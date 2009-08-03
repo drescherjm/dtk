@@ -1,0 +1,171 @@
+### CMakeLists.txt --- 
+## 
+## Author: Julien Wintz
+## Copyright (C) 2008 - Julien Wintz, Inria.
+## Created: Mon Jul 20 18:39:20 2009 (+0200)
+## Version: $Id$
+## Last-Updated: Thu Jul 23 18:04:31 2009 (+0200)
+##           By: Julien Wintz
+##     Update #: 77
+######################################################################
+## 
+### Commentary: 
+## 
+######################################################################
+## 
+### Change log:
+## 
+######################################################################
+
+project(dtkCore)
+
+## #################################################################
+## Sources
+## #################################################################
+
+set(${PROJECT_NAME}_HEADERS
+  dtkAbstractData.h
+  dtkAbstractDataFactory.h
+  dtkAbstractDataImage.h
+  dtkAbstractDataImage2D.h
+  dtkAbstractDataImage3D.h
+  dtkAbstractDataImageDicom.h
+  dtkAbstractDataMesh.h
+  dtkAbstractDataMeshSurfacic.h
+  dtkAbstractDataMeshVolumic.h
+  dtkAbstractDataReader.h
+  dtkAbstractDataWriter.h
+  dtkAbstractDevice.h
+  dtkAbstractDeviceFactory.h
+  dtkAbstractFactory.h
+  dtkAbstractObject.h
+  dtkAbstractPlugin.h
+  dtkAbstractProcess.h
+  dtkAbstractProcessFactory.h
+  dtkAbstractView.h
+  dtkAbstractViewAnimator.h
+  dtkAbstractViewFactory.h
+  dtkAbstractViewInteractor.h
+  dtkAbstractViewNavigator.h
+  dtkCoreExport.h
+  dtkGlobal.h
+  dtkLog.h
+  dtkPluginManager.h
+  dtkUpdater.h
+)
+
+set(${PROJECT_NAME}_HEADERS_MOC
+  dtkAbstractData.h
+  dtkAbstractDataFactory.h
+  dtkAbstractDataImage.h
+  dtkAbstractDataImage2D.h
+  dtkAbstractDataImage3D.h
+  dtkAbstractDataImageDicom.h
+  dtkAbstractDataMesh.h
+  dtkAbstractDataMeshSurfacic.h
+  dtkAbstractDataMeshVolumic.h
+  dtkAbstractDataReader.h
+  dtkAbstractDataWriter.h
+  dtkAbstractDevice.h
+  dtkAbstractDeviceFactory.h
+  dtkAbstractFactory.h
+  dtkAbstractObject.h
+  dtkAbstractPlugin.h
+  dtkAbstractProcess.h
+  dtkAbstractProcessFactory.h
+  dtkAbstractView.h
+  dtkAbstractViewAnimator.h
+  dtkAbstractViewFactory.h
+  dtkAbstractViewInteractor.h
+  dtkAbstractViewNavigator.h
+  dtkPluginManager.h
+  dtkUpdater_p.h
+)
+
+set(${PROJECT_NAME}_SOURCES
+  dtkAbstractDataFactory.cpp
+  dtkAbstractData.cpp
+  dtkAbstractDataReader.cpp
+  dtkAbstractDataWriter.cpp
+  dtkAbstractDataImage.cpp
+  dtkAbstractDataImage2D.cpp
+  dtkAbstractDataImage3D.cpp
+  dtkAbstractDataImageDicom.cpp
+  dtkAbstractDataMesh.cpp
+  dtkAbstractDataMeshSurfacic.cpp
+  dtkAbstractDataMeshVolumic.cpp
+  dtkAbstractDevice.cpp
+  dtkAbstractDeviceFactory.cpp
+  dtkAbstractFactory.cpp
+  dtkAbstractObject.cpp
+  dtkAbstractProcessFactory.cpp
+  dtkAbstractProcess.cpp
+  dtkAbstractViewFactory.cpp
+  dtkAbstractView.cpp
+  dtkAbstractViewAnimator.cpp
+  dtkAbstractViewInteractor.cpp
+  dtkAbstractViewNavigator.cpp
+  dtkAbstractPlugin.cpp
+  dtkLog.cpp
+  dtkPluginManager.cpp
+  dtkUpdater.cpp
+)
+
+## #################################################################
+## Wrapping
+## #################################################################
+
+set(${PROJECT_NAME}_WRAP_DEPENDS
+  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractObject.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractData.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractDataFactory.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractDataReader.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractDataWriter.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractProcess.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractProcessFactory.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractView.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractViewFactory.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractViewAnimator.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractViewNavigator.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractViewInteractor.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractPlugin.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/dtkPluginManager.h)
+
+dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP core python ${CMAKE_CURRENT_SOURCE_DIR}/dtkCore.i ${${PROJECT_NAME}_WRAP_DEPENDS})
+dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP core tcl    ${CMAKE_CURRENT_SOURCE_DIR}/dtkCore.i ${${PROJECT_NAME}_WRAP_DEPENDS})
+
+## #################################################################
+## Build rules
+## #################################################################
+
+qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
+
+add_library(${PROJECT_NAME}
+  ${${PROJECT_NAME}_SOURCES}
+  ${${PROJECT_NAME}_SOURCES_MOC}
+  ${${PROJECT_NAME}_SOURCES_WRAP}
+)
+
+target_link_libraries(${PROJECT_NAME}
+  ${QT_LIBRARIES}
+  ${TCL_LIBRARY}
+)
+
+if(PYTHON_DEBUG_LIBRARIES)
+  target_link_libraries(${PROJECT_NAME} debug ${PYTHON_DEBUG_LIBRARIES})
+  target_link_libraries(${PROJECT_NAME} optimized ${PYTHON_LIBRARIES})
+else(PYTHON_DEBUG_LIBRARIES)
+  target_link_libraries(${PROJECT_NAME} ${PYTHON_LIBRARIES})
+endif(PYTHON_DEBUG_LIBRARIES)
+
+## #################################################################
+## Installation
+## #################################################################
+
+if(NOT dtk_INSTALL_NO_DEVELOPMENT)
+  install_files(${dtk_INSTALL_INCLUDE_DIR}/${PROJECT_NAME} .h ${${PROJECT_NAME}_HEADERS})
+endif(NOT dtk_INSTALL_NO_DEVELOPMENT)
+
+if(NOT dtk_INSTALL_NO_LIBRARIES)
+  install_targets(${dtk_INSTALL_LIB_DIR} RUNTIME_DIRECTORY ${dtk_INSTALL_BIN_DIR} ${PROJECT_NAME})
+endif(NOT dtk_INSTALL_NO_LIBRARIES)

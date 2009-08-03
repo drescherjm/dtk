@@ -1,0 +1,47 @@
+### dtkConfig.cmake.in --- 
+## 
+## Author: Julien Wintz
+## Copyright (C) 2008 - Julien Wintz, Inria.
+## Created: Mon Jul 20 22:51:02 2009 (+0200)
+## Version: $Id$
+## Last-Updated: Tue Jul 21 13:17:58 2009 (+0200)
+##           By: Julien Wintz
+##     Update #: 14
+######################################################################
+## 
+### Commentary: 
+## 
+######################################################################
+## 
+### Change log:
+## 
+######################################################################
+
+@dtk_CONFIG_INSTALL_ONLY@
+
+set(dtk_VERSION_MAJOR  "@dtk_VERSION_MAJOR@")
+set(dtk_VERSION_MINOR  "@dtk_VERSION_MINOR@")
+set(dtk_VERSION_BUILD  "@dtk_VERSION_BUILD@")
+set(dtk_VERSION        "@dtk_VERSION@")
+
+set(dtk_LIBRARIES "@dtk_LIBRARIES@")
+
+set(dtk_CMAKE_DIR "@dtk_CMAKE_DIR_CONFIG@")
+
+set(dtk_USE_FILE "@dtk_USE_FILE_CONFIG@")
+
+set(dtk_BUILD_SETTINGS_FILE "@dtk_BUILD_SETTINGS_FILE_CONFIG@")
+
+set(dtk_LIBRARY_DIRS "@dtk_LIBRARY_DIRS_CONFIG@")
+
+set(dtk_RUNTIME_DIRS "@dtk_RUNTIME_DIRS_CONFIG@")
+
+set(dtk_INCLUDE_DIRS "@dtk_INCLUDE_DIRS_CONFIG@")
+
+if(NOT dtk_NO_LIBRARY_DEPENDS AND EXISTS "@dtk_LIBRARY_DEPENDS_FILE@")
+  include("@dtk_LIBRARY_DEPENDS_FILE@")
+endif(NOT dtk_NO_LIBRARY_DEPENDS AND EXISTS "@dtk_LIBRARY_DEPENDS_FILE@")
+
+set(dtk_CONFIGURATION_TYPES @dtk_CONFIGURATION_TYPES_CONFIG@)
+
+set(dtk_BUILD_TYPE @dtk_BUILD_TYPE_CONFIG@)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 15:31:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat May 16 00:21:57 2009 (+0200)
+ * Last-Updated: Tue Aug  4 21:22:21 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 294
+ *     Update #: 296
  */
 
 /* Commentary: 
@@ -166,10 +166,13 @@ void dtkInterpreter::registerInterpreter(dtkScriptInterpreter *interpreter)
     connect(this, SIGNAL(stopped(void)),                interpreter,  SIGNAL(  stopped(void)));
 
     dtkTextEditorSyntaxHighlighter *highlighter;
+
     if(dynamic_cast<dtkScriptInterpreterPython *>(interpreter))
         highlighter = new dtkTextEditorSyntaxHighlighterPython(this);
+
     if(dynamic_cast<dtkScriptInterpreterTcl *>(interpreter))
         highlighter = new dtkTextEditorSyntaxHighlighterTcl(this);
+
     Q_UNUSED(highlighter);
 
     this->appendPlainText(filter(d->interpreter->prompt()));

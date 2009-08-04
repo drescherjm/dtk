@@ -1,12 +1,12 @@
-/* dtkAbstractPlugin.cpp --- 
+/* dtkPlugin.cpp --- 
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Oct 31 14:14:48 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Aug  1 19:21:03 2009 (+0200)
+ * Last-Updated: Tue Aug  4 19:24:48 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 52
+ *     Update #: 55
  */
 
 /* Commentary: 
@@ -17,52 +17,29 @@
  * 
  */
 
-#include <dtkCore/dtkAbstractPlugin.h>
+#include <dtkCore/dtkPlugin.h>
 
 // /////////////////////////////////////////////////////////////////
-// dtkAbstractPluginPrivate
+// dtkPluginPrivate
 // /////////////////////////////////////////////////////////////////
 
-class dtkAbstractPluginPrivate
+class dtkPluginPrivate
 {
 public:
-    bool isRunning;
-
-    QString path;
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkAbstractPlugin
+// dtkPlugin
 // /////////////////////////////////////////////////////////////////
 
-dtkAbstractPlugin::dtkAbstractPlugin(QObject * parent) : QObject(parent), d(new dtkAbstractPluginPrivate)
-{
-    d->isRunning = false;
-}
-
-dtkAbstractPlugin::~dtkAbstractPlugin(void)
+dtkPlugin::dtkPlugin(QObject * parent) : QObject(parent), d(new dtkPluginPrivate)
 {
 
 }
 
-bool dtkAbstractPlugin::isRunning (void) const
+dtkPlugin::~dtkPlugin(void)
 {
-    return d->isRunning;
-}
 
-QString dtkAbstractPlugin::path(void) const
-{
-    return d->path;
-}
-
-void dtkAbstractPlugin::setRunning(bool isRunning)
-{
-    d->isRunning = isRunning;
-}
-
-void dtkAbstractPlugin::setPath(const QString & path)
-{
-    d->path = path;
 }
 
 //! Returns a widget reprensenting the user interface of the plugin.
@@ -109,7 +86,7 @@ dtkConcreteDataWidget *dtkConcreteData::s_ui = NULL;
  * \return A widget containing a user interface that will be parented by the host application.
  */
 
-QWidget *dtkAbstractPlugin::ui(void)
+QWidget *dtkPlugin::ui(void)
 {
     return NULL;
 }

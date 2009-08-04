@@ -2,11 +2,11 @@
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Fri Oct 31 15:06:30 2008 (+0100)
+ * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Aug  1 19:44:52 2009 (+0200)
+ * Last-Updated: Tue Aug  4 19:24:29 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 109
+ *     Update #: 66
  */
 
 /* Commentary: 
@@ -17,319 +17,153 @@
  * 
  */
 
-#include <dtkCore/dtkGlobal.h>
-#include <dtkCore/dtkAbstractPlugin.h>
-#include <dtkCore/dtkPluginManager.h>
+#include "dtkPluginManager.h"
+
+#include <dtkCore/dtkPlugin.h>
 #include <dtkCore/dtkLog.h>
 
-// /////////////////////////////////////////////////////////////////
-// dtkPluginManagerPrivate
-// /////////////////////////////////////////////////////////////////
-
-class dtkPluginManagerPrivate 
+class dtkPluginManagerPrivate
 {
 public:
-    QList<dtkAbstractPlugin *> plugins;
-    QList<QLibrary *> libraries;
-    QStringList pluginsRunning;
-};
+    QString path;
 
-// /////////////////////////////////////////////////////////////////
-// dtkPluginManager
-// /////////////////////////////////////////////////////////////////
+    QHash<QString, QPluginLoader *> loaders;
+};
 
 dtkPluginManager *dtkPluginManager::instance(void)
 {
     if(!s_instance)
-	s_instance = new dtkPluginManager;
+        s_instance = new dtkPluginManager;
 
     return s_instance;
 }
 
-bool dtkPluginManager::isPlugin(QLibrary& library)
+void dtkPluginManager::initialize(void)
 {
-    if (library.resolve("plugin_create_instance") == NULL)
-	return(false);
-    
-    if (library.resolve("plugin_destroy_instance") == NULL)
-	return(false);
-    
-    return(true);
+    this->readSettings();
+
+    if(d->path.isEmpty())
+        return;
+
+    QDir dir(d->path); dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
+
+    foreach (QFileInfo entry, dir.entryInfoList())
+        loadPlugin(entry.absoluteFilePath());
 }
 
-bool dtkPluginManager::isPlugin(const QString& fileName)
+void dtkPluginManager::uninitialize(void)
 {
-    if (QLibrary::isLibrary(fileName) == false)
-	return(false);
+    this->writeSettings();
 
-    QLibrary library(fileName);
-
-    if (library.load() == false) {
-	qDebug(qPrintable(library.errorString()));
-	return(false);
-    }
-
-    bool is_plugin = isPlugin(library);
-
-    library.unload();
-
-    return(is_plugin);
+    foreach(QString path, d->loaders.keys())
+        unloadPlugin(path);
 }
 
-dtkAbstractPlugin *dtkPluginManager::loadPlugin(const QString& fileName)
+void dtkPluginManager::readSettings(void)
 {
-    QLibrary *lib = library(fileName);
-
-    if (lib == NULL) {
-	lib = new QLibrary(fileName);
-
-	if (lib->load() == false) {
-	    delete lib;
-	    return(NULL);
-	}
-    }
-
-    return(loadPlugin(lib));
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("plugins");
+    d->path = settings.value("path").toString();
+    settings.endGroup();
 }
 
-dtkAbstractPlugin *dtkPluginManager::loadPlugin(QLibrary *library) 
+void dtkPluginManager::writeSettings(void)
 {
-    if(!d->libraries.contains(library))
-	d->libraries.append(library);
-    
-    dtkPluginInstancer plugin_instancer = (dtkPluginInstancer) library->resolve("plugin_create_instance");
-    dtkAbstractPlugin *plugin = NULL;
-
-    if (plugin_instancer == NULL)  
-	goto unload_lib;
-
-    plugin = plugin_instancer();
-
-    if (plugin == NULL) 
-	goto unload_lib;
-
-    plugin->setRunning(false);
-    plugin->setPath(library->fileName());
-
-    d->plugins.append(plugin);
-
-    return(plugin);
-
-unload_lib:
-    d->libraries.removeAll(library);
-
-    library->unload();
-    delete library;
-
-    return(NULL);
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("plugins");
+    settings.setValue("path", d->path);
+    settings.endGroup();
 }
 
-QList<dtkAbstractPlugin *> dtkPluginManager::loadPlugins(const QString& dirPath) 
+void dtkPluginManager::printPlugins(void)
 {
-    QDir dir(dirPath);
-    dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
-
-    QList<dtkAbstractPlugin *> loadedPlugins;
-    QStringList possibleList;
-
-    QFileInfoList list = dir.entryInfoList();
-    foreach (QFileInfo fileInfo, list) {
-	if (fileInfo.isDir() == true) {
-	    loadPlugins(fileInfo.absoluteFilePath());
-	} else {
-	    QString filePath = fileInfo.absoluteFilePath();
-	    if (isPlugin(filePath) == true) {
-		dtkAbstractPlugin *plugin = loadPlugin(filePath);
-		if (plugin != NULL) loadedPlugins.append(plugin);
-	    } else if (QLibrary::isLibrary(filePath) == true) {
-		possibleList.append(filePath);
-	    }
-	}
-    }
-
-    int count = possibleList.size() * possibleList.size();
-    for (; possibleList.size() > 0 && count >= 0; --count) {
-	QString pluginPath = possibleList.takeFirst();
-
-	if (isPlugin(pluginPath) == true) {
-	    dtkAbstractPlugin *plugin = loadPlugin(pluginPath);
-	    if (plugin != NULL) loadedPlugins.append(plugin);
-	} else {
-	    possibleList.append(pluginPath);
-	}
-    }
-
-    return(loadedPlugins);
+    foreach(QString path, d->loaders.keys())
+        dtkOutput() << path;
 }
 
-QList<dtkAbstractPlugin *> dtkPluginManager::plugins(void) const 
+dtkPlugin *dtkPluginManager::plugin(QString name)
 {
-    return d->plugins;
-}
+    foreach(QPluginLoader *loader, d->loaders) {
+        dtkPlugin *plugin = qobject_cast<dtkPlugin *>(loader->instance());
 
-dtkAbstractPlugin *dtkPluginManager::plugin(QString id) const 
-{
-    foreach (dtkAbstractPlugin *plugin, d->plugins) {
-	if (plugin->id() == id)
-	    return plugin;
-
-        if (!QString::compare(plugin->name(), id, Qt::CaseInsensitive))
-            return plugin;
-
-        if (plugin->path().contains(id))
+        if(plugin->name() == name)
             return plugin;
     }
+
+    return NULL;
+}
+
+QList<dtkPlugin *> dtkPluginManager::plugins(void)
+{
+    QList<dtkPlugin *> list;
     
-    return(NULL);
+    foreach(QPluginLoader *loader, d->loaders)
+        list << qobject_cast<dtkPlugin *>(loader->instance());
+
+    return list;
 }
 
-void dtkPluginManager::startPlugins(void) 
-{
-    foreach (dtkAbstractPlugin *plugin, d->plugins)
-	start(plugin);
-}
-
-void dtkPluginManager::stopPlugins(void)
-{
-    foreach (QString id, d->pluginsRunning)
-	stopPlugin(id);
-}
-
-bool dtkPluginManager::startPlugin(const QString& id)
-{
-    dtkAbstractPlugin *plug = plugin(id);
-
-    if (plug != NULL)
-	return(start(plug));
-
-    return false;
-}
-
-void dtkPluginManager::stopPlugin(const QString& id)
-{
-    dtkAbstractPlugin *plug = plugin(id);
-
-    if (plug != NULL) 
-	stop(plug);
-}
-
-bool dtkPluginManager::start(dtkAbstractPlugin *plugin)
-{
-    if (!resolveDependences(plugin))
-	return(false);
-
-    if (!canStart(plugin))
-	return(false);
-
-    emit initing(plugin);
-
-    if (!plugin->initialize()) {
-	emit initFailed(plugin);
-	return(false);
-    }
-
-    plugin->setRunning(true);
-
-    emit inited(plugin);
-
-    d->pluginsRunning.append(plugin->id());
-
-    return true;
-}
-
-void dtkPluginManager::stop(dtkAbstractPlugin *plugin)
-{
-    if (!plugin->isRunning()) return;
-
-    foreach (QString depId, plugin->dependences())
-    	stopPlugin(depId);
-
-    emit stopping(plugin);
-
-    if (plugin->uninitialize() == false)
-	emit stopFailed(plugin);
-
-    plugin->setRunning(false);
-
-    d->pluginsRunning.removeAll(plugin->id());
-
-    emit stopped(plugin);
-}
-
-bool dtkPluginManager::resolveDependences(dtkAbstractPlugin *plugin)
-{
-    foreach (QString depId, plugin->dependences()) {
-    	if (!startPlugin(depId))
-    	    return(false);
-    }
-
-    return true;
-}
-
-dtkPluginManager::dtkPluginManager(QObject *parent) : QObject(parent), d(new dtkPluginManagerPrivate)
+dtkPluginManager::dtkPluginManager(void) : d(new dtkPluginManagerPrivate)
 {
 
 }
 
-dtkPluginManager::~dtkPluginManager(void) 
+dtkPluginManager::~dtkPluginManager(void)
 {
     delete d;
 
     d = NULL;
 }
 
-QStringList dtkPluginManager::reverseDependences(dtkAbstractPlugin *plugin) 
+void dtkPluginManager::loadPlugin(const QString& path)
 {
-    return reverseDependences(plugin->id());
-}
+    QPluginLoader *loader = new QPluginLoader(path);
 
-QStringList dtkPluginManager::reverseDependences(const QString& id)
-{
-    QStringList revDep;
-
-    foreach (dtkAbstractPlugin *plugin, d->plugins) {
-    	if (plugin->dependences().contains(id))
-    	    revDep.append(plugin->id());
+    if(!loader->load()) {
+        dtkDebug() << "Unable to load - " << loader->errorString();
+        delete loader;
+        return;
     }
 
-    return revDep;
-}
+    dtkPlugin *plugin = qobject_cast<dtkPlugin *>(loader->instance());
 
-bool dtkPluginManager::canStart(dtkAbstractPlugin *plugin)
-{
-    foreach (QString depId, plugin->dependences()) {
-    	if (!d->pluginsRunning.contains(depId))
-    	    return(false);
+    if(!plugin) {
+        dtkDebug() << "Unable to retrieve" << path;
+        return;
     }
 
-    return true;
-}
-
-bool dtkPluginManager::hasLibrary(const QString& fileName) 
-{
-    return library(fileName) != NULL;
-}
-
-QLibrary *dtkPluginManager::library(const QString& fileName) 
-{
-    QList<QLibrary *>::const_iterator iEnd = d->libraries.constEnd();
-    QList<QLibrary *>::const_iterator i = d->libraries.constBegin();
-
-    for (; i != iEnd; ++i) {
-	if ((*i)->fileName() == fileName)
-	    return *i;
+    if(!plugin->initialize()) {
+        dtkOutput() << "Unable to initialize" << plugin->name() << "plugin";
+        return;
     }
 
-    return(NULL);
+    d->loaders.insert(path, loader);
 }
 
-void dtkPluginManager::printPlugins(void)
+void dtkPluginManager::unloadPlugin(const QString& path)
 {
-    foreach(dtkAbstractPlugin *plugin, d->plugins)
-        if (plugin->isRunning())
-            dtkDebug() << plugin->name() << DTK_COLOR_FG_GREEN << "started" << DTK_NOCOLOR;
-        else
-            dtkDebug() << plugin->name() << DTK_COLOR_FG_YELLOW << "available" << DTK_NOCOLOR;
+    dtkPlugin *plugin = qobject_cast<dtkPlugin *>(d->loaders.value(path)->instance());
+
+    if(!plugin) {
+        dtkDebug() << "dtkPluginManager - Unable to retrieve" << plugin->name() << "plugin";
+        return;
+    }
+
+    if(!plugin->uninitialize()) {
+        dtkOutput() << "Unable to uninitialize" << plugin->name() << "plugin";
+        return;
+    }
+
+    QPluginLoader *loader = d->loaders.value(path);
+
+    if(!loader->unload()) {
+        dtkDebug() << "dtkPluginManager - Unable to unload plugin:" << loader->errorString();
+        return;
+    }
+
+    delete loader;
+
+    d->loaders.remove(path);
 }
 
 dtkPluginManager *dtkPluginManager::s_instance = NULL;

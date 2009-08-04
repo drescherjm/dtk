@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 15:29:01 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat May 16 00:17:28 2009 (+0200)
+ * Last-Updated: Tue Aug  4 15:21:17 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 34
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -36,6 +36,9 @@ public:
      dtkInterpreter(QWidget *parent = 0);
     ~dtkInterpreter(void);
 
+    void  readSettings(void);
+    void writeSettings(void);
+
     void registerInterpreter(dtkScriptInterpreter *interpreter);
 
     QString filter(QString text);
@@ -43,9 +46,6 @@ public:
     dtkInterpreterPreferencesWidget *preferencesWidget(QWidget *parent = 0);
 
 public slots:
-    void  readSettings(void);
-    void writeSettings(void);
-
     void onKeyUpPressed(void);
     void onKeyDownPressed(void);
     void onKeyLeftPressed(void);

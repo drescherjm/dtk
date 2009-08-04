@@ -2,11 +2,11 @@
 ## 
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
-## Created: Mon Mar  9 21:07:07 2009 (+0100)
+## Created: Mon Aug  3 17:34:51 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Aug  4 20:05:39 2009 (+0200)
+## Last-Updated: Tue Aug  4 10:30:11 2009 (+0200)
 ##           By: Julien Wintz
-##     Update #: 29
+##     Update #: 9
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,47 +17,43 @@
 ## 
 ######################################################################
 
-project(dtkPluginGenerator)
+project(dtkCreator)
 
 ## #################################################################
 ## Sources
 ## #################################################################
 
+set(${PROJECT_NAME}_HEADERS
+
+)
+
 set(${PROJECT_NAME}_HEADERS_MOC
-  dtkPluginGeneratorMainWindow.h
+  dtkCreatorMainWindow.h
+  dtkCreatorPluginBrowser.h
+  dtkCreatorScriptBrowser.h
 )
 
 set(${PROJECT_NAME}_SOURCES
-  dtkPluginGenerator.cpp
-  dtkPluginGeneratorCMakeLists.cpp
-  dtkPluginGeneratorTypeHeaderFile.cpp
-  dtkPluginGeneratorTypeSourceFile.cpp
-  dtkPluginGeneratorPluginHeaderFile.cpp
-  dtkPluginGeneratorPluginSourceFile.cpp
-  dtkPluginGeneratorExportHeaderFile.cpp
-  dtkPluginGeneratorMainWindow.cpp
-  anyoption.cpp
+  dtkCreatorMainWindow.cpp
+  dtkCreatorPluginBrowser.cpp
+  dtkCreatorScriptBrowser.cpp
   main.cpp
-)
-
-set(${PROJECT_NAME}_FORMS
-  dtkPluginGeneratorMainWindow.ui
 )
 
 ## #################################################################
 ## Build rules
 ## #################################################################
 
-qt4_wrap_ui(${PROJECT_NAME}_SOURCES_UIC ${${PROJECT_NAME}_FORMS})
-
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
 add_executable(${PROJECT_NAME} MACOSX_BUNDLE
-  ${${PROJECT_NAME}_SOURCES_UIC}
   ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES}
 )
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
+  dtkCore
+  dtkScript
+  dtkGui
 )

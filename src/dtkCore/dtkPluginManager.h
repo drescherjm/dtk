@@ -2,11 +2,11 @@
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Fri Oct 31 15:01:29 2008 (+0100)
+ * Created: Tue Aug  4 12:21:09 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Aug  1 19:22:08 2009 (+0200)
+ * Last-Updated: Tue Aug  4 19:24:16 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 26
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -20,67 +20,38 @@
 #ifndef DTKPLUGINMANAGER_H
 #define DTKPLUGINMANAGER_H
 
-#include <dtkCore/dtkCoreExport.h>
-#include <dtkCore/dtkGlobal.h>
+#include <QtCore>
 
-class dtkAbstractPlugin;
+#include "dtkCoreExport.h"
 
-typedef dtkAbstractPlugin *(*dtkPluginInstancer)(void);
-typedef void               (*dtkPluginDestroyer)(void);
-
+class dtkPlugin;
 class dtkPluginManagerPrivate;
 
-class DTKCORE_EXPORT dtkPluginManager : public QObject 
+class DTKCORE_EXPORT dtkPluginManager : public QObject
 {
     Q_OBJECT
 
 public:
     static dtkPluginManager *instance(void);
-    
-    bool isPlugin(QLibrary& library);
-    bool isPlugin(const QString& fileName);
-    
-    void startPlugins(void);
-    void stopPlugins(void);
-    
-    bool startPlugin(const QString& id);
-    void stopPlugin(const QString& id);
-    
-    bool start(dtkAbstractPlugin *plugin);
-    void stop(dtkAbstractPlugin *plugin);
 
-          dtkAbstractPlugin *  loadPlugin (QLibrary *library);
-          dtkAbstractPlugin *  loadPlugin (const QString& fileName);
-    QList<dtkAbstractPlugin *> loadPlugins(const QString& dirPath);
-            
-          dtkAbstractPlugin *  plugin (QString id) const;
-    QList<dtkAbstractPlugin *> plugins(void) const;
+    void   initialize(void);
+    void uninitialize(void);
+
+    void  readSettings(void);
+    void writeSettings(void);
 
     void printPlugins(void);
 
-signals:
-    void initFailed(dtkAbstractPlugin *plugin);
-    void stopFailed(dtkAbstractPlugin *plugin);
-    
-    void initing(dtkAbstractPlugin *plugin);
-    void inited(dtkAbstractPlugin *plugin);
-    
-    void stopping(dtkAbstractPlugin *plugin);
-    void stopped(dtkAbstractPlugin *plugin);
-    
-private:
-     dtkPluginManager(QObject *parent = 0);
+    dtkPlugin *plugin(QString name);
+
+    QList<dtkPlugin *> plugins(void);
+
+protected:
+     dtkPluginManager(void);
     ~dtkPluginManager(void);
 
-    QStringList reverseDependences(const QString& id);
-    QStringList reverseDependences(dtkAbstractPlugin *plugin);
-    
-    bool resolveDependences(dtkAbstractPlugin *plugin);
-    
-    bool canStart(dtkAbstractPlugin *plugin);
-    
-    bool   hasLibrary(const QString& fileName);
-    QLibrary *library(const QString& fileName);
+    void   loadPlugin(const QString& path);
+    void unloadPlugin(const QString& path);
 
 private:
     static dtkPluginManager *s_instance;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar  9 21:40:22 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 11 19:41:27 2009 (+0100)
+ * Last-Updated: Tue Aug  4 20:04:57 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 23
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -54,8 +54,6 @@ protected:
    bool generateTypeSourceFile(void);
    bool generatePluginHeaderFile(void);
    bool generatePluginSourceFile(void);
-   bool generateLoaderHeaderFile(void);
-   bool generateLoaderSourceFile(void);
    bool generateExportHeaderFile(void);
 
 private:

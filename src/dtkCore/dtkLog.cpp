@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2009 - Jean-Christophe Lombardo, Inria.
  * Created: Thu May 14 14:32:46 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul 31 22:37:37 2009 (+0200)
+ * Last-Updated: Tue Aug  4 12:20:30 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 104
+ *     Update #: 111
  */
 
 /* Commentary: 
@@ -198,9 +198,8 @@ dtkLog::~dtkLog(void)
      if (s_handlers.keys().contains(m_source))
          foreach(Handler handler, s_handlers.values(m_source)) handler(m_level, m_log);
     else
-        qDebug().nospace() << "(" << m_source << ") Level=" << m_level << "-" << m_log;
+        qDebug().nospace() << QDate::currentDate().toString().toAscii().constData() << QTime::currentTime().toString().toAscii() << "(" << m_source << ") Level=" << m_level << "-" << m_log.toAscii();
 }
-
 
 void dtkLog::registerHandler(Handler handler, QString source)
 {

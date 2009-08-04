@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Jul 23 18:04:31 2009 (+0200)
+## Last-Updated: Tue Aug  4 19:48:00 2009 (+0200)
 ##           By: Julien Wintz
-##     Update #: 77
+##     Update #: 78
 ######################################################################
 ## 
 ### Commentary: 
@@ -39,7 +39,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractDeviceFactory.h
   dtkAbstractFactory.h
   dtkAbstractObject.h
-  dtkAbstractPlugin.h
+  dtkPlugin.h
   dtkAbstractProcess.h
   dtkAbstractProcessFactory.h
   dtkAbstractView.h
@@ -70,7 +70,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractDeviceFactory.h
   dtkAbstractFactory.h
   dtkAbstractObject.h
-  dtkAbstractPlugin.h
+  dtkPlugin.h
   dtkAbstractProcess.h
   dtkAbstractProcessFactory.h
   dtkAbstractView.h
@@ -105,7 +105,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkAbstractViewAnimator.cpp
   dtkAbstractViewInteractor.cpp
   dtkAbstractViewNavigator.cpp
-  dtkAbstractPlugin.cpp
+  dtkPlugin.cpp
   dtkLog.cpp
   dtkPluginManager.cpp
   dtkUpdater.cpp
@@ -128,7 +128,7 @@ set(${PROJECT_NAME}_WRAP_DEPENDS
   ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractViewAnimator.h
   ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractViewNavigator.h
   ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractViewInteractor.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractPlugin.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/dtkPlugin.h
   ${CMAKE_CURRENT_SOURCE_DIR}/dtkPluginManager.h)
 
 dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP core python ${CMAKE_CURRENT_SOURCE_DIR}/dtkCore.i ${${PROJECT_NAME}_WRAP_DEPENDS})

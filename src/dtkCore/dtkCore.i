@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Aug  2 15:16:09 2009 (+0200)
+ * Last-Updated: Tue Aug  4 19:47:14 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 165
+ *     Update #: 178
  */
 
 /* Commentary:
@@ -49,7 +49,7 @@
 #include <dtkCore/dtkAbstractProcessFactory.h>
 #include <dtkCore/dtkAbstractViewFactory.h>
 
-#include <dtkCore/dtkAbstractPlugin.h>
+#include <dtkCore/dtkPlugin.h>
 
 #include <dtkCore/dtkPluginManager.h>
 %}
@@ -78,6 +78,9 @@
 #undef  Q_PROPERTY(Type type MODE mode)
 #define Q_PROPERTY(Type type MODE mode)
 
+#undef  Q_DECLARE_INTERFACE(IFace, IId)
+#define Q_DECLARE_INTERFACE(IFace, IId)
+
 #undef  DTKCORE_EXPORT
 #define DTKCORE_EXPORT
 
@@ -96,19 +99,6 @@
 %ignore addProperty(QString key, QString value);      // No scripter should add properties dynamically
 
 %ignore propertySet(QString key, QString value);
-
-// /////////////////////////////////////////////////////////////////
-// Ignore rules for dtkAbstractPlugin
-// /////////////////////////////////////////////////////////////////
-
-%ignore initFailed(dtkAbstractPlugin *plugin);
-%ignore stopFailed(dtkAbstractPlugin *plugin);
-
-%ignore initing(dtkAbstractPlugin *plugin);
-%ignore inited(dtkAbstractPlugin *plugin);
-
-%ignore stopping(dtkAbstractPlugin *plugin);
-%ignore stopped(dtkAbstractPlugin *plugin);
 
 // /////////////////////////////////////////////////////////////////
 // Ignore rules for dtkAbstractView signals
@@ -196,8 +186,7 @@
 %include <dtkCore/dtkAbstractViewInteractor.h>
 %include <dtkCore/dtkAbstractViewNavigator.h>
 
-%include <dtkCore/dtkAbstractPlugin.h>
-
+%include <dtkCore/dtkPlugin.h>
 %include <dtkCore/dtkPluginManager.h>
 
 #endif

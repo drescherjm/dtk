@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 10:06:37 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug  4 11:26:26 2009 (+0200)
+ * Last-Updated: Wed Aug  5 09:31:47 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 15
+ *     Update #: 18
  */
 
 /* Commentary: 
@@ -43,8 +43,12 @@ signals:
     void loaded(const QString&);
 
 public slots:
-    void preloadScript(const QModelIndex& index);
-    void loadScript(const QModelIndex& index);
+    void preloadScript(const QString& fileName);
+    void loadScript(const QString& fileName);
+
+private slots:
+    void onModelIndexClicked(const QModelIndex& index);
+    void onModelIndexDoubleClicked(const QModelIndex& index);
 
 private:
     dtkCreatorScriptListPrivate *d;

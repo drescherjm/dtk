@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug  4 11:24:04 2009 (+0200)
+ * Last-Updated: Wed Aug  5 13:09:57 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 105
+ *     Update #: 165
  */
 
 /* Commentary: 
@@ -21,6 +21,8 @@
 #include "dtkCreatorPluginBrowser.h"
 #include "dtkCreatorScriptBrowser.h"
 
+#include <dtkCore/dtkLog.h>
+
 #include <dtkScript/dtkScriptInterpreter.h>
 #include <dtkScript/dtkScriptInterpreterPool.h>
 #include <dtkScript/dtkScriptInterpreterPython.h>
@@ -28,13 +30,32 @@
 
 #include <dtkGui/dtkInterpreter.h>
 #include <dtkGui/dtkInterpreterPreferencesWidget.h>
+#include <dtkGui/dtkSearchBox.h>
+#ifdef Q_WS_MAC
+#include <dtkGui/dtkSearchBoxMac.h>
+#endif
+#include <dtkGui/dtkSpacer.h>
 #include <dtkGui/dtkSplitter.h>
 #include <dtkGui/dtkTextEditor.h>
-#include <dtkGui/dtkTextEditorCompleter.h>
 #include <dtkGui/dtkTextEditorPreferencesWidget.h>
 #include <dtkGui/dtkTextEditorSyntaxHighlighterCpp.h>
 #include <dtkGui/dtkTextEditorSyntaxHighlighterPython.h>
 #include <dtkGui/dtkTextEditorSyntaxHighlighterTcl.h>
+
+// /////////////////////////////////////////////////////////////////
+// log message handler
+// /////////////////////////////////////////////////////////////////
+
+QWidget *log_output;
+
+void dtkCreatorRedirectLogHandler(dtkLog::Level level, const QString& msg)
+{
+    QCoreApplication::postEvent(log_output, new dtkLogEvent(level, msg));
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkCreatorMainWindowPrivate
+// /////////////////////////////////////////////////////////////////
 
 class dtkCreatorMainWindowPrivate
 {
@@ -48,13 +69,18 @@ public:
     QAction *fileSaveAsAction;
     QAction *preferencesAction;
 
+    QAction *toolTextualEditorAction;
+    QAction *toolVisualEditorAction;
+    QAction *toolViewerAction;
+
+    QToolBar *toolBar;
+
     QStackedWidget *stack;
 
     dtkCreatorScriptBrowser *script_browser;
     dtkCreatorPluginBrowser *plugin_browser;
     dtkInterpreter *interpreter;
     dtkTextEditor *editor;
-    dtkTextEditorCompleter *completer;
     dtkTextEditorSyntaxHighlighter *highlighter;
 
 public:
@@ -65,7 +91,7 @@ bool dtkCreatorMainWindowPrivate::maySave(void)
 {
     if (editor->isModified()) {
         QMessageBox::StandardButton ret = QMessageBox::warning(q,
-            q->tr("Editor"),
+            q->tr("dtkCreator"),
             q->tr("The document has been modified.\n"
                   "Do you want to save your changes?"),
             QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel
@@ -105,17 +131,52 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->fileMenu->addAction(d->fileSaveAsAction);
     d->fileMenu->addAction(d->preferencesAction);
 
+    d->toolTextualEditorAction = new QAction("Textual editor", this);
+    d->toolTextualEditorAction->setShortcut(Qt::MetaModifier+Qt::Key_1);
+    d->toolTextualEditorAction->setToolTip("Switch to the textual editor (Ctrl+1)");
+    d->toolTextualEditorAction->setIcon(QIcon(":icons/widget.tiff"));
+    connect(d->toolTextualEditorAction, SIGNAL(triggered()), this, SLOT(switchToTextualEditor()));
+    d->toolTextualEditorAction->setEnabled(false);
+
+    d->toolVisualEditorAction = new QAction("Visual editor", this);
+    d->toolVisualEditorAction->setShortcut(Qt::MetaModifier+Qt::Key_2);
+    d->toolVisualEditorAction->setToolTip("Switch to the visual editor (Ctrl+3)");
+    d->toolVisualEditorAction->setIcon(QIcon(":icons/widget.tiff"));
+    connect(d->toolVisualEditorAction, SIGNAL(triggered()), this, SLOT(switchToVisualEditor()));
+    d->toolVisualEditorAction->setEnabled(false);
+
+    d->toolViewerAction = new QAction("Viewer", this);
+    d->toolViewerAction->setShortcut(Qt::MetaModifier+Qt::Key_3);
+    d->toolViewerAction->setToolTip("Switch to the viewer (Ctrl+3)");
+    d->toolViewerAction->setIcon(QIcon(":icons/widget.tiff"));
+    connect(d->toolViewerAction, SIGNAL(triggered()), this, SLOT(switchToViewer()));
+    d->toolViewerAction->setEnabled(false);
+
+    d->toolBar = addToolBar("Editors");
+    d->toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    d->toolBar->setIconSize(QSize(32, 32));
+    d->toolBar->addAction(d->toolTextualEditorAction);
+    d->toolBar->addAction(d->toolVisualEditorAction);
+    d->toolBar->addAction(d->toolViewerAction);
+
+#ifdef Q_WS_MAC
+    dtkSearchBoxAction *dtk_search_box = new dtkSearchBoxAction(d->toolBar);
+    d->toolBar->addWidget(new dtkSpacer(d->toolBar));
+    d->toolBar->addAction(dtk_search_box);
+#else
+    dtkSearchBox *dtk_search_box = new dtkSearchBox(d->toolBar);
+    d->toolBar->addWidget(new dtkSpacer(d->toolBar));
+    d->toolBar->addWidget(dtk_search_box);
+    d->toolBar->addWidget(new dtkSpacer(d->toolBar, 20, 0));
+#endif
+
     d->q = this;
 
     d->stack = new QStackedWidget(this);
 
     d->editor = new dtkTextEditor(d->stack);
-    d->editor->readSettings();
     d->editor->setFrameStyle(QFrame::NoFrame);
     d->editor->setAttribute(Qt::WA_MacShowFocusRect, false);
-
-    d->completer = new dtkTextEditorCompleterDocument(d->editor);
-    d->editor->setCompleter(d->completer);
 
     d->highlighter = new dtkTextEditorSyntaxHighlighterCpp(d->editor);
     Q_UNUSED(d->highlighter);
@@ -124,12 +185,10 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     connect(d->editor, SIGNAL(documentChanged()), this, SLOT(onDocumentChanged()));
 
     d->interpreter = new dtkInterpreter(this);
-    d->interpreter->readSettings();
     d->interpreter->setFrameStyle(QFrame::NoFrame);
     d->interpreter->setAttribute(Qt::WA_MacShowFocusRect, false);
     d->interpreter->setMaximumHeight(200);
-    d->interpreter->registerInterpreter(dtkScriptInterpreterPool::instance()->python());
-    d->interpreter->setFocus();
+    d->interpreter->registerInterpreter(new dtkScriptInterpreterPython);
 
     d->stack->addWidget(d->editor);
 
@@ -147,16 +206,51 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     outer_splitter->addWidget(inner_splitter);
     outer_splitter->addWidget(d->plugin_browser);
 
+    log_output = d->interpreter;
+
+    dtkLog::registerHandler(dtkCreatorRedirectLogHandler);
+
     this->setWindowTitle(d->editor->fileName());
+    this->setUnifiedTitleAndToolBarOnMac(true);
     this->setCentralWidget(outer_splitter);
+
+    this->readSettings();
 }
 
 dtkCreatorMainWindow::~dtkCreatorMainWindow(void)
 {
+    this->writeSettings();
+
     delete d->interpreter;
     delete d->editor;
     delete d->highlighter;
     delete d;
+}
+
+void dtkCreatorMainWindow::readSettings(void)
+{
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("creator");
+    QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
+    QSize size = settings.value("size", QSize(400, 400)).toSize();
+    move(pos);
+    resize(size);
+    settings.endGroup();
+
+    d->editor->readSettings();
+    d->interpreter->readSettings();
+}
+
+void dtkCreatorMainWindow::writeSettings(void)
+{
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("creator");
+    settings.setValue("pos", pos());
+    settings.setValue("size", size());
+    settings.endGroup();
+
+    d->editor->writeSettings();
+    d->interpreter->writeSettings();
 }
 
 bool dtkCreatorMainWindow::fileOpen(void)
@@ -199,11 +293,24 @@ void dtkCreatorMainWindow::showPreferences(void)
     // widget->show();
 }
 
+void dtkCreatorMainWindow::switchToTextualEditor(void)
+{
+    d->stack->setCurrentIndex(0);
+}
+
+void dtkCreatorMainWindow::switchToVisualEditor(void)
+{
+    d->stack->setCurrentIndex(1);
+}
+
+void dtkCreatorMainWindow::switchToViewer(void)
+{
+    d->stack->setCurrentIndex(2);
+}
+
 void dtkCreatorMainWindow::closeEvent(QCloseEvent *event)
 {
     if (d->maySave()) {
-        d->interpreter->writeSettings();
-        d->editor->writeSettings();
         event->accept();
     } else {
         event->ignore();

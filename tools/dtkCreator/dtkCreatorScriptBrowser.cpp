@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 10:07:29 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug  4 11:26:13 2009 (+0200)
+ * Last-Updated: Wed Aug  5 10:02:19 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 25
+ *     Update #: 80
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 
 #include <dtkScript/dtkScriptInterpreter.h>
 #include <dtkScript/dtkScriptInterpreterPool.h>
+#include <dtkScript/dtkScriptManager.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkCreatorScriptListPrivate
@@ -68,29 +69,18 @@ dtkCreatorScriptList::dtkCreatorScriptList(QWidget *parent) : dtkSplitter(parent
     this->setSizes(QList<int>() << static_cast<int>(parent->height()*0.7) << static_cast<int>(parent->height()*0.3) );
     this->setOrientation(Qt::Vertical);
 
-    // Initialization ---
-    QDir dir(QApplication::applicationDirPath());
-#ifdef Q_WS_MAC
-    dir.cdUp();
-    dir.cdUp();
-    dir.cdUp();
-#elif defined(Q_WS_WIN)
-	dir.cdUp();
-#endif
-    dir.cdUp();
-    if(!dir.cd("scripts"))
-        dtkDebug() << "No script found in " << dir.absolutePath();
-
     d->model = new QDirModel;
+    d->model->setFilter(QDir::AllDirs);
     d->categories->setModel(d->model);
-    d->categories->setRootIndex(d->model->index(dir.absolutePath()));
+    d->categories->setRootIndex(d->model->index(dtkScriptManager::instance()->scriptPath()));
     d->items->setModel(d->model);
-    d->items->setRootIndex(d->model->index(dir.absolutePath()));
+    d->items->setRootIndex(d->model->index(dtkScriptManager::instance()->scriptPath() + "/python"));
 
-    connect(d->categories, SIGNAL(clicked(const QModelIndex&)), d->items, SLOT(setRootIndex(const QModelIndex&)));
+    connect(d->categories, SIGNAL(clicked(const QModelIndex&)), this, SLOT(onModelIndexClicked(const QModelIndex&)));
+    connect(d->items, SIGNAL(clicked(const QModelIndex&)), this, SLOT(onModelIndexClicked(const QModelIndex&)));
+    connect(d->categories, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(onModelIndexDoubleClicked(const QModelIndex&)));
+    connect(d->items, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(onModelIndexDoubleClicked(const QModelIndex&)));
 
-    connect(d->items, SIGNAL(clicked(const QModelIndex&)), this, SLOT(preloadScript(const QModelIndex&)));
-    connect(d->items, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(loadScript(const QModelIndex&)));
 }
 
 dtkCreatorScriptList::~dtkCreatorScriptList(void)
@@ -103,34 +93,32 @@ dtkCreatorScriptList::~dtkCreatorScriptList(void)
     d = NULL;
 }
 
-void dtkCreatorScriptList::preloadScript(const QModelIndex& index)
+void dtkCreatorScriptList::preloadScript(const QString& fileName)
 {
-    QString fileName = d->model->filePath(index);
-    int stat;
-    
-    dtkScriptInterpreter *interpreter;
+    dtkScriptInterpreter *interpreter; int stat;
     if (fileName.endsWith(".py"))
         interpreter = dtkScriptInterpreterPool::instance()->python();
     else if (fileName.endsWith(".tcl"))
         interpreter = dtkScriptInterpreterPool::instance()->tcl();
+    else
+        return;
     interpreter->load(fileName);
     QString description = interpreter->interpret("description", QStringList(), &stat);
 
-    // interpreter->release();
+    interpreter->release();
 
     d->description->setText(description);
 }
 
-void dtkCreatorScriptList::loadScript(const QModelIndex& index)
+void dtkCreatorScriptList::loadScript(const QString& fileName)
 {
-    int stat;
-    QString fileName = d->model->filePath(index);
-
-    dtkScriptInterpreter *interpreter;
+    dtkScriptInterpreter *interpreter; int stat;
     if (fileName.endsWith(".py"))
         interpreter = dtkScriptInterpreterPool::instance()->python();
     else if (fileName.endsWith(".tcl"))
         interpreter = dtkScriptInterpreterPool::instance()->tcl();
+    else
+        return;
     interpreter->load(fileName);
     interpreter->interpret("init", QStringList(), &stat);
     interpreter->retain();
@@ -138,6 +126,47 @@ void dtkCreatorScriptList::loadScript(const QModelIndex& index)
     // connect(dtkCreatorWidgetFactory::instance(), SIGNAL(interpret(const QString&, int *)), interpreter, SLOT(interpret(const QString&, int *)));
 
     emit loaded(fileName);
+}
+
+void dtkCreatorScriptList::onModelIndexClicked(const QModelIndex& index)
+{
+    QFileInfo info = d->model->fileInfo(index);
+
+    if(sender() == d->categories) {
+        if(info.isDir())
+            ; // d->items->setRootIndex(index);
+        else
+            this->preloadScript(info.absoluteFilePath());
+    }
+    
+    if(sender() == d->items) {
+        if(info.isDir()) {
+            // d->categories->setRootIndex(index.parent());
+            // d->items->setRootIndex(index);
+        } else
+            this->preloadScript(info.absoluteFilePath());
+    }
+}
+
+void dtkCreatorScriptList::onModelIndexDoubleClicked(const QModelIndex& index)
+{
+    QFileInfo info = d->model->fileInfo(index);
+
+    if(sender() == d->categories) {
+        if(info.isDir()) {
+            d->categories->setRootIndex(index);
+            d->items->setRootIndex(index.child(2, 0));
+        } else
+            this->loadScript(info.absoluteFilePath());
+    }
+    
+    if(sender() == d->items) {
+        if(info.isDir()) {
+            d->categories->setRootIndex(index);
+            d->items->setRootIndex(index.child(2, 0));
+        } else
+            this->loadScript(info.absoluteFilePath());
+    }
 }
 
 // /////////////////////////////////////////////////////////////////

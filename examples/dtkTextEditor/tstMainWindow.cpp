@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:19:56 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 17 13:57:14 2009 (+0200)
+ * Last-Updated: Wed Aug  5 11:17:18 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 22
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -22,7 +22,6 @@
 #include "tstMainWindow.h"
 
 #include <dtkGui/dtkTextEditor.h>
-#include <dtkGui/dtkTextEditorCompleter.h>
 #include <dtkGui/dtkTextEditorPreferencesWidget.h>
 #include <dtkGui/dtkTextEditorSyntaxHighlighterCpp.h>
 #include <dtkGui/dtkTextEditorSyntaxHighlighterPython.h>
@@ -43,7 +42,6 @@ public:
     QAction *preferencesAction;
 
     dtkTextEditor *editor;
-    dtkTextEditorCompleter *completer;
     dtkTextEditorSyntaxHighlighter *highlighter;
 
 public:
@@ -74,9 +72,6 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
 
     d->editor = new dtkTextEditor(this);
     d->editor->readSettings();
-
-    d->completer = new dtkTextEditorCompleterDocument(d->editor);
-    d->editor->setCompleter(d->completer);
 
     d->highlighter = new dtkTextEditorSyntaxHighlighterCpp(d->editor);
     Q_UNUSED(d->highlighter);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 21:03:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug  4 21:34:52 2009 (+0200)
+ * Last-Updated: Tue Aug  4 22:08:57 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 28
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -28,7 +28,8 @@
 class dtkScriptManagerPrivate
 {
 public:
-    QString path;
+    QString script_path;
+    QString module_path;
 
     QHash<QString, dtkScriptInterpreter *> loaders;
 };
@@ -55,16 +56,34 @@ void dtkScriptManager::readSettings(void)
 {
     QSettings settings("inria", "dtk");
     settings.beginGroup("scripts");
-    d->path = settings.value("path").toString();
+    d->script_path = settings.value("script_path").toString();
+    d->module_path = settings.value("module_path").toString();
     settings.endGroup();
+
+    if(d->module_path.isEmpty() && d->script_path.isEmpty()) {
+        dtkWarning() << "Your dtk confg does not seem to be set correctly.";
+        dtkWarning() << "Please set scripts.script_path.";
+        dtkWarning() << "Please set scripts.module_path.";
+    }
 }
 
 void dtkScriptManager::writeSettings(void)
 {
     QSettings settings("inria", "dtk");
     settings.beginGroup("scripts");
-    settings.setValue("path", d->path);
+    settings.setValue("script_path", d->script_path);
+    settings.setValue("module_path", d->module_path);
     settings.endGroup();
+}
+
+QString dtkScriptManager::scriptPath(void) const
+{
+    return d->script_path;
+}
+
+QString dtkScriptManager::modulePath(void) const
+{
+    return d->module_path;
 }
 
 dtkScriptManager::dtkScriptManager(void) : d(new dtkScriptManagerPrivate)

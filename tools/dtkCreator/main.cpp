@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:37:15 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug  4 16:01:16 2009 (+0200)
+ * Last-Updated: Wed Aug  5 13:09:26 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 20
+ *     Update #: 39
  */
 
 /* Commentary: 
@@ -21,10 +21,20 @@
 
 #include <dtkCore/dtkPluginManager.h>
 
+#include <dtkScript/dtkScriptManager.h>
+
+#ifdef Q_WS_MAC
+#include <dtkGui/dtkCocoaController.h>
+#endif
+
 #include "dtkCreatorMainWindow.h"
 
 int main(int argc, char **argv)
 {
+#ifdef Q_WS_MAC
+    dtkCocoaController::instance()->initialize();
+#endif
+
     QApplication application(argc, argv);
     application.setApplicationName("dtkCreator");
     application.setOrganizationName("inria");
@@ -32,12 +42,18 @@ int main(int argc, char **argv)
     application.setApplicationVersion("0.1.0");
 
     dtkPluginManager::instance()->initialize();
+    dtkScriptManager::instance()->initialize();
 
-    dtkCreatorMainWindow *mainwindow = new dtkCreatorMainWindow; mainwindow->show();
-    
+    dtkCreatorMainWindow mainwindow; mainwindow.show();
+
     int status = application.exec();
 
     dtkPluginManager::instance()->uninitialize();
+    dtkScriptManager::instance()->uninitialize();
+
+#ifdef Q_WS_MAC
+    dtkCocoaController::instance()->uninitialize();
+#endif
 
     return status;
 }

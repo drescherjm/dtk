@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Aug  4 19:48:00 2009 (+0200)
+## Last-Updated: Wed Aug  5 10:14:51 2009 (+0200)
 ##           By: Julien Wintz
-##     Update #: 78
+##     Update #: 84
 ######################################################################
 ## 
 ### Commentary: 
@@ -157,6 +157,17 @@ if(PYTHON_DEBUG_LIBRARIES)
 else(PYTHON_DEBUG_LIBRARIES)
   target_link_libraries(${PROJECT_NAME} ${PYTHON_LIBRARIES})
 endif(PYTHON_DEBUG_LIBRARIES)
+
+## #################################################################
+## Handling of generated script modules
+## #################################################################
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dtkCore.i
+  COMMAND ${CMAKE_COMMAND} ARGS -E  make_directory ${CMAKE_BINARY_DIR}/modules
+  COMMAND ${CMAKE_COMMAND} ARGS -E  copy ${${PROJECT_NAME}_BINARY_DIR}/core.py ${CMAKE_BINARY_DIR}/modules
+  COMMENT "-- Moving python modules to ${CMAKE_BINARY_DIR}/modules"
+)
 
 ## #################################################################
 ## Installation

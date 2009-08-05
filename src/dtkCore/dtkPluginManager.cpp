@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug  4 19:24:29 2009 (+0200)
+ * Last-Updated: Tue Aug  4 22:08:24 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 66
+ *     Update #: 69
  */
 
 /* Commentary: 
@@ -65,6 +65,11 @@ void dtkPluginManager::readSettings(void)
     settings.beginGroup("plugins");
     d->path = settings.value("path").toString();
     settings.endGroup();
+
+    if(d->path.isEmpty()) {
+        dtkWarning() << "Your dtk confg does not seem to be set correctly.";
+        dtkWarning() << "Please set plugins.path.";
+    }
 }
 
 void dtkPluginManager::writeSettings(void)

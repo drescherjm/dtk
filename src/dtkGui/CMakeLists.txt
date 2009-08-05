@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Jul 31 22:27:14 2009 (+0200)
+## Last-Updated: Wed Aug  5 11:15:29 2009 (+0200)
 ##           By: Julien Wintz
-##     Update #: 47
+##     Update #: 48
 ######################################################################
 ## 
 ### Commentary: 
@@ -32,7 +32,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkSplitter.h
   dtkTagCloud.h
   dtkTextEditor.h
-  dtkTextEditorCompleter.h
   dtkTextEditorPreferencesWidget.h
   dtkTextEditorSyntaxHighlighter.h
   dtkTextEditorSyntaxHighlighterCpp.h
@@ -48,7 +47,6 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkSplitter.h
   dtkTagCloud.h
   dtkTextEditor.h
-  dtkTextEditorCompleter.h
   dtkTextEditorPreferencesWidget.h
   dtkTextEditorSyntaxHighlighter.h
 )
@@ -60,7 +58,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkSplitter.cpp
   dtkTagCloud.cpp
   dtkTextEditor.cpp
-  dtkTextEditorCompleter.cpp
   dtkTextEditorPreferencesWidget.cpp
   dtkTextEditorSyntaxHighlighter.cpp
   dtkTextEditorSyntaxHighlighterCpp.cpp

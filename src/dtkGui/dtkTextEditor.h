@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:23:52 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat May 16 00:27:08 2009 (+0200)
+ * Last-Updated: Wed Aug  5 11:15:16 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 42
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -24,7 +24,6 @@
 
 #include <QtGui/QPlainTextEdit>
 
-class dtkTextEditorCompleter;
 class dtkTextEditorPreferencesWidget;
 class dtkTextEditorPrivate;
 
@@ -113,8 +112,6 @@ public:
     QColor backgroundColor(void) const;
     QColor foregroundColor(void) const;
 
-    dtkTextEditorCompleter *completer(void);
-
     dtkTextEditorPreferencesWidget *preferencesWidget(QWidget *parent = 0);
 
     void setShowLineNumbers(bool show);
@@ -124,8 +121,6 @@ public:
     void setBackgroundOpacity(int opacity);
     void setBackgroundColor(QColor color);
     void setForegroundColor(QColor color);
-
-    void setCompleter(dtkTextEditorCompleter *completer);
 
 signals:
     void titleChanged(QString);
@@ -164,9 +159,6 @@ protected slots:
     void onUpdateExtraAreaWidth(void);
     void onCursorPositionChanged(void);
     void onUpdateRequest(const QRect&, int);
-
-private slots:
-    void insertCompletion(const QString &completion);
 
 private:
     QString textUnderCursor(void) const;

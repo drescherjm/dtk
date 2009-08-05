@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:23:18 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat May 16 00:27:15 2009 (+0200)
+ * Last-Updated: Wed Aug  5 11:14:59 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 113
+ *     Update #: 117
  */
 
 /* Commentary: 
@@ -22,7 +22,6 @@
 #include <dtkCore/dtkLog.h>
 
 #include <dtkGui/dtkTextEditor.h>
-#include <dtkGui/dtkTextEditorCompleter.h>
 #include <dtkGui/dtkTextEditorSyntaxHighlighterCpp.h>
 #include <dtkGui/dtkTextEditorSyntaxHighlighterPython.h>
 #include <dtkGui/dtkTextEditorSyntaxHighlighterTcl.h>
@@ -280,8 +279,6 @@ public:
     bool showCurrentLine;
     bool showRevisions;
 
-    dtkTextEditorCompleter *completer;
-
     dtkTextEditorDocument *document;
 
     dtkTextEditorExtraArea *extraArea;
@@ -301,8 +298,6 @@ dtkTextEditor::dtkTextEditor(QWidget *parent) : QPlainTextEdit(parent)
 
     d->extraArea = new dtkTextEditorExtraArea(this);
     d->preferences = NULL;
-
-    d->completer = NULL;
 
     d->document = new dtkTextEditorDocument;
     // begin setting up document
@@ -459,11 +454,6 @@ QColor dtkTextEditor::foregroundColor(void) const
     return p.color(QPalette::Text);
 }
 
-dtkTextEditorCompleter *dtkTextEditor::completer(void)
-{
-    return d->completer;
-}
-
 dtkTextEditorPreferencesWidget *dtkTextEditor::preferencesWidget(QWidget *parent)
 {
     if(!d->preferences)
@@ -526,23 +516,6 @@ void dtkTextEditor::setForegroundColor(QColor color)
     this->viewport()->update();
 }
 
-void dtkTextEditor::setCompleter(dtkTextEditorCompleter *completer)
-{
-    if (d->completer)
-         QObject::disconnect(d->completer, 0, this, 0);
-
-    d->completer = completer;
-    
-    if (!d->completer)
-        return;
-    
-    d->completer->setWidget(this);
-    d->completer->setCompletionMode(QCompleter::PopupCompletion);
-    d->completer->setCaseSensitivity(Qt::CaseInsensitive);
-
-    QObject::connect(d->completer, SIGNAL(activated(const QString&)), this, SLOT(insertCompletion(const QString&)));
-}
-
 void dtkTextEditor::changeEvent(QEvent *e)
 {
     QPlainTextEdit::changeEvent(e);
@@ -560,9 +533,6 @@ void dtkTextEditor::changeEvent(QEvent *e)
 
 void dtkTextEditor::focusInEvent(QFocusEvent *event)
 {
-    if (d->completer)
-        d->completer->setWidget(this);
-
     QPlainTextEdit::focusInEvent(event);
 }
 
@@ -570,69 +540,7 @@ void dtkTextEditor::focusInEvent(QFocusEvent *event)
 
 void dtkTextEditor::keyPressEvent(QKeyEvent *event)
 {
-    if (d->completer && d->completer->popup()->isVisible()) {
-        switch (event->key()) {
-        case Qt::Key_Enter:
-        case Qt::Key_Return:
-        case Qt::Key_Escape:
-        case Qt::Key_Tab:
-        case Qt::Key_Backtab:
-            event->ignore();
-            return;
-        default:
-            break;
-        }
-    }
-    
-    static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-=");
-
-    if(dynamic_cast<dtkTextEditorCompleterDocument *>(d->completer)) {
-
-        bool isShortcut = ((event->modifiers() & Qt::ControlModifier) && event->key() == Qt::Key_E);
-        if (!d->completer || !isShortcut)
-            QPlainTextEdit::keyPressEvent(event);
-        
-        const bool ctrlOrShift = event->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
-        if (!d->completer || (ctrlOrShift && event->text().isEmpty()))
-            return;
-        
-        bool hasModifier = (event->modifiers() != Qt::NoModifier) && !ctrlOrShift;
-        QString completionPrefix = textUnderCursor();
-        
-        if (!isShortcut && (hasModifier || event->text().isEmpty()|| completionPrefix.length() < 3
-                            || eow.contains(event->text().right(1)))) {
-            d->completer->popup()->hide();
-            return;
-        }
-        
-        if (completionPrefix != d->completer->completionPrefix()) {
-            d->completer->setCompletionPrefix(completionPrefix);
-            d->completer->popup()->setCurrentIndex(d->completer->completionModel()->index(0, 0));
-        }
-        QRect cr = cursorRect();
-        cr.setWidth(d->completer->popup()->sizeHintForColumn(0)
-                    + d->completer->popup()->verticalScrollBar()->sizeHint().width());
-        d->completer->complete(cr);
-    }
-
-    if(dynamic_cast<dtkTextEditorCompleterPath *>(d->completer)) {
-        
-        if(event->key() == Qt::Key_Tab) {
-            QString currentWord = textUnderCursor();
-            QString currentLine = this->currentLine();
-            QString prefix = currentLine.split(currentWord).first().split(QRegExp("\\s+")).last();
-
-            QString completionPrefix = prefix + currentWord;
-
-            d->completer->setCompletionPrefix(completionPrefix);
-
-            QRect cr = cursorRect();
-            cr.setWidth(d->completer->popup()->sizeHintForColumn(0)
-                        + d->completer->popup()->verticalScrollBar()->sizeHint().width());
-            d->completer->complete(cr);
-        } else
-            QPlainTextEdit::keyPressEvent(event);
-    }
+    QPlainTextEdit::keyPressEvent(event);
 }
 
 void dtkTextEditor::paintEvent(QPaintEvent *event)
@@ -852,19 +760,6 @@ void dtkTextEditor::onUpdateRequest(const QRect &r, int dy)
 void dtkTextEditor::onCursorPositionChanged(void)
 {
     this->viewport()->update();
-}
-
-void dtkTextEditor::insertCompletion(const QString &completion)
-{
-    if (d->completer->widget() != this)
-        return;
-
-    QTextCursor tc = textCursor();
-    int extra = completion.length() - d->completer->completionPrefix().length();
-    tc.movePosition(QTextCursor::Left);
-    tc.movePosition(QTextCursor::EndOfWord);
-    tc.insertText(completion.right(extra));
-    setTextCursor(tc);
 }
 
 QString dtkTextEditor::textUnderCursor(void) const

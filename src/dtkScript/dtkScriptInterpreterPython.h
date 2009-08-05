@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 26 16:28:12 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Aug  4 21:00:52 2009 (+0200)
+ * Last-Updated: Tue Aug  4 22:03:06 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 20
+ *     Update #: 21
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include <dtkCore/dtkGlobal.h>
 
 #include <dtkScript/dtkScriptInterpreter.h>
+#include <dtkScript/dtkScriptManager.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkScriptInterpreterPython

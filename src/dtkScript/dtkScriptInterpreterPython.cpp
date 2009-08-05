@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 26 16:29:02 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Aug  4 09:05:31 2009 (+0200)
+ * Last-Updated: Wed Aug  5 11:34:12 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 206
+ *     Update #: 214
  */
 
 /* Commentary: 
@@ -117,27 +117,16 @@ dtkScriptInterpreterPython::dtkScriptInterpreterPython(QObject *parent) : dtkScr
 
     // -- Setting up utilities
     interpret("import sys", &stat);
-//#ifdef __APPLE__
-//    interpret("sys.path.append(\"" + QCoreApplication::applicationDirPath() + "/../../../libraries\")", &stat);
-//    interpret("sys.path.append(\"" + QCoreApplication::applicationDirPath() + "/../../../modules\")",   &stat);
-//#elif defined (Q_WS_WIN)
-//    interpret("sys.path.append(\"" + QCoreApplication::applicationDirPath() + "/../libraries\")", &stat);
-//    interpret("sys.path.append(\"" + QCoreApplication::applicationDirPath() + "/../modules\")",   &stat);
-//#else
-//    interpret("sys.path.append(\"" + QCoreApplication::applicationDirPath() + "/libraries\")", &stat);
-//    interpret("sys.path.append(\"" + QCoreApplication::applicationDirPath() + "/modules\")",   &stat);
-//#endif
-//    interpret("sys.path.append(\"" + QCoreApplication::applicationDirPath() + "/../libraries\")", &stat); // for example apps
-//    interpret("sys.path.append(\"" + QCoreApplication::applicationDirPath() + "/../modules\")",   &stat); // for example apps
-//
-//    // -- Setting up core module
-//    interpret("import core"                                                              , &stat);
-//    interpret("dataFactory    = core.dtkAbstractDataFactory.instance()"                  , &stat);
-//    interpret("processFactory = core.dtkAbstractProcessFactory.instance()"               , &stat);
-//    interpret("viewFactory    = core.dtkAbstractViewFactory.instance()"                  , &stat);
-//    interpret("pluginManager  = core.dtkPluginManager.instance()"                        , &stat);
-//    interpret("deviceFactory  = core.dtkAbstractDeviceFactory.instance()"                , &stat);
+    interpret("sys.path.append(\"" + dtkScriptManager::instance()->modulePath() + "\")", &stat);
 
+    // -- Setting up core module
+    interpret("import core"                                                              , &stat);
+    interpret("dataFactory    = core.dtkAbstractDataFactory.instance()"                  , &stat);
+    interpret("processFactory = core.dtkAbstractProcessFactory.instance()"               , &stat);
+    interpret("viewFactory    = core.dtkAbstractViewFactory.instance()"                  , &stat);
+    interpret("pluginManager  = core.dtkPluginManager.instance()"                        , &stat);
+    interpret("deviceFactory  = core.dtkAbstractDeviceFactory.instance()"                , &stat);
+    
     dtkScriptInterpreterPythonModuleManager::instance()->initialize(this);
 
     registerPrompt(&prompt);

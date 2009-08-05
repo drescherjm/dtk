@@ -1,4 +1,5 @@
 #include <QtGui/QApplication>
+
 #include "tstMainWindow.h"
 
 int main(int argc, char *argv[])

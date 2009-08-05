@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:19:56 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 17 13:54:28 2009 (+0200)
+ * Last-Updated: Wed Aug  5 11:16:46 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 20
+ *     Update #: 21
  */
 
 /* Commentary: 
@@ -21,7 +21,6 @@
 
 #include "tstMainWindow.h"
 
-#include <dtkGui/dtkTextEditorCompleter.h>
 #include <dtkGui/dtkInterpreter.h>
 #include <dtkGui/dtkInterpreterPreferencesWidget.h>
 
@@ -31,8 +30,6 @@ public:
     QMenu *fileMenu;
 
     QAction *preferencesAction;
-
-    dtkTextEditorCompleter *completer;
 
     dtkInterpreter *interpreter;
 
@@ -46,9 +43,6 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
 
     d->interpreter = new dtkInterpreter(this);
     d->interpreter->readSettings();
-
-    d->completer = new dtkTextEditorCompleterPath(d->interpreter);
-    d->interpreter->setCompleter(d->completer);
 
     d->preferencesAction = new QAction("Preferences", this);
     d->preferencesAction->setShortcut(Qt::ControlModifier + Qt::Key_Comma);

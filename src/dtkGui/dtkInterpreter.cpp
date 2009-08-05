@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 15:31:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Aug  5 11:10:47 2009 (+0200)
+ * Last-Updated: Wed Aug  5 18:46:19 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 297
+ *     Update #: 360
  */
 
 /* Commentary: 
@@ -79,6 +79,7 @@ void dtkInterpreter::keyPressEvent(QKeyEvent *event)
     QTextCursor cursor = textCursor();
 
     if(event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
+
         this->onKeyEnterPressed();
 
     } else if(event->key() == Qt::Key_Backspace) {
@@ -152,6 +153,13 @@ void dtkInterpreter::writeSettings(void)
     settings.setValue("backgroundcolor", this->backgroundColor());
     settings.setValue("foregroundcolor", this->foregroundColor());
     settings.endGroup();
+}
+
+void dtkInterpreter::registerAsHandler(dtkLog::Handler handler)
+{
+    dtkLog::registerHandler(handler);
+
+    disconnect(d->interpreter, SIGNAL(interpreted(const QString&, int *)), this, SLOT(output(const QString&, int *)));
 }
 
 void dtkInterpreter::registerInterpreter(dtkScriptInterpreter *interpreter)
@@ -252,6 +260,7 @@ void dtkInterpreter::onKeyEnterPressed(void)
     int stat;
 
     QString line = currentLine();
+
     if(d->interpreter)
         line.remove(filter(d->interpreter->prompt()));
 
@@ -291,11 +300,16 @@ void dtkInterpreter::onKeyEnterPressed(void)
         
         emit input("", &stat);
         
-    } else if (line.startsWith(":man ")) {            
+    } else if (line.startsWith(":man ")) {
         
         emit input("", &stat);
-        
+
+    } else if(line.isEmpty()) {
+
+        this->appendPlainText(filter(d->interpreter->prompt()));
+
     } else {
+
         emit input(line, &stat);
     }
 }

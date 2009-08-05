@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Aug  5 13:09:57 2009 (+0200)
+ * Last-Updated: Wed Aug  5 18:48:27 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 165
+ *     Update #: 182
  */
 
 /* Commentary: 
@@ -189,6 +189,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->interpreter->setAttribute(Qt::WA_MacShowFocusRect, false);
     d->interpreter->setMaximumHeight(200);
     d->interpreter->registerInterpreter(new dtkScriptInterpreterPython);
+    log_output = d->interpreter;
+    d->interpreter->registerAsHandler(dtkCreatorRedirectLogHandler);
 
     d->stack->addWidget(d->editor);
 
@@ -205,10 +207,6 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     outer_splitter->addWidget(d->script_browser);
     outer_splitter->addWidget(inner_splitter);
     outer_splitter->addWidget(d->plugin_browser);
-
-    log_output = d->interpreter;
-
-    dtkLog::registerHandler(dtkCreatorRedirectLogHandler);
 
     this->setWindowTitle(d->editor->fileName());
     this->setUnifiedTitleAndToolBarOnMac(true);
@@ -325,5 +323,5 @@ void dtkCreatorMainWindow::onTitleChanged(QString title)
 void dtkCreatorMainWindow::onDocumentChanged(void)
 {
     if(!this->windowTitle().endsWith("*"))
-        this->setWindowTitle(this->windowTitle() + "*");
+        this->setWindowTitle("dtkCreator - " + this->windowTitle() + "*");
 }

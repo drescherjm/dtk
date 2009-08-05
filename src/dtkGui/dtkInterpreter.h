@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 15:29:01 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug  4 15:21:17 2009 (+0200)
+ * Last-Updated: Wed Aug  5 18:46:00 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 35
+ *     Update #: 39
  */
 
 /* Commentary: 
@@ -21,6 +21,9 @@
 #define DTKINTERPRETER_H
 
 #include "dtkGuiExport.h"
+
+#include <dtkCore/dtkLog.h>
+
 #include <dtkGui/dtkTextEditor.h>
 
 class dtkScriptInterpreter;
@@ -40,6 +43,7 @@ public:
     void writeSettings(void);
 
     void registerInterpreter(dtkScriptInterpreter *interpreter);
+    void registerAsHandler(dtkLog::Handler handler);
 
     QString filter(QString text);
 

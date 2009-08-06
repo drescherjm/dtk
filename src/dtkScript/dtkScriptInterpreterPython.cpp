@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 26 16:29:02 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Aug  5 11:34:12 2009 (+0200)
+ * Last-Updated: Thu Aug  6 23:02:37 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 214
+ *     Update #: 245
  */
 
 /* Commentary: 
@@ -27,6 +27,8 @@
 
 #include <iostream>
 
+static bool redirection_occured;
+
 static PyObject* redirector_init(PyObject *, PyObject *)
 {
     Py_INCREF(Py_None);
@@ -45,6 +47,8 @@ static PyObject* redirector_write(PyObject *, PyObject *args)
 
     if(!text.simplified().isEmpty())
         std::cout << text.toAscii().constData() << std::flush << std::endl;
+
+    redirection_occured = true;
 
     Py_INCREF(Py_None);
     return Py_None;
@@ -168,13 +172,16 @@ void dtkScriptInterpreterPython::unregisterVariable(QString name)
 
 QString dtkScriptInterpreterPython::interpret(const QString& command, int *stat)
 {
+    redirection_occured = false;
+
     switch(PyRun_SimpleString(command.toAscii().constData())) {
     case  0: *stat = Status_Ok;    break;
     case -1: *stat = Status_Error; break;
     default: break;
     }
 
-    emit interpreted("", stat);
+    if(!redirection_occured)
+        emit interpreted("", stat);
 
     dtkScriptInterpreterSynchronizer::instance()->wake();
 

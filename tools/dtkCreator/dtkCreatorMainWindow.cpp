@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Aug  5 18:48:27 2009 (+0200)
+ * Last-Updated: Fri Aug  7 00:00:05 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 182
+ *     Update #: 262
  */
 
 /* Commentary: 
@@ -17,9 +17,11 @@
  * 
  */
 
+#include "dtkCreatorController.h"
 #include "dtkCreatorMainWindow.h"
 #include "dtkCreatorPluginBrowser.h"
 #include "dtkCreatorScriptBrowser.h"
+#include "dtkCreatorViewer.h"
 
 #include <dtkCore/dtkLog.h>
 
@@ -28,8 +30,10 @@
 #include <dtkScript/dtkScriptInterpreterPython.h>
 #include <dtkScript/dtkScriptInterpreterTcl.h>
 
+#include <dtkGui/dtkInspector.h>
 #include <dtkGui/dtkInterpreter.h>
 #include <dtkGui/dtkInterpreterPreferencesWidget.h>
+#include <dtkGui/dtkPreferencesWidget.h>
 #include <dtkGui/dtkSearchBox.h>
 #ifdef Q_WS_MAC
 #include <dtkGui/dtkSearchBoxMac.h>
@@ -67,21 +71,26 @@ public:
     QAction *fileOpenAction;
     QAction *fileSaveAction;
     QAction *fileSaveAsAction;
+    QAction *fileQuitAction;
     QAction *preferencesAction;
 
     QAction *toolTextualEditorAction;
     QAction *toolVisualEditorAction;
     QAction *toolViewerAction;
+    QAction *toolInspectorAction;
 
     QToolBar *toolBar;
 
     QStackedWidget *stack;
 
+    dtkInspector *inspector;
+    dtkPreferencesWidget *preferences;
     dtkCreatorScriptBrowser *script_browser;
     dtkCreatorPluginBrowser *plugin_browser;
-    dtkInterpreter *interpreter;
     dtkTextEditor *editor;
     dtkTextEditorSyntaxHighlighter *highlighter;
+    dtkCreatorViewer *viewer;
+    dtkInterpreter *interpreter;
 
 public:
     dtkCreatorMainWindow *q;
@@ -105,6 +114,9 @@ bool dtkCreatorMainWindowPrivate::maySave(void)
      return true;
 }
 
+extern "C" int init_creator(void);               // -- Initialization creator layer python wrapped functions
+extern "C" int Creator_Init(Tcl_Interp *interp); // -- Initialization creator layer tcl wrapped functions
+
 dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent)
 {
     d = new dtkCreatorMainWindowPrivate;
@@ -120,6 +132,10 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->fileSaveAsAction = new QAction("Save as...", this);
     d->fileSaveAsAction->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_S);
     connect(d->fileSaveAsAction, SIGNAL(triggered()), this, SLOT(fileSaveAs()));
+
+    d->fileQuitAction = new QAction("Quit", this);
+    d->fileQuitAction->setShortcut(Qt::ControlModifier + Qt::Key_Q);
+    connect(d->fileQuitAction, SIGNAL(triggered()), this, SLOT(close()));
 
     d->preferencesAction = new QAction("Preferences", this);
     d->preferencesAction->setShortcut(Qt::ControlModifier + Qt::Key_Comma);
@@ -143,14 +159,20 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->toolVisualEditorAction->setToolTip("Switch to the visual editor (Ctrl+3)");
     d->toolVisualEditorAction->setIcon(QIcon(":icons/widget.tiff"));
     connect(d->toolVisualEditorAction, SIGNAL(triggered()), this, SLOT(switchToVisualEditor()));
-    d->toolVisualEditorAction->setEnabled(false);
+    d->toolVisualEditorAction->setEnabled(true);
 
     d->toolViewerAction = new QAction("Viewer", this);
     d->toolViewerAction->setShortcut(Qt::MetaModifier+Qt::Key_3);
     d->toolViewerAction->setToolTip("Switch to the viewer (Ctrl+3)");
     d->toolViewerAction->setIcon(QIcon(":icons/widget.tiff"));
     connect(d->toolViewerAction, SIGNAL(triggered()), this, SLOT(switchToViewer()));
-    d->toolViewerAction->setEnabled(false);
+    d->toolViewerAction->setEnabled(true);
+
+    d->toolInspectorAction = new QAction("Inspector", this);
+    d->toolInspectorAction->setShortcut(Qt::MetaModifier+Qt::Key_I);
+    d->toolInspectorAction->setToolTip("Open inspector (Ctrl+I)");
+    d->toolInspectorAction->setIcon(QIcon(":icons/inspector.tiff"));
+    connect(d->toolInspectorAction, SIGNAL(triggered()), this, SLOT(showInspector()));
 
     d->toolBar = addToolBar("Editors");
     d->toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
@@ -158,9 +180,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->toolBar->addAction(d->toolTextualEditorAction);
     d->toolBar->addAction(d->toolVisualEditorAction);
     d->toolBar->addAction(d->toolViewerAction);
-
 #ifdef Q_WS_MAC
-    dtkSearchBoxAction *dtk_search_box = new dtkSearchBoxAction(d->toolBar);
+    dtkSearchBoxAction *dtk_search_box = new dtkSearchBoxAction("Search", d->toolBar);
     d->toolBar->addWidget(new dtkSpacer(d->toolBar));
     d->toolBar->addAction(dtk_search_box);
 #else
@@ -169,6 +190,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->toolBar->addWidget(dtk_search_box);
     d->toolBar->addWidget(new dtkSpacer(d->toolBar, 20, 0));
 #endif
+    d->toolBar->addAction(d->toolInspectorAction);
 
     d->q = this;
 
@@ -184,15 +206,20 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     connect(d->editor, SIGNAL(titleChanged(QString)), this, SLOT(onTitleChanged(QString)));
     connect(d->editor, SIGNAL(documentChanged()), this, SLOT(onDocumentChanged()));
 
+    d->stack->addWidget(d->editor);
+
+    d->stack->addWidget(new QWidget(this)); // placeholder for visual editor
+
+    d->viewer = new dtkCreatorViewer(this);
+    d->viewer->setAttribute(Qt::WA_MacShowFocusRect, false);
+
+    d->stack->addWidget(d->viewer);
+
     d->interpreter = new dtkInterpreter(this);
     d->interpreter->setFrameStyle(QFrame::NoFrame);
     d->interpreter->setAttribute(Qt::WA_MacShowFocusRect, false);
     d->interpreter->setMaximumHeight(200);
-    d->interpreter->registerInterpreter(new dtkScriptInterpreterPython);
     log_output = d->interpreter;
-    d->interpreter->registerAsHandler(dtkCreatorRedirectLogHandler);
-
-    d->stack->addWidget(d->editor);
 
     dtkSplitter *inner_splitter = new dtkSplitter(this, true);
     inner_splitter->setOrientation(Qt::Vertical);
@@ -208,11 +235,48 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     outer_splitter->addWidget(inner_splitter);
     outer_splitter->addWidget(d->plugin_browser);
 
+    d->preferences = NULL;
+
     this->setWindowTitle(d->editor->fileName());
     this->setUnifiedTitleAndToolBarOnMac(true);
     this->setCentralWidget(outer_splitter);
 
     this->readSettings();
+
+    dtkCreatorController::instance()->attach(d->plugin_browser);
+    dtkCreatorController::instance()->attach(d->script_browser);
+    dtkCreatorController::instance()->attach(d->viewer);
+
+    dtkScriptInterpreterPythonModuleManager::instance()->registerInitializer(&init_creator);
+    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
+        "import creator"
+    );
+    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
+        "viewer = creator.dtkCreatorController.instance().viewer()"
+    );
+    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
+        "holder = creator.dtkCreatorController.instance().scriptBrowser().widget()"
+    );
+    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
+        "widgetFactory = creator.dtkCreatorWidgetFactory.instance()"
+    );
+
+    dtkScriptInterpreterTclModuleManager::instance()->registerInitializer(&Creator_Init);
+    dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
+        "set controller [dtkCreatorController_instance]"
+    );
+    dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
+        "set viewer [$controller viewer]"
+    );
+    dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
+        "set holder [[[$controller workspace] scriptBrowser] widget]"
+    );
+    dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
+	"set widgetFactory [dtkCreatorWidgetFactory_instance]"
+    );
+
+    d->interpreter->registerInterpreter(new dtkScriptInterpreterPython);
+    d->interpreter->registerAsHandler(dtkCreatorRedirectLogHandler);
 }
 
 dtkCreatorMainWindow::~dtkCreatorMainWindow(void)
@@ -280,30 +344,52 @@ bool dtkCreatorMainWindow::fileSaveAs(void)
     return false;
 }
 
+void dtkCreatorMainWindow::showInspector(void)
+{
+    if(!d->inspector) {
+        d->inspector = new dtkInspector(this);
+        // ...
+    }
+
+    d->inspector->show();
+}
+
 void dtkCreatorMainWindow::showPreferences(void)
 {
-    dtkInterpreterPreferencesWidget *widget = d->interpreter->preferencesWidget(this);
-    widget->setWindowFlags(Qt::Sheet);
-    widget->show();
+    if(!d->preferences) {
+        d->preferences = new dtkPreferencesWidget(this);
+        d->preferences->addPage("Textual editor", d->editor->preferencesWidget(this));
+        d->preferences->addPage("Interpreter", d->interpreter->preferencesWidget(this));
+    }
 
-    // dtkTextEditorPreferencesWidget *widget = d->editor->preferencesWidget(this);
-    // widget->setWindowFlags(Qt::Sheet);
-    // widget->show();
+    d->preferences->show();
 }
 
 void dtkCreatorMainWindow::switchToTextualEditor(void)
 {
     d->stack->setCurrentIndex(0);
+
+    d->toolTextualEditorAction->setEnabled(false);
+    d->toolVisualEditorAction->setEnabled(true);
+    d->toolViewerAction->setEnabled(true);
 }
 
 void dtkCreatorMainWindow::switchToVisualEditor(void)
 {
     d->stack->setCurrentIndex(1);
+
+    d->toolTextualEditorAction->setEnabled(true);
+    d->toolVisualEditorAction->setEnabled(false);
+    d->toolViewerAction->setEnabled(true);
 }
 
 void dtkCreatorMainWindow::switchToViewer(void)
 {
     d->stack->setCurrentIndex(2);
+
+    d->toolTextualEditorAction->setEnabled(true);
+    d->toolVisualEditorAction->setEnabled(true);
+    d->toolViewerAction->setEnabled(false);
 }
 
 void dtkCreatorMainWindow::closeEvent(QCloseEvent *event)

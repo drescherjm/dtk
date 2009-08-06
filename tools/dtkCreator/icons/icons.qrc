@@ -1,5 +1,6 @@
 <!DOCTYPE RCC><RCC version="1.0">
   <qresource prefix="icons">
+    <file>inspector.tiff</file>
     <file>widget.tiff</file>
   </qresource>
 </RCC>

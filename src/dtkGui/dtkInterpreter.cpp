@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 15:31:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Aug  5 18:46:19 2009 (+0200)
+ * Last-Updated: Thu Aug  6 23:14:07 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 360
+ *     Update #: 390
  */
 
 /* Commentary: 
@@ -158,8 +158,6 @@ void dtkInterpreter::writeSettings(void)
 void dtkInterpreter::registerAsHandler(dtkLog::Handler handler)
 {
     dtkLog::registerHandler(handler);
-
-    disconnect(d->interpreter, SIGNAL(interpreted(const QString&, int *)), this, SLOT(output(const QString&, int *)));
 }
 
 void dtkInterpreter::registerInterpreter(dtkScriptInterpreter *interpreter)
@@ -311,6 +309,7 @@ void dtkInterpreter::onKeyEnterPressed(void)
     } else {
 
         emit input(line, &stat);
+
     }
 }
 

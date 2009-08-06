@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Aug  5 11:15:29 2009 (+0200)
+## Last-Updated: Thu Aug  6 23:38:33 2009 (+0200)
 ##           By: Julien Wintz
-##     Update #: 48
+##     Update #: 55
 ######################################################################
 ## 
 ### Commentary: 
@@ -25,8 +25,10 @@ project(dtkGui)
 
 set(${PROJECT_NAME}_HEADERS
   dtkGuiExport.h
+  dtkInspector.h
   dtkInterpreter.h
   dtkInterpreterPreferencesWidget.h
+  dtkPreferencesWidget.h
   dtkSearchBox.h
   dtkSpacer.h
   dtkSplitter.h
@@ -40,8 +42,10 @@ set(${PROJECT_NAME}_HEADERS
 )
 
 set(${PROJECT_NAME}_HEADERS_MOC
+  dtkInspector.h
   dtkInterpreter.h
   dtkInterpreterPreferencesWidget.h
+  dtkPreferencesWidget.h
   dtkSearchBox.h
   dtkSpacer.h
   dtkSplitter.h
@@ -52,8 +56,10 @@ set(${PROJECT_NAME}_HEADERS_MOC
 )
 
 set(${PROJECT_NAME}_SOURCES
+  dtkInspector.cpp
   dtkInterpreter.cpp
   dtkInterpreterPreferencesWidget.cpp
+  dtkPreferencesWidget.cpp
   dtkSpacer.cpp
   dtkSplitter.cpp
   dtkTagCloud.cpp

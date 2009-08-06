@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:24:10 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 20 15:46:07 2009 (+0200)
+ * Last-Updated: Thu Aug  6 10:20:51 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 5
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -22,12 +22,12 @@
 
 #include "dtkGuiExport.h"
 
-#include <QWidget>
+#include <dtkGui/dtkPreferencesWidget.h>
 
 class dtkTextEditor;
 class dtkTextEditorPreferencesWidgetPrivate;
 
-class DTKGUI_EXPORT dtkTextEditorPreferencesWidget : public QWidget
+class DTKGUI_EXPORT dtkTextEditorPreferencesWidget : public dtkPreferencesPage
 {
     Q_OBJECT
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 16 23:58:26 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Aug  2 15:02:31 2009 (+0200)
+ * Last-Updated: Thu Aug  6 23:59:18 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 154
+ *     Update #: 170
  */
 
 /* Commentary: 
@@ -130,13 +130,13 @@ void dtkSearchBoxMac::onTextChanged(const QString& text)
 {
     QString attribute = "";
 
-    if(d->menu)
-	foreach(QAction *action, d->menu->actions())
-	    if(action->isChecked())
-		attribute = action->text();
+    // if(d->menu)
+    //     foreach(QAction *action, d->menu->actions())
+    //         if(action->isChecked())
+    //     	attribute = action->text();
     
     emit(textChanged(text));
-    emit(textChanged(text, attribute));
+    // emit(textChanged(text, attribute));
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -182,6 +182,16 @@ void dtkSearchBox::setFocus(void)
 // /////////////////////////////////////////////////////////////////
 // dtkSearchBoxAction
 // /////////////////////////////////////////////////////////////////
+
+dtkSearchBoxAction::dtkSearchBoxAction(const QString& text, QObject *parent) : QWidgetAction(parent), widget(NULL)
+{
+    this->setText(text);
+}
+
+dtkSearchBoxAction::~dtkSearchBoxAction(void)
+{
+
+}
 
 QWidget *dtkSearchBoxAction::createWidget(QWidget *parent)
 {

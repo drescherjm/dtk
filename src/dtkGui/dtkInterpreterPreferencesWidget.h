@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:24:10 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 20 15:46:26 2009 (+0200)
+ * Last-Updated: Thu Aug  6 10:21:27 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 9
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -20,12 +20,12 @@
 #ifndef DTKINTERPRETERPREFERENCESWIDGET_H
 #define DTKINTERPRETERPREFERENCESWIDGET_H
 
-#include <QWidget>
+#include <dtkGui/dtkPreferencesWidget.h>
 
 class dtkInterpreter;
 class dtkInterpreterPreferencesWidgetPrivate;
 
-class dtkInterpreterPreferencesWidget : public QWidget
+class dtkInterpreterPreferencesWidget : public dtkPreferencesPage
 {
     Q_OBJECT
 

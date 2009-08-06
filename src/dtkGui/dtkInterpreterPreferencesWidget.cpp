@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:24:22 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 20 15:46:31 2009 (+0200)
+ * Last-Updated: Thu Aug  6 10:24:27 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 53
+ *     Update #: 54
  */
 
 /* Commentary: 
@@ -38,7 +38,7 @@ public:
     int  backgroundOpacity;
 };
 
-dtkInterpreterPreferencesWidget::dtkInterpreterPreferencesWidget(dtkInterpreter *interpreter, QWidget *parent) : QWidget(parent)
+dtkInterpreterPreferencesWidget::dtkInterpreterPreferencesWidget(dtkInterpreter *interpreter, QWidget *parent) : dtkPreferencesPage(parent)
 {
     d = new dtkInterpreterPreferencesWidgetPrivate;
     d->interpreter     = interpreter;

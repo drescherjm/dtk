@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 16 23:59:34 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Aug  2 15:01:59 2009 (+0200)
+ * Last-Updated: Thu Aug  6 23:47:24 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 40
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -56,8 +56,8 @@ class dtkSearchBoxAction : public QWidgetAction
     Q_OBJECT
 
 public:
-    dtkSearchBoxAction(QObject *parent = 0) : QWidgetAction(parent), widget(NULL) {}
-   ~dtkSearchBoxAction(void) {}
+     dtkSearchBoxAction(const QString& text, QObject *parent = 0);
+    ~dtkSearchBoxAction(void);
    
     QWidget *createWidget(QWidget *parent);
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:24:22 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 20 15:46:13 2009 (+0200)
+ * Last-Updated: Thu Aug  6 10:33:18 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 18
+ *     Update #: 22
  */
 
 /* Commentary: 
@@ -38,7 +38,7 @@ public:
     QFont font;
 };
 
-dtkTextEditorPreferencesWidget::dtkTextEditorPreferencesWidget(dtkTextEditor *editor, QWidget *parent) : QWidget(parent)
+dtkTextEditorPreferencesWidget::dtkTextEditorPreferencesWidget(dtkTextEditor *editor, QWidget *parent) : dtkPreferencesPage(parent)
 {
     d = new dtkTextEditorPreferencesWidgetPrivate;
 

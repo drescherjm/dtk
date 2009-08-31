@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Aug  7 00:00:05 2009 (+0200)
+ * Last-Updated: Fri Aug  7 14:37:16 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 262
+ *     Update #: 263
  */
 
 /* Commentary: 
@@ -403,7 +403,7 @@ void dtkCreatorMainWindow::closeEvent(QCloseEvent *event)
 
 void dtkCreatorMainWindow::onTitleChanged(QString title)
 {
-    this->setWindowTitle(title);
+    this->setWindowTitle("dtkCreator - " + title);
 }
 
 void dtkCreatorMainWindow::onDocumentChanged(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Aug  7 14:37:16 2009 (+0200)
+ * Last-Updated: Mon Aug 31 21:12:18 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 263
+ *     Update #: 266
  */
 
 /* Commentary: 
@@ -234,6 +234,9 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     outer_splitter->addWidget(d->script_browser);
     outer_splitter->addWidget(inner_splitter);
     outer_splitter->addWidget(d->plugin_browser);
+    outer_splitter->setStretchFactor(0, 1);
+    outer_splitter->setStretchFactor(1, 2);
+    outer_splitter->setStretchFactor(2, 1);
 
     d->preferences = NULL;
 

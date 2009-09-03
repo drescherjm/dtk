@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 10:31:04 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug  4 19:58:27 2009 (+0200)
+ * Last-Updated: Mon Aug 31 21:15:39 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 19
+ *     Update #: 21
  */
 
 /* Commentary: 
@@ -164,7 +164,8 @@ dtkCreatorPluginBrowser::dtkCreatorPluginBrowser(QWidget *parent) : dtkSplitter(
     this->addWidget(d->list);
     this->addWidget(d->widget);
     this->setOrientation(Qt::Vertical);
-    this->setSizes(QList<int>() << static_cast<int>(parent->height()*0.9) << static_cast<int>(parent->height()*0.1));
+    this->setStretchFactor(0, 3);
+    this->setStretchFactor(1, 1);
 }
 
 dtkCreatorPluginBrowser::~dtkCreatorPluginBrowser(void)

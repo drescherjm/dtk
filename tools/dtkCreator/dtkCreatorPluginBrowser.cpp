@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 10:31:04 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep  3 13:45:30 2009 (+0200)
+ * Last-Updated: Thu Sep  3 20:15:39 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 27
+ *     Update #: 48
  */
 
 /* Commentary: 
@@ -103,7 +103,7 @@ dtkCreatorPluginList::~dtkCreatorPluginList(void)
 void dtkCreatorPluginList::onPluginClicked(QString name)
 {
     if(dtkPlugin *plugin = dtkPluginManager::instance()->plugin(name))
-        if (QWidget *ui = plugin->ui()) 
+        if (QWidget *ui = plugin->ui())
             emit pluginClicked(ui);
 }
 
@@ -114,15 +114,21 @@ void dtkCreatorPluginList::onPluginClicked(QString name)
 class dtkCreatorPluginWidgetPrivate
 {
 public:
+    QStackedWidget *stack;
 };
 
 // /////////////////////////////////////////////////////////////////
 // dtkCreatorPluginWidget
 // /////////////////////////////////////////////////////////////////
 
-dtkCreatorPluginWidget::dtkCreatorPluginWidget(QWidget *parent) : QStackedWidget(parent), d(new dtkCreatorPluginWidgetPrivate)
+dtkCreatorPluginWidget::dtkCreatorPluginWidget(QWidget *parent) : QWidget(parent), d(new dtkCreatorPluginWidgetPrivate)
 {
-    this->layout()->setContentsMargins(0, 0, 0, 0);
+    d->stack = new QStackedWidget(this);
+
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    layout->addWidget(d->stack);
 }
 
 dtkCreatorPluginWidget::~dtkCreatorPluginWidget(void)
@@ -139,11 +145,11 @@ QSize dtkCreatorPluginWidget::sizeHint(void) const
 
 void dtkCreatorPluginWidget::addWidget(QWidget *widget)
 {
-    if(QWidget *current = this->currentWidget())
-        QStackedWidget::removeWidget(current);
+    if(QWidget *current = d->stack->currentWidget())
+        d->stack->removeWidget(current);
 
-    QStackedWidget::addWidget(widget);
-    QStackedWidget::setCurrentWidget(widget);
+    d->stack->addWidget(widget);
+    d->stack->setCurrentWidget(widget);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -169,6 +175,8 @@ dtkCreatorPluginBrowser::dtkCreatorPluginBrowser(QWidget *parent) : dtkSplitter(
     this->addWidget(d->list);
     this->addWidget(d->widget);
     this->setOrientation(Qt::Vertical);
+
+    connect(d->list, SIGNAL(pluginClicked(QWidget *)), d->widget, SLOT(addWidget(QWidget *)));
 }
 
 dtkCreatorPluginBrowser::~dtkCreatorPluginBrowser(void)

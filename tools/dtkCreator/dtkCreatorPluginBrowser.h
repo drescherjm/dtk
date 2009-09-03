@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 10:30:24 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep  3 13:44:12 2009 (+0200)
+ * Last-Updated: Thu Sep  3 20:04:49 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 16
+ *     Update #: 21
  */
 
 /* Commentary: 
@@ -40,7 +40,7 @@ public:
     ~dtkCreatorPluginList(void);
 
 signals:
-    void pluginClicked(QWidget *ui);
+    void pluginClicked(QWidget *);
 
 public slots:
     void onPluginClicked(QString name);
@@ -55,7 +55,7 @@ private:
 
 class dtkCreatorPluginWidgetPrivate;
 
-class dtkCreatorPluginWidget : public QStackedWidget
+class dtkCreatorPluginWidget : public QWidget
 {
     Q_OBJECT
 

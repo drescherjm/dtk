@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 10:07:29 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep  3 16:33:26 2009 (+0200)
+ * Last-Updated: Thu Sep  3 18:59:35 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 142
+ *     Update #: 145
  */
 
 /* Commentary: 
@@ -57,12 +57,14 @@ dtkCreatorScriptList::dtkCreatorScriptList(QWidget *parent) : QWidget(parent), d
     d->view->setAttribute(Qt::WA_MacShowFocusRect, false);
     d->view->setColumnWidths(QList<int>() << 200 << 200 << 200);
     d->view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    d->view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     d->view->setModel(d->model);
     d->view->setRootIndex(d->model->index(dtkScriptManager::instance()->scriptPath()));
     d->view->setPreviewWidget(d->description);
 
     connect(d->view, SIGNAL(clicked(const QModelIndex&)), this, SLOT(onModelIndexClicked(const QModelIndex&)));
     connect(d->view, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(onModelIndexDoubleClicked(const QModelIndex&)));
+    connect(d->view, SIGNAL(updatePreviewWidget(const QModelIndex&)), this, SLOT(onModelIndexClicked(const QModelIndex&)));
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setMargin(0);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 10:06:37 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Aug  5 09:31:47 2009 (+0200)
+ * Last-Updated: Thu Sep  3 15:50:20 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 18
+ *     Update #: 28
  */
 
 /* Commentary: 
@@ -31,7 +31,7 @@
 
 class dtkCreatorScriptListPrivate;
 
-class dtkCreatorScriptList : public dtkSplitter
+class dtkCreatorScriptList : public QWidget
 {
     Q_OBJECT
 
@@ -40,11 +40,7 @@ public:
     ~dtkCreatorScriptList(void);
 
 signals:
-    void loaded(const QString&);
-
-public slots:
-    void preloadScript(const QString& fileName);
-    void loadScript(const QString& fileName);
+    void scriptClicked(const QString&);
 
 private slots:
     void onModelIndexClicked(const QModelIndex& index);
@@ -67,6 +63,8 @@ class dtkCreatorScriptWidget : public QStackedWidget
 public:
      dtkCreatorScriptWidget(QWidget *parent = 0);
     ~dtkCreatorScriptWidget(void);
+
+    QSize sizeHint(void) const;
 
 public slots:
     void addWidget(QWidget *widget);
@@ -93,6 +91,9 @@ public:
 
     dtkCreatorScriptList *list(void);
     dtkCreatorScriptWidget *widget(void);
+
+signals:
+    void scriptClicked(const QString&);
 
 private:
     dtkCreatorScriptBrowserPrivate *d;

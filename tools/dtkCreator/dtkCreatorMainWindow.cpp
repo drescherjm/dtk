@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Aug 31 21:12:18 2009 (+0200)
+ * Last-Updated: Thu Sep  3 16:26:17 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 266
+ *     Update #: 269
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 #include "dtkCreatorPluginBrowser.h"
 #include "dtkCreatorScriptBrowser.h"
 #include "dtkCreatorViewer.h"
+#include "dtkCreatorWidgetFactory.h"
 
 #include <dtkCore/dtkLog.h>
 
@@ -228,6 +229,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     d->script_browser = new dtkCreatorScriptBrowser(this);
     d->plugin_browser = new dtkCreatorPluginBrowser(this);
+
+    connect(d->script_browser, SIGNAL(scriptClicked(const QString&)), d->editor, SLOT(open(const QString&)));
 
     dtkSplitter *outer_splitter = new dtkSplitter(this);
     outer_splitter->setOrientation(Qt::Horizontal);

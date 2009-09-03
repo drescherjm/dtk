@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 10:30:24 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug  4 11:25:27 2009 (+0200)
+ * Last-Updated: Thu Sep  3 13:44:12 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 14
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -62,6 +62,8 @@ class dtkCreatorPluginWidget : public QStackedWidget
 public:
      dtkCreatorPluginWidget(QWidget *parent = 0);
     ~dtkCreatorPluginWidget(void);
+
+    QSize sizeHint(void) const;
 
 public slots:
     void addWidget(QWidget *widget);

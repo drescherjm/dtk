@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 10:31:04 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Aug 31 21:15:39 2009 (+0200)
+ * Last-Updated: Thu Sep  3 13:45:30 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 21
+ *     Update #: 27
  */
 
 /* Commentary: 
@@ -132,6 +132,11 @@ dtkCreatorPluginWidget::~dtkCreatorPluginWidget(void)
     d = NULL;
 }
 
+QSize dtkCreatorPluginWidget::sizeHint(void) const
+{
+    return QSize(1, 200);
+}
+
 void dtkCreatorPluginWidget::addWidget(QWidget *widget)
 {
     if(QWidget *current = this->currentWidget())
@@ -164,8 +169,6 @@ dtkCreatorPluginBrowser::dtkCreatorPluginBrowser(QWidget *parent) : dtkSplitter(
     this->addWidget(d->list);
     this->addWidget(d->widget);
     this->setOrientation(Qt::Vertical);
-    this->setStretchFactor(0, 3);
-    this->setStretchFactor(1, 1);
 }
 
 dtkCreatorPluginBrowser::~dtkCreatorPluginBrowser(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Aug  6 16:07:45 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Aug  6 20:15:49 2009 (+0200)
+ * Last-Updated: Thu Sep  3 13:59:14 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 24
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -67,7 +67,7 @@
 // /////////////////////////////////////////////////////////////////
 
 %ignore dtkCreatorPluginList::pluginClicked(QWidget *);
-%ignore dtkCreatorScriptList::loaded(const QString&);
+%ignore dtkCreatorScriptList::scriptClicked(const QString&);
 %ignore dtkCreatorWidgetFactory::interpret(const QString&, int *stat);
 %ignore dtkCreatorWidgetFactoryButton::interpret(const QString&, int *stat);
 

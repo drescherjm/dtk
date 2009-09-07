@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Oct 31 14:14:48 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Aug  4 19:24:48 2009 (+0200)
+ * Last-Updated: Fri Sep  4 16:41:34 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 55
+ *     Update #: 56
  */
 
 /* Commentary: 
@@ -87,6 +87,11 @@ dtkConcreteDataWidget *dtkConcreteData::s_ui = NULL;
  */
 
 QWidget *dtkPlugin::ui(void)
+{
+    return NULL;
+}
+
+QWidget *dtkPlugin::node(void)
 {
     return NULL;
 }

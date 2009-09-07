@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Oct 31 13:49:50 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Aug  4 19:24:39 2009 (+0200)
+ * Last-Updated: Fri Sep  4 15:39:08 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 35
+ *     Update #: 40
  */
 
 /* Commentary: 
@@ -43,6 +43,7 @@ public:
     virtual QStringList tags(void) const = 0;
 
     virtual QWidget *ui(void);
+    virtual QWidget *node(void);
 
 private:
     dtkPluginPrivate *d;

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Jul 31 21:58:57 2009 (+0200)
+## Last-Updated: Fri Sep  4 21:51:34 2009 (+0200)
 ##           By: Julien Wintz
-##     Update #: 192
+##     Update #: 193
 ######################################################################
 ## 
 ### Commentary: 
@@ -209,7 +209,7 @@ endif(PYTHONLIBS_FOUND)
 ## #################################################################
 
 option(BUILD_SHARED_LIBS  "Build shared libraries" true)
-option(BUILD_TOOLS        "Build tools"            false)
+option(BUILD_TOOLS        "Build tools"            true)
 option(BUILD_EXAMPLES     "Build examples"         false)
 
 ## #################################################################

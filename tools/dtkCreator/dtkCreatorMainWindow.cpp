@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep  3 16:26:17 2009 (+0200)
+ * Last-Updated: Fri Sep  4 15:35:05 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 269
+ *     Update #: 279
  */
 
 /* Commentary: 
@@ -47,6 +47,8 @@
 #include <dtkGui/dtkTextEditorSyntaxHighlighterPython.h>
 #include <dtkGui/dtkTextEditorSyntaxHighlighterTcl.h>
 
+#include <dtkComposer/dtkComposer.h>
+
 // /////////////////////////////////////////////////////////////////
 // log message handler
 // /////////////////////////////////////////////////////////////////
@@ -75,8 +77,8 @@ public:
     QAction *fileQuitAction;
     QAction *preferencesAction;
 
-    QAction *toolTextualEditorAction;
-    QAction *toolVisualEditorAction;
+    QAction *toolEditorAction;
+    QAction *toolComposerAction;
     QAction *toolViewerAction;
     QAction *toolInspectorAction;
 
@@ -90,6 +92,7 @@ public:
     dtkCreatorPluginBrowser *plugin_browser;
     dtkTextEditor *editor;
     dtkTextEditorSyntaxHighlighter *highlighter;
+    dtkComposer *composer;
     dtkCreatorViewer *viewer;
     dtkInterpreter *interpreter;
 
@@ -148,19 +151,19 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->fileMenu->addAction(d->fileSaveAsAction);
     d->fileMenu->addAction(d->preferencesAction);
 
-    d->toolTextualEditorAction = new QAction("Textual editor", this);
-    d->toolTextualEditorAction->setShortcut(Qt::MetaModifier+Qt::Key_1);
-    d->toolTextualEditorAction->setToolTip("Switch to the textual editor (Ctrl+1)");
-    d->toolTextualEditorAction->setIcon(QIcon(":icons/widget.tiff"));
-    connect(d->toolTextualEditorAction, SIGNAL(triggered()), this, SLOT(switchToTextualEditor()));
-    d->toolTextualEditorAction->setEnabled(false);
+    d->toolEditorAction = new QAction("Editor", this);
+    d->toolEditorAction->setShortcut(Qt::MetaModifier+Qt::Key_1);
+    d->toolEditorAction->setToolTip("Switch to the textual editor (Ctrl+1)");
+    d->toolEditorAction->setIcon(QIcon(":icons/widget.tiff"));
+    connect(d->toolEditorAction, SIGNAL(triggered()), this, SLOT(switchToEditor()));
+    d->toolEditorAction->setEnabled(false);
 
-    d->toolVisualEditorAction = new QAction("Visual editor", this);
-    d->toolVisualEditorAction->setShortcut(Qt::MetaModifier+Qt::Key_2);
-    d->toolVisualEditorAction->setToolTip("Switch to the visual editor (Ctrl+3)");
-    d->toolVisualEditorAction->setIcon(QIcon(":icons/widget.tiff"));
-    connect(d->toolVisualEditorAction, SIGNAL(triggered()), this, SLOT(switchToVisualEditor()));
-    d->toolVisualEditorAction->setEnabled(true);
+    d->toolComposerAction = new QAction("Composer", this);
+    d->toolComposerAction->setShortcut(Qt::MetaModifier+Qt::Key_2);
+    d->toolComposerAction->setToolTip("Switch to the visual editor (Ctrl+2)");
+    d->toolComposerAction->setIcon(QIcon(":icons/widget.tiff"));
+    connect(d->toolComposerAction, SIGNAL(triggered()), this, SLOT(switchToComposer()));
+    d->toolComposerAction->setEnabled(true);
 
     d->toolViewerAction = new QAction("Viewer", this);
     d->toolViewerAction->setShortcut(Qt::MetaModifier+Qt::Key_3);
@@ -178,8 +181,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->toolBar = addToolBar("Editors");
     d->toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     d->toolBar->setIconSize(QSize(32, 32));
-    d->toolBar->addAction(d->toolTextualEditorAction);
-    d->toolBar->addAction(d->toolVisualEditorAction);
+    d->toolBar->addAction(d->toolEditorAction);
+    d->toolBar->addAction(d->toolComposerAction);
     d->toolBar->addAction(d->toolViewerAction);
 #ifdef Q_WS_MAC
     dtkSearchBoxAction *dtk_search_box = new dtkSearchBoxAction("Search", d->toolBar);
@@ -209,7 +212,9 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     d->stack->addWidget(d->editor);
 
-    d->stack->addWidget(new QWidget(this)); // placeholder for visual editor
+    d->composer = new dtkComposer(d->stack);
+
+    d->stack->addWidget(d->composer);
 
     d->viewer = new dtkCreatorViewer(this);
     d->viewer->setAttribute(Qt::WA_MacShowFocusRect, false);
@@ -364,28 +369,28 @@ void dtkCreatorMainWindow::showPreferences(void)
 {
     if(!d->preferences) {
         d->preferences = new dtkPreferencesWidget(this);
-        d->preferences->addPage("Textual editor", d->editor->preferencesWidget(this));
+        d->preferences->addPage("Editor", d->editor->preferencesWidget(this));
         d->preferences->addPage("Interpreter", d->interpreter->preferencesWidget(this));
     }
 
     d->preferences->show();
 }
 
-void dtkCreatorMainWindow::switchToTextualEditor(void)
+void dtkCreatorMainWindow::switchToEditor(void)
 {
     d->stack->setCurrentIndex(0);
 
-    d->toolTextualEditorAction->setEnabled(false);
-    d->toolVisualEditorAction->setEnabled(true);
+    d->toolEditorAction->setEnabled(false);
+    d->toolComposerAction->setEnabled(true);
     d->toolViewerAction->setEnabled(true);
 }
 
-void dtkCreatorMainWindow::switchToVisualEditor(void)
+void dtkCreatorMainWindow::switchToComposer(void)
 {
     d->stack->setCurrentIndex(1);
 
-    d->toolTextualEditorAction->setEnabled(true);
-    d->toolVisualEditorAction->setEnabled(false);
+    d->toolEditorAction->setEnabled(true);
+    d->toolComposerAction->setEnabled(false);
     d->toolViewerAction->setEnabled(true);
 }
 
@@ -393,8 +398,8 @@ void dtkCreatorMainWindow::switchToViewer(void)
 {
     d->stack->setCurrentIndex(2);
 
-    d->toolTextualEditorAction->setEnabled(true);
-    d->toolVisualEditorAction->setEnabled(true);
+    d->toolEditorAction->setEnabled(true);
+    d->toolComposerAction->setEnabled(true);
     d->toolViewerAction->setEnabled(false);
 }
 

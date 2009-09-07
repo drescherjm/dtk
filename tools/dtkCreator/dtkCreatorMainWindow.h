@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:38:47 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Aug  6 23:25:07 2009 (+0200)
+ * Last-Updated: Fri Sep  4 14:19:04 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 20
+ *     Update #: 21
  */
 
 /* Commentary: 
@@ -48,8 +48,8 @@ public slots:
     void onTitleChanged(QString title);
     void onDocumentChanged(void);
 
-    void switchToTextualEditor(void);
-    void switchToVisualEditor(void);
+    void switchToEditor(void);
+    void switchToComposer(void);
     void switchToViewer(void);
 
 protected:

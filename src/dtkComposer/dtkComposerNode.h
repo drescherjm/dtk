@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep  7 15:22:09 2009 (+0200)
+ * Last-Updated: Mon Sep  7 23:15:40 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 19
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -23,7 +23,9 @@
 #include <QtCore>
 #include <QtGui>
 
+class dtkComposerEdge;
 class dtkComposerNodePrivate;
+class dtkComposerNodeProperty;
 
 class dtkComposerNode : public QObject, public QGraphicsItem
 {
@@ -33,8 +35,10 @@ public:
      dtkComposerNode(dtkComposerNode *parent = 0);
     ~dtkComposerNode(void);
 
-    QString propertyAt(const QPointF& point) const;
-    QRectF propertyRect(const QString& prop) const;
+    dtkComposerNodeProperty *propertyAt(const QPointF& point) const;
+
+    void addInputEdge(dtkComposerEdge *edge);
+    void addOutputEdge(dtkComposerEdge *edge);
 
 public:
     QRectF boundingRect(void) const;
@@ -42,6 +46,7 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 protected:
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 

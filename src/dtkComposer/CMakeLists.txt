@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Sep  7 15:35:20 2009 (+0200)
+## Last-Updated: Mon Sep  7 20:11:15 2009 (+0200)
 ##           By: Julien Wintz
-##     Update #: 21
+##     Update #: 22
 ######################################################################
 ## 
 ### Commentary: 
@@ -63,6 +63,7 @@ add_library(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
+  dtkCore
 )
 
 if(PYTHON_DEBUG_LIBRARIES)

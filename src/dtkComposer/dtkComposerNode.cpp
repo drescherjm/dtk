@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep  7 15:52:27 2009 (+0200)
+ * Last-Updated: Mon Sep  7 23:16:16 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 49
+ *     Update #: 90
  */
 
 /* Commentary: 
@@ -17,6 +17,7 @@
  * 
  */
 
+#include "dtkComposerEdge.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeProperty.h"
 
@@ -36,14 +37,19 @@ public:
     QGraphicsTextItem *title;
     QGraphicsTextItem *button;
 
-    QList<dtkComposerNodeProperty *> inputs;
-    QList<dtkComposerNodeProperty *> outputs;
+    QList<dtkComposerNodeProperty *> input_properties;
+    QList<dtkComposerNodeProperty *> output_properties;
+
+    QList<dtkComposerEdge *> input_edges;
+    QList<dtkComposerEdge *> output_edges;
+
+    dtkComposerNodeProperty *clicked_property;
 };
 
 dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePrivate)
 {
-    int n_inputs = 3;
-    int n_outputs = 2;
+    int n_input_properties = 3;
+    int n_output_properties = 2;
 
     d->penWidth = 1;
     d->header_height = 20;
@@ -54,7 +60,7 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
     d->margin_bottom = 5;
 
     d->width = 150;
-    d->height = d->header_height + (3*qMax(n_inputs, n_outputs) + 1) * d->node_radius;
+    d->height = d->header_height + (3*qMax(n_input_properties, n_output_properties) + 1) * d->node_radius;
 
     d->title = new QGraphicsTextItem(this);
     d->title->setHtml("Title");
@@ -68,26 +74,52 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
     d->button->setDefaultTextColor(Qt::black);
     d->button->setPos(d->width/2 - d->margin_right*3, -d->height/2-2);
 
-    for(int i = 0 ; i < n_inputs ; i++) {
+    for(int i = 0 ; i < n_input_properties ; i++) {
         dtkComposerNodeProperty *input = new dtkComposerNodeProperty(dtkComposerNodeProperty::Input, this);
         input->setText(QString("Input %1").arg(i));
         input->setRect(QRectF(-d->width/2+d->node_radius, -d->height/2+d->header_height+d->margin_top+(3*i+1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
-        d->inputs << input;
+        d->input_properties << input;
     }
 
-    for(int i = 0 ; i < n_outputs ; i++) {
+    for(int i = 0 ; i < n_output_properties ; i++) {
         dtkComposerNodeProperty *output = new dtkComposerNodeProperty(dtkComposerNodeProperty::Output, this);
         output->setText(QString("Output %1").arg(i));
         output->setRect(QRectF(d->width/2-3*d->node_radius, -d->height/2+d->header_height+d->margin_top+(3*i+1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
-        d->outputs << output;
+        d->output_properties << output;
     }
 
-    this->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsFocusable);
+    this->setFlags(QGraphicsItem::ItemIsMovable);
+    this->setZValue(10);
 }
 
 dtkComposerNode::~dtkComposerNode(void)
 {
+    delete d;
+
+    d = NULL;
+}
+
+dtkComposerNodeProperty *dtkComposerNode::propertyAt(const QPointF& point) const
+{
+    foreach(dtkComposerNodeProperty *property, d->input_properties)
+        if(property->rect().contains(point))
+            return property;
+
+    foreach(dtkComposerNodeProperty *property, d->output_properties)
+        if(property->rect().contains(point))
+            return property;
     
+    return NULL;
+}
+
+void dtkComposerNode::addInputEdge(dtkComposerEdge *edge)
+{
+    d->input_edges << edge;
+}
+
+void dtkComposerNode::addOutputEdge(dtkComposerEdge *edge)
+{
+    d->output_edges << edge;
 }
 
 QRectF dtkComposerNode::boundingRect(void) const
@@ -159,8 +191,25 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     }
 }
 
+void dtkComposerNode::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    if(!d->clicked_property)
+        QGraphicsItem::mouseMoveEvent(event);
+
+    foreach(dtkComposerEdge *edge, d->input_edges)
+	edge->adjust();
+
+    foreach(dtkComposerEdge *edge, d->output_edges)
+	edge->adjust();
+}
+
 void dtkComposerNode::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    d->clicked_property = this->propertyAt(event->pos());
+
+    if(d->clicked_property)
+        return;
+
     if(event->button() == Qt::RightButton) {
         QMenu menu;
         menu.addAction("Action 1");
@@ -173,5 +222,8 @@ void dtkComposerNode::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void dtkComposerNode::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    QGraphicsItem::mouseReleaseEvent(event);
+    if(!d->clicked_property)
+        QGraphicsItem::mouseReleaseEvent(event);
+
+    d->clicked_property = NULL;
 }

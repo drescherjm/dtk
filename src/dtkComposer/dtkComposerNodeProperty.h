@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep  7 15:51:32 2009 (+0200)
+ * Last-Updated: Mon Sep  7 22:47:30 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 15
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -26,7 +26,7 @@
 class dtkComposerNode;
 class dtkComposerNodePropertyPrivate;
 
-class dtkComposerNodeProperty : public QObject, public QGraphicsItemGroup
+class dtkComposerNodeProperty : public QObject, public QGraphicsItem
 {
     Q_OBJECT
 
@@ -36,11 +36,18 @@ public:
      dtkComposerNodeProperty(Type type, dtkComposerNode *parent);
     ~dtkComposerNodeProperty(void);
 
+    dtkComposerNode *node(void);
+
     Type type(void);
 
 public:
+    QRectF boundingRect(void) const;
+    QRectF rect(void) const;
+
     void setText(const QString& text);
     void setRect(const QRectF& rect);
+
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 private:
     dtkComposerNodePropertyPrivate *d;

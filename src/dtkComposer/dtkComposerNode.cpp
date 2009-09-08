@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep  7 23:16:16 2009 (+0200)
+ * Last-Updated: Tue Sep  8 13:22:58 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 90
+ *     Update #: 112
  */
 
 /* Commentary: 
@@ -40,8 +40,8 @@ public:
     QList<dtkComposerNodeProperty *> input_properties;
     QList<dtkComposerNodeProperty *> output_properties;
 
-    QList<dtkComposerEdge *> input_edges;
-    QList<dtkComposerEdge *> output_edges;
+    QHash<dtkComposerEdge *, dtkComposerNodeProperty *> input_edges;
+    QHash<dtkComposerEdge *, dtkComposerNodeProperty *> output_edges;
 
     dtkComposerNodeProperty *clicked_property;
 };
@@ -99,6 +99,48 @@ dtkComposerNode::~dtkComposerNode(void)
     d = NULL;
 }
 
+dtkComposerEdge *dtkComposerNode::edge(dtkComposerNodeProperty *property)
+{
+    if(property->type() == dtkComposerNodeProperty::Input)
+        return d->input_edges.key(property);
+    
+    if(property->type() == dtkComposerNodeProperty::Output)
+        return d->output_edges.key(property);
+
+    return 0;
+}
+
+void dtkComposerNode::addInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+{
+    d->input_edges.insert(edge, property);
+}
+
+void dtkComposerNode::addOutputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+{
+    d->output_edges.insert(edge, property);
+}
+
+void dtkComposerNode::removeInputEdge(dtkComposerEdge *edge)
+{
+    d->input_edges.remove(edge);
+}
+
+void dtkComposerNode::removeOutputEdge(dtkComposerEdge *edge)
+{
+    d->output_edges.remove(edge);
+}
+
+int dtkComposerNode::count(dtkComposerNodeProperty *property)
+{
+    if(property->type() == dtkComposerNodeProperty::Input)
+        return d->input_edges.keys(property).count();
+
+    if(property->type() == dtkComposerNodeProperty::Output)
+        return d->output_edges.keys(property).count();
+
+    return 0;
+}
+
 dtkComposerNodeProperty *dtkComposerNode::propertyAt(const QPointF& point) const
 {
     foreach(dtkComposerNodeProperty *property, d->input_properties)
@@ -110,16 +152,6 @@ dtkComposerNodeProperty *dtkComposerNode::propertyAt(const QPointF& point) const
             return property;
     
     return NULL;
-}
-
-void dtkComposerNode::addInputEdge(dtkComposerEdge *edge)
-{
-    d->input_edges << edge;
-}
-
-void dtkComposerNode::addOutputEdge(dtkComposerEdge *edge)
-{
-    d->output_edges << edge;
 }
 
 QRectF dtkComposerNode::boundingRect(void) const
@@ -196,10 +228,10 @@ void dtkComposerNode::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     if(!d->clicked_property)
         QGraphicsItem::mouseMoveEvent(event);
 
-    foreach(dtkComposerEdge *edge, d->input_edges)
+    foreach(dtkComposerEdge *edge, d->input_edges.keys())
 	edge->adjust();
 
-    foreach(dtkComposerEdge *edge, d->output_edges)
+    foreach(dtkComposerEdge *edge, d->output_edges.keys())
 	edge->adjust();
 }
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep  7 23:15:40 2009 (+0200)
+ * Last-Updated: Tue Sep  8 13:18:47 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 25
+ *     Update #: 33
  */
 
 /* Commentary: 
@@ -35,12 +35,19 @@ public:
      dtkComposerNode(dtkComposerNode *parent = 0);
     ~dtkComposerNode(void);
 
-    dtkComposerNodeProperty *propertyAt(const QPointF& point) const;
+    dtkComposerEdge *edge(dtkComposerNodeProperty *property);
 
-    void addInputEdge(dtkComposerEdge *edge);
-    void addOutputEdge(dtkComposerEdge *edge);
+    void addInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void addOutputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+
+    void removeInputEdge(dtkComposerEdge *edge);
+    void removeOutputEdge(dtkComposerEdge *edge);
+
+    int count(dtkComposerNodeProperty *property);
 
 public:
+    dtkComposerNodeProperty *propertyAt(const QPointF& point) const;
+
     QRectF boundingRect(void) const;
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);

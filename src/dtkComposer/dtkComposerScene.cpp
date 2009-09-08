@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep  7 23:24:46 2009 (+0200)
+ * Last-Updated: Tue Sep  8 13:36:17 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 105
+ *     Update #: 124
  */
 
 /* Commentary: 
@@ -81,12 +81,23 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
     dtkComposerNodeProperty *property = propertyAt(mouseEvent->scenePos());
 
-    if (property) {
+    if(!property)
+        return;
+
+    qDebug() << "Property count" << property->count();
+
+    if (property->type() == dtkComposerNodeProperty::Output && property->count() == 0) {
         delete d->current_edge;
         d->current_edge = new dtkComposerEdge;
         this->addItem(d->current_edge);
         d->current_edge->setSource(property);
         d->current_edge->show();
+        return;
+    }
+
+    if (property->type() == dtkComposerNodeProperty::Input && property->count() > 0) {
+        d->current_edge = property->edge();
+        d->current_edge->unlink();
         return;
     }
 }

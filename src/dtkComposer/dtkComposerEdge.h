@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:26:53 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep  7 20:20:42 2009 (+0200)
+ * Last-Updated: Tue Sep  8 13:14:48 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 16
+ *     Update #: 18
  */
 
 /* Commentary: 
@@ -52,6 +52,7 @@ public:
     void adjust(const QPointF& start, const QPointF& end);
 
     bool link(void);
+    bool unlink(void);
 
 private:
     dtkComposerEdgePrivate *d;

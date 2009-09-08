@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:43:14 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Aug  1 00:35:09 2009 (+0200)
+ * Last-Updated: Tue Sep  8 11:28:23 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 32
+ *     Update #: 36
  */
 
 /* Commentary:
@@ -21,7 +21,6 @@
 #define DTKABSTRACTOBJECT_H
 
 #include <dtkCore/dtkCoreExport.h>
-
 #include <dtkCore/dtkGlobal.h>
 
 class dtkAbstractObjectPrivate;
@@ -41,6 +40,9 @@ public:
 
    bool hasProperty(QString key);
    QString property(QString key);
+
+   // dtkComposerNode *node(void);
+   // ???? *ui(void);
 
 signals:
    void propertySet(QString key, QString value);

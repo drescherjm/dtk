@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep  7 23:29:42 2009 (+0200)
+ * Last-Updated: Tue Sep  8 13:18:00 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 81
+ *     Update #: 91
  */
 
 /* Commentary: 
@@ -24,6 +24,7 @@ class dtkComposerNodePropertyPrivate
 {
 public:
     dtkComposerNode *parent;
+
     dtkComposerNodeProperty::Type type;
 
     QGraphicsEllipseItem *ellipse;
@@ -53,6 +54,11 @@ dtkComposerNodeProperty::~dtkComposerNodeProperty(void)
     d = NULL;
 }
 
+dtkComposerEdge *dtkComposerNodeProperty::edge(void)
+{
+    return d->parent->edge(this);
+}
+
 dtkComposerNode *dtkComposerNodeProperty::node(void)
 {
     return d->parent;
@@ -61,6 +67,11 @@ dtkComposerNode *dtkComposerNodeProperty::node(void)
 dtkComposerNodeProperty::Type dtkComposerNodeProperty::type(void)
 {
     return d->type;
+}
+
+int dtkComposerNodeProperty::count(void)
+{
+    return d->parent->count(this);
 }
 
 QRectF dtkComposerNodeProperty::boundingRect(void) const

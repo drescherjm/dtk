@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep  7 22:47:30 2009 (+0200)
+ * Last-Updated: Tue Sep  8 13:24:49 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 25
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include <QtCore>
 #include <QtGui>
 
+class dtkComposerEdge;
 class dtkComposerNode;
 class dtkComposerNodePropertyPrivate;
 
@@ -31,14 +32,17 @@ class dtkComposerNodeProperty : public QObject, public QGraphicsItem
     Q_OBJECT
 
 public:
-    enum Type { Input, Output };
+    enum Type  { Input, Output };
 
      dtkComposerNodeProperty(Type type, dtkComposerNode *parent);
     ~dtkComposerNodeProperty(void);
 
+    dtkComposerEdge *edge(void);
     dtkComposerNode *node(void);
 
     Type type(void);
+
+    int count(void);
 
 public:
     QRectF boundingRect(void) const;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep  7 23:26:50 2009 (+0200)
+ * Last-Updated: Tue Sep  8 13:35:22 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 74
+ *     Update #: 100
  */
 
 /* Commentary: 
@@ -73,7 +73,7 @@ void dtkComposerEdge::setDestination(dtkComposerNodeProperty *property)
 
 QRectF dtkComposerEdge::boundingRect(void) const
 {
-    return QRectF(0, 0, 0, 0);
+    return QRectF(start(), end());
 }
 
 QPointF dtkComposerEdge::start(void) const
@@ -102,7 +102,7 @@ void dtkComposerEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     Q_UNUSED(widget);
 
     painter->save();
-    painter->setPen(QPen(Qt::black, 0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter->setPen(QPen(Qt::darkGray, 1));
     painter->setBrush(Qt::yellow);
     painter->drawPath(d->path);
     painter->restore();
@@ -140,7 +140,7 @@ void dtkComposerEdge::adjust(const QPointF& start, const QPointF& end)
 
     QPainterPathStroker stroker;
     stroker.setWidth(3);
-    stroker.setCapStyle(Qt::FlatCap);
+    stroker.setCapStyle(Qt::RoundCap);
     d->path = stroker.createStroke(path);
 
     update();
@@ -150,6 +150,11 @@ bool dtkComposerEdge::link(void)
 {
     if (!d->source || !d->destination)
         return false;
+
+    if(d->source->node() == d->destination->node()) {
+        dtkDebug() << "Cannot connect a node to itself!!";
+        return false;
+    }
 
     if (d->source->type() == dtkComposerNodeProperty::Input) {
         dtkDebug() << "Source should be an output property!";
@@ -161,9 +166,16 @@ bool dtkComposerEdge::link(void)
         return false;
     }
 
-    d->source->node()->addInputEdge(this);
-    d->destination->node()->addOutputEdge(this);
+    d->source->node()->addOutputEdge(this, d->source);
+    d->destination->node()->addInputEdge(this, d->destination);
 
     return true;
 }
 
+bool dtkComposerEdge::unlink(void)
+{
+    d->source->node()->removeOutputEdge(this);
+    d->destination->node()->removeInputEdge(this);
+
+    return true;
+}

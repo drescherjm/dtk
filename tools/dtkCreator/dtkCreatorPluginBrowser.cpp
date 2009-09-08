@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 10:31:04 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep  3 20:15:39 2009 (+0200)
+ * Last-Updated: Tue Sep  8 16:48:37 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 48
+ *     Update #: 49
  */
 
 /* Commentary: 
@@ -43,7 +43,7 @@ public:
 // /////////////////////////////////////////////////////////////////
 
 static QString view_stylesheet =
-"body { font-size: 70%; }";
+"body { background:#ffffff; font-size: 70%; }";
 
 static QString cloud_stylesheet =
 "body      { color: rgb(99, 99,  99); background:#ffffff; }"

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:01 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 12 18:05:41 2009 (+0200)
+ * Last-Updated: Tue Sep  8 23:41:56 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 73
+ *     Update #: 78
  */
 
 /* Commentary: 
@@ -158,11 +158,13 @@ public:
      dtkItem(QString name);
      dtkItem(QString name, QString description);
      dtkItem(QString name, QString description, QStringList tags);
+     dtkItem(QString name, QString description, QStringList tags, QStringList types);
     ~dtkItem(void);
 
     QString name(void) const;
     QString description(void) const;
     QStringList tags(void) const;
+    QStringList types(void) const;
 
 private:
     dtkItemPrivate *d;
@@ -185,6 +187,7 @@ public:
     void addItem(QString name);
     void addItem(QString name, QString description);
     void addItem(QString name, QString description, QStringList tags);
+    void addItem(QString name, QString description, QStringList tags, QStringList types);
     void addItem(dtkItem item);
 
     void clear(void);
@@ -198,6 +201,9 @@ signals:
 
     void itemClicked(QString item);
     void itemClicked(QString item, QStringList tags);
+
+    void typeClicked(QString type);
+    void typeClicked(QString type, QStringList tags);
 
 private slots:
     void onLinkClicked(const QUrl& item);
@@ -227,6 +233,7 @@ public:
     void addItem(QString name);
     void addItem(QString name, QString description);
     void addItem(QString name, QString description, QStringList tags);
+    void addItem(QString name, QString description, QStringList tags, QStringList types);
 
     void update(void);
     void render(void);

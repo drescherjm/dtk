@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Aug  6 23:38:33 2009 (+0200)
+## Last-Updated: Wed Sep  9 19:18:21 2009 (+0200)
 ##           By: Julien Wintz
-##     Update #: 55
+##     Update #: 68
 ######################################################################
 ## 
 ### Commentary: 
@@ -26,6 +26,7 @@ project(dtkGui)
 set(${PROJECT_NAME}_HEADERS
   dtkGuiExport.h
   dtkInspector.h
+  dtkInspectorScene.h
   dtkInterpreter.h
   dtkInterpreterPreferencesWidget.h
   dtkPreferencesWidget.h
@@ -39,10 +40,15 @@ set(${PROJECT_NAME}_HEADERS
   dtkTextEditorSyntaxHighlighterCpp.h
   dtkTextEditorSyntaxHighlighterPython.h
   dtkTextEditorSyntaxHighlighterTcl.h
+  dtkUi.h
+  dtkUiItem.h
+  dtkUiItemDelegate.h
+  dtkUiView.h
 )
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkInspector.h
+  dtkInspectorScene.h
   dtkInterpreter.h
   dtkInterpreterPreferencesWidget.h
   dtkPreferencesWidget.h
@@ -53,10 +59,14 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkTextEditor.h
   dtkTextEditorPreferencesWidget.h
   dtkTextEditorSyntaxHighlighter.h
+  dtkUi.h
+  dtkUiItemDelegate.h
+  dtkUiView.h
 )
 
 set(${PROJECT_NAME}_SOURCES
   dtkInspector.cpp
+  dtkInspectorScene.cpp
   dtkInterpreter.cpp
   dtkInterpreterPreferencesWidget.cpp
   dtkPreferencesWidget.cpp
@@ -69,6 +79,10 @@ set(${PROJECT_NAME}_SOURCES
   dtkTextEditorSyntaxHighlighterCpp.cpp
   dtkTextEditorSyntaxHighlighterPython.cpp
   dtkTextEditorSyntaxHighlighterTcl.cpp
+  dtkUi.cpp
+  dtkUiItem.cpp
+  dtkUiItemDelegate.cpp
+  dtkUiView.cpp
 )
 
 if(APPLE)

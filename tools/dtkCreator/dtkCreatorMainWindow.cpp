@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep  4 15:35:05 2009 (+0200)
+ * Last-Updated: Thu Sep 10 17:43:15 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 279
+ *     Update #: 334
  */
 
 /* Commentary: 
@@ -24,6 +24,9 @@
 #include "dtkCreatorViewer.h"
 #include "dtkCreatorWidgetFactory.h"
 
+#include <dtkCore/dtkAbstractDataFactory.h>
+#include <dtkCore/dtkAbstractProcessFactory.h>
+#include <dtkCore/dtkAbstractViewFactory.h>
 #include <dtkCore/dtkLog.h>
 
 #include <dtkScript/dtkScriptInterpreter.h>
@@ -32,6 +35,7 @@
 #include <dtkScript/dtkScriptInterpreterTcl.h>
 
 #include <dtkGui/dtkInspector.h>
+#include <dtkGui/dtkInspectorScene.h>
 #include <dtkGui/dtkInterpreter.h>
 #include <dtkGui/dtkInterpreterPreferencesWidget.h>
 #include <dtkGui/dtkPreferencesWidget.h>
@@ -173,8 +177,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->toolViewerAction->setEnabled(true);
 
     d->toolInspectorAction = new QAction("Inspector", this);
-    d->toolInspectorAction->setShortcut(Qt::MetaModifier+Qt::Key_I);
-    d->toolInspectorAction->setToolTip("Open inspector (Ctrl+I)");
+    d->toolInspectorAction->setShortcut(Qt::ControlModifier+Qt::Key_I);
+    d->toolInspectorAction->setToolTip("Show/hide inspector");
     d->toolInspectorAction->setIcon(QIcon(":icons/inspector.tiff"));
     connect(d->toolInspectorAction, SIGNAL(triggered()), this, SLOT(showInspector()));
 
@@ -237,6 +241,31 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     connect(d->script_browser, SIGNAL(scriptClicked(const QString&)), d->editor, SLOT(open(const QString&)));
 
+    dtkInspectorScene *inspector_scene = new dtkInspectorScene;
+
+    d->inspector = new dtkInspector(this);
+    d->inspector->addPage("Scene", inspector_scene);
+
+    connect(dtkAbstractDataFactory::instance(), SIGNAL(created(dtkAbstractData *, QString)), inspector_scene, SLOT(addData(dtkAbstractData *, QString)));
+    connect(dtkAbstractProcessFactory::instance(), SIGNAL(created(dtkAbstractProcess *, QString)), inspector_scene, SLOT(addProcess(dtkAbstractProcess *, QString)));
+    connect(dtkAbstractViewFactory::instance(), SIGNAL(created(dtkAbstractView *, QString)), inspector_scene, SLOT(addView(dtkAbstractView *, QString)));
+
+    connect(inspector_scene, SIGNAL(dataSelected(dtkAbstractData *)), d->plugin_browser, SLOT(onDataSelected(dtkAbstractData *)));
+    connect(inspector_scene, SIGNAL(processSelected(dtkAbstractProcess *)), d->plugin_browser, SLOT(onProcessSelected(dtkAbstractProcess *)));
+    connect(inspector_scene, SIGNAL(viewSelected(dtkAbstractView *)), d->plugin_browser, SLOT(onViewSelected(dtkAbstractView *)));
+    
+    connect(inspector_scene, SIGNAL(dataSelected(dtkAbstractData *)), d->composer, SLOT(onDataSelected(dtkAbstractData *)));
+    connect(inspector_scene, SIGNAL(processSelected(dtkAbstractProcess *)), d->composer, SLOT(onProcessSelected(dtkAbstractProcess *)));
+    connect(inspector_scene, SIGNAL(viewSelected(dtkAbstractView *)), d->composer, SLOT(onViewSelected(dtkAbstractView *)));
+    
+    connect(d->composer, SIGNAL(dataSelected(dtkAbstractData *)), inspector_scene, SLOT(onDataSelected(dtkAbstractData *)));
+    connect(d->composer, SIGNAL(processSelected(dtkAbstractProcess *)), inspector_scene, SLOT(onProcessSelected(dtkAbstractProcess *)));
+    connect(d->composer, SIGNAL(viewSelected(dtkAbstractView *)), inspector_scene, SLOT(onViewSelected(dtkAbstractView *)));
+    
+    connect(d->composer, SIGNAL(dataSelected(dtkAbstractData *)), d->plugin_browser, SLOT(onDataSelected(dtkAbstractData *)));
+    connect(d->composer, SIGNAL(processSelected(dtkAbstractProcess *)), d->plugin_browser, SLOT(onProcessSelected(dtkAbstractProcess *)));
+    connect(d->composer, SIGNAL(viewSelected(dtkAbstractView *)), d->plugin_browser, SLOT(onViewSelected(dtkAbstractView *)));
+
     dtkSplitter *outer_splitter = new dtkSplitter(this);
     outer_splitter->setOrientation(Qt::Horizontal);
     outer_splitter->addWidget(d->script_browser);
@@ -248,7 +277,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     d->preferences = NULL;
 
-    this->setWindowTitle(d->editor->fileName());
+    this->onTitleChanged(d->editor->fileName());
     this->setUnifiedTitleAndToolBarOnMac(true);
     this->setCentralWidget(outer_splitter);
 
@@ -292,8 +321,6 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
 dtkCreatorMainWindow::~dtkCreatorMainWindow(void)
 {
-    this->writeSettings();
-
     delete d->interpreter;
     delete d->editor;
     delete d->highlighter;
@@ -305,13 +332,14 @@ void dtkCreatorMainWindow::readSettings(void)
     QSettings settings("inria", "dtk");
     settings.beginGroup("creator");
     QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
-    QSize size = settings.value("size", QSize(400, 400)).toSize();
+    QSize size = settings.value("size", QSize(600, 400)).toSize();
     move(pos);
     resize(size);
     settings.endGroup();
 
     d->editor->readSettings();
     d->interpreter->readSettings();
+    d->inspector->readSettings();
 }
 
 void dtkCreatorMainWindow::writeSettings(void)
@@ -324,6 +352,7 @@ void dtkCreatorMainWindow::writeSettings(void)
 
     d->editor->writeSettings();
     d->interpreter->writeSettings();
+    d->inspector->writeSettings();
 }
 
 bool dtkCreatorMainWindow::fileOpen(void)
@@ -357,12 +386,10 @@ bool dtkCreatorMainWindow::fileSaveAs(void)
 
 void dtkCreatorMainWindow::showInspector(void)
 {
-    if(!d->inspector) {
-        d->inspector = new dtkInspector(this);
-        // ...
-    }
+    QPoint pos = d->inspector->pos();
 
-    d->inspector->show();
+    d->inspector->setVisible(!d->inspector->isVisible());
+    d->inspector->move(pos);
 }
 
 void dtkCreatorMainWindow::showPreferences(void)
@@ -406,6 +433,7 @@ void dtkCreatorMainWindow::switchToViewer(void)
 void dtkCreatorMainWindow::closeEvent(QCloseEvent *event)
 {
     if (d->maySave()) {
+        this->writeSettings();
         event->accept();
     } else {
         event->ignore();
@@ -420,5 +448,5 @@ void dtkCreatorMainWindow::onTitleChanged(QString title)
 void dtkCreatorMainWindow::onDocumentChanged(void)
 {
     if(!this->windowTitle().endsWith("*"))
-        this->setWindowTitle("dtkCreator - " + this->windowTitle() + "*");
+        this->setWindowTitle(this->windowTitle() + "*");
 }

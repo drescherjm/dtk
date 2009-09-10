@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Aug  6 23:26:46 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Aug  7 00:20:59 2009 (+0200)
+ * Last-Updated: Wed Sep  9 20:08:22 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 12
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -32,11 +32,13 @@ public:
      dtkInspector(QWidget *parent = 0);
     ~dtkInspector(void);
 
+    void readSettings(void);
+    void writeSettings(void);
+
     void addPage(const QString& title, QWidget *page);
     void addPage(const QString& title, QWidget *page, const QIcon& icon);
 
 private slots:
-    void onActionHovered(void);
     void onActionTriggered(void);
 
 private:

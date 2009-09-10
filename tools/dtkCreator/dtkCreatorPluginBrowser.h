@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 10:30:24 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep  3 20:04:49 2009 (+0200)
+ * Last-Updated: Thu Sep 10 09:37:36 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 21
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -24,6 +24,11 @@
 #include <QtGui>
 
 #include <dtkGui/dtkSplitter.h>
+#include <dtkGui/dtkUi.h>
+
+class dtkAbstractData;
+class dtkAbstractProcess;
+class dtkAbstractView;
 
 // /////////////////////////////////////////////////////////////////
 // dtkCreatorPluginList
@@ -43,7 +48,7 @@ signals:
     void pluginClicked(QWidget *);
 
 public slots:
-    void onPluginClicked(QString name);
+    void onPluginClicked(QString type);
 
 private:
     dtkCreatorPluginListPrivate *d;
@@ -66,7 +71,7 @@ public:
     QSize sizeHint(void) const;
 
 public slots:
-    void addWidget(QWidget *widget);
+    void addWidget(QWidget *ui);
 
 private:
     dtkCreatorPluginWidgetPrivate *d;
@@ -90,6 +95,11 @@ public:
 
     dtkCreatorPluginList *list(void);
     dtkCreatorPluginWidget *widget(void);
+
+public slots:
+    void onDataSelected(dtkAbstractData *data);
+    void onProcessSelected(dtkAbstractProcess *process);
+    void onViewSelected(dtkAbstractView *view);
 
 private:
     dtkCreatorPluginBrowserPrivate *d;

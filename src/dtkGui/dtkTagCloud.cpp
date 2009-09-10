@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:27 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Aug  2 15:08:11 2009 (+0200)
+ * Last-Updated: Wed Sep  9 20:04:34 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 599
+ *     Update #: 647
  */
 
 /* Commentary: 
@@ -458,6 +458,7 @@ public:
     QString name;
     QString description;
     QStringList tags;
+    QStringList types;
 };
 
 dtkItem::dtkItem(QString name)
@@ -466,6 +467,7 @@ dtkItem::dtkItem(QString name)
     d->name = name;
     d->description = QString();
     d->tags = QStringList();
+    d->types = QStringList();
 }
 
 dtkItem::dtkItem(QString name, QString description)
@@ -474,6 +476,7 @@ dtkItem::dtkItem(QString name, QString description)
     d->name = name;
     d->description = description;
     d->tags = QStringList();
+    d->types = QStringList();
 }
 
 dtkItem::dtkItem(QString name, QString description, QStringList tags)
@@ -482,6 +485,16 @@ dtkItem::dtkItem(QString name, QString description, QStringList tags)
     d->name = name;
     d->description = description;
     d->tags = tags;
+    d->types = QStringList();
+}
+
+dtkItem::dtkItem(QString name, QString description, QStringList tags, QStringList types)
+{
+    d = new dtkItemPrivate;
+    d->name = name;
+    d->description = description;
+    d->tags = tags;
+    d->types = types;
 }
 
 dtkItem::~dtkItem(void)
@@ -502,6 +515,11 @@ QString dtkItem::description(void) const
 QStringList dtkItem::tags(void) const
 {
     return d->tags;
+}
+
+QStringList dtkItem::types(void) const
+{
+    return d->types;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -547,6 +565,11 @@ void dtkItemView::addItem(QString name, QString description, QStringList tags)
     d->items << dtkItem(name, description, tags);
 }
 
+void dtkItemView::addItem(QString name, QString description, QStringList tags, QStringList types)
+{
+    d->items << dtkItem(name, description, tags, types);
+}
+
 void dtkItemView::addItem(dtkItem item)
 {
     d->items << item;
@@ -566,11 +589,17 @@ void dtkItemView::render(void)
     list += "<ul>\n";
     foreach(dtkItem item, d->items) {
     list += "  <li>\n";
-    list += "    <div class=\"name\"><a href=\"item://" + item.name() + "\">" + item.name() + "</a></div>\n";
-    list += "    <div class=\"desc\">" + item.description() + "</div>\n";
+    list += "    <div class=\"name\">" + item.name() + "</div><br/>";
+    list += "    Description: <div class=\"desc\">" + item.description() + "</div><br/>\n";
+    list += "    Types: <div class=\"types\">\n";
+    foreach(QString type, item.types()) {
+        list += "        <a href=\"type:" + type + "\">" + type + "</a>";
+    list += ((type == item.types().last()) ? QString("\n") : QString(" - \n"));
+    }
+    list += "    </div><br/>\n";
     list += "    <div class=\"tags\" align=\"right\">\n";
     foreach(QString tag, item.tags()) {
-    list += "        <a href=\"tag://" + tag + "\">" + tag + "</a>";
+    list += "        <a href=\"tag:" + tag + "\"><b>" + tag + "</b></a>";
     list += ((tag == item.tags().last()) ? QString("\n") : QString(" > \n"));
     }
     list += "    </div>\n";
@@ -585,12 +614,13 @@ void dtkItemView::render(void)
 static QString view_stylesheet =
 "ul            { margin: 0px; padding: 0px; }\n"
 "li            { list-style: none; }\n"
-".name         { font-size: 100%; color: rgb(153, 153, 153); }\n"
-".name a       { color: rgb(153, 153, 153); text-decoration: none; }\n"
-".desc         { font-size: 130%; color: rgb( 18,  89, 199); }\n"
-".tags         { font-size:  90%; color: gray; }\n"
+".name         { font-size: 130%; color: rgb(18,  89, 199); }\n"
+".desc         { display: inline; font-size: 100%; color: rgb(153, 153, 153); }\n"
+".types        { display: inline; font-size: 100%; color: rgb( 18,  89, 199); }\n"
+".types a      { color: rgb( 18,  89, 199); text-decoration: none; }\n"
+".tags         { font-size: 100%; color: gray; }\n"
 ".tags a       { color: gray;  text-decoration: none; }\n"
-".tags a:hover { color: white; text-decoration: none; background: gray; }\n"
+".tags a:hover { color: rgb( 18,  89, 199); text-decoration: none; }\n"
 "hr            { border: 0; width: 100%; color: rgb(200, 200, 200); background-color: rgb(200, 200, 200); height: 1px; }";
 
 void dtkItemView::setStyleSheet(QString user_stylesheet)
@@ -606,10 +636,13 @@ void dtkItemView::setStyleSheet(QString user_stylesheet)
 void dtkItemView::onLinkClicked(const QUrl& url)
 {
     if (url.scheme() == "tag")
-        emit tagClicked(url.host());
+        emit tagClicked(url.path());
 
     if (url.scheme() == "item")
-        emit itemClicked(url.host());
+        emit itemClicked(url.path());
+
+    if (url.scheme() == "type")
+        emit typeClicked(url.path());
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -687,6 +720,14 @@ void dtkTagController::addItem(QString name, QString description)
 void dtkTagController::addItem(QString name, QString description, QStringList tags)
 {
     d->items << dtkItem(name, description, tags);
+
+    this->update();
+    this->render();
+}
+
+void dtkTagController::addItem(QString name, QString description, QStringList tags, QStringList types)
+{
+    d->items << dtkItem(name, description, tags, types);
 
     this->update();
     this->render();

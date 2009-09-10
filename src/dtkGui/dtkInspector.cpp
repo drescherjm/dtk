@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Aug  6 23:28:30 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Aug  7 00:24:34 2009 (+0200)
+ * Last-Updated: Wed Sep  9 20:41:28 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 37
+ *     Update #: 80
  */
 
 /* Commentary: 
@@ -40,20 +40,6 @@ dtkInspector::dtkInspector(QWidget *parent) : QMainWindow(parent), d(new dtkInsp
     d->toolBar->setFloatable(false);
     d->toolBar->setMovable(false);
 
-    QAction *action1 = new QAction("Test1", this);
-    action1->setIcon(QIcon(":icons/widget.tiff"));
-    action1->setToolTip(QString("Switch to %1 preferences page"));
-
-    QAction *action2 = new QAction("Test2", this);
-    action2->setIcon(QIcon(":icons/widget.tiff"));
-    action2->setToolTip(QString("Switch to %1 preferences page"));
-
-    connect(action1, SIGNAL(hovered()), this, SLOT(onActionHovered()));
-    connect(action2, SIGNAL(hovered()), this, SLOT(onActionHovered()));
-
-    d->toolBar->addAction(action1);
-    d->toolBar->addAction(action2);
-
     this->setWindowFlags(Qt::Tool | Qt::WindowCloseButtonHint | Qt::CustomizeWindowHint);
     this->setWindowTitle("Inspector");
     this->setCentralWidget(d->stack);
@@ -68,6 +54,29 @@ dtkInspector::~dtkInspector(void)
     d = NULL;
 }
 
+void dtkInspector::readSettings(void)
+{
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("inspector");
+    QPoint pos = settings.value("pos", QPoint(800, 150)).toPoint();
+    QSize size = settings.value("size", QSize(100, 250)).toSize();
+    bool visible = settings.value("visible", false).toBool();
+    move(pos);
+    resize(size);
+    setVisible(visible);
+    settings.endGroup();
+}
+
+void dtkInspector::writeSettings(void)
+{
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("inspector");
+    settings.setValue("pos", pos());
+    settings.setValue("size", size());
+    settings.setValue("visible", isVisible());
+    settings.endGroup();
+}
+
 void dtkInspector::addPage(const QString& title, QWidget *page)
 {
     QAction *action = new QAction(title, this);
@@ -78,8 +87,10 @@ void dtkInspector::addPage(const QString& title, QWidget *page)
     d->stack->addWidget(page);
     d->toolBar->addAction(action);
 
-    connect(action, SIGNAL(hovered()), this, SLOT(onActionHovered()));
     connect(action, SIGNAL(triggered()), this, SLOT(onActionTriggered()));
+
+    if (d->stack->count() == 1)
+        action->trigger();
 }
 
 void dtkInspector::addPage(const QString& title, QWidget *page, const QIcon& icon)
@@ -87,20 +98,16 @@ void dtkInspector::addPage(const QString& title, QWidget *page, const QIcon& ico
     QAction *action = new QAction(title, this);
     action->setIcon(icon);
     action->setToolTip(QString("Switch to %1 inspector page.").arg(title));
+    action->setEnabled(d->stack->count());
 
     d->pages.insert(action, page);
     d->stack->addWidget(page);
     d->toolBar->addAction(action);
 
-    connect(action, SIGNAL(hovered()), this, SLOT(onActionHovered()));
     connect(action, SIGNAL(triggered()), this, SLOT(onActionTriggered()));
-}
 
-void dtkInspector::onActionHovered(void)
-{
-    QAction *sender = qobject_cast<QAction *>(this->sender());
-
-    this->setWindowTitle(sender->text());
+    if (d->stack->count() == 1)
+        action->trigger();
 }
 
 void dtkInspector::onActionTriggered(void)
@@ -111,4 +118,6 @@ void dtkInspector::onActionTriggered(void)
         action == sender ? action->setEnabled(false) : action->setEnabled(true);
 
     d->stack->setCurrentWidget(d->pages.value(sender));
+
+    this->setWindowTitle(sender->text());
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Mar 11 14:22:17 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Aug  4 20:31:30 2009 (+0200)
+ * Last-Updated: Wed Sep  9 08:51:46 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 14
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -38,7 +38,6 @@ bool dtkPluginGenerator::generatePluginHeaderFile(void)
         "#ifndef %2PLUGIN_H\n"
         "#define %2PLUGIN_H\n"
         "\n"
-        "#include <dtkCore/dtkGlobal.h>\n"
         "#include <dtkCore/dtkPlugin.h>\n"
         "\n"
         "#include \"%1PluginExport.h\"\n"

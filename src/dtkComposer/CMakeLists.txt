@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Sep  7 20:11:15 2009 (+0200)
+## Last-Updated: Thu Sep 10 17:00:19 2009 (+0200)
 ##           By: Julien Wintz
-##     Update #: 22
+##     Update #: 23
 ######################################################################
 ## 
 ### Commentary: 
@@ -38,6 +38,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerEdge.h
   dtkComposerNode.h
   dtkComposerNodeProperty.h
+  dtkComposerScene.h
 )
 
 set(${PROJECT_NAME}_SOURCES

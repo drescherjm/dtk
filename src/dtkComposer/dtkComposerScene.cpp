@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep  8 13:36:17 2009 (+0200)
+ * Last-Updated: Thu Sep 10 16:57:52 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 124
+ *     Update #: 158
  */
 
 /* Commentary: 
@@ -22,6 +22,12 @@
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerScene.h"
 
+#include <dtkCore/dtkAbstractData.h>
+#include <dtkCore/dtkAbstractDataFactory.h>
+#include <dtkCore/dtkAbstractProcess.h>
+#include <dtkCore/dtkAbstractProcessFactory.h>
+#include <dtkCore/dtkAbstractView.h>
+#include <dtkCore/dtkAbstractViewFactory.h>
 #include <dtkCore/dtkLog.h>
 
 class dtkComposerScenePrivate
@@ -34,8 +40,7 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
 {
     d->current_edge = NULL;
 
-    this->addItem(new dtkComposerNode);
-    this->addItem(new dtkComposerNode);
+    connect(this, SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));
 }
 
 dtkComposerScene::~dtkComposerScene(void)
@@ -43,6 +48,27 @@ dtkComposerScene::~dtkComposerScene(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkComposerScene::addNode(const QString& type)
+{
+    Q_UNUSED(type);
+
+    // dtkComposerNode *node = new dtkComposerNode;
+
+    dtkComposerNode *node = NULL;
+
+    if(dtkAbstractData *data = dtkAbstractDataFactory::instance()->create(type))
+        node = data->node();
+
+    if(dtkAbstractProcess *process = dtkAbstractProcessFactory::instance()->create(type))
+        node = process->node();
+
+    if(dtkAbstractView *view = dtkAbstractViewFactory::instance()->create(type))
+        node = view->node();
+
+    if (node)
+        this->addItem(node);
 }
 
 dtkComposerNode *dtkComposerScene::nodeAt(const QPointF& point) const
@@ -84,8 +110,6 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     if(!property)
         return;
 
-    qDebug() << "Property count" << property->count();
-
     if (property->type() == dtkComposerNodeProperty::Output && property->count() == 0) {
         delete d->current_edge;
         d->current_edge = new dtkComposerEdge;
@@ -119,5 +143,19 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
         if (!d->current_edge->link())
             delete d->current_edge;
         d->current_edge = 0;
+    }
+}
+
+void dtkComposerScene::onSelectionChanged(void)
+{
+    foreach(QGraphicsItem *item, this->selectedItems()) {
+        if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) {
+            if(dtkAbstractData *data = dynamic_cast<dtkAbstractData *>(node->object()))
+                emit dataSelected(data);
+            if(dtkAbstractProcess *process = dynamic_cast<dtkAbstractProcess *>(node->object()))
+                emit processSelected(process);
+            if(dtkAbstractView *view = dynamic_cast<dtkAbstractView *>(node->object()))
+                emit viewSelected(view);
+        }
     }
 }

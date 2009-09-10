@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:07:37 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep  7 15:07:58 2009 (+0200)
+ * Last-Updated: Wed Sep  9 00:42:26 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 4
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -17,6 +17,7 @@
  * 
  */
 
+#include "dtkComposerScene.h"
 #include "dtkComposerView.h"
 
 dtkComposerView::dtkComposerView(QWidget *parent) : QGraphicsView(parent)
@@ -30,6 +31,7 @@ dtkComposerView::dtkComposerView(QWidget *parent) : QGraphicsView(parent)
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setFrameStyle(QFrame::NoFrame);
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
+    this->setAcceptDrops(true);
 }
 
 dtkComposerView::~dtkComposerView(void)
@@ -48,6 +50,25 @@ void dtkComposerView::drawBackground(QPainter *painter, const QRectF& rect)
     pt.end();
 
     painter->drawTiledPixmap(rect, tile);
+}
+
+void dtkComposerView::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasUrls())
+        event->acceptProposedAction();
+}
+
+void dtkComposerView::dropEvent(QDropEvent *event)
+{
+    QUrl url = event->mimeData()->urls().first();
+
+    if (url.scheme() != "type")
+        return;
+
+    if (dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene()))
+        scene->addNode(url.path());
+    
+    event->acceptProposedAction();
 }
 
 void dtkComposerView::wheelEvent(QWheelEvent *event)

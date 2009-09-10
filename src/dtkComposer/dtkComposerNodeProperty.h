@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep  8 13:24:49 2009 (+0200)
+ * Last-Updated: Thu Sep 10 10:28:17 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 35
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -32,15 +32,17 @@ class dtkComposerNodeProperty : public QObject, public QGraphicsItem
     Q_OBJECT
 
 public:
-    enum Type  { Input, Output };
+    enum Type { Input, Output };
+    enum Multiplicity { Null, Single, Multiple };
 
-     dtkComposerNodeProperty(Type type, dtkComposerNode *parent);
+     dtkComposerNodeProperty(QString name, Type type, Multiplicity multiplicity, dtkComposerNode *parent);
     ~dtkComposerNodeProperty(void);
 
     dtkComposerEdge *edge(void);
     dtkComposerNode *node(void);
 
     Type type(void);
+    Multiplicity multiplicity(void);
 
     int count(void);
 

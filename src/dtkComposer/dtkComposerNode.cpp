@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep  8 13:22:58 2009 (+0200)
+ * Last-Updated: Thu Sep 10 16:53:52 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 112
+ *     Update #: 185
  */
 
 /* Commentary: 
@@ -20,6 +20,12 @@
 #include "dtkComposerEdge.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerScene.h"
+
+#include <dtkCore/dtkAbstractData.h>
+#include <dtkCore/dtkAbstractObject.h>
+#include <dtkCore/dtkAbstractProcess.h>
+#include <dtkCore/dtkAbstractView.h>
 
 class dtkComposerNodePrivate
 {
@@ -35,7 +41,6 @@ public:
     qreal margin_bottom;
 
     QGraphicsTextItem *title;
-    QGraphicsTextItem *button;
 
     QList<dtkComposerNodeProperty *> input_properties;
     QList<dtkComposerNodeProperty *> output_properties;
@@ -44,12 +49,16 @@ public:
     QHash<dtkComposerEdge *, dtkComposerNodeProperty *> output_edges;
 
     dtkComposerNodeProperty *clicked_property;
+
+    dtkComposerNode::Type type;
+
+    dtkAbstractObject *object;
 };
 
 dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePrivate)
 {
-    int n_input_properties = 3;
-    int n_output_properties = 2;
+    d->type = Unknown;
+    d->object = NULL;
 
     d->penWidth = 1;
     d->header_height = 20;
@@ -60,35 +69,14 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
     d->margin_bottom = 5;
 
     d->width = 150;
-    d->height = d->header_height + (3*qMax(n_input_properties, n_output_properties) + 1) * d->node_radius;
+    d->height = d->header_height*2;
 
     d->title = new QGraphicsTextItem(this);
     d->title->setHtml("Title");
     d->title->setDefaultTextColor(Qt::black);
     d->title->setPos(-d->width/2 + d->margin_left/2, -d->height/2-2);
 
-    d->button = new QGraphicsTextItem(this);
-    // d->button->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
-    // d->button->setHtml("<a href=\"node://more\">?</a>");
-    d->button->setHtml("?");
-    d->button->setDefaultTextColor(Qt::black);
-    d->button->setPos(d->width/2 - d->margin_right*3, -d->height/2-2);
-
-    for(int i = 0 ; i < n_input_properties ; i++) {
-        dtkComposerNodeProperty *input = new dtkComposerNodeProperty(dtkComposerNodeProperty::Input, this);
-        input->setText(QString("Input %1").arg(i));
-        input->setRect(QRectF(-d->width/2+d->node_radius, -d->height/2+d->header_height+d->margin_top+(3*i+1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
-        d->input_properties << input;
-    }
-
-    for(int i = 0 ; i < n_output_properties ; i++) {
-        dtkComposerNodeProperty *output = new dtkComposerNodeProperty(dtkComposerNodeProperty::Output, this);
-        output->setText(QString("Output %1").arg(i));
-        output->setRect(QRectF(d->width/2-3*d->node_radius, -d->height/2+d->header_height+d->margin_top+(3*i+1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
-        d->output_properties << output;
-    }
-
-    this->setFlags(QGraphicsItem::ItemIsMovable);
+    this->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
     this->setZValue(10);
 }
 
@@ -97,6 +85,28 @@ dtkComposerNode::~dtkComposerNode(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkComposerNode::setType(Type type)
+{
+    d->type = type;
+}
+
+void dtkComposerNode::setObject(dtkAbstractObject *object)
+{
+    d->object = object;
+
+    d->title->setHtml(object->name());
+}
+
+dtkComposerNode::Type dtkComposerNode::type(void)
+{
+    return d->type;
+}
+
+dtkAbstractObject *dtkComposerNode::object(void)
+{
+    return d->object;
 }
 
 dtkComposerEdge *dtkComposerNode::edge(dtkComposerNodeProperty *property)
@@ -108,6 +118,24 @@ dtkComposerEdge *dtkComposerNode::edge(dtkComposerNodeProperty *property)
         return d->output_edges.key(property);
 
     return 0;
+}
+
+void dtkComposerNode::addInputProperty(dtkComposerNodeProperty *property)
+{
+    property->setRect(QRectF(-d->width/2+d->node_radius, -d->height/2+d->header_height+d->margin_top+(3*d->input_properties.count()+1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
+
+    d->input_properties << property;
+
+    d->height = d->header_height + (3*qMax(d->input_properties.count(), d->output_properties.count()) + 1) * d->node_radius;
+}
+
+void dtkComposerNode::addOutputProperty(dtkComposerNodeProperty *property)
+{
+    property->setRect(QRectF(-d->width/2+d->node_radius, -d->height/2+d->header_height+d->margin_top+(3*d->output_properties.count()+1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
+
+    d->output_properties << property;
+
+    d->height = d->header_height + (3*qMax(d->input_properties.count(), d->output_properties.count()) + 1) * d->node_radius;
 }
 
 void dtkComposerNode::addInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
@@ -185,8 +213,22 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     path.quadTo(rect.left(), rect.bottom(), rect.left(), rect.bottom() - leftBottomRadius);
     path.closeSubpath();
 
+    switch(d->type) {
+    case Unknown:
+        painter->setBrush(Qt::gray);
+        break;
+    case Data:
+        painter->setBrush(Qt::blue);
+        break;
+    case Process:
+        painter->setBrush(Qt::red);
+        break;
+    case View:
+        painter->setBrush(Qt::green);
+        break;
+    }
+
     painter->setPen(Qt::darkGray);
-    painter->setBrush(Qt::gray);
     painter->drawPath(path);
 
     painter->restore();
@@ -216,6 +258,34 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 
     painter->setPen(Qt::darkGray);
     painter->setBrush(Qt::lightGray);
+    painter->drawPath(path);
+
+    painter->restore();
+
+    }
+
+    if(this->isSelected()) { // Drawing selection outline
+
+    QRectF rect(-d->width/2, -d->height/2, d->width, d->height);
+         
+    qreal leftBottomRadius = 5;
+    qreal leftTopRadius = 5;
+    qreal rightBottomRadius = 5;
+    qreal rightTopRadius = 5;
+
+    painter->save();
+
+    QPainterPath path(QPoint(rect.left(), rect.top() + leftTopRadius));
+    path.quadTo(rect.left(), rect.top(), rect.left() + leftTopRadius, rect.top());
+    path.lineTo(rect.right() - rightTopRadius, rect.top());
+    path.quadTo(rect.right(), rect.top(), rect.right(), rect.top() + rightTopRadius);
+    path.lineTo(rect.right(), rect.bottom() - rightBottomRadius);
+    path.quadTo(rect.right(), rect.bottom(), rect.right() - rightBottomRadius, rect.bottom());
+    path.lineTo(rect.left() + leftBottomRadius, rect.bottom());
+    path.quadTo(rect.left(), rect.bottom(), rect.left(), rect.bottom() - leftBottomRadius);
+    path.closeSubpath();
+
+    painter->setPen(QPen(Qt::magenta, 2));
     painter->drawPath(path);
 
     painter->restore();

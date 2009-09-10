@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:52 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep  7 15:07:26 2009 (+0200)
+ * Last-Updated: Tue Sep  8 22:10:44 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 3
+ *     Update #: 6
  */
 
 /* Commentary: 
@@ -32,6 +32,8 @@ public:
     void drawBackground(QPainter *painter, const QRectF& rect);
 
 protected:
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
     void wheelEvent(QWheelEvent *event);
 };
 

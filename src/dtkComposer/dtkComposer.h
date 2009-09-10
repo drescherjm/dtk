@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:12:32 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep  7 13:43:48 2009 (+0200)
+ * Last-Updated: Thu Sep 10 16:44:49 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 8
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -22,6 +22,9 @@
 
 #include <QtGui/QWidget>
 
+class dtkAbstractData;
+class dtkAbstractProcess;
+class dtkAbstractView;
 class dtkComposerPrivate;
 
 class dtkComposer : public QWidget
@@ -31,6 +34,16 @@ class dtkComposer : public QWidget
 public:
      dtkComposer(QWidget *parent = 0);
     ~dtkComposer(void);
+
+signals:
+   void dataSelected(dtkAbstractData *data);
+   void processSelected(dtkAbstractProcess *process);
+   void viewSelected(dtkAbstractView *view);
+
+public slots:
+   void onDataSelected(dtkAbstractData *data);
+   void onProcessSelected(dtkAbstractProcess *process);
+   void onViewSelected(dtkAbstractView *view);
 
 private:
     dtkComposerPrivate *d;

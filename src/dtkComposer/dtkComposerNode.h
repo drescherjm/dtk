@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep  8 13:18:47 2009 (+0200)
+ * Last-Updated: Thu Sep 10 16:53:58 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 33
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include <QtCore>
 #include <QtGui>
 
+class dtkAbstractObject;
 class dtkComposerEdge;
 class dtkComposerNodePrivate;
 class dtkComposerNodeProperty;
@@ -32,10 +33,22 @@ class dtkComposerNode : public QObject, public QGraphicsItem
     Q_OBJECT
 
 public:
+    enum Type { Unknown, Data, Process, View };
+
      dtkComposerNode(dtkComposerNode *parent = 0);
     ~dtkComposerNode(void);
 
+    void setType(Type type);
+    void setObject(dtkAbstractObject *object);
+
+    Type type(void);
+
+    dtkAbstractObject *object(void);
+
     dtkComposerEdge *edge(dtkComposerNodeProperty *property);
+
+    void addInputProperty(dtkComposerNodeProperty *property);
+    void addOutputProperty(dtkComposerNodeProperty *property);
 
     void addInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
     void addOutputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);

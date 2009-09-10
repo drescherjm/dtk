@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep  7 15:08:17 2009 (+0200)
+ * Last-Updated: Thu Sep 10 16:46:09 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 298
+ *     Update #: 309
  */
 
 /* Commentary: 
@@ -21,6 +21,10 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerView.h"
+
+#include <dtkCore/dtkAbstractData.h>
+#include <dtkCore/dtkAbstractProcess.h>
+#include <dtkCore/dtkAbstractView.h>
 
 #include <QtCore>
 #include <QtGui>
@@ -38,6 +42,10 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
     d->view = new dtkComposerView(this);
     d->view->setScene(d->scene);
 
+    connect(d->scene, SIGNAL(dataSelected(dtkAbstractData *)), this, SIGNAL(dataSelected(dtkAbstractData *)));
+    connect(d->scene, SIGNAL(processSelected(dtkAbstractProcess *)), this, SIGNAL(processSelected(dtkAbstractProcess *)));
+    connect(d->scene, SIGNAL(viewSelected(dtkAbstractView *)), this, SIGNAL(viewSelected(dtkAbstractView *)));
+
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
@@ -51,4 +59,25 @@ dtkComposer::~dtkComposer(void)
     delete d;
     
     d = NULL;
+}
+
+void dtkComposer::onDataSelected(dtkAbstractData *data)
+{
+    d->scene->clearSelection();
+
+    data->node()->setSelected(true);
+}
+
+void dtkComposer::onProcessSelected(dtkAbstractProcess *process)
+{
+    d->scene->clearSelection();
+
+    process->node()->setSelected(true);
+}
+
+void dtkComposer::onViewSelected(dtkAbstractView *view)
+{
+    d->scene->clearSelection();
+
+    view->node()->setSelected(true);
 }

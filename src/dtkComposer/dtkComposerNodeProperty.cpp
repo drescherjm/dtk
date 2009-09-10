@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep  8 13:18:00 2009 (+0200)
+ * Last-Updated: Thu Sep 10 10:29:39 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 91
+ *     Update #: 95
  */
 
 /* Commentary: 
@@ -26,19 +26,21 @@ public:
     dtkComposerNode *parent;
 
     dtkComposerNodeProperty::Type type;
+    dtkComposerNodeProperty::Multiplicity multiplicity;
 
     QGraphicsEllipseItem *ellipse;
     QGraphicsTextItem *text;
 };
 
-dtkComposerNodeProperty::dtkComposerNodeProperty(Type type, dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePropertyPrivate)
+dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multiplicity multiplicity, dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePropertyPrivate)
 {
     d->type = type;
+    d->multiplicity = multiplicity;
     d->parent = parent;
 
     d->text = new QGraphicsTextItem(this);
     d->text->setFont(QFont("Lucida Grande", 11));
-    d->text->setPlainText("Property");
+    d->text->setPlainText(name);
     d->text->setDefaultTextColor(Qt::black);
 
     d->ellipse = new QGraphicsEllipseItem(this);

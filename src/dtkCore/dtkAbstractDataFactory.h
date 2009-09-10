@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:48:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jul 31 22:57:38 2009 (+0200)
+ * Last-Updated: Wed Sep  9 22:39:08 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 56
+ *     Update #: 58
  */
 
 /* Commentary:
@@ -52,6 +52,9 @@ public:
     unsigned int size(QString type);
 
     dtkAbstractData *get(QString type, int index = 0);
+
+signals:
+    void created(dtkAbstractData *data, QString type);
 
 public slots:
     dtkAbstractData *create(QString type);

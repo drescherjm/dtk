@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Aug  1 00:47:08 2009 (+0200)
+ * Last-Updated: Thu Sep 10 12:44:01 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 103
+ *     Update #: 109
  */
 
 /* Commentary:
@@ -63,7 +63,11 @@ dtkAbstractView *dtkAbstractViewFactory::create(QString type)
         if(key.second.contains(type) || key.second.contains("any"))
             view->addInteractor(d->interactors[key]());
 
+    view->setObjectName(QString("view%1").arg(d->views.count()));
+
     d->views[type] << view;
+
+    emit created(view, type);
 
     return view;
 }

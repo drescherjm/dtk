@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:48:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  7 10:37:19 2009 (+0200)
+ * Last-Updated: Thu Sep 10 12:33:43 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 37
+ *     Update #: 46
  */
 
 /* Commentary:
@@ -25,6 +25,7 @@
 #include <dtkCore/dtkAbstractFactory.h>
 
 class dtkAbstractProcess;
+class dtkAbstractProcessFactoryPrivate;
 
 class DTKCORE_EXPORT dtkAbstractProcessFactory : public dtkAbstractFactory
 {
@@ -32,23 +33,29 @@ class DTKCORE_EXPORT dtkAbstractProcessFactory : public dtkAbstractFactory
 
 public:
     typedef dtkAbstractProcess *(*dtkAbstractProcessCreator)(void);
-    typedef QMap<QString, dtkAbstractProcessCreator> dtkAbstractProcessCreatorMap;
+
+    typedef QHash<QString, dtkAbstractProcessCreator> dtkAbstractProcessCreatorHash;
 
 public:
     static dtkAbstractProcessFactory *instance(void);
 
     bool registerProcessType(QString type, dtkAbstractProcessCreator func);
 
+signals:
+    void created(dtkAbstractProcess *process, QString type);
+
 public slots:
     dtkAbstractProcess *create(QString type);
 
 protected:
-    dtkAbstractProcessFactory(void);
+     dtkAbstractProcessFactory(void);
+    ~dtkAbstractProcessFactory(void);
 
 private:
-    dtkAbstractProcessCreatorMap m_creators;
-    
-    static dtkAbstractProcessFactory   *m_instance;
+    static dtkAbstractProcessFactory   *s_instance;
+
+private:
+    dtkAbstractProcessFactoryPrivate *d;
 };
 
 #endif

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 12 11:05:50 2008 (+0100)
  * Version: $Id$
- * Last-Updated:  Wed Mar 25 13:19:44 2009
- *           By: Jean-Christophe Lombardo
- *     Update #: 5
+ * Last-Updated: Wed Sep  9 23:19:51 2009 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 6
  */
 
 /* Commentary: 
@@ -23,7 +23,7 @@
 
 dtkAbstractFactory::dtkAbstractFactory(void)
 {
-    connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(clear()) );
+    connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(clear()));
 }
 
 dtkAbstractFactory::~dtkAbstractFactory(void)

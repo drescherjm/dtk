@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  7 11:34:14 2009 (+0200)
+ * Last-Updated: Thu Sep 10 12:44:29 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 27
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -20,35 +20,60 @@
 #include <dtkCore/dtkAbstractProcess.h>
 #include <dtkCore/dtkAbstractProcessFactory.h>
 
-dtkAbstractProcessFactory * dtkAbstractProcessFactory::instance(void)
-{
-    if(!m_instance)
-	m_instance = new dtkAbstractProcessFactory;
+typedef QHash<QString, QList<dtkAbstractProcess*> > dtkAbstractProcessHash;
 
-    return m_instance;
+class dtkAbstractProcessFactoryPrivate
+{
+public:
+    dtkAbstractProcessHash processes;
+
+    dtkAbstractProcessFactory::dtkAbstractProcessCreatorHash creators;
+};
+
+dtkAbstractProcessFactory *dtkAbstractProcessFactory::instance(void)
+{
+    if(!s_instance)
+	s_instance = new dtkAbstractProcessFactory;
+
+    return s_instance;
 }
 
-dtkAbstractProcess * dtkAbstractProcessFactory::create(QString type)
+dtkAbstractProcess *dtkAbstractProcessFactory::create(QString type)
 {
-    if(m_creators.contains(type))
-	return m_creators[type]();
+    if(!d->creators.contains(type))
+        return NULL;
 
-    return NULL;
+    dtkAbstractProcess *process = d->creators[type]();
+
+    process->setObjectName(QString("process%1").arg(d->processes.count()));
+
+    d->processes[type] << process;
+    
+    emit created(process, type);
+
+    return process;
 }
 
 bool dtkAbstractProcessFactory::registerProcessType(QString type, dtkAbstractProcessCreator func)
 {
-    if(!m_creators.contains(type)) {
-	m_creators.insert(type, func);
+    if(!d->creators.contains(type)) {
+	d->creators.insert(type, func);
 	return true;
     }
  
     return false;
 }
 
-dtkAbstractProcessFactory::dtkAbstractProcessFactory(void) : dtkAbstractFactory()
+dtkAbstractProcessFactory::dtkAbstractProcessFactory(void) : dtkAbstractFactory(), d(new dtkAbstractProcessFactoryPrivate)
 {
 
 }
 
-dtkAbstractProcessFactory * dtkAbstractProcessFactory::m_instance = NULL;
+dtkAbstractProcessFactory::~dtkAbstractProcessFactory(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+dtkAbstractProcessFactory *dtkAbstractProcessFactory::s_instance = NULL;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jul 31 22:59:16 2009 (+0200)
+ * Last-Updated: Thu Sep 10 12:36:37 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 60
+ *     Update #: 65
  */
 
 /* Commentary:
@@ -25,7 +25,7 @@ typedef QHash<QString, QList<dtkAbstractData*> > dtkAbstractDataHash;
 class dtkAbstractDataFactoryPrivate
 {
 public:
-    dtkAbstractDataHash data;
+    dtkAbstractDataHash datas;
 
     dtkAbstractDataFactory::dtkAbstractDataCreatorHash       creators;
     dtkAbstractDataFactory::dtkAbstractDataReaderCreatorHash readers;
@@ -55,7 +55,11 @@ dtkAbstractData *dtkAbstractDataFactory::create(QString type)
 	if(key.second.contains(type))
 	    data->addWriter(d->writers[key]());
 
-    d->data[type] << data;
+    data->setObjectName(QString("data%1").arg(d->datas.count()));
+
+    d->datas[type] << data;
+
+    emit created(data, type);
 
     return data;
 }
@@ -92,12 +96,12 @@ bool dtkAbstractDataFactory::registerDataWriterType(QString type, QStringList ha
 
 unsigned int dtkAbstractDataFactory::size(QString type)
 {
-    return d->data[type].size();
+    return d->datas[type].size();
 }
 
 dtkAbstractData *dtkAbstractDataFactory::get(QString type, int idx)
 {
-    return d->data[type].value(idx);
+    return d->datas[type].value(idx);
 }
 
 dtkAbstractDataFactory::dtkAbstractDataFactory(void) : dtkAbstractFactory(), d(new dtkAbstractDataFactoryPrivate)

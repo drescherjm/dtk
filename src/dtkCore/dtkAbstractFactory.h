@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 12 11:03:31 2008 (+0100)
  * Version: $Id$
- * Last-Updated:  Wed Mar 25 13:48:43 2009
- *           By: Jean-Christophe Lombardo
- *     Update #: 9
+ * Last-Updated: Wed Sep  9 23:13:59 2009 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -28,12 +28,13 @@
 class DTKCORE_EXPORT dtkAbstractFactory : public QObject
 {
     Q_OBJECT
+
 public:
      dtkAbstractFactory(void);
     ~dtkAbstractFactory(void);
 
 private slots:
-    void clear(void) {/*printf("Clearing a factory\n");*/ delete this;}
+    void clear(void) { delete this; }
 };
 
 #endif

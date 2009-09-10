@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep  3 20:12:08 2009 (+0200)
+ * Last-Updated: Tue Sep  8 23:21:21 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 71
+ *     Update #: 72
  */
 
 /* Commentary: 
@@ -91,7 +91,7 @@ dtkPlugin *dtkPluginManager::plugin(QString name)
     foreach(QPluginLoader *loader, d->loaders) {
         dtkPlugin *plugin = qobject_cast<dtkPlugin *>(loader->instance());
 
-        if(plugin->name().toLower() == name.toLower())
+        if(plugin->name() == name)
             return plugin;
     }
 

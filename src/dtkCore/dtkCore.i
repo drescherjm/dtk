@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Aug  5 10:14:58 2009 (+0200)
+ * Last-Updated: Thu Sep 10 12:42:01 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 187
+ *     Update #: 195
  */
 
 /* Commentary:
@@ -92,7 +92,7 @@
 %ignore operator==;
 
 // /////////////////////////////////////////////////////////////////
-// Ignore signals for dtkAbstractObject
+// Ignore rules for dtkAbstractObject signals
 // /////////////////////////////////////////////////////////////////
 
 %ignore addProperty(QString key, QStringList values); // No scripter should add properties dynamically
@@ -115,7 +115,7 @@
 %ignore clickedWorldCoordinates(double, double, double);
 
 // /////////////////////////////////////////////////////////////////
-// Ignore signals for dtkAbstractDevice
+// Ignore rules for dtkAbstractDevice signals
 // /////////////////////////////////////////////////////////////////
 
 %ignore buttonPressed(int idx);
@@ -126,6 +126,14 @@
 // /////////////////////////////////////////////////////////////////
 
 %ignore updated();
+
+// /////////////////////////////////////////////////////////////////
+// Ignore rules for factories
+// /////////////////////////////////////////////////////////////////
+
+%ignore created(dtkAbstractData *data, QString type);
+%ignore created(dtkAbstractProcess *process, QString type);
+%ignore created(dtkAbstractView *view, QString type);
 
 // /////////////////////////////////////////////////////////////////
 // Typemaps

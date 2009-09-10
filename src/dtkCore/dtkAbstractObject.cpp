@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:54:04 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Aug  1 00:34:46 2009 (+0200)
+ * Last-Updated: Thu Sep 10 10:48:48 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 55
+ *     Update #: 56
  */
 
 /* Commentary:
@@ -89,6 +89,11 @@ QString dtkAbstractObject::property(QString key)
     }
 
     return d->properties.value(key);
+}
+
+QString dtkAbstractObject::name(void) const
+{
+    return this->objectName();
 }
 
 void dtkAbstractObject::onPropertySet(QString key, QString value)

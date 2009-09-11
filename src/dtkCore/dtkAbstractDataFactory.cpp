@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 10 12:36:37 2009 (+0200)
+ * Last-Updated: Fri Sep 11 13:31:17 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 65
+ *     Update #: 67
  */
 
 /* Commentary:
@@ -102,6 +102,15 @@ unsigned int dtkAbstractDataFactory::size(QString type)
 dtkAbstractData *dtkAbstractDataFactory::get(QString type, int idx)
 {
     return d->datas[type].value(idx);
+}
+
+dtkAbstractData *dtkAbstractDataFactory::get(QString type, QString name)
+{
+    foreach(dtkAbstractData *data, d->datas[type])
+        if(data->name() == name)
+            return data;
+
+    return NULL;
 }
 
 dtkAbstractDataFactory::dtkAbstractDataFactory(void) : dtkAbstractFactory(), d(new dtkAbstractDataFactoryPrivate)

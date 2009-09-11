@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 15:31:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Aug  6 23:14:07 2009 (+0200)
+ * Last-Updated: Fri Sep 11 13:44:09 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 390
+ *     Update #: 393
  */
 
 /* Commentary: 
@@ -72,6 +72,11 @@ dtkInterpreter::dtkInterpreter(QWidget *parent) : dtkTextEditor(parent)
 dtkInterpreter::~dtkInterpreter(void)
 {
     delete d;
+}
+
+dtkScriptInterpreter *dtkInterpreter::interpreter(void)
+{
+    return d->interpreter;
 }
 
 void dtkInterpreter::keyPressEvent(QKeyEvent *event)

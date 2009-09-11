@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:48:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep  9 22:53:51 2009 (+0200)
+ * Last-Updated: Fri Sep 11 13:34:25 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 94
+ *     Update #: 96
  */
 
 /* Commentary:
@@ -56,6 +56,7 @@ public:
     unsigned int size(QString type);
 
     dtkAbstractView *get(QString type, int index = 0);
+    dtkAbstractView *get(QString type, QString name);
 
 signals:
     void created(dtkAbstractView *view, QString type);

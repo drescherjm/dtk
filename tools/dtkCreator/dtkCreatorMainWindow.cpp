@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 10 17:43:15 2009 (+0200)
+ * Last-Updated: Fri Sep 11 18:16:51 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 334
+ *     Update #: 386
  */
 
 /* Commentary: 
@@ -24,8 +24,11 @@
 #include "dtkCreatorViewer.h"
 #include "dtkCreatorWidgetFactory.h"
 
+#include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkAbstractDataFactory.h>
+#include <dtkCore/dtkAbstractProcess.h>
 #include <dtkCore/dtkAbstractProcessFactory.h>
+#include <dtkCore/dtkAbstractView.h>
 #include <dtkCore/dtkAbstractViewFactory.h>
 #include <dtkCore/dtkLog.h>
 
@@ -84,6 +87,8 @@ public:
     QAction *toolEditorAction;
     QAction *toolComposerAction;
     QAction *toolViewerAction;
+    QAction *toolRunAction;
+    QAction *toolStopAction;
     QAction *toolInspectorAction;
 
     QToolBar *toolBar;
@@ -176,6 +181,19 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     connect(d->toolViewerAction, SIGNAL(triggered()), this, SLOT(switchToViewer()));
     d->toolViewerAction->setEnabled(true);
 
+    d->toolRunAction = new QAction("Run", this);
+    d->toolRunAction->setShortcut(Qt::ControlModifier+Qt::Key_R);
+    d->toolRunAction->setToolTip("Runs the current composition.");
+    d->toolRunAction->setIcon(QIcon(":icons/run.tiff"));
+    connect(d->toolRunAction, SIGNAL(triggered()), this, SLOT(run()));
+
+    d->toolStopAction = new QAction("Stop", this);
+    d->toolStopAction->setShortcut(Qt::ControlModifier+Qt::Key_Colon);
+    d->toolStopAction->setToolTip("Stops the current composition.");
+    d->toolStopAction->setIcon(QIcon(":icons/stop.tiff"));
+    d->toolStopAction->setEnabled(false);
+    connect(d->toolStopAction, SIGNAL(triggered()), this, SLOT(stop()));
+
     d->toolInspectorAction = new QAction("Inspector", this);
     d->toolInspectorAction->setShortcut(Qt::ControlModifier+Qt::Key_I);
     d->toolInspectorAction->setToolTip("Show/hide inspector");
@@ -188,6 +206,10 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->toolBar->addAction(d->toolEditorAction);
     d->toolBar->addAction(d->toolComposerAction);
     d->toolBar->addAction(d->toolViewerAction);
+    d->toolBar->addWidget(new dtkSpacer(d->toolBar));
+    d->toolBar->addAction(d->toolRunAction);
+    d->toolBar->addAction(d->toolStopAction);
+    d->toolBar->addWidget(new dtkSpacer(d->toolBar));
 #ifdef Q_WS_MAC
     dtkSearchBoxAction *dtk_search_box = new dtkSearchBoxAction("Search", d->toolBar);
     d->toolBar->addWidget(new dtkSpacer(d->toolBar));
@@ -249,6 +271,10 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     connect(dtkAbstractDataFactory::instance(), SIGNAL(created(dtkAbstractData *, QString)), inspector_scene, SLOT(addData(dtkAbstractData *, QString)));
     connect(dtkAbstractProcessFactory::instance(), SIGNAL(created(dtkAbstractProcess *, QString)), inspector_scene, SLOT(addProcess(dtkAbstractProcess *, QString)));
     connect(dtkAbstractViewFactory::instance(), SIGNAL(created(dtkAbstractView *, QString)), inspector_scene, SLOT(addView(dtkAbstractView *, QString)));
+
+    connect(dtkAbstractDataFactory::instance(), SIGNAL(created(dtkAbstractData *, QString)), this, SLOT(registerData(dtkAbstractData *, QString)));
+    connect(dtkAbstractProcessFactory::instance(), SIGNAL(created(dtkAbstractProcess *, QString)), this, SLOT(registerProcess(dtkAbstractProcess *, QString)));
+    connect(dtkAbstractViewFactory::instance(), SIGNAL(created(dtkAbstractView *, QString)), this, SLOT(registerView(dtkAbstractView *, QString)));
 
     connect(inspector_scene, SIGNAL(dataSelected(dtkAbstractData *)), d->plugin_browser, SLOT(onDataSelected(dtkAbstractData *)));
     connect(inspector_scene, SIGNAL(processSelected(dtkAbstractProcess *)), d->plugin_browser, SLOT(onProcessSelected(dtkAbstractProcess *)));
@@ -449,4 +475,53 @@ void dtkCreatorMainWindow::onDocumentChanged(void)
 {
     if(!this->windowTitle().endsWith("*"))
         this->setWindowTitle(this->windowTitle() + "*");
+}
+
+void dtkCreatorMainWindow::run(void)
+{
+    qDebug() << "Not implemented yet";
+
+    d->toolRunAction->setEnabled(false);
+    d->toolStopAction->setEnabled(true);
+}
+
+void dtkCreatorMainWindow::stop(void)
+{
+    qDebug() << "Not implemented yet";
+
+    d->toolRunAction->setEnabled(true);
+    d->toolStopAction->setEnabled(false);
+}
+
+void dtkCreatorMainWindow::registerData(dtkAbstractData *data, QString type)
+{
+    int stat;
+
+    if(dtkScriptInterpreterPython *interpreter = dynamic_cast<dtkScriptInterpreterPython *>(d->interpreter->interpreter()))
+        interpreter->interpret(QString("%1 = dataFactory.get(\"%2\", \"%1\")").arg(data->name()).arg(type), &stat);
+
+    if(dtkScriptInterpreterTcl *interpreter = dynamic_cast<dtkScriptInterpreterTcl *>(d->interpreter->interpreter()))
+        interpreter->interpret(QString("set $1 [$dataFactory get \"2\" \"1\"]").arg(data->name()).arg(type), &stat);
+}
+
+void dtkCreatorMainWindow::registerProcess(dtkAbstractProcess *process, QString type)
+{
+    int stat;
+
+    if(dtkScriptInterpreterPython *interpreter = dynamic_cast<dtkScriptInterpreterPython *>(d->interpreter->interpreter()))
+        interpreter->interpret(QString("%1 = processFactory.get(\"%2\", \"%1\")").arg(process->name()).arg(type), &stat);
+
+    if(dtkScriptInterpreterTcl *interpreter = dynamic_cast<dtkScriptInterpreterTcl *>(d->interpreter->interpreter()))
+        interpreter->interpret(QString("set $1 [$processFactory get \"2\" \"1\"]").arg(process->name()).arg(type), &stat);
+}
+
+void dtkCreatorMainWindow::registerView(dtkAbstractView *view, QString type)
+{
+    int stat;
+
+    if(dtkScriptInterpreterPython *interpreter = dynamic_cast<dtkScriptInterpreterPython *>(d->interpreter->interpreter()))
+        interpreter->interpret(QString("%1 = viewFactory.get(\"%2\", \"%1\")").arg(view->name()).arg(type), &stat);
+
+    if(dtkScriptInterpreterTcl *interpreter = dynamic_cast<dtkScriptInterpreterTcl *>(d->interpreter->interpreter()))
+        interpreter->interpret(QString("set $1 [$viewFactory get \"2\" \"1\"]").arg(view->name()).arg(type), &stat);
 }

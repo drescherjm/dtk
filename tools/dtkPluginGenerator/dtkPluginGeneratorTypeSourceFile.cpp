@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Mar 11 14:21:10 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Aug  4 20:29:42 2009 (+0200)
+ * Last-Updated: Fri Sep 11 10:15:59 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 30
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -111,7 +111,7 @@ bool dtkPluginGenerator::generateTypeSourceFile(void)
         "}\n"
         "\n"
         "// /////////////////////////////////////////////////////////////////\n"
-        "// Process type instanciation\n"
+        "// Type instanciation\n"
         "// /////////////////////////////////////////////////////////////////\n"
         "\n"
         "dtkAbstract%2 *create%3(void)\n"

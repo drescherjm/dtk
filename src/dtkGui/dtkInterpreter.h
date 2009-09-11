@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 15:29:01 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Aug  5 18:46:00 2009 (+0200)
+ * Last-Updated: Fri Sep 11 13:43:41 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 39
+ *     Update #: 40
  */
 
 /* Commentary: 
@@ -48,6 +48,8 @@ public:
     QString filter(QString text);
 
     dtkInterpreterPreferencesWidget *preferencesWidget(QWidget *parent = 0);
+
+    dtkScriptInterpreter *interpreter(void);
 
 public slots:
     void onKeyUpPressed(void);

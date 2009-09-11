@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:38:47 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep  4 14:19:04 2009 (+0200)
+ * Last-Updated: Fri Sep 11 18:09:18 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 21
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -22,8 +22,10 @@
 
 #include <QtGui/QMainWindow>
 
+class dtkAbstractData;
+class dtkAbstractProcess;
+class dtkAbstractView;
 class dtkInterpreter;
-
 class dtkCreatorMainWindowPrivate;
 
 class dtkCreatorMainWindow : public QMainWindow
@@ -51,6 +53,14 @@ public slots:
     void switchToEditor(void);
     void switchToComposer(void);
     void switchToViewer(void);
+
+protected slots:
+    void run(void);
+    void stop(void);
+
+    void registerData(dtkAbstractData *data, QString type);
+    void registerProcess(dtkAbstractProcess *process, QString type);
+    void registerView(dtkAbstractView *view, QString type);
 
 protected:
     void closeEvent(QCloseEvent *event);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 10 12:44:01 2009 (+0200)
+ * Last-Updated: Fri Sep 11 13:35:11 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 109
+ *     Update #: 114
  */
 
 /* Commentary:
@@ -147,6 +147,15 @@ unsigned int dtkAbstractViewFactory::size(QString type)
 dtkAbstractView *dtkAbstractViewFactory::get(QString type, int idx)
 {
     return d->views[type].value(idx);
+}
+
+dtkAbstractView *dtkAbstractViewFactory::get(QString type, QString name)
+{
+    foreach(dtkAbstractView *view, d->views[type])
+        if(view->name() == name)
+            return view;
+
+    return NULL;
 }
 
 dtkAbstractViewFactory::dtkAbstractViewFactory(void) : dtkAbstractFactory(), d(new dtkAbstractViewFactoryPrivate)

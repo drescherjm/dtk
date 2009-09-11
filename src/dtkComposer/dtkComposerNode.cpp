@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 10 16:53:52 2009 (+0200)
+ * Last-Updated: Fri Sep 11 13:10:20 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 185
+ *     Update #: 247
  */
 
 /* Commentary: 
@@ -72,9 +72,10 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
     d->height = d->header_height*2;
 
     d->title = new QGraphicsTextItem(this);
+    d->title->setFont(QFont("Lucida Grande", 13));
     d->title->setHtml("Title");
     d->title->setDefaultTextColor(Qt::black);
-    d->title->setPos(-d->width/2 + d->margin_left/2, -d->height/2-2);
+    d->title->setPos(-d->width/2 + d->margin_left/2, -d->header_height-2);
 
     this->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
     this->setZValue(10);
@@ -122,20 +123,20 @@ dtkComposerEdge *dtkComposerNode::edge(dtkComposerNodeProperty *property)
 
 void dtkComposerNode::addInputProperty(dtkComposerNodeProperty *property)
 {
-    property->setRect(QRectF(-d->width/2+d->node_radius, -d->height/2+d->header_height+d->margin_top+(3*d->input_properties.count()+1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
+    property->setRect(QRectF(-d->width/2+d->node_radius, d->margin_top+(3*d->input_properties.count() +1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
 
     d->input_properties << property;
 
-    d->height = d->header_height + (3*qMax(d->input_properties.count(), d->output_properties.count()) + 1) * d->node_radius;
+    d->height = d->header_height + (3*qMax(d->input_properties.count(), d->output_properties.count())) * d->node_radius + d->margin_bottom;
 }
 
 void dtkComposerNode::addOutputProperty(dtkComposerNodeProperty *property)
 {
-    property->setRect(QRectF(-d->width/2+d->node_radius, -d->height/2+d->header_height+d->margin_top+(3*d->output_properties.count()+1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
+    property->setRect(QRectF(d->width/2-3*d->node_radius, d->margin_top+(3*d->output_properties.count() + 1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
 
     d->output_properties << property;
 
-    d->height = d->header_height + (3*qMax(d->input_properties.count(), d->output_properties.count()) + 1) * d->node_radius;
+    d->height = d->header_height + (3*qMax(d->input_properties.count(), d->output_properties.count())) * d->node_radius + d->margin_bottom;
 }
 
 void dtkComposerNode::addInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
@@ -184,7 +185,7 @@ dtkComposerNodeProperty *dtkComposerNode::propertyAt(const QPointF& point) const
 
 QRectF dtkComposerNode::boundingRect(void) const
 {
-    return QRectF(-d->width/2 - d->penWidth / 2, -d->height/2 - d->penWidth / 2, d->width + d->penWidth, d->height + d->penWidth);
+    return QRectF(-d->width/2 - d->penWidth / 2, -d->header_height - d->penWidth / 2, d->width + d->penWidth, d->height + d->penWidth);
 }
 
 void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -194,7 +195,7 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 
     { // Drawing node header
 
-    QRectF rect(-d->width/2, -d->height/2, d->width, d->header_height);
+    QRectF rect(-d->width/2, -d->header_height, d->width, d->header_height);
 
     qreal leftBottomRadius = 0;
     qreal leftTopRadius = 5;
@@ -218,13 +219,13 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
         painter->setBrush(Qt::gray);
         break;
     case Data:
-        painter->setBrush(Qt::blue);
+        painter->setBrush(QColor(Qt::blue).lighter());
         break;
     case Process:
-        painter->setBrush(Qt::red);
+        painter->setBrush(QColor(Qt::red).lighter());
         break;
     case View:
-        painter->setBrush(Qt::green);
+        painter->setBrush(QColor(Qt::green).lighter());
         break;
     }
 
@@ -237,7 +238,7 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 
     { // Drawing node body
 
-    QRectF rect(-d->width/2, -d->height/2+d->header_height, d->width, d->height-d->header_height);
+    QRectF rect(-d->width/2, 0, d->width, d->height-d->header_height);
 
     qreal leftBottomRadius = 5;
     qreal leftTopRadius = 0;
@@ -266,7 +267,7 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 
     if(this->isSelected()) { // Drawing selection outline
 
-    QRectF rect(-d->width/2, -d->height/2, d->width, d->height);
+    QRectF rect(-d->width/2, -d->header_height, d->width, d->height);
          
     qreal leftBottomRadius = 5;
     qreal leftTopRadius = 5;

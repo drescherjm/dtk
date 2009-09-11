@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 10 16:57:52 2009 (+0200)
+ * Last-Updated: Fri Sep 11 10:49:36 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 158
+ *     Update #: 161
  */
 
 /* Commentary: 
@@ -53,8 +53,6 @@ dtkComposerScene::~dtkComposerScene(void)
 void dtkComposerScene::addNode(const QString& type)
 {
     Q_UNUSED(type);
-
-    // dtkComposerNode *node = new dtkComposerNode;
 
     dtkComposerNode *node = NULL;
 

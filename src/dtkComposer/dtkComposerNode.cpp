@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 11 13:10:20 2009 (+0200)
+ * Last-Updated: Sun Sep 13 18:16:15 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 247
+ *     Update #: 271
  */
 
 /* Commentary: 
@@ -53,6 +53,8 @@ public:
     dtkComposerNode::Type type;
 
     dtkAbstractObject *object;
+
+    QString script;
 };
 
 dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePrivate)
@@ -100,6 +102,11 @@ void dtkComposerNode::setObject(dtkAbstractObject *object)
     d->title->setHtml(object->name());
 }
 
+void dtkComposerNode::setScript(const QString& script)
+{
+    d->script = script;
+}
+
 dtkComposerNode::Type dtkComposerNode::type(void)
 {
     return d->type;
@@ -119,6 +126,11 @@ dtkComposerEdge *dtkComposerNode::edge(dtkComposerNodeProperty *property)
         return d->output_edges.key(property);
 
     return 0;
+}
+
+QString dtkComposerNode::script(void) const
+{
+    return d->script;
 }
 
 void dtkComposerNode::addInputProperty(dtkComposerNodeProperty *property)
@@ -168,6 +180,36 @@ int dtkComposerNode::count(dtkComposerNodeProperty *property)
         return d->output_edges.keys(property).count();
 
     return 0;
+}
+
+QList<dtkComposerEdge *> dtkComposerNode::inputEdges(void)
+{
+    return d->input_edges.keys();
+}
+
+QList<dtkComposerEdge *> dtkComposerNode::outputEdges(void)
+{
+    return d->output_edges.keys();
+}
+
+QList<dtkComposerNode *> dtkComposerNode::inputNodes(void)
+{
+    QList<dtkComposerNode *> nodes;
+
+    foreach(dtkComposerEdge *edge, d->input_edges.keys())
+        nodes << edge->source()->node();
+
+    return nodes;
+}
+
+QList<dtkComposerNode *> dtkComposerNode::outputNodes(void)
+{
+    QList<dtkComposerNode *> nodes;
+
+    foreach(dtkComposerEdge *edge, d->output_edges.keys())
+        nodes << edge->destination()->node();
+
+    return nodes;
 }
 
 dtkComposerNodeProperty *dtkComposerNode::propertyAt(const QPointF& point) const

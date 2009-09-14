@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Sep 10 17:00:19 2009 (+0200)
+## Last-Updated: Sun Sep 13 18:16:48 2009 (+0200)
 ##           By: Julien Wintz
-##     Update #: 23
+##     Update #: 26
 ######################################################################
 ## 
 ### Commentary: 
@@ -26,6 +26,7 @@ project(dtkComposer)
 set(${PROJECT_NAME}_HEADERS
   dtkComposer.h
   dtkComposerEdge.h
+  dtkComposerEvaluator.h
   dtkComposerExport.h
   dtkComposerNode.h
   dtkComposerNodeProperty.h
@@ -36,6 +37,7 @@ set(${PROJECT_NAME}_HEADERS
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposer.h
   dtkComposerEdge.h
+  dtkComposerEvaluator.h
   dtkComposerNode.h
   dtkComposerNodeProperty.h
   dtkComposerScene.h
@@ -44,6 +46,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
 set(${PROJECT_NAME}_SOURCES
   dtkComposer.cpp
   dtkComposerEdge.cpp
+  dtkComposerEvaluator.cpp
   dtkComposerNode.cpp
   dtkComposerNodeProperty.cpp
   dtkComposerScene.cpp
@@ -65,6 +68,7 @@ add_library(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkCore
+  dtkScript
 )
 
 if(PYTHON_DEBUG_LIBRARIES)

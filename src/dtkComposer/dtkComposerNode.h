@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 10 16:53:58 2009 (+0200)
+ * Last-Updated: Sun Sep 13 18:11:24 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 45
+ *     Update #: 56
  */
 
 /* Commentary: 
@@ -33,19 +33,18 @@ class dtkComposerNode : public QObject, public QGraphicsItem
     Q_OBJECT
 
 public:
-    enum Type { Unknown, Data, Process, View };
+    enum Type { Unknown, Data, Process, View, All };
 
      dtkComposerNode(dtkComposerNode *parent = 0);
     ~dtkComposerNode(void);
 
     void setType(Type type);
     void setObject(dtkAbstractObject *object);
+    void setScript(const QString& script);
 
-    Type type(void);
+    // virtual void evaluate(void) = 0;
 
-    dtkAbstractObject *object(void);
-
-    dtkComposerEdge *edge(dtkComposerNodeProperty *property);
+public:
 
     void addInputProperty(dtkComposerNodeProperty *property);
     void addOutputProperty(dtkComposerNodeProperty *property);
@@ -57,6 +56,20 @@ public:
     void removeOutputEdge(dtkComposerEdge *edge);
 
     int count(dtkComposerNodeProperty *property);
+
+    Type type(void);
+
+    dtkAbstractObject *object(void);
+
+    QList<dtkComposerEdge *> inputEdges(void);
+    QList<dtkComposerEdge *> outputEdges(void);
+
+    QList<dtkComposerNode *> inputNodes(void);
+    QList<dtkComposerNode *> outputNodes(void);
+
+    dtkComposerEdge *edge(dtkComposerNodeProperty *property);
+
+    QString script(void) const;
 
 public:
     dtkComposerNodeProperty *propertyAt(const QPointF& point) const;

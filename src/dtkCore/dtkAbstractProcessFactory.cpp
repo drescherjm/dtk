@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep 11 13:33:52 2009 (+0200)
+ * Last-Updated: Sat Sep 12 00:06:39 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 47
+ *     Update #: 48
  */
 
 /* Commentary: 
@@ -45,7 +45,7 @@ dtkAbstractProcess *dtkAbstractProcessFactory::create(QString type)
 
     dtkAbstractProcess *process = d->creators[type]();
 
-    process->setObjectName(QString("process%1").arg(d->processes.count()));
+    process->setObjectName(QString("process%1").arg(d->processes[type].count()));
 
     d->processes[type] << process;
     

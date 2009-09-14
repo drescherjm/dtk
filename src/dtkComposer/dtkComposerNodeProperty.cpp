@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 10 10:29:39 2009 (+0200)
+ * Last-Updated: Sun Sep 13 16:24:54 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 95
+ *     Update #: 103
  */
 
 /* Commentary: 
@@ -30,10 +30,13 @@ public:
 
     QGraphicsEllipseItem *ellipse;
     QGraphicsTextItem *text;
+
+    QString port;
 };
 
-dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multiplicity multiplicity, dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePropertyPrivate)
+dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, QString port, Type type, Multiplicity multiplicity, dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePropertyPrivate)
 {
+    d->port = port;
     d->type = type;
     d->multiplicity = multiplicity;
     d->parent = parent;
@@ -64,6 +67,16 @@ dtkComposerEdge *dtkComposerNodeProperty::edge(void)
 dtkComposerNode *dtkComposerNodeProperty::node(void)
 {
     return d->parent;
+}
+
+QString dtkComposerNodeProperty::name(void) const
+{
+    return d->text->toPlainText();
+}
+
+QString dtkComposerNodeProperty::port(void) const
+{
+    return d->port;
 }
 
 dtkComposerNodeProperty::Type dtkComposerNodeProperty::type(void)

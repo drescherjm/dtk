@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 11 18:16:51 2009 (+0200)
+ * Last-Updated: Sun Sep 13 18:14:49 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 386
+ *     Update #: 394
  */
 
 /* Commentary: 
@@ -183,13 +183,13 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     d->toolRunAction = new QAction("Run", this);
     d->toolRunAction->setShortcut(Qt::ControlModifier+Qt::Key_R);
-    d->toolRunAction->setToolTip("Runs the current composition.");
+    d->toolRunAction->setToolTip("Runs the current composition (Ctrl+R)");
     d->toolRunAction->setIcon(QIcon(":icons/run.tiff"));
     connect(d->toolRunAction, SIGNAL(triggered()), this, SLOT(run()));
 
     d->toolStopAction = new QAction("Stop", this);
-    d->toolStopAction->setShortcut(Qt::ControlModifier+Qt::Key_Colon);
-    d->toolStopAction->setToolTip("Stops the current composition.");
+    d->toolStopAction->setShortcut(Qt::ControlModifier+Qt::Key_Period);
+    d->toolStopAction->setToolTip("Stops the current composition (Ctrl+.)");
     d->toolStopAction->setIcon(QIcon(":icons/stop.tiff"));
     d->toolStopAction->setEnabled(false);
     connect(d->toolStopAction, SIGNAL(triggered()), this, SLOT(stop()));
@@ -341,7 +341,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 	"set widgetFactory [dtkCreatorWidgetFactory_instance]"
     );
 
-    d->interpreter->registerInterpreter(new dtkScriptInterpreterPython);
+    d->interpreter->registerInterpreter(dtkScriptInterpreterPool::instance()->python());
     d->interpreter->registerAsHandler(dtkCreatorRedirectLogHandler);
 }
 
@@ -479,18 +479,18 @@ void dtkCreatorMainWindow::onDocumentChanged(void)
 
 void dtkCreatorMainWindow::run(void)
 {
-    qDebug() << "Not implemented yet";
-
     d->toolRunAction->setEnabled(false);
     d->toolStopAction->setEnabled(true);
+
+    d->composer->run();
 }
 
 void dtkCreatorMainWindow::stop(void)
 {
-    qDebug() << "Not implemented yet";
-
     d->toolRunAction->setEnabled(true);
     d->toolStopAction->setEnabled(false);
+
+    d->composer->stop();
 }
 
 void dtkCreatorMainWindow::registerData(dtkAbstractData *data, QString type)

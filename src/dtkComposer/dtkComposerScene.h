@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 10 18:35:16 2009 (+0200)
+ * Last-Updated: Fri Sep 11 23:38:54 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 27
+ *     Update #: 34
  */
 
 /* Commentary: 
@@ -38,6 +38,9 @@ public:
     ~dtkComposerScene(void);
 
     void addNode(const QString& type);
+
+    QList<dtkComposerNode *> nodes(void);
+    QList<dtkComposerNode *> nodes(QString name);
 
 signals:
     void dataSelected(dtkAbstractData *data);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep 11 13:31:17 2009 (+0200)
+ * Last-Updated: Sat Sep 12 00:05:52 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 67
+ *     Update #: 68
  */
 
 /* Commentary:
@@ -55,7 +55,7 @@ dtkAbstractData *dtkAbstractDataFactory::create(QString type)
 	if(key.second.contains(type))
 	    data->addWriter(d->writers[key]());
 
-    data->setObjectName(QString("data%1").arg(d->datas.count()));
+    data->setObjectName(QString("data%1").arg(d->datas[type].count()));
 
     d->datas[type] << data;
 

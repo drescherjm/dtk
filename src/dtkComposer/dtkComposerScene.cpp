@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 11 10:49:36 2009 (+0200)
+ * Last-Updated: Fri Sep 11 23:39:06 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 161
+ *     Update #: 167
  */
 
 /* Commentary: 
@@ -67,6 +67,29 @@ void dtkComposerScene::addNode(const QString& type)
 
     if (node)
         this->addItem(node);
+}
+
+QList<dtkComposerNode *> dtkComposerScene::nodes(void)
+{
+    QList<dtkComposerNode *> list;
+
+    foreach(QGraphicsItem *item, this->items())
+        if (dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item))
+            list << node;
+
+    return list;
+}
+
+QList<dtkComposerNode *> dtkComposerScene::nodes(QString name)
+{
+    QList<dtkComposerNode *> list;
+
+    foreach(QGraphicsItem *item, this->items())
+        if (dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item))
+            if(node->object()->name() == name)
+                list << node;
+
+    return list;
 }
 
 dtkComposerNode *dtkComposerScene::nodeAt(const QPointF& point) const

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Sep  9 19:08:46 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 10 17:43:02 2009 (+0200)
+ * Last-Updated: Sat Sep 12 00:04:45 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 173
+ *     Update #: 175
  */
 
 /* Commentary: 
@@ -228,7 +228,7 @@ void dtkInspectorScene::onDataSelected(dtkAbstractData *data)
 {
     d->tree->clearSelection();
 
-    foreach(QTreeWidgetItem *item, d->tree->findItems(data->name(), Qt::MatchExactly))
+    foreach(QTreeWidgetItem *item, d->tree->findItems(data->name(), Qt::MatchFixedString | Qt::MatchRecursive, 0))
         item->setSelected(true);
 }
 
@@ -236,7 +236,7 @@ void dtkInspectorScene::onProcessSelected(dtkAbstractProcess *process)
 {
     d->tree->clearSelection();
 
-    foreach(QTreeWidgetItem *item, d->tree->findItems(process->name(), Qt::MatchExactly))
+    foreach(QTreeWidgetItem *item, d->tree->findItems(process->name(), Qt::MatchFixedString | Qt::MatchRecursive, 0))
         item->setSelected(true);
 }
 

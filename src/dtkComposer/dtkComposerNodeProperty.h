@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 10 10:28:17 2009 (+0200)
+ * Last-Updated: Sun Sep 13 16:12:59 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 41
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -35,11 +35,14 @@ public:
     enum Type { Input, Output };
     enum Multiplicity { Null, Single, Multiple };
 
-     dtkComposerNodeProperty(QString name, Type type, Multiplicity multiplicity, dtkComposerNode *parent);
+     dtkComposerNodeProperty(QString name, QString port, Type type, Multiplicity multiplicity, dtkComposerNode *parent);
     ~dtkComposerNodeProperty(void);
 
     dtkComposerEdge *edge(void);
     dtkComposerNode *node(void);
+
+    QString name(void) const;
+    QString port(void) const;
 
     Type type(void);
     Multiplicity multiplicity(void);

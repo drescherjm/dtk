@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:12:32 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 10 16:44:49 2009 (+0200)
+ * Last-Updated: Fri Sep 11 23:08:59 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 14
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -34,6 +34,9 @@ class dtkComposer : public QWidget
 public:
      dtkComposer(QWidget *parent = 0);
     ~dtkComposer(void);
+
+    void run(void);
+    void stop(void);
 
 signals:
    void dataSelected(dtkAbstractData *data);

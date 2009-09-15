@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 10:07:29 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep  3 18:59:35 2009 (+0200)
+ * Last-Updated: Tue Sep 15 18:41:31 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 145
+ *     Update #: 148
  */
 
 /* Commentary: 
@@ -99,8 +99,10 @@ void dtkCreatorScriptList::onModelIndexClicked(const QModelIndex& index)
         return;
 
     interpreter->load(fileName);
+
     d->description->setText(interpreter->interpret("description", QStringList(), &stat));
-    interpreter->release();    
+
+    // interpreter->release();
 }
 
 void dtkCreatorScriptList::onModelIndexDoubleClicked(const QModelIndex& index)
@@ -119,8 +121,10 @@ void dtkCreatorScriptList::onModelIndexDoubleClicked(const QModelIndex& index)
         return;
 
     interpreter->load(fileName);
+
     interpreter->interpret("init", QStringList(), &stat);
-    interpreter->retain();    
+
+    // interpreter->retain();    
 
     connect(dtkCreatorWidgetFactory::instance(), SIGNAL(interpret(const QString&, int *)),
             interpreter,                           SLOT(interpret(const QString&, int *)));

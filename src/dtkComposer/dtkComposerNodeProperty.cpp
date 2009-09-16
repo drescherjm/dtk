@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Sep 13 16:24:54 2009 (+0200)
+ * Last-Updated: Wed Sep 16 15:44:18 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 103
+ *     Update #: 106
  */
 
 /* Commentary: 
@@ -42,7 +42,11 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, QString port, Typ
     d->parent = parent;
 
     d->text = new QGraphicsTextItem(this);
+#if defined(Q_WS_MAC)
     d->text->setFont(QFont("Lucida Grande", 11));
+#else
+    d->text->setFont(QFont("Lucida Grande", 9));
+#endif
     d->text->setPlainText(name);
     d->text->setDefaultTextColor(Qt::black);
 

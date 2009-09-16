@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Sep 13 18:16:15 2009 (+0200)
+ * Last-Updated: Wed Sep 16 15:42:53 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 271
+ *     Update #: 272
  */
 
 /* Commentary: 
@@ -74,7 +74,11 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
     d->height = d->header_height*2;
 
     d->title = new QGraphicsTextItem(this);
+#if defined(Q_WS_MAC)
     d->title->setFont(QFont("Lucida Grande", 13));
+#else
+    d->title->setFont(QFont("Lucida Grande", 11));
+#endif
     d->title->setHtml("Title");
     d->title->setDefaultTextColor(Qt::black);
     d->title->setPos(-d->width/2 + d->margin_left/2, -d->header_height-2);

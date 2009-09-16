@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:52 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep  8 22:10:44 2009 (+0200)
+ * Last-Updated: Wed Sep 16 15:41:32 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 6
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -25,6 +25,8 @@
 
 class dtkComposerView : public QGraphicsView
 {
+    Q_OBJECT
+
 public:
      dtkComposerView(QWidget *parent = 0);
     ~dtkComposerView(void);
@@ -33,6 +35,7 @@ public:
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);
+    void dragMoveEvent(QDragMoveEvent *event);
     void dropEvent(QDropEvent *event);
     void wheelEvent(QWheelEvent *event);
 };

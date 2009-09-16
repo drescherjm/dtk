@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Aug  6 23:28:30 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep  9 20:41:28 2009 (+0200)
+ * Last-Updated: Wed Sep 16 14:35:23 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 80
+ *     Update #: 81
  */
 
 /* Commentary: 
@@ -40,7 +40,7 @@ dtkInspector::dtkInspector(QWidget *parent) : QMainWindow(parent), d(new dtkInsp
     d->toolBar->setFloatable(false);
     d->toolBar->setMovable(false);
 
-    this->setWindowFlags(Qt::Tool | Qt::WindowCloseButtonHint | Qt::CustomizeWindowHint);
+    this->setWindowFlags(Qt::Tool | Qt::WindowCloseButtonHint | Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint);
     this->setWindowTitle("Inspector");
     this->setCentralWidget(d->stack);
 }

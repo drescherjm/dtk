@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:07:37 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep  9 00:42:26 2009 (+0200)
+ * Last-Updated: Wed Sep 16 15:45:14 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 23
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -53,6 +53,12 @@ void dtkComposerView::drawBackground(QPainter *painter, const QRectF& rect)
 }
 
 void dtkComposerView::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasUrls())
+        event->acceptProposedAction();
+}
+
+void dtkComposerView::dragMoveEvent(QDragMoveEvent *event)
 {
     if (event->mimeData()->hasUrls())
         event->acceptProposedAction();

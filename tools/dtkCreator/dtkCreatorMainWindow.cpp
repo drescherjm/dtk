@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Sep 13 18:14:49 2009 (+0200)
+ * Last-Updated: Wed Sep 16 16:55:22 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 394
+ *     Update #: 405
  */
 
 /* Commentary: 
@@ -497,31 +497,43 @@ void dtkCreatorMainWindow::registerData(dtkAbstractData *data, QString type)
 {
     int stat;
 
+    d->interpreter->interpreter()->blockSignals(true);
+
     if(dtkScriptInterpreterPython *interpreter = dynamic_cast<dtkScriptInterpreterPython *>(d->interpreter->interpreter()))
         interpreter->interpret(QString("%1 = dataFactory.get(\"%2\", \"%1\")").arg(data->name()).arg(type), &stat);
 
     if(dtkScriptInterpreterTcl *interpreter = dynamic_cast<dtkScriptInterpreterTcl *>(d->interpreter->interpreter()))
         interpreter->interpret(QString("set $1 [$dataFactory get \"2\" \"1\"]").arg(data->name()).arg(type), &stat);
+
+    d->interpreter->interpreter()->blockSignals(false);
 }
 
 void dtkCreatorMainWindow::registerProcess(dtkAbstractProcess *process, QString type)
 {
     int stat;
 
+    d->interpreter->interpreter()->blockSignals(true);
+
     if(dtkScriptInterpreterPython *interpreter = dynamic_cast<dtkScriptInterpreterPython *>(d->interpreter->interpreter()))
         interpreter->interpret(QString("%1 = processFactory.get(\"%2\", \"%1\")").arg(process->name()).arg(type), &stat);
 
     if(dtkScriptInterpreterTcl *interpreter = dynamic_cast<dtkScriptInterpreterTcl *>(d->interpreter->interpreter()))
         interpreter->interpret(QString("set $1 [$processFactory get \"2\" \"1\"]").arg(process->name()).arg(type), &stat);
+
+    d->interpreter->interpreter()->blockSignals(false);
 }
 
 void dtkCreatorMainWindow::registerView(dtkAbstractView *view, QString type)
 {
     int stat;
 
+    d->interpreter->interpreter()->blockSignals(true);
+
     if(dtkScriptInterpreterPython *interpreter = dynamic_cast<dtkScriptInterpreterPython *>(d->interpreter->interpreter()))
         interpreter->interpret(QString("%1 = viewFactory.get(\"%2\", \"%1\")").arg(view->name()).arg(type), &stat);
 
     if(dtkScriptInterpreterTcl *interpreter = dynamic_cast<dtkScriptInterpreterTcl *>(d->interpreter->interpreter()))
         interpreter->interpret(QString("set $1 [$viewFactory get \"2\" \"1\"]").arg(view->name()).arg(type), &stat);
+
+    d->interpreter->interpreter()->blockSignals(false);
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 16 16:55:22 2009 (+0200)
+ * Last-Updated: Thu Sep 17 18:09:23 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 405
+ *     Update #: 408
  */
 
 /* Commentary: 
@@ -161,21 +161,33 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->fileMenu->addAction(d->preferencesAction);
 
     d->toolEditorAction = new QAction("Editor", this);
+#if defined(Q_WS_MAC)
     d->toolEditorAction->setShortcut(Qt::MetaModifier+Qt::Key_1);
+#else
+    d->toolEditorAction->setShortcut(Qt::ControlModifier+Qt::Key_1);
+#endif
     d->toolEditorAction->setToolTip("Switch to the textual editor (Ctrl+1)");
     d->toolEditorAction->setIcon(QIcon(":icons/widget.tiff"));
     connect(d->toolEditorAction, SIGNAL(triggered()), this, SLOT(switchToEditor()));
     d->toolEditorAction->setEnabled(false);
 
     d->toolComposerAction = new QAction("Composer", this);
+#if defined(Q_WS_MAC)
     d->toolComposerAction->setShortcut(Qt::MetaModifier+Qt::Key_2);
+#else
+    d->toolComposerAction->setShortcut(Qt::ControlModifier+Qt::Key_2);
+#endif
     d->toolComposerAction->setToolTip("Switch to the visual editor (Ctrl+2)");
     d->toolComposerAction->setIcon(QIcon(":icons/widget.tiff"));
     connect(d->toolComposerAction, SIGNAL(triggered()), this, SLOT(switchToComposer()));
     d->toolComposerAction->setEnabled(true);
 
     d->toolViewerAction = new QAction("Viewer", this);
+#if defined(Q_WS_MAC)
     d->toolViewerAction->setShortcut(Qt::MetaModifier+Qt::Key_3);
+#else
+    d->toolViewerAction->setShortcut(Qt::ControlModifier+Qt::Key_3);
+#endif
     d->toolViewerAction->setToolTip("Switch to the viewer (Ctrl+3)");
     d->toolViewerAction->setIcon(QIcon(":icons/widget.tiff"));
     connect(d->toolViewerAction, SIGNAL(triggered()), this, SLOT(switchToViewer()));

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2009 - Jean-Christophe Lombardo, Inria.
  * Created: Thu May 14 14:32:46 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug  4 12:20:30 2009 (+0200)
+ * Last-Updated: Fri Sep 18 23:01:35 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 111
+ *     Update #: 113
  */
 
 /* Commentary: 
@@ -57,9 +57,9 @@ private:
     static dtkStandardRedirector *s_log;
 };
 
-dtkStandardRedirector *dtkStandardRedirector::s_err = 0l;
-dtkStandardRedirector *dtkStandardRedirector::s_out = 0l;
-dtkStandardRedirector *dtkStandardRedirector::s_log = 0l;
+dtkStandardRedirector *dtkStandardRedirector::s_err = NULL;
+dtkStandardRedirector *dtkStandardRedirector::s_out = NULL;
+dtkStandardRedirector *dtkStandardRedirector::s_log = NULL;
 
 dtkStandardRedirector::dtkStandardRedirector(std::ostream &stream, Channel channel) : m_stream(stream), m_channel(channel)
 {
@@ -119,9 +119,9 @@ bool dtkStandardRedirector::initialize(void)
 
 void dtkStandardRedirector::uninitialize(void)
 {
-    if (s_err) { delete s_err; s_err = 0l; }
-    if (s_out) { delete s_out; s_out = 0l; }
-    if (s_log) { delete s_log; s_log = 0l; }
+    if (s_err) { delete s_err; s_err = NULL; }
+    if (s_out) { delete s_out; s_out = NULL; }
+    if (s_log) { delete s_log; s_log = NULL; }
 }
 
 static bool log_initialized = dtkStandardRedirector::initialize();

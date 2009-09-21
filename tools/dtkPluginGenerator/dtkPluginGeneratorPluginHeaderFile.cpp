@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Mar 11 14:22:17 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep  9 08:51:46 2009 (+0200)
+ * Last-Updated: Mon Sep 21 14:51:05 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 15
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -60,6 +60,7 @@ bool dtkPluginGenerator::generatePluginHeaderFile(void)
         "    virtual QString description(void) const;\n"
         "\n"
         "    virtual QStringList tags(void) const;\n"
+        "    virtual QStringList types(void) const;\n"
         "\n"
         "private:\n"
         "     %1PluginPrivate *d;\n"

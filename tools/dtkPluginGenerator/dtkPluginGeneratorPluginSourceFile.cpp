@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Mar 11 14:27:57 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Aug  4 20:41:03 2009 (+0200)
+ * Last-Updated: Mon Sep 21 14:54:06 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 16
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -92,6 +92,11 @@ bool dtkPluginGenerator::generatePluginSourceFile(void)
         "QStringList %1Plugin::tags(void) const\n"
         "{\n"
         "    return QStringList();\n"
+        "}\n"
+        "\n"
+        "QStringList %1Plugin::types(void) const\n"
+        "{\n"
+        "    return QStringList() << \"%1\";\n"
         "}\n"
         "\n"
         "Q_EXPORT_PLUGIN2(%1Plugin, %1Plugin)\n"

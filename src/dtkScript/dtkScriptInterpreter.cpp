@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 26 16:11:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Aug  2 11:04:21 2009 (+0200)
+ * Last-Updated: Mon Sep 21 13:37:22 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 452
+ *     Update #: 454
  */
 
 /* Commentary: 
@@ -258,9 +258,7 @@ void dtkScriptInterpreterConsole::run(void)
 
         }
 
-#if defined(Q_OS_MAC)
         dtkScriptInterpreterSynchronizer::instance()->wait();
-#endif
         dtkScriptInterpreterSynchronizer::instance()->unlock();
     }
 

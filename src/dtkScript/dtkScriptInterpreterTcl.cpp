@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 26 16:19:44 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Aug  2 11:10:53 2009 (+0200)
+ * Last-Updated: Mon Sep 21 14:03:42 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 291
+ *     Update #: 300
  */
 
 /* Commentary: 
@@ -35,8 +35,6 @@ public:
 // dtkScriptInterpreterTcl
 // /////////////////////////////////////////////////////////////////
 
-extern "C" int Core_Init(Tcl_Interp *interp);
-
 void InitInterpreterChannels(Tcl_Interp *interpreter);
 
 dtkScriptInterpreterTcl::dtkScriptInterpreterTcl(QObject *parent) : dtkScriptInterpreter(parent), d(new dtkScriptInterpreterTclPrivate)
@@ -45,8 +43,7 @@ dtkScriptInterpreterTcl::dtkScriptInterpreterTcl(QObject *parent) : dtkScriptInt
 
     InitInterpreterChannels(d->interpreter);
     
-     Tcl_Init(d->interpreter); // -- Initialize built-in tcl functions
-    Core_Init(d->interpreter); // -- Initialize core layer wrapped functions
+    Tcl_Init(d->interpreter); // -- Initialize built-in tcl functions
     
     this->setVerbose(false);
 
@@ -58,15 +55,6 @@ dtkScriptInterpreterTcl::dtkScriptInterpreterTcl(QObject *parent) : dtkScriptInt
 #else
     interpret("lappend auto_path " + QCoreApplication::applicationDirPath() + "/libraries", &stat);
 #endif
-
-    // -- Setting up core module
-    interpret("set dataFactory    [dtkAbstractDataFactory_instance]"      , &stat);
-    interpret("set processFactory [dtkAbstractProcessFactory_instance]"   , &stat);
-    interpret("set viewFactory    [dtkAbstractViewFactory_instance]"      , &stat);
-    interpret("set pluginManager  [dtkPluginManager_instance]"            , &stat);
-
-    // -- Setting up vr module
-    interpret("set deviceFactory  [dtkAbstractDeviceFactory_instance]"    , &stat);
 
     dtkScriptInterpreterTclModuleManager::instance()->initialize(this);
 
@@ -177,7 +165,7 @@ static void InterpreterWatch  _ANSI_ARGS_((ClientData instanceData, int mask));
 static  int InterpreterHandle _ANSI_ARGS_((ClientData instanceData, int direction, ClientData *handlePtr));
 
 static Tcl_ChannelType interpreterChannelType = {
-    "interpreter",              // Type name.
+    (char *)"interpreter",      // Type name.
     NULL,	                // Always non-blocking.
     InterpreterClose,		// Close proc.
     InterpreterInput,		// Input proc.

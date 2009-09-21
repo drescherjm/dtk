@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 17 18:09:23 2009 (+0200)
+ * Last-Updated: Mon Sep 21 13:53:11 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 408
+ *     Update #: 433
  */
 
 /* Commentary: 
@@ -127,8 +127,11 @@ bool dtkCreatorMainWindowPrivate::maySave(void)
      return true;
 }
 
+extern "C" int init_core(void);                  // -- Initialization core layer python wrapped functions
+extern "C" int Core_Init(Tcl_Interp *interp);    // -- Initialization core layer tcl    wrapped functions
+
 extern "C" int init_creator(void);               // -- Initialization creator layer python wrapped functions
-extern "C" int Creator_Init(Tcl_Interp *interp); // -- Initialization creator layer tcl wrapped functions
+extern "C" int Creator_Init(Tcl_Interp *interp); // -- Initialization creator layer tcl    wrapped functions
 
 dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -325,6 +328,30 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     dtkCreatorController::instance()->attach(d->script_browser);
     dtkCreatorController::instance()->attach(d->viewer);
 
+    // Setting up core python module
+
+    dtkScriptInterpreterPythonModuleManager::instance()->registerInitializer(&init_core);
+    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
+        "import core"
+    );
+    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
+        "dataFactory    = core.dtkAbstractDataFactory.instance()"
+    );
+    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
+        "processFactory = core.dtkAbstractProcessFactory.instance()"
+    );
+    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
+        "viewFactory    = core.dtkAbstractViewFactory.instance()"
+    );
+    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
+        "pluginManager  = core.dtkPluginManager.instance()"
+    );
+    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
+        "deviceFactory  = core.dtkAbstractDeviceFactory.instance()"
+    );
+
+    // Setting up creator python module
+
     dtkScriptInterpreterPythonModuleManager::instance()->registerInitializer(&init_creator);
     dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
         "import creator"
@@ -338,6 +365,25 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
         "widgetFactory = creator.dtkCreatorWidgetFactory.instance()"
     );
+
+    // Setting up core tcl module
+
+    // -- Setting up core module
+    dtkScriptInterpreterTclModuleManager::instance()->registerInitializer(&Core_Init);
+    dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
+        "set dataFactory    [dtkAbstractDataFactory_instance]"
+    );
+    dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
+        "set processFactory [dtkAbstractProcessFactory_instance]"
+    );
+    dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
+        "set viewFactory    [dtkAbstractViewFactory_instance]"
+    );
+    dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
+        "set pluginManager  [dtkPluginManager_instance]"
+    );
+
+    // Setting up creator tcl module
 
     dtkScriptInterpreterTclModuleManager::instance()->registerInitializer(&Creator_Init);
     dtkScriptInterpreterTclModuleManager::instance()->registerCommand(

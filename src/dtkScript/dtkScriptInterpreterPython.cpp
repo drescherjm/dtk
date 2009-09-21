@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 26 16:29:02 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Aug  6 23:02:37 2009 (+0200)
+ * Last-Updated: Mon Sep 21 13:45:47 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 245
+ *     Update #: 248
  */
 
 /* Commentary: 
@@ -101,8 +101,6 @@ public:
 // dtkScriptInterpreterPython
 // /////////////////////////////////////////////////////////////////
 
-extern "C" int init_core(void);
-
 dtkScriptInterpreterPython::dtkScriptInterpreterPython(QObject *parent) : dtkScriptInterpreter(parent), d(new dtkScriptInterpreterPythonPrivate)
 {
     int stat;
@@ -116,21 +114,11 @@ dtkScriptInterpreterPython::dtkScriptInterpreterPython(QObject *parent) : dtkScr
     interpret("sys.stdout = redirector.redirector()", &stat);
     interpret("sys.stderr = sys.stdout",              &stat);
 
-    // -- dtk environment setup
-    init_core(); // -- Initialize core layer wrapped functions
-
     // -- Setting up utilities
     interpret("import sys", &stat);
     interpret("sys.path.append(\"" + dtkScriptManager::instance()->modulePath() + "\")", &stat);
 
-    // -- Setting up core module
-    interpret("import core"                                                              , &stat);
-    interpret("dataFactory    = core.dtkAbstractDataFactory.instance()"                  , &stat);
-    interpret("processFactory = core.dtkAbstractProcessFactory.instance()"               , &stat);
-    interpret("viewFactory    = core.dtkAbstractViewFactory.instance()"                  , &stat);
-    interpret("pluginManager  = core.dtkPluginManager.instance()"                        , &stat);
-    interpret("deviceFactory  = core.dtkAbstractDeviceFactory.instance()"                , &stat);
-    
+    // -- Setting up managed modules
     dtkScriptInterpreterPythonModuleManager::instance()->initialize(this);
 
     registerPrompt(&prompt);

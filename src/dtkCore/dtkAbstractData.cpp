@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 10 12:05:09 2009 (+0200)
+ * Last-Updated: Tue Sep 22 12:49:01 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 98
+ *     Update #: 99
  */
 
 /* Commentary:
@@ -119,7 +119,7 @@ void dtkAbstractData::update(void)
 
 }
 
-bool dtkAbstractData::read(QString file)
+bool dtkAbstractData::read(const QString& file)
 {
     bool read = false;
 
@@ -136,7 +136,7 @@ bool dtkAbstractData::read(QString file)
     return read;
 }
 
-bool dtkAbstractData::write(QString file)
+bool dtkAbstractData::write(const QString& file)
 {
     bool written = false;
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 21 13:53:11 2009 (+0200)
+ * Last-Updated: Mon Sep 21 14:58:41 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 433
+ *     Update #: 434
  */
 
 /* Commentary: 
@@ -368,7 +368,6 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     // Setting up core tcl module
 
-    // -- Setting up core module
     dtkScriptInterpreterTclModuleManager::instance()->registerInitializer(&Core_Init);
     dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
         "set dataFactory    [dtkAbstractDataFactory_instance]"

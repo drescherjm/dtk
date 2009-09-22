@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 10:31:04 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 10 18:36:09 2009 (+0200)
+ * Last-Updated: Tue Sep 22 16:35:49 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 117
+ *     Update #: 118
  */
 
 /* Commentary: 
@@ -198,6 +198,9 @@ QSize dtkCreatorPluginWidget::sizeHint(void) const
 
 void dtkCreatorPluginWidget::addWidget(QWidget *widget)
 {
+    if(!widget)
+        return;
+
     if(QWidget *current = d->stack->currentWidget())
         d->stack->removeWidget(current);
 

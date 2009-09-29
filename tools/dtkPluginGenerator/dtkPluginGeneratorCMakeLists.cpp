@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar 10 10:18:39 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 29 08:33:35 2009 (+0200)
+ * Last-Updated: Tue Sep 29 23:16:14 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 22
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -145,11 +145,6 @@ bool dtkPluginGenerator::generateCMakeLists(void)
         "  dtkCore\n"
         ")\n"
         "\n"
-        "if(APPLE)\n"
-        "  set(CMAKE_SHARED_LINKER_FLAGS \"-undefined dynamic_lookup\")\n"
-        "elseif(UNIX)\n"
-        "  string(REPLACE \"-Wl,--no-undefined\" \"\" CMAKE_SHARED_LINKER_FLAGS \"${CMAKE_SHARED_LINKER_FLAGS}\")\n"
-        "endif()\n"
 	)
 	.arg(QString(d->plugin));
 

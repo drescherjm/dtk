@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Sep  9 19:18:21 2009 (+0200)
+## Last-Updated: Mon Sep 28 11:19:11 2009 (+0200)
 ##           By: Julien Wintz
-##     Update #: 68
+##     Update #: 69
 ######################################################################
 ## 
 ### Commentary: 
@@ -125,11 +125,15 @@ set(${PROJECT_NAME}_FORMS
 ## Build rules
 ## #################################################################
 
+add_definitions(${QT_DEFINITIONS})
+add_definitions(-DQT_SHARED)
+add_definitions(-DQT_NO_DEBUG)
+
 qt4_wrap_ui(${PROJECT_NAME}_SOURCES_UIC ${${PROJECT_NAME}_FORMS})
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
-add_library(${PROJECT_NAME}
+add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_SOURCES_UIC}
   ${${PROJECT_NAME}_SOURCES_MOC}

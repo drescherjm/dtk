@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Sep  4 21:51:34 2009 (+0200)
+## Last-Updated: Tue Sep 29 08:31:26 2009 (+0200)
 ##           By: Julien Wintz
-##     Update #: 193
+##     Update #: 194
 ######################################################################
 ## 
 ### Commentary: 
@@ -147,6 +147,7 @@ if(APPLE)
 endif(APPLE)
 
 set(QT_USE_QTOPENGL  TRUE)
+set(QT_USE_QTXML     TRUE)
 set(QT_USE_QTSQL     TRUE)
 set(QT_USE_QTHELP    TRUE)
 set(QT_USE_QTNETWORK TRUE)

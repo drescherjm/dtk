@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar 10 10:18:39 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Aug  4 20:37:11 2009 (+0200)
+ * Last-Updated: Tue Sep 29 08:33:35 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 21
+ *     Update #: 22
  */
 
 /* Commentary: 
@@ -96,6 +96,7 @@ bool dtkPluginGenerator::generateCMakeLists(void)
         "endif(APPLE)\n"
         "\n"
         "set(QT_USE_QTOPENGL  TRUE)\n"
+        "set(QT_USE_QTXML     TRUE)\n"
         "set(QT_USE_QTSQL     TRUE)\n"
         "set(QT_USE_QTHELP    TRUE)\n"
         "set(QT_USE_QTNETWORK TRUE)\n"

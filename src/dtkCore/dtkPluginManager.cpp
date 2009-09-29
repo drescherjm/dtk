@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 22 12:07:47 2009 (+0200)
+ * Last-Updated: Tue Sep 29 13:21:38 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 73
+ *     Update #: 90
  */
 
 /* Commentary: 
@@ -45,9 +45,9 @@ void dtkPluginManager::initialize(void)
     if(d->path.isEmpty())
         return;
 
-    foreach(QString path, d->path.split(":")) {
+    foreach(QString path, d->path.split(":", QString::SkipEmptyParts)) {
 
-        QDir dir(d->path);
+        QDir dir(path);
         dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
         
         foreach (QFileInfo entry, dir.entryInfoList())

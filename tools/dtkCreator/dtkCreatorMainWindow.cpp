@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 21 14:58:41 2009 (+0200)
+ * Last-Updated: Mon Sep 28 09:10:10 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 434
+ *     Update #: 435
  */
 
 /* Commentary: 
@@ -226,9 +226,9 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->toolBar->addAction(d->toolStopAction);
     d->toolBar->addWidget(new dtkSpacer(d->toolBar));
 #ifdef Q_WS_MAC
-    dtkSearchBoxAction *dtk_search_box = new dtkSearchBoxAction("Search", d->toolBar);
-    d->toolBar->addWidget(new dtkSpacer(d->toolBar));
-    d->toolBar->addAction(dtk_search_box);
+    // dtkSearchBoxAction *dtk_search_box = new dtkSearchBoxAction("Search", d->toolBar);
+    // d->toolBar->addWidget(new dtkSpacer(d->toolBar));
+    // d->toolBar->addAction(dtk_search_box);
 #else
     dtkSearchBox *dtk_search_box = new dtkSearchBox(d->toolBar);
     d->toolBar->addWidget(new dtkSpacer(d->toolBar));

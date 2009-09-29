@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2009 - Jean-Christophe Lombardo, Inria.
 ## Created: Tue Mar 10 15:12:38 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue Aug  4 21:31:02 2009 (+0200)
+## Last-Updated: Mon Sep 28 11:19:29 2009 (+0200)
 ##           By: Julien Wintz
-##     Update #: 24
+##     Update #: 26
 ######################################################################
 ## 
 ### Commentary: 
@@ -76,9 +76,13 @@ endif(EDITLINE_FOUND)
 ## Build rules
 ## #################################################################
 
+add_definitions(${QT_DEFINITIONS})
+add_definitions(-DQT_SHARED)
+add_definitions(-DQT_NO_DEBUG)
+
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
-add_library(${PROJECT_NAME}
+add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_SOURCES_MOC}
 )

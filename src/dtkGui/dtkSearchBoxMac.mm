@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 16 23:58:26 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Aug  6 23:59:18 2009 (+0200)
+ * Last-Updated: Mon Sep 28 08:59:47 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 170
+ *     Update #: 172
  */
 
 /* Commentary: 
@@ -57,7 +57,7 @@ extern QString qStringfromNSString(NSString *nss);
 	
 	[[search cell] setSendsWholeSearchString:NO];
 
-	[search setDelegate:self];
+	// [search setDelegate:self];
 	
 	[self addSubview:search];
     }
@@ -99,7 +99,7 @@ dtkSearchBoxMac::dtkSearchBoxMac(QWidget *parent) : QWidget(parent), d(new dtkSe
 
     [d->search setParent:this];
 
-    HICocoaViewCreate(d->search, 0, &(d->ref));
+    // HICocoaViewCreate(d->search, 0, &(d->ref));
 
     this->create(reinterpret_cast<WId>(d->ref));
 

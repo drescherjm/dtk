@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 13 18:47:58 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Aug  2 14:58:53 2009 (+0200)
+ * Last-Updated: Tue Sep 29 22:18:22 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 7
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -19,8 +19,6 @@
 
 #ifndef DTKCOCOACONTROLLER_H
 #define DTKCOCOACONTROLLER_H
-
-#include <dtkCore/dtkGlobal.h>
 
 class dtkCocoaControllerPrivate;
 

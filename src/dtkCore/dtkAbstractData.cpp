@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 29 22:03:44 2009 (+0200)
+ * Last-Updated: Thu Oct  1 23:42:57 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 102
+ *     Update #: 107
  */
 
 /* Commentary:
@@ -136,6 +136,16 @@ bool dtkAbstractData::read(QString file)
     return read;
 }
 
+bool dtkAbstractData::read(QStringList files)
+{
+    bool read = false;
+
+    foreach(QString file, files)
+        read = read || this->read(file);
+
+    return read;
+}
+
 bool dtkAbstractData::write(QString file)
 {
     bool written = false;
@@ -143,6 +153,16 @@ bool dtkAbstractData::write(QString file)
     foreach(dtkAbstractDataWriter *writer, d->writers)
         if(writer->enabled() && !written)
             written = writer->write(file);
+
+    return written;
+}
+
+bool dtkAbstractData::write(QStringList files)
+{
+    bool written = false;
+
+    foreach(QString file, files)
+        written = written || this->write(file);
 
     return written;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 22:03:03 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jul 31 23:10:57 2009 (+0200)
+ * Last-Updated: Thu Oct  1 23:39:35 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 22
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -65,9 +65,16 @@ void dtkAbstractDataReader::setData(dtkAbstractData *data)
     d->data = data;
 }
 
-bool dtkAbstractDataReader::read(const QString& path)
+bool dtkAbstractDataReader::read(QString file)
 {
-    Q_UNUSED(path);
+    Q_UNUSED(file);
+
+    return false;
+}
+
+bool dtkAbstractDataReader::read(QStringList files)
+{
+    Q_UNUSED(files);
 
     return false;
 }

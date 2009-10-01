@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 21:58:48 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jul 31 23:13:25 2009 (+0200)
+ * Last-Updated: Thu Oct  1 23:38:20 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 26
+ *     Update #: 28
  */
 
 /* Commentary: 
@@ -45,7 +45,8 @@ public:
    virtual void setData(dtkAbstractData *data);
 
 public slots:
-   virtual bool read(const QString& path);
+   virtual bool read(QString file);
+   virtual bool read(QStringList files);
 
 private:
    dtkAbstractDataReaderPrivate *d;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 29 22:02:43 2009 (+0200)
+ * Last-Updated: Thu Oct  1 23:37:24 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 178
+ *     Update #: 180
  */
 
 /* Commentary:
@@ -43,8 +43,11 @@ public:
     virtual void draw(void) {}
 
 public slots:
-    virtual bool read (QString file);
+    virtual bool read(QString file);
+    virtual bool read(QStringList files);
+
     virtual bool write(QString file);
+    virtual bool write(QStringList files);
 
     virtual void *output(void);
 

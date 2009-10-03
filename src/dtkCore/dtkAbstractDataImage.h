@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb  2 09:08:09 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jul 31 23:14:15 2009 (+0200)
+ * Last-Updated: Sat Oct  3 18:59:00 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 33
+ *     Update #: 34
  */
 
 /* Commentary: 
@@ -30,7 +30,7 @@ class DTKCORE_EXPORT dtkAbstractDataImage : public dtkAbstractData
 
 public:
              dtkAbstractDataImage(void);
-             dtkAbstractDataImage(const  dtkAbstractDataImage& other);
+             dtkAbstractDataImage(const dtkAbstractDataImage& other);
     virtual ~dtkAbstractDataImage(void);
 
     void *image(void);

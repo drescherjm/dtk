@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Tue Jul 21 10:52:39 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Jul 21 13:34:52 2009 (+0200)
+## Last-Updated: Sat Oct  3 18:34:17 2009 (+0200)
 ##           By: Julien Wintz
-##     Update #: 7
+##     Update #: 8
 ######################################################################
 ## 
 ### Commentary: 
@@ -32,3 +32,30 @@ if(NOT @PROJECT_NAME@_USE_FILE_INCLUDED)
   set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${@PROJECT_NAME@_CMAKE_DIR}")
 
 endif(NOT @PROJECT_NAME@_USE_FILE_INCLUDED)
+
+macro(dtk_wrap project target name language input deps)
+
+  set(wrap_output ${project}_wrap_${language}.cpp)
+
+  add_custom_command(
+    OUTPUT ${wrap_output}
+    COMMAND ${SWIG_EXECUTABLE}
+    ARGS
+      "-${language}"
+      "-c++"
+      "-module" ${name}
+      "-I${dtk_INCLUDE_PATH}"
+      "-outdir" ${CMAKE_CURRENT_BINARY_DIR}
+      "-o" ${wrap_output}
+      ${input}
+    MAIN_DEPENDENCY ${input}
+#   DEPENDS ${project}_wrap_${language}_DEPENDS
+    COMMENT "Wrapping ${input} to ${language}")
+
+  set(${target} ${${target}} ${wrap_output})
+
+# add_custom_target(${project}_wrap_${language}_DEPENDS 
+#   ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/${project}_wrap_${language}.timestamp
+#   DEPENDS ${deps})
+
+endmacro(dtk_wrap)

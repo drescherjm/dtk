@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 22:03:03 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jul 31 23:06:59 2009 (+0200)
+ * Last-Updated: Sat Oct  3 18:19:10 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 19
+ *     Update #: 27
  */
 
 /* Commentary: 
@@ -65,9 +65,30 @@ void dtkAbstractDataWriter::setData(dtkAbstractData *data)
     d->data = data;
 }
 
-bool dtkAbstractDataWriter::write(const QString& path)
+bool dtkAbstractDataWriter::canWrite(QString file)
 {
-    Q_UNUSED(path);
+    Q_UNUSED(file);
+
+    return false;
+}
+
+bool dtkAbstractDataWriter::canWrite(QStringList files)
+{
+    Q_UNUSED(files);
+
+    return false;
+}
+
+bool dtkAbstractDataWriter::write(QString file)
+{
+    Q_UNUSED(file);
+
+    return false;
+}
+
+bool dtkAbstractDataWriter::write(QStringList files)
+{
+    Q_UNUSED(files);
 
     return false;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 21:58:48 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jul 31 23:13:47 2009 (+0200)
+ * Last-Updated: Sat Oct  3 18:17:53 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 26
+ *     Update #: 28
  */
 
 /* Commentary: 
@@ -45,7 +45,11 @@ public:
    virtual void setData(dtkAbstractData *data);
 
 public slots:
-   virtual bool write(const QString& path);
+   virtual bool canWrite(QString file);
+   virtual bool canWrite(QStringList files);
+
+   virtual bool write(QString file);
+   virtual bool write(QStringList files);
 
 private:
    dtkAbstractDataWriterPrivate *d;

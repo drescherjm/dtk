@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 22:03:03 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Oct  1 23:39:35 2009 (+0200)
+ * Last-Updated: Sat Oct  3 18:17:15 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 25
+ *     Update #: 30
  */
 
 /* Commentary: 
@@ -63,6 +63,20 @@ dtkAbstractData *dtkAbstractDataReader::data(void)
 void dtkAbstractDataReader::setData(dtkAbstractData *data)
 {
     d->data = data;
+}
+
+bool dtkAbstractDataReader::canRead(QString file)
+{
+    Q_UNUSED(file);
+
+    return false;
+}
+
+bool dtkAbstractDataReader::canRead(QStringList files)
+{
+    Q_UNUSED(files);
+
+    return false;
 }
 
 bool dtkAbstractDataReader::read(QString file)

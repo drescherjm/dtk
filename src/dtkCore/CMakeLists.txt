@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Sep 28 11:15:57 2009 (+0200)
+## Last-Updated: Sat Oct  3 18:14:07 2009 (+0200)
 ##           By: Julien Wintz
-##     Update #: 86
+##     Update #: 88
 ######################################################################
 ## 
 ### Commentary: 
@@ -29,7 +29,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractDataImage.h
   dtkAbstractDataImage2D.h
   dtkAbstractDataImage3D.h
-  dtkAbstractDataImageDicom.h
   dtkAbstractDataMesh.h
   dtkAbstractDataMeshSurfacic.h
   dtkAbstractDataMeshVolumic.h
@@ -60,7 +59,6 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractDataImage.h
   dtkAbstractDataImage2D.h
   dtkAbstractDataImage3D.h
-  dtkAbstractDataImageDicom.h
   dtkAbstractDataMesh.h
   dtkAbstractDataMeshSurfacic.h
   dtkAbstractDataMeshVolumic.h
@@ -90,7 +88,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkAbstractDataImage.cpp
   dtkAbstractDataImage2D.cpp
   dtkAbstractDataImage3D.cpp
-  dtkAbstractDataImageDicom.cpp
   dtkAbstractDataMesh.cpp
   dtkAbstractDataMeshSurfacic.cpp
   dtkAbstractDataMeshVolumic.cpp

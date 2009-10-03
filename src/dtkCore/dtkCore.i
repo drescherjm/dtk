@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep 11 17:42:25 2009 (+0200)
+ * Last-Updated: Sat Oct  3 18:11:57 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 197
+ *     Update #: 198
  */
 
 /* Commentary:
@@ -32,7 +32,6 @@
 #include <dtkCore/dtkAbstractDataWriter.h>
 
 #include <dtkCore/dtkAbstractDataImage.h>
-#include <dtkCore/dtkAbstractDataImageDicom.h>
 
 #include <dtkCore/dtkAbstractProcess.h>
 
@@ -180,7 +179,6 @@
 %include <dtkCore/dtkAbstractDataWriter.h>
 
 %include <dtkCore/dtkAbstractDataImage.h>
-%include <dtkCore/dtkAbstractDataImageDicom.h>
 
 %include <dtkCore/dtkAbstractProcess.h>
 %include <dtkCore/dtkAbstractProcessFactory.h>

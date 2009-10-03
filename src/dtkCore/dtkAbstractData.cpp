@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Oct  1 23:42:57 2009 (+0200)
+ * Last-Updated: Sat Oct  3 13:18:14 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 107
+ *     Update #: 110
  */
 
 /* Commentary:
@@ -139,10 +139,16 @@ bool dtkAbstractData::read(QString file)
 bool dtkAbstractData::read(QStringList files)
 {
     bool read = false;
-
-    foreach(QString file, files)
-        read = read || this->read(file);
-
+  
+    foreach(dtkAbstractDataReader *reader, d->readers)
+      if(reader->enabled() && !read)
+	read = reader->read(files);
+    
+    if(read)
+      foreach(QString file, files)
+	if(!d->paths.contains(file))
+	  d->paths << file;
+    
     return read;
 }
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Oct  3 18:11:57 2009 (+0200)
+ * Last-Updated: Mon Oct  5 23:01:20 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 198
+ *     Update #: 199
  */
 
 /* Commentary:
@@ -98,6 +98,7 @@
 %ignore addProperty(QString key, QString value);      // No scripter should add properties dynamically
 
 %ignore propertySet(QString key, QString value);
+%ignore metadataSet(QString key, QString value);
 
 // /////////////////////////////////////////////////////////////////
 // Ignore rules for dtkAbstractView signals

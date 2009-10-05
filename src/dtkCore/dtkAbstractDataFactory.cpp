@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Sep 12 00:05:52 2009 (+0200)
+ * Last-Updated: Mon Oct  5 14:23:19 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 68
+ *     Update #: 95
  */
 
 /* Commentary:
@@ -64,6 +64,16 @@ dtkAbstractData *dtkAbstractDataFactory::create(QString type)
     return data;
 }
 
+dtkAbstractDataReader *dtkAbstractDataFactory::reader(QString type, QStringList handled)
+{
+    return d->readers[qMakePair(type, handled)]();
+}
+
+dtkAbstractDataWriter *dtkAbstractDataFactory::writer(QString type, QStringList handled)
+{
+    return d->writers[qMakePair(type, handled)]();
+}
+
 bool dtkAbstractDataFactory::registerDataType(QString type, dtkAbstractDataCreator func)
 {
     if(!d->creators.contains(type)) {
@@ -99,6 +109,21 @@ unsigned int dtkAbstractDataFactory::size(QString type)
     return d->datas[type].size();
 }
 
+unsigned int dtkAbstractDataFactory::count(QString type)
+{
+    return d->creators.keys().count();
+}
+
+unsigned int dtkAbstractDataFactory::countReaders(QString type)
+{
+    return d->readers.keys().count();
+}
+
+unsigned int dtkAbstractDataFactory::countWriters(QString type)
+{
+    return d->writers.keys().count();
+}
+
 dtkAbstractData *dtkAbstractDataFactory::get(QString type, int idx)
 {
     return d->datas[type].value(idx);
@@ -111,6 +136,16 @@ dtkAbstractData *dtkAbstractDataFactory::get(QString type, QString name)
             return data;
 
     return NULL;
+}
+
+QList<dtkAbstractDataFactory::dtkAbstractDataTypeHandler> dtkAbstractDataFactory::readers(void)
+{
+    return d->readers.keys();
+}
+
+QList<dtkAbstractDataFactory::dtkAbstractDataTypeHandler> dtkAbstractDataFactory::writers(void)
+{
+    return d->writers.keys();
 }
 
 dtkAbstractDataFactory::dtkAbstractDataFactory(void) : dtkAbstractFactory(), d(new dtkAbstractDataFactoryPrivate)

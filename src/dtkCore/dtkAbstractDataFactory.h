@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:48:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep 11 13:28:16 2009 (+0200)
+ * Last-Updated: Mon Oct  5 14:20:28 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 62
+ *     Update #: 80
  */
 
 /* Commentary:
@@ -39,7 +39,6 @@ public:
     typedef QHash<               QString,      dtkAbstractDataCreator>       dtkAbstractDataCreatorHash;
     typedef QHash<QPair<QString, QStringList>, dtkAbstractDataReaderCreator> dtkAbstractDataReaderCreatorHash;
     typedef QHash<QPair<QString, QStringList>, dtkAbstractDataWriterCreator> dtkAbstractDataWriterCreatorHash;
-
     typedef       QPair<QString, QStringList>  dtkAbstractDataTypeHandler;
 
 public:
@@ -51,14 +50,23 @@ public:
 
     unsigned int size(QString type);
 
+    unsigned int count(QString type);
+    unsigned int countReaders(QString type);
+    unsigned int countWriters(QString type);
+
     dtkAbstractData *get(QString type, int index = 0);
     dtkAbstractData *get(QString type, QString name);
+
+    QList<dtkAbstractDataTypeHandler> readers(void);
+    QList<dtkAbstractDataTypeHandler> writers(void);
 
 signals:
     void created(dtkAbstractData *data, QString type);
 
 public slots:
-    dtkAbstractData *create(QString type);
+    dtkAbstractData       *create(QString type);
+    dtkAbstractDataReader *reader(QString type, QStringList handled);
+    dtkAbstractDataWriter *writer(QString type, QStringList handled);
 
 protected:
      dtkAbstractDataFactory(void);

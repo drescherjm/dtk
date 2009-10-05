@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:43:14 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 10 10:48:55 2009 (+0200)
+ * Last-Updated: Mon Oct  5 14:33:42 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 49
+ *     Update #: 63
  */
 
 /* Commentary:
@@ -35,15 +35,21 @@ public:
     dtkAbstractObject(dtkAbstractObject *parent = 0);
    ~dtkAbstractObject(void);
 
+   QString name(void) const;
+
+   bool hasProperty(QString key);
    void addProperty(QString key, QStringList values);
    void addProperty(QString key, QString value);
    void setProperty(QString key, QString value);
    const QStringList propertyValues(QString key);
-
-   bool hasProperty(QString key);
    QString property(QString key);
 
-   QString name(void) const;
+   bool hasMetaData(QString key);
+   void addMetaData(QString key, QStringList values);
+   void addMetaData(QString key, QString value);
+   void setMetaData(QString key, QStringList values);
+   void setMetaData(QString key, QString value);
+   const QStringList metaDataValues(QString key);
    
    virtual dtkComposerNode *node(void) { 
        return NULL;
@@ -55,9 +61,11 @@ public:
 
 signals:
    void propertySet(QString key, QString value);
+   void metaDataSet(QString key, QString value);
 
 public slots:
    virtual void onPropertySet(QString key, QString value);
+   virtual void onMetaDataSet(QString key, QString value);
 
 private:
    dtkAbstractObjectPrivate *d;

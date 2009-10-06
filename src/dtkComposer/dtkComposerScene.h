@@ -20,6 +20,8 @@
 #ifndef DTKCOMPOSERSCENE_H
 #define DTKCOMPOSERSCENE_H
 
+#include "dtkComposerExport.h"
+
 #include <QtGui>
 
 class dtkAbstractData;
@@ -29,7 +31,7 @@ class dtkComposerNode;
 class dtkComposerNodeProperty;
 class dtkComposerScenePrivate;
 
-class dtkComposerScene : public QGraphicsScene
+class DTKCOMPOSER_EXPORT dtkComposerScene : public QGraphicsScene
 {
     Q_OBJECT
 

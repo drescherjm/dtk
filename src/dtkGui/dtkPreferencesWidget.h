@@ -20,6 +20,8 @@
 #ifndef DTKPREFERENCESWIDGET_H
 #define DTKPREFERENCESWIDGET_H
 
+#include "dtkGuiExport.h"
+
 #include <QtCore>
 #include <QtGui>
 
@@ -27,7 +29,7 @@
 // dtkPreferencesPage
 // /////////////////////////////////////////////////////////////////
 
-class dtkPreferencesPage : public QWidget
+class DTKGUI_EXPORT dtkPreferencesPage : public QWidget
 {
     Q_OBJECT
 
@@ -46,7 +48,7 @@ signals:
 
 class dtkPreferencesWidgetPrivate;
 
-class dtkPreferencesWidget : public QMainWindow
+class DTKGUI_EXPORT dtkPreferencesWidget : public QMainWindow
 {
     Q_OBJECT
 

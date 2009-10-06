@@ -20,11 +20,13 @@
 #ifndef DTKINSPECTOR_H
 #define DTKINSPECTOR_H
 
+#include "dtkGuiExport.h"
+
 #include <QtGui/QMainWindow>
 
 class dtkInspectorPrivate;
 
-class dtkInspector : public QMainWindow
+class DTKGUI_EXPORT dtkInspector : public QMainWindow
 {
     Q_OBJECT
 

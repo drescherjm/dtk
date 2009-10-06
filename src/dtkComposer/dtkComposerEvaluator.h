@@ -20,13 +20,15 @@
 #ifndef DTKCOMPOSEREVALUATOR_H
 #define DTKCOMPOSEREVALUATOR_H
 
+#include "dtkComposerExport.h"
+
 #include <QtCore/QObject>
 
 class dtkComposerNode;
 class dtkComposerScene;
 class dtkComposerEvaluatorPrivate;
 
-class dtkComposerEvaluator : public QObject
+class DTKCOMPOSER_EXPORT dtkComposerEvaluator : public QObject
 {
     Q_OBJECT
 

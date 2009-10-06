@@ -20,6 +20,8 @@
 #ifndef DTKCOMPOSER_H
 #define DTKCOMPOSER_H
 
+#include "dtkComposerExport.h"
+
 #include <QtGui/QWidget>
 
 class dtkAbstractData;
@@ -27,7 +29,7 @@ class dtkAbstractProcess;
 class dtkAbstractView;
 class dtkComposerPrivate;
 
-class dtkComposer : public QWidget
+class DTKCOMPOSER_EXPORT dtkComposer : public QWidget
 {
     Q_OBJECT
 

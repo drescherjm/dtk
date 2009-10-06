@@ -20,6 +20,8 @@
 #ifndef DTKINSPECTORSCENE_H
 #define DTKINSPECTORSCENE_H
 
+#include "dtkGuiExport.h"
+
 #include <QtGui>
 
 class dtkAbstractData;
@@ -27,7 +29,7 @@ class dtkAbstractProcess;
 class dtkAbstractView;
 class dtkInspectorScenePrivate;
 
-class dtkInspectorScene : public QWidget
+class DTKGUI_EXPORT dtkInspectorScene : public QWidget
 {
     Q_OBJECT
 

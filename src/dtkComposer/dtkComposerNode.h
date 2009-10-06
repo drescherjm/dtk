@@ -20,6 +20,8 @@
 #ifndef DTKCOMPOSERNODE_H
 #define DTKCOMPOSERNODE_H
 
+#include "dtkComposerExport.h"
+
 #include <QtCore>
 #include <QtGui>
 
@@ -28,7 +30,7 @@ class dtkComposerEdge;
 class dtkComposerNodePrivate;
 class dtkComposerNodeProperty;
 
-class dtkComposerNode : public QObject, public QGraphicsItem
+class DTKCOMPOSER_EXPORT dtkComposerNode : public QObject, public QGraphicsItem
 {
     Q_OBJECT
 

@@ -20,13 +20,15 @@
 #ifndef DTKCOMPOSEREDGE_H
 #define DTKCOMPOSEREDGE_H
 
+#include "dtkComposerExport.h"
+
 #include <QtCore>
 #include <QtGui>
 
 class dtkComposerEdgePrivate;
 class dtkComposerNodeProperty;
 
-class dtkComposerEdge : public QObject, public QGraphicsItem
+class DTKCOMPOSER_EXPORT dtkComposerEdge : public QObject, public QGraphicsItem
 {
     Q_OBJECT
 

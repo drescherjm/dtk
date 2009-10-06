@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Aug  6 09:48:31 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Aug  6 10:34:12 2009 (+0200)
+ * Last-Updated: Tue Oct  6 14:40:39 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 23
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -38,8 +38,8 @@ public:
     virtual ~dtkPreferencesPage(void) {}
 
 signals:
-    virtual void accepted(void) = 0;
-    virtual void rejected(void) = 0;
+    void accepted(void);
+    void rejected(void);
 };
 
 // /////////////////////////////////////////////////////////////////

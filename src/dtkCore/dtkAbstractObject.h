@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:43:14 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Oct  5 14:33:42 2009 (+0200)
+ * Last-Updated: Thu Oct  8 16:41:34 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 63
+ *     Update #: 65
  */
 
 /* Commentary:
@@ -26,6 +26,8 @@
 class dtkAbstractObjectPrivate;
 class dtkComposerNode;
 class dtkUi;
+
+class QWidget;
 
 class DTKCORE_EXPORT dtkAbstractObject : public QObject
 {
@@ -55,7 +57,7 @@ public:
        return NULL;
    }
 
-   virtual dtkUi *ui(void) {
+   virtual QWidget *ui(void) {
        return NULL;
    }
 

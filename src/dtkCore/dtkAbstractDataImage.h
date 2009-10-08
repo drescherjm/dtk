@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb  2 09:08:09 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Oct  3 18:59:00 2009 (+0200)
+ * Last-Updated: Thu Oct  8 09:14:16 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 34
+ *     Update #: 36
  */
 
 /* Commentary: 
@@ -45,6 +45,8 @@ public:
     virtual int scalarValueCount(int value) { return 0; }
     virtual int scalarValueMinCount(void) { return 0; }
     virtual int scalarValueMaxCount(void) { return 0; }
+
+    virtual QImage& thumbnail(int width = 100, int height = 200) const;
 
 private:
     dtkAbstractDataImagePrivate *d;

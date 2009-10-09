@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 29 13:21:38 2009 (+0200)
+ * Last-Updated: Fri Oct  9 09:19:16 2009 (+0200)
  *           By: Julien Wintz
- *     Update #: 90
+ *     Update #: 97
  */
 
 /* Commentary: 
@@ -40,7 +40,8 @@ dtkPluginManager *dtkPluginManager::instance(void)
 
 void dtkPluginManager::initialize(void)
 {
-    this->readSettings();
+    if(d->path.isNull())
+        this->readSettings();
 
     if(d->path.isEmpty())
         return;
@@ -110,6 +111,11 @@ QList<dtkPlugin *> dtkPluginManager::plugins(void)
         list << qobject_cast<dtkPlugin *>(loader->instance());
 
     return list;
+}
+
+void dtkPluginManager::setPath(const QString& path)
+{
+    d->path = path;
 }
 
 dtkPluginManager::dtkPluginManager(void) : d(new dtkPluginManagerPrivate)

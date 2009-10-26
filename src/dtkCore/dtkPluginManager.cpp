@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 26 10:23:00 2009 (+0100)
+ * Last-Updated: Mon Oct 26 13:00:31 2009 (+0100)
  *           By: Julien Wintz
- *     Update #: 100
+ *     Update #: 101
  */
 
 /* Commentary: 
@@ -182,7 +182,7 @@ void dtkPluginManager::unloadPlugin(const QString& path)
 
     d->loaders.remove(path);
 
-    emit unloaded(plugin->name());
+    // emit unloaded(plugin->name());
 }
 
 dtkPluginManager *dtkPluginManager::s_instance = NULL;

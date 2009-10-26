@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:21:09 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Oct  9 09:17:46 2009 (+0200)
+ * Last-Updated: Mon Oct 26 10:17:34 2009 (+0100)
  *           By: Julien Wintz
- *     Update #: 33
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -46,6 +46,10 @@ public:
     QList<dtkPlugin *> plugins(void);
 
     void setPath(const QString& path);
+
+signals:
+    void   loaded(const QString& plugin);
+    void unloaded(const QString& plugin);
 
 protected:
      dtkPluginManager(void);

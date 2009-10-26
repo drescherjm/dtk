@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 21:58:48 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Oct  5 17:51:31 2009 (+0200)
+ * Last-Updated: Mon Oct 26 12:06:07 2009 (+0100)
  *           By: Julien Wintz
- *     Update #: 37
+ *     Update #: 39
  */
 
 /* Commentary: 
@@ -43,6 +43,11 @@ public:
    dtkAbstractData *data(void);
 
    virtual void setData(dtkAbstractData *data);
+
+signals:
+   void started(const QString& message);
+   void progressed(int step);
+   void finished(void);
 
 public slots:
    virtual bool canRead(QString file);

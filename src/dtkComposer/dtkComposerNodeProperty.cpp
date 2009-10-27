@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 16 15:44:18 2009 (+0200)
+ * Last-Updated: Tue Oct 27 12:16:12 2009 (+0100)
  *           By: Julien Wintz
- *     Update #: 106
+ *     Update #: 110
  */
 
 /* Commentary: 
@@ -125,7 +125,27 @@ void dtkComposerNodeProperty::setRect(const QRectF& rect)
         break;
     default:
         break;
-    };    
+    };
+}
+
+void dtkComposerNodeProperty::mirror(void)
+{
+    const QRectF& rect = this->rect();
+
+    QFontMetrics fm(d->text->font());
+
+    d->ellipse->setRect(rect);
+
+    switch(d->type) {
+    case Output:
+        d->text->setPos(rect.topRight() + QPointF(0, (fm.height()/2-1)*-1));
+        break;
+    case Input:
+        d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText())*-1 - d->ellipse->rect().width(), (fm.height()/2-1)*-1));
+        break;
+    default:
+        break;
+    };
 }
 
 void dtkComposerNodeProperty::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

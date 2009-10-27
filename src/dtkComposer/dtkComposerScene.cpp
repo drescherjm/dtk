@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 11 23:39:06 2009 (+0200)
+ * Last-Updated: Tue Oct 27 12:39:44 2009 (+0100)
  *           By: Julien Wintz
- *     Update #: 167
+ *     Update #: 178
  */
 
 /* Commentary: 
@@ -69,6 +69,17 @@ void dtkComposerScene::addNode(const QString& type)
         this->addItem(node);
 }
 
+QList<dtkComposerEdge *> dtkComposerScene::edges(void)
+{
+    QList<dtkComposerEdge *> list;
+
+    foreach(QGraphicsItem *item, this->items())
+        if (dtkComposerEdge *edge = dynamic_cast<dtkComposerEdge *>(item))
+            list << edge;
+
+    return list;
+}
+
 QList<dtkComposerNode *> dtkComposerScene::nodes(void)
 {
     QList<dtkComposerNode *> list;
@@ -88,6 +99,29 @@ QList<dtkComposerNode *> dtkComposerScene::nodes(QString name)
         if (dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item))
             if(node->object()->name() == name)
                 list << node;
+
+    return list;
+}
+
+QList<dtkComposerNodeProperty *> dtkComposerScene::properties(void)
+{
+    QList<dtkComposerNodeProperty *> list;
+
+    foreach(QGraphicsItem *item, this->items())
+        if (dtkComposerNodeProperty *property = dynamic_cast<dtkComposerNodeProperty *>(item))
+            list << property;
+
+    return list;
+}
+
+QList<dtkComposerNodeProperty *> dtkComposerScene::properties(QString name)
+{
+    QList<dtkComposerNodeProperty *> list;
+
+    foreach(QGraphicsItem *item, this->items())
+        if (dtkComposerNodeProperty *property = dynamic_cast<dtkComposerNodeProperty *>(item))
+            if(property->name() == name)
+                list << property;
 
     return list;
 }
@@ -120,6 +154,8 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
     if (d->current_edge)
         d->current_edge->adjust(d->current_edge->start(), mouseEvent->scenePos());
+
+    this->update(this->sceneRect());
 }
 
 void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)

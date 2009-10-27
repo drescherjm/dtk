@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 11 23:38:54 2009 (+0200)
+ * Last-Updated: Tue Oct 27 12:40:32 2009 (+0100)
  *           By: Julien Wintz
- *     Update #: 34
+ *     Update #: 37
  */
 
 /* Commentary: 
@@ -27,6 +27,7 @@
 class dtkAbstractData;
 class dtkAbstractProcess;
 class dtkAbstractView;
+class dtkComposerEdge;
 class dtkComposerNode;
 class dtkComposerNodeProperty;
 class dtkComposerScenePrivate;
@@ -41,8 +42,11 @@ public:
 
     void addNode(const QString& type);
 
+    QList<dtkComposerEdge *> edges(void);
     QList<dtkComposerNode *> nodes(void);
     QList<dtkComposerNode *> nodes(QString name);
+    QList<dtkComposerNodeProperty *> properties(void);
+    QList<dtkComposerNodeProperty *> properties(QString name);
 
 signals:
     void dataSelected(dtkAbstractData *data);

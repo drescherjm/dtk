@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Oct 26 12:06:56 2009 (+0100)
+ * Last-Updated: Tue Oct 27 16:05:05 2009 (+0100)
  *           By: Julien Wintz
- *     Update #: 111
+ *     Update #: 113
  */
 
 /* Commentary: 
@@ -39,8 +39,7 @@ public:
     friend QDebug operator<<(QDebug debug,       dtkAbstractProcess *process);
 
 signals:
-
-   void started(const QString& message);
+   void started(QString message);
    void progressed(int step);
    void finished(void);
 

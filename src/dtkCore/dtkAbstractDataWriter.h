@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 21:58:48 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Oct 26 12:06:26 2009 (+0100)
+ * Last-Updated: Tue Oct 27 16:03:12 2009 (+0100)
  *           By: Julien Wintz
- *     Update #: 29
+ *     Update #: 30
  */
 
 /* Commentary: 
@@ -45,7 +45,7 @@ public:
    virtual void setData(dtkAbstractData *data);
 
 signals:
-   void started(const QString& message);
+   void started(QString message);
    void progressed(int step);
    void finished(void);
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Oct  5 23:02:53 2009 (+0200)
+ * Last-Updated: Tue Oct 27 16:07:26 2009 (+0100)
  *           By: Julien Wintz
- *     Update #: 200
+ *     Update #: 209
  */
 
 /* Commentary:
@@ -101,6 +101,14 @@
 %ignore metaDataSet(QString key, QString value);
 
 // /////////////////////////////////////////////////////////////////
+// Ignore rules for dtkAbstractDataReader|Writer|Process
+// /////////////////////////////////////////////////////////////////
+
+%ignore started(QString message);
+%ignore progressed(int step);
+%ignore finished();
+
+// /////////////////////////////////////////////////////////////////
 // Ignore rules for dtkAbstractView signals
 // /////////////////////////////////////////////////////////////////
 
@@ -134,6 +142,13 @@
 %ignore created(dtkAbstractData *data, QString type);
 %ignore created(dtkAbstractProcess *process, QString type);
 %ignore created(dtkAbstractView *view, QString type);
+
+// /////////////////////////////////////////////////////////////////
+// Ignore rules for dtkPluginManager
+// /////////////////////////////////////////////////////////////////
+
+%ignore   loaded(const QString& path);
+%ignore unloaded(const QString& path);
 
 // /////////////////////////////////////////////////////////////////
 // Typemaps

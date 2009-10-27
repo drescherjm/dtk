@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Sep 13 18:11:24 2009 (+0200)
+ * Last-Updated: Tue Oct 27 16:10:24 2009 (+0100)
  *           By: Julien Wintz
- *     Update #: 56
+ *     Update #: 57
  */
 
 /* Commentary: 
@@ -33,6 +33,8 @@ class dtkComposerNodeProperty;
 class DTKCOMPOSER_EXPORT dtkComposerNode : public QObject, public QGraphicsItem
 {
     Q_OBJECT
+
+    Q_INTERFACES(QGraphicsItem)
 
 public:
     enum Type { Unknown, Data, Process, View, All };

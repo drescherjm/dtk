@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:37:15 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Aug  5 13:09:26 2009 (+0200)
+ * Last-Updated: Sat Nov 14 14:20:02 2009 (+0100)
  *           By: Julien Wintz
- *     Update #: 39
+ *     Update #: 40
  */
 
 /* Commentary: 
@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 
     int status = application.exec();
 
-    dtkPluginManager::instance()->uninitialize();
+    // dtkPluginManager::instance()->uninitialize();
     dtkScriptManager::instance()->uninitialize();
 
 #ifdef Q_WS_MAC

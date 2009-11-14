@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb  2 09:08:09 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Oct  8 09:19:47 2009 (+0200)
+ * Last-Updated: Sat Nov 14 14:12:08 2009 (+0100)
  *           By: Julien Wintz
- *     Update #: 52
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -54,16 +54,4 @@ dtkAbstractDataImage::~dtkAbstractDataImage(void)
 void *dtkAbstractDataImage::image(void)
 {
     return this->data();
-}
-
-QImage& dtkAbstractDataImage::thumbnail(int width, int height) const
-{
-    QImage *image = new QImage(width, height, QImage::Format_RGB32);
-
-    QPainter painter(image);
-    painter.setRenderHints(QPainter::Antialiasing);
-    painter.setPen(Qt::gray);
-    painter.fillRect(image->rect(), Qt::black);
-
-    return *image;
 }

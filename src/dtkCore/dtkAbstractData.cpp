@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Oct  3 13:18:14 2009 (+0200)
+ * Last-Updated: Sat Nov 14 14:17:29 2009 (+0100)
  *           By: Julien Wintz
- *     Update #: 110
+ *     Update #: 120
  */
 
 /* Commentary:
@@ -22,6 +22,8 @@
 #include <dtkCore/dtkAbstractDataWriter.h>
 #include <dtkCore/dtkLog.h>
 
+#include <QtGui>
+
 class dtkAbstractDataPrivate
 {
 public:
@@ -30,6 +32,8 @@ public:
 
     QString     path;
     QStringList paths;
+
+    QList<QImage> thumbnails;
 };
 
 dtkAbstractData::dtkAbstractData(dtkAbstractData *parent) : dtkAbstractObject(parent), d(new dtkAbstractDataPrivate)
@@ -181,6 +185,25 @@ QString dtkAbstractData::path(void)
 QStringList dtkAbstractData::paths(void)
 {
     return d->paths;
+}
+
+QImage& dtkAbstractData::thumbnail(void) const
+{
+    QImage *image = new QImage(128, 128, QImage::Format_RGB32);
+    
+    QPainter painter(image);
+    painter.setRenderHints(QPainter::Antialiasing);
+    painter.setPen(Qt::gray);
+    painter.fillRect(image->rect(), Qt::black);
+    
+    d->thumbnails << (*image);
+
+    return (*image);
+}
+
+QList<QImage>& dtkAbstractData::thumbnails(void) const
+{
+    return d->thumbnails;
 }
 
 void *dtkAbstractData::output(void)

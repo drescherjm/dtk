@@ -24,7 +24,6 @@
 #include <QtGui>
 
 #include <dtkGui/dtkSplitter.h>
-#include <dtkGui/dtkUi.h>
 
 class dtkAbstractData;
 class dtkAbstractProcess;

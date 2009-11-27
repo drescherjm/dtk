@@ -29,7 +29,6 @@
 #include <dtkCore/dtkPluginManager.h>
 
 #include <dtkGui/dtkTagCloud.h>
-#include <dtkGui/dtkUi.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkCreatorPluginListPrivate

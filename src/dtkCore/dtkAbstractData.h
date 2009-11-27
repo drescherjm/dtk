@@ -54,6 +54,9 @@ public slots:
     virtual void *data(void);
     virtual void *data(int channel);
 
+    virtual void setParameter(int parameter);
+    virtual void setParameter(int parameter, int channel);
+
     virtual void setData(void* data);
     virtual void setData(void* data, int channel);
 

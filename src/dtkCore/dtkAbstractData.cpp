@@ -223,6 +223,17 @@ void *dtkAbstractData::data(int channel)
     return NULL;
 }
 
+void dtkAbstractData::setParameter(int parameter)
+{
+    Q_UNUSED(parameter);
+}
+
+void dtkAbstractData::setParameter(int parameter, int channel)
+{
+    Q_UNUSED(parameter);
+    Q_UNUSED(channel);
+}
+
 void dtkAbstractData::setData(void* data)
 {
     Q_UNUSED(data);

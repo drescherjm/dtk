@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Sep 28 11:19:11 2009 (+0200)
+## Last-Updated: Thu Nov 26 15:00:15 2009 (+0100)
 ##           By: Julien Wintz
-##     Update #: 69
+##     Update #: 71
 ######################################################################
 ## 
 ### Commentary: 
@@ -40,10 +40,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkTextEditorSyntaxHighlighterCpp.h
   dtkTextEditorSyntaxHighlighterPython.h
   dtkTextEditorSyntaxHighlighterTcl.h
-  dtkUi.h
-  dtkUiItem.h
-  dtkUiItemDelegate.h
-  dtkUiView.h
 )
 
 set(${PROJECT_NAME}_HEADERS_MOC
@@ -59,9 +55,6 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkTextEditor.h
   dtkTextEditorPreferencesWidget.h
   dtkTextEditorSyntaxHighlighter.h
-  dtkUi.h
-  dtkUiItemDelegate.h
-  dtkUiView.h
 )
 
 set(${PROJECT_NAME}_SOURCES
@@ -79,10 +72,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkTextEditorSyntaxHighlighterCpp.cpp
   dtkTextEditorSyntaxHighlighterPython.cpp
   dtkTextEditorSyntaxHighlighterTcl.cpp
-  dtkUi.cpp
-  dtkUiItem.cpp
-  dtkUiItemDelegate.cpp
-  dtkUiView.cpp
 )
 
 if(APPLE)

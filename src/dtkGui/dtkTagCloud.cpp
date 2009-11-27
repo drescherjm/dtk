@@ -382,7 +382,7 @@ QSize dtkTagScope::sizeHint(void) const
 }
 
 static QString scope_stylesheet = 
-"body       { margin: 0px; padding: 3px; background: rgb(233, 233, 233); font-size: 90%; color: rgb(100, 100, 100); }"
+"body       { margin: 0px; padding: 3px; background: rgb(%1, %2, %3); font-size: 90%; color: rgb(100, 100, 100); }"
 "form       { padding-left: 5px; display: inline; height: 16px; } "
 "input.text { border: 1px solid #cccccc; color: rgb(140, 140, 140); font-size: 80%; width: 100px; }"
 "a          { text-decoration: none; color: rgb(140, 140, 140); float: right;}";

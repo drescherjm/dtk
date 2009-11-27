@@ -49,10 +49,10 @@ public:
 // /////////////////////////////////////////////////////////////////
 
 static QString view_stylesheet =
-"body { background:#ffffff; font-size: 70%; }";
+"body { font-size: 70%; }";
 
 static QString cloud_stylesheet =
-"body      { color: rgb(99, 99,  99); background:#ffffff; }"
+"body      { color: rgb(99, 99,  99); }"
 "a:link    { color: rgb(18, 89, 199); text-decoration:none; }"
 "a:active  { color: rgb(81, 86, 151); text-decoration:none; }"
 "a:hover   { color: rgb(81, 86, 151); text-decoration:underline; }";

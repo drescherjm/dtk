@@ -438,6 +438,11 @@ void dtkCreatorMainWindow::writeSettings(void)
     d->inspector->writeSettings();
 }
 
+void dtkCreatorMainWindow::interpret(const QString& file)
+{
+    d->interpreter->interpreter()->load(file);
+}
+
 bool dtkCreatorMainWindow::fileOpen(void)
 {
     if(d->maySave()) {

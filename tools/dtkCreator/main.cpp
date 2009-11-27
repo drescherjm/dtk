@@ -46,6 +46,9 @@ int main(int argc, char **argv)
 
     dtkCreatorMainWindow mainwindow; mainwindow.show();
 
+    if(application.arguments().contains("--script"))
+        mainwindow.interpret(application.arguments().value(application.arguments().indexOf("--script")+1));
+
     int status = application.exec();
 
     // dtkPluginManager::instance()->uninitialize();

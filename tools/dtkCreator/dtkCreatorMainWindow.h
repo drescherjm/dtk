@@ -26,6 +26,7 @@ class dtkAbstractData;
 class dtkAbstractProcess;
 class dtkAbstractView;
 class dtkInterpreter;
+class dtkScriptInterpreter;
 class dtkCreatorMainWindowPrivate;
 
 class dtkCreatorMainWindow : public QMainWindow
@@ -38,6 +39,8 @@ public:
 
     void readSettings(void);
     void writeSettings(void);
+
+    void interpret(const QString& file);
 
 public slots:
     bool fileOpen(void);

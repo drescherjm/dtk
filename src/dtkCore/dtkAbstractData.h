@@ -60,6 +60,9 @@ public slots:
     virtual void setParameter(float parameter);
     virtual void setParameter(float parameter, int channel);
 
+    virtual void setParameter(dtkAbstractData *parameter);
+    virtual void setParameter(dtkAbstractData *parameter, int channel);
+
     virtual void setData(void* data);
     virtual void setData(void* data, int channel);
 
@@ -82,6 +85,14 @@ public slots:
 
     virtual       QImage & thumbnail(void)  const;
     virtual QList<QImage>& thumbnails(void) const;
+
+public:
+    virtual bool casts(QString type);
+
+    virtual operator bool   (void);
+    virtual operator int    (void);
+    virtual operator float  (void);
+    virtual operator double (void);
 
 private:
     dtkAbstractDataPrivate *d;

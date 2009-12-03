@@ -38,6 +38,7 @@
 #include <dtkScript/dtkScriptInterpreterTcl.h>
 
 #include <dtkGui/dtkInspector.h>
+#include <dtkGui/dtkInspectorComposer.h>
 #include <dtkGui/dtkInspectorScene.h>
 #include <dtkGui/dtkInterpreter.h>
 #include <dtkGui/dtkInterpreterPreferencesWidget.h>
@@ -279,6 +280,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     connect(d->script_browser, SIGNAL(scriptClicked(const QString&)), d->editor, SLOT(open(const QString&)));
 
     dtkInspectorScene *inspector_scene = new dtkInspectorScene;
+    dtkInspectorComposer *inspector_composer = new dtkInspectorComposer;
 
     d->inspector = new dtkInspector(this);
     d->inspector->addPage("Scene", inspector_scene);

@@ -106,6 +106,11 @@ void dtkComposerNode::setObject(dtkAbstractObject *object)
     d->title->setHtml(object->name());
 }
 
+void dtkComposerNode::addScript(const QString& script)
+{
+    d->script += script + "\n";
+}
+
 void dtkComposerNode::setScript(const QString& script)
 {
     d->script = script;
@@ -263,6 +268,9 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     switch(d->type) {
     case Unknown:
         painter->setBrush(Qt::gray);
+        break;
+    case GenericData:
+        painter->setBrush(QColor(220, 155, 50));
         break;
     case Data:
         painter->setBrush(QColor(Qt::blue).lighter());

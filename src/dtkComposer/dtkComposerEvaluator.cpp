@@ -56,21 +56,37 @@ void dtkComposerEvaluator::run(void)
     foreach(dtkComposerNode *node, d->scene->nodes()) if(node->type() == dtkComposerNode::Process) processes << node;
     foreach(dtkComposerNode *node, d->scene->nodes()) if(node->type() == dtkComposerNode::View) views << node;
 
+    QString script;
+
     foreach(dtkComposerNode *node, views)
-        this->evaluate(node);
-}
+        script += this->evaluate(node);
 
-void dtkComposerEvaluator::evaluate(dtkComposerNode *node)
-{
-    QString script = node->script();
-
-    script.replace("#0", node->object()->name());
-    foreach(dtkComposerEdge *input, node->inputEdges())
-        script.replace(input->source()->port(), input->source()->node()->object()->name());
-
-    int stat;
+    int stat; qDebug() << script;
 
     dtkScriptInterpreterPool::instance()->python()->interpret(script, &stat);
+}
+
+QString dtkComposerEvaluator::evaluate(dtkComposerNode *node)
+{
+    QString node_script;
+
+    if(!node->inputEdges().count())
+        return node_script;
+
+    foreach(dtkComposerEdge *input, node->inputEdges())
+        node_script += this->evaluate(input->source()->node()) + "\n";
+
+    QString script = node->script(); script.replace("#0", node->object()->name());
+
+    foreach(dtkComposerEdge *input, node->inputEdges()) {
+        qDebug() << "replacing" << input->destination()->port() << "by" << input->source()->node()->object()->name();
+        script.replace(input->destination()->port(), input->source()->node()->object()->name());
+    }
+
+    node_script += script;
+    node_script += "\n";
+
+    return node_script;
 }
 
 void dtkComposerEvaluator::stop(void)

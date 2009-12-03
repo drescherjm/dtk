@@ -245,6 +245,17 @@ void dtkAbstractData::setParameter(float parameter, int channel)
     Q_UNUSED(channel);
 }
 
+void dtkAbstractData::setParameter(dtkAbstractData *parameter)
+{
+    Q_UNUSED(parameter);
+}
+
+void dtkAbstractData::setParameter(dtkAbstractData *parameter, int channel)
+{
+    Q_UNUSED(parameter);
+    Q_UNUSED(channel);
+}
+
 void dtkAbstractData::setData(void* data)
 {
     Q_UNUSED(data);
@@ -254,6 +265,31 @@ void dtkAbstractData::setData(void* data, int channel)
 {
     Q_UNUSED(data);
     Q_UNUSED(channel);
+}
+
+bool dtkAbstractData::casts(QString type)
+{
+    return false;
+}
+
+dtkAbstractData::operator bool (void)
+{
+    return false;
+}
+
+dtkAbstractData::operator int (void)
+{
+    return 0;
+}
+
+dtkAbstractData::operator float (void)
+{
+    return 0.0;
+}
+
+dtkAbstractData::operator double (void)
+{
+    return 0.0;
 }
 
 QDebug operator<<(QDebug debug, const dtkAbstractData& data)

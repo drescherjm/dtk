@@ -56,24 +56,30 @@ void dtkComposerView::dragEnterEvent(QDragEnterEvent *event)
 {
     if (event->mimeData()->hasUrls())
         event->acceptProposedAction();
+    else
+        event->ignore();
 }
 
 void dtkComposerView::dragMoveEvent(QDragMoveEvent *event)
 {
     if (event->mimeData()->hasUrls())
         event->acceptProposedAction();
+    else
+        event->ignore();
 }
 
 void dtkComposerView::dropEvent(QDropEvent *event)
 {
     QUrl url = event->mimeData()->urls().first();
 
-    if (url.scheme() != "type")
+    if (url.scheme() != "type") {
+        event->ignore();
         return;
+    }
 
     if (dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene()))
         scene->addNode(url.path());
-    
+
     event->acceptProposedAction();
 }
 

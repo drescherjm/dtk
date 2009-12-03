@@ -42,7 +42,7 @@ public:
     void setScene(dtkComposerScene *scene);
 
 protected slots:
-    void evaluate(dtkComposerNode *node);
+    QString evaluate(dtkComposerNode *node);
 
 private:
     dtkComposerEvaluatorPrivate *d;

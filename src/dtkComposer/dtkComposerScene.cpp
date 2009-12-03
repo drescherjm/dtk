@@ -52,17 +52,15 @@ dtkComposerScene::~dtkComposerScene(void)
 
 void dtkComposerScene::addNode(const QString& type)
 {
-    Q_UNUSED(type);
-
     dtkComposerNode *node = NULL;
 
     if(dtkAbstractData *data = dtkAbstractDataFactory::instance()->create(type))
         node = data->node();
 
-    if(dtkAbstractProcess *process = dtkAbstractProcessFactory::instance()->create(type))
+    else if(dtkAbstractProcess *process = dtkAbstractProcessFactory::instance()->create(type))
         node = process->node();
 
-    if(dtkAbstractView *view = dtkAbstractViewFactory::instance()->create(type))
+    else if(dtkAbstractView *view = dtkAbstractViewFactory::instance()->create(type))
         node = view->node();
 
     if (node)

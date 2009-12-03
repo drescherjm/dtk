@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Oct 21 14:29:13 2009 (+0200)
+## Last-Updated: Wed Dec  2 09:20:28 2009 (+0100)
 ##           By: Julien Wintz
-##     Update #: 203
+##     Update #: 205
 ######################################################################
 ## 
 ### Commentary: 
@@ -143,6 +143,7 @@ mark_as_advanced(CMAKE_BUILD_TYPE)
 mark_as_advanced(CMAKE_INSTALL_PREFIX)
 if(APPLE)
   mark_as_advanced(CMAKE_OSX_ARCHITECTURES)
+  mark_as_advanced(CMAKE_OSX_DEPLOYMENT_TARGET)
   mark_as_advanced(CMAKE_OSX_SYSROOT)
 endif(APPLE)
 
@@ -157,6 +158,9 @@ find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 
 mark_as_advanced(QT_QMAKE_EXECUTABLE)
+mark_as_advanced(QT_QTMOTIF_INCLUDE_DIR)
+mark_as_advanced(QT_QTMOTIF_LIBRARY_DEBUG)
+mark_as_advanced(QT_QTMOTIF_LIBRARY_RELEASE)
 
 find_package(SWIG REQUIRED)
 include(${SWIG_USE_FILE})

@@ -42,6 +42,8 @@ DTKCORE_EXPORT dtkAbstractDataFactory *dtkAbstractDataFactory::instance(void)
 
 dtkAbstractData *dtkAbstractDataFactory::create(QString type)
 {
+    static int count = 0;
+
     if(!d->creators.contains(type))
 	return NULL;
 
@@ -55,7 +57,7 @@ dtkAbstractData *dtkAbstractDataFactory::create(QString type)
 	if(key.second.contains(type))
 	    data->addWriter(d->writers[key]());
 
-    data->setObjectName(QString("data%1").arg(d->datas[type].count()));
+    data->setObjectName(QString("data%1").arg(count++));
 
     d->datas[type] << data;
 

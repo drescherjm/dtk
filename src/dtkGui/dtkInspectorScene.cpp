@@ -140,22 +140,6 @@ dtkInspectorScene::dtkInspectorScene(QWidget *parent) : QWidget(parent), d(new d
     d->root->setText(0, "root");
     d->root->setIcon(0, d->icon_root);
 
-    // QTreeWidgetItem *testitem1 = new QTreeWidgetItem(d->root);
-    // testitem1->setText(0, "data");
-    // testitem1->setText(1, "qglViewPoint");
-    // testitem1->setIcon(0, d->icon_data);
-    // d->root->addChild(testitem1);
-
-    // QTreeWidgetItem *testitem2 = new QTreeWidgetItem(testitem1);
-    // testitem2->setText(0, "process");
-    // testitem2->setIcon(0, d->icon_process);
-    // testitem1->addChild(testitem2);
-
-    // QTreeWidgetItem *testitem3 = new QTreeWidgetItem(d->root);
-    // testitem3->setText(0, "view");
-    // testitem3->setIcon(0, d->icon_view);
-    // d->root->addChild(testitem3);
-
     d->tree->addTopLevelItem(d->root);
     d->tree->expandAll();
 

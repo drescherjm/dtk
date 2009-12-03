@@ -37,16 +37,22 @@ class DTKCOMPOSER_EXPORT dtkComposerNode : public QObject, public QGraphicsItem
     Q_INTERFACES(QGraphicsItem)
 
 public:
-    enum Type { Unknown, Data, Process, View, All };
+    enum Type {
+        Unknown,
+        GenericData,
+        Data,
+        Process,
+        View,
+        All
+    };
 
      dtkComposerNode(dtkComposerNode *parent = 0);
     ~dtkComposerNode(void);
 
     void setType(Type type);
     void setObject(dtkAbstractObject *object);
+    void addScript(const QString& script);
     void setScript(const QString& script);
-
-    // virtual void evaluate(void) = 0;
 
 public:
 

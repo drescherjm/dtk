@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 28 09:10:10 2009 (+0200)
+ * Last-Updated: Wed Dec  9 10:19:33 2009 (+0100)
  *           By: Julien Wintz
- *     Update #: 435
+ *     Update #: 436
  */
 
 /* Commentary: 
@@ -44,9 +44,6 @@
 #include <dtkGui/dtkInterpreterPreferencesWidget.h>
 #include <dtkGui/dtkPreferencesWidget.h>
 #include <dtkGui/dtkSearchBox.h>
-#ifdef Q_WS_MAC
-#include <dtkGui/dtkSearchBoxMac.h>
-#endif
 #include <dtkGui/dtkSpacer.h>
 #include <dtkGui/dtkSplitter.h>
 #include <dtkGui/dtkTextEditor.h>

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Dec  3 09:07:55 2009 (+0100)
+## Last-Updated: Wed Dec  9 10:11:31 2009 (+0100)
 ##           By: Julien Wintz
-##     Update #: 72
+##     Update #: 75
 ######################################################################
 ## 
 ### Commentary: 
@@ -31,6 +31,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkInterpreter.h
   dtkInterpreterPreferencesWidget.h
   dtkPreferencesWidget.h
+  dtkSearchBar.h
   dtkSearchBox.h
   dtkSpacer.h
   dtkSplitter.h
@@ -50,6 +51,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkInterpreter.h
   dtkInterpreterPreferencesWidget.h
   dtkPreferencesWidget.h
+  dtkSearchBar.h
   dtkSearchBox.h
   dtkSpacer.h
   dtkSplitter.h
@@ -66,6 +68,8 @@ set(${PROJECT_NAME}_SOURCES
   dtkInterpreter.cpp
   dtkInterpreterPreferencesWidget.cpp
   dtkPreferencesWidget.cpp
+  dtkSearchBox.cpp
+  dtkSearchBar.cpp
   dtkSpacer.cpp
   dtkSplitter.cpp
   dtkTagCloud.cpp
@@ -80,33 +84,11 @@ set(${PROJECT_NAME}_SOURCES
 if(APPLE)
   set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
     dtkCocoaController.h
-    dtkCocoaUtils.h
-    dtkSearchBoxMac.h)
-  set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
-    dtkSearchBoxMac.h)
+    dtkCocoaUtils.h)
   set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkCocoaController.mm
-  dtkCocoaUtils.mm
-  dtkSearchBoxMac.mm)
+  dtkCocoaUtils.mm)
 endif(APPLE)
-
-if(UNIX AND NOT APPLE)
-  set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
-    dtkSearchBoxUnix.h)
-  set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
-    dtkSearchBoxUnix.h)
-  set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
-  dtkSearchBoxUnix.cpp)
-endif(UNIX AND NOT APPLE)
-
-if(WIN32)
-  set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
-    dtkSearchBoxUnix.h)
-  set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
-    dtkSearchBoxUnix.h)
-  set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
-  dtkSearchBoxUnix.cpp)
-endif(WIN32)
 
 set(${PROJECT_NAME}_FORMS
   dtkInterpreterPreferencesWidget.ui

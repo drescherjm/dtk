@@ -232,5 +232,8 @@ void dtkSearchBar::filter(void)
         last = item->proxy();
     }
 
-    d->view->setModel(last);
+    if(last)
+        d->view->setModel(last);
+    else
+        d->view->setModel(d->model);
 }

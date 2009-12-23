@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:24:22 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Aug  6 10:33:18 2009 (+0200)
+ * Last-Updated: Wed Dec 23 10:40:58 2009 (+0100)
  *           By: Julien Wintz
- *     Update #: 22
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -101,7 +101,6 @@ void dtkTextEditorPreferencesWidget::keyPressEvent(QKeyEvent *event)
 void dtkTextEditorPreferencesWidget::onFontChosen(QFont font)
 {
     d->font = font;
-    qDebug() << font;
 }
 
 void dtkTextEditorPreferencesWidget::onSizeChosen(QString size)

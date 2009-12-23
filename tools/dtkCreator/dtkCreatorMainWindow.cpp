@@ -44,6 +44,7 @@
 #include <dtkGui/dtkInterpreterPreferencesWidget.h>
 #include <dtkGui/dtkPreferencesWidget.h>
 #include <dtkGui/dtkSearchBox.h>
+#include <dtkGui/dtkSettingsEditorPreferencesWidget.h>
 #include <dtkGui/dtkSpacer.h>
 #include <dtkGui/dtkSplitter.h>
 #include <dtkGui/dtkTextEditor.h>
@@ -102,6 +103,7 @@ public:
     dtkComposer *composer;
     dtkCreatorViewer *viewer;
     dtkInterpreter *interpreter;
+    dtkSettingsEditorPreferencesWidget *settings_preferences;
 
 public:
     dtkCreatorMainWindow *q;
@@ -316,6 +318,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     outer_splitter->setStretchFactor(2, 1);
 
     d->preferences = NULL;
+    d->settings_preferences = NULL;
 
     this->onTitleChanged(d->editor->fileName());
     this->setUnifiedTitleAndToolBarOnMac(true);
@@ -485,6 +488,9 @@ void dtkCreatorMainWindow::showPreferences(void)
         d->preferences = new dtkPreferencesWidget(this);
         d->preferences->addPage("Editor", d->editor->preferencesWidget(this));
         d->preferences->addPage("Interpreter", d->interpreter->preferencesWidget(this));
+
+        d->settings_preferences = new dtkSettingsEditorPreferencesWidget(d->preferences);
+        d->preferences->addPage("Settings", d->settings_preferences);
     }
 
     d->preferences->show();

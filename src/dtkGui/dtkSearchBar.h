@@ -1,11 +1,13 @@
 #ifndef DTKSEARCHBAR_H
 #define DTKSEARCHBAR_H
 
+#include "dtkGuiExport.h"
+
 #include <QtGui>
 
 class dtkSearchBarItemPrivate;
 
-class dtkSearchBarItem : public QFrame
+class DTKGUI_EXPORT dtkSearchBarItem : public QFrame
 {
     Q_OBJECT
 
@@ -44,7 +46,7 @@ private:
 
 class dtkSearchBarPrivate;
 
-class dtkSearchBar : public QWidget
+class DTKGUI_EXPORT dtkSearchBar : public QWidget
 {
     Q_OBJECT
 

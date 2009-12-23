@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:06:43 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Sep  4 14:17:02 2009 (+0200)
+## Last-Updated: Wed Dec 23 10:00:39 2009 (+0100)
 ##           By: Julien Wintz
-##     Update #: 4
+##     Update #: 5
 ######################################################################
 ## 
 ### Commentary: 
@@ -23,3 +23,4 @@ add_subdirectory(dtkTagCloud)
 add_subdirectory(dtkTextEditor)
 add_subdirectory(dtkUpdater)
 add_subdirectory(dtkSearchBar)
+add_subdirectory(dtkSettingsEditor)

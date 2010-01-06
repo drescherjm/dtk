@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb  2 09:08:09 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jul 31 23:24:01 2009 (+0200)
+ * Last-Updated: Tue Jan  5 15:23:13 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 40
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -52,4 +52,44 @@ dtkAbstractDataMesh::~dtkAbstractDataMesh(void)
 void *dtkAbstractDataMesh::mesh(void)
 {
     return this->data();
+}
+
+int dtkAbstractDataMesh::countIndices(void)
+{
+    return -1;
+}
+
+int dtkAbstractDataMesh::countVertices(void)
+{
+    return -1;
+}
+
+int dtkAbstractDataMesh::countNormals(void)
+{
+    return -1;
+}
+
+int dtkAbstractDataMesh::countColors(void)
+{
+    return -1;
+}
+
+int *dtkAbstractDataMesh::indices(void)
+{
+    return NULL;
+}
+
+double *dtkAbstractDataMesh::vertices(void)
+{
+    return NULL;
+}
+
+double *dtkAbstractDataMesh::normals(void)
+{
+    return NULL;
+}
+
+double *dtkAbstractDataMesh::colors(void)
+{
+    return NULL;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Nov 14 14:12:59 2009 (+0100)
+ * Last-Updated: Tue Jan  5 16:02:13 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 183
+ *     Update #: 186
  */
 
 /* Commentary:
@@ -54,11 +54,16 @@ public slots:
     virtual void *data(void);
     virtual void *data(int channel);
 
+    virtual int parameter(int channel);
+
     virtual void setParameter(int parameter);
     virtual void setParameter(int parameter, int channel);
 
     virtual void setParameter(float parameter);
     virtual void setParameter(float parameter, int channel);
+
+    virtual void setParameter(QString parameter);
+    virtual void setParameter(QString parameter, int channel);
 
     virtual void setParameter(dtkAbstractData *parameter);
     virtual void setParameter(dtkAbstractData *parameter, int channel);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Nov 14 14:17:29 2009 (+0100)
+ * Last-Updated: Tue Jan  5 16:03:18 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 120
+ *     Update #: 127
  */
 
 /* Commentary:
@@ -223,6 +223,13 @@ void *dtkAbstractData::data(int channel)
     return NULL;
 }
 
+int dtkAbstractData::parameter(int channel)
+{
+    Q_UNUSED(channel);
+
+    return -1;
+}
+
 void dtkAbstractData::setParameter(int parameter)
 {
     Q_UNUSED(parameter);
@@ -240,6 +247,17 @@ void dtkAbstractData::setParameter(float parameter)
 }
 
 void dtkAbstractData::setParameter(float parameter, int channel)
+{
+    Q_UNUSED(parameter);
+    Q_UNUSED(channel);
+}
+
+void dtkAbstractData::setParameter(QString parameter)
+{
+    Q_UNUSED(parameter);
+}
+
+void dtkAbstractData::setParameter(QString parameter, int channel)
 {
     Q_UNUSED(parameter);
     Q_UNUSED(channel);

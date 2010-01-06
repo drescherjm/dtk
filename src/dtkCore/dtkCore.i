@@ -224,4 +224,31 @@
 %include <dtkCore/dtkPlugin.h>
 %include <dtkCore/dtkPluginManager.h>
 
+#ifdef SWIGPYTHON
+
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+%inline %{
+
+dtkAbstractDataMesh *dtk_as_mesh(dtkAbstractData *data)
+{
+    return dynamic_cast<dtkAbstractDataMesh *>(data);
+}
+
+dtkAbstractDataMeshSurfacic *dtk_as_mesh_surfacic(dtkAbstractData *data)
+{
+    return dynamic_cast<dtkAbstractDataMeshSurfacic *>(data);
+}
+
+dtkAbstractDataMeshVolumic *dtk_as_mesh_volumic(dtkAbstractData *data)
+{
+    return dynamic_cast<dtkAbstractDataMeshVolumic *>(data);
+}
+
+%}
+
+#endif
+
 #endif

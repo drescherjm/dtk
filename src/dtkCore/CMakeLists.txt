@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Dec 11 11:12:21 2009 (+0100)
+## Last-Updated: Thu Jan  7 17:29:50 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 103
+##     Update #: 115
 ######################################################################
 ## 
 ### Commentary: 
@@ -146,6 +146,9 @@ dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP core tcl    ${CMAKE_CURREN
 ## #################################################################
 ## Build rules
 ## #################################################################
+
+add_definitions(-Wno-write-strings)
+add_definitions(-Wformat=0)
 
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Dec 11 11:18:58 2009 (+0100)
+ * Last-Updated: Thu Jan  7 16:24:42 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 212
+ *     Update #: 213
  */
 
 /* Commentary:
@@ -95,6 +95,10 @@
 
 %ignore operator<<;
 %ignore operator==;
+%ignore operator bool;
+%ignore operator int;
+%ignore operator float;
+%ignore operator double;
 
 // /////////////////////////////////////////////////////////////////
 // Ignore rules for dtkAbstractObject signals

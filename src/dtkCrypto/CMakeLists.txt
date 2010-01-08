@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Thu Jan  7 10:37:04 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Jan  7 11:00:19 2010 (+0100)
+## Last-Updated: Thu Jan  7 19:27:54 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 13
+##     Update #: 14
 ######################################################################
 ## 
 ### Commentary: 
@@ -23,7 +23,7 @@ project(dtkCrypto)
 ## Resolve dependencies
 ## #################################################################
 
-find_package(OpenSSL REQUIRED)
+find_package(OpenSSL REQUIRED QUIET)
 
 include_directories(${OPENSSL_INCLUDE_DIR})
 

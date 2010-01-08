@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Oct 27 16:10:37 2009 (+0100)
+ * Last-Updated: Fri Jan  8 14:39:10 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 46
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -33,7 +33,9 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeProperty : public QObject, public QGraph
 {
     Q_OBJECT
 
+#if QT_VERSION >= 0x040600
     Q_INTERFACES(QGraphicsItem)
+#endif
 
 public:
     enum Type { Input, Output };

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Dec  2 09:20:28 2009 (+0100)
+## Last-Updated: Fri Jan  8 11:26:55 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 205
+##     Update #: 226
 ######################################################################
 ## 
 ### Commentary: 
@@ -219,7 +219,7 @@ endif(WIN32)
 
 option(BUILD_SHARED_LIBS  "Build shared libraries" true)
 option(BUILD_TOOLS        "Build tools"            true)
-option(BUILD_EXAMPLES     "Build examples"         false)
+option(BUILD_EXAMPLES     "Build examples"         true)
 
 ## #################################################################
 ## Build rules
@@ -388,3 +388,27 @@ configure_file("${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Uninstall.cmake.in"
 add_custom_target(uninstall
   "${CMAKE_COMMAND}" -P
   "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake")
+
+## #################################################################
+## Dashboard settings
+## #################################################################
+
+# include(DartConfig)
+# include(Dart)
+
+## #################################################################
+## Packaging settings
+## #################################################################
+
+set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
+set(CPACK_PACKAGE_VENDOR "http://www.inria.fr/sophia/dream")
+set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_CURRENT_SOURCE_DIR}/README.txt)
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY ${PROJECT_NAME})
+set(CPACK_PACKAGE_DESCRIPTION "")
+set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/COPYING.txt)
+
+set(CPACK_PACKAGE_VERSION_MAJOR ${${PROJECT_NAME}_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${${PROJECT_NAME}_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${${PROJECT_NAME}_VERSION_BUILD})
+
+include(CPack)

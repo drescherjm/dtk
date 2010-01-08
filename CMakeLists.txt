@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Jan  8 11:26:55 2010 (+0100)
+## Last-Updated: Fri Jan  8 16:12:23 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 226
+##     Update #: 230
 ######################################################################
 ## 
 ### Commentary: 
@@ -390,11 +390,19 @@ add_custom_target(uninstall
   "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake")
 
 ## #################################################################
+## Nighty builds
+## #################################################################
+
+enable_testing()
+
+include(dtkNightly)
+
+## #################################################################
 ## Dashboard settings
 ## #################################################################
 
-# include(DartConfig)
-# include(Dart)
+include(dtkDart)
+include(Dart)
 
 ## #################################################################
 ## Packaging settings
@@ -402,6 +410,7 @@ add_custom_target(uninstall
 
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
 set(CPACK_PACKAGE_VENDOR "http://www.inria.fr/sophia/dream")
+set(CPACK_PACKAGE_CONTACT "Julien Wintz <jwintz@sophia.inria.fr>")
 set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_CURRENT_SOURCE_DIR}/README.txt)
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY ${PROJECT_NAME})
 set(CPACK_PACKAGE_DESCRIPTION "")

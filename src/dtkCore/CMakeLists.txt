@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Jan  7 17:29:50 2010 (+0100)
+## Last-Updated: Mon Jan 11 15:53:56 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 115
+##     Update #: 120
 ######################################################################
 ## 
 ### Commentary: 
@@ -195,4 +195,5 @@ endif(NOT dtk_INSTALL_NO_DEVELOPMENT)
 
 if(NOT dtk_INSTALL_NO_LIBRARIES)
   install_targets(${dtk_INSTALL_LIB_DIR} RUNTIME_DIRECTORY ${dtk_INSTALL_BIN_DIR} ${PROJECT_NAME})
+  install_files(${dtk_INSTALL_MODULE_DIR} .py ${CMAKE_BINARY_DIR}/modules/core.py)
 endif(NOT dtk_INSTALL_NO_LIBRARIES)

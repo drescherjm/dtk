@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Jan  8 16:12:23 2010 (+0100)
+## Last-Updated: Mon Jan 11 15:53:37 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 230
+##     Update #: 233
 ######################################################################
 ## 
 ### Commentary: 
@@ -76,7 +76,7 @@ set(CMAKE_MODULE_PATH
   ${CMAKE_MODULE_PATH} "${${PROJECT_NAME}_CMAKE_DIR}")
 
 if(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
-  install_files(${${PROJECT_NAME}_INSTALL_PACKAGE_DIR}/cmake "\\.cmake$")
+  install_files(${${PROJECT_NAME}_INSTALL_PACKAGE_DIR}/cmake "${CMAKE_BINARY_DIR}/*\\.cmake$")
 endif(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
 
 ## #################################################################
@@ -101,8 +101,12 @@ if(NOT ${PROJECT_NAME}_INSTALL_INCLUDE_DIR)
   set(${PROJECT_NAME}_INSTALL_INCLUDE_DIR "/include")
 endif(NOT ${PROJECT_NAME}_INSTALL_INCLUDE_DIR)
 
+if(NOT ${PROJECT_NAME}_INSTALL_MODULE_DIR)
+  set(${PROJECT_NAME}_INSTALL_MODULE_DIR "/module")
+endif(NOT ${PROJECT_NAME}_INSTALL_MODULE_DIR)
+
 if(NOT ${PROJECT_NAME}_INSTALL_PACKAGE_DIR)
-  set(${PROJECT_NAME}_INSTALL_PACKAGE_DIR ${${PROJECT_NAME}_INSTALL_LIB_DIR} CACHE INTERNAL "")
+  set(${PROJECT_NAME}_INSTALL_PACKAGE_DIR "/cmake")
 endif(NOT ${PROJECT_NAME}_INSTALL_PACKAGE_DIR)
 
 if(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
@@ -127,12 +131,6 @@ else(${PROJECT_NAME}_BUILD_SHARED_LIBS)
     set(${PROJECT_NAME}_INSTALL_NO_LIBRARIES 1)
   endif(${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
 endif(${PROJECT_NAME}_BUILD_SHARED_LIBS)
-
-## #################################################################
-## Setup testing
-## #################################################################
-
-# include(CTest)
 
 ## #################################################################
 ## Resolve dependencies

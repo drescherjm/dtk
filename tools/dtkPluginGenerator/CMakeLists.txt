@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:07:07 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Sep  4 21:44:56 2009 (+0200)
+## Last-Updated: Mon Jan 11 14:42:17 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 32
+##     Update #: 33
 ######################################################################
 ## 
 ### Commentary: 
@@ -79,3 +79,11 @@ if(APPLE)
     COMMAND ${CMAKE_COMMAND} ARGS -E copy ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.icns ${${PROJECT_NAME}_RESOURCE_DIR}
     COMMENT "-- Setting up plugins and resources")
 endif(APPLE)
+
+## #################################################################
+## Installation
+## #################################################################
+
+if(NOT dtk_INSTALL_NO_RUNTIME)
+  install_targets(${dtk_INSTALL_BIN_DIR} ${PROJECT_NAME})
+endif(NOT dtk_INSTALL_NO_RUNTIME)

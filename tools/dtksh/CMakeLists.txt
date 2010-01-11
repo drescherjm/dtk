@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Thu Dec 10 14:04:48 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Dec 10 14:05:31 2009 (+0100)
+## Last-Updated: Mon Jan 11 14:43:35 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 2
+##     Update #: 3
 ######################################################################
 ## 
 ### Commentary: 
@@ -42,3 +42,11 @@ target_link_libraries(${PROJECT_NAME}
   dtkCore
   dtkScript
 )
+
+## #################################################################
+## Installation
+## #################################################################
+
+if(NOT dtk_INSTALL_NO_RUNTIME)
+  install_targets(${dtk_INSTALL_BIN_DIR} ${PROJECT_NAME})
+endif(NOT dtk_INSTALL_NO_RUNTIME)

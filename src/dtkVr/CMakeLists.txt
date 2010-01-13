@@ -2,11 +2,11 @@
 ## 
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
-## Created: Thu Jan  7 10:37:04 2010 (+0100)
+## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Wed Jan 13 14:01:06 2010 (+0100)
+## Last-Updated: Wed Jan 13 15:17:10 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 15
+##     Update #: 17
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,37 +17,48 @@
 ## 
 ######################################################################
 
-project(dtkCrypto)
+project(dtkVr)
 
 ## #################################################################
 ## Resolve dependencies
 ## #################################################################
 
-find_package(OpenSSL REQUIRED QUIET)
-
-include_directories(${OPENSSL_INCLUDE_DIR})
+# find_package(vrpn QUIET)
 
 ## #################################################################
 ## Sources
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkCryptoBase64.h
-  dtkCryptoExport.h
-  dtkCryptoLicenseManager.h
+  dtkAbstractDevice.h
+  dtkVrExport.h
 )
 
 set(${PROJECT_NAME}_HEADERS_MOC
+  dtkAbstractDevice.h
 )
 
 set(${PROJECT_NAME}_SOURCES
-  dtkCryptoBase64.c
-  dtkCryptoLicenseManager.cpp
+  dtkAbstractDevice.cpp
 )
+
+## #################################################################
+## Wrapping
+## #################################################################
+
+set(${PROJECT_NAME}_WRAP_DEPENDS
+  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractDevice.h
+)
+
+dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP vr python ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i ${${PROJECT_NAME}_WRAP_DEPENDS})
+dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP vr tcl    ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i ${${PROJECT_NAME}_WRAP_DEPENDS})
 
 ## #################################################################
 ## Build rules
 ## #################################################################
+
+add_definitions(-Wno-write-strings)
+add_definitions(-Wformat=0)
 
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)
@@ -74,6 +85,17 @@ else(PYTHON_DEBUG_LIBRARIES)
 endif(PYTHON_DEBUG_LIBRARIES)
 
 ## #################################################################
+## Handling of generated script modules
+## #################################################################
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i
+  COMMAND ${CMAKE_COMMAND} ARGS -E  make_directory ${CMAKE_BINARY_DIR}/modules
+  COMMAND ${CMAKE_COMMAND} ARGS -E  copy ${${PROJECT_NAME}_BINARY_DIR}/vr.py ${CMAKE_BINARY_DIR}/modules
+  COMMENT "-- Moving python modules to ${CMAKE_BINARY_DIR}/modules"
+)
+
+## #################################################################
 ## Installation
 ## #################################################################
 
@@ -83,4 +105,5 @@ endif(NOT dtk_INSTALL_NO_DEVELOPMENT)
 
 if(NOT dtk_INSTALL_NO_LIBRARIES)
   install_targets(${dtk_INSTALL_LIB_DIR} RUNTIME_DIRECTORY ${dtk_INSTALL_BIN_DIR} ${PROJECT_NAME})
+  install_files(${dtk_INSTALL_MODULE_DIR} .py ${CMAKE_BINARY_DIR}/modules/vr.py)
 endif(NOT dtk_INSTALL_NO_LIBRARIES)

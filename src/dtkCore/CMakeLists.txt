@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Jan 11 15:53:56 2010 (+0100)
+## Last-Updated: Wed Jan 13 14:20:39 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 120
+##     Update #: 124
 ######################################################################
 ## 
 ### Commentary: 
@@ -38,8 +38,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractDataVertex.h
   dtkAbstractDataTet.h
   dtkAbstractDataWriter.h
-  dtkAbstractDevice.h
-  dtkAbstractDeviceFactory.h
   dtkAbstractFactory.h
   dtkAbstractObject.h
   dtkPlugin.h
@@ -72,8 +70,6 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractDataTet.h
   dtkAbstractDataVertex.h
   dtkAbstractDataWriter.h
-  dtkAbstractDevice.h
-  dtkAbstractDeviceFactory.h
   dtkAbstractFactory.h
   dtkAbstractObject.h
   dtkPlugin.h
@@ -103,8 +99,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkAbstractDataMeshVolumic.cpp
   dtkAbstractDataTet.cpp
   dtkAbstractDataVertex.cpp
-  dtkAbstractDevice.cpp
-  dtkAbstractDeviceFactory.cpp
   dtkAbstractFactory.cpp
   dtkAbstractObject.cpp
   dtkAbstractProcessFactory.cpp

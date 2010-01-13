@@ -45,15 +45,19 @@ int main(int argc, char **argv)
     dtkPluginManager::instance()->initialize();
     dtkScriptManager::instance()->initialize();
 
+    if(application.arguments().contains("--stereo")) {
+       QGLFormat format;
+       format.setAlpha(true);
+       format.setDoubleBuffer(true);
+       format.setStereo(true);
+       format.setDirectRendering(true);
+       QGLFormat::setDefaultFormat(format);
+    }
+
     dtkCreatorMainWindow mainwindow; mainwindow.show();
 
     if(application.arguments().contains("--script"))
         mainwindow.interpret(application.arguments().value(application.arguments().indexOf("--script")+1));
-
-     if(application.arguments().contains("--stereo")) {
-        QGLFormat format; format.setStereo(true);
-        QGLFormat::setDefaultFormat(format);
-     }
 
     int status = application.exec();
 

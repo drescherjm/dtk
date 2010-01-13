@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Dec  9 10:19:33 2009 (+0100)
+ * Last-Updated: Wed Jan 13 15:18:22 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 436
+ *     Update #: 437
  */
 
 /* Commentary: 
@@ -347,9 +347,6 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     );
     dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
         "pluginManager  = core.dtkPluginManager.instance()"
-    );
-    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
-        "deviceFactory  = core.dtkAbstractDeviceFactory.instance()"
     );
 
     // Setting up creator python module

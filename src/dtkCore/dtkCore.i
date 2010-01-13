@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Jan  7 16:24:42 2010 (+0100)
+ * Last-Updated: Wed Jan 13 14:27:00 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 213
+ *     Update #: 218
  */
 
 /* Commentary:
@@ -46,11 +46,8 @@
 #include <dtkCore/dtkAbstractViewInteractor.h>
 #include <dtkCore/dtkAbstractViewNavigator.h>
 
-#include <dtkCore/dtkAbstractDevice.h>
-
 #include <dtkCore/dtkAbstractFactory.h>
 #include <dtkCore/dtkAbstractDataFactory.h>
-#include <dtkCore/dtkAbstractDeviceFactory.h>
 #include <dtkCore/dtkAbstractProcessFactory.h>
 #include <dtkCore/dtkAbstractViewFactory.h>
 
@@ -133,13 +130,6 @@
 %ignore clickedWorldCoordinates(double, double, double);
 
 // /////////////////////////////////////////////////////////////////
-// Ignore rules for dtkAbstractDevice signals
-// /////////////////////////////////////////////////////////////////
-
-%ignore buttonPressed(int idx);
-%ignore buttonReleased(int idx);
-
-// /////////////////////////////////////////////////////////////////
 // Ignore rules for dtkAbstractViewInteractor signals
 // /////////////////////////////////////////////////////////////////
 
@@ -183,7 +173,9 @@
 %typemap(out) QString { // C++ -> Python
     $result = PyString_FromString($1.toAscii().constData());
 }
+
 #elif SWIGTCL
+
 %typemap(in) QString { // Tcl -> C++
     $1 = QString(Tcl_GetString($input));
 }
@@ -191,6 +183,7 @@
 %typemap(out) QString { // C++ -> Tcl
     Tcl_SetStringObj($result, $1.toAscii().constData(), $1.size());
 }
+
 #endif
 
 // /////////////////////////////////////////////////////////////////
@@ -215,9 +208,6 @@
 
 %include <dtkCore/dtkAbstractProcess.h>
 %include <dtkCore/dtkAbstractProcessFactory.h>
-
-%include <dtkCore/dtkAbstractDevice.h>
-%include <dtkCore/dtkAbstractDeviceFactory.h>
 
 %include <dtkCore/dtkAbstractView.h>
 %include <dtkCore/dtkAbstractViewFactory.h>

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 26 16:29:02 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep 21 13:45:47 2009 (+0200)
+ * Last-Updated: Wed Jan 13 15:20:03 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 248
+ *     Update #: 249
  */
 
 /* Commentary: 
@@ -18,6 +18,9 @@
  */
 
 #include <dtkScript/dtkScriptInterpreterPython.h>
+
+#undef _POSIX_C_SOURCE
+#undef _XOPEN_SOURCE
 
 #include <Python.h>
 

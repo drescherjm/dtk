@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Thu Jan  7 10:37:04 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Wed Jan 13 14:01:06 2010 (+0100)
+## Last-Updated: Thu Jan 14 11:19:52 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 15
+##     Update #: 20
 ######################################################################
 ## 
 ### Commentary: 
@@ -20,21 +20,12 @@
 project(dtkCrypto)
 
 ## #################################################################
-## Resolve dependencies
-## #################################################################
-
-find_package(OpenSSL REQUIRED QUIET)
-
-include_directories(${OPENSSL_INCLUDE_DIR})
-
-## #################################################################
 ## Sources
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
   dtkCryptoBase64.h
   dtkCryptoExport.h
-  dtkCryptoLicenseManager.h
 )
 
 set(${PROJECT_NAME}_HEADERS_MOC
@@ -42,8 +33,22 @@ set(${PROJECT_NAME}_HEADERS_MOC
 
 set(${PROJECT_NAME}_SOURCES
   dtkCryptoBase64.c
+)
+
+if(OPENSSL_FOUND)
+message(STATUS "${PROJECT_NAME}: license management enabled")
+
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkCryptoLicenseManager.h
+)
+
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
+)
+
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkCryptoLicenseManager.cpp
 )
+endif(OPENSSL_FOUND)
 
 ## #################################################################
 ## Build rules

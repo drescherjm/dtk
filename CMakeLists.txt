@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Jan 11 15:53:37 2010 (+0100)
+## Last-Updated: Thu Jan 14 11:06:34 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 233
+##     Update #: 244
 ######################################################################
 ## 
 ### Commentary: 
@@ -136,6 +136,8 @@ endif(${PROJECT_NAME}_BUILD_SHARED_LIBS)
 ## Resolve dependencies
 ## #################################################################
 
+## Qt
+
 mark_as_advanced(CMAKE_BACKWARDS_COMPATIBILITY)
 mark_as_advanced(CMAKE_BUILD_TYPE)
 mark_as_advanced(CMAKE_INSTALL_PREFIX)
@@ -159,6 +161,8 @@ mark_as_advanced(QT_QMAKE_EXECUTABLE)
 mark_as_advanced(QT_QTMOTIF_INCLUDE_DIR)
 mark_as_advanced(QT_QTMOTIF_LIBRARY_DEBUG)
 mark_as_advanced(QT_QTMOTIF_LIBRARY_RELEASE)
+
+## swig
 
 find_package(SWIG REQUIRED)
 include(${SWIG_USE_FILE})
@@ -195,10 +199,14 @@ mark_as_advanced(SWIG_DIR)
 mark_as_advanced(SWIG_EXECUTABLE)
 mark_as_advanced(SWIG_VERSION)
 
+## tcl
+
 find_package(TCL)
 if(TCL_FOUND)
   include_directories(${TCL_INCLUDE_PATH})
 endif(TCL_FOUND)
+
+## python
 
 find_package(PythonLibs)
 if(PYTHONLIBS_FOUND)
@@ -206,6 +214,33 @@ if(PYTHONLIBS_FOUND)
   get_filename_component(PYTHON_PATH ${PYTHON_LIBRARIES} PATH)
   link_directories(${PYTHON_PATH})
 endif(PYTHONLIBS_FOUND)
+
+## ssl
+
+find_package(OpenSSL REQUIRED QUIET)
+
+include_directories(${OPENSSL_INCLUDE_DIR})
+
+## vrpn
+
+find_path(VRPN_INCLUDES vrpn_Configure.h /usr/include /usr/local/include)
+
+if(VRPN_INCLUDES)
+include_directories(${VRPN_INCLUDES})
+endif(VRPN_INCLUDES)
+
+mark_as_advanced(VRPN_INCLUDES)
+
+find_library(QUAT_LIBRARIES NAMES quat PATHS /usr/lib /usr/local/lib)
+find_library(VRPN_LIBRARIES NAMES vrpn PATHS /usr/lib /usr/local/lib)
+
+if(QUAT_LIBRARIES AND VRPN_LIBRARIES)
+link_directories(${QUAT_LIBRARIES})
+link_directories(${VRPN_LIBRARIES})
+endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)
+
+mark_as_advanced(QUAT_LIBRARIES)
+mark_as_advanced(VRPN_LIBRARIES)
 
 ## #################################################################
 ## Build options
@@ -398,6 +433,8 @@ include(dtkNightly)
 ## #################################################################
 ## Dashboard settings
 ## #################################################################
+
+mark_as_advanced(DART_ROOT)
 
 include(dtkDart)
 include(Dart)

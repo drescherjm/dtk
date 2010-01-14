@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Wed Jan 13 15:17:10 2010 (+0100)
+## Last-Updated: Thu Jan 14 11:15:22 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 17
+##     Update #: 51
 ######################################################################
 ## 
 ### Commentary: 
@@ -18,12 +18,6 @@
 ######################################################################
 
 project(dtkVr)
-
-## #################################################################
-## Resolve dependencies
-## #################################################################
-
-# find_package(vrpn QUIET)
 
 ## #################################################################
 ## Sources
@@ -41,6 +35,22 @@ set(${PROJECT_NAME}_HEADERS_MOC
 set(${PROJECT_NAME}_SOURCES
   dtkAbstractDevice.cpp
 )
+
+if(QUAT_LIBRARIES AND VRPN_LIBRARIES)
+message(STATUS "${PROJECT_NAME}: vrpn support enabled")
+
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkDeviceVrpn.h
+)
+
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
+  dtkDeviceVrpn.h
+)
+
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkDeviceVrpn.cpp
+)
+endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)
 
 ## #################################################################
 ## Wrapping
@@ -74,8 +84,14 @@ add_library(${PROJECT_NAME} SHARED
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
-  ${OPENSSL_LIBRARIES}
 )
+
+if(${QUAT_LIBRARIES} AND ${VRPN_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}
+  quat
+  vrpn
+)
+endif(${QUAT_LIBRARIES} AND ${VRPN_LIBRARIES})
 
 if(PYTHON_DEBUG_LIBRARIES)
   target_link_libraries(${PROJECT_NAME} debug ${PYTHON_DEBUG_LIBRARIES})

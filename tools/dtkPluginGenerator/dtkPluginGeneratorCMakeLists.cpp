@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar 10 10:18:39 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 29 23:16:14 2009 (+0200)
+ * Last-Updated: Fri Jan 15 13:11:50 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 23
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -92,6 +92,7 @@ bool dtkPluginGenerator::generateCMakeLists(void)
         "mark_as_advanced(CMAKE_INSTALL_PREFIX)\n"
         "if(APPLE)\n"
         "mark_as_advanced(CMAKE_OSX_ARCHITECTURES)\n"
+        "mark_as_advanced(CMAKE_OSX_DEPLOYMENT_TARGET)\n"
         "mark_as_advanced(CMAKE_OSX_SYSROOT)\n"
         "endif(APPLE)\n"
         "\n"
@@ -106,6 +107,9 @@ bool dtkPluginGenerator::generateCMakeLists(void)
         "include(${QT_USE_FILE})\n"
         "\n"
         "mark_as_advanced(QT_QMAKE_EXECUTABLE)\n"
+        "mark_as_advanced(QT_QTMOTIF_INCLUDE_DIR)\n"
+        "mark_as_advanced(QT_QTMOTIF_LIBRARY_DEBUG)\n"
+        "mark_as_advanced(QT_QTMOTIF_LIBRARY_RELEASE)\n"
         "\n"
         "find_package(dtk REQUIRED)\n"
         "include(${dtk_USE_FILE})\n"

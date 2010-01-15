@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Jan 14 11:15:22 2010 (+0100)
+## Last-Updated: Fri Jan 15 13:06:26 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 51
+##     Update #: 53
 ######################################################################
 ## 
 ### Commentary: 
@@ -83,7 +83,7 @@ add_library(${PROJECT_NAME} SHARED
 )
 
 target_link_libraries(${PROJECT_NAME}
-  ${QT_LIBRARIES}
+  dtkCore
 )
 
 if(${QUAT_LIBRARIES} AND ${VRPN_LIBRARIES})

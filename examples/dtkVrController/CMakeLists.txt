@@ -2,11 +2,11 @@
 ## 
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
-## Created: Thu Dec 10 14:04:48 2009 (+0100)
+## Created: Mon Jan 25 12:22:16 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Sat Jan 16 16:30:13 2010 (+0100)
+## Last-Updated: Mon Jan 25 12:33:21 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 4
+##     Update #: 18
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,37 +17,45 @@
 ## 
 ######################################################################
 
-project(dtksh)
+project(dtkVrController)
+
+if(APPLE)
 
 ## #################################################################
 ## Sources
 ## #################################################################
 
+set(${PROJECT_NAME}_HEADERS_MOC
+  tstMainWindow.h
+)
+
 set(${PROJECT_NAME}_SOURCES
+  tstMainWindow.cpp
   main.cpp
+)
+
+set(${PROJECT_NAME}_RESOURCES
+  tstMainWindow.qrc
 )
 
 ## #################################################################
 ## Build rules
 ## #################################################################
 
-add_executable(${PROJECT_NAME}
-  ${${PROJECT_NAME}_SOURCES_UIC}
-  ${${PROJECT_NAME}_SOURCES_MOC}
+qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
+
+qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
+
+add_executable(${PROJECT_NAME} MACOSX_BUNDLE
   ${${PROJECT_NAME}_SOURCES}
+  ${${PROJECT_NAME}_SOURCES_MOC}
+  ${${PROJECT_NAME}_SOURCES_QRC}
 )
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkCore
-  dtkScript
   dtkVr
 )
 
-## #################################################################
-## Installation
-## #################################################################
-
-if(NOT dtk_INSTALL_NO_RUNTIME)
-  install_targets(${dtk_INSTALL_BIN_DIR} ${PROJECT_NAME})
-endif(NOT dtk_INSTALL_NO_RUNTIME)
+endif(APPLE)

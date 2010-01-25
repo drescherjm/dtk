@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Jan  8 16:00:44 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Jan  8 16:11:36 2010 (+0100)
+## Last-Updated: Mon Jan 25 09:54:25 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 4
+##     Update #: 5
 ######################################################################
 ## 
 ### Commentary: 
@@ -39,5 +39,5 @@ else(PIPOL_IMAGE)
 endif(PIPOL_IMAGE)
 
 if(PIPOL_IMAGE)
-  set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${${PROJECT_NAME}_VERSION}-${PIPOL_IMAGE_NAME}")
+  set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}-${PIPOL_IMAGE_NAME}")
 endif(PIPOL_IMAGE)

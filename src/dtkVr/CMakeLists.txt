@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Jan 15 13:06:26 2010 (+0100)
+## Last-Updated: Mon Jan 25 11:45:34 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 53
+##     Update #: 69
 ######################################################################
 ## 
 ### Commentary: 
@@ -19,45 +19,48 @@
 
 project(dtkVr)
 
+if(APPLE)
+
 ## #################################################################
 ## Sources
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkAbstractDevice.h
+  dtkDeviceTdx.h
+  dtkDeviceWii.h
+  dtkDeviceWiiAccelerationView.h
+  dtkDeviceWiiDelegate.h
+  dtkDeviceWiiInfraredMotionView.h
+  dtkDeviceWiiJoystickMotionView.h
+  dtkDeviceWiiRemote.h
+  dtkDeviceWiiRemoteDiscovery.h
+  dtkDeviceWiiRemotePrivate.h
   dtkVrExport.h
 )
 
 set(${PROJECT_NAME}_HEADERS_MOC
-  dtkAbstractDevice.h
+  dtkDeviceTdx.h
+  dtkDeviceWii.h
 )
 
 set(${PROJECT_NAME}_SOURCES
-  dtkAbstractDevice.cpp
+  dtkDeviceTdx.mm
+  dtkDeviceWii.mm
+  dtkDeviceWiiAccelerationView.cpp
+  dtkDeviceWiiDelegate.mm
+  dtkDeviceWiiInfraredMotionView.cpp
+  dtkDeviceWiiJoystickMotionView.cpp
+  dtkDeviceWiiRemote.m
+  dtkDeviceWiiRemoteDiscovery.m
 )
-
-if(QUAT_LIBRARIES AND VRPN_LIBRARIES)
-message(STATUS "${PROJECT_NAME}: vrpn support enabled")
-
-set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
-  dtkDeviceVrpn.h
-)
-
-set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
-  dtkDeviceVrpn.h
-)
-
-set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
-  dtkDeviceVrpn.cpp
-)
-endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)
 
 ## #################################################################
 ## Wrapping
 ## #################################################################
 
 set(${PROJECT_NAME}_WRAP_DEPENDS
-  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractDevice.h
+  dtkDeviceTdx.h
+  dtkDeviceWii.h
 )
 
 dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP vr python ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i ${${PROJECT_NAME}_WRAP_DEPENDS})
@@ -86,12 +89,11 @@ target_link_libraries(${PROJECT_NAME}
   dtkCore
 )
 
-if(${QUAT_LIBRARIES} AND ${VRPN_LIBRARIES})
 target_link_libraries(${PROJECT_NAME}
-  quat
-  vrpn
+  "-framework Cocoa"
+  "-framework IOBluetooth"
+  "-framework 3DconnexionClient"
 )
-endif(${QUAT_LIBRARIES} AND ${VRPN_LIBRARIES})
 
 if(PYTHON_DEBUG_LIBRARIES)
   target_link_libraries(${PROJECT_NAME} debug ${PYTHON_DEBUG_LIBRARIES})
@@ -123,3 +125,5 @@ if(NOT dtk_INSTALL_NO_LIBRARIES)
   install_targets(${dtk_INSTALL_LIB_DIR} RUNTIME_DIRECTORY ${dtk_INSTALL_BIN_DIR} ${PROJECT_NAME})
   install_files(${dtk_INSTALL_MODULE_DIR} .py ${CMAKE_BINARY_DIR}/modules/vr.py)
 endif(NOT dtk_INSTALL_NO_LIBRARIES)
+
+endif(APPLE)

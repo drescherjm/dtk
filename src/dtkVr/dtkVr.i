@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Jan 13 14:21:12 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jan 13 14:26:49 2010 (+0100)
+ * Last-Updated: Mon Jan 25 11:24:55 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 6
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -43,7 +43,7 @@
 #include <dtkCore/dtkAbstractViewInteractor.h>
 #include <dtkCore/dtkAbstractViewNavigator.h>
 
-#include <dtkVr/dtkAbstractDevice.h>
+// #include <dtkVr/....h>
 %}
 
 // /////////////////////////////////////////////////////////////////
@@ -116,6 +116,6 @@
 // Wrapper input
 // /////////////////////////////////////////////////////////////////
 
-%include <dtkVr/dtkAbstractDevice.h>
+// %include <dtkVr/....h>
 
 #endif

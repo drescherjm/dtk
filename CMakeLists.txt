@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Jan 15 13:10:04 2010 (+0100)
+## Last-Updated: Mon Jan 25 09:52:49 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 245
+##     Update #: 246
 ######################################################################
 ## 
 ### Commentary: 
@@ -448,7 +448,7 @@ set(CPACK_PACKAGE_VENDOR "http://www.inria.fr/sophia/dream")
 set(CPACK_PACKAGE_CONTACT "Julien Wintz <jwintz@sophia.inria.fr>")
 set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_CURRENT_SOURCE_DIR}/README.txt)
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY ${PROJECT_NAME})
-set(CPACK_PACKAGE_DESCRIPTION "")
+set(CPACK_PACKAGE_DESCRIPTION ${PROJECT_NAME})
 set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/COPYING.txt)
 
 set(CPACK_PACKAGE_VERSION_MAJOR ${${PROJECT_NAME}_VERSION_MAJOR})

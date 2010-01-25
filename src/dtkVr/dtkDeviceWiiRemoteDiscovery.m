@@ -1,10 +1,21 @@
-//
-//  WiiRemoteDiscovery.m
-//  DarwiinRemote
-//
-//  Created by Ian Rickard on 12/9/06.
-//  Copyright 2006 __MyCompanyName__. All rights reserved.
-//
+/* dtkDeviceWiiRemoteDiscovery.m --- 
+ * 
+ * Author: Julien Wintz
+ * Copyright (C) 2008 - Julien Wintz, Inria.
+ * Created: Mon Jan 25 13:03:16 2010 (+0100)
+ * Version: $Id$
+ * Last-Updated: Mon Jan 25 13:03:20 2010 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 1
+ */
+
+/* Commentary: 
+ * 
+ */
+
+/* Change log:
+ * 
+ */
 
 #import <IOBluetooth/objc/IOBluetoothDevice.h>
 #import "dtkDeviceWiiRemoteDiscovery.h"
@@ -151,3 +162,11 @@
 }
 
 @end
+
+//
+//  WiiRemoteDiscovery.m
+//  DarwiinRemote
+//
+//  Created by Ian Rickard on 12/9/06.
+//  Copyright 2006 __MyCompanyName__. All rights reserved.
+//

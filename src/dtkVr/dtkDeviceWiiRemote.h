@@ -1,12 +1,12 @@
-/* WiiRemote.h --- 
+/* dtkDeviceWiiRemote.h --- 
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jan 21 09:12:33 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Jan 24 13:27:28 2010 (+0100)
+ * Last-Updated: Mon Jan 25 13:02:19 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 9
+ *     Update #: 10
  */
 
 /* Commentary: 

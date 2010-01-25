@@ -1,3 +1,22 @@
+/* dtkDeviceWiiDelegate.mm --- 
+ * 
+ * Author: Julien Wintz
+ * Copyright (C) 2008 - Julien Wintz, Inria.
+ * Created: Mon Jan 25 13:01:40 2010 (+0100)
+ * Version: $Id$
+ * Last-Updated: Mon Jan 25 13:01:41 2010 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 1
+ */
+
+/* Commentary: 
+ * 
+ */
+
+/* Change log:
+ * 
+ */
+
 #import "dtkDeviceWiiDelegate.h"
 
 // #define NSLOG

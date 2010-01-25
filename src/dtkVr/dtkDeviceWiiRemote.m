@@ -1,16 +1,16 @@
-/* WiiRemote.m --- 
+/* dtkDeviceWiiRemote.m --- 
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jan 21 09:13:07 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Jan 24 21:43:53 2010 (+0100)
+ * Last-Updated: Mon Jan 25 13:02:37 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 63
+ *     Update #: 64
  */
 
 /* Commentary: 
- * 
+ * See credits at EOF.
  */
 
 /* Change log:

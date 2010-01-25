@@ -1,3 +1,22 @@
+/* dtkDeviceWii.h --- 
+ * 
+ * Author: Julien Wintz
+ * Copyright (C) 2008 - Julien Wintz, Inria.
+ * Created: Mon Jan 25 13:00:57 2010 (+0100)
+ * Version: $Id$
+ * Last-Updated: Mon Jan 25 13:01:00 2010 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 1
+ */
+
+/* Commentary: 
+ * 
+ */
+
+/* Change log:
+ * 
+ */
+
 #ifndef DTKDEVICEWII_H
 #define DTKDEVICEWII_H
 

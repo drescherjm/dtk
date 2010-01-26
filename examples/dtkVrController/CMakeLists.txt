@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jan 25 12:22:16 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Jan 25 12:33:21 2010 (+0100)
+## Last-Updated: Tue Jan 26 21:16:10 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 18
+##     Update #: 19
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,9 +17,9 @@
 ## 
 ######################################################################
 
-project(dtkVrController)
-
 if(APPLE)
+
+project(dtkVrController)
 
 ## #################################################################
 ## Sources

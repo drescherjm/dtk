@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 28 15:15:06 2009 (+0200)
+ * Last-Updated: Tue Jan 26 15:33:19 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 31
+ *     Update #: 40
  */
 
 /* Commentary: 
@@ -56,6 +56,44 @@ void dtkAbstractProcess::run(void)
 void dtkAbstractProcess::update(void)
 {
 
+}
+
+bool dtkAbstractProcess::read(QString file)
+{
+    Q_UNUSED(file);
+}
+
+bool dtkAbstractProcess::read(QStringList files)
+{
+    Q_UNUSED(files);
+}
+
+bool dtkAbstractProcess::write(QString file)
+{
+    Q_UNUSED(file);
+}
+
+bool dtkAbstractProcess::write(QStringList files)
+{
+    Q_UNUSED(files);
+}
+
+void dtkAbstractProcess::setParameter(int data)
+{
+    Q_UNUSED(data);
+}
+
+void dtkAbstractProcess::setParameter(int data, int channel)
+{
+    Q_UNUSED(data);
+    Q_UNUSED(channel);
+}
+
+void dtkAbstractProcess::setParameter(int data, int channel, int frame)
+{
+    Q_UNUSED(data);
+    Q_UNUSED(channel);
+    Q_UNUSED(frame);
 }
 
 void dtkAbstractProcess::setParameter(double  data)

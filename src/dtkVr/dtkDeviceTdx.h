@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Jan 24 21:28:47 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jan 25 10:59:04 2010 (+0100)
+ * Last-Updated: Tue Jan 26 21:09:26 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 17
+ *     Update #: 20
  */
 
 /* Commentary: 
@@ -20,11 +20,11 @@
 #ifndef DTKDEVICETDX_H
 #define DTKDEVICETDX_H
 
-#include <QtCore>
+#include "dtkAbstractDevice.h"
 
 class dtkDeviceTdxPrivate;
 
-class dtkDeviceTdx : public QObject
+class dtkDeviceTdx : public dtkAbstractDevice
 {
     Q_OBJECT
 

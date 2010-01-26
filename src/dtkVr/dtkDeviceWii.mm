@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Jan 25 13:01:05 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jan 25 13:01:08 2010 (+0100)
+ * Last-Updated: Tue Jan 26 21:09:01 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 2
+ *     Update #: 3
  */
 
 /* Commentary: 
@@ -128,7 +128,7 @@ void dtkDeviceWiiPrivate::runInfraredSingleMotionHandlers(float x, float y, floa
 // dtkDeviceWii
 // /////////////////////////////////////////////////////////////////
 
-dtkDeviceWii::dtkDeviceWii(void) : QObject(), d(new dtkDeviceWiiPrivate)
+dtkDeviceWii::dtkDeviceWii(void) : dtkAbstractDevice(), d(new dtkDeviceWiiPrivate)
 {
      d->delegate = [[dtkDeviceWiiDelegate alloc] init];
     [d->delegate setParent:d];

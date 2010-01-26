@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Jan 13 14:21:12 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jan 25 11:24:55 2010 (+0100)
+ * Last-Updated: Tue Jan 26 21:17:50 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -43,7 +43,11 @@
 #include <dtkCore/dtkAbstractViewInteractor.h>
 #include <dtkCore/dtkAbstractViewNavigator.h>
 
-// #include <dtkVr/....h>
+#include <dtkVr/dtkAbstractDevice.h>
+#if defined(APPLE)
+#include <dtkVr/dtkDeviceTdx.h>
+#include <dtkVr/dtkDeviceWii.h>
+#endif
 %}
 
 // /////////////////////////////////////////////////////////////////
@@ -113,9 +117,28 @@
 #endif
 
 // /////////////////////////////////////////////////////////////////
+// Ignore rules for dtkDeviceTdx
+// /////////////////////////////////////////////////////////////////
+
+%ignore buttonPressed(dtkDeviceTdx::dtkDeviceTdxButton);
+%ignore buttonReleased(dtkDeviceTdx::dtkDeviceTdxButton);
+
+// /////////////////////////////////////////////////////////////////
+// Ignore rules for dtkDeviceWii
+// /////////////////////////////////////////////////////////////////
+
+%ignore discovered();
+%ignore buttonPressed(dtkDeviceWii::dtkDeviceWiiButton);
+%ignore buttonReleased(dtkDeviceWii::dtkDeviceWiiButton);
+
+// /////////////////////////////////////////////////////////////////
 // Wrapper input
 // /////////////////////////////////////////////////////////////////
 
-// %include <dtkVr/....h>
+%include <dtkVr/dtkAbstractDevice.h>
+#if defined(APPLE)
+%include <dtkVr/dtkDeviceTdx.h>
+%include <dtkVr/dtkDeviceWii.h>
+#endif
 
 #endif

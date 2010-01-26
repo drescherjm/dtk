@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Jan 25 11:45:34 2010 (+0100)
+## Last-Updated: Tue Jan 26 21:15:54 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 69
+##     Update #: 85
 ######################################################################
 ## 
 ### Commentary: 
@@ -19,13 +19,17 @@
 
 project(dtkVr)
 
-if(APPLE)
-
 ## #################################################################
 ## Sources
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkAbstractDevice.h
+  dtkVrExport.h
+)
+
+if(APPLE)
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkDeviceTdx.h
   dtkDeviceWii.h
   dtkDeviceWiiAccelerationView.h
@@ -35,15 +39,26 @@ set(${PROJECT_NAME}_HEADERS
   dtkDeviceWiiRemote.h
   dtkDeviceWiiRemoteDiscovery.h
   dtkDeviceWiiRemotePrivate.h
-  dtkVrExport.h
 )
+endif(APPLE)
 
 set(${PROJECT_NAME}_HEADERS_MOC
+  dtkAbstractDevice.h
+)
+
+if(APPLE)
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
   dtkDeviceTdx.h
   dtkDeviceWii.h
 )
+endif(APPLE)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkAbstractDevice.cpp
+)
+
+if(APPLE)
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkDeviceTdx.mm
   dtkDeviceWii.mm
   dtkDeviceWiiAccelerationView.cpp
@@ -53,14 +68,14 @@ set(${PROJECT_NAME}_SOURCES
   dtkDeviceWiiRemote.m
   dtkDeviceWiiRemoteDiscovery.m
 )
+endif(APPLE)
 
 ## #################################################################
 ## Wrapping
 ## #################################################################
 
 set(${PROJECT_NAME}_WRAP_DEPENDS
-  dtkDeviceTdx.h
-  dtkDeviceWii.h
+  dtkAbstractDevice.h
 )
 
 dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP vr python ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i ${${PROJECT_NAME}_WRAP_DEPENDS})
@@ -89,11 +104,13 @@ target_link_libraries(${PROJECT_NAME}
   dtkCore
 )
 
+if(APPLE)
 target_link_libraries(${PROJECT_NAME}
   "-framework Cocoa"
   "-framework IOBluetooth"
   "-framework 3DconnexionClient"
 )
+endif(APPLE)
 
 if(PYTHON_DEBUG_LIBRARIES)
   target_link_libraries(${PROJECT_NAME} debug ${PYTHON_DEBUG_LIBRARIES})
@@ -126,4 +143,3 @@ if(NOT dtk_INSTALL_NO_LIBRARIES)
   install_files(${dtk_INSTALL_MODULE_DIR} .py ${CMAKE_BINARY_DIR}/modules/vr.py)
 endif(NOT dtk_INSTALL_NO_LIBRARIES)
 
-endif(APPLE)

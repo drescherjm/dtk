@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Jan 24 21:30:13 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jan 25 11:06:39 2010 (+0100)
+ * Last-Updated: Tue Jan 26 21:09:37 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 42
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -76,7 +76,7 @@ dtkDeviceTdxPrivate *dtkDeviceTdxPrivate::self = NULL;
 // dtkDeviceTdx
 // /////////////////////////////////////////////////////////////////
 
-dtkDeviceTdx::dtkDeviceTdx(void) : QObject(), d(new dtkDeviceTdxPrivate)
+dtkDeviceTdx::dtkDeviceTdx(void) : dtkAbstractDevice(), d(new dtkDeviceTdxPrivate)
 {
     d->self = d;
     d->q = this;

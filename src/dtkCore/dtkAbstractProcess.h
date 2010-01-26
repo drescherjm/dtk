@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Oct 27 16:05:05 2009 (+0100)
+ * Last-Updated: Tue Jan 26 15:33:51 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 113
+ *     Update #: 119
  */
 
 /* Commentary: 
@@ -48,6 +48,16 @@ public slots:
     void run(void);
 
     virtual void update(void);
+
+    virtual bool read(QString file);
+    virtual bool read(QStringList files);
+
+    virtual bool write(QString file);
+    virtual bool write(QStringList files);
+
+    virtual void setParameter(int data);
+    virtual void setParameter(int data, int channel);
+    virtual void setParameter(int data, int channel, int frame);
 
     virtual void setParameter(double  data);
     virtual void setParameter(double  data, int channel);

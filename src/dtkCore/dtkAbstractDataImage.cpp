@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb  2 09:08:09 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Nov 14 14:12:08 2009 (+0100)
+ * Last-Updated: Wed Jan 27 15:36:59 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 53
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -54,4 +54,61 @@ dtkAbstractDataImage::~dtkAbstractDataImage(void)
 void *dtkAbstractDataImage::image(void)
 {
     return this->data();
+}
+
+int dtkAbstractDataImage::xDimension(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return 0;
+}
+
+int dtkAbstractDataImage::yDimension(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return 0;
+}
+
+int dtkAbstractDataImage::zDimension(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return 0;
+}
+
+int dtkAbstractDataImage::minRangeValue(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return 0;
+}
+
+int dtkAbstractDataImage::maxRangeValue(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return 0;
+}
+
+int dtkAbstractDataImage::scalarValueCount(int value)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(value);
+
+    return 0;
+}
+
+int dtkAbstractDataImage::scalarValueMinCount(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return 0;
+}
+
+int dtkAbstractDataImage::scalarValueMaxCount(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return 0;
 }

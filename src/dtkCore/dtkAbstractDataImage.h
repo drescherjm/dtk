@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb  2 09:08:09 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Nov 14 14:12:02 2009 (+0100)
+ * Last-Updated: Wed Jan 27 15:37:26 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 39
+ *     Update #: 40
  */
 
 /* Commentary: 
@@ -35,16 +35,16 @@ public:
 
     void *image(void);
 
-    virtual int xDimension(void) { return 0; }
-    virtual int yDimension(void) { return 0; }
-    virtual int zDimension(void) { return 0; }
+    virtual int xDimension(void);
+    virtual int yDimension(void);
+    virtual int zDimension(void);
 
-    virtual int minRangeValue(void) { return 0; }
-    virtual int maxRangeValue(void) { return 0; }
+    virtual int minRangeValue(void);
+    virtual int maxRangeValue(void);
 
-    virtual int scalarValueCount(int value) { return 0; }
-    virtual int scalarValueMinCount(void) { return 0; }
-    virtual int scalarValueMaxCount(void) { return 0; }
+    virtual int scalarValueCount(int value);
+    virtual int scalarValueMinCount(void);
+    virtual int scalarValueMaxCount(void);
 
 private:
     dtkAbstractDataImagePrivate *d;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jan  5 16:03:18 2010 (+0100)
+ * Last-Updated: Wed Jan 27 15:27:17 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 127
+ *     Update #: 152
  */
 
 /* Commentary:
@@ -59,6 +59,8 @@ dtkAbstractData::~dtkAbstractData(void)
 
 QString dtkAbstractData::description(void) const
 {
+    DTK_DEFAULT_IMPLEMENTATION;
+
     return "";
 }
 
@@ -120,7 +122,7 @@ dtkAbstractDataWriter *dtkAbstractData::writer(QString type)
 
 void dtkAbstractData::update(void)
 {
-
+    DTK_DEFAULT_IMPLEMENTATION;
 }
 
 bool dtkAbstractData::read(QString file)
@@ -208,105 +210,131 @@ QList<QImage>& dtkAbstractData::thumbnails(void) const
 
 void *dtkAbstractData::output(void)
 {
+    DTK_DEFAULT_IMPLEMENTATION;
+
     return NULL;
 }
 
 void *dtkAbstractData::data(void)
 {
+    DTK_DEFAULT_IMPLEMENTATION;
+
     return NULL;
 }
 
 void *dtkAbstractData::data(int channel)
 {
-    Q_UNUSED(channel);
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(channel);
 
     return NULL;
 }
 
 int dtkAbstractData::parameter(int channel)
 {
-    Q_UNUSED(channel);
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(channel);
 
     return -1;
 }
 
 void dtkAbstractData::setParameter(int parameter)
 {
-    Q_UNUSED(parameter);
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(parameter);
 }
 
 void dtkAbstractData::setParameter(int parameter, int channel)
 {
-    Q_UNUSED(parameter);
-    Q_UNUSED(channel);
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(parameter);
+    DTK_UNUSED(channel);
 }
 
 void dtkAbstractData::setParameter(float parameter)
 {
-    Q_UNUSED(parameter);
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(parameter);
 }
 
 void dtkAbstractData::setParameter(float parameter, int channel)
 {
-    Q_UNUSED(parameter);
-    Q_UNUSED(channel);
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(parameter);
+    DTK_UNUSED(channel);
 }
 
 void dtkAbstractData::setParameter(QString parameter)
 {
-    Q_UNUSED(parameter);
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(parameter);
 }
 
 void dtkAbstractData::setParameter(QString parameter, int channel)
 {
-    Q_UNUSED(parameter);
-    Q_UNUSED(channel);
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(parameter);
+    DTK_UNUSED(channel);
 }
 
 void dtkAbstractData::setParameter(dtkAbstractData *parameter)
 {
-    Q_UNUSED(parameter);
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(parameter);
 }
 
 void dtkAbstractData::setParameter(dtkAbstractData *parameter, int channel)
 {
-    Q_UNUSED(parameter);
-    Q_UNUSED(channel);
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(parameter);
+    DTK_UNUSED(channel);
 }
 
 void dtkAbstractData::setData(void* data)
 {
-    Q_UNUSED(data);
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
 }
 
 void dtkAbstractData::setData(void* data, int channel)
 {
-    Q_UNUSED(data);
-    Q_UNUSED(channel);
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+    DTK_UNUSED(channel);
 }
 
 bool dtkAbstractData::casts(QString type)
 {
+    DTK_DEFAULT_IMPLEMENTATION;
+
     return false;
 }
 
 dtkAbstractData::operator bool (void)
 {
+    DTK_DEFAULT_IMPLEMENTATION;
+
     return false;
 }
 
 dtkAbstractData::operator int (void)
 {
+    DTK_DEFAULT_IMPLEMENTATION;
+
     return 0;
 }
 
 dtkAbstractData::operator float (void)
 {
+    DTK_DEFAULT_IMPLEMENTATION;
+
     return 0.0;
 }
 
 dtkAbstractData::operator double (void)
 {
+    DTK_DEFAULT_IMPLEMENTATION;
+
     return 0.0;
 }
 

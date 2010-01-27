@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:54:04 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Oct  5 14:35:08 2009 (+0200)
+ * Last-Updated: Wed Jan 27 15:23:37 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 80
+ *     Update #: 86
  */
 
 /* Commentary:
@@ -159,14 +159,31 @@ QString dtkAbstractObject::name(void) const
     return this->objectName();
 }
 
+dtkComposerNode *dtkAbstractObject::node(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return NULL;
+}
+
+QWidget *dtkAbstractObject::ui(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return NULL;
+}
+
+
 void dtkAbstractObject::onPropertySet(QString key, QString value)
 {
-    Q_UNUSED(key);
-    Q_UNUSED(value);
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(key);
+    DTK_UNUSED(value);
 }
 
 void dtkAbstractObject::onMetaDataSet(QString key, QString value)
 {
-    Q_UNUSED(key);
-    Q_UNUSED(value);
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(key);
+    DTK_UNUSED(value);
 }

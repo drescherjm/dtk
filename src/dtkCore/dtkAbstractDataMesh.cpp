@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb  2 09:08:09 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jan  5 15:23:13 2010 (+0100)
+ * Last-Updated: Wed Jan 27 18:42:09 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 41
+ *     Update #: 63
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include <dtkCore/dtkAbstractDataMesh.h>
+#include <dtkCore/dtkLog.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractDataMeshPrivate
@@ -56,40 +57,43 @@ void *dtkAbstractDataMesh::mesh(void)
 
 int dtkAbstractDataMesh::countIndices(void)
 {
+    DTK_DEFAULT_IMPLEMENTATION;
+
     return -1;
 }
 
 int dtkAbstractDataMesh::countVertices(void)
 {
+    DTK_DEFAULT_IMPLEMENTATION;
+
     return -1;
 }
 
-int dtkAbstractDataMesh::countNormals(void)
+int dtkAbstractDataMesh::countEdges(void)
 {
-    return -1;
-}
+    DTK_DEFAULT_IMPLEMENTATION;
 
-int dtkAbstractDataMesh::countColors(void)
-{
     return -1;
 }
 
 int *dtkAbstractDataMesh::indices(void)
 {
+    DTK_DEFAULT_IMPLEMENTATION;
+
     return NULL;
 }
 
 double *dtkAbstractDataMesh::vertices(void)
 {
+    DTK_DEFAULT_IMPLEMENTATION;
+
     return NULL;
 }
 
-double *dtkAbstractDataMesh::normals(void)
+double *dtkAbstractDataMesh::vertex(int index)
 {
-    return NULL;
-}
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(index);
 
-double *dtkAbstractDataMesh::colors(void)
-{
     return NULL;
 }

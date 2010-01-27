@@ -48,7 +48,7 @@ public:
    void disable(void);
 
 public slots:
-   virtual void start(unsigned int iterations = 1) { Q_UNUSED(iterations); }
+   virtual void start(unsigned int iterations = 1) { DTK_UNUSED(iterations); }
    virtual void  stop(void) {}
 
 private:

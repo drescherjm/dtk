@@ -67,38 +67,38 @@ void dtkAbstractDataReader::setData(dtkAbstractData *data)
 
 bool dtkAbstractDataReader::canRead(QString file)
 {
-    Q_UNUSED(file);
+    DTK_UNUSED(file);
 
     return false;
 }
 
 bool dtkAbstractDataReader::canRead(QStringList files)
 {
-    Q_UNUSED(files);
+    DTK_UNUSED(files);
 
     return false;
 }
 
 bool dtkAbstractDataReader::read(QString file)
 {
-    Q_UNUSED(file);
+    DTK_UNUSED(file);
 
     return false;
 }
 
 bool dtkAbstractDataReader::read(QStringList files)
 {
-    Q_UNUSED(files);
+    DTK_UNUSED(files);
 
     return false;
 }
 
 void dtkAbstractDataReader::readInformation(QString path)
 {
-    Q_UNUSED(path);
+    DTK_UNUSED(path);
 }
 
 void dtkAbstractDataReader::readInformation(QStringList paths)
 {
-    Q_UNUSED(paths);
+    DTK_UNUSED(paths);
 }

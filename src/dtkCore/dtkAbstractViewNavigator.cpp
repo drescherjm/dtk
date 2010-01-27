@@ -85,8 +85,8 @@ dtkAbstractData *dtkAbstractViewNavigator::output(int channel)
 
 dtkAbstractData *dtkAbstractViewNavigator::output(int channel, int frame)
 {
-    Q_UNUSED (channel);
-    Q_UNUSED (frame);
+    DTK_UNUSED (channel);
+    DTK_UNUSED (frame);
 
     return 0;
 }

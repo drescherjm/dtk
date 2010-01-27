@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 11 12:38:11 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jul 31 23:24:43 2009 (+0200)
+ * Last-Updated: Wed Jan 27 18:45:06 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 8
+ *     Update #: 10
  */
 
 /* Commentary: 
@@ -32,6 +32,9 @@ class DTKCORE_EXPORT dtkAbstractDataMeshSurfacic : public dtkAbstractDataMesh
 public:
     dtkAbstractDataMeshSurfacic(void);
    ~dtkAbstractDataMeshSurfacic(void);
+
+public:
+   virtual int countFaces(void);
 
 private:
    dtkAbstractDataMeshSurfacicPrivate *d;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 11 12:38:11 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jul 31 23:28:15 2009 (+0200)
+ * Last-Updated: Wed Jan 27 18:45:21 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 9
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -32,6 +32,10 @@ class DTKCORE_EXPORT dtkAbstractDataMeshVolumic : public dtkAbstractDataMesh
 public:
     dtkAbstractDataMeshVolumic(void);
    ~dtkAbstractDataMeshVolumic(void);
+
+public:
+   virtual int countFaces(void);
+   virtual int countTets(void);
 
 private:
    dtkAbstractDataMeshVolumicPrivate *d;

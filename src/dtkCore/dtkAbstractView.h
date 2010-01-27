@@ -70,11 +70,11 @@ public slots:
 
     virtual dtkAbstractData *retreiveAbstractData(void*) { return NULL; }
 
-    virtual void setBackgroundColor(   int red,    int green,    int blue) { Q_UNUSED(red); Q_UNUSED(green); Q_UNUSED(blue); }
-    virtual void setBackgroundColor(double red, double green, double blue) { Q_UNUSED(red); Q_UNUSED(green); Q_UNUSED(blue); }
+    virtual void setBackgroundColor(   int red,    int green,    int blue) { DTK_UNUSED(red); DTK_UNUSED(green); DTK_UNUSED(blue); }
+    virtual void setBackgroundColor(double red, double green, double blue) { DTK_UNUSED(red); DTK_UNUSED(green); DTK_UNUSED(blue); }
 
-    virtual void setForegroundImage(dtkAbstractData *data) { Q_UNUSED(data); }
-    virtual void setBackgroundImage(dtkAbstractData *data) { Q_UNUSED(data); }
+    virtual void setForegroundImage(dtkAbstractData *data) { DTK_UNUSED(data); }
+    virtual void setBackgroundImage(dtkAbstractData *data) { DTK_UNUSED(data); }
 
     virtual void *view(void) { return NULL; }
     virtual void *data(void);
@@ -118,10 +118,10 @@ public slots:
     QList<dtkAbstractViewInteractor *> interactors(void);
 
     virtual void setColorLookupTable(int min, int max, int size, int *table) {
-        Q_UNUSED(min);
-        Q_UNUSED(max);
-        Q_UNUSED(size);
-        Q_UNUSED(table);
+        DTK_UNUSED(min);
+        DTK_UNUSED(max);
+        DTK_UNUSED(size);
+        DTK_UNUSED(table);
     }
 
 private:

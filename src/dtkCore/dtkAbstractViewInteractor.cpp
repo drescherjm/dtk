@@ -80,15 +80,15 @@ dtkAbstractData *dtkAbstractViewInteractor::output(void)
 
 dtkAbstractData *dtkAbstractViewInteractor::output(int channel)
 {
-    Q_UNUSED (channel);
+    DTK_UNUSED (channel);
 
     return 0;
 }
 
 dtkAbstractData *dtkAbstractViewInteractor::output(int channel, int frame)
 {
-    Q_UNUSED (channel);
-    Q_UNUSED (frame);
+    DTK_UNUSED (channel);
+    DTK_UNUSED (frame);
 
     return 0;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 16 09:54:33 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Aug  1 00:31:31 2009 (+0200)
+ * Last-Updated: Wed Jan 27 15:33:03 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 59
+ *     Update #: 82
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #define DTKGLOBAL_H
 
 #include <QtCore>
+#include <QtDebug>
 
 #include "dtkCoreExport.h"
 
@@ -60,10 +61,32 @@
 #define DTK_NOCOLOR           "\033[00m"
 
 // /////////////////////////////////////////////////////////////////
+// Default implementation warning
+// /////////////////////////////////////////////////////////////////
+
+#ifdef _MSC_VER
+#  define DTK_PRETTY_FUNCTION __FUNCSIG__
+#elif defined __GNUG__
+#  define DTK_PRETTY_FUNCTION __PRETTY_FUNCTION__
+#else 
+#  define DTK_PRETTY_FUNCTION __func__
+#endif
+
+#define DTK_DEFAULT_IMPLEMENTATION                                      \
+    qDebug()                                                            \
+    << "Using default implementation of"                                \
+    << DTK_PRETTY_FUNCTION                                              \
+    << "for"                                                            \
+    << this->metaObject()->className()
+
+#define DTK_UNUSED(variable) Q_UNUSED(variable)
+
+// /////////////////////////////////////////////////////////////////
 // Hash functions
 // /////////////////////////////////////////////////////////////////
 
-inline uint qHash(const QStringList &key) {
+inline uint qHash(const QStringList &key)
+{
     uint hash = 0;
     foreach(QString string, key)
 	hash = hash ^ qHash(string);

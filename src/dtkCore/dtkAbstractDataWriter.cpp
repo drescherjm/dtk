@@ -67,28 +67,28 @@ void dtkAbstractDataWriter::setData(dtkAbstractData *data)
 
 bool dtkAbstractDataWriter::canWrite(QString file)
 {
-    Q_UNUSED(file);
+    DTK_UNUSED(file);
 
     return false;
 }
 
 bool dtkAbstractDataWriter::canWrite(QStringList files)
 {
-    Q_UNUSED(files);
+    DTK_UNUSED(files);
 
     return false;
 }
 
 bool dtkAbstractDataWriter::write(QString file)
 {
-    Q_UNUSED(file);
+    DTK_UNUSED(file);
 
     return false;
 }
 
 bool dtkAbstractDataWriter::write(QStringList files)
 {
-    Q_UNUSED(files);
+    DTK_UNUSED(files);
 
     return false;
 }

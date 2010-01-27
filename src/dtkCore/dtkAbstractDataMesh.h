@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb  2 09:08:09 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jan  5 15:22:55 2010 (+0100)
+ * Last-Updated: Wed Jan 27 18:43:09 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 29
+ *     Update #: 34
  */
 
 /* Commentary: 
@@ -38,13 +38,12 @@ public:
 public:
     virtual int countIndices(void);
     virtual int countVertices(void);
-    virtual int countNormals(void);
-    virtual int countColors(void);
+    virtual int countEdges(void);
 
     virtual int *indices(void);
+
     virtual double *vertices(void);
-    virtual double *normals(void);
-    virtual double *colors(void);
+    virtual double *vertex(int index);
 
 private:
     dtkAbstractDataMeshPrivate *d;

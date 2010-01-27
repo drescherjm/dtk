@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Jul 20 11:15:27 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul 20 12:47:38 2009 (+0200)
+ * Last-Updated: Wed Jan 27 17:13:13 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 10
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include <QtNetwork>
 
+#include "dtkGlobal.h"
 #include "dtkUpdater_p.h"
 #include "dtkUpdater.h"
 
@@ -28,7 +29,7 @@
 
 void dtkUpdaterPrivate::onRequestFinished(int id, bool error)
 {
-    Q_UNUSED(error);
+    DTK_UNUSED(error);
 
     if (id == cfgId) {
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:43:14 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Oct  8 16:41:34 2009 (+0200)
+ * Last-Updated: Wed Jan 27 14:24:48 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 65
+ *     Update #: 68
  */
 
 /* Commentary:
@@ -25,7 +25,6 @@
 
 class dtkAbstractObjectPrivate;
 class dtkComposerNode;
-class dtkUi;
 
 class QWidget;
 
@@ -53,14 +52,9 @@ public:
    void setMetaData(QString key, QString value);
    const QStringList metaDataValues(QString key);
    
-   virtual dtkComposerNode *node(void) { 
-       return NULL;
-   }
-
-   virtual QWidget *ui(void) {
-       return NULL;
-   }
-
+   virtual dtkComposerNode *node(void);
+   virtual QWidget *ui(void);
+   
 signals:
    void propertySet(QString key, QString value);
    void metaDataSet(QString key, QString value);

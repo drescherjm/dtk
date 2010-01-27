@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Aug  1 00:51:40 2009 (+0200)
+ * Last-Updated: Wed Jan 27 15:30:50 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 137
+ *     Update #: 144
  */
 
 /* Commentary:
@@ -55,10 +55,13 @@ dtkAbstractView::~dtkAbstractView(void)
 
 void dtkAbstractView::setView(void *)
 {
+    DTK_DEFAULT_IMPLEMENTATION;
 }
 
 void dtkAbstractView::setData(dtkAbstractData *data)
 {
+    DTK_DEFAULT_IMPLEMENTATION;
+
     foreach(dtkAbstractViewAnimator *animator, d->animators)
         if (animator->enabled())
             animator->setData(data);
@@ -70,22 +73,29 @@ void dtkAbstractView::setData(dtkAbstractData *data)
 
 void dtkAbstractView::setData(dtkAbstractData *data, int channel)
 {
-    Q_UNUSED(data);
-    Q_UNUSED(channel);
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+    DTK_UNUSED(channel);
 }
 
 void *dtkAbstractView::data(void)
 {
+    DTK_DEFAULT_IMPLEMENTATION;
+
     return NULL;
 }
 
 void *dtkAbstractView::data(int channel)
 {
+    DTK_DEFAULT_IMPLEMENTATION;
+
     return NULL;
 }
 
 void dtkAbstractView::updatePosition(double x, double y, double z)
 {
+    DTK_DEFAULT_IMPLEMENTATION;
+
     foreach(dtkAbstractViewInteractor *interactor, d->interactors)
       interactor->updatePosition (x, y, z);
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb  2 09:08:09 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jan 27 18:42:09 2010 (+0100)
+ * Last-Updated: Mon Feb  1 22:17:52 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 63
+ *     Update #: 65
  */
 
 /* Commentary: 
@@ -53,47 +53,4 @@ dtkAbstractDataMesh::~dtkAbstractDataMesh(void)
 void *dtkAbstractDataMesh::mesh(void)
 {
     return this->data();
-}
-
-int dtkAbstractDataMesh::countIndices(void)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return -1;
-}
-
-int dtkAbstractDataMesh::countVertices(void)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return -1;
-}
-
-int dtkAbstractDataMesh::countEdges(void)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return -1;
-}
-
-int *dtkAbstractDataMesh::indices(void)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return NULL;
-}
-
-double *dtkAbstractDataMesh::vertices(void)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return NULL;
-}
-
-double *dtkAbstractDataMesh::vertex(int index)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(index);
-
-    return NULL;
 }

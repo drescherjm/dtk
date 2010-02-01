@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Jan 15 13:05:49 2010 (+0100)
+## Last-Updated: Mon Feb  1 22:08:33 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 125
+##     Update #: 128
 ######################################################################
 ## 
 ### Commentary: 
@@ -25,6 +25,7 @@ project(dtkCore)
 
 set(${PROJECT_NAME}_HEADERS
   dtkAbstractData.h
+  dtkAbstractDataCell.h
   dtkAbstractDataEdge.h
   dtkAbstractDataFace.h
   dtkAbstractDataFactory.h
@@ -36,7 +37,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractDataMeshVolumic.h
   dtkAbstractDataReader.h
   dtkAbstractDataVertex.h
-  dtkAbstractDataTet.h
   dtkAbstractDataWriter.h
   dtkAbstractFactory.h
   dtkAbstractObject.h
@@ -57,6 +57,7 @@ set(${PROJECT_NAME}_HEADERS
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractData.h
+  dtkAbstractDataCell.h
   dtkAbstractDataEdge.h
   dtkAbstractDataFace.h
   dtkAbstractDataFactory.h
@@ -67,7 +68,6 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractDataMeshSurfacic.h
   dtkAbstractDataMeshVolumic.h
   dtkAbstractDataReader.h
-  dtkAbstractDataTet.h
   dtkAbstractDataVertex.h
   dtkAbstractDataWriter.h
   dtkAbstractFactory.h
@@ -87,6 +87,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
 set(${PROJECT_NAME}_SOURCES
   dtkAbstractDataFactory.cpp
   dtkAbstractData.cpp
+  dtkAbstractDataCell.cpp
   dtkAbstractDataEdge.cpp
   dtkAbstractDataFace.cpp
   dtkAbstractDataReader.cpp
@@ -97,7 +98,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkAbstractDataMesh.cpp
   dtkAbstractDataMeshSurfacic.cpp
   dtkAbstractDataMeshVolumic.cpp
-  dtkAbstractDataTet.cpp
   dtkAbstractDataVertex.cpp
   dtkAbstractFactory.cpp
   dtkAbstractObject.cpp

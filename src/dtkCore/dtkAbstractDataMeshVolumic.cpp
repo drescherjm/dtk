@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 11 12:40:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jan 27 18:47:20 2010 (+0100)
+ * Last-Updated: Mon Feb  1 22:21:25 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 9
+ *     Update #: 10
  */
 
 /* Commentary: 
@@ -34,18 +34,4 @@ dtkAbstractDataMeshVolumic::~dtkAbstractDataMeshVolumic(void)
     delete d;
 
     d = NULL;
-}
-
-int dtkAbstractDataMeshVolumic::countFaces(void)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return -1;
-}
-
-int dtkAbstractDataMeshVolumic::countTets(void)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return -1;
 }

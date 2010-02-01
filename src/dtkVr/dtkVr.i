@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Jan 13 14:21:12 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jan 26 21:17:50 2010 (+0100)
+ * Last-Updated: Mon Feb  1 22:28:32 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 26
+ *     Update #: 27
  */
 
 /* Commentary: 
@@ -24,24 +24,6 @@
 %{
 #include <QtDebug>
 #include <QtCore>
-
-#include <dtkCore/dtkAbstractObject.h>
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkAbstractDataEdge.h>
-#include <dtkCore/dtkAbstractDataFace.h>
-#include <dtkCore/dtkAbstractDataVertex.h>
-#include <dtkCore/dtkAbstractDataTet.h>
-#include <dtkCore/dtkAbstractDataMesh.h>
-#include <dtkCore/dtkAbstractDataMeshSurfacic.h>
-#include <dtkCore/dtkAbstractDataMeshVolumic.h>
-#include <dtkCore/dtkAbstractDataReader.h>
-#include <dtkCore/dtkAbstractDataWriter.h>
-#include <dtkCore/dtkAbstractDataImage.h>
-#include <dtkCore/dtkAbstractProcess.h>
-#include <dtkCore/dtkAbstractView.h>
-#include <dtkCore/dtkAbstractViewAnimator.h>
-#include <dtkCore/dtkAbstractViewInteractor.h>
-#include <dtkCore/dtkAbstractViewNavigator.h>
 
 #include <dtkVr/dtkAbstractDevice.h>
 #if defined(APPLE)

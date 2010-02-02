@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Dec 11 11:04:22 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  1 22:16:09 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 10
+ * Last-Updated: Tue Feb  2 16:41:23 2010 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -34,6 +34,9 @@ public:
 
     virtual dtkAbstractDataVertex *source(void) = 0;
     virtual dtkAbstractDataVertex *destination(void) = 0;
+
+    virtual void setSource(dtkAbstractDataVertex *source) = 0;
+    virtual void setDestination(dtkAbstractDataVertex *destination) = 0;
 };
 
 #endif

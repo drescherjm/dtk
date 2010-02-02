@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Jan 25 09:52:49 2010 (+0100)
+## Last-Updated: Tue Feb  2 20:34:10 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 246
+##     Update #: 248
 ######################################################################
 ## 
 ### Commentary: 
@@ -250,9 +250,10 @@ if(WIN32)
   set(CMAKE_BUILD_TYPE Release CACHE STRING "Release is default build type for windows because of python distributions")
 endif(WIN32)
 
-option(BUILD_SHARED_LIBS  "Build shared libraries" true)
-option(BUILD_TOOLS        "Build tools"            true)
-option(BUILD_EXAMPLES     "Build examples"         true)
+option(BUILD_SHARED_LIBS   "Build shared libraries" true)
+option(BUILD_TOOLS         "Build tools"            true)
+option(BUILD_EXAMPLES      "Build examples"         true)
+option(BUILD_DOCUMENTATION "Build documentation"    true)
 
 ## #################################################################
 ## Build rules
@@ -269,6 +270,10 @@ endif(BUILD_TOOLS)
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif(BUILD_EXAMPLES)
+
+if(BUILD_DOCUMENTATION)
+  add_subdirectory(doc)
+endif(BUILD_DOCUMENTATION)
 
 ## #################################################################
 ## Configuration rules for the build tree

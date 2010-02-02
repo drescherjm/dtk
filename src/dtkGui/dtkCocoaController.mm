@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 13 18:50:55 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep 21 10:37:06 2009 (+0200)
+ * Last-Updated: Tue Feb  2 10:08:44 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 14
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -44,7 +44,7 @@ void dtkCocoaController::initialize(void)
 
 void dtkCocoaController::uninitialize(void)
 {
-    [d->pool release];
+    // [d->pool release];
 }
 
 dtkCocoaController::dtkCocoaController(void) : d(new dtkCocoaControllerPrivate)

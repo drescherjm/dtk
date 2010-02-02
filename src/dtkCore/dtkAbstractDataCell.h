@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Dec 11 11:04:22 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  1 22:16:40 2010 (+0100)
+ * Last-Updated: Mon Feb  1 23:13:36 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 22
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -35,9 +35,9 @@ public:
     virtual ~dtkAbstractDataCell(void);
 
     enum Type {
-        dtkAbstractDataFaceTetrahedron,
-        dtkAbstractDataFaceCube,
-        dtkAbstractDataFacePolyhedron
+        dtkAbstractDataCellTetrahedron,
+        dtkAbstractDataCellCube,
+        dtkAbstractDataCellPolyhedron
     };
 
     virtual int countVertices(void) = 0;

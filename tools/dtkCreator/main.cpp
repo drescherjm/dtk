@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:37:15 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Nov 14 14:20:02 2009 (+0100)
+ * Last-Updated: Tue Feb  2 09:42:26 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 40
+ *     Update #: 42
  */
 
 /* Commentary: 
@@ -61,12 +61,12 @@ int main(int argc, char **argv)
 
     int status = application.exec();
 
-    // dtkPluginManager::instance()->uninitialize();
+    dtkPluginManager::instance()->uninitialize();
     dtkScriptManager::instance()->uninitialize();
 
-#ifdef Q_WS_MAC
-    dtkCocoaController::instance()->uninitialize();
-#endif
+// #ifdef Q_WS_MAC
+//     dtkCocoaController::instance()->uninitialize();
+// #endif
 
     return status;
 }

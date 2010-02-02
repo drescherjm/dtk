@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jan 27 14:06:30 2010 (+0100)
+ * Last-Updated: Tue Feb  2 09:41:15 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 103
+ *     Update #: 104
  */
 
 /* Commentary: 
@@ -60,8 +60,8 @@ void dtkPluginManager::uninitialize(void)
 {
     this->writeSettings();
 
-    foreach(QString path, d->loaders.keys())
-        unloadPlugin(path);
+    // foreach(QString path, d->loaders.keys())
+    //     unloadPlugin(path);
 }
 
 void dtkPluginManager::readSettings(void)

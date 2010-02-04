@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Dec 11 11:04:22 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  1 23:13:36 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 23
+ * Last-Updated: Thu Feb  4 17:02:24 2010 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -49,6 +49,10 @@ public:
     virtual QList<dtkAbstractDataFace *> faces(void) = 0;
 
     virtual Type type(void) = 0;
+
+    virtual void addVertex(dtkAbstractDataVertex *vertex) = 0;
+    virtual void addEdge(dtkAbstractDataEdge *edge) = 0;
+    virtual void addFace(dtkAbstractDataFace *face) = 0;
 };
 
 #endif

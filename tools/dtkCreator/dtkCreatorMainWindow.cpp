@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jan 13 15:47:43 2010 (+0100)
+ * Last-Updated: Thu Feb  4 10:44:38 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 441
+ *     Update #: 442
  */
 
 /* Commentary: 
@@ -43,7 +43,6 @@
 #include <dtkGui/dtkInterpreter.h>
 #include <dtkGui/dtkInterpreterPreferencesWidget.h>
 #include <dtkGui/dtkPreferencesWidget.h>
-#include <dtkGui/dtkSearchBox.h>
 #include <dtkGui/dtkSettingsEditorPreferencesWidget.h>
 #include <dtkGui/dtkSpacer.h>
 #include <dtkGui/dtkSplitter.h>

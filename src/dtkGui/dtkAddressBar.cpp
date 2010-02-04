@@ -1,12 +1,12 @@
-/* dtkSearchBar.cpp --- 
+/* dtkAddressBar.cpp --- 
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Thu Feb  4 11:03:21 2010 (+0100)
+ * Created: Thu Feb  4 11:07:43 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  4 16:45:43 2010 (+0100)
+ * Last-Updated: Thu Feb  4 17:53:50 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 63
+ *     Update #: 22
  */
 
 /* Commentary: 
@@ -17,13 +17,13 @@
  * 
  */
 
-#include "dtkSearchBar.h"
+#include "dtkAddressBar.h"
 
 // /////////////////////////////////////////////////////////////////
-// dtkSearchBarButton
+// dtkAddressBarButton
 // /////////////////////////////////////////////////////////////////
 
-class dtkSearchBarButtonPrivate
+class dtkAddressBarButtonPrivate
 {
 public:
     void drawRoundRect(QPainter *painter, const QRectF& rect, qreal radius)
@@ -88,23 +88,23 @@ public:
     qreal rightBottomRadius;
 };
 
-dtkSearchBarButton::dtkSearchBarButton(QWidget *parent): QAbstractButton(parent), d(new dtkSearchBarButtonPrivate)
+dtkAddressBarButton::dtkAddressBarButton(QWidget *parent): QAbstractButton(parent), d(new dtkAddressBarButtonPrivate)
 {
     this->setRadius(10);
 }
 
-dtkSearchBarButton::dtkSearchBarButton(const QString& text, QWidget *parent) : QAbstractButton(parent), d(new dtkSearchBarButtonPrivate)
+dtkAddressBarButton::dtkAddressBarButton(const QString& text, QWidget *parent) : QAbstractButton(parent), d(new dtkAddressBarButtonPrivate)
 {
     this->setRadius(10);
     this->setText(text);
 }
 
-dtkSearchBarButton::~dtkSearchBarButton(void)
+dtkAddressBarButton::~dtkAddressBarButton(void)
 {
     delete d;
 }
 
-void dtkSearchBarButton::setRadius(qreal radius)
+void dtkAddressBarButton::setRadius(qreal radius)
 {
     d->leftTopRadius = radius;
     d->leftBottomRadius = radius;
@@ -112,7 +112,7 @@ void dtkSearchBarButton::setRadius(qreal radius)
     d->rightBottomRadius = radius;
 }
 
-void dtkSearchBarButton::setRadius(qreal leftTopRadius, qreal leftBottomRadius, qreal rightTopRadius, qreal rightBottomRadius)
+void dtkAddressBarButton::setRadius(qreal leftTopRadius, qreal leftBottomRadius, qreal rightTopRadius, qreal rightBottomRadius)
 {
     d->leftTopRadius = leftTopRadius;
     d->leftBottomRadius = leftBottomRadius;
@@ -120,7 +120,7 @@ void dtkSearchBarButton::setRadius(qreal leftTopRadius, qreal leftBottomRadius, 
     d->rightBottomRadius = rightBottomRadius;
 }
 
-QSize dtkSearchBarButton::minimumSizeHint(void) const
+QSize dtkAddressBarButton::minimumSizeHint(void) const
 {
     QFontMetrics fontMetrics(QFont("Arial", 8, QFont::Bold));
 
@@ -129,7 +129,7 @@ QSize dtkSearchBarButton::minimumSizeHint(void) const
     return QSize(width, 22);
 }
 
-void dtkSearchBarButton::paintEvent(QPaintEvent *event)
+void dtkAddressBarButton::paintEvent(QPaintEvent *event)
 {
     int height = event->rect().height();
     int width = event->rect().width();
@@ -165,21 +165,21 @@ void dtkSearchBarButton::paintEvent(QPaintEvent *event)
 }
 
 // /////////////////////////////////////////////////////////////////
-// dtkSearchBar
+// dtkAddressBar
 // /////////////////////////////////////////////////////////////////
 
-class dtkSearchBarPrivate
+class dtkAddressBarPrivate
 {
 public:
-    dtkSearchBarButton *button;
+    dtkAddressBarButton *button;
     QLineEdit *edit;
 };
 
-dtkSearchBar::dtkSearchBar(QWidget *parent) : QWidget(parent), d(new dtkSearchBarPrivate)
+dtkAddressBar::dtkAddressBar(QWidget *parent) : QWidget(parent), d(new dtkAddressBarPrivate)
 {
-    d->button = new dtkSearchBarButton("Search:", this);
-    d->button->setRadius(10, 10, 0, 0);
-    
+    d->button = new dtkAddressBarButton("Address:", this);
+    d->button->setRadius(5, 5, 0, 0);
+
     d->edit = new QLineEdit(this);
     d->edit->setAttribute(Qt::WA_MacShowFocusRect, false);
 
@@ -189,9 +189,24 @@ dtkSearchBar::dtkSearchBar(QWidget *parent) : QWidget(parent), d(new dtkSearchBa
     layout->addWidget(d->edit);
 }
 
-dtkSearchBar::~dtkSearchBar(void)
+dtkAddressBar::~dtkAddressBar(void)
 {
     delete d;
 
     d = NULL;
+}
+
+// QSize dtkAddressBar::sizeHint(void) const
+// {
+//     return d->button->sizeHint() + d->edit->sizeHint();
+// }
+
+QSizePolicy dtkAddressBar::sizePolicy(void) const
+{
+    return QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+}
+
+void dtkAddressBar::setText(const QString& text)
+{
+    d->edit->setText(text);
 }

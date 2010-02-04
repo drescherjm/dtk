@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:06:43 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Dec 10 14:12:55 2009 (+0100)
+## Last-Updated: Wed Feb  3 17:05:58 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 3
+##     Update #: 4
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,6 +17,7 @@
 ## 
 ######################################################################
 
+add_subdirectory(dtkAssistant)
 add_subdirectory(dtkCreator)
 add_subdirectory(dtkPluginGenerator)
 add_subdirectory(dtksh)

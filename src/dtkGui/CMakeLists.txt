@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Dec 23 10:51:09 2009 (+0100)
+## Last-Updated: Thu Feb  4 11:09:07 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 82
+##     Update #: 92
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,6 +24,7 @@ project(dtkGui)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkAddressBar.h
   dtkGuiExport.h
   dtkInspector.h
   dtkInspectorComposer.h
@@ -32,7 +33,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkInterpreterPreferencesWidget.h
   dtkPreferencesWidget.h
   dtkSearchBar.h
-  dtkSearchBox.h
   dtkSettingsEditor.h
   dtkSettingsEditorPreferencesWidget.h
   dtkSpacer.h
@@ -47,6 +47,7 @@ set(${PROJECT_NAME}_HEADERS
 )
 
 set(${PROJECT_NAME}_HEADERS_MOC
+  dtkAddressBar.h
   dtkInspector.h
   dtkInspectorComposer.h
   dtkInspectorScene.h
@@ -54,7 +55,6 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkInterpreterPreferencesWidget.h
   dtkPreferencesWidget.h
   dtkSearchBar.h
-  dtkSearchBox.h
   dtkSettingsEditor.h
   dtkSettingsEditorPreferencesWidget.h
   dtkSpacer.h
@@ -66,13 +66,13 @@ set(${PROJECT_NAME}_HEADERS_MOC
 )
 
 set(${PROJECT_NAME}_SOURCES
+  dtkAddressBar.cpp
   dtkInspector.cpp
   dtkInspectorComposer.cpp
   dtkInspectorScene.cpp
   dtkInterpreter.cpp
   dtkInterpreterPreferencesWidget.cpp
   dtkPreferencesWidget.cpp
-  dtkSearchBox.cpp
   dtkSearchBar.cpp
   dtkSettingsEditor.cpp
   dtkSettingsEditorPreferencesWidget.cpp

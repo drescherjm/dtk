@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Sat Jun 13 19:49:36 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Feb  5 15:45:21 2010 (+0100)
-##           By: Julien Wintz
-##     Update #: 61
+## Last-Updated: Fri Feb  5 16:50:39 2010 (+0100)
+##           By: Thibaud Kloczko
+##     Update #: 63
 ######################################################################
 ## 
 ### Commentary: 
@@ -1341,7 +1341,7 @@ PERL_PATH              = /usr/bin/perl
 # fallback. It is recommended to install and use dot, since it yields more 
 # powerful graphs.
 
-CLASS_DIAGRAMS         = YES
+CLASS_DIAGRAMS         = NO
 
 # You can define message sequence charts within doxygen comments using the \msc 
 # command. Doxygen will then run the mscgen tool (see 
@@ -1350,7 +1350,7 @@ CLASS_DIAGRAMS         = YES
 # the mscgen tool resides. If left empty the tool is assumed to be found in the 
 # default search path.
 
-MSCGEN_PATH            = /Applications/Doxygen.app/Contents/Resources/
+MSCGEN_PATH            =
 
 # If set to YES, the inheritance and collaboration graphs will hide 
 # inheritance and usage relations if the target is undocumented 

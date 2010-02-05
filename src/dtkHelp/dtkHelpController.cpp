@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb  3 16:02:30 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  3 17:24:20 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 24
+ * Last-Updated: Fri Feb  5 16:54:00 2010 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -69,7 +69,7 @@ dtkHelpController::dtkHelpController(void) : QObject(), d(new dtkHelpControllerP
 #ifdef Q_WS_MAC
     d->engine = new QHelpEngine(qApp->applicationDirPath() + "/../../../../doc/dtk.qhc", this);
 #else
-    d->engine = new QHelpEngine(qApp->applicationDirPath() + "/../../doc/dtk.qhc", this);
+    d->engine = new QHelpEngine(qApp->applicationDirPath() + "/../doc/dtk.qhc", this);
 #endif
     d->engine->setupData();
 }

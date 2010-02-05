@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb  3 15:54:13 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  3 17:24:45 2010 (+0100)
+ * Last-Updated: Fri Feb  5 16:25:10 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 9
+ *     Update #: 27
  */
 
 /* Commentary: 
@@ -23,10 +23,11 @@
 #include <QtCore>
 #include <QtGui>
 #include <QtHelp>
+#include <QtWebKit>
 
 class dtkHelpBrowserPrivate;
 
-class dtkHelpBrowser : public QTextBrowser
+class dtkHelpBrowser : public QWebView
 {
     Q_OBJECT
 
@@ -34,7 +35,14 @@ public:
      dtkHelpBrowser(QWidget *parent = 0);
     ~dtkHelpBrowser(void);
 
-    QVariant loadResource(int type, const QUrl &url);
+    QAction *backwardAction(void);
+    QAction *forwardAction(void);
+
+signals:
+    void sourceChanged(const QUrl& url);
+
+public slots:
+    void setSource(const QUrl& url);
 
 private:
     dtkHelpBrowserPrivate *d;

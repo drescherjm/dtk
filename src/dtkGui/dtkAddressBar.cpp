@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb  4 11:07:43 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  5 09:14:22 2010 (+0100)
+ * Last-Updated: Fri Feb  5 15:52:02 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 29
+ *     Update #: 34
  */
 
 /* Commentary: 
@@ -188,6 +188,8 @@ dtkAddressBar::dtkAddressBar(QWidget *parent) : QWidget(parent), d(new dtkAddres
     layout->setSpacing(0);
     layout->addWidget(d->button);
     layout->addWidget(d->edit);
+
+    connect(d->edit, SIGNAL(returnPressed()), this, SLOT(onReturnPressed()));
 }
 
 dtkAddressBar::~dtkAddressBar(void)
@@ -210,4 +212,9 @@ QSizePolicy dtkAddressBar::sizePolicy(void) const
 void dtkAddressBar::setText(const QString& text)
 {
     d->edit->setText(text);
+}
+
+void dtkAddressBar::onReturnPressed(void)
+{
+    emit addressEntered(QUrl(d->edit->text()));
 }

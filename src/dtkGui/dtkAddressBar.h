@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb  4 11:01:31 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  4 18:21:42 2010 (+0100)
+ * Last-Updated: Fri Feb  5 15:51:20 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 17
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -67,8 +67,14 @@ public:
     QSize       sizeHint(void) const;    
     QSizePolicy sizePolicy(void) const;
 
+signals:
+    void addressEntered(const QUrl& url);
+
 public slots:
     void setText(const QString& text);
+
+protected slots:
+    void onReturnPressed(void);
 
 private:
     dtkAddressBarPrivate *d;

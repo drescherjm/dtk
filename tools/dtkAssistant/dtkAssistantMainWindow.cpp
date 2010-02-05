@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb  3 21:42:16 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  5 09:17:04 2010 (+0100)
+ * Last-Updated: Fri Feb  5 16:27:45 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 49
+ *     Update #: 82
  */
 
 /* Commentary: 
@@ -31,12 +31,12 @@ class dtkAssistantMainWindowPrivate
 public:
     dtkHelpBrowser *browser;
 
-    QAction *backwardAction;
-    QAction *forwardAction;
-
     dtkAddressBar *address;
     dtkNavigationBar *navigation;
     dtkSearchBar *search;
+
+    QAction *backwardAction;
+    QAction *forwardAction;
 
     QDockWidget *contentDock;
     QDockWidget *indexDock;
@@ -46,34 +46,23 @@ dtkAssistantMainWindow::dtkAssistantMainWindow(QWidget *parent) : QMainWindow(pa
 {
     d->browser = new dtkHelpBrowser(this);
 
+    connect(d->browser, SIGNAL(sourceChanged(const QUrl&)), this, SLOT(onUrlChanged(const QUrl&)));
+
     connect(dtkHelpController::instance()->engine()->contentWidget(), SIGNAL(linkActivated(const QUrl&)), d->browser, SLOT(setSource(const QUrl&)));
     connect(dtkHelpController::instance()->engine()->indexWidget(), SIGNAL(linkActivated(const QUrl&, const QString&)), d->browser, SLOT(setSource(const QUrl&)));
 
-    connect(dtkHelpController::instance()->engine()->contentWidget(), SIGNAL(linkActivated(const QUrl&)), this, SLOT(onUrlChanged(const QUrl&)));
-    connect(dtkHelpController::instance()->engine()->indexWidget(), SIGNAL(linkActivated(const QUrl&, const QString&)), this, SLOT(onUrlChanged(const QUrl&)));
-
-    d->backwardAction = new QAction("Backward", this);
-    d->backwardAction->setShortcut(Qt::AltModifier + Qt::Key_Left);
-
-    d->forwardAction = new QAction("Forward", this);
-    d->forwardAction->setShortcut(Qt::AltModifier + Qt::Key_Right);
-
-    connect(d->backwardAction, SIGNAL(triggered()), d->browser, SLOT(backward()));
-    connect(d->forwardAction, SIGNAL(triggered()), d->browser, SLOT(forward()));
-
-    connect(d->browser, SIGNAL(backwardAvailable(bool)), d->backwardAction, SLOT(setEnabled(bool)));
-    connect(d->browser, SIGNAL(forwardAvailable(bool)), d->forwardAction, SLOT(setEnabled(bool)));
+    d->backwardAction = d->browser->backwardAction();
+    d->forwardAction = d->browser->forwardAction();
 
     d->navigation = new dtkNavigationBar(this);
-
-    connect(d->browser, SIGNAL(backwardAvailable(bool)), d->navigation->backwardButton(), SLOT(setEnabled(bool)));
-    connect(d->browser, SIGNAL(forwardAvailable(bool)), d->navigation->forwardButton(), SLOT(setEnabled(bool)));
 
     connect(d->navigation->backwardButton(), SIGNAL(clicked()), d->backwardAction, SLOT(trigger()));
     connect(d->navigation->forwardButton(), SIGNAL(clicked()), d->forwardAction, SLOT(trigger()));
 
     d->address = new dtkAddressBar(this);
     d->address->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+    connect(d->address, SIGNAL(addressEntered(const QUrl&)), d->browser, SLOT(setSource(const QUrl&)));
 
     d->search = new dtkSearchBar(this);
     d->search->setFixedWidth(200);
@@ -98,6 +87,10 @@ dtkAssistantMainWindow::dtkAssistantMainWindow(QWidget *parent) : QMainWindow(pa
     this->setCentralWidget(d->browser);
     this->setUnifiedTitleAndToolBarOnMac(true);
     this->setWindowTitle("dtkAssistant");
+
+    d->browser->setSource(QUrl("qthelp://fr.inria.dtk/dtk/index.html"));
+
+    this->resize(800, 480);
 }
 
 dtkAssistantMainWindow::~dtkAssistantMainWindow(void)

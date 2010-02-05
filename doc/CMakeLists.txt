@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Tue Feb  2 20:18:37 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue Feb  2 22:14:50 2010 (+0100)
+## Last-Updated: Fri Feb  5 12:59:46 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 12
+##     Update #: 18
 ######################################################################
 ## 
 ### Commentary: 
@@ -37,6 +37,10 @@ if (DOXYGEN_FOUND)
 
   add_custom_target(doc
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/DoxygenLayout.xml  ${CMAKE_CURRENT_BINARY_DIR}/DoxygenLayout.xml
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/DoxygenHeader.html ${CMAKE_CURRENT_BINARY_DIR}/DoxygenHeader.html
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/DoxygenFooter.html ${CMAKE_CURRENT_BINARY_DIR}/DoxygenFooter.html
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/DoxygenStyle.css   ${CMAKE_CURRENT_BINARY_DIR}/DoxygenStyle.css
     COMMAND ${DOXYGEN_EXECUTABLE} Doxyfile
     COMMAND ${CMAKE_COMMAND} -E remove qch/dtk-0.1.qch
     COMMAND qhelpgenerator html/index.qhp -o dtk.qch

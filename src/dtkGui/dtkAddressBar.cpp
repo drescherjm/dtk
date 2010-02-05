@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb  4 11:07:43 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  4 17:53:50 2010 (+0100)
+ * Last-Updated: Fri Feb  5 09:14:22 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 22
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -140,25 +140,25 @@ void dtkAddressBarButton::paintEvent(QPaintEvent *event)
 
     if (isDown()) {
         linearGrad = QLinearGradient(QPointF(0, 0), QPointF(0, mh));
-        linearGrad.setColorAt(0, QColor(0x6c, 0x6c, 0x6c));
-        linearGrad.setColorAt(1, QColor(0x40, 0x40, 0x40));
-        color = QColor(0x35, 0x35, 0x35);
+        linearGrad.setColorAt(0, QColor("#8c95ad").darker(120));
+        linearGrad.setColorAt(1, QColor("#818aa2").darker(120));
+        color = QColor("#5d6984").darker(120);
     } else {
         linearGrad = QLinearGradient(QPointF(0, 0), QPointF(0, mh));
-        linearGrad.setColorAt(0, QColor(0x8e, 0x8e, 0x8e));
-        linearGrad.setColorAt(1, QColor(0x5c, 0x5c, 0x5c));
-        color = QColor(0x41, 0x41, 0x41);
+        linearGrad.setColorAt(0, QColor("#8c95ad"));
+        linearGrad.setColorAt(1, QColor("#818aa2"));
+        color = QColor("#5d6984");
     }
     
     QPainter p(this);
     p.setRenderHints(QPainter::Antialiasing);
-    p.setPen(QPen(QColor(0x28, 0x28, 0x28), 1));
+    p.setPen(QPen(QColor("#374262"), 1));
     p.translate(5, 0);
     d->fillRoundRect(&p, QRect(0, 0, width, mh), d->leftTopRadius, 0, d->rightTopRadius, 0, QBrush(linearGrad));
     d->fillRoundRect(&p, QRect(0, mh, width, mh), 0, d->leftBottomRadius, 0, d->rightBottomRadius, color);
     d->drawRoundRect(&p, QRect(0, 0, width, height), d->leftTopRadius, d->leftBottomRadius, d->rightTopRadius, d->rightBottomRadius);
     p.translate(-5, 0);
-    p.setFont(QFont("Arial", 8, QFont::Bold));
+    p.setFont(QFont("Arial", 9, QFont::Bold));
     p.setPen(QPen(QColor(0xff, 0xff, 0xff), 1));
     p.drawText(event->rect(), Qt::AlignCenter, text());
     p.end();
@@ -184,6 +184,7 @@ dtkAddressBar::dtkAddressBar(QWidget *parent) : QWidget(parent), d(new dtkAddres
     d->edit->setAttribute(Qt::WA_MacShowFocusRect, false);
 
     QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->setContentsMargins(0, 5, 0, 5);
     layout->setSpacing(0);
     layout->addWidget(d->button);
     layout->addWidget(d->edit);
@@ -196,14 +197,14 @@ dtkAddressBar::~dtkAddressBar(void)
     d = NULL;
 }
 
-// QSize dtkAddressBar::sizeHint(void) const
-// {
-//     return d->button->sizeHint() + d->edit->sizeHint();
-// }
+QSize dtkAddressBar::sizeHint(void) const
+{
+    return d->button->sizeHint() + d->edit->sizeHint();
+}
 
 QSizePolicy dtkAddressBar::sizePolicy(void) const
 {
-    return QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    return QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
 
 void dtkAddressBar::setText(const QString& text)

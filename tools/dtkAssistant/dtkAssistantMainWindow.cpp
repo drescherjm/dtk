@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb  3 21:42:16 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  4 16:33:16 2010 (+0100)
+ * Last-Updated: Fri Feb  5 09:17:04 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 20
+ *     Update #: 49
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #include "dtkAssistantMainWindow.h"
 
 #include <dtkGui/dtkAddressBar.h>
+#include <dtkGui/dtkNavigationBar.h>
 #include <dtkGui/dtkSearchBar.h>
 
 #include <dtkHelp/dtkHelpController.h>
@@ -34,6 +35,7 @@ public:
     QAction *forwardAction;
 
     dtkAddressBar *address;
+    dtkNavigationBar *navigation;
     dtkSearchBar *search;
 
     QDockWidget *contentDock;
@@ -62,16 +64,25 @@ dtkAssistantMainWindow::dtkAssistantMainWindow(QWidget *parent) : QMainWindow(pa
     connect(d->browser, SIGNAL(backwardAvailable(bool)), d->backwardAction, SLOT(setEnabled(bool)));
     connect(d->browser, SIGNAL(forwardAvailable(bool)), d->forwardAction, SLOT(setEnabled(bool)));
 
+    d->navigation = new dtkNavigationBar(this);
+
+    connect(d->browser, SIGNAL(backwardAvailable(bool)), d->navigation->backwardButton(), SLOT(setEnabled(bool)));
+    connect(d->browser, SIGNAL(forwardAvailable(bool)), d->navigation->forwardButton(), SLOT(setEnabled(bool)));
+
+    connect(d->navigation->backwardButton(), SIGNAL(clicked()), d->backwardAction, SLOT(trigger()));
+    connect(d->navigation->forwardButton(), SIGNAL(clicked()), d->forwardAction, SLOT(trigger()));
+
     d->address = new dtkAddressBar(this);
+    d->address->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     d->search = new dtkSearchBar(this);
-    d->search->setFixedWidth(150);
+    d->search->setFixedWidth(200);
 
     connect(d->search, SIGNAL(textChanged(QString)), dtkHelpController::instance()->engine()->indexWidget(), SLOT(filterIndices(QString)));
+    connect(d->search, SIGNAL(returnPressed()), dtkHelpController::instance()->engine()->indexWidget(), SLOT(activateCurrentItem()));
 
     QToolBar *toolbar = this->addToolBar("navigation");
-    toolbar->addAction(d->backwardAction);
-    toolbar->addAction(d->forwardAction);
+    toolbar->addWidget(d->navigation);
     toolbar->addWidget(d->address);
     toolbar->addWidget(d->search);
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb  4 11:01:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  4 12:59:35 2010 (+0100)
+ * Last-Updated: Thu Feb  4 19:06:02 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 10
+ *     Update #: 17
  */
 
 /* Commentary: 
@@ -63,6 +63,15 @@ class dtkSearchBar : public QWidget
 public:
      dtkSearchBar(QWidget *parent = 0);
     ~dtkSearchBar(void);
+
+    QSize       sizeHint(void) const;    
+    QSizePolicy sizePolicy(void) const;
+
+    QString text(void) const;
+
+signals:
+    void textChanged(QString);
+    void returnPressed();
 
 private:
     dtkSearchBarPrivate *d;

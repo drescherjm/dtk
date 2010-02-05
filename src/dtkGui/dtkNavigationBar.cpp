@@ -1,12 +1,12 @@
-/* dtkSearchBar.cpp --- 
+/* dtkNavigationBar.cpp --- 
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Thu Feb  4 11:03:21 2010 (+0100)
+ * Created: Thu Feb  4 18:28:35 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  5 09:13:50 2010 (+0100)
+ * Last-Updated: Fri Feb  5 09:12:07 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 80
+ *     Update #: 58
  */
 
 /* Commentary: 
@@ -17,13 +17,13 @@
  * 
  */
 
-#include "dtkSearchBar.h"
+#include "dtkNavigationBar.h"
 
 // /////////////////////////////////////////////////////////////////
-// dtkSearchBarButton
+// dtkNavigationBarButton
 // /////////////////////////////////////////////////////////////////
 
-class dtkSearchBarButtonPrivate
+class dtkNavigationBarButtonPrivate
 {
 public:
     void drawRoundRect(QPainter *painter, const QRectF& rect, qreal radius)
@@ -88,23 +88,23 @@ public:
     qreal rightBottomRadius;
 };
 
-dtkSearchBarButton::dtkSearchBarButton(QWidget *parent): QAbstractButton(parent), d(new dtkSearchBarButtonPrivate)
+dtkNavigationBarButton::dtkNavigationBarButton(QWidget *parent): QAbstractButton(parent), d(new dtkNavigationBarButtonPrivate)
 {
     this->setRadius(10);
 }
 
-dtkSearchBarButton::dtkSearchBarButton(const QString& text, QWidget *parent) : QAbstractButton(parent), d(new dtkSearchBarButtonPrivate)
+dtkNavigationBarButton::dtkNavigationBarButton(const QString& text, QWidget *parent) : QAbstractButton(parent), d(new dtkNavigationBarButtonPrivate)
 {
     this->setRadius(10);
     this->setText(text);
 }
 
-dtkSearchBarButton::~dtkSearchBarButton(void)
+dtkNavigationBarButton::~dtkNavigationBarButton(void)
 {
     delete d;
 }
 
-void dtkSearchBarButton::setRadius(qreal radius)
+void dtkNavigationBarButton::setRadius(qreal radius)
 {
     d->leftTopRadius = radius;
     d->leftBottomRadius = radius;
@@ -112,7 +112,7 @@ void dtkSearchBarButton::setRadius(qreal radius)
     d->rightBottomRadius = radius;
 }
 
-void dtkSearchBarButton::setRadius(qreal leftTopRadius, qreal leftBottomRadius, qreal rightTopRadius, qreal rightBottomRadius)
+void dtkNavigationBarButton::setRadius(qreal leftTopRadius, qreal leftBottomRadius, qreal rightTopRadius, qreal rightBottomRadius)
 {
     d->leftTopRadius = leftTopRadius;
     d->leftBottomRadius = leftBottomRadius;
@@ -120,16 +120,16 @@ void dtkSearchBarButton::setRadius(qreal leftTopRadius, qreal leftBottomRadius, 
     d->rightBottomRadius = rightBottomRadius;
 }
 
-QSize dtkSearchBarButton::minimumSizeHint(void) const
+QSize dtkNavigationBarButton::minimumSizeHint(void) const
 {
     QFontMetrics fontMetrics(QFont("Arial", 8, QFont::Bold));
 
-    int width = fontMetrics.width(text()) + 48;
+    int width = fontMetrics.width(text()) + 28;
 
     return QSize(width, 22);
 }
 
-void dtkSearchBarButton::paintEvent(QPaintEvent *event)
+void dtkNavigationBarButton::paintEvent(QPaintEvent *event)
 {
     int height = event->rect().height();
     int width = event->rect().width();
@@ -153,66 +153,67 @@ void dtkSearchBarButton::paintEvent(QPaintEvent *event)
     QPainter p(this);
     p.setRenderHints(QPainter::Antialiasing);
     p.setPen(QPen(QColor("#374262"), 1));
-    p.translate(5, 0);
+    p.translate(qMax(d->leftBottomRadius, d->leftTopRadius), 0);
     d->fillRoundRect(&p, QRect(0, 0, width, mh), d->leftTopRadius, 0, d->rightTopRadius, 0, QBrush(linearGrad));
     d->fillRoundRect(&p, QRect(0, mh, width, mh), 0, d->leftBottomRadius, 0, d->rightBottomRadius, color);
     d->drawRoundRect(&p, QRect(0, 0, width, height), d->leftTopRadius, d->leftBottomRadius, d->rightTopRadius, d->rightBottomRadius);
-    p.translate(-5, 0);
+    p.translate(-1*qMax(d->rightBottomRadius, d->rightTopRadius), 0);
     p.setFont(QFont("Arial", 9, QFont::Bold));
-    p.setPen(QPen(QColor(0xff, 0xff, 0xff), 1));
+
+    if(this->isEnabled())
+        p.setPen(QPen(Qt::white, 1));
+    else
+        p.setPen(QPen(Qt::gray, 1));
+
     p.drawText(event->rect(), Qt::AlignCenter, text());
     p.end();
 }
 
+
 // /////////////////////////////////////////////////////////////////
-// dtkSearchBar
+// dtkNavigationBar
 // /////////////////////////////////////////////////////////////////
 
-class dtkSearchBarPrivate
+class dtkNavigationBarPrivate
 {
 public:
-    dtkSearchBarButton *button;
-    QLineEdit *edit;
+    dtkNavigationBarButton *backwardButton;
+    dtkNavigationBarButton *forwardButton;
 };
 
-dtkSearchBar::dtkSearchBar(QWidget *parent) : QWidget(parent), d(new dtkSearchBarPrivate)
+dtkNavigationBar::dtkNavigationBar(QWidget *parent) : QWidget(parent), d(new dtkNavigationBarPrivate)
 {
-    d->button = new dtkSearchBarButton("Search:", this);
-    d->button->setRadius(5, 5, 0, 0);
+    d->backwardButton = new dtkNavigationBarButton("Backward", this);
+    d->backwardButton->setRadius(5, 5, 0, 0);
     
-    d->edit = new QLineEdit(this);
-    d->edit->setAttribute(Qt::WA_MacShowFocusRect, false);
+    d->forwardButton = new dtkNavigationBarButton("Forward", this);
+    d->forwardButton->setRadius(0, 0, 5, 5);
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 5, 0, 5);
     layout->setSpacing(0);
-    layout->addWidget(d->button);
-    layout->addWidget(d->edit);
-
-    connect(d->edit, SIGNAL(textChanged(QString)), this, SIGNAL(textChanged(QString)));
-    connect(d->edit, SIGNAL(returnPressed()), this, SIGNAL(returnPressed()));
-
-    this->setFocusPolicy(Qt::StrongFocus);
+    layout->addWidget(d->backwardButton);
+    layout->addWidget(d->forwardButton);
 }
 
-dtkSearchBar::~dtkSearchBar(void)
+dtkNavigationBar::~dtkNavigationBar(void)
 {
     delete d;
 
     d = NULL;
 }
 
-QSize dtkSearchBar::sizeHint(void) const
+QSize dtkNavigationBar::sizeHint(void) const
 {
-    return d->button->sizeHint() + d->edit->sizeHint();
+    return d->backwardButton->sizeHint() + d->forwardButton->sizeHint();
 }
 
-QSizePolicy dtkSearchBar::sizePolicy(void) const
+QAbstractButton *dtkNavigationBar::backwardButton(void)
 {
-    return QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    return d->backwardButton;
 }
 
-QString dtkSearchBar::text(void) const
+QAbstractButton *dtkNavigationBar::forwardButton(void)
 {
-    return d->edit->text();
+    return d->forwardButton;
 }

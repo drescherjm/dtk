@@ -1,12 +1,12 @@
-/* dtkAddressBar.h --- 
+/* dtkNavigationBar.h --- 
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Thu Feb  4 11:01:31 2010 (+0100)
+ * Created: Thu Feb  4 18:25:17 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  4 18:21:42 2010 (+0100)
+ * Last-Updated: Fri Feb  5 08:19:31 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 17
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -17,25 +17,25 @@
  * 
  */
 
-#ifndef DTKADDRESSBAR_H
-#define DTKADDRESSBAR_H
+#ifndef DTKNAVIGATIONBAR_H
+#define DTKNAVIGATIONBAR_H
 
 #include <QtGui>
 
 // /////////////////////////////////////////////////////////////////
-// dtkAddressBarButton
+// dtkNavigationBarButton
 // /////////////////////////////////////////////////////////////////
 
-class dtkAddressBarButtonPrivate;
+class dtkNavigationBarButtonPrivate;
 
-class dtkAddressBarButton : public QAbstractButton
+class dtkNavigationBarButton : public QAbstractButton
 {
     Q_OBJECT
     
 public:
-     dtkAddressBarButton(QWidget *parent = 0);
-     dtkAddressBarButton(const QString& text, QWidget *parent = 0);
-    ~dtkAddressBarButton(void);
+     dtkNavigationBarButton(QWidget *parent = 0);
+     dtkNavigationBarButton(const QString& text, QWidget *parent = 0);
+    ~dtkNavigationBarButton(void);
     
 public:
     void setRadius(qreal radius);
@@ -47,31 +47,30 @@ protected:
     void paintEvent(QPaintEvent *event);
     
 private:
-    dtkAddressBarButtonPrivate *d;
+    dtkNavigationBarButtonPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkAddressBar
+// dtkNavigationBar
 // /////////////////////////////////////////////////////////////////
 
-class dtkAddressBarPrivate;
+class dtkNavigationBarPrivate;
 
-class dtkAddressBar : public QWidget
+class dtkNavigationBar : public QWidget
 {
     Q_OBJECT
 
 public:
-     dtkAddressBar(QWidget *parent = 0);
-    ~dtkAddressBar(void);
+     dtkNavigationBar(QWidget *parent = 0);
+    ~dtkNavigationBar(void);
 
-    QSize       sizeHint(void) const;    
-    QSizePolicy sizePolicy(void) const;
+    QSize sizeHint(void) const;
 
-public slots:
-    void setText(const QString& text);
+    QAbstractButton *backwardButton(void);
+    QAbstractButton *forwardButton(void);
 
 private:
-    dtkAddressBarPrivate *d;
+    dtkNavigationBarPrivate *d;
 };
 
 #endif

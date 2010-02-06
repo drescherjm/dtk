@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Sat Jun 13 19:49:36 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Feb  5 16:50:39 2010 (+0100)
-##           By: Thibaud Kloczko
-##     Update #: 63
+## Last-Updated: Sat Feb  6 12:36:56 2010 (+0100)
+##           By: Julien Wintz
+##     Update #: 75
 ######################################################################
 ## 
 ### Commentary: 
@@ -673,7 +673,7 @@ EXAMPLE_RECURSIVE      = NO
 # directories that contain image that are included in the documentation (see 
 # the \image command).
 
-IMAGE_PATH             = 
+IMAGE_PATH             = img
 
 # The INPUT_FILTER tag can be used to specify a program that doxygen should 
 # invoke to filter for each input file. Doxygen will invoke the filter program 
@@ -921,7 +921,7 @@ QCH_FILE               =
 # Qt Help Project output. For more information please see 
 # http://doc.trolltech.com/qthelpproject.html#namespace
 
-QHP_NAMESPACE          = fr.inria.sophia.dream
+QHP_NAMESPACE          = fr.inria
 
 # The QHP_VIRTUAL_FOLDER tag specifies the namespace to use when generating 
 # Qt Help Project output. For more information please see 
@@ -933,18 +933,18 @@ QHP_VIRTUAL_FOLDER     = dtk
 # For more information please see 
 # http://doc.trolltech.com/qthelpproject.html#custom-filters
 
-QHP_CUST_FILTER_NAME   = 
+QHP_CUST_FILTER_NAME   = dtk
 
 # The QHP_CUST_FILT_ATTRS tag specifies the list of the attributes of the custom filter to add.For more information please see 
 # <a href="http://doc.trolltech.com/qthelpproject.html#custom-filters">Qt Help Project / Custom Filters</a>.
 
-QHP_CUST_FILTER_ATTRS  = 
+QHP_CUST_FILTER_ATTRS  = dtk
 
 # The QHP_SECT_FILTER_ATTRS tag specifies the list of the attributes this project's 
 # filter section matches. 
 # <a href="http://doc.trolltech.com/qthelpproject.html#filter-attributes">Qt Help Project / Filter Attributes</a>.
 
-QHP_SECT_FILTER_ATTRS  = 
+QHP_SECT_FILTER_ATTRS  = dtk
 
 # If the GENERATE_QHP tag is set to YES, the QHG_LOCATION tag can 
 # be used to specify the location of Qt's qhelpgenerator. 

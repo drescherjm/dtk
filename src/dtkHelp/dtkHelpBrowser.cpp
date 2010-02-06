@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb  3 15:56:38 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  5 16:30:40 2010 (+0100)
+ * Last-Updated: Sat Feb  6 13:53:21 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 104
+ *     Update #: 129
  */
 
 /* Commentary: 
@@ -21,45 +21,6 @@
 #include "dtkHelpController.h"
 
 #include <dtkCore/dtkLog.h>
-
-// /////////////////////////////////////////////////////////////////
-// dtkHelpBrowserCommand
-// /////////////////////////////////////////////////////////////////
-
-class dtkHelpBrowserCommand : public QUndoCommand
-{
-public:
-    dtkHelpBrowserCommand(QUrl before, QUrl after, dtkHelpBrowser *browser);
-
-    void undo(void);
-    void redo(void);
-
-private:
-    dtkHelpBrowser *m_browser;
-
-    QUrl m_before;
-    QUrl m_after;
-};
-
-dtkHelpBrowserCommand::dtkHelpBrowserCommand(QUrl before, QUrl after, dtkHelpBrowser *browser)
-{
-    m_before = before;
-    m_after = after;
-    
-    m_browser = browser;
-}
-
-void dtkHelpBrowserCommand::undo(void)
-{
-    if(m_before.isValid())
-        m_browser->setContent(dtkHelpController::instance()->engine()->fileData(m_before));
-}
-
-void dtkHelpBrowserCommand::redo(void)
-{
-    if(m_after.isValid())
-        m_browser->setContent(dtkHelpController::instance()->engine()->fileData(m_after));
-}
 
 // /////////////////////////////////////////////////////////////////
 // dtkHelpBrowser
@@ -91,27 +52,24 @@ dtkHelpBrowser::~dtkHelpBrowser(void)
 
 QAction *dtkHelpBrowser::backwardAction(void)
 {
-    return d->stack->createUndoAction(this);
+    return this->pageAction(QWebPage::Back);
 }
 
 QAction *dtkHelpBrowser::forwardAction(void)
 {
-    return d->stack->createRedoAction(this);
+    return this->pageAction(QWebPage::Forward);
 }
 
 void dtkHelpBrowser::setSource(const QUrl& url)
 {
     QUrl filteredUrl;
 
-    if(url.scheme() != "qthelp")
-        filteredUrl = QUrl("qthelp://fr.inria.dtk/dtk/" + url.toString());
+    if(url.scheme() == "qthelp")
+        filteredUrl = QUrl(dtkHelpController::instance()->path() + "/" + url.toString().remove("qthelp://fr.inria/dtk/"));
     else
         filteredUrl = url;
 
-    d->stack->push(new dtkHelpBrowserCommand(d->currentUrl, filteredUrl, this));
-    d->stack->redo();
-
-    d->currentUrl = filteredUrl;
+    this->load(filteredUrl);
 
     emit sourceChanged(filteredUrl);
 }

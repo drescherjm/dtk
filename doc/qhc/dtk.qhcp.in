@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QHelpCollectionProject version="1.0">
   <assistant>
-    <startPage>qthelp://fr.inria.sophia.dream/dtk/index.html</startPage>
+    <startPage>qthelp://fr.inria/dtk/index.html</startPage>
   </assistant>
   <docFiles>
     <register>

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb  3 21:42:16 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  5 16:27:45 2010 (+0100)
+ * Last-Updated: Sat Feb  6 13:56:28 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 82
+ *     Update #: 89
  */
 
 /* Commentary: 
@@ -88,9 +88,9 @@ dtkAssistantMainWindow::dtkAssistantMainWindow(QWidget *parent) : QMainWindow(pa
     this->setUnifiedTitleAndToolBarOnMac(true);
     this->setWindowTitle("dtkAssistant");
 
-    d->browser->setSource(QUrl("qthelp://fr.inria.dtk/dtk/index.html"));
-
     this->resize(800, 480);
+
+    d->browser->setSource(QUrl(dtkHelpController::instance()->path() + "/index.html"));
 }
 
 dtkAssistantMainWindow::~dtkAssistantMainWindow(void)

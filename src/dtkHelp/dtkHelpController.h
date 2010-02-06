@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb  3 16:00:38 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  3 17:23:47 2010 (+0100)
+ * Last-Updated: Sat Feb  6 13:30:41 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 12
  */
 
 /* Commentary: 
@@ -39,6 +39,8 @@ public:
     void writeSettings(void);
 
     QHelpEngine *engine(void);
+
+    QString path(void) const;
 
 protected:
      dtkHelpController(void);

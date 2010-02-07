@@ -106,42 +106,12 @@
       </item>
       <item>
        <property name="text">
-        <string>DataReader</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>DataWriter</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Device</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
         <string>Process</string>
        </property>
       </item>
       <item>
        <property name="text">
         <string>View</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>ViewAnimator</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>ViewInteractor</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>ViewNavigator</string>
        </property>
       </item>
      </widget>

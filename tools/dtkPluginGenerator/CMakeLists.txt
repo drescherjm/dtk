@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:07:07 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Jan 11 14:42:17 2010 (+0100)
+## Last-Updated: Sun Feb  7 17:51:52 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 33
+##     Update #: 44
 ######################################################################
 ## 
 ### Commentary: 
@@ -29,12 +29,6 @@ set(${PROJECT_NAME}_HEADERS_MOC
 
 set(${PROJECT_NAME}_SOURCES
   dtkPluginGenerator.cpp
-  dtkPluginGeneratorCMakeLists.cpp
-  dtkPluginGeneratorTypeHeaderFile.cpp
-  dtkPluginGeneratorTypeSourceFile.cpp
-  dtkPluginGeneratorPluginHeaderFile.cpp
-  dtkPluginGeneratorPluginSourceFile.cpp
-  dtkPluginGeneratorExportHeaderFile.cpp
   dtkPluginGeneratorMainWindow.cpp
   anyoption.cpp
   main.cpp
@@ -42,6 +36,10 @@ set(${PROJECT_NAME}_SOURCES
 
 set(${PROJECT_NAME}_FORMS
   dtkPluginGeneratorMainWindow.ui
+)
+
+set(${PROJECT_NAME}_RESOURCES
+  template/template.qrc
 )
 
 ## #################################################################
@@ -52,9 +50,12 @@ qt4_wrap_ui(${PROJECT_NAME}_SOURCES_UIC ${${PROJECT_NAME}_FORMS})
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
+qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
+
 add_executable(${PROJECT_NAME} MACOSX_BUNDLE
   ${${PROJECT_NAME}_SOURCES_UIC}
   ${${PROJECT_NAME}_SOURCES_MOC}
+  ${${PROJECT_NAME}_SOURCES_QRC}
   ${${PROJECT_NAME}_SOURCES}
 )
 

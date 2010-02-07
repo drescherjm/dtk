@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar  9 21:40:22 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Aug  4 20:04:57 2009 (+0200)
+ * Last-Updated: Sun Feb  7 17:39:03 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 24
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -55,6 +55,8 @@ protected:
    bool generatePluginHeaderFile(void);
    bool generatePluginSourceFile(void);
    bool generateExportHeaderFile(void);
+   bool generateHelpCollectionFile(void);
+   bool generateHelpConfigurationFile(void);
 
 private:
    dtkPluginGeneratorPrivate *d;

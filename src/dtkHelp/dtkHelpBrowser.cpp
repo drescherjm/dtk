@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb  3 15:56:38 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb  6 13:53:21 2010 (+0100)
+ * Last-Updated: Sun Feb  7 13:29:51 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 129
+ *     Update #: 140
  */
 
 /* Commentary: 
@@ -29,15 +29,10 @@
 class dtkHelpBrowserPrivate
 {
 public:
-    QUndoStack *stack;
-
-    QUrl currentUrl;
 };
 
 dtkHelpBrowser::dtkHelpBrowser(QWidget *parent) : QWebView(parent), d(new dtkHelpBrowserPrivate)
 {
-    d->stack = new QUndoStack(this);
-
     this->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
 
     connect(this, SIGNAL(linkClicked(const QUrl&)), this, SLOT(setSource(const QUrl&)));
@@ -62,12 +57,7 @@ QAction *dtkHelpBrowser::forwardAction(void)
 
 void dtkHelpBrowser::setSource(const QUrl& url)
 {
-    QUrl filteredUrl;
-
-    if(url.scheme() == "qthelp")
-        filteredUrl = QUrl(dtkHelpController::instance()->path() + "/" + url.toString().remove("qthelp://fr.inria/dtk/"));
-    else
-        filteredUrl = url;
+    QUrl filteredUrl = dtkHelpController::instance()->filter(url);
 
     this->load(filteredUrl);
 

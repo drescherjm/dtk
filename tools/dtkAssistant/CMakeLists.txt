@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Feb  3 17:00:27 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Wed Feb  3 21:45:22 2010 (+0100)
+## Last-Updated: Sun Feb  7 12:21:30 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 11
+##     Update #: 14
 ######################################################################
 ## 
 ### Commentary: 
@@ -51,6 +51,8 @@ target_link_libraries(${PROJECT_NAME}
   dtkGui
   dtkHelp
 )
+
+## add_dependencies(${PROJECT_NAME} doc)
 
 ## #################################################################
 ## Bundle setup

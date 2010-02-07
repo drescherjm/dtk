@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb  3 21:42:16 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb  6 13:56:28 2010 (+0100)
+ * Last-Updated: Sun Feb  7 13:38:17 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 89
+ *     Update #: 150
  */
 
 /* Commentary: 
@@ -38,6 +38,9 @@ public:
     QAction *backwardAction;
     QAction *forwardAction;
 
+    QAction   *registerAction;
+    QAction *unregisterAction;
+
     QDockWidget *contentDock;
     QDockWidget *indexDock;
 };
@@ -50,9 +53,17 @@ dtkAssistantMainWindow::dtkAssistantMainWindow(QWidget *parent) : QMainWindow(pa
 
     connect(dtkHelpController::instance()->engine()->contentWidget(), SIGNAL(linkActivated(const QUrl&)), d->browser, SLOT(setSource(const QUrl&)));
     connect(dtkHelpController::instance()->engine()->indexWidget(), SIGNAL(linkActivated(const QUrl&, const QString&)), d->browser, SLOT(setSource(const QUrl&)));
+    connect(dtkHelpController::instance()->engine()->indexWidget(), SIGNAL(linksActivated(const QMap<QString, QUrl>&, const QString&)), this, SLOT(onLinksActivated(const QMap<QString, QUrl>&, const QString&)));
 
     d->backwardAction = d->browser->backwardAction();
     d->forwardAction = d->browser->forwardAction();
+
+    d->registerAction = new QAction("Register", this);
+    d->registerAction->setShortcut(Qt::ControlModifier + Qt::Key_I);
+    connect(d->registerAction, SIGNAL(triggered()), this, SLOT(onRegisterClicked()));
+
+    d->unregisterAction = new QAction("Unregister", this);
+    connect(d->unregisterAction, SIGNAL(triggered()), this, SLOT(onUnregisterClicked()));
 
     d->navigation = new dtkNavigationBar(this);
 
@@ -72,6 +83,8 @@ dtkAssistantMainWindow::dtkAssistantMainWindow(QWidget *parent) : QMainWindow(pa
 
     QToolBar *toolbar = this->addToolBar("navigation");
     toolbar->addWidget(d->navigation);
+    toolbar->addAction(d->registerAction);
+    toolbar->addAction(d->unregisterAction);
     toolbar->addWidget(d->address);
     toolbar->addWidget(d->search);
 
@@ -89,8 +102,6 @@ dtkAssistantMainWindow::dtkAssistantMainWindow(QWidget *parent) : QMainWindow(pa
     this->setWindowTitle("dtkAssistant");
 
     this->resize(800, 480);
-
-    d->browser->setSource(QUrl(dtkHelpController::instance()->path() + "/index.html"));
 }
 
 dtkAssistantMainWindow::~dtkAssistantMainWindow(void)
@@ -100,7 +111,52 @@ dtkAssistantMainWindow::~dtkAssistantMainWindow(void)
     d = NULL;
 }
 
+void dtkAssistantMainWindow::onRegisterClicked(void)
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "Open Help Collection File", qApp->applicationDirPath(), "Help collection file (*.qch)");
+    
+    if(!fileName.isNull())
+        dtkHelpController::instance()->registerDocumentation(fileName);
+}
+
+void dtkAssistantMainWindow::onUnregisterClicked(void)
+{
+    bool ok;
+
+    QStringList items = dtkHelpController::instance()->registeredNamespaces();
+    items.removeFirst();
+
+    QString namespaceName = QInputDialog::getItem(
+        this,
+        "dtkAssistant",
+        "Choose the documentation namespace to unregister",
+        items,
+        0,
+        false,
+        &ok);
+    
+    if (ok)
+        dtkHelpController::instance()->unregisterDocumentation(namespaceName);
+}
+
 void dtkAssistantMainWindow::onUrlChanged(const QUrl& url)
 {
     d->address->setText(url.toString());
+}
+
+void dtkAssistantMainWindow::onLinksActivated(const QMap<QString, QUrl>& urls, const QString& keyword)
+{
+    bool ok;
+    
+    QString key = QInputDialog::getItem(
+        this,
+        "dtkAssistant",
+        QString("Choose a topic for %1").arg(keyword),
+        urls.keys(),
+        0,
+        false,
+        &ok);
+    
+    if (ok)
+        d->browser->setSource(urls.value(key));
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb  3 16:00:38 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb  6 13:30:41 2010 (+0100)
+ * Last-Updated: Sun Feb  7 11:55:11 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 12
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -38,9 +38,14 @@ public:
     void  readSettings(void);
     void writeSettings(void);
 
+    bool   registerDocumentation(const QString& path);
+    bool unregisterDocumentation(const QString& namespaceName);
+
     QHelpEngine *engine(void);
 
-    QString path(void) const;
+    QUrl filter(const QUrl& url) const;
+
+    QStringList registeredNamespaces(void) const;
 
 protected:
      dtkHelpController(void);

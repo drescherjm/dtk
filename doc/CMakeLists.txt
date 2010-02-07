@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Tue Feb  2 20:18:37 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Sat Feb  6 14:00:01 2010 (+0100)
+## Last-Updated: Sat Feb  6 21:12:57 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 32
+##     Update #: 35
 ######################################################################
 ## 
 ### Commentary: 
@@ -16,8 +16,6 @@
 ### Change log:
 ## 
 ######################################################################
-
-project(documentation)
 
 ## #################################################################
 ## Retrieve dependencies
@@ -32,7 +30,7 @@ find_package(Doxygen)
 ## #################################################################
 
 if (DOXYGEN_FOUND)
-  configure_file(Doxyfile.config.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile IMMEDIATE @ONLY)
+  configure_file(Doxyfile.in     ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile IMMEDIATE @ONLY)
   configure_file(qhc/dtk.qhcp.in ${CMAKE_CURRENT_BINARY_DIR}/dtk.qhcp IMMEDIATE @ONLY)
 
   add_custom_target(doc

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Feb  4 18:32:34 2010 (+0100)
+## Last-Updated: Sun Feb  7 15:13:34 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 96
+##     Update #: 101
 ######################################################################
 ## 
 ### Commentary: 
@@ -33,6 +33,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkInterpreterPreferencesWidget.h
   dtkNavigationBar.h
   dtkPreferencesWidget.h
+  dtkRegistrationBar.h
   dtkSearchBar.h
   dtkSettingsEditor.h
   dtkSettingsEditorPreferencesWidget.h
@@ -56,6 +57,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkInterpreterPreferencesWidget.h
   dtkNavigationBar.h
   dtkPreferencesWidget.h
+  dtkRegistrationBar.h
   dtkSearchBar.h
   dtkSettingsEditor.h
   dtkSettingsEditorPreferencesWidget.h
@@ -76,6 +78,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkInterpreterPreferencesWidget.cpp
   dtkNavigationBar.cpp
   dtkPreferencesWidget.cpp
+  dtkRegistrationBar.cpp
   dtkSearchBar.cpp
   dtkSettingsEditor.cpp
   dtkSettingsEditorPreferencesWidget.cpp

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb  4 11:07:43 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  5 15:52:02 2010 (+0100)
+ * Last-Updated: Sun Feb  7 15:57:57 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 34
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -217,4 +217,16 @@ void dtkAddressBar::setText(const QString& text)
 void dtkAddressBar::onReturnPressed(void)
 {
     emit addressEntered(QUrl(d->edit->text()));
+}
+
+void dtkAddressBar::focusInEvent(QFocusEvent *event)
+{
+    Q_UNUSED(event);
+
+    d->edit->setFocus();
+}
+
+void dtkAddressBar::focusOutEvent(QFocusEvent *event)
+{
+    Q_UNUSED(event);
 }

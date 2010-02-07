@@ -1,12 +1,12 @@
-/* dtkSearchBar.cpp --- 
+/* dtkRegistrationBar.cpp --- 
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Thu Feb  4 11:03:21 2010 (+0100)
+ * Created: Sun Feb  7 15:11:48 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb  7 16:00:03 2010 (+0100)
+ * Last-Updated: Sun Feb  7 15:12:54 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 83
+ *     Update #: 2
  */
 
 /* Commentary: 
@@ -17,13 +17,13 @@
  * 
  */
 
-#include "dtkSearchBar.h"
+#include "dtkRegistrationBar.h"
 
 // /////////////////////////////////////////////////////////////////
-// dtkSearchBarButton
+// dtkRegistrationBarButton
 // /////////////////////////////////////////////////////////////////
 
-class dtkSearchBarButtonPrivate
+class dtkRegistrationBarButtonPrivate
 {
 public:
     void drawRoundRect(QPainter *painter, const QRectF& rect, qreal radius)
@@ -88,23 +88,23 @@ public:
     qreal rightBottomRadius;
 };
 
-dtkSearchBarButton::dtkSearchBarButton(QWidget *parent): QAbstractButton(parent), d(new dtkSearchBarButtonPrivate)
+dtkRegistrationBarButton::dtkRegistrationBarButton(QWidget *parent): QAbstractButton(parent), d(new dtkRegistrationBarButtonPrivate)
 {
     this->setRadius(10);
 }
 
-dtkSearchBarButton::dtkSearchBarButton(const QString& text, QWidget *parent) : QAbstractButton(parent), d(new dtkSearchBarButtonPrivate)
+dtkRegistrationBarButton::dtkRegistrationBarButton(const QString& text, QWidget *parent) : QAbstractButton(parent), d(new dtkRegistrationBarButtonPrivate)
 {
     this->setRadius(10);
     this->setText(text);
 }
 
-dtkSearchBarButton::~dtkSearchBarButton(void)
+dtkRegistrationBarButton::~dtkRegistrationBarButton(void)
 {
     delete d;
 }
 
-void dtkSearchBarButton::setRadius(qreal radius)
+void dtkRegistrationBarButton::setRadius(qreal radius)
 {
     d->leftTopRadius = radius;
     d->leftBottomRadius = radius;
@@ -112,7 +112,7 @@ void dtkSearchBarButton::setRadius(qreal radius)
     d->rightBottomRadius = radius;
 }
 
-void dtkSearchBarButton::setRadius(qreal leftTopRadius, qreal leftBottomRadius, qreal rightTopRadius, qreal rightBottomRadius)
+void dtkRegistrationBarButton::setRadius(qreal leftTopRadius, qreal leftBottomRadius, qreal rightTopRadius, qreal rightBottomRadius)
 {
     d->leftTopRadius = leftTopRadius;
     d->leftBottomRadius = leftBottomRadius;
@@ -120,16 +120,16 @@ void dtkSearchBarButton::setRadius(qreal leftTopRadius, qreal leftBottomRadius, 
     d->rightBottomRadius = rightBottomRadius;
 }
 
-QSize dtkSearchBarButton::minimumSizeHint(void) const
+QSize dtkRegistrationBarButton::minimumSizeHint(void) const
 {
     QFontMetrics fontMetrics(QFont("Arial", 8, QFont::Bold));
 
-    int width = fontMetrics.width(text()) + 48;
+    int width = fontMetrics.width(text()) + 28;
 
     return QSize(width, 22);
 }
 
-void dtkSearchBarButton::paintEvent(QPaintEvent *event)
+void dtkRegistrationBarButton::paintEvent(QPaintEvent *event)
 {
     int height = event->rect().height();
     int width = event->rect().width();
@@ -153,78 +153,67 @@ void dtkSearchBarButton::paintEvent(QPaintEvent *event)
     QPainter p(this);
     p.setRenderHints(QPainter::Antialiasing);
     p.setPen(QPen(QColor("#374262"), 1));
-    p.translate(5, 0);
+    p.translate(qMax(d->leftBottomRadius, d->leftTopRadius), 0);
     d->fillRoundRect(&p, QRect(0, 0, width, mh), d->leftTopRadius, 0, d->rightTopRadius, 0, QBrush(linearGrad));
     d->fillRoundRect(&p, QRect(0, mh, width, mh), 0, d->leftBottomRadius, 0, d->rightBottomRadius, color);
     d->drawRoundRect(&p, QRect(0, 0, width, height), d->leftTopRadius, d->leftBottomRadius, d->rightTopRadius, d->rightBottomRadius);
-    p.translate(-5, 0);
+    p.translate(-1*qMax(d->rightBottomRadius, d->rightTopRadius), 0);
     p.setFont(QFont("Arial", 9, QFont::Bold));
-    p.setPen(QPen(QColor(0xff, 0xff, 0xff), 1));
+
+    if(this->isEnabled())
+        p.setPen(QPen(Qt::white, 1));
+    else
+        p.setPen(QPen(Qt::gray, 1));
+
     p.drawText(event->rect(), Qt::AlignCenter, text());
     p.end();
 }
 
+
 // /////////////////////////////////////////////////////////////////
-// dtkSearchBar
+// dtkRegistrationBar
 // /////////////////////////////////////////////////////////////////
 
-class dtkSearchBarPrivate
+class dtkRegistrationBarPrivate
 {
 public:
-    dtkSearchBarButton *button;
-    QLineEdit *edit;
+    dtkRegistrationBarButton *registerButton;
+    dtkRegistrationBarButton *unregisterButton;
 };
 
-dtkSearchBar::dtkSearchBar(QWidget *parent) : QWidget(parent), d(new dtkSearchBarPrivate)
+dtkRegistrationBar::dtkRegistrationBar(QWidget *parent) : QWidget(parent), d(new dtkRegistrationBarPrivate)
 {
-    d->button = new dtkSearchBarButton("Search:", this);
-    d->button->setRadius(5, 5, 0, 0);
+    d->registerButton = new dtkRegistrationBarButton("Register", this);
+    d->registerButton->setRadius(5, 5, 0, 0);
     
-    d->edit = new QLineEdit(this);
-    d->edit->setAttribute(Qt::WA_MacShowFocusRect, false);
+    d->unregisterButton = new dtkRegistrationBarButton("Unregister", this);
+    d->unregisterButton->setRadius(0, 0, 5, 5);
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 5, 0, 5);
     layout->setSpacing(0);
-    layout->addWidget(d->button);
-    layout->addWidget(d->edit);
-
-    connect(d->edit, SIGNAL(textChanged(QString)), this, SIGNAL(textChanged(QString)));
-    connect(d->edit, SIGNAL(returnPressed()), this, SIGNAL(returnPressed()));
-
-    this->setFocusPolicy(Qt::StrongFocus);
+    layout->addWidget(d->registerButton);
+    layout->addWidget(d->unregisterButton);
 }
 
-dtkSearchBar::~dtkSearchBar(void)
+dtkRegistrationBar::~dtkRegistrationBar(void)
 {
     delete d;
 
     d = NULL;
 }
 
-QSize dtkSearchBar::sizeHint(void) const
+QSize dtkRegistrationBar::sizeHint(void) const
 {
-    return d->button->sizeHint() + d->edit->sizeHint();
+    return d->registerButton->sizeHint() + d->unregisterButton->sizeHint();
 }
 
-QSizePolicy dtkSearchBar::sizePolicy(void) const
+QAbstractButton *dtkRegistrationBar::registerButton(void)
 {
-    return QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    return d->registerButton;
 }
 
-QString dtkSearchBar::text(void) const
+QAbstractButton *dtkRegistrationBar::unregisterButton(void)
 {
-    return d->edit->text();
-}
-
-void dtkSearchBar::focusInEvent(QFocusEvent *event)
-{
-    Q_UNUSED(event);
-
-    d->edit->setFocus();
-}
-
-void dtkSearchBar::focusOutEvent(QFocusEvent *event)
-{
-    Q_UNUSED(event);
+    return d->unregisterButton;
 }

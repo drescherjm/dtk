@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb  4 11:01:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  4 19:06:02 2010 (+0100)
+ * Last-Updated: Sun Feb  7 16:00:21 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 17
+ *     Update #: 18
  */
 
 /* Commentary: 
@@ -72,6 +72,10 @@ public:
 signals:
     void textChanged(QString);
     void returnPressed();
+
+protected:
+    void focusInEvent(QFocusEvent *event);
+    void focusOutEvent(QFocusEvent *event);
 
 private:
     dtkSearchBarPrivate *d;

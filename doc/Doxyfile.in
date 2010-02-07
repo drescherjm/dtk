@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Sat Jun 13 19:49:36 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Sun Feb  7 12:20:54 2010 (+0100)
+## Last-Updated: Sun Feb  7 15:07:40 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 111
+##     Update #: 112
 ######################################################################
 ## 
 ### Commentary: 
@@ -652,7 +652,7 @@ EXCLUDE_PATTERNS       =
 # wildcard * is used, a substring. Examples: ANamespace, AClass, 
 # AClass::ANamespace, ANamespace::*Test
 
-EXCLUDE_SYMBOLS        = 
+EXCLUDE_SYMBOLS        = AnyOption
 
 # The EXAMPLE_PATH tag can be used to specify one or more files or 
 # directories that contain example code fragments that are included (see 

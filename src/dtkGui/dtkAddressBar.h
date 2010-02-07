@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb  4 11:01:31 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  5 15:51:20 2010 (+0100)
+ * Last-Updated: Sun Feb  7 15:57:00 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 23
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -75,6 +75,10 @@ public slots:
 
 protected slots:
     void onReturnPressed(void);
+
+protected:
+    void focusInEvent(QFocusEvent *event);
+    void focusOutEvent(QFocusEvent *event);
 
 private:
     dtkAddressBarPrivate *d;

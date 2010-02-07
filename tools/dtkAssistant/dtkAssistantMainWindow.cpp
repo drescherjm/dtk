@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb  3 21:42:16 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb  7 13:38:17 2010 (+0100)
+ * Last-Updated: Sun Feb  7 16:08:13 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 150
+ *     Update #: 210
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 
 #include <dtkGui/dtkAddressBar.h>
 #include <dtkGui/dtkNavigationBar.h>
+#include <dtkGui/dtkRegistrationBar.h>
 #include <dtkGui/dtkSearchBar.h>
 
 #include <dtkHelp/dtkHelpController.h>
@@ -31,8 +32,9 @@ class dtkAssistantMainWindowPrivate
 public:
     dtkHelpBrowser *browser;
 
-    dtkAddressBar *address;
     dtkNavigationBar *navigation;
+    dtkRegistrationBar *registration;
+    dtkAddressBar *address;
     dtkSearchBar *search;
 
     QAction *backwardAction;
@@ -40,6 +42,9 @@ public:
 
     QAction   *registerAction;
     QAction *unregisterAction;
+
+    QAction *addressFocusAction;
+    QAction *searchFocusAction;
 
     QDockWidget *contentDock;
     QDockWidget *indexDock;
@@ -56,19 +61,26 @@ dtkAssistantMainWindow::dtkAssistantMainWindow(QWidget *parent) : QMainWindow(pa
     connect(dtkHelpController::instance()->engine()->indexWidget(), SIGNAL(linksActivated(const QMap<QString, QUrl>&, const QString&)), this, SLOT(onLinksActivated(const QMap<QString, QUrl>&, const QString&)));
 
     d->backwardAction = d->browser->backwardAction();
+
     d->forwardAction = d->browser->forwardAction();
 
     d->registerAction = new QAction("Register", this);
-    d->registerAction->setShortcut(Qt::ControlModifier + Qt::Key_I);
     connect(d->registerAction, SIGNAL(triggered()), this, SLOT(onRegisterClicked()));
 
     d->unregisterAction = new QAction("Unregister", this);
     connect(d->unregisterAction, SIGNAL(triggered()), this, SLOT(onUnregisterClicked()));
 
     d->navigation = new dtkNavigationBar(this);
+    d->navigation->backwardButton()->setShortcut(Qt::ControlModifier + Qt::Key_Left);
+    d->navigation->forwardButton()->setShortcut(Qt::ControlModifier + Qt::Key_Right);
 
     connect(d->navigation->backwardButton(), SIGNAL(clicked()), d->backwardAction, SLOT(trigger()));
     connect(d->navigation->forwardButton(), SIGNAL(clicked()), d->forwardAction, SLOT(trigger()));
+
+    d->registration = new dtkRegistrationBar(this);
+    
+    connect(d->registration->registerButton(), SIGNAL(clicked()), d->registerAction, SLOT(trigger()));
+    connect(d->registration->unregisterButton(), SIGNAL(clicked()), d->unregisterAction, SLOT(trigger()));
 
     d->address = new dtkAddressBar(this);
     d->address->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -81,10 +93,23 @@ dtkAssistantMainWindow::dtkAssistantMainWindow(QWidget *parent) : QMainWindow(pa
     connect(d->search, SIGNAL(textChanged(QString)), dtkHelpController::instance()->engine()->indexWidget(), SLOT(filterIndices(QString)));
     connect(d->search, SIGNAL(returnPressed()), dtkHelpController::instance()->engine()->indexWidget(), SLOT(activateCurrentItem()));
 
+    QAction *addressFocusAction = new QAction(this);
+    addressFocusAction->setShortcut(Qt::ControlModifier + Qt::Key_L);
+    connect(addressFocusAction, SIGNAL(triggered()), this, SLOT(onAddressFocusTriggered()));
+    this->addAction(addressFocusAction);
+
+    QAction *searchFocusAction = new QAction(this);
+#if defined(Q_WS_MAC)
+    searchFocusAction->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_F);
+#else
+    searchFocusAction->setShortcut(Qt::ControlModifier + Qt::Key_K);
+#endif
+    connect(searchFocusAction, SIGNAL(triggered()), this, SLOT(onSearchFocusTriggered()));
+    this->addAction(searchFocusAction);
+
     QToolBar *toolbar = this->addToolBar("navigation");
     toolbar->addWidget(d->navigation);
-    toolbar->addAction(d->registerAction);
-    toolbar->addAction(d->unregisterAction);
+    toolbar->addWidget(d->registration);
     toolbar->addWidget(d->address);
     toolbar->addWidget(d->search);
 
@@ -101,7 +126,9 @@ dtkAssistantMainWindow::dtkAssistantMainWindow(QWidget *parent) : QMainWindow(pa
     this->setUnifiedTitleAndToolBarOnMac(true);
     this->setWindowTitle("dtkAssistant");
 
-    this->resize(800, 480);
+    this->readSettings();
+
+    d->browser->setSource(QUrl("qthelp://fr.inria.dtk/doc/index.html"));
 }
 
 dtkAssistantMainWindow::~dtkAssistantMainWindow(void)
@@ -109,6 +136,26 @@ dtkAssistantMainWindow::~dtkAssistantMainWindow(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkAssistantMainWindow::readSettings(void)
+{
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("assistant");
+    QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
+    QSize size = settings.value("size", QSize(600, 400)).toSize();
+    move(pos);
+    resize(size);
+    settings.endGroup();
+}
+
+void dtkAssistantMainWindow::writeSettings(void)
+{
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("assistant");
+    settings.setValue("pos", pos());
+    settings.setValue("size", size());
+    settings.endGroup();
 }
 
 void dtkAssistantMainWindow::onRegisterClicked(void)
@@ -159,4 +206,19 @@ void dtkAssistantMainWindow::onLinksActivated(const QMap<QString, QUrl>& urls, c
     
     if (ok)
         d->browser->setSource(urls.value(key));
+}
+
+void dtkAssistantMainWindow::onAddressFocusTriggered(void)
+{
+    d->address->setFocus();
+}
+
+void dtkAssistantMainWindow::onSearchFocusTriggered(void)
+{
+    d->search->setFocus();
+}
+
+void dtkAssistantMainWindow::closeEvent(QCloseEvent *event)
+{
+    this->writeSettings();
 }

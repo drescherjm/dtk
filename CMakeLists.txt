@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Feb  2 20:34:10 2010 (+0100)
+## Last-Updated: Sun Feb  7 16:16:03 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 248
+##     Update #: 253
 ######################################################################
 ## 
 ### Commentary: 
@@ -42,6 +42,12 @@ set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 ## #################################################################
 ## Setup output paths
 ## #################################################################
+
+if(WIN32)
+  set(CMAKE_INSTALL_PREFIX "$ENV{ProgramFiles}\\Inria\\${PROJECT_NAME}")
+else(WIN32)
+  set(CMAKE_INSTALL_PREFIX "/usr/local/inria/dtk")
+endif(WIN32)
 
 if(WIN32)
   set(${PROJECT_NAME}_ARCHIVE_OUTPUT_DIRECTORY lib)

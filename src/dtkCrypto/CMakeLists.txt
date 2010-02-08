@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Thu Jan  7 10:37:04 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Jan 14 11:19:52 2010 (+0100)
+## Last-Updated: Mon Feb  8 15:49:05 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 20
+##     Update #: 21
 ######################################################################
 ## 
 ### Commentary: 
@@ -63,7 +63,6 @@ qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES_WRAP}
 )
 
 target_link_libraries(${PROJECT_NAME}

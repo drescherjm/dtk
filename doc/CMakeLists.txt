@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Tue Feb  2 20:18:37 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Sat Feb  6 21:12:57 2010 (+0100)
+## Last-Updated: Mon Feb  8 09:39:24 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 35
+##     Update #: 36
 ######################################################################
 ## 
 ### Commentary: 
@@ -38,7 +38,6 @@ if (DOXYGEN_FOUND)
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/DoxygenLayout.xml  ${CMAKE_CURRENT_BINARY_DIR}/DoxygenLayout.xml
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/DoxygenHeader.html ${CMAKE_CURRENT_BINARY_DIR}/DoxygenHeader.html
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/DoxygenFooter.html ${CMAKE_CURRENT_BINARY_DIR}/DoxygenFooter.html
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/DoxygenStyle.css   ${CMAKE_CURRENT_BINARY_DIR}/DoxygenStyle.css
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/img      ${CMAKE_CURRENT_BINARY_DIR}/html/img
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/css      ${CMAKE_CURRENT_BINARY_DIR}/html/css
     COMMAND ${DOXYGEN_EXECUTABLE} Doxyfile

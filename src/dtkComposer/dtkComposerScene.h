@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Oct 27 12:40:32 2009 (+0100)
+ * Last-Updated: Sun Feb  7 23:00:57 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 37
+ *     Update #: 38
  */
 
 /* Commentary: 
@@ -40,7 +40,7 @@ public:
      dtkComposerScene(QObject *parent = 0);
     ~dtkComposerScene(void);
 
-    void addNode(const QString& type);
+    void addNode(dtkComposerNode *node);
 
     QList<dtkComposerEdge *> edges(void);
     QList<dtkComposerNode *> nodes(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb  3 21:42:16 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb  7 16:08:13 2010 (+0100)
+ * Last-Updated: Mon Feb  8 09:48:11 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 210
+ *     Update #: 216
  */
 
 /* Commentary: 
@@ -118,6 +118,8 @@ dtkAssistantMainWindow::dtkAssistantMainWindow(QWidget *parent) : QMainWindow(pa
 
     d->indexDock = new QDockWidget("Index", this);
     d->indexDock->setWidget(dtkHelpController::instance()->engine()->indexWidget());
+
+    dtkHelpController::instance()->engine()->contentWidget()->expandAll();
 
     this->addDockWidget(Qt::LeftDockWidgetArea, d->contentDock);
     this->addDockWidget(Qt::LeftDockWidgetArea, d->indexDock);

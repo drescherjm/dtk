@@ -4,9 +4,9 @@
 ;; Copyright (C) 2008 - Julien Wintz, Inria.
 ;; Created: Sat Feb  6 13:57:51 2010 (+0100)
 ;; Version: $Id$
-;; Last-Updated: Sat Feb  6 13:57:51 2010 (+0100)
+;; Last-Updated: Mon Feb  8 09:36:22 2010 (+0100)
 ;;           By: Julien Wintz
-;;     Update #: 1
+;;     Update #: 4
 */
 
 /*Commentary: 
@@ -65,7 +65,7 @@ code {
     font-size: 130%;
 }
 
-.memitem {
+.memproto {
     background-color: rgb(238, 238, 238);
     border-color: rgb(221, 221, 221);
     border-style: solid;

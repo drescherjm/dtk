@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Oct 27 08:52:50 2009 (+0100)
+ * Last-Updated: Mon Feb  8 14:27:20 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 101
+ *     Update #: 102
  */
 
 /* Commentary: 
@@ -102,7 +102,7 @@ void dtkComposerEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     Q_UNUSED(widget);
 
     painter->save();
-    painter->setPen(QPen(Qt::darkGray, 1));
+    painter->setPen(QPen(Qt::black, 1));
     painter->setBrush(Qt::yellow);
     painter->drawPath(d->path);
     painter->restore();

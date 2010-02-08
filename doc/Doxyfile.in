@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Sat Jun 13 19:49:36 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Sun Feb  7 15:07:40 2010 (+0100)
+## Last-Updated: Mon Feb  8 09:40:04 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 112
+##     Update #: 118
 ######################################################################
 ## 
 ### Commentary: 
@@ -630,7 +630,7 @@ RECURSIVE              = YES
 # excluded from the INPUT source files. This way you can easily exclude a 
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
-EXCLUDE                = 
+EXCLUDE                = @CMAKE_SOURCE_DIR@/tools/dtkPluginGenerator/template
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or 
 # directories that are symbolic links (a Unix filesystem feature) are excluded 
@@ -823,7 +823,7 @@ HTML_FOOTER            = DoxygenFooter.html
 # the style sheet file to the HTML output directory, so don't put your own 
 # stylesheet in the HTML output directory as well, or it will be erased!
 
-HTML_STYLESHEET        = DoxygenStyle.css
+HTML_STYLESHEET        = 
 
 # If the HTML_ALIGN_MEMBERS tag is set to YES, the members of classes, 
 # files or namespaces will be aligned in HTML using tables. If set to 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Oct 27 12:16:12 2009 (+0100)
+ * Last-Updated: Mon Feb  8 13:42:56 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 110
+ *     Update #: 115
  */
 
 /* Commentary: 
@@ -30,13 +30,10 @@ public:
 
     QGraphicsEllipseItem *ellipse;
     QGraphicsTextItem *text;
-
-    QString port;
 };
 
-dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, QString port, Type type, Multiplicity multiplicity, dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePropertyPrivate)
+dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multiplicity multiplicity, dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePropertyPrivate)
 {
-    d->port = port;
     d->type = type;
     d->multiplicity = multiplicity;
     d->parent = parent;
@@ -48,10 +45,10 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, QString port, Typ
     d->text->setFont(QFont("Lucida Grande", 9));
 #endif
     d->text->setPlainText(name);
-    d->text->setDefaultTextColor(Qt::black);
+    d->text->setDefaultTextColor(Qt::white);
 
     d->ellipse = new QGraphicsEllipseItem(this);
-    d->ellipse->setPen(QPen(Qt::darkGray, 1));
+    d->ellipse->setPen(QPen(Qt::gray, 1));
 
     this->setZValue(20);
 }
@@ -76,11 +73,6 @@ dtkComposerNode *dtkComposerNodeProperty::node(void)
 QString dtkComposerNodeProperty::name(void) const
 {
     return d->text->toPlainText();
-}
-
-QString dtkComposerNodeProperty::port(void) const
-{
-    return d->port;
 }
 
 dtkComposerNodeProperty::Type dtkComposerNodeProperty::type(void)

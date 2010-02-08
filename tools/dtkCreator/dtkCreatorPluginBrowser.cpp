@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 10:31:04 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 22 16:35:49 2009 (+0200)
+ * Last-Updated: Mon Feb  8 09:29:25 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 118
+ *     Update #: 119
  */
 
 /* Commentary: 
@@ -258,15 +258,15 @@ dtkCreatorPluginWidget *dtkCreatorPluginBrowser::widget(void)
 
 void dtkCreatorPluginBrowser::onDataSelected(dtkAbstractData *data)
 {
-    d->widget->addWidget(data->ui());
+    // d->widget->addWidget(data->ui());
 }
 
 void dtkCreatorPluginBrowser::onProcessSelected(dtkAbstractProcess *process)
 {
-    d->widget->addWidget(process->ui());
+    // d->widget->addWidget(process->ui());
 }
 
 void dtkCreatorPluginBrowser::onViewSelected(dtkAbstractView *view)
 {
-    d->widget->addWidget(view->ui());
+    // d->widget->addWidget(view->ui());
 }

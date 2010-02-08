@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jan  8 14:38:54 2010 (+0100)
+ * Last-Updated: Mon Feb  8 11:04:42 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 58
+ *     Update #: 63
  */
 
 /* Commentary: 
@@ -41,11 +41,9 @@ class DTKCOMPOSER_EXPORT dtkComposerNode : public QObject, public QGraphicsItem
 public:
     enum Type {
         Unknown,
-        GenericData,
         Data,
         Process,
-        View,
-        All
+        View
     };
 
      dtkComposerNode(dtkComposerNode *parent = 0);
@@ -53,11 +51,8 @@ public:
 
     void setType(Type type);
     void setObject(dtkAbstractObject *object);
-    void addScript(const QString& script);
-    void setScript(const QString& script);
 
 public:
-
     void addInputProperty(dtkComposerNodeProperty *property);
     void addOutputProperty(dtkComposerNodeProperty *property);
 
@@ -80,8 +75,6 @@ public:
     QList<dtkComposerNode *> outputNodes(void);
 
     dtkComposerEdge *edge(dtkComposerNodeProperty *property);
-
-    QString script(void) const;
 
 public:
     dtkComposerNodeProperty *propertyAt(const QPointF& point) const;

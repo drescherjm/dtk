@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep 11 22:51:47 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Sep 13 16:15:58 2009 (+0200)
+ * Last-Updated: Mon Feb  8 11:07:10 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 16
+ *     Update #: 17
  */
 
 /* Commentary: 
@@ -42,8 +42,8 @@ public:
     void setScene(dtkComposerScene *scene);
 
 protected slots:
-    QString evaluate(dtkComposerNode *node);
-
+    void evaluate(dtkComposerNode *node);
+    
 private:
     dtkComposerEvaluatorPrivate *d;
 };

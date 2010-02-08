@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:43:14 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jan 27 14:24:48 2010 (+0100)
+ * Last-Updated: Mon Feb  8 08:52:18 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 68
+ *     Update #: 70
  */
 
 /* Commentary:
@@ -24,9 +24,6 @@
 #include <dtkCore/dtkGlobal.h>
 
 class dtkAbstractObjectPrivate;
-class dtkComposerNode;
-
-class QWidget;
 
 class DTKCORE_EXPORT dtkAbstractObject : public QObject
 {
@@ -51,9 +48,6 @@ public:
    void setMetaData(QString key, QStringList values);
    void setMetaData(QString key, QString value);
    const QStringList metaDataValues(QString key);
-   
-   virtual dtkComposerNode *node(void);
-   virtual QWidget *ui(void);
    
 signals:
    void propertySet(QString key, QString value);

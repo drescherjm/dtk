@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep 11 22:54:53 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Sep 13 18:23:36 2009 (+0200)
+ * Last-Updated: Mon Feb  8 11:06:18 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 72
+ *     Update #: 77
  */
 
 /* Commentary: 
@@ -56,37 +56,14 @@ void dtkComposerEvaluator::run(void)
     foreach(dtkComposerNode *node, d->scene->nodes()) if(node->type() == dtkComposerNode::Process) processes << node;
     foreach(dtkComposerNode *node, d->scene->nodes()) if(node->type() == dtkComposerNode::View) views << node;
 
-    QString script;
-
-    foreach(dtkComposerNode *node, views)
-        script += this->evaluate(node);
-
-    int stat; qDebug() << script;
-
-    dtkScriptInterpreterPool::instance()->python()->interpret(script, &stat);
+    Q_UNUSED(datas);
+    Q_UNUSED(processes);
+    Q_UNUSED(views);
 }
 
-QString dtkComposerEvaluator::evaluate(dtkComposerNode *node)
+void dtkComposerEvaluator::evaluate(dtkComposerNode *node)
 {
-    QString node_script;
-
-    if(!node->inputEdges().count())
-        return node_script;
-
-    foreach(dtkComposerEdge *input, node->inputEdges())
-        node_script += this->evaluate(input->source()->node()) + "\n";
-
-    QString script = node->script(); script.replace("#0", node->object()->name());
-
-    foreach(dtkComposerEdge *input, node->inputEdges()) {
-        qDebug() << "replacing" << input->destination()->port() << "by" << input->source()->node()->object()->name();
-        script.replace(input->destination()->port(), input->source()->node()->object()->name());
-    }
-
-    node_script += script;
-    node_script += "\n";
-
-    return node_script;
+    Q_UNUSED(node);
 }
 
 void dtkComposerEvaluator::stop(void)

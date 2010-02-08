@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 16 15:42:53 2009 (+0200)
+ * Last-Updated: Mon Feb  8 13:26:09 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 272
+ *     Update #: 327
  */
 
 /* Commentary: 
@@ -53,8 +53,6 @@ public:
     dtkComposerNode::Type type;
 
     dtkAbstractObject *object;
-
-    QString script;
 };
 
 dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePrivate)
@@ -80,11 +78,18 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
     d->title->setFont(QFont("Lucida Grande", 11));
 #endif
     d->title->setHtml("Title");
-    d->title->setDefaultTextColor(Qt::black);
+    d->title->setDefaultTextColor(Qt::white);
     d->title->setPos(-d->width/2 + d->margin_left/2, -d->header_height-2);
 
     this->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
     this->setZValue(10);
+
+    QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(this);
+    shadow->setBlurRadius(5);
+    shadow->setOffset(3);
+    shadow->setColor(QColor(0, 0, 0, 127));
+
+    this->setGraphicsEffect(shadow);
 }
 
 dtkComposerNode::~dtkComposerNode(void)
@@ -106,16 +111,6 @@ void dtkComposerNode::setObject(dtkAbstractObject *object)
     d->title->setHtml(object->name());
 }
 
-void dtkComposerNode::addScript(const QString& script)
-{
-    d->script += script + "\n";
-}
-
-void dtkComposerNode::setScript(const QString& script)
-{
-    d->script = script;
-}
-
 dtkComposerNode::Type dtkComposerNode::type(void)
 {
     return d->type;
@@ -135,11 +130,6 @@ dtkComposerEdge *dtkComposerNode::edge(dtkComposerNodeProperty *property)
         return d->output_edges.key(property);
 
     return 0;
-}
-
-QString dtkComposerNode::script(void) const
-{
-    return d->script;
 }
 
 void dtkComposerNode::addInputProperty(dtkComposerNodeProperty *property)
@@ -265,25 +255,33 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     path.quadTo(rect.left(), rect.bottom(), rect.left(), rect.bottom() - leftBottomRadius);
     path.closeSubpath();
 
+    QLinearGradient gradiant(rect.left(), rect.top(), rect.left(), rect.bottom());
+
     switch(d->type) {
     case Unknown:
-        painter->setBrush(Qt::gray);
-        break;
-    case GenericData:
-        painter->setBrush(QColor(220, 155, 50));
+        gradiant.setColorAt(0.0, QColor(Qt::white));
+        gradiant.setColorAt(0.1, QColor(Qt::gray));
+        gradiant.setColorAt(1.0, QColor(Qt::gray).darker());
         break;
     case Data:
-        painter->setBrush(QColor(Qt::blue).lighter());
+        gradiant.setColorAt(0.0, QColor(Qt::white));
+        gradiant.setColorAt(0.1, QColor(Qt::blue));
+        gradiant.setColorAt(1.0, QColor(Qt::blue).darker());
         break;
     case Process:
-        painter->setBrush(QColor(Qt::red).lighter());
+        gradiant.setColorAt(0.0, QColor(Qt::white));
+        gradiant.setColorAt(0.1, QColor(Qt::red));
+        gradiant.setColorAt(1.0, QColor(Qt::red).darker());
         break;
     case View:
-        painter->setBrush(QColor(Qt::green).lighter());
+        gradiant.setColorAt(0.0, QColor(Qt::white));
+        gradiant.setColorAt(0.1, QColor(Qt::green));
+        gradiant.setColorAt(1.0, QColor(Qt::green).darker());
         break;
     }
 
-    painter->setPen(Qt::darkGray);
+    painter->setBrush(gradiant);
+    painter->setPen(Qt::NoPen);
     painter->drawPath(path);
 
     painter->restore();
@@ -292,7 +290,7 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 
     { // Drawing node body
 
-    QRectF rect(-d->width/2, 0, d->width, d->height-d->header_height);
+    QRectF rect(-d->width/2, 0, d->width, d->height-d->header_height-1);
 
     qreal leftBottomRadius = 5;
     qreal leftTopRadius = 0;
@@ -311,15 +309,29 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     path.quadTo(rect.left(), rect.bottom(), rect.left(), rect.bottom() - leftBottomRadius);
     path.closeSubpath();
 
-    painter->setPen(Qt::darkGray);
-    painter->setBrush(Qt::lightGray);
+    switch(d->type) {
+    case Unknown:
+        painter->setBrush(Qt::gray);
+        break;
+    case Data:
+        painter->setBrush(QColor(Qt::blue).darker());
+        break;
+    case Process:
+        painter->setBrush(QColor(Qt::red).darker());
+        break;
+    case View:
+        painter->setBrush(QColor(Qt::green).darker());
+        break;
+    }
+
+    painter->setPen(Qt::NoPen);
     painter->drawPath(path);
 
     painter->restore();
 
     }
 
-    if(this->isSelected()) { // Drawing selection outline
+    { // Drawing selection outline
 
     QRectF rect(-d->width/2, -d->header_height, d->width, d->height);
          
@@ -340,7 +352,11 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     path.quadTo(rect.left(), rect.bottom(), rect.left(), rect.bottom() - leftBottomRadius);
     path.closeSubpath();
 
-    painter->setPen(QPen(Qt::magenta, 2));
+    if(this->isSelected()) 
+        painter->setPen(QPen(Qt::magenta, 2));
+    else
+        painter->setPen(QPen(Qt::black, 1));
+
     painter->drawPath(path);
 
     painter->restore();

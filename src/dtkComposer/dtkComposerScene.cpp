@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Oct 27 12:39:44 2009 (+0100)
+ * Last-Updated: Sun Feb  7 23:00:42 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 178
+ *     Update #: 180
  */
 
 /* Commentary: 
@@ -50,21 +50,9 @@ dtkComposerScene::~dtkComposerScene(void)
     d = NULL;
 }
 
-void dtkComposerScene::addNode(const QString& type)
+void dtkComposerScene::addNode(dtkComposerNode *node)
 {
-    dtkComposerNode *node = NULL;
-
-    if(dtkAbstractData *data = dtkAbstractDataFactory::instance()->create(type))
-        node = data->node();
-
-    else if(dtkAbstractProcess *process = dtkAbstractProcessFactory::instance()->create(type))
-        node = process->node();
-
-    else if(dtkAbstractView *view = dtkAbstractViewFactory::instance()->create(type))
-        node = view->node();
-
-    if (node)
-        this->addItem(node);
+    this->addItem(node);
 }
 
 QList<dtkComposerEdge *> dtkComposerScene::edges(void)

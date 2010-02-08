@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 22 16:39:59 2009 (+0200)
+ * Last-Updated: Mon Feb  8 09:28:39 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 317
+ *     Update #: 319
  */
 
 /* Commentary: 
@@ -79,22 +79,22 @@ void dtkComposer::onDataSelected(dtkAbstractData *data)
 {
     d->scene->clearSelection();
 
-    if(dtkComposerNode *node = data->node())
-        node->setSelected(true);
+    // if(dtkComposerNode *node = data->node())
+    //     node->setSelected(true);
 }
 
 void dtkComposer::onProcessSelected(dtkAbstractProcess *process)
 {
     d->scene->clearSelection();
 
-    if(dtkComposerNode *node = process->node())
-        node->setSelected(true);
+    // if(dtkComposerNode *node = process->node())
+    //     node->setSelected(true);
 }
 
 void dtkComposer::onViewSelected(dtkAbstractView *view)
 {
     d->scene->clearSelection();
 
-    if(dtkComposerNode *node = view->node())
-        node->setSelected(true);
+    // if(dtkComposerNode *node = view->node())
+    //     node->setSelected(true);
 }

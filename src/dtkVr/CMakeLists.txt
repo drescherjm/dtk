@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Feb  8 20:57:54 2010 (+0100)
+## Last-Updated: Mon Feb  8 22:52:28 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 108
+##     Update #: 109
 ######################################################################
 ## 
 ### Commentary: 
@@ -18,16 +18,6 @@
 ######################################################################
 
 project(dtkVr)
-
-## #################################################################
-## Configuration
-## #################################################################
-
-find_package(MPI)
-
-if(MPI_FOUND)
-  include_directories(${MPI_INCLUDE_PATH})
-endif(MPI_FOUND)
 
 ## #################################################################
 ## Sources
@@ -51,14 +41,6 @@ set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkDeviceWiiRemotePrivate.h
 )
 endif(APPLE)
-
-if(MPI_FOUND)
-set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}  
-  dtkVrMaster.h
-  dtkVrProcess.h
-  dtkVrSlave.h
-)
-endif(MPI_FOUND)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractDevice.h
@@ -87,14 +69,6 @@ set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkDeviceWiiRemoteDiscovery.m
 )
 endif(APPLE)
-
-if(MPI_FOUND)
-set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
-  dtkVrMaster.cpp
-  dtkVrProcess.cpp
-  dtkVrSlave.cpp
-)
-endif(MPI_FOUND)
 
 ## #################################################################
 ## Wrapping

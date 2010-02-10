@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb  9 11:15:14 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 10 15:24:23 2010 (+0100)
+ * Last-Updated: Wed Feb 10 16:40:47 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 306
+ *     Update #: 311
  */
 
 /* Commentary: 
@@ -42,20 +42,10 @@ public:
     QTcpSocket *socket;
 
     quint16 size;
-
-public:
-    dtkAbstractView *view;
 };
 
 tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent), d(new tstMainWindowPrivate)
 {
-    // /////////////////////////////////////////////////////////////////
-    // View
-    // /////////////////////////////////////////////////////////////////
-
-    d->view = dtkAbstractViewFactory::instance()->create("vtkView");
-    d->view->init();
-
     // /////////////////////////////////////////////////////////////////
     // Network
     // /////////////////////////////////////////////////////////////////
@@ -92,8 +82,6 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent), d(new tstMa
 
     QVBoxLayout *layout = new QVBoxLayout(central);
     layout->addLayout(formLayout);
-    if (d->view)
-        layout->addWidget(d->view->widget());
     layout->addWidget(buttons);
 
     this->setCentralWidget(central);
@@ -176,8 +164,6 @@ void tstMainWindow::onRead(void)
     float rz; in >> rz;
     
     qDebug() << "client:" << tx << ty << tz << rx << ry << rz;
-
-    d->view->update(tx, ty, tz, rx, ry, rz);
 
     d->size = 0;
 }

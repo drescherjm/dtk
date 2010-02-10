@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jan 27 15:30:50 2010 (+0100)
+ * Last-Updated: Wed Feb 10 14:51:38 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 144
+ *     Update #: 178
  */
 
 /* Commentary:
@@ -53,6 +53,31 @@ dtkAbstractView::~dtkAbstractView(void)
     d = NULL;
 }
 
+void dtkAbstractView::link(dtkAbstractView *other)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::unlink(dtkAbstractView *other)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::select(dtkAbstractData *data)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::unselect(dtkAbstractData *data)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::update(float tx, float ty, float tz, float rx, float ry, float rz)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
 void dtkAbstractView::setView(void *)
 {
     DTK_DEFAULT_IMPLEMENTATION;
@@ -78,6 +103,29 @@ void dtkAbstractView::setData(dtkAbstractData *data, int channel)
     DTK_UNUSED(channel);
 }
 
+void dtkAbstractView::setBackgroundColor(int red, int green, int blue)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(red);
+    DTK_UNUSED(green);
+    DTK_UNUSED(blue);
+}
+
+void dtkAbstractView::setBackgroundColor(double red, double green, double blue)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(red);
+    DTK_UNUSED(green);
+    DTK_UNUSED(blue);
+}
+
+void *dtkAbstractView::view(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return NULL;
+}
+
 void *dtkAbstractView::data(void)
 {
     DTK_DEFAULT_IMPLEMENTATION;
@@ -92,12 +140,31 @@ void *dtkAbstractView::data(int channel)
     return NULL;
 }
 
-void dtkAbstractView::updatePosition(double x, double y, double z)
+void dtkAbstractView::init(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::clear(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::reset(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::update(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+QWidget *dtkAbstractView::widget(void)
 {
     DTK_DEFAULT_IMPLEMENTATION;
 
-    foreach(dtkAbstractViewInteractor *interactor, d->interactors)
-      interactor->updatePosition (x, y, z);
+    return NULL;
 }
 
 void dtkAbstractView::showFullScreen(void)
@@ -209,20 +276,6 @@ dtkAbstractViewInteractor *dtkAbstractView::interactor(QString type)
     return NULL;
 }
 
-void dtkAbstractView::start(unsigned int iterations)
-{
-    foreach(dtkAbstractViewAnimator *animator, d->animators)
-        if (animator->enabled())
-            animator->start(iterations);
-}
-
-void dtkAbstractView::stop(void)
-{
-    foreach(dtkAbstractViewAnimator *animator, d->animators)
-        if (animator->enabled())
-            animator->stop();
-}
-
 QList<dtkAbstractViewAnimator *> dtkAbstractView::animators(void)
 {
     return d->animators.values();
@@ -239,7 +292,7 @@ QList<dtkAbstractViewInteractor *> dtkAbstractView::interactors(void)
 }
 
 // /////////////////////////////////////////////////////////////////
-//
+// Debug stream operators
 // /////////////////////////////////////////////////////////////////
 
 QDebug operator<<(QDebug debug, const dtkAbstractView& viewer)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Jan 25 12:24:58 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jan 25 12:25:01 2010 (+0100)
+ * Last-Updated: Tue Feb  9 16:14:43 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 1
+ *     Update #: 3
  */
 
 /* Commentary: 
@@ -23,7 +23,6 @@
 #include <dtkVr/dtkDeviceWiiAccelerationView.h>
 #include <dtkVr/dtkDeviceWiiJoystickMotionView.h>
 #include <dtkVr/dtkDeviceWiiInfraredMotionView.h>
-
 #include <dtkVr/dtkDeviceTdx.h>
 
 #include <QtCore>

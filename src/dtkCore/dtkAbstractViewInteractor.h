@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jan 29 14:36:41 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jul 31 23:37:39 2009 (+0200)
+ * Last-Updated: Tue Feb  9 22:50:50 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 78
+ *     Update #: 80
  */
 
 /* Commentary:
@@ -52,21 +52,12 @@ public:
     virtual dtkAbstractData *output (int channel);
     virtual dtkAbstractData *output (int channel, int frame);
 
-    virtual void  predraw(void) {}
-    virtual void     draw(void) {}
-    virtual void postdraw(void) {}
+    virtual void  predraw(void);
+    virtual void     draw(void);
+    virtual void postdraw(void);
 
 signals:
     void updated(void);
-
-public slots:
-    virtual void    updatePosition(          double x, double y, double z) {} // -- to be moved later on
-    virtual void updateOrientation(double a, double x, double y, double z) {} // -- to be moved later on
-
-    virtual void update(double tx, double ty, double tz) {}                                  // -- to be moved later on
-    virtual void update(double tx, double ty, double tz, double rx, double ry, double rz) {} // -- to be moved later on
-
-    virtual void update(double thumb, double index, double middle, double ring, double pinky) {} // -- to be moved later on
 
 private:
     dtkAbstractViewInteractorPrivate *d;

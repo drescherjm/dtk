@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Jan 30 16:14:03 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Aug  1 00:46:42 2009 (+0200)
+ * Last-Updated: Tue Feb  9 22:38:25 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 12
+ *     Update #: 17
  */
 
 /* Commentary: 
@@ -36,7 +36,9 @@ dtkAbstractViewAnimator::dtkAbstractViewAnimator(void) : dtkAbstractObject(), d(
 
 dtkAbstractViewAnimator::~dtkAbstractViewAnimator(void)
 {
+    delete d;
 
+    d = NULL;
 }
 
 dtkAbstractData *dtkAbstractViewAnimator::data(void)
@@ -72,4 +74,14 @@ void dtkAbstractViewAnimator::enable(void)
 void dtkAbstractViewAnimator::disable(void)
 {
     d->enabled = false;
+}
+
+void dtkAbstractViewAnimator::start(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractViewAnimator::stop(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
 }

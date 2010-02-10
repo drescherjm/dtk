@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Jan 30 16:13:08 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Aug  1 00:54:14 2009 (+0200)
+ * Last-Updated: Tue Feb  9 22:50:51 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 24
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -48,8 +48,8 @@ public:
    void disable(void);
 
 public slots:
-   virtual void start(unsigned int iterations = 1) { DTK_UNUSED(iterations); }
-   virtual void  stop(void) {}
+   virtual void start(void);
+   virtual void  stop(void);
 
 private:
    dtkAbstractViewAnimatorPrivate *d;

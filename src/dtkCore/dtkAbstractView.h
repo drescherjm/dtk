@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Aug  1 00:40:53 2009 (+0200)
+ * Last-Updated: Wed Feb 10 14:53:25 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 201
+ *     Update #: 217
  */
 
 /* Commentary:
@@ -57,36 +57,32 @@ signals:
     void clickedWorldCoordinates(double, double, double);
 
 public slots:
-    virtual void   link(dtkAbstractView *other) {}
-    virtual void unlink(dtkAbstractView *other) {}
+    virtual void   link(dtkAbstractView *other);
+    virtual void unlink(dtkAbstractView *other);
 
-    virtual void   select(dtkAbstractData *data) {}
-    virtual void unselect(dtkAbstractData *data) {}
+    virtual void   select(dtkAbstractData *data);
+    virtual void unselect(dtkAbstractData *data);
+
+    virtual void update(float tx, float ty, float tz, float rx, float ry, float rz);
 
     virtual void setView(void *view);
 
     virtual void setData(dtkAbstractData *data);
     virtual void setData(dtkAbstractData *data, int inputId);
 
-    virtual dtkAbstractData *retreiveAbstractData(void*) { return NULL; }
+    virtual void setBackgroundColor(int red, int green, int blue);
+    virtual void setBackgroundColor(double red, double green, double blue);
 
-    virtual void setBackgroundColor(   int red,    int green,    int blue) { DTK_UNUSED(red); DTK_UNUSED(green); DTK_UNUSED(blue); }
-    virtual void setBackgroundColor(double red, double green, double blue) { DTK_UNUSED(red); DTK_UNUSED(green); DTK_UNUSED(blue); }
-
-    virtual void setForegroundImage(dtkAbstractData *data) { DTK_UNUSED(data); }
-    virtual void setBackgroundImage(dtkAbstractData *data) { DTK_UNUSED(data); }
-
-    virtual void *view(void) { return NULL; }
+    virtual void *view(void);
     virtual void *data(void);
     virtual void *data(int channel);
 
-    virtual void  clear(void) {}
-    virtual void  reset(void) {}
-    virtual void update(void) {}
+    virtual void   init(void);
+    virtual void  clear(void);
+    virtual void  reset(void);
+    virtual void update(void);
 
-    virtual void updatePosition (double x, double y, double z);
-
-    virtual QWidget *widget(void) { return NULL; }
+    virtual QWidget *widget(void);
 
     void showFullScreen(void);
     void showMinimized(void);
@@ -110,19 +106,9 @@ public slots:
     dtkAbstractViewNavigator  *navigator (QString type);
     dtkAbstractViewInteractor *interactor(QString type);
 
-    void start(unsigned int iterations = 1);
-    void stop(void);
-
     QList<dtkAbstractViewAnimator   *> animators(void);
     QList<dtkAbstractViewNavigator  *> navigators(void);
     QList<dtkAbstractViewInteractor *> interactors(void);
-
-    virtual void setColorLookupTable(int min, int max, int size, int *table) {
-        DTK_UNUSED(min);
-        DTK_UNUSED(max);
-        DTK_UNUSED(size);
-        DTK_UNUSED(table);
-    }
 
 private:
     dtkAbstractViewPrivate *d;

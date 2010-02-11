@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Aug  3 17:34:51 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Jan 25 12:33:16 2010 (+0100)
+## Last-Updated: Thu Feb 11 10:17:34 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 68
+##     Update #: 70
 ######################################################################
 ## 
 ### Commentary: 
@@ -83,8 +83,6 @@ target_link_libraries(${PROJECT_NAME}
   dtkScript
   dtkGui
   dtkComposer
-  dtkCrypto
-  dtkVr
 )
 
 ## #################################################################

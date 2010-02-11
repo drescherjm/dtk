@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 19:22:37 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Feb  8 18:19:56 2010 (+0100)
+## Last-Updated: Thu Feb 11 10:11:32 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 16
+##     Update #: 17
 ######################################################################
 ## 
 ### Commentary: 
@@ -22,6 +22,4 @@ add_subdirectory(dtkScript)
 add_subdirectory(dtkGui)
 add_subdirectory(dtkComposer)
 add_subdirectory(dtkCrypto)
-add_subdirectory(dtkVr)
 add_subdirectory(dtkHelp)
-

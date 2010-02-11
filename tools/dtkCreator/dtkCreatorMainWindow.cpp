@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Feb  7 15:31:37 2010 (+0100)
+ * Last-Updated: Thu Feb 11 10:17:12 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 445
+ *     Update #: 446
  */
 
 /* Commentary: 
@@ -128,9 +128,6 @@ bool dtkCreatorMainWindowPrivate::maySave(void)
 
 extern "C" int init_core(void);                  // -- Initialization core layer python wrapped functions
 extern "C" int Core_Init(Tcl_Interp *interp);    // -- Initialization core layer tcl    wrapped functions
-
-extern "C" int init_vr(void);                  // -- Initialization vr layer python wrapped functions
-extern "C" int Vr_Init(Tcl_Interp *interp);    // -- Initialization vr layer tcl    wrapped functions
 
 extern "C" int init_creator(void);               // -- Initialization creator layer python wrapped functions
 extern "C" int Creator_Init(Tcl_Interp *interp); // -- Initialization creator layer tcl    wrapped functions
@@ -341,13 +338,6 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
         "pluginManager  = core.dtkPluginManager.instance()"
     );
 
-    // Setting up vr python module
-
-    dtkScriptInterpreterPythonModuleManager::instance()->registerInitializer(&init_vr);
-    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
-        "import vr"
-    );
-
     // Setting up creator python module
 
     dtkScriptInterpreterPythonModuleManager::instance()->registerInitializer(&init_creator);
@@ -379,10 +369,6 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
         "set pluginManager  [dtkPluginManager_instance]"
     );
-
-    // Setting up vr tcl module
-
-    dtkScriptInterpreterTclModuleManager::instance()->registerInitializer(&Vr_Init);
 
     // Setting up creator tcl module
 

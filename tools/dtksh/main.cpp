@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Dec 10 14:05:44 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Jan 16 16:29:38 2010 (+0100)
+ * Last-Updated: Thu Feb 11 10:16:31 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 15
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -28,9 +28,6 @@
 
 extern "C" int init_core(void);               // -- Initialization core layer python wrapped functions
 extern "C" int Core_Init(Tcl_Interp *interp); // -- Initialization core layer tcl    wrapped functions
-
-extern "C" int init_vr(void);                  // -- Initialization vr layer python wrapped functions
-extern "C" int Vr_Init(Tcl_Interp *interp);    // -- Initialization vr layer tcl    wrapped functions
 
 int main(int argc, char **argv)
 {
@@ -62,13 +59,6 @@ int main(int argc, char **argv)
         "pluginManager  = core.dtkPluginManager.instance()"
     );
 
-    // Setting up vr python module
-
-    dtkScriptInterpreterPythonModuleManager::instance()->registerInitializer(&init_vr);
-    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
-        "import vr"
-    );
-
     // Setting up core tcl module
 
     dtkScriptInterpreterTclModuleManager::instance()->registerInitializer(&Core_Init);
@@ -84,10 +74,6 @@ int main(int argc, char **argv)
     dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
         "set pluginManager  [dtkPluginManager_instance]"
     );
-
-    // Setting up vr tcl module
-
-    dtkScriptInterpreterTclModuleManager::instance()->registerInitializer(&Vr_Init);
 
     // Setting up interpreter
 

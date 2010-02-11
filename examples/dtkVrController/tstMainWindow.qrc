@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>pixmaps/dtkDeviceTdx.png</file>
-        <file>pixmaps/dtkDeviceWii.png</file>
-    </qresource>
-</RCC>

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 26 16:29:02 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jan 13 15:20:03 2010 (+0100)
+ * Last-Updated: Thu Feb 11 14:11:07 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 249
+ *     Update #: 261
  */
 
 /* Commentary: 
@@ -97,7 +97,10 @@ void init_redirector(void)
 
 class dtkScriptInterpreterPythonPrivate
 {
-public:    
+public:
+    unsigned int thread_level;
+
+    PyThreadState* thread_state;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -106,6 +109,9 @@ public:
 
 dtkScriptInterpreterPython::dtkScriptInterpreterPython(QObject *parent) : dtkScriptInterpreter(parent), d(new dtkScriptInterpreterPythonPrivate)
 {
+    d->thread_level = 0;
+    d->thread_state = 0;
+
     int stat;
 
     Py_Initialize();
@@ -161,9 +167,27 @@ void dtkScriptInterpreterPython::unregisterVariable(QString name)
 
 }
 
+void dtkScriptInterpreterPython::allowThreads(void)
+{
+    d->thread_level--;
+
+    if (d->thread_level == 0)
+        d->thread_state = PyEval_SaveThread();
+}
+
+void dtkScriptInterpreterPython::blockThreads(void)
+{    
+    if((d->thread_level == 0) && (d->thread_state))
+        PyEval_RestoreThread(d->thread_state);
+
+    d->thread_level++;
+}
+
 QString dtkScriptInterpreterPython::interpret(const QString& command, int *stat)
 {
     redirection_occured = false;
+
+    blockThreads();
 
     switch(PyRun_SimpleString(command.toAscii().constData())) {
     case  0: *stat = Status_Ok;    break;
@@ -176,12 +200,16 @@ QString dtkScriptInterpreterPython::interpret(const QString& command, int *stat)
 
     dtkScriptInterpreterSynchronizer::instance()->wake();
 
+    allowThreads();
+
     return "";
 }
 
 QString dtkScriptInterpreterPython::interpret(const QString& command, const QStringList& args, int *stat)
 {
     QString result = "";
+
+    blockThreads();
 
     PyObject *modname = PyString_FromString("__main__");
     PyObject *mod = PyImport_Import(modname);
@@ -202,6 +230,8 @@ QString dtkScriptInterpreterPython::interpret(const QString& command, const QStr
 	Py_XDECREF(mod);
     }
     Py_XDECREF(modname);
+
+    allowThreads();
 
     return result;
 }

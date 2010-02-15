@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Feb 11 10:56:37 2010 (+0100)
+## Last-Updated: Mon Feb 15 20:13:03 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 254
+##     Update #: 259
 ######################################################################
 ## 
 ### Commentary: 
@@ -44,9 +44,10 @@ set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 ## #################################################################
 
 if(WIN32)
-  set(CMAKE_INSTALL_PREFIX "$ENV{ProgramFiles}\\Inria\\${PROJECT_NAME}")
+  string(REPLACE "\\" "/" ProgramFiles "$ENV{ProgramFiles}")
+  set(CMAKE_INSTALL_PREFIX "${ProgramFiles}/Inria/${PROJECT_NAME}")
 else(WIN32)
-  set(CMAKE_INSTALL_PREFIX "/usr/local/inria/dtk")
+  set(CMAKE_INSTALL_PREFIX "/usr/local/inria/${PROJECT_NAME}")
 endif(WIN32)
 
 if(WIN32)
@@ -207,14 +208,14 @@ mark_as_advanced(SWIG_VERSION)
 
 ## tcl
 
-find_package(TCL)
+find_package(TCL QUIET)
 if(TCL_FOUND)
   include_directories(${TCL_INCLUDE_PATH})
 endif(TCL_FOUND)
 
 ## python
 
-find_package(PythonLibs)
+find_package(PythonLibs QUIET)
 if(PYTHONLIBS_FOUND)
   include_directories(${PYTHON_INCLUDE_PATH})
   get_filename_component(PYTHON_PATH ${PYTHON_LIBRARIES} PATH)
@@ -223,30 +224,13 @@ endif(PYTHONLIBS_FOUND)
 
 ## ssl
 
-find_package(OpenSSL REQUIRED QUIET)
+find_package(OpenSSL QUIET)
 
 include_directories(${OPENSSL_INCLUDE_DIR})
 
-## vrpn
+## mpi
 
-find_path(VRPN_INCLUDES vrpn_Configure.h /usr/include /usr/local/include)
-
-if(VRPN_INCLUDES)
-include_directories(${VRPN_INCLUDES})
-endif(VRPN_INCLUDES)
-
-mark_as_advanced(VRPN_INCLUDES)
-
-find_library(QUAT_LIBRARIES NAMES quat PATHS /usr/lib /usr/local/lib)
-find_library(VRPN_LIBRARIES NAMES vrpn PATHS /usr/lib /usr/local/lib)
-
-if(QUAT_LIBRARIES AND VRPN_LIBRARIES)
-link_directories(${QUAT_LIBRARIES})
-link_directories(${VRPN_LIBRARIES})
-endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)
-
-mark_as_advanced(QUAT_LIBRARIES)
-mark_as_advanced(VRPN_LIBRARIES)
+find_package(MPI QUIET)
 
 ## #################################################################
 ## Build options

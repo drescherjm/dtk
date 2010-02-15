@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Mar 13 21:49:35 2009 (+0100)
  * Version: $Id$
- * Last-Updated:  Thu Apr  9 18:48:36 2009
- *           By: Jean-Christophe Lombardo
- *     Update #: 2
+ * Last-Updated: Mon Feb 15 21:21:38 2010 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 4
  */
 
 /* Commentary: 
@@ -17,6 +17,9 @@
  * 
  */
 
+#ifndef DTKGUIEXPORT_H
+#define DTKGUIEXPORT_H
+
 #ifdef WIN32
     #ifdef dtkGui_EXPORTS
         #define DTKGUI_EXPORT __declspec(dllexport) 
@@ -25,4 +28,6 @@
     #endif
 #else
     #define DTKGUI_EXPORT	
+#endif
+
 #endif

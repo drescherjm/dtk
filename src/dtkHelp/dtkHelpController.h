@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb  3 16:00:38 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb  7 11:55:11 2010 (+0100)
+ * Last-Updated: Mon Feb 15 20:10:12 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 26
+ *     Update #: 28
  */
 
 /* Commentary: 
@@ -23,9 +23,11 @@
 #include <QtCore>
 #include <QtHelp>
 
+#include "dtkHelpExport.h"
+
 class dtkHelpControllerPrivate;
 
-class dtkHelpController : public QObject
+class DTKHELP_EXPORT dtkHelpController : public QObject
 {
     Q_OBJECT
 

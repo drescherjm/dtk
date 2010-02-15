@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb  4 18:25:17 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  5 08:19:31 2010 (+0100)
+ * Last-Updated: Mon Feb 15 20:08:19 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 16
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -22,13 +22,15 @@
 
 #include <QtGui>
 
+#include "dtkGuiExport.h"
+
 // /////////////////////////////////////////////////////////////////
 // dtkNavigationBarButton
 // /////////////////////////////////////////////////////////////////
 
 class dtkNavigationBarButtonPrivate;
 
-class dtkNavigationBarButton : public QAbstractButton
+class DTKGUI_EXPORT dtkNavigationBarButton : public QAbstractButton
 {
     Q_OBJECT
     
@@ -56,7 +58,7 @@ private:
 
 class dtkNavigationBarPrivate;
 
-class dtkNavigationBar : public QWidget
+class DTKGUI_EXPORT dtkNavigationBar : public QWidget
 {
     Q_OBJECT
 

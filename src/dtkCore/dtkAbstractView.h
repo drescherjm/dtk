@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 10 14:53:25 2010 (+0100)
+ * Last-Updated: Sat Feb 13 20:54:40 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 217
+ *     Update #: 229
  */
 
 /* Commentary:
@@ -22,7 +22,9 @@
 
 #include <dtkCore/dtkAbstractObject.h>
 
-class QWidget;
+#include <QtGui/QVector3D>
+#include <QtGui/QQuaternion>
+#include <QtGui/QWidget>
 
 class dtkAbstractViewPrivate;
 class dtkAbstractViewAnimator;
@@ -63,8 +65,6 @@ public slots:
     virtual void   select(dtkAbstractData *data);
     virtual void unselect(dtkAbstractData *data);
 
-    virtual void update(float tx, float ty, float tz, float rx, float ry, float rz);
-
     virtual void setView(void *view);
 
     virtual void setData(dtkAbstractData *data);
@@ -77,7 +77,6 @@ public slots:
     virtual void *data(void);
     virtual void *data(int channel);
 
-    virtual void   init(void);
     virtual void  clear(void);
     virtual void  reset(void);
     virtual void update(void);
@@ -109,6 +108,12 @@ public slots:
     QList<dtkAbstractViewAnimator   *> animators(void);
     QList<dtkAbstractViewNavigator  *> navigators(void);
     QList<dtkAbstractViewInteractor *> interactors(void);
+
+    virtual void   initialize(void);
+    virtual void uninitialize(void);
+
+    virtual void setupCameraLookAt(const QVector3D& eye, const QVector3D& center, const QVector3D& up);
+    virtual void setupCameraFrustum(double left, double right, double bottom, double top, double near, double far);
 
 private:
     dtkAbstractViewPrivate *d;

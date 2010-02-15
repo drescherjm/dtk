@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Aug  3 17:34:51 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Feb 11 10:17:34 2010 (+0100)
+## Last-Updated: Mon Feb 15 20:10:39 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 70
+##     Update #: 71
 ######################################################################
 ## 
 ### Commentary: 
@@ -63,8 +63,10 @@ dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP creator tcl    ${CMAKE_CUR
 ## Build rules
 ## #################################################################
 
+if(NOT MSVC)
 add_definitions(-Wno-write-strings)
 add_definitions(-Wformat=0)
+endif(NOT MSVC)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 

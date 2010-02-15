@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb  3 15:54:13 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  5 16:25:10 2010 (+0100)
+ * Last-Updated: Mon Feb 15 20:09:45 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 27
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -25,9 +25,11 @@
 #include <QtHelp>
 #include <QtWebKit>
 
+#include "dtkHelpExport.h"
+
 class dtkHelpBrowserPrivate;
 
-class dtkHelpBrowser : public QWebView
+class DTKHELP_EXPORT dtkHelpBrowser : public QWebView
 {
     Q_OBJECT
 

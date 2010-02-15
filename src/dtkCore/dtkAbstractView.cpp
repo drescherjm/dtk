@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 10 14:51:38 2010 (+0100)
+ * Last-Updated: Sat Feb 13 20:54:54 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 178
+ *     Update #: 209
  */
 
 /* Commentary:
@@ -16,8 +16,6 @@
 /* Change log:
  *
  */
-
-#include <QtGui/QWidget>
 
 #include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkAbstractView.h>
@@ -69,11 +67,6 @@ void dtkAbstractView::select(dtkAbstractData *data)
 }
 
 void dtkAbstractView::unselect(dtkAbstractData *data)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-void dtkAbstractView::update(float tx, float ty, float tz, float rx, float ry, float rz)
 {
     DTK_DEFAULT_IMPLEMENTATION;
 }
@@ -138,11 +131,6 @@ void *dtkAbstractView::data(int channel)
     DTK_DEFAULT_IMPLEMENTATION;
 
     return NULL;
-}
-
-void dtkAbstractView::init(void)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
 }
 
 void dtkAbstractView::clear(void)
@@ -289,6 +277,39 @@ QList<dtkAbstractViewNavigator *> dtkAbstractView::navigators(void)
 QList<dtkAbstractViewInteractor *> dtkAbstractView::interactors(void)
 {
     return d->interactors.values();
+}
+
+// /////////////////////////////////////////////////////////////////
+// vr compatibility api
+// /////////////////////////////////////////////////////////////////
+
+void dtkAbstractView::initialize(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::uninitialize(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::setupCameraLookAt(const QVector3D& eye, const QVector3D& center, const QVector3D& up)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(eye);
+    DTK_UNUSED(center);
+    DTK_UNUSED(up);
+}
+
+void dtkAbstractView::setupCameraFrustum(double left, double right, double bottom, double top, double near, double far)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(left);
+    DTK_UNUSED(right);
+    DTK_UNUSED(bottom);
+    DTK_UNUSED(top);
+    DTK_UNUSED(near);
+    DTK_UNUSED(far);
 }
 
 // /////////////////////////////////////////////////////////////////

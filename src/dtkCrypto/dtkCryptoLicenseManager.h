@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jan  7 10:48:37 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Jan  7 14:19:36 2010 (+0100)
+ * Last-Updated: Mon Feb 15 20:07:13 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 28
+ *     Update #: 30
  */
 
 /* Commentary: 
@@ -23,9 +23,11 @@
 
 #include <QtCore>
 
+#include "dtkCryptoExport.h"
+
 class dtkCryptoLicenseManagerPrivate;
 
-class dtkCryptoLicenseManager
+class DTKCRYPTO_EXPORT dtkCryptoLicenseManager
 {
     typedef QMap<QString, QString> dtkCryptoLicenseData;
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Jul 20 11:15:03 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul 20 11:15:07 2009 (+0200)
+ * Last-Updated: Mon Feb 15 20:06:19 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 1
+ *     Update #: 3
  */
 
 /* Commentary: 
@@ -22,9 +22,11 @@
 
 #include <QtCore>
 
+#include "dtkCoreExport.h"
+
 class dtkUpdaterPrivate;
 
-class dtkUpdater
+class DTKCORE_EXPORT dtkUpdater
 {   
 public:
      dtkUpdater(const QUrl& url);

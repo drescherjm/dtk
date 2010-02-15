@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jan  7 10:51:40 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Jan  7 15:55:51 2010 (+0100)
+ * Last-Updated: Mon Feb 15 20:06:43 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 135
+ *     Update #: 136
  */
 
 /* Commentary: 
@@ -85,6 +85,8 @@ bool dtkCryptoLicenseManager::setKey(const QString& key)
 bool dtkCryptoLicenseManager::setHash(const QString& hash)
 {
     d->hash = hash;
+
+    return true;
 }
 
 bool dtkCryptoLicenseManager::check(dtkCryptoLicenseData data)

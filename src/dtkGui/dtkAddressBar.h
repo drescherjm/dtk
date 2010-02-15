@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb  4 11:01:31 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb  7 15:57:00 2010 (+0100)
+ * Last-Updated: Mon Feb 15 20:07:56 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 24
+ *     Update #: 27
  */
 
 /* Commentary: 
@@ -22,13 +22,15 @@
 
 #include <QtGui>
 
+#include "dtkGuiExport.h"
+
 // /////////////////////////////////////////////////////////////////
 // dtkAddressBarButton
 // /////////////////////////////////////////////////////////////////
 
 class dtkAddressBarButtonPrivate;
 
-class dtkAddressBarButton : public QAbstractButton
+class DTKGUI_EXPORT dtkAddressBarButton : public QAbstractButton
 {
     Q_OBJECT
     
@@ -56,7 +58,7 @@ private:
 
 class dtkAddressBarPrivate;
 
-class dtkAddressBar : public QWidget
+class DTKGUI_EXPORT dtkAddressBar : public QWidget
 {
     Q_OBJECT
 

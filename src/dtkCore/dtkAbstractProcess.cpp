@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jan 27 15:29:38 2010 (+0100)
+ * Last-Updated: Mon Feb 15 20:05:40 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 73
+ *     Update #: 77
  */
 
 /* Commentary: 
@@ -62,24 +62,32 @@ bool dtkAbstractProcess::read(QString file)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(file);
+
+    return false;
 }
 
 bool dtkAbstractProcess::read(QStringList files)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(files);
+
+    return false;
 }
 
 bool dtkAbstractProcess::write(QString file)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(file);
+
+    return false;
 }
 
 bool dtkAbstractProcess::write(QStringList files)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(files);
+
+    return false;
 }
 
 void dtkAbstractProcess::setParameter(int data)

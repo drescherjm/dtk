@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jan  5 16:02:13 2010 (+0100)
+ * Last-Updated: Mon Feb 15 20:04:59 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 186
+ *     Update #: 187
  */
 
 /* Commentary:
@@ -21,6 +21,8 @@
 #define DTKABSTRACTDATA_H
 
 #include <dtkCore/dtkAbstractObject.h>
+
+#include <QtGui/QImage>
 
 class dtkAbstractDataReader;
 class dtkAbstractDataWriter;

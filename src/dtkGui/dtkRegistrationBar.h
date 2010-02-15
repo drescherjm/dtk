@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb  7 15:11:08 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb  7 15:13:06 2010 (+0100)
+ * Last-Updated: Mon Feb 15 20:08:48 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 3
+ *     Update #: 6
  */
 
 /* Commentary: 
@@ -22,13 +22,15 @@
 
 #include <QtGui>
 
+#include "dtkGuiExport.h"
+
 // /////////////////////////////////////////////////////////////////
 // dtkRegistrationBarButton
 // /////////////////////////////////////////////////////////////////
 
 class dtkRegistrationBarButtonPrivate;
 
-class dtkRegistrationBarButton : public QAbstractButton
+class DTKGUI_EXPORT dtkRegistrationBarButton : public QAbstractButton
 {
     Q_OBJECT
     
@@ -56,7 +58,7 @@ private:
 
 class dtkRegistrationBarPrivate;
 
-class dtkRegistrationBar : public QWidget
+class DTKGUI_EXPORT dtkRegistrationBar : public QWidget
 {
     Q_OBJECT
 

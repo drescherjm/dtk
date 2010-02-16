@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Feb 15 20:13:30 2010 (+0100)
+## Last-Updated: Tue Feb 16 17:25:47 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 23
+##     Update #: 30
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,22 +24,34 @@ project(dtkDistributed)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkAbstractCommunicator.h
-  dtkCommunicatorTcp.h
-  dtkCommunicatorUdp.h
+  dtkDistributedCommunicator.h
+  dtkDistributedCommunicatorTcp.h
+  dtkDistributedCore.h
+  dtkDistributedDiscoverer.h
+  dtkDistributedCpu.h
+  dtkDistributedGpu.h
+  dtkDistributedNode.h
   dtkDistributedExport.h
 )
 
 set(${PROJECT_NAME}_HEADERS_MOC
-  dtkAbstractCommunicator.h
-  dtkCommunicatorTcp.h
-  dtkCommunicatorUdp.h
+  dtkDistributedCommunicator.h
+  dtkDistributedCommunicatorTcp.h
+  dtkDistributedCore.h
+  dtkDistributedDiscoverer.h
+  dtkDistributedCpu.h
+  dtkDistributedGpu.h
+  dtkDistributedNode.h
 )
 
 set(${PROJECT_NAME}_SOURCES
-  dtkAbstractCommunicator.cpp
-  dtkCommunicatorTcp.cpp
-  dtkCommunicatorUdp.cpp
+  dtkDistributedCommunicator.cpp
+  dtkDistributedCommunicatorTcp.cpp
+  dtkDistributedCore.cpp
+  dtkDistributedDiscoverer.cpp
+  dtkDistributedCpu.cpp
+  dtkDistributedGpu.cpp
+  dtkDistributedNode.cpp
 )
 
 ## #################################################################
@@ -49,15 +61,15 @@ set(${PROJECT_NAME}_SOURCES
 if(MPI_FOUND)
 
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
-  dtkCommunicatorMpi.h
+  dtkDistributedCommunicatorMpi.h
 )
 
 set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
-  dtkCommunicatorMpi.h
+  dtkDistributedCommunicatorMpi.h
 )
 
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
-  dtkCommunicatorMpi.cpp
+  dtkDistributedCommunicatorMpi.cpp
 )
 endif(MPI_FOUND)
 
@@ -78,6 +90,7 @@ add_library(${PROJECT_NAME} SHARED
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
+  dtkCore
 )
 
 if(MPI_FOUND)

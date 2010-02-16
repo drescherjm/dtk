@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Sat Jun 13 19:49:36 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Feb  8 18:19:50 2010 (+0100)
+## Last-Updated: Tue Feb 16 08:36:22 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 121
+##     Update #: 122
 ######################################################################
 ## 
 ### Commentary: 
@@ -597,6 +597,7 @@ INPUT                  = @CMAKE_SOURCE_DIR@/doc/dox \
                          @CMAKE_SOURCE_DIR@/src/dtkScript \
                          @CMAKE_SOURCE_DIR@/src/dtkComposer \
                          @CMAKE_SOURCE_DIR@/src/dtkGui \
+                         @CMAKE_SOURCE_DIR@/src/dtkDistributed \
                          @CMAKE_SOURCE_DIR@/tools/dtkAssistant \
                          @CMAKE_SOURCE_DIR@/tools/dtkCreator \
                          @CMAKE_SOURCE_DIR@/tools/dtkPluginGenerator

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Oct 31 14:14:48 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep  9 08:49:25 2009 (+0200)
+ * Last-Updated: Tue Feb 16 16:31:57 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 58
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -32,7 +32,7 @@ public:
 // dtkPlugin
 // /////////////////////////////////////////////////////////////////
 
-dtkPlugin::dtkPlugin(QObject * parent) : QObject(parent), d(new dtkPluginPrivate)
+dtkPlugin::dtkPlugin(QObject *parent) : dtkAbstractObject(), d(new dtkPluginPrivate)
 {
 
 }

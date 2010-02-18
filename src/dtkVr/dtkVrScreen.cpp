@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 21:10:30 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 12 21:43:36 2010 (+0100)
+ * Last-Updated: Thu Feb 18 23:21:00 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 70
+ *     Update #: 72
  */
 
 /* Commentary: 
@@ -19,22 +19,24 @@
 
 #include "dtkVrScreen.h"
 
+#include <dtkCore/dtkVec3.h>
+
 class dtkVrScreenPrivate
 {
 public:
-    QVector3D x;
-    QVector3D y;
+    dtkVec3 x;
+    dtkVec3 y;
 
-    QVector3D lowerLeft;
-    QVector3D upperLeft;
-    QVector3D lowerRight;
-    QVector3D upperRight;
+    dtkVec3 lowerLeft;
+    dtkVec3 upperLeft;
+    dtkVec3 lowerRight;
+    dtkVec3 upperRight;
 
     double width;
     double height;
 };
 
-dtkVrScreen::dtkVrScreen(const QVector3D& lowerLeft, const QVector3D& lowerRight, const QVector3D& upperLeft) : d(new dtkVrScreenPrivate)
+dtkVrScreen::dtkVrScreen(const dtkVec3& lowerLeft, const dtkVec3& lowerRight, const dtkVec3& upperLeft) : d(new dtkVrScreenPrivate)
 {
     d->lowerLeft = lowerLeft;
     d->upperLeft = upperLeft;
@@ -78,32 +80,32 @@ void dtkVrScreen::uninitialize(void)
 
 }
 
-const QVector3D& dtkVrScreen::lowerLeft(void) const
+const dtkVec3& dtkVrScreen::lowerLeft(void) const
 {
     return d->lowerLeft;
 }
 
-const QVector3D& dtkVrScreen::upperLeft(void) const
+const dtkVec3& dtkVrScreen::upperLeft(void) const
 {
     return d->upperLeft;
 }
 
-const QVector3D& dtkVrScreen::lowerRight(void) const
+const dtkVec3& dtkVrScreen::lowerRight(void) const
 {
     return d->lowerRight;
 }
 
-const QVector3D& dtkVrScreen::upperRight(void) const
+const dtkVec3& dtkVrScreen::upperRight(void) const
 {
     return d->upperRight;
 }
 
-const QVector3D& dtkVrScreen::up(void) const
+const dtkVec3& dtkVrScreen::up(void) const
 {
     return d->y;
 }
 
-const QVector3D& dtkVrScreen::right(void) const
+const dtkVec3& dtkVrScreen::right(void) const
 {
     return d->x;
 }
@@ -118,10 +120,10 @@ double dtkVrScreen::height(void) const
     return d->height;
 }
 
-const QVector3D dtkVrScreen::screens[5][3] = {
-    { QVector3D(-1.6, -0.8, -0.05), QVector3D(-1.6, 2.4, -0.05), QVector3D(-1.6, -0.8,  2.35)}, // left
-    { QVector3D(-1.6,  2.4, -0.05), QVector3D( 1.6, 2.4, -0.05), QVector3D(-1.6,  2.4,  2.35)}, // front
-    { QVector3D( 1.6,  2.4, -0.05), QVector3D( 1.6,-0.8, -0.05), QVector3D( 1.6,  2.4,  2.35)}, // right
-    { QVector3D(-1.6,  0.0, -0.05), QVector3D( 1.6, 0.0, -0.05), QVector3D(-1.6,  2.4, -0.05)}, // bottom
-    { QVector3D(-2.05, 1.5,  0.76), QVector3D( 2.05, 1.5, 0.76), QVector3D(-2.05, 1.5,  2.16)}  // wall
+const dtkVec3 dtkVrScreen::screens[5][3] = {
+    { dtkVec3(-1.6, -0.8, -0.05), dtkVec3(-1.6, 2.4, -0.05), dtkVec3(-1.6, -0.8,  2.35)}, // left
+    { dtkVec3(-1.6,  2.4, -0.05), dtkVec3( 1.6, 2.4, -0.05), dtkVec3(-1.6,  2.4,  2.35)}, // front
+    { dtkVec3( 1.6,  2.4, -0.05), dtkVec3( 1.6,-0.8, -0.05), dtkVec3( 1.6,  2.4,  2.35)}, // right
+    { dtkVec3(-1.6,  0.0, -0.05), dtkVec3( 1.6, 0.0, -0.05), dtkVec3(-1.6,  2.4, -0.05)}, // bottom
+    { dtkVec3(-2.05, 1.5,  0.76), dtkVec3( 2.05, 1.5, 0.76), dtkVec3(-2.05, 1.5,  2.16)}  // wall
 };

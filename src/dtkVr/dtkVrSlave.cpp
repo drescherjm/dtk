@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 10:03:10 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 12:29:58 2010 (+0100)
+ * Last-Updated: Thu Feb 18 23:22:54 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 193
+ *     Update #: 199
  */
 
 /* Commentary: 
@@ -96,8 +96,25 @@ void dtkVrSlave::setView(dtkAbstractView *view)
 
 void dtkVrSlave::process(void)
 {
-    // this->setupCameraLookAt
-    // this->setupCameraFrustum
+    dtkVec3 eye(0, 0, 0);
+    
+    double x0   = (eye - d->screen->lowerLeft()) * d->screen->right();
+    double y0   = (eye - d->screen->lowerLeft()) * d->screen->up();
+    dtkVec3 center = d->screen->lowerLeft() + d->screen->right() * x0 + d->screen->up() * y0;
+    double dist = (eye - center).length();
+    double focusDist = 5.0;
+    dtkVec3 focusPoint = eye + (center-eye)/dist*focusDist;
+    
+    this->setupCameraLookAt(eye, focusPoint, d->screen->up());
+    
+    double near   = 1e-2;
+    double far    = 1e2;
+    double left   = -x0 * near / dist;
+    double bottom = -y0 * near / dist;
+    double right  =  (d->screen->width() - x0) * near / dist;
+    double top    = (d->screen->height() - y0) * near / dist;
+    
+    this->setupCameraFrustum(left, right, bottom, top, near, far);
     
     d->view->update();
 }

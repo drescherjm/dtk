@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 13:22:24 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 16 17:24:39 2010 (+0100)
+ * Last-Updated: Thu Feb 18 14:10:30 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 10
+ *     Update #: 12
  */
 
 /* Commentary: 
@@ -38,11 +38,12 @@ public:
 
     enum Network {
         dtkDistributedNodeEthernet1G,
+        dtkDistributedNodeEthernet10G,
         dtkDistributedNodeMyrinet2G,
         dtkDistributedNodeMyrinet10G,
         dtkDistributedNodeInfiniband10G,
         dtkDistributedNodeInfiniband20G,
-        dtkDistributedNodeInfiniband100G
+        dtkDistributedNodeInfiniband40G
     };
 
     QList<Network> networks(void);

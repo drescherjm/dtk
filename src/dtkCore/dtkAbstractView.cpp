@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb 13 20:54:54 2010 (+0100)
+ * Last-Updated: Thu Feb 18 12:30:32 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 209
+ *     Update #: 212
  */
 
 /* Commentary:
@@ -23,6 +23,8 @@
 #include <dtkCore/dtkAbstractViewNavigator.h>
 #include <dtkCore/dtkAbstractViewInteractor.h>
 #include <dtkCore/dtkLog.h>
+#include <dtkCore/dtkVec3.h>
+#include <dtkCore/dtkQuat.h>
 
 class dtkAbstractViewPrivate
 {
@@ -293,7 +295,7 @@ void dtkAbstractView::uninitialize(void)
     DTK_DEFAULT_IMPLEMENTATION;
 }
 
-void dtkAbstractView::setupCameraLookAt(const QVector3D& eye, const QVector3D& center, const QVector3D& up)
+void dtkAbstractView::setupCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(eye);

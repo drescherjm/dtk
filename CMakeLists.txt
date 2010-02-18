@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Feb 15 20:13:03 2010 (+0100)
+## Last-Updated: Thu Feb 18 14:13:35 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 259
+##     Update #: 262
 ######################################################################
 ## 
 ### Commentary: 
@@ -231,6 +231,27 @@ include_directories(${OPENSSL_INCLUDE_DIR})
 ## mpi
 
 find_package(MPI QUIET)
+
+## vrpn
+
+find_path(VRPN_INCLUDES vrpn_Configure.h /usr/include /usr/local/include)
+
+if(VRPN_INCLUDES)
+include_directories(${VRPN_INCLUDES})
+endif(VRPN_INCLUDES)
+
+mark_as_advanced(VRPN_INCLUDES)
+
+find_library(QUAT_LIBRARIES NAMES quat PATHS /usr/lib /usr/local/lib)
+find_library(VRPN_LIBRARIES NAMES vrpn PATHS /usr/lib /usr/local/lib)
+
+if(QUAT_LIBRARIES AND VRPN_LIBRARIES)
+link_directories(${QUAT_LIBRARIES})
+link_directories(${VRPN_LIBRARIES})
+endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)
+
+mark_as_advanced(QUAT_LIBRARIES)
+mark_as_advanced(VRPN_LIBRARIES)
 
 ## #################################################################
 ## Build options

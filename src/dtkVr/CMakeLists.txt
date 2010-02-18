@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Feb 18 10:33:07 2010 (+0100)
+## Last-Updated: Thu Feb 18 15:44:21 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 143
+##     Update #: 153
 ######################################################################
 ## 
 ### Commentary: 
@@ -30,16 +30,19 @@ find_package(MPI)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkVrDevice.h
   dtkVrExport.h
   dtkVrScreen.h
   dtkVrManager.h
 )
 
 set(${PROJECT_NAME}_HEADERS_MOC
+  dtkVrDevice.h
   dtkVrManager.h
 )
 
 set(${PROJECT_NAME}_SOURCES
+  dtkVrDevice.cpp
   dtkVrScreen.cpp
   dtkVrManager.cpp
 )
@@ -67,6 +70,26 @@ set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
 )
 
 endif(MPI_FOUND)
+
+## #################################################################
+## Vrpn sources
+## #################################################################
+
+if(QUAT_LIBRARIES AND VRPN_LIBRARIES)
+
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkVrDeviceVrpn.h
+)
+
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
+  dtkVrDeviceVrpn.h
+)
+
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkVrDeviceVrpn.cpp
+)
+
+endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)
 
 ## #################################################################
 ## Wrapping
@@ -108,6 +131,13 @@ target_link_libraries(${PROJECT_NAME}
   ${MPI_LIBRARIES}
 )
 endif(MPI_FOUND)
+
+if(QUAT_LIBRARIES AND VRPN_LIBRARIES)
+target_link_libraries(${PROJECT_NAME}
+  ${QUAT_LIBRARIES}
+  ${VRPN_LIBRARIES}
+)
+endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)
 
 if(PYTHON_DEBUG_LIBRARIES)
   target_link_libraries(${PROJECT_NAME} debug ${PYTHON_DEBUG_LIBRARIES})

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb 13 20:54:40 2010 (+0100)
+ * Last-Updated: Thu Feb 18 12:28:39 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 229
+ *     Update #: 232
  */
 
 /* Commentary:
@@ -22,16 +22,15 @@
 
 #include <dtkCore/dtkAbstractObject.h>
 
-#include <QtGui/QVector3D>
-#include <QtGui/QQuaternion>
 #include <QtGui/QWidget>
 
 class dtkAbstractViewPrivate;
 class dtkAbstractViewAnimator;
 class dtkAbstractViewNavigator;
 class dtkAbstractViewInteractor;
-
 class dtkAbstractData;
+class dtkVec3;
+class dtkQuat;
 
 class DTKCORE_EXPORT dtkAbstractView : public dtkAbstractObject
 {
@@ -112,7 +111,7 @@ public slots:
     virtual void   initialize(void);
     virtual void uninitialize(void);
 
-    virtual void setupCameraLookAt(const QVector3D& eye, const QVector3D& center, const QVector3D& up);
+    virtual void setupCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up);
     virtual void setupCameraFrustum(double left, double right, double bottom, double top, double near, double far);
 
 private:

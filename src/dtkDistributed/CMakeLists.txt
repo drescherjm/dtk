@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue Feb 16 17:25:47 2010 (+0100)
+## Last-Updated: Thu Feb 18 14:14:42 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 30
+##     Update #: 33
 ######################################################################
 ## 
 ### Commentary: 
@@ -71,6 +71,7 @@ set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkDistributedCommunicatorMpi.cpp
 )
+
 endif(MPI_FOUND)
 
 ## #################################################################

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Feb 15 20:04:23 2010 (+0100)
+## Last-Updated: Thu Feb 18 11:36:24 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 129
+##     Update #: 132
 ######################################################################
 ## 
 ### Commentary: 
@@ -52,7 +52,9 @@ set(${PROJECT_NAME}_HEADERS
   dtkGlobal.h
   dtkLog.h
   dtkPluginManager.h
+  dtkQuat.h
   dtkUpdater.h
+  dtkVec3.h
 )
 
 set(${PROJECT_NAME}_HEADERS_MOC
@@ -111,6 +113,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkPlugin.cpp
   dtkLog.cpp
   dtkPluginManager.cpp
+  dtkQuat.cpp
   dtkUpdater.cpp
 )
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 10 21:06:57 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 11:18:39 2010 (+0100)
+ * Last-Updated: Thu Feb 18 12:29:17 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 50
+ *     Update #: 52
  */
 
 /* Commentary: 
@@ -25,7 +25,9 @@
 #include <QtGui>
 
 class dtkAbstractView;
+class dtkVec3;
 class dtkVrSlavePrivate;
+class dtkQuat;
 
 class dtkVrSlave : public dtkVrProcess
 {
@@ -47,7 +49,7 @@ public:
 protected:
     void process(void);
 
-    void setupCameraLookAt(const QVector3D& eye, const QVector3D& center, const QVector3D& up);
+    void setupCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up);
     void setupCameraFrustum(double left, double right, double bottom, double top, double near, double far);
 
 private:

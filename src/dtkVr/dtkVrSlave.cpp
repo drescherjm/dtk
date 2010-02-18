@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 10:03:10 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 11:18:18 2010 (+0100)
+ * Last-Updated: Thu Feb 18 12:29:58 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 191
+ *     Update #: 193
  */
 
 /* Commentary: 
@@ -23,6 +23,8 @@
 #include <dtkCore/dtkAbstractView.h>
 #include <dtkCore/dtkGlobal.h>
 #include <dtkCore/dtkLog.h>
+#include <dtkCore/dtkVec3.h>
+#include <dtkCore/dtkQuat.h>
 
 class dtkVrSlavePrivate
 {
@@ -100,7 +102,7 @@ void dtkVrSlave::process(void)
     d->view->update();
 }
 
-void dtkVrSlave::setupCameraLookAt(const QVector3D& eye, const QVector3D& center, const QVector3D& up)
+void dtkVrSlave::setupCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up)
 {
     if (d->view)
         d->view->setupCameraLookAt(eye, center, up);

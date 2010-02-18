@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 13:44:22 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 20:21:23 2010 (+0100)
+ * Last-Updated: Thu Feb 18 22:40:48 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 80
+ *     Update #: 85
  */
 
 /* Commentary: 
@@ -19,8 +19,6 @@
 
 #include "dtkVrDeviceVrpn.h"
 
-#include <dtkCore/dtkLog.h>
-
 #include <vrpn_Shared.h>
 #include <vrpn_Button.h>
 #include <vrpn_Analog.h>
@@ -28,13 +26,15 @@
 #include <vrpn_FileConnection.h>
 #include <quat.h>
 
+#include <dtkCore/dtkLog.h>
+
 // /////////////////////////////////////////////////////////////////
 // vrpn callbacks (Definition at EOF.)
 // /////////////////////////////////////////////////////////////////
 
-void VRPN_CALLBACK handle_button(void *data, const vrpn_BUTTONCB callback);
-void VRPN_CALLBACK handle_analog(void *data, const vrpn_ANALOGCB callback);
-void VRPN_CALLBACK handle_tracker(void *data, const vrpn_TRACKERCB callback);
+void VRPN_CALLBACK vrpn_device_handle_button(void *data, const vrpn_BUTTONCB callback);
+void VRPN_CALLBACK vrpn_device_handle_analog(void *data, const vrpn_ANALOGCB callback);
+void VRPN_CALLBACK vrpn_device_handle_tracker(void *data, const vrpn_TRACKERCB callback);
 
 // /////////////////////////////////////////////////////////////////
 // dtkVrDeviceVrpnPrivate
@@ -75,9 +75,13 @@ void dtkVrDeviceVrpnPrivate::run(void)
     this->tracker = new vrpn_Tracker_Remote("");
 
     if (!this->analog || !this->button || !this->tracker) {
-        dtkWarning() << "Error connecting to tracker";
+        dtkWarning() << "Error connecting to server";
         return;
     }
+
+    this->button->register_change_handler(this, vrpn_device_handle_button);
+    this->analog->register_change_handler(this, vrpn_device_handle_analog);
+    this->tracker->register_change_handler(this, vrpn_device_handle_tracker);
 
     while(this->running) {
         this->analog->mainloop();
@@ -99,17 +103,17 @@ void dtkVrDeviceVrpnPrivate::stop(void)
 void dtkVrDeviceVrpnPrivate::handle_button(const vrpn_BUTTONCB callback)
 {
     switch(callback.button) {
-    case 1: emit q->buttonClicked(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton1); break;
-    case 2: emit q->buttonClicked(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton2); break;
-    case 3: emit q->buttonClicked(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton3); break;
-    case 4: emit q->buttonClicked(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton4); break;
-    case 5: emit q->buttonClicked(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton5); break;
-    case 6: emit q->buttonClicked(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton6); break;
-    case 7: emit q->buttonClicked(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton7); break;
-    case 8: emit q->buttonClicked(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton8); break;
-    case 9: emit q->buttonClicked(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton9); break;
+    case 1: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton1) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton1); break;
+    case 2: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton2) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton1); break;
+    case 3: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton3) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton1); break;
+    case 4: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton4) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton1); break;
+    case 5: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton5) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton1); break;
+    case 6: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton6) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton1); break;
+    case 7: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton7) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton1); break;
+    case 8: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton8) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton1); break;
+    case 9: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton9) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton1); break;
     default:
-        emit q->buttonClicked(dtkVrDeviceVrpn::dtkVrDeviceVrpnButtonUndefined);
+        callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButtonUndefined) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButtonUndefined);
         break;
     };
 }
@@ -203,19 +207,19 @@ void dtkVrDeviceVrpn::runOrientationHandlers(float q0, float q1, float q2, float
 // vrpn callbacks
 // /////////////////////////////////////////////////////////////////
 
-void VRPN_CALLBACK handle_button(void *data, const vrpn_BUTTONCB callback)
+void VRPN_CALLBACK vrpn_device_handle_button(void *data, const vrpn_BUTTONCB callback)
 {
     if(dtkVrDeviceVrpnPrivate *device = static_cast<dtkVrDeviceVrpnPrivate *>(data))
         device->handle_button(callback);
 }
 
-void VRPN_CALLBACK handle_analog(void *data, const vrpn_ANALOGCB callback)
+void VRPN_CALLBACK vrpn_device_handle_analog(void *data, const vrpn_ANALOGCB callback)
 {
     if(dtkVrDeviceVrpnPrivate *device = static_cast<dtkVrDeviceVrpnPrivate *>(data))
         device->handle_analog(callback);
 }
 
-void VRPN_CALLBACK handle_tracker(void *data, const vrpn_TRACKERCB callback)
+void VRPN_CALLBACK vrpn_device_handle_tracker(void *data, const vrpn_TRACKERCB callback)
 {
     if(dtkVrDeviceVrpnPrivate *device = static_cast<dtkVrDeviceVrpnPrivate *>(data))
         device->handle_tracker(callback);

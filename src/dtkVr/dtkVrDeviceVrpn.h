@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 13:43:20 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 20:21:49 2010 (+0100)
+ * Last-Updated: Thu Feb 18 20:49:09 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 19
+ *     Update #: 21
  */
 
 /* Commentary: 
@@ -33,9 +33,11 @@ public:
     ~dtkVrDeviceVrpn(void);
 
     typedef void (*dtkVrDeviceVrpnPositionHandler)(float x, float y, float z);
-    typedef void (*dtkVrDeviceVrpnOrientationHandler)(float q0, float q1, float q2, float q3);
 
     void registerPositionHandler(dtkVrDeviceVrpn::dtkVrDeviceVrpnPositionHandler handler);
+
+    typedef void (*dtkVrDeviceVrpnOrientationHandler)(float q0, float q1, float q2, float q3);
+
     void registerOrientationHandler(dtkVrDeviceVrpn::dtkVrDeviceVrpnOrientationHandler handler);
 
     enum Button {
@@ -54,7 +56,8 @@ public:
     QString description(void) const;
 
 signals:
-    void buttonClicked(Button button);
+    void buttonPressed(Button button);
+    void buttonReleased(Button button);
 
 public slots:
     void startConnection(const QUrl& server);

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Feb 18 15:44:21 2010 (+0100)
+## Last-Updated: Thu Feb 18 20:34:46 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 153
+##     Update #: 163
 ######################################################################
 ## 
 ### Commentary: 
@@ -34,17 +34,20 @@ set(${PROJECT_NAME}_HEADERS
   dtkVrExport.h
   dtkVrScreen.h
   dtkVrManager.h
+  dtkVrTracker.h
 )
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkVrDevice.h
   dtkVrManager.h
+  dtkVrTracker.h
 )
 
 set(${PROJECT_NAME}_SOURCES
   dtkVrDevice.cpp
   dtkVrScreen.cpp
   dtkVrManager.cpp
+  dtkVrTracker.cpp
 )
 
 ## #################################################################
@@ -79,14 +82,17 @@ if(QUAT_LIBRARIES AND VRPN_LIBRARIES)
 
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkVrDeviceVrpn.h
+  dtkVrTrackerVrpn.h
 )
 
 set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
   dtkVrDeviceVrpn.h
+  dtkVrTrackerVrpn.h
 )
 
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkVrDeviceVrpn.cpp
+  dtkVrTrackerVrpn.cpp
 )
 
 endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)

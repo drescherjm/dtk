@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Feb 18 14:13:35 2010 (+0100)
+## Last-Updated: Thu Feb 18 20:09:32 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 262
+##     Update #: 267
 ######################################################################
 ## 
 ### Commentary: 
@@ -234,13 +234,16 @@ find_package(MPI QUIET)
 
 ## vrpn
 
+find_path(QUAT_INCLUDES           quat.h /usr/include /usr/local/include)
 find_path(VRPN_INCLUDES vrpn_Configure.h /usr/include /usr/local/include)
 
-if(VRPN_INCLUDES)
+if(QUAT_INCLUDES AND VRPN_INCLUDES)
+include_directories(${QUAT_INCLUDES})
 include_directories(${VRPN_INCLUDES})
-endif(VRPN_INCLUDES)
+endif(QUAT_INCLUDES AND VRPN_INCLUDES)
 
 mark_as_advanced(VRPN_INCLUDES)
+mark_as_advanced(QUAT_INCLUDES)
 
 find_library(QUAT_LIBRARIES NAMES quat PATHS /usr/lib /usr/local/lib)
 find_library(VRPN_LIBRARIES NAMES vrpn PATHS /usr/lib /usr/local/lib)

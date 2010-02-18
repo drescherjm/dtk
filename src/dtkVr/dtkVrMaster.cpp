@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 10:03:10 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 16 22:35:32 2010 (+0100)
+ * Last-Updated: Thu Feb 18 11:19:05 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 42
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -26,7 +26,7 @@ class dtkVrMasterPrivate
 public:
 };
 
-dtkVrMaster::dtkVrMaster(void) : dtkVrProcess(), d(new dtkVrMasterPrivate)
+dtkVrMaster::dtkVrMaster(dtkDistributedCommunicator *communicator) : dtkVrProcess(communicator), d(new dtkVrMasterPrivate)
 {
 
 }

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:06:43 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Feb 18 08:50:51 2010 (+0100)
+## Last-Updated: Thu Feb 18 10:45:46 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 13
+##     Update #: 14
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,4 +24,4 @@ add_subdirectory(dtkTextEditor)
 add_subdirectory(dtkUpdater)
 add_subdirectory(dtkSettingsEditor)
 add_subdirectory(dtkLicenseManager)
-
+add_subdirectory(dtkVrProcess)

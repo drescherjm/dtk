@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Jan 13 14:21:12 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb 13 21:31:08 2010 (+0100)
+ * Last-Updated: Thu Feb 18 11:24:23 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 34
+ *     Update #: 40
  */
 
 /* Commentary: 
@@ -22,8 +22,9 @@
 
 %module vr
 %{
-#include <dtkVr/dtkVrProcess.h>
+#include <dtkVr/dtkVrManager.h>
 #include <dtkVr/dtkVrMaster.h>
+#include <dtkVr/dtkVrProcess.h>
 #include <dtkVr/dtkVrSlave.h>
 
 #include <QtDebug>
@@ -100,8 +101,9 @@
 // Wrapper input
 // /////////////////////////////////////////////////////////////////
 
-%include <dtkVr/dtkVrProcess.h>
+%include <dtkVr/dtkVrManager.h>
 %include <dtkVr/dtkVrMaster.h>
+%include <dtkVr/dtkVrProcess.h>
 %include <dtkVr/dtkVrSlave.h>
 
 #endif

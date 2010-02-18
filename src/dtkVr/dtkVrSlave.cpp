@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 10:03:10 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 16 22:29:31 2010 (+0100)
+ * Last-Updated: Thu Feb 18 11:18:18 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 180
+ *     Update #: 191
  */
 
 /* Commentary: 
@@ -32,7 +32,7 @@ public:
     dtkAbstractView *view;
 };
 
-dtkVrSlave::dtkVrSlave(void) : dtkVrProcess(), d(new dtkVrSlavePrivate)
+dtkVrSlave::dtkVrSlave(dtkDistributedCommunicator *communicator) : dtkVrProcess(communicator), d(new dtkVrSlavePrivate)
 {
     d->screen = new dtkVrScreen(
         dtkVrScreen::screens[this->rank()-1][0],
@@ -61,6 +61,30 @@ void dtkVrSlave::uninitialize(void)
 {
     if (d->view)
         d->view->uninitialize();
+}
+
+void dtkVrSlave::show(void)
+{
+    if (d->view)
+        d->view->showNormal();
+}
+
+void dtkVrSlave::showFullScreen(void)
+{
+    if (d->view)
+        d->view->showFullScreen();
+}
+
+void dtkVrSlave::resize(int w, int h)
+{
+    if (d->view)
+        d->view->widget()->resize(w, h);
+}
+
+void dtkVrSlave::move(int x, int y)
+{
+    if (d->view)
+        d->view->widget()->move(x, y);
 }
 
 void dtkVrSlave::setView(dtkAbstractView *view)

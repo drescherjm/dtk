@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 10 21:06:22 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb 13 20:51:25 2010 (+0100)
+ * Last-Updated: Thu Feb 18 11:16:57 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 13
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -27,7 +27,7 @@ class dtkVrMasterPrivate;
 class dtkVrMaster : public dtkVrProcess
 {
 public:
-     dtkVrMaster(void);
+     dtkVrMaster(dtkDistributedCommunicator *communicator);
     ~dtkVrMaster(void);
 
     virtual void   initialize(void);

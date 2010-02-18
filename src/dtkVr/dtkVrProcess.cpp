@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 10 21:11:31 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 16 22:29:58 2010 (+0100)
+ * Last-Updated: Thu Feb 18 11:17:50 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 94
+ *     Update #: 135
  */
 
 /* Commentary: 
@@ -18,6 +18,11 @@
  */
 
 #include "dtkVrProcess.h"
+#include "dtkVrSlave.h"
+
+#include <dtkCore/dtkLog.h>
+
+#include <dtkDistributed/dtkDistributedCommunicator.h>
 
 #include <QtGui>
 
@@ -47,21 +52,35 @@ void dtk_atomize(const QQuaternion& quaternion, double *coordinates)
 class dtkVrProcessPrivate
 {
 public:
-    int rank;
-    int size;
-
     char running;
+
+    dtkDistributedCommunicator *communicator;
 };
 
-dtkVrProcess::dtkVrProcess(void) : d(new dtkVrProcessPrivate)
+dtkVrProcess::dtkVrProcess(dtkDistributedCommunicator *communicator) : d(new dtkVrProcessPrivate)
 {
-    // d->rank = MPI::COMM_WORLD.Get_rank(); // Replace with dtkDistributed
-    // d->size = MPI::COMM_WORLD.Get_size(); // Replace with dtkDistributed
+    d->communicator = communicator;
 }
 
 dtkVrProcess::~dtkVrProcess(void)
 {
 
+}
+
+void dtkVrProcess::show(bool fullscreen)
+{
+    if (!this->rank())
+        return;
+
+    if (!fullscreen) {
+        dynamic_cast<dtkVrSlave *>(this)->show();
+        dynamic_cast<dtkVrSlave *>(this)->resize(500, 320);
+        dynamic_cast<dtkVrSlave *>(this)->move(
+            this->rank()-1 == 3 ? 500 : (this->rank()-1)*500,
+            this->rank()-1 == 3 ? 350 : 0);
+    } else {
+        dynamic_cast<dtkVrSlave *>(this)->showFullScreen();
+    }
 }
 
 void dtkVrProcess::start(void)
@@ -89,12 +108,12 @@ void dtkVrProcess::stop(void)
 
 int dtkVrProcess::rank(void) const
 {
-    return d->rank;
+    return d->communicator->rank();
 }
 
 int dtkVrProcess::size(void) const
 {
-    return d->size;
+    return d->communicator->size();
 }
 
 bool dtkVrProcess::running(void)
@@ -106,12 +125,12 @@ void dtkVrProcess::broadcast(void)
 {
     char status[1]; status[0] = d->running;
 
-    // MPI::COMM_WORLD.Bcast(&status, 1, MPI_CHAR, 0); // Replace with dtk distributed
+    d->communicator->broadcast(&status, 1, dtkDistributedCommunicator::dtkDistributedCommunicatorChar, 0);
 
     d->running = status[0];
 }
 
 void dtkVrProcess::synchronize(void)
 {
-    // MPI::COMM_WORLD.Barrier(); // Replace with dtkDistributed
+    d->communicator->barrier();
 }

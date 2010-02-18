@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 21:01:33 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 08:52:23 2010 (+0100)
+ * Last-Updated: Thu Feb 18 11:08:05 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 95
+ *     Update #: 107
  */
 
 /* Commentary: 
@@ -20,6 +20,9 @@
 #include <QtCore>
 #include <QtGui>
 
+#include <dtkCore/dtkPluginManager.h>
+
+#include <dtkVr/dtkVrManager.h>
 #include <dtkVr/dtkVrMaster.h>
 #include <dtkVr/dtkVrSlave.cpp>
 
@@ -27,24 +30,19 @@ int main(int argc, char **argv)
 {
     QApplication application(argc, argv);
 
-    dtkVrController::instance()->initialize();
+    dtkPluginManager::instance()->initialize();
+    
+    dtkVrManager::instance()->initialize();
 
-    dtkVrProcess *process = dtkVrController::instance()->createProcess("vtkViewVr");
-
+    dtkVrProcess *process = dtkVrManager::instance()->create("vtkViewVr");
     process->initialize();
-
-    if (process->rank()) {
-        process->view()->widget()->show();
-        process->view()->widget()->resize(500, 320);
-        process->view()->widget()->move(
-            process->rank()-1 == 3 ? 500 : (process->rank()-1)*500,
-            process->rank()-1 == 3 ? 350 : 0);
-    }
-
+    process->show();
     process->start();
     process->uninitialize();
 
-    dtkVrController::instance()->uninitialize();
+    dtkVrManager::instance()->uninitialize();
+
+    dtkPluginManager::instance()->uninitialize();
 
     return 0;
 }

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Sat Feb 13 21:32:00 2010 (+0100)
+## Last-Updated: Thu Feb 18 10:33:07 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 139
+##     Update #: 143
 ######################################################################
 ## 
 ### Commentary: 
@@ -32,14 +32,16 @@ find_package(MPI)
 set(${PROJECT_NAME}_HEADERS
   dtkVrExport.h
   dtkVrScreen.h
+  dtkVrManager.h
 )
 
 set(${PROJECT_NAME}_HEADERS_MOC
-
+  dtkVrManager.h
 )
 
 set(${PROJECT_NAME}_SOURCES
   dtkVrScreen.cpp
+  dtkVrManager.cpp
 )
 
 ## #################################################################
@@ -98,6 +100,7 @@ add_library(${PROJECT_NAME} SHARED
 
 target_link_libraries(${PROJECT_NAME}
   dtkCore
+  dtkDistributed
 )
 
 if(MPI_FOUND)

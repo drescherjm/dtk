@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 10 21:06:57 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb 13 21:27:01 2010 (+0100)
+ * Last-Updated: Thu Feb 18 11:18:39 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 37
+ *     Update #: 50
  */
 
 /* Commentary: 
@@ -25,18 +25,23 @@
 #include <QtGui>
 
 class dtkAbstractView;
-
 class dtkVrSlavePrivate;
 
 class dtkVrSlave : public dtkVrProcess
 {
 public:
-             dtkVrSlave(void);
+             dtkVrSlave(dtkDistributedCommunicator *communicator);
     virtual ~dtkVrSlave(void);
 
     virtual void   initialize(void);
     virtual void uninitialize(void);
-    
+
+    void show(void);
+    void showFullScreen(void);
+
+    void resize(int w, int h);
+    void move(int x, int y);
+
     void setView(dtkAbstractView *view);
 
 protected:

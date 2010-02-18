@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Feb  6 13:35:23 2010 (+0100)
+ * Last-Updated: Tue Feb 16 22:39:38 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 106
+ *     Update #: 107
  */
 
 /* Commentary: 
@@ -40,6 +40,11 @@ dtkPluginManager *dtkPluginManager::instance(void)
 
 void dtkPluginManager::initialize(void)
 {
+    static bool initialized = false;
+
+    if(initialized)
+        return;
+
     if(d->path.isNull())
         this->readSettings();
 
@@ -54,6 +59,8 @@ void dtkPluginManager::initialize(void)
         foreach (QFileInfo entry, dir.entryInfoList())
             loadPlugin(entry.absoluteFilePath());
     }
+
+    initialized = true;
 }
 
 void dtkPluginManager::uninitialize(void)

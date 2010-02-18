@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 10:03:10 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 15 21:59:26 2010 (+0100)
+ * Last-Updated: Tue Feb 16 22:29:31 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 179
+ *     Update #: 180
  */
 
 /* Commentary: 
@@ -74,8 +74,6 @@ void dtkVrSlave::process(void)
     // this->setupCameraFrustum
     
     d->view->update();
-
-    qApp->processEvents(QEventLoop::AllEvents, 10);
 }
 
 void dtkVrSlave::setupCameraLookAt(const QVector3D& eye, const QVector3D& center, const QVector3D& up)

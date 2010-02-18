@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 10 21:11:31 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 15 21:17:17 2010 (+0100)
+ * Last-Updated: Tue Feb 16 22:29:58 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 93
+ *     Update #: 94
  */
 
 /* Commentary: 
@@ -75,6 +75,7 @@ void dtkVrProcess::start(void)
     while(this->running()) {
         this->broadcast();
         this->process();
+        qApp->processEvents(QEventLoop::AllEvents, 10);
         this->synchronize();
     }
 

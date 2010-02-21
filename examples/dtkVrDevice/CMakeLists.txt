@@ -2,11 +2,11 @@
 ## 
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
-## Created: Mon Mar  9 21:06:43 2009 (+0100)
+## Created: Sun Feb 21 17:05:22 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Sun Feb 21 17:05:44 2010 (+0100)
+## Last-Updated: Sun Feb 21 17:05:31 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 15
+##     Update #: 1
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,12 +17,17 @@
 ## 
 ######################################################################
 
-add_subdirectory(dtkInterpreter)
-add_subdirectory(dtkLog)
-add_subdirectory(dtkTagCloud)
-add_subdirectory(dtkTextEditor)
-add_subdirectory(dtkUpdater)
-add_subdirectory(dtkSettingsEditor)
-add_subdirectory(dtkLicenseManager)
-add_subdirectory(dtkVrProcess)
-add_subdirectory(dtkVrDevice)
+project(dtkVrDevice)
+
+## #################################################################
+## Build rules
+## #################################################################
+
+add_executable(${PROJECT_NAME}
+  main.cpp
+)
+
+target_link_libraries(${PROJECT_NAME}
+  ${QT_LIBRARIES}
+  dtkVr
+)

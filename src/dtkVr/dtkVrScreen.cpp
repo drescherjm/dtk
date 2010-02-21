@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 21:10:30 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 23:21:00 2010 (+0100)
+ * Last-Updated: Sun Feb 21 16:46:00 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 72
+ *     Update #: 73
  */
 
 /* Commentary: 
@@ -64,13 +64,9 @@ dtkVrScreen::~dtkVrScreen(void)
 void dtkVrScreen::initialize(void)
 {
     d->x = d->lowerRight - d->lowerLeft;
+    d->width = d->x.normalize();
     d->y = d->upperLeft - d->lowerLeft;
-
-    d->x.normalize();
-    d->y.normalize();
-
-    d->width = d->x.length();
-    d->height = d->y.length();
+    d->height = d->y.normalize();
 
     d->upperRight = d->lowerRight + d->y*d->height;
 }

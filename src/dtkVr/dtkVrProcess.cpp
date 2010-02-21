@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 10 21:11:31 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 11:17:50 2010 (+0100)
+ * Last-Updated: Sat Feb 20 11:54:28 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 135
+ *     Update #: 141
  */
 
 /* Commentary: 
@@ -134,3 +134,34 @@ void dtkVrProcess::synchronize(void)
 {
     d->communicator->barrier();
 }
+
+// /////////////////////////////////////////////////////////////////
+// dtkVrProcess Documentation
+// /////////////////////////////////////////////////////////////////
+
+/*! \class dtkVrProcess
+ *
+ *  \brief The dtkAbstractObject is the base class virtual reality
+ *  entities in a multiprocess envrionment.
+ *
+ *  The process is not meant to be instantiated by its own, the
+ *  possibility remains though. Instead, it is meant to be created
+ *  through the dtkVrManager that also equips it with a specialization
+ *  of a dtkAbstractView.
+ *
+ *  \code
+ *  dtkPluginManager::instance()->initialize();
+ *
+ *  dtkVrManager::instance()->initialize();
+ *
+ *  dtkVrProcess *process = dtkVrManager::instance()->create("vtkViewVr");
+ *  process->initialize();
+ *  process->show();
+ *  process->start();
+ *  process->uninitialize();
+ *
+ *  dtkVrManager::instance()->uninitialize();
+ *
+ *  dtkPluginManager::instance()->uninitialize();
+ *  \encode
+ */

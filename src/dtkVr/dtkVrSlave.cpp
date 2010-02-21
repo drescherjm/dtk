@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 10:03:10 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 21 18:13:39 2010 (+0100)
+ * Last-Updated: Sun Feb 21 21:29:41 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 229
+ *     Update #: 232
  */
 
 /* Commentary: 
@@ -19,6 +19,8 @@
 
 #include "dtkVrScreen.h"
 #include "dtkVrSlave.h"
+#include "dtkVrUser.h"
+#include "dtkVrWand.h"
 
 #include <dtkCore/dtkAbstractView.h>
 #include <dtkCore/dtkGlobal.h>
@@ -98,7 +100,7 @@ void dtkVrSlave::setView(dtkAbstractView *view)
 
 void dtkVrSlave::process(void)
 {
-    dtkVec3 eye(0, 0, 1.72);
+    dtkVec3 eye(this->user()->position());
     
     double x0   = (eye - d->screen->lowerLeft()) * d->screen->right();
     double y0   = (eye - d->screen->lowerLeft()) * d->screen->up();
@@ -123,10 +125,6 @@ void dtkVrSlave::process(void)
 
 void dtkVrSlave::setupCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up)
 {
-    // qDebug() << rank() << "eye" << eye.x() << eye.y() << eye.z();
-    // qDebug() << rank() << "center" << center.x() << center.y() << center.z();
-    // qDebug() << rank() << "up" << up.x() << up.y() << up.z();
-
     if (d->view)
         d->view->setupCameraLookAt(eye, center, up);
 }

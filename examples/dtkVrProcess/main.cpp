@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 21:01:33 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 21 18:11:06 2010 (+0100)
+ * Last-Updated: Sun Feb 21 22:01:16 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 121
+ *     Update #: 122
  */
 
 /* Commentary: 
@@ -39,7 +39,7 @@ int main(int argc, char **argv)
     dtkVrManager::instance()->initialize();
 
     dtkVrProcess *process = dtkVrManager::instance()->create(argv[2]);
-    process->show();
+    process->show(application.arguments().contains("--fullscreen"));
     process->start();
 
     dtkVrManager::instance()->uninitialize();

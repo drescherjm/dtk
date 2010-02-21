@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 10 21:11:31 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb 20 11:54:28 2010 (+0100)
+ * Last-Updated: Sun Feb 21 18:48:16 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 141
+ *     Update #: 157
  */
 
 /* Commentary: 
@@ -19,8 +19,12 @@
 
 #include "dtkVrProcess.h"
 #include "dtkVrSlave.h"
+#include "dtkVrUser.h"
+#include "dtkVrWand.h"
 
 #include <dtkCore/dtkLog.h>
+#include <dtkCore/dtkVec3.h>
+#include <dtkCore/dtkQuat.h>
 
 #include <dtkDistributed/dtkDistributedCommunicator.h>
 
@@ -54,17 +58,26 @@ class dtkVrProcessPrivate
 public:
     char running;
 
+    dtkVrUser *user;
+    dtkVrWand *wand;
+
     dtkDistributedCommunicator *communicator;
 };
 
 dtkVrProcess::dtkVrProcess(dtkDistributedCommunicator *communicator) : d(new dtkVrProcessPrivate)
 {
+    d->user = new dtkVrUser;
+    d->wand = new dtkVrWand;
     d->communicator = communicator;
 }
 
 dtkVrProcess::~dtkVrProcess(void)
 {
+    delete d->user;
+    delete d->wand;
+    delete d;
 
+    d = NULL;
 }
 
 void dtkVrProcess::show(bool fullscreen)
@@ -121,11 +134,27 @@ bool dtkVrProcess::running(void)
     return d->running ? (++(d->running) < 3) : true;
 }
 
+dtkVrUser *dtkVrProcess::user(void)
+{
+    return d->user;
+}
+
+dtkVrWand *dtkVrProcess::wand(void)
+{
+    return d->wand;
+}
+
 void dtkVrProcess::broadcast(void)
 {
     char status[1]; status[0] = d->running;
 
     d->communicator->broadcast(&status, 1, dtkDistributedCommunicator::dtkDistributedCommunicatorChar, 0);
+
+    d->communicator->broadcast(d->user->position().values(), 3, dtkDistributedCommunicator::dtkDistributedCommunicatorDouble, 0);
+    d->communicator->broadcast(d->user->orientation().values(), 4, dtkDistributedCommunicator::dtkDistributedCommunicatorDouble, 0);
+
+    d->communicator->broadcast(d->wand->position().values(), 3, dtkDistributedCommunicator::dtkDistributedCommunicatorDouble, 0);
+    d->communicator->broadcast(d->wand->orientation().values(), 4, dtkDistributedCommunicator::dtkDistributedCommunicatorDouble, 0);
 
     d->running = status[0];
 }
@@ -155,10 +184,8 @@ void dtkVrProcess::synchronize(void)
  *  dtkVrManager::instance()->initialize();
  *
  *  dtkVrProcess *process = dtkVrManager::instance()->create("vtkViewVr");
- *  process->initialize();
  *  process->show();
  *  process->start();
- *  process->uninitialize();
  *
  *  dtkVrManager::instance()->uninitialize();
  *

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 20:32:08 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 22:44:59 2010 (+0100)
+ * Last-Updated: Sun Feb 21 18:07:58 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 37
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -285,6 +285,7 @@ QString dtkVrTrackerVrpn::description(void) const
 
 void dtkVrTrackerVrpn::startConnection(const QUrl& server)
 {
+    d->running = true;
     d->url = server;
 
     d->start();

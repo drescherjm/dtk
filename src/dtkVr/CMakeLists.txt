@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Sat Feb 20 12:04:40 2010 (+0100)
+## Last-Updated: Sun Feb 21 18:34:05 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 169
+##     Update #: 172
 ######################################################################
 ## 
 ### Commentary: 
@@ -38,12 +38,16 @@ set(${PROJECT_NAME}_HEADERS
   dtkVrProcess.h
   dtkVrSlave.h
   dtkVrTracker.h
+  dtkVrUser.h
+  dtkVrWand.h
 )
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkVrDevice.h
   dtkVrManager.h
   dtkVrTracker.h
+  dtkVrUser.h
+  dtkVrWand.h
 )
 
 set(${PROJECT_NAME}_SOURCES
@@ -54,6 +58,8 @@ set(${PROJECT_NAME}_SOURCES
   dtkVrProcess.cpp
   dtkVrSlave.cpp
   dtkVrTracker.cpp
+  dtkVrUser.cpp
+  dtkVrWand.cpp
 )
 
 ## #################################################################

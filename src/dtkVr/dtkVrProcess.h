@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 10 21:08:39 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 11:16:13 2010 (+0100)
+ * Last-Updated: Sun Feb 21 18:35:46 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 58
+ *     Update #: 62
  */
 
 /* Commentary: 
@@ -22,6 +22,8 @@
 
 class dtkDistributedCommunicator;
 class dtkVrDevice;
+class dtkVrUser;
+class dtkVrWand;
 class dtkVrProcessPrivate;
 
 class dtkVrProcess
@@ -43,6 +45,9 @@ public:
 
     bool running(void);
     
+    dtkVrUser *user(void);
+    dtkVrWand *wand(void);
+
 protected:
     virtual void process(void) = 0;
 

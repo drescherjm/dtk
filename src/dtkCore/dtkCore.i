@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 22 10:21:06 2010 (+0100)
+ * Last-Updated: Mon Feb 22 21:41:46 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 248
+ *     Update #: 250
  */
 
 /* Commentary:
@@ -21,6 +21,8 @@
 #define DTKCORE_I
 
 %module core
+%include "carrays.i"
+%array_class(double, doubleArray);
 %{
 #include <QtDebug>
 #include <QtCore>

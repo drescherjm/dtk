@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 10 21:11:31 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 21 22:00:12 2010 (+0100)
+ * Last-Updated: Mon Feb 22 09:39:25 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 159
+ *     Update #: 160
  */
 
 /* Commentary: 
@@ -29,25 +29,6 @@
 #include <dtkDistributed/dtkDistributedCommunicator.h>
 
 #include <QtGui>
-
-// /////////////////////////////////////////////////////////////////
-// Helper functions
-// /////////////////////////////////////////////////////////////////
-
-void dtk_atomize(const QVector3D& vector, double *coordinates)
-{
-    coordinates[0] = vector.x();
-    coordinates[1] = vector.y();
-    coordinates[2] = vector.z();
-}
-
-void dtk_atomize(const QQuaternion& quaternion, double *coordinates)
-{
-    coordinates[0] = quaternion.scalar();
-    coordinates[1] = quaternion.x();
-    coordinates[2] = quaternion.y();
-    coordinates[3] = quaternion.z();
-}
 
 // /////////////////////////////////////////////////////////////////
 // dtkVrProcess

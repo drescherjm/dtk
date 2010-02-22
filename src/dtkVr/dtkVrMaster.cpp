@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 10:03:10 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 21 18:44:56 2010 (+0100)
+ * Last-Updated: Mon Feb 22 09:44:04 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 74
+ *     Update #: 83
  */
 
 /* Commentary: 
@@ -77,7 +77,12 @@ dtkVrMaster::dtkVrMaster(dtkDistributedCommunicator *communicator) : dtkVrProces
 {
     d->q = this;
     d->self = d;
+ 
     d->tracker = new dtkVrTrackerVrpn;
+    d->tracker->registerPositionHandler1(dtkVrMasterPrivate::positionHandler1);
+    d->tracker->registerPositionHandler2(dtkVrMasterPrivate::positionHandler2);
+    d->tracker->registerOrientationHandler1(dtkVrMasterPrivate::orientationHandler1);
+    d->tracker->registerOrientationHandler2(dtkVrMasterPrivate::orientationHandler2);
 }
 
 dtkVrMaster::~dtkVrMaster(void)

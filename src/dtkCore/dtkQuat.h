@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 11:30:32 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 12:26:21 2010 (+0100)
+ * Last-Updated: Mon Feb 22 09:37:20 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 15
+ *     Update #: 17
  */
 
 /* Commentary: 
@@ -140,6 +140,20 @@ inline std::istream &operator>>(std::istream &in, dtkQuat &q)
 {
     in>>q[0]>>q[1]>>q[2]>>q[3];
     return in;
+}
+
+inline QDebug operator<<(QDebug debug, const dtkQuat& data)
+{
+    debug.nospace() << data[0] << " " << data[1] << " " << data[2] << " " << data[3];
+
+    return debug.space();
+}
+
+inline QDebug operator<<(QDebug debug, dtkQuat *data)
+{
+    debug.nospace() << data[0] << " " << data[1] << " " << data[2] << " " << data[3];
+
+    return debug.space();
 }
 
 #endif

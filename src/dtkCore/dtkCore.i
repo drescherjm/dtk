@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 12:32:46 2010 (+0100)
+ * Last-Updated: Mon Feb 22 10:21:06 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 240
+ *     Update #: 248
  */
 
 /* Commentary:
@@ -25,12 +25,11 @@
 #include <QtDebug>
 #include <QtCore>
 
-#include <dtkCore/dtkAbstractObject.h>
-
 #include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkAbstractDataCell.h>
 #include <dtkCore/dtkAbstractDataEdge.h>
 #include <dtkCore/dtkAbstractDataFace.h>
+#include <dtkCore/dtkAbstractDataFactory.h>
 #include <dtkCore/dtkAbstractDataVertex.h>
 #include <dtkCore/dtkAbstractDataMesh.h>
 #include <dtkCore/dtkAbstractDataMeshSurfacic.h>
@@ -38,22 +37,18 @@
 #include <dtkCore/dtkAbstractDataReader.h>
 #include <dtkCore/dtkAbstractDataWriter.h>
 #include <dtkCore/dtkAbstractDataImage.h>
-
+#include <dtkCore/dtkAbstractObject.h>
 #include <dtkCore/dtkAbstractProcess.h>
-
+#include <dtkCore/dtkAbstractProcessFactory.h>
 #include <dtkCore/dtkAbstractView.h>
 #include <dtkCore/dtkAbstractViewAnimator.h>
+#include <dtkCore/dtkAbstractViewFactory.h>
 #include <dtkCore/dtkAbstractViewInteractor.h>
 #include <dtkCore/dtkAbstractViewNavigator.h>
-
-#include <dtkCore/dtkAbstractFactory.h>
-#include <dtkCore/dtkAbstractDataFactory.h>
-#include <dtkCore/dtkAbstractProcessFactory.h>
-#include <dtkCore/dtkAbstractViewFactory.h>
-
 #include <dtkCore/dtkPlugin.h>
-
 #include <dtkCore/dtkPluginManager.h>
+#include <dtkCore/dtkVec3.h>
+#include <dtkCore/dtkQuat.h>
 %}
 
 // /////////////////////////////////////////////////////////////////
@@ -90,8 +85,13 @@
 // Ignore rules for operators
 // /////////////////////////////////////////////////////////////////
 
+%ignore operator>>;
 %ignore operator<<;
 %ignore operator==;
+%ignore operator[];
+%ignore operator!=;
+%ignore operator*=;
+%ignore operator/=;
 %ignore operator bool;
 %ignore operator int;
 %ignore operator float;
@@ -204,20 +204,18 @@
 %include <dtkCore/dtkAbstractDataFactory.h>
 %include <dtkCore/dtkAbstractDataReader.h>
 %include <dtkCore/dtkAbstractDataWriter.h>
-
 %include <dtkCore/dtkAbstractDataImage.h>
-
 %include <dtkCore/dtkAbstractProcess.h>
 %include <dtkCore/dtkAbstractProcessFactory.h>
-
 %include <dtkCore/dtkAbstractView.h>
 %include <dtkCore/dtkAbstractViewFactory.h>
 %include <dtkCore/dtkAbstractViewAnimator.h>
 %include <dtkCore/dtkAbstractViewInteractor.h>
 %include <dtkCore/dtkAbstractViewNavigator.h>
-
 %include <dtkCore/dtkPlugin.h>
 %include <dtkCore/dtkPluginManager.h>
+%include <dtkCore/dtkVec3.h>
+%include <dtkCore/dtkQuat.h>
 
 #ifdef SWIGPYTHON
 

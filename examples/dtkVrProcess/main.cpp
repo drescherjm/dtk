@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 21:01:33 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 21 22:01:16 2010 (+0100)
+ * Last-Updated: Mon Feb 22 09:05:02 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 122
+ *     Update #: 123
  */
 
 /* Commentary: 
@@ -29,7 +29,7 @@
 int main(int argc, char **argv)
 {
     if (argc < 3) {
-        qDebug() << "Usage: dtkVrProcess --view <type> [--tracker <url>]";
+        qDebug() << "Usage: dtkVrProcess --view <type> [--tracker <url>] [--fullscreen]";
         return 1;
     }
 

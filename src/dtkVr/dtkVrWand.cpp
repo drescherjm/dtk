@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 21 18:28:53 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 21 18:35:02 2010 (+0100)
+ * Last-Updated: Mon Feb 22 09:44:35 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 13
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -41,12 +41,12 @@ dtkVrWand::~dtkVrWand(void)
     d = NULL;
 }
 
-dtkVec3 dtkVrWand::position(void) const
+dtkVec3& dtkVrWand::position(void)
 {
     return d->position;
 }
 
-dtkQuat dtkVrWand::orientation(void) const
+dtkQuat& dtkVrWand::orientation(void)
 {
     return d->orientation;
 }

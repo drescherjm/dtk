@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 11:28:59 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 12:26:49 2010 (+0100)
+ * Last-Updated: Mon Feb 22 09:36:34 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 4
+ *     Update #: 10
  */
 
 /* Commentary: 
@@ -21,7 +21,10 @@
 #define DTKVEC3_H
 
 #include <math.h>
+
 #include <iostream>
+
+#include <QtDebug>
 
 class dtkVec3
 {
@@ -121,6 +124,20 @@ inline std::istream &operator>>(std::istream &in, dtkVec3 &v)
 {
     in>>v[0]>>v[1]>>v[2];
     return in;
+}
+
+inline QDebug operator<<(QDebug debug, const dtkVec3& data)
+{
+    debug.nospace() << data.x() << " " << data.y() << " " << data.z();
+
+    return debug.space();
+}
+
+inline QDebug operator<<(QDebug debug, dtkVec3 *data)
+{
+    debug.nospace() << data->x() << " " << data->y() << " " << data->z();
+
+    return debug.space();
 }
 
 #endif

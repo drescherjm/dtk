@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 10:03:10 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 23 10:26:58 2010 (+0100)
+ * Last-Updated: Tue Feb 23 15:32:27 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 248
+ *     Update #: 250
  */
 
 /* Commentary: 
@@ -102,7 +102,7 @@ void dtkVrSlave::process(void)
 {
     dtkVec3 eye(this->user()->position());
 
-    double focusDist = 5.0;
+    double focusDist = 10;
     dtkVec3 halfEyeDist(0.035, 0, 0);
 
     double x0   = (eye - d->screen->lowerLeft()) * d->screen->right();

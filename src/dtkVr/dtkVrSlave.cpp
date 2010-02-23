@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 10:03:10 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 21 21:29:41 2010 (+0100)
+ * Last-Updated: Tue Feb 23 10:26:58 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 232
+ *     Update #: 248
  */
 
 /* Commentary: 
@@ -101,24 +101,65 @@ void dtkVrSlave::setView(dtkAbstractView *view)
 void dtkVrSlave::process(void)
 {
     dtkVec3 eye(this->user()->position());
-    
+
+    double focusDist = 5.0;
+    dtkVec3 halfEyeDist(0.035, 0, 0);
+
     double x0   = (eye - d->screen->lowerLeft()) * d->screen->right();
     double y0   = (eye - d->screen->lowerLeft()) * d->screen->up();
     dtkVec3 center = d->screen->lowerLeft() + d->screen->right() * x0 + d->screen->up() * y0;
     double dist = (eye - center).length();
-    double focusDist = 5.0;
     dtkVec3 focusPoint = eye + (center-eye)/dist*focusDist;
     
-    this->setupCameraLookAt(eye, focusPoint, d->screen->up());
-    
-    double near   = 1e-2;
-    double far    = 1e2;
-    double left   = -x0 * near / dist;
-    double bottom = -y0 * near / dist;
-    double right  =  (d->screen->width() - x0) * near / dist;
-    double top    = (d->screen->height() - y0) * near / dist;
-    
-    this->setupCameraFrustum(left, right, bottom, top, near, far);
+    if (!qApp->arguments().contains("--stereo")) {
+
+        this->setupCameraLookAt(eye, focusPoint, d->screen->up());
+        
+        double near   = 1e-2;
+        double far    = 1e2;
+        double left   = -x0 * near / dist;
+        double bottom = -y0 * near / dist;
+        double right  =  (d->screen->width() - x0) * near / dist;
+        double top    = (d->screen->height() - y0) * near / dist;
+        
+        this->setupCameraFrustum(left, right, bottom, top, near, far);
+
+    } else {
+
+        dtkVec3 leftEye = eye + this->user()->orientation().rotate(-halfEyeDist);
+        double x0   = (leftEye - d->screen->lowerLeft()) * d->screen->right();
+        double y0   = (leftEye - d->screen->lowerLeft()) * d->screen->up();
+        dtkVec3 center = d->screen->lowerLeft() + d->screen->right() * x0 + d->screen->up() * y0;
+        double dist = (leftEye - center).length();
+
+        this->setupLeftEyeCameraLookAt(leftEye, focusPoint, d->screen->up());
+        
+        double near   = 1e-2;
+        double far    = 1e2;
+        double left   = -x0 * near / dist;
+        double bottom = -y0 * near / dist;
+        double right  =  (d->screen->width() - x0) * near / dist;
+        double top    = (d->screen->height() - y0) * near / dist;
+        
+        this->setupLeftEyeCameraFrustum(left, right, bottom, top, near, far);        
+        
+        dtkVec3 rightEye = eye + this->user()->orientation().rotate(halfEyeDist);
+        x0   = (rightEye - d->screen->lowerLeft()) * d->screen->right();
+        y0   = (rightEye - d->screen->lowerLeft()) * d->screen->up();
+        center = d->screen->lowerLeft() + d->screen->right() * x0 + d->screen->up() * y0;
+        dist = (rightEye - center).length();
+        
+        this->setupRightEyeCameraLookAt(rightEye, focusPoint, d->screen->up());
+        
+        near   = 1e-2;
+        far    = 1e2;
+        left   = -x0 * near / dist;
+        bottom = -y0 * near / dist;
+        right  =  (d->screen->width() - x0) * near / dist;
+        top    = (d->screen->height() - y0) * near / dist;
+        
+        this->setupRightEyeCameraFrustum(left, right, bottom, top, near, far);
+    }
     
     d->view->update();
 }
@@ -129,8 +170,32 @@ void dtkVrSlave::setupCameraLookAt(const dtkVec3& eye, const dtkVec3& center, co
         d->view->setupCameraLookAt(eye, center, up);
 }
 
+void dtkVrSlave::setupLeftEyeCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up)
+{
+    if (d->view)
+        d->view->setupLeftEyeCameraLookAt(eye, center, up);
+}
+
+void dtkVrSlave::setupRightEyeCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up)
+{
+    if (d->view)
+        d->view->setupRightEyeCameraLookAt(eye, center, up);
+}
+
 void dtkVrSlave::setupCameraFrustum(double left, double right, double bottom, double top, double near, double far)
 {
     if (d->view)
         d->view->setupCameraFrustum(left, right, bottom, top, near, far);
+}
+
+void dtkVrSlave::setupLeftEyeCameraFrustum(double left, double right, double bottom, double top, double near, double far)
+{
+    if (d->view)
+        d->view->setupLeftEyeCameraFrustum(left, right, bottom, top, near, far);
+}
+
+void dtkVrSlave::setupRightEyeCameraFrustum(double left, double right, double bottom, double top, double near, double far)
+{
+    if (d->view)
+        d->view->setupRightEyeCameraFrustum(left, right, bottom, top, near, far);
 }

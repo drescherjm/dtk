@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 12:30:32 2010 (+0100)
+ * Last-Updated: Tue Feb 23 10:18:23 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 212
+ *     Update #: 216
  */
 
 /* Commentary:
@@ -303,7 +303,45 @@ void dtkAbstractView::setupCameraLookAt(const dtkVec3& eye, const dtkVec3& cente
     DTK_UNUSED(up);
 }
 
+void dtkAbstractView::setupLeftEyeCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(eye);
+    DTK_UNUSED(center);
+    DTK_UNUSED(up);
+}
+
+void dtkAbstractView::setupRightEyeCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(eye);
+    DTK_UNUSED(center);
+    DTK_UNUSED(up);
+}
+
 void dtkAbstractView::setupCameraFrustum(double left, double right, double bottom, double top, double near, double far)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(left);
+    DTK_UNUSED(right);
+    DTK_UNUSED(bottom);
+    DTK_UNUSED(top);
+    DTK_UNUSED(near);
+    DTK_UNUSED(far);
+}
+
+void dtkAbstractView::setupLeftEyeCameraFrustum(double left, double right, double bottom, double top, double near, double far)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(left);
+    DTK_UNUSED(right);
+    DTK_UNUSED(bottom);
+    DTK_UNUSED(top);
+    DTK_UNUSED(near);
+    DTK_UNUSED(far);
+}
+
+void dtkAbstractView::setupRightEyeCameraFrustum(double left, double right, double bottom, double top, double near, double far)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(left);

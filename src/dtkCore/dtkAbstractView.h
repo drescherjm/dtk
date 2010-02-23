@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 12:28:39 2010 (+0100)
+ * Last-Updated: Tue Feb 23 10:20:37 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 232
+ *     Update #: 235
  */
 
 /* Commentary:
@@ -111,8 +111,13 @@ public slots:
     virtual void   initialize(void);
     virtual void uninitialize(void);
 
-    virtual void setupCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up);
-    virtual void setupCameraFrustum(double left, double right, double bottom, double top, double near, double far);
+    virtual void         setupCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up);
+    virtual void  setupLeftEyeCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up);
+    virtual void setupRightEyeCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up);
+
+    virtual void        setupCameraFrustum(double left, double right, double bottom, double top, double near, double far);
+    virtual void  setupLeftEyeCameraFrustum(double left, double right, double bottom, double top, double near, double far);
+    virtual void setupRightEyeCameraFrustum(double left, double right, double bottom, double top, double near, double far);
 
 private:
     dtkAbstractViewPrivate *d;

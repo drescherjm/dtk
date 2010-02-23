@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 10 21:06:57 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 12:29:17 2010 (+0100)
+ * Last-Updated: Tue Feb 23 10:25:16 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 52
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -49,8 +49,13 @@ public:
 protected:
     void process(void);
 
-    void setupCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up);
-    void setupCameraFrustum(double left, double right, double bottom, double top, double near, double far);
+    void         setupCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up);
+    void  setupLeftEyeCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up);
+    void setupRightEyeCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up);
+
+    void         setupCameraFrustum(double left, double right, double bottom, double top, double near, double far);
+    void  setupLeftEyeCameraFrustum(double left, double right, double bottom, double top, double near, double far);
+    void setupRightEyeCameraFrustum(double left, double right, double bottom, double top, double near, double far);
 
 private:
     dtkVrSlavePrivate *d;

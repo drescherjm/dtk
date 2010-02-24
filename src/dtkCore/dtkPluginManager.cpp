@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 10:50:08 2010 (+0100)
+ * Last-Updated: Wed Feb 24 10:40:40 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 108
+ *     Update #: 110
  */
 
 /* Commentary: 
@@ -133,6 +133,8 @@ dtkPluginManager::~dtkPluginManager(void)
 void dtkPluginManager::loadPlugin(const QString& path)
 {
     QPluginLoader *loader = new QPluginLoader(path);
+
+    loader->setLoadHints (QLibrary::ExportExternalSymbolsHint);
 
     if(!loader->load()) {
         dtkDebug() << "Unable to load - " << loader->errorString();

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Feb 22 21:42:37 2010 (+0100)
+## Last-Updated: Thu Feb 25 20:31:35 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 173
+##     Update #: 175
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,6 +24,8 @@ project(dtkVr)
 ## #################################################################
 
 find_package(MPI)
+
+if(MPI_FOUND)
 
 ## #################################################################
 ## Sources
@@ -100,8 +102,10 @@ dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP vr tcl    ${CMAKE_CURRENT_
 ## Build rules
 ## #################################################################
 
+if(NOT WIN32)
 add_definitions(-Wno-write-strings)
 add_definitions(-Wformat=0)
+endif(NOT WIN32)
 
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)
@@ -163,3 +167,5 @@ if(NOT dtk_INSTALL_NO_LIBRARIES)
   install_targets(${dtk_INSTALL_LIB_DIR} RUNTIME_DIRECTORY ${dtk_INSTALL_BIN_DIR} ${PROJECT_NAME})
   install_files(${dtk_INSTALL_MODULE_DIR} .py ${CMAKE_BINARY_DIR}/modules/vr.py)
 endif(NOT dtk_INSTALL_NO_LIBRARIES)
+
+endif(MPI_FOUND)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jan 29 14:36:41 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jul 31 23:49:34 2009 (+0200)
+ * Last-Updated: Wed Feb 24 11:42:13 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 77
+ *     Update #: 78
  */
 
 /* Commentary:
@@ -58,15 +58,6 @@ public:
 
 signals:
     void updated(void);
-
-public slots:
-    virtual void    updatePosition(          double x, double y, double z) {} // -- to be moved later on
-    virtual void updateOrientation(double a, double x, double y, double z) {} // -- to be moved later on
-
-    virtual void update(double tx, double ty, double tz) {}                                  // -- to be moved later on
-    virtual void update(double tx, double ty, double tz, double rx, double ry, double rz) {} // -- to be moved later on
-
-    virtual void update(double thumb, double index, double middle, double ring, double pinky) {} // -- to be moved later on
 
 private:
     dtkAbstractViewNavigatorPrivate *d;

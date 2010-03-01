@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 10:03:10 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 22 09:44:04 2010 (+0100)
+ * Last-Updated: Wed Feb 24 19:21:10 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 83
+ *     Update #: 143
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 #include "dtkVrUser.h"
 #include "dtkVrWand.h"
 
+#include <dtkCore/dtkGlobal.h>
 #include <dtkCore/dtkVec3.h>
 #include <dtkCore/dtkQuat.h>
 
@@ -54,7 +55,7 @@ void dtkVrMasterPrivate::positionHandler1(float x, float y, float z)
 
 void dtkVrMasterPrivate::positionHandler2(float x, float y, float z)
 {
-    self->q->wand()->setPosition(dtkVec3(x, y, z));
+    self->q->wand()->setCurrentPosition(dtkVec3(x, y, z));
 }
 
 void dtkVrMasterPrivate::orientationHandler1(float q0, float q1, float q2, float q3)
@@ -64,7 +65,7 @@ void dtkVrMasterPrivate::orientationHandler1(float q0, float q1, float q2, float
 
 void dtkVrMasterPrivate::orientationHandler2(float q0, float q1, float q2, float q3)
 {
-    self->q->wand()->setOrientation(dtkQuat(q0, q1, q2, q3));
+    self->q->wand()->setCurrentOrientation(dtkQuat(q0, q1, q2, q3));
 }
 
 dtkVrMasterPrivate *dtkVrMasterPrivate::self = NULL;
@@ -83,6 +84,9 @@ dtkVrMaster::dtkVrMaster(dtkDistributedCommunicator *communicator) : dtkVrProces
     d->tracker->registerPositionHandler2(dtkVrMasterPrivate::positionHandler2);
     d->tracker->registerOrientationHandler1(dtkVrMasterPrivate::orientationHandler1);
     d->tracker->registerOrientationHandler2(dtkVrMasterPrivate::orientationHandler2);
+
+    connect(d->tracker, SIGNAL(buttonPressed(int)), this, SLOT(onButtonPressed(int)));
+    connect(d->tracker, SIGNAL(buttonReleased(int)), this, SLOT(onButtonReleased(int)));
 }
 
 dtkVrMaster::~dtkVrMaster(void)
@@ -107,6 +111,33 @@ void dtkVrMaster::initialize(void)
 void dtkVrMaster::uninitialize(void)
 {
     d->tracker->stopConnection();
+}
+
+void dtkVrMaster::onButtonPressed(int button)
+{
+    switch(button) {
+    case dtkVrTrackerVrpn::dtkVrTrackerVrpnButton0:
+        this->wand()->setAction(dtkVrWand::dtkVrWandPicking);
+        this->wand()->setReferencePosition(this->wand()->currentPosition());
+        this->wand()->setReferenceOrientation(this->wand()->currentOrientation());
+        break;
+    };    
+}
+
+void dtkVrMaster::onButtonReleased(int button)
+{
+    switch(button) {
+    case dtkVrTrackerVrpn::dtkVrTrackerVrpnButton0:
+        this->wand()->setAction(dtkVrWand::dtkVrWandNone);
+        break;
+    case dtkVrTrackerVrpn::dtkVrTrackerVrpnButton4:
+        this->wand()->setMode(dtkVrWand::dtkVrWandInteraction);
+        break;
+    case dtkVrTrackerVrpn::dtkVrTrackerVrpnButton3:
+        this->wand()->setMode(dtkVrWand::dtkVrWandNavigation);
+        break;
+    default: break;
+    }
 }
 
 void dtkVrMaster::process(void)

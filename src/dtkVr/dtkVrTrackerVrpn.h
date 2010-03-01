@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 20:35:23 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 22:43:33 2010 (+0100)
+ * Last-Updated: Wed Feb 24 13:34:06 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 19
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -63,6 +63,7 @@ public:
     void registerOrientationHandler6(dtkVrTrackerVrpn::dtkVrTrackerVrpnOrientationHandler handler);
 
     enum Button {
+        dtkVrTrackerVrpnButton0,
         dtkVrTrackerVrpnButton1,
         dtkVrTrackerVrpnButton2,
         dtkVrTrackerVrpnButton3,
@@ -78,8 +79,8 @@ public:
     QString description(void) const;
 
 signals:
-    void buttonPressed(Button button);
-    void buttonReleased(Button button);
+     void buttonPressed(int button);
+    void buttonReleased(int button);
 
 public slots:
     void startConnection(const QUrl& server);

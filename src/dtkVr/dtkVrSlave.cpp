@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 10:03:10 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 23 15:32:27 2010 (+0100)
+ * Last-Updated: Mon Mar  1 10:43:12 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 250
+ *     Update #: 574
  */
 
 /* Commentary: 
@@ -100,9 +100,51 @@ void dtkVrSlave::setView(dtkAbstractView *view)
 
 void dtkVrSlave::process(void)
 {
+    // Wand management /////////////////////////////////////////////////////////////////
+
+    static bool dirty = true;
+    static bool dirty2 = false;
+    static dtkVec3 initialPosition;
+    static dtkQuat initialOrientation;
+    static dtkVec3 magic;
+    
+    if(this->wand()->action() == dtkVrWand::dtkVrWandPicking && this->wand()->mode() == dtkVrWand::dtkVrWandNavigation) {
+        
+        if(dirty) {
+            initialPosition = this->scenePosition();
+            initialOrientation = this->sceneOrientation();
+            dirty = false;
+            dirty2 = true;
+        }
+
+        dtkVec3 wp  = this->wand()->currentPosition();
+        dtkVec3 wp0 = this->wand()->referencePosition();
+        dtkQuat wq  = this->wand()->currentOrientation();
+        dtkQuat wq0 = this->wand()->referenceOrientation();
+        dtkVec3 sp0 = initialPosition;
+        dtkQuat sq0 = initialOrientation;
+
+        dtkVec3 dt  = wp - wp0;
+        dtkQuat dq  = wq * wq0.inv();
+
+        this->setupSceneOrientation(dq * sq0);
+        this->setupScenePosition(dq.inv().rotate(sp0 + wp - wp0) - dq.inv().rotate(wp) + wp);
+    }
+
+    if(this->wand()->action() == dtkVrWand::dtkVrWandNone && this->wand()->mode() == dtkVrWand::dtkVrWandNavigation) {
+
+        if(dirty2) {
+            dirty = true;
+            dirty2 = false;            
+        }
+
+    }
+
+    // User management /////////////////////////////////////////////////////////////////
+
     dtkVec3 eye(this->user()->position());
 
-    double focusDist = 10;
+    double focusDist = 5;
     dtkVec3 halfEyeDist(0.035, 0, 0);
 
     double x0   = (eye - d->screen->lowerLeft()) * d->screen->right();
@@ -162,6 +204,30 @@ void dtkVrSlave::process(void)
     }
     
     d->view->update();
+}
+
+dtkVec3 dtkVrSlave::scenePosition(void) const
+{
+    if (d->view)
+        return d->view->scenePosition();
+}
+
+dtkQuat dtkVrSlave::sceneOrientation(void) const
+{
+    if (d->view)
+        return d->view->sceneOrientation();
+}
+
+void dtkVrSlave::setupScenePosition(const dtkVec3& position)
+{
+    if (d->view)
+        d->view->setupScenePosition(position);
+}
+
+void dtkVrSlave::setupSceneOrientation(const dtkQuat& orientation)
+{
+    if (d->view)
+        d->view->setupSceneOrientation(orientation);
 }
 
 void dtkVrSlave::setupCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 23 10:18:23 2010 (+0100)
+ * Last-Updated: Mon Mar  1 08:57:24 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 216
+ *     Update #: 228
  */
 
 /* Commentary:
@@ -23,8 +23,6 @@
 #include <dtkCore/dtkAbstractViewNavigator.h>
 #include <dtkCore/dtkAbstractViewInteractor.h>
 #include <dtkCore/dtkLog.h>
-#include <dtkCore/dtkVec3.h>
-#include <dtkCore/dtkQuat.h>
 
 class dtkAbstractViewPrivate
 {
@@ -293,6 +291,32 @@ void dtkAbstractView::initialize(void)
 void dtkAbstractView::uninitialize(void)
 {
     DTK_DEFAULT_IMPLEMENTATION;
+}
+
+dtkVec3 dtkAbstractView::scenePosition(void) const
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return dtkVec3();
+}
+
+dtkQuat dtkAbstractView::sceneOrientation(void) const
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    
+    return dtkQuat();
+}
+
+void dtkAbstractView::setupScenePosition(const dtkVec3& position)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(position);
+}
+
+void dtkAbstractView::setupSceneOrientation(const dtkQuat& orientation)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(orientation);
 }
 
 void dtkAbstractView::setupCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up)

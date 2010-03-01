@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Feb 22 21:42:37 2010 (+0100)
+## Last-Updated: Thu Feb 25 09:28:56 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 173
+##     Update #: 180
 ######################################################################
 ## 
 ### Commentary: 
@@ -45,6 +45,9 @@ set(${PROJECT_NAME}_HEADERS
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkVrDevice.h
   dtkVrManager.h
+  dtkVrMaster.h
+  dtkVrProcess.h
+  dtkVrSlave.h
   dtkVrTracker.h
   dtkVrUser.h
   dtkVrWand.h

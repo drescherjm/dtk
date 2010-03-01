@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 10 21:06:57 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 23 10:25:16 2010 (+0100)
+ * Last-Updated: Mon Mar  1 08:56:58 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 53
+ *     Update #: 64
  */
 
 /* Commentary: 
@@ -31,12 +31,14 @@ class dtkQuat;
 
 class dtkVrSlave : public dtkVrProcess
 {
+    Q_OBJECT
+
 public:
              dtkVrSlave(dtkDistributedCommunicator *communicator);
     virtual ~dtkVrSlave(void);
 
-    virtual void   initialize(void);
-    virtual void uninitialize(void);
+    void   initialize(void);
+    void uninitialize(void);
 
     void show(void);
     void showFullScreen(void);
@@ -48,6 +50,12 @@ public:
 
 protected:
     void process(void);
+
+    dtkVec3 scenePosition(void) const;
+    dtkQuat sceneOrientation(void) const;
+
+    void setupScenePosition(const dtkVec3& position);
+    void setupSceneOrientation(const dtkQuat& orientation);
 
     void         setupCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up);
     void  setupLeftEyeCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up);

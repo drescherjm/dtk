@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 11:30:32 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 22 09:37:20 2010 (+0100)
+ * Last-Updated: Sat Feb 27 15:39:19 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 17
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -84,7 +84,9 @@ public:
 
     inline dtkVec3 rotate(const dtkVec3 &v) const
     {
-        dtkQuat q((*this)*dtkQuat(v.x(), v.y(), v.z(), 0)*(*this).inv());
+        // dtkQuat q((*this)*dtkQuat(v.x(), v.y(), v.z(), 0)*((*this).inv()));
+        dtkQuat q(((*this).inv())*dtkQuat(v.x(), v.y(), v.z(), 0)*((*this)));
+
         return dtkVec3(q[0], q[1], q[2]);
     }
 

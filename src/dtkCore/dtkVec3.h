@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 11:28:59 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 22 09:36:34 2010 (+0100)
+ * Last-Updated: Fri Feb 26 13:41:04 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 10
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -108,6 +108,25 @@ public:
     inline const dtkVec3 operator+(const dtkVec3 &v) const
     {
         return dtkVec3(mVal[0] + v.mVal[0], mVal[1] + v.mVal[1], mVal[2] + v.mVal[2]); 
+    }
+
+    inline const dtkVec3 operator^(const dtkVec3 &v) const
+    {
+        return dtkVec3(
+            mVal[1]  * v.mVal[2] - mVal[2] * v.mVal[1],
+            mVal[2]  * v.mVal[0] - mVal[0] * v.mVal[2],
+            mVal[0]  * v.mVal[1] - mVal[1] * v.mVal[0]); 
+    }
+
+    inline const dtkVec3 orth(void) const
+    {
+        if ((fabs(mVal[1]) >= 0.9*fabs(mVal[0])) && (fabs(mVal[2]) >= 0.9*fabs(mVal[0])))
+            return dtkVec3(0.0, -mVal[2], mVal[1]);
+        else
+            if ((fabs(mVal[0]) >= 0.9*fabs(mVal[1])) && (fabs(mVal[2]) >= 0.9*fabs(mVal[1])))
+                return dtkVec3(-mVal[2], 0.0, mVal[0]);
+            else
+                return dtkVec3(-mVal[1], mVal[0], 0.0);
     }
 
 private:

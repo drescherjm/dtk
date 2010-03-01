@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 21 18:27:56 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 22 09:42:38 2010 (+0100)
+ * Last-Updated: Wed Feb 24 19:27:51 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 6
+ *     Update #: 33
  */
 
 /* Commentary: 
@@ -36,11 +36,31 @@ public:
      dtkVrWand(void);
     ~dtkVrWand(void);
 
-    dtkVec3& position(void);
-    dtkQuat& orientation(void);
+    enum Action {
+        dtkVrWandPicking,
+        dtkVrWandNone
+    };
 
-    void setPosition(const dtkVec3& position);
-    void setOrientation(const dtkQuat& orientation);
+    enum Mode {
+        dtkVrWandInteraction,
+        dtkVrWandNavigation
+    };
+
+    int& action(void);
+    int& mode(void);
+
+    dtkVec3& referencePosition(void);
+    dtkQuat& referenceOrientation(void);
+    dtkVec3& currentPosition(void);
+    dtkQuat& currentOrientation(void);
+
+    void setAction(Action action);
+    void setMode(Mode mode);
+
+    void setReferencePosition(const dtkVec3& position);
+    void setReferenceOrientation(const dtkQuat& orientation);
+    void setCurrentPosition(const dtkVec3& position);
+    void setCurrentOrientation(const dtkQuat& orientation);
 
 private:
     dtkVrWandPrivate *d;

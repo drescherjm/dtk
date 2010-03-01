@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 20:32:08 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 21 18:07:58 2010 (+0100)
+ * Last-Updated: Wed Feb 24 18:00:56 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 41
+ *     Update #: 60
  */
 
 /* Commentary: 
@@ -121,15 +121,16 @@ void dtkVrTrackerVrpnPrivate::stop(void)
 void dtkVrTrackerVrpnPrivate::handle_button(const vrpn_BUTTONCB callback)
 {
     switch(callback.button) {
+    case 0: callback.state ? emit q->buttonPressed(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton0) : emit q->buttonReleased(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton0); break;
     case 1: callback.state ? emit q->buttonPressed(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton1) : emit q->buttonReleased(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton1); break;
-    case 2: callback.state ? emit q->buttonPressed(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton2) : emit q->buttonReleased(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton1); break;
-    case 3: callback.state ? emit q->buttonPressed(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton3) : emit q->buttonReleased(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton1); break;
-    case 4: callback.state ? emit q->buttonPressed(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton4) : emit q->buttonReleased(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton1); break;
-    case 5: callback.state ? emit q->buttonPressed(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton5) : emit q->buttonReleased(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton1); break;
-    case 6: callback.state ? emit q->buttonPressed(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton6) : emit q->buttonReleased(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton1); break;
-    case 7: callback.state ? emit q->buttonPressed(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton7) : emit q->buttonReleased(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton1); break;
-    case 8: callback.state ? emit q->buttonPressed(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton8) : emit q->buttonReleased(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton1); break;
-    case 9: callback.state ? emit q->buttonPressed(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton9) : emit q->buttonReleased(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton1); break;
+    case 2: callback.state ? emit q->buttonPressed(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton2) : emit q->buttonReleased(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton2); break;
+    case 3: callback.state ? emit q->buttonPressed(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton3) : emit q->buttonReleased(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton3); break;
+    case 4: callback.state ? emit q->buttonPressed(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton4) : emit q->buttonReleased(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton4); break;
+    case 5: callback.state ? emit q->buttonPressed(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton5) : emit q->buttonReleased(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton5); break;
+    case 6: callback.state ? emit q->buttonPressed(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton6) : emit q->buttonReleased(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton6); break;
+    case 7: callback.state ? emit q->buttonPressed(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton7) : emit q->buttonReleased(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton7); break;
+    case 8: callback.state ? emit q->buttonPressed(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton8) : emit q->buttonReleased(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton8); break;
+    case 9: callback.state ? emit q->buttonPressed(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton9) : emit q->buttonReleased(dtkVrTrackerVrpn::dtkVrTrackerVrpnButton9); break;
     default:
         callback.state ? emit q->buttonPressed(dtkVrTrackerVrpn::dtkVrTrackerVrpnButtonUndefined) : emit q->buttonReleased(dtkVrTrackerVrpn::dtkVrTrackerVrpnButtonUndefined);
         break;
@@ -216,6 +217,36 @@ dtkVrTrackerVrpn::~dtkVrTrackerVrpn(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkVrTrackerVrpn::registerAxesHandler1(dtkVrTrackerVrpn::dtkVrTrackerVrpnAxesHandler handler)
+{
+    d->axes_handlers_1 << handler;
+}
+
+void dtkVrTrackerVrpn::registerAxesHandler2(dtkVrTrackerVrpn::dtkVrTrackerVrpnAxesHandler handler)
+{
+    d->axes_handlers_2 << handler;
+}
+
+void dtkVrTrackerVrpn::registerAxesHandler3(dtkVrTrackerVrpn::dtkVrTrackerVrpnAxesHandler handler)
+{
+    d->axes_handlers_3 << handler;
+}
+
+void dtkVrTrackerVrpn::registerAxesHandler4(dtkVrTrackerVrpn::dtkVrTrackerVrpnAxesHandler handler)
+{
+    d->axes_handlers_4 << handler;
+}
+
+void dtkVrTrackerVrpn::registerAxesHandler5(dtkVrTrackerVrpn::dtkVrTrackerVrpnAxesHandler handler)
+{
+    d->axes_handlers_5 << handler;
+}
+
+void dtkVrTrackerVrpn::registerAxesHandler6(dtkVrTrackerVrpn::dtkVrTrackerVrpnAxesHandler handler)
+{
+    d->axes_handlers_6 << handler;
 }
 
 void dtkVrTrackerVrpn::registerPositionHandler1(dtkVrTrackerVrpn::dtkVrTrackerVrpnPositionHandler handler)

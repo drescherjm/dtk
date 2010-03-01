@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 13:44:22 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 22:40:48 2010 (+0100)
+ * Last-Updated: Wed Feb 24 13:16:34 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 85
+ *     Update #: 91
  */
 
 /* Commentary: 
@@ -57,6 +57,7 @@ public:
     vrpn_Analog_Remote *analog;
     vrpn_Tracker_Remote *tracker;
 
+    QList<dtkVrDeviceVrpn::dtkVrDeviceVrpnAxesHandler> axes_handlers;
     QList<dtkVrDeviceVrpn::dtkVrDeviceVrpnPositionHandler> position_handlers;
     QList<dtkVrDeviceVrpn::dtkVrDeviceVrpnOrientationHandler> orientation_handlers;
 
@@ -103,15 +104,16 @@ void dtkVrDeviceVrpnPrivate::stop(void)
 void dtkVrDeviceVrpnPrivate::handle_button(const vrpn_BUTTONCB callback)
 {
     switch(callback.button) {
+    case 0: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton0) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton0); break;
     case 1: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton1) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton1); break;
-    case 2: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton2) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton1); break;
-    case 3: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton3) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton1); break;
-    case 4: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton4) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton1); break;
-    case 5: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton5) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton1); break;
-    case 6: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton6) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton1); break;
-    case 7: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton7) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton1); break;
-    case 8: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton8) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton1); break;
-    case 9: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton9) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton1); break;
+    case 2: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton2) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton2); break;
+    case 3: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton3) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton3); break;
+    case 4: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton4) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton4); break;
+    case 5: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton5) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton5); break;
+    case 6: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton6) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton6); break;
+    case 7: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton7) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton7); break;
+    case 8: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton8) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton8); break;
+    case 9: callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton9) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButton9); break;
     default:
         callback.state ? emit q->buttonPressed(dtkVrDeviceVrpn::dtkVrDeviceVrpnButtonUndefined) : emit q->buttonReleased(dtkVrDeviceVrpn::dtkVrDeviceVrpnButtonUndefined);
         break;
@@ -163,6 +165,7 @@ dtkVrDeviceVrpn::~dtkVrDeviceVrpn(void)
 
     d = NULL;
 }
+
 
 void dtkVrDeviceVrpn::registerPositionHandler(dtkVrDeviceVrpn::dtkVrDeviceVrpnPositionHandler handler)
 {

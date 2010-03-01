@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 10 21:08:39 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 21 18:35:46 2010 (+0100)
+ * Last-Updated: Wed Feb 24 19:18:59 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 62
+ *     Update #: 73
  */
 
 /* Commentary: 
@@ -20,14 +20,18 @@
 #ifndef DTKVRPROCESS_H
 #define DTKVRPROCESS_H
 
+#include <QtCore>
+
 class dtkDistributedCommunicator;
 class dtkVrDevice;
 class dtkVrUser;
 class dtkVrWand;
 class dtkVrProcessPrivate;
 
-class dtkVrProcess
+class dtkVrProcess : public QObject
 {
+    Q_OBJECT
+
 public:
              dtkVrProcess(dtkDistributedCommunicator *communicator);
     virtual ~dtkVrProcess(void);

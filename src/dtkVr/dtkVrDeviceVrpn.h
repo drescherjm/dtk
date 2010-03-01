@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 13:43:20 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 20:49:09 2010 (+0100)
+ * Last-Updated: Wed Feb 24 13:16:00 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 21
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -32,6 +32,10 @@ public:
      dtkVrDeviceVrpn(void);
     ~dtkVrDeviceVrpn(void);
 
+    typedef void (*dtkVrDeviceVrpnAxesHandler)(int, float);
+
+    void registerAxesHandler(dtkVrDeviceVrpn::dtkVrDeviceVrpnAxesHandler handler);
+
     typedef void (*dtkVrDeviceVrpnPositionHandler)(float x, float y, float z);
 
     void registerPositionHandler(dtkVrDeviceVrpn::dtkVrDeviceVrpnPositionHandler handler);
@@ -41,6 +45,7 @@ public:
     void registerOrientationHandler(dtkVrDeviceVrpn::dtkVrDeviceVrpnOrientationHandler handler);
 
     enum Button {
+        dtkVrDeviceVrpnButton0,
         dtkVrDeviceVrpnButton1,
         dtkVrDeviceVrpnButton2,
         dtkVrDeviceVrpnButton3,
@@ -64,6 +69,7 @@ public slots:
     void  stopConnection(void);
 
 protected:
+    void runAxesHandlers(int axis, float angle);
     void runPositionHandlers(float x, float y, float z);
     void runOrientationHandlers(float q0, float q1, float q2, float q3);
 

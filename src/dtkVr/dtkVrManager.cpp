@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 10:09:51 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 11:20:29 2010 (+0100)
+ * Last-Updated: Thu Feb 25 11:27:30 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 52
+ *     Update #: 59
  */
 
 /* Commentary: 
@@ -62,18 +62,10 @@ dtkVrProcess *dtkVrManager::create(QString type)
     dtkVrProcess *process = NULL;
 
     if(d->communicator->rank()) {
-
-        dtkVrSlave *slave = new dtkVrSlave(d->communicator);
-        slave->setView(view);
-
-        process = slave;
-
+        process = new dtkVrSlave(d->communicator);
+        dynamic_cast <dtkVrSlave *>(process)->setView(view);
     } else {
-
-        dtkVrMaster *master = new dtkVrMaster(d->communicator);
-        
-        process = master;
-
+        process = new dtkVrMaster(d->communicator);
     }
 
     return process;

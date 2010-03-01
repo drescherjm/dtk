@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 11:30:32 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb 27 15:39:19 2010 (+0100)
+ * Last-Updated: Mon Mar  1 12:41:35 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 23
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -25,8 +25,8 @@
 class dtkQuat
 {
 public:
-    dtkQuat(double q0=0.0, double q1=0.0, double q2=0.0, double q3=1.0);
-    dtkQuat(const dtkQuat &q);
+     dtkQuat(double q0=0.0, double q1=0.0, double q2=0.0, double q3=1.0);
+     dtkQuat(const dtkQuat &q);
     ~dtkQuat(void);
 
     inline double  operator[](int i) const { return mVal[i]; }

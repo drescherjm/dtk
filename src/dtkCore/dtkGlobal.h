@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 16 09:54:33 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jan 27 15:33:03 2010 (+0100)
+ * Last-Updated: Mon Mar  1 23:48:14 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 82
+ *     Update #: 89
  */
 
 /* Commentary: 
@@ -80,6 +80,11 @@
     << this->metaObject()->className()
 
 #define DTK_UNUSED(variable) Q_UNUSED(variable)
+
+#define DTK_DEPRECATED Q_DECL_DEPRECATED
+
+#define DTK_SUCCEED 1
+#define DTK_FAILURE 0
 
 // /////////////////////////////////////////////////////////////////
 // Hash functions

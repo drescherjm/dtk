@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jan 26 15:33:51 2010 (+0100)
+ * Last-Updated: Mon Mar  1 23:58:04 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 119
+ *     Update #: 128
  */
 
 /* Commentary: 
@@ -44,14 +44,13 @@ signals:
    void finished(void);
 
 public slots:
-
-    void run(void);
-
-    virtual void update(void);
-
+    int run(void);
+   
+    virtual  int update(void);
+    
     virtual bool read(QString file);
     virtual bool read(QStringList files);
-
+    
     virtual bool write(QString file);
     virtual bool write(QStringList files);
 

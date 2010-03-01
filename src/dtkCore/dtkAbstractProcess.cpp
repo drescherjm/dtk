@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 15 20:05:40 2010 (+0100)
+ * Last-Updated: Mon Mar  1 23:58:15 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 77
+ *     Update #: 85
  */
 
 /* Commentary: 
@@ -48,14 +48,16 @@ QDebug operator<<(QDebug debug, dtkAbstractProcess *process)
     return debug.space();
 }
 
-void dtkAbstractProcess::run(void)
+int dtkAbstractProcess::run(void)
 {
-    this->update();
+    return this->update();
 }
 
-void dtkAbstractProcess::update(void)
+int dtkAbstractProcess::update(void)
 {
     DTK_DEFAULT_IMPLEMENTATION;
+
+    return DTK_FAILURE;
 }
 
 bool dtkAbstractProcess::read(QString file)

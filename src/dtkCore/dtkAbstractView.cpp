@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar  1 08:57:24 2010 (+0100)
+ * Last-Updated: Tue Mar  2 14:18:30 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 228
+ *     Update #: 237
  */
 
 /* Commentary:
@@ -27,6 +27,8 @@
 class dtkAbstractViewPrivate
 {
 public:
+    bool stereo;
+
     QMap<QString, dtkAbstractViewAnimator   *>   animators;
     QMap<QString, dtkAbstractViewNavigator  *>  navigators;
     QMap<QString, dtkAbstractViewInteractor *> interactors;
@@ -69,6 +71,11 @@ void dtkAbstractView::select(dtkAbstractData *data)
 void dtkAbstractView::unselect(dtkAbstractData *data)
 {
     DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::setStereo(bool on)
+{
+    d->stereo = on;
 }
 
 void dtkAbstractView::setView(void *)
@@ -131,6 +138,11 @@ void *dtkAbstractView::data(int channel)
     DTK_DEFAULT_IMPLEMENTATION;
 
     return NULL;
+}
+
+bool dtkAbstractView::stereo(void)
+{
+    return d->stereo;
 }
 
 void dtkAbstractView::clear(void)
@@ -305,6 +317,18 @@ dtkQuat dtkAbstractView::sceneOrientation(void) const
     DTK_DEFAULT_IMPLEMENTATION;
     
     return dtkQuat();
+}
+
+void dtkAbstractView::setupWandPosition(const dtkVec3& position)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(position);
+}
+
+void dtkAbstractView::setupWandOrientation(const dtkQuat& orientation)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(orientation);
 }
 
 void dtkAbstractView::setupScenePosition(const dtkVec3& position)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Jan 13 14:21:12 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 11:24:23 2010 (+0100)
+ * Last-Updated: Tue Mar  2 13:35:03 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 40
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -22,10 +22,14 @@
 
 %module vr
 %{
+#include <dtkVr/dtkVrDevice.h>
+#if defined(DTK_WRAP_VR)
 #include <dtkVr/dtkVrManager.h>
 #include <dtkVr/dtkVrMaster.h>
 #include <dtkVr/dtkVrProcess.h>
 #include <dtkVr/dtkVrSlave.h>
+#endif
+#include <dtkVr/dtkVrTracker.h>
 
 #include <QtDebug>
 #include <QtCore>
@@ -101,9 +105,13 @@
 // Wrapper input
 // /////////////////////////////////////////////////////////////////
 
+%include <dtkVr/dtkVrDevice.h>
+#if defined(DTK_WRAP_VR)
 %include <dtkVr/dtkVrManager.h>
 %include <dtkVr/dtkVrMaster.h>
 %include <dtkVr/dtkVrProcess.h>
 %include <dtkVr/dtkVrSlave.h>
+#endif
+%include <dtkVr/dtkVrTracker.h>
 
 #endif

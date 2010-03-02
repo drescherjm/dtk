@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 10 21:06:57 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar  1 08:56:58 2010 (+0100)
+ * Last-Updated: Tue Mar  2 14:15:51 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 64
+ *     Update #: 67
  */
 
 /* Commentary: 
@@ -47,12 +47,16 @@ public:
     void move(int x, int y);
 
     void setView(dtkAbstractView *view);
+    void setStereo(bool on);
 
 protected:
     void process(void);
 
     dtkVec3 scenePosition(void) const;
     dtkQuat sceneOrientation(void) const;
+
+    void setupWandPosition(const dtkVec3& position);
+    void setupWandOrientation(const dtkQuat& orientation);
 
     void setupScenePosition(const dtkVec3& position);
     void setupSceneOrientation(const dtkQuat& orientation);

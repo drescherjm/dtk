@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 10:03:10 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 24 19:21:10 2010 (+0100)
+ * Last-Updated: Tue Mar  2 16:54:37 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 143
+ *     Update #: 206
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include "dtkVrMaster.h"
+#include "dtkVrDeviceVrpn.h"
 #include "dtkVrTrackerVrpn.h"
 #include "dtkVrUser.h"
 #include "dtkVrWand.h"
@@ -27,6 +28,7 @@
 #include <dtkCore/dtkQuat.h>
 
 #include <QtCore>
+#include <QtGui>
 
 // /////////////////////////////////////////////////////////////////
 // dtkVrMasterPrivate
@@ -35,7 +37,11 @@
 class dtkVrMasterPrivate
 {
 public:
+    QUrl trackerUrl;
+    QUrl deviceUrl;
+
     dtkVrTrackerVrpn *tracker;
+    dtkVrDeviceVrpn *device;
 
     static void positionHandler1(float x, float y, float z);
     static void positionHandler2(float x, float y, float z);
@@ -79,14 +85,8 @@ dtkVrMaster::dtkVrMaster(dtkDistributedCommunicator *communicator) : dtkVrProces
     d->q = this;
     d->self = d;
  
-    d->tracker = new dtkVrTrackerVrpn;
-    d->tracker->registerPositionHandler1(dtkVrMasterPrivate::positionHandler1);
-    d->tracker->registerPositionHandler2(dtkVrMasterPrivate::positionHandler2);
-    d->tracker->registerOrientationHandler1(dtkVrMasterPrivate::orientationHandler1);
-    d->tracker->registerOrientationHandler2(dtkVrMasterPrivate::orientationHandler2);
-
-    connect(d->tracker, SIGNAL(buttonPressed(int)), this, SLOT(onButtonPressed(int)));
-    connect(d->tracker, SIGNAL(buttonReleased(int)), this, SLOT(onButtonReleased(int)));
+    d->tracker = NULL;
+    d->device = NULL;
 }
 
 dtkVrMaster::~dtkVrMaster(void)
@@ -98,42 +98,79 @@ dtkVrMaster::~dtkVrMaster(void)
 
 void dtkVrMaster::initialize(void)
 {
-    QUrl url;
+    if (d->tracker)
+        d->tracker->startConnection(d->trackerUrl);
 
-    for(int i = 0; i < qApp->arguments().count(); i++)
-        if(qApp->arguments().at(i) == "--tracker")
-            url = QUrl(qApp->arguments().at(i+1));
-
-    if(url.isValid())
-        d->tracker->startConnection(url);
+    if (d->device)
+        d->device->startConnection(d->deviceUrl);
 }
 
 void dtkVrMaster::uninitialize(void)
 {
-    d->tracker->stopConnection();
+    if (d->tracker)
+        d->tracker->stopConnection();
+
+    if (d->device)
+        d->device->stopConnection();
+}
+
+void dtkVrMaster::setTracker(const QUrl& url)
+{
+    d->tracker = new dtkVrTrackerVrpn;
+    d->tracker->registerPositionHandler1(dtkVrMasterPrivate::positionHandler1);
+    d->tracker->registerPositionHandler2(dtkVrMasterPrivate::positionHandler2);
+    d->tracker->registerOrientationHandler1(dtkVrMasterPrivate::orientationHandler1);
+    d->tracker->registerOrientationHandler2(dtkVrMasterPrivate::orientationHandler2);
+    
+    connect(d->tracker, SIGNAL(buttonPressed(int)), this, SLOT(onButtonPressed(int)));
+    connect(d->tracker, SIGNAL(buttonReleased(int)), this, SLOT(onButtonReleased(int)));
+
+    d->trackerUrl = url;
+}
+
+void dtkVrMaster::setDevice(const QUrl& url)
+{
+    d->device = new dtkVrDeviceVrpn;
+    d->device->registerPositionHandler(dtkVrMasterPrivate::positionHandler2);
+    d->device->registerOrientationHandler(dtkVrMasterPrivate::orientationHandler2);
+    
+    connect(d->device, SIGNAL(buttonPressed(int)), this, SLOT(onButtonPressed(int)));
+    connect(d->device, SIGNAL(buttonReleased(int)), this, SLOT(onButtonReleased(int)));
+
+    d->deviceUrl = url;
 }
 
 void dtkVrMaster::onButtonPressed(int button)
 {
-    switch(button) {
+    if(d->tracker) switch(button) {
     case dtkVrTrackerVrpn::dtkVrTrackerVrpnButton0:
         this->wand()->setAction(dtkVrWand::dtkVrWandPicking);
         this->wand()->setReferencePosition(this->wand()->currentPosition());
         this->wand()->setReferenceOrientation(this->wand()->currentOrientation());
         break;
-    };    
+    };
 }
 
 void dtkVrMaster::onButtonReleased(int button)
 {
-    switch(button) {
+    if(d->tracker) switch(button) {
     case dtkVrTrackerVrpn::dtkVrTrackerVrpnButton0:
         this->wand()->setAction(dtkVrWand::dtkVrWandNone);
         break;
-    case dtkVrTrackerVrpn::dtkVrTrackerVrpnButton4:
+    case dtkVrTrackerVrpn::dtkVrTrackerVrpnButton3:
         this->wand()->setMode(dtkVrWand::dtkVrWandInteraction);
         break;
-    case dtkVrTrackerVrpn::dtkVrTrackerVrpnButton3:
+    case dtkVrTrackerVrpn::dtkVrTrackerVrpnButton4:
+        this->wand()->setMode(dtkVrWand::dtkVrWandNavigation);
+        break;
+    default: break;
+    }
+
+    if(d->device) switch(button) {
+    case dtkVrDeviceVrpn::dtkVrDeviceVrpnButton1:
+        this->wand()->setMode(dtkVrWand::dtkVrWandInteraction);
+        break;
+    case dtkVrDeviceVrpn::dtkVrDeviceVrpnButton0:
         this->wand()->setMode(dtkVrWand::dtkVrWandNavigation);
         break;
     default: break;
@@ -142,5 +179,5 @@ void dtkVrMaster::onButtonReleased(int button)
 
 void dtkVrMaster::process(void)
 {
-
+    qApp->processEvents(QEventLoop::AllEvents, 10);
 }

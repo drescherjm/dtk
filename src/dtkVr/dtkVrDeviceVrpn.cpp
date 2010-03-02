@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 13:44:22 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 24 13:16:34 2010 (+0100)
+ * Last-Updated: Tue Mar  2 17:18:01 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 91
+ *     Update #: 133
  */
 
 /* Commentary: 
@@ -71,14 +71,18 @@ void dtkVrDeviceVrpnPrivate::run(void)
     vrpn_FILE_CONNECTIONS_SHOULD_PRELOAD = false;
     vrpn_FILE_CONNECTIONS_SHOULD_ACCUMULATE = false;
 
-    this->analog = new vrpn_Analog_Remote("");
-    this->button = new vrpn_Button_Remote("");
-    this->tracker = new vrpn_Tracker_Remote("");
+    this->analog = new vrpn_Analog_Remote(url.toString().toAscii().constData());
+    this->button = new vrpn_Button_Remote(url.toString().toAscii().constData());
+    this->tracker = new vrpn_Tracker_Remote(url.toString().toAscii().constData());
 
-    if (!this->analog || !this->button || !this->tracker) {
-        dtkWarning() << "Error connecting to server";
-        return;
-    }
+    if (!this->analog)
+        dtkWarning() << "Error connecting analog to server";
+
+    if (!this->button)
+        dtkWarning() << "Error connecting button to server";
+
+    if (!this->tracker)
+        dtkWarning() << "Error connecting tracker to server";
 
     this->button->register_change_handler(this, vrpn_device_handle_button);
     this->analog->register_change_handler(this, vrpn_device_handle_analog);
@@ -166,7 +170,6 @@ dtkVrDeviceVrpn::~dtkVrDeviceVrpn(void)
     d = NULL;
 }
 
-
 void dtkVrDeviceVrpn::registerPositionHandler(dtkVrDeviceVrpn::dtkVrDeviceVrpnPositionHandler handler)
 {
     d->position_handlers << handler;
@@ -184,6 +187,7 @@ QString dtkVrDeviceVrpn::description(void) const
 
 void dtkVrDeviceVrpn::startConnection(const QUrl& server)
 {
+    d->running = true;
     d->url = server;
 
     d->start();

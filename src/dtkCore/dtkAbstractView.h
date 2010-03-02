@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar  1 08:57:18 2010 (+0100)
+ * Last-Updated: Tue Mar  2 14:17:40 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 246
+ *     Update #: 250
  */
 
 /* Commentary:
@@ -64,6 +64,8 @@ public slots:
     virtual void   select(dtkAbstractData *data);
     virtual void unselect(dtkAbstractData *data);
 
+    virtual void setStereo(bool on);
+
     virtual void setView(void *view);
 
     virtual void setData(dtkAbstractData *data);
@@ -75,6 +77,8 @@ public slots:
     virtual void *view(void);
     virtual void *data(void);
     virtual void *data(int channel);
+
+    virtual bool stereo(void);
 
     virtual void  clear(void);
     virtual void  reset(void);
@@ -113,6 +117,9 @@ public slots:
 
     virtual dtkVec3 scenePosition(void) const;
     virtual dtkQuat sceneOrientation(void) const;
+
+    virtual void setupWandPosition(const dtkVec3& position);
+    virtual void setupWandOrientation(const dtkQuat& orientation);
 
     virtual void setupScenePosition(const dtkVec3& position);
     virtual void setupSceneOrientation(const dtkQuat& orientation);

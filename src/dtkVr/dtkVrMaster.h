@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 10 21:06:22 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 24 19:18:48 2010 (+0100)
+ * Last-Updated: Tue Mar  2 11:04:40 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 25
+ *     Update #: 32
  */
 
 /* Commentary: 
@@ -35,6 +35,9 @@ public:
 
     virtual void   initialize(void);
     virtual void uninitialize(void);
+
+    void setTracker(const QUrl& url);
+    void setDevice(const QUrl& url);
 
 protected slots:
     void onButtonPressed(int button);

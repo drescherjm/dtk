@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Mar  1 12:40:30 2010 (+0100)
+## Last-Updated: Tue Mar  2 13:26:10 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 181
+##     Update #: 193
 ######################################################################
 ## 
 ### Commentary: 
@@ -20,14 +20,6 @@
 project(dtkVr)
 
 ## #################################################################
-## Resolve dependencies
-## #################################################################
-
-find_package(MPI)
-
-if(MPI_FOUND)
-
-## #################################################################
 ## Sources
 ## #################################################################
 
@@ -35,10 +27,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkVrDevice.h
   dtkVrExport.h
   dtkVrScreen.h
-  dtkVrManager.h
-  dtkVrMaster.h
-  dtkVrProcess.h
-  dtkVrSlave.h
   dtkVrTracker.h
   dtkVrUser.h
   dtkVrWand.h
@@ -46,10 +34,6 @@ set(${PROJECT_NAME}_HEADERS
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkVrDevice.h
-  dtkVrManager.h
-  dtkVrMaster.h
-  dtkVrProcess.h
-  dtkVrSlave.h
   dtkVrTracker.h
   dtkVrUser.h
   dtkVrWand.h
@@ -58,10 +42,6 @@ set(${PROJECT_NAME}_HEADERS_MOC
 set(${PROJECT_NAME}_SOURCES
   dtkVrDevice.cpp
   dtkVrScreen.cpp
-  dtkVrManager.cpp
-  dtkVrMaster.cpp
-  dtkVrProcess.cpp
-  dtkVrSlave.cpp
   dtkVrTracker.cpp
   dtkVrUser.cpp
   dtkVrWand.cpp
@@ -71,24 +51,38 @@ set(${PROJECT_NAME}_SOURCES
 ## Vrpn sources
 ## #################################################################
 
-if(QUAT_LIBRARIES AND VRPN_LIBRARIES)
+if(QUAT_LIBRARIES AND VRPN_LIBRARIES AND MPI_FOUND)
+
+add_definitions(-DDTK_WRAP_VR)
 
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkVrDeviceVrpn.h
+  dtkVrManager.h
+  dtkVrMaster.h
+  dtkVrProcess.h
+  dtkVrSlave.h
   dtkVrTrackerVrpn.h
 )
 
 set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
   dtkVrDeviceVrpn.h
+  dtkVrManager.h
+  dtkVrMaster.h
+  dtkVrProcess.h
+  dtkVrSlave.h
   dtkVrTrackerVrpn.h
 )
 
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkVrDeviceVrpn.cpp
+  dtkVrManager.cpp
+  dtkVrMaster.cpp
+  dtkVrProcess.cpp
+  dtkVrSlave.cpp
   dtkVrTrackerVrpn.cpp
 )
 
-endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)
+endif(QUAT_LIBRARIES AND VRPN_LIBRARIES AND MPI_FOUND)
 
 ## #################################################################
 ## Wrapping
@@ -170,5 +164,3 @@ if(NOT dtk_INSTALL_NO_LIBRARIES)
   install_targets(${dtk_INSTALL_LIB_DIR} RUNTIME_DIRECTORY ${dtk_INSTALL_BIN_DIR} ${PROJECT_NAME})
   install_files(${dtk_INSTALL_MODULE_DIR} .py ${CMAKE_BINARY_DIR}/modules/vr.py)
 endif(NOT dtk_INSTALL_NO_LIBRARIES)
-
-endif(MPI_FOUND)

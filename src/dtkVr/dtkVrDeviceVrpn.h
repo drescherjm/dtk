@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 13:43:20 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 24 13:16:00 2010 (+0100)
+ * Last-Updated: Tue Mar  2 09:47:36 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 24
+ *     Update #: 27
  */
 
 /* Commentary: 
@@ -61,8 +61,8 @@ public:
     QString description(void) const;
 
 signals:
-    void buttonPressed(Button button);
-    void buttonReleased(Button button);
+    void buttonPressed(int button);
+    void buttonReleased(int button);
 
 public slots:
     void startConnection(const QUrl& server);

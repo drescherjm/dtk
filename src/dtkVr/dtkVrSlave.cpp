@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 10:03:10 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar  1 10:43:12 2010 (+0100)
+ * Last-Updated: Tue Mar  2 16:12:17 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 574
+ *     Update #: 596
  */
 
 /* Commentary: 
@@ -28,21 +28,37 @@
 #include <dtkCore/dtkVec3.h>
 #include <dtkCore/dtkQuat.h>
 
+#include <dtkDistributed/dtkDistributedCommunicator.h>
+
 class dtkVrSlavePrivate
 {
 public:
     dtkVrScreen *screen;
 
     dtkAbstractView *view;
+
+    bool stereo;
 };
 
 dtkVrSlave::dtkVrSlave(dtkDistributedCommunicator *communicator) : dtkVrProcess(communicator), d(new dtkVrSlavePrivate)
 {
+    if(communicator->size() > 2) {
+
     d->screen = new dtkVrScreen(
         dtkVrScreen::screens[this->rank()-1][0],
         dtkVrScreen::screens[this->rank()-1][1],
         dtkVrScreen::screens[this->rank()-1][2]
     );
+
+    } else {
+
+    d->screen = new dtkVrScreen(
+        dtkVrScreen::screens[1][0],
+        dtkVrScreen::screens[1][1],
+        dtkVrScreen::screens[1][2]
+    );
+    
+    }
 
     d->view = NULL;
 }
@@ -98,6 +114,11 @@ void dtkVrSlave::setView(dtkAbstractView *view)
     d->view = view;
 }
 
+void dtkVrSlave::setStereo(bool on)
+{
+    d->stereo = on;
+}
+
 void dtkVrSlave::process(void)
 {
     // Wand management /////////////////////////////////////////////////////////////////
@@ -108,6 +129,9 @@ void dtkVrSlave::process(void)
     static dtkQuat initialOrientation;
     static dtkVec3 magic;
     
+    this->setupWandPosition(this->wand()->currentPosition());
+    this->setupWandOrientation(this->wand()->currentOrientation());
+
     if(this->wand()->action() == dtkVrWand::dtkVrWandPicking && this->wand()->mode() == dtkVrWand::dtkVrWandNavigation) {
         
         if(dirty) {
@@ -216,6 +240,18 @@ dtkQuat dtkVrSlave::sceneOrientation(void) const
 {
     if (d->view)
         return d->view->sceneOrientation();
+}
+
+void dtkVrSlave::setupWandPosition(const dtkVec3& position)
+{
+    if (d->view)
+        d->view->setupWandPosition(position);
+}
+
+void dtkVrSlave::setupWandOrientation(const dtkQuat& orientation)
+{
+    if (d->view)
+        d->view->setupWandOrientation(orientation);
 }
 
 void dtkVrSlave::setupScenePosition(const dtkVec3& position)

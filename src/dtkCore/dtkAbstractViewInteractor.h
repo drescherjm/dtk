@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jan 29 14:36:41 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb  9 22:50:50 2010 (+0100)
+ * Last-Updated: Thu Mar  4 20:59:53 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 80
+ *     Update #: 82
  */
 
 /* Commentary:
@@ -43,6 +43,8 @@ public:
     virtual void disable(void);
 
     virtual void setData(dtkAbstractData *data);
+    virtual void setData(dtkAbstractData* data, int channel);
+    virtual void setData(dtkAbstractData* data, int channel, int frame);
     virtual void setView(dtkAbstractView *view);
 
     virtual dtkAbstractData *data(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 11:32:57 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  2 16:50:54 2010 (+0100)
+ * Last-Updated: Tue Mar  2 17:56:45 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 18
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -91,12 +91,6 @@ dtkQuat dtkQuat::fromHPR(double h, double p, double r)
 
 void dtkQuat::axeAngle(dtkVec3 &axis, double &angle) const
 {
-    if(mVal[0] == 0.0 && mVal[1] == 0.0 && mVal[2] == 0.0) {
-        angle = 0.0;
-        axis.set(0, 0, 0);
-        return;
-    }
-
     angle = 2*Rad2Deg(acos(mVal[3]));
     axis.set(mVal[0], mVal[1], mVal[2]);
     axis.normalize();

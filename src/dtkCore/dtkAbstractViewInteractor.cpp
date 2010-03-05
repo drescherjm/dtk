@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jan 29 14:38:31 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb  9 22:40:15 2010 (+0100)
+ * Last-Updated: Thu Mar  4 21:00:31 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 53
+ *     Update #: 54
  */
 
 /* Commentary:
@@ -61,6 +61,21 @@ void dtkAbstractViewInteractor::disable(void)
 void dtkAbstractViewInteractor::setData(dtkAbstractData *data)
 {
     d->data = data;
+}
+
+void dtkAbstractViewInteractor::setData(dtkAbstractData *data, int channel)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+    DTK_UNUSED(channel);
+}
+
+void dtkAbstractViewInteractor::setData(dtkAbstractData *data, int channel, int frame)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+    DTK_UNUSED(channel);
+    DTK_UNUSED(frame);
 }
 
 void dtkAbstractViewInteractor::setView(dtkAbstractView *view)

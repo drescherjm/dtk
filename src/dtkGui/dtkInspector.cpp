@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Aug  6 23:28:30 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 16 14:35:23 2009 (+0200)
+ * Last-Updated: Sun Mar 14 15:04:37 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 81
+ *     Update #: 88
  */
 
 /* Commentary: 
@@ -41,7 +41,9 @@ dtkInspector::dtkInspector(QWidget *parent) : QMainWindow(parent), d(new dtkInsp
     d->toolBar->setMovable(false);
 
     this->setWindowFlags(Qt::Tool | Qt::WindowCloseButtonHint | Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint);
+    this->setWindowOpacity(0.8);
     this->setWindowTitle("Inspector");
+
     this->setCentralWidget(d->stack);
 }
 
@@ -77,7 +79,7 @@ void dtkInspector::writeSettings(void)
     settings.endGroup();
 }
 
-void dtkInspector::addPage(const QString& title, QWidget *page)
+QAction *dtkInspector::addPage(const QString& title, QWidget *page)
 {
     QAction *action = new QAction(title, this);
     action->setIcon(QIcon(":icons/widget.tiff"));
@@ -91,9 +93,11 @@ void dtkInspector::addPage(const QString& title, QWidget *page)
 
     if (d->stack->count() == 1)
         action->trigger();
+
+    return action;
 }
 
-void dtkInspector::addPage(const QString& title, QWidget *page, const QIcon& icon)
+QAction *dtkInspector::addPage(const QString& title, QWidget *page, const QIcon& icon)
 {
     QAction *action = new QAction(title, this);
     action->setIcon(icon);
@@ -108,6 +112,8 @@ void dtkInspector::addPage(const QString& title, QWidget *page, const QIcon& ico
 
     if (d->stack->count() == 1)
         action->trigger();
+
+    return action;
 }
 
 void dtkInspector::onActionTriggered(void)
@@ -119,5 +125,5 @@ void dtkInspector::onActionTriggered(void)
 
     d->stack->setCurrentWidget(d->pages.value(sender));
 
-    this->setWindowTitle(sender->text());
+    this->setWindowTitle("Inspector - " + sender->text());
 }

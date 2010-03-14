@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Aug  6 23:26:46 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep  9 20:08:22 2009 (+0200)
+ * Last-Updated: Sun Mar 14 15:03:59 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 14
+ *     Update #: 17
  */
 
 /* Commentary: 
@@ -37,8 +37,8 @@ public:
     void readSettings(void);
     void writeSettings(void);
 
-    void addPage(const QString& title, QWidget *page);
-    void addPage(const QString& title, QWidget *page, const QIcon& icon);
+    QAction *addPage(const QString& title, QWidget *page);
+    QAction *addPage(const QString& title, QWidget *page, const QIcon& icon);
 
 private slots:
     void onActionTriggered(void);

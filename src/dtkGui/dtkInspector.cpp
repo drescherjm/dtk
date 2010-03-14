@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Aug  6 23:28:30 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Mar 14 15:04:37 2010 (+0100)
+ * Last-Updated: Sun Mar 14 15:31:33 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 88
+ *     Update #: 89
  */
 
 /* Commentary: 
@@ -35,7 +35,7 @@ dtkInspector::dtkInspector(QWidget *parent) : QMainWindow(parent), d(new dtkInsp
     d->stack = new QStackedWidget(this);
 
     d->toolBar = this->addToolBar("Pages");
-    d->toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    d->toolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     d->toolBar->setIconSize(QSize(16, 16));
     d->toolBar->setFloatable(false);
     d->toolBar->setMovable(false);

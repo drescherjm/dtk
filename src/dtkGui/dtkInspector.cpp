@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Aug  6 23:28:30 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Mar 14 15:31:33 2010 (+0100)
+ * Last-Updated: Mon Mar 15 09:08:40 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 89
+ *     Update #: 92
  */
 
 /* Commentary: 
@@ -18,6 +18,8 @@
  */
 
 #include "dtkInspector.h"
+
+#include <dtkCore/dtkGlobal.h>
 
 #include <QtCore>
 #include <QtGui>
@@ -40,11 +42,11 @@ dtkInspector::dtkInspector(QWidget *parent) : QMainWindow(parent), d(new dtkInsp
     d->toolBar->setFloatable(false);
     d->toolBar->setMovable(false);
 
+    this->setCentralWidget(d->stack);
+    this->setStyleSheet(dtkReadFile(":dtkGui/dtkInspector.qss"));
     this->setWindowFlags(Qt::Tool | Qt::WindowCloseButtonHint | Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint);
     this->setWindowOpacity(0.8);
     this->setWindowTitle("Inspector");
-
-    this->setCentralWidget(d->stack);
 }
 
 dtkInspector::~dtkInspector(void)

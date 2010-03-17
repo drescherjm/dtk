@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 26 16:11:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep 21 13:37:22 2009 (+0200)
+ * Last-Updated: Wed Mar 17 09:10:38 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 454
+ *     Update #: 456
  */
 
 /* Commentary: 
@@ -280,7 +280,7 @@ void dtkScriptInterpreterConsole::run(void)
 void dtkScriptInterpreterConsole::output(const QString& result, int *stat)
 {
     if(!result.simplified().isEmpty())
-	std::cout << (*stat == dtkScriptInterpreter::Status_Ok ? DTK_NOCOLOR : DTK_COLOR_FG_RED) << result.toAscii().constData() << DTK_NOCOLOR << std::endl;
+	std::cout << (*stat == dtkScriptInterpreter::Status_Ok ? DTK_NO_COLOR : DTK_COLOR_FG_RED) << result.toAscii().constData() << DTK_NO_COLOR << std::endl;
 }
 
 // /////////////////////////////////////////////////////////////////

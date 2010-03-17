@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 15:31:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 11 13:44:09 2009 (+0200)
+ * Last-Updated: Wed Mar 17 09:10:59 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 393
+ *     Update #: 394
  */
 
 /* Commentary: 
@@ -371,7 +371,7 @@ QString dtkInterpreter::filter(QString text)
 
         .remove(DTK_COLOR_FG_BD)
         .remove(DTK_COLOR_FG_UL)
-        .remove(DTK_NOCOLOR);
+        .remove(DTK_NO_COLOR);
 }
 
 bool dtkInterpreter::eventFilter(QObject *object, QEvent *event)

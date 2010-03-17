@@ -1,0 +1,14 @@
+<!DOCTYPE RCC><RCC version="1.0">
+  <qresource prefix="dtkGui">
+    <file>dtkInspector.qss</file>
+    <file>dtkAnchoredBar.qss</file>
+
+    <file>pixmaps/dtk-anchored-bar-action.png</file>
+    <file>pixmaps/dtk-anchored-bar-add.png</file>
+    <file>pixmaps/dtk-anchored-bar-handle.png</file>
+    <file>pixmaps/dtk-composer-run.png</file>
+    <file>pixmaps/dtk-composer-stop.png</file>
+    <file>pixmaps/dtk-inspector.png</file>
+    <file>pixmaps/dtk-widget.png</file>
+  </qresource>
+</RCC>

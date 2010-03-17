@@ -1,9 +1,0 @@
-<!DOCTYPE RCC><RCC version="1.0">
-  <qresource prefix="icons">
-    <file>inspector.png</file>
-    <file>run.png</file>
-    <file>stop.png</file>
-    <file>widget.png</file>
-    <file>widget.png</file>
-  </qresource>
-</RCC>

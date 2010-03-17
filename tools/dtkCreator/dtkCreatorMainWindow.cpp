@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar  2 10:51:13 2010 (+0100)
+ * Last-Updated: Tue Mar 16 08:57:54 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 460
+ *     Update #: 469
  */
 
 /* Commentary: 
@@ -172,7 +172,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->toolEditorAction->setShortcut(Qt::ControlModifier+Qt::Key_1);
 #endif
     d->toolEditorAction->setToolTip("Switch to the textual editor (Ctrl+1)");
-    d->toolEditorAction->setIcon(QIcon(":icons/widget.png"));
+    d->toolEditorAction->setIcon(QIcon(":dtkGui/pixmaps/dtk-widget.png"));
     connect(d->toolEditorAction, SIGNAL(triggered()), this, SLOT(switchToEditor()));
     d->toolEditorAction->setEnabled(false);
 
@@ -183,7 +183,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->toolComposerAction->setShortcut(Qt::ControlModifier+Qt::Key_2);
 #endif
     d->toolComposerAction->setToolTip("Switch to the visual editor (Ctrl+2)");
-    d->toolComposerAction->setIcon(QIcon(":icons/widget.png"));
+    d->toolComposerAction->setIcon(QIcon(":dtkGui/pixmaps/dtk-widget.png"));
     connect(d->toolComposerAction, SIGNAL(triggered()), this, SLOT(switchToComposer()));
     d->toolComposerAction->setEnabled(true);
 
@@ -194,27 +194,27 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->toolViewerAction->setShortcut(Qt::ControlModifier+Qt::Key_3);
 #endif
     d->toolViewerAction->setToolTip("Switch to the viewer (Ctrl+3)");
-    d->toolViewerAction->setIcon(QIcon(":icons/widget.png"));
+    d->toolViewerAction->setIcon(QIcon(":dtkGui/pixmaps/dtk-widget.png"));
     connect(d->toolViewerAction, SIGNAL(triggered()), this, SLOT(switchToViewer()));
     d->toolViewerAction->setEnabled(true);
 
     d->toolRunAction = new QAction("Run", this);
     d->toolRunAction->setShortcut(Qt::ControlModifier+Qt::Key_R);
     d->toolRunAction->setToolTip("Runs the current composition (Ctrl+R)");
-    d->toolRunAction->setIcon(QIcon(":icons/run.png"));
+    d->toolRunAction->setIcon(QIcon(":dtkGui/pixmaps/dtk-composer-run.png"));
     connect(d->toolRunAction, SIGNAL(triggered()), this, SLOT(run()));
 
     d->toolStopAction = new QAction("Stop", this);
     d->toolStopAction->setShortcut(Qt::ControlModifier+Qt::Key_Period);
     d->toolStopAction->setToolTip("Stops the current composition (Ctrl+.)");
-    d->toolStopAction->setIcon(QIcon(":icons/stop.png"));
+    d->toolStopAction->setIcon(QIcon(":dtkGui/pixmaps/dtk-composer-stop.png"));
     d->toolStopAction->setEnabled(false);
     connect(d->toolStopAction, SIGNAL(triggered()), this, SLOT(stop()));
 
     d->toolInspectorAction = new QAction("Inspector", this);
     d->toolInspectorAction->setShortcut(Qt::ControlModifier+Qt::Key_I);
     d->toolInspectorAction->setToolTip("Show/hide inspector");
-    d->toolInspectorAction->setIcon(QIcon(":icons/inspector.png"));
+    d->toolInspectorAction->setIcon(QIcon(":dtkGui/pixmaps/dtk-inspector.png"));
     connect(d->toolInspectorAction, SIGNAL(triggered()), this, SLOT(showInspector()));
 
     d->toolBar = addToolBar("Editors");

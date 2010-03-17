@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 16 09:54:33 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Mar  1 23:48:14 2010 (+0100)
+ * Last-Updated: Wed Mar 17 09:08:13 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 89
+ *     Update #: 92
  */
 
 /* Commentary: 
@@ -58,7 +58,7 @@
 
 #define DTK_COLOR_FG_BD       "\033[01m"
 #define DTK_COLOR_FG_UL       "\033[04m"
-#define DTK_NOCOLOR           "\033[00m"
+#define DTK_NO_COLOR          "\033[00m"
 
 // /////////////////////////////////////////////////////////////////
 // Default implementation warning
@@ -85,6 +85,24 @@
 
 #define DTK_SUCCEED 1
 #define DTK_FAILURE 0
+
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+inline QString dtkReadFile(const QString& path)
+{
+    QFile file(path);
+
+    if(!file.open(QFile::ReadOnly))
+        qDebug() << "Unable to read file" << path;
+
+    QString contents = file.readAll();
+
+    file.close();
+
+    return contents;
+}
 
 // /////////////////////////////////////////////////////////////////
 // Hash functions

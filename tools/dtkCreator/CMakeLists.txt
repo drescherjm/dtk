@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Aug  3 17:34:51 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Mar  2 10:53:31 2010 (+0100)
+## Last-Updated: Tue Mar 16 09:09:26 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 74
+##     Update #: 77
 ######################################################################
 ## 
 ### Commentary: 
@@ -45,10 +45,6 @@ set(${PROJECT_NAME}_SOURCES
   main.cpp
 )
 
-set(${PROJECT_NAME}_RESOURCES
-  icons/icons.qrc
-)
-
 ## #################################################################
 ## Wrapping
 ## #################################################################
@@ -70,11 +66,8 @@ endif(NOT MSVC)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
-qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
-
 add_executable(${PROJECT_NAME} MACOSX_BUNDLE
   ${${PROJECT_NAME}_SOURCES_WRAP}
-  ${${PROJECT_NAME}_SOURCES_QRC}
   ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES}
 )

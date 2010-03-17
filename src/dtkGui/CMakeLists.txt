@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Feb 11 10:08:42 2010 (+0100)
+## Last-Updated: Tue Mar 16 08:48:20 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 102
+##     Update #: 112
 ######################################################################
 ## 
 ### Commentary: 
@@ -25,6 +25,7 @@ project(dtkGui)
 
 set(${PROJECT_NAME}_HEADERS
   dtkAddressBar.h
+  dtkAnchoredBar.h
   dtkGuiExport.h
   dtkInspector.h
   dtkInspectorComposer.h
@@ -50,6 +51,7 @@ set(${PROJECT_NAME}_HEADERS
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkAddressBar.h
+  dtkAnchoredBar.h
   dtkInspector.h
   dtkInspectorComposer.h
   dtkInspectorScene.h
@@ -71,6 +73,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
 
 set(${PROJECT_NAME}_SOURCES
   dtkAddressBar.cpp
+  dtkAnchoredBar.cpp
   dtkInspector.cpp
   dtkInspectorComposer.cpp
   dtkInspectorScene.cpp
@@ -107,6 +110,10 @@ set(${PROJECT_NAME}_FORMS
   dtkTextEditorPreferencesWidget.ui
 )
 
+set(${PROJECT_NAME}_RESOURCES
+  dtkGui.qrc
+)
+
 ## #################################################################
 ## Build rules
 ## #################################################################
@@ -119,10 +126,13 @@ qt4_wrap_ui(${PROJECT_NAME}_SOURCES_UIC ${${PROJECT_NAME}_FORMS})
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
+qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
+
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_SOURCES_UIC}
   ${${PROJECT_NAME}_SOURCES_MOC}
+  ${${PROJECT_NAME}_SOURCES_QRC}
 )
 
 target_link_libraries(${PROJECT_NAME}

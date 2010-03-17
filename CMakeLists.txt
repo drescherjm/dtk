@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Feb 18 20:09:32 2010 (+0100)
+## Last-Updated: Tue Mar 16 14:44:55 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 267
+##     Update #: 268
 ######################################################################
 ## 
 ### Commentary: 
@@ -221,6 +221,12 @@ if(PYTHONLIBS_FOUND)
   get_filename_component(PYTHON_PATH ${PYTHON_LIBRARIES} PATH)
   link_directories(${PYTHON_PATH})
 endif(PYTHONLIBS_FOUND)
+
+## zlib
+
+find_package(ZLIB QUIET)
+
+include_directories(${ZLIB_INCLUDE_DIRS})
 
 ## ssl
 

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Tue Mar 16 11:01:20 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Wed Mar 17 08:50:25 2010 (+0100)
+## Last-Updated: Thu Mar 18 11:11:03 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 47
+##     Update #: 48
 ######################################################################
 ## 
 ### Commentary: 
@@ -48,7 +48,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkSshCrypt.c
   dtkSshDh.c
   dtkSshError.c
-  dtkSshGcrypt_missing.c
+  dtkSshGcrypt_Missing.c
   dtkSshGzip.c
   dtkSshInit.c
   dtkSshKex.c

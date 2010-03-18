@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 13:21:10 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 14:09:16 2010 (+0100)
+ * Last-Updated: Wed Mar 17 09:55:24 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 17
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -39,7 +39,7 @@ public:
      dtkDistributedDiscoverer(void);
     ~dtkDistributedDiscoverer(void);
 
-    void discover(const QUrl& url);
+    virtual void discover(const QUrl& url) = 0;
 
     QList<dtkDistributedNode *> nodes(void);
     QList<dtkDistributedCpu *> cpus(void);
@@ -51,7 +51,7 @@ public:
     bool available(dtkDistributedGpu *gpu, int duration = 60);
     bool available(dtkDistributedCore *core, int duration = 60);
 
-private:
+protected:
     dtkDistributedDiscovererPrivate *d;
 };
 

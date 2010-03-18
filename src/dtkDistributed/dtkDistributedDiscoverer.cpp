@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 13:44:52 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 16 17:16:50 2010 (+0100)
+ * Last-Updated: Wed Mar 17 09:52:48 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 21
+ *     Update #: 27
  */
 
 /* Commentary: 
@@ -41,11 +41,6 @@ dtkDistributedDiscoverer::~dtkDistributedDiscoverer(void)
     delete d;
 
     d = NULL;
-}
-
-void dtkDistributedDiscoverer::discover(const QUrl& url)
-{
-    DTK_UNUSED(url);
 }
 
 QList<dtkDistributedNode *> dtkDistributedDiscoverer::nodes(void)

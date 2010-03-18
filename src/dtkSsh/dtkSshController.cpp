@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar 16 14:53:39 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 17 09:35:43 2010 (+0100)
+ * Last-Updated: Wed Mar 17 16:21:16 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 52
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #include "dtkSshController.h"
 #include "dtkSshLibssh.h"
 
+#include <dtkCore/dtkGlobal.h>
 #include <dtkCore/dtkLog.h>
 
 // /////////////////////////////////////////////////////////////////
@@ -116,12 +117,10 @@ bool dtkSshController::execute(const QString& command, QString& result)
         dtkWarning() << "Failed to execute command.";
         return 1;
     }
-    
-    ssh_buffer buf;
 
     if (channel_is_open(d->channel)) {
         while (channel_poll(d->channel, 0) >= 0) {
-            buf = buffer_new();
+            ssh_buffer buf = buffer_new();
             rc = channel_read_buffer(d->channel, buf, 0, 0);
             if (rc < 0) {
                 buffer_free(buf);
@@ -138,6 +137,8 @@ bool dtkSshController::execute(const QString& command, QString& result)
     }
 
     result = result.trimmed();
+
+    return true;
 }
 
 dtkSshController::dtkSshController(void) : QObject(), d(new dtkSshControllerPrivate)

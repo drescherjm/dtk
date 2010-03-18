@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Feb 18 14:14:42 2010 (+0100)
+## Last-Updated: Wed Mar 17 10:00:41 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 33
+##     Update #: 35
 ######################################################################
 ## 
 ### Commentary: 
@@ -28,6 +28,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedCommunicatorTcp.h
   dtkDistributedCore.h
   dtkDistributedDiscoverer.h
+  dtkDistributedDiscovererOar.h
+  dtkDistributedDiscovererTorque.h
   dtkDistributedCpu.h
   dtkDistributedGpu.h
   dtkDistributedNode.h
@@ -49,6 +51,8 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedCommunicatorTcp.cpp
   dtkDistributedCore.cpp
   dtkDistributedDiscoverer.cpp
+  dtkDistributedDiscovererOar.cpp
+  dtkDistributedDiscovererTorque.cpp
   dtkDistributedCpu.cpp
   dtkDistributedGpu.cpp
   dtkDistributedNode.cpp
@@ -92,6 +96,7 @@ add_library(${PROJECT_NAME} SHARED
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkCore
+  dtkSsh
 )
 
 if(MPI_FOUND)

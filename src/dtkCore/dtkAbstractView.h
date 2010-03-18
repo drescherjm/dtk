@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  2 14:17:40 2010 (+0100)
+ * Last-Updated: Wed Mar 17 21:39:57 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 250
+ *     Update #: 251
  */
 
 /* Commentary:
@@ -47,15 +47,7 @@ public:
     friend QDebug operator<<(QDebug debug,       dtkAbstractView *viewer);
 
 signals:
-    void selected(dtkAbstractData *);
-
-    void clickedScreenCoordinates(int, int);
-
-    void clickedObjectCoordinates(double, double);
-    void clickedObjectCoordinates(double, double, double);
-
-    void clickedWorldCoordinates(double, double);
-    void clickedWorldCoordinates(double, double, double);
+    void closed(void);
 
 public slots:
     virtual void   link(dtkAbstractView *other);

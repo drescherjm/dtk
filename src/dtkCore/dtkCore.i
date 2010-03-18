@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  2 10:43:45 2010 (+0100)
+ * Last-Updated: Wed Mar 17 21:41:18 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 257
+ *     Update #: 258
  */
 
 /* Commentary:
@@ -119,15 +119,7 @@
 // Ignore rules for dtkAbstractView signals
 // /////////////////////////////////////////////////////////////////
 
-%ignore selected(dtkAbstractData *);
-
-%ignore clickedScreenCoordinates(int, int);
-
-%ignore clickedObjectCoordinates(double, double);
-%ignore clickedObjectCoordinates(double, double, double);
-
-%ignore clickedWorldCoordinates(double, double);
-%ignore clickedWorldCoordinates(double, double, double);
+%ignore closed();
 
 // /////////////////////////////////////////////////////////////////
 // Ignore rules for dtkAbstractViewInteractor signals

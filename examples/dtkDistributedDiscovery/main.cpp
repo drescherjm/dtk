@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar 16 14:49:31 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 17 09:38:39 2010 (+0100)
+ * Last-Updated: Wed Mar 17 10:39:30 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 18
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -23,21 +23,38 @@
 #include <dtkCore/dtkGlobal.h>
 #include <dtkCore/dtkLog.h>
 
-#include <dtkSsh/dtkSshController.h>
+#include <dtkDistributed/dtkDistributedDiscoverer.h>
+#include <dtkDistributed/dtkDistributedDiscovererOar.h>
+#include <dtkDistributed/dtkDistributedDiscovererTorque.h>
 
 int main(int argc, char **argv)
 {
-    if(argc != 2) {
-        dtkOutput() << "Usage: " << QString(argv[0]) << " [host]";
+    if(dtkApplicationArgumentsContain(argc, argv, "--help")) {
+        dtkOutput() << "Usage: " << QString(argv[0]) << " (--oar | --torque) --host url";
+        return 0;
+    }
+   
+    dtkDistributedDiscoverer *discoverer = NULL;
+
+    if(dtkApplicationArgumentsContain(argc, argv, "--oar"))
+        discoverer = new dtkDistributedDiscovererOar;
+
+    if(dtkApplicationArgumentsContain(argc, argv, "--torque"))
+        discoverer = new dtkDistributedDiscovererTorque;
+        
+    if(!discoverer) {
+        dtkCritical() << "No discovering method has been specified. See usage with --help option.";
         return 0;
     }
 
-    QString result;
+    QString host = dtkApplicationArgumentsValue(argc, argv, "--host");
 
-    dtkSshController::instance()->createConnection(QUrl(QString(argv[1])));
-    dtkSshController::instance()->execute(QString("qstat -x"), result);
+    if(host.isEmpty()) {
+        dtkCritical() << "No host has been specified. See usage with --help option.";
+        return 0;
+    }
 
-    dtkDebug() << DTK_COLOR_FG_RED << result << DTK_NO_COLOR;
-    
+    discoverer->discover(QUrl(host));
+
     return 0;
 }

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Thu Jan  7 10:37:04 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Feb  8 15:49:05 2010 (+0100)
+## Last-Updated: Wed Mar 17 10:00:09 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 21
+##     Update #: 22
 ######################################################################
 ## 
 ### Commentary: 
@@ -36,7 +36,6 @@ set(${PROJECT_NAME}_SOURCES
 )
 
 if(OPENSSL_FOUND)
-message(STATUS "${PROJECT_NAME}: license management enabled")
 
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkCryptoLicenseManager.h

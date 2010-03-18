@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 16 09:54:33 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Mar 17 09:08:13 2010 (+0100)
+ * Last-Updated: Wed Mar 17 10:24:15 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 92
+ *     Update #: 106
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #define DTKGLOBAL_H
 
 #include <QtCore>
+#include <QtGui>
 #include <QtDebug>
 
 #include "dtkCoreExport.h"
@@ -102,6 +103,34 @@ inline QString dtkReadFile(const QString& path)
     file.close();
 
     return contents;
+}
+
+inline bool dtkApplicationArgumentsContain(int argc, char **argv, QString value)
+{
+    for(int i = 1; i < argc; i++)
+        if(QString(argv[i]) == value)
+            return true;
+
+    return false;
+}
+
+inline bool dtkApplicationArgumentsContain(QApplication *application, QString value)
+{
+    return dtkApplicationArgumentsContain(application->argc(), application->argv(), value); // I know the previous is deprecated but it really shouldn't :-|
+}
+
+inline QString dtkApplicationArgumentsValue(int argc, char **argv, QString key)
+{
+    for(int i = 1; i < argc; i++)
+        if(QString(argv[i]) == key)
+            return QString(argv[i+1]);
+
+    return QString();
+}
+
+inline QString dtkApplicationArgumentsValue(QApplication *application, QString key)
+{
+    return dtkApplicationArgumentsValue(application->argc(), application->argv(), key); // I know the previous is deprecated but it really shouldn't :-|
 }
 
 // /////////////////////////////////////////////////////////////////

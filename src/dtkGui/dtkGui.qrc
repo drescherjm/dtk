@@ -9,6 +9,7 @@
     <file>pixmaps/dtk-composer-run.png</file>
     <file>pixmaps/dtk-composer-stop.png</file>
     <file>pixmaps/dtk-inspector.png</file>
+    <file>pixmaps/dtk-interpreter.png</file>
     <file>pixmaps/dtk-widget.png</file>
   </qresource>
 </RCC>

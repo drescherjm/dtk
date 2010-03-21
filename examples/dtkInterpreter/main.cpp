@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Apr 11 13:49:30 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 21 11:31:43 2009 (+0200)
+ * Last-Updated: Fri Mar 19 11:24:01 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 34
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -58,11 +58,8 @@ int main(int argc, char *argv[])
     options.addUsage(" -i  --interpreter");
     options.addUsage("     --interpreter=tcl    Run tcl     gui interpreter");
     options.addUsage("     --interpreter=python Run python  gui interpreter");
-
-
     options.setFlag("console", 'c');
     options.setOption("interpreter", 'i');
-
     options.processCommandArgs(argc, argv);
 
     tstMainWindow window;

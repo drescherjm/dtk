@@ -1,0 +1,9 @@
+<!DOCTYPE RCC><RCC version="1.0">
+  <qresource prefix="dtkDistributed">
+    <file>pixmaps/dtk-distributed-connect-button.png</file>
+    <file>pixmaps/dtk-distributed-connect-button-pressed.png</file>
+    <file>pixmaps/dtk-distributed-connect-label.png</file>
+    <file>pixmaps/dtk-distributed-disconnect-button.png</file>
+    <file>pixmaps/dtk-distributed-disconnect-button-pressed.png</file>
+  </qresource>
+</RCC>

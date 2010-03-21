@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 13:44:52 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 17 09:52:48 2010 (+0100)
+ * Last-Updated: Sun Mar 21 22:56:59 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 27
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -22,14 +22,9 @@
 #include "dtkDistributedCpu.h"
 #include "dtkDistributedGpu.h"
 #include "dtkDistributedDiscoverer.h"
+#include "dtkDistributedDiscoverer_p.h"
 
 #include <dtkCore/dtkGlobal.h>
-
-class dtkDistributedDiscovererPrivate
-{
-public:
-    QList<dtkDistributedNode *> nodes;
-};
 
 dtkDistributedDiscoverer::dtkDistributedDiscoverer(void) : QObject(), d(new dtkDistributedDiscovererPrivate)
 {

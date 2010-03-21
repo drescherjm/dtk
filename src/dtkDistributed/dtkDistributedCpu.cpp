@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 16:18:36 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 16 16:23:01 2010 (+0100)
+ * Last-Updated: Mon Mar 22 00:01:17 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 6
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -47,9 +47,19 @@ dtkDistributedCpu::Architecture dtkDistributedCpu::architecture(void)
     return d->architecture;
 }
 
+void dtkDistributedCpu::setArchitecture(Architecture arch)
+{
+    d->architecture = arch;
+}
+
 dtkDistributedCpu::Model dtkDistributedCpu::model(void)
 {
     return d->model;
+}
+
+void dtkDistributedCpu::setModel(Model model)
+{
+    d->model = model;
 }
 
 QList<dtkDistributedCore *> dtkDistributedCpu::cores(void)

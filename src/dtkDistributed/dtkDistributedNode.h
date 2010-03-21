@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 13:22:24 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 18 14:10:30 2010 (+0100)
+ * Last-Updated: Sun Mar 21 23:24:28 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 12
+ *     Update #: 20
  */
 
 /* Commentary: 
@@ -37,19 +37,32 @@ public:
     ~dtkDistributedNode(void);
 
     enum Network {
-        dtkDistributedNodeEthernet1G,
-        dtkDistributedNodeEthernet10G,
-        dtkDistributedNodeMyrinet2G,
-        dtkDistributedNodeMyrinet10G,
-        dtkDistributedNodeInfiniband10G,
-        dtkDistributedNodeInfiniband20G,
-        dtkDistributedNodeInfiniband40G
+        Ethernet1G,
+        Ethernet10G,
+        Myrinet2G,
+        Myrinet10G,
+        Infiniband10G,
+        Infiniband20G,
+        Infiniband40G
+    };
+
+    enum State {
+        Free,
+        JobExclusive,
+        Down,
+        Offline
     };
 
     QList<Network> networks(void);
 
     QList<dtkDistributedCpu *> cpus(void);
     QList<dtkDistributedGpu *> gpus(void);
+
+    QString name(void) const;
+    State state(void);
+
+    void setName(const QString& name);
+    void setState(State state);
 
 private:
     dtkDistributedNodePrivate *d;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 13:23:49 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 16 17:13:01 2010 (+0100)
+ * Last-Updated: Mon Mar 22 00:00:12 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 13
+ *     Update #: 17
  */
 
 /* Commentary: 
@@ -37,18 +37,22 @@ public:
     ~dtkDistributedCpu(void);
 
     enum Architecture {
-        dtkDistributedCpuX86,
-        dtkDistributedCpuX86_64,
+        X86,
+        X86_64,
     };
 
     Architecture architecture(void);
 
+    void setArchitecture(Architecture arch);
+
     enum Model {
-        dtkDistributedCpuXeon,
-        dtkDistributedCpuOpteron
+        Xeon,
+        Opteron
     };
 
     Model model(void);
+
+    void setModel(Model model);
 
     QList<dtkDistributedCore *> cores(void);
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Mar 17 09:56:45 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 17 10:00:29 2010 (+0100)
+ * Last-Updated: Sun Mar 21 23:02:22 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 4
+ *     Update #: 5
  */
 
 /* Commentary: 
@@ -24,7 +24,7 @@
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedDiscovererOar : public dtkDistributedDiscoverer
 {
-public:
+public slots:
     void discover(const QUrl& url);
 };
 

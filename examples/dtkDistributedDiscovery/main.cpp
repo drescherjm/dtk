@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar 16 14:49:31 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 17 10:39:30 2010 (+0100)
+ * Last-Updated: Sun Mar 21 23:09:31 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 47
+ *     Update #: 57
  */
 
 /* Commentary: 
@@ -26,35 +26,39 @@
 #include <dtkDistributed/dtkDistributedDiscoverer.h>
 #include <dtkDistributed/dtkDistributedDiscovererOar.h>
 #include <dtkDistributed/dtkDistributedDiscovererTorque.h>
+#include <dtkDistributed/dtkDistributor.h>
 
 int main(int argc, char **argv)
 {
-    if(dtkApplicationArgumentsContain(argc, argv, "--help")) {
-        dtkOutput() << "Usage: " << QString(argv[0]) << " (--oar | --torque) --host url";
-        return 0;
-    }
+    // if(dtkApplicationArgumentsContain(argc, argv, "--help")) {
+    //     dtkOutput() << "Usage: " << QString(argv[0]) << " (--oar | --torque) --host url";
+    //     return 0;
+    // }
    
-    dtkDistributedDiscoverer *discoverer = NULL;
+    // dtkDistributedDiscoverer *discoverer = NULL;
 
-    if(dtkApplicationArgumentsContain(argc, argv, "--oar"))
-        discoverer = new dtkDistributedDiscovererOar;
+    // if(dtkApplicationArgumentsContain(argc, argv, "--oar"))
+    //     discoverer = new dtkDistributedDiscovererOar;
 
-    if(dtkApplicationArgumentsContain(argc, argv, "--torque"))
-        discoverer = new dtkDistributedDiscovererTorque;
+    // if(dtkApplicationArgumentsContain(argc, argv, "--torque"))
+    //     discoverer = new dtkDistributedDiscovererTorque;
         
-    if(!discoverer) {
-        dtkCritical() << "No discovering method has been specified. See usage with --help option.";
-        return 0;
-    }
+    // if(!discoverer) {
+    //     dtkCritical() << "No discovering method has been specified. See usage with --help option.";
+    //     return 0;
+    // }
 
-    QString host = dtkApplicationArgumentsValue(argc, argv, "--host");
+    // QString host = dtkApplicationArgumentsValue(argc, argv, "--host");
 
-    if(host.isEmpty()) {
-        dtkCritical() << "No host has been specified. See usage with --help option.";
-        return 0;
-    }
+    // if(host.isEmpty()) {
+    //     dtkCritical() << "No host has been specified. See usage with --help option.";
+    //     return 0;
+    // }
 
-    discoverer->discover(QUrl(host));
+    QApplication application(argc, argv);
 
-    return 0;
+    dtkDistributor *distributor = new dtkDistributor;
+    distributor->show();
+
+    return application.exec();
 }

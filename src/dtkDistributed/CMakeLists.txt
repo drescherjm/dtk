@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Wed Mar 17 10:00:41 2010 (+0100)
+## Last-Updated: Sun Mar 21 19:06:16 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 35
+##     Update #: 44
 ######################################################################
 ## 
 ### Commentary: 
@@ -32,8 +32,11 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedDiscovererTorque.h
   dtkDistributedCpu.h
   dtkDistributedGpu.h
-  dtkDistributedNode.h
   dtkDistributedExport.h
+  dtkDistributedNode.h
+  dtkDistributor.h
+  dtkDistributorScene.h
+  dtkDistributorView.h
 )
 
 set(${PROJECT_NAME}_HEADERS_MOC
@@ -44,6 +47,9 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkDistributedCpu.h
   dtkDistributedGpu.h
   dtkDistributedNode.h
+  dtkDistributor.h
+  dtkDistributorScene.h
+  dtkDistributorView.h
 )
 
 set(${PROJECT_NAME}_SOURCES
@@ -56,6 +62,9 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedCpu.cpp
   dtkDistributedGpu.cpp
   dtkDistributedNode.cpp
+  dtkDistributor.cpp
+  dtkDistributorScene.cpp
+  dtkDistributorView.cpp
 )
 
 ## #################################################################
@@ -78,6 +87,10 @@ set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
 
 endif(MPI_FOUND)
 
+set(${PROJECT_NAME}_RESOURCES
+  dtkDistributed.qrc
+)
+
 ## #################################################################
 ## Build rules
 ## #################################################################
@@ -88,9 +101,12 @@ add_definitions(-DQT_NO_DEBUG)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
+qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
+
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_SOURCES_MOC}
+  ${${PROJECT_NAME}_SOURCES_QRC}
 )
 
 target_link_libraries(${PROJECT_NAME}

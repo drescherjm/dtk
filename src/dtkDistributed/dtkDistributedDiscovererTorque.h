@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Mar 17 09:53:41 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 17 09:55:05 2010 (+0100)
+ * Last-Updated: Sun Mar 21 23:02:09 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 3
+ *     Update #: 4
  */
 
 /* Commentary: 
@@ -24,7 +24,7 @@
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedDiscovererTorque : public dtkDistributedDiscoverer
 {
-public:
+public slots:
     void discover(const QUrl& url);
 };
 

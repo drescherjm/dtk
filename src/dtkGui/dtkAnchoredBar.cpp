@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar 16 08:45:44 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 16 10:25:51 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 8
+ * Last-Updated: Tue Mar 23 16:03:39 2010 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -21,7 +21,15 @@
 
 #include <dtkCore/dtkGlobal.h>
 
-dtkAnchoredBar::dtkAnchoredBar(QWidget *parent) : QToolBar(parent)
+class dtkAnchoredBarPrivate
+{
+public:
+    QPoint dragPosition;
+    int parentHeight;
+    int parentWidth;
+};
+
+dtkAnchoredBar::dtkAnchoredBar(QWidget *parent) : QToolBar(parent), d(new dtkAnchoredBarPrivate)
 {
     this->setMouseTracking(true);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -40,20 +48,20 @@ void dtkAnchoredBar::mouseMoveEvent(QMouseEvent *event)
     else
         this->setCursor(Qt::ArrowCursor);
 
-    if(!dragPosition.isNull())
-        parentWidget()->setMaximumWidth(parentWidth + (event->pos().x() - dragPosition.x()));
+    if(!d->dragPosition.isNull())
+        parentWidget()->setMaximumWidth(d->parentWidth + (event->pos().x() - d->dragPosition.x()));
 }
 
 void dtkAnchoredBar::mousePressEvent(QMouseEvent *event)
 {
     if(event->pos().x() > this->width() - 23) {
-        parentHeight = parentWidget()->height();
-        parentWidth = parentWidget()->width();
-        dragPosition = event->pos();
+        d->parentHeight = parentWidget()->height();
+        d->parentWidth = parentWidget()->width();
+        d->dragPosition = event->pos();
     }
 }
 
 void dtkAnchoredBar::mouseReleaseEvent(QMouseEvent *event)
 {
-    dragPosition = QPoint();
+    d->dragPosition = QPoint();
 }

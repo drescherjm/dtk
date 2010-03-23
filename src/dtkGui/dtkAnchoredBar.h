@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar 16 08:43:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 16 08:45:38 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 4
+ * Last-Updated: Tue Mar 23 16:01:46 2010 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 5
  */
 
 /* Commentary: 
@@ -21,6 +21,8 @@
 #define DTKANCHOREDBAR_H
 
 #include <QtGui>
+
+class dtkAnchoredBarPrivate;
 
 class dtkAnchoredBar : public QToolBar
 {
@@ -37,9 +39,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event);
 
 private:
-    QPoint dragPosition;
-    int parentHeight;
-    int parentWidth;
+    dtkAnchoredBarPrivate *d;
 };
 
 #endif

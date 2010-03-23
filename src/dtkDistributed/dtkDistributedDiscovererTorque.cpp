@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Mar 17 09:55:42 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar 21 23:47:41 2010 (+0100)
+ * Last-Updated: Mon Mar 22 11:01:48 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 65
+ *     Update #: 95
  */
 
 /* Commentary: 
@@ -17,6 +17,9 @@
  * 
  */
 
+#include "dtkDistributedCore.h"
+#include "dtkDistributedCpu.h"
+#include "dtkDistributedGpu.h"
 #include "dtkDistributedDiscoverer_p.h"
 #include "dtkDistributedDiscovererTorque.h"
 #include "dtkDistributedNode.h"
@@ -52,9 +55,12 @@ void dtkDistributedDiscovererTorque::discover(const QUrl& url)
 
     for(int i = 0; i < nodes.count(); i++) {
 
+        int np = nodes.item(i).firstChildElement("np").text().simplified().toInt();
         QString name  = nodes.item(i).firstChildElement("name").text().simplified();
         QString state = nodes.item(i).firstChildElement("state").text().simplified();
+        QString status = nodes.item(i).firstChildElement("status").text().simplified();
         QStringList properties = nodes.item(i).firstChildElement("properties").text().simplified().split(",");
+
 
         dtkDistributedNode *node = new dtkDistributedNode;
         node->setName(name);
@@ -71,18 +77,80 @@ void dtkDistributedDiscovererTorque::discover(const QUrl& url)
         if(state == "offline")
             node->setState(dtkDistributedNode::Offline);
 
-        
+        if(properties.contains("dell"))
+            node->setBrand(dtkDistributedNode::Dell);
+
+        if(properties.contains("hp"))
+            node->setBrand(dtkDistributedNode::Hp);
+
+        if(properties.contains("ibm"))
+            node->setBrand(dtkDistributedNode::Ibm);
+
+        if(properties.contains("myrinet"))
+            node->setNetwork(dtkDistributedNode::Myrinet10G);
+        else
+            node->setNetwork(dtkDistributedNode::Ethernet1G);
+
+        if(properties.contains("gpu")) for(int i = 0; i < np; i++) {
+
+            dtkDistributedGpu *gpu = new dtkDistributedGpu(node);
+
+            if(status.contains("x86_64"))
+                gpu->setArchitecture(dtkDistributedGpu::x86_64);
+            else
+                gpu->setArchitecture(dtkDistributedGpu::x86);
+
+            if(properties.contains("opteron"))
+                gpu->setModel(dtkDistributedGpu::Opteron);
+
+            if(properties.contains("xeon"))
+                gpu->setModel(dtkDistributedGpu::Xeon);
+
+            int nc = 0;
+            
+            if(properties.contains("singlecore"))
+                nc = 1;
+            else if(properties.contains("dualcore"))
+                nc = 2;
+            else if(properties.contains("quadcore"))
+                nc = 4;
+            
+            for(int i = 0; i < nc; i++)
+                *gpu << new dtkDistributedCore(gpu);
+
+            *node << gpu;
+        }
+
+        else for(int i = 0; i < np; i++) {
+
+            dtkDistributedCpu *cpu = new dtkDistributedCpu(node);
+
+            if(status.contains("x86_64"))
+                cpu->setArchitecture(dtkDistributedCpu::x86_64);
+            else
+                cpu->setArchitecture(dtkDistributedCpu::x86);
+
+            if(properties.contains("opteron"))
+                cpu->setModel(dtkDistributedCpu::Opteron);
+
+            if(properties.contains("xeon"))
+                cpu->setModel(dtkDistributedCpu::Xeon);
+
+            int nc = 0;
+            
+            if(properties.contains("singlecore"))
+                nc = 1;
+            else if(properties.contains("dualcore"))
+                nc = 2;
+            else if(properties.contains("quadcore"))
+                nc = 4;
+            
+            for(int i = 0; i < nc; i++)
+                *cpu << new dtkDistributedCore(cpu);
+
+            *node << cpu;
+        }
 
         d->nodes << node;
     }
 }
-
-// <Node>
-//  <name>nef001.inria.fr</name>
-//  <state>job-exclusive</state>
-//  <np>2</np>
-//  <properties>nef,opteron,singlecore,ibm,ghz200</properties>
-//  <ntype>cluster</ntype>
-//  <jobs>0/1799848.nef.inria.fr, 1/1799848.nef.inria.fr</jobs>
-//  <status>opsys=linux,uname=Linux nef001 2.6.27.41-170.2.117.fc10.x86_64 #1 SMP Thu Dec 10 10:36:29 EST2009 x86_64,sessions=5576,nsessions=1,nusers=1,idletime=176837,totmem=5966352kb,availmem=4691004kb,physmem=2059888kb,ncpus=2,loadave=2.06,netload=1795010938166,state=free,jobs=1799848.nef.inria.fr,rectime=1269209517</status>
-// </Node>

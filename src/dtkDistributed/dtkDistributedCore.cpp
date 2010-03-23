@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 16:26:17 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 16 17:13:25 2010 (+0100)
+ * Last-Updated: Mon Mar 22 10:14:41 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 6
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -23,12 +23,20 @@
 class dtkDistributedCorePrivate
 {
 public:
-    dtkDistributedCpu *parent;
+    dtkDistributedCpu *cpu;
+    dtkDistributedGpu *gpu;
 };
 
 dtkDistributedCore::dtkDistributedCore(dtkDistributedCpu *parent) : QObject(), d(new dtkDistributedCorePrivate)
 {
+    d->cpu = parent;
+    d->gpu = NULL;
+}
 
+dtkDistributedCore::dtkDistributedCore(dtkDistributedGpu *parent) : QObject(), d(new dtkDistributedCorePrivate)
+{
+    d->cpu = NULL;
+    d->gpu = parent;
 }
 
 dtkDistributedCore::~dtkDistributedCore(void)

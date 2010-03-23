@@ -5,5 +5,13 @@
     <file>pixmaps/dtk-distributed-connect-label.png</file>
     <file>pixmaps/dtk-distributed-disconnect-button.png</file>
     <file>pixmaps/dtk-distributed-disconnect-button-pressed.png</file>
+    <file>pixmaps/dtk-distributed-node-down.png</file>
+    <file>pixmaps/dtk-distributed-node-down-selected.png</file>
+    <file>pixmaps/dtk-distributed-node-free.png</file>
+    <file>pixmaps/dtk-distributed-node-free-selected.png</file>
+    <file>pixmaps/dtk-distributed-node-jobexclusive.png</file>
+    <file>pixmaps/dtk-distributed-node-jobexclusive-selected.png</file>
+    <file>pixmaps/dtk-distributed-node-offline.png</file>
+    <file>pixmaps/dtk-distributed-node-offline-selected.png</file>
   </qresource>
 </RCC>

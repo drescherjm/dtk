@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 13:22:24 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar 21 23:24:28 2010 (+0100)
+ * Last-Updated: Mon Mar 22 10:52:44 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 20
+ *     Update #: 30
  */
 
 /* Commentary: 
@@ -53,16 +53,28 @@ public:
         Offline
     };
 
+    enum Brand {
+        Hp,
+        Ibm,
+        Dell
+    };
+
     QList<Network> networks(void);
 
     QList<dtkDistributedCpu *> cpus(void);
     QList<dtkDistributedGpu *> gpus(void);
 
     QString name(void) const;
+    Network network(void);
     State state(void);
-
+    Brand brand(void);
     void setName(const QString& name);
+    void setNetwork(Network network);
     void setState(State state);
+    void setBrand(Brand brand);
+
+    void operator << (dtkDistributedCpu *cpu);
+    void operator << (dtkDistributedGpu *gpu);
 
 private:
     dtkDistributedNodePrivate *d;

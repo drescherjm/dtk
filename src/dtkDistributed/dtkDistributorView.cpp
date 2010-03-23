@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 18:26:28 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar 21 22:23:39 2010 (+0100)
+ * Last-Updated: Mon Mar 22 21:32:26 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 7
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -29,6 +29,8 @@ dtkDistributorView::dtkDistributorView(QWidget *parent) : QGraphicsView(parent),
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setFrameShape(QFrame::NoFrame);
     this->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    this->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 }
 
 dtkDistributorView::~dtkDistributorView(void)

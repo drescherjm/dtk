@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 16:18:36 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 22 00:01:17 2010 (+0100)
+ * Last-Updated: Mon Mar 22 10:11:58 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 9
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -32,7 +32,7 @@ public:
 
 dtkDistributedCpu::dtkDistributedCpu(dtkDistributedNode *parent) : QObject(), d(new dtkDistributedCpuPrivate)
 {
-
+    d->parent = parent;
 }
 
 dtkDistributedCpu::~dtkDistributedCpu(void)
@@ -65,4 +65,9 @@ void dtkDistributedCpu::setModel(Model model)
 QList<dtkDistributedCore *> dtkDistributedCpu::cores(void)
 {
     return d->cores;
+}
+
+void dtkDistributedCpu::operator << (dtkDistributedCore *core)
+{
+    d->cores << core;
 }

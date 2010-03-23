@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 19:02:42 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar 21 23:09:11 2010 (+0100)
+ * Last-Updated: Tue Mar 23 11:32:01 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 83
+ *     Update #: 164
  */
 
 /* Commentary: 
@@ -44,19 +44,20 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QWidget(parent), d(new dtkDist
     d->discoverer = new dtkDistributedDiscovererTorque;
 
     d->connectLabel = new dtkDistributorLabel;
+    d->connectLabel->setLabel("nef.inria.fr");
     d->connectLabel->setPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-connect-label.png"));
     d->connectLabel->setPos(0, -45);
 
     d->connectButton = new dtkDistributorButton;
     d->connectButton->setPixmapNormal(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-connect-button.png"));
     d->connectButton->setPixmapPressed(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-connect-button-pressed.png"));
-    d->connectButton->setPos(0, 45);
+    d->connectButton->setPos(0, 65);
     d->connectButton->setOpacity(1);
 
     d->disconnectButton = new dtkDistributorButton;
     d->disconnectButton->setPixmapNormal(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-disconnect-button.png"));
     d->disconnectButton->setPixmapPressed(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-disconnect-button-pressed.png"));
-    d->disconnectButton->setPos(-300, -210);
+    d->disconnectButton->setPos(-300, -190);
     d->disconnectButton->setOpacity(0);
 
     d->scene = new dtkDistributorScene;
@@ -88,7 +89,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QWidget(parent), d(new dtkDist
     d->s2->assignProperty(d->disconnectButton, "opacity", 1.0);
     d->s2->assignProperty(d->scene, "connected", true);
 
-    connect(d->s2, SIGNAL(entered()), d->discoverer, SLOT(discover()));
+    connect(d->s2, SIGNAL(entered()), this, SLOT(discover()));
 
     QSignalTransition *s1s2 = d->s1->addTransition(d->connectButton, SIGNAL(clicked()), d->s2);
     s1s2->addAnimation(new QPropertyAnimation(d->connectLabel, "position"));
@@ -117,14 +118,93 @@ dtkDistributor::~dtkDistributor(void)
     d = NULL;
 }
 
+void dtkDistributor::discover(void)
+{
+    d->discoverer->discover();
+
+    foreach(dtkDistributedNode *node, d->discoverer->nodes())
+        d->scene->addItem(new dtkDistributorNode(node));
+
+    this->update();
+}
+
+void dtkDistributor::update(void)
+{
+    // Update nodes
+
+    QList<dtkDistributorNode *> nodes;
+
+    foreach(QGraphicsItem *item, d->scene->items())
+        if(dtkDistributorNode *node = dynamic_cast<dtkDistributorNode *>(item))
+            if(node->isVisible())
+                nodes << node;
+
+    qreal ox = d->scene->sceneRect().topLeft().x() + 128/2 + 150 + 10;
+    qreal oy = d->scene->sceneRect().topLeft().y() + 128/2 + 10;
+    qreal dx = 128;
+    qreal dy = 128;
+    qreal  x = ox;
+    qreal  y = oy;
+
+    foreach(dtkDistributorNode *node, nodes) {
+
+        node->setPos(x, y);
+
+        if(x + dx > d->scene->sceneRect().width()/2 - 128/2) {
+            y += dy;
+            x  = ox;
+        } else {
+            x += dx;
+        }
+    }
+
+    d->scene->setSceneRect(
+        d->scene->sceneRect().topLeft().x(),
+        d->scene->sceneRect().topLeft().y(),
+        d->scene->sceneRect().width(),
+        qMax(y - d->scene->sceneRect().topLeft().y(), d->scene->sceneRect().height()));
+
+    // Parent implementation
+
+    QWidget::update();
+}
+
 void dtkDistributor::resizeEvent(QResizeEvent *event)
 {
-    d->scene->setSceneRect(-event->size().width()/2, -event->size().height()/2, event->size().width(), event->size().height());
+    // Update scene
+
+    d->scene->setSceneRect(
+        -event->size().width()/2,
+        -event->size().height()/2,
+        // -d->scene->sceneRect().height()/2,
+        event->size().width(),
+        event->size().height()
+        // d->scene->sceneRect().height()
+        );
+
+    // Update states
 
     d->s2->assignProperty(d->connectLabel, "position", d->scene->sceneRect().topLeft() + QPointF(10 + 64, 10 + 64));
 
-    d->disconnectButton->setPos(d->scene->sceneRect().topLeft() + QPointF(10 + 64, 10 + 128 + 25));
+    // Update buttons
+
+    d->disconnectButton->setPos(d->scene->sceneRect().topLeft() + QPointF(10 + 64, 10 + 128 + +20 + 25));
+
+    // Update labels
 
     if(d->scene->connected())
         d->connectLabel->setPos(d->scene->sceneRect().topLeft() + QPointF(10 + 64, 10 + 64));
+
+    // Update items
+    
+    this->update();
+
+    // Scroll view
+
+    d->view->ensureVisible(
+        -event->size().width()/2,
+        -event->size().height()/2,
+        event->size().width(),
+        event->size().height()
+        );
 }

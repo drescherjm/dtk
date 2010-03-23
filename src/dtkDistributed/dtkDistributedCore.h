@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 16:24:27 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 16 17:23:47 2010 (+0100)
+ * Last-Updated: Mon Mar 22 10:13:49 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 9
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -25,6 +25,7 @@
 #include "dtkDistributedExport.h"
 
 class dtkDistributedCpu;
+class dtkDistributedGpu;
 class dtkDistributedCorePrivate;
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedCore : public QObject
@@ -33,6 +34,7 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedCore : public QObject
 
 public:
      dtkDistributedCore(dtkDistributedCpu *parent);
+     dtkDistributedCore(dtkDistributedGpu *parent);
     ~dtkDistributedCore(void);
 
 private:

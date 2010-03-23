@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 13:32:38 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 16 16:28:47 2010 (+0100)
+ * Last-Updated: Mon Mar 22 10:11:17 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 7
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -35,6 +35,28 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedGpu : public QObject
 public:
      dtkDistributedGpu(dtkDistributedNode *parent);
     ~dtkDistributedGpu(void);
+
+    enum Architecture {
+        x86,
+        x86_64,
+    };
+
+    Architecture architecture(void);
+
+    void setArchitecture(Architecture arch);
+
+    enum Model {
+        Xeon,
+        Opteron
+    };
+
+    Model model(void);
+
+    void setModel(Model model);
+
+    QList<dtkDistributedCore *> cores(void);
+
+    void operator << (dtkDistributedCore *core);
 
 private:
     dtkDistributedGpuPrivate *d;

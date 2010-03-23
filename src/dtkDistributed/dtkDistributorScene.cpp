@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 18:30:50 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar 21 22:49:03 2010 (+0100)
+ * Last-Updated: Tue Mar 23 11:30:22 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 84
+ *     Update #: 165
  */
 
 /* Commentary: 
@@ -17,27 +17,62 @@
  * 
  */
 
+#include "dtkDistributedNode.h"
 #include "dtkDistributorScene.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributorLabel
 // /////////////////////////////////////////////////////////////////
 
-dtkDistributorLabel::dtkDistributorLabel(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
+class dtkDistributorLabelPrivate
 {
+public:
+    QGraphicsPixmapItem *pixmap;
+    QGraphicsTextItem *text;
+};
 
+dtkDistributorLabel::dtkDistributorLabel(QGraphicsItem *parent) : QGraphicsItemGroup(parent), d(new dtkDistributorLabelPrivate)
+{
+    d->pixmap = NULL;
+    d->text = NULL;
 }
 
 dtkDistributorLabel::~dtkDistributorLabel(void)
 {
+    delete d;
+    
+    d = NULL;
+}
 
+void dtkDistributorLabel::setLabel(const QString& label)
+{
+    d->text = new QGraphicsTextItem(label, this);
+    d->text->setDefaultTextColor(Qt::white);
+
+    this->addToGroup(d->text);
+    this->layout();
 }
 
 void dtkDistributorLabel::setPixmap(const QPixmap& pixmap)
 {
-    QGraphicsPixmapItem::setPixmap(pixmap);
+    d->pixmap = new QGraphicsPixmapItem(pixmap, this);
+    d->pixmap->setOffset(-pixmap.width()/2, -pixmap.height()/2);
 
-    this->setOffset(-pixmap.width()/2, -pixmap.height()/2);
+    this->addToGroup(d->pixmap);
+    this->layout();
+}
+
+void dtkDistributorLabel::layout(void)
+{
+    if(!d->text)
+        return;
+
+    if(!d->pixmap)
+        return;
+
+    QFontMetrics metrics(d->text->font());
+
+    d->text->setPos(-(d->pixmap->pixmap().width()-metrics.width(d->text->toPlainText()))/2 - 5, d->pixmap->pixmap().height()/2);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -79,6 +114,68 @@ void dtkDistributorButton::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     this->setOffset(-pixmap_normal.width()/2, -pixmap_normal.height()/2);
 
     emit clicked();
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkDistributorNode
+// /////////////////////////////////////////////////////////////////
+
+class dtkDistributorNodePrivate
+{
+public:
+    dtkDistributedNode *node;
+
+    QGraphicsPixmapItem *pixmap;
+    QGraphicsTextItem *text;
+};
+
+dtkDistributorNode::dtkDistributorNode(dtkDistributedNode *node, QGraphicsItem *parent) : QGraphicsItemGroup(parent), d(new dtkDistributorNodePrivate)
+{
+    d->node = node;
+
+    d->pixmap = NULL;
+    d->text = NULL;
+
+    this->layout();
+}
+
+dtkDistributorNode::~dtkDistributorNode(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+void dtkDistributorNode::layout(void)
+{
+    if(!d->pixmap)
+        d->pixmap = new QGraphicsPixmapItem(this);
+
+    if(d->node->state() == dtkDistributedNode::Free)
+        d->pixmap->setPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-node-free.png"));
+
+    if(d->node->state() == dtkDistributedNode::JobExclusive)
+        d->pixmap->setPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-node-jobexclusive.png"));
+
+    if(d->node->state() == dtkDistributedNode::Down)
+        d->pixmap->setPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-node-down.png"));
+
+    if(d->node->state() == dtkDistributedNode::Offline)
+        d->pixmap->setPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-node-offline.png"));
+
+    d->pixmap->setOffset(-d->pixmap->pixmap().width()/2, -d->pixmap->pixmap().height()/2);
+
+    if(!d->text)
+        d->text = new QGraphicsTextItem(this);
+
+    d->text->setPlainText(d->node->name());
+
+    QFontMetrics metrics(d->text->font());
+
+    d->text->setDefaultTextColor(Qt::white);
+    d->text->setPos(
+        -d->pixmap->pixmap().width()/2 + ((d->pixmap->pixmap().width() - metrics.width(d->text->toPlainText()))/2),
+         d->pixmap->pixmap().height()/2-15);
 }
 
 // /////////////////////////////////////////////////////////////////

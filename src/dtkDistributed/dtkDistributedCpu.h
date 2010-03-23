@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 13:23:49 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 22 00:00:12 2010 (+0100)
+ * Last-Updated: Mon Mar 22 09:56:24 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 17
+ *     Update #: 22
  */
 
 /* Commentary: 
@@ -37,8 +37,8 @@ public:
     ~dtkDistributedCpu(void);
 
     enum Architecture {
-        X86,
-        X86_64,
+        x86,
+        x86_64,
     };
 
     Architecture architecture(void);
@@ -55,6 +55,8 @@ public:
     void setModel(Model model);
 
     QList<dtkDistributedCore *> cores(void);
+
+    void operator << (dtkDistributedCore *core);
 
 private:
     dtkDistributedCpuPrivate *d;

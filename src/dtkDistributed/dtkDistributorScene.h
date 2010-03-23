@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 18:29:30 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar 21 22:19:10 2010 (+0100)
+ * Last-Updated: Mon Mar 22 13:02:25 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 19
+ *     Update #: 37
  */
 
 /* Commentary: 
@@ -26,7 +26,9 @@
 // dtkDistributorLabel
 // /////////////////////////////////////////////////////////////////
 
-class dtkDistributorLabel : public QObject, public QGraphicsPixmapItem
+class dtkDistributorLabelPrivate;
+
+class dtkDistributorLabel : public QObject, public QGraphicsItemGroup
 {
     Q_OBJECT
     Q_PROPERTY(QPointF position READ pos WRITE setPos)
@@ -35,7 +37,14 @@ public:
      dtkDistributorLabel(QGraphicsItem *parent = 0);
     ~dtkDistributorLabel(void);
 
+    void setLabel(const QString& label);
     void setPixmap(const QPixmap& pixmap);
+
+protected:
+    void layout(void);
+
+private:
+    dtkDistributorLabelPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -64,6 +73,32 @@ protected:
 private:
     QPixmap pixmap_normal;
     QPixmap pixmap_pressed;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkDistributorNode
+// /////////////////////////////////////////////////////////////////
+
+class dtkDistributedNode;
+class dtkDistributorNodePrivate;
+
+class dtkDistributorNode : public QObject, public QGraphicsItemGroup
+{
+    Q_OBJECT
+
+    Q_PROPERTY(bool visible READ isVisible WRITE setVisible)
+
+    Q_PROPERTY(QPointF position READ pos WRITE setPos)
+
+public:
+     dtkDistributorNode(dtkDistributedNode *node, QGraphicsItem *parent = 0);
+    ~dtkDistributorNode(void);
+
+protected:
+    void layout(void);
+
+private:
+    dtkDistributorNodePrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////

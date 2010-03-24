@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Mar 23 14:34:56 2010 (+0100)
-##           By: Thibaud Kloczko
-##     Update #: 271
+## Last-Updated: Wed Mar 24 09:36:30 2010 (+0100)
+##           By: Julien Wintz
+##     Update #: 272
 ######################################################################
 ## 
 ### Commentary: 
@@ -238,9 +238,10 @@ include_directories(${OPENSSL_INCLUDE_DIR})
 
 find_package(MPI QUIET)
 
+if(MPI_FOUND)
 include_directories(${MPI_INCLUDE_PATH})
-
 set(COMPILE_FLAGS ${COMPILE_FLAGS} ${MPI_COMPILE_FLAGS})
+endif(MPI_FOUND)
 
 ## vrpn
 

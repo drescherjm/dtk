@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar 22 10:20:50 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 22 10:26:29 2010 (+0100)
+ * Last-Updated: Wed Mar 24 09:34:29 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 12
  */
 
 /* Commentary: 
@@ -18,8 +18,6 @@
  */
 
 #include "dtkProgressIndicator.h"
-
-#include <QtGui/QPainter.h>
 
 class dtkProgressIndicatorPrivate
 {

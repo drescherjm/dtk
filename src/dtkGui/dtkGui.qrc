@@ -6,10 +6,14 @@
     <file>pixmaps/dtk-anchored-bar-action.png</file>
     <file>pixmaps/dtk-anchored-bar-add.png</file>
     <file>pixmaps/dtk-anchored-bar-handle.png</file>
+
     <file>pixmaps/dtk-composer-run.png</file>
     <file>pixmaps/dtk-composer-stop.png</file>
+
     <file>pixmaps/dtk-inspector.png</file>
+
     <file>pixmaps/dtk-interpreter.png</file>
+
     <file>pixmaps/dtk-widget.png</file>
   </qresource>
 </RCC>

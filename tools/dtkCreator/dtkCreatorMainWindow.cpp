@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 16 08:57:54 2010 (+0100)
+ * Last-Updated: Thu Mar 25 11:06:52 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 469
+ *     Update #: 473
  */
 
 /* Commentary: 
@@ -424,7 +424,6 @@ void dtkCreatorMainWindow::readSettings(void)
 
     d->editor->readSettings();
     d->interpreter->readSettings();
-    d->inspector->readSettings();
 }
 
 void dtkCreatorMainWindow::writeSettings(void)
@@ -437,7 +436,6 @@ void dtkCreatorMainWindow::writeSettings(void)
 
     d->editor->writeSettings();
     d->interpreter->writeSettings();
-    d->inspector->writeSettings();
 }
 
 void dtkCreatorMainWindow::interpret(const QString& file)

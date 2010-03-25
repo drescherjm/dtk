@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Mar 24 09:36:30 2010 (+0100)
+## Last-Updated: Thu Mar 25 11:21:09 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 272
+##     Update #: 273
 ######################################################################
 ## 
 ### Commentary: 
@@ -226,7 +226,9 @@ endif(PYTHONLIBS_FOUND)
 
 find_package(ZLIB QUIET)
 
+if(Z_LIBRARY)
 include_directories(${ZLIB_INCLUDE_DIRS})
+endif(Z_LIBRARY)
 
 ## ssl
 

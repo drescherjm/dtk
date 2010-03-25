@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Tue Mar 16 11:01:20 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Mar 18 11:11:03 2010 (+0100)
+## Last-Updated: Thu Mar 25 11:23:14 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 48
+##     Update #: 50
 ######################################################################
 ## 
 ### Commentary: 
@@ -99,7 +99,13 @@ add_library(${PROJECT_NAME} SHARED
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
-  ${ZLIB_LIBRARIES}
-  ${OPENSSL_LIBRARIES}
   dtkCore
 )
+
+if(OPENSSL_FOUND)
+target_link_libraries(${PROJECT_NAME} ${OPENSSL_LIBRARIES})
+endif(OPENSSL_FOUND)
+
+if(Z_LIBRARY)
+target_link_libraries(${PROJECT_NAME} ${ZLIB_LIBRARIES})
+endif(Z_LIBRARY)

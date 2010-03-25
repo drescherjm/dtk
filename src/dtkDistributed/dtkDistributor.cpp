@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 19:02:42 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 23 11:32:01 2010 (+0100)
+ * Last-Updated: Thu Mar 25 11:15:57 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 164
+ *     Update #: 168
  */
 
 /* Commentary: 
@@ -89,6 +89,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QWidget(parent), d(new dtkDist
     d->s2->assignProperty(d->disconnectButton, "opacity", 1.0);
     d->s2->assignProperty(d->scene, "connected", true);
 
+    connect(d->s1, SIGNAL(entered()), this, SLOT(clear()));
     connect(d->s2, SIGNAL(entered()), this, SLOT(discover()));
 
     QSignalTransition *s1s2 = d->s1->addTransition(d->connectButton, SIGNAL(clicked()), d->s2);
@@ -116,6 +117,16 @@ dtkDistributor::~dtkDistributor(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkDistributor::clear(void)
+{
+    foreach(QGraphicsItem *item, d->scene->items()) {
+        if(dtkDistributorNode *node = dynamic_cast<dtkDistributorNode *>(item)) {
+            d->scene->removeItem(item);
+            delete item;
+        }
+    }
 }
 
 void dtkDistributor::discover(void)

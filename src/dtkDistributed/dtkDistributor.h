@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 19:01:19 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 22 13:25:59 2010 (+0100)
+ * Last-Updated: Thu Mar 25 11:12:33 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 8
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -33,6 +33,7 @@ public:
     ~dtkDistributor(void);
 
 protected slots:
+    void clear(void);
     void discover(void);
     void update(void);
 

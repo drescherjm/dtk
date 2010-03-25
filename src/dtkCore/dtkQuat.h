@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 11:30:32 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar  1 12:41:35 2010 (+0100)
+ * Last-Updated: Thu Mar 25 11:21:44 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 24
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -20,9 +20,10 @@
 #ifndef DTKQUAT_H
 #define DTKQUAT_H
 
+#include "dtkCoreExport.h"
 #include "dtkVec3.h"
 
-class dtkQuat
+class DTKCORE_EXPORT dtkQuat
 {
 public:
      dtkQuat(double q0=0.0, double q1=0.0, double q2=0.0, double q3=1.0);

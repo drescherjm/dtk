@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Mar 17 09:55:42 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 25 11:17:39 2010 (+0100)
+ * Last-Updated: Thu Mar 25 11:30:48 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 96
+ *     Update #: 102
  */
 
 /* Commentary: 
@@ -40,12 +40,24 @@ void dtkDistributedDiscovererTorque::discover(const QUrl& url)
 
     dtkDebug() << "Opening ssh connection towards " << url.toString();
 
-    QString result;
+    // dtkSshController::instance()->createConnection(url);
+    // dtkSshController::instance()->execute("pbsnodes -x", result);
 
-    dtkSshController::instance()->createConnection(url);
-    dtkSshController::instance()->execute("pbsnodes -x", result);
+    QProcess stat; stat.start("ssh", QStringList() << "nef.inria.fr" << "pbsnodes -x");
 
-    result = result.split("\n").first(); // Figure this out !
+    if (!stat.waitForStarted()) {
+        dtkCritical() << "Unable to launch ssh command";
+        return;
+    }
+
+    if (!stat.waitForFinished()) {
+        dtkCritical() << "Unable to completed ssh command";
+        return;
+    }
+    
+    QString result = stat.readAll();
+
+    // result = result.split("\n").first(); // Figure this out !
 
     QDomDocument document; QString error;
 

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Sun Mar 21 19:06:16 2010 (+0100)
+## Last-Updated: Thu Mar 25 11:34:51 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 44
+##     Update #: 45
 ######################################################################
 ## 
 ### Commentary: 
@@ -112,7 +112,6 @@ add_library(${PROJECT_NAME} SHARED
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkCore
-  dtkSsh
 )
 
 if(MPI_FOUND)

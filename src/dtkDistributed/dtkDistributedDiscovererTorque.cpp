@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Mar 17 09:55:42 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 25 11:30:48 2010 (+0100)
+ * Last-Updated: Thu Mar 25 11:34:41 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 102
+ *     Update #: 103
  */
 
 /* Commentary: 
@@ -26,8 +26,6 @@
 
 #include <dtkCore/dtkGlobal.h>
 #include <dtkCore/dtkLog.h>
-
-#include <dtkSsh/dtkSshController.h>
 
 #include <QtXml>
 

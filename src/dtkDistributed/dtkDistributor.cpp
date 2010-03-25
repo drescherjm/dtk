@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 19:02:42 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 25 11:15:57 2010 (+0100)
+ * Last-Updated: Thu Mar 25 12:59:21 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 168
+ *     Update #: 175
  */
 
 /* Commentary: 
@@ -173,7 +173,7 @@ void dtkDistributor::update(void)
         d->scene->sceneRect().topLeft().x(),
         d->scene->sceneRect().topLeft().y(),
         d->scene->sceneRect().width(),
-        qMax(y - d->scene->sceneRect().topLeft().y(), d->scene->sceneRect().height()));
+        qMax(y - d->scene->sceneRect().topLeft().y() + dy, d->scene->sceneRect().height()));
 
     // Parent implementation
 
@@ -187,10 +187,8 @@ void dtkDistributor::resizeEvent(QResizeEvent *event)
     d->scene->setSceneRect(
         -event->size().width()/2,
         -event->size().height()/2,
-        // -d->scene->sceneRect().height()/2,
-        event->size().width(),
-        event->size().height()
-        // d->scene->sceneRect().height()
+         event->size().width()-20, // Prevent offset due to scrollbar
+         event->size().height()
         );
 
     // Update states

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 19:01:19 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 25 11:12:33 2010 (+0100)
+ * Last-Updated: Sun Mar 28 00:30:45 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 9
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -36,6 +36,7 @@ protected slots:
     void clear(void);
     void discover(void);
     void update(void);
+    void toggle(void);
 
 protected:
     void resizeEvent(QResizeEvent *event);

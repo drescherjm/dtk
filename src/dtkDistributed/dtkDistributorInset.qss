@@ -1,0 +1,58 @@
+/*dtkDistributorInset.qss --- 
+;; 
+;; Author: Julien Wintz
+;; Copyright (C) 2008 - Julien Wintz, Inria.
+;; Created: Thu Mar 25 13:15:13 2010 (+0100)
+;; Version: $Id$
+;; Last-Updated: Sat Mar 27 15:28:42 2010 (+0100)
+;;           By: Julien Wintz
+;;     Update #: 96
+*/
+
+/*Commentary: 
+;; 
+*/
+
+/*Change log:
+;; 
+*/
+
+/* dtkDistributorInsetHeader */
+
+dtkDistributorInsetHeader {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #b6d4f0, stop: 0.49 #a1c8e7, stop: 0.50 #8bb7da stop: 1.0 #8cb6dc);
+    border-bottom: 1px solid #5185ce;
+}
+
+dtkDistributorInsetHeader QPushButton {
+    color: black;
+    border-image: url(:dtkDistributed/pixmaps/dtk-distributed-inset-button.png) 7 10 7 10;
+    border-top: 7px transparent;
+    border-bottom: 7px transparent;
+    border-right: 10px transparent;
+    border-left: 10px transparent;
+    min-width: 80px;
+    font-size: 9px;
+}
+
+dtkDistributorInsetHeader QPushButton:hover {
+    color: black;
+    border-image: url(:dtkDistributed/pixmaps/dtk-distributed-inset-button-hovered.png) 7 10 7 10;
+}
+
+dtkDistributorInsetHeader QPushButton:pressed {
+    color: white;
+    border-image: url(:dtkDistributed/pixmaps/dtk-distributed-inset-button-pressed.png) 7 10 7 10;
+}
+
+dtkDistributorInsetHeader QPushButton:checked {
+    color: white;
+    border-image: url(:dtkDistributed/pixmaps/dtk-distributed-inset-button-pressed.png) 7 10 7 10;
+}
+
+/* dtkDistributorInsetBody */
+
+dtkDistributorInsetBody {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #d2e0ee, stop: 0.30 #bad3e8, stop: 0.31 #acc9e1 stop: 1.0 #d9e5ef);
+    border-bottom: 1px solid darkGray;
+}

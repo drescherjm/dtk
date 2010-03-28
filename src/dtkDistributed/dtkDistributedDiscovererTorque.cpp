@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Mar 17 09:55:42 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 25 13:00:24 2010 (+0100)
+ * Last-Updated: Sun Mar 28 01:38:39 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 104
+ *     Update #: 105
  */
 
 /* Commentary: 
@@ -52,9 +52,7 @@ void dtkDistributedDiscovererTorque::discover(const QUrl& url)
 
     QDomDocument document; QString error;
 
-    if(document.setContent(result, false, &error))
-        dtkDebug() << "Successfully retrieved xml output out of " << url.toString() << "torque setup";
-    else
+    if(!document.setContent(result, false, &error))
         dtkDebug() << "Error retrieving xml output out of " << url.toString() << error;
 
     QDomNodeList nodes = document.elementsByTagName("Node");

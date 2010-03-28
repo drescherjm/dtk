@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar 16 14:49:31 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar 21 23:09:31 2010 (+0100)
+ * Last-Updated: Sat Mar 27 13:33:59 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 57
+ *     Update #: 58
  */
 
 /* Commentary: 
@@ -30,34 +30,10 @@
 
 int main(int argc, char **argv)
 {
-    // if(dtkApplicationArgumentsContain(argc, argv, "--help")) {
-    //     dtkOutput() << "Usage: " << QString(argv[0]) << " (--oar | --torque) --host url";
-    //     return 0;
-    // }
-   
-    // dtkDistributedDiscoverer *discoverer = NULL;
-
-    // if(dtkApplicationArgumentsContain(argc, argv, "--oar"))
-    //     discoverer = new dtkDistributedDiscovererOar;
-
-    // if(dtkApplicationArgumentsContain(argc, argv, "--torque"))
-    //     discoverer = new dtkDistributedDiscovererTorque;
-        
-    // if(!discoverer) {
-    //     dtkCritical() << "No discovering method has been specified. See usage with --help option.";
-    //     return 0;
-    // }
-
-    // QString host = dtkApplicationArgumentsValue(argc, argv, "--host");
-
-    // if(host.isEmpty()) {
-    //     dtkCritical() << "No host has been specified. See usage with --help option.";
-    //     return 0;
-    // }
-
     QApplication application(argc, argv);
 
     dtkDistributor *distributor = new dtkDistributor;
+    distributor->resize(800, 480);
     distributor->show();
 
     return application.exec();

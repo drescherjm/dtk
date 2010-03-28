@@ -1,17 +1,46 @@
 <!DOCTYPE RCC><RCC version="1.0">
   <qresource prefix="dtkDistributed">
+    <file>dtkDistributorInset.qss</file>
+
     <file>pixmaps/dtk-distributed-connect-button.png</file>
     <file>pixmaps/dtk-distributed-connect-button-pressed.png</file>
     <file>pixmaps/dtk-distributed-connect-label.png</file>
+
     <file>pixmaps/dtk-distributed-disconnect-button.png</file>
     <file>pixmaps/dtk-distributed-disconnect-button-pressed.png</file>
+
+    <file>pixmaps/dtk-distributed-inset-handle.png</file>
+    <file>pixmaps/dtk-distributed-inset-handle-pressed.png</file>
+
+    <file>pixmaps/dtk-distributed-inset-button.png</file>
+    <file>pixmaps/dtk-distributed-inset-button-hovered.png</file>
+    <file>pixmaps/dtk-distributed-inset-button-pressed.png</file>
+
+    <file>pixmaps/dtk-distributed-inset-core-1.png</file>
+    <file>pixmaps/dtk-distributed-inset-core-2.png</file>
+    <file>pixmaps/dtk-distributed-inset-core-4.png</file>
+    <file>pixmaps/dtk-distributed-inset-core-8.png</file>
+
+    <file>pixmaps/dtk-distributed-inset-free.png</file>
+    <file>pixmaps/dtk-distributed-inset-jobexclusive.png</file>
+    <file>pixmaps/dtk-distributed-inset-offline.png</file>
+    <file>pixmaps/dtk-distributed-inset-down.png</file>
+
+    <file>pixmaps/dtk-distributed-inset-dell.png</file>
+    <file>pixmaps/dtk-distributed-inset-ibm.png</file>
+    <file>pixmaps/dtk-distributed-inset-hp.png</file>
+
+    <file>pixmaps/dtk-distributed-inset-e1g.png</file>
+    <file>pixmaps/dtk-distributed-inset-e10g.png</file>
+    <file>pixmaps/dtk-distributed-inset-m2g.png</file>
+    <file>pixmaps/dtk-distributed-inset-m10g.png</file>
+    <file>pixmaps/dtk-distributed-inset-i10g.png</file>
+    <file>pixmaps/dtk-distributed-inset-i20g.png</file>
+    <file>pixmaps/dtk-distributed-inset-i40g.png</file>
+
     <file>pixmaps/dtk-distributed-node-down.png</file>
-    <file>pixmaps/dtk-distributed-node-down-selected.png</file>
     <file>pixmaps/dtk-distributed-node-free.png</file>
-    <file>pixmaps/dtk-distributed-node-free-selected.png</file>
     <file>pixmaps/dtk-distributed-node-jobexclusive.png</file>
-    <file>pixmaps/dtk-distributed-node-jobexclusive-selected.png</file>
     <file>pixmaps/dtk-distributed-node-offline.png</file>
-    <file>pixmaps/dtk-distributed-node-offline-selected.png</file>
   </qresource>
 </RCC>

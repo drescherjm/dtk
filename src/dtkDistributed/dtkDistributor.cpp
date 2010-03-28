@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 19:02:42 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 25 12:59:21 2010 (+0100)
+ * Last-Updated: Sun Mar 28 00:32:45 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 175
+ *     Update #: 269
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #include "dtkDistributedDiscovererOar.h"
 #include "dtkDistributedDiscovererTorque.h"
 #include "dtkDistributor.h"
+#include "dtkDistributorInset.h"
 #include "dtkDistributorScene.h"
 #include "dtkDistributorView.h"
 
@@ -28,11 +29,13 @@ class dtkDistributorPrivate
 {
 public:
     dtkDistributedDiscoverer *discoverer;
+    dtkDistributorButton *handle;
     dtkDistributorButton *connectButton;
     dtkDistributorButton *disconnectButton;
     dtkDistributorLabel *connectLabel;
     dtkDistributorScene *scene;
     dtkDistributorView *view;
+    dtkDistributorInset *inset;
 
     QStateMachine *machine;
     QState *s1;
@@ -48,6 +51,11 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QWidget(parent), d(new dtkDist
     d->connectLabel->setPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-connect-label.png"));
     d->connectLabel->setPos(0, -45);
 
+    d->handle = new dtkDistributorButton;
+    d->handle->setPixmapNormal(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-handle.png"));
+    d->handle->setPixmapPressed(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-handle-pressed.png"));
+    d->handle->setOpacity(0);
+
     d->connectButton = new dtkDistributorButton;
     d->connectButton->setPixmapNormal(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-connect-button.png"));
     d->connectButton->setPixmapPressed(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-connect-button-pressed.png"));
@@ -60,7 +68,11 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QWidget(parent), d(new dtkDist
     d->disconnectButton->setPos(-300, -190);
     d->disconnectButton->setOpacity(0);
 
+    d->inset = new dtkDistributorInset(this);
+    d->inset->setMaximumHeight(0);
+
     d->scene = new dtkDistributorScene;
+    d->scene->addItem(d->handle);
     d->scene->addItem(d->connectLabel);
     d->scene->addItem(d->connectButton);
     d->scene->addItem(d->disconnectButton);
@@ -70,20 +82,23 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QWidget(parent), d(new dtkDist
 
     // Widget setup
 
-    QHBoxLayout *layout = new QHBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
+    layout->addWidget(d->inset);
     layout->addWidget(d->view);
 
     // State machine setup
 
     d->s1 = new QState;
+    d->s1->assignProperty(d->handle, "opacity", 0.0);
     d->s1->assignProperty(d->connectLabel, "position", QPointF(0, -45));
     d->s1->assignProperty(d->connectButton, "opacity", 1.0);
     d->s1->assignProperty(d->disconnectButton, "opacity", 0.0);
     d->s1->assignProperty(d->scene, "connected", false);
 
     d->s2 = new QState;
+    d->s2->assignProperty(d->handle, "opacity", 1.0);
     d->s2->assignProperty(d->connectLabel, "position", QPointF(-300, -300));
     d->s2->assignProperty(d->connectButton, "opacity", 0.0);
     d->s2->assignProperty(d->disconnectButton, "opacity", 1.0);
@@ -107,6 +122,10 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QWidget(parent), d(new dtkDist
     d->machine->addState(d->s2);
     d->machine->setInitialState(d->s1);
     d->machine->start();
+
+    // Events
+
+    connect(d->handle, SIGNAL(clicked()), this, SLOT(toggle()));
 }
 
 dtkDistributor::~dtkDistributor(void)
@@ -175,9 +194,38 @@ void dtkDistributor::update(void)
         d->scene->sceneRect().width(),
         qMax(y - d->scene->sceneRect().topLeft().y() + dy, d->scene->sceneRect().height()));
 
+    d->view->ensureVisible(
+        -d->view->size().width()/2,
+        -d->view->size().height()/2,
+        10,
+        10);
+
     // Parent implementation
 
     QWidget::update();
+}
+
+void dtkDistributor::toggle(void)
+{
+    static bool toggled = false;
+
+    QPropertyAnimation *animation = new QPropertyAnimation(d->inset, "maximumHeight");
+    animation->setDuration(1000);
+    animation->setEasingCurve(QEasingCurve::OutBounce);
+
+    if(!toggled) {
+        animation->setStartValue(d->inset->height());
+        animation->setEndValue(100);
+    } else {
+        animation->setStartValue(d->inset->height());
+        animation->setEndValue(0);
+    }
+
+    animation->start();
+
+    connect(animation, SIGNAL(finished()), animation, SLOT(deleteLater()));
+
+    toggled = !toggled;
 }
 
 void dtkDistributor::resizeEvent(QResizeEvent *event)
@@ -197,6 +245,8 @@ void dtkDistributor::resizeEvent(QResizeEvent *event)
 
     // Update buttons
 
+    d->handle->setPos(0, -event->size().height()/2);
+
     d->disconnectButton->setPos(d->scene->sceneRect().topLeft() + QPointF(10 + 64, 10 + 128 + +20 + 25));
 
     // Update labels
@@ -207,13 +257,4 @@ void dtkDistributor::resizeEvent(QResizeEvent *event)
     // Update items
     
     this->update();
-
-    // Scroll view
-
-    d->view->ensureVisible(
-        -event->size().width()/2,
-        -event->size().height()/2,
-        event->size().width(),
-        event->size().height()
-        );
 }

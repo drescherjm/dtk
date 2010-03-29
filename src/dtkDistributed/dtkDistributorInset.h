@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar 25 13:10:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Mar 27 18:07:07 2010 (+0100)
+ * Last-Updated: Mon Mar 29 14:45:23 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 25
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -30,10 +30,45 @@ class dtkDistributorInsetPixmap : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
     Q_PROPERTY(QPointF pos READ pos WRITE setPos)
+    Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity)
 
 public:
      dtkDistributorInsetPixmap(const QPixmap& pixmap, QGraphicsItem *parent = 0);
     ~dtkDistributorInsetPixmap(void);
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkDistributorInsetScroller
+// /////////////////////////////////////////////////////////////////
+
+class dtkDistributorInsetScrollerPrivate;
+
+class dtkDistributorInsetScroller : public QObject, public QGraphicsPixmapItem
+{
+    Q_OBJECT
+
+public:
+     dtkDistributorInsetScroller(QGraphicsItem *parent = 0);
+    ~dtkDistributorInsetScroller(void);
+
+    enum Type {
+        None,
+        Both,
+        Left,
+        Right
+    };
+
+    void setType(Type type);
+
+signals:
+    void scrollLeft(void);
+    void scrollRight(void);
+
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
+private:
+    dtkDistributorInsetScrollerPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -67,6 +102,10 @@ public:
     ~dtkDistributorInsetBody(void);
 
 public slots:
+    void clear(void);
+    void update(void);
+    void scrollLeft(void);
+    void scrollRight(void);
     void setCurrentIndex(int index);
 
 protected:

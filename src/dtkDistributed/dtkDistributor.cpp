@@ -5,9 +5,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 19:02:42 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 29 10:48:53 2010 (+0200)
+ * Last-Updated: Mon Mar 29 11:19:26 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 298
+ *     Update #: 299
  */
 
 /* Commentary: 
@@ -169,7 +169,7 @@ void dtkDistributor::clear(void)
 
 void dtkDistributor::discover(void)
 {
-    if(!d->discoverer && d->connectCombo->text().contains("grid")) {
+    if(!d->discoverer && d->connectCombo->text().contains("grid5000")) {
         d->discoverer = new dtkDistributedDiscovererOar;
     } else {
         d->discoverer = new dtkDistributedDiscovererTorque;

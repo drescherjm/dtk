@@ -12,6 +12,11 @@
     <file>pixmaps/dtk-distributed-inset-handle.png</file>
     <file>pixmaps/dtk-distributed-inset-handle-pressed.png</file>
 
+    <file>pixmaps/dtk-distributed-inset-scroller-none.png</file>
+    <file>pixmaps/dtk-distributed-inset-scroller-both.png</file>
+    <file>pixmaps/dtk-distributed-inset-scroller-left.png</file>
+    <file>pixmaps/dtk-distributed-inset-scroller-right.png</file>
+
     <file>pixmaps/dtk-distributed-inset-core-1.png</file>
     <file>pixmaps/dtk-distributed-inset-core-2.png</file>
     <file>pixmaps/dtk-distributed-inset-core-4.png</file>
@@ -33,6 +38,14 @@
     <file>pixmaps/dtk-distributed-inset-i10g.png</file>
     <file>pixmaps/dtk-distributed-inset-i20g.png</file>
     <file>pixmaps/dtk-distributed-inset-i40g.png</file>
+
+    <file>pixmaps/dtk-distributed-inset-xeon.png</file>
+    <file>pixmaps/dtk-distributed-inset-opteron.png</file>
+
+    <file>pixmaps/dtk-distributed-inset-x86.png</file>
+    <file>pixmaps/dtk-distributed-inset-x86_64.png</file>
+
+    <file>pixmaps/dtk-distributed-inset-cluster.png</file>
 
     <file>pixmaps/dtk-distributed-node-down.png</file>
     <file>pixmaps/dtk-distributed-node-free.png</file>

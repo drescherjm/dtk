@@ -1,12 +1,13 @@
+
 /* dtkDistributor.cpp --- 
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 19:02:42 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar 28 00:32:45 2010 (+0100)
+ * Last-Updated: Mon Mar 29 10:48:53 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 269
+ *     Update #: 298
  */
 
 /* Commentary: 
@@ -32,6 +33,7 @@ public:
     dtkDistributorButton *handle;
     dtkDistributorButton *connectButton;
     dtkDistributorButton *disconnectButton;
+    dtkDistributorCombo *connectCombo;
     dtkDistributorLabel *connectLabel;
     dtkDistributorScene *scene;
     dtkDistributorView *view;
@@ -44,12 +46,17 @@ public:
 
 dtkDistributor::dtkDistributor(QWidget *parent) : QWidget(parent), d(new dtkDistributorPrivate)
 {
-    d->discoverer = new dtkDistributedDiscovererTorque;
+    d->discoverer = NULL;
 
     d->connectLabel = new dtkDistributorLabel;
-    d->connectLabel->setLabel("nef.inria.fr");
+    // d->connectLabel->setLabel("nef.inria.fr");
     d->connectLabel->setPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-connect-label.png"));
     d->connectLabel->setPos(0, -45);
+
+    d->connectCombo = new dtkDistributorCombo;
+    d->connectCombo->setPos(-64, 20);
+    d->connectCombo->setOpacity(1.0);
+    d->connectCombo->setZValue(10);
 
     d->handle = new dtkDistributorButton;
     d->handle->setPixmapNormal(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-handle.png"));
@@ -74,6 +81,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QWidget(parent), d(new dtkDist
     d->scene = new dtkDistributorScene;
     d->scene->addItem(d->handle);
     d->scene->addItem(d->connectLabel);
+    d->scene->addItem(d->connectCombo);
     d->scene->addItem(d->connectButton);
     d->scene->addItem(d->disconnectButton);
 
@@ -96,6 +104,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QWidget(parent), d(new dtkDist
     d->s1->assignProperty(d->connectButton, "opacity", 1.0);
     d->s1->assignProperty(d->disconnectButton, "opacity", 0.0);
     d->s1->assignProperty(d->scene, "connected", false);
+    d->s1->assignProperty(d->connectCombo, "opacity", 1.0);
 
     d->s2 = new QState;
     d->s2->assignProperty(d->handle, "opacity", 1.0);
@@ -103,6 +112,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QWidget(parent), d(new dtkDist
     d->s2->assignProperty(d->connectButton, "opacity", 0.0);
     d->s2->assignProperty(d->disconnectButton, "opacity", 1.0);
     d->s2->assignProperty(d->scene, "connected", true);
+    d->s2->assignProperty(d->connectCombo, "opacity", 0.0);
 
     connect(d->s1, SIGNAL(entered()), this, SLOT(clear()));
     connect(d->s2, SIGNAL(entered()), this, SLOT(discover()));
@@ -140,20 +150,37 @@ dtkDistributor::~dtkDistributor(void)
 
 void dtkDistributor::clear(void)
 {
+    // Clear the scene
+
     foreach(QGraphicsItem *item, d->scene->items()) {
         if(dtkDistributorNode *node = dynamic_cast<dtkDistributorNode *>(item)) {
             d->scene->removeItem(item);
             delete item;
         }
     }
+
+    // Clear the discoverer
+
+    if (d->discoverer) {
+        delete d->discoverer;
+        d->discoverer = NULL;
+    }    
 }
 
 void dtkDistributor::discover(void)
 {
-    d->discoverer->discover();
+    if(!d->discoverer && d->connectCombo->text().contains("grid")) {
+        d->discoverer = new dtkDistributedDiscovererOar;
+    } else {
+        d->discoverer = new dtkDistributedDiscovererTorque;
+    }
+
+    d->discoverer->discover(QUrl(d->connectCombo->text()));
 
     foreach(dtkDistributedNode *node, d->discoverer->nodes())
         d->scene->addItem(new dtkDistributorNode(node));
+
+    d->connectLabel->setLabel(d->connectCombo->text());
 
     this->update();
 }

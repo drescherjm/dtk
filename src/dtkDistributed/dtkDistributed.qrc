@@ -12,10 +12,6 @@
     <file>pixmaps/dtk-distributed-inset-handle.png</file>
     <file>pixmaps/dtk-distributed-inset-handle-pressed.png</file>
 
-    <file>pixmaps/dtk-distributed-inset-button.png</file>
-    <file>pixmaps/dtk-distributed-inset-button-hovered.png</file>
-    <file>pixmaps/dtk-distributed-inset-button-pressed.png</file>
-
     <file>pixmaps/dtk-distributed-inset-core-1.png</file>
     <file>pixmaps/dtk-distributed-inset-core-2.png</file>
     <file>pixmaps/dtk-distributed-inset-core-4.png</file>

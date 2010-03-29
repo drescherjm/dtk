@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 18:29:30 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 22 13:02:25 2010 (+0100)
+ * Last-Updated: Mon Mar 29 09:44:48 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 37
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -73,6 +73,28 @@ protected:
 private:
     QPixmap pixmap_normal;
     QPixmap pixmap_pressed;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkDistributorCombo
+// /////////////////////////////////////////////////////////////////
+
+class dtkDistributorComboPrivate;
+
+class dtkDistributorCombo : public QGraphicsProxyWidget
+{
+    Q_OBJECT
+    Q_PROPERTY(QPointF position READ pos WRITE setPos)
+    Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity)
+
+public:
+     dtkDistributorCombo(QGraphicsItem *parent = 0);
+    ~dtkDistributorCombo(void);
+
+    QString text(void) const;
+
+private:
+    dtkDistributorComboPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 18:30:50 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar 28 01:36:50 2010 (+0100)
+ * Last-Updated: Mon Mar 29 09:52:09 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 166
+ *     Update #: 189
  */
 
 /* Commentary: 
@@ -46,6 +46,12 @@ dtkDistributorLabel::~dtkDistributorLabel(void)
 
 void dtkDistributorLabel::setLabel(const QString& label)
 {
+    if (d->text) {
+        this->removeFromGroup(d->text);
+        delete d->text;
+        d->text = NULL;
+    }
+
     d->text = new QGraphicsTextItem(label, this);
     d->text->setDefaultTextColor(Qt::white);
 
@@ -114,6 +120,40 @@ void dtkDistributorButton::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     this->setOffset(-pixmap_normal.width()/2, -pixmap_normal.height()/2);
 
     emit clicked();
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkDistributorCombo
+// /////////////////////////////////////////////////////////////////
+
+class dtkDistributorComboPrivate
+{
+public:
+    QComboBox *combo;
+};
+
+dtkDistributorCombo::dtkDistributorCombo(QGraphicsItem *parent) : QGraphicsProxyWidget(parent), d(new dtkDistributorComboPrivate)
+{
+    d->combo = new QComboBox;
+    d->combo->setAttribute(Qt::WA_TranslucentBackground);
+    d->combo->setEditable(true);
+    d->combo->addItem("nef.inria.fr");
+    d->combo->setFixedWidth(128);
+
+    this->setWidget(d->combo);
+}
+
+dtkDistributorCombo::~dtkDistributorCombo(void)
+{
+    delete d->combo;
+    delete d;
+
+    d = NULL;
+}
+
+QString dtkDistributorCombo::text(void) const
+{
+    return d->combo->currentText();
 }
 
 // /////////////////////////////////////////////////////////////////

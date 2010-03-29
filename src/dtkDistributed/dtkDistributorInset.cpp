@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar 25 13:12:35 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar 28 01:26:08 2010 (+0100)
+ * Last-Updated: Sun Mar 28 14:02:52 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 294
+ *     Update #: 296
  */
 
 /* Commentary: 
@@ -27,10 +27,21 @@
 
 dtkDistributorInsetHeader::dtkDistributorInsetHeader(QWidget *parent) : QFrame(parent)
 {
-    QPushButton *button1 = new QPushButton("State", this); button1->setFixedHeight(21); button1->setCheckable(true);
-    QPushButton *button2 = new QPushButton("Brand", this); button2->setFixedHeight(21); button2->setCheckable(true);
-    QPushButton *button3 = new QPushButton("Network", this); button3->setFixedHeight(21); button3->setCheckable(true);
-    QPushButton *button4 = new QPushButton("Core", this); button4->setFixedHeight(21); button4->setCheckable(true);
+    QPushButton *button1 = new QPushButton("State", this);
+    // button1->setFixedHeight(21);
+    button1->setCheckable(true);
+    
+    QPushButton *button2 = new QPushButton("Brand", this);
+    // button2->setFixedHeight(21);
+    button2->setCheckable(true);
+    
+    QPushButton *button3 = new QPushButton("Network", this);
+    // button3->setFixedHeight(21);
+    button3->setCheckable(true);
+    
+    QPushButton *button4 = new QPushButton("Core", this);
+    // button4->setFixedHeight(21);
+    button4->setCheckable(true);
 
     QButtonGroup *group = new QButtonGroup(this);
     group->addButton(button1, 0);
@@ -163,8 +174,8 @@ void dtkDistributorInsetBody::setCurrentIndex(int index)
 
         dtkDistributorInsetPixmap *item1 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-free.png"));
         dtkDistributorInsetPixmap *item2 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-jobexclusive.png"));
-        dtkDistributorInsetPixmap *item3 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-down.png"));
-        dtkDistributorInsetPixmap *item4 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-offline.png"));
+        dtkDistributorInsetPixmap *item3 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-offline.png"));
+        dtkDistributorInsetPixmap *item4 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-down.png"));
 
         QPropertyAnimation *animation1 = new QPropertyAnimation(item1, "pos");
         animation1->setDuration(500);

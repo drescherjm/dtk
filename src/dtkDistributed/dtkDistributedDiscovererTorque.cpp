@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Mar 17 09:55:42 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar 28 01:38:39 2010 (+0100)
+ * Last-Updated: Mon Mar 29 10:47:57 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 105
+ *     Update #: 108
  */
 
 /* Commentary: 
@@ -31,12 +31,7 @@
 
 void dtkDistributedDiscovererTorque::discover(const QUrl& url)
 {
-    static bool discovered = false;
-
-    if(discovered)
-        return;
-
-    QProcess stat; stat.start("ssh", QStringList() << "nef.inria.fr" << "pbsnodes -x");
+    QProcess stat; stat.start("ssh", QStringList() << url.toString() << "pbsnodes -x");
 
     if (!stat.waitForStarted()) {
         dtkCritical() << "Unable to launch ssh command";
@@ -155,8 +150,6 @@ void dtkDistributedDiscovererTorque::discover(const QUrl& url)
             *node << cpu;
         }
 
-        d->nodes << node;
+        d->nodes.prepend(node);
     }
-
-    discovered = true;
 }

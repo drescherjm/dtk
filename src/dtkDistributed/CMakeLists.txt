@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Sat Mar 27 13:16:21 2010 (+0100)
+## Last-Updated: Wed Mar 31 18:27:47 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 48
+##     Update #: 52
 ######################################################################
 ## 
 ### Commentary: 
@@ -35,6 +35,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedExport.h
   dtkDistributedNode.h
   dtkDistributor.h
+  dtkDistributorController.h
   dtkDistributorInset.h
   dtkDistributorScene.h
   dtkDistributorView.h
@@ -49,6 +50,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkDistributedGpu.h
   dtkDistributedNode.h
   dtkDistributor.h
+  dtkDistributorController.h
   dtkDistributorInset.h
   dtkDistributorScene.h
   dtkDistributorView.h
@@ -65,6 +67,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedGpu.cpp
   dtkDistributedNode.cpp
   dtkDistributor.cpp
+  dtkDistributorController.cpp
   dtkDistributorInset.cpp
   dtkDistributorScene.cpp
   dtkDistributorView.cpp

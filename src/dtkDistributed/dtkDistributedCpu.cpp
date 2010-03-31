@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 16:18:36 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 22 10:11:58 2010 (+0100)
+ * Last-Updated: Wed Mar 31 20:00:43 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 14
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@ public:
 
     dtkDistributedCpu::Architecture architecture;
     dtkDistributedCpu::Model model;
+    dtkDistributedCpu::Cardinality cardinality;
 
     QList<dtkDistributedCore *> cores;
 };
@@ -60,6 +61,16 @@ dtkDistributedCpu::Model dtkDistributedCpu::model(void)
 void dtkDistributedCpu::setModel(Model model)
 {
     d->model = model;
+}
+
+dtkDistributedCpu::Cardinality dtkDistributedCpu::cardinality(void)
+{
+    return d->cardinality;
+}
+
+void dtkDistributedCpu::setCardinality(Cardinality cardinality)
+{
+    d->cardinality = cardinality;
 }
 
 QList<dtkDistributedCore *> dtkDistributedCpu::cores(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 18:29:30 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 29 09:44:48 2010 (+0200)
+ * Last-Updated: Wed Mar 31 18:52:53 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 47
+ *     Update #: 52
  */
 
 /* Commentary: 
@@ -115,6 +115,8 @@ class dtkDistributorNode : public QObject, public QGraphicsItemGroup
 public:
      dtkDistributorNode(dtkDistributedNode *node, QGraphicsItem *parent = 0);
     ~dtkDistributorNode(void);
+
+    bool filter(void);
 
 protected:
     void layout(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Mar 17 09:55:42 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 29 10:47:57 2010 (+0200)
+ * Last-Updated: Wed Mar 31 21:20:37 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 108
+ *     Update #: 120
  */
 
 /* Commentary: 
@@ -107,12 +107,15 @@ void dtkDistributedDiscovererTorque::discover(const QUrl& url)
 
             int nc = 0;
             
-            if(properties.contains("singlecore"))
-                nc = 1;
-            else if(properties.contains("dualcore"))
-                nc = 2;
-            else if(properties.contains("quadcore"))
-                nc = 4;
+            if(properties.contains("singlecore")) {
+                nc = 1; gpu->setCardinality(dtkDistributedGpu::Single);
+            } else if(properties.contains("dualcore")) {
+                nc = 2; gpu->setCardinality(dtkDistributedGpu::Dual);
+            } else if(properties.contains("quadcore")) {
+                nc = 4; gpu->setCardinality(dtkDistributedGpu::Quad);
+            } else if(properties.contains("octocore")) {
+                nc = 8; gpu->setCardinality(dtkDistributedGpu::Octo);
+            }
             
             for(int i = 0; i < nc; i++)
                 *gpu << new dtkDistributedCore(gpu);
@@ -137,12 +140,15 @@ void dtkDistributedDiscovererTorque::discover(const QUrl& url)
 
             int nc = 0;
             
-            if(properties.contains("singlecore"))
-                nc = 1;
-            else if(properties.contains("dualcore"))
-                nc = 2;
-            else if(properties.contains("quadcore"))
-                nc = 4;
+            if(properties.contains("singlecore")) {
+                nc = 1; cpu->setCardinality(dtkDistributedCpu::Single);
+            } else if(properties.contains("dualcore")) {
+                nc = 2; cpu->setCardinality(dtkDistributedCpu::Dual);
+            } else if(properties.contains("quadcore")) {
+                nc = 4; cpu->setCardinality(dtkDistributedCpu::Quad);
+            } else if(properties.contains("octocore")) {
+                nc = 8; cpu->setCardinality(dtkDistributedCpu::Octo);
+            }
             
             for(int i = 0; i < nc; i++)
                 *cpu << new dtkDistributedCore(cpu);

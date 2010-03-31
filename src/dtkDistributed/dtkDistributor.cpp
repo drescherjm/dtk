@@ -5,9 +5,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 19:02:42 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 29 11:19:26 2010 (+0200)
+ * Last-Updated: Wed Mar 31 18:52:31 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 299
+ *     Update #: 308
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 #include "dtkDistributedDiscovererOar.h"
 #include "dtkDistributedDiscovererTorque.h"
 #include "dtkDistributor.h"
+#include "dtkDistributorController.h"
 #include "dtkDistributorInset.h"
 #include "dtkDistributorScene.h"
 #include "dtkDistributorView.h"
@@ -136,6 +137,10 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QWidget(parent), d(new dtkDist
     // Events
 
     connect(d->handle, SIGNAL(clicked()), this, SLOT(toggle()));
+
+    // Control
+
+    connect(dtkDistributorController::instance(), SIGNAL(updated()), this, SLOT(update()));
 }
 
 dtkDistributor::~dtkDistributor(void)
@@ -193,8 +198,10 @@ void dtkDistributor::update(void)
 
     foreach(QGraphicsItem *item, d->scene->items())
         if(dtkDistributorNode *node = dynamic_cast<dtkDistributorNode *>(item))
-            if(node->isVisible())
+            if(node->filter())
                 nodes << node;
+            else
+                node->hide();
 
     qreal ox = d->scene->sceneRect().topLeft().x() + 128/2 + 150 + 10;
     qreal oy = d->scene->sceneRect().topLeft().y() + 128/2 + 10;
@@ -206,6 +213,7 @@ void dtkDistributor::update(void)
     foreach(dtkDistributorNode *node, nodes) {
 
         node->setPos(x, y);
+        node->show();
 
         if(x + dx > d->scene->sceneRect().width()/2 - 128/2) {
             y += dy;

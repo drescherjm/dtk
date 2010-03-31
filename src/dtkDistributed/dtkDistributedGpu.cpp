@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 16:23:42 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 22 10:12:34 2010 (+0100)
+ * Last-Updated: Wed Mar 31 20:05:14 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 8
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@ public:
 
     dtkDistributedGpu::Architecture architecture;
     dtkDistributedGpu::Model model;
+    dtkDistributedGpu::Cardinality cardinality;
 
     QList<dtkDistributedCore *> cores;
 };
@@ -60,6 +61,16 @@ dtkDistributedGpu::Model dtkDistributedGpu::model(void)
 void dtkDistributedGpu::setModel(Model model)
 {
     d->model = model;
+}
+
+dtkDistributedGpu::Cardinality dtkDistributedGpu::cardinality(void)
+{
+    return d->cardinality;
+}
+
+void dtkDistributedGpu::setCardinality(Cardinality cardinality)
+{
+    d->cardinality = cardinality;
 }
 
 QList<dtkDistributedCore *> dtkDistributedGpu::cores(void)

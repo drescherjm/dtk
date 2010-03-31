@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar 25 13:12:35 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 31 14:41:24 2010 (+0200)
+ * Last-Updated: Wed Mar 31 20:58:32 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 506
+ *     Update #: 624
  */
 
 /* Commentary: 
@@ -17,6 +17,9 @@
  * 
  */
 
+#include "dtkDistributedCpu.h"
+#include "dtkDistributedNode.h"
+#include "dtkDistributorController.h"
 #include "dtkDistributorInset.h"
 
 #include <dtkCore/dtkGlobal.h>
@@ -224,14 +227,63 @@ dtkDistributorInsetView::~dtkDistributorInsetView(void)
 // dtkDistributorInsetPixmap
 // /////////////////////////////////////////////////////////////////
 
-dtkDistributorInsetPixmap::dtkDistributorInsetPixmap(const QPixmap& pixmap, QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(pixmap, parent)
+class dtkDistributorInsetPixmapPrivate
 {
+public:
+    int index;
+    int flag;
+};
 
+dtkDistributorInsetPixmap::dtkDistributorInsetPixmap(const QPixmap& pixmap, QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(pixmap, parent), d(new dtkDistributorInsetPixmapPrivate)
+{
+    d->index = -1;
+    d->flag = -1;
 }
 
 dtkDistributorInsetPixmap::~dtkDistributorInsetPixmap(void)
 {
+    delete d;
 
+    d = NULL;
+}
+
+void dtkDistributorInsetPixmap::setIndex(int index)
+{
+    d->index = index;
+}
+
+void dtkDistributorInsetPixmap::setFlag(int flag)
+{
+    d->flag = flag;
+
+    if(d->index == 0 && dtkDistributorController::instance()->states().testFlag((dtkDistributedNode::State)d->flag))
+        this->setGraphicsEffect(new QGraphicsBlurEffect(this));
+
+    if(d->index == 1 && dtkDistributorController::instance()->brands().testFlag((dtkDistributedNode::Brand)d->flag))
+        this->setGraphicsEffect(new QGraphicsBlurEffect(this));
+
+    if(d->index == 2 && dtkDistributorController::instance()->networks().testFlag((dtkDistributedNode::Network)d->flag))
+        this->setGraphicsEffect(new QGraphicsBlurEffect(this));
+
+    if(d->index == 3 && dtkDistributorController::instance()->cardinalities().testFlag((dtkDistributedCpu::Cardinality)d->flag))
+        this->setGraphicsEffect(new QGraphicsBlurEffect(this));
+
+    if(d->index == 4 && dtkDistributorController::instance()->architectures().testFlag((dtkDistributedCpu::Architecture)d->flag))
+        this->setGraphicsEffect(new QGraphicsBlurEffect(this));
+
+    if(d->index == 5 && dtkDistributorController::instance()->models().testFlag((dtkDistributedCpu::Model)d->flag))
+        this->setGraphicsEffect(new QGraphicsBlurEffect(this));
+}
+
+void dtkDistributorInsetPixmap::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    if(!this->graphicsEffect()) {
+        this->setGraphicsEffect(new QGraphicsBlurEffect(this));
+        emit toggled(d->index, d->flag, true);
+    } else {
+        this->setGraphicsEffect(0);
+        emit toggled(d->index, d->flag, false);
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -393,14 +445,38 @@ void dtkDistributorInsetBody::scrollRight(void)
 
 void dtkDistributorInsetBody::setCurrentIndex(int index)
 {
+    static int current_index = -1;
+    
+    if(index == current_index)
+        return;
+
     this->clear();
 
     if(index == 0) {
 
         dtkDistributorInsetPixmap *item1 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-free.png"));
+        item1->setIndex(0);
+        item1->setFlag(dtkDistributedNode::Free);
+
+        connect(item1, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+
         dtkDistributorInsetPixmap *item2 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-jobexclusive.png"));
+        item2->setIndex(0);
+        item2->setFlag(dtkDistributedNode::JobExclusive);
+
+        connect(item2, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+
         dtkDistributorInsetPixmap *item3 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-offline.png"));
+        item3->setIndex(0);
+        item3->setFlag(dtkDistributedNode::Offline);
+
+        connect(item3, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+
         dtkDistributorInsetPixmap *item4 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-down.png"));
+        item4->setIndex(0);
+        item4->setFlag(dtkDistributedNode::Down);
+
+        connect(item4, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
 
         QPropertyAnimation *animation1 = new QPropertyAnimation(item1, "pos");
         animation1->setDuration(500);
@@ -447,8 +523,24 @@ void dtkDistributorInsetBody::setCurrentIndex(int index)
     if(index == 1) {
 
         dtkDistributorInsetPixmap *item1 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-dell.png"));
+        item1->setIndex(1);
+        item1->setFlag(dtkDistributedNode::Dell);
+
+        connect(item1, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+
         dtkDistributorInsetPixmap *item2 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-ibm.png"));
+
+        item2->setIndex(1);
+        item2->setFlag(dtkDistributedNode::Ibm);
+
+        connect(item2, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+
         dtkDistributorInsetPixmap *item3 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-hp.png"));
+
+        item3->setIndex(1);
+        item3->setFlag(dtkDistributedNode::Hp);
+
+        connect(item3, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
 
         QPropertyAnimation *animation1 = new QPropertyAnimation(item1, "pos");
         animation1->setDuration(500);
@@ -487,12 +579,53 @@ void dtkDistributorInsetBody::setCurrentIndex(int index)
     if(index == 2) {
 
         dtkDistributorInsetPixmap *item1 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-e1g.png"));
+
+        item1->setIndex(2);
+        item1->setFlag(dtkDistributedNode::Ethernet1G);
+
+        connect(item1, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+
         dtkDistributorInsetPixmap *item2 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-e10g.png"));
+
+        item2->setIndex(2);
+        item2->setFlag(dtkDistributedNode::Ethernet10G);
+
+        connect(item2, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+
         dtkDistributorInsetPixmap *item3 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-m2g.png"));
+
+        item3->setIndex(2);
+        item3->setFlag(dtkDistributedNode::Myrinet2G);
+
+        connect(item3, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+
         dtkDistributorInsetPixmap *item4 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-m10g.png"));
+
+        item4->setIndex(2);
+        item4->setFlag(dtkDistributedNode::Myrinet10G);
+
+        connect(item4, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+
         dtkDistributorInsetPixmap *item5 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-i10g.png"));
+
+        item5->setIndex(2);
+        item5->setFlag(dtkDistributedNode::Infiniband10G);
+
+        connect(item5, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+
         dtkDistributorInsetPixmap *item6 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-i20g.png"));
+
+        item6->setIndex(2);
+        item6->setFlag(dtkDistributedNode::Infiniband20G);
+
+        connect(item6, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+
         dtkDistributorInsetPixmap *item7 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-i40g.png"));
+
+        item7->setIndex(2);
+        item7->setFlag(dtkDistributedNode::Infiniband40G);
+
+        connect(item7, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
 
         QPropertyAnimation *animation1 = new QPropertyAnimation(item1, "pos");
         animation1->setDuration(500);
@@ -563,9 +696,32 @@ void dtkDistributorInsetBody::setCurrentIndex(int index)
     if(index == 3) {
 
         dtkDistributorInsetPixmap *item1 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-core-1.png"));
+
+        item1->setIndex(3);
+        item1->setFlag(dtkDistributedCpu::Single);
+
+        connect(item1, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+
         dtkDistributorInsetPixmap *item2 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-core-2.png"));
+
+        item2->setIndex(3);
+        item2->setFlag(dtkDistributedCpu::Dual);
+
+        connect(item2, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+
         dtkDistributorInsetPixmap *item3 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-core-4.png"));
+
+        item3->setIndex(3);
+        item3->setFlag(dtkDistributedCpu::Quad);
+
+        connect(item3, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+
         dtkDistributorInsetPixmap *item4 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-core-8.png"));
+
+        item4->setIndex(3);
+        item4->setFlag(dtkDistributedCpu::Octo);
+
+        connect(item4, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
 
         QPropertyAnimation *animation1 = new QPropertyAnimation(item1, "pos");
         animation1->setDuration(500);
@@ -612,7 +768,18 @@ void dtkDistributorInsetBody::setCurrentIndex(int index)
     if(index == 4) {
 
         dtkDistributorInsetPixmap *item1 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-x86.png"));
+
+        item1->setIndex(4);
+        item1->setFlag(dtkDistributedCpu::x86);
+
+        connect(item1, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+        
         dtkDistributorInsetPixmap *item2 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-x86_64.png"));
+
+        item2->setIndex(4);
+        item2->setFlag(dtkDistributedCpu::x86_64);
+
+        connect(item2, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
 
         QPropertyAnimation *animation1 = new QPropertyAnimation(item1, "pos");
         animation1->setDuration(500);
@@ -643,7 +810,18 @@ void dtkDistributorInsetBody::setCurrentIndex(int index)
     if(index == 5) {
 
         dtkDistributorInsetPixmap *item1 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-xeon.png"));
+
+        item1->setIndex(5);
+        item1->setFlag(dtkDistributedCpu::Xeon);
+
+        connect(item1, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+
         dtkDistributorInsetPixmap *item2 = new dtkDistributorInsetPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-opteron.png"));
+
+        item2->setIndex(5);
+        item2->setFlag(dtkDistributedCpu::Opteron);
+
+        connect(item2, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
 
         QPropertyAnimation *animation1 = new QPropertyAnimation(item1, "pos");
         animation1->setDuration(500);
@@ -692,6 +870,8 @@ void dtkDistributorInsetBody::setCurrentIndex(int index)
 
         group->start(QAbstractAnimation::DeleteWhenStopped);
     }
+
+    current_index = index;
 }
 
 void dtkDistributorInsetBody::resizeEvent(QResizeEvent *event)

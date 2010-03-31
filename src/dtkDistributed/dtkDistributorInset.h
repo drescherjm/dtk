@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar 25 13:10:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 31 14:39:20 2010 (+0200)
+ * Last-Updated: Wed Mar 31 19:11:05 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 45
+ *     Update #: 77
  */
 
 /* Commentary: 
@@ -26,6 +26,8 @@
 // dtkDistributorInsetPixmap
 // /////////////////////////////////////////////////////////////////
 
+class dtkDistributorInsetPixmapPrivate;
+
 class dtkDistributorInsetPixmap : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
@@ -35,6 +37,18 @@ class dtkDistributorInsetPixmap : public QObject, public QGraphicsPixmapItem
 public:
      dtkDistributorInsetPixmap(const QPixmap& pixmap, QGraphicsItem *parent = 0);
     ~dtkDistributorInsetPixmap(void);
+
+    void setIndex(int index);
+    void setFlag(int flag);
+
+signals:
+    void toggled(int index, int flag, bool checked);
+
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
+private:
+    dtkDistributorInsetPixmapPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////

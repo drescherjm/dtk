@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 18:30:50 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 29 09:52:09 2010 (+0200)
+ * Last-Updated: Wed Mar 31 21:17:31 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 189
+ *     Update #: 238
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include "dtkDistributedNode.h"
+#include "dtkDistributorController.h"
 #include "dtkDistributorScene.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -184,6 +185,32 @@ dtkDistributorNode::~dtkDistributorNode(void)
     delete d;
 
     d = NULL;
+}
+
+bool dtkDistributorNode::filter(void)
+{
+    if(dtkDistributorController::instance()->states().testFlag(d->node->state()))
+        return false;
+
+    if(dtkDistributorController::instance()->brands().testFlag(d->node->brand()))
+        return false;
+
+    if(dtkDistributorController::instance()->networks().testFlag(d->node->network()))
+        return false;
+
+    foreach(dtkDistributedCpu *cpu, d->node->cpus())
+        if(dtkDistributorController::instance()->architectures().testFlag(cpu->architecture()))
+            return false;
+    
+    foreach(dtkDistributedCpu *cpu, d->node->cpus())
+        if(dtkDistributorController::instance()->models().testFlag(cpu->model()))
+            return false;
+    
+    foreach(dtkDistributedCpu *cpu, d->node->cpus())
+        if(dtkDistributorController::instance()->cardinalities().testFlag(cpu->cardinality()))
+            return false;
+    
+    return true;
 }
 
 void dtkDistributorNode::layout(void)

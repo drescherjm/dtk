@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 13:22:24 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 22 10:52:44 2010 (+0100)
+ * Last-Updated: Wed Mar 31 19:03:53 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 30
+ *     Update #: 34
  */
 
 /* Commentary: 
@@ -37,26 +37,26 @@ public:
     ~dtkDistributedNode(void);
 
     enum Network {
-        Ethernet1G,
-        Ethernet10G,
-        Myrinet2G,
-        Myrinet10G,
-        Infiniband10G,
-        Infiniband20G,
-        Infiniband40G
+           Ethernet1G = 0x1,
+          Ethernet10G = 0x2,
+            Myrinet2G = 0x4,
+           Myrinet10G = 0x8,
+        Infiniband10G = 0x16,
+        Infiniband20G = 0x32,
+        Infiniband40G = 0x64
     };
 
     enum State {
-        Free,
-        JobExclusive,
-        Down,
-        Offline
+                Free = 0x1,
+        JobExclusive = 0x2,
+             Offline = 0x4,
+                Down = 0x8
     };
 
     enum Brand {
-        Hp,
-        Ibm,
-        Dell
+          Hp = 0x1,
+         Ibm = 0x2,
+        Dell = 0x4
     };
 
     QList<Network> networks(void);
@@ -68,6 +68,7 @@ public:
     Network network(void);
     State state(void);
     Brand brand(void);
+
     void setName(const QString& name);
     void setNetwork(Network network);
     void setState(State state);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar 25 13:10:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 31 14:04:35 2010 (+0200)
+ * Last-Updated: Wed Mar 31 14:39:20 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 44
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -63,6 +63,7 @@ public:
     void setCount(int count);
     void setType(Type type);
 
+    void reset(void);
     void incr(void);
     void decr(void);
 

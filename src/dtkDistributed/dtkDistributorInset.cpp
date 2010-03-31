@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar 25 13:12:35 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 31 14:06:25 2010 (+0200)
+ * Last-Updated: Wed Mar 31 14:41:24 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 502
+ *     Update #: 506
  */
 
 /* Commentary: 
@@ -130,6 +130,11 @@ void dtkDistributorInsetScroller::setType(Type type)
 void dtkDistributorInsetScroller::setCount(int count)
 {
     d->count = count;
+}
+
+void dtkDistributorInsetScroller::reset(void)
+{
+    d->current = 1;
 }
 
 void dtkDistributorInsetScroller::incr(void)
@@ -289,6 +294,8 @@ void dtkDistributorInsetBody::clear(void)
     }
 
     d->items.clear();
+
+    d->scroller->reset();
 }
 
 void dtkDistributorInsetBody::update(void)

@@ -5,9 +5,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 19:02:42 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 31 18:52:31 2010 (+0200)
+ * Last-Updated: Wed Mar 31 21:50:53 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 308
+ *     Update #: 316
  */
 
 /* Commentary: 
@@ -106,6 +106,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QWidget(parent), d(new dtkDist
     d->s1->assignProperty(d->disconnectButton, "opacity", 0.0);
     d->s1->assignProperty(d->scene, "connected", false);
     d->s1->assignProperty(d->connectCombo, "opacity", 1.0);
+    d->s1->assignProperty(d->inset, "maximumHeight", 0);
 
     d->s2 = new QState;
     d->s2->assignProperty(d->handle, "opacity", 1.0);
@@ -114,6 +115,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QWidget(parent), d(new dtkDist
     d->s2->assignProperty(d->disconnectButton, "opacity", 1.0);
     d->s2->assignProperty(d->scene, "connected", true);
     d->s2->assignProperty(d->connectCombo, "opacity", 0.0);
+    d->s2->assignProperty(d->inset, "maximumHeight", 0);
 
     connect(d->s1, SIGNAL(entered()), this, SLOT(clear()));
     connect(d->s2, SIGNAL(entered()), this, SLOT(discover()));
@@ -127,6 +129,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QWidget(parent), d(new dtkDist
     s2s1->addAnimation(new QPropertyAnimation(d->connectLabel, "position"));
     s2s1->addAnimation(new QPropertyAnimation(d->connectButton, "opacity"));
     s2s1->addAnimation(new QPropertyAnimation(d->disconnectButton, "opacity"));
+    s2s1->addAnimation(new QPropertyAnimation(d->inset, "maximumHeight"));
 
     d->machine = new QStateMachine(this);
     d->machine->addState(d->s1);
@@ -242,13 +245,11 @@ void dtkDistributor::update(void)
 
 void dtkDistributor::toggle(void)
 {
-    static bool toggled = false;
-
     QPropertyAnimation *animation = new QPropertyAnimation(d->inset, "maximumHeight");
     animation->setDuration(1000);
     animation->setEasingCurve(QEasingCurve::OutBounce);
 
-    if(!toggled) {
+    if(!d->inset->height()) {
         animation->setStartValue(d->inset->height());
         animation->setEndValue(100);
     } else {
@@ -259,8 +260,6 @@ void dtkDistributor::toggle(void)
     animation->start();
 
     connect(animation, SIGNAL(finished()), animation, SLOT(deleteLater()));
-
-    toggled = !toggled;
 }
 
 void dtkDistributor::resizeEvent(QResizeEvent *event)

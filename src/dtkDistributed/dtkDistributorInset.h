@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar 25 13:10:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 29 14:45:23 2010 (+0200)
+ * Last-Updated: Wed Mar 31 14:04:35 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 35
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -58,7 +58,13 @@ public:
         Right
     };
 
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
+    void setCount(int count);
     void setType(Type type);
+
+    void incr(void);
+    void decr(void);
 
 signals:
     void scrollLeft(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar 25 13:12:35 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 29 15:18:46 2010 (+0200)
+ * Last-Updated: Wed Mar 31 14:06:25 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 424
+ *     Update #: 502
  */
 
 /* Commentary: 
@@ -87,11 +87,17 @@ class dtkDistributorInsetScrollerPrivate
 {
 public:
     dtkDistributorInsetScroller::Type type;
+
+    int current;
+    int count;
 };
 
 dtkDistributorInsetScroller::dtkDistributorInsetScroller(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent), d(new dtkDistributorInsetScrollerPrivate)
 {
     this->setType(None);
+
+    d->current = 1;
+    d->count = 1;
 }
 
 dtkDistributorInsetScroller::~dtkDistributorInsetScroller(void)
@@ -119,6 +125,32 @@ void dtkDistributorInsetScroller::setType(Type type)
     };
 
     d->type = type;
+}
+
+void dtkDistributorInsetScroller::setCount(int count)
+{
+    d->count = count;
+}
+
+void dtkDistributorInsetScroller::incr(void)
+{
+    d->current++;
+}
+
+void dtkDistributorInsetScroller::decr(void)
+{
+    d->current--;
+}
+
+void dtkDistributorInsetScroller::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    QGraphicsPixmapItem::paint(painter, option, widget);
+
+    painter->save();
+    painter->setPen(Qt::darkGray);
+    painter->setFont(QFont("Helvetica", 9));
+    painter->drawText(this->boundingRect(), Qt::AlignCenter, QString("Page %1 of %2").arg(d->current).arg(d->count));
+    painter->restore();
 }
 
 void dtkDistributorInsetScroller::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -212,6 +244,8 @@ public:
     qreal item_height;
     qreal item_margins;
 
+    qreal offset;
+
     QList<dtkDistributorInsetPixmap *> items;
 };
 
@@ -261,16 +295,22 @@ void dtkDistributorInsetBody::update(void)
 {
     // Set up item opacity
 
+    QRectF rect(
+        d->scene->sceneRect().x(),
+        d->scene->sceneRect().y(),
+        d->scene->sceneRect().width() - d->scroller->sceneBoundingRect().width(),
+        d->scene->sceneRect().height());
+
     foreach(dtkDistributorInsetPixmap *item, d->items) {
-        if (item->sceneBoundingRect().right() > d->scroller->sceneBoundingRect().left())
-            item->setOpacity(0);
-        else
+        if (rect.contains(item->sceneBoundingRect().topRight()))
             item->setOpacity(1);
+        else
+            item->setOpacity(0);
     }
 
     // Set up scroller type
 
-    if (d->items.count() && d->items.first()->pos().x() < 0 && d->items.last()->opacity() == 0)
+    if (d->items.count() && d->items.first()->pos().x()  < 0 && d->items.last()->opacity() == 0)
         d->scroller->setType(dtkDistributorInsetScroller::Both);
 
     if (d->items.count() && d->items.first()->pos().x() >= 0 && d->items.last()->opacity() == 1)
@@ -279,8 +319,11 @@ void dtkDistributorInsetBody::update(void)
     if (d->items.count() && d->items.first()->pos().x() >= 0 && d->items.last()->opacity() == 0)
         d->scroller->setType(dtkDistributorInsetScroller::Right);
 
-    if (d->items.count() && d->items.first()->pos().x() < 0 && d->items.last()->opacity() == 1)
+    if (d->items.count() && d->items.first()->pos().x()  < 0 && d->items.last()->opacity() == 1)
         d->scroller->setType(dtkDistributorInsetScroller::Left);
+
+    if (rect.width())
+        d->scroller->setCount(((d->items.count() * (int)(d->item_width + d->item_margins)) / (int)rect.width()) + 1);
 
     // Parent method
 
@@ -290,21 +333,24 @@ void dtkDistributorInsetBody::update(void)
 void dtkDistributorInsetBody::scrollLeft(void)
 {
     QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
-        
+
     foreach(QGraphicsItem *item, d->scene->items()) {
+
         if(dtkDistributorInsetPixmap *pixmap = dynamic_cast<dtkDistributorInsetPixmap *>(item)) {
 
-                pixmap->setOpacity(1.0);
+            pixmap->setOpacity(1);
 
-                QPropertyAnimation *animation = new QPropertyAnimation(pixmap, "pos");
-                animation->setDuration(500);
-                animation->setEasingCurve(QEasingCurve::OutQuad);
-                animation->setStartValue(pixmap->pos());
-                animation->setEndValue(pixmap->pos() + QPoint(this->width() - d->scroller->boundingRect().width(), 0));
-
-                group->addAnimation(animation);
+            QPropertyAnimation *animation = new QPropertyAnimation(pixmap, "pos");
+            animation->setDuration(500);
+            animation->setEasingCurve(QEasingCurve::OutQuad);
+            animation->setStartValue(pixmap->pos());
+            animation->setEndValue(pixmap->pos() + QPoint(d->offset, 0));
+            
+            group->addAnimation(animation);
         }
     }
+
+    d->scroller->decr();
 
     connect(group, SIGNAL(finished()), this, SLOT(update()));
 
@@ -316,17 +362,22 @@ void dtkDistributorInsetBody::scrollRight(void)
     QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
         
     foreach(QGraphicsItem *item, d->scene->items()) {
+
         if(dtkDistributorInsetPixmap *pixmap = dynamic_cast<dtkDistributorInsetPixmap *>(item)) {
 
-                QPropertyAnimation *animation = new QPropertyAnimation(pixmap, "pos");
-                animation->setDuration(500);
-                animation->setEasingCurve(QEasingCurve::OutQuad);
-                animation->setStartValue(pixmap->pos());
-                animation->setEndValue(pixmap->pos() - QPoint(this->width() - d->scroller->boundingRect().width(), 0));
+            pixmap->setOpacity(1);
 
-                group->addAnimation(animation);
+            QPropertyAnimation *animation = new QPropertyAnimation(pixmap, "pos");
+            animation->setDuration(500);
+            animation->setEasingCurve(QEasingCurve::OutQuad);
+            animation->setStartValue(pixmap->pos());
+            animation->setEndValue(pixmap->pos() - QPoint(d->offset, 0));
+            
+            group->addAnimation(animation);
         }
     }
+
+    d->scroller->incr();
 
     connect(group, SIGNAL(finished()), this, SLOT(update()));
 
@@ -348,25 +399,25 @@ void dtkDistributorInsetBody::setCurrentIndex(int index)
         animation1->setDuration(500);
         animation1->setEasingCurve(QEasingCurve::OutQuad);
         animation1->setStartValue(QPointF(-100, 0));
-        animation1->setEndValue(QPointF(0 * (10 + 76), 0));
+        animation1->setEndValue(QPointF(0 * (d->item_margins + d->item_width), 0));
 
         QPropertyAnimation *animation2 = new QPropertyAnimation(item2, "pos");
         animation2->setDuration(500);
         animation2->setEasingCurve(QEasingCurve::OutQuad);
         animation2->setStartValue(QPointF(-100, 0));
-        animation2->setEndValue(QPointF(1 * (10 + 76), 0));
+        animation2->setEndValue(QPointF(1 * (d->item_margins + d->item_width), 0));
 
         QPropertyAnimation *animation3 = new QPropertyAnimation(item3, "pos");
         animation3->setDuration(500);
         animation3->setEasingCurve(QEasingCurve::OutQuad);
         animation3->setStartValue(QPointF(-100, 0));
-        animation3->setEndValue(QPointF(2 * (10 + 76), 0));
+        animation3->setEndValue(QPointF(2 * (d->item_margins + d->item_width), 0));
 
         QPropertyAnimation *animation4 = new QPropertyAnimation(item4, "pos");
         animation4->setDuration(500);
         animation4->setEasingCurve(QEasingCurve::OutQuad);
         animation4->setStartValue(QPointF(-100, 0));
-        animation4->setEndValue(QPointF(3 * (10 + 76), 0));
+        animation4->setEndValue(QPointF(3 * (d->item_margins + d->item_width), 0));
 
         QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
         group->addAnimation(animation1);
@@ -396,19 +447,19 @@ void dtkDistributorInsetBody::setCurrentIndex(int index)
         animation1->setDuration(500);
         animation1->setEasingCurve(QEasingCurve::OutQuad);
         animation1->setStartValue(QPointF(-100, 0));
-        animation1->setEndValue(QPointF(0 * (10 + 76), 0));
+        animation1->setEndValue(QPointF(0 * (d->item_margins + d->item_width), 0));
 
         QPropertyAnimation *animation2 = new QPropertyAnimation(item2, "pos");
         animation2->setDuration(500);
         animation2->setEasingCurve(QEasingCurve::OutQuad);
         animation2->setStartValue(QPointF(-100, 0));
-        animation2->setEndValue(QPointF(1 * (10 + 76), 0));
+        animation2->setEndValue(QPointF(1 * (d->item_margins + d->item_width), 0));
 
         QPropertyAnimation *animation3 = new QPropertyAnimation(item3, "pos");
         animation3->setDuration(500);
         animation3->setEasingCurve(QEasingCurve::OutQuad);
         animation3->setStartValue(QPointF(-100, 0));
-        animation3->setEndValue(QPointF(2 * (10 + 76), 0));
+        animation3->setEndValue(QPointF(2 * (d->item_margins + d->item_width), 0));
 
         QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
         group->addAnimation(animation1);
@@ -440,43 +491,43 @@ void dtkDistributorInsetBody::setCurrentIndex(int index)
         animation1->setDuration(500);
         animation1->setEasingCurve(QEasingCurve::OutQuad);
         animation1->setStartValue(QPointF(-100, 0));
-        animation1->setEndValue(QPointF(0 * (10 + 76), 0));
+        animation1->setEndValue(QPointF(0 * (d->item_margins + d->item_width), 0));
 
         QPropertyAnimation *animation2 = new QPropertyAnimation(item2, "pos");
         animation2->setDuration(500);
         animation2->setEasingCurve(QEasingCurve::OutQuad);
         animation2->setStartValue(QPointF(-100, 0));
-        animation2->setEndValue(QPointF(1 * (10 + 76), 0));
+        animation2->setEndValue(QPointF(1 * (d->item_margins + d->item_width), 0));
 
         QPropertyAnimation *animation3 = new QPropertyAnimation(item3, "pos");
         animation3->setDuration(500);
         animation3->setEasingCurve(QEasingCurve::OutQuad);
         animation3->setStartValue(QPointF(-100, 0));
-        animation3->setEndValue(QPointF(2 * (10 + 76), 0));
+        animation3->setEndValue(QPointF(2 * (d->item_margins + d->item_width), 0));
 
         QPropertyAnimation *animation4 = new QPropertyAnimation(item4, "pos");
         animation4->setDuration(500);
         animation4->setEasingCurve(QEasingCurve::OutQuad);
         animation4->setStartValue(QPointF(-100, 0));
-        animation4->setEndValue(QPointF(3 * (10 + 76), 0));
+        animation4->setEndValue(QPointF(3 * (d->item_margins + d->item_width), 0));
 
         QPropertyAnimation *animation5 = new QPropertyAnimation(item5, "pos");
         animation5->setDuration(500);
         animation5->setEasingCurve(QEasingCurve::OutQuad);
         animation5->setStartValue(QPointF(-100, 0));
-        animation5->setEndValue(QPointF(4 * (10 + 76), 0));
+        animation5->setEndValue(QPointF(4 * (d->item_margins + d->item_width), 0));
 
         QPropertyAnimation *animation6 = new QPropertyAnimation(item6, "pos");
         animation6->setDuration(500);
         animation6->setEasingCurve(QEasingCurve::OutQuad);
         animation6->setStartValue(QPointF(-100, 0));
-        animation6->setEndValue(QPointF(5 * (10 + 76), 0));
+        animation6->setEndValue(QPointF(5 * (d->item_margins + d->item_width), 0));
 
         QPropertyAnimation *animation7 = new QPropertyAnimation(item7, "pos");
         animation7->setDuration(500);
         animation7->setEasingCurve(QEasingCurve::OutQuad);
         animation7->setStartValue(QPointF(-100, 0));
-        animation7->setEndValue(QPointF(6 * (10 + 76), 0));
+        animation7->setEndValue(QPointF(6 * (d->item_margins + d->item_width), 0));
 
         QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
         group->addAnimation(animation1);
@@ -513,25 +564,25 @@ void dtkDistributorInsetBody::setCurrentIndex(int index)
         animation1->setDuration(500);
         animation1->setEasingCurve(QEasingCurve::OutQuad);
         animation1->setStartValue(QPointF(-100, 0));
-        animation1->setEndValue(QPointF(0 * (10 + 76), 0));
+        animation1->setEndValue(QPointF(0 * (d->item_margins + d->item_width), 0));
 
         QPropertyAnimation *animation2 = new QPropertyAnimation(item2, "pos");
         animation2->setDuration(500);
         animation2->setEasingCurve(QEasingCurve::OutQuad);
         animation2->setStartValue(QPointF(-100, 0));
-        animation2->setEndValue(QPointF(1 * (10 + 76), 0));
+        animation2->setEndValue(QPointF(1 * (d->item_margins + d->item_width), 0));
 
         QPropertyAnimation *animation3 = new QPropertyAnimation(item3, "pos");
         animation3->setDuration(500);
         animation3->setEasingCurve(QEasingCurve::OutQuad);
         animation3->setStartValue(QPointF(-100, 0));
-        animation3->setEndValue(QPointF(2 * (10 + 76), 0));
+        animation3->setEndValue(QPointF(2 * (d->item_margins + d->item_width), 0));
 
         QPropertyAnimation *animation4 = new QPropertyAnimation(item4, "pos");
         animation4->setDuration(500);
         animation4->setEasingCurve(QEasingCurve::OutQuad);
         animation4->setStartValue(QPointF(-100, 0));
-        animation4->setEndValue(QPointF(3 * (10 + 76), 0));
+        animation4->setEndValue(QPointF(3 * (d->item_margins + d->item_width), 0));
 
         QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
         group->addAnimation(animation1);
@@ -560,13 +611,13 @@ void dtkDistributorInsetBody::setCurrentIndex(int index)
         animation1->setDuration(500);
         animation1->setEasingCurve(QEasingCurve::OutQuad);
         animation1->setStartValue(QPointF(-100, 0));
-        animation1->setEndValue(QPointF(0 * (10 + 76), 0));
+        animation1->setEndValue(QPointF(0 * (d->item_margins + d->item_width), 0));
 
         QPropertyAnimation *animation2 = new QPropertyAnimation(item2, "pos");
         animation2->setDuration(500);
         animation2->setEasingCurve(QEasingCurve::OutQuad);
         animation2->setStartValue(QPointF(-100, 0));
-        animation2->setEndValue(QPointF(1 * (10 + 76), 0));
+        animation2->setEndValue(QPointF(1 * (d->item_margins + d->item_width), 0));
 
         QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
         group->addAnimation(animation1);
@@ -591,13 +642,13 @@ void dtkDistributorInsetBody::setCurrentIndex(int index)
         animation1->setDuration(500);
         animation1->setEasingCurve(QEasingCurve::OutQuad);
         animation1->setStartValue(QPointF(-100, 0));
-        animation1->setEndValue(QPointF(0 * (10 + 76), 0));
+        animation1->setEndValue(QPointF(0 * (d->item_margins + d->item_width), 0));
 
         QPropertyAnimation *animation2 = new QPropertyAnimation(item2, "pos");
         animation2->setDuration(500);
         animation2->setEasingCurve(QEasingCurve::OutQuad);
         animation2->setStartValue(QPointF(-100, 0));
-        animation2->setEndValue(QPointF(1 * (10 + 76), 0));
+        animation2->setEndValue(QPointF(1 * (d->item_margins + d->item_width), 0));
 
         QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
         group->addAnimation(animation1);
@@ -621,7 +672,7 @@ void dtkDistributorInsetBody::setCurrentIndex(int index)
         animation1->setDuration(500);
         animation1->setEasingCurve(QEasingCurve::OutQuad);
         animation1->setStartValue(QPointF(-100, 0));
-        animation1->setEndValue(QPointF(0 * (10 + 76), 0));
+        animation1->setEndValue(QPointF(0 * (d->item_margins + d->item_width), 0));
 
         QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
         group->addAnimation(animation1);
@@ -640,7 +691,9 @@ void dtkDistributorInsetBody::resizeEvent(QResizeEvent *event)
 {
     d->scene->setSceneRect(0, 0, this->width(), this->height());
 
-    d->scroller->setPos(this->width()-d->scroller->boundingRect().width()-10, this->height()/2 - d->scroller->boundingRect().height()/2);
+    d->scroller->setPos(this->width()-d->scroller->boundingRect().width()-d->item_margins, this->height()/2 - d->scroller->boundingRect().height()/2);
+
+    d->offset = (int)(this->width() - d->scroller->boundingRect().width()) - (int)(this->width() - d->scroller->boundingRect().width()) % ((int)d->item_width + (int)d->item_margins);
 
     this->update();
 }

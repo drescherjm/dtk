@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 18:30:50 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr  1 11:19:58 2010 (+0200)
+ * Last-Updated: Thu Apr  1 12:12:58 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 320
+ *     Update #: 345
  */
 
 /* Commentary: 
@@ -237,8 +237,12 @@ void dtkDistributorNode::setOrientation(qreal orientation)
     d->orientation = orientation;
 
     if(orientation >= 90) {
+        d->pixmap->hide();
+        d->text->hide();
         d->panel->show();
     } else {
+        d->pixmap->show();
+        d->text->show();
         d->panel->hide();
     }
 
@@ -265,8 +269,8 @@ void dtkDistributorNode::layout(void)
     if(d->node->state() == dtkDistributedNode::Offline)
         d->pixmap->setPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-node-offline.png"));
 
+    d->pixmap->setAcceptHoverEvents(true);
     d->pixmap->setOffset(-d->pixmap->pixmap().width()/2, -d->pixmap->pixmap().height()/2);
-    d->pixmap->setAcceptsHoverEvents(true);
 
     if(!d->text)
         d->text = new QGraphicsTextItem(this);
@@ -304,20 +308,33 @@ void dtkDistributorNode::mousePressEvent(QGraphicsSceneMouseEvent *event)
         d->information->setPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-node-information-pressed.png"));
         d->information->setOffset(-10, -10);
     }
+
+    QRectF okRect = QRectF(-150 + 10, 200 - 30 - 40, 300 - 20, 50);
+
+    if (d->panel->isVisible() && okRect.contains(event->pos())) {
+        d->panel->setPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-node-information-panel-pressed.png"));
+    }
 }
 
 void dtkDistributorNode::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QRectF informationRect = QRectF(-5, -10, 16, 16);
 
-    if(d->information->isVisible() && informationRect.contains(event->pos())) {
+    if (d->information->isVisible() && informationRect.contains(event->pos())) {
         d->information->setPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-node-information.png"));
         d->information->setOffset(0, 0);
 
-        if(this->orientation())
-            emit hideInformation(this);
-        else
+        // if(this->orientation())
+        //     emit hideInformation(this);
+        // else
             emit showInformation(this);
+    }
+
+    QRectF okRect = QRectF(-150 + 10, 200 - 30 - 40, 300 - 20, 50);
+
+    if (d->panel->isVisible() && okRect.contains(event->pos())) {
+        d->panel->setPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-node-information-panel.png"));
+        emit hideInformation(this);
     }
 }
 

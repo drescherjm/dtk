@@ -51,5 +51,11 @@
     <file>pixmaps/dtk-distributed-node-free.png</file>
     <file>pixmaps/dtk-distributed-node-jobexclusive.png</file>
     <file>pixmaps/dtk-distributed-node-offline.png</file>
+
+    <file>pixmaps/dtk-distributed-node-information.png</file>
+    <file>pixmaps/dtk-distributed-node-information-pressed.png</file>
+
+    <file>pixmaps/dtk-distributed-node-information-panel.png</file>
+    <file>pixmaps/dtk-distributed-node-information-panel-pressed.png</file>
   </qresource>
 </RCC>

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 19:01:19 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar 28 00:30:45 2010 (+0100)
+ * Last-Updated: Thu Apr  1 10:45:16 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 14
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 
 #include <QtGui>
 
+class dtkDistributorNode;
 class dtkDistributorPrivate;
 
 class dtkDistributor : public QWidget
@@ -37,6 +38,9 @@ protected slots:
     void discover(void);
     void update(void);
     void toggle(void);
+
+    void showInformation(dtkDistributorNode *node);
+    void hideInformation(dtkDistributorNode *node);
 
 protected:
     void resizeEvent(QResizeEvent *event);

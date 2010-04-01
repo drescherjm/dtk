@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 18:30:50 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 31 21:17:31 2010 (+0200)
+ * Last-Updated: Thu Apr  1 11:19:58 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 238
+ *     Update #: 320
  */
 
 /* Commentary: 
@@ -166,16 +166,30 @@ class dtkDistributorNodePrivate
 public:
     dtkDistributedNode *node;
 
+    QGraphicsPixmapItem *information;
     QGraphicsPixmapItem *pixmap;
     QGraphicsTextItem *text;
+
+    QGraphicsPixmapItem *panel;
+
+    qreal orientation;
 };
 
 dtkDistributorNode::dtkDistributorNode(dtkDistributedNode *node, QGraphicsItem *parent) : QGraphicsItemGroup(parent), d(new dtkDistributorNodePrivate)
 {
+    d->orientation = 0;
+
     d->node = node;
 
+    d->information = NULL;
     d->pixmap = NULL;
     d->text = NULL;
+
+    d->panel = new QGraphicsPixmapItem(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-node-information-panel.png"), this);
+    d->panel->setPos(-d->panel->pixmap().width()/2, -d->panel->pixmap().height()/2);
+    d->panel->hide();
+
+    this->setAcceptHoverEvents(true);
 
     this->layout();
 }
@@ -213,6 +227,27 @@ bool dtkDistributorNode::filter(void)
     return true;
 }
 
+qreal dtkDistributorNode::orientation(void)
+{
+    return d->orientation;
+}
+
+void dtkDistributorNode::setOrientation(qreal orientation)
+{
+    d->orientation = orientation;
+
+    if(orientation >= 90) {
+        d->panel->show();
+    } else {
+        d->panel->hide();
+    }
+
+    QTransform transform;
+    transform.rotate(d->orientation, Qt::YAxis);
+
+    this->setTransform(transform);
+}
+
 void dtkDistributorNode::layout(void)
 {
     if(!d->pixmap)
@@ -231,6 +266,7 @@ void dtkDistributorNode::layout(void)
         d->pixmap->setPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-node-offline.png"));
 
     d->pixmap->setOffset(-d->pixmap->pixmap().width()/2, -d->pixmap->pixmap().height()/2);
+    d->pixmap->setAcceptsHoverEvents(true);
 
     if(!d->text)
         d->text = new QGraphicsTextItem(this);
@@ -243,6 +279,46 @@ void dtkDistributorNode::layout(void)
     d->text->setPos(
         -d->pixmap->pixmap().width()/2 + ((d->pixmap->pixmap().width() - metrics.width(d->text->toPlainText()))/2),
          d->pixmap->pixmap().height()/2-15);
+
+    d->information = new QGraphicsPixmapItem(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-node-information.png"), d->pixmap);
+    d->information->setPos(-5, -15);
+    d->information->setZValue(d->pixmap->zValue()+1);
+    d->information->hide();
+}
+
+void dtkDistributorNode::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+    d->information->show();
+}
+
+void dtkDistributorNode::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+    d->information->hide();
+}
+
+void dtkDistributorNode::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    QRectF informationRect = QRectF(-5, -10, 16, 16);
+
+    if (d->information->isVisible() && informationRect.contains(event->pos())) {
+        d->information->setPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-node-information-pressed.png"));
+        d->information->setOffset(-10, -10);
+    }
+}
+
+void dtkDistributorNode::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    QRectF informationRect = QRectF(-5, -10, 16, 16);
+
+    if(d->information->isVisible() && informationRect.contains(event->pos())) {
+        d->information->setPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-node-information.png"));
+        d->information->setOffset(0, 0);
+
+        if(this->orientation())
+            emit hideInformation(this);
+        else
+            emit showInformation(this);
+    }
 }
 
 // /////////////////////////////////////////////////////////////////

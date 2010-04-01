@@ -5,9 +5,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 19:02:42 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 31 21:50:53 2010 (+0200)
+ * Last-Updated: Thu Apr  1 11:30:20 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 316
+ *     Update #: 371
  */
 
 /* Commentary: 
@@ -30,6 +30,8 @@
 class dtkDistributorPrivate
 {
 public:
+    QPointF pos; int z; bool info;
+
     dtkDistributedDiscoverer *discoverer;
     dtkDistributorButton *handle;
     dtkDistributorButton *connectButton;
@@ -47,6 +49,8 @@ public:
 
 dtkDistributor::dtkDistributor(QWidget *parent) : QWidget(parent), d(new dtkDistributorPrivate)
 {
+    d->z = 0; d->info = false;
+
     d->discoverer = NULL;
 
     d->connectLabel = new dtkDistributorLabel;
@@ -185,8 +189,12 @@ void dtkDistributor::discover(void)
 
     d->discoverer->discover(QUrl(d->connectCombo->text()));
 
-    foreach(dtkDistributedNode *node, d->discoverer->nodes())
-        d->scene->addItem(new dtkDistributorNode(node));
+    foreach(dtkDistributedNode *node, d->discoverer->nodes()) {
+        dtkDistributorNode *gnode = new dtkDistributorNode(node);
+        connect(gnode, SIGNAL(showInformation(dtkDistributorNode *)), this, SLOT(showInformation(dtkDistributorNode *)));
+        connect(gnode, SIGNAL(hideInformation(dtkDistributorNode *)), this, SLOT(hideInformation(dtkDistributorNode *)));
+        d->scene->addItem(gnode);
+    }
 
     d->connectLabel->setLabel(d->connectCombo->text());
 
@@ -257,9 +265,62 @@ void dtkDistributor::toggle(void)
         animation->setEndValue(0);
     }
 
-    animation->start();
-
     connect(animation, SIGNAL(finished()), animation, SLOT(deleteLater()));
+
+    animation->start();
+}
+
+void dtkDistributor::showInformation(dtkDistributorNode *node)
+{
+    if(d->info)
+        return;
+
+    d->pos = node->pos(); d->z = node->zValue(); d->info = true; node->setZValue(100000);
+
+    QPropertyAnimation *animation1 = new QPropertyAnimation(node, "position");
+    animation1->setDuration(1000);
+    animation1->setEasingCurve(QEasingCurve::OutCubic);
+    animation1->setStartValue(node->pos());
+    animation1->setEndValue(d->view->mapToScene(this->width()/2, this->height()/2));
+
+    QPropertyAnimation *animation2 = new QPropertyAnimation(node, "orientation");
+    animation2->setDuration(1000);
+    animation2->setEasingCurve(QEasingCurve::OutCubic);
+    animation2->setStartValue(0);
+    animation2->setEndValue(180);
+
+    QParallelAnimationGroup *group = new QParallelAnimationGroup;
+    group->addAnimation(animation1);
+    group->addAnimation(animation2);
+
+    connect(group, SIGNAL(finished()), group, SLOT(deleteLater()));
+
+    group->start();
+}
+
+void dtkDistributor::hideInformation(dtkDistributorNode *node)
+{
+    d->info = false; node->setZValue(d->z);
+
+    QPropertyAnimation *animation1 = new QPropertyAnimation(node, "position");
+    animation1->setDuration(1000);
+    animation1->setEasingCurve(QEasingCurve::OutCubic);
+    animation1->setStartValue(node->pos());
+    animation1->setEndValue(d->pos);
+
+    QPropertyAnimation *animation2 = new QPropertyAnimation(node, "orientation");
+    animation2->setDuration(1000);
+    animation2->setEasingCurve(QEasingCurve::OutCubic);
+    animation2->setStartValue(180);
+    animation2->setEndValue(0);
+
+    QParallelAnimationGroup *group = new QParallelAnimationGroup;
+    group->addAnimation(animation1);
+    group->addAnimation(animation2);
+
+    connect(group, SIGNAL(finished()), group, SLOT(deleteLater()));
+
+    group->start();
 }
 
 void dtkDistributor::resizeEvent(QResizeEvent *event)

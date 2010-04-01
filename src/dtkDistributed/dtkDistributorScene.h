@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 18:29:30 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 31 18:52:53 2010 (+0200)
+ * Last-Updated: Thu Apr  1 11:02:56 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 52
+ *     Update #: 69
  */
 
 /* Commentary: 
@@ -109,8 +109,8 @@ class dtkDistributorNode : public QObject, public QGraphicsItemGroup
     Q_OBJECT
 
     Q_PROPERTY(bool visible READ isVisible WRITE setVisible)
-
     Q_PROPERTY(QPointF position READ pos WRITE setPos)
+    Q_PROPERTY(qreal orientation READ orientation WRITE setOrientation)
 
 public:
      dtkDistributorNode(dtkDistributedNode *node, QGraphicsItem *parent = 0);
@@ -118,8 +118,22 @@ public:
 
     bool filter(void);
 
+    qreal orientation(void);
+    
+    void setOrientation(qreal orientation);
+
+signals:
+    void showInformation(dtkDistributorNode *node);
+    void hideInformation(dtkDistributorNode *node);
+
 protected:
     void layout(void);
+
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:
     dtkDistributorNodePrivate *d;

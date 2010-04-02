@@ -39,6 +39,11 @@ set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}")
 ## Generator list
 ## #################################################################
 
+set(CPACK_TBZ2 OFF)
+set(CPACK_TGZ OFF)
+set(CPACK_ZIP OFF)
+set(CPACK_TZ OFF)
+
 set(CPACK_SOURCE_TBZ2 OFF)
 set(CPACK_SOURCE_TGZ OFF)
 set(CPACK_SOURCE_ZIP OFF)
@@ -52,6 +57,10 @@ if(WIN32)
   set(CPACK_GENERATOR "NSIS")
 endif(WIN32)
 
+if(UNIX)
+  set(CPACK_GENERATOR "RPM")
+endif(UNIX)
+
 ## #################################################################
 ## NSIS generator settings
 ## #################################################################
@@ -63,6 +72,14 @@ if(WIN32 AND NOT UNIX)
   set(CPACK_NSIS_URL_INFO_ABOUT "http://www.inria.fr/sophia/dream/")
   set(CPACK_NSIS_MODIFY_PATH ON)  
 endif(WIN32 AND NOT UNIX)
+
+## #################################################################
+## RPM generator settings
+## #################################################################
+
+set(CPACK_RPM_PACKAGE_REQUIRES "")
+set(CPACK_RPM_PACKAGE_REQUIRES ${CPACK_RPM_PACKAGE_REQUIRES} "qt")
+set(CPACK_RPM_PACKAGE_REQUIRES ${CPACK_RPM_PACKAGE_REQUIRES} "qt-devel")
 
 ## #################################################################
 ## DEB generator settings

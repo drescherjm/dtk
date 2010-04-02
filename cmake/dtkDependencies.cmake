@@ -1,0 +1,146 @@
+### dtkDependencies.cmake --- 
+## 
+## Author: Julien Wintz
+## Copyright (C) 2008 - Julien Wintz, Inria.
+## Created: Fri Apr  2 09:11:53 2010 (+0200)
+## Version: $Id$
+## Last-Updated: Fri Apr  2 10:09:00 2010 (+0200)
+##           By: Julien Wintz
+##     Update #: 7
+######################################################################
+## 
+### Commentary: 
+## 
+######################################################################
+## 
+### Change log:
+## 
+######################################################################
+
+## #################################################################
+## Qt
+## #################################################################
+
+set(QT_USE_QTOPENGL  TRUE)
+set(QT_USE_QTXML     TRUE)
+set(QT_USE_QTSQL     TRUE)
+set(QT_USE_QTHELP    TRUE)
+set(QT_USE_QTNETWORK TRUE)
+set(QT_USE_QTWEBKIT  TRUE)
+
+find_package(Qt4 REQUIRED)
+include(${QT_USE_FILE})
+
+mark_as_advanced(QT_QMAKE_EXECUTABLE)
+mark_as_advanced(QT_QTMOTIF_INCLUDE_DIR)
+mark_as_advanced(QT_QTMOTIF_LIBRARY_DEBUG)
+mark_as_advanced(QT_QTMOTIF_LIBRARY_RELEASE)
+
+## #################################################################
+## Swig
+## #################################################################
+
+find_package(SWIG REQUIRED)
+include(${SWIG_USE_FILE})
+set(CMAKE_SWIG_FLAGS "")
+
+macro(dtk_wrap project target name language input deps)
+
+  set(wrap_output ${project}_wrap_${language}.cpp)
+
+  add_custom_command(
+    OUTPUT ${wrap_output}
+    COMMAND ${SWIG_EXECUTABLE}
+    ARGS
+      "-${language}"
+      "-c++"
+      "-module" ${name}
+      "-I${dtk_INCLUDE_PATH}"
+      "-outdir" ${CMAKE_CURRENT_BINARY_DIR}
+      "-o" ${wrap_output}
+      ${input}
+    MAIN_DEPENDENCY ${input}
+    COMMENT "Wrapping ${input} to ${language}")
+
+  set(${target} ${${target}} ${wrap_output})
+
+endmacro(dtk_wrap)
+
+mark_as_advanced(SWIG_DIR)
+mark_as_advanced(SWIG_EXECUTABLE)
+mark_as_advanced(SWIG_VERSION)
+
+## #################################################################
+## Tcl
+## #################################################################
+
+find_package(TCL QUIET)
+if(TCL_FOUND)
+  include_directories(${TCL_INCLUDE_PATH})
+endif(TCL_FOUND)
+
+## #################################################################
+## Python
+## #################################################################
+
+find_package(PythonLibs QUIET)
+if(PYTHONLIBS_FOUND)
+  include_directories(${PYTHON_INCLUDE_PATH})
+  get_filename_component(PYTHON_PATH ${PYTHON_LIBRARIES} PATH)
+  link_directories(${PYTHON_PATH})
+endif(PYTHONLIBS_FOUND)
+
+## #################################################################
+## Zlib
+## #################################################################
+
+find_package(ZLIB QUIET)
+
+if(Z_LIBRARY)
+include_directories(${ZLIB_INCLUDE_DIRS})
+endif(Z_LIBRARY)
+
+## #################################################################
+## Ssl
+## #################################################################
+
+find_package(OpenSSL QUIET)
+
+include_directories(${OPENSSL_INCLUDE_DIR})
+
+## #################################################################
+## Mpi
+## #################################################################
+
+find_package(MPI QUIET)
+
+if(MPI_FOUND)
+include_directories(${MPI_INCLUDE_PATH})
+set(COMPILE_FLAGS ${COMPILE_FLAGS} ${MPI_COMPILE_FLAGS})
+endif(MPI_FOUND)
+
+## #################################################################
+## Vrpn
+## #################################################################
+
+find_path(QUAT_INCLUDES           quat.h /usr/include /usr/local/include)
+find_path(VRPN_INCLUDES vrpn_Configure.h /usr/include /usr/local/include)
+
+if(QUAT_INCLUDES AND VRPN_INCLUDES)
+include_directories(${QUAT_INCLUDES})
+include_directories(${VRPN_INCLUDES})
+endif(QUAT_INCLUDES AND VRPN_INCLUDES)
+
+mark_as_advanced(VRPN_INCLUDES)
+mark_as_advanced(QUAT_INCLUDES)
+
+find_library(QUAT_LIBRARIES NAMES quat PATHS /usr/lib /usr/local/lib)
+find_library(VRPN_LIBRARIES NAMES vrpn PATHS /usr/lib /usr/local/lib)
+
+if(QUAT_LIBRARIES AND VRPN_LIBRARIES)
+link_directories(${QUAT_LIBRARIES})
+link_directories(${VRPN_LIBRARIES})
+endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)
+
+mark_as_advanced(QUAT_LIBRARIES)
+mark_as_advanced(VRPN_LIBRARIES)

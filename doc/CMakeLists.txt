@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Tue Feb  2 20:18:37 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Feb  8 09:39:24 2010 (+0100)
+## Last-Updated: Fri Apr  2 11:23:11 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 36
+##     Update #: 39
 ######################################################################
 ## 
 ### Commentary: 
@@ -45,6 +45,9 @@ if (DOXYGEN_FOUND)
     COMMAND qcollectiongenerator dtk.qhcp -o dtk.qhc
     COMMENT "-- Generating embedded documentation"
     )
+
+  install(FILES ${CMAKE_BINARY_DIR}/doc/dtk.qhc DESTINATION ${CMAKE_INSTALL_PREFIX}/doc)
+  install(DIRECTORY ${CMAKE_BINARY_DIR}/doc/html DESTINATION ${CMAKE_INSTALL_PREFIX}/doc)
 else (DOXYGEN_FOUND)
   message(INFO "Can't find doxygen. Can't build documentation")
 endif (DOXYGEN_FOUND)

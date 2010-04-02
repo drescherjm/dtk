@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Apr  2 11:09:52 2010 (+0200)
+## Last-Updated: Fri Apr  2 14:13:38 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 27
+##     Update #: 28
 ######################################################################
 ## 
 ### Commentary: 
@@ -44,23 +44,21 @@ cmake_export_build_settings(
 export_library_dependencies(
   ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}LibraryDepends.cmake)
 
-if(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
-  install(FILES
-    ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Build.cmake
-    ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Dart.cmake
-    ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Dependencies.cmake
-    ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Install.cmake
-    ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Nightly.cmake
-    ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Pack.cmake
-    ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Paths.cmake
-    ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Use.cmake
-    ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Config.cmake
-    ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake
-    ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}LibraryDepends.cmake
-    ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}BuildSettings.cmake
-    DESTINATION
-    ${CMAKE_INSTALL_PREFIX}/cmake)
-endif(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
+install(FILES
+  ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Build.cmake
+  ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Dart.cmake
+  ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Dependencies.cmake
+  ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Install.cmake
+  ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Nightly.cmake
+  ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Pack.cmake
+  ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Paths.cmake
+  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Use.cmake
+  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake
+  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}LibraryDepends.cmake
+  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}BuildSettings.cmake
+  DESTINATION
+  ${CMAKE_INSTALL_PREFIX}/cmake)
 
 ## Settings specific to the build tree.
 

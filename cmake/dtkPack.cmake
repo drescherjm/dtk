@@ -33,7 +33,8 @@ set(CPACK_PACKAGE_VERSION_MAJOR ${${PROJECT_NAME}_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${${PROJECT_NAME}_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${${PROJECT_NAME}_VERSION_BUILD})
 set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/COPYING.txt)
-set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}")
+set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}")
+set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}-src")
 
 ## #################################################################
 ## Generator list
@@ -77,9 +78,15 @@ endif(WIN32 AND NOT UNIX)
 ## RPM generator settings
 ## #################################################################
 
-set(CPACK_RPM_PACKAGE_REQUIRES "")
-set(CPACK_RPM_PACKAGE_REQUIRES ${CPACK_RPM_PACKAGE_REQUIRES} "qt")
-set(CPACK_RPM_PACKAGE_REQUIRES ${CPACK_RPM_PACKAGE_REQUIRES} "qt-devel")
+# wget http://www.cmake.org/files/v2.8/cmake-2.8.1-Linux-i386.sh
+# sh cmake-2.8.1-Linux-i386.sh --prefix=/usr --exclude-subdir
+
+set(CPACK_PACKAGING_INSTALL_PREFIX "/usr/local/inria")
+
+## post install commands
+
+set(CPACK_RPM_SPEC_INSTALL_POST
+  "echo '/usr/local/inria/lib/' > /etc/ld.so.conf.d/dtk.conf && ldconfig")
 
 ## #################################################################
 ## DEB generator settings

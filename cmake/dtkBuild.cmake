@@ -36,10 +36,10 @@ endif(APPLE)
 ## Settings specific to the build tree.
 ## #################################################################
 
-include(CMakeExportBuildSettings)
+# include(CMakeExportBuildSettings) # no more used as of cmake 2.8.X
 
-cmake_export_build_settings(
-  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}BuildSettings.cmake)
+# cmake_export_build_settings(
+#   ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}BuildSettings.cmake)
 
 export_library_dependencies(
   ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}LibraryDepends.cmake)

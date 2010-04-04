@@ -85,8 +85,8 @@ set(CPACK_PACKAGING_INSTALL_PREFIX "/usr/local/inria")
 
 ## post install commands
 
-set(CPACK_RPM_SPEC_INSTALL_POST
-  "echo '/usr/local/inria/lib/' > /etc/ld.so.conf.d/dtk.conf && ldconfig")
+# set(CPACK_RPM_SPEC_INSTALL_POST
+#   "echo '/usr/local/inria/lib/' > /etc/ld.so.conf.d/dtk.conf && ldconfig")
 
 ## #################################################################
 ## DEB generator settings

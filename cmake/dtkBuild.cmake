@@ -56,7 +56,7 @@ install(FILES
   ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Config.cmake
   ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake
   ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}LibraryDepends.cmake
-  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}BuildSettings.cmake
+# ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}BuildSettings.cmake
   DESTINATION
   ${CMAKE_INSTALL_PREFIX}/cmake)
 

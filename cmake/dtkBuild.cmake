@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Apr  6 21:40:01 2010 (+0200)
+## Last-Updated: Tue Apr  6 22:13:08 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 64
+##     Update #: 73
 ######################################################################
 ## 
 ### Commentary: 
@@ -74,37 +74,47 @@ set(LIBRARY_INSTALL_OUTPUT_PATH    ${CMAKE_INSTALL_PREFIX}/${${PROJECT_NAME}_LIB
 set(ARCHIVE_INSTALL_OUTPUT_PATH    ${CMAKE_INSTALL_PREFIX}/${${PROJECT_NAME}_ARCHIVE_OUTPUT_DIRECTORY})
 set(RUNTIME_INSTALL_OUTPUT_PATH    ${CMAKE_INSTALL_PREFIX}/${${PROJECT_NAME}_RUNTIME_OUTPUT_DIRECTORY})
 set(EXECUTABLE_INSTALL_OUTPUT_PATH ${CMAKE_INSTALL_PREFIX}/${${PROJECT_NAME}_RUNTIME_OUTPUT_DIRECTORY})
- 
+
+set(${PROJECT_NAME}_PLUGINS_DIRS ${CMAKE_BINARY_DIR}/plugins)
 set(${PROJECT_NAME}_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/src) 
 set(${PROJECT_NAME}_LIBRARY_DIRS ${LIBRARY_OUTPUT_PATH})
 set(${PROJECT_NAME}_RUNTIME_DIRS ${RUNTIME_OUTPUT_PATH})
 set(${PROJECT_NAME}_CMAKE_DIRS ${CMAKE_SOURCE_DIR}/cmake)
 set(${PROJECT_NAME}_USE_FILE ${CMAKE_BINARY_DIR}/${PROJECT_NAME}Use.cmake)
 
+set(${PROJECT_NAME}_INSTALL_PLUGINS_DIRS ${CMAKE_INSTALL_PREFIX}/plugins)
 set(${PROJECT_NAME}_INSTALL_INCLUDE_DIRS ${CMAKE_INSTALL_PREFIX}/include) 
 set(${PROJECT_NAME}_INSTALL_LIBRARY_DIRS ${LIBRARY_INSTALL_OUTPUT_PATH})
 set(${PROJECT_NAME}_INSTALL_RUNTIME_DIRS ${RUNTIME_INSTALL_OUTPUT_PATH})
 set(${PROJECT_NAME}_INSTALL_CMAKE_DIRS ${CMAKE_INSTALL_PREFIX}/cmake)
 set(${PROJECT_NAME}_INSTALL_USE_FILE ${CMAKE_INSTALL_PREFIX}/cmake/${PROJECT_NAME}Use.cmake)
 
+if(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in)
 configure_file( ## Build tree configure file
   ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in
   ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Config.cmake
   @ONLY IMMEDIATE)
+endif(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in)
 
+if(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.install.cmake.in)
 configure_file( ## Install tree configure file
   ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.install.cmake.in
   ${${PROJECT_NAME}_BINARY_DIR}/install/${PROJECT_NAME}Config.cmake
   @ONLY IMMEDIATE)
+endif(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.install.cmake.in)
 
+if(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Use.cmake.in)
 configure_file( ## Common use file
   ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Use.cmake.in
   ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Use.cmake
   @ONLY IMMEDIATE)
+endif(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Use.cmake.in)
 
 ## #################################################################
 ## Uninstall target
 ## #################################################################
+
+if(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Uninstall.cmake.in)
 
 configure_file("${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Uninstall.cmake.in"
                "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake"
@@ -114,9 +124,17 @@ add_custom_target(uninstall
   "${CMAKE_COMMAND}" -P
   "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake")
 
+endif(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Uninstall.cmake.in)
+
 ## #################################################################
 ## Install rules
 ## #################################################################
+
+if( EXISTS ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Dependencies.cmake
+AND EXISTS ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Build.cmake
+AND EXISTS ${${PROJECT_NAME}_BINARY_DIR}/install/${PROJECT_NAME}Config.cmake
+AND EXISTS ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Use.cmake
+AND EXISTS ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake)
 
 install(FILES
   ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Dependencies.cmake
@@ -126,3 +144,9 @@ install(FILES
   ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake
   DESTINATION
   ${CMAKE_INSTALL_PREFIX}/cmake)
+
+endif( EXISTS ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Dependencies.cmake
+   AND EXISTS ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Build.cmake
+   AND EXISTS ${${PROJECT_NAME}_BINARY_DIR}/install/${PROJECT_NAME}Config.cmake
+   AND EXISTS ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Use.cmake
+   AND EXISTS ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake)

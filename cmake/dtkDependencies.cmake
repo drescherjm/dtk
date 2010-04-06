@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Apr  6 10:47:25 2010 (+0200)
+## Last-Updated: Tue Apr  6 22:35:05 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 11
+##     Update #: 12
 ######################################################################
 ## 
 ### Commentary: 
@@ -132,7 +132,6 @@ endif(Z_LIBRARY)
 find_package(OpenSSL QUIET)
 
 if(OPENSSL_FOUND)
-message(STATUS "Using OpenSSL")
 include_directories(${OPENSSL_INCLUDE_DIR})
 endif(OPENSSL_FOUND)
 

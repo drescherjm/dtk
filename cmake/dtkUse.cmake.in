@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Tue Apr  6 10:55:48 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Apr  6 19:57:53 2010 (+0200)
+## Last-Updated: Tue Apr  6 21:00:49 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 6
+##     Update #: 8
 ######################################################################
 ## 
 ### Commentary: 
@@ -28,5 +28,6 @@ if(NOT dtk_USE_FILE_INCLUDED)
    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${dtk_CMAKE_DIRS})
    
    include(dtkDependencies)
+   include(dtkBuild)
 
 endif(NOT dtk_USE_FILE_INCLUDED)

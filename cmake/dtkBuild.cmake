@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Apr  6 19:57:02 2010 (+0200)
+## Last-Updated: Tue Apr  6 21:40:01 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 58
+##     Update #: 64
 ######################################################################
 ## 
 ### Commentary: 
@@ -43,9 +43,9 @@ endif(APPLE)
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   if(WIN32)
     string(REPLACE "\\" "/" ProgramFiles "$ENV{ProgramFiles}")
-    set(CMAKE_INSTALL_PREFIX "${ProgramFiles}/Inria/${PROJECT_NAME}" CACHE PATH "dtk install prefix" FORCE)
+    set(CMAKE_INSTALL_PREFIX "${ProgramFiles}/Inria/${PROJECT_NAME}" CACHE PATH "${PROJECT_NAME} install prefix" FORCE)
   else(WIN32)
-    set(CMAKE_INSTALL_PREFIX "/usr/local/inria" CACHE PATH "dtk install prefix" FORCE)
+    set(CMAKE_INSTALL_PREFIX "/usr/local/inria/" CACHE PATH "${PROJECT_NAME} install prefix" FORCE)
   endif(WIN32)
 endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
@@ -119,8 +119,10 @@ add_custom_target(uninstall
 ## #################################################################
 
 install(FILES
-  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Use.cmake
+  ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Dependencies.cmake
+  ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Build.cmake
   ${${PROJECT_NAME}_BINARY_DIR}/install/${PROJECT_NAME}Config.cmake
+  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Use.cmake
   ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake
   DESTINATION
   ${CMAKE_INSTALL_PREFIX}/cmake)

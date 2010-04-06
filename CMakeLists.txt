@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Apr  2 09:23:20 2010 (+0200)
+## Last-Updated: Tue Apr  6 10:44:35 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 290
+##     Update #: 292
 ######################################################################
 ## 
 ### Commentary: 
@@ -35,10 +35,8 @@ enable_testing()
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
-include(dtkPaths)
 include(dtkDependencies)
 include(dtkBuild)
-include(dtkInstall)
 include(dtkNightly)
 include(dtkDart)
 include(dtkPack)

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Apr  2 10:09:00 2010 (+0200)
+## Last-Updated: Tue Apr  6 10:47:25 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 7
+##     Update #: 11
 ######################################################################
 ## 
 ### Commentary: 
@@ -55,7 +55,7 @@ macro(dtk_wrap project target name language input deps)
       "-${language}"
       "-c++"
       "-module" ${name}
-      "-I${dtk_INCLUDE_PATH}"
+      "-I${CMAKE_SOURCE_DIR}/src"
       "-outdir" ${CMAKE_CURRENT_BINARY_DIR}
       "-o" ${wrap_output}
       ${input}
@@ -91,6 +91,31 @@ if(PYTHONLIBS_FOUND)
 endif(PYTHONLIBS_FOUND)
 
 ## #################################################################
+## Editline
+## #################################################################
+
+mark_as_advanced(EDITLINE_INCLUDE_DIR)
+mark_as_advanced(EDITLINE_LIBRARY)
+
+find_path(EDITLINE_INCLUDE_DIR histedit.h
+  /usr/include
+  /usr/local/include
+)
+
+find_library(EDITLINE_LIBRARY edit
+  /usr/lib
+  /usr/local/lib
+)
+
+if(EDITLINE_LIBRARY)
+  set(EDITLINE_FOUND "YES")
+endif(EDITLINE_LIBRARY)
+
+if(EDITLINE_FOUND)
+  add_definitions(-DHAVE_EDITLINE)
+endif(EDITLINE_FOUND)
+
+## #################################################################
 ## Zlib
 ## #################################################################
 
@@ -106,7 +131,10 @@ endif(Z_LIBRARY)
 
 find_package(OpenSSL QUIET)
 
+if(OPENSSL_FOUND)
+message(STATUS "Using OpenSSL")
 include_directories(${OPENSSL_INCLUDE_DIR})
+endif(OPENSSL_FOUND)
 
 ## #################################################################
 ## Mpi

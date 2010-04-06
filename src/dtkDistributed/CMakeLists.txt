@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Wed Mar 31 18:27:47 2010 (+0200)
+## Last-Updated: Tue Apr  6 09:42:25 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 52
+##     Update #: 58
 ######################################################################
 ## 
 ### Commentary: 
@@ -38,8 +38,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributorController.h
   dtkDistributorInset.h
   dtkDistributorScene.h
-  dtkDistributorView.h
-)
+  dtkDistributorView.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkDistributedCommunicator.h
@@ -53,8 +52,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkDistributorController.h
   dtkDistributorInset.h
   dtkDistributorScene.h
-  dtkDistributorView.h
-)
+  dtkDistributorView.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkDistributedCommunicator.cpp
@@ -70,32 +68,22 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributorController.cpp
   dtkDistributorInset.cpp
   dtkDistributorScene.cpp
-  dtkDistributorView.cpp
-)
+  dtkDistributorView.cpp)
+
+set(${PROJECT_NAME}_RESOURCES dtkDistributed.qrc)
 
 ## #################################################################
 ## Mpi sources
 ## #################################################################
 
 if(MPI_FOUND)
-
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
-  dtkDistributedCommunicatorMpi.h
-)
-
+  dtkDistributedCommunicatorMpi.h)
 set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
-  dtkDistributedCommunicatorMpi.h
-)
-
+  dtkDistributedCommunicatorMpi.h)
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
-  dtkDistributedCommunicatorMpi.cpp
-)
-
+  dtkDistributedCommunicatorMpi.cpp)
 endif(MPI_FOUND)
-
-set(${PROJECT_NAME}_RESOURCES
-  dtkDistributed.qrc
-)
 
 ## #################################################################
 ## Build rules
@@ -106,43 +94,28 @@ add_definitions(-DQT_SHARED)
 add_definitions(-DQT_NO_DEBUG)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
-
 qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
 
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES_QRC}
-)
+  ${${PROJECT_NAME}_SOURCES_QRC})
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
-  dtkCore
-)
+  dtkCore)
 
 if(MPI_FOUND)
-
 target_link_libraries(${PROJECT_NAME}
-  ${MPI_LIBRARIES}
-)
-
+  ${MPI_LIBRARIES})
 endif(MPI_FOUND)
-
-if(PYTHON_DEBUG_LIBRARIES)
-  target_link_libraries(${PROJECT_NAME} debug ${PYTHON_DEBUG_LIBRARIES})
-  target_link_libraries(${PROJECT_NAME} optimized ${PYTHON_LIBRARIES})
-else(PYTHON_DEBUG_LIBRARIES)
-  target_link_libraries(${PROJECT_NAME} ${PYTHON_LIBRARIES})
-endif(PYTHON_DEBUG_LIBRARIES)
 
 ## #################################################################
 ## Installation
 ## #################################################################
 
-if(NOT dtk_INSTALL_NO_DEVELOPMENT)
-  install_files(${dtk_INSTALL_INCLUDE_DIR}/${PROJECT_NAME} .h ${${PROJECT_NAME}_HEADERS})
-endif(NOT dtk_INSTALL_NO_DEVELOPMENT)
-
-if(NOT dtk_INSTALL_NO_LIBRARIES)
-  install_targets(${dtk_INSTALL_LIB_DIR} RUNTIME_DIRECTORY ${dtk_INSTALL_BIN_DIR} ${PROJECT_NAME})
-endif(NOT dtk_INSTALL_NO_LIBRARIES)
+install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
+install(TARGETS ${PROJECT_NAME}
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib)

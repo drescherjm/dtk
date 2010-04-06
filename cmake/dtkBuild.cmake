@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Apr  2 14:13:38 2010 (+0200)
+## Last-Updated: Tue Apr  6 19:57:02 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 28
+##     Update #: 58
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,7 +17,11 @@
 ## 
 ######################################################################
 
-set(CMAKE_BUILD_TYPE Release CACHE STRING "dtk build type")
+## #################################################################
+## Configure cmake variables
+## #################################################################
+
+set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
 
 set(CMAKE_COLOR_MAKEFILE ON)
 set(CMAKE_VERBOSE_MAKEFILE OFF)
@@ -33,153 +37,70 @@ if(APPLE)
 endif(APPLE)
 
 ## #################################################################
-## Settings specific to the build tree.
+## Install prefix
 ## #################################################################
 
-# include(CMakeExportBuildSettings) # no more used as of cmake 2.8.X
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  if(WIN32)
+    string(REPLACE "\\" "/" ProgramFiles "$ENV{ProgramFiles}")
+    set(CMAKE_INSTALL_PREFIX "${ProgramFiles}/Inria/${PROJECT_NAME}" CACHE PATH "dtk install prefix" FORCE)
+  else(WIN32)
+    set(CMAKE_INSTALL_PREFIX "/usr/local/inria" CACHE PATH "dtk install prefix" FORCE)
+  endif(WIN32)
+endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
-# cmake_export_build_settings(
-#   ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}BuildSettings.cmake)
+## #################################################################
+## Configure path
+## #################################################################
 
-export_library_dependencies(
-  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}LibraryDepends.cmake)
+include_directories(${CMAKE_SOURCE_DIR}/src)
 
-install(FILES
-  ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Build.cmake
-  ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Dart.cmake
-  ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Dependencies.cmake
-  ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Install.cmake
-  ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Nightly.cmake
-  ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Pack.cmake
-  ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Paths.cmake
-  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Use.cmake
-  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Config.cmake
-  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake
-  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}LibraryDepends.cmake
-# ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}BuildSettings.cmake
-  DESTINATION
-  ${CMAKE_INSTALL_PREFIX}/cmake)
+if(WIN32)
+  set(${PROJECT_NAME}_ARCHIVE_OUTPUT_DIRECTORY lib)
+  set(${PROJECT_NAME}_RUNTIME_OUTPUT_DIRECTORY bin)
+  set(${PROJECT_NAME}_LIBRARY_OUTPUT_DIRECTORY bin)
+else(WIN32)
+  set(${PROJECT_NAME}_ARCHIVE_OUTPUT_DIRECTORY lib)
+  set(${PROJECT_NAME}_RUNTIME_OUTPUT_DIRECTORY bin)
+  set(${PROJECT_NAME}_LIBRARY_OUTPUT_DIRECTORY lib)
+endif(WIN32)
 
-## Settings specific to the build tree.
+set(LIBRARY_OUTPUT_PATH    ${CMAKE_BINARY_DIR}/${${PROJECT_NAME}_LIBRARY_OUTPUT_DIRECTORY})
+set(ARCHIVE_OUTPUT_PATH    ${CMAKE_BINARY_DIR}/${${PROJECT_NAME}_ARCHIVE_OUTPUT_DIRECTORY})
+set(RUNTIME_OUTPUT_PATH    ${CMAKE_BINARY_DIR}/${${PROJECT_NAME}_RUNTIME_OUTPUT_DIRECTORY})
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${${PROJECT_NAME}_RUNTIME_OUTPUT_DIRECTORY})
 
-set(${PROJECT_NAME}_CONFIG_INSTALL_ONLY)
+set(LIBRARY_INSTALL_OUTPUT_PATH    ${CMAKE_INSTALL_PREFIX}/${${PROJECT_NAME}_LIBRARY_OUTPUT_DIRECTORY})
+set(ARCHIVE_INSTALL_OUTPUT_PATH    ${CMAKE_INSTALL_PREFIX}/${${PROJECT_NAME}_ARCHIVE_OUTPUT_DIRECTORY})
+set(RUNTIME_INSTALL_OUTPUT_PATH    ${CMAKE_INSTALL_PREFIX}/${${PROJECT_NAME}_RUNTIME_OUTPUT_DIRECTORY})
+set(EXECUTABLE_INSTALL_OUTPUT_PATH ${CMAKE_INSTALL_PREFIX}/${${PROJECT_NAME}_RUNTIME_OUTPUT_DIRECTORY})
+ 
+set(${PROJECT_NAME}_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/src) 
+set(${PROJECT_NAME}_LIBRARY_DIRS ${LIBRARY_OUTPUT_PATH})
+set(${PROJECT_NAME}_RUNTIME_DIRS ${RUNTIME_OUTPUT_PATH})
+set(${PROJECT_NAME}_CMAKE_DIRS ${CMAKE_SOURCE_DIR}/cmake)
+set(${PROJECT_NAME}_USE_FILE ${CMAKE_BINARY_DIR}/${PROJECT_NAME}Use.cmake)
 
-set(${PROJECT_NAME}_USE_FILE_CONFIG
-  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Use.cmake)
+set(${PROJECT_NAME}_INSTALL_INCLUDE_DIRS ${CMAKE_INSTALL_PREFIX}/include) 
+set(${PROJECT_NAME}_INSTALL_LIBRARY_DIRS ${LIBRARY_INSTALL_OUTPUT_PATH})
+set(${PROJECT_NAME}_INSTALL_RUNTIME_DIRS ${RUNTIME_INSTALL_OUTPUT_PATH})
+set(${PROJECT_NAME}_INSTALL_CMAKE_DIRS ${CMAKE_INSTALL_PREFIX}/cmake)
+set(${PROJECT_NAME}_INSTALL_USE_FILE ${CMAKE_INSTALL_PREFIX}/cmake/${PROJECT_NAME}Use.cmake)
 
-set(${PROJECT_NAME}_BUILD_SETTINGS_FILE_CONFIG 
-  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}BuildSettings.cmake)
-
-set(${PROJECT_NAME}_LIBRARY_DIRS_CONFIG ${${PROJECT_NAME}_LIBRARY_DIRS})
-
-set(${PROJECT_NAME}_RUNTIME_DIRS_CONFIG ${${PROJECT_NAME}_RUNTIME_DIRS})
-
-set(${PROJECT_NAME}_INCLUDE_DIRS_CONFIG ${${PROJECT_NAME}_INCLUDE_PATH})
-
-set(${PROJECT_NAME}_LIBRARY_DEPENDS_FILE 
-  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}LibraryDepends.cmake)
-
-set(${PROJECT_NAME}_CMAKE_DIR_CONFIG ${${PROJECT_NAME}_CMAKE_DIR})
-
-set(${PROJECT_NAME}_CONFIGURATION_TYPES_CONFIG ${${PROJECT_NAME}_CONFIGURATION_TYPES})
-
-set(${PROJECT_NAME}_BUILD_TYPE_CONFIG ${CMAKE_BUILD_TYPE})
-
-configure_file(
+configure_file( ## Build tree configure file
   ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in
   ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Config.cmake
   @ONLY IMMEDIATE)
 
-configure_file(
+configure_file( ## Install tree configure file
+  ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.install.cmake.in
+  ${${PROJECT_NAME}_BINARY_DIR}/install/${PROJECT_NAME}Config.cmake
+  @ONLY IMMEDIATE)
+
+configure_file( ## Common use file
   ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Use.cmake.in
   ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Use.cmake
   @ONLY IMMEDIATE)
-
-## #################################################################
-## Settings specific to the install tree.
-## #################################################################
-
-set(DOLLAR "$")
-
-set(${PROJECT_NAME}_USE_FILE_CONFIG 
-  ${DOLLAR}{${PROJECT_NAME}_INSTALL_PREFIX}${${PROJECT_NAME}_INSTALL_PACKAGE_DIR}/${PROJECT_NAME}Use.cmake)
-
-set(${PROJECT_NAME}_BUILD_SETTINGS_FILE_CONFIG 
-  ${DOLLAR}{${PROJECT_NAME}_INSTALL_PREFIX}${${PROJECT_NAME}_INSTALL_PACKAGE_DIR}/${PROJECT_NAME}BuildSettings.cmake)
-
-if(CYGWIN AND ${PROJECT_NAME}_BUILD_SHARED_LIBS)
-  set(${PROJECT_NAME}_LIBRARY_DIRS_CONFIG 
-    ${DOLLAR}{${PROJECT_NAME}_INSTALL_PREFIX}${${PROJECT_NAME}_INSTALL_BIN_DIR})
-else(CYGWIN AND ${PROJECT_NAME}_BUILD_SHARED_LIBS)
-  set(${PROJECT_NAME}_LIBRARY_DIRS_CONFIG 
-    ${DOLLAR}{${PROJECT_NAME}_INSTALL_PREFIX}${${PROJECT_NAME}_INSTALL_LIB_DIR})
-endif(CYGWIN AND ${PROJECT_NAME}_BUILD_SHARED_LIBS)
-
-if(WIN32)
-  set(${PROJECT_NAME}_RUNTIME_DIRS_CONFIG 
-    ${DOLLAR}{${PROJECT_NAME}_INSTALL_PREFIX}${${PROJECT_NAME}_INSTALL_BIN_DIR})
-else(WIN32)
-  set(${PROJECT_NAME}_RUNTIME_DIRS_CONFIG 
-    ${DOLLAR}{${PROJECT_NAME}_INSTALL_PREFIX}${${PROJECT_NAME}_INSTALL_LIB_DIR})
-endif(WIN32)
-
-set(${PROJECT_NAME}_INCLUDE_DIRS_CONFIG
-  ${DOLLAR}{${PROJECT_NAME}_INSTALL_PREFIX}${${PROJECT_NAME}_INSTALL_INCLUDE_DIR})
-
-set(${PROJECT_NAME}_LIBRARY_DEPENDS_FILE 
-  ${DOLLAR}{${PROJECT_NAME}_INSTALL_PREFIX}${${PROJECT_NAME}_INSTALL_PACKAGE_DIR}/${PROJECT_NAME}LibraryDepends.cmake)
-
-set(${PROJECT_NAME}_CMAKE_DIR_CONFIG 
-  ${DOLLAR}{${PROJECT_NAME}_INSTALL_PREFIX}${${PROJECT_NAME}_INSTALL_PACKAGE_DIR}/CMake)
-
-set(${PROJECT_NAME}_CONFIGURATION_TYPES_CONFIG)
-
-string(REGEX REPLACE "/" ";" ${PROJECT_NAME}_INSTALL_PACKAGE_DIR_COUNT
-  "${${PROJECT_NAME}_INSTALL_PACKAGE_DIR}")
-set(${PROJECT_NAME}_CONFIG_INSTALL_ONLY "
-# Compute the installation prefix from ${PROJECT_NAME}_DIR.
-set(${PROJECT_NAME}_INSTALL_PREFIX \"${DOLLAR}{${PROJECT_NAME}_DIR}\")
-")
-foreach(p ${${PROJECT_NAME}_INSTALL_PACKAGE_DIR_COUNT})
-  set(${PROJECT_NAME}_CONFIG_INSTALL_ONLY
-    "${${PROJECT_NAME}_CONFIG_INSTALL_ONLY}GET_FILENAME_COMPONENT(${PROJECT_NAME}_INSTALL_PREFIX \"${DOLLAR}{${PROJECT_NAME}_INSTALL_PREFIX}\" PATH)\n"
-    )
-endforeach(p)
-
-if(CMAKE_CONFIGURATION_TYPES)
-  foreach(config ${CMAKE_CONFIGURATION_TYPES})
-    set(${PROJECT_NAME}_BUILD_TYPE_CONFIG ${config})
-    configure_file(
-      ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in
-      ${${PROJECT_NAME}_BINARY_DIR}/Install/${config}/${PROJECT_NAME}Config.cmake
-      @ONLY IMMEDIATE)
-    configure_file(
-      ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Use.cmake.in
-      ${${PROJECT_NAME}_BINARY_DIR}/Install/${config}/${PROJECT_NAME}Use.cmake
-      @ONLY IMMEDIATE)
-  endforeach(config)
-
-  if(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
-    install(FILES ${${PROJECT_NAME}_BINARY_DIR}/Install/${DOLLAR}{BUILD_TYPE}/${PROJECT_NAME}Config.cmake DESTINATION ${${PROJECT_NAME}_INSTALL_PACKAGE_DIR})
-  endif(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
-else(CMAKE_CONFIGURATION_TYPES)
-  set(${PROJECT_NAME}_BUILD_TYPE_CONFIG ${CMAKE_BUILD_TYPE})
-  configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in
-    ${${PROJECT_NAME}_BINARY_DIR}/Install/${PROJECT_NAME}Config.cmake
-    @ONLY IMMEDIATE)
-  configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Use.cmake.in
-    ${${PROJECT_NAME}_BINARY_DIR}/Install/${PROJECT_NAME}Use.cmake
-    @ONLY IMMEDIATE)
-
-  if(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
-    install(FILES ${${PROJECT_NAME}_BINARY_DIR}/Install/${PROJECT_NAME}Config.cmake
-      DESTINATION ${CMAKE_INSTALL_PREFIX}/cmake/)
-    install(FILES ${${PROJECT_NAME}_BINARY_DIR}/Install/${PROJECT_NAME}Use.cmake
-      DESTINATION ${CMAKE_INSTALL_PREFIX}/cmake/)
-  endif(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
-endif(CMAKE_CONFIGURATION_TYPES)
 
 ## #################################################################
 ## Uninstall target
@@ -192,3 +113,14 @@ configure_file("${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Uninstall.cmake.in"
 add_custom_target(uninstall
   "${CMAKE_COMMAND}" -P
   "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake")
+
+## #################################################################
+## Install rules
+## #################################################################
+
+install(FILES
+  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Use.cmake
+  ${${PROJECT_NAME}_BINARY_DIR}/install/${PROJECT_NAME}Config.cmake
+  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake
+  DESTINATION
+  ${CMAKE_INSTALL_PREFIX}/cmake)

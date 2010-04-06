@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Mar 22 10:24:47 2010 (+0100)
+## Last-Updated: Tue Apr  6 09:41:15 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 117
+##     Update #: 120
 ######################################################################
 ## 
 ### Commentary: 
@@ -47,8 +47,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkTextEditorSyntaxHighlighter.h
   dtkTextEditorSyntaxHighlighterCpp.h
   dtkTextEditorSyntaxHighlighterPython.h
-  dtkTextEditorSyntaxHighlighterTcl.h
-)
+  dtkTextEditorSyntaxHighlighterTcl.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkAddressBar.h
@@ -70,8 +69,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkTagCloud.h
   dtkTextEditor.h
   dtkTextEditorPreferencesWidget.h
-  dtkTextEditorSyntaxHighlighter.h
-)
+  dtkTextEditorSyntaxHighlighter.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkAddressBar.cpp
@@ -96,26 +94,22 @@ set(${PROJECT_NAME}_SOURCES
   dtkTextEditorSyntaxHighlighter.cpp
   dtkTextEditorSyntaxHighlighterCpp.cpp
   dtkTextEditorSyntaxHighlighterPython.cpp
-  dtkTextEditorSyntaxHighlighterTcl.cpp
-)
+  dtkTextEditorSyntaxHighlighterTcl.cpp)
 
 if(APPLE)
-  set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
-    dtkCocoaController.h
-    dtkCocoaUtils.h)
-  set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkCocoaController.h
+  dtkCocoaUtils.h)
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkCocoaController.mm
   dtkCocoaUtils.mm)
 endif(APPLE)
 
 set(${PROJECT_NAME}_FORMS
   dtkInterpreterPreferencesWidget.ui
-  dtkTextEditorPreferencesWidget.ui
-)
+  dtkTextEditorPreferencesWidget.ui)
 
-set(${PROJECT_NAME}_RESOURCES
-  dtkGui.qrc
-)
+set(${PROJECT_NAME}_RESOURCES dtkGui.qrc)
 
 ## #################################################################
 ## Build rules
@@ -126,23 +120,19 @@ add_definitions(-DQT_SHARED)
 add_definitions(-DQT_NO_DEBUG)
 
 qt4_wrap_ui(${PROJECT_NAME}_SOURCES_UIC ${${PROJECT_NAME}_FORMS})
-
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
-
 qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
 
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_SOURCES_UIC}
   ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES_QRC}
-)
+  ${${PROJECT_NAME}_SOURCES_QRC})
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkCore
-  dtkScript
-)
+  dtkScript)
 
 if(APPLE)
 target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
@@ -152,10 +142,8 @@ endif(APPLE)
 ## Installation
 ## #################################################################
 
-if(NOT dtk_INSTALL_NO_DEVELOPMENT)
-  install_files(${dtk_INSTALL_INCLUDE_DIR}/${PROJECT_NAME} .h ${${PROJECT_NAME}_HEADERS})
-endif(NOT dtk_INSTALL_NO_DEVELOPMENT)
-
-if(NOT dtk_INSTALL_NO_LIBRARIES)
-  install_targets(${dtk_INSTALL_LIB_DIR} RUNTIME_DIRECTORY ${dtk_INSTALL_BIN_DIR} ${PROJECT_NAME})
-endif(NOT dtk_INSTALL_NO_LIBRARIES)
+install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
+install(TARGETS ${PROJECT_NAME}
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib)

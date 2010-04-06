@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Tue Mar 16 14:48:33 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Wed Mar 17 10:33:25 2010 (+0100)
+## Last-Updated: Tue Apr  6 09:19:54 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 8
+##     Update #: 9
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,11 +24,9 @@ project(dtkDistributedDiscovery)
 ## #################################################################
 
 add_executable(${PROJECT_NAME}
-  main.cpp
-)
+  main.cpp)
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkCore
-  dtkDistributed
-)
+  dtkDistributed)

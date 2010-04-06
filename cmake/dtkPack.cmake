@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:04:36 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Apr  2 12:24:44 2010 (+0200)
+## Last-Updated: Tue Apr  6 09:44:18 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 22
+##     Update #: 30
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,11 +17,11 @@
 ## 
 ######################################################################
 
+include (InstallRequiredSystemLibraries)
+
 ## #################################################################
 ## Global settings
 ## #################################################################
-
-include(${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake)
 
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
 set(CPACK_PACKAGE_VENDOR "http://www.inria.fr/sophia/dream")
@@ -36,6 +36,8 @@ set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/COPYING.txt)
 set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}")
 set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}-src")
 
+set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
+
 ## #################################################################
 ## Generator list
 ## #################################################################
@@ -44,55 +46,39 @@ set(CPACK_TBZ2 OFF)
 set(CPACK_TGZ OFF)
 set(CPACK_ZIP OFF)
 set(CPACK_TZ OFF)
+set(CPACK_STBZ2 OFF)
+set(CPACK_STGZ OFF)
+set(CPACK_SZIP OFF)
+set(CPACK_STZ OFF)
 
-set(CPACK_SOURCE_TBZ2 OFF)
-set(CPACK_SOURCE_TGZ OFF)
-set(CPACK_SOURCE_ZIP OFF)
-set(CPACK_SOURCE_TZ OFF)
-
-if(APPLE)
+if(APPLE AND NOT UNIX)
   set(CPACK_GENERATOR "PackageMaker")
-endif(APPLE)
+endif(APPLE AND NOT UNIX)
 
 if(WIN32)
   set(CPACK_GENERATOR "NSIS")
 endif(WIN32)
 
-if(UNIX)
+if(UNIX AND NOT APPLE)
   set(CPACK_GENERATOR "RPM")
-endif(UNIX)
+endif(UNIX AND NOT APPLE)
 
 ## #################################################################
 ## NSIS generator settings
 ## #################################################################
 
-if(WIN32 AND NOT UNIX)
-  set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}.exe")
-  set(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_INSTALL_DIRECTORY}")
-  set(CPACK_NSIS_HELP_LINK "http://www.inria.fr/sophia/dream/")
-  set(CPACK_NSIS_URL_INFO_ABOUT "http://www.inria.fr/sophia/dream/")
-  set(CPACK_NSIS_MODIFY_PATH ON)  
-endif(WIN32 AND NOT UNIX)
+# ;
 
 ## #################################################################
 ## RPM generator settings
 ## #################################################################
 
-# wget http://www.cmake.org/files/v2.8/cmake-2.8.1-Linux-i386.sh
-# sh cmake-2.8.1-Linux-i386.sh --prefix=/usr --exclude-subdir
-
-set(CPACK_PACKAGING_INSTALL_PREFIX "/usr/local/inria")
-
-## post install commands
-
-# set(CPACK_RPM_SPEC_INSTALL_POST
-#   "echo '/usr/local/inria/lib/' > /etc/ld.so.conf.d/dtk.conf && ldconfig")
+# ;
 
 ## #################################################################
 ## DEB generator settings
 ## #################################################################
 
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "swig")
-SET(CPACK_DEBIAN_PACKAGE_SUGGESTS "dtk")
+# ;
 
 include(CPack)

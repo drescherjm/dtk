@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Feb 18 11:36:24 2010 (+0100)
+## Last-Updated: Tue Apr  6 09:40:39 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 132
+##     Update #: 137
 ######################################################################
 ## 
 ### Commentary: 
@@ -54,8 +54,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkPluginManager.h
   dtkQuat.h
   dtkUpdater.h
-  dtkVec3.h
-)
+  dtkVec3.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractData.h
@@ -83,8 +82,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractViewInteractor.h
   dtkAbstractViewNavigator.h
   dtkPluginManager.h
-  dtkUpdater_p.h
-)
+  dtkUpdater_p.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkAbstractDataFactory.cpp
@@ -114,28 +112,13 @@ set(${PROJECT_NAME}_SOURCES
   dtkLog.cpp
   dtkPluginManager.cpp
   dtkQuat.cpp
-  dtkUpdater.cpp
-)
+  dtkUpdater.cpp)
 
 ## #################################################################
 ## Wrapping
 ## #################################################################
 
-set(${PROJECT_NAME}_WRAP_DEPENDS
-  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractObject.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractData.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractDataFactory.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractDataReader.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractDataWriter.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractProcess.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractProcessFactory.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractView.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractViewFactory.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractViewAnimator.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractViewNavigator.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/dtkAbstractViewInteractor.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/dtkPlugin.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/dtkPluginManager.h)
+set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS})
 
 dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP core python ${CMAKE_CURRENT_SOURCE_DIR}/dtkCore.i ${${PROJECT_NAME}_WRAP_DEPENDS})
 dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP core tcl    ${CMAKE_CURRENT_SOURCE_DIR}/dtkCore.i ${${PROJECT_NAME}_WRAP_DEPENDS})
@@ -158,20 +141,12 @@ qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES_WRAP}
-)
+  ${${PROJECT_NAME}_SOURCES_WRAP})
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   ${TCL_LIBRARY}
-)
-
-if(PYTHON_DEBUG_LIBRARIES)
-  target_link_libraries(${PROJECT_NAME} debug ${PYTHON_DEBUG_LIBRARIES})
-  target_link_libraries(${PROJECT_NAME} optimized ${PYTHON_LIBRARIES})
-else(PYTHON_DEBUG_LIBRARIES)
-  target_link_libraries(${PROJECT_NAME} ${PYTHON_LIBRARIES})
-endif(PYTHON_DEBUG_LIBRARIES)
+  ${PYTHON_LIBRARIES})
 
 ## #################################################################
 ## Handling of generated script modules
@@ -181,18 +156,17 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dtkCore.i
   COMMAND ${CMAKE_COMMAND} ARGS -E  make_directory ${CMAKE_BINARY_DIR}/modules
   COMMAND ${CMAKE_COMMAND} ARGS -E  copy ${${PROJECT_NAME}_BINARY_DIR}/core.py ${CMAKE_BINARY_DIR}/modules
-  COMMENT "-- Moving python modules to ${CMAKE_BINARY_DIR}/modules"
-)
+  COMMENT "-- Moving python modules to ${CMAKE_BINARY_DIR}/modules")
+
+set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/core.py)
 
 ## #################################################################
 ## Installation
 ## #################################################################
 
-if(NOT dtk_INSTALL_NO_DEVELOPMENT)
-  install_files(${dtk_INSTALL_INCLUDE_DIR}/${PROJECT_NAME} .h ${${PROJECT_NAME}_HEADERS})
-endif(NOT dtk_INSTALL_NO_DEVELOPMENT)
-
-if(NOT dtk_INSTALL_NO_LIBRARIES)
-  install_targets(${dtk_INSTALL_LIB_DIR} RUNTIME_DIRECTORY ${dtk_INSTALL_BIN_DIR} ${PROJECT_NAME})
-  install_files(${dtk_INSTALL_MODULE_DIR} .py ${CMAKE_BINARY_DIR}/modules/core.py)
-endif(NOT dtk_INSTALL_NO_LIBRARIES)
+install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
+install(FILES ${${PROJECT_NAME}_MODULES} DESTINATION modules)
+install(TARGETS ${PROJECT_NAME}
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib)

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Sun Feb  7 23:06:57 2010 (+0100)
+## Last-Updated: Tue Apr  6 09:42:11 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 34
+##     Update #: 39
 ######################################################################
 ## 
 ### Commentary: 
@@ -32,8 +32,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeFactory.h
   dtkComposerNodeProperty.h
   dtkComposerScene.h
-  dtkComposerView.h
-)
+  dtkComposerView.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposer.h
@@ -43,8 +42,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerNodeFactory.h
   dtkComposerNodeProperty.h
   dtkComposerScene.h
-  dtkComposerView.h
-)
+  dtkComposerView.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkComposer.cpp
@@ -54,8 +52,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeFactory.cpp
   dtkComposerNodeProperty.cpp
   dtkComposerScene.cpp
-  dtkComposerView.cpp
-)
+  dtkComposerView.cpp)
 
 ## #################################################################
 ## Build rules
@@ -70,30 +67,19 @@ qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES_WRAP}
-)
+  ${${PROJECT_NAME}_SOURCES_WRAP})
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkCore
-  dtkScript
-)
-
-if(PYTHON_DEBUG_LIBRARIES)
-  target_link_libraries(${PROJECT_NAME} debug ${PYTHON_DEBUG_LIBRARIES})
-  target_link_libraries(${PROJECT_NAME} optimized ${PYTHON_LIBRARIES})
-else(PYTHON_DEBUG_LIBRARIES)
-  target_link_libraries(${PROJECT_NAME} ${PYTHON_LIBRARIES})
-endif(PYTHON_DEBUG_LIBRARIES)
+  dtkScript)
 
 ## #################################################################
 ## Installation
 ## #################################################################
 
-if(NOT dtk_INSTALL_NO_DEVELOPMENT)
-  install_files(${dtk_INSTALL_INCLUDE_DIR}/${PROJECT_NAME} .h ${${PROJECT_NAME}_HEADERS})
-endif(NOT dtk_INSTALL_NO_DEVELOPMENT)
-
-if(NOT dtk_INSTALL_NO_LIBRARIES)
-  install_targets(${dtk_INSTALL_LIB_DIR} RUNTIME_DIRECTORY ${dtk_INSTALL_BIN_DIR} ${PROJECT_NAME})
-endif(NOT dtk_INSTALL_NO_LIBRARIES)
+install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
+install(TARGETS ${PROJECT_NAME}
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib)

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:51:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Apr  6 19:36:32 2010 (+0200)
+## Last-Updated: Tue Apr  6 19:47:15 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 24
+##     Update #: 25
 ######################################################################
 ## 
 ### Commentary: 
@@ -22,8 +22,8 @@ set(dtk_VERSION_MINOR  "@dtk_VERSION_MINOR@")
 set(dtk_VERSION_BUILD  "@dtk_VERSION_BUILD@")
 set(dtk_VERSION        "@dtk_VERSION@")
 
-set(dtk_INCLUDE_DIRS "@dtk_INCLUDE_DIRS@")
-set(dtk_LIBRARY_DIRS "@dtk_LIBRARY_DIRS@")
-set(dtk_CMAKE_DIRS   "@dtk_CMAKE_DIRS@")
+set(dtk_INCLUDE_DIRS "@dtk_INSTALL_INCLUDE_DIRS@")
+set(dtk_LIBRARY_DIRS "@dtk_INSTALL_LIBRARY_DIRS@")
+set(dtk_CMAKE_DIRS   "@dtk_INSTALL_CMAKE_DIRS@")
 
 set(dtk_USE_FILE "@dtk_USE_FILE@")

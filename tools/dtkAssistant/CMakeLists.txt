@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Feb  3 17:00:27 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Mar 19 09:48:49 2010 (+0100)
+## Last-Updated: Tue Apr  6 09:26:50 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 16
+##     Update #: 20
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,35 +24,28 @@ project(dtkAssistant)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS_MOC
-  dtkAssistantMainWindow.h
-)
+  dtkAssistantMainWindow.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkAssistantMainWindow.cpp
-  main.cpp
-)
+  main.cpp)
 
 ## #################################################################
 ## Build rules
 ## #################################################################
 
 qt4_wrap_ui(${PROJECT_NAME}_SOURCES_UIC ${${PROJECT_NAME}_FORMS})
-
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
 add_executable(${PROJECT_NAME} MACOSX_BUNDLE
   ${${PROJECT_NAME}_SOURCES_UIC}
   ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES}
-)
+  ${${PROJECT_NAME}_SOURCES})
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkGui
-  dtkHelp
-)
-
-## add_dependencies(${PROJECT_NAME} doc)
+  dtkHelp)
 
 ## #################################################################
 ## Bundle setup
@@ -64,10 +57,8 @@ if(APPLE)
   SET(MACOSX_BUNDLE_VERSION 0.1.0)
   SET(MACOSX_BUNDLE_LONG_VERSION_STRING Version 0.1.0)
   set(${PROJECT_NAME}_RESOURCE_DIR ${EXECUTABLE_OUTPUT_PATH}/${PROJECT_NAME}.app/Contents/Resources)
-# set(${PROJECT_NAME}_PLUGINS_DIR  ${EXECUTABLE_OUTPUT_PATH}/${PROJECT_NAME}.app/Contents/Plugins)
   add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${${PROJECT_NAME}_RESOURCE_DIR}
-#   COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${${PROJECT_NAME}_PLUGINS_DIR}
     COMMAND ${CMAKE_COMMAND} ARGS -E copy ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.icns ${${PROJECT_NAME}_RESOURCE_DIR}
     COMMENT "-- Setting up plugins and resources")
 endif(APPLE)
@@ -76,6 +67,6 @@ endif(APPLE)
 ## Installation
 ## #################################################################
 
-if(NOT dtk_INSTALL_NO_RUNTIME)
-  install_targets(${dtk_INSTALL_BIN_DIR} ${PROJECT_NAME})
-endif(NOT dtk_INSTALL_NO_RUNTIME)
+install(TARGETS ${PROJECT_NAME}
+   BUNDLE DESTINATION bin
+  RUNTIME DESTINATION bin)

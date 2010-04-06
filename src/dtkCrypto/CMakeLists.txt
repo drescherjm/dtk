@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Thu Jan  7 10:37:04 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Wed Mar 17 10:00:09 2010 (+0100)
+## Last-Updated: Tue Apr  6 09:46:01 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 22
+##     Update #: 29
 ######################################################################
 ## 
 ### Commentary: 
@@ -25,28 +25,16 @@ project(dtkCrypto)
 
 set(${PROJECT_NAME}_HEADERS
   dtkCryptoBase64.h
-  dtkCryptoExport.h
-)
-
-set(${PROJECT_NAME}_HEADERS_MOC
-)
+  dtkCryptoExport.h)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkCryptoBase64.c
-)
+  dtkCryptoBase64.c)
 
 if(OPENSSL_FOUND)
-
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
-  dtkCryptoLicenseManager.h
-)
-
-set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
-)
-
+  dtkCryptoLicenseManager.h)
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
-  dtkCryptoLicenseManager.cpp
-)
+  dtkCryptoLicenseManager.cpp)
 endif(OPENSSL_FOUND)
 
 ## #################################################################
@@ -61,29 +49,19 @@ qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
-  ${${PROJECT_NAME}_SOURCES_MOC}
-)
+  ${${PROJECT_NAME}_SOURCES_MOC})
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
-  ${OPENSSL_LIBRARIES}
-)
-
-if(PYTHON_DEBUG_LIBRARIES)
-  target_link_libraries(${PROJECT_NAME} debug ${PYTHON_DEBUG_LIBRARIES})
-  target_link_libraries(${PROJECT_NAME} optimized ${PYTHON_LIBRARIES})
-else(PYTHON_DEBUG_LIBRARIES)
-  target_link_libraries(${PROJECT_NAME} ${PYTHON_LIBRARIES})
-endif(PYTHON_DEBUG_LIBRARIES)
+  ${OPENSSL_LIBRARIES})
 
 ## #################################################################
 ## Installation
 ## #################################################################
 
-if(NOT dtk_INSTALL_NO_DEVELOPMENT)
-  install_files(${dtk_INSTALL_INCLUDE_DIR}/${PROJECT_NAME} .h ${${PROJECT_NAME}_HEADERS})
-endif(NOT dtk_INSTALL_NO_DEVELOPMENT)
-
-if(NOT dtk_INSTALL_NO_LIBRARIES)
-  install_targets(${dtk_INSTALL_LIB_DIR} RUNTIME_DIRECTORY ${dtk_INSTALL_BIN_DIR} ${PROJECT_NAME})
-endif(NOT dtk_INSTALL_NO_LIBRARIES)
+install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
+install(FILES ${${PROJECT_NAME}_MODULES} DESTINATION modules)
+install(TARGETS ${PROJECT_NAME}
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib)

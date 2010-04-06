@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Sun Feb 21 17:05:22 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Feb 22 21:43:09 2010 (+0100)
+## Last-Updated: Tue Apr  6 09:19:43 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 5
+##     Update #: 6
 ######################################################################
 ## 
 ### Commentary: 
@@ -26,12 +26,10 @@ project(dtkVrDevice)
 if(QUAT_LIBRARIES AND VRPN_LIBRARIES)
 
 add_executable(${PROJECT_NAME}
-  main.cpp
-)
+  main.cpp)
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
-  dtkVr
-)
+  dtkVr)
 
 endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)

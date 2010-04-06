@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue Mar  2 13:26:10 2010 (+0100)
+## Last-Updated: Tue Apr  6 09:42:38 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 193
+##     Update #: 199
 ######################################################################
 ## 
 ### Commentary: 
@@ -29,23 +29,20 @@ set(${PROJECT_NAME}_HEADERS
   dtkVrScreen.h
   dtkVrTracker.h
   dtkVrUser.h
-  dtkVrWand.h
-)
+  dtkVrWand.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkVrDevice.h
   dtkVrTracker.h
   dtkVrUser.h
-  dtkVrWand.h
-)
+  dtkVrWand.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkVrDevice.cpp
   dtkVrScreen.cpp
   dtkVrTracker.cpp
   dtkVrUser.cpp
-  dtkVrWand.cpp
-)
+  dtkVrWand.cpp)
 
 ## #################################################################
 ## Vrpn sources
@@ -61,8 +58,7 @@ set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkVrMaster.h
   dtkVrProcess.h
   dtkVrSlave.h
-  dtkVrTrackerVrpn.h
-)
+  dtkVrTrackerVrpn.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
   dtkVrDeviceVrpn.h
@@ -70,8 +66,7 @@ set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
   dtkVrMaster.h
   dtkVrProcess.h
   dtkVrSlave.h
-  dtkVrTrackerVrpn.h
-)
+  dtkVrTrackerVrpn.h)
 
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkVrDeviceVrpn.cpp
@@ -79,8 +74,7 @@ set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkVrMaster.cpp
   dtkVrProcess.cpp
   dtkVrSlave.cpp
-  dtkVrTrackerVrpn.cpp
-)
+  dtkVrTrackerVrpn.cpp)
 
 endif(QUAT_LIBRARIES AND VRPN_LIBRARIES AND MPI_FOUND)
 
@@ -88,9 +82,7 @@ endif(QUAT_LIBRARIES AND VRPN_LIBRARIES AND MPI_FOUND)
 ## Wrapping
 ## #################################################################
 
-set(${PROJECT_NAME}_WRAP_DEPENDS
-  dtkVrProcess.h
-)
+set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS})
 
 dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP vr python ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i ${${PROJECT_NAME}_WRAP_DEPENDS})
 dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP vr tcl    ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i ${${PROJECT_NAME}_WRAP_DEPENDS})
@@ -113,33 +105,22 @@ qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES_WRAP}
-)
+  ${${PROJECT_NAME}_SOURCES_WRAP})
 
 target_link_libraries(${PROJECT_NAME}
   dtkCore
-  dtkDistributed
-)
+  dtkDistributed)
 
 if(MPI_FOUND)
 target_link_libraries(${PROJECT_NAME}
-  ${MPI_LIBRARIES}
-)
+  ${MPI_LIBRARIES})
 endif(MPI_FOUND)
 
 if(QUAT_LIBRARIES AND VRPN_LIBRARIES)
 target_link_libraries(${PROJECT_NAME}
   ${QUAT_LIBRARIES}
-  ${VRPN_LIBRARIES}
-)
+  ${VRPN_LIBRARIES})
 endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)
-
-if(PYTHON_DEBUG_LIBRARIES)
-  target_link_libraries(${PROJECT_NAME} debug ${PYTHON_DEBUG_LIBRARIES})
-  target_link_libraries(${PROJECT_NAME} optimized ${PYTHON_LIBRARIES})
-else(PYTHON_DEBUG_LIBRARIES)
-  target_link_libraries(${PROJECT_NAME} ${PYTHON_LIBRARIES})
-endif(PYTHON_DEBUG_LIBRARIES)
 
 ## #################################################################
 ## Handling of generated script modules
@@ -152,15 +133,15 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   COMMENT "-- Moving python modules to ${CMAKE_BINARY_DIR}/modules"
 )
 
+set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/vr.py)
+
 ## #################################################################
 ## Installation
 ## #################################################################
 
-if(NOT dtk_INSTALL_NO_DEVELOPMENT)
-  install_files(${dtk_INSTALL_INCLUDE_DIR}/${PROJECT_NAME} .h ${${PROJECT_NAME}_HEADERS})
-endif(NOT dtk_INSTALL_NO_DEVELOPMENT)
-
-if(NOT dtk_INSTALL_NO_LIBRARIES)
-  install_targets(${dtk_INSTALL_LIB_DIR} RUNTIME_DIRECTORY ${dtk_INSTALL_BIN_DIR} ${PROJECT_NAME})
-  install_files(${dtk_INSTALL_MODULE_DIR} .py ${CMAKE_BINARY_DIR}/modules/vr.py)
-endif(NOT dtk_INSTALL_NO_LIBRARIES)
+install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
+install(FILES ${${PROJECT_NAME}_MODULES} DESTINATION modules)
+install(TARGETS ${PROJECT_NAME}
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib)

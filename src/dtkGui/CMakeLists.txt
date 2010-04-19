@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Apr  6 09:41:15 2010 (+0200)
+## Last-Updated: Mon Apr 19 12:54:39 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 120
+##     Update #: 125
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,6 +24,7 @@ project(dtkGui)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkAboutBox.h
   dtkAddressBar.h
   dtkAnchoredBar.h
   dtkGuiExport.h
@@ -50,6 +51,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkTextEditorSyntaxHighlighterTcl.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
+  dtkAboutBox.h
   dtkAddressBar.h
   dtkAnchoredBar.h
   dtkInspector.h
@@ -72,6 +74,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkTextEditorSyntaxHighlighter.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkAboutBox.cpp
   dtkAddressBar.cpp
   dtkAnchoredBar.cpp
   dtkInspector.cpp

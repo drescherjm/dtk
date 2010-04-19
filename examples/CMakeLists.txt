@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:06:43 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue Apr  6 09:17:42 2010 (+0200)
+## Last-Updated: Fri Apr 16 09:46:36 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 19
+##     Update #: 20
 ######################################################################
 ## 
 ### Commentary: 
@@ -28,3 +28,4 @@ add_subdirectory(dtkVrProcess)
 add_subdirectory(dtkVrDevice)
 add_subdirectory(dtkDistributedDiscovery)
 add_subdirectory(dtkInspector)
+add_subdirectory(dtkReferenceCounting)

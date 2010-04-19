@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:43:14 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  8 08:52:18 2010 (+0100)
+ * Last-Updated: Mon Apr 19 11:23:17 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 70
+ *     Update #: 77
  */
 
 /* Commentary:
@@ -30,10 +30,14 @@ class DTKCORE_EXPORT dtkAbstractObject : public QObject
     Q_OBJECT
 
 public:
-    dtkAbstractObject(dtkAbstractObject *parent = 0);
-   ~dtkAbstractObject(void);
+            dtkAbstractObject(dtkAbstractObject *parent = 0);
+   virtual ~dtkAbstractObject(void);
 
    QString name(void) const;
+
+   int count(void);
+   int retain(void);
+   int release(void);
 
    bool hasProperty(QString key);
    void addProperty(QString key, QStringList values);

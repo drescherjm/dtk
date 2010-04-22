@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Apr 22 13:59:40 2010 (+0200)
+## Last-Updated: Thu Apr 22 14:37:23 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 112
+##     Update #: 117
 ######################################################################
 ## 
 ### Commentary: 
@@ -185,15 +185,20 @@ SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 
 # add install path to the rpath list
-SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib" )
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 MARK_AS_ADVANCED(CMAKE_INSTALL_RPATH)
 
 # add install path to the rpath list (apple)
 IF(APPLE)
-    SET(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib" )
-    MARK_AS_ADVANCED( CMAKE_INSTALL_NAME_DIR )
+    SET(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
+    MARK_AS_ADVANCED(CMAKE_INSTALL_NAME_DIR)
 ENDIF()
 
 # add the automatically determined parts of the RPATH
 # which point to directories outside the build tree to the install RPATH
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+## #################################################################
+## 
+## #################################################################
+

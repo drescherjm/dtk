@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Aug  3 17:34:51 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Apr 22 12:31:10 2010 (+0200)
+## Last-Updated: Thu Apr 22 14:59:32 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 107
+##     Update #: 111
 ######################################################################
 ## 
 ### Commentary: 
@@ -111,8 +111,8 @@ install(TARGETS ${PROJECT_NAME}
    BUNDLE DESTINATION bin
   RUNTIME DESTINATION bin)
 
-# install(CODE "
-#   set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} \"${CMAKE_SOURCE_DIR}/cmake\")
-#   include(dtkInstall)
-#   dtk_install_dependencies(${PROJECT_NAME})"
-# )
+install(CODE "
+  set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} \"${CMAKE_SOURCE_DIR}/cmake\")
+  include(dtkInstall)
+  dtk_post_install(${PROJECT_NAME})"
+)

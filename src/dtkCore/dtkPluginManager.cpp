@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Feb 24 10:40:40 2010 (+0100)
+ * Last-Updated: Wed Apr 21 17:13:50 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 110
+ *     Update #: 113
  */
 
 /* Commentary: 
@@ -68,11 +68,11 @@ void dtkPluginManager::readSettings(void)
 {
     QSettings settings("inria", "dtk");
     settings.beginGroup("plugins");
-    d->path = settings.value("path").toString();
+    d->path = settings.value("path", "/usr/local/inria/plugins").toString();
     settings.endGroup();
 
     if(d->path.isEmpty()) {
-        dtkWarning() << "Your dtk confg does not seem to be set correctly.";
+        dtkWarning() << "Your dtk config does not seem to be set correctly.";
         dtkWarning() << "Please set plugins.path.";
     }
 }

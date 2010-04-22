@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 21:03:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep  3 16:15:53 2009 (+0200)
+ * Last-Updated: Wed Apr 21 17:13:43 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 44
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -56,12 +56,12 @@ void dtkScriptManager::readSettings(void)
 {
     QSettings settings("inria", "dtk");
     settings.beginGroup("scripts");
-    d->script_path = settings.value("script_path").toString();
-    d->module_path = settings.value("module_path").toString();
+    d->script_path = settings.value("script_path", "/usr/local/inria/scripts").toString();
+    d->module_path = settings.value("module_path", "/usr/local/inria/modules").toString();
     settings.endGroup();
 
     if(d->module_path.isEmpty() && d->script_path.isEmpty()) {
-        dtkWarning() << "Your dtk confg does not seem to be set correctly.";
+        dtkWarning() << "Your dtk config does not seem to be set correctly.";
         dtkWarning() << "Please set scripts.script_path.";
         dtkWarning() << "Please set scripts.module_path.";
     }

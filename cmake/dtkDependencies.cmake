@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Apr  6 22:35:05 2010 (+0200)
+## Last-Updated: Thu Apr 22 10:36:37 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 12
+##     Update #: 23
 ######################################################################
 ## 
 ### Commentary: 
@@ -27,6 +27,12 @@ set(QT_USE_QTSQL     TRUE)
 set(QT_USE_QTHELP    TRUE)
 set(QT_USE_QTNETWORK TRUE)
 set(QT_USE_QTWEBKIT  TRUE)
+
+set(QT_USE_FRAMEWORKS FALSE)
+
+if(WIN32)
+  set(QT_USE_QTMAIN TRUE)
+endif(WIN32)
 
 find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})

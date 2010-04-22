@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 16 09:27:23 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 19 13:21:21 2010 (+0200)
+ * Last-Updated: Mon Apr 19 13:30:24 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 243
+ *     Update #: 245
  */
 
 /* Commentary: 
@@ -276,9 +276,9 @@ int main(int argc, char **argv)
         "This example demonstrates the use "
         "of the retain/release cycle of "
         "dtkAbstractObjects and derivative classes, "
-        "among which, dtkAbstractData, dtkAbstractProcess"
+        "among which, dtkAbstractData, dtkAbstractProcess "
         "and dtkAbstractView. An example of an object watcher is "
-        "implemented to track obects for self deletion. <br><br>"
+        "implemented to track objects for self deletion. <br><br>"
         "Click <b>create</b> button to instanciate a dtkAbstractObject subclass. "
         "Use then the <b>retain</b> and <b>release</b> buttons to act on "
         "the reference count of the object instance highlighted in the list view.");

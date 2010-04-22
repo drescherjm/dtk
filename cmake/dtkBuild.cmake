@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Apr  7 09:10:28 2010 (+0200)
+## Last-Updated: Thu Apr 22 13:59:40 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 76
+##     Update #: 112
 ######################################################################
 ## 
 ### Commentary: 
@@ -125,7 +125,7 @@ add_custom_target(uninstall
 endif(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Uninstall.cmake.in)
 
 ## #################################################################
-## Install rules
+## Install cmake files
 ## #################################################################
 
 if( EXISTS ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Dependencies.cmake
@@ -149,3 +149,51 @@ endif( EXISTS ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Dependencies.cm
    AND EXISTS ${${PROJECT_NAME}_BINARY_DIR}/install/${PROJECT_NAME}Config.cmake
    AND EXISTS ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Use.cmake
    AND EXISTS ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake)
+
+## #################################################################
+## 
+## #################################################################
+
+FOREACH(DEPENDENCY ${QT_LIBRARIES})
+    GET_FILENAME_COMPONENT(DEPENDENCY_NAME "${DEPENDENCY}" NAME_WE)
+    GET_FILENAME_COMPONENT(DEPENDENCY_PATH "${DEPENDENCY}" REALPATH)
+
+    message(STATUS "${DEPENDENCY_NAME}")
+    message(STATUS "${DEPENDENCY_PATH}")
+
+    if(APPLE)
+      set(DEPENDENCY_ACTUAL "${DEPENDENCY_PATH}/Versions/4/${DEPENDENCY_NAME}")
+    else(APPLE)
+      set(DEPENDENCY_ACTUAL "${DEPENDENCY_PATH}")
+    endif(APPLE)
+
+    install(FILES ${DEPENDENCY_ACTUAL} DESTINATION "${CMAKE_INSTALL_PREFIX}/lib")
+ENDFOREACH()
+
+## #################################################################
+## 
+## #################################################################
+
+# use, i.e. don't skip the full RPATH for the build tree
+SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
+
+# when building, don't use the install RPATH already
+# (but later on when installing)
+SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+
+# the RPATH to be used when installing
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+
+# add install path to the rpath list
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib" )
+MARK_AS_ADVANCED(CMAKE_INSTALL_RPATH)
+
+# add install path to the rpath list (apple)
+IF(APPLE)
+    SET(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib" )
+    MARK_AS_ADVANCED( CMAKE_INSTALL_NAME_DIR )
+ENDIF()
+
+# add the automatically determined parts of the RPATH
+# which point to directories outside the build tree to the install RPATH
+SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)

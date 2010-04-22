@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:04:36 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Apr  6 09:44:18 2010 (+0200)
+## Last-Updated: Wed Apr 21 12:44:06 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 30
+##     Update #: 34
 ######################################################################
 ## 
 ### Commentary: 
@@ -42,14 +42,13 @@ set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 ## Generator list
 ## #################################################################
 
-set(CPACK_TBZ2 OFF)
-set(CPACK_TGZ OFF)
-set(CPACK_ZIP OFF)
-set(CPACK_TZ OFF)
-set(CPACK_STBZ2 OFF)
-set(CPACK_STGZ OFF)
-set(CPACK_SZIP OFF)
-set(CPACK_STZ OFF)
+set(CPACK_BINARY_STGZ OFF)
+set(CPACK_BINARY_TBZ2 OFF)
+set(CPACK_BINARY_TGZ OFF)
+set(CPACK_SOURCE_TBZ2 OFF)
+set(CPACK_SOURCE_TGZ OFF)
+set(CPACK_SOURCE_TZ OFF)
+set(CPACK_SOURCE_ZIP OFF)
 
 if(APPLE AND NOT UNIX)
   set(CPACK_GENERATOR "PackageMaker")

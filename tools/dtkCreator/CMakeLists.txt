@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Aug  3 17:34:51 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Apr  6 09:27:45 2010 (+0200)
+## Last-Updated: Thu Apr 22 12:31:10 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 82
+##     Update #: 107
 ######################################################################
 ## 
 ### Commentary: 
@@ -59,7 +59,7 @@ endif(NOT MSVC)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
-add_executable(${PROJECT_NAME} MACOSX_BUNDLE
+add_executable(${PROJECT_NAME} MACOSX_BUNDLE WIN32
   ${${PROJECT_NAME}_SOURCES_WRAP}
   ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES})
@@ -99,7 +99,7 @@ if(APPLE)
   add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${${PROJECT_NAME}_RESOURCE_DIR}
     COMMAND ${CMAKE_COMMAND} ARGS -E copy ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.icns ${${PROJECT_NAME}_RESOURCE_DIR}
-    COMMENT "-- Setting up plugins and resources")
+    COMMENT "-- Setting up resources")
 endif(APPLE)
 
 ## #################################################################
@@ -110,3 +110,9 @@ install(FILES ${${PROJECT_NAME}_MODULES} DESTINATION modules)
 install(TARGETS ${PROJECT_NAME}
    BUNDLE DESTINATION bin
   RUNTIME DESTINATION bin)
+
+# install(CODE "
+#   set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} \"${CMAKE_SOURCE_DIR}/cmake\")
+#   include(dtkInstall)
+#   dtk_install_dependencies(${PROJECT_NAME})"
+# )

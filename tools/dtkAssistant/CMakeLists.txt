@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Feb  3 17:00:27 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue Apr  6 09:26:50 2010 (+0200)
+## Last-Updated: Wed Apr 21 17:33:59 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 20
+##     Update #: 21
 ######################################################################
 ## 
 ### Commentary: 
@@ -60,7 +60,7 @@ if(APPLE)
   add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${${PROJECT_NAME}_RESOURCE_DIR}
     COMMAND ${CMAKE_COMMAND} ARGS -E copy ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.icns ${${PROJECT_NAME}_RESOURCE_DIR}
-    COMMENT "-- Setting up plugins and resources")
+    COMMENT "-- Setting up resources")
 endif(APPLE)
 
 ## #################################################################

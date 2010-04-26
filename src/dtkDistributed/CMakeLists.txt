@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue Apr  6 09:42:25 2010 (+0200)
+## Last-Updated: Mon Apr 26 13:13:41 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 58
+##     Update #: 63
 ######################################################################
 ## 
 ### Commentary: 
@@ -119,3 +119,4 @@ install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib)
+

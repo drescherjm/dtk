@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Apr 22 10:36:37 2010 (+0200)
+## Last-Updated: Mon Apr 26 10:56:47 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 23
+##     Update #: 30
 ######################################################################
 ## 
 ### Commentary: 
@@ -27,8 +27,6 @@ set(QT_USE_QTSQL     TRUE)
 set(QT_USE_QTHELP    TRUE)
 set(QT_USE_QTNETWORK TRUE)
 set(QT_USE_QTWEBKIT  TRUE)
-
-set(QT_USE_FRAMEWORKS FALSE)
 
 if(WIN32)
   set(QT_USE_QTMAIN TRUE)

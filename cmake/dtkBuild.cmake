@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Apr 22 14:37:23 2010 (+0200)
+## Last-Updated: Mon Apr 26 15:13:10 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 117
+##     Update #: 140
 ######################################################################
 ## 
 ### Commentary: 
@@ -87,6 +87,10 @@ set(${PROJECT_NAME}_INSTALL_RUNTIME_DIRS ${RUNTIME_INSTALL_OUTPUT_PATH})
 set(${PROJECT_NAME}_INSTALL_CMAKE_DIRS ${CMAKE_INSTALL_PREFIX}/cmake)
 set(${PROJECT_NAME}_INSTALL_USE_FILE ${CMAKE_INSTALL_PREFIX}/cmake/${PROJECT_NAME}Use.cmake)
 
+## #################################################################
+## Setup configration files
+## #################################################################
+
 if(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in)
 configure_file( ## Build tree configure file
   ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in
@@ -101,6 +105,10 @@ configure_file( ## Install tree configure file
   @ONLY IMMEDIATE)
 endif(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.install.cmake.in)
 
+## #################################################################
+## Setup use file
+## #################################################################
+
 if(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Use.cmake.in)
 configure_file( ## Common use file
   ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Use.cmake.in
@@ -109,20 +117,20 @@ configure_file( ## Common use file
 endif(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Use.cmake.in)
 
 ## #################################################################
-## Uninstall target
+## Path relocation
 ## #################################################################
 
-if(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Uninstall.cmake.in)
+set(CMAKE_SKIP_BUILD_RPATH FALSE)
 
-configure_file("${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Uninstall.cmake.in"
-               "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake"
-               IMMEDIATE @ONLY)
+if (APPLE)
+  set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
+  set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+endif (APPLE)
 
-add_custom_target(uninstall
-  "${CMAKE_COMMAND}" -P
-  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake")
-
-endif(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Uninstall.cmake.in)
+if (UNIX AND NOT APPLE)
+  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+endif (UNIX AND NOT APPLE)
 
 ## #################################################################
 ## Install cmake files
@@ -151,54 +159,17 @@ endif( EXISTS ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Dependencies.cm
    AND EXISTS ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake)
 
 ## #################################################################
-## 
+## Uninstall target
 ## #################################################################
 
-FOREACH(DEPENDENCY ${QT_LIBRARIES})
-    GET_FILENAME_COMPONENT(DEPENDENCY_NAME "${DEPENDENCY}" NAME_WE)
-    GET_FILENAME_COMPONENT(DEPENDENCY_PATH "${DEPENDENCY}" REALPATH)
+if(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Uninstall.cmake.in)
 
-    message(STATUS "${DEPENDENCY_NAME}")
-    message(STATUS "${DEPENDENCY_PATH}")
+configure_file("${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Uninstall.cmake.in"
+               "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake"
+               IMMEDIATE @ONLY)
 
-    if(APPLE)
-      set(DEPENDENCY_ACTUAL "${DEPENDENCY_PATH}/Versions/4/${DEPENDENCY_NAME}")
-    else(APPLE)
-      set(DEPENDENCY_ACTUAL "${DEPENDENCY_PATH}")
-    endif(APPLE)
+add_custom_target(uninstall
+  "${CMAKE_COMMAND}" -P
+  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake")
 
-    install(FILES ${DEPENDENCY_ACTUAL} DESTINATION "${CMAKE_INSTALL_PREFIX}/lib")
-ENDFOREACH()
-
-## #################################################################
-## 
-## #################################################################
-
-# use, i.e. don't skip the full RPATH for the build tree
-SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
-
-# when building, don't use the install RPATH already
-# (but later on when installing)
-SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-
-# the RPATH to be used when installing
-SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-
-# add install path to the rpath list
-SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-MARK_AS_ADVANCED(CMAKE_INSTALL_RPATH)
-
-# add install path to the rpath list (apple)
-IF(APPLE)
-    SET(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
-    MARK_AS_ADVANCED(CMAKE_INSTALL_NAME_DIR)
-ENDIF()
-
-# add the automatically determined parts of the RPATH
-# which point to directories outside the build tree to the install RPATH
-SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-
-## #################################################################
-## 
-## #################################################################
-
+endif(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Uninstall.cmake.in)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb  3 16:02:30 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 12 08:47:12 2010 (+0100)
+ * Last-Updated: Mon Apr 26 16:15:43 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 234
+ *     Update #: 236
  */
 
 /* Commentary: 
@@ -57,6 +57,9 @@ void dtkHelpController::readSettings(void)
     foreach(QString key, paths.keys())
         if(d->engine->customFilters().contains(key))
             d->paths.insert(key, paths.value(key));
+
+    if(paths.isEmpty() && QFile::exists("/usr/local/inria/doc/dtk.qhc"))
+        d->paths.insert("fr.inria.dtk", "/usr/local/inria/doc/html/");
 }
 
 void dtkHelpController::writeSettings(void)
@@ -83,7 +86,7 @@ bool dtkHelpController::registerDocumentation(const QString& path)
 
     d->paths.insert(d->engine->namespaceName(path),
                     d->engine->filterAttributes(d->engine->namespaceName(path)).first());
-    
+
     return true;
 }
 

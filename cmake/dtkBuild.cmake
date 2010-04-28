@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Apr 26 15:13:10 2010 (+0200)
+## Last-Updated: Wed Apr 28 17:46:39 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 140
+##     Update #: 141
 ######################################################################
 ## 
 ### Commentary: 
@@ -144,7 +144,6 @@ AND EXISTS ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake)
 
 install(FILES
   ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Dependencies.cmake
-  ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Plugin.cmake
   ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Build.cmake
   ${${PROJECT_NAME}_BINARY_DIR}/install/${PROJECT_NAME}Config.cmake
   ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Use.cmake
@@ -157,6 +156,13 @@ endif( EXISTS ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Dependencies.cm
    AND EXISTS ${${PROJECT_NAME}_BINARY_DIR}/install/${PROJECT_NAME}Config.cmake
    AND EXISTS ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Use.cmake
    AND EXISTS ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake)
+
+if(EXISTS ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Plugin.cmake)
+install(FILES
+  ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Plugin.cmake
+  DESTINATION
+  ${CMAKE_INSTALL_PREFIX}/cmake)
+endif(EXISTS ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Plugin.cmake)
 
 ## #################################################################
 ## Uninstall target

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar  9 21:41:18 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb  7 17:44:06 2010 (+0100)
+ * Last-Updated: Tue Apr 27 09:25:41 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 168
+ *     Update #: 174
  */
 
 /* Commentary: 
@@ -83,7 +83,9 @@ bool dtkPluginGenerator::run(void)
         && generatePluginSourceFile()
         && generateExportHeaderFile()
         && generateHelpCollectionFile()
-        && generateHelpConfigurationFile();
+        && generateHelpConfigurationFile()
+        && generateReadmeFile()
+        && generateCopyingFile();
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -338,6 +340,50 @@ bool dtkPluginGenerator::generateHelpConfigurationFile(void)
     targetFile.close();
     
     templateFile.close();
+
+    return true;
+}
+
+// /////////////////////////////////////////////////////////////////
+// README file
+// /////////////////////////////////////////////////////////////////
+
+bool dtkPluginGenerator::generateReadmeFile(void)
+{
+    QFile targetFile(d->target.absoluteFilePath("README.txt"));
+
+    if(!targetFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+	qWarning() << "dtkPluginGenerator: unable to open CMakeLists.txt for writing";
+	return false;
+    }
+
+    QTextStream stream(&targetFile);
+
+    stream << QString("");
+
+    targetFile.close();
+
+    return true;
+}
+
+// /////////////////////////////////////////////////////////////////
+// COPYING file
+// /////////////////////////////////////////////////////////////////
+
+bool dtkPluginGenerator::generateCopyingFile(void)
+{
+    QFile targetFile(d->target.absoluteFilePath("CMakeLists.txt"));
+
+    if(!targetFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+	qWarning() << "dtkPluginGenerator: unable to open CMakeLists.txt for writing";
+	return false;
+    }
+
+    QTextStream stream(&targetFile);
+
+    stream << QString("");
+
+    targetFile.close();
 
     return true;
 }

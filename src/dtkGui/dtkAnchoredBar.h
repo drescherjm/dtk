@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar 16 08:43:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 23 16:01:46 2010 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 5
+ * Last-Updated: Fri Apr 30 18:32:56 2010 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 6
  */
 
 /* Commentary: 
@@ -22,9 +22,11 @@
 
 #include <QtGui>
 
+#include "dtkGuiExport.h"
+
 class dtkAnchoredBarPrivate;
 
-class dtkAnchoredBar : public QToolBar
+class DTKGUI_EXPORT dtkAnchoredBar : public QToolBar
 {
     Q_OBJECT
 

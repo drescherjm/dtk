@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Apr 28 17:46:39 2010 (+0200)
+## Last-Updated: Tue May  4 10:55:49 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 141
+##     Update #: 145
 ######################################################################
 ## 
 ### Commentary: 
@@ -122,15 +122,17 @@ endif(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Use.cmake.in)
 
 set(CMAKE_SKIP_BUILD_RPATH FALSE)
 
+set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+
 if (APPLE)
   set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
-  set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 endif (APPLE)
 
 if (UNIX AND NOT APPLE)
-  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 endif (UNIX AND NOT APPLE)
+
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 ## #################################################################
 ## Install cmake files

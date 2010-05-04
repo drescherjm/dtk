@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 19:01:19 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr  1 10:45:16 2010 (+0200)
+ * Last-Updated: Fri Apr 30 19:06:09 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 19
+ *     Update #: 21
  */
 
 /* Commentary: 
@@ -22,10 +22,12 @@
 
 #include <QtGui>
 
+#include "dtkDistributedExport.h"
+
 class dtkDistributorNode;
 class dtkDistributorPrivate;
 
-class dtkDistributor : public QWidget
+class DTKDISTRIBUTED_EXPORT dtkDistributor : public QWidget
 {
     Q_OBJECT
 

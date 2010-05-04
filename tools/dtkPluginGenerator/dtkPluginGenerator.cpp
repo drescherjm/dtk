@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar  9 21:41:18 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 27 09:25:41 2010 (+0200)
+ * Last-Updated: Tue May  4 15:32:39 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 174
+ *     Update #: 175
  */
 
 /* Commentary: 
@@ -372,7 +372,7 @@ bool dtkPluginGenerator::generateReadmeFile(void)
 
 bool dtkPluginGenerator::generateCopyingFile(void)
 {
-    QFile targetFile(d->target.absoluteFilePath("CMakeLists.txt"));
+    QFile targetFile(d->target.absoluteFilePath("COPYING.txt"));
 
     if(!targetFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
 	qWarning() << "dtkPluginGenerator: unable to open CMakeLists.txt for writing";

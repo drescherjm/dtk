@@ -4,9 +4,9 @@
 ;; Copyright (C) 2008 - Julien Wintz, Inria.
 ;; Created: Mon Mar 15 09:01:08 2010 (+0100)
 ;; Version: $Id$
-;; Last-Updated: Wed Mar 24 16:22:25 2010 (+0100)
+;; Last-Updated: Fri May 28 14:54:21 2010 (+0200)
 ;;           By: Julien Wintz
-;;     Update #: 12
+;;     Update #: 13
 */
 
 /* Commentary: 
@@ -17,22 +17,3 @@
 ;; 
 */
 
-dtkInspector QLabel {
-    color: lightGray;
-    font-size: 10pt;
-}
-
-dtkInspector QPushButton {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #717171, stop: 0.4 #303030, stop: 0.5 #323232 stop:1 #323232);
-    border: 1px solid #cecece;
-    border-radius: 10px;
-    color: #cecece;
-    height: 18px;
-    font-size: 10pt;
-}
-
-dtkInspector QDoubleSpinBox {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #5d5d5d, stop:1 #4a4a4a);
-    border: 1px solid #cecece;
-    color: #cecece;
-}

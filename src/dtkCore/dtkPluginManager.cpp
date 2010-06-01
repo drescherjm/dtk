@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 30 19:04:10 2010 (+0200)
+ * Last-Updated: Tue Jun  1 20:58:14 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 115
+ *     Update #: 116
  */
 
 /* Commentary: 
@@ -69,7 +69,7 @@ void dtkPluginManager::readSettings(void)
     QSettings settings("inria", "dtk");
     settings.beginGroup("plugins");
 #ifdef Q_WS_WIN
-    d->path = settings.value("path", "C:\Program Files\inria\plugins").toString();
+    d->path = settings.value("path", "C:\\Program Files\\inria\\plugins").toString();
 #else
     d->path = settings.value("path", "/usr/local/inria/plugins").toString();
 #endif

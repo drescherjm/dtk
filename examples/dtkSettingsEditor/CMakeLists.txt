@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Dec 23 10:00:14 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue Apr  6 09:18:53 2010 (+0200)
+## Last-Updated: Tue Jun  1 21:01:55 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 2
+##     Update #: 5
 ######################################################################
 ## 
 ### Commentary: 
@@ -30,3 +30,11 @@ target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkCore
   dtkGui)
+
+install(TARGETS ${PROJECT_NAME}
+  RUNTIME DESTINATION bin
+   BUNDLE DESTINATION bin)
+
+if(APPLE)
+  install(CODE "execute_process(COMMAND macdeployqt \${CMAKE_INSTALL_PREFIX}/bin/${PROJECT_NAME}.app)")
+endif(APPLE)

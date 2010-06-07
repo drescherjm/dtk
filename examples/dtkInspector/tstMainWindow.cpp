@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar 23 21:05:20 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 23 21:31:46 2010 (+0100)
+ * Last-Updated: Wed Jun  2 13:59:48 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 41
+ *     Update #: 42
  */
 
 /* Commentary: 
@@ -33,6 +33,11 @@ class tstMainWindowPrivate
 public:
     dtkInspector *inspector;
 };
+
+// /////////////////////////////////////////////////////////////////
+// tstMainWindow
+// /////////////////////////////////////////////////////////////////
+
 
 tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
 {

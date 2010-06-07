@@ -1,8 +1,14 @@
 <!DOCTYPE RCC><RCC version="1.0">
   <qresource prefix="dtkGui">
+    <file>dtkInsetMenu.qss</file>
+    <file>dtkInsetMenu-green.qss</file>
     <file>dtkInspector.qss</file>
     <file>dtkAnchoredBar.qss</file>
-
+    <file>pixmaps/dtk-gui-inset-menu-item.png</file>
+    <file>pixmaps/dtk-gui-inset-menu-scroller-both.png</file>
+    <file>pixmaps/dtk-gui-inset-menu-scroller-left.png</file>
+    <file>pixmaps/dtk-gui-inset-menu-scroller-right.png</file>
+    <file>pixmaps/dtk-gui-inset-menu-scroller-none.png</file>
     <file>pixmaps/dtk-anchored-bar-action.png</file>
     <file>pixmaps/dtk-anchored-bar-add.png</file>
     <file>pixmaps/dtk-anchored-bar-handle.png</file>
@@ -11,6 +17,7 @@
     <file>pixmaps/dtk-inspector.png</file>
     <file>pixmaps/dtk-interpreter.png</file>
     <file>pixmaps/dtk-widget.png</file>
+    <file>pixmaps/dtk-inset.png</file>
     <file>pixmaps/dtk.png</file>
   </qresource>
 </RCC>

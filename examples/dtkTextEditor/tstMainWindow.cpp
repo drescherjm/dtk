@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:19:56 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun  8 16:05:57 2010 (+0200)
+ * Last-Updated: Tue Jun  8 16:34:16 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 49
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -129,7 +129,7 @@ bool tstMainWindow::fileOpen(void)
     if(d->maySave()) {
         QString fileName = QFileDialog::getOpenFileName(this, tr("Open file"), QDir::homePath());
 
-        if(fileName.isEmpty()) {
+        if(!fileName.isEmpty()) {
 
             status = d->editor->open(fileName);
 

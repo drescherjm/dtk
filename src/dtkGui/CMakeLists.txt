@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Jun  2 13:55:25 2010 (+0200)
+## Last-Updated: Tue Jun  8 13:48:06 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 135
+##     Update #: 140
 ######################################################################
 ## 
 ### Commentary: 
@@ -37,6 +37,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkNavigationBar.h
   dtkPreferencesWidget.h
   dtkProgressIndicator.h
+  dtkRecentFilesMenu.h
   dtkRegistrationBar.h
   dtkSearchBar.h
   dtkSettingsEditor.h
@@ -64,6 +65,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkNavigationBar.h
   dtkPreferencesWidget.h
   dtkProgressIndicator.h
+  dtkRecentFilesMenu.h
   dtkRegistrationBar.h
   dtkSearchBar.h
   dtkSettingsEditor.h
@@ -88,6 +90,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkNavigationBar.cpp
   dtkPreferencesWidget.cpp
   dtkProgressIndicator.cpp
+  dtkRecentFilesMenu.cpp
   dtkRegistrationBar.cpp
   dtkSearchBar.cpp
   dtkSettingsEditor.cpp

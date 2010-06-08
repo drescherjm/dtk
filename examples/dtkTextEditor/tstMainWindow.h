@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:19:37 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Apr 18 23:08:49 2009 (+0200)
+ * Last-Updated: Tue Jun  8 14:24:29 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 2
+ *     Update #: 4
  */
 
 /* Commentary: 
@@ -34,6 +34,7 @@ public:
 
 public slots:
     bool fileOpen  (void);
+    bool fileOpen  (const QString& file);
     bool fileSave  (void);
     bool fileSaveAs(void);
 

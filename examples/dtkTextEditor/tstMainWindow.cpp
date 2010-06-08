@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:19:56 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Aug  5 11:17:18 2009 (+0200)
+ * Last-Updated: Tue Jun  8 16:05:57 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 24
+ *     Update #: 49
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 
 #include "tstMainWindow.h"
 
+#include <dtkGui/dtkRecentFilesMenu.h>
 #include <dtkGui/dtkTextEditor.h>
 #include <dtkGui/dtkTextEditorPreferencesWidget.h>
 #include <dtkGui/dtkTextEditorSyntaxHighlighterCpp.h>
@@ -43,6 +44,8 @@ public:
 
     dtkTextEditor *editor;
     dtkTextEditorSyntaxHighlighter *highlighter;
+
+    dtkRecentFilesMenu *recentFilesMenu;
 
 public:
     tstMainWindow *q;
@@ -80,6 +83,8 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
     d->fileOpenAction->setShortcut(Qt::ControlModifier + Qt::Key_O);
     connect(d->fileOpenAction, SIGNAL(triggered()), this, SLOT(fileOpen()));
 
+    d->recentFilesMenu = new dtkRecentFilesMenu("Open recent files", this);
+
     d->fileSaveAction = new QAction("Save", this);
     d->fileSaveAction->setShortcut(Qt::ControlModifier + Qt::Key_S);
     connect(d->fileSaveAction, SIGNAL(triggered()), this, SLOT(fileSave()));
@@ -94,6 +99,7 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
 
     d->fileMenu = this->menuBar()->addMenu("File");
     d->fileMenu->addAction(d->fileOpenAction);
+    d->fileMenu->addMenu(d->recentFilesMenu);
     d->fileMenu->addAction(d->fileSaveAction);
     d->fileMenu->addAction(d->fileSaveAsAction);
     d->fileMenu->addAction(d->preferencesAction);
@@ -102,6 +108,8 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
 
     connect(d->editor, SIGNAL(titleChanged(QString)), this, SLOT(onTitleChanged(QString)));
     connect(d->editor, SIGNAL(documentChanged()), this, SLOT(onDocumentChanged()));
+
+    connect(d->recentFilesMenu, SIGNAL(recentFileTriggered(const QString&)), this, SLOT(fileOpen(const QString&)));
 
     this->setWindowTitle(d->editor->fileName());
     this->setCentralWidget(d->editor);
@@ -116,13 +124,31 @@ tstMainWindow::~tstMainWindow(void)
 
 bool tstMainWindow::fileOpen(void)
 {
+    bool status = false;
+
     if(d->maySave()) {
         QString fileName = QFileDialog::getOpenFileName(this, tr("Open file"), QDir::homePath());
 
-        return d->editor->open(fileName);
+        if(fileName.isEmpty()) {
+
+            status = d->editor->open(fileName);
+
+            if(status)
+                d->recentFilesMenu->addRecentFile(fileName);
+        }
     }
 
-    return false;
+    return status;
+}
+
+bool tstMainWindow::fileOpen(const QString& file)
+{
+    bool status = d->editor->open(file);
+
+    if(status)
+        d->recentFilesMenu->addRecentFile(file);
+
+    return status;
 }
 
 bool tstMainWindow::fileSave(void)

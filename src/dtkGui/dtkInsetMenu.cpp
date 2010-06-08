@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Jun  2 13:30:45 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Jun  6 17:51:17 2010 (+0200)
+ * Last-Updated: Tue Jun  8 11:18:45 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 107
+ *     Update #: 128
  */
 
 /* Commentary: 
@@ -217,12 +217,14 @@ dtkInsetMenuView::~dtkInsetMenuView(void)
 class dtkInsetMenuPixmapPrivate
 {
 public:
+    bool checkable;
     int index;
     int flag;
 };
 
 dtkInsetMenuPixmap::dtkInsetMenuPixmap(const QPixmap& pixmap, QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(pixmap, parent), d(new dtkInsetMenuPixmapPrivate)
 {
+    d->checkable = false;
     d->index = -1;
     d->flag = -1;
 }
@@ -244,14 +246,39 @@ void dtkInsetMenuPixmap::setFlag(int flag)
     d->flag = flag;
 }
 
+void dtkInsetMenuPixmap::setCheckable(bool checkable)
+{
+    d->checkable = checkable;
+}
+
+bool dtkInsetMenuPixmap::checkable(void)
+{
+    return d->checkable;
+}
+
 void dtkInsetMenuPixmap::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(!this->graphicsEffect()) {
-        this->setGraphicsEffect(new QGraphicsBlurEffect(this));
-        emit toggled(d->index, d->flag, true);
+    if(!d->checkable) {
+        if(!this->graphicsEffect())
+            this->setGraphicsEffect(new QGraphicsColorizeEffect(this));
     } else {
-        this->setGraphicsEffect(0);
-        emit toggled(d->index, d->flag, false);
+        if(!this->graphicsEffect()) {
+            this->setGraphicsEffect(new QGraphicsBlurEffect(this));
+            emit toggled(d->index, d->flag, true);
+        } else {
+            this->setGraphicsEffect(0);
+            emit toggled(d->index, d->flag, false);
+        }
+    }
+}
+
+void dtkInsetMenuPixmap::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    if(!d->checkable) {
+        if (this->graphicsEffect())
+            this->setGraphicsEffect(0);
+
+        emit triggered();
     }
 }
 
@@ -318,6 +345,13 @@ int dtkInsetMenuBody::addItem(int tab, const QPixmap& pixmap)
     
     // connect(item, SIGNAL(toggled(int, int, bool)), this, SIGNAL(toggled(int, int, bool)));
 
+    d->items[tab] << item;
+}
+
+int dtkInsetMenuBody::addItem(int tab, dtkInsetMenuPixmap *item)
+{
+    item->setIndex(tab);
+    
     d->items[tab] << item;
 }
 
@@ -515,6 +549,11 @@ int dtkInsetMenu::addItem(int tab, const QPixmap& pixmap)
     d->body->addItem(tab, pixmap);
 }
 
+int dtkInsetMenu::addItem(int tab, dtkInsetMenuPixmap *item)
+{
+    d->body->addItem(tab, item);
+}
+
 void dtkInsetMenu::setStyle(dtkInsetMenu::Style style)
 {
     switch(style) {
@@ -524,6 +563,10 @@ void dtkInsetMenu::setStyle(dtkInsetMenu::Style style)
         break;
     case dtkInsetMenuStyleGreen:
         this->setStyleSheet(dtkReadFile(":dtkGui/dtkInsetMenu-green.qss"));
+        break;
+    case dtkInsetMenuStyleOrange:
+        this->setStyleSheet(dtkReadFile(":dtkGui/dtkInsetMenu-orange.qss"));
+        break;
     default:
         break;
     }

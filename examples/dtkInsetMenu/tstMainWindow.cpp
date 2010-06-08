@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Jun  2 13:58:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Jun  6 18:11:50 2010 (+0200)
+ * Last-Updated: Tue Jun  8 11:13:00 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 86
+ *     Update #: 90
  */
 
 /* Commentary: 
@@ -109,12 +109,28 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
     d->workspace2 = new tstWorkspace(this);
     d->workspace2->inset()->setStyle(dtkInsetMenu::dtkInsetMenuStyleGreen);
     d->workspace2->inset()->addTab("Tab 1");
-    d->workspace2->inset()->addTab("Tab 2");
-    d->workspace2->inset()->addTab("Tab 3");
-    d->workspace2->inset()->addTab("Tab 4");
 
     d->workspace3 = new tstWorkspace(this);
-    d->workspace3->inset()->setStyle(dtkInsetMenu::dtkInsetMenuStyleBlue);
+    d->workspace3->inset()->setStyle(dtkInsetMenu::dtkInsetMenuStyleOrange);
+    d->workspace3->inset()->addTab("Tab 1");
+    d->workspace3->inset()->addTab("Tab 2");
+    d->workspace3->inset()->addTab("Tab 3");
+    d->workspace3->inset()->addTab("Tab 4");
+    d->workspace3->inset()->addItem(0, QPixmap(":dtkGui/pixmaps/dtk-gui-inset-menu-item.png"));
+    d->workspace3->inset()->addItem(0, QPixmap(":dtkGui/pixmaps/dtk-gui-inset-menu-item.png"));
+    d->workspace3->inset()->addItem(0, QPixmap(":dtkGui/pixmaps/dtk-gui-inset-menu-item.png"));
+    d->workspace3->inset()->addItem(1, QPixmap(":dtkGui/pixmaps/dtk-gui-inset-menu-item.png"));
+    d->workspace3->inset()->addItem(1, QPixmap(":dtkGui/pixmaps/dtk-gui-inset-menu-item.png"));
+    d->workspace3->inset()->addItem(2, QPixmap(":dtkGui/pixmaps/dtk-gui-inset-menu-item.png"));
+    d->workspace3->inset()->addItem(2, QPixmap(":dtkGui/pixmaps/dtk-gui-inset-menu-item.png"));
+    d->workspace3->inset()->addItem(2, QPixmap(":dtkGui/pixmaps/dtk-gui-inset-menu-item.png"));
+    d->workspace3->inset()->addItem(2, QPixmap(":dtkGui/pixmaps/dtk-gui-inset-menu-item.png"));
+    d->workspace3->inset()->addItem(3, QPixmap(":dtkGui/pixmaps/dtk-gui-inset-menu-item.png"));
+    d->workspace3->inset()->addItem(3, QPixmap(":dtkGui/pixmaps/dtk-gui-inset-menu-item.png"));
+    d->workspace3->inset()->addItem(3, QPixmap(":dtkGui/pixmaps/dtk-gui-inset-menu-item.png"));
+    d->workspace3->inset()->addItem(3, QPixmap(":dtkGui/pixmaps/dtk-gui-inset-menu-item.png"));
+    d->workspace3->inset()->addItem(3, QPixmap(":dtkGui/pixmaps/dtk-gui-inset-menu-item.png"));
+    d->workspace3->inset()->addItem(3, QPixmap(":dtkGui/pixmaps/dtk-gui-inset-menu-item.png"));
 
     d->stack = new QStackedWidget(this);
     d->stack->addWidget(d->workspace1);

@@ -5,9 +5,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Mar 21 19:02:42 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr  1 11:30:20 2010 (+0200)
+ * Last-Updated: Tue Jun  8 11:34:40 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 371
+ *     Update #: 440
  */
 
 /* Commentary: 
@@ -23,9 +23,10 @@
 #include "dtkDistributedDiscovererTorque.h"
 #include "dtkDistributor.h"
 #include "dtkDistributorController.h"
-#include "dtkDistributorInset.h"
 #include "dtkDistributorScene.h"
 #include "dtkDistributorView.h"
+
+#include <dtkGui/dtkInsetMenu.h>
 
 class dtkDistributorPrivate
 {
@@ -40,7 +41,7 @@ public:
     dtkDistributorLabel *connectLabel;
     dtkDistributorScene *scene;
     dtkDistributorView *view;
-    dtkDistributorInset *inset;
+    dtkInsetMenu *inset;
 
     QStateMachine *machine;
     QState *s1;
@@ -80,8 +81,173 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QWidget(parent), d(new dtkDist
     d->disconnectButton->setPos(-300, -190);
     d->disconnectButton->setOpacity(0);
 
-    d->inset = new dtkDistributorInset(this);
+    d->inset = new dtkInsetMenu(this);
     d->inset->setMaximumHeight(0);
+
+    d->inset->addTab("State"); {
+
+        dtkInsetMenuPixmap *item1 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-free.png"));
+        dtkInsetMenuPixmap *item2 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-jobexclusive.png"));
+        dtkInsetMenuPixmap *item3 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-offline.png"));
+        dtkInsetMenuPixmap *item4 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-down.png"));
+        
+        item1->setFlag(dtkDistributedNode::Free);
+        item2->setFlag(dtkDistributedNode::JobExclusive);    
+        item3->setFlag(dtkDistributedNode::Offline);
+        item4->setFlag(dtkDistributedNode::Down);
+
+        item1->setCheckable(true);
+        item2->setCheckable(true);    
+        item3->setCheckable(true);
+        item4->setCheckable(true);
+        
+        connect(item1, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+        connect(item2, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+        connect(item3, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+        connect(item4, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+
+        d->inset->addItem(0, item1);
+        d->inset->addItem(0, item2);
+        d->inset->addItem(0, item3);
+        d->inset->addItem(0, item4);
+    }
+
+    d->inset->addTab("Brand"); {
+
+        dtkInsetMenuPixmap *item1 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-dell.png"));
+        dtkInsetMenuPixmap *item2 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-ibm.png"));
+        dtkInsetMenuPixmap *item3 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-hp.png"));
+
+        item1->setFlag(dtkDistributedNode::Dell);
+        item2->setFlag(dtkDistributedNode::Ibm);
+        item3->setFlag(dtkDistributedNode::Hp);
+
+        item1->setCheckable(true);
+        item2->setCheckable(true);    
+        item3->setCheckable(true);
+
+        connect(item1, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+        connect(item2, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+        connect(item3, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+
+        d->inset->addItem(1, item1);
+        d->inset->addItem(1, item2);
+        d->inset->addItem(1, item3);
+    }
+
+    d->inset->addTab("Network"); {
+
+        dtkInsetMenuPixmap *item1 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-e1g.png"));
+        dtkInsetMenuPixmap *item2 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-e10g.png"));
+        dtkInsetMenuPixmap *item3 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-m2g.png"));
+        dtkInsetMenuPixmap *item4 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-m10g.png"));
+        dtkInsetMenuPixmap *item5 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-i10g.png"));
+        dtkInsetMenuPixmap *item6 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-i20g.png"));
+        dtkInsetMenuPixmap *item7 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-i40g.png"));
+
+        item1->setFlag(dtkDistributedNode::Ethernet1G);
+        item2->setFlag(dtkDistributedNode::Ethernet10G);
+        item3->setFlag(dtkDistributedNode::Myrinet2G);
+        item4->setFlag(dtkDistributedNode::Myrinet10G);
+        item5->setFlag(dtkDistributedNode::Infiniband10G);
+        item6->setFlag(dtkDistributedNode::Infiniband20G);
+        item7->setFlag(dtkDistributedNode::Infiniband40G);
+
+        item1->setCheckable(true);
+        item2->setCheckable(true);
+        item3->setCheckable(true);
+        item4->setCheckable(true);
+        item5->setCheckable(true);
+        item6->setCheckable(true);
+        item7->setCheckable(true);
+
+        connect(item1, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+        connect(item2, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+        connect(item3, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+        connect(item4, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+        connect(item5, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+        connect(item6, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+
+        d->inset->addItem(2, item1);
+        d->inset->addItem(2, item2);
+        d->inset->addItem(2, item3);
+        d->inset->addItem(2, item4);
+        d->inset->addItem(2, item5);
+        d->inset->addItem(2, item6);
+        d->inset->addItem(2, item7);
+    }
+
+    d->inset->addTab("Core"); {
+
+        dtkInsetMenuPixmap *item1 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-core-1.png"));
+        dtkInsetMenuPixmap *item2 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-core-2.png"));
+        dtkInsetMenuPixmap *item3 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-core-4.png"));
+        dtkInsetMenuPixmap *item4 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-core-8.png"));
+
+        item1->setFlag(dtkDistributedCpu::Single);
+        item2->setFlag(dtkDistributedCpu::Dual);
+        item3->setFlag(dtkDistributedCpu::Quad);
+        item4->setFlag(dtkDistributedCpu::Octo);
+
+        item1->setCheckable(true);
+        item2->setCheckable(true);
+        item3->setCheckable(true);
+        item4->setCheckable(true);
+
+        connect(item1, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+        connect(item2, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+        connect(item3, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+        connect(item4, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+
+        d->inset->addItem(3, item1);
+        d->inset->addItem(3, item2);
+        d->inset->addItem(3, item3);
+        d->inset->addItem(3, item4);
+    }
+
+    d->inset->addTab("Architecture"); {
+
+        dtkInsetMenuPixmap *item1 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-x86.png"));
+        dtkInsetMenuPixmap *item2 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-x86_64.png"));
+
+        item1->setFlag(dtkDistributedCpu::x86);
+        item2->setFlag(dtkDistributedCpu::x86_64);
+
+        item1->setCheckable(true);
+        item2->setCheckable(true);
+
+        connect(item1, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+        connect(item2, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+
+        d->inset->addItem(4, item1);
+        d->inset->addItem(4, item2);
+    }
+
+    d->inset->addTab("Model"); {
+
+        dtkInsetMenuPixmap *item1 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-xeon.png"));
+        dtkInsetMenuPixmap *item2 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-opteron.png"));
+
+        item1->setFlag(dtkDistributedCpu::Xeon);
+        item2->setFlag(dtkDistributedCpu::Opteron);
+
+        item1->setCheckable(true);
+        item2->setCheckable(true);
+
+        connect(item1, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+        connect(item2, SIGNAL(toggled(int, int, bool)), dtkDistributorController::instance(), SLOT(toggle(int, int, bool)));
+
+        d->inset->addItem(5, item1);
+        d->inset->addItem(5, item2);
+    }
+
+
+    d->inset->addTab("Cluster"); {
+
+        dtkInsetMenuPixmap *item1 = new dtkInsetMenuPixmap(QPixmap(":dtkDistributed/pixmaps/dtk-distributed-inset-cluster.png"));
+        
+        d->inset->addItem(6, item1);
+    }
 
     d->scene = new dtkDistributorScene;
     d->scene->addItem(d->handle);

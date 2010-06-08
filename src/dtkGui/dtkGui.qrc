@@ -2,6 +2,7 @@
   <qresource prefix="dtkGui">
     <file>dtkInsetMenu.qss</file>
     <file>dtkInsetMenu-green.qss</file>
+    <file>dtkInsetMenu-orange.qss</file>
     <file>dtkInspector.qss</file>
     <file>dtkAnchoredBar.qss</file>
     <file>pixmaps/dtk-gui-inset-menu-item.png</file>

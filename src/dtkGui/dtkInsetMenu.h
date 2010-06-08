@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Jun  2 13:29:19 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun  3 11:55:20 2010 (+0200)
+ * Last-Updated: Tue Jun  8 11:17:57 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 18
+ *     Update #: 30
  */
 
 /* Commentary: 
@@ -40,12 +40,17 @@ public:
 
     void setIndex(int index);
     void setFlag(int flag);
+    void setCheckable(bool checkable);
+
+    bool checkable(void);
 
 signals:
+    void triggered(void);
     void toggled(int index, int flag, bool checked);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:
     dtkInsetMenuPixmapPrivate *d;
@@ -130,6 +135,7 @@ public:
     ~dtkInsetMenuBody(void);
 
     int addItem(int tab, const QPixmap& pixmap);
+    int addItem(int tab, dtkInsetMenuPixmap *item);
 
 public slots:
     void clear(void);
@@ -163,12 +169,14 @@ public:
         dtkInsetMenuStyleDefault,
         dtkInsetMenuStyleBlue,
         dtkInsetMenuStyleGreen,
+        dtkInsetMenuStyleOrange
     };
 
     QSize sizeHint(void) const;
 
     int addTab(const QString& name);
     int addItem(int tab, const QPixmap& pixmap);
+    int addItem(int tab, dtkInsetMenuPixmap *item);
 
     void setStyle(Style style);
 

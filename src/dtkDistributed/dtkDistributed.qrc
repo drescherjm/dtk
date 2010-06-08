@@ -1,7 +1,5 @@
 <!DOCTYPE RCC><RCC version="1.0">
   <qresource prefix="dtkDistributed">
-    <file>dtkDistributorInset.qss</file>
-
     <file>pixmaps/dtk-distributed-connect-button.png</file>
     <file>pixmaps/dtk-distributed-connect-button-pressed.png</file>
     <file>pixmaps/dtk-distributed-connect-label.png</file>

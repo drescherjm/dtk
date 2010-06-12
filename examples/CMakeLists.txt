@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:06:43 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Wed Jun  2 14:00:35 2010 (+0200)
+## Last-Updated: Sat Jun 12 15:55:35 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 21
+##     Update #: 22
 ######################################################################
 ## 
 ### Commentary: 
@@ -30,3 +30,4 @@ add_subdirectory(dtkDistributedDiscovery)
 add_subdirectory(dtkInspector)
 add_subdirectory(dtkReferenceCounting)
 add_subdirectory(dtkInsetMenu)
+add_subdirectory(dtkFinder)

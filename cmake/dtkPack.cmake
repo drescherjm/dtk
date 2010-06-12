@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:04:36 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Jun  1 20:57:00 2010 (+0200)
+## Last-Updated: Thu Jun 10 10:41:48 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 38
+##     Update #: 43
 ######################################################################
 ## 
 ### Commentary: 
@@ -55,6 +55,7 @@ set(CPACK_SOURCE_ZIP OFF)
 
 if(APPLE AND NOT UNIX)
   set(CPACK_GENERATOR "PackageMaker")
+   set(CPACK_BUNDLE_NAME ${PROJECT_NAME})
 endif(APPLE AND NOT UNIX)
 
 if(WIN32)
@@ -82,6 +83,5 @@ endif(UNIX AND NOT APPLE)
 ## #################################################################
 
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.4), libgcc1 (>= 1:4.1.1), libpython2.6 (>= 2.6), libqt4-help (>= 4:4.5.3), libqt4-network (>= 4:4.5.3), libqt4-opengl (>= 4:4.5.3), libqt4-sql (>= 4:4.5.3), libqt4-webkit (>= 4:4.5.3), libqt4-xml (>= 4:4.5.3), libqt4-xmlpatterns (>= 4:4.5.3), libqtcore4 (>= 4:4.6.1), libqtgui4 (>= 4:4.6.1), libssl0.9.8 (>= 0.9.8k-1), libstdc++6 (>= 4.4.0), tcl8.4 (>= 8.4.16)")
-
 
 include(CPack)

@@ -1,5 +1,6 @@
 <!DOCTYPE RCC><RCC version="1.0">
   <qresource prefix="dtkGui">
+    <file>dtkFinder.qss</file>
     <file>dtkInsetMenu.qss</file>
     <file>dtkInsetMenu-green.qss</file>
     <file>dtkInsetMenu-orange.qss</file>

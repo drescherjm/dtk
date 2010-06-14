@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Jun 12 15:47:45 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Jun 12 16:22:17 2010 (+0200)
+ * Last-Updated: Mon Jun 14 10:22:04 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 12
+ *     Update #: 39
  */
 
 /* Commentary: 
@@ -330,7 +330,13 @@ void dtkFinderPathBar::paintEvent(QPaintEvent *event)
 // dtkFinderListView
 // /////////////////////////////////////////////////////////////////
 
-dtkFinderListView::dtkFinderListView(QWidget *parent) : QListView(parent)
+class dtkFinderListViewPrivate
+{
+public:
+    QMenu *menu;
+};
+
+dtkFinderListView::dtkFinderListView(QWidget *parent) : QListView(parent), d(new dtkFinderListViewPrivate)
 {
     this->setViewMode(QListView::IconMode);
     this->setWordWrap(true);
@@ -343,12 +349,33 @@ dtkFinderListView::dtkFinderListView(QWidget *parent) : QListView(parent)
 
     this->setContextMenuPolicy(Qt::CustomContextMenu);
 
+    d->menu = new QMenu(this);
+    d->menu->addAction("Bookmark", this, SLOT(onBookmarkContextMenuClicked()));
+
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(updateContextMenu(const QPoint&)));
 }
 
 dtkFinderListView::~dtkFinderListView(void)
 {
+    delete d;
 
+    d = NULL;
+}
+
+void dtkFinderListView::addContextMenuAction(QAction *action)
+{
+    d->menu->addAction(action);
+}
+
+QString dtkFinderListView::selectedPath(void) const
+{
+    if(!selectedIndexes().count())
+        return QString();
+
+    if(QFileSystemModel *model = qobject_cast<QFileSystemModel *>(this->model()))
+        return model->filePath(selectedIndexes().first());
+
+    return QString();
 }
 
 void dtkFinderListView::updateContextMenu(const QPoint& point)
@@ -358,9 +385,7 @@ void dtkFinderListView::updateContextMenu(const QPoint& point)
     if(!index.isValid())
         return;
 
-    QMenu menu(this);
-    menu.addAction("Bookmark", this, SLOT(onBookmarkContextMenuClicked()));
-    menu.exec(mapToGlobal(point));
+    d->menu->exec(mapToGlobal(point));
 }
 
 void dtkFinderListView::onBookmarkContextMenuClicked(void)
@@ -431,16 +456,31 @@ void dtkFinderListView::startDrag(Qt::DropActions supportedActions)
 // dtkFinderTreeView
 // /////////////////////////////////////////////////////////////////
 
-dtkFinderTreeView::dtkFinderTreeView(QWidget *parent) : QTreeView(parent)
+class dtkFinderTreeViewPrivate
+{
+public:
+    QMenu *menu;
+};
+
+dtkFinderTreeView::dtkFinderTreeView(QWidget *parent) : QTreeView(parent), d(new dtkFinderTreeViewPrivate)
 {
     this->setDragEnabled(true);
     this->setFrameStyle(QFrame::NoFrame);
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
+
+    this->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    d->menu = new QMenu(this);
+    d->menu->addAction("Bookmark", this, SLOT(onBookmarkContextMenuClicked()));
+
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(updateContextMenu(const QPoint&)));
 }
 
 dtkFinderTreeView::~dtkFinderTreeView(void)
 {
+    delete d;
 
+    d = NULL;
 }
 
 int dtkFinderTreeView::sizeHintForColumn(int column) const
@@ -449,6 +489,41 @@ int dtkFinderTreeView::sizeHintForColumn(int column) const
         return 400;
 
     return 100;
+}
+
+void dtkFinderTreeView::addContextMenuAction(QAction *action)
+{
+    d->menu->addAction(action);
+}
+
+QString dtkFinderTreeView::selectedPath(void) const
+{
+    if(!selectedIndexes().count())
+        return QString();
+
+    if(QFileSystemModel *model = qobject_cast<QFileSystemModel *>(this->model()))
+        return model->filePath(selectedIndexes().first());
+
+    return QString();
+}
+
+void dtkFinderTreeView::updateContextMenu(const QPoint& point)
+{
+    QModelIndex index = this->indexAt(point);
+
+    if(!index.isValid())
+        return;
+
+    d->menu->exec(mapToGlobal(point));
+}
+
+void dtkFinderTreeView::onBookmarkContextMenuClicked(void)
+{
+    if(!selectedIndexes().count())
+        return;
+
+    if(QFileSystemModel *model = qobject_cast<QFileSystemModel *>(this->model()))
+            emit bookmarked(model->filePath(selectedIndexes().first()));
 }
 
 void dtkFinderTreeView::keyPressEvent(QKeyEvent *event)
@@ -575,6 +650,23 @@ dtkFinder::~dtkFinder(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkFinder::addContextMenuAction(QAction *action)
+{
+    d->list->addContextMenuAction(action);
+    d->tree->addContextMenuAction(action);
+}
+
+QString dtkFinder::selectedPath(void) const
+{
+    if(d->stack->currentIndex() == 0)
+        return d->list->selectedPath();
+
+    if(d->stack->currentIndex() == 1)
+        return d->tree->selectedPath();
+
+    return QString();
 }
 
 void dtkFinder::setPath(const QString& path)

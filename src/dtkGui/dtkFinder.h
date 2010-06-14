@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Jun 12 15:45:12 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Jun 12 15:47:29 2010 (+0200)
+ * Last-Updated: Mon Jun 14 10:21:37 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 4
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -91,6 +91,8 @@ private:
 // dtkFinderListView
 // /////////////////////////////////////////////////////////////////
 
+class dtkFinderListViewPrivate;
+
 class dtkFinderListView : public QListView
 {
     Q_OBJECT
@@ -98,6 +100,10 @@ class dtkFinderListView : public QListView
 public:
      dtkFinderListView(QWidget *parent = 0);
     ~dtkFinderListView(void);
+
+    void addContextMenuAction(QAction *action);
+
+    QString selectedPath(void) const;
 
 signals:
     void changed(const QString& path);
@@ -110,11 +116,16 @@ protected slots:
 protected:
      void keyPressEvent(QKeyEvent *event);
      void startDrag(Qt::DropActions supportedActions);
+
+private:
+     dtkFinderListViewPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////
 // dtkFinderTreeView
 // /////////////////////////////////////////////////////////////////
+
+class dtkFinderTreeViewPrivate;
 
 class dtkFinderTreeView : public QTreeView
 {
@@ -126,13 +137,24 @@ public:
 
     int	sizeHintForColumn(int column) const;
 
+    void addContextMenuAction(QAction *action);
+
+    QString selectedPath(void) const;
+
 signals:
     void changed(const QString& path);
     void bookmarked(const QString& path);
 
+protected slots:
+    void updateContextMenu(const QPoint&);
+    void onBookmarkContextMenuClicked(void);
+
 protected:
      void keyPressEvent(QKeyEvent *event);
      void startDrag(Qt::DropActions supportedActions);
+
+private:
+     dtkFinderTreeViewPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -148,6 +170,10 @@ class dtkFinder : public QWidget
 public:
      dtkFinder(QWidget *parent = 0);
     ~dtkFinder(void);
+
+    void addContextMenuAction(QAction *action);
+
+    QString selectedPath(void) const;
 
 signals:
     void changed(const QString& path);

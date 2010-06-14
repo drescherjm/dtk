@@ -102,3 +102,8 @@ void dtkAbstractDataReader::readInformation(QStringList paths)
 {
     DTK_UNUSED(paths);
 }
+
+void dtkAbstractDataReader::setProgress (int value)
+{
+  emit progressed (value);
+}

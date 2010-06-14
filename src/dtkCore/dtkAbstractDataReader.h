@@ -59,6 +59,9 @@ public slots:
    virtual void readInformation(QString path);
    virtual void readInformation(QStringList paths);
 
+   virtual void setProgress (int value);
+   
+
 private:
    dtkAbstractDataReaderPrivate *d;
 };

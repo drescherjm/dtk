@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Jun  2 13:30:45 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun  8 11:18:45 2010 (+0200)
+ * Last-Updated: Mon Jun 14 12:32:07 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 128
+ *     Update #: 131
  */
 
 /* Commentary: 
@@ -347,7 +347,7 @@ int dtkInsetMenuBody::addItem(int tab, const QPixmap& pixmap)
 
     d->items[tab] << item;
 
-	return tab; //?
+    return d->items.count()-1;
 }
 
 int dtkInsetMenuBody::addItem(int tab, dtkInsetMenuPixmap *item)
@@ -356,7 +356,7 @@ int dtkInsetMenuBody::addItem(int tab, dtkInsetMenuPixmap *item)
     
     d->items[tab] << item;
 
-	return tab; //?
+    return d->items.count()-1;
 }
 
 void dtkInsetMenuBody::clear(void)

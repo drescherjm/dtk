@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Jun 12 15:47:45 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jun 14 10:22:04 2010 (+0200)
+ * Last-Updated: Mon Jun 14 12:30:50 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 39
+ *     Update #: 40
  */
 
 /* Commentary: 
@@ -282,7 +282,7 @@ void dtkFinderPathBar::setPath(const QString &path)
 
         dtkFinderPathBarItem *item = new dtkFinderPathBarItem;
         item->text = dir.dirName().isEmpty() ? "/" : dir.dirName();
-		if (!dir.entryInfoList(QStringList() << ".").isEmpty())
+        if (!dir.entryInfoList(QStringList() << ".").isEmpty())
             item->icon = provider.icon(dir.entryInfoList(QStringList() << ".").first());
         item->dir = dir;
         d->items.prepend(item);

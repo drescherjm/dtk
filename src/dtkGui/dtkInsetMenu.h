@@ -22,13 +22,15 @@
 
 #include <QtGui>
 
+#include "dtkGuiExport.h"
+
 // /////////////////////////////////////////////////////////////////
 // dtkInsetMenuPixmap
 // /////////////////////////////////////////////////////////////////
 
 class dtkInsetMenuPixmapPrivate;
 
-class dtkInsetMenuPixmap : public QObject, public QGraphicsPixmapItem
+class DTKGUI_EXPORT dtkInsetMenuPixmap : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
     Q_PROPERTY(QPointF pos READ pos WRITE setPos)
@@ -62,7 +64,7 @@ private:
 
 class dtkInsetMenuScrollerPrivate;
 
-class dtkInsetMenuScroller : public QObject, public QGraphicsPixmapItem
+class DTKGUI_EXPORT dtkInsetMenuScroller : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 
@@ -103,7 +105,7 @@ private:
 
 class dtkInsetMenuHeaderPrivate;
 
-class dtkInsetMenuHeader : public QFrame
+class DTKGUI_EXPORT dtkInsetMenuHeader : public QFrame
 {
     Q_OBJECT
 
@@ -126,7 +128,7 @@ private:
 
 class dtkInsetMenuBodyPrivate;
 
-class dtkInsetMenuBody : public QFrame
+class DTKGUI_EXPORT dtkInsetMenuBody : public QFrame
 {
     Q_OBJECT
 
@@ -157,7 +159,7 @@ private:
 
 class dtkInsetMenuPrivate;
 
-class dtkInsetMenu : public QFrame
+class DTKGUI_EXPORT dtkInsetMenu : public QFrame
 {
     Q_OBJECT
 

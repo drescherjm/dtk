@@ -22,7 +22,9 @@
 
 #include <QMenu>
 
-class dtkRecentFilesMenu : public QMenu
+#include "dtkGuiExport.h"
+
+class DTKGUI_EXPORT dtkRecentFilesMenu : public QMenu
 {
     Q_OBJECT
     Q_PROPERTY(int maxCount READ maxCount WRITE setMaxCount)

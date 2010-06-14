@@ -282,7 +282,8 @@ void dtkFinderPathBar::setPath(const QString &path)
 
         dtkFinderPathBarItem *item = new dtkFinderPathBarItem;
         item->text = dir.dirName().isEmpty() ? "/" : dir.dirName();
-        item->icon = provider.icon(dir.entryInfoList(QStringList() << ".").first());
+		if (!dir.entryInfoList(QStringList() << ".").isEmpty())
+            item->icon = provider.icon(dir.entryInfoList(QStringList() << ".").first());
         item->dir = dir;
         d->items.prepend(item);
 

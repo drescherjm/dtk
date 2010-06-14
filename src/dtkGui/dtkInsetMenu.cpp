@@ -346,6 +346,8 @@ int dtkInsetMenuBody::addItem(int tab, const QPixmap& pixmap)
     // connect(item, SIGNAL(toggled(int, int, bool)), this, SIGNAL(toggled(int, int, bool)));
 
     d->items[tab] << item;
+
+	return tab; //?
 }
 
 int dtkInsetMenuBody::addItem(int tab, dtkInsetMenuPixmap *item)
@@ -353,6 +355,8 @@ int dtkInsetMenuBody::addItem(int tab, dtkInsetMenuPixmap *item)
     item->setIndex(tab);
     
     d->items[tab] << item;
+
+	return tab; //?
 }
 
 void dtkInsetMenuBody::clear(void)
@@ -541,17 +545,17 @@ QSize dtkInsetMenu::sizeHint(void) const
 
 int dtkInsetMenu::addTab(const QString& name)
 {
-    d->header->addTab(name);
+    return d->header->addTab(name);
 }
 
 int dtkInsetMenu::addItem(int tab, const QPixmap& pixmap)
 {
-    d->body->addItem(tab, pixmap);
+    return d->body->addItem(tab, pixmap);
 }
 
 int dtkInsetMenu::addItem(int tab, dtkInsetMenuPixmap *item)
 {
-    d->body->addItem(tab, item);
+    return d->body->addItem(tab, item);
 }
 
 void dtkInsetMenu::setStyle(dtkInsetMenu::Style style)

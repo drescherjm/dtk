@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Jun 12 15:47:45 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 15 16:50:27 2010 (+0200)
+ * Last-Updated: Tue Jun 15 20:24:09 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 42
+ *     Update #: 52
  */
 
 /* Commentary: 
@@ -432,6 +432,22 @@ void dtkFinderListView::keyPressEvent(QKeyEvent *event)
     QListView::keyPressEvent(event);
 }
 
+void dtkFinderListView::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    if(QFileSystemModel *model = qobject_cast<QFileSystemModel *>(this->model())) {
+
+        QModelIndex index = indexAt(event->pos());
+        
+        if(!index.isValid())
+            return;
+
+        QFileInfo info = model->fileInfo(index);
+
+        if(info.isDir())
+            QListView::mouseDoubleClickEvent(event);
+    }
+}
+
 void dtkFinderListView::startDrag(Qt::DropActions supportedActions)
 {
     QModelIndexList indexes = selectedIndexes();
@@ -560,6 +576,22 @@ void dtkFinderTreeView::keyPressEvent(QKeyEvent *event)
     }
 
     QTreeView::keyPressEvent(event);
+}
+
+void dtkFinderTreeView::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    if(QFileSystemModel *model = qobject_cast<QFileSystemModel *>(this->model())) {
+
+        QModelIndex index = indexAt(event->pos());
+     
+        if(!index.isValid())
+            return;
+   
+        QFileInfo info = model->fileInfo(index);
+
+        if(info.isDir())
+            QTreeView::mouseDoubleClickEvent(event);
+    }
 }
 
 void dtkFinderTreeView::startDrag(Qt::DropActions supportedActions)

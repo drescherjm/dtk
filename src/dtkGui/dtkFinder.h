@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Jun 12 15:45:12 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jun 14 10:21:37 2010 (+0200)
+ * Last-Updated: Tue Jun 15 20:19:29 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 19
+ *     Update #: 21
  */
 
 /* Commentary: 
@@ -117,6 +117,7 @@ protected slots:
 
 protected:
      void keyPressEvent(QKeyEvent *event);
+     void mouseDoubleClickEvent(QMouseEvent *event);
      void startDrag(Qt::DropActions supportedActions);
 
 private:
@@ -153,6 +154,7 @@ protected slots:
 
 protected:
      void keyPressEvent(QKeyEvent *event);
+     void mouseDoubleClickEvent(QMouseEvent *event);
      void startDrag(Qt::DropActions supportedActions);
 
 private:

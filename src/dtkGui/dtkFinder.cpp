@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Jun 12 15:47:45 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jun 14 12:30:50 2010 (+0200)
+ * Last-Updated: Tue Jun 15 16:50:27 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 40
+ *     Update #: 42
  */
 
 /* Commentary: 
@@ -468,8 +468,9 @@ dtkFinderTreeView::dtkFinderTreeView(QWidget *parent) : QTreeView(parent), d(new
     this->setDragEnabled(true);
     this->setFrameStyle(QFrame::NoFrame);
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
-
     this->setContextMenuPolicy(Qt::CustomContextMenu);
+    this->setSortingEnabled(true);
+    this->sortByColumn(0, Qt::AscendingOrder);
 
     d->menu = new QMenu(this);
     d->menu->addAction("Bookmark", this, SLOT(onBookmarkContextMenuClicked()));

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 21:58:48 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Oct 27 16:02:54 2009 (+0100)
+ * Last-Updated: Tue Jun 15 11:08:39 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 41
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -59,8 +59,7 @@ public slots:
    virtual void readInformation(QString path);
    virtual void readInformation(QStringList paths);
 
-   virtual void setProgress (int value);
-   
+   virtual void setProgress(int value);
 
 private:
    dtkAbstractDataReaderPrivate *d;

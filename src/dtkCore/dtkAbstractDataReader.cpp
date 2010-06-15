@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 22:03:03 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Oct  5 17:51:58 2009 (+0200)
+ * Last-Updated: Tue Jun 15 11:09:09 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 34
+ *     Update #: 36
  */
 
 /* Commentary: 
@@ -103,7 +103,7 @@ void dtkAbstractDataReader::readInformation(QStringList paths)
     DTK_UNUSED(paths);
 }
 
-void dtkAbstractDataReader::setProgress (int value)
+void dtkAbstractDataReader::setProgress(int value)
 {
-  emit progressed (value);
+    emit progressed (value);
 }

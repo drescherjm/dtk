@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 21:58:48 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Oct 27 16:03:12 2009 (+0100)
+ * Last-Updated: Tue Jun 15 11:08:34 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 30
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -55,6 +55,8 @@ public slots:
 
    virtual bool write(QString file);
    virtual bool write(QStringList files);
+
+   virtual void setProgress(int value);
 
 private:
    dtkAbstractDataWriterPrivate *d;

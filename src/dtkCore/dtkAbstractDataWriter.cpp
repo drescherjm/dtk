@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 22:03:03 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Oct  3 18:19:10 2009 (+0200)
+ * Last-Updated: Tue Jun 15 11:09:06 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 27
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -91,4 +91,9 @@ bool dtkAbstractDataWriter::write(QStringList files)
     DTK_UNUSED(files);
 
     return false;
+}
+
+void dtkAbstractDataWriter::setProgress(int value)
+{
+    emit progressed (value);
 }

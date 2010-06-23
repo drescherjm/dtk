@@ -135,6 +135,22 @@ endif (UNIX AND NOT APPLE)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 
 ## #################################################################
+## Uninstall target
+## #################################################################
+
+if(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Uninstall.cmake.in)
+
+configure_file("${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Uninstall.cmake.in"
+               "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake"
+               IMMEDIATE @ONLY)
+
+add_custom_target(uninstall
+  "${CMAKE_COMMAND}" -P
+  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake")
+
+endif(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Uninstall.cmake.in)
+
+## #################################################################
 ## Install cmake files
 ## #################################################################
 
@@ -151,7 +167,7 @@ install(FILES
   ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Use.cmake
   ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake
   DESTINATION
-  ${CMAKE_INSTALL_PREFIX}/cmake)
+  cmake)
 
 endif( EXISTS ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Dependencies.cmake
    AND EXISTS ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Build.cmake
@@ -163,21 +179,5 @@ if(EXISTS ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Plugin.cmake)
 install(FILES
   ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Plugin.cmake
   DESTINATION
-  ${CMAKE_INSTALL_PREFIX}/cmake)
+  cmake)
 endif(EXISTS ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Plugin.cmake)
-
-## #################################################################
-## Uninstall target
-## #################################################################
-
-if(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Uninstall.cmake.in)
-
-configure_file("${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Uninstall.cmake.in"
-               "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake"
-               IMMEDIATE @ONLY)
-
-add_custom_target(uninstall
-  "${CMAKE_COMMAND}" -P
-  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake")
-
-endif(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Uninstall.cmake.in)

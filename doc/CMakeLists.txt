@@ -46,8 +46,8 @@ if (DOXYGEN_FOUND)
     COMMENT "-- Generating embedded documentation"
     )
 
-  install(FILES ${CMAKE_BINARY_DIR}/doc/dtk.qhc DESTINATION ${CMAKE_INSTALL_PREFIX}/doc)
-  install(DIRECTORY ${CMAKE_BINARY_DIR}/doc/html DESTINATION ${CMAKE_INSTALL_PREFIX}/doc)
+  install(FILES ${CMAKE_BINARY_DIR}/doc/dtk.qhc DESTINATION doc)
+  install(DIRECTORY ${CMAKE_BINARY_DIR}/doc/html DESTINATION doc)
 else (DOXYGEN_FOUND)
   message(INFO "Can't find doxygen. Can't build documentation")
 endif (DOXYGEN_FOUND)

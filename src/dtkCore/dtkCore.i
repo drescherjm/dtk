@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 17 21:41:18 2010 (+0100)
+ * Last-Updated: Thu Jun 24 10:51:28 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 258
+ *     Update #: 261
  */
 
 /* Commentary:
@@ -28,14 +28,8 @@
 #include <QtCore>
 
 #include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkAbstractDataCell.h>
-#include <dtkCore/dtkAbstractDataEdge.h>
-#include <dtkCore/dtkAbstractDataFace.h>
 #include <dtkCore/dtkAbstractDataFactory.h>
-#include <dtkCore/dtkAbstractDataVertex.h>
 #include <dtkCore/dtkAbstractDataMesh.h>
-#include <dtkCore/dtkAbstractDataMeshSurfacic.h>
-#include <dtkCore/dtkAbstractDataMeshVolumic.h>
 #include <dtkCore/dtkAbstractDataReader.h>
 #include <dtkCore/dtkAbstractDataWriter.h>
 #include <dtkCore/dtkAbstractDataImage.h>
@@ -185,13 +179,7 @@
 %include <dtkCore/dtkAbstractObject.h>
 
 %include <dtkCore/dtkAbstractData.h>
-%include <dtkCore/dtkAbstractDataCell.h>
-%include <dtkCore/dtkAbstractDataEdge.h>
-%include <dtkCore/dtkAbstractDataFace.h>
-%include <dtkCore/dtkAbstractDataVertex.h>
 %include <dtkCore/dtkAbstractDataMesh.h>
-%include <dtkCore/dtkAbstractDataMeshSurfacic.h>
-%include <dtkCore/dtkAbstractDataMeshVolumic.h>
 %include <dtkCore/dtkAbstractDataFactory.h>
 %include <dtkCore/dtkAbstractDataReader.h>
 %include <dtkCore/dtkAbstractDataWriter.h>
@@ -219,16 +207,6 @@
 dtkAbstractDataMesh *dtk_as_mesh(dtkAbstractData *data)
 {
     return dynamic_cast<dtkAbstractDataMesh *>(data);
-}
-
-dtkAbstractDataMeshSurfacic *dtk_as_mesh_surfacic(dtkAbstractData *data)
-{
-    return dynamic_cast<dtkAbstractDataMeshSurfacic *>(data);
-}
-
-dtkAbstractDataMeshVolumic *dtk_as_mesh_volumic(dtkAbstractData *data)
-{
-    return dynamic_cast<dtkAbstractDataMeshVolumic *>(data);
 }
 
 %}

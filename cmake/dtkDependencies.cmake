@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Apr 26 10:56:47 2010 (+0200)
+## Last-Updated: Wed Jun 23 17:28:35 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 30
+##     Update #: 31
 ######################################################################
 ## 
 ### Commentary: 
@@ -32,7 +32,7 @@ if(WIN32)
   set(QT_USE_QTMAIN TRUE)
 endif(WIN32)
 
-find_package(Qt4 4.6.3 REQUIRED)
+find_package(Qt4 4.6 REQUIRED)
 include(${QT_USE_FILE})
 
 mark_as_advanced(QT_QMAKE_EXECUTABLE)

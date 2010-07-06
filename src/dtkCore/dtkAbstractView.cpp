@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr 16 12:46:58 2010 (+0200)
+ * Last-Updated: Tue Jul  6 13:28:45 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 242
+ *     Update #: 248
  */
 
 /* Commentary:
@@ -189,6 +189,18 @@ void dtkAbstractView::showNormal(void)
 {
     if(QWidget *widget = this->widget())
         widget->showNormal();
+}
+
+void dtkAbstractView::show(void)
+{
+    if(QWidget *widget = this->widget())
+        widget->show();
+}
+
+void dtkAbstractView::resize(int width, int height)
+{
+    if(QWidget *widget = this->widget())
+        widget->resize(width, height);
 }
 
 void dtkAbstractView::addAnimator(dtkAbstractViewAnimator *animator)

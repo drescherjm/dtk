@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr 16 12:46:50 2010 (+0200)
+ * Last-Updated: Tue Jul  6 19:05:30 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 254
+ *     Update #: 258
  */
 
 /* Commentary:
@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef DTKABSTRACTVIEWER_H
-#define DTKABSTRACTVIEWER_H
+#ifndef DTKABSTRACTVIEW_H
+#define DTKABSTRACTVIEW_H
 
 #include <dtkCore/dtkAbstractObject.h>
 #include <dtkCore/dtkVec3.h>
@@ -82,6 +82,9 @@ public slots:
     void showMinimized(void);
     void showMaximized(void);
     void showNormal(void);
+    void show(void);
+
+    void resize(int width, int height);
 
     void addAnimator  (dtkAbstractViewAnimator   *animator);
     void addNavigator (dtkAbstractViewNavigator  *navigator);

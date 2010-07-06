@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:07:37 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Feb  8 14:25:04 2010 (+0100)
+ * Last-Updated: Tue Jul  6 17:04:44 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 62
+ *     Update #: 73
  */
 
 /* Commentary: 
@@ -17,6 +17,7 @@
  * 
  */
 
+#include "dtkComposerNode.h"
 #include "dtkComposerNodeFactory.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerView.h"
@@ -54,7 +55,6 @@ void dtkComposerView::dragLeaveEvent(QDragLeaveEvent *event)
     event->accept();
 }
 
-
 void dtkComposerView::dragMoveEvent(QDragMoveEvent *event)
 {
     if (event->mimeData()->hasUrls())
@@ -82,10 +82,24 @@ void dtkComposerView::dropEvent(QDropEvent *event)
     if (!scene)
         qDebug() << "Unable to retrieve composition scene";
 
-    if (node &&scene)
+    if (node)
+        node->setPos(this->mapToScene(event->pos()));
+
+    if (node && scene)
         scene->addNode(node);
 
     event->acceptProposedAction();
+}
+
+void dtkComposerView::keyPressEvent(QKeyEvent *event)
+{
+    if(event->modifiers() & Qt::ShiftModifier)
+        this->setDragMode(QGraphicsView::ScrollHandDrag);
+}
+
+void dtkComposerView::keyReleaseEvent(QKeyEvent *event)
+{
+    this->setDragMode(QGraphicsView::RubberBandDrag);
 }
 
 void dtkComposerView::wheelEvent(QWheelEvent *event)
@@ -94,7 +108,7 @@ void dtkComposerView::wheelEvent(QWheelEvent *event)
 
     qreal factor = matrix().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();
 
-    if (factor < 0.07 || factor > 100)
+    if (factor < 0.3 || factor > 100)
         return;
     
     scale(scaleFactor, scaleFactor);

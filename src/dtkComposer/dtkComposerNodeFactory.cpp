@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb  7 22:37:03 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  8 14:25:17 2010 (+0100)
+ * Last-Updated: Tue Jul  6 21:07:30 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 76
+ *     Update #: 88
  */
 
 /* Commentary: 
@@ -76,6 +76,8 @@ dtkComposerNode *dtkComposerNodeFactory::create(QString type)
         node->setType(dtkComposerNode::View);
         node->setObject(view);
         node->addInputProperty(new dtkComposerNodeProperty("data", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, node));
+        node->addAction("Show view", view, SLOT(show()));
+
         return node;
     }
 

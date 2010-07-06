@@ -1,12 +1,12 @@
-/* dtkComposerView.cpp --- 
+/* dtkComposer.cpp --- 
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Feb  8 09:28:39 2010 (+0100)
+ * Last-Updated: Tue Jul  6 11:25:55 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 319
+ *     Update #: 320
  */
 
 /* Commentary: 

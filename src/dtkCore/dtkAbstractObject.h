@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:43:14 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 30 19:26:32 2010 (+0200)
+ * Last-Updated: Tue Jul  6 21:02:55 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 85
+ *     Update #: 91
  */
 
 /* Commentary:
@@ -54,7 +54,7 @@ public:
    const QStringList metaDataValues(QString key);
    QString metadata(QString key);
    QStringList metadatas(QString key);
-   
+
 signals:
    void propertySet(QString key, QString value);
    void metaDataSet(QString key, QString value);

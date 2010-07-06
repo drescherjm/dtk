@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:52 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Feb  8 11:20:44 2010 (+0100)
+ * Last-Updated: Tue Jul  6 16:48:22 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -38,6 +38,8 @@ protected:
     void dragLeaveEvent(QDragLeaveEvent *event);
     void dragMoveEvent(QDragMoveEvent *event);
     void dropEvent(QDropEvent *event);
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
     void wheelEvent(QWheelEvent *event);
 };
 

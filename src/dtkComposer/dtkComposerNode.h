@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Feb  8 11:04:42 2010 (+0100)
+ * Last-Updated: Tue Jul  6 18:59:28 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 63
+ *     Update #: 68
  */
 
 /* Commentary: 
@@ -61,6 +61,8 @@ public:
 
     void removeInputEdge(dtkComposerEdge *edge);
     void removeOutputEdge(dtkComposerEdge *edge);
+
+    void addAction(const QString& text, const QObject *receiver, const char *slot);
 
     int count(dtkComposerNodeProperty *property);
 

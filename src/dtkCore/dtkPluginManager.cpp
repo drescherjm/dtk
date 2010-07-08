@@ -45,8 +45,19 @@ void dtkPluginManager::initialize(void)
 
     if(d->path.isEmpty())
         return;
-
-    foreach(QString path, d->path.split(":", QString::SkipEmptyParts)) {
+	
+	QString paths = d->path + ":" + 
+#ifdef Q_WS_WIN
+	qApp->applicationDirPath() + "\\..\\plugins";
+#else
+#ifdef Q_WS_MAC
+	qApp->applicationDirPath() + "/../PlugIns";
+#else
+	qApp->applicationDirPath() + "\..\plugins";
+#endif
+#endif
+	
+    foreach(QString path, paths.split(":", QString::SkipEmptyParts)) {
 
         QDir dir(path);
         dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
@@ -71,10 +82,11 @@ void dtkPluginManager::readSettings(void)
 #ifdef Q_WS_WIN
     d->path = settings.value("path", "C:\\Program Files\\inria\\plugins").toString();
 #else
-    d->path = settings.value("path", "/usr/local/inria/plugins").toString();
+	d->path = settings.value("path", "/usr/local/inria/plugins").toString();
 #endif
+	
     settings.endGroup();
-
+	
     if(d->path.isEmpty()) {
         dtkWarning() << "Your dtk config does not seem to be set correctly.";
         dtkWarning() << "Please set plugins.path.";

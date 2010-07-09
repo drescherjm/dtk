@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 18:59:28 2010 (+0200)
+ * Last-Updated: Wed Jul  7 17:52:23 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 68
+ *     Update #: 72
  */
 
 /* Commentary: 
@@ -30,7 +30,7 @@ class dtkComposerEdge;
 class dtkComposerNodePrivate;
 class dtkComposerNodeProperty;
 
-class DTKCOMPOSER_EXPORT dtkComposerNode : public QObject, public QGraphicsItem
+class DTKCOMPOSER_EXPORT dtkComposerNode : public QState, public QGraphicsItem
 {
     Q_OBJECT
 
@@ -41,6 +41,8 @@ class DTKCOMPOSER_EXPORT dtkComposerNode : public QObject, public QGraphicsItem
 public:
     enum Type {
         Unknown,
+        Atomic,
+        Control,
         Data,
         Process,
         View
@@ -49,6 +51,7 @@ public:
      dtkComposerNode(dtkComposerNode *parent = 0);
     ~dtkComposerNode(void);
 
+    void setTitle(const QString& title);
     void setType(Type type);
     void setObject(dtkAbstractObject *object);
 

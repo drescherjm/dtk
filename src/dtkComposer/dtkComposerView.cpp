@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:07:37 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 17:04:44 2010 (+0200)
+ * Last-Updated: Wed Jul  7 18:11:04 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 73
+ *     Update #: 83
  */
 
 /* Commentary: 
@@ -17,9 +17,6 @@
  * 
  */
 
-#include "dtkComposerNode.h"
-#include "dtkComposerNodeFactory.h"
-#include "dtkComposerScene.h"
 #include "dtkComposerView.h"
 
 dtkComposerView::dtkComposerView(QWidget *parent) : QGraphicsView(parent)
@@ -35,6 +32,8 @@ dtkComposerView::dtkComposerView(QWidget *parent) : QGraphicsView(parent)
     this->setFrameStyle(QFrame::NoFrame);
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setAcceptDrops(true);
+
+    this->setDragMode(QGraphicsView::RubberBandDrag);
 }
 
 dtkComposerView::~dtkComposerView(void)
@@ -42,65 +41,18 @@ dtkComposerView::~dtkComposerView(void)
 
 }
 
-void dtkComposerView::dragEnterEvent(QDragEnterEvent *event)
-{
-    if (event->mimeData()->hasUrls())
-        event->acceptProposedAction();
-    else
-        event->ignore();
-}
+// void dtkComposerView::keyPressEvent(QKeyEvent *event)
+// {
+//     if(event->modifiers() & Qt::ShiftModifier)
+//         this->setDragMode(QGraphicsView::ScrollHandDrag);
 
-void dtkComposerView::dragLeaveEvent(QDragLeaveEvent *event)
-{
-    event->accept();
-}
+//     event->ignore();
+// }
 
-void dtkComposerView::dragMoveEvent(QDragMoveEvent *event)
-{
-    if (event->mimeData()->hasUrls())
-        event->acceptProposedAction();
-    else
-        event->ignore();
-}
-
-void dtkComposerView::dropEvent(QDropEvent *event)
-{
-    QUrl url = event->mimeData()->urls().first();
-
-    if (url.scheme() != "type") {
-        event->ignore();
-        return;
-    }
-
-    dtkComposerNode *node = dtkComposerNodeFactory::instance()->create(url.path());
-
-    if (!node)
-        qDebug() << "Unable to create node for type" << url.path();
-
-    dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene());
-
-    if (!scene)
-        qDebug() << "Unable to retrieve composition scene";
-
-    if (node)
-        node->setPos(this->mapToScene(event->pos()));
-
-    if (node && scene)
-        scene->addNode(node);
-
-    event->acceptProposedAction();
-}
-
-void dtkComposerView::keyPressEvent(QKeyEvent *event)
-{
-    if(event->modifiers() & Qt::ShiftModifier)
-        this->setDragMode(QGraphicsView::ScrollHandDrag);
-}
-
-void dtkComposerView::keyReleaseEvent(QKeyEvent *event)
-{
-    this->setDragMode(QGraphicsView::RubberBandDrag);
-}
+// void dtkComposerView::keyReleaseEvent(QKeyEvent *event)
+// {
+//     this->setDragMode(QGraphicsView::RubberBandDrag);
+// }
 
 void dtkComposerView::wheelEvent(QWheelEvent *event)
 {
@@ -108,7 +60,7 @@ void dtkComposerView::wheelEvent(QWheelEvent *event)
 
     qreal factor = matrix().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();
 
-    if (factor < 0.3 || factor > 100)
+    if (factor < 0.3 || factor > 10)
         return;
     
     scale(scaleFactor, scaleFactor);

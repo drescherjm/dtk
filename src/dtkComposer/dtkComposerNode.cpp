@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 19:07:46 2010 (+0200)
+ * Last-Updated: Wed Jul  7 18:22:05 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 346
+ *     Update #: 362
  */
 
 /* Commentary: 
@@ -57,7 +57,7 @@ public:
     QList<QAction *> actions;
 };
 
-dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePrivate)
+dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QState(), QGraphicsItem(parent), d(new dtkComposerNodePrivate)
 {
     d->type = Unknown;
     d->object = NULL;
@@ -97,9 +97,20 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
 
 dtkComposerNode::~dtkComposerNode(void)
 {
+    // foreach(dtkComposerEdge *edge, d->input_edges.keys())
+    //     delete edge;
+
+    // foreach(dtkComposerEdge *edge, d->output_edges.keys())
+    //     delete edge;
+    
     delete d;
 
     d = NULL;
+}
+
+void dtkComposerNode::setTitle(const QString& title)
+{
+    d->title->setHtml(title);
 }
 
 void dtkComposerNode::setType(Type type)
@@ -255,6 +266,16 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
         gradiant.setColorAt(0.0, QColor(Qt::white));
         gradiant.setColorAt(0.3, QColor(Qt::gray));
         gradiant.setColorAt(1.0, QColor(Qt::gray).darker());
+        break;
+    case Atomic:
+        gradiant.setColorAt(0.0, QColor(Qt::white));
+        gradiant.setColorAt(0.3, QColor("#ffa500"));
+        gradiant.setColorAt(1.0, QColor("#ffa500").darker());
+        break;
+    case Control:
+        gradiant.setColorAt(0.0, QColor(Qt::white));
+        gradiant.setColorAt(0.3, QColor(Qt::red));
+        gradiant.setColorAt(1.0, QColor(Qt::red).darker());
         break;
     case Data:
         gradiant.setColorAt(0.0, QColor(Qt::white));

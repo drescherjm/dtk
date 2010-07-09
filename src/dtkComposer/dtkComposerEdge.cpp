@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Feb  8 14:27:20 2010 (+0100)
+ * Last-Updated: Wed Jul  7 18:32:18 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 102
+ *     Update #: 113
  */
 
 /* Commentary: 
@@ -44,7 +44,21 @@ dtkComposerEdge::dtkComposerEdge(void) : QObject(), QGraphicsItem(), d(new dtkCo
 
 dtkComposerEdge::~dtkComposerEdge(void)
 {
+    if(d->source && d->source->node()) {
 
+        d->source->node()->removeInputEdge(this);
+        d->source->node()->removeOutputEdge(this);
+    }
+
+    if(d->destination && d->destination->node()) {
+        
+        d->destination->node()->removeInputEdge(this);
+        d->destination->node()->removeOutputEdge(this);
+    }
+
+    delete d;
+
+    d = NULL;
 }
 
 dtkComposerNodeProperty *dtkComposerEdge::source(void)

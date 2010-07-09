@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 16:46:29 2010 (+0200)
+ * Last-Updated: Wed Jul  7 18:26:08 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 185
+ *     Update #: 219
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include "dtkComposerEdge.h"
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeFactory.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerScene.h"
 
@@ -34,6 +35,8 @@ class dtkComposerScenePrivate
 {
 public:
     dtkComposerEdge *current_edge;
+
+    QStateMachine machine;
 };
 
 dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(new dtkComposerScenePrivate)
@@ -132,6 +135,71 @@ dtkComposerNodeProperty *dtkComposerScene::propertyAt(const QPointF& point) cons
             return property;
 
     return NULL;
+}
+
+void dtkComposerScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if (event->mimeData()->hasUrls())
+        event->acceptProposedAction();
+    else
+        event->ignore();
+}
+
+void dtkComposerScene::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
+{
+    event->accept();
+}
+
+void dtkComposerScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if (event->mimeData()->hasUrls())
+        event->acceptProposedAction();
+    else
+        event->ignore();
+}
+
+void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
+{
+    QUrl url = event->mimeData()->urls().first();
+
+    if (url.scheme() != "type") {
+        event->ignore();
+        return;
+    }
+
+    if(dtkComposerNode *node = dtkComposerNodeFactory::instance()->create(url.path())) {
+        node->setPos(event->pos());
+        this->addNode(node);
+    } else {
+        qDebug() << "Unable to create node for type" << url.path();
+    }
+
+    event->acceptProposedAction();
+}
+
+void dtkComposerScene::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Backspace || event->key() == Qt::Key_Delete) {        
+        foreach(QGraphicsItem *item, this->selectedItems()) {
+            if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) {
+
+                foreach(dtkComposerEdge *edge, node->inputEdges())
+                    delete edge; // this->removeItem(edge);
+
+                foreach(dtkComposerEdge *edge, node->outputEdges())
+                    delete edge; // this->removeItem(edge);
+
+                // this->removeItem(node);
+                
+                delete node;
+            }
+        }
+    }
+}
+
+void dtkComposerScene::keyReleaseEvent(QKeyEvent *event)
+{
+    Q_UNUSED(event);
 }
 
 void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)

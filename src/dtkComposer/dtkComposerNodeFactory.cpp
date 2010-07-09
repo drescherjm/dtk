@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb  7 22:37:03 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 21:07:30 2010 (+0200)
+ * Last-Updated: Thu Jul  8 13:16:03 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 88
+ *     Update #: 105
  */
 
 /* Commentary: 
@@ -51,6 +51,28 @@ dtkComposerNodeFactory *dtkComposerNodeFactory::instance(void)
 
 dtkComposerNode *dtkComposerNodeFactory::create(QString type)
 {
+    if (type == "file") {
+        
+        dtkComposerNode *node = new dtkComposerNode;
+        node->setTitle("File");
+        node->setType(dtkComposerNode::Atomic);
+        node->addInputProperty(new dtkComposerNodeProperty("path", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, node));
+        node->addOutputProperty(new dtkComposerNodeProperty("name", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, node));
+        node->addOutputProperty(new dtkComposerNodeProperty("text", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, node));
+        return node;
+    }
+
+    if (type == "condition") {
+        
+        dtkComposerNode *node = new dtkComposerNode;
+        node->setTitle("Condition");
+        node->setType(dtkComposerNode::Control);
+        node->addInputProperty(new dtkComposerNodeProperty("if", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, node));
+        node->addOutputProperty(new dtkComposerNodeProperty("then", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Single, node));
+        node->addOutputProperty(new dtkComposerNodeProperty("else", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Single, node));
+        return node;
+    }
+
     if (dtkAbstractData *data = dtkAbstractDataFactory::instance()->create(type)) {
         
         dtkComposerNode *node = new dtkComposerNode;

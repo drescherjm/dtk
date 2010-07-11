@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Jul  8 13:36:07 2010 (+0200)
+## Last-Updated: Sun Jul 11 23:29:37 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 47
+##     Update #: 52
 ######################################################################
 ## 
 ### Commentary: 
@@ -26,11 +26,11 @@ project(dtkComposer)
 set(${PROJECT_NAME}_HEADERS
   dtkComposer.h
   dtkComposerEdge.h
-  dtkComposerEvaluator.h
   dtkComposerExport.h
   dtkComposerNode.h
   dtkComposerNodeFactory.h
   dtkComposerNodeFile.h
+  dtkComposerNodeInteger.h
   dtkComposerNodeProperty.h
   dtkComposerScene.h
   dtkComposerView.h)
@@ -38,10 +38,10 @@ set(${PROJECT_NAME}_HEADERS
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposer.h
   dtkComposerEdge.h
-  dtkComposerEvaluator.h
   dtkComposerNode.h
   dtkComposerNodeFactory.h
   dtkComposerNodeFile.h
+  dtkComposerNodeInteger.h
   dtkComposerNodeProperty.h
   dtkComposerScene.h
   dtkComposerView.h)
@@ -49,10 +49,10 @@ set(${PROJECT_NAME}_HEADERS_MOC
 set(${PROJECT_NAME}_SOURCES
   dtkComposer.cpp
   dtkComposerEdge.cpp
-  dtkComposerEvaluator.cpp
   dtkComposerNode.cpp
   dtkComposerNodeFactory.cpp
   dtkComposerNodeFile.cpp
+  dtkComposerNodeInteger.cpp
   dtkComposerNodeProperty.cpp
   dtkComposerScene.cpp
   dtkComposerView.cpp)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:12:32 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 11 23:08:59 2009 (+0200)
+ * Last-Updated: Sun Jul 11 23:28:36 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 19
+ *     Update #: 20
  */
 
 /* Commentary: 
@@ -36,8 +36,8 @@ class DTKCOMPOSER_EXPORT dtkComposer : public QWidget
 public:
      dtkComposer(QWidget *parent = 0);
     ~dtkComposer(void);
-
-    void run(void);
+    
+    void start(void);
     void stop(void);
 
 signals:

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 11:25:55 2010 (+0200)
+ * Last-Updated: Sun Jul 11 23:28:24 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 320
+ *     Update #: 326
  */
 
 /* Commentary: 
@@ -18,7 +18,6 @@
  */
 
 #include "dtkComposer.h"
-#include "dtkComposerEvaluator.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerView.h"
@@ -33,7 +32,6 @@
 class dtkComposerPrivate
 {
 public:
-    dtkComposerEvaluator *evaluator;
     dtkComposerScene *scene;
     dtkComposerView *view;
 };
@@ -43,8 +41,6 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
     d->scene = new dtkComposerScene(this);
     d->view = new dtkComposerView(this);
     d->view->setScene(d->scene);
-    d->evaluator = new dtkComposerEvaluator;
-    d->evaluator->setScene(d->scene);
 
     connect(d->scene, SIGNAL(dataSelected(dtkAbstractData *)), this, SIGNAL(dataSelected(dtkAbstractData *)));
     connect(d->scene, SIGNAL(processSelected(dtkAbstractProcess *)), this, SIGNAL(processSelected(dtkAbstractProcess *)));
@@ -65,14 +61,14 @@ dtkComposer::~dtkComposer(void)
     d = NULL;
 }
 
-void dtkComposer::run(void)
+void dtkComposer::start(void)
 {
-    d->evaluator->run();
+    d->scene->start();
 }
 
 void dtkComposer::stop(void)
 {
-    d->evaluator->stop();
+    d->scene->stop();
 }
 
 void dtkComposer::onDataSelected(dtkAbstractData *data)

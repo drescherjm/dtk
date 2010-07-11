@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb  7 22:37:03 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Jul  8 13:16:03 2010 (+0200)
+ * Last-Updated: Sun Jul 11 19:40:08 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 105
+ *     Update #: 110
  */
 
 /* Commentary: 
@@ -26,6 +26,8 @@
 
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeFactory.h"
+#include "dtkComposerNodeFile.h"
+#include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeProperty.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -51,16 +53,11 @@ dtkComposerNodeFactory *dtkComposerNodeFactory::instance(void)
 
 dtkComposerNode *dtkComposerNodeFactory::create(QString type)
 {
-    if (type == "file") {
-        
-        dtkComposerNode *node = new dtkComposerNode;
-        node->setTitle("File");
-        node->setType(dtkComposerNode::Atomic);
-        node->addInputProperty(new dtkComposerNodeProperty("path", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, node));
-        node->addOutputProperty(new dtkComposerNodeProperty("name", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, node));
-        node->addOutputProperty(new dtkComposerNodeProperty("text", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, node));
-        return node;
-    }
+    if (type == "integer")
+        return new dtkComposerNodeInteger;
+
+    if (type == "file")
+        return new dtkComposerNodeFile;
 
     if (type == "condition") {
         

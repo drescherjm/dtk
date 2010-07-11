@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jul  7 18:26:08 2010 (+0200)
+ * Last-Updated: Sun Jul 11 23:29:59 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 219
+ *     Update #: 225
  */
 
 /* Commentary: 
@@ -56,6 +56,8 @@ dtkComposerScene::~dtkComposerScene(void)
 void dtkComposerScene::addNode(dtkComposerNode *node)
 {
     this->addItem(node);
+    
+    d->machine.addState(node);
 }
 
 QList<dtkComposerEdge *> dtkComposerScene::edges(void)
@@ -113,6 +115,21 @@ QList<dtkComposerNodeProperty *> dtkComposerScene::properties(QString name)
                 list << property;
 
     return list;
+}
+
+void dtkComposerScene::start(void)
+{
+    d->machine.start();
+}
+
+void dtkComposerScene::pause(void)
+{
+    // d->machine.pause();
+}
+
+void dtkComposerScene::stop(void)
+{
+    d->machine.stop();
 }
 
 dtkComposerNode *dtkComposerScene::nodeAt(const QPointF& point) const

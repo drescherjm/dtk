@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jul  7 18:01:15 2010 (+0200)
+ * Last-Updated: Sun Jul 11 23:26:10 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 42
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -52,6 +52,11 @@ signals:
     void dataSelected(dtkAbstractData *data);
     void processSelected(dtkAbstractProcess *process);
     void viewSelected(dtkAbstractView *view);
+
+public slots:
+    void start(void);
+    void pause(void);
+    void stop(void);
 
 protected:
     dtkComposerNode *nodeAt(const QPointF& point) const;

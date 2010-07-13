@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Apr 26 13:12:37 2010 (+0200)
+## Last-Updated: Mon Jul 12 16:54:25 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 44
+##     Update #: 60
 ######################################################################
 ## 
 ### Commentary: 
@@ -26,30 +26,39 @@ project(dtkComposer)
 set(${PROJECT_NAME}_HEADERS
   dtkComposer.h
   dtkComposerEdge.h
-  dtkComposerEvaluator.h
   dtkComposerExport.h
   dtkComposerNode.h
+  dtkComposerNodeCondition.h
   dtkComposerNodeFactory.h
+  dtkComposerNodeFile.h
+  dtkComposerNodeInteger.h
   dtkComposerNodeProperty.h
+  dtkComposerNodeString.h
   dtkComposerScene.h
   dtkComposerView.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposer.h
   dtkComposerEdge.h
-  dtkComposerEvaluator.h
   dtkComposerNode.h
+  dtkComposerNodeCondition.h
   dtkComposerNodeFactory.h
+  dtkComposerNodeFile.h
+  dtkComposerNodeInteger.h
   dtkComposerNodeProperty.h
+  dtkComposerNodeString.h
   dtkComposerScene.h
   dtkComposerView.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkComposer.cpp
   dtkComposerEdge.cpp
-  dtkComposerEvaluator.cpp
   dtkComposerNode.cpp
+  dtkComposerNodeCondition.cpp
   dtkComposerNodeFactory.cpp
+  dtkComposerNodeFile.cpp
+  dtkComposerNodeInteger.cpp
+  dtkComposerNodeString.cpp
   dtkComposerNodeProperty.cpp
   dtkComposerScene.cpp
   dtkComposerView.cpp)
@@ -61,6 +70,8 @@ set(${PROJECT_NAME}_SOURCES
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)
 add_definitions(-DQT_NO_DEBUG)
+
+add_definitions(-DQSTATEMACHINE_DEBUG)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 

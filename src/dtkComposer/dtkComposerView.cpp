@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:07:37 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Feb  8 14:25:04 2010 (+0100)
+ * Last-Updated: Tue Jul 13 10:20:12 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 62
+ *     Update #: 85
  */
 
 /* Commentary: 
@@ -17,8 +17,6 @@
  * 
  */
 
-#include "dtkComposerNodeFactory.h"
-#include "dtkComposerScene.h"
 #include "dtkComposerView.h"
 
 dtkComposerView::dtkComposerView(QWidget *parent) : QGraphicsView(parent)
@@ -34,58 +32,13 @@ dtkComposerView::dtkComposerView(QWidget *parent) : QGraphicsView(parent)
     this->setFrameStyle(QFrame::NoFrame);
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setAcceptDrops(true);
+
+    this->setDragMode(QGraphicsView::RubberBandDrag);
 }
 
 dtkComposerView::~dtkComposerView(void)
 {
 
-}
-
-void dtkComposerView::dragEnterEvent(QDragEnterEvent *event)
-{
-    if (event->mimeData()->hasUrls())
-        event->acceptProposedAction();
-    else
-        event->ignore();
-}
-
-void dtkComposerView::dragLeaveEvent(QDragLeaveEvent *event)
-{
-    event->accept();
-}
-
-
-void dtkComposerView::dragMoveEvent(QDragMoveEvent *event)
-{
-    if (event->mimeData()->hasUrls())
-        event->acceptProposedAction();
-    else
-        event->ignore();
-}
-
-void dtkComposerView::dropEvent(QDropEvent *event)
-{
-    QUrl url = event->mimeData()->urls().first();
-
-    if (url.scheme() != "type") {
-        event->ignore();
-        return;
-    }
-
-    dtkComposerNode *node = dtkComposerNodeFactory::instance()->create(url.path());
-
-    if (!node)
-        qDebug() << "Unable to create node for type" << url.path();
-
-    dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene());
-
-    if (!scene)
-        qDebug() << "Unable to retrieve composition scene";
-
-    if (node &&scene)
-        scene->addNode(node);
-
-    event->acceptProposedAction();
 }
 
 void dtkComposerView::wheelEvent(QWheelEvent *event)
@@ -94,7 +47,7 @@ void dtkComposerView::wheelEvent(QWheelEvent *event)
 
     qreal factor = matrix().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();
 
-    if (factor < 0.07 || factor > 100)
+    if (factor < 0.1 || factor > 10)
         return;
     
     scale(scaleFactor, scaleFactor);

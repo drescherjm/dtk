@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Feb  9 23:02:46 2010 (+0100)
+ * Last-Updated: Tue Jul 13 10:22:12 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 328
+ *     Update #: 404
  */
 
 /* Commentary: 
@@ -53,6 +53,8 @@ public:
     dtkComposerNode::Type type;
 
     dtkAbstractObject *object;
+
+    QList<QAction *> actions;
 };
 
 dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePrivate)
@@ -95,9 +97,20 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
 
 dtkComposerNode::~dtkComposerNode(void)
 {
+    // foreach(dtkComposerEdge *edge, d->input_edges.keys())
+    //     delete edge;
+
+    // foreach(dtkComposerEdge *edge, d->output_edges.keys())
+    //     delete edge;
+    
     delete d;
 
     d = NULL;
+}
+
+void dtkComposerNode::setTitle(const QString& title)
+{
+    d->title->setHtml(title);
 }
 
 void dtkComposerNode::setType(Type type)
@@ -171,6 +184,15 @@ void dtkComposerNode::removeOutputEdge(dtkComposerEdge *edge)
     d->output_edges.remove(edge);
 }
 
+void dtkComposerNode::addAction(const QString& text, const QObject *receiver, const char *slot)
+{
+    QAction *action = new QAction(text, this);
+
+    connect(action, SIGNAL(triggered()), receiver, slot);
+
+    d->actions << action;
+}
+
 int dtkComposerNode::count(dtkComposerNodeProperty *property)
 {
     if(property->type() == dtkComposerNodeProperty::Input)
@@ -180,6 +202,16 @@ int dtkComposerNode::count(dtkComposerNodeProperty *property)
         return d->output_edges.keys(property).count();
 
     return 0;
+}
+
+QList<dtkComposerNodeProperty *> dtkComposerNode::inputProperties(void)
+{
+    return d->input_properties;
+}
+
+QList<dtkComposerNodeProperty *> dtkComposerNode::outputProperties(void)
+{
+    return d->output_properties;
 }
 
 QList<dtkComposerEdge *> dtkComposerNode::inputEdges(void)
@@ -227,7 +259,9 @@ dtkComposerNodeProperty *dtkComposerNode::propertyAt(const QPointF& point) const
 
 QRectF dtkComposerNode::boundingRect(void) const
 {
-    return QRectF(-d->width/2 - d->penWidth / 2, -d->header_height - d->penWidth / 2, d->width + d->penWidth, d->height + d->penWidth);
+    QRectF rect(-d->width/2 - d->penWidth / 2, -d->header_height - d->penWidth / 2, d->width + d->penWidth, d->height + d->penWidth);
+
+    return rect;
 }
 
 void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -235,134 +269,51 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    { // Drawing node header
-
-    QRectF rect(-d->width/2, -d->header_height, d->width, d->header_height);
-
-    qreal leftBottomRadius = 0;
-    qreal leftTopRadius = 5;
-    qreal rightBottomRadius = 0;
-    qreal rightTopRadius = 5;
-
-    painter->save();
-
-    QPainterPath path(QPoint(rect.left(), rect.top() + leftTopRadius));
-    path.quadTo(rect.left(), rect.top(), rect.left() + leftTopRadius, rect.top());
-    path.lineTo(rect.right() - rightTopRadius, rect.top());
-    path.quadTo(rect.right(), rect.top(), rect.right(), rect.top() + rightTopRadius);
-    path.lineTo(rect.right(), rect.bottom() - rightBottomRadius);
-    path.quadTo(rect.right(), rect.bottom(), rect.right() - rightBottomRadius, rect.bottom());
-    path.lineTo(rect.left() + leftBottomRadius, rect.bottom());
-    path.quadTo(rect.left(), rect.bottom(), rect.left(), rect.bottom() - leftBottomRadius);
-    path.closeSubpath();
+    QRectF rect(-d->width/2, -d->header_height, d->width, d->height);
 
     QLinearGradient gradiant(rect.left(), rect.top(), rect.left(), rect.bottom());
 
     switch(d->type) {
     case Unknown:
         gradiant.setColorAt(0.0, QColor(Qt::white));
-        gradiant.setColorAt(0.1, QColor(Qt::gray));
+        gradiant.setColorAt(0.3, QColor(Qt::gray));
         gradiant.setColorAt(1.0, QColor(Qt::gray).darker());
+        break;
+    case Atomic:
+        gradiant.setColorAt(0.0, QColor(Qt::white));
+        gradiant.setColorAt(0.3, QColor("#ffa500"));
+        gradiant.setColorAt(1.0, QColor("#ffa500").darker());
+        break;
+    case Control:
+        gradiant.setColorAt(0.0, QColor(Qt::white));
+        gradiant.setColorAt(0.3, QColor(Qt::red));
+        gradiant.setColorAt(1.0, QColor(Qt::red).darker());
         break;
     case Data:
         gradiant.setColorAt(0.0, QColor(Qt::white));
-        gradiant.setColorAt(0.1, QColor(Qt::blue));
+        gradiant.setColorAt(0.3, QColor(Qt::blue));
         gradiant.setColorAt(1.0, QColor(Qt::blue).darker());
         break;
     case Process:
         gradiant.setColorAt(0.0, QColor(Qt::white));
-        gradiant.setColorAt(0.1, QColor(Qt::red));
+        gradiant.setColorAt(0.3, QColor(Qt::red));
         gradiant.setColorAt(1.0, QColor(Qt::red).darker());
         break;
     case View:
         gradiant.setColorAt(0.0, QColor(Qt::white));
-        gradiant.setColorAt(0.1, QColor(Qt::green));
+        gradiant.setColorAt(0.3, QColor(Qt::green));
         gradiant.setColorAt(1.0, QColor(Qt::green).darker());
         break;
     }
 
     painter->setBrush(gradiant);
-    painter->setPen(Qt::NoPen);
-    painter->drawPath(path);
-
-    painter->restore();
-
-    }
-
-    { // Drawing node body
-
-    QRectF rect(-d->width/2, 0, d->width, d->height-d->header_height-1);
-
-    qreal leftBottomRadius = 5;
-    qreal leftTopRadius = 0;
-    qreal rightBottomRadius = 5;
-    qreal rightTopRadius = 0;
-
-    painter->save();
-
-    QPainterPath path(QPoint(rect.left(), rect.top() + leftTopRadius));
-    path.quadTo(rect.left(), rect.top(), rect.left() + leftTopRadius, rect.top());
-    path.lineTo(rect.right() - rightTopRadius, rect.top());
-    path.quadTo(rect.right(), rect.top(), rect.right(), rect.top() + rightTopRadius);
-    path.lineTo(rect.right(), rect.bottom() - rightBottomRadius);
-    path.quadTo(rect.right(), rect.bottom(), rect.right() - rightBottomRadius, rect.bottom());
-    path.lineTo(rect.left() + leftBottomRadius, rect.bottom());
-    path.quadTo(rect.left(), rect.bottom(), rect.left(), rect.bottom() - leftBottomRadius);
-    path.closeSubpath();
-
-    switch(d->type) {
-    case Unknown:
-        painter->setBrush(Qt::gray);
-        break;
-    case Data:
-        painter->setBrush(QColor(Qt::blue).darker());
-        break;
-    case Process:
-        painter->setBrush(QColor(Qt::red).darker());
-        break;
-    case View:
-        painter->setBrush(QColor(Qt::green).darker());
-        break;
-    }
-
-    painter->setPen(Qt::NoPen);
-    painter->drawPath(path);
-
-    painter->restore();
-
-    }
-
-    { // Drawing selection outline
-
-    QRectF rect(-d->width/2, -d->header_height, d->width, d->height);
-         
-    qreal leftBottomRadius = 5;
-    qreal leftTopRadius = 5;
-    qreal rightBottomRadius = 5;
-    qreal rightTopRadius = 5;
-
-    painter->save();
-
-    QPainterPath path(QPoint(rect.left(), rect.top() + leftTopRadius));
-    path.quadTo(rect.left(), rect.top(), rect.left() + leftTopRadius, rect.top());
-    path.lineTo(rect.right() - rightTopRadius, rect.top());
-    path.quadTo(rect.right(), rect.top(), rect.right(), rect.top() + rightTopRadius);
-    path.lineTo(rect.right(), rect.bottom() - rightBottomRadius);
-    path.quadTo(rect.right(), rect.bottom(), rect.right() - rightBottomRadius, rect.bottom());
-    path.lineTo(rect.left() + leftBottomRadius, rect.bottom());
-    path.quadTo(rect.left(), rect.bottom(), rect.left(), rect.bottom() - leftBottomRadius);
-    path.closeSubpath();
 
     if(this->isSelected()) 
         painter->setPen(QPen(Qt::magenta, 2));
     else
         painter->setPen(QPen(Qt::black, 1));
 
-    painter->drawPath(path);
-
-    painter->restore();
-
-    }
+    painter->drawRoundedRect(rect, d->node_radius, d->node_radius);
 }
 
 void dtkComposerNode::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -386,8 +337,9 @@ void dtkComposerNode::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     if(event->button() == Qt::RightButton) {
         QMenu menu;
-        menu.addAction("Action 1");
-        menu.addAction("Action 2");
+        
+        foreach(QAction *action, d->actions)
+            menu.addAction(action);
         menu.exec(QCursor::pos());
     }
 

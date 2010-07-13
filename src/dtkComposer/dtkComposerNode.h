@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Feb  8 11:04:42 2010 (+0100)
+ * Last-Updated: Tue Jul 13 10:20:49 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 63
+ *     Update #: 92
  */
 
 /* Commentary: 
@@ -41,6 +41,8 @@ class DTKCOMPOSER_EXPORT dtkComposerNode : public QObject, public QGraphicsItem
 public:
     enum Type {
         Unknown,
+        Atomic,
+        Control,
         Data,
         Process,
         View
@@ -49,10 +51,10 @@ public:
      dtkComposerNode(dtkComposerNode *parent = 0);
     ~dtkComposerNode(void);
 
+    void setTitle(const QString& title);
     void setType(Type type);
     void setObject(dtkAbstractObject *object);
 
-public:
     void addInputProperty(dtkComposerNodeProperty *property);
     void addOutputProperty(dtkComposerNodeProperty *property);
 
@@ -62,11 +64,16 @@ public:
     void removeInputEdge(dtkComposerEdge *edge);
     void removeOutputEdge(dtkComposerEdge *edge);
 
+    void addAction(const QString& text, const QObject *receiver, const char *slot);
+
     int count(dtkComposerNodeProperty *property);
 
     Type type(void);
 
     dtkAbstractObject *object(void);
+
+    QList<dtkComposerNodeProperty *> inputProperties(void);
+    QList<dtkComposerNodeProperty *> outputProperties(void);
 
     QList<dtkComposerEdge *> inputEdges(void);
     QList<dtkComposerEdge *> outputEdges(void);
@@ -76,7 +83,6 @@ public:
 
     dtkComposerEdge *edge(dtkComposerNodeProperty *property);
 
-public:
     dtkComposerNodeProperty *propertyAt(const QPointF& point) const;
 
     QRectF boundingRect(void) const;

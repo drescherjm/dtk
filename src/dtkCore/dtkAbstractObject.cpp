@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:54:04 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 19 11:24:00 2010 (+0200)
+ * Last-Updated: Tue Jul  6 21:03:10 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 156
+ *     Update #: 168
  */
 
 /* Commentary:
@@ -218,16 +218,34 @@ bool dtkAbstractObject::hasMetaData(QString key)
 
 void dtkAbstractObject::onPropertySet(QString key, QString value)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(key);
     DTK_UNUSED(value);
 }
 
 void dtkAbstractObject::onMetaDataSet(QString key, QString value)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(key);
     DTK_UNUSED(value);
+}
+
+QString dtkAbstractObject::metadata(QString key)
+{
+    if(!d->metadatas.contains(key)) {
+	dtkDebug() << this->metaObject()->className() << "has no such property:" << key;
+	return QString();
+    }
+
+    return d->metadatas.value(key).first();
+}
+
+QStringList dtkAbstractObject::metadatas(QString key)
+{
+    if(!d->metadatas.contains(key)) {
+	dtkDebug() << this->metaObject()->className() << "has no such property:" << key;
+	return QStringList();
+    }
+
+    return d->metadatas.value(key);
 }
 
 // /////////////////////////////////////////////////////////////////

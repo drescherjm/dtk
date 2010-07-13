@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb  7 22:37:03 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  8 14:25:17 2010 (+0100)
+ * Last-Updated: Mon Jul 12 14:11:00 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 76
+ *     Update #: 115
  */
 
 /* Commentary: 
@@ -25,8 +25,12 @@
 #include <dtkCore/dtkAbstractViewFactory.h>
 
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeCondition.h"
 #include "dtkComposerNodeFactory.h"
+#include "dtkComposerNodeFile.h"
+#include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerNodeString.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeFactoryPrivate
@@ -51,6 +55,18 @@ dtkComposerNodeFactory *dtkComposerNodeFactory::instance(void)
 
 dtkComposerNode *dtkComposerNodeFactory::create(QString type)
 {
+    if (type == "integer")
+        return new dtkComposerNodeInteger;
+
+    if (type == "string")
+        return new dtkComposerNodeString;
+
+    if (type == "file")
+        return new dtkComposerNodeFile;
+
+    if (type == "condition")
+        return new dtkComposerNodeCondition;
+
     if (dtkAbstractData *data = dtkAbstractDataFactory::instance()->create(type)) {
         
         dtkComposerNode *node = new dtkComposerNode;
@@ -76,6 +92,8 @@ dtkComposerNode *dtkComposerNodeFactory::create(QString type)
         node->setType(dtkComposerNode::View);
         node->setObject(view);
         node->addInputProperty(new dtkComposerNodeProperty("data", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, node));
+        node->addAction("Show view", view, SLOT(show()));
+
         return node;
     }
 

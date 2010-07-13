@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Apr  7 09:09:18 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Apr  7 09:26:24 2010 (+0200)
+## Last-Updated: Sat Jun 26 18:42:50 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 13
+##     Update #: 16
 ######################################################################
 ## 
 ### Commentary: This script overrides some of the dtkBuild script
@@ -19,7 +19,7 @@
 ######################################################################
 
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/plugins/)
-set(ARCHIVE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/plugins/)
+set(ARCHIVE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib/)
 set(RUNTIME_OUTPUT_PATH ${CMAKE_BINARY_DIR}/plugins/)
 
 add_definitions(${QT_DEFINITIONS})

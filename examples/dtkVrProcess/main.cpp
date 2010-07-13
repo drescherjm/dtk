@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 21:01:33 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  2 16:13:14 2010 (+0100)
+ * Last-Updated: Fri Jul  9 10:44:55 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 144
+ *     Update #: 145
  */
 
 /* Commentary: 
@@ -44,7 +44,6 @@ int main(int argc, char **argv)
        format.setDirectRendering(true);
        QGLFormat::setDefaultFormat(format);
     }
-
 
     QUrl trackerUrl, deviceUrl;
     

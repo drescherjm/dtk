@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb  7 22:37:03 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Jul 11 19:40:08 2010 (+0200)
+ * Last-Updated: Mon Jul 12 14:11:00 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 110
+ *     Update #: 115
  */
 
 /* Commentary: 
@@ -25,10 +25,12 @@
 #include <dtkCore/dtkAbstractViewFactory.h>
 
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeCondition.h"
 #include "dtkComposerNodeFactory.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerNodeString.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeFactoryPrivate
@@ -56,19 +58,14 @@ dtkComposerNode *dtkComposerNodeFactory::create(QString type)
     if (type == "integer")
         return new dtkComposerNodeInteger;
 
+    if (type == "string")
+        return new dtkComposerNodeString;
+
     if (type == "file")
         return new dtkComposerNodeFile;
 
-    if (type == "condition") {
-        
-        dtkComposerNode *node = new dtkComposerNode;
-        node->setTitle("Condition");
-        node->setType(dtkComposerNode::Control);
-        node->addInputProperty(new dtkComposerNodeProperty("if", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, node));
-        node->addOutputProperty(new dtkComposerNodeProperty("then", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Single, node));
-        node->addOutputProperty(new dtkComposerNodeProperty("else", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Single, node));
-        return node;
-    }
+    if (type == "condition")
+        return new dtkComposerNodeCondition;
 
     if (dtkAbstractData *data = dtkAbstractDataFactory::instance()->create(type)) {
         

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jul  7 18:32:18 2010 (+0200)
+ * Last-Updated: Tue Jul 13 10:26:55 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 113
+ *     Update #: 213
  */
 
 /* Commentary: 
@@ -29,6 +29,8 @@ public:
     QPainterPath path;
     QRectF sourceRect;
     QRectF destRect;
+
+    QPointF progress;
 
     dtkComposerNodeProperty *source;
     dtkComposerNodeProperty *destination;
@@ -119,6 +121,12 @@ void dtkComposerEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     painter->setPen(QPen(Qt::black, 1));
     painter->setBrush(Qt::yellow);
     painter->drawPath(d->path);
+
+    if(!d->progress.isNull()) {
+        painter->setBrush(Qt::cyan);
+        painter->drawEllipse(d->progress.x()-8, d->progress.y()-8, 16, 16);
+    }
+
     painter->restore();
 }
 
@@ -193,3 +201,32 @@ bool dtkComposerEdge::unlink(void)
 
     return true;
 }
+
+// void dtkComposerEdge::onTransition(QEvent *event)
+// {
+//     QRectF rect;
+
+//     rect = d->source->rect();
+//     QPointF start = d->source->mapToScene(rect.center());
+
+//     rect = d->destination->rect();
+//     QPointF end = d->destination->mapToScene(rect.center());
+
+//     QPointF midPoint = (start + end) / 2;
+
+//     qreal halfMid = (midPoint.x() - start.x())/2;
+
+//     QPainterPath path;
+//     path.moveTo(start);
+//     path.cubicTo(QPointF(end.x() - halfMid, start.y()), QPointF(start.x() + halfMid, end.y()), end);
+
+//     for(int i = 0; i <= 100; i++) {
+//         usleep(10000);
+//         d->progress = path.pointAtPercent(i/100.0);
+//         this->scene()->update(this->boundingRect());
+//         this->scene()->views().first()->update();
+//         qApp->processEvents();
+//     }
+
+//     d->progress = QPointF(0, 0);
+// }

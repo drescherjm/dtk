@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jul  7 18:22:05 2010 (+0200)
+ * Last-Updated: Tue Jul 13 10:22:12 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 362
+ *     Update #: 404
  */
 
 /* Commentary: 
@@ -57,7 +57,7 @@ public:
     QList<QAction *> actions;
 };
 
-dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QState(), QGraphicsItem(parent), d(new dtkComposerNodePrivate)
+dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePrivate)
 {
     d->type = Unknown;
     d->object = NULL;
@@ -204,6 +204,16 @@ int dtkComposerNode::count(dtkComposerNodeProperty *property)
     return 0;
 }
 
+QList<dtkComposerNodeProperty *> dtkComposerNode::inputProperties(void)
+{
+    return d->input_properties;
+}
+
+QList<dtkComposerNodeProperty *> dtkComposerNode::outputProperties(void)
+{
+    return d->output_properties;
+}
+
 QList<dtkComposerEdge *> dtkComposerNode::inputEdges(void)
 {
     return d->input_edges.keys();
@@ -249,7 +259,9 @@ dtkComposerNodeProperty *dtkComposerNode::propertyAt(const QPointF& point) const
 
 QRectF dtkComposerNode::boundingRect(void) const
 {
-    return QRectF(-d->width/2 - d->penWidth / 2, -d->header_height - d->penWidth / 2, d->width + d->penWidth, d->height + d->penWidth);
+    QRectF rect(-d->width/2 - d->penWidth / 2, -d->header_height - d->penWidth / 2, d->width + d->penWidth, d->height + d->penWidth);
+
+    return rect;
 }
 
 void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -325,6 +337,7 @@ void dtkComposerNode::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     if(event->button() == Qt::RightButton) {
         QMenu menu;
+        
         foreach(QAction *action, d->actions)
             menu.addAction(action);
         menu.exec(QCursor::pos());

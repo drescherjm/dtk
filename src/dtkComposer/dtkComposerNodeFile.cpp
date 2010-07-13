@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul  8 13:28:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Jul 11 23:30:25 2010 (+0200)
+ * Last-Updated: Tue Jul 13 10:24:36 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 8
+ *     Update #: 17
  */
 
 /* Commentary: 
@@ -19,6 +19,8 @@
 
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeProperty.h"
+
+#include <dtkCore/dtkGlobal.h>
 
 class dtkComposerNodeFilePrivate
 {

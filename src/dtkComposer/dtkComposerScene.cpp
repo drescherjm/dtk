@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Jul 11 23:29:59 2010 (+0200)
+ * Last-Updated: Tue Jul 13 10:27:29 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 225
+ *     Update #: 249
  */
 
 /* Commentary: 
@@ -35,8 +35,6 @@ class dtkComposerScenePrivate
 {
 public:
     dtkComposerEdge *current_edge;
-
-    QStateMachine machine;
 };
 
 dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(new dtkComposerScenePrivate)
@@ -56,8 +54,6 @@ dtkComposerScene::~dtkComposerScene(void)
 void dtkComposerScene::addNode(dtkComposerNode *node)
 {
     this->addItem(node);
-    
-    d->machine.addState(node);
 }
 
 QList<dtkComposerEdge *> dtkComposerScene::edges(void)
@@ -115,21 +111,6 @@ QList<dtkComposerNodeProperty *> dtkComposerScene::properties(QString name)
                 list << property;
 
     return list;
-}
-
-void dtkComposerScene::start(void)
-{
-    d->machine.start();
-}
-
-void dtkComposerScene::pause(void)
-{
-    // d->machine.pause();
-}
-
-void dtkComposerScene::stop(void)
-{
-    d->machine.stop();
 }
 
 dtkComposerNode *dtkComposerScene::nodeAt(const QPointF& point) const
@@ -196,6 +177,8 @@ void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
 
 void dtkComposerScene::keyPressEvent(QKeyEvent *event)
 {
+    // Item deletion - Delete | Backspace
+
     if(event->key() == Qt::Key_Backspace || event->key() == Qt::Key_Delete) {        
         foreach(QGraphicsItem *item, this->selectedItems()) {
             if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) {
@@ -223,10 +206,10 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     QGraphicsScene::mouseMoveEvent(mouseEvent);
 
-    if (d->current_edge)
+    if (d->current_edge) {
         d->current_edge->adjust(d->current_edge->start(), mouseEvent->scenePos());
-
-    this->update(this->sceneRect());
+        this->update(QRectF(d->current_edge->start(), mouseEvent->scenePos()));
+    }
 }
 
 void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)

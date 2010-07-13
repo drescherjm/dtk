@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jul  7 17:52:23 2010 (+0200)
+ * Last-Updated: Tue Jul 13 10:20:49 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 72
+ *     Update #: 92
  */
 
 /* Commentary: 
@@ -30,7 +30,7 @@ class dtkComposerEdge;
 class dtkComposerNodePrivate;
 class dtkComposerNodeProperty;
 
-class DTKCOMPOSER_EXPORT dtkComposerNode : public QState, public QGraphicsItem
+class DTKCOMPOSER_EXPORT dtkComposerNode : public QObject, public QGraphicsItem
 {
     Q_OBJECT
 
@@ -55,7 +55,6 @@ public:
     void setType(Type type);
     void setObject(dtkAbstractObject *object);
 
-public:
     void addInputProperty(dtkComposerNodeProperty *property);
     void addOutputProperty(dtkComposerNodeProperty *property);
 
@@ -73,6 +72,9 @@ public:
 
     dtkAbstractObject *object(void);
 
+    QList<dtkComposerNodeProperty *> inputProperties(void);
+    QList<dtkComposerNodeProperty *> outputProperties(void);
+
     QList<dtkComposerEdge *> inputEdges(void);
     QList<dtkComposerEdge *> outputEdges(void);
 
@@ -81,7 +83,6 @@ public:
 
     dtkComposerEdge *edge(dtkComposerNodeProperty *property);
 
-public:
     dtkComposerNodeProperty *propertyAt(const QPointF& point) const;
 
     QRectF boundingRect(void) const;

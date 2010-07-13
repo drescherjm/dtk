@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Jul 11 23:28:24 2010 (+0200)
+ * Last-Updated: Tue Jul 13 10:25:50 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 326
+ *     Update #: 329
  */
 
 /* Commentary: 
@@ -59,16 +59,6 @@ dtkComposer::~dtkComposer(void)
     delete d;
     
     d = NULL;
-}
-
-void dtkComposer::start(void)
-{
-    d->scene->start();
-}
-
-void dtkComposer::stop(void)
-{
-    d->scene->stop();
 }
 
 void dtkComposer::onDataSelected(dtkAbstractData *data)

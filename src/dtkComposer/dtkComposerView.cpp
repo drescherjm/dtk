@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:07:37 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jul  7 18:11:04 2010 (+0200)
+ * Last-Updated: Tue Jul 13 10:20:12 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 83
+ *     Update #: 85
  */
 
 /* Commentary: 
@@ -41,26 +41,13 @@ dtkComposerView::~dtkComposerView(void)
 
 }
 
-// void dtkComposerView::keyPressEvent(QKeyEvent *event)
-// {
-//     if(event->modifiers() & Qt::ShiftModifier)
-//         this->setDragMode(QGraphicsView::ScrollHandDrag);
-
-//     event->ignore();
-// }
-
-// void dtkComposerView::keyReleaseEvent(QKeyEvent *event)
-// {
-//     this->setDragMode(QGraphicsView::RubberBandDrag);
-// }
-
 void dtkComposerView::wheelEvent(QWheelEvent *event)
 {
     qreal scaleFactor = pow((double)2, -event->delta() / 240.0);
 
     qreal factor = matrix().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();
 
-    if (factor < 0.3 || factor > 10)
+    if (factor < 0.1 || factor > 10)
         return;
     
     scale(scaleFactor, scaleFactor);

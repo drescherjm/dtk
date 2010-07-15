@@ -53,7 +53,7 @@ void dtkPluginManager::initialize(void)
 #ifdef Q_WS_MAC
 	qApp->applicationDirPath() + "/../PlugIns";
 #else
-	qApp->applicationDirPath() + "\..\plugins";
+	qApp->applicationDirPath() + "/../plugins";
 #endif
 #endif
 	

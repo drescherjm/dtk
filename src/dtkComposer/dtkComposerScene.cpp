@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 13 10:27:29 2010 (+0200)
+ * Last-Updated: Tue Jul 13 11:49:17 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 249
+ *     Update #: 264
  */
 
 /* Commentary: 
@@ -111,6 +111,25 @@ QList<dtkComposerNodeProperty *> dtkComposerScene::properties(QString name)
                 list << property;
 
     return list;
+}
+
+void dtkComposerScene::evaluate(EvaluationMode mode)
+{
+    QList<dtkComposerNode *> src_nodes;
+    QList<dtkComposerNode *> dst_nodes;
+    
+    foreach(dtkComposerNode *node, this->nodes())
+        if(node->inputProperties().count() && !(node->outputProperties().count()))
+            src_nodes << node;
+
+    foreach(dtkComposerNode *node, this->nodes())
+        if(!(node->inputProperties().count()) && node->outputProperties().count())
+            dst_nodes << node;
+
+    if(mode == Push) {
+        qDebug() << "Scene has" << src_nodes.count() << "src nodes";
+        qDebug() << "Scene has" << dst_nodes.count() << "dst nodes";
+    }
 }
 
 dtkComposerNode *dtkComposerScene::nodeAt(const QPointF& point) const

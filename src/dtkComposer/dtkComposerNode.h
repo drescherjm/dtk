@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 13 10:20:49 2010 (+0200)
+ * Last-Updated: Thu Jul 15 13:31:18 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 92
+ *     Update #: 99
  */
 
 /* Commentary: 
@@ -85,6 +85,7 @@ public:
 
     dtkComposerNodeProperty *propertyAt(const QPointF& point) const;
 
+public:
     QRectF boundingRect(void) const;
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
@@ -93,6 +94,13 @@ protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
+public:
+    virtual QVariant value(dtkComposerNodeProperty *property) { return QVariant(); }
+
+protected:
+    virtual void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property) {}
+    virtual void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property) {}
 
 private:
     dtkComposerNodePrivate *d;

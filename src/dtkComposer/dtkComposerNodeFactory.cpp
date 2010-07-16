@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb  7 22:37:03 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jul 12 14:11:00 2010 (+0200)
+ * Last-Updated: Fri Jul 16 11:57:42 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 115
+ *     Update #: 125
  */
 
 /* Commentary: 
@@ -26,11 +26,14 @@
 
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeCondition.h"
+#include "dtkComposerNodeData.h"
 #include "dtkComposerNodeFactory.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeInteger.h"
+#include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerNodeString.h"
+#include "dtkComposerNodeView.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeFactoryPrivate
@@ -69,29 +72,22 @@ dtkComposerNode *dtkComposerNodeFactory::create(QString type)
 
     if (dtkAbstractData *data = dtkAbstractDataFactory::instance()->create(type)) {
         
-        dtkComposerNode *node = new dtkComposerNode;
-        node->setType(dtkComposerNode::Data);
+        dtkComposerNodeData *node = new dtkComposerNodeData;
         node->setObject(data);
-        node->addOutputProperty(new dtkComposerNodeProperty("this", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, node));
         return node;
     }
 
     if (dtkAbstractProcess *process = dtkAbstractProcessFactory::instance()->create(type)) {
         
-        dtkComposerNode *node = new dtkComposerNode;
-        node->setType(dtkComposerNode::Process);
+        dtkComposerNodeProcess *node = new dtkComposerNodeProcess;
         node->setObject(process);
-        node->addInputProperty(new dtkComposerNodeProperty("input", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, node));
-        node->addOutputProperty(new dtkComposerNodeProperty("output", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Single, node));
         return node;
     }
 
     if (dtkAbstractView *view = dtkAbstractViewFactory::instance()->create(type)) {
         
-        dtkComposerNode *node = new dtkComposerNode;
-        node->setType(dtkComposerNode::View);
+        dtkComposerNodeView *node = new dtkComposerNodeView;
         node->setObject(view);
-        node->addInputProperty(new dtkComposerNodeProperty("data", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, node));
         node->addAction("Show view", view, SLOT(show()));
 
         return node;

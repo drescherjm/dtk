@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 13 10:22:12 2010 (+0200)
+ * Last-Updated: Thu Jul 15 12:41:39 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 404
+ *     Update #: 410
  */
 
 /* Commentary: 
@@ -167,11 +167,15 @@ void dtkComposerNode::addOutputProperty(dtkComposerNodeProperty *property)
 void dtkComposerNode::addInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     d->input_edges.insert(edge, property);
+
+    this->onInputEdgeConnected(edge, property);
 }
 
 void dtkComposerNode::addOutputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     d->output_edges.insert(edge, property);
+
+    this->onOutputEdgeConnected(edge, property);
 }
 
 void dtkComposerNode::removeInputEdge(dtkComposerEdge *edge)

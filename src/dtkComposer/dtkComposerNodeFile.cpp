@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul  8 13:28:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 13 10:24:36 2010 (+0200)
+ * Last-Updated: Fri Jul 16 12:04:36 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 17
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -22,19 +22,33 @@
 
 #include <dtkCore/dtkGlobal.h>
 
+#include <dtkGui/dtkTextEditor.h>
+
+#include <QtGui/QFileDialog>
+
 class dtkComposerNodeFilePrivate
 {
+public:
+    dtkComposerNodeProperty *property_output_file_name;
+    dtkComposerNodeProperty *property_output_file_text;
+
 public:
     QString file;
 };
 
 dtkComposerNodeFile::dtkComposerNodeFile(dtkComposerNode *parent) : dtkComposerNode(parent), d(new dtkComposerNodeFilePrivate)
 {
+    d->property_output_file_name = new dtkComposerNodeProperty("name", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, this);
+    d->property_output_file_text = new dtkComposerNodeProperty("text", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, this);
+
     this->setTitle("File");
     this->setType(dtkComposerNode::Atomic);
-    this->addInputProperty(new dtkComposerNodeProperty("path", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, this));
-    this->addOutputProperty(new dtkComposerNodeProperty("name", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, this));
-    this->addOutputProperty(new dtkComposerNodeProperty("text", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, this));
+    // this->addInputProperty(new dtkComposerNodeProperty("path", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, this));
+    this->addOutputProperty(d->property_output_file_name);
+    this->addOutputProperty(d->property_output_file_text);
+
+    this->addAction("Choose file", this, SLOT(getFileName()));
+    this->addAction("Edit file", this, SLOT(editFile()));
 }
 
 dtkComposerNodeFile::~dtkComposerNodeFile(void)
@@ -42,4 +56,24 @@ dtkComposerNodeFile::~dtkComposerNodeFile(void)
     delete d;
 
     d = NULL;
+}
+
+QVariant dtkComposerNodeFile::value(dtkComposerNodeProperty *property)
+{
+    if(property == d->property_output_file_name)
+        return QVariant(d->file);
+}
+
+void dtkComposerNodeFile::editFile(void)
+{
+    dtkTextEditor *editor = new dtkTextEditor;
+    editor->open(d->file);
+    editor->show();
+
+    connect(editor, SIGNAL(closed()), editor, SLOT(deleteLater()));
+}
+
+void dtkComposerNodeFile::getFileName(void)
+{
+    d->file = QFileDialog::getOpenFileName(0, "File node");
 }

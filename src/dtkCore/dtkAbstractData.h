@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 15 20:04:59 2010 (+0100)
+ * Last-Updated: Thu Jul 15 13:49:03 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 187
+ *     Update #: 188
  */
 
 /* Commentary:
@@ -107,5 +107,7 @@ private:
 
 QDebug operator<<(QDebug debug, const dtkAbstractData& data);
 QDebug operator<<(QDebug debug,       dtkAbstractData *data);
+
+Q_DECLARE_METATYPE(dtkAbstractData)
 
 #endif

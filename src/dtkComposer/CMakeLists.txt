@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Jul 12 16:54:25 2010 (+0200)
+## Last-Updated: Fri Jul 16 12:01:00 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 60
+##     Update #: 74
 ######################################################################
 ## 
 ### Commentary: 
@@ -29,11 +29,14 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerExport.h
   dtkComposerNode.h
   dtkComposerNodeCondition.h
+  dtkComposerNodeData.h
   dtkComposerNodeFactory.h
   dtkComposerNodeFile.h
   dtkComposerNodeInteger.h
+  dtkComposerNodeProcess.h
   dtkComposerNodeProperty.h
   dtkComposerNodeString.h
+  dtkComposerNodeView.h
   dtkComposerScene.h
   dtkComposerView.h)
 
@@ -42,11 +45,14 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerEdge.h
   dtkComposerNode.h
   dtkComposerNodeCondition.h
+  dtkComposerNodeData.h
   dtkComposerNodeFactory.h
   dtkComposerNodeFile.h
   dtkComposerNodeInteger.h
+  dtkComposerNodeProcess.h
   dtkComposerNodeProperty.h
   dtkComposerNodeString.h
+  dtkComposerNodeView.h
   dtkComposerScene.h
   dtkComposerView.h)
 
@@ -55,11 +61,14 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerEdge.cpp
   dtkComposerNode.cpp
   dtkComposerNodeCondition.cpp
+  dtkComposerNodeData.cpp
   dtkComposerNodeFactory.cpp
   dtkComposerNodeFile.cpp
   dtkComposerNodeInteger.cpp
   dtkComposerNodeString.cpp
+  dtkComposerNodeProcess.cpp
   dtkComposerNodeProperty.cpp
+  dtkComposerNodeView.cpp
   dtkComposerScene.cpp
   dtkComposerView.cpp)
 
@@ -83,7 +92,7 @@ add_library(${PROJECT_NAME} SHARED
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkCore
-  dtkScript)
+  dtkGui)
 
 ## #################################################################
 ## Installation

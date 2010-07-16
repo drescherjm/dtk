@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 13 10:18:38 2010 (+0200)
+ * Last-Updated: Tue Jul 13 11:44:59 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 49
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -37,6 +37,11 @@ class DTKCOMPOSER_EXPORT dtkComposerScene : public QGraphicsScene
     Q_OBJECT
 
 public:
+    enum EvaluationMode {
+        Push,
+        Pull
+    };
+
      dtkComposerScene(QObject *parent = 0);
     ~dtkComposerScene(void);
 
@@ -47,6 +52,9 @@ public:
     QList<dtkComposerNode *> nodes(QString name);
     QList<dtkComposerNodeProperty *> properties(void);
     QList<dtkComposerNodeProperty *> properties(QString name);
+
+public slots:
+    void evaluate(EvaluationMode = Push);
 
 signals:
     void dataSelected(dtkAbstractData *data);

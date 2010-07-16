@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun  1 20:58:14 2010 (+0200)
+ * Last-Updated: Thu Jul 15 15:05:23 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 116
+ *     Update #: 117
  */
 
 /* Commentary: 
@@ -17,6 +17,7 @@
  * 
  */
 
+#include "dtkAbstractData.h"
 #include "dtkPluginManager.h"
 
 #include <dtkCore/dtkPlugin.h>
@@ -32,8 +33,11 @@ public:
 
 dtkPluginManager *dtkPluginManager::instance(void)
 {
-    if(!s_instance)
+    if(!s_instance) {
         s_instance = new dtkPluginManager;
+
+        qRegisterMetaType<dtkAbstractData>("dtkAbstractData");
+    }
 
     return s_instance;
 }

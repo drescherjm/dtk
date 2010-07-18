@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 13 11:44:59 2010 (+0200)
+ * Last-Updated: Sat Jul 17 20:25:33 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 53
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -29,6 +29,7 @@ class dtkAbstractProcess;
 class dtkAbstractView;
 class dtkComposerEdge;
 class dtkComposerNode;
+class dtkComposerNodeFactory;
 class dtkComposerNodeProperty;
 class dtkComposerScenePrivate;
 
@@ -37,15 +38,8 @@ class DTKCOMPOSER_EXPORT dtkComposerScene : public QGraphicsScene
     Q_OBJECT
 
 public:
-    enum EvaluationMode {
-        Push,
-        Pull
-    };
-
-     dtkComposerScene(QObject *parent = 0);
-    ~dtkComposerScene(void);
-
-    void addNode(dtkComposerNode *node);
+             dtkComposerScene(QObject *parent = 0);
+    virtual ~dtkComposerScene(void);
 
     QList<dtkComposerEdge *> edges(void);
     QList<dtkComposerNode *> nodes(void);
@@ -53,8 +47,9 @@ public:
     QList<dtkComposerNodeProperty *> properties(void);
     QList<dtkComposerNodeProperty *> properties(QString name);
 
-public slots:
-    void evaluate(EvaluationMode = Push);
+    void addNode(dtkComposerNode *node);
+
+    void setFactory(dtkComposerNodeFactory *factory);
 
 signals:
     void dataSelected(dtkAbstractData *data);

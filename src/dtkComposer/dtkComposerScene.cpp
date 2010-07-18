@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 13 11:49:17 2010 (+0200)
+ * Last-Updated: Sat Jul 17 21:09:03 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 264
+ *     Update #: 282
  */
 
 /* Commentary: 
@@ -35,25 +35,23 @@ class dtkComposerScenePrivate
 {
 public:
     dtkComposerEdge *current_edge;
+    dtkComposerNodeFactory *factory;
 };
 
 dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(new dtkComposerScenePrivate)
 {
     d->current_edge = NULL;
+    d->factory = new dtkComposerNodeFactory;
 
     connect(this, SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));
 }
 
 dtkComposerScene::~dtkComposerScene(void)
 {
+    delete d->factory;
     delete d;
 
     d = NULL;
-}
-
-void dtkComposerScene::addNode(dtkComposerNode *node)
-{
-    this->addItem(node);
 }
 
 QList<dtkComposerEdge *> dtkComposerScene::edges(void)
@@ -113,23 +111,14 @@ QList<dtkComposerNodeProperty *> dtkComposerScene::properties(QString name)
     return list;
 }
 
-void dtkComposerScene::evaluate(EvaluationMode mode)
+void dtkComposerScene::addNode(dtkComposerNode *node)
 {
-    QList<dtkComposerNode *> src_nodes;
-    QList<dtkComposerNode *> dst_nodes;
-    
-    foreach(dtkComposerNode *node, this->nodes())
-        if(node->inputProperties().count() && !(node->outputProperties().count()))
-            src_nodes << node;
+    this->addItem(node);
+}
 
-    foreach(dtkComposerNode *node, this->nodes())
-        if(!(node->inputProperties().count()) && node->outputProperties().count())
-            dst_nodes << node;
-
-    if(mode == Push) {
-        qDebug() << "Scene has" << src_nodes.count() << "src nodes";
-        qDebug() << "Scene has" << dst_nodes.count() << "dst nodes";
-    }
+void dtkComposerScene::setFactory(dtkComposerNodeFactory *factory)
+{
+    d->factory = factory;
 }
 
 dtkComposerNode *dtkComposerScene::nodeAt(const QPointF& point) const
@@ -184,7 +173,7 @@ void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
         return;
     }
 
-    if(dtkComposerNode *node = dtkComposerNodeFactory::instance()->create(url.path())) {
+    if(dtkComposerNode *node = d->factory->create(url.path())) {
         node->setPos(event->pos());
         this->addNode(node);
     } else {

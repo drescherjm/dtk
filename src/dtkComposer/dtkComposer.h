@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:12:32 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 13 10:25:58 2010 (+0200)
+ * Last-Updated: Sat Jul 17 20:25:09 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 22
+ *     Update #: 28
  */
 
 /* Commentary: 
@@ -27,6 +27,7 @@
 class dtkAbstractData;
 class dtkAbstractProcess;
 class dtkAbstractView;
+class dtkComposerNodeFactory;
 class dtkComposerPrivate;
 
 class DTKCOMPOSER_EXPORT dtkComposer : public QWidget
@@ -34,9 +35,11 @@ class DTKCOMPOSER_EXPORT dtkComposer : public QWidget
     Q_OBJECT
 
 public:
-     dtkComposer(QWidget *parent = 0);
-    ~dtkComposer(void);
+             dtkComposer(QWidget *parent = 0);
+    virtual ~dtkComposer(void);
     
+    void setFactory(dtkComposerNodeFactory *factory);
+
 signals:
    void dataSelected(dtkAbstractData *data);
    void processSelected(dtkAbstractProcess *process);

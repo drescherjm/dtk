@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 13 10:25:50 2010 (+0200)
+ * Last-Updated: Sat Jul 17 20:23:28 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 329
+ *     Update #: 335
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include "dtkComposer.h"
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeFactory.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerView.h"
 
@@ -59,6 +60,11 @@ dtkComposer::~dtkComposer(void)
     delete d;
     
     d = NULL;
+}
+
+void dtkComposer::setFactory(dtkComposerNodeFactory *factory)
+{
+    d->scene->setFactory(factory);
 }
 
 void dtkComposer::onDataSelected(dtkAbstractData *data)

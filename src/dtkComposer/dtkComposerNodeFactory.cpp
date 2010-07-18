@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb  7 22:37:03 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jul 16 11:57:42 2010 (+0200)
+ * Last-Updated: Sat Jul 17 21:08:15 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 125
+ *     Update #: 126
  */
 
 /* Commentary: 
@@ -48,12 +48,16 @@ public:
 // dtkComposerNodeFactory
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNodeFactory *dtkComposerNodeFactory::instance(void)
+dtkComposerNodeFactory::dtkComposerNodeFactory(void) : QObject(), d(new dtkComposerNodeFactoryPrivate)
 {
-    if(!s_instance)
-        s_instance = new dtkComposerNodeFactory;
 
-    return s_instance;
+}
+
+dtkComposerNodeFactory::~dtkComposerNodeFactory(void)
+{
+    delete d;
+
+    d = NULL;
 }
 
 dtkComposerNode *dtkComposerNodeFactory::create(QString type)
@@ -96,19 +100,6 @@ dtkComposerNode *dtkComposerNodeFactory::create(QString type)
     return NULL;
 }
 
-dtkComposerNodeFactory::dtkComposerNodeFactory(void) : QObject(), d(new dtkComposerNodeFactoryPrivate)
-{
-
-}
-
-dtkComposerNodeFactory::~dtkComposerNodeFactory(void)
-{
-    delete d;
-
-    d = NULL;
-}
-
-dtkComposerNodeFactory *dtkComposerNodeFactory::s_instance = NULL;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeFactory documentation

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 21:58:48 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jun 15 11:08:34 2010 (+0200)
+ * Last-Updated: Wed Jul 21 09:14:25 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 31
+ *     Update #: 34
  */
 
 /* Commentary: 
@@ -30,36 +30,36 @@ class DTKCORE_EXPORT dtkAbstractDataWriter : public dtkAbstractObject
     Q_OBJECT
 
 public:
-    dtkAbstractDataWriter(void);
-   ~dtkAbstractDataWriter(void);
+             dtkAbstractDataWriter(void);
+    virtual ~dtkAbstractDataWriter(void);
 
-   virtual QString description(void) const = 0;
-   virtual QStringList handled(void) const = 0;
-
-   bool enabled(void);
-   void  enable(void);
-   void disable(void);
-
-   dtkAbstractData *data(void);
-
-   virtual void setData(dtkAbstractData *data);
-
+    virtual QString description(void) const = 0;
+    virtual QStringList handled(void) const = 0;
+    
+    bool enabled(void);
+    void  enable(void);
+    void disable(void);
+    
+    dtkAbstractData *data(void);
+    
+    virtual void setData(dtkAbstractData *data);
+    
 signals:
-   void started(QString message);
-   void progressed(int step);
-   void finished(void);
+    void started(QString message);
+    void progressed(int step);
+    void finished(void);
 
 public slots:
-   virtual bool canWrite(QString file);
-   virtual bool canWrite(QStringList files);
-
-   virtual bool write(QString file);
-   virtual bool write(QStringList files);
-
-   virtual void setProgress(int value);
+    virtual bool canWrite(QString file);
+    virtual bool canWrite(QStringList files);
+    
+    virtual bool write(QString file);
+    virtual bool write(QStringList files);
+    
+    virtual void setProgress(int value);
 
 private:
-   dtkAbstractDataWriterPrivate *d;
+    dtkAbstractDataWriterPrivate *d;
 };
 
 #endif

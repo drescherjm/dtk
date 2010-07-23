@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul 15 11:25:19 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul 16 11:57:34 2010 (+0200)
+ * Last-Updated: Fri Jul 23 18:07:14 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 32
+ *     Update #: 33
  */
 
 /* Commentary: 
@@ -34,7 +34,7 @@ public:
 
 dtkComposerNodeView::dtkComposerNodeView(dtkComposerNode *parent) : dtkComposerNode(parent), d(new dtkComposerNodeViewPrivate)
 {
-    d->property_input_data = new dtkComposerNodeProperty("if", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, this);
+    d->property_input_data = new dtkComposerNodeProperty("data", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, this);
 
     this->setType(dtkComposerNode::View);
     this->addInputProperty(d->property_input_data);

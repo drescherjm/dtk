@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Jul 17 21:09:03 2010 (+0200)
+ * Last-Updated: Fri Jul 23 15:59:57 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 282
+ *     Update #: 285
  */
 
 /* Commentary: 
@@ -200,6 +200,14 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
                 // this->removeItem(node);
                 
                 delete node;
+            }
+        }
+    }
+
+    if(event->key() == Qt::Key_U) {
+        foreach(QGraphicsItem *item, this->selectedItems()) {
+            if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) {
+                node->update();
             }
         }
     }

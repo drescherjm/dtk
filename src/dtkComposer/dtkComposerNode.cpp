@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jul 15 12:41:39 2010 (+0200)
+ * Last-Updated: Fri Jul 23 17:15:36 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 410
+ *     Update #: 423
  */
 
 /* Commentary: 
@@ -259,6 +259,20 @@ dtkComposerNodeProperty *dtkComposerNode::propertyAt(const QPointF& point) const
             return property;
     
     return NULL;
+}
+
+void dtkComposerNode::update(void)
+{
+    qDebug() << DTK_PRETTY_FUNCTION;
+
+    foreach(dtkComposerEdge *edge, d->input_edges.keys())
+        this->onInputEdgeConnected(edge, edge->destination());
+
+    foreach(dtkComposerEdge *edge, d->output_edges.keys())
+        this->onOutputEdgeConnected(edge, edge->source());
+
+    foreach(dtkComposerEdge *edge, d->output_edges.keys())
+        edge->destination()->node()->update();
 }
 
 QRectF dtkComposerNode::boundingRect(void) const

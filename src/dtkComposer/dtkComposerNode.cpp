@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul 23 17:15:36 2010 (+0200)
+ * Last-Updated: Mon Jul 26 12:22:55 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 423
+ *     Update #: 444
  */
 
 /* Commentary: 
@@ -79,7 +79,7 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
 #else
     d->title->setFont(QFont("Lucida Grande", 11));
 #endif
-    d->title->setHtml("Title");
+    d->title->setPlainText("Title");
     d->title->setDefaultTextColor(Qt::white);
     d->title->setPos(-d->width/2 + d->margin_left/2, -d->header_height-2);
 
@@ -110,7 +110,7 @@ dtkComposerNode::~dtkComposerNode(void)
 
 void dtkComposerNode::setTitle(const QString& title)
 {
-    d->title->setHtml(title);
+    d->title->setPlainText(title);
 }
 
 void dtkComposerNode::setType(Type type)
@@ -168,14 +168,14 @@ void dtkComposerNode::addInputEdge(dtkComposerEdge *edge, dtkComposerNodePropert
 {
     d->input_edges.insert(edge, property);
 
-    this->onInputEdgeConnected(edge, property);
+    // this->onInputEdgeConnected(edge, property);
 }
 
 void dtkComposerNode::addOutputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     d->output_edges.insert(edge, property);
 
-    this->onOutputEdgeConnected(edge, property);
+    // this->onOutputEdgeConnected(edge, property);
 }
 
 void dtkComposerNode::removeInputEdge(dtkComposerEdge *edge)
@@ -261,9 +261,14 @@ dtkComposerNodeProperty *dtkComposerNode::propertyAt(const QPointF& point) const
     return NULL;
 }
 
+QString dtkComposerNode::title(void)
+{
+    return QString(d->title->toPlainText());
+}
+
 void dtkComposerNode::update(void)
 {
-    qDebug() << DTK_PRETTY_FUNCTION;
+    emit evaluated(this); qApp->processEvents(QEventLoop::ExcludeUserInputEvents | QEventLoop::ExcludeSocketNotifiers, 10);
 
     foreach(dtkComposerEdge *edge, d->input_edges.keys())
         this->onInputEdgeConnected(edge, edge->destination());

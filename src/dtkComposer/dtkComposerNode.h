@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul 23 16:00:30 2010 (+0200)
+ * Last-Updated: Mon Jul 26 10:59:08 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 101
+ *     Update #: 108
  */
 
 /* Commentary: 
@@ -84,6 +84,12 @@ public:
     dtkComposerEdge *edge(dtkComposerNodeProperty *property);
 
     dtkComposerNodeProperty *propertyAt(const QPointF& point) const;
+
+    QString title(void);
+
+signals:
+    void evaluated(dtkComposerNode *node);
+    void progressed(int progress);
 
 public slots:
     void update(void);

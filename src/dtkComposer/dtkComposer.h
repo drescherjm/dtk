@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:12:32 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Jul 17 20:25:09 2010 (+0200)
+ * Last-Updated: Tue Jul 27 11:46:34 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 28
+ *     Update #: 36
  */
 
 /* Commentary: 
@@ -27,6 +27,7 @@
 class dtkAbstractData;
 class dtkAbstractProcess;
 class dtkAbstractView;
+class dtkComposerNode;
 class dtkComposerNodeFactory;
 class dtkComposerPrivate;
 
@@ -41,14 +42,25 @@ public:
     void setFactory(dtkComposerNodeFactory *factory);
 
 signals:
-   void dataSelected(dtkAbstractData *data);
-   void processSelected(dtkAbstractProcess *process);
-   void viewSelected(dtkAbstractView *view);
+    void dataSelected(dtkAbstractData *data);
+    void processSelected(dtkAbstractProcess *process);
+    void viewSelected(dtkAbstractView *view);
+    
+    void nodeAdded(dtkComposerNode *node);
+    void nodeRemoved(dtkComposerNode *node);
+   
+signals:
+    void evaluationStarted(void);
+    void evaluationStopped(void);
 
 public slots:
    void onDataSelected(dtkAbstractData *data);
    void onProcessSelected(dtkAbstractProcess *process);
    void onViewSelected(dtkAbstractView *view);
+
+public slots:
+   void startEvaluation(void);
+   void stopEvaluation(void);
 
 private:
     dtkComposerPrivate *d;

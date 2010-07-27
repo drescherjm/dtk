@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul 23 15:59:57 2010 (+0200)
+ * Last-Updated: Tue Jul 27 11:49:36 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 285
+ *     Update #: 306
  */
 
 /* Commentary: 
@@ -114,11 +114,40 @@ QList<dtkComposerNodeProperty *> dtkComposerScene::properties(QString name)
 void dtkComposerScene::addNode(dtkComposerNode *node)
 {
     this->addItem(node);
+
+    emit nodeAdded(node);
+}
+
+void dtkComposerScene::removeNode(dtkComposerNode *node)
+{ 
+    foreach(dtkComposerEdge *edge, node->inputEdges())
+        delete edge; // this->removeItem(edge);
+    
+    foreach(dtkComposerEdge *edge, node->outputEdges())
+        delete edge; // this->removeItem(edge);
+    
+    // this->removeItem(node);
+    
+    delete node;
 }
 
 void dtkComposerScene::setFactory(dtkComposerNodeFactory *factory)
 {
     d->factory = factory;
+}
+
+void dtkComposerScene::startEvaluation(void)
+{
+    foreach(QGraphicsItem *item, this->selectedItems())
+        if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item))
+            node->update();
+
+    emit evaluationStarted();
+}
+
+void dtkComposerScene::stopEvaluation(void)
+{
+    emit evaluationStopped();
 }
 
 dtkComposerNode *dtkComposerScene::nodeAt(const QPointF& point) const
@@ -187,30 +216,15 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
 {
     // Item deletion - Delete | Backspace
 
-    if(event->key() == Qt::Key_Backspace || event->key() == Qt::Key_Delete) {        
-        foreach(QGraphicsItem *item, this->selectedItems()) {
-            if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) {
+    if(event->key() == Qt::Key_Backspace || event->key() == Qt::Key_Delete)
+        foreach(QGraphicsItem *item, this->selectedItems())
+            if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item))
+                this->removeNode(node);
 
-                foreach(dtkComposerEdge *edge, node->inputEdges())
-                    delete edge; // this->removeItem(edge);
+    // Pipeline update - U
 
-                foreach(dtkComposerEdge *edge, node->outputEdges())
-                    delete edge; // this->removeItem(edge);
-
-                // this->removeItem(node);
-                
-                delete node;
-            }
-        }
-    }
-
-    if(event->key() == Qt::Key_U) {
-        foreach(QGraphicsItem *item, this->selectedItems()) {
-            if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) {
-                node->update();
-            }
-        }
-    }
+    if(event->key() == Qt::Key_U)
+        this->startEvaluation();
 }
 
 void dtkComposerScene::keyReleaseEvent(QKeyEvent *event)

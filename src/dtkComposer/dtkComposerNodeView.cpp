@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul 15 11:25:19 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul 23 18:07:14 2010 (+0200)
+ * Last-Updated: Mon Jul 26 14:43:54 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 33
+ *     Update #: 42
  */
 
 /* Commentary: 
@@ -53,7 +53,7 @@ void dtkComposerNodeView::onInputEdgeConnected(dtkComposerEdge *edge, dtkCompose
 
         dtkAbstractView *view = dynamic_cast<dtkAbstractView *>(this->object());
 
-        dtkAbstractData *data;
+        dtkAbstractData *data = NULL;
 
         if(dtkAbstractProcess *process = dynamic_cast<dtkAbstractProcess *>(edge->source()->node()->object()))
             data = process->output();

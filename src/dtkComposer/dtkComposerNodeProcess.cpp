@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul 15 11:23:54 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul 16 16:22:02 2010 (+0200)
+ * Last-Updated: Mon Jul 26 12:39:26 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 74
+ *     Update #: 81
  */
 
 /* Commentary: 
@@ -75,6 +75,9 @@ void dtkComposerNodeProcess::onInputEdgeConnected(dtkComposerEdge *edge, dtkComp
         
         dtkAbstractData *data;
 
+        if(dtkAbstractData *d = dynamic_cast<dtkAbstractData *>(edge->source()->node()->object()))
+            data = d;
+
         if(dtkAbstractProcess *process = dynamic_cast<dtkAbstractProcess *>(edge->source()->node()->object()))
             data = process->output();
 
@@ -88,16 +91,10 @@ void dtkComposerNodeProcess::onOutputEdgeConnected(dtkComposerEdge *edge, dtkCom
     Q_UNUSED(edge);
 
     if(property == d->property_output_data) {
-
-        // QProgressDialog *dialog = new QProgressDialog;
-        // dialog->show();
-
         if(dtkAbstractProcess *process = dynamic_cast<dtkAbstractProcess *>(this->object())) {
-            // connect(process, SIGNAL(progressed(int)), dialog, SLOT(setValue(int)));
+            connect(process, SIGNAL(progressed(int)), this, SIGNAL(progressed(int)));
             process->update();
+            // disconnect(process, SIGNAL(progressed(int)), this, SIGNAL(progressed(int)));
         }
-
-        // dialog->hide();
-        // dialog->deleteLater();
     }
 }

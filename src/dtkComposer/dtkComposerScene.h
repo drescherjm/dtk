@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Jul 17 20:25:33 2010 (+0200)
+ * Last-Updated: Tue Jul 27 11:46:27 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 61
+ *     Update #: 69
  */
 
 /* Commentary: 
@@ -49,12 +49,25 @@ public:
 
     void addNode(dtkComposerNode *node);
 
+    void removeNode(dtkComposerNode *node);
+
     void setFactory(dtkComposerNodeFactory *factory);
 
 signals:
     void dataSelected(dtkAbstractData *data);
     void processSelected(dtkAbstractProcess *process);
     void viewSelected(dtkAbstractView *view);
+
+    void nodeAdded(dtkComposerNode *node);
+    void nodeRemoved(dtkComposerNode *node);
+
+signals:
+    void evaluationStarted(void);
+    void evaluationStopped(void);
+
+public slots:
+   void startEvaluation(void);
+   void stopEvaluation(void);
 
 protected:
     dtkComposerNode *nodeAt(const QPointF& point) const;

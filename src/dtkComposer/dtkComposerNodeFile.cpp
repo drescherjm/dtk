@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul  8 13:28:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul 16 12:04:36 2010 (+0200)
+ * Last-Updated: Wed Jul 28 12:43:02 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 45
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -60,8 +60,12 @@ dtkComposerNodeFile::~dtkComposerNodeFile(void)
 
 QVariant dtkComposerNodeFile::value(dtkComposerNodeProperty *property)
 {
-    if(property == d->property_output_file_name)
+    if(property == d->property_output_file_name) {
+        emit elapsed("00:00::000.001");
+        emit progressed(QString("File name: %1").arg(d->file));
+        emit progressed(100);
         return QVariant(d->file);
+    }
 }
 
 void dtkComposerNodeFile::editFile(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul 26 10:59:08 2010 (+0200)
+ * Last-Updated: Wed Jul 28 10:32:45 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 108
+ *     Update #: 110
  */
 
 /* Commentary: 
@@ -88,7 +88,9 @@ public:
     QString title(void);
 
 signals:
+    void elapsed(QString duration);
     void evaluated(dtkComposerNode *node);
+    void progressed(QString message);
     void progressed(int progress);
 
 public slots:

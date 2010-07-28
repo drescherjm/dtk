@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul 15 11:25:19 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul 26 14:43:54 2010 (+0200)
+ * Last-Updated: Wed Jul 28 12:58:32 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 42
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -58,7 +58,10 @@ void dtkComposerNodeView::onInputEdgeConnected(dtkComposerEdge *edge, dtkCompose
         if(dtkAbstractProcess *process = dynamic_cast<dtkAbstractProcess *>(edge->source()->node()->object()))
             data = process->output();
 
-        if(data && view)
+        if(data && view) {
             view->setData(data);
+            emit elapsed("00:00:00.001");
+            emit progressed(100);
+        }
     }
 }

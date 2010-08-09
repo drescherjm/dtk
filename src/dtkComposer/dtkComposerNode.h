@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 18:59:28 2010 (+0200)
+ * Last-Updated: Wed Jul 28 10:32:45 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 68
+ *     Update #: 110
  */
 
 /* Commentary: 
@@ -41,6 +41,8 @@ class DTKCOMPOSER_EXPORT dtkComposerNode : public QObject, public QGraphicsItem
 public:
     enum Type {
         Unknown,
+        Atomic,
+        Control,
         Data,
         Process,
         View
@@ -49,10 +51,10 @@ public:
      dtkComposerNode(dtkComposerNode *parent = 0);
     ~dtkComposerNode(void);
 
+    void setTitle(const QString& title);
     void setType(Type type);
     void setObject(dtkAbstractObject *object);
 
-public:
     void addInputProperty(dtkComposerNodeProperty *property);
     void addOutputProperty(dtkComposerNodeProperty *property);
 
@@ -70,6 +72,9 @@ public:
 
     dtkAbstractObject *object(void);
 
+    QList<dtkComposerNodeProperty *> inputProperties(void);
+    QList<dtkComposerNodeProperty *> outputProperties(void);
+
     QList<dtkComposerEdge *> inputEdges(void);
     QList<dtkComposerEdge *> outputEdges(void);
 
@@ -78,9 +83,20 @@ public:
 
     dtkComposerEdge *edge(dtkComposerNodeProperty *property);
 
-public:
     dtkComposerNodeProperty *propertyAt(const QPointF& point) const;
 
+    QString title(void);
+
+signals:
+    void elapsed(QString duration);
+    void evaluated(dtkComposerNode *node);
+    void progressed(QString message);
+    void progressed(int progress);
+
+public slots:
+    void update(void);
+
+public:
     QRectF boundingRect(void) const;
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
@@ -89,6 +105,13 @@ protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
+public:
+    virtual QVariant value(dtkComposerNodeProperty *property) { return QVariant(); }
+
+protected:
+    virtual void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property) {}
+    virtual void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property) {}
 
 private:
     dtkComposerNodePrivate *d;

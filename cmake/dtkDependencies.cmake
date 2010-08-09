@@ -32,7 +32,7 @@ if(WIN32)
   set(QT_USE_QTMAIN TRUE)
 endif(WIN32)
 
-find_package(Qt4 4.6 REQUIRED)
+find_package(Qt4 4.6.0 REQUIRED)
 include(${QT_USE_FILE})
 
 mark_as_advanced(QT_QMAKE_EXECUTABLE)

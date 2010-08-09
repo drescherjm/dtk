@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:26:53 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jan  8 14:39:27 2010 (+0100)
+ * Last-Updated: Tue Jul 13 10:22:40 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 20
+ *     Update #: 34
  */
 
 /* Commentary: 
@@ -25,8 +25,9 @@
 #include <QtCore>
 #include <QtGui>
 
-class dtkComposerEdgePrivate;
+class dtkComposerNode;
 class dtkComposerNodeProperty;
+class dtkComposerEdgePrivate;
 
 class DTKCOMPOSER_EXPORT dtkComposerEdge : public QObject, public QGraphicsItem
 {

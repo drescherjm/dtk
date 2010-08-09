@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb  7 22:37:03 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 21:07:30 2010 (+0200)
+ * Last-Updated: Sat Jul 17 21:08:15 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 88
+ *     Update #: 126
  */
 
 /* Commentary: 
@@ -25,8 +25,15 @@
 #include <dtkCore/dtkAbstractViewFactory.h>
 
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeCondition.h"
+#include "dtkComposerNodeData.h"
 #include "dtkComposerNodeFactory.h"
+#include "dtkComposerNodeFile.h"
+#include "dtkComposerNodeInteger.h"
+#include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerNodeString.h"
+#include "dtkComposerNodeView.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeFactoryPrivate
@@ -41,49 +48,6 @@ public:
 // dtkComposerNodeFactory
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNodeFactory *dtkComposerNodeFactory::instance(void)
-{
-    if(!s_instance)
-        s_instance = new dtkComposerNodeFactory;
-
-    return s_instance;
-}
-
-dtkComposerNode *dtkComposerNodeFactory::create(QString type)
-{
-    if (dtkAbstractData *data = dtkAbstractDataFactory::instance()->create(type)) {
-        
-        dtkComposerNode *node = new dtkComposerNode;
-        node->setType(dtkComposerNode::Data);
-        node->setObject(data);
-        node->addOutputProperty(new dtkComposerNodeProperty("this", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, node));
-        return node;
-    }
-
-    if (dtkAbstractProcess *process = dtkAbstractProcessFactory::instance()->create(type)) {
-        
-        dtkComposerNode *node = new dtkComposerNode;
-        node->setType(dtkComposerNode::Process);
-        node->setObject(process);
-        node->addInputProperty(new dtkComposerNodeProperty("input", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, node));
-        node->addOutputProperty(new dtkComposerNodeProperty("output", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Single, node));
-        return node;
-    }
-
-    if (dtkAbstractView *view = dtkAbstractViewFactory::instance()->create(type)) {
-        
-        dtkComposerNode *node = new dtkComposerNode;
-        node->setType(dtkComposerNode::View);
-        node->setObject(view);
-        node->addInputProperty(new dtkComposerNodeProperty("data", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, node));
-        node->addAction("Show view", view, SLOT(show()));
-
-        return node;
-    }
-
-    return NULL;
-}
-
 dtkComposerNodeFactory::dtkComposerNodeFactory(void) : QObject(), d(new dtkComposerNodeFactoryPrivate)
 {
 
@@ -96,7 +60,46 @@ dtkComposerNodeFactory::~dtkComposerNodeFactory(void)
     d = NULL;
 }
 
-dtkComposerNodeFactory *dtkComposerNodeFactory::s_instance = NULL;
+dtkComposerNode *dtkComposerNodeFactory::create(QString type)
+{
+    if (type == "integer")
+        return new dtkComposerNodeInteger;
+
+    if (type == "string")
+        return new dtkComposerNodeString;
+
+    if (type == "file")
+        return new dtkComposerNodeFile;
+
+    if (type == "condition")
+        return new dtkComposerNodeCondition;
+
+    if (dtkAbstractData *data = dtkAbstractDataFactory::instance()->create(type)) {
+        
+        dtkComposerNodeData *node = new dtkComposerNodeData;
+        node->setObject(data);
+        return node;
+    }
+
+    if (dtkAbstractProcess *process = dtkAbstractProcessFactory::instance()->create(type)) {
+        
+        dtkComposerNodeProcess *node = new dtkComposerNodeProcess;
+        node->setObject(process);
+        return node;
+    }
+
+    if (dtkAbstractView *view = dtkAbstractViewFactory::instance()->create(type)) {
+        
+        dtkComposerNodeView *node = new dtkComposerNodeView;
+        node->setObject(view);
+        node->addAction("Show view", view, SLOT(show()));
+
+        return node;
+    }
+
+    return NULL;
+}
+
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeFactory documentation

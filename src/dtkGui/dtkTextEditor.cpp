@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:23:18 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Aug  5 11:14:59 2009 (+0200)
+ * Last-Updated: Fri Jul 16 12:03:55 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 117
+ *     Update #: 119
  */
 
 /* Commentary: 
@@ -575,6 +575,11 @@ void dtkTextEditor::resizeEvent(QResizeEvent *event)
 
     QRect cr = viewport()->rect();
     d->extraArea->setGeometry(QStyle::visualRect(layoutDirection(), cr, QRect(cr.left(), cr.top(), extraAreaWidth(), cr.height())));
+}
+
+void dtkTextEditor::closeEvent(QCloseEvent *event)
+{
+    emit closed();
 }
 
 void dtkTextEditor::wheelEvent(QWheelEvent *event)

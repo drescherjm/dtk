@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul  5 16:24:39 2010 (+0200)
+ * Last-Updated: Tue Jul 13 10:27:52 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 474
+ *     Update #: 477
  */
 
 /* Commentary: 
@@ -546,16 +546,12 @@ void dtkCreatorMainWindow::run(void)
 {
     d->toolRunAction->setEnabled(false);
     d->toolStopAction->setEnabled(true);
-
-    d->composer->run();
 }
 
 void dtkCreatorMainWindow::stop(void)
 {
     d->toolRunAction->setEnabled(true);
     d->toolStopAction->setEnabled(false);
-
-    d->composer->stop();
 }
 
 void dtkCreatorMainWindow::registerData(dtkAbstractData *data, QString type)

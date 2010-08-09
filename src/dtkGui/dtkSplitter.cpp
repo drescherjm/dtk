@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Oct  7 23:24:59 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Aug  2 14:52:53 2009 (+0200)
+ * Last-Updated: Fri Jul 30 18:12:23 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 58
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -22,13 +22,13 @@
 #include <dtkGui/dtkSplitter.h>
 
 // /////////////////////////////////////////////////////////////////
-// dtkMacSplitterHandle
+// dtkSplitterHandle
 // /////////////////////////////////////////////////////////////////
 
-class dtkMacSplitterHandle : public QSplitterHandle
+class dtkSplitterHandle : public QSplitterHandle
 {
 public:
-    dtkMacSplitterHandle(Qt::Orientation orientation, bool slim, QSplitter *parent);
+    dtkSplitterHandle(Qt::Orientation orientation, bool slim, QSplitter *parent);
     
     void paintEvent(QPaintEvent * event);
     QSize sizeHint(void) const;
@@ -37,12 +37,12 @@ private:
     bool m_slim;
 };
 
-dtkMacSplitterHandle::dtkMacSplitterHandle(Qt::Orientation orientation, bool slim, QSplitter *parent) : QSplitterHandle(orientation, parent) 
+dtkSplitterHandle::dtkSplitterHandle(Qt::Orientation orientation, bool slim, QSplitter *parent) : QSplitterHandle(orientation, parent) 
 {
     this->m_slim = slim;
 }
 
-void dtkMacSplitterHandle::paintEvent(QPaintEvent *event)
+void dtkSplitterHandle::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
 
@@ -73,7 +73,7 @@ void dtkMacSplitterHandle::paintEvent(QPaintEvent *event)
     }
 }
 
-QSize dtkMacSplitterHandle::sizeHint(void) const
+QSize dtkSplitterHandle::sizeHint(void) const
 {
     QSize parent = QSplitterHandle::sizeHint();
     if (orientation() == Qt::Vertical) {
@@ -111,8 +111,5 @@ dtkSplitter::~dtkSplitter(void)
 
 QSplitterHandle *dtkSplitter::createHandle(void)
 {
-#ifdef __APPLE__
-    return new dtkMacSplitterHandle(orientation(), d->slim, this);
-#endif
-    return QSplitter::createHandle();
+    return new dtkSplitterHandle(orientation(), d->slim, this);
 }

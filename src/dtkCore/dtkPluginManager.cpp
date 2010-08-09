@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun  1 20:58:14 2010 (+0200)
+ * Last-Updated: Sun Jul 18 14:57:08 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 116
+ *     Update #: 126
  */
 
 /* Commentary: 
@@ -17,10 +17,13 @@
  * 
  */
 
+#include "dtkAbstractData.h"
 #include "dtkPluginManager.h"
 
 #include <dtkCore/dtkPlugin.h>
 #include <dtkCore/dtkLog.h>
+
+#define DTK_VERBOSE_LOAD false
 
 class dtkPluginManagerPrivate
 {
@@ -32,8 +35,11 @@ public:
 
 dtkPluginManager *dtkPluginManager::instance(void)
 {
-    if(!s_instance)
+    if(!s_instance) {
         s_instance = new dtkPluginManager;
+
+        qRegisterMetaType<dtkAbstractData>("dtkAbstractData");
+    }
 
     return s_instance;
 }
@@ -153,7 +159,7 @@ void dtkPluginManager::loadPlugin(const QString& path)
     loader->setLoadHints (QLibrary::ExportExternalSymbolsHint);
 
     if(!loader->load()) {
-        dtkDebug() << "Unable to load - " << loader->errorString();
+        if(DTK_VERBOSE_LOAD) dtkDebug() << "Unable to load - " << loader->errorString();
         delete loader;
         return;
     }
@@ -161,12 +167,12 @@ void dtkPluginManager::loadPlugin(const QString& path)
     dtkPlugin *plugin = qobject_cast<dtkPlugin *>(loader->instance());
 
     if(!plugin) {
-        dtkDebug() << "Unable to retrieve" << path;
+        if(DTK_VERBOSE_LOAD) dtkDebug() << "Unable to retrieve" << path;
         return;
     }
 
     if(!plugin->initialize()) {
-        dtkOutput() << "Unable to initialize" << plugin->name() << "plugin";
+        if(DTK_VERBOSE_LOAD) dtkOutput() << "Unable to initialize" << plugin->name() << "plugin";
         return;
     }
 
@@ -180,19 +186,19 @@ void dtkPluginManager::unloadPlugin(const QString& path)
     dtkPlugin *plugin = qobject_cast<dtkPlugin *>(d->loaders.value(path)->instance());
 
     if(!plugin) {
-        dtkDebug() << "dtkPluginManager - Unable to retrieve" << plugin->name() << "plugin";
+        if(DTK_VERBOSE_LOAD) dtkDebug() << "dtkPluginManager - Unable to retrieve" << plugin->name() << "plugin";
         return;
     }
 
     if(!plugin->uninitialize()) {
-        dtkOutput() << "Unable to uninitialize" << plugin->name() << "plugin";
+        if(DTK_VERBOSE_LOAD) dtkOutput() << "Unable to uninitialize" << plugin->name() << "plugin";
         return;
     }
 
     QPluginLoader *loader = d->loaders.value(path);
 
     if(!loader->unload()) {
-        dtkDebug() << "dtkPluginManager - Unable to unload plugin:" << loader->errorString();
+        if(DTK_VERBOSE_LOAD) dtkDebug() << "dtkPluginManager - Unable to unload plugin:" << loader->errorString();
         return;
     }
 

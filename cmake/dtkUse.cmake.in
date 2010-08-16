@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Tue Apr  6 10:55:48 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Apr 26 16:45:59 2010 (+0200)
+## Last-Updated: Mon Aug 16 11:08:21 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 11
+##     Update #: 12
 ######################################################################
 ## 
 ### Commentary: 
@@ -29,6 +29,5 @@ if(NOT dtk_USE_FILE_INCLUDED)
    
    include(dtkDependencies)
    include(dtkBuild)
-   include(dtkPack)
 
 endif(NOT dtk_USE_FILE_INCLUDED)

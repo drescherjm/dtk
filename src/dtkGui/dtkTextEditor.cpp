@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:23:18 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul 16 12:03:55 2010 (+0200)
+ * Last-Updated: Mon Aug 16 15:01:03 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 119
+ *     Update #: 120
  */
 
 /* Commentary: 
@@ -180,7 +180,6 @@ bool dtkTextEditorDocument::open(const QString& fileName)
         d->document->setModified(false);
 
         emit titleChanged(title);
-        emit changed();
     }
 
     return true;

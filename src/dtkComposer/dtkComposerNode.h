@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jul 28 10:32:45 2010 (+0200)
+ * Last-Updated: Mon Aug 16 21:56:10 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 110
+ *     Update #: 126
  */
 
 /* Commentary: 
@@ -39,7 +39,7 @@ class DTKCOMPOSER_EXPORT dtkComposerNode : public QObject, public QGraphicsItem
 #endif
 
 public:
-    enum Type {
+    enum Kind {
         Unknown,
         Atomic,
         Control,
@@ -52,7 +52,8 @@ public:
     ~dtkComposerNode(void);
 
     void setTitle(const QString& title);
-    void setType(Type type);
+    void setKind(Kind kind);
+    void setType(QString type);
     void setObject(dtkAbstractObject *object);
 
     void addInputProperty(dtkComposerNodeProperty *property);
@@ -68,7 +69,8 @@ public:
 
     int count(dtkComposerNodeProperty *property);
 
-    Type type(void);
+    Kind kind(void);
+    QString type(void);
 
     dtkAbstractObject *object(void);
 
@@ -84,6 +86,9 @@ public:
     dtkComposerEdge *edge(dtkComposerNodeProperty *property);
 
     dtkComposerNodeProperty *propertyAt(const QPointF& point) const;
+
+    dtkComposerNodeProperty  *inputProperty(const QString& name) const;
+    dtkComposerNodeProperty *outputProperty(const QString& name) const;
 
     QString title(void);
 

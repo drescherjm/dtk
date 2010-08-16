@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:12:32 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 27 11:46:34 2010 (+0200)
+ * Last-Updated: Mon Aug 16 15:14:38 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 36
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -38,8 +38,19 @@ class DTKCOMPOSER_EXPORT dtkComposer : public QWidget
 public:
              dtkComposer(QWidget *parent = 0);
     virtual ~dtkComposer(void);
-    
+
     void setFactory(dtkComposerNodeFactory *factory);
+
+    bool isModified(void);
+
+    QString fileName(void);
+
+    bool open(QString fileName);
+    bool save(QString fileName = QString());
+
+signals:
+    void compositionChanged(void);
+    void titleChanged(QString title);
 
 signals:
     void dataSelected(dtkAbstractData *data);

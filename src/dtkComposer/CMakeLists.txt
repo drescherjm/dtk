@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Apr 26 13:12:37 2010 (+0200)
+## Last-Updated: Fri Jul 16 12:01:00 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 44
+##     Update #: 74
 ######################################################################
 ## 
 ### Commentary: 
@@ -26,31 +26,49 @@ project(dtkComposer)
 set(${PROJECT_NAME}_HEADERS
   dtkComposer.h
   dtkComposerEdge.h
-  dtkComposerEvaluator.h
   dtkComposerExport.h
   dtkComposerNode.h
+  dtkComposerNodeCondition.h
+  dtkComposerNodeData.h
   dtkComposerNodeFactory.h
+  dtkComposerNodeFile.h
+  dtkComposerNodeInteger.h
+  dtkComposerNodeProcess.h
   dtkComposerNodeProperty.h
+  dtkComposerNodeString.h
+  dtkComposerNodeView.h
   dtkComposerScene.h
   dtkComposerView.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposer.h
   dtkComposerEdge.h
-  dtkComposerEvaluator.h
   dtkComposerNode.h
+  dtkComposerNodeCondition.h
+  dtkComposerNodeData.h
   dtkComposerNodeFactory.h
+  dtkComposerNodeFile.h
+  dtkComposerNodeInteger.h
+  dtkComposerNodeProcess.h
   dtkComposerNodeProperty.h
+  dtkComposerNodeString.h
+  dtkComposerNodeView.h
   dtkComposerScene.h
   dtkComposerView.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkComposer.cpp
   dtkComposerEdge.cpp
-  dtkComposerEvaluator.cpp
   dtkComposerNode.cpp
+  dtkComposerNodeCondition.cpp
+  dtkComposerNodeData.cpp
   dtkComposerNodeFactory.cpp
+  dtkComposerNodeFile.cpp
+  dtkComposerNodeInteger.cpp
+  dtkComposerNodeString.cpp
+  dtkComposerNodeProcess.cpp
   dtkComposerNodeProperty.cpp
+  dtkComposerNodeView.cpp
   dtkComposerScene.cpp
   dtkComposerView.cpp)
 
@@ -62,6 +80,8 @@ add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)
 add_definitions(-DQT_NO_DEBUG)
 
+add_definitions(-DQSTATEMACHINE_DEBUG)
+
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
 add_library(${PROJECT_NAME} SHARED
@@ -72,7 +92,7 @@ add_library(${PROJECT_NAME} SHARED
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkCore
-  dtkScript)
+  dtkGui)
 
 ## #################################################################
 ## Installation

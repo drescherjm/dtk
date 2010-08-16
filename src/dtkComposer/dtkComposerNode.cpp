@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 19:07:46 2010 (+0200)
+ * Last-Updated: Mon Jul 26 12:22:55 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 346
+ *     Update #: 444
  */
 
 /* Commentary: 
@@ -79,7 +79,7 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
 #else
     d->title->setFont(QFont("Lucida Grande", 11));
 #endif
-    d->title->setHtml("Title");
+    d->title->setPlainText("Title");
     d->title->setDefaultTextColor(Qt::white);
     d->title->setPos(-d->width/2 + d->margin_left/2, -d->header_height-2);
 
@@ -97,9 +97,20 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
 
 dtkComposerNode::~dtkComposerNode(void)
 {
+    // foreach(dtkComposerEdge *edge, d->input_edges.keys())
+    //     delete edge;
+
+    // foreach(dtkComposerEdge *edge, d->output_edges.keys())
+    //     delete edge;
+    
     delete d;
 
     d = NULL;
+}
+
+void dtkComposerNode::setTitle(const QString& title)
+{
+    d->title->setPlainText(title);
 }
 
 void dtkComposerNode::setType(Type type)
@@ -156,11 +167,15 @@ void dtkComposerNode::addOutputProperty(dtkComposerNodeProperty *property)
 void dtkComposerNode::addInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     d->input_edges.insert(edge, property);
+
+    // this->onInputEdgeConnected(edge, property);
 }
 
 void dtkComposerNode::addOutputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     d->output_edges.insert(edge, property);
+
+    // this->onOutputEdgeConnected(edge, property);
 }
 
 void dtkComposerNode::removeInputEdge(dtkComposerEdge *edge)
@@ -191,6 +206,16 @@ int dtkComposerNode::count(dtkComposerNodeProperty *property)
         return d->output_edges.keys(property).count();
 
     return 0;
+}
+
+QList<dtkComposerNodeProperty *> dtkComposerNode::inputProperties(void)
+{
+    return d->input_properties;
+}
+
+QList<dtkComposerNodeProperty *> dtkComposerNode::outputProperties(void)
+{
+    return d->output_properties;
 }
 
 QList<dtkComposerEdge *> dtkComposerNode::inputEdges(void)
@@ -236,9 +261,30 @@ dtkComposerNodeProperty *dtkComposerNode::propertyAt(const QPointF& point) const
     return NULL;
 }
 
+QString dtkComposerNode::title(void)
+{
+    return QString(d->title->toPlainText());
+}
+
+void dtkComposerNode::update(void)
+{
+    emit evaluated(this); qApp->processEvents(QEventLoop::ExcludeUserInputEvents | QEventLoop::ExcludeSocketNotifiers, 10);
+
+    foreach(dtkComposerEdge *edge, d->input_edges.keys())
+        this->onInputEdgeConnected(edge, edge->destination());
+
+    foreach(dtkComposerEdge *edge, d->output_edges.keys())
+        this->onOutputEdgeConnected(edge, edge->source());
+
+    foreach(dtkComposerEdge *edge, d->output_edges.keys())
+        edge->destination()->node()->update();
+}
+
 QRectF dtkComposerNode::boundingRect(void) const
 {
-    return QRectF(-d->width/2 - d->penWidth / 2, -d->header_height - d->penWidth / 2, d->width + d->penWidth, d->height + d->penWidth);
+    QRectF rect(-d->width/2 - d->penWidth / 2, -d->header_height - d->penWidth / 2, d->width + d->penWidth, d->height + d->penWidth);
+
+    return rect;
 }
 
 void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -255,6 +301,16 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
         gradiant.setColorAt(0.0, QColor(Qt::white));
         gradiant.setColorAt(0.3, QColor(Qt::gray));
         gradiant.setColorAt(1.0, QColor(Qt::gray).darker());
+        break;
+    case Atomic:
+        gradiant.setColorAt(0.0, QColor(Qt::white));
+        gradiant.setColorAt(0.3, QColor("#ffa500"));
+        gradiant.setColorAt(1.0, QColor("#ffa500").darker());
+        break;
+    case Control:
+        gradiant.setColorAt(0.0, QColor(Qt::white));
+        gradiant.setColorAt(0.3, QColor(Qt::red));
+        gradiant.setColorAt(1.0, QColor(Qt::red).darker());
         break;
     case Data:
         gradiant.setColorAt(0.0, QColor(Qt::white));
@@ -304,6 +360,7 @@ void dtkComposerNode::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     if(event->button() == Qt::RightButton) {
         QMenu menu;
+        
         foreach(QAction *action, d->actions)
             menu.addAction(action);
         menu.exec(QCursor::pos());

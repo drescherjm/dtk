@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:23:52 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Aug  5 11:15:16 2009 (+0200)
+ * Last-Updated: Thu Jul 22 16:32:59 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 43
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -125,6 +125,7 @@ public:
 signals:
     void titleChanged(QString);
     void documentChanged(void);
+    void closed(void);
 
 public slots:
     bool open(const QString& fileName);
@@ -139,6 +140,7 @@ public slots:
     void zoomOut(int range = 1);
 
 protected:
+    void closeEvent(QCloseEvent *event);
     void wheelEvent(QWheelEvent *event);
     void paintEvent(QPaintEvent *event);
     void resizeEvent(QResizeEvent *event);

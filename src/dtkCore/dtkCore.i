@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Jun 24 10:51:28 2010 (+0200)
+ * Last-Updated: Mon Aug  9 16:49:06 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 261
+ *     Update #: 265
  */
 
 /* Commentary:
@@ -71,6 +71,9 @@
 #undef  Q_DECLARE_INTERFACE(IFace, IId)
 #define Q_DECLARE_INTERFACE(IFace, IId)
 
+#undef  Q_DECLARE_METATYPE(Type type)
+#define Q_DECLARE_METATYPE(Type type)
+
 #undef  DTKCORE_EXPORT
 #define DTKCORE_EXPORT
 
@@ -106,7 +109,9 @@
 // /////////////////////////////////////////////////////////////////
 
 %ignore started(QString message);
+%ignore elapsed(QString duration);
 %ignore progressed(int step);
+%ignore progressed(QString message);
 %ignore finished();
 
 // /////////////////////////////////////////////////////////////////

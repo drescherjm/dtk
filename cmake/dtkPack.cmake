@@ -25,7 +25,18 @@ include (InstallRequiredSystemLibraries)
 
 if(NOT DTK_AGGREGATE_PLUGINS)
   set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
-  set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}")
+  if( "${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" )
+    # To obtain rpm named such as dtk-...-.fc10.x86_64.rpm
+    execute_process( COMMAND uname -r 
+                     COMMAND sed "s/.*\\.\\(\\w*\\.\\w*\\)$/\\1/"
+                     OUTPUT_VARIABLE PACKAGE_EXTENSION
+                     OUTPUT_STRIP_TRAILING_WHITESPACE)
+    set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}.${PACKAGE_EXTENSION}")
+  else( "${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" )
+    # Default situation
+    set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}.${CMAKE_SYSTEM_PROCESSOR}")
+  endif( "${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" )
+
   set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}-src")
   set(CPACK_PACKAGE_DESCRIPTION_SUMMARY ${PROJECT_NAME})
   set(CPACK_PACKAGE_DESCRIPTION ${PROJECT_NAME})

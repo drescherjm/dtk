@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul  8 13:26:20 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul 16 11:58:55 2010 (+0200)
+ * Last-Updated: Tue Aug 17 10:52:56 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 16
+ *     Update #: 17
  */
 
 /* Commentary: 
@@ -37,6 +37,7 @@ public:
 public slots:
     void editFile(void);
     void getFileName(void);
+    void setFileName(const QString& file);
 
 private:
     dtkComposerNodeFilePrivate *d;

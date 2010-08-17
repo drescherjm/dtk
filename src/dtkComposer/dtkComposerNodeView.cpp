@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul 15 11:25:19 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Aug 16 16:20:33 2010 (+0200)
+ * Last-Updated: Tue Aug 17 13:20:47 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 46
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -43,6 +43,9 @@ dtkComposerNodeView::dtkComposerNodeView(dtkComposerNode *parent) : dtkComposerN
 
 dtkComposerNodeView::~dtkComposerNodeView(void)
 {
+    if (this->object())
+        delete this->object();
+
     delete d;
 
     d = NULL;

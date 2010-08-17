@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul 15 11:21:51 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Aug 16 16:16:53 2010 (+0200)
+ * Last-Updated: Tue Aug 17 13:24:13 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 6
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #include "dtkComposerNodeData.h"
 #include "dtkComposerNodeProperty.h"
 
+#include <dtkCore/dtkAbstractObject.h>
 #include <dtkCore/dtkGlobal.h>
 
 class dtkComposerNodeDataPrivate
@@ -37,6 +38,9 @@ dtkComposerNodeData::dtkComposerNodeData(dtkComposerNode *parent) : dtkComposerN
 
 dtkComposerNodeData::~dtkComposerNodeData(void)
 {
+    if (this->object())
+        delete this->object();
+
     delete d;
 
     d = NULL;

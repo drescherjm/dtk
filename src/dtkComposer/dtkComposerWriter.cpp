@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Aug 16 22:14:30 2010 (+0200)
+ * Last-Updated: Tue Aug 17 11:22:34 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 62
+ *     Update #: 68
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include "dtkComposerEdge.h"
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerWriter.h"
@@ -67,6 +68,25 @@ void dtkComposerWriter::write(const QString& fileName)
         tag.setAttribute("x", QString::number(node->pos().x()));
         tag.setAttribute("y", QString::number(node->pos().y()));
         tag.setAttribute("id", QString::number(id));
+
+        // -- File node
+
+        if(dtkComposerNodeFile *file_node = dynamic_cast<dtkComposerNodeFile *>(node)) {
+           
+            QString file_name = file_node->value(file_node->outputProperty("name")).toString();
+
+            if(!file_name.isEmpty()) {
+                
+                QDomText text = doc.createTextNode(file_name);
+                
+                QDomElement name = doc.createElement("name");
+                name.appendChild(text);
+
+                tag.appendChild(name);
+            }
+        }
+
+        // --
 
         root.appendChild(tag);
 

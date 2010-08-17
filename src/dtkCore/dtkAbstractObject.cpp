@@ -33,6 +33,7 @@ public:
     QHash<QString, QString> properties;
 
     QHash<QString, QStringList> metadatas;
+    QList<QAction *> actions;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -246,6 +247,23 @@ QStringList dtkAbstractObject::metadatas(QString key)
     }
 
     return d->metadatas.value(key);
+}
+
+//! To add custom actions used by the composer.
+void dtkAbstractObject::addAction(const QString& text, const QObject *receiver, const char *slot) {
+    QAction *action = new QAction(text, this);
+
+    connect(action, SIGNAL(triggered()), receiver, slot);
+
+    d->actions << action;
+}
+
+void dtkAbstractObject::addAction( QMenu& menu ) {
+    if ( d->actions.size() ) {
+        menu.addSeparator();
+        foreach(QAction *action, d->actions)
+            menu.addAction(action);
+    }
 }
 
 // /////////////////////////////////////////////////////////////////

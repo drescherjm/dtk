@@ -55,6 +55,8 @@ public:
    QString metadata(QString key);
    QStringList metadatas(QString key);
 
+   virtual void addAction(const QString& text, const QObject *receiver, const char *slot);
+   virtual void addAction( QMenu& menu );
 signals:
    void propertySet(QString key, QString value);
    void metaDataSet(QString key, QString value);

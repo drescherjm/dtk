@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 27 11:48:02 2010 (+0200)
+ * Last-Updated: Mon Aug 16 15:25:17 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 346
+ *     Update #: 389
  */
 
 /* Commentary: 
@@ -20,8 +20,10 @@
 #include "dtkComposer.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeFactory.h"
+#include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerView.h"
+#include "dtkComposerWriter.h"
 
 #include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkAbstractProcess.h>
@@ -35,6 +37,8 @@ class dtkComposerPrivate
 public:
     dtkComposerScene *scene;
     dtkComposerView *view;
+
+    QString fileName;
 };
 
 dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPrivate)
@@ -42,6 +46,8 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
     d->scene = new dtkComposerScene(this);
     d->view = new dtkComposerView(this);
     d->view->setScene(d->scene);
+
+    d->fileName = "untitled";
 
     connect(d->scene, SIGNAL(dataSelected(dtkAbstractData *)), this, SIGNAL(dataSelected(dtkAbstractData *)));
     connect(d->scene, SIGNAL(processSelected(dtkAbstractProcess *)), this, SIGNAL(processSelected(dtkAbstractProcess *)));
@@ -57,6 +63,8 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(d->view);
+
+    emit titleChanged(d->fileName);
 }
 
 dtkComposer::~dtkComposer(void)
@@ -71,6 +79,49 @@ dtkComposer::~dtkComposer(void)
 void dtkComposer::setFactory(dtkComposerNodeFactory *factory)
 {
     d->scene->setFactory(factory);
+}
+
+bool dtkComposer::isModified(void)
+{
+    return true;
+}
+
+QString dtkComposer::fileName(void)
+{
+    return d->fileName;
+}
+
+bool dtkComposer::open(QString fileName)
+{
+    if (!fileName.isEmpty()) {
+        
+        dtkComposerReader reader(d->scene);
+        reader.read(fileName);
+
+        QFileInfo info(fileName);
+
+        emit titleChanged(info.baseName());
+    }
+
+    return true;
+}
+
+bool dtkComposer::save(QString fileName)
+{
+    QString fName = d->fileName;
+
+    if(!fileName.isEmpty())
+        fName = fileName;
+
+    dtkComposerWriter writer(d->scene);
+    writer.write(fName);
+
+    const QFileInfo fi(fName);
+    d->fileName = fi.absoluteFilePath();
+
+    emit titleChanged(fi.fileName());
+
+    return true;
 }
 
 void dtkComposer::onDataSelected(dtkAbstractData *data)

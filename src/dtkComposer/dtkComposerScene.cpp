@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 27 11:49:36 2010 (+0200)
+ * Last-Updated: Mon Aug 16 22:22:43 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 306
+ *     Update #: 326
  */
 
 /* Commentary: 
@@ -111,6 +111,11 @@ QList<dtkComposerNodeProperty *> dtkComposerScene::properties(QString name)
     return list;
 }
 
+void dtkComposerScene::addEdge(dtkComposerEdge *edge)
+{
+    this->addItem(edge);
+}
+
 void dtkComposerScene::addNode(dtkComposerNode *node)
 {
     this->addItem(node);
@@ -129,6 +134,18 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
     // this->removeItem(node);
     
     delete node;
+}
+
+dtkComposerNode *dtkComposerScene::createNode(QString type, QPointF position)
+{
+    if(dtkComposerNode *node = d->factory->create(type)) {
+        node->setPos(position);
+        this->addNode(node);
+        return node;
+    } else {
+        qDebug() << "Unable to create node for type" << type;
+        return NULL;
+    }
 }
 
 void dtkComposerScene::setFactory(dtkComposerNodeFactory *factory)
@@ -202,12 +219,7 @@ void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
         return;
     }
 
-    if(dtkComposerNode *node = d->factory->create(url.path())) {
-        node->setPos(event->pos());
-        this->addNode(node);
-    } else {
-        qDebug() << "Unable to create node for type" << url.path();
-    }
+    this->createNode(url.path(), event->pos());
 
     event->acceptProposedAction();
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Aug 16 22:24:13 2010 (+0200)
+ * Last-Updated: Tue Aug 17 13:42:35 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 60
+ *     Update #: 80
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include "dtkComposerEdge.h"
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeFile.h"
 #include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
 
@@ -60,6 +61,10 @@ void dtkComposerReader::read(const QString& fileName)
 
     file.close();
 
+    // Clear scene
+
+    d->scene->clear();
+
     // Ds
 
     QHash<int, dtkComposerNode *> node_map;
@@ -80,12 +85,22 @@ void dtkComposerReader::read(const QString& fileName)
 
         dtkComposerNode *node = d->scene->createNode(nodes.at(i).toElement().attribute("type"), position);
 
+        // File node
+
+        if(dtkComposerNodeFile *file_node = dynamic_cast<dtkComposerNodeFile *>(node)) {
+
+            QDomNodeList children = nodes.at(i).toElement().elementsByTagName("name");
+
+            if(!children.isEmpty())
+                file_node->setFileName(children.at(0).childNodes().at(0).toText().data());
+        }
+
+        // --
+
         int id = nodes.at(i).toElement().attribute("id").toInt();
 
         node_map.insert(id, node);
     }
-
-    qDebug() << node_map.keys();
 
     // Feeding scene with edges
 
@@ -93,8 +108,6 @@ void dtkComposerReader::read(const QString& fileName)
 
     for(int i = 0; i < edges.count(); i++) {
 
-        qDebug() << "Reading an edge";
-        
         QDomElement source = edges.at(i).firstChildElement("source");
         QDomElement destin = edges.at(i).firstChildElement("destination");
 

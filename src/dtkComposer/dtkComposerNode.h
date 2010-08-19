@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Aug 16 21:56:10 2010 (+0200)
+ * Last-Updated: Tue Aug 17 13:19:38 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 126
+ *     Update #: 127
  */
 
 /* Commentary: 
@@ -48,8 +48,8 @@ public:
         View
     };
 
-     dtkComposerNode(dtkComposerNode *parent = 0);
-    ~dtkComposerNode(void);
+              dtkComposerNode(dtkComposerNode *parent = 0);
+     virtual ~dtkComposerNode(void);
 
     void setTitle(const QString& title);
     void setKind(Kind kind);

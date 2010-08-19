@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Aug 16 22:10:40 2010 (+0200)
+ * Last-Updated: Tue Aug 17 13:21:28 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 73
+ *     Update #: 82
  */
 
 /* Commentary: 
@@ -47,6 +47,11 @@ public:
     QList<dtkComposerNodeProperty *> properties(void);
     QList<dtkComposerNodeProperty *> properties(QString name);
 
+    void clear(void);
+
+    bool  isModified(void);
+    void setModified(bool modified);
+
     void    addEdge(dtkComposerEdge *edge);
     void    addNode(dtkComposerNode *node);
     void removeNode(dtkComposerNode *node);
@@ -62,6 +67,8 @@ signals:
 
     void nodeAdded(dtkComposerNode *node);
     void nodeRemoved(dtkComposerNode *node);
+
+    void compositionChanged(void);
 
 signals:
     void evaluationStarted(void);

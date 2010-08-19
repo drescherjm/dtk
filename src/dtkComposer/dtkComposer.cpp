@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Aug 16 15:25:17 2010 (+0200)
+ * Last-Updated: Tue Aug 17 13:03:57 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 389
+ *     Update #: 395
  */
 
 /* Commentary: 
@@ -59,6 +59,8 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
     connect(d->scene, SIGNAL(evaluationStarted()), this, SIGNAL(evaluationStarted()));
     connect(d->scene, SIGNAL(evaluationStopped()), this, SIGNAL(evaluationStopped()));
 
+    connect(d->scene, SIGNAL(compositionChanged()), this, SIGNAL(compositionChanged()));
+
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
@@ -83,7 +85,7 @@ void dtkComposer::setFactory(dtkComposerNodeFactory *factory)
 
 bool dtkComposer::isModified(void)
 {
-    return true;
+    return d->scene->isModified();
 }
 
 QString dtkComposer::fileName(void)
@@ -97,6 +99,8 @@ bool dtkComposer::open(QString fileName)
         
         dtkComposerReader reader(d->scene);
         reader.read(fileName);
+
+        d->scene->setModified(false);
 
         QFileInfo info(fileName);
 
@@ -118,6 +122,8 @@ bool dtkComposer::save(QString fileName)
 
     const QFileInfo fi(fName);
     d->fileName = fi.absoluteFilePath();
+
+    d->scene->setModified(false);
 
     emit titleChanged(fi.fileName());
 

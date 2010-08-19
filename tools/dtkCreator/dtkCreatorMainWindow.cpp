@@ -246,7 +246,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->stack->addWidget(d->editor);
 
     d->composer = new dtkComposer(d->stack);
-    connect( d->toolRunAction, SIGNAL(triggered()), d->composer, SLOT(startEvaluation()) );
+    connect( d->toolRunAction, SIGNAL(triggered()),      d->composer, SLOT(startEvaluation()) );
+    connect( d->composer,      SIGNAL(evaluationStopped()), this, SLOT(stop()) );
 
     d->stack->addWidget(d->composer);
 

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Jun 23 17:28:35 2010 (+0200)
-##           By: Julien Wintz
-##     Update #: 31
+## Last-Updated: Mon Aug 23 20:33:36 2010 (+0200)
+##           By: jwintz
+##     Update #: 37
 ######################################################################
 ## 
 ### Commentary: 
@@ -44,18 +44,20 @@ mark_as_advanced(QT_QTMOTIF_LIBRARY_RELEASE)
 ## Swig
 ## #################################################################
 
-find_package(SWIG REQUIRED)
-include(${SWIG_USE_FILE})
-set(CMAKE_SWIG_FLAGS "")
+find_package(SWIG QUIET)
 
-macro(dtk_wrap project target name language input deps)
-
-  set(wrap_output ${project}_wrap_${language}.cpp)
-
-  add_custom_command(
-    OUTPUT ${wrap_output}
-    COMMAND ${SWIG_EXECUTABLE}
-    ARGS
+if(SWIG_FOUND)
+  include(${SWIG_USE_FILE})
+  set(CMAKE_SWIG_FLAGS "")
+  
+  macro(dtk_wrap project target name language input deps)
+    
+    set(wrap_output ${project}_wrap_${language}.cpp)
+    
+    add_custom_command(
+      OUTPUT ${wrap_output}
+      COMMAND ${SWIG_EXECUTABLE}
+      ARGS
       "-${language}"
       "-c++"
       "-module" ${name}
@@ -63,24 +65,34 @@ macro(dtk_wrap project target name language input deps)
       "-outdir" ${CMAKE_CURRENT_BINARY_DIR}
       "-o" ${wrap_output}
       ${input}
-    MAIN_DEPENDENCY ${input}
-    COMMENT "Wrapping ${input} to ${language}")
+      MAIN_DEPENDENCY ${input}
+      COMMENT "Wrapping ${input} to ${language}")
+    
+    set(${target} ${${target}} ${wrap_output})
+    
+  endmacro(dtk_wrap)
+  
+  mark_as_advanced(SWIG_DIR)
+  mark_as_advanced(SWIG_EXECUTABLE)
+  mark_as_advanced(SWIG_VERSION)
+endif(SWIG_FOUND)
 
-  set(${target} ${${target}} ${wrap_output})
-
-endmacro(dtk_wrap)
-
-mark_as_advanced(SWIG_DIR)
-mark_as_advanced(SWIG_EXECUTABLE)
-mark_as_advanced(SWIG_VERSION)
+if(SWIG_FOUND)
+  add_definitions(-DHAVE_SWIG)
+endif(SWIG_FOUND)
 
 ## #################################################################
 ## Tcl
 ## #################################################################
 
 find_package(TCL QUIET)
+
 if(TCL_FOUND)
   include_directories(${TCL_INCLUDE_PATH})
+endif(TCL_FOUND)
+
+if(TCL_FOUND)
+  add_definitions(-DHAVE_TCL)
 endif(TCL_FOUND)
 
 ## #################################################################
@@ -88,10 +100,15 @@ endif(TCL_FOUND)
 ## #################################################################
 
 find_package(PythonLibs QUIET)
+
 if(PYTHONLIBS_FOUND)
   include_directories(${PYTHON_INCLUDE_PATH})
   get_filename_component(PYTHON_PATH ${PYTHON_LIBRARIES} PATH)
   link_directories(${PYTHON_PATH})
+endif(PYTHONLIBS_FOUND)
+
+if(PYTHONLIBS_FOUND)
+  add_definitions(-DHAVE_PYTHON)
 endif(PYTHONLIBS_FOUND)
 
 ## #################################################################

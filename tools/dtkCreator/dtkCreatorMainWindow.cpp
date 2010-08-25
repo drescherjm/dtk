@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 13 10:27:52 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 477
+ * Last-Updated: Mon Aug 23 20:32:59 2010 (+0200)
+ *           By: jwintz
+ *     Update #: 481
  */
 
 /* Commentary: 
@@ -126,14 +126,17 @@ bool dtkCreatorMainWindowPrivate::maySave(void)
      return true;
 }
 
+#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
 extern "C" int init_core(void);                  // -- Initialization core layer python wrapped functions
-extern "C" int Core_Init(Tcl_Interp *interp);    // -- Initialization core layer tcl    wrapped functions
-
 extern "C" int init_vr(void);                    // -- Initialization vr layer python wrapped functions
-extern "C" int Vr_Init(Tcl_Interp *interp);      // -- Initialization vr layer tcl    wrapped functions
-
 extern "C" int init_creator(void);               // -- Initialization creator layer python wrapped functions
-extern "C" int Creator_Init(Tcl_Interp *interp); // -- Initialization creator layer tcl    wrapped functions
+#endif
+
+#if defined(HAVE_SWIG) && defined(HAVE_TCL)
+extern "C" int Core_Init(Tcl_Interp *interp);    // -- Initialization core layer tcl wrapped functions
+extern "C" int Vr_Init(Tcl_Interp *interp);      // -- Initialization vr layer tcl wrapped functions
+extern "C" int Creator_Init(Tcl_Interp *interp); // -- Initialization creator layer tcl wrapped functions
+#endif
 
 dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -324,6 +327,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     dtkCreatorController::instance()->attach(d->script_browser);
     dtkCreatorController::instance()->attach(d->viewer);
 
+#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
     // Setting up core python module
 
     dtkScriptInterpreterPythonModuleManager::instance()->registerInitializer(&init_core);
@@ -365,7 +369,9 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
         "widgetFactory = creator.dtkCreatorWidgetFactory.instance()"
     );
+#endif
 
+#if defined(HAVE_SWIG) && defined(HAVE_TCL)
     // Setting up core tcl module
 
     dtkScriptInterpreterTclModuleManager::instance()->registerInitializer(&Core_Init);
@@ -382,7 +388,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
         "set pluginManager  [dtkPluginManager_instance]"
     );
 
-    // Setting up core tcl module
+    // Setting up vr tcl module
 
     dtkScriptInterpreterTclModuleManager::instance()->registerInitializer(&Vr_Init);
 
@@ -401,6 +407,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
 	"set widgetFactory [dtkCreatorWidgetFactory_instance]"
     );
+#endif
 
     d->interpreter->registerInterpreter(dtkScriptInterpreterPool::instance()->python());
     d->interpreter->registerAsHandler(dtkCreatorRedirectLogHandler);

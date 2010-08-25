@@ -76,8 +76,15 @@ void dtkFinderSideView::populate(void)
     item1->setData(0, Qt::FontRole, groupFont);
     item1->setData(0, Qt::ForegroundRole, groupBrush);
 
-    foreach(QFileInfo info, QDir::drives()) {
-
+	QFileInfoList driveList;
+#ifdef Q_WS_MAC
+	QDir macDir("/Volumes");
+	driveList = macDir.entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot);
+#else
+	driveList = QDir::drives();
+#endif
+	
+    foreach(QFileInfo info, driveList) {
         QTreeWidgetItem *item = new QTreeWidgetItem(item1, QStringList() << (info.baseName().isEmpty() ? "HD" : info.baseName()));
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         item->setData(0, Qt::FontRole, itemFont);
@@ -633,7 +640,7 @@ public:
 dtkFinder::dtkFinder(QWidget *parent) : QWidget(parent), d(new dtkFinderPrivate)
 {
     d->model = new QFileSystemModel(this);
-    d->model->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
+    d->model->setFilter(QDir::Hidden | QDir::AllEntries | QDir::NoDotAndDotDot);
     d->model->setRootPath(QDir::rootPath());
 
     d->list = new dtkFinderListView(this);

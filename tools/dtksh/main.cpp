@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Dec 10 14:05:44 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 11 10:16:31 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 16
+ * Last-Updated: Mon Aug 23 20:43:05 2010 (+0200)
+ *           By: jwintz
+ *     Update #: 18
  */
 
 /* Commentary: 
@@ -26,8 +26,13 @@
 #include <dtkScript/dtkScriptInterpreterPython.h>
 #include <dtkScript/dtkScriptInterpreterTcl.h>
 
+#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
 extern "C" int init_core(void);               // -- Initialization core layer python wrapped functions
+#endif
+
+#if defined(HAVE_SWIG) && defined(HAVE_TCL)
 extern "C" int Core_Init(Tcl_Interp *interp); // -- Initialization core layer tcl    wrapped functions
+#endif
 
 int main(int argc, char **argv)
 {
@@ -40,6 +45,7 @@ int main(int argc, char **argv)
     dtkPluginManager::instance()->initialize();
     dtkScriptManager::instance()->initialize();
 
+#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
     // Setting up core python module
 
     dtkScriptInterpreterPythonModuleManager::instance()->registerInitializer(&init_core);
@@ -58,7 +64,9 @@ int main(int argc, char **argv)
     dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
         "pluginManager  = core.dtkPluginManager.instance()"
     );
+#endif
 
+#if defined(HAVE_SWIG) && defined(HAVE_TCL)
     // Setting up core tcl module
 
     dtkScriptInterpreterTclModuleManager::instance()->registerInitializer(&Core_Init);
@@ -74,6 +82,7 @@ int main(int argc, char **argv)
     dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
         "set pluginManager  [dtkPluginManager_instance]"
     );
+#endif
 
     // Setting up interpreter
 

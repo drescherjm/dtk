@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Jun 24 10:50:24 2010 (+0200)
-##           By: Julien Wintz
-##     Update #: 168
+## Last-Updated: Mon Aug 23 20:02:04 2010 (+0200)
+##           By: jwintz
+##     Update #: 178
 ######################################################################
 ## 
 ### Commentary: 
@@ -100,10 +100,21 @@ set(${PROJECT_NAME}_SOURCES
 ## Wrapping
 ## #################################################################
 
-set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS})
+set(${PROJECT_NAME}_SOURCES_WRAP)
 
-dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP core python ${CMAKE_CURRENT_SOURCE_DIR}/dtkCore.i ${${PROJECT_NAME}_WRAP_DEPENDS})
-dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP core tcl    ${CMAKE_CURRENT_SOURCE_DIR}/dtkCore.i ${${PROJECT_NAME}_WRAP_DEPENDS})
+if(SWIG_FOUND)
+
+  set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS})
+  
+  if(PYTHONLIBS_FOUND)
+    dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP core python ${CMAKE_CURRENT_SOURCE_DIR}/dtkCore.i ${${PROJECT_NAME}_WRAP_DEPENDS})
+  endif(PYTHONLIBS_FOUND)
+  
+  if(TCL_FOUND)
+    dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP core tcl    ${CMAKE_CURRENT_SOURCE_DIR}/dtkCore.i ${${PROJECT_NAME}_WRAP_DEPENDS})
+  endif(TCL_FOUND)
+  
+endif(SWIG_FOUND)
 
 ## #################################################################
 ## Build rules
@@ -125,14 +136,23 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_WRAP})
 
-target_link_libraries(${PROJECT_NAME}
-  ${QT_LIBRARIES}
-  ${TCL_LIBRARY}
-  ${PYTHON_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES})
+
+if(TCL_FOUND)
+  target_link_libraries(${PROJECT_NAME} ${TCL_LIBRARY})
+endif(TCL_FOUND)
+
+if(PYTHONLIBS_FOUND)
+  target_link_libraries(${PROJECT_NAME} ${PYTHON_LIBRARIES})
+endif(PYTHONLIBS_FOUND)
 
 ## #################################################################
 ## Handling of generated script modules
 ## #################################################################
+
+set(${PROJECT_NAME}_MODULES)
+
+if(SWIG_FOUND AND PYTHONLIBS_FOUND)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dtkCore.i
@@ -141,6 +161,8 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   COMMENT "-- Moving python modules to ${CMAKE_BINARY_DIR}/modules")
 
 set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/core.py)
+
+endif(SWIG_FOUND AND PYTHONLIBS_FOUND)
 
 ## #################################################################
 ## Installation

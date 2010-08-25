@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 27 11:49:36 2010 (+0200)
+ * Last-Updated: Tue Aug 17 13:22:23 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 306
+ *     Update #: 349
  */
 
 /* Commentary: 
@@ -36,12 +36,15 @@ class dtkComposerScenePrivate
 public:
     dtkComposerEdge *current_edge;
     dtkComposerNodeFactory *factory;
+
+    bool modified;
 };
 
 dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(new dtkComposerScenePrivate)
 {
     d->current_edge = NULL;
     d->factory = new dtkComposerNodeFactory;
+    d->modified = false;
 
     connect(this, SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));
 }
@@ -111,15 +114,43 @@ QList<dtkComposerNodeProperty *> dtkComposerScene::properties(QString name)
     return list;
 }
 
+void dtkComposerScene::clear(void)
+{
+    foreach(dtkComposerNode *node, this->nodes())
+        delete node;
+}
+
+bool dtkComposerScene::isModified(void)
+{
+    return d->modified;
+}
+
+void dtkComposerScene::setModified(bool modified)
+{
+    d->modified = modified;
+
+    if(d->modified)
+        emit compositionChanged();
+}
+
+void dtkComposerScene::addEdge(dtkComposerEdge *edge)
+{
+    this->addItem(edge);
+
+    this->setModified(true);
+}
+
 void dtkComposerScene::addNode(dtkComposerNode *node)
 {
     this->addItem(node);
 
     emit nodeAdded(node);
+
+    this->setModified(true);
 }
 
 void dtkComposerScene::removeNode(dtkComposerNode *node)
-{ 
+{
     foreach(dtkComposerEdge *edge, node->inputEdges())
         delete edge; // this->removeItem(edge);
     
@@ -129,6 +160,20 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
     // this->removeItem(node);
     
     delete node;
+
+    this->setModified(true);
+}
+
+dtkComposerNode *dtkComposerScene::createNode(QString type, QPointF position)
+{
+    if(dtkComposerNode *node = d->factory->create(type)) {
+        node->setPos(position);
+        this->addNode(node);
+        return node;
+    } else {
+        qDebug() << "Unable to create node for type" << type;
+        return NULL;
+    }
 }
 
 void dtkComposerScene::setFactory(dtkComposerNodeFactory *factory)
@@ -202,12 +247,7 @@ void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
         return;
     }
 
-    if(dtkComposerNode *node = d->factory->create(url.path())) {
-        node->setPos(event->pos());
-        this->addNode(node);
-    } else {
-        qDebug() << "Unable to create node for type" << url.path();
-    }
+    this->createNode(url.path(), event->pos());
 
     event->acceptProposedAction();
 }
@@ -285,6 +325,8 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             delete d->current_edge;
         d->current_edge = 0;
     }
+
+    this->setModified(true);
 }
 
 void dtkComposerScene::onSelectionChanged(void)

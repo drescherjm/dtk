@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb  7 22:37:03 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Jul 17 21:08:15 2010 (+0200)
+ * Last-Updated: Mon Aug 16 21:10:03 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 126
+ *     Update #: 131
  */
 
 /* Commentary: 
@@ -62,22 +62,23 @@ dtkComposerNodeFactory::~dtkComposerNodeFactory(void)
 
 dtkComposerNode *dtkComposerNodeFactory::create(QString type)
 {
-    if (type == "integer")
+    if (type == "dtkComposerInteger")
         return new dtkComposerNodeInteger;
 
-    if (type == "string")
+    if (type == "dtkComposerString")
         return new dtkComposerNodeString;
 
-    if (type == "file")
+    if (type == "dtkComposerFile")
         return new dtkComposerNodeFile;
 
-    if (type == "condition")
+    if (type == "dtkComposerCondition")
         return new dtkComposerNodeCondition;
 
     if (dtkAbstractData *data = dtkAbstractDataFactory::instance()->create(type)) {
         
         dtkComposerNodeData *node = new dtkComposerNodeData;
         node->setObject(data);
+        node->setType(type);
         return node;
     }
 
@@ -85,6 +86,7 @@ dtkComposerNode *dtkComposerNodeFactory::create(QString type)
         
         dtkComposerNodeProcess *node = new dtkComposerNodeProcess;
         node->setObject(process);
+        node->setType(type);
         return node;
     }
 
@@ -92,6 +94,7 @@ dtkComposerNode *dtkComposerNodeFactory::create(QString type)
         
         dtkComposerNodeView *node = new dtkComposerNodeView;
         node->setObject(view);
+        node->setType(type);
         node->addAction("Show view", view, SLOT(show()));
 
         return node;

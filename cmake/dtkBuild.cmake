@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Jun 10 12:06:43 2010 (+0200)
+## Last-Updated: Mon Aug 16 10:56:40 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 148
+##     Update #: 149
 ######################################################################
 ## 
 ### Commentary: 
@@ -122,7 +122,7 @@ endif(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Use.cmake.in)
 
 set(CMAKE_SKIP_BUILD_RPATH FALSE)
 
-  set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 
 if (APPLE)
   set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")

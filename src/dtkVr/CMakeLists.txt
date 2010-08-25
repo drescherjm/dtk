@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Apr 26 13:13:51 2010 (+0200)
-##           By: Julien Wintz
-##     Update #: 204
+## Last-Updated: Mon Aug 23 20:06:32 2010 (+0200)
+##           By: jwintz
+##     Update #: 207
 ######################################################################
 ## 
 ### Commentary: 
@@ -82,10 +82,21 @@ endif(QUAT_LIBRARIES AND VRPN_LIBRARIES AND MPI_FOUND)
 ## Wrapping
 ## #################################################################
 
-set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS})
+set(${PROJECT_NAME}_SOURCES_WRAP)
 
-dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP vr python ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i ${${PROJECT_NAME}_WRAP_DEPENDS})
-dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP vr tcl    ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i ${${PROJECT_NAME}_WRAP_DEPENDS})
+if(SWIG_FOUND)
+
+  set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS})
+  
+  if(PYTHONLIBS_FOUND)
+    dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP vr python ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i ${${PROJECT_NAME}_WRAP_DEPENDS})
+  endif(PYTHONLIBS_FOUND)
+
+  if(TCL_FOUND)
+    dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP vr tcl    ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i ${${PROJECT_NAME}_WRAP_DEPENDS})
+  endif(TCL_FOUND)
+
+endif(SWIG_FOUND)
 
 ## #################################################################
 ## Build rules
@@ -126,6 +137,10 @@ endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)
 ## Handling of generated script modules
 ## #################################################################
 
+set(${PROJECT_NAME}_MODULES)
+
+if(SWIG_FOUND AND PYTHONLIBS_FOUND)
+
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i
   COMMAND ${CMAKE_COMMAND} ARGS -E  make_directory ${CMAKE_BINARY_DIR}/modules
@@ -134,6 +149,8 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 )
 
 set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/vr.py)
+
+endif(SWIG_FOUND AND PYTHONLIBS_FOUND)
 
 ## #################################################################
 ## Installation

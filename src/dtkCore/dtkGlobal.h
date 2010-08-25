@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 16 09:54:33 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 21:02:43 2010 (+0200)
+ * Last-Updated: Tue Aug 24 12:47:35 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 110
+ *     Update #: 111
  */
 
 /* Commentary: 
@@ -114,7 +114,7 @@ inline bool dtkApplicationArgumentsContain(int argc, char **argv, QString value)
     return false;
 }
 
-inline bool dtkApplicationArgumentsContain(QApplication *application, QString value)
+inline bool dtkApplicationArgumentsContain(QCoreApplication *application, QString value)
 {
     return dtkApplicationArgumentsContain(application->argc(), application->argv(), value); // I know the previous is deprecated but it really shouldn't :-|
 }
@@ -128,7 +128,7 @@ inline QString dtkApplicationArgumentsValue(int argc, char **argv, QString key)
     return QString();
 }
 
-inline QString dtkApplicationArgumentsValue(QApplication *application, QString key)
+inline QString dtkApplicationArgumentsValue(QCoreApplication *application, QString key)
 {
     return dtkApplicationArgumentsValue(application->argc(), application->argv(), key); // I know the previous is deprecated but it really shouldn't :-|
 }

@@ -269,7 +269,7 @@ QString dtkFinderSideView::driveLabel(QString drive)
 #endif
 
 #ifdef Q_WS_MAC
-	return drive.baseName();
+	return QFileInfo(drive).baseName();
 #endif
 
 	return drive;

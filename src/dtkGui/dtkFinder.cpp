@@ -21,6 +21,10 @@
 
 #include <dtkCore/dtkGlobal.h>
 
+#ifdef Q_WS_WIN
+#include <qt_windows.h>
+#endif
+
 // /////////////////////////////////////////////////////////////////
 // dtkFinderSideView
 // /////////////////////////////////////////////////////////////////
@@ -85,7 +89,9 @@ void dtkFinderSideView::populate(void)
 #endif
 	
     foreach(QFileInfo info, driveList) {
-        QTreeWidgetItem *item = new QTreeWidgetItem(item1, QStringList() << (info.baseName().isEmpty() ? "HD" : info.baseName()));
+
+		QString dlabel = this->driveLabel( info.absoluteFilePath() );
+        QTreeWidgetItem *item = new QTreeWidgetItem(item1, QStringList() << (dlabel.isEmpty() ? "HD" : dlabel));
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         item->setData(0, Qt::FontRole, itemFont);
         item->setData(0, Qt::UserRole, info.absoluteFilePath());
@@ -234,6 +240,39 @@ void dtkFinderSideView::dropEvent(QDropEvent *event)
     }
 
     event->ignore();
+}
+
+QString dtkFinderSideView::driveLabel(QString drive)
+{
+#ifdef Q_WS_WIN
+	drive.replace("/", "\\");
+	TCHAR  szVolumeName[256];
+	TCHAR  szFileSystemName[256];
+	DWORD dwSerialNumber = 0;
+	DWORD dwMaxFileNameLength=256;
+	DWORD dwFileSystemFlags=0;
+	bool ret = GetVolumeInformation( drive.toAscii().constData(), 
+									 szVolumeName, 256, 
+									 &dwSerialNumber, &dwMaxFileNameLength,
+									 &dwFileSystemFlags, szFileSystemName, 256);
+	if(!ret) { 
+		drive.remove("\\");
+		QString decoratedDrive = "("+drive+")";
+		return decoratedDrive;
+	}
+	
+	QString vName = QString::fromAscii(szVolumeName) ;
+	vName.trimmed();
+	drive.remove("\\");
+	vName += " ("+drive+")";
+	return vName;
+#endif
+
+#ifdef Q_WS_MAC
+	return drive.baseName();
+#endif
+
+	return drive;
 }
 
 // /////////////////////////////////////////////////////////////////

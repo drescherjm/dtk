@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul 26 12:22:55 2010 (+0200)
+ * Last-Updated: Mon Aug 16 21:57:20 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 444
+ *     Update #: 466
  */
 
 /* Commentary: 
@@ -50,7 +50,9 @@ public:
 
     dtkComposerNodeProperty *clicked_property;
 
-    dtkComposerNode::Type type;
+    dtkComposerNode::Kind kind;
+
+    QString type;
 
     dtkAbstractObject *object;
 
@@ -59,7 +61,7 @@ public:
 
 dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePrivate)
 {
-    d->type = Unknown;
+    d->kind = Unknown;
     d->object = NULL;
 
     d->penWidth = 1;
@@ -113,7 +115,12 @@ void dtkComposerNode::setTitle(const QString& title)
     d->title->setPlainText(title);
 }
 
-void dtkComposerNode::setType(Type type)
+void dtkComposerNode::setKind(Kind kind)
+{
+    d->kind = kind;
+}
+
+void dtkComposerNode::setType(QString type)
 {
     d->type = type;
 }
@@ -125,7 +132,12 @@ void dtkComposerNode::setObject(dtkAbstractObject *object)
     d->title->setHtml(object->name());
 }
 
-dtkComposerNode::Type dtkComposerNode::type(void)
+dtkComposerNode::Kind dtkComposerNode::kind(void)
+{
+    return d->kind;
+}
+
+QString dtkComposerNode::type(void)
 {
     return d->type;
 }
@@ -261,6 +273,24 @@ dtkComposerNodeProperty *dtkComposerNode::propertyAt(const QPointF& point) const
     return NULL;
 }
 
+dtkComposerNodeProperty *dtkComposerNode::inputProperty(const QString& name) const
+{
+    foreach(dtkComposerNodeProperty *property, d->input_properties)
+        if(property->name() == name)
+            return property;
+    
+    return NULL;
+}
+
+dtkComposerNodeProperty *dtkComposerNode::outputProperty(const QString& name) const
+{
+    foreach(dtkComposerNodeProperty *property, d->output_properties)
+        if(property->name() == name)
+            return property;
+
+    return NULL;
+}
+
 QString dtkComposerNode::title(void)
 {
     return QString(d->title->toPlainText());
@@ -296,7 +326,7 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 
     QLinearGradient gradiant(rect.left(), rect.top(), rect.left(), rect.bottom());
 
-    switch(d->type) {
+    switch(d->kind) {
     case Unknown:
         gradiant.setColorAt(0.0, QColor(Qt::white));
         gradiant.setColorAt(0.3, QColor(Qt::gray));

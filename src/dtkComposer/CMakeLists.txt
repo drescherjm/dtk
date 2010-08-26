@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Jul 16 12:01:00 2010 (+0200)
+## Last-Updated: Mon Aug 16 15:06:02 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 74
+##     Update #: 78
 ######################################################################
 ## 
 ### Commentary: 
@@ -37,8 +37,10 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeProperty.h
   dtkComposerNodeString.h
   dtkComposerNodeView.h
+  dtkComposerReader.h
   dtkComposerScene.h
-  dtkComposerView.h)
+  dtkComposerView.h
+  dtkComposerWriter.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposer.h
@@ -53,8 +55,10 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerNodeProperty.h
   dtkComposerNodeString.h
   dtkComposerNodeView.h
+  dtkComposerReader.h
   dtkComposerScene.h
-  dtkComposerView.h)
+  dtkComposerView.h
+  dtkComposerWriter.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkComposer.cpp
@@ -69,8 +73,10 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeProcess.cpp
   dtkComposerNodeProperty.cpp
   dtkComposerNodeView.cpp
+  dtkComposerReader.cpp
   dtkComposerScene.cpp
-  dtkComposerView.cpp)
+  dtkComposerView.cpp
+  dtkComposerWriter.cpp)
 
 ## #################################################################
 ## Build rules

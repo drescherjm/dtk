@@ -49,10 +49,12 @@ void dtkPluginManager::initialize(void)
     if(d->path.isNull())
         this->readSettings();
 
-    if(d->path.isEmpty())
-        return;
+	QString paths = "";
 	
-	QString paths = d->path + ":" + 
+	if (!d->path.isEmpty())
+		paths = d->path + ":";
+
+	paths = paths + 
 #ifdef Q_WS_WIN
 	qApp->applicationDirPath() + "\\..\\plugins";
 #else

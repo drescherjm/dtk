@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Aug 23 20:33:36 2010 (+0200)
-##           By: jwintz
-##     Update #: 37
+## Last-Updated: Wed Sep  8 10:10:21 2010 (+0200)
+##           By: Julien Wintz
+##     Update #: 38
 ######################################################################
 ## 
 ### Commentary: 
@@ -188,6 +188,10 @@ find_library(VRPN_LIBRARIES NAMES vrpn PATHS /usr/lib /usr/local/lib)
 if(QUAT_LIBRARIES AND VRPN_LIBRARIES)
 link_directories(${QUAT_LIBRARIES})
 link_directories(${VRPN_LIBRARIES})
+endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)
+
+if(QUAT_LIBRARIES AND VRPN_LIBRARIES)
+  add_definitions(-DHAVE_VRPN)
 endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)
 
 mark_as_advanced(QUAT_LIBRARIES)

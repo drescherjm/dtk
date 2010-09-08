@@ -28,11 +28,12 @@ if(NOT DTK_AGGREGATE_PLUGINS)
   if( "${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" )
     # To obtain rpm named such as dtk-...-.fc10.x86_64.rpm
     execute_process( COMMAND uname -r 
-                     COMMAND sed "s/\\.PAE//"   # Getting rid of the PAE keyword, not relevant here.
-                     COMMAND sed "s/.*\\.\\(\\w*\\.\\w*\\)$/\\1/"
+                     COMMAND sed "s/xxx\\(.*\\.\\)\\(\\w*\\.\\w*\\)\\(\\.PAE\\)?\\(\\.rpm\\)$/\\4/"
                      OUTPUT_VARIABLE PACKAGE_EXTENSION
                      OUTPUT_STRIP_TRAILING_WHITESPACE)
-    set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}.${PACKAGE_EXTENSION}")
+    set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}.${PACKAGE_EXTENSION}")    
+    message( "PACKAGE_EXTENSION = ${PACKAGE_EXTENSION} " )
+    message( "CPACK_PACKAGE_FILE_NAME = ${CPACK_PACKAGE_FILE_NAME} " )
   else( "${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" )
     # Default situation
     set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}.${CMAKE_SYSTEM_PROCESSOR}")

@@ -57,6 +57,8 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event);
     void dropEvent(QDropEvent *event);
 
+	QString driveLabel(QString drive);
+
 private:
     dtkFinderSideViewPrivate *d;
 };

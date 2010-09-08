@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 13:44:22 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  2 17:18:01 2010 (+0100)
+ * Last-Updated: Mon Sep  6 11:44:08 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 133
+ *     Update #: 141
  */
 
 /* Commentary: 
@@ -53,6 +53,8 @@ public:
 public:
     bool running;
 
+    int sensor;
+
     vrpn_Button_Remote *button;
     vrpn_Analog_Remote *analog;
     vrpn_Tracker_Remote *tracker;
@@ -71,18 +73,14 @@ void dtkVrDeviceVrpnPrivate::run(void)
     vrpn_FILE_CONNECTIONS_SHOULD_PRELOAD = false;
     vrpn_FILE_CONNECTIONS_SHOULD_ACCUMULATE = false;
 
-    this->analog = new vrpn_Analog_Remote(url.toString().toAscii().constData());
-    this->button = new vrpn_Button_Remote(url.toString().toAscii().constData());
-    this->tracker = new vrpn_Tracker_Remote(url.toString().toAscii().constData());
+    this->analog = new vrpn_Analog_Remote(url.path().toAscii().constData());
+    this->button = new vrpn_Button_Remote(url.path().toAscii().constData());
+    this->tracker = new vrpn_Tracker_Remote(url.path().toAscii().constData());
 
-    if (!this->analog)
-        dtkWarning() << "Error connecting analog to server";
-
-    if (!this->button)
-        dtkWarning() << "Error connecting button to server";
-
-    if (!this->tracker)
-        dtkWarning() << "Error connecting tracker to server";
+    if (!this->analog || !this->button || !this->tracker) {
+        dtkWarning() << "Error connecting to server";
+        return;
+    }
 
     this->button->register_change_handler(this, vrpn_device_handle_button);
     this->analog->register_change_handler(this, vrpn_device_handle_analog);
@@ -138,6 +136,9 @@ void dtkVrDeviceVrpnPrivate::handle_analog(const vrpn_ANALOGCB callback)
 
 void dtkVrDeviceVrpnPrivate::handle_tracker(const vrpn_TRACKERCB callback)
 {
+    if(callback.sensor != this->sensor)
+        return;
+
     q->runPositionHandlers(
         callback.pos[0],
         callback.pos[1],
@@ -157,6 +158,7 @@ void dtkVrDeviceVrpnPrivate::handle_tracker(const vrpn_TRACKERCB callback)
 dtkVrDeviceVrpn::dtkVrDeviceVrpn(void) : dtkVrDevice(), d(new dtkVrDeviceVrpnPrivate)
 {
     d->q = this;
+    d->sensor = -1,
     d->running = false;
 }
 
@@ -189,6 +191,7 @@ void dtkVrDeviceVrpn::startConnection(const QUrl& server)
 {
     d->running = true;
     d->url = server;
+    d->sensor = server.port();
 
     d->start();
 }

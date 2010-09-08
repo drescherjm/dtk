@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Aug  3 17:34:51 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Aug 23 20:08:34 2010 (+0200)
-##           By: jwintz
-##     Update #: 136
+## Last-Updated: Wed Aug 25 10:03:23 2010 (+0200)
+##           By: Julien Wintz
+##     Update #: 139
 ######################################################################
 ## 
 ### Commentary: 
@@ -47,7 +47,7 @@ set(${PROJECT_NAME}_SOURCES_WRAP)
 
 if(SWIG_FOUND)
 
-  set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS})
+  set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS_MOC})
   
   if(PYTHONLIBS_FOUND)
     dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP creator python ${CMAKE_CURRENT_SOURCE_DIR}/dtkCreator.i ${${PROJECT_NAME}_WRAP_DEPENDS})

@@ -79,8 +79,8 @@ void dtkPluginManager::uninitialize(void)
 {
     this->writeSettings();
 
-    // foreach(QString path, d->loaders.keys())
-    //     unloadPlugin(path);
+    foreach(QString path, d->loaders.keys())
+        unloadPlugin(path);
 }
 
 void dtkPluginManager::readSettings(void)

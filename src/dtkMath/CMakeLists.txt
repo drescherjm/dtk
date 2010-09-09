@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Thu Sep  9 11:30:33 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Sep  9 11:33:40 2010 (+0200)
+## Last-Updated: Thu Sep  9 11:38:30 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 10
+##     Update #: 12
 ######################################################################
 ## 
 ### Commentary: 
@@ -61,9 +61,7 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_WRAP})
 
-target_link_libraries(${PROJECT_NAME}
-  dtkCore
-  dtkDistributed)
+target_link_libraries(${PROJECT_NAME} ${QT_LBRARIES})
 
 ## #################################################################
 ## Installation

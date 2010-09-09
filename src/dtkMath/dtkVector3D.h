@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:41:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul 12 16:20:52 2010 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 32
+ * Last-Updated: Thu Sep  9 20:30:33 2010 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 56
  */
 
 /* Commentary: 
@@ -66,6 +66,26 @@ template <class T> class dtkZero< dtkVector3D<T> >: public dtkVector3D<T>
 {
 public:
     dtkZero(void) { fill(dtkZero<T>()); }
+};
+
+template <class T = double> class dtkReferential : dtkVector3D<dtkVector3D<T> >
+{
+public:
+    dtkReferential(void) {
+        (*this)[0] = dtkVector3D<T>((T)(1), (T)(0), (T)(0));
+        (*this)[1] = dtkVector3D<T>((T)(0), (T)(1), (T)(0));
+        (*this)[2] = dtkVector3D<T>((T)(0), (T)(0), (T)(1));
+    }
+
+    dtkReferential(dtkVector3D<T> i, dtkVector3D<T> j, dtkVector3D<T> k) {
+        (*this)[0] = i;
+        (*this)[1] = j;
+        (*this)[2] = k;
+    }
+
+    dtkVector3D<T> i(void) { return (*this)[0]; }
+    dtkVector3D<T> j(void) { return (*this)[1]; }
+    dtkVector3D<T> k(void) { return (*this)[2]; }
 };
 
 // /////////////////////////////////////////////////////////////////

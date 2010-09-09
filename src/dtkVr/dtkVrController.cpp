@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  6 12:01:59 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep  9 13:15:31 2010 (+0200)
+ * Last-Updated: Thu Sep  9 13:52:48 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 240
+ *     Update #: 243
  */
 
 /* Commentary: 
@@ -124,9 +124,9 @@ void dtkVrControllerPrivate::positionHandler1(float x, float y, float z)
         ratio_z_world = 4;
 #endif
 
-        camera_position[0] += delta[0]*ratio_x_scene/ratio_x_world;
-        camera_position[1] += delta[1]*ratio_y_scene/ratio_y_world;
-        camera_position[2] += delta[2]*ratio_z_scene/ratio_z_world;
+        camera_position[0] += 2*delta[0]*ratio_x_scene/ratio_x_world;
+        camera_position[1] += 2*delta[1]*ratio_y_scene/ratio_y_world;
+        camera_position[2] += 2*delta[2]*ratio_z_scene/ratio_z_world;
 
         view->setCameraPosition(camera_position[0], camera_position[1], camera_position[2]);
         view->update();

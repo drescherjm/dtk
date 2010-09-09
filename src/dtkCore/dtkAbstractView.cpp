@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 13:28:45 2010 (+0200)
+ * Last-Updated: Thu Sep  9 13:08:41 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 248
+ *     Update #: 257
  */
 
 /* Commentary:
@@ -314,6 +314,48 @@ void dtkAbstractView::initialize(void)
 
 void dtkAbstractView::uninitialize(void)
 {
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::bounds(float& xmin, float& xmax, float& ymin, float& ymax, float &zmin, float& zmax)
+{
+    DTK_UNUSED(xmin);
+    DTK_UNUSED(xmax);
+    DTK_UNUSED(ymin);
+    DTK_UNUSED(ymax);
+    DTK_UNUSED(zmin);
+    DTK_UNUSED(zmax);
+
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::cameraUp(double *coordinates)
+{
+    DTK_UNUSED(coordinates);
+
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::cameraPosition(double *coordinates)
+{
+    DTK_UNUSED(coordinates);
+
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::cameraFocalPoint(double *coordinates)
+{
+    DTK_UNUSED(coordinates);
+
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::setCameraPosition(double x, double y, double z)
+{
+    DTK_UNUSED(x);
+    DTK_UNUSED(y);
+    DTK_UNUSED(z);
+
     DTK_DEFAULT_IMPLEMENTATION;
 }
 

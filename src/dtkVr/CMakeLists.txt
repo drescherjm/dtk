@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Aug 23 20:06:32 2010 (+0200)
-##           By: jwintz
-##     Update #: 207
+## Last-Updated: Thu Sep  9 13:14:30 2010 (+0200)
+##           By: Julien Wintz
+##     Update #: 212
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,6 +24,7 @@ project(dtkVr)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkVrController.h
   dtkVrDevice.h
   dtkVrExport.h
   dtkVrScreen.h
@@ -32,12 +33,14 @@ set(${PROJECT_NAME}_HEADERS
   dtkVrWand.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
+  dtkVrController.h
   dtkVrDevice.h
   dtkVrTracker.h
   dtkVrUser.h
   dtkVrWand.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkVrController.cpp
   dtkVrDevice.cpp
   dtkVrScreen.cpp
   dtkVrTracker.cpp

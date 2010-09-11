@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 19:20:01 2010 (+0200)
+ * Last-Updated: Fri Sep 10 16:56:37 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 49
+ *     Update #: 56
  */
 
 /* Commentary: 
@@ -81,6 +81,11 @@ dtkAbstractProcess *dtkAbstractProcessFactory::get(QString type, QString name)
             return process;
 
     return NULL;
+}
+
+bool dtkAbstractProcessFactory::exists(QString type)
+{
+    return d->creators.contains(type);
 }
 
 dtkAbstractProcessFactory::dtkAbstractProcessFactory(void) : dtkAbstractFactory(), d(new dtkAbstractProcessFactoryPrivate)

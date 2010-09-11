@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug 17 13:22:23 2010 (+0200)
+ * Last-Updated: Sat Sep 11 14:07:06 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 349
+ *     Update #: 356
  */
 
 /* Commentary: 
@@ -305,6 +305,8 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         d->current_edge->unlink();
         return;
     }
+
+    this->update();
 }
 
 void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)

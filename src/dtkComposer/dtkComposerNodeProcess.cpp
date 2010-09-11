@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul 15 11:23:54 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug 17 13:20:31 2010 (+0200)
+ * Last-Updated: Fri Sep 10 14:24:41 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 83
+ *     Update #: 84
  */
 
 /* Commentary: 
@@ -72,7 +72,7 @@ void dtkComposerNodeProcess::onInputEdgeConnected(dtkComposerEdge *edge, dtkComp
 
         if(dtkAbstractProcess *process = dynamic_cast<dtkAbstractProcess *>(this->object()))
             process->read(file);
-    }   
+    }
 
     if(property == d->property_input_data) {
         

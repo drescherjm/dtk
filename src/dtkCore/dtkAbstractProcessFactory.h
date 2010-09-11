@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:48:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep 11 13:33:02 2009 (+0200)
+ * Last-Updated: Fri Sep 10 16:52:29 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 48
+ *     Update #: 50
  */
 
 /* Commentary:
@@ -45,6 +45,8 @@ public:
 
     dtkAbstractProcess *get(QString type, int index = 0);
     dtkAbstractProcess *get(QString type, QString name);
+
+    bool exists(QString type);
 
 signals:
     void created(dtkAbstractProcess *process, QString type);

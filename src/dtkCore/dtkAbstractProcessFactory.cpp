@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep 10 16:56:37 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 56
+ * Last-Updated: Fri Sep 17 16:57:05 2010 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 85
  */
 
 /* Commentary: 
@@ -27,6 +27,7 @@ class dtkAbstractProcessFactoryPrivate
 public:
     dtkAbstractProcessHash processes;
 
+    dtkAbstractProcessFactory::dtkAbstractProcessInterfacesHash interfaces;
     dtkAbstractProcessFactory::dtkAbstractProcessCreatorHash creators;
 };
 
@@ -64,6 +65,17 @@ bool dtkAbstractProcessFactory::registerProcessType(QString type, dtkAbstractPro
     return false;
 }
 
+bool dtkAbstractProcessFactory::registerProcessType(QString type, dtkAbstractProcessCreator func, QString interface)
+{
+    if(!d->creators.contains(type)) {
+	d->creators.insert(type, func);
+        d->interfaces.insert(type, interface);
+	return true;
+    }
+ 
+    return false;
+}
+
 unsigned int dtkAbstractProcessFactory::size(QString type)
 {
     return d->processes[type].size();
@@ -86,6 +98,17 @@ dtkAbstractProcess *dtkAbstractProcessFactory::get(QString type, QString name)
 bool dtkAbstractProcessFactory::exists(QString type)
 {
     return d->creators.contains(type);
+}
+
+QStringList dtkAbstractProcessFactory::implementations(const QString& abstraction)
+{
+    QStringList implementations;
+
+    foreach(QString interface, d->interfaces.values())
+        if(interface == abstraction)
+            implementations << d->interfaces.key(interface);
+        
+    return implementations;
 }
 
 dtkAbstractProcessFactory::dtkAbstractProcessFactory(void) : dtkAbstractFactory(), d(new dtkAbstractProcessFactoryPrivate)

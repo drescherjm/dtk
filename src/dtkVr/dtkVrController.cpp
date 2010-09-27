@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  6 12:01:59 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep  9 13:52:48 2010 (+0200)
+ * Last-Updated: Thu Sep  9 17:27:18 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 243
+ *     Update #: 258
  */
 
 /* Commentary: 
@@ -75,7 +75,7 @@ void dtkVrControllerPrivate::positionHandler1(float x, float y, float z)
 
     dtkQuaternion<float> q = dtkQuaternionFromAxisAngle(l, (float)(90.0));
 
-    dtkVector3D<float> o = dtkVector3D<float>(x, y, z);
+    dtkVector3D<float> o = dtkVector3D<float>(x, y, z - 1.7);
     dtkVector3D<float> p = dtkMatSquaredFromQuaternion(q) * o;
 
     dtkVector3D<float> delta = p - last;
@@ -87,10 +87,6 @@ void dtkVrControllerPrivate::positionHandler1(float x, float y, float z)
         double camera_up[3];
         double camera_position[3];
         double camera_focalpnt[3];
-
-        // vtkCamera *camera = static_cast<vtkCamera *>(view->camera());
-        // camera->GetPosition(camera_position);
-        // camera->GetViewUp(camera_up);
 
         view->cameraUp(camera_up);
         view->cameraPosition(camera_position);
@@ -124,16 +120,16 @@ void dtkVrControllerPrivate::positionHandler1(float x, float y, float z)
         ratio_z_world = 4;
 #endif
 
-        camera_position[0] += 2*delta[0]*ratio_x_scene/ratio_x_world;
-        camera_position[1] += 2*delta[1]*ratio_y_scene/ratio_y_world;
-        camera_position[2] += 2*delta[2]*ratio_z_scene/ratio_z_world;
+        camera_position[0] += 1.5*delta[0]*ratio_x_scene/ratio_x_world;
+        camera_position[1] += 1.5*delta[1]*ratio_y_scene/ratio_y_world;
+        camera_position[2] += 1.5*delta[2]*ratio_z_scene/ratio_z_world;
 
         view->setCameraPosition(camera_position[0], camera_position[1], camera_position[2]);
         view->update();
     }
 }
 
-dtkVector3D<float> dtkVrControllerPrivate::last = dtkVector3D<float>();
+dtkVector3D<float> dtkVrControllerPrivate::last = dtkVector3D<float>(0.0, 0.0, 0.0);
 
 dtkVrControllerPrivate *dtkVrControllerPrivate::self = NULL;
 
@@ -190,13 +186,17 @@ void dtkVrController::assign(dtkAbstractView *view)
 void dtkVrController::onButtonPressed(int button)
 {
     d->activated = true;
+
+    foreach(dtkAbstractView *view, d->views)
+        view->disableInteraction();
 }
 
 void dtkVrController::onButtonReleased(int button)
 {
     d->activated = false;
 
-    d->last = dtkVector3D<float>();
+    foreach(dtkAbstractView *view, d->views)
+        view->enableInteraction();
 }
 
 dtkVrController::dtkVrController(void) : QObject(), d(new dtkVrControllerPrivate)

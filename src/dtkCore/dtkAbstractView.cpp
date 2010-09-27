@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep  9 13:08:41 2010 (+0200)
+ * Last-Updated: Thu Sep  9 17:28:40 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 257
+ *     Update #: 259
  */
 
 /* Commentary:
@@ -313,6 +313,16 @@ void dtkAbstractView::initialize(void)
 }
 
 void dtkAbstractView::uninitialize(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::enableInteraction(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::disableInteraction(void)
 {
     DTK_DEFAULT_IMPLEMENTATION;
 }

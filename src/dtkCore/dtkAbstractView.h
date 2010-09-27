@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep  9 13:09:00 2010 (+0200)
+ * Last-Updated: Thu Sep  9 17:28:06 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 268
+ *     Update #: 269
  */
 
 /* Commentary:
@@ -111,6 +111,9 @@ public slots:
     virtual void uninitialize(void);
 
     // -- The following methods are needed to get tracking
+
+    virtual void  enableInteraction(void);
+    virtual void disableInteraction(void);
 
     virtual void bounds(float& xmin, float& xmax, float& ymin, float& ymax, float &zmin, float& zmax);
 

@@ -25,7 +25,9 @@ project(dtkHelp)
 
 set(${PROJECT_NAME}_HEADERS
   dtkHelpBrowser.h
-  dtkHelpController.h)
+  dtkHelpController.h
+  dtkHelpExport.h
+)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkHelpBrowser.h

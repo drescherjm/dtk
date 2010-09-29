@@ -23,7 +23,7 @@
 #include <dtkCore/dtkPlugin.h>
 #include <dtkCore/dtkLog.h>
 
-#define DTK_VERBOSE_LOAD false
+#define DTK_VERBOSE_LOAD true
 
 class dtkPluginManagerPrivate
 {

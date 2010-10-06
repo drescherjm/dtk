@@ -77,6 +77,13 @@ int dtkAbstractDataImage::zDimension(void)
     return 0;
 }
 
+int dtkAbstractDataImage::tDimension(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+	
+    return 0;
+}
+
 int dtkAbstractDataImage::minRangeValue(void)
 {
     DTK_DEFAULT_IMPLEMENTATION;

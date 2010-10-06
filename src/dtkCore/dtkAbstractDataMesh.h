@@ -38,11 +38,14 @@ public:
     void *mesh(void);
 
 public:
-    virtual int countVertices(void) = 0;
-    virtual int countEdges(void) = 0;
+    virtual int countVertices(void)
+    { return 0; }
+    virtual int countEdges(void)
+    { return 0; }
 
-    virtual QList<dtkAbstractDataVertex *> vertices(void) = 0;
-    virtual QList<dtkAbstractDataEdge *> edges(void) = 0;
+    //    virtual QList<dtkAbstractDataVertex *> vertices(void);
+    //    virtual QList<dtkAbstractDataEdge *> edges(void);
+    
 
 private:
     dtkAbstractDataMeshPrivate *d;

@@ -39,8 +39,8 @@ public:
 
     virtual QString description(void) const;
 
-    friend QDebug operator<<(QDebug debug, const dtkAbstractData& data);
-    friend QDebug operator<<(QDebug debug,       dtkAbstractData *data);
+    friend DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractData& data);
+    friend DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractData *data);
 
     virtual void draw(void) {}
 
@@ -105,8 +105,8 @@ private:
     dtkAbstractDataPrivate *d;
 };
 
-QDebug operator<<(QDebug debug, const dtkAbstractData& data);
-QDebug operator<<(QDebug debug,       dtkAbstractData *data);
+DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractData& data);
+DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractData *data);
 
 Q_DECLARE_METATYPE(dtkAbstractData)
 

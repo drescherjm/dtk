@@ -88,7 +88,10 @@ endif(MPI_FOUND)
 
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)
-add_definitions(-DQT_NO_DEBUG)
+if(NOT MSVC)
+  # Shouldn't the QT_USE_FILE set this appropriately?
+  add_definitions(-DQT_NO_DEBUG)
+endif(NOT MSVC)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})

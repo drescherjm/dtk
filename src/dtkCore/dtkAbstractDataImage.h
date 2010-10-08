@@ -38,6 +38,7 @@ public:
     virtual int xDimension(void);
     virtual int yDimension(void);
     virtual int zDimension(void);
+    virtual int tDimension(void);
 
     virtual int minRangeValue(void);
     virtual int maxRangeValue(void);

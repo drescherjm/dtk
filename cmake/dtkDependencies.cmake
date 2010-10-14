@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Sep  8 10:10:21 2010 (+0200)
+## Last-Updated: Thu Oct 14 20:58:04 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 38
+##     Update #: 47
 ######################################################################
 ## 
 ### Commentary: 
@@ -21,12 +21,13 @@
 ## Qt
 ## #################################################################
 
-set(QT_USE_QTOPENGL  TRUE)
-set(QT_USE_QTXML     TRUE)
-set(QT_USE_QTSQL     TRUE)
-set(QT_USE_QTHELP    TRUE)
-set(QT_USE_QTNETWORK TRUE)
-set(QT_USE_QTWEBKIT  TRUE)
+set(QT_USE_QTOPENGL      TRUE)
+set(QT_USE_QTXML         TRUE)
+set(QT_USE_QTSQL         TRUE)
+set(QT_USE_QTHELP        TRUE)
+set(QT_USE_QTNETWORK     TRUE)
+set(QT_USE_QTWEBKIT      TRUE)
+set(QT_USE_QTDECLARATIVE TRUE)
 
 if(WIN32)
   set(QT_USE_QTMAIN TRUE)
@@ -39,6 +40,12 @@ mark_as_advanced(QT_QMAKE_EXECUTABLE)
 mark_as_advanced(QT_QTMOTIF_INCLUDE_DIR)
 mark_as_advanced(QT_QTMOTIF_LIBRARY_DEBUG)
 mark_as_advanced(QT_QTMOTIF_LIBRARY_RELEASE)
+
+## #################################################################
+## Wrapping
+## #################################################################
+
+if(BUILD_WRAPPERS)
 
 ## #################################################################
 ## Swig
@@ -135,6 +142,12 @@ endif(EDITLINE_LIBRARY)
 if(EDITLINE_FOUND)
   add_definitions(-DHAVE_EDITLINE)
 endif(EDITLINE_FOUND)
+
+## #################################################################
+## Build wrappers (end)
+## #################################################################
+
+endif(BUILD_WRAPPERS)
 
 ## #################################################################
 ## Zlib

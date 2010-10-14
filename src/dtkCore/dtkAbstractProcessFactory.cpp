@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep 17 16:57:05 2010 (+0200)
+ * Last-Updated: Tue Sep 28 10:23:01 2010 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 85
+ *     Update #: 106
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include <dtkCore/dtkAbstractProcess.h>
 #include <dtkCore/dtkAbstractProcessFactory.h>
+#include <dtkCore/dtkLog.h>
 
 typedef QHash<QString, QList<dtkAbstractProcess*> > dtkAbstractProcessHash;
 
@@ -69,7 +70,7 @@ bool dtkAbstractProcessFactory::registerProcessType(QString type, dtkAbstractPro
 {
     if(!d->creators.contains(type)) {
 	d->creators.insert(type, func);
-        d->interfaces.insert(type, interface);
+        d->interfaces.insertMulti(interface, type);
 	return true;
     }
  
@@ -104,10 +105,11 @@ QStringList dtkAbstractProcessFactory::implementations(const QString& abstractio
 {
     QStringList implementations;
 
-    foreach(QString interface, d->interfaces.values())
-        if(interface == abstraction)
-            implementations << d->interfaces.key(interface);
-        
+    if(d->interfaces.keys().contains(abstraction))
+        implementations << d->interfaces.values(abstraction);
+    else
+        dtkWarning() << "There is no avalaible implementation of " << abstraction ;
+
     return implementations;
 }
 

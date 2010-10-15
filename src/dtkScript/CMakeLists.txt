@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2009 - Julien Wintz, Inria.
 ## Created: Tue Mar 10 15:12:38 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Oct 14 21:02:33 2010 (+0200)
+## Last-Updated: Fri Oct 15 11:23:47 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 49
+##     Update #: 50
 ######################################################################
 ## 
 ### Commentary: 
@@ -39,15 +39,15 @@ set(${PROJECT_NAME}_SOURCES
   dtkScriptManager.cpp)
 
 if(BUILD_WRAPPERS)
-set(${PROJECT_NAME}_HEADERS
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkScriptInterpreterPython.h
   dtkScriptInterpreterTcl.h)
 
-set(${PROJECT_NAME}_HEADERS_MOC
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
   dtkScriptInterpreterPython.h
   dtkScriptInterpreterTcl.h)
 
-set(${PROJECT_NAME}_SOURCES
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkScriptInterpreterPython.cpp
   dtkScriptInterpreterTcl.cpp)
 endif(BUILD_WRAPPERS)

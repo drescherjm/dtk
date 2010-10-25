@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 15:31:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Mar 17 09:10:59 2010 (+0100)
+ * Last-Updated: Thu Oct 14 21:20:30 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 394
+ *     Update #: 400
  */
 
 /* Commentary: 
@@ -26,8 +26,12 @@
 #include <dtkCore/dtkLog.h>
 
 #include <dtkScript/dtkScriptInterpreter.h>
+#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
 #include <dtkScript/dtkScriptInterpreterPython.h>
+#endif
+#if defined(HAVE_SWIG) && defined(HAVE_TCL)
 #include <dtkScript/dtkScriptInterpreterTcl.h>
+#endif
 
 #include <dtkGui/dtkTextEditorSyntaxHighlighterPython.h>
 #include <dtkGui/dtkTextEditorSyntaxHighlighterTcl.h>
@@ -176,13 +180,17 @@ void dtkInterpreter::registerInterpreter(dtkScriptInterpreter *interpreter)
     connect(this, SIGNAL( save(const QString&)),        interpreter,    SLOT(     save(const QString&)));
     connect(this, SIGNAL(stopped(void)),                interpreter,  SIGNAL(  stopped(void)));
 
-    dtkTextEditorSyntaxHighlighter *highlighter;
+    dtkTextEditorSyntaxHighlighter *highlighter = NULL;
 
+#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
     if(dynamic_cast<dtkScriptInterpreterPython *>(interpreter))
         highlighter = new dtkTextEditorSyntaxHighlighterPython(this);
+#endif
 
+#if defined(HAVE_SWIG) && defined(HAVE_TCL)
     if(dynamic_cast<dtkScriptInterpreterTcl *>(interpreter))
         highlighter = new dtkTextEditorSyntaxHighlighterTcl(this);
+#endif
 
     Q_UNUSED(highlighter);
 

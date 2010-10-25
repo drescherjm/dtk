@@ -1,12 +1,12 @@
 ### CMakeLists.txt --- 
 ## 
 ## Author: Julien Wintz
-## Copyright (C) 2008-2009 - Julien Wintz, Inria.
-## Created: Tue Mar 10 15:12:38 2009 (+0100)
+## Copyright (C) 2008 - Julien Wintz, Inria.
+## Created: Thu Sep  9 11:30:33 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Oct 15 11:23:47 2010 (+0200)
+## Last-Updated: Thu Sep  9 11:38:30 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 50
+##     Update #: 12
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,70 +17,51 @@
 ## 
 ######################################################################
 
-project(dtkScript)
+project(dtkMath)
 
 ## #################################################################
 ## Sources
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkScriptInterpreter.h
-  dtkScriptInterpreterPool.h
-  dtkScriptManager.h)
+  dtkMath.h
+  dtkMathExport.h
+  dtkMatrix.h
+  dtkMatrixSquared.h
+  dtkQuaternion.h
+  dtkVector.h
+  dtkVector3D.h
+)
 
 set(${PROJECT_NAME}_HEADERS_MOC
-  dtkScriptInterpreter.h
-  dtkScriptInterpreterPool.h
-  dtkScriptManager.h)
+
+)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkScriptInterpreter.cpp
-  dtkScriptInterpreterPool.cpp
-  dtkScriptManager.cpp)
-
-if(BUILD_WRAPPERS)
-set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
-  dtkScriptInterpreterPython.h
-  dtkScriptInterpreterTcl.h)
-
-set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
-  dtkScriptInterpreterPython.h
-  dtkScriptInterpreterTcl.h)
-
-set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
-  dtkScriptInterpreterPython.cpp
-  dtkScriptInterpreterTcl.cpp)
-endif(BUILD_WRAPPERS)
+  dtkMath.cpp
+)
 
 ## #################################################################
 ## Build rules
 ## #################################################################
 
+if(NOT WIN32)
+add_definitions(-Wno-write-strings)
+add_definitions(-Wformat=0)
+endif(NOT WIN32)
+
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)
-if(NOT MSVC)
-  add_definitions(-DQT_NO_DEBUG)
-endif(NOT MSVC)
+add_definitions(-DQT_NO_DEBUG)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
-  ${${PROJECT_NAME}_SOURCES_MOC})
+  ${${PROJECT_NAME}_SOURCES_MOC}
+  ${${PROJECT_NAME}_SOURCES_WRAP})
 
-target_link_libraries(${PROJECT_NAME}
-  ${TCL_LIBRARY}
-  dtkCore)
-
-if(BUILD_WRAPPERS)
-target_link_libraries(${PROJECT_NAME}
-  ${TCL_LIBRARY}
-  ${PYTHON_LIBRARIES})
-endif(BUILD_WRAPPERS)
-
-if(EDITLINE_FOUND)
-  target_link_libraries(${PROJECT_NAME} ${EDITLINE_LIBRARY})
-endif(EDITLINE_FOUND)
+target_link_libraries(${PROJECT_NAME} ${QT_LBRARIES})
 
 ## #################################################################
 ## Installation
@@ -91,4 +72,3 @@ install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib)
-

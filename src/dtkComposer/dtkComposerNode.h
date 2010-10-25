@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug 17 13:19:38 2010 (+0200)
+ * Last-Updated: Fri Sep 10 14:39:22 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 127
+ *     Update #: 128
  */
 
 /* Commentary: 
@@ -91,6 +91,9 @@ public:
     dtkComposerNodeProperty *outputProperty(const QString& name) const;
 
     QString title(void);
+
+    bool dirty(void);
+    void setDirty(bool dirty);
 
 signals:
     void elapsed(QString duration);

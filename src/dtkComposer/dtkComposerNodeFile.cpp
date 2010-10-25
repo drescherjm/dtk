@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul  8 13:28:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug 17 11:27:22 2010 (+0200)
+ * Last-Updated: Sat Sep 11 22:16:15 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 58
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -44,7 +44,7 @@ dtkComposerNodeFile::dtkComposerNodeFile(dtkComposerNode *parent) : dtkComposerN
     this->setTitle("File");
     this->setKind(dtkComposerNode::Atomic);
     this->setType("dtkComposerFile");
-    // this->addInputProperty(new dtkComposerNodeProperty("path", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, this));
+
     this->addOutputProperty(d->property_output_file_name);
     this->addOutputProperty(d->property_output_file_text);
     
@@ -85,7 +85,5 @@ void dtkComposerNodeFile::getFileName(void)
 
 void dtkComposerNodeFile::setFileName(const QString& file)
 {
-    qDebug() << DTK_PRETTY_FUNCTION << file;
-
     d->file = file;
 }

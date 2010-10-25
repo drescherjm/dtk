@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Aug 23 20:32:59 2010 (+0200)
- *           By: jwintz
- *     Update #: 481
+ * Last-Updated: Thu Oct 14 21:25:27 2010 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 487
  */
 
 /* Commentary: 
@@ -567,11 +567,15 @@ void dtkCreatorMainWindow::registerData(dtkAbstractData *data, QString type)
 
     d->interpreter->interpreter()->blockSignals(true);
 
+#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
     if(dtkScriptInterpreterPython *interpreter = dynamic_cast<dtkScriptInterpreterPython *>(d->interpreter->interpreter()))
         interpreter->interpret(QString("%1 = dataFactory.get(\"%2\", \"%1\")").arg(data->name()).arg(type), &stat);
+#endif
 
+#if defined(HAVE_SWIG) && defined(HAVE_TCL)
     if(dtkScriptInterpreterTcl *interpreter = dynamic_cast<dtkScriptInterpreterTcl *>(d->interpreter->interpreter()))
         interpreter->interpret(QString("set $1 [$dataFactory get \"2\" \"1\"]").arg(data->name()).arg(type), &stat);
+#endif
 
     d->interpreter->interpreter()->blockSignals(false);
 }
@@ -582,11 +586,15 @@ void dtkCreatorMainWindow::registerProcess(dtkAbstractProcess *process, QString 
 
     d->interpreter->interpreter()->blockSignals(true);
 
+#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
     if(dtkScriptInterpreterPython *interpreter = dynamic_cast<dtkScriptInterpreterPython *>(d->interpreter->interpreter()))
         interpreter->interpret(QString("%1 = processFactory.get(\"%2\", \"%1\")").arg(process->name()).arg(type), &stat);
+#endif
 
+#if defined(HAVE_SWIG) && defined(HAVE_TCL)
     if(dtkScriptInterpreterTcl *interpreter = dynamic_cast<dtkScriptInterpreterTcl *>(d->interpreter->interpreter()))
         interpreter->interpret(QString("set $1 [$processFactory get \"2\" \"1\"]").arg(process->name()).arg(type), &stat);
+#endif
 
     d->interpreter->interpreter()->blockSignals(false);
 }
@@ -597,11 +605,15 @@ void dtkCreatorMainWindow::registerView(dtkAbstractView *view, QString type)
 
     d->interpreter->interpreter()->blockSignals(true);
 
+#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
     if(dtkScriptInterpreterPython *interpreter = dynamic_cast<dtkScriptInterpreterPython *>(d->interpreter->interpreter()))
         interpreter->interpret(QString("%1 = viewFactory.get(\"%2\", \"%1\")").arg(view->name()).arg(type), &stat);
+#endif
 
+#if defined(HAVE_SWIG) && defined(HAVE_TCL)
     if(dtkScriptInterpreterTcl *interpreter = dynamic_cast<dtkScriptInterpreterTcl *>(d->interpreter->interpreter()))
         interpreter->interpret(QString("set $1 [$viewFactory get \"2\" \"1\"]").arg(view->name()).arg(type), &stat);
+#endif
 
     d->interpreter->interpreter()->blockSignals(false);
 }

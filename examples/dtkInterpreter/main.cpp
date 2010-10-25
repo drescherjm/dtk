@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Apr 11 13:49:30 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Mar 19 11:24:01 2010 (+0100)
+ * Last-Updated: Thu Oct 14 21:29:07 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 35
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -24,8 +24,12 @@
 #include "tstMainWindow.h"
 
 #include <dtkScript/dtkScriptInterpreter.h>
+#if defined(HAVE_SWIG) && defined(HAVE_TCL)
 #include <dtkScript/dtkScriptInterpreterTcl.h>
+#endif
+#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
 #include <dtkScript/dtkScriptInterpreterPython.h>
+#endif
 
 #include <dtkGui/dtkInterpreter.h>
 
@@ -66,12 +70,22 @@ int main(int argc, char *argv[])
 
     if (options.getValue("interpreter") != NULL || options.getValue('i') != NULL) {
 
-        dtkScriptInterpreter *interpreter;
+        dtkScriptInterpreter *interpreter = NULL;
 
+#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
         if(QString(options.getValue('i')) == "python")
             interpreter = new dtkScriptInterpreterPython;
-        else
+#endif
+
+#if defined(HAVE_SWIG) && defined(HAVE_TCL)
+        if(QString(options.getValue('i')) == "tcl")
             interpreter = new dtkScriptInterpreterTcl;
+#endif
+
+        if(!interpreter) {
+            qDebug() << "No interpreter available. Is BUILD_WRAPPERS enabled ?";
+            return 0;
+        }
 
         if(!options.getFlag("console") || !options.getFlag('c')) {
 

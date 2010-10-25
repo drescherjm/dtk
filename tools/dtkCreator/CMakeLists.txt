@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Aug  3 17:34:51 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Aug 25 10:03:23 2010 (+0200)
+## Last-Updated: Thu Oct 14 21:03:39 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 139
+##     Update #: 142
 ######################################################################
 ## 
 ### Commentary: 
@@ -45,7 +45,7 @@ set(${PROJECT_NAME}_SOURCES
 
 set(${PROJECT_NAME}_SOURCES_WRAP)
 
-if(SWIG_FOUND)
+if(BUILD_WRAPPERS AND SWIG_FOUND)
 
   set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS_MOC})
   
@@ -57,7 +57,7 @@ if(SWIG_FOUND)
     dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP creator tcl    ${CMAKE_CURRENT_SOURCE_DIR}/dtkCreator.i ${${PROJECT_NAME}_WRAP_DEPENDS})
   endif(TCL_FOUND)
 
-endif(SWIG_FOUND)
+endif(BUILD_WRAPPERS AND SWIG_FOUND)
 
 ## #################################################################
 ## Build rules
@@ -90,7 +90,7 @@ target_link_libraries(${PROJECT_NAME}
 
 set(${PROJECT_NAME}_MODULES)
 
-if(SWIG_FOUND AND PYTHONLIBS_FOUND)
+if(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dtkCreator.i
@@ -101,7 +101,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 
 set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/creator.py)
 
-endif(SWIG_FOUND AND PYTHONLIBS_FOUND)
+endif(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
 
 ## #################################################################
 ## Bundle setup

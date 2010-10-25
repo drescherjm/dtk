@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 19:20:01 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 49
+ * Last-Updated: Tue Sep 28 10:23:01 2010 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 106
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include <dtkCore/dtkAbstractProcess.h>
 #include <dtkCore/dtkAbstractProcessFactory.h>
+#include <dtkCore/dtkLog.h>
 
 typedef QHash<QString, QList<dtkAbstractProcess*> > dtkAbstractProcessHash;
 
@@ -27,6 +28,7 @@ class dtkAbstractProcessFactoryPrivate
 public:
     dtkAbstractProcessHash processes;
 
+    dtkAbstractProcessFactory::dtkAbstractProcessInterfacesHash interfaces;
     dtkAbstractProcessFactory::dtkAbstractProcessCreatorHash creators;
 };
 
@@ -64,6 +66,17 @@ bool dtkAbstractProcessFactory::registerProcessType(QString type, dtkAbstractPro
     return false;
 }
 
+bool dtkAbstractProcessFactory::registerProcessType(QString type, dtkAbstractProcessCreator func, QString interface)
+{
+    if(!d->creators.contains(type)) {
+	d->creators.insert(type, func);
+        d->interfaces.insertMulti(interface, type);
+	return true;
+    }
+ 
+    return false;
+}
+
 unsigned int dtkAbstractProcessFactory::size(QString type)
 {
     return d->processes[type].size();
@@ -81,6 +94,23 @@ dtkAbstractProcess *dtkAbstractProcessFactory::get(QString type, QString name)
             return process;
 
     return NULL;
+}
+
+bool dtkAbstractProcessFactory::exists(QString type)
+{
+    return d->creators.contains(type);
+}
+
+QStringList dtkAbstractProcessFactory::implementations(const QString& abstraction)
+{
+    QStringList implementations;
+
+    if(d->interfaces.keys().contains(abstraction))
+        implementations << d->interfaces.values(abstraction);
+    else
+        dtkWarning() << "There is no avalaible implementation of " << abstraction ;
+
+    return implementations;
 }
 
 dtkAbstractProcessFactory::dtkAbstractProcessFactory(void) : dtkAbstractFactory(), d(new dtkAbstractProcessFactoryPrivate)

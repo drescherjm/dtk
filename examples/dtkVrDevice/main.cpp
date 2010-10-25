@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 21 17:04:09 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 21 17:52:17 2010 (+0100)
+ * Last-Updated: Mon Sep  6 11:38:49 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 17
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -20,28 +20,38 @@
 #include <QtCore>
 #include <QtGui>
 
+#include <dtkCore/dtkGlobal.h>
+
 #include <dtkVr/dtkVrDeviceVrpn.h>
 #include <dtkVr/dtkVrTrackerVrpn.h>
 
-void trackerPositionHandler1(float x, float y, float z)
+void trackerPositionHandler(float x, float y, float z)
 {
-    qDebug() << "tracker handler 1:" << x << y << z;
+    qDebug() << "tracker handler:" << x << y << z;
 }
 
-void devicePositionHandler1(float x, float y, float z)
+void devicePositionHandler(float x, float y, float z)
 {
-    qDebug() << "device handler 1:" << x << y << z;
+    qDebug() << "device handler:" << x << y << z;
 }
 
 int main(int argc, char **argv)
 {
     QApplication application(argc, argv);
 
-    dtkVrTrackerVrpn *tracker = new dtkVrTrackerVrpn;
-    tracker->registerPositionHandler1(trackerPositionHandler1);
-    tracker->startConnection(QUrl("DTrack@is-sound"));
-    
-    int status = application.exec();
+    if(dtkApplicationArgumentsContain(qApp, "--tracker")) {
+        dtkVrTrackerVrpn *tracker = new dtkVrTrackerVrpn;
+        tracker->registerPositionHandler1(trackerPositionHandler);
+        tracker->startConnection(dtkApplicationArgumentsValue(qApp, "--tracker"));
+        QObject::connect(qApp, SIGNAL(aboutToQuit()), tracker, SLOT(stopConnection()));
+    }
 
-    tracker->stopConnection();
+    if(dtkApplicationArgumentsContain(qApp, "--device")) {
+        dtkVrDeviceVrpn *device = new dtkVrDeviceVrpn;
+        device->registerPositionHandler(devicePositionHandler);
+        device->startConnection(dtkApplicationArgumentsValue(qApp, "--device"));
+        QObject::connect(qApp, SIGNAL(aboutToQuit()), device, SLOT(stopConnection()));
+    }
+
+    int status = application.exec();
 }

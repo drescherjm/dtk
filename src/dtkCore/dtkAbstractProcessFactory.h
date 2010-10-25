@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:48:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep 11 13:33:02 2009 (+0200)
- *           By: Julien Wintz
- *     Update #: 48
+ * Last-Updated: Fri Sep 17 16:55:42 2010 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 59
  */
 
 /* Commentary:
@@ -35,16 +35,22 @@ public:
     typedef dtkAbstractProcess *(*dtkAbstractProcessCreator)(void);
 
     typedef QHash<QString, dtkAbstractProcessCreator> dtkAbstractProcessCreatorHash;
+    typedef QHash<QString, QString> dtkAbstractProcessInterfacesHash;
 
 public:
     static dtkAbstractProcessFactory *instance(void);
 
     bool registerProcessType(QString type, dtkAbstractProcessCreator func);
+    bool registerProcessType(QString type, dtkAbstractProcessCreator func, QString interface);
 
     unsigned int size(QString type);
 
     dtkAbstractProcess *get(QString type, int index = 0);
     dtkAbstractProcess *get(QString type, QString name);
+
+    bool exists(QString type);
+
+    QStringList implementations(const QString& abstraction);
 
 signals:
     void created(dtkAbstractProcess *process, QString type);

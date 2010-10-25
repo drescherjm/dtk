@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul 15 11:25:19 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug 17 13:20:47 2010 (+0200)
+ * Last-Updated: Sat Sep 11 22:49:11 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 47
+ *     Update #: 48
  */
 
 /* Commentary: 
@@ -64,6 +64,7 @@ void dtkComposerNodeView::onInputEdgeConnected(dtkComposerEdge *edge, dtkCompose
 
         if(data && view) {
             view->setData(data);
+            view->update();
             emit elapsed("00:00:00.001");
             emit progressed(100);
         }

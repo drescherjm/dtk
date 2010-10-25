@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Aug 23 20:06:32 2010 (+0200)
-##           By: jwintz
-##     Update #: 207
+## Last-Updated: Thu Oct 14 21:04:39 2010 (+0200)
+##           By: Julien Wintz
+##     Update #: 215
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,6 +24,7 @@ project(dtkVr)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkVrController.h
   dtkVrDevice.h
   dtkVrExport.h
   dtkVrScreen.h
@@ -32,12 +33,14 @@ set(${PROJECT_NAME}_HEADERS
   dtkVrWand.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
+  dtkVrController.h
   dtkVrDevice.h
   dtkVrTracker.h
   dtkVrUser.h
   dtkVrWand.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkVrController.cpp
   dtkVrDevice.cpp
   dtkVrScreen.cpp
   dtkVrTracker.cpp
@@ -84,7 +87,7 @@ endif(QUAT_LIBRARIES AND VRPN_LIBRARIES AND MPI_FOUND)
 
 set(${PROJECT_NAME}_SOURCES_WRAP)
 
-if(SWIG_FOUND)
+if(BUILD_WRAPPERS AND SWIG_FOUND)
 
   set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS})
   
@@ -96,7 +99,7 @@ if(SWIG_FOUND)
     dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP vr tcl    ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i ${${PROJECT_NAME}_WRAP_DEPENDS})
   endif(TCL_FOUND)
 
-endif(SWIG_FOUND)
+endif(BUILD_WRAPPERS AND SWIG_FOUND)
 
 ## #################################################################
 ## Build rules
@@ -142,7 +145,7 @@ endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)
 
 set(${PROJECT_NAME}_MODULES)
 
-if(SWIG_FOUND AND PYTHONLIBS_FOUND)
+if(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i
@@ -153,7 +156,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 
 set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/vr.py)
 
-endif(SWIG_FOUND AND PYTHONLIBS_FOUND)
+endif(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
 
 ## #################################################################
 ## Installation

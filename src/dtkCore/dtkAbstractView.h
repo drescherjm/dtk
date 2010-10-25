@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 19:05:30 2010 (+0200)
+ * Last-Updated: Thu Sep  9 17:28:06 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 258
+ *     Update #: 269
  */
 
 /* Commentary:
@@ -109,6 +109,21 @@ public slots:
 
     virtual void   initialize(void);
     virtual void uninitialize(void);
+
+    // -- The following methods are needed to get tracking
+
+    virtual void  enableInteraction(void);
+    virtual void disableInteraction(void);
+
+    virtual void bounds(float& xmin, float& xmax, float& ymin, float& ymax, float &zmin, float& zmax);
+
+    virtual void cameraUp(double *coordinates);
+    virtual void cameraPosition(double *coordinates);
+    virtual void cameraFocalPoint(double *coordinates);
+
+    virtual void setCameraPosition(double x, double y, double z);
+
+    // --
 
     virtual dtkVec3 scenePosition(void) const;
     virtual dtkQuat sceneOrientation(void) const;

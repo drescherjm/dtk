@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Aug 16 21:57:20 2010 (+0200)
+ * Last-Updated: Sat Sep 11 14:40:39 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 466
+ *     Update #: 489
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@
 #include <dtkCore/dtkAbstractObject.h>
 #include <dtkCore/dtkAbstractProcess.h>
 #include <dtkCore/dtkAbstractView.h>
+#include <dtkCore/dtkGlobal.h>
 
 class dtkComposerNodePrivate
 {
@@ -57,6 +58,8 @@ public:
     dtkAbstractObject *object;
 
     QList<QAction *> actions;
+
+    bool dirty;
 };
 
 dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePrivate)
@@ -95,6 +98,8 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
     shadow->setColor(QColor(0, 0, 0, 127));
     this->setGraphicsEffect(shadow);
 #endif
+
+    d->dirty = false;
 }
 
 dtkComposerNode::~dtkComposerNode(void)
@@ -296,8 +301,25 @@ QString dtkComposerNode::title(void)
     return QString(d->title->toPlainText());
 }
 
+bool dtkComposerNode::dirty(void)
+{
+    return d->dirty;
+}
+
+void dtkComposerNode::setDirty(bool dirty)
+{
+    d->dirty = dirty;
+}
+
 void dtkComposerNode::update(void)
 {
+    foreach(dtkComposerEdge *edge, d->input_edges.keys())
+        if(edge->source()->node()->dirty())
+            return;
+
+    foreach(dtkComposerEdge *edge, d->output_edges.keys())
+        edge->destination()->node()->setDirty(true);
+
     emit evaluated(this); qApp->processEvents(QEventLoop::ExcludeUserInputEvents | QEventLoop::ExcludeSocketNotifiers, 10);
 
     foreach(dtkComposerEdge *edge, d->input_edges.keys())
@@ -305,6 +327,8 @@ void dtkComposerNode::update(void)
 
     foreach(dtkComposerEdge *edge, d->output_edges.keys())
         this->onOutputEdgeConnected(edge, edge->source());
+
+    d->dirty = false;
 
     foreach(dtkComposerEdge *edge, d->output_edges.keys())
         edge->destination()->node()->update();

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 21:03:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 21 17:13:43 2010 (+0200)
+ * Last-Updated: Thu Oct 14 21:15:22 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 46
+ *     Update #: 49
  */
 
 /* Commentary: 
@@ -22,8 +22,12 @@
 #include <dtkCore/dtkLog.h>
 
 #include <dtkScript/dtkScriptInterpreter.h>
+#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
 #include <dtkScript/dtkScriptInterpreterPython.h>
+#endif
+#if defined(HAVE_SWIG) && defined(HAVE_TCL)
 #include <dtkScript/dtkScriptInterpreterTcl.h>
+#endif
 
 class dtkScriptManagerPrivate
 {
@@ -100,6 +104,7 @@ dtkScriptManager::~dtkScriptManager(void)
 
 dtkScriptInterpreter *dtkScriptManager::loadScript(const QString& path)
 {
+#if defined(HAVE_SWIG) && defined(HAVE_TCL) && defined(HAVE_PYTHON)
     dtkScriptInterpreter *interpreter;
 
     if(path.endsWith("py")) 
@@ -113,22 +118,33 @@ dtkScriptInterpreter *dtkScriptManager::loadScript(const QString& path)
     d->loaders.insert(path, interpreter);
 
     return interpreter;
+#else
+    return NULL;
+#endif
 }
 
 dtkScriptInterpreter *dtkScriptManager::unloadScript(const QString& path)
 {
+#if defined(HAVE_SWIG) && defined(HAVE_TCL) && defined(HAVE_PYTHON)
     dtkScriptInterpreter *interpreter = d->loaders.value(path);
 
     d->loaders.remove(path);
 
     return interpreter;
+#else
+    return NULL;
+#endif
 }
 
 dtkScriptInterpreter *dtkScriptManager::reloadScript(const QString& path)
 {
+#if defined(HAVE_SWIG) && defined(HAVE_TCL) && defined(HAVE_PYTHON)
     this->unloadScript(path);
 
     return this->loadScript(path);
+#else
+    return NULL;
+#endif
 }
 
 dtkScriptManager *dtkScriptManager::s_instance = NULL;

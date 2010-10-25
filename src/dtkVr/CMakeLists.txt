@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Oct 21 19:14:31 2010 (+0200)
+## Last-Updated: Mon Oct 25 16:09:39 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 214
+##     Update #: 221
 ######################################################################
 ## 
 ### Commentary: 
@@ -57,6 +57,7 @@ add_definitions(-DDTK_WRAP_VR)
 
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkVrDeviceVrpn.h
+  dtkVrGesturePinch.h
   dtkVrGestureRecognizer.h
   dtkVrManager.h
   dtkVrMaster.h
@@ -66,6 +67,7 @@ set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
 
 set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
   dtkVrDeviceVrpn.h
+  dtkVrGesturePinch.h
   dtkVrGestureRecognizer.h
   dtkVrGestureRecognizer_p.h
   dtkVrManager.h
@@ -76,6 +78,7 @@ set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
 
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkVrDeviceVrpn.cpp
+  dtkVrGesturePinch.cpp
   dtkVrGestureRecognizer.cpp
   dtkVrManager.cpp
   dtkVrMaster.cpp
@@ -91,7 +94,7 @@ endif(QUAT_LIBRARIES AND VRPN_LIBRARIES AND MPI_FOUND)
 
 set(${PROJECT_NAME}_SOURCES_WRAP)
 
-if(SWIG_FOUND)
+if(BUILD_WRAPPERS AND SWIG_FOUND)
 
   set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS})
   
@@ -103,7 +106,7 @@ if(SWIG_FOUND)
     dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP vr tcl    ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i ${${PROJECT_NAME}_WRAP_DEPENDS})
   endif(TCL_FOUND)
 
-endif(SWIG_FOUND)
+endif(BUILD_WRAPPERS AND SWIG_FOUND)
 
 ## #################################################################
 ## Build rules
@@ -129,6 +132,7 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES_WRAP})
 
 target_link_libraries(${PROJECT_NAME}
+  dtkMath
   dtkCore
   dtkDistributed)
 
@@ -149,7 +153,7 @@ endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)
 
 set(${PROJECT_NAME}_MODULES)
 
-if(SWIG_FOUND AND PYTHONLIBS_FOUND)
+if(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i
@@ -160,7 +164,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 
 set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/vr.py)
 
-endif(SWIG_FOUND AND PYTHONLIBS_FOUND)
+endif(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
 
 ## #################################################################
 ## Installation

@@ -1,6 +1,9 @@
 #include "tstWidget.h"
 
+#include <dtkCore/dtkGlobal.h>
+
 #include <dtkVr/dtkVrGestureRecognizer.h>
+#include <dtkVr/dtkVrGesturePinch.h>
 
 class tstWidgetPrivate
 {
@@ -80,11 +83,27 @@ void tstWidget::panGestureEvent(QPanGesture *event)
 
 void tstWidget::pinchGestureEvent(QPinchGesture *event)
 {
-    Q_UNUSED(event);
+    if(dtkVrGesturePinch *pinch = static_cast<dtkVrGesturePinch *>(event)) {
 
-    d->bg = Qt::green;
+        if(pinch->property("State").toString() == "Started")
+            qDebug() << DTK_PRETTY_FUNCTION << "Gesture started";
 
-    this->update();
+        if(pinch->property("State").toString() == "Updated")
+            qDebug() << DTK_PRETTY_FUNCTION << "Gesture updated";
+
+        if(pinch->property("State").toString() == "Finished")
+            qDebug() << DTK_PRETTY_FUNCTION << "Gesture finished";
+        
+        qDebug() << DTK_PRETTY_FUNCTION << "     scale factor is" << pinch->scaleFactor();
+        qDebug() << DTK_PRETTY_FUNCTION << "last scale factor is" << pinch->lastScaleFactor();
+        
+        d->bg = Qt::green;
+        
+        this->update();
+    } else {
+        qDebug() << "Unable to get dtk gesture event";
+    }
+
 }
 
 void tstWidget::swipeGestureEvent(QSwipeGesture *event)

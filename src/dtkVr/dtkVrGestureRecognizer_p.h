@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 21 19:12:59 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 21 19:13:10 2010 (+0200)
+ * Last-Updated: Mon Oct 25 09:52:47 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 2
+ *     Update #: 3
  */
 
 /* Commentary: 
@@ -80,8 +80,8 @@ public:
     dtkVrGestureRecognizer *q;
 
 signals:
-    void postPanEvent(void);
-    void postSwipeEvent(void);
-    void postPinchEvent(void);
-    void postClearEvent(void);
+    void postPanEvent(Qt::GestureState state);
+    void postSwipeEvent(Qt::GestureState state);
+    void postPinchEvent(Qt::GestureState state);
+    void postClearEvent(Qt::GestureState state);
 };

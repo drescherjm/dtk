@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Sep  8 10:10:21 2010 (+0200)
+## Last-Updated: Sun Oct 17 18:02:42 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 38
+##     Update #: 51
 ######################################################################
 ## 
 ### Commentary: 
@@ -21,24 +21,35 @@
 ## Qt
 ## #################################################################
 
-set(QT_USE_QTOPENGL  TRUE)
-set(QT_USE_QTXML     TRUE)
-set(QT_USE_QTSQL     TRUE)
-set(QT_USE_QTHELP    TRUE)
-set(QT_USE_QTNETWORK TRUE)
-set(QT_USE_QTWEBKIT  TRUE)
+set(QT_USE_QTOPENGL      TRUE)
+set(QT_USE_QTXML         TRUE)
+set(QT_USE_QTSQL         TRUE)
+set(QT_USE_QTHELP        TRUE)
+set(QT_USE_QTNETWORK     TRUE)
+set(QT_USE_QTWEBKIT      TRUE)
 
 if(WIN32)
   set(QT_USE_QTMAIN TRUE)
 endif(WIN32)
 
 find_package(Qt4 4.6.0 REQUIRED)
+
+if(${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} GREATER 6)
+  set(QT_USE_QTDECLARATIVE TRUE)
+endif(${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} GREATER 6)
+
 include(${QT_USE_FILE})
 
 mark_as_advanced(QT_QMAKE_EXECUTABLE)
 mark_as_advanced(QT_QTMOTIF_INCLUDE_DIR)
 mark_as_advanced(QT_QTMOTIF_LIBRARY_DEBUG)
 mark_as_advanced(QT_QTMOTIF_LIBRARY_RELEASE)
+
+## #################################################################
+## Wrapping
+## #################################################################
+
+if(BUILD_WRAPPERS)
 
 ## #################################################################
 ## Swig
@@ -135,6 +146,12 @@ endif(EDITLINE_LIBRARY)
 if(EDITLINE_FOUND)
   add_definitions(-DHAVE_EDITLINE)
 endif(EDITLINE_FOUND)
+
+## #################################################################
+## Build wrappers (end)
+## #################################################################
+
+endif(BUILD_WRAPPERS)
 
 ## #################################################################
 ## Zlib

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 21 19:11:52 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 21 19:11:56 2010 (+0200)
+ * Last-Updated: Mon Oct 25 09:57:20 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 1
+ *     Update #: 5
  */
 
 /* Commentary: 
@@ -36,10 +36,10 @@ public slots:
     void startConnection(const QUrl& server);
     void stopConnection(void);
 
-    void postPanEvent(void);
-    void postSwipeEvent(void);
-    void postPinchEvent(void);
-    void postClearEvent(void);
+    void postPanEvent(Qt::GestureState state);
+    void postSwipeEvent(Qt::GestureState state);
+    void postPinchEvent(Qt::GestureState state);
+    void postClearEvent(Qt::GestureState state);
 
 private:
     dtkVrGestureRecognizerPrivate *d;

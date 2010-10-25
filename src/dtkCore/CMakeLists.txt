@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Aug 23 20:02:04 2010 (+0200)
-##           By: jwintz
-##     Update #: 178
+## Last-Updated: Thu Oct 14 21:05:06 2010 (+0200)
+##           By: Julien Wintz
+##     Update #: 181
 ######################################################################
 ## 
 ### Commentary: 
@@ -102,7 +102,7 @@ set(${PROJECT_NAME}_SOURCES
 
 set(${PROJECT_NAME}_SOURCES_WRAP)
 
-if(SWIG_FOUND)
+if(BUILD_WRAPPERS AND SWIG_FOUND)
 
   set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS})
   
@@ -114,7 +114,7 @@ if(SWIG_FOUND)
     dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP core tcl    ${CMAKE_CURRENT_SOURCE_DIR}/dtkCore.i ${${PROJECT_NAME}_WRAP_DEPENDS})
   endif(TCL_FOUND)
   
-endif(SWIG_FOUND)
+endif(BUILD_WRAPPERS AND SWIG_FOUND)
 
 ## #################################################################
 ## Build rules
@@ -155,7 +155,7 @@ endif(PYTHONLIBS_FOUND)
 
 set(${PROJECT_NAME}_MODULES)
 
-if(SWIG_FOUND AND PYTHONLIBS_FOUND)
+if(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dtkCore.i
@@ -165,7 +165,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 
 set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/core.py)
 
-endif(SWIG_FOUND AND PYTHONLIBS_FOUND)
+endif(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
 
 ## #################################################################
 ## Installation

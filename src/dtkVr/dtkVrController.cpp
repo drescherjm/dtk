@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  6 12:01:59 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep  9 17:27:18 2010 (+0200)
+ * Last-Updated: Tue Oct 26 11:27:48 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 258
+ *     Update #: 268
  */
 
 /* Commentary: 
@@ -56,7 +56,7 @@ public:
     
     static dtkVector3D<float> last;
 
-    QList<dtkAbstractView *> views;
+    dtkAbstractView *view;
 
     static dtkVrControllerPrivate *self;
 
@@ -82,15 +82,15 @@ void dtkVrControllerPrivate::positionHandler1(float x, float y, float z)
 
     last = p;
 
-    foreach(dtkAbstractView *view, self->views) {
+    if(self->view) {
 
         double camera_up[3];
         double camera_position[3];
         double camera_focalpnt[3];
 
-        view->cameraUp(camera_up);
-        view->cameraPosition(camera_position);
-        view->cameraFocalPoint(camera_focalpnt);
+        self->view->cameraUp(camera_up);
+        self->view->cameraPosition(camera_position);
+        self->view->cameraFocalPoint(camera_focalpnt);
 
         dtkVector3D<float> j = dtkVector3D<float>(camera_up[0], camera_up[1], camera_up[2]);
         dtkVector3D<float> k = dtkVector3D<float>(camera_position[0] - camera_focalpnt[0],
@@ -104,7 +104,7 @@ void dtkVrControllerPrivate::positionHandler1(float x, float y, float z)
 
         delta = t * delta;
 
-        float xmin, xmax, ymin, ymax, zmin, zmax; view->bounds(xmin, xmax, ymin, ymax, zmin, zmax);
+        float xmin, xmax, ymin, ymax, zmin, zmax; self->view->bounds(xmin, xmax, ymin, ymax, zmin, zmax);
 
         float ratio_x_scene = xmax-xmin;
         float ratio_y_scene = ymax-ymin;
@@ -124,8 +124,8 @@ void dtkVrControllerPrivate::positionHandler1(float x, float y, float z)
         camera_position[1] += 1.5*delta[1]*ratio_y_scene/ratio_y_world;
         camera_position[2] += 1.5*delta[2]*ratio_z_scene/ratio_z_world;
 
-        view->setCameraPosition(camera_position[0], camera_position[1], camera_position[2]);
-        view->update();
+        self->view->setCameraPosition(camera_position[0], camera_position[1], camera_position[2]);
+        self->view->update();
     }
 }
 
@@ -180,29 +180,28 @@ void dtkVrController::setDevice(const QUrl& url)
 
 void dtkVrController::assign(dtkAbstractView *view)
 {
-    d->views << view;
+    d->view = view;
 }
 
 void dtkVrController::onButtonPressed(int button)
 {
     d->activated = true;
 
-    foreach(dtkAbstractView *view, d->views)
-        view->disableInteraction();
+    d->view->disableInteraction();
 }
 
 void dtkVrController::onButtonReleased(int button)
 {
     d->activated = false;
 
-    foreach(dtkAbstractView *view, d->views)
-        view->enableInteraction();
+    d->view->enableInteraction();
 }
 
 dtkVrController::dtkVrController(void) : QObject(), d(new dtkVrControllerPrivate)
 {
     d->q = this;
     d->self = d;
+    d->view = NULL;
 
     d->activated = false;
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 21 19:11:52 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 25 09:57:20 2010 (+0200)
+ * Last-Updated: Tue Oct 26 10:41:26 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 5
+ *     Update #: 7
  */
 
 /* Commentary: 
@@ -29,8 +29,10 @@ class dtkVrGestureRecognizer : public QObject
     Q_OBJECT
 
 public:
-     dtkVrGestureRecognizer(QObject *receiver);
+     dtkVrGestureRecognizer(void);
     ~dtkVrGestureRecognizer(void);
+
+    void setReceiver(QObject *receiver);
 
 public slots:
     void startConnection(const QUrl& server);

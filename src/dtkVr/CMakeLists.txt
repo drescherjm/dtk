@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Oct 25 16:09:39 2010 (+0200)
+## Last-Updated: Tue Oct 26 13:11:35 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 221
+##     Update #: 228
 ######################################################################
 ## 
 ### Commentary: 
@@ -57,8 +57,8 @@ add_definitions(-DDTK_WRAP_VR)
 
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkVrDeviceVrpn.h
-  dtkVrGesturePinch.h
   dtkVrGestureRecognizer.h
+  dtkVrHeadRecognizer.h
   dtkVrManager.h
   dtkVrMaster.h
   dtkVrProcess.h
@@ -67,9 +67,10 @@ set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
 
 set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
   dtkVrDeviceVrpn.h
-  dtkVrGesturePinch.h
   dtkVrGestureRecognizer.h
   dtkVrGestureRecognizer_p.h
+  dtkVrHeadRecognizer.h
+  dtkVrHeadRecognizer_p.h
   dtkVrManager.h
   dtkVrMaster.h
   dtkVrProcess.h
@@ -78,8 +79,8 @@ set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
 
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkVrDeviceVrpn.cpp
-  dtkVrGesturePinch.cpp
   dtkVrGestureRecognizer.cpp
+  dtkVrHeadRecognizer.cpp
   dtkVrManager.cpp
   dtkVrMaster.cpp
   dtkVrProcess.cpp

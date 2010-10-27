@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 21 19:12:40 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 25 16:43:08 2010 (+0200)
+ * Last-Updated: Tue Oct 26 22:36:51 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 223
+ *     Update #: 245
  */
 
 /* Commentary: 
@@ -17,7 +17,6 @@
  * 
  */
 
-#include "dtkVrGesturePinch.h"
 #include "dtkVrGestureRecognizer.h"
 #include "dtkVrGestureRecognizer_p.h"
 
@@ -31,9 +30,9 @@
 // vrpn callbacks (Definition at EOF.)
 // /////////////////////////////////////////////////////////////////
 
-void VRPN_CALLBACK vrpn_recognizer_handle_button(void *data, const vrpn_BUTTONCB callback);
-void VRPN_CALLBACK vrpn_recognizer_handle_analog(void *data, const vrpn_ANALOGCB callback);
-void VRPN_CALLBACK vrpn_recognizer_handle_tracker(void *data, const vrpn_TRACKERCB callback);
+void VRPN_CALLBACK vrpn_gesture_recognizer_handle_button(void *data, const vrpn_BUTTONCB callback);
+void VRPN_CALLBACK vrpn_gesture_recognizer_handle_analog(void *data, const vrpn_ANALOGCB callback);
+void VRPN_CALLBACK vrpn_gesture_recognizer_handle_tracker(void *data, const vrpn_TRACKERCB callback);
 
 // /////////////////////////////////////////////////////////////////
 // dtkVrGestureRecognizerPrivate
@@ -53,9 +52,9 @@ void dtkVrGestureRecognizerPrivate::run(void)
         return;
     }
 
-    this->button->register_change_handler(this, vrpn_recognizer_handle_button);
-    this->analog->register_change_handler(this, vrpn_recognizer_handle_analog);
-    this->tracker->register_change_handler(this, vrpn_recognizer_handle_tracker);
+    this->button->register_change_handler(this, vrpn_gesture_recognizer_handle_button);
+    this->analog->register_change_handler(this, vrpn_gesture_recognizer_handle_analog);
+    this->tracker->register_change_handler(this, vrpn_gesture_recognizer_handle_tracker);
 
     while(this->running) {
         this->analog->mainloop();
@@ -227,9 +226,9 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
 // dtkVrGestureRecognizer
 // /////////////////////////////////////////////////////////////////
 
-dtkVrGestureRecognizer::dtkVrGestureRecognizer(QObject *receiver) : QObject(), d(new dtkVrGestureRecognizerPrivate)
+dtkVrGestureRecognizer::dtkVrGestureRecognizer(void) : QObject(), d(new dtkVrGestureRecognizerPrivate)
 {
-    d->receiver = receiver;
+    d->receiver = NULL;
     d->q = this;
     d->running = false;
     d->state = dtkVrGestureRecognizerPrivate::End;
@@ -247,6 +246,11 @@ dtkVrGestureRecognizer::~dtkVrGestureRecognizer(void)
     d = NULL;
 }
 
+void dtkVrGestureRecognizer::setReceiver(QObject *receiver)
+{
+    d->receiver = receiver;
+}
+
 void dtkVrGestureRecognizer::startConnection(const QUrl& server)
 {
     d->running = true;
@@ -262,6 +266,9 @@ void dtkVrGestureRecognizer::stopConnection(void)
 
 void dtkVrGestureRecognizer::postPanEvent(Qt::GestureState state)
 {
+    if(!d->receiver)
+        return;
+
     QPanGesture *gesture = new QPanGesture(this);
     QGestureEvent *event = new QGestureEvent(QList<QGesture *>() << gesture);
 
@@ -270,6 +277,9 @@ void dtkVrGestureRecognizer::postPanEvent(Qt::GestureState state)
 
 void dtkVrGestureRecognizer::postSwipeEvent(Qt::GestureState state)
 {
+    if(!d->receiver)
+        return;
+
     QSwipeGesture *gesture = new QSwipeGesture(this);
     QGestureEvent *event = new QGestureEvent(QList<QGesture *>() << gesture);
 
@@ -280,6 +290,9 @@ void dtkVrGestureRecognizer::postSwipeEvent(Qt::GestureState state)
 
 void dtkVrGestureRecognizer::postPinchEvent(Qt::GestureState state)
 {
+    if(!d->receiver)
+        return;
+
     dtkVector3D<double> s = dtkVector3D<double>(
         d->right_index_start_position[0] - d->left_index_start_position[0],
         d->right_index_start_position[2] - d->left_index_start_position[2],
@@ -351,6 +364,9 @@ void dtkVrGestureRecognizer::postPinchEvent(Qt::GestureState state)
 
 void dtkVrGestureRecognizer::postClearEvent(Qt::GestureState state)
 {
+    if(!d->receiver)
+        return;
+
     QGesture *gesture = new QGesture(this);
     QGestureEvent *event = new QGestureEvent(QList<QGesture *>() << gesture);
     QCoreApplication::postEvent(d->receiver, event);
@@ -360,19 +376,19 @@ void dtkVrGestureRecognizer::postClearEvent(Qt::GestureState state)
 // vrpn callbacks
 // /////////////////////////////////////////////////////////////////
 
-void VRPN_CALLBACK vrpn_recognizer_handle_button(void *data, const vrpn_BUTTONCB callback)
+void VRPN_CALLBACK vrpn_gesture_recognizer_handle_button(void *data, const vrpn_BUTTONCB callback)
 {
     if(dtkVrGestureRecognizerPrivate *recognizer = static_cast<dtkVrGestureRecognizerPrivate *>(data))
         recognizer->handle_button(callback);
 }
 
-void VRPN_CALLBACK vrpn_recognizer_handle_analog(void *data, const vrpn_ANALOGCB callback)
+void VRPN_CALLBACK vrpn_gesture_recognizer_handle_analog(void *data, const vrpn_ANALOGCB callback)
 {
     if(dtkVrGestureRecognizerPrivate *recognizer = static_cast<dtkVrGestureRecognizerPrivate *>(data))
         recognizer->handle_analog(callback);
 }
 
-void VRPN_CALLBACK vrpn_recognizer_handle_tracker(void *data, const vrpn_TRACKERCB callback)
+void VRPN_CALLBACK vrpn_gesture_recognizer_handle_tracker(void *data, const vrpn_TRACKERCB callback)
 {
     if(dtkVrGestureRecognizerPrivate *recognizer = static_cast<dtkVrGestureRecognizerPrivate *>(data))
         recognizer->handle_tracker(callback);

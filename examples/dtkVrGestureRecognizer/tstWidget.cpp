@@ -3,7 +3,6 @@
 #include <dtkCore/dtkGlobal.h>
 
 #include <dtkVr/dtkVrGestureRecognizer.h>
-#include <dtkVr/dtkVrGesturePinch.h>
 
 class tstWidgetPrivate
 {
@@ -42,7 +41,8 @@ QSize tstWidget::sizeHint(void) const
 
 void tstWidget::setTracker(QUrl tracker)
 {
-    d->recognizer = new dtkVrGestureRecognizer(this);
+    d->recognizer = new dtkVrGestureRecognizer;
+    d->recognizer->setReceiver(this);
     d->recognizer->startConnection(tracker);
 }
 
@@ -83,27 +83,21 @@ void tstWidget::panGestureEvent(QPanGesture *event)
 
 void tstWidget::pinchGestureEvent(QPinchGesture *event)
 {
-    if(dtkVrGesturePinch *pinch = static_cast<dtkVrGesturePinch *>(event)) {
-
-        if(pinch->property("State").toString() == "Started")
-            qDebug() << DTK_PRETTY_FUNCTION << "Gesture started";
-
-        if(pinch->property("State").toString() == "Updated")
-            qDebug() << DTK_PRETTY_FUNCTION << "Gesture updated";
-
-        if(pinch->property("State").toString() == "Finished")
-            qDebug() << DTK_PRETTY_FUNCTION << "Gesture finished";
-        
-        qDebug() << DTK_PRETTY_FUNCTION << "     scale factor is" << pinch->scaleFactor();
-        qDebug() << DTK_PRETTY_FUNCTION << "last scale factor is" << pinch->lastScaleFactor();
-        
-        d->bg = Qt::green;
-        
-        this->update();
-    } else {
-        qDebug() << "Unable to get dtk gesture event";
-    }
-
+    if(event->property("State").toString() == "Started")
+        qDebug() << DTK_PRETTY_FUNCTION << "Gesture started";
+    
+    if(event->property("State").toString() == "Updated")
+        qDebug() << DTK_PRETTY_FUNCTION << "Gesture updated";
+    
+    if(event->property("State").toString() == "Finished")
+        qDebug() << DTK_PRETTY_FUNCTION << "Gesture finished";
+    
+    qDebug() << DTK_PRETTY_FUNCTION << "     scale factor is" << event->scaleFactor();
+    qDebug() << DTK_PRETTY_FUNCTION << "last scale factor is" << event->lastScaleFactor();
+    
+    d->bg = Qt::green;
+    
+    this->update();
 }
 
 void tstWidget::swipeGestureEvent(QSwipeGesture *event)

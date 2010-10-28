@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Oct 26 12:40:19 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 27 16:28:53 2010 (+0200)
+ * Last-Updated: Thu Oct 28 11:04:46 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 182
+ *     Update #: 189
  */
 
 /* Commentary: 
@@ -33,9 +33,11 @@
 // vrpn callbacks (Definition at EOF.)
 // /////////////////////////////////////////////////////////////////
 
+#if defined(HAVE_VRPN)
 void VRPN_CALLBACK vrpn_head_recognizer_handle_button(void *data, const vrpn_BUTTONCB callback);
 void VRPN_CALLBACK vrpn_head_recognizer_handle_analog(void *data, const vrpn_ANALOGCB callback);
 void VRPN_CALLBACK vrpn_head_recognizer_handle_tracker(void *data, const vrpn_TRACKERCB callback);
+#endif
 
 // /////////////////////////////////////////////////////////////////
 // dtkVrHeadRecognizerPrivate
@@ -43,6 +45,7 @@ void VRPN_CALLBACK vrpn_head_recognizer_handle_tracker(void *data, const vrpn_TR
 
 void dtkVrHeadRecognizerPrivate::run(void)
 {
+#if defined(HAVE_VRPN)
     vrpn_FILE_CONNECTIONS_SHOULD_PRELOAD = false;
     vrpn_FILE_CONNECTIONS_SHOULD_ACCUMULATE = false;
 
@@ -69,12 +72,15 @@ void dtkVrHeadRecognizerPrivate::run(void)
     delete this->analog;
     delete this->button;
     delete this->tracker;
+#endif
 }
 
 void dtkVrHeadRecognizerPrivate::stop(void)
 {
     this->running = false;
 }
+
+#if defined(HAVE_VRPN)
 
 void dtkVrHeadRecognizerPrivate::handle_button(const vrpn_BUTTONCB callback)
 {
@@ -98,6 +104,8 @@ void dtkVrHeadRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback)
         emit moved();
     }
 }
+
+#endif
 
 // /////////////////////////////////////////////////////////////////
 // dtkVrHeadRecognizer
@@ -221,6 +229,8 @@ void dtkVrHeadRecognizer::onButtonReleased(int)
 // vrpn callbacks
 // /////////////////////////////////////////////////////////////////
 
+#if defined(HAVE_VRPN)
+
 void VRPN_CALLBACK vrpn_head_recognizer_handle_button(void *data, const vrpn_BUTTONCB callback)
 {
     if(dtkVrHeadRecognizerPrivate *recognizer = static_cast<dtkVrHeadRecognizerPrivate *>(data))
@@ -238,3 +248,5 @@ void VRPN_CALLBACK vrpn_head_recognizer_handle_tracker(void *data, const vrpn_TR
     if(dtkVrHeadRecognizerPrivate *recognizer = static_cast<dtkVrHeadRecognizerPrivate *>(data))
         recognizer->handle_tracker(callback);
 }
+
+#endif

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 21 19:12:40 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Oct 26 22:36:51 2010 (+0200)
+ * Last-Updated: Thu Oct 28 11:02:51 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 245
+ *     Update #: 253
  */
 
 /* Commentary: 
@@ -30,9 +30,11 @@
 // vrpn callbacks (Definition at EOF.)
 // /////////////////////////////////////////////////////////////////
 
+#if defined(HAVE_VRPN)
 void VRPN_CALLBACK vrpn_gesture_recognizer_handle_button(void *data, const vrpn_BUTTONCB callback);
 void VRPN_CALLBACK vrpn_gesture_recognizer_handle_analog(void *data, const vrpn_ANALOGCB callback);
 void VRPN_CALLBACK vrpn_gesture_recognizer_handle_tracker(void *data, const vrpn_TRACKERCB callback);
+#endif
 
 // /////////////////////////////////////////////////////////////////
 // dtkVrGestureRecognizerPrivate
@@ -40,6 +42,7 @@ void VRPN_CALLBACK vrpn_gesture_recognizer_handle_tracker(void *data, const vrpn
 
 void dtkVrGestureRecognizerPrivate::run(void)
 {
+#if defined(HAVE_VRPN)
     vrpn_FILE_CONNECTIONS_SHOULD_PRELOAD = false;
     vrpn_FILE_CONNECTIONS_SHOULD_ACCUMULATE = false;
 
@@ -66,12 +69,15 @@ void dtkVrGestureRecognizerPrivate::run(void)
     delete this->analog;
     delete this->button;
     delete this->tracker;
+#endif
 }
 
 void dtkVrGestureRecognizerPrivate::stop(void)
 {
     this->running = false;
 }
+
+#if defined(HAVE_VRPN)
 
 void dtkVrGestureRecognizerPrivate::handle_button(const vrpn_BUTTONCB callback)
 {
@@ -222,6 +228,8 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
     }
 }
 
+#endif
+
 // /////////////////////////////////////////////////////////////////
 // dtkVrGestureRecognizer
 // /////////////////////////////////////////////////////////////////
@@ -283,7 +291,7 @@ void dtkVrGestureRecognizer::postSwipeEvent(Qt::GestureState state)
     QSwipeGesture *gesture = new QSwipeGesture(this);
     QGestureEvent *event = new QGestureEvent(QList<QGesture *>() << gesture);
 
-    // QCoreApplication::postEvent(d->receiver, event);
+    QCoreApplication::postEvent(d->receiver, event);
 }
 
 #include <math.h>
@@ -376,6 +384,8 @@ void dtkVrGestureRecognizer::postClearEvent(Qt::GestureState state)
 // vrpn callbacks
 // /////////////////////////////////////////////////////////////////
 
+#if defined(HAVE_VRPN)
+
 void VRPN_CALLBACK vrpn_gesture_recognizer_handle_button(void *data, const vrpn_BUTTONCB callback)
 {
     if(dtkVrGestureRecognizerPrivate *recognizer = static_cast<dtkVrGestureRecognizerPrivate *>(data))
@@ -393,3 +403,5 @@ void VRPN_CALLBACK vrpn_gesture_recognizer_handle_tracker(void *data, const vrpn
     if(dtkVrGestureRecognizerPrivate *recognizer = static_cast<dtkVrGestureRecognizerPrivate *>(data))
         recognizer->handle_tracker(callback);
 }
+
+#endif

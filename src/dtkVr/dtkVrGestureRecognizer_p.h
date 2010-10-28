@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 21 19:12:59 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 25 09:52:47 2010 (+0200)
+ * Last-Updated: Thu Oct 28 11:01:09 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 3
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -17,12 +17,14 @@
  * 
  */
 
+#if defined(HAVE_VRPN)
 #include <vrpn_Shared.h>
 #include <vrpn_Button.h>
 #include <vrpn_Analog.h>
 #include <vrpn_Tracker.h>
 #include <vrpn_FileConnection.h>
 #include <quat.h>
+#endif
 
 #include <QtCore>
 
@@ -44,16 +46,20 @@ public:
     void run(void);
     void stop(void);
 
+#if defined(HAVE_VRPN)
     void handle_button(const vrpn_BUTTONCB callback);
     void handle_analog(const vrpn_ANALOGCB callback);
     void handle_tracker(const vrpn_TRACKERCB callback);
+#endif
 
 public:
     bool running;
 
+#if defined(HAVE_VRPN)
     vrpn_Button_Remote *button;
     vrpn_Analog_Remote *analog;
     vrpn_Tracker_Remote *tracker;
+#endif
 
     QUrl url;
 

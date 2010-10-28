@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 21 19:11:52 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Oct 26 10:41:26 2010 (+0200)
+ * Last-Updated: Thu Oct 28 15:55:33 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 7
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 
 #include <QtCore>
 
+class dtkAbstractView;
 class dtkVrGestureRecognizerPrivate;
 
 class dtkVrGestureRecognizer : public QObject
@@ -33,6 +34,7 @@ public:
     ~dtkVrGestureRecognizer(void);
 
     void setReceiver(QObject *receiver);
+    void setView(dtkAbstractView *view);
 
 public slots:
     void startConnection(const QUrl& server);

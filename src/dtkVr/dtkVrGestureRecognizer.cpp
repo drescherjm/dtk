@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 21 19:12:40 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 28 11:02:51 2010 (+0200)
+ * Last-Updated: Thu Oct 28 16:52:35 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 253
+ *     Update #: 354
  */
 
 /* Commentary: 
@@ -19,10 +19,13 @@
 
 #include "dtkVrGestureRecognizer.h"
 #include "dtkVrGestureRecognizer_p.h"
+#include "dtkVrScreen.h"
 
 #include <dtkMath/dtkMath.h>
 #include <dtkMath/dtkQuaternion.h>
 #include <dtkMath/dtkVector3D.h>
+
+#include <dtkCore/dtkAbstractView.h>
 
 #include <QtGui>
 
@@ -167,46 +170,33 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
             if(this->left_interaction && this->right_interaction) {
 
                 emit postPanEvent(Qt::GestureFinished);
-                emit postPinchEvent(Qt::GestureStarted);
 
-                state = Pinch;
+                state = End;
             }
 
-            else if(this->left_interaction) { // Use left index to pan
+            else {
 
                 emit postPanEvent(Qt::GestureUpdated);
 
-            } else { // Use right index to pan
-
-                emit postSwipeEvent(Qt::GestureUpdated);
-
-           }
+            }
         }
 
         if (state == Pinch) {
 
-            if(this->left_interaction && !this->right_interaction) {
+            if(this->left_interaction && this->right_interaction) {
 
-                emit postPinchEvent(Qt::GestureFinished);
-                emit postPanEvent(Qt::GestureStarted);
-
-                state = Pan;
-
-            } else if(!this->left_interaction && this->right_interaction) {
-
-                emit postPinchEvent(Qt::GestureFinished);
-                emit postPanEvent(Qt::GestureStarted);
-
-                state = Pan;
+                emit postPinchEvent(Qt::GestureUpdated);
 
             } else {
 
-                emit postPinchEvent(Qt::GestureUpdated);
+                emit postPinchEvent(Qt::GestureFinished);
+
+                state = End;
+
             }
         }
 
     } else {
-
             
         if(state == Pinch) {
             
@@ -220,11 +210,11 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
             
             state = End;
             
-            emit postPinchEvent(Qt::GestureFinished);
+            emit postPanEvent(Qt::GestureFinished);
             
         }
         
-        emit postClearEvent(Qt::GestureFinished);
+        // emit postClearEvent(Qt::GestureFinished);
     }
 }
 
@@ -236,6 +226,7 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
 
 dtkVrGestureRecognizer::dtkVrGestureRecognizer(void) : QObject(), d(new dtkVrGestureRecognizerPrivate)
 {
+    d->view = NULL;
     d->receiver = NULL;
     d->q = this;
     d->running = false;
@@ -259,6 +250,11 @@ void dtkVrGestureRecognizer::setReceiver(QObject *receiver)
     d->receiver = receiver;
 }
 
+void dtkVrGestureRecognizer::setView(dtkAbstractView *view)
+{
+    d->view = view;
+}
+
 void dtkVrGestureRecognizer::startConnection(const QUrl& server)
 {
     d->running = true;
@@ -277,10 +273,97 @@ void dtkVrGestureRecognizer::postPanEvent(Qt::GestureState state)
     if(!d->receiver)
         return;
 
-    QPanGesture *gesture = new QPanGesture(this);
-    QGestureEvent *event = new QGestureEvent(QList<QGesture *>() << gesture);
+    static dtkVector3D<double> lastPosition;
 
-    // QCoreApplication::postEvent(d->receiver, event);
+    dtkVector3D<double> position;
+
+    if(d->left_interaction) {
+        
+        position = dtkVector3D<double>(
+            d->left_index_position[0],
+            d->left_index_position[2],
+          - d->left_index_position[1]);
+
+    } else {
+        
+        position = dtkVector3D<double>(
+            d->right_index_position[0],
+            d->right_index_position[2],
+          - d->right_index_position[1]);
+    }
+
+    if(state == Qt::GestureStarted)
+        lastPosition = position;
+
+    static dtkVector3D<double> lastOffset;
+
+    dtkVector3D<double> offset = position-lastPosition;
+
+    // --
+
+    float xmin, xmax;
+    float ymin, ymax;
+    float zmin, zmax;
+
+    double camera_up[3];
+    double camera_position[3];
+    double camera_focalpnt[3];
+
+    d->view->bounds(xmin, xmax, ymin, ymax, zmin, zmax);
+    d->view->cameraUp(camera_up);
+    d->view->cameraPosition(camera_position);
+    d->view->cameraFocalPoint(camera_focalpnt);
+
+    dtkVector3D<double> a = dtkVector3D<double>(xmin, ymin, zmin);
+    dtkVector3D<double> b = dtkVector3D<double>(xmax, ymax, zmax);
+
+    double dg = (b-a).norm();
+
+    dtkVector3D<double> u_xtk = dtkVector3D<double>(camera_up[0], camera_up[1], camera_up[2]);
+    dtkVector3D<double> p_xtk = dtkVector3D<double>(camera_position[0], camera_position[1], camera_position[2]);
+    dtkVector3D<double> f_xtk = dtkVector3D<double>(camera_focalpnt[0], camera_focalpnt[1], camera_focalpnt[2]);
+
+    dtkVector3D<double> l = dtkVector3D<double>(1.0, 0.0, 0.0);
+    dtkVector3D<double> m = dtkVector3D<double>(0.0, 1.0, 0.0);
+    dtkVector3D<double> n = dtkVector3D<double>(0.0, 0.0, 1.0);
+    dtkVector3D<dtkVector3D<double> > xtk_in_xtk = dtkVector3D<dtkVector3D<double> >(l, m, n);
+    
+    dtkVector3D<double> j = u_xtk;
+    dtkVector3D<double> k = p_xtk-f_xtk;
+    dtkVector3D<double> i = j%k;
+    dtkVector3D<dtkVector3D<double> > cam_in_xtk = dtkVector3D<dtkVector3D<double> >(i.unit(), j.unit(), k.unit());
+    
+    dtkMatrixSquared<double> cam_to_xtk = dtkChangeOfBasis(cam_in_xtk, xtk_in_xtk);
+
+    dtkVector3D<double> o_xtk = cam_to_xtk*offset;
+    // o_xtk *= dg;
+    // o_xtk /= (-1*dtkVrScreen::screens[4][2][2] - (-1*dtkVrScreen::screens[4][1][2]));
+    
+    o_xtk *= -1;
+
+    if(state == Qt::GestureStarted)
+        lastOffset = offset;
+
+    QPanGesture *gesture = new QPanGesture(this);
+    if(state == Qt::GestureStarted)
+        gesture->setProperty("State", "Started");
+    if(state == Qt::GestureUpdated)
+        gesture->setProperty("State", "Updated");
+    if(state == Qt::GestureFinished)
+        gesture->setProperty("State", "Finished");
+    gesture->setOffset(QPointF(o_xtk[0], o_xtk[1]));
+//    gesture->setOffset(QPointF(-offset[0], -offset[1]));
+
+    if  (  state == Qt::GestureStarted
+       ||  state == Qt::GestureFinished
+           //|| (state == Qt::GestureUpdated && qAbs(offset.norm() - lastOffset.norm())/lastOffset.norm() > 0.01)) {
+           || (state == Qt::GestureUpdated && (offset.norm()/0.1 > 0.01))){
+        QGestureEvent *event = new QGestureEvent(QList<QGesture *>() << gesture);        
+        QCoreApplication::postEvent(d->receiver, event);   
+    }
+
+    lastPosition = position;
+    lastOffset = offset;
 }
 
 void dtkVrGestureRecognizer::postSwipeEvent(Qt::GestureState state)
@@ -291,7 +374,7 @@ void dtkVrGestureRecognizer::postSwipeEvent(Qt::GestureState state)
     QSwipeGesture *gesture = new QSwipeGesture(this);
     QGestureEvent *event = new QGestureEvent(QList<QGesture *>() << gesture);
 
-    QCoreApplication::postEvent(d->receiver, event);
+    // QCoreApplication::postEvent(d->receiver, event);
 }
 
 #include <math.h>

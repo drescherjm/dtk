@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 21 19:12:59 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 28 11:01:09 2010 (+0200)
+ * Last-Updated: Thu Oct 28 15:53:34 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 8
+ *     Update #: 12
  */
 
 /* Commentary: 
@@ -28,6 +28,7 @@
 
 #include <QtCore>
 
+class dtkAbstractView;
 class dtkVrGestureRecognizer;
 
 class dtkVrGestureRecognizerPrivate : public QThread
@@ -81,6 +82,7 @@ public:
 
 public:
     QObject *receiver;
+    dtkAbstractView *view;
 
 public:
     dtkVrGestureRecognizer *q;

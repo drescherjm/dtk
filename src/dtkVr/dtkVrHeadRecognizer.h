@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Oct 26 12:38:20 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Oct 26 13:23:25 2010 (+0200)
+ * Last-Updated: Thu Oct 28 15:53:53 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 5
+ *     Update #: 6
  */
 
 /* Commentary: 
@@ -33,7 +33,7 @@ public:
      dtkVrHeadRecognizer(void);
     ~dtkVrHeadRecognizer(void);
 
-    void setReceiver(dtkAbstractView *receiver);
+    void setView(dtkAbstractView *view);
 
 public slots:
     void startConnection(const QUrl& server);

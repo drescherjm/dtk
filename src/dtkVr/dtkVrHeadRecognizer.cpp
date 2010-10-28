@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Oct 26 12:40:19 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 28 11:04:46 2010 (+0200)
+ * Last-Updated: Thu Oct 28 16:00:56 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 189
+ *     Update #: 194
  */
 
 /* Commentary: 
@@ -113,7 +113,7 @@ void dtkVrHeadRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback)
 
 dtkVrHeadRecognizer::dtkVrHeadRecognizer(void) : QObject(), d(new dtkVrHeadRecognizerPrivate)
 {
-    d->receiver = NULL;
+    d->view = NULL;
     d->q = this;
     d->running = false;
     d->activated = true;
@@ -132,9 +132,9 @@ dtkVrHeadRecognizer::~dtkVrHeadRecognizer(void)
     d = NULL;
 }
 
-void dtkVrHeadRecognizer::setReceiver(dtkAbstractView *receiver)
+void dtkVrHeadRecognizer::setView(dtkAbstractView *view)
 {
-    d->receiver = receiver;
+    d->view = view;
 }
 
 void dtkVrHeadRecognizer::startConnection(const QUrl& server)
@@ -152,7 +152,7 @@ void dtkVrHeadRecognizer::stopConnection(void)
 
 void dtkVrHeadRecognizer::onMoved(void)
 {
-    if(!d->activated || !d->receiver)
+    if(!d->activated || !d->view)
         return;
 
     double x =  d->head_position[0];
@@ -168,16 +168,16 @@ void dtkVrHeadRecognizer::onMoved(void)
     dtkVector3D<double> p_art = dtkVector3D<double>(x, y, z);
     dtkVector3D<double> d_art = p_art - d->last;
 
-    if(d_art.norm()/d->last.norm() < 0.01)
+    if(d_art.norm()/d->last.norm() < 0.005)
         return;
 
     double camera_up[3];
     double camera_position[3];
     double camera_focalpnt[3];
     
-    d->receiver->cameraUp(camera_up);
-    d->receiver->cameraPosition(camera_position);
-    d->receiver->cameraFocalPoint(camera_focalpnt);
+    d->view->cameraUp(camera_up);
+    d->view->cameraPosition(camera_position);
+    d->view->cameraFocalPoint(camera_focalpnt);
 
     dtkVector3D<double> u_xtk = dtkVector3D<double>(camera_up[0], camera_up[1], camera_up[2]);
     dtkVector3D<double> p_xtk = dtkVector3D<double>(camera_position[0], camera_position[1], camera_position[2]);
@@ -199,30 +199,30 @@ void dtkVrHeadRecognizer::onMoved(void)
     dtkVector3D<double> d_xtk = cam_to_xtk*d_art;
     dtkVector3D<double> c_xtk = ((p_xtk - f_xtk).norm() / (z_art - f_art).norm()) * d_xtk + p_xtk;
     
-    d->receiver->setCameraPosition(c_xtk[0], c_xtk[1], c_xtk[2]);
-    d->receiver->update();
+    d->view->setCameraPosition(c_xtk[0], c_xtk[1], c_xtk[2]);
+    d->view->update();
 
     d->last = p_art;
 }
 
 void dtkVrHeadRecognizer::onButtonPressed(int)
 {
-    if(!d->receiver)
+    if(!d->view)
         return;
 
     // d->activated = true;
 
-    // d->receiver->disableInteraction();
+    // d->view->disableInteraction();
 }
 
 void dtkVrHeadRecognizer::onButtonReleased(int)
 {
-    if(!d->receiver)
+    if(!d->view)
         return;
 
     // d->activated = false;
 
-    // d->receiver->enableInteraction();
+    // d->view->enableInteraction();
 }
 
 // /////////////////////////////////////////////////////////////////

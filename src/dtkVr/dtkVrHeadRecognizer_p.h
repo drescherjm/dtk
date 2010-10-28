@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Oct 26 12:39:24 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 28 11:05:51 2010 (+0200)
+ * Last-Updated: Thu Oct 28 15:54:08 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 18
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -65,7 +65,7 @@ public:
     QUrl url;
 
 public:
-    dtkAbstractView *receiver;
+    dtkAbstractView *view;
 
 public:
     dtkVrHeadRecognizer *q;

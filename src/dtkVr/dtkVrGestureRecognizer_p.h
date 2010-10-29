@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 21 19:12:59 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 28 15:53:34 2010 (+0200)
+ * Last-Updated: Fri Oct 29 16:39:42 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 12
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -91,5 +91,6 @@ signals:
     void postPanEvent(Qt::GestureState state);
     void postSwipeEvent(Qt::GestureState state);
     void postPinchEvent(Qt::GestureState state);
+    void postCustomEvent(Qt::GestureState state);
     void postClearEvent(Qt::GestureState state);
 };

@@ -26,6 +26,7 @@
 
 class dtkAbstractDataReader;
 class dtkAbstractDataWriter;
+class dtkAbstractDataConverter;
 class dtkAbstractDataPrivate;
 
 class DTKCORE_EXPORT dtkAbstractData : public dtkAbstractObject
@@ -51,6 +52,8 @@ public slots:
     virtual bool write(QString file);
     virtual bool write(QStringList files);
 
+    virtual dtkAbstractData *convert(QString toType);
+
     virtual void *output(void);
 
     virtual void *data(void);
@@ -75,8 +78,9 @@ public slots:
 
     virtual void update(void);
 
-    void addReader(dtkAbstractDataReader *reader);
-    void addWriter(dtkAbstractDataWriter *writer);
+    void addReader   (dtkAbstractDataReader    *reader);
+    void addWriter   (dtkAbstractDataWriter    *writer);
+    void addConverter(dtkAbstractDataConverter *converter);
 
     void  enableReader(QString reader);
     void disableReader(QString reader);
@@ -84,8 +88,12 @@ public slots:
     void  enableWriter(QString writer);
     void disableWriter(QString writer);
 
-    dtkAbstractDataReader *reader(QString type);
-    dtkAbstractDataWriter *writer(QString type);
+    void  enableConverter(QString converter);
+    void disableConverter(QString converter);
+
+    dtkAbstractDataReader    *reader   (QString type);
+    dtkAbstractDataWriter    *writer   (QString type);
+    dtkAbstractDataConverter *converter(QString type);
 
     QString     path(void);
     QStringList paths(void);

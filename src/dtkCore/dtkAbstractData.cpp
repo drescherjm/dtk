@@ -20,6 +20,7 @@
 #include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkAbstractDataReader.h>
 #include <dtkCore/dtkAbstractDataWriter.h>
+#include <dtkCore/dtkAbstractDataConverter.h>
 #include <dtkCore/dtkLog.h>
 
 #include <QtGui>
@@ -27,8 +28,9 @@
 class dtkAbstractDataPrivate
 {
 public:
-    QMap<QString, dtkAbstractDataReader *> readers;
-    QMap<QString, dtkAbstractDataWriter *> writers;
+    QMap<QString, dtkAbstractDataReader    *> readers;
+    QMap<QString, dtkAbstractDataWriter    *> writers;
+    QMap<QString, dtkAbstractDataConverter *> converters;
 
     QString     path;
     QStringList paths;
@@ -45,8 +47,9 @@ dtkAbstractData::dtkAbstractData(const dtkAbstractData& data) : dtkAbstractObjec
 {
     this->setParent(data.parent());
 
-    d->readers = data.d->readers;
-    d->writers = data.d->writers;
+    d->readers    = data.d->readers;
+    d->writers    = data.d->writers;
+    d->converters = data.d->converters;
 }
 
 dtkAbstractData::~dtkAbstractData(void)
@@ -72,6 +75,12 @@ void dtkAbstractData::addReader(dtkAbstractDataReader *reader)
 void dtkAbstractData::addWriter(dtkAbstractDataWriter *writer)
 {
     d->writers.insert(writer->description(), writer);
+}
+
+void dtkAbstractData::addConverter(dtkAbstractDataConverter *converter)
+{
+    d->converters.insert(converter->description(), converter);
+    converter->setData (this);
 }
 
 void dtkAbstractData::enableReader(QString reader)
@@ -104,6 +113,21 @@ void dtkAbstractData::disableWriter(QString writer)
 	d->writers.value(writer)->disable();
 }
 
+void dtkAbstractData::enableConverter(QString converter)
+{
+    if (d->converters.contains(converter)) {
+        d->converters.value(converter)->setData(this);
+	d->converters.value(converter)->enable();
+    } else
+	dtkDebug() << description() << "has no such converter: " << converter;
+}
+
+void dtkAbstractData::disableConverter(QString converter)
+{
+    if (d->converters.contains(converter))
+	d->converters.value(converter)->disable();
+}
+
 dtkAbstractDataReader *dtkAbstractData::reader(QString type)
 {
     if (d->readers.contains(type))
@@ -116,6 +140,14 @@ dtkAbstractDataWriter *dtkAbstractData::writer(QString type)
 {
     if (d->writers.contains(type))
 	return d->writers.value(type);
+
+    return NULL;
+}
+
+dtkAbstractDataConverter *dtkAbstractData::converter(QString type)
+{
+    if (d->converters.contains(type))
+	return d->converters.value(type);
 
     return NULL;
 }
@@ -177,6 +209,16 @@ bool dtkAbstractData::write(QStringList files)
         written = written || this->write(file);
 
     return written;
+}
+
+dtkAbstractData *dtkAbstractData::convert(QString toType)
+{
+    dtkAbstractData *conversion = 0;
+    foreach(dtkAbstractDataConverter *converter, d->converters)
+      if(/*converter->enabled() && */!conversion && converter->canConvert (toType))
+            conversion = converter->convert();
+
+    return conversion;
 }
 
 QString dtkAbstractData::path(void)

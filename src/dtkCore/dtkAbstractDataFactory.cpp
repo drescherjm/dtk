@@ -27,9 +27,10 @@ class dtkAbstractDataFactoryPrivate
 public:
     dtkAbstractDataHash datas;
 
-    dtkAbstractDataFactory::dtkAbstractDataCreatorHash       creators;
-    dtkAbstractDataFactory::dtkAbstractDataReaderCreatorHash readers;
-    dtkAbstractDataFactory::dtkAbstractDataWriterCreatorHash writers;
+    dtkAbstractDataFactory::dtkAbstractDataCreatorHash          creators;
+    dtkAbstractDataFactory::dtkAbstractDataReaderCreatorHash    readers;
+    dtkAbstractDataFactory::dtkAbstractDataWriterCreatorHash    writers;
+    dtkAbstractDataFactory::dtkAbstractDataConverterCreatorHash converters;
 };
 
 DTKCORE_EXPORT dtkAbstractDataFactory *dtkAbstractDataFactory::instance(void)
@@ -57,6 +58,10 @@ dtkAbstractData *dtkAbstractDataFactory::create(QString type)
 	if(key.second.contains(type))
 	    data->addWriter(d->writers[key]());
 
+    foreach(dtkAbstractDataConverterTypeHandler key, d->converters.keys())
+        if(key.second.first.contains (type))
+	    data->addConverter(d->converters[key]());
+
     data->setObjectName(QString("%1%2").arg(data->metaObject()->className()).arg(count++));
 
     d->datas[type] << data;
@@ -74,6 +79,11 @@ dtkAbstractDataReader *dtkAbstractDataFactory::reader(QString type, QStringList 
 dtkAbstractDataWriter *dtkAbstractDataFactory::writer(QString type, QStringList handled)
 {
     return d->writers[qMakePair(type, handled)]();
+}
+
+dtkAbstractDataConverter *dtkAbstractDataFactory::converter(QString type, QStringList fromTypes, QString toType)
+{
+    return d->converters[qMakePair(type, qMakePair(fromTypes, toType))]();
 }
 
 bool dtkAbstractDataFactory::registerDataType(QString type, dtkAbstractDataCreator func)
@@ -106,6 +116,16 @@ bool dtkAbstractDataFactory::registerDataWriterType(QString type, QStringList ha
     return false;
 }
 
+bool dtkAbstractDataFactory::registerDataConverterType(QString type, QStringList fromTypes, QString toType, dtkAbstractDataConverterCreator func)
+{
+    if(!d->converters.contains(qMakePair(type, qMakePair (fromTypes, toType)))) {
+        d->converters.insert(qMakePair(type, qMakePair(fromTypes, toType)), func);
+	return true;
+    }
+
+    return false;
+}
+
 unsigned int dtkAbstractDataFactory::size(QString type)
 {
     return d->datas[type].size();
@@ -124,6 +144,11 @@ unsigned int dtkAbstractDataFactory::countReaders(QString type)
 unsigned int dtkAbstractDataFactory::countWriters(QString type)
 {
     return d->writers.keys().count();
+}
+
+unsigned int dtkAbstractDataFactory::countConverters(QString type)
+{
+    return d->converters.keys().count();
 }
 
 dtkAbstractData *dtkAbstractDataFactory::get(QString type, int idx)
@@ -148,6 +173,11 @@ QList<dtkAbstractDataFactory::dtkAbstractDataTypeHandler> dtkAbstractDataFactory
 QList<dtkAbstractDataFactory::dtkAbstractDataTypeHandler> dtkAbstractDataFactory::writers(void)
 {
     return d->writers.keys();
+}
+
+QList<dtkAbstractDataFactory::dtkAbstractDataConverterTypeHandler> dtkAbstractDataFactory::converters(void)
+{
+    return d->converters.keys();
 }
 
 dtkAbstractDataFactory::dtkAbstractDataFactory(void) : dtkAbstractFactory(), d(new dtkAbstractDataFactoryPrivate)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 21 19:12:40 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Oct 29 16:40:47 2010 (+0200)
+ * Last-Updated: Fri Oct 29 17:30:06 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 441
+ *     Update #: 490
  */
 
 /* Commentary: 
@@ -154,7 +154,7 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
 
             if(this->left_interaction && this->right_interaction) {
 
-                emit postPinchEvent(Qt::GestureStarted);
+                emit postCustomEvent(Qt::GestureStarted);
 
                 state = Pinch;
             } else {
@@ -185,11 +185,11 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
 
             if(this->left_interaction && this->right_interaction) {
 
-                emit postPinchEvent(Qt::GestureUpdated);
+                emit postCustomEvent(Qt::GestureUpdated);
 
             } else {
 
-                emit postPinchEvent(Qt::GestureFinished);
+                emit postCustomEvent(Qt::GestureFinished);
 
                 state = End;
 
@@ -202,7 +202,7 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
             
             state = End;
             
-            emit postPinchEvent(Qt::GestureFinished);
+            emit postCustomEvent(Qt::GestureFinished);
             
         }
         
@@ -469,9 +469,87 @@ void dtkVrGestureRecognizer::postCustomEvent(Qt::GestureState state)
     if(!d->receiver)
         return;
 
-    QGesture *gesture = new QGesture(this);
-    QGestureEvent *event = new QGestureEvent(QList<QGesture *>() << gesture);
-    QCoreApplication::postEvent(d->receiver, event);
+    dtkVector3D<double> s = dtkVector3D<double>(
+        d->right_index_start_position[0] - d->left_index_start_position[0],
+        d->right_index_start_position[2] - d->left_index_start_position[2],
+      - d->right_index_start_position[1] + d->left_index_start_position[1]);
+
+    dtkVector3D<double> u = dtkVector3D<double>(
+        d->right_index_position[0] - d->left_index_position[0],
+        d->right_index_position[2] - d->left_index_position[2],
+      - d->right_index_position[1] + d->left_index_position[1]);
+
+    dtkVector3D<double> i = dtkVector3D<double>(1.0, 0.0, 0.0);
+    dtkVector3D<double> j = dtkVector3D<double>(0.0, 1.0, 0.0);
+    dtkVector3D<double> k = dtkVector3D<double>(0.0, 0.0, 1.0);
+    dtkVector3D<dtkVector3D<double> > from = dtkVector3D<dtkVector3D<double> >(i, j, k);
+
+    dtkVector3D<double> l = dtkVector3D<double>(s[0], 0.0, s[2]).unit();
+    dtkVector3D<double> m = dtkVector3D<double>(0.0, 1.0, 0.0).unit();
+    dtkVector3D<double> n = (l%m).unit();
+    dtkVector3D<dtkVector3D<double> > to = dtkVector3D<dtkVector3D<double> >(l, m, n);
+
+    dtkMatrixSquared<double> t = dtkChangeOfBasis(from, to);
+
+    dtkVector3D<double> ns = t*s;
+    dtkVector3D<double> nu = t*u;
+
+    dtkVector3D<double> ys = ns; ys[1] = 0;
+    dtkVector3D<double> yu = nu; yu[1] = 0;
+
+    dtkVector3D<double> ps = ns; ps[0] = 0;
+    dtkVector3D<double> pu = nu; pu[0] = 0;
+
+    dtkVector3D<double> rs = ns; rs[2] = 0;
+    dtkVector3D<double> ru = nu; ru[2] = 0;
+
+    // -- Computing rotation angle --
+
+    static qreal lastYawAngle;
+    static qreal lastPitchAngle;
+    static qreal lastRollAngle;
+
+    qreal yawAngle = -1.0 * (acos(nu.unit() * ns.unit()) * ((ns % nu).unit() * m.unit())) * 180.0 / 3.141593;
+
+    qreal pitchAngle = -1.0 * (acos(nu.unit() * ns.unit()) * ((ns % nu).unit() * l.unit())) * 180.0 / 3.141593;
+
+    qreal rollAngle = -1.0 * (acos(nu.unit() * ns.unit()) * ((ns % nu).unit() * n.unit())) * 180.0 / 3.141593;
+
+    if(state == Qt::GestureStarted) {
+        lastYawAngle = yawAngle;
+        lastPitchAngle = pitchAngle;
+        lastRollAngle = rollAngle;
+    }
+
+    // -- Post event --
+
+    QGesture *gesture = new QGesture;
+    if(state == Qt::GestureStarted)
+        gesture->setProperty("State", "Started");
+    if(state == Qt::GestureUpdated)
+        gesture->setProperty("State", "Updated");
+    if(state == Qt::GestureFinished)
+        gesture->setProperty("State", "Finished");
+    gesture->setProperty("Type", "Custom");
+    gesture->setProperty("CustomGestureAngleYaw", (yawAngle - lastYawAngle));
+    gesture->setProperty("CustomGestureAnglePitch", (pitchAngle - lastPitchAngle));
+    gesture->setProperty("CustomGestureAngleRoll", -1*(rollAngle - lastRollAngle));
+
+    if  (  state == Qt::GestureStarted
+       ||  state == Qt::GestureFinished
+       || (state == Qt::GestureUpdated && qAbs((yawAngle - lastYawAngle)/lastYawAngle) > 0.01)
+       || (state == Qt::GestureUpdated && qAbs((pitchAngle - lastPitchAngle)/lastPitchAngle) > 0.01)
+       || (state == Qt::GestureUpdated && qAbs((rollAngle - lastRollAngle)/lastRollAngle) > 0.01)) {
+
+        qDebug() << "posting sutom gesture";
+
+        QGestureEvent *event = new QGestureEvent(QList<QGesture *>() << gesture);
+        QCoreApplication::postEvent(d->receiver, event);
+    }
+
+    lastYawAngle = yawAngle;
+    lastPitchAngle = pitchAngle;
+    lastRollAngle = rollAngle;
 }
 
 void dtkVrGestureRecognizer::postClearEvent(Qt::GestureState state)

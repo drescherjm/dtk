@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 22:03:03 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jun 15 11:09:09 2010 (+0200)
+ * Last-Updated: Sun Oct 31 19:45:43 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 36
+ *     Update #: 37
  */
 
 /* Commentary: 
@@ -67,7 +67,7 @@ void dtkAbstractDataConverter::setData(dtkAbstractData *data)
 
 bool dtkAbstractDataConverter::canConvert(QString toType)
 {
-    return this->toType()==toType;
+    return this->toType() == toType;
 }
 
 dtkAbstractData *dtkAbstractDataConverter::convert(void)

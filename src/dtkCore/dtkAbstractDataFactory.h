@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:48:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Oct  5 14:20:28 2009 (+0200)
+ * Last-Updated: Sun Oct 31 19:47:10 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 80
+ *     Update #: 81
  */
 
 /* Commentary:
@@ -41,7 +41,7 @@ public:
     typedef QHash<               QString,      dtkAbstractDataCreator>          dtkAbstractDataCreatorHash;
     typedef QHash<QPair<QString, QStringList>, dtkAbstractDataReaderCreator>    dtkAbstractDataReaderCreatorHash;
     typedef QHash<QPair<QString, QStringList>, dtkAbstractDataWriterCreator>    dtkAbstractDataWriterCreatorHash;
-    typedef QHash<QPair<QString, QPair<QStringList, QString> >,     dtkAbstractDataConverterCreator> dtkAbstractDataConverterCreatorHash;
+    typedef QHash<QPair<QString, QPair<QStringList, QString> >, dtkAbstractDataConverterCreator> dtkAbstractDataConverterCreatorHash;
     typedef       QPair<QString, QStringList>  dtkAbstractDataTypeHandler;
     typedef       QPair<QString, QPair<QStringList, QString> >  dtkAbstractDataConverterTypeHandler;
 

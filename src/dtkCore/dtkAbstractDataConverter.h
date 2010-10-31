@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 21:58:48 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jul 21 09:13:43 2010 (+0200)
+ * Last-Updated: Sun Oct 31 19:45:27 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 44
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -35,7 +35,7 @@ public:
     
     virtual QString  description (void) const = 0;
     virtual QStringList fromTypes(void) const = 0;
-    virtual QString      toType  (void) const = 0;
+    virtual QString       toType (void) const = 0;
     
     bool enabled(void);
     void  enable(void);

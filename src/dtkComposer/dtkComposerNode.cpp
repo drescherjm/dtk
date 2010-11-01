@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Sep 11 14:40:39 2010 (+0200)
+ * Last-Updated: Mon Nov  1 16:12:29 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 489
+ *     Update #: 491
  */
 
 /* Commentary: 
@@ -160,7 +160,7 @@ dtkComposerEdge *dtkComposerNode::edge(dtkComposerNodeProperty *property)
     if(property->type() == dtkComposerNodeProperty::Output)
         return d->output_edges.key(property);
 
-    return 0;
+    return NULL;
 }
 
 void dtkComposerNode::addInputProperty(dtkComposerNodeProperty *property)

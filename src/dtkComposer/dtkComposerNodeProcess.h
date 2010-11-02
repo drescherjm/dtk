@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul 15 11:23:26 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul 26 13:53:13 2010 (+0200)
+ * Last-Updated: Mon Nov  1 16:37:27 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 8
+ *     Update #: 10
  */
 
 /* Commentary: 
@@ -33,6 +33,8 @@ public:
     ~dtkComposerNodeProcess(void);
 
     QVariant value(dtkComposerNodeProperty *property);
+
+    virtual QString implementation(void);
 
 protected:
     void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);

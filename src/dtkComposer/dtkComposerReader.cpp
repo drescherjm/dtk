@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug 17 13:42:35 2010 (+0200)
+ * Last-Updated: Mon Nov  1 16:31:33 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 80
+ *     Update #: 87
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #include "dtkComposerEdge.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeFile.h"
+#include "dtkComposerNodeProcess.h"
 #include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
 
@@ -93,6 +94,16 @@ void dtkComposerReader::read(const QString& fileName)
 
             if(!children.isEmpty())
                 file_node->setFileName(children.at(0).childNodes().at(0).toText().data());
+        }
+
+        // Process node
+
+        if(dtkComposerNodeProcess *process_node = dynamic_cast<dtkComposerNodeProcess *>(node)) {
+            
+            QDomNodeList children = nodes.at(i).toElement().elementsByTagName("implementation");
+
+            if(!children.isEmpty())
+                process_node->setupImplementation(children.at(0).childNodes().at(0).toText().data());
         }
 
         // --

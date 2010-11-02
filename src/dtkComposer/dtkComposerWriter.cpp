@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug 17 11:22:34 2010 (+0200)
+ * Last-Updated: Mon Nov  1 16:38:02 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 68
+ *     Update #: 82
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerNodeProcess.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerWriter.h"
 
@@ -83,6 +84,23 @@ void dtkComposerWriter::write(const QString& fileName)
                 name.appendChild(text);
 
                 tag.appendChild(name);
+            }
+        }
+
+        // -- Process node
+
+        if(dtkComposerNodeProcess *process_node = dynamic_cast<dtkComposerNodeProcess *>(node)) {
+           
+            QString implementation = process_node->implementation();
+
+            if(!implementation.isEmpty()) {
+                
+                QDomText text = doc.createTextNode(implementation);
+                
+                QDomElement implementation = doc.createElement("implementation");
+                implementation.appendChild(text);
+
+                tag.appendChild(implementation);
             }
         }
 

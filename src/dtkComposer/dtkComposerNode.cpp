@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov  1 16:12:29 2010 (+0100)
+ * Last-Updated: Mon Nov  1 16:29:53 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 491
+ *     Update #: 502
  */
 
 /* Commentary: 
@@ -429,4 +429,16 @@ void dtkComposerNode::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         QGraphicsItem::mouseReleaseEvent(event);
 
     d->clicked_property = NULL;
+}
+
+void dtkComposerNode::chooseImplementation(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkComposerNode::setupImplementation(QString implementation)
+{
+    DTK_UNUSED(implementation);
+
+    DTK_DEFAULT_IMPLEMENTATION;
 }

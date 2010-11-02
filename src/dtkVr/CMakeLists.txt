@@ -133,7 +133,7 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES_WRAP})
 
 target_link_libraries(${PROJECT_NAME}
-  dtkMath
+  #dtkMath
   dtkCore
   dtkDistributed)
 

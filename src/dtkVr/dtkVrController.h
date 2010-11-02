@@ -20,13 +20,15 @@
 #ifndef DTKVRCONTROLLER_H
 #define DTKVRCONTROLLER_H
 
+#include "dtkVrExport.h"
+
 #include <QtCore>
 
 class dtkAbstractView;
 
 class dtkVrControllerPrivate;
 
-class dtkVrController : public QObject
+class  DTKVR_EXPORT dtkVrController : public QObject
 {
     Q_OBJECT
 

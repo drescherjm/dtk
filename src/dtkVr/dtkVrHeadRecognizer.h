@@ -20,12 +20,14 @@
 #ifndef DTKVRHEADRECOGNIZER_H
 #define DTKVRHEADRECOGNIZER_H
 
+#include "dtkVrExport.h"
+
 #include <QtCore>
 
 class dtkAbstractView;
 class dtkVrHeadRecognizerPrivate;
 
-class dtkVrHeadRecognizer : public QObject
+class DTKVR_EXPORT dtkVrHeadRecognizer : public QObject
 {
     Q_OBJECT
 

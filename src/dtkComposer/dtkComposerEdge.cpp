@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 13 10:26:55 2010 (+0200)
+ * Last-Updated: Mon Nov  1 16:10:47 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 213
+ *     Update #: 220
  */
 
 /* Commentary: 
@@ -196,6 +196,12 @@ bool dtkComposerEdge::link(void)
 
 bool dtkComposerEdge::unlink(void)
 {
+    if(!d->source)
+        return false;
+
+    if(!d->destination)
+        return false;
+
     d->source->node()->removeOutputEdge(this);
     d->destination->node()->removeInputEdge(this);
 

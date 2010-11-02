@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep  9 17:28:06 2010 (+0200)
+ * Last-Updated: Tue Oct 26 15:26:51 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 269
+ *     Update #: 273
  */
 
 /* Commentary:
@@ -122,6 +122,8 @@ public slots:
     virtual void cameraFocalPoint(double *coordinates);
 
     virtual void setCameraPosition(double x, double y, double z);
+
+    virtual void setCameraClippingRange(double near, double far);
 
     // --
 

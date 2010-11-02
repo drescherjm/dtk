@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Oct 14 21:04:39 2010 (+0200)
+## Last-Updated: Thu Oct 28 10:59:30 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 215
+##     Update #: 238
 ######################################################################
 ## 
 ### Commentary: 
@@ -27,6 +27,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkVrController.h
   dtkVrDevice.h
   dtkVrExport.h
+  dtkVrGestureRecognizer.h
+  dtkVrHeadRecognizer.h
   dtkVrScreen.h
   dtkVrTracker.h
   dtkVrUser.h
@@ -35,6 +37,10 @@ set(${PROJECT_NAME}_HEADERS
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkVrController.h
   dtkVrDevice.h
+  dtkVrGestureRecognizer.h
+  dtkVrGestureRecognizer_p.h
+  dtkVrHeadRecognizer.h
+  dtkVrHeadRecognizer_p.h
   dtkVrTracker.h
   dtkVrUser.h
   dtkVrWand.h)
@@ -42,6 +48,8 @@ set(${PROJECT_NAME}_HEADERS_MOC
 set(${PROJECT_NAME}_SOURCES
   dtkVrController.cpp
   dtkVrDevice.cpp
+  dtkVrGestureRecognizer.cpp
+  dtkVrHeadRecognizer.cpp
   dtkVrScreen.cpp
   dtkVrTracker.cpp
   dtkVrUser.cpp
@@ -125,6 +133,7 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES_WRAP})
 
 target_link_libraries(${PROJECT_NAME}
+  dtkMath
   dtkCore
   dtkDistributed)
 

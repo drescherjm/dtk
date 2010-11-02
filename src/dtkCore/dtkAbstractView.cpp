@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep  9 17:28:40 2010 (+0200)
+ * Last-Updated: Tue Oct 26 15:26:31 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 259
+ *     Update #: 265
  */
 
 /* Commentary:
@@ -365,6 +365,14 @@ void dtkAbstractView::setCameraPosition(double x, double y, double z)
     DTK_UNUSED(x);
     DTK_UNUSED(y);
     DTK_UNUSED(z);
+
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::setCameraClippingRange(double near, double far)
+{
+    DTK_UNUSED(near);
+    DTK_UNUSED(far);
 
     DTK_DEFAULT_IMPLEMENTATION;
 }

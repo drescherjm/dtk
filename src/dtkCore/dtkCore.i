@@ -32,6 +32,7 @@
 #include <dtkCore/dtkAbstractDataMesh.h>
 #include <dtkCore/dtkAbstractDataReader.h>
 #include <dtkCore/dtkAbstractDataWriter.h>
+#include <dtkCore/dtkAbstractDataConverter.h>
 #include <dtkCore/dtkAbstractDataImage.h>
 #include <dtkCore/dtkAbstractObject.h>
 #include <dtkCore/dtkAbstractProcess.h>
@@ -188,6 +189,7 @@
 %include <dtkCore/dtkAbstractDataFactory.h>
 %include <dtkCore/dtkAbstractDataReader.h>
 %include <dtkCore/dtkAbstractDataWriter.h>
+%include <dtkCore/dtkAbstractDataConverter.h>
 %include <dtkCore/dtkAbstractDataImage.h>
 %include <dtkCore/dtkAbstractProcess.h>
 %include <dtkCore/dtkAbstractProcessFactory.h>

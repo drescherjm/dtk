@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul 15 11:23:54 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 10 14:24:41 2010 (+0200)
+ * Last-Updated: Mon Nov  1 20:13:27 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 84
+ *     Update #: 94
  */
 
 /* Commentary: 
@@ -39,6 +39,10 @@ dtkComposerNodeProcess::dtkComposerNodeProcess(dtkComposerNode *parent) : dtkCom
     d->property_input_file = new dtkComposerNodeProperty("file", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, this);
     d->property_output_data = new dtkComposerNodeProperty("data", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Single, this);
 
+    d->property_input_data->hide();
+    d->property_input_file->hide();
+    d->property_output_data->hide();
+
     this->setKind(dtkComposerNode::Process);
     this->addInputProperty(d->property_input_data);
     this->addInputProperty(d->property_input_file);
@@ -62,6 +66,11 @@ QVariant dtkComposerNodeProcess::value(dtkComposerNodeProperty *property)
             return qVariantFromValue(*(process->output()));
 
     return QVariant();
+}
+
+QString dtkComposerNodeProcess::implementation(void)
+{
+    return QString();
 }
 
 void dtkComposerNodeProcess::onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Sep 11 14:40:39 2010 (+0200)
+ * Last-Updated: Mon Nov  1 16:29:53 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 489
+ *     Update #: 502
  */
 
 /* Commentary: 
@@ -160,7 +160,7 @@ dtkComposerEdge *dtkComposerNode::edge(dtkComposerNodeProperty *property)
     if(property->type() == dtkComposerNodeProperty::Output)
         return d->output_edges.key(property);
 
-    return 0;
+    return NULL;
 }
 
 void dtkComposerNode::addInputProperty(dtkComposerNodeProperty *property)
@@ -429,4 +429,16 @@ void dtkComposerNode::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         QGraphicsItem::mouseReleaseEvent(event);
 
     d->clicked_property = NULL;
+}
+
+void dtkComposerNode::chooseImplementation(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkComposerNode::setupImplementation(QString implementation)
+{
+    DTK_UNUSED(implementation);
+
+    DTK_DEFAULT_IMPLEMENTATION;
 }

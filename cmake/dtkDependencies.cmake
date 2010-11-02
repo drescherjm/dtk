@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Oct 14 20:58:04 2010 (+0200)
+## Last-Updated: Sun Oct 17 18:02:42 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 47
+##     Update #: 51
 ######################################################################
 ## 
 ### Commentary: 
@@ -35,11 +35,10 @@ endif(WIN32)
 find_package(Qt4 4.6.0 REQUIRED)
 
 if(${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} GREATER 6)
-    set(QT_USE_QTDECLARATIVE TRUE)
+  set(QT_USE_QTDECLARATIVE TRUE)
 endif(${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} GREATER 6)
 
 include(${QT_USE_FILE})
-
 
 mark_as_advanced(QT_QMAKE_EXECUTABLE)
 mark_as_advanced(QT_QTMOTIF_INCLUDE_DIR)

@@ -32,6 +32,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractDataMesh.h
   dtkAbstractDataReader.h
   dtkAbstractDataWriter.h
+  dtkAbstractDataConverter.h
   dtkAbstractFactory.h
   dtkAbstractObject.h
   dtkPlugin.h
@@ -59,6 +60,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractDataMesh.h
   dtkAbstractDataReader.h
   dtkAbstractDataWriter.h
+  dtkAbstractDataConverter.h
   dtkAbstractFactory.h
   dtkAbstractObject.h
   dtkPlugin.h
@@ -77,6 +79,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkAbstractData.cpp
   dtkAbstractDataReader.cpp
   dtkAbstractDataWriter.cpp
+  dtkAbstractDataConverter.cpp
   dtkAbstractDataImage.cpp
   dtkAbstractDataImage2D.cpp
   dtkAbstractDataImage3D.cpp

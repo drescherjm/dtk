@@ -35,8 +35,8 @@ public:
 
     virtual QString description(void) const { return ""; }
 
-    friend QDebug operator<<(QDebug debug, const dtkAbstractProcess& process);
-    friend QDebug operator<<(QDebug debug,       dtkAbstractProcess *process);
+    friend DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractProcess& process);
+    friend DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractProcess *process);
 
 signals:
     void started(QString message);
@@ -89,7 +89,7 @@ public slots:
     virtual void *data (int channel, int frame);
 };
 
-QDebug operator<<(QDebug debug, const dtkAbstractProcess& process);
-QDebug operator<<(QDebug debug,       dtkAbstractProcess *process);
+DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractProcess& process);
+DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractProcess *process);
 
 #endif

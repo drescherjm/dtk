@@ -43,8 +43,8 @@ public:
 
     virtual QString description(void) const { return ""; }
 
-    friend QDebug operator<<(QDebug debug, const dtkAbstractView& viewer);
-    friend QDebug operator<<(QDebug debug,       dtkAbstractView *viewer);
+    friend DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractView& viewer);
+    friend DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractView *viewer);
 
 signals:
     void closed(void);
@@ -146,7 +146,7 @@ private:
     dtkAbstractViewPrivate *d;
 };
 
-QDebug operator<<(QDebug debug, const dtkAbstractView& viewer);
-QDebug operator<<(QDebug debug,       dtkAbstractView *viewer);
+DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractView& viewer);
+DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractView *viewer);
 
 #endif

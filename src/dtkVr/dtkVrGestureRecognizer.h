@@ -20,12 +20,14 @@
 #ifndef DTKVRGESTURERECOGNIZER_H
 #define DTKVRGESTURERECOGNIZER_H
 
+#include "dtkVrExport.h"
+
 #include <QtCore>
 
 class dtkAbstractView;
 class dtkVrGestureRecognizerPrivate;
 
-class dtkVrGestureRecognizer : public QObject
+class DTKVR_EXPORT dtkVrGestureRecognizer : public QObject
 {
     Q_OBJECT
 

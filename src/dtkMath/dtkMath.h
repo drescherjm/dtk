@@ -24,6 +24,9 @@
 #include "dtkQuaternion.h"
 #include "dtkVector3D.h"
 
+#include "dtkMathExport.h"
+
+DTKMATH_EXPORT
 void dtkBubbleSort(unsigned int indices[], int size) ;
 
 //! dtkMixedProduct(const dtkVector3D &v0, const dtkVector3D &v1, const dtkVector3D &v2)

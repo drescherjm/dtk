@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 21 19:12:40 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Nov  4 16:56:12 2010 (+0100)
+ * Last-Updated: Fri Nov  5 17:44:47 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 564
+ *     Update #: 662
  */
 
 /* Commentary: 
@@ -94,6 +94,9 @@ void dtkVrGestureRecognizerPrivate::handle_analog(const vrpn_ANALOGCB callback)
 
 void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback)
 {
+    if(!this->acknowledge)
+        return;
+
     if(callback.sensor == 100) {
         this->right_hand_position[0] = callback.pos[0];
         this->right_hand_position[1] = callback.pos[1];
@@ -175,14 +178,23 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
 
             if(this->left_major_interaction && this->right_major_interaction) {
 
-                emit postCustomEvent(Qt::GestureStarted);
-
                 state = Pinch;
-            } else {
                 
-                emit postPanEvent(Qt::GestureStarted);
+                // this->mutex.lock();
+                // this->acknowledge = false;
+                // this->mutex.unlock();                
+
+                emit postPinchEvent(Qt::GestureStarted);
+
+            } else {
 
                 state = Pan;
+                
+                // this->mutex.lock();
+                // this->acknowledge = false;
+                // this->mutex.unlock();
+
+                emit postPanEvent(Qt::GestureStarted);
             }
         }
 
@@ -190,12 +202,19 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
 
             if(this->left_major_interaction && this->right_major_interaction) {
 
+                state = End;
+
+                this->mutex.lock();
+                this->acknowledge = false;
+                this->mutex.unlock();
+
                 emit postPanEvent(Qt::GestureFinished);
 
-                state = End;
-            }
+            } else {
 
-            else {
+                // this->mutex.lock();
+                // this->acknowledge = false;
+                // this->mutex.unlock();
 
                 emit postPanEvent(Qt::GestureUpdated);
 
@@ -206,14 +225,21 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
 
             if(this->left_major_interaction && this->right_major_interaction) {
 
-                emit postCustomEvent(Qt::GestureUpdated);
+                // this->mutex.lock();
+                // this->acknowledge = false;
+                // this->mutex.unlock();
+
+                emit postPinchEvent(Qt::GestureUpdated);
 
             } else {
 
-                emit postCustomEvent(Qt::GestureFinished);
-
                 state = End;
 
+                this->mutex.lock();
+                this->acknowledge = false;
+                this->mutex.unlock();
+
+                emit postPinchEvent(Qt::GestureFinished);
             }
         }
 
@@ -222,20 +248,24 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
         if(state == Pinch) {
             
             state = End;
-            
-            emit postCustomEvent(Qt::GestureFinished);
-            
+
+            this->mutex.lock();
+            this->acknowledge = false;
+            this->mutex.unlock();
+
+            emit postPinchEvent(Qt::GestureFinished);
         }
         
         if(state == Pan) {
             
             state = End;
-            
+
+            this->mutex.lock();
+            this->acknowledge = false;
+            this->mutex.unlock();
+
             emit postPanEvent(Qt::GestureFinished);
-            
         }
-        
-        // emit postClearEvent(Qt::GestureFinished);
     }
 }
 
@@ -251,6 +281,7 @@ dtkVrGestureRecognizer::dtkVrGestureRecognizer(void) : QObject(), d(new dtkVrGes
     d->receiver = NULL;
     d->q = this;
     d->running = false;
+    d->acknowledge = true;
     d->state = dtkVrGestureRecognizerPrivate::End;
 
     connect(d, SIGNAL(postPanEvent(Qt::GestureState)), this, SLOT(postPanEvent(Qt::GestureState)));
@@ -295,6 +326,12 @@ void dtkVrGestureRecognizer::postPanEvent(Qt::GestureState state)
     if(!d->receiver)
         return;
 
+    if(state == Qt::GestureFinished) {
+        d->mutex.lock();
+        d->acknowledge = true;
+        d->mutex.unlock();
+    }
+
     static dtkVector3D<double> lastPosition;
 
     dtkVector3D<double> position;
@@ -313,9 +350,11 @@ void dtkVrGestureRecognizer::postPanEvent(Qt::GestureState state)
             d->right_index_position[0],
             d->right_index_position[2],
           - d->right_index_position[1]);
-    }
 
-    else return;
+    } else {
+
+        position = lastPosition;
+    }
 
     position[2] = 0;
 
@@ -391,6 +430,10 @@ void dtkVrGestureRecognizer::postPanEvent(Qt::GestureState state)
     if  (  state == Qt::GestureStarted
        ||  state == Qt::GestureFinished
        || (state == Qt::GestureUpdated && (offset.norm() > 0.005))) {
+
+        if(state == Qt::GestureFinished)
+            qDebug() << "POSTING PAN FINISHED";
+
         QGestureEvent *event = new QGestureEvent(QList<QGesture *>() << gesture);        
         QCoreApplication::postEvent(d->receiver, event);   
     }
@@ -402,6 +445,12 @@ void dtkVrGestureRecognizer::postSwipeEvent(Qt::GestureState state)
 {
     if(!d->receiver)
         return;
+
+    if(state == Qt::GestureFinished) {
+        d->mutex.lock();
+        d->acknowledge = true;
+        d->mutex.unlock();
+    }
 
     QSwipeGesture *gesture = new QSwipeGesture(this);
     QGestureEvent *event = new QGestureEvent(QList<QGesture *>() << gesture);
@@ -415,6 +464,12 @@ void dtkVrGestureRecognizer::postPinchEvent(Qt::GestureState state)
 {
     if(!d->receiver)
         return;
+
+    if(state == Qt::GestureFinished) {
+        d->mutex.lock();
+        d->acknowledge = true;
+        d->mutex.unlock();
+    }
 
     dtkVector3D<double> s = dtkVector3D<double>(
         d->right_index_start_position[0] - d->left_index_start_position[0],
@@ -489,6 +544,12 @@ void dtkVrGestureRecognizer::postCustomEvent(Qt::GestureState state)
 {
     if(!d->receiver)
         return;
+
+    if(state == Qt::GestureFinished) {
+        d->mutex.lock();
+        d->acknowledge = true;
+        d->mutex.unlock();
+    }
 
     dtkVector3D<double> nis = dtkVector3D<double>(
         d->left_thumb_start_position[0] - d->left_index_start_position[0],

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 21 19:12:40 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Nov  5 17:44:47 2010 (+0100)
+ * Last-Updated: Sun Nov  7 17:33:58 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 662
+ *     Update #: 690
  */
 
 /* Commentary: 
@@ -180,20 +180,12 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
 
                 state = Pinch;
                 
-                // this->mutex.lock();
-                // this->acknowledge = false;
-                // this->mutex.unlock();                
-
                 emit postPinchEvent(Qt::GestureStarted);
 
             } else {
 
                 state = Pan;
                 
-                // this->mutex.lock();
-                // this->acknowledge = false;
-                // this->mutex.unlock();
-
                 emit postPanEvent(Qt::GestureStarted);
             }
         }
@@ -212,10 +204,6 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
 
             } else {
 
-                // this->mutex.lock();
-                // this->acknowledge = false;
-                // this->mutex.unlock();
-
                 emit postPanEvent(Qt::GestureUpdated);
 
             }
@@ -224,10 +212,6 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
         if (state == Pinch) {
 
             if(this->left_major_interaction && this->right_major_interaction) {
-
-                // this->mutex.lock();
-                // this->acknowledge = false;
-                // this->mutex.unlock();
 
                 emit postPinchEvent(Qt::GestureUpdated);
 
@@ -406,8 +390,17 @@ void dtkVrGestureRecognizer::postPanEvent(Qt::GestureState state)
     dtkVector3D<double> d_art = offset;
 
     dtkVector3D<double> o_xtk = cam_to_xtk*offset;
-    o_xtk *= dg;
-    o_xtk *= -1;
+
+    if(d->view->cameraProjectionMode() == "Parallel") {
+        
+        o_xtk *= dg/d->view->cameraZoom();
+        o_xtk *= -1;
+
+    } else {
+
+        o_xtk *= (d->view->cameraViewAngle()/180.0*3.14159)*k.norm();
+        o_xtk *= -1;
+    }
 
     QPanGesture *gesture = new QPanGesture(this);
     if(state == Qt::GestureStarted)
@@ -429,10 +422,7 @@ void dtkVrGestureRecognizer::postPanEvent(Qt::GestureState state)
 
     if  (  state == Qt::GestureStarted
        ||  state == Qt::GestureFinished
-       || (state == Qt::GestureUpdated && (offset.norm() > 0.005))) {
-
-        if(state == Qt::GestureFinished)
-            qDebug() << "POSTING PAN FINISHED";
+       || (state == Qt::GestureUpdated && (offset.norm() > 0.003))) {
 
         QGestureEvent *event = new QGestureEvent(QList<QGesture *>() << gesture);        
         QCoreApplication::postEvent(d->receiver, event);   

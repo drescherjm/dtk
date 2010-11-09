@@ -26,6 +26,36 @@
 #include "dtkGuiExport.h"
 
 // /////////////////////////////////////////////////////////////////
+// dtkFinderToolBar
+// /////////////////////////////////////////////////////////////////
+
+class dtkFinderToolBarPrivate;
+
+class DTKGUI_EXPORT dtkFinderToolBar : public QToolBar
+{
+    Q_OBJECT
+
+public:
+     dtkFinderToolBar(QWidget *parent = 0);
+    ~dtkFinderToolBar(void);
+
+signals:
+    void changed(const QString& path);
+    void listView (void);
+    void treeView (void);
+
+public slots:
+    void setPath(const QString& path);
+    void onPrev (void);
+    void onNext (void);
+
+protected:
+
+private:
+    dtkFinderToolBarPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
 // dtkFinderSideView
 // /////////////////////////////////////////////////////////////////
 

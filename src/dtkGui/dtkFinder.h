@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Jun 12 15:45:12 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 15 20:19:29 2010 (+0200)
+ * Last-Updated: Wed Nov 10 09:57:22 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 21
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -87,7 +87,7 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event);
     void dropEvent(QDropEvent *event);
 
-	QString driveLabel(QString drive);
+    QString driveLabel(QString drive);
 
 private:
     dtkFinderSideViewPrivate *d;

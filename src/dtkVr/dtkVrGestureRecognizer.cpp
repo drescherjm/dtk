@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 21 19:12:40 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Oct 29 17:30:06 2010 (+0200)
+ * Last-Updated: Sun Nov  7 17:33:58 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 490
+ *     Update #: 690
  */
 
 /* Commentary: 
@@ -94,10 +94,19 @@ void dtkVrGestureRecognizerPrivate::handle_analog(const vrpn_ANALOGCB callback)
 
 void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback)
 {
+    if(!this->acknowledge)
+        return;
+
     if(callback.sensor == 100) {
         this->right_hand_position[0] = callback.pos[0];
         this->right_hand_position[1] = callback.pos[1];
         this->right_hand_position[2] = callback.pos[2];
+    }
+
+    if(callback.sensor == 1000) {
+        this->right_thumb_position[0] = this->right_hand_position[0] + callback.pos[0];
+        this->right_thumb_position[1] = this->right_hand_position[1] + callback.pos[1];
+        this->right_thumb_position[2] = this->right_hand_position[2] + callback.pos[2];
     }
 
     if(callback.sensor == 1001) {
@@ -118,6 +127,12 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
         this->left_hand_position[2] = callback.pos[2];
     }
 
+    if(callback.sensor == 1010) {
+        this->left_thumb_position[0] = this->left_hand_position[0] + callback.pos[0];
+        this->left_thumb_position[1] = this->left_hand_position[1] + callback.pos[1];
+        this->left_thumb_position[2] = this->left_hand_position[2] + callback.pos[2];
+    }
+
     if(callback.sensor == 1011) {
         this->left_index_position[0] = this->left_hand_position[0] + callback.pos[0];
         this->left_index_position[1] = this->left_hand_position[1] + callback.pos[1];
@@ -131,14 +146,23 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
     }
 
     if(callback.sensor == 1002)
-        this->right_interaction = (callback.pos[0] <= 0);
+        this->right_major_interaction = (callback.pos[0] <= 0);
 
     if(callback.sensor == 1012)
-        this->left_interaction = (callback.pos[0] <= 0);
+        this->left_major_interaction = (callback.pos[0] <= 0);
 
-    if(this->left_interaction || this->right_interaction) {
+    if(this->left_major_interaction || this->right_major_interaction) {
 
         if (state == End) {
+
+            this->left_thumb_start_position[0] = this->left_thumb_position[0];
+            this->left_thumb_start_position[1] = this->left_thumb_position[1];
+            this->left_thumb_start_position[2] = this->left_thumb_position[2];
+
+            this->right_thumb_start_position[0] = this->right_thumb_position[0];
+            this->right_thumb_start_position[1] = this->right_thumb_position[1];
+            this->right_thumb_start_position[2] = this->right_thumb_position[2];
+
             this->left_index_start_position[0] = this->left_index_position[0];
             this->left_index_start_position[1] = this->left_index_position[1];
             this->left_index_start_position[2] = this->left_index_position[2];
@@ -152,29 +176,33 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
 
         if (state == Begin) {
 
-            if(this->left_interaction && this->right_interaction) {
-
-                emit postCustomEvent(Qt::GestureStarted);
+            if(this->left_major_interaction && this->right_major_interaction) {
 
                 state = Pinch;
-            } else {
                 
-                emit postPanEvent(Qt::GestureStarted);
+                emit postPinchEvent(Qt::GestureStarted);
+
+            } else {
 
                 state = Pan;
+                
+                emit postPanEvent(Qt::GestureStarted);
             }
         }
 
         if (state == Pan) {
 
-            if(this->left_interaction && this->right_interaction) {
+            if(this->left_major_interaction && this->right_major_interaction) {
+
+                state = End;
+
+                this->mutex.lock();
+                this->acknowledge = false;
+                this->mutex.unlock();
 
                 emit postPanEvent(Qt::GestureFinished);
 
-                state = End;
-            }
-
-            else {
+            } else {
 
                 emit postPanEvent(Qt::GestureUpdated);
 
@@ -183,16 +211,19 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
 
         if (state == Pinch) {
 
-            if(this->left_interaction && this->right_interaction) {
+            if(this->left_major_interaction && this->right_major_interaction) {
 
-                emit postCustomEvent(Qt::GestureUpdated);
+                emit postPinchEvent(Qt::GestureUpdated);
 
             } else {
 
-                emit postCustomEvent(Qt::GestureFinished);
-
                 state = End;
 
+                this->mutex.lock();
+                this->acknowledge = false;
+                this->mutex.unlock();
+
+                emit postPinchEvent(Qt::GestureFinished);
             }
         }
 
@@ -201,20 +232,24 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
         if(state == Pinch) {
             
             state = End;
-            
-            emit postCustomEvent(Qt::GestureFinished);
-            
+
+            this->mutex.lock();
+            this->acknowledge = false;
+            this->mutex.unlock();
+
+            emit postPinchEvent(Qt::GestureFinished);
         }
         
         if(state == Pan) {
             
             state = End;
-            
+
+            this->mutex.lock();
+            this->acknowledge = false;
+            this->mutex.unlock();
+
             emit postPanEvent(Qt::GestureFinished);
-            
         }
-        
-        // emit postClearEvent(Qt::GestureFinished);
     }
 }
 
@@ -230,6 +265,7 @@ dtkVrGestureRecognizer::dtkVrGestureRecognizer(void) : QObject(), d(new dtkVrGes
     d->receiver = NULL;
     d->q = this;
     d->running = false;
+    d->acknowledge = true;
     d->state = dtkVrGestureRecognizerPrivate::End;
 
     connect(d, SIGNAL(postPanEvent(Qt::GestureState)), this, SLOT(postPanEvent(Qt::GestureState)));
@@ -274,11 +310,17 @@ void dtkVrGestureRecognizer::postPanEvent(Qt::GestureState state)
     if(!d->receiver)
         return;
 
+    if(state == Qt::GestureFinished) {
+        d->mutex.lock();
+        d->acknowledge = true;
+        d->mutex.unlock();
+    }
+
     static dtkVector3D<double> lastPosition;
 
     dtkVector3D<double> position;
 
-    if(d->left_interaction && !d->right_interaction) {
+    if(d->left_major_interaction && !d->right_major_interaction) {
         
         position = dtkVector3D<double>(
             d->left_index_position[0],
@@ -287,14 +329,16 @@ void dtkVrGestureRecognizer::postPanEvent(Qt::GestureState state)
 
     }
         
-    else if(!d->left_interaction && d->right_interaction) {
+    else if(!d->left_major_interaction && d->right_major_interaction) {
         position = dtkVector3D<double>(
             d->right_index_position[0],
             d->right_index_position[2],
           - d->right_index_position[1]);
-    }
 
-    else return;
+    } else {
+
+        position = lastPosition;
+    }
 
     position[2] = 0;
 
@@ -346,8 +390,17 @@ void dtkVrGestureRecognizer::postPanEvent(Qt::GestureState state)
     dtkVector3D<double> d_art = offset;
 
     dtkVector3D<double> o_xtk = cam_to_xtk*offset;
-    o_xtk *= dg;
-    o_xtk *= -1;
+
+    if(d->view->cameraProjectionMode() == "Parallel") {
+        
+        o_xtk *= dg/d->view->cameraZoom();
+        o_xtk *= -1;
+
+    } else {
+
+        o_xtk *= (d->view->cameraViewAngle()/180.0*3.14159)*k.norm();
+        o_xtk *= -1;
+    }
 
     QPanGesture *gesture = new QPanGesture(this);
     if(state == Qt::GestureStarted)
@@ -369,7 +422,8 @@ void dtkVrGestureRecognizer::postPanEvent(Qt::GestureState state)
 
     if  (  state == Qt::GestureStarted
        ||  state == Qt::GestureFinished
-       || (state == Qt::GestureUpdated && (offset.norm() > 0.005))) {
+       || (state == Qt::GestureUpdated && (offset.norm() > 0.003))) {
+
         QGestureEvent *event = new QGestureEvent(QList<QGesture *>() << gesture);        
         QCoreApplication::postEvent(d->receiver, event);   
     }
@@ -381,6 +435,12 @@ void dtkVrGestureRecognizer::postSwipeEvent(Qt::GestureState state)
 {
     if(!d->receiver)
         return;
+
+    if(state == Qt::GestureFinished) {
+        d->mutex.lock();
+        d->acknowledge = true;
+        d->mutex.unlock();
+    }
 
     QSwipeGesture *gesture = new QSwipeGesture(this);
     QGestureEvent *event = new QGestureEvent(QList<QGesture *>() << gesture);
@@ -394,6 +454,12 @@ void dtkVrGestureRecognizer::postPinchEvent(Qt::GestureState state)
 {
     if(!d->receiver)
         return;
+
+    if(state == Qt::GestureFinished) {
+        d->mutex.lock();
+        d->acknowledge = true;
+        d->mutex.unlock();
+    }
 
     dtkVector3D<double> s = dtkVector3D<double>(
         d->right_index_start_position[0] - d->left_index_start_position[0],
@@ -469,56 +535,128 @@ void dtkVrGestureRecognizer::postCustomEvent(Qt::GestureState state)
     if(!d->receiver)
         return;
 
-    dtkVector3D<double> s = dtkVector3D<double>(
+    if(state == Qt::GestureFinished) {
+        d->mutex.lock();
+        d->acknowledge = true;
+        d->mutex.unlock();
+    }
+
+    dtkVector3D<double> nis = dtkVector3D<double>(
+        d->left_thumb_start_position[0] - d->left_index_start_position[0],
+        d->left_thumb_start_position[2] - d->left_index_start_position[2],
+      - d->left_thumb_start_position[1] + d->left_index_start_position[1]);
+
+    dtkVector3D<double> njs = dtkVector3D<double>(
         d->right_index_start_position[0] - d->left_index_start_position[0],
         d->right_index_start_position[2] - d->left_index_start_position[2],
       - d->right_index_start_position[1] + d->left_index_start_position[1]);
 
-    dtkVector3D<double> u = dtkVector3D<double>(
+    dtkVector3D<double> nks = nis%njs;
+
+    dtkVector3D<double> niu = dtkVector3D<double>(
+        d->left_thumb_position[0] - d->left_index_position[0],
+        d->left_thumb_position[2] - d->left_index_position[2],
+      - d->left_thumb_position[1] + d->left_index_position[1]);
+
+    dtkVector3D<double> nju = dtkVector3D<double>(
         d->right_index_position[0] - d->left_index_position[0],
         d->right_index_position[2] - d->left_index_position[2],
       - d->right_index_position[1] + d->left_index_position[1]);
 
-    dtkVector3D<double> i = dtkVector3D<double>(1.0, 0.0, 0.0);
-    dtkVector3D<double> j = dtkVector3D<double>(0.0, 1.0, 0.0);
-    dtkVector3D<double> k = dtkVector3D<double>(0.0, 0.0, 1.0);
-    dtkVector3D<dtkVector3D<double> > from = dtkVector3D<dtkVector3D<double> >(i, j, k);
+    dtkVector3D<double> nku = niu%nju;
 
-    dtkVector3D<double> l = dtkVector3D<double>(s[0], 0.0, s[2]).unit();
-    dtkVector3D<double> m = dtkVector3D<double>(0.0, 1.0, 0.0).unit();
-    dtkVector3D<double> n = (l%m).unit();
-    dtkVector3D<dtkVector3D<double> > to = dtkVector3D<dtkVector3D<double> >(l, m, n);
+    // double camera_up[3];
+    // double camera_position[3];
+    // double camera_focalpnt[3];
 
-    dtkMatrixSquared<double> t = dtkChangeOfBasis(from, to);
+    // d->view->cameraUp(camera_up);
+    // d->view->cameraPosition(camera_position);
+    // d->view->cameraFocalPoint(camera_focalpnt);
 
-    dtkVector3D<double> ns = t*s;
-    dtkVector3D<double> nu = t*u;
+    // dtkVector3D<double> u_xtk = dtkVector3D<double>(camera_up[0], camera_up[1], camera_up[2]);
+    // dtkVector3D<double> p_xtk = dtkVector3D<double>(camera_position[0], camera_position[1], camera_position[2]);
+    // dtkVector3D<double> f_xtk = dtkVector3D<double>(camera_focalpnt[0], camera_focalpnt[1], camera_focalpnt[2]);
 
-    dtkVector3D<double> ys = ns; ys[1] = 0;
-    dtkVector3D<double> yu = nu; yu[1] = 0;
+    // dtkVector3D<double> l = dtkVector3D<double>(1.0, 0.0, 0.0);
+    // dtkVector3D<double> m = dtkVector3D<double>(0.0, 1.0, 0.0);
+    // dtkVector3D<double> n = dtkVector3D<double>(0.0, 0.0, 1.0);
+    // dtkVector3D<dtkVector3D<double> > xtk_in_xtk = dtkVector3D<dtkVector3D<double> >(l, m, n);
+    
+    // dtkVector3D<double> j = u_xtk;
+    // dtkVector3D<double> k = p_xtk-f_xtk;
+    // dtkVector3D<double> i = j%k;
+    // dtkVector3D<dtkVector3D<double> > cam_in_xtk = dtkVector3D<dtkVector3D<double> >(i.unit(), j.unit(), k.unit());
+    
+    // dtkMatrixSquared<double> t = dtkChangeOfBasis(cam_in_xtk, xtk_in_xtk);
 
-    dtkVector3D<double> ps = ns; ps[0] = 0;
-    dtkVector3D<double> pu = nu; pu[0] = 0;
+    // dtkVector3D<double> nnjs = t*njs;
+    // dtkVector3D<double> nnju = t*nju;
+    // dtkVector3D<double> nnks = t*nks;
+    // dtkVector3D<double> nnku = t*nku;
 
-    dtkVector3D<double> rs = ns; rs[2] = 0;
-    dtkVector3D<double> ru = nu; ru[2] = 0;
+    // dtkVector3D<double> nnjs_mn = nnjs; nnjs_mn[0] = 0; 
+    // dtkVector3D<double> nnjs_nl = nnjs; nnjs_nl[1] = 0; 
+    // dtkVector3D<double> nnjs_lm = nnjs; nnjs_lm[2] = 0; 
+
+    // dtkVector3D<double> nnju_mn = nnju; nnju_mn[0] = 0; 
+    // dtkVector3D<double> nnju_nl = nnju; nnju_nl[1] = 0; 
+    // dtkVector3D<double> nnju_lm = nnju; nnju_lm[2] = 0; 
+
+    // dtkVector3D<double> nnks_mn = nnks; nnks_mn[0] = 0; 
+    // dtkVector3D<double> nnks_nl = nnks; nnks_nl[1] = 0; 
+    // dtkVector3D<double> nnks_lm = nnks; nnks_lm[2] = 0; 
+
+    // dtkVector3D<double> nnku_mn = nnku; nnku_mn[0] = 0; 
+    // dtkVector3D<double> nnku_nl = nnku; nnku_nl[1] = 0; 
+    // dtkVector3D<double> nnku_lm = nnku; nnku_lm[2] = 0; 
+
+    // // -- Computing rotation angle --
+
+    // static qreal lastAzAngle;
+    // static qreal lastElAngle;
+    // static qreal lastRoAngle;
+
+    // qreal azAngle = -0.0 * (acos(nnju_lm.unit() * nnjs_lm.unit()) * ((nnjs_lm % nnju_lm).unit() * j.unit())) * 180.0 / 3.141593;
+
+    // qreal elAngle =  0.0 * (acos(nnku_mn.unit() * nnks_mn.unit()) * ((nnks_mn % nnku_mn).unit() * i.unit())) * 180.0 / 3.141593;
+
+    // qreal roAngle =  1.0 * (acos(nnju_nl.unit() * nnjs_nl.unit()) * ((nnjs_nl % nnju_nl).unit() * k.unit())) * 180.0 / 3.141593;
+
+    // if(state == Qt::GestureStarted) {
+    //     lastAzAngle = azAngle;
+    //     lastElAngle = elAngle;
+    //     lastRoAngle = roAngle;
+    // }
 
     // -- Computing rotation angle --
 
-    static qreal lastYawAngle;
-    static qreal lastPitchAngle;
-    static qreal lastRollAngle;
+    dtkVector3D<double> i = dtkVector3D<double>(1.0, 0.0, 0.0);
+    dtkVector3D<double> j = dtkVector3D<double>(0.0, 1.0, 0.0);
+    dtkVector3D<double> k = dtkVector3D<double>(0.0, 0.0, 1.0);
 
-    qreal yawAngle = -1.0 * (acos(nu.unit() * ns.unit()) * ((ns % nu).unit() * m.unit())) * 180.0 / 3.141593;
+    dtkVector3D<double> njs_ki = njs; njs_ki[1] = 0; 
+    dtkVector3D<double> nju_ki = nju; nju_ki[1] = 0; 
 
-    qreal pitchAngle = -1.0 * (acos(nu.unit() * ns.unit()) * ((ns % nu).unit() * l.unit())) * 180.0 / 3.141593;
+    dtkVector3D<double> njs_ij = njs; njs_ij[2] = 0; 
+    dtkVector3D<double> nju_ij = nju; nju_ij[2] = 0; 
 
-    qreal rollAngle = -1.0 * (acos(nu.unit() * ns.unit()) * ((ns % nu).unit() * n.unit())) * 180.0 / 3.141593;
+    dtkVector3D<double> nks_jk = nks; nks_jk[0] = 0; 
+    dtkVector3D<double> nku_jk = nku; nku_jk[0] = 0; 
+
+    static qreal lastAzAngle;
+    static qreal lastElAngle;
+    static qreal lastRoAngle;
+
+    qreal azAngle = -1.0 * (acos(nju_ki.unit() * njs_ki.unit()) * ((njs_ki % nju_ki).unit() * j.unit())) * 180.0 / 3.141593;
+
+    qreal elAngle =  0.0 * (acos(nku_jk.unit() * nks_jk.unit()) * ((nks_jk % nku_jk).unit() * i.unit())) * 180.0 / 3.141593;
+
+    qreal roAngle =  1.0 * (acos(nju_ij.unit() * njs_ij.unit()) * ((njs_ij % nju_ij).unit() * k.unit())) * 180.0 / 3.141593;
 
     if(state == Qt::GestureStarted) {
-        lastYawAngle = yawAngle;
-        lastPitchAngle = pitchAngle;
-        lastRollAngle = rollAngle;
+        lastAzAngle = azAngle;
+        lastElAngle = elAngle;
+        lastRoAngle = roAngle;
     }
 
     // -- Post event --
@@ -531,15 +669,15 @@ void dtkVrGestureRecognizer::postCustomEvent(Qt::GestureState state)
     if(state == Qt::GestureFinished)
         gesture->setProperty("State", "Finished");
     gesture->setProperty("Type", "Custom");
-    gesture->setProperty("CustomGestureAngleYaw", (yawAngle - lastYawAngle));
-    gesture->setProperty("CustomGestureAnglePitch", (pitchAngle - lastPitchAngle));
-    gesture->setProperty("CustomGestureAngleRoll", -1*(rollAngle - lastRollAngle));
+    gesture->setProperty("CustomGestureAngleAz", (azAngle - lastAzAngle));
+    gesture->setProperty("CustomGestureAngleEl", (elAngle - lastElAngle));
+    gesture->setProperty("CustomGestureAngleRo", (roAngle - lastRoAngle));
 
     if  (  state == Qt::GestureStarted
        ||  state == Qt::GestureFinished
-       || (state == Qt::GestureUpdated && qAbs((yawAngle - lastYawAngle)/lastYawAngle) > 0.01)
-       || (state == Qt::GestureUpdated && qAbs((pitchAngle - lastPitchAngle)/lastPitchAngle) > 0.01)
-       || (state == Qt::GestureUpdated && qAbs((rollAngle - lastRollAngle)/lastRollAngle) > 0.01)) {
+       || (state == Qt::GestureUpdated && qAbs((azAngle - lastAzAngle)/lastAzAngle) > 0.01)
+       || (state == Qt::GestureUpdated && qAbs((elAngle - lastElAngle)/lastElAngle) > 0.01)
+       || (state == Qt::GestureUpdated && qAbs((roAngle - lastRoAngle)/lastRoAngle) > 0.01)) {
 
         qDebug() << "posting sutom gesture";
 
@@ -547,9 +685,9 @@ void dtkVrGestureRecognizer::postCustomEvent(Qt::GestureState state)
         QCoreApplication::postEvent(d->receiver, event);
     }
 
-    lastYawAngle = yawAngle;
-    lastPitchAngle = pitchAngle;
-    lastRollAngle = rollAngle;
+    lastAzAngle = azAngle;
+    lastElAngle = elAngle;
+    lastRoAngle = roAngle;
 }
 
 void dtkVrGestureRecognizer::postClearEvent(Qt::GestureState state)

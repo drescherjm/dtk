@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Oct 26 15:26:51 2010 (+0200)
+ * Last-Updated: Sun Nov  7 16:41:51 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 273
+ *     Update #: 280
  */
 
 /* Commentary:
@@ -143,6 +143,10 @@ public slots:
     virtual void        setupCameraFrustum(double left, double right, double bottom, double top, double near, double far);
     virtual void  setupLeftEyeCameraFrustum(double left, double right, double bottom, double top, double near, double far);
     virtual void setupRightEyeCameraFrustum(double left, double right, double bottom, double top, double near, double far);
+
+    virtual QString cameraProjectionMode(void);
+    virtual double cameraViewAngle(void);
+    virtual double cameraZoom(void);
 
 private:
     dtkAbstractViewPrivate *d;

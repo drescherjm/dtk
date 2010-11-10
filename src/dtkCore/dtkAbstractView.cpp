@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Oct 26 15:26:31 2010 (+0200)
+ * Last-Updated: Sun Nov  7 16:42:20 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 265
+ *     Update #: 271
  */
 
 /* Commentary:
@@ -470,6 +470,27 @@ void dtkAbstractView::setupRightEyeCameraFrustum(double left, double right, doub
     DTK_UNUSED(top);
     DTK_UNUSED(near);
     DTK_UNUSED(far);
+}
+
+QString dtkAbstractView::cameraProjectionMode(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return "None";
+}
+
+double dtkAbstractView::cameraViewAngle(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return 0.0;
+}
+
+double dtkAbstractView::cameraZoom(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return 1.0;
 }
 
 // /////////////////////////////////////////////////////////////////

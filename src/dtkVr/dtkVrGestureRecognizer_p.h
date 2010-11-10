@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 21 19:12:59 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Oct 29 16:39:42 2010 (+0200)
+ * Last-Updated: Fri Nov  5 17:31:39 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 13
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -55,6 +55,7 @@ public:
 
 public:
     bool running;
+    bool acknowledge;
 
 #if defined(HAVE_VRPN)
     vrpn_Button_Remote *button;
@@ -64,16 +65,22 @@ public:
 
     QUrl url;
 
+    QMutex mutex;
+
 public:
-    bool left_interaction;
-    bool right_interaction;
+    bool left_major_interaction;
+    bool right_major_interaction;
 
     float left_hand_position[3];
+    float left_thumb_position[3];
+    float left_thumb_start_position[3];
     float left_index_position[3];
     float left_index_start_position[3];
     float left_major_position[3];
 
     float right_hand_position[3];
+    float right_thumb_position[3];
+    float right_thumb_start_position[3];
     float right_index_position[3];
     float right_index_start_position[3];
     float right_major_position[3];

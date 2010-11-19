@@ -26,4 +26,9 @@ set(dtk_INCLUDE_DIRS "@dtk_INCLUDE_DIRS@")
 set(dtk_LIBRARY_DIRS "@dtk_LIBRARY_DIRS@")
 set(dtk_CMAKE_DIRS   "@dtk_CMAKE_DIRS@")
 
+set(dtk_CMAKE_DIRS   "@dtk_CMAKE_DIRS@")
+
 set(dtk_USE_FILE "@dtk_USE_FILE@")
+
+set(QT_QMAKE_EXECUTABLE "@QT_QMAKE_EXECUTABLE@")
+set(QT_USE_FILE         "@QT_USE_FILE@")

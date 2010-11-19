@@ -21,6 +21,8 @@ cmake_minimum_required(VERSION 2.8.0)
 
 project(dtk)
 
+set(FIND_NAME Dtk)
+
 set(${PROJECT_NAME}_VERSION_MAJOR 0 CACHE STRING "dtk major version number.")
 set(${PROJECT_NAME}_VERSION_MINOR 1 CACHE STRING "dtk minor version number.")
 set(${PROJECT_NAME}_VERSION_BUILD 23 CACHE STRING "dtk build version number.")

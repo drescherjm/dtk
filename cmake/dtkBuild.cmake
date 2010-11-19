@@ -91,12 +91,12 @@ set(${PROJECT_NAME}_INSTALL_USE_FILE ${CMAKE_INSTALL_PREFIX}/cmake/${PROJECT_NAM
 ## Setup configration files
 ## #################################################################
 
-if(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in)
+if(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${FIND_NAME}Config.cmake.in)
 configure_file( ## Build tree configure file
-  ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in
-  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+  ${CMAKE_SOURCE_DIR}/cmake/${FIND_NAME}Config.cmake.in
+  ${${PROJECT_NAME}_BINARY_DIR}/${FIND_NAME}Config.cmake
   @ONLY IMMEDIATE)
-endif(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in)
+endif(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${FIND_NAME}Config.cmake.in)
 
 if(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.install.cmake.in)
 configure_file( ## Install tree configure file
@@ -109,14 +109,12 @@ endif(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.install.cmake.in)
 ## Setup find file
 ## #################################################################
 
-string(TOUPPER ${PROJECT_NAME} FND_NAME)
-
-if(EXISTS ${CMAKE_SOURCE_DIR}/cmake/Find${FND_NAME}.cmake.in)
+if(EXISTS ${CMAKE_SOURCE_DIR}/cmake/Find${FIND_NAME}.cmake.in)
 configure_file( ## Build tree configure file
-  ${CMAKE_SOURCE_DIR}/cmake/Find${FND_NAME}.cmake.in
-  ${${PROJECT_NAME}_BINARY_DIR}/CMakeModules/Find${FND_NAME}.cmake
+  ${CMAKE_SOURCE_DIR}/cmake/Find${FIND_NAME}.cmake.in
+  ${${PROJECT_NAME}_BINARY_DIR}/CMakeModules/Find${FIND_NAME}.cmake
   @ONLY IMMEDIATE)
-endif(EXISTS ${CMAKE_SOURCE_DIR}/cmake/Find${FND_NAME}.cmake.in)
+endif(EXISTS ${CMAKE_SOURCE_DIR}/cmake/Find${FIND_NAME}.cmake.in)
 
 ## #################################################################
 ## Setup use file

@@ -23,10 +23,10 @@ set(dtk_CMAKE_DIRS   "@dtk_CMAKE_DIRS@")
 
 set(dtk_USE_FILE "@dtk_USE_FILE@")
 
-set(DTK_LIBRARIES dtkCore)
-
 set(QT_QMAKE_EXECUTABLE "@QT_QMAKE_EXECUTABLE@")
 
 include(${dtk_USE_FILE})
+
+set(DTK_LIBRARIES dtkCore ${QT_LIBRARIES})
 
 set(DTK_FOUND 1)

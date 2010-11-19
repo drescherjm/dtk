@@ -16,6 +16,9 @@
 ### Change log:
 ## 
 ######################################################################
+if(NOT DTK_DEPENDDENCIES_INCLUDED)
+
+set(NOT DTK_DEPENDDENCIES_INCLUDED ON)
 
 ## #################################################################
 ## Qt
@@ -32,7 +35,9 @@ if(WIN32)
   set(QT_USE_QTMAIN TRUE)
 endif(WIN32)
 
-find_package(Qt4 4.6.0 REQUIRED)
+if(NOT QT_FOUND)
+  find_package(Qt4 4.6.0 REQUIRED)
+endif(NOT QT_FOUND)
 
 if(${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} GREATER 6)
   set(QT_USE_QTDECLARATIVE TRUE)
@@ -213,3 +218,5 @@ endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)
 
 mark_as_advanced(QUAT_LIBRARIES)
 mark_as_advanced(VRPN_LIBRARIES)
+
+endif(NOT DTK_DEPENDDENCIES_INCLUDED)

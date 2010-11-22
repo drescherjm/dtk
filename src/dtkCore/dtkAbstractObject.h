@@ -39,21 +39,21 @@ public:
    int retain(void);
    int release(void);
 
-   bool hasProperty(QString key);
+   bool hasProperty(QString key) const;
    void addProperty(QString key, QStringList values);
    void addProperty(QString key, QString value);
    void setProperty(QString key, QString value);
    const QStringList propertyValues(QString key);
-   QString property(QString key);
+   QString property(QString key) const;
 
-   bool hasMetaData(QString key);
+   bool hasMetaData(QString key) const;
    void addMetaData(QString key, QStringList values);
    void addMetaData(QString key, QString value);
    void setMetaData(QString key, QStringList values);
    void setMetaData(QString key, QString value);
-   const QStringList metaDataValues(QString key);
-   QString metadata(QString key);
-   QStringList metadatas(QString key);
+   const QStringList metaDataValues(QString key) const;
+   QString metadata(QString key) const;
+   QStringList metadatas(QString key) const;
 
 signals:
    void propertySet(QString key, QString value);

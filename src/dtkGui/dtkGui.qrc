@@ -20,6 +20,8 @@
     <file>pixmaps/dtk-interpreter.png</file>
     <file>pixmaps/dtk-widget.png</file>
     <file>pixmaps/dtk-inset.png</file>
+    <file>pixmaps/dtk-view-tree.png</file>
+    <file>pixmaps/dtk-view-list.png</file>
     <file>pixmaps/dtk.png</file>
   </qresource>
 </RCC>

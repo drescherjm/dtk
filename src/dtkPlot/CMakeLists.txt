@@ -2,11 +2,11 @@
 ## 
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
-## Created: Thu Sep  9 11:30:33 2010 (+0200)
+## Created: Mon Nov 22 10:20:27 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Nov 22 11:05:13 2010 (+0100)
+## Last-Updated: Mon Nov 22 11:59:49 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 13
+##     Update #: 24
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,28 +17,28 @@
 ## 
 ######################################################################
 
-project(dtkMath)
+project(dtkPlot)
 
 ## #################################################################
 ## Sources
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkMath.h
-  dtkMathExport.h
-  dtkMatrix.h
-  dtkMatrixSquared.h
-  dtkQuaternion.h
-  dtkVector.h
-  dtkVector3D.h
+  dtkPlotExport.h
+  dtkPlotPoint.h
+  dtkPlotScene.h
+  dtkPlotView.h
 )
 
 set(${PROJECT_NAME}_HEADERS_MOC
-
+  dtkPlotScene.h
+  dtkPlotView.h
 )
 
 set(${PROJECT_NAME}_SOURCES
-  dtkMath.cpp
+  dtkPlotPoint.cpp
+  dtkPlotScene.cpp
+  dtkPlotView.cpp
 )
 
 ## #################################################################
@@ -58,11 +58,11 @@ qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
-  ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES_WRAP})
+  ${${PROJECT_NAME}_SOURCES_MOC})
 
 target_link_libraries(${PROJECT_NAME}
-  ${QT_LBRARIES})
+  ${QT_LIBRARIES}
+  dtkMath)
 
 ## #################################################################
 ## Installation

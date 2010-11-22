@@ -43,7 +43,7 @@ public:
    void addProperty(QString key, QStringList values);
    void addProperty(QString key, QString value);
    void setProperty(QString key, QString value);
-   const QStringList propertyValues(QString key);
+   const QStringList propertyValues(QString key) const;
    QString property(QString key) const;
 
    bool hasMetaData(QString key) const;

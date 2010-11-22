@@ -132,7 +132,7 @@ void dtkAbstractObject::setProperty(QString key, QString value)
     emit propertySet(key, value);
 }
 
-const QStringList dtkAbstractObject::propertyValues(QString key)
+const QStringList dtkAbstractObject::propertyValues(QString key) const
 {
     if(d->values.contains(key))
 	return d->values[key];

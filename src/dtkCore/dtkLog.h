@@ -38,24 +38,24 @@ public:
     dtkLog& operator<<(int value);
     dtkLog& operator<<(float value);
     dtkLog& operator<<(double value);
-    dtkLog& operator<<(QString value);
+    dtkLog& operator<<(const QString& value);
 
     ~dtkLog(void);
 
-    static dtkLog   output(QString source = "default");
-    static dtkLog    error(QString source = "default");
-    static dtkLog    debug(QString source = "default");
-    static dtkLog  warning(QString source = "default");
-    static dtkLog critical(QString source = "default");
-    static dtkLog    fatal(QString source = "default");
+    static dtkLog   output(const QString& source = "default");
+    static dtkLog    error(const QString& source = "default");
+    static dtkLog    debug(const QString& source = "default");
+    static dtkLog  warning(const QString& source = "default");
+    static dtkLog critical(const QString& source = "default");
+    static dtkLog    fatal(const QString& source = "default");
 
-    static void   registerHandler(Handler handler, QString source = "default");
-    static void unregisterHandler(Handler handler, QString source = "default");
+    static void   registerHandler(Handler handler, const QString& source = "default");
+    static void unregisterHandler(Handler handler, const QString& source = "default");
 
     static void disableRedirection(void);
 
 private:
-     dtkLog(QString source, Level level);
+     dtkLog(const QString& source, Level level);
 
 private:
     Level   m_level;
@@ -73,7 +73,7 @@ private:
 class DTKCORE_EXPORT dtkLogEvent : public QEvent
 {
 public:
-    dtkLogEvent(dtkLog::Level level, const QString & msg);
+    dtkLogEvent(dtkLog::Level level, const QString& msg);
     
     dtkLog::Level level(void) const;
 

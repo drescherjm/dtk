@@ -40,7 +40,7 @@ dtkAbstractDataWriter::~dtkAbstractDataWriter(void)
     d = NULL;
 }
 
-bool dtkAbstractDataWriter::enabled(void)
+bool dtkAbstractDataWriter::enabled(void) const
 {
     return d->enabled;
 }
@@ -65,28 +65,28 @@ void dtkAbstractDataWriter::setData(dtkAbstractData *data)
     d->data = data;
 }
 
-bool dtkAbstractDataWriter::canWrite(QString file)
+bool dtkAbstractDataWriter::canWrite(const QString& file)
 {
     DTK_UNUSED(file);
 
     return false;
 }
 
-bool dtkAbstractDataWriter::canWrite(QStringList files)
+bool dtkAbstractDataWriter::canWrite(const QStringList& files)
 {
     DTK_UNUSED(files);
 
     return false;
 }
 
-bool dtkAbstractDataWriter::write(QString file)
+bool dtkAbstractDataWriter::write(const QString& file)
 {
     DTK_UNUSED(file);
 
     return false;
 }
 
-bool dtkAbstractDataWriter::write(QStringList files)
+bool dtkAbstractDataWriter::write(const QStringList& files)
 {
     DTK_UNUSED(files);
 

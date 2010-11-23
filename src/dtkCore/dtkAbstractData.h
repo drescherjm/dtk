@@ -46,13 +46,13 @@ public:
     virtual void draw(void) {}
 
 public slots:
-    virtual bool read(const QString & file);
-    virtual bool read(const QStringList & files);
+    virtual bool read(const QString& file);
+    virtual bool read(const QStringList& files);
 
-    virtual bool write(const QString & file);
-    virtual bool write(const QStringList & files);
+    virtual bool write(const QString& file);
+    virtual bool write(const QStringList& files);
 
-    virtual dtkAbstractData *convert(const QString & toType);
+    virtual dtkAbstractData *convert(const QString& toType);
 
     virtual void *output(void);
 
@@ -67,8 +67,8 @@ public slots:
     virtual void setParameter(float parameter);
     virtual void setParameter(float parameter, int channel);
 
-    virtual void setParameter(const QString & parameter);
-    virtual void setParameter(const QString & parameter, int channel);
+    virtual void setParameter(const QString& parameter);
+    virtual void setParameter(const QString& parameter, int channel);
 
     virtual void setParameter(dtkAbstractData *parameter);
     virtual void setParameter(dtkAbstractData *parameter, int channel);
@@ -82,18 +82,18 @@ public slots:
     void addWriter   (dtkAbstractDataWriter    *writer);
     void addConverter(dtkAbstractDataConverter *converter);
 
-    void  enableReader(const QString & reader);
-    void disableReader(const QString & reader);
+    void  enableReader(const QString& reader);
+    void disableReader(const QString& reader);
 
-    void  enableWriter(const QString & writer);
-    void disableWriter(const QString & writer);
+    void  enableWriter(const QString& writer);
+    void disableWriter(const QString& writer);
 
-    void  enableConverter(const QString & converter);
-    void disableConverter(const QString & converter);
+    void  enableConverter(const QString& converter);
+    void disableConverter(const QString& converter);
 
-    dtkAbstractDataReader    *reader   (const QString & type);
-    dtkAbstractDataWriter    *writer   (const QString & type);
-    dtkAbstractDataConverter *converter(const QString & type);
+    dtkAbstractDataReader    *reader   (const QString& type);
+    dtkAbstractDataWriter    *writer   (const QString& type);
+    dtkAbstractDataConverter *converter(const QString& type);
 
     QString     path(void);
     QStringList paths(void);
@@ -102,7 +102,7 @@ public slots:
     virtual QList<QImage>& thumbnails(void) const;
 
 public:
-    virtual bool casts(const QString & type);
+    virtual bool casts(const QString& type);
 
     virtual operator bool   (void);
     virtual operator int    (void);

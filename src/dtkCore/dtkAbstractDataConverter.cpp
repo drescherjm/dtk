@@ -65,7 +65,7 @@ void dtkAbstractDataConverter::setData(dtkAbstractData *data)
     d->data = data;
 }
 
-bool dtkAbstractDataConverter::canConvert(const QString & toType)
+bool dtkAbstractDataConverter::canConvert(const QString& toType)
 {
     return this->toType() == toType;
 }

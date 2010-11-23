@@ -60,7 +60,7 @@ int dtkAbstractProcess::update(void)
     return DTK_FAILURE;
 }
 
-bool dtkAbstractProcess::read(const QString & file)
+bool dtkAbstractProcess::read(const QString& file)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(file);
@@ -68,7 +68,7 @@ bool dtkAbstractProcess::read(const QString & file)
     return false;
 }
 
-bool dtkAbstractProcess::read(const QStringList & files)
+bool dtkAbstractProcess::read(const QStringList& files)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(files);
@@ -76,7 +76,7 @@ bool dtkAbstractProcess::read(const QStringList & files)
     return false;
 }
 
-bool dtkAbstractProcess::write(const QString & file)
+bool dtkAbstractProcess::write(const QString& file)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(file);
@@ -84,7 +84,7 @@ bool dtkAbstractProcess::write(const QString & file)
     return false;
 }
 
-bool dtkAbstractProcess::write(const QStringList & files)
+bool dtkAbstractProcess::write(const QStringList& files)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(files);

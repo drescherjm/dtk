@@ -40,7 +40,7 @@ dtkAbstractProcessFactory *dtkAbstractProcessFactory::instance(void)
     return s_instance;
 }
 
-dtkAbstractProcess *dtkAbstractProcessFactory::create(const QString & type)
+dtkAbstractProcess *dtkAbstractProcessFactory::create(const QString& type)
 {
     if(!d->creators.contains(type))
         return NULL;
@@ -56,7 +56,7 @@ dtkAbstractProcess *dtkAbstractProcessFactory::create(const QString & type)
     return process;
 }
 
-bool dtkAbstractProcessFactory::registerProcessType(const QString & type, dtkAbstractProcessCreator func)
+bool dtkAbstractProcessFactory::registerProcessType(const QString& type, dtkAbstractProcessCreator func)
 {
     if(!d->creators.contains(type)) {
 	d->creators.insert(type, func);
@@ -66,7 +66,7 @@ bool dtkAbstractProcessFactory::registerProcessType(const QString & type, dtkAbs
     return false;
 }
 
-bool dtkAbstractProcessFactory::registerProcessType(const QString & type, dtkAbstractProcessCreator func, const QString & interface)
+bool dtkAbstractProcessFactory::registerProcessType(const QString& type, dtkAbstractProcessCreator func, const QString& interface)
 {
     if(!d->creators.contains(type)) {
 	d->creators.insert(type, func);
@@ -77,17 +77,17 @@ bool dtkAbstractProcessFactory::registerProcessType(const QString & type, dtkAbs
     return false;
 }
 
-unsigned int dtkAbstractProcessFactory::size(const QString & type)
+unsigned int dtkAbstractProcessFactory::size(const QString& type)
 {
     return d->processes[type].size();
 }
 
-dtkAbstractProcess *dtkAbstractProcessFactory::get(const QString & type, int idx)
+dtkAbstractProcess *dtkAbstractProcessFactory::get(const QString& type, int idx)
 {
     return d->processes[type].value(idx);
 }
 
-dtkAbstractProcess *dtkAbstractProcessFactory::get(const QString & type, const QString & name)
+dtkAbstractProcess *dtkAbstractProcessFactory::get(const QString& type, const QString& name)
 {
     foreach(dtkAbstractProcess *process, d->processes[type])
         if(process->name() == name)
@@ -96,7 +96,7 @@ dtkAbstractProcess *dtkAbstractProcessFactory::get(const QString & type, const Q
     return NULL;
 }
 
-bool dtkAbstractProcessFactory::exists(const QString & type)
+bool dtkAbstractProcessFactory::exists(const QString& type)
 {
     return d->creators.contains(type);
 }

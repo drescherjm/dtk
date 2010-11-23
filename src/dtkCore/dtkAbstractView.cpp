@@ -219,7 +219,7 @@ void dtkAbstractView::addInteractor(dtkAbstractViewInteractor *interactor)
         d->interactors.insert(interactor->description(), interactor);
 }
 
-void dtkAbstractView::enableAnimator(const QString & animator)
+void dtkAbstractView::enableAnimator(const QString& animator)
 {
     if (d->animators.contains(animator)) {
         d->animators.value(animator)->setView(this);
@@ -228,13 +228,13 @@ void dtkAbstractView::enableAnimator(const QString & animator)
         dtkDebug() << description() << "has no such animator:" << animator;
 }
 
-void dtkAbstractView::disableAnimator(const QString & animator)
+void dtkAbstractView::disableAnimator(const QString& animator)
 {
     if (d->animators.contains(animator))
         d->animators.value(animator)->disable();
 }
 
-void dtkAbstractView::enableNavigator(const QString & navigator)
+void dtkAbstractView::enableNavigator(const QString& navigator)
 {
     if (d->navigators.contains(navigator)) {
 //      d->navigators.value(navigator)->setView(this);
@@ -243,13 +243,13 @@ void dtkAbstractView::enableNavigator(const QString & navigator)
         dtkDebug() << description() << "has no such navigator:" << navigator;
 }
 
-void dtkAbstractView::disableNavigator(const QString & navigator)
+void dtkAbstractView::disableNavigator(const QString& navigator)
 {
     if (d->navigators.contains(navigator))
         d->navigators.value(navigator)->disable();
 }
 
-void dtkAbstractView::enableInteractor(const QString & interactor)
+void dtkAbstractView::enableInteractor(const QString& interactor)
 {
     if (d->interactors.contains(interactor)) {
         d->interactors.value(interactor)->setView(this);
@@ -258,13 +258,13 @@ void dtkAbstractView::enableInteractor(const QString & interactor)
         dtkDebug() << description() << "has no such interactor:" << interactor;
 }
 
-void dtkAbstractView::disableInteractor(const QString & interactor)
+void dtkAbstractView::disableInteractor(const QString& interactor)
 {
     if (d->interactors.contains(interactor))
         d->interactors.value(interactor)->disable();
 }
 
-dtkAbstractViewAnimator *dtkAbstractView::animator(const QString & type)
+dtkAbstractViewAnimator *dtkAbstractView::animator(const QString& type)
 {
     if (d->animators.contains(type))
         return d->animators.value(type);
@@ -272,7 +272,7 @@ dtkAbstractViewAnimator *dtkAbstractView::animator(const QString & type)
     return NULL;
 }
 
-dtkAbstractViewNavigator *dtkAbstractView::navigator(const QString & type)
+dtkAbstractViewNavigator *dtkAbstractView::navigator(const QString& type)
 {
     if (d->navigators.contains(type))
         return d->navigators.value(type);
@@ -280,7 +280,7 @@ dtkAbstractViewNavigator *dtkAbstractView::navigator(const QString & type)
     return NULL;
 }
 
-dtkAbstractViewInteractor *dtkAbstractView::interactor(const QString & type)
+dtkAbstractViewInteractor *dtkAbstractView::interactor(const QString& type)
 {
     if (d->interactors.contains(type))
         return d->interactors.value(type);

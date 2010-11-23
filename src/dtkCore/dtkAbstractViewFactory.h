@@ -48,25 +48,25 @@ public:
 public:
     static dtkAbstractViewFactory *instance(void);
 
-    bool registerViewType          (const QString & type,                      dtkAbstractViewCreator           func);
-    bool registerViewAnimatorType  (const QString & type, const QStringList & handled, dtkAbstractViewAnimatorCreator   func);
-    bool registerViewNavigatorType (const QString & type, const QStringList & handled, dtkAbstractViewNavigatorCreator  func);
-    bool registerViewInteractorType(const QString & type, const QStringList & handled, dtkAbstractViewInteractorCreator func);
+    bool registerViewType          (const QString& type,                      dtkAbstractViewCreator           func);
+    bool registerViewAnimatorType  (const QString& type, const QStringList& handled, dtkAbstractViewAnimatorCreator   func);
+    bool registerViewNavigatorType (const QString& type, const QStringList& handled, dtkAbstractViewNavigatorCreator  func);
+    bool registerViewInteractorType(const QString& type, const QStringList& handled, dtkAbstractViewInteractorCreator func);
 
-    unsigned int size(const QString & type) const;
+    unsigned int size(const QString& type) const;
 
-    dtkAbstractView *get(const QString & type, int index = 0);
-    dtkAbstractView *get(const QString & type, const QString & name);
+    dtkAbstractView *get(const QString& type, int index = 0);
+    dtkAbstractView *get(const QString& type, const QString& name);
 
 signals:
-    void created(dtkAbstractView *view, const QString & type);
+    void created(dtkAbstractView *view, const QString& type);
 
 public slots:
-    dtkAbstractView *create(const QString & type);
+    dtkAbstractView *create(const QString& type);
 
-    dtkAbstractViewAnimator *animator(const QString & type);
-    dtkAbstractViewNavigator *navigator(const QString & type);
-    dtkAbstractViewInteractor *interactor(const QString & type);
+    dtkAbstractViewAnimator *animator(const QString& type);
+    dtkAbstractViewNavigator *navigator(const QString& type);
+    dtkAbstractViewInteractor *interactor(const QString& type);
 
 protected:
      dtkAbstractViewFactory(void);

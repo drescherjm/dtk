@@ -83,7 +83,7 @@ void dtkAbstractData::addConverter(dtkAbstractDataConverter *converter)
     converter->setData (this);
 }
 
-void dtkAbstractData::enableReader(const QString & reader)
+void dtkAbstractData::enableReader(const QString& reader)
 {
     if (d->readers.contains(reader)) {
         d->readers.value(reader)->setData(this);
@@ -92,13 +92,13 @@ void dtkAbstractData::enableReader(const QString & reader)
 	dtkDebug() << description() << "has no such reader: " << reader;
 }
 
-void dtkAbstractData::disableReader(const QString & reader)
+void dtkAbstractData::disableReader(const QString& reader)
 {
     if (d->readers.contains(reader))
 	d->readers.value(reader)->disable();
 }
 
-void dtkAbstractData::enableWriter(const QString & writer)
+void dtkAbstractData::enableWriter(const QString& writer)
 {
     if (d->writers.contains(writer)) {
         d->writers.value(writer)->setData(this);
@@ -107,13 +107,13 @@ void dtkAbstractData::enableWriter(const QString & writer)
 	dtkDebug() << description() << "has no such writer: " << writer;
 }
 
-void dtkAbstractData::disableWriter(const QString & writer)
+void dtkAbstractData::disableWriter(const QString& writer)
 {
     if (d->writers.contains(writer))
 	d->writers.value(writer)->disable();
 }
 
-void dtkAbstractData::enableConverter(const QString & converter)
+void dtkAbstractData::enableConverter(const QString& converter)
 {
     if (d->converters.contains(converter)) {
         d->converters.value(converter)->setData(this);
@@ -122,13 +122,13 @@ void dtkAbstractData::enableConverter(const QString & converter)
 	dtkDebug() << description() << "has no such converter: " << converter;
 }
 
-void dtkAbstractData::disableConverter(const QString & converter)
+void dtkAbstractData::disableConverter(const QString& converter)
 {
     if (d->converters.contains(converter))
 	d->converters.value(converter)->disable();
 }
 
-dtkAbstractDataReader *dtkAbstractData::reader(const QString & type)
+dtkAbstractDataReader *dtkAbstractData::reader(const QString& type)
 {
     if (d->readers.contains(type))
 	return d->readers.value(type);
@@ -136,7 +136,7 @@ dtkAbstractDataReader *dtkAbstractData::reader(const QString & type)
     return NULL;
 }
 
-dtkAbstractDataWriter *dtkAbstractData::writer(const QString & type)
+dtkAbstractDataWriter *dtkAbstractData::writer(const QString& type)
 {
     if (d->writers.contains(type))
 	return d->writers.value(type);
@@ -144,7 +144,7 @@ dtkAbstractDataWriter *dtkAbstractData::writer(const QString & type)
     return NULL;
 }
 
-dtkAbstractDataConverter *dtkAbstractData::converter(const QString & type)
+dtkAbstractDataConverter *dtkAbstractData::converter(const QString& type)
 {
     if (d->converters.contains(type))
 	return d->converters.value(type);
@@ -157,7 +157,7 @@ void dtkAbstractData::update(void)
     DTK_DEFAULT_IMPLEMENTATION;
 }
 
-bool dtkAbstractData::read(const QString & file)
+bool dtkAbstractData::read(const QString& file)
 {
     bool read = false;
 
@@ -174,7 +174,7 @@ bool dtkAbstractData::read(const QString & file)
     return read;
 }
 
-bool dtkAbstractData::read(const QStringList & files)
+bool dtkAbstractData::read(const QStringList& files)
 {
     bool read = false;
   
@@ -190,7 +190,7 @@ bool dtkAbstractData::read(const QStringList & files)
     return read;
 }
 
-bool dtkAbstractData::write(const QString & file)
+bool dtkAbstractData::write(const QString& file)
 {
     bool written = false;
 
@@ -201,7 +201,7 @@ bool dtkAbstractData::write(const QString & file)
     return written;
 }
 
-bool dtkAbstractData::write(const QStringList & files)
+bool dtkAbstractData::write(const QStringList& files)
 {
     bool written = false;
 
@@ -211,7 +211,7 @@ bool dtkAbstractData::write(const QStringList & files)
     return written;
 }
 
-dtkAbstractData *dtkAbstractData::convert(const QString & toType)
+dtkAbstractData *dtkAbstractData::convert(const QString& toType)
 {
     dtkAbstractData *conversion = 0;
     foreach(dtkAbstractDataConverter *converter, d->converters)
@@ -306,13 +306,13 @@ void dtkAbstractData::setParameter(float parameter, int channel)
     DTK_UNUSED(channel);
 }
 
-void dtkAbstractData::setParameter(const QString & parameter)
+void dtkAbstractData::setParameter(const QString& parameter)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(parameter);
 }
 
-void dtkAbstractData::setParameter(const QString & parameter, int channel)
+void dtkAbstractData::setParameter(const QString& parameter, int channel)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(parameter);
@@ -345,7 +345,7 @@ void dtkAbstractData::setData(void* data, int channel)
     DTK_UNUSED(channel);
 }
 
-bool dtkAbstractData::casts(const QString & type)
+bool dtkAbstractData::casts(const QString& type)
 {
     DTK_DEFAULT_IMPLEMENTATION;
 

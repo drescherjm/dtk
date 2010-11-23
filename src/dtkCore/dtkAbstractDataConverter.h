@@ -46,12 +46,12 @@ public:
     virtual void setData(dtkAbstractData *data);
 
 signals:
-    void started(const QString & message);
+    void started(const QString& message);
     void progressed(int step);
     void finished(void);
     
 public slots:
-    virtual bool canConvert(const QString & toType);
+    virtual bool canConvert(const QString& toType);
     
     virtual dtkAbstractData *convert(void);
     

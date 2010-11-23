@@ -45,16 +45,16 @@ public:
     virtual void setData(dtkAbstractData *data);
     
 signals:
-    void started(const QString & message);
+    void started(const QString& message);
     void progressed(int step);
     void finished(void);
 
 public slots:
-    virtual bool canWrite(const QString & file);
-    virtual bool canWrite(const QStringList & files);
+    virtual bool canWrite(const QString& file);
+    virtual bool canWrite(const QStringList& files);
     
-    virtual bool write(const QString & file);
-    virtual bool write(const QStringList & files);
+    virtual bool write(const QString& file);
+    virtual bool write(const QStringList& files);
     
     virtual void setProgress(int value);
 

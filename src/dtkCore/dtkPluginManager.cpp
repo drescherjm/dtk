@@ -115,7 +115,7 @@ void dtkPluginManager::printPlugins(void)
         dtkOutput() << path;
 }
 
-dtkPlugin *dtkPluginManager::plugin(const QString & name)
+dtkPlugin *dtkPluginManager::plugin(const QString& name)
 {
     foreach(QPluginLoader *loader, d->loaders) {
         dtkPlugin *plugin = qobject_cast<dtkPlugin *>(loader->instance());

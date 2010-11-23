@@ -90,18 +90,18 @@ public slots:
     void addNavigator (dtkAbstractViewNavigator  *navigator);
     void addInteractor(dtkAbstractViewInteractor *interactor);
 
-    void  enableAnimator(const QString & animator);
-    void disableAnimator(const QString & animator);
+    void  enableAnimator(const QString& animator);
+    void disableAnimator(const QString& animator);
 
-    void  enableNavigator(const QString & navigator);
-    void disableNavigator(const QString & navigator);
+    void  enableNavigator(const QString& navigator);
+    void disableNavigator(const QString& navigator);
 
-    void  enableInteractor(const QString & interactor);
-    void disableInteractor(const QString & interactor);
+    void  enableInteractor(const QString& interactor);
+    void disableInteractor(const QString& interactor);
 
-    dtkAbstractViewAnimator   *animator  (const QString & type);
-    dtkAbstractViewNavigator  *navigator (const QString & type);
-    dtkAbstractViewInteractor *interactor(const QString & type);
+    dtkAbstractViewAnimator   *animator  (const QString& type);
+    dtkAbstractViewNavigator  *navigator (const QString& type);
+    dtkAbstractViewInteractor *interactor(const QString& type);
 
     QList<dtkAbstractViewAnimator   *> animators(void) const;
     QList<dtkAbstractViewNavigator  *> navigators(void) const;

@@ -39,29 +39,29 @@ public:
    int retain(void);
    int release(void);
 
-   bool hasProperty(const QString & key) const;
-   void addProperty(const QString & key, const QStringList & values);
-   void addProperty(const QString & key, const QString & value);
-   void setProperty(const QString & key, const QString & value);
-   QStringList propertyValues(const QString & key) const;
-   QString property(const QString & key) const;
+   bool hasProperty(const QString& key) const;
+   void addProperty(const QString& key, const QStringList& values);
+   void addProperty(const QString& key, const QString& value);
+   void setProperty(const QString& key, const QString& value);
+   QStringList propertyValues(const QString& key) const;
+   QString property(const QString& key) const;
 
-   bool hasMetaData(const QString & key) const;
-   void addMetaData(const QString & key, const QStringList & values);
-   void addMetaData(const QString & key, const QString & value);
-   void setMetaData(const QString & key, const QStringList & values);
-   void setMetaData(const QString & key, const QString & value);
-   QStringList metaDataValues(const QString & key) const;
-   QString metadata(const QString & key) const;
-   QStringList metadatas(const QString & key) const;
+   bool hasMetaData(const QString& key) const;
+   void addMetaData(const QString& key, const QStringList& values);
+   void addMetaData(const QString& key, const QString& value);
+   void setMetaData(const QString& key, const QStringList& values);
+   void setMetaData(const QString& key, const QString& value);
+   QStringList metaDataValues(const QString& key) const;
+   QString metadata(const QString& key) const;
+   QStringList metadatas(const QString& key) const;
 
 signals:
-   void propertySet(const QString & key, const QString & value);
-   void metaDataSet(const QString & key, const QString & value);
+   void propertySet(const QString& key, const QString& value);
+   void metaDataSet(const QString& key, const QString& value);
 
 public slots:
-   virtual void onPropertySet(const QString & key, const QString & value);
-   virtual void onMetaDataSet(const QString & key, const QString & value);
+   virtual void onPropertySet(const QString& key, const QString& value);
+   virtual void onMetaDataSet(const QString& key, const QString& value);
 
 private:
    dtkAbstractObjectPrivate *d;

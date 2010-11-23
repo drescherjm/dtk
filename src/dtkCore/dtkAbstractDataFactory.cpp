@@ -41,7 +41,7 @@ DTKCORE_EXPORT dtkAbstractDataFactory *dtkAbstractDataFactory::instance(void)
     return s_instance;
 }
 
-dtkAbstractData *dtkAbstractDataFactory::create(const QString & type)
+dtkAbstractData *dtkAbstractDataFactory::create(const QString& type)
 {
     static int count = 0;
 
@@ -71,22 +71,22 @@ dtkAbstractData *dtkAbstractDataFactory::create(const QString & type)
     return data;
 }
 
-dtkAbstractDataReader *dtkAbstractDataFactory::reader(const QString & type, const QStringList & handled)
+dtkAbstractDataReader *dtkAbstractDataFactory::reader(const QString& type, const QStringList& handled)
 {
     return d->readers[qMakePair(type, handled)]();
 }
 
-dtkAbstractDataWriter *dtkAbstractDataFactory::writer(const QString & type, const QStringList & handled)
+dtkAbstractDataWriter *dtkAbstractDataFactory::writer(const QString& type, const QStringList& handled)
 {
     return d->writers[qMakePair(type, handled)]();
 }
 
-dtkAbstractDataConverter *dtkAbstractDataFactory::converter(const QString & type, const QStringList & fromTypes, const QString & toType)
+dtkAbstractDataConverter *dtkAbstractDataFactory::converter(const QString& type, const QStringList& fromTypes, const QString& toType)
 {
     return d->converters[qMakePair(type, qMakePair(fromTypes, toType))]();
 }
 
-bool dtkAbstractDataFactory::registerDataType(const QString & type, dtkAbstractDataCreator func)
+bool dtkAbstractDataFactory::registerDataType(const QString& type, dtkAbstractDataCreator func)
 {
     if(!d->creators.contains(type)) {
 	d->creators.insert(type, func);
@@ -96,7 +96,7 @@ bool dtkAbstractDataFactory::registerDataType(const QString & type, dtkAbstractD
     return false;
 }
 
-bool dtkAbstractDataFactory::registerDataReaderType(const QString & type, const QStringList & handled, dtkAbstractDataReaderCreator func)
+bool dtkAbstractDataFactory::registerDataReaderType(const QString& type, const QStringList& handled, dtkAbstractDataReaderCreator func)
 {
     if(!d->readers.contains(qMakePair(type, handled))) {
 	d->readers.insert(qMakePair(type, handled), func);
@@ -106,7 +106,7 @@ bool dtkAbstractDataFactory::registerDataReaderType(const QString & type, const 
     return false;
 }
 
-bool dtkAbstractDataFactory::registerDataWriterType(const QString & type, const QStringList & handled, dtkAbstractDataWriterCreator func)
+bool dtkAbstractDataFactory::registerDataWriterType(const QString& type, const QStringList& handled, dtkAbstractDataWriterCreator func)
 {
     if(!d->writers.contains(qMakePair(type, handled))) {
 	d->writers.insert(qMakePair(type, handled), func);
@@ -116,7 +116,7 @@ bool dtkAbstractDataFactory::registerDataWriterType(const QString & type, const 
     return false;
 }
 
-bool dtkAbstractDataFactory::registerDataConverterType(const QString & type, const QStringList & fromTypes, const QString & toType, dtkAbstractDataConverterCreator func)
+bool dtkAbstractDataFactory::registerDataConverterType(const QString& type, const QStringList& fromTypes, const QString& toType, dtkAbstractDataConverterCreator func)
 {
     if(!d->converters.contains(qMakePair(type, qMakePair (fromTypes, toType)))) {
         d->converters.insert(qMakePair(type, qMakePair(fromTypes, toType)), func);
@@ -126,37 +126,37 @@ bool dtkAbstractDataFactory::registerDataConverterType(const QString & type, con
     return false;
 }
 
-unsigned int dtkAbstractDataFactory::size(const QString & type) const
+unsigned int dtkAbstractDataFactory::size(const QString& type) const
 {
     return d->datas[type].size();
 }
 
-unsigned int dtkAbstractDataFactory::count(const QString & type) const
+unsigned int dtkAbstractDataFactory::count(const QString& type) const
 {
     return d->creators.keys().count();
 }
 
-unsigned int dtkAbstractDataFactory::countReaders(const QString & type) const
+unsigned int dtkAbstractDataFactory::countReaders(const QString& type) const
 {
     return d->readers.keys().count();
 }
 
-unsigned int dtkAbstractDataFactory::countWriters(const QString & type) const
+unsigned int dtkAbstractDataFactory::countWriters(const QString& type) const
 {
     return d->writers.keys().count();
 }
 
-unsigned int dtkAbstractDataFactory::countConverters(const QString & type) const
+unsigned int dtkAbstractDataFactory::countConverters(const QString& type) const
 {
     return d->converters.keys().count();
 }
 
-dtkAbstractData *dtkAbstractDataFactory::get(const QString & type, int idx)
+dtkAbstractData *dtkAbstractDataFactory::get(const QString& type, int idx)
 {
     return d->datas[type].value(idx);
 }
 
-dtkAbstractData *dtkAbstractDataFactory::get(const QString & type, const QString & name)
+dtkAbstractData *dtkAbstractDataFactory::get(const QString& type, const QString& name)
 {
     foreach(dtkAbstractData *data, d->datas[type])
         if(data->name() == name)

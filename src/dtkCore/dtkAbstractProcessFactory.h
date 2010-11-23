@@ -40,23 +40,23 @@ public:
 public:
     static dtkAbstractProcessFactory *instance(void);
 
-    bool registerProcessType(const QString & type, dtkAbstractProcessCreator func);
-    bool registerProcessType(const QString & type, dtkAbstractProcessCreator func, const QString & interface);
+    bool registerProcessType(const QString& type, dtkAbstractProcessCreator func);
+    bool registerProcessType(const QString& type, dtkAbstractProcessCreator func, const QString& interface);
 
-    unsigned int size(const QString & type);
+    unsigned int size(const QString& type);
 
-    dtkAbstractProcess *get(const QString & type, int index = 0);
-    dtkAbstractProcess *get(const QString & type, const QString & name);
+    dtkAbstractProcess *get(const QString& type, int index = 0);
+    dtkAbstractProcess *get(const QString& type, const QString& name);
 
-    bool exists(const QString & type);
+    bool exists(const QString& type);
 
     QStringList implementations(const QString& abstraction);
 
 signals:
-    void created(dtkAbstractProcess *process, const QString & type);
+    void created(dtkAbstractProcess *process, const QString& type);
 
 public slots:
-    dtkAbstractProcess *create(const QString & type);
+    dtkAbstractProcess *create(const QString& type);
 
 protected:
      dtkAbstractProcessFactory(void);

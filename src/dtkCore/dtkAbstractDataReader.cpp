@@ -40,7 +40,7 @@ dtkAbstractDataReader::~dtkAbstractDataReader(void)
     d = NULL;
 }
 
-bool dtkAbstractDataReader::enabled(void)
+bool dtkAbstractDataReader::enabled(void) const
 {
     return d->enabled;
 }
@@ -65,40 +65,40 @@ void dtkAbstractDataReader::setData(dtkAbstractData *data)
     d->data = data;
 }
 
-bool dtkAbstractDataReader::canRead(QString file)
+bool dtkAbstractDataReader::canRead(const QString & file)
 {
     DTK_UNUSED(file);
 
     return false;
 }
 
-bool dtkAbstractDataReader::canRead(QStringList files)
+bool dtkAbstractDataReader::canRead(const QStringList & files)
 {
     DTK_UNUSED(files);
 
     return false;
 }
 
-bool dtkAbstractDataReader::read(QString file)
+bool dtkAbstractDataReader::read(const QString & file)
 {
     DTK_UNUSED(file);
 
     return false;
 }
 
-bool dtkAbstractDataReader::read(QStringList files)
+bool dtkAbstractDataReader::read(const QStringList & files)
 {
     DTK_UNUSED(files);
 
     return false;
 }
 
-void dtkAbstractDataReader::readInformation(QString path)
+void dtkAbstractDataReader::readInformation(const QString & path)
 {
     DTK_UNUSED(path);
 }
 
-void dtkAbstractDataReader::readInformation(QStringList paths)
+void dtkAbstractDataReader::readInformation(const QStringList & paths)
 {
     DTK_UNUSED(paths);
 }

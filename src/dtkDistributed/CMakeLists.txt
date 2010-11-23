@@ -69,6 +69,9 @@ set(${PROJECT_NAME}_SOURCES
 
 set(${PROJECT_NAME}_RESOURCES dtkDistributed.qrc)
 
+# Include header files for Visual Studio.
+SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
+
 ## #################################################################
 ## Mpi sources
 ## #################################################################
@@ -98,6 +101,7 @@ qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
 
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
+  ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_QRC})
 

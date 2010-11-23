@@ -113,7 +113,7 @@ public:
         return mVal;
     }
     
-    inline unsigned int nbValues(void) {
+    inline unsigned int nbValues(void) const {
         return 4;
     }
 

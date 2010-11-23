@@ -36,7 +36,7 @@ public:
     virtual QString description(void) const = 0;
     virtual QStringList handled(void) const = 0;
     
-    bool enabled(void);
+    bool enabled(void) const;
     void  enable(void);
     void disable(void);
     
@@ -45,19 +45,19 @@ public:
     virtual void setData(dtkAbstractData *data);
 
 signals:
-    void started(QString message);
+    void started(const QString & message);
     void progressed(int step);
     void finished(void);
     
 public slots:
-    virtual bool canRead(QString file);
-    virtual bool canRead(QStringList files);
+    virtual bool canRead(const QString & file);
+    virtual bool canRead(const QStringList & files);
     
-    virtual bool read(QString file);
-    virtual bool read(QStringList files);
+    virtual bool read(const QString & file);
+    virtual bool read(const QStringList & files);
     
-    virtual void readInformation(QString path);
-    virtual void readInformation(QStringList paths);
+    virtual void readInformation(const QString & path);
+    virtual void readInformation(const QStringList & paths);
     
     virtual void setProgress(int value);
     

@@ -103,17 +103,17 @@ int dtkAbstractObject::release(void)
     return d->count;
 }
 
-void dtkAbstractObject::addProperty(QString key, QStringList values)
+void dtkAbstractObject::addProperty(const QString & key, const QStringList & values)
 {
     d->values.insert(key, values);
 }
 
-void dtkAbstractObject::addProperty(QString key, QString value)
+void dtkAbstractObject::addProperty(const QString & key, const QString & value)
 {
     d->values.insert(key, QStringList() << value);
 }
 
-void dtkAbstractObject::setProperty(QString key, QString value)
+void dtkAbstractObject::setProperty(const QString & key, const QString & value)
 {
     if(!d->values.contains(key)) {
     	dtkDebug() << this->metaObject()->className() << "has no such property:" << key;
@@ -132,7 +132,7 @@ void dtkAbstractObject::setProperty(QString key, QString value)
     emit propertySet(key, value);
 }
 
-const QStringList dtkAbstractObject::propertyValues(QString key) const
+QStringList dtkAbstractObject::propertyValues(const QString & key) const
 {
     if(d->values.contains(key))
 	return d->values[key];
@@ -140,12 +140,12 @@ const QStringList dtkAbstractObject::propertyValues(QString key) const
     return QStringList();
 }
 
-bool dtkAbstractObject::hasProperty(QString key) const
+bool dtkAbstractObject::hasProperty(const QString & key) const
 {
     return d->values.contains(key);
 }
 
-QString dtkAbstractObject::property(QString key) const
+QString dtkAbstractObject::property(const QString & key) const
 {
     if(!d->values.contains(key)) {
 	dtkDebug() << this->metaObject()->className() << "has no such property:" << key;
@@ -159,7 +159,7 @@ QString dtkAbstractObject::property(QString key) const
 // 
 // /////////////////////////////////////////////////////////////////
 
-void dtkAbstractObject::addMetaData(QString key, QStringList values)
+void dtkAbstractObject::addMetaData(const QString & key, const QStringList & values)
 {
     QStringList currentValues = d->metadatas.value(key);
 
@@ -172,7 +172,7 @@ void dtkAbstractObject::addMetaData(QString key, QStringList values)
         emit metaDataSet(key, value);
 }
 
-void dtkAbstractObject::addMetaData(QString key, QString value)
+void dtkAbstractObject::addMetaData(const QString & key, const QString & value)
 {
     QStringList currentValues = d->metadatas.value(key);
 
@@ -183,7 +183,7 @@ void dtkAbstractObject::addMetaData(QString key, QString value)
     emit metaDataSet(key, value);
 }
 
-void dtkAbstractObject::setMetaData(QString key, QStringList values)
+void dtkAbstractObject::setMetaData(const QString & key, const QStringList & values)
 {
     d->metadatas.insert(key, values);
 
@@ -194,7 +194,7 @@ void dtkAbstractObject::setMetaData(QString key, QStringList values)
         emit metaDataSet(key, value);
 }
 
-void dtkAbstractObject::setMetaData(QString key, QString value)
+void dtkAbstractObject::setMetaData(const QString & key, const QString & value)
 {
     d->metadatas.insert(key, QStringList() << value);
 
@@ -203,7 +203,7 @@ void dtkAbstractObject::setMetaData(QString key, QString value)
     emit metaDataSet(key, value);
 }
 
-const QStringList dtkAbstractObject::metaDataValues(QString key) const
+QStringList dtkAbstractObject::metaDataValues(const QString & key) const
 {
     if(d->metadatas.contains(key))
 	return d->metadatas[key];
@@ -211,24 +211,24 @@ const QStringList dtkAbstractObject::metaDataValues(QString key) const
     return QStringList();
 }
 
-bool dtkAbstractObject::hasMetaData(QString key) const
+bool dtkAbstractObject::hasMetaData(const QString & key) const
 {
     return d->metadatas.contains(key);
 }
 
-void dtkAbstractObject::onPropertySet(QString key, QString value)
+void dtkAbstractObject::onPropertySet(const QString & key, const QString & value)
 {
     DTK_UNUSED(key);
     DTK_UNUSED(value);
 }
 
-void dtkAbstractObject::onMetaDataSet(QString key, QString value)
+void dtkAbstractObject::onMetaDataSet(const QString & key, const QString & value)
 {
     DTK_UNUSED(key);
     DTK_UNUSED(value);
 }
 
-QString dtkAbstractObject::metadata(QString key) const
+QString dtkAbstractObject::metadata(const QString & key) const
 {
     if(!d->metadatas.contains(key)) {
 	dtkDebug() << this->metaObject()->className() << "has no such property:" << key;
@@ -238,7 +238,7 @@ QString dtkAbstractObject::metadata(QString key) const
     return d->metadatas.value(key).first();
 }
 
-QStringList dtkAbstractObject::metadatas(QString key) const
+QStringList dtkAbstractObject::metadatas(const QString & key) const
 {
     if(!d->metadatas.contains(key)) {
 	dtkDebug() << this->metaObject()->className() << "has no such property:" << key;

@@ -151,44 +151,44 @@ dtkLog& dtkLog::operator<<(double value)
     return *this;
 }
 
-dtkLog& dtkLog::operator<<(QString value)
+dtkLog& dtkLog::operator<<(const QString & value)
 { 
     m_log += value;
 
     return *this;
 }
 
-dtkLog dtkLog::output(QString source)
+dtkLog dtkLog::output(const QString & source)
 {
     return dtkLog(source, Output);
 }
 
-dtkLog dtkLog::error(QString source)
+dtkLog dtkLog::error(const QString & source)
 {
     return dtkLog(source, Error);
 }
 
-dtkLog dtkLog::debug(QString source)
+dtkLog dtkLog::debug(const QString & source)
 {
     return dtkLog(source, Debug);
 }
 
-dtkLog dtkLog::warning(QString source)
+dtkLog dtkLog::warning(const QString & source)
 {
     return dtkLog(source, Warning);
 }
 
-dtkLog dtkLog::critical(QString source)
+dtkLog dtkLog::critical(const QString & source)
 {
     return dtkLog(source, Critical);
 }
 
-dtkLog dtkLog::fatal(QString source)
+dtkLog dtkLog::fatal(const QString & source)
 {
     return dtkLog(source, Fatal);
 }
 
-dtkLog::dtkLog(QString source, Level level) : m_level(level), m_source(source)
+dtkLog::dtkLog(const QString & source, Level level) : m_level(level), m_source(source)
 {
 
 }
@@ -203,12 +203,12 @@ dtkLog::~dtkLog(void)
      // qDebug().nospace() << QDate::currentDate().toString().toAscii().constData() << QTime::currentTime().toString().toAscii() << "(" << m_source << ") Level=" << m_level << "-" << m_log.toAscii();
 }
 
-void dtkLog::registerHandler(Handler handler, QString source)
+void dtkLog::registerHandler(Handler handler, const QString & source)
 {
     s_handlers.insert(source, handler);
 }
 
-void dtkLog::unregisterHandler(Handler handler, QString source)
+void dtkLog::unregisterHandler(Handler handler, const QString & source)
 {
     s_handlers.remove(source, handler);
 }

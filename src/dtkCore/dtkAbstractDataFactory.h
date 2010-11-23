@@ -48,33 +48,33 @@ public:
 public:
     static dtkAbstractDataFactory *instance(void);
 
-    bool registerDataType         (QString type,                      dtkAbstractDataCreator          func);
-    bool registerDataReaderType   (QString type, QStringList handled, dtkAbstractDataReaderCreator    func);
-    bool registerDataWriterType   (QString type, QStringList handled, dtkAbstractDataWriterCreator    func);
-    bool registerDataConverterType(QString type, QStringList fromTypes, QString toType,  dtkAbstractDataConverterCreator func);
+    bool registerDataType         (const QString & type,                      dtkAbstractDataCreator          func);
+    bool registerDataReaderType   (const QString & type, const QStringList & handled, dtkAbstractDataReaderCreator    func);
+    bool registerDataWriterType   (const QString & type, const QStringList & handled, dtkAbstractDataWriterCreator    func);
+    bool registerDataConverterType(const QString & type, const QStringList & fromTypes, const QString & toType,  dtkAbstractDataConverterCreator func);
 
-    unsigned int size(QString type);
+    unsigned int size(const QString & type) const;
 
-    unsigned int count(QString type);
-    unsigned int countReaders   (QString type);
-    unsigned int countWriters   (QString type);
-    unsigned int countConverters(QString type);
+    unsigned int count(const QString & type) const;
+    unsigned int countReaders   (const QString & type) const;
+    unsigned int countWriters   (const QString & type) const;
+    unsigned int countConverters(const QString & type) const;
 
-    dtkAbstractData *get(QString type, int index = 0);
-    dtkAbstractData *get(QString type, QString name);
+    dtkAbstractData *get(const QString & type, int index = 0);
+    dtkAbstractData *get(const QString & type, const QString & name);
 
-    QList<dtkAbstractDataTypeHandler>          readers(void);
-    QList<dtkAbstractDataTypeHandler>          writers(void);
-    QList<dtkAbstractDataConverterTypeHandler> converters(void);
+    QList<dtkAbstractDataTypeHandler>          readers(void) const;
+    QList<dtkAbstractDataTypeHandler>          writers(void) const;
+    QList<dtkAbstractDataConverterTypeHandler> converters(void) const;
 
 signals:
-    void created(dtkAbstractData *data, QString type);
+    void created(dtkAbstractData *data, const QString & type);
 
 public slots:
-    dtkAbstractData          *create   (QString type);
-    dtkAbstractDataReader    *reader   (QString type, QStringList handled);
-    dtkAbstractDataWriter    *writer   (QString type, QStringList handled);
-    dtkAbstractDataConverter *converter(QString type, QStringList fromType, QString toType);
+    dtkAbstractData          *create   (const QString & type);
+    dtkAbstractDataReader    *reader   (const QString & type, const QStringList & handled);
+    dtkAbstractDataWriter    *writer   (const QString & type, const QStringList & handled);
+    dtkAbstractDataConverter *converter(const QString & type, const QStringList & fromType, const QString & toType);
 
 protected:
      dtkAbstractDataFactory(void);

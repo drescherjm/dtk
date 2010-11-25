@@ -39,9 +39,9 @@ public:
     friend DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractProcess *process);
 
 signals:
-    void started(QString message);
-    void elapsed(QString duration);
-    void progressed(QString message);
+    void started(const QString& message);
+    void elapsed(const QString& duration);
+    void progressed(const QString& message);
     void progressed(int step);
     void finished(void);
 
@@ -50,11 +50,11 @@ public slots:
    
     virtual  int update(void);
     
-    virtual bool read(QString file);
-    virtual bool read(QStringList files);
+    virtual bool read(const QString& file);
+    virtual bool read(const QStringList& files);
     
-    virtual bool write(QString file);
-    virtual bool write(QStringList files);
+    virtual bool write(const QString& file);
+    virtual bool write(const QStringList& files);
 
     virtual void setParameter(int data);
     virtual void setParameter(int data, int channel);

@@ -99,6 +99,9 @@ set(${PROJECT_NAME}_SOURCES
   dtkQuat.cpp
   dtkUpdater.cpp)
 
+# Include header files for Visual Studio.
+SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
+
 ## #################################################################
 ## Wrapping
 ## #################################################################
@@ -139,6 +142,7 @@ qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
+  ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_WRAP})
 

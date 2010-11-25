@@ -40,7 +40,7 @@ dtkAbstractDataConverter::~dtkAbstractDataConverter(void)
     d = NULL;
 }
 
-bool dtkAbstractDataConverter::enabled(void)
+bool dtkAbstractDataConverter::enabled(void) const
 {
     return d->enabled;
 }
@@ -65,7 +65,7 @@ void dtkAbstractDataConverter::setData(dtkAbstractData *data)
     d->data = data;
 }
 
-bool dtkAbstractDataConverter::canConvert(QString toType)
+bool dtkAbstractDataConverter::canConvert(const QString& toType)
 {
     return this->toType() == toType;
 }

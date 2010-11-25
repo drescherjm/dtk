@@ -90,22 +90,22 @@ public slots:
     void addNavigator (dtkAbstractViewNavigator  *navigator);
     void addInteractor(dtkAbstractViewInteractor *interactor);
 
-    void  enableAnimator(QString animator);
-    void disableAnimator(QString animator);
+    void  enableAnimator(const QString& animator);
+    void disableAnimator(const QString& animator);
 
-    void  enableNavigator(QString navigator);
-    void disableNavigator(QString navigator);
+    void  enableNavigator(const QString& navigator);
+    void disableNavigator(const QString& navigator);
 
-    void  enableInteractor(QString interactor);
-    void disableInteractor(QString interactor);
+    void  enableInteractor(const QString& interactor);
+    void disableInteractor(const QString& interactor);
 
-    dtkAbstractViewAnimator   *animator  (QString type);
-    dtkAbstractViewNavigator  *navigator (QString type);
-    dtkAbstractViewInteractor *interactor(QString type);
+    dtkAbstractViewAnimator   *animator  (const QString& type);
+    dtkAbstractViewNavigator  *navigator (const QString& type);
+    dtkAbstractViewInteractor *interactor(const QString& type);
 
-    QList<dtkAbstractViewAnimator   *> animators(void);
-    QList<dtkAbstractViewNavigator  *> navigators(void);
-    QList<dtkAbstractViewInteractor *> interactors(void);
+    QList<dtkAbstractViewAnimator   *> animators(void) const;
+    QList<dtkAbstractViewNavigator  *> navigators(void) const;
+    QList<dtkAbstractViewInteractor *> interactors(void) const;
 
     virtual void   initialize(void);
     virtual void uninitialize(void);

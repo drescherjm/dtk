@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Nov 22 10:29:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Nov 22 12:24:48 2010 (+0100)
+ * Last-Updated: Wed Nov 24 14:18:47 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 15
+ *     Update #: 21
  */
 
 /* Commentary: 
@@ -22,7 +22,8 @@
 
 #include <QtGui>
 
-class dtkPlotPoint;
+class dtkPlotCurve;
+class dtkPlotData;
 class dtkPlotScenePrivate;
 
 class dtkPlotScene : public QGraphicsScene
@@ -33,7 +34,8 @@ public:
      dtkPlotScene(QObject *parent = 0);
     ~dtkPlotScene(void);
 
-    dtkPlotScene& operator<<(dtkPlotPoint *point);
+    dtkPlotScene& operator<<(dtkPlotCurve *curve);
+    dtkPlotScene& operator<<(dtkPlotData *data);
 
 protected:
     void drawBackground(QPainter *painter, const QRectF& rect);

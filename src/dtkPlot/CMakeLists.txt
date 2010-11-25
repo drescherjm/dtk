@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Nov 22 10:20:27 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Nov 22 11:59:49 2010 (+0100)
+## Last-Updated: Wed Nov 24 16:36:13 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 24
+##     Update #: 40
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,7 +24,12 @@ project(dtkPlot)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkPlotCurve.h
+  dtkPlotData.h
   dtkPlotExport.h
+  dtkPlotInterpolator.h
+  dtkPlotInterpolatorLinear.h
+  dtkPlotInterpolatorCubic.h
   dtkPlotPoint.h
   dtkPlotScene.h
   dtkPlotView.h
@@ -36,6 +41,11 @@ set(${PROJECT_NAME}_HEADERS_MOC
 )
 
 set(${PROJECT_NAME}_SOURCES
+  dtkPlotCurve.cpp
+  dtkPlotData.cpp
+  dtkPlotInterpolator.cpp
+  dtkPlotInterpolatorLinear.cpp
+  dtkPlotInterpolatorCubic.cpp
   dtkPlotPoint.cpp
   dtkPlotScene.cpp
   dtkPlotView.cpp

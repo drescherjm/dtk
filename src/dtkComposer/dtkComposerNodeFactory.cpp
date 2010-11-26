@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb  7 22:37:03 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Aug 16 21:10:03 2010 (+0200)
+ * Last-Updated: Fri Nov 26 09:37:08 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 131
+ *     Update #: 132
  */
 
 /* Commentary: 
@@ -102,7 +102,6 @@ dtkComposerNode *dtkComposerNodeFactory::create(QString type)
 
     return NULL;
 }
-
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeFactory documentation

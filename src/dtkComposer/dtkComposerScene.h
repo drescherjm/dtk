@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug 17 13:21:28 2010 (+0200)
+ * Last-Updated: Mon Nov 29 12:37:52 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 82
+ *     Update #: 85
  */
 
 /* Commentary: 
@@ -67,8 +67,11 @@ signals:
 
     void nodeAdded(dtkComposerNode *node);
     void nodeRemoved(dtkComposerNode *node);
+    void nodeSelected(dtkComposerNode *node);
 
     void compositionChanged(void);
+
+    void selectionCleared(void);
 
 signals:
     void evaluationStarted(void);

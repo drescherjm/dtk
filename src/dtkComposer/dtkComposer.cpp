@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 10 14:37:23 2010 (+0200)
+ * Last-Updated: Mon Nov 29 12:50:10 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 397
+ *     Update #: 399
  */
 
 /* Commentary: 
@@ -55,6 +55,8 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
 
     connect(d->scene, SIGNAL(nodeAdded(dtkComposerNode *)), this, SIGNAL(nodeAdded(dtkComposerNode *)));
     connect(d->scene, SIGNAL(nodeRemoved(dtkComposerNode *)), this, SIGNAL(nodeRemoved(dtkComposerNode *)));
+    connect(d->scene, SIGNAL(nodeSelected(dtkComposerNode *)), this, SIGNAL(nodeSelected(dtkComposerNode *)));
+    connect(d->scene, SIGNAL(selectionCleared()), this, SIGNAL(selectionCleared()));
 
     connect(d->scene, SIGNAL(evaluationStarted()), this, SIGNAL(evaluationStarted()));
     connect(d->scene, SIGNAL(evaluationStopped()), this, SIGNAL(evaluationStopped()));

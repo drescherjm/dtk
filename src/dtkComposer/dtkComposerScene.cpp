@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov  1 16:12:46 2010 (+0100)
+ * Last-Updated: Mon Nov 29 12:52:09 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 357
+ *     Update #: 374
  */
 
 /* Commentary: 
@@ -334,13 +334,22 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 void dtkComposerScene::onSelectionChanged(void)
 {
     foreach(QGraphicsItem *item, this->selectedItems()) {
+
         if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) {
+
+            emit nodeSelected(node);
+
             if(dtkAbstractData *data = dynamic_cast<dtkAbstractData *>(node->object()))
                 emit dataSelected(data);
+
             if(dtkAbstractProcess *process = dynamic_cast<dtkAbstractProcess *>(node->object()))
                 emit processSelected(process);
+
             if(dtkAbstractView *view = dynamic_cast<dtkAbstractView *>(node->object()))
                 emit viewSelected(view);
         }
     }
+
+    if(this->selectedItems().count() == 0)
+        emit selectionCleared();
 }

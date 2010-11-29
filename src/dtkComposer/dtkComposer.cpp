@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov 29 12:50:10 2010 (+0100)
+ * Last-Updated: Mon Nov 29 19:32:56 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 399
+ *     Update #: 409
  */
 
 /* Commentary: 
@@ -57,6 +57,7 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
     connect(d->scene, SIGNAL(nodeRemoved(dtkComposerNode *)), this, SIGNAL(nodeRemoved(dtkComposerNode *)));
     connect(d->scene, SIGNAL(nodeSelected(dtkComposerNode *)), this, SIGNAL(nodeSelected(dtkComposerNode *)));
     connect(d->scene, SIGNAL(selectionCleared()), this, SIGNAL(selectionCleared()));
+    connect(d->scene, SIGNAL(pathChanged(dtkComposerNode *)), this, SIGNAL(pathChanged(dtkComposerNode *)));
 
     connect(d->scene, SIGNAL(evaluationStarted()), this, SIGNAL(evaluationStarted()));
     connect(d->scene, SIGNAL(evaluationStopped()), this, SIGNAL(evaluationStopped()));
@@ -130,6 +131,16 @@ bool dtkComposer::save(QString fileName)
     emit titleChanged(fi.fileName());
 
     return true;
+}
+
+void dtkComposer::group(QList<dtkComposerNode *> nodes)
+{
+    d->scene->createGroup(nodes);
+}
+
+void dtkComposer::ungroup(dtkComposerNode *node)
+{
+    d->scene->explodeGroup(node);
 }
 
 void dtkComposer::onDataSelected(dtkAbstractData *data)

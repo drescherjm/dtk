@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov  1 16:29:53 2010 (+0100)
+ * Last-Updated: Mon Nov 29 19:03:23 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 502
+ *     Update #: 539
  */
 
 /* Commentary: 
@@ -60,12 +60,16 @@ public:
     QList<QAction *> actions;
 
     bool dirty;
+
+          dtkComposerNode *  parent;
+    QList<dtkComposerNode *> children;
 };
 
 dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePrivate)
 {
     d->kind = Unknown;
     d->object = NULL;
+    d->parent = NULL;
 
     d->penWidth = 1;
     d->header_height = 20;
@@ -104,6 +108,8 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
 
 dtkComposerNode::~dtkComposerNode(void)
 {
+    qDebug() << DTK_PRETTY_FUNCTION;
+
     // foreach(dtkComposerEdge *edge, d->input_edges.keys())
     //     delete edge;
 
@@ -311,6 +317,35 @@ void dtkComposerNode::setDirty(bool dirty)
     d->dirty = dirty;
 }
 
+void dtkComposerNode::setParentNode(dtkComposerNode *node)
+{
+    d->parent = node;
+
+    QObject::setParent(node);
+}
+
+void dtkComposerNode::addChildNode(dtkComposerNode *node)
+{
+    if(!d->children.contains(node))
+        d->children << node;
+}
+
+void dtkComposerNode::removeChildNode(dtkComposerNode *node)
+{
+    if (d->children.contains(node))
+        d->children.removeAll(node);
+}
+
+QList<dtkComposerNode *> dtkComposerNode::childNodes(void)
+{
+    return d->children;
+}
+
+dtkComposerNode *dtkComposerNode::parentNode(void)
+{
+    return d->parent;
+}
+
 void dtkComposerNode::update(void)
 {
     foreach(dtkComposerEdge *edge, d->input_edges.keys())
@@ -360,6 +395,10 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
         gradiant.setColorAt(0.0, QColor(Qt::white));
         gradiant.setColorAt(0.3, QColor("#ffa500"));
         gradiant.setColorAt(1.0, QColor("#ffa500").darker());
+        break;
+    case Composite:
+        gradiant.setColorAt(0.0, QColor("#515151"));
+        gradiant.setColorAt(1.0, QColor("#000000"));
         break;
     case Control:
         gradiant.setColorAt(0.0, QColor(Qt::white));

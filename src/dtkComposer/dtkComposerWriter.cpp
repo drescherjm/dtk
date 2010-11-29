@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov  1 16:38:02 2010 (+0100)
+ * Last-Updated: Mon Nov 29 18:06:52 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 82
+ *     Update #: 89
  */
 
 /* Commentary: 
@@ -69,6 +69,22 @@ void dtkComposerWriter::write(const QString& fileName)
         tag.setAttribute("x", QString::number(node->pos().x()));
         tag.setAttribute("y", QString::number(node->pos().y()));
         tag.setAttribute("id", QString::number(id));
+
+        { // -- Generic node
+
+            { // -- title
+
+                QString node_title = node->title();
+                
+                QDomText text = doc.createTextNode(node_title);
+                
+                QDomElement title = doc.createElement("title");
+                title.appendChild(text);
+                
+                tag.appendChild(title);
+
+            }
+        }
 
         // -- File node
 

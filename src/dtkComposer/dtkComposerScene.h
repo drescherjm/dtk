@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov 29 12:37:52 2010 (+0100)
+ * Last-Updated: Mon Nov 29 19:49:45 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 85
+ *     Update #: 95
  */
 
 /* Commentary: 
@@ -58,7 +58,10 @@ public:
 
     void setFactory(dtkComposerNodeFactory *factory);
 
+    dtkComposerNode *createGroup(QList<dtkComposerNode *> nodes);
     dtkComposerNode *createNode(QString type, QPointF position = QPointF());
+
+    void explodeGroup(dtkComposerNode *node);
 
 signals:
     void dataSelected(dtkAbstractData *data);
@@ -70,6 +73,8 @@ signals:
     void nodeSelected(dtkComposerNode *node);
 
     void compositionChanged(void);
+
+    void pathChanged(dtkComposerNode *);
 
     void selectionCleared(void);
 
@@ -86,6 +91,11 @@ protected:
     dtkComposerNodeProperty *propertyAt(const QPointF& point) const;
 
 protected:
+    void hideAllNodes(void);
+    void showAllNodes(void);
+    void showChildNodes(dtkComposerNode *node);
+    
+protected:
     void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
     void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
     void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
@@ -97,6 +107,7 @@ protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent);
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent);
 
 protected slots:
     void onSelectionChanged(void);

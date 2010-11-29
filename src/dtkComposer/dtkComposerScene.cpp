@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov 29 12:52:09 2010 (+0100)
+ * Last-Updated: Mon Nov 29 20:54:31 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 374
+ *     Update #: 542
  */
 
 /* Commentary: 
@@ -34,15 +34,20 @@
 class dtkComposerScenePrivate
 {
 public:
+    dtkComposerNode *current_node;
     dtkComposerEdge *current_edge;
+
     dtkComposerNodeFactory *factory;
 
     bool modified;
+
+    QList<dtkComposerNode *> nodes;
 };
 
 dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(new dtkComposerScenePrivate)
 {
     d->current_edge = NULL;
+    d->current_node = NULL;
     d->factory = new dtkComposerNodeFactory;
     d->modified = false;
 
@@ -144,6 +149,8 @@ void dtkComposerScene::addNode(dtkComposerNode *node)
 {
     this->addItem(node);
 
+    d->nodes << node;
+
     emit nodeAdded(node);
 
     this->setModified(true);
@@ -151,6 +158,8 @@ void dtkComposerScene::addNode(dtkComposerNode *node)
 
 void dtkComposerScene::removeNode(dtkComposerNode *node)
 {
+    d->nodes.removeAll(node);
+
     foreach(dtkComposerEdge *edge, node->inputEdges())
         delete edge; // this->removeItem(edge);
     
@@ -164,16 +173,77 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
     this->setModified(true);
 }
 
+dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes)
+{
+    dtkComposerNode *group = new dtkComposerNode;
+    group->setTitle("Composite node");
+    group->setKind(dtkComposerNode::Composite);
+    group->setParentNode(d->current_node);
+
+    if (d->current_node)
+        d->current_node->addChildNode(group);
+
+    foreach(dtkComposerNode *node, nodes) {
+
+        if(dtkComposerNode *parent = node->parentNode())
+            parent->removeChildNode(node);
+
+        node->setParentNode(group);
+        node->hide();
+
+        this->removeItem(node);
+
+        group->addChildNode(node);
+    }
+
+    this->addNode(group);
+    this->setModified(true);
+
+    return group;
+}
+
 dtkComposerNode *dtkComposerScene::createNode(QString type, QPointF position)
 {
     if(dtkComposerNode *node = d->factory->create(type)) {
         node->setPos(position);
+        node->setParentNode(d->current_node);
+
+        if (d->current_node)
+            d->current_node->addChildNode(node);
+
         this->addNode(node);
+
         return node;
+
     } else {
         qDebug() << "Unable to create node for type" << type;
+
         return NULL;
     }
+}
+
+void dtkComposerScene::explodeGroup(dtkComposerNode *node)
+{
+    if(!node)
+        return;
+    
+    if(node->kind() != dtkComposerNode::Composite) {
+        qDebug() << "Only composite nodes can be ungrouped.";
+        return;
+    }
+
+    foreach(dtkComposerNode *child, node->childNodes()) {
+
+        node->removeChildNode(child);
+
+        child->setParentNode(node->parentNode());
+        child->show();
+
+        this->addItem(child);
+    }
+
+    this->removeNode(node);
+    this->setModified(true);
 }
 
 void dtkComposerScene::setFactory(dtkComposerNodeFactory *factory)
@@ -215,6 +285,36 @@ dtkComposerNodeProperty *dtkComposerScene::propertyAt(const QPointF& point) cons
             return property;
 
     return NULL;
+}
+
+void dtkComposerScene::hideAllNodes(void)
+{
+    foreach(QGraphicsItem *item, this->items()) {
+        if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) {
+            if(node->isVisible()) {
+                node->hide();
+                this->removeItem(node);
+            }
+        }
+    }
+}
+
+void dtkComposerScene::showAllNodes(void)
+{
+    foreach(dtkComposerNode *node, d->nodes) {
+        if(!node->parentNode()) {
+            node->show();
+            this->addItem(node);
+        }
+    }
+}
+
+void dtkComposerScene::showChildNodes(dtkComposerNode *node)
+{
+    foreach(dtkComposerNode *child, node->childNodes()) {
+        child->show();
+        this->addItem(child);
+    }
 }
 
 void dtkComposerScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
@@ -329,6 +429,59 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
     }
 
     this->setModified(true);
+}
+
+void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent)
+{
+    dtkComposerNode *node = nodeAt(mouseEvent->scenePos());
+
+    if(!node)
+        return;
+
+    if(!(mouseEvent->buttons() & Qt::LeftButton))
+        return;
+
+    if(!(mouseEvent->modifiers() & Qt::ControlModifier)) {
+
+        if(node->kind() != dtkComposerNode::Composite)
+            return;
+        
+        this->hideAllNodes();
+        this->showChildNodes(node);
+
+        d->current_node = node;
+
+        emit pathChanged(d->current_node);
+
+    } else {
+     
+        if(dtkComposerNode *current = node->parentNode()) {
+
+            dtkComposerNode *parent = current->parentNode();
+
+            if(parent) {
+
+                if(parent->kind() != dtkComposerNode::Composite)
+                    return;
+                
+                this->hideAllNodes();
+                this->showChildNodes(parent);
+                
+                d->current_node = parent;
+  
+                emit pathChanged(d->current_node);
+
+            } else {
+                
+                this->hideAllNodes();
+                this->showAllNodes();
+                
+                d->current_node = NULL;
+
+                emit pathChanged(d->current_node);
+            }
+        }
+    }
 }
 
 void dtkComposerScene::onSelectionChanged(void)

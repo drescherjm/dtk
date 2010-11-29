@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov  1 16:26:26 2010 (+0100)
+ * Last-Updated: Mon Nov 29 19:03:29 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 130
+ *     Update #: 147
  */
 
 /* Commentary: 
@@ -42,6 +42,7 @@ public:
     enum Kind {
         Unknown,
         Atomic,
+        Composite,
         Control,
         Data,
         Process,
@@ -94,6 +95,19 @@ public:
 
     bool dirty(void);
     void setDirty(bool dirty);
+
+    // -- Composite operations
+
+    void    addChildNode(dtkComposerNode *node);
+    void removeChildNode(dtkComposerNode *node);
+
+    void setParentNode(dtkComposerNode *node);
+
+    QList<dtkComposerNode *> childNodes(void);
+
+    dtkComposerNode *parentNode(void);
+
+    // --
 
 signals:
     void elapsed(QString duration);

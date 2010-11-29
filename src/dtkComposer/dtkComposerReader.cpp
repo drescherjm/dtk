@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov  1 16:31:33 2010 (+0100)
+ * Last-Updated: Mon Nov 29 18:08:50 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 87
+ *     Update #: 89
  */
 
 /* Commentary: 
@@ -85,6 +85,16 @@ void dtkComposerReader::read(const QString& fileName)
             position.setY(nodes.at(i).toElement().attribute("y").toFloat());
 
         dtkComposerNode *node = d->scene->createNode(nodes.at(i).toElement().attribute("type"), position);
+
+        // Generic node
+
+        { // -- title
+
+            QDomNodeList children = nodes.at(i).toElement().elementsByTagName("title");
+            
+            if(!children.isEmpty())
+                node->setTitle(children.at(0).childNodes().at(0).toText().data());
+        }
 
         // File node
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:12:32 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov 29 12:50:22 2010 (+0100)
+ * Last-Updated: Mon Nov 29 19:32:18 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 53
+ *     Update #: 57
  */
 
 /* Commentary: 
@@ -63,9 +63,15 @@ signals:
    
     void selectionCleared(void);
 
+    void pathChanged(dtkComposerNode *);
+
 signals:
     void evaluationStarted(void);
     void evaluationStopped(void);
+
+public slots:
+    void   group(QList<dtkComposerNode *> nodes);
+    void ungroup(dtkComposerNode *node);
 
 public slots:
    void onDataSelected(dtkAbstractData *data);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov 29 10:56:07 2010 (+0100)
+ * Last-Updated: Tue Nov 30 00:16:28 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 64
+ *     Update #: 65
  */
 
 /* Commentary: 
@@ -61,6 +61,9 @@ public:
     Multiplicity multiplicity(void);
 
     int count(void);
+
+    void hide(void);
+    void show(void);
 
 public:
     QRectF boundingRect(void) const;

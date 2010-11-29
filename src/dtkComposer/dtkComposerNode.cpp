@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov 29 19:03:23 2010 (+0100)
+ * Last-Updated: Tue Nov 30 00:31:52 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 539
+ *     Update #: 563
  */
 
 /* Commentary: 
@@ -171,20 +171,16 @@ dtkComposerEdge *dtkComposerNode::edge(dtkComposerNodeProperty *property)
 
 void dtkComposerNode::addInputProperty(dtkComposerNodeProperty *property)
 {
-    property->setRect(QRectF(-d->width/2+d->node_radius, d->margin_top+(3*d->input_properties.count() +1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
-
     d->input_properties << property;
 
-    d->height = d->header_height + (3*qMax(d->input_properties.count(), d->output_properties.count())) * d->node_radius + d->margin_bottom;
+    this->layout();
 }
 
 void dtkComposerNode::addOutputProperty(dtkComposerNodeProperty *property)
 {
-    property->setRect(QRectF(d->width/2-3*d->node_radius, d->margin_top+(3*d->output_properties.count() + 1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
-
     d->output_properties << property;
 
-    d->height = d->header_height + (3*qMax(d->input_properties.count(), d->output_properties.count())) * d->node_radius + d->margin_bottom;
+    this->layout();
 }
 
 void dtkComposerNode::addInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
@@ -315,6 +311,25 @@ bool dtkComposerNode::dirty(void)
 void dtkComposerNode::setDirty(bool dirty)
 {
     d->dirty = dirty;
+}
+
+void dtkComposerNode::layout(void)
+{
+    int exposed_input_properties = 0;
+
+    foreach(dtkComposerNodeProperty *property, d->input_properties)
+        if(property->isVisible())
+            property->setRect(QRectF(-d->width/2+d->node_radius, d->margin_top+(3*(exposed_input_properties++) + 1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
+
+    int exposed_output_properties = 0;
+
+    foreach(dtkComposerNodeProperty *property, d->output_properties)
+        if(property->isVisible())
+            property->setRect(QRectF(d->width/2-3*d->node_radius, d->margin_top+(3*(exposed_output_properties++) + 1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
+
+    d->height = d->header_height + (3*qMax(exposed_input_properties, exposed_output_properties)) * d->node_radius + d->margin_bottom;
+
+    QGraphicsItem::update(this->boundingRect());
 }
 
 void dtkComposerNode::setParentNode(dtkComposerNode *node)

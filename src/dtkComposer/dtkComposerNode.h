@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov 29 19:03:29 2010 (+0100)
+ * Last-Updated: Mon Nov 29 23:57:36 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 147
+ *     Update #: 154
  */
 
 /* Commentary: 
@@ -95,6 +95,8 @@ public:
 
     bool dirty(void);
     void setDirty(bool dirty);
+
+    void layout(void);
 
     // -- Composite operations
 

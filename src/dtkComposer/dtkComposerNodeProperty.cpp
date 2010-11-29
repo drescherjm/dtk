@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 13 10:23:57 2010 (+0200)
+ * Last-Updated: Tue Nov 30 00:18:08 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 135
+ *     Update #: 139
  */
 
 /* Commentary: 
@@ -84,6 +84,20 @@ dtkComposerNodeProperty::Type dtkComposerNodeProperty::type(void)
 int dtkComposerNodeProperty::count(void)
 {
     return d->parent->count(this);
+}
+
+void dtkComposerNodeProperty::hide(void)
+{
+    QGraphicsItem::hide();
+
+    d->parent->layout();
+}
+
+void dtkComposerNodeProperty::show(void)
+{
+    QGraphicsItem::show();
+
+    d->parent->layout();
 }
 
 QRectF dtkComposerNodeProperty::boundingRect(void) const

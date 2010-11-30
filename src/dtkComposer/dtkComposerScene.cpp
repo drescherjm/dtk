@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov 30 09:30:31 2010 (+0100)
+ * Last-Updated: Tue Nov 30 12:55:39 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 548
+ *     Update #: 605
  */
 
 /* Commentary: 
@@ -31,8 +31,15 @@
 #include <dtkCore/dtkAbstractViewFactory.h>
 #include <dtkCore/dtkLog.h>
 
+// /////////////////////////////////////////////////////////////////
+// dtkComposerScenePrivate
+// /////////////////////////////////////////////////////////////////
+
 class dtkComposerScenePrivate
 {
+public:
+    dtkComposerEdge *edge(dtkComposerEdge *edge);
+
 public:
     dtkComposerNode *current_node;
     dtkComposerEdge *current_edge;
@@ -42,7 +49,21 @@ public:
     bool modified;
 
     QList<dtkComposerNode *> nodes;
+    QList<dtkComposerEdge *> edges;
 };
+
+dtkComposerEdge *dtkComposerScenePrivate::edge(dtkComposerEdge *edge)
+{
+    foreach(dtkComposerEdge *e, this->edges)
+        if(edge->source() == e->source() && edge->destination() == e->destination())
+            return e;
+
+    return NULL;
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerScene
+// /////////////////////////////////////////////////////////////////
 
 dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(new dtkComposerScenePrivate)
 {
@@ -142,6 +163,8 @@ void dtkComposerScene::addEdge(dtkComposerEdge *edge)
 {
     this->addItem(edge);
 
+    d->edges << edge;
+
     this->setModified(true);
 }
 
@@ -160,13 +183,15 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
 {
     d->nodes.removeAll(node);
 
-    foreach(dtkComposerEdge *edge, node->inputEdges())
-        delete edge; // this->removeItem(edge);
+    foreach(dtkComposerEdge *edge, node->inputEdges()) {
+        d->edges.removeAll(edge);
+        delete edge;
+    }
     
-    foreach(dtkComposerEdge *edge, node->outputEdges())
-        delete edge; // this->removeItem(edge);
-    
-    // this->removeItem(node);
+    foreach(dtkComposerEdge *edge, node->outputEdges()) {
+        d->edges.removeAll(edge);
+        delete edge;
+    }
     
     delete node;
 
@@ -203,6 +228,7 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes)
     }
 
     this->addNode(group);
+    this->updateEdgesVisibility();
     this->setModified(true);
 
     return group;
@@ -222,7 +248,6 @@ dtkComposerNode *dtkComposerScene::createNode(QString type, QPointF position)
         return node;
 
     } else {
-        qDebug() << "Unable to create node for type" << type;
 
         return NULL;
     }
@@ -323,6 +348,32 @@ void dtkComposerScene::showChildNodes(dtkComposerNode *node)
     }
 }
 
+void dtkComposerScene::updateEdgesVisibility(void)
+{
+    foreach(dtkComposerEdge *edge, d->edges) {
+        
+        if (edge->source()->node()->isVisible() && edge->destination()->node()->isVisible() && !edge->isVisible()) {
+            edge->show();
+            this->addItem(edge);
+        }
+
+        if(!edge->source()->node()->isVisible() && edge->destination()->node()->isVisible() && edge->isVisible()) {
+            edge->hide();
+            this->removeItem(edge);
+        }
+
+        if(edge->source()->node()->isVisible() && !edge->destination()->node()->isVisible() && edge->isVisible()) {
+            edge->hide();
+            this->removeItem(edge);
+        }
+
+        if(!edge->source()->node()->isVisible() && !edge->destination()->node()->isVisible() && edge->isVisible()) {
+            edge->hide();
+            this->removeItem(edge);
+        }
+    }
+}
+
 void dtkComposerScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
     if (event->mimeData()->hasUrls())
@@ -407,8 +458,12 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     }
 
     if (property->type() == dtkComposerNodeProperty::Input /*&& property->count() > 0*/) {
+
         if (d->current_edge = property->edge())
             d->current_edge->unlink();
+
+        d->edges.removeAll(d->edge(d->current_edge));
+
         return;
     }
 
@@ -425,13 +480,26 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
     dtkComposerNodeProperty *property = propertyAt(mouseEvent->scenePos());
     
     if (d->current_edge->source() == property) {
+
         delete d->current_edge;
-        d->current_edge = 0;
+
+        d->current_edge = NULL;
+
     } else {
         d->current_edge->setDestination(property);
-        if (!d->current_edge->link())
+
+        if (!d->current_edge->link()) {
+
             delete d->current_edge;
-        d->current_edge = 0;
+
+        } else {
+
+            dtkComposerEdge *edge = d->current_edge;
+
+            d->edges << edge;
+        }
+
+        d->current_edge = NULL;
     }
 
     this->setModified(true);
@@ -454,6 +522,7 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEven
         
         this->hideAllNodes();
         this->showChildNodes(node);
+        this->updateEdgesVisibility();
 
         d->current_node = node;
 
@@ -472,7 +541,8 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEven
                 
                 this->hideAllNodes();
                 this->showChildNodes(parent);
-                
+                this->updateEdgesVisibility();
+
                 d->current_node = parent;
   
                 emit pathChanged(d->current_node);
@@ -481,7 +551,8 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEven
                 
                 this->hideAllNodes();
                 this->showAllNodes();
-                
+                this->updateEdgesVisibility();
+
                 d->current_node = NULL;
 
                 emit pathChanged(d->current_node);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov 30 00:31:52 2010 (+0100)
+ * Last-Updated: Tue Nov 30 12:53:05 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 563
+ *     Update #: 565
  */
 
 /* Commentary: 
@@ -108,8 +108,6 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
 
 dtkComposerNode::~dtkComposerNode(void)
 {
-    qDebug() << DTK_PRETTY_FUNCTION;
-
     // foreach(dtkComposerEdge *edge, d->input_edges.keys())
     //     delete edge;
 
@@ -361,6 +359,10 @@ dtkComposerNode *dtkComposerNode::parentNode(void)
     return d->parent;
 }
 
+//! 
+/*! 
+ * 
+ */
 void dtkComposerNode::update(void)
 {
     foreach(dtkComposerEdge *edge, d->input_edges.keys())

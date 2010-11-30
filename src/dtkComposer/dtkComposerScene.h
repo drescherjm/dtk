@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov 29 19:49:45 2010 (+0100)
+ * Last-Updated: Tue Nov 30 10:33:25 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 95
+ *     Update #: 97
  */
 
 /* Commentary: 
@@ -94,7 +94,8 @@ protected:
     void hideAllNodes(void);
     void showAllNodes(void);
     void showChildNodes(dtkComposerNode *node);
-    
+    void updateEdgesVisibility(void);
+
 protected:
     void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
     void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);

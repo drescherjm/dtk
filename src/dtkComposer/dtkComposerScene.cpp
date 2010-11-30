@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov 30 12:55:39 2010 (+0100)
+ * Last-Updated: Tue Nov 30 13:05:44 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 605
+ *     Update #: 610
  */
 
 /* Commentary: 
@@ -240,8 +240,15 @@ dtkComposerNode *dtkComposerScene::createNode(QString type, QPointF position)
         node->setPos(position);
         node->setParentNode(d->current_node);
 
-        if (d->current_node)
+        if (d->current_node) {
             d->current_node->addChildNode(node);
+            
+            foreach(dtkComposerNodeProperty *property, node->inputProperties())
+                d->current_node->addInputProperty(property->clone(d->current_node));
+            
+            foreach(dtkComposerNodeProperty *property, node->outputProperties())
+                d->current_node->addOutputProperty(property->clone(d->current_node));
+        }
 
         this->addNode(node);
 

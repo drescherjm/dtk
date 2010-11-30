@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov 30 00:16:28 2010 (+0100)
+ * Last-Updated: Tue Nov 30 09:38:44 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 65
+ *     Update #: 71
  */
 
 /* Commentary: 
@@ -52,12 +52,14 @@ public:
      dtkComposerNodeProperty(QString name, Type type, Multiplicity multiplicity, dtkComposerNode *parent);
     ~dtkComposerNodeProperty(void);
 
+    dtkComposerNodeProperty *clone(dtkComposerNode *node);
+
     dtkComposerEdge *edge(void);
     dtkComposerNode *node(void);
 
     QString name(void) const;
 
-    Type type(void);
+            Type type(void);
     Multiplicity multiplicity(void);
 
     int count(void);
@@ -67,7 +69,7 @@ public:
 
 public:
     QRectF boundingRect(void) const;
-    QRectF rect(void) const;
+    QRectF         rect(void) const;
 
     void setText(const QString& text);
     void setRect(const QRectF& rect);

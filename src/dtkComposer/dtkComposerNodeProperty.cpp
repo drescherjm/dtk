@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov 30 00:18:08 2010 (+0100)
+ * Last-Updated: Tue Nov 30 09:38:51 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 139
+ *     Update #: 149
  */
 
 /* Commentary: 
@@ -59,6 +59,14 @@ dtkComposerNodeProperty::~dtkComposerNodeProperty(void)
     delete d;
 
     d = NULL;
+}
+
+dtkComposerNodeProperty *dtkComposerNodeProperty::clone(dtkComposerNode *node)
+{
+    dtkComposerNodeProperty *property = new dtkComposerNodeProperty(d->text->toPlainText(), d->type, d->multiplicity, node);
+    property->hide();
+    
+    return property;
 }
 
 dtkComposerEdge *dtkComposerNodeProperty::edge(void)

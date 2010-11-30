@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov 29 20:54:31 2010 (+0100)
+ * Last-Updated: Tue Nov 30 09:30:31 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 542
+ *     Update #: 548
  */
 
 /* Commentary: 
@@ -190,6 +190,12 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes)
 
         node->setParentNode(group);
         node->hide();
+
+        foreach(dtkComposerNodeProperty *property, node->inputProperties())
+            group->addInputProperty(property->clone(group));
+
+        foreach(dtkComposerNodeProperty *property, node->outputProperties())
+            group->addOutputProperty(property->clone(group));
 
         this->removeItem(node);
 

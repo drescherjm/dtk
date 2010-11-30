@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov 30 19:57:19 2010 (+0100)
+ * Last-Updated: Tue Nov 30 23:38:58 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 755
+ *     Update #: 761
  */
 
 /* Commentary: 
@@ -101,23 +101,16 @@ QList<dtkComposerEdge *> dtkComposerScene::edges(void)
 
 QList<dtkComposerNode *> dtkComposerScene::nodes(void)
 {
-    QList<dtkComposerNode *> list;
-
-    foreach(QGraphicsItem *item, this->items())
-        if (dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item))
-            list << node;
-
-    return list;
+    return d->nodes;
 }
 
 QList<dtkComposerNode *> dtkComposerScene::nodes(QString name)
 {
     QList<dtkComposerNode *> list;
 
-    foreach(QGraphicsItem *item, this->items())
-        if (dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item))
-            if(node->object()->name() == name)
-                list << node;
+    foreach(dtkComposerNode *node, d->nodes)
+        if(node->object()->name() == name)
+            list << node;
 
     return list;
 }
@@ -205,10 +198,7 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
         parent->removeChildNode(node);
 
         foreach(dtkComposerNodeProperty *property, parent->inputProperties()) {
-            if(property->clonedFrom() == node) {
-                
-                qDebug() << "Removing an input property";
-
+            if(property->clonedFrom() == node) {                
                 parent->removeInputProperty(property);
                 this->removeItem(property);
                 delete property;
@@ -217,9 +207,6 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
 
         foreach(dtkComposerNodeProperty *property, parent->outputProperties()) {
             if(property->clonedFrom() == node) {
-
-                qDebug() << "Removing an output property";
-
                 parent->removeOutputProperty(property);
                 this->removeItem(property);
                 delete property;
@@ -247,6 +234,7 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes)
 {
     dtkComposerNode *group = new dtkComposerNode;
     group->setTitle("Composite node");
+    group->setType("dtkComposerNodeComposite");
     group->setKind(dtkComposerNode::Composite);
     group->setParentNode(d->current_node);
 

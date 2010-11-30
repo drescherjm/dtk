@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov 30 10:33:25 2010 (+0100)
+ * Last-Updated: Tue Nov 30 15:53:07 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 97
+ *     Update #: 102
  */
 
 /* Commentary: 
@@ -91,6 +91,8 @@ protected:
     dtkComposerNodeProperty *propertyAt(const QPointF& point) const;
 
 protected:
+    void setCurrentNode(dtkComposerNode *node);
+
     void hideAllNodes(void);
     void showAllNodes(void);
     void showChildNodes(dtkComposerNode *node);

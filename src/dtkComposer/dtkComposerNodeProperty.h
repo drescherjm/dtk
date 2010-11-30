@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov 30 09:38:44 2010 (+0100)
+ * Last-Updated: Tue Nov 30 14:13:26 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 71
+ *     Update #: 74
  */
 
 /* Commentary: 
@@ -52,7 +52,7 @@ public:
      dtkComposerNodeProperty(QString name, Type type, Multiplicity multiplicity, dtkComposerNode *parent);
     ~dtkComposerNodeProperty(void);
 
-    dtkComposerNodeProperty *clone(dtkComposerNode *node);
+    dtkComposerNodeProperty *clone(dtkComposerNode *node = 0);
 
     dtkComposerEdge *edge(void);
     dtkComposerNode *node(void);
@@ -66,6 +66,8 @@ public:
 
     void hide(void);
     void show(void);
+
+    dtkComposerNode *clonedFrom(void);
 
 public:
     QRectF boundingRect(void) const;

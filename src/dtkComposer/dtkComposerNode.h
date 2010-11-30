@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov 29 23:57:36 2010 (+0100)
+ * Last-Updated: Tue Nov 30 19:33:31 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 154
+ *     Update #: 160
  */
 
 /* Commentary: 
@@ -60,6 +60,9 @@ public:
     void addInputProperty(dtkComposerNodeProperty *property);
     void addOutputProperty(dtkComposerNodeProperty *property);
 
+    void removeInputProperty(dtkComposerNodeProperty *property);
+    void removeOutputProperty(dtkComposerNodeProperty *property);
+
     void addInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
     void addOutputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
 
@@ -110,6 +113,9 @@ public:
     dtkComposerNode *parentNode(void);
 
     // --
+
+    void setGhost(bool ghost);
+    bool  isGhost(void);
 
 signals:
     void elapsed(QString duration);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov 30 09:38:51 2010 (+0100)
+ * Last-Updated: Tue Nov 30 14:27:35 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 149
+ *     Update #: 160
  */
 
 /* Commentary: 
@@ -25,6 +25,7 @@ class dtkComposerNodePropertyPrivate
 {
 public:
     dtkComposerNode *parent;
+    dtkComposerNode *clone;
 
     dtkComposerNodeProperty::Type type;
     dtkComposerNodeProperty::Multiplicity multiplicity;
@@ -38,6 +39,7 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multip
     d->type = type;
     d->multiplicity = multiplicity;
     d->parent = parent;
+    d->clone = NULL;
 
     d->text = new QGraphicsTextItem(this);
 #if defined(Q_WS_MAC)
@@ -64,7 +66,10 @@ dtkComposerNodeProperty::~dtkComposerNodeProperty(void)
 dtkComposerNodeProperty *dtkComposerNodeProperty::clone(dtkComposerNode *node)
 {
     dtkComposerNodeProperty *property = new dtkComposerNodeProperty(d->text->toPlainText(), d->type, d->multiplicity, node);
-    property->hide();
+    property->d->clone = d->parent;
+
+    if(node)
+        property->hide();
     
     return property;
 }
@@ -106,6 +111,11 @@ void dtkComposerNodeProperty::show(void)
     QGraphicsItem::show();
 
     d->parent->layout();
+}
+
+dtkComposerNode *dtkComposerNodeProperty::clonedFrom(void)
+{
+    return d->clone;
 }
 
 QRectF dtkComposerNodeProperty::boundingRect(void) const

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Dec  1 11:19:55 2010 (+0100)
+ * Last-Updated: Wed Dec  1 12:02:45 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 134
+ *     Update #: 154
  */
 
 /* Commentary: 
@@ -63,37 +63,60 @@ dtkComposerNode *dtkComposerReaderPrivate::readNode(QDomNode node)
     
     { // -- title
         
-        QDomNodeList children = node.toElement().elementsByTagName("title");
+        QDomNodeList children = node.childNodes();
         
-        if(!children.isEmpty())
-            n->setTitle(children.at(0).childNodes().at(0).toText().data());
+        for(int i = 0; i < children.count(); i++) {
+
+            if(children.at(i).toElement().tagName() != "title")
+                continue;
+
+            n->setTitle(children.at(i).childNodes().at(0).toText().data());
+        }
+    }
+
+    { // -- properties
+        
+        /// ----
     }
     
     // File node
     
     if(dtkComposerNodeFile *file_node = dynamic_cast<dtkComposerNodeFile *>(n)) {
         
-        QDomNodeList children = node.toElement().elementsByTagName("name");
+        QDomNodeList children = node.childNodes();
         
-        if(!children.isEmpty())
-            file_node->setFileName(children.at(0).childNodes().at(0).toText().data());
+        for(int i = 0; i < children.count(); i++) {
+
+            if(children.at(i).toElement().tagName() != "name")
+                continue;
+
+            file_node->setFileName(children.at(i).childNodes().at(0).toText().data());
+        }        
     }
     
     // Process node
     
     if(dtkComposerNodeProcess *process_node = dynamic_cast<dtkComposerNodeProcess *>(n)) {
         
-        QDomNodeList children = node.toElement().elementsByTagName("implementation");
+        QDomNodeList children = node.childNodes();
         
-        if(!children.isEmpty())
-            process_node->setupImplementation(children.at(0).childNodes().at(0).toText().data());
+        for(int i = 0; i < children.count(); i++) {
+
+            if(children.at(i).toElement().tagName() != "implementation")
+                continue;
+
+            process_node->setupImplementation(children.at(i).childNodes().at(0).toText().data());
+        }
     }
     
     if(node.toElement().attribute("type") == "dtkComposerNodeComposite") {
 
-        QDomNodeList children = node.toElement().elementsByTagName("node");
+        QDomNodeList children = node.childNodes();
         
         for(int i = 0; i < children.count(); i++) {
+
+            if(children.at(i).toElement().tagName() != "node")
+                continue;
 
             if(children.at(i).parentNode() != node)
                 continue;
@@ -164,17 +187,20 @@ void dtkComposerReader::read(const QString& fileName)
 
     // Feeding scene with nodes
 
-    QDomNodeList nodes = doc.elementsByTagName("node");
+    QDomNodeList nodes = doc.firstChild().childNodes();
 
     for(int i = 0; i < nodes.count(); i++)
-        if(nodes.at(i).parentNode().toElement().tagName() != "node")
+        if(nodes.at(i).toElement().tagName() == "node")
             d->scene->addNode(d->readNode(nodes.at(i)));
 
     // Feeding scene with edges
 
-    QDomNodeList edges = doc.elementsByTagName("edge");
+    QDomNodeList edges = doc.firstChild().childNodes();
 
     for(int i = 0; i < edges.count(); i++) {
+
+        if(edges.at(i).toElement().tagName() != "edge")
+            continue;
 
         QDomElement source = edges.at(i).firstChildElement("source");
         QDomElement destin = edges.at(i).firstChildElement("destination");

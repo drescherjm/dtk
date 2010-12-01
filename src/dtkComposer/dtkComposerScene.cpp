@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov 30 23:38:58 2010 (+0100)
+ * Last-Updated: Wed Dec  1 12:12:20 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 761
+ *     Update #: 791
  */
 
 /* Commentary: 
@@ -597,7 +597,7 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEven
 
         if(node->kind() != dtkComposerNode::Composite)
             return;
-        
+                
         node->setGhost(true);
 
         this->hideAllNodes();
@@ -613,10 +613,10 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEven
             
             if(parent->kind() != dtkComposerNode::Composite)
                 return;
-            
+
             node->setGhost(false);
             parent->setGhost(true);
-            
+       
             this->hideAllNodes();
             this->showChildNodes(parent);
             this->updateEdgesVisibility();
@@ -625,7 +625,7 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEven
             emit pathChanged(d->current_node);
             
         } else {
-            
+
             node->setGhost(false);
             
             this->hideAllNodes();

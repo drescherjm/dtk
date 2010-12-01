@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Dec  1 00:34:57 2010 (+0100)
+ * Last-Updated: Wed Dec  1 11:19:55 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 133
+ *     Update #: 134
  */
 
 /* Commentary: 
@@ -94,6 +94,9 @@ dtkComposerNode *dtkComposerReaderPrivate::readNode(QDomNode node)
         QDomNodeList children = node.toElement().elementsByTagName("node");
         
         for(int i = 0; i < children.count(); i++) {
+
+            if(children.at(i).parentNode() != node)
+                continue;
          
             dtkComposerNode *nd = this->readNode(children.at(i));
             

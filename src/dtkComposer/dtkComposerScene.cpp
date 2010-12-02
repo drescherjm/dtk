@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Dec  1 12:12:20 2010 (+0100)
+ * Last-Updated: Thu Dec  2 19:52:02 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 791
+ *     Update #: 805
  */
 
 /* Commentary: 
@@ -198,7 +198,7 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
         parent->removeChildNode(node);
 
         foreach(dtkComposerNodeProperty *property, parent->inputProperties()) {
-            if(property->clonedFrom() == node) {                
+            if(property->clonedFrom() == node) {
                 parent->removeInputProperty(property);
                 this->removeItem(property);
                 delete property;
@@ -230,13 +230,14 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
  * \return The composite node that form the group.
  */
 
-dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes)
+dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, QPointF position)
 {
     dtkComposerNode *group = new dtkComposerNode;
     group->setTitle("Composite node");
     group->setType("dtkComposerNodeComposite");
     group->setKind(dtkComposerNode::Composite);
     group->setParentNode(d->current_node);
+    group->setPos(position);
 
     if (d->current_node)
         d->current_node->addChildNode(group);
@@ -273,14 +274,21 @@ dtkComposerNode *dtkComposerScene::createNode(QString type, QPointF position)
         node->setPos(position);
         node->setParentNode(d->current_node);
 
-        if (d->current_node) {
+        if (d->current_node)
             d->current_node->addChildNode(node);
+
+        dtkComposerNode *n = d->current_node;
+
+        while (n) {
             
             foreach(dtkComposerNodeProperty *property, node->inputProperties())
-                d->current_node->addInputProperty(property->clone(d->current_node));
+                n->addInputProperty(property->clone(n));
             
             foreach(dtkComposerNodeProperty *property, node->outputProperties())
-                d->current_node->addOutputProperty(property->clone(d->current_node));
+                n->addOutputProperty(property->clone(n));
+            
+            n = n->parentNode();
+
         }
 
         this->addNode(node);
@@ -364,31 +372,6 @@ dtkComposerNodeProperty *dtkComposerScene::propertyAt(const QPointF& point) cons
 void dtkComposerScene::setCurrentNode(dtkComposerNode *node)
 {
     d->current_node = node;
-
-    // foreach(dtkComposerNodeProperty *property, d->current_input_properties)
-    //     delete property;
-    
-    // d->current_input_properties.clear();
-
-    // foreach(dtkComposerNodeProperty *property, d->current_output_properties)
-    //     delete property;
-    
-    // d->current_output_properties.clear();
-
-    // if(!node)
-    //     return;
-
-    // foreach(dtkComposerNodeProperty *property, d->current_node->inputProperties()) {
-    //     dtkComposerNodeProperty *clone = property->clone();
-    //     this->addItem(clone);
-    //     d->current_input_properties << clone;
-    // }
-
-    // foreach(dtkComposerNodeProperty *property, d->current_node->outputProperties()) {
-    //     dtkComposerNodeProperty *clone = property->clone();
-    //     this->addItem(clone);
-    //     d->current_output_properties << clone;
-    // }
 }
 
 void dtkComposerScene::hideAllNodes(void)
@@ -480,7 +463,7 @@ void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
         return;
     }
 
-    this->createNode(url.path(), event->pos());
+    this->createNode(url.path(), event->scenePos());
 
     event->acceptProposedAction();
 }

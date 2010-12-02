@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov 30 19:35:52 2010 (+0100)
+ * Last-Updated: Thu Dec  2 23:38:27 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 684
+ *     Update #: 724
  */
 
 /* Commentary: 
@@ -362,7 +362,7 @@ void dtkComposerNode::layout(void)
     int exposed_input_properties = 0;
 
     foreach(dtkComposerNodeProperty *property, d->input_properties)
-        if(property->isVisible())
+        if(property->isDisplayed())
             if(d->ghost)
                 property->setRect(QRectF(d->ghostRect().left()+d->node_radius, d->ghostRect().top() + 40 + (3*(exposed_input_properties++) + 1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
             else
@@ -371,7 +371,7 @@ void dtkComposerNode::layout(void)
     int exposed_output_properties = 0;
 
     foreach(dtkComposerNodeProperty *property, d->output_properties)
-        if(property->isVisible())
+        if(property->isDisplayed())
             if(d->ghost)
                 property->setRect(QRectF(d->ghostRect().right() - 3*d->node_radius, d->ghostRect().top() + 40 + (3*(exposed_output_properties++) + 1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
             else
@@ -557,6 +557,22 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 
     painter->setPen(pen);
     painter->drawRoundedRect(rect, d->node_radius, d->node_radius);
+
+    if(d->kind == Composite) {
+        foreach(dtkComposerNodeProperty *property, d->input_properties) {
+            if (property->isDirty()) {
+                property->show();
+                property->setDirty(false);
+            }
+        }
+
+        foreach(dtkComposerNodeProperty *property, d->output_properties) {
+            if (property->isDirty()) {
+                property->show();
+                property->setDirty(false);
+            }
+        }
+    }
 }
 
 void dtkComposerNode::mouseMoveEvent(QGraphicsSceneMouseEvent *event)

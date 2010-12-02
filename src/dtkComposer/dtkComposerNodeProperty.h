@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov 30 14:13:26 2010 (+0100)
+ * Last-Updated: Thu Dec  2 19:56:07 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 74
+ *     Update #: 84
  */
 
 /* Commentary: 
@@ -68,6 +68,12 @@ public:
     void show(void);
 
     dtkComposerNode *clonedFrom(void);
+
+    bool  isDisplayed(void);
+    void setDisplayed(bool dirty);
+
+    bool  isDirty(void);
+    void setDirty(bool dirty);
 
 public:
     QRectF boundingRect(void) const;

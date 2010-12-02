@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Dec  2 23:36:08 2010 (+0100)
+ * Last-Updated: Fri Dec  3 00:06:31 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 327
+ *     Update #: 330
  */
 
 /* Commentary: 
@@ -228,7 +228,7 @@ void dtkComposerReader::read(const QString& fileName)
 
     for(int i = 0; i < nodes.count(); i++)
         if(nodes.at(i).toElement().tagName() == "node")
-            d->scene->addNode(d->readNode(nodes.at(i)));
+            d->readNode(nodes.at(i));
 
     // Feeding scene with edges
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Dec  2 19:52:02 2010 (+0100)
+ * Last-Updated: Thu Dec  2 23:40:37 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 805
+ *     Update #: 808
  */
 
 /* Commentary: 
@@ -50,9 +50,6 @@ public:
 
     QList<dtkComposerNode *> nodes;
     QList<dtkComposerEdge *> edges;
-
-    // QList<dtkComposerNodeProperty *>  current_input_properties; // composite node's view  left_property_area items
-    // QList<dtkComposerNodeProperty *> current_output_properties; // composite node's view right_property_area items
 };
 
 dtkComposerEdge *dtkComposerScenePrivate::edge(dtkComposerEdge *edge)
@@ -509,7 +506,7 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     if(!property)
         return;
 
-    if (property->type() == dtkComposerNodeProperty::Output /*&& property->count() == 0*/) {
+    if (property->type() == dtkComposerNodeProperty::Output) {
         delete d->current_edge;
         d->current_edge = new dtkComposerEdge;
         this->addItem(d->current_edge);
@@ -518,7 +515,7 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         return;
     }
 
-    if (property->type() == dtkComposerNodeProperty::Input /*&& property->count() > 0*/) {
+    if (property->type() == dtkComposerNodeProperty::Input) {
 
         if (d->current_edge = property->edge())
             d->current_edge->unlink();

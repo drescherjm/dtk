@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov 30 14:27:35 2010 (+0100)
+ * Last-Updated: Thu Dec  2 23:24:14 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 160
+ *     Update #: 227
  */
 
 /* Commentary: 
@@ -32,6 +32,9 @@ public:
 
     QGraphicsEllipseItem *ellipse;
     QGraphicsTextItem *text;
+
+    bool dirty;
+    bool displayed;
 };
 
 dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multiplicity multiplicity, dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePropertyPrivate)
@@ -40,6 +43,9 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multip
     d->multiplicity = multiplicity;
     d->parent = parent;
     d->clone = NULL;
+
+    d->dirty = false;
+    d->displayed = true;
 
     d->text = new QGraphicsTextItem(this);
 #if defined(Q_WS_MAC)
@@ -66,7 +72,13 @@ dtkComposerNodeProperty::~dtkComposerNodeProperty(void)
 dtkComposerNodeProperty *dtkComposerNodeProperty::clone(dtkComposerNode *node)
 {
     dtkComposerNodeProperty *property = new dtkComposerNodeProperty(d->text->toPlainText(), d->type, d->multiplicity, node);
-    property->d->clone = d->parent;
+
+    if(d->parent->kind() == dtkComposerNode::Composite)
+        property->d->clone = d->clone;
+    else
+        property->d->clone = d->parent;
+
+    property->d->displayed = false;
 
     if(node)
         property->hide();
@@ -102,6 +114,8 @@ int dtkComposerNodeProperty::count(void)
 void dtkComposerNodeProperty::hide(void)
 {
     QGraphicsItem::hide();
+    
+    d->displayed = false;
 
     d->parent->layout();
 }
@@ -110,12 +124,43 @@ void dtkComposerNodeProperty::show(void)
 {
     QGraphicsItem::show();
 
+    d->displayed = true;
+
     d->parent->layout();
 }
 
 dtkComposerNode *dtkComposerNodeProperty::clonedFrom(void)
 {
     return d->clone;
+}
+
+bool dtkComposerNodeProperty::isDisplayed(void)
+{
+    return d->displayed;
+}
+
+//! Mark the property as displayed independently from whether it is currently visible or not.
+/*! 
+ *  A property can be displayed while not visible. This occurs when a
+ *  node relies within a group. It's property is displayed but not
+ *  currently visible if the scene shows a higher or deeper level of
+ *  the composition.
+ */
+void dtkComposerNodeProperty::setDisplayed(bool displayed)
+{
+    d->displayed = displayed;
+}
+
+#include <dtkCore/dtkGlobal.h>
+
+bool dtkComposerNodeProperty::isDirty(void)
+{
+    return d->dirty;
+}
+
+void dtkComposerNodeProperty::setDirty(bool dirty)
+{
+    d->dirty = dirty;
 }
 
 QRectF dtkComposerNodeProperty::boundingRect(void) const

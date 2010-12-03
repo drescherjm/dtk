@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov  1 16:10:47 2010 (+0100)
+ * Last-Updated: Fri Dec  3 01:01:44 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 220
+ *     Update #: 245
  */
 
 /* Commentary: 
@@ -173,20 +173,12 @@ bool dtkComposerEdge::link(void)
     if (!d->source || !d->destination)
         return false;
 
-    if(d->source->node() == d->destination->node()) {
-        dtkDebug() << "Cannot connect a node to itself!!";
+    if(d->source->node() == d->destination->node())
         return false;
-    }
 
-    if (d->source->type() == dtkComposerNodeProperty::Input) {
-        dtkDebug() << "Source should be an output property!";
-        return false;
-    }
-
-    if (d->destination->type() == dtkComposerNodeProperty::Output) {
-        dtkDebug() << "Destination should be an input property!";
-        return false;
-    }
+    if (d->source->node()->kind() == d->destination->node()->kind())
+        if(d->source->type() == d->destination->type())
+            return false;
 
     d->source->node()->addOutputEdge(this, d->source);
     d->destination->node()->addInputEdge(this, d->destination);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Dec  1 00:21:58 2010 (+0100)
+ * Last-Updated: Fri Dec  3 00:06:39 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 150
+ *     Update #: 179
  */
 
 /* Commentary: 
@@ -53,23 +53,7 @@ void dtkComposerWriterPrivate::writeNode(dtkComposerNode *node, QDomElement& ele
     tag.setAttribute("x", QString::number(node->pos().x()));
     tag.setAttribute("y", QString::number(node->pos().y()));
     tag.setAttribute("id", QString::number(current_id));
-    
-    { // -- Generic node
         
-        { // -- title
-            
-            QString node_title = node->title();
-            
-            QDomText text = document.createTextNode(node_title);
-            
-            QDomElement title = document.createElement("title");
-            title.appendChild(text);
-            
-            tag.appendChild(title);
-            
-        }
-    }
-    
     // -- File node
     
     if(dtkComposerNodeFile *file_node = dynamic_cast<dtkComposerNodeFile *>(node)) {
@@ -111,6 +95,46 @@ void dtkComposerWriterPrivate::writeNode(dtkComposerNode *node, QDomElement& ele
             this->writeNode(child, tag, document);
     }
     
+    { // -- Generic node
+        
+        { // -- title
+            
+            QString node_title = node->title();
+            
+            QDomText text = document.createTextNode(node_title);
+            
+            QDomElement title = document.createElement("title");
+            title.appendChild(text);
+            
+            tag.appendChild(title);
+        }
+
+        { // -- properties
+
+            foreach(dtkComposerNodeProperty *property, node->inputProperties()) {
+                
+                QDomElement property_element = document.createElement("property");
+                property_element.setAttribute("name", property->name());
+                property_element.setAttribute("type", "input");
+                property_element.setAttribute("hidden", property->isDisplayed() ? "false" : "true");
+                if(node->kind() == dtkComposerNode::Composite)
+                    property_element.setAttribute("id", node_ids.key(property->clonedFrom()));
+                tag.appendChild(property_element);
+            }
+
+            foreach(dtkComposerNodeProperty *property, node->outputProperties()) {
+                
+                QDomElement property_element = document.createElement("property");
+                property_element.setAttribute("name", property->name());
+                property_element.setAttribute("type", "output");
+                property_element.setAttribute("hidden", property->isDisplayed() ? "false" : "true");
+                if(node->kind() == dtkComposerNode::Composite)
+                    property_element.setAttribute("id", node_ids.key(property->clonedFrom()));
+                tag.appendChild(property_element);
+            }
+        }
+    }
+
     // --
     
     element.appendChild(tag);

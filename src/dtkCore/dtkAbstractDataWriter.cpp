@@ -97,3 +97,8 @@ void dtkAbstractDataWriter::setProgress(int value)
 {
     emit progressed (value);
 }
+
+QStringList dtkAbstractDataWriter::preferredFileExtensions () const
+{
+    return QStringList ();
+}

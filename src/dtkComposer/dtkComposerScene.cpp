@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Dec  2 23:40:37 2010 (+0100)
+ * Last-Updated: Fri Dec  3 01:00:53 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 808
+ *     Update #: 820
  */
 
 /* Commentary: 
@@ -506,7 +506,7 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     if(!property)
         return;
 
-    if (property->type() == dtkComposerNodeProperty::Output) {
+    if (!property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Output) {
         delete d->current_edge;
         d->current_edge = new dtkComposerEdge;
         this->addItem(d->current_edge);
@@ -515,13 +515,26 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         return;
     }
 
-    if (property->type() == dtkComposerNodeProperty::Input) {
+    if (property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Input) {
+        delete d->current_edge;
+        d->current_edge = new dtkComposerEdge;
+        this->addItem(d->current_edge);
+        d->current_edge->setSource(property);
+        d->current_edge->show();
+        return;
+    }
 
+    if (!property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Input) {
         if (d->current_edge = property->edge())
             d->current_edge->unlink();
-
         d->edges.removeAll(d->edge(d->current_edge));
+        return;
+    }
 
+    if (property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Output) {
+        if (d->current_edge = property->edge())
+            d->current_edge->unlink();
+        d->edges.removeAll(d->edge(d->current_edge));
         return;
     }
 
@@ -548,9 +561,13 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
         if (!d->current_edge->link()) {
 
+            qDebug() << "deleting edge";
+
             delete d->current_edge;
 
         } else {
+
+            qDebug() << "link ok !";
 
             dtkComposerEdge *edge = d->current_edge;
 

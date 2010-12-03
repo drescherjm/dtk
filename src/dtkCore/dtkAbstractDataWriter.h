@@ -49,7 +49,7 @@ public:
         The default implementation returns an empty StringList, 
         indicating no preferred extension.
       */
-    virtual QStringList preferredFileExtensions () const;
+    virtual QStringList supportedFileExtensions () const;
 
 signals:
     void started(const QString& message);

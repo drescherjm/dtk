@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec  3 01:33:34 2010 (+0100)
+ * Last-Updated: Mon Dec  6 21:28:35 2010 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 725
+ *     Update #: 730
  */
 
 /* Commentary: 
@@ -337,11 +337,31 @@ dtkComposerNodeProperty *dtkComposerNode::inputProperty(const QString& name) con
     return NULL;
 }
 
+dtkComposerNodeProperty *dtkComposerNode::inputProperty(const QString& name, dtkComposerNode *from) const
+{
+    foreach(dtkComposerNodeProperty *property, d->input_properties)
+        if(property->name() == name)
+            if(property->clonedFrom() == from)
+                return property;
+    
+    return NULL;
+}
+
 dtkComposerNodeProperty *dtkComposerNode::outputProperty(const QString& name) const
 {
     foreach(dtkComposerNodeProperty *property, d->output_properties)
         if(property->name() == name)
             return property;
+
+    return NULL;
+}
+
+dtkComposerNodeProperty *dtkComposerNode::outputProperty(const QString& name, dtkComposerNode *from) const
+{
+    foreach(dtkComposerNodeProperty *property, d->output_properties)
+        if(property->name() == name)
+            if(property->clonedFrom() == from)
+                return property;
 
     return NULL;
 }

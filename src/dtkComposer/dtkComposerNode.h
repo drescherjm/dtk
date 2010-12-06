@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec  3 19:29:27 2010 (+0100)
+ * Last-Updated: Mon Dec  6 13:09:55 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 163
+ *     Update #: 164
  */
 
 /* Commentary: 
@@ -71,7 +71,8 @@ public:
 
     void addAction(const QString& text, const QObject *receiver, const char *slot);
 
-    int count(dtkComposerNodeProperty *property);
+    int  count(dtkComposerNodeProperty *property);
+    int number(dtkComposerNodeProperty *property);
 
     Kind kind(void);
     QString type(void);

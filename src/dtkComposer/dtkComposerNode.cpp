@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec  3 19:32:29 2010 (+0100)
+ * Last-Updated: Mon Dec  6 13:10:03 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 728
+ *     Update #: 729
  */
 
 /* Commentary: 
@@ -264,6 +264,15 @@ int dtkComposerNode::count(dtkComposerNodeProperty *property)
         return d->output_edges.keys(property).count();
 
     return 0;
+}
+
+int dtkComposerNode::number(dtkComposerNodeProperty *property)
+{
+    if(property->type() == dtkComposerNodeProperty::Input)
+        return d->input_properties.indexOf(property);
+
+    if(property->type() == dtkComposerNodeProperty::Output)
+        return d->output_properties.indexOf(property);
 }
 
 QList<dtkComposerNodeProperty *> dtkComposerNode::inputProperties(void)

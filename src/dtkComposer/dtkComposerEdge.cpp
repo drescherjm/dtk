@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec  3 01:01:44 2010 (+0100)
+ * Last-Updated: Sat Dec  4 16:09:11 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 245
+ *     Update #: 266
  */
 
 /* Commentary: 
@@ -170,15 +170,35 @@ void dtkComposerEdge::adjust(const QPointF& start, const QPointF& end)
 
 bool dtkComposerEdge::link(void)
 {
-    if (!d->source || !d->destination)
+    if (!d->source || !d->destination) {
+        qDebug() << "Cannot connect undefined properties";
         return false;
+    }
 
-    if(d->source->node() == d->destination->node())
+    if(d->source->node() == d->destination->node()) {
+        qDebug() << "Cannot connect a property to itself.";
         return false;
+    }
 
-    if (d->source->node()->kind() == d->destination->node()->kind())
-        if(d->source->type() == d->destination->type())
-            return false;
+    if(d->source->node()->isGhost() && d->destination->node()->isGhost()) {
+        qDebug() << "Cannot connect ghost nodes together.";
+        return false;
+    }
+
+    if (d->source->node()->isGhost() && d->source->type() == dtkComposerNodeProperty::Output) {
+        qDebug() << "Source property cannot be the output property of a ghost";
+        return false;
+    }
+
+    if (d->destination->node()->isGhost() && d->destination->type() == dtkComposerNodeProperty::Input) {
+        qDebug() << "Destination property cannot be the input property of a ghost";
+        return false;
+    }
+
+    if (!d->source->node()->isGhost() && !d->destination->node()->isGhost() && d->source->type() == d->destination->type()) {
+        qDebug() << "Cannot connect properties of non ghost nodes if they are of the same type";
+        return false;
+    }
 
     d->source->node()->addOutputEdge(this, d->source);
     d->destination->node()->addInputEdge(this, d->destination);

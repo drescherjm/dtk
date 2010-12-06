@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec  3 00:06:31 2010 (+0100)
+ * Last-Updated: Sat Dec  4 15:40:55 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 330
+ *     Update #: 357
  */
 
 /* Commentary: 
@@ -247,13 +247,33 @@ void dtkComposerReader::read(const QString& fileName)
         
         QString source_property = source.attribute("property");
         QString destin_property = destin.attribute("property");
+        
+        QString source_property_id;
+        QString destin_property_id;
+        
+        if (source.hasAttribute("id"))
+            source_property_id = source.attribute("id");
+
+        if (destin.hasAttribute("id"))
+            destin_property_id = destin.attribute("id");
 
         dtkComposerEdge *edge = new dtkComposerEdge;
-        edge->setSource(d->node_map.value(source_id)->outputProperty(source_property));
-        edge->setDestination(d->node_map.value(destin_id)->inputProperty(destin_property));
-        edge->link();
-        edge->show();
+        
+        if(source_property_id.isEmpty())
+            edge->setSource(d->node_map.value(source_id)->outputProperty(source_property));
+        else
+            edge->setSource(d->node_map.value(source_id)->inputProperty(source_property, d->node_map.value(source_property_id.toInt())));
 
-        d->scene->addEdge(edge);
+        if(destin_property_id.isEmpty())
+            edge->setDestination(d->node_map.value(destin_id)->inputProperty(destin_property));
+        else
+            edge->setDestination(d->node_map.value(destin_id)->outputProperty(destin_property, d->node_map.value(destin_property_id.toInt())));
+
+        if (edge->link()) {
+            edge->show();
+            d->scene->addEdge(edge);
+        } else {
+            qDebug() << DTK_PRETTY_FUNCTION << "Unable to link!";
+        }
     }
 }

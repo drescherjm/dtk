@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov 30 19:33:31 2010 (+0100)
+ * Last-Updated: Fri Dec  3 19:29:27 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 160
+ *     Update #: 163
  */
 
 /* Commentary: 
@@ -92,7 +92,9 @@ public:
     dtkComposerNodeProperty *propertyAt(const QPointF& point) const;
 
     dtkComposerNodeProperty  *inputProperty(const QString& name) const;
+    dtkComposerNodeProperty  *inputProperty(const QString& name, dtkComposerNode *from) const;
     dtkComposerNodeProperty *outputProperty(const QString& name) const;
+    dtkComposerNodeProperty *outputProperty(const QString& name, dtkComposerNode *from) const;
 
     QString title(void);
 

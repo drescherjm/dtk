@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Dec  4 16:26:48 2010 (+0100)
+ * Last-Updated: Mon Dec  6 18:27:02 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 843
+ *     Update #: 844
  */
 
 /* Commentary: 
@@ -460,7 +460,7 @@ void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
         return;
     }
 
-    this->createNode(url.path(), event->scenePos());
+    this->createNode(url.path(), event->pos());
 
     event->acceptProposedAction();
 }

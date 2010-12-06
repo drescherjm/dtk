@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Dec  4 15:40:55 2010 (+0100)
+ * Last-Updated: Mon Dec  6 21:03:28 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 357
+ *     Update #: 359
  */
 
 /* Commentary: 
@@ -154,6 +154,10 @@ dtkComposerNode *dtkComposerReaderPrivate::readNode(QDomNode node)
                             if(hidden == "true") {
                                 property->hide();
                             }
+
+                            if(hidden == "false") {
+                                property->show();
+                            }
                         }
                     }
                 }
@@ -169,6 +173,10 @@ dtkComposerNode *dtkComposerReaderPrivate::readNode(QDomNode node)
                         } else {
                             if(hidden == "true") {
                                 property->hide();
+                            }
+
+                            if(hidden == "false") {
+                                property->show();
                             }
                         }
                     }

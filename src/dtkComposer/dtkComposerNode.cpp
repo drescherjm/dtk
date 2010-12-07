@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec  6 13:10:03 2010 (+0100)
+ * Last-Updated: Tue Dec  7 19:25:31 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 729
+ *     Update #: 750
  */
 
 /* Commentary: 
@@ -57,6 +57,9 @@ public:
 
     QHash<dtkComposerEdge *, dtkComposerNodeProperty *> input_edges;
     QHash<dtkComposerEdge *, dtkComposerNodeProperty *> output_edges;
+
+    QHash<dtkComposerEdge *, dtkComposerNodeProperty *> ghost_input_edges;
+    QHash<dtkComposerEdge *, dtkComposerNodeProperty *> ghost_output_edges;
 
     dtkComposerNodeProperty *clicked_property;
 
@@ -236,6 +239,16 @@ void dtkComposerNode::addOutputEdge(dtkComposerEdge *edge, dtkComposerNodeProper
     // this->onOutputEdgeConnected(edge, property);
 }
 
+void dtkComposerNode::addGhostInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+{
+    d->ghost_input_edges.insert(edge, property);
+}
+
+void dtkComposerNode::addGhostOutputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+{
+    d->ghost_output_edges.insert(edge, property);
+}
+
 void dtkComposerNode::removeInputEdge(dtkComposerEdge *edge)
 {
     d->input_edges.remove(edge);
@@ -244,6 +257,12 @@ void dtkComposerNode::removeInputEdge(dtkComposerEdge *edge)
 void dtkComposerNode::removeOutputEdge(dtkComposerEdge *edge)
 {
     d->output_edges.remove(edge);
+}
+
+void dtkComposerNode::removeAllEdges(void)
+{
+    d->input_edges.clear();
+    d->output_edges.clear();
 }
 
 void dtkComposerNode::addAction(const QString& text, const QObject *receiver, const char *slot)
@@ -293,6 +312,16 @@ QList<dtkComposerEdge *> dtkComposerNode::inputEdges(void)
 QList<dtkComposerEdge *> dtkComposerNode::outputEdges(void)
 {
     return d->output_edges.keys();
+}
+
+QList<dtkComposerEdge *> dtkComposerNode::inputGhostEdges(void)
+{
+    return d->ghost_input_edges.keys();
+}
+
+QList<dtkComposerEdge *> dtkComposerNode::outputGhostEdges(void)
+{
+    return d->ghost_output_edges.keys();
 }
 
 QList<dtkComposerNode *> dtkComposerNode::inputNodes(void)

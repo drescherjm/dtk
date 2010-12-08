@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec  6 21:28:35 2010 (+0100)
+ * Last-Updated: Wed Dec  8 09:16:53 2010 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 730
+ *     Update #: 778
  */
 
 /* Commentary: 
@@ -57,6 +57,9 @@ public:
 
     QHash<dtkComposerEdge *, dtkComposerNodeProperty *> input_edges;
     QHash<dtkComposerEdge *, dtkComposerNodeProperty *> output_edges;
+
+    QHash<dtkComposerEdge *, dtkComposerNodeProperty *> ghost_input_edges;
+    QHash<dtkComposerEdge *, dtkComposerNodeProperty *> ghost_output_edges;
 
     dtkComposerNodeProperty *clicked_property;
 
@@ -236,6 +239,16 @@ void dtkComposerNode::addOutputEdge(dtkComposerEdge *edge, dtkComposerNodeProper
     // this->onOutputEdgeConnected(edge, property);
 }
 
+void dtkComposerNode::addGhostInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+{
+    d->ghost_input_edges.insert(edge, property);
+}
+
+void dtkComposerNode::addGhostOutputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+{
+    d->ghost_output_edges.insert(edge, property);
+}
+
 void dtkComposerNode::removeInputEdge(dtkComposerEdge *edge)
 {
     d->input_edges.remove(edge);
@@ -244,6 +257,12 @@ void dtkComposerNode::removeInputEdge(dtkComposerEdge *edge)
 void dtkComposerNode::removeOutputEdge(dtkComposerEdge *edge)
 {
     d->output_edges.remove(edge);
+}
+
+void dtkComposerNode::removeAllEdges(void)
+{
+    d->input_edges.clear();
+    d->output_edges.clear();
 }
 
 void dtkComposerNode::addAction(const QString& text, const QObject *receiver, const char *slot)
@@ -293,6 +312,16 @@ QList<dtkComposerEdge *> dtkComposerNode::inputEdges(void)
 QList<dtkComposerEdge *> dtkComposerNode::outputEdges(void)
 {
     return d->output_edges.keys();
+}
+
+QList<dtkComposerEdge *> dtkComposerNode::inputGhostEdges(void)
+{
+    return d->ghost_input_edges.keys();
+}
+
+QList<dtkComposerEdge *> dtkComposerNode::outputGhostEdges(void)
+{
+    return d->ghost_output_edges.keys();
 }
 
 QList<dtkComposerNode *> dtkComposerNode::inputNodes(void)
@@ -480,22 +509,55 @@ void dtkComposerNode::update(void)
     foreach(dtkComposerEdge *edge, d->input_edges.keys())
         if(edge->source()->node()->dirty())
             return;
-
+    
     foreach(dtkComposerEdge *edge, d->output_edges.keys())
         edge->destination()->node()->setDirty(true);
+    
+    emit evaluated(this); qApp->processEvents(QEventLoop::ExcludeUserInputEvents | QEventLoop::ExcludeSocketNotifiers, 1);
 
-    emit evaluated(this); qApp->processEvents(QEventLoop::ExcludeUserInputEvents | QEventLoop::ExcludeSocketNotifiers, 10);
+    if(d->kind != dtkComposerNode::Composite) {
 
-    foreach(dtkComposerEdge *edge, d->input_edges.keys())
-        this->onInputEdgeConnected(edge, edge->destination());
+        foreach(dtkComposerEdge *edge, d->input_edges.keys())
+            this->onInputEdgeConnected(edge, edge->destination());
 
-    foreach(dtkComposerEdge *edge, d->output_edges.keys())
-        this->onOutputEdgeConnected(edge, edge->source());
+    } else {
+        
+        foreach(dtkComposerEdge *g_edge, d->ghost_input_edges.keys()) {
+            foreach(dtkComposerEdge *i_edge, d->input_edges.keys()) {
+                if(i_edge->destination() == g_edge->source())
+                    g_edge->destination()->node()->onInputEdgeConnected(i_edge, g_edge->destination());
+            }
+        }
+    }
+
+    if(d->kind != dtkComposerNode::Composite) {
+        
+        foreach(dtkComposerEdge *edge, d->output_edges.keys())
+            this->onOutputEdgeConnected(edge, edge->source());
+    
+    } else {
+
+        foreach(dtkComposerEdge *g_edge, d->ghost_output_edges.keys()) {
+            foreach(dtkComposerEdge *o_edge, d->output_edges.keys()) {
+                if(o_edge->source() == g_edge->destination())
+                    g_edge->source()->node()->onOutputEdgeConnected(o_edge, g_edge->source());
+            }
+        }
+    }
 
     d->dirty = false;
+    
+    if(d->kind != dtkComposerNode::Composite) {
 
-    foreach(dtkComposerEdge *edge, d->output_edges.keys())
-        edge->destination()->node()->update();
+        foreach(dtkComposerEdge *edge, d->output_edges.keys())
+            edge->destination()->node()->update();
+
+    } else {
+
+        foreach(dtkComposerEdge *edge, d->ghost_input_edges.keys())
+            edge->destination()->node()->update();
+
+    }
 }
 
 QRectF dtkComposerNode::boundingRect(void) const
@@ -650,6 +712,22 @@ void dtkComposerNode::chooseImplementation(void)
 void dtkComposerNode::setupImplementation(QString implementation)
 {
     DTK_UNUSED(implementation);
+
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkComposerNode::onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+{
+    Q_UNUSED(edge);
+    Q_UNUSED(property);
+
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkComposerNode::onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+{
+    Q_UNUSED(edge);
+    Q_UNUSED(property);
 
     DTK_DEFAULT_IMPLEMENTATION;
 }

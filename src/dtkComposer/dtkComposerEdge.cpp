@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Dec  4 16:09:11 2010 (+0100)
+ * Last-Updated: Tue Dec  7 19:50:33 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 266
+ *     Update #: 295
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeProperty.h"
 
+#include <dtkCore/dtkGlobal.h>
 #include <dtkCore/dtkLog.h>
 
 class dtkComposerEdgePrivate
@@ -168,15 +169,34 @@ void dtkComposerEdge::adjust(const QPointF& start, const QPointF& end)
     update();
 }
 
-bool dtkComposerEdge::link(void)
+bool dtkComposerEdge::link(bool anyway)
 {
+    if(anyway) {
+
+        qDebug() << DTK_PRETTY_FUNCTION << "Trying to link" << d->source->name() << "with" << d->destination->name();
+
+        if (d->source->node()->kind() == dtkComposerNode::Composite && d->destination->node()->parentNode() == d->source->node())
+            d->source->node()->addGhostInputEdge(this, d->source);
+        else
+            d->source->node()->addOutputEdge(this, d->source);
+        
+        if (d->destination->node()->kind() == dtkComposerNode::Composite && d->source->node()->parentNode() == d->destination->node())
+            d->destination->node()->addGhostOutputEdge(this, d->destination);
+        else
+            d->destination->node()->addInputEdge(this, d->destination);
+
+        qDebug() << "Ok";
+
+        return true;
+    }
+
     if (!d->source || !d->destination) {
         qDebug() << "Cannot connect undefined properties";
         return false;
     }
 
     if(d->source->node() == d->destination->node()) {
-        qDebug() << "Cannot connect a property to itself.";
+        qDebug() << "Cannot connect a node to itself.";
         return false;
     }
 
@@ -190,6 +210,11 @@ bool dtkComposerEdge::link(void)
         return false;
     }
 
+    if (d->source->node()->isGhost() && d->destination->type() == dtkComposerNodeProperty::Output) {
+        qDebug() << "Destination property cannot be the output property of a non ghost node if source property node is a ghost.";
+        return false;
+    }
+
     if (d->destination->node()->isGhost() && d->destination->type() == dtkComposerNodeProperty::Input) {
         qDebug() << "Destination property cannot be the input property of a ghost";
         return false;
@@ -200,8 +225,33 @@ bool dtkComposerEdge::link(void)
         return false;
     }
 
-    d->source->node()->addOutputEdge(this, d->source);
-    d->destination->node()->addInputEdge(this, d->destination);
+    if(d->source->type() == dtkComposerNodeProperty::Output) {
+        foreach(dtkComposerEdge *edge, d->source->node()->outputEdges()) {
+            if(edge->source() == d->source && edge->destination() == d->destination) {
+                qDebug() << "Edge already exist.";
+                return false;
+            }
+        }
+    }
+
+    if(d->destination->type() == dtkComposerNodeProperty::Input) {
+        foreach(dtkComposerEdge *edge, d->destination->node()->inputEdges()) {
+            if(edge->source() == d->source && edge->destination() == d->destination) {
+                qDebug() << "Edge already exist.";
+                return false;
+            }
+        }
+    }
+
+    if (d->source->node()->isGhost())
+        d->source->node()->addGhostInputEdge(this, d->source);
+    else
+        d->source->node()->addOutputEdge(this, d->source);
+
+    if (d->destination->node()->isGhost())
+        d->destination->node()->addGhostOutputEdge(this, d->destination);
+    else
+        d->destination->node()->addInputEdge(this, d->destination);
 
     return true;
 }

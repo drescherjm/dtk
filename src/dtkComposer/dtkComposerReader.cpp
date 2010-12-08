@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec  6 21:03:28 2010 (+0100)
+ * Last-Updated: Tue Dec  7 19:47:34 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 359
+ *     Update #: 361
  */
 
 /* Commentary: 
@@ -277,11 +277,8 @@ void dtkComposerReader::read(const QString& fileName)
         else
             edge->setDestination(d->node_map.value(destin_id)->outputProperty(destin_property, d->node_map.value(destin_property_id.toInt())));
 
-        if (edge->link()) {
-            edge->show();
-            d->scene->addEdge(edge);
-        } else {
-            qDebug() << DTK_PRETTY_FUNCTION << "Unable to link!";
-        }
+        edge->link(true);
+        edge->show();
+        d->scene->addEdge(edge);
     }
 }

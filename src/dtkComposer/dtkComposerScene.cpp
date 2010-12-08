@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec  6 18:27:02 2010 (+0100)
+ * Last-Updated: Tue Dec  7 19:25:50 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 844
+ *     Update #: 858
  */
 
 /* Commentary: 
@@ -189,6 +189,16 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
         d->edges.removeAll(d->edge(edge));
         delete edge;
     }
+
+    foreach(dtkComposerEdge *edge, node->inputGhostEdges()) {
+        d->edges.removeAll(d->edge(edge));
+        delete edge;
+    }
+    
+    foreach(dtkComposerEdge *edge, node->outputGhostEdges()) {
+        d->edges.removeAll(d->edge(edge));
+        delete edge;
+    }
     
     dtkComposerNode *n = node;
 
@@ -246,6 +256,7 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
         if(dtkComposerNode *parent = node->parentNode())
             parent->removeChildNode(node);
 
+        node->removeAllEdges();
         node->setParentNode(group);
         node->hide();
 
@@ -556,24 +567,24 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
     if (!d->current_edge)
         return;
 
-    d->current_edge->setDestination(propertyAt(mouseEvent->scenePos()));
+    dtkComposerNodeProperty *property = propertyAt(mouseEvent->scenePos());
+
+    d->current_edge->setDestination(property);
     
     if(!d->current_edge->link()) {
         
-        d->current_edge->hide();
-
-        this->removeItem(d->current_edge);
-        
         delete d->current_edge;
+
+        d->current_edge = 0;
         
     } else {
         
         dtkComposerEdge *edge = d->current_edge;
         
         d->edges << edge;
+
+        d->current_edge = 0;
     }
-    
-    d->current_edge = NULL;
     
     this->setModified(true);
 }

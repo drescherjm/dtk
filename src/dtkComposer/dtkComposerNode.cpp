@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Dec  8 09:16:53 2010 (+0100)
+ * Last-Updated: Thu Dec  9 15:56:41 2010 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 778
+ *     Update #: 791
  */
 
 /* Commentary: 
@@ -555,7 +555,7 @@ void dtkComposerNode::update(void)
     } else {
 
         foreach(dtkComposerEdge *edge, d->ghost_input_edges.keys())
-            edge->destination()->node()->update();
+            edge->destination()->node()->update(); 
 
     }
 }

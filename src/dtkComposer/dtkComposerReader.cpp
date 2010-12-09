@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Dec  7 19:47:34 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 361
+ * Last-Updated: Thu Dec  9 14:46:55 2010 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 380
  */
 
 /* Commentary: 
@@ -267,18 +267,65 @@ void dtkComposerReader::read(const QString& fileName)
 
         dtkComposerEdge *edge = new dtkComposerEdge;
         
-        if(source_property_id.isEmpty())
+        if(source_property_id.isEmpty() && destin_property_id.isEmpty()) {
             edge->setSource(d->node_map.value(source_id)->outputProperty(source_property));
-        else
-            edge->setSource(d->node_map.value(source_id)->inputProperty(source_property, d->node_map.value(source_property_id.toInt())));
-
-        if(destin_property_id.isEmpty())
             edge->setDestination(d->node_map.value(destin_id)->inputProperty(destin_property));
-        else
-            edge->setDestination(d->node_map.value(destin_id)->outputProperty(destin_property, d->node_map.value(destin_property_id.toInt())));
+        }
+
+        else if(!source_property_id.isEmpty() && !destin_property_id.isEmpty()) {
+
+            dtkComposerNode *l = d->node_map.value(source_id);
+            dtkComposerNode *r = d->node_map.value(destin_id);
+
+            if(l->parentNode() == r) {
+                
+                edge->setSource(d->node_map.value(source_id)->outputProperty(source_property, d->node_map.value(source_property_id.toInt())));
+                edge->setDestination(d->node_map.value(destin_id)->outputProperty(destin_property, d->node_map.value(destin_property_id.toInt())));
+            }
+
+            else if(r->parentNode() == l) {
+
+                edge->setSource(d->node_map.value(source_id)->inputProperty(source_property, d->node_map.value(source_property_id.toInt())));
+                edge->setDestination(d->node_map.value(destin_id)->inputProperty(destin_property, d->node_map.value(destin_property_id.toInt())));
+            }
+
+            else {
+
+                edge->setSource(d->node_map.value(source_id)->outputProperty(source_property, d->node_map.value(source_property_id.toInt())));
+                edge->setDestination(d->node_map.value(destin_id)->inputProperty(destin_property, d->node_map.value(destin_property_id.toInt())));
+            }
+        }
+
+
+        else if(!source_property_id.isEmpty() || !destin_property_id.isEmpty()) {
+
+            dtkComposerNode *l = d->node_map.value(source_id);
+            dtkComposerNode *r = d->node_map.value(destin_id);
+
+            if(!source_property_id.isEmpty()) {
+
+                if(r->parentNode() == l)
+                    edge->setSource(d->node_map.value(source_id)->inputProperty(source_property, d->node_map.value(source_property_id.toInt())));
+                else
+                    edge->setSource(d->node_map.value(source_id)->outputProperty(source_property, d->node_map.value(source_property_id.toInt())));
+
+                edge->setDestination(d->node_map.value(destin_id)->inputProperty(destin_property));
+            }
+
+            else {
+                
+                edge->setSource(d->node_map.value(source_id)->outputProperty(source_property));
+
+                if(l->parentNode() == r)
+                    edge->setDestination(d->node_map.value(destin_id)->outputProperty(destin_property, d->node_map.value(destin_property_id.toInt())));
+                else
+                    edge->setDestination(d->node_map.value(destin_id)->inputProperty(destin_property, d->node_map.value(destin_property_id.toInt())));
+            }
+        }
 
         edge->link(true);
         edge->show();
+
         d->scene->addEdge(edge);
     }
 }

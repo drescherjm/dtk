@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Dec  7 19:25:50 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 858
+ * Last-Updated: Thu Dec  9 13:55:34 2010 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 863
  */
 
 /* Commentary: 
@@ -253,6 +253,16 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
 
     foreach(dtkComposerNode *node, nodes) {
 
+        foreach(dtkComposerEdge *edge, node->inputEdges()) {
+            this->removeItem(edge);
+            d->edges.removeAll(edge);
+        }
+        
+        foreach(dtkComposerEdge *edge, node->outputEdges()) {
+            this->removeItem(edge);
+            d->edges.removeAll(edge);
+        }
+       
         if(dtkComposerNode *parent = node->parentNode())
             parent->removeChildNode(node);
 

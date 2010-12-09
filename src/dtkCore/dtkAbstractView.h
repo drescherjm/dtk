@@ -77,6 +77,8 @@ public slots:
     virtual void update(void);
 
     virtual QWidget *widget(void);
+    
+    virtual void close(void);
 
     void showFullScreen(void);
     void showMinimized(void);

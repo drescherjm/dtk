@@ -63,6 +63,7 @@ signals:
 
 public slots:
     dtkAbstractView *create(const QString& type);
+    void destroy (dtkAbstractView *view);
 
     dtkAbstractViewAnimator *animator(const QString& type);
     dtkAbstractViewNavigator *navigator(const QString& type);

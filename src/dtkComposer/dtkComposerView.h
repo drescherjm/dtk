@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:52 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 13 10:19:56 2010 (+0200)
+ * Last-Updated: Fri Dec 10 22:31:25 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 19
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -34,6 +34,8 @@ public:
     ~dtkComposerView(void);
 
 protected:
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
     void wheelEvent(QWheelEvent *event);
 };
 

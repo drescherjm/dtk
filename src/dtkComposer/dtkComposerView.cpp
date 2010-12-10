@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:07:37 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov 29 17:01:22 2010 (+0100)
+ * Last-Updated: Fri Dec 10 22:51:56 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 87
+ *     Update #: 160
  */
 
 /* Commentary: 
@@ -31,13 +31,26 @@ dtkComposerView::dtkComposerView(QWidget *parent) : QGraphicsView(parent)
     this->setFrameStyle(QFrame::NoFrame);
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setAcceptDrops(true);
-
-    this->setDragMode(QGraphicsView::RubberBandDrag);
 }
 
 dtkComposerView::~dtkComposerView(void)
 {
 
+}
+
+void dtkComposerView::mousePressEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::LeftButton && (event->modifiers() & Qt::AltModifier))
+        this->setDragMode(QGraphicsView::ScrollHandDrag);
+    else
+        this->setDragMode(QGraphicsView::RubberBandDrag);
+
+    QGraphicsView::mousePressEvent(event);
+}
+
+void dtkComposerView::mouseReleaseEvent(QMouseEvent *event)
+{
+    QGraphicsView::mouseReleaseEvent(event);
 }
 
 void dtkComposerView::wheelEvent(QWheelEvent *event)
@@ -49,5 +62,5 @@ void dtkComposerView::wheelEvent(QWheelEvent *event)
     if (factor < 0.1 || factor > 10)
         return;
     
-    scale(scaleFactor, scaleFactor);
+    this->scale(scaleFactor, scaleFactor);
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Dec  9 15:56:41 2010 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 791
+ * Last-Updated: Fri Dec 10 12:36:19 2010 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 801
  */
 
 /* Commentary: 
@@ -36,6 +36,9 @@ class dtkComposerNodePrivate
 {
 public:
     QRectF ghostRect(void);
+
+    QList<dtkComposerEdge *> iRoute(dtkComposerEdge *edge);
+    QList<dtkComposerEdge *> oRoute(dtkComposerEdge *edge);
 
 public:
     dtkComposerNode *q;
@@ -89,6 +92,34 @@ QRectF dtkComposerNodePrivate::ghostRect(void)
     rect.adjust(-75, -40, 75, 40);
 
     return rect;
+}
+
+QList<dtkComposerEdge *> dtkComposerNodePrivate::iRoute(dtkComposerEdge *edge)
+{
+    QList<dtkComposerEdge *> edges;
+
+    if(edge->source()->node()->kind() != dtkComposerNode::Composite) {
+        edges << edge;
+    } else {
+        foreach(dtkComposerEdge *ghost, edge->source()->node()->outputGhostEdges())
+            edges << iRoute(ghost);
+    }
+
+    return edges;
+}
+
+QList<dtkComposerEdge *> dtkComposerNodePrivate::oRoute(dtkComposerEdge *edge)
+{
+    QList<dtkComposerEdge *> edges;
+
+    if(edge->destination()->node()->kind() != dtkComposerNode::Composite) {
+        edges << edge;
+    } else {
+        foreach(dtkComposerEdge *ghost, edge->destination()->node()->inputGhostEdges())
+            edges << oRoute(ghost);
+    }
+
+    return edges;
 }
 
 // /////////////////////////////////////////////////////////////////

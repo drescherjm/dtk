@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov 29 19:32:56 2010 (+0100)
+ * Last-Updated: Fri Dec 10 21:55:32 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 409
+ *     Update #: 412
  */
 
 /* Commentary: 
@@ -104,6 +104,7 @@ bool dtkComposer::open(QString fileName)
         reader.read(fileName);
 
         d->scene->setModified(false);
+        d->view->fitInView(d->scene->sceneRect(), Qt::KeepAspectRatio);
 
         QFileInfo info(fileName);
 

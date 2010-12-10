@@ -167,6 +167,11 @@ QWidget *dtkAbstractView::widget(void)
     return NULL;
 }
 
+void dtkAbstractView::close(void)
+{
+    emit closed();
+}
+
 void dtkAbstractView::showFullScreen(void)
 {
     if(QWidget *widget = this->widget())

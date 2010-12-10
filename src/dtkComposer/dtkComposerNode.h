@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec 10 17:30:09 2010 (+0100)
+ * Last-Updated: Fri Dec 10 23:22:53 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 178
+ *     Update #: 182
  */
 
 /* Commentary: 
@@ -145,6 +145,8 @@ protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
+    // QVariant itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value);
 
 public:
     virtual QVariant value(dtkComposerNodeProperty *property) { return QVariant(); }

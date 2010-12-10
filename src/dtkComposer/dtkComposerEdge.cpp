@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec 10 17:35:30 2010 (+0100)
+ * Last-Updated: Fri Dec 10 23:21:36 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 303
+ *     Update #: 306
  */
 
 /* Commentary: 
@@ -136,6 +136,9 @@ void dtkComposerEdge::adjust(void)
     if (!d->source || !d->destination)
         return;
 
+    if (!this->isVisible())
+        return;
+
     QRectF rect;
 
     rect = d->source->rect();
@@ -146,13 +149,13 @@ void dtkComposerEdge::adjust(void)
     d->destRect = d->destination->mapToScene(rect).boundingRect();
     QPointF end = d->destination->mapToScene(rect.center());
 
-    adjust(start, end);
+    this->adjust(start, end);
 }
 
 void dtkComposerEdge::adjust(const QPointF& start, const QPointF& end)
 {
-    prepareGeometryChange();
-
+    this->prepareGeometryChange();
+    
     QPointF midPoint = (start + end) / 2;
 
     qreal halfMid = (midPoint.x() - start.x())/2;
@@ -166,7 +169,7 @@ void dtkComposerEdge::adjust(const QPointF& start, const QPointF& end)
     stroker.setCapStyle(Qt::RoundCap);
     d->path = stroker.createStroke(path);
 
-    update();
+    this->update();
 }
 
 bool dtkComposerEdge::link(bool anyway)

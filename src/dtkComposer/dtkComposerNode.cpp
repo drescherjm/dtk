@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec 10 21:50:01 2010 (+0100)
+ * Last-Updated: Fri Dec 10 23:23:04 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 885
+ *     Update #: 905
  */
 
 /* Commentary: 
@@ -169,7 +169,7 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
     d->title->setDefaultTextColor(Qt::white);
     d->title->setPos(-d->width/2 + d->margin_left/2, -d->header_height-2);
 
-    this->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+    this->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable); // | QGraphicsItem::ItemSendsGeometryChanges);
     this->setZValue(10);
 
 #if QT_VERSION >= 0x040600
@@ -761,6 +761,28 @@ void dtkComposerNode::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
     d->clicked_property = NULL;
 }
+
+// QVariant dtkComposerNode::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
+// {
+//     if (change == QGraphicsItem::ItemPositionHasChanged) {
+
+//         qDebug() << DTK_PRETTY_FUNCTION << "ItemPositionHasChanged";
+
+//         foreach(dtkComposerEdge *edge, d->input_edges.keys())
+//             edge->adjust();
+
+//         foreach(dtkComposerEdge *edge, d->output_edges.keys())
+//             edge->adjust();
+
+//         foreach(dtkComposerEdge *edge, d->ghost_input_edges.keys())
+//             edge->adjust();
+
+//         foreach(dtkComposerEdge *edge, d->ghost_output_edges.keys())
+//             edge->adjust();
+//     }
+
+//     return QGraphicsItem::itemChange(change, value);
+// }
 
 void dtkComposerNode::chooseImplementation(void)
 {

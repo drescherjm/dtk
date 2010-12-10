@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec 10 22:22:34 2010 (+0100)
+ * Last-Updated: Fri Dec 10 23:20:50 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 867
+ *     Update #: 878
  */
 
 /* Commentary: 
@@ -448,6 +448,8 @@ void dtkComposerScene::updateEdgesVisibility(void)
             edge->hide();
             this->removeItem(edge);
         }
+
+        edge->adjust();
     }
 }
 
@@ -516,6 +518,8 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
         d->current_edge->adjust(d->current_edge->start(), mouseEvent->scenePos());
         this->update(QRectF(d->current_edge->start(), mouseEvent->scenePos()));
     }
+
+    this->updateEdgesVisibility();
 }
 
 void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)

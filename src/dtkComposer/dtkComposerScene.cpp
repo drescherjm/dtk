@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec 10 23:20:50 2010 (+0100)
+ * Last-Updated: Sat Dec 11 00:18:53 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 878
+ *     Update #: 897
  */
 
 /* Commentary: 
@@ -285,6 +285,8 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
     this->updateEdgesVisibility();
     this->setModified(true);
 
+    QGraphicsScene::update();
+
     return group;
 }
 
@@ -429,25 +431,17 @@ void dtkComposerScene::updateEdgesVisibility(void)
 {
     foreach(dtkComposerEdge *edge, d->edges) {
         
-        if (edge->source()->node()->isVisible() && edge->destination()->node()->isVisible() && !edge->isVisible()) {
+        if (edge->source()->node()->isVisible() && edge->destination()->node()->isVisible() && !edge->isVisible())
             edge->show();
-            this->addItem(edge);
-        }
 
-        if(!edge->source()->node()->isVisible() && edge->destination()->node()->isVisible() && edge->isVisible()) {
+        if(!edge->source()->node()->isVisible() && edge->destination()->node()->isVisible() && edge->isVisible())
             edge->hide();
-            this->removeItem(edge);
-        }
 
-        if(edge->source()->node()->isVisible() && !edge->destination()->node()->isVisible() && edge->isVisible()) {
+        if(edge->source()->node()->isVisible() && !edge->destination()->node()->isVisible() && edge->isVisible())
             edge->hide();
-            this->removeItem(edge);
-        }
 
-        if(!edge->source()->node()->isVisible() && !edge->destination()->node()->isVisible() && edge->isVisible()) {
+        if(!edge->source()->node()->isVisible() && !edge->destination()->node()->isVisible() && edge->isVisible())
             edge->hide();
-            this->removeItem(edge);
-        }
 
         edge->adjust();
     }
@@ -625,6 +619,8 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEven
         this->updateEdgesVisibility();
         this->setCurrentNode(node);
 
+        emit centerOn(node->sceneBoundingRect().center());
+        // emit fitInView(node->sceneBoundingRect());
         emit pathChanged(d->current_node);
 
     } else {
@@ -642,6 +638,8 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEven
             this->updateEdgesVisibility();
             this->setCurrentNode(parent);
             
+            emit centerOn(parent->sceneBoundingRect().center());
+            // emit fitInView(parent->sceneBoundingRect());
             emit pathChanged(d->current_node);
             
         } else {
@@ -653,6 +651,8 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEven
             this->updateEdgesVisibility();
             this->setCurrentNode(NULL);
             
+            emit centerOn(this->sceneRect().center());
+            // emit fitInView(this->sceneRect());
             emit pathChanged(d->current_node);
         }
     }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec 10 21:40:09 2010 (+0100)
+ * Last-Updated: Fri Dec 10 23:56:30 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 106
+ *     Update #: 108
  */
 
 /* Commentary: 
@@ -74,6 +74,8 @@ signals:
 
     void compositionChanged(void);
 
+    void centerOn(const QPointF&);
+    void fitInView(const QRectF&);
     void pathChanged(dtkComposerNode *);
 
     void selectionCleared(void);

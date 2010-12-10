@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:07:37 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec 10 22:51:56 2010 (+0100)
+ * Last-Updated: Fri Dec 10 23:55:36 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 160
+ *     Update #: 167
  */
 
 /* Commentary: 
@@ -36,6 +36,16 @@ dtkComposerView::dtkComposerView(QWidget *parent) : QGraphicsView(parent)
 dtkComposerView::~dtkComposerView(void)
 {
 
+}
+
+void dtkComposerView::onCenterOn(const QPointF& point)
+{
+    this->centerOn(point);
+}
+
+void dtkComposerView::onFitInView(const QRectF& rect)
+{
+    this->fitInView(rect, Qt::KeepAspectRatio);
 }
 
 void dtkComposerView::mousePressEvent(QMouseEvent *event)

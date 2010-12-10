@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec 10 21:55:32 2010 (+0100)
+ * Last-Updated: Fri Dec 10 23:56:10 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 412
+ *     Update #: 416
  */
 
 /* Commentary: 
@@ -63,6 +63,9 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
     connect(d->scene, SIGNAL(evaluationStopped()), this, SIGNAL(evaluationStopped()));
 
     connect(d->scene, SIGNAL(compositionChanged()), this, SIGNAL(compositionChanged()));
+
+    connect(d->scene, SIGNAL(centerOn(const QPointF&)), d->view, SLOT(onCenterOn(const QPointF&)));
+    connect(d->scene, SIGNAL(fitInView(const QRectF&)), d->view, SLOT(onFitInView(const QRectF&)));
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);

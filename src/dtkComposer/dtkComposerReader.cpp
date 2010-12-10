@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Dec  9 14:46:55 2010 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 380
+ * Last-Updated: Fri Dec 10 21:46:40 2010 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 385
  */
 
 /* Commentary: 
@@ -77,7 +77,7 @@ dtkComposerNode *dtkComposerReaderPrivate::readNode(QDomNode node)
             child_nodes << this->readNode(children.at(i));
         }
 
-        n = this->scene->createGroup(child_nodes);
+        n = this->scene->createGroup(child_nodes, position);
     }
     
     // File node
@@ -324,8 +324,10 @@ void dtkComposerReader::read(const QString& fileName)
         }
 
         edge->link(true);
-        edge->show();
 
         d->scene->addEdge(edge);
+
+        if (edge->source()->node()->parentNode() || edge->destination()->node()->parentNode())
+            edge->hide();
     }
 }

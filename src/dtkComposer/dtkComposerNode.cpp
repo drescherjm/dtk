@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec 10 12:36:19 2010 (+0100)
+ * Last-Updated: Fri Dec 10 21:50:01 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 801
+ *     Update #: 885
  */
 
 /* Commentary: 
@@ -99,10 +99,17 @@ QList<dtkComposerEdge *> dtkComposerNodePrivate::iRoute(dtkComposerEdge *edge)
     QList<dtkComposerEdge *> edges;
 
     if(edge->source()->node()->kind() != dtkComposerNode::Composite) {
+
         edges << edge;
+
     } else {
-        foreach(dtkComposerEdge *ghost, edge->source()->node()->outputGhostEdges())
-            edges << iRoute(ghost);
+
+        if(edge->destination()->node() == q && edge->source()->node() == edge->destination()->node()->parentNode())
+            foreach(dtkComposerEdge *i_edge, edge->source()->node()->inputEdges())
+                edges << iRoute(i_edge);
+        else
+            foreach(dtkComposerEdge *ghost, edge->source()->node()->outputGhostEdges())
+                edges << iRoute(ghost);
     }
 
     return edges;
@@ -113,10 +120,17 @@ QList<dtkComposerEdge *> dtkComposerNodePrivate::oRoute(dtkComposerEdge *edge)
     QList<dtkComposerEdge *> edges;
 
     if(edge->destination()->node()->kind() != dtkComposerNode::Composite) {
+
         edges << edge;
+
     } else {
-        foreach(dtkComposerEdge *ghost, edge->destination()->node()->inputGhostEdges())
-            edges << oRoute(ghost);
+
+        if(edge->source()->node() == q && edge->destination()->node() == edge->source()->node()->parentNode())
+            foreach(dtkComposerEdge *o_edge, edge->destination()->node()->outputEdges())
+                edges << oRoute(o_edge);
+        else
+            foreach(dtkComposerEdge *ghost, edge->destination()->node()->inputGhostEdges())
+                edges << oRoute(ghost);
     }
 
     return edges;
@@ -166,7 +180,7 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
     this->setGraphicsEffect(shadow);
 #endif
 
-    d->dirty = false;
+    d->dirty = true;
 
     d->ghost = false;
 }
@@ -537,58 +551,71 @@ bool dtkComposerNode::isGhost(void)
  */
 void dtkComposerNode::update(void)
 {
-    foreach(dtkComposerEdge *edge, d->input_edges.keys())
-        if(edge->source()->node()->dirty())
-            return;
+    QList<dtkComposerEdge *> input_edges = d->input_edges.keys();
+    QList<dtkComposerEdge *> output_edges = d->output_edges.keys();
+
+    // -- Check dirty inputs
     
-    foreach(dtkComposerEdge *edge, d->output_edges.keys())
-        edge->destination()->node()->setDirty(true);
-    
+    foreach(dtkComposerEdge *i_edge, input_edges)
+        foreach(dtkComposerEdge *e, d->iRoute(i_edge))
+            if(e->source()->node()->dirty())
+                return;
+
+    // -- Mark dirty outputs
+
+    foreach(dtkComposerEdge *o_edge, output_edges)
+        foreach(dtkComposerEdge *e, d->oRoute(o_edge))
+            e->destination()->node()->setDirty(true);
+
+    // -- Event handling
+
     emit evaluated(this); qApp->processEvents(QEventLoop::ExcludeUserInputEvents | QEventLoop::ExcludeSocketNotifiers, 1);
 
-    if(d->kind != dtkComposerNode::Composite) {
+    // -- Pull
 
-        foreach(dtkComposerEdge *edge, d->input_edges.keys())
-            this->onInputEdgeConnected(edge, edge->destination());
+    foreach(dtkComposerEdge *i_edge, input_edges) {
+        foreach(dtkComposerEdge *r_edge, d->oRoute(i_edge)) {
+            dtkComposerNodeProperty *p = r_edge->destination();
+            dtkComposerNode         *n = r_edge->destination()->node();
+            foreach(dtkComposerEdge *e, d->iRoute(r_edge)) {
 
-    } else {
-        
-        foreach(dtkComposerEdge *g_edge, d->ghost_input_edges.keys()) {
-            foreach(dtkComposerEdge *i_edge, d->input_edges.keys()) {
-                if(i_edge->destination() == g_edge->source())
-                    g_edge->destination()->node()->onInputEdgeConnected(i_edge, g_edge->destination());
+                dtkComposerEdge *edge = new dtkComposerEdge;
+                edge->setSource(e->source());
+                edge->setDestination(p);
+
+                n->onInputEdgeConnected(edge, p);
+
+                delete edge;
             }
         }
     }
 
-    if(d->kind != dtkComposerNode::Composite) {
-        
-        foreach(dtkComposerEdge *edge, d->output_edges.keys())
-            this->onOutputEdgeConnected(edge, edge->source());
-    
-    } else {
+    // -- Push
 
-        foreach(dtkComposerEdge *g_edge, d->ghost_output_edges.keys()) {
-            foreach(dtkComposerEdge *o_edge, d->output_edges.keys()) {
-                if(o_edge->source() == g_edge->destination())
-                    g_edge->source()->node()->onOutputEdgeConnected(o_edge, g_edge->source());
+    foreach(dtkComposerEdge *o_edge, output_edges) {
+        foreach(dtkComposerEdge *r_edge, d->iRoute(o_edge)) {
+            dtkComposerNodeProperty *p = r_edge->source();
+            dtkComposerNode         *n = r_edge->source()->node();
+            foreach(dtkComposerEdge *e, d->oRoute(r_edge)) {
+
+                dtkComposerEdge *edge = new dtkComposerEdge;
+                edge->setSource(p);
+                edge->setDestination(e->destination());
+
+                n->onOutputEdgeConnected(edge, p);
+
+                delete edge;
             }
         }
     }
 
-    d->dirty = false;
-    
-    if(d->kind != dtkComposerNode::Composite) {
+    // -- Forward
 
-        foreach(dtkComposerEdge *edge, d->output_edges.keys())
-            edge->destination()->node()->update();
+    this->setDirty(false);
 
-    } else {
-
-        foreach(dtkComposerEdge *edge, d->ghost_input_edges.keys())
-            edge->destination()->node()->update(); 
-
-    }
+    foreach(dtkComposerEdge *o_edge, output_edges)
+        foreach(dtkComposerEdge *e, d->oRoute(o_edge))
+            e->destination()->node()->update();
 }
 
 QRectF dtkComposerNode::boundingRect(void) const

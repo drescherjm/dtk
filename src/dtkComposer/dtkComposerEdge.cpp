@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Dec  9 14:14:53 2010 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 296
+ * Last-Updated: Fri Dec 10 17:35:30 2010 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 303
  */
 
 /* Commentary: 
@@ -173,8 +173,6 @@ bool dtkComposerEdge::link(bool anyway)
 {
     if(anyway) {
 
-        qDebug() << DTK_PRETTY_FUNCTION << "Trying to link" << d->source->name() << "with" << d->destination->name();
-
         if (d->source->node()->kind() == dtkComposerNode::Composite && d->destination->node()->parentNode() == d->source->node())
             d->source->node()->addGhostInputEdge(this, d->source);
         else
@@ -184,8 +182,6 @@ bool dtkComposerEdge::link(bool anyway)
             d->destination->node()->addGhostOutputEdge(this, d->destination);
         else
             d->destination->node()->addInputEdge(this, d->destination);
-
-        qDebug() << "Ok";
 
         return true;
     }
@@ -298,3 +294,40 @@ bool dtkComposerEdge::unlink(void)
 
 //     d->progress = QPointF(0, 0);
 // }
+
+// /////////////////////////////////////////////////////////////////
+// Debug operators
+// /////////////////////////////////////////////////////////////////
+
+QDebug operator<<(QDebug dbg, dtkComposerEdge  edge)
+{
+    dbg.nospace() << QString("(%1, %2) -> (%3, %4)")
+        .arg(edge.source()->node()->title())
+        .arg(edge.source()->name())
+        .arg(edge.destination()->node()->title())
+        .arg(edge.destination()->name());
+    
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, dtkComposerEdge& edge)
+{
+    dbg.nospace() << QString("(%1, %2) -> (%3, %4)")
+        .arg(edge.source()->node()->title())
+        .arg(edge.source()->name())
+        .arg(edge.destination()->node()->title())
+        .arg(edge.destination()->name());
+    
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, dtkComposerEdge *edge)
+{
+    dbg.nospace() << QString("(%1, %2) -> (%3, %4)")
+        .arg(edge->source()->node()->title())
+        .arg(edge->source()->name())
+        .arg(edge->destination()->node()->title())
+        .arg(edge->destination()->name());
+    
+    return dbg.space();
+}

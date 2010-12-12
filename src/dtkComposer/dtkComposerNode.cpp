@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec 10 23:23:04 2010 (+0100)
+ * Last-Updated: Sun Dec 12 17:12:47 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 905
+ *     Update #: 971
  */
 
 /* Commentary: 
@@ -100,16 +100,27 @@ QList<dtkComposerEdge *> dtkComposerNodePrivate::iRoute(dtkComposerEdge *edge)
 
     if(edge->source()->node()->kind() != dtkComposerNode::Composite) {
 
+        // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->source()->node()->title() << "is not composite" << DTK_NO_COLOR;
+
         edges << edge;
 
     } else {
 
-        if(edge->destination()->node() == q && edge->source()->node() == edge->destination()->node()->parentNode())
+        if(edge->destination()->node() == q && edge->source()->node() == edge->destination()->node()->parentNode()) {
+
+            // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->source()->node()->title() << "parent is composite" << DTK_NO_COLOR;
+
             foreach(dtkComposerEdge *i_edge, edge->source()->node()->inputEdges())
-                edges << iRoute(i_edge);
-        else
+                if(i_edge->destination() == edge->source())
+                    edges << iRoute(i_edge);
+        } else {
+
+            // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->source()->node()->title() << "source is composite" << DTK_NO_COLOR;
+
             foreach(dtkComposerEdge *ghost, edge->source()->node()->outputGhostEdges())
-                edges << iRoute(ghost);
+                if(ghost->destination() == edge->source())
+                    edges << iRoute(ghost);
+        }
     }
 
     return edges;
@@ -121,16 +132,27 @@ QList<dtkComposerEdge *> dtkComposerNodePrivate::oRoute(dtkComposerEdge *edge)
 
     if(edge->destination()->node()->kind() != dtkComposerNode::Composite) {
 
+        // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->destination()->node()->title() << "is not composite" << DTK_NO_COLOR;
+
         edges << edge;
 
     } else {
 
-        if(edge->source()->node() == q && edge->destination()->node() == edge->source()->node()->parentNode())
+        if(edge->source()->node() == q && edge->destination()->node() == edge->source()->node()->parentNode()) {
+
+            // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->destination()->node()->title() << "parent is composite" << DTK_NO_COLOR;
+
             foreach(dtkComposerEdge *o_edge, edge->destination()->node()->outputEdges())
-                edges << oRoute(o_edge);
-        else
+                if(o_edge->source() == edge->destination())
+                    edges << oRoute(o_edge);
+        } else {
+
+            // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->destination()->node()->title() << "destination is composite" << DTK_NO_COLOR;
+
             foreach(dtkComposerEdge *ghost, edge->destination()->node()->inputGhostEdges())
-                edges << oRoute(ghost);
+                if(ghost->source() == edge->destination())
+                    edges << oRoute(ghost);
+        }
     }
 
     return edges;
@@ -554,12 +576,16 @@ void dtkComposerNode::update(void)
     QList<dtkComposerEdge *> input_edges = d->input_edges.keys();
     QList<dtkComposerEdge *> output_edges = d->output_edges.keys();
 
+    // qDebug() << DTK_COLOR_BG_GREEN << "-- Check dirty inputs" << this->title() << DTK_NO_COLOR;
+
     // -- Check dirty inputs
     
     foreach(dtkComposerEdge *i_edge, input_edges)
         foreach(dtkComposerEdge *e, d->iRoute(i_edge))
             if(e->source()->node()->dirty())
                 return;
+
+    // qDebug() << DTK_COLOR_BG_GREEN << "-- Mark dirty outputs" << this->title() << DTK_NO_COLOR;
 
     // -- Mark dirty outputs
 
@@ -571,41 +597,43 @@ void dtkComposerNode::update(void)
 
     emit evaluated(this); qApp->processEvents(QEventLoop::ExcludeUserInputEvents | QEventLoop::ExcludeSocketNotifiers, 1);
 
+    // qDebug() << DTK_COLOR_BG_GREEN << "Updating" << this->title() << DTK_NO_COLOR;
+
     // -- Pull
 
     foreach(dtkComposerEdge *i_edge, input_edges) {
-        foreach(dtkComposerEdge *r_edge, d->oRoute(i_edge)) {
-            dtkComposerNodeProperty *p = r_edge->destination();
-            dtkComposerNode         *n = r_edge->destination()->node();
-            foreach(dtkComposerEdge *e, d->iRoute(r_edge)) {
+        dtkComposerNodeProperty *p = i_edge->destination();
+        dtkComposerNode         *n = i_edge->destination()->node();
+        foreach(dtkComposerEdge *e, d->iRoute(i_edge)) {
+            
+            dtkComposerEdge *edge = new dtkComposerEdge;
+            edge->setSource(e->source());
+            edge->setDestination(p);
+            
+            // qDebug() << DTK_COLOR_BG_YELLOW << "Pulling" << n->title() << edge << DTK_NO_COLOR;
 
-                dtkComposerEdge *edge = new dtkComposerEdge;
-                edge->setSource(e->source());
-                edge->setDestination(p);
-
-                n->onInputEdgeConnected(edge, p);
-
-                delete edge;
-            }
+            n->onInputEdgeConnected(edge, p);
+            
+            delete edge;
         }
     }
 
     // -- Push
 
     foreach(dtkComposerEdge *o_edge, output_edges) {
-        foreach(dtkComposerEdge *r_edge, d->iRoute(o_edge)) {
-            dtkComposerNodeProperty *p = r_edge->source();
-            dtkComposerNode         *n = r_edge->source()->node();
-            foreach(dtkComposerEdge *e, d->oRoute(r_edge)) {
+        dtkComposerNodeProperty *p = o_edge->source();
+        dtkComposerNode         *n = o_edge->source()->node();
+        foreach(dtkComposerEdge *e, d->oRoute(o_edge)) {
+            
+            dtkComposerEdge *edge = new dtkComposerEdge;
+            edge->setSource(p);
+            edge->setDestination(e->destination());
+            
+            // qDebug() << DTK_COLOR_BG_RED << "Pushing" << n->title() << edge << DTK_NO_COLOR;
 
-                dtkComposerEdge *edge = new dtkComposerEdge;
-                edge->setSource(p);
-                edge->setDestination(e->destination());
-
-                n->onOutputEdgeConnected(edge, p);
-
-                delete edge;
-            }
+            n->onOutputEdgeConnected(edge, p);
+            
+            delete edge;
         }
     }
 
@@ -613,9 +641,12 @@ void dtkComposerNode::update(void)
 
     this->setDirty(false);
 
-    foreach(dtkComposerEdge *o_edge, output_edges)
-        foreach(dtkComposerEdge *e, d->oRoute(o_edge))
+    foreach(dtkComposerEdge *o_edge, output_edges) {
+        foreach(dtkComposerEdge *e, d->oRoute(o_edge)) {
+            // qDebug() << DTK_COLOR_BG_GREEN << "Forwarding" << this->title() << "->" << e->destination()->node()->title() << DTK_NO_COLOR;
             e->destination()->node()->update();
+        }
+    }
 }
 
 QRectF dtkComposerNode::boundingRect(void) const

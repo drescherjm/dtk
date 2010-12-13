@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec 10 23:56:30 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 108
+ * Last-Updated: Mon Dec 13 14:53:28 2010 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 109
  */
 
 /* Commentary: 
@@ -53,6 +53,7 @@ public:
     void setModified(bool modified);
 
     void    addEdge(dtkComposerEdge *edge);
+    void removeEdge(dtkComposerEdge *edge);
     void    addNode(dtkComposerNode *node);
     void removeNode(dtkComposerNode *node);
 

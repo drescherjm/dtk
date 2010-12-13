@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec 13 14:19:33 2010 (+0100)
+ * Last-Updated: Mon Dec 13 15:00:00 2010 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 1000
+ *     Update #: 1074
  */
 
 /* Commentary: 
@@ -64,6 +64,7 @@ public:
     QHash<dtkComposerEdge *, dtkComposerNodeProperty *> ghost_input_edges;
     QHash<dtkComposerEdge *, dtkComposerNodeProperty *> ghost_output_edges;
 
+    dtkComposerNodeProperty *loop_property;
     dtkComposerNodeProperty *clicked_property;
 
     dtkComposerNode::Behavior behavior;
@@ -204,6 +205,11 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
     this->setGraphicsEffect(shadow);
 #endif
 
+    d->loop_property = new dtkComposerNodeProperty("condition", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Single, this);
+    d->loop_property->hide();
+
+    d->clicked_property = NULL;
+
     d->dirty = true;
 
     d->ghost = false;
@@ -224,6 +230,21 @@ void dtkComposerNode::setTitle(const QString& title)
 void dtkComposerNode::setBehavior(Behavior behavior)
 {
     d->behavior = behavior;
+
+    if(behavior == dtkComposerNode::Loop && d->ghost) {
+        d->loop_property->show();
+    } else {
+
+        foreach(dtkComposerEdge *edge, d->ghost_output_edges.keys()) {
+            if(edge->destination() == d->loop_property) {
+                d->ghost_output_edges.remove(edge);
+                if(dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene()))
+                    scene->removeEdge(edge);
+            }
+        }
+
+        d->loop_property->hide();
+    }
 }
 
 void dtkComposerNode::setKind(Kind kind)
@@ -508,6 +529,11 @@ void dtkComposerNode::layout(void)
             else
                 property->setRect(QRectF(d->width/2-3*d->node_radius, d->margin_top+(3*(exposed_output_properties++) + 1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
 
+    if(d->ghost && d->loop_property->isVisible()) {
+        d->loop_property->setRect(QRectF(d->ghostRect().right() - 3*d->node_radius, d->ghostRect().bottom() - 40 - 2*d->node_radius, d->node_radius*2, d->node_radius*2));
+        exposed_output_properties++;
+    }
+
     d->height = d->header_height + (3*qMax(exposed_input_properties, exposed_output_properties)) * d->node_radius + d->margin_bottom;
 
     QGraphicsItem::update(this->boundingRect());
@@ -556,6 +582,9 @@ void dtkComposerNode::setGhost(bool ghost)
         foreach(dtkComposerNode *node, d->children)
             node->setParentItem(this);
 
+        if(d->behavior == dtkComposerNode::Loop)
+            d->loop_property->show();
+
     } else {
 
         this->setZValue(10);
@@ -563,6 +592,8 @@ void dtkComposerNode::setGhost(bool ghost)
         foreach(dtkComposerNode *node, d->children)
             node->setParentItem(NULL);
 
+        if(d->behavior == dtkComposerNode::Loop)
+            d->loop_property->hide();
     }
 
     this->layout();

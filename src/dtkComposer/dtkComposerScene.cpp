@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Dec 11 00:18:53 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 897
+ * Last-Updated: Mon Dec 13 14:57:33 2010 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 905
  */
 
 /* Commentary: 
@@ -163,6 +163,15 @@ void dtkComposerScene::addEdge(dtkComposerEdge *edge)
     d->edges << edge;
 
     this->setModified(true);
+}
+
+void dtkComposerScene::removeEdge(dtkComposerEdge *edge)
+{
+    edge->unlink();
+
+    d->edges.removeAll(edge);
+
+    delete edge;
 }
 
 void dtkComposerScene::addNode(dtkComposerNode *node)

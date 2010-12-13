@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Dec 12 17:12:47 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 971
+ * Last-Updated: Mon Dec 13 14:19:33 2010 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 1000
  */
 
 /* Commentary: 
@@ -66,6 +66,7 @@ public:
 
     dtkComposerNodeProperty *clicked_property;
 
+    dtkComposerNode::Behavior behavior;
     dtkComposerNode::Kind kind;
 
     QString type;
@@ -165,7 +166,8 @@ QList<dtkComposerEdge *> dtkComposerNodePrivate::oRoute(dtkComposerEdge *edge)
 dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePrivate)
 {
     d->q = this;
-
+    
+    d->behavior = Default;
     d->kind = Unknown;
     d->object = NULL;
     d->parent = NULL;
@@ -209,12 +211,6 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
 
 dtkComposerNode::~dtkComposerNode(void)
 {
-    // foreach(dtkComposerEdge *edge, d->input_edges.keys())
-    //     delete edge;
-
-    // foreach(dtkComposerEdge *edge, d->output_edges.keys())
-    //     delete edge;
-    
     delete d;
 
     d = NULL;
@@ -223,6 +219,11 @@ dtkComposerNode::~dtkComposerNode(void)
 void dtkComposerNode::setTitle(const QString& title)
 {
     d->title->setPlainText(title);
+}
+
+void dtkComposerNode::setBehavior(Behavior behavior)
+{
+    d->behavior = behavior;
 }
 
 void dtkComposerNode::setKind(Kind kind)
@@ -240,6 +241,11 @@ void dtkComposerNode::setObject(dtkAbstractObject *object)
     d->object = object;
 
     d->title->setHtml(object->name());
+}
+
+dtkComposerNode::Behavior dtkComposerNode::behavior(void)
+{
+    return d->behavior;
 }
 
 dtkComposerNode::Kind dtkComposerNode::kind(void)
@@ -567,6 +573,15 @@ bool dtkComposerNode::isGhost(void)
     return d->ghost;
 }
 
+//! Ask the node to redraw itself
+/*! 
+ * 
+ */
+void dtkComposerNode::touch(void)
+{
+    QGraphicsItem::update(this->boundingRect());
+}
+
 //! 
 /*! 
  * 
@@ -687,18 +702,22 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
         gradiant.setColorAt(1.0, QColor("#ffa500").darker());
         break;
     case Composite:
-        if(d->ghost) {
-            gradiant.setColorAt(0.0, QColor("#959595"));
-            gradiant.setColorAt(1.0, QColor("#525252"));
-        } else {
-            gradiant.setColorAt(0.0, QColor("#515151"));
-            gradiant.setColorAt(1.0, QColor("#000000"));
+        if(d->behavior == dtkComposerNode::Loop)
+            if(d->ghost) {
+                gradiant.setColorAt(0.0, QColor("#b6b71b"));
+                gradiant.setColorAt(1.0, QColor("#76670c"));
+            } else {
+                gradiant.setColorAt(0.0, QColor("#67670a"));
+                gradiant.setColorAt(1.0, QColor("#352d02"));
+            }
+        else
+            if(d->ghost) {
+                gradiant.setColorAt(0.0, QColor("#959595"));
+                gradiant.setColorAt(1.0, QColor("#525252"));
+            } else {
+                gradiant.setColorAt(0.0, QColor("#515151"));
+                gradiant.setColorAt(1.0, QColor("#000000"));
         }
-        break;
-    case Control:
-        gradiant.setColorAt(0.0, QColor(Qt::white));
-        gradiant.setColorAt(0.3, QColor(Qt::red));
-        gradiant.setColorAt(1.0, QColor(Qt::red).darker());
         break;
     case Data:
         gradiant.setColorAt(0.0, QColor(Qt::white));
@@ -726,12 +745,23 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
         pen.setWidth(2);
     } else {
         if(this->isGhost()) {
-            pen.setColor(QColor("#c7c7c7"));
-            pen.setStyle(Qt::DashLine);
-            pen.setWidth(1);
-        } else {                        
-            pen.setColor(Qt::black);
-            pen.setWidth(1);
+            if(d->behavior == dtkComposerNode::Loop) {
+                pen.setColor(QColor("#76670c"));
+                pen.setStyle(Qt::DashLine);
+                pen.setWidth(1);
+            } else {
+                pen.setColor(QColor("#c7c7c7"));
+                pen.setStyle(Qt::DashLine);
+                pen.setWidth(1);
+            }
+        } else {    
+            if(d->behavior == dtkComposerNode::Loop) {
+                pen.setColor(QColor("#352d02"));
+                pen.setWidth(1);
+            } else {
+                pen.setColor(Qt::black);
+                pen.setWidth(1);
+            }
         }
     }
 

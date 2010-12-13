@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec 10 23:22:53 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 182
+ * Last-Updated: Mon Dec 13 14:14:29 2010 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 193
  */
 
 /* Commentary: 
@@ -43,16 +43,21 @@ public:
         Unknown,
         Atomic,
         Composite,
-        Control,
         Data,
         Process,
         View
+    };
+
+    enum Behavior {
+        Default,
+        Loop
     };
 
               dtkComposerNode(dtkComposerNode *parent = 0);
      virtual ~dtkComposerNode(void);
 
     void setTitle(const QString& title);
+    void setBehavior(Behavior behavior);
     void setKind(Kind kind);
     void setType(QString type);
     void setObject(dtkAbstractObject *object);
@@ -78,6 +83,7 @@ public:
     int  count(dtkComposerNodeProperty *property);
     int number(dtkComposerNodeProperty *property);
 
+    Behavior behavior(void);
     Kind kind(void);
     QString type(void);
 
@@ -134,6 +140,7 @@ signals:
     void progressed(int progress);
 
 public slots:
+    void touch(void);
     void update(void);
 
 public:

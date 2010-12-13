@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb  7 22:37:03 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Nov 26 09:37:08 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 132
+ * Last-Updated: Mon Dec 13 13:52:10 2010 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 135
  */
 
 /* Commentary: 
@@ -25,7 +25,6 @@
 #include <dtkCore/dtkAbstractViewFactory.h>
 
 #include "dtkComposerNode.h"
-#include "dtkComposerNodeCondition.h"
 #include "dtkComposerNodeData.h"
 #include "dtkComposerNodeFactory.h"
 #include "dtkComposerNodeFile.h"
@@ -71,11 +70,7 @@ dtkComposerNode *dtkComposerNodeFactory::create(QString type)
     if (type == "dtkComposerFile")
         return new dtkComposerNodeFile;
 
-    if (type == "dtkComposerCondition")
-        return new dtkComposerNodeCondition;
-
     if (dtkAbstractData *data = dtkAbstractDataFactory::instance()->create(type)) {
-        
         dtkComposerNodeData *node = new dtkComposerNodeData;
         node->setObject(data);
         node->setType(type);
@@ -83,7 +78,6 @@ dtkComposerNode *dtkComposerNodeFactory::create(QString type)
     }
 
     if (dtkAbstractProcess *process = dtkAbstractProcessFactory::instance()->create(type)) {
-        
         dtkComposerNodeProcess *node = new dtkComposerNodeProcess;
         node->setObject(process);
         node->setType(type);
@@ -91,7 +85,6 @@ dtkComposerNode *dtkComposerNodeFactory::create(QString type)
     }
 
     if (dtkAbstractView *view = dtkAbstractViewFactory::instance()->create(type)) {
-        
         dtkComposerNodeView *node = new dtkComposerNodeView;
         node->setObject(view);
         node->setType(type);

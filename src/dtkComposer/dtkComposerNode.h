@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec 13 14:14:29 2010 (+0100)
+ * Last-Updated: Mon Dec 13 19:46:59 2010 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 193
+ *     Update #: 202
  */
 
 /* Commentary: 
@@ -58,6 +58,7 @@ public:
 
     void setTitle(const QString& title);
     void setBehavior(Behavior behavior);
+    void setCondition(const QString& condition);
     void setKind(Kind kind);
     void setType(QString type);
     void setObject(dtkAbstractObject *object);
@@ -111,6 +112,7 @@ public:
     dtkComposerNodeProperty *outputProperty(const QString& name, dtkComposerNode *from) const;
 
     QString title(void);
+    QString condition(void);
 
     bool dirty(void);
     void setDirty(bool dirty);
@@ -153,8 +155,6 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
-    // QVariant itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value);
-
 public:
     virtual QVariant value(dtkComposerNodeProperty *property) { return QVariant(); }
 
@@ -166,7 +166,7 @@ protected:
     virtual void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
 
 private:
-    dtkComposerNodePrivate *d;
+    friend class dtkComposerNodePrivate; dtkComposerNodePrivate *d;
 };
 
 #endif

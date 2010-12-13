@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Dec  2 23:24:14 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 227
+ * Last-Updated: Mon Dec 13 15:44:21 2010 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 230
  */
 
 /* Commentary: 
@@ -132,6 +132,11 @@ void dtkComposerNodeProperty::show(void)
 dtkComposerNode *dtkComposerNodeProperty::clonedFrom(void)
 {
     return d->clone;
+}
+
+void dtkComposerNodeProperty::setClonedFrom(dtkComposerNode *node)
+{
+    d->clone = node;
 }
 
 bool dtkComposerNodeProperty::isDisplayed(void)

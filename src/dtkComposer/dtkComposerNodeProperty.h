@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec  6 20:57:18 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 85
+ * Last-Updated: Mon Dec 13 15:44:00 2010 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 88
  */
 
 /* Commentary: 
@@ -68,6 +68,7 @@ public:
     void show(void);
 
     dtkComposerNode *clonedFrom(void);
+    void setClonedFrom(dtkComposerNode *node);
 
     bool  isDisplayed(void);
     void setDisplayed(bool dirty);

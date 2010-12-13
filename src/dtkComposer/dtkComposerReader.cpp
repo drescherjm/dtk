@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec 10 21:46:40 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 385
+ * Last-Updated: Mon Dec 13 18:34:44 2010 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 399
  */
 
 /* Commentary: 
@@ -53,7 +53,7 @@ dtkComposerNode *dtkComposerReaderPrivate::readNode(QDomNode node)
     
     if(node.toElement().hasAttribute("y"))
         position.setY(node.toElement().attribute("y").toFloat());
-    
+
     dtkComposerNode *n = NULL;
 
     if(node.toElement().attribute("type") != "dtkComposerNodeComposite")
@@ -109,7 +109,7 @@ dtkComposerNode *dtkComposerReaderPrivate::readNode(QDomNode node)
             process_node->setupImplementation(children.at(i).childNodes().at(0).toText().data());
         }
     }
-    
+
     // Generic node
     
     { // -- title
@@ -122,6 +122,26 @@ dtkComposerNode *dtkComposerReaderPrivate::readNode(QDomNode node)
                 continue;
 
             n->setTitle(children.at(i).childNodes().at(0).toText().data());
+        }
+    }
+
+    { // -- behavior
+
+        if (node.toElement().hasAttribute("behavior") && node.toElement().attribute("behavior") == "loop")
+            n->setBehavior(dtkComposerNode::Loop);
+
+        if (n->behavior() == dtkComposerNode::Loop) {
+
+            QDomNodeList children = node.childNodes();
+            
+            for(int i = 0; i < children.count(); i++) {
+                
+                if(children.at(i).toElement().tagName() != "condition")
+                    continue;
+                
+                n->setCondition(children.at(i).childNodes().at(0).toText().data());
+            }
+
         }
     }
 

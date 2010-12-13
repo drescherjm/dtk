@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec 10 23:56:10 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 416
+ * Last-Updated: Mon Dec 13 15:24:08 2010 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 418
  */
 
 /* Commentary: 
@@ -112,6 +112,8 @@ bool dtkComposer::open(QString fileName)
         QFileInfo info(fileName);
 
         emit titleChanged(info.baseName());
+
+        d->fileName = fileName;
     }
 
     return true;

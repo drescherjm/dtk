@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec  3 16:19:27 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 189
+ * Last-Updated: Mon Dec 13 18:31:59 2010 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 204
  */
 
 /* Commentary: 
@@ -53,6 +53,7 @@ void dtkComposerWriterPrivate::writeNode(dtkComposerNode *node, QDomElement& ele
     tag.setAttribute("x", QString::number(node->pos().x()));
     tag.setAttribute("y", QString::number(node->pos().y()));
     tag.setAttribute("id", QString::number(current_id));
+    tag.setAttribute("behavior", (node->behavior() == dtkComposerNode::Loop) ? QString("loop") : QString("default"));
         
     // -- File node
     
@@ -95,6 +96,20 @@ void dtkComposerWriterPrivate::writeNode(dtkComposerNode *node, QDomElement& ele
             this->writeNode(child, tag, document);
     }
     
+    // -- Loop nodes
+
+    if(node->behavior() == dtkComposerNode::Loop) {
+
+        QString node_condition = node->condition();
+        
+        QDomText text = document.createTextNode(node_condition);
+        
+        QDomElement condition = document.createElement("condition");
+        condition.appendChild(text);
+        
+        tag.appendChild(condition);
+    }
+
     { // -- Generic node
         
         { // -- title

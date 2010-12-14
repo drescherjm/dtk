@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec 13 18:34:44 2010 (+0100)
+ * Last-Updated: Tue Dec 14 19:25:32 2010 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 399
+ *     Update #: 407
  */
 
 /* Commentary: 
@@ -166,9 +166,9 @@ dtkComposerNode *dtkComposerReaderPrivate::readNode(QDomNode node)
             if(type == "input") {
                 foreach(dtkComposerNodeProperty *property, n->inputProperties()) {
                     if(property->name() == name) {
-                        if(p_id >= 0 && p_id == node_map.key(property->clonedFrom())) {
-                            if(hidden == "false") {
-                                property->setDirty(true);
+                        if(p_id >= 0) {
+                            if(p_id == node_map.key(property->clonedFrom()) && hidden == "false") {
+                                property->show();
                             }
                         } else {
                             if(hidden == "true") {
@@ -186,9 +186,9 @@ dtkComposerNode *dtkComposerReaderPrivate::readNode(QDomNode node)
             if(type == "output") {
                 foreach(dtkComposerNodeProperty *property, n->outputProperties()) {
                     if(property->name() == name) {
-                        if(p_id >= 0 && p_id == node_map.key(property->clonedFrom())) {
-                            if(hidden == "false") {
-                                property->setDirty(true);
+                        if(p_id >= 0) {
+                            if(p_id == node_map.key(property->clonedFrom()) && hidden == "false") {
+                                property->show();
                             }
                         } else {
                             if(hidden == "true") {

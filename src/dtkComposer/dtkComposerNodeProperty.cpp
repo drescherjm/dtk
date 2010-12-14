@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec 13 15:44:21 2010 (+0100)
+ * Last-Updated: Tue Dec 14 19:32:46 2010 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 230
+ *     Update #: 235
  */
 
 /* Commentary: 
@@ -33,7 +33,6 @@ public:
     QGraphicsEllipseItem *ellipse;
     QGraphicsTextItem *text;
 
-    bool dirty;
     bool displayed;
 };
 
@@ -44,7 +43,6 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multip
     d->parent = parent;
     d->clone = NULL;
 
-    d->dirty = false;
     d->displayed = true;
 
     d->text = new QGraphicsTextItem(this);
@@ -154,18 +152,6 @@ bool dtkComposerNodeProperty::isDisplayed(void)
 void dtkComposerNodeProperty::setDisplayed(bool displayed)
 {
     d->displayed = displayed;
-}
-
-#include <dtkCore/dtkGlobal.h>
-
-bool dtkComposerNodeProperty::isDirty(void)
-{
-    return d->dirty;
-}
-
-void dtkComposerNodeProperty::setDirty(bool dirty)
-{
-    d->dirty = dirty;
 }
 
 QRectF dtkComposerNodeProperty::boundingRect(void) const

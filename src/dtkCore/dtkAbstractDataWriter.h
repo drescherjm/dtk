@@ -44,6 +44,13 @@ public:
     
     virtual void setData(dtkAbstractData *data);
     
+    /** Get the extension this writer prefers. 
+        The list may depend on the data set by setData.
+        The default implementation returns an empty StringList, 
+        indicating no preferred extension.
+      */
+    virtual QStringList supportedFileExtensions () const;
+
 signals:
     void started(const QString& message);
     void progressed(int step);

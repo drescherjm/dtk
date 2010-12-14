@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec 13 14:53:28 2010 (+0100)
+ * Last-Updated: Tue Dec 14 19:00:55 2010 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 109
+ *     Update #: 111
  */
 
 /* Commentary: 
@@ -47,6 +47,7 @@ public:
     QList<dtkComposerNodeProperty *> properties(void);
     QList<dtkComposerNodeProperty *> properties(QString name);
 
+    void touch(void);
     void clear(void);
 
     bool  isModified(void);

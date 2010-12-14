@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec 13 14:57:33 2010 (+0100)
+ * Last-Updated: Tue Dec 14 19:33:01 2010 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 905
+ *     Update #: 912
  */
 
 /* Commentary: 
@@ -135,6 +135,11 @@ QList<dtkComposerNodeProperty *> dtkComposerScene::properties(QString name)
                 list << property;
 
     return list;
+}
+
+void dtkComposerScene::touch(void)
+{
+    this->updateEdgesVisibility();
 }
 
 void dtkComposerScene::clear(void)

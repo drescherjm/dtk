@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec 13 15:44:00 2010 (+0100)
+ * Last-Updated: Tue Dec 14 19:32:49 2010 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 88
+ *     Update #: 90
  */
 
 /* Commentary: 
@@ -72,9 +72,6 @@ public:
 
     bool  isDisplayed(void);
     void setDisplayed(bool dirty);
-
-    bool  isDirty(void);
-    void setDirty(bool dirty);
 
 public:
     QRectF boundingRect(void) const;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec 13 19:46:50 2010 (+0100)
+ * Last-Updated: Tue Dec 14 19:33:14 2010 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 1231
+ *     Update #: 1240
  */
 
 /* Commentary: 
@@ -830,7 +830,7 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    if (d->ghost)
+    if (d->kind == Composite)
         this->layout();
 
     QRectF rect;
@@ -920,22 +920,6 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 
     painter->setPen(pen);
     painter->drawRoundedRect(rect, d->node_radius, d->node_radius);
-
-    if(d->kind == Composite) {
-        foreach(dtkComposerNodeProperty *property, d->input_properties) {
-            if (property->isDirty()) {
-                property->show();
-                property->setDirty(false);
-            }
-        }
-
-        foreach(dtkComposerNodeProperty *property, d->output_properties) {
-            if (property->isDirty()) {
-                property->show();
-                property->setDirty(false);
-            }
-        }
-    }
 }
 
 void dtkComposerNode::mouseMoveEvent(QGraphicsSceneMouseEvent *event)

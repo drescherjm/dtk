@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 21:58:48 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jul 21 09:14:25 2010 (+0200)
+ * Last-Updated: Tue Dec 14 10:22:05 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 34
+ *     Update #: 36
  */
 
 /* Commentary: 
@@ -44,12 +44,7 @@ public:
     
     virtual void setData(dtkAbstractData *data);
     
-    /** Get the extension this writer prefers. 
-        The list may depend on the data set by setData.
-        The default implementation returns an empty StringList, 
-        indicating no preferred extension.
-      */
-    virtual QStringList supportedFileExtensions () const;
+    virtual QStringList supportedFileExtensions(void) const;
 
 signals:
     void started(const QString& message);

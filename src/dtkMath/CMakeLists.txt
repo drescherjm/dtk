@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Thu Sep  9 11:30:33 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Sep  9 11:38:30 2010 (+0200)
+## Last-Updated: Mon Nov 22 11:05:13 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 12
+##     Update #: 13
 ######################################################################
 ## 
 ### Commentary: 
@@ -41,6 +41,9 @@ set(${PROJECT_NAME}_SOURCES
   dtkMath.cpp
 )
 
+# Include header files for Visual Studio.
+SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
+
 ## #################################################################
 ## Build rules
 ## #################################################################
@@ -58,10 +61,12 @@ qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
+  ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_WRAP})
 
-target_link_libraries(${PROJECT_NAME} ${QT_LBRARIES})
+target_link_libraries(${PROJECT_NAME}
+  ${QT_LBRARIES})
 
 ## #################################################################
 ## Installation

@@ -38,7 +38,7 @@ public:
     virtual QString description(void) const = 0;
     virtual QStringList handled(void) const = 0;
 
-            bool enabled(void);
+            bool enabled(void) const;
     virtual void  enable(void);
     virtual void disable(void);
 

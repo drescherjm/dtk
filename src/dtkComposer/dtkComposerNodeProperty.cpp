@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 13 10:23:57 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 135
+ * Last-Updated: Tue Dec 14 19:32:46 2010 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 235
  */
 
 /* Commentary: 
@@ -25,12 +25,15 @@ class dtkComposerNodePropertyPrivate
 {
 public:
     dtkComposerNode *parent;
+    dtkComposerNode *clone;
 
     dtkComposerNodeProperty::Type type;
     dtkComposerNodeProperty::Multiplicity multiplicity;
 
     QGraphicsEllipseItem *ellipse;
     QGraphicsTextItem *text;
+
+    bool displayed;
 };
 
 dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multiplicity multiplicity, dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePropertyPrivate)
@@ -38,6 +41,9 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multip
     d->type = type;
     d->multiplicity = multiplicity;
     d->parent = parent;
+    d->clone = NULL;
+
+    d->displayed = true;
 
     d->text = new QGraphicsTextItem(this);
 #if defined(Q_WS_MAC)
@@ -59,6 +65,23 @@ dtkComposerNodeProperty::~dtkComposerNodeProperty(void)
     delete d;
 
     d = NULL;
+}
+
+dtkComposerNodeProperty *dtkComposerNodeProperty::clone(dtkComposerNode *node)
+{
+    dtkComposerNodeProperty *property = new dtkComposerNodeProperty(d->text->toPlainText(), d->type, d->multiplicity, node);
+
+    if(d->parent->kind() == dtkComposerNode::Composite)
+        property->d->clone = d->clone;
+    else
+        property->d->clone = d->parent;
+
+    property->d->displayed = false;
+
+    if(node)
+        property->hide();
+    
+    return property;
 }
 
 dtkComposerEdge *dtkComposerNodeProperty::edge(void)
@@ -84,6 +107,51 @@ dtkComposerNodeProperty::Type dtkComposerNodeProperty::type(void)
 int dtkComposerNodeProperty::count(void)
 {
     return d->parent->count(this);
+}
+
+void dtkComposerNodeProperty::hide(void)
+{
+    QGraphicsItem::hide();
+    
+    d->displayed = false;
+
+    d->parent->layout();
+}
+
+void dtkComposerNodeProperty::show(void)
+{
+    QGraphicsItem::show();
+
+    d->displayed = true;
+
+    d->parent->layout();
+}
+
+dtkComposerNode *dtkComposerNodeProperty::clonedFrom(void)
+{
+    return d->clone;
+}
+
+void dtkComposerNodeProperty::setClonedFrom(dtkComposerNode *node)
+{
+    d->clone = node;
+}
+
+bool dtkComposerNodeProperty::isDisplayed(void)
+{
+    return d->displayed;
+}
+
+//! Mark the property as displayed independently from whether it is currently visible or not.
+/*! 
+ *  A property can be displayed while not visible. This occurs when a
+ *  node relies within a group. It's property is displayed but not
+ *  currently visible if the scene shows a higher or deeper level of
+ *  the composition.
+ */
+void dtkComposerNodeProperty::setDisplayed(bool displayed)
+{
+    d->displayed = displayed;
 }
 
 QRectF dtkComposerNodeProperty::boundingRect(void) const

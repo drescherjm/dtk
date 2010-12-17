@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul 15 11:23:54 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov  1 20:13:27 2010 (+0100)
+ * Last-Updated: Fri Nov 26 15:03:05 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 94
+ *     Update #: 107
  */
 
 /* Commentary: 
@@ -28,30 +28,16 @@
 class dtkComposerNodeProcessPrivate
 {
 public:
-    dtkComposerNodeProperty *property_input_file;
-    dtkComposerNodeProperty *property_input_data;
-    dtkComposerNodeProperty *property_output_data;
 };
 
 dtkComposerNodeProcess::dtkComposerNodeProcess(dtkComposerNode *parent) : dtkComposerNode(parent), d(new dtkComposerNodeProcessPrivate)
 {
-    d->property_input_data = new dtkComposerNodeProperty("data", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, this);
-    d->property_input_file = new dtkComposerNodeProperty("file", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, this);
-    d->property_output_data = new dtkComposerNodeProperty("data", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Single, this);
-
-    d->property_input_data->hide();
-    d->property_input_file->hide();
-    d->property_output_data->hide();
-
     this->setKind(dtkComposerNode::Process);
-    this->addInputProperty(d->property_input_data);
-    this->addInputProperty(d->property_input_file);
-    this->addOutputProperty(d->property_output_data);
 }
 
 dtkComposerNodeProcess::~dtkComposerNodeProcess(void)
 {
-    if (this->object())
+    if(this->object())
         delete this->object();
 
     delete d;
@@ -61,52 +47,32 @@ dtkComposerNodeProcess::~dtkComposerNodeProcess(void)
 
 QVariant dtkComposerNodeProcess::value(dtkComposerNodeProperty *property)
 {
-    if(property == d->property_output_data)
-        if(dtkAbstractProcess *process = dynamic_cast<dtkAbstractProcess *>(this->object()))
-            return qVariantFromValue(*(process->output()));
+    Q_UNUSED(property);
+
+    DTK_DEFAULT_IMPLEMENTATION;
 
     return QVariant();
 }
 
 QString dtkComposerNodeProcess::implementation(void)
 {
+    DTK_DEFAULT_IMPLEMENTATION;
+
     return QString();
 }
 
 void dtkComposerNodeProcess::onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
-    if(property == d->property_input_file) {
-        
-        QString file = edge->source()->node()->value(edge->source()).toString();
+    Q_UNUSED(edge);
+    Q_UNUSED(property);
 
-        if(dtkAbstractProcess *process = dynamic_cast<dtkAbstractProcess *>(this->object()))
-            process->read(file);
-    }
-
-    if(property == d->property_input_data) {
-        
-        dtkAbstractData *data;
-
-        if(dtkAbstractData *d = dynamic_cast<dtkAbstractData *>(edge->source()->node()->object()))
-            data = d;
-
-        if(dtkAbstractProcess *process = dynamic_cast<dtkAbstractProcess *>(edge->source()->node()->object()))
-            data = process->output();
-
-        if(dtkAbstractProcess *process = dynamic_cast<dtkAbstractProcess *>(this->object()))
-            process->setInput(data);
-    }
+    DTK_DEFAULT_IMPLEMENTATION;
 }
 
 void dtkComposerNodeProcess::onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(edge);
+    Q_UNUSED(property);
 
-    if(property == d->property_output_data) {
-        if(dtkAbstractProcess *process = dynamic_cast<dtkAbstractProcess *>(this->object())) {
-            connect(process, SIGNAL(progressed(int)), this, SIGNAL(progressed(int)));
-            process->update();
-            // disconnect(process, SIGNAL(progressed(int)), this, SIGNAL(progressed(int)));
-        }
-    }
+    DTK_DEFAULT_IMPLEMENTATION;
 }

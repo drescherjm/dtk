@@ -61,7 +61,7 @@ void dtkAbstractViewAnimator::setView(dtkAbstractView *view)
     d->view = view;
 }
 
-bool dtkAbstractViewAnimator::enabled(void)
+bool dtkAbstractViewAnimator::enabled(void) const
 {
     return d->enabled;
 }

@@ -99,20 +99,20 @@
 // Ignore rules for dtkAbstractObject signals
 // /////////////////////////////////////////////////////////////////
 
-%ignore addProperty(QString key, QStringList values); // No scripter should add properties dynamically
-%ignore addProperty(QString key, QString value);      // No scripter should add properties dynamically
+%ignore addProperty(const QString& key, const QStringList& values); // No scripter should add properties dynamically
+%ignore addProperty(const QString& key, const QString& value);      // No scripter should add properties dynamically
 
-%ignore propertySet(QString key, QString value);
-%ignore metaDataSet(QString key, QString value);
+%ignore propertySet(const QString& key, const QString& value);
+%ignore metaDataSet(const QString& key, const QString& value);
 
 // /////////////////////////////////////////////////////////////////
 // Ignore rules for dtkAbstractDataReader|Writer|Process
 // /////////////////////////////////////////////////////////////////
 
-%ignore started(QString message);
-%ignore elapsed(QString duration);
+%ignore started(const QString& message);
+%ignore elapsed(const QString& duration);
 %ignore progressed(int step);
-%ignore progressed(QString message);
+%ignore progressed(const QString& message);
 %ignore finished();
 
 // /////////////////////////////////////////////////////////////////
@@ -131,9 +131,9 @@
 // Ignore rules for factories
 // /////////////////////////////////////////////////////////////////
 
-%ignore created(dtkAbstractData *data, QString type);
-%ignore created(dtkAbstractProcess *process, QString type);
-%ignore created(dtkAbstractView *view, QString type);
+%ignore created(dtkAbstractData *data, const QString& type);
+%ignore created(dtkAbstractProcess *process,const  QString& type);
+%ignore created(dtkAbstractView *view, const QString& type);
 
 // /////////////////////////////////////////////////////////////////
 // Ignore rules for dtkPluginManager

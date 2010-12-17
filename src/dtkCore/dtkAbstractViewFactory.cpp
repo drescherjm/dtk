@@ -44,7 +44,7 @@ dtkAbstractViewFactory *dtkAbstractViewFactory::instance(void)
     return s_instance;
 }
 
-dtkAbstractView *dtkAbstractViewFactory::create(QString type)
+dtkAbstractView *dtkAbstractViewFactory::create(const QString& type)
 {
     if(!d->creators.contains(type))
         return NULL;
@@ -72,7 +72,7 @@ dtkAbstractView *dtkAbstractViewFactory::create(QString type)
     return view;
 }
 
-dtkAbstractViewAnimator *dtkAbstractViewFactory::animator(QString type)
+dtkAbstractViewAnimator *dtkAbstractViewFactory::animator(const QString& type)
 {
     foreach(dtkAbstractViewTypeHandler key, d->animators.keys())
         if (key.first == type)
@@ -81,7 +81,7 @@ dtkAbstractViewAnimator *dtkAbstractViewFactory::animator(QString type)
     return 0l;
 }
 
-dtkAbstractViewNavigator *dtkAbstractViewFactory::navigator(QString type)
+dtkAbstractViewNavigator *dtkAbstractViewFactory::navigator(const QString& type)
 {
     foreach(dtkAbstractViewTypeHandler key, d->navigators.keys())
         if (key.first == type)
@@ -90,7 +90,7 @@ dtkAbstractViewNavigator *dtkAbstractViewFactory::navigator(QString type)
     return 0l;
 }
 
-dtkAbstractViewInteractor *dtkAbstractViewFactory::interactor(QString type)
+dtkAbstractViewInteractor *dtkAbstractViewFactory::interactor(const QString& type)
 {
     foreach(dtkAbstractViewTypeHandler key, d->interactors.keys())
         if (key.first == type)
@@ -99,7 +99,7 @@ dtkAbstractViewInteractor *dtkAbstractViewFactory::interactor(QString type)
     return 0l;
 }
 
-bool dtkAbstractViewFactory::registerViewType(QString type, dtkAbstractViewCreator func)
+bool dtkAbstractViewFactory::registerViewType(const QString& type, dtkAbstractViewCreator func)
 {
     if(!d->creators.contains(type)) {
         d->creators.insert(type, func);
@@ -109,7 +109,7 @@ bool dtkAbstractViewFactory::registerViewType(QString type, dtkAbstractViewCreat
     return false;
 }
 
-bool dtkAbstractViewFactory::registerViewAnimatorType(QString type, QStringList handled, dtkAbstractViewAnimatorCreator func)
+bool dtkAbstractViewFactory::registerViewAnimatorType(const QString& type, const QStringList& handled, dtkAbstractViewAnimatorCreator func)
 {
     if(!d->animators.contains(qMakePair(type, handled))) {
         d->animators.insert(qMakePair(type, handled), func);
@@ -119,7 +119,7 @@ bool dtkAbstractViewFactory::registerViewAnimatorType(QString type, QStringList 
     return false;
 }
 
-bool dtkAbstractViewFactory::registerViewNavigatorType(QString type, QStringList handled, dtkAbstractViewNavigatorCreator func)
+bool dtkAbstractViewFactory::registerViewNavigatorType(const QString& type, const QStringList& handled, dtkAbstractViewNavigatorCreator func)
 {
     if(!d->navigators.contains(qMakePair(type, handled))) {
         d->navigators.insert(qMakePair(type, handled), func);
@@ -129,7 +129,7 @@ bool dtkAbstractViewFactory::registerViewNavigatorType(QString type, QStringList
     return false;
 }
 
-bool dtkAbstractViewFactory::registerViewInteractorType(QString type, QStringList handled, dtkAbstractViewInteractorCreator func)
+bool dtkAbstractViewFactory::registerViewInteractorType(const QString& type, const QStringList& handled, dtkAbstractViewInteractorCreator func)
 {
     if(!d->interactors.contains(qMakePair(type, handled))) {
         d->interactors.insert(qMakePair(type, handled), func);
@@ -139,17 +139,17 @@ bool dtkAbstractViewFactory::registerViewInteractorType(QString type, QStringLis
     return false;
 }
 
-unsigned int dtkAbstractViewFactory::size(QString type)
+unsigned int dtkAbstractViewFactory::size(const QString& type) const
 {
     return d->views[type].size();
 }
 
-dtkAbstractView *dtkAbstractViewFactory::get(QString type, int idx)
+dtkAbstractView *dtkAbstractViewFactory::get(const QString& type, int idx)
 {
     return d->views[type].value(idx);
 }
 
-dtkAbstractView *dtkAbstractViewFactory::get(QString type, QString name)
+dtkAbstractView *dtkAbstractViewFactory::get(const QString& type, const QString& name)
 {
     foreach(dtkAbstractView *view, d->views[type])
         if(view->name() == name)

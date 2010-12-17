@@ -43,7 +43,7 @@ dtkAbstractViewInteractor::~dtkAbstractViewInteractor(void)
     d = NULL;
 }
 
-bool dtkAbstractViewInteractor::enabled(void)
+bool dtkAbstractViewInteractor::enabled(void) const
 {
     return d->enabled;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov  1 16:26:26 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 130
+ * Last-Updated: Tue Dec 14 19:07:03 2010 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 204
  */
 
 /* Commentary: 
@@ -42,16 +42,23 @@ public:
     enum Kind {
         Unknown,
         Atomic,
-        Control,
+        Composite,
         Data,
         Process,
         View
+    };
+
+    enum Behavior {
+        Default,
+        Loop
     };
 
               dtkComposerNode(dtkComposerNode *parent = 0);
      virtual ~dtkComposerNode(void);
 
     void setTitle(const QString& title);
+    void setBehavior(Behavior behavior);
+    void setCondition(const QString& condition);
     void setKind(Kind kind);
     void setType(QString type);
     void setObject(dtkAbstractObject *object);
@@ -59,16 +66,25 @@ public:
     void addInputProperty(dtkComposerNodeProperty *property);
     void addOutputProperty(dtkComposerNodeProperty *property);
 
+    void removeInputProperty(dtkComposerNodeProperty *property);
+    void removeOutputProperty(dtkComposerNodeProperty *property);
+
     void addInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
     void addOutputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
 
+    void addGhostInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void addGhostOutputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+
     void removeInputEdge(dtkComposerEdge *edge);
     void removeOutputEdge(dtkComposerEdge *edge);
+    void removeAllEdges(void);
 
     void addAction(const QString& text, const QObject *receiver, const char *slot);
 
-    int count(dtkComposerNodeProperty *property);
+    int  count(dtkComposerNodeProperty *property);
+    int number(dtkComposerNodeProperty *property);
 
+    Behavior behavior(void);
     Kind kind(void);
     QString type(void);
 
@@ -80,6 +96,9 @@ public:
     QList<dtkComposerEdge *> inputEdges(void);
     QList<dtkComposerEdge *> outputEdges(void);
 
+    QList<dtkComposerEdge *> inputGhostEdges(void);
+    QList<dtkComposerEdge *> outputGhostEdges(void);
+
     QList<dtkComposerNode *> inputNodes(void);
     QList<dtkComposerNode *> outputNodes(void);
 
@@ -88,12 +107,33 @@ public:
     dtkComposerNodeProperty *propertyAt(const QPointF& point) const;
 
     dtkComposerNodeProperty  *inputProperty(const QString& name) const;
+    dtkComposerNodeProperty  *inputProperty(const QString& name, dtkComposerNode *from) const;
     dtkComposerNodeProperty *outputProperty(const QString& name) const;
+    dtkComposerNodeProperty *outputProperty(const QString& name, dtkComposerNode *from) const;
 
     QString title(void);
+    QString condition(void);
 
     bool dirty(void);
     void setDirty(bool dirty);
+
+    void layout(void);
+
+    // -- Composite operations
+
+    void    addChildNode(dtkComposerNode *node);
+    void removeChildNode(dtkComposerNode *node);
+
+    void setParentNode(dtkComposerNode *node);
+
+    QList<dtkComposerNode *> childNodes(void);
+
+    dtkComposerNode *parentNode(void);
+
+    // --
+
+    void setGhost(bool ghost);
+    bool  isGhost(void);
 
 signals:
     void elapsed(QString duration);
@@ -102,6 +142,7 @@ signals:
     void progressed(int progress);
 
 public slots:
+    void touch(void);
     void update(void);
 
 public:
@@ -121,11 +162,11 @@ public:
     virtual void  setupImplementation(QString implementation = QString());
 
 protected:
-    virtual void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property) {}
-    virtual void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property) {}
+    virtual void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    virtual void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
 
 private:
-    dtkComposerNodePrivate *d;
+    friend class dtkComposerNodePrivate; dtkComposerNodePrivate *d;
 };
 
 #endif

@@ -37,7 +37,7 @@ public:
     virtual QStringList fromTypes(void) const = 0;
     virtual QString       toType (void) const = 0;
     
-    bool enabled(void);
+    bool enabled(void) const;
     void  enable(void);
     void disable(void);
     
@@ -46,12 +46,12 @@ public:
     virtual void setData(dtkAbstractData *data);
 
 signals:
-    void started(QString message);
+    void started(const QString& message);
     void progressed(int step);
     void finished(void);
     
 public slots:
-    virtual bool canConvert(QString toType);
+    virtual bool canConvert(const QString& toType);
     
     virtual dtkAbstractData *convert(void);
     

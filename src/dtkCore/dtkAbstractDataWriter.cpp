@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 22:03:03 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jun 15 11:09:06 2010 (+0200)
+ * Last-Updated: Tue Dec 14 10:24:41 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 29
+ *     Update #: 33
  */
 
 /* Commentary: 
@@ -40,7 +40,7 @@ dtkAbstractDataWriter::~dtkAbstractDataWriter(void)
     d = NULL;
 }
 
-bool dtkAbstractDataWriter::enabled(void)
+bool dtkAbstractDataWriter::enabled(void) const
 {
     return d->enabled;
 }
@@ -65,28 +65,28 @@ void dtkAbstractDataWriter::setData(dtkAbstractData *data)
     d->data = data;
 }
 
-bool dtkAbstractDataWriter::canWrite(QString file)
+bool dtkAbstractDataWriter::canWrite(const QString& file)
 {
     DTK_UNUSED(file);
 
     return false;
 }
 
-bool dtkAbstractDataWriter::canWrite(QStringList files)
+bool dtkAbstractDataWriter::canWrite(const QStringList& files)
 {
     DTK_UNUSED(files);
 
     return false;
 }
 
-bool dtkAbstractDataWriter::write(QString file)
+bool dtkAbstractDataWriter::write(const QString& file)
 {
     DTK_UNUSED(file);
 
     return false;
 }
 
-bool dtkAbstractDataWriter::write(QStringList files)
+bool dtkAbstractDataWriter::write(const QStringList& files)
 {
     DTK_UNUSED(files);
 
@@ -96,4 +96,18 @@ bool dtkAbstractDataWriter::write(QStringList files)
 void dtkAbstractDataWriter::setProgress(int value)
 {
     emit progressed (value);
+}
+
+//! 
+/*! 
+ * Get the extension this writer prefers.  The list may depend on the
+ * data set by setData.  The default implementation returns an
+ * empty StringList, indicating no preferred extension.
+ * 
+ * \return The list of supported extensions.
+ */
+
+QStringList dtkAbstractDataWriter::supportedFileExtensions(void) const
+{
+    return QStringList();
 }

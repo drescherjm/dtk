@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:26:53 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 13 10:22:40 2010 (+0200)
+ * Last-Updated: Fri Dec 10 16:04:16 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 34
+ *     Update #: 39
  */
 
 /* Commentary: 
@@ -48,6 +48,11 @@ public:
     void setDestination(dtkComposerNodeProperty *property);
 
 public:
+    friend QDebug operator<<(QDebug dbg, dtkComposerEdge  edge);
+    friend QDebug operator<<(QDebug dbg, dtkComposerEdge& edge);
+    friend QDebug operator<<(QDebug dbg, dtkComposerEdge *edge);
+
+public:
     QRectF boundingRect(void) const;
 
     QPointF start(void) const;
@@ -58,11 +63,19 @@ public:
     void adjust(void);
     void adjust(const QPointF& start, const QPointF& end);
 
-    bool link(void);
+    bool link(bool anyway = false);
     bool unlink(void);
 
 private:
     dtkComposerEdgePrivate *d;
 };
+
+// /////////////////////////////////////////////////////////////////
+// Debug operators
+// /////////////////////////////////////////////////////////////////
+
+QDebug operator<<(QDebug dbg, dtkComposerEdge  edge);
+QDebug operator<<(QDebug dbg, dtkComposerEdge& edge);
+QDebug operator<<(QDebug dbg, dtkComposerEdge *edge);
 
 #endif

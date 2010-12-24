@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Oct  7 14:55:57 2010 (+0200)
+ * Last-Updated: Fri Dec 24 13:31:50 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 267
+ *     Update #: 317
  */
 
 /* Commentary:
@@ -113,6 +113,8 @@
 %ignore elapsed(const QString& duration);
 %ignore progressed(int step);
 %ignore progressed(const QString& message);
+%ignore success();
+%ignore failure();
 %ignore finished();
 
 // /////////////////////////////////////////////////////////////////
@@ -152,9 +154,12 @@
   $1 = PyString_Check($input) ? 1 : 0;
 }
 
-%typemap(typecheck) QString = char *;
+%typemap(typecheck)       QString  = char *;
+%typemap(typecheck) const QString& = char *;
 
-%typemap(in) QString { // Python -> C++
+// Python -> C++
+
+%typemap(in) QString {
     if (PyString_Check($input)) {
          $1 = QString(PyString_AsString($input));
      } else {
@@ -162,17 +167,45 @@
      }
 }
 
-%typemap(out) QString { // C++ -> Python
+%typemap(in) const QString& {
+    if (PyString_Check($input)) {
+         char *t = PyString_AsString($input);
+         $1 = new QString(t);
+     } else {
+         qDebug("QString expected");
+     }
+}
+
+// C++ -> Python
+
+%typemap(out) QString {
+    $result = PyString_FromString($1.toAscii().constData());
+}
+
+%typemap(out) const QString& {
     $result = PyString_FromString($1.toAscii().constData());
 }
 
 #elif SWIGTCL
 
-%typemap(in) QString { // Tcl -> C++
+// Tcl -> C++
+
+%typemap(in) QString {
     $1 = QString(Tcl_GetString($input));
 }
 
-%typemap(out) QString { // C++ -> Tcl
+%typemap(in) const QString& {
+    char *t = Tcl_GetString($input);
+    $1 = new QString(t);
+}
+
+// C++ -> Tcl
+
+%typemap(out) QString { 
+    Tcl_SetStringObj($result, $1.toAscii().constData(), $1.size());
+}
+
+%typemap(out) const QString& {
     Tcl_SetStringObj($result, $1.toAscii().constData(), $1.size());
 }
 

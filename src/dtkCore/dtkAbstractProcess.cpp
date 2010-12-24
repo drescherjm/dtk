@@ -50,7 +50,13 @@ QDebug operator<<(QDebug debug, dtkAbstractProcess *process)
 
 int dtkAbstractProcess::run(void)
 {
-    return this->update();
+    int retval = this->update();
+    if (retval==0)
+        emit success();
+    else
+        emit failure();
+
+    return retval;
 }
 
 int dtkAbstractProcess::update(void)

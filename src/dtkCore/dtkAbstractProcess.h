@@ -43,7 +43,8 @@ signals:
     void elapsed(const QString& duration);
     void progressed(const QString& message);
     void progressed(int step);
-    void finished(void);
+    void success(void);
+    void failure(void);
 
 public slots:
     int run(void);

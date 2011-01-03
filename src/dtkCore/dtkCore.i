@@ -114,6 +114,8 @@
 %ignore progressed(int step);
 %ignore progressed(const QString& message);
 %ignore finished();
+%ignore success();
+%ignore failure();
 
 // /////////////////////////////////////////////////////////////////
 // Ignore rules for dtkAbstractView signals

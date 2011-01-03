@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug 17 13:21:28 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 82
+ * Last-Updated: Tue Dec 14 19:00:55 2010 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 111
  */
 
 /* Commentary: 
@@ -47,18 +47,23 @@ public:
     QList<dtkComposerNodeProperty *> properties(void);
     QList<dtkComposerNodeProperty *> properties(QString name);
 
+    void touch(void);
     void clear(void);
 
     bool  isModified(void);
     void setModified(bool modified);
 
     void    addEdge(dtkComposerEdge *edge);
+    void removeEdge(dtkComposerEdge *edge);
     void    addNode(dtkComposerNode *node);
     void removeNode(dtkComposerNode *node);
 
     void setFactory(dtkComposerNodeFactory *factory);
 
+    dtkComposerNode *createGroup(QList<dtkComposerNode *> nodes, QPointF position = QPointF());
     dtkComposerNode *createNode(QString type, QPointF position = QPointF());
+
+    void explodeGroup(dtkComposerNode *node);
 
 signals:
     void dataSelected(dtkAbstractData *data);
@@ -67,8 +72,15 @@ signals:
 
     void nodeAdded(dtkComposerNode *node);
     void nodeRemoved(dtkComposerNode *node);
+    void nodeSelected(dtkComposerNode *node);
 
     void compositionChanged(void);
+
+    void centerOn(const QPointF&);
+    void fitInView(const QRectF&);
+    void pathChanged(dtkComposerNode *);
+
+    void selectionCleared(void);
 
 signals:
     void evaluationStarted(void);
@@ -83,6 +95,14 @@ protected:
     dtkComposerNodeProperty *propertyAt(const QPointF& point) const;
 
 protected:
+    void setCurrentNode(dtkComposerNode *node);
+
+    void hideAllNodes(void);
+    void showAllNodes(void);
+    void showChildNodes(dtkComposerNode *node);
+    void updateEdgesVisibility(void);
+
+protected:
     void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
     void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
     void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
@@ -94,6 +114,7 @@ protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent);
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent);
 
 protected slots:
     void onSelectionChanged(void);

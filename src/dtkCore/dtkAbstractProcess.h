@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jul 28 10:08:10 2010 (+0200)
+ * Last-Updated: Fri Dec 24 12:51:47 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 130
+ *     Update #: 131
  */
 
 /* Commentary: 
@@ -45,6 +45,7 @@ signals:
     void progressed(int step);
     void success(void);
     void failure(void);
+    void finished(void);
 
 public slots:
     int run(void);

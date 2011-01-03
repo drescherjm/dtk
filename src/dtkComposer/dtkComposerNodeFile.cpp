@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul  8 13:28:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Sep 11 22:16:15 2010 (+0200)
+ * Last-Updated: Mon Dec 20 18:02:45 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 61
+ *     Update #: 68
  */
 
 /* Commentary: 
@@ -86,4 +86,16 @@ void dtkComposerNodeFile::getFileName(void)
 void dtkComposerNodeFile::setFileName(const QString& file)
 {
     d->file = file;
+}
+
+void dtkComposerNodeFile::onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+{
+    DTK_UNUSED(edge);
+    DTK_UNUSED(property);
+}
+
+void dtkComposerNodeFile::onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+{
+    DTK_UNUSED(edge);
+    DTK_UNUSED(property);
 }

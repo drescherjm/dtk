@@ -2,11 +2,11 @@
 ## 
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
-## Created: Mon Jul 20 19:22:37 2009 (+0200)
+## Created: Mon Nov 22 11:06:06 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Nov 22 10:33:15 2010 (+0100)
+## Last-Updated: Mon Nov 22 11:06:40 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 30
+##     Update #: 3
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,13 +17,14 @@
 ## 
 ######################################################################
 
-add_subdirectory(dtkMath)
-add_subdirectory(dtkCore)
-add_subdirectory(dtkScript)
-add_subdirectory(dtkGui)
-add_subdirectory(dtkComposer)
-add_subdirectory(dtkCrypto)
-add_subdirectory(dtkHelp)
-add_subdirectory(dtkDistributed)
-add_subdirectory(dtkVr)
-add_subdirectory(dtkPlot)
+project(dtkPlotPoints)
+
+## #################################################################
+## Build rules
+## #################################################################
+
+add_executable(${PROJECT_NAME} MACOSX_BUNDLE
+  main.cpp)
+
+target_link_libraries(${PROJECT_NAME}
+  dtkPlot)

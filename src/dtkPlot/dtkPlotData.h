@@ -22,11 +22,13 @@
 
 #include <QtGui>
 
+#include "dtkPlotExport.h"
+
 class dtkPlotCurve;
 class dtkPlotPoint;
 class dtkPlotDataPrivate;
 
-class dtkPlotData : public QGraphicsItem
+class DTKPLOT_EXPORT dtkPlotData : public QGraphicsItem
 {
 public:
     typedef QList<dtkPlotPoint *> dtkPlotDataPoints;

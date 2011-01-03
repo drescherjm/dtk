@@ -20,11 +20,13 @@
 #ifndef DTKPLOTINTERPOLATORCUBIC_H
 #define DTKPLOTINTERPOLATORCUBIC_H
 
+#include "dtkPlotExport.h"
+
 #include "dtkPlotInterpolator.h"
 
 class dtkPlotInterpolatorCubicPrivate;
 
-class dtkPlotInterpolatorCubic : public dtkPlotInterpolator
+class DTKPLOT_EXPORT  dtkPlotInterpolatorCubic : public dtkPlotInterpolator
 {
 public:
     dtkPlotCurve *interpolate(dtkPlotData *data);

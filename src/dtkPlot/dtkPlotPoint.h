@@ -22,9 +22,11 @@
 
 #include <QtGui>
 
+#include "dtkPlotExport.h"
+
 class dtkPlotPointPrivate;
 
-class dtkPlotPoint : public QGraphicsItem
+class DTKPLOT_EXPORT dtkPlotPoint : public QGraphicsItem
 {
 public:
      dtkPlotPoint(void);

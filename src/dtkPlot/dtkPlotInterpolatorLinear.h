@@ -20,11 +20,13 @@
 #ifndef DTKPLOTINTERPOLATORLINEAR_H
 #define DTKPLOTINTERPOLATORLINEAR_H
 
+#include "dtkPlotExport.h"
+
 #include "dtkPlotInterpolator.h"
 
 class dtkPlotInterpolatorLinearPrivate;
 
-class dtkPlotInterpolatorLinear : public dtkPlotInterpolator
+class DTKPLOT_EXPORT dtkPlotInterpolatorLinear : public dtkPlotInterpolator
 {
 public:
     dtkPlotCurve *interpolate(dtkPlotData *data);

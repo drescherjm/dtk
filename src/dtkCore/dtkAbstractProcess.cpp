@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar  1 23:58:15 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 85
+ * Last-Updated: Tue Jan  4 15:40:54 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 86
  */
 
 /* Commentary: 
@@ -112,6 +112,27 @@ void dtkAbstractProcess::setParameter(int data, int channel)
 }
 
 void dtkAbstractProcess::setParameter(int data, int channel, int frame)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+    DTK_UNUSED(channel);
+    DTK_UNUSED(frame);
+}
+
+void dtkAbstractProcess::setParameter(int* data)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+}
+
+void dtkAbstractProcess::setParameter(int* data, int channel)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+    DTK_UNUSED(channel);
+}
+
+void dtkAbstractProcess::setParameter(int* data, int channel, int frame)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(data);

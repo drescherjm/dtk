@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Dec 24 12:51:47 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 131
+ * Last-Updated: Tue Jan  4 15:40:10 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 132
  */
 
 /* Commentary: 
@@ -61,6 +61,10 @@ public slots:
     virtual void setParameter(int data);
     virtual void setParameter(int data, int channel);
     virtual void setParameter(int data, int channel, int frame);
+
+    virtual void setParameter(int *data);
+    virtual void setParameter(int *data, int channel);
+    virtual void setParameter(int *data, int channel, int frame);
 
     virtual void setParameter(double  data);
     virtual void setParameter(double  data, int channel);

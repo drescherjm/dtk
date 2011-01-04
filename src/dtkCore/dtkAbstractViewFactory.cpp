@@ -72,6 +72,26 @@ dtkAbstractView *dtkAbstractViewFactory::create(const QString& type)
     return view;
 }
 
+void dtkAbstractViewFactory::destroy(dtkAbstractView *view)
+{
+  if (!view)
+    return;
+  
+  QList<dtkAbstractViewAnimator*> animators = view->animators();
+  foreach (dtkAbstractViewAnimator* animator, animators)
+      delete animator;
+
+  QList<dtkAbstractViewNavigator*> navigators = view->navigators();
+  foreach (dtkAbstractViewNavigator* navigator, navigators)
+      delete navigator;
+
+  QList<dtkAbstractViewInteractor*> interactors = view->interactors();
+  foreach (dtkAbstractViewInteractor* interactor, interactors)
+      delete interactor;
+
+  delete view;
+}
+
 dtkAbstractViewAnimator *dtkAbstractViewFactory::animator(const QString& type)
 {
     foreach(dtkAbstractViewTypeHandler key, d->animators.keys())

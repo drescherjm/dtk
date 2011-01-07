@@ -1,0 +1,34 @@
+### dtkConfig.cmake.in --- 
+## 
+## Author: Julien Wintz
+## Copyright (C) 2008 - Julien Wintz, Inria.
+## Created: Mon Jul 20 22:51:02 2009 (+0200)
+## Version: $Id$
+## Last-Updated: Wed Sep  8 16:47:30 2010 (+0200)
+##           By: Julien Wintz
+##     Update #: 26
+######################################################################
+## 
+### Commentary: 
+## 
+######################################################################
+## 
+### Change log:
+## 
+######################################################################
+
+set(dtk_VERSION_MAJOR  "@dtk_VERSION_MAJOR@")
+set(dtk_VERSION_MINOR  "@dtk_VERSION_MINOR@")
+set(dtk_VERSION_BUILD  "@dtk_VERSION_BUILD@")
+set(dtk_VERSION        "@dtk_VERSION@")
+
+set(dtk_INCLUDE_DIRS "@dtk_INCLUDE_DIRS@")
+set(dtk_LIBRARY_DIRS "@dtk_LIBRARY_DIRS@")
+set(dtk_CMAKE_DIRS   "@dtk_CMAKE_DIRS@")
+
+set(dtk_CMAKE_DIRS   "@dtk_CMAKE_DIRS@")
+
+set(dtk_USE_FILE "@dtk_USE_FILE@")
+
+set(QT_QMAKE_EXECUTABLE "@QT_QMAKE_EXECUTABLE@")
+set(QT_USE_FILE         "@QT_USE_FILE@")

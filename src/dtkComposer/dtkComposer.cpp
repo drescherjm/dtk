@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Dec 14 19:18:48 2010 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 435
+ * Last-Updated: Sat Jan  8 16:10:38 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 436
  */
 
 /* Commentary: 
@@ -82,6 +82,11 @@ dtkComposer::~dtkComposer(void)
     delete d;
     
     d = NULL;
+}
+
+void dtkComposer::setBackgroundColor(const QColor &color)
+{
+    d->view->setBackgroundBrush(color);
 }
 
 void dtkComposer::setFactory(dtkComposerNodeFactory *factory)

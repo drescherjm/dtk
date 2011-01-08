@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:12:32 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov 29 19:32:18 2010 (+0100)
+ * Last-Updated: Sat Jan  8 16:10:19 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 57
+ *     Update #: 58
  */
 
 /* Commentary: 
@@ -39,6 +39,7 @@ public:
              dtkComposer(QWidget *parent = 0);
     virtual ~dtkComposer(void);
 
+    void setBackgroundColor(const QColor& color);
     void setFactory(dtkComposerNodeFactory *factory);
 
     bool isModified(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jan 27 15:27:17 2010 (+0100)
+ * Last-Updated: Fri Jan 14 12:37:24 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 152
+ *     Update #: 155
  */
 
 /* Commentary:
@@ -253,6 +253,14 @@ QList<QImage>& dtkAbstractData::thumbnails(void) const
 void *dtkAbstractData::output(void)
 {
     DTK_DEFAULT_IMPLEMENTATION;
+
+    return NULL;
+}
+
+void *dtkAbstractData::output(int channel)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(channel);
 
     return NULL;
 }

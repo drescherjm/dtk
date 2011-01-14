@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Jul 15 13:49:03 2010 (+0200)
+ * Last-Updated: Fri Jan 14 12:36:53 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 188
+ *     Update #: 191
  */
 
 /* Commentary:
@@ -55,6 +55,7 @@ public slots:
     virtual dtkAbstractData *convert(const QString& toType);
 
     virtual void *output(void);
+    virtual void *output(int channel);
 
     virtual void *data(void);
     virtual void *data(int channel);

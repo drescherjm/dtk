@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:48:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep 17 16:55:42 2010 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 59
+ * Last-Updated: Sat Jan 15 14:09:46 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 60
  */
 
 /* Commentary:
@@ -50,6 +50,7 @@ public:
 
     bool exists(const QString& type);
 
+    QStringList creators(void) const;
     QStringList implementations(const QString& abstraction);
 
 signals:

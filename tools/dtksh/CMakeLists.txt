@@ -41,6 +41,12 @@ target_link_libraries(${PROJECT_NAME}
   dtkScript)
 
 ## #################################################################
+## Source file layout in development environments like Visual Studio
+## #################################################################
+
+SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
+
+## #################################################################
 ## Bundle setup
 ## #################################################################
 

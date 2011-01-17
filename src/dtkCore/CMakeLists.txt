@@ -99,9 +99,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkQuat.cpp
   dtkUpdater.cpp)
 
-# Include header files for Visual Studio.
-SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
-
 ## #################################################################
 ## Wrapping
 ## #################################################################
@@ -173,6 +170,13 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/core.py)
 
 endif(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
+
+## #################################################################
+## Source file layout in development environments like Visual Studio
+## #################################################################
+
+SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
+SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 
 ## #################################################################
 ## Installation

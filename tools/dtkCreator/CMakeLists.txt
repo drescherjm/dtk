@@ -30,6 +30,10 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkCreatorViewer.h
   dtkCreatorWidgetFactory.h)
 
+set(${PROJECT_NAME}_HEADERS
+    ${${PROJECT_NAME}_HEADERS_MOC}
+    )
+
 set(${PROJECT_NAME}_SOURCES
   dtkCreatorController.cpp
   dtkCreatorMainWindow.cpp
@@ -73,7 +77,8 @@ qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 add_executable(${PROJECT_NAME} MACOSX_BUNDLE WIN32
   ${${PROJECT_NAME}_SOURCES_WRAP}
   ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES})
+  ${${PROJECT_NAME}_SOURCES}
+  ${${PROJECT_NAME}_HEADERS})
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
@@ -102,6 +107,13 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/creator.py)
 
 endif(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
+
+## #################################################################
+## Source file layout in development environments like Visual Studio
+## #################################################################
+
+SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
+SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 
 ## #################################################################
 ## Bundle setup

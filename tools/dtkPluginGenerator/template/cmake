@@ -62,6 +62,13 @@ target_link_libraries(${PROJECT_NAME}
 dtk_build_doc(%1Plugin)
 
 ## #################################################################
+## Source file layout in development environments like Visual Studio
+## #################################################################
+
+SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
+SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
+
+## #################################################################
 ## Install rules
 ## #################################################################
 

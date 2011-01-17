@@ -25,6 +25,10 @@ project(dtkAssistant)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkAssistantMainWindow.h)
+  
+set(${PROJECT_NAME}_HEADERS
+   ${${PROJECT_NAME}_HEADERS_MOC}
+   )
 
 set(${PROJECT_NAME}_SOURCES
   dtkAssistantMainWindow.cpp
@@ -40,12 +44,20 @@ qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 add_executable(${PROJECT_NAME} MACOSX_BUNDLE
   ${${PROJECT_NAME}_SOURCES_UIC}
   ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES})
+  ${${PROJECT_NAME}_SOURCES}
+  ${${PROJECT_NAME}_HEADERS})
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkGui
   dtkHelp)
+
+## #################################################################
+## Source file layout in development environments like Visual Studio
+## #################################################################
+
+SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
+SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC} ${${PROJECT_NAME}_SOURCES_UIC})
 
 ## #################################################################
 ## Bundle setup

@@ -33,7 +33,7 @@
 // vrpn callbacks (Definition at EOF.)
 // /////////////////////////////////////////////////////////////////
 
-#if defined(HAVE_VRPN)
+#if defined(DTK_WRAP_VRPN)
 void VRPN_CALLBACK vrpn_head_recognizer_handle_button(void *data, const vrpn_BUTTONCB callback);
 void VRPN_CALLBACK vrpn_head_recognizer_handle_analog(void *data, const vrpn_ANALOGCB callback);
 void VRPN_CALLBACK vrpn_head_recognizer_handle_tracker(void *data, const vrpn_TRACKERCB callback);
@@ -45,7 +45,7 @@ void VRPN_CALLBACK vrpn_head_recognizer_handle_tracker(void *data, const vrpn_TR
 
 void dtkVrHeadRecognizerPrivate::run(void)
 {
-#if defined(HAVE_VRPN)
+#if defined(DTK_WRAP_VRPN)
     vrpn_FILE_CONNECTIONS_SHOULD_PRELOAD = false;
     vrpn_FILE_CONNECTIONS_SHOULD_ACCUMULATE = false;
 
@@ -80,7 +80,7 @@ void dtkVrHeadRecognizerPrivate::stop(void)
     this->running = false;
 }
 
-#if defined(HAVE_VRPN)
+#if defined(DTK_WRAP_VRPN)
 
 void dtkVrHeadRecognizerPrivate::handle_button(const vrpn_BUTTONCB callback)
 {
@@ -229,7 +229,7 @@ void dtkVrHeadRecognizer::onButtonReleased(int)
 // vrpn callbacks
 // /////////////////////////////////////////////////////////////////
 
-#if defined(HAVE_VRPN)
+#if defined(DTK_WRAP_VRPN)
 
 void VRPN_CALLBACK vrpn_head_recognizer_handle_button(void *data, const vrpn_BUTTONCB callback)
 {

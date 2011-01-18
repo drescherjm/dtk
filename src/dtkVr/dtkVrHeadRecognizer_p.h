@@ -17,7 +17,7 @@
  * 
  */
 
-#if defined(HAVE_VRPN)
+#if defined(DTK_WRAP_VRPN)
 #include <vrpn_Shared.h>
 #include <vrpn_Button.h>
 #include <vrpn_Analog.h>
@@ -41,7 +41,7 @@ public:
     void run(void);
     void stop(void);
 
-#if defined(HAVE_VRPN)
+#if defined(DTK_WRAP_VRPN)
     void handle_button(const vrpn_BUTTONCB callback);
     void handle_analog(const vrpn_ANALOGCB callback);
     void handle_tracker(const vrpn_TRACKERCB callback);
@@ -56,7 +56,7 @@ public:
 public:
     bool running;
 
-#if defined(HAVE_VRPN)
+#if defined(DTK_WRAP_VRPN)
     vrpn_Button_Remote *button;
     vrpn_Analog_Remote *analog;
     vrpn_Tracker_Remote *tracker;

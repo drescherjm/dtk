@@ -22,7 +22,7 @@
 #include <dtkCore/dtkGlobal.h>
 #include <dtkCore/dtkVec3.h>
 
-#if defined(HAVE_VRPN)
+#if defined(DTK_WRAP_VRPN)
 #include <dtkVr/dtkVrTrackerVrpn.h>
 #include <dtkVr/dtkVrDeviceVrpn.h>
 #include <dtkVr/dtkVrScreen.h>
@@ -49,7 +49,7 @@ public:
 
     bool activated;
 
-#if defined(HAVE_VRPN)
+#if defined(DTK_WRAP_VRPN)
     dtkVrTrackerVrpn *tracker;
     dtkVrDeviceVrpn *device;
 #endif
@@ -114,7 +114,7 @@ void dtkVrControllerPrivate::positionHandler1(float x, float y, float z)
         float ratio_y_world = 1;
         float ratio_z_world = 1;
 
-#if defined(HAVE_VRPN)
+#if defined(DTK_WRAP_VRPN)
         ratio_x_world = dtkVrScreen::screens[4][1].x()-dtkVrScreen::screens[4][0].x();
         ratio_y_world = dtkVrScreen::screens[4][2].z()-dtkVrScreen::screens[4][0].z(); // This is not a mistake
         ratio_z_world = 4;
@@ -147,7 +147,7 @@ dtkVrController *dtkVrController::instance(void)
 
 void dtkVrController::setTracker(const QUrl& url)
 {
-#if defined(HAVE_VRPN)
+#if defined(DTK_WRAP_VRPN)
     if(!d->tracker) {
         d->tracker = new dtkVrTrackerVrpn;
         d->tracker->registerPositionHandler1(dtkVrControllerPrivate::positionHandler1);
@@ -163,7 +163,7 @@ void dtkVrController::setTracker(const QUrl& url)
 
 void dtkVrController::setDevice(const QUrl& url)
 {
-#if defined(HAVE_VRPN)
+#if defined(DTK_WRAP_VRPN)
     if(!d->device) {
         d->device = new dtkVrDeviceVrpn;
         d->device->startConnection(url);
@@ -205,7 +205,7 @@ dtkVrController::dtkVrController(void) : QObject(), d(new dtkVrControllerPrivate
 
     d->activated = false;
 
-#if defined(HAVE_VRPN)
+#if defined(DTK_WRAP_VRPN)
     d->tracker = NULL;
     d->device = NULL;
 #endif

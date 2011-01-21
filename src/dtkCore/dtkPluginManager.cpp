@@ -49,29 +49,53 @@ void dtkPluginManager::initialize(void)
     if(d->path.isNull())
         this->readSettings();
 
-	QString paths = "";
-	
-	if (!d->path.isEmpty())
-		paths = d->path + ":";
+    QString paths = "";
+    
+    if (!d->path.isEmpty())
+        paths = d->path + ":";
 
-	paths = paths + 
-#ifdef Q_WS_WIN
-	qApp->applicationDirPath() + "\\..\\plugins";
-#else
+    // Qt uses / as directory separator on all platforms.
+    paths = paths + 
 #ifdef Q_WS_MAC
-	qApp->applicationDirPath() + "/../PlugIns";
+    qApp->applicationDirPath() + "/../PlugIns";
 #else
-	qApp->applicationDirPath() + "/../plugins";
+    qApp->applicationDirPath() + "/../plugins";
 #endif
+    
+#ifdef Q_WS_WIN
+    // For windows absolute paths may contain drive letters followed by : , which
+    // should not be treated as delimiters. Join these with the next result.
+    QStringList pathList;
+    // Match driveletter followed by colon + path or any path up to a colon.
+    QRegExp pathFilterRx("(([a-zA-Z]:|)[^:]+)");
+    int pos = 0;
+    while ((pos = pathFilterRx.indexIn(paths, pos)) != -1) {
+        QString pathItem = pathFilterRx.cap(1);
+        // Replace \ with / since Qt uses / as directory separator on all platforms
+        pathItem.replace( "\\" , "/" ); 
+        if ( !pathItem.isEmpty() ) {
+            pathList << pathItem;
+        }
+        pos += pathFilterRx.matchedLength();
+    }
+#else
+    QStringList pathList = 
+        paths.split(":", QString::SkipEmptyParts);
 #endif
-	
-    foreach(QString path, paths.split(":", QString::SkipEmptyParts)) {
 
-        QDir dir(path);
-        dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
+    const QString appDir = qApp->applicationDirPath();
+
+    foreach(QString path, pathList) {
+
+        QDir dir(appDir);
+        if ( dir.cd( path ) ) {  // Allow path to be relative to the appDir;
+            dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
         
-        foreach (QFileInfo entry, dir.entryInfoList())
-            loadPlugin(entry.absoluteFilePath());
+            foreach (QFileInfo entry, dir.entryInfoList())
+                loadPlugin(entry.absoluteFilePath());
+        } else {
+            dtkWarning() << "Failed to load plugins from path " << path << ". Could not cd to directory.";
+        }
     }
 }
 
@@ -90,11 +114,11 @@ void dtkPluginManager::readSettings(void)
 #ifdef Q_WS_WIN
     d->path = settings.value("path", "C:\\Program Files\\inria\\plugins").toString();
 #else
-	d->path = settings.value("path", "/usr/local/inria/plugins").toString();
+    d->path = settings.value("path", "/usr/local/inria/plugins").toString();
 #endif
-	
+    
     settings.endGroup();
-	
+    
     if(d->path.isEmpty()) {
         dtkWarning() << "Your dtk config does not seem to be set correctly.";
         dtkWarning() << "Please set plugins.path.";
@@ -169,16 +193,18 @@ void dtkPluginManager::loadPlugin(const QString& path)
     dtkPlugin *plugin = qobject_cast<dtkPlugin *>(loader->instance());
 
     if(!plugin) {
-        if(DTK_VERBOSE_LOAD) dtkDebug() << "Unable to retrieve" << path;
+        if(DTK_VERBOSE_LOAD) dtkDebug() << "Unable to retrieve " << path;
         return;
     }
 
     if(!plugin->initialize()) {
-        if(DTK_VERBOSE_LOAD) dtkOutput() << "Unable to initialize" << plugin->name() << "plugin";
+        if(DTK_VERBOSE_LOAD) dtkOutput() << "Unable to initialize " << plugin->name() << " plugin";
         return;
     }
 
     d->loaders.insert(path, loader);
+
+    if(DTK_VERBOSE_LOAD) dtkOutput() << "Loaded plugin " << plugin->name() << " from " << path;
 
     emit loaded(plugin->name());
 }
@@ -188,19 +214,19 @@ void dtkPluginManager::unloadPlugin(const QString& path)
     dtkPlugin *plugin = qobject_cast<dtkPlugin *>(d->loaders.value(path)->instance());
 
     if(!plugin) {
-        if(DTK_VERBOSE_LOAD) dtkDebug() << "dtkPluginManager - Unable to retrieve" << plugin->name() << "plugin";
+        if(DTK_VERBOSE_LOAD) dtkDebug() << "dtkPluginManager - Unable to retrieve " << plugin->name() << " plugin";
         return;
     }
 
     if(!plugin->uninitialize()) {
-        if(DTK_VERBOSE_LOAD) dtkOutput() << "Unable to uninitialize" << plugin->name() << "plugin";
+        if(DTK_VERBOSE_LOAD) dtkOutput() << "Unable to uninitialize " << plugin->name() << " plugin";
         return;
     }
 
     QPluginLoader *loader = d->loaders.value(path);
 
     if(!loader->unload()) {
-        if(DTK_VERBOSE_LOAD) dtkDebug() << "dtkPluginManager - Unable to unload plugin:" << loader->errorString();
+        if(DTK_VERBOSE_LOAD) dtkDebug() << "dtkPluginManager - Unable to unload plugin: " << loader->errorString();
         return;
     }
 

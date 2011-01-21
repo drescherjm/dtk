@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:48:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Oct 31 19:47:10 2010 (+0100)
+ * Last-Updated: Sat Jan 15 13:38:08 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 81
+ *     Update #: 83
  */
 
 /* Commentary:
@@ -63,6 +63,7 @@ public:
     dtkAbstractData *get(const QString& type, int index = 0);
     dtkAbstractData *get(const QString& type, const QString& name);
 
+    QList<QString>                             creators(void) const;
     QList<dtkAbstractDataTypeHandler>          readers(void) const;
     QList<dtkAbstractDataTypeHandler>          writers(void) const;
     QList<dtkAbstractDataConverterTypeHandler> converters(void) const;

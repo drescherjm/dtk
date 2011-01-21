@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jan 14 12:36:53 2011 (+0100)
+ * Last-Updated: Sun Jan 16 19:34:51 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 191
+ *     Update #: 196
  */
 
 /* Commentary:
@@ -60,13 +60,16 @@ public slots:
     virtual void *data(void);
     virtual void *data(int channel);
 
-    virtual int parameter(int channel);
+    virtual double parameter(int channel);
 
     virtual void setParameter(int parameter);
     virtual void setParameter(int parameter, int channel);
 
     virtual void setParameter(float parameter);
     virtual void setParameter(float parameter, int channel);
+
+    virtual void setParameter(double parameter);
+    virtual void setParameter(double parameter, int channel);
 
     virtual void setParameter(const QString& parameter);
     virtual void setParameter(const QString& parameter, int channel);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jan 14 12:37:24 2011 (+0100)
+ * Last-Updated: Sun Jan 16 19:34:47 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 155
+ *     Update #: 162
  */
 
 /* Commentary:
@@ -280,7 +280,7 @@ void *dtkAbstractData::data(int channel)
     return NULL;
 }
 
-int dtkAbstractData::parameter(int channel)
+double dtkAbstractData::parameter(int channel)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(channel);
@@ -308,6 +308,19 @@ void dtkAbstractData::setParameter(float parameter)
 }
 
 void dtkAbstractData::setParameter(float parameter, int channel)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(parameter);
+    DTK_UNUSED(channel);
+}
+
+void dtkAbstractData::setParameter(double parameter)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(parameter);
+}
+
+void dtkAbstractData::setParameter(double parameter, int channel)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(parameter);

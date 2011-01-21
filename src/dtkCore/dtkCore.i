@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Dec 24 13:31:50 2010 (+0100)
+ * Last-Updated: Fri Jan 21 16:13:23 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 317
+ *     Update #: 326
  */
 
 /* Commentary:
@@ -158,7 +158,7 @@
 
 %typemap(typecheck)       QString  = char *;
 %typemap(typecheck) const QString& = char *;
-%typemap(typecheck) QStringList = char *;
+%typemap(typecheck)       QStringList  = char *;
 %typemap(typecheck) const QStringList& = char *;
 
 // Python -> C++
@@ -207,6 +207,7 @@
         qDebug("QStringList expected");
     }
 }
+
 // C++ -> Python
 
 %typemap(out) QString {
@@ -217,7 +218,6 @@
     $result = PyString_FromString($1.toAscii().constData());
 }
 
-// Typemaps for QList
 %define %QList_typemapsPtr(DATA_TYPE)
  
 %typemap(out) QList<DATA_TYPE> {
@@ -235,8 +235,6 @@
 
 %QList_typemapsPtr(dtkPlugin *)
 
-
-// Typemaps for QList
 %define %QList_typemaps(DATA_TYPE)
  
 %typemap(out) QList<DATA_TYPE> {
@@ -253,7 +251,6 @@
 
 %enddef // %QList_typemaps()
 
-// Typemaps for QStringList
 %typemap(out) QStringList {
     $result = PyList_New($1.size());
     int i = 0;
@@ -273,7 +270,6 @@ public:
     T2 second;
 };
 
-// Typemaps for dtkAbstractDataFactory::dtkAbstractDataTypeHandler
 %define %QPair_typemaps(DATA_TYPE_1, DATA_TYPE_2)
  
 %typemap(out) QPair<DATA_TYPE_1, DATA_TYPE_2> {
@@ -287,7 +283,8 @@ public:
 %enddef // %QPair_typemaps()
 
 %template(QPairStrStrList) QPair<QString, QStringList>;
-%QPair_typemaps(QString,QStringList)
+
+%QPair_typemaps(QString, QStringList)
 
 %QList_typemaps(dtkAbstractDataFactory::dtkAbstractDataTypeHandler)
 

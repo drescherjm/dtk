@@ -253,8 +253,21 @@
 
 %enddef // %QList_typemaps()
 
+
 // Typemaps for QStringList
 %typemap(out) QStringList {
+    $result = PyList_New($1.size());
+    int i = 0;
+    QStringList::iterator it = $1.begin();
+    QStringList::iterator end = $1.end();
+    for(;it!=end; ++it, ++i) {
+        PyObject* st = PyString_FromString((*it).toAscii().constData());
+        PyList_SET_ITEM($result, i, st);
+  }
+}
+
+// Copy of the code for QStringList
+%typemap(out) QList<QString> {
     $result = PyList_New($1.size());
     int i = 0;
     QStringList::iterator it = $1.begin();

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:01:36 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Aug 16 15:42:00 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 8
+ * Last-Updated: Mon Jan 31 23:52:55 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -20,8 +20,11 @@
 #ifndef DTKCOMPOSERREADER_H
 #define DTKCOMPOSERREADER_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
+#include <QtXml/QDomNode>
+
+class dtkComposerNode;
 class dtkComposerScene;
 class dtkComposerReaderPrivate;
 
@@ -34,6 +37,9 @@ public:
    ~dtkComposerReader(void);
 
    void read(const QString& fileName);
+
+protected:
+   virtual dtkComposerNode *readNode(QDomNode node);
 
 private:
     dtkComposerReaderPrivate *d;

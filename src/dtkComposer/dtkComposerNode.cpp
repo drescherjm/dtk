@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jan 31 22:31:19 2011 (+0100)
+ * Last-Updated: Tue Feb  1 00:52:28 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1340
+ *     Update #: 1351
  */
 
 /* Commentary: 
@@ -28,7 +28,7 @@
 #include <dtkCore/dtkAbstractView.h>
 #include <dtkCore/dtkGlobal.h>
 
-// #define DTK_DEBUG_COMPOSER_EVALUATION 1
+#define DTK_DEBUG_COMPOSER_EVALUATION 1
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodePrivate
@@ -802,15 +802,13 @@ void dtkComposerNode::update(void)
 
     // -- Forward
 
-    this->setDirty(false); bool forwarded = false;
+    this->setDirty(false);
 
     foreach(dtkComposerEdge *o_edge, output_edges) {
         foreach(dtkComposerEdge *e, d->oRoute(o_edge)) {
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
             qDebug() << DTK_COLOR_BG_GREEN << "Forwarding" << this->title() << "->" << e->destination()->node()->title() << DTK_NO_COLOR;
 #endif
-
-            forwarded = true;
 
             e->destination()->node()->update();
         }
@@ -830,17 +828,12 @@ void dtkComposerNode::update(void)
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
                     qDebug() << DTK_COLOR_BG_BLUE << "Forwarding" << this->title() << "->" << e->destination()->node()->title() << DTK_NO_COLOR;
 #endif
-                    forwarded = true;
 
                     e->destination()->node()->update();
                 }
             }
         }
     }
-    
-    if(!forwarded)
-        if(dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene()))
-            scene->stopEvaluation();
 }
 
 QRectF dtkComposerNode::boundingRect(void) const

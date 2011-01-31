@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec 13 18:31:59 2010 (+0100)
+ * Last-Updated: Mon Jan 31 23:22:27 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 204
+ *     Update #: 216
  */
 
 /* Commentary: 
@@ -34,9 +34,6 @@
 class dtkComposerWriterPrivate
 {
 public:
-    void writeNode(dtkComposerNode *node, QDomElement& element, QDomDocument& document);
-
-public:
     dtkComposerScene *scene;
 
     QHash<int, dtkComposerNode *> node_ids;
@@ -44,9 +41,78 @@ public:
     int id;
 };
 
-void dtkComposerWriterPrivate::writeNode(dtkComposerNode *node, QDomElement& element, QDomDocument& document)
+// /////////////////////////////////////////////////////////////////
+// dtkComposerWriter
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerWriter::dtkComposerWriter(dtkComposerScene *scene) : QObject(), d(new dtkComposerWriterPrivate)
 {
-    int current_id = id++;
+    d->scene = scene;
+}
+
+dtkComposerWriter::~dtkComposerWriter(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+void dtkComposerWriter::write(const QString& fileName)
+{
+    d->node_ids.clear();
+    d->id = 0;
+
+    // Building dom document
+
+    QDomDocument document("dtk");
+
+    QDomElement root = document.createElement("dtk");
+    document.appendChild(root);
+
+    // -- Writing nodes
+
+    foreach(dtkComposerNode *node, d->scene->nodes())
+        if(!node->parentNode())
+            this->writeNode(node, root, document);
+
+    // -- Writing edges
+
+    foreach(dtkComposerEdge *edge, d->scene->edges()) {
+
+        QDomElement source = document.createElement("source");
+        source.setAttribute("node", d->node_ids.key(edge->source()->node()));
+        source.setAttribute("property", edge->source()->name());
+        if(edge->source()->clonedFrom())
+            source.setAttribute("id", d->node_ids.key(edge->source()->clonedFrom()));
+
+        QDomElement destin = document.createElement("destination");
+        destin.setAttribute("node", d->node_ids.key(edge->destination()->node()));
+        destin.setAttribute("property", edge->destination()->name());
+        if(edge->destination()->clonedFrom())
+            destin.setAttribute("id", d->node_ids.key(edge->destination()->clonedFrom()));
+
+        QDomElement tag = document.createElement("edge");
+        tag.appendChild(source);
+        tag.appendChild(destin);
+
+        root.appendChild(tag);
+    }
+
+    // Writing file
+
+    QFile file(fileName);
+
+    if (!file.open(QIODevice::WriteOnly))
+        return;
+
+    QTextStream out(&file); out << document.toString();
+
+    file.close();
+}
+
+QDomElement& dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& element, QDomDocument& document)
+{
+    int current_id = d->id++;
 
     QDomElement tag = document.createElement("node");
     tag.setAttribute("type", node->type());
@@ -133,7 +199,7 @@ void dtkComposerWriterPrivate::writeNode(dtkComposerNode *node, QDomElement& ele
                 property_element.setAttribute("type", "input");
                 property_element.setAttribute("hidden", property->isDisplayed() ? "false" : "true");
                 if(node->kind() == dtkComposerNode::Composite)
-                    property_element.setAttribute("id", node_ids.key(property->clonedFrom()));
+                    property_element.setAttribute("id", d->node_ids.key(property->clonedFrom()));
                 tag.appendChild(property_element);
             }
 
@@ -144,7 +210,7 @@ void dtkComposerWriterPrivate::writeNode(dtkComposerNode *node, QDomElement& ele
                 property_element.setAttribute("type", "output");
                 property_element.setAttribute("hidden", property->isDisplayed() ? "false" : "true");
                 if(node->kind() == dtkComposerNode::Composite)
-                    property_element.setAttribute("id", node_ids.key(property->clonedFrom()));
+                    property_element.setAttribute("id", d->node_ids.key(property->clonedFrom()));
                 tag.appendChild(property_element);
             }
         }
@@ -154,74 +220,7 @@ void dtkComposerWriterPrivate::writeNode(dtkComposerNode *node, QDomElement& ele
     
     element.appendChild(tag);
     
-    this->node_ids.insert(current_id, node);
-}
+    d->node_ids.insert(current_id, node);
 
-// /////////////////////////////////////////////////////////////////
-// dtkComposerWriter
-// /////////////////////////////////////////////////////////////////
-
-dtkComposerWriter::dtkComposerWriter(dtkComposerScene *scene) : QObject(), d(new dtkComposerWriterPrivate)
-{
-    d->scene = scene;
-}
-
-dtkComposerWriter::~dtkComposerWriter(void)
-{
-    delete d;
-
-    d = NULL;
-}
-
-void dtkComposerWriter::write(const QString& fileName)
-{
-    d->node_ids.clear();
-    d->id = 0;
-
-    // Building dom document
-
-    QDomDocument document("dtk");
-
-    QDomElement root = document.createElement("dtk");
-    document.appendChild(root);
-
-    // -- Writing nodes
-
-    foreach(dtkComposerNode *node, d->scene->nodes())
-        if(!node->parentNode())
-            d->writeNode(node, root, document);
-
-    // -- Writing edges
-
-    foreach(dtkComposerEdge *edge, d->scene->edges()) {
-
-        QDomElement source = document.createElement("source");
-        source.setAttribute("node", d->node_ids.key(edge->source()->node()));
-        source.setAttribute("property", edge->source()->name());
-        if(edge->source()->clonedFrom())
-            source.setAttribute("id", d->node_ids.key(edge->source()->clonedFrom()));
-
-        QDomElement destin = document.createElement("destination");
-        destin.setAttribute("node", d->node_ids.key(edge->destination()->node()));
-        destin.setAttribute("property", edge->destination()->name());
-        if(edge->destination()->clonedFrom())
-            destin.setAttribute("id", d->node_ids.key(edge->destination()->clonedFrom()));
-
-        QDomElement tag = document.createElement("edge");
-        tag.appendChild(source);
-        tag.appendChild(destin);
-
-        root.appendChild(tag);
-    }
-
-    // Writing file
-
-    QFile file(fileName);
-
-    if (!file.open(QIODevice::WriteOnly))
-        return;
-
-    QTextStream out(&file); out << document.toString();
-
-    file.close();
+    return tag;
 }

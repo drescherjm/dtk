@@ -93,7 +93,7 @@ void dtkPluginGeneratorMainWindow::onPluginTypeChanged(void)
 void dtkPluginGeneratorMainWindow::onPrefixChanged(void)
 {
     d->prefix = d->ui.prefixLineEdit->text();
-    d->prefix.toLower();
+    d->prefix = d->prefix.toLower();
 
     update();
 }
@@ -108,8 +108,7 @@ void dtkPluginGeneratorMainWindow::onSuffixChanged(void)
 void dtkPluginGeneratorMainWindow::update(void)
 {
     d->ui.outputNameLabel->setText(
-        QString("%1/%2%3%4")
-        .arg(d->output)
+        QString("%2%3%4")
         .arg(d->prefix)
         .arg(d->type)
         .arg(d->suffix)

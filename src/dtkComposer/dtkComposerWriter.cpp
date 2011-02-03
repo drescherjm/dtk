@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jan 31 23:22:27 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 216
+ * Last-Updated: Thu Feb  3 17:35:06 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 224
  */
 
 /* Commentary: 
@@ -110,7 +110,7 @@ void dtkComposerWriter::write(const QString& fileName)
     file.close();
 }
 
-QDomElement& dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& element, QDomDocument& document)
+QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& element, QDomDocument& document)
 {
     int current_id = d->id++;
 
@@ -222,5 +222,14 @@ QDomElement& dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& el
     
     d->node_ids.insert(current_id, node);
 
+    this->extend(node, tag, document);
+
     return tag;
+}
+
+void dtkComposerWriter::extend(dtkComposerNode *node, QDomElement& element, QDomDocument& document)
+{
+    Q_UNUSED(node);
+    Q_UNUSED(element);
+    Q_UNUSED(document);
 }

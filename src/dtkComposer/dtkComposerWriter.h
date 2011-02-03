@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:01:36 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jan 31 23:53:08 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 17
+ * Last-Updated: Thu Feb  3 17:34:54 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -39,7 +39,9 @@ public:
    void write(const QString& fileName);
 
 protected:
-   virtual QDomElement& writeNode(dtkComposerNode *node, QDomElement& element, QDomDocument& document);
+   virtual QDomElement writeNode(dtkComposerNode *node, QDomElement& element, QDomDocument& document);
+
+   virtual void extend(dtkComposerNode *node, QDomElement& element, QDomDocument& document);
 
 private:
     dtkComposerWriterPrivate *d;

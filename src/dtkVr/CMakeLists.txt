@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Feb  4 18:09:19 2011 (+0100)
+## Last-Updated: Sat Feb  5 02:34:13 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 253
+##     Update #: 261
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,6 +24,7 @@ project(dtkVr)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkVrArtController.h
   dtkVrController.h
   dtkVrDevice.h
   dtkVrExport.h
@@ -35,6 +36,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkVrWand.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
+  dtkVrArtController.h
   dtkVrController.h
   dtkVrDevice.h
   dtkVrGestureRecognizer.h
@@ -46,6 +48,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkVrWand.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkVrArtController.cpp
   dtkVrController.cpp
   dtkVrDevice.cpp
   dtkVrGestureRecognizer.cpp
@@ -64,7 +67,6 @@ if(QUAT_LIBRARIES AND VRPN_LIBRARIES AND MPI_FOUND)
 add_definitions(-DDTK_WRAP_VR)
 
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
-  dtkVrArtController.h
   dtkVrDeviceVrpn.h
   dtkVrManager.h
   dtkVrMaster.h
@@ -73,7 +75,6 @@ set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkVrTrackerVrpn.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
-  dtkVrArtController.h
   dtkVrDeviceVrpn.h
   dtkVrManager.h
   dtkVrMaster.h
@@ -82,7 +83,6 @@ set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
   dtkVrTrackerVrpn.h)
 
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
-  dtkVrArtController.cpp
   dtkVrDeviceVrpn.cpp
   dtkVrManager.cpp
   dtkVrMaster.cpp

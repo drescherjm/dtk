@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Oct 28 10:59:30 2010 (+0200)
+## Last-Updated: Fri Feb  4 18:09:19 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 238
+##     Update #: 253
 ######################################################################
 ## 
 ### Commentary: 
@@ -64,6 +64,7 @@ if(QUAT_LIBRARIES AND VRPN_LIBRARIES AND MPI_FOUND)
 add_definitions(-DDTK_WRAP_VR)
 
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkVrArtController.h
   dtkVrDeviceVrpn.h
   dtkVrManager.h
   dtkVrMaster.h
@@ -72,6 +73,7 @@ set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkVrTrackerVrpn.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
+  dtkVrArtController.h
   dtkVrDeviceVrpn.h
   dtkVrManager.h
   dtkVrMaster.h
@@ -80,6 +82,7 @@ set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
   dtkVrTrackerVrpn.h)
 
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkVrArtController.cpp
   dtkVrDeviceVrpn.cpp
   dtkVrManager.cpp
   dtkVrMaster.cpp

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jan 31 21:59:20 2011 (+0100)
+ * Last-Updated: Sat Feb  5 15:08:39 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 215
+ *     Update #: 216
  */
 
 /* Commentary: 
@@ -143,6 +143,7 @@ signals:
     void progressed(int progress);
 
 public slots:
+    void alter(void);
     void touch(void);
     void update(void);
 

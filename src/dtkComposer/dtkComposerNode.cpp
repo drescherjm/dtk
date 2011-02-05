@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Feb  1 00:53:37 2011 (+0100)
+ * Last-Updated: Sat Feb  5 15:09:07 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1352
+ *     Update #: 1360
  */
 
 /* Commentary: 
@@ -28,7 +28,7 @@
 #include <dtkCore/dtkAbstractView.h>
 #include <dtkCore/dtkGlobal.h>
 
-// #define DTK_DEBUG_COMPOSER_EVALUATION 1
+#define DTK_DEBUG_COMPOSER_EVALUATION 1
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodePrivate
@@ -703,6 +703,16 @@ void dtkComposerNode::setGhost(bool ghost)
 bool dtkComposerNode::isGhost(void)
 {
     return d->ghost;
+}
+
+void dtkComposerNode::alter(void)
+{
+    if(dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene())) {
+        scene->stopEvaluation();
+        scene->clearSelection();
+        this->setSelected(true);
+        scene->startEvaluation();
+    }
 }
 
 //! Ask the node to redraw itself

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Feb  1 17:44:58 2011 (+0100)
+ * Last-Updated: Sat Feb  5 15:04:27 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 933
+ *     Update #: 934
  */
 
 /* Commentary: 
@@ -381,9 +381,12 @@ void dtkComposerScene::startEvaluation(void)
         else
             node->setDirty(true);
 
-    foreach(QGraphicsItem *item, this->selectedItems())
-        if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item))
+    foreach(QGraphicsItem *item, this->selectedItems()) {
+        if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) {
+            node->setDirty(true);
             node->update();
+        }
+    }
 }
 
 void dtkComposerScene::stopEvaluation(void)

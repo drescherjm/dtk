@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Feb  5 15:24:23 2011 (+0100)
+ * Last-Updated: Sun Feb  6 15:46:55 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1361
+ *     Update #: 1369
  */
 
 /* Commentary: 
@@ -733,7 +733,7 @@ void dtkComposerNode::update(void)
     if(!dtkComposerScene::s_evaluate)
         return;
 
-    if(d->kind != dtkComposerNode::View && !d->dirty)
+    if(d->kind == dtkComposerNode::Process && !d->dirty)
         return;
 
     QList<dtkComposerEdge *> input_edges = d->input_edges.keys();
@@ -783,6 +783,15 @@ void dtkComposerNode::update(void)
             qDebug() << DTK_COLOR_BG_YELLOW << "Pulling" << n->title() << edge << DTK_NO_COLOR;
 #endif
             
+
+// --
+            if(dtkComposerNode *source = e->source()->node()) {
+                if (source->kind() == dtkComposerNode::Data) {
+                    source->onOutputEdgeConnected(e, e->source());
+                }
+            }
+// --
+
             n->onInputEdgeConnected(edge, p);
             
             delete edge;

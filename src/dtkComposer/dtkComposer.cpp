@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Jan  8 16:10:38 2011 (+0100)
+ * Last-Updated: Sat Feb  5 23:40:03 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 436
+ *     Update #: 443
  */
 
 /* Commentary: 
@@ -94,6 +94,11 @@ void dtkComposer::setFactory(dtkComposerNodeFactory *factory)
     d->scene->setFactory(factory);
 }
 
+void dtkComposer::setFileName(const QString& fileName)
+{
+    d->fileName = fileName;
+}
+
 bool dtkComposer::isModified(void)
 {
     return d->scene->isModified();
@@ -102,6 +107,16 @@ bool dtkComposer::isModified(void)
 QString dtkComposer::fileName(void)
 {
     return d->fileName;
+}
+
+dtkComposerScene *dtkComposer::scene(void)
+{
+    return d->scene;
+}
+
+dtkComposerView *dtkComposer::view(void)
+{
+    return d->view;
 }
 
 bool dtkComposer::open(QString fileName)
@@ -113,7 +128,7 @@ bool dtkComposer::open(QString fileName)
 
         d->scene->setModified(false);
 
-        d->view->fitInView(d->scene->sceneRect(), Qt::KeepAspectRatio);
+        // d->view->fitInView(d->scene->sceneRect(), Qt::KeepAspectRatio);
         d->view->update();
 
         QFileInfo info(fileName);

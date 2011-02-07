@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Dec 14 19:07:03 2010 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 204
+ * Last-Updated: Sat Feb  5 15:08:39 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 216
  */
 
 /* Commentary: 
@@ -29,6 +29,7 @@ class dtkAbstractObject;
 class dtkComposerEdge;
 class dtkComposerNodePrivate;
 class dtkComposerNodeProperty;
+class stkComspoerScene;
 
 class DTKCOMPOSER_EXPORT dtkComposerNode : public QObject, public QGraphicsItem
 {
@@ -142,6 +143,7 @@ signals:
     void progressed(int progress);
 
 public slots:
+    void alter(void);
     void touch(void);
     void update(void);
 

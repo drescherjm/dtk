@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:12:32 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Jan  8 16:10:19 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 58
+ * Last-Updated: Mon Jan 31 23:34:08 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 76
  */
 
 /* Commentary: 
@@ -27,9 +27,12 @@
 class dtkAbstractData;
 class dtkAbstractProcess;
 class dtkAbstractView;
+
 class dtkComposerNode;
 class dtkComposerNodeFactory;
 class dtkComposerPrivate;
+class dtkComposerScene;
+class dtkComposerView;
 
 class DTKCOMPOSER_EXPORT dtkComposer : public QWidget
 {
@@ -41,6 +44,7 @@ public:
 
     void setBackgroundColor(const QColor& color);
     void setFactory(dtkComposerNodeFactory *factory);
+    void setFileName(const QString& fileName);
 
     bool isModified(void);
 
@@ -82,6 +86,10 @@ public slots:
 public slots:
    void startEvaluation(void);
    void stopEvaluation(void);
+
+protected:
+   dtkComposerScene *scene(void);
+   dtkComposerView *view(void);
 
 private:
     dtkComposerPrivate *d;

@@ -70,7 +70,6 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES_MOC})
 
 target_link_libraries(${PROJECT_NAME}
-  ${TCL_LIBRARY}
   dtkCore)
 
 if(BUILD_WRAPPERS)

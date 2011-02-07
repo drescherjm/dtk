@@ -67,6 +67,8 @@ QVariant dtkComposerNodeFile::value(dtkComposerNodeProperty *property)
         emit progressed(100);
         return QVariant(d->file);
     }
+    // Return an invalid variant
+    return QVariant();
 }
 
 void dtkComposerNodeFile::editFile(void)

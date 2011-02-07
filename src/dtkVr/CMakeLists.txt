@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Sat Feb  5 02:34:13 2011 (+0100)
+## Last-Updated: Mon Feb  7 10:09:07 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 261
+##     Update #: 269
 ######################################################################
 ## 
 ### Commentary: 
@@ -28,6 +28,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkVrController.h
   dtkVrDevice.h
   dtkVrExport.h
+  dtkVrFlystickRecognizer.h
   dtkVrGestureRecognizer.h
   dtkVrHeadRecognizer.h
   dtkVrScreen.h
@@ -39,6 +40,8 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkVrArtController.h
   dtkVrController.h
   dtkVrDevice.h
+  dtkVrFlystickRecognizer.h
+  dtkVrFlystickRecognizer_p.h
   dtkVrGestureRecognizer.h
   dtkVrGestureRecognizer_p.h
   dtkVrHeadRecognizer.h
@@ -51,6 +54,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkVrArtController.cpp
   dtkVrController.cpp
   dtkVrDevice.cpp
+  dtkVrFlystickRecognizer.cpp
   dtkVrGestureRecognizer.cpp
   dtkVrHeadRecognizer.cpp
   dtkVrScreen.cpp

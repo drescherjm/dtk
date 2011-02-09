@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 19:18:53 2010 (+0200)
+ * Last-Updated: Sat Jan 15 14:03:12 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 96
+ *     Update #: 100
  */
 
 /* Commentary:
@@ -163,6 +163,11 @@ dtkAbstractData *dtkAbstractDataFactory::get(const QString& type, const QString&
             return data;
 
     return NULL;
+}
+
+QList<QString> dtkAbstractDataFactory::creators(void) const
+{
+    return d->creators.keys();
 }
 
 QList<dtkAbstractDataFactory::dtkAbstractDataTypeHandler> dtkAbstractDataFactory::readers(void) const

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Dec 14 19:33:01 2010 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 912
+ * Last-Updated: Sat Feb  5 15:04:27 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 934
  */
 
 /* Commentary: 
@@ -371,15 +371,28 @@ void dtkComposerScene::setFactory(dtkComposerNodeFactory *factory)
 
 void dtkComposerScene::startEvaluation(void)
 {
-    foreach(QGraphicsItem *item, this->selectedItems())
-        if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item))
-            node->update();
+    s_evaluate = true;
 
     emit evaluationStarted();
+
+    foreach(dtkComposerNode *node, this->nodes())
+        if(node->kind() == dtkComposerNode::Data)
+            node->setDirty(false);
+        else
+            node->setDirty(true);
+
+    foreach(QGraphicsItem *item, this->selectedItems()) {
+        if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) {
+            node->setDirty(true);
+            node->update();
+        }
+    }
 }
 
 void dtkComposerScene::stopEvaluation(void)
 {
+    s_evaluate = false;
+
     emit evaluationStopped();
 }
 
@@ -694,3 +707,5 @@ void dtkComposerScene::onSelectionChanged(void)
     if(this->selectedItems().count() == 0)
         emit selectionCleared();
 }
+
+bool dtkComposerScene::s_evaluate = false;

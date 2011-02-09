@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 21 21:04:35 2010 (+0200)
+ * Last-Updated: Fri Jan 21 16:06:03 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 127
+ *     Update #: 151
  */
 
 /* Commentary: 
@@ -23,7 +23,7 @@
 #include <dtkCore/dtkPlugin.h>
 #include <dtkCore/dtkLog.h>
 
-#define DTK_VERBOSE_LOAD true
+#define DTK_VERBOSE_LOAD false
 
 class dtkPluginManagerPrivate
 {
@@ -54,33 +54,36 @@ void dtkPluginManager::initialize(void)
     if (!d->path.isEmpty())
         paths = d->path + ":";
 
-    // Qt uses / as directory separator on all platforms.
-    paths = paths + 
 #ifdef Q_WS_MAC
-    qApp->applicationDirPath() + "/../PlugIns";
+    QDir plugins_dir = qApp->applicationDirPath() + "/../PlugIns";
+
+    if(plugins_dir.exists())
+        paths = paths + plugins_dir.absolutePath();;
 #else
-    qApp->applicationDirPath() + "/../plugins";
+    QDir plugins_dir = qApp->applicationDirPath() + "/../plugins";
+
+    if(plugins_dir.exists())
+        paths = paths + plugins_dir.absolutePath();
 #endif
     
 #ifdef Q_WS_WIN
-    // For windows absolute paths may contain drive letters followed by : , which
-    // should not be treated as delimiters. Join these with the next result.
     QStringList pathList;
-    // Match driveletter followed by colon + path or any path up to a colon.
     QRegExp pathFilterRx("(([a-zA-Z]:|)[^:]+)");
+
     int pos = 0;
+
     while ((pos = pathFilterRx.indexIn(paths, pos)) != -1) {
+
         QString pathItem = pathFilterRx.cap(1);
-        // Replace \ with / since Qt uses / as directory separator on all platforms
         pathItem.replace( "\\" , "/" ); 
-        if ( !pathItem.isEmpty() ) {
+
+        if (!pathItem.isEmpty())
             pathList << pathItem;
-        }
+
         pos += pathFilterRx.matchedLength();
     }
 #else
-    QStringList pathList = 
-        paths.split(":", QString::SkipEmptyParts);
+    QStringList pathList = paths.split(":", QString::SkipEmptyParts);
 #endif
 
     const QString appDir = qApp->applicationDirPath();
@@ -88,7 +91,8 @@ void dtkPluginManager::initialize(void)
     foreach(QString path, pathList) {
 
         QDir dir(appDir);
-        if ( dir.cd( path ) ) {  // Allow path to be relative to the appDir;
+
+        if (dir.cd(path)) {
             dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
         
             foreach (QFileInfo entry, dir.entryInfoList())

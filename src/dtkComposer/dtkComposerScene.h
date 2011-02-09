@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Dec 14 19:00:55 2010 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 111
+ * Last-Updated: Mon Jan 31 22:13:11 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 118
  */
 
 /* Commentary: 
@@ -120,6 +120,11 @@ protected slots:
     void onSelectionChanged(void);
 
 private:
+    static bool s_evaluate;
+
+private:
+    friend class dtkComposerNode;
+
     dtkComposerScenePrivate *d;
 };
 

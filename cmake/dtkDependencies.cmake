@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Sun Oct 17 18:02:42 2010 (+0200)
+## Last-Updated: Sat Feb  5 19:48:10 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 51
+##     Update #: 52
 ######################################################################
 ## 
 ### Commentary: 
@@ -213,3 +213,11 @@ endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)
 
 mark_as_advanced(QUAT_LIBRARIES)
 mark_as_advanced(VRPN_LIBRARIES)
+
+## #################################################################
+## 
+## #################################################################
+
+if(MPI_FOUND AND QUAT_LIBRARIES AND VRPN_LIBRARIES)
+  add_definitions(-DDTK_WRAP_VRPN)
+endif(MPI_FOUND AND QUAT_LIBRARIES AND VRPN_LIBRARIES)

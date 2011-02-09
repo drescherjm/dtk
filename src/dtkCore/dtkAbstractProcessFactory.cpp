@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 28 10:23:01 2010 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 106
+ * Last-Updated: Sat Jan 15 14:10:13 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 109
  */
 
 /* Commentary: 
@@ -99,6 +99,11 @@ dtkAbstractProcess *dtkAbstractProcessFactory::get(const QString& type, const QS
 bool dtkAbstractProcessFactory::exists(const QString& type)
 {
     return d->creators.contains(type);
+}
+
+QStringList dtkAbstractProcessFactory::creators(void) const
+{
+    return d->creators.keys();
 }
 
 QStringList dtkAbstractProcessFactory::implementations(const QString& abstraction)

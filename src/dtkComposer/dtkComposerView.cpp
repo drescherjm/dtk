@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:07:37 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec 10 23:55:36 2010 (+0100)
+ * Last-Updated: Sat Feb  5 23:43:16 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 167
+ *     Update #: 174
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 
 dtkComposerView::dtkComposerView(QWidget *parent) : QGraphicsView(parent)
 {
+    this->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     this->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
     this->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     this->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
@@ -38,6 +39,11 @@ dtkComposerView::~dtkComposerView(void)
 
 }
 
+void dtkComposerView::setBackgroundColor(const QColor &color)
+{
+    this->setBackgroundBrush(color);
+}
+
 void dtkComposerView::onCenterOn(const QPointF& point)
 {
     this->centerOn(point);
@@ -45,7 +51,7 @@ void dtkComposerView::onCenterOn(const QPointF& point)
 
 void dtkComposerView::onFitInView(const QRectF& rect)
 {
-    this->fitInView(rect, Qt::KeepAspectRatio);
+    // this->fitInView(rect, Qt::KeepAspectRatio);
 }
 
 void dtkComposerView::mousePressEvent(QMouseEvent *event)

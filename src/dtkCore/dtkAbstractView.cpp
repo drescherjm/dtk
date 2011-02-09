@@ -230,7 +230,7 @@ void dtkAbstractView::enableAnimator(const QString& animator)
         d->animators.value(animator)->setView(this);
         d->animators.value(animator)->enable();
     } else
-        dtkDebug() << description() << "has no such animator:" << animator;
+        dtkDebug() << description() << " has no such animator: " << animator;
 }
 
 void dtkAbstractView::disableAnimator(const QString& animator)
@@ -245,7 +245,7 @@ void dtkAbstractView::enableNavigator(const QString& navigator)
 //      d->navigators.value(navigator)->setView(this);
         d->navigators.value(navigator)->enable();
     } else
-        dtkDebug() << description() << "has no such navigator:" << navigator;
+        dtkDebug() << description() << " has no such navigator: " << navigator;
 }
 
 void dtkAbstractView::disableNavigator(const QString& navigator)
@@ -260,7 +260,7 @@ void dtkAbstractView::enableInteractor(const QString& interactor)
         d->interactors.value(interactor)->setView(this);
         d->interactors.value(interactor)->enable();
     } else
-        dtkDebug() << description() << "has no such interactor:" << interactor;
+        dtkDebug() << description() << " has no such interactor: " << interactor;
 }
 
 void dtkAbstractView::disableInteractor(const QString& interactor)

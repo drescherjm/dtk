@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 19:20:49 2010 (+0200)
+ * Last-Updated: Sat Jan 15 14:23:57 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 119
+ *     Update #: 131
  */
 
 /* Commentary:
@@ -176,6 +176,26 @@ dtkAbstractView *dtkAbstractViewFactory::get(const QString& type, const QString&
             return view;
 
     return NULL;
+}
+
+QList<QString> dtkAbstractViewFactory::creators(void) const
+{
+    return d->creators.keys();
+}
+
+QList<dtkAbstractViewFactory::dtkAbstractViewTypeHandler> dtkAbstractViewFactory::animators(void) const
+{
+    return d->animators.keys();
+}
+
+QList<dtkAbstractViewFactory::dtkAbstractViewTypeHandler> dtkAbstractViewFactory::interactors(void) const
+{
+    return d->interactors.keys();
+}
+
+QList<dtkAbstractViewFactory::dtkAbstractViewTypeHandler> dtkAbstractViewFactory::navigators(void) const
+{
+    return d->navigators.keys();
 }
 
 dtkAbstractViewFactory::dtkAbstractViewFactory(void) : dtkAbstractFactory(), d(new dtkAbstractViewFactoryPrivate)

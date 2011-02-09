@@ -156,14 +156,89 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="0">
+    <item row="4" column="1">
+     <widget class="QTextEdit" name="descriptionTextEdit">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>300</width>
+        <height>100</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>300</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="pluginLicenseLabel">
+      <property name="text">
+       <string>Plugin license:</string>
+      </property>
+      <property name="buddy">
+       <cstring>pluginTypeCombo</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QComboBox" name="pluginLicenseCombo">
+      <property name="minimumSize">
+       <size>
+        <width>300</width>
+        <height>0</height>
+       </size>
+      </property>
+      <item>
+       <property name="text">
+        <string>Choose a license ...</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Apache</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Artistic</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Cecill</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>GPL</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>LGPL</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="6" column="0">
      <widget class="QLabel" name="outputPluginLabel">
       <property name="text">
        <string>Plugin name:</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
+    <item row="6" column="1">
      <widget class="QLabel" name="outputNameLabel">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -191,6 +266,13 @@
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="descriptionLabel">
+      <property name="text">
+       <string>Description:</string>
       </property>
      </widget>
     </item>

@@ -30,6 +30,8 @@ public:
     QString prefix;
     QString suffix;
     QString type;
+    QString description;
+    QString license;
 
     QDir parent;
     QDir target;
@@ -45,6 +47,8 @@ public:
    void setPrefix(const QString& prefix);
    void setSuffix(const QString& suffix);
    void setType(const QString& type);
+   void setDescription(const QString& desc);
+   void setLicense(const QString& desc);
 
    bool run(void);
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Feb  6 15:46:55 2011 (+0100)
+ * Last-Updated: Thu Feb 10 11:09:38 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1369
+ *     Update #: 1371
  */
 
 /* Commentary: 
@@ -479,7 +479,6 @@ int dtkComposerNode::number(dtkComposerNodeProperty *property)
     if(property->type() == dtkComposerNodeProperty::Output)
         return d->output_properties.indexOf(property);
 
-    // Return an invalid index : but what?
     return -1;
 }
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 10 11:59:16 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 10 14:34:16 2011 (+0100)
+ * Last-Updated: Thu Feb 10 16:05:10 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -83,6 +83,12 @@ void deployPlugins(const QString &appBundlePath, DeploymentInfo deploymentInfo, 
 void changeIdentification(const QString &id, const QString &binaryPath);
 void changeInstallName(const QString &oldName, const QString &newName, const QString &binaryPath);
 QString findAppBinary(const QString &appBundlePath);
+
+// /////////////////////////////////////////////////////////////////
+// dtk specific deployment
+// /////////////////////////////////////////////////////////////////
+
+void deployDtkPlugins(const QString &appBundlePath, DeploymentInfo deploymentInfo, const QString& pluginsPath);
 
 #endif
 

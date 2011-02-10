@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 10 11:57:45 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 10 14:33:52 2011 (+0100)
+ * Last-Updated: Thu Feb 10 16:15:14 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 25
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -24,6 +24,7 @@
 int main(int argc, char **argv)
 {
     QString appBundlePath;
+    QStringList injection;
 
     if (argc > 1)
         appBundlePath = QString::fromLocal8Bit(argv[1]);
@@ -32,9 +33,11 @@ int main(int argc, char **argv)
         qDebug() << "Usage: dtkDeploy app-bundle [options]";
         qDebug() << "";
         qDebug() << "Options:";
-        qDebug() << "   -verbose=<0-3>  : 0 = no output, 1 = error/warning (default), 2 = normal, 3 = debug";
-        qDebug() << "   -no-strip       : Don't run 'strip' on the binaries";
-        qDebug() << "   -use-debug-libs : Deploy with debug versions of frameworks and plugins (implies -no-strip)";
+        qDebug() << "   -verbose=<0-3> : 0 = no output, 1 = error/warning (default), 2 = normal, 3 = debug";
+        qDebug() << "   -no-strip      : Don't run 'strip' on the binaries";
+        qDebug() << "   -use-debug-libs: Deploy with debug versions of frameworks and plugins (implies -no-strip)";
+        qDebug() << "   -inject=<dir>  : Repeatable option. Specifies a dtk build directory containing plugins to be";
+        qDebug() << "                    injected into the bundle";
         qDebug() << "";
         qDebug() << "dtkDeploy takes an application bundle as input and makes it";
         qDebug() << "self-contained by copying in the Qt frameworks and plugins that";
@@ -74,6 +77,23 @@ int main(int argc, char **argv)
                 LogError() << "Could not parse verbose level";
             else
                 logLevel = number;
+
+            // --
+
+        } else if (argument.startsWith(QByteArray("-inject"))) {
+            LogDebug() << "Argument found:" << argument;
+
+            int index = argument.indexOf("=");
+
+            QString directory = argument.mid(index+1);
+            directory = directory.split(" ").first();
+            if (directory.isNull())
+                LogError() << "Could not parse injection directory";
+
+            injection << directory;
+
+            // --
+
         } else if (argument.startsWith("-")) {
             LogError() << "Unknown argument" << argument << "\n";
             return 0;
@@ -90,6 +110,11 @@ int main(int argc, char **argv)
     LogNormal();
     deployPlugins(appBundlePath, deploymentInfo, useDebugLibs);
     createQtConf(appBundlePath);
+
+    foreach(QString directory, injection) {
+        qDebug() << "Injecting plugins from" << directory;
+        deployDtkPlugins(appBundlePath, deploymentInfo, directory);
+    }
 }
 
 /* **************************************************************

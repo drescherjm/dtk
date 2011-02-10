@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 10 12:01:02 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 10 14:38:07 2011 (+0100)
+ * Last-Updated: Thu Feb 10 16:14:22 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 42
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -543,9 +543,48 @@ void changeQtFrameworks(const QString appPath, const QString &qtPath, bool useDe
     }
 }
 
-/* **************************************************************
- * Credits
- * ************************************************************** */
+// /////////////////////////////////////////////////////////////////
+// dtk specific deployment
+// /////////////////////////////////////////////////////////////////
+
+void deployDtkPlugins(const QString &appBundlePath, DeploymentInfo deploymentInfo, const QString& pluginsPath)
+{
+    ApplicationBundleInfo applicationBundle;
+    applicationBundle.path = appBundlePath;
+    applicationBundle.binaryPath = findAppBinary(appBundlePath);
+
+    const QString pluginDestinationPath = appBundlePath + "/" + "Contents/PlugIns";
+
+#if defined(Q_WS_MAC)
+    QStringList plugins = QDir(pluginsPath).entryList(QStringList() << "*.dylib");
+#endif
+
+    foreach (QString pluginName, plugins) {
+
+        QDir dir;
+        dir.mkpath(pluginDestinationPath);
+
+        const QString sourcePath = pluginsPath + "/" + pluginName;
+        const QString destinationPath = pluginDestinationPath + "/" + pluginName;
+
+        if (copyFilePrintStatus(sourcePath, destinationPath)) {
+
+            runStrip(destinationPath);
+
+            QList<FrameworkInfo> frameworks = getQtFrameworks(destinationPath, 0);
+
+            deployQtFrameworks(frameworks, applicationBundle.path, destinationPath, 0);
+        }
+    } // foreach plugins
+
+    QStringList subdirs = QDir(pluginsPath).entryList(QStringList() << "*", QDir::Dirs | QDir::NoDotAndDotDot);
+    foreach (const QString &subdir, subdirs)
+        deployDtkPlugins(appBundlePath, deploymentInfo, subdir);
+}
+
+// /////////////////////////////////////////////////////////////////
+// Credits
+// /////////////////////////////////////////////////////////////////
 
 /****************************************************************************
 **

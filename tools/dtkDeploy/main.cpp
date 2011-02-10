@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 10 11:57:45 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 10 13:14:07 2011 (+0100)
+ * Last-Updated: Thu Feb 10 14:33:52 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 17
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -33,18 +33,12 @@ int main(int argc, char **argv)
         qDebug() << "";
         qDebug() << "Options:";
         qDebug() << "   -verbose=<0-3>  : 0 = no output, 1 = error/warning (default), 2 = normal, 3 = debug";
-        qDebug() << "   -no-plugins     : Skip plugin deployment";
-        qDebug() << "   -dmg            : Create a .dmg disk image";
         qDebug() << "   -no-strip       : Don't run 'strip' on the binaries";
         qDebug() << "   -use-debug-libs : Deploy with debug versions of frameworks and plugins (implies -no-strip)";
         qDebug() << "";
         qDebug() << "dtkDeploy takes an application bundle as input and makes it";
         qDebug() << "self-contained by copying in the Qt frameworks and plugins that";
         qDebug() << "the application uses.";
-        qDebug() << "";
-        qDebug() << "Plugins related to a framework are copied in with the";
-        qDebug() << "framework. The accessibilty, image formats, and text codec";
-        qDebug() << "plugins are always copied, unless \"-no-plugins\" is specified.";
 
         return 0;
     }
@@ -57,8 +51,6 @@ int main(int argc, char **argv)
         return 0;
     }
 
-    bool plugins = true;
-    bool dmg = false;
     bool useDebugLibs = false;
     extern bool runStripEnabled;
 
@@ -66,13 +58,7 @@ int main(int argc, char **argv)
 
         QByteArray argument = QByteArray(argv[i]);
 
-        if (argument == QByteArray("-no-plugins")) {
-            LogDebug() << "Argument found:" << argument;
-            plugins = false;
-        } else if (argument == QByteArray("-dmg")) {
-            LogDebug() << "Argument found:" << argument;
-            dmg = true;
-        } else if (argument == QByteArray("-no-strip")) {
+        if (argument == QByteArray("-no-strip")) {
             LogDebug() << "Argument found:" << argument;
             runStripEnabled = false;
         } else if (argument == QByteArray("-use-debug-libs")) {
@@ -96,22 +82,14 @@ int main(int argc, char **argv)
 
     DeploymentInfo deploymentInfo  = deployQtFrameworks(appBundlePath, useDebugLibs);
 
-    if (plugins) {
-
-        if (deploymentInfo.qtPath.isEmpty())
-            deploymentInfo.pluginPath = "/Developer/Applications/Qt/plugins"; // Assume binary package.
-        else
-            deploymentInfo.pluginPath = deploymentInfo.qtPath + "/plugins";
-
-        LogNormal();
-        deployPlugins(appBundlePath, deploymentInfo, useDebugLibs);
-        createQtConf(appBundlePath);
-    }
-
-    if (dmg) {
-        LogNormal();
-        createDiskImage(appBundlePath);
-    }
+    if (deploymentInfo.qtPath.isEmpty())
+        deploymentInfo.pluginPath = "/Developer/Applications/Qt/plugins"; // Assume binary package.
+    else
+        deploymentInfo.pluginPath = deploymentInfo.qtPath + "/plugins";
+    
+    LogNormal();
+    deployPlugins(appBundlePath, deploymentInfo, useDebugLibs);
+    createQtConf(appBundlePath);
 }
 
 /* **************************************************************

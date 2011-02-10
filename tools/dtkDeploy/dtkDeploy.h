@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 10 11:59:16 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 10 12:07:23 2011 (+0100)
+ * Last-Updated: Thu Feb 10 14:34:16 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 8
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -20,16 +20,15 @@
 #ifndef DTKDEPLOY_H
 #define DTKDEPLOY_H
 
-#include <QString>
-#include <QStringList>
+#include <QtCore>
 #include <QDebug>
 
 extern int logLevel;
 
-#define LogError()      if (logLevel < 1) {} else qDebug() << "ERROR:"
-#define LogWarning()    if (logLevel < 1) {} else qDebug() << "WARNING:"
-#define LogNormal()     if (logLevel < 2) {} else qDebug() << "Log:"
-#define LogDebug()      if (logLevel < 3) {} else qDebug() << "Log:"
+#define LogError()   if (logLevel < 1) {} else qDebug() << "ERROR:"
+#define LogWarning() if (logLevel < 1) {} else qDebug() << "WARNING:"
+#define LogNormal()  if (logLevel < 2) {} else qDebug() << "Log:"
+#define LogDebug()   if (logLevel < 3) {} else qDebug() << "Log:"
 
 extern bool runStripEnabled;
 
@@ -84,7 +83,6 @@ void deployPlugins(const QString &appBundlePath, DeploymentInfo deploymentInfo, 
 void changeIdentification(const QString &id, const QString &binaryPath);
 void changeInstallName(const QString &oldName, const QString &newName, const QString &binaryPath);
 QString findAppBinary(const QString &appBundlePath);
-void createDiskImage(const QString &appBundlePath);
 
 #endif
 

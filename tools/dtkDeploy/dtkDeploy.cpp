@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 10 12:01:02 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 10 14:13:20 2011 (+0100)
+ * Last-Updated: Thu Feb 10 14:38:07 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 37
+ *     Update #: 42
  */
 
 /* Commentary: 
@@ -25,7 +25,7 @@
 
 bool runStripEnabled = true;
 
-int logLevel = 3;
+int logLevel = 1;
 
 using std::cout;
 using std::endl;
@@ -403,8 +403,7 @@ DeploymentInfo deployQtFrameworks(const QString &appBundlePath, bool useDebugLib
    }
 }
 
-void deployPlugins(const ApplicationBundleInfo &appBundleInfo, const QString &pluginSourcePath,
-        const QString pluginDestinationPath, DeploymentInfo deploymentInfo, bool useDebugLibs)
+void deployPlugins(const ApplicationBundleInfo &appBundleInfo, const QString &pluginSourcePath, const QString pluginDestinationPath, DeploymentInfo deploymentInfo, bool useDebugLibs)
 {
     LogNormal() << "Deploying plugins from" << pluginSourcePath;
     QStringList plugins = QDir(pluginSourcePath).entryList(QStringList() << "*.dylib");
@@ -514,7 +513,6 @@ void deployPlugins(const QString &appBundlePath, DeploymentInfo deploymentInfo, 
     deployPlugins(applicationBundle, deploymentInfo.pluginPath, pluginDestinationPath, deploymentInfo, useDebugLibs);
 }
 
-
 void changeQtFrameworks(const QList<FrameworkInfo> frameworks, const QString &appBinaryPath, const QString &absoluteQtPath)
 {
     LogNormal() << "Changing" << appBinaryPath << "to link against";
@@ -543,30 +541,6 @@ void changeQtFrameworks(const QString appPath, const QString &qtPath, bool useDe
         const QString absoluteQtPath = QDir(qtPath).absolutePath();
         changeQtFrameworks(frameworks, appBinaryPath, absoluteQtPath);
     }
-}
-
-
-void createDiskImage(const QString &appBundlePath)
-{
-    QString appBaseName = appBundlePath;
-    appBaseName.chop(4); // remove ".app" from end
-
-    QString dmgName = appBaseName + ".dmg";
-
-    QFile dmg(dmgName);
-
-    if (dmg.exists()) {
-        LogNormal() << "Disk image already exists, skipping .dmg creation for" << dmg.fileName();
-    } else {
-        LogNormal() << "Creating disk image (.dmg) for" << appBundlePath;
-    }
-
-    // More dmg options can be found in the hdiutil man page.
-    QString options = QString("create %1.dmg -srcfolder %1.app -format UDZO -volname %1").arg(appBaseName);
-
-    QProcess hdutil;
-    hdutil.start("hdiutil", options.split(' '));
-    hdutil.waitForFinished(-1);
 }
 
 /* **************************************************************

@@ -478,6 +478,9 @@ int dtkComposerNode::number(dtkComposerNodeProperty *property)
 
     if(property->type() == dtkComposerNodeProperty::Output)
         return d->output_properties.indexOf(property);
+
+    // Return an invalid index : but what?
+    return -1;
 }
 
 QList<dtkComposerNodeProperty *> dtkComposerNode::inputProperties(void)

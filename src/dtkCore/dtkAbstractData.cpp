@@ -89,7 +89,7 @@ void dtkAbstractData::enableReader(const QString& reader)
         d->readers.value(reader)->setData(this);
 	d->readers.value(reader)->enable();
     } else
-	dtkDebug() << description() << "has no such reader: " << reader;
+	dtkDebug() << description() << " has no such reader: " << reader;
 }
 
 void dtkAbstractData::disableReader(const QString& reader)
@@ -104,7 +104,7 @@ void dtkAbstractData::enableWriter(const QString& writer)
         d->writers.value(writer)->setData(this);
 	d->writers.value(writer)->enable();
     } else
-	dtkDebug() << description() << "has no such writer: " << writer;
+	dtkDebug() << description() << " has no such writer: " << writer;
 }
 
 void dtkAbstractData::disableWriter(const QString& writer)
@@ -119,7 +119,7 @@ void dtkAbstractData::enableConverter(const QString& converter)
         d->converters.value(converter)->setData(this);
 	d->converters.value(converter)->enable();
     } else
-	dtkDebug() << description() << "has no such converter: " << converter;
+	dtkDebug() << description() << " has no such converter: " << converter;
 }
 
 void dtkAbstractData::disableConverter(const QString& converter)

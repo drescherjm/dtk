@@ -26,7 +26,7 @@
 
 class dtkVrArtControllerPrivate;
 
-class dtkVrArtController : public QObject
+class DTKVR_EXPORT dtkVrArtController : public QObject
 {
     Q_OBJECT
 

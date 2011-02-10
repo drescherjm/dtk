@@ -145,6 +145,11 @@ target_link_libraries(${PROJECT_NAME}
   dtkCore
   dtkDistributed)
 
+if(MSVC)
+  target_link_libraries(${PROJECT_NAME}
+    wsock32)
+endif()
+
 if(MPI_FOUND)
 target_link_libraries(${PROJECT_NAME}
   ${MPI_LIBRARIES})

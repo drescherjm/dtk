@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 10 12:01:02 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 10 16:14:22 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 61
+ * Last-Updated: Fri Feb 11 14:42:57 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 62
  */
 
 /* Commentary: 
@@ -557,6 +557,14 @@ void deployDtkPlugins(const QString &appBundlePath, DeploymentInfo deploymentInf
 
 #if defined(Q_WS_MAC)
     QStringList plugins = QDir(pluginsPath).entryList(QStringList() << "*.dylib");
+#endif
+
+#if defined(Q_WS_WIN)
+    QStringList plugins = QDir(pluginsPath).entryList(QStringList() << "*.dll");
+#endif
+
+#if defined(Q_WS_X11)
+    QStringList plugins = QDir(pluginsPath).entryList(QStringList() << "*.so");
 #endif
 
     foreach (QString pluginName, plugins) {

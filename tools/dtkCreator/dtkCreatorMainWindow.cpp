@@ -568,18 +568,19 @@ void dtkCreatorMainWindow::stop(void)
 
 void dtkCreatorMainWindow::registerData(dtkAbstractData *data, QString type)
 {
-    int stat;
 
     d->interpreter->interpreter()->blockSignals(true);
 
 #if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
+    int statPython;
     if(dtkScriptInterpreterPython *interpreter = dynamic_cast<dtkScriptInterpreterPython *>(d->interpreter->interpreter()))
-        interpreter->interpret(QString("%1 = dataFactory.get(\"%2\", \"%1\")").arg(data->name()).arg(type), &stat);
+        interpreter->interpret(QString("%1 = dataFactory.get(\"%2\", \"%1\")").arg(data->name()).arg(type), &statPython);
 #endif
 
 #if defined(HAVE_SWIG) && defined(HAVE_TCL)
+    int statTcl;
     if(dtkScriptInterpreterTcl *interpreter = dynamic_cast<dtkScriptInterpreterTcl *>(d->interpreter->interpreter()))
-        interpreter->interpret(QString("set $1 [$dataFactory get \"2\" \"1\"]").arg(data->name()).arg(type), &stat);
+        interpreter->interpret(QString("set $1 [$dataFactory get \"2\" \"1\"]").arg(data->name()).arg(type), &statTcl);
 #endif
 
     d->interpreter->interpreter()->blockSignals(false);
@@ -587,18 +588,18 @@ void dtkCreatorMainWindow::registerData(dtkAbstractData *data, QString type)
 
 void dtkCreatorMainWindow::registerProcess(dtkAbstractProcess *process, QString type)
 {
-    int stat;
-
     d->interpreter->interpreter()->blockSignals(true);
 
 #if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
+    int statPython;
     if(dtkScriptInterpreterPython *interpreter = dynamic_cast<dtkScriptInterpreterPython *>(d->interpreter->interpreter()))
-        interpreter->interpret(QString("%1 = processFactory.get(\"%2\", \"%1\")").arg(process->name()).arg(type), &stat);
+        interpreter->interpret(QString("%1 = processFactory.get(\"%2\", \"%1\")").arg(process->name()).arg(type), &statPython);
 #endif
 
 #if defined(HAVE_SWIG) && defined(HAVE_TCL)
+    int statTcl;
     if(dtkScriptInterpreterTcl *interpreter = dynamic_cast<dtkScriptInterpreterTcl *>(d->interpreter->interpreter()))
-        interpreter->interpret(QString("set $1 [$processFactory get \"2\" \"1\"]").arg(process->name()).arg(type), &stat);
+        interpreter->interpret(QString("set $1 [$processFactory get \"2\" \"1\"]").arg(process->name()).arg(type), &statTcl);
 #endif
 
     d->interpreter->interpreter()->blockSignals(false);
@@ -606,18 +607,18 @@ void dtkCreatorMainWindow::registerProcess(dtkAbstractProcess *process, QString 
 
 void dtkCreatorMainWindow::registerView(dtkAbstractView *view, QString type)
 {
-    int stat;
-
     d->interpreter->interpreter()->blockSignals(true);
 
 #if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
+    int statPython;
     if(dtkScriptInterpreterPython *interpreter = dynamic_cast<dtkScriptInterpreterPython *>(d->interpreter->interpreter()))
-        interpreter->interpret(QString("%1 = viewFactory.get(\"%2\", \"%1\")").arg(view->name()).arg(type), &stat);
+        interpreter->interpret(QString("%1 = viewFactory.get(\"%2\", \"%1\")").arg(view->name()).arg(type), &statPython);
 #endif
 
 #if defined(HAVE_SWIG) && defined(HAVE_TCL)
+    int statTcl;
     if(dtkScriptInterpreterTcl *interpreter = dynamic_cast<dtkScriptInterpreterTcl *>(d->interpreter->interpreter()))
-        interpreter->interpret(QString("set $1 [$viewFactory get \"2\" \"1\"]").arg(view->name()).arg(type), &stat);
+        interpreter->interpret(QString("set $1 [$viewFactory get \"2\" \"1\"]").arg(view->name()).arg(type), &statTcl);
 #endif
 
     d->interpreter->interpreter()->blockSignals(false);

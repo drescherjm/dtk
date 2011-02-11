@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul  8 13:28:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec 20 18:02:45 2010 (+0100)
+ * Last-Updated: Thu Feb 10 11:10:09 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 68
+ *     Update #: 69
  */
 
 /* Commentary: 
@@ -67,6 +67,8 @@ QVariant dtkComposerNodeFile::value(dtkComposerNodeProperty *property)
         emit progressed(100);
         return QVariant(d->file);
     }
+
+    return QVariant();
 }
 
 void dtkComposerNodeFile::editFile(void)

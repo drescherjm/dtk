@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jan 21 16:13:23 2011 (+0100)
+ * Last-Updated: Thu Feb 10 11:03:04 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 326
+ *     Update #: 328
  */
 
 /* Commentary:
@@ -252,6 +252,17 @@
 %enddef // %QList_typemaps()
 
 %typemap(out) QStringList {
+    $result = PyList_New($1.size());
+    int i = 0;
+    QStringList::iterator it = $1.begin();
+    QStringList::iterator end = $1.end();
+    for(;it!=end; ++it, ++i) {
+        PyObject* st = PyString_FromString((*it).toAscii().constData());
+        PyList_SET_ITEM($result, i, st);
+  }
+}
+
+%typemap(out) QList<QString> {
     $result = PyList_New($1.size());
     int i = 0;
     QStringList::iterator it = $1.begin();

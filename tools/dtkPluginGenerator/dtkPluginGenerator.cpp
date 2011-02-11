@@ -50,6 +50,16 @@ void dtkPluginGenerator::setType(const QString& type)
     d->type = type;
 }
 
+void dtkPluginGenerator::setDescription(const QString& desc)
+{
+    d->description = desc;
+}
+
+void dtkPluginGenerator::setLicense(const QString& license)
+{
+    d->license = license;
+}
+
 bool dtkPluginGenerator::run(void)
 {
     d->parent = QDir(d->output);
@@ -103,8 +113,10 @@ bool dtkPluginGenerator::generateCMakeLists(void)
 
     QFile templateFile(":template/cmake");
 
-    if(!templateFile.open(QIODevice::ReadOnly | QIODevice::Text))
-        qDebug() << "dtkPluginGenerator: unable to open template file for reading";
+    if(!templateFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "dtkPluginGenerator: unable to open template file " << templateFile.fileName() << " for reading";
+        return false;
+    }
 
     QTextStream stream(&targetFile);
 
@@ -133,7 +145,7 @@ bool dtkPluginGenerator::generateTypeHeaderFile(void)
     QFile templateFile(":template/type.h");
 
     if(!templateFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "dtkPluginGenerator: unable to open template file for reading";
+        qDebug() << "dtkPluginGenerator: unable to open template file " << templateFile.fileName() << " for reading";
         return false;
     }
 
@@ -168,7 +180,7 @@ bool dtkPluginGenerator::generateTypeSourceFile(void)
     QFile templateFile(":template/type.cpp");
 
     if(!templateFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "dtkPluginGenerator: unable to open template file for reading";
+        qDebug() << "dtkPluginGenerator: unable to open template file " << templateFile.fileName() << " for reading";
         return false;
     }
 
@@ -202,7 +214,7 @@ bool dtkPluginGenerator::generatePluginHeaderFile(void)
     QFile templateFile(":template/plugin.h");
 
     if(!templateFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "dtkPluginGenerator: unable to open template file for reading";
+        qDebug() << "dtkPluginGenerator: unable to open template file " << templateFile.fileName() << " for reading";
         return false;
     }
 
@@ -235,7 +247,7 @@ bool dtkPluginGenerator::generatePluginSourceFile(void)
     QFile templateFile(":template/plugin.cpp");
 
     if(!templateFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "dtkPluginGenerator: unable to open template file for reading";
+        qDebug() << "dtkPluginGenerator: unable to open template file " << templateFile.fileName() << " for reading";
         return false;
     }
 
@@ -266,7 +278,7 @@ bool dtkPluginGenerator::generateExportHeaderFile(void)
     QFile templateFile(":template/export.h");
 
     if(!templateFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "dtkPluginGenerator: unable to open template file for reading";
+        qDebug() << "dtkPluginGenerator: unable to open template file " << templateFile.fileName() << " for reading";
         return false;
     }
 
@@ -297,7 +309,7 @@ bool dtkPluginGenerator::generateHelpCollectionFile(void)
     QFile templateFile(":template/qhcp");
 
     if(!templateFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "dtkPluginGenerator: unable to open template file for reading";
+        qDebug() << "dtkPluginGenerator: unable to open template file " << templateFile.fileName() << " for reading";
         return false;
     }
 
@@ -329,7 +341,7 @@ bool dtkPluginGenerator::generateHelpConfigurationFile(void)
     QFile templateFile(":template/doxyfile");
 
     if(!templateFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "dtkPluginGenerator: unable to open template file for reading";
+        qDebug() << "dtkPluginGenerator: unable to open template file " << templateFile.fileName() << " for reading";
         return false;
     }
 
@@ -359,7 +371,7 @@ bool dtkPluginGenerator::generateReadmeFile(void)
 
     QTextStream stream(&targetFile);
 
-    stream << QString("");
+    stream << d->description;
 
     targetFile.close();
 
@@ -375,13 +387,19 @@ bool dtkPluginGenerator::generateCopyingFile(void)
     QFile targetFile(d->target.absoluteFilePath("COPYING.txt"));
 
     if(!targetFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
-	qWarning() << "dtkPluginGenerator: unable to open CMakeLists.txt for writing";
+	qWarning() << "dtkPluginGenerator: unable to open COPYING.txt for writing";
 	return false;
+    }
+
+    QFile templateFile(QString(":template/license/").append(d->license));
+    if(!templateFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "dtkPluginGenerator: unable to open template file " << templateFile.fileName() << " for reading";
+        return false;
     }
 
     QTextStream stream(&targetFile);
 
-    stream << QString("");
+    stream << QString(templateFile.readAll()).arg(QString(d->plugin));
 
     targetFile.close();
 

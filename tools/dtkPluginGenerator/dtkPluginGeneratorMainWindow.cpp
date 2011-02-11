@@ -30,6 +30,8 @@ public:
     QString prefix;
     QString type;
     QString suffix;
+    QString description;
+    QString license;
 };
 
 dtkPluginGeneratorMainWindow::dtkPluginGeneratorMainWindow(QWidget *parent) : QMainWindow(parent)
@@ -37,11 +39,15 @@ dtkPluginGeneratorMainWindow::dtkPluginGeneratorMainWindow(QWidget *parent) : QM
     this->d = new dtkPluginGeneratorMainWindowPrivate;
     this->d->ui.setupUi(this);
 
+    d->ui.descriptionTextEdit->setAcceptRichText(false);
+
     connect(d->ui.pathToolButton, SIGNAL(clicked()), this, SLOT(onOutputPathClicked()));
     connect(d->ui.pathLineEdit, SIGNAL(textEdited(const QString&)), this, SLOT(onOutputPathChanged()));
     connect(d->ui.pluginTypeCombo, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(onPluginTypeChanged()));
     connect(d->ui.prefixLineEdit, SIGNAL(textEdited(const QString&)), this, SLOT(onPrefixChanged()));
     connect(d->ui.suffixLineEdit, SIGNAL(textEdited(const QString&)), this, SLOT(onSuffixChanged()));
+    connect(d->ui.descriptionTextEdit, SIGNAL(textChanged()), this, SLOT(onDescriptionChanged()));
+    connect(d->ui.pluginLicenseCombo, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(onPluginLicenseChanged()));
 
     connect(d->ui.generateAction, SIGNAL(triggered()), this, SLOT(generate()));
     connect(d->ui.quitAction,     SIGNAL(triggered()), qApp, SLOT(quit()));
@@ -93,7 +99,7 @@ void dtkPluginGeneratorMainWindow::onPluginTypeChanged(void)
 void dtkPluginGeneratorMainWindow::onPrefixChanged(void)
 {
     d->prefix = d->ui.prefixLineEdit->text();
-    d->prefix.toLower();
+    d->prefix = d->prefix.toLower();
 
     update();
 }
@@ -105,11 +111,21 @@ void dtkPluginGeneratorMainWindow::onSuffixChanged(void)
     update();
 }
 
+void dtkPluginGeneratorMainWindow::onDescriptionChanged()
+{
+    d->description = d->ui.descriptionTextEdit->toPlainText();
+}
+
+void dtkPluginGeneratorMainWindow::onPluginLicenseChanged()
+{
+    if(d->ui.pluginLicenseCombo->currentIndex() > 0)
+        d->license = d->ui.pluginLicenseCombo->currentText();
+}
+
 void dtkPluginGeneratorMainWindow::update(void)
 {
     d->ui.outputNameLabel->setText(
-        QString("%1/%2%3%4")
-        .arg(d->output)
+        QString("%2%3%4")
         .arg(d->prefix)
         .arg(d->type)
         .arg(d->suffix)
@@ -145,6 +161,8 @@ void dtkPluginGeneratorMainWindow::generate(void)
     generator.setPrefix(d->prefix);
     generator.setSuffix(d->suffix);
     generator.setType(d->type);
+    generator.setDescription(d->description);
+    generator.setLicense(d->license);
 
     if(generator.run())
         statusBar()->showMessage("Generation succeeded", 2000);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Feb 16 14:23:08 2011 (+0100)
+ * Last-Updated: Thu Feb 17 17:10:40 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 1372
+ *     Update #: 1375
  */
 
 /* Commentary: 
@@ -800,6 +800,10 @@ void dtkComposerNode::update(void)
         }
     }
 
+    // -- Run node's logic
+
+    this->run();
+
     // -- Push
 
     foreach(dtkComposerEdge *o_edge, output_edges) {
@@ -1025,5 +1029,10 @@ void dtkComposerNode::onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNo
     Q_UNUSED(edge);
     Q_UNUSED(property);
 
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkComposerNode::run(void)
+{
     DTK_DEFAULT_IMPLEMENTATION;
 }

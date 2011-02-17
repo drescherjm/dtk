@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Feb  5 15:08:39 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 216
+ * Last-Updated: Thu Feb 17 13:36:53 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 217
  */
 
 /* Commentary: 
@@ -166,6 +166,8 @@ public:
 protected:
     virtual void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
     virtual void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+
+    virtual void run(void);
 
 private:
     friend class dtkComposerNodePrivate; dtkComposerNodePrivate *d;

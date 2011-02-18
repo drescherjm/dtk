@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb 17 17:10:40 2011 (+0100)
+ * Last-Updated: Fri Feb 18 15:04:28 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 1375
+ *     Update #: 1391
  */
 
 /* Commentary: 
@@ -301,6 +301,64 @@ dtkComposerNode::~dtkComposerNode(void)
     delete d;
 
     d = NULL;
+}
+
+QString dtkComposerNode::description(void)
+{
+    QString node_kind;
+
+    switch (d->kind) {
+        
+    case(dtkComposerNode::Unknown):
+        node_kind = "Unknown";
+        break;
+
+    case(dtkComposerNode::Atomic):
+        node_kind = "Atomic";
+        break;
+
+    case(dtkComposerNode::Composite):
+        node_kind = "Composite";
+        break;
+
+    case(dtkComposerNode::Data):
+        node_kind = "Data";
+        break;
+
+    case(dtkComposerNode::Process):
+        node_kind = "Process";
+        break;
+
+    case(dtkComposerNode::View):
+        node_kind = "View";
+        break;
+
+    default:
+        node_kind = "";
+        break;
+    }
+
+    QString node_behavior;
+
+    switch (d->behavior) {
+
+    case(dtkComposerNode::Default):
+        node_behavior = "Default";
+        break;
+
+    case(dtkComposerNode::Loop):
+        node_behavior = "Loop";
+        break;
+
+    default:
+        node_behavior = "";
+        break;
+    }
+
+    return QString("Node: name %1, kind %2, behavior %3")
+        .arg(d->title->toPlainText())
+        .arg(node_kind)
+        .arg(node_behavior);
 }
 
 void dtkComposerNode::setTitle(const QString& title)
@@ -1035,4 +1093,29 @@ void dtkComposerNode::onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNo
 void dtkComposerNode::run(void)
 {
     DTK_DEFAULT_IMPLEMENTATION;
+}
+
+// /////////////////////////////////////////////////////////////////
+// Debug operators
+// /////////////////////////////////////////////////////////////////
+
+QDebug operator<<(QDebug dbg, dtkComposerNode node)
+{
+    dbg.nospace() << node.description();
+    
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, dtkComposerNode& node)
+{
+    dbg.nospace() << node.description();
+    
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, dtkComposerNode *node)
+{
+    dbg.nospace() << node->description();
+    
+    return dbg.space();
 }

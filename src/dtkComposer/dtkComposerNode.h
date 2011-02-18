@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb 17 13:36:53 2011 (+0100)
+ * Last-Updated: Fri Feb 18 14:36:27 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 217
+ *     Update #: 222
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include "dtkComposerExport.h"
 
 #include <QtCore>
+#include <QtDebug>
 #include <QtGui>
 
 class dtkAbstractObject;
@@ -54,8 +55,10 @@ public:
         Loop
     };
 
-              dtkComposerNode(dtkComposerNode *parent = 0);
-     virtual ~dtkComposerNode(void);
+             dtkComposerNode(dtkComposerNode *parent = 0);
+    virtual ~dtkComposerNode(void);
+
+    virtual QString description(void); 
 
     void setTitle(const QString& title);
     void setBehavior(Behavior behavior);
@@ -136,6 +139,9 @@ public:
     void setGhost(bool ghost);
     bool  isGhost(void);
 
+    friend QDebug operator<<(QDebug dbg, dtkComposerNode& node);
+    friend QDebug operator<<(QDebug dbg, dtkComposerNode *node);
+
 signals:
     void elapsed(QString duration);
     void evaluated(dtkComposerNode *node);
@@ -172,5 +178,13 @@ protected:
 private:
     friend class dtkComposerNodePrivate; dtkComposerNodePrivate *d;
 };
+
+// /////////////////////////////////////////////////////////////////
+// Debug operators
+// /////////////////////////////////////////////////////////////////
+
+QDebug operator<<(QDebug dbg, dtkComposerNode  node);
+QDebug operator<<(QDebug dbg, dtkComposerNode& node);
+QDebug operator<<(QDebug dbg, dtkComposerNode *node);
 
 #endif

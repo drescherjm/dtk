@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 24 11:31:18 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov 24 14:38:40 2010 (+0100)
+ * Last-Updated: Thu Feb 17 12:45:08 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 68
+ *     Update #: 70
  */
 
 /* Commentary: 
@@ -79,8 +79,9 @@ dtkPlotData& dtkPlotData::operator<<(dtkPlotPoint *point)
     d->points << point;
     d->computeRect();
 
-    point->setFillColor(d->fillColor);
-    point->setStrokeColor(d->strokeColor);
+    // point->setFillColor(d->fillColor);
+    // point->setStrokeColor(d->strokeColor);
+
     point->setParentItem(this);
 
     return *(this);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar  9 21:41:18 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue May  4 15:32:39 2010 (+0200)
+ * Last-Updated: Fri Feb 11 14:51:33 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 175
+ *     Update #: 176
  */
 
 /* Commentary: 
@@ -399,7 +399,7 @@ bool dtkPluginGenerator::generateCopyingFile(void)
 
     QTextStream stream(&targetFile);
 
-    stream << QString(templateFile.readAll()).arg(QString(d->plugin));
+    stream << QString(templateFile.readAll());
 
     targetFile.close();
 

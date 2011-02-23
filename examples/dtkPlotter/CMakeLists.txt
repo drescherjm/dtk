@@ -2,11 +2,11 @@
 ## 
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
-## Created: Mon Mar  9 21:06:43 2009 (+0100)
+## Created: Thu Feb 17 12:51:56 2011 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Feb 10 12:04:26 2011 (+0100)
+## Last-Updated: Thu Feb 17 12:52:14 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 8
+##     Update #: 2
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,8 +17,14 @@
 ## 
 ######################################################################
 
-add_subdirectory(dtkAssistant)
-add_subdirectory(dtkCreator)
-add_subdirectory(dtkDeploy)
-add_subdirectory(dtkPluginGenerator)
-add_subdirectory(dtksh)
+project(dtkPlotter)
+
+## #################################################################
+## Build rules
+## #################################################################
+
+add_executable(${PROJECT_NAME} MACOSX_BUNDLE
+  main.cpp)
+
+target_link_libraries(${PROJECT_NAME}
+  dtkPlot)

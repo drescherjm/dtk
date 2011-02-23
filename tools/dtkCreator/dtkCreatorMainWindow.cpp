@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 14 21:25:27 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 487
+ * Last-Updated: Fri Feb 11 14:31:01 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 492
  */
 
 /* Commentary: 
@@ -367,6 +367,9 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
         "widgetFactory = creator.dtkCreatorWidgetFactory.instance()"
     );
+
+    d->interpreter->registerInterpreter(dtkScriptInterpreterPool::instance()->python());
+    d->interpreter->registerAsHandler(dtkCreatorRedirectLogHandler);
 #endif
 
 #if defined(HAVE_SWIG) && defined(HAVE_TCL)
@@ -405,10 +408,12 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
 	"set widgetFactory [dtkCreatorWidgetFactory_instance]"
     );
-#endif
 
-    d->interpreter->registerInterpreter(dtkScriptInterpreterPool::instance()->python());
+#if !defined(HAVE_PYTHON)
+    d->interpreter->registerInterpreter(dtkScriptInterpreterPool::instance()->tcl());
+#endif
     d->interpreter->registerAsHandler(dtkCreatorRedirectLogHandler);
+#endif
 }
 
 dtkCreatorMainWindow::~dtkCreatorMainWindow(void)

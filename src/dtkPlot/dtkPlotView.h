@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Nov 22 10:22:04 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Nov 22 11:12:55 2010 (+0100)
+ * Last-Updated: Wed Feb 23 09:42:34 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -34,10 +34,9 @@ public:
      dtkPlotView(QWidget *parent = 0);
     ~dtkPlotView(void);
 
-    QBrush backgroundBrush(void) const;
-
 private:
     dtkPlotViewPrivate *d;
 };
 
 #endif
+

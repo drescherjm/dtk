@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec 13 18:35:27 2010 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 308
+ * Last-Updated: Thu Feb 24 15:58:32 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 338
  */
 
 /* Commentary: 
@@ -47,21 +47,30 @@ dtkComposerEdge::dtkComposerEdge(void) : QObject(), QGraphicsItem(), d(new dtkCo
 
 dtkComposerEdge::~dtkComposerEdge(void)
 {
-    if(d->source && d->source->node()) {
+    qDebug() << DTK_PRETTY_FUNCTION << this;
 
-        d->source->node()->removeInputEdge(this);
+    if (d->source && d->source->node()) {
+        d->source->node()->removeGhostInputEdge(this);
         d->source->node()->removeOutputEdge(this);
     }
 
-    if(d->destination && d->destination->node()) {
-        
+    if (d->destination && d->destination->node()) { 
         d->destination->node()->removeInputEdge(this);
-        d->destination->node()->removeOutputEdge(this);
+        d->destination->node()->removeGhostOutputEdge(this);
     }
 
     delete d;
 
     d = NULL;
+}
+
+QString dtkComposerEdge::description(void)
+{
+    return QString("(%1, %2) -> (%3, %4)")
+        .arg(d->source->node()->title())
+        .arg(d->source->name())
+        .arg(d->destination->node()->title())
+        .arg(d->destination->name());
 }
 
 dtkComposerNodeProperty *dtkComposerEdge::source(void)
@@ -261,10 +270,17 @@ bool dtkComposerEdge::unlink(void)
         return false;
 
     if(!d->destination)
-        return false;
+        return false;  
 
-    d->source->node()->removeOutputEdge(this);
-    d->destination->node()->removeInputEdge(this);
+    if(d->source->node()->isGhost())
+        d->source->node()->removeGhostInputEdge(this);
+    else
+        d->source->node()->removeOutputEdge(this);
+
+    if(d->destination->node()->isGhost())
+        d->destination->node()->removeGhostOutputEdge(this);
+    else
+        d->destination->node()->removeInputEdge(this);
 
     return true;
 }
@@ -304,33 +320,21 @@ bool dtkComposerEdge::unlink(void)
 
 QDebug operator<<(QDebug dbg, dtkComposerEdge  edge)
 {
-    dbg.nospace() << QString("(%1, %2) -> (%3, %4)")
-        .arg(edge.source()->node()->title())
-        .arg(edge.source()->name())
-        .arg(edge.destination()->node()->title())
-        .arg(edge.destination()->name());
+    dbg.nospace() << edge.description();
     
     return dbg.space();
 }
 
 QDebug operator<<(QDebug dbg, dtkComposerEdge& edge)
 {
-    dbg.nospace() << QString("(%1, %2) -> (%3, %4)")
-        .arg(edge.source()->node()->title())
-        .arg(edge.source()->name())
-        .arg(edge.destination()->node()->title())
-        .arg(edge.destination()->name());
+    dbg.nospace() << edge.description();
     
     return dbg.space();
 }
 
 QDebug operator<<(QDebug dbg, dtkComposerEdge *edge)
 {
-    dbg.nospace() << QString("(%1, %2) -> (%3, %4)")
-        .arg(edge->source()->node()->title())
-        .arg(edge->source()->name())
-        .arg(edge->destination()->node()->title())
-        .arg(edge->destination()->name());
+    dbg.nospace() << edge->description();
     
     return dbg.space();
 }

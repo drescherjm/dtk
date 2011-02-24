@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Nov 22 11:17:51 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov 24 11:30:08 2010 (+0100)
+ * Last-Updated: Thu Feb 17 12:44:15 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 16
+ *     Update #: 17
  */
 
 /* Commentary: 
@@ -33,7 +33,7 @@ public:
      dtkPlotPoint(qreal x, qreal y);
     ~dtkPlotPoint(void);
 
-    void setFillColor(const QColor& color);
+    void   setFillColor(const QColor& color);
     void setStrokeColor(const QColor& color);
 
 public:

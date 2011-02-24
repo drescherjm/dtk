@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:52 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Jan  8 16:09:14 2011 (+0100)
+ * Last-Updated: Thu Feb 24 15:09:43 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 31
+ *     Update #: 32
  */
 
 /* Commentary: 
@@ -30,8 +30,8 @@ class DTKCOMPOSER_EXPORT dtkComposerView : public QGraphicsView
     Q_OBJECT
 
 public:
-     dtkComposerView(QWidget *parent = 0);
-    ~dtkComposerView(void);
+             dtkComposerView(QWidget *parent = 0);
+    virtual ~dtkComposerView(void);
 
     void setBackgroundColor(const QColor &color);
     

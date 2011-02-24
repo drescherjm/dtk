@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Feb  5 15:08:39 2011 (+0100)
+ * Last-Updated: Thu Feb 24 12:50:56 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 216
+ *     Update #: 225
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include "dtkComposerExport.h"
 
 #include <QtCore>
+#include <QtDebug>
 #include <QtGui>
 
 class dtkAbstractObject;
@@ -49,17 +50,12 @@ public:
         View
     };
 
-    enum Behavior {
-        Default,
-        Loop
-    };
+             dtkComposerNode(dtkComposerNode *parent = 0);
+    virtual ~dtkComposerNode(void);
 
-              dtkComposerNode(dtkComposerNode *parent = 0);
-     virtual ~dtkComposerNode(void);
+    virtual QString description(void); 
 
     void setTitle(const QString& title);
-    void setBehavior(Behavior behavior);
-    void setCondition(const QString& condition);
     void setKind(Kind kind);
     void setType(QString type);
     void setObject(dtkAbstractObject *object);
@@ -80,12 +76,15 @@ public:
     void removeOutputEdge(dtkComposerEdge *edge);
     void removeAllEdges(void);
 
+    void removeGhostInputEdge(dtkComposerEdge *edge);
+    void removeGhostOutputEdge(dtkComposerEdge *edge);
+    void removeAllGhostEdges(void);
+
     void addAction(const QString& text, const QObject *receiver, const char *slot);
 
     int  count(dtkComposerNodeProperty *property);
     int number(dtkComposerNodeProperty *property);
 
-    Behavior behavior(void);
     Kind kind(void);
     QString type(void);
 
@@ -113,7 +112,6 @@ public:
     dtkComposerNodeProperty *outputProperty(const QString& name, dtkComposerNode *from) const;
 
     QString title(void);
-    QString condition(void);
 
     bool dirty(void);
     void setDirty(bool dirty);
@@ -135,6 +133,9 @@ public:
 
     void setGhost(bool ghost);
     bool  isGhost(void);
+
+    friend QDebug operator<<(QDebug dbg, dtkComposerNode& node);
+    friend QDebug operator<<(QDebug dbg, dtkComposerNode *node);
 
 signals:
     void elapsed(QString duration);
@@ -167,8 +168,18 @@ protected:
     virtual void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
     virtual void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
 
+    virtual void run(void);
+
 private:
     friend class dtkComposerNodePrivate; dtkComposerNodePrivate *d;
 };
+
+// /////////////////////////////////////////////////////////////////
+// Debug operators
+// /////////////////////////////////////////////////////////////////
+
+QDebug operator<<(QDebug dbg, dtkComposerNode  node);
+QDebug operator<<(QDebug dbg, dtkComposerNode& node);
+QDebug operator<<(QDebug dbg, dtkComposerNode *node);
 
 #endif

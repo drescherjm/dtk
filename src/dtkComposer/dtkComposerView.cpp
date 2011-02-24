@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:07:37 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Feb  5 23:43:16 2011 (+0100)
+ * Last-Updated: Thu Feb 24 16:06:19 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 174
+ *     Update #: 175
  */
 
 /* Commentary: 
@@ -46,7 +46,7 @@ void dtkComposerView::setBackgroundColor(const QColor &color)
 
 void dtkComposerView::onCenterOn(const QPointF& point)
 {
-    this->centerOn(point);
+    // this->centerOn(point);
 }
 
 void dtkComposerView::onFitInView(const QRectF& rect)

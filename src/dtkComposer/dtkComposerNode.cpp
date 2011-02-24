@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb 24 10:04:00 2011 (+0100)
+ * Last-Updated: Thu Feb 24 10:10:55 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1393
+ *     Update #: 1397
  */
 
 /* Commentary: 
@@ -436,12 +436,24 @@ dtkAbstractObject *dtkComposerNode::object(void)
 
 dtkComposerEdge *dtkComposerNode::edge(dtkComposerNodeProperty *property)
 {
-    if(property->type() == dtkComposerNodeProperty::Input)
-        return d->input_edges.key(property);
-    
-    if(property->type() == dtkComposerNodeProperty::Output)
-        return d->output_edges.key(property);
+    if(this->kind() != dtkComposerNode::Composite) {
 
+        if(property->type() == dtkComposerNodeProperty::Input)
+            return d->input_edges.key(property);
+        
+        if(property->type() == dtkComposerNodeProperty::Output)
+            return d->output_edges.key(property);
+
+    } else {
+
+        if(property->type() == dtkComposerNodeProperty::Input)
+            return d->ghost_input_edges.key(property);
+
+        if(property->type() == dtkComposerNodeProperty::Output)
+            return d->ghost_output_edges.key(property);
+
+    }
+        
     return NULL;
 }
 
@@ -1119,4 +1131,3 @@ QDebug operator<<(QDebug dbg, dtkComposerNode *node)
     
     return dbg.space();
 }
-

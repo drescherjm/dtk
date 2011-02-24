@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Feb  5 15:04:27 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 934
+ * Last-Updated: Fri Feb 18 16:01:24 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 957
  */
 
 /* Commentary: 
@@ -579,15 +579,21 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     }
 
     if (!property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Input) {
-        if (d->current_edge = property->edge())
+
+        d->current_edge = property->edge();
+        if (d->current_edge)
             d->current_edge->unlink();
+
         d->edges.removeAll(d->edge(d->current_edge));
         return;
     }
 
     if (property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Output) {
-        if (d->current_edge = property->edge())
+
+        d->current_edge = property->edge();
+        if (d->current_edge)
             d->current_edge->unlink();
+
         d->edges.removeAll(d->edge(d->current_edge));
         return;
     }

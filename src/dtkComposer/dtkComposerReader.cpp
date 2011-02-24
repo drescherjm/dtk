@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jan 31 23:08:29 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 411
+ * Last-Updated: Thu Feb 24 12:56:14 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 412
  */
 
 /* Commentary: 
@@ -261,26 +261,6 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
                 continue;
 
             n->setTitle(children.at(i).childNodes().at(0).toText().data());
-        }
-    }
-
-    { // -- behavior
-
-        if (node.toElement().hasAttribute("behavior") && node.toElement().attribute("behavior") == "loop")
-            n->setBehavior(dtkComposerNode::Loop);
-
-        if (n->behavior() == dtkComposerNode::Loop) {
-
-            QDomNodeList children = node.childNodes();
-            
-            for(int i = 0; i < children.count(); i++) {
-                
-                if(children.at(i).toElement().tagName() != "condition")
-                    continue;
-                
-                n->setCondition(children.at(i).childNodes().at(0).toText().data());
-            }
-
         }
     }
 

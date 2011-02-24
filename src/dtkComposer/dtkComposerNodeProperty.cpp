@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Feb 18 15:04:56 2011 (+0100)
+ * Last-Updated: Thu Feb 24 10:12:27 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 255
+ *     Update #: 257
  */
 
 /* Commentary: 
@@ -62,6 +62,8 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multip
 
 dtkComposerNodeProperty::~dtkComposerNodeProperty(void)
 {
+    qDebug() << "Deleting property" << this;
+
     delete d;
 
     d = NULL;

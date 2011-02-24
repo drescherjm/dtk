@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Feb 18 14:29:47 2011 (+0100)
+ * Last-Updated: Thu Feb 24 10:12:05 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 311
+ *     Update #: 337
  */
 
 /* Commentary: 
@@ -47,16 +47,16 @@ dtkComposerEdge::dtkComposerEdge(void) : QObject(), QGraphicsItem(), d(new dtkCo
 
 dtkComposerEdge::~dtkComposerEdge(void)
 {
-    if(d->source && d->source->node()) {
+    qDebug() << DTK_PRETTY_FUNCTION << this;
 
-        d->source->node()->removeInputEdge(this);
+    if (d->source && d->source->node()) {
+        d->source->node()->removeGhostInputEdge(this);
         d->source->node()->removeOutputEdge(this);
     }
 
-    if(d->destination && d->destination->node()) {
-        
+    if (d->destination && d->destination->node()) { 
         d->destination->node()->removeInputEdge(this);
-        d->destination->node()->removeOutputEdge(this);
+        d->destination->node()->removeGhostOutputEdge(this);
     }
 
     delete d;
@@ -270,10 +270,17 @@ bool dtkComposerEdge::unlink(void)
         return false;
 
     if(!d->destination)
-        return false;
+        return false;  
 
-    d->source->node()->removeOutputEdge(this);
-    d->destination->node()->removeInputEdge(this);
+    if(d->source->node()->isGhost())
+        d->source->node()->removeGhostInputEdge(this);
+    else
+        d->source->node()->removeOutputEdge(this);
+
+    if(d->destination->node()->isGhost())
+        d->destination->node()->removeGhostOutputEdge(this);
+    else
+        d->destination->node()->removeInputEdge(this);
 
     return true;
 }

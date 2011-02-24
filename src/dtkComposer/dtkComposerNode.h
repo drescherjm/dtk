@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Feb 18 14:36:27 2011 (+0100)
+ * Last-Updated: Mon Feb 21 12:45:14 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 222
+ *     Update #: 223
  */
 
 /* Commentary: 
@@ -82,6 +82,10 @@ public:
     void removeInputEdge(dtkComposerEdge *edge);
     void removeOutputEdge(dtkComposerEdge *edge);
     void removeAllEdges(void);
+
+    void removeGhostInputEdge(dtkComposerEdge *edge);
+    void removeGhostOutputEdge(dtkComposerEdge *edge);
+    void removeAllGhostEdges(void);
 
     void addAction(const QString& text, const QObject *receiver, const char *slot);
 

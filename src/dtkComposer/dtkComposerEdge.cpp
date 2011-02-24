@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec 13 18:35:27 2010 (+0100)
+ * Last-Updated: Fri Feb 18 14:29:47 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 308
+ *     Update #: 311
  */
 
 /* Commentary: 
@@ -62,6 +62,15 @@ dtkComposerEdge::~dtkComposerEdge(void)
     delete d;
 
     d = NULL;
+}
+
+QString dtkComposerEdge::description(void)
+{
+    return QString("(%1, %2) -> (%3, %4)")
+        .arg(d->source->node()->title())
+        .arg(d->source->name())
+        .arg(d->destination->node()->title())
+        .arg(d->destination->name());
 }
 
 dtkComposerNodeProperty *dtkComposerEdge::source(void)
@@ -304,33 +313,21 @@ bool dtkComposerEdge::unlink(void)
 
 QDebug operator<<(QDebug dbg, dtkComposerEdge  edge)
 {
-    dbg.nospace() << QString("(%1, %2) -> (%3, %4)")
-        .arg(edge.source()->node()->title())
-        .arg(edge.source()->name())
-        .arg(edge.destination()->node()->title())
-        .arg(edge.destination()->name());
+    dbg.nospace() << edge.description();
     
     return dbg.space();
 }
 
 QDebug operator<<(QDebug dbg, dtkComposerEdge& edge)
 {
-    dbg.nospace() << QString("(%1, %2) -> (%3, %4)")
-        .arg(edge.source()->node()->title())
-        .arg(edge.source()->name())
-        .arg(edge.destination()->node()->title())
-        .arg(edge.destination()->name());
+    dbg.nospace() << edge.description();
     
     return dbg.space();
 }
 
 QDebug operator<<(QDebug dbg, dtkComposerEdge *edge)
 {
-    dbg.nospace() << QString("(%1, %2) -> (%3, %4)")
-        .arg(edge->source()->node()->title())
-        .arg(edge->source()->name())
-        .arg(edge->destination()->node()->title())
-        .arg(edge->destination()->name());
+    dbg.nospace() << edge->description();
     
     return dbg.space();
 }

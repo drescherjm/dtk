@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Dec 14 19:32:49 2010 (+0100)
+ * Last-Updated: Fri Feb 18 14:26:52 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 90
+ *     Update #: 94
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include "dtkComposerExport.h"
 
 #include <QtCore>
+#include <QtDebug>
 #include <QtGui>
 
 class dtkComposerEdge;
@@ -52,6 +53,8 @@ public:
      dtkComposerNodeProperty(QString name, Type type, Multiplicity multiplicity, dtkComposerNode *parent);
     ~dtkComposerNodeProperty(void);
 
+    QString description(void);    
+
     dtkComposerNodeProperty *clone(dtkComposerNode *node = 0);
 
     dtkComposerEdge *edge(void);
@@ -73,6 +76,9 @@ public:
     bool  isDisplayed(void);
     void setDisplayed(bool dirty);
 
+    friend QDebug operator<<(QDebug dbg, dtkComposerNodeProperty& property);
+    friend QDebug operator<<(QDebug dbg, dtkComposerNodeProperty *property);
+
 public:
     QRectF boundingRect(void) const;
     QRectF         rect(void) const;
@@ -87,5 +93,13 @@ public:
 private:
     dtkComposerNodePropertyPrivate *d;
 };
+
+// /////////////////////////////////////////////////////////////////
+// Debug operators
+// /////////////////////////////////////////////////////////////////
+
+QDebug operator<<(QDebug dbg, dtkComposerNodeProperty  property);
+QDebug operator<<(QDebug dbg, dtkComposerNodeProperty& property);
+QDebug operator<<(QDebug dbg, dtkComposerNodeProperty *property);
 
 #endif

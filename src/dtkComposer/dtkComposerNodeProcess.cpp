@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul 15 11:23:54 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Nov 26 15:03:05 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 107
+ * Last-Updated: Thu Feb 17 16:53:04 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 109
  */
 
 /* Commentary: 
@@ -74,5 +74,10 @@ void dtkComposerNodeProcess::onOutputEdgeConnected(dtkComposerEdge *edge, dtkCom
     Q_UNUSED(edge);
     Q_UNUSED(property);
 
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkComposerNodeProcess::run(void)
+{
     DTK_DEFAULT_IMPLEMENTATION;
 }

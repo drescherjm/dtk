@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul 15 11:21:24 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jul 15 11:21:43 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 2
+ * Last-Updated: Thu Feb 17 16:21:24 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 4
  */
 
 /* Commentary: 
@@ -31,6 +31,9 @@ class dtkComposerNodeData : public dtkComposerNode
 public:
      dtkComposerNodeData(dtkComposerNode *parent = 0);
     ~dtkComposerNodeData(void);
+
+protected:
+    virtual void run(void);
 
 private:
     dtkComposerNodeDataPrivate *d;

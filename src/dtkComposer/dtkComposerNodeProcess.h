@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul 15 11:23:26 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov  1 16:37:27 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 10
+ * Last-Updated: Thu Feb 17 16:52:41 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -37,8 +37,10 @@ public:
     virtual QString implementation(void);
 
 protected:
-    void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    virtual void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    virtual void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+
+    virtual void run(void);
 
 private:
     dtkComposerNodeProcessPrivate *d;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb 24 12:56:14 2011 (+0100)
+ * Last-Updated: Fri Feb 25 15:14:21 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 412
+ *     Update #: 442
  */
 
 /* Commentary: 
@@ -19,6 +19,8 @@
 
 #include "dtkComposerEdge.h"
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeBoolean.h"
+#include "dtkComposerNodeBooleanOperator.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeProperty.h"
@@ -219,6 +221,57 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
         n = d->scene->createGroup(child_nodes, position);
     }
     
+    // Boolean node
+    
+    if(dtkComposerNodeBoolean *boolean_node = dynamic_cast<dtkComposerNodeBoolean *>(n)) {
+        
+        QDomNodeList children = node.childNodes();
+        
+        for(int i = 0; i < children.count(); i++) {
+
+            if(children.at(i).toElement().tagName() != "value")
+                continue;
+
+            boolean_node->setValue((children.at(i).childNodes().at(0).toText().data() == "true") ? true : false);
+        }
+    }
+
+    // Boolean operator node
+    
+    if(dtkComposerNodeBooleanOperator *boolean_operator_node = dynamic_cast<dtkComposerNodeBooleanOperator *>(n)) {
+        
+        QDomNodeList children = node.childNodes();
+        
+        for(int i = 0; i < children.count(); i++) {
+
+            if(children.at(i).toElement().tagName() != "operation")
+                continue;
+
+            dtkComposerNodeBooleanOperator::Operation operation;
+
+            if(children.at(i).childNodes().at(0).toText().data() == "and")
+                operation = dtkComposerNodeBooleanOperator::And;
+            else if(children.at(i).childNodes().at(0).toText().data() == "or")
+                operation = dtkComposerNodeBooleanOperator::Or;
+            else if(children.at(i).childNodes().at(0).toText().data() == "xor")
+                operation = dtkComposerNodeBooleanOperator::Xor;
+            else if(children.at(i).childNodes().at(0).toText().data() == "nand")
+                operation = dtkComposerNodeBooleanOperator::Nand;
+            else if(children.at(i).childNodes().at(0).toText().data() == "nor")
+                operation = dtkComposerNodeBooleanOperator::Nor;
+            else if(children.at(i).childNodes().at(0).toText().data() == "xnor")
+                operation = dtkComposerNodeBooleanOperator::Xnor;
+            else if(children.at(i).childNodes().at(0).toText().data() == "imp")
+                operation = dtkComposerNodeBooleanOperator::Imp;
+            else if(children.at(i).childNodes().at(0).toText().data() == "nimp")
+                operation = dtkComposerNodeBooleanOperator::Nimp;
+            else
+                operation = dtkComposerNodeBooleanOperator::And;
+
+            boolean_operator_node->setOperation(operation);
+        }        
+    }
+
     // File node
     
     if(dtkComposerNodeFile *file_node = dynamic_cast<dtkComposerNodeFile *>(n)) {

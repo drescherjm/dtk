@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb 24 12:49:42 2011 (+0100)
+ * Last-Updated: Fri Feb 25 15:38:26 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 274
+ *     Update #: 275
  */
 
 /* Commentary: 
@@ -64,8 +64,6 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multip
 
 dtkComposerNodeProperty::~dtkComposerNodeProperty(void)
 {
-    qDebug() << "Deleting property" << this;
-
     d->parent = NULL;
     d->clone = NULL;
 
@@ -214,8 +212,6 @@ void dtkComposerNodeProperty::setClonedFrom(dtkComposerNode *node)
 
 void dtkComposerNodeProperty::setParentNode(dtkComposerNode *node)
 {
-    qDebug() << DTK_PRETTY_FUNCTION;
-
     d->parent = node;
 }
 

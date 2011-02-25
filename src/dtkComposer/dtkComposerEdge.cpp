@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb 24 15:58:32 2011 (+0100)
+ * Last-Updated: Fri Feb 25 15:37:21 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 338
+ *     Update #: 340
  */
 
 /* Commentary: 
@@ -47,8 +47,6 @@ dtkComposerEdge::dtkComposerEdge(void) : QObject(), QGraphicsItem(), d(new dtkCo
 
 dtkComposerEdge::~dtkComposerEdge(void)
 {
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-
     if (d->source && d->source->node()) {
         d->source->node()->removeGhostInputEdge(this);
         d->source->node()->removeOutputEdge(this);
@@ -66,6 +64,9 @@ dtkComposerEdge::~dtkComposerEdge(void)
 
 QString dtkComposerEdge::description(void)
 {
+    if(!d->source || !d->destination)
+        return QString("Invalid edge");
+
     return QString("(%1, %2) -> (%3, %4)")
         .arg(d->source->node()->title())
         .arg(d->source->name())

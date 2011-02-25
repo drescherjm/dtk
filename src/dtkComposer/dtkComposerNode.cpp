@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb 24 15:58:20 2011 (+0100)
+ * Last-Updated: Fri Feb 25 15:44:49 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1505
+ *     Update #: 1522
  */
 
 /* Commentary: 
@@ -28,7 +28,7 @@
 #include <dtkCore/dtkAbstractView.h>
 #include <dtkCore/dtkGlobal.h>
 
-#define DTK_DEBUG_COMPOSER_INTERACTION
+// #define DTK_DEBUG_COMPOSER_INTERACTION 1
 // #define DTK_DEBUG_COMPOSER_EVALUATION 1
 
 // /////////////////////////////////////////////////////////////////
@@ -435,6 +435,7 @@ void dtkComposerNode::addGhostInputEdge(dtkComposerEdge *edge, dtkComposerNodePr
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
+
     d->ghost_input_edges.insert(edge, property);
 }
 
@@ -443,6 +444,7 @@ void dtkComposerNode::addGhostOutputEdge(dtkComposerEdge *edge, dtkComposerNodeP
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
+
     d->ghost_output_edges.insert(edge, property);
 }
 
@@ -451,8 +453,8 @@ void dtkComposerNode::removeInputEdge(dtkComposerEdge *edge)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
-    if(d->input_edges.remove(edge))
-        qDebug() << DTK_PRETTY_FUNCTION << edge;
+
+    d->input_edges.remove(edge);
 }
 
 void dtkComposerNode::removeOutputEdge(dtkComposerEdge *edge)
@@ -460,8 +462,8 @@ void dtkComposerNode::removeOutputEdge(dtkComposerEdge *edge)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
-    if(d->output_edges.remove(edge))
-        qDebug() << DTK_PRETTY_FUNCTION << edge;
+
+    d->output_edges.remove(edge);
 }
 
 void dtkComposerNode::removeAllEdges(void)
@@ -469,6 +471,7 @@ void dtkComposerNode::removeAllEdges(void)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
+
     d->input_edges.clear();
     d->output_edges.clear();
 }
@@ -478,8 +481,8 @@ void dtkComposerNode::removeGhostInputEdge(dtkComposerEdge *edge)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
-    if(d->ghost_input_edges.remove(edge)) 
-        qDebug() << DTK_PRETTY_FUNCTION << edge;       
+
+    d->ghost_input_edges.remove(edge);
 }
 
 void dtkComposerNode::removeGhostOutputEdge(dtkComposerEdge *edge)
@@ -487,8 +490,8 @@ void dtkComposerNode::removeGhostOutputEdge(dtkComposerEdge *edge)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
-    if(d->ghost_output_edges.remove(edge))
-        qDebug() << DTK_PRETTY_FUNCTION << edge;
+
+    d->ghost_output_edges.remove(edge);
 }
 
 void dtkComposerNode::removeAllGhostEdges(void)
@@ -496,6 +499,7 @@ void dtkComposerNode::removeAllGhostEdges(void)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
+
     d->ghost_input_edges.clear();
     d->ghost_output_edges.clear();
 }
@@ -731,8 +735,6 @@ void dtkComposerNode::layout(void)
                 property->setRect(QRectF(d->width/2-3*d->node_radius, d->margin_top+(3*(exposed_output_properties++) + 1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
 
     d->height = d->header_height + (3*qMax(exposed_input_properties, exposed_output_properties)) * d->node_radius + d->margin_bottom;
-
-    // QGraphicsItem::update(this->boundingRect());
 }
 
 void dtkComposerNode::setParentNode(dtkComposerNode *node)
@@ -750,7 +752,6 @@ void dtkComposerNode::addChildNode(dtkComposerNode *node)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
-    qDebug() << DTK_PRETTY_FUNCTION;
 
     if(!d->children.contains(node))
         d->children << node;
@@ -764,7 +765,6 @@ void dtkComposerNode::removeChildNode(dtkComposerNode *node)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
-    qDebug() << DTK_PRETTY_FUNCTION;
 
     if (d->children.contains(node))
         d->children.removeAll(node);

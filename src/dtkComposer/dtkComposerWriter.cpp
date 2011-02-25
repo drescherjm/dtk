@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb 24 12:56:35 2011 (+0100)
+ * Last-Updated: Fri Feb 25 15:13:03 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 226
+ *     Update #: 267
  */
 
 /* Commentary: 
@@ -19,6 +19,8 @@
 
 #include "dtkComposerEdge.h"
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeBoolean.h"
+#include "dtkComposerNodeBooleanOperator.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerNodeProcess.h"
@@ -119,7 +121,64 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
     tag.setAttribute("x", QString::number(node->pos().x()));
     tag.setAttribute("y", QString::number(node->pos().y()));
     tag.setAttribute("id", QString::number(current_id));
+     
+    // -- Boolean node
+    
+    if(dtkComposerNodeBoolean *boolean_node = dynamic_cast<dtkComposerNodeBoolean *>(node)) {
         
+        bool value = boolean_node->value(boolean_node->outputProperty("value")).toBool();
+        
+        QDomText text = document.createTextNode(value ? "true" : "false");
+        
+        QDomElement e_value = document.createElement("value");
+        e_value.appendChild(text);
+        
+        tag.appendChild(e_value);
+    }
+
+    // -- Boolean operator node
+    
+    if(dtkComposerNodeBooleanOperator *boolean_operator_node = dynamic_cast<dtkComposerNodeBooleanOperator *>(node)) {
+        
+        dtkComposerNodeBooleanOperator::Operation operation = boolean_operator_node->operation();
+        
+        QDomText text;
+
+        switch(operation) {
+        case dtkComposerNodeBooleanOperator::And:
+            text = document.createTextNode("and");
+            break;
+        case dtkComposerNodeBooleanOperator::Or:
+            text = document.createTextNode("or");
+            break;
+        case dtkComposerNodeBooleanOperator::Xor:
+            text = document.createTextNode("xor");
+            break;
+        case dtkComposerNodeBooleanOperator::Nand:
+            text = document.createTextNode("nand");
+            break;
+        case dtkComposerNodeBooleanOperator::Nor:
+            text = document.createTextNode("nor");
+            break;
+        case dtkComposerNodeBooleanOperator::Xnor:
+            text = document.createTextNode("xnor");
+            break;
+        case dtkComposerNodeBooleanOperator::Imp:
+            text = document.createTextNode("imp");
+            break;
+        case dtkComposerNodeBooleanOperator::Nimp:
+            text = document.createTextNode("nimp");
+            break;
+        default:
+            break;
+        }
+        
+        QDomElement e_operation = document.createElement("operation");
+        e_operation.appendChild(text);
+        
+        tag.appendChild(e_operation);
+    }
+
     // -- File node
     
     if(dtkComposerNodeFile *file_node = dynamic_cast<dtkComposerNodeFile *>(node)) {

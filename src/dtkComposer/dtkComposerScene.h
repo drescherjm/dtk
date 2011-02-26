@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Feb 26 19:49:53 2011 (+0100)
+ * Last-Updated: Sun Feb 27 00:35:39 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 123
+ *     Update #: 137
  */
 
 /* Commentary: 
@@ -31,6 +31,7 @@ class dtkComposerEdge;
 class dtkComposerNode;
 class dtkComposerNodeFactory;
 class dtkComposerNodeProperty;
+class dtkComposerNote;
 class dtkComposerScenePrivate;
 
 class DTKCOMPOSER_EXPORT dtkComposerScene : public QGraphicsScene
@@ -41,6 +42,7 @@ public:
              dtkComposerScene(QObject *parent = 0);
     virtual ~dtkComposerScene(void);
 
+    QList<dtkComposerNote *> notes(void);
     QList<dtkComposerEdge *> edges(void);
     QList<dtkComposerNode *> nodes(void);
     QList<dtkComposerNode *> nodes(QString name);
@@ -57,14 +59,17 @@ public:
     void setModified(bool modified);
 
     void    addEdge(dtkComposerEdge *edge);
-    void removeEdge(dtkComposerEdge *edge);
     void    addNode(dtkComposerNode *node);
+    void    addNote(dtkComposerNote *note);
+    void removeEdge(dtkComposerEdge *edge);
     void removeNode(dtkComposerNode *node);
+    void removeNote(dtkComposerNote *note);
 
     void setFactory(dtkComposerNodeFactory *factory);
 
     dtkComposerNode *createGroup(QList<dtkComposerNode *> nodes, QPointF position = QPointF());
     dtkComposerNode *createNode(QString type, QPointF position = QPointF());
+    dtkComposerNote *createNote(QString text, QPointF position = QPointF(), QSizeF size = QSize());
 
     void explodeGroup(dtkComposerNode *node);
 

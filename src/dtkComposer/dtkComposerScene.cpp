@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Feb 26 20:15:12 2011 (+0100)
+ * Last-Updated: Sun Feb 27 00:44:31 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1330
+ *     Update #: 1374
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeFactory.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerNote.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
 
@@ -67,6 +68,11 @@ dtkComposerScene::~dtkComposerScene(void)
     delete d;
 
     d = NULL;
+}
+
+QList<dtkComposerNote *> dtkComposerScene::notes(void)
+{
+    return d->notes;
 }
 
 QList<dtkComposerEdge *> dtkComposerScene::edges(void)
@@ -145,7 +151,11 @@ void dtkComposerScene::clear(void)
     foreach(dtkComposerNode *node, this->nodes())
         delete node;
 
+    foreach(dtkComposerNote *note, this->notes())
+        delete note;
+
     d->nodes.clear();
+    d->notes.clear();
 }
 
 bool dtkComposerScene::isModified(void)
@@ -170,15 +180,6 @@ void dtkComposerScene::addEdge(dtkComposerEdge *edge)
     this->setModified(true);
 }
 
-void dtkComposerScene::removeEdge(dtkComposerEdge *edge)
-{
-    edge->unlink();
-
-    d->edges.removeAll(edge);
-
-    delete edge;
-}
-
 void dtkComposerScene::addNode(dtkComposerNode *node)
 {
     this->addItem(node);
@@ -188,6 +189,24 @@ void dtkComposerScene::addNode(dtkComposerNode *node)
     emit nodeAdded(node);
 
     this->setModified(true);
+}
+
+void dtkComposerScene::addNote(dtkComposerNote *note)
+{
+    this->addItem(note);
+
+    d->notes << note;
+
+    this->setModified(true);
+}
+
+void dtkComposerScene::removeEdge(dtkComposerEdge *edge)
+{
+    edge->unlink();
+
+    d->edges.removeAll(edge);
+
+    delete edge;
 }
 
 void dtkComposerScene::removeNode(dtkComposerNode *node)
@@ -332,6 +351,13 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
     this->setModified(true);
 }
 
+void dtkComposerScene::removeNote(dtkComposerNote *note)
+{
+    d->notes.removeAll(note);
+
+    delete note;
+}
+
 //! Group creation. Creates a composite node.
 /*! 
  * \param nodes The list of nodes to be grouped together. Beware not
@@ -421,6 +447,23 @@ dtkComposerNode *dtkComposerScene::createNode(QString type, QPointF position)
 
         return NULL;
     }
+}
+
+dtkComposerNote *dtkComposerScene::createNote(QString text, QPointF position, QSizeF size)
+{
+    dtkComposerNote *note = new dtkComposerNote(d->current_node);
+    
+    note->setText(text);
+
+    if(!position.isNull())
+        note->setPos(position);
+
+    if(!size.isNull())
+        note->setSize(size);
+
+    this->addNote(note);
+
+    return note;
 }
 
 void dtkComposerScene::explodeGroup(dtkComposerNode *node)
@@ -697,6 +740,12 @@ void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
     QUrl url = event->mimeData()->urls().first();
 
+    if (url.scheme() == "note") {
+        this->createNote(url.path(), event->pos());
+        event->acceptProposedAction();
+        return;
+    }
+
     if (url.scheme() != "type") {
         event->ignore();
         return;
@@ -727,6 +776,8 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
     if(event->key() == Qt::Key_V && event->modifiers() & Qt::ControlModifier) {
         this->paste();
     }
+
+    QGraphicsScene::keyPressEvent(event);
 }
 
 void dtkComposerScene::keyReleaseEvent(QKeyEvent *event)

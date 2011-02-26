@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Feb 25 15:13:03 2011 (+0100)
+ * Last-Updated: Sat Feb 26 23:30:31 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 267
+ *     Update #: 283
  */
 
 /* Commentary: 
@@ -24,6 +24,7 @@
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerNodeProcess.h"
+#include "dtkComposerNote.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerWriter.h"
 
@@ -96,6 +97,22 @@ void dtkComposerWriter::write(const QString& fileName)
         QDomElement tag = document.createElement("edge");
         tag.appendChild(source);
         tag.appendChild(destin);
+
+        root.appendChild(tag);
+    }
+
+    // Writing notes
+
+    foreach(dtkComposerNote *note, d->scene->notes()) {
+
+        QDomText text = document.createTextNode(note->text());
+
+        QDomElement tag = document.createElement("note");
+        tag.setAttribute("x", QString::number(note->pos().x()));
+        tag.setAttribute("y", QString::number(note->pos().y()));
+        tag.setAttribute("w", QString::number(note->boundingRect().width()));
+        tag.setAttribute("h", QString::number(note->boundingRect().height()));
+        tag.appendChild(text);
 
         root.appendChild(tag);
     }

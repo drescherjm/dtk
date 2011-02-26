@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Feb 25 15:14:21 2011 (+0100)
+ * Last-Updated: Sun Feb 27 00:35:11 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 442
+ *     Update #: 450
  */
 
 /* Commentary: 
@@ -182,6 +182,23 @@ void dtkComposerReader::read(const QString& fileName)
 
         if (edge->source()->node()->parentNode() || edge->destination()->node()->parentNode())
             edge->hide();
+    }
+
+    // Feeding scene with notes
+    
+    QDomNodeList notes = doc.firstChild().childNodes();
+
+    for(int i = 0; i < notes.count(); i++) {
+        
+        if(notes.at(i).toElement().tagName() != "note")
+            continue;
+
+        qreal x = notes.at(i).toElement().attribute("x").toFloat();
+        qreal y = notes.at(i).toElement().attribute("y").toFloat();
+        qreal w = notes.at(i).toElement().attribute("w").toFloat();
+        qreal h = notes.at(i).toElement().attribute("h").toFloat();
+        
+        d->scene->createNote(notes.at(i).childNodes().at(0).toText().data(), QPointF(x, y), QSizeF(w, h));
     }
 }
 

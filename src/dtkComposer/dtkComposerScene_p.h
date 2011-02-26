@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 26 18:33:27 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb 26 18:57:45 2011 (+0100)
+ * Last-Updated: Sat Feb 26 23:05:46 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 22
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 class dtkComposerEdge;
 class dtkComposerNode;
 class dtkComposerNodeFactory;
+class dtkComposerNote;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerSceneClipboard
@@ -57,6 +58,7 @@ public:
 public:
     QList<dtkComposerNode *> nodes;
     QList<dtkComposerEdge *> edges;
+    QList<dtkComposerNote *> notes;
 
 public:
     dtkComposerSceneClipboard clipboard;

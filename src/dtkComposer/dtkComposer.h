@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:12:32 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jan 31 23:34:08 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 76
+ * Last-Updated: Sat Feb 26 19:53:07 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 78
  */
 
 /* Commentary: 
@@ -86,6 +86,10 @@ public slots:
 public slots:
    void startEvaluation(void);
    void stopEvaluation(void);
+
+public slots:
+   void copy(void);
+   void paste(void);
 
 protected:
    dtkComposerScene *scene(void);

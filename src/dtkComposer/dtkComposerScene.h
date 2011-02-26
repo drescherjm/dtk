@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Feb 25 17:25:55 2011 (+0100)
+ * Last-Updated: Sat Feb 26 19:49:53 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 122
+ *     Update #: 123
  */
 
 /* Commentary: 
@@ -93,7 +93,7 @@ public slots:
    void startEvaluation(void);
    void stopEvaluation(void);
 
-protected:
+public slots:
    void copy(void);
    void paste(void);
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Feb 25 15:25:29 2011 (+0100)
+ * Last-Updated: Fri Feb 25 17:25:55 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 121
+ *     Update #: 122
  */
 
 /* Commentary: 
@@ -92,6 +92,10 @@ signals:
 public slots:
    void startEvaluation(void);
    void stopEvaluation(void);
+
+protected:
+   void copy(void);
+   void paste(void);
 
 protected:
     dtkComposerNode *nodeAt(const QPointF& point) const;

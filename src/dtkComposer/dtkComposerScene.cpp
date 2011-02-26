@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Feb 25 15:38:07 2011 (+0100)
+ * Last-Updated: Sat Feb 26 19:36:29 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1272
+ *     Update #: 1328
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 #include "dtkComposerNodeFactory.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerScene.h"
+#include "dtkComposerScene_p.h"
 
 #include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkAbstractDataFactory.h>
@@ -34,23 +35,6 @@
 // /////////////////////////////////////////////////////////////////
 // dtkComposerScenePrivate
 // /////////////////////////////////////////////////////////////////
-
-class dtkComposerScenePrivate
-{
-public:
-    dtkComposerEdge *edge(dtkComposerEdge *edge);
-
-public:
-    dtkComposerNode *current_node; // current_node is NULL for the root, !NULL when inside a composite node.
-    dtkComposerEdge *current_edge;
-
-    dtkComposerNodeFactory *factory;
-
-    bool modified;
-
-    QList<dtkComposerNode *> nodes;
-    QList<dtkComposerEdge *> edges;
-};
 
 dtkComposerEdge *dtkComposerScenePrivate::edge(dtkComposerEdge *edge)
 {
@@ -570,6 +554,40 @@ void dtkComposerScene::stopEvaluation(void)
     emit evaluationStopped();
 }
 
+void dtkComposerScene::copy(void)
+{
+    d->clipboard.nodes.clear();
+    d->clipboard.edges.clear();
+
+    foreach(QGraphicsItem *item, this->selectedItems())
+        if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item))
+            d->clipboard.nodes << node;
+
+    foreach(dtkComposerEdge *edge, d->edges)
+        if(d->clipboard.nodes.contains(edge->source()->node()) && d->clipboard.nodes.contains(edge->destination()->node()))
+            d->clipboard.edges << edge;
+}
+
+void dtkComposerScene::paste(void)
+{
+    QMap<dtkComposerNode *, dtkComposerNode *> node_map;
+
+    foreach(dtkComposerNode *node, d->clipboard.nodes)
+        node_map.insert(node, this->createNode(node->type(), node->pos() + QPointF(200, 200)));
+
+    foreach(dtkComposerEdge *edge, d->clipboard.edges) {
+
+        dtkComposerEdge *e = new dtkComposerEdge;
+        e->setSource(node_map.value(edge->source()->node())->outputProperty(edge->source()->name()));
+        e->setDestination(node_map.value(edge->destination()->node())->inputProperty(edge->destination()->name()));
+
+        node_map.value(edge->source()->node())->addOutputEdge(e, node_map.value(edge->source()->node())->outputProperty(edge->source()->name()));
+        node_map.value(edge->destination()->node())->addInputEdge(e, node_map.value(edge->destination()->node())->inputProperty(edge->destination()->name()));
+
+        this->addEdge(e);
+    }
+}
+
 dtkComposerNode *dtkComposerScene::nodeAt(const QPointF& point) const
 {
     QList<QGraphicsItem *> items = this->items(point.x(), point.y(), 1, 1, Qt::IntersectsItemBoundingRect);
@@ -689,12 +707,17 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
             if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item))
                 this->removeNode(node);
 
-    // Pipeline update - U
+    // Item Copy - Ctrl + C
 
-    if(event->key() == Qt::Key_U)
-        this->startEvaluation();
+    if(event->key() == Qt::Key_C && event->modifiers() & Qt::ControlModifier) {
+        this->copy();
+    }
 
-    // this->update();
+    // Item Copy - Ctrl + V
+
+    if(event->key() == Qt::Key_V && event->modifiers() & Qt::ControlModifier) {
+        this->paste();
+    }
 }
 
 void dtkComposerScene::keyReleaseEvent(QKeyEvent *event)

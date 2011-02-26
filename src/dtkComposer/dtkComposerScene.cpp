@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Feb 26 19:36:29 2011 (+0100)
+ * Last-Updated: Sat Feb 26 20:15:12 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1328
+ *     Update #: 1330
  */
 
 /* Commentary: 
@@ -566,6 +566,15 @@ void dtkComposerScene::copy(void)
     foreach(dtkComposerEdge *edge, d->edges)
         if(d->clipboard.nodes.contains(edge->source()->node()) && d->clipboard.nodes.contains(edge->destination()->node()))
             d->clipboard.edges << edge;
+
+    // -- Forbid copy/paste of composite nodes for the moment
+    
+    foreach(dtkComposerNode *node, d->clipboard.nodes) {
+        if(node->kind() == dtkComposerNode::Composite) {
+            d->clipboard.nodes.clear();
+            d->clipboard.edges.clear();
+        }
+    }
 }
 
 void dtkComposerScene::paste(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Feb 27 00:35:39 2011 (+0100)
+ * Last-Updated: Sun Feb 27 01:11:16 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 137
+ *     Update #: 138
  */
 
 /* Commentary: 
@@ -69,7 +69,7 @@ public:
 
     dtkComposerNode *createGroup(QList<dtkComposerNode *> nodes, QPointF position = QPointF());
     dtkComposerNode *createNode(QString type, QPointF position = QPointF());
-    dtkComposerNote *createNote(QString text, QPointF position = QPointF(), QSizeF size = QSize());
+    dtkComposerNote *createNote(QString text, QPointF position = QPointF(), QSizeF size = QSizeF());
 
     void explodeGroup(dtkComposerNode *node);
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 25 10:07:34 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 25 15:44:23 2011 (+0100)
+ * Last-Updated: Sun Feb 27 01:32:19 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 190
+ *     Update #: 194
  */
 
 /* Commentary: 
@@ -61,7 +61,10 @@ dtkComposerNodeBooleanLabel::dtkComposerNodeBooleanLabel(dtkComposerNodeBoolean 
 
     parent_node = parent;
 
-    text = parent_node->value() ? "T" : "F";
+    if(parent_node->value())
+        text = "T";
+    else
+        text = "F";
 }
 
 dtkComposerNodeBooleanLabel::~dtkComposerNodeBooleanLabel(void)
@@ -111,7 +114,7 @@ void dtkComposerNodeBooleanLabel::mousePressEvent(QGraphicsSceneMouseEvent *even
     else
         text = "T";
 
-    parent_node->setValue(text == "T" ? true : false);
+    parent_node->setValue((text == "T"));
 
     this->update();
 }
@@ -177,7 +180,11 @@ void dtkComposerNodeBoolean::setValue(bool value)
 {
     d->value = value;
 
-    d->label->text = value ? "T" : "F";
+    if(d->value)
+        d->label->text = "T";
+    else
+        d->label->text = "F";
+
     d->label->update();
 }
 

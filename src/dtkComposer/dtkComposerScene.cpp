@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Feb 27 00:44:31 2011 (+0100)
+ * Last-Updated: Sun Feb 27 01:21:08 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1374
+ *     Update #: 1385
  */
 
 /* Commentary: 
@@ -453,12 +453,13 @@ dtkComposerNote *dtkComposerScene::createNote(QString text, QPointF position, QS
 {
     dtkComposerNote *note = new dtkComposerNote(d->current_node);
     
-    note->setText(text);
+    if(!text.isNull())
+        note->setText(text);
 
     if(!position.isNull())
         note->setPos(position);
 
-    if(!size.isNull())
+    if(size.isValid() && !size.isNull())
         note->setSize(size);
 
     this->addNote(note);
@@ -741,7 +742,7 @@ void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
     QUrl url = event->mimeData()->urls().first();
 
     if (url.scheme() == "note") {
-        this->createNote(url.path(), event->pos());
+        this->createNote(url.path(), event->scenePos());
         event->acceptProposedAction();
         return;
     }
@@ -751,7 +752,7 @@ void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
         return;
     }
 
-    this->createNode(url.path(), event->pos());
+    this->createNode(url.path(), event->scenePos());
 
     event->acceptProposedAction();
 }

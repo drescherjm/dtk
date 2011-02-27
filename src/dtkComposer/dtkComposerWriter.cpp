@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Feb 26 23:30:31 2011 (+0100)
+ * Last-Updated: Sun Feb 27 19:26:39 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 283
+ *     Update #: 302
  */
 
 /* Commentary: 
@@ -24,6 +24,9 @@
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerNodeProcess.h"
+#include "dtkComposerNodeString.h"
+#include "dtkComposerNodeStringComparator.h"
+#include "dtkComposerNodeStringOperator.h"
 #include "dtkComposerNote.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerWriter.h"
@@ -211,6 +214,82 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
             
             tag.appendChild(name);
         }
+    }
+
+    // -- String node
+    
+    if(dtkComposerNodeString *string_node = dynamic_cast<dtkComposerNodeString *>(node)) {
+        
+        QString value = string_node->value(string_node->outputProperty("value")).toString();
+        
+        QDomText text = document.createTextNode(value);
+        
+        QDomElement e_value = document.createElement("value");
+        e_value.appendChild(text);
+        
+        tag.appendChild(e_value);
+    }
+
+    // -- String comparator node
+    
+    if(dtkComposerNodeStringComparator *string_comparator_node = dynamic_cast<dtkComposerNodeStringComparator *>(node)) {
+        
+        dtkComposerNodeStringComparator::Operation operation = string_comparator_node->operation();
+        
+        QDomText text;
+
+        switch(operation) {
+        case dtkComposerNodeStringComparator::LesserThan:
+            text = document.createTextNode("<");
+            break;
+        case dtkComposerNodeStringComparator::LesserThanOrEqual:
+            text = document.createTextNode("<=");
+            break;
+        case dtkComposerNodeStringComparator::GreaterThan:
+            text = document.createTextNode(">");
+            break;
+        case dtkComposerNodeStringComparator::GreaterThanOrEqual:
+            text = document.createTextNode(">=");
+            break;
+        case dtkComposerNodeStringComparator::Equal:
+            text = document.createTextNode("==");
+            break;
+        case dtkComposerNodeStringComparator::Differ:
+            text = document.createTextNode("!=");
+            break;
+        default:
+            break;
+        }
+        
+        QDomElement e_operation = document.createElement("operation");
+        e_operation.appendChild(text);
+        
+        tag.appendChild(e_operation);
+    }
+
+    // -- String operator node
+    
+    if(dtkComposerNodeStringOperator *string_operator_node = dynamic_cast<dtkComposerNodeStringOperator *>(node)) {
+        
+        dtkComposerNodeStringOperator::Operation operation = string_operator_node->operation();
+        
+        QDomText text;
+
+        switch(operation) {
+        case dtkComposerNodeStringOperator::Append:
+            text = document.createTextNode("<<");
+            break;
+        case dtkComposerNodeStringOperator::Prepend:
+            text = document.createTextNode(">>");
+            break;
+        default:
+            break;
+        }
+        
+        QDomElement e_operation = document.createElement("operation");
+        e_operation.appendChild(text);
+        
+        tag.appendChild(e_operation);
     }
     
     // -- Process node

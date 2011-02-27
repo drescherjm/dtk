@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Feb 25 15:44:49 2011 (+0100)
+ * Last-Updated: Sun Feb 27 16:54:00 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1522
+ *     Update #: 1524
  */
 
 /* Commentary: 
@@ -200,7 +200,7 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
     d->title->setDefaultTextColor(Qt::white);
     d->title->setPos(-d->width/2 + d->margin_left/2, -d->header_height-2);
 
-    this->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable); // | QGraphicsItem::ItemSendsGeometryChanges);
+    this->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
     this->setZValue(10);
 
 #if QT_VERSION >= 0x040600

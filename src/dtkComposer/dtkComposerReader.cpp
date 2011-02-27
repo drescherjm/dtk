@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Feb 27 01:30:09 2011 (+0100)
+ * Last-Updated: Sun Feb 27 19:26:57 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 452
+ *     Update #: 475
  */
 
 /* Commentary: 
@@ -24,6 +24,9 @@
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerNodeString.h"
+#include "dtkComposerNodeStringComparator.h"
+#include "dtkComposerNodeStringOperator.h"
 #include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
 
@@ -302,6 +305,77 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
 
             file_node->setFileName(children.at(i).childNodes().at(0).toText().data());
         }        
+    }
+
+    // String node
+    
+    if(dtkComposerNodeString *string_node = dynamic_cast<dtkComposerNodeString *>(n)) {
+        
+        QDomNodeList children = node.childNodes();
+        
+        for(int i = 0; i < children.count(); i++) {
+
+            if(children.at(i).toElement().tagName() != "value")
+                continue;
+
+            string_node->setValue(children.at(i).childNodes().at(0).toText().data());
+        }
+    }
+
+    // String comparator
+    
+    if(dtkComposerNodeStringComparator *string_comparator_node = dynamic_cast<dtkComposerNodeStringComparator *>(n)) {
+        
+        QDomNodeList children = node.childNodes();
+        
+        for(int i = 0; i < children.count(); i++) {
+
+            if(children.at(i).toElement().tagName() != "operation")
+                continue;
+
+            dtkComposerNodeStringComparator::Operation operation;
+
+            if(children.at(i).childNodes().at(0).toText().data() == "<")
+                operation = dtkComposerNodeStringComparator::LesserThan;
+            else if(children.at(i).childNodes().at(0).toText().data() == "<=")
+                operation = dtkComposerNodeStringComparator::LesserThanOrEqual;
+            else if(children.at(i).childNodes().at(0).toText().data() == ">")
+                operation = dtkComposerNodeStringComparator::GreaterThan;
+            else if(children.at(i).childNodes().at(0).toText().data() == ">=")
+                operation = dtkComposerNodeStringComparator::GreaterThanOrEqual;
+            else if(children.at(i).childNodes().at(0).toText().data() == "==")
+                operation = dtkComposerNodeStringComparator::Equal;
+            else if(children.at(i).childNodes().at(0).toText().data() == "!=")
+                operation = dtkComposerNodeStringComparator::Differ;
+            else
+                operation = dtkComposerNodeStringComparator::Equal;
+
+            string_comparator_node->setOperation(operation);
+        }
+    }
+
+    // String operator
+    
+    if(dtkComposerNodeStringOperator *string_operator_node = dynamic_cast<dtkComposerNodeStringOperator *>(n)) {
+        
+        QDomNodeList children = node.childNodes();
+        
+        for(int i = 0; i < children.count(); i++) {
+
+            if(children.at(i).toElement().tagName() != "operation")
+                continue;
+
+            dtkComposerNodeStringOperator::Operation operation;
+
+            if(children.at(i).childNodes().at(0).toText().data() == "<<")
+                operation = dtkComposerNodeStringOperator::Append;
+            else if(children.at(i).childNodes().at(0).toText().data() == ">>")
+                operation = dtkComposerNodeStringOperator::Prepend;
+            else
+                operation = dtkComposerNodeStringOperator::Append;
+
+            string_operator_node->setOperation(operation);
+        }
     }
     
     // Process node

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb  7 22:37:03 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 25 10:54:34 2011 (+0100)
+ * Last-Updated: Sun Feb 27 19:36:10 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 149
+ *     Update #: 156
  */
 
 /* Commentary: 
@@ -32,6 +32,9 @@
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerNodeString.h"
+#include "dtkComposerNodeStringComparator.h"
+#include "dtkComposerNodeStringOperator.h"
 #include "dtkComposerNodeView.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -69,6 +72,15 @@ dtkComposerNode *dtkComposerNodeFactory::create(QString type)
 
     if (type == "dtkComposerFile")
         return new dtkComposerNodeFile;
+
+    if (type == "dtkComposerString")
+        return new dtkComposerNodeString;
+
+    if (type == "dtkComposerStringComparator")
+        return new dtkComposerNodeStringComparator;
+
+    if (type == "dtkComposerStringOperator")
+        return new dtkComposerNodeStringOperator;
 
     if (dtkAbstractData *data = dtkAbstractDataFactory::instance()->create(type)) {
         dtkComposerNodeData *node = new dtkComposerNodeData;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Feb 28 11:09:18 2011 (+0100)
+ * Last-Updated: Mon Feb 28 15:53:00 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 304
+ *     Update #: 317
  */
 
 /* Commentary: 
@@ -203,14 +203,54 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
     // -- Number node
     
     if(dtkComposerNodeNumber *number_node = dynamic_cast<dtkComposerNodeNumber *>(node)) {
-        
-        QVariant value = number_node->value(number_node->outputProperty("value"));
-        
-        QDomText text = document.createTextNode(value.toString());
-        
+                
+        QDomText text;
+        QString value;
+
+        dtkComposerNodeNumber::Genre genre =  number_node->genre();
+
+        switch (genre) {
+        case (dtkComposerNodeNumber::Int):
+            text = document.createTextNode("int");
+            value = QString::number(number_node->number().toInt());
+            break;        
+        case (dtkComposerNodeNumber::UInt):
+            text = document.createTextNode("uint");
+            value = QString::number(number_node->number().toUInt());
+            break;
+        case (dtkComposerNodeNumber::Long):
+            text = document.createTextNode("long");
+            value = QString::number(number_node->number().value<long>());
+            break;
+        case (dtkComposerNodeNumber::ULong):
+            text = document.createTextNode("ulong");
+            value = QString::number(number_node->number().value<ulong>());
+            break;
+        case (dtkComposerNodeNumber::LongLong):
+            text = document.createTextNode("longlong");
+            value = QString::number(number_node->number().toLongLong());
+            break;
+        case (dtkComposerNodeNumber::ULongLong):
+            text = document.createTextNode("ulonglong");
+            value = QString::number(number_node->number().toULongLong());
+            break;
+        case (dtkComposerNodeNumber::Float):
+            text = document.createTextNode("float");
+            value = QString::number(number_node->number().value<float>());
+            break;
+        case (dtkComposerNodeNumber::Double):
+            text = document.createTextNode("double");
+            value = QString::number(number_node->number().toDouble());
+            break;
+        } 
+       
+        QDomElement e_genre = document.createElement("genre");
+        e_genre.appendChild(text);        
+        tag.appendChild(e_genre);
+
+        text = document.createTextNode(value);        
         QDomElement e_value = document.createElement("value");
-        e_value.appendChild(text);
-        
+        e_value.appendChild(text);        
         tag.appendChild(e_value);
     }
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Feb 28 11:09:26 2011 (+0100)
+ * Last-Updated: Mon Feb 28 15:26:04 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 477
+ *     Update #: 485
  */
 
 /* Commentary: 
@@ -301,10 +301,77 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
         
         for(int i = 0; i < children.count(); i++) {
 
-            if(children.at(i).toElement().tagName() != "value")
+            if(children.at(i).toElement().tagName() != "genre") 
                 continue;
 
-            //number_node->setValue((children.at(i).childNodes().at(0).toText().data()));
+            dtkComposerNodeNumber::Genre genre;
+
+            if(children.at(i).childNodes().at(0).toText().data() == "int")
+                genre = dtkComposerNodeNumber::Int;
+            else if(children.at(i).childNodes().at(0).toText().data() == "uint")
+                genre = dtkComposerNodeNumber::UInt;
+            else if(children.at(i).childNodes().at(0).toText().data() == "long")
+                genre = dtkComposerNodeNumber::Long;
+            else if(children.at(i).childNodes().at(0).toText().data() == "ulong")
+                genre = dtkComposerNodeNumber::ULong;
+            else if(children.at(i).childNodes().at(0).toText().data() == "longlong")
+                genre = dtkComposerNodeNumber::LongLong;
+            else if(children.at(i).childNodes().at(0).toText().data() == "ulonglong")
+                genre = dtkComposerNodeNumber::ULongLong;
+            else if(children.at(i).childNodes().at(0).toText().data() == "float")
+                genre = dtkComposerNodeNumber::Float;
+            else if(children.at(i).childNodes().at(0).toText().data() == "double")
+                genre = dtkComposerNodeNumber::Double;
+
+            number_node->setGenre(genre);
+        }
+        
+        for(int i = 0; i < children.count(); i++) {
+
+            if(children.at(i).toElement().tagName() != "value") 
+                continue;
+
+            QString value = children.at(i).childNodes().at(0).toText().data();
+
+            switch (number_node->genre()) {
+
+            case (dtkComposerNodeNumber::Int):
+                number_node->setValue(value.toInt());
+                break;
+        
+            case (dtkComposerNodeNumber::UInt):
+                number_node->setValue(value.toUInt());
+                break;
+                
+            case (dtkComposerNodeNumber::Long):
+                number_node->setValue(value.toLong());
+                break;
+                
+            case (dtkComposerNodeNumber::ULong):
+                number_node->setValue(value.toULong());
+                break;
+                
+            case (dtkComposerNodeNumber::LongLong):
+                number_node->setValue(value.toLongLong());
+                break;
+                
+            case (dtkComposerNodeNumber::ULongLong):
+                number_node->setValue(value.toULongLong());
+                break;
+                
+            case (dtkComposerNodeNumber::Float):
+                number_node->setValue(value.toFloat());
+                break;
+                
+            case (dtkComposerNodeNumber::Double):
+                number_node->setValue(value.toDouble());
+                break;
+                
+            default:
+                number_node->setGenre(dtkComposerNodeNumber::Int);
+                number_node->setValue(value.toInt());
+                break;
+            }
         }
     }
 

@@ -1,5 +1,5 @@
-/* dtkSettingsEditorPreferencesWidget.cpp --- 
- * 
+/* dtkSettingsEditorPreferencesWidget.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Dec 23 10:34:54 2009 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 11
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkSettingsEditor.h"
@@ -47,6 +47,5 @@ dtkSettingsEditorPreferencesWidget::dtkSettingsEditorPreferencesWidget(QWidget *
 dtkSettingsEditorPreferencesWidget::~dtkSettingsEditorPreferencesWidget(void)
 {
     delete d;
-
     d = NULL;
 }

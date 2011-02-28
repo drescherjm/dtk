@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb 24 10:43:57 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 1469
+ * Last-Updated: Sun Feb 27 16:54:00 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 1524
  */
 
 /* Commentary: 
@@ -28,7 +28,7 @@
 #include <dtkCore/dtkAbstractView.h>
 #include <dtkCore/dtkGlobal.h>
 
-#define DTK_DEBUG_COMPOSER_INTERACTION
+// #define DTK_DEBUG_COMPOSER_INTERACTION 1
 // #define DTK_DEBUG_COMPOSER_EVALUATION 1
 
 // /////////////////////////////////////////////////////////////////
@@ -42,8 +42,6 @@ public:
 
     QList<dtkComposerEdge *> iRoute(dtkComposerEdge *edge);
     QList<dtkComposerEdge *> oRoute(dtkComposerEdge *edge);
-
-    bool loop(void);
 
 public:
     dtkComposerNode *q;
@@ -69,14 +67,11 @@ public:
     QHash<dtkComposerEdge *, dtkComposerNodeProperty *> ghost_input_edges;
     QHash<dtkComposerEdge *, dtkComposerNodeProperty *> ghost_output_edges;
 
-    dtkComposerNodeProperty *loop_property;
     dtkComposerNodeProperty *clicked_property;
 
-    dtkComposerNode::Behavior behavior;
     dtkComposerNode::Kind kind;
 
     QString type;
-    QString condition;
 
     dtkAbstractObject *object;
 
@@ -140,9 +135,6 @@ QList<dtkComposerEdge *> dtkComposerNodePrivate::oRoute(dtkComposerEdge *edge)
 {
     QList<dtkComposerEdge *> edges;
 
-    if(edge->destination()->node()->behavior() == dtkComposerNode::Loop && edge->destination() == edge->destination()->node()->d->loop_property)
-        return edges;
-
     if(edge->destination()->node()->kind() != dtkComposerNode::Composite) {
 
         // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->destination()->node()->title() << "is not composite" << DTK_NO_COLOR;
@@ -173,72 +165,6 @@ QList<dtkComposerEdge *> dtkComposerNodePrivate::oRoute(dtkComposerEdge *edge)
     return edges;
 }
 
-bool dtkComposerNodePrivate::loop(void)
-{
-    QRegExp r("(\\w+)\\s*(>|>=|<|<=|==|!=)\\s*([\\d\\.]+)");
-    
-    QString op1, op, op2;
-
-    if(r.indexIn(this->condition) != -1) {
-        op1 = r.cap(1);
-        op  = r.cap(2);
-        op2 = r.cap(3);
-    }
-
-    if(op1.isEmpty() || op.isEmpty() || op2.isEmpty()) {
-        qDebug() << DTK_PRETTY_FUNCTION << "Malformed condition expression";
-        return false;
-    } else {
-        // qDebug() << "op1" << op1;
-        // qDebug() << "op " << op;
-        // qDebug() << "op2" << op2;
-    }
-
-    QVariant v1;
-
-    foreach(dtkComposerEdge *edge, this->ghost_output_edges.keys()) {
-        if(edge->destination() == this->loop_property) {
-            v1 = edge->source()->node()->value(edge->source());
-        }
-    }
-
-    if(!v1.isValid()) {
-        qDebug() << DTK_PRETTY_FUNCTION << "Unable to retrieve first operand value";
-        return false;
-    } else {
-        // qDebug() << DTK_PRETTY_FUNCTION << "First operand value is" << v1;
-    }
-
-    if(!v1.canConvert<double>()) {
-        qDebug() << DTK_PRETTY_FUNCTION << "Unable to convert first operand to double";
-        return false;
-    }
-
-    double d; bool ok; d = op2.toDouble(&ok);
-
-    if(!ok) {
-        qDebug() << DTK_PRETTY_FUNCTION << "Unable to cast second argument into a double";
-        return false;
-    } else {
-        // qDebug() << "Second argument is" << d;
-    }
-
-    if(op == "<")
-        return (v1.toDouble()  < d);
-    else if(op == "<=")
-        return (v1.toDouble() <= d);
-    else if(op == "==")
-        return (v1.toDouble() == d);
-    else if(op == "!=")
-        return (v1.toDouble() != d);
-    else if(op == ">=")
-        return (v1.toDouble() >= d);
-    else if(op == ">")
-        return (v1.toDouble()  > d);
-
-    return false;
-}
-
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNode
 // /////////////////////////////////////////////////////////////////
@@ -249,7 +175,6 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
 
     d->q = this;
     
-    d->behavior = Default;
     d->kind = Unknown;
     d->object = NULL;
     d->parent = NULL;
@@ -275,7 +200,7 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
     d->title->setDefaultTextColor(Qt::white);
     d->title->setPos(-d->width/2 + d->margin_left/2, -d->header_height-2);
 
-    this->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable); // | QGraphicsItem::ItemSendsGeometryChanges);
+    this->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
     this->setZValue(10);
 
 #if QT_VERSION >= 0x040600
@@ -285,10 +210,6 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
     shadow->setColor(QColor(0, 0, 0, 127));
     this->setGraphicsEffect(shadow);
 #endif
-
-    d->loop_property = new dtkComposerNodeProperty("condition", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Single, this);
-    d->loop_property->setClonedFrom(this);
-    d->loop_property->hide();
 
     d->clicked_property = NULL;
 
@@ -302,6 +223,15 @@ dtkComposerNode::~dtkComposerNode(void)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
+
+    // if (this->scene() && this->scene()->items().contains(this))
+    //     this->scene()->removeItem(this);
+
+    foreach(dtkComposerNodeProperty *property, d->input_properties)
+        property->setParentNode(NULL);
+
+    foreach(dtkComposerNodeProperty *property, d->output_properties)
+        property->setParentNode(NULL);
 
     delete d;
 
@@ -343,71 +273,14 @@ QString dtkComposerNode::description(void)
         break;
     }
 
-    QString node_behavior;
-
-    switch (d->behavior) {
-
-    case(dtkComposerNode::Default):
-        node_behavior = "Default";
-        break;
-
-    case(dtkComposerNode::Loop):
-        node_behavior = "Loop";
-        break;
-
-    default:
-        node_behavior = "";
-        break;
-    }
-
-    return QString("Node: name %1, kind %2, behavior %3")
+    return QString("Node: name %1, kind %2")
         .arg(d->title->toPlainText())
-        .arg(node_kind)
-        .arg(node_behavior);
+        .arg(node_kind);
 }
 
 void dtkComposerNode::setTitle(const QString& title)
 {
     d->title->setPlainText(title);
-}
-
-void dtkComposerNode::setBehavior(Behavior behavior)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->behavior = behavior;
-
-    if(behavior == dtkComposerNode::Loop) {
-
-        d->output_properties << d->loop_property;
-
-        if (d->ghost)
-            d->loop_property->show();
-        
-    } else {
-
-        foreach(dtkComposerEdge *edge, d->ghost_output_edges.keys()) {
-            if(edge->destination() == d->loop_property) {
-                d->ghost_output_edges.remove(edge);
-                if(dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene()))
-                    scene->removeEdge(edge);
-            }
-        }
-
-        d->loop_property->hide();
-        d->output_properties.removeAll(d->loop_property);
-    }
-}
-
-void dtkComposerNode::setCondition(const QString& condition)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->condition = condition;
 }
 
 void dtkComposerNode::setKind(Kind kind)
@@ -437,15 +310,6 @@ void dtkComposerNode::setObject(dtkAbstractObject *object)
     d->object = object;
 
     d->title->setHtml(object->name());
-}
-
-dtkComposerNode::Behavior dtkComposerNode::behavior(void)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    return d->behavior;
 }
 
 dtkComposerNode::Kind dtkComposerNode::kind(void)
@@ -571,6 +435,7 @@ void dtkComposerNode::addGhostInputEdge(dtkComposerEdge *edge, dtkComposerNodePr
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
+
     d->ghost_input_edges.insert(edge, property);
 }
 
@@ -579,6 +444,7 @@ void dtkComposerNode::addGhostOutputEdge(dtkComposerEdge *edge, dtkComposerNodeP
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
+
     d->ghost_output_edges.insert(edge, property);
 }
 
@@ -587,8 +453,8 @@ void dtkComposerNode::removeInputEdge(dtkComposerEdge *edge)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
-    if(d->input_edges.remove(edge))
-        qDebug() << DTK_PRETTY_FUNCTION << edge;
+
+    d->input_edges.remove(edge);
 }
 
 void dtkComposerNode::removeOutputEdge(dtkComposerEdge *edge)
@@ -596,8 +462,8 @@ void dtkComposerNode::removeOutputEdge(dtkComposerEdge *edge)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
-    if(d->output_edges.remove(edge))
-        qDebug() << DTK_PRETTY_FUNCTION << edge;
+
+    d->output_edges.remove(edge);
 }
 
 void dtkComposerNode::removeAllEdges(void)
@@ -605,6 +471,7 @@ void dtkComposerNode::removeAllEdges(void)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
+
     d->input_edges.clear();
     d->output_edges.clear();
 }
@@ -614,8 +481,8 @@ void dtkComposerNode::removeGhostInputEdge(dtkComposerEdge *edge)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
-    if(d->ghost_input_edges.remove(edge)) 
-        qDebug() << DTK_PRETTY_FUNCTION << edge;       
+
+    d->ghost_input_edges.remove(edge);
 }
 
 void dtkComposerNode::removeGhostOutputEdge(dtkComposerEdge *edge)
@@ -623,8 +490,8 @@ void dtkComposerNode::removeGhostOutputEdge(dtkComposerEdge *edge)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
-    if(d->ghost_output_edges.remove(edge))
-        qDebug() << DTK_PRETTY_FUNCTION << edge;
+
+    d->ghost_output_edges.remove(edge);
 }
 
 void dtkComposerNode::removeAllGhostEdges(void)
@@ -632,6 +499,7 @@ void dtkComposerNode::removeAllGhostEdges(void)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
+
     d->ghost_input_edges.clear();
     d->ghost_output_edges.clear();
 }
@@ -821,14 +689,6 @@ QString dtkComposerNode::title(void)
     return QString(d->title->toPlainText());
 }
 
-QString dtkComposerNode::condition(void)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-    return d->condition;
-}
-
 bool dtkComposerNode::dirty(void)
 {
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
@@ -874,14 +734,7 @@ void dtkComposerNode::layout(void)
             else
                 property->setRect(QRectF(d->width/2-3*d->node_radius, d->margin_top+(3*(exposed_output_properties++) + 1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
 
-    if(d->ghost && d->loop_property->isVisible()) {
-        d->loop_property->setRect(QRectF(d->ghostRect().right() - 3*d->node_radius, d->ghostRect().bottom() - 40 - 2*d->node_radius, d->node_radius*2, d->node_radius*2));
-        exposed_output_properties++;
-    }
-
     d->height = d->header_height + (3*qMax(exposed_input_properties, exposed_output_properties)) * d->node_radius + d->margin_bottom;
-
-    QGraphicsItem::update(this->boundingRect());
 }
 
 void dtkComposerNode::setParentNode(dtkComposerNode *node)
@@ -891,7 +744,7 @@ void dtkComposerNode::setParentNode(dtkComposerNode *node)
 #endif
     d->parent = node;
 
-    //QObject::setParent(node);
+    QObject::setParent(node);
 }
 
 void dtkComposerNode::addChildNode(dtkComposerNode *node)
@@ -899,13 +752,12 @@ void dtkComposerNode::addChildNode(dtkComposerNode *node)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
-    qDebug() << DTK_PRETTY_FUNCTION;
 
     if(!d->children.contains(node))
         d->children << node;
 
-    //if(d->ghost)
-    //    node->setParentItem(this);
+    if(d->ghost)
+        node->setParentItem(this);
 }
 
 void dtkComposerNode::removeChildNode(dtkComposerNode *node)
@@ -913,7 +765,6 @@ void dtkComposerNode::removeChildNode(dtkComposerNode *node)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
-    qDebug() << DTK_PRETTY_FUNCTION;
 
     if (d->children.contains(node))
         d->children.removeAll(node);
@@ -932,6 +783,7 @@ dtkComposerNode *dtkComposerNode::parentNode(void)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
+
     return d->parent;
 }
 
@@ -950,22 +802,12 @@ void dtkComposerNode::setGhost(bool ghost)
         foreach(dtkComposerNode *node, d->children)
             node->setParentItem(this);
 
-        if(d->behavior == dtkComposerNode::Loop) {
-            d->loop_property->show();
-            d->output_properties << d->loop_property;
-        }
-
     } else {
 
         this->setZValue(10);
 
         foreach(dtkComposerNode *node, d->children)
             node->setParentItem(NULL);
-
-        if(d->behavior == dtkComposerNode::Loop) {
-            d->loop_property->hide();
-            d->output_properties.removeAll(d->loop_property);
-        }
     }
 
     this->layout();
@@ -1002,7 +844,7 @@ void dtkComposerNode::touch(void)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
-    QGraphicsItem::update(this->boundingRect());
+    // QGraphicsItem::update(this->boundingRect());
 }
 
 //! 
@@ -1121,27 +963,6 @@ void dtkComposerNode::update(void)
             e->destination()->node()->update();
         }
     }
-
-    // -- Loop
-
-    foreach(dtkComposerEdge *o_edge, output_edges) {
-        if (o_edge->destination()->node()->behavior() == dtkComposerNode::Loop && o_edge->destination() == o_edge->destination()->node()->d->loop_property) {
-            
-            if(o_edge->destination()->node()->d->loop()) {
-                
-                foreach(dtkComposerEdge *e, o_edge->destination()->node()->inputGhostEdges())
-                    e->destination()->node()->setDirty(true);
-
-                foreach(dtkComposerEdge *e, o_edge->destination()->node()->inputGhostEdges()) {
-#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-                    qDebug() << DTK_COLOR_BG_BLUE << "Forwarding" << this->title() << "->" << e->destination()->node()->title() << DTK_NO_COLOR;
-#endif
-
-                    e->destination()->node()->update();
-                }
-            }
-        }
-    }
 }
 
 QRectF dtkComposerNode::boundingRect(void) const
@@ -1186,21 +1007,12 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
         gradiant.setColorAt(1.0, QColor("#ffa500").darker());
         break;
     case Composite:
-        if(d->behavior == dtkComposerNode::Loop)
-            if(d->ghost) {
-                gradiant.setColorAt(0.0, QColor("#b6b71b"));
-                gradiant.setColorAt(1.0, QColor("#76670c"));
-            } else {
-                gradiant.setColorAt(0.0, QColor("#67670a"));
-                gradiant.setColorAt(1.0, QColor("#352d02"));
-            }
-        else
-            if(d->ghost) {
-                gradiant.setColorAt(0.0, QColor("#959595"));
-                gradiant.setColorAt(1.0, QColor("#525252"));
-            } else {
-                gradiant.setColorAt(0.0, QColor("#515151"));
-                gradiant.setColorAt(1.0, QColor("#000000"));
+        if(d->ghost) {
+            gradiant.setColorAt(0.0, QColor("#959595"));
+            gradiant.setColorAt(1.0, QColor("#525252"));
+        } else {
+            gradiant.setColorAt(0.0, QColor("#515151"));
+            gradiant.setColorAt(1.0, QColor("#000000"));
         }
         break;
     case Data:
@@ -1229,23 +1041,12 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
         pen.setWidth(2);
     } else {
         if(this->isGhost()) {
-            if(d->behavior == dtkComposerNode::Loop) {
-                pen.setColor(QColor("#76670c"));
-                pen.setStyle(Qt::DashLine);
-                pen.setWidth(1);
-            } else {
-                pen.setColor(QColor("#c7c7c7"));
-                pen.setStyle(Qt::DashLine);
-                pen.setWidth(1);
-            }
+            pen.setColor(QColor("#c7c7c7"));
+            pen.setStyle(Qt::DashLine);
+            pen.setWidth(1);
         } else {    
-            if(d->behavior == dtkComposerNode::Loop) {
-                pen.setColor(QColor("#352d02"));
-                pen.setWidth(1);
-            } else {
-                pen.setColor(Qt::black);
-                pen.setWidth(1);
-            }
+            pen.setColor(Qt::black);
+            pen.setWidth(1);
         }
     }
 

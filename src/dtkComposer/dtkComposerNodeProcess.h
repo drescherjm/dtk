@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul 15 11:23:26 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb 17 16:52:41 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 13
+ * Last-Updated: Thu Feb 24 15:08:59 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -29,8 +29,8 @@ class dtkComposerNodeProcess : public dtkComposerNode
     Q_OBJECT
 
 public:
-     dtkComposerNodeProcess(dtkComposerNode *parent = 0);
-    ~dtkComposerNodeProcess(void);
+             dtkComposerNodeProcess(dtkComposerNode *parent = 0);
+    virtual ~dtkComposerNodeProcess(void);
 
     QVariant value(dtkComposerNodeProperty *property);
 

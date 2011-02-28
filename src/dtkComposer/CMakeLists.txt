@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Dec 13 13:50:54 2010 (+0100)
+## Last-Updated: Mon Feb 28 11:08:57 2011 (+0100)
 ##           By: Thibaud Kloczko
-##     Update #: 84
+##     Update #: 114
 ######################################################################
 ## 
 ### Commentary: 
@@ -28,14 +28,19 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerEdge.h
   dtkComposerExport.h
   dtkComposerNode.h
+  dtkComposerNodeBoolean.h
+  dtkComposerNodeBooleanOperator.h
   dtkComposerNodeData.h
   dtkComposerNodeFactory.h
   dtkComposerNodeFile.h
-  dtkComposerNodeInteger.h
+  dtkComposerNodeNumber.h
   dtkComposerNodeProcess.h
   dtkComposerNodeProperty.h
   dtkComposerNodeString.h
+  dtkComposerNodeStringComparator.h
+  dtkComposerNodeStringOperator.h
   dtkComposerNodeView.h
+  dtkComposerNote.h
   dtkComposerReader.h
   dtkComposerScene.h
   dtkComposerView.h
@@ -45,14 +50,19 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposer.h
   dtkComposerEdge.h
   dtkComposerNode.h
+  dtkComposerNodeBoolean.h
+  dtkComposerNodeBooleanOperator.h
   dtkComposerNodeData.h
   dtkComposerNodeFactory.h
   dtkComposerNodeFile.h
-  dtkComposerNodeInteger.h
+  dtkComposerNodeNumber.h
   dtkComposerNodeProcess.h
   dtkComposerNodeProperty.h
   dtkComposerNodeString.h
+  dtkComposerNodeStringComparator.h
+  dtkComposerNodeStringOperator.h
   dtkComposerNodeView.h
+  dtkComposerNote.h
   dtkComposerReader.h
   dtkComposerScene.h
   dtkComposerView.h
@@ -62,14 +72,19 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposer.cpp
   dtkComposerEdge.cpp
   dtkComposerNode.cpp
+  dtkComposerNodeBoolean.cpp
+  dtkComposerNodeBooleanOperator.cpp
   dtkComposerNodeData.cpp
   dtkComposerNodeFactory.cpp
   dtkComposerNodeFile.cpp
-  dtkComposerNodeInteger.cpp
-  dtkComposerNodeString.cpp
+  dtkComposerNodeNumber.cpp
   dtkComposerNodeProcess.cpp
   dtkComposerNodeProperty.cpp
+  dtkComposerNodeString.cpp
+  dtkComposerNodeStringComparator.cpp
+  dtkComposerNodeStringOperator.cpp
   dtkComposerNodeView.cpp
+  dtkComposerNote.cpp
   dtkComposerReader.cpp
   dtkComposerScene.cpp
   dtkComposerView.cpp

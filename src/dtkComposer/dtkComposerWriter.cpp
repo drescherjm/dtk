@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb  3 17:35:06 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 224
+ * Last-Updated: Mon Feb 28 11:09:18 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 304
  */
 
 /* Commentary: 
@@ -19,9 +19,16 @@
 
 #include "dtkComposerEdge.h"
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeBoolean.h"
+#include "dtkComposerNodeBooleanOperator.h"
 #include "dtkComposerNodeFile.h"
+#include "dtkComposerNodeNumber.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerNodeProcess.h"
+#include "dtkComposerNodeString.h"
+#include "dtkComposerNodeStringComparator.h"
+#include "dtkComposerNodeStringOperator.h"
+#include "dtkComposerNote.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerWriter.h"
 
@@ -98,6 +105,22 @@ void dtkComposerWriter::write(const QString& fileName)
         root.appendChild(tag);
     }
 
+    // Writing notes
+
+    foreach(dtkComposerNote *note, d->scene->notes()) {
+
+        QDomText text = document.createTextNode(note->text());
+
+        QDomElement tag = document.createElement("note");
+        tag.setAttribute("x", QString::number(note->pos().x()));
+        tag.setAttribute("y", QString::number(note->pos().y()));
+        tag.setAttribute("w", QString::number(note->boundingRect().width()));
+        tag.setAttribute("h", QString::number(note->boundingRect().height()));
+        tag.appendChild(text);
+
+        root.appendChild(tag);
+    }
+
     // Writing file
 
     QFile file(fileName);
@@ -119,8 +142,78 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
     tag.setAttribute("x", QString::number(node->pos().x()));
     tag.setAttribute("y", QString::number(node->pos().y()));
     tag.setAttribute("id", QString::number(current_id));
-    tag.setAttribute("behavior", (node->behavior() == dtkComposerNode::Loop) ? QString("loop") : QString("default"));
+     
+    // -- Boolean node
+    
+    if(dtkComposerNodeBoolean *boolean_node = dynamic_cast<dtkComposerNodeBoolean *>(node)) {
         
+        bool value = boolean_node->value(boolean_node->outputProperty("value")).toBool();
+        
+        QDomText text = document.createTextNode(value ? "true" : "false");
+        
+        QDomElement e_value = document.createElement("value");
+        e_value.appendChild(text);
+        
+        tag.appendChild(e_value);
+    }
+
+    // -- Boolean operator node
+    
+    if(dtkComposerNodeBooleanOperator *boolean_operator_node = dynamic_cast<dtkComposerNodeBooleanOperator *>(node)) {
+        
+        dtkComposerNodeBooleanOperator::Operation operation = boolean_operator_node->operation();
+        
+        QDomText text;
+
+        switch(operation) {
+        case dtkComposerNodeBooleanOperator::And:
+            text = document.createTextNode("and");
+            break;
+        case dtkComposerNodeBooleanOperator::Or:
+            text = document.createTextNode("or");
+            break;
+        case dtkComposerNodeBooleanOperator::Xor:
+            text = document.createTextNode("xor");
+            break;
+        case dtkComposerNodeBooleanOperator::Nand:
+            text = document.createTextNode("nand");
+            break;
+        case dtkComposerNodeBooleanOperator::Nor:
+            text = document.createTextNode("nor");
+            break;
+        case dtkComposerNodeBooleanOperator::Xnor:
+            text = document.createTextNode("xnor");
+            break;
+        case dtkComposerNodeBooleanOperator::Imp:
+            text = document.createTextNode("imp");
+            break;
+        case dtkComposerNodeBooleanOperator::Nimp:
+            text = document.createTextNode("nimp");
+            break;
+        default:
+            break;
+        }
+        
+        QDomElement e_operation = document.createElement("operation");
+        e_operation.appendChild(text);
+        
+        tag.appendChild(e_operation);
+    }
+     
+    // -- Number node
+    
+    if(dtkComposerNodeNumber *number_node = dynamic_cast<dtkComposerNodeNumber *>(node)) {
+        
+        QVariant value = number_node->value(number_node->outputProperty("value"));
+        
+        QDomText text = document.createTextNode(value.toString());
+        
+        QDomElement e_value = document.createElement("value");
+        e_value.appendChild(text);
+        
+        tag.appendChild(e_value);
+    }
+
     // -- File node
     
     if(dtkComposerNodeFile *file_node = dynamic_cast<dtkComposerNodeFile *>(node)) {
@@ -136,6 +229,82 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
             
             tag.appendChild(name);
         }
+    }
+
+    // -- String node
+    
+    if(dtkComposerNodeString *string_node = dynamic_cast<dtkComposerNodeString *>(node)) {
+        
+        QString value = string_node->value(string_node->outputProperty("value")).toString();
+        
+        QDomText text = document.createTextNode(value);
+        
+        QDomElement e_value = document.createElement("value");
+        e_value.appendChild(text);
+        
+        tag.appendChild(e_value);
+    }
+
+    // -- String comparator node
+    
+    if(dtkComposerNodeStringComparator *string_comparator_node = dynamic_cast<dtkComposerNodeStringComparator *>(node)) {
+        
+        dtkComposerNodeStringComparator::Operation operation = string_comparator_node->operation();
+        
+        QDomText text;
+
+        switch(operation) {
+        case dtkComposerNodeStringComparator::LesserThan:
+            text = document.createTextNode("<");
+            break;
+        case dtkComposerNodeStringComparator::LesserThanOrEqual:
+            text = document.createTextNode("<=");
+            break;
+        case dtkComposerNodeStringComparator::GreaterThan:
+            text = document.createTextNode(">");
+            break;
+        case dtkComposerNodeStringComparator::GreaterThanOrEqual:
+            text = document.createTextNode(">=");
+            break;
+        case dtkComposerNodeStringComparator::Equal:
+            text = document.createTextNode("==");
+            break;
+        case dtkComposerNodeStringComparator::Differ:
+            text = document.createTextNode("!=");
+            break;
+        default:
+            break;
+        }
+        
+        QDomElement e_operation = document.createElement("operation");
+        e_operation.appendChild(text);
+        
+        tag.appendChild(e_operation);
+    }
+
+    // -- String operator node
+    
+    if(dtkComposerNodeStringOperator *string_operator_node = dynamic_cast<dtkComposerNodeStringOperator *>(node)) {
+        
+        dtkComposerNodeStringOperator::Operation operation = string_operator_node->operation();
+        
+        QDomText text;
+
+        switch(operation) {
+        case dtkComposerNodeStringOperator::Append:
+            text = document.createTextNode("<<");
+            break;
+        case dtkComposerNodeStringOperator::Prepend:
+            text = document.createTextNode(">>");
+            break;
+        default:
+            break;
+        }
+        
+        QDomElement e_operation = document.createElement("operation");
+        e_operation.appendChild(text);
+        
+        tag.appendChild(e_operation);
     }
     
     // -- Process node
@@ -162,20 +331,6 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
             this->writeNode(child, tag, document);
     }
     
-    // -- Loop nodes
-
-    if(node->behavior() == dtkComposerNode::Loop) {
-
-        QString node_condition = node->condition();
-        
-        QDomText text = document.createTextNode(node_condition);
-        
-        QDomElement condition = document.createElement("condition");
-        condition.appendChild(text);
-        
-        tag.appendChild(condition);
-    }
-
     { // -- Generic node
         
         { // -- title

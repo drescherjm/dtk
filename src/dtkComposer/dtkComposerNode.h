@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb 24 10:44:28 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 224
+ * Last-Updated: Fri Feb 25 10:07:09 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 227
  */
 
 /* Commentary: 
@@ -50,19 +50,12 @@ public:
         View
     };
 
-    enum Behavior {
-        Default,
-        Loop
-    };
-
              dtkComposerNode(dtkComposerNode *parent = 0);
     virtual ~dtkComposerNode(void);
 
     virtual QString description(void); 
 
     void setTitle(const QString& title);
-    void setBehavior(Behavior behavior);
-    void setCondition(const QString& condition);
     void setKind(Kind kind);
     void setType(QString type);
     void setObject(dtkAbstractObject *object);
@@ -92,7 +85,6 @@ public:
     int  count(dtkComposerNodeProperty *property);
     int number(dtkComposerNodeProperty *property);
 
-    Behavior behavior(void);
     Kind kind(void);
     QString type(void);
 
@@ -120,7 +112,6 @@ public:
     dtkComposerNodeProperty *outputProperty(const QString& name, dtkComposerNode *from) const;
 
     QString title(void);
-    QString condition(void);
 
     bool dirty(void);
     void setDirty(bool dirty);
@@ -176,7 +167,6 @@ public:
 protected:
     virtual void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
     virtual void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-
     virtual void run(void);
 
 private:

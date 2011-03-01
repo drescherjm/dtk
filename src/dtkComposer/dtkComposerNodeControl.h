@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:47:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 28 18:32:48 2011 (+0100)
+ * Last-Updated: Tue Mar  1 18:02:01 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 7
+ *     Update #: 17
  */
 
 /* Commentary: 
@@ -22,6 +22,23 @@
 
 #include "dtkComposerNode.h"
 
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeControlBloc
+// /////////////////////////////////////////////////////////////////
+
+#include <QtGui>
+
+class dtkComposerNodeControlBloc : public QGraphicsRectItem
+{
+public:
+     dtkComposerNodeControlBloc(QGraphicsItem *parent);
+    ~dtkComposerNodeControlBloc(void);
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeControl
+// /////////////////////////////////////////////////////////////////
+
 class dtkComposerNodeControlPrivate;
 
 class dtkComposerNodeControl : public dtkComposerNode
@@ -31,6 +48,14 @@ class dtkComposerNodeControl : public dtkComposerNode
 public:
      dtkComposerNodeControl(dtkComposerNode *parent = 0);
     ~dtkComposerNodeControl(void);
+  
+    dtkComposerNodeControlBloc *addBlock(void);
+
+public:
+    void layout(void);
+  
+public:
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 public slots:
     virtual void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);

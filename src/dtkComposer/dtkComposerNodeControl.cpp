@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 28 20:45:30 2011 (+0100)
+ * Last-Updated: Tue Mar  1 18:32:51 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 45
+ *     Update #: 78
  */
 
 /* Commentary: 
@@ -24,48 +24,46 @@
 #include <dtkCore/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
+// dtkComposerNodeControlBloc
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerNodeControlBloc::dtkComposerNodeControlBloc(QGraphicsItem *parent) : QGraphicsRectItem(parent)
+{
+    QPen pen;
+    pen.setColor(QColor("#c7c7c7"));
+    pen.setStyle(Qt::DashLine);
+    pen.setWidth(1);
+
+    this->setPen(pen);
+    this->setBrush(Qt::NoBrush);
+}
+
+dtkComposerNodeControlBloc::~dtkComposerNodeControlBloc(void)
+{
+
+}
+
+// /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlPrivate
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeControlPrivate
 {
 public:
-    QList<dtkComposerEdge *> iProps(dtkComposerEdge *edge);
+    QList<dtkComposerNodeProperty *> iProps(dtkComposerEdge *edge);
+
+public:
+    QList<dtkComposerNodeControlBloc *> blocs;
 
 public:
     dtkComposerNodeProperty *property_input_condition;
 };
 
-QList<dtkComposerEdge *> dtkComposerNodeControlPrivate::iProps(dtkComposerEdge *edge)
+QList<dtkComposerNodeProperty *> dtkComposerNodeControlPrivate::iProps(dtkComposerEdge *edge)
 {
-    QList<dtkComposerEdge *> edges;
+    QList<dtkComposerNodeProperty *> properties;
 
-    if(edge->source()->node()->kind() != dtkComposerNode::Composite) {
-
-        // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->source()->node()->title() << "is not composite" << DTK_NO_COLOR;
-
-        edges << edge;
-
-    } else {
-
-        if(edge->source()->node() == edge->destination()->node()->parentNode()) {
-
-            // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->source()->node()->title() << "parent is composite" << DTK_NO_COLOR;
-
-            foreach(dtkComposerEdge *i_edge, edge->source()->node()->inputEdges())
-                if(i_edge->destination() == edge->source())
-                    edges << iProps(i_edge);
-        } else {
-
-            // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->source()->node()->title() << "source is composite" << DTK_NO_COLOR;
-
-            foreach(dtkComposerEdge *ghost, edge->source()->node()->outputGhostEdges())
-                if(ghost->destination() == edge->source())
-                    edges << iProps(ghost);
-        }
-    }
-
-    return edges;
+    return properties;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -85,6 +83,15 @@ dtkComposerNodeControl::dtkComposerNodeControl(dtkComposerNode *parent) : dtkCom
     this->setZValue(5);
 }
 
+dtkComposerNodeControlBloc *dtkComposerNodeControl::addBlock(void)
+{
+    dtkComposerNodeControlBloc *bloc = new dtkComposerNodeControlBloc(this);
+    
+    d->blocs << bloc;
+
+    return bloc;
+}
+
 dtkComposerNodeControl::~dtkComposerNodeControl(void)
 {
     delete d;
@@ -92,9 +99,25 @@ dtkComposerNodeControl::~dtkComposerNodeControl(void)
     d = NULL;
 }
 
+void dtkComposerNodeControl::layout(void)
+{
+    dtkComposerNode::layout();
+
+    for(int i = 0; i < d->blocs.count(); i++)
+        d->blocs.at(i)->setRect(QRectF(this->boundingRect().x(),
+                                       this->boundingRect().y() + 23 + i * (this->boundingRect().height() - 46 / d->blocs.count()),
+                                       this->boundingRect().width(),
+                                       this->boundingRect().height() - 46 / d->blocs.count()));
+}
+
+void dtkComposerNodeControl::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    dtkComposerNode::paint(painter, option, widget);
+}
+
 void dtkComposerNodeControl::onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
-    qDebug() << d->iProps(edge);
+    qDebug() << DTK_PRETTY_FUNCTION;
 }
 
 void dtkComposerNodeControl::onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)

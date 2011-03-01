@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Feb 28 18:46:01 2011 (+0100)
+ * Last-Updated: Tue Mar  1 18:01:12 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 232
+ *     Update #: 235
  */
 
 /* Commentary: 
@@ -120,7 +120,7 @@ public:
     bool resizable(void);
     void setResizable(bool resizable);
 
-    void layout(void);
+    virtual void layout(void);
 
     // -- Composite operations
 
@@ -155,9 +155,9 @@ public slots:
     virtual void update(void);
 
 public:
-    QRectF boundingRect(void) const;
+    virtual QRectF boundingRect(void) const;
 
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Feb 28 15:26:04 2011 (+0100)
+ * Last-Updated: Tue Mar  1 19:13:50 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 485
+ *     Update #: 498
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include "dtkComposerNodeBooleanOperator.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeNumber.h"
+#include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerNodeString.h"
@@ -324,6 +325,7 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
                 genre = dtkComposerNodeNumber::Double;
 
             number_node->setGenre(genre);
+            qDebug() << genre;
         }
         
         for(int i = 0; i < children.count(); i++) {
@@ -336,42 +338,80 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
             switch (number_node->genre()) {
 
             case (dtkComposerNodeNumber::Int):
-                number_node->setValue(value.toInt());
+                number_node->setNumber(QVariant(value.toInt()));
                 break;
         
             case (dtkComposerNodeNumber::UInt):
-                number_node->setValue(value.toUInt());
+                number_node->setNumber(QVariant(value.toUInt()));
                 break;
                 
             case (dtkComposerNodeNumber::Long):
-                number_node->setValue(value.toLong());
+                number_node->setNumber(qVariantFromValue(value.toLong()));
                 break;
                 
             case (dtkComposerNodeNumber::ULong):
-                number_node->setValue(value.toULong());
+                number_node->setNumber(qVariantFromValue(value.toULong()));
                 break;
                 
             case (dtkComposerNodeNumber::LongLong):
-                number_node->setValue(value.toLongLong());
+                number_node->setNumber(QVariant(value.toLongLong()));
                 break;
                 
             case (dtkComposerNodeNumber::ULongLong):
-                number_node->setValue(value.toULongLong());
+                number_node->setNumber(QVariant(value.toULongLong()));
                 break;
                 
             case (dtkComposerNodeNumber::Float):
-                number_node->setValue(value.toFloat());
+                number_node->setNumber(qVariantFromValue(value.toFloat()));
                 break;
                 
             case (dtkComposerNodeNumber::Double):
-                number_node->setValue(value.toDouble());
+                number_node->setNumber(QVariant(value.toDouble()));
                 break;
                 
             default:
                 number_node->setGenre(dtkComposerNodeNumber::Int);
-                number_node->setValue(value.toInt());
+                number_node->setNumber(QVariant(value.toInt()));
                 break;
             }
+        }
+    }
+
+    // Number operator
+    
+    if(dtkComposerNodeNumberOperator *number_operator_node = dynamic_cast<dtkComposerNodeNumberOperator *>(n)) {
+        
+        QDomNodeList children = node.childNodes();
+        
+        for(int i = 0; i < children.count(); i++) {
+
+            if(children.at(i).toElement().tagName() != "operation")
+                continue;
+
+            dtkComposerNodeNumberOperator::Operation operation;
+
+            if(children.at(i).childNodes().at(0).toText().data() == "+")
+                operation = dtkComposerNodeNumberOperator::Addition;
+            else if(children.at(i).childNodes().at(0).toText().data() == "-")
+                operation = dtkComposerNodeNumberOperator::Substraction;
+            else if(children.at(i).childNodes().at(0).toText().data() == "x")
+                operation = dtkComposerNodeNumberOperator::Multiplication;
+            else if(children.at(i).childNodes().at(0).toText().data() == "/")
+                operation = dtkComposerNodeNumberOperator::Division;
+            else if(children.at(i).childNodes().at(0).toText().data() == "++")
+                operation = dtkComposerNodeNumberOperator::Increment;
+            else if(children.at(i).childNodes().at(0).toText().data() == "--")
+                operation = dtkComposerNodeNumberOperator::Decrement;
+            else if(children.at(i).childNodes().at(0).toText().data() == "%")
+                operation = dtkComposerNodeNumberOperator::Modulo;
+            else if(children.at(i).childNodes().at(0).toText().data() == "MIN")
+                operation = dtkComposerNodeNumberOperator::Min;
+            else if(children.at(i).childNodes().at(0).toText().data() == "MAX")
+                operation = dtkComposerNodeNumberOperator::Max;
+            else
+                operation = dtkComposerNodeNumberOperator::Addition;
+
+            number_operator_node->setOperation(operation);
         }
     }
 

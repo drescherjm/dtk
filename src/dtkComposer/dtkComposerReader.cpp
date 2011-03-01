@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Feb 28 15:26:04 2011 (+0100)
+ * Last-Updated: Tue Mar  1 19:09:28 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 485
+ *     Update #: 491
  */
 
 /* Commentary: 
@@ -324,6 +324,7 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
                 genre = dtkComposerNodeNumber::Double;
 
             number_node->setGenre(genre);
+            qDebug() << genre;
         }
         
         for(int i = 0; i < children.count(); i++) {
@@ -336,40 +337,40 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
             switch (number_node->genre()) {
 
             case (dtkComposerNodeNumber::Int):
-                number_node->setValue(value.toInt());
+                number_node->setNumber(QVariant(value.toInt()));
                 break;
         
             case (dtkComposerNodeNumber::UInt):
-                number_node->setValue(value.toUInt());
+                number_node->setNumber(QVariant(value.toUInt()));
                 break;
                 
             case (dtkComposerNodeNumber::Long):
-                number_node->setValue(value.toLong());
+                number_node->setNumber(qVariantFromValue(value.toLong()));
                 break;
                 
             case (dtkComposerNodeNumber::ULong):
-                number_node->setValue(value.toULong());
+                number_node->setNumber(qVariantFromValue(value.toULong()));
                 break;
                 
             case (dtkComposerNodeNumber::LongLong):
-                number_node->setValue(value.toLongLong());
+                number_node->setNumber(QVariant(value.toLongLong()));
                 break;
                 
             case (dtkComposerNodeNumber::ULongLong):
-                number_node->setValue(value.toULongLong());
+                number_node->setNumber(QVariant(value.toULongLong()));
                 break;
                 
             case (dtkComposerNodeNumber::Float):
-                number_node->setValue(value.toFloat());
+                number_node->setNumber(qVariantFromValue(value.toFloat()));
                 break;
                 
             case (dtkComposerNodeNumber::Double):
-                number_node->setValue(value.toDouble());
+                number_node->setNumber(QVariant(value.toDouble()));
                 break;
                 
             default:
                 number_node->setGenre(dtkComposerNodeNumber::Int);
-                number_node->setValue(value.toInt());
+                number_node->setNumber(QVariant(value.toInt()));
                 break;
             }
         }

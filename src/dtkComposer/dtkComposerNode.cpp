@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Feb 27 16:54:00 2011 (+0100)
+ * Last-Updated: Mon Feb 28 18:36:49 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1524
+ *     Update #: 1611
  */
 
 /* Commentary: 
@@ -47,8 +47,6 @@ public:
     dtkComposerNode *q;
 
     qreal penWidth;
-    qreal width;
-    qreal height;
     qreal header_height;
     qreal node_radius;
     qreal margin_left;
@@ -77,14 +75,18 @@ public:
 
     QList<QAction *> actions;
 
-    bool dirty;
-    
+    bool dirty;    
     bool ghost;
+    bool resizable;
 
           dtkComposerNode *  parent;
     QList<dtkComposerNode *> children;
 
     int count;
+
+    QPointF drag_point;
+
+    QRectF bounding_rect;
 };
 
 QRectF dtkComposerNodePrivate::ghostRect(void)
@@ -187,8 +189,7 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
     d->margin_top = 5;
     d->margin_bottom = 5;
 
-    d->width = 150;
-    d->height = d->header_height*2;
+    d->bounding_rect = QRectF(-75, -20, 150, 40);
 
     d->title = new QGraphicsTextItem(this);
 #if defined(Q_WS_MAC)
@@ -198,7 +199,7 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
 #endif
     d->title->setPlainText("Title");
     d->title->setDefaultTextColor(Qt::white);
-    d->title->setPos(-d->width/2 + d->margin_left/2, -d->header_height-2);
+    d->title->setPos(d->bounding_rect.topLeft());
 
     this->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
     this->setZValue(10);
@@ -214,8 +215,8 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
     d->clicked_property = NULL;
 
     d->dirty = true;
-
     d->ghost = false;
+    d->resizable = false;
 }
 
 dtkComposerNode::~dtkComposerNode(void)
@@ -705,16 +706,43 @@ void dtkComposerNode::setDirty(bool dirty)
     d->dirty = dirty;
 }
 
+bool dtkComposerNode::resizable(void)
+{
+    return d->resizable;
+}
+
+void dtkComposerNode::setResizable(bool resizable)
+{
+    d->resizable = resizable;
+}
+
 void dtkComposerNode::layout(void)
 {
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
 
-    if (d->ghost)
+    if (d->ghost) {
+
         d->title->setPos(d->ghostRect().topLeft());
-    else 
-        d->title->setPos(-d->width/2 + d->margin_left/2, -d->header_height-2);
+    
+    } else if(d->kind == dtkComposerNode::Control) {
+
+#if defined(Q_WS_MAC)
+        QFont font("Lucida Grande", 13);
+#else
+        QFont font("Lucida Grande", 11);
+#endif
+        QFontMetrics metrics(font);
+        
+        d->title->setPos(d->bounding_rect.topRight() + QPointF(-metrics.width(d->title->toPlainText()) - 2*d->margin_right, 0));
+
+    } else  {
+        d->title->setPos(d->bounding_rect.topLeft());
+    }
+
+    if(d->kind == Control)
+        return;
 
     int exposed_input_properties = 0;
 
@@ -723,7 +751,7 @@ void dtkComposerNode::layout(void)
             if(d->ghost)
                 property->setRect(QRectF(d->ghostRect().left()+d->node_radius, d->ghostRect().top() + 40 + (3*(exposed_input_properties++) + 1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
             else
-                property->setRect(QRectF(-d->width/2+d->node_radius, d->margin_top+(3*(exposed_input_properties++) + 1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
+                property->setRect(QRectF(d->bounding_rect.left()+d->node_radius, d->margin_top+(3*(exposed_input_properties++) + 1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
 
     int exposed_output_properties = 0;
 
@@ -732,9 +760,9 @@ void dtkComposerNode::layout(void)
             if(d->ghost)
                 property->setRect(QRectF(d->ghostRect().right() - 3*d->node_radius, d->ghostRect().top() + 40 + (3*(exposed_output_properties++) + 1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
             else
-                property->setRect(QRectF(d->width/2-3*d->node_radius, d->margin_top+(3*(exposed_output_properties++) + 1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
-
-    d->height = d->header_height + (3*qMax(exposed_input_properties, exposed_output_properties)) * d->node_radius + d->margin_bottom;
+                property->setRect(QRectF(d->bounding_rect.right()-3*d->node_radius, d->margin_top+(3*(exposed_output_properties++) + 1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
+    
+    d->bounding_rect.setHeight(d->header_height + (3*qMax(exposed_input_properties, exposed_output_properties)) * d->node_radius + d->margin_bottom);
 }
 
 void dtkComposerNode::setParentNode(dtkComposerNode *node)
@@ -970,7 +998,9 @@ QRectF dtkComposerNode::boundingRect(void) const
     if(d->ghost)
         return d->ghostRect();
     else
-        return QRectF(-d->width/2 - d->penWidth / 2, -d->header_height - d->penWidth / 2, d->width + d->penWidth, d->height + d->penWidth);
+        return d->bounding_rect;
+
+    // return QRectF(-d->width/2 - d->penWidth / 2, -d->header_height - d->penWidth / 2, d->width + d->penWidth, d->height + d->penWidth);
 }
 
 void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -982,13 +1012,15 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    if (d->kind == Composite)
+    if ((d->kind == Composite) || (d->kind == Control))
         this->layout();
 
     QRectF rect;
 
     if(!d->ghost) {
-        rect = QRectF(-d->width/2, -d->header_height, d->width, d->height);
+        rect = d->bounding_rect;
+
+        // rect = QRectF(-d->width/2, -d->header_height, d->width, d->height);
     } else {
         rect = d->ghostRect();
     }
@@ -1032,15 +1064,17 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
         break;
     }
 
-    painter->setBrush(gradiant);
-
     QPen pen;
 
     if(this->isSelected()) {
         pen.setColor(Qt::magenta);
         pen.setWidth(2);
     } else {
-        if(this->isGhost()) {
+        if(this->kind() == dtkComposerNode::Composite && this->isGhost()) {
+            pen.setColor(QColor("#c7c7c7"));
+            pen.setStyle(Qt::DashLine);
+            pen.setWidth(1);
+        } else if(this->kind() == dtkComposerNode::Control) {
             pen.setColor(QColor("#c7c7c7"));
             pen.setStyle(Qt::DashLine);
             pen.setWidth(1);
@@ -1051,7 +1085,29 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     }
 
     painter->setPen(pen);
+
+    if(this->kind() == dtkComposerNode::Control) {
+        painter->setBrush(Qt::NoBrush);
+    } else {
+        painter->setBrush(gradiant);
+    }
+
     painter->drawRoundedRect(rect, d->node_radius, d->node_radius);
+
+    // Drawing size grip
+
+    if(d->resizable) {
+
+        QPainterPath path;
+        path.moveTo(this->boundingRect().bottomRight() + QPointF(0.5, 0.5));
+        path.lineTo(this->boundingRect().bottomRight() + QPointF(0.5, 0.5) + QPointF(-12, 0));
+        path.lineTo(this->boundingRect().bottomRight() + QPointF(0.5, 0.5) + QPointF(0, -12));
+        path.lineTo(this->boundingRect().bottomRight() + QPointF(0.5, 0.5));
+        
+        painter->setPen(Qt::NoPen);
+        painter->setBrush(QColor("#c7c7c7"));
+        painter->drawPath(path);
+    }
 }
 
 void dtkComposerNode::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -1059,6 +1115,21 @@ void dtkComposerNode::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
+
+    if (event->buttons() & Qt::LeftButton && !d->drag_point.isNull()) {
+        
+        QPointF delta = QPointF(event->scenePos() - d->drag_point);
+
+        d->bounding_rect.setBottomRight(d->bounding_rect.bottomRight() + delta);
+
+        d->drag_point = event->scenePos();
+
+        event->accept();
+
+        QGraphicsItem::update();
+
+        return;
+    }
 
     if(!d->clicked_property)
         QGraphicsItem::mouseMoveEvent(event);
@@ -1076,10 +1147,14 @@ void dtkComposerNode::mousePressEvent(QGraphicsSceneMouseEvent *event)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
 
+    // -- Handling of properties
+
     d->clicked_property = this->propertyAt(event->pos());
 
     if(d->clicked_property)
         return;
+
+    // -- Handling of menus
 
     if(event->button() == Qt::RightButton) {
         QMenu menu;
@@ -1087,6 +1162,26 @@ void dtkComposerNode::mousePressEvent(QGraphicsSceneMouseEvent *event)
         foreach(QAction *action, d->actions)
             menu.addAction(action);
         menu.exec(QCursor::pos());
+
+        QGraphicsItem::mousePressEvent(event);
+
+        return;
+    }
+
+    // -- Handling of resizing
+
+    QPointF br = this->boundingRect().bottomRight();
+
+    QRectF corner(br.x() - 16, br.y() - 16, 16, 16);
+
+    if (d->kind == Control && event->button() & Qt::LeftButton && corner.contains(event->pos())) {
+        d->drag_point = event->scenePos();
+
+        event->accept();
+
+        QGraphicsItem::mousePressEvent(event);
+        
+        return;
     }
 
     QGraphicsItem::mousePressEvent(event);
@@ -1097,6 +1192,15 @@ void dtkComposerNode::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
+
+    if (event->button() & Qt::LeftButton && !d->drag_point.isNull()) {
+        d->drag_point = QPointF(0, 0);
+        event->accept();
+        QGraphicsItem::mouseReleaseEvent(event);
+        return;
+    }
+
+    QGraphicsItem::mouseReleaseEvent(event);
 
     if(!d->clicked_property)
         QGraphicsItem::mouseReleaseEvent(event);

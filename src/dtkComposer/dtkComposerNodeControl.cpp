@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  1 18:32:51 2011 (+0100)
+ * Last-Updated: Tue Mar  1 19:20:32 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 78
+ *     Update #: 100
  */
 
 /* Commentary: 
@@ -78,6 +78,7 @@ dtkComposerNodeControl::dtkComposerNodeControl(dtkComposerNode *parent) : dtkCom
 
     this->addInputProperty(d->property_input_condition);
 
+    this->setAcceptHoverEvents(true);
     this->setKind(dtkComposerNode::Control);
     this->setResizable(true);
     this->setZValue(5);
@@ -105,9 +106,9 @@ void dtkComposerNodeControl::layout(void)
 
     for(int i = 0; i < d->blocs.count(); i++)
         d->blocs.at(i)->setRect(QRectF(this->boundingRect().x(),
-                                       this->boundingRect().y() + 23 + i * (this->boundingRect().height() - 46 / d->blocs.count()),
+                                       this->boundingRect().y() + 23 + i * ((this->boundingRect().height() - 46) / d->blocs.count()),
                                        this->boundingRect().width(),
-                                       this->boundingRect().height() - 46 / d->blocs.count()));
+                                       (this->boundingRect().height() - 46) / d->blocs.count()));
 }
 
 void dtkComposerNodeControl::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Feb 25 16:21:13 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 28 15:03:30 2011 (+0100)
+ * Last-Updated: Tue Mar  1 09:37:32 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 105
+ *     Update #: 112
  */
 
 /* Commentary: 
@@ -51,14 +51,19 @@ public:
 
 dtkComposerNodeNumberLabel::dtkComposerNodeNumberLabel(dtkComposerNodeNumber *parent) : QGraphicsItem(parent)
 {
-    QPainterPath b; b.addRoundedRect(-15, 0, 10, 15, 5, 5);
-    QPainterPath c; c.addRoundedRect( -5, 0, 75, 15, 5, 5);
-    QPainterPath d; d.addRoundedRect( 70, 0, 10, 15, 5, 5);
-    QPainterPath e; e.addRoundedRect(-10, 0, 85,  7, 0, 0);
+    int margin = 10;
+    int length = 75;
+    int height = 15;
+    int radius =  5;
+    int origin_x = parent->boundingRect().width() / 2 - length - margin;
+    int origin_y = -parent->boundingRect().height() / 2;
+
+    QPainterPath b; b.addRoundedRect(origin_x,              origin_y, margin,          height,     radius, radius);
+    QPainterPath c; c.addRoundedRect(origin_x + margin,     origin_y, length - margin, height,     radius, radius);
+    QPainterPath d; d.addRoundedRect(origin_x + length,     origin_y, margin,          height,     radius, radius);
+    QPainterPath e; e.addRoundedRect(origin_x + margin / 2, origin_y, length,          height / 2,      0,      0);
 
     path = c.united(e.subtracted(b.united(c.united(d))));
-    
-    path.translate(path.boundingRect().width()/2 * -1, 0);
 
     parent_node = parent;
 
@@ -102,7 +107,7 @@ void dtkComposerNodeNumberLabel::paint(QPainter *painter, const QStyleOptionGrap
     
     painter->setFont(font);
     painter->setPen(Qt::white);
-    painter->drawText(option->rect.left() + option->rect.width()/2 - metrics.width(text)/2, 11, text);
+    painter->drawText(this->boundingRect(), Qt::AlignCenter, text);
 }
 
 void dtkComposerNodeNumberLabel::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -155,6 +160,108 @@ void dtkComposerNodeNumberLabel::mousePressEvent(QGraphicsSceneMouseEvent *event
 }
 
 // /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberButton
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeNumberButton : public QGraphicsItem
+{
+public:
+     dtkComposerNodeNumberButton(dtkComposerNodeNumber *parent);
+    ~dtkComposerNodeNumberButton(void);
+
+public:
+    QRectF boundingRect(void) const;
+
+public:
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
+public:
+    dtkComposerNodeNumber *parent_node;
+    QPainterPath path;
+    QString text;
+    bool expanded;
+};
+
+dtkComposerNodeNumberButton::dtkComposerNodeNumberButton(dtkComposerNodeNumber *parent) : QGraphicsItem(parent)
+{
+    int margin = 10;
+    int length = 30;
+    int height = 10;
+    int radius =  5;
+    int origin_x = -(length + margin) / 2;
+    int origin_y = parent->boundingRect().height() / 2;
+
+    QPainterPath b; b.addRoundedRect(origin_x,              origin_y, margin,          -height,     radius, radius);
+    QPainterPath c; c.addRoundedRect(origin_x + margin,     origin_y, length - margin, -height,     radius, radius);
+    QPainterPath d; d.addRoundedRect(origin_x + length,     origin_y, margin,          -height,     radius, radius);
+    QPainterPath e; e.addRoundedRect(origin_x + margin / 2, origin_y, length,          -height / 2,      0,      0);
+
+    path = c.united(e.subtracted(b.united(c.united(d))));
+
+    parent_node = parent;
+    
+    text = "+";
+
+    expanded = false;
+}
+
+dtkComposerNodeNumberButton::~dtkComposerNodeNumberButton(void)
+{
+
+}
+
+QRectF dtkComposerNodeNumberButton::boundingRect(void) const
+{
+    return path.boundingRect();
+}
+
+void dtkComposerNodeNumberButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
+    QLinearGradient gradient(option->rect.left(), option->rect.top(), option->rect.left(), option->rect.bottom());
+    gradient.setColorAt(0.0, QColor("#bbbbbb"));
+    gradient.setColorAt(0.3, QColor("#333333"));
+    gradient.setColorAt(1.0, QColor("#222222"));
+
+    painter->setPen(QPen(Qt::black, 1));
+    painter->setBrush(gradient);
+    painter->drawPath(path);
+    
+#if defined(Q_WS_MAC)
+    QFont font("Lucida Grande", 8);
+#else
+    QFont font("Lucida Grande", 6);
+#endif
+    font.setBold(true);
+
+    QFontMetrics metrics(font);
+    
+    painter->setFont(font);
+    painter->setPen(Qt::white);
+    painter->drawText(this->boundingRect(), Qt::AlignCenter, text);
+}
+
+void dtkComposerNodeNumberButton::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    Q_UNUSED(event);
+
+    if(!this->expanded) {
+        parent_node->expand();
+        text = "-";
+    } else {
+        parent_node->collapse();
+        text = "+";
+    }
+
+    this->expanded = !this->expanded;
+}
+
+// /////////////////////////////////////////////////////////////////
 // dtkComposerNodeNumberEditor
 // /////////////////////////////////////////////////////////////////
 
@@ -191,7 +298,7 @@ dtkComposerNodeNumberEditor::dtkComposerNodeNumberEditor(dtkComposerNodeNumber *
 
 void dtkComposerNodeNumberEditor::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    QPainterPath s_rect; s_rect.addRect(QRectF(option->rect.topLeft(), QSizeF(option->rect.width(), 10)));
+    QPainterPath s_rect; s_rect.addRect(QRectF(option->rect.topLeft(), QSizeF(option->rect.width(), option->rect.height() / 2)));
     QPainterPath r_rect; r_rect.addRoundedRect(option->rect, 5, 5);
     QPainterPath path = s_rect.united(r_rect);
 
@@ -265,6 +372,7 @@ public:
 
 public:
     dtkComposerNodeNumberLabel *label;
+    dtkComposerNodeNumberButton *button;
     dtkComposerNodeNumberEditor *editor;
 
 public:
@@ -286,7 +394,10 @@ dtkComposerNodeNumber::dtkComposerNodeNumber(dtkComposerNode *parent) : dtkCompo
     d->property_output_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, this);
 
     d->label = new dtkComposerNodeNumberLabel(this);
-    d->label->setPos(40, -20);
+    d->label->setPos(0, 0);
+
+    d->button = new dtkComposerNodeNumberButton(this);
+    d->button->setPos(0, 0);
     
     d->genre = dtkComposerNodeNumber::Int;
     d->value = QVariant(0);
@@ -301,16 +412,16 @@ dtkComposerNodeNumber::dtkComposerNodeNumber(dtkComposerNode *parent) : dtkCompo
     // --
     
     d->editor = new dtkComposerNodeNumberEditor(this);
-    d->editor->setPos(-50, -10);
-    d->editor->setTextWidth(100);
+    d->editor->setPos(-d->editor->boundingRect().width() / 2, 0);
+    d->editor->setTextWidth(0.8 * this->boundingRect().width());
     d->editor->hide();
 
     // --
 
     d->animation = new QPropertyAnimation(d->editor, "pos");
     d->animation->setDuration(500);
-    d->animation->setStartValue(QPointF(-50, 0));
-    d->animation->setEndValue(QPointF(-50, d->editor->boundingRect().height()));
+    d->animation->setStartValue(QPointF(-d->editor->boundingRect().width()/2, 0));
+    d->animation->setEndValue(QPointF(-d->editor->boundingRect().width()/2, 0.85 * d->editor->boundingRect().height()));
     d->animation->setEasingCurve(QEasingCurve::OutBounce);
 }
 

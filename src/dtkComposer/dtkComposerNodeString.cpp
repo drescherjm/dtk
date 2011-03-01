@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 15:12:01 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 28 17:38:12 2011 (+0100)
+ * Last-Updated: Tue Mar  1 09:27:54 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 237
+ *     Update #: 255
  */
 
 /* Commentary: 
@@ -107,7 +107,7 @@ void dtkComposerNodeStringButton::paint(QPainter *painter, const QStyleOptionGra
     
     painter->setFont(font);
     painter->setPen(Qt::white);
-    painter->drawText(option->rect.left() + option->rect.width()/2 - metrics.width(text)/2, option->rect.bottom()-1, text);
+    painter->drawText(this->boundingRect(), Qt::AlignCenter, text);
 }
 
 void dtkComposerNodeStringButton::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -230,15 +230,15 @@ dtkComposerNodeString::dtkComposerNodeString(dtkComposerNode *parent) : dtkCompo
     
     d->editor = new dtkComposerNodeStringEditor(this);
     d->editor->setPos(-d->editor->boundingRect().width() / 2, 0);
-    d->editor->setTextWidth(100);
+    d->editor->setTextWidth(0.8 * this->boundingRect().width());
     d->editor->hide();
 
     // --
 
     d->animation = new QPropertyAnimation(d->editor, "pos");
     d->animation->setDuration(500);
-    d->animation->setStartValue(QPointF(-50, 0));
-    d->animation->setEndValue(QPointF(-50, d->editor->boundingRect().height()-8));
+    d->animation->setStartValue(QPointF(-d->editor->boundingRect().width()/2, 0));
+    d->animation->setEndValue(QPointF(-d->editor->boundingRect().width()/2, 0.85 * d->editor->boundingRect().height()));
     d->animation->setEasingCurve(QEasingCurve::OutBounce);
 }
 

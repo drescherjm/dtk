@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Feb 25 16:21:13 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  1 09:37:32 2011 (+0100)
+ * Last-Updated: Tue Mar  1 09:55:11 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 112
+ *     Update #: 114
  */
 
 /* Commentary: 
@@ -52,7 +52,7 @@ public:
 dtkComposerNodeNumberLabel::dtkComposerNodeNumberLabel(dtkComposerNodeNumber *parent) : QGraphicsItem(parent)
 {
     int margin = 10;
-    int length = 75;
+    int length = 77;
     int height = 15;
     int radius =  5;
     int origin_x = parent->boundingRect().width() / 2 - length - margin;

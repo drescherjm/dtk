@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 18:00:48 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 27 18:35:55 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 17
+ * Last-Updated: Tue Mar  1 10:10:04 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 18
  */
 
 /* Commentary: 
@@ -50,14 +50,19 @@ public:
 
 dtkComposerNodeStringComparatorLabel::dtkComposerNodeStringComparatorLabel(dtkComposerNodeStringComparator *parent) : QGraphicsItem(parent)
 {
-    QPainterPath b; b.addRoundedRect( 0, 0, 10, 15, 5, 5);
-    QPainterPath c; c.addRoundedRect(10, 0, 40, 15, 5, 5);
-    QPainterPath d; d.addRoundedRect(50, 0, 10, 15, 5, 5);
-    QPainterPath e; e.addRoundedRect( 5, 0, 50,  7, 0, 0);
+    int margin = 10;
+    int length = 50;
+    int height = 15;
+    int radius =  5;
+    int origin_x = parent->boundingRect().width() / 2 - length - margin;
+    int origin_y = -parent->boundingRect().height() / 2;
+
+    QPainterPath b; b.addRoundedRect(origin_x,              origin_y, margin,          height,     radius, radius);
+    QPainterPath c; c.addRoundedRect(origin_x + margin,     origin_y, length - margin, height,     radius, radius);
+    QPainterPath d; d.addRoundedRect(origin_x + length,     origin_y, margin,          height,     radius, radius);
+    QPainterPath e; e.addRoundedRect(origin_x + margin / 2, origin_y, length,          height / 2,      0,      0);
 
     path = c.united(e.subtracted(b.united(c.united(d))));
-    
-    path.translate(path.boundingRect().width()/2 * -1, 0);
 
     parent_node = parent;
 
@@ -99,7 +104,7 @@ void dtkComposerNodeStringComparatorLabel::paint(QPainter *painter, const QStyle
 
     painter->setFont(font);
     painter->setPen(Qt::white);
-    painter->drawText(option->rect.left() + option->rect.width()/2 - metrics.width(text)/2, 11, text);
+    painter->drawText(this->boundingRect(), Qt::AlignCenter, text);
 }
 
 void dtkComposerNodeStringComparatorLabel::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -175,7 +180,7 @@ dtkComposerNodeStringComparator::dtkComposerNodeStringComparator(dtkComposerNode
     d->property_output_value = new dtkComposerNodeProperty("result", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, this);
 
     d->label = new dtkComposerNodeStringComparatorLabel(this);
-    d->label->setPos(40, -20);
+    d->label->setPos(0, 0);
 
     d->operation = dtkComposerNodeStringComparator::Equal;
 

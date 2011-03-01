@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Feb 25 16:21:13 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  1 09:55:11 2011 (+0100)
+ * Last-Updated: Tue Mar  1 15:31:19 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 114
+ *     Update #: 141
  */
 
 /* Commentary: 
@@ -400,7 +400,7 @@ dtkComposerNodeNumber::dtkComposerNodeNumber(dtkComposerNode *parent) : dtkCompo
     d->button->setPos(0, 0);
     
     d->genre = dtkComposerNodeNumber::Int;
-    d->value = QVariant(0);
+    d->value = QVariant((int)0);
 
     this->setTitle("Number");
     this->setKind(dtkComposerNode::Atomic);
@@ -455,60 +455,51 @@ void dtkComposerNodeNumber::setGenre(dtkComposerNodeNumber::Genre genre)
 
 bool dtkComposerNodeNumber::setNumber(QVariant number)
 {
-    switch (number.type()) {
+    switch (number.userType()) {
 
-    case (QVariant::Int):
+    case (dtkComposerNodeNumber::Int):
         this->setGenre(dtkComposerNodeNumber::Int);
         this->setValue(number.toInt());
         break;
 
-    case (QVariant::UInt):
+    case (dtkComposerNodeNumber::UInt):
         this->setGenre(dtkComposerNodeNumber::UInt);
         this->setValue(number.toUInt());
         break;
 
-    case (QVariant::LongLong):
+    case (dtkComposerNodeNumber::Long):
+        this->setGenre(dtkComposerNodeNumber::Long);
+        this->setValue(number.value<long>());
+        break;
+
+    case (dtkComposerNodeNumber::ULong):
+        this->setGenre(dtkComposerNodeNumber::ULong);
+        this->setValue(number.value<ulong>());
+        break;
+
+    case (dtkComposerNodeNumber::LongLong):
         this->setGenre(dtkComposerNodeNumber::LongLong);
         this->setValue(number.toLongLong());
         break;
 
-    case (QVariant::ULongLong):
+    case (dtkComposerNodeNumber::ULongLong):
         this->setGenre(dtkComposerNodeNumber::ULongLong);
         this->setValue(number.toULongLong());
         break;
 
-    case (QVariant::Double):
+    case (dtkComposerNodeNumber::Float):
+        this->setGenre(dtkComposerNodeNumber::Float);
+        this->setValue(number.value<float>());
+        break;
+
+    case (dtkComposerNodeNumber::Double):
         this->setGenre(dtkComposerNodeNumber::Double);
         this->setValue(number.toDouble());
         break;
-
-    case(QVariant::UserType):
-
-        switch (number.userType()) {
-
-        case (QMetaType::Long):
-            this->setGenre(dtkComposerNodeNumber::Long);
-            this->setValue(number.value<long>());
-            break;
-
-        case (QMetaType::ULong):
-            this->setGenre(dtkComposerNodeNumber::ULong);
-            this->setValue(number.value<ulong>());
-            break;
-
-        case (QMetaType::Float):
-            this->setGenre(dtkComposerNodeNumber::Float);
-            this->setValue(number.value<float>());
-            break;
-            
-        default:
-            qDebug() << DTK_PRETTY_FUNCTION << "Invalid Variant user type" << number.userType();
-            return false;
-            break;
-        }
-        break;
           
     default:
+        this->setGenre(dtkComposerNodeNumber::Invalid);
+        d->value.clear();
         qDebug() << DTK_PRETTY_FUNCTION << "Invalid Variant type" << number.type();
         return false;
         break;
@@ -618,7 +609,7 @@ void dtkComposerNodeNumber::onInputEdgeConnected(dtkComposerEdge *edge, dtkCompo
         QVariant number = edge->source()->node()->value(edge->source());
 
         if (!this->setNumber(number)) {
-            qDebug() << DTK_PRETTY_FUNCTION << "Input number has an unrecognizable genre.";
+            qDebug() << DTK_PRETTY_FUNCTION << "Input number has an invalid genre.";
             return;
         }
     }
@@ -634,4 +625,70 @@ void dtkComposerNodeNumber::onOutputEdgeConnected(dtkComposerEdge *edge, dtkComp
 void dtkComposerNodeNumber::run(void)
 {
 
+}
+
+dtkComposerNodeNumber::Genre dtkComposerNodeNumber::genre(QVariant& a, QVariant& b)
+{
+    if (a.userType() == dtkComposerNodeNumber::Invalid || b.userType() == dtkComposerNodeNumber::Invalid) {
+
+        return dtkComposerNodeNumber::Invalid;
+
+    } else if (a.userType() == dtkComposerNodeNumber::Double || b.userType() == dtkComposerNodeNumber::Double) {
+
+        return dtkComposerNodeNumber::Double;
+
+    } else if (a.userType() == dtkComposerNodeNumber::Float || b.userType() == dtkComposerNodeNumber::Float) {
+
+        return dtkComposerNodeNumber::Float;
+
+    } else if (a.userType() == dtkComposerNodeNumber::ULongLong) {
+
+        if (b.userType() == dtkComposerNodeNumber::ULongLong || b.userType() == dtkComposerNodeNumber::ULong || b.userType() == dtkComposerNodeNumber::UInt)
+            return dtkComposerNodeNumber::ULongLong;
+        else
+            return dtkComposerNodeNumber::Invalid;
+
+    } else if (b.userType() == dtkComposerNodeNumber::ULongLong) {
+
+        if (a.userType() == dtkComposerNodeNumber::ULong || a.userType() == dtkComposerNodeNumber::UInt)
+            return dtkComposerNodeNumber::ULongLong;
+        else
+            return dtkComposerNodeNumber::Invalid;
+
+    } else if (a.userType() == dtkComposerNodeNumber::ULong) {
+
+        if (b.userType() == dtkComposerNodeNumber::ULong || b.userType() == dtkComposerNodeNumber::UInt)
+            return dtkComposerNodeNumber::ULong;
+        else
+            return dtkComposerNodeNumber::Invalid;
+
+    } else if (b.userType() == dtkComposerNodeNumber::ULong) {
+
+        if (a.userType() == dtkComposerNodeNumber::UInt)
+            return dtkComposerNodeNumber::ULong;
+        else
+            return dtkComposerNodeNumber::Invalid;
+
+    } else if (a.userType() == dtkComposerNodeNumber::UInt) {
+
+        if (b.userType() == dtkComposerNodeNumber::UInt)
+            return dtkComposerNodeNumber::UInt;
+        else
+            return dtkComposerNodeNumber::Invalid;
+
+    } else if (a.userType() == dtkComposerNodeNumber::LongLong || b.userType() == dtkComposerNodeNumber::LongLong) {
+
+        return dtkComposerNodeNumber::LongLong;
+
+    } else if (a.userType() == dtkComposerNodeNumber::Long || b.userType() == dtkComposerNodeNumber::Long) {
+
+        return dtkComposerNodeNumber::Long;
+
+    } else if (a.userType() == dtkComposerNodeNumber::Int || b.userType() == dtkComposerNodeNumber::Int) {
+
+        return dtkComposerNodeNumber::Int;
+
+    }
+
+    return dtkComposerNodeNumber::Invalid;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Feb 25 16:21:13 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  1 15:31:19 2011 (+0100)
+ * Last-Updated: Tue Mar  1 18:32:08 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 141
+ *     Update #: 147
  */
 
 /* Commentary: 
@@ -460,41 +460,49 @@ bool dtkComposerNodeNumber::setNumber(QVariant number)
     case (dtkComposerNodeNumber::Int):
         this->setGenre(dtkComposerNodeNumber::Int);
         this->setValue(number.toInt());
+        d->editor->setPlainText(QString("%1").arg(number.toInt()));
         break;
 
     case (dtkComposerNodeNumber::UInt):
         this->setGenre(dtkComposerNodeNumber::UInt);
         this->setValue(number.toUInt());
+        d->editor->setPlainText(QString("%1").arg(number.toUInt()));
         break;
 
     case (dtkComposerNodeNumber::Long):
         this->setGenre(dtkComposerNodeNumber::Long);
         this->setValue(number.value<long>());
+        d->editor->setPlainText(QString("%1").arg(number.value<long>()));
         break;
 
     case (dtkComposerNodeNumber::ULong):
         this->setGenre(dtkComposerNodeNumber::ULong);
         this->setValue(number.value<ulong>());
+        d->editor->setPlainText(QString("%1").arg(number.value<ulong>()));
         break;
 
     case (dtkComposerNodeNumber::LongLong):
         this->setGenre(dtkComposerNodeNumber::LongLong);
         this->setValue(number.toLongLong());
+        d->editor->setPlainText(QString("%1").arg(number.toLongLong()));
         break;
 
     case (dtkComposerNodeNumber::ULongLong):
         this->setGenre(dtkComposerNodeNumber::ULongLong);
         this->setValue(number.toULongLong());
+        d->editor->setPlainText(QString("%1").arg(number.toULongLong()));
         break;
 
     case (dtkComposerNodeNumber::Float):
         this->setGenre(dtkComposerNodeNumber::Float);
         this->setValue(number.value<float>());
+        d->editor->setPlainText(QString("%1").arg(number.value<float>()));
         break;
 
     case (dtkComposerNodeNumber::Double):
         this->setGenre(dtkComposerNodeNumber::Double);
         this->setValue(number.toDouble());
+        d->editor->setPlainText(QString("%1").arg(number.toDouble()));
         break;
           
     default:
@@ -504,6 +512,8 @@ bool dtkComposerNodeNumber::setNumber(QVariant number)
         return false;
         break;
     }
+
+    d->editor->update();
 
     return true;
 }

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Sun Feb 27 19:19:34 2011 (+0100)
+## Last-Updated: Mon Feb 28 21:02:17 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 112
+##     Update #: 121
 ######################################################################
 ## 
 ### Commentary: 
@@ -30,9 +30,13 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNode.h
   dtkComposerNodeBoolean.h
   dtkComposerNodeBooleanOperator.h
+  dtkComposerNodeCase.h
+  dtkComposerNodeConditional.h
+  dtkComposerNodeControl.h
   dtkComposerNodeData.h
   dtkComposerNodeFactory.h
   dtkComposerNodeFile.h
+  dtkComposerNodeLog.h
   dtkComposerNodeProcess.h
   dtkComposerNodeProperty.h
   dtkComposerNodeString.h
@@ -51,9 +55,13 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerNode.h
   dtkComposerNodeBoolean.h
   dtkComposerNodeBooleanOperator.h
+  dtkComposerNodeCase.h
+  dtkComposerNodeConditional.h
+  dtkComposerNodeControl.h
   dtkComposerNodeData.h
   dtkComposerNodeFactory.h
   dtkComposerNodeFile.h
+  dtkComposerNodeLog.h
   dtkComposerNodeProcess.h
   dtkComposerNodeProperty.h
   dtkComposerNodeString.h
@@ -72,9 +80,13 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNode.cpp
   dtkComposerNodeBoolean.cpp
   dtkComposerNodeBooleanOperator.cpp
+  dtkComposerNodeCase.cpp
+  dtkComposerNodeConditional.cpp
+  dtkComposerNodeControl.cpp
   dtkComposerNodeData.cpp
   dtkComposerNodeFactory.cpp
   dtkComposerNodeFile.cpp
+  dtkComposerNodeLog.cpp
   dtkComposerNodeProcess.cpp
   dtkComposerNodeProperty.cpp
   dtkComposerNodeString.cpp

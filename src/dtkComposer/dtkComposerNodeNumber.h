@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Feb 25 16:19:59 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 28 14:37:16 2011 (+0100)
+ * Last-Updated: Tue Mar  1 17:20:36 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 33
+ *     Update #: 60
  */
 
 /* Commentary: 
@@ -30,15 +30,18 @@ class dtkComposerNodeNumber : public dtkComposerNode
 
 public:
     enum Genre {
-        Int,
-        UInt,
-        Long,
-        ULong,
-        LongLong,
-        ULongLong,
-        Float,
-        Double
+          Invalid = QVariant::Invalid,
+              Int = QVariant::Int,
+             UInt = QVariant::UInt,
+             Long = QMetaType::Long,
+            ULong = QMetaType::ULong,
+         LongLong = QVariant::LongLong,
+        ULongLong = QVariant::ULongLong,
+            Float = QMetaType::Float,
+           Double = QVariant::Double
     };
+
+    typedef long toto_long;
 
 public:
      dtkComposerNodeNumber(dtkComposerNode *parent = 0);
@@ -74,6 +77,9 @@ protected:
     void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
     void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
     void run(void);
+
+public:
+    static Genre genre(QVariant& a, QVariant& b);
 
 private:
     dtkComposerNodeNumberPrivate *d;

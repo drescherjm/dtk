@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Feb 28 15:53:00 2011 (+0100)
+ * Last-Updated: Tue Mar  1 19:16:54 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 317
+ *     Update #: 323
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include "dtkComposerNodeBooleanOperator.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeNumber.h"
+#include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeString.h"
@@ -252,6 +253,52 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
         QDomElement e_value = document.createElement("value");
         e_value.appendChild(text);        
         tag.appendChild(e_value);
+    }
+
+    // -- Number operator node
+    
+    if(dtkComposerNodeNumberOperator *number_operator_node = dynamic_cast<dtkComposerNodeNumberOperator *>(node)) {
+        
+        dtkComposerNodeNumberOperator::Operation operation = number_operator_node->operation();
+        
+        QDomText text;
+
+        switch(operation) {
+        case dtkComposerNodeNumberOperator::Addition:
+            text = document.createTextNode("+");
+            break;
+        case dtkComposerNodeNumberOperator::Substraction:
+            text = document.createTextNode("-");
+            break;
+        case dtkComposerNodeNumberOperator::Multiplication:
+            text = document.createTextNode("x");
+            break;
+        case dtkComposerNodeNumberOperator::Division:
+            text = document.createTextNode("/");
+            break;
+        case dtkComposerNodeNumberOperator::Increment:
+            text = document.createTextNode("++");
+            break;
+        case dtkComposerNodeNumberOperator::Decrement:
+            text = document.createTextNode("--");
+            break;
+        case dtkComposerNodeNumberOperator::Modulo:
+            text = document.createTextNode("%");
+            break;
+        case dtkComposerNodeNumberOperator::Min:
+            text = document.createTextNode("MIN");
+            break;
+        case dtkComposerNodeNumberOperator::Max:
+            text = document.createTextNode("MAX");
+            break;
+        default:
+            break;
+        }
+        
+        QDomElement e_operation = document.createElement("operation");
+        e_operation.appendChild(text);
+        
+        tag.appendChild(e_operation);
     }
 
     // -- File node

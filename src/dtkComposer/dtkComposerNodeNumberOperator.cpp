@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Mar  1 10:18:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  1 18:10:43 2011 (+0100)
+ * Last-Updated: Tue Mar  1 18:22:45 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 126
+ *     Update #: 129
  */
 
 /* Commentary: 
@@ -119,10 +119,10 @@ void dtkComposerNodeNumberOperatorLabel::mousePressEvent(QGraphicsSceneMouseEven
 
     } else if (text == "-") {
 
-        text = "*";
+        text = "x";
         parent_node->setOperation(dtkComposerNodeNumberOperator::Multiplication);
 
-    } else if (text == "*") {
+    } else if (text == "x") {
 
         text = "/";
         parent_node->setOperation(dtkComposerNodeNumberOperator::Division);
@@ -239,7 +239,7 @@ void dtkComposerNodeNumberOperator::setOperation(dtkComposerNodeNumberOperator::
         d->label->text = "-";
         break;
     case dtkComposerNodeNumberOperator::Multiplication:
-        d->label->text = "*";
+        d->label->text = "x";
         break;
     case dtkComposerNodeNumberOperator::Division:
         d->label->text = "/";
@@ -553,6 +553,7 @@ void dtkComposerNodeNumberOperator::run(void)
         default:
             break;
         }
-
     }
+
+    d->value = r;
 }

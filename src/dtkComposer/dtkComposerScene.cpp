@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Feb 27 01:21:08 2011 (+0100)
+ * Last-Updated: Mon Feb 28 18:50:04 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1385
+ *     Update #: 1389
  */
 
 /* Commentary: 
@@ -869,6 +869,13 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
         
     } else {
         
+        // -- Handling control nodes
+
+        if (property->node()->kind() == dtkComposerNode::Control)
+            property->node()->onInputEdgeConnected(d->current_edge, property);
+
+        // --
+
         dtkComposerEdge *edge = d->current_edge;
         
         d->edges << edge;

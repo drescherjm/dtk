@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Feb 28 11:09:26 2011 (+0100)
+ * Last-Updated: Tue Mar  1 19:13:50 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 477
+ *     Update #: 498
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include "dtkComposerNodeBooleanOperator.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeNumber.h"
+#include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerNodeString.h"
@@ -301,10 +302,116 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
         
         for(int i = 0; i < children.count(); i++) {
 
-            if(children.at(i).toElement().tagName() != "value")
+            if(children.at(i).toElement().tagName() != "genre") 
                 continue;
 
-            //number_node->setValue((children.at(i).childNodes().at(0).toText().data()));
+            dtkComposerNodeNumber::Genre genre;
+
+            if(children.at(i).childNodes().at(0).toText().data() == "int")
+                genre = dtkComposerNodeNumber::Int;
+            else if(children.at(i).childNodes().at(0).toText().data() == "uint")
+                genre = dtkComposerNodeNumber::UInt;
+            else if(children.at(i).childNodes().at(0).toText().data() == "long")
+                genre = dtkComposerNodeNumber::Long;
+            else if(children.at(i).childNodes().at(0).toText().data() == "ulong")
+                genre = dtkComposerNodeNumber::ULong;
+            else if(children.at(i).childNodes().at(0).toText().data() == "longlong")
+                genre = dtkComposerNodeNumber::LongLong;
+            else if(children.at(i).childNodes().at(0).toText().data() == "ulonglong")
+                genre = dtkComposerNodeNumber::ULongLong;
+            else if(children.at(i).childNodes().at(0).toText().data() == "float")
+                genre = dtkComposerNodeNumber::Float;
+            else if(children.at(i).childNodes().at(0).toText().data() == "double")
+                genre = dtkComposerNodeNumber::Double;
+
+            number_node->setGenre(genre);
+            qDebug() << genre;
+        }
+        
+        for(int i = 0; i < children.count(); i++) {
+
+            if(children.at(i).toElement().tagName() != "value") 
+                continue;
+
+            QString value = children.at(i).childNodes().at(0).toText().data();
+
+            switch (number_node->genre()) {
+
+            case (dtkComposerNodeNumber::Int):
+                number_node->setNumber(QVariant(value.toInt()));
+                break;
+        
+            case (dtkComposerNodeNumber::UInt):
+                number_node->setNumber(QVariant(value.toUInt()));
+                break;
+                
+            case (dtkComposerNodeNumber::Long):
+                number_node->setNumber(qVariantFromValue(value.toLong()));
+                break;
+                
+            case (dtkComposerNodeNumber::ULong):
+                number_node->setNumber(qVariantFromValue(value.toULong()));
+                break;
+                
+            case (dtkComposerNodeNumber::LongLong):
+                number_node->setNumber(QVariant(value.toLongLong()));
+                break;
+                
+            case (dtkComposerNodeNumber::ULongLong):
+                number_node->setNumber(QVariant(value.toULongLong()));
+                break;
+                
+            case (dtkComposerNodeNumber::Float):
+                number_node->setNumber(qVariantFromValue(value.toFloat()));
+                break;
+                
+            case (dtkComposerNodeNumber::Double):
+                number_node->setNumber(QVariant(value.toDouble()));
+                break;
+                
+            default:
+                number_node->setGenre(dtkComposerNodeNumber::Int);
+                number_node->setNumber(QVariant(value.toInt()));
+                break;
+            }
+        }
+    }
+
+    // Number operator
+    
+    if(dtkComposerNodeNumberOperator *number_operator_node = dynamic_cast<dtkComposerNodeNumberOperator *>(n)) {
+        
+        QDomNodeList children = node.childNodes();
+        
+        for(int i = 0; i < children.count(); i++) {
+
+            if(children.at(i).toElement().tagName() != "operation")
+                continue;
+
+            dtkComposerNodeNumberOperator::Operation operation;
+
+            if(children.at(i).childNodes().at(0).toText().data() == "+")
+                operation = dtkComposerNodeNumberOperator::Addition;
+            else if(children.at(i).childNodes().at(0).toText().data() == "-")
+                operation = dtkComposerNodeNumberOperator::Substraction;
+            else if(children.at(i).childNodes().at(0).toText().data() == "x")
+                operation = dtkComposerNodeNumberOperator::Multiplication;
+            else if(children.at(i).childNodes().at(0).toText().data() == "/")
+                operation = dtkComposerNodeNumberOperator::Division;
+            else if(children.at(i).childNodes().at(0).toText().data() == "++")
+                operation = dtkComposerNodeNumberOperator::Increment;
+            else if(children.at(i).childNodes().at(0).toText().data() == "--")
+                operation = dtkComposerNodeNumberOperator::Decrement;
+            else if(children.at(i).childNodes().at(0).toText().data() == "%")
+                operation = dtkComposerNodeNumberOperator::Modulo;
+            else if(children.at(i).childNodes().at(0).toText().data() == "MIN")
+                operation = dtkComposerNodeNumberOperator::Min;
+            else if(children.at(i).childNodes().at(0).toText().data() == "MAX")
+                operation = dtkComposerNodeNumberOperator::Max;
+            else
+                operation = dtkComposerNodeNumberOperator::Addition;
+
+            number_operator_node->setOperation(operation);
         }
     }
 

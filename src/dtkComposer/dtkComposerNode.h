@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Feb 25 10:07:09 2011 (+0100)
+ * Last-Updated: Tue Mar  1 18:01:12 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 227
+ *     Update #: 235
  */
 
 /* Commentary: 
@@ -45,6 +45,7 @@ public:
         Unknown,
         Atomic,
         Composite,
+        Control,
         Data,
         Process,
         View
@@ -116,7 +117,10 @@ public:
     bool dirty(void);
     void setDirty(bool dirty);
 
-    void layout(void);
+    bool resizable(void);
+    void setResizable(bool resizable);
+
+    virtual void layout(void);
 
     // -- Composite operations
 
@@ -146,12 +150,14 @@ signals:
 public slots:
     void alter(void);
     void touch(void);
-    void update(void);
+
+public slots:
+    virtual void update(void);
 
 public:
-    QRectF boundingRect(void) const;
+    virtual QRectF boundingRect(void) const;
 
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
@@ -170,7 +176,11 @@ protected:
     virtual void run(void);
 
 private:
-    friend class dtkComposerNodePrivate; dtkComposerNodePrivate *d;
+    friend class dtkComposerScene; 
+    friend class dtkComposerNodePrivate;
+
+private:
+    dtkComposerNodePrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////

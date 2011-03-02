@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb  7 22:37:03 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 28 11:09:09 2011 (+0100)
+ * Last-Updated: Tue Mar  1 18:20:21 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 158
+ *     Update #: 164
  */
 
 /* Commentary: 
@@ -27,10 +27,14 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
+#include "dtkComposerNodeCase.h"
+#include "dtkComposerNodeConditional.h"
 #include "dtkComposerNodeData.h"
 #include "dtkComposerNodeFactory.h"
 #include "dtkComposerNodeFile.h"
+#include "dtkComposerNodeLog.h"
 #include "dtkComposerNodeNumber.h"
+#include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerNodeString.h"
@@ -65,14 +69,20 @@ dtkComposerNodeFactory::~dtkComposerNodeFactory(void)
 
 dtkComposerNode *dtkComposerNodeFactory::create(QString type)
 {
-    if (type == "dtkComposerNumber")
-        return new dtkComposerNodeNumber;
-
     if (type == "dtkComposerBoolean")
         return new dtkComposerNodeBoolean;
 
     if (type == "dtkComposerBooleanOperator")
         return new dtkComposerNodeBooleanOperator;
+
+    if (type == "dtkComposerCase")
+        return new dtkComposerNodeCase;
+
+    if (type == "dtkComposerConditional")
+        return new dtkComposerNodeConditional;
+
+    if (type == "dtkComposerLog")
+        return new dtkComposerNodeLog;
 
     if (type == "dtkComposerFile")
         return new dtkComposerNodeFile;
@@ -85,6 +95,12 @@ dtkComposerNode *dtkComposerNodeFactory::create(QString type)
 
     if (type == "dtkComposerStringOperator")
         return new dtkComposerNodeStringOperator;
+
+    if (type == "dtkComposerNumber")
+        return new dtkComposerNodeNumber;
+
+    if (type == "dtkComposerNumberOperator")
+        return new dtkComposerNodeNumberOperator;
 
     if (dtkAbstractData *data = dtkAbstractDataFactory::instance()->create(type)) {
         dtkComposerNodeData *node = new dtkComposerNodeData;

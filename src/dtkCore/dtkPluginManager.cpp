@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jan 21 16:06:03 2011 (+0100)
+ * Last-Updated: Thu Mar  3 19:03:05 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 151
+ *     Update #: 153
  */
 
 /* Commentary:
@@ -113,7 +113,7 @@ void dtkPluginManager::uninitialize(void)
 
 void dtkPluginManager::readSettings(void)
 {
-    QSettings settings("inria","dtk");
+    QSettings settings("inria", "dtk");
 
     settings.beginGroup("plugins");
 #ifdef Q_WS_WIN
@@ -132,7 +132,7 @@ void dtkPluginManager::readSettings(void)
 
 void dtkPluginManager::writeSettings(void)
 {
-    QSettings settings("inria","dtk");
+    QSettings settings("inria", "dtk");
     settings.beginGroup("plugins");
     settings.setValue("path", d->path);
     settings.endGroup();
@@ -171,7 +171,7 @@ void dtkPluginManager::setPath(const QString& path)
     d->path = path;
 }
 
-QString dtkPluginManager::path()const
+QString dtkPluginManager::path(void) const
 {
     return d->path;
 }

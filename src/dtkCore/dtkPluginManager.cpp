@@ -23,7 +23,7 @@
 #include <dtkCore/dtkPlugin.h>
 #include <dtkCore/dtkLog.h>
 
-#define DTK_VERBOSE_LOAD false
+#define DTK_VERBOSE_LOAD true
 
 class dtkPluginManagerPrivate
 {
@@ -107,8 +107,8 @@ void dtkPluginManager::uninitialize(void)
 {
     this->writeSettings();
 
-    // foreach(QString path, d->loaders.keys())
-    //     unloadPlugin(path);
+    foreach(QString path, d->loaders.keys())
+        unloadPlugin(path);
 }
 
 void dtkPluginManager::readSettings(void)

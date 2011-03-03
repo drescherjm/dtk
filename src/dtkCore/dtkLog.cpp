@@ -216,6 +216,7 @@ void dtkLog::unregisterHandler(Handler handler, const QString& source)
 void dtkLog::disableRedirection(void)
 {
     dtkStandardRedirector::uninitialize();
+    s_handlers.clear();
 }
 
 // /////////////////////////////////////////////////////////////////

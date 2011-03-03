@@ -1179,6 +1179,9 @@ void dtkComposerNode::mousePressEvent(QGraphicsSceneMouseEvent *event)
         
         foreach(QAction *action, d->actions)
             menu.addAction(action);
+
+        d->object->addAction(menu);
+
         menu.exec(QCursor::pos());
 
         QGraphicsItem::mousePressEvent(event);

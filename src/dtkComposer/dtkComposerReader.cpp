@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar  1 19:13:50 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 498
+ * Last-Updated: Thu Mar  3 18:50:18 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 546
  */
 
 /* Commentary: 
@@ -21,6 +21,8 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
+#include "dtkComposerNodeControl.h"
+#include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeNumber.h"
 #include "dtkComposerNodeNumberOperator.h"
@@ -513,6 +515,39 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
                 continue;
 
             process_node->setupImplementation(children.at(i).childNodes().at(0).toText().data());
+        }
+    }
+
+    // Control node
+    
+    if(dtkComposerNodeControl *control_node = dynamic_cast<dtkComposerNodeControl *>(n)) {
+
+        qreal w = node.toElement().attribute("w").toFloat();
+        qreal h = node.toElement().attribute("h").toFloat();
+
+        control_node->setSize(w, h);
+        
+        foreach(dtkComposerNodeControlBlock *block, control_node->blocks()) {
+
+            QDomNodeList children = node.childNodes();
+            
+            for(int i = 0; i < children.count(); i++) {
+                
+                if(children.at(i).toElement().tagName() != "block")
+                    continue;
+
+                if(children.at(i).toElement().attribute("title") != block->title())
+                    continue;
+
+                QDomNodeList block_node_elements = children.at(i).childNodes();
+                
+                for(int i = 0; i < block_node_elements.count(); i++) {
+                    
+                    dtkComposerNode *block_node = this->readNode(block_node_elements.at(i));
+                    block_node->setParentItem(block);
+                    block_node->setPos(block_node->pos());
+                }
+            }
         }
     }
 

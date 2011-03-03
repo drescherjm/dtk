@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  1 18:56:35 2011 (+0100)
+ * Last-Updated: Thu Mar  3 18:15:35 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 16
+ *     Update #: 32
  */
 
 /* Commentary: 
@@ -18,20 +18,19 @@
  */
 
 #include "dtkComposerNodeConditional.h"
-
-#include <dtkCore/dtkGlobal.h>
+#include "dtkComposerNodeControlBlock.h"
 
 class dtkComposerNodeConditionalPrivate
 {
 public:
-    dtkComposerNodeControlBloc *bloc_then;
-    dtkComposerNodeControlBloc *bloc_else;
+    dtkComposerNodeControlBlock *block_then;
+    dtkComposerNodeControlBlock *block_else;
 };
 
 dtkComposerNodeConditional::dtkComposerNodeConditional(dtkComposerNode *parent) : dtkComposerNodeControl(parent), d(new dtkComposerNodeConditionalPrivate)
 {
-    d->bloc_then = this->addBlock();
-    d->bloc_else = this->addBlock();
+    d->block_then = this->addBlock("then");
+    d->block_else = this->addBlock("else");
 
     this->setTitle("Conditional");
     this->setType("dtkComposerConditional");
@@ -46,5 +45,10 @@ dtkComposerNodeConditional::~dtkComposerNodeConditional(void)
 
 void dtkComposerNodeConditional::update(void)
 {
-    qDebug() << DTK_PRETTY_FUNCTION;
+    if(this->condition())
+        foreach(dtkComposerNode *node, d->block_then->startNodes())
+            node->update();
+    else
+        foreach(dtkComposerNode *node, d->block_else->startNodes())
+            node->update();
 }

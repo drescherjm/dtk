@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar  1 19:09:19 2011 (+0100)
+ * Last-Updated: Thu Mar  3 14:18:09 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1615
+ *     Update #: 1625
  */
 
 /* Commentary: 
@@ -772,7 +772,9 @@ void dtkComposerNode::setParentNode(dtkComposerNode *node)
 #endif
     d->parent = node;
 
-    QObject::setParent(node);
+    // QObject::setParent(node);
+
+    this->setParentItem(node);
 }
 
 void dtkComposerNode::addChildNode(dtkComposerNode *node)
@@ -847,6 +849,22 @@ bool dtkComposerNode::isGhost(void)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
     return d->ghost;
+}
+
+void dtkComposerNode::setSize(const QSizeF& size)
+{
+    d->bounding_rect.setHeight(size.height());
+    d->bounding_rect.setWidth(size.width());
+    
+    QGraphicsItem::update();
+}
+
+void dtkComposerNode::setSize(qreal w, qreal h)
+{
+    d->bounding_rect.setHeight(h);
+    d->bounding_rect.setWidth(w);
+
+    QGraphicsItem::update();
 }
 
 void dtkComposerNode::alter(void)
@@ -1076,7 +1094,7 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
             pen.setWidth(1);
         } else if(this->kind() == dtkComposerNode::Control) {
             pen.setColor(QColor("#c7c7c7"));
-            pen.setStyle(Qt::DashLine);
+            // pen.setStyle(Qt::DashLine);
             pen.setWidth(1);
         } else {    
             pen.setColor(Qt::black);

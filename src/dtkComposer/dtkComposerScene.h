@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Feb 27 01:11:16 2011 (+0100)
+ * Last-Updated: Thu Mar  3 18:51:19 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 138
+ *     Update #: 151
  */
 
 /* Commentary: 
@@ -29,6 +29,7 @@ class dtkAbstractProcess;
 class dtkAbstractView;
 class dtkComposerEdge;
 class dtkComposerNode;
+class dtkComposerNodeControlBlock;
 class dtkComposerNodeFactory;
 class dtkComposerNodeProperty;
 class dtkComposerNote;
@@ -113,6 +114,9 @@ protected:
     void showAllNodes(void);
     void showChildNodes(dtkComposerNode *node);
     void updateEdgesVisibility(void);
+
+    QList<dtkComposerNodeControlBlock *> hoveredControlBlocks(dtkComposerNode *node);
+    QList<dtkComposerNodeControlBlock *> hoveredControlBlocks(dtkComposerNode *node, QList<QGraphicsItem *> parents);
 
 protected:
     void dragEnterEvent(QGraphicsSceneDragDropEvent *event);

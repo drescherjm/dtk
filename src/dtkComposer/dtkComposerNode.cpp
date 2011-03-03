@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 14:18:09 2011 (+0100)
+ * Last-Updated: Thu Mar  3 19:21:10 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1625
+ *     Update #: 1626
  */
 
 /* Commentary: 
@@ -1179,8 +1179,6 @@ void dtkComposerNode::mousePressEvent(QGraphicsSceneMouseEvent *event)
         
         foreach(QAction *action, d->actions)
             menu.addAction(action);
-
-        d->object->addAction(menu);
 
         menu.exec(QCursor::pos());
 

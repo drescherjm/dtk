@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2009 - Jean-Christophe Lombardo, Inria.
  * Created: Thu May 14 14:32:46 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 21 13:43:42 2009 (+0200)
+ * Last-Updated: Thu Mar  3 19:18:12 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 120
+ *     Update #: 121
  */
 
 /* Commentary: 
@@ -216,6 +216,7 @@ void dtkLog::unregisterHandler(Handler handler, const QString& source)
 void dtkLog::disableRedirection(void)
 {
     dtkStandardRedirector::uninitialize();
+
     s_handlers.clear();
 }
 

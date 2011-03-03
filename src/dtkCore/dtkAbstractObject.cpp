@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:54:04 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 21:03:10 2010 (+0200)
+ * Last-Updated: Thu Mar  3 19:17:33 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 168
+ *     Update #: 171
  */
 
 /* Commentary:
@@ -33,7 +33,6 @@ public:
     QHash<QString, QString> properties;
 
     QHash<QString, QStringList> metadatas;
-    QList<QAction *> actions;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -247,23 +246,6 @@ QStringList dtkAbstractObject::metadatas(const QString& key) const
     }
 
     return d->metadatas.value(key);
-}
-
-//! To add custom actions used by the composer.
-void dtkAbstractObject::addAction(const QString& text, const QObject *receiver, const char *slot) {
-    QAction *action = new QAction(text, this);
-
-    connect(action, SIGNAL(triggered()), receiver, slot);
-
-    d->actions << action;
-}
-
-void dtkAbstractObject::addAction( QMenu& menu ) {
-    if ( d->actions.size() ) {
-        menu.addSeparator();
-        foreach(QAction *action, d->actions)
-            menu.addAction(action);
-    }
 }
 
 // /////////////////////////////////////////////////////////////////

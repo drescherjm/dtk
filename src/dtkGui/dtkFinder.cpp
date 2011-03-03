@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Jun 12 15:47:45 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 15 20:24:09 2010 (+0200)
+ * Last-Updated: Wed Nov 10 09:57:39 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 52
+ *     Update #: 65
  */
 
 /* Commentary: 
@@ -24,6 +24,112 @@
 #ifdef Q_WS_WIN
 #include <qt_windows.h>
 #endif
+
+#include <QListIterator>
+
+// /////////////////////////////////////////////////////////////////
+// dtkFinderToolBar
+// /////////////////////////////////////////////////////////////////
+
+class dtkFinderToolBarPrivate
+{
+public:
+    QToolButton *prevButton;
+    QToolButton *nextButton;
+    QToolButton *listViewButton;
+    QToolButton *treeViewButton;
+    QLinkedList<QString>           pathList;
+    QLinkedList<QString>::iterator iterator;
+};
+
+dtkFinderToolBar::dtkFinderToolBar(QWidget *parent) : QToolBar(parent), d(new dtkFinderToolBarPrivate)
+{
+    d->prevButton = new QToolButton (this);
+    d->prevButton->setArrowType (Qt::LeftArrow);
+    d->prevButton->setEnabled (0);
+    d->prevButton->setIconSize(QSize(16, 16));
+    
+    d->nextButton = new QToolButton (this);
+    d->nextButton->setArrowType (Qt::RightArrow);
+    d->nextButton->setEnabled (0);
+    d->nextButton->setIconSize(QSize(16, 16));
+    
+    d->listViewButton = new QToolButton (this);
+    d->listViewButton->setIcon(QIcon(":dtkGui/pixmaps/dtk-view-list.png"));
+    d->listViewButton->setIconSize(QSize(16, 16));
+    
+    d->treeViewButton = new QToolButton (this);
+    d->treeViewButton->setIcon(QIcon(":dtkGui/pixmaps/dtk-view-tree.png"));
+    d->treeViewButton->setChecked (true);
+    d->treeViewButton->setIconSize(QSize(16, 16));
+    
+    QButtonGroup *viewButtonGroup = new QButtonGroup (this);
+    viewButtonGroup->setExclusive (true);
+    viewButtonGroup->addButton ( d->listViewButton );
+    viewButtonGroup->addButton ( d->treeViewButton );
+    
+    this->addWidget (d->prevButton);
+    this->addWidget (d->nextButton);
+    this->addWidget (d->treeViewButton);
+    this->addWidget (d->listViewButton);
+    
+    connect (d->prevButton, SIGNAL (clicked()), this, SLOT (onPrev()));
+    connect (d->nextButton, SIGNAL (clicked()), this, SLOT (onNext()));
+    
+    connect (d->listViewButton, SIGNAL (clicked()), this, SIGNAL (listView()));
+    connect (d->treeViewButton, SIGNAL (clicked()), this, SIGNAL (treeView()));
+
+    this->setFixedHeight(23);
+}
+
+dtkFinderToolBar::~dtkFinderToolBar(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+void dtkFinderToolBar::setPath (const QString &path)
+{
+    if (d->pathList.count()) {
+        if (d->iterator!=d->pathList.end())
+            d->pathList.erase(d->pathList.begin(), d->iterator);
+    }
+    
+    d->pathList.prepend (path);
+    d->iterator = d->pathList.begin();
+    
+    if (d->pathList.count()>1)
+        d->prevButton->setEnabled(1);
+    else
+        d->prevButton->setEnabled(0);
+
+    d->nextButton->setEnabled (0);
+}
+
+void dtkFinderToolBar::onNext (void)
+{
+    if (d->iterator!=d->pathList.begin()) {
+        emit ( changed (*(--d->iterator)) );
+        d->prevButton->setEnabled (1);
+        if (d->iterator==d->pathList.begin())
+            d->nextButton->setEnabled (0);
+    }
+    else
+        d->nextButton->setEnabled (0);
+}
+
+void dtkFinderToolBar::onPrev (void)
+{
+    if (d->iterator!=--d->pathList.end()) {
+        emit ( changed (*(++d->iterator)) );
+        d->nextButton->setEnabled(1);
+        if (d->iterator==(--d->pathList.end()))
+            d->prevButton->setEnabled (0);
+    }
+    else
+        d->prevButton->setEnabled (0);
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkFinderSideView

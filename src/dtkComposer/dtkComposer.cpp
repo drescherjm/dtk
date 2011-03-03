@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug 17 13:03:57 2010 (+0200)
+ * Last-Updated: Sat Feb 26 19:53:40 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 395
+ *     Update #: 445
  */
 
 /* Commentary: 
@@ -55,11 +55,17 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
 
     connect(d->scene, SIGNAL(nodeAdded(dtkComposerNode *)), this, SIGNAL(nodeAdded(dtkComposerNode *)));
     connect(d->scene, SIGNAL(nodeRemoved(dtkComposerNode *)), this, SIGNAL(nodeRemoved(dtkComposerNode *)));
+    connect(d->scene, SIGNAL(nodeSelected(dtkComposerNode *)), this, SIGNAL(nodeSelected(dtkComposerNode *)));
+    connect(d->scene, SIGNAL(selectionCleared()), this, SIGNAL(selectionCleared()));
+    connect(d->scene, SIGNAL(pathChanged(dtkComposerNode *)), this, SIGNAL(pathChanged(dtkComposerNode *)));
 
     connect(d->scene, SIGNAL(evaluationStarted()), this, SIGNAL(evaluationStarted()));
     connect(d->scene, SIGNAL(evaluationStopped()), this, SIGNAL(evaluationStopped()));
 
     connect(d->scene, SIGNAL(compositionChanged()), this, SIGNAL(compositionChanged()));
+
+    connect(d->scene, SIGNAL(centerOn(const QPointF&)), d->view, SLOT(onCenterOn(const QPointF&)));
+    connect(d->scene, SIGNAL(fitInView(const QRectF&)), d->view, SLOT(onFitInView(const QRectF&)));
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -78,9 +84,19 @@ dtkComposer::~dtkComposer(void)
     d = NULL;
 }
 
+void dtkComposer::setBackgroundColor(const QColor &color)
+{
+    d->view->setBackgroundBrush(color);
+}
+
 void dtkComposer::setFactory(dtkComposerNodeFactory *factory)
 {
     d->scene->setFactory(factory);
+}
+
+void dtkComposer::setFileName(const QString& fileName)
+{
+    d->fileName = fileName;
 }
 
 bool dtkComposer::isModified(void)
@@ -93,6 +109,16 @@ QString dtkComposer::fileName(void)
     return d->fileName;
 }
 
+dtkComposerScene *dtkComposer::scene(void)
+{
+    return d->scene;
+}
+
+dtkComposerView *dtkComposer::view(void)
+{
+    return d->view;
+}
+
 bool dtkComposer::open(QString fileName)
 {
     if (!fileName.isEmpty()) {
@@ -102,9 +128,14 @@ bool dtkComposer::open(QString fileName)
 
         d->scene->setModified(false);
 
+        // d->view->fitInView(d->scene->sceneRect(), Qt::KeepAspectRatio);
+        d->view->update();
+
         QFileInfo info(fileName);
 
         emit titleChanged(info.baseName());
+
+        d->fileName = fileName;
     }
 
     return true;
@@ -128,6 +159,16 @@ bool dtkComposer::save(QString fileName)
     emit titleChanged(fi.fileName());
 
     return true;
+}
+
+void dtkComposer::group(QList<dtkComposerNode *> nodes)
+{
+    d->scene->createGroup(nodes);
+}
+
+void dtkComposer::ungroup(dtkComposerNode *node)
+{
+    d->scene->explodeGroup(node);
 }
 
 void dtkComposer::onDataSelected(dtkAbstractData *data)
@@ -162,4 +203,14 @@ void dtkComposer::startEvaluation(void)
 void dtkComposer::stopEvaluation(void)
 {
     d->scene->stopEvaluation();
+}
+
+void dtkComposer::copy(void)
+{
+    d->scene->copy();
+}
+
+void dtkComposer::paste(void)
+{
+    d->scene->paste();
 }

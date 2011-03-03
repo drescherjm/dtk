@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug 17 13:21:28 2010 (+0200)
+ * Last-Updated: Sun Feb 27 01:11:16 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 82
+ *     Update #: 138
  */
 
 /* Commentary: 
@@ -31,6 +31,7 @@ class dtkComposerEdge;
 class dtkComposerNode;
 class dtkComposerNodeFactory;
 class dtkComposerNodeProperty;
+class dtkComposerNote;
 class dtkComposerScenePrivate;
 
 class DTKCOMPOSER_EXPORT dtkComposerScene : public QGraphicsScene
@@ -41,12 +42,17 @@ public:
              dtkComposerScene(QObject *parent = 0);
     virtual ~dtkComposerScene(void);
 
+    QList<dtkComposerNote *> notes(void);
     QList<dtkComposerEdge *> edges(void);
     QList<dtkComposerNode *> nodes(void);
     QList<dtkComposerNode *> nodes(QString name);
     QList<dtkComposerNodeProperty *> properties(void);
     QList<dtkComposerNodeProperty *> properties(QString name);
 
+    QList<dtkComposerNode *> startNodes(void);
+    QList<dtkComposerNode *>   endNodes(void);
+
+    void touch(void);
     void clear(void);
 
     bool  isModified(void);
@@ -54,11 +60,18 @@ public:
 
     void    addEdge(dtkComposerEdge *edge);
     void    addNode(dtkComposerNode *node);
+    void    addNote(dtkComposerNote *note);
+    void removeEdge(dtkComposerEdge *edge);
     void removeNode(dtkComposerNode *node);
+    void removeNote(dtkComposerNote *note);
 
     void setFactory(dtkComposerNodeFactory *factory);
 
+    dtkComposerNode *createGroup(QList<dtkComposerNode *> nodes, QPointF position = QPointF());
     dtkComposerNode *createNode(QString type, QPointF position = QPointF());
+    dtkComposerNote *createNote(QString text, QPointF position = QPointF(), QSizeF size = QSizeF());
+
+    void explodeGroup(dtkComposerNode *node);
 
 signals:
     void dataSelected(dtkAbstractData *data);
@@ -67,8 +80,15 @@ signals:
 
     void nodeAdded(dtkComposerNode *node);
     void nodeRemoved(dtkComposerNode *node);
+    void nodeSelected(dtkComposerNode *node);
 
     void compositionChanged(void);
+
+    void centerOn(const QPointF&);
+    void fitInView(const QRectF&);
+    void pathChanged(dtkComposerNode *);
+
+    void selectionCleared(void);
 
 signals:
     void evaluationStarted(void);
@@ -78,9 +98,21 @@ public slots:
    void startEvaluation(void);
    void stopEvaluation(void);
 
+public slots:
+   void copy(void);
+   void paste(void);
+
 protected:
     dtkComposerNode *nodeAt(const QPointF& point) const;
     dtkComposerNodeProperty *propertyAt(const QPointF& point) const;
+
+protected:
+    void setCurrentNode(dtkComposerNode *node);
+
+    void hideAllNodes(void);
+    void showAllNodes(void);
+    void showChildNodes(dtkComposerNode *node);
+    void updateEdgesVisibility(void);
 
 protected:
     void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
@@ -94,11 +126,17 @@ protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent);
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent);
 
 protected slots:
     void onSelectionChanged(void);
 
 private:
+    static bool s_evaluate;
+
+private:
+    friend class dtkComposerNode;
+
     dtkComposerScenePrivate *d;
 };
 

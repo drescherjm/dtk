@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul 15 11:25:19 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug 17 13:20:47 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 47
+ * Last-Updated: Thu Feb 17 16:50:39 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 58
  */
 
 /* Commentary: 
@@ -29,21 +29,16 @@
 class dtkComposerNodeViewPrivate
 {
 public:
-    dtkComposerNodeProperty *property_input_data;
 };
 
 dtkComposerNodeView::dtkComposerNodeView(dtkComposerNode *parent) : dtkComposerNode(parent), d(new dtkComposerNodeViewPrivate)
 {
-    d->property_input_data = new dtkComposerNodeProperty("data", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, this);
-
     this->setKind(dtkComposerNode::View);
-    
-    this->addInputProperty(d->property_input_data);
 }
 
 dtkComposerNodeView::~dtkComposerNodeView(void)
 {
-    if (this->object())
+    if(this->object())
         delete this->object();
 
     delete d;
@@ -53,19 +48,11 @@ dtkComposerNodeView::~dtkComposerNodeView(void)
 
 void dtkComposerNodeView::onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
-    if(property == d->property_input_data) {
+    Q_UNUSED(edge);
+    Q_UNUSED(property);
+}
 
-        dtkAbstractView *view = dynamic_cast<dtkAbstractView *>(this->object());
-
-        dtkAbstractData *data = NULL;
-
-        if(dtkAbstractProcess *process = dynamic_cast<dtkAbstractProcess *>(edge->source()->node()->object()))
-            data = process->output();
-
-        if(data && view) {
-            view->setData(data);
-            emit elapsed("00:00:00.001");
-            emit progressed(100);
-        }
-    }
+void dtkComposerNodeView::run(void)
+{
+    return;
 }

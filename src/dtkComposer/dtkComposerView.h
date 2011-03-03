@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:52 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 13 10:19:56 2010 (+0200)
+ * Last-Updated: Thu Feb 24 15:09:43 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 19
+ *     Update #: 32
  */
 
 /* Commentary: 
@@ -30,10 +30,18 @@ class DTKCOMPOSER_EXPORT dtkComposerView : public QGraphicsView
     Q_OBJECT
 
 public:
-     dtkComposerView(QWidget *parent = 0);
-    ~dtkComposerView(void);
+             dtkComposerView(QWidget *parent = 0);
+    virtual ~dtkComposerView(void);
+
+    void setBackgroundColor(const QColor &color);
+    
+public slots:
+    void onCenterOn(const QPointF& point);
+    void onFitInView(const QRectF& rect);
 
 protected:
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
     void wheelEvent(QWheelEvent *event);
 };
 

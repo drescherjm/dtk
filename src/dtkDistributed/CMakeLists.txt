@@ -88,13 +88,17 @@ endif(MPI_FOUND)
 
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)
-add_definitions(-DQT_NO_DEBUG)
+if(NOT MSVC)
+  # Shouldn't the QT_USE_FILE set this appropriately?
+  add_definitions(-DQT_NO_DEBUG)
+endif(NOT MSVC)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
 
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
+  ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_QRC})
 
@@ -107,6 +111,13 @@ if(MPI_FOUND)
 target_link_libraries(${PROJECT_NAME}
   ${MPI_LIBRARIES})
 endif(MPI_FOUND)
+
+## #################################################################
+## Source file layout in development environments like Visual Studio
+## #################################################################
+
+SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
+SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC} ${${PROJECT_NAME}_SOURCES_QRC})
 
 ## #################################################################
 ## Installation

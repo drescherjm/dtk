@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jul 28 10:08:10 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 130
+ * Last-Updated: Tue Jan  4 15:40:10 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 132
  */
 
 /* Commentary: 
@@ -35,14 +35,16 @@ public:
 
     virtual QString description(void) const { return ""; }
 
-    friend QDebug operator<<(QDebug debug, const dtkAbstractProcess& process);
-    friend QDebug operator<<(QDebug debug,       dtkAbstractProcess *process);
+    friend DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractProcess& process);
+    friend DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractProcess *process);
 
 signals:
-    void started(QString message);
-    void elapsed(QString duration);
-    void progressed(QString message);
+    void started(const QString& message);
+    void elapsed(const QString& duration);
+    void progressed(const QString& message);
     void progressed(int step);
+    void success(void);
+    void failure(void);
     void finished(void);
 
 public slots:
@@ -50,15 +52,19 @@ public slots:
    
     virtual  int update(void);
     
-    virtual bool read(QString file);
-    virtual bool read(QStringList files);
+    virtual bool read(const QString& file);
+    virtual bool read(const QStringList& files);
     
-    virtual bool write(QString file);
-    virtual bool write(QStringList files);
+    virtual bool write(const QString& file);
+    virtual bool write(const QStringList& files);
 
     virtual void setParameter(int data);
     virtual void setParameter(int data, int channel);
     virtual void setParameter(int data, int channel, int frame);
+
+    virtual void setParameter(int *data);
+    virtual void setParameter(int *data, int channel);
+    virtual void setParameter(int *data, int channel, int frame);
 
     virtual void setParameter(double  data);
     virtual void setParameter(double  data, int channel);
@@ -89,7 +95,7 @@ public slots:
     virtual void *data (int channel, int frame);
 };
 
-QDebug operator<<(QDebug debug, const dtkAbstractProcess& process);
-QDebug operator<<(QDebug debug,       dtkAbstractProcess *process);
+DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractProcess& process);
+DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractProcess *process);
 
 #endif

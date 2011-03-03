@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 19:20:49 2010 (+0200)
+ * Last-Updated: Sat Jan 15 14:23:57 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 119
+ *     Update #: 131
  */
 
 /* Commentary:
@@ -44,7 +44,7 @@ dtkAbstractViewFactory *dtkAbstractViewFactory::instance(void)
     return s_instance;
 }
 
-dtkAbstractView *dtkAbstractViewFactory::create(QString type)
+dtkAbstractView *dtkAbstractViewFactory::create(const QString& type)
 {
     if(!d->creators.contains(type))
         return NULL;
@@ -72,7 +72,27 @@ dtkAbstractView *dtkAbstractViewFactory::create(QString type)
     return view;
 }
 
-dtkAbstractViewAnimator *dtkAbstractViewFactory::animator(QString type)
+void dtkAbstractViewFactory::destroy(dtkAbstractView *view)
+{
+  if (!view)
+    return;
+  
+  QList<dtkAbstractViewAnimator*> animators = view->animators();
+  foreach (dtkAbstractViewAnimator* animator, animators)
+      delete animator;
+
+  QList<dtkAbstractViewNavigator*> navigators = view->navigators();
+  foreach (dtkAbstractViewNavigator* navigator, navigators)
+      delete navigator;
+
+  QList<dtkAbstractViewInteractor*> interactors = view->interactors();
+  foreach (dtkAbstractViewInteractor* interactor, interactors)
+      delete interactor;
+
+  delete view;
+}
+
+dtkAbstractViewAnimator *dtkAbstractViewFactory::animator(const QString& type)
 {
     foreach(dtkAbstractViewTypeHandler key, d->animators.keys())
         if (key.first == type)
@@ -81,7 +101,7 @@ dtkAbstractViewAnimator *dtkAbstractViewFactory::animator(QString type)
     return 0l;
 }
 
-dtkAbstractViewNavigator *dtkAbstractViewFactory::navigator(QString type)
+dtkAbstractViewNavigator *dtkAbstractViewFactory::navigator(const QString& type)
 {
     foreach(dtkAbstractViewTypeHandler key, d->navigators.keys())
         if (key.first == type)
@@ -90,7 +110,7 @@ dtkAbstractViewNavigator *dtkAbstractViewFactory::navigator(QString type)
     return 0l;
 }
 
-dtkAbstractViewInteractor *dtkAbstractViewFactory::interactor(QString type)
+dtkAbstractViewInteractor *dtkAbstractViewFactory::interactor(const QString& type)
 {
     foreach(dtkAbstractViewTypeHandler key, d->interactors.keys())
         if (key.first == type)
@@ -99,7 +119,7 @@ dtkAbstractViewInteractor *dtkAbstractViewFactory::interactor(QString type)
     return 0l;
 }
 
-bool dtkAbstractViewFactory::registerViewType(QString type, dtkAbstractViewCreator func)
+bool dtkAbstractViewFactory::registerViewType(const QString& type, dtkAbstractViewCreator func)
 {
     if(!d->creators.contains(type)) {
         d->creators.insert(type, func);
@@ -109,7 +129,7 @@ bool dtkAbstractViewFactory::registerViewType(QString type, dtkAbstractViewCreat
     return false;
 }
 
-bool dtkAbstractViewFactory::registerViewAnimatorType(QString type, QStringList handled, dtkAbstractViewAnimatorCreator func)
+bool dtkAbstractViewFactory::registerViewAnimatorType(const QString& type, const QStringList& handled, dtkAbstractViewAnimatorCreator func)
 {
     if(!d->animators.contains(qMakePair(type, handled))) {
         d->animators.insert(qMakePair(type, handled), func);
@@ -119,7 +139,7 @@ bool dtkAbstractViewFactory::registerViewAnimatorType(QString type, QStringList 
     return false;
 }
 
-bool dtkAbstractViewFactory::registerViewNavigatorType(QString type, QStringList handled, dtkAbstractViewNavigatorCreator func)
+bool dtkAbstractViewFactory::registerViewNavigatorType(const QString& type, const QStringList& handled, dtkAbstractViewNavigatorCreator func)
 {
     if(!d->navigators.contains(qMakePair(type, handled))) {
         d->navigators.insert(qMakePair(type, handled), func);
@@ -129,7 +149,7 @@ bool dtkAbstractViewFactory::registerViewNavigatorType(QString type, QStringList
     return false;
 }
 
-bool dtkAbstractViewFactory::registerViewInteractorType(QString type, QStringList handled, dtkAbstractViewInteractorCreator func)
+bool dtkAbstractViewFactory::registerViewInteractorType(const QString& type, const QStringList& handled, dtkAbstractViewInteractorCreator func)
 {
     if(!d->interactors.contains(qMakePair(type, handled))) {
         d->interactors.insert(qMakePair(type, handled), func);
@@ -139,23 +159,43 @@ bool dtkAbstractViewFactory::registerViewInteractorType(QString type, QStringLis
     return false;
 }
 
-unsigned int dtkAbstractViewFactory::size(QString type)
+unsigned int dtkAbstractViewFactory::size(const QString& type) const
 {
     return d->views[type].size();
 }
 
-dtkAbstractView *dtkAbstractViewFactory::get(QString type, int idx)
+dtkAbstractView *dtkAbstractViewFactory::get(const QString& type, int idx)
 {
     return d->views[type].value(idx);
 }
 
-dtkAbstractView *dtkAbstractViewFactory::get(QString type, QString name)
+dtkAbstractView *dtkAbstractViewFactory::get(const QString& type, const QString& name)
 {
     foreach(dtkAbstractView *view, d->views[type])
         if(view->name() == name)
             return view;
 
     return NULL;
+}
+
+QList<QString> dtkAbstractViewFactory::creators(void) const
+{
+    return d->creators.keys();
+}
+
+QList<dtkAbstractViewFactory::dtkAbstractViewTypeHandler> dtkAbstractViewFactory::animators(void) const
+{
+    return d->animators.keys();
+}
+
+QList<dtkAbstractViewFactory::dtkAbstractViewTypeHandler> dtkAbstractViewFactory::interactors(void) const
+{
+    return d->interactors.keys();
+}
+
+QList<dtkAbstractViewFactory::dtkAbstractViewTypeHandler> dtkAbstractViewFactory::navigators(void) const
+{
+    return d->navigators.keys();
 }
 
 dtkAbstractViewFactory::dtkAbstractViewFactory(void) : dtkAbstractFactory(), d(new dtkAbstractViewFactoryPrivate)

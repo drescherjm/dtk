@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 19:05:30 2010 (+0200)
+ * Last-Updated: Sun Nov  7 16:41:51 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 258
+ *     Update #: 280
  */
 
 /* Commentary:
@@ -43,8 +43,8 @@ public:
 
     virtual QString description(void) const { return ""; }
 
-    friend QDebug operator<<(QDebug debug, const dtkAbstractView& viewer);
-    friend QDebug operator<<(QDebug debug,       dtkAbstractView *viewer);
+    friend DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractView& viewer);
+    friend DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractView *viewer);
 
 signals:
     void closed(void);
@@ -77,6 +77,8 @@ public slots:
     virtual void update(void);
 
     virtual QWidget *widget(void);
+    
+    virtual void close(void);
 
     void showFullScreen(void);
     void showMinimized(void);
@@ -90,25 +92,42 @@ public slots:
     void addNavigator (dtkAbstractViewNavigator  *navigator);
     void addInteractor(dtkAbstractViewInteractor *interactor);
 
-    void  enableAnimator(QString animator);
-    void disableAnimator(QString animator);
+    void  enableAnimator(const QString& animator);
+    void disableAnimator(const QString& animator);
 
-    void  enableNavigator(QString navigator);
-    void disableNavigator(QString navigator);
+    void  enableNavigator(const QString& navigator);
+    void disableNavigator(const QString& navigator);
 
-    void  enableInteractor(QString interactor);
-    void disableInteractor(QString interactor);
+    void  enableInteractor(const QString& interactor);
+    void disableInteractor(const QString& interactor);
 
-    dtkAbstractViewAnimator   *animator  (QString type);
-    dtkAbstractViewNavigator  *navigator (QString type);
-    dtkAbstractViewInteractor *interactor(QString type);
+    dtkAbstractViewAnimator   *animator  (const QString& type);
+    dtkAbstractViewNavigator  *navigator (const QString& type);
+    dtkAbstractViewInteractor *interactor(const QString& type);
 
-    QList<dtkAbstractViewAnimator   *> animators(void);
-    QList<dtkAbstractViewNavigator  *> navigators(void);
-    QList<dtkAbstractViewInteractor *> interactors(void);
+    QList<dtkAbstractViewAnimator   *> animators(void) const;
+    QList<dtkAbstractViewNavigator  *> navigators(void) const;
+    QList<dtkAbstractViewInteractor *> interactors(void) const;
 
     virtual void   initialize(void);
     virtual void uninitialize(void);
+
+    // -- The following methods are needed to get tracking
+
+    virtual void  enableInteraction(void);
+    virtual void disableInteraction(void);
+
+    virtual void bounds(float& xmin, float& xmax, float& ymin, float& ymax, float &zmin, float& zmax);
+
+    virtual void cameraUp(double *coordinates);
+    virtual void cameraPosition(double *coordinates);
+    virtual void cameraFocalPoint(double *coordinates);
+
+    virtual void setCameraPosition(double x, double y, double z);
+
+    virtual void setCameraClippingRange(double near, double far);
+
+    // --
 
     virtual dtkVec3 scenePosition(void) const;
     virtual dtkQuat sceneOrientation(void) const;
@@ -127,11 +146,15 @@ public slots:
     virtual void  setupLeftEyeCameraFrustum(double left, double right, double bottom, double top, double near, double far);
     virtual void setupRightEyeCameraFrustum(double left, double right, double bottom, double top, double near, double far);
 
+    virtual QString cameraProjectionMode(void);
+    virtual double cameraViewAngle(void);
+    virtual double cameraZoom(void);
+
 private:
     dtkAbstractViewPrivate *d;
 };
 
-QDebug operator<<(QDebug debug, const dtkAbstractView& viewer);
-QDebug operator<<(QDebug debug,       dtkAbstractView *viewer);
+DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractView& viewer);
+DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractView *viewer);
 
 #endif

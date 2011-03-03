@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Aug 16 15:06:02 2010 (+0200)
-##           By: Julien Wintz
-##     Update #: 78
+## Last-Updated: Tue Mar  1 18:17:16 2011 (+0100)
+##           By: Thibaud Kloczko
+##     Update #: 117
 ######################################################################
 ## 
 ### Commentary: 
@@ -28,15 +28,24 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerEdge.h
   dtkComposerExport.h
   dtkComposerNode.h
-  dtkComposerNodeCondition.h
+  dtkComposerNodeBoolean.h
+  dtkComposerNodeBooleanOperator.h
+  dtkComposerNodeCase.h
+  dtkComposerNodeConditional.h
+  dtkComposerNodeControl.h
   dtkComposerNodeData.h
   dtkComposerNodeFactory.h
   dtkComposerNodeFile.h
-  dtkComposerNodeInteger.h
+  dtkComposerNodeLog.h
+  dtkComposerNodeNumber.h
+  dtkComposerNodeNumberOperator.h
   dtkComposerNodeProcess.h
   dtkComposerNodeProperty.h
   dtkComposerNodeString.h
+  dtkComposerNodeStringComparator.h
+  dtkComposerNodeStringOperator.h
   dtkComposerNodeView.h
+  dtkComposerNote.h
   dtkComposerReader.h
   dtkComposerScene.h
   dtkComposerView.h
@@ -46,15 +55,24 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposer.h
   dtkComposerEdge.h
   dtkComposerNode.h
-  dtkComposerNodeCondition.h
+  dtkComposerNodeBoolean.h
+  dtkComposerNodeBooleanOperator.h
+  dtkComposerNodeCase.h
+  dtkComposerNodeConditional.h
+  dtkComposerNodeControl.h
   dtkComposerNodeData.h
   dtkComposerNodeFactory.h
   dtkComposerNodeFile.h
-  dtkComposerNodeInteger.h
+  dtkComposerNodeLog.h
+  dtkComposerNodeNumber.h
+  dtkComposerNodeNumberOperator.h
   dtkComposerNodeProcess.h
   dtkComposerNodeProperty.h
   dtkComposerNodeString.h
+  dtkComposerNodeStringComparator.h
+  dtkComposerNodeStringOperator.h
   dtkComposerNodeView.h
+  dtkComposerNote.h
   dtkComposerReader.h
   dtkComposerScene.h
   dtkComposerView.h
@@ -64,15 +82,24 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposer.cpp
   dtkComposerEdge.cpp
   dtkComposerNode.cpp
-  dtkComposerNodeCondition.cpp
+  dtkComposerNodeBoolean.cpp
+  dtkComposerNodeBooleanOperator.cpp
+  dtkComposerNodeCase.cpp
+  dtkComposerNodeConditional.cpp
+  dtkComposerNodeControl.cpp
   dtkComposerNodeData.cpp
   dtkComposerNodeFactory.cpp
   dtkComposerNodeFile.cpp
-  dtkComposerNodeInteger.cpp
-  dtkComposerNodeString.cpp
+  dtkComposerNodeLog.cpp
+  dtkComposerNodeNumber.cpp
+  dtkComposerNodeNumberOperator.cpp
   dtkComposerNodeProcess.cpp
   dtkComposerNodeProperty.cpp
+  dtkComposerNodeString.cpp
+  dtkComposerNodeStringComparator.cpp
+  dtkComposerNodeStringOperator.cpp
   dtkComposerNodeView.cpp
+  dtkComposerNote.cpp
   dtkComposerReader.cpp
   dtkComposerScene.cpp
   dtkComposerView.cpp
@@ -84,7 +111,10 @@ set(${PROJECT_NAME}_SOURCES
 
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)
-add_definitions(-DQT_NO_DEBUG)
+if(NOT MSVC)
+  # Shouldn't the QT_USE_FILE set this appropriately?
+  add_definitions(-DQT_NO_DEBUG)
+endif(NOT MSVC)
 
 add_definitions(-DQSTATEMACHINE_DEBUG)
 
@@ -92,6 +122,7 @@ qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
+  ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_WRAP})
 
@@ -99,6 +130,13 @@ target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkCore
   dtkGui)
+
+## #################################################################
+## Source file layout in development environments like Visual Studio
+## #################################################################
+
+SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
+SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 
 ## #################################################################
 ## Installation

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul  8 13:28:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug 17 11:27:22 2010 (+0200)
+ * Last-Updated: Thu Feb 10 11:10:09 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 58
+ *     Update #: 69
  */
 
 /* Commentary: 
@@ -44,7 +44,7 @@ dtkComposerNodeFile::dtkComposerNodeFile(dtkComposerNode *parent) : dtkComposerN
     this->setTitle("File");
     this->setKind(dtkComposerNode::Atomic);
     this->setType("dtkComposerFile");
-    // this->addInputProperty(new dtkComposerNodeProperty("path", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, this));
+
     this->addOutputProperty(d->property_output_file_name);
     this->addOutputProperty(d->property_output_file_text);
     
@@ -67,6 +67,8 @@ QVariant dtkComposerNodeFile::value(dtkComposerNodeProperty *property)
         emit progressed(100);
         return QVariant(d->file);
     }
+
+    return QVariant();
 }
 
 void dtkComposerNodeFile::editFile(void)
@@ -85,7 +87,17 @@ void dtkComposerNodeFile::getFileName(void)
 
 void dtkComposerNodeFile::setFileName(const QString& file)
 {
-    qDebug() << DTK_PRETTY_FUNCTION << file;
-
     d->file = file;
+}
+
+void dtkComposerNodeFile::onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+{
+    DTK_UNUSED(edge);
+    DTK_UNUSED(property);
+}
+
+void dtkComposerNodeFile::onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+{
+    DTK_UNUSED(edge);
+    DTK_UNUSED(property);
 }

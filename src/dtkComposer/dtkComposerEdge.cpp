@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 13 10:26:55 2010 (+0200)
+ * Last-Updated: Fri Feb 25 15:37:21 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 213
+ *     Update #: 340
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeProperty.h"
 
+#include <dtkCore/dtkGlobal.h>
 #include <dtkCore/dtkLog.h>
 
 class dtkComposerEdgePrivate
@@ -46,21 +47,31 @@ dtkComposerEdge::dtkComposerEdge(void) : QObject(), QGraphicsItem(), d(new dtkCo
 
 dtkComposerEdge::~dtkComposerEdge(void)
 {
-    if(d->source && d->source->node()) {
-
-        d->source->node()->removeInputEdge(this);
+    if (d->source && d->source->node()) {
+        d->source->node()->removeGhostInputEdge(this);
         d->source->node()->removeOutputEdge(this);
     }
 
-    if(d->destination && d->destination->node()) {
-        
+    if (d->destination && d->destination->node()) { 
         d->destination->node()->removeInputEdge(this);
-        d->destination->node()->removeOutputEdge(this);
+        d->destination->node()->removeGhostOutputEdge(this);
     }
 
     delete d;
 
     d = NULL;
+}
+
+QString dtkComposerEdge::description(void)
+{
+    if(!d->source || !d->destination)
+        return QString("Invalid edge");
+
+    return QString("(%1, %2) -> (%3, %4)")
+        .arg(d->source->node()->title())
+        .arg(d->source->name())
+        .arg(d->destination->node()->title())
+        .arg(d->destination->name());
 }
 
 dtkComposerNodeProperty *dtkComposerEdge::source(void)
@@ -135,6 +146,9 @@ void dtkComposerEdge::adjust(void)
     if (!d->source || !d->destination)
         return;
 
+    if (!this->isVisible())
+        return;
+
     QRectF rect;
 
     rect = d->source->rect();
@@ -145,13 +159,13 @@ void dtkComposerEdge::adjust(void)
     d->destRect = d->destination->mapToScene(rect).boundingRect();
     QPointF end = d->destination->mapToScene(rect.center());
 
-    adjust(start, end);
+    this->adjust(start, end);
 }
 
 void dtkComposerEdge::adjust(const QPointF& start, const QPointF& end)
 {
-    prepareGeometryChange();
-
+    this->prepareGeometryChange();
+    
     QPointF midPoint = (start + end) / 2;
 
     qreal halfMid = (midPoint.x() - start.x())/2;
@@ -165,39 +179,109 @@ void dtkComposerEdge::adjust(const QPointF& start, const QPointF& end)
     stroker.setCapStyle(Qt::RoundCap);
     d->path = stroker.createStroke(path);
 
-    update();
+    this->update();
 }
 
-bool dtkComposerEdge::link(void)
+bool dtkComposerEdge::link(bool anyway)
 {
-    if (!d->source || !d->destination)
+    if(anyway) {
+
+        if (d->source->node()->kind() == dtkComposerNode::Composite && d->destination->node()->parentNode() == d->source->node())
+            d->source->node()->addGhostInputEdge(this, d->source);
+        else
+            d->source->node()->addOutputEdge(this, d->source);
+        
+        if (d->destination->node()->kind() == dtkComposerNode::Composite && d->source->node()->parentNode() == d->destination->node())
+            d->destination->node()->addGhostOutputEdge(this, d->destination);
+        else
+            d->destination->node()->addInputEdge(this, d->destination);
+
+        return true;
+    }
+
+    if (!d->source || !d->destination) {
+        qDebug() << "Cannot connect undefined properties";
         return false;
+    }
 
     if(d->source->node() == d->destination->node()) {
-        dtkDebug() << "Cannot connect a node to itself!!";
+        qDebug() << "Cannot connect a node to itself.";
         return false;
     }
 
-    if (d->source->type() == dtkComposerNodeProperty::Input) {
-        dtkDebug() << "Source should be an output property!";
+    if(d->source->node()->isGhost() && d->destination->node()->isGhost()) {
+        qDebug() << "Cannot connect ghost nodes together.";
         return false;
     }
 
-    if (d->destination->type() == dtkComposerNodeProperty::Output) {
-        dtkDebug() << "Destination should be an input property!";
+    if (d->source->node()->isGhost() && d->source->type() == dtkComposerNodeProperty::Output) {
+        qDebug() << "Source property cannot be the output property of a ghost";
         return false;
     }
 
-    d->source->node()->addOutputEdge(this, d->source);
-    d->destination->node()->addInputEdge(this, d->destination);
+    if (d->source->node()->isGhost() && d->destination->type() == dtkComposerNodeProperty::Output) {
+        qDebug() << "Destination property cannot be the output property of a non ghost node if source property node is a ghost.";
+        return false;
+    }
+
+    if (d->destination->node()->isGhost() && d->destination->type() == dtkComposerNodeProperty::Input) {
+        qDebug() << "Destination property cannot be the input property of a ghost";
+        return false;
+    }
+
+    if (!d->source->node()->isGhost() && !d->destination->node()->isGhost() && d->source->type() == d->destination->type()) {
+        qDebug() << "Cannot connect properties of non ghost nodes if they are of the same type";
+        return false;
+    }
+
+    if(d->source->type() == dtkComposerNodeProperty::Output) {
+        foreach(dtkComposerEdge *edge, d->source->node()->outputEdges()) {
+            if(edge->source() == d->source && edge->destination() == d->destination) {
+                qDebug() << "Edge already exist.";
+                return false;
+            }
+        }
+    }
+
+    if(d->destination->type() == dtkComposerNodeProperty::Input) {
+        foreach(dtkComposerEdge *edge, d->destination->node()->inputEdges()) {
+            if(edge->source() == d->source && edge->destination() == d->destination) {
+                qDebug() << "Edge already exist.";
+                return false;
+            }
+        }
+    }
+
+    if (d->source->node()->isGhost())
+        d->source->node()->addGhostInputEdge(this, d->source);
+    else
+        d->source->node()->addOutputEdge(this, d->source);
+
+    if (d->destination->node()->isGhost())
+        d->destination->node()->addGhostOutputEdge(this, d->destination);
+    else
+        d->destination->node()->addInputEdge(this, d->destination);
 
     return true;
 }
 
 bool dtkComposerEdge::unlink(void)
 {
-    d->source->node()->removeOutputEdge(this);
-    d->destination->node()->removeInputEdge(this);
+    if(!d->source)
+        return false;
+
+    if(!d->destination)
+        return false;  
+
+    if(d->source->node()->isGhost())
+        d->source->node()->removeGhostInputEdge(this);
+    else
+        d->source->node()->removeOutputEdge(this);
+
+    if(d->destination->node()->isGhost())
+        d->destination->node()->removeGhostOutputEdge(this);
+    else
+        d->destination->node()->removeInputEdge(this);
 
     return true;
 }
@@ -230,3 +314,28 @@ bool dtkComposerEdge::unlink(void)
 
 //     d->progress = QPointF(0, 0);
 // }
+
+// /////////////////////////////////////////////////////////////////
+// Debug operators
+// /////////////////////////////////////////////////////////////////
+
+QDebug operator<<(QDebug dbg, dtkComposerEdge  edge)
+{
+    dbg.nospace() << edge.description();
+    
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, dtkComposerEdge& edge)
+{
+    dbg.nospace() << edge.description();
+    
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, dtkComposerEdge *edge)
+{
+    dbg.nospace() << edge->description();
+    
+    return dbg.space();
+}

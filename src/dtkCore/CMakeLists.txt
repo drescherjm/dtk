@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Aug 23 20:02:04 2010 (+0200)
-##           By: jwintz
-##     Update #: 178
+## Last-Updated: Thu Oct 14 21:05:06 2010 (+0200)
+##           By: Julien Wintz
+##     Update #: 181
 ######################################################################
 ## 
 ### Commentary: 
@@ -32,6 +32,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractDataMesh.h
   dtkAbstractDataReader.h
   dtkAbstractDataWriter.h
+  dtkAbstractDataConverter.h
   dtkAbstractFactory.h
   dtkAbstractObject.h
   dtkPlugin.h
@@ -59,6 +60,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractDataMesh.h
   dtkAbstractDataReader.h
   dtkAbstractDataWriter.h
+  dtkAbstractDataConverter.h
   dtkAbstractFactory.h
   dtkAbstractObject.h
   dtkPlugin.h
@@ -77,6 +79,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkAbstractData.cpp
   dtkAbstractDataReader.cpp
   dtkAbstractDataWriter.cpp
+  dtkAbstractDataConverter.cpp
   dtkAbstractDataImage.cpp
   dtkAbstractDataImage2D.cpp
   dtkAbstractDataImage3D.cpp
@@ -102,7 +105,7 @@ set(${PROJECT_NAME}_SOURCES
 
 set(${PROJECT_NAME}_SOURCES_WRAP)
 
-if(SWIG_FOUND)
+if(BUILD_WRAPPERS AND SWIG_FOUND)
 
   set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS})
   
@@ -114,7 +117,7 @@ if(SWIG_FOUND)
     dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP core tcl    ${CMAKE_CURRENT_SOURCE_DIR}/dtkCore.i ${${PROJECT_NAME}_WRAP_DEPENDS})
   endif(TCL_FOUND)
   
-endif(SWIG_FOUND)
+endif(BUILD_WRAPPERS AND SWIG_FOUND)
 
 ## #################################################################
 ## Build rules
@@ -127,12 +130,16 @@ endif(NOT MSVC)
 
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)
-add_definitions(-DQT_NO_DEBUG)
+if(NOT MSVC)
+  # Shouldn't the QT_USE_FILE set this appropriately?
+  add_definitions(-DQT_NO_DEBUG)
+endif(NOT MSVC)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
+  ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_WRAP})
 
@@ -152,7 +159,7 @@ endif(PYTHONLIBS_FOUND)
 
 set(${PROJECT_NAME}_MODULES)
 
-if(SWIG_FOUND AND PYTHONLIBS_FOUND)
+if(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dtkCore.i
@@ -162,7 +169,14 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 
 set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/core.py)
 
-endif(SWIG_FOUND AND PYTHONLIBS_FOUND)
+endif(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
+
+## #################################################################
+## Source file layout in development environments like Visual Studio
+## #################################################################
+
+SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
+SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 
 ## #################################################################
 ## Installation

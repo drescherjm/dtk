@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 13:28:45 2010 (+0200)
+ * Last-Updated: Sun Nov  7 16:42:20 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 248
+ *     Update #: 271
  */
 
 /* Commentary:
@@ -167,6 +167,11 @@ QWidget *dtkAbstractView::widget(void)
     return NULL;
 }
 
+void dtkAbstractView::close(void)
+{
+    emit closed();
+}
+
 void dtkAbstractView::showFullScreen(void)
 {
     if(QWidget *widget = this->widget())
@@ -219,52 +224,52 @@ void dtkAbstractView::addInteractor(dtkAbstractViewInteractor *interactor)
         d->interactors.insert(interactor->description(), interactor);
 }
 
-void dtkAbstractView::enableAnimator(QString animator)
+void dtkAbstractView::enableAnimator(const QString& animator)
 {
     if (d->animators.contains(animator)) {
         d->animators.value(animator)->setView(this);
         d->animators.value(animator)->enable();
     } else
-        dtkDebug() << description() << "has no such animator:" << animator;
+        dtkDebug() << description() << " has no such animator: " << animator;
 }
 
-void dtkAbstractView::disableAnimator(QString animator)
+void dtkAbstractView::disableAnimator(const QString& animator)
 {
     if (d->animators.contains(animator))
         d->animators.value(animator)->disable();
 }
 
-void dtkAbstractView::enableNavigator(QString navigator)
+void dtkAbstractView::enableNavigator(const QString& navigator)
 {
     if (d->navigators.contains(navigator)) {
 //      d->navigators.value(navigator)->setView(this);
         d->navigators.value(navigator)->enable();
     } else
-        dtkDebug() << description() << "has no such navigator:" << navigator;
+        dtkDebug() << description() << " has no such navigator: " << navigator;
 }
 
-void dtkAbstractView::disableNavigator(QString navigator)
+void dtkAbstractView::disableNavigator(const QString& navigator)
 {
     if (d->navigators.contains(navigator))
         d->navigators.value(navigator)->disable();
 }
 
-void dtkAbstractView::enableInteractor(QString interactor)
+void dtkAbstractView::enableInteractor(const QString& interactor)
 {
     if (d->interactors.contains(interactor)) {
         d->interactors.value(interactor)->setView(this);
         d->interactors.value(interactor)->enable();
     } else
-        dtkDebug() << description() << "has no such interactor:" << interactor;
+        dtkDebug() << description() << " has no such interactor: " << interactor;
 }
 
-void dtkAbstractView::disableInteractor(QString interactor)
+void dtkAbstractView::disableInteractor(const QString& interactor)
 {
     if (d->interactors.contains(interactor))
         d->interactors.value(interactor)->disable();
 }
 
-dtkAbstractViewAnimator *dtkAbstractView::animator(QString type)
+dtkAbstractViewAnimator *dtkAbstractView::animator(const QString& type)
 {
     if (d->animators.contains(type))
         return d->animators.value(type);
@@ -272,7 +277,7 @@ dtkAbstractViewAnimator *dtkAbstractView::animator(QString type)
     return NULL;
 }
 
-dtkAbstractViewNavigator *dtkAbstractView::navigator(QString type)
+dtkAbstractViewNavigator *dtkAbstractView::navigator(const QString& type)
 {
     if (d->navigators.contains(type))
         return d->navigators.value(type);
@@ -280,7 +285,7 @@ dtkAbstractViewNavigator *dtkAbstractView::navigator(QString type)
     return NULL;
 }
 
-dtkAbstractViewInteractor *dtkAbstractView::interactor(QString type)
+dtkAbstractViewInteractor *dtkAbstractView::interactor(const QString& type)
 {
     if (d->interactors.contains(type))
         return d->interactors.value(type);
@@ -288,17 +293,17 @@ dtkAbstractViewInteractor *dtkAbstractView::interactor(QString type)
     return NULL;
 }
 
-QList<dtkAbstractViewAnimator *> dtkAbstractView::animators(void)
+QList<dtkAbstractViewAnimator *> dtkAbstractView::animators(void) const
 {
     return d->animators.values();
 }
 
-QList<dtkAbstractViewNavigator *> dtkAbstractView::navigators(void)
+QList<dtkAbstractViewNavigator *> dtkAbstractView::navigators(void) const
 {
     return d->navigators.values();
 }
 
-QList<dtkAbstractViewInteractor *> dtkAbstractView::interactors(void)
+QList<dtkAbstractViewInteractor *> dtkAbstractView::interactors(void) const
 {
     return d->interactors.values();
 }
@@ -314,6 +319,66 @@ void dtkAbstractView::initialize(void)
 
 void dtkAbstractView::uninitialize(void)
 {
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::enableInteraction(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::disableInteraction(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::bounds(float& xmin, float& xmax, float& ymin, float& ymax, float &zmin, float& zmax)
+{
+    DTK_UNUSED(xmin);
+    DTK_UNUSED(xmax);
+    DTK_UNUSED(ymin);
+    DTK_UNUSED(ymax);
+    DTK_UNUSED(zmin);
+    DTK_UNUSED(zmax);
+
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::cameraUp(double *coordinates)
+{
+    DTK_UNUSED(coordinates);
+
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::cameraPosition(double *coordinates)
+{
+    DTK_UNUSED(coordinates);
+
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::cameraFocalPoint(double *coordinates)
+{
+    DTK_UNUSED(coordinates);
+
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::setCameraPosition(double x, double y, double z)
+{
+    DTK_UNUSED(x);
+    DTK_UNUSED(y);
+    DTK_UNUSED(z);
+
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::setCameraClippingRange(double near, double far)
+{
+    DTK_UNUSED(near);
+    DTK_UNUSED(far);
+
     DTK_DEFAULT_IMPLEMENTATION;
 }
 
@@ -410,6 +475,27 @@ void dtkAbstractView::setupRightEyeCameraFrustum(double left, double right, doub
     DTK_UNUSED(top);
     DTK_UNUSED(near);
     DTK_UNUSED(far);
+}
+
+QString dtkAbstractView::cameraProjectionMode(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return "None";
+}
+
+double dtkAbstractView::cameraViewAngle(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return 0.0;
+}
+
+double dtkAbstractView::cameraZoom(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return 1.0;
 }
 
 // /////////////////////////////////////////////////////////////////

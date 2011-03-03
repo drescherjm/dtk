@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Apr 22 14:13:31 2010 (+0200)
+## Last-Updated: Thu Oct 14 20:56:24 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 296
+##     Update #: 299
 ######################################################################
 ## 
 ### Commentary: 
@@ -45,6 +45,7 @@ option(BUILD_SHARED_LIBS   "Build shared libraries" true)
 option(BUILD_TOOLS         "Build tools"            true)
 option(BUILD_EXAMPLES      "Build examples"         true)
 option(BUILD_DOCUMENTATION "Build documentation"    true)
+option(BUILD_WRAPPERS      "Build wrappers"         true)
 
 add_subdirectory(src)
 

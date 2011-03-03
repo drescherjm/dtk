@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:04:36 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Jun 10 10:41:48 2010 (+0200)
+## Last-Updated: Wed Sep 22 16:39:32 2010 (+0200)
 ##           By: Julien Wintz
-##     Update #: 43
+##     Update #: 45
 ######################################################################
 ## 
 ### Commentary: 
@@ -23,29 +23,25 @@ include (InstallRequiredSystemLibraries)
 ## Global settings
 ## #################################################################
 
-if(NOT DTK_AGGREGATE_PLUGINS)
-  set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
-  if( "${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" )
-    # To obtain rpm named such as dtk-...-.fc10.x86_64.rpm
-    execute_process( COMMAND uname -r 
-                     COMMAND sed "s/\\.PAE//"  # Getting of any PAE keyword
-                     COMMAND sed "s/.*\\.\\(\\w*\\.\\w*\\)$/\\1/"
-                     OUTPUT_VARIABLE PACKAGE_EXTENSION
-                     OUTPUT_STRIP_TRAILING_WHITESPACE)
-    set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}.${PACKAGE_EXTENSION}")    
-  else( "${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" )
-    # Default situation
-    set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}.${CMAKE_SYSTEM_PROCESSOR}")
-  endif( "${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" )
+set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
 
-  set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}-src")
-  set(CPACK_PACKAGE_DESCRIPTION_SUMMARY ${PROJECT_NAME})
-  set(CPACK_PACKAGE_DESCRIPTION ${PROJECT_NAME})
-endif(NOT DTK_AGGREGATE_PLUGINS)
+if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
+  execute_process(COMMAND uname -r
+    COMMAND sed "s/.*\\.\\(\\w*\\.\\w*\\)$/\\1/"
+    OUTPUT_VARIABLE PACKAGE_EXTENSION
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+  set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}.${PACKAGE_EXTENSION}")
+else("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
+  set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}.${CMAKE_SYSTEM_PROCESSOR}")
+endif("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
+
+set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}-src")
 
 set(CPACK_PACKAGE_VENDOR "http://www.inria.fr/sophia/dream")
 set(CPACK_PACKAGE_CONTACT "Julien Wintz <jwintz@sophia.inria.fr>")
 set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_CURRENT_SOURCE_DIR}/README.txt)
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY ${PROJECT_NAME})
+set(CPACK_PACKAGE_DESCRIPTION ${PROJECT_NAME})
 set(CPACK_PACKAGE_VERSION_MAJOR ${${PROJECT_NAME}_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${${PROJECT_NAME}_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${${PROJECT_NAME}_VERSION_BUILD})

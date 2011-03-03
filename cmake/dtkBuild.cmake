@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Aug 16 10:56:40 2010 (+0200)
+## Last-Updated: Tue Nov 16 15:39:54 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 149
+##     Update #: 163
 ######################################################################
 ## 
 ### Commentary: 
@@ -104,6 +104,19 @@ configure_file( ## Install tree configure file
   ${${PROJECT_NAME}_BINARY_DIR}/install/${PROJECT_NAME}Config.cmake
   @ONLY IMMEDIATE)
 endif(EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.install.cmake.in)
+
+## #################################################################
+## Setup find file
+## #################################################################
+
+string(TOUPPER ${PROJECT_NAME} FND_NAME)
+
+if(EXISTS ${CMAKE_SOURCE_DIR}/cmake/Find${FND_NAME}.cmake.in)
+configure_file( ## Build tree configure file
+  ${CMAKE_SOURCE_DIR}/cmake/Find${FND_NAME}.cmake.in
+  ${${PROJECT_NAME}_BINARY_DIR}/CMakeModules/Find${FND_NAME}.cmake
+  @ONLY IMMEDIATE)
+endif(EXISTS ${CMAKE_SOURCE_DIR}/cmake/Find${FND_NAME}.cmake.in)
 
 ## #################################################################
 ## Setup use file

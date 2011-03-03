@@ -42,7 +42,7 @@ public:
 
     void printPlugins(void);
 
-          dtkPlugin *  plugin(QString name);
+          dtkPlugin *  plugin(const QString& name);
     QList<dtkPlugin *> plugins(void);
 
     void setPath(const QString& path);

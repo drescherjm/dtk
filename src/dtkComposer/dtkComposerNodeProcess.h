@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul 15 11:23:26 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul 26 13:53:13 2010 (+0200)
+ * Last-Updated: Thu Feb 24 15:08:59 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 8
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -29,14 +29,18 @@ class dtkComposerNodeProcess : public dtkComposerNode
     Q_OBJECT
 
 public:
-     dtkComposerNodeProcess(dtkComposerNode *parent = 0);
-    ~dtkComposerNodeProcess(void);
+             dtkComposerNodeProcess(dtkComposerNode *parent = 0);
+    virtual ~dtkComposerNodeProcess(void);
 
     QVariant value(dtkComposerNodeProperty *property);
 
+    virtual QString implementation(void);
+
 protected:
-    void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    virtual void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    virtual void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+
+    virtual void run(void);
 
 private:
     dtkComposerNodeProcessPrivate *d;

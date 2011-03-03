@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Aug 23 20:06:32 2010 (+0200)
-##           By: jwintz
-##     Update #: 207
+## Last-Updated: Mon Feb  7 10:09:07 2011 (+0100)
+##           By: Julien Wintz
+##     Update #: 269
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,21 +24,39 @@ project(dtkVr)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkVrArtController.h
+  dtkVrController.h
   dtkVrDevice.h
   dtkVrExport.h
+  dtkVrFlystickRecognizer.h
+  dtkVrGestureRecognizer.h
+  dtkVrHeadRecognizer.h
   dtkVrScreen.h
   dtkVrTracker.h
   dtkVrUser.h
   dtkVrWand.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
+  dtkVrArtController.h
+  dtkVrController.h
   dtkVrDevice.h
+  dtkVrFlystickRecognizer.h
+  dtkVrFlystickRecognizer_p.h
+  dtkVrGestureRecognizer.h
+  dtkVrGestureRecognizer_p.h
+  dtkVrHeadRecognizer.h
+  dtkVrHeadRecognizer_p.h
   dtkVrTracker.h
   dtkVrUser.h
   dtkVrWand.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkVrArtController.cpp
+  dtkVrController.cpp
   dtkVrDevice.cpp
+  dtkVrFlystickRecognizer.cpp
+  dtkVrGestureRecognizer.cpp
+  dtkVrHeadRecognizer.cpp
   dtkVrScreen.cpp
   dtkVrTracker.cpp
   dtkVrUser.cpp
@@ -84,7 +102,7 @@ endif(QUAT_LIBRARIES AND VRPN_LIBRARIES AND MPI_FOUND)
 
 set(${PROJECT_NAME}_SOURCES_WRAP)
 
-if(SWIG_FOUND)
+if(BUILD_WRAPPERS AND SWIG_FOUND)
 
   set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS})
   
@@ -96,7 +114,7 @@ if(SWIG_FOUND)
     dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP vr tcl    ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i ${${PROJECT_NAME}_WRAP_DEPENDS})
   endif(TCL_FOUND)
 
-endif(SWIG_FOUND)
+endif(BUILD_WRAPPERS AND SWIG_FOUND)
 
 ## #################################################################
 ## Build rules
@@ -109,18 +127,28 @@ endif(NOT WIN32)
 
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)
-add_definitions(-DQT_NO_DEBUG)
+if(NOT MSVC)
+  # Shouldn't the QT_USE_FILE set this appropriately?
+  add_definitions(-DQT_NO_DEBUG)
+endif(NOT MSVC)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
+  ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_WRAP})
 
 target_link_libraries(${PROJECT_NAME}
+  dtkMath
   dtkCore
   dtkDistributed)
+
+if(MSVC)
+  target_link_libraries(${PROJECT_NAME}
+    wsock32)
+endif()
 
 if(MPI_FOUND)
 target_link_libraries(${PROJECT_NAME}
@@ -139,7 +167,7 @@ endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)
 
 set(${PROJECT_NAME}_MODULES)
 
-if(SWIG_FOUND AND PYTHONLIBS_FOUND)
+if(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i
@@ -150,7 +178,14 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 
 set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/vr.py)
 
-endif(SWIG_FOUND AND PYTHONLIBS_FOUND)
+endif(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
+
+## #################################################################
+## Source file layout in development environments like Visual Studio
+## #################################################################
+
+SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
+SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 
 ## #################################################################
 ## Installation

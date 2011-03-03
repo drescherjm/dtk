@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:12:32 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug 17 13:03:24 2010 (+0200)
+ * Last-Updated: Sat Feb 26 19:53:07 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 50
+ *     Update #: 78
  */
 
 /* Commentary: 
@@ -27,9 +27,12 @@
 class dtkAbstractData;
 class dtkAbstractProcess;
 class dtkAbstractView;
+
 class dtkComposerNode;
 class dtkComposerNodeFactory;
 class dtkComposerPrivate;
+class dtkComposerScene;
+class dtkComposerView;
 
 class DTKCOMPOSER_EXPORT dtkComposer : public QWidget
 {
@@ -39,7 +42,9 @@ public:
              dtkComposer(QWidget *parent = 0);
     virtual ~dtkComposer(void);
 
+    void setBackgroundColor(const QColor& color);
     void setFactory(dtkComposerNodeFactory *factory);
+    void setFileName(const QString& fileName);
 
     bool isModified(void);
 
@@ -59,10 +64,19 @@ signals:
     
     void nodeAdded(dtkComposerNode *node);
     void nodeRemoved(dtkComposerNode *node);
+    void nodeSelected(dtkComposerNode *node);
    
+    void selectionCleared(void);
+
+    void pathChanged(dtkComposerNode *);
+
 signals:
     void evaluationStarted(void);
     void evaluationStopped(void);
+
+public slots:
+    void   group(QList<dtkComposerNode *> nodes);
+    void ungroup(dtkComposerNode *node);
 
 public slots:
    void onDataSelected(dtkAbstractData *data);
@@ -72,6 +86,14 @@ public slots:
 public slots:
    void startEvaluation(void);
    void stopEvaluation(void);
+
+public slots:
+   void copy(void);
+   void paste(void);
+
+protected:
+   dtkComposerScene *scene(void);
+   dtkComposerView *view(void);
 
 private:
     dtkComposerPrivate *d;

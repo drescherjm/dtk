@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 19:20:01 2010 (+0200)
+ * Last-Updated: Sat Jan 15 14:10:13 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 49
+ *     Update #: 109
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include <dtkCore/dtkAbstractProcess.h>
 #include <dtkCore/dtkAbstractProcessFactory.h>
+#include <dtkCore/dtkLog.h>
 
 typedef QHash<QString, QList<dtkAbstractProcess*> > dtkAbstractProcessHash;
 
@@ -27,6 +28,7 @@ class dtkAbstractProcessFactoryPrivate
 public:
     dtkAbstractProcessHash processes;
 
+    dtkAbstractProcessFactory::dtkAbstractProcessInterfacesHash interfaces;
     dtkAbstractProcessFactory::dtkAbstractProcessCreatorHash creators;
 };
 
@@ -38,7 +40,7 @@ dtkAbstractProcessFactory *dtkAbstractProcessFactory::instance(void)
     return s_instance;
 }
 
-dtkAbstractProcess *dtkAbstractProcessFactory::create(QString type)
+dtkAbstractProcess *dtkAbstractProcessFactory::create(const QString& type)
 {
     if(!d->creators.contains(type))
         return NULL;
@@ -54,7 +56,7 @@ dtkAbstractProcess *dtkAbstractProcessFactory::create(QString type)
     return process;
 }
 
-bool dtkAbstractProcessFactory::registerProcessType(QString type, dtkAbstractProcessCreator func)
+bool dtkAbstractProcessFactory::registerProcessType(const QString& type, dtkAbstractProcessCreator func)
 {
     if(!d->creators.contains(type)) {
 	d->creators.insert(type, func);
@@ -64,23 +66,56 @@ bool dtkAbstractProcessFactory::registerProcessType(QString type, dtkAbstractPro
     return false;
 }
 
-unsigned int dtkAbstractProcessFactory::size(QString type)
+bool dtkAbstractProcessFactory::registerProcessType(const QString& type, dtkAbstractProcessCreator func, const QString& interface)
+{
+    if(!d->creators.contains(type)) {
+	d->creators.insert(type, func);
+        d->interfaces.insertMulti(interface, type);
+	return true;
+    }
+ 
+    return false;
+}
+
+unsigned int dtkAbstractProcessFactory::size(const QString& type)
 {
     return d->processes[type].size();
 }
 
-dtkAbstractProcess *dtkAbstractProcessFactory::get(QString type, int idx)
+dtkAbstractProcess *dtkAbstractProcessFactory::get(const QString& type, int idx)
 {
     return d->processes[type].value(idx);
 }
 
-dtkAbstractProcess *dtkAbstractProcessFactory::get(QString type, QString name)
+dtkAbstractProcess *dtkAbstractProcessFactory::get(const QString& type, const QString& name)
 {
     foreach(dtkAbstractProcess *process, d->processes[type])
         if(process->name() == name)
             return process;
 
     return NULL;
+}
+
+bool dtkAbstractProcessFactory::exists(const QString& type)
+{
+    return d->creators.contains(type);
+}
+
+QStringList dtkAbstractProcessFactory::creators(void) const
+{
+    return d->creators.keys();
+}
+
+QStringList dtkAbstractProcessFactory::implementations(const QString& abstraction)
+{
+    QStringList implementations;
+
+    if(d->interfaces.keys().contains(abstraction))
+        implementations << d->interfaces.values(abstraction);
+    else
+        dtkWarning() << "There is no avalaible implementation of " << abstraction ;
+
+    return implementations;
 }
 
 dtkAbstractProcessFactory::dtkAbstractProcessFactory(void) : dtkAbstractFactory(), d(new dtkAbstractProcessFactoryPrivate)

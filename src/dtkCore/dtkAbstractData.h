@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Jul 15 13:49:03 2010 (+0200)
+ * Last-Updated: Sun Jan 16 19:34:51 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 188
+ *     Update #: 196
  */
 
 /* Commentary:
@@ -26,6 +26,7 @@
 
 class dtkAbstractDataReader;
 class dtkAbstractDataWriter;
+class dtkAbstractDataConverter;
 class dtkAbstractDataPrivate;
 
 class DTKCORE_EXPORT dtkAbstractData : public dtkAbstractObject
@@ -39,24 +40,27 @@ public:
 
     virtual QString description(void) const;
 
-    friend QDebug operator<<(QDebug debug, const dtkAbstractData& data);
-    friend QDebug operator<<(QDebug debug,       dtkAbstractData *data);
+    friend DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractData& data);
+    friend DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractData *data);
 
     virtual void draw(void) {}
 
 public slots:
-    virtual bool read(QString file);
-    virtual bool read(QStringList files);
+    virtual bool read(const QString& file);
+    virtual bool read(const QStringList& files);
 
-    virtual bool write(QString file);
-    virtual bool write(QStringList files);
+    virtual bool write(const QString& file);
+    virtual bool write(const QStringList& files);
+
+    virtual dtkAbstractData *convert(const QString& toType);
 
     virtual void *output(void);
+    virtual void *output(int channel);
 
     virtual void *data(void);
     virtual void *data(int channel);
 
-    virtual int parameter(int channel);
+    virtual double parameter(int channel);
 
     virtual void setParameter(int parameter);
     virtual void setParameter(int parameter, int channel);
@@ -64,8 +68,11 @@ public slots:
     virtual void setParameter(float parameter);
     virtual void setParameter(float parameter, int channel);
 
-    virtual void setParameter(QString parameter);
-    virtual void setParameter(QString parameter, int channel);
+    virtual void setParameter(double parameter);
+    virtual void setParameter(double parameter, int channel);
+
+    virtual void setParameter(const QString& parameter);
+    virtual void setParameter(const QString& parameter, int channel);
 
     virtual void setParameter(dtkAbstractData *parameter);
     virtual void setParameter(dtkAbstractData *parameter, int channel);
@@ -75,17 +82,22 @@ public slots:
 
     virtual void update(void);
 
-    void addReader(dtkAbstractDataReader *reader);
-    void addWriter(dtkAbstractDataWriter *writer);
+    void addReader   (dtkAbstractDataReader    *reader);
+    void addWriter   (dtkAbstractDataWriter    *writer);
+    void addConverter(dtkAbstractDataConverter *converter);
 
-    void  enableReader(QString reader);
-    void disableReader(QString reader);
+    void  enableReader(const QString& reader);
+    void disableReader(const QString& reader);
 
-    void  enableWriter(QString writer);
-    void disableWriter(QString writer);
+    void  enableWriter(const QString& writer);
+    void disableWriter(const QString& writer);
 
-    dtkAbstractDataReader *reader(QString type);
-    dtkAbstractDataWriter *writer(QString type);
+    void  enableConverter(const QString& converter);
+    void disableConverter(const QString& converter);
+
+    dtkAbstractDataReader    *reader   (const QString& type);
+    dtkAbstractDataWriter    *writer   (const QString& type);
+    dtkAbstractDataConverter *converter(const QString& type);
 
     QString     path(void);
     QStringList paths(void);
@@ -94,7 +106,7 @@ public slots:
     virtual QList<QImage>& thumbnails(void) const;
 
 public:
-    virtual bool casts(QString type);
+    virtual bool casts(const QString& type);
 
     virtual operator bool   (void);
     virtual operator int    (void);
@@ -105,8 +117,8 @@ private:
     dtkAbstractDataPrivate *d;
 };
 
-QDebug operator<<(QDebug debug, const dtkAbstractData& data);
-QDebug operator<<(QDebug debug,       dtkAbstractData *data);
+DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractData& data);
+DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractData *data);
 
 Q_DECLARE_METATYPE(dtkAbstractData)
 

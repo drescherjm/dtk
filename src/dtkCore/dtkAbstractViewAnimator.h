@@ -43,7 +43,7 @@ public:
    virtual void setData(dtkAbstractData *data);
    virtual void setView(dtkAbstractView *view);
 
-   bool enabled(void);
+   bool enabled(void) const;
    void  enable(void);
    void disable(void);
 

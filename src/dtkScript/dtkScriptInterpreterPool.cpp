@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Jan 26 09:48:03 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Aug  2 14:50:18 2009 (+0200)
+ * Last-Updated: Thu Oct 14 21:13:17 2010 (+0200)
  *           By: Julien Wintz
- *     Update #: 45
+ *     Update #: 50
  */
 
 /* Commentary: 
@@ -18,8 +18,12 @@
  */
 
 #include <dtkScript/dtkScriptInterpreter.h>
+#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
 #include <dtkScript/dtkScriptInterpreterPython.h>
+#endif
+#if defined(HAVE_SWIG) && defined(HAVE_TCL)
 #include <dtkScript/dtkScriptInterpreterTcl.h>
+#endif
 #include <dtkScript/dtkScriptInterpreterPool.h>
 
 class dtkScriptInterpreterPoolPrivate
@@ -38,6 +42,7 @@ dtkScriptInterpreterPool *dtkScriptInterpreterPool::instance(void)
 
 dtkScriptInterpreter *dtkScriptInterpreterPool::console(QString type)
 {
+#if defined(HAVE_SWIG) && defined(HAVE_PYTHON) && defined(HAVE_TCL)
     if(!d->interpreters.contains("console") || !d->interpreters.value("console"))
         if(type == "tcl")
             d->interpreters.insert("console", new dtkScriptInterpreterTcl);
@@ -45,22 +50,33 @@ dtkScriptInterpreter *dtkScriptInterpreterPool::console(QString type)
             d->interpreters.insert("console", new dtkScriptInterpreterPython);
 
     return d->interpreters.value("console");
+#else
+    return NULL;
+#endif
 }
 
 dtkScriptInterpreter *dtkScriptInterpreterPool::python(void)
 {
+#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
     if(!d->interpreters.contains("python") || !d->interpreters.value("python"))
 	d->interpreters.insert("python", new dtkScriptInterpreterPython);
 
     return d->interpreters.value("python");
+#else
+    return NULL;
+#endif
 }
 
 dtkScriptInterpreter *dtkScriptInterpreterPool::tcl(void)
 {
+#if defined(HAVE_SWIG) && defined(HAVE_TCL)
     if(!d->interpreters.contains("tcl") || !d->interpreters.value("tcl"))
 	d->interpreters.insert("tcl", new dtkScriptInterpreterTcl);
 
     return d->interpreters.value("tcl");
+#else
+    return NULL;
+#endif
 }
 
 dtkScriptInterpreterPool::dtkScriptInterpreterPool(void) : QObject(), d(new dtkScriptInterpreterPoolPrivate)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb  7 22:37:03 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Aug 16 21:10:03 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 131
+ * Last-Updated: Tue Mar  1 18:20:21 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 164
  */
 
 /* Commentary: 
@@ -25,14 +25,21 @@
 #include <dtkCore/dtkAbstractViewFactory.h>
 
 #include "dtkComposerNode.h"
-#include "dtkComposerNodeCondition.h"
+#include "dtkComposerNodeBoolean.h"
+#include "dtkComposerNodeBooleanOperator.h"
+#include "dtkComposerNodeCase.h"
+#include "dtkComposerNodeConditional.h"
 #include "dtkComposerNodeData.h"
 #include "dtkComposerNodeFactory.h"
 #include "dtkComposerNodeFile.h"
-#include "dtkComposerNodeInteger.h"
+#include "dtkComposerNodeLog.h"
+#include "dtkComposerNodeNumber.h"
+#include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerNodeString.h"
+#include "dtkComposerNodeStringComparator.h"
+#include "dtkComposerNodeStringOperator.h"
 #include "dtkComposerNodeView.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -62,20 +69,40 @@ dtkComposerNodeFactory::~dtkComposerNodeFactory(void)
 
 dtkComposerNode *dtkComposerNodeFactory::create(QString type)
 {
-    if (type == "dtkComposerInteger")
-        return new dtkComposerNodeInteger;
+    if (type == "dtkComposerBoolean")
+        return new dtkComposerNodeBoolean;
 
-    if (type == "dtkComposerString")
-        return new dtkComposerNodeString;
+    if (type == "dtkComposerBooleanOperator")
+        return new dtkComposerNodeBooleanOperator;
+
+    if (type == "dtkComposerCase")
+        return new dtkComposerNodeCase;
+
+    if (type == "dtkComposerConditional")
+        return new dtkComposerNodeConditional;
+
+    if (type == "dtkComposerLog")
+        return new dtkComposerNodeLog;
 
     if (type == "dtkComposerFile")
         return new dtkComposerNodeFile;
 
-    if (type == "dtkComposerCondition")
-        return new dtkComposerNodeCondition;
+    if (type == "dtkComposerString")
+        return new dtkComposerNodeString;
+
+    if (type == "dtkComposerStringComparator")
+        return new dtkComposerNodeStringComparator;
+
+    if (type == "dtkComposerStringOperator")
+        return new dtkComposerNodeStringOperator;
+
+    if (type == "dtkComposerNumber")
+        return new dtkComposerNodeNumber;
+
+    if (type == "dtkComposerNumberOperator")
+        return new dtkComposerNodeNumberOperator;
 
     if (dtkAbstractData *data = dtkAbstractDataFactory::instance()->create(type)) {
-        
         dtkComposerNodeData *node = new dtkComposerNodeData;
         node->setObject(data);
         node->setType(type);
@@ -83,7 +110,6 @@ dtkComposerNode *dtkComposerNodeFactory::create(QString type)
     }
 
     if (dtkAbstractProcess *process = dtkAbstractProcessFactory::instance()->create(type)) {
-        
         dtkComposerNodeProcess *node = new dtkComposerNodeProcess;
         node->setObject(process);
         node->setType(type);
@@ -91,7 +117,6 @@ dtkComposerNode *dtkComposerNodeFactory::create(QString type)
     }
 
     if (dtkAbstractView *view = dtkAbstractViewFactory::instance()->create(type)) {
-        
         dtkComposerNodeView *node = new dtkComposerNodeView;
         node->setObject(view);
         node->setType(type);
@@ -102,7 +127,6 @@ dtkComposerNode *dtkComposerNodeFactory::create(QString type)
 
     return NULL;
 }
-
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeFactory documentation

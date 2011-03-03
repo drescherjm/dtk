@@ -43,7 +43,7 @@ dtkAbstractViewNavigator::~dtkAbstractViewNavigator(void)
     d = NULL;
 }
 
-bool dtkAbstractViewNavigator::enabled(void)
+bool dtkAbstractViewNavigator::enabled(void) const
 {
     return d->enabled;
 }

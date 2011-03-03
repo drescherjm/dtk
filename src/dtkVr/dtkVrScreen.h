@@ -20,12 +20,14 @@
 #ifndef DTKVRSCREEN_H
 #define DTKVRSCREEN_H
 
+#include "dtkVrExport.h"
+
 #include <QtGui>
 
 class dtkVec3;
 class dtkVrScreenPrivate;
 
-class dtkVrScreen
+class  DTKVR_EXPORT dtkVrScreen
 {
 public:
      dtkVrScreen(const dtkVec3& lowerLeft, const dtkVec3& lowerRight, const dtkVec3& upperLeft);

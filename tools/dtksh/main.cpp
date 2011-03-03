@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Dec 10 14:05:44 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Aug 23 20:43:05 2010 (+0200)
- *           By: jwintz
- *     Update #: 18
+ * Last-Updated: Thu Oct 14 21:26:59 2010 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -88,6 +88,11 @@ int main(int argc, char **argv)
 
     dtkScriptInterpreter *interpreter = dtkScriptInterpreterPool::instance()->console("python");
 
+    if(!interpreter) {
+        qDebug() << "No interpreter available. Is BUILD_WRAPPERS enabled ?";
+        return 0;
+    }
+    
     interpreter->start();
 
     for(int i = 1; i < argc; i++)

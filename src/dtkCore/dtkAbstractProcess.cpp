@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar  1 23:58:15 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 85
+ * Last-Updated: Tue Jan  4 15:40:54 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 86
  */
 
 /* Commentary: 
@@ -50,7 +50,13 @@ QDebug operator<<(QDebug debug, dtkAbstractProcess *process)
 
 int dtkAbstractProcess::run(void)
 {
-    return this->update();
+    int retval = this->update();
+    if (retval==0)
+        emit success();
+    else
+        emit failure();
+
+    return retval;
 }
 
 int dtkAbstractProcess::update(void)
@@ -60,7 +66,7 @@ int dtkAbstractProcess::update(void)
     return DTK_FAILURE;
 }
 
-bool dtkAbstractProcess::read(QString file)
+bool dtkAbstractProcess::read(const QString& file)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(file);
@@ -68,7 +74,7 @@ bool dtkAbstractProcess::read(QString file)
     return false;
 }
 
-bool dtkAbstractProcess::read(QStringList files)
+bool dtkAbstractProcess::read(const QStringList& files)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(files);
@@ -76,7 +82,7 @@ bool dtkAbstractProcess::read(QStringList files)
     return false;
 }
 
-bool dtkAbstractProcess::write(QString file)
+bool dtkAbstractProcess::write(const QString& file)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(file);
@@ -84,7 +90,7 @@ bool dtkAbstractProcess::write(QString file)
     return false;
 }
 
-bool dtkAbstractProcess::write(QStringList files)
+bool dtkAbstractProcess::write(const QStringList& files)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(files);
@@ -106,6 +112,27 @@ void dtkAbstractProcess::setParameter(int data, int channel)
 }
 
 void dtkAbstractProcess::setParameter(int data, int channel, int frame)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+    DTK_UNUSED(channel);
+    DTK_UNUSED(frame);
+}
+
+void dtkAbstractProcess::setParameter(int* data)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+}
+
+void dtkAbstractProcess::setParameter(int* data, int channel)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+    DTK_UNUSED(channel);
+}
+
+void dtkAbstractProcess::setParameter(int* data, int channel, int frame)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(data);

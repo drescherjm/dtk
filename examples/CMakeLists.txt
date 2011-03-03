@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:06:43 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Jul 15 09:20:28 2010 (+0200)
+## Last-Updated: Mon Nov 22 11:09:19 2010 (+0100)
 ##           By: Julien Wintz
-##     Update #: 24
+##     Update #: 26
 ######################################################################
 ## 
 ### Commentary: 
@@ -31,3 +31,5 @@ add_subdirectory(dtkInspector)
 add_subdirectory(dtkReferenceCounting)
 add_subdirectory(dtkInsetMenu)
 add_subdirectory(dtkFinder)
+add_subdirectory(dtkVrGestureRecognizer)
+add_subdirectory(dtkPlotPoints)

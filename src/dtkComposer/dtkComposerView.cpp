@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:07:37 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 13 10:20:12 2010 (+0200)
+ * Last-Updated: Thu Feb 24 16:06:19 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 85
+ *     Update #: 175
  */
 
 /* Commentary: 
@@ -21,8 +21,8 @@
 
 dtkComposerView::dtkComposerView(QWidget *parent) : QGraphicsView(parent)
 {
+    this->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     this->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
-    this->setCacheMode(QGraphicsView::CacheBackground);
     this->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     this->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     this->setResizeAnchor(QGraphicsView::AnchorViewCenter);
@@ -32,13 +32,41 @@ dtkComposerView::dtkComposerView(QWidget *parent) : QGraphicsView(parent)
     this->setFrameStyle(QFrame::NoFrame);
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setAcceptDrops(true);
-
-    this->setDragMode(QGraphicsView::RubberBandDrag);
 }
 
 dtkComposerView::~dtkComposerView(void)
 {
 
+}
+
+void dtkComposerView::setBackgroundColor(const QColor &color)
+{
+    this->setBackgroundBrush(color);
+}
+
+void dtkComposerView::onCenterOn(const QPointF& point)
+{
+    // this->centerOn(point);
+}
+
+void dtkComposerView::onFitInView(const QRectF& rect)
+{
+    // this->fitInView(rect, Qt::KeepAspectRatio);
+}
+
+void dtkComposerView::mousePressEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::LeftButton && (event->modifiers() & Qt::AltModifier))
+        this->setDragMode(QGraphicsView::ScrollHandDrag);
+    else
+        this->setDragMode(QGraphicsView::RubberBandDrag);
+
+    QGraphicsView::mousePressEvent(event);
+}
+
+void dtkComposerView::mouseReleaseEvent(QMouseEvent *event)
+{
+    QGraphicsView::mouseReleaseEvent(event);
 }
 
 void dtkComposerView::wheelEvent(QWheelEvent *event)
@@ -50,5 +78,5 @@ void dtkComposerView::wheelEvent(QWheelEvent *event)
     if (factor < 0.1 || factor > 10)
         return;
     
-    scale(scaleFactor, scaleFactor);
+    this->scale(scaleFactor, scaleFactor);
 }

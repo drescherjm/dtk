@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 21:58:48 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jul 21 09:14:25 2010 (+0200)
+ * Last-Updated: Tue Dec 14 10:22:05 2010 (+0100)
  *           By: Julien Wintz
- *     Update #: 34
+ *     Update #: 36
  */
 
 /* Commentary: 
@@ -36,7 +36,7 @@ public:
     virtual QString description(void) const = 0;
     virtual QStringList handled(void) const = 0;
     
-    bool enabled(void);
+    bool enabled(void) const;
     void  enable(void);
     void disable(void);
     
@@ -44,17 +44,19 @@ public:
     
     virtual void setData(dtkAbstractData *data);
     
+    virtual QStringList supportedFileExtensions(void) const;
+
 signals:
-    void started(QString message);
+    void started(const QString& message);
     void progressed(int step);
     void finished(void);
 
 public slots:
-    virtual bool canWrite(QString file);
-    virtual bool canWrite(QStringList files);
+    virtual bool canWrite(const QString& file);
+    virtual bool canWrite(const QStringList& files);
     
-    virtual bool write(QString file);
-    virtual bool write(QStringList files);
+    virtual bool write(const QString& file);
+    virtual bool write(const QStringList& files);
     
     virtual void setProgress(int value);
 

@@ -1,5 +1,5 @@
-/* dtkPluginManager.cpp --- 
- * 
+/* dtkPluginManager.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 151
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkAbstractData.h"
@@ -50,7 +50,7 @@ void dtkPluginManager::initialize(void)
         this->readSettings();
 
     QString paths = "";
-    
+
     if (!d->path.isEmpty())
         paths = d->path + ":";
 
@@ -65,7 +65,7 @@ void dtkPluginManager::initialize(void)
     if(plugins_dir.exists())
         paths = paths + plugins_dir.absolutePath();
 #endif
-    
+
 #ifdef Q_WS_WIN
     QStringList pathList;
     QRegExp pathFilterRx("(([a-zA-Z]:|)[^:]+)");
@@ -75,7 +75,7 @@ void dtkPluginManager::initialize(void)
     while ((pos = pathFilterRx.indexIn(paths, pos)) != -1) {
 
         QString pathItem = pathFilterRx.cap(1);
-        pathItem.replace( "\\" , "/" ); 
+        pathItem.replace( "\\" , "/" );
 
         if (!pathItem.isEmpty())
             pathList << pathItem;
@@ -94,7 +94,7 @@ void dtkPluginManager::initialize(void)
 
         if (dir.cd(path)) {
             dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
-        
+
             foreach (QFileInfo entry, dir.entryInfoList())
                 loadPlugin(entry.absoluteFilePath());
         } else {
@@ -113,16 +113,17 @@ void dtkPluginManager::uninitialize(void)
 
 void dtkPluginManager::readSettings(void)
 {
-    QSettings settings("inria", "dtk");
+    QSettings settings("inria","dtk");
+
     settings.beginGroup("plugins");
 #ifdef Q_WS_WIN
     d->path = settings.value("path", "C:\\Program Files\\inria\\plugins").toString();
 #else
     d->path = settings.value("path", "/usr/local/inria/plugins").toString();
 #endif
-    
+
     settings.endGroup();
-    
+
     if(d->path.isEmpty()) {
         dtkWarning() << "Your dtk config does not seem to be set correctly.";
         dtkWarning() << "Please set plugins.path.";
@@ -131,7 +132,7 @@ void dtkPluginManager::readSettings(void)
 
 void dtkPluginManager::writeSettings(void)
 {
-    QSettings settings("inria", "dtk");
+    QSettings settings("inria","dtk");
     settings.beginGroup("plugins");
     settings.setValue("path", d->path);
     settings.endGroup();
@@ -158,7 +159,7 @@ dtkPlugin *dtkPluginManager::plugin(const QString& name)
 QList<dtkPlugin *> dtkPluginManager::plugins(void)
 {
     QList<dtkPlugin *> list;
-    
+
     foreach(QPluginLoader *loader, d->loaders)
         list << qobject_cast<dtkPlugin *>(loader->instance());
 
@@ -168,6 +169,11 @@ QList<dtkPlugin *> dtkPluginManager::plugins(void)
 void dtkPluginManager::setPath(const QString& path)
 {
     d->path = path;
+}
+
+QString dtkPluginManager::path()const
+{
+    return d->path;
 }
 
 dtkPluginManager::dtkPluginManager(void) : d(new dtkPluginManagerPrivate)

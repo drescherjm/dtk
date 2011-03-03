@@ -1,5 +1,5 @@
-/* dtkDeploy.cpp --- 
- * 
+/* dtkDeploy.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 10 12:01:02 2011 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 62
  */
 
-/* Commentary: 
+/* Commentary:
  * See credits at EOF.
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDeploy.h"
@@ -22,6 +22,11 @@
 #include <QtCore>
 
 #include <iostream>
+
+#if defined ( WIN32 )
+#define __func__ __FUNCTION__
+#endif
+
 
 bool runStripEnabled = true;
 
@@ -345,7 +350,7 @@ DeploymentInfo deployQtFrameworks(QList<FrameworkInfo> frameworks,
 
         // Get the qt path from one of the Qt frameworks;
         if (deploymenInfo.qtPath.isNull()
-         && framework.frameworkName.contains("Qt") 
+         && framework.frameworkName.contains("Qt")
          && framework.frameworkDirectory.contains("/lib"))
         {
                 deploymenInfo.qtPath = framework.frameworkDirectory;

@@ -113,7 +113,7 @@ endif(TCL_FOUND)
 find_package(PythonLibs QUIET)
 
 if(PYTHONLIBS_FOUND)
-  include_directories(${PYTHON_INCLUDE_PATH})
+    include_directories(${PYTHON_INCLUDE_DIRS})
   get_filename_component(PYTHON_PATH ${PYTHON_LIBRARIES} PATH)
   link_directories(${PYTHON_PATH})
 endif(PYTHONLIBS_FOUND)

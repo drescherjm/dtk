@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar  1 18:01:12 2011 (+0100)
+ * Last-Updated: Thu Mar  3 14:04:18 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 235
+ *     Update #: 236
  */
 
 /* Commentary: 
@@ -137,6 +137,13 @@ public:
 
     void setGhost(bool ghost);
     bool  isGhost(void);
+
+    // --
+
+    void setSize(const QSizeF& size);
+    void setSize(qreal w, qreal h);
+
+    // --
 
     friend QDebug operator<<(QDebug dbg, dtkComposerNode& node);
     friend QDebug operator<<(QDebug dbg, dtkComposerNode *node);

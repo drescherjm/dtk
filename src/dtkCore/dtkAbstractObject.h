@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:43:14 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 21:02:55 2010 (+0200)
+ * Last-Updated: Thu Mar  3 19:16:01 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 91
+ *     Update #: 92
  */
 
 /* Commentary:
@@ -55,8 +55,6 @@ public:
    QString metadata(const QString& key) const;
    QStringList metadatas(const QString& key) const;
 
-   virtual void addAction(const QString& text, const QObject *receiver, const char *slot);
-   virtual void addAction( QMenu& menu );
 signals:
    void propertySet(const QString& key, const QString& value);
    void metaDataSet(const QString& key, const QString& value);

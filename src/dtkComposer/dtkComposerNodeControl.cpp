@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  1 19:20:32 2011 (+0100)
+ * Last-Updated: Thu Mar  3 18:49:35 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 100
+ *     Update #: 163
  */
 
 /* Commentary: 
@@ -19,29 +19,10 @@
 
 #include "dtkComposerEdge.h"
 #include "dtkComposerNodeControl.h"
+#include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeProperty.h"
 
 #include <dtkCore/dtkGlobal.h>
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerNodeControlBloc
-// /////////////////////////////////////////////////////////////////
-
-dtkComposerNodeControlBloc::dtkComposerNodeControlBloc(QGraphicsItem *parent) : QGraphicsRectItem(parent)
-{
-    QPen pen;
-    pen.setColor(QColor("#c7c7c7"));
-    pen.setStyle(Qt::DashLine);
-    pen.setWidth(1);
-
-    this->setPen(pen);
-    this->setBrush(Qt::NoBrush);
-}
-
-dtkComposerNodeControlBloc::~dtkComposerNodeControlBloc(void)
-{
-
-}
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlPrivate
@@ -53,7 +34,7 @@ public:
     QList<dtkComposerNodeProperty *> iProps(dtkComposerEdge *edge);
 
 public:
-    QList<dtkComposerNodeControlBloc *> blocs;
+    QList<dtkComposerNodeControlBlock *> blocks;
 
 public:
     dtkComposerNodeProperty *property_input_condition;
@@ -84,15 +65,6 @@ dtkComposerNodeControl::dtkComposerNodeControl(dtkComposerNode *parent) : dtkCom
     this->setZValue(5);
 }
 
-dtkComposerNodeControlBloc *dtkComposerNodeControl::addBlock(void)
-{
-    dtkComposerNodeControlBloc *bloc = new dtkComposerNodeControlBloc(this);
-    
-    d->blocs << bloc;
-
-    return bloc;
-}
-
 dtkComposerNodeControl::~dtkComposerNodeControl(void)
 {
     delete d;
@@ -100,15 +72,31 @@ dtkComposerNodeControl::~dtkComposerNodeControl(void)
     d = NULL;
 }
 
+dtkComposerNodeControlBlock *dtkComposerNodeControl::addBlock(const QString& title)
+{
+    dtkComposerNodeControlBlock *block = new dtkComposerNodeControlBlock(title, this);
+    
+    d->blocks << block;
+
+    this->layout();
+
+    return block;
+}
+
+QList<dtkComposerNodeControlBlock *> dtkComposerNodeControl::blocks(void)
+{
+    return d->blocks;
+}
+
 void dtkComposerNodeControl::layout(void)
 {
     dtkComposerNode::layout();
 
-    for(int i = 0; i < d->blocs.count(); i++)
-        d->blocs.at(i)->setRect(QRectF(this->boundingRect().x(),
-                                       this->boundingRect().y() + 23 + i * ((this->boundingRect().height() - 46) / d->blocs.count()),
+    for(int i = 0; i < d->blocks.count(); i++)
+        d->blocks.at(i)->setRect(QRectF(this->boundingRect().x(),
+                                       this->boundingRect().y() + 23 + i * ((this->boundingRect().height() - 46) / d->blocks.count()),
                                        this->boundingRect().width(),
-                                       (this->boundingRect().height() - 46) / d->blocs.count()));
+                                       (this->boundingRect().height() - 46) / d->blocks.count()));
 }
 
 void dtkComposerNodeControl::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -118,10 +106,30 @@ void dtkComposerNodeControl::paint(QPainter *painter, const QStyleOptionGraphics
 
 void dtkComposerNodeControl::onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
-    qDebug() << DTK_PRETTY_FUNCTION;
+    // qDebug() << DTK_PRETTY_FUNCTION;
 }
 
 void dtkComposerNodeControl::onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
-    qDebug() << DTK_PRETTY_FUNCTION;
+    // qDebug() << DTK_PRETTY_FUNCTION;
+}
+
+bool dtkComposerNodeControl::condition(void)
+{
+    bool value = false;
+
+    if(!d->property_input_condition)
+        return value;
+
+    if(!d->property_input_condition->edge())
+        return value;
+
+    QVariant p_value = d->property_input_condition->edge()->source()->node()->value(d->property_input_condition->edge()->source());
+
+    if(!p_value.canConvert(QVariant::Bool))
+        return value;
+    else
+        value = p_value.toBool();
+
+    return value;
 }

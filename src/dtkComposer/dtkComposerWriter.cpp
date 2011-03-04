@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar  1 19:16:54 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 323
+ * Last-Updated: Thu Mar  3 18:52:00 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 365
  */
 
 /* Commentary: 
@@ -21,6 +21,8 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
+#include "dtkComposerNodeControl.h"
+#include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeNumber.h"
 #include "dtkComposerNodeNumberOperator.h"
@@ -80,7 +82,7 @@ void dtkComposerWriter::write(const QString& fileName)
     // -- Writing nodes
 
     foreach(dtkComposerNode *node, d->scene->nodes())
-        if(!node->parentNode())
+        if(!node->parentNode() && !node->parentItem())
             this->writeNode(node, root, document);
 
     // -- Writing edges
@@ -408,6 +410,25 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
             implementation.appendChild(text);
             
             tag.appendChild(implementation);
+        }
+    }
+
+    // -- Control node
+    
+    if(dtkComposerNodeControl *control_node = dynamic_cast<dtkComposerNodeControl *>(node)) {
+        
+        tag.setAttribute("w", QString::number(control_node->boundingRect().width()));
+        tag.setAttribute("h", QString::number(control_node->boundingRect().height()));
+
+        foreach(dtkComposerNodeControlBlock *block, control_node->blocks()) {
+            
+            QDomElement block_element = document.createElement("block");
+            block_element.setAttribute("title", block->title());
+
+            foreach(dtkComposerNode *block_node, block->nodes())
+                this->writeNode(block_node, block_element, document);
+
+            tag.appendChild(block_element);
         }
     }
     

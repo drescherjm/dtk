@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar  4 20:54:03 2011 (+0100)
+ * Last-Updated: Fri Mar  4 22:33:32 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 227
+ *     Update #: 238
  */
 
 /* Commentary: 
@@ -37,7 +37,10 @@ public:
     QList<dtkComposerNodeControlBlock *> blocks;
 
 public:
-    dtkComposerNodeProperty *property_input_condition;
+    dtkComposerNodeProperty *property_input;
+
+public:
+    QColor color;
 };
 
 QList<dtkComposerNodeProperty *> dtkComposerNodeControlPrivate::iProps(dtkComposerEdge *edge)
@@ -53,11 +56,13 @@ QList<dtkComposerNodeProperty *> dtkComposerNodeControlPrivate::iProps(dtkCompos
 
 dtkComposerNodeControl::dtkComposerNodeControl(dtkComposerNode *parent) : dtkComposerNode(parent), d(new dtkComposerNodeControlPrivate)
 {
-    d->property_input_condition = new dtkComposerNodeProperty("condition", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, this);
-    d->property_input_condition->setRect(QRectF(this->boundingRect().left() + 5, this->boundingRect().top() + 5, 10, 10));
-    d->property_input_condition->setPos(QPointF(d->property_input_condition->pos().x(), this->boundingRect().top()));
+    d->color = Qt::transparent;
 
-    this->addInputProperty(d->property_input_condition);
+    d->property_input = new dtkComposerNodeProperty("condition", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, this);
+    d->property_input->setRect(QRectF(this->boundingRect().left() + 5, this->boundingRect().top() + 5, 10, 10));
+    d->property_input->setPos(QPointF(d->property_input->pos().x(), this->boundingRect().top()));
+
+    this->addInputProperty(d->property_input);
 
     this->setAcceptHoverEvents(true);
     this->setKind(dtkComposerNode::Control);
@@ -120,13 +125,13 @@ void dtkComposerNodeControl::paint(QPainter *painter, const QStyleOptionGraphics
 
     QLinearGradient header_gradient(header_path.boundingRect().topLeft(), header_path.boundingRect().bottomLeft());
     header_gradient.setColorAt(0.0, QColor(Qt::white));
-    header_gradient.setColorAt(0.2, QColor("#aa7845"));
-    header_gradient.setColorAt(1.0, QColor("#aa7845").darker());
+    header_gradient.setColorAt(0.2, d->color);
+    header_gradient.setColorAt(1.0, d->color.darker());
 
     QLinearGradient footer_gradient(footer_path.boundingRect().topLeft(), footer_path.boundingRect().bottomLeft());
-    footer_gradient.setColorAt(0.0, QColor("#aa7845").darker());
-    footer_gradient.setColorAt(0.6, QColor("#aa7845").darker());
-    footer_gradient.setColorAt(1.0, QColor("#aa7845").darker().darker());
+    footer_gradient.setColorAt(0.0, d->color.darker());
+    footer_gradient.setColorAt(0.6, d->color.darker());
+    footer_gradient.setColorAt(1.0, d->color.darker().darker());
     
     painter->setPen(Qt::NoPen);
 
@@ -173,13 +178,13 @@ bool dtkComposerNodeControl::condition(void)
 {
     bool value = false;
 
-    if(!d->property_input_condition)
+    if(!d->property_input)
         return value;
 
-    if(!d->property_input_condition->edge())
+    if(!d->property_input->edge())
         return value;
 
-    QVariant p_value = d->property_input_condition->edge()->source()->node()->value(d->property_input_condition->edge()->source());
+    QVariant p_value = d->property_input->edge()->source()->node()->value(d->property_input->edge()->source());
 
     if(!p_value.canConvert(QVariant::Bool))
         return value;
@@ -187,4 +192,14 @@ bool dtkComposerNodeControl::condition(void)
         value = p_value.toBool();
 
     return value;
+}
+
+void dtkComposerNodeControl::setColor(const QColor& color)
+{
+    d->color = color;
+}
+
+void dtkComposerNodeControl::setInputPropertyName(const QString& name)
+{
+    d->property_input->setName(name);
 }

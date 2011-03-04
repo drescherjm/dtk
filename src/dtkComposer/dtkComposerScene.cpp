@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Mar  4 21:03:07 2011 (+0100)
+ * Last-Updated: Fri Mar  4 21:29:19 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1699
+ *     Update #: 1701
  */
 
 /* Commentary: 
@@ -853,7 +853,8 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
     QList<dtkComposerNodeControlBlock *> hovered_control_blocks = this->hoveredControlBlocks(d->grabber_node);
 
     foreach(dtkComposerNodeControlBlock *block, hovered_control_blocks)
-        block->highlight(block);
+        if(d->grabber_node->parentItem() != block)
+            block->highlight(block);
 
     if(hovered_control_blocks.isEmpty())
         dtkComposerNodeControlBlock::highlight(0);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:47:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar  4 20:35:18 2011 (+0100)
+ * Last-Updated: Fri Mar  4 22:31:53 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 57
+ *     Update #: 60
  */
 
 /* Commentary: 
@@ -51,6 +51,10 @@ public slots:
 
 protected:
     bool condition(void);
+
+protected:
+    void setColor(const QColor& color);
+    void setInputPropertyName(const QString& name);
 
 private:
     dtkComposerNodeControlPrivate *d;

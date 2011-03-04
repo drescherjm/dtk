@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 18:50:18 2011 (+0100)
+ * Last-Updated: Fri Mar  4 22:25:19 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 546
+ *     Update #: 553
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
+#include "dtkComposerNodeCase.h"
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeFile.h"
@@ -524,6 +525,25 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
 
         qreal w = node.toElement().attribute("w").toFloat();
         qreal h = node.toElement().attribute("h").toFloat();
+
+        if(dtkComposerNodeCase *case_node = dynamic_cast<dtkComposerNodeCase *>(control_node)) {
+
+            int case_block_count = 0;
+
+            QDomNodeList children = node.childNodes();
+
+            for(int i = 0; i < children.count(); i++) {
+                
+                if(children.at(i).toElement().tagName() != "block")
+                    continue;
+
+                if(children.at(i).toElement().attribute("title").startsWith("case"))
+                    case_block_count++;
+            }
+
+            for(int i = 0; i < case_block_count; i++)
+                case_node->addBlock(QString("case%1").arg(i));
+        }    
 
         control_node->setSize(w, h);
         

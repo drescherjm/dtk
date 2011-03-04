@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb 24 11:28:34 2011 (+0100)
+ * Last-Updated: Fri Mar  4 21:17:08 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 98
+ *     Update #: 99
  */
 
 /* Commentary: 
@@ -78,6 +78,8 @@ public:
 
     bool  isDisplayed(void);
     void setDisplayed(bool dirty);
+
+    void setName(const QString& name);
 
     friend QDebug operator<<(QDebug dbg, dtkComposerNodeProperty& property);
     friend QDebug operator<<(QDebug dbg, dtkComposerNodeProperty *property);

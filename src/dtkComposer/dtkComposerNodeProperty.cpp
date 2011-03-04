@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Feb 25 15:38:26 2011 (+0100)
+ * Last-Updated: Fri Mar  4 21:18:04 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 275
+ *     Update #: 277
  */
 
 /* Commentary: 
@@ -230,6 +230,13 @@ bool dtkComposerNodeProperty::isDisplayed(void)
 void dtkComposerNodeProperty::setDisplayed(bool displayed)
 {
     d->displayed = displayed;
+}
+
+void dtkComposerNodeProperty::setName(const QString& name)
+{
+    d->text->setPlainText(name);
+
+    this->update();
 }
 
 QRectF dtkComposerNodeProperty::boundingRect(void) const

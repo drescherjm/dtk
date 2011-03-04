@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:46:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 20:15:09 2011 (+0100)
+ * Last-Updated: Fri Mar  4 20:40:06 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 29
+ *     Update #: 33
  */
 
 /* Commentary: 
@@ -46,6 +46,8 @@ public:
 
     void setBrushColor(const QColor& color);
     void setPenColor(const QColor& color);
+    void setRect(const QRectF& rectangle);
+    void setRect(qreal x, qreal y, qreal width, qreal height);
 
     QList<dtkComposerNode *>      nodes(void);
     QList<dtkComposerNode *> startNodes(void);

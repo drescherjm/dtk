@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:47:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 18:48:55 2011 (+0100)
+ * Last-Updated: Fri Mar  4 20:35:18 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 53
+ *     Update #: 57
  */
 
 /* Commentary: 
@@ -42,6 +42,7 @@ public:
   
 public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    bool resize(const QRectF& rect);
 
 public slots:
     virtual void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);

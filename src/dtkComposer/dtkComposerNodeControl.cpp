@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar  4 12:41:03 2011 (+0100)
+ * Last-Updated: Fri Mar  4 20:54:03 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 166
+ *     Update #: 227
  */
 
 /* Commentary: 
@@ -95,14 +95,68 @@ void dtkComposerNodeControl::layout(void)
 
     for(int i = 0; i < d->blocks.count(); i++)
         d->blocks.at(i)->setRect(QRectF(this->boundingRect().x(),
-                                       this->boundingRect().y() + 23 + i * ((this->boundingRect().height() - 46) / d->blocks.count()),
-                                       this->boundingRect().width(),
+                                        this->boundingRect().y() + 23 + i * ((this->boundingRect().height() - 46) / d->blocks.count()),
+                                        this->boundingRect().width(),
                                        (this->boundingRect().height() - 46) / d->blocks.count()));
 }
 
 void dtkComposerNodeControl::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    QPainterPath path;
+    path.addRoundedRect(this->boundingRect(), this->nodeRadius(), this->nodeRadius());
+    
+    QPainterPath blocs_path;
+    path.addRect(QRectF(this->boundingRect().topLeft() + QPointF(0, 23), this->boundingRect().bottomRight() - QPointF(0, 23)));
+
+    path -= blocs_path;
+
+    QPainterPath header_path;
+    header_path.addRect(QRectF(this->boundingRect().topLeft(), QSizeF(this->boundingRect().width(), 23)));
+    header_path &= path;
+
+    QPainterPath footer_path;
+    footer_path.addRect(QRectF(this->boundingRect().bottomLeft() - QPointF(0, 23), QSizeF(this->boundingRect().width(), 23)));
+    footer_path &= path;
+
+    QLinearGradient header_gradient(header_path.boundingRect().topLeft(), header_path.boundingRect().bottomLeft());
+    header_gradient.setColorAt(0.0, QColor(Qt::white));
+    header_gradient.setColorAt(0.2, QColor("#aa7845"));
+    header_gradient.setColorAt(1.0, QColor("#aa7845").darker());
+
+    QLinearGradient footer_gradient(footer_path.boundingRect().topLeft(), footer_path.boundingRect().bottomLeft());
+    footer_gradient.setColorAt(0.0, QColor("#aa7845").darker());
+    footer_gradient.setColorAt(0.6, QColor("#aa7845").darker());
+    footer_gradient.setColorAt(1.0, QColor("#aa7845").darker().darker());
+    
+    painter->setPen(Qt::NoPen);
+
+    painter->setBrush(header_gradient);
+    painter->drawPath(header_path);
+
+    painter->setBrush(footer_gradient);
+    painter->drawPath(footer_path);
+
     dtkComposerNode::paint(painter, option, widget);
+}
+
+bool dtkComposerNodeControl::resize(const QRectF& rect)
+{
+    bool resize = true;
+
+    for(int i = 0; i < d->blocks.count(); i++) {
+
+        dtkComposerNodeControlBlock *block = d->blocks.at(i);
+
+        QRectF r(rect.x(),
+                 rect.y() + 23 + i * ((rect.height() - 46) / d->blocks.count()),
+                 rect.width(),
+                 (rect.height() - 46) / d->blocks.count());
+
+        if(block->childItems().count() != 0 && !r.contains(block->childrenBoundingRect()))
+            resize = false;
+    }
+
+    return resize;
 }
 
 void dtkComposerNodeControl::onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)

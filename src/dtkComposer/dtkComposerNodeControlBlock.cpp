@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 22:26:05 2011 (+0100)
+ * Last-Updated: Fri Mar  4 20:45:26 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 81
+ *     Update #: 107
  */
 
 /* Commentary: 
@@ -89,6 +89,29 @@ void dtkComposerNodeControlBlock::setPenColor(const QColor& color)
 
     this->setPen(d->pen_color);
     this->update();
+}
+
+void dtkComposerNodeControlBlock::setRect(const QRectF& rectangle)
+{
+    if(this->childItems().count()) {
+
+        if(rectangle.topLeft() != this->rect().topLeft()) {
+
+            QPointF delta = rectangle.topLeft() - this->rect().topLeft();
+
+            foreach(QGraphicsItem *item, this->childItems()) {
+                item->setX(item->x() + delta.x());
+                item->setY(item->y() + delta.y());
+            }
+        }
+    }
+
+    QGraphicsRectItem::setRect(rectangle);
+}
+
+void dtkComposerNodeControlBlock::setRect(qreal x, qreal y, qreal width, qreal height)
+{
+    this->setRect(QRectF(x, y, width, height));
 }
 
 QList<dtkComposerNode *> dtkComposerNodeControlBlock::nodes(void)

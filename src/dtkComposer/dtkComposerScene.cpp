@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Mar  4 13:32:54 2011 (+0100)
+ * Last-Updated: Fri Mar  4 20:07:42 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1691
+ *     Update #: 1694
  */
 
 /* Commentary: 
@@ -973,10 +973,8 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
         d->grabber_node->setParentItem(blocks.first());
         d->grabber_node->setPos(c - w);
 
-        if(dtkComposerNodeControl *control = dynamic_cast<dtkComposerNodeControl *>(d->grabber_node)) {
-            qDebug() << "Updating z value";
+        if(dtkComposerNodeControl *control = dynamic_cast<dtkComposerNodeControl *>(d->grabber_node))
             control->setZValue(blocks.first()->zValue() + 1);
-        }
 
     } else {
 

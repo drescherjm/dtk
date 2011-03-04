@@ -206,7 +206,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->toolRunAction->setToolTip("Runs the current composition (Ctrl+R)");
     d->toolRunAction->setIcon(QIcon(":dtkGui/pixmaps/dtk-composer-run.png"));
     connect(d->toolRunAction, SIGNAL(triggered()), this, SLOT(run()));
-
+    
     d->toolStopAction = new QAction("Stop", this);
     d->toolStopAction->setShortcut(Qt::ControlModifier+Qt::Key_Period);
     d->toolStopAction->setToolTip("Stops the current composition (Ctrl+.)");
@@ -249,6 +249,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->stack->addWidget(d->editor);
 
     d->composer = new dtkComposer(d->stack);
+    connect( d->toolRunAction, SIGNAL(triggered()),      d->composer, SLOT(startEvaluation()) );
+    connect( d->composer,      SIGNAL(evaluationStopped()), this, SLOT(stop()) );
 
     d->stack->addWidget(d->composer);
 

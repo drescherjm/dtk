@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:47:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  1 19:20:28 2011 (+0100)
+ * Last-Updated: Thu Mar  3 18:48:55 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 23
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -22,23 +22,7 @@
 
 #include "dtkComposerNode.h"
 
-// /////////////////////////////////////////////////////////////////
-// dtkComposerNodeControlBloc
-// /////////////////////////////////////////////////////////////////
-
-#include <QtGui>
-
-class dtkComposerNodeControlBloc : public QGraphicsRectItem
-{
-public:
-     dtkComposerNodeControlBloc(QGraphicsItem *parent);
-    ~dtkComposerNodeControlBloc(void);
-};
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerNodeControl
-// /////////////////////////////////////////////////////////////////
-
+class dtkComposerNodeControlBlock;
 class dtkComposerNodeControlPrivate;
 
 class dtkComposerNodeControl : public dtkComposerNode
@@ -49,7 +33,9 @@ public:
      dtkComposerNodeControl(dtkComposerNode *parent = 0);
     ~dtkComposerNodeControl(void);
   
-    dtkComposerNodeControlBloc *addBlock(void);
+    dtkComposerNodeControlBlock *addBlock(const QString& title);
+
+    QList<dtkComposerNodeControlBlock *> blocks(void);
 
 public:
     void layout(void);
@@ -61,6 +47,9 @@ public slots:
     virtual void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
     virtual void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
     virtual void update(void) = 0;
+
+protected:
+    bool condition(void);
 
 private:
     dtkComposerNodeControlPrivate *d;

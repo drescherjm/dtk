@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 18:49:35 2011 (+0100)
+ * Last-Updated: Thu Mar  3 22:26:09 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 163
+ *     Update #: 165
  */
 
 /* Commentary: 
@@ -62,7 +62,7 @@ dtkComposerNodeControl::dtkComposerNodeControl(dtkComposerNode *parent) : dtkCom
     this->setAcceptHoverEvents(true);
     this->setKind(dtkComposerNode::Control);
     this->setResizable(true);
-    this->setZValue(5);
+    this->setZValue(-2000);
 }
 
 dtkComposerNodeControl::~dtkComposerNodeControl(void)

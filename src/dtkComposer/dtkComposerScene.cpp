@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 18:50:56 2011 (+0100)
+ * Last-Updated: Thu Mar  3 22:39:10 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1564
+ *     Update #: 1652
  */
 
 /* Commentary: 
@@ -733,7 +733,7 @@ QList<dtkComposerNodeControlBlock *> dtkComposerScene::hoveredControlBlocks(dtkC
     foreach(QGraphicsItem *item, this->items(node->mapToScene(node->boundingRect()))) {
         if(dtkComposerNodeControlBlock *block = dynamic_cast<dtkComposerNodeControlBlock *>(item)) {
             if(   (block->parentItem() != node)
-               && (node->parentItem() != block)
+                  // && (node->parentItem() != block)
                && (block->mapRectToScene(block->boundingRect()).contains(node->mapRectToScene(node->boundingRect()))) && (this->hoveredControlBlocks(node, block->childItems()).isEmpty()))
                 blocks << block;
         }
@@ -942,6 +942,12 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             }
             
             this->setModified(true);
+
+        } else {
+
+            delete d->current_edge;
+
+            d->current_edge = 0;
         }
         
     }
@@ -955,11 +961,42 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
     QList<dtkComposerNodeControlBlock *> blocks = this->hoveredControlBlocks(grabbed);
 
-    if((blocks.count() != 1) || (!grabbed)) {
+    if(blocks.count() > 1)
         return;
-    } else {
+
+    if(blocks.count()) {
+
+        // qDebug() << "Parenting";
+        // qDebug() << "Grabbed coordinates" << grabbed->pos() << grabbed->scenePos();
+        // qDebug() << "Block coordinates" << blocks.first()->pos() << blocks.first()->scenePos();
+        // qDebug() << "";
+
+        if(grabbed->parentItem() == blocks.first())
+            return;
+
+        QPointF c = grabbed->scenePos();
+        QPointF w = blocks.first()->scenePos();
+
         grabbed->setParentItem(blocks.first());
-        grabbed->setPos(blocks.first()->mapFromScene(mouseEvent->scenePos()));
+        grabbed->setPos(c - w);
+
+        if(dtkComposerNodeControl *control = dynamic_cast<dtkComposerNodeControl *>(grabbed))
+            control->setZValue(grabbed->zValue() + 1);
+
+    } else {
+
+        // qDebug() << "UnParenting";
+        // qDebug() << "Grabbed coordinates" << grabbed->pos() << grabbed->scenePos();
+        // qDebug() << "";
+
+        QPointF c = grabbed->pos();
+        QPointF w = QPointF(0, 0);
+
+        if(grabbed->parentItem())
+            w = grabbed->parentItem()->scenePos();
+
+        grabbed->setParentItem(0);
+        grabbed->setPos(c + w);
     }
 
     // --

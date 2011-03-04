@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 18:15:04 2011 (+0100)
+ * Last-Updated: Thu Mar  3 22:26:05 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 41
+ *     Update #: 81
  */
 
 /* Commentary: 
@@ -27,7 +27,9 @@
 class dtkComposerNodeControlBlockPrivate
 {
 public:
-    QColor color;
+    QColor pen_color;
+    QColor brush_color;
+
     QString title;
 };
 
@@ -37,11 +39,14 @@ public:
 
 dtkComposerNodeControlBlock::dtkComposerNodeControlBlock(const QString& title, QGraphicsItem *parent) : QGraphicsRectItem(parent), d(new dtkComposerNodeControlBlockPrivate)
 {
-    d->color = QColor("#c7c7c7");
+    d->pen_color = QColor("#c7c7c7");
+    d->brush_color = Qt::transparent;
+
     d->title = title;
 
-    this->setPen(d->color);
+    this->setPen(d->pen_color);
     this->setBrush(Qt::NoBrush);
+    this->setZValue(parent->zValue());
 }
 
 dtkComposerNodeControlBlock::~dtkComposerNodeControlBlock(void)
@@ -56,16 +61,33 @@ QString dtkComposerNodeControlBlock::title(void) const
     return d->title;
 }
 
+QColor dtkComposerNodeControlBlock::brushColor(void) const
+{
+    return d->brush_color;
+}
+
 QColor dtkComposerNodeControlBlock::penColor(void) const
 {
-    return d->color;
+    return d->pen_color;
+}
+
+void dtkComposerNodeControlBlock::setBrushColor(const QColor& color)
+{
+    d->brush_color = color;
+
+    if(color == Qt::transparent)
+        this->setBrush(Qt::NoBrush);
+    else
+        this->setBrush(d->brush_color);
+
+    this->update();
 }
 
 void dtkComposerNodeControlBlock::setPenColor(const QColor& color)
 {
-    d->color = color;
+    d->pen_color = color;
 
-    this->setPen(d->color);
+    this->setPen(d->pen_color);
     this->update();
 }
 
@@ -104,19 +126,17 @@ QList<dtkComposerNode *> dtkComposerNodeControlBlock::endNodes(void)
 
 void dtkComposerNodeControlBlock::highlight(void)
 {
-    QPropertyAnimation *animation = new QPropertyAnimation(this, "penColor");
-    animation->setDuration(1000);
-    animation->setKeyValueAt(0.0, QColor("#c7c7c7"));
-    animation->setKeyValueAt(0.1, Qt::red);
-    animation->setKeyValueAt(0.2, QColor("#c7c7c7"));
-    animation->setKeyValueAt(0.3, Qt::red);
-    animation->setKeyValueAt(0.4, QColor("#c7c7c7"));
-    animation->setKeyValueAt(0.5, Qt::red);
-    animation->setKeyValueAt(0.6, QColor("#c7c7c7"));
-    animation->setKeyValueAt(0.7, Qt::red);
-    animation->setKeyValueAt(0.8, QColor("#c7c7c7"));
-    animation->setKeyValueAt(0.9, Qt::red);
-    animation->setKeyValueAt(1.0, QColor("#c7c7c7"));
+    static dtkComposerNodeControlBlock *highlighted = NULL;
+
+    if(highlighted == this)
+        return;
+
+    QPropertyAnimation *animation = new QPropertyAnimation(this, "brushColor");
+    animation->setDuration(500);
+    animation->setKeyValueAt(0.0, Qt::red);
+    animation->setKeyValueAt(1.0, Qt::transparent);
     animation->setEasingCurve(QEasingCurve::Linear);
     animation->start(QAbstractAnimation::DeleteWhenStopped);
+
+    highlighted = this;
 }

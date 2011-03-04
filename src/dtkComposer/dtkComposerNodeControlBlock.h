@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:46:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar  4 20:40:06 2011 (+0100)
+ * Last-Updated: Fri Mar  4 21:00:43 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 33
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -54,7 +54,7 @@ public:
     QList<dtkComposerNode *>   endNodes(void);
     
 public:
-    void highlight(void);
+    static void highlight(dtkComposerNodeControlBlock *block);
 
 private:
     dtkComposerNodeControlBlockPrivate *d;

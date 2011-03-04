@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar  4 20:45:26 2011 (+0100)
+ * Last-Updated: Fri Mar  4 21:03:23 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 107
+ *     Update #: 123
  */
 
 /* Commentary: 
@@ -147,19 +147,21 @@ QList<dtkComposerNode *> dtkComposerNodeControlBlock::endNodes(void)
     return nodes;
 }
 
-void dtkComposerNodeControlBlock::highlight(void)
+void dtkComposerNodeControlBlock::highlight(dtkComposerNodeControlBlock *block)
 {
     static dtkComposerNodeControlBlock *highlighted = NULL;
 
-    if(highlighted == this)
+    if(highlighted == block)
         return;
 
-    QPropertyAnimation *animation = new QPropertyAnimation(this, "brushColor");
-    animation->setDuration(500);
-    animation->setKeyValueAt(0.0, Qt::red);
-    animation->setKeyValueAt(1.0, Qt::transparent);
-    animation->setEasingCurve(QEasingCurve::Linear);
-    animation->start(QAbstractAnimation::DeleteWhenStopped);
+    if(block) {
+        QPropertyAnimation *animation = new QPropertyAnimation(block, "brushColor");
+        animation->setDuration(500);
+        animation->setKeyValueAt(0.0, Qt::red);
+        animation->setKeyValueAt(1.0, Qt::transparent);
+        animation->setEasingCurve(QEasingCurve::Linear);
+        animation->start(QAbstractAnimation::DeleteWhenStopped);
+    }
 
-    highlighted = this;
+    highlighted = block;
 }

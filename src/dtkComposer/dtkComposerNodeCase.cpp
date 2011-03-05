@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar  4 22:35:43 2011 (+0100)
+ * Last-Updated: Sat Mar  5 22:00:38 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 85
+ *     Update #: 120
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #include "dtkComposerNodeCase.h"
 #include "dtkComposerNodeCase_p.h"
 #include "dtkComposerNodeControlBlock.h"
+#include "dtkComposerNodeProperty.h"
 
 #include <dtkCore/dtkGlobal.h>
 
@@ -114,7 +115,9 @@ void dtkComposerNodeCaseButton::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
 
-    parent_node_d->block_cases.prepend(parent_node->addBlock(QString("case%1").arg(parent_node_d->block_cases.count())));
+    QString block_name = QString("case%1").arg(parent_node_d->block_cases.count());
+    
+    parent_node->addBlock(block_name);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -140,6 +143,24 @@ dtkComposerNodeCase::~dtkComposerNodeCase(void)
     delete d;
 
     d = NULL;
+}
+
+dtkComposerNodeControlBlock *dtkComposerNodeCase::addBlock(const QString& title)
+{
+    dtkComposerNodeControlBlock *block = dtkComposerNodeControl::addBlock(title);
+
+    dtkComposerNodeProperty *input_constant = block->addInputProperty("constant", this);
+    input_constant->setBlockedFrom(title);
+    
+    dtkComposerNodeProperty *output_constant = block->addOutputProperty("constant", this);
+    output_constant->setBlockedFrom(title);
+
+    this->addInputProperty(input_constant);
+    this->addOutputProperty(output_constant);
+    
+    d->block_cases.prepend(block);
+
+    return block;
 }
 
 void dtkComposerNodeCase::layout(void)

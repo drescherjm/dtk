@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 26 20:21:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 27 17:32:39 2011 (+0100)
+ * Last-Updated: Fri Mar  4 23:14:37 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 129
+ *     Update #: 130
  */
 
 /* Commentary: 
@@ -42,6 +42,7 @@ dtkComposerNote::dtkComposerNote(dtkComposerNode *parent) : QObject(parent), QGr
     d->text->setTextWidth(200);
 
     this->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+    this->setZValue(-4000);
 
 #if QT_VERSION >= 0x040600
     QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(this);

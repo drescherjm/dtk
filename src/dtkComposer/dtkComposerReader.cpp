@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Mar  4 22:25:19 2011 (+0100)
+ * Last-Updated: Sat Mar  5 22:05:07 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 553
+ *     Update #: 575
  */
 
 /* Commentary: 
@@ -119,18 +119,40 @@ void dtkComposerReader::read(const QString& fileName)
         
         QString source_property_id;
         QString destin_property_id;
+
+        QString source_property_block;
+        QString destin_property_block;
         
         if (source.hasAttribute("id"))
             source_property_id = source.attribute("id");
+        if (source.hasAttribute("block"))
+            source_property_block = source.attribute("block");
 
         if (destin.hasAttribute("id"))
             destin_property_id = destin.attribute("id");
+        if (destin.hasAttribute("block"))
+            destin_property_block = destin.attribute("block");
 
         dtkComposerEdge *edge = new dtkComposerEdge;
         
-        if(source_property_id.isEmpty() && destin_property_id.isEmpty()) {
+        if(source_property_id.isEmpty() && destin_property_id.isEmpty() && source_property_block.isEmpty() && destin_property_block.isEmpty()) {
             edge->setSource(d->node_map.value(source_id)->outputProperty(source_property));
             edge->setDestination(d->node_map.value(destin_id)->inputProperty(destin_property));
+        }
+
+        else if(!source_property_block.isEmpty() || !destin_property_block.isEmpty()) {
+
+            if (!source_property_block.isEmpty()) {
+
+                edge->setSource(dynamic_cast<dtkComposerNodeControl *>(d->node_map.value(source_id))->outputProperty(source_property_block, source_property));
+                edge->setDestination(d->node_map.value(destin_id)->inputProperty(destin_property));
+            }
+
+            else {
+
+                edge->setSource(d->node_map.value(source_id)->outputProperty(source_property));
+                edge->setDestination(dynamic_cast<dtkComposerNodeControl *>(d->node_map.value(destin_id))->inputProperty(destin_property_block, destin_property));
+            }
         }
 
         else if(!source_property_id.isEmpty() && !destin_property_id.isEmpty()) {
@@ -328,7 +350,6 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
                 genre = dtkComposerNodeNumber::Double;
 
             number_node->setGenre(genre);
-            qDebug() << genre;
         }
         
         for(int i = 0; i < children.count(); i++) {

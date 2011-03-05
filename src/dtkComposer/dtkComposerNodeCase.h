@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:01:16 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar  4 21:43:33 2011 (+0100)
+ * Last-Updated: Sat Mar  5 21:58:18 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 3
+ *     Update #: 4
  */
 
 /* Commentary: 
@@ -31,6 +31,8 @@ class dtkComposerNodeCase : public dtkComposerNodeControl
 public:
      dtkComposerNodeCase(dtkComposerNode *parent = 0);
     ~dtkComposerNodeCase(void);
+
+    dtkComposerNodeControlBlock *addBlock(const QString& title);
 
 public:
     void layout(void);

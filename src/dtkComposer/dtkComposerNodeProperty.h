@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Mar  4 21:17:08 2011 (+0100)
+ * Last-Updated: Sat Mar  5 20:53:17 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 99
+ *     Update #: 107
  */
 
 /* Commentary: 
@@ -72,7 +72,10 @@ public:
 
     dtkComposerNode *parent(void);
     dtkComposerNode *clonedFrom(void);
+    
+    QString blockedFrom(void) const;
 
+    void setBlockedFrom(const QString& name);
     void setClonedFrom(dtkComposerNode *node);
     void setParentNode(dtkComposerNode *node);
 

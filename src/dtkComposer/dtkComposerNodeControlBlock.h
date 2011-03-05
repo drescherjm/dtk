@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:46:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar  4 21:00:43 2011 (+0100)
+ * Last-Updated: Sat Mar  5 17:04:05 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 35
+ *     Update #: 48
  */
 
 /* Commentary: 
@@ -24,6 +24,7 @@
 
 class dtkComposerNode;
 class dtkComposerNodeControlBlockPrivate;
+class dtkComposerNodeProperty;
 
 class dtkComposerNodeControlBlock : public QObject, public QGraphicsRectItem
 {
@@ -40,7 +41,6 @@ public:
     ~dtkComposerNodeControlBlock(void);
 
     QString title(void) const;
-
     QColor brushColor(void) const;
     QColor penColor(void) const;
 
@@ -52,6 +52,12 @@ public:
     QList<dtkComposerNode *>      nodes(void);
     QList<dtkComposerNode *> startNodes(void);
     QList<dtkComposerNode *>   endNodes(void);
+
+    QList<dtkComposerNodeProperty *>  inputProperties(void);
+    QList<dtkComposerNodeProperty *> outputProperties(void);
+
+    dtkComposerNodeProperty  *addInputProperty(QString name, dtkComposerNode *parent = 0);
+    dtkComposerNodeProperty *addOutputProperty(QString name, dtkComposerNode *parent = 0);
     
 public:
     static void highlight(dtkComposerNodeControlBlock *block);

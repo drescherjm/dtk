@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar  4 22:33:32 2011 (+0100)
+ * Last-Updated: Sat Mar  5 22:04:48 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 238
+ *     Update #: 292
  */
 
 /* Commentary: 
@@ -31,9 +31,6 @@
 class dtkComposerNodeControlPrivate
 {
 public:
-    QList<dtkComposerNodeProperty *> iProps(dtkComposerEdge *edge);
-
-public:
     QList<dtkComposerNodeControlBlock *> blocks;
 
 public:
@@ -42,13 +39,6 @@ public:
 public:
     QColor color;
 };
-
-QList<dtkComposerNodeProperty *> dtkComposerNodeControlPrivate::iProps(dtkComposerEdge *edge)
-{
-    QList<dtkComposerNodeProperty *> properties;
-
-    return properties;
-}
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControl
@@ -94,15 +84,61 @@ QList<dtkComposerNodeControlBlock *> dtkComposerNodeControl::blocks(void)
     return d->blocks;
 }
 
+dtkComposerNodeProperty *dtkComposerNodeControl::inputProperty(const QString& block_title, const QString& name) const
+{
+    foreach(dtkComposerNodeControlBlock *block, d->blocks)
+        if(block->title() == block_title)
+            foreach(dtkComposerNodeProperty *property, block->inputProperties())
+                if(property->name() == name)
+                    return property;
+
+    return NULL;
+}
+
+dtkComposerNodeProperty *dtkComposerNodeControl::outputProperty(const QString& block_title, const QString& name) const
+{
+    foreach(dtkComposerNodeControlBlock *block, d->blocks)
+        if(block->title() == block_title)
+            foreach(dtkComposerNodeProperty *property, block->outputProperties())
+                if(property->name() == name)
+                    return property;
+
+    return NULL;
+}
+
 void dtkComposerNodeControl::layout(void)
 {
     dtkComposerNode::layout();
 
-    for(int i = 0; i < d->blocks.count(); i++)
+    for(int i = 0; i < d->blocks.count(); i++) {
+
         d->blocks.at(i)->setRect(QRectF(this->boundingRect().x(),
                                         this->boundingRect().y() + 23 + i * ((this->boundingRect().height() - 46) / d->blocks.count()),
                                         this->boundingRect().width(),
                                        (this->boundingRect().height() - 46) / d->blocks.count()));
+
+        for(int j = 0; j < d->blocks.at(i)->inputProperties().count(); j++) {
+
+            d->blocks.at(i)->inputProperties().at(j)->setRect(
+                QRectF(
+                    d->blocks.at(i)->rect().left() + this->nodeRadius(),
+                    d->blocks.at(i)->rect().top() + this->nodeRadius() * (3*j + 1),
+                    2 * this->nodeRadius(),
+                    2 * this->nodeRadius()
+                ));
+        }
+
+        for(int j = 0; j < d->blocks.at(i)->outputProperties().count(); j++) {
+
+            d->blocks.at(i)->outputProperties().at(j)->setRect(
+                QRectF(
+                    d->blocks.at(i)->rect().right() - 3 * this->nodeRadius(),
+                    d->blocks.at(i)->rect().top() + this->nodeRadius() * (3*j + 1),
+                    2 * this->nodeRadius(),
+                    2 * this->nodeRadius()
+                ));
+        }
+    }
 }
 
 void dtkComposerNodeControl::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar  4 21:03:23 2011 (+0100)
+ * Last-Updated: Sat Mar  5 17:05:03 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 123
+ *     Update #: 147
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeControlBlock.h"
+#include "dtkComposerNodeProperty.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlBlockPrivate
@@ -27,9 +28,12 @@
 class dtkComposerNodeControlBlockPrivate
 {
 public:
+    QList<dtkComposerNodeProperty *>  input_properties;
+    QList<dtkComposerNodeProperty *> output_properties;
+
+public:
     QColor pen_color;
     QColor brush_color;
-
     QString title;
 };
 
@@ -145,6 +149,34 @@ QList<dtkComposerNode *> dtkComposerNodeControlBlock::endNodes(void)
             nodes << node;
 
     return nodes;
+}
+
+QList<dtkComposerNodeProperty *> dtkComposerNodeControlBlock::inputProperties(void)
+{
+    return d->input_properties;
+}
+
+QList<dtkComposerNodeProperty *> dtkComposerNodeControlBlock::outputProperties(void)
+{
+    return d->output_properties;
+}
+
+dtkComposerNodeProperty *dtkComposerNodeControlBlock::addInputProperty(QString name, dtkComposerNode *parent)
+{
+    dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, parent);
+
+    d->input_properties << property;
+    
+    return property;
+}
+
+dtkComposerNodeProperty *dtkComposerNodeControlBlock::addOutputProperty(QString name, dtkComposerNode *parent)
+{
+    dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, parent);
+
+    d->output_properties << property;
+
+    return property;
 }
 
 void dtkComposerNodeControlBlock::highlight(dtkComposerNodeControlBlock *block)

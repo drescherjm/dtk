@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Mar  5 22:04:48 2011 (+0100)
+ * Last-Updated: Sat Mar  5 23:03:38 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 292
+ *     Update #: 296
  */
 
 /* Commentary: 
@@ -228,6 +228,16 @@ bool dtkComposerNodeControl::condition(void)
         value = p_value.toBool();
 
     return value;
+}
+
+QVariant dtkComposerNodeControl::value(void)
+{
+    if(!d->property_input->edge()) {
+        qDebug() << DTK_PRETTY_FUNCTION << "No input property edge !!!";
+        return QVariant();
+    }
+
+    return d->property_input->edge()->source()->node()->value(d->property_input->edge()->source());
 }
 
 void dtkComposerNodeControl::setColor(const QColor& color)

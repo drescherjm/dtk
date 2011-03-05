@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Mar  5 22:00:38 2011 (+0100)
+ * Last-Updated: Sat Mar  5 23:34:48 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 120
+ *     Update #: 171
  */
 
 /* Commentary: 
@@ -17,6 +17,7 @@
  * 
  */
 
+#include "dtkComposerEdge.h"
 #include "dtkComposerNodeCase.h"
 #include "dtkComposerNodeCase_p.h"
 #include "dtkComposerNodeControlBlock.h"
@@ -149,6 +150,9 @@ dtkComposerNodeControlBlock *dtkComposerNodeCase::addBlock(const QString& title)
 {
     dtkComposerNodeControlBlock *block = dtkComposerNodeControl::addBlock(title);
 
+    if(title == "default")
+        return block;
+
     dtkComposerNodeProperty *input_constant = block->addInputProperty("constant", this);
     input_constant->setBlockedFrom(title);
     
@@ -158,7 +162,7 @@ dtkComposerNodeControlBlock *dtkComposerNodeCase::addBlock(const QString& title)
     this->addInputProperty(input_constant);
     this->addOutputProperty(output_constant);
     
-    d->block_cases.prepend(block);
+    d->block_cases << block;
 
     return block;
 }
@@ -173,4 +177,87 @@ void dtkComposerNodeCase::layout(void)
 void dtkComposerNodeCase::update(void)
 {
     qDebug() << DTK_PRETTY_FUNCTION;
+
+    int matched = -1;
+
+    QVariant value = dtkComposerNodeControl::value();
+
+    qDebug() << DTK_PRETTY_FUNCTION << "value is" << value;
+
+    if(!value.isValid())
+        return;
+
+    int i = 0;
+
+    for(int i = 0; i < d->block_cases.count(); i++) {
+
+        dtkComposerNodeControlBlock *block = d->block_cases.at(i);
+
+        qDebug() << DTK_PRETTY_FUNCTION << "Checking" << block->title() << "block";
+
+        dtkComposerNodeProperty *property = this->inputProperty(block->title(), "constant");
+
+        if(!property)
+            continue;
+
+        if(!property->edge())
+            continue;
+
+        QVariant constant = property->edge()->source()->node()->value(property->edge()->source());
+
+        qDebug() << DTK_PRETTY_FUNCTION << "constant is" << constant;
+
+        if(constant == value) {
+            foreach(dtkComposerNode *node, block->startNodes())
+                node->update();
+
+            matched = i;
+        }
+    }
+    
+    qDebug() << DTK_PRETTY_FUNCTION << "matched block" << matched;
+
+    if(matched < 0)
+        foreach(dtkComposerNode *node, d->block_default->startNodes())
+            node->update();
+
+    this->setDirty(false);
+
+    if(matched >= 0) {
+
+        dtkComposerNodeControlBlock *matched_block = d->block_cases.at(matched);
+
+        qDebug() << DTK_PRETTY_FUNCTION << "matched block is" << matched_block->title();
+        qDebug() << DTK_PRETTY_FUNCTION << "case node has" << this->outputEdges().count() << "output edges";
+
+        foreach(dtkComposerEdge *edge, this->outputEdges()) {
+
+            qDebug() << DTK_PRETTY_FUNCTION << "Examinating edge" << edge;
+
+            if (edge->source() == this->outputProperty(matched_block->title(), "constant")) {
+
+                qDebug() << DTK_PRETTY_FUNCTION << "Matched edge" << edge << edge->destination()->node();
+                
+                edge->destination()->node()->update();
+            }
+        }
+    }
+}
+
+//! Overloads output value to feed the destination back with the corresponding input value.
+/*! 
+ * 
+ * \param property Output constant property of a case block.
+ */
+
+QVariant dtkComposerNodeCase::value(dtkComposerNodeProperty *property)
+{
+    qDebug() << DTK_PRETTY_FUNCTION;
+
+    foreach(dtkComposerNodeProperty *p, this->inputProperties())
+        if(p->blockedFrom() == property->blockedFrom())
+            if(p->edge())
+                return p->edge()->source()->node()->value(p->edge()->source());
+
+    return QVariant();
 }

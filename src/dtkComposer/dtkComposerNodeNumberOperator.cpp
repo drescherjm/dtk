@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Mar  1 10:18:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  1 18:22:45 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 129
+ * Last-Updated: Sat Mar  5 22:59:12 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 130
  */
 
 /* Commentary: 
@@ -220,6 +220,8 @@ QVariant dtkComposerNodeNumberOperator::value(dtkComposerNodeProperty *property)
 {
     if(property == d->property_output_value)
         return d->value;
+
+    return QVariant();
 }
 
 dtkComposerNodeNumberOperator::Operation dtkComposerNodeNumberOperator::operation(void)

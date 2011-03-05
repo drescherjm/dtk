@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Mar  4 20:35:00 2011 (+0100)
+ * Last-Updated: Sat Mar  5 23:31:08 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1636
+ *     Update #: 1637
  */
 
 /* Commentary: 
@@ -30,7 +30,7 @@
 #include <dtkCore/dtkGlobal.h>
 
 // #define DTK_DEBUG_COMPOSER_INTERACTION 1
-// #define DTK_DEBUG_COMPOSER_EVALUATION 1
+#define DTK_DEBUG_COMPOSER_EVALUATION 1
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodePrivate

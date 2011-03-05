@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:47:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Mar  5 21:38:41 2011 (+0100)
+ * Last-Updated: Sat Mar  5 22:24:31 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 64
+ *     Update #: 65
  */
 
 /* Commentary: 
@@ -54,6 +54,7 @@ public slots:
 
 protected:
     bool condition(void);
+    QVariant value(void);
 
 protected:
     void setColor(const QColor& color);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:01:16 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Mar  5 21:58:18 2011 (+0100)
+ * Last-Updated: Sat Mar  5 22:47:16 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 4
+ *     Update #: 6
  */
 
 /* Commentary: 
@@ -39,6 +39,9 @@ public:
 
 public slots:
     void update(void);
+
+public:
+    QVariant value(dtkComposerNodeProperty *property);
 
 private:
     dtkComposerNodeCasePrivate *d;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 14:04:18 2011 (+0100)
+ * Last-Updated: Fri Mar  4 16:03:37 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 236
+ *     Update #: 237
  */
 
 /* Commentary: 
@@ -165,6 +165,9 @@ public:
     virtual QRectF boundingRect(void) const;
 
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+protected:
+    qreal nodeRadius(void);
 
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);

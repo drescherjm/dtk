@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Feb 25 15:38:26 2011 (+0100)
+ * Last-Updated: Sat Mar  5 20:53:44 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 275
+ *     Update #: 290
  */
 
 /* Commentary: 
@@ -36,6 +36,8 @@ public:
     QGraphicsTextItem *text;
 
     bool displayed;
+
+    QString block;
 };
 
 dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multiplicity multiplicity, dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePropertyPrivate)
@@ -139,7 +141,7 @@ dtkComposerNodeProperty *dtkComposerNodeProperty::clone(dtkComposerNode *node)
 {
     dtkComposerNodeProperty *property = new dtkComposerNodeProperty(d->text->toPlainText(), d->type, d->multiplicity, node);
 
-    if(d->parent->kind() == dtkComposerNode::Composite)
+    if(d->parent && d->parent->kind() == dtkComposerNode::Composite)
         property->d->clone = d->clone;
     else
         property->d->clone = d->parent;
@@ -154,6 +156,9 @@ dtkComposerNodeProperty *dtkComposerNodeProperty::clone(dtkComposerNode *node)
 
 dtkComposerEdge *dtkComposerNodeProperty::edge(void)
 {
+    if(!d->parent)
+        return NULL;
+
     return d->parent->edge(this);
 }
 
@@ -174,6 +179,9 @@ dtkComposerNodeProperty::Type dtkComposerNodeProperty::type(void)
 
 int dtkComposerNodeProperty::count(void)
 {
+    if(!d->parent)
+        return -1;
+
     return d->parent->count(this);
 }
 
@@ -183,7 +191,8 @@ void dtkComposerNodeProperty::hide(void)
     
     d->displayed = false;
 
-    d->parent->layout();
+    if (d->parent)
+        d->parent->layout();
 }
 
 void dtkComposerNodeProperty::show(void)
@@ -192,7 +201,8 @@ void dtkComposerNodeProperty::show(void)
 
     d->displayed = true;
 
-    d->parent->layout();
+    if (d->parent)
+        d->parent->layout();
 }
 
 dtkComposerNode *dtkComposerNodeProperty::parent(void)
@@ -203,6 +213,16 @@ dtkComposerNode *dtkComposerNodeProperty::parent(void)
 dtkComposerNode *dtkComposerNodeProperty::clonedFrom(void)
 {
     return d->clone;
+}
+
+QString dtkComposerNodeProperty::blockedFrom(void) const
+{
+    return d->block;
+}
+
+void dtkComposerNodeProperty::setBlockedFrom(const QString& name)
+{
+    d->block = name;
 }
 
 void dtkComposerNodeProperty::setClonedFrom(dtkComposerNode *node)
@@ -230,6 +250,13 @@ bool dtkComposerNodeProperty::isDisplayed(void)
 void dtkComposerNodeProperty::setDisplayed(bool displayed)
 {
     d->displayed = displayed;
+}
+
+void dtkComposerNodeProperty::setName(const QString& name)
+{
+    d->text->setPlainText(name);
+
+    this->update();
 }
 
 QRectF dtkComposerNodeProperty::boundingRect(void) const

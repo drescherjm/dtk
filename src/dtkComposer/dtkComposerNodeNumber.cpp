@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Feb 25 16:21:13 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  1 19:00:54 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 156
+ * Last-Updated: Sat Mar  5 22:59:51 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 157
  */
 
 /* Commentary: 
@@ -452,6 +452,8 @@ QVariant dtkComposerNodeNumber::value(dtkComposerNodeProperty *property)
 {
     if(property == d->property_output_value)
         return d->value;
+
+    return QVariant();
 }
 
 dtkComposerNodeNumber::Genre dtkComposerNodeNumber::genre(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 18:15:04 2011 (+0100)
+ * Last-Updated: Sat Mar  5 17:05:03 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 41
+ *     Update #: 147
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeControlBlock.h"
+#include "dtkComposerNodeProperty.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlBlockPrivate
@@ -27,7 +28,12 @@
 class dtkComposerNodeControlBlockPrivate
 {
 public:
-    QColor color;
+    QList<dtkComposerNodeProperty *>  input_properties;
+    QList<dtkComposerNodeProperty *> output_properties;
+
+public:
+    QColor pen_color;
+    QColor brush_color;
     QString title;
 };
 
@@ -37,11 +43,14 @@ public:
 
 dtkComposerNodeControlBlock::dtkComposerNodeControlBlock(const QString& title, QGraphicsItem *parent) : QGraphicsRectItem(parent), d(new dtkComposerNodeControlBlockPrivate)
 {
-    d->color = QColor("#c7c7c7");
+    d->pen_color = QColor("#c7c7c7");
+    d->brush_color = Qt::transparent;
+
     d->title = title;
 
-    this->setPen(d->color);
+    this->setPen(d->pen_color);
     this->setBrush(Qt::NoBrush);
+    this->setZValue(parent->zValue());
 }
 
 dtkComposerNodeControlBlock::~dtkComposerNodeControlBlock(void)
@@ -56,17 +65,57 @@ QString dtkComposerNodeControlBlock::title(void) const
     return d->title;
 }
 
+QColor dtkComposerNodeControlBlock::brushColor(void) const
+{
+    return d->brush_color;
+}
+
 QColor dtkComposerNodeControlBlock::penColor(void) const
 {
-    return d->color;
+    return d->pen_color;
+}
+
+void dtkComposerNodeControlBlock::setBrushColor(const QColor& color)
+{
+    d->brush_color = color;
+
+    if(color == Qt::transparent)
+        this->setBrush(Qt::NoBrush);
+    else
+        this->setBrush(d->brush_color);
+
+    this->update();
 }
 
 void dtkComposerNodeControlBlock::setPenColor(const QColor& color)
 {
-    d->color = color;
+    d->pen_color = color;
 
-    this->setPen(d->color);
+    this->setPen(d->pen_color);
     this->update();
+}
+
+void dtkComposerNodeControlBlock::setRect(const QRectF& rectangle)
+{
+    if(this->childItems().count()) {
+
+        if(rectangle.topLeft() != this->rect().topLeft()) {
+
+            QPointF delta = rectangle.topLeft() - this->rect().topLeft();
+
+            foreach(QGraphicsItem *item, this->childItems()) {
+                item->setX(item->x() + delta.x());
+                item->setY(item->y() + delta.y());
+            }
+        }
+    }
+
+    QGraphicsRectItem::setRect(rectangle);
+}
+
+void dtkComposerNodeControlBlock::setRect(qreal x, qreal y, qreal width, qreal height)
+{
+    this->setRect(QRectF(x, y, width, height));
 }
 
 QList<dtkComposerNode *> dtkComposerNodeControlBlock::nodes(void)
@@ -102,21 +151,49 @@ QList<dtkComposerNode *> dtkComposerNodeControlBlock::endNodes(void)
     return nodes;
 }
 
-void dtkComposerNodeControlBlock::highlight(void)
+QList<dtkComposerNodeProperty *> dtkComposerNodeControlBlock::inputProperties(void)
 {
-    QPropertyAnimation *animation = new QPropertyAnimation(this, "penColor");
-    animation->setDuration(1000);
-    animation->setKeyValueAt(0.0, QColor("#c7c7c7"));
-    animation->setKeyValueAt(0.1, Qt::red);
-    animation->setKeyValueAt(0.2, QColor("#c7c7c7"));
-    animation->setKeyValueAt(0.3, Qt::red);
-    animation->setKeyValueAt(0.4, QColor("#c7c7c7"));
-    animation->setKeyValueAt(0.5, Qt::red);
-    animation->setKeyValueAt(0.6, QColor("#c7c7c7"));
-    animation->setKeyValueAt(0.7, Qt::red);
-    animation->setKeyValueAt(0.8, QColor("#c7c7c7"));
-    animation->setKeyValueAt(0.9, Qt::red);
-    animation->setKeyValueAt(1.0, QColor("#c7c7c7"));
-    animation->setEasingCurve(QEasingCurve::Linear);
-    animation->start(QAbstractAnimation::DeleteWhenStopped);
+    return d->input_properties;
+}
+
+QList<dtkComposerNodeProperty *> dtkComposerNodeControlBlock::outputProperties(void)
+{
+    return d->output_properties;
+}
+
+dtkComposerNodeProperty *dtkComposerNodeControlBlock::addInputProperty(QString name, dtkComposerNode *parent)
+{
+    dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, parent);
+
+    d->input_properties << property;
+    
+    return property;
+}
+
+dtkComposerNodeProperty *dtkComposerNodeControlBlock::addOutputProperty(QString name, dtkComposerNode *parent)
+{
+    dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, parent);
+
+    d->output_properties << property;
+
+    return property;
+}
+
+void dtkComposerNodeControlBlock::highlight(dtkComposerNodeControlBlock *block)
+{
+    static dtkComposerNodeControlBlock *highlighted = NULL;
+
+    if(highlighted == block)
+        return;
+
+    if(block) {
+        QPropertyAnimation *animation = new QPropertyAnimation(block, "brushColor");
+        animation->setDuration(500);
+        animation->setKeyValueAt(0.0, Qt::red);
+        animation->setKeyValueAt(1.0, Qt::transparent);
+        animation->setEasingCurve(QEasingCurve::Linear);
+        animation->start(QAbstractAnimation::DeleteWhenStopped);
+    }
+
+    highlighted = block;
 }

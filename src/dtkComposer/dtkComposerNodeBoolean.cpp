@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 25 10:07:34 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  1 10:01:35 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 200
+ * Last-Updated: Fri Mar  4 21:06:46 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 202
  */
 
 /* Commentary: 
@@ -65,11 +65,6 @@ dtkComposerNodeBooleanLabel::dtkComposerNodeBooleanLabel(dtkComposerNodeBoolean 
     path = c.united(e.subtracted(b.united(c.united(d))));
 
     parent_node = parent;
-
-    if(parent_node->value())
-        text = "T";
-    else
-        text = "F";
 }
 
 dtkComposerNodeBooleanLabel::~dtkComposerNodeBooleanLabel(void)
@@ -152,6 +147,7 @@ dtkComposerNodeBoolean::dtkComposerNodeBoolean(dtkComposerNode *parent) : dtkCom
 
     d->label = new dtkComposerNodeBooleanLabel(this);
     d->label->setPos(0, 0);
+    d->label->text = "F";
 
     d->value = false;
 

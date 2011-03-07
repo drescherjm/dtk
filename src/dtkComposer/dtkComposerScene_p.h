@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 26 18:33:27 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb 26 23:05:46 2011 (+0100)
+ * Last-Updated: Fri Mar  4 13:00:21 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 24
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -46,6 +46,7 @@ public:
     dtkComposerEdge *edge(dtkComposerEdge *edge);
 
 public:
+    dtkComposerNode *grabber_node;
     dtkComposerNode *current_node; // current_node is NULL for the root, !NULL when inside a composite node.
     dtkComposerEdge *current_edge;
 

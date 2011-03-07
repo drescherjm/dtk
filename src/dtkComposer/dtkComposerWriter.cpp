@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 18:52:00 2011 (+0100)
+ * Last-Updated: Sat Mar  5 20:54:18 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 365
+ *     Update #: 375
  */
 
 /* Commentary: 
@@ -94,12 +94,16 @@ void dtkComposerWriter::write(const QString& fileName)
         source.setAttribute("property", edge->source()->name());
         if(edge->source()->clonedFrom())
             source.setAttribute("id", d->node_ids.key(edge->source()->clonedFrom()));
+        if(!edge->source()->blockedFrom().isEmpty())
+            source.setAttribute("block", edge->source()->blockedFrom());
 
         QDomElement destin = document.createElement("destination");
         destin.setAttribute("node", d->node_ids.key(edge->destination()->node()));
         destin.setAttribute("property", edge->destination()->name());
         if(edge->destination()->clonedFrom())
             destin.setAttribute("id", d->node_ids.key(edge->destination()->clonedFrom()));
+        if(!edge->destination()->blockedFrom().isEmpty())
+            destin.setAttribute("block", edge->destination()->blockedFrom());
 
         QDomElement tag = document.createElement("edge");
         tag.appendChild(source);

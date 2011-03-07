@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Feb 25 15:37:21 2011 (+0100)
+ * Last-Updated: Sat Mar  5 23:14:21 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 340
+ *     Update #: 351
  */
 
 /* Commentary: 
@@ -186,15 +186,17 @@ bool dtkComposerEdge::link(bool anyway)
 {
     if(anyway) {
 
-        if (d->source->node()->kind() == dtkComposerNode::Composite && d->destination->node()->parentNode() == d->source->node())
+        if (d->source->node()->kind() == dtkComposerNode::Composite && d->destination->node()->parentNode() == d->source->node()) {
             d->source->node()->addGhostInputEdge(this, d->source);
-        else
+        } else {
             d->source->node()->addOutputEdge(this, d->source);
+        }
         
-        if (d->destination->node()->kind() == dtkComposerNode::Composite && d->source->node()->parentNode() == d->destination->node())
+        if (d->destination->node()->kind() == dtkComposerNode::Composite && d->source->node()->parentNode() == d->destination->node()) {
             d->destination->node()->addGhostOutputEdge(this, d->destination);
-        else
+        } else {
             d->destination->node()->addInputEdge(this, d->destination);
+        }
 
         return true;
     }

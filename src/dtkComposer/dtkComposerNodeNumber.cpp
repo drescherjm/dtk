@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Feb 25 16:21:13 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Mar  5 22:59:51 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 157
+ * Last-Updated: Tue Mar  8 11:25:57 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 277
  */
 
 /* Commentary: 
@@ -118,49 +118,41 @@ void dtkComposerNodeNumberLabel::mousePressEvent(QGraphicsSceneMouseEvent *event
 
         text = "UINT";
         parent_node->setGenre(dtkComposerNodeNumber::UInt);
-        parent_node->setValue(parent_node->number().toUInt());
 
     } else if (text == "UINT") {
 
         text = "LONG";
         parent_node->setGenre(dtkComposerNodeNumber::Long);
-        parent_node->setValue(parent_node->number().value<long>());
 
     } else if (text == "LONG") {
 
         text = "ULONG";
         parent_node->setGenre(dtkComposerNodeNumber::ULong);
-        parent_node->setValue(parent_node->number().value<ulong>());
 
     } else if (text == "ULONG") {
 
         text = "LLONG";
         parent_node->setGenre(dtkComposerNodeNumber::LongLong);
-        parent_node->setValue(parent_node->number().toLongLong());
 
     } else if (text == "LLONG") {
 
         text = "ULLONG";
         parent_node->setGenre(dtkComposerNodeNumber::ULongLong);
-        parent_node->setValue(parent_node->number().toULongLong());
 
     } else if (text == "ULLONG") {
 
         text = "FLOAT";
         parent_node->setGenre(dtkComposerNodeNumber::Float);
-        parent_node->setValue(parent_node->number().value<float>());
 
     } else if (text == "FLOAT") {
 
         text = "DOUBLE";
         parent_node->setGenre(dtkComposerNodeNumber::Double);
-        parent_node->setValue(parent_node->number().toDouble());
 
     } else if (text == "DOUBLE") {
 
         text = "INT";
         parent_node->setGenre(dtkComposerNodeNumber::Int);
-        parent_node->setValue(parent_node->number().toInt());
 
     }
 
@@ -325,52 +317,43 @@ void dtkComposerNodeNumberEditor::paint(QPainter *painter, const QStyleOptionGra
 
 void dtkComposerNodeNumberEditor::keyPressEvent(QKeyEvent *event)
 {
-    QGraphicsTextItem::keyPressEvent(event);    
+    QGraphicsTextItem::keyPressEvent(event);
 
     switch (this->parent_node->genre()) {
 
     case (dtkComposerNodeNumber::Int):
-        this->parent_node->setGenre(dtkComposerNodeNumber::Int);
         this->parent_node->setValue(this->toPlainText().toInt());
         break;
         
     case (dtkComposerNodeNumber::UInt):
-        this->parent_node->setGenre(dtkComposerNodeNumber::UInt);
         this->parent_node->setValue(this->toPlainText().toUInt());
         break;
 
     case (dtkComposerNodeNumber::Long):
-        this->parent_node->setGenre(dtkComposerNodeNumber::Long);
-        this->parent_node->setValue(this->toPlainText().toLong());
+        this->parent_node->setValue((long)this->toPlainText().toLongLong());
         break;
 
     case (dtkComposerNodeNumber::ULong):
-        this->parent_node->setGenre(dtkComposerNodeNumber::ULong);
-        this->parent_node->setValue(this->toPlainText().toULong());
+        this->parent_node->setValue((ulong)this->toPlainText().toULongLong());
         break;
 
     case (dtkComposerNodeNumber::LongLong):
-        this->parent_node->setGenre(dtkComposerNodeNumber::LongLong);
         this->parent_node->setValue(this->toPlainText().toLongLong());
         break;
 
     case (dtkComposerNodeNumber::ULongLong):
-        this->parent_node->setGenre(dtkComposerNodeNumber::ULongLong);
         this->parent_node->setValue(this->toPlainText().toULongLong());
         break;
 
     case (dtkComposerNodeNumber::Float):
-        this->parent_node->setGenre(dtkComposerNodeNumber::Float);
-        this->parent_node->setValue(this->toPlainText().toFloat());
+        this->parent_node->setValue((float)this->toPlainText().toDouble());
         break;
 
     case (dtkComposerNodeNumber::Double):
-        this->parent_node->setGenre(dtkComposerNodeNumber::Double);
         this->parent_node->setValue(this->toPlainText().toDouble());
         break;
 
     default:
-        this->parent_node->setGenre(dtkComposerNodeNumber::Int);
         this->parent_node->setValue(this->toPlainText().toInt());
         break;
     }
@@ -468,80 +451,55 @@ QVariant dtkComposerNodeNumber::number(void)
 
 void dtkComposerNodeNumber::setGenre(dtkComposerNodeNumber::Genre genre)
 {
-    d->genre = genre;
+    this->setGenre((int) genre);
 }
 
-bool dtkComposerNodeNumber::setNumber(QVariant number)
+void dtkComposerNodeNumber::setGenre(int genre)
 {
-    switch (number.userType()) {
-
+    switch (genre) {
     case (dtkComposerNodeNumber::Int):
         d->label->text = "INT";
-        this->setGenre(dtkComposerNodeNumber::Int);
-        this->setValue(number.toInt());
-        d->editor->setPlainText(QString("%1").arg(number.toInt()));
-        break;
-
+        d->genre = dtkComposerNodeNumber::Int;
+        break;        
     case (dtkComposerNodeNumber::UInt):
         d->label->text = "UINT";
-        this->setGenre(dtkComposerNodeNumber::UInt);
-        this->setValue(number.toUInt());
-        d->editor->setPlainText(QString("%1").arg(number.toUInt()));
+        d->genre = dtkComposerNodeNumber::UInt;
         break;
-
     case (dtkComposerNodeNumber::Long):
         d->label->text = "LONG";
-        this->setGenre(dtkComposerNodeNumber::Long);
-        this->setValue(number.value<long>());
-        d->editor->setPlainText(QString("%1").arg(number.value<long>()));
+        d->genre = dtkComposerNodeNumber::Long;
         break;
-
     case (dtkComposerNodeNumber::ULong):
         d->label->text = "ULONG";
-        this->setGenre(dtkComposerNodeNumber::ULong);
-        this->setValue(number.value<ulong>());
-        d->editor->setPlainText(QString("%1").arg(number.value<ulong>()));
+        d->genre = dtkComposerNodeNumber::ULong;
         break;
-
     case (dtkComposerNodeNumber::LongLong):
         d->label->text = "LLONG";
-        this->setGenre(dtkComposerNodeNumber::LongLong);
-        this->setValue(number.toLongLong());
-        d->editor->setPlainText(QString("%1").arg(number.toLongLong()));
+        d->genre = dtkComposerNodeNumber::LongLong;
         break;
-
     case (dtkComposerNodeNumber::ULongLong):
         d->label->text = "ULLONG";
-        this->setGenre(dtkComposerNodeNumber::ULongLong);
-        this->setValue(number.toULongLong());
-        d->editor->setPlainText(QString("%1").arg(number.toULongLong()));
+        d->genre = dtkComposerNodeNumber::ULongLong;
         break;
-
     case (dtkComposerNodeNumber::Float):
         d->label->text = "FLOAT";
-        this->setGenre(dtkComposerNodeNumber::Float);
-        this->setValue(number.value<float>());
-        d->editor->setPlainText(QString("%1").arg(number.value<float>()));
+        d->genre = dtkComposerNodeNumber::Float;
         break;
-
     case (dtkComposerNodeNumber::Double):
         d->label->text = "DOUBLE";
-        this->setGenre(dtkComposerNodeNumber::Double);
-        this->setValue(number.toDouble());
-        d->editor->setPlainText(QString("%1").arg(number.toDouble()));
+        d->genre = dtkComposerNodeNumber::Double;
         break;
-          
     default:
-        this->setGenre(dtkComposerNodeNumber::Invalid);
-        d->value.clear();
-        qDebug() << DTK_PRETTY_FUNCTION << "Invalid Variant type" << number.type();
-        return false;
+        d->genre = dtkComposerNodeNumber::Invalid;
         break;
     }
 
-    d->editor->update();
+    d->label->update();
+}
 
-    return true;
+void dtkComposerNodeNumber::setNumber(QVariant number)
+{
+    d->value = number;
 }
 
 void dtkComposerNodeNumber::setValue(int value)
@@ -616,6 +574,59 @@ void dtkComposerNodeNumber::setValue(double value)
     d->value = QVariant(value);
 }
 
+void dtkComposerNodeNumber::refresh(void)
+{
+    switch (d->genre) {
+        
+    case (dtkComposerNodeNumber::Int):
+        d->label->text = "INT";
+        d->editor->setPlainText(QString("%1").arg(d->value.toInt()));
+        break;
+        
+    case (dtkComposerNodeNumber::UInt):
+        d->label->text = "UINT";
+        d->editor->setPlainText(QString("%1").arg(d->value.toUInt()));
+        break;
+        
+    case (dtkComposerNodeNumber::Long):
+        d->label->text = "LONG";
+        d->editor->setPlainText(QString("%1").arg((long)d->value.toLongLong()));
+        break;
+        
+    case (dtkComposerNodeNumber::ULong):
+        d->label->text = "ULONG";
+        d->editor->setPlainText(QString("%1").arg((ulong)d->value.toULongLong()));
+        break;
+        
+    case (dtkComposerNodeNumber::LongLong):
+        d->label->text = "LLONG";
+        d->editor->setPlainText(QString("%1").arg(d->value.toLongLong()));
+        break;
+        
+    case (dtkComposerNodeNumber::ULongLong):
+        d->label->text = "ULLONG";
+        d->editor->setPlainText(QString("%1").arg(d->value.toULongLong()));
+        break;
+        
+    case (dtkComposerNodeNumber::Float):
+        d->label->text = "FLOAT";
+        d->editor->setPlainText(QString("%1").arg((float)d->value.toDouble()));
+        break;
+        
+    case (dtkComposerNodeNumber::Double):
+        d->label->text = "DOUBLE";
+        d->editor->setPlainText(QString("%1").arg(d->value.toDouble()));
+        break;
+        
+    default:
+        break;
+    }
+    
+    d->label->update();
+    d->editor->update();
+    
+}
+
 void dtkComposerNodeNumber::expand(void)
 {
     d->editor->show();
@@ -644,10 +655,15 @@ void dtkComposerNodeNumber::onInputEdgeConnected(dtkComposerEdge *edge, dtkCompo
 
         QVariant number = edge->source()->node()->value(edge->source());
 
-        if (!this->setNumber(number)) {
+        this->setGenre(number.userType());
+
+        if (d->genre == dtkComposerNodeNumber::Invalid) {
             qDebug() << DTK_PRETTY_FUNCTION << "Input number has an invalid genre.";
             return;
         }
+
+        this->setNumber(number);
+        this->refresh();
     }
     return;
 }
@@ -660,7 +676,48 @@ void dtkComposerNodeNumber::onOutputEdgeConnected(dtkComposerEdge *edge, dtkComp
 
 void dtkComposerNodeNumber::run(void)
 {
+    if((int)d->genre != d->value.userType()) {
 
+        switch (d->genre) {
+
+        case (dtkComposerNodeNumber::Int):
+            this->setValue(d->editor->toPlainText().toInt());
+            break;
+        
+        case (dtkComposerNodeNumber::UInt):
+            this->setValue(d->editor->toPlainText().toUInt());
+            break;
+
+        case (dtkComposerNodeNumber::Long):
+            this->setValue((long)d->editor->toPlainText().toLongLong());
+            break;
+
+        case (dtkComposerNodeNumber::ULong):
+            this->setValue((ulong)d->editor->toPlainText().toULongLong());
+            break;
+
+        case (dtkComposerNodeNumber::LongLong):
+            this->setValue(d->editor->toPlainText().toLongLong());
+            break;
+
+        case (dtkComposerNodeNumber::ULongLong):
+            this->setValue(d->editor->toPlainText().toULongLong());
+            break;
+
+        case (dtkComposerNodeNumber::Float):
+            this->setValue((float)d->editor->toPlainText().toDouble());
+            break;
+
+        case (dtkComposerNodeNumber::Double):
+            this->setValue(d->editor->toPlainText().toDouble());
+            break;
+
+        default:
+            break;
+        }
+
+        this->refresh();
+    }
 }
 
 dtkComposerNodeNumber::Genre dtkComposerNodeNumber::genre(QVariant& a, QVariant& b)

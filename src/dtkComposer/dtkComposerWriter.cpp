@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Mar  5 20:54:18 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 375
+ * Last-Updated: Mon Mar  7 12:59:09 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 382
  */
 
 /* Commentary: 
@@ -25,6 +25,7 @@
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeNumber.h"
+#include "dtkComposerNodeNumberComparator.h"
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerNodeProcess.h"
@@ -227,11 +228,11 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
             break;
         case (dtkComposerNodeNumber::Long):
             text = document.createTextNode("long");
-            value = QString::number(number_node->number().value<long>());
+            value = QString::number((long)number_node->number().toLongLong());
             break;
         case (dtkComposerNodeNumber::ULong):
             text = document.createTextNode("ulong");
-            value = QString::number(number_node->number().value<ulong>());
+            value = QString::number((ulong)number_node->number().toULongLong());
             break;
         case (dtkComposerNodeNumber::LongLong):
             text = document.createTextNode("longlong");
@@ -243,7 +244,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
             break;
         case (dtkComposerNodeNumber::Float):
             text = document.createTextNode("float");
-            value = QString::number(number_node->number().value<float>());
+            value = QString::number((float)number_node->number().toDouble());
             break;
         case (dtkComposerNodeNumber::Double):
             text = document.createTextNode("double");
@@ -259,6 +260,43 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
         QDomElement e_value = document.createElement("value");
         e_value.appendChild(text);        
         tag.appendChild(e_value);
+    }
+
+    // -- Number comparator node
+    
+    if(dtkComposerNodeNumberComparator *number_comparator_node = dynamic_cast<dtkComposerNodeNumberComparator *>(node)) {
+        
+        dtkComposerNodeNumberComparator::Operation operation = number_comparator_node->operation();
+        
+        QDomText text;
+
+        switch(operation) {
+        case dtkComposerNodeNumberComparator::LesserThan:
+            text = document.createTextNode("<");
+            break;
+        case dtkComposerNodeNumberComparator::LesserThanOrEqual:
+            text = document.createTextNode("<=");
+            break;
+        case dtkComposerNodeNumberComparator::GreaterThan:
+            text = document.createTextNode(">");
+            break;
+        case dtkComposerNodeNumberComparator::GreaterThanOrEqual:
+            text = document.createTextNode(">=");
+            break;
+        case dtkComposerNodeNumberComparator::Equal:
+            text = document.createTextNode("==");
+            break;
+        case dtkComposerNodeNumberComparator::Differ:
+            text = document.createTextNode("!=");
+            break;
+        default:
+            break;
+        }
+        
+        QDomElement e_operation = document.createElement("operation");
+        e_operation.appendChild(text);
+        
+        tag.appendChild(e_operation);
     }
 
     // -- Number operator node

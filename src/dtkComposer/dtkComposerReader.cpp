@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Mar  5 22:05:07 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 575
+ * Last-Updated: Mon Mar  7 14:14:21 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 584
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeNumber.h"
+#include "dtkComposerNodeNumberComparator.h"
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeProperty.h"
@@ -362,42 +363,76 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
             switch (number_node->genre()) {
 
             case (dtkComposerNodeNumber::Int):
-                number_node->setNumber(QVariant(value.toInt()));
+                number_node->setValue(value.toInt());
                 break;
         
             case (dtkComposerNodeNumber::UInt):
-                number_node->setNumber(QVariant(value.toUInt()));
+                number_node->setValue(value.toUInt());
                 break;
                 
             case (dtkComposerNodeNumber::Long):
-                number_node->setNumber(qVariantFromValue(value.toLong()));
+                number_node->setValue((long)value.toLongLong());
                 break;
                 
             case (dtkComposerNodeNumber::ULong):
-                number_node->setNumber(qVariantFromValue(value.toULong()));
+                number_node->setValue((ulong)value.toULongLong());
                 break;
                 
             case (dtkComposerNodeNumber::LongLong):
-                number_node->setNumber(QVariant(value.toLongLong()));
+                number_node->setValue(value.toLongLong());
                 break;
                 
             case (dtkComposerNodeNumber::ULongLong):
-                number_node->setNumber(QVariant(value.toULongLong()));
+                number_node->setValue(value.toULongLong());
                 break;
                 
             case (dtkComposerNodeNumber::Float):
-                number_node->setNumber(qVariantFromValue(value.toFloat()));
+                number_node->setValue((float)value.toDouble());
                 break;
                 
             case (dtkComposerNodeNumber::Double):
-                number_node->setNumber(QVariant(value.toDouble()));
+                number_node->setValue(value.toDouble());
                 break;
                 
             default:
                 number_node->setGenre(dtkComposerNodeNumber::Int);
-                number_node->setNumber(QVariant(value.toInt()));
+                number_node->setValue(value.toInt());
                 break;
             }
+        }
+
+        number_node->refresh();
+    }
+
+    // Number comparator
+    
+    if(dtkComposerNodeNumberComparator *number_comparator_node = dynamic_cast<dtkComposerNodeNumberComparator *>(n)) {
+        
+        QDomNodeList children = node.childNodes();
+        
+        for(int i = 0; i < children.count(); i++) {
+
+            if(children.at(i).toElement().tagName() != "operation")
+                continue;
+
+            dtkComposerNodeNumberComparator::Operation operation;
+
+            if(children.at(i).childNodes().at(0).toText().data() == "<")
+                operation = dtkComposerNodeNumberComparator::LesserThan;
+            else if(children.at(i).childNodes().at(0).toText().data() == "<=")
+                operation = dtkComposerNodeNumberComparator::LesserThanOrEqual;
+            else if(children.at(i).childNodes().at(0).toText().data() == ">")
+                operation = dtkComposerNodeNumberComparator::GreaterThan;
+            else if(children.at(i).childNodes().at(0).toText().data() == ">=")
+                operation = dtkComposerNodeNumberComparator::GreaterThanOrEqual;
+            else if(children.at(i).childNodes().at(0).toText().data() == "==")
+                operation = dtkComposerNodeNumberComparator::Equal;
+            else if(children.at(i).childNodes().at(0).toText().data() == "!=")
+                operation = dtkComposerNodeNumberComparator::Differ;
+            else
+                operation = dtkComposerNodeNumberComparator::Equal;
+
+            number_comparator_node->setOperation(operation);
         }
     }
 

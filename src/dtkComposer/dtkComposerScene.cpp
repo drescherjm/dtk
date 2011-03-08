@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Mar  4 21:29:19 2011 (+0100)
+ * Last-Updated: Tue Mar  8 15:26:05 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1701
+ *     Update #: 1702
  */
 
 /* Commentary: 
@@ -869,7 +869,7 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     if(!property)
         return;
 
-    if (!property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Output) {
+    if (!property->node()->isGhost() && (property->type() == dtkComposerNodeProperty::Output || property->type() == dtkComposerNodeProperty::HybridOutput)) {
         if(d->current_edge) {
             d->current_edge->hide();
             delete d->current_edge;

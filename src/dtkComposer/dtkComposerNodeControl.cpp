@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Mar  5 23:03:38 2011 (+0100)
+ * Last-Updated: Mon Mar  7 16:54:35 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 296
+ *     Update #: 297
  */
 
 /* Commentary: 
@@ -193,8 +193,8 @@ bool dtkComposerNodeControl::resize(const QRectF& rect)
                  rect.width(),
                  (rect.height() - 46) / d->blocks.count());
 
-        if(block->childItems().count() != 0 && !r.contains(block->childrenBoundingRect()))
-            resize = false;
+        // if(block->childItems().count() != 0 && !r.contains(block->childrenBoundingRect()))
+        //     resize = false;
     }
 
     return resize;

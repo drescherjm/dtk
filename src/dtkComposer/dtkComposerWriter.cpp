@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Mar  7 12:59:09 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 382
+ * Last-Updated: Tue Mar  8 15:55:00 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 388
  */
 
 /* Commentary: 
@@ -505,6 +505,8 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
                 property_element.setAttribute("hidden", property->isDisplayed() ? "false" : "true");
                 if(node->kind() == dtkComposerNode::Composite)
                     property_element.setAttribute("id", d->node_ids.key(property->clonedFrom()));
+                if(node->kind() == dtkComposerNode::Control && !property->blockedFrom().isEmpty())
+                    property_element.setAttribute("block", property->blockedFrom());
                 tag.appendChild(property_element);
             }
 
@@ -516,6 +518,8 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
                 property_element.setAttribute("hidden", property->isDisplayed() ? "false" : "true");
                 if(node->kind() == dtkComposerNode::Composite)
                     property_element.setAttribute("id", d->node_ids.key(property->clonedFrom()));
+                if(node->kind() == dtkComposerNode::Control && !property->blockedFrom().isEmpty())
+                    property_element.setAttribute("block", property->blockedFrom());
                 tag.appendChild(property_element);
             }
         }

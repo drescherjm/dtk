@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Mar  7 14:14:21 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 584
+ * Last-Updated: Tue Mar  8 16:32:04 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 600
  */
 
 /* Commentary: 
@@ -25,6 +25,7 @@
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeFile.h"
+#include "dtkComposerNodeLoop.h"
 #include "dtkComposerNodeNumber.h"
 #include "dtkComposerNodeNumberComparator.h"
 #include "dtkComposerNodeNumberOperator.h"
@@ -599,7 +600,31 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
 
             for(int i = 0; i < case_block_count; i++)
                 case_node->addBlock(QString("case%1").arg(i));
-        }    
+        }
+
+        if(dtkComposerNodeLoop *loop_node = dynamic_cast<dtkComposerNodeLoop *>(control_node)) {
+
+            QDomNodeList children = node.childNodes();
+
+            for(int i = 0; i < children.count(); i++) {
+                
+                if(children.at(i).toElement().tagName() != "property")
+                    continue;
+
+                if(children.at(i).toElement().attribute("name") == "condition")
+                    continue;
+
+                // Assign the property
+
+                qDebug() << "Assigning" << children.at(i).toElement().attribute("name") << "property to block" << children.at(i).toElement().attribute("block");
+
+                dtkComposerNodeProperty *i_p = loop_node->block(children.at(i).toElement().attribute("block"))->addInputProperty(children.at(i).toElement().attribute("name"), loop_node);
+                dtkComposerNodeProperty *o_p = loop_node->block(children.at(i).toElement().attribute("block"))->addOutputProperty(children.at(i).toElement().attribute("name"), loop_node);
+
+                loop_node->addInputProperty(i_p);
+                loop_node->addInputProperty(o_p);
+            }
+        }
 
         control_node->setSize(w, h);
         

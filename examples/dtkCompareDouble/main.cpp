@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Mar  9 14:08:06 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar  9 14:29:41 2011 (+0100)
+ * Last-Updated: Wed Mar  9 15:17:26 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 7
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -37,7 +37,7 @@ void TestCompare2sComplement(double A, double B, bool expectedResult, long long 
 
 void TestCompareFinal(double A, double B, bool expectedResult, long long int maxUlps = 10)
 {
-    bool result = dtkAlmostEqualUlpsFinal(A, B, maxUlps);
+    bool result = dtkAlmostEqualUlps(A, B, maxUlps);
 
     if (result != expectedResult)
         printf("Unexpected result final - %1.18f, %1.18f, %lld, expected %s\n", A, B, maxUlps, expectedResult ? "true" : "false");

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 10 15:11:21 2011 (+0100)
+ * Last-Updated: Thu Mar 10 15:25:45 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 253
+ *     Update #: 255
  */
 
 /* Commentary: 
@@ -189,11 +189,11 @@ int dtkComposerNodeCase::removeBlock(dtkComposerNodeControlBlock *block, bool cl
             if(property->name() == "constant")
                 delete property;
         }
-
-        delete block;
-
-        this->layout();
-
+        
+        if (clean) {
+            delete block;
+            this->layout();
+        }
     }
 
     return removed_blocks;

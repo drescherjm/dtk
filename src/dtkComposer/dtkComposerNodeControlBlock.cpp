@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 10 14:55:09 2011 (+0100)
+ * Last-Updated: Thu Mar 10 15:25:50 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 425
+ *     Update #: 426
  */
 
 /* Commentary: 
@@ -173,7 +173,7 @@ void dtkComposerNodeControlBlockButtonRemove::mousePressEvent(QGraphicsSceneMous
 {
     Q_UNUSED(event);
 
-    this->block->parentNode()->removeBlock(this->block);
+    this->block->parentNode()->removeBlock(this->block, true);
 }
 
 // /////////////////////////////////////////////////////////////////

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar  8 13:31:11 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  8 15:03:27 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 27
+ * Last-Updated: Thu Mar 10 13:17:08 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include <QtGui>
 
 class dtkComposerNodeControl;
+class dtkComposerNodeControlBlockButtonRemove;
 class dtkComposerNodeControlBlockButton;
 class dtkComposerNodeControlBlockLabel;
 class dtkComposerNodeProperty;
@@ -37,6 +38,7 @@ public:
     dtkComposerNodeControl *parent;
 
 public:
+    dtkComposerNodeControlBlockButtonRemove *remove_button;
     dtkComposerNodeControlBlockButton *button;
     dtkComposerNodeControlBlockLabel *label;
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  8 16:26:05 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 301
+ * Last-Updated: Thu Mar 10 14:54:51 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 318
  */
 
 /* Commentary: 
@@ -86,6 +86,30 @@ dtkComposerNodeControlBlock *dtkComposerNodeControl::addBlock(const QString& tit
     this->layout();
 
     return block;
+}
+
+int dtkComposerNodeControl::removeBlock(dtkComposerNodeControlBlock *block, bool clean)
+{
+    int removed_blocks = 0;
+
+    if (d->blocks.contains(block))
+        removed_blocks = d->blocks.removeAll(block);        
+
+    if (clean) {
+        delete block;
+        this->layout();
+    }
+
+    return removed_blocks;
+}
+
+int dtkComposerNodeControl::removeBlock(const QString& title)
+{
+    foreach(dtkComposerNodeControlBlock *block, d->blocks)
+        if(block->title() == title)
+            return this->removeBlock(block, true);
+
+    return 0;
 }
 
 QList<dtkComposerNodeControlBlock *> dtkComposerNodeControl::blocks(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 10 14:54:46 2011 (+0100)
+ * Last-Updated: Thu Mar 10 15:11:21 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 252
+ *     Update #: 253
  */
 
 /* Commentary: 
@@ -174,24 +174,27 @@ int dtkComposerNodeCase::removeBlock(dtkComposerNodeControlBlock *block, bool cl
 
     int removed_blocks = 0;
 
-    if (d->block_cases.contains(block))
+    if (d->block_cases.contains(block)) {
+
         removed_blocks = d->block_cases.removeAll(block);
 
-    foreach(dtkComposerNodeProperty *property, block->inputProperties()) {
-        this->removeInputProperty(property);
-        if(property->name() == "constant")
-            delete property;
+        foreach(dtkComposerNodeProperty *property, block->inputProperties()) {
+            this->removeInputProperty(property);
+            if(property->name() == "constant")
+                delete property;
+        }
+        
+        foreach(dtkComposerNodeProperty *property, block->outputProperties()) {
+            this->removeOutputProperty(property);
+            if(property->name() == "constant")
+                delete property;
+        }
+
+        delete block;
+
+        this->layout();
+
     }
-
-    foreach(dtkComposerNodeProperty *property, block->outputProperties()) {
-        this->removeOutputProperty(property);
-        if(property->name() == "constant")
-            delete property;
-    }
-
-    delete block;
-
-    this->layout();
 
     return removed_blocks;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 10 14:54:51 2011 (+0100)
+ * Last-Updated: Thu Mar 10 15:11:44 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 318
+ *     Update #: 319
  */
 
 /* Commentary: 
@@ -92,12 +92,14 @@ int dtkComposerNodeControl::removeBlock(dtkComposerNodeControlBlock *block, bool
 {
     int removed_blocks = 0;
 
-    if (d->blocks.contains(block))
+    if (d->blocks.contains(block)) {
+
         removed_blocks = d->blocks.removeAll(block);        
 
-    if (clean) {
-        delete block;
-        this->layout();
+        if (clean) {
+            delete block;
+            this->layout();
+        }
     }
 
     return removed_blocks;

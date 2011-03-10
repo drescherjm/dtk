@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Mar  5 23:03:38 2011 (+0100)
+ * Last-Updated: Tue Mar  8 16:26:05 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 296
+ *     Update #: 301
  */
 
 /* Commentary: 
@@ -66,6 +66,15 @@ dtkComposerNodeControl::~dtkComposerNodeControl(void)
     delete d;
 
     d = NULL;
+}
+
+dtkComposerNodeControlBlock *dtkComposerNodeControl::block(const QString& title)
+{
+    foreach(dtkComposerNodeControlBlock *block, d->blocks)
+        if(block->title() == title)
+            return block;
+
+    return NULL;
 }
 
 dtkComposerNodeControlBlock *dtkComposerNodeControl::addBlock(const QString& title)
@@ -193,8 +202,8 @@ bool dtkComposerNodeControl::resize(const QRectF& rect)
                  rect.width(),
                  (rect.height() - 46) / d->blocks.count());
 
-        if(block->childItems().count() != 0 && !r.contains(block->childrenBoundingRect()))
-            resize = false;
+        // if(block->childItems().count() != 0 && !r.contains(block->childrenBoundingRect()))
+        //     resize = false;
     }
 
     return resize;

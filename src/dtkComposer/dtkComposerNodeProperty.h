@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Mar  5 20:53:17 2011 (+0100)
+ * Last-Updated: Mon Mar  7 13:36:49 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 107
+ *     Update #: 111
  */
 
 /* Commentary: 
@@ -40,8 +40,10 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeProperty : public QObject, public QGraph
 
 public:
     enum Type {
-         Input,
-        Output
+        Input,
+        Output,
+        HybridInput,
+        HybridOutput
     };
     
     enum Multiplicity {

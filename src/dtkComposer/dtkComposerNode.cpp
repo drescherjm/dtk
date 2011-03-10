@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Mar  5 23:31:08 2011 (+0100)
+ * Last-Updated: Mon Mar  7 13:58:01 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1637
+ *     Update #: 1645
  */
 
 /* Commentary: 
@@ -351,8 +351,14 @@ dtkComposerEdge *dtkComposerNode::edge(dtkComposerNodeProperty *property)
 
         if(property->type() == dtkComposerNodeProperty::Input)
             return d->input_edges.key(property);
+
+        if(property->type() == dtkComposerNodeProperty::HybridInput)
+            return d->input_edges.key(property);
         
         if(property->type() == dtkComposerNodeProperty::Output)
+            return d->output_edges.key(property);
+
+        if(property->type() == dtkComposerNodeProperty::HybridOutput)
             return d->output_edges.key(property);
 
     } else {
@@ -523,10 +529,17 @@ int dtkComposerNode::count(dtkComposerNodeProperty *property)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
+
     if(property->type() == dtkComposerNodeProperty::Input)
         return d->input_edges.keys(property).count();
 
+    if(property->type() == dtkComposerNodeProperty::HybridInput)
+        return d->input_edges.keys(property).count();
+
     if(property->type() == dtkComposerNodeProperty::Output)
+        return d->output_edges.keys(property).count();
+
+    if(property->type() == dtkComposerNodeProperty::HybridOutput)
         return d->output_edges.keys(property).count();
 
     return 0;
@@ -537,10 +550,17 @@ int dtkComposerNode::number(dtkComposerNodeProperty *property)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
+
     if(property->type() == dtkComposerNodeProperty::Input)
         return d->input_properties.indexOf(property);
 
+    if(property->type() == dtkComposerNodeProperty::HybridInput)
+        return d->input_properties.indexOf(property);
+
     if(property->type() == dtkComposerNodeProperty::Output)
+        return d->output_properties.indexOf(property);
+
+    if(property->type() == dtkComposerNodeProperty::HybridOutput)
         return d->output_properties.indexOf(property);
 
     return -1;

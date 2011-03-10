@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Mar  5 22:05:07 2011 (+0100)
+ * Last-Updated: Tue Mar  8 16:32:04 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 575
+ *     Update #: 600
  */
 
 /* Commentary: 
@@ -25,7 +25,9 @@
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeFile.h"
+#include "dtkComposerNodeLoop.h"
 #include "dtkComposerNodeNumber.h"
+#include "dtkComposerNodeNumberComparator.h"
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeProperty.h"
@@ -362,42 +364,76 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
             switch (number_node->genre()) {
 
             case (dtkComposerNodeNumber::Int):
-                number_node->setNumber(QVariant(value.toInt()));
+                number_node->setValue(value.toInt());
                 break;
         
             case (dtkComposerNodeNumber::UInt):
-                number_node->setNumber(QVariant(value.toUInt()));
+                number_node->setValue(value.toUInt());
                 break;
                 
             case (dtkComposerNodeNumber::Long):
-                number_node->setNumber(qVariantFromValue(value.toLong()));
+                number_node->setValue((long)value.toLongLong());
                 break;
                 
             case (dtkComposerNodeNumber::ULong):
-                number_node->setNumber(qVariantFromValue(value.toULong()));
+                number_node->setValue((ulong)value.toULongLong());
                 break;
                 
             case (dtkComposerNodeNumber::LongLong):
-                number_node->setNumber(QVariant(value.toLongLong()));
+                number_node->setValue(value.toLongLong());
                 break;
                 
             case (dtkComposerNodeNumber::ULongLong):
-                number_node->setNumber(QVariant(value.toULongLong()));
+                number_node->setValue(value.toULongLong());
                 break;
                 
             case (dtkComposerNodeNumber::Float):
-                number_node->setNumber(qVariantFromValue(value.toFloat()));
+                number_node->setValue((float)value.toDouble());
                 break;
                 
             case (dtkComposerNodeNumber::Double):
-                number_node->setNumber(QVariant(value.toDouble()));
+                number_node->setValue(value.toDouble());
                 break;
                 
             default:
                 number_node->setGenre(dtkComposerNodeNumber::Int);
-                number_node->setNumber(QVariant(value.toInt()));
+                number_node->setValue(value.toInt());
                 break;
             }
+        }
+
+        number_node->refresh();
+    }
+
+    // Number comparator
+    
+    if(dtkComposerNodeNumberComparator *number_comparator_node = dynamic_cast<dtkComposerNodeNumberComparator *>(n)) {
+        
+        QDomNodeList children = node.childNodes();
+        
+        for(int i = 0; i < children.count(); i++) {
+
+            if(children.at(i).toElement().tagName() != "operation")
+                continue;
+
+            dtkComposerNodeNumberComparator::Operation operation;
+
+            if(children.at(i).childNodes().at(0).toText().data() == "<")
+                operation = dtkComposerNodeNumberComparator::LesserThan;
+            else if(children.at(i).childNodes().at(0).toText().data() == "<=")
+                operation = dtkComposerNodeNumberComparator::LesserThanOrEqual;
+            else if(children.at(i).childNodes().at(0).toText().data() == ">")
+                operation = dtkComposerNodeNumberComparator::GreaterThan;
+            else if(children.at(i).childNodes().at(0).toText().data() == ">=")
+                operation = dtkComposerNodeNumberComparator::GreaterThanOrEqual;
+            else if(children.at(i).childNodes().at(0).toText().data() == "==")
+                operation = dtkComposerNodeNumberComparator::Equal;
+            else if(children.at(i).childNodes().at(0).toText().data() == "!=")
+                operation = dtkComposerNodeNumberComparator::Differ;
+            else
+                operation = dtkComposerNodeNumberComparator::Equal;
+
+            number_comparator_node->setOperation(operation);
         }
     }
 
@@ -564,7 +600,31 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
 
             for(int i = 0; i < case_block_count; i++)
                 case_node->addBlock(QString("case%1").arg(i));
-        }    
+        }
+
+        if(dtkComposerNodeLoop *loop_node = dynamic_cast<dtkComposerNodeLoop *>(control_node)) {
+
+            QDomNodeList children = node.childNodes();
+
+            for(int i = 0; i < children.count(); i++) {
+                
+                if(children.at(i).toElement().tagName() != "property")
+                    continue;
+
+                if(children.at(i).toElement().attribute("name") == "condition")
+                    continue;
+
+                // Assign the property
+
+                qDebug() << "Assigning" << children.at(i).toElement().attribute("name") << "property to block" << children.at(i).toElement().attribute("block");
+
+                dtkComposerNodeProperty *i_p = loop_node->block(children.at(i).toElement().attribute("block"))->addInputProperty(children.at(i).toElement().attribute("name"), loop_node);
+                dtkComposerNodeProperty *o_p = loop_node->block(children.at(i).toElement().attribute("block"))->addOutputProperty(children.at(i).toElement().attribute("name"), loop_node);
+
+                loop_node->addInputProperty(i_p);
+                loop_node->addInputProperty(o_p);
+            }
+        }
 
         control_node->setSize(w, h);
         

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:06:43 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Nov 22 11:09:19 2010 (+0100)
-##           By: Julien Wintz
-##     Update #: 26
+## Last-Updated: Wed Mar  9 14:06:57 2011 (+0100)
+##           By: Thibaud Kloczko
+##     Update #: 27
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,6 +17,8 @@
 ## 
 ######################################################################
 
+add_subdirectory(dtkCompareDouble)
+add_subdirectory(dtkCompareFloat)
 add_subdirectory(dtkInterpreter)
 add_subdirectory(dtkLog)
 add_subdirectory(dtkTagCloud)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  8 15:22:40 2011 (+0100)
+ * Last-Updated: Wed Mar  9 13:33:55 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 405
+ *     Update #: 407
  */
 
 /* Commentary: 
@@ -315,6 +315,7 @@ QList<dtkComposerNodeProperty *> dtkComposerNodeControlBlock::outputProperties(v
 dtkComposerNodeProperty *dtkComposerNodeControlBlock::addInputProperty(QString name, dtkComposerNode *parent)
 {
     dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::HybridInput, dtkComposerNodeProperty::Multiple, parent);
+    property->setBlockedFrom(this->title());
 
     d->input_properties << property;
     
@@ -324,6 +325,7 @@ dtkComposerNodeProperty *dtkComposerNodeControlBlock::addInputProperty(QString n
 dtkComposerNodeProperty *dtkComposerNodeControlBlock::addOutputProperty(QString name, dtkComposerNode *parent)
 {
     dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::HybridOutput, dtkComposerNodeProperty::Multiple, parent);
+    property->setBlockedFrom(this->title());
 
     d->output_properties << property;
 

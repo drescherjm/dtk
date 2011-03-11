@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Mar  5 23:14:21 2011 (+0100)
+ * Last-Updated: Wed Mar  9 14:44:13 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 351
+ *     Update #: 353
  */
 
 /* Commentary: 
@@ -231,7 +231,7 @@ bool dtkComposerEdge::link(bool anyway)
         return false;
     }
 
-    if (!d->source->node()->isGhost() && !d->destination->node()->isGhost() && d->source->type() == d->destination->type()) {
+    if (!d->source->node()->isGhost() && !d->destination->node()->isGhost() && d->source->type() == d->destination->type() && (d->source->type() == dtkComposerNodeProperty::Input || d->source->type() == dtkComposerNodeProperty::Output)) {
         qDebug() << "Cannot connect properties of non ghost nodes if they are of the same type";
         return false;
     }

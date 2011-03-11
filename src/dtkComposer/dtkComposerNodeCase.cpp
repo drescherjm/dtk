@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Mar  5 23:34:48 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 171
+ * Last-Updated: Fri Mar 11 09:22:52 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 264
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 #include "dtkComposerNodeCase_p.h"
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerScene.h"
 
 #include <dtkCore/dtkGlobal.h>
 
@@ -47,7 +48,7 @@ protected:
 public:
     dtkComposerNodeCase *parent_node;
     dtkComposerNodeCasePrivate *parent_node_d;
-;
+
     QPainterPath path;
     QString text;
 };
@@ -66,22 +67,22 @@ dtkComposerNodeCaseButton::dtkComposerNodeCaseButton(dtkComposerNodeCase *parent
     QPainterPath d; d.addRoundedRect(origin_x + length,     origin_y, margin,          -height,     radius, radius);
     QPainterPath e; e.addRoundedRect(origin_x + margin / 2, origin_y, length,          -height / 2,      0,      0);
 
-    path = c.united(e.subtracted(b.united(c.united(d))));
+    this->path = c.united(e.subtracted(b.united(c.united(d))));
 
-    parent_node = parent;
-    parent_node_d = parent_d;
+    this->parent_node = parent;
+    this->parent_node_d = parent_d;
 
-    text = "+";
+    this->text = "+";
 }
 
 dtkComposerNodeCaseButton::~dtkComposerNodeCaseButton(void)
-{
+{    
 
 }
 
 QRectF dtkComposerNodeCaseButton::boundingRect(void) const
 {
-    return path.boundingRect();
+    return this->path.boundingRect();
 }
 
 void dtkComposerNodeCaseButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -118,7 +119,7 @@ void dtkComposerNodeCaseButton::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     QString block_name = QString("case%1").arg(parent_node_d->block_cases.count());
     
-    parent_node->addBlock(block_name);
+    this->parent_node->addBlock(block_name);  
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -127,9 +128,9 @@ void dtkComposerNodeCaseButton::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 dtkComposerNodeCase::dtkComposerNodeCase(dtkComposerNode *parent) : dtkComposerNodeControl(parent), d(new dtkComposerNodeCasePrivate)
 {
-    d->button = new dtkComposerNodeCaseButton(this, d);
-    d->button->setPos(0, 0);
-    d->button->setZValue(this->zValue() + 1);
+    d->add_button = new dtkComposerNodeCaseButton(this, d);
+    d->add_button->setPos(0, 0);
+    d->add_button->setZValue(this->zValue() + 1);
 
     d->block_default = this->addBlock("default");
 
@@ -167,11 +168,55 @@ dtkComposerNodeControlBlock *dtkComposerNodeCase::addBlock(const QString& title)
     return block;
 }
 
+int dtkComposerNodeCase::removeBlock(dtkComposerNodeControlBlock *block, bool clean)
+{
+    dtkComposerNodeControl::removeBlock(block, false);
+
+    int removed_blocks = 0;
+
+    if (d->block_cases.contains(block)) {
+
+        if(dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene()))
+            foreach(dtkComposerNode *child, block->nodes())
+                scene->removeNode(child);
+
+        removed_blocks = d->block_cases.removeAll(block);
+
+        foreach(dtkComposerNodeProperty *property, block->inputProperties()) {
+            this->removeInputProperty(property);
+            if(property->name() == "constant")                
+                delete property;
+        }
+        
+        foreach(dtkComposerNodeProperty *property, block->outputProperties()) {
+            this->removeOutputProperty(property);
+            if(property->name() == "constant")
+                delete property;
+        }
+        
+        if (clean) {
+            delete block;
+            this->layout();
+        }
+    }
+
+    return removed_blocks;
+}
+
+int dtkComposerNodeCase::removeBlock(const QString& title)
+{
+    foreach(dtkComposerNodeControlBlock *block, d->block_cases)
+        if(block->title() == title)
+            return this->removeBlock(block, true);
+
+    return 0;
+}
+
 void dtkComposerNodeCase::layout(void)
 {
     dtkComposerNodeControl::layout();
 
-    d->button->setPos(this->boundingRect().width()/2 - 150/2, this->boundingRect().bottom() - 200);
+    d->add_button->setPos(this->boundingRect().width()/2 - 150/2, this->boundingRect().bottom() - 200);
 }
 
 void dtkComposerNodeCase::update(void)

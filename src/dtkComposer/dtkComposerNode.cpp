@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Mar  7 13:58:01 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 1645
+ * Last-Updated: Fri Mar 11 09:09:29 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 1646
  */
 
 /* Commentary: 
@@ -256,6 +256,10 @@ QString dtkComposerNode::description(void)
 
     case(dtkComposerNode::Composite):
         node_kind = "Composite";
+        break;
+
+    case(dtkComposerNode::Control):
+        node_kind = "Control";
         break;
 
     case(dtkComposerNode::Data):

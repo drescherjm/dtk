@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 10 15:25:45 2011 (+0100)
+ * Last-Updated: Fri Mar 11 09:22:52 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 255
+ *     Update #: 264
  */
 
 /* Commentary: 
@@ -176,11 +176,15 @@ int dtkComposerNodeCase::removeBlock(dtkComposerNodeControlBlock *block, bool cl
 
     if (d->block_cases.contains(block)) {
 
+        if(dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene()))
+            foreach(dtkComposerNode *child, block->nodes())
+                scene->removeNode(child);
+
         removed_blocks = d->block_cases.removeAll(block);
 
         foreach(dtkComposerNodeProperty *property, block->inputProperties()) {
             this->removeInputProperty(property);
-            if(property->name() == "constant")
+            if(property->name() == "constant")                
                 delete property;
         }
         

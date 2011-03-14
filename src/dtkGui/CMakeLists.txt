@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Mar 14 14:52:57 2011 (+0100)
+## Last-Updated: Mon Mar 14 16:24:01 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 159
+##     Update #: 163
 ######################################################################
 ## 
 ### Commentary: 
@@ -31,6 +31,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkGuiExport.h
   dtkInsetMenu.h
   dtkInspector.h
+  dtkInspectorBox.h
   dtkInspectorButton.h
   dtkInspectorTitleBar.h
   dtkInspectorToolBar.h
@@ -66,6 +67,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkFinder.h
   dtkInsetMenu.h
   dtkInspector.h
+  dtkInspectorBox.h
   dtkInspectorButton.h
   dtkInspectorTitleBar.h
   dtkInspectorToolBar.h
@@ -99,6 +101,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkInsetMenu.cpp
 
   dtkInspector.cpp
+  dtkInspectorBox.cpp
   dtkInspectorButton.cpp
   dtkInspectorTitleBar.cpp
   dtkInspectorToolBar.cpp

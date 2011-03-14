@@ -52,9 +52,6 @@ set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkScriptInterpreterTcl.cpp)
 endif(BUILD_WRAPPERS)
 
-# Include header files for Visual Studio.
-SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
-
 ## #################################################################
 ## Build rules
 ## #################################################################
@@ -73,7 +70,6 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES_MOC})
 
 target_link_libraries(${PROJECT_NAME}
-  ${TCL_LIBRARY}
   dtkCore)
 
 if(BUILD_WRAPPERS)
@@ -85,6 +81,13 @@ endif(BUILD_WRAPPERS)
 if(EDITLINE_FOUND)
   target_link_libraries(${PROJECT_NAME} ${EDITLINE_LIBRARY})
 endif(EDITLINE_FOUND)
+
+## #################################################################
+## Source file layout in development environments like Visual Studio
+## #################################################################
+
+SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
+SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_UIC} ${${PROJECT_NAME}_SOURCES_MOC} ${${PROJECT_NAME}_SOURCES_QRC})
 
 ## #################################################################
 ## Installation

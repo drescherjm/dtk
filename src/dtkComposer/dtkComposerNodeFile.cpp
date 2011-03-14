@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul  8 13:28:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Sep 11 22:16:15 2010 (+0200)
+ * Last-Updated: Thu Feb 10 11:10:09 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 61
+ *     Update #: 69
  */
 
 /* Commentary: 
@@ -67,6 +67,8 @@ QVariant dtkComposerNodeFile::value(dtkComposerNodeProperty *property)
         emit progressed(100);
         return QVariant(d->file);
     }
+
+    return QVariant();
 }
 
 void dtkComposerNodeFile::editFile(void)
@@ -86,4 +88,16 @@ void dtkComposerNodeFile::getFileName(void)
 void dtkComposerNodeFile::setFileName(const QString& file)
 {
     d->file = file;
+}
+
+void dtkComposerNodeFile::onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+{
+    DTK_UNUSED(edge);
+    DTK_UNUSED(property);
+}
+
+void dtkComposerNodeFile::onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+{
+    DTK_UNUSED(edge);
+    DTK_UNUSED(property);
 }

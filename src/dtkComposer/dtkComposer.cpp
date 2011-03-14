@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Dec 14 19:18:48 2010 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 435
+ * Last-Updated: Sat Feb 26 19:53:40 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 445
  */
 
 /* Commentary: 
@@ -84,9 +84,19 @@ dtkComposer::~dtkComposer(void)
     d = NULL;
 }
 
+void dtkComposer::setBackgroundColor(const QColor &color)
+{
+    d->view->setBackgroundBrush(color);
+}
+
 void dtkComposer::setFactory(dtkComposerNodeFactory *factory)
 {
     d->scene->setFactory(factory);
+}
+
+void dtkComposer::setFileName(const QString& fileName)
+{
+    d->fileName = fileName;
 }
 
 bool dtkComposer::isModified(void)
@@ -99,6 +109,16 @@ QString dtkComposer::fileName(void)
     return d->fileName;
 }
 
+dtkComposerScene *dtkComposer::scene(void)
+{
+    return d->scene;
+}
+
+dtkComposerView *dtkComposer::view(void)
+{
+    return d->view;
+}
+
 bool dtkComposer::open(QString fileName)
 {
     if (!fileName.isEmpty()) {
@@ -108,7 +128,7 @@ bool dtkComposer::open(QString fileName)
 
         d->scene->setModified(false);
 
-        d->view->fitInView(d->scene->sceneRect(), Qt::KeepAspectRatio);
+        // d->view->fitInView(d->scene->sceneRect(), Qt::KeepAspectRatio);
         d->view->update();
 
         QFileInfo info(fileName);
@@ -183,4 +203,14 @@ void dtkComposer::startEvaluation(void)
 void dtkComposer::stopEvaluation(void)
 {
     d->scene->stopEvaluation();
+}
+
+void dtkComposer::copy(void)
+{
+    d->scene->copy();
+}
+
+void dtkComposer::paste(void)
+{
+    d->scene->paste();
 }

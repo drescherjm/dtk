@@ -20,6 +20,8 @@
 #ifndef DTKPLOTINTERPOLATOR_H
 #define DTKPLOTINTERPOLATOR_H
 
+#include "dtkPlotExport.h"
+
 class dtkPlotCurve;
 class dtkPlotData;
 class dtkPlotInterpolatorPrivate;
@@ -35,7 +37,7 @@ bool dtkPlotInterpolatorLessThan(dtkPlotPoint *p1, dtkPlotPoint *p2);
 // dtkPlotInterpolator
 // /////////////////////////////////////////////////////////////////
 
-class dtkPlotInterpolator
+class DTKPLOT_EXPORT dtkPlotInterpolator
 {
 public:
              dtkPlotInterpolator(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jan 27 15:27:17 2010 (+0100)
+ * Last-Updated: Sun Jan 16 19:34:47 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 152
+ *     Update #: 162
  */
 
 /* Commentary:
@@ -89,7 +89,7 @@ void dtkAbstractData::enableReader(const QString& reader)
         d->readers.value(reader)->setData(this);
 	d->readers.value(reader)->enable();
     } else
-	dtkDebug() << description() << "has no such reader: " << reader;
+	dtkDebug() << description() << " has no such reader: " << reader;
 }
 
 void dtkAbstractData::disableReader(const QString& reader)
@@ -104,7 +104,7 @@ void dtkAbstractData::enableWriter(const QString& writer)
         d->writers.value(writer)->setData(this);
 	d->writers.value(writer)->enable();
     } else
-	dtkDebug() << description() << "has no such writer: " << writer;
+	dtkDebug() << description() << " has no such writer: " << writer;
 }
 
 void dtkAbstractData::disableWriter(const QString& writer)
@@ -119,7 +119,7 @@ void dtkAbstractData::enableConverter(const QString& converter)
         d->converters.value(converter)->setData(this);
 	d->converters.value(converter)->enable();
     } else
-	dtkDebug() << description() << "has no such converter: " << converter;
+	dtkDebug() << description() << " has no such converter: " << converter;
 }
 
 void dtkAbstractData::disableConverter(const QString& converter)
@@ -257,6 +257,14 @@ void *dtkAbstractData::output(void)
     return NULL;
 }
 
+void *dtkAbstractData::output(int channel)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(channel);
+
+    return NULL;
+}
+
 void *dtkAbstractData::data(void)
 {
     DTK_DEFAULT_IMPLEMENTATION;
@@ -272,7 +280,7 @@ void *dtkAbstractData::data(int channel)
     return NULL;
 }
 
-int dtkAbstractData::parameter(int channel)
+double dtkAbstractData::parameter(int channel)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(channel);
@@ -300,6 +308,19 @@ void dtkAbstractData::setParameter(float parameter)
 }
 
 void dtkAbstractData::setParameter(float parameter, int channel)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(parameter);
+    DTK_UNUSED(channel);
+}
+
+void dtkAbstractData::setParameter(double parameter)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(parameter);
+}
+
+void dtkAbstractData::setParameter(double parameter, int channel)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(parameter);

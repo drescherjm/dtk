@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Dec 14 19:32:46 2010 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 235
+ * Last-Updated: Mon Mar  7 13:40:19 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 297
  */
 
 /* Commentary: 
@@ -21,6 +21,8 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeProperty.h"
 
+#include <dtkCore/dtkGlobal.h>
+
 class dtkComposerNodePropertyPrivate
 {
 public:
@@ -34,6 +36,8 @@ public:
     QGraphicsTextItem *text;
 
     bool displayed;
+
+    QString block;
 };
 
 dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multiplicity multiplicity, dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePropertyPrivate)
@@ -62,16 +66,90 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multip
 
 dtkComposerNodeProperty::~dtkComposerNodeProperty(void)
 {
+    d->parent = NULL;
+    d->clone = NULL;
+
     delete d;
 
     d = NULL;
+}
+
+QString dtkComposerNodeProperty::description(void)
+{
+    QString property_type;
+
+    switch(d->type) {
+        
+    case(dtkComposerNodeProperty::Input):
+        property_type = "Input";
+        break;
+        
+    case(dtkComposerNodeProperty::Output):
+        property_type = "Output";
+        break;
+
+    case(dtkComposerNodeProperty::HybridInput):
+        property_type = "HybridInput";
+        break;
+
+    case(dtkComposerNodeProperty::HybridOutput):
+        property_type = "HybridInput";
+        break;
+
+    default:
+        property_type = "";
+        break;
+    }
+
+    QString property_multiplicity;
+
+    switch(d->multiplicity) {
+        
+    case(dtkComposerNodeProperty::Null):
+        property_multiplicity = "Null";
+        break;
+        
+    case(dtkComposerNodeProperty::Single):
+        property_multiplicity = "Single";
+        break;
+        
+    case(dtkComposerNodeProperty::Multiple):
+        property_multiplicity = "Multiple";
+        break;
+
+    default:
+        property_multiplicity = "";
+        break;
+    }
+
+    if(!d->parent)
+        return QString("Invalid property");
+
+    // if(d->clone)
+    //     return QString("Property: name %1, parent %2, clone of %3, type %4, multiplicity %5, displayed %6")
+    //         .arg(d->text->toPlainText())
+    //         .arg(d->parent->description())
+    //         .arg(d->clone->description())
+    //         .arg(property_type)
+    //         .arg(property_multiplicity)
+    //         .arg(d->displayed);
+
+    // else
+        // return QString("Property: name %1, parent %2, no cloned, type %3, multiplicty %4, displayed %5")
+        //     .arg(d->text->toPlainText())
+        //     .arg(d->parent->description())
+        //     .arg(property_type)
+        //     .arg(property_multiplicity)
+        //     .arg(d->displayed);
+
+    return QString("Valid property %1").arg(d->text->toPlainText());
 }
 
 dtkComposerNodeProperty *dtkComposerNodeProperty::clone(dtkComposerNode *node)
 {
     dtkComposerNodeProperty *property = new dtkComposerNodeProperty(d->text->toPlainText(), d->type, d->multiplicity, node);
 
-    if(d->parent->kind() == dtkComposerNode::Composite)
+    if(d->parent && d->parent->kind() == dtkComposerNode::Composite)
         property->d->clone = d->clone;
     else
         property->d->clone = d->parent;
@@ -86,6 +164,9 @@ dtkComposerNodeProperty *dtkComposerNodeProperty::clone(dtkComposerNode *node)
 
 dtkComposerEdge *dtkComposerNodeProperty::edge(void)
 {
+    if(!d->parent)
+        return NULL;
+
     return d->parent->edge(this);
 }
 
@@ -106,6 +187,9 @@ dtkComposerNodeProperty::Type dtkComposerNodeProperty::type(void)
 
 int dtkComposerNodeProperty::count(void)
 {
+    if(!d->parent)
+        return -1;
+
     return d->parent->count(this);
 }
 
@@ -115,7 +199,8 @@ void dtkComposerNodeProperty::hide(void)
     
     d->displayed = false;
 
-    d->parent->layout();
+    if (d->parent)
+        d->parent->layout();
 }
 
 void dtkComposerNodeProperty::show(void)
@@ -124,7 +209,13 @@ void dtkComposerNodeProperty::show(void)
 
     d->displayed = true;
 
-    d->parent->layout();
+    if (d->parent)
+        d->parent->layout();
+}
+
+dtkComposerNode *dtkComposerNodeProperty::parent(void)
+{
+    return d->parent;
 }
 
 dtkComposerNode *dtkComposerNodeProperty::clonedFrom(void)
@@ -132,9 +223,24 @@ dtkComposerNode *dtkComposerNodeProperty::clonedFrom(void)
     return d->clone;
 }
 
+QString dtkComposerNodeProperty::blockedFrom(void) const
+{
+    return d->block;
+}
+
+void dtkComposerNodeProperty::setBlockedFrom(const QString& name)
+{
+    d->block = name;
+}
+
 void dtkComposerNodeProperty::setClonedFrom(dtkComposerNode *node)
 {
     d->clone = node;
+}
+
+void dtkComposerNodeProperty::setParentNode(dtkComposerNode *node)
+{
+    d->parent = node;
 }
 
 bool dtkComposerNodeProperty::isDisplayed(void)
@@ -152,6 +258,13 @@ bool dtkComposerNodeProperty::isDisplayed(void)
 void dtkComposerNodeProperty::setDisplayed(bool displayed)
 {
     d->displayed = displayed;
+}
+
+void dtkComposerNodeProperty::setName(const QString& name)
+{
+    d->text->setPlainText(name);
+
+    this->update();
 }
 
 QRectF dtkComposerNodeProperty::boundingRect(void) const
@@ -184,6 +297,14 @@ void dtkComposerNodeProperty::setRect(const QRectF& rect)
         d->ellipse->setBrush(Qt::red);
         d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText())*-1 - d->ellipse->rect().width(), (fm.height()/2-1)*-1));
         break;
+    case HybridInput:
+        d->ellipse->setBrush(Qt::gray);
+        d->text->setPos(rect.topRight() + QPointF(0, (fm.height()/2-1)*-1));
+        break;
+    case HybridOutput:
+        d->ellipse->setBrush(Qt::gray);
+        d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText())*-1 - d->ellipse->rect().width(), (fm.height()/2-1)*-1));
+        break;
     default:
         break;
     };
@@ -204,6 +325,12 @@ void dtkComposerNodeProperty::mirror(void)
     case Input:
         d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText())*-1 - d->ellipse->rect().width(), (fm.height()/2-1)*-1));
         break;
+    case HybridOutput:
+        d->text->setPos(rect.topRight() + QPointF(0, (fm.height()/2-1)*-1));
+        break;
+    case HybridInput:
+        d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText())*-1 - d->ellipse->rect().width(), (fm.height()/2-1)*-1));
+        break;
     default:
         break;
     };
@@ -214,4 +341,29 @@ void dtkComposerNodeProperty::paint(QPainter *painter, const QStyleOptionGraphic
     Q_UNUSED(painter);
     Q_UNUSED(option);
     Q_UNUSED(widget);
+}
+
+// /////////////////////////////////////////////////////////////////
+// Debug operators
+// /////////////////////////////////////////////////////////////////
+
+QDebug operator<<(QDebug dbg, dtkComposerNodeProperty  property)
+{
+    dbg.nospace() << property.description();
+
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, dtkComposerNodeProperty& property)
+{
+    dbg.nospace() << property.description();
+
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, dtkComposerNodeProperty *property)
+{
+    dbg.nospace() << property->description();
+
+    return dbg.space();
 }

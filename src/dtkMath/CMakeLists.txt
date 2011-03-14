@@ -4,8 +4,8 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Thu Sep  9 11:30:33 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Nov 22 11:05:13 2010 (+0100)
-##           By: Julien Wintz
+## Last-Updated:  Thu Feb  3 10:00:11 2011
+##           By: Jean-Christophe Lombardo
 ##     Update #: 13
 ######################################################################
 ## 
@@ -27,10 +27,15 @@ set(${PROJECT_NAME}_HEADERS
   dtkMath.h
   dtkMathExport.h
   dtkMatrix.h
+  dtkMatrix.tpp
   dtkMatrixSquared.h
+  dtkMatrixSquared.tpp
   dtkQuaternion.h
+  dtkQuaternion.tpp
   dtkVector.h
+  dtkVector.tpp
   dtkVector3D.h
+  dtkVector3D.tpp
 )
 
 set(${PROJECT_NAME}_HEADERS_MOC
@@ -40,10 +45,6 @@ set(${PROJECT_NAME}_HEADERS_MOC
 set(${PROJECT_NAME}_SOURCES
   dtkMath.cpp
 )
-
-# Include header files for Visual Studio.
-SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
-
 ## #################################################################
 ## Build rules
 ## #################################################################
@@ -67,6 +68,14 @@ add_library(${PROJECT_NAME} SHARED
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LBRARIES})
+
+## #################################################################
+## Source file layout in development environments like Visual Studio
+## #################################################################
+
+SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
+SOURCE_GROUP("Templates Files" REGULAR_EXPRESSION .*\\.tpp\$)
+SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 
 ## #################################################################
 ## Installation

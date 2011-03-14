@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:01:36 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov 30 20:30:05 2010 (+0100)
+ * Last-Updated: Thu Feb  3 17:34:54 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -20,8 +20,11 @@
 #ifndef DTKCOMPOSERWRITER_H
 #define DTKCOMPOSERWRITER_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
+#include <QtXml/QDomElement>
+
+class dtkComposerNode;
 class dtkComposerScene;
 class dtkComposerWriterPrivate;
 
@@ -34,6 +37,11 @@ public:
    ~dtkComposerWriter(void);
 
    void write(const QString& fileName);
+
+protected:
+   virtual QDomElement writeNode(dtkComposerNode *node, QDomElement& element, QDomDocument& document);
+
+   virtual void extend(dtkComposerNode *node, QDomElement& element, QDomDocument& document);
 
 private:
     dtkComposerWriterPrivate *d;

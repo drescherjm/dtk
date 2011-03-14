@@ -69,9 +69,6 @@ set(${PROJECT_NAME}_SOURCES
 
 set(${PROJECT_NAME}_RESOURCES dtkDistributed.qrc)
 
-# Include header files for Visual Studio.
-SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
-
 ## #################################################################
 ## Mpi sources
 ## #################################################################
@@ -114,6 +111,13 @@ if(MPI_FOUND)
 target_link_libraries(${PROJECT_NAME}
   ${MPI_LIBRARIES})
 endif(MPI_FOUND)
+
+## #################################################################
+## Source file layout in development environments like Visual Studio
+## #################################################################
+
+SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
+SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC} ${${PROJECT_NAME}_SOURCES_QRC})
 
 ## #################################################################
 ## Installation

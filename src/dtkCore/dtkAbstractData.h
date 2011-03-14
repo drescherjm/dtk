@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Jul 15 13:49:03 2010 (+0200)
+ * Last-Updated: Sun Jan 16 19:34:51 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 188
+ *     Update #: 196
  */
 
 /* Commentary:
@@ -55,17 +55,21 @@ public slots:
     virtual dtkAbstractData *convert(const QString& toType);
 
     virtual void *output(void);
+    virtual void *output(int channel);
 
     virtual void *data(void);
     virtual void *data(int channel);
 
-    virtual int parameter(int channel);
+    virtual double parameter(int channel);
 
     virtual void setParameter(int parameter);
     virtual void setParameter(int parameter, int channel);
 
     virtual void setParameter(float parameter);
     virtual void setParameter(float parameter, int channel);
+
+    virtual void setParameter(double parameter);
+    virtual void setParameter(double parameter, int channel);
 
     virtual void setParameter(const QString& parameter);
     virtual void setParameter(const QString& parameter, int channel);

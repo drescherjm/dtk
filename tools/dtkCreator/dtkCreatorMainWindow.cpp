@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 14 21:25:27 2010 (+0200)
+ * Last-Updated: Mon Mar 14 15:08:29 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 487
+ *     Update #: 494
  */
 
 /* Commentary: 
@@ -38,8 +38,6 @@
 #include <dtkScript/dtkScriptInterpreterTcl.h>
 
 #include <dtkGui/dtkInspector.h>
-#include <dtkGui/dtkInspectorComposer.h>
-#include <dtkGui/dtkInspectorScene.h>
 #include <dtkGui/dtkInterpreter.h>
 #include <dtkGui/dtkInterpreterPreferencesWidget.h>
 #include <dtkGui/dtkPreferencesWidget.h>
@@ -206,7 +204,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->toolRunAction->setToolTip("Runs the current composition (Ctrl+R)");
     d->toolRunAction->setIcon(QIcon(":dtkGui/pixmaps/dtk-composer-run.png"));
     connect(d->toolRunAction, SIGNAL(triggered()), this, SLOT(run()));
-
+    
     d->toolStopAction = new QAction("Stop", this);
     d->toolStopAction->setShortcut(Qt::ControlModifier+Qt::Key_Period);
     d->toolStopAction->setToolTip("Stops the current composition (Ctrl+.)");
@@ -249,6 +247,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->stack->addWidget(d->editor);
 
     d->composer = new dtkComposer(d->stack);
+    connect( d->toolRunAction, SIGNAL(triggered()),      d->composer, SLOT(startEvaluation()) );
+    connect( d->composer,      SIGNAL(evaluationStopped()), this, SLOT(stop()) );
 
     d->stack->addWidget(d->composer);
 
@@ -273,31 +273,11 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     connect(d->script_browser, SIGNAL(scriptClicked(const QString&)), d->editor, SLOT(open(const QString&)));
 
-    dtkInspectorScene *inspector_scene = new dtkInspectorScene;
-    dtkInspectorComposer *inspector_composer = new dtkInspectorComposer;
-
     d->inspector = new dtkInspector(this);
-    d->inspector->addPage("Scene", inspector_scene);
-
-    connect(dtkAbstractDataFactory::instance(), SIGNAL(created(dtkAbstractData *, QString)), inspector_scene, SLOT(addData(dtkAbstractData *, QString)));
-    connect(dtkAbstractProcessFactory::instance(), SIGNAL(created(dtkAbstractProcess *, QString)), inspector_scene, SLOT(addProcess(dtkAbstractProcess *, QString)));
-    connect(dtkAbstractViewFactory::instance(), SIGNAL(created(dtkAbstractView *, QString)), inspector_scene, SLOT(addView(dtkAbstractView *, QString)));
 
     connect(dtkAbstractDataFactory::instance(), SIGNAL(created(dtkAbstractData *, QString)), this, SLOT(registerData(dtkAbstractData *, QString)));
     connect(dtkAbstractProcessFactory::instance(), SIGNAL(created(dtkAbstractProcess *, QString)), this, SLOT(registerProcess(dtkAbstractProcess *, QString)));
     connect(dtkAbstractViewFactory::instance(), SIGNAL(created(dtkAbstractView *, QString)), this, SLOT(registerView(dtkAbstractView *, QString)));
-
-    connect(inspector_scene, SIGNAL(dataSelected(dtkAbstractData *)), d->plugin_browser, SLOT(onDataSelected(dtkAbstractData *)));
-    connect(inspector_scene, SIGNAL(processSelected(dtkAbstractProcess *)), d->plugin_browser, SLOT(onProcessSelected(dtkAbstractProcess *)));
-    connect(inspector_scene, SIGNAL(viewSelected(dtkAbstractView *)), d->plugin_browser, SLOT(onViewSelected(dtkAbstractView *)));
-    
-    connect(inspector_scene, SIGNAL(dataSelected(dtkAbstractData *)), d->composer, SLOT(onDataSelected(dtkAbstractData *)));
-    connect(inspector_scene, SIGNAL(processSelected(dtkAbstractProcess *)), d->composer, SLOT(onProcessSelected(dtkAbstractProcess *)));
-    connect(inspector_scene, SIGNAL(viewSelected(dtkAbstractView *)), d->composer, SLOT(onViewSelected(dtkAbstractView *)));
-    
-    connect(d->composer, SIGNAL(dataSelected(dtkAbstractData *)), inspector_scene, SLOT(onDataSelected(dtkAbstractData *)));
-    connect(d->composer, SIGNAL(processSelected(dtkAbstractProcess *)), inspector_scene, SLOT(onProcessSelected(dtkAbstractProcess *)));
-    connect(d->composer, SIGNAL(viewSelected(dtkAbstractView *)), inspector_scene, SLOT(onViewSelected(dtkAbstractView *)));
     
     connect(d->composer, SIGNAL(dataSelected(dtkAbstractData *)), d->plugin_browser, SLOT(onDataSelected(dtkAbstractData *)));
     connect(d->composer, SIGNAL(processSelected(dtkAbstractProcess *)), d->plugin_browser, SLOT(onProcessSelected(dtkAbstractProcess *)));
@@ -367,6 +347,9 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
         "widgetFactory = creator.dtkCreatorWidgetFactory.instance()"
     );
+
+    d->interpreter->registerInterpreter(dtkScriptInterpreterPool::instance()->python());
+    d->interpreter->registerAsHandler(dtkCreatorRedirectLogHandler);
 #endif
 
 #if defined(HAVE_SWIG) && defined(HAVE_TCL)
@@ -405,10 +388,12 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
 	"set widgetFactory [dtkCreatorWidgetFactory_instance]"
     );
-#endif
 
-    d->interpreter->registerInterpreter(dtkScriptInterpreterPool::instance()->python());
+#if !defined(HAVE_PYTHON)
+    d->interpreter->registerInterpreter(dtkScriptInterpreterPool::instance()->tcl());
+#endif
     d->interpreter->registerAsHandler(dtkCreatorRedirectLogHandler);
+#endif
 }
 
 dtkCreatorMainWindow::~dtkCreatorMainWindow(void)
@@ -563,18 +548,19 @@ void dtkCreatorMainWindow::stop(void)
 
 void dtkCreatorMainWindow::registerData(dtkAbstractData *data, QString type)
 {
-    int stat;
 
     d->interpreter->interpreter()->blockSignals(true);
 
 #if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
+    int statPython;
     if(dtkScriptInterpreterPython *interpreter = dynamic_cast<dtkScriptInterpreterPython *>(d->interpreter->interpreter()))
-        interpreter->interpret(QString("%1 = dataFactory.get(\"%2\", \"%1\")").arg(data->name()).arg(type), &stat);
+        interpreter->interpret(QString("%1 = dataFactory.get(\"%2\", \"%1\")").arg(data->name()).arg(type), &statPython);
 #endif
 
 #if defined(HAVE_SWIG) && defined(HAVE_TCL)
+    int statTcl;
     if(dtkScriptInterpreterTcl *interpreter = dynamic_cast<dtkScriptInterpreterTcl *>(d->interpreter->interpreter()))
-        interpreter->interpret(QString("set $1 [$dataFactory get \"2\" \"1\"]").arg(data->name()).arg(type), &stat);
+        interpreter->interpret(QString("set $1 [$dataFactory get \"2\" \"1\"]").arg(data->name()).arg(type), &statTcl);
 #endif
 
     d->interpreter->interpreter()->blockSignals(false);
@@ -582,18 +568,18 @@ void dtkCreatorMainWindow::registerData(dtkAbstractData *data, QString type)
 
 void dtkCreatorMainWindow::registerProcess(dtkAbstractProcess *process, QString type)
 {
-    int stat;
-
     d->interpreter->interpreter()->blockSignals(true);
 
 #if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
+    int statPython;
     if(dtkScriptInterpreterPython *interpreter = dynamic_cast<dtkScriptInterpreterPython *>(d->interpreter->interpreter()))
-        interpreter->interpret(QString("%1 = processFactory.get(\"%2\", \"%1\")").arg(process->name()).arg(type), &stat);
+        interpreter->interpret(QString("%1 = processFactory.get(\"%2\", \"%1\")").arg(process->name()).arg(type), &statPython);
 #endif
 
 #if defined(HAVE_SWIG) && defined(HAVE_TCL)
+    int statTcl;
     if(dtkScriptInterpreterTcl *interpreter = dynamic_cast<dtkScriptInterpreterTcl *>(d->interpreter->interpreter()))
-        interpreter->interpret(QString("set $1 [$processFactory get \"2\" \"1\"]").arg(process->name()).arg(type), &stat);
+        interpreter->interpret(QString("set $1 [$processFactory get \"2\" \"1\"]").arg(process->name()).arg(type), &statTcl);
 #endif
 
     d->interpreter->interpreter()->blockSignals(false);
@@ -601,18 +587,18 @@ void dtkCreatorMainWindow::registerProcess(dtkAbstractProcess *process, QString 
 
 void dtkCreatorMainWindow::registerView(dtkAbstractView *view, QString type)
 {
-    int stat;
-
     d->interpreter->interpreter()->blockSignals(true);
 
 #if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
+    int statPython;
     if(dtkScriptInterpreterPython *interpreter = dynamic_cast<dtkScriptInterpreterPython *>(d->interpreter->interpreter()))
-        interpreter->interpret(QString("%1 = viewFactory.get(\"%2\", \"%1\")").arg(view->name()).arg(type), &stat);
+        interpreter->interpret(QString("%1 = viewFactory.get(\"%2\", \"%1\")").arg(view->name()).arg(type), &statPython);
 #endif
 
 #if defined(HAVE_SWIG) && defined(HAVE_TCL)
+    int statTcl;
     if(dtkScriptInterpreterTcl *interpreter = dynamic_cast<dtkScriptInterpreterTcl *>(d->interpreter->interpreter()))
-        interpreter->interpret(QString("set $1 [$viewFactory get \"2\" \"1\"]").arg(view->name()).arg(type), &stat);
+        interpreter->interpret(QString("set $1 [$viewFactory get \"2\" \"1\"]").arg(view->name()).arg(type), &statTcl);
 #endif
 
     d->interpreter->interpreter()->blockSignals(false);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:48:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep 11 13:34:25 2009 (+0200)
+ * Last-Updated: Sat Jan 15 14:17:49 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 96
+ *     Update #: 100
  */
 
 /* Commentary:
@@ -58,11 +58,17 @@ public:
     dtkAbstractView *get(const QString& type, int index = 0);
     dtkAbstractView *get(const QString& type, const QString& name);
 
+    QList<QString>                    creators(void) const;
+    QList<dtkAbstractViewTypeHandler> animators(void) const;
+    QList<dtkAbstractViewTypeHandler> interactors(void) const;
+    QList<dtkAbstractViewTypeHandler> navigators(void) const;
+
 signals:
     void created(dtkAbstractView *view, const QString& type);
 
 public slots:
     dtkAbstractView *create(const QString& type);
+    void destroy (dtkAbstractView *view);
 
     dtkAbstractViewAnimator *animator(const QString& type);
     dtkAbstractViewNavigator *navigator(const QString& type);

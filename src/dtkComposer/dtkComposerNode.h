@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Dec 14 19:07:03 2010 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 204
+ * Last-Updated: Fri Mar  4 16:03:37 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 237
  */
 
 /* Commentary: 
@@ -23,12 +23,14 @@
 #include "dtkComposerExport.h"
 
 #include <QtCore>
+#include <QtDebug>
 #include <QtGui>
 
 class dtkAbstractObject;
 class dtkComposerEdge;
 class dtkComposerNodePrivate;
 class dtkComposerNodeProperty;
+class stkComspoerScene;
 
 class DTKCOMPOSER_EXPORT dtkComposerNode : public QObject, public QGraphicsItem
 {
@@ -43,22 +45,18 @@ public:
         Unknown,
         Atomic,
         Composite,
+        Control,
         Data,
         Process,
         View
     };
 
-    enum Behavior {
-        Default,
-        Loop
-    };
+             dtkComposerNode(dtkComposerNode *parent = 0);
+    virtual ~dtkComposerNode(void);
 
-              dtkComposerNode(dtkComposerNode *parent = 0);
-     virtual ~dtkComposerNode(void);
+    virtual QString description(void); 
 
     void setTitle(const QString& title);
-    void setBehavior(Behavior behavior);
-    void setCondition(const QString& condition);
     void setKind(Kind kind);
     void setType(QString type);
     void setObject(dtkAbstractObject *object);
@@ -79,12 +77,15 @@ public:
     void removeOutputEdge(dtkComposerEdge *edge);
     void removeAllEdges(void);
 
+    void removeGhostInputEdge(dtkComposerEdge *edge);
+    void removeGhostOutputEdge(dtkComposerEdge *edge);
+    void removeAllGhostEdges(void);
+
     void addAction(const QString& text, const QObject *receiver, const char *slot);
 
     int  count(dtkComposerNodeProperty *property);
     int number(dtkComposerNodeProperty *property);
 
-    Behavior behavior(void);
     Kind kind(void);
     QString type(void);
 
@@ -112,12 +113,14 @@ public:
     dtkComposerNodeProperty *outputProperty(const QString& name, dtkComposerNode *from) const;
 
     QString title(void);
-    QString condition(void);
 
     bool dirty(void);
     void setDirty(bool dirty);
 
-    void layout(void);
+    bool resizable(void);
+    void setResizable(bool resizable);
+
+    virtual void layout(void);
 
     // -- Composite operations
 
@@ -135,6 +138,16 @@ public:
     void setGhost(bool ghost);
     bool  isGhost(void);
 
+    // --
+
+    void setSize(const QSizeF& size);
+    void setSize(qreal w, qreal h);
+
+    // --
+
+    friend QDebug operator<<(QDebug dbg, dtkComposerNode& node);
+    friend QDebug operator<<(QDebug dbg, dtkComposerNode *node);
+
 signals:
     void elapsed(QString duration);
     void evaluated(dtkComposerNode *node);
@@ -142,13 +155,19 @@ signals:
     void progressed(int progress);
 
 public slots:
+    void alter(void);
     void touch(void);
-    void update(void);
+
+public slots:
+    virtual void update(void);
 
 public:
-    QRectF boundingRect(void) const;
+    virtual QRectF boundingRect(void) const;
 
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+protected:
+    qreal nodeRadius(void);
 
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
@@ -164,9 +183,22 @@ public:
 protected:
     virtual void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
     virtual void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    virtual void run(void);
 
 private:
-    friend class dtkComposerNodePrivate; dtkComposerNodePrivate *d;
+    friend class dtkComposerScene; 
+    friend class dtkComposerNodePrivate;
+
+private:
+    dtkComposerNodePrivate *d;
 };
+
+// /////////////////////////////////////////////////////////////////
+// Debug operators
+// /////////////////////////////////////////////////////////////////
+
+QDebug operator<<(QDebug dbg, dtkComposerNode  node);
+QDebug operator<<(QDebug dbg, dtkComposerNode& node);
+QDebug operator<<(QDebug dbg, dtkComposerNode *node);
 
 #endif

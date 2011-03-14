@@ -2,11 +2,11 @@
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Thu Aug  6 23:28:30 2009 (+0200)
+ * Created: Mon Jan 31 11:09:59 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 15 09:08:40 2010 (+0100)
+ * Last-Updated: Mon Mar 14 14:47:02 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 92
+ *     Update #: 100
  */
 
 /* Commentary: 
@@ -18,67 +18,59 @@
  */
 
 #include "dtkInspector.h"
+#include "dtkInspectorTitleBar.h"
+#include "dtkInspectorToolBar.h"
 
 #include <dtkCore/dtkGlobal.h>
 
-#include <QtCore>
 #include <QtGui>
 
 class dtkInspectorPrivate
 {
 public:
+    dtkInspectorTitleBar *title_bar;
+    dtkInspectorToolBar *tool_bar;
+
+public:
+    QPoint drag_point;
+
     QHash<QAction *, QWidget *> pages;
-    QToolBar *toolBar;
     QStackedWidget *stack;
 };
 
-dtkInspector::dtkInspector(QWidget *parent) : QMainWindow(parent), d(new dtkInspectorPrivate)
+dtkInspector::dtkInspector(QWidget *parent) : QDialog(parent), d(new dtkInspectorPrivate)
 {
+    d->title_bar = new dtkInspectorTitleBar(this);
+    d->title_bar->setTitle("Inspector");
+
+    d->tool_bar = new dtkInspectorToolBar(this);
+    d->tool_bar->hide();
+
     d->stack = new QStackedWidget(this);
 
-    d->toolBar = this->addToolBar("Pages");
-    d->toolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    d->toolBar->setIconSize(QSize(16, 16));
-    d->toolBar->setFloatable(false);
-    d->toolBar->setMovable(false);
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    layout->addWidget(d->title_bar);
+    layout->addWidget(d->stack);
+    layout->addWidget(d->tool_bar);
 
-    this->setCentralWidget(d->stack);
+#if defined(Q_WS_MAC)
+    this->setAttribute(Qt::WA_TranslucentBackground);
+#endif
     this->setStyleSheet(dtkReadFile(":dtkGui/dtkInspector.qss"));
-    this->setWindowFlags(Qt::Tool | Qt::WindowCloseButtonHint | Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint);
-    this->setWindowOpacity(0.8);
-    this->setWindowTitle("Inspector");
+    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+    this->setWindowOpacity(0.95);
+
+    connect(d->title_bar, SIGNAL(closed()), this, SLOT(close()));
+    connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(close()));
 }
 
 dtkInspector::~dtkInspector(void)
 {
-    delete d->stack;
-    delete d->toolBar;
     delete d;
 
     d = NULL;
-}
-
-void dtkInspector::readSettings(void)
-{
-    QSettings settings("inria", "dtk");
-    settings.beginGroup("inspector");
-    QPoint pos = settings.value("pos", QPoint(800, 150)).toPoint();
-    QSize size = settings.value("size", QSize(100, 250)).toSize();
-    bool visible = settings.value("visible", false).toBool();
-    move(pos);
-    resize(size);
-    setVisible(visible);
-    settings.endGroup();
-}
-
-void dtkInspector::writeSettings(void)
-{
-    QSettings settings("inria", "dtk");
-    settings.beginGroup("inspector");
-    settings.setValue("pos", pos());
-    settings.setValue("size", size());
-    settings.setValue("visible", isVisible());
-    settings.endGroup();
 }
 
 QAction *dtkInspector::addPage(const QString& title, QWidget *page)
@@ -89,12 +81,15 @@ QAction *dtkInspector::addPage(const QString& title, QWidget *page)
 
     d->pages.insert(action, page);
     d->stack->addWidget(page);
-    d->toolBar->addAction(action);
+    d->tool_bar->addAction(action);
 
     connect(action, SIGNAL(triggered()), this, SLOT(onActionTriggered()));
 
     if (d->stack->count() == 1)
         action->trigger();
+
+    if (d->stack->count() > 1)
+        d->tool_bar->show();
 
     return action;
 }
@@ -108,7 +103,7 @@ QAction *dtkInspector::addPage(const QString& title, QWidget *page, const QIcon&
 
     d->pages.insert(action, page);
     d->stack->addWidget(page);
-    d->toolBar->addAction(action);
+    d->tool_bar->addAction(action);
 
     connect(action, SIGNAL(triggered()), this, SLOT(onActionTriggered()));
 
@@ -116,6 +111,64 @@ QAction *dtkInspector::addPage(const QString& title, QWidget *page, const QIcon&
         action->trigger();
 
     return action;
+}
+
+void dtkInspector::setTitle(const QString& title)
+{
+    d->title_bar->setTitle(title);
+}
+
+void dtkInspector::closeEvent(QCloseEvent *event)
+{
+    Q_UNUSED(event);
+    
+    emit visibilityChanged(false);
+}
+
+void dtkInspector::mouseMoveEvent(QMouseEvent *event)
+{
+    if (!d->drag_point.isNull()) {
+        
+        QPoint dest = QPoint(event->globalPos() - d->drag_point);
+        
+#if defined(Q_WS_MAC)
+        if (dest.y() <= 22)
+            dest.setY(22);
+#endif
+        
+        this->move(dest);
+        
+        event->accept();
+    }
+
+    QDialog::mouseMoveEvent(event);
+}
+
+void dtkInspector::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton) {
+        d->drag_point = event->globalPos() - frameGeometry().topLeft();
+        event->accept();
+    }
+
+    QDialog::mousePressEvent(event);
+}
+
+void dtkInspector::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton) {
+        d->drag_point = QPoint(0, 0);
+    }
+
+    QDialog::mouseReleaseEvent(event);
+}
+
+void dtkInspector::resizeEvent(QResizeEvent *event)
+{
+    QPainterPath r_path;
+    r_path.addRoundedRect(QRectF(this->rect()), 5, 5, Qt::AbsoluteSize);
+        
+    this->setMask(QRegion(r_path.toFillPolygon().toPolygon()));
 }
 
 void dtkInspector::onActionTriggered(void)

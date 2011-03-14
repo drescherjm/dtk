@@ -42,6 +42,8 @@ public slots:
     void onPluginTypeChanged(void);
     void onPrefixChanged(void);
     void onSuffixChanged(void);
+    void onDescriptionChanged();
+    void onPluginLicenseChanged();
     void update(void);
 
 private:

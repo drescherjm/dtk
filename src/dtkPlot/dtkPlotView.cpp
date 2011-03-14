@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Nov 22 10:25:08 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Nov 22 12:01:38 2010 (+0100)
+ * Last-Updated: Thu Feb 17 12:49:01 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 10
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -35,9 +35,4 @@ dtkPlotView::~dtkPlotView(void)
     delete d;
 
     d = NULL;
-}
-
-QBrush dtkPlotView::backgroundBrush(void) const
-{
-    return QBrush(QColor(29, 29, 29));
 }

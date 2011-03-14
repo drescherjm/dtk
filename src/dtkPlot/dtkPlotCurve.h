@@ -21,10 +21,11 @@
 #define DTKPLOTCURVE_H
 
 #include <QtGui>
+#include "dtkPlotExport.h"
 
 class dtkPlotCurvePrivate;
 
-class dtkPlotCurve : public QGraphicsPathItem
+class DTKPLOT_EXPORT dtkPlotCurve : public QGraphicsPathItem
 {
 public:
      dtkPlotCurve(void);

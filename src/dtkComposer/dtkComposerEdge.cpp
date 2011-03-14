@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec 13 18:35:27 2010 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 308
+ * Last-Updated: Wed Mar  9 14:44:13 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 353
  */
 
 /* Commentary: 
@@ -47,21 +47,31 @@ dtkComposerEdge::dtkComposerEdge(void) : QObject(), QGraphicsItem(), d(new dtkCo
 
 dtkComposerEdge::~dtkComposerEdge(void)
 {
-    if(d->source && d->source->node()) {
-
-        d->source->node()->removeInputEdge(this);
+    if (d->source && d->source->node()) {
+        d->source->node()->removeGhostInputEdge(this);
         d->source->node()->removeOutputEdge(this);
     }
 
-    if(d->destination && d->destination->node()) {
-        
+    if (d->destination && d->destination->node()) { 
         d->destination->node()->removeInputEdge(this);
-        d->destination->node()->removeOutputEdge(this);
+        d->destination->node()->removeGhostOutputEdge(this);
     }
 
     delete d;
 
     d = NULL;
+}
+
+QString dtkComposerEdge::description(void)
+{
+    if(!d->source || !d->destination)
+        return QString("Invalid edge");
+
+    return QString("(%1, %2) -> (%3, %4)")
+        .arg(d->source->node()->title())
+        .arg(d->source->name())
+        .arg(d->destination->node()->title())
+        .arg(d->destination->name());
 }
 
 dtkComposerNodeProperty *dtkComposerEdge::source(void)
@@ -176,15 +186,17 @@ bool dtkComposerEdge::link(bool anyway)
 {
     if(anyway) {
 
-        if (d->source->node()->kind() == dtkComposerNode::Composite && d->destination->node()->parentNode() == d->source->node())
+        if (d->source->node()->kind() == dtkComposerNode::Composite && d->destination->node()->parentNode() == d->source->node()) {
             d->source->node()->addGhostInputEdge(this, d->source);
-        else
+        } else {
             d->source->node()->addOutputEdge(this, d->source);
+        }
         
-        if (d->destination->node()->kind() == dtkComposerNode::Composite && d->source->node()->parentNode() == d->destination->node())
+        if (d->destination->node()->kind() == dtkComposerNode::Composite && d->source->node()->parentNode() == d->destination->node()) {
             d->destination->node()->addGhostOutputEdge(this, d->destination);
-        else
+        } else {
             d->destination->node()->addInputEdge(this, d->destination);
+        }
 
         return true;
     }
@@ -219,7 +231,7 @@ bool dtkComposerEdge::link(bool anyway)
         return false;
     }
 
-    if (!d->source->node()->isGhost() && !d->destination->node()->isGhost() && d->source->type() == d->destination->type()) {
+    if (!d->source->node()->isGhost() && !d->destination->node()->isGhost() && d->source->type() == d->destination->type() && (d->source->type() == dtkComposerNodeProperty::Input || d->source->type() == dtkComposerNodeProperty::Output)) {
         qDebug() << "Cannot connect properties of non ghost nodes if they are of the same type";
         return false;
     }
@@ -261,10 +273,17 @@ bool dtkComposerEdge::unlink(void)
         return false;
 
     if(!d->destination)
-        return false;
+        return false;  
 
-    d->source->node()->removeOutputEdge(this);
-    d->destination->node()->removeInputEdge(this);
+    if(d->source->node()->isGhost())
+        d->source->node()->removeGhostInputEdge(this);
+    else
+        d->source->node()->removeOutputEdge(this);
+
+    if(d->destination->node()->isGhost())
+        d->destination->node()->removeGhostOutputEdge(this);
+    else
+        d->destination->node()->removeInputEdge(this);
 
     return true;
 }
@@ -304,33 +323,21 @@ bool dtkComposerEdge::unlink(void)
 
 QDebug operator<<(QDebug dbg, dtkComposerEdge  edge)
 {
-    dbg.nospace() << QString("(%1, %2) -> (%3, %4)")
-        .arg(edge.source()->node()->title())
-        .arg(edge.source()->name())
-        .arg(edge.destination()->node()->title())
-        .arg(edge.destination()->name());
+    dbg.nospace() << edge.description();
     
     return dbg.space();
 }
 
 QDebug operator<<(QDebug dbg, dtkComposerEdge& edge)
 {
-    dbg.nospace() << QString("(%1, %2) -> (%3, %4)")
-        .arg(edge.source()->node()->title())
-        .arg(edge.source()->name())
-        .arg(edge.destination()->node()->title())
-        .arg(edge.destination()->name());
+    dbg.nospace() << edge.description();
     
     return dbg.space();
 }
 
 QDebug operator<<(QDebug dbg, dtkComposerEdge *edge)
 {
-    dbg.nospace() << QString("(%1, %2) -> (%3, %4)")
-        .arg(edge->source()->node()->title())
-        .arg(edge->source()->name())
-        .arg(edge->destination()->node()->title())
-        .arg(edge->destination()->name());
+    dbg.nospace() << edge->description();
     
     return dbg.space();
 }

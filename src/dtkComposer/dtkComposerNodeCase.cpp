@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 11 09:22:52 2011 (+0100)
+ * Last-Updated: Mon Mar 14 12:51:06 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 264
+ *     Update #: 269
  */
 
 /* Commentary: 
@@ -153,6 +153,8 @@ dtkComposerNodeControlBlock *dtkComposerNodeCase::addBlock(const QString& title)
 
     if(title == "default")
         return block;
+
+    block->setRemoveButtonVisible(true);
 
     dtkComposerNodeProperty *input_constant = block->addInputProperty("constant", this);
     input_constant->setBlockedFrom(title);

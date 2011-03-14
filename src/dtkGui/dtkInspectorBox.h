@@ -22,9 +22,11 @@
 
 #include <QtGui/QFrame>
 
+#include "dtkGuiExport.h"
+
 class dtkInspectorBoxPrivate;
 
-class dtkInspectorBox : public QFrame
+class DTKGUI_EXPORT dtkInspectorBox : public QFrame
 {
     Q_OBJECT
 

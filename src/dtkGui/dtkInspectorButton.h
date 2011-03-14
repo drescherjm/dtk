@@ -22,9 +22,11 @@
 
 #include <QtGui/QWidget>
 
+#include "dtkGuiExport.h"
+
 class dtkInspectorButtonPrivate;
 
-class dtkInspectorButton : public QWidget
+class DTKGUI_EXPORT dtkInspectorButton : public QWidget
 {
     Q_OBJECT
 

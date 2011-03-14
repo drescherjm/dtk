@@ -22,9 +22,11 @@
 
 #include <QtGui/QWidget>
 
+#include "dtkGuiExport.h"
+
 class dtkInspectorSwitchPrivate;
 
-class dtkInspectorSwitch : public QWidget
+class DTKGUI_EXPORT dtkInspectorSwitch : public QWidget
 {
     Q_OBJECT
 

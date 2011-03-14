@@ -26,7 +26,12 @@
     <file>pixmaps/dtk-view-tree.png</file>
     <file>pixmaps/dtk-view-list.png</file>
     <file>pixmaps/dtk.png</file>
-
+    <file>pixmaps/dtkLedBlue.png</file>
+    <file>pixmaps/dtkLedGray.png</file>
+    <file>pixmaps/dtkLedGreen.png</file>
+    <file>pixmaps/dtkLedPurple.png</file>
+    <file>pixmaps/dtkLedRed.png</file>
+    <file>pixmaps/dtkLedYellow.png</file>
 
     <file>pixmaps/dtkInspector-spin-up.png</file>
     <file>pixmaps/dtkInspector-spin-dw.png</file>

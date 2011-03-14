@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:46:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 10 14:33:06 2011 (+0100)
+ * Last-Updated: Mon Mar 14 12:50:47 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 56
+ *     Update #: 63
  */
 
 /* Commentary: 
@@ -46,6 +46,8 @@ public:
     QString title(void) const;
     QColor brushColor(void) const;
     QColor penColor(void) const;
+
+    void setRemoveButtonVisible(bool visible);
 
     void setBrushColor(const QColor& color);
     void setInteractive(bool interactive);

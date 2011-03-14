@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 11 15:29:21 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 427
+ * Last-Updated: Mon Mar 14 12:51:33 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 444
  */
 
 /* Commentary: 
@@ -256,6 +256,7 @@ dtkComposerNodeControlBlock::dtkComposerNodeControlBlock(const QString& title, d
     
     d->remove_button = new dtkComposerNodeControlBlockButtonRemove(this);
     d->remove_button->setZValue(this->zValue() + 1);
+    d->remove_button->hide();
 
     d->button = NULL;
     d->label = NULL;
@@ -295,6 +296,11 @@ QColor dtkComposerNodeControlBlock::brushColor(void) const
 QColor dtkComposerNodeControlBlock::penColor(void) const
 {
     return d->pen_color;
+}
+
+void dtkComposerNodeControlBlock::setRemoveButtonVisible(bool visible)
+{
+    d->remove_button->setVisible(visible);
 }
 
 void dtkComposerNodeControlBlock::setBrushColor(const QColor& color)
@@ -352,7 +358,8 @@ void dtkComposerNodeControlBlock::setRect(const QRectF& rectangle)
         }
     }
 
-    d->remove_button->setPos(rectangle.width()/2 - 150/2, this->rect().bottom());
+    if (d->remove_button && d->remove_button->isVisible())
+        d->remove_button->setPos(rectangle.width()/2 - 150/2, this->rect().bottom());
 
     if (d->button)
         d->button->setPos((rectangle.left() + rectangle.width() - 100) / 2 + 50, this->rect().top());

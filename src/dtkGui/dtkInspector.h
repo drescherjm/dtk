@@ -22,9 +22,11 @@
 
 #include <QtGui/QDialog>
 
+#include "dtkGuiExport.h"
+
 class dtkInspectorPrivate;
 
-class dtkInspector : public QDialog
+class DTKGUI_EXPORT dtkInspector : public QDialog
 {
     Q_OBJECT
 

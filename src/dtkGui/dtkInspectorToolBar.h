@@ -22,9 +22,11 @@
 
 #include <QtGui/QToolBar>
 
+#include "dtkGuiExport.h"
+
 class dtkInspectorToolBarPrivate;
 
-class dtkInspectorToolBar : public QWidget
+class DTKGUI_EXPORT dtkInspectorToolBar : public QWidget
 {
     Q_OBJECT
 

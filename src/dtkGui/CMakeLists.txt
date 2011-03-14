@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Sat Jun 12 15:51:21 2010 (+0200)
+## Last-Updated: Mon Mar 14 14:52:57 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 143
+##     Update #: 159
 ######################################################################
 ## 
 ### Commentary: 
@@ -31,8 +31,14 @@ set(${PROJECT_NAME}_HEADERS
   dtkGuiExport.h
   dtkInsetMenu.h
   dtkInspector.h
-  dtkInspectorComposer.h
-  dtkInspectorScene.h
+  dtkInspectorButton.h
+  dtkInspectorTitleBar.h
+  dtkInspectorToolBar.h
+  dtkInspectorSwitch.h
+
+  # dtkInspectorComposer.h
+  # dtkInspectorScene.h
+
   dtkInterpreter.h
   dtkInterpreterPreferencesWidget.h
   dtkNavigationBar.h
@@ -60,8 +66,14 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkFinder.h
   dtkInsetMenu.h
   dtkInspector.h
-  dtkInspectorComposer.h
-  dtkInspectorScene.h
+  dtkInspectorButton.h
+  dtkInspectorTitleBar.h
+  dtkInspectorToolBar.h
+  dtkInspectorSwitch.h
+
+  # dtkInspectorComposer.h
+  # dtkInspectorScene.h
+
   dtkInterpreter.h
   dtkInterpreterPreferencesWidget.h
   dtkNavigationBar.h
@@ -85,9 +97,16 @@ set(${PROJECT_NAME}_SOURCES
   dtkAnchoredBar.cpp
   dtkFinder.cpp
   dtkInsetMenu.cpp
+
   dtkInspector.cpp
-  dtkInspectorComposer.cpp
-  dtkInspectorScene.cpp
+  dtkInspectorButton.cpp
+  dtkInspectorTitleBar.cpp
+  dtkInspectorToolBar.cpp
+  dtkInspectorSwitch.cpp
+
+  # dtkInspectorComposer.cpp
+  # dtkInspectorScene.cpp
+
   dtkInterpreter.cpp
   dtkInterpreterPreferencesWidget.cpp
   dtkNavigationBar.cpp

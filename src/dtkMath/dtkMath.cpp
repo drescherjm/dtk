@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jul  6 16:57:24 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 15 17:35:34 2011 (+0100)
+ * Last-Updated: Tue Mar 15 17:45:50 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 111
+ *     Update #: 114
  */
 
 /* Commentary: 
@@ -268,7 +268,11 @@ inline bool dtkIsInfinite(float A)
 
 inline bool dtkIsInfinite(double A)
 {
+#if defined (DTK_PLATFORM_64)
     const int_least64_t kInfAsInt = 0x7F80000000000000;
+#else
+    const int_least64_t kInfAsInt = 0x7F800000;
+#endif
 
 #if defined (DTK_PLATFORM_64)
     if ((*(int_least64_t*)&A & 0x7FFFFFFFFFFFFFFF) == kInfAsInt)
@@ -307,8 +311,13 @@ inline bool dtkIsNan(double A)
     int_least64_t mantissa = *(int_least64_t*)&A & 0x007FFFFF;
 #endif
 
+#if defined(DTK_PLATFORM_64)
     if (exp == 0x7F80000000000000 && mantissa != 0)
         return true;
+#else
+    if (exp == 0x7F800000 && mantissa != 0)
+        return true;
+#endif
 
     return false;
 }

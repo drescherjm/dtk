@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Mar  4 21:57:30 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar  4 21:58:30 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 4
+ * Last-Updated: Thu Mar 10 12:46:19 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 6
  */
 
 /* Commentary: 
@@ -28,7 +28,7 @@ class dtkComposerNodeControlBlock;
 class dtkComposerNodeCasePrivate
 {
 public:
-    dtkComposerNodeCaseButton *button;
+    dtkComposerNodeCaseButton *add_button;
 
 public:
     QList<dtkComposerNodeControlBlock *> block_cases;

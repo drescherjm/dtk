@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:46:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  8 15:07:08 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 55
+ * Last-Updated: Tue Mar 15 15:45:19 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 64
  */
 
 /* Commentary: 
@@ -47,6 +47,8 @@ public:
     QColor brushColor(void) const;
     QColor penColor(void) const;
 
+    void setRemoveButtonVisible(bool visible);
+
     void setBrushColor(const QColor& color);
     void setInteractive(bool interactive);
     void setPenColor(const QColor& color);
@@ -62,6 +64,9 @@ public:
 
     dtkComposerNodeProperty  *addInputProperty(QString name, dtkComposerNode *parent = 0);
     dtkComposerNodeProperty *addOutputProperty(QString name, dtkComposerNode *parent = 0);
+
+public:
+    QRectF minimalBoundingRect(void);
     
 public:
     static void highlight(dtkComposerNodeControlBlock *block);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:01:16 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Mar  5 22:47:16 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 6
+ * Last-Updated: Thu Mar 10 14:48:35 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -33,6 +33,9 @@ public:
     ~dtkComposerNodeCase(void);
 
     dtkComposerNodeControlBlock *addBlock(const QString& title);
+
+    int removeBlock(dtkComposerNodeControlBlock *block, bool clean = false);
+    int removeBlock(const QString& title);
 
 public:
     void layout(void);

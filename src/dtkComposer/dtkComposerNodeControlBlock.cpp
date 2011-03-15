@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  8 15:22:40 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 405
+ * Last-Updated: Tue Mar 15 16:01:09 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 453
  */
 
 /* Commentary: 
@@ -80,6 +80,100 @@ void dtkComposerNodeControlBlockLabel::paint(QPainter *painter, const QStyleOpti
     o->state &= ~QStyle::State_HasFocus;
 
     QGraphicsTextItem::paint(painter, option, widget);
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeControlBlockButtonRemove
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeControlBlockButtonRemove : public QGraphicsItem
+{
+public:
+     dtkComposerNodeControlBlockButtonRemove(dtkComposerNodeControlBlock *parent = 0);
+    ~dtkComposerNodeControlBlockButtonRemove(void);
+
+public:
+    QRectF boundingRect(void) const;
+
+public:
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
+public:
+    dtkComposerNodeControlBlock *block;
+
+    QPainterPath path;
+    QString text;
+};
+
+dtkComposerNodeControlBlockButtonRemove::dtkComposerNodeControlBlockButtonRemove(dtkComposerNodeControlBlock *parent) : QGraphicsItem(parent)
+{
+    int margin = 10;
+    int length = 30;
+    int height = 10;
+    int radius =  5;
+    int origin_x = -(length + margin) / 2;
+    int origin_y = parent->boundingRect().height() / 2;
+
+    QPainterPath b; b.addRoundedRect(origin_x,              origin_y, margin,          -height,     radius, radius);
+    QPainterPath c; c.addRoundedRect(origin_x + margin,     origin_y, length - margin, -height,     radius, radius);
+    QPainterPath d; d.addRoundedRect(origin_x + length,     origin_y, margin,          -height,     radius, radius);
+    QPainterPath e; e.addRoundedRect(origin_x + margin / 2, origin_y, length,          -height / 2,      0,      0);
+
+    this->path = c.united(e.subtracted(b.united(c.united(d))));
+
+    this->block = parent;
+
+    this->text = "-";
+
+    this->setFlag(QGraphicsItem::ItemStacksBehindParent, true);
+}
+
+dtkComposerNodeControlBlockButtonRemove::~dtkComposerNodeControlBlockButtonRemove(void)
+{
+
+}
+
+QRectF dtkComposerNodeControlBlockButtonRemove::boundingRect(void) const
+{
+    return this->path.boundingRect();
+}
+
+void dtkComposerNodeControlBlockButtonRemove::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
+    QLinearGradient gradient(option->rect.left(), option->rect.top(), option->rect.left(), option->rect.bottom());
+    gradient.setColorAt(0.0, QColor("#bbbbbb"));
+    gradient.setColorAt(0.3, QColor("#333333"));
+    gradient.setColorAt(1.0, QColor("#222222"));
+
+    painter->setPen(QPen(Qt::black, 1));
+    painter->setBrush(gradient);
+    painter->drawPath(path);
+    
+#if defined(Q_WS_MAC)
+    QFont font("Lucida Grande", 8);
+#else
+    QFont font("Lucida Grande", 6);
+#endif
+    font.setBold(true);
+
+    QFontMetrics metrics(font);
+    
+    painter->setFont(font);
+    painter->setPen(Qt::white);
+    painter->drawText(this->boundingRect(), Qt::AlignCenter, text);
+}
+
+void dtkComposerNodeControlBlockButtonRemove::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    Q_UNUSED(event);
+
+    this->block->parentNode()->removeBlock(this->block, true);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -160,6 +254,10 @@ dtkComposerNodeControlBlock::dtkComposerNodeControlBlock(const QString& title, d
 {
     d->parent = parent;
     
+    d->remove_button = new dtkComposerNodeControlBlockButtonRemove(this);
+    d->remove_button->setZValue(this->zValue() + 1);
+    d->remove_button->hide();
+
     d->button = NULL;
     d->label = NULL;
     
@@ -198,6 +296,11 @@ QColor dtkComposerNodeControlBlock::brushColor(void) const
 QColor dtkComposerNodeControlBlock::penColor(void) const
 {
     return d->pen_color;
+}
+
+void dtkComposerNodeControlBlock::setRemoveButtonVisible(bool visible)
+{
+    d->remove_button->setVisible(visible);
 }
 
 void dtkComposerNodeControlBlock::setBrushColor(const QColor& color)
@@ -254,6 +357,9 @@ void dtkComposerNodeControlBlock::setRect(const QRectF& rectangle)
             }
         }
     }
+
+    if (d->remove_button && d->remove_button->isVisible())
+        d->remove_button->setPos(rectangle.width()/2 - 150/2, this->rect().bottom());
 
     if (d->button)
         d->button->setPos((rectangle.left() + rectangle.width() - 100) / 2 + 50, this->rect().top());
@@ -315,6 +421,7 @@ QList<dtkComposerNodeProperty *> dtkComposerNodeControlBlock::outputProperties(v
 dtkComposerNodeProperty *dtkComposerNodeControlBlock::addInputProperty(QString name, dtkComposerNode *parent)
 {
     dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::HybridInput, dtkComposerNodeProperty::Multiple, parent);
+    property->setBlockedFrom(this->title());
 
     d->input_properties << property;
     
@@ -324,10 +431,28 @@ dtkComposerNodeProperty *dtkComposerNodeControlBlock::addInputProperty(QString n
 dtkComposerNodeProperty *dtkComposerNodeControlBlock::addOutputProperty(QString name, dtkComposerNode *parent)
 {
     dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::HybridOutput, dtkComposerNodeProperty::Multiple, parent);
+    property->setBlockedFrom(this->title());
 
     d->output_properties << property;
 
     return property;
+}
+
+QRectF dtkComposerNodeControlBlock::minimalBoundingRect(void)
+{
+    qreal top = this->rect().bottom();
+    qreal left = this->rect().right();
+    qreal bottom = this->rect().top();
+    qreal right = this->rect().left();
+
+    foreach(dtkComposerNode *child, this->nodes()) {
+        top = qMax(top, child->boundingRect().top());
+        left = qMin(left, child->boundingRect().left());
+        bottom = qMin(bottom, child->boundingRect().bottom());
+        right = qMax(right, child->boundingRect().right());
+    }
+
+    return QRectF(top, left, (right - left), (top - bottom));
 }
 
 void dtkComposerNodeControlBlock::highlight(dtkComposerNodeControlBlock *block)

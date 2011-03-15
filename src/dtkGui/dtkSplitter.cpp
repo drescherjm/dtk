@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Oct  7 23:24:59 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 15 16:53:30 2011 (+0100)
+ * Last-Updated: Tue Mar 15 18:01:54 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 72
+ *     Update #: 82
  */
 
 /* Commentary: 
@@ -61,8 +61,8 @@ void dtkSplitterHandle::paintEvent(QPaintEvent *event)
         gradientStart = QColor(252, 252, 252);
         gradientStop = QColor(223, 223, 223);
     } else {
-        topColor = QColor(80, 80, 80);
-        bottomColor = QColor(82, 82, 82);
+        topColor = QColor(60, 60, 60);
+        bottomColor = QColor(35, 35, 35);
         gradientStart = QColor(48, 48, 48);
         gradientStop = QColor(28, 28, 28);
     }
@@ -81,6 +81,13 @@ void dtkSplitterHandle::paintEvent(QPaintEvent *event)
 	linearGrad.setColorAt(0, gradientStart);
 	linearGrad.setColorAt(1, gradientStop);
 	painter.fillRect(QRect(QPoint(0,1), size() - QSize(0, 2)), QBrush(linearGrad));
+
+        if(!m_hud)
+            return;
+
+        painter.setBrush(linearGrad);
+        painter.drawEllipse(QRect(event->rect().width()/2-1, this->sizeHint().height()/2 - 2, 4, 4));
+
     } else {
 	painter.setPen(topColor);
 	painter.drawLine(0, 0, 0, height());
@@ -90,6 +97,7 @@ void dtkSplitterHandle::paintEvent(QPaintEvent *event)
 QSize dtkSplitterHandle::sizeHint(void) const
 {
     QSize parent = QSplitterHandle::sizeHint();
+
     if (orientation() == Qt::Vertical) {
 	return m_slim ? QSize(parent.width(), 1) : parent + QSize(0, 3);
     } else {

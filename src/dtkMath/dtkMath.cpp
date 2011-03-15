@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jul  6 16:57:24 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 15 14:21:24 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 87
+ * Last-Updated: Tue Mar 15 17:35:34 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 111
  */
 
 /* Commentary: 
@@ -24,6 +24,7 @@
  * 
  */
 
+#include "dtkConfig.h"
 #include "dtkMath.h"
 #include "dtkVector3D.h"
 
@@ -220,11 +221,19 @@ bool dtkAlmostEqual2sComplement(double A, double B, int_least64_t maxUlps)
 
     int_least64_t aInt = *(int_least64_t*)&A;
     if (aInt < 0)
+#if defined(DTK_PLATFORM_64)
         aInt = 0x8000000000000000 - aInt;
+#else
+        aInt = 0x80000000 - aInt;
+#endif
 
     int_least64_t bInt = *(int_least64_t*)&B;
     if (bInt < 0)
+#if defined(DTK_PLATFORM_64)
         bInt = 0x8000000000000000 - bInt;
+#else
+        bInt = 0x80000000 - bInt;
+#endif
 
     int_least64_t intDiff = abs(aInt - bInt);
     if (intDiff <= maxUlps)
@@ -261,8 +270,13 @@ inline bool dtkIsInfinite(double A)
 {
     const int_least64_t kInfAsInt = 0x7F80000000000000;
 
+#if defined (DTK_PLATFORM_64)
     if ((*(int_least64_t*)&A & 0x7FFFFFFFFFFFFFFF) == kInfAsInt)
         return true;
+#else
+    if ((*(int_least64_t*)&A & 0x7FFFFFFF) == kInfAsInt)
+        return true;
+#endif
 
     return false;
 }
@@ -285,8 +299,13 @@ inline bool dtkIsNan(float A)
 
 inline bool dtkIsNan(double A)
 {
+#if defined(DTK_PLATFORM_64)
     int_least64_t exp = *(int_least64_t*)&A & 0x7F80000000000000;
     int_least64_t mantissa = *(int_least64_t*)&A & 0x007FFFFFFFFFFFFF;
+#else
+    int_least64_t exp = *(int_least64_t*)&A & 0x7F800000;
+    int_least64_t mantissa = *(int_least64_t*)&A & 0x007FFFFF;
+#endif
 
     if (exp == 0x7F80000000000000 && mantissa != 0)
         return true;
@@ -305,7 +324,11 @@ inline int_least32_t dtkSign(float A)
 
 inline int_least64_t dtkSign(double A)
 {
+#if defined(DTK_PLATFORM_64)
     return (*(int_least64_t*)&A) & 0x8000000000000000;
+#else
+    return (*(int_least64_t*)&A) & 0x80000000;
+#endif
 }
 
 //! Final version of the AlmostEqualUlps function.
@@ -390,12 +413,23 @@ bool dtkAlmostEqualUlps(double A, double B, int_least64_t maxUlps)
 
     int_least64_t aInt = *(int_least64_t*)&A;
 
+#if defined(DTK_PLATFORM_64)
     if (aInt < 0)
         aInt = 0x8000000000000000 - aInt;
+#else
+    if (aInt < 0)
+        aInt = 0x80000000 - aInt;
+#endif
 
     int_least64_t bInt = *(int_least64_t*)&B;
+
+#if defined(DTK_PLATFORM_64)
     if (bInt < 0)
         bInt = 0x8000000000000000 - bInt;
+#else
+    if (bInt < 0)
+        bInt = 0x80000000 - bInt;
+#endif
 
     int_least64_t intDiff = abs(aInt - bInt);
     if (intDiff <= maxUlps)
@@ -498,12 +532,23 @@ bool dtkLesserThanUlps(double A, double B, int_least64_t maxUlps)
 
     int_least64_t aInt = *(int_least64_t*)&A;
 
+#if defined(DTK_PLATFORM_64)
     if (aInt < 0)
         aInt = 0x8000000000000000 - aInt;
+#else
+    if (aInt < 0)
+        aInt = 0x80000000 - aInt;
+#endif
 
     int_least64_t bInt = *(int_least64_t*)&B;
+
+#if defined(DTK_PLATFORM_64)
     if (bInt < 0)
         bInt = 0x8000000000000000 - bInt;
+#else
+    if (bInt < 0)
+        bInt = 0x80000000 - bInt;
+#endif
 
     int_least64_t intDiff = aInt - bInt;
     if (abs(intDiff) <= maxUlps)
@@ -576,12 +621,23 @@ bool dtkLesserThanOrAlmostEqualUlps(double A, double B, int_least64_t maxUlps)
 
     int_least64_t aInt = *(int_least64_t*)&A;
 
+#if defined(DTK_PLATFORM_64)
     if (aInt < 0)
         aInt = 0x8000000000000000 - aInt;
+#else
+    if (aInt < 0)
+        aInt = 0x80000000 - aInt;
+#endif
 
     int_least64_t bInt = *(int_least64_t*)&B;
+
+#if defined(DTK_PLATFORM_64)
     if (bInt < 0)
         bInt = 0x8000000000000000 - bInt;
+#else
+    if (bInt < 0)
+        bInt = 0x80000000 - bInt;
+#endif
 
     int_least64_t intDiff = aInt - bInt;
     if (abs(intDiff) <= maxUlps)
@@ -654,12 +710,23 @@ bool dtkGreaterThanUlps(double A, double B, int_least64_t maxUlps)
 
     int_least64_t aInt = *(int_least64_t*)&A;
 
+#if defined(DTK_PLATFORM_64)
     if (aInt < 0)
         aInt = 0x8000000000000000 - aInt;
+#else
+    if (aInt < 0)
+        aInt = 0x80000000 - aInt;
+#endif
 
     int_least64_t bInt = *(int_least64_t*)&B;
+
+#if defined(DTK_PLATFORM_64)
     if (bInt < 0)
         bInt = 0x8000000000000000 - bInt;
+#else
+    if (bInt < 0)
+        bInt = 0x80000000 - bInt;
+#endif
 
     int_least64_t intDiff = aInt - bInt;
     if (abs(intDiff) <= maxUlps)
@@ -732,12 +799,23 @@ bool dtkGreaterThanOrAlmostEqualUlps(double A, double B, int_least64_t maxUlps)
 
     int_least64_t aInt = *(int_least64_t*)&A;
 
+#if defined(DTK_PLATFORM_64)
     if (aInt < 0)
         aInt = 0x8000000000000000 - aInt;
+#else
+    if (aInt < 0)
+        aInt = 0x80000000 - aInt;
+#endif
 
     int_least64_t bInt = *(int_least64_t*)&B;
+
+#if defined(DTK_PLATFORM_64)
     if (bInt < 0)
         bInt = 0x8000000000000000 - bInt;
+#else
+    if (bInt < 0)
+        bInt = 0x80000000 - bInt;
+#endif
 
     int_least64_t intDiff = aInt - bInt;
     if (abs(intDiff) <= maxUlps)

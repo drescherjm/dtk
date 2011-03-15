@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Nov 16 15:39:54 2010 (+0100)
+## Last-Updated: Tue Mar 15 17:27:44 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 163
+##     Update #: 175
 ######################################################################
 ## 
 ### Commentary: 
@@ -50,10 +50,25 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
 ## #################################################################
+## Configure arch
+## #################################################################
+
+if(CMAKE_SIZEOF_VOID_P MATCHES 8)
+    set(DTK_PLATFORM_64 1)
+else(CMAKE_SIZEOF_VOID_P MATCHES 8)
+    set(DTK_PLATFORM_32 1)
+endif(CMAKE_SIZEOF_VOID_P MATCHES 8)
+
+configure_file (
+  "${PROJECT_SOURCE_DIR}/src/dtkCore/dtkConfig.h.in"
+  "${PROJECT_BINARY_DIR}/dtkConfig.h")
+
+## #################################################################
 ## Configure path
 ## #################################################################
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
+include_directories(${CMAKE_BINARY_DIR})
 
 if(WIN32)
   set(${PROJECT_NAME}_ARCHIVE_OUTPUT_DIRECTORY lib)

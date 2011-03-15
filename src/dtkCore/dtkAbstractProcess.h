@@ -38,6 +38,8 @@ public:
     friend DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractProcess& process);
     friend DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractProcess *process);
 
+    void cancel (void);
+    
 signals:
     void started(const QString& message);
     void elapsed(const QString& duration);
@@ -46,11 +48,14 @@ signals:
     void success(void);
     void failure(void);
     void finished(void);
+    void canceled(void);
 
 public slots:
     int run(void);
    
     virtual  int update(void);
+
+    virtual void onCanceled (void);
     
     virtual bool read(const QString& file);
     virtual bool read(const QStringList& files);

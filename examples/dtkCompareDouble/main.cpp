@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Mar  9 14:08:06 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar  9 15:17:26 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 8
+ * Last-Updated: Tue Mar 15 21:44:20 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -16,6 +16,8 @@
 /* Change log:
  * 
  */
+
+#include <dtkConfig.h>
 
 #include <dtkMath/dtkMath.h>
 
@@ -59,7 +61,11 @@ int main(int argc, char* argv[])
 {
     double negativeZero;
 
+#if defined(DTK_PLATORM_64)
     *(long long int*)&negativeZero = 0x8000000000000000LL;
+#else
+    *(long long int*)&negativeZero = 0x80000000LL;
+#endif
 
     double nan1 = sqrt(-1.0);
     double nan2 = zero1 / zero2;

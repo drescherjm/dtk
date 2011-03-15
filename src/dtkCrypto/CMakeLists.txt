@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Thu Jan  7 10:37:04 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Apr 26 13:13:25 2010 (+0200)
+## Last-Updated: Mon Mar 14 19:53:32 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 34
+##     Update #: 37
 ######################################################################
 ## 
 ### Commentary: 
@@ -43,8 +43,8 @@ endif(OPENSSL_FOUND)
 
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)
+
 if(NOT MSVC)
-  # Shouldn't the QT_USE_FILE set this appropriately?
   add_definitions(-DQT_NO_DEBUG)
 endif(NOT MSVC)
 
@@ -56,8 +56,12 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES_MOC})
 
 target_link_libraries(${PROJECT_NAME}
-  ${QT_LIBRARIES}
+  ${QT_LIBRARIES})
+
+if(OPENSSL_FOUND)
+target_link_libraries(${PROJECT_NAME}
   ${OPENSSL_LIBRARIES})
+endif(OPENSSL_FOUND)
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

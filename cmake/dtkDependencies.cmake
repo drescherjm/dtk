@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Sat Feb  5 19:48:10 2011 (+0100)
+## Last-Updated: Tue Mar 15 17:08:41 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 52
+##     Update #: 53
 ######################################################################
 ## 
 ### Commentary: 
@@ -113,7 +113,7 @@ endif(TCL_FOUND)
 find_package(PythonLibs QUIET)
 
 if(PYTHONLIBS_FOUND)
-  include_directories(${PYTHON_INCLUDE_PATH})
+    include_directories(${PYTHON_INCLUDE_DIRS})
   get_filename_component(PYTHON_PATH ${PYTHON_LIBRARIES} PATH)
   link_directories(${PYTHON_PATH})
 endif(PYTHONLIBS_FOUND)

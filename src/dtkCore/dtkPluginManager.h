@@ -1,20 +1,20 @@
-/* dtkPluginManager.h --- 
- * 
+/* dtkPluginManager.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:21:09 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 26 10:17:34 2009 (+0100)
+ * Last-Updated: Thu Mar  3 19:02:15 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 35
+ *     Update #: 36
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKPLUGINMANAGER_H
@@ -37,8 +37,8 @@ public:
     void   initialize(void);
     void uninitialize(void);
 
-    void  readSettings(void);
-    void writeSettings(void);
+    virtual void  readSettings(void);
+    virtual void writeSettings(void);
 
     void printPlugins(void);
 
@@ -57,6 +57,8 @@ protected:
 
     void   loadPlugin(const QString& path);
     void unloadPlugin(const QString& path);
+
+    QString path(void) const;
 
 private:
     static dtkPluginManager *s_instance;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jan 31 22:13:11 2011 (+0100)
+ * Last-Updated: Thu Mar  3 18:51:19 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 118
+ *     Update #: 151
  */
 
 /* Commentary: 
@@ -29,8 +29,10 @@ class dtkAbstractProcess;
 class dtkAbstractView;
 class dtkComposerEdge;
 class dtkComposerNode;
+class dtkComposerNodeControlBlock;
 class dtkComposerNodeFactory;
 class dtkComposerNodeProperty;
+class dtkComposerNote;
 class dtkComposerScenePrivate;
 
 class DTKCOMPOSER_EXPORT dtkComposerScene : public QGraphicsScene
@@ -41,11 +43,15 @@ public:
              dtkComposerScene(QObject *parent = 0);
     virtual ~dtkComposerScene(void);
 
+    QList<dtkComposerNote *> notes(void);
     QList<dtkComposerEdge *> edges(void);
     QList<dtkComposerNode *> nodes(void);
     QList<dtkComposerNode *> nodes(QString name);
     QList<dtkComposerNodeProperty *> properties(void);
     QList<dtkComposerNodeProperty *> properties(QString name);
+
+    QList<dtkComposerNode *> startNodes(void);
+    QList<dtkComposerNode *>   endNodes(void);
 
     void touch(void);
     void clear(void);
@@ -54,14 +60,17 @@ public:
     void setModified(bool modified);
 
     void    addEdge(dtkComposerEdge *edge);
-    void removeEdge(dtkComposerEdge *edge);
     void    addNode(dtkComposerNode *node);
+    void    addNote(dtkComposerNote *note);
+    void removeEdge(dtkComposerEdge *edge);
     void removeNode(dtkComposerNode *node);
+    void removeNote(dtkComposerNote *note);
 
     void setFactory(dtkComposerNodeFactory *factory);
 
     dtkComposerNode *createGroup(QList<dtkComposerNode *> nodes, QPointF position = QPointF());
     dtkComposerNode *createNode(QString type, QPointF position = QPointF());
+    dtkComposerNote *createNote(QString text, QPointF position = QPointF(), QSizeF size = QSizeF());
 
     void explodeGroup(dtkComposerNode *node);
 
@@ -90,6 +99,10 @@ public slots:
    void startEvaluation(void);
    void stopEvaluation(void);
 
+public slots:
+   void copy(void);
+   void paste(void);
+
 protected:
     dtkComposerNode *nodeAt(const QPointF& point) const;
     dtkComposerNodeProperty *propertyAt(const QPointF& point) const;
@@ -101,6 +114,9 @@ protected:
     void showAllNodes(void);
     void showChildNodes(dtkComposerNode *node);
     void updateEdgesVisibility(void);
+
+    QList<dtkComposerNodeControlBlock *> hoveredControlBlocks(dtkComposerNode *node);
+    QList<dtkComposerNodeControlBlock *> hoveredControlBlocks(dtkComposerNode *node, QList<QGraphicsItem *> parents);
 
 protected:
     void dragEnterEvent(QGraphicsSceneDragDropEvent *event);

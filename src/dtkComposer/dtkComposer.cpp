@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Feb  5 23:40:03 2011 (+0100)
+ * Last-Updated: Sat Feb 26 19:53:40 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 443
+ *     Update #: 445
  */
 
 /* Commentary: 
@@ -203,4 +203,14 @@ void dtkComposer::startEvaluation(void)
 void dtkComposer::stopEvaluation(void)
 {
     d->scene->stopEvaluation();
+}
+
+void dtkComposer::copy(void)
+{
+    d->scene->copy();
+}
+
+void dtkComposer::paste(void)
+{
+    d->scene->paste();
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 18:15:04 2011 (+0100)
+ * Last-Updated: Tue Mar  8 15:22:40 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 41
+ *     Update #: 405
  */
 
 /* Commentary: 
@@ -18,30 +18,159 @@
  */
 
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeControlBlock.h"
+#include "dtkComposerNodeControlBlock_p.h"
+#include "dtkComposerNodeProperty.h"
+
+#include <dtkCore/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeControlBlockPrivate
+// dtkComposerNodeControlBlockLabel
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNodeControlBlockPrivate
+class dtkComposerNodeControlBlockLabel : public QGraphicsTextItem
 {
 public:
-    QColor color;
-    QString title;
+     dtkComposerNodeControlBlockLabel(dtkComposerNodeControlBlock *parent = 0);
+    ~dtkComposerNodeControlBlockLabel(void);
+
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
+private:
+    dtkComposerNodeControlBlock *block;
 };
+
+dtkComposerNodeControlBlockLabel::dtkComposerNodeControlBlockLabel(dtkComposerNodeControlBlock *parent) : QGraphicsTextItem(parent)
+{
+    this->block = parent;
+
+#if defined(Q_WS_MAC)
+    QFont font("Lucida Grande", 10);
+#else
+    QFont font("Lucida Grande", 8);
+#endif
+
+    this->setDefaultTextColor(Qt::lightGray);
+    this->setFont(font);
+    this->setTextInteractionFlags(Qt::TextEditorInteraction);
+    this->setTextWidth(100);
+    this->setFlag(QGraphicsItem::ItemStacksBehindParent, true);
+}
+
+dtkComposerNodeControlBlockLabel::~dtkComposerNodeControlBlockLabel(void)
+{
+
+}
+
+void dtkComposerNodeControlBlockLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    QPainterPath s_rect; s_rect.addRect(QRectF(option->rect.topLeft(), QSizeF(option->rect.width(), option->rect.height() / 2)));
+    QPainterPath r_rect; r_rect.addRoundedRect(option->rect, 5, 5);
+    QPainterPath path = s_rect.united(r_rect);
+
+    painter->save();
+    painter->setPen(Qt::darkGray);
+    painter->setBrush(Qt::black);
+    painter->drawPath(path);
+    painter->restore();
+
+    QStyleOptionGraphicsItem *o = const_cast<QStyleOptionGraphicsItem*>(option);
+    o->state &= ~QStyle::State_Selected;
+    o->state &= ~QStyle::State_HasFocus;
+
+    QGraphicsTextItem::paint(painter, option, widget);
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeControlBlockButton
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeControlBlockButton : public QGraphicsItem
+{
+public:
+     dtkComposerNodeControlBlockButton(dtkComposerNodeControlBlock *parent = 0);
+    ~dtkComposerNodeControlBlockButton(void);
+
+    QRectF boundingRect(void) const;
+
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
+public:
+    dtkComposerNodeControlBlockLabel *label;
+
+private:
+    dtkComposerNodeControlBlock *block;
+};
+
+dtkComposerNodeControlBlockButton::dtkComposerNodeControlBlockButton(dtkComposerNodeControlBlock *parent) : QGraphicsItem(parent)
+{
+    this->block = parent;
+    this->label = NULL;
+
+    this->setFlag(QGraphicsItem::ItemStacksBehindParent, true);
+}
+
+dtkComposerNodeControlBlockButton::~dtkComposerNodeControlBlockButton(void)
+{
+
+}
+
+QRectF dtkComposerNodeControlBlockButton::boundingRect(void) const
+{
+    return QRectF(0, 0, 20, 10);
+}
+
+void dtkComposerNodeControlBlockButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    QPainterPath s_rect; s_rect.addRect(QRectF(option->rect.topLeft(), QSizeF(option->rect.width(), option->rect.height() / 2)));
+    QPainterPath r_rect; r_rect.addRoundedRect(option->rect, 5, 5);
+    QPainterPath path = s_rect.united(r_rect);
+
+    painter->save();
+    painter->setPen(Qt::darkGray);
+    painter->setBrush(Qt::black);
+    painter->drawPath(path);
+    painter->restore();
+}
+
+void dtkComposerNodeControlBlockButton::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    if(!this->label)
+        return;
+
+    dtkComposerNodeProperty *input_property = block->addInputProperty(this->label->toPlainText(), block->parentNode());
+    input_property->setBlockedFrom(block->title());
+    
+    dtkComposerNodeProperty *output_property = block->addOutputProperty(this->label->toPlainText(), block->parentNode());
+    output_property->setBlockedFrom(block->title());
+
+    block->parentNode()->addInputProperty(input_property);
+    block->parentNode()->addOutputProperty(output_property);
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlBlock
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNodeControlBlock::dtkComposerNodeControlBlock(const QString& title, QGraphicsItem *parent) : QGraphicsRectItem(parent), d(new dtkComposerNodeControlBlockPrivate)
+dtkComposerNodeControlBlock::dtkComposerNodeControlBlock(const QString& title, dtkComposerNodeControl *parent) : QGraphicsRectItem(parent), d(new dtkComposerNodeControlBlockPrivate)
 {
-    d->color = QColor("#c7c7c7");
+    d->parent = parent;
+    
+    d->button = NULL;
+    d->label = NULL;
+    
+    d->interactive = false;
+    d->pen_color = QColor("#c7c7c7");
+    d->brush_color = Qt::transparent;
     d->title = title;
 
-    this->setPen(d->color);
+    this->setPen(d->pen_color);
     this->setBrush(Qt::NoBrush);
+    this->setZValue(parent->zValue());
 }
 
 dtkComposerNodeControlBlock::~dtkComposerNodeControlBlock(void)
@@ -51,22 +180,93 @@ dtkComposerNodeControlBlock::~dtkComposerNodeControlBlock(void)
     d = NULL;
 }
 
+dtkComposerNodeControl *dtkComposerNodeControlBlock::parentNode(void)
+{
+    return d->parent;
+}
+
 QString dtkComposerNodeControlBlock::title(void) const
 {
     return d->title;
 }
 
+QColor dtkComposerNodeControlBlock::brushColor(void) const
+{
+    return d->brush_color;
+}
+
 QColor dtkComposerNodeControlBlock::penColor(void) const
 {
-    return d->color;
+    return d->pen_color;
+}
+
+void dtkComposerNodeControlBlock::setBrushColor(const QColor& color)
+{
+    d->brush_color = color;
+
+    if(color == Qt::transparent)
+        this->setBrush(Qt::NoBrush);
+    else
+        this->setBrush(d->brush_color);
+
+    this->update();
+}
+
+void dtkComposerNodeControlBlock::setInteractive(bool interactive)
+{
+    d->interactive = interactive;
+
+    if(d->interactive && !d->button) {
+        d->button = new dtkComposerNodeControlBlockButton(this);
+        d->button->setVisible(false);
+    }
+
+    if(d->interactive && !d->label) {
+        d->label = new dtkComposerNodeControlBlockLabel(this);
+        d->label->setVisible(false);
+
+        if(!d->button->label)
+            d->button->label = d->label;
+    }
+
+    this->setAcceptHoverEvents(interactive);
 }
 
 void dtkComposerNodeControlBlock::setPenColor(const QColor& color)
 {
-    d->color = color;
+    d->pen_color = color;
 
-    this->setPen(d->color);
+    this->setPen(d->pen_color);
     this->update();
+}
+
+void dtkComposerNodeControlBlock::setRect(const QRectF& rectangle)
+{
+    if(this->childItems().count()) {
+
+        if(rectangle.topLeft() != this->rect().topLeft()) {
+
+            QPointF delta = rectangle.topLeft() - this->rect().topLeft();
+
+            foreach(QGraphicsItem *item, this->childItems()) {
+                item->setX(item->x() + delta.x());
+                item->setY(item->y() + delta.y());
+            }
+        }
+    }
+
+    if (d->button)
+        d->button->setPos((rectangle.left() + rectangle.width() - 100) / 2 + 50, this->rect().top());
+
+    if (d->label)
+        d->label->setPos((rectangle.left() + rectangle.width() - 100) / 2 - 50, this->rect().top());
+    
+    QGraphicsRectItem::setRect(rectangle);
+}
+
+void dtkComposerNodeControlBlock::setRect(qreal x, qreal y, qreal width, qreal height)
+{
+    this->setRect(QRectF(x, y, width, height));
 }
 
 QList<dtkComposerNode *> dtkComposerNodeControlBlock::nodes(void)
@@ -102,21 +302,76 @@ QList<dtkComposerNode *> dtkComposerNodeControlBlock::endNodes(void)
     return nodes;
 }
 
-void dtkComposerNodeControlBlock::highlight(void)
+QList<dtkComposerNodeProperty *> dtkComposerNodeControlBlock::inputProperties(void)
 {
-    QPropertyAnimation *animation = new QPropertyAnimation(this, "penColor");
-    animation->setDuration(1000);
-    animation->setKeyValueAt(0.0, QColor("#c7c7c7"));
-    animation->setKeyValueAt(0.1, Qt::red);
-    animation->setKeyValueAt(0.2, QColor("#c7c7c7"));
-    animation->setKeyValueAt(0.3, Qt::red);
-    animation->setKeyValueAt(0.4, QColor("#c7c7c7"));
-    animation->setKeyValueAt(0.5, Qt::red);
-    animation->setKeyValueAt(0.6, QColor("#c7c7c7"));
-    animation->setKeyValueAt(0.7, Qt::red);
-    animation->setKeyValueAt(0.8, QColor("#c7c7c7"));
-    animation->setKeyValueAt(0.9, Qt::red);
-    animation->setKeyValueAt(1.0, QColor("#c7c7c7"));
-    animation->setEasingCurve(QEasingCurve::Linear);
-    animation->start(QAbstractAnimation::DeleteWhenStopped);
+    return d->input_properties;
+}
+
+QList<dtkComposerNodeProperty *> dtkComposerNodeControlBlock::outputProperties(void)
+{
+    return d->output_properties;
+}
+
+dtkComposerNodeProperty *dtkComposerNodeControlBlock::addInputProperty(QString name, dtkComposerNode *parent)
+{
+    dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::HybridInput, dtkComposerNodeProperty::Multiple, parent);
+
+    d->input_properties << property;
+    
+    return property;
+}
+
+dtkComposerNodeProperty *dtkComposerNodeControlBlock::addOutputProperty(QString name, dtkComposerNode *parent)
+{
+    dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::HybridOutput, dtkComposerNodeProperty::Multiple, parent);
+
+    d->output_properties << property;
+
+    return property;
+}
+
+void dtkComposerNodeControlBlock::highlight(dtkComposerNodeControlBlock *block)
+{
+    static dtkComposerNodeControlBlock *highlighted = NULL;
+
+    if(highlighted == block)
+        return;
+
+    if(block) {
+        QPropertyAnimation *animation = new QPropertyAnimation(block, "brushColor");
+        animation->setDuration(500);
+        animation->setKeyValueAt(0.0, Qt::red);
+        animation->setKeyValueAt(1.0, Qt::transparent);
+        animation->setEasingCurve(QEasingCurve::Linear);
+        animation->start(QAbstractAnimation::DeleteWhenStopped);
+    }
+
+    highlighted = block;
+}
+
+void dtkComposerNodeControlBlock::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+    DTK_UNUSED(event);
+
+    if (d->button)
+        d->button->setVisible(true);
+
+    if (d->label)
+        d->label->setVisible(true);
+}
+
+void dtkComposerNodeControlBlock::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+    DTK_UNUSED(event);
+
+    if (d->button)
+        d->button->setVisible(false);
+
+    if (d->label)
+        d->label->setVisible(false);
+}
+
+void dtkComposerNodeControlBlock::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
+{
+    DTK_UNUSED(event);
 }

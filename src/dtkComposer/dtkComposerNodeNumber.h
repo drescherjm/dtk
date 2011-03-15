@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Feb 25 16:19:59 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  1 17:20:36 2011 (+0100)
+ * Last-Updated: Mon Mar  7 14:13:54 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 60
+ *     Update #: 67
  */
 
 /* Commentary: 
@@ -41,8 +41,6 @@ public:
            Double = QVariant::Double
     };
 
-    typedef long toto_long;
-
 public:
      dtkComposerNodeNumber(dtkComposerNode *parent = 0);
     ~dtkComposerNodeNumber(void);
@@ -54,7 +52,8 @@ public:
     QVariant number(void);
 
     void setGenre(Genre genre);
-    bool setNumber(QVariant number);
+    void setGenre(int genre);
+    void setNumber(QVariant number);
 
 public:
     void setValue(int value);
@@ -65,6 +64,9 @@ public:
     void setValue(qulonglong value);
     void setValue(float value);
     void setValue(double value);
+
+public:
+    void refresh(void);
 
 public:
     void expand(void);

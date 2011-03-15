@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:47:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 18:48:55 2011 (+0100)
+ * Last-Updated: Tue Mar  8 16:24:13 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 53
+ *     Update #: 67
  */
 
 /* Commentary: 
@@ -33,15 +33,20 @@ public:
      dtkComposerNodeControl(dtkComposerNode *parent = 0);
     ~dtkComposerNodeControl(void);
   
+    dtkComposerNodeControlBlock    *block(const QString& title);
     dtkComposerNodeControlBlock *addBlock(const QString& title);
 
     QList<dtkComposerNodeControlBlock *> blocks(void);
+
+    dtkComposerNodeProperty  *inputProperty(const QString& block_title, const QString& name) const;
+    dtkComposerNodeProperty *outputProperty(const QString& block_title, const QString& name) const;
 
 public:
     void layout(void);
   
 public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    bool resize(const QRectF& rect);
 
 public slots:
     virtual void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
@@ -50,6 +55,11 @@ public slots:
 
 protected:
     bool condition(void);
+    QVariant value(void);
+
+protected:
+    void setColor(const QColor& color);
+    void setInputPropertyName(const QString& name);
 
 private:
     dtkComposerNodeControlPrivate *d;

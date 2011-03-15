@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:26:53 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Feb 18 14:27:25 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 40
+ * Last-Updated: Sat Mar  5 20:48:57 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -65,7 +65,7 @@ public:
     void adjust(void);
     void adjust(const QPointF& start, const QPointF& end);
 
-    bool link(bool anyway = false);
+    bool   link(bool anyway = false);
     bool unlink(void);
 
 private:

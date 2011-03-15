@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb 24 11:28:34 2011 (+0100)
+ * Last-Updated: Mon Mar  7 13:36:49 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 98
+ *     Update #: 111
  */
 
 /* Commentary: 
@@ -40,8 +40,10 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeProperty : public QObject, public QGraph
 
 public:
     enum Type {
-         Input,
-        Output
+        Input,
+        Output,
+        HybridInput,
+        HybridOutput
     };
     
     enum Multiplicity {
@@ -72,12 +74,17 @@ public:
 
     dtkComposerNode *parent(void);
     dtkComposerNode *clonedFrom(void);
+    
+    QString blockedFrom(void) const;
 
+    void setBlockedFrom(const QString& name);
     void setClonedFrom(dtkComposerNode *node);
     void setParentNode(dtkComposerNode *node);
 
     bool  isDisplayed(void);
     void setDisplayed(bool dirty);
+
+    void setName(const QString& name);
 
     friend QDebug operator<<(QDebug dbg, dtkComposerNodeProperty& property);
     friend QDebug operator<<(QDebug dbg, dtkComposerNodeProperty *property);

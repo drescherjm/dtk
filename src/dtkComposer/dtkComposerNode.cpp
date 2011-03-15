@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 19:21:10 2011 (+0100)
+ * Last-Updated: Mon Mar  7 13:58:01 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1626
+ *     Update #: 1645
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include "dtkComposerEdge.h"
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerScene.h"
 
@@ -29,7 +30,7 @@
 #include <dtkCore/dtkGlobal.h>
 
 // #define DTK_DEBUG_COMPOSER_INTERACTION 1
-// #define DTK_DEBUG_COMPOSER_EVALUATION 1
+#define DTK_DEBUG_COMPOSER_EVALUATION 1
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodePrivate
@@ -350,8 +351,14 @@ dtkComposerEdge *dtkComposerNode::edge(dtkComposerNodeProperty *property)
 
         if(property->type() == dtkComposerNodeProperty::Input)
             return d->input_edges.key(property);
+
+        if(property->type() == dtkComposerNodeProperty::HybridInput)
+            return d->input_edges.key(property);
         
         if(property->type() == dtkComposerNodeProperty::Output)
+            return d->output_edges.key(property);
+
+        if(property->type() == dtkComposerNodeProperty::HybridOutput)
             return d->output_edges.key(property);
 
     } else {
@@ -522,10 +529,17 @@ int dtkComposerNode::count(dtkComposerNodeProperty *property)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
+
     if(property->type() == dtkComposerNodeProperty::Input)
         return d->input_edges.keys(property).count();
 
+    if(property->type() == dtkComposerNodeProperty::HybridInput)
+        return d->input_edges.keys(property).count();
+
     if(property->type() == dtkComposerNodeProperty::Output)
+        return d->output_edges.keys(property).count();
+
+    if(property->type() == dtkComposerNodeProperty::HybridOutput)
         return d->output_edges.keys(property).count();
 
     return 0;
@@ -536,10 +550,17 @@ int dtkComposerNode::number(dtkComposerNodeProperty *property)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
+
     if(property->type() == dtkComposerNodeProperty::Input)
         return d->input_properties.indexOf(property);
 
+    if(property->type() == dtkComposerNodeProperty::HybridInput)
+        return d->input_properties.indexOf(property);
+
     if(property->type() == dtkComposerNodeProperty::Output)
+        return d->output_properties.indexOf(property);
+
+    if(property->type() == dtkComposerNodeProperty::HybridOutput)
         return d->output_properties.indexOf(property);
 
     return -1;
@@ -1094,7 +1115,6 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
             pen.setWidth(1);
         } else if(this->kind() == dtkComposerNode::Control) {
             pen.setColor(QColor("#c7c7c7"));
-            // pen.setStyle(Qt::DashLine);
             pen.setWidth(1);
         } else {    
             pen.setColor(Qt::black);
@@ -1128,6 +1148,11 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     }
 }
 
+qreal dtkComposerNode::nodeRadius(void)
+{
+    return d->node_radius;
+}
+
 void dtkComposerNode::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
@@ -1138,9 +1163,12 @@ void dtkComposerNode::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         
         QPointF delta = QPointF(event->scenePos() - d->drag_point);
 
-        d->bounding_rect.setBottomRight(d->bounding_rect.bottomRight() + delta);
-
-        d->drag_point = event->scenePos();
+        if(dtkComposerNodeControl *control = dynamic_cast<dtkComposerNodeControl *>(this)) {
+            if(control->resize(QRectF(d->bounding_rect.topLeft(), d->bounding_rect.bottomRight() + delta))) {
+                d->bounding_rect.setBottomRight(d->bounding_rect.bottomRight() + delta);
+                d->drag_point = event->scenePos();
+            }
+        }
 
         event->accept();
 

@@ -4,9 +4,9 @@
 ;; Copyright (C) 2008 - Julien Wintz, Inria.
 ;; Created: Mon Jan 31 11:18:26 2011 (+0100)
 ;; Version: $Id$
-;; Last-Updated: Mon Mar 14 15:03:29 2011 (+0100)
+;; Last-Updated: Mon Mar 14 18:37:27 2011 (+0100)
 ;;           By: Julien Wintz
-;;     Update #: 145
+;;     Update #: 149
 */
 
 /* Commentary: 
@@ -356,3 +356,94 @@ QSpinBox::down-arrow, QDoubleSpinBox::down-arrow {
 QStackedWidget {
     background: #1a1a1a;
 }
+
+/**
+ * QTreeView
+ */
+
+QTreeView {
+    alternate-background-color: #2d2d2d;
+    background: #1a1a1a;
+    show-decoration-selected: 1;
+}
+
+QTreeView QHeaderView::section {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #727272, stop: 0.4 #343434, stop: 1 #313131);
+    color: #c1c1c1;
+    font-size: 10px;
+    padding-left: 4px;
+    border: none;
+    border-left: 1px solid #c1c1c1;
+    border-bottom: 1px solid #c1c1c1;
+    height: 23px;
+}
+
+QTreeView QHeaderView::section:first {
+    border-left: none;
+}
+
+QTreeView::item {
+    background: #1a1a1a;
+    color: #c1c1c1;
+    height: 23px;
+}
+
+QTreeView::item:alternate {
+    background: #2d2d2d;
+    color: #c1c1c1;
+    height: 23px;
+}
+
+QTreeView::indicator:checked {
+    image: url(:dtkGui/pixmaps/dtkLedPurple.png);
+}
+
+QTreeView::indicator:unchecked {
+    image: url(:dtkGui/pixmaps/dtkLedGray.png);
+}
+
+QTreeView::item:selected {
+    color: #e1e1e1;
+}
+
+QTreeView::item:selected:active {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);
+}
+
+QTreeView::item:selected:!active {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #cccccc, stop: 1 #888888);
+}
+
+QTreeView::branch:selected:active {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);
+}
+
+QTreeView::branch:selected:alternate:active {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);
+}
+
+QTreeView::branch:selected:!active {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #cccccc, stop: 1 #888888);
+}
+
+QTreeView::branch:selected:alternate:!active {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #cccccc, stop: 1 #888888);
+}
+
+/* QTreeView::branch:closed { */
+/*     background: #1a1a1a; */
+/*     border-image: none; */
+/*     image: url(:dtkGui/pixmaps/dtkInspector-branch-closed.png); */
+/* } */
+
+/* QTreeView::branch:closed:alternate { */
+/*     background: #2d2d2d; */
+/*     border-image: none; */
+/*     image: url(:dtkGui/pixmaps/dtkInspector-branch-closed.png); */
+/* } */
+
+/* QTreeView::branch:open:alternate { */
+/*     background: #2d2d2d; */
+/*     border-image: none; */
+/*     image: url(:dtkGui/pixmaps/dtkInspector-branch-opened.png); */
+/* } */

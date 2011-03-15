@@ -22,9 +22,11 @@
 
 #include <QtGui/QWidget>
 
+#include "dtkGuiExport.h"
+
 class dtkInspectorTitleBarPrivate;
 
-class dtkInspectorTitleBar : public QWidget
+class DTKGUI_EXPORT dtkInspectorTitleBar : public QWidget
 {
     Q_OBJECT
 

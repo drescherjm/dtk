@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Jul 20 11:15:27 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jan 27 17:13:13 2010 (+0100)
+ * Last-Updated: Sun Feb 13 15:35:40 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 12
  */
 
 /* Commentary: 
@@ -159,4 +159,3 @@ dtkUpdater::~dtkUpdater(void)
     QFile::remove("/tmp/cfg");
     QFile::remove("/tmp/bin");
 }
-

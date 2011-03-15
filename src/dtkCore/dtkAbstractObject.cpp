@@ -116,12 +116,12 @@ void dtkAbstractObject::addProperty(const QString& key, const QString& value)
 void dtkAbstractObject::setProperty(const QString& key, const QString& value)
 {
     if(!d->values.contains(key)) {
-    	dtkDebug() << this->metaObject()->className() << "has no such property:" << key;
+    	dtkDebug() << this->metaObject()->className() << " has no such property:" << key;
     	return;
     }
 
     if(!d->values.value(key).contains(value)) {
-    	dtkDebug() << this->metaObject()->className() << "has no such value:" << value << "for key:" << key;
+    	dtkDebug() << this->metaObject()->className() << " has no such value:" << value << " for key: " << key;
     	return;
     }
 

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Mar 15 17:27:44 2011 (+0100)
+## Last-Updated: Tue Mar 15 18:05:10 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 175
+##     Update #: 176
 ######################################################################
 ## 
 ### Commentary: 
@@ -58,10 +58,6 @@ if(CMAKE_SIZEOF_VOID_P MATCHES 8)
 else(CMAKE_SIZEOF_VOID_P MATCHES 8)
     set(DTK_PLATFORM_32 1)
 endif(CMAKE_SIZEOF_VOID_P MATCHES 8)
-
-configure_file (
-  "${PROJECT_SOURCE_DIR}/src/dtkCore/dtkConfig.h.in"
-  "${PROJECT_BINARY_DIR}/dtkConfig.h")
 
 ## #################################################################
 ## Configure path

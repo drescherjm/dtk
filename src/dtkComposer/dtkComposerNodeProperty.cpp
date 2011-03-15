@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Mar 14 17:43:57 2011 (+0100)
+ * Last-Updated: Tue Mar 15 10:54:45 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 382
+ *     Update #: 401
  */
 
 /* Commentary: 
@@ -31,6 +31,7 @@ public:
 
     dtkComposerNodeProperty::Type type;
     dtkComposerNodeProperty::Multiplicity multiplicity;
+    dtkComposerNodeProperty::Behavior behavior;
 
     QGraphicsPathItem *path_left;
     QGraphicsPathItem *path_right;
@@ -46,6 +47,7 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multip
 {
     d->type = type;
     d->multiplicity = multiplicity;
+    d->behavior = dtkComposerNodeProperty::None;
     d->parent = parent;
     d->clone = NULL;
 
@@ -204,6 +206,24 @@ dtkComposerNodeProperty::Type dtkComposerNodeProperty::type(void)
     return d->type;
 }
 
+dtkComposerNodeProperty::Multiplicity dtkComposerNodeProperty::multiplicity(void)
+{
+    return d->multiplicity;
+}
+
+dtkComposerNodeProperty::Behavior dtkComposerNodeProperty::behavior(void)
+{
+    return d->behavior;
+}
+
+bool dtkComposerNodeProperty::contains(const QPointF& point) const
+{
+    if (d->ellipse)
+        return d->ellipse->contains(point);
+
+    return d->path_right->contains(point);
+}
+
 int dtkComposerNodeProperty::count(void)
 {
     if(!d->parent)
@@ -286,6 +306,11 @@ void dtkComposerNodeProperty::setName(const QString& name)
     this->update();
 }
 
+void dtkComposerNodeProperty::setBehavior(dtkComposerNodeProperty::Behavior behavior)
+{
+    d->behavior = behavior;
+}
+
 QRectF dtkComposerNodeProperty::boundingRect(void) const
 {
     if (d->ellipse)
@@ -326,19 +351,19 @@ void dtkComposerNodeProperty::setRect(const QRectF& rect)
         d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText())*-1 - rect.width(), (fm.height()/2-1)*-1));
         break;
     case HybridInput:
-        lp.moveTo(rect.center()); lp.arcTo(rect, 60., 240.); lp.closeSubpath();
+        lp.moveTo(rect.center()); lp.arcTo(rect, 90., 180.); lp.closeSubpath();
         d->path_left->setPath(lp);
         d->path_left->setBrush(Qt::yellow);
-        rp.moveTo(rect.center()); rp.arcTo(rect, 300., 120.); rp.closeSubpath();
+        rp.moveTo(rect.center()); rp.arcTo(rect, 270., 180.); rp.closeSubpath();
         d->path_right->setPath(rp);
         d->path_right->setBrush(Qt::red);
         d->text->setPos(rect.topRight() + QPointF(0, (fm.height()/2-1)*-1));
         break;
     case HybridOutput: 
-        lp.moveTo(rect.center()); lp.arcTo(rect, 120., 120.); lp.closeSubpath();
+        lp.moveTo(rect.center()); lp.arcTo(rect, 90., 180.); lp.closeSubpath();
         d->path_left->setPath(lp);
         d->path_left->setBrush(Qt::yellow);
-        rp.moveTo(rect.center()); rp.arcTo(rect, 240., 240.); rp.closeSubpath();
+        rp.moveTo(rect.center()); rp.arcTo(rect, 270., 180.); rp.closeSubpath();
         d->path_right->setPath(rp);
         d->path_right->setBrush(Qt::red);
         d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText())*-1 - rect.width(), (fm.height()/2-1)*-1));

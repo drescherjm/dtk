@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 14 12:51:33 2011 (+0100)
+ * Last-Updated: Tue Mar 15 16:01:09 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 444
+ *     Update #: 453
  */
 
 /* Commentary: 
@@ -436,6 +436,23 @@ dtkComposerNodeProperty *dtkComposerNodeControlBlock::addOutputProperty(QString 
     d->output_properties << property;
 
     return property;
+}
+
+QRectF dtkComposerNodeControlBlock::minimalBoundingRect(void)
+{
+    qreal top = this->rect().bottom();
+    qreal left = this->rect().right();
+    qreal bottom = this->rect().top();
+    qreal right = this->rect().left();
+
+    foreach(dtkComposerNode *child, this->nodes()) {
+        top = qMax(top, child->boundingRect().top());
+        left = qMin(left, child->boundingRect().left());
+        bottom = qMin(bottom, child->boundingRect().bottom());
+        right = qMax(right, child->boundingRect().right());
+    }
+
+    return QRectF(top, left, (right - left), (top - bottom));
 }
 
 void dtkComposerNodeControlBlock::highlight(dtkComposerNodeControlBlock *block)

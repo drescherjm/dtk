@@ -41,8 +41,8 @@ if (DOXYGEN_FOUND)
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/img      ${CMAKE_CURRENT_BINARY_DIR}/html/img
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/css      ${CMAKE_CURRENT_BINARY_DIR}/html/css
     COMMAND ${DOXYGEN_EXECUTABLE} Doxyfile
-    COMMAND qhelpgenerator html/index.qhp -o dtk.qch
-    COMMAND qcollectiongenerator dtk.qhcp -o dtk.qhc
+    COMMAND ${QT_BINARY_DIR}/qhelpgenerator html/index.qhp -o dtk.qch
+    COMMAND ${QT_BINARY_DIR}/qcollectiongenerator dtk.qhcp -o dtk.qhc
     COMMENT "-- Generating embedded documentation"
     )
 

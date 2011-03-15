@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
 {
     double negativeZero;
 
-    *(long long int*)&negativeZero = 0x8000000000000000;
+    *(long long int*)&negativeZero = 0x8000000000000000LL;
 
     double nan1 = sqrt(-1.0);
     double nan2 = zero1 / zero2;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 15 16:01:09 2011 (+0100)
+ * Last-Updated: Wed Mar 16 17:33:05 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 453
+ *     Update #: 517
  */
 
 /* Commentary: 
@@ -440,19 +440,31 @@ dtkComposerNodeProperty *dtkComposerNodeControlBlock::addOutputProperty(QString 
 
 QRectF dtkComposerNodeControlBlock::minimalBoundingRect(void)
 {
-    qreal top = this->rect().bottom();
-    qreal left = this->rect().right();
-    qreal bottom = this->rect().top();
-    qreal right = this->rect().left();
+    qreal min_height = 75;
+    qreal min_width = 200;
 
-    foreach(dtkComposerNode *child, this->nodes()) {
-        top = qMax(top, child->boundingRect().top());
-        left = qMin(left, child->boundingRect().left());
-        bottom = qMin(bottom, child->boundingRect().bottom());
-        right = qMax(right, child->boundingRect().right());
+    if (this->nodes().count()) {
+
+        QRectF child_rect = this->nodes().first()->mapRectToParent(this->nodes().first()->boundingRect());
+        qreal top  = child_rect.top();
+        qreal left = child_rect.left();
+        qreal bottom = child_rect.bottom();
+        qreal right  = child_rect.right();
+
+        foreach(dtkComposerNode *child, this->nodes()) {
+
+            child_rect = child->mapRectToParent(child->boundingRect());
+
+            top = top < child_rect.top() ? top : child_rect.top();
+            left = left < child_rect.left() ? left : child_rect.left();
+            bottom = bottom > child_rect.bottom() ? bottom : child_rect.bottom();
+            right = right > child_rect.right() ? right : child_rect.right();
+        }
+
+        min_height = (1.1 * qAbs(top - bottom)) > min_height ? (1.1 * qAbs(top - bottom)) : min_height;
+        min_width  = (1.1 * qAbs(right - left)) >  min_width ? (1.1 * qAbs(right - left)) :  min_width;
     }
-
-    return QRectF(top, left, (right - left), (top - bottom));
+    return QRectF(this->rect().top(), this->rect().left(), min_width, min_height);
 }
 
 void dtkComposerNodeControlBlock::highlight(dtkComposerNodeControlBlock *block)

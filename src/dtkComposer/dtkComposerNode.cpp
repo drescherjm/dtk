@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 15 16:00:58 2011 (+0100)
+ * Last-Updated: Wed Mar 16 17:24:53 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 1663
+ *     Update #: 1700
  */
 
 /* Commentary: 
@@ -1244,10 +1244,8 @@ void dtkComposerNode::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         QPointF delta = QPointF(event->scenePos() - d->drag_point);
 
         if(dtkComposerNodeControl *control = dynamic_cast<dtkComposerNodeControl *>(this)) {
-            if(control->resize(QRectF(d->bounding_rect.topLeft(), d->bounding_rect.bottomRight() + delta))) {
-                d->bounding_rect.setBottomRight(d->bounding_rect.bottomRight() + delta);
-                d->drag_point = event->scenePos();
-            }
+            control->resize(delta);
+            d->drag_point = event->scenePos();
         }
 
         event->accept();

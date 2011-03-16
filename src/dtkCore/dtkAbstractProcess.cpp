@@ -59,11 +59,22 @@ int dtkAbstractProcess::run(void)
     return retval;
 }
 
+void dtkAbstractProcess::cancel (void)
+{
+    onCanceled ();
+    emit canceled();
+}
+
 int dtkAbstractProcess::update(void)
 {
     DTK_DEFAULT_IMPLEMENTATION;
 
     return DTK_FAILURE;
+}
+
+void dtkAbstractProcess::onCanceled (void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;  
 }
 
 bool dtkAbstractProcess::read(const QString& file)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb  7 10:09:35 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  7 10:15:06 2011 (+0100)
+ * Last-Updated: Mon Feb  7 13:33:39 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 3
+ *     Update #: 4
  */
 
 /* Commentary: 
@@ -63,9 +63,6 @@ public:
 #endif
 
     QUrl url;
-
-public:
-    dtkAbstractView *view;
 
 public:
     dtkVrFlystickRecognizer *q;

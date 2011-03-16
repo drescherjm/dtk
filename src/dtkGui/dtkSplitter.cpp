@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Oct  7 23:24:59 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 15 18:01:54 2011 (+0100)
+ * Last-Updated: Tue Mar 15 18:27:35 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 82
+ *     Update #: 85
  */
 
 /* Commentary: 
@@ -62,7 +62,7 @@ void dtkSplitterHandle::paintEvent(QPaintEvent *event)
         gradientStop = QColor(223, 223, 223);
     } else {
         topColor = QColor(60, 60, 60);
-        bottomColor = QColor(35, 35, 35);
+        bottomColor = QColor(40, 40, 40);
         gradientStart = QColor(48, 48, 48);
         gradientStop = QColor(28, 28, 28);
     }
@@ -85,7 +85,8 @@ void dtkSplitterHandle::paintEvent(QPaintEvent *event)
         if(!m_hud)
             return;
 
-        painter.setBrush(linearGrad);
+        painter.setPen(topColor);
+        painter.setBrush(topColor);
         painter.drawEllipse(QRect(event->rect().width()/2-1, this->sizeHint().height()/2 - 2, 4, 4));
 
     } else {

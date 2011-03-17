@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Mar 16 17:24:53 2011 (+0100)
+ * Last-Updated: Thu Mar 17 17:33:50 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 1700
+ *     Update #: 1786
  */
 
 /* Commentary: 
@@ -1239,13 +1239,27 @@ void dtkComposerNode::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
 
-    if (event->buttons() & Qt::LeftButton && !d->drag_point.isNull()) {
+    if (event->buttons() & Qt::LeftButton && !d->drag_point.isNull()) { 
+
+        QPointF br = this->mapRectToScene(this->boundingRect()).bottomRight();
+        QRectF corner(br.x() - 20, br.y() - 20, 20, 20);
+
+        if (!corner.contains(event->lastScenePos()))
+            return;
         
-        QPointF delta = QPointF(event->scenePos() - d->drag_point);
+        QPointF delta = QPointF(event->scenePos() - d->drag_point); 
+
+        qreal original_width  =  this->boundingRect().width();
+        qreal original_height = this->boundingRect().height();
 
         if(dtkComposerNodeControl *control = dynamic_cast<dtkComposerNodeControl *>(this)) {
+            
             control->resize(delta);
-            d->drag_point = event->scenePos();
+            
+            if (qAbs(original_height - this->boundingRect().height()) < 0.1 || qAbs(original_width - this->boundingRect().width()) < 0.1)
+                d->drag_point = this->mapRectToScene(this->boundingRect()).bottomRight();
+            else
+                d->drag_point = event->scenePos();
         }
 
         event->accept();

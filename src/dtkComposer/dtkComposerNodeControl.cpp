@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 17 13:26:47 2011 (+0100)
+ * Last-Updated: Thu Mar 17 14:16:48 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 418
+ *     Update #: 420
  */
 
 /* Commentary: 
@@ -152,8 +152,6 @@ void dtkComposerNodeControl::layout(void)
 {
     dtkComposerNode::layout();
 
-    qDebug() << DTK_PRETTY_FUNCTION;
-
     if (d->dirty) {
         this->resize();
         d->dirty = false;
@@ -244,10 +242,6 @@ void dtkComposerNodeControl::resize(const QPointF& delta)
 
 void dtkComposerNodeControl::resize(qreal dw, qreal dh)
 {
-    //static QPoint cursor_pos;
-
-    //cursor_pos = QCursor::pos();
-
     qreal dw_min =  this->minimalBoundingRect().width() -  this->boundingRect().width();
     qreal dh_min = this->minimalBoundingRect().height() - this->boundingRect().height();
 
@@ -258,9 +252,6 @@ void dtkComposerNodeControl::resize(qreal dw, qreal dh)
 
     foreach(dtkComposerNodeControlBlock *block, d->blocks)
         block->adjustChildNodes(dw, dh / d->blocks.count());
-
-    //if(true)
-    //    QCursor::setPos(cursor_pos - QPoint(dw, dh));
 }
 
 void dtkComposerNodeControl::resize(void)

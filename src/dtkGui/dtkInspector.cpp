@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Jan 31 11:09:59 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 14 14:47:02 2011 (+0100)
+ * Last-Updated: Wed Mar 16 22:09:47 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 100
+ *     Update #: 120
  */
 
 /* Commentary: 
@@ -59,7 +59,7 @@ dtkInspector::dtkInspector(QWidget *parent) : QDialog(parent), d(new dtkInspecto
     this->setAttribute(Qt::WA_TranslucentBackground);
 #endif
     this->setStyleSheet(dtkReadFile(":dtkGui/dtkInspector.qss"));
-    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+    this->setWindowFlags(Qt::Tool | Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
     this->setWindowOpacity(0.95);
 
     connect(d->title_bar, SIGNAL(closed()), this, SLOT(close()));

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jul  6 16:57:24 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Mar 16 10:49:17 2011 (+0100)
+ * Last-Updated: Wed Mar 16 10:55:40 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 127
+ *     Update #: 129
  */
 
 /* Commentary: 
@@ -417,7 +417,7 @@ void dtkPrintNumber(float f, int32_t offset)
     (*((int32_t*)&f)) += offset;
 
 #if !defined(__APPLE__)
-    printf("%+1.8g, 0x%08lX, %d\n", f, *(int32_t*)&f, *(int32_t*)&f);
+    printf("%+1.8g, 0x%08lx, %d\n", f, *(int32_t*)&f, *(int32_t*)&f);
 #else
     printf("%+1.8g, %d, %d\n", f, *(int32_t*)&f, *(int32_t*)&f);
 #endif
@@ -428,7 +428,7 @@ void dtkPrintNumber(double f, int64_t offset)
     (*((int64_t*)&f)) += offset;
 
 #if !defined(__APPLE__)
-    printf("%+1.8g, 0x%08lX, %lld\n", f, *(int64_t*)&f, *(int64_t*)&f);
+    printf("%+1.8g, 0x%016llx, %lld\n", f, *(int64_t*)&f, *(int64_t*)&f);
 #else
     printf("%+1.8g, %lld, %lld\n", f, *(int64_t*)&f, *(int64_t*)&f);
 #endif

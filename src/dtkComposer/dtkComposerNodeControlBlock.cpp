@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 16 17:33:05 2011 (+0100)
+ * Last-Updated: Thu Mar 17 13:04:56 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 517
+ *     Update #: 532
  */
 
 /* Commentary: 
@@ -436,6 +436,31 @@ dtkComposerNodeProperty *dtkComposerNodeControlBlock::addOutputProperty(QString 
     d->output_properties << property;
 
     return property;
+}
+
+void dtkComposerNodeControlBlock::adjustChildNodes(qreal dw, qreal dh)
+{
+    if (dw > 0 && dh > 0) {
+        qreal scaling_factor = 0.5;
+
+        qreal dx;
+        qreal dy;
+        qreal width;
+        qreal height;
+        foreach(dtkComposerNode *child, this->nodes()) {
+            width  = qAbs(child->mapRectToParent(child->boundingRect()).left() - this->boundingRect().left());
+            height = qAbs( child->mapRectToParent(child->boundingRect()).top() -  this->boundingRect().top());
+
+            qDebug() << child->mapRectToParent(child->boundingRect()).left() << child->mapRectToParent(child->boundingRect()).top() << this->boundingRect().left() << this->boundingRect().top();
+            qDebug() << child->pos().x() << child->pos().y() << this->pos().x() << this->pos().y();
+            qDebug() << width << height;
+
+            dx = scaling_factor * dw *  width /  this->boundingRect().width();
+            dy = scaling_factor * dh * height / this->boundingRect().height();
+
+            child->setPos(child->pos().x() + dx, child->pos().y() + dy);
+        }
+    }
 }
 
 QRectF dtkComposerNodeControlBlock::minimalBoundingRect(void)

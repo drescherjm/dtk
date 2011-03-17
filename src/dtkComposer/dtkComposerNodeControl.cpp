@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 17 10:52:12 2011 (+0100)
+ * Last-Updated: Thu Mar 17 13:01:52 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 403
+ *     Update #: 414
  */
 
 /* Commentary: 
@@ -39,8 +39,7 @@ public:
 public:
     QColor color;
 
-    //qreal min_height;
-    //qreal min_width;
+    bool dirty;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -62,6 +61,8 @@ dtkComposerNodeControl::dtkComposerNodeControl(dtkComposerNode *parent) : dtkCom
     this->setResizable(true);
     this->setZValue(-2000);
     this->setSize(400, 400);
+
+    d->dirty = false;
 }
 
 dtkComposerNodeControl::~dtkComposerNodeControl(void)
@@ -86,6 +87,8 @@ dtkComposerNodeControlBlock *dtkComposerNodeControl::addBlock(const QString& tit
     
     d->blocks << block;
 
+    d->dirty = true;
+
     this->layout();
 
     return block;
@@ -101,6 +104,7 @@ int dtkComposerNodeControl::removeBlock(dtkComposerNodeControlBlock *block, bool
 
         if (clean) {
             delete block;
+            d->dirty = true;
             this->layout();
         }
     }
@@ -148,7 +152,12 @@ void dtkComposerNodeControl::layout(void)
 {
     dtkComposerNode::layout();
 
-    this->resize();
+    qDebug() << DTK_PRETTY_FUNCTION;
+
+    if (d->dirty) {
+        this->resize();
+        d->dirty = false;
+    }
 
     for(int i = 0; i < d->blocks.count(); i++) {
 
@@ -242,6 +251,9 @@ void dtkComposerNodeControl::resize(qreal dw, qreal dh)
     dh = dh > dh_min ? dh : dh_min;
 
     this->setSize(this->boundingRect().width() + dw, this->boundingRect().height() + dh);
+
+    foreach(dtkComposerNodeControlBlock *block, d->blocks)
+        block->adjustChildNodes(dw, dh / d->blocks.count());
 }
 
 void dtkComposerNodeControl::resize(void)

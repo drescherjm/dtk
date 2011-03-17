@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:46:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 15 15:45:19 2011 (+0100)
+ * Last-Updated: Thu Mar 17 11:02:06 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 64
+ *     Update #: 65
  */
 
 /* Commentary: 
@@ -66,6 +66,7 @@ public:
     dtkComposerNodeProperty *addOutputProperty(QString name, dtkComposerNode *parent = 0);
 
 public:
+    void adjustChildNodes(qreal dw, qreal dh);
     QRectF minimalBoundingRect(void);
     
 public:

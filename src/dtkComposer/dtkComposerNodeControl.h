@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:47:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 16 17:35:56 2011 (+0100)
+ * Last-Updated: Thu Mar 17 09:10:19 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 83
+ *     Update #: 84
  */
 
 /* Commentary: 
@@ -53,6 +53,7 @@ public:
     void resize(const QRectF& rect);
     void resize(const QPointF& delta);
     void resize(qreal dw, qreal dh);
+    void resize(void);
 
     QRectF minimalBoundingRect(void);
 

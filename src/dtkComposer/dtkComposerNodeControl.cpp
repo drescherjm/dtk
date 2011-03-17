@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 16 17:23:03 2011 (+0100)
+ * Last-Updated: Thu Mar 17 10:52:12 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 365
+ *     Update #: 403
  */
 
 /* Commentary: 
@@ -148,12 +148,14 @@ void dtkComposerNodeControl::layout(void)
 {
     dtkComposerNode::layout();
 
+    this->resize();
+
     for(int i = 0; i < d->blocks.count(); i++) {
 
         d->blocks.at(i)->setRect(QRectF(this->boundingRect().x(),
                                         this->boundingRect().y() + 23 + i * ((this->boundingRect().height() - 46) / d->blocks.count()),
                                         this->boundingRect().width(),
-                                       (this->boundingRect().height() - 46) / d->blocks.count()));
+                                        (this->boundingRect().height() - 46) / d->blocks.count()));
 
         for(int j = 0; j < d->blocks.at(i)->inputProperties().count(); j++) {
 
@@ -220,10 +222,10 @@ void dtkComposerNodeControl::paint(QPainter *painter, const QStyleOptionGraphics
 
 void dtkComposerNodeControl::resize(const QRectF& rect)
 {
-    qreal height = rect.height() > this->minimalBoundingRect().height() ? rect.height() : this->minimalBoundingRect().height();
-    qreal width  =  rect.width() >  this->minimalBoundingRect().width() ?  rect.width() :  this->minimalBoundingRect().width();
+    qreal dw =  rect.width() -  this->boundingRect().width();
+    qreal dh = rect.height() - this->boundingRect().height();
 
-    this->setSize(width, height);
+    this->resize(dw, dh);
 }
 
 void dtkComposerNodeControl::resize(const QPointF& delta)
@@ -233,10 +235,31 @@ void dtkComposerNodeControl::resize(const QPointF& delta)
 
 void dtkComposerNodeControl::resize(qreal dw, qreal dh)
 {
-    dw =  dw > (this->minimalBoundingRect().width() -  this->boundingRect().width()) ? dw : (this->minimalBoundingRect().width() -  this->boundingRect().width());
-    dh = dh > (this->minimalBoundingRect().height() - this->boundingRect().height()) ? dh : (this->minimalBoundingRect().height() - this->boundingRect().height());
+    qreal dw_min =  this->minimalBoundingRect().width() -  this->boundingRect().width();
+    qreal dh_min = this->minimalBoundingRect().height() - this->boundingRect().height();
+
+    dw = dw > dw_min ? dw : dw_min;
+    dh = dh > dh_min ? dh : dh_min;
 
     this->setSize(this->boundingRect().width() + dw, this->boundingRect().height() + dh);
+}
+
+void dtkComposerNodeControl::resize(void)
+{
+    if (this->boundingRect().height() < this->minimalBoundingRect().height() && this->boundingRect().width() < this->minimalBoundingRect().width()) {
+
+        this->setPos(this->pos().x(), this->pos().y() - (this->minimalBoundingRect().height() - this->boundingRect().height()));
+        this->setSize(this->minimalBoundingRect().width(), this->minimalBoundingRect().height());
+
+    } else if (this->boundingRect().height() < this->minimalBoundingRect().height()) {
+
+        this->setPos(this->pos().x(), this->pos().y() - (this->minimalBoundingRect().height() - this->boundingRect().height()));
+        this->setSize(this->boundingRect().width(), this->minimalBoundingRect().height());
+
+    } else if (this->boundingRect().width() < this->minimalBoundingRect().width()) {
+
+        this->setSize(this->minimalBoundingRect().width(), this->boundingRect().height());
+    }
 }
 
 QRectF dtkComposerNodeControl::minimalBoundingRect(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 17 14:16:48 2011 (+0100)
+ * Last-Updated: Fri Mar 18 17:14:34 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 420
+ *     Update #: 437
  */
 
 /* Commentary: 
@@ -51,9 +51,6 @@ dtkComposerNodeControl::dtkComposerNodeControl(dtkComposerNode *parent) : dtkCom
     d->color = Qt::transparent;
 
     d->property_input = new dtkComposerNodeProperty("condition", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, this);
-    d->property_input->setRect(QRectF(this->boundingRect().left() + 5, this->boundingRect().top() + 5, 10, 10));
-    d->property_input->setPos(QPointF(d->property_input->pos().x(), this->boundingRect().top()));
-
     this->addInputProperty(d->property_input);
 
     this->setAcceptHoverEvents(true);
@@ -100,11 +97,12 @@ int dtkComposerNodeControl::removeBlock(dtkComposerNodeControlBlock *block, bool
 
     if (d->blocks.contains(block)) {
 
-        removed_blocks = d->blocks.removeAll(block);        
+        removed_blocks = d->blocks.removeAll(block); 
+        
+        d->dirty = true;       
 
         if (clean) {
             delete block;
-            d->dirty = true;
             this->layout();
         }
     }
@@ -152,10 +150,13 @@ void dtkComposerNodeControl::layout(void)
 {
     dtkComposerNode::layout();
 
-    if (d->dirty) {
+    d->property_input->setRect(QRectF(this->boundingRect().left() + this->nodeRadius(), 
+                                      this->boundingRect().top() + this->nodeRadius(), 
+                                      2 * + this->nodeRadius(), 
+                                      2 * + this->nodeRadius()));
+
+    if (d->dirty)
         this->resize();
-        d->dirty = false;
-    }
 
     for(int i = 0; i < d->blocks.count(); i++) {
 
@@ -270,6 +271,8 @@ void dtkComposerNodeControl::resize(void)
 
         this->setSize(this->minimalBoundingRect().width(), this->boundingRect().height());
     }
+
+    d->dirty = false;
 }
 
 QRectF dtkComposerNodeControl::minimalBoundingRect(void)

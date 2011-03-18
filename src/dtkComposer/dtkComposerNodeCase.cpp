@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 14 12:51:06 2011 (+0100)
+ * Last-Updated: Fri Mar 18 16:32:46 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 269
+ *     Update #: 271
  */
 
 /* Commentary: 
@@ -133,6 +133,7 @@ dtkComposerNodeCase::dtkComposerNodeCase(dtkComposerNode *parent) : dtkComposerN
     d->add_button->setZValue(this->zValue() + 1);
 
     d->block_default = this->addBlock("default");
+    d->block_default->setInteractive(true);
 
     this->setColor(QColor("#922891"));
     this->setInputPropertyName("variable");
@@ -153,6 +154,8 @@ dtkComposerNodeControlBlock *dtkComposerNodeCase::addBlock(const QString& title)
 
     if(title == "default")
         return block;
+
+    block->setInteractive(true);
 
     block->setRemoveButtonVisible(true);
 

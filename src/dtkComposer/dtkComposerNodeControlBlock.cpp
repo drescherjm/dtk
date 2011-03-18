@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 16 17:33:05 2011 (+0100)
+ * Last-Updated: Thu Mar 17 13:35:04 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 517
+ *     Update #: 542
  */
 
 /* Commentary: 
@@ -438,6 +438,24 @@ dtkComposerNodeProperty *dtkComposerNodeControlBlock::addOutputProperty(QString 
     return property;
 }
 
+void dtkComposerNodeControlBlock::adjustChildNodes(qreal dw, qreal dh)
+{
+    qreal scaling_factor = 0.5;
+    qreal dx;
+    qreal dy;
+    qreal width;
+    qreal height;
+
+    foreach(dtkComposerNode *child, this->nodes()) {
+        width  = qAbs(child->mapRectToParent(child->boundingRect()).left() - this->boundingRect().left());
+        height = qAbs( child->mapRectToParent(child->boundingRect()).top() -  this->boundingRect().top());        
+        dx = scaling_factor * dw *  width /  this->boundingRect().width();
+        dy = scaling_factor * dh * height / this->boundingRect().height();
+        
+        child->setPos(child->pos().x() + dx, child->pos().y() + dy);
+    }
+}
+
 QRectF dtkComposerNodeControlBlock::minimalBoundingRect(void)
 {
     qreal min_height = 75;
@@ -446,8 +464,8 @@ QRectF dtkComposerNodeControlBlock::minimalBoundingRect(void)
     if (this->nodes().count()) {
 
         QRectF child_rect = this->nodes().first()->mapRectToParent(this->nodes().first()->boundingRect());
-        qreal top  = child_rect.top();
-        qreal left = child_rect.left();
+        //qreal top  = child_rect.top();
+        //qreal left = child_rect.left();
         qreal bottom = child_rect.bottom();
         qreal right  = child_rect.right();
 
@@ -455,14 +473,17 @@ QRectF dtkComposerNodeControlBlock::minimalBoundingRect(void)
 
             child_rect = child->mapRectToParent(child->boundingRect());
 
-            top = top < child_rect.top() ? top : child_rect.top();
-            left = left < child_rect.left() ? left : child_rect.left();
+            //top = top < child_rect.top() ? top : child_rect.top();
+            //left = left < child_rect.left() ? left : child_rect.left();
             bottom = bottom > child_rect.bottom() ? bottom : child_rect.bottom();
             right = right > child_rect.right() ? right : child_rect.right();
         }
 
-        min_height = (1.1 * qAbs(top - bottom)) > min_height ? (1.1 * qAbs(top - bottom)) : min_height;
-        min_width  = (1.1 * qAbs(right - left)) >  min_width ? (1.1 * qAbs(right - left)) :  min_width;
+        //min_height = (1.1 * qAbs(top - bottom)) > min_height ? (1.1 * qAbs(top - bottom)) : min_height;
+        //min_width  = (1.1 * qAbs(right - left)) >  min_width ? (1.1 * qAbs(right - left)) :  min_width;
+
+        min_height = (1.1 * qAbs(this->rect().top() - bottom)) > min_height ? (1.1 * qAbs(this->rect().top() - bottom)) : min_height;
+        min_width  = (1.1 * qAbs(right - this->rect().left())) >  min_width ? (1.1 * qAbs(right - this->rect().left())) :  min_width;
     }
     return QRectF(this->rect().top(), this->rect().left(), min_width, min_height);
 }

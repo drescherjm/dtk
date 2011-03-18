@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 18 16:17:53 2011 (+0100)
+ * Last-Updated: Fri Mar 18 17:14:34 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 425
+ *     Update #: 437
  */
 
 /* Commentary: 
@@ -51,9 +51,6 @@ dtkComposerNodeControl::dtkComposerNodeControl(dtkComposerNode *parent) : dtkCom
     d->color = Qt::transparent;
 
     d->property_input = new dtkComposerNodeProperty("condition", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, this);
-    d->property_input->setRect(QRectF(this->boundingRect().left() + 5, this->boundingRect().top() + 5, 10, 10));
-    d->property_input->setPos(QPointF(d->property_input->pos().x(), this->boundingRect().top()));
-
     this->addInputProperty(d->property_input);
 
     this->setAcceptHoverEvents(true);
@@ -152,6 +149,11 @@ dtkComposerNodeProperty *dtkComposerNodeControl::outputProperty(const QString& b
 void dtkComposerNodeControl::layout(void)
 {
     dtkComposerNode::layout();
+
+    d->property_input->setRect(QRectF(this->boundingRect().left() + this->nodeRadius(), 
+                                      this->boundingRect().top() + this->nodeRadius(), 
+                                      2 * + this->nodeRadius(), 
+                                      2 * + this->nodeRadius()));
 
     if (d->dirty)
         this->resize();

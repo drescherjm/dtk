@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 18 16:12:12 2011 (+0100)
+ * Last-Updated: Fri Mar 18 16:33:15 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 557
+ *     Update #: 558
  */
 
 /* Commentary: 
@@ -526,8 +526,6 @@ void dtkComposerNodeControlBlock::hoverEnterEvent(QGraphicsSceneHoverEvent *even
 void dtkComposerNodeControlBlock::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     DTK_UNUSED(event);
-
-    qDebug() << DTK_PRETTY_FUNCTION;
 
     if (d->button)
         d->button->setVisible(false);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar 17 17:33:50 2011 (+0100)
+ * Last-Updated: Fri Mar 18 16:15:16 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 1786
+ *     Update #: 1871
  */
 
 /* Commentary: 
@@ -1218,8 +1218,8 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 
         QPainterPath path;
         path.moveTo(this->boundingRect().bottomRight() + QPointF(0.5, 0.5));
-        path.lineTo(this->boundingRect().bottomRight() + QPointF(0.5, 0.5) + QPointF(-12, 0));
-        path.lineTo(this->boundingRect().bottomRight() + QPointF(0.5, 0.5) + QPointF(0, -12));
+        path.lineTo(this->boundingRect().bottomRight() + QPointF(0.5, 0.5) + QPointF(-15, 0));
+        path.lineTo(this->boundingRect().bottomRight() + QPointF(0.5, 0.5) + QPointF(0, -15));
         path.lineTo(this->boundingRect().bottomRight() + QPointF(0.5, 0.5));
         
         painter->setPen(Qt::NoPen);
@@ -1241,30 +1241,32 @@ void dtkComposerNode::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     if (event->buttons() & Qt::LeftButton && !d->drag_point.isNull()) { 
 
-        QPointF br = this->mapRectToScene(this->boundingRect()).bottomRight();
-        QRectF corner(br.x() - 20, br.y() - 20, 20, 20);
-
-        if (!corner.contains(event->lastScenePos()))
-            return;
-        
-        QPointF delta = QPointF(event->scenePos() - d->drag_point); 
-
-        qreal original_width  =  this->boundingRect().width();
-        qreal original_height = this->boundingRect().height();
-
         if(dtkComposerNodeControl *control = dynamic_cast<dtkComposerNodeControl *>(this)) {
+
+            QPointF br = this->mapRectToScene(this->boundingRect()).bottomRight();
+            QRectF corner(br.x() - 23, br.y() - 23, 23, 23);
+
+            QPointF delta;
+
+            if (!corner.contains(event->lastScenePos()))
+                delta = QPointF(0, 0);
+            else
+                delta = QPointF(event->scenePos() - d->drag_point);
+
+            qreal original_width  =  control->boundingRect().width();
+            qreal original_height = control->boundingRect().height();
             
             control->resize(delta);
             
-            if (qAbs(original_height - this->boundingRect().height()) < 0.1 || qAbs(original_width - this->boundingRect().width()) < 0.1)
+            if (qAbs(original_height - this->boundingRect().height()) < 1. || qAbs(original_width - this->boundingRect().width()) < 1.)
                 d->drag_point = this->mapRectToScene(this->boundingRect()).bottomRight();
             else
                 d->drag_point = event->scenePos();
+
+            event->accept();
+            
+            QGraphicsItem::update();
         }
-
-        event->accept();
-
-        QGraphicsItem::update();
 
         return;
     }
@@ -1315,12 +1317,14 @@ void dtkComposerNode::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     // -- Handling of resizing
 
-    QPointF br = this->boundingRect().bottomRight();
+    QPointF br = this->mapRectToScene(this->boundingRect()).bottomRight();
 
-    QRectF corner(br.x() - 16, br.y() - 16, 16, 16);
+    QRectF corner(br.x() - 23, br.y() - 23, 23, 23);
 
-    if (d->kind == Control && event->button() & Qt::LeftButton && corner.contains(event->pos())) {
-        d->drag_point = event->scenePos();
+    if (d->kind == Control && event->button() & Qt::LeftButton && corner.contains(event->scenePos())) {
+
+        //d->drag_point = event->scenePos();
+        d->drag_point = this->mapRectToScene(this->boundingRect()).bottomRight();
 
         event->accept();
 
@@ -1341,6 +1345,7 @@ void dtkComposerNode::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     if (event->button() & Qt::LeftButton && !d->drag_point.isNull()) {
         d->drag_point = QPointF(0, 0);
         event->accept();
+
         QGraphicsItem::mouseReleaseEvent(event);
         return;
     }

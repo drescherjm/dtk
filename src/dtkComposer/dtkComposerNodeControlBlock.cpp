@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 17 13:35:04 2011 (+0100)
+ * Last-Updated: Fri Mar 18 16:12:12 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 542
+ *     Update #: 557
  */
 
 /* Commentary: 
@@ -321,15 +321,18 @@ void dtkComposerNodeControlBlock::setInteractive(bool interactive)
 
     if(d->interactive && !d->button) {
         d->button = new dtkComposerNodeControlBlockButton(this);
+        d->button->setZValue(this->zValue() - 1);
         d->button->setVisible(false);
     }
 
     if(d->interactive && !d->label) {
         d->label = new dtkComposerNodeControlBlockLabel(this);
+        d->label->setZValue(this->zValue() - 1);
         d->label->setVisible(false);
 
-        if(!d->button->label)
-            d->button->label = d->label;
+        if(d->button)
+            if(!d->button->label)
+                d->button->label = d->label;
     }
 
     this->setAcceptHoverEvents(interactive);
@@ -454,6 +457,8 @@ void dtkComposerNodeControlBlock::adjustChildNodes(qreal dw, qreal dh)
         
         child->setPos(child->pos().x() + dx, child->pos().y() + dy);
     }
+
+    this->update();
 }
 
 QRectF dtkComposerNodeControlBlock::minimalBoundingRect(void)
@@ -521,6 +526,8 @@ void dtkComposerNodeControlBlock::hoverEnterEvent(QGraphicsSceneHoverEvent *even
 void dtkComposerNodeControlBlock::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     DTK_UNUSED(event);
+
+    qDebug() << DTK_PRETTY_FUNCTION;
 
     if (d->button)
         d->button->setVisible(false);

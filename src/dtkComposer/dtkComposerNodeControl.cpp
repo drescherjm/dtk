@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 17 14:16:48 2011 (+0100)
+ * Last-Updated: Fri Mar 18 16:17:53 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 420
+ *     Update #: 425
  */
 
 /* Commentary: 
@@ -100,11 +100,12 @@ int dtkComposerNodeControl::removeBlock(dtkComposerNodeControlBlock *block, bool
 
     if (d->blocks.contains(block)) {
 
-        removed_blocks = d->blocks.removeAll(block);        
+        removed_blocks = d->blocks.removeAll(block); 
+        
+        d->dirty = true;       
 
         if (clean) {
             delete block;
-            d->dirty = true;
             this->layout();
         }
     }
@@ -152,10 +153,8 @@ void dtkComposerNodeControl::layout(void)
 {
     dtkComposerNode::layout();
 
-    if (d->dirty) {
+    if (d->dirty)
         this->resize();
-        d->dirty = false;
-    }
 
     for(int i = 0; i < d->blocks.count(); i++) {
 
@@ -270,6 +269,8 @@ void dtkComposerNodeControl::resize(void)
 
         this->setSize(this->minimalBoundingRect().width(), this->boundingRect().height());
     }
+
+    d->dirty = false;
 }
 
 QRectF dtkComposerNodeControl::minimalBoundingRect(void)

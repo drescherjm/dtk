@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Mar 14 16:24:01 2011 (+0100)
+## Last-Updated: Fri Mar 18 15:43:15 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 163
+##     Update #: 172
 ######################################################################
 ## 
 ### Commentary: 
@@ -27,6 +27,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkAboutBox.h
   dtkAddressBar.h
   dtkAnchoredBar.h
+  dtkColorButton.h
+  dtkColorGrid.h
   dtkFinder.h
   dtkGuiExport.h
   dtkInsetMenu.h
@@ -43,6 +45,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkInterpreter.h
   dtkInterpreterPreferencesWidget.h
   dtkNavigationBar.h
+  dtkPopup.h
   dtkPreferencesWidget.h
   dtkProgressIndicator.h
   dtkRecentFilesMenu.h
@@ -64,6 +67,8 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkAboutBox.h
   dtkAddressBar.h
   dtkAnchoredBar.h
+  dtkColorButton.h
+  dtkColorGrid.h
   dtkFinder.h
   dtkInsetMenu.h
   dtkInspector.h
@@ -79,6 +84,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkInterpreter.h
   dtkInterpreterPreferencesWidget.h
   dtkNavigationBar.h
+  dtkPopup.h
   dtkPreferencesWidget.h
   dtkProgressIndicator.h
   dtkRecentFilesMenu.h
@@ -97,6 +103,10 @@ set(${PROJECT_NAME}_SOURCES
   dtkAboutBox.cpp
   dtkAddressBar.cpp
   dtkAnchoredBar.cpp
+
+  dtkColorButton.cpp
+  dtkColorGrid.cpp
+
   dtkFinder.cpp
   dtkInsetMenu.cpp
 
@@ -113,6 +123,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkInterpreter.cpp
   dtkInterpreterPreferencesWidget.cpp
   dtkNavigationBar.cpp
+  dtkPopup.cpp
   dtkPreferencesWidget.cpp
   dtkProgressIndicator.cpp
   dtkRecentFilesMenu.cpp

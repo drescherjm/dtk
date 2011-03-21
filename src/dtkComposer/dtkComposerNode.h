@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Mar  4 16:03:37 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 237
+ * Last-Updated: Tue Mar 15 11:15:54 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 240
  */
 
 /* Commentary: 
@@ -73,6 +73,9 @@ public:
     void addGhostInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
     void addGhostOutputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
 
+    void addInputRelayEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void addOutputRelayEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+
     void removeInputEdge(dtkComposerEdge *edge);
     void removeOutputEdge(dtkComposerEdge *edge);
     void removeAllEdges(void);
@@ -80,6 +83,10 @@ public:
     void removeGhostInputEdge(dtkComposerEdge *edge);
     void removeGhostOutputEdge(dtkComposerEdge *edge);
     void removeAllGhostEdges(void);
+
+    void removeInputRelayEdge(dtkComposerEdge *edge);
+    void removeOutputRelayEdge(dtkComposerEdge *edge);
+    void removeAllRelayEdges(void);
 
     void addAction(const QString& text, const QObject *receiver, const char *slot);
 
@@ -99,6 +106,9 @@ public:
 
     QList<dtkComposerEdge *> inputGhostEdges(void);
     QList<dtkComposerEdge *> outputGhostEdges(void);
+
+    QList<dtkComposerEdge *> inputRelayEdges(void);
+    QList<dtkComposerEdge *> outputRelayEdges(void);
 
     QList<dtkComposerNode *> inputNodes(void);
     QList<dtkComposerNode *> outputNodes(void);

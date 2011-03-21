@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Mar  7 13:36:49 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 111
+ * Last-Updated: Tue Mar 15 10:56:47 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 123
  */
 
 /* Commentary: 
@@ -52,6 +52,13 @@ public:
         Multiple
     };
 
+    enum Behavior {
+        None,
+        AsRelay,
+        AsInput,
+        AsOutput
+    };
+
      dtkComposerNodeProperty(QString name, Type type, Multiplicity multiplicity, dtkComposerNode *parent);
     ~dtkComposerNodeProperty(void);
 
@@ -66,6 +73,9 @@ public:
 
             Type type(void);
     Multiplicity multiplicity(void);
+        Behavior behavior(void);
+
+    bool contains(const QPointF& point) const;
 
     int count(void);
 
@@ -85,6 +95,8 @@ public:
     void setDisplayed(bool dirty);
 
     void setName(const QString& name);
+
+	void setBehavior(Behavior behavior);
 
     friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNodeProperty& property);
     friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNodeProperty *property);

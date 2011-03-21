@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Mar  7 09:24:11 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar  9 16:37:50 2011 (+0100)
+ * Last-Updated: Wed Mar 16 10:47:15 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 42
+ *     Update #: 48
  */
 
 /* Commentary: 
@@ -289,10 +289,10 @@ void dtkComposerNodeNumberComparator::run(void)
                 d->value = a.toULongLong() < b.toULongLong();
                 break;
             case dtkComposerNodeNumber::Float:
-                d->value = dtkLesserThanUlps(a.value<float>(), b.value<float>(), 10);
+                d->value = dtkLesserThanUlps(a.value<float>(), b.value<float>(), (int32_t)10);
                 break;
             case dtkComposerNodeNumber::Double:
-                d->value = dtkLesserThanUlps(a.toDouble(), b.toDouble(), (long long int)10);
+                d->value = dtkLesserThanUlps(a.toDouble(), b.toDouble(), (int64_t)10);
                 break;
             }
             break;
@@ -314,10 +314,10 @@ void dtkComposerNodeNumberComparator::run(void)
                 d->value = a.toULongLong() <= b.toULongLong();
                 break;
             case dtkComposerNodeNumber::Float:
-                d->value = dtkLesserThanOrAlmostEqualUlps(a.value<float>(), b.value<float>(), 10);
+                d->value = dtkLesserThanOrAlmostEqualUlps(a.value<float>(), b.value<float>(), (int32_t)10);
                 break;
             case dtkComposerNodeNumber::Double:
-                d->value = dtkLesserThanOrAlmostEqualUlps(a.toDouble(), b.toDouble(), (long long int)10);
+                d->value = dtkLesserThanOrAlmostEqualUlps(a.toDouble(), b.toDouble(), (int64_t)10);
                 break;
             }
             break;
@@ -339,10 +339,10 @@ void dtkComposerNodeNumberComparator::run(void)
                 d->value = a.toULongLong() > b.toULongLong();
                 break;
             case dtkComposerNodeNumber::Float:
-                d->value = dtkGreaterThanUlps(a.value<float>(), b.value<float>(), 10);
+                d->value = dtkGreaterThanUlps(a.value<float>(), b.value<float>(), (int32_t)10);
                 break;
             case dtkComposerNodeNumber::Double:
-                d->value = dtkGreaterThanUlps(a.toDouble(), b.toDouble(), (long long int)10);
+                d->value = dtkGreaterThanUlps(a.toDouble(), b.toDouble(), (int64_t)10);
                 break;
             }
             break;
@@ -364,10 +364,10 @@ void dtkComposerNodeNumberComparator::run(void)
                 d->value = a.toULongLong() >= b.toULongLong();
                 break;
             case dtkComposerNodeNumber::Float:
-                d->value = dtkGreaterThanOrAlmostEqualUlps(a.value<float>(), b.value<float>(), 10);
+                d->value = dtkGreaterThanOrAlmostEqualUlps(a.value<float>(), b.value<float>(), (int32_t)10);
                 break;
             case dtkComposerNodeNumber::Double:
-                d->value = dtkGreaterThanOrAlmostEqualUlps(a.toDouble(), b.toDouble(), (long long int)10);
+                d->value = dtkGreaterThanOrAlmostEqualUlps(a.toDouble(), b.toDouble(), (int64_t)10);
                 break;
             }
             break;
@@ -389,10 +389,10 @@ void dtkComposerNodeNumberComparator::run(void)
                 d->value = a.toULongLong() == b.toULongLong();
                 break;
             case dtkComposerNodeNumber::Float:
-                d->value = dtkAlmostEqualUlps(a.value<float>(), b.value<float>(), 10);
+                d->value = dtkAlmostEqualUlps(a.value<float>(), b.value<float>(), (int32_t)10);
                 break;
             case dtkComposerNodeNumber::Double:
-                d->value = dtkAlmostEqualUlps(a.toDouble(), b.toDouble(), (long long int)10);
+                d->value = dtkAlmostEqualUlps(a.toDouble(), b.toDouble(), (int64_t)10);
                 break;
             }
             break;
@@ -414,10 +414,10 @@ void dtkComposerNodeNumberComparator::run(void)
                 d->value = a.toULongLong() != b.toULongLong();
                 break;
             case dtkComposerNodeNumber::Float:
-                d->value = !(dtkAlmostEqualUlps(a.value<float>(), b.value<float>(), 10));
+                d->value = !(dtkAlmostEqualUlps(a.value<float>(), b.value<float>(), (int32_t)10));
                 break;
             case dtkComposerNodeNumber::Double:
-                d->value = !(dtkAlmostEqualUlps(a.toDouble(), b.toDouble(), (long long int)10));
+                d->value = !(dtkAlmostEqualUlps(a.toDouble(), b.toDouble(), (int64_t)10));
                 break;
             }
             break;

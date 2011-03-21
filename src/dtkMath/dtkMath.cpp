@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jul  6 16:57:24 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Mar  9 15:33:28 2011 (+0100)
+ * Last-Updated: Wed Mar 16 10:55:40 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 82
+ *     Update #: 129
  */
 
 /* Commentary: 
@@ -24,6 +24,7 @@
  * 
  */
 
+#include "dtkConfig.h"
 #include "dtkMath.h"
 #include "dtkVector3D.h"
 
@@ -163,12 +164,12 @@ bool dtkAlmostEqualRelativeOrAbsolute(double A, double B, double maxRelativeErro
 /*! 
  *  Fast and simple, but some limitations.
  */
-bool dtkAlmostEqualUlpsSimple(float A, float B, int maxUlps)
+bool dtkAlmostEqualUlpsSimple(float A, float B, int32_t maxUlps)
 {
     if (A == B)
         return true; 
 
-    int intDiff = abs(*(int*)&A - *(int*)&B);
+    int32_t intDiff = abs(*(int32_t*)&A - *(int32_t*)&B);
 
     if (intDiff <= maxUlps)
         return true;
@@ -176,12 +177,12 @@ bool dtkAlmostEqualUlpsSimple(float A, float B, int maxUlps)
     return false;
 }
 
-bool dtkAlmostEqualUlpsSimple(double A, double B, long long int maxUlps)
+bool dtkAlmostEqualUlpsSimple(double A, double B, int64_t maxUlps)
 {
     if (A == B)
         return true; 
 
-    long long int intDiff = abs(*(long long int*)&A - *(long long int*)&B);
+    int64_t intDiff = abs(*(int64_t*)&A - *(int64_t*)&B);
 
     if (intDiff <= maxUlps)
         return true;
@@ -193,40 +194,40 @@ bool dtkAlmostEqualUlpsSimple(double A, double B, long long int maxUlps)
 /*! 
  * 
  */
-bool dtkAlmostEqual2sComplement(float A, float B, int maxUlps)
+bool dtkAlmostEqual2sComplement(float A, float B, int32_t maxUlps)
 {
     if (maxUlps < 0 || maxUlps > 4 * 1024 * 1024)
         return false;
 
-    int aInt = *(int*)&A;
+    int32_t aInt = *(int32_t*)&A;
     if (aInt < 0)
-        aInt = 0x80000000 - aInt;
+        aInt = HIGH_BIT_32 - aInt;
 
-    long long int bInt = *(int*)&B;
+    int32_t bInt = *(int32_t*)&B;
     if (bInt < 0)
-        bInt = 0x80000000 - bInt;
+        bInt = HIGH_BIT_32 - bInt;
 
-    int intDiff = abs(aInt - bInt);
+    int32_t intDiff = abs(aInt - bInt);
     if (intDiff <= maxUlps)
         return true;
 
     return false;
 }
 
-bool dtkAlmostEqual2sComplement(double A, double B, long long int maxUlps)
+bool dtkAlmostEqual2sComplement(double A, double B, int64_t maxUlps)
 {
     if (maxUlps < 0 || maxUlps > 8 * 1024 * 1024)
         return false;
 
-    long long int aInt = *(long long int*)&A;
+    int64_t aInt = *(int64_t*)&A;
     if (aInt < 0)
-        aInt = 0x8000000000000000 - aInt;
+        aInt = HIGH_BIT_64 - aInt;
 
-    long long int bInt = *(long long int*)&B;
+    int64_t bInt = *(int64_t*)&B;
     if (bInt < 0)
-        bInt = 0x8000000000000000 - bInt;
+        bInt = HIGH_BIT_64 - bInt;
 
-    long long int intDiff = abs(aInt - bInt);
+    int64_t intDiff = abs(aInt - bInt);
     if (intDiff <= maxUlps)
         return true;
 
@@ -249,9 +250,9 @@ bool dtkAlmostEqual2sComplement(double A, double B, long long int maxUlps)
  */
 inline bool dtkIsInfinite(float A)
 {
-    const int kInfAsInt = 0x7F800000;
+    const int32_t kInfAsInt = EXP_255_BIT_32;
 
-    if ((*(int*)&A & 0x7FFFFFFF) == kInfAsInt)
+    if ((*(int32_t*)&A & (HIGH_BIT_32 - ONE_BIT_32)) == kInfAsInt)
         return true;
 
     return false;
@@ -259,9 +260,9 @@ inline bool dtkIsInfinite(float A)
 
 inline bool dtkIsInfinite(double A)
 {
-    const long long int kInfAsInt = 0x7F80000000000000;
+    const int64_t kInfAsInt = EXP_255_BIT_64;
 
-    if ((*(long long int*)&A & 0x7FFFFFFFFFFFFFFF) == kInfAsInt)
+    if ((*(int64_t*)&A & (HIGH_BIT_64 - ONE_BIT_64)) == kInfAsInt)
         return true;
 
     return false;
@@ -274,10 +275,10 @@ inline bool dtkIsInfinite(double A)
  */
 inline bool dtkIsNan(float A)
 {
-    int exp = *(int*)&A & 0x7F800000;
-    int mantissa = *(int*)&A & 0x007FFFFF;
+    int32_t exp = *(int32_t*)&A & EXP_255_BIT_32;
+    int32_t mantissa = *(int32_t*)&A & ((1u<<23)-1u); //0x007FFFFF
 
-    if (exp == 0x7F800000 && mantissa != 0)
+    if (exp == EXP_255_BIT_32 && mantissa != 0)
         return true;
 
     return false;
@@ -285,10 +286,10 @@ inline bool dtkIsNan(float A)
 
 inline bool dtkIsNan(double A)
 {
-    long long int exp = *(long long int*)&A & 0x7F80000000000000;
-    long long int mantissa = *(long long int*)&A & 0x007FFFFFFFFFFFFF;
+    int64_t exp = *(int64_t*)&A & EXP_255_BIT_64;
+    int64_t mantissa = *(int64_t*)&A & ((1ull<<55)-1ull); //0x007FFFFFFFFFFFFF
 
-    if (exp == 0x7F80000000000000 && mantissa != 0)
+    if (exp == EXP_255_BIT_64 && mantissa != 0)
         return true;
 
     return false;
@@ -298,14 +299,14 @@ inline bool dtkIsNan(double A)
 /*! 
  *  The sign bit of a number is the high bit.
  */
-inline int dtkSign(float A)
+inline int32_t dtkSign(float A)
 {
-    return (*(int*)&A) & 0x80000000;
+    return (*(int32_t*)&A) & HIGH_BIT_32;
 }
 
-inline long long int dtkSign(double A)
+inline int64_t dtkSign(double A)
 {
-    return (*(long long int*)&A) & 0x8000000000000000;
+    return (*(int64_t*)&A) & HIGH_BIT_64;
 }
 
 //! Final version of the AlmostEqualUlps function.
@@ -334,7 +335,7 @@ inline long long int dtkSign(double A)
  *  other.
  *
  */
-bool dtkAlmostEqualUlps(float A, float B, int maxUlps)
+bool dtkAlmostEqualUlps(float A, float B, int32_t maxUlps)
 {
 #ifdef  INFINITYCHECK
     if (dtkIsInfinite(A) || dtkIsInfinite(B))
@@ -351,27 +352,27 @@ bool dtkAlmostEqualUlps(float A, float B, int maxUlps)
         return A == B;
 #endif
 
-    int aInt = *(int*)&A;
+    int32_t aInt = *(int32_t*)&A;
 
     // Make aInt lexicographically ordered as a twos-complement int
     if (aInt < 0)
-        aInt = 0x80000000 - aInt;
+        aInt = HIGH_BIT_32 - aInt;
 
     // Make bInt lexicographically ordered as a twos-complement int
-    int bInt = *(int*)&B;
+    int32_t bInt = *(int32_t*)&B;
     if (bInt < 0)
-        bInt = 0x80000000 - bInt;
+        bInt = HIGH_BIT_32 - bInt;
 
     // Now we can compare aInt and bInt to find out how far apart A and B
     // are.
-    int intDiff = abs(aInt - bInt);
+    int32_t intDiff = abs(aInt - bInt);
     if (intDiff <= maxUlps)
         return true;
 
     return false;
 }
 
-bool dtkAlmostEqualUlps(double A, double B, long long int maxUlps)
+bool dtkAlmostEqualUlps(double A, double B, int64_t maxUlps)
 {
 #ifdef  INFINITYCHECK
     if (dtkIsInfinite(A) || dtkIsInfinite(B))
@@ -388,16 +389,15 @@ bool dtkAlmostEqualUlps(double A, double B, long long int maxUlps)
         return A == B;
 #endif
 
-    long long int aInt = *(long long int*)&A;
-
+    int64_t aInt = *(int64_t*)&A;
     if (aInt < 0)
-        aInt = 0x8000000000000000 - aInt;
+        aInt = HIGH_BIT_64 - aInt;
 
-    long long int bInt = *(long long int*)&B;
+    int64_t bInt = *(int64_t*)&B;
     if (bInt < 0)
-        bInt = 0x8000000000000000 - bInt;
+        bInt = HIGH_BIT_64 - bInt;
 
-    long long int intDiff = abs(aInt - bInt);
+    int64_t intDiff = abs(aInt - bInt);
     if (intDiff <= maxUlps)
         return true;
 
@@ -412,25 +412,25 @@ bool dtkAlmostEqualUlps(double A, double B, long long int maxUlps)
 /*! 
  * 
  */
-void dtkPrintNumber(float f, int offset)
+void dtkPrintNumber(float f, int32_t offset)
 {
-    (*((int*)&f)) += offset;
+    (*((int32_t*)&f)) += offset;
 
 #if !defined(__APPLE__)
-    printf("%+1.8g, 0x%08lX, %d\n", f, *(int*)&f, *(int*)&f);
+    printf("%+1.8g, 0x%08lx, %d\n", f, *(int32_t*)&f, *(int32_t*)&f);
 #else
-    printf("%+1.8g, %d, %d\n", f, *(int*)&f, *(int*)&f);
+    printf("%+1.8g, %d, %d\n", f, *(int32_t*)&f, *(int32_t*)&f);
 #endif
 }
 
-void dtkPrintNumber(double f, long long int offset)
+void dtkPrintNumber(double f, int64_t offset)
 {
-    (*((long long int*)&f)) += offset;
+    (*((int64_t*)&f)) += offset;
 
 #if !defined(__APPLE__)
-    printf("%+1.8g, 0x%08lX, %lld\n", f, *(long long int*)&f, *(long long int*)&f);
+    printf("%+1.8g, 0x%016llx, %lld\n", f, *(int64_t*)&f, *(int64_t*)&f);
 #else
-    printf("%+1.8g, %lld, %lld\n", f, *(long long int*)&f, *(long long int*)&f);
+    printf("%+1.8g, %lld, %lld\n", f, *(int64_t*)&f, *(int64_t*)&f);
 #endif
 }
 
@@ -442,7 +442,7 @@ void dtkPrintNumber(double f, long long int offset)
 /*! 
  * 
  */
-bool dtkLesserThanUlps(float A, float B, int maxUlps)
+bool dtkLesserThanUlps(float A, float B, int32_t maxUlps)
 {
 #ifdef  INFINITYCHECK
     if (dtkIsInfinite(A) || dtkIsInfinite(B))
@@ -459,16 +459,15 @@ bool dtkLesserThanUlps(float A, float B, int maxUlps)
         return A < B;
 #endif
 
-    int aInt = *(int*)&A;
-
+    int32_t aInt = *(int32_t*)&A;
     if (aInt < 0)
-        aInt = 0x80000000 - aInt;
+        aInt = HIGH_BIT_32 - aInt;
 
-    int bInt = *(int*)&B;
+    int32_t bInt = *(int32_t*)&B;
     if (bInt < 0)
-        bInt = 0x80000000 - bInt;
+        bInt = HIGH_BIT_32 - bInt;
 
-    int intDiff = aInt - bInt;
+    int32_t intDiff = aInt - bInt;
     if (abs(intDiff) <= maxUlps)
         return false;
 
@@ -479,7 +478,7 @@ bool dtkLesserThanUlps(float A, float B, int maxUlps)
         return true;    
 }
 
-bool dtkLesserThanUlps(double A, double B, long long int maxUlps)
+bool dtkLesserThanUlps(double A, double B, int64_t maxUlps)
 {
 #ifdef  INFINITYCHECK
     if (dtkIsInfinite(A) || dtkIsInfinite(B))
@@ -496,16 +495,15 @@ bool dtkLesserThanUlps(double A, double B, long long int maxUlps)
         return A < B;
 #endif
 
-    long long int aInt = *(long long int*)&A;
-
+    int64_t aInt = *(int64_t*)&A;
     if (aInt < 0)
-        aInt = 0x8000000000000000 - aInt;
+        aInt = HIGH_BIT_64 - aInt;
 
-    long long int bInt = *(long long int*)&B;
+    int64_t bInt = *(int64_t*)&B;
     if (bInt < 0)
-        bInt = 0x8000000000000000 - bInt;
+        bInt = HIGH_BIT_64 - bInt;
 
-    long long int intDiff = aInt - bInt;
+    int64_t intDiff = aInt - bInt;
     if (abs(intDiff) <= maxUlps)
         return false;
 
@@ -520,7 +518,7 @@ bool dtkLesserThanUlps(double A, double B, long long int maxUlps)
 /*! 
  * 
  */
-bool dtkLesserThanOrAlmostEqualUlps(float A, float B, int maxUlps)
+bool dtkLesserThanOrAlmostEqualUlps(float A, float B, int32_t maxUlps)
 {
 #ifdef  INFINITYCHECK
     if (dtkIsInfinite(A) || dtkIsInfinite(B))
@@ -537,16 +535,15 @@ bool dtkLesserThanOrAlmostEqualUlps(float A, float B, int maxUlps)
         return A <= B;
 #endif
 
-    int aInt = *(int*)&A;
-
+    int32_t aInt = *(int32_t*)&A;
     if (aInt < 0)
-        aInt = 0x80000000 - aInt;
+        aInt = HIGH_BIT_32 - aInt;
 
-    int bInt = *(int*)&B;
+    int32_t bInt = *(int32_t*)&B;
     if (bInt < 0)
-        bInt = 0x80000000 - bInt;
+        bInt = HIGH_BIT_32 - bInt;
 
-    int intDiff = aInt - bInt;
+    int32_t intDiff = aInt - bInt;
     if (abs(intDiff) <= maxUlps)
         return true;
 
@@ -557,7 +554,7 @@ bool dtkLesserThanOrAlmostEqualUlps(float A, float B, int maxUlps)
         return true; 
 }
 
-bool dtkLesserThanOrAlmostEqualUlps(double A, double B, long long int maxUlps)
+bool dtkLesserThanOrAlmostEqualUlps(double A, double B, int64_t maxUlps)
 {
 #ifdef  INFINITYCHECK
     if (dtkIsInfinite(A) || dtkIsInfinite(B))
@@ -574,16 +571,15 @@ bool dtkLesserThanOrAlmostEqualUlps(double A, double B, long long int maxUlps)
         return A <= B;
 #endif
 
-    long long int aInt = *(long long int*)&A;
-
+    int64_t aInt = *(int64_t*)&A;
     if (aInt < 0)
-        aInt = 0x8000000000000000 - aInt;
+        aInt = HIGH_BIT_64 - aInt;
 
-    long long int bInt = *(long long int*)&B;
+    int64_t bInt = *(int64_t*)&B;
     if (bInt < 0)
-        bInt = 0x8000000000000000 - bInt;
+        bInt = HIGH_BIT_64 - bInt;
 
-    long long int intDiff = aInt - bInt;
+    int64_t intDiff = aInt - bInt;
     if (abs(intDiff) <= maxUlps)
         return true;
 
@@ -598,7 +594,7 @@ bool dtkLesserThanOrAlmostEqualUlps(double A, double B, long long int maxUlps)
 /*! 
  * 
  */
-bool dtkGreaterThanUlps(float A,  float B, int maxUlps)
+bool dtkGreaterThanUlps(float A,  float B, int32_t maxUlps)
 {
 #ifdef  INFINITYCHECK
     if (dtkIsInfinite(A) || dtkIsInfinite(B))
@@ -615,16 +611,15 @@ bool dtkGreaterThanUlps(float A,  float B, int maxUlps)
         return A > B;
 #endif
 
-    int aInt = *(int*)&A;
-
+    int32_t aInt = *(int32_t*)&A;
     if (aInt < 0)
-        aInt = 0x80000000 - aInt;
+        aInt = HIGH_BIT_32 - aInt;
 
-    int bInt = *(int*)&B;
+    int32_t bInt = *(int32_t*)&B;
     if (bInt < 0)
-        bInt = 0x80000000 - bInt;
+        bInt = HIGH_BIT_32 - bInt;
 
-    int intDiff = aInt - bInt;
+    int32_t intDiff = aInt - bInt;
     if (abs(intDiff) <= maxUlps)
         return false;
 
@@ -635,7 +630,7 @@ bool dtkGreaterThanUlps(float A,  float B, int maxUlps)
         return true; 
 }
 
-bool dtkGreaterThanUlps(double A, double B, long long int maxUlps)
+bool dtkGreaterThanUlps(double A, double B, int64_t maxUlps)
 {
 #ifdef  INFINITYCHECK
     if (dtkIsInfinite(A) || dtkIsInfinite(B))
@@ -652,16 +647,15 @@ bool dtkGreaterThanUlps(double A, double B, long long int maxUlps)
         return A > B;
 #endif
 
-    long long int aInt = *(long long int*)&A;
-
+    int64_t aInt = *(int64_t*)&A;
     if (aInt < 0)
-        aInt = 0x8000000000000000 - aInt;
+        aInt = HIGH_BIT_64 - aInt;
 
-    long long int bInt = *(long long int*)&B;
+    int64_t bInt = *(int64_t*)&B;
     if (bInt < 0)
-        bInt = 0x8000000000000000 - bInt;
+        bInt = HIGH_BIT_64 - bInt;
 
-    long long int intDiff = aInt - bInt;
+    int64_t intDiff = aInt - bInt;
     if (abs(intDiff) <= maxUlps)
         return false;
 
@@ -676,7 +670,7 @@ bool dtkGreaterThanUlps(double A, double B, long long int maxUlps)
 /*! 
  * 
  */
-bool dtkGreaterThanOrAlmostEqualUlps(float A,  float B, int maxUlps)
+bool dtkGreaterThanOrAlmostEqualUlps(float A,  float B, int32_t maxUlps)
 {
 #ifdef  INFINITYCHECK
     if (dtkIsInfinite(A) || dtkIsInfinite(B))
@@ -693,16 +687,16 @@ bool dtkGreaterThanOrAlmostEqualUlps(float A,  float B, int maxUlps)
         return A >= B;
 #endif
 
-    int aInt = *(int*)&A;
+    int32_t aInt = *(int32_t*)&A;
 
     if (aInt < 0)
-        aInt = 0x80000000 - aInt;
+        aInt = HIGH_BIT_32 - aInt;
 
-    int bInt = *(int*)&B;
+    int32_t bInt = *(int32_t*)&B;
     if (bInt < 0)
-        bInt = 0x80000000 - bInt;
+        bInt = HIGH_BIT_32 - bInt;
 
-    int intDiff = aInt - bInt;
+    int32_t intDiff = aInt - bInt;
     if (abs(intDiff) <= maxUlps)
         return true;
 
@@ -713,7 +707,7 @@ bool dtkGreaterThanOrAlmostEqualUlps(float A,  float B, int maxUlps)
         return true;
 }
 
-bool dtkGreaterThanOrAlmostEqualUlps(double A, double B, long long int maxUlps)
+bool dtkGreaterThanOrAlmostEqualUlps(double A, double B, int64_t maxUlps)
 {
 #ifdef  INFINITYCHECK
     if (dtkIsInfinite(A) || dtkIsInfinite(B))
@@ -730,16 +724,15 @@ bool dtkGreaterThanOrAlmostEqualUlps(double A, double B, long long int maxUlps)
         return A >= B;
 #endif
 
-    long long int aInt = *(long long int*)&A;
-
+    int64_t aInt = *(int64_t*)&A;
     if (aInt < 0)
-        aInt = 0x8000000000000000 - aInt;
+        aInt = HIGH_BIT_64 - aInt;
 
-    long long int bInt = *(long long int*)&B;
+    int64_t bInt = *(int64_t*)&B;
     if (bInt < 0)
-        bInt = 0x8000000000000000 - bInt;
+        bInt = HIGH_BIT_64 - bInt;
 
-    long long int intDiff = aInt - bInt;
+    int64_t intDiff = aInt - bInt;
     if (abs(intDiff) <= maxUlps)
         return true;
 

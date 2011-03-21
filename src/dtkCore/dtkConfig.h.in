@@ -1,0 +1,26 @@
+/* dtkConfig.h.in --- 
+ * 
+ * Author: Julien Wintz
+ * Copyright (C) 2008 - Julien Wintz, Inria.
+ * Created: Tue Mar 15 17:04:44 2011 (+0100)
+ * Version: $Id$
+ * Last-Updated: Tue Mar 15 17:25:50 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 5
+ */
+
+/* Commentary: 
+ * 
+ */
+
+/* Change log:
+ * 
+ */
+
+#ifndef DTKCONFIG_H
+#define DTKCONFIG_H
+
+#cmakedefine DTK_PLATFORM_32
+#cmakedefine DTK_PLATFORM_64
+
+#endif

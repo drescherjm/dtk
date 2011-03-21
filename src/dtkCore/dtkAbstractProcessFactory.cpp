@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Jan 15 14:10:13 2011 (+0100)
+ * Last-Updated: Wed Mar 16 14:56:47 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 109
+ *     Update #: 115
  */
 
 /* Commentary: 
@@ -106,16 +106,21 @@ QStringList dtkAbstractProcessFactory::creators(void) const
     return d->creators.keys();
 }
 
-QStringList dtkAbstractProcessFactory::implementations(const QString& abstraction)
+QStringList dtkAbstractProcessFactory::implementations(const QString& interface)
 {
     QStringList implementations;
 
-    if(d->interfaces.keys().contains(abstraction))
-        implementations << d->interfaces.values(abstraction);
+    if(d->interfaces.keys().contains(interface))
+        implementations << d->interfaces.values(interface);
     else
-        dtkWarning() << "There is no avalaible implementation of " << abstraction ;
+        dtkWarning() << "There is no avalaible implementation of " << interface ;
 
     return implementations;
+}
+
+QStringList dtkAbstractProcessFactory::interfaces(void)
+{
+    return d->interfaces.keys();
 }
 
 dtkAbstractProcessFactory::dtkAbstractProcessFactory(void) : dtkAbstractFactory(), d(new dtkAbstractProcessFactoryPrivate)

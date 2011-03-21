@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 14 12:51:06 2011 (+0100)
+ * Last-Updated: Mon Mar 21 11:08:08 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 269
+ *     Update #: 290
  */
 
 /* Commentary: 
@@ -133,6 +133,7 @@ dtkComposerNodeCase::dtkComposerNodeCase(dtkComposerNode *parent) : dtkComposerN
     d->add_button->setZValue(this->zValue() + 1);
 
     d->block_default = this->addBlock("default");
+    d->block_default->setInteractive(true);
 
     this->setColor(QColor("#922891"));
     this->setInputPropertyName("variable");
@@ -153,6 +154,8 @@ dtkComposerNodeControlBlock *dtkComposerNodeCase::addBlock(const QString& title)
 
     if(title == "default")
         return block;
+
+    block->setInteractive(true);
 
     block->setRemoveButtonVisible(true);
 
@@ -178,22 +181,53 @@ int dtkComposerNodeCase::removeBlock(dtkComposerNodeControlBlock *block, bool cl
 
     if (d->block_cases.contains(block)) {
 
-        if(dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene()))
-            foreach(dtkComposerNode *child, block->nodes())
-                scene->removeNode(child);
+        dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene());
+        if(!scene)
+            return 0;
+
+        foreach(dtkComposerNode *child, block->nodes())
+            scene->removeNode(child);
 
         removed_blocks = d->block_cases.removeAll(block);
 
         foreach(dtkComposerNodeProperty *property, block->inputProperties()) {
+       
+            foreach(dtkComposerEdge *edge, this->inputEdges()) {
+                if(edge->destination() == property) {
+                    this->removeInputEdge(edge);
+                    scene->removeEdge(edge);
+                }
+            }
+       
+            foreach(dtkComposerEdge *edge, this->inputRelayEdges()) {
+                if(edge->source() == property) {
+                    this->removeInputRelayEdge(edge);
+                    scene->removeEdge(edge);
+                }
+            }
+
             this->removeInputProperty(property);
-            if(property->name() == "constant")                
-                delete property;
+            delete property;
         }
         
         foreach(dtkComposerNodeProperty *property, block->outputProperties()) {
+       
+            foreach(dtkComposerEdge *edge, this->outputEdges()) {
+                if(edge->source() == property) {
+                    this->removeOutputEdge(edge);
+                    scene->removeEdge(edge);
+                }
+            }
+       
+            foreach(dtkComposerEdge *edge, this->outputRelayEdges()) {
+                if(edge->destination() == property) {
+                    this->removeOutputRelayEdge(edge);
+                    scene->removeEdge(edge);
+                }
+            }
+            
             this->removeOutputProperty(property);
-            if(property->name() == "constant")
-                delete property;
+            delete property;
         }
         
         if (clean) {

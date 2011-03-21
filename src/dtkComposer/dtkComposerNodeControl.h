@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:47:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 10 14:48:23 2011 (+0100)
+ * Last-Updated: Thu Mar 17 11:09:57 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 76
+ *     Update #: 85
  */
 
 /* Commentary: 
@@ -50,7 +50,13 @@ public:
   
 public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-    bool resize(const QRectF& rect);
+
+    void resize(const QRectF& rect);
+    void resize(const QPointF& delta);
+    void resize(qreal dw, qreal dh);
+    void resize(void);
+
+    QRectF minimalBoundingRect(void);
 
 public slots:
     virtual void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);

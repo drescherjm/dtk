@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 21 12:52:18 2011 (+0100)
+ * Last-Updated: Mon Mar 21 14:13:13 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 597
+ *     Update #: 633
  */
 
 /* Commentary: 
@@ -17,13 +17,16 @@
  * 
  */
 
+#include "dtkComposerEdge.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeControlBlock_p.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerScene.h"
 
 #include <dtkCore/dtkGlobal.h>
+#include <dtkCore/dtkLog.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlBlockLabel
@@ -207,8 +210,6 @@ dtkComposerNodeControlBlockButton::dtkComposerNodeControlBlockButton(dtkComposer
     this->block = parent;
     this->label = NULL;
 
-    this->text = "+";
-
     this->setFlag(QGraphicsItem::ItemStacksBehindParent, true);
 }
 
@@ -252,18 +253,88 @@ void dtkComposerNodeControlBlockButton::mousePressEvent(QGraphicsSceneMouseEvent
 {
     Q_UNUSED(event);
 
-    if(!this->label)
+    if (!this->label)
         return;
 
-    dtkComposerNodeProperty *input_property = block->addInputProperty(this->label->toPlainText(), block->parentNode());
-    input_property->setBlockedFrom(block->title());
-    
-    dtkComposerNodeProperty *output_property = block->addOutputProperty(this->label->toPlainText(), block->parentNode());
-    output_property->setBlockedFrom(block->title());
+    if (this->label->toPlainText().isEmpty()) {
+        qDebug() << "Please enter a valid name for the new property.";
+        return;
+    }
 
-    block->parentNode()->addInputProperty(input_property);
-    block->parentNode()->addOutputProperty(output_property);
+    if (this->text == "+") {
 
+        foreach(dtkComposerNodeProperty *property, block->inputProperties()) {
+            if (property->name() == this->label->toPlainText()) {
+                qDebug() << QString("Property %1 already exists. Please choose another name.").arg(property->name());
+                //dtkLog::debug(QString("Property %1 already exists. Please choose another name.").arg(property->name()));
+                return;
+            }
+        }
+
+        dtkComposerNodeProperty *input_property = block->addInputProperty(this->label->toPlainText(), block->parentNode());
+        input_property->setBlockedFrom(block->title());
+        
+        dtkComposerNodeProperty *output_property = block->addOutputProperty(this->label->toPlainText(), block->parentNode());
+        output_property->setBlockedFrom(block->title());
+
+        block->parentNode()->addInputProperty(input_property);
+        block->parentNode()->addOutputProperty(output_property);
+
+    } else if (this->text == "-") {   
+
+        dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene()); 
+        if(!scene)
+            return;
+
+        foreach(dtkComposerNodeProperty *property, block->inputProperties()) {
+            if (property->name() == this->label->toPlainText()) {
+
+                block->removeInputProperty(property);  
+       
+                foreach(dtkComposerEdge *edge, block->parentNode()->inputEdges()) {
+                    if(edge->destination() == property) {
+                        block->parentNode()->removeInputEdge(edge);
+                        scene->removeEdge(edge);
+                    }
+                }
+                
+                foreach(dtkComposerEdge *edge, block->parentNode()->inputRelayEdges()) {
+                    if(edge->source() == property) {
+                        block->parentNode()->removeInputRelayEdge(edge);
+                        scene->removeEdge(edge);
+                    }
+                }
+                
+                block->parentNode()->removeInputProperty(property);
+                delete property;
+            }
+        }                     
+
+        foreach(dtkComposerNodeProperty *property, block->outputProperties()) {
+            if (property->name() == this->label->toPlainText()) {
+
+                block->removeOutputProperty(property); 
+       
+                foreach(dtkComposerEdge *edge, block->parentNode()->outputEdges()) {
+                    if(edge->source() == property) {
+                        block->parentNode()->removeOutputEdge(edge);
+                        scene->removeEdge(edge);
+                    }
+                }
+                
+                foreach(dtkComposerEdge *edge, block->parentNode()->outputRelayEdges()) {
+                    if(edge->destination() == property) {
+                        block->parentNode()->removeOutputRelayEdge(edge);
+                        scene->removeEdge(edge);
+                    }
+                }
+                
+                block->parentNode()->removeOutputProperty(property);
+                delete property;                
+            }
+        }
+    }
+        
     block->parentNode()->resize();
 }
 
@@ -279,7 +350,8 @@ dtkComposerNodeControlBlock::dtkComposerNodeControlBlock(const QString& title, d
     d->remove_button->setZValue(this->zValue() + 1);
     d->remove_button->hide();
 
-    d->button = NULL;
+    d->button_add = NULL;
+    d->button_rem = NULL;
     d->label = NULL;
     
     d->interactive = false;
@@ -340,10 +412,16 @@ void dtkComposerNodeControlBlock::setInteractive(bool interactive)
 {
     d->interactive = interactive;
 
-    if(d->interactive && !d->button) {
-        d->button = new dtkComposerNodeControlBlockButton(this);
-        d->button->setZValue(this->zValue() - 1);
-        d->button->setVisible(false);
+    if(d->interactive && !d->button_add) {
+        d->button_add = new dtkComposerNodeControlBlockButton(this);
+        d->button_add->setZValue(this->zValue() - 1);
+        d->button_add->setVisible(false);
+    }
+
+    if(d->interactive && !d->button_rem) {
+        d->button_rem = new dtkComposerNodeControlBlockButton(this);
+        d->button_rem->setZValue(this->zValue() - 1);
+        d->button_rem->setVisible(false);
     }
 
     if(d->interactive && !d->label) {
@@ -351,9 +429,13 @@ void dtkComposerNodeControlBlock::setInteractive(bool interactive)
         d->label->setZValue(this->zValue() - 1);
         d->label->setVisible(false);
 
-        if(d->button)
-            if(!d->button->label)
-                d->button->label = d->label;
+        if(d->button_add)
+            if(!d->button_add->label)
+                d->button_add->label = d->label;
+
+        if(d->button_rem)
+            if(!d->button_rem->label)
+                d->button_rem->label = d->label;
     }
 
     this->setAcceptHoverEvents(interactive);
@@ -385,8 +467,15 @@ void dtkComposerNodeControlBlock::setRect(const QRectF& rectangle)
     if (d->remove_button && d->remove_button->isVisible())
         d->remove_button->setPos(rectangle.width()/2 - 150/2, this->rect().bottom());
 
-    if (d->button)
-        d->button->setPos((rectangle.left() + rectangle.width() - 100) / 2 + 50, this->rect().top());
+    if (d->button_add) {
+        d->button_add->text = "+";
+        d->button_add->setPos((rectangle.left() + rectangle.width() - 100) / 2 + 50, this->rect().top());
+    }
+
+    if (d->button_rem) {
+        d->button_rem->text = "-";
+        d->button_rem->setPos((rectangle.left() + rectangle.width() - 100) / 2 - 50 - 20, this->rect().top());
+    }
 
     if (d->label)
         d->label->setPos((rectangle.left() + rectangle.width() - 100) / 2 - 50, this->rect().top());
@@ -465,15 +554,11 @@ dtkComposerNodeProperty *dtkComposerNodeControlBlock::addOutputProperty(QString 
 void dtkComposerNodeControlBlock::removeInputProperty(dtkComposerNodeProperty *property)
 {
     d->input_properties.removeAll(property);
-
-    d->parent->resize();
 }
 
 void dtkComposerNodeControlBlock::removeOutputProperty(dtkComposerNodeProperty *property)
 {
     d->output_properties.removeAll(property);
-
-    d->parent->resize();
 }
 
 void dtkComposerNodeControlBlock::removeAllProperties(void)
@@ -568,8 +653,11 @@ void dtkComposerNodeControlBlock::hoverEnterEvent(QGraphicsSceneHoverEvent *even
 {
     DTK_UNUSED(event);
 
-    if (d->button)
-        d->button->setVisible(true);
+    if (d->button_add)
+        d->button_add->setVisible(true);
+
+    if (d->button_rem)
+        d->button_rem->setVisible(true);
 
     if (d->label)
         d->label->setVisible(true);
@@ -579,8 +667,11 @@ void dtkComposerNodeControlBlock::hoverLeaveEvent(QGraphicsSceneHoverEvent *even
 {
     DTK_UNUSED(event);
 
-    if (d->button)
-        d->button->setVisible(false);
+    if (d->button_add)
+        d->button_add->setVisible(false);
+
+    if (d->button_rem)
+        d->button_rem->setVisible(false);
 
     if (d->label)
         d->label->setVisible(false);

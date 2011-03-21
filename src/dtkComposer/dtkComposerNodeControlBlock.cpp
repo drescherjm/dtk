@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 21 14:13:13 2011 (+0100)
+ * Last-Updated: Mon Mar 21 16:43:50 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 633
+ *     Update #: 635
  */
 
 /* Commentary: 
@@ -569,7 +569,7 @@ void dtkComposerNodeControlBlock::removeAllProperties(void)
 
 void dtkComposerNodeControlBlock::adjustChildNodes(qreal dw, qreal dh)
 {
-    qreal scaling_factor = 0.5;
+    qreal scaling_factor = 0.05;
     qreal dx;
     qreal dy;
     qreal width;
@@ -613,8 +613,8 @@ QRectF dtkComposerNodeControlBlock::minimalBoundingRect(void)
         //min_height = (1.1 * qAbs(top - bottom)) > min_height ? (1.1 * qAbs(top - bottom)) : min_height;
         //min_width  = (1.1 * qAbs(right - left)) >  min_width ? (1.1 * qAbs(right - left)) :  min_width;
 
-        min_height = (1.1 * qAbs(this->rect().top() - bottom)) > min_height ? (1.1 * qAbs(this->rect().top() - bottom)) : min_height;
-        min_width  = (1.1 * qAbs(right - this->rect().left())) >  min_width ? (1.1 * qAbs(right - this->rect().left())) :  min_width;
+        min_height = (1. * qAbs(this->rect().top() - bottom) + 20) > min_height ? (1. * qAbs(this->rect().top() - bottom) + 20) : min_height;
+        min_width  = (1. * qAbs(right - this->rect().left()) + 20) >  min_width ? (1. * qAbs(right - this->rect().left()) + 20) :  min_width;
     }
 
     if (d->input_properties.count()) {

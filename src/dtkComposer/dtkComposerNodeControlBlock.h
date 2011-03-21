@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:46:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 17 11:02:06 2011 (+0100)
+ * Last-Updated: Mon Mar 21 10:13:44 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 65
+ *     Update #: 68
  */
 
 /* Commentary: 
@@ -64,6 +64,10 @@ public:
 
     dtkComposerNodeProperty  *addInputProperty(QString name, dtkComposerNode *parent = 0);
     dtkComposerNodeProperty *addOutputProperty(QString name, dtkComposerNode *parent = 0);
+
+    void removeInputProperty(dtkComposerNodeProperty *property);
+    void removeOutputProperty(dtkComposerNodeProperty *property);
+    void removeAllProperties(void);
 
 public:
     void adjustChildNodes(qreal dw, qreal dh);

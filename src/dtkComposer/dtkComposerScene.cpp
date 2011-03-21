@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 15 14:43:47 2011 (+0100)
+ * Last-Updated: Mon Mar 21 10:34:53 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 1727
+ *     Update #: 1737
  */
 
 /* Commentary: 
@@ -220,25 +220,23 @@ void dtkComposerScene::removeEdge(dtkComposerEdge *edge)
 
 void dtkComposerScene::removeNode(dtkComposerNode *node)
 {
-    foreach(dtkComposerEdge *edge, node->inputEdges()) {
-        d->edges.removeAll(d->edge(edge));
-        delete edge;
-    }
+    foreach(dtkComposerEdge *edge, node->inputEdges())
+        this->removeEdge(edge);
     
-    foreach(dtkComposerEdge *edge, node->outputEdges()) {
-        d->edges.removeAll(d->edge(edge));
-        delete edge;
-    }
+    foreach(dtkComposerEdge *edge, node->outputEdges())
+        this->removeEdge(edge);
 
-    foreach(dtkComposerEdge *edge, node->inputGhostEdges()) {
-        d->edges.removeAll(d->edge(edge));
-        delete edge;
-    }
+    foreach(dtkComposerEdge *edge, node->inputRelayEdges())
+        this->removeEdge(edge);
     
-    foreach(dtkComposerEdge *edge, node->outputGhostEdges()) {
-        d->edges.removeAll(d->edge(edge));
-        delete edge;
-    }
+    foreach(dtkComposerEdge *edge, node->outputRelayEdges())
+        this->removeEdge(edge);
+
+    foreach(dtkComposerEdge *edge, node->inputGhostEdges())
+        this->removeEdge(edge);
+    
+    foreach(dtkComposerEdge *edge, node->outputGhostEdges())
+        this->removeEdge(edge);
 
     dtkComposerNode *n = node;
     dtkComposerNode *parent;
@@ -250,38 +248,32 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
         parent->removeChildNode(node);
 
         foreach(dtkComposerNodeProperty *property, parent->inputProperties()) {
-            if(property->clonedFrom() == node) {         
-                foreach(dtkComposerEdge *edge, parent->inputEdges()) {
-                    if(edge->destination() == property) {
-                        d->edges.removeAll(d->edge(edge));
-                        delete edge;
-                    }
-                }         
-                foreach(dtkComposerEdge *edge, parent->inputGhostEdges()) {
-                    if(edge->source() == property) {
-                        d->edges.removeAll(d->edge(edge));
-                        delete edge;
-                    }
-                }
+            if(property->clonedFrom() == node) {
+
+                foreach(dtkComposerEdge *edge, parent->inputEdges())
+                    if(edge->destination() == property)
+                        this->removeEdge(edge);
+
+                foreach(dtkComposerEdge *edge, parent->inputGhostEdges())
+                    if(edge->source() == property)
+                        this->removeEdge(edge);
+
                 parent->removeInputProperty(property);
                 delete property;
             }
         }
 
         foreach(dtkComposerNodeProperty *property, parent->outputProperties()) {
-            if(property->clonedFrom() == node) {                
-                foreach(dtkComposerEdge *edge, parent->outputEdges()) {
-                    if(edge->source() == property) {
-                        d->edges.removeAll(d->edge(edge));
-                        delete edge;
-                    }
-                }               
-                foreach(dtkComposerEdge *edge, parent->outputGhostEdges()) {
-                    if(edge->destination() == property) {
-                        d->edges.removeAll(d->edge(edge));
-                        delete edge;
-                    }
-                }
+            if(property->clonedFrom() == node) {
+
+                foreach(dtkComposerEdge *edge, parent->outputEdges())
+                    if(edge->source() == property)
+                        this->removeEdge(edge);
+
+                foreach(dtkComposerEdge *edge, parent->outputGhostEdges()) 
+                    if(edge->destination() == property) 
+                        this->removeEdge(edge);
+
                 parent->removeOutputProperty(property);
                 delete property;
             }

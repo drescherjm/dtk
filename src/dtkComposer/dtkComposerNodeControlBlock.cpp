@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 18 16:33:15 2011 (+0100)
+ * Last-Updated: Mon Mar 21 12:52:18 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 558
+ *     Update #: 597
  */
 
 /* Commentary: 
@@ -196,6 +196,8 @@ protected:
 public:
     dtkComposerNodeControlBlockLabel *label;
 
+    QString text;
+
 private:
     dtkComposerNodeControlBlock *block;
 };
@@ -204,6 +206,8 @@ dtkComposerNodeControlBlockButton::dtkComposerNodeControlBlockButton(dtkComposer
 {
     this->block = parent;
     this->label = NULL;
+
+    this->text = "+";
 
     this->setFlag(QGraphicsItem::ItemStacksBehindParent, true);
 }
@@ -229,10 +233,25 @@ void dtkComposerNodeControlBlockButton::paint(QPainter *painter, const QStyleOpt
     painter->setBrush(Qt::black);
     painter->drawPath(path);
     painter->restore();
+    
+#if defined(Q_WS_MAC)
+    QFont font("Lucida Grande", 8);
+#else
+    QFont font("Lucida Grande", 6);
+#endif
+    font.setBold(true);
+
+    QFontMetrics metrics(font);
+    
+    painter->setFont(font);
+    painter->setPen(Qt::white);
+    painter->drawText(this->boundingRect(), Qt::AlignCenter, this->text);
 }
 
 void dtkComposerNodeControlBlockButton::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    Q_UNUSED(event);
+
     if(!this->label)
         return;
 
@@ -244,6 +263,8 @@ void dtkComposerNodeControlBlockButton::mousePressEvent(QGraphicsSceneMouseEvent
 
     block->parentNode()->addInputProperty(input_property);
     block->parentNode()->addOutputProperty(output_property);
+
+    block->parentNode()->resize();
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -441,6 +462,26 @@ dtkComposerNodeProperty *dtkComposerNodeControlBlock::addOutputProperty(QString 
     return property;
 }
 
+void dtkComposerNodeControlBlock::removeInputProperty(dtkComposerNodeProperty *property)
+{
+    d->input_properties.removeAll(property);
+
+    d->parent->resize();
+}
+
+void dtkComposerNodeControlBlock::removeOutputProperty(dtkComposerNodeProperty *property)
+{
+    d->output_properties.removeAll(property);
+
+    d->parent->resize();
+}
+
+void dtkComposerNodeControlBlock::removeAllProperties(void)
+{
+    d->input_properties.clear();
+    d->output_properties.clear();
+}
+
 void dtkComposerNodeControlBlock::adjustChildNodes(qreal dw, qreal dh)
 {
     qreal scaling_factor = 0.5;
@@ -490,6 +531,17 @@ QRectF dtkComposerNodeControlBlock::minimalBoundingRect(void)
         min_height = (1.1 * qAbs(this->rect().top() - bottom)) > min_height ? (1.1 * qAbs(this->rect().top() - bottom)) : min_height;
         min_width  = (1.1 * qAbs(right - this->rect().left())) >  min_width ? (1.1 * qAbs(right - this->rect().left())) :  min_width;
     }
+
+    if (d->input_properties.count()) {
+        qreal prop_height = d->input_properties.count() * 1.5 * d->input_properties.last()->boundingRect().height();
+        min_height = prop_height > min_height ? prop_height : min_height;
+    }
+
+    if (d->output_properties.count()) {
+        qreal prop_height = d->output_properties.count() * 1.5 * d->output_properties.last()->boundingRect().height();
+        min_height = prop_height > min_height ? prop_height : min_height;
+    }
+
     return QRectF(this->rect().top(), this->rect().left(), min_width, min_height);
 }
 

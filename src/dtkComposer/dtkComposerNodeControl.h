@@ -20,12 +20,13 @@
 #ifndef DTKCOMPOSERNODECONTROL_H
 #define DTKCOMPOSERNODECONTROL_H
 
+#include "dtkComposerExport.h"
 #include "dtkComposerNode.h"
 
 class dtkComposerNodeControlBlock;
 class dtkComposerNodeControlPrivate;
 
-class dtkComposerNodeControl : public dtkComposerNode
+class DTKCOMPOSER_EXPORT dtkComposerNodeControl : public dtkComposerNode
 {
     Q_OBJECT
 

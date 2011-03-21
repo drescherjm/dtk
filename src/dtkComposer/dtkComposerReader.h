@@ -20,6 +20,8 @@
 #ifndef DTKCOMPOSERREADER_H
 #define DTKCOMPOSERREADER_H
 
+#include "dtkComposerExport.h"
+
 #include <QtCore/QObject>
 
 #include <QtXml/QDomNode>
@@ -28,7 +30,7 @@ class dtkComposerNode;
 class dtkComposerScene;
 class dtkComposerReaderPrivate;
 
-class dtkComposerReader : public QObject
+class DTKCOMPOSER_EXPORT dtkComposerReader : public QObject
 {
     Q_OBJECT
 

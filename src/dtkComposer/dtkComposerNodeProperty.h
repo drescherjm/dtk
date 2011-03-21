@@ -86,8 +86,8 @@ public:
 
     void setName(const QString& name);
 
-    friend QDebug operator<<(QDebug dbg, dtkComposerNodeProperty& property);
-    friend QDebug operator<<(QDebug dbg, dtkComposerNodeProperty *property);
+    friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNodeProperty& property);
+    friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNodeProperty *property);
 
 public:
     QRectF boundingRect(void) const;
@@ -108,8 +108,8 @@ private:
 // Debug operators
 // /////////////////////////////////////////////////////////////////
 
-QDebug operator<<(QDebug dbg, dtkComposerNodeProperty  property);
-QDebug operator<<(QDebug dbg, dtkComposerNodeProperty& property);
-QDebug operator<<(QDebug dbg, dtkComposerNodeProperty *property);
+DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNodeProperty  property);
+DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNodeProperty& property);
+DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNodeProperty *property);
 
 #endif

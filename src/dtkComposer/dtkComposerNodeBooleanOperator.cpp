@@ -218,6 +218,8 @@ QVariant dtkComposerNodeBooleanOperator::value(dtkComposerNodeProperty *property
 {
     if(property == d->property_output_value)
         return QVariant(d->value);
+
+	return QVariant();
 }
 
 dtkComposerNodeBooleanOperator::Operation dtkComposerNodeBooleanOperator::operation(void)

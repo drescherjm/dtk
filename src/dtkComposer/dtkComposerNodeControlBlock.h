@@ -20,6 +20,8 @@
 #ifndef DTKCOMPOSERNODECONTROLBLOCK_H
 #define DTKCOMPOSERNODECONTROLBLOCK_H
 
+#include "dtkComposerExport.h"
+
 #include <QtGui>
 
 class dtkComposerNode;
@@ -27,7 +29,7 @@ class dtkComposerNodeControl;
 class dtkComposerNodeControlBlockPrivate;
 class dtkComposerNodeProperty;
 
-class dtkComposerNodeControlBlock : public QObject, public QGraphicsRectItem
+class DTKCOMPOSER_EXPORT dtkComposerNodeControlBlock : public QObject, public QGraphicsRectItem
 {
     Q_OBJECT
     Q_PROPERTY(QColor brushColor READ brushColor WRITE setBrushColor)

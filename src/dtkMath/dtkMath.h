@@ -22,7 +22,15 @@
 
 #include "dtkMathExport.h"
 
-#include <inttypes.h>
+#ifdef _MSC_VER
+  // The C99 header inttypes.h does not exist (yet?) on windows.
+  // Set the typedefs we use with the portable Qt equivalent.
+  #include <QtGlobal>
+  typedef qint32 int_least32_t;
+  typedef qint64 int_least64_t;
+#else
+  #include <inttypes.h>
+#endif
 
 DTKMATH_EXPORT void dtkBubbleSort(unsigned int indices[], int size);
 

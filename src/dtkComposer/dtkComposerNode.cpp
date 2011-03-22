@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Mar 18 16:15:16 2011 (+0100)
+ * Last-Updated: Tue Mar 22 16:25:05 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 1871
+ *     Update #: 1878
  */
 
 /* Commentary: 
@@ -183,7 +183,7 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
     
     d->kind = Unknown;
     d->object = NULL;
-    d->parent = NULL;
+    d->parent = parent;
 
     d->penWidth = 1;
     d->header_height = 20;
@@ -872,10 +872,6 @@ void dtkComposerNode::setParentNode(dtkComposerNode *node)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
     d->parent = node;
-
-    // QObject::setParent(node);
-
-    this->setParentItem(node);
 }
 
 void dtkComposerNode::addChildNode(dtkComposerNode *node)

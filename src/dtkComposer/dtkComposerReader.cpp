@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 22 17:11:34 2011 (+0100)
+ * Last-Updated: Tue Mar 22 18:36:00 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 671
+ *     Update #: 691
  */
 
 /* Commentary: 
@@ -138,46 +138,70 @@ void dtkComposerReader::read(const QString& fileName)
 
         dtkComposerEdge *edge = new dtkComposerEdge;
         
-        if(source_property_id.isEmpty() && destin_property_id.isEmpty() && source_property_block.isEmpty() && destin_property_block.isEmpty()) {
+        if (source_property_id.isEmpty() && destin_property_id.isEmpty() && source_property_block.isEmpty() && destin_property_block.isEmpty()) {
+
             edge->setSource(d->node_map.value(source_id)->outputProperty(source_property));
             edge->setDestination(d->node_map.value(destin_id)->inputProperty(destin_property));
-        }
 
-        else if(!source_property_block.isEmpty() || !destin_property_block.isEmpty()) {
+        } else if (!source_property_block.isEmpty() && !destin_property_block.isEmpty()) {
+
+            dtkComposerNode *l = d->node_map.value(source_id);
+            dtkComposerNode *r = d->node_map.value(destin_id);
+
+            if (l->parentNode() == r) {
+
+                edge->setSource(dynamic_cast<dtkComposerNodeControl *>(d->node_map.value(source_id))->outputProperty(source_property_block, source_property));
+                edge->setDestination(dynamic_cast<dtkComposerNodeControl *>(d->node_map.value(destin_id))->outputProperty(destin_property_block, destin_property));
+
+            } else if (r->parentNode() == l) {
+
+                edge->setSource(dynamic_cast<dtkComposerNodeControl *>(d->node_map.value(source_id))->inputProperty(source_property_block, source_property));
+                edge->setDestination(dynamic_cast<dtkComposerNodeControl *>(d->node_map.value(destin_id))->inputProperty(destin_property_block, destin_property));               
+
+            } else {
+
+                edge->setSource(dynamic_cast<dtkComposerNodeControl *>(d->node_map.value(source_id))->outputProperty(source_property_block, source_property));
+                edge->setDestination(dynamic_cast<dtkComposerNodeControl *>(d->node_map.value(destin_id))->inputProperty(destin_property_block, destin_property));
+                
+            }            
+
+        } else if (!source_property_block.isEmpty() || !destin_property_block.isEmpty()) {
+
+            dtkComposerNode *l = d->node_map.value(source_id);
+            dtkComposerNode *r = d->node_map.value(destin_id);
 
             if (!source_property_block.isEmpty()) {
 
-                if(d->node_map.value(source_id) == d->node_map.value(destin_id)->parentNode())
+                if (r->parentNode() == l)
                     edge->setSource(dynamic_cast<dtkComposerNodeControl *>(d->node_map.value(source_id))->inputProperty(source_property_block, source_property));
                 else
                     edge->setSource(dynamic_cast<dtkComposerNodeControl *>(d->node_map.value(source_id))->outputProperty(source_property_block, source_property));
 
                 edge->setDestination(d->node_map.value(destin_id)->inputProperty(destin_property));
-            }
 
-            else {
+            } else {
 
                 edge->setSource(d->node_map.value(source_id)->outputProperty(source_property));
 
-                if(d->node_map.value(source_id)->parentNode() == d->node_map.value(destin_id))
+                if (l->parentNode() == r)
                     edge->setDestination(dynamic_cast<dtkComposerNodeControl *>(d->node_map.value(destin_id))->outputProperty(destin_property_block, destin_property));
                 else
-                    edge->setDestination(dynamic_cast<dtkComposerNodeControl *>(d->node_map.value(destin_id))->inputProperty(destin_property_block, destin_property));
+                   edge->setDestination(dynamic_cast<dtkComposerNodeControl *>(d->node_map.value(destin_id))->inputProperty(destin_property_block, destin_property));                    
+                
             }
-        }
 
-        else if(!source_property_id.isEmpty() && !destin_property_id.isEmpty()) {
+        } else if (!source_property_id.isEmpty() && !destin_property_id.isEmpty()) {
 
             dtkComposerNode *l = d->node_map.value(source_id);
             dtkComposerNode *r = d->node_map.value(destin_id);
 
-            if(l->parentNode() == r) {
+            if (l->parentNode() == r) {
                 
                 edge->setSource(d->node_map.value(source_id)->outputProperty(source_property, d->node_map.value(source_property_id.toInt())));
                 edge->setDestination(d->node_map.value(destin_id)->outputProperty(destin_property, d->node_map.value(destin_property_id.toInt())));
             }
 
-            else if(r->parentNode() == l) {
+            else if (r->parentNode() == l) {
 
                 edge->setSource(d->node_map.value(source_id)->inputProperty(source_property, d->node_map.value(source_property_id.toInt())));
                 edge->setDestination(d->node_map.value(destin_id)->inputProperty(destin_property, d->node_map.value(destin_property_id.toInt())));
@@ -191,14 +215,14 @@ void dtkComposerReader::read(const QString& fileName)
         }
 
 
-        else if(!source_property_id.isEmpty() || !destin_property_id.isEmpty()) {
+        else if (!source_property_id.isEmpty() || !destin_property_id.isEmpty()) {
 
             dtkComposerNode *l = d->node_map.value(source_id);
             dtkComposerNode *r = d->node_map.value(destin_id);
 
-            if(!source_property_id.isEmpty()) {
+            if (!source_property_id.isEmpty()) {
 
-                if(r->parentNode() == l)
+                if (r->parentNode() == l)
                     edge->setSource(d->node_map.value(source_id)->inputProperty(source_property, d->node_map.value(source_property_id.toInt())));
                 else
                     edge->setSource(d->node_map.value(source_id)->outputProperty(source_property, d->node_map.value(source_property_id.toInt())));
@@ -210,7 +234,7 @@ void dtkComposerReader::read(const QString& fileName)
                 
                 edge->setSource(d->node_map.value(source_id)->outputProperty(source_property));
 
-                if(l->parentNode() == r)
+                if (l->parentNode() == r)
                     edge->setDestination(d->node_map.value(destin_id)->outputProperty(destin_property, d->node_map.value(destin_property_id.toInt())));
                 else
                     edge->setDestination(d->node_map.value(destin_id)->inputProperty(destin_property, d->node_map.value(destin_property_id.toInt())));
@@ -252,8 +276,6 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
     
     if(node.toElement().hasAttribute("y"))
         position.setY(node.toElement().attribute("y").toFloat());
-
-    qDebug() << position;
 
     dtkComposerNode *n = NULL;
 
@@ -622,8 +644,6 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
 
                 // Assign the property
 
-                qDebug() << "Assigning" << children.at(i).toElement().attribute("name") << "property to block" << children.at(i).toElement().attribute("block") << "for node" << case_node->title();
-
                 if(children.at(i).toElement().attribute("type") == "hybridinput" && children.at(i).toElement().attribute("name") != "constant") {
                     dtkComposerNodeProperty *i_p = case_node->block(children.at(i).toElement().attribute("block"))->addInputProperty(children.at(i).toElement().attribute("name"), case_node);
                     case_node->addInputProperty(i_p);
@@ -651,8 +671,6 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
                     continue;
 
                 // Assign the property
-
-                qDebug() << "Assigning" << children.at(i).toElement().attribute("name") << "property to block" << children.at(i).toElement().attribute("block") << "for node" << control_node->title();
 
                 if(children.at(i).toElement().attribute("type") == "hybridinput") {
                     dtkComposerNodeProperty *i_p = control_node->block(children.at(i).toElement().attribute("block"))->addInputProperty(children.at(i).toElement().attribute("name"), control_node);

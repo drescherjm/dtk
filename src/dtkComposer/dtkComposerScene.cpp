@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Mar 21 10:34:53 2011 (+0100)
+ * Last-Updated: Tue Mar 22 17:13:32 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 1737
+ *     Update #: 1745
  */
 
 /* Commentary: 
@@ -422,6 +422,7 @@ dtkComposerNode *dtkComposerScene::createNode(QString type, QPointF position)
     if(dtkComposerNode *node = d->factory->create(type)) {
         node->setPos(position);
         node->setParentNode(d->current_node);
+        node->setParentItem(d->current_node);
 
         if (d->current_node)
             d->current_node->addChildNode(node);
@@ -1027,7 +1028,7 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
         QPointF w = blocks.first()->scenePos();
 
         d->grabber_node->setParentItem(blocks.first());
-        //d->grabber_node->setParentNode(blocks.first()->parentNode());
+        d->grabber_node->setParentNode(blocks.first()->parentNode());
         d->grabber_node->setPos(c - w);
 
         if(dtkComposerNodeControl *control = dynamic_cast<dtkComposerNodeControl *>(d->grabber_node))
@@ -1042,7 +1043,7 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             w = d->grabber_node->parentItem()->scenePos();
 
         d->grabber_node->setParentItem(0); 
-        //d->grabber_node->setParentNode(0);
+        d->grabber_node->setParentNode(0);
         d->grabber_node->setPos(c + w);
     }
 }

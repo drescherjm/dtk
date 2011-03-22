@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Mar  9 14:29:09 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 636
+ * Last-Updated: Tue Mar 22 17:11:34 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 671
  */
 
 /* Commentary: 
@@ -252,6 +252,8 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
     
     if(node.toElement().hasAttribute("y"))
         position.setY(node.toElement().attribute("y").toFloat());
+
+    qDebug() << position;
 
     dtkComposerNode *n = NULL;
 
@@ -594,7 +596,7 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
 
         if(dtkComposerNodeCase *case_node = dynamic_cast<dtkComposerNodeCase *>(control_node)) {
 
-            int case_block_count = 0;
+            int case_block_count = 0; 
 
             QDomNodeList children = node.childNodes();
 
@@ -609,6 +611,31 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
 
             for(int i = 0; i < case_block_count; i++)
                 case_node->addBlock(QString("case%1").arg(i));
+
+            for(int i = 0; i < children.count(); i++) {
+                
+                if(children.at(i).toElement().tagName() != "property")
+                    continue;
+
+                if(children.at(i).toElement().attribute("name") == "condition")
+                    continue;
+
+                // Assign the property
+
+                qDebug() << "Assigning" << children.at(i).toElement().attribute("name") << "property to block" << children.at(i).toElement().attribute("block") << "for node" << case_node->title();
+
+                if(children.at(i).toElement().attribute("type") == "hybridinput" && children.at(i).toElement().attribute("name") != "constant") {
+                    dtkComposerNodeProperty *i_p = case_node->block(children.at(i).toElement().attribute("block"))->addInputProperty(children.at(i).toElement().attribute("name"), case_node);
+                    case_node->addInputProperty(i_p);
+                }
+                
+                if(children.at(i).toElement().attribute("type") == "hybridoutput" && children.at(i).toElement().attribute("name") != "constant") {
+                    dtkComposerNodeProperty *o_p = case_node->block(children.at(i).toElement().attribute("block"))->addOutputProperty(children.at(i).toElement().attribute("name"), case_node);
+                    case_node->addOutputProperty(o_p);
+                }
+            }
+
+            
         }
 
         if(dynamic_cast<dtkComposerNodeConditional *>(control_node) || dynamic_cast<dtkComposerNodeLoop *>(control_node)) {
@@ -627,12 +654,12 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
 
                 qDebug() << "Assigning" << children.at(i).toElement().attribute("name") << "property to block" << children.at(i).toElement().attribute("block") << "for node" << control_node->title();
 
-                if(children.at(i).toElement().attribute("type") == "input") {
+                if(children.at(i).toElement().attribute("type") == "hybridinput") {
                     dtkComposerNodeProperty *i_p = control_node->block(children.at(i).toElement().attribute("block"))->addInputProperty(children.at(i).toElement().attribute("name"), control_node);
                     control_node->addInputProperty(i_p);
                 }
                 
-                if(children.at(i).toElement().attribute("type") == "output") {
+                if(children.at(i).toElement().attribute("type") == "hybridoutput") {
                     dtkComposerNodeProperty *o_p = control_node->block(children.at(i).toElement().attribute("block"))->addOutputProperty(children.at(i).toElement().attribute("name"), control_node);
                     control_node->addOutputProperty(o_p);
                 }
@@ -640,30 +667,32 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
         }
 
         control_node->setSize(w, h);
-        
+        control_node->layout();
+
         foreach(dtkComposerNodeControlBlock *block, control_node->blocks()) {
 
             QDomNodeList children = node.childNodes();
             
-            for(int i = 0; i < children.count(); i++) {
+            for(int j = 0; j < children.count(); j++) {
                 
-                if(children.at(i).toElement().tagName() != "block")
+                if(children.at(j).toElement().tagName() != "block")
                     continue;
 
-                if(children.at(i).toElement().attribute("title") != block->title())
+                if(children.at(j).toElement().attribute("title") != block->title())
                     continue;
 
-                QDomNodeList block_node_elements = children.at(i).childNodes();
+                QDomNodeList block_node_elements = children.at(j).childNodes();
                 
-                for(int i = 0; i < block_node_elements.count(); i++) {
+                for(int k = 0; k < block_node_elements.count(); k++) {
                     
-                    dtkComposerNode *block_node = this->readNode(block_node_elements.at(i));
-                    block_node->setParentItem(block);
+                    dtkComposerNode *block_node = this->readNode(block_node_elements.at(k));
                     block_node->setParentNode(block->parentNode());
+                    block_node->setParentItem(block);
                     block_node->setPos(block_node->pos());
                 }
             }
         }
+        control_node->resize();
     }
 
     // Generic node
@@ -699,7 +728,7 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
             if(children.at(i).toElement().hasAttribute("id"))
                 p_id = children.at(i).toElement().attribute("id").toInt();
 
-            if(type == "input") {
+            if(type == "input" || type == "hybridinput") {
                 foreach(dtkComposerNodeProperty *property, n->inputProperties()) {
                     if(property->name() == name) {
                         if(p_id >= 0) {
@@ -719,7 +748,7 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
                 }
             }
 
-            if(type == "output") {
+            if(type == "output" || type == "hybridoutput") {
                 foreach(dtkComposerNodeProperty *property, n->outputProperties()) {
                     if(property->name() == name) {
                         if(p_id >= 0) {

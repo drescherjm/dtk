@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar 24 14:30:42 2011 (+0100)
+ * Last-Updated: Thu Mar 24 16:06:29 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 1995
+ *     Update #: 2035
  */
 
 /* Commentary: 
@@ -734,21 +734,25 @@ void dtkComposerScene::updateEdgesVisibility(void)
 QList<dtkComposerNodeControlBlock *> dtkComposerScene::hoveredControlBlocks(dtkComposerNode *node)
 {
     QList<dtkComposerNodeControlBlock *> blocks;
+    QList<dtkComposerNodeControlBlock *> hovered_child_blocks;
 
-    foreach(QGraphicsItem *item, this->items(node->mapToScene(node->boundingRect()))) {
+    QRectF node_rec = node->mapRectToScene(node->boundingRect());
+
+    foreach(QGraphicsItem *item, this->items(node_rec)) {
 
         if (dtkComposerNodeControlBlock *block = dynamic_cast<dtkComposerNodeControlBlock *>(item)) {
 
             if (!d->isChildOf(block, node)) {
 
-                if (block->mapRectToScene(block->boundingRect()).contains(node->mapRectToScene(node->boundingRect())) &&
-                    (this->hoveredControlBlocks(node, block->childItems()).isEmpty())) {
+                hovered_child_blocks = this->hoveredControlBlocks(node, block->nodes());
+
+                if (block->mapRectToScene(block->boundingRect()).contains(node_rec) && hovered_child_blocks.isEmpty()) {
 
                     blocks.clear();
                     blocks << block;
                     return blocks;
 
-                } else if (this->hoveredControlBlocks(node, block->childItems()).isEmpty()) {
+                } else if (hovered_child_blocks.isEmpty()) {
 
                     blocks << block;
 
@@ -756,9 +760,9 @@ QList<dtkComposerNodeControlBlock *> dtkComposerScene::hoveredControlBlocks(dtkC
 
                     bool node_is_shared = true;
 
-                    foreach(dtkComposerNodeControlBlock *block_of_childs, this->hoveredControlBlocks(node, block->childItems())) {
-                        if (block_of_childs->mapRectToScene(block_of_childs->boundingRect()).contains(node->mapRectToScene(node->boundingRect())) || 
-                            block_of_childs->parentNode()->mapRectToScene(block_of_childs->parentNode()->boundingRect()).contains(node->mapRectToScene(node->boundingRect()))) {
+                    foreach(dtkComposerNodeControlBlock *block_of_childs, hovered_child_blocks) {
+                        if (block_of_childs->mapRectToScene(block_of_childs->boundingRect()).contains(node_rec) || 
+                            block_of_childs->parentNode()->mapRectToScene(block_of_childs->parentNode()->boundingRect()).contains(node_rec)) {
                             node_is_shared = false;
                             break;
                         }
@@ -772,52 +776,55 @@ QList<dtkComposerNodeControlBlock *> dtkComposerScene::hoveredControlBlocks(dtkC
         }
     }
 
-    if (blocks.count() == 1 && !blocks.first()->mapRectToScene(blocks.first()->boundingRect()).contains(node->mapRectToScene(node->boundingRect())))
+    if (blocks.count() == 1 && !blocks.first()->mapRectToScene(blocks.first()->boundingRect()).contains(node_rec))
         blocks << blocks.first();
     
     return blocks;
 }
 
-QList<dtkComposerNodeControlBlock *> dtkComposerScene::hoveredControlBlocks(dtkComposerNode *node, QList<QGraphicsItem *> parents)
+QList<dtkComposerNodeControlBlock *> dtkComposerScene::hoveredControlBlocks(dtkComposerNode *node, QList<dtkComposerNode *> parents)
 {
     QList<dtkComposerNodeControlBlock *> blocks;
+    QList<dtkComposerNodeControlBlock *> hovered_child_blocks;
+    QRectF node_rec = node->mapRectToScene(node->boundingRect());
 
-    foreach(QGraphicsItem *parent, parents) {
+    foreach(dtkComposerNode *parent_node, parents) {
 
-        foreach(QGraphicsItem *item, parent->childItems()) {
+        if (dtkComposerNodeControl *parent = dynamic_cast<dtkComposerNodeControl *>(parent_node)) {
 
-            if (dtkComposerNodeControlBlock *block = dynamic_cast<dtkComposerNodeControlBlock *>(item)) {
-
-                if (!d->isChildOf(block, node)) {
+            foreach(dtkComposerNodeControlBlock *block, parent->blocks()) {
+                    
+                    if (!d->isChildOf(block, node)) {
                         
-                    if (block->mapRectToScene(block->boundingRect()).contains(node->mapRectToScene(node->boundingRect())) &&
-                        (this->hoveredControlBlocks(node, block->childItems()).isEmpty())) {
-
-                        blocks.clear();
-                        blocks << block;
-                        return blocks;
-
-                    } else if (this->hoveredControlBlocks(node, block->childItems()).isEmpty()) {
-
-                        blocks << block;
-
-                    } else {
-
-                        bool node_is_shared = true;
-
-                        foreach(dtkComposerNodeControlBlock *block_of_childs, this->hoveredControlBlocks(node, block->childItems())) {
-                            if (block_of_childs->mapRectToScene(block_of_childs->boundingRect()).contains(node->mapRectToScene(node->boundingRect())) || 
-                            block_of_childs->parentNode()->mapRectToScene(block_of_childs->parentNode()->boundingRect()).contains(node->mapRectToScene(node->boundingRect()))) {
-                                node_is_shared = false;
-                                break;
-                            }
-                        }
-                                
-                        if (node_is_shared)
+                        hovered_child_blocks = this->hoveredControlBlocks(node, block->nodes());
+                        
+                        if (block->mapRectToScene(block->boundingRect()).contains(node_rec) && hovered_child_blocks.isEmpty()) {
+                            
+                            blocks.clear();
                             blocks << block;
-
+                            return blocks;
+                            
+                        } else if (hovered_child_blocks.isEmpty()) {
+                            
+                            blocks << block;
+                            
+                        } else {
+                            
+                            bool node_is_shared = true;
+                            
+                            foreach(dtkComposerNodeControlBlock *block_of_childs, hovered_child_blocks) {
+                                if (block_of_childs->mapRectToScene(block_of_childs->boundingRect()).contains(node_rec) || 
+                                    block_of_childs->parentNode()->mapRectToScene(block_of_childs->parentNode()->boundingRect()).contains(node_rec)) {
+                                    node_is_shared = false;
+                                    break;
+                                }
+                            }
+                            
+                            if (node_is_shared)
+                                blocks << block;
+                            
+                        }
                     }
-                }
             }
         }
     }
@@ -1041,9 +1048,10 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         
         QGraphicsItem *p = d->grabber_node->parentItem();
         QGraphicsItem *n = d->grabber_node;
+        dtkComposerNodeControlBlock * block;
+        dtkComposerNodeControl *control_node;
         while(p) {
-            foreach(QGraphicsItem *item, p->childItems())
-                item->stackBefore(n);
+            n->setZValue(n->zValue() + 10000);
             n = p;
             p = n->parentItem();
         }
@@ -1110,7 +1118,8 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
         QGraphicsItem *p = d->grabber_node->parentItem();
         QGraphicsItem *n = d->grabber_node;
-        while(p) {            
+        while(p) {    
+            n->setZValue(n->zValue() - 10000);       
             n = p;
             p = n->parentItem();
         }

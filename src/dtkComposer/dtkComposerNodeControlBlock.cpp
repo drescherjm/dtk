@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 21 16:43:50 2011 (+0100)
+ * Last-Updated: Thu Mar 24 12:48:30 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 635
+ *     Update #: 670
  */
 
 /* Commentary: 
@@ -345,6 +345,7 @@ void dtkComposerNodeControlBlockButton::mousePressEvent(QGraphicsSceneMouseEvent
 dtkComposerNodeControlBlock::dtkComposerNodeControlBlock(const QString& title, dtkComposerNodeControl *parent) : QGraphicsRectItem(parent), d(new dtkComposerNodeControlBlockPrivate)
 {
     d->parent = parent;
+    this->setZValue(parent->zValue());
     
     d->remove_button = new dtkComposerNodeControlBlockButtonRemove(this);
     d->remove_button->setZValue(this->zValue() + 1);
@@ -361,7 +362,8 @@ dtkComposerNodeControlBlock::dtkComposerNodeControlBlock(const QString& title, d
 
     this->setPen(d->pen_color);
     this->setBrush(Qt::NoBrush);
-    this->setZValue(parent->zValue());
+
+    this->setFlag(QGraphicsItem::ItemStacksBehindParent, false);
 }
 
 dtkComposerNodeControlBlock::~dtkComposerNodeControlBlock(void)
@@ -630,29 +632,36 @@ QRectF dtkComposerNodeControlBlock::minimalBoundingRect(void)
     return QRectF(this->rect().top(), this->rect().left(), min_width, min_height);
 }
 
-void dtkComposerNodeControlBlock::highlight(dtkComposerNodeControlBlock *block)
+void dtkComposerNodeControlBlock::highlight(bool ok)
 {
-    static dtkComposerNodeControlBlock *highlighted = NULL;
+    if (ok) {
 
-    if(highlighted == block)
-        return;
-
-    if(block) {
-        QPropertyAnimation *animation = new QPropertyAnimation(block, "brushColor");
-        animation->setDuration(500);
-        animation->setKeyValueAt(0.0, Qt::red);
+        QPropertyAnimation *animation = new QPropertyAnimation(this, "brushColor");
+        animation->setDuration(300);
+        animation->setKeyValueAt(0.0, Qt::darkGreen);
         animation->setKeyValueAt(1.0, Qt::transparent);
         animation->setEasingCurve(QEasingCurve::Linear);
         animation->start(QAbstractAnimation::DeleteWhenStopped);
-    }
 
-    highlighted = block;
+    } else {
+
+        QPropertyAnimation *animation = new QPropertyAnimation(this, "brushColor");
+        animation->setDuration(250);
+        animation->setKeyValueAt(0.0, Qt::darkRed);
+        animation->setKeyValueAt(1.0, Qt::transparent);
+        animation->setEasingCurve(QEasingCurve::Linear);
+        animation->start(QAbstractAnimation::DeleteWhenStopped);
+
+    }
 }
 
 void dtkComposerNodeControlBlock::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
     DTK_UNUSED(event);
 
+    foreach(dtkComposerNodeControlBlock *block, d->parent->blocks())
+        block->stackBefore(this);
+                           
     if (d->button_add)
         d->button_add->setVisible(true);
 

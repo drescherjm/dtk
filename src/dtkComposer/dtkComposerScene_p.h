@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 26 18:33:27 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar  4 13:00:21 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 25
+ * Last-Updated: Thu Mar 24 10:38:57 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -44,6 +44,12 @@ class dtkComposerScenePrivate
 {
 public:
     dtkComposerEdge *edge(dtkComposerEdge *edge);
+
+public:
+    bool isChildOf(QGraphicsItem *item, QGraphicsItem *parent);
+
+public:
+    QPointF grabber_node_origin;
 
 public:
     dtkComposerNode *grabber_node;

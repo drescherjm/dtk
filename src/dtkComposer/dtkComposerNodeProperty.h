@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 15 10:56:47 2011 (+0100)
+ * Last-Updated: Wed Mar 23 09:51:47 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 123
+ *     Update #: 124
  */
 
 /* Commentary: 
@@ -96,7 +96,7 @@ public:
 
     void setName(const QString& name);
 
-	void setBehavior(Behavior behavior);
+    void setBehavior(Behavior behavior);
 
     friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNodeProperty& property);
     friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNodeProperty *property);

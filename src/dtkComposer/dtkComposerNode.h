@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 15 11:15:54 2011 (+0100)
+ * Last-Updated: Mon Mar 28 11:10:35 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 240
+ *     Update #: 246
  */
 
 /* Commentary: 
@@ -147,6 +147,11 @@ public:
 
     void setGhost(bool ghost);
     bool  isGhost(void);
+
+    void    setGhostPosition(QPointF pos);
+    QPointF    ghostPosition(void);
+    void setNonGhostPosition(QPointF pos);
+    QPointF nonGhostPosition(void);
 
     // --
 

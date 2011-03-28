@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Mar 23 09:21:35 2011 (+0100)
+ * Last-Updated: Mon Mar 28 11:11:06 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 1881
+ *     Update #: 1889
  */
 
 /* Commentary: 
@@ -87,6 +87,9 @@ public:
     QList<dtkComposerNode *> children;
 
     int count;
+
+    QPointF ghost_position;
+    QPointF non_ghost_position;
 
     QPointF drag_point;
 
@@ -946,6 +949,26 @@ bool dtkComposerNode::isGhost(void)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
     return d->ghost;
+}
+
+void dtkComposerNode::setGhostPosition(QPointF pos)
+{
+    d->ghost_position = pos;
+}
+
+QPointF dtkComposerNode::ghostPosition(void)
+{
+    return d->ghost_position;
+}
+
+void dtkComposerNode::setNonGhostPosition(QPointF pos)
+{
+    d->non_ghost_position = pos;
+}
+
+QPointF dtkComposerNode::nonGhostPosition(void)
+{
+    return d->non_ghost_position;
 }
 
 void dtkComposerNode::setSize(const QSizeF& size)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Mar 28 09:49:22 2011 (+0200)
+ * Last-Updated: Mon Mar 28 12:59:47 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 2127
+ *     Update #: 2173
  */
 
 /* Commentary: 
@@ -395,17 +395,26 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
     group->setKind(dtkComposerNode::Composite);
     group->setParentNode(d->current_node);
     group->setParentItem(d->current_node);
-    group->setPos(position);
+
+    QPointF group_ave_pos(0., 0.);
 
     if (d->current_node)
         d->current_node->addChildNode(group);
 
     foreach(dtkComposerNode *node, nodes) {
 
+        group_ave_pos += node->pos();
+
         foreach(dtkComposerEdge *edge, node->inputEdges())
             this->removeEdge(edge);
         
         foreach(dtkComposerEdge *edge, node->outputEdges())
+            this->removeEdge(edge);
+
+        foreach(dtkComposerEdge *edge, node->inputRelayEdges())
+            this->removeEdge(edge);
+        
+        foreach(dtkComposerEdge *edge, node->outputRelayEdges())
             this->removeEdge(edge);
        
         if (dtkComposerNode *parent = node->parentNode())
@@ -424,6 +433,9 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
 
         group->addChildNode(node);
     }
+
+    group->setPos(group_ave_pos / nodes.count());
+    group->setGhostPosition(group_ave_pos / nodes.count());
 
     this->addNode(group);
     this->updateEdgesVisibility();
@@ -1165,7 +1177,8 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
             if (d->grabber_node_has_edges && d->grabber_node->parentItem() != blocks.first()) {
 
-                w = d->grabber_node->parentItem()->scenePos();
+                if (d->grabber_node->parentItem()) 
+                    w = d->grabber_node->parentItem()->scenePos();
                 d->grabber_node->setPos(d->grabber_node_origin - w);
 
             } else if (d->grabber_node->parentItem() != blocks.first()) {
@@ -1221,17 +1234,22 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEven
         if (node->kind() != dtkComposerNode::Composite)
             return;
 
-        if (dtkComposerNode *parent = node->parentNode())
-            parent->setGhost(false);                
+        node->setNonGhostPosition(node->pos());
+        if (dtkComposerNode *parent = node->parentNode()) {
+            parent->setGhost(false);
+            parent->setGhostPosition(parent->pos());
+        }
         node->setGhost(true);
+
+        node->setPos(node->ghostPosition());
 
         this->hideAllNodes();
         this->showChildNodes(node);
         this->updateEdgesVisibility();
         this->setCurrentNode(node);
 
-        emit centerOn(node->sceneBoundingRect().center());
-        // emit fitInView(node->sceneBoundingRect());
+        emit centerOn(node->mapRectToScene(node->boundingRect()).center());
+        //emit fitInView(node->sceneBoundingRect());
         emit pathChanged(d->current_node);
 
     } else {
@@ -1241,29 +1259,36 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEven
             if (parent->kind() != dtkComposerNode::Composite)
                 return;
 
+            node->setGhostPosition(node->pos());
             node->setGhost(false);
             parent->setGhost(true);
+
+            parent->setPos(parent->ghostPosition());
+            node->setPos(node->nonGhostPosition());
        
             this->hideAllNodes();
             this->showChildNodes(parent);
             this->updateEdgesVisibility();
             this->setCurrentNode(parent);
             
-            emit centerOn(parent->sceneBoundingRect().center());
+            emit centerOn(parent->mapRectToScene(parent->boundingRect()).center());
             // emit fitInView(parent->sceneBoundingRect());
             emit pathChanged(d->current_node);
             
         } else {
 
+            node->setGhostPosition(node->pos());
             node->setGhost(false);
+
+            node->setPos(node->nonGhostPosition());
             
             this->hideAllNodes();
             this->showAllNodes();
             this->updateEdgesVisibility();
             this->setCurrentNode(NULL);
             
-            emit centerOn(this->sceneRect().center());
-            // emit fitInView(this->sceneRect());
+            emit centerOn(node->mapRectToScene(node->boundingRect()).center());
+            //emit fitInView(this->sceneRect());
             emit pathChanged(d->current_node);
         }
     }

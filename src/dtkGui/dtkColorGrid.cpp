@@ -123,7 +123,7 @@ void dtkColorGrid::setAutoSize(bool autosize)
 {
     d->autoSize = autosize;
     if (d->autoSize && d->colors) {
-        setWidthInCells(sqrt(d->colors->count()));
+        setWidthInCells(sqrt((float)(d->colors->count())));
     }
 }
 
@@ -160,7 +160,7 @@ void dtkColorGrid::setScheme(dtkColorList *list)
     d->idx = -1;
 
     if (d->autoSize && d->colors) {
-        setWidthInCells(sqrt(d->colors->count()));
+        setWidthInCells(sqrt((float)(d->colors->count())));
     } else
         redraw();
 

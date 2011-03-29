@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 15 10:54:45 2011 (+0100)
+ * Last-Updated: Wed Mar 23 09:53:54 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 401
+ *     Update #: 402
  */
 
 /* Commentary: 
@@ -136,6 +136,31 @@ QString dtkComposerNodeProperty::description(void)
         
     case(dtkComposerNodeProperty::Multiple):
         property_multiplicity = "Multiple";
+        break;
+
+    default:
+        property_multiplicity = "";
+        break;
+    }
+
+    QString property_behavior;
+
+    switch(d->behavior) {
+        
+    case(dtkComposerNodeProperty::None):
+        property_behavior = "Node";
+        break;
+        
+    case(dtkComposerNodeProperty::AsRelay):
+        property_behavior = "AsRelay";
+        break;
+        
+    case(dtkComposerNodeProperty::AsInput):
+        property_behavior = "AsInput";
+        break;
+        
+    case(dtkComposerNodeProperty::AsOutput):
+        property_behavior = "AsOutput";
         break;
 
     default:

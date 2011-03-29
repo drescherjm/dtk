@@ -25,6 +25,8 @@
 #include <dtkMath/dtkQuaternion.h>
 #include <dtkMath/dtkVector3D.h>
 
+#include <dtkCore/dtkGlobal.h>
+
 #include <QtGui>
 
 // /////////////////////////////////////////////////////////////////
@@ -151,19 +153,19 @@ void dtkVrFlystickRecognizer::onMoved(void)
     double y =  d->flystick_position[2];
     double z = -d->flystick_position[1];
     
-    qDebug() << __func__ << x << y << z;
+    qDebug() << DTK_PRETTY_FUNCTION << x << y << z;
 }
 
 void dtkVrFlystickRecognizer::onButtonPressed(int button)
 {
-    qDebug() << __func__ << button;
+    qDebug() << DTK_PRETTY_FUNCTION << button;
 
     d->activated = true;
 }
 
 void dtkVrFlystickRecognizer::onButtonReleased(int button)
 {
-    qDebug() << __func__ << button;
+    qDebug() << DTK_PRETTY_FUNCTION << button;
 
     d->activated = false;
 }

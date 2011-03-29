@@ -253,6 +253,8 @@ QVariant dtkComposerNodeString::value(dtkComposerNodeProperty *property)
 {
     if(property == d->property_output_value)
         return QVariant(d->value);
+
+	return QVariant();
 }
 
 QString dtkComposerNodeString::value(void)

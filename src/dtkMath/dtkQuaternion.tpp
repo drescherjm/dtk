@@ -280,21 +280,21 @@ template <class T> dtkQuaternion<T> dtkExp(const dtkQuaternion<T>& qtn)
         return dtkExp(dtkRe(qtn))*dtkQuaternion<T>(dtkDirection(vec)*sin(len), cos(len));
 }
 
-template <class T> dtkQuaternion<T> dtkLog(const dtkQuaternion<T>& qtn)
+template <class T> dtkQuaternion<T> dtkLogQ(const dtkQuaternion<T>& qtn)
 {
     dtkVector3D<T> vec = dtkIm(qtn);
 
     T len = dtkNorm(vec);
 
     if (len == dtkZero<T>()) 
-        return dtkQuaternion<T>(dtkZero<T>(), dtkZero<T>(), dtkZero<T>(), dtkLog(dtkNorm(qtn)));
+        return dtkQuaternion<T>(dtkZero<T>(), dtkZero<T>(), dtkZero<T>(), dtkLogQ(dtkNorm(qtn)));
     else
-        return dtkQuaternion<T>(dtkDirection(vec)*dtkArgument(qtn), dtkLog(dtkNorm(qtn)));
+        return dtkQuaternion<T>(dtkDirection(vec)*dtkArgument(qtn), dtkLogQ(dtkNorm(qtn)));
 }
 
-template <class T> inline dtkQuaternion<T> dtkPow(const dtkQuaternion<T>& qtn1, const dtkQuaternion<T>& qtn2)
+template <class T> inline dtkQuaternion<T> dtkPowQ(const dtkQuaternion<T>& qtn1, const dtkQuaternion<T>& qtn2)
 {
-    return dtkExp(qtn2*dtkLog(qtn1));
+    return dtkExp(qtn2*dtkLogQ(qtn1));
 }
 
 #endif

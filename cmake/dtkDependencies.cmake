@@ -187,6 +187,7 @@ find_package(MPI QUIET)
 if(MPI_FOUND)
 include_directories(${MPI_INCLUDE_PATH})
 set(COMPILE_FLAGS ${COMPILE_FLAGS} ${MPI_COMPILE_FLAGS})
+set(DTK_HAVE_MPI "YES")
 endif(MPI_FOUND)
 
 ## #################################################################

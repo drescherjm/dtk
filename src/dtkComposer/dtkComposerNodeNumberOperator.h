@@ -20,11 +20,12 @@
 #ifndef DTKCOMPOSERNODENUMBEROPERATOR_H
 #define DTKCOMPOSERNODENUMBEROPERATOR_H
 
+#include "dtkComposerExport.h"
 #include "dtkComposerNode.h"
 
 class dtkComposerNodeNumberOperatorPrivate;
 
-class dtkComposerNodeNumberOperator : public dtkComposerNode
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperator : public dtkComposerNode
 {
     Q_OBJECT
 

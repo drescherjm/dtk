@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 18:51:19 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 151
+ * Last-Updated: Thu Mar 24 16:06:37 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 156
  */
 
 /* Commentary: 
@@ -116,7 +116,7 @@ protected:
     void updateEdgesVisibility(void);
 
     QList<dtkComposerNodeControlBlock *> hoveredControlBlocks(dtkComposerNode *node);
-    QList<dtkComposerNodeControlBlock *> hoveredControlBlocks(dtkComposerNode *node, QList<QGraphicsItem *> parents);
+    QList<dtkComposerNodeControlBlock *> hoveredControlBlocks(dtkComposerNode *node, QList<dtkComposerNode *> parents);
 
 protected:
     void dragEnterEvent(QGraphicsSceneDragDropEvent *event);

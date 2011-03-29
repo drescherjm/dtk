@@ -155,8 +155,8 @@ public:
 
     // --
 
-    friend QDebug operator<<(QDebug dbg, dtkComposerNode& node);
-    friend QDebug operator<<(QDebug dbg, dtkComposerNode *node);
+    friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNode& node);
+    friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNode *node);
 
 signals:
     void elapsed(QString duration);
@@ -207,8 +207,8 @@ private:
 // Debug operators
 // /////////////////////////////////////////////////////////////////
 
-QDebug operator<<(QDebug dbg, dtkComposerNode  node);
-QDebug operator<<(QDebug dbg, dtkComposerNode& node);
-QDebug operator<<(QDebug dbg, dtkComposerNode *node);
+DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNode  node);
+DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNode& node);
+DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNode *node);
 
 #endif

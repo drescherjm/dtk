@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:46:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 17 11:02:06 2011 (+0100)
+ * Last-Updated: Wed Mar 23 16:32:30 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 65
+ *     Update #: 73
  */
 
 /* Commentary: 
@@ -20,6 +20,8 @@
 #ifndef DTKCOMPOSERNODECONTROLBLOCK_H
 #define DTKCOMPOSERNODECONTROLBLOCK_H
 
+#include "dtkComposerExport.h"
+
 #include <QtGui>
 
 class dtkComposerNode;
@@ -27,7 +29,7 @@ class dtkComposerNodeControl;
 class dtkComposerNodeControlBlockPrivate;
 class dtkComposerNodeProperty;
 
-class dtkComposerNodeControlBlock : public QObject, public QGraphicsRectItem
+class DTKCOMPOSER_EXPORT dtkComposerNodeControlBlock : public QObject, public QGraphicsRectItem
 {
     Q_OBJECT
     Q_PROPERTY(QColor brushColor READ brushColor WRITE setBrushColor)
@@ -65,12 +67,16 @@ public:
     dtkComposerNodeProperty  *addInputProperty(QString name, dtkComposerNode *parent = 0);
     dtkComposerNodeProperty *addOutputProperty(QString name, dtkComposerNode *parent = 0);
 
+    void removeInputProperty(dtkComposerNodeProperty *property);
+    void removeOutputProperty(dtkComposerNodeProperty *property);
+    void removeAllProperties(void);
+
 public:
     void adjustChildNodes(qreal dw, qreal dh);
     QRectF minimalBoundingRect(void);
     
 public:
-    static void highlight(dtkComposerNodeControlBlock *block);
+    void highlight(bool ok);
 
 protected:
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);

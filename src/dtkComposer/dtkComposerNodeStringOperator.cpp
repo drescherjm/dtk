@@ -184,6 +184,8 @@ QVariant dtkComposerNodeStringOperator::value(dtkComposerNodeProperty *property)
 {
     if(property == d->property_output_value)
         return QVariant(d->value);
+
+	return QVariant();
 }
 
 dtkComposerNodeStringOperator::Operation dtkComposerNodeStringOperator::operation(void)

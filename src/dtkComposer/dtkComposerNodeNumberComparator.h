@@ -21,11 +21,12 @@
 #ifndef DTKCOMPOSERNODENUMBERCOMPARATOR_H
 #define DTKCOMPOSERNODENUMBERCOMPARATOR_H
 
+#include "dtkComposerExport.h"
 #include "dtkComposerNode.h"
 
 class dtkComposerNodeNumberComparatorPrivate;
 
-class dtkComposerNodeNumberComparator : public dtkComposerNode
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberComparator : public dtkComposerNode
 {
     Q_OBJECT
 

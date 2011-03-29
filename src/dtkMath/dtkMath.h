@@ -22,7 +22,14 @@
 
 #include "dtkMathExport.h"
 
+#include <QtCore/QtGlobal>
+
+#if !defined(Q_WS_WIN)
 #include <inttypes.h>
+#else
+#define int32_t __int32
+#define int64_t __int64
+#endif
 
 // /////////////////////////////////////////////////////////////////
 // Sorting algorithm

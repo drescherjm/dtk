@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb  7 10:04:45 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  7 14:21:01 2011 (+0100)
+ * Last-Updated: Wed Mar 30 13:33:14 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 12
+ *     Update #: 34
  */
 
 /* Commentary: 
@@ -97,11 +97,19 @@ void dtkVrFlystickRecognizerPrivate::handle_analog(const vrpn_ANALOGCB callback)
 void dtkVrFlystickRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback)
 {
     if(callback.sensor == 5) {
+
         this->flystick_position[0] = callback.pos[0];
         this->flystick_position[1] = callback.pos[1];
         this->flystick_position[2] = callback.pos[2];
 
         emit moved();
+
+        this->flystick_orientation[0] = callback.quat[0];
+        this->flystick_orientation[1] = callback.quat[1];
+        this->flystick_orientation[2] = callback.quat[2];
+        this->flystick_orientation[3] = callback.quat[3];
+
+        emit rotated();
     }
 }
 
@@ -117,9 +125,11 @@ dtkVrFlystickRecognizer::dtkVrFlystickRecognizer(void) : QObject(), d(new dtkVrF
     d->running = false;
     d->activated = true;
 
-    d->last = dtkVector3D<double>(0.0, 0.0, 0.0);
+    d->last_position = dtkVector3D<double>(0.0, 0.0, 0.0);
+    d->last_orientation = dtkQuaternion<double>(0.0, 0.0, 0.0, 1.0);
 
     connect(d, SIGNAL(moved()), this, SLOT(onMoved()));
+    connect(d, SIGNAL(rotated()), this, SLOT(onRotated()));
     connect(d, SIGNAL(buttonPressed(int)), this, SLOT(onButtonPressed(int)));
     connect(d, SIGNAL(buttonReleased(int)), this, SLOT(onButtonReleased(int)));
 }
@@ -146,14 +156,21 @@ void dtkVrFlystickRecognizer::stopConnection(void)
 
 void dtkVrFlystickRecognizer::onMoved(void)
 {
-    // if(!d->activated)
-    //     return;
-
     double x =  d->flystick_position[0];
     double y =  d->flystick_position[2];
     double z = -d->flystick_position[1];
     
     qDebug() << DTK_PRETTY_FUNCTION << x << y << z;
+}
+
+void dtkVrFlystickRecognizer::onRotated(void)
+{
+    double q0 = d->flystick_orientation[0];
+    double q1 = d->flystick_orientation[1];
+    double q2 = d->flystick_orientation[2];
+    double q3 = d->flystick_orientation[3];
+    
+    qDebug() << DTK_PRETTY_FUNCTION << q0 << q1 << q2 << q3;
 }
 
 void dtkVrFlystickRecognizer::onButtonPressed(int button)

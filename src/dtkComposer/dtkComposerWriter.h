@@ -20,6 +20,8 @@
 #ifndef DTKCOMPOSERWRITER_H
 #define DTKCOMPOSERWRITER_H
 
+#include "dtkComposerExport.h"
+
 #include <QtCore/QObject>
 
 #include <QtXml/QDomElement>
@@ -28,7 +30,7 @@ class dtkComposerNode;
 class dtkComposerScene;
 class dtkComposerWriterPrivate;
 
-class dtkComposerWriter : public QObject
+class DTKCOMPOSER_EXPORT dtkComposerWriter : public QObject
 {
     Q_OBJECT
 

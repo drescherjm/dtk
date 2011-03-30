@@ -20,12 +20,14 @@
 #ifndef DTKCOMPOSERNODEFACTORY_H
 #define DTKCOMPOSERNODEFACTORY_H
 
+#include "dtkComposerExport.h"
+
 #include <QtCore>
 
 class dtkComposerNode;
 class dtkComposerNodeFactoryPrivate;
 
-class dtkComposerNodeFactory : public QObject
+class DTKCOMPOSER_EXPORT dtkComposerNodeFactory : public QObject
 {
     Q_OBJECT
 

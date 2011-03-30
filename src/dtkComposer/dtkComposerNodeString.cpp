@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 15:12:01 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 27 17:43:39 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 164
+ * Last-Updated: Tue Mar  1 09:27:54 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 255
  */
 
 /* Commentary: 
@@ -51,18 +51,23 @@ public:
 
 dtkComposerNodeStringButton::dtkComposerNodeStringButton(dtkComposerNodeString *parent) : QGraphicsItem(parent)
 {
-    QPainterPath b; b.addRoundedRect( 0, 0, 10, 15, 5, 5);
-    QPainterPath c; c.addRoundedRect(10, 0, 20, 15, 5, 5);
-    QPainterPath d; d.addRoundedRect(30, 0, 10, 15, 5, 5);
-    QPainterPath e; e.addRoundedRect( 5, 0, 30,  7, 0, 0);
+    int margin = 10;
+    int length = 30;
+    int height = 10;
+    int radius =  5;
+    int origin_x = -(length + margin) / 2;
+    int origin_y = parent->boundingRect().height() / 2;
+
+    QPainterPath b; b.addRoundedRect(origin_x,              origin_y, margin,          -height,     radius, radius);
+    QPainterPath c; c.addRoundedRect(origin_x + margin,     origin_y, length - margin, -height,     radius, radius);
+    QPainterPath d; d.addRoundedRect(origin_x + length,     origin_y, margin,          -height,     radius, radius);
+    QPainterPath e; e.addRoundedRect(origin_x + margin / 2, origin_y, length,          -height / 2,      0,      0);
 
     path = c.united(e.subtracted(b.united(c.united(d))));
-    
-    path.translate(path.boundingRect().width()/2 * -1, 0);
 
     parent_node = parent;
     
-    text = "i";
+    text = "+";
 
     expanded = false;
 }
@@ -92,9 +97,9 @@ void dtkComposerNodeStringButton::paint(QPainter *painter, const QStyleOptionGra
     painter->drawPath(path);
     
 #if defined(Q_WS_MAC)
-    QFont font("Lucida Grande", 11);
+    QFont font("Lucida Grande", 8);
 #else
-    QFont font("Lucida Grande", 9);
+    QFont font("Lucida Grande", 6);
 #endif
     font.setBold(true);
 
@@ -102,17 +107,20 @@ void dtkComposerNodeStringButton::paint(QPainter *painter, const QStyleOptionGra
     
     painter->setFont(font);
     painter->setPen(Qt::white);
-    painter->drawText(option->rect.left() + option->rect.width()/2 - metrics.width(text)/2, 11, text);
+    painter->drawText(this->boundingRect(), Qt::AlignCenter, text);
 }
 
 void dtkComposerNodeStringButton::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
 
-    if(!this->expanded)
+    if(!this->expanded) {
         parent_node->expand();
-    else
+        text = "-";
+    } else {
         parent_node->collapse();
+        text = "+";
+    }
 
     this->expanded = !this->expanded;
 }
@@ -154,7 +162,7 @@ dtkComposerNodeStringEditor::dtkComposerNodeStringEditor(dtkComposerNodeString *
 
 void dtkComposerNodeStringEditor::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    QPainterPath s_rect; s_rect.addRect(QRectF(option->rect.topLeft(), QSizeF(option->rect.width(), 10)));
+    QPainterPath s_rect; s_rect.addRect(QRectF(option->rect.topLeft(), QSizeF(option->rect.width(), option->rect.height() / 2)));
     QPainterPath r_rect; r_rect.addRoundedRect(option->rect, 5, 5);
     QPainterPath path = s_rect.united(r_rect);
 
@@ -209,7 +217,7 @@ dtkComposerNodeString::dtkComposerNodeString(dtkComposerNode *parent) : dtkCompo
     d->property_output_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, this);
 
     d->button = new dtkComposerNodeStringButton(this);
-    d->button->setPos(40, -20);
+    d->button->setPos(0,0);
 
     this->setTitle("String");
     this->setKind(dtkComposerNode::Atomic);
@@ -221,16 +229,16 @@ dtkComposerNodeString::dtkComposerNodeString(dtkComposerNode *parent) : dtkCompo
     // --
     
     d->editor = new dtkComposerNodeStringEditor(this);
-    d->editor->setPos(-50, -10);
-    d->editor->setTextWidth(100);
+    d->editor->setPos(-d->editor->boundingRect().width() / 2, 0);
+    d->editor->setTextWidth(0.8 * this->boundingRect().width());
     d->editor->hide();
 
     // --
 
     d->animation = new QPropertyAnimation(d->editor, "pos");
     d->animation->setDuration(500);
-    d->animation->setStartValue(QPointF(-50, 0));
-    d->animation->setEndValue(QPointF(-50, d->editor->boundingRect().height()));
+    d->animation->setStartValue(QPointF(-d->editor->boundingRect().width()/2, 0));
+    d->animation->setEndValue(QPointF(-d->editor->boundingRect().width()/2, 0.85 * d->editor->boundingRect().height()));
     d->animation->setEasingCurve(QEasingCurve::OutBounce);
 }
 
@@ -245,6 +253,8 @@ QVariant dtkComposerNodeString::value(dtkComposerNodeProperty *property)
 {
     if(property == d->property_output_value)
         return QVariant(d->value);
+
+	return QVariant();
 }
 
 QString dtkComposerNodeString::value(void)

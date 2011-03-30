@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Tue Mar 23 21:01:24 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue Apr  6 09:20:12 2010 (+0200)
+## Last-Updated: Mon Mar 14 15:38:12 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 4
+##     Update #: 12
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,9 +24,13 @@ project(dtkInspector)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS_MOC
+  tstInspectorObject.h
+  tstInspectorScene.h
   tstMainWindow.h)
 
 set(${PROJECT_NAME}_SOURCES
+  tstInspectorObject.cpp
+  tstInspectorScene.cpp
   tstMainWindow.cpp
   main.cpp)
 

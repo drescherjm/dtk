@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Feb 28 11:09:26 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 477
+ * Last-Updated: Wed Mar  9 14:29:09 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 636
  */
 
 /* Commentary: 
@@ -21,8 +21,15 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
+#include "dtkComposerNodeCase.h"
+#include "dtkComposerNodeConditional.h"
+#include "dtkComposerNodeControl.h"
+#include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeFile.h"
+#include "dtkComposerNodeLoop.h"
 #include "dtkComposerNodeNumber.h"
+#include "dtkComposerNodeNumberComparator.h"
+#include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerNodeString.h"
@@ -115,18 +122,48 @@ void dtkComposerReader::read(const QString& fileName)
         
         QString source_property_id;
         QString destin_property_id;
+
+        QString source_property_block;
+        QString destin_property_block;
         
         if (source.hasAttribute("id"))
             source_property_id = source.attribute("id");
+        if (source.hasAttribute("block"))
+            source_property_block = source.attribute("block");
 
         if (destin.hasAttribute("id"))
             destin_property_id = destin.attribute("id");
+        if (destin.hasAttribute("block"))
+            destin_property_block = destin.attribute("block");
 
         dtkComposerEdge *edge = new dtkComposerEdge;
         
-        if(source_property_id.isEmpty() && destin_property_id.isEmpty()) {
+        if(source_property_id.isEmpty() && destin_property_id.isEmpty() && source_property_block.isEmpty() && destin_property_block.isEmpty()) {
             edge->setSource(d->node_map.value(source_id)->outputProperty(source_property));
             edge->setDestination(d->node_map.value(destin_id)->inputProperty(destin_property));
+        }
+
+        else if(!source_property_block.isEmpty() || !destin_property_block.isEmpty()) {
+
+            if (!source_property_block.isEmpty()) {
+
+                if(d->node_map.value(source_id) == d->node_map.value(destin_id)->parentNode())
+                    edge->setSource(dynamic_cast<dtkComposerNodeControl *>(d->node_map.value(source_id))->inputProperty(source_property_block, source_property));
+                else
+                    edge->setSource(dynamic_cast<dtkComposerNodeControl *>(d->node_map.value(source_id))->outputProperty(source_property_block, source_property));
+
+                edge->setDestination(d->node_map.value(destin_id)->inputProperty(destin_property));
+            }
+
+            else {
+
+                edge->setSource(d->node_map.value(source_id)->outputProperty(source_property));
+
+                if(d->node_map.value(source_id)->parentNode() == d->node_map.value(destin_id))
+                    edge->setDestination(dynamic_cast<dtkComposerNodeControl *>(d->node_map.value(destin_id))->outputProperty(destin_property_block, destin_property));
+                else
+                    edge->setDestination(dynamic_cast<dtkComposerNodeControl *>(d->node_map.value(destin_id))->inputProperty(destin_property_block, destin_property));
+            }
         }
 
         else if(!source_property_id.isEmpty() && !destin_property_id.isEmpty()) {
@@ -301,10 +338,149 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
         
         for(int i = 0; i < children.count(); i++) {
 
-            if(children.at(i).toElement().tagName() != "value")
+            if(children.at(i).toElement().tagName() != "genre") 
                 continue;
 
-            //number_node->setValue((children.at(i).childNodes().at(0).toText().data()));
+            dtkComposerNodeNumber::Genre genre;
+
+            if(children.at(i).childNodes().at(0).toText().data() == "int")
+                genre = dtkComposerNodeNumber::Int;
+            else if(children.at(i).childNodes().at(0).toText().data() == "uint")
+                genre = dtkComposerNodeNumber::UInt;
+            else if(children.at(i).childNodes().at(0).toText().data() == "long")
+                genre = dtkComposerNodeNumber::Long;
+            else if(children.at(i).childNodes().at(0).toText().data() == "ulong")
+                genre = dtkComposerNodeNumber::ULong;
+            else if(children.at(i).childNodes().at(0).toText().data() == "longlong")
+                genre = dtkComposerNodeNumber::LongLong;
+            else if(children.at(i).childNodes().at(0).toText().data() == "ulonglong")
+                genre = dtkComposerNodeNumber::ULongLong;
+            else if(children.at(i).childNodes().at(0).toText().data() == "float")
+                genre = dtkComposerNodeNumber::Float;
+            else if(children.at(i).childNodes().at(0).toText().data() == "double")
+                genre = dtkComposerNodeNumber::Double;
+
+            number_node->setGenre(genre);
+        }
+        
+        for(int i = 0; i < children.count(); i++) {
+
+            if(children.at(i).toElement().tagName() != "value") 
+                continue;
+
+            QString value = children.at(i).childNodes().at(0).toText().data();
+
+            switch (number_node->genre()) {
+
+            case (dtkComposerNodeNumber::Int):
+                number_node->setValue(value.toInt());
+                break;
+        
+            case (dtkComposerNodeNumber::UInt):
+                number_node->setValue(value.toUInt());
+                break;
+                
+            case (dtkComposerNodeNumber::Long):
+                number_node->setValue((long)value.toLongLong());
+                break;
+                
+            case (dtkComposerNodeNumber::ULong):
+                number_node->setValue((ulong)value.toULongLong());
+                break;
+                
+            case (dtkComposerNodeNumber::LongLong):
+                number_node->setValue(value.toLongLong());
+                break;
+                
+            case (dtkComposerNodeNumber::ULongLong):
+                number_node->setValue(value.toULongLong());
+                break;
+                
+            case (dtkComposerNodeNumber::Float):
+                number_node->setValue((float)value.toDouble());
+                break;
+                
+            case (dtkComposerNodeNumber::Double):
+                number_node->setValue(value.toDouble());
+                break;
+                
+            default:
+                number_node->setGenre(dtkComposerNodeNumber::Int);
+                number_node->setValue(value.toInt());
+                break;
+            }
+        }
+
+        number_node->refresh();
+    }
+
+    // Number comparator
+    
+    if(dtkComposerNodeNumberComparator *number_comparator_node = dynamic_cast<dtkComposerNodeNumberComparator *>(n)) {
+        
+        QDomNodeList children = node.childNodes();
+        
+        for(int i = 0; i < children.count(); i++) {
+
+            if(children.at(i).toElement().tagName() != "operation")
+                continue;
+
+            dtkComposerNodeNumberComparator::Operation operation;
+
+            if(children.at(i).childNodes().at(0).toText().data() == "<")
+                operation = dtkComposerNodeNumberComparator::LesserThan;
+            else if(children.at(i).childNodes().at(0).toText().data() == "<=")
+                operation = dtkComposerNodeNumberComparator::LesserThanOrEqual;
+            else if(children.at(i).childNodes().at(0).toText().data() == ">")
+                operation = dtkComposerNodeNumberComparator::GreaterThan;
+            else if(children.at(i).childNodes().at(0).toText().data() == ">=")
+                operation = dtkComposerNodeNumberComparator::GreaterThanOrEqual;
+            else if(children.at(i).childNodes().at(0).toText().data() == "==")
+                operation = dtkComposerNodeNumberComparator::Equal;
+            else if(children.at(i).childNodes().at(0).toText().data() == "!=")
+                operation = dtkComposerNodeNumberComparator::Differ;
+            else
+                operation = dtkComposerNodeNumberComparator::Equal;
+
+            number_comparator_node->setOperation(operation);
+        }
+    }
+
+    // Number operator
+    
+    if(dtkComposerNodeNumberOperator *number_operator_node = dynamic_cast<dtkComposerNodeNumberOperator *>(n)) {
+        
+        QDomNodeList children = node.childNodes();
+        
+        for(int i = 0; i < children.count(); i++) {
+
+            if(children.at(i).toElement().tagName() != "operation")
+                continue;
+
+            dtkComposerNodeNumberOperator::Operation operation;
+
+            if(children.at(i).childNodes().at(0).toText().data() == "+")
+                operation = dtkComposerNodeNumberOperator::Addition;
+            else if(children.at(i).childNodes().at(0).toText().data() == "-")
+                operation = dtkComposerNodeNumberOperator::Substraction;
+            else if(children.at(i).childNodes().at(0).toText().data() == "x")
+                operation = dtkComposerNodeNumberOperator::Multiplication;
+            else if(children.at(i).childNodes().at(0).toText().data() == "/")
+                operation = dtkComposerNodeNumberOperator::Division;
+            else if(children.at(i).childNodes().at(0).toText().data() == "++")
+                operation = dtkComposerNodeNumberOperator::Increment;
+            else if(children.at(i).childNodes().at(0).toText().data() == "--")
+                operation = dtkComposerNodeNumberOperator::Decrement;
+            else if(children.at(i).childNodes().at(0).toText().data() == "%")
+                operation = dtkComposerNodeNumberOperator::Modulo;
+            else if(children.at(i).childNodes().at(0).toText().data() == "MIN")
+                operation = dtkComposerNodeNumberOperator::Min;
+            else if(children.at(i).childNodes().at(0).toText().data() == "MAX")
+                operation = dtkComposerNodeNumberOperator::Max;
+            else
+                operation = dtkComposerNodeNumberOperator::Addition;
+
+            number_operator_node->setOperation(operation);
         }
     }
 
@@ -406,6 +582,87 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
                 continue;
 
             process_node->setupImplementation(children.at(i).childNodes().at(0).toText().data());
+        }
+    }
+
+    // Control node
+    
+    if(dtkComposerNodeControl *control_node = dynamic_cast<dtkComposerNodeControl *>(n)) {
+
+        qreal w = node.toElement().attribute("w").toFloat();
+        qreal h = node.toElement().attribute("h").toFloat();
+
+        if(dtkComposerNodeCase *case_node = dynamic_cast<dtkComposerNodeCase *>(control_node)) {
+
+            int case_block_count = 0;
+
+            QDomNodeList children = node.childNodes();
+
+            for(int i = 0; i < children.count(); i++) {
+                
+                if(children.at(i).toElement().tagName() != "block")
+                    continue;
+
+                if(children.at(i).toElement().attribute("title").startsWith("case"))
+                    case_block_count++;
+            }
+
+            for(int i = 0; i < case_block_count; i++)
+                case_node->addBlock(QString("case%1").arg(i));
+        }
+
+        if(dynamic_cast<dtkComposerNodeConditional *>(control_node) || dynamic_cast<dtkComposerNodeLoop *>(control_node)) {
+
+            QDomNodeList children = node.childNodes();
+
+            for(int i = 0; i < children.count(); i++) {
+                
+                if(children.at(i).toElement().tagName() != "property")
+                    continue;
+
+                if(children.at(i).toElement().attribute("name") == "condition")
+                    continue;
+
+                // Assign the property
+
+                qDebug() << "Assigning" << children.at(i).toElement().attribute("name") << "property to block" << children.at(i).toElement().attribute("block") << "for node" << control_node->title();
+
+                if(children.at(i).toElement().attribute("type") == "input") {
+                    dtkComposerNodeProperty *i_p = control_node->block(children.at(i).toElement().attribute("block"))->addInputProperty(children.at(i).toElement().attribute("name"), control_node);
+                    control_node->addInputProperty(i_p);
+                }
+                
+                if(children.at(i).toElement().attribute("type") == "output") {
+                    dtkComposerNodeProperty *o_p = control_node->block(children.at(i).toElement().attribute("block"))->addOutputProperty(children.at(i).toElement().attribute("name"), control_node);
+                    control_node->addOutputProperty(o_p);
+                }
+            }
+        }
+
+        control_node->setSize(w, h);
+        
+        foreach(dtkComposerNodeControlBlock *block, control_node->blocks()) {
+
+            QDomNodeList children = node.childNodes();
+            
+            for(int i = 0; i < children.count(); i++) {
+                
+                if(children.at(i).toElement().tagName() != "block")
+                    continue;
+
+                if(children.at(i).toElement().attribute("title") != block->title())
+                    continue;
+
+                QDomNodeList block_node_elements = children.at(i).childNodes();
+                
+                for(int i = 0; i < block_node_elements.count(); i++) {
+                    
+                    dtkComposerNode *block_node = this->readNode(block_node_elements.at(i));
+                    block_node->setParentItem(block);
+                    block_node->setParentNode(block->parentNode());
+                    block_node->setPos(block_node->pos());
+                }
+            }
         }
     }
 

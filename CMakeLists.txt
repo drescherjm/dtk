@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Oct 14 20:56:24 2010 (+0200)
+## Last-Updated: Thu Mar  3 19:07:20 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 299
+##     Update #: 300
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,13 +17,13 @@
 ## 
 ######################################################################
 
-cmake_minimum_required(VERSION 2.8.0)
+cmake_minimum_required(VERSION 2.6.4)
 
 project(dtk)
 
-set(${PROJECT_NAME}_VERSION_MAJOR 0 CACHE STRING "dtk major version number.")
-set(${PROJECT_NAME}_VERSION_MINOR 1 CACHE STRING "dtk minor version number.")
-set(${PROJECT_NAME}_VERSION_BUILD 23 CACHE STRING "dtk build version number.")
+set(${PROJECT_NAME}_VERSION_MAJOR  0 CACHE STRING "dtk major version number.")
+set(${PROJECT_NAME}_VERSION_MINOR  1 CACHE STRING "dtk minor version number.")
+set(${PROJECT_NAME}_VERSION_BUILD 26 CACHE STRING "dtk build version number.")
 set(${PROJECT_NAME}_VERSION
   "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD}")
 
@@ -35,17 +35,17 @@ enable_testing()
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
-include(dtkDependencies)
-include(dtkBuild)
-include(dtkNightly)
-include(dtkDart)
-include(dtkPack)
-
 option(BUILD_SHARED_LIBS   "Build shared libraries" true)
 option(BUILD_TOOLS         "Build tools"            true)
 option(BUILD_EXAMPLES      "Build examples"         true)
 option(BUILD_DOCUMENTATION "Build documentation"    true)
 option(BUILD_WRAPPERS      "Build wrappers"         true)
+
+include(dtkDependencies)
+include(dtkBuild)
+include(dtkNightly)
+include(dtkDart)
+include(dtkPack)
 
 add_subdirectory(src)
 

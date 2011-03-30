@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:54:04 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  6 21:03:10 2010 (+0200)
+ * Last-Updated: Thu Mar  3 19:17:33 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 168
+ *     Update #: 171
  */
 
 /* Commentary:
@@ -116,12 +116,12 @@ void dtkAbstractObject::addProperty(const QString& key, const QString& value)
 void dtkAbstractObject::setProperty(const QString& key, const QString& value)
 {
     if(!d->values.contains(key)) {
-    	dtkDebug() << this->metaObject()->className() << "has no such property:" << key;
+    	dtkDebug() << this->metaObject()->className() << " has no such property:" << key;
     	return;
     }
 
     if(!d->values.value(key).contains(value)) {
-    	dtkDebug() << this->metaObject()->className() << "has no such value:" << value << "for key:" << key;
+    	dtkDebug() << this->metaObject()->className() << " has no such value:" << value << " for key: " << key;
     	return;
     }
 

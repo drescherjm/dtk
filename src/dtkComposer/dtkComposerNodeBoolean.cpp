@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 25 10:07:34 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 27 01:32:19 2011 (+0100)
+ * Last-Updated: Fri Mar  4 21:06:46 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 194
+ *     Update #: 202
  */
 
 /* Commentary: 
@@ -50,21 +50,21 @@ public:
 
 dtkComposerNodeBooleanLabel::dtkComposerNodeBooleanLabel(dtkComposerNodeBoolean *parent) : QGraphicsItem(parent)
 {
-    QPainterPath b; b.addRoundedRect( 0, 0, 10, 15, 5, 5);
-    QPainterPath c; c.addRoundedRect(10, 0, 20, 15, 5, 5);
-    QPainterPath d; d.addRoundedRect(30, 0, 10, 15, 5, 5);
-    QPainterPath e; e.addRoundedRect( 5, 0, 30,  7, 0, 0);
+    int margin = 10;
+    int length = 30;
+    int height = 15;
+    int radius =  5;
+    int origin_x = parent->boundingRect().width() / 2 - length - margin;
+    int origin_y = -parent->boundingRect().height() / 2;
+
+    QPainterPath b; b.addRoundedRect(origin_x,              origin_y, margin,          height,     radius, radius);
+    QPainterPath c; c.addRoundedRect(origin_x + margin,     origin_y, length - margin, height,     radius, radius);
+    QPainterPath d; d.addRoundedRect(origin_x + length,     origin_y, margin,          height,     radius, radius);
+    QPainterPath e; e.addRoundedRect(origin_x + margin / 2, origin_y, length,          height / 2,      0,      0);
 
     path = c.united(e.subtracted(b.united(c.united(d))));
-    
-    path.translate(path.boundingRect().width()/2 * -1, 0);
 
     parent_node = parent;
-
-    if(parent_node->value())
-        text = "T";
-    else
-        text = "F";
 }
 
 dtkComposerNodeBooleanLabel::~dtkComposerNodeBooleanLabel(void)
@@ -102,7 +102,7 @@ void dtkComposerNodeBooleanLabel::paint(QPainter *painter, const QStyleOptionGra
     
     painter->setFont(font);
     painter->setPen(Qt::white);
-    painter->drawText(option->rect.left() + option->rect.width()/2 - metrics.width(text)/2, 11, text);
+    painter->drawText(this->boundingRect(), Qt::AlignCenter, text);
 }
 
 void dtkComposerNodeBooleanLabel::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -146,7 +146,8 @@ dtkComposerNodeBoolean::dtkComposerNodeBoolean(dtkComposerNode *parent) : dtkCom
     d->property_output_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, this);
 
     d->label = new dtkComposerNodeBooleanLabel(this);
-    d->label->setPos(40, -20);
+    d->label->setPos(0, 0);
+    d->label->text = "F";
 
     d->value = false;
 
@@ -169,6 +170,8 @@ QVariant dtkComposerNodeBoolean::value(dtkComposerNodeProperty *property)
 {
     if(property == d->property_output_value)
         return QVariant(d->value);
+
+	return QVariant();
 }
 
 bool dtkComposerNodeBoolean::value(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb 24 11:28:34 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 98
+ * Last-Updated: Tue Mar 15 10:56:47 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 123
  */
 
 /* Commentary: 
@@ -40,14 +40,23 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeProperty : public QObject, public QGraph
 
 public:
     enum Type {
-         Input,
-        Output
+        Input,
+        Output,
+        HybridInput,
+        HybridOutput
     };
     
     enum Multiplicity {
         Null,
         Single,
         Multiple
+    };
+
+    enum Behavior {
+        None,
+        AsRelay,
+        AsInput,
+        AsOutput
     };
 
      dtkComposerNodeProperty(QString name, Type type, Multiplicity multiplicity, dtkComposerNode *parent);
@@ -64,6 +73,9 @@ public:
 
             Type type(void);
     Multiplicity multiplicity(void);
+        Behavior behavior(void);
+
+    bool contains(const QPointF& point) const;
 
     int count(void);
 
@@ -72,15 +84,22 @@ public:
 
     dtkComposerNode *parent(void);
     dtkComposerNode *clonedFrom(void);
+    
+    QString blockedFrom(void) const;
 
+    void setBlockedFrom(const QString& name);
     void setClonedFrom(dtkComposerNode *node);
     void setParentNode(dtkComposerNode *node);
 
     bool  isDisplayed(void);
     void setDisplayed(bool dirty);
 
-    friend QDebug operator<<(QDebug dbg, dtkComposerNodeProperty& property);
-    friend QDebug operator<<(QDebug dbg, dtkComposerNodeProperty *property);
+    void setName(const QString& name);
+
+	void setBehavior(Behavior behavior);
+
+    friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNodeProperty& property);
+    friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNodeProperty *property);
 
 public:
     QRectF boundingRect(void) const;
@@ -101,8 +120,8 @@ private:
 // Debug operators
 // /////////////////////////////////////////////////////////////////
 
-QDebug operator<<(QDebug dbg, dtkComposerNodeProperty  property);
-QDebug operator<<(QDebug dbg, dtkComposerNodeProperty& property);
-QDebug operator<<(QDebug dbg, dtkComposerNodeProperty *property);
+DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNodeProperty  property);
+DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNodeProperty& property);
+DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNodeProperty *property);
 
 #endif

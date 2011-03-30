@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Sat Jun 13 19:49:36 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Feb 16 08:36:22 2010 (+0100)
+## Last-Updated: Thu Mar  3 19:06:00 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 122
+##     Update #: 123
 ######################################################################
 ## 
 ### Commentary: 
@@ -957,7 +957,7 @@ QHP_SECT_FILTER_ATTRS  = dtk # DO NOT CHANGE THIS VALUE
 # If non-empty doxygen will try to run qhelpgenerator on the generated 
 # .qhp file.
 
-QHG_LOCATION           = qhelpgenerator
+QHG_LOCATION           = @QT_BINARY_DIR@/qhelpgenerator
 
 # The DISABLE_INDEX tag can be used to turn on/off the condensed index at 
 # top of each HTML page. The value NO (the default) enables the index and 
@@ -1317,7 +1317,7 @@ TAGFILES               =
 # When a file name is specified after GENERATE_TAGFILE, doxygen will create 
 # a tag file that is based on the input files it reads.
 
-GENERATE_TAGFILE       = dtk.tag 
+GENERATE_TAGFILE       = @PROJECT_NAME@.tag
 
 # If the ALLEXTERNALS tag is set to YES all external classes will be listed 
 # in the class index. If set to NO only the inherited external classes 
@@ -1475,7 +1475,7 @@ DOT_IMAGE_FORMAT       = png
 # The tag DOT_PATH can be used to specify the path where the dot tool can be 
 # found. If left blank, it is assumed the dot tool can be found in the path.
 
-DOT_PATH               = 
+DOT_PATH               = @DOXYGEN_DOT_PATH@
 
 # The DOTFILE_DIRS tag can be used to specify one or more directories that 
 # contain dot files that are included in the documentation (see the 

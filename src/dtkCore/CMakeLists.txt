@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Oct 14 21:05:06 2010 (+0200)
+## Last-Updated: Tue Mar 15 18:07:12 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 181
+##     Update #: 186
 ######################################################################
 ## 
 ### Commentary: 
@@ -121,6 +121,14 @@ if(BUILD_WRAPPERS AND SWIG_FOUND)
   endif(TCL_FOUND)
   
 endif(BUILD_WRAPPERS AND SWIG_FOUND)
+
+## #################################################################
+## Configure file
+## #################################################################
+
+configure_file (
+  "${PROJECT_SOURCE_DIR}/dtkConfig.h.in"
+  "${CMAKE_BINARY_DIR}/dtkConfig.h")
 
 ## #################################################################
 ## Build rules

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Feb 25 10:07:09 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 227
+ * Last-Updated: Tue Mar 15 11:15:54 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 240
  */
 
 /* Commentary: 
@@ -45,6 +45,7 @@ public:
         Unknown,
         Atomic,
         Composite,
+        Control,
         Data,
         Process,
         View
@@ -72,6 +73,9 @@ public:
     void addGhostInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
     void addGhostOutputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
 
+    void addInputRelayEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void addOutputRelayEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+
     void removeInputEdge(dtkComposerEdge *edge);
     void removeOutputEdge(dtkComposerEdge *edge);
     void removeAllEdges(void);
@@ -79,6 +83,10 @@ public:
     void removeGhostInputEdge(dtkComposerEdge *edge);
     void removeGhostOutputEdge(dtkComposerEdge *edge);
     void removeAllGhostEdges(void);
+
+    void removeInputRelayEdge(dtkComposerEdge *edge);
+    void removeOutputRelayEdge(dtkComposerEdge *edge);
+    void removeAllRelayEdges(void);
 
     void addAction(const QString& text, const QObject *receiver, const char *slot);
 
@@ -99,6 +107,9 @@ public:
     QList<dtkComposerEdge *> inputGhostEdges(void);
     QList<dtkComposerEdge *> outputGhostEdges(void);
 
+    QList<dtkComposerEdge *> inputRelayEdges(void);
+    QList<dtkComposerEdge *> outputRelayEdges(void);
+
     QList<dtkComposerNode *> inputNodes(void);
     QList<dtkComposerNode *> outputNodes(void);
 
@@ -116,7 +127,10 @@ public:
     bool dirty(void);
     void setDirty(bool dirty);
 
-    void layout(void);
+    bool resizable(void);
+    void setResizable(bool resizable);
+
+    virtual void layout(void);
 
     // -- Composite operations
 
@@ -134,8 +148,15 @@ public:
     void setGhost(bool ghost);
     bool  isGhost(void);
 
-    friend QDebug operator<<(QDebug dbg, dtkComposerNode& node);
-    friend QDebug operator<<(QDebug dbg, dtkComposerNode *node);
+    // --
+
+    void setSize(const QSizeF& size);
+    void setSize(qreal w, qreal h);
+
+    // --
+
+    friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNode& node);
+    friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNode *node);
 
 signals:
     void elapsed(QString duration);
@@ -146,12 +167,17 @@ signals:
 public slots:
     void alter(void);
     void touch(void);
-    void update(void);
+
+public slots:
+    virtual void update(void);
 
 public:
-    QRectF boundingRect(void) const;
+    virtual QRectF boundingRect(void) const;
 
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+protected:
+    qreal nodeRadius(void);
 
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
@@ -170,15 +196,19 @@ protected:
     virtual void run(void);
 
 private:
-    friend class dtkComposerNodePrivate; dtkComposerNodePrivate *d;
+    friend class dtkComposerScene; 
+    friend class dtkComposerNodePrivate;
+
+private:
+    dtkComposerNodePrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////
 // Debug operators
 // /////////////////////////////////////////////////////////////////
 
-QDebug operator<<(QDebug dbg, dtkComposerNode  node);
-QDebug operator<<(QDebug dbg, dtkComposerNode& node);
-QDebug operator<<(QDebug dbg, dtkComposerNode *node);
+DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNode  node);
+DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNode& node);
+DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNode *node);
 
 #endif

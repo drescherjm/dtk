@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Feb 28 11:08:57 2011 (+0100)
-##           By: Thibaud Kloczko
-##     Update #: 114
+## Last-Updated: Mon Mar 14 15:06:38 2011 (+0100)
+##           By: Julien Wintz
+##     Update #: 129
 ######################################################################
 ## 
 ### Commentary: 
@@ -30,10 +30,18 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNode.h
   dtkComposerNodeBoolean.h
   dtkComposerNodeBooleanOperator.h
+  dtkComposerNodeCase.h
+  dtkComposerNodeConditional.h
+  dtkComposerNodeControl.h
+  dtkComposerNodeControlBlock.h
   dtkComposerNodeData.h
   dtkComposerNodeFactory.h
   dtkComposerNodeFile.h
+  dtkComposerNodeLog.h
+  dtkComposerNodeLoop.h
   dtkComposerNodeNumber.h
+  dtkComposerNodeNumberComparator.h
+  dtkComposerNodeNumberOperator.h
   dtkComposerNodeProcess.h
   dtkComposerNodeProperty.h
   dtkComposerNodeString.h
@@ -52,10 +60,18 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerNode.h
   dtkComposerNodeBoolean.h
   dtkComposerNodeBooleanOperator.h
+  dtkComposerNodeCase.h
+  dtkComposerNodeConditional.h
+  dtkComposerNodeControl.h
+  dtkComposerNodeControlBlock.h
   dtkComposerNodeData.h
   dtkComposerNodeFactory.h
   dtkComposerNodeFile.h
+  dtkComposerNodeLog.h
+  dtkComposerNodeLoop.h
   dtkComposerNodeNumber.h
+  dtkComposerNodeNumberComparator.h
+  dtkComposerNodeNumberOperator.h
   dtkComposerNodeProcess.h
   dtkComposerNodeProperty.h
   dtkComposerNodeString.h
@@ -74,10 +90,18 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNode.cpp
   dtkComposerNodeBoolean.cpp
   dtkComposerNodeBooleanOperator.cpp
+  dtkComposerNodeCase.cpp
+  dtkComposerNodeConditional.cpp
+  dtkComposerNodeControl.cpp
+  dtkComposerNodeControlBlock.cpp
   dtkComposerNodeData.cpp
   dtkComposerNodeFactory.cpp
   dtkComposerNodeFile.cpp
+  dtkComposerNodeLog.cpp
+  dtkComposerNodeLoop.cpp
   dtkComposerNodeNumber.cpp
+  dtkComposerNodeNumberComparator.cpp
+  dtkComposerNodeNumberOperator.cpp
   dtkComposerNodeProcess.cpp
   dtkComposerNodeProperty.cpp
   dtkComposerNodeString.cpp
@@ -113,6 +137,7 @@ add_library(${PROJECT_NAME} SHARED
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
+  dtkMath
   dtkCore
   dtkGui)
 

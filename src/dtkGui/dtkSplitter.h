@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Oct  7 23:16:58 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Aug  2 15:03:52 2009 (+0200)
+ * Last-Updated: Tue Mar 15 16:44:05 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 33
+ *     Update #: 35
  */
 
 /* Commentary:
@@ -33,7 +33,7 @@ class DTKGUI_EXPORT dtkSplitter : public QSplitter
     Q_OBJECT
 
 public:
-     dtkSplitter(QWidget *parent = 0, bool slim = false);
+     dtkSplitter(QWidget *parent = 0, bool slim = false, bool hud = false);
     ~dtkSplitter(void);
 
     QSplitterHandle *createHandle(void);

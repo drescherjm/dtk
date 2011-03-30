@@ -35,6 +35,9 @@ public:
 
     void *image(void);
 
+    virtual int            Dimension() const;
+    virtual const QString& PixelType() const;
+
     virtual int xDimension(void);
     virtual int yDimension(void);
     virtual int zDimension(void);

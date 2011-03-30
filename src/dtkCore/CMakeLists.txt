@@ -29,6 +29,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractDataImage.h
   dtkAbstractDataImage2D.h
   dtkAbstractDataImage3D.h
+  dtkAbstractDataImage4D.h
   dtkAbstractDataMesh.h
   dtkAbstractDataReader.h
   dtkAbstractDataWriter.h
@@ -57,6 +58,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractDataImage.h
   dtkAbstractDataImage2D.h
   dtkAbstractDataImage3D.h
+  dtkAbstractDataImage4D.h
   dtkAbstractDataMesh.h
   dtkAbstractDataReader.h
   dtkAbstractDataWriter.h
@@ -83,6 +85,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkAbstractDataImage.cpp
   dtkAbstractDataImage2D.cpp
   dtkAbstractDataImage3D.cpp
+  dtkAbstractDataImage4D.cpp
   dtkAbstractDataMesh.cpp
   dtkAbstractFactory.cpp
   dtkAbstractObject.cpp

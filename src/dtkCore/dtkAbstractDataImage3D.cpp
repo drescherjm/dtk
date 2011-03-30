@@ -35,3 +35,7 @@ dtkAbstractDataImage3D::~dtkAbstractDataImage3D(void)
 
     d = NULL;
 }
+
+int dtkAbstractDataImage3D::Dimension() const {
+    return 3;
+}

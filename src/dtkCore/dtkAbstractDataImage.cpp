@@ -56,6 +56,20 @@ void *dtkAbstractDataImage::image(void)
     return this->data();
 }
 
+int dtkAbstractDataImage::Dimension() const
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return 0;
+}
+
+const QString& dtkAbstractDataImage::PixelType() const
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return "";
+}
+
 int dtkAbstractDataImage::xDimension(void)
 {
     DTK_DEFAULT_IMPLEMENTATION;

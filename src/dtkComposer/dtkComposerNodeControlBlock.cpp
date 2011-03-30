@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 24 12:48:30 2011 (+0100)
+ * Last-Updated: Wed Mar 30 17:03:44 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 670
+ *     Update #: 676
  */
 
 /* Commentary: 
@@ -492,13 +492,7 @@ void dtkComposerNodeControlBlock::setRect(qreal x, qreal y, qreal width, qreal h
 
 QList<dtkComposerNode *> dtkComposerNodeControlBlock::nodes(void)
 {
-    QList<dtkComposerNode *> nodes;
-
-    foreach(QGraphicsItem *item, this->childItems())
-        if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item))
-            nodes << node;
-
-    return nodes;
+    return d->nodes;
 }
 
 QList<dtkComposerNode *> dtkComposerNodeControlBlock::startNodes(void)
@@ -521,6 +515,22 @@ QList<dtkComposerNode *> dtkComposerNodeControlBlock::endNodes(void)
             nodes << node;
 
     return nodes;
+}
+
+void dtkComposerNodeControlBlock::addNode(dtkComposerNode *node)
+{
+    if (!d->nodes.contains(node))
+        d->nodes << node;
+}
+
+void dtkComposerNodeControlBlock::removeNode(dtkComposerNode *node)
+{
+    d->nodes.removeAll(node);
+}
+
+void dtkComposerNodeControlBlock::removeAllNodes(void)
+{
+    d->nodes.clear();
 }
 
 QList<dtkComposerNodeProperty *> dtkComposerNodeControlBlock::inputProperties(void)

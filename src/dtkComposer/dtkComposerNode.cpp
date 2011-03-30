@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Mar 28 11:11:06 2011 (+0200)
+ * Last-Updated: Wed Mar 30 16:21:37 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 1889
+ *     Update #: 1904
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #include "dtkComposerEdge.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeControl.h"
+#include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerScene.h"
 
@@ -885,9 +886,6 @@ void dtkComposerNode::addChildNode(dtkComposerNode *node)
 
     if (!d->children.contains(node))
         d->children << node;
-
-    //if (d->ghost)
-    //    node->setParentItem(this);
 }
 
 void dtkComposerNode::removeChildNode(dtkComposerNode *node)
@@ -927,12 +925,21 @@ void dtkComposerNode::setGhost(bool ghost)
 
     if (d->ghost) {
 
+        if (d->parent && d->parent->kind() == dtkComposerNode::Control)
+            this->setParentItem(NULL);
+
         this->setZValue(0);
 
         foreach(dtkComposerNode *node, d->children)
             node->setParentItem(this);
 
-    } else {
+    } else {  
+
+        if (d->parent && d->parent->kind() == dtkComposerNode::Control) {            
+            foreach(dtkComposerNodeControlBlock *block, (dynamic_cast<dtkComposerNodeControl *>(d->parent))->blocks())
+                if (block->nodes().contains(this))
+                    this->setParentItem(block);            
+        }        
 
         this->setZValue(10);
 

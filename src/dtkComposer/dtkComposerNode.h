@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Mar 28 11:10:35 2011 (+0200)
+ * Last-Updated: Thu Mar 31 14:54:17 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 246
+ *     Update #: 257
  */
 
 /* Commentary: 
@@ -35,6 +35,7 @@ class stkComspoerScene;
 class DTKCOMPOSER_EXPORT dtkComposerNode : public QObject, public QGraphicsItem
 {
     Q_OBJECT
+    Q_PROPERTY(QColor penColor READ penColor WRITE setPenColor)
 
 #if QT_VERSION >= 0x040600
     Q_INTERFACES(QGraphicsItem)
@@ -180,6 +181,15 @@ public:
     virtual QRectF boundingRect(void) const;
 
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+public:
+    void highlight(bool ok);
+
+    QColor penColor(void) const;
+    QPen pen(void) const;
+
+    void setPenColor(const QColor& color);
+    void setPen(const QColor& color, const Qt::PenStyle& style, const qreal& width);
 
 protected:
     qreal nodeRadius(void);

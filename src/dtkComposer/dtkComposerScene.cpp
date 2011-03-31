@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Mar 30 17:07:58 2011 (+0200)
+ * Last-Updated: Thu Mar 31 15:17:06 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 2398
+ *     Update #: 2442
  */
 
 /* Commentary: 
@@ -725,13 +725,7 @@ void dtkComposerScene::hideAllNodes(void)
 void dtkComposerScene::showAllNodes(void)
 {
     foreach(dtkComposerNode *node, d->nodes) {
-
-        if (!node->parentNode() && node->kind() == dtkComposerNode::Control)
-
-            this->showChildNodes(node);
-
-        else if (!node->parentNode())
-
+        if (!node->parentNode() || node->parentNode()->kind() != dtkComposerNode::Composite)
             node->show();
     }
 }
@@ -959,18 +953,38 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
     QList<dtkComposerNodeControlBlock *> hovered_control_blocks = this->hoveredControlBlocks(d->grabber_node);
 
-    if (hovered_control_blocks.count() == 1) {
-
-        if (d->grabber_node_has_edges && d->grabber_node->parentItem() != hovered_control_blocks.first())
-            hovered_control_blocks.first()->highlight(false);
-        else
-            hovered_control_blocks.first()->highlight(true);
-
-    } else {
+    if (hovered_control_blocks.count() > 1) {
 
         foreach(dtkComposerNodeControlBlock *block, hovered_control_blocks)
             block->highlight(false);
 
+        d->grabber_node->highlight(false);
+
+    } else if (hovered_control_blocks.count() == 1) {
+
+        if (d->grabber_node_has_edges && d->grabber_node->parentItem() != hovered_control_blocks.first()) {
+
+            hovered_control_blocks.first()->highlight(false);
+            d->grabber_node->highlight(false);
+
+        } else {
+
+            hovered_control_blocks.first()->highlight(true);
+            d->grabber_node->highlight(true);
+
+        }
+
+    } else {
+
+        if (d->grabber_node_has_edges && d->grabber_node->parentItem() != d->current_node) {
+
+            d->grabber_node->highlight(false);
+
+        } else {
+
+            d->grabber_node->highlight(true);
+            
+        }
     }
 }
 
@@ -1085,30 +1099,22 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     if (d->grabber_node = dynamic_cast<dtkComposerNode *>(this->mouseGrabberItem())) {
 
         d->grabber_node_origin = d->grabber_node->scenePos();
+        d->grabber_node_zvalue = d->grabber_node->zValue();
 
-        // -- Rise z-value of the node and its parent items
+        // -- Rise z-value of the node   
 
-        QGraphicsItem *p = d->grabber_node->parentItem();
-        QGraphicsItem *n = d->grabber_node;
-        dtkComposerNodeControlBlock * block;
-        dtkComposerNodeControl *control_node;
-        while(p) {
-            n->setZValue(n->zValue() + 10000);
-            n = p;
-            p = n->parentItem();
-        }
-        n->setZValue(n->zValue() + 10000);
+        d->grabber_node->setZValue(100);
 
-        // -- Rise z-value of edges connected to the node and its childs.
-
+        // -- Search for external edges
         d->grabber_node_has_edges = false;
 
         QRectF node_rec = d->grabber_node->mapRectToScene(d->grabber_node->boundingRect());
 
         foreach(QGraphicsItem *item, this->items(node_rec)) {
             if (dtkComposerEdge *edge = dynamic_cast<dtkComposerEdge *>(item)) {
-                if (d->isChildOf(edge->source()->node(), d->grabber_node) || d->isChildOf(edge->destination()->node(), d->grabber_node)) {
-                    edge->setZValue(n->zValue());
+                if (d->isChildOf(edge->source()->node(), d->grabber_node) && d->isChildOf(edge->destination()->node(), d->grabber_node)) {
+
+                } else if (d->isChildOf(edge->source()->node(), d->grabber_node) || d->isChildOf(edge->destination()->node(), d->grabber_node)) {
                     d->grabber_node_has_edges = true;
                 }
             }
@@ -1173,20 +1179,9 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
         if (!d->grabber_node)
             return;
 
-        QGraphicsItem *p = d->grabber_node->parentItem();
-        QGraphicsItem *n = d->grabber_node;
-        while(p) {    
-            n->setZValue(n->zValue() - 10000);       
-            n = p;
-            p = n->parentItem();
-        }
-        n->setZValue(n->zValue() - 10000);
+        d->grabber_node->setZValue(d->grabber_node_zvalue);
 
         QRectF node_rec = d->grabber_node->mapRectToScene(d->grabber_node->boundingRect());
-
-        foreach(QGraphicsItem *item, this->items(node_rec))
-            if (dtkComposerEdge *edge = dynamic_cast<dtkComposerEdge *>(item))
-                edge->setZValue(5);
         
         QList<dtkComposerNodeControlBlock *> blocks = this->hoveredControlBlocks(d->grabber_node);
 

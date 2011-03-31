@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Mar 30 16:21:37 2011 (+0200)
+ * Last-Updated: Thu Mar 31 14:54:25 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 1904
+ *     Update #: 1971
  */
 
 /* Commentary: 
@@ -92,9 +92,12 @@ public:
     QPointF ghost_position;
     QPointF non_ghost_position;
 
+public:
     QPointF drag_point;
-
     QRectF bounding_rect;
+
+    QColor pen_color;
+    QPen pen;
 };
 
 QRectF dtkComposerNodePrivate::ghostRect(void)
@@ -225,6 +228,8 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
     d->dirty = true;
     d->ghost = false;
     d->resizable = false;
+
+    d->pen_color = Qt::transparent;
 }
 
 dtkComposerNode::~dtkComposerNode(void)
@@ -1017,7 +1022,7 @@ void dtkComposerNode::touch(void)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
-    // QGraphicsItem::update(this->boundingRect());
+    QGraphicsItem::update(this->boundingRect());
 }
 
 //! 
@@ -1158,12 +1163,7 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     if ((d->kind == Composite) || (d->kind == Control))
         this->layout();
 
-    QRectF rect;
-
-    if (!d->ghost) 
-        rect = d->bounding_rect;
-    else  
-        rect = d->ghostRect();    
+    QRectF rect = this->boundingRect();
 
     QLinearGradient gradiant(rect.left(), rect.top(), rect.left(), rect.bottom());
 
@@ -1204,26 +1204,18 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
         break;
     }
 
-    QPen pen;
-
     if (this->isSelected()) {
-        pen.setColor(Qt::magenta);
-        pen.setWidth(2);
+        this->setPen(Qt::magenta, Qt::SolidLine, 2);
     } else {
-        if (this->kind() == dtkComposerNode::Composite && this->isGhost()) {
-            pen.setColor(QColor("#c7c7c7"));
-            pen.setStyle(Qt::DashLine);
-            pen.setWidth(1);
-        } else if (this->kind() == dtkComposerNode::Control) {
-            pen.setColor(QColor("#c7c7c7"));
-            pen.setWidth(1);
-        } else {    
-            pen.setColor(Qt::black);
-            pen.setWidth(1);
-        }
+        if (this->isGhost() && this->kind() == dtkComposerNode::Composite)
+            this->setPen(QColor("#c7c7c7"), Qt::DashLine, 1);
+        else if (this->kind() == dtkComposerNode::Control)
+            this->setPen(QColor("#c7c7c7"), Qt::SolidLine, 1);
+        else
+            this->setPen(Qt::black, Qt::SolidLine, 1);
     }
-
-    painter->setPen(pen);
+    painter->setPen(d->pen);
+    d->pen_color = Qt::transparent;
 
     if (this->kind() == dtkComposerNode::Control) {
         painter->setBrush(Qt::NoBrush);
@@ -1247,6 +1239,57 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
         painter->setBrush(QColor("#c7c7c7"));
         painter->drawPath(path);
     }
+}
+
+void dtkComposerNode::highlight(bool ok)
+{
+    if (ok) {
+
+        QPropertyAnimation *animation = new QPropertyAnimation(this, "penColor");
+        animation->setDuration(300);
+        animation->setKeyValueAt(0.0, Qt::green);
+        animation->setKeyValueAt(1.0, Qt::magenta);
+        animation->setEasingCurve(QEasingCurve::Linear);
+        animation->start(QAbstractAnimation::DeleteWhenStopped);
+
+    } else {
+
+        QPropertyAnimation *animation = new QPropertyAnimation(this, "penColor");
+        animation->setDuration(300);
+        animation->setKeyValueAt(0.0, Qt::red);
+        animation->setKeyValueAt(1.0, Qt::magenta);
+        animation->setEasingCurve(QEasingCurve::Linear);
+        animation->start(QAbstractAnimation::DeleteWhenStopped);
+
+    }
+}
+
+QColor dtkComposerNode::penColor(void) const
+{
+    return d->pen_color;
+}
+
+QPen dtkComposerNode::pen(void) const
+{
+    return d->pen;
+}
+
+void dtkComposerNode::setPenColor(const QColor& color)
+{
+    d->pen_color = color;
+
+    this->touch();
+}
+
+void dtkComposerNode::setPen(const QColor& color, const Qt::PenStyle& style, const qreal& width)
+{
+    if (d->pen_color == Qt::transparent)
+        d->pen.setColor(color);
+    else
+        d->pen.setColor(d->pen_color);
+
+    d->pen.setStyle(style);
+    d->pen.setWidth(width);
 }
 
 qreal dtkComposerNode::nodeRadius(void)

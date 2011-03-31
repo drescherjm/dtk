@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 30 17:03:44 2011 (+0200)
+ * Last-Updated: Thu Mar 31 14:54:48 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 676
+ *     Update #: 690
  */
 
 /* Commentary: 
@@ -646,21 +646,37 @@ void dtkComposerNodeControlBlock::highlight(bool ok)
 {
     if (ok) {
 
-        QPropertyAnimation *animation = new QPropertyAnimation(this, "brushColor");
-        animation->setDuration(300);
-        animation->setKeyValueAt(0.0, Qt::darkGreen);
-        animation->setKeyValueAt(1.0, Qt::transparent);
-        animation->setEasingCurve(QEasingCurve::Linear);
-        animation->start(QAbstractAnimation::DeleteWhenStopped);
+        QPropertyAnimation *p_animation = new QPropertyAnimation(this, "penColor");
+        p_animation->setDuration(300);
+        p_animation->setKeyValueAt(0.0, Qt::green);
+        p_animation->setKeyValueAt(1.0, Qt::white);
+        p_animation->setEndValue(Qt::white);
+        p_animation->setEasingCurve(QEasingCurve::Linear);
+        p_animation->start(QAbstractAnimation::DeleteWhenStopped);
+
+        // QPropertyAnimation *b_animation = new QPropertyAnimation(this, "brushColor");
+        // b_animation->setDuration(300);
+        // b_animation->setKeyValueAt(0.0, Qt::blue);
+        // b_animation->setKeyValueAt(1.0, Qt::transparent);
+        // b_animation->setEasingCurve(QEasingCurve::Linear);
+        // b_animation->start(QAbstractAnimation::DeleteWhenStopped);
 
     } else {
 
-        QPropertyAnimation *animation = new QPropertyAnimation(this, "brushColor");
-        animation->setDuration(250);
-        animation->setKeyValueAt(0.0, Qt::darkRed);
-        animation->setKeyValueAt(1.0, Qt::transparent);
-        animation->setEasingCurve(QEasingCurve::Linear);
-        animation->start(QAbstractAnimation::DeleteWhenStopped);
+        QPropertyAnimation *p_animation = new QPropertyAnimation(this, "penColor");
+        p_animation->setDuration(300);
+        p_animation->setKeyValueAt(0.0, Qt::red);
+        p_animation->setKeyValueAt(1.0, Qt::white);
+        p_animation->setEndValue(Qt::white);
+        p_animation->setEasingCurve(QEasingCurve::Linear);
+        p_animation->start(QAbstractAnimation::DeleteWhenStopped);
+
+        // QPropertyAnimation *animation = new QPropertyAnimation(this, "brushColor");
+        // animation->setDuration(250);
+        // animation->setKeyValueAt(0.0, Qt::darkRed);
+        // animation->setKeyValueAt(1.0, Qt::transparent);
+        // animation->setEasingCurve(QEasingCurve::Linear);
+        // animation->start(QAbstractAnimation::DeleteWhenStopped);
 
     }
 }

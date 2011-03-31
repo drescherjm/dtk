@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Mar 23 09:21:35 2011 (+0100)
+ * Last-Updated: Wed Mar 30 16:21:37 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 1881
+ *     Update #: 1904
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #include "dtkComposerEdge.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeControl.h"
+#include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerScene.h"
 
@@ -87,6 +88,9 @@ public:
     QList<dtkComposerNode *> children;
 
     int count;
+
+    QPointF ghost_position;
+    QPointF non_ghost_position;
 
     QPointF drag_point;
 
@@ -882,9 +886,6 @@ void dtkComposerNode::addChildNode(dtkComposerNode *node)
 
     if (!d->children.contains(node))
         d->children << node;
-
-    //if (d->ghost)
-    //    node->setParentItem(this);
 }
 
 void dtkComposerNode::removeChildNode(dtkComposerNode *node)
@@ -924,12 +925,21 @@ void dtkComposerNode::setGhost(bool ghost)
 
     if (d->ghost) {
 
+        if (d->parent && d->parent->kind() == dtkComposerNode::Control)
+            this->setParentItem(NULL);
+
         this->setZValue(0);
 
         foreach(dtkComposerNode *node, d->children)
             node->setParentItem(this);
 
-    } else {
+    } else {  
+
+        if (d->parent && d->parent->kind() == dtkComposerNode::Control) {            
+            foreach(dtkComposerNodeControlBlock *block, (dynamic_cast<dtkComposerNodeControl *>(d->parent))->blocks())
+                if (block->nodes().contains(this))
+                    this->setParentItem(block);            
+        }        
 
         this->setZValue(10);
 
@@ -946,6 +956,26 @@ bool dtkComposerNode::isGhost(void)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
     return d->ghost;
+}
+
+void dtkComposerNode::setGhostPosition(QPointF pos)
+{
+    d->ghost_position = pos;
+}
+
+QPointF dtkComposerNode::ghostPosition(void)
+{
+    return d->ghost_position;
+}
+
+void dtkComposerNode::setNonGhostPosition(QPointF pos)
+{
+    d->non_ghost_position = pos;
+}
+
+QPointF dtkComposerNode::nonGhostPosition(void)
+{
+    return d->non_ghost_position;
 }
 
 void dtkComposerNode::setSize(const QSizeF& size)

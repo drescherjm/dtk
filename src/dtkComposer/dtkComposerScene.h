@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar 24 16:06:37 2011 (+0100)
+ * Last-Updated: Tue Mar 29 11:57:57 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 156
+ *     Update #: 157
  */
 
 /* Commentary: 
@@ -112,6 +112,7 @@ protected:
 
     void hideAllNodes(void);
     void showAllNodes(void);
+    void hideChildNodes(dtkComposerNode *node);
     void showChildNodes(dtkComposerNode *node);
     void updateEdgesVisibility(void);
 

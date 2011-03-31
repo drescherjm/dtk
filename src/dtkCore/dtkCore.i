@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 10 11:03:04 2011 (+0100)
+ * Last-Updated: Wed Mar 30 10:14:19 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 328
+ *     Update #: 329
  */
 
 /* Commentary:
@@ -118,6 +118,7 @@
 %ignore finished();
 %ignore success();
 %ignore failure();
+%ignore canceled();
 
 // /////////////////////////////////////////////////////////////////
 // Ignore rules for dtkAbstractView signals

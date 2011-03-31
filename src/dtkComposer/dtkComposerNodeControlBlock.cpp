@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 31 14:54:48 2011 (+0200)
+ * Last-Updated: Thu Mar 31 17:16:39 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 690
+ *     Update #: 696
  */
 
 /* Commentary: 
@@ -646,6 +646,9 @@ void dtkComposerNodeControlBlock::highlight(bool ok)
 {
     if (ok) {
 
+        foreach(dtkComposerNodeControlBlock *block, d->parent->blocks())
+            block->stackBefore(this);
+
         QPropertyAnimation *p_animation = new QPropertyAnimation(this, "penColor");
         p_animation->setDuration(300);
         p_animation->setKeyValueAt(0.0, Qt::green);
@@ -684,9 +687,6 @@ void dtkComposerNodeControlBlock::highlight(bool ok)
 void dtkComposerNodeControlBlock::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
     DTK_UNUSED(event);
-
-    foreach(dtkComposerNodeControlBlock *block, d->parent->blocks())
-        block->stackBefore(this);
                            
     if (d->button_add)
         d->button_add->setVisible(true);

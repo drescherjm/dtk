@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar 31 15:17:06 2011 (+0200)
+ * Last-Updated: Thu Mar 31 17:22:21 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 2442
+ *     Update #: 2457
  */
 
 /* Commentary: 
@@ -392,6 +392,15 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
     if (d->grabber_node)
         d->grabber_node = NULL;
 
+    dtkComposerNodeControlBlock * parent_block = NULL;
+
+    foreach(dtkComposerNode *node, nodes) {
+        if (node->parentItem() != nodes.first()->parentItem()) {
+            qDebug() << "Cannot create group of nodes that do not share the same parent item.";
+            return NULL;
+        }
+    }        
+
     dtkComposerNode *group = new dtkComposerNode;
     group->setTitle("Composite node");
     group->setType("dtkComposerNodeComposite");
@@ -400,14 +409,20 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
     this->addNode(group);
     this->addItem(group);
 
-    if (d->current_node) {
+    if (nodes.first()->parentNode() != d->current_node) {
+        parent_block = dynamic_cast<dtkComposerNodeControlBlock *>(nodes.first()->parentItem());
+        group->setParentNode(parent_block->parentNode());
+        group->setParentItem(parent_block);
+        parent_block->parentNode()->addChildNode(group);
+        parent_block->addNode(group);
+    } else if (d->current_node) {
         group->setParentNode(d->current_node);
         group->setParentItem(d->current_node);
         d->current_node->addChildNode(group);
     } else {
         group->setParentNode(NULL);
         group->setParentItem(NULL);
-    }            
+    }
 
     QPointF group_ave_pos(0., 0.);
 
@@ -429,6 +444,8 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
        
         if (dtkComposerNode *parent = node->parentNode())
             parent->removeChildNode(node);
+        if (parent_block = dynamic_cast<dtkComposerNodeControlBlock *>(node->parentItem()))
+            parent_block->removeNode(node);
 
         node->removeAllEdges();
         node->setParentNode(group);
@@ -948,6 +965,9 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
     // -- Control nodes handling
 
+    d->grabber_node = NULL;
+    d->grabber_node = dynamic_cast<dtkComposerNode *>(this->mouseGrabberItem());
+
     if (!d->grabber_node || d->grabber_node->isGhost())
         return;
 
@@ -1100,6 +1120,9 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
         d->grabber_node_origin = d->grabber_node->scenePos();
         d->grabber_node_zvalue = d->grabber_node->zValue();
+
+        if (d->grabber_node->isGhost())
+            return;
 
         // -- Rise z-value of the node   
 

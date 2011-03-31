@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar 31 15:41:46 2011 (+0200)
+ * Last-Updated: Thu Mar 31 16:21:51 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 696
+ *     Update #: 697
  */
 
 /* Commentary: 
@@ -343,6 +343,7 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
         }
 
         n = d->scene->createGroup(child_nodes, position);
+        n->setPos(position);
     }
     
     // Boolean node

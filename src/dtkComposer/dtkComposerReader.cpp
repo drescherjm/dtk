@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Mar 23 09:04:14 2011 (+0100)
+ * Last-Updated: Thu Mar 31 15:41:46 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 695
+ *     Update #: 696
  */
 
 /* Commentary: 
@@ -749,6 +749,9 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
                     block_node->setParentNode(block->parentNode());
                     block_node->setParentItem(block);
                     block_node->setPos(block_node->pos());
+                    block->parentNode()->addChildNode(block_node);
+                    block->addNode(block_node);
+                    
                 }
             }
         }

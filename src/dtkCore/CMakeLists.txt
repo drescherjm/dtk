@@ -29,11 +29,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractDataImage.h
   dtkAbstractDataImage2D.h
   dtkAbstractDataImage3D.h
-  dtkAbstractDataImage4D.h
   dtkAbstractDataTypedImage.h
-  dtkAbstractDataTypedImage2D.h
-  dtkAbstractDataTypedImage3D.h
-  dtkAbstractDataTypedImage4D.h
   dtkAbstractDataMesh.h
   dtkAbstractDataReader.h
   dtkAbstractDataWriter.h

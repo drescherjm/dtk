@@ -158,6 +158,23 @@ dtkLog& dtkLog::operator<<(const QString& value)
     return *this;
 }
 
+dtkLog& dtkLog::operator<<(const QStringList& value)
+{ 
+    QStringList::const_iterator it(value.begin());
+    if ( it == value.end() ) {
+        m_log += "()";  // List is empty.
+    } else {
+        m_log += "(" + *it;  // First entry displayed, no comma.
+        ++it;
+        for( ; it != value.end(); ++it ) {
+            m_log += "," + *it;
+        }
+        m_log += ")";
+    }
+
+    return *this;
+}
+
 dtkLog dtkLog::output(const QString& source)
 {
     return dtkLog(source, Output);

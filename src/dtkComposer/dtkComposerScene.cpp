@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr  1 17:05:12 2011 (+0200)
+ * Last-Updated: Fri Apr  1 17:16:23 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 2528
+ *     Update #: 2533
  */
 
 /* Commentary: 
@@ -555,34 +555,6 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
 
     foreach(dtkComposerNode *child, node->childNodes()) {
 
-        // foreach(dtkComposerEdge *ghost, node->inputGhostEdges()) {
-        //     if (ghost->destination()->node() == child) {
-        //         foreach(dtkComposerEdge *input, node->inputEdges()) {
-        //             dtkComposerEdge *e = new dtkComposerEdge;
-        //             e->setSource(input->source());
-        //             e->setDestination(ghost->destination());
-        //             if (!e->link())
-        //                 delete e;
-        //             else
-        //                 this->addEdge(e);
-        //          }
-        //     }
-        // } 
-
-        // foreach(dtkComposerEdge *ghost, node->outputGhostEdges()) {
-        //     if (ghost->source()->node() == child) {
-        //         foreach(dtkComposerEdge *output, node->outputEdges()) {
-        //             dtkComposerEdge *e = new dtkComposerEdge;
-        //             e->setSource(ghost->source());
-        //             e->setDestination(output->destination());
-        //             if (!e->link())
-        //                 delete e;
-        //             else
-        //                 this->addEdge(e);
-        //         }
-        //     }
-        // }
-
         if (parent)
             parent->addChildNode(child);
         if (parent_block)
@@ -590,6 +562,34 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
 
         child->setParentNode(node->parentNode());
         child->setParentItem(node->parentItem());
+
+        foreach(dtkComposerEdge *ghost, node->inputGhostEdges()) {
+            if (ghost->destination()->node() == child) {
+                foreach(dtkComposerEdge *input, node->inputEdges()) {
+                    if (input->destination() == ghost->source()) {
+                        dtkComposerEdge *e = new dtkComposerEdge;
+                        e->setSource(input->source());
+                        e->setDestination(ghost->destination());
+                        e->link(true);
+                        this->addEdge(e);
+                    }
+                 }
+            }
+        } 
+
+        foreach(dtkComposerEdge *ghost, node->outputGhostEdges()) {
+            if (ghost->source()->node() == child) {
+                foreach(dtkComposerEdge *output, node->outputEdges()) {
+                    if (output->source() == ghost->destination()) {
+                        dtkComposerEdge *e = new dtkComposerEdge;
+                        e->setSource(ghost->source());
+                        e->setDestination(output->destination());
+                        e->link(true);
+                        this->addEdge(e);
+                    }
+                }
+            }
+        }
 
         node->removeChildNode(child);
         

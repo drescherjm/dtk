@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar 31 14:54:25 2011 (+0200)
+ * Last-Updated: Fri Apr  1 14:54:26 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 1971
+ *     Update #: 1979
  */
 
 /* Commentary: 
@@ -933,7 +933,7 @@ void dtkComposerNode::setGhost(bool ghost)
         if (d->parent && d->parent->kind() == dtkComposerNode::Control)
             this->setParentItem(NULL);
 
-        this->setZValue(0);
+        this->setZValue(-10000);
 
         foreach(dtkComposerNode *node, d->children)
             node->setParentItem(this);
@@ -943,7 +943,7 @@ void dtkComposerNode::setGhost(bool ghost)
         if (d->parent && d->parent->kind() == dtkComposerNode::Control) {            
             foreach(dtkComposerNodeControlBlock *block, (dynamic_cast<dtkComposerNodeControl *>(d->parent))->blocks())
                 if (block->nodes().contains(this))
-                    this->setParentItem(block);            
+                    this->setParentItem(block);
         }        
 
         this->setZValue(10);
@@ -1179,10 +1179,7 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
         gradiant.setColorAt(1.0, QColor("#ffa500").darker());
         break;
     case Composite:
-        if (d->ghost) {
-            gradiant.setColorAt(0.0, QColor("#959595"));
-            gradiant.setColorAt(1.0, QColor("#525252"));
-        } else {
+        if (!d->ghost) {
             gradiant.setColorAt(0.0, QColor("#515151"));
             gradiant.setColorAt(1.0, QColor("#000000"));
         }
@@ -1205,10 +1202,13 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     }
 
     if (this->isSelected()) {
-        this->setPen(Qt::magenta, Qt::SolidLine, 2);
+        if (this->isGhost() && this->kind() == dtkComposerNode::Composite)
+            this->setPen(Qt::magenta, Qt::DashLine, 3);
+        else
+            this->setPen(Qt::magenta, Qt::SolidLine, 2);
     } else {
         if (this->isGhost() && this->kind() == dtkComposerNode::Composite)
-            this->setPen(QColor("#c7c7c7"), Qt::DashLine, 1);
+            this->setPen(QColor("#cccccc"), Qt::DashLine, 3);
         else if (this->kind() == dtkComposerNode::Control)
             this->setPen(QColor("#c7c7c7"), Qt::SolidLine, 1);
         else
@@ -1219,6 +1219,8 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 
     if (this->kind() == dtkComposerNode::Control) {
         painter->setBrush(Qt::NoBrush);
+    } else if (this->isGhost() && this->kind() == dtkComposerNode::Composite) {
+        painter->setBrush(Qt::NoBrush);        
     } else {
         painter->setBrush(gradiant);
     }

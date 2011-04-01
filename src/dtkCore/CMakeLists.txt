@@ -30,6 +30,10 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractDataImage2D.h
   dtkAbstractDataImage3D.h
   dtkAbstractDataImage4D.h
+  dtkAbstractDataTypedImage.h
+  dtkAbstractDataTypedImage2D.h
+  dtkAbstractDataTypedImage3D.h
+  dtkAbstractDataTypedImage4D.h
   dtkAbstractDataMesh.h
   dtkAbstractDataReader.h
   dtkAbstractDataWriter.h
@@ -55,7 +59,6 @@ set(${PROJECT_NAME}_HEADERS
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractData.h
   dtkAbstractDataFactory.h
-  dtkAbstractDataImage.h
   dtkAbstractDataImage2D.h
   dtkAbstractDataImage3D.h
   dtkAbstractDataImage4D.h

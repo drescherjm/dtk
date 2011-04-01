@@ -25,30 +25,24 @@
 // dtkAbstractDataImagePrivate
 // /////////////////////////////////////////////////////////////////
 
-class dtkAbstractDataImagePrivate
-{
-public:
-};
+//  Unneeded in this case.
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractDataImage
 // /////////////////////////////////////////////////////////////////
 
-dtkAbstractDataImage::dtkAbstractDataImage(void) : dtkAbstractData(), d(new dtkAbstractDataImagePrivate)
+dtkAbstractDataImage::dtkAbstractDataImage(void) : dtkAbstractData()
 {
 
 }
 
-dtkAbstractDataImage::dtkAbstractDataImage(const dtkAbstractDataImage& other): dtkAbstractData(other), d(new dtkAbstractDataImagePrivate)
+dtkAbstractDataImage::dtkAbstractDataImage(const dtkAbstractDataImage& other): dtkAbstractData(other)
 {
 
 }
 
 dtkAbstractDataImage::~dtkAbstractDataImage(void)
 {
-    delete d;
-
-    d = NULL;
 }
 
 void *dtkAbstractDataImage::image(void)
@@ -63,11 +57,11 @@ int dtkAbstractDataImage::Dimension() const
     return 0;
 }
 
-const QString& dtkAbstractDataImage::PixelType() const
+const dtkAbstractDataImage::PixId& dtkAbstractDataImage::PixelType() const
 {
     DTK_DEFAULT_IMPLEMENTATION;
 
-    return "";
+    return typeid(void);
 }
 
 int dtkAbstractDataImage::xDimension(void)

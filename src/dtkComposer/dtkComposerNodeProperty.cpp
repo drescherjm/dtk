@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Mar 23 09:53:54 2011 (+0100)
+ * Last-Updated: Mon Apr  4 10:45:20 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 402
+ *     Update #: 403
  */
 
 /* Commentary: 
@@ -164,7 +164,7 @@ QString dtkComposerNodeProperty::description(void)
         break;
 
     default:
-        property_multiplicity = "";
+        property_behavior = "";
         break;
     }
 

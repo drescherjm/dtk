@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr  1 17:16:23 2011 (+0200)
+ * Last-Updated: Mon Apr  4 14:26:11 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 2533
+ *     Update #: 2613
  */
 
 /* Commentary: 
@@ -259,12 +259,12 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
     
     dtkComposerNode *parent = node->parentNode();
     if (parent)
-        parent->removeChildNode(node);
+        parent->removeChildNode(node); 
 
-    dtkComposerNodeControlBlock * parent_block = dynamic_cast<dtkComposerNodeControlBlock *>(node->parentItem());
-    if (parent_block)
-        parent_block->removeNode(node);
-
+    if (parent && parent->kind() == dtkComposerNode::Control)        
+        foreach(dtkComposerNodeControlBlock *parent_block, (dynamic_cast<dtkComposerNodeControl *>(parent))->blocks())
+            if (parent_block->nodes().contains(node))
+                parent_block->removeNode(node);
 
     dtkComposerNode *n = node;
 
@@ -433,24 +433,21 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
 
     QPointF group_ave_pos(0., 0.);
 
+    dtkComposerNodeProperty *source;
+    dtkComposerNodeProperty *destin;
+    dtkComposerNodeProperty *clone;
+
     foreach(dtkComposerNode *node, nodes) {
 
         group_ave_pos += node->pos();
-
-        foreach(dtkComposerEdge *edge, node->inputEdges())
-            this->removeEdge(edge);
-        
-        foreach(dtkComposerEdge *edge, node->outputEdges())
-            this->removeEdge(edge);
        
         if (dtkComposerNode *parent = node->parentNode())
             parent->removeChildNode(node);
         if (parent_block = dynamic_cast<dtkComposerNodeControlBlock *>(node->parentItem()))
             parent_block->removeNode(node);
 
-        node->removeAllEdges();
         node->setParentNode(group);
-        node->hide();
+        group->addChildNode(node);
 
         foreach(dtkComposerNodeProperty *property, node->inputProperties())
             group->addInputProperty(property->clone(group));
@@ -458,13 +455,75 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
         foreach(dtkComposerNodeProperty *property, node->outputProperties())
             group->addOutputProperty(property->clone(group));
 
-        group->addChildNode(node);
+        foreach(dtkComposerEdge *edge, node->inputEdges()) {
+            
+            if (!nodes.contains(edge->source()->node())) {
+                    
+                source = edge->source();
+                destin = edge->destination();
+
+                if (node->kind() == dtkComposerNode::Composite)
+                    clone = group->inputProperty(destin->name(), destin->clonedFrom());
+                else
+                    clone = group->inputProperty(destin->name(), node);
+
+                clone->show();
+
+                this->removeEdge(edge);
+
+                dtkComposerEdge *input = new dtkComposerEdge;
+                input->setSource(source);
+                input->setDestination(clone);
+                input->link(true);
+                this->addEdge(input);
+
+                dtkComposerEdge *ghost = new dtkComposerEdge;
+                ghost->setSource(clone);
+                ghost->setDestination(destin);
+                ghost->link(true);
+                this->addEdge(ghost);
+            }
+        }
+        
+        foreach(dtkComposerEdge *edge, node->outputEdges()) {
+
+            if (!nodes.contains(edge->destination()->node())) {
+                    
+                source = edge->source();
+                destin = edge->destination();
+
+                if (node->kind() == dtkComposerNode::Composite)
+                    clone = group->outputProperty(source->name(), source->clonedFrom());
+                else
+                    clone = group->outputProperty(source->name(), node);
+
+                clone->show();
+
+                this->removeEdge(edge);
+
+                dtkComposerEdge *output = new dtkComposerEdge;
+                output->setSource(clone);
+                output->setDestination(destin);
+                output->link();
+                this->addEdge(output);
+
+                dtkComposerEdge *ghost = new dtkComposerEdge;
+                ghost->setSource(source);
+                ghost->setDestination(clone);
+                ghost->link(true);
+                this->addEdge(ghost);
+            }
+
+        }
+
+        //node->removeAllEdges();
+        node->hide();
     }
     group->setPos(group_ave_pos / nodes.count());
     group->setGhost(false);
 
     this->updateEdgesVisibility();
-
+        
     return group;
 }
 
@@ -536,10 +595,17 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
 
     dtkComposerNode *parent = node->parentNode();
 
-    dtkComposerNodeControlBlock * parent_block = dynamic_cast<dtkComposerNodeControlBlock *>(node->parentItem());
+    // -- Looking for parent block if parent node is of control kind
 
-    dtkComposerNode *ghost_parent = NULL;
-        
+    dtkComposerNodeControlBlock *parent_block = NULL;
+    if (parent && parent->kind() == dtkComposerNode::Control)
+        foreach(dtkComposerNodeControlBlock *block, (dynamic_cast<dtkComposerNodeControl *>(parent))->blocks())
+            if (block->nodes().contains(node))
+                parent_block = block;
+
+    // -- Looking for a composite parent node through the parent ancestors.
+
+    dtkComposerNode *ghost_parent = NULL;        
     ghost_parent = node->parentNode();
     while (ghost_parent) {
         if (ghost_parent->kind() == dtkComposerNode::Composite)  
@@ -548,20 +614,26 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
             ghost_parent = ghost_parent->parentNode();
     }
     
-    // --- 
+    // -- 
 
     bool node_was_ghost = node->isGhost();
     QPointF scene_center = node->mapRectToScene(node->boundingRect()).center();
+
+    // -- For each child nodes, the parenthood is reset and the edge logic is saved.
 
     foreach(dtkComposerNode *child, node->childNodes()) {
 
         if (parent)
             parent->addChildNode(child);
-        if (parent_block)
-            parent_block->addNode(child);
 
-        child->setParentNode(node->parentNode());
-        child->setParentItem(node->parentItem());
+        child->setParentNode(parent);
+
+        if (parent_block) {
+            parent_block->addNode(child);
+            child->setParentItem(parent_block);
+        } else {
+            child->setParentItem(node->parentItem());
+        }
 
         foreach(dtkComposerEdge *ghost, node->inputGhostEdges()) {
             if (ghost->destination()->node() == child) {
@@ -605,16 +677,6 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
         this->setCurrentNode(ghost_parent);
             
         emit centerOn(ghost_parent->mapRectToScene(parent->boundingRect()).center());
-        // emit fitInView(parent->sceneBoundingRect());
-        emit pathChanged(d->current_node);
-        
-    } else if (node_was_ghost) {
-
-        this->showAllNodes();
-        this->setCurrentNode(NULL);
-            
-        emit centerOn(scene_center);
-        // emit fitInView(this->sceneRect());
         emit pathChanged(d->current_node);
 
     } else if (ghost_parent) {
@@ -627,14 +689,13 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
         this->setCurrentNode(NULL);
             
         emit centerOn(scene_center);
-        // emit fitInView(this->sceneRect());
         emit pathChanged(d->current_node);
     }
-        
-    this->updateEdgesVisibility();
 
     if (parent_block)
         parent_block->parentNode()->resize();
+        
+    this->updateEdgesVisibility();
 }
 
 void dtkComposerScene::setFactory(dtkComposerNodeFactory *factory)

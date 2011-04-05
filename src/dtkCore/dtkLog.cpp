@@ -215,9 +215,27 @@ dtkLog::~dtkLog(void)
      if (s_handlers.keys().contains(m_source))
          foreach(Handler handler, s_handlers.values(m_source)) handler(m_level, m_log);
      else
-         qDebug() << m_log.toAscii().constData();
+     {
+         switch(m_level)
+         {
+         case Debug:
+             qDebug() << m_log.toAscii().constData();
+             break;
+         case Warning:
+             qWarning() << m_log.toAscii().constData();
+             break;
+         case Error:
+             qCritical() << m_log.toAscii().constData();
+             break;
+         case Fatal:
+             qCritical() << m_log.toAscii().constData();
+             break;
+         default:
+             qDebug() << m_log.toAscii().constData();
+             break;
+         }
+     }
 
-     // qDebug().nospace() << QDate::currentDate().toString().toAscii().constData() << QTime::currentTime().toString().toAscii() << "(" << m_source << ") Level=" << m_level << "-" << m_log.toAscii();
 }
 
 void dtkLog::registerHandler(Handler handler, const QString& source)

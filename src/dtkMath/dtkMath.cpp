@@ -28,6 +28,11 @@
 #include "dtkMath.h"
 #include "dtkVector3D.h"
 
+#if defined(Q_WS_WIN)
+// on vs 9 abs() does not work with long long int or __uint64
+#define abs qAbs
+#endif
+
 //! dtkBubbleSort(unsigned int indices[], int size) 
 /*! 
  * Sorts the integer of an array by growing values.
@@ -168,7 +173,7 @@ bool dtkAlmostEqualUlpsSimple(float A, float B, int32_t maxUlps)
 {
     if (A == B)
         return true; 
-
+ 
     int32_t intDiff = abs(*(int32_t*)&A - *(int32_t*)&B);
 
     if (intDiff <= maxUlps)

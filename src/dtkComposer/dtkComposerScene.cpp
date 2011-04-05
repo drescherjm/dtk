@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr  4 14:26:11 2011 (+0200)
+ * Last-Updated: Tue Apr  5 17:05:45 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 2613
+ *     Update #: 2614
  */
 
 /* Commentary: 
@@ -151,8 +151,12 @@ QList<dtkComposerNode *> dtkComposerScene::startNodes(void)
 {
     QList<dtkComposerNode *> list;
 
+    // foreach(dtkComposerNode *node, d->nodes)
+    //     if (!node->parentNode() && !node->parentItem() && node->inputEdges().count() == 0)
+    //         list << node;
+
     foreach(dtkComposerNode *node, d->nodes)
-        if (!node->parentNode() && !node->parentItem() && node->inputEdges().count() == 0)
+        if (!node->inputEdges().count() && node->outputEdges().count())
             list << node;
 
     return list;

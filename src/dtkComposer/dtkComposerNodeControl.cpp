@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 21 12:51:41 2011 (+0100)
+ * Last-Updated: Tue Apr  5 17:22:47 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 438
+ *     Update #: 440
  */
 
 /* Commentary: 
@@ -151,7 +151,7 @@ void dtkComposerNodeControl::layout(void)
     dtkComposerNode::layout();
 
     d->property_input->setRect(QRectF(this->boundingRect().left() + this->nodeRadius(), 
-                                      this->boundingRect().top() + this->nodeRadius(), 
+                                      this->boundingRect().top()  + this->nodeRadius(), 
                                       2 * + this->nodeRadius(), 
                                       2 * + this->nodeRadius()));
 
@@ -170,7 +170,7 @@ void dtkComposerNodeControl::layout(void)
             d->blocks.at(i)->inputProperties().at(j)->setRect(
                 QRectF(
                     d->blocks.at(i)->rect().left() + this->nodeRadius(),
-                    d->blocks.at(i)->rect().top() + this->nodeRadius() * (3*j + 1),
+                    d->blocks.at(i)->rect().top() + this->nodeRadius() * (4*j + 1),
                     2 * this->nodeRadius(),
                     2 * this->nodeRadius()
                 ));
@@ -181,7 +181,7 @@ void dtkComposerNodeControl::layout(void)
             d->blocks.at(i)->outputProperties().at(j)->setRect(
                 QRectF(
                     d->blocks.at(i)->rect().right() - 3 * this->nodeRadius(),
-                    d->blocks.at(i)->rect().top() + this->nodeRadius() * (3*j + 1),
+                    d->blocks.at(i)->rect().top() + this->nodeRadius() * (4*j + 1),
                     2 * this->nodeRadius(),
                     2 * this->nodeRadius()
                 ));

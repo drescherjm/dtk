@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:46:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 20:15:09 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 29
+ * Last-Updated: Wed Mar 30 16:05:56 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 75
  */
 
 /* Commentary: 
@@ -20,12 +20,16 @@
 #ifndef DTKCOMPOSERNODECONTROLBLOCK_H
 #define DTKCOMPOSERNODECONTROLBLOCK_H
 
+#include "dtkComposerExport.h"
+
 #include <QtGui>
 
 class dtkComposerNode;
+class dtkComposerNodeControl;
 class dtkComposerNodeControlBlockPrivate;
+class dtkComposerNodeProperty;
 
-class dtkComposerNodeControlBlock : public QObject, public QGraphicsRectItem
+class DTKCOMPOSER_EXPORT dtkComposerNodeControlBlock : public QObject, public QGraphicsRectItem
 {
     Q_OBJECT
     Q_PROPERTY(QColor brushColor READ brushColor WRITE setBrushColor)
@@ -36,24 +40,53 @@ class dtkComposerNodeControlBlock : public QObject, public QGraphicsRectItem
 #endif
 
 public:
-     dtkComposerNodeControlBlock(const QString& title, QGraphicsItem *parent);
+     dtkComposerNodeControlBlock(const QString& title, dtkComposerNodeControl *parent);
     ~dtkComposerNodeControlBlock(void);
 
-    QString title(void) const;
+    dtkComposerNodeControl *parentNode(void);
 
+    QString title(void) const;
     QColor brushColor(void) const;
     QColor penColor(void) const;
 
+    void setRemoveButtonVisible(bool visible);
+
     void setBrushColor(const QColor& color);
+    void setInteractive(bool interactive);
     void setPenColor(const QColor& color);
+    void setRect(const QRectF& rectangle);
+    void setRect(qreal x, qreal y, qreal width, qreal height);
 
     QList<dtkComposerNode *>      nodes(void);
     QList<dtkComposerNode *> startNodes(void);
     QList<dtkComposerNode *>   endNodes(void);
+
+    void        addNode(dtkComposerNode *node);
+    void     removeNode(dtkComposerNode *node);
+    void removeAllNodes(void);
+
+    QList<dtkComposerNodeProperty *>  inputProperties(void);
+    QList<dtkComposerNodeProperty *> outputProperties(void);
+
+    dtkComposerNodeProperty  *addInputProperty(QString name, dtkComposerNode *parent = 0);
+    dtkComposerNodeProperty *addOutputProperty(QString name, dtkComposerNode *parent = 0);
+
+    void  removeInputProperty(dtkComposerNodeProperty *property);
+    void removeOutputProperty(dtkComposerNodeProperty *property);
+    void  removeAllProperties(void);
+
+public:
+    void adjustChildNodes(qreal dw, qreal dh);
+    QRectF minimalBoundingRect(void);
     
 public:
-    void highlight(void);
+    void highlight(bool ok);
 
+protected:
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+    void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
+        
 private:
     dtkComposerNodeControlBlockPrivate *d;
 };

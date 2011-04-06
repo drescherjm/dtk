@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Mar  3 18:14:28 2011 (+0100)
+## Last-Updated: Mon Mar 14 15:06:38 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 124
+##     Update #: 129
 ######################################################################
 ## 
 ### Commentary: 
@@ -38,7 +38,9 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeFactory.h
   dtkComposerNodeFile.h
   dtkComposerNodeLog.h
+  dtkComposerNodeLoop.h
   dtkComposerNodeNumber.h
+  dtkComposerNodeNumberComparator.h
   dtkComposerNodeNumberOperator.h
   dtkComposerNodeProcess.h
   dtkComposerNodeProperty.h
@@ -66,7 +68,9 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerNodeFactory.h
   dtkComposerNodeFile.h
   dtkComposerNodeLog.h
+  dtkComposerNodeLoop.h
   dtkComposerNodeNumber.h
+  dtkComposerNodeNumberComparator.h
   dtkComposerNodeNumberOperator.h
   dtkComposerNodeProcess.h
   dtkComposerNodeProperty.h
@@ -94,7 +98,9 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeFactory.cpp
   dtkComposerNodeFile.cpp
   dtkComposerNodeLog.cpp
+  dtkComposerNodeLoop.cpp
   dtkComposerNodeNumber.cpp
+  dtkComposerNodeNumberComparator.cpp
   dtkComposerNodeNumberOperator.cpp
   dtkComposerNodeProcess.cpp
   dtkComposerNodeProperty.cpp
@@ -131,6 +137,7 @@ add_library(${PROJECT_NAME} SHARED
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
+  dtkMath
   dtkCore
   dtkGui)
 

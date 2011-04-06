@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Sat Jun 12 15:51:21 2010 (+0200)
+## Last-Updated: Fri Mar 18 15:43:15 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 143
+##     Update #: 172
 ######################################################################
 ## 
 ### Commentary: 
@@ -27,15 +27,25 @@ set(${PROJECT_NAME}_HEADERS
   dtkAboutBox.h
   dtkAddressBar.h
   dtkAnchoredBar.h
+  dtkColorButton.h
+  dtkColorGrid.h
   dtkFinder.h
   dtkGuiExport.h
   dtkInsetMenu.h
   dtkInspector.h
-  dtkInspectorComposer.h
-  dtkInspectorScene.h
+  dtkInspectorBox.h
+  dtkInspectorButton.h
+  dtkInspectorTitleBar.h
+  dtkInspectorToolBar.h
+  dtkInspectorSwitch.h
+
+  # dtkInspectorComposer.h
+  # dtkInspectorScene.h
+
   dtkInterpreter.h
   dtkInterpreterPreferencesWidget.h
   dtkNavigationBar.h
+  dtkPopup.h
   dtkPreferencesWidget.h
   dtkProgressIndicator.h
   dtkRecentFilesMenu.h
@@ -57,14 +67,24 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkAboutBox.h
   dtkAddressBar.h
   dtkAnchoredBar.h
+  dtkColorButton.h
+  dtkColorGrid.h
   dtkFinder.h
   dtkInsetMenu.h
   dtkInspector.h
-  dtkInspectorComposer.h
-  dtkInspectorScene.h
+  dtkInspectorBox.h
+  dtkInspectorButton.h
+  dtkInspectorTitleBar.h
+  dtkInspectorToolBar.h
+  dtkInspectorSwitch.h
+
+  # dtkInspectorComposer.h
+  # dtkInspectorScene.h
+
   dtkInterpreter.h
   dtkInterpreterPreferencesWidget.h
   dtkNavigationBar.h
+  dtkPopup.h
   dtkPreferencesWidget.h
   dtkProgressIndicator.h
   dtkRecentFilesMenu.h
@@ -83,14 +103,27 @@ set(${PROJECT_NAME}_SOURCES
   dtkAboutBox.cpp
   dtkAddressBar.cpp
   dtkAnchoredBar.cpp
+
+  dtkColorButton.cpp
+  dtkColorGrid.cpp
+
   dtkFinder.cpp
   dtkInsetMenu.cpp
+
   dtkInspector.cpp
-  dtkInspectorComposer.cpp
-  dtkInspectorScene.cpp
+  dtkInspectorBox.cpp
+  dtkInspectorButton.cpp
+  dtkInspectorTitleBar.cpp
+  dtkInspectorToolBar.cpp
+  dtkInspectorSwitch.cpp
+
+  # dtkInspectorComposer.cpp
+  # dtkInspectorScene.cpp
+
   dtkInterpreter.cpp
   dtkInterpreterPreferencesWidget.cpp
   dtkNavigationBar.cpp
+  dtkPopup.cpp
   dtkPreferencesWidget.cpp
   dtkProgressIndicator.cpp
   dtkRecentFilesMenu.cpp

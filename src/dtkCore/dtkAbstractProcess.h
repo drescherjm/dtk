@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jan  4 15:40:10 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 132
+ * Last-Updated: Wed Mar 16 16:26:18 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 135
  */
 
 /* Commentary: 
@@ -37,7 +37,7 @@ public:
 
     friend DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractProcess& process);
     friend DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractProcess *process);
-
+    
 signals:
     void started(const QString& message);
     void elapsed(const QString& duration);
@@ -46,11 +46,16 @@ signals:
     void success(void);
     void failure(void);
     void finished(void);
+    void canceled(void);
 
 public slots:
+    void cancel(void);
+
     int run(void);
    
     virtual  int update(void);
+
+    virtual void onCanceled (void);
     
     virtual bool read(const QString& file);
     virtual bool read(const QStringList& files);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:27 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep  9 20:04:34 2009 (+0200)
+ * Last-Updated: Wed Mar 16 16:11:32 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 647
+ *     Update #: 651
  */
 
 /* Commentary: 
@@ -378,7 +378,7 @@ dtkTagScope::~dtkTagScope(void)
 
 QSize dtkTagScope::sizeHint(void) const
 {
-    return QSize(100, 25);
+    return QSize(100, 32);
 }
 
 static QString scope_stylesheet = 
@@ -405,7 +405,7 @@ void dtkTagScope::clear(void)
 void dtkTagScope::render(void)
 {
     QString scope = "";
-    scope += "  <form name=\"scope\">";
+    scope += "<form name=\"scope\">";
     scope += "<strong>scope</strong> > ";
     foreach(QString filter, d->filters) {
     scope += "  " + filter + " > ";

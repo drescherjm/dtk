@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Mar  4 13:32:54 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 1691
+ * Last-Updated: Tue Apr  5 17:05:45 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 2614
  */
 
 /* Commentary: 
@@ -42,10 +42,26 @@
 dtkComposerEdge *dtkComposerScenePrivate::edge(dtkComposerEdge *edge)
 {
     foreach(dtkComposerEdge *e, this->edges)
-        if(edge->source() == e->source() && edge->destination() == e->destination())
+        if (edge->source() == e->source() && edge->destination() == e->destination())
             return e;
 
     return NULL;
+}
+
+bool dtkComposerScenePrivate::isChildOf(QGraphicsItem *item, QGraphicsItem *parent)
+{
+    if (item == parent)
+        return true;
+
+    QGraphicsItem *p = item->parentItem();
+
+    while (p)
+        if (p == parent)
+            return true;
+        else
+            p = p->parentItem();
+    
+    return false;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -54,6 +70,9 @@ dtkComposerEdge *dtkComposerScenePrivate::edge(dtkComposerEdge *edge)
 
 dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(new dtkComposerScenePrivate)
 {
+    d->grabber_node_origin = QPointF(0,0);
+    d->grabber_node_has_edges = false;
+
     d->grabber_node = NULL;
     d->current_edge = NULL;
     d->current_node = NULL;
@@ -93,7 +112,7 @@ QList<dtkComposerNode *> dtkComposerScene::nodes(QString name)
     QList<dtkComposerNode *> list;
 
     foreach(dtkComposerNode *node, d->nodes)
-        if(node->object()->name() == name)
+        if (node->object()->name() == name)
             list << node;
 
     return list;
@@ -116,7 +135,7 @@ QList<dtkComposerNodeProperty *> dtkComposerScene::properties(QString name)
 
     foreach(QGraphicsItem *item, this->items())
         if (dtkComposerNodeProperty *property = dynamic_cast<dtkComposerNodeProperty *>(item))
-            if(property->name() == name)
+            if (property->name() == name)
                 list << property;
 
     return list;
@@ -132,8 +151,12 @@ QList<dtkComposerNode *> dtkComposerScene::startNodes(void)
 {
     QList<dtkComposerNode *> list;
 
+    // foreach(dtkComposerNode *node, d->nodes)
+    //     if (!node->parentNode() && !node->parentItem() && node->inputEdges().count() == 0)
+    //         list << node;
+
     foreach(dtkComposerNode *node, d->nodes)
-        if(!node->parentNode() && !node->parentItem() && node->inputEdges().count() == 0)
+        if (!node->inputEdges().count() && node->outputEdges().count())
             list << node;
 
     return list;
@@ -144,7 +167,7 @@ QList<dtkComposerNode *> dtkComposerScene::endNodes(void)
     QList<dtkComposerNode *> list;
 
     foreach(dtkComposerNode *node, d->nodes)
-        if(!node->parentNode() && !node->parentItem()  && node->outputEdges().count() == 0)
+        if (!node->parentNode() && !node->parentItem()  && node->outputEdges().count() == 0)
             list << node;
 
     return list;
@@ -174,9 +197,9 @@ bool dtkComposerScene::isModified(void)
 
 void dtkComposerScene::setModified(bool modified)
 {
-    d->modified = modified;
+    d->modified = modified;           
 
-    if(d->modified)
+    if (d->modified)
         emit compositionChanged();
 }
 
@@ -186,18 +209,16 @@ void dtkComposerScene::addEdge(dtkComposerEdge *edge)
 
     d->edges << edge;
 
-    this->setModified(true);
+    //this->setModified(true);
 }
 
 void dtkComposerScene::addNode(dtkComposerNode *node)
 {
-    this->addItem(node);
-
     d->nodes << node;
 
     emit nodeAdded(node);
 
-    this->setModified(true);
+    //this->setModified(true);
 }
 
 void dtkComposerScene::addNote(dtkComposerNote *note)
@@ -206,7 +227,7 @@ void dtkComposerScene::addNote(dtkComposerNote *note)
 
     d->notes << note;
 
-    this->setModified(true);
+    //this->setModified(true);
 }
 
 void dtkComposerScene::removeEdge(dtkComposerEdge *edge)
@@ -216,74 +237,76 @@ void dtkComposerScene::removeEdge(dtkComposerEdge *edge)
     d->edges.removeAll(edge);
 
     delete edge;
+    edge = NULL;
 }
 
 void dtkComposerScene::removeNode(dtkComposerNode *node)
 {
-    foreach(dtkComposerEdge *edge, node->inputEdges()) {
-        d->edges.removeAll(d->edge(edge));
-        delete edge;
-    }
+    foreach(dtkComposerEdge *edge, node->inputEdges())
+        this->removeEdge(edge);
     
-    foreach(dtkComposerEdge *edge, node->outputEdges()) {
-        d->edges.removeAll(d->edge(edge));
-        delete edge;
-    }
+    foreach(dtkComposerEdge *edge, node->outputEdges())
+        this->removeEdge(edge);
 
-    foreach(dtkComposerEdge *edge, node->inputGhostEdges()) {
-        d->edges.removeAll(d->edge(edge));
-        delete edge;
-    }
+    foreach(dtkComposerEdge *edge, node->inputRelayEdges())
+        this->removeEdge(edge);
     
-    foreach(dtkComposerEdge *edge, node->outputGhostEdges()) {
-        d->edges.removeAll(d->edge(edge));
-        delete edge;
-    }
+    foreach(dtkComposerEdge *edge, node->outputRelayEdges())
+        this->removeEdge(edge);
+
+    foreach(dtkComposerEdge *edge, node->inputGhostEdges())
+        this->removeEdge(edge);
+    
+    foreach(dtkComposerEdge *edge, node->outputGhostEdges())
+        this->removeEdge(edge);
+
+    
+    dtkComposerNode *parent = node->parentNode();
+    if (parent)
+        parent->removeChildNode(node); 
+
+    if (parent && parent->kind() == dtkComposerNode::Control)        
+        foreach(dtkComposerNodeControlBlock *parent_block, (dynamic_cast<dtkComposerNodeControl *>(parent))->blocks())
+            if (parent_block->nodes().contains(node))
+                parent_block->removeNode(node);
 
     dtkComposerNode *n = node;
-    dtkComposerNode *parent;
 
     while(n->parentNode()) {
 
         parent = n->parentNode();
 
-        parent->removeChildNode(node);
-
         foreach(dtkComposerNodeProperty *property, parent->inputProperties()) {
-            if(property->clonedFrom() == node) {         
-                foreach(dtkComposerEdge *edge, parent->inputEdges()) {
-                    if(edge->destination() == property) {
-                        d->edges.removeAll(d->edge(edge));
-                        delete edge;
-                    }
-                }         
-                foreach(dtkComposerEdge *edge, parent->inputGhostEdges()) {
-                    if(edge->source() == property) {
-                        d->edges.removeAll(d->edge(edge));
-                        delete edge;
-                    }
-                }
+            if (property->clonedFrom() == node) {
+
+                foreach(dtkComposerEdge *edge, parent->inputEdges())
+                    if (edge->destination() == property)
+                        this->removeEdge(edge);
+
+                foreach(dtkComposerEdge *edge, parent->inputGhostEdges())
+                    if (edge->source() == property)
+                        this->removeEdge(edge);
+
                 parent->removeInputProperty(property);
                 delete property;
+                property = NULL;
             }
         }
 
         foreach(dtkComposerNodeProperty *property, parent->outputProperties()) {
-            if(property->clonedFrom() == node) {                
-                foreach(dtkComposerEdge *edge, parent->outputEdges()) {
-                    if(edge->source() == property) {
-                        d->edges.removeAll(d->edge(edge));
-                        delete edge;
-                    }
-                }               
-                foreach(dtkComposerEdge *edge, parent->outputGhostEdges()) {
-                    if(edge->destination() == property) {
-                        d->edges.removeAll(d->edge(edge));
-                        delete edge;
-                    }
-                }
+            if (property->clonedFrom() == node) {
+
+                foreach(dtkComposerEdge *edge, parent->outputEdges())
+                    if (edge->source() == property)
+                        this->removeEdge(edge);
+
+                foreach(dtkComposerEdge *edge, parent->outputGhostEdges()) 
+                    if (edge->destination() == property) 
+                        this->removeEdge(edge);
+
                 parent->removeOutputProperty(property);
                 delete property;
+                property = NULL;
             }
         }
 
@@ -294,27 +317,27 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
 
     foreach(dtkComposerNode *child, node->childNodes()) {
 
-        if(child->childNodes().count()) {
+        if (child->childNodes().count()) {
 
             foreach(dtkComposerNode *child1, child->childNodes()) {
                 
-                if(child1->childNodes().count()) {
+                if (child1->childNodes().count()) {
                     
                     foreach(dtkComposerNode *child2, child1->childNodes()) {
                         
-                        if(child2->childNodes().count()) {
+                        if (child2->childNodes().count()) {
                             
                             foreach(dtkComposerNode *child3, child2->childNodes()) {
                                 
-                                if(child3->childNodes().count()) {
+                                if (child3->childNodes().count()) {
                                     
                                     foreach(dtkComposerNode *child4, child3->childNodes()) {
                                         
-                                        if(child4->childNodes().count()) {
+                                        if (child4->childNodes().count()) {
                                             
                                             foreach(dtkComposerNode *child5, child4->childNodes()) {
                                                 
-                                                if(child5->childNodes().count()) {
+                                                if (child5->childNodes().count()) {
                                                     
                                                     foreach(dtkComposerNode *child6, child5->childNodes()) {
                                                         
@@ -356,8 +379,7 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
     d->nodes.removeAll(node);
     
     delete node;
-
-    this->setModified(true);
+    node = NULL;
 }
 
 void dtkComposerScene::removeNote(dtkComposerNote *note)
@@ -378,34 +400,58 @@ void dtkComposerScene::removeNote(dtkComposerNote *note)
 
 dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, QPointF position)
 {
+    if (d->grabber_node)
+        d->grabber_node = NULL;
+
+    dtkComposerNodeControlBlock * parent_block = NULL;
+
+    foreach(dtkComposerNode *node, nodes) {
+        if (node->parentItem() != nodes.first()->parentItem()) {
+            qDebug() << "Cannot create group of nodes that do not share the same parent item.";
+            return NULL;
+        }
+    }        
+
     dtkComposerNode *group = new dtkComposerNode;
     group->setTitle("Composite node");
     group->setType("dtkComposerNodeComposite");
     group->setKind(dtkComposerNode::Composite);
-    group->setParentNode(d->current_node);
-    group->setPos(position);
 
-    if (d->current_node)
+    this->addNode(group);
+    this->addItem(group);
+
+    if (nodes.first()->parentNode() != d->current_node) {
+        parent_block = dynamic_cast<dtkComposerNodeControlBlock *>(nodes.first()->parentItem());
+        group->setParentNode(parent_block->parentNode());
+        group->setParentItem(parent_block);
+        parent_block->parentNode()->addChildNode(group);
+        parent_block->addNode(group);
+    } else if (d->current_node) {
+        group->setParentNode(d->current_node);
+        group->setParentItem(d->current_node);
         d->current_node->addChildNode(group);
+    } else {
+        group->setParentNode(NULL);
+        group->setParentItem(NULL);
+    }
+
+    QPointF group_ave_pos(0., 0.);
+
+    dtkComposerNodeProperty *source;
+    dtkComposerNodeProperty *destin;
+    dtkComposerNodeProperty *clone;
 
     foreach(dtkComposerNode *node, nodes) {
 
-        foreach(dtkComposerEdge *edge, node->inputEdges()) {
-            d->edges.removeAll(edge);
-            delete edge;
-        }
-        
-        foreach(dtkComposerEdge *edge, node->outputEdges()) {
-            d->edges.removeAll(edge);
-            delete edge;
-        }
+        group_ave_pos += node->pos();
        
-        if(dtkComposerNode *parent = node->parentNode())
+        if (dtkComposerNode *parent = node->parentNode())
             parent->removeChildNode(node);
+        if (parent_block = dynamic_cast<dtkComposerNodeControlBlock *>(node->parentItem()))
+            parent_block->removeNode(node);
 
-        node->removeAllEdges();
         node->setParentNode(group);
-        node->hide();
+        group->addChildNode(node);
 
         foreach(dtkComposerNodeProperty *property, node->inputProperties())
             group->addInputProperty(property->clone(group));
@@ -413,23 +459,84 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
         foreach(dtkComposerNodeProperty *property, node->outputProperties())
             group->addOutputProperty(property->clone(group));
 
-        group->addChildNode(node);
+        foreach(dtkComposerEdge *edge, node->inputEdges()) {
+            
+            if (!nodes.contains(edge->source()->node())) {
+                    
+                source = edge->source();
+                destin = edge->destination();
+
+                if (node->kind() == dtkComposerNode::Composite)
+                    clone = group->inputProperty(destin->name(), destin->clonedFrom());
+                else
+                    clone = group->inputProperty(destin->name(), node);
+
+                clone->show();
+
+                this->removeEdge(edge);
+
+                dtkComposerEdge *input = new dtkComposerEdge;
+                input->setSource(source);
+                input->setDestination(clone);
+                input->link(true);
+                this->addEdge(input);
+
+                dtkComposerEdge *ghost = new dtkComposerEdge;
+                ghost->setSource(clone);
+                ghost->setDestination(destin);
+                ghost->link(true);
+                this->addEdge(ghost);
+            }
+        }
+        
+        foreach(dtkComposerEdge *edge, node->outputEdges()) {
+
+            if (!nodes.contains(edge->destination()->node())) {
+                    
+                source = edge->source();
+                destin = edge->destination();
+
+                if (node->kind() == dtkComposerNode::Composite)
+                    clone = group->outputProperty(source->name(), source->clonedFrom());
+                else
+                    clone = group->outputProperty(source->name(), node);
+
+                clone->show();
+
+                this->removeEdge(edge);
+
+                dtkComposerEdge *output = new dtkComposerEdge;
+                output->setSource(clone);
+                output->setDestination(destin);
+                output->link();
+                this->addEdge(output);
+
+                dtkComposerEdge *ghost = new dtkComposerEdge;
+                ghost->setSource(source);
+                ghost->setDestination(clone);
+                ghost->link(true);
+                this->addEdge(ghost);
+            }
+
+        }
+
+        //node->removeAllEdges();
+        node->hide();
     }
+    group->setPos(group_ave_pos / nodes.count());
+    group->setGhost(false);
 
-    this->addNode(group);
     this->updateEdgesVisibility();
-    this->setModified(true);
-
-    // QGraphicsScene::update();
-
+        
     return group;
 }
 
 dtkComposerNode *dtkComposerScene::createNode(QString type, QPointF position)
 {
-    if(dtkComposerNode *node = d->factory->create(type)) {
+    if (dtkComposerNode *node = d->factory->create(type)) {
         node->setPos(position);
         node->setParentNode(d->current_node);
+        node->setParentItem(d->current_node);
 
         if (d->current_node)
             d->current_node->addChildNode(node);
@@ -449,6 +556,7 @@ dtkComposerNode *dtkComposerScene::createNode(QString type, QPointF position)
         }
 
         this->addNode(node);
+        this->addItem(node);
 
         return node;
 
@@ -462,13 +570,13 @@ dtkComposerNote *dtkComposerScene::createNote(QString text, QPointF position, QS
 {
     dtkComposerNote *note = new dtkComposerNote(d->current_node);
     
-    if(!text.isNull())
+    if (!text.isNull())
         note->setText(text);
 
-    if(!position.isNull())
+    if (!position.isNull())
         note->setPos(position);
 
-    if(size.isValid() && !size.isNull())
+    if (size.isValid() && !size.isNull())
         note->setSize(size);
 
     this->addNote(note);
@@ -478,94 +586,120 @@ dtkComposerNote *dtkComposerScene::createNote(QString text, QPointF position, QS
 
 void dtkComposerScene::explodeGroup(dtkComposerNode *node)
 {
-    if(!node)
+    if (!node)
         return;
     
-    if(node->kind() != dtkComposerNode::Composite) {
+    if (node->kind() != dtkComposerNode::Composite) {
         qDebug() << "Only composite nodes can be ungrouped.";
         return;
     }
-    
-    // --- When node is Ghost, we first go to the parent level
 
-    if(node->isGhost()) {
- 
-        if(dtkComposerNode *parent = node->parentNode()) {
-            
-            if(parent->kind() != dtkComposerNode::Composite)
-                return;
+    if (d->grabber_node)
+        d->grabber_node = NULL;
 
-            node->setGhost(false);
-            parent->setGhost(true);
-       
-            this->hideAllNodes();
-            this->showChildNodes(parent);
-            this->updateEdgesVisibility();
-            this->setCurrentNode(parent);
-            
-            emit centerOn(parent->sceneBoundingRect().center());
-            // emit fitInView(parent->sceneBoundingRect());
-            emit pathChanged(d->current_node);
-            
-        } else {
+    dtkComposerNode *parent = node->parentNode();
 
-            node->setGhost(false);
-            
-            this->hideAllNodes();
-            this->showAllNodes();
-            this->updateEdgesVisibility();
-            this->setCurrentNode(NULL);
-            
-            emit centerOn(this->sceneRect().center());
-            // emit fitInView(this->sceneRect());
-            emit pathChanged(d->current_node);
-        }
+    // -- Looking for parent block if parent node is of control kind
 
+    dtkComposerNodeControlBlock *parent_block = NULL;
+    if (parent && parent->kind() == dtkComposerNode::Control)
+        foreach(dtkComposerNodeControlBlock *block, (dynamic_cast<dtkComposerNodeControl *>(parent))->blocks())
+            if (block->nodes().contains(node))
+                parent_block = block;
+
+    // -- Looking for a composite parent node through the parent ancestors.
+
+    dtkComposerNode *ghost_parent = NULL;        
+    ghost_parent = node->parentNode();
+    while (ghost_parent) {
+        if (ghost_parent->kind() == dtkComposerNode::Composite)  
+            break; 
+        else
+            ghost_parent = ghost_parent->parentNode();
     }
+    
+    // -- 
+
+    bool node_was_ghost = node->isGhost();
+    QPointF scene_center = node->mapRectToScene(node->boundingRect()).center();
+
+    // -- For each child nodes, the parenthood is reset and the edge logic is saved.
 
     foreach(dtkComposerNode *child, node->childNodes()) {
 
-        node->removeChildNode(child);
+        if (parent)
+            parent->addChildNode(child);
 
-        child->setParentNode(node->parentNode());
-        child->show();
+        child->setParentNode(parent);
 
-        if (node->parentNode())
-            node->parentNode()->addChildNode(child);
+        if (parent_block) {
+            parent_block->addNode(child);
+            child->setParentItem(parent_block);
+        } else {
+            child->setParentItem(node->parentItem());
+        }
 
         foreach(dtkComposerEdge *ghost, node->inputGhostEdges()) {
-            if(ghost->destination()->node() == child) {
+            if (ghost->destination()->node() == child) {
                 foreach(dtkComposerEdge *input, node->inputEdges()) {
-                    dtkComposerEdge *e = new dtkComposerEdge;
-                    e->setSource(input->source());
-                    e->setDestination(ghost->destination());
-                    this->addItem(e);
-                    e->show();
-                    e->source()->node()->addOutputEdge(e, e->source());
-                    child->addInputEdge(e, e->destination());
-                }
+                    if (input->destination() == ghost->source()) {
+                        dtkComposerEdge *e = new dtkComposerEdge;
+                        e->setSource(input->source());
+                        e->setDestination(ghost->destination());
+                        e->link(true);
+                        this->addEdge(e);
+                    }
+                 }
             }
         } 
 
         foreach(dtkComposerEdge *ghost, node->outputGhostEdges()) {
-            if(ghost->source()->node() == child) {
+            if (ghost->source()->node() == child) {
                 foreach(dtkComposerEdge *output, node->outputEdges()) {
-                    dtkComposerEdge *e = new dtkComposerEdge;
-                    e->setSource(ghost->source());
-                    e->setDestination(output->destination());
-                    this->addItem(e);
-                    e->show();
-                    child->addOutputEdge(e, e->source());
-                    e->destination()->node()->addInputEdge(e, e->destination());
+                    if (output->source() == ghost->destination()) {
+                        dtkComposerEdge *e = new dtkComposerEdge;
+                        e->setSource(ghost->source());
+                        e->setDestination(output->destination());
+                        e->link(true);
+                        this->addEdge(e);
+                    }
                 }
             }
-        }        
+        }
 
-        this->addItem(child);
-    }    
-
+        node->removeChildNode(child);
+        
+    }        
+    
     this->removeNode(node);
-    this->setModified(true);
+
+    if (node_was_ghost && ghost_parent) {
+    
+        ghost_parent->setGhost(true);
+        ghost_parent->setPos(ghost_parent->ghostPosition());
+        this->showChildNodes(ghost_parent);
+        this->setCurrentNode(ghost_parent);
+            
+        emit centerOn(ghost_parent->mapRectToScene(parent->boundingRect()).center());
+        emit pathChanged(d->current_node);
+
+    } else if (ghost_parent) {
+
+        this->showChildNodes(ghost_parent);
+        
+    } else {
+
+        this->showAllNodes();
+        this->setCurrentNode(NULL);
+            
+        emit centerOn(scene_center);
+        emit pathChanged(d->current_node);
+    }
+
+    if (parent_block)
+        parent_block->parentNode()->resize();
+        
+    this->updateEdgesVisibility();
 }
 
 void dtkComposerScene::setFactory(dtkComposerNodeFactory *factory)
@@ -580,15 +714,15 @@ void dtkComposerScene::startEvaluation(void)
     emit evaluationStarted();
 
     foreach(dtkComposerNode *node, this->nodes())
-        if(node->kind() == dtkComposerNode::Data)
+        if (node->kind() == dtkComposerNode::Data)
             node->setDirty(false);
         else
             node->setDirty(true);
 
-    if(this->selectedItems().count()) {
+    if (this->selectedItems().count()) {
         foreach(QGraphicsItem *item, this->selectedItems()) {
-            if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) {
-                if(!node->parentItem()) {
+            if (dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) {
+                if (!node->parentItem()) {
                     node->setDirty(true);
                     node->update();
                 }
@@ -615,17 +749,17 @@ void dtkComposerScene::copy(void)
     d->clipboard.edges.clear();
 
     foreach(QGraphicsItem *item, this->selectedItems())
-        if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item))
+        if (dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item))
             d->clipboard.nodes << node;
 
     foreach(dtkComposerEdge *edge, d->edges)
-        if(d->clipboard.nodes.contains(edge->source()->node()) && d->clipboard.nodes.contains(edge->destination()->node()))
+        if (d->clipboard.nodes.contains(edge->source()->node()) && d->clipboard.nodes.contains(edge->destination()->node()))
             d->clipboard.edges << edge;
 
     // -- Forbid copy/paste of composite nodes for the moment
     
     foreach(dtkComposerNode *node, d->clipboard.nodes) {
-        if(node->kind() == dtkComposerNode::Composite) {
+        if (node->kind() == dtkComposerNode::Composite) {
             d->clipboard.nodes.clear();
             d->clipboard.edges.clear();
         }
@@ -669,7 +803,7 @@ dtkComposerNodeProperty *dtkComposerScene::propertyAt(const QPointF& point) cons
 
     foreach(QGraphicsItem *item, items)
         if (dtkComposerNodeProperty *property = dynamic_cast<dtkComposerNodeProperty *>(item))
-            return property;
+            return property;         
 
     return NULL;
 }
@@ -682,8 +816,8 @@ void dtkComposerScene::setCurrentNode(dtkComposerNode *node)
 void dtkComposerScene::hideAllNodes(void)
 {
     foreach(QGraphicsItem *item, this->items()) {
-        if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) {
-            if(node->isVisible()) {
+        if (dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) {
+            if (node->isVisible()) {
                 node->hide();
             }
         }
@@ -693,10 +827,17 @@ void dtkComposerScene::hideAllNodes(void)
 void dtkComposerScene::showAllNodes(void)
 {
     foreach(dtkComposerNode *node, d->nodes) {
-        if(!node->parentNode()) {
+        if (!node->parentNode() || node->parentNode()->kind() != dtkComposerNode::Composite)
             node->show();
-        }
     }
+}
+
+void dtkComposerScene::hideChildNodes(dtkComposerNode *node)
+{
+    foreach(dtkComposerNode *child, node->childNodes())
+        child->hide();
+
+    node->hide();
 }
 
 void dtkComposerScene::showChildNodes(dtkComposerNode *node)
@@ -704,7 +845,10 @@ void dtkComposerScene::showChildNodes(dtkComposerNode *node)
     node->show();
 
     foreach(dtkComposerNode *child, node->childNodes())
-        child->show();
+        if (child->kind() == dtkComposerNode::Control)
+            this->showChildNodes(child);
+        else
+            child->show();
 }
 
 void dtkComposerScene::updateEdgesVisibility(void)
@@ -714,13 +858,13 @@ void dtkComposerScene::updateEdgesVisibility(void)
         if (edge->source()->node()->isVisible() && edge->destination()->node()->isVisible() && !edge->isVisible())
             edge->show();
 
-        if(!edge->source()->node()->isVisible() && edge->destination()->node()->isVisible() && edge->isVisible())
+        if (!edge->source()->node()->isVisible() && edge->destination()->node()->isVisible() && edge->isVisible())
             edge->hide();
 
-        if(edge->source()->node()->isVisible() && !edge->destination()->node()->isVisible() && edge->isVisible())
+        if (edge->source()->node()->isVisible() && !edge->destination()->node()->isVisible() && edge->isVisible())
             edge->hide();
 
-        if(!edge->source()->node()->isVisible() && !edge->destination()->node()->isVisible() && edge->isVisible())
+        if (!edge->source()->node()->isVisible() && !edge->destination()->node()->isVisible() && edge->isVisible())
             edge->hide();
 
         edge->adjust();
@@ -730,30 +874,97 @@ void dtkComposerScene::updateEdgesVisibility(void)
 QList<dtkComposerNodeControlBlock *> dtkComposerScene::hoveredControlBlocks(dtkComposerNode *node)
 {
     QList<dtkComposerNodeControlBlock *> blocks;
+    QList<dtkComposerNodeControlBlock *> hovered_child_blocks;
 
-    foreach(QGraphicsItem *item, this->items(node->mapToScene(node->boundingRect()))) {
-        if(dtkComposerNodeControlBlock *block = dynamic_cast<dtkComposerNodeControlBlock *>(item)) {
-            if((block->parentItem() != node)
-            && (block->mapRectToScene(block->boundingRect()).contains(node->mapRectToScene(node->boundingRect())))
-            && (this->hoveredControlBlocks(node, block->childItems()).isEmpty()))
-                blocks << block;
+    QRectF node_rec = node->mapRectToScene(node->boundingRect());
+
+    foreach(QGraphicsItem *item, this->items(node_rec)) {
+
+        if (dtkComposerNodeControlBlock *block = dynamic_cast<dtkComposerNodeControlBlock *>(item)) {
+
+            if (!d->isChildOf(block, node)) {
+
+                hovered_child_blocks = this->hoveredControlBlocks(node, block->nodes());
+
+                if (block->mapRectToScene(block->boundingRect()).contains(node_rec) && hovered_child_blocks.isEmpty()) {
+
+                    blocks.clear();
+                    blocks << block;
+                    return blocks;
+
+                } else if (hovered_child_blocks.isEmpty()) {
+
+                    blocks << block;
+
+                } else {
+
+                    bool node_is_shared = true;
+
+                    foreach(dtkComposerNodeControlBlock *block_of_childs, hovered_child_blocks) {
+                        if (block_of_childs->mapRectToScene(block_of_childs->boundingRect()).contains(node_rec) || 
+                            block_of_childs->parentNode()->mapRectToScene(block_of_childs->parentNode()->boundingRect()).contains(node_rec)) {
+                            node_is_shared = false;
+                            break;
+                        }
+                    }
+                                
+                    if (node_is_shared)
+                        blocks << block;
+
+                }
+            }
         }
     }
+
+    if (blocks.count() == 1 && !blocks.first()->mapRectToScene(blocks.first()->boundingRect()).contains(node_rec))
+        blocks << blocks.first();
     
     return blocks;
 }
 
-QList<dtkComposerNodeControlBlock *> dtkComposerScene::hoveredControlBlocks(dtkComposerNode *node, QList<QGraphicsItem *> parents)
+QList<dtkComposerNodeControlBlock *> dtkComposerScene::hoveredControlBlocks(dtkComposerNode *node, QList<dtkComposerNode *> parents)
 {
     QList<dtkComposerNodeControlBlock *> blocks;
+    QList<dtkComposerNodeControlBlock *> hovered_child_blocks;
+    QRectF node_rec = node->mapRectToScene(node->boundingRect());
 
-    foreach(QGraphicsItem *parent, parents) {
-        foreach(QGraphicsItem *item, parent->childItems()) {
-            if(dtkComposerNodeControlBlock *block = dynamic_cast<dtkComposerNodeControlBlock *>(item)) {
-                if((block->parentItem() != node)
-                && (block->mapRectToScene(block->boundingRect()).contains(node->mapRectToScene(node->boundingRect())))
-                && (this->hoveredControlBlocks(node, block->childItems()).isEmpty()))
-                    blocks << block;
+    foreach(dtkComposerNode *parent_node, parents) {
+
+        if (dtkComposerNodeControl *parent = dynamic_cast<dtkComposerNodeControl *>(parent_node)) {
+
+            foreach(dtkComposerNodeControlBlock *block, parent->blocks()) {
+                    
+                if (!d->isChildOf(block, node)) {
+                        
+                    hovered_child_blocks = this->hoveredControlBlocks(node, block->nodes());
+                        
+                    if (block->mapRectToScene(block->boundingRect()).contains(node_rec) && hovered_child_blocks.isEmpty()) {
+                            
+                        blocks.clear();
+                        blocks << block;
+                        return blocks;
+                            
+                    } else if (hovered_child_blocks.isEmpty()) {
+                            
+                        blocks << block;
+                            
+                    } else {
+                            
+                        bool node_is_shared = true;
+                            
+                        foreach(dtkComposerNodeControlBlock *block_of_childs, hovered_child_blocks) {
+                            if (block_of_childs->mapRectToScene(block_of_childs->boundingRect()).contains(node_rec) || 
+                                block_of_childs->parentNode()->mapRectToScene(block_of_childs->parentNode()->boundingRect()).contains(node_rec)) {
+                                node_is_shared = false;
+                                break;
+                            }
+                        }
+                            
+                        if (node_is_shared)
+                            blocks << block;
+                            
+                    }
+                }
             }
         }
     }
@@ -806,20 +1017,20 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
 {
     // Item deletion - Delete | Backspace
 
-    if(event->key() == Qt::Key_Backspace || event->key() == Qt::Key_Delete)
+    if ((event->key() == Qt::Key_Backspace || event->key() == Qt::Key_Delete) && (event->modifiers() & Qt::ControlModifier))
         foreach(QGraphicsItem *item, this->selectedItems())
-            if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item))
+            if (dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item))
                 this->removeNode(node);
 
     // Item Copy - Ctrl + C
 
-    if(event->key() == Qt::Key_C && event->modifiers() & Qt::ControlModifier) {
+    if (event->key() == Qt::Key_C && event->modifiers() & Qt::ControlModifier) {
         this->copy();
     }
 
     // Item Copy - Ctrl + V
 
-    if(event->key() == Qt::Key_V && event->modifiers() & Qt::ControlModifier) {
+    if (event->key() == Qt::Key_V && event->modifiers() & Qt::ControlModifier) {
         this->paste();
     }
 
@@ -843,67 +1054,187 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
     // -- Control nodes handling
 
     d->grabber_node = NULL;
-    
-    if(this->mouseGrabberItem())
-        d->grabber_node = dynamic_cast<dtkComposerNode *>(this->mouseGrabberItem());
-    
-    if(!d->grabber_node)
+    d->grabber_node = dynamic_cast<dtkComposerNode *>(this->mouseGrabberItem());
+
+    if (!d->grabber_node || d->grabber_node->isGhost())
         return;
 
-    foreach(dtkComposerNodeControlBlock *block, this->hoveredControlBlocks(d->grabber_node))
-        block->highlight();
+    QList<dtkComposerNodeControlBlock *> hovered_control_blocks = this->hoveredControlBlocks(d->grabber_node);
+
+    if (hovered_control_blocks.count() > 1) {
+
+        foreach(dtkComposerNodeControlBlock *block, hovered_control_blocks)
+            block->highlight(false);
+
+        d->grabber_node->highlight(false);
+
+    } else if (hovered_control_blocks.count() == 1) {
+
+        if (d->grabber_node_has_edges && d->grabber_node->parentItem() != hovered_control_blocks.first()) {
+
+            hovered_control_blocks.first()->highlight(false);
+            d->grabber_node->highlight(false);
+
+        } else {
+
+            hovered_control_blocks.first()->highlight(true);
+            d->grabber_node->highlight(true);
+
+        }
+
+    } else {
+
+        if (d->grabber_node_has_edges && d->grabber_node->parentItem() != d->current_node) {
+
+            d->grabber_node->highlight(false);
+
+        } else {
+
+            d->grabber_node->highlight(true);
+            
+        }
+    }
 }
 
 void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     QGraphicsScene::mousePressEvent(mouseEvent);
 
+    // --- Pulling edge from property
+
     dtkComposerNodeProperty *property = propertyAt(mouseEvent->scenePos());
 
-    if(!property)
-        return;
+     if (property && property->node() == dynamic_cast<dtkComposerNode *>(this->mouseGrabberItem())) {
 
-    if (!property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Output) {
-        if(d->current_edge) {
-            d->current_edge->hide();
-            delete d->current_edge;
-            d->current_edge = NULL;
+        if (!property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Output) {
+
+            if (d->current_edge) {
+                d->current_edge->hide();
+                delete d->current_edge;
+                d->current_edge = NULL;
+            }
+            d->current_edge = new dtkComposerEdge;
+            this->addItem(d->current_edge);
+            d->current_edge->setSource(property);
+            d->current_edge->show();
+
+        } else if (!property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Input) {
+
+            d->current_edge = property->edge();
+            if (d->current_edge) {
+                d->current_edge->unlink();
+                d->edges.removeAll(d->edge(d->current_edge));
+            }
+
+        } else if (!property->node()->isGhost() && property->type() == dtkComposerNodeProperty::HybridOutput) {
+        
+            if (property->contains(mouseEvent->pos())) {
+        
+                property->setBehavior(dtkComposerNodeProperty::AsOutput);
+                if (d->current_edge) {
+                    d->current_edge->hide();
+                    delete d->current_edge;
+                    d->current_edge = NULL;
+                }
+                d->current_edge = new dtkComposerEdge;
+                this->addItem(d->current_edge);
+                d->current_edge->setSource(property);
+                d->current_edge->show();
+
+            } else {
+            
+                property->setBehavior(dtkComposerNodeProperty::AsRelay);
+                d->current_edge = property->edge();
+                if (d->current_edge) {
+                    d->current_edge->unlink();
+                    d->edges.removeAll(d->edge(d->current_edge));
+                }
+            }
+
+        } else if (!property->node()->isGhost() && property->type() == dtkComposerNodeProperty::HybridInput) {
+        
+            if (property->contains(mouseEvent->pos())) {
+
+                property->setBehavior(dtkComposerNodeProperty::AsRelay);
+                if (d->current_edge) {
+                    d->current_edge->hide();
+                    delete d->current_edge;
+                    d->current_edge = NULL;
+                }
+                d->current_edge = new dtkComposerEdge;
+                this->addItem(d->current_edge);
+                d->current_edge->setSource(property);
+                d->current_edge->show();
+
+            } else {
+
+                property->setBehavior(dtkComposerNodeProperty::AsInput);
+                d->current_edge = property->edge();
+                if (d->current_edge) {
+                    d->current_edge->unlink();
+                    d->edges.removeAll(d->edge(d->current_edge));
+                }
+            }
+
+        } else if (property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Input) {
+
+            if (d->current_edge) {
+                d->current_edge->hide();
+                delete d->current_edge;
+                d->current_edge = NULL;
+            }
+            d->current_edge = new dtkComposerEdge;
+            this->addItem(d->current_edge);
+            d->current_edge->setSource(property);
+            d->current_edge->show();
+
+        } else if (property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Output) {
+
+            d->current_edge = property->edge();
+            if (d->current_edge) {
+                d->current_edge->unlink();
+                d->edges.removeAll(d->edge(d->current_edge));
+            }
         }
-        d->current_edge = new dtkComposerEdge;
-        this->addItem(d->current_edge);
-        d->current_edge->setSource(property);
-        d->current_edge->show();
-        return;
-    }
 
-    if (property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Input) {
-        if(d->current_edge) {
-            d->current_edge->hide();
-            delete d->current_edge;
-            d->current_edge = NULL;
+        mouseEvent->accept();
+        return;
+
+    }
+    
+    // --- Node grabbing
+
+    if (d->grabber_node = dynamic_cast<dtkComposerNode *>(this->mouseGrabberItem())) {
+
+        d->grabber_node_origin = d->grabber_node->scenePos();
+        d->grabber_node_zvalue = d->grabber_node->zValue();
+
+        if (d->grabber_node->isGhost())
+            return;
+
+        // -- Rise z-value of the node   
+
+        d->grabber_node->setZValue(100);
+
+        // -- Search for external edges
+        d->grabber_node_has_edges = false;
+
+        QRectF node_rec = d->grabber_node->mapRectToScene(d->grabber_node->boundingRect());
+
+        foreach(QGraphicsItem *item, this->items(node_rec)) {
+            if (dtkComposerEdge *edge = dynamic_cast<dtkComposerEdge *>(item)) {
+                if (d->isChildOf(edge->source()->node(), d->grabber_node) && d->isChildOf(edge->destination()->node(), d->grabber_node)) {
+
+                } else if (d->isChildOf(edge->source()->node(), d->grabber_node) || d->isChildOf(edge->destination()->node(), d->grabber_node)) {
+                    d->grabber_node_has_edges = true;
+                }
+            }
         }
-        d->current_edge = new dtkComposerEdge;
-        this->addItem(d->current_edge);
-        d->current_edge->setSource(property);
-        d->current_edge->show();
+        
+        mouseEvent->accept();
         return;
     }
-
-    if (!property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Input) {
-        d->current_edge = property->edge();
-        if (d->current_edge)
-            d->current_edge->unlink();
-        d->edges.removeAll(d->edge(d->current_edge));
-        return;
-    }
-
-    if (property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Output) {
-        d->current_edge = property->edge();
-        if (d->current_edge)
-            d->current_edge->unlink();
-        d->edges.removeAll(d->edge(d->current_edge));
-        return;
-    }
+    
 }
 
 void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
@@ -914,11 +1245,11 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
     if (d->current_edge) {
 
-        if(dtkComposerNodeProperty *property = propertyAt(mouseEvent->scenePos())) {
+        if (dtkComposerNodeProperty *property = propertyAt(mouseEvent->scenePos())) {
             
             d->current_edge->setDestination(property);
             
-            if(!d->current_edge->link()) {
+            if (!d->current_edge->link()) {
                 
                 delete d->current_edge;
                 
@@ -936,7 +1267,7 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
                 // --
                 
                 dtkComposerEdge *edge = d->current_edge;
-                
+
                 d->edges << edge;
                 
                 d->current_edge = 0;
@@ -951,129 +1282,179 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             d->current_edge = 0;
         }        
     }
-
+        
     // -- Control nodes handling
 
-    if(!d->grabber_node)
+    if (!d->grabber_node || d->grabber_node->isGhost())
         return;
 
+    d->grabber_node->setZValue(d->grabber_node_zvalue);
+
+    QRectF node_rec = d->grabber_node->mapRectToScene(d->grabber_node->boundingRect());
+        
     QList<dtkComposerNodeControlBlock *> blocks = this->hoveredControlBlocks(d->grabber_node);
 
-    if(blocks.count() > 1)
-        return;
+    QPointF w = QPointF(0, 0);
 
-    if(blocks.count()) {
+    dtkComposerNodeControlBlock *parent_block = NULL;
+        
+    if (blocks.count() > 1) {
+            
+        if (d->grabber_node->parentItem())
+            w = d->grabber_node->parentItem()->scenePos();
+        d->grabber_node->setPos(d->grabber_node_origin - w);
 
-        if(d->grabber_node->parentItem() == blocks.first())
-            return;
+    } else if (blocks.count() == 1) {
 
-        QPointF c = d->grabber_node->scenePos();
-        QPointF w = blocks.first()->scenePos();
+        if (d->grabber_node_has_edges && d->grabber_node->parentItem() != blocks.first()) {
 
-        d->grabber_node->setParentItem(blocks.first());
-        d->grabber_node->setPos(c - w);
+            if (d->grabber_node->parentItem()) 
+                w = d->grabber_node->parentItem()->scenePos();
+            d->grabber_node->setPos(d->grabber_node_origin - w);
 
-        if(dtkComposerNodeControl *control = dynamic_cast<dtkComposerNodeControl *>(d->grabber_node)) {
-            qDebug() << "Updating z value";
-            control->setZValue(blocks.first()->zValue() + 1);
+        } else if (d->grabber_node->parentItem() != blocks.first()) {
+
+            if (d->grabber_node->parentNode())
+                d->grabber_node->parentNode()->removeChildNode(d->grabber_node);
+                
+            if(parent_block = dynamic_cast<dtkComposerNodeControlBlock *>(d->grabber_node->parentItem()))
+                parent_block->removeNode(d->grabber_node);
+
+            w = blocks.first()->scenePos(); 
+            d->grabber_node->setPos(d->grabber_node->scenePos() - w);           
+            d->grabber_node->setParentItem(blocks.first());
+            d->grabber_node->setParentNode(blocks.first()->parentNode());
+
+            blocks.first()->parentNode()->addChildNode(d->grabber_node);
+            blocks.first()->addNode(d->grabber_node);
+
         }
-
+            
     } else {
 
-        QPointF c = d->grabber_node->pos();
-        QPointF w = QPointF(0, 0);
+        parent_block = dynamic_cast<dtkComposerNodeControlBlock *>(d->grabber_node->parentItem());
 
-        if(d->grabber_node->parentItem())
-            w = d->grabber_node->parentItem()->scenePos();
+        if (parent_block && d->grabber_node_has_edges) {
+            
+            w = parent_block->scenePos();
+            d->grabber_node->setPos(d->grabber_node_origin - w);
+                
+        } else {
 
-        d->grabber_node->setParentItem(0);
-        d->grabber_node->setPos(c + w);
+            if (d->grabber_node->parentNode() && d->grabber_node->parentNode() != d->current_node)
+                d->grabber_node->parentNode()->removeChildNode(d->grabber_node);
+
+            if (parent_block)
+                parent_block->removeNode(d->grabber_node);
+                
+            if (d->current_node)
+                w = d->current_node->scenePos();
+            else if (d->grabber_node->parentItem()) 
+                w = -1. * d->grabber_node->parentItem()->scenePos();
+                
+            d->grabber_node->setParentItem(d->current_node); 
+            d->grabber_node->setParentNode(d->current_node);
+            d->grabber_node->setPos(d->grabber_node->scenePos() - w);
+                
+        }
     }
+        
+    d->grabber_node = NULL;
+
 }
 
 void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
+
     dtkComposerNode *node = nodeAt(mouseEvent->scenePos());
+    if (!node)
+        return; 
 
-    if(!node)
+    if (!(mouseEvent->buttons() & Qt::LeftButton))
         return;
 
-    if(!(mouseEvent->buttons() & Qt::LeftButton))
+    if (node->kind() != dtkComposerNode::Composite)
         return;
 
-    if(!node->isGhost()) {
+    // --- Browsing through composite levels
 
-        if(node->kind() != dtkComposerNode::Composite)
-            return;
+    dtkComposerNode *ghost_parent = NULL;
 
-        if(dtkComposerNode *parent = node->parentNode())
-            parent->setGhost(false);                
+    this->hideAllNodes();
+
+    if (!node->isGhost()) {
+
+        node->setNonGhostPosition(node->pos());
+        
+        ghost_parent = node->parentNode();
+        while (ghost_parent) {
+            if (ghost_parent->isGhost()) {
+                ghost_parent->setGhostPosition(ghost_parent->scenePos());
+                ghost_parent->setGhost(false);  
+                break; 
+            } else {
+                ghost_parent = ghost_parent->parentNode();
+            }
+        }
+
         node->setGhost(true);
+        node->setPos(node->ghostPosition());
 
-        this->hideAllNodes();
-        this->showChildNodes(node);
-        this->updateEdgesVisibility();
         this->setCurrentNode(node);
 
-        emit centerOn(node->sceneBoundingRect().center());
-        // emit fitInView(node->sceneBoundingRect());
-        emit pathChanged(d->current_node);
+    } else if (node->isGhost()) {  
 
-    } else {
-     
-        if(dtkComposerNode *parent = node->parentNode()) {
-            
-            if(parent->kind() != dtkComposerNode::Composite)
-                return;
-
-            node->setGhost(false);
-            parent->setGhost(true);
-       
-            this->hideAllNodes();
-            this->showChildNodes(parent);
-            this->updateEdgesVisibility();
-            this->setCurrentNode(parent);
-            
-            emit centerOn(parent->sceneBoundingRect().center());
-            // emit fitInView(parent->sceneBoundingRect());
-            emit pathChanged(d->current_node);
-            
-        } else {
-
-            node->setGhost(false);
-            
-            this->hideAllNodes();
-            this->showAllNodes();
-            this->updateEdgesVisibility();
-            this->setCurrentNode(NULL);
-            
-            emit centerOn(this->sceneRect().center());
-            // emit fitInView(this->sceneRect());
-            emit pathChanged(d->current_node);
+        node->setGhostPosition(node->scenePos());
+        node->setGhost(false);      
+        
+        ghost_parent = node->parentNode();
+        while (ghost_parent) {
+            if (ghost_parent->kind() == dtkComposerNode::Composite) {
+                ghost_parent->setGhost(true);
+                ghost_parent->setPos(ghost_parent->ghostPosition());
+                break; 
+            } else {
+                ghost_parent = ghost_parent->parentNode();
+            }
         }
+
+        node->setPos(node->nonGhostPosition());
+
+        this->setCurrentNode(ghost_parent);
     }
+
+    QPointF scene_center = node->mapRectToScene(node->boundingRect()).center();
+
+    if (d->current_node)
+        this->showChildNodes(d->current_node);
+    else
+        this->showAllNodes();
+
+    this->updateEdgesVisibility();
+    emit centerOn(scene_center);
+    emit pathChanged(d->current_node);
 }
 
 void dtkComposerScene::onSelectionChanged(void)
 {
     foreach(QGraphicsItem *item, this->selectedItems()) {
 
-        if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) {
+        if (dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) {
 
             emit nodeSelected(node);
 
-            if(dtkAbstractData *data = dynamic_cast<dtkAbstractData *>(node->object()))
+            if (dtkAbstractData *data = dynamic_cast<dtkAbstractData *>(node->object()))
                 emit dataSelected(data);
 
-            if(dtkAbstractProcess *process = dynamic_cast<dtkAbstractProcess *>(node->object()))
+            if (dtkAbstractProcess *process = dynamic_cast<dtkAbstractProcess *>(node->object()))
                 emit processSelected(process);
 
-            if(dtkAbstractView *view = dynamic_cast<dtkAbstractView *>(node->object()))
+            if (dtkAbstractView *view = dynamic_cast<dtkAbstractView *>(node->object()))
                 emit viewSelected(view);
         }
     }
 
-    if(this->selectedItems().count() == 0)
+    if (this->selectedItems().count() == 0)
         emit selectionCleared();
 }
 

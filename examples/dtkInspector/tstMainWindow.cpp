@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar 23 21:05:20 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun  2 13:59:48 2010 (+0200)
+ * Last-Updated: Mon Mar 14 15:38:44 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 42
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -19,6 +19,8 @@
 
 #include <QtGui>
 
+#include "tstInspectorObject.h"
+#include "tstInspectorScene.h"
 #include "tstMainWindow.h"
 
 #include <dtkGui/dtkInspector.h>
@@ -68,8 +70,11 @@ tstMainWindow::~tstMainWindow(void)
 
 void tstMainWindow::showInspector(void)
 {
-    if(!d->inspector)
+    if(!d->inspector) {
         d->inspector = new dtkInspector;
+        d->inspector->addPage("Scene", new tstInspectorScene(d->inspector));
+        d->inspector->addPage("Object", new tstInspectorObject(d->inspector));
+    }
 
     d->inspector->setVisible(!d->inspector->isVisible());
 }

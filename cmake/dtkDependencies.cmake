@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Sat Feb  5 19:48:10 2011 (+0100)
+## Last-Updated: Wed Mar 30 08:49:17 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 52
+##     Update #: 54
 ######################################################################
 ## 
 ### Commentary: 
@@ -131,13 +131,11 @@ mark_as_advanced(EDITLINE_LIBRARY)
 
 find_path(EDITLINE_INCLUDE_DIR histedit.h
   /usr/include
-  /usr/local/include
-)
+  /usr/local/include)
 
 find_library(EDITLINE_LIBRARY edit
   /usr/lib
-  /usr/local/lib
-)
+  /usr/local/lib)
 
 if(EDITLINE_LIBRARY)
   set(EDITLINE_FOUND "YES")
@@ -182,6 +180,7 @@ find_package(MPI QUIET)
 if(MPI_FOUND)
 include_directories(${MPI_INCLUDE_PATH})
 set(COMPILE_FLAGS ${COMPILE_FLAGS} ${MPI_COMPILE_FLAGS})
+set(DTK_HAVE_MPI "YES")
 endif(MPI_FOUND)
 
 ## #################################################################

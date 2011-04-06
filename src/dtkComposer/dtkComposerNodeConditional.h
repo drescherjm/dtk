@@ -20,11 +20,12 @@
 #ifndef DTKCOMPOSERNODECONDITIONAL_H
 #define DTKCOMPOSERNODECONDITIONAL_H
 
+#include "dtkComposerExport.h"
 #include "dtkComposerNodeControl.h"
 
 class dtkComposerNodeConditionalPrivate;
 
-class dtkComposerNodeConditional : public dtkComposerNodeControl
+class DTKCOMPOSER_EXPORT dtkComposerNodeConditional : public dtkComposerNodeControl
 {
     Q_OBJECT
 

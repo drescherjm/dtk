@@ -20,13 +20,15 @@
 #ifndef DTKCOMPOSERNOTE_H
 #define DTKCOMPOSERNOTE_H
 
+#include "dtkComposerExport.h"
+
 #include <QtCore>
 #include <QtGui>
 
 class dtkComposerNode;
 class dtkComposerNotePrivate;
 
-class dtkComposerNote : public QObject, public QGraphicsItem
+class DTKCOMPOSER_EXPORT dtkComposerNote : public QObject, public QGraphicsItem
 {
     Q_OBJECT
 

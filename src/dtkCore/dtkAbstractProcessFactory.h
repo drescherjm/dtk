@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:48:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Jan 15 14:09:46 2011 (+0100)
+ * Last-Updated: Wed Mar 16 14:56:22 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 60
+ *     Update #: 63
  */
 
 /* Commentary:
@@ -51,7 +51,9 @@ public:
     bool exists(const QString& type);
 
     QStringList creators(void) const;
-    QStringList implementations(const QString& abstraction);
+
+    QStringList implementations(const QString& interface);
+    QStringList interfaces(void);
 
 signals:
     void created(dtkAbstractProcess *process, const QString& type);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Oct  7 09:25:06 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 14 22:31:29 2009 (+0200)
+ * Last-Updated: Fri Mar 18 00:29:14 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 16
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -23,10 +23,12 @@ dtkSpacer::dtkSpacer(QWidget *parent, int width, int height) : QWidget(parent)
 {
     this->setMinimumSize(width, height);
 
-    if(width)
-        this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    else
+    if(width && !height)
+        this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    else if(!width && height)
         this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    else
+        this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
 dtkSpacer::~dtkSpacer(void)

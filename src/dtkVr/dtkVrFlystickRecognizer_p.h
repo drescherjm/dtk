@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb  7 10:09:35 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  7 10:15:06 2011 (+0100)
+ * Last-Updated: Wed Mar 30 13:28:47 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 3
+ *     Update #: 10
  */
 
 /* Commentary: 
@@ -28,6 +28,7 @@
 
 #include <QtCore>
 
+#include <dtkMath/dtkQuaternion.h>
 #include <dtkMath/dtkVector3D.h>
 
 class dtkAbstractView;
@@ -48,10 +49,12 @@ public:
 #endif
 
     double flystick_position[3];
+    double flystick_orientation[4];
 
     bool activated;
 
-    dtkVector3D<double> last;
+    dtkVector3D<double> last_position;
+    dtkQuaternion<double> last_orientation;
 
 public:
     bool running;
@@ -65,13 +68,11 @@ public:
     QUrl url;
 
 public:
-    dtkAbstractView *view;
-
-public:
     dtkVrFlystickRecognizer *q;
 
 signals:
     void moved(void);
+    void rotated(void);
     void buttonPressed(int);
     void buttonReleased(int);
 };

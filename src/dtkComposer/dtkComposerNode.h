@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 14:04:18 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 236
+ * Last-Updated: Thu Mar 31 14:54:17 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 257
  */
 
 /* Commentary: 
@@ -35,6 +35,7 @@ class stkComspoerScene;
 class DTKCOMPOSER_EXPORT dtkComposerNode : public QObject, public QGraphicsItem
 {
     Q_OBJECT
+    Q_PROPERTY(QColor penColor READ penColor WRITE setPenColor)
 
 #if QT_VERSION >= 0x040600
     Q_INTERFACES(QGraphicsItem)
@@ -73,6 +74,9 @@ public:
     void addGhostInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
     void addGhostOutputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
 
+    void addInputRelayEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void addOutputRelayEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+
     void removeInputEdge(dtkComposerEdge *edge);
     void removeOutputEdge(dtkComposerEdge *edge);
     void removeAllEdges(void);
@@ -80,6 +84,10 @@ public:
     void removeGhostInputEdge(dtkComposerEdge *edge);
     void removeGhostOutputEdge(dtkComposerEdge *edge);
     void removeAllGhostEdges(void);
+
+    void removeInputRelayEdge(dtkComposerEdge *edge);
+    void removeOutputRelayEdge(dtkComposerEdge *edge);
+    void removeAllRelayEdges(void);
 
     void addAction(const QString& text, const QObject *receiver, const char *slot);
 
@@ -99,6 +107,9 @@ public:
 
     QList<dtkComposerEdge *> inputGhostEdges(void);
     QList<dtkComposerEdge *> outputGhostEdges(void);
+
+    QList<dtkComposerEdge *> inputRelayEdges(void);
+    QList<dtkComposerEdge *> outputRelayEdges(void);
 
     QList<dtkComposerNode *> inputNodes(void);
     QList<dtkComposerNode *> outputNodes(void);
@@ -138,6 +149,11 @@ public:
     void setGhost(bool ghost);
     bool  isGhost(void);
 
+    void    setGhostPosition(QPointF pos);
+    QPointF    ghostPosition(void);
+    void setNonGhostPosition(QPointF pos);
+    QPointF nonGhostPosition(void);
+
     // --
 
     void setSize(const QSizeF& size);
@@ -145,8 +161,8 @@ public:
 
     // --
 
-    friend QDebug operator<<(QDebug dbg, dtkComposerNode& node);
-    friend QDebug operator<<(QDebug dbg, dtkComposerNode *node);
+    friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNode& node);
+    friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNode *node);
 
 signals:
     void elapsed(QString duration);
@@ -165,6 +181,18 @@ public:
     virtual QRectF boundingRect(void) const;
 
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+public:
+    void highlight(bool ok);
+
+    QColor penColor(void) const;
+    QPen pen(void) const;
+
+    void setPenColor(const QColor& color);
+    void setPen(const QColor& color, const Qt::PenStyle& style, const qreal& width);
+
+protected:
+    qreal nodeRadius(void);
 
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
@@ -194,8 +222,8 @@ private:
 // Debug operators
 // /////////////////////////////////////////////////////////////////
 
-QDebug operator<<(QDebug dbg, dtkComposerNode  node);
-QDebug operator<<(QDebug dbg, dtkComposerNode& node);
-QDebug operator<<(QDebug dbg, dtkComposerNode *node);
+DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNode  node);
+DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNode& node);
+DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNode *node);
 
 #endif

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 17:59:17 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 27 19:18:17 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 10
+ * Last-Updated: Fri Apr  8 16:34:43 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 12
  */
 
 /* Commentary: 
@@ -47,9 +47,9 @@ public:
     void setOperation(Operation operation);
 
 protected:
-    void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    void run(void);
+    void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void  run(void);
+    void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
 
 private:
     dtkComposerNodeStringOperatorPrivate *d;

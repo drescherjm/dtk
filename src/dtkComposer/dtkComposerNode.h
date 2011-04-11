@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar 31 14:54:17 2011 (+0200)
+ * Last-Updated: Mon Apr 11 17:00:00 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 257
+ *     Update #: 268
  */
 
 /* Commentary: 
@@ -114,6 +114,9 @@ public:
     QList<dtkComposerNode *> inputNodes(void);
     QList<dtkComposerNode *> outputNodes(void);
 
+    QList<dtkComposerEdge *> inputRoutes(void);
+    QList<dtkComposerEdge *> outputRoutes(void);
+
     dtkComposerEdge *edge(dtkComposerNodeProperty *property);
 
     dtkComposerNodeProperty *propertyAt(const QPointF& point) const;
@@ -143,8 +146,6 @@ public:
     QList<dtkComposerNode *> childNodes(void);
 
     dtkComposerNode *parentNode(void);
-
-    // --
 
     void setGhost(bool ghost);
     bool  isGhost(void);
@@ -200,15 +201,18 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 public:
+    void onEdgeConnected(dtkComposerEdge *edge);
+
+public:
     virtual QVariant value(dtkComposerNodeProperty *property) { return QVariant(); }
 
     virtual void chooseImplementation(void);
     virtual void  setupImplementation(QString implementation = QString());
 
 protected:
-    virtual void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    virtual void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    virtual void run(void);
+    virtual void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    virtual void  run(void);
+    virtual void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
 
 private:
     friend class dtkComposerScene; 

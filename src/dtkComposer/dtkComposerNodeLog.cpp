@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 20:51:32 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  1 15:01:20 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 32
+ * Last-Updated: Fri Apr  8 16:30:11 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -48,7 +48,7 @@ dtkComposerNodeLog::~dtkComposerNodeLog(void)
     d = NULL;
 }
 
-void dtkComposerNodeLog::onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNodeLog::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(property);
 
@@ -60,5 +60,5 @@ void dtkComposerNodeLog::onInputEdgeConnected(dtkComposerEdge *edge, dtkComposer
 
 void dtkComposerNodeLog::run(void)
 {
-
+    return;
 }

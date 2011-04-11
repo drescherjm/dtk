@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  5 17:22:47 2011 (+0200)
+ * Last-Updated: Fri Apr  8 16:28:53 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 440
+ *     Update #: 441
  */
 
 /* Commentary: 
@@ -290,16 +290,6 @@ QRectF dtkComposerNodeControl::minimalBoundingRect(void)
     min_height += 23 + 23; // header + footer
 
     return QRectF(this->boundingRect().top(), this->boundingRect().top(), min_width, min_height);
-}
-
-void dtkComposerNodeControl::onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
-{
-    // qDebug() << DTK_PRETTY_FUNCTION;
-}
-
-void dtkComposerNodeControl::onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
-{
-    // qDebug() << DTK_PRETTY_FUNCTION;
 }
 
 bool dtkComposerNodeControl::condition(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar  7 09:21:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar  7 10:21:28 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 5
+ * Last-Updated: Fri Apr  8 16:30:33 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 7
  */
 
 /* Commentary: 
@@ -37,8 +37,9 @@ public slots:
     void update(void);
 
 protected:
-    void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void  run(void);
+    void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
 
 private:
     dtkComposerNodeLoopPrivate *d;

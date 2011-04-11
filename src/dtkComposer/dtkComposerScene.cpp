@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr  5 17:05:45 2011 (+0200)
+ * Last-Updated: Mon Apr 11 10:56:12 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 2614
+ *     Update #: 2634
  */
 
 /* Commentary: 
@@ -151,12 +151,8 @@ QList<dtkComposerNode *> dtkComposerScene::startNodes(void)
 {
     QList<dtkComposerNode *> list;
 
-    // foreach(dtkComposerNode *node, d->nodes)
-    //     if (!node->parentNode() && !node->parentItem() && node->inputEdges().count() == 0)
-    //         list << node;
-
     foreach(dtkComposerNode *node, d->nodes)
-        if (!node->inputEdges().count() && node->outputEdges().count())
+        if (!node->inputEdges().count() && node->outputEdges().count() && node->kind() != dtkComposerNode::Composite)
             list << node;
 
     return list;
@@ -167,7 +163,7 @@ QList<dtkComposerNode *> dtkComposerScene::endNodes(void)
     QList<dtkComposerNode *> list;
 
     foreach(dtkComposerNode *node, d->nodes)
-        if (!node->parentNode() && !node->parentItem()  && node->outputEdges().count() == 0)
+        if (node->inputEdges().count() && !node->outputEdges().count() && node->kind() != dtkComposerNode::Composite)
             list << node;
 
     return list;
@@ -313,68 +309,10 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
         n = parent;
     }
 
-    // --
-
     foreach(dtkComposerNode *child, node->childNodes()) {
-
-        if (child->childNodes().count()) {
-
-            foreach(dtkComposerNode *child1, child->childNodes()) {
-                
-                if (child1->childNodes().count()) {
-                    
-                    foreach(dtkComposerNode *child2, child1->childNodes()) {
-                        
-                        if (child2->childNodes().count()) {
-                            
-                            foreach(dtkComposerNode *child3, child2->childNodes()) {
-                                
-                                if (child3->childNodes().count()) {
-                                    
-                                    foreach(dtkComposerNode *child4, child3->childNodes()) {
-                                        
-                                        if (child4->childNodes().count()) {
-                                            
-                                            foreach(dtkComposerNode *child5, child4->childNodes()) {
-                                                
-                                                if (child5->childNodes().count()) {
-                                                    
-                                                    foreach(dtkComposerNode *child6, child5->childNodes()) {
-                                                        
-                                                        d->nodes.removeAll(child6);
-                                                    }
-                                                    
-                                                }
-                                                
-                                                d->nodes.removeAll(child5);
-                                            }
-                                            
-                                        }
-                                        
-                                        d->nodes.removeAll(child4);
-                                    }
-                                    
-                                }
-                                
-                                d->nodes.removeAll(child3);
-                            }
-                            
-                        }
-                        
-                        d->nodes.removeAll(child2);
-                    }
-                    
-                }
-                
-                d->nodes.removeAll(child1);
-            }
-            
-        }
-        
-        d->nodes.removeAll(child);
+        node->removeChildNode(child);
+        this->removeNode(child);
     }
-
-    // --
 
     d->nodes.removeAll(node);
     
@@ -713,19 +651,20 @@ void dtkComposerScene::startEvaluation(void)
 
     emit evaluationStarted();
 
+    // foreach(dtkComposerNode *node, this->nodes())
+    //     if (node->kind() == dtkComposerNode::Data)
+    //         node->setDirty(false);
+    //     else
+    //         node->setDirty(true);
+
     foreach(dtkComposerNode *node, this->nodes())
-        if (node->kind() == dtkComposerNode::Data)
-            node->setDirty(false);
-        else
-            node->setDirty(true);
+        node->setDirty(true);
 
     if (this->selectedItems().count()) {
         foreach(QGraphicsItem *item, this->selectedItems()) {
-            if (dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) {
-                if (!node->parentItem()) {
-                    node->setDirty(true);
-                    node->update();
-                }
+            if (dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) {         
+                node->setDirty(true);
+                node->update();
             }
         }
     } else {
@@ -1259,12 +1198,7 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
                 
             } else {
                 
-                // -- Handling control nodes
-                
-                if (property->node()->kind() == dtkComposerNode::Control)
-                    property->node()->onInputEdgeConnected(d->current_edge, property);
-                
-                // --
+                d->current_edge->destination()->node()->onEdgeConnected(d->current_edge);
                 
                 dtkComposerEdge *edge = d->current_edge;
 

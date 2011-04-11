@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:47:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 17 11:09:57 2011 (+0100)
+ * Last-Updated: Fri Apr  8 16:29:00 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 85
+ *     Update #: 86
  */
 
 /* Commentary: 
@@ -59,8 +59,6 @@ public:
     QRectF minimalBoundingRect(void);
 
 public slots:
-    virtual void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    virtual void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
     virtual void update(void) = 0;
 
 protected:

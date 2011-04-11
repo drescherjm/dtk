@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul 15 11:25:19 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb 17 16:50:39 2011 (+0100)
+ * Last-Updated: Fri Apr  8 16:37:14 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 58
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -46,10 +46,10 @@ dtkComposerNodeView::~dtkComposerNodeView(void)
     d = NULL;
 }
 
-void dtkComposerNodeView::onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNodeView::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
-    Q_UNUSED(edge);
-    Q_UNUSED(property);
+    DTK_UNUSED(edge);
+    DTK_UNUSED(property);
 }
 
 void dtkComposerNodeView::run(void)

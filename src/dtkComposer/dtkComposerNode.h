@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 11 17:00:00 2011 (+0200)
+ * Last-Updated: Mon Apr 11 17:17:28 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 268
+ *     Update #: 269
  */
 
 /* Commentary: 
@@ -202,6 +202,7 @@ protected:
 
 public:
     void onEdgeConnected(dtkComposerEdge *edge);
+    void onEdgeDeconnected(dtkComposerEdge *edge);
 
 public:
     virtual QVariant value(dtkComposerNodeProperty *property) { return QVariant(); }

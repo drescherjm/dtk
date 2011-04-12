@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 11 10:56:12 2011 (+0200)
+ * Last-Updated: Tue Apr 12 09:37:36 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 2634
+ *     Update #: 2639
  */
 
 /* Commentary: 
@@ -1210,6 +1210,8 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             this->setModified(true);
 
         } else {
+                
+            d->current_edge->destination()->node()->onEdgeDeconnected(d->current_edge);
 
             delete d->current_edge;
 

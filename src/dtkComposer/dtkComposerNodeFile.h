@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul  8 13:26:20 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Feb 25 10:15:00 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 19
+ * Last-Updated: Fri Apr  8 16:25:58 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 21
  */
 
 /* Commentary: 
@@ -41,8 +41,9 @@ public slots:
     void setFileName(const QString& file);
 
 protected:
-    void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void  run(void);
+    void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
 
 private:
     dtkComposerNodeFilePrivate *d;

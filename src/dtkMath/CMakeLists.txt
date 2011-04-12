@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Thu Sep  9 11:30:33 2010 (+0200)
 ## Version: $Id$
-## Last-Updated:  Thu Feb  3 10:00:11 2011
-##           By: Jean-Christophe Lombardo
-##     Update #: 13
+## Last-Updated: Wed Mar 30 08:44:39 2011 (+0200)
+##           By: Julien Wintz
+##     Update #: 15
 ######################################################################
 ## 
 ### Commentary: 
@@ -18,13 +18,14 @@
 ######################################################################
 
 project(dtkMath)
-
+  
 ## #################################################################
 ## Sources
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
   dtkMath.h
+  dtkMath.tpp
   dtkMathExport.h
   dtkMatrix.h
   dtkMatrix.tpp
@@ -35,8 +36,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkVector.h
   dtkVector.tpp
   dtkVector3D.h
-  dtkVector3D.tpp
-)
+  dtkVector3D.tpp)
 
 set(${PROJECT_NAME}_HEADERS_MOC
 
@@ -45,6 +45,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
 set(${PROJECT_NAME}_SOURCES
   dtkMath.cpp
 )
+
 ## #################################################################
 ## Build rules
 ## #################################################################
@@ -66,8 +67,7 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_WRAP})
 
-target_link_libraries(${PROJECT_NAME}
-  ${QT_LBRARIES})
+target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES})
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

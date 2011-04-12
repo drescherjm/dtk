@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar  8 13:31:11 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 21 13:44:17 2011 (+0100)
+ * Last-Updated: Wed Mar 30 16:04:06 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 30
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -44,6 +44,8 @@ public:
     dtkComposerNodeControlBlockLabel *label;
 
 public:
+    QList<dtkComposerNode *> nodes; 
+
     QList<dtkComposerNodeProperty *>  input_properties;
     QList<dtkComposerNodeProperty *> output_properties;
 

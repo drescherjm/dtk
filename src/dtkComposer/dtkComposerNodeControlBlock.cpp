@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 21 16:43:50 2011 (+0100)
+ * Last-Updated: Thu Mar 31 17:16:39 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 635
+ *     Update #: 696
  */
 
 /* Commentary: 
@@ -345,6 +345,7 @@ void dtkComposerNodeControlBlockButton::mousePressEvent(QGraphicsSceneMouseEvent
 dtkComposerNodeControlBlock::dtkComposerNodeControlBlock(const QString& title, dtkComposerNodeControl *parent) : QGraphicsRectItem(parent), d(new dtkComposerNodeControlBlockPrivate)
 {
     d->parent = parent;
+    this->setZValue(parent->zValue());
     
     d->remove_button = new dtkComposerNodeControlBlockButtonRemove(this);
     d->remove_button->setZValue(this->zValue() + 1);
@@ -361,7 +362,8 @@ dtkComposerNodeControlBlock::dtkComposerNodeControlBlock(const QString& title, d
 
     this->setPen(d->pen_color);
     this->setBrush(Qt::NoBrush);
-    this->setZValue(parent->zValue());
+
+    this->setFlag(QGraphicsItem::ItemStacksBehindParent, false);
 }
 
 dtkComposerNodeControlBlock::~dtkComposerNodeControlBlock(void)
@@ -490,13 +492,7 @@ void dtkComposerNodeControlBlock::setRect(qreal x, qreal y, qreal width, qreal h
 
 QList<dtkComposerNode *> dtkComposerNodeControlBlock::nodes(void)
 {
-    QList<dtkComposerNode *> nodes;
-
-    foreach(QGraphicsItem *item, this->childItems())
-        if(dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item))
-            nodes << node;
-
-    return nodes;
+    return d->nodes;
 }
 
 QList<dtkComposerNode *> dtkComposerNodeControlBlock::startNodes(void)
@@ -519,6 +515,22 @@ QList<dtkComposerNode *> dtkComposerNodeControlBlock::endNodes(void)
             nodes << node;
 
     return nodes;
+}
+
+void dtkComposerNodeControlBlock::addNode(dtkComposerNode *node)
+{
+    if (!d->nodes.contains(node))
+        d->nodes << node;
+}
+
+void dtkComposerNodeControlBlock::removeNode(dtkComposerNode *node)
+{
+    d->nodes.removeAll(node);
+}
+
+void dtkComposerNodeControlBlock::removeAllNodes(void)
+{
+    d->nodes.clear();
 }
 
 QList<dtkComposerNodeProperty *> dtkComposerNodeControlBlock::inputProperties(void)
@@ -630,29 +642,52 @@ QRectF dtkComposerNodeControlBlock::minimalBoundingRect(void)
     return QRectF(this->rect().top(), this->rect().left(), min_width, min_height);
 }
 
-void dtkComposerNodeControlBlock::highlight(dtkComposerNodeControlBlock *block)
+void dtkComposerNodeControlBlock::highlight(bool ok)
 {
-    static dtkComposerNodeControlBlock *highlighted = NULL;
+    if (ok) {
 
-    if(highlighted == block)
-        return;
+        foreach(dtkComposerNodeControlBlock *block, d->parent->blocks())
+            block->stackBefore(this);
 
-    if(block) {
-        QPropertyAnimation *animation = new QPropertyAnimation(block, "brushColor");
-        animation->setDuration(500);
-        animation->setKeyValueAt(0.0, Qt::red);
-        animation->setKeyValueAt(1.0, Qt::transparent);
-        animation->setEasingCurve(QEasingCurve::Linear);
-        animation->start(QAbstractAnimation::DeleteWhenStopped);
+        QPropertyAnimation *p_animation = new QPropertyAnimation(this, "penColor");
+        p_animation->setDuration(300);
+        p_animation->setKeyValueAt(0.0, Qt::green);
+        p_animation->setKeyValueAt(1.0, Qt::white);
+        p_animation->setEndValue(Qt::white);
+        p_animation->setEasingCurve(QEasingCurve::Linear);
+        p_animation->start(QAbstractAnimation::DeleteWhenStopped);
+
+        // QPropertyAnimation *b_animation = new QPropertyAnimation(this, "brushColor");
+        // b_animation->setDuration(300);
+        // b_animation->setKeyValueAt(0.0, Qt::blue);
+        // b_animation->setKeyValueAt(1.0, Qt::transparent);
+        // b_animation->setEasingCurve(QEasingCurve::Linear);
+        // b_animation->start(QAbstractAnimation::DeleteWhenStopped);
+
+    } else {
+
+        QPropertyAnimation *p_animation = new QPropertyAnimation(this, "penColor");
+        p_animation->setDuration(300);
+        p_animation->setKeyValueAt(0.0, Qt::red);
+        p_animation->setKeyValueAt(1.0, Qt::white);
+        p_animation->setEndValue(Qt::white);
+        p_animation->setEasingCurve(QEasingCurve::Linear);
+        p_animation->start(QAbstractAnimation::DeleteWhenStopped);
+
+        // QPropertyAnimation *animation = new QPropertyAnimation(this, "brushColor");
+        // animation->setDuration(250);
+        // animation->setKeyValueAt(0.0, Qt::darkRed);
+        // animation->setKeyValueAt(1.0, Qt::transparent);
+        // animation->setEasingCurve(QEasingCurve::Linear);
+        // animation->start(QAbstractAnimation::DeleteWhenStopped);
+
     }
-
-    highlighted = block;
 }
 
 void dtkComposerNodeControlBlock::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
     DTK_UNUSED(event);
-
+                           
     if (d->button_add)
         d->button_add->setVisible(true);
 

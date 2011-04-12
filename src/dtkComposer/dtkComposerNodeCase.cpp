@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 21 11:08:08 2011 (+0100)
+ * Last-Updated: Tue Apr  5 10:31:15 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 290
+ *     Update #: 291
  */
 
 /* Commentary: 
@@ -164,6 +164,7 @@ dtkComposerNodeControlBlock *dtkComposerNodeCase::addBlock(const QString& title)
     
     dtkComposerNodeProperty *output_constant = block->addOutputProperty("constant", this);
     output_constant->setBlockedFrom(title);
+    output_constant->hide();
 
     this->addInputProperty(input_constant);
     this->addOutputProperty(output_constant);

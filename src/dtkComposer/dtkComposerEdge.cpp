@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 15 14:42:30 2011 (+0100)
+ * Last-Updated: Mon Apr  4 11:36:12 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 376
+ *     Update #: 380
  */
 
 /* Commentary: 
@@ -90,14 +90,14 @@ void dtkComposerEdge::setSource(dtkComposerNodeProperty *property)
 {
     d->source = property;
 
-    this->adjust();
+    //this->adjust();
 }
 
 void dtkComposerEdge::setDestination(dtkComposerNodeProperty *property)
 {
     d->destination = property;
 
-    this->adjust();
+    //this->adjust();
 }
 
 QRectF dtkComposerEdge::boundingRect(void) const

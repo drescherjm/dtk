@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Mar 18 16:15:16 2011 (+0100)
+ * Last-Updated: Tue Apr 12 09:51:00 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 1871
+ *     Update #: 2075
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #include "dtkComposerEdge.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeControl.h"
+#include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerScene.h"
 
@@ -69,6 +70,9 @@ public:
     QHash<dtkComposerEdge *, dtkComposerNodeProperty *> input_relay_edges;
     QHash<dtkComposerEdge *, dtkComposerNodeProperty *> output_relay_edges;
 
+    QList<dtkComposerEdge *> input_routes;
+    QList<dtkComposerEdge *> output_routes;
+
     dtkComposerNodeProperty *clicked_property;
 
     dtkComposerNode::Kind kind;
@@ -88,9 +92,15 @@ public:
 
     int count;
 
-    QPointF drag_point;
+    QPointF ghost_position;
+    QPointF non_ghost_position;
 
+public:
+    QPointF drag_point;
     QRectF bounding_rect;
+
+    QColor pen_color;
+    QPen pen;
 };
 
 QRectF dtkComposerNodePrivate::ghostRect(void)
@@ -109,7 +119,7 @@ QList<dtkComposerEdge *> dtkComposerNodePrivate::iRoute(dtkComposerEdge *edge)
 {
     QList<dtkComposerEdge *> edges;
 
-    if(edge->source()->node()->kind() != dtkComposerNode::Composite) {
+    if (edge->source()->node()->kind() != dtkComposerNode::Composite) {
 
         // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->source()->node()->title() << "is not composite" << DTK_NO_COLOR;
 
@@ -117,19 +127,19 @@ QList<dtkComposerEdge *> dtkComposerNodePrivate::iRoute(dtkComposerEdge *edge)
 
     } else {
 
-        if(edge->source()->node() == edge->destination()->node()->parentNode()) {
+        if (edge->source()->node() == edge->destination()->node()->parentNode()) {
 
             // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->source()->node()->title() << "parent is composite" << DTK_NO_COLOR;
 
             foreach(dtkComposerEdge *i_edge, edge->source()->node()->inputEdges())
-                if(i_edge->destination() == edge->source())
+                if (i_edge->destination() == edge->source())
                     edges << iRoute(i_edge);
         } else {
 
             // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->source()->node()->title() << "source is composite" << DTK_NO_COLOR;
 
             foreach(dtkComposerEdge *ghost, edge->source()->node()->outputGhostEdges())
-                if(ghost->destination() == edge->source())
+                if (ghost->destination() == edge->source())
                     edges << iRoute(ghost);
         }
     }
@@ -141,7 +151,7 @@ QList<dtkComposerEdge *> dtkComposerNodePrivate::oRoute(dtkComposerEdge *edge)
 {
     QList<dtkComposerEdge *> edges;
 
-    if(edge->destination()->node()->kind() != dtkComposerNode::Composite) {
+    if (edge->destination()->node()->kind() != dtkComposerNode::Composite) {
 
         // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->destination()->node()->title() << "is not composite" << DTK_NO_COLOR;
 
@@ -149,12 +159,12 @@ QList<dtkComposerEdge *> dtkComposerNodePrivate::oRoute(dtkComposerEdge *edge)
 
     } else {
 
-        if(edge->destination()->node() == edge->source()->node()->parentNode()) {
+        if (edge->destination()->node() == edge->source()->node()->parentNode()) {
 
             // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->destination()->node()->title() << "parent is composite" << DTK_NO_COLOR;
 
             foreach(dtkComposerEdge *o_edge, edge->destination()->node()->outputEdges())
-                if(o_edge->source() == edge->destination())
+                if (o_edge->source() == edge->destination())
                     edges << oRoute(o_edge);
 
         } else {
@@ -162,7 +172,7 @@ QList<dtkComposerEdge *> dtkComposerNodePrivate::oRoute(dtkComposerEdge *edge)
             // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->destination()->node()->title() << "destination is composite" << DTK_NO_COLOR;
 
             foreach(dtkComposerEdge *ghost, edge->destination()->node()->inputGhostEdges())
-                if(ghost->source() == edge->destination())
+                if (ghost->source() == edge->destination())
                     edges << oRoute(ghost);
 
         }
@@ -183,7 +193,7 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
     
     d->kind = Unknown;
     d->object = NULL;
-    d->parent = NULL;
+    d->parent = parent;
 
     d->penWidth = 1;
     d->header_height = 20;
@@ -221,6 +231,8 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
     d->dirty = true;
     d->ghost = false;
     d->resizable = false;
+
+    d->pen_color = Qt::transparent;
 }
 
 dtkComposerNode::~dtkComposerNode(void)
@@ -228,9 +240,6 @@ dtkComposerNode::~dtkComposerNode(void)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
-
-    // if (this->scene() && this->scene()->items().contains(this))
-    //     this->scene()->removeItem(this);
 
     foreach(dtkComposerNodeProperty *property, d->input_properties)
         property->setParentNode(NULL);
@@ -720,17 +729,27 @@ QList<dtkComposerNode *> dtkComposerNode::outputNodes(void)
     return nodes;
 }
 
+QList<dtkComposerEdge *> dtkComposerNode::inputRoutes(void)
+{
+    return d->input_routes;
+}
+
+QList<dtkComposerEdge *> dtkComposerNode::outputRoutes(void)
+{
+    return d->output_routes;
+}
+
 dtkComposerNodeProperty *dtkComposerNode::propertyAt(const QPointF& point) const
 {
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
     foreach(dtkComposerNodeProperty *property, d->input_properties)
-        if(property->rect().contains(point))
+        if (property->rect().contains(point))
             return property;
 
     foreach(dtkComposerNodeProperty *property, d->output_properties)
-        if(property->rect().contains(point))
+        if (property->rect().contains(point))
             return property;
     
     return NULL;
@@ -742,7 +761,7 @@ dtkComposerNodeProperty *dtkComposerNode::inputProperty(const QString& name) con
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
     foreach(dtkComposerNodeProperty *property, d->input_properties)
-        if(property->name() == name)
+        if (property->name() == name)
             return property;
     
     return NULL;
@@ -754,8 +773,8 @@ dtkComposerNodeProperty *dtkComposerNode::inputProperty(const QString& name, dtk
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
     foreach(dtkComposerNodeProperty *property, d->input_properties)
-        if(property->name() == name)
-            if(property->clonedFrom() == from)
+        if (property->name() == name)
+            if (property->clonedFrom() == from)
                 return property;
     
     return NULL;
@@ -767,7 +786,7 @@ dtkComposerNodeProperty *dtkComposerNode::outputProperty(const QString& name) co
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
     foreach(dtkComposerNodeProperty *property, d->output_properties)
-        if(property->name() == name)
+        if (property->name() == name)
             return property;
 
     return NULL;
@@ -779,8 +798,8 @@ dtkComposerNodeProperty *dtkComposerNode::outputProperty(const QString& name, dt
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
     foreach(dtkComposerNodeProperty *property, d->output_properties)
-        if(property->name() == name)
-            if(property->clonedFrom() == from)
+        if (property->name() == name)
+            if (property->clonedFrom() == from)
                 return property;
 
     return NULL;
@@ -805,6 +824,19 @@ void dtkComposerNode::setDirty(bool dirty)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
     d->dirty = dirty;
+
+    if (d->kind == dtkComposerNode::Composite) {
+        if (d->dirty) {
+            foreach(dtkComposerNode *child, d->children)
+                if (!child->inputEdges().count() && child->outputEdges().count())
+                    child->setDirty(dirty);            
+            foreach(dtkComposerEdge *ghost_edge, d->ghost_input_edges.keys())
+                ghost_edge->destination()->node()->setDirty(dirty);
+        } else {
+            foreach(dtkComposerNode *child, d->children)
+                child->setDirty(dirty);            
+        }
+    }
 }
 
 bool dtkComposerNode::resizable(void)
@@ -827,7 +859,7 @@ void dtkComposerNode::layout(void)
 
         d->title->setPos(d->ghostRect().topLeft());
     
-    } else if(d->kind == dtkComposerNode::Control) {
+    } else if (d->kind == dtkComposerNode::Control) {
 
 #if defined(Q_WS_MAC)
         QFont font("Lucida Grande", 13);
@@ -842,26 +874,26 @@ void dtkComposerNode::layout(void)
         d->title->setPos(d->bounding_rect.topLeft());
     }
 
-    if(d->kind == Control)
+    if (d->kind == Control)
         return;
 
     int exposed_input_properties = 0;
 
     foreach(dtkComposerNodeProperty *property, d->input_properties)
-        if(property->isDisplayed())
-            if(d->ghost)
-                property->setRect(QRectF(d->ghostRect().left()+d->node_radius, d->ghostRect().top() + 40 + (3*(exposed_input_properties++) + 1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
+        if (property->isDisplayed())
+            if (d->ghost)
+                property->setRect(QRectF(d->ghostRect().left() + d->node_radius, d->ghostRect().top() + 40 + (4 * (exposed_input_properties++) + 1) * d->node_radius - d->node_radius, d->node_radius * 2, d->node_radius * 2));
             else
-                property->setRect(QRectF(d->bounding_rect.left()+d->node_radius, d->margin_top+(3*(exposed_input_properties++) + 1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
+                property->setRect(QRectF(d->bounding_rect.left() + d->node_radius, d->margin_top + (3 * (exposed_input_properties++) + 1) * d->node_radius - d->node_radius, d->node_radius * 2, d->node_radius * 2));
 
     int exposed_output_properties = 0;
 
     foreach(dtkComposerNodeProperty *property, d->output_properties)
-        if(property->isDisplayed())
-            if(d->ghost)
-                property->setRect(QRectF(d->ghostRect().right() - 3*d->node_radius, d->ghostRect().top() + 40 + (3*(exposed_output_properties++) + 1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
+        if (property->isDisplayed())
+            if (d->ghost)
+                property->setRect(QRectF(d->ghostRect().right() - 3 * d->node_radius, d->ghostRect().top() + 40 + (4 * (exposed_output_properties++) + 1) * d->node_radius - d->node_radius, d->node_radius * 2, d->node_radius * 2));
             else
-                property->setRect(QRectF(d->bounding_rect.right()-3*d->node_radius, d->margin_top+(3*(exposed_output_properties++) + 1)*d->node_radius - d->node_radius, d->node_radius*2, d->node_radius*2));
+                property->setRect(QRectF(d->bounding_rect.right() - 3 * d->node_radius, d->margin_top + (3 * (exposed_output_properties++) + 1) * d->node_radius - d->node_radius, d->node_radius * 2, d->node_radius * 2));
     
     d->bounding_rect.setHeight(d->header_height + (3*qMax(exposed_input_properties, exposed_output_properties)) * d->node_radius + d->margin_bottom);
 }
@@ -872,10 +904,6 @@ void dtkComposerNode::setParentNode(dtkComposerNode *node)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
     d->parent = node;
-
-    // QObject::setParent(node);
-
-    this->setParentItem(node);
 }
 
 void dtkComposerNode::addChildNode(dtkComposerNode *node)
@@ -884,11 +912,8 @@ void dtkComposerNode::addChildNode(dtkComposerNode *node)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
 
-    if(!d->children.contains(node))
+    if (!d->children.contains(node))
         d->children << node;
-
-    if(d->ghost)
-        node->setParentItem(this);
 }
 
 void dtkComposerNode::removeChildNode(dtkComposerNode *node)
@@ -926,14 +951,23 @@ void dtkComposerNode::setGhost(bool ghost)
 
     d->ghost = ghost;
 
-    if(d->ghost) {
+    if (d->ghost) {
 
-        this->setZValue(0);
+        if (d->parent && d->parent->kind() == dtkComposerNode::Control)
+            this->setParentItem(NULL);
+
+        this->setZValue(-10000);
 
         foreach(dtkComposerNode *node, d->children)
             node->setParentItem(this);
 
-    } else {
+    } else {  
+
+        if (d->parent && d->parent->kind() == dtkComposerNode::Control) {            
+            foreach(dtkComposerNodeControlBlock *block, (dynamic_cast<dtkComposerNodeControl *>(d->parent))->blocks())
+                if (block->nodes().contains(this))
+                    this->setParentItem(block);
+        }        
 
         this->setZValue(10);
 
@@ -950,6 +984,26 @@ bool dtkComposerNode::isGhost(void)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
     return d->ghost;
+}
+
+void dtkComposerNode::setGhostPosition(QPointF pos)
+{
+    d->ghost_position = pos;
+}
+
+QPointF dtkComposerNode::ghostPosition(void)
+{
+    return d->ghost_position;
+}
+
+void dtkComposerNode::setNonGhostPosition(QPointF pos)
+{
+    d->non_ghost_position = pos;
+}
+
+QPointF dtkComposerNode::nonGhostPosition(void)
+{
+    return d->non_ghost_position;
 }
 
 void dtkComposerNode::setSize(const QSizeF& size)
@@ -974,7 +1028,7 @@ void dtkComposerNode::alter(void)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
 
-    if(dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene())) {
+    if (dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene())) {
         scene->stopEvaluation();
         scene->clearSelection();
         this->setSelected(true);
@@ -991,7 +1045,7 @@ void dtkComposerNode::touch(void)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
-    // QGraphicsItem::update(this->boundingRect());
+    QGraphicsItem::update(this->boundingRect());
 }
 
 //! 
@@ -1004,11 +1058,18 @@ void dtkComposerNode::update(void)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
 
-    if(!dtkComposerScene::s_evaluate)
+    if (!dtkComposerScene::s_evaluate)
         return;
 
-    if(d->kind == dtkComposerNode::Process && !d->dirty)
+    if (d->kind == dtkComposerNode::Process && !d->dirty)
         return;
+
+    if (d->kind == dtkComposerNode::Composite) {
+        foreach(dtkComposerNode *child, d->children)
+            child->update();
+        return;
+    }
+        
 
     QList<dtkComposerEdge *> input_edges = d->input_edges.keys();
     QList<dtkComposerEdge *> output_edges = d->output_edges.keys();
@@ -1018,11 +1079,10 @@ void dtkComposerNode::update(void)
 #endif
 
     // -- Check dirty inputs
-    
-    foreach(dtkComposerEdge *i_edge, input_edges)
-        foreach(dtkComposerEdge *e, d->iRoute(i_edge))
-            if(e->source()->node()->dirty())
-                return;
+
+    foreach(dtkComposerEdge *i_edge, d->input_routes)
+        if (i_edge->source()->node()->dirty())
+            return;
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
     qDebug() << DTK_COLOR_BG_GREEN << "-- Mark dirty outputs" << this->title() << DTK_NO_COLOR;
@@ -1030,96 +1090,55 @@ void dtkComposerNode::update(void)
 
     // -- Mark dirty outputs
 
-    foreach(dtkComposerEdge *o_edge, output_edges)
-        foreach(dtkComposerEdge *e, d->oRoute(o_edge))
-            e->destination()->node()->setDirty(true);
+    foreach(dtkComposerEdge *o_edge, d->output_routes)
+        o_edge->destination()->node()->setDirty(true);
 
     // -- Event handling
 
     emit evaluated(this); qApp->processEvents();
 
+    foreach(dtkComposerEdge *i_edge, d->input_routes) {            
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-    qDebug() << DTK_COLOR_BG_GREEN << "Updating" << this->title() << DTK_NO_COLOR;
+        qDebug() << DTK_COLOR_BG_YELLOW << "Pulling" << this->title() << i_edge << DTK_NO_COLOR;
 #endif
-
-    // -- Pull
-
-    foreach(dtkComposerEdge *i_edge, input_edges) {
-        dtkComposerNodeProperty *p = i_edge->destination();
-        dtkComposerNode         *n = i_edge->destination()->node();
-        foreach(dtkComposerEdge *e, d->iRoute(i_edge)) {
-            
-            dtkComposerEdge *edge = new dtkComposerEdge;
-            edge->setSource(e->source());
-            edge->setDestination(p);
-            
-#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-            qDebug() << DTK_COLOR_BG_YELLOW << "Pulling" << n->title() << edge << DTK_NO_COLOR;
-#endif
-            
-
-// --
-            if(dtkComposerNode *source = e->source()->node()) {
-                if (source->kind() == dtkComposerNode::Data) {
-                    source->onOutputEdgeConnected(e, e->source());
-                }
-            }
-// --
-
-            n->onInputEdgeConnected(edge, p);
-            
-            delete edge;
-        }
+        this->pull(i_edge, i_edge->destination());
     }
 
     // -- Run node's logic
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+    qDebug() << DTK_COLOR_BG_RED  << "Running node" << this->title() << "'s logics" << DTK_NO_COLOR;
+#endif
 
     this->run();
 
     // -- Push
 
-    foreach(dtkComposerEdge *o_edge, output_edges) {
-        dtkComposerNodeProperty *p = o_edge->source();
-        dtkComposerNode         *n = o_edge->source()->node();
-        foreach(dtkComposerEdge *e, d->oRoute(o_edge)) {
-            
-            dtkComposerEdge *edge = new dtkComposerEdge;
-            edge->setSource(p);
-            edge->setDestination(e->destination());
-            
+    foreach(dtkComposerEdge *o_edge, d->output_routes) {            
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-            qDebug() << DTK_COLOR_BG_RED << "Pushing" << n->title() << edge << DTK_NO_COLOR;
+        qDebug() << DTK_COLOR_BG_YELLOW << "Pushing" << this->title() << o_edge << DTK_NO_COLOR;
 #endif
-            
-            n->onOutputEdgeConnected(edge, p);
-            
-            delete edge;
-        }
+        this->push(o_edge, o_edge->source());
     }
 
     // -- Forward
 
     this->setDirty(false);
 
-    foreach(dtkComposerEdge *o_edge, output_edges) {
-        foreach(dtkComposerEdge *e, d->oRoute(o_edge)) {
+    foreach(dtkComposerEdge *o_edge, d->output_routes) {
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-            qDebug() << DTK_COLOR_BG_GREEN << "Forwarding" << this->title() << "->" << e->destination()->node()->title() << DTK_NO_COLOR;
+        qDebug() << DTK_COLOR_BG_BLUE << "Forwarding" << this->title() << "->" << o_edge->destination()->node()->title() << DTK_NO_COLOR;
 #endif
-
-            e->destination()->node()->update();
-        }
+        o_edge->destination()->node()->update();
     }
 }
 
 QRectF dtkComposerNode::boundingRect(void) const
 {
-    if(d->ghost)
+    if (d->ghost)
         return d->ghostRect();
     else
         return d->bounding_rect;
-
-    // return QRectF(-d->width/2 - d->penWidth / 2, -d->header_height - d->penWidth / 2, d->width + d->penWidth, d->height + d->penWidth);
 }
 
 void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -1134,19 +1153,11 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     if ((d->kind == Composite) || (d->kind == Control))
         this->layout();
 
-    QRectF rect;
-
-    if(!d->ghost) {
-        rect = d->bounding_rect;
-
-        // rect = QRectF(-d->width/2, -d->header_height, d->width, d->height);
-    } else {
-        rect = d->ghostRect();
-    }
+    QRectF rect = this->boundingRect();
 
     QLinearGradient gradiant(rect.left(), rect.top(), rect.left(), rect.bottom());
 
-    switch(d->kind) {
+    switch (d->kind) {
     case Unknown:
         gradiant.setColorAt(0.0, QColor(Qt::white));
         gradiant.setColorAt(0.3, QColor(Qt::gray));
@@ -1158,10 +1169,7 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
         gradiant.setColorAt(1.0, QColor("#ffa500").darker());
         break;
     case Composite:
-        if(d->ghost) {
-            gradiant.setColorAt(0.0, QColor("#959595"));
-            gradiant.setColorAt(1.0, QColor("#525252"));
-        } else {
+        if (!d->ghost) {
             gradiant.setColorAt(0.0, QColor("#515151"));
             gradiant.setColorAt(1.0, QColor("#000000"));
         }
@@ -1183,29 +1191,26 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
         break;
     }
 
-    QPen pen;
-
-    if(this->isSelected()) {
-        pen.setColor(Qt::magenta);
-        pen.setWidth(2);
+    if (this->isSelected()) {
+        if (this->isGhost() && this->kind() == dtkComposerNode::Composite)
+            this->setPen(Qt::magenta, Qt::DashLine, 3);
+        else
+            this->setPen(Qt::magenta, Qt::SolidLine, 2);
     } else {
-        if(this->kind() == dtkComposerNode::Composite && this->isGhost()) {
-            pen.setColor(QColor("#c7c7c7"));
-            pen.setStyle(Qt::DashLine);
-            pen.setWidth(1);
-        } else if(this->kind() == dtkComposerNode::Control) {
-            pen.setColor(QColor("#c7c7c7"));
-            pen.setWidth(1);
-        } else {    
-            pen.setColor(Qt::black);
-            pen.setWidth(1);
-        }
+        if (this->isGhost() && this->kind() == dtkComposerNode::Composite)
+            this->setPen(QColor("#cccccc"), Qt::DashLine, 3);
+        else if (this->kind() == dtkComposerNode::Control)
+            this->setPen(QColor("#c7c7c7"), Qt::SolidLine, 1);
+        else
+            this->setPen(Qt::black, Qt::SolidLine, 1);
     }
+    painter->setPen(d->pen);
+    d->pen_color = Qt::transparent;
 
-    painter->setPen(pen);
-
-    if(this->kind() == dtkComposerNode::Control) {
+    if (this->kind() == dtkComposerNode::Control) {
         painter->setBrush(Qt::NoBrush);
+    } else if (this->isGhost() && this->kind() == dtkComposerNode::Composite) {
+        painter->setBrush(Qt::NoBrush);        
     } else {
         painter->setBrush(gradiant);
     }
@@ -1214,7 +1219,7 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 
     // Drawing size grip
 
-    if(d->resizable) {
+    if (d->resizable) {
 
         QPainterPath path;
         path.moveTo(this->boundingRect().bottomRight() + QPointF(0.5, 0.5));
@@ -1226,6 +1231,57 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
         painter->setBrush(QColor("#c7c7c7"));
         painter->drawPath(path);
     }
+}
+
+void dtkComposerNode::highlight(bool ok)
+{
+    if (ok) {
+
+        QPropertyAnimation *animation = new QPropertyAnimation(this, "penColor");
+        animation->setDuration(300);
+        animation->setKeyValueAt(0.0, Qt::green);
+        animation->setKeyValueAt(1.0, Qt::magenta);
+        animation->setEasingCurve(QEasingCurve::Linear);
+        animation->start(QAbstractAnimation::DeleteWhenStopped);
+
+    } else {
+
+        QPropertyAnimation *animation = new QPropertyAnimation(this, "penColor");
+        animation->setDuration(300);
+        animation->setKeyValueAt(0.0, Qt::red);
+        animation->setKeyValueAt(1.0, Qt::magenta);
+        animation->setEasingCurve(QEasingCurve::Linear);
+        animation->start(QAbstractAnimation::DeleteWhenStopped);
+
+    }
+}
+
+QColor dtkComposerNode::penColor(void) const
+{
+    return d->pen_color;
+}
+
+QPen dtkComposerNode::pen(void) const
+{
+    return d->pen;
+}
+
+void dtkComposerNode::setPenColor(const QColor& color)
+{
+    d->pen_color = color;
+
+    this->touch();
+}
+
+void dtkComposerNode::setPen(const QColor& color, const Qt::PenStyle& style, const qreal& width)
+{
+    if (d->pen_color == Qt::transparent)
+        d->pen.setColor(color);
+    else
+        d->pen.setColor(d->pen_color);
+
+    d->pen.setStyle(style);
+    d->pen.setWidth(width);
 }
 
 qreal dtkComposerNode::nodeRadius(void)
@@ -1241,7 +1297,7 @@ void dtkComposerNode::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     if (event->buttons() & Qt::LeftButton && !d->drag_point.isNull()) { 
 
-        if(dtkComposerNodeControl *control = dynamic_cast<dtkComposerNodeControl *>(this)) {
+        if (dtkComposerNodeControl *control = dynamic_cast<dtkComposerNodeControl *>(this)) {
 
             QPointF br = this->mapRectToScene(this->boundingRect()).bottomRight();
             QRectF corner(br.x() - 23, br.y() - 23, 23, 23);
@@ -1271,7 +1327,7 @@ void dtkComposerNode::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-    if(!d->clicked_property)
+    if (!d->clicked_property)
         QGraphicsItem::mouseMoveEvent(event);
 
     foreach(dtkComposerEdge *edge, d->input_edges.keys())
@@ -1297,12 +1353,12 @@ void dtkComposerNode::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     d->clicked_property = this->propertyAt(event->pos());
 
-    if(d->clicked_property)
+    if (d->clicked_property)
         return;
 
     // -- Handling of menus
 
-    if(event->button() == Qt::RightButton) {
+    if (event->button() == Qt::RightButton) {
         QMenu menu;
         
         foreach(QAction *action, d->actions)
@@ -1352,12 +1408,108 @@ void dtkComposerNode::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
     QGraphicsItem::mouseReleaseEvent(event);
 
-    if(!d->clicked_property)
+    if (!d->clicked_property)
         QGraphicsItem::mouseReleaseEvent(event);
 
     d->clicked_property = NULL;
 }
 
+void dtkComposerNode::onEdgeConnected(dtkComposerEdge *edge)
+{
+    if (edge->source()->node()->kind() != dtkComposerNode::Composite &&
+        edge->destination()->node()->kind() != dtkComposerNode::Composite) {
+
+        edge->destination()->node()->d->input_routes << edge;
+        edge->source()->node()->d->output_routes << edge;
+
+    } else {
+
+        QList<dtkComposerNodeProperty *> sources;
+        QList<dtkComposerNodeProperty *> destinations;
+        
+        foreach(dtkComposerEdge *e, d->iRoute(edge))
+            if (!sources.contains(e->source()) && e->source()->node()->kind() != dtkComposerNode::Composite)
+                sources << e->source();
+        
+        foreach(dtkComposerEdge *e, d->oRoute(edge))
+            if (!destinations.contains(e->destination()) && e->destination()->node()->kind() != dtkComposerNode::Composite)
+                destinations << e->destination();    
+        
+        foreach(dtkComposerNodeProperty *source, sources) {
+            foreach(dtkComposerNodeProperty *destin, destinations) {
+                
+                dtkComposerEdge *e = new dtkComposerEdge;
+                e->setSource(source);
+                e->setDestination(destin);
+                
+                foreach(dtkComposerEdge *input, destin->node()->d->input_routes) {
+                    if (input->source() == source && input->destination() == destin) {
+                        delete e;                    
+                        return;
+                    }
+                }
+                foreach(dtkComposerEdge *output, source->node()->d->output_routes) {
+                    if (output->source() == source && output->destination() == destin) {
+                        delete e;
+                        return;
+                    }
+                }
+                
+                destin->node()->d->input_routes << e;
+                source->node()->d->output_routes << e;                    
+            }
+        }
+    }
+}
+
+void dtkComposerNode::onEdgeDeconnected(dtkComposerEdge *edge)
+{
+    if (edge->source()->node()->kind() != dtkComposerNode::Composite &&
+        edge->destination()->node()->kind() != dtkComposerNode::Composite) {
+
+        edge->destination()->node()->d->input_routes.removeAll(edge);
+        edge->source()->node()->d->output_routes.removeAll(edge);
+
+    } else {
+
+        QList<dtkComposerNodeProperty *> sources;
+        QList<dtkComposerNodeProperty *> destinations;
+
+        foreach(dtkComposerEdge *e, d->iRoute(edge))
+            if (!sources.contains(e->source()) && e->source()->node()->kind() != dtkComposerNode::Composite)
+                sources << e->source();
+
+        foreach(dtkComposerEdge *e, d->oRoute(edge))
+            if (!destinations.contains(e->destination()) && e->destination()->node()->kind() != dtkComposerNode::Composite)
+                destinations << e->destination();
+
+        dtkComposerEdge *route;
+        
+        foreach(dtkComposerNodeProperty *source, sources) {
+            foreach(dtkComposerNodeProperty *destin, destinations) {
+                
+                foreach(dtkComposerEdge *input, destin->node()->d->input_routes) {
+                    if (input->source() == source && input->destination() == destin) {
+                        route = input;
+                        destin->node()->d->input_routes.removeAll(route);
+                        break;
+                    }
+                }
+                foreach(dtkComposerEdge *output, source->node()->d->output_routes) {
+                    if (output->source() == source && output->destination() == destin) {
+                        route = output;
+                        source->node()->d->output_routes.removeAll(route);
+                        break;
+                    }
+                }
+                if (route)
+                    delete route;
+                route = NULL;
+            }
+        }
+    }
+}
+    
 void dtkComposerNode::chooseImplementation(void)
 {
     DTK_DEFAULT_IMPLEMENTATION;
@@ -1370,25 +1522,25 @@ void dtkComposerNode::setupImplementation(QString implementation)
     DTK_DEFAULT_IMPLEMENTATION;
 }
 
-void dtkComposerNode::onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNode::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(edge);
     Q_UNUSED(property);
 
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-void dtkComposerNode::onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
-{
-    Q_UNUSED(edge);
-    Q_UNUSED(property);
-
-    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_DEFAULT_IMPLEMENTATION;    
 }
 
 void dtkComposerNode::run(void)
 {
     DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkComposerNode::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+{
+    Q_UNUSED(edge);
+    Q_UNUSED(property);
+
+    DTK_DEFAULT_IMPLEMENTATION;    
 }
 
 // /////////////////////////////////////////////////////////////////

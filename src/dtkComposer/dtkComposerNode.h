@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 15 11:15:54 2011 (+0100)
+ * Last-Updated: Mon Apr 11 17:17:28 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 240
+ *     Update #: 269
  */
 
 /* Commentary: 
@@ -35,6 +35,7 @@ class stkComspoerScene;
 class DTKCOMPOSER_EXPORT dtkComposerNode : public QObject, public QGraphicsItem
 {
     Q_OBJECT
+    Q_PROPERTY(QColor penColor READ penColor WRITE setPenColor)
 
 #if QT_VERSION >= 0x040600
     Q_INTERFACES(QGraphicsItem)
@@ -113,6 +114,9 @@ public:
     QList<dtkComposerNode *> inputNodes(void);
     QList<dtkComposerNode *> outputNodes(void);
 
+    QList<dtkComposerEdge *> inputRoutes(void);
+    QList<dtkComposerEdge *> outputRoutes(void);
+
     dtkComposerEdge *edge(dtkComposerNodeProperty *property);
 
     dtkComposerNodeProperty *propertyAt(const QPointF& point) const;
@@ -143,10 +147,13 @@ public:
 
     dtkComposerNode *parentNode(void);
 
-    // --
-
     void setGhost(bool ghost);
     bool  isGhost(void);
+
+    void    setGhostPosition(QPointF pos);
+    QPointF    ghostPosition(void);
+    void setNonGhostPosition(QPointF pos);
+    QPointF nonGhostPosition(void);
 
     // --
 
@@ -176,6 +183,15 @@ public:
 
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
+public:
+    void highlight(bool ok);
+
+    QColor penColor(void) const;
+    QPen pen(void) const;
+
+    void setPenColor(const QColor& color);
+    void setPen(const QColor& color, const Qt::PenStyle& style, const qreal& width);
+
 protected:
     qreal nodeRadius(void);
 
@@ -185,15 +201,19 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 public:
+    void onEdgeConnected(dtkComposerEdge *edge);
+    void onEdgeDeconnected(dtkComposerEdge *edge);
+
+public:
     virtual QVariant value(dtkComposerNodeProperty *property) { return QVariant(); }
 
     virtual void chooseImplementation(void);
     virtual void  setupImplementation(QString implementation = QString());
 
 protected:
-    virtual void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    virtual void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    virtual void run(void);
+    virtual void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    virtual void  run(void);
+    virtual void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
 
 private:
     friend class dtkComposerScene; 

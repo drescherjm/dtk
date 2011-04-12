@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:07:37 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb 24 16:06:19 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 175
+ * Last-Updated: Mon Mar 28 13:49:57 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 185
  */
 
 /* Commentary: 
@@ -46,7 +46,7 @@ void dtkComposerView::setBackgroundColor(const QColor &color)
 
 void dtkComposerView::onCenterOn(const QPointF& point)
 {
-    // this->centerOn(point);
+    this->centerOn(point);
 }
 
 void dtkComposerView::onFitInView(const QRectF& rect)
@@ -71,11 +71,11 @@ void dtkComposerView::mouseReleaseEvent(QMouseEvent *event)
 
 void dtkComposerView::wheelEvent(QWheelEvent *event)
 {
-    qreal scaleFactor = pow((double)2, -event->delta() / 240.0);
+    qreal scaleFactor = pow((double)2, -event->delta() / 500.0);
 
-    qreal factor = matrix().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();
+    qreal factor = this->matrix().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();
 
-    if (factor < 0.1 || factor > 10)
+    if (factor < 0.1 || factor > 2.)
         return;
     
     this->scale(scaleFactor, scaleFactor);

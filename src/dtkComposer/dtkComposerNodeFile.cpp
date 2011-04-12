@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul  8 13:28:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb 10 11:10:09 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 69
+ * Last-Updated: Fri Apr  8 16:26:53 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 78
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #include "dtkComposerNodeProperty.h"
 
 #include <dtkCore/dtkGlobal.h>
+#include <dtkCore/dtkLog.h>
 
 #include <dtkGui/dtkTextEditor.h>
 
@@ -50,6 +51,8 @@ dtkComposerNodeFile::dtkComposerNodeFile(dtkComposerNode *parent) : dtkComposerN
     
     this->addAction("Choose file", this, SLOT(getFileName()));
     this->addAction("Edit file", this, SLOT(editFile()));
+
+    d->file = QString();
 }
 
 dtkComposerNodeFile::~dtkComposerNodeFile(void)
@@ -90,14 +93,26 @@ void dtkComposerNodeFile::setFileName(const QString& file)
     d->file = file;
 }
 
-void dtkComposerNodeFile::onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNodeFile::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
-    DTK_UNUSED(edge);
-    DTK_UNUSED(property);
+    Q_UNUSED(edge);
+    Q_UNUSED(property);
+
+    DTK_DEFAULT_IMPLEMENTATION;    
 }
 
-void dtkComposerNodeFile::onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNodeFile::run(void)
 {
-    DTK_UNUSED(edge);
-    DTK_UNUSED(property);
+    if (d->file.isEmpty())
+        dtkDebug() << "File has not been initialized.";
+
+    return;
+}
+
+void dtkComposerNodeFile::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+{
+    Q_UNUSED(edge);
+    Q_UNUSED(property);
+
+    DTK_DEFAULT_IMPLEMENTATION;    
 }

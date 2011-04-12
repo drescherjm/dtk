@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 20:49:22 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  1 13:23:44 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 3
+ * Last-Updated: Fri Apr  8 16:30:00 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 5
  */
 
 /* Commentary: 
@@ -34,8 +34,8 @@ public:
     ~dtkComposerNodeLog(void);
 
 protected:
-    void onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    void run(void);
+    void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void  run(void);
 
 private:
     dtkComposerNodeLogPrivate *d;

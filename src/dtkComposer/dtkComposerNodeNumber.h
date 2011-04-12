@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Feb 25 16:19:59 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar  7 14:13:54 2011 (+0100)
+ * Last-Updated: Fri Apr  8 16:32:00 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 67
+ *     Update #: 69
  */
 
 /* Commentary: 
@@ -77,9 +77,9 @@ protected slots:
     void onCollapseFinised(void);
 
 protected:
-    void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    void run(void);
+    void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void  run(void);
+    void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
 
 public:
     static Genre genre(QVariant& a, QVariant& b);

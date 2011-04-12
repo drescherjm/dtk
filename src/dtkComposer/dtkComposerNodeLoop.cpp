@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar  7 09:26:54 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  8 15:39:18 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 18
+ * Last-Updated: Fri Apr  8 16:30:44 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 20
  */
 
 /* Commentary: 
@@ -54,7 +54,7 @@ void dtkComposerNodeLoop::update(void)
     // qDebug() << DTK_PRETTY_FUNCTION;
 }
 
-void dtkComposerNodeLoop::onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNodeLoop::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     DTK_UNUSED(edge);
     DTK_UNUSED(property);
@@ -62,7 +62,12 @@ void dtkComposerNodeLoop::onInputEdgeConnected(dtkComposerEdge *edge, dtkCompose
     // qDebug() << DTK_PRETTY_FUNCTION;
 }
 
-void dtkComposerNodeLoop::onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNodeLoop::run(void)
+{
+    return;
+}
+
+void dtkComposerNodeLoop::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     DTK_UNUSED(edge);
     DTK_UNUSED(property);

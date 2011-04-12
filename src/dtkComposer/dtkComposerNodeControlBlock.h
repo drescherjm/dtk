@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:46:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 21 10:13:44 2011 (+0100)
+ * Last-Updated: Wed Mar 30 16:05:56 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 68
+ *     Update #: 75
  */
 
 /* Commentary: 
@@ -61,22 +61,26 @@ public:
     QList<dtkComposerNode *> startNodes(void);
     QList<dtkComposerNode *>   endNodes(void);
 
+    void        addNode(dtkComposerNode *node);
+    void     removeNode(dtkComposerNode *node);
+    void removeAllNodes(void);
+
     QList<dtkComposerNodeProperty *>  inputProperties(void);
     QList<dtkComposerNodeProperty *> outputProperties(void);
 
     dtkComposerNodeProperty  *addInputProperty(QString name, dtkComposerNode *parent = 0);
     dtkComposerNodeProperty *addOutputProperty(QString name, dtkComposerNode *parent = 0);
 
-    void removeInputProperty(dtkComposerNodeProperty *property);
+    void  removeInputProperty(dtkComposerNodeProperty *property);
     void removeOutputProperty(dtkComposerNodeProperty *property);
-    void removeAllProperties(void);
+    void  removeAllProperties(void);
 
 public:
     void adjustChildNodes(qreal dw, qreal dh);
     QRectF minimalBoundingRect(void);
     
 public:
-    static void highlight(dtkComposerNodeControlBlock *block);
+    void highlight(bool ok);
 
 protected:
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);

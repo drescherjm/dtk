@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar  8 15:55:00 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 388
+ * Last-Updated: Tue Mar 22 17:11:19 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 396
  */
 
 /* Commentary: 
@@ -501,7 +501,14 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
                 
                 QDomElement property_element = document.createElement("property");
                 property_element.setAttribute("name", property->name());
-                property_element.setAttribute("type", "input");
+                switch (property->type()) {
+                case dtkComposerNodeProperty::Input:
+                    property_element.setAttribute("type", "input");
+                    break;
+                case dtkComposerNodeProperty::HybridInput:
+                    property_element.setAttribute("type", "hybridinput");
+                    break;
+                }
                 property_element.setAttribute("hidden", property->isDisplayed() ? "false" : "true");
                 if(node->kind() == dtkComposerNode::Composite)
                     property_element.setAttribute("id", d->node_ids.key(property->clonedFrom()));
@@ -514,7 +521,14 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
                 
                 QDomElement property_element = document.createElement("property");
                 property_element.setAttribute("name", property->name());
-                property_element.setAttribute("type", "output");
+                switch (property->type()) {
+                case dtkComposerNodeProperty::Output:
+                    property_element.setAttribute("type", "output");
+                    break;
+                case dtkComposerNodeProperty::HybridOutput:
+                    property_element.setAttribute("type", "hybridoutput");
+                    break;
+                }
                 property_element.setAttribute("hidden", property->isDisplayed() ? "false" : "true");
                 if(node->kind() == dtkComposerNode::Composite)
                     property_element.setAttribute("id", d->node_ids.key(property->clonedFrom()));

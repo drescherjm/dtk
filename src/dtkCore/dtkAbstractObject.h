@@ -43,6 +43,7 @@ public:
    void addProperty(const QString& key, const QStringList& values);
    void addProperty(const QString& key, const QString& value);
    void setProperty(const QString& key, const QString& value);
+   QStringList propertyList(void) const;
    QStringList propertyValues(const QString& key) const;
    QString property(const QString& key) const;
 
@@ -51,6 +52,7 @@ public:
    void addMetaData(const QString& key, const QString& value);
    void setMetaData(const QString& key, const QStringList& values);
    void setMetaData(const QString& key, const QString& value);
+   QStringList metaDataList(void) const;
    QStringList metaDataValues(const QString& key) const;
    QString metadata(const QString& key) const;
    QStringList metadatas(const QString& key) const;

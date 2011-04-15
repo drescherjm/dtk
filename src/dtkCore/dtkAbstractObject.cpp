@@ -132,6 +132,11 @@ void dtkAbstractObject::setProperty(const QString& key, const QString& value)
     emit propertySet(key, value);
 }
 
+QStringList dtkAbstractObject::propertyList(void) const
+{
+    return d->values.keys();
+}
+
 QStringList dtkAbstractObject::propertyValues(const QString& key) const
 {
     if(d->values.contains(key))
@@ -201,6 +206,11 @@ void dtkAbstractObject::setMetaData(const QString& key, const QString& value)
     onMetaDataSet(key, value);
 
     emit metaDataSet(key, value);
+}
+
+QStringList dtkAbstractObject::metaDataList(void) const
+{
+    return d->metadatas.keys();
 }
 
 QStringList dtkAbstractObject::metaDataValues(const QString& key) const

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar 31 16:21:51 2011 (+0200)
+ * Last-Updated: Mon Apr 11 11:08:02 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 697
+ *     Update #: 698
  */
 
 /* Commentary: 
@@ -284,6 +284,8 @@ void dtkComposerReader::read(const QString& fileName)
         }
 
         edge->link(true);
+
+        edge->destination()->node()->onEdgeConnected(edge);
 
         d->scene->addEdge(edge);
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 15:12:01 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  1 09:27:54 2011 (+0100)
+ * Last-Updated: Fri Apr  8 16:34:26 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 255
+ *     Update #: 257
  */
 
 /* Commentary: 
@@ -297,7 +297,7 @@ void dtkComposerNodeString::onCollapseFinised(void)
     disconnect(d->animation, SIGNAL(finished()), this, SLOT(onCollapseFinised()));    
 }
 
-void dtkComposerNodeString::onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNodeString::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     if (property == d->property_input_value) {
 
@@ -312,13 +312,13 @@ void dtkComposerNodeString::onInputEdgeConnected(dtkComposerEdge *edge, dtkCompo
     }
 }
 
-void dtkComposerNodeString::onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNodeString::run(void)
+{
+    return;
+}
+
+void dtkComposerNodeString::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(edge);
     Q_UNUSED(property);
-}
-
-void dtkComposerNodeString::run(void)
-{
-
 }

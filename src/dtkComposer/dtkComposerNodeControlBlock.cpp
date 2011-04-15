@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 31 17:16:39 2011 (+0200)
+ * Last-Updated: Fri Apr 15 09:09:28 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 696
+ *     Update #: 720
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include "dtkComposerEdge.h"
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeCase.h"
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeControlBlock_p.h"
@@ -500,8 +501,12 @@ QList<dtkComposerNode *> dtkComposerNodeControlBlock::startNodes(void)
     QList<dtkComposerNode *> nodes;
 
     foreach(dtkComposerNode *node, this->nodes())
-        if(node->inputEdges().count() == 0)
+        if (!node->inputEdges().count() && node->outputEdges().count())
             nodes << node;
+
+    foreach(dtkComposerEdge *edge, d->parent->inputRelayEdges())
+        if (edge->source()->blockedFrom() == this->title() && !nodes.contains(edge->destination()->node()))
+            nodes << edge->destination()->node();
 
     return nodes;
 }
@@ -511,8 +516,12 @@ QList<dtkComposerNode *> dtkComposerNodeControlBlock::endNodes(void)
     QList<dtkComposerNode *> nodes;
 
     foreach(dtkComposerNode *node, this->nodes())
-        if(node->outputEdges().count() == 0)
+        if(!node->outputEdges().count() && node->inputEdges().count())
             nodes << node;
+
+    foreach(dtkComposerEdge *edge, d->parent->outputRelayEdges())
+        if (edge->destination()->blockedFrom() == this->title() && !nodes.contains(edge->source()->node()))
+            nodes << edge->source()->node();
 
     return nodes;
 }
@@ -545,7 +554,26 @@ QList<dtkComposerNodeProperty *> dtkComposerNodeControlBlock::outputProperties(v
 
 dtkComposerNodeProperty *dtkComposerNodeControlBlock::addInputProperty(QString name, dtkComposerNode *parent)
 {
-    dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::HybridInput, dtkComposerNodeProperty::Multiple, parent);
+    dtkComposerNodeProperty *property;
+    dtkComposerNodeCase *node_case = dynamic_cast<dtkComposerNodeCase *>(d->parent);
+
+    if (node_case) {
+
+        if (name == "constant") {
+            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, parent);
+        } else if (name == "variable") {
+            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, parent);
+        }
+        else {
+            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::HybridInput, dtkComposerNodeProperty::Multiple, parent);
+        }
+
+    } else {
+
+        property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::HybridInput, dtkComposerNodeProperty::Multiple, parent);
+
+    }
+
     property->setBlockedFrom(this->title());
 
     d->input_properties << property;
@@ -555,7 +583,14 @@ dtkComposerNodeProperty *dtkComposerNodeControlBlock::addInputProperty(QString n
 
 dtkComposerNodeProperty *dtkComposerNodeControlBlock::addOutputProperty(QString name, dtkComposerNode *parent)
 {
-    dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::HybridOutput, dtkComposerNodeProperty::Multiple, parent);
+    dtkComposerNodeProperty *property;
+    dtkComposerNodeCase *node_case = NULL;
+
+    if ((node_case = dynamic_cast<dtkComposerNodeCase *>(d->parent)) && (name == "variable"))
+        property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, parent);
+    else
+        property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::HybridOutput, dtkComposerNodeProperty::Multiple, parent);
+
     property->setBlockedFrom(this->title());
 
     d->output_properties << property;

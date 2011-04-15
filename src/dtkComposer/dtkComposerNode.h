@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar 31 14:54:17 2011 (+0200)
+ * Last-Updated: Wed Apr 13 15:06:53 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 257
+ *     Update #: 272
  */
 
 /* Commentary: 
@@ -62,32 +62,39 @@ public:
     void setType(QString type);
     void setObject(dtkAbstractObject *object);
 
-    void addInputProperty(dtkComposerNodeProperty *property);
+    void  addInputProperty(dtkComposerNodeProperty *property);
     void addOutputProperty(dtkComposerNodeProperty *property);
 
-    void removeInputProperty(dtkComposerNodeProperty *property);
+    void  removeInputProperty(dtkComposerNodeProperty *property);
     void removeOutputProperty(dtkComposerNodeProperty *property);
 
-    void addInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void  addInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
     void addOutputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
 
-    void addGhostInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void  addGhostInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
     void addGhostOutputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
 
-    void addInputRelayEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void  addInputRelayEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
     void addOutputRelayEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
 
-    void removeInputEdge(dtkComposerEdge *edge);
+    void  addInputRoute(dtkComposerEdge *route);
+    void addOutputRoute(dtkComposerEdge *route);
+
+    void  removeInputEdge(dtkComposerEdge *edge);
     void removeOutputEdge(dtkComposerEdge *edge);
-    void removeAllEdges(void);
+    void   removeAllEdges(void);
 
-    void removeGhostInputEdge(dtkComposerEdge *edge);
+    void  removeGhostInputEdge(dtkComposerEdge *edge);
     void removeGhostOutputEdge(dtkComposerEdge *edge);
-    void removeAllGhostEdges(void);
+    void   removeAllGhostEdges(void);
 
-    void removeInputRelayEdge(dtkComposerEdge *edge);
+    void  removeInputRelayEdge(dtkComposerEdge *edge);
     void removeOutputRelayEdge(dtkComposerEdge *edge);
-    void removeAllRelayEdges(void);
+    void   removeAllRelayEdges(void);
+
+    void  removeInputRoute(dtkComposerEdge *route);
+    void removeOutputRoute(dtkComposerEdge *route);
+    void   removeAllRoutes(void);
 
     void addAction(const QString& text, const QObject *receiver, const char *slot);
 
@@ -113,6 +120,9 @@ public:
 
     QList<dtkComposerNode *> inputNodes(void);
     QList<dtkComposerNode *> outputNodes(void);
+
+    QList<dtkComposerEdge *> inputRoutes(void);
+    QList<dtkComposerEdge *> outputRoutes(void);
 
     dtkComposerEdge *edge(dtkComposerNodeProperty *property);
 
@@ -143,8 +153,6 @@ public:
     QList<dtkComposerNode *> childNodes(void);
 
     dtkComposerNode *parentNode(void);
-
-    // --
 
     void setGhost(bool ghost);
     bool  isGhost(void);
@@ -200,15 +208,19 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 public:
+    void    onEdgeConnected(dtkComposerEdge *edge);
+    void onEdgeDisconnected(dtkComposerEdge *edge);
+
+public:
     virtual QVariant value(dtkComposerNodeProperty *property) { return QVariant(); }
 
     virtual void chooseImplementation(void);
     virtual void  setupImplementation(QString implementation = QString());
 
 protected:
-    virtual void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    virtual void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    virtual void run(void);
+    virtual void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    virtual void  run(void);
+    virtual void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
 
 private:
     friend class dtkComposerScene; 

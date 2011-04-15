@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 15:08:06 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 27 17:37:10 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 9
+ * Last-Updated: Fri Apr  8 16:34:16 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -49,9 +49,9 @@ protected slots:
     void onCollapseFinised(void);
 
 protected:
-    void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    void run(void);
+    void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void  run(void);
+    void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
 
 private:
     dtkComposerNodeStringPrivate *d;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul 15 11:23:54 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb 17 16:53:04 2011 (+0100)
+ * Last-Updated: Fri Apr  8 16:33:53 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 109
+ *     Update #: 111
  */
 
 /* Commentary: 
@@ -61,15 +61,7 @@ QString dtkComposerNodeProcess::implementation(void)
     return QString();
 }
 
-void dtkComposerNodeProcess::onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
-{
-    Q_UNUSED(edge);
-    Q_UNUSED(property);
-
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-void dtkComposerNodeProcess::onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNodeProcess::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(edge);
     Q_UNUSED(property);
@@ -79,5 +71,13 @@ void dtkComposerNodeProcess::onOutputEdgeConnected(dtkComposerEdge *edge, dtkCom
 
 void dtkComposerNodeProcess::run(void)
 {
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkComposerNodeProcess::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+{
+    Q_UNUSED(edge);
+    Q_UNUSED(property);
+
     DTK_DEFAULT_IMPLEMENTATION;
 }

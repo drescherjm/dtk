@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Feb 25 16:21:13 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  8 11:25:57 2011 (+0100)
+ * Last-Updated: Fri Apr  8 16:32:19 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 277
+ *     Update #: 279
  */
 
 /* Commentary: 
@@ -649,7 +649,7 @@ void dtkComposerNodeNumber::onCollapseFinised(void)
     disconnect(d->animation, SIGNAL(finished()), this, SLOT(onCollapseFinised()));    
 }
 
-void dtkComposerNodeNumber::onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNodeNumber::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     if (property == d->property_input_value) {
 
@@ -666,12 +666,6 @@ void dtkComposerNodeNumber::onInputEdgeConnected(dtkComposerEdge *edge, dtkCompo
         this->refresh();
     }
     return;
-}
-
-void dtkComposerNodeNumber::onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
-{
-    Q_UNUSED(edge);
-    Q_UNUSED(property);
 }
 
 void dtkComposerNodeNumber::run(void)
@@ -718,6 +712,12 @@ void dtkComposerNodeNumber::run(void)
 
         this->refresh();
     }
+}
+
+void dtkComposerNodeNumber::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+{
+    Q_UNUSED(edge);
+    Q_UNUSED(property);
 }
 
 dtkComposerNodeNumber::Genre dtkComposerNodeNumber::genre(QVariant& a, QVariant& b)

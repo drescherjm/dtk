@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:47:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 17 11:09:57 2011 (+0100)
+ * Last-Updated: Fri Apr 15 15:26:36 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 85
+ *     Update #: 97
  */
 
 /* Commentary: 
@@ -45,11 +45,31 @@ public:
     dtkComposerNodeProperty  *inputProperty(const QString& block_title, const QString& name) const;
     dtkComposerNodeProperty *outputProperty(const QString& block_title, const QString& name) const;
 
+    void  addInputRelayRoute(dtkComposerEdge *route);
+    void addOutputRelayRoute(dtkComposerEdge *route);
+
+    void  removeInputRelayRoute(dtkComposerEdge *route);
+    void removeOutputRelayRoute(dtkComposerEdge *route);
+    void   removeAllRelayRoutes(void);
+
+    QList<dtkComposerEdge *>  inputRelayRoutes(void);
+    QList<dtkComposerEdge *> outputRelayRoutes(void);
+
+    void  addInputActiveRoute(dtkComposerEdge *route);
+    void addOutputActiveRoute(dtkComposerEdge *route);
+
+    void  removeInputActiveRoute(dtkComposerEdge *route);
+    void removeOutputActiveRoute(dtkComposerEdge *route);
+    void   removeAllActiveRoutes(void);
+
+    QList<dtkComposerEdge *>  inputActiveRoutes(void);
+    QList<dtkComposerEdge *> outputActiveRoutes(void);
+
 public:
     void layout(void);
   
 public:
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     void resize(const QRectF& rect);
     void resize(const QPointF& delta);
@@ -59,13 +79,16 @@ public:
     QRectF minimalBoundingRect(void);
 
 public slots:
-    virtual void  onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    virtual void onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
     virtual void update(void) = 0;
 
 protected:
     bool condition(void);
     QVariant value(void);
+
+    dtkComposerNodeProperty *inputProperty(void);
+
+    void setRunning(bool running);
+    bool  isRunning(void);
 
 protected:
     void setColor(const QColor& color);

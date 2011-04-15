@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Mar  4 21:57:30 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 10 12:46:19 2011 (+0100)
+ * Last-Updated: Thu Apr 14 13:32:25 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 6
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -33,6 +33,8 @@ public:
 public:
     QList<dtkComposerNodeControlBlock *> block_cases;
           dtkComposerNodeControlBlock *  block_default;
+
+    dtkComposerNodeControlBlock *selected_block;
 };
 
 #endif

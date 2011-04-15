@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 25 10:07:34 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar  4 21:06:46 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 202
+ * Last-Updated: Fri Apr  8 16:26:40 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 206
  */
 
 /* Commentary: 
@@ -191,7 +191,7 @@ void dtkComposerNodeBoolean::setValue(bool value)
     d->label->update();
 }
 
-void dtkComposerNodeBoolean::onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNodeBoolean::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     if (property == d->property_input_value) {
 
@@ -206,13 +206,13 @@ void dtkComposerNodeBoolean::onInputEdgeConnected(dtkComposerEdge *edge, dtkComp
     }
 }
 
-void dtkComposerNodeBoolean::onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNodeBoolean::run(void)
+{
+    return;
+}
+
+void dtkComposerNodeBoolean::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(edge);
     Q_UNUSED(property);
-}
-
-void dtkComposerNodeBoolean::run(void)
-{
-
 }

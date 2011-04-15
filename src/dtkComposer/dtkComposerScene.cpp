@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 12 09:37:36 2011 (+0200)
+ * Last-Updated: Thu Apr 14 14:00:43 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 2639
+ *     Update #: 2650
  */
 
 /* Commentary: 
@@ -151,9 +151,22 @@ QList<dtkComposerNode *> dtkComposerScene::startNodes(void)
 {
     QList<dtkComposerNode *> list;
 
-    foreach(dtkComposerNode *node, d->nodes)
-        if (!node->inputEdges().count() && node->outputEdges().count() && node->kind() != dtkComposerNode::Composite)
-            list << node;
+    dtkComposerNode *p = NULL;
+
+    foreach(dtkComposerNode *node, d->nodes) {
+        if (!node->inputEdges().count() && node->outputEdges().count() && node->kind() != dtkComposerNode::Composite) {
+
+            p = node->parentNode();
+            while (p) {
+                if (p->kind() == dtkComposerNode::Control)
+                    break;
+                else
+                    p = p->parentNode();
+            }
+            if (!p)
+                list << node;
+        }
+    }
 
     return list;
 }
@@ -162,9 +175,22 @@ QList<dtkComposerNode *> dtkComposerScene::endNodes(void)
 {
     QList<dtkComposerNode *> list;
 
-    foreach(dtkComposerNode *node, d->nodes)
-        if (node->inputEdges().count() && !node->outputEdges().count() && node->kind() != dtkComposerNode::Composite)
-            list << node;
+    dtkComposerNode *p = NULL;
+
+    foreach(dtkComposerNode *node, d->nodes) {
+        if (node->inputEdges().count() && !node->outputEdges().count() && node->kind() != dtkComposerNode::Composite) {
+
+            p = node->parentNode();
+            while (p) {
+                if (p->kind() == dtkComposerNode::Control)
+                    break;
+                else
+                    p = p->parentNode();
+            }
+            if (!p)
+                list << node;
+        }
+    }
 
     return list;
 }
@@ -1061,6 +1087,7 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
             d->current_edge = property->edge();
             if (d->current_edge) {
+                d->current_edge->destination()->node()->onEdgeDisconnected(d->current_edge);
                 d->current_edge->unlink();
                 d->edges.removeAll(d->edge(d->current_edge));
             }
@@ -1085,6 +1112,7 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
                 property->setBehavior(dtkComposerNodeProperty::AsRelay);
                 d->current_edge = property->edge();
                 if (d->current_edge) {
+                    d->current_edge->destination()->node()->onEdgeDisconnected(d->current_edge);
                     d->current_edge->unlink();
                     d->edges.removeAll(d->edge(d->current_edge));
                 }
@@ -1110,6 +1138,7 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
                 property->setBehavior(dtkComposerNodeProperty::AsInput);
                 d->current_edge = property->edge();
                 if (d->current_edge) {
+                    d->current_edge->destination()->node()->onEdgeDisconnected(d->current_edge);
                     d->current_edge->unlink();
                     d->edges.removeAll(d->edge(d->current_edge));
                 }
@@ -1131,6 +1160,7 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
             d->current_edge = property->edge();
             if (d->current_edge) {
+                d->current_edge->destination()->node()->onEdgeDisconnected(d->current_edge);
                 d->current_edge->unlink();
                 d->edges.removeAll(d->edge(d->current_edge));
             }
@@ -1197,7 +1227,7 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
                 this->setModified(true);
                 
             } else {
-                
+
                 d->current_edge->destination()->node()->onEdgeConnected(d->current_edge);
                 
                 dtkComposerEdge *edge = d->current_edge;
@@ -1211,7 +1241,7 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
         } else {
                 
-            d->current_edge->destination()->node()->onEdgeDeconnected(d->current_edge);
+            //d->current_edge->destination()->node()->onEdgeDisconnected(d->current_edge);
 
             delete d->current_edge;
 

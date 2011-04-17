@@ -72,7 +72,7 @@ if(SWIG_FOUND)
       "-${language}"
       "-c++"
       "-module" ${name}
-      "-I${CMAKE_SOURCE_DIR}/src"
+      "-I${PROJECT_SOURCE_DIR}/.."
       "-outdir" ${CMAKE_CURRENT_BINARY_DIR}
       "-o" ${wrap_output}
       ${input}

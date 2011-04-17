@@ -112,14 +112,14 @@ if(BUILD_WRAPPERS AND SWIG_FOUND)
   set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS})
   
   if(PYTHONLIBS_FOUND)
-    dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP core python ${CMAKE_CURRENT_SOURCE_DIR}/dtkCore.i ${${PROJECT_NAME}_WRAP_DEPENDS})
-  endif(PYTHONLIBS_FOUND)
+    dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP core python ${PROJECT_SOURCE_DIR}/dtkCore.i ${${PROJECT_NAME}_WRAP_DEPENDS})
+  endif()
   
   if(TCL_FOUND)
-    dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP core tcl    ${CMAKE_CURRENT_SOURCE_DIR}/dtkCore.i ${${PROJECT_NAME}_WRAP_DEPENDS})
-  endif(TCL_FOUND)
+    dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP core tcl    ${PROJECT_SOURCE_DIR}/dtkCore.i ${${PROJECT_NAME}_WRAP_DEPENDS})
+  endif()
   
-endif(BUILD_WRAPPERS AND SWIG_FOUND)
+endif()
 
 ## #################################################################
 ## Configure file
@@ -127,7 +127,7 @@ endif(BUILD_WRAPPERS AND SWIG_FOUND)
 
 configure_file (
   "${PROJECT_SOURCE_DIR}/dtkConfig.h.in"
-  "${CMAKE_BINARY_DIR}/dtkConfig.h")
+  "${PROJECT_BINARY_DIR}/../../dtkConfig.h")
 
 ## #################################################################
 ## Build rules
@@ -136,14 +136,14 @@ configure_file (
 if(NOT MSVC)
 add_definitions(-Wno-write-strings)
 add_definitions(-Wformat=0)
-endif(NOT MSVC)
+endif()
 
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)
 if(NOT MSVC)
   # Shouldn't the QT_USE_FILE set this appropriately?
   add_definitions(-DQT_NO_DEBUG)
-endif(NOT MSVC)
+endif()
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
@@ -157,11 +157,11 @@ target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES})
 
 if(TCL_FOUND)
   target_link_libraries(${PROJECT_NAME} ${TCL_LIBRARY})
-endif(TCL_FOUND)
+endif()
 
 if(PYTHONLIBS_FOUND)
   target_link_libraries(${PROJECT_NAME} ${PYTHON_LIBRARIES})
-endif(PYTHONLIBS_FOUND)
+endif()
 
 ## #################################################################
 ## Handling of generated script modules
@@ -172,14 +172,14 @@ set(${PROJECT_NAME}_MODULES)
 if(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dtkCore.i
-  COMMAND ${CMAKE_COMMAND} ARGS -E  make_directory ${CMAKE_BINARY_DIR}/modules
-  COMMAND ${CMAKE_COMMAND} ARGS -E  copy ${${PROJECT_NAME}_BINARY_DIR}/core.py ${CMAKE_BINARY_DIR}/modules
+  DEPENDS ${PROJECT_SOURCE_DIR}/dtkCore.i
+  COMMAND ${CMAKE_COMMAND} ARGS -E  make_directory ${PROJECT_BINARY_DIR}/modules
+  COMMAND ${CMAKE_COMMAND} ARGS -E  copy ${${PROJECT_NAME}_BINARY_DIR}/core.py ${PROJECT_BINARY_DIR}/modules
   COMMENT "-- Moving python modules to ${CMAKE_BINARY_DIR}/modules")
 
 set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/core.py)
 
-endif(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
+endif()
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

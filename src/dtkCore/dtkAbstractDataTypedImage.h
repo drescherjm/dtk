@@ -26,6 +26,12 @@ public:
 
     int                                Dimension() const { return DIM;       }
     const dtkAbstractDataImage::PixId& PixelType() const { return typeid(T); }
+
+    const QString PixelMeaning() const {
+        if (hasMetaData(dtkAbstractDataImage::PixelMeaningMetaData))
+            return metadata(dtkAbstractDataImage::PixelMeaningMetaData);
+        return "";
+    }
 };
 
 #endif

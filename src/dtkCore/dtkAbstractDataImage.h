@@ -48,6 +48,8 @@ public:
     virtual int scalarValueCount(int value);
     virtual int scalarValueMinCount(void);
     virtual int scalarValueMaxCount(void);
+
+    static const char* PixelMeaningMetaData;
 };
 
 #endif

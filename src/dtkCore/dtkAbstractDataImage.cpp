@@ -31,6 +31,8 @@
 // dtkAbstractDataImage
 // /////////////////////////////////////////////////////////////////
 
+const char* dtkAbstractDataImage::PixelMeaningMetaData = "PixelMeaning";
+
 dtkAbstractDataImage::dtkAbstractDataImage(void) : dtkAbstractData()
 {
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr  5 17:19:12 2011 (+0200)
+ * Last-Updated: Thu Apr 14 15:44:07 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 409
+ *     Update #: 413
  */
 
 /* Commentary: 
@@ -369,17 +369,17 @@ void dtkComposerNodeProperty::setRect(const QRectF& rect)
         d->ellipse->setRect(rect);
         d->ellipse->setBrush(Qt::yellow);
         if (d->parent->isGhost())
-            d->text->setPos(rect.topRight() + QPointF(fm.width(d->text->toPlainText()) * (-1) - 3 * rect.width(), (fm.height()/2-1)*-1));
+            d->text->setPos(rect.topRight() + QPointF(fm.width(d->text->toPlainText()) * (-1) - 3 * rect.width(), (fm.height() / 2. - 1) * (-1)));
         else
-            d->text->setPos(rect.topRight() + QPointF(0, (fm.height()/2-1)*-1));
+            d->text->setPos(rect.topRight() + QPointF(0, (fm.height() / 2. - 1) * (-1)));
         break;
     case Output:
         d->ellipse->setRect(rect);
         d->ellipse->setBrush(Qt::red);
         if (d->parent->isGhost())
-            d->text->setPos(rect.topRight() + QPointF(rect.width(), (fm.height()/2-1)*-1));
+            d->text->setPos(rect.topRight() + QPointF(rect.width(), (fm.height() / 2. - 1) * (-1)));
         else
-            d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText()) * (-1) - rect.width(), (fm.height()/2-1)*-1));
+            d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText()) * (-1) - rect.width(), (fm.height() / 2. - 1) * (-1)));
         break;
     case HybridInput:
         lp.moveTo(rect.center()); lp.arcTo(rect, 90., 180.); lp.closeSubpath();
@@ -388,7 +388,7 @@ void dtkComposerNodeProperty::setRect(const QRectF& rect)
         rp.moveTo(rect.center()); rp.arcTo(rect, 270., 180.); rp.closeSubpath();
         d->path_right->setPath(rp);
         d->path_right->setBrush(Qt::red);
-        d->text->setPos(rect.topRight() + QPointF(0, (fm.height()/2-1)*-1));
+        d->text->setPos(rect.topRight() + QPointF(0, (fm.height() / 2. - 1) * (-1)));
         break;
     case HybridOutput: 
         lp.moveTo(rect.center()); lp.arcTo(rect, 90., 180.); lp.closeSubpath();
@@ -397,7 +397,7 @@ void dtkComposerNodeProperty::setRect(const QRectF& rect)
         rp.moveTo(rect.center()); rp.arcTo(rect, 270., 180.); rp.closeSubpath();
         d->path_right->setPath(rp);
         d->path_right->setBrush(Qt::red);
-        d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText())*-1 - rect.width(), (fm.height()/2-1)*-1));
+        d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText()) * (-1) - rect.width(), (fm.height() / 2. - 1) * (-1)));
         break;
     default:
         break;

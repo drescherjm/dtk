@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 13 22:48:21 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 14 14:49:27 2011 (+0100)
+ * Last-Updated: Wed Apr 20 12:52:02 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 75
+ *     Update #: 76
  */
 
 /* Commentary: 
@@ -95,7 +95,7 @@ void dtkInspectorToolBar::paintEvent(QPaintEvent *event)
             painter.setPen("#00a2fd");
         painter.drawText(event->rect().left() + x, metrics.height() + 2 + y, action->text());
 
-        d->actions[action] = QRect(x, y, metrics.width(action->text()), metrics.height());
+        d->actions[action] = QRect(x, 0, metrics.width(action->text()), 32);
 
         x += metrics.width(action->text()) + 10;
     }

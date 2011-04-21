@@ -27,6 +27,7 @@ set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
 
 if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
   execute_process(COMMAND uname -r
+    COMMAND sed "s/\\.PAE//" # Getting of any PAE keyword
     COMMAND sed "s/.*\\.\\(\\w*\\.\\w*\\)$/\\1/"
     OUTPUT_VARIABLE PACKAGE_EXTENSION
     OUTPUT_STRIP_TRAILING_WHITESPACE)

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Mar  1 10:18:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar  7 13:30:14 2011 (+0100)
+ * Last-Updated: Fri Apr  8 16:32:50 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 145
+ *     Update #: 147
  */
 
 /* Commentary: 
@@ -266,19 +266,13 @@ void dtkComposerNodeNumberOperator::setOperation(dtkComposerNodeNumberOperator::
     }
 }
 
-void dtkComposerNodeNumberOperator::onInputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNodeNumberOperator::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     if(property == d->property_input_value_op1)
         d->value_op1 = edge->source()->node()->value(edge->source());
 
     if(property == d->property_input_value_op2)
         d->value_op2 = edge->source()->node()->value(edge->source());
-}
-
-void dtkComposerNodeNumberOperator::onOutputEdgeConnected(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
-{
-    Q_UNUSED(edge);
-    Q_UNUSED(property);
 }
 
 void dtkComposerNodeNumberOperator::run(void)
@@ -540,4 +534,10 @@ void dtkComposerNodeNumberOperator::run(void)
     }
 
     d->value = r;
+}
+
+void dtkComposerNodeNumberOperator::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+{
+    Q_UNUSED(edge);
+    Q_UNUSED(property);
 }

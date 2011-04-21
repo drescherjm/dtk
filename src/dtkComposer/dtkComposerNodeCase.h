@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:01:16 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 10 14:48:35 2011 (+0100)
+ * Last-Updated: Wed Apr 13 16:14:19 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 9
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -43,6 +43,11 @@ public:
 
 public slots:
     void update(void);
+
+protected:
+    void pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property);
+    void  run(void);
+    void push(dtkComposerEdge *o_route, dtkComposerNodeProperty *property);
 
 public:
     QVariant value(dtkComposerNodeProperty *property);

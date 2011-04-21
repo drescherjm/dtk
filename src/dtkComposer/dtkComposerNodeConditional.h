@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:59:35 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 28 13:05:59 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 2
+ * Last-Updated: Fri Apr 15 09:15:14 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 4
  */
 
 /* Commentary: 
@@ -33,8 +33,16 @@ public:
      dtkComposerNodeConditional(dtkComposerNode *parent = 0);
     ~dtkComposerNodeConditional(void);
 
+public:
+    void layout(void);
+
 public slots:
     void update(void);
+
+protected:
+    void pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property);
+    void  run(void);
+    void push(dtkComposerEdge *o_route, dtkComposerNodeProperty *property);
 
 private:
     dtkComposerNodeConditionalPrivate *d;

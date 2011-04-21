@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 26 18:33:27 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 25 13:46:49 2011 (+0100)
+ * Last-Updated: Thu Mar 31 14:20:52 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 32
+ *     Update #: 33
  */
 
 /* Commentary: 
@@ -51,6 +51,7 @@ public:
 public:
     QPointF grabber_node_origin;
     bool    grabber_node_has_edges;
+    qreal   grabber_node_zvalue;
 
 public:
     dtkComposerNode *grabber_node;

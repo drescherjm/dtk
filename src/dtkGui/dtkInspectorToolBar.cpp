@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 13 22:48:21 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 14 14:49:27 2011 (+0100)
+ * Last-Updated: Wed Apr 20 13:04:14 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 75
+ *     Update #: 115
  */
 
 /* Commentary: 
@@ -28,7 +28,7 @@ public:
     QPixmap pixmap;
 
 public:
-    QHash<QAction *, QRect> actions;
+    QList<QPair<QAction *, QRect *> > actions;
 };
 
 dtkInspectorToolBar::dtkInspectorToolBar(QWidget *parent) : QWidget(parent), d(new dtkInspectorToolBarPrivate)
@@ -55,14 +55,16 @@ QSize dtkInspectorToolBar::sizeHint(void) const
 
 void dtkInspectorToolBar::addAction(QAction *action)
 {
-    d->actions.insert(action, QRect());
+    d->actions << qMakePair(action, new QRect);
 }
 
 void dtkInspectorToolBar::mouseReleaseEvent(QMouseEvent *event)
 {
-    foreach(QRect rect, d->actions)
-        if(rect.contains(event->pos()))
-            d->actions.key(rect)->trigger();
+    typedef QPair<QAction *, QRect *> it;
+
+    foreach(it action, d->actions)
+        if(action.second->contains(event->pos()))
+            action.first->trigger();
 
     this->update();
 }
@@ -85,19 +87,21 @@ void dtkInspectorToolBar::paintEvent(QPaintEvent *event)
     QFontMetrics metrics(font);
     painter.setFont(font);
 
-    foreach(QAction *action, d->actions.keys()) {
+    typedef QPair<QAction *, QRect *> it;
+
+    foreach(it action, d->actions) {
 
         painter.setPen(Qt::black);
-        painter.drawText(event->rect().left() + x, metrics.height() + 3 + y, action->text());
-        if(action->isEnabled())
+        painter.drawText(event->rect().left() + x, metrics.height() + 3 + y, action.first->text());
+        if(action.first->isEnabled())
             painter.setPen("#bbbbbb");
         else
             painter.setPen("#00a2fd");
-        painter.drawText(event->rect().left() + x, metrics.height() + 2 + y, action->text());
+        painter.drawText(event->rect().left() + x, metrics.height() + 2 + y, action.first->text());
 
-        d->actions[action] = QRect(x, y, metrics.width(action->text()), metrics.height());
+        action.second->setRect(x, 0, metrics.width(action.first->text()), 32);
 
-        x += metrics.width(action->text()) + 10;
+        x += metrics.width(action.first->text()) + 10;
     }
 }
 

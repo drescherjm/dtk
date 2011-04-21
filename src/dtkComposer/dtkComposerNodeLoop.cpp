@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar  7 09:26:54 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr  8 16:30:44 2011 (+0200)
+ * Last-Updated: Thu Apr 21 12:16:36 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 20
+ *     Update #: 77
  */
 
 /* Commentary: 
@@ -17,60 +17,159 @@
  * 
  */
 
+#include "dtkComposerEdge.h"
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeLoop.h"
+#include "dtkComposerNodeProperty.h"
 
 #include <dtkCore/dtkGlobal.h>
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeLoopPrivate declaration
+// /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeLoopPrivate
 {
 public:
-    dtkComposerNodeControlBlock *block_loop;
-    dtkComposerNodeControlBlock *block_post;
+    dtkComposerNodeControlBlock *current_block;
+
+public:
+    bool pre_running;
+    bool post_running;
+
+public:
+    bool loop_condition;
 };
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeLoop implementation
+// /////////////////////////////////////////////////////////////////
 
 dtkComposerNodeLoop::dtkComposerNodeLoop(dtkComposerNode *parent) : dtkComposerNodeControl(parent), d(new dtkComposerNodeLoopPrivate)
 {
-    d->block_loop = this->addBlock("loop");
-    d->block_loop->setInteractive(true);
-
-    d->block_post = this->addBlock("post");
-    d->block_post->setInteractive(true);
-
     this->setColor(QColor("#004b07"));
     this->setTitle("Loop");
     this->setType("dtkComposerLoop");
+
+    d->current_block = NULL;
+
+    d->pre_running = false;
+    d->post_running = false;
+
+    d->loop_condition = false;
 }
 
 dtkComposerNodeLoop::~dtkComposerNodeLoop(void)
 {
     delete d;
-
+    
     d = NULL;
 }
 
-void dtkComposerNodeLoop::update(void)
+bool dtkComposerNodeLoop::isPreRunning(void)
 {
-    // qDebug() << DTK_PRETTY_FUNCTION;
+    return d->pre_running;
 }
 
-void dtkComposerNodeLoop::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+bool dtkComposerNodeLoop::isPostRunning(void)
 {
-    DTK_UNUSED(edge);
-    DTK_UNUSED(property);
+    return d->post_running;
+}
 
-    // qDebug() << DTK_PRETTY_FUNCTION;
+bool dtkComposerNodeLoop::loopConditon(void)
+{
+    return d->loop_condition;
+}
+
+dtkComposerNodeControlBlock *dtkComposerNodeLoop::currentBlock(void)
+{
+    return d->current_block;
+}
+
+void dtkComposerNodeLoop::setPreRunning(bool pre_running)
+{
+    d->pre_running = pre_running;
+}
+
+void dtkComposerNodeLoop::setPostRunning(bool post_running)
+{
+    d->post_running = post_running;
+}
+
+void dtkComposerNodeLoop::setLoopCondition(bool loop_condition)
+{
+    d->loop_condition = loop_condition;
+}
+
+void dtkComposerNodeLoop::setCurrentBlock(dtkComposerNodeControlBlock *block)
+{
+    d->current_block = block;
+}
+
+void dtkComposerNodeLoop::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property)
+{
+    if (property == this->inputProperty()) {
+        
+        foreach(dtkComposerEdge *relay_route, this->inputRelayRoutes()) {
+            if (relay_route->source()->name() == "variable") {
+
+                dtkComposerEdge *route = new dtkComposerEdge;
+                route->setSource(this->inputProperty());
+                route->setDestination(relay_route->destination());
+                
+                relay_route->destination()->node()->addInputRoute(route);
+                this->addInputActiveRoute(route);
+            }
+        }
+
+    } else {
+
+        foreach(dtkComposerEdge *relay_route, this->inputRelayRoutes()) {
+            if (relay_route->source() == property) {
+                
+                dtkComposerEdge *route = new dtkComposerEdge;
+                route->setSource(i_route->source());
+                route->setDestination(relay_route->destination());
+                
+                relay_route->destination()->node()->addInputRoute(route);
+                this->addInputActiveRoute(route);
+            }
+        }
+    }
 }
 
 void dtkComposerNodeLoop::run(void)
 {
-    return;
+    foreach(dtkComposerNode *child, d->current_block->nodes()) 
+        child->setDirty(true);
+
+    foreach(dtkComposerNode *child, d->current_block->startNodes())
+        child->update();
 }
 
-void dtkComposerNodeLoop::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNodeLoop::push(dtkComposerEdge *o_route, dtkComposerNodeProperty *property)
 {
-    DTK_UNUSED(edge);
-    DTK_UNUSED(property);
+    if (property->name() == "variable" && property->type() == dtkComposerNodeProperty::Output) {
+        
+        dtkComposerEdge *route = new dtkComposerEdge;
+        route->setSource(this->inputProperty());
+        route->setDestination(o_route->destination());
+        
+        o_route->destination()->node()->addInputRoute(route);
+        this->addOutputActiveRoute(route);
 
-    // qDebug() << DTK_PRETTY_FUNCTION;
+    } else {
+
+        foreach(dtkComposerEdge *relay_route, this->outputRelayRoutes()) {
+            if (relay_route->destination() == o_route->source()) {
+                
+                dtkComposerEdge *route = new dtkComposerEdge;
+                route->setSource(relay_route->source());
+                route->setDestination(o_route->destination());
+                
+                o_route->destination()->node()->addInputRoute(route);
+                this->addOutputActiveRoute(route);
+            }
+        }
+    }
 }

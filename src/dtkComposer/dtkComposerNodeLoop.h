@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar  7 09:21:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr  8 16:30:33 2011 (+0200)
+ * Last-Updated: Thu Apr 21 12:11:44 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 7
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -33,13 +33,25 @@ public:
      dtkComposerNodeLoop(dtkComposerNode *parent = 0);
     ~dtkComposerNodeLoop(void);
 
-public slots:
-    void update(void);
+    bool  isPreRunning(void);
+    bool isPostRunning(void);
+
+    bool loopConditon(void);
+
+    dtkComposerNodeControlBlock *currentBlock(void);
 
 protected:
-    void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void  setPreRunning(bool pre_running);
+    void setPostRunning(bool post_running);
+
+    void setLoopCondition(bool loop_condition);
+
+    void setCurrentBlock(dtkComposerNodeControlBlock *block);
+
+protected:
+    void pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property);
     void  run(void);
-    void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void push(dtkComposerEdge *o_route, dtkComposerNodeProperty *property);
 
 private:
     dtkComposerNodeLoopPrivate *d;

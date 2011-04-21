@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr 15 09:09:28 2011 (+0200)
+ * Last-Updated: Wed Apr 20 15:40:45 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 720
+ *     Update #: 736
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeControlBlock_p.h"
+#include "dtkComposerNodeLoopFor.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerScene.h"
 
@@ -265,6 +266,14 @@ void dtkComposerNodeControlBlockButton::mousePressEvent(QGraphicsSceneMouseEvent
     if (this->text == "+") {
 
         foreach(dtkComposerNodeProperty *property, block->inputProperties()) {
+            if (property->name() == this->label->toPlainText()) {
+                qDebug() << QString("Property %1 already exists. Please choose another name.").arg(property->name());
+                //dtkLog::debug(QString("Property %1 already exists. Please choose another name.").arg(property->name()));
+                return;
+            }
+        }
+
+        foreach(dtkComposerNodeProperty *property, block->outputProperties()) {
             if (property->name() == this->label->toPlainText()) {
                 qDebug() << QString("Property %1 already exists. Please choose another name.").arg(property->name());
                 //dtkLog::debug(QString("Property %1 already exists. Please choose another name.").arg(property->name()));
@@ -556,16 +565,35 @@ dtkComposerNodeProperty *dtkComposerNodeControlBlock::addInputProperty(QString n
 {
     dtkComposerNodeProperty *property;
     dtkComposerNodeCase *node_case = dynamic_cast<dtkComposerNodeCase *>(d->parent);
+    dtkComposerNodeLoopFor *node_loop = dynamic_cast<dtkComposerNodeLoopFor *>(d->parent);
 
     if (node_case) {
 
         if (name == "constant") {
-            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, parent);
+
+            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, parent);
+
         } else if (name == "variable") {
+
             property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, parent);
-        }
-        else {
+
+        } else {
+
             property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::HybridInput, dtkComposerNodeProperty::Multiple, parent);
+
+        }
+
+    } else if (node_loop) {
+
+        if (name == "variable") {
+
+            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, parent);
+            property->setBehavior(dtkComposerNodeProperty::AsLoopInput);
+
+        } else {
+
+            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::HybridInput, dtkComposerNodeProperty::Multiple, parent);
+
         }
 
     } else {
@@ -585,11 +613,39 @@ dtkComposerNodeProperty *dtkComposerNodeControlBlock::addOutputProperty(QString 
 {
     dtkComposerNodeProperty *property;
     dtkComposerNodeCase *node_case = NULL;
+    dtkComposerNodeLoopFor *node_loop = NULL;
 
-    if ((node_case = dynamic_cast<dtkComposerNodeCase *>(d->parent)) && (name == "variable"))
+    if ((node_case = dynamic_cast<dtkComposerNodeCase *>(d->parent)) && (name == "variable")) {
+
         property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, parent);
-    else
+
+    } else if (node_loop = dynamic_cast<dtkComposerNodeLoopFor *>(d->parent)) {
+
+        if (this->title() == "loop" && name == "variable") {
+
+            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, parent);
+
+        } else if (this->title() == "post" && name == "variable") {
+
+            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, parent);
+            property->setBehavior(dtkComposerNodeProperty::AsLoopOutput);
+
+        } else if (this->title() == "condition" && name == "condition") {
+
+            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, parent);
+            property->setBehavior(dtkComposerNodeProperty::AsLoopOutput);
+
+        } else {
+
+            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::HybridOutput, dtkComposerNodeProperty::Multiple, parent);
+
+        }
+
+    } else {
+
         property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::HybridOutput, dtkComposerNodeProperty::Multiple, parent);
+
+    }
 
     property->setBlockedFrom(this->title());
 

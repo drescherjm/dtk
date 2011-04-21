@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 13 15:06:53 2011 (+0200)
+ * Last-Updated: Thu Apr 21 10:22:20 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 272
+ *     Update #: 277
  */
 
 /* Commentary: 
@@ -135,8 +135,11 @@ public:
 
     QString title(void);
 
-    bool dirty(void);
-    void setDirty(bool dirty);
+    bool active(void);
+    void setActive(bool active);
+
+    virtual bool dirty(void);
+    virtual void setDirty(bool dirty);
 
     bool resizable(void);
     void setResizable(bool resizable);
@@ -153,6 +156,8 @@ public:
     QList<dtkComposerNode *> childNodes(void);
 
     dtkComposerNode *parentNode(void);
+    
+    bool isChildOf(dtkComposerNode *node);
 
     void setGhost(bool ghost);
     bool  isGhost(void);

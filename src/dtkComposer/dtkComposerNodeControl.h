@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:47:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr 15 15:26:36 2011 (+0200)
+ * Last-Updated: Wed Apr 20 10:21:54 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 97
+ *     Update #: 101
  */
 
 /* Commentary: 
@@ -65,6 +65,9 @@ public:
     QList<dtkComposerEdge *>  inputActiveRoutes(void);
     QList<dtkComposerEdge *> outputActiveRoutes(void);
 
+    void setRunning(bool running);
+    bool  isRunning(void);
+
 public:
     void layout(void);
   
@@ -86,9 +89,6 @@ protected:
     QVariant value(void);
 
     dtkComposerNodeProperty *inputProperty(void);
-
-    void setRunning(bool running);
-    bool  isRunning(void);
 
 protected:
     void setColor(const QColor& color);

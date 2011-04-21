@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 14 15:44:07 2011 (+0200)
+ * Last-Updated: Wed Apr 20 14:00:45 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 413
+ *     Update #: 414
  */
 
 /* Commentary: 
@@ -161,6 +161,14 @@ QString dtkComposerNodeProperty::description(void)
         
     case(dtkComposerNodeProperty::AsOutput):
         property_behavior = "AsOutput";
+        break;
+        
+    case(dtkComposerNodeProperty::AsLoopInput):
+        property_behavior = "AsLoopInput";
+        break;
+        
+    case(dtkComposerNodeProperty::AsLoopOutput):
+        property_behavior = "AsLoopOutput";
         break;
 
     default:

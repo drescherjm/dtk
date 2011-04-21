@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 11 11:08:02 2011 (+0200)
+ * Last-Updated: Wed Apr 20 14:28:13 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 698
+ *     Update #: 701
  */
 
 /* Commentary: 
@@ -309,6 +309,8 @@ void dtkComposerReader::read(const QString& fileName)
         
         d->scene->createNote(notes.at(i).childNodes().at(0).toText().data(), QPointF(x, y), QSizeF(w, h));
     }
+
+    d->scene->touch();
 }
 
 dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
@@ -684,17 +686,17 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
                 if(children.at(i).toElement().tagName() != "property")
                     continue;
 
-                if(children.at(i).toElement().attribute("name") == "condition")
+                if(children.at(i).toElement().attribute("name") == "condition" || children.at(i).toElement().attribute("name") == "variable" || children.at(i).toElement().attribute("name") == "constant")
                     continue;
 
                 // Assign the property
 
-                if(children.at(i).toElement().attribute("type") == "hybridinput" && children.at(i).toElement().attribute("name") != "constant") {
+                if(children.at(i).toElement().attribute("type") == "hybridinput") {
                     dtkComposerNodeProperty *i_p = case_node->block(children.at(i).toElement().attribute("block"))->addInputProperty(children.at(i).toElement().attribute("name"), case_node);
                     case_node->addInputProperty(i_p);
                 }
                 
-                if(children.at(i).toElement().attribute("type") == "hybridoutput" && children.at(i).toElement().attribute("name") != "constant") {
+                if(children.at(i).toElement().attribute("type") == "hybridoutput") {
                     dtkComposerNodeProperty *o_p = case_node->block(children.at(i).toElement().attribute("block"))->addOutputProperty(children.at(i).toElement().attribute("name"), case_node);
                     case_node->addOutputProperty(o_p);
                 }
@@ -712,7 +714,7 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
                 if(children.at(i).toElement().tagName() != "property")
                     continue;
 
-                if(children.at(i).toElement().attribute("name") == "condition")
+                if(children.at(i).toElement().attribute("name") == "condition" || children.at(i).toElement().attribute("name") == "variable")
                     continue;
 
                 // Assign the property

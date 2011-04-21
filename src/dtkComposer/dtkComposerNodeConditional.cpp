@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr 15 09:15:03 2011 (+0200)
+ * Last-Updated: Thu Apr 21 12:22:10 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 49
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #include "dtkComposerEdge.h"
 #include "dtkComposerNodeConditional.h"
 #include "dtkComposerNodeControlBlock.h"
+#include "dtkComposerNodeLoop.h"
 #include "dtkComposerNodeProperty.h"
 
 #include <dtkCore/dtkGlobal.h>
@@ -136,11 +137,36 @@ void dtkComposerNodeConditional::update(void)
 #endif
 
         // -- Check dirty inputs
+ 
+        foreach(dtkComposerEdge *i_route, this->inputRoutes()) {
+            if (i_route->destination()->blockedFrom() == d->selected_block->title()) {
 
-        foreach(dtkComposerEdge *i_route, this->inputRoutes())
-            if (i_route->destination()->blockedFrom() == d->selected_block->title())
-                if (i_route->source()->node()->dirty())
-                    return;
+// /////////////////////////////////////////////////////////////////
+// TMP: Treating special case of loop control nodes
+// /////////////////////////////////////////////////////////////////
+
+                if(dtkComposerNodeLoop *loop = dynamic_cast<dtkComposerNodeLoop *>(i_route->source()->node())) {
+                    if(this->isChildOf(loop)) {
+                        if(loop->isPreRunning() || loop->isRunning() || loop->isPostRunning()) {
+                            continue;
+                        } else {
+                            return;
+                        }
+                    } else {
+                        if (i_route->source()->node()->dirty())
+                            return;
+                    }
+                } else {
+                
+// /////////////////////////////////////////////////////////////////
+
+                    if (i_route->source()->node()->dirty())
+                        return;
+                
+// /////////////////////////////////////////////////////////////////
+                }
+            }
+        }
 
         // -- Mark dirty outputs
 

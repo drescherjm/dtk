@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Feb 25 16:21:13 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr  8 16:32:19 2011 (+0200)
+ * Last-Updated: Tue Apr 19 15:59:04 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 279
+ *     Update #: 282
  */
 
 /* Commentary: 
@@ -722,9 +722,17 @@ void dtkComposerNodeNumber::push(dtkComposerEdge *edge, dtkComposerNodeProperty 
 
 dtkComposerNodeNumber::Genre dtkComposerNodeNumber::genre(QVariant& a, QVariant& b)
 {
-    if (a.userType() == dtkComposerNodeNumber::Invalid || b.userType() == dtkComposerNodeNumber::Invalid) {
+    if (a.userType() == dtkComposerNodeNumber::Invalid && b.userType() == dtkComposerNodeNumber::Invalid) {
 
         return dtkComposerNodeNumber::Invalid;
+
+    } else if (a.userType() == dtkComposerNodeNumber::Invalid) {
+
+        return (dtkComposerNodeNumber::Genre)b.userType();
+
+    } else if (b.userType() == dtkComposerNodeNumber::Invalid) {
+
+        return (dtkComposerNodeNumber::Genre)a.userType();
 
     } else if (a.userType() == dtkComposerNodeNumber::Double || b.userType() == dtkComposerNodeNumber::Double) {
 

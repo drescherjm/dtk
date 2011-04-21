@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Mar 23 09:51:47 2011 (+0100)
+ * Last-Updated: Wed Apr 20 14:00:21 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 124
+ *     Update #: 125
  */
 
 /* Commentary: 
@@ -56,7 +56,9 @@ public:
         None,
         AsRelay,
         AsInput,
-        AsOutput
+        AsOutput,
+        AsLoopInput,
+        AsLoopOutput
     };
 
      dtkComposerNodeProperty(QString name, Type type, Multiplicity multiplicity, dtkComposerNode *parent);

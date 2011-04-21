@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Jan 31 11:09:59 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 16 22:09:47 2011 (+0100)
+ * Last-Updated: Wed Apr 20 12:46:36 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 120
+ *     Update #: 121
  */
 
 /* Commentary: 
@@ -35,6 +35,7 @@ public:
     QPoint drag_point;
 
     QHash<QAction *, QWidget *> pages;
+
     QStackedWidget *stack;
 };
 

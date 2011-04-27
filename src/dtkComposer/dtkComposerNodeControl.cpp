@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr 15 15:41:41 2011 (+0200)
+ * Last-Updated: Wed Apr 27 18:17:42 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 470
+ *     Update #: 501
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #include "dtkComposerEdge.h"
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeControlBlock.h"
+#include "dtkComposerNodeLoop.h"
 #include "dtkComposerNodeProperty.h"
 
 #include <dtkCore/dtkGlobal.h>
@@ -30,6 +31,9 @@
 
 class dtkComposerNodeControlPrivate
 {
+public:
+    dtkComposerNodeControlBlock *current_block;
+
 public:
     QList<dtkComposerNodeControlBlock *> blocks;
 
@@ -57,7 +61,8 @@ public:
 
 dtkComposerNodeControl::dtkComposerNodeControl(dtkComposerNode *parent) : dtkComposerNode(parent), d(new dtkComposerNodeControlPrivate)
 {
-    d->color = Qt::transparent;
+
+    d->current_block = NULL;
 
     d->property_input = new dtkComposerNodeProperty("condition", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, this);
     this->addInputProperty(d->property_input);
@@ -67,6 +72,8 @@ dtkComposerNodeControl::dtkComposerNodeControl(dtkComposerNode *parent) : dtkCom
     this->setResizable(true);
     this->setZValue(-2000);
     this->setSize(400, 400);
+
+    d->color = Qt::transparent;
 
     d->dirty = false;
     d->running = false;
@@ -132,6 +139,11 @@ int dtkComposerNodeControl::removeBlock(const QString& title)
 QList<dtkComposerNodeControlBlock *> dtkComposerNodeControl::blocks(void)
 {
     return d->blocks;
+}
+
+dtkComposerNodeControlBlock *dtkComposerNodeControl::currentBlock(void)
+{
+    return d->current_block;
 }
 
 dtkComposerNodeProperty *dtkComposerNodeControl::inputProperty(const QString& block_title, const QString& name) const
@@ -230,6 +242,154 @@ QList<dtkComposerEdge *> dtkComposerNodeControl::inputActiveRoutes(void)
 QList<dtkComposerEdge *> dtkComposerNodeControl::outputActiveRoutes(void)
 {
     return d->output_active_routes;
+}
+
+QList<dtkComposerEdge *> dtkComposerNodeControl::allRoutes(void)
+{
+    QList<dtkComposerEdge *> routes;
+    routes << dtkComposerNode::allRoutes();
+    routes << d->input_relay_routes;
+    routes << d->output_relay_routes;
+    routes << d->input_active_routes;
+    routes << d->output_active_routes;
+
+    return routes;
+}
+
+void dtkComposerNodeControl::removeRoute(dtkComposerEdge *route)
+{
+    dtkComposerNode::removeRoute(route);
+
+    d->input_relay_routes.removeAll(route);
+    d->output_relay_routes.removeAll(route);
+
+    d->input_active_routes.removeAll(route);
+    d->output_active_routes.removeAll(route);
+}
+
+bool dtkComposerNodeControl::isRunning(void)
+{
+    return d->running;
+}
+
+bool dtkComposerNodeControl::condition(void)
+{
+    bool value = false;
+
+    if(!d->property_input)
+        return value;
+
+    if(!d->property_input->edge())
+        return value;
+
+    foreach(dtkComposerEdge *i_route, this->inputRoutes()) {
+        if (i_route->destination() == d->property_input) {
+
+            QVariant p_value = i_route->source()->node()->value(i_route->source());
+
+            if(!p_value.canConvert(QVariant::Bool))
+                return value;
+            else
+                value = p_value.toBool();
+            
+            break;
+        }
+    }
+
+    return value;
+}
+
+QVariant dtkComposerNodeControl::value(void)
+{
+    if(!d->property_input->edge()) {
+        qDebug() << DTK_PRETTY_FUNCTION << "No input property edge !!!";
+        return QVariant();
+    }
+
+    foreach(dtkComposerEdge *i_route, this->inputRoutes())
+        if (i_route->destination() == d->property_input)
+            return i_route->source()->node()->value(i_route->source());
+}
+
+dtkComposerNodeProperty * dtkComposerNodeControl::inputProperty(void)
+{
+    return d->property_input;
+}
+
+void dtkComposerNodeControl::setRunning(bool running)
+{
+    d->running = running;
+}
+
+void dtkComposerNodeControl::setCurrentBlock(dtkComposerNodeControlBlock *block)
+{
+    d->current_block = block;
+}
+
+bool dtkComposerNodeControl::dirtyInputValue(void)
+{
+    foreach(dtkComposerEdge *i_route, this->inputRoutes()) {
+        if (i_route->destination() == this->inputProperty()) {
+            if(dtkComposerNodeLoop *loop = dynamic_cast<dtkComposerNodeLoop *>(i_route->source()->node())) {
+
+                if(this->isChildOf(loop)) {
+                    if(loop->isPreRunning() || loop->isRunning() || loop->isPostRunning()) {
+                        continue;
+                    } else {
+                        return true;
+                    }
+                } else {
+                    if (i_route->source()->node()->dirty())
+                        return true;
+                }
+
+            } else {
+
+                if (i_route->source()->node()->dirty())
+                    return true;
+
+            }
+        }
+    }
+
+    return false;
+}
+
+bool dtkComposerNodeControl::dirtyUpstreamNodes(void)
+{
+    foreach(dtkComposerEdge *i_route, this->inputRoutes()) {
+        if (i_route->destination()->blockedFrom() == d->current_block->title()) {
+            
+            if(dtkComposerNodeLoop *loop = dynamic_cast<dtkComposerNodeLoop *>(i_route->source()->node())) {
+                
+                if(this->isChildOf(loop)) {
+                    if(loop->isPreRunning() || loop->isRunning() || loop->isPostRunning()) {
+                        continue;
+                    } else {
+                        return true;
+                    }
+                } else {
+                    if (i_route->source()->node()->dirty())
+                        return true;
+                }
+                
+            } else {
+                
+                if (i_route->source()->node()->dirty())
+                    return true;;
+                
+            }
+        }
+    }
+
+    return false;
+}
+
+void dtkComposerNodeControl::markDirtyDownstreamNodes(void)
+{
+    foreach(dtkComposerEdge *o_route, this->outputRoutes())
+        if (o_route->source()->blockedFrom() == d->current_block->title())
+            o_route->destination()->node()->setDirty(true);
 }
 
 void dtkComposerNodeControl::layout(void)
@@ -375,61 +535,7 @@ QRectF dtkComposerNodeControl::minimalBoundingRect(void)
     }
     min_height += 23 + 23; // header + footer
 
-    return QRectF(this->boundingRect().top(), this->boundingRect().top(), min_width, min_height);
-}
-
-bool dtkComposerNodeControl::condition(void)
-{
-    bool value = false;
-
-    if(!d->property_input)
-        return value;
-
-    if(!d->property_input->edge())
-        return value;
-
-    foreach(dtkComposerEdge *i_route, this->inputRoutes()) {
-        if (i_route->destination() == d->property_input) {
-
-            QVariant p_value = i_route->source()->node()->value(i_route->source());
-
-            if(!p_value.canConvert(QVariant::Bool))
-                return value;
-            else
-                value = p_value.toBool();
-            
-            break;
-        }
-    }
-
-    return value;
-}
-
-QVariant dtkComposerNodeControl::value(void)
-{
-    if(!d->property_input->edge()) {
-        qDebug() << DTK_PRETTY_FUNCTION << "No input property edge !!!";
-        return QVariant();
-    }
-
-    foreach(dtkComposerEdge *i_route, this->inputRoutes())
-        if (i_route->destination() == d->property_input)
-            return i_route->source()->node()->value(i_route->source());
-}
-
-dtkComposerNodeProperty * dtkComposerNodeControl::inputProperty(void)
-{
-    return d->property_input;
-}
-
-void dtkComposerNodeControl::setRunning(bool running)
-{
-    d->running = running;
-}
-
-bool dtkComposerNodeControl::isRunning(void)
-{
-    return d->running;
+    return QRectF(this->boundingRect().left(), this->boundingRect().top(), min_width, min_height);
 }
 
 void dtkComposerNodeControl::setColor(const QColor& color)

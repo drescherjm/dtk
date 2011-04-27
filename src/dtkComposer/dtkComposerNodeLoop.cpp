@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar  7 09:26:54 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 21 12:16:36 2011 (+0200)
+ * Last-Updated: Wed Apr 27 18:24:45 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 77
+ *     Update #: 146
  */
 
 /* Commentary: 
@@ -31,14 +31,15 @@
 class dtkComposerNodeLoopPrivate
 {
 public:
-    dtkComposerNodeControlBlock *current_block;
-
-public:
     bool pre_running;
     bool post_running;
 
 public:
     bool loop_condition;
+
+public:
+    QMap<dtkComposerNodeProperty *, QVariant> pass_through_variables;
+    QHash<dtkComposerNodeProperty *, dtkComposerNodeProperty *> twin_properties;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -50,8 +51,6 @@ dtkComposerNodeLoop::dtkComposerNodeLoop(dtkComposerNode *parent) : dtkComposerN
     this->setColor(QColor("#004b07"));
     this->setTitle("Loop");
     this->setType("dtkComposerLoop");
-
-    d->current_block = NULL;
 
     d->pre_running = false;
     d->post_running = false;
@@ -80,10 +79,15 @@ bool dtkComposerNodeLoop::loopConditon(void)
 {
     return d->loop_condition;
 }
-
-dtkComposerNodeControlBlock *dtkComposerNodeLoop::currentBlock(void)
+    
+QVariant dtkComposerNodeLoop::value(dtkComposerNodeProperty *property)
 {
-    return d->current_block;
+    return d->pass_through_variables.value(property, QVariant());
+}
+
+QList<QVariant> dtkComposerNodeLoop::passThroughVariables(void)
+{
+    return d->pass_through_variables.values();
 }
 
 void dtkComposerNodeLoop::setPreRunning(bool pre_running)
@@ -101,9 +105,9 @@ void dtkComposerNodeLoop::setLoopCondition(bool loop_condition)
     d->loop_condition = loop_condition;
 }
 
-void dtkComposerNodeLoop::setCurrentBlock(dtkComposerNodeControlBlock *block)
+void dtkComposerNodeLoop::setPassThroughVariable(dtkComposerNodeProperty *property, QVariant loop_variable)
 {
-    d->current_block = block;
+    d->pass_through_variables.insert(property, loop_variable);
 }
 
 void dtkComposerNodeLoop::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property)
@@ -115,6 +119,26 @@ void dtkComposerNodeLoop::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty
 
                 dtkComposerEdge *route = new dtkComposerEdge;
                 route->setSource(this->inputProperty());
+                route->setDestination(relay_route->destination());
+                
+                relay_route->destination()->node()->addInputRoute(route);
+                this->addInputActiveRoute(route);
+            }
+        }
+
+    } else if (property->type() == dtkComposerNodeProperty::PassThroughInput && i_route->source()->node()->value(i_route->source()).isValid()) {
+        
+        d->pass_through_variables.insert(property, i_route->source()->node()->value(i_route->source()));
+
+        foreach(dtkComposerNodeProperty *twin, this->outputProperties())
+            if (twin->type() == dtkComposerNodeProperty::PassThroughOutput && twin->name() == property->name())
+                d->twin_properties.insert(twin, property);
+        
+        foreach(dtkComposerEdge *relay_route, this->inputRelayRoutes()) {
+            if (relay_route->source()->name() == property->name()) {
+                
+                dtkComposerEdge *route = new dtkComposerEdge;
+                route->setSource(property);
                 route->setDestination(relay_route->destination());
                 
                 relay_route->destination()->node()->addInputRoute(route);
@@ -140,10 +164,10 @@ void dtkComposerNodeLoop::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty
 
 void dtkComposerNodeLoop::run(void)
 {
-    foreach(dtkComposerNode *child, d->current_block->nodes()) 
+    foreach(dtkComposerNode *child, this->currentBlock()->nodes()) 
         child->setDirty(true);
 
-    foreach(dtkComposerNode *child, d->current_block->startNodes())
+    foreach(dtkComposerNode *child, this->currentBlock()->startNodes())
         child->update();
 }
 
@@ -158,6 +182,15 @@ void dtkComposerNodeLoop::push(dtkComposerEdge *o_route, dtkComposerNodeProperty
         o_route->destination()->node()->addInputRoute(route);
         this->addOutputActiveRoute(route);
 
+    } else if (property->type() == dtkComposerNodeProperty::PassThroughOutput && this->value(property).isValid()) {
+        
+        dtkComposerEdge *route = new dtkComposerEdge;
+        route->setSource(d->twin_properties.value(property));
+        route->setDestination(o_route->destination());
+                
+        o_route->destination()->node()->addInputRoute(route);
+        this->addOutputActiveRoute(route);
+        
     } else {
 
         foreach(dtkComposerEdge *relay_route, this->outputRelayRoutes()) {
@@ -172,4 +205,14 @@ void dtkComposerNodeLoop::push(dtkComposerEdge *o_route, dtkComposerNodeProperty
             }
         }
     }
+}
+
+void dtkComposerNodeLoop::updatePassThroughVariables(void)
+{
+    if (this->currentBlock()->title() == "loop")
+        foreach(dtkComposerEdge *o_route, this->outputRelayRoutes())
+            if (o_route->destination()->type() == dtkComposerNodeProperty::PassThroughOutput) {
+                this->setPassThroughVariable(d->twin_properties.value(o_route->destination()), o_route->source()->node()->value(o_route->source()));
+            }
+
 }

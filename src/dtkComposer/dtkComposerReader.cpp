@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 20 14:28:13 2011 (+0200)
+ * Last-Updated: Wed Apr 27 09:29:17 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 701
+ *     Update #: 703
  */
 
 /* Commentary: 
@@ -722,6 +722,16 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
                 if(children.at(i).toElement().attribute("type") == "hybridinput") {
                     dtkComposerNodeProperty *i_p = control_node->block(children.at(i).toElement().attribute("block"))->addInputProperty(children.at(i).toElement().attribute("name"), control_node);
                     control_node->addInputProperty(i_p);
+                }
+
+                if(children.at(i).toElement().attribute("type") == "passthroughinput") {
+                    dtkComposerNodeProperty *i_p = control_node->block(children.at(i).toElement().attribute("block"))->addInputPassThroughProperty(children.at(i).toElement().attribute("name"), control_node);
+                    control_node->addInputProperty(i_p);
+                }
+                
+                if(children.at(i).toElement().attribute("type") == "passthroughoutput") {
+                    dtkComposerNodeProperty *o_p = control_node->block(children.at(i).toElement().attribute("block"))->addOutputPassThroughProperty(children.at(i).toElement().attribute("name"), control_node);
+                    control_node->addOutputProperty(o_p);
                 }
                 
                 if(children.at(i).toElement().attribute("type") == "hybridoutput") {

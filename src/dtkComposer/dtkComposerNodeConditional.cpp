@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 21 12:22:10 2011 (+0200)
+ * Last-Updated: Wed Apr 27 18:18:36 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 51
+ *     Update #: 67
  */
 
 /* Commentary: 
@@ -37,7 +37,6 @@ class dtkComposerNodeConditionalPrivate
 public:
     dtkComposerNodeControlBlock *block_then;
     dtkComposerNodeControlBlock *block_else;
-    dtkComposerNodeControlBlock *selected_block;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -55,8 +54,6 @@ dtkComposerNodeConditional::dtkComposerNodeConditional(dtkComposerNode *parent) 
     this->setColor(QColor("#aa7845"));
     this->setTitle("Conditional");
     this->setType("dtkComposerConditional");
-
-    d->selected_block = NULL;
 }
 
 dtkComposerNodeConditional::~dtkComposerNodeConditional(void)
@@ -117,8 +114,8 @@ void dtkComposerNodeConditional::update(void)
             return;
 
         // -- Check dirty input value
-        
-        if (this->inputProperty()->edge()->source()->node()->dirty())
+
+        if (this->dirtyInputValue())
             return;
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
@@ -128,51 +125,22 @@ void dtkComposerNodeConditional::update(void)
         // -- Block selection
 
         if(this->condition())
-            d->selected_block = d->block_then;
+            this->setCurrentBlock(d->block_then);
         else
-            d->selected_block = d->block_else;
+            this->setCurrentBlock(d->block_else);
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-        qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "Selected block is" << d->selected_block->title() << DTK_NO_COLOR;
+        qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "Selected block is" << this->currentBlock()->title() << DTK_NO_COLOR;
 #endif
 
         // -- Check dirty inputs
- 
-        foreach(dtkComposerEdge *i_route, this->inputRoutes()) {
-            if (i_route->destination()->blockedFrom() == d->selected_block->title()) {
 
-// /////////////////////////////////////////////////////////////////
-// TMP: Treating special case of loop control nodes
-// /////////////////////////////////////////////////////////////////
-
-                if(dtkComposerNodeLoop *loop = dynamic_cast<dtkComposerNodeLoop *>(i_route->source()->node())) {
-                    if(this->isChildOf(loop)) {
-                        if(loop->isPreRunning() || loop->isRunning() || loop->isPostRunning()) {
-                            continue;
-                        } else {
-                            return;
-                        }
-                    } else {
-                        if (i_route->source()->node()->dirty())
-                            return;
-                    }
-                } else {
-                
-// /////////////////////////////////////////////////////////////////
-
-                    if (i_route->source()->node()->dirty())
-                        return;
-                
-// /////////////////////////////////////////////////////////////////
-                }
-            }
-        }
+        if (this->dirtyUpstreamNodes())
+            return;
 
         // -- Mark dirty outputs
 
-        foreach(dtkComposerEdge *o_route, this->outputRoutes())
-            if (o_route->source()->blockedFrom() == d->selected_block->title())
-                o_route->destination()->node()->setDirty(true);
+        this->markDirtyDownstreamNodes();
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
         qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "All output nodes are set to dirty" << DTK_NO_COLOR;
@@ -199,7 +167,7 @@ void dtkComposerNodeConditional::update(void)
         // -- Pull
 
         foreach(dtkComposerEdge *i_route, this->inputRoutes())
-            if (i_route->destination()->blockedFrom() == d->selected_block->title())
+            if (i_route->destination()->blockedFrom() == this->currentBlock()->title())
                 this->pull(i_route, i_route->destination());
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
@@ -220,7 +188,7 @@ void dtkComposerNodeConditional::update(void)
         // -- Check Dirty end nodes
         
         foreach(dtkComposerEdge *o_route, this->outputRelayRoutes())
-            if (o_route->destination()->blockedFrom() == d->selected_block->title())
+            if (o_route->destination()->blockedFrom() == this->currentBlock()->title())
                 if (o_route->source()->node()->dirty())
                     return;
 
@@ -249,7 +217,7 @@ void dtkComposerNodeConditional::update(void)
         // -- Push
 
         foreach(dtkComposerEdge *o_route, this->outputRoutes())
-            if (o_route->source()->blockedFrom() == d->selected_block->title())
+            if (o_route->source()->blockedFrom() == this->currentBlock()->title())
                 this->push(o_route, o_route->source());
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
@@ -266,7 +234,7 @@ void dtkComposerNodeConditional::update(void)
 #endif
 
         foreach(dtkComposerEdge *o_route, this->outputRoutes())
-            if (o_route->source()->blockedFrom() == d->selected_block->title())
+            if (o_route->source()->blockedFrom() == this->currentBlock()->title())
                 o_route->destination()->node()->update();
 
     }
@@ -289,10 +257,10 @@ void dtkComposerNodeConditional::pull(dtkComposerEdge *i_route, dtkComposerNodeP
 
 void dtkComposerNodeConditional::run(void)
 {
-    foreach(dtkComposerNode *child, d->selected_block->nodes())
+    foreach(dtkComposerNode *child, this->currentBlock()->nodes())
         child->setDirty(true);
 
-    foreach(dtkComposerNode *child, d->selected_block->startNodes())
+    foreach(dtkComposerNode *child, this->currentBlock()->startNodes())
         child->update();
 }
 

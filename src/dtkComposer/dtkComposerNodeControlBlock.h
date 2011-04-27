@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:46:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 30 16:05:56 2011 (+0200)
+ * Last-Updated: Tue Apr 26 08:55:05 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 75
+ *     Update #: 76
  */
 
 /* Commentary: 
@@ -70,6 +70,9 @@ public:
 
     dtkComposerNodeProperty  *addInputProperty(QString name, dtkComposerNode *parent = 0);
     dtkComposerNodeProperty *addOutputProperty(QString name, dtkComposerNode *parent = 0);
+
+    dtkComposerNodeProperty  *addInputPassThroughProperty(QString name, dtkComposerNode *parent = 0);
+    dtkComposerNodeProperty *addOutputPassThroughProperty(QString name, dtkComposerNode *parent = 0);
 
     void  removeInputProperty(dtkComposerNodeProperty *property);
     void removeOutputProperty(dtkComposerNodeProperty *property);

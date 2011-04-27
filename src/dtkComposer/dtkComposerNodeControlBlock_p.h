@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar  8 13:31:11 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 30 16:04:06 2011 (+0200)
+ * Last-Updated: Fri Apr 22 15:41:08 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 31
+ *     Update #: 33
  */
 
 /* Commentary: 
@@ -39,8 +39,12 @@ public:
 
 public:
     dtkComposerNodeControlBlockButtonRemove *remove_button;
-    dtkComposerNodeControlBlockButton *button_add;
-    dtkComposerNodeControlBlockButton *button_rem;
+    dtkComposerNodeControlBlockButton *button_add_left;
+    dtkComposerNodeControlBlockButton *button_rem_left;
+    dtkComposerNodeControlBlockButton *button_add_right;
+    dtkComposerNodeControlBlockButton *button_rem_right;
+    dtkComposerNodeControlBlockButton *button_add_both;
+    dtkComposerNodeControlBlockButton *button_rem_both;
     dtkComposerNodeControlBlockLabel *label;
 
 public:

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar  7 09:21:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 21 12:11:44 2011 (+0200)
+ * Last-Updated: Wed Apr 27 17:22:47 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 31
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -23,6 +23,9 @@
 #include "dtkComposerExport.h"
 #include "dtkComposerNodeControl.h"
 
+class dtkComposerNodeControlBlock;
+class dtkComposerNodeProperty;
+
 class dtkComposerNodeLoopPrivate;
 
 class DTKCOMPOSER_EXPORT dtkComposerNodeLoop : public dtkComposerNodeControl
@@ -38,7 +41,9 @@ public:
 
     bool loopConditon(void);
 
-    dtkComposerNodeControlBlock *currentBlock(void);
+    QVariant value(dtkComposerNodeProperty *property);
+
+    QList<QVariant> passThroughVariables(void);
 
 protected:
     void  setPreRunning(bool pre_running);
@@ -46,12 +51,15 @@ protected:
 
     void setLoopCondition(bool loop_condition);
 
-    void setCurrentBlock(dtkComposerNodeControlBlock *block);
+    void setPassThroughVariable(dtkComposerNodeProperty *property, QVariant pass_through_variable);
 
 protected:
     void pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property);
     void  run(void);
     void push(dtkComposerEdge *o_route, dtkComposerNodeProperty *property);
+
+protected:
+    void updatePassThroughVariables(void);
 
 private:
     dtkComposerNodeLoopPrivate *d;

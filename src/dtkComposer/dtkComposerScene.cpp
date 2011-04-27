@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 21 09:21:49 2011 (+0200)
+ * Last-Updated: Tue Apr 26 13:00:24 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 2656
+ *     Update #: 2660
  */
 
 /* Commentary: 
@@ -335,9 +335,15 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
         n = parent;
     }
 
+    QList<dtkComposerNode *> selected_nodes;
+    foreach(QGraphicsItem *item, this->selectedItems())
+        if (dtkComposerNode *sn = dynamic_cast<dtkComposerNode *>(item))
+            selected_nodes << sn;
+
     foreach(dtkComposerNode *child, node->childNodes()) {
         node->removeChildNode(child);
-        this->removeNode(child);
+        if (!selected_nodes.contains(child))
+            this->removeNode(child);
     }
 
     d->nodes.removeAll(node);
@@ -1095,7 +1101,7 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
                 d->edges.removeAll(d->edge(d->current_edge));
             }
 
-        } else if (!property->node()->isGhost() && property->type() == dtkComposerNodeProperty::HybridOutput) {
+        } else if (!property->node()->isGhost() && (property->type() == dtkComposerNodeProperty::HybridOutput || property->type() == dtkComposerNodeProperty::PassThroughOutput)) {
         
             if (property->contains(mouseEvent->pos())) {
         
@@ -1120,7 +1126,7 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
                 }
             }
 
-        } else if (!property->node()->isGhost() && property->type() == dtkComposerNodeProperty::HybridInput) {
+        } else if (!property->node()->isGhost() && (property->type() == dtkComposerNodeProperty::HybridInput || property->type() == dtkComposerNodeProperty::PassThroughInput)) {
         
             if (property->contains(mouseEvent->pos())) {
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 22 17:11:19 2011 (+0100)
+ * Last-Updated: Tue Apr 26 16:30:32 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 396
+ *     Update #: 398
  */
 
 /* Commentary: 
@@ -508,6 +508,12 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
                 case dtkComposerNodeProperty::HybridInput:
                     property_element.setAttribute("type", "hybridinput");
                     break;
+                case dtkComposerNodeProperty::PassThroughInput:
+                    property_element.setAttribute("type", "passthroughinput");
+                    break;
+                case dtkComposerNodeProperty::Output:
+                    property_element.setAttribute("type", "passthroughinput");
+                    break;
                 }
                 property_element.setAttribute("hidden", property->isDisplayed() ? "false" : "true");
                 if(node->kind() == dtkComposerNode::Composite)
@@ -527,6 +533,9 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
                     break;
                 case dtkComposerNodeProperty::HybridOutput:
                     property_element.setAttribute("type", "hybridoutput");
+                    break;
+                case dtkComposerNodeProperty::PassThroughOutput:
+                    property_element.setAttribute("type", "passthroughoutput");
                     break;
                 }
                 property_element.setAttribute("hidden", property->isDisplayed() ? "false" : "true");

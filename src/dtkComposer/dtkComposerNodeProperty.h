@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 20 14:00:21 2011 (+0200)
+ * Last-Updated: Tue Apr 26 08:38:21 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 125
+ *     Update #: 129
  */
 
 /* Commentary: 
@@ -43,7 +43,9 @@ public:
         Input,
         Output,
         HybridInput,
-        HybridOutput
+        HybridOutput,
+        PassThroughInput,
+        PassThroughOutput
     };
     
     enum Multiplicity {

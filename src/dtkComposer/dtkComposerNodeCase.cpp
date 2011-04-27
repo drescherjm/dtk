@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 18 11:14:00 2011 (+0200)
+ * Last-Updated: Wed Apr 27 21:30:53 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 510
+ *     Update #: 560
  */
 
 /* Commentary: 
@@ -21,13 +21,14 @@
 #include "dtkComposerNodeCase.h"
 #include "dtkComposerNodeCase_p.h"
 #include "dtkComposerNodeControlBlock.h"
+#include "dtkComposerNodeLoop.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerScene.h"
 
 #include <dtkCore/dtkGlobal.h>
 
 // #define DTK_DEBUG_COMPOSER_INTERACTION 1
-#define DTK_DEBUG_COMPOSER_EVALUATION 1
+// #define DTK_DEBUG_COMPOSER_EVALUATION 1
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeCaseButton
@@ -141,8 +142,6 @@ dtkComposerNodeCase::dtkComposerNodeCase(dtkComposerNode *parent) : dtkComposerN
     this->setInputPropertyName("variable");
     this->setTitle("Case");
     this->setType("dtkComposerCase");
-
-    d->selected_block = NULL;
 }
 
 dtkComposerNodeCase::~dtkComposerNodeCase(void)
@@ -333,9 +332,8 @@ void dtkComposerNodeCase::update(void)
 
         // -- Check dirty input value
 
-        foreach(dtkComposerEdge *i_route, this->inputRoutes())
-            if (i_route->destination() == this->inputProperty() && i_route->source()->node()->dirty())
-                return;
+        if (this->dirtyInputValue())
+            return;
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
         qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "Dirty input value OK" << DTK_NO_COLOR;
@@ -357,7 +355,7 @@ void dtkComposerNodeCase::update(void)
         dtkComposerNodeProperty *property = NULL;
         QVariant constant;
 
-        d->selected_block = NULL;
+        this->setCurrentBlock(NULL);
 
         foreach(dtkComposerNodeControlBlock *block, d->block_cases) {
 
@@ -377,23 +375,21 @@ void dtkComposerNodeCase::update(void)
             constant = property->edge()->source()->node()->value(property->edge()->source());
 
             if (constant == value) {
-                d->selected_block = block;
+                this->setCurrentBlock(block);
                 break;
             }
         }
-        if (!d->selected_block)
-            d->selected_block = d->block_default;
+        if (!this->currentBlock())
+            this->setCurrentBlock(d->block_default);
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-        qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "Selected block is" << d->selected_block->title() << DTK_NO_COLOR;
+        qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "Selected block is" << this->currentBlock()->title() << DTK_NO_COLOR;
 #endif
 
         // -- Check dirty inputs
 
-        foreach(dtkComposerEdge *i_route, this->inputRoutes())
-            if (i_route->destination()->blockedFrom() == d->selected_block->title())
-                if (i_route->source()->node()->dirty())
-                    return;
+        if (this->dirtyUpstreamNodes())
+            return;
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
         qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "All input nodes are clean" << DTK_NO_COLOR;
@@ -401,9 +397,7 @@ void dtkComposerNodeCase::update(void)
 
         // -- Mark dirty outputs
 
-        foreach(dtkComposerEdge *o_route, this->outputRoutes())
-            if (o_route->source()->blockedFrom() == d->selected_block->title())
-                o_route->destination()->node()->setDirty(true);
+        this->markDirtyDownstreamNodes();
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
         qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "All output nodes are set to dirty" << DTK_NO_COLOR;
@@ -412,9 +406,10 @@ void dtkComposerNodeCase::update(void)
         // -- Clean active input routes
 
         foreach(dtkComposerEdge *active_route, this->inputActiveRoutes()) {
-            foreach(dtkComposerEdge *i_route, active_route->destination()->node()->inputRoutes()) {
+            foreach(dtkComposerEdge *i_route, active_route->destination()->node()->allRoutes()) {
                 if (i_route == active_route) {
-                    active_route->destination()->node()->removeInputRoute(i_route);
+                    //active_route->destination()->node()->removeInputRoute(i_route);
+                    active_route->destination()->node()->removeRoute(i_route);
                     break;
                 }
             }
@@ -430,7 +425,7 @@ void dtkComposerNodeCase::update(void)
         // -- Pull
 
         foreach(dtkComposerEdge *i_route, this->inputRoutes())
-            if (i_route->destination()->blockedFrom() == d->selected_block->title() || i_route->destination() == this->inputProperty())
+            if (i_route->destination()->blockedFrom() == this->currentBlock()->title() || i_route->destination() == this->inputProperty())
                 this->pull(i_route, i_route->destination());
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
@@ -451,7 +446,7 @@ void dtkComposerNodeCase::update(void)
         // -- Check Dirty end nodes
         
         foreach(dtkComposerEdge *o_route, this->outputRelayRoutes())
-            if (o_route->destination()->blockedFrom() == d->selected_block->title())
+            if (o_route->destination()->blockedFrom() == this->currentBlock()->title())
                 if (o_route->source()->node()->dirty())
                     return;
 
@@ -462,9 +457,9 @@ void dtkComposerNodeCase::update(void)
         // -- Clean active output routes
 
         foreach(dtkComposerEdge *active_route, this->outputActiveRoutes()) {
-            foreach(dtkComposerEdge *i_route, active_route->destination()->node()->inputRoutes()) {
+            foreach(dtkComposerEdge *i_route, active_route->destination()->node()->allRoutes()) {
                 if (i_route == active_route) {
-                    active_route->destination()->node()->removeInputRoute(i_route);
+                    active_route->destination()->node()->removeRoute(i_route);
                     break;
                 }
             }
@@ -480,7 +475,7 @@ void dtkComposerNodeCase::update(void)
         // -- Push
 
         foreach(dtkComposerEdge *o_route, this->outputRoutes())
-            if (o_route->source()->blockedFrom() == d->selected_block->title())
+            if (o_route->source()->blockedFrom() == this->currentBlock()->title())
                 this->push(o_route, o_route->source());
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
@@ -497,7 +492,7 @@ void dtkComposerNodeCase::update(void)
 #endif
 
         foreach(dtkComposerEdge *o_route, this->outputRoutes())
-            if (o_route->source()->blockedFrom() == d->selected_block->title())
+            if (o_route->source()->blockedFrom() == this->currentBlock()->title())
                 o_route->destination()->node()->update();
 
     }
@@ -537,10 +532,10 @@ void dtkComposerNodeCase::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty
 
 void dtkComposerNodeCase::run(void)
 {
-    foreach(dtkComposerNode *child, d->selected_block->nodes())
+    foreach(dtkComposerNode *child, this->currentBlock()->nodes())
         child->setDirty(true);
 
-    foreach(dtkComposerNode *child, d->selected_block->startNodes())
+    foreach(dtkComposerNode *child, this->currentBlock()->startNodes())
         child->update();
 }
 
@@ -556,40 +551,45 @@ void dtkComposerNodeCase::push(dtkComposerEdge *o_route, dtkComposerNodeProperty
         dtkComposerEdge *route = new dtkComposerEdge;
         route->setSource(source);
         route->setDestination(o_route->destination());
-                
-        o_route->destination()->node()->addInputRoute(route);
         this->addOutputActiveRoute(route);
+                
+        if (o_route->destination()->type() == dtkComposerNodeProperty::HybridOutput || 
+            o_route->destination()->type() == dtkComposerNodeProperty::PassThroughOutput || 
+            (o_route->destination()->type() == dtkComposerNodeProperty::Input && o_route->destination()->node()->kind() == dtkComposerNode::Control && source->node()->isChildOfControlNode(o_route->destination()->node()))) {
+
+            dtkComposerNodeControl *output_control_node = dynamic_cast<dtkComposerNodeControl *>(o_route->destination()->node());
+            output_control_node->addOutputRelayRoute(route);
+            
+        } else {
+
+            o_route->destination()->node()->addInputRoute(route);
+
+        }
 
     } else {
 
         foreach(dtkComposerEdge *relay_route, this->outputRelayRoutes()) {
             if (relay_route->destination() == o_route->source()) {
-                
+
                 dtkComposerEdge *route = new dtkComposerEdge;
                 route->setSource(relay_route->source());
                 route->setDestination(o_route->destination());
-                
-                o_route->destination()->node()->addInputRoute(route);
+
                 this->addOutputActiveRoute(route);
+                
+                if (o_route->destination()->type() == dtkComposerNodeProperty::HybridOutput || 
+                    o_route->destination()->type() == dtkComposerNodeProperty::PassThroughOutput || 
+                    (o_route->destination()->type() == dtkComposerNodeProperty::Input && o_route->destination()->node()->kind() == dtkComposerNode::Control && relay_route->source()->node()->isChildOfControlNode(o_route->destination()->node()))) {
+
+                    dtkComposerNodeControl *output_control_node = dynamic_cast<dtkComposerNodeControl *>(o_route->destination()->node());
+                    output_control_node->addOutputRelayRoute(route);
+
+                } else {
+
+                    o_route->destination()->node()->addInputRoute(route);
+
+                }
             }
         }
     }
-}
-
-//! Overloads output value to feed the destination back with the corresponding input value.
-/*! 
- * 
- * \param property Output constant property of a case block.
- */
-
-QVariant dtkComposerNodeCase::value(dtkComposerNodeProperty *property)
-{
-    qDebug() << DTK_PRETTY_FUNCTION;
-
-    foreach(dtkComposerNodeProperty *p, this->inputProperties())
-        if(p->blockedFrom() == property->blockedFrom())
-            if(p->edge())
-                return p->edge()->source()->node()->value(p->edge()->source());
-
-    return QVariant();
 }

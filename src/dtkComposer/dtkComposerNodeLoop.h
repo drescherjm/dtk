@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar  7 09:21:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr 27 17:22:47 2011 (+0200)
+ * Last-Updated: Thu Apr 28 09:53:36 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 46
+ *     Update #: 48
  */
 
 /* Commentary: 
@@ -54,8 +54,10 @@ protected:
     void setPassThroughVariable(dtkComposerNodeProperty *property, QVariant pass_through_variable);
 
 protected:
+    bool dirtyBlockEndNodes(void);
+
+protected:
     void pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property);
-    void  run(void);
     void push(dtkComposerEdge *o_route, dtkComposerNodeProperty *property);
 
 protected:

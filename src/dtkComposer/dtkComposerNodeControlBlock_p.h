@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar  8 13:31:11 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr 22 15:41:08 2011 (+0200)
+ * Last-Updated: Thu Apr 28 11:18:57 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 33
+ *     Update #: 34
  */
 
 /* Commentary: 
@@ -58,6 +58,9 @@ public:
     QColor pen_color;
     QColor brush_color;
     QString title;
+
+public:
+    qreal height_ratio;
 };
 
 #endif

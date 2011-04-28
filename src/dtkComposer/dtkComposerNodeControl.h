@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:47:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr 27 18:16:56 2011 (+0200)
+ * Last-Updated: Thu Apr 28 09:46:39 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 117
+ *     Update #: 123
  */
 
 /* Commentary: 
@@ -93,9 +93,19 @@ public slots:
     virtual void update(void) = 0;
 
 protected:
-    bool dirtyInputValue(void);
-    bool dirtyUpstreamNodes(void);
+            bool dirtyInputValue(void);
+            bool dirtyUpstreamNodes(void);
+    virtual bool dirtyBlockEndNodes(void);
+
     void markDirtyDownstreamNodes(void);
+
+    void cleanInputActiveRoutes(void);
+    void cleanOutputActiveRoutes(void);
+
+protected:
+    void pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property);
+    void  run(void);
+    void push(dtkComposerEdge *o_route, dtkComposerNodeProperty *property);
 
 public:
     void layout(void);

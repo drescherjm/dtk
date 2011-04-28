@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr 27 09:02:43 2011 (+0200)
+ * Last-Updated: Thu Apr 28 13:35:45 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 855
+ *     Update #: 911
  */
 
 /* Commentary: 
@@ -501,6 +501,8 @@ dtkComposerNodeControlBlock::dtkComposerNodeControlBlock(const QString& title, d
     this->setBrush(Qt::NoBrush);
 
     this->setFlag(QGraphicsItem::ItemStacksBehindParent, false);
+
+    d->height_ratio = 1.;
 }
 
 dtkComposerNodeControlBlock::~dtkComposerNodeControlBlock(void)
@@ -901,6 +903,16 @@ void dtkComposerNodeControlBlock::removeAllProperties(void)
     d->output_properties.clear();
 }
 
+qreal dtkComposerNodeControlBlock::heightRatio(void)
+{
+    return d->height_ratio;
+}
+
+void dtkComposerNodeControlBlock::setHeightRatio(qreal height_ratio)
+{
+    d->height_ratio = height_ratio;
+}
+
 void dtkComposerNodeControlBlock::adjustChildNodes(qreal dw, qreal dh)
 {
     qreal scaling_factor = 0.05;
@@ -928,38 +940,25 @@ void dtkComposerNodeControlBlock::adjustChildNodes(qreal dw, qreal dh)
 
 QRectF dtkComposerNodeControlBlock::minimalBoundingRect(void)
 {
-    qreal min_height = 75;
-    qreal min_width = 200;
+    QRectF prop_rect;
+    foreach(dtkComposerNodeProperty *p, d->input_properties)
+        prop_rect = prop_rect.united(p->mapRectToParent(p->boundingRect()));
+    foreach(dtkComposerNodeProperty *p, d->output_properties)
+        prop_rect = prop_rect.united(p->mapRectToParent(p->boundingRect()));
+
+    qreal min_height = 80;
+    min_height = prop_rect.height() > min_height ? prop_rect.height() : min_height;
+    QRectF block_rect(this->boundingRect().left(), this->boundingRect().top(), 230, min_height);
 
     QList<dtkComposerNode *> block_nodes = this->nodes();
-    QRectF block_rect = this->rect();
 
-    if (block_nodes.count()) {
+    foreach(dtkComposerNode *child, block_nodes)
+        block_rect = block_rect.united(child->mapRectToParent(child->boundingRect()));
+    
+    block_rect.setWidth(block_rect.width() + 30);
+    block_rect.setHeight(block_rect.height() + 30);
 
-        QRectF child_rect = block_nodes.first()->mapRectToParent(block_nodes.first()->boundingRect());
-        qreal bottom = child_rect.bottom();
-        qreal right  = child_rect.right();
-
-        foreach(dtkComposerNode *child, block_nodes) {
-            child_rect = child->mapRectToParent(child->boundingRect());
-            bottom = bottom > child_rect.bottom() ? bottom : child_rect.bottom();
-            right = right > child_rect.right() ? right : child_rect.right();
-        }
-        min_height = (1. * qAbs(block_rect.top() - bottom) + 20) > min_height ? (1. * qAbs(block_rect.top() - bottom) + 20) : min_height;
-        min_width  = (1. * qAbs(right - block_rect.left()) + 20) >  min_width ? (1. * qAbs(right - block_rect.left()) + 20) :  min_width;
-    }
-
-    if (d->input_properties.count()) {
-        qreal prop_height = d->input_properties.count() * 1.5 * d->input_properties.last()->boundingRect().height();
-        min_height = prop_height > min_height ? prop_height : min_height;
-    }
-
-    if (d->output_properties.count()) {
-        qreal prop_height = d->output_properties.count() * 1.5 * d->output_properties.last()->boundingRect().height();
-        min_height = prop_height > min_height ? prop_height : min_height;
-    }
-
-    return QRectF(block_rect.top(), block_rect.left(), min_width, min_height);
+    return block_rect;
 }
 
 void dtkComposerNodeControlBlock::highlight(bool ok)

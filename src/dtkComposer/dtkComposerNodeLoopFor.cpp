@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr 27 18:20:55 2011 (+0200)
+ * Last-Updated: Thu Apr 28 11:47:25 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 224
+ *     Update #: 246
  */
 
 /* Commentary: 
@@ -58,16 +58,19 @@ dtkComposerNodeLoopFor::dtkComposerNodeLoopFor(dtkComposerNode *parent) : dtkCom
 {
     d->block_cond = this->addBlock("condition");
     d->block_cond->setInteractive(true);
+    d->block_cond->setHeightRatio(1.);
     this->addInputProperty(d->block_cond->addInputProperty("variable", this));
     this->addOutputProperty(d->block_cond->addOutputProperty("condition", this));
 
     d->block_loop = this->addBlock("loop");
     d->block_loop->setInteractive(true);
+    d->block_loop->setHeightRatio(1.);
     this->addInputProperty(d->block_loop->addInputProperty("variable", this));
     this->addOutputProperty(d->block_loop->addOutputProperty("variable", this));
 
     d->block_post = this->addBlock("post");
     d->block_post->setInteractive(true);
+    d->block_post->setHeightRatio(1.);
     this->addInputProperty(d->block_post->addInputProperty("variable", this));
     this->addOutputProperty(d->block_post->addOutputProperty("variable", this));
 
@@ -105,10 +108,10 @@ void dtkComposerNodeLoopFor::layout(void)
     
     foreach(dtkComposerNodeControlBlock *block, this->blocks()) {
 
-        if (block == d->block_cond || block == d->block_post)
-            height = 0.25 * (this->boundingRect().height() - 46);
-        else
-            height = 0.5 * (this->boundingRect().height() - 46);
+        // if (block == d->block_cond || block == d->block_post)
+        //     height = block->heightRatio() * (this->boundingRect().height() - 46) / this->blocks().count();
+        // else
+        height = block->heightRatio() * (this->boundingRect().height() - 46) / this->blocks().count();
 
         block->setRect(QRectF(this->boundingRect().x(),
                               this->boundingRect().y() + 23 + total_height,
@@ -194,27 +197,13 @@ void dtkComposerNodeLoopFor::update(void)
 
         this->dtkComposerNode::markDirtyDownstreamNodes();
 
-        foreach(dtkComposerEdge *o_route, this->outputRoutes())
-            o_route->destination()->node()->setDirty(true);
-
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
         qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "All output nodes are set to dirty" << DTK_NO_COLOR;
 #endif
 
         // -- Clean active input routes
 
-        foreach(dtkComposerEdge *active_route, this->inputActiveRoutes()) {
-            foreach(dtkComposerEdge *i_route, active_route->destination()->node()->allRoutes()) {
-                if (i_route == active_route) {
-                    //active_route->destination()->node()->removeInputRoute(i_route);
-                    active_route->destination()->node()->removeRoute(i_route);
-                    break;
-                }
-            }
-            this->removeInputActiveRoute(active_route);
-            delete active_route;
-            active_route = NULL;
-        }
+        this->cleanInputActiveRoutes();
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
         qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Input active routes cleaned" << DTK_NO_COLOR;
@@ -261,15 +250,9 @@ void dtkComposerNodeLoopFor::update(void)
         if (!this->isRunning()) {
 
             // -- Check Dirty end nodes for conditional block
-        
-            foreach(dtkComposerEdge *o_route, this->outputRelayRoutes())
-                if (o_route->destination()->blockedFrom() == this->currentBlock()->title())
-                    if (o_route->source()->node()->dirty())
-                        return;
 
-            foreach(dtkComposerNode *node, this->currentBlock()->nodes())
-                if(!node->outputEdges().count() && node->inputEdges().count() && node->dirty())
-                    return;
+            if (this->dirtyBlockEndNodes())
+                return;
         
             this->setLoopCondition(d->node_cond->value(d->prop_cond).toBool());
         
@@ -300,36 +283,9 @@ void dtkComposerNodeLoopFor::update(void)
             }
 
         } else if (!this->isPostRunning()) {
-        
-            foreach(dtkComposerEdge *o_route, this->outputRelayRoutes()) {
-                if (o_route->destination()->blockedFrom() == this->currentBlock()->title()) {
 
-// /////////////////////////////////////////////////////////////////
-// TMP: Treating special case of loop control nodes
-// /////////////////////////////////////////////////////////////////
-
-                    if(dtkComposerNodeLoop *loop = dynamic_cast<dtkComposerNodeLoop *>(o_route->source()->node())) {
-                        if(this->isChildOf(loop)) {
-                            if(loop->isPreRunning() || loop->isRunning() || loop->isPostRunning()) {
-                                continue;
-                            } else {
-                                return;
-                            }
-                        } else {
-                            if (o_route->source()->node()->dirty())
-                                return;
-                        }
-                    } else {
-                        
-// /////////////////////////////////////////////////////////////////
-
-                        if (o_route->source()->node()->dirty())
-                            return;
-                
-// /////////////////////////////////////////////////////////////////
-                    }
-                }
-            }
+            if (this->dirtyBlockEndNodes())
+                return;
 
             foreach(dtkComposerNode *node, this->currentBlock()->nodes())
                 if(!node->outputEdges().count() && node->inputEdges().count() && node->dirty())
@@ -348,15 +304,9 @@ void dtkComposerNodeLoopFor::update(void)
             this->update();
             
         } else if (!this->isPreRunning()) {
-        
-            foreach(dtkComposerEdge *o_route, this->outputRelayRoutes())
-                if (o_route->destination()->blockedFrom() == this->currentBlock()->title())
-                    if (o_route->source()->node()->dirty())
-                        return;
-            
-            foreach(dtkComposerNode *node, this->currentBlock()->nodes())
-                if(!node->outputEdges().count() && node->inputEdges().count() && node->dirty())
-                    return;
+
+            if (this->dirtyBlockEndNodes())
+                return;
             
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
             qDebug() << DTK_COLOR_BG_RED  << "Running Condition block" << DTK_NO_COLOR;
@@ -373,19 +323,8 @@ void dtkComposerNodeLoopFor::update(void)
         } else {
             
             // -- Clean active output routes
-            
-            foreach(dtkComposerEdge *active_route, this->outputActiveRoutes()) {
-                foreach(dtkComposerEdge *i_route, active_route->destination()->node()->allRoutes()) {
-                    if (i_route == active_route) {
-                        //active_route->destination()->node()->removeInputRoute(i_route);
-                        active_route->destination()->node()->removeRoute(i_route);
-                        break;
-                    }
-                }
-                this->removeOutputActiveRoute(active_route);
-                delete active_route;
-                active_route = NULL;
-            }
+
+            this->cleanOutputActiveRoutes();
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
             qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Output active routes cleaned" << DTK_NO_COLOR;

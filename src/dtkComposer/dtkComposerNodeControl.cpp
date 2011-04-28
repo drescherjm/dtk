@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr 27 18:17:42 2011 (+0200)
+ * Last-Updated: Thu Apr 28 13:34:05 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 501
+ *     Update #: 518
  */
 
 /* Commentary: 
@@ -385,11 +385,102 @@ bool dtkComposerNodeControl::dirtyUpstreamNodes(void)
     return false;
 }
 
+bool dtkComposerNodeControl::dirtyBlockEndNodes(void)
+{        
+    foreach(dtkComposerEdge *o_route, this->outputRelayRoutes())
+        if (o_route->destination()->blockedFrom() == this->currentBlock()->title())
+            if (o_route->source()->node()->dirty())
+                return true;
+
+    return false;
+}
+
 void dtkComposerNodeControl::markDirtyDownstreamNodes(void)
 {
     foreach(dtkComposerEdge *o_route, this->outputRoutes())
         if (o_route->source()->blockedFrom() == d->current_block->title())
             o_route->destination()->node()->setDirty(true);
+}
+
+void dtkComposerNodeControl::cleanInputActiveRoutes(void)
+{
+    foreach(dtkComposerEdge *active_route, this->inputActiveRoutes()) {
+        foreach(dtkComposerEdge *i_route, active_route->destination()->node()->allRoutes()) {
+            if (i_route == active_route) {
+                active_route->destination()->node()->removeRoute(i_route);
+                break;
+            }
+        }
+        this->removeInputActiveRoute(active_route);
+        delete active_route;
+        active_route = NULL;
+    }
+}
+
+void dtkComposerNodeControl::cleanOutputActiveRoutes(void)
+{            
+    foreach(dtkComposerEdge *active_route, this->outputActiveRoutes()) {
+        foreach(dtkComposerEdge *i_route, active_route->destination()->node()->allRoutes()) {
+            if (i_route == active_route) {
+                active_route->destination()->node()->removeRoute(i_route);
+                break;
+            }
+        }
+        this->removeOutputActiveRoute(active_route);
+        delete active_route;
+        active_route = NULL;
+    }
+}
+
+void dtkComposerNodeControl::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property)
+{
+    foreach(dtkComposerEdge *relay_route, this->inputRelayRoutes()) {
+        if (relay_route->source() == property) {
+                
+            dtkComposerEdge *route = new dtkComposerEdge;
+            route->setSource(i_route->source());
+            route->setDestination(relay_route->destination());
+                
+            relay_route->destination()->node()->addInputRoute(route);
+            this->addInputActiveRoute(route);
+        }
+    }
+}
+
+void dtkComposerNodeControl::run(void)
+{
+    foreach(dtkComposerNode *child, this->currentBlock()->nodes())
+        child->setDirty(true);
+
+    foreach(dtkComposerNode *child, this->currentBlock()->startNodes())
+        child->update();
+}
+
+void dtkComposerNodeControl::push(dtkComposerEdge *o_route, dtkComposerNodeProperty *property)
+{
+    foreach(dtkComposerEdge *relay_route, this->outputRelayRoutes()) {
+        if (relay_route->destination() == o_route->source()) {
+            
+            dtkComposerEdge *route = new dtkComposerEdge;
+            route->setSource(relay_route->source());
+            route->setDestination(o_route->destination());
+            
+            this->addOutputActiveRoute(route);
+            
+            if (o_route->destination()->type() == dtkComposerNodeProperty::HybridOutput || 
+                o_route->destination()->type() == dtkComposerNodeProperty::PassThroughOutput || 
+                (o_route->destination()->type() == dtkComposerNodeProperty::Input && o_route->destination()->node()->kind() == dtkComposerNode::Control && relay_route->source()->node()->isChildOfControlNode(o_route->destination()->node()))) {
+                
+                dtkComposerNodeControl *output_control_node = dynamic_cast<dtkComposerNodeControl *>(o_route->destination()->node());
+                output_control_node->addOutputRelayRoute(route);
+                
+            } else {
+                
+                o_route->destination()->node()->addInputRoute(route);
+                
+            }
+        }
+    }
 }
 
 void dtkComposerNodeControl::layout(void)
@@ -497,8 +588,8 @@ void dtkComposerNodeControl::resize(qreal dw, qreal dh)
 
     this->setSize(this->boundingRect().width() + dw, this->boundingRect().height() + dh);
 
-    foreach(dtkComposerNodeControlBlock *block, d->blocks)
-        block->adjustChildNodes(dw, dh / d->blocks.count());
+    //foreach(dtkComposerNodeControlBlock *block, d->blocks)
+    //    block->adjustChildNodes(dw, dh / d->blocks.count());
 }
 
 void dtkComposerNodeControl::resize(void)
@@ -529,6 +620,7 @@ QRectF dtkComposerNodeControl::minimalBoundingRect(void)
     if (d->blocks.count()) {
         foreach(dtkComposerNodeControlBlock *block, d->blocks) {
             min_height = min_height > block->minimalBoundingRect().height() ? min_height : block->minimalBoundingRect().height();
+            //min_height +=  block->minimalBoundingRect().height();
             min_width  =  min_width >  block->minimalBoundingRect().width() ?  min_width :  block->minimalBoundingRect().width();
         }
         min_height *= d->blocks.count();

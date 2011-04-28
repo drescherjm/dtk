@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 20 14:00:45 2011 (+0200)
+ * Last-Updated: Tue Apr 26 09:51:12 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 414
+ *     Update #: 421
  */
 
 /* Commentary: 
@@ -78,6 +78,14 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multip
         d->path_right = new QGraphicsPathItem(this);
         d->path_right->setPen(QPen(Qt::gray, 1));
         break;
+    case PassThroughInput:
+    case PassThroughOutput:
+        d->ellipse = NULL;
+        d->path_left = new QGraphicsPathItem(this);
+        d->path_left->setPen(QPen(Qt::black, 1));
+        d->path_right = new QGraphicsPathItem(this);
+        d->path_right->setPen(QPen(Qt::black, 1));
+        break;
     default:
         break;
     };
@@ -115,6 +123,14 @@ QString dtkComposerNodeProperty::description(void)
 
     case(dtkComposerNodeProperty::HybridOutput):
         property_type = "HybridInput";
+        break;
+
+    case(dtkComposerNodeProperty::PassThroughInput):
+        property_type = "PassThroughInput";
+        break;
+
+    case(dtkComposerNodeProperty::PassThroughOutput):
+        property_type = "PassThroughOutput";
         break;
 
     default:
@@ -390,6 +406,7 @@ void dtkComposerNodeProperty::setRect(const QRectF& rect)
             d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText()) * (-1) - rect.width(), (fm.height() / 2. - 1) * (-1)));
         break;
     case HybridInput:
+    case PassThroughInput:
         lp.moveTo(rect.center()); lp.arcTo(rect, 90., 180.); lp.closeSubpath();
         d->path_left->setPath(lp);
         d->path_left->setBrush(Qt::yellow);
@@ -398,7 +415,8 @@ void dtkComposerNodeProperty::setRect(const QRectF& rect)
         d->path_right->setBrush(Qt::red);
         d->text->setPos(rect.topRight() + QPointF(0, (fm.height() / 2. - 1) * (-1)));
         break;
-    case HybridOutput: 
+    case HybridOutput:
+    case PassThroughOutput:
         lp.moveTo(rect.center()); lp.arcTo(rect, 90., 180.); lp.closeSubpath();
         d->path_left->setPath(lp);
         d->path_left->setBrush(Qt::yellow);
@@ -426,9 +444,11 @@ void dtkComposerNodeProperty::mirror(void)
         d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText())*-1 - rect.width(), (fm.height()/2-1)*-1));
         break;
     case HybridOutput:
+    case PassThroughInput:
         d->text->setPos(rect.topRight() + QPointF(0, (fm.height()/2-1)*-1));
         break;
     case HybridInput:
+    case PassThroughOutput:
         d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText())*-1 - rect.width(), (fm.height()/2-1)*-1));
         break;
     default:

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 21 10:22:20 2011 (+0200)
+ * Last-Updated: Wed Apr 27 18:47:04 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 277
+ *     Update #: 288
  */
 
 /* Commentary: 
@@ -158,6 +158,7 @@ public:
     dtkComposerNode *parentNode(void);
     
     bool isChildOf(dtkComposerNode *node);
+    bool isChildOfControlNode(dtkComposerNode *node);
 
     void setGhost(bool ghost);
     bool  isGhost(void);
@@ -216,11 +217,18 @@ public:
     void    onEdgeConnected(dtkComposerEdge *edge);
     void onEdgeDisconnected(dtkComposerEdge *edge);
 
+    virtual QList<dtkComposerEdge *> allRoutes(void);
+    virtual void removeRoute(dtkComposerEdge *route);
+
 public:
-    virtual QVariant value(dtkComposerNodeProperty *property) { return QVariant(); }
+    virtual QVariant value(dtkComposerNodeProperty *property);
 
     virtual void chooseImplementation(void);
     virtual void  setupImplementation(QString implementation = QString());
+
+protected:
+    virtual bool dirtyUpstreamNodes(void);
+    virtual void markDirtyDownstreamNodes(void);
 
 protected:
     virtual void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);

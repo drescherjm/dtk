@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 21 10:17:12 2011 (+0200)
+ * Last-Updated: Wed Apr 27 19:59:58 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 402
+ *     Update #: 415
  */
 
 /* Commentary: 
@@ -240,22 +240,22 @@ bool dtkComposerEdge::link(bool anyway)
         return false;
     }
 
-    if (d->destination->node()->kind() == dtkComposerNode::Control && d->destination->node() == d->source->node()->parentNode() && d->destination->type() == dtkComposerNodeProperty::HybridInput) {
+    if (d->destination->node()->kind() == dtkComposerNode::Control && d->destination->node() == d->source->node()->parentNode() && (d->destination->type() == dtkComposerNodeProperty::HybridInput || d->destination->type() == dtkComposerNodeProperty::PassThroughInput)) {
         qDebug() << "Hybrid input property of a block cannot be the destination property of a node contained by this block";
         return false;
     }
 
-    if (d->source->type() == dtkComposerNodeProperty::HybridInput && d->destination->type() == dtkComposerNodeProperty::Output) {
+    if ((d->source->type() == dtkComposerNodeProperty::HybridInput || d->source->type() == dtkComposerNodeProperty::PassThroughInput) && d->destination->type() == dtkComposerNodeProperty::Output) {
         qDebug() << "Cannot connect Hybrid input property to an Output property";
         return false;
     }
 
-    if (d->source->type() == dtkComposerNodeProperty::HybridInput && d->source->node() != d->destination->node()->parentNode()) {
+    if ((d->source->type() == dtkComposerNodeProperty::HybridInput || d->source->type() == dtkComposerNodeProperty::PassThroughInput) && d->source->node() != d->destination->node()->parentNode()) {
         qDebug() << "Cannot connect Hybrid input property of a control node to a node that is not inside this control node";
         return false;
     }
 
-    if (d->source->node() == d->destination->node()->parentNode() && d->source->type() == dtkComposerNodeProperty::HybridOutput) {
+    if (d->source->node() == d->destination->node()->parentNode() && (d->source->type() == dtkComposerNodeProperty::HybridOutput || d->source->type() == dtkComposerNodeProperty::PassThroughOutput)) {
         qDebug() << "Hybrid output property of a block cannot be the source of an edge whose destination is a node contained by this block";
         return false;
     }
@@ -267,7 +267,7 @@ bool dtkComposerEdge::link(bool anyway)
         }
     }            
 
-    if (d->source->type() == dtkComposerNodeProperty::Output || d->source->type() == dtkComposerNodeProperty::HybridOutput) {
+    if (d->source->type() == dtkComposerNodeProperty::Output || d->source->type() == dtkComposerNodeProperty::HybridOutput || d->source->type() == dtkComposerNodeProperty::PassThroughOutput) {
         foreach (dtkComposerEdge *edge, d->source->node()->outputEdges()) {
             if (edge->source() == d->source && edge->destination() == d->destination) {
                 qDebug() << "Edge already exist.";
@@ -276,7 +276,7 @@ bool dtkComposerEdge::link(bool anyway)
         }
     }
 
-    if (d->destination->type() == dtkComposerNodeProperty::Input || d->destination->type() == dtkComposerNodeProperty::HybridInput) {        
+    if (d->destination->type() == dtkComposerNodeProperty::Input || d->destination->type() == dtkComposerNodeProperty::HybridInput || d->destination->type() == dtkComposerNodeProperty::PassThroughInput) {        
         foreach (dtkComposerEdge *edge, d->destination->node()->inputEdges()) {
             if (edge->source() == d->source && edge->destination() == d->destination) {
                 qDebug() << "Edge already exist.";
@@ -285,7 +285,7 @@ bool dtkComposerEdge::link(bool anyway)
         }
     }
 
-    if (d->destination->type() == dtkComposerNodeProperty::HybridOutput) {
+    if (d->destination->type() == dtkComposerNodeProperty::HybridOutput || d->destination->type() == dtkComposerNodeProperty::PassThroughOutput) {
         foreach (dtkComposerEdge *edge, d->destination->node()->outputRelayEdges()) {
             if (edge->source() == d->source && edge->destination() == d->destination) {
                 qDebug() << "Edge already exist.";
@@ -294,7 +294,7 @@ bool dtkComposerEdge::link(bool anyway)
         }
     }
 
-    if (d->source->type() == dtkComposerNodeProperty::HybridInput) {
+    if (d->source->type() == dtkComposerNodeProperty::HybridInput || d->source->type() == dtkComposerNodeProperty::PassThroughInput) {
         foreach (dtkComposerEdge *edge, d->source->node()->inputRelayEdges()) {
             if (edge->source() == d->source && edge->destination() == d->destination) {
                 qDebug() << "Edge already exist.";
@@ -335,14 +335,14 @@ bool dtkComposerEdge::unlink(void)
 
     if (d->source->node()->isGhost())
         d->source->node()->removeGhostInputEdge(this);
-    else if (d->source->type() == dtkComposerNodeProperty::HybridInput)
+    else if (d->source->node()->kind() == dtkComposerNode::Control && d->destination->node()->parentNode() == d->source->node())
         d->source->node()->removeInputRelayEdge(this);
     else
         d->source->node()->removeOutputEdge(this);
 
     if (d->destination->node()->isGhost())
         d->destination->node()->removeGhostOutputEdge(this);
-    else if (d->destination->type() == dtkComposerNodeProperty::HybridOutput)
+    else if (d->destination->node()->kind() == dtkComposerNode::Control && d->source->node()->parentNode() == d->destination->node())
         d->destination->node()->removeOutputRelayEdge(this);
     else
         d->destination->node()->removeInputEdge(this);

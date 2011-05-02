@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:46:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 28 11:20:35 2011 (+0200)
+ * Last-Updated: lun. mai  2 18:21:49 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 81
+ *     Update #: 82
  */
 
 /* Commentary: 
@@ -79,8 +79,10 @@ public:
     void  removeAllProperties(void);
 
 public:
+    qreal height(void);
     qreal heightRatio(void);
 
+    void setHeight(qreal height);
     void setHeightRatio(qreal height_ratio);
     void adjustChildNodes(qreal dw, qreal dh);
     QRectF minimalBoundingRect(void);

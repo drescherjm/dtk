@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar  8 13:31:11 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 28 11:18:57 2011 (+0200)
+ * Last-Updated: lun. mai  2 18:20:37 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 34
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -60,6 +60,7 @@ public:
     QString title;
 
 public:
+    qreal height;
     qreal height_ratio;
 };
 

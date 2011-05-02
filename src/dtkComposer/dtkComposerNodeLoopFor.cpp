@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 28 11:47:25 2011 (+0200)
+ * Last-Updated: lun. mai  2 19:54:15 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 246
+ *     Update #: 262
  */
 
 /* Commentary: 
@@ -58,19 +58,19 @@ dtkComposerNodeLoopFor::dtkComposerNodeLoopFor(dtkComposerNode *parent) : dtkCom
 {
     d->block_cond = this->addBlock("condition");
     d->block_cond->setInteractive(true);
-    d->block_cond->setHeightRatio(1.);
+    d->block_cond->setHeightRatio(0.95);
     this->addInputProperty(d->block_cond->addInputProperty("variable", this));
     this->addOutputProperty(d->block_cond->addOutputProperty("condition", this));
 
     d->block_loop = this->addBlock("loop");
     d->block_loop->setInteractive(true);
-    d->block_loop->setHeightRatio(1.);
+    d->block_loop->setHeightRatio(1.1);
     this->addInputProperty(d->block_loop->addInputProperty("variable", this));
     this->addOutputProperty(d->block_loop->addOutputProperty("variable", this));
 
     d->block_post = this->addBlock("post");
     d->block_post->setInteractive(true);
-    d->block_post->setHeightRatio(1.);
+    d->block_post->setHeightRatio(0.95);
     this->addInputProperty(d->block_post->addInputProperty("variable", this));
     this->addOutputProperty(d->block_post->addOutputProperty("variable", this));
 
@@ -100,33 +100,28 @@ void dtkComposerNodeLoopFor::layout(void)
 {
     dtkComposerNodeControl::layout();
 
-    int i = 0;
+    QRectF  node_rect = this->boundingRect();
+    qreal node_radius = this->nodeRadius();
+
     int j;
-
-    qreal height;
-    qreal total_height = 0.;
+    qreal offset = 23;
     
-    foreach(dtkComposerNodeControlBlock *block, this->blocks()) {
+    foreach(dtkComposerNodeControlBlock *block, this->blocks()) { 
 
-        // if (block == d->block_cond || block == d->block_post)
-        //     height = block->heightRatio() * (this->boundingRect().height() - 46) / this->blocks().count();
-        // else
-        height = block->heightRatio() * (this->boundingRect().height() - 46) / this->blocks().count();
+        block->setRect(QRectF(node_rect.x(),
+                              node_rect.y() + offset,
+                              node_rect.width(),
+                              block->height()));
 
-        block->setRect(QRectF(this->boundingRect().x(),
-                              this->boundingRect().y() + 23 + total_height,
-                              this->boundingRect().width(),
-                              height));
-        
-        total_height += height;
+        offset += block->rect().height();
 
         j = 0;
         foreach(dtkComposerNodeProperty *property, block->inputProperties()) {
 
-            property->setRect(QRectF(block->rect().left() + this->nodeRadius(),
-                                     block->rect().top()  + this->nodeRadius() * (4*j + 1),
-                                     2 * this->nodeRadius(),
-                                     2 * this->nodeRadius() ));
+            property->setRect(QRectF(block->mapRectToParent(block->rect()).left() + node_radius,
+                                     block->mapRectToParent(block->rect()).top()  + node_radius * (4*j + 1),
+                                     2 * node_radius,
+                                     2 * node_radius ));
 
             if (property->type() == dtkComposerNodeProperty::Output)
                 property->mirror();
@@ -139,10 +134,10 @@ void dtkComposerNodeLoopFor::layout(void)
         j = 0;
         foreach(dtkComposerNodeProperty *property, block->outputProperties()) {
 
-            property->setRect(QRectF(block->rect().right() - this->nodeRadius() * 3,
-                                     block->rect().top()   + this->nodeRadius() * (4*j + 1),
-                                     2 * this->nodeRadius(),
-                                     2 * this->nodeRadius() ));
+            property->setRect(QRectF(block->mapRectToParent(block->rect()).right() - node_radius * 3,
+                                     block->mapRectToParent(block->rect()).top()   + node_radius * (4*j + 1),
+                                     2 * node_radius,
+                                     2 * node_radius ));
 
             if (property->type() == dtkComposerNodeProperty::Input)
                 property->mirror();    
@@ -152,8 +147,6 @@ void dtkComposerNodeLoopFor::layout(void)
 
             j++;
         }
-
-        i++;
     }     
 }
 

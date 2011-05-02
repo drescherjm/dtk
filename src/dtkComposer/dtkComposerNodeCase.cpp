@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 28 11:08:55 2011 (+0200)
+ * Last-Updated: lun. mai  2 18:24:07 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 574
+ *     Update #: 669
  */
 
 /* Commentary: 
@@ -64,7 +64,7 @@ dtkComposerNodeCaseButton::dtkComposerNodeCaseButton(dtkComposerNodeCase *parent
     int height = 10;
     int radius =  5;
     int origin_x = -(length + margin) / 2;
-    int origin_y = parent->boundingRect().height() / 2;
+    int origin_y = 0.;
 
     QPainterPath b; b.addRoundedRect(origin_x,              origin_y, margin,          -height,     radius, radius);
     QPainterPath c; c.addRoundedRect(origin_x + margin,     origin_y, length - margin, -height,     radius, radius);
@@ -133,7 +133,6 @@ void dtkComposerNodeCaseButton::mousePressEvent(QGraphicsSceneMouseEvent *event)
 dtkComposerNodeCase::dtkComposerNodeCase(dtkComposerNode *parent) : dtkComposerNodeControl(parent), d(new dtkComposerNodeCasePrivate)
 {
     d->add_button = new dtkComposerNodeCaseButton(this, d);
-    d->add_button->setPos(0, 0);
     d->add_button->setZValue(this->zValue() + 1);
 
     d->block_default = this->addBlock("default");
@@ -271,23 +270,28 @@ void dtkComposerNodeCase::layout(void)
 {
     dtkComposerNodeControl::layout();  
 
-    int i = 0;
+    QRectF  node_rect = this->boundingRect();
+    qreal node_radius = this->nodeRadius();
+
     int j;
-    
+    qreal offset = 23;
+
     foreach(dtkComposerNodeControlBlock *block, this->blocks()) {
 
-        block->setRect(QRectF(this->boundingRect().x(),
-                              this->boundingRect().y() + 23 + i * ((this->boundingRect().height() - 46) / this->blocks().count()),
-                              this->boundingRect().width(),
-                              (this->boundingRect().height() - 46) / this->blocks().count()));
+        block->setRect(QRectF(node_rect.x(),
+                              node_rect.y() + offset,
+                              node_rect.width(),
+                              block->height()));
+
+        offset += block->rect().height();        
 
         j = 0;
         foreach(dtkComposerNodeProperty *property, block->inputProperties()) {
 
-            property->setRect(QRectF(block->rect().left() + this->nodeRadius(),
-                                     block->rect().top()  + this->nodeRadius() * (4*j + 1),
-                                     2 * this->nodeRadius(),
-                                     2 * this->nodeRadius() ));
+            property->setRect(QRectF(block->mapRectToParent(block->rect()).left() + node_radius,
+                                     block->mapRectToParent(block->rect()).top()  + node_radius * (4*j + 1),
+                                     2 * node_radius,
+                                     2 * node_radius ));
 
             if (property->name() == "variable") {
                 property->mirror();
@@ -302,21 +306,19 @@ void dtkComposerNodeCase::layout(void)
             j = 1;
         foreach(dtkComposerNodeProperty *property, block->outputProperties()) {
 
-            property->setRect(QRectF(block->rect().right() - this->nodeRadius() * 3,
-                                     block->rect().top()   + this->nodeRadius() * (4*j + 1),
-                                     2 * this->nodeRadius(),
-                                     2 * this->nodeRadius() ));
+            property->setRect(QRectF(block->mapRectToParent(block->rect()).right() - node_radius * 3,
+                                     block->mapRectToParent(block->rect()).top()   + node_radius * (4*j + 1),
+                                     2 * node_radius,
+                                     2 * node_radius ));
 
             if (property->name() == "variable")
                 j++;
 
             j++;
         }
-
-        i++;
     } 
 
-    d->add_button->setPos(this->boundingRect().width()/2 - 150/2, this->boundingRect().bottom() - 200);
+    d->add_button->setPos(node_rect.left() + 0.5 * node_rect.width(), node_rect.bottom());
 }
 
 void dtkComposerNodeCase::update(void)

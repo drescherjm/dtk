@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 28 13:35:45 2011 (+0200)
+ * Last-Updated: lun. mai  2 20:05:59 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 911
+ *     Update #: 935
  */
 
 /* Commentary: 
@@ -120,7 +120,7 @@ dtkComposerNodeControlBlockButtonRemove::dtkComposerNodeControlBlockButtonRemove
     int height = 10;
     int radius =  5;
     int origin_x = -(length + margin) / 2;
-    int origin_y = parent->boundingRect().height() / 2;
+    int origin_y = 0;
 
     QPainterPath b; b.addRoundedRect(origin_x,              origin_y, margin,          -height,     radius, radius);
     QPainterPath c; c.addRoundedRect(origin_x + margin,     origin_y, length - margin, -height,     radius, radius);
@@ -502,7 +502,9 @@ dtkComposerNodeControlBlock::dtkComposerNodeControlBlock(const QString& title, d
 
     this->setFlag(QGraphicsItem::ItemStacksBehindParent, false);
 
-    d->height_ratio = 1.;
+    this->setRect(QRectF(0, 0, 250, 100));
+    d->height = 100.;
+    d->height_ratio = 1.0;
 }
 
 dtkComposerNodeControlBlock::~dtkComposerNodeControlBlock(void)
@@ -652,7 +654,7 @@ void dtkComposerNodeControlBlock::setRect(const QRectF& rectangle)
     }
     
     if (d->remove_button && d->remove_button->isVisible())
-        d->remove_button->setPos(rectangle.width()/2 - 150/2, this->rect().bottom());
+        d->remove_button->setPos(rectangle.left() + 0.5 * rectangle.width(), this->rect().bottom());
     
     if (d->button_add_left) {
         d->button_add_left->text = "+";
@@ -903,9 +905,19 @@ void dtkComposerNodeControlBlock::removeAllProperties(void)
     d->output_properties.clear();
 }
 
+qreal dtkComposerNodeControlBlock::height(void)
+{
+    return d->height;
+}
+
 qreal dtkComposerNodeControlBlock::heightRatio(void)
 {
     return d->height_ratio;
+}
+
+void dtkComposerNodeControlBlock::setHeight(qreal height)
+{
+    d->height = height;
 }
 
 void dtkComposerNodeControlBlock::setHeightRatio(qreal height_ratio)
@@ -946,9 +958,10 @@ QRectF dtkComposerNodeControlBlock::minimalBoundingRect(void)
     foreach(dtkComposerNodeProperty *p, d->output_properties)
         prop_rect = prop_rect.united(p->mapRectToParent(p->boundingRect()));
 
-    qreal min_height = 80;
+    qreal min_height = 70;
+    qreal  min_width = 220;
     min_height = prop_rect.height() > min_height ? prop_rect.height() : min_height;
-    QRectF block_rect(this->boundingRect().left(), this->boundingRect().top(), 230, min_height);
+    QRectF block_rect(this->boundingRect().left(), this->boundingRect().top(), min_width, min_height);
 
     QList<dtkComposerNode *> block_nodes = this->nodes();
 

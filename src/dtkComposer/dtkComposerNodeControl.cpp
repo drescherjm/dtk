@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 28 13:34:05 2011 (+0200)
+ * Last-Updated: lun. mai  2 20:11:12 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 518
+ *     Update #: 814
  */
 
 /* Commentary: 
@@ -50,7 +50,8 @@ public:
 public:
     QColor color;
 
-    bool dirty;
+    bool block_added;
+    bool block_removed;
 
     bool running;
 };
@@ -71,11 +72,12 @@ dtkComposerNodeControl::dtkComposerNodeControl(dtkComposerNode *parent) : dtkCom
     this->setKind(dtkComposerNode::Control);
     this->setResizable(true);
     this->setZValue(-2000);
-    this->setSize(400, 400);
+    this->setSize(250, 146);
 
     d->color = Qt::transparent;
 
-    d->dirty = false;
+    d->block_added = false;
+    d->block_removed = false;
     d->running = false;
 }
 
@@ -101,7 +103,7 @@ dtkComposerNodeControlBlock *dtkComposerNodeControl::addBlock(const QString& tit
     
     d->blocks << block;
 
-    d->dirty = true;
+    d->block_added = true;
 
     this->layout();
 
@@ -116,7 +118,7 @@ int dtkComposerNodeControl::removeBlock(dtkComposerNodeControlBlock *block, bool
 
         removed_blocks = d->blocks.removeAll(block); 
         
-        d->dirty = true;
+        d->block_removed = true;
 
         if (clean) {
             delete block;
@@ -492,38 +494,8 @@ void dtkComposerNodeControl::layout(void)
                                       2 * + this->nodeRadius(), 
                                       2 * + this->nodeRadius()));
 
-    if (d->dirty)
+    if (d->block_added || d->block_removed)
         this->resize();
-
-    // for(int i = 0; i < d->blocks.count(); i++) {
-
-    //     d->blocks.at(i)->setRect(QRectF(this->boundingRect().x(),
-    //                                     this->boundingRect().y() + 23 + i * ((this->boundingRect().height() - 46) / d->blocks.count()),
-    //                                     this->boundingRect().width(),
-    //                                     (this->boundingRect().height() - 46) / d->blocks.count()));
-
-    //     for(int j = 0; j < d->blocks.at(i)->inputProperties().count(); j++) {
-
-    //         d->blocks.at(i)->inputProperties().at(j)->setRect(
-    //             QRectF(
-    //                 d->blocks.at(i)->rect().left() + this->nodeRadius(),
-    //                 d->blocks.at(i)->rect().top() + this->nodeRadius() * (4*j + 1),
-    //                 2 * this->nodeRadius(),
-    //                 2 * this->nodeRadius()
-    //                 ));
-    //     }
-
-    //     for(int j = 0; j < d->blocks.at(i)->outputProperties().count(); j++) {
-
-    //         d->blocks.at(i)->outputProperties().at(j)->setRect(
-    //             QRectF(
-    //                 d->blocks.at(i)->rect().right() - 3 * this->nodeRadius(),
-    //                 d->blocks.at(i)->rect().top() + this->nodeRadius() * (4*j + 1),
-    //                 2 * this->nodeRadius(),
-    //                 2 * this->nodeRadius()
-    //             ));
-    //     }
-    // }
 }
 
 void dtkComposerNodeControl::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -580,54 +552,70 @@ void dtkComposerNodeControl::resize(const QPointF& delta)
 
 void dtkComposerNodeControl::resize(qreal dw, qreal dh)
 {
-    qreal dw_min =  this->minimalBoundingRect().width() -  this->boundingRect().width();
-    qreal dh_min = this->minimalBoundingRect().height() - this->boundingRect().height();
+    QRectF mini_rect = this->minimalBoundingRect();
+    QRectF node_rect = this->boundingRect();
+
+    qreal dw_min =  mini_rect.width() -  node_rect.width();
+    qreal dh_min = mini_rect.height() - node_rect.height();
 
     dw = dw > dw_min ? dw : dw_min;
     dh = dh > dh_min ? dh : dh_min;
 
-    this->setSize(this->boundingRect().width() + dw, this->boundingRect().height() + dh);
+    this->setSize(node_rect.width() + dw, node_rect.height() + dh);
 
-    //foreach(dtkComposerNodeControlBlock *block, d->blocks)
-    //    block->adjustChildNodes(dw, dh / d->blocks.count());
+    dh /= d->blocks.count();
+    foreach(dtkComposerNodeControlBlock *block, d->blocks)
+        block->setHeight(block->height() + block->heightRatio() * dh);
 }
 
 void dtkComposerNodeControl::resize(void)
 {
-    if (this->boundingRect().height() < this->minimalBoundingRect().height() && this->boundingRect().width() < this->minimalBoundingRect().width()) {
+    QRectF node_rect = this->boundingRect();
+    QRectF mini_rect = this->minimalBoundingRect();
 
-        this->setPos(this->pos().x(), this->pos().y() - (this->minimalBoundingRect().height() - this->boundingRect().height()));
-        this->setSize(this->minimalBoundingRect().width(), this->minimalBoundingRect().height());
+    if (d->block_added) {
 
-    } else if (this->boundingRect().height() < this->minimalBoundingRect().height()) {
+        if (node_rect.height() < mini_rect.height()) {
 
-        this->setPos(this->pos().x(), this->pos().y() - (this->minimalBoundingRect().height() - this->boundingRect().height()));
-        this->setSize(this->boundingRect().width(), this->minimalBoundingRect().height());
+            this->setPos(this->pos().x(), this->pos().y() - (mini_rect.height() - node_rect.height()));
+            this->setSize(node_rect.width(), mini_rect.height());
+            foreach(dtkComposerNodeControlBlock *block, d->blocks)
+                block->setHeight((mini_rect.height() - 46) / d->blocks.count());
 
-    } else if (this->boundingRect().width() < this->minimalBoundingRect().width()) {
+        } else {
 
-        this->setSize(this->minimalBoundingRect().width(), this->boundingRect().height());
+            foreach(dtkComposerNodeControlBlock *block, d->blocks)
+                block->setHeight((node_rect.height() - 46) / d->blocks.count());
+        }
+
+    } else if (d->block_removed) {
+
+        foreach(dtkComposerNodeControlBlock *block, d->blocks)
+            block->setHeight((node_rect.height() - 46) / d->blocks.count());
+
     }
-
-    d->dirty = false;
+    d->block_added = false;
+    d->block_removed = false;
 }
 
 QRectF dtkComposerNodeControl::minimalBoundingRect(void)
 {
-    qreal min_height = 75;
-    qreal min_width = 200;
+    qreal min_height = 100;
+    qreal  min_width = 250;
+    QRectF node_rect(this->boundingRect().left(), this->boundingRect().top(), min_width, min_height);
 
-    if (d->blocks.count()) {
-        foreach(dtkComposerNodeControlBlock *block, d->blocks) {
-            min_height = min_height > block->minimalBoundingRect().height() ? min_height : block->minimalBoundingRect().height();
-            //min_height +=  block->minimalBoundingRect().height();
-            min_width  =  min_width >  block->minimalBoundingRect().width() ?  min_width :  block->minimalBoundingRect().width();
-        }
-        min_height *= d->blocks.count();
+    QRectF block_rect;
+    foreach(dtkComposerNodeControlBlock *block, d->blocks) {
+        block_rect = block->mapRectToParent(block->minimalBoundingRect());
+        min_height = min_height > block_rect.height() ? min_height : block_rect.height();
+        min_width  =  min_width >  block_rect.width() ?  min_width :  block_rect.width();
     }
-    min_height += 23 + 23; // header + footer
+    min_height *= d->blocks.count();
+    
+    node_rect.setWidth(min_width);
+    node_rect.setHeight(min_height + 46); // Add header and footer
 
-    return QRectF(this->boundingRect().left(), this->boundingRect().top(), min_width, min_height);
+    return node_rect;
 }
 
 void dtkComposerNodeControl::setColor(const QColor& color)

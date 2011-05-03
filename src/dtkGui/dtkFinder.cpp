@@ -426,6 +426,8 @@ dtkFinderPathBar::~dtkFinderPathBar(void)
 void dtkFinderPathBar::setPath(const QString &path)
 {
     d->path = path;
+    foreach(dtkFinderPathBarItem *item, d->items)
+        delete item;
     d->items.clear();
 
     QFileIconProvider provider;

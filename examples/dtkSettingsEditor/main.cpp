@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 {
     QApplication application(argc, argv);
 
-    dtkSettingsEditor *editor = new dtkSettingsEditor;
+    QScopedPointer<dtkSettingsEditor> editor(new dtkSettingsEditor);
     editor->setSettings("inria", "dtk");
     editor->show();
 

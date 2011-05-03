@@ -61,6 +61,21 @@ dtkStandardRedirector *dtkStandardRedirector::s_err = NULL;
 dtkStandardRedirector *dtkStandardRedirector::s_out = NULL;
 dtkStandardRedirector *dtkStandardRedirector::s_log = NULL;
 
+// This class initializes and destroys the redirector instances.
+class dtkStandardRedirectorInitialiser {
+public:
+    dtkStandardRedirectorInitialiser() {
+        dtkStandardRedirector::initialize();
+    }
+    ~dtkStandardRedirectorInitialiser() {
+        dtkStandardRedirector::uninitialize();
+    }
+};
+
+// This has to be performed after s_err, s_out and s_log have been set to NULL. 
+// This should be OK as C++ guarantees that variables in compilation unit are initialized in order of declaration.
+static dtkStandardRedirectorInitialiser initializerInstance;
+
 dtkStandardRedirector::dtkStandardRedirector(std::ostream &stream, Channel channel) : m_stream(stream), m_channel(channel)
 {
     m_string = " ";
@@ -123,8 +138,6 @@ void dtkStandardRedirector::uninitialize(void)
     if (s_out) { delete s_out; s_out = NULL; }
     if (s_log) { delete s_log; s_log = NULL; }
 }
-
-static bool log_initialized = dtkStandardRedirector::initialize();
 
 // /////////////////////////////////////////////////////////////////
 // dtkLog

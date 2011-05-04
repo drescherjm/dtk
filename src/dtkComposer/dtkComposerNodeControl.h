@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:47:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 28 09:46:39 2011 (+0200)
+ * Last-Updated: Wed May  4 09:03:47 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 123
+ *     Update #: 124
  */
 
 /* Commentary: 
@@ -83,6 +83,7 @@ protected:
     QVariant value(void);
 
     dtkComposerNodeProperty *inputProperty(void);
+    void disableInputProperty(void);
 
 protected:
     void setRunning(bool running);

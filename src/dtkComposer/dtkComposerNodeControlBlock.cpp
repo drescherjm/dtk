@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mai  2 20:05:59 2011 (+0200)
+ * Last-Updated: Wed May  4 15:05:36 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 935
+ *     Update #: 945
  */
 
 /* Commentary: 
@@ -23,7 +23,7 @@
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeControlBlock_p.h"
-#include "dtkComposerNodeLoopFor.h"
+#include "dtkComposerNodeLoop.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerScene.h"
 
@@ -725,7 +725,7 @@ QList<dtkComposerNode *> dtkComposerNodeControlBlock::endNodes(void)
         if(!node->outputEdges().count() && node->inputEdges().count())
             nodes << node;
 
-    foreach(dtkComposerEdge *edge, d->parent->outputRelayEdges())
+    foreach(dtkComposerEdge *edge, d->parent->outputRelayRoutes())
         if (edge->destination()->blockedFrom() == this->title() && !nodes.contains(edge->source()->node()))
             nodes << edge->source()->node();
 
@@ -762,7 +762,7 @@ dtkComposerNodeProperty *dtkComposerNodeControlBlock::addInputProperty(QString n
 {
     dtkComposerNodeProperty *property = NULL;
     dtkComposerNodeCase *node_case = dynamic_cast<dtkComposerNodeCase *>(d->parent);
-    dtkComposerNodeLoopFor *node_loop = dynamic_cast<dtkComposerNodeLoopFor *>(d->parent);
+    dtkComposerNodeLoop *node_loop = dynamic_cast<dtkComposerNodeLoop *>(d->parent);
 
     if (node_case) {
 
@@ -810,13 +810,13 @@ dtkComposerNodeProperty *dtkComposerNodeControlBlock::addOutputProperty(QString 
 {
     dtkComposerNodeProperty *property = NULL;
     dtkComposerNodeCase *node_case = NULL;
-    dtkComposerNodeLoopFor *node_loop = NULL;
+    dtkComposerNodeLoop *node_loop = NULL;
 
     if ((node_case = dynamic_cast<dtkComposerNodeCase *>(d->parent)) && (name == "variable")) {
 
         property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, parent);
 
-    } else if (node_loop = dynamic_cast<dtkComposerNodeLoopFor *>(d->parent)) {
+    } else if (node_loop = dynamic_cast<dtkComposerNodeLoop *>(d->parent)) {
 
         if (this->title() == "loop" && name == "variable") {
 
@@ -854,7 +854,7 @@ dtkComposerNodeProperty *dtkComposerNodeControlBlock::addOutputProperty(QString 
 dtkComposerNodeProperty *dtkComposerNodeControlBlock::addInputPassThroughProperty(QString name, dtkComposerNode *parent)
 {
     dtkComposerNodeProperty *property = NULL;
-    dtkComposerNodeLoopFor *node_loop = dynamic_cast<dtkComposerNodeLoopFor *>(d->parent);
+    dtkComposerNodeLoop *node_loop = dynamic_cast<dtkComposerNodeLoop *>(d->parent);
 
     if (node_loop) {
 
@@ -874,7 +874,7 @@ dtkComposerNodeProperty *dtkComposerNodeControlBlock::addInputPassThroughPropert
 dtkComposerNodeProperty *dtkComposerNodeControlBlock::addOutputPassThroughProperty(QString name, dtkComposerNode *parent)
 {
     dtkComposerNodeProperty *property = NULL;
-    dtkComposerNodeLoopFor *node_loop = dynamic_cast<dtkComposerNodeLoopFor *>(d->parent);
+    dtkComposerNodeLoop *node_loop = dynamic_cast<dtkComposerNodeLoop *>(d->parent);
 
     if (node_loop) {
         if (this->title() == "loop") {

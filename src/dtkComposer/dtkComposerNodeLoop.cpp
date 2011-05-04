@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar  7 09:26:54 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 28 11:14:13 2011 (+0200)
+ * Last-Updated: Wed May  4 09:53:02 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 164
+ *     Update #: 166
  */
 
 /* Commentary: 
@@ -141,7 +141,7 @@ bool dtkComposerNodeLoop::dirtyBlockEndNodes(void)
 
 void dtkComposerNodeLoop::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property)
 {
-    if (property == this->inputProperty()) {
+    if (this->inputProperty() && property == this->inputProperty()) {
         
         foreach(dtkComposerEdge *relay_route, this->inputRelayRoutes()) {
             if (relay_route->source()->name() == this->inputProperty()->name()) {
@@ -184,7 +184,7 @@ void dtkComposerNodeLoop::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty
 
 void dtkComposerNodeLoop::push(dtkComposerEdge *o_route, dtkComposerNodeProperty *property)
 {
-    if (property->name() == this->inputProperty()->name() && property->type() == dtkComposerNodeProperty::Output) {
+    if (this->inputProperty() && property->name() == this->inputProperty()->name() && property->type() == dtkComposerNodeProperty::Output) {
         
         dtkComposerEdge *route = new dtkComposerEdge;
         route->setSource(this->inputProperty());

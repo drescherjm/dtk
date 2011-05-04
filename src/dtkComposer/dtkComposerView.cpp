@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:07:37 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Mar 28 13:49:57 2011 (+0200)
+ * Last-Updated: Wed May  4 10:42:49 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 185
+ *     Update #: 186
  */
 
 /* Commentary: 
@@ -75,7 +75,7 @@ void dtkComposerView::wheelEvent(QWheelEvent *event)
 
     qreal factor = this->matrix().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();
 
-    if (factor < 0.1 || factor > 2.)
+    if (factor < 0.1 || factor > 1.25)
         return;
     
     this->scale(scaleFactor, scaleFactor);

@@ -189,7 +189,7 @@ bool dtkAbstractData::read(const QString& file)
     if (read) {
         if (d->path.isEmpty())
             d->path = file;
-        else if (!d->paths.contains(file))
+        if (!d->paths.contains(file))
             d->paths << file;
     }
     return read;

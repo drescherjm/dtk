@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 27 21:25:53 2011 (+0200)
+ * Last-Updated: Tue May  3 17:08:00 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 2360
+ *     Update #: 2366
  */
 
 /* Commentary: 
@@ -330,7 +330,8 @@ void dtkComposerNode::setObject(dtkAbstractObject *object)
 
     d->object = object;
 
-    d->title->setHtml(object->name());
+    if (d->object)
+        d->title->setHtml(object->name());
 }
 
 dtkComposerNode::Kind dtkComposerNode::kind(void)
@@ -1437,19 +1438,20 @@ void dtkComposerNode::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             else
                 delta = QPointF(event->scenePos() - d->drag_point);
 
-            qreal original_width  =  control->boundingRect().width();
-            qreal original_height = control->boundingRect().height();
-            
-            control->resize(delta);
-            
-            if (qAbs(original_height - this->boundingRect().height()) < 1. || qAbs(original_width - this->boundingRect().width()) < 1.)
-                d->drag_point = this->mapRectToScene(this->boundingRect()).bottomRight();
-            else
-                d->drag_point = event->scenePos();
+            if (delta.x() * delta.x() + delta.y() * delta.y() >= 1) {
 
-            event->accept();
-            
-            QGraphicsItem::update();
+                control->resize(delta);
+                d->drag_point = event->scenePos();
+                event->accept();            
+                QGraphicsItem::update();
+
+            } else {
+
+                d->drag_point = this->mapRectToScene(this->boundingRect()).bottomRight();
+                event->accept();          
+                QGraphicsItem::update();
+
+            }
         }
 
         return;

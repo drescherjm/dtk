@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:54:04 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 19:17:33 2011 (+0100)
+ * Last-Updated: Thu May  5 09:23:13 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 171
+ *     Update #: 178
  */
 
 /* Commentary:
@@ -132,6 +132,11 @@ void dtkAbstractObject::setProperty(const QString& key, const QString& value)
     emit propertySet(key, value);
 }
 
+QStringList dtkAbstractObject::propertyList(void) const
+{
+    return d->properties.keys();
+}
+
 QStringList dtkAbstractObject::propertyValues(const QString& key) const
 {
     if(d->values.contains(key))
@@ -201,6 +206,11 @@ void dtkAbstractObject::setMetaData(const QString& key, const QString& value)
     onMetaDataSet(key, value);
 
     emit metaDataSet(key, value);
+}
+
+QStringList dtkAbstractObject::metaDataList(void) const
+{
+    return d->metadatas.keys();
 }
 
 QStringList dtkAbstractObject::metaDataValues(const QString& key) const

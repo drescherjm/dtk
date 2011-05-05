@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Feb  7 10:09:07 2011 (+0100)
+## Last-Updated: Fri Apr 29 12:27:59 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 269
+##     Update #: 276
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,21 +24,15 @@ project(dtkVr)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkVrArtController.h
-  dtkVrController.h
   dtkVrDevice.h
   dtkVrExport.h
   dtkVrFlystickRecognizer.h
   dtkVrGestureRecognizer.h
   dtkVrHeadRecognizer.h
   dtkVrScreen.h
-  dtkVrTracker.h
-  dtkVrUser.h
-  dtkVrWand.h)
+  dtkVrTracker.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
-  dtkVrArtController.h
-  dtkVrController.h
   dtkVrDevice.h
   dtkVrFlystickRecognizer.h
   dtkVrFlystickRecognizer_p.h
@@ -46,21 +40,15 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkVrGestureRecognizer_p.h
   dtkVrHeadRecognizer.h
   dtkVrHeadRecognizer_p.h
-  dtkVrTracker.h
-  dtkVrUser.h
-  dtkVrWand.h)
+  dtkVrTracker.h)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkVrArtController.cpp
-  dtkVrController.cpp
   dtkVrDevice.cpp
   dtkVrFlystickRecognizer.cpp
   dtkVrGestureRecognizer.cpp
   dtkVrHeadRecognizer.cpp
   dtkVrScreen.cpp
-  dtkVrTracker.cpp
-  dtkVrUser.cpp
-  dtkVrWand.cpp)
+  dtkVrTracker.cpp)
 
 ## #################################################################
 ## Vrpn sources

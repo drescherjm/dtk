@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 10:03:10 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  2 16:12:17 2010 (+0100)
+ * Last-Updated: Thu May  5 09:17:17 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 596
+ *     Update #: 598
  */
 
 /* Commentary: 
@@ -19,8 +19,6 @@
 
 #include "dtkVrScreen.h"
 #include "dtkVrSlave.h"
-#include "dtkVrUser.h"
-#include "dtkVrWand.h"
 
 #include <dtkCore/dtkAbstractView.h>
 #include <dtkCore/dtkGlobal.h>
@@ -123,109 +121,109 @@ void dtkVrSlave::process(void)
 {
     // Wand management /////////////////////////////////////////////////////////////////
 
-    static bool dirty = true;
-    static bool dirty2 = false;
-    static dtkVec3 initialPosition;
-    static dtkQuat initialOrientation;
-    static dtkVec3 magic;
+    // static bool dirty = true;
+    // static bool dirty2 = false;
+    // static dtkVec3 initialPosition;
+    // static dtkQuat initialOrientation;
+    // static dtkVec3 magic;
     
-    this->setupWandPosition(this->wand()->currentPosition());
-    this->setupWandOrientation(this->wand()->currentOrientation());
+    // this->setupWandPosition(this->wand()->currentPosition());
+    // this->setupWandOrientation(this->wand()->currentOrientation());
 
-    if(this->wand()->action() == dtkVrWand::dtkVrWandPicking && this->wand()->mode() == dtkVrWand::dtkVrWandNavigation) {
+    // if(this->wand()->action() == dtkVrWand::dtkVrWandPicking && this->wand()->mode() == dtkVrWand::dtkVrWandNavigation) {
         
-        if(dirty) {
-            initialPosition = this->scenePosition();
-            initialOrientation = this->sceneOrientation();
-            dirty = false;
-            dirty2 = true;
-        }
+    //     if(dirty) {
+    //         initialPosition = this->scenePosition();
+    //         initialOrientation = this->sceneOrientation();
+    //         dirty = false;
+    //         dirty2 = true;
+    //     }
 
-        dtkVec3 wp  = this->wand()->currentPosition();
-        dtkVec3 wp0 = this->wand()->referencePosition();
-        dtkQuat wq  = this->wand()->currentOrientation();
-        dtkQuat wq0 = this->wand()->referenceOrientation();
-        dtkVec3 sp0 = initialPosition;
-        dtkQuat sq0 = initialOrientation;
+    //     dtkVec3 wp  = this->wand()->currentPosition();
+    //     dtkVec3 wp0 = this->wand()->referencePosition();
+    //     dtkQuat wq  = this->wand()->currentOrientation();
+    //     dtkQuat wq0 = this->wand()->referenceOrientation();
+    //     dtkVec3 sp0 = initialPosition;
+    //     dtkQuat sq0 = initialOrientation;
 
-        dtkVec3 dt  = wp - wp0;
-        dtkQuat dq  = wq * wq0.inv();
+    //     dtkVec3 dt  = wp - wp0;
+    //     dtkQuat dq  = wq * wq0.inv();
 
-        this->setupSceneOrientation(dq * sq0);
-        this->setupScenePosition(dq.inv().rotate(sp0 + wp - wp0) - dq.inv().rotate(wp) + wp);
-    }
+    //     this->setupSceneOrientation(dq * sq0);
+    //     this->setupScenePosition(dq.inv().rotate(sp0 + wp - wp0) - dq.inv().rotate(wp) + wp);
+    // }
 
-    if(this->wand()->action() == dtkVrWand::dtkVrWandNone && this->wand()->mode() == dtkVrWand::dtkVrWandNavigation) {
+    // if(this->wand()->action() == dtkVrWand::dtkVrWandNone && this->wand()->mode() == dtkVrWand::dtkVrWandNavigation) {
 
-        if(dirty2) {
-            dirty = true;
-            dirty2 = false;            
-        }
+    //     if(dirty2) {
+    //         dirty = true;
+    //         dirty2 = false;            
+    //     }
 
-    }
+    // }
 
-    // User management /////////////////////////////////////////////////////////////////
+    // // User management /////////////////////////////////////////////////////////////////
 
-    dtkVec3 eye(this->user()->position());
+    // dtkVec3 eye(this->user()->position());
 
-    double focusDist = 5;
-    dtkVec3 halfEyeDist(0.035, 0, 0);
+    // double focusDist = 5;
+    // dtkVec3 halfEyeDist(0.035, 0, 0);
 
-    double x0   = (eye - d->screen->lowerLeft()) * d->screen->right();
-    double y0   = (eye - d->screen->lowerLeft()) * d->screen->up();
-    dtkVec3 center = d->screen->lowerLeft() + d->screen->right() * x0 + d->screen->up() * y0;
-    double dist = (eye - center).length();
-    dtkVec3 focusPoint = eye + (center-eye)/dist*focusDist;
+    // double x0   = (eye - d->screen->lowerLeft()) * d->screen->right();
+    // double y0   = (eye - d->screen->lowerLeft()) * d->screen->up();
+    // dtkVec3 center = d->screen->lowerLeft() + d->screen->right() * x0 + d->screen->up() * y0;
+    // double dist = (eye - center).length();
+    // dtkVec3 focusPoint = eye + (center-eye)/dist*focusDist;
     
-    if (!qApp->arguments().contains("--stereo")) {
+    // if (!qApp->arguments().contains("--stereo")) {
 
-        this->setupCameraLookAt(eye, focusPoint, d->screen->up());
+    //     this->setupCameraLookAt(eye, focusPoint, d->screen->up());
         
-        double near   = 1e-2;
-        double far    = 1e2;
-        double left   = -x0 * near / dist;
-        double bottom = -y0 * near / dist;
-        double right  =  (d->screen->width() - x0) * near / dist;
-        double top    = (d->screen->height() - y0) * near / dist;
+    //     double near   = 1e-2;
+    //     double far    = 1e2;
+    //     double left   = -x0 * near / dist;
+    //     double bottom = -y0 * near / dist;
+    //     double right  =  (d->screen->width() - x0) * near / dist;
+    //     double top    = (d->screen->height() - y0) * near / dist;
         
-        this->setupCameraFrustum(left, right, bottom, top, near, far);
+    //     this->setupCameraFrustum(left, right, bottom, top, near, far);
 
-    } else {
+    // } else {
 
-        dtkVec3 leftEye = eye + this->user()->orientation().rotate(-halfEyeDist);
-        double x0   = (leftEye - d->screen->lowerLeft()) * d->screen->right();
-        double y0   = (leftEye - d->screen->lowerLeft()) * d->screen->up();
-        dtkVec3 center = d->screen->lowerLeft() + d->screen->right() * x0 + d->screen->up() * y0;
-        double dist = (leftEye - center).length();
+    //     dtkVec3 leftEye = eye + this->user()->orientation().rotate(-halfEyeDist);
+    //     double x0   = (leftEye - d->screen->lowerLeft()) * d->screen->right();
+    //     double y0   = (leftEye - d->screen->lowerLeft()) * d->screen->up();
+    //     dtkVec3 center = d->screen->lowerLeft() + d->screen->right() * x0 + d->screen->up() * y0;
+    //     double dist = (leftEye - center).length();
 
-        this->setupLeftEyeCameraLookAt(leftEye, focusPoint, d->screen->up());
+    //     this->setupLeftEyeCameraLookAt(leftEye, focusPoint, d->screen->up());
         
-        double near   = 1e-2;
-        double far    = 1e2;
-        double left   = -x0 * near / dist;
-        double bottom = -y0 * near / dist;
-        double right  =  (d->screen->width() - x0) * near / dist;
-        double top    = (d->screen->height() - y0) * near / dist;
+    //     double near   = 1e-2;
+    //     double far    = 1e2;
+    //     double left   = -x0 * near / dist;
+    //     double bottom = -y0 * near / dist;
+    //     double right  =  (d->screen->width() - x0) * near / dist;
+    //     double top    = (d->screen->height() - y0) * near / dist;
         
-        this->setupLeftEyeCameraFrustum(left, right, bottom, top, near, far);        
+    //     this->setupLeftEyeCameraFrustum(left, right, bottom, top, near, far);        
         
-        dtkVec3 rightEye = eye + this->user()->orientation().rotate(halfEyeDist);
-        x0   = (rightEye - d->screen->lowerLeft()) * d->screen->right();
-        y0   = (rightEye - d->screen->lowerLeft()) * d->screen->up();
-        center = d->screen->lowerLeft() + d->screen->right() * x0 + d->screen->up() * y0;
-        dist = (rightEye - center).length();
+    //     dtkVec3 rightEye = eye + this->user()->orientation().rotate(halfEyeDist);
+    //     x0   = (rightEye - d->screen->lowerLeft()) * d->screen->right();
+    //     y0   = (rightEye - d->screen->lowerLeft()) * d->screen->up();
+    //     center = d->screen->lowerLeft() + d->screen->right() * x0 + d->screen->up() * y0;
+    //     dist = (rightEye - center).length();
         
-        this->setupRightEyeCameraLookAt(rightEye, focusPoint, d->screen->up());
+    //     this->setupRightEyeCameraLookAt(rightEye, focusPoint, d->screen->up());
         
-        near   = 1e-2;
-        far    = 1e2;
-        left   = -x0 * near / dist;
-        bottom = -y0 * near / dist;
-        right  =  (d->screen->width() - x0) * near / dist;
-        top    = (d->screen->height() - y0) * near / dist;
+    //     near   = 1e-2;
+    //     far    = 1e2;
+    //     left   = -x0 * near / dist;
+    //     bottom = -y0 * near / dist;
+    //     right  =  (d->screen->width() - x0) * near / dist;
+    //     top    = (d->screen->height() - y0) * near / dist;
         
-        this->setupRightEyeCameraFrustum(left, right, bottom, top, near, far);
-    }
+    //     this->setupRightEyeCameraFrustum(left, right, bottom, top, near, far);
+    // }
     
     d->view->update();
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 10 21:08:39 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 24 19:18:59 2010 (+0100)
+ * Last-Updated: Fri Apr 29 12:31:42 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 73
+ *     Update #: 75
  */
 
 /* Commentary: 
@@ -24,8 +24,6 @@
 
 class dtkDistributedCommunicator;
 class dtkVrDevice;
-class dtkVrUser;
-class dtkVrWand;
 class dtkVrProcessPrivate;
 
 class dtkVrProcess : public QObject
@@ -48,9 +46,6 @@ public:
     int size(void) const;
 
     bool running(void);
-    
-    dtkVrUser *user(void);
-    dtkVrWand *wand(void);
 
 protected:
     virtual void process(void) = 0;

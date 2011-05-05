@@ -1,12 +1,12 @@
-/* dtkComposerNodeLoopFor.cpp --- 
+/* dtkComposerNodeLoopWhile.cpp --- 
  * 
- * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Mon Feb 28 13:03:58 2011 (+0100)
+ * Author: Thibaud Kloczko
+ * Copyright (C) 2011 - Thibaud Kloczko, Inria.
+ * Created: Wed May  4 08:51:21 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May  4 10:47:59 2011 (+0200)
+ * Last-Updated: Wed May  4 15:04:07 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 263
+ *     Update #: 30
  */
 
 /* Commentary: 
@@ -19,84 +19,60 @@
 
 #include "dtkComposerEdge.h"
 #include "dtkComposerNodeControlBlock.h"
-#include "dtkComposerNodeLoopFor.h"
+#include "dtkComposerNodeLoopWhile.h"
 #include "dtkComposerNodeNumber.h"
 #include "dtkComposerNodeProperty.h"
 
 #include <dtkCore/dtkGlobal.h>
 
-// #define DTK_DEBUG_COMPOSER_INTERACTION 1
 // #define DTK_DEBUG_COMPOSER_EVALUATION 1
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeLoopPrivate declaration
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNodeLoopForPrivate
+class dtkComposerNodeLoopWhilePrivate
 {
 public:
     dtkComposerNodeControlBlock *block_cond;
     dtkComposerNodeControlBlock *block_loop;
-    dtkComposerNodeControlBlock *block_post;
 
     dtkComposerNode *node_cond;
-    dtkComposerNode *node_post;
-
     dtkComposerNodeProperty *prop_cond;
-    dtkComposerNodeProperty *prop_post;
-
-public:
-    QVariant loop_variable;
-    QVariant loop_variable_old;
 };
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeLoop implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNodeLoopFor::dtkComposerNodeLoopFor(dtkComposerNode *parent) : dtkComposerNodeLoop(parent), d(new dtkComposerNodeLoopForPrivate)
+dtkComposerNodeLoopWhile::dtkComposerNodeLoopWhile(dtkComposerNode *parent) : dtkComposerNodeLoop(parent), d(new dtkComposerNodeLoopWhilePrivate)
 {
     d->block_cond = this->addBlock("condition");
     d->block_cond->setInteractive(true);
     d->block_cond->setHeightRatio(0.95);
-    this->addInputProperty(d->block_cond->addInputProperty("variable", this));
     this->addOutputProperty(d->block_cond->addOutputProperty("condition", this));
 
     d->block_loop = this->addBlock("loop");
     d->block_loop->setInteractive(true);
-    d->block_loop->setHeightRatio(1.1);
-    this->addInputProperty(d->block_loop->addInputProperty("variable", this));
-    this->addOutputProperty(d->block_loop->addOutputProperty("variable", this));
+    d->block_loop->setHeightRatio(1.05);
 
-    d->block_post = this->addBlock("post");
-    d->block_post->setInteractive(true);
-    d->block_post->setHeightRatio(0.95);
-    this->addInputProperty(d->block_post->addInputProperty("variable", this));
-    this->addOutputProperty(d->block_post->addOutputProperty("variable", this));
-
-    this->setColor(QColor("#005b07"));
-    this->setInputPropertyName("variable");
-    this->setTitle("For Loop");
-    this->setType("dtkComposerLoopFor");
+    this->disableInputProperty();
+    this->setColor(QColor("#30DC7B"));
+    this->setTitle("While Loop");
+    this->setType("dtkComposerLoopWhile");
 
     d->node_cond = NULL;
-    d->node_post = NULL;
-
     d->prop_cond = NULL;
-    d->prop_post = NULL;
-
-    d->loop_variable = QVariant();
-    d->loop_variable_old = QVariant();
 }
 
-dtkComposerNodeLoopFor::~dtkComposerNodeLoopFor(void)
+dtkComposerNodeLoopWhile::~dtkComposerNodeLoopWhile(void)
 {
     delete d;
 
     d = NULL;
 }
 
-void dtkComposerNodeLoopFor::layout(void)
+void dtkComposerNodeLoopWhile::layout(void)
 {
     dtkComposerNodeControl::layout();
 
@@ -115,7 +91,7 @@ void dtkComposerNodeLoopFor::layout(void)
 
         offset += block->rect().height();
 
-        j = 0;
+        j = 1;
         foreach(dtkComposerNodeProperty *property, block->inputProperties()) {
 
             property->setRect(QRectF(block->mapRectToParent(block->rect()).left() + node_radius,
@@ -126,12 +102,13 @@ void dtkComposerNodeLoopFor::layout(void)
             if (property->type() == dtkComposerNodeProperty::Output)
                 property->mirror();
 
-            if (property->name() == "variable")
-                j++;
-
             j++;
         }
-        j = 0;
+        
+        if (block == d->block_cond)
+            j = 0;
+        else
+            j = 1;
         foreach(dtkComposerNodeProperty *property, block->outputProperties()) {
 
             property->setRect(QRectF(block->mapRectToParent(block->rect()).right() - node_radius * 3,
@@ -139,47 +116,26 @@ void dtkComposerNodeLoopFor::layout(void)
                                      2 * node_radius,
                                      2 * node_radius ));
 
-            if (property->type() == dtkComposerNodeProperty::Input)
-                property->mirror();    
-
-            if (property->name() == "variable" || property->name() == "condition") 
+            if (property->name() == "condition") {
+                property->mirror();
                 j++;
+            }
 
             j++;
         }
     }     
 }
 
-void dtkComposerNodeLoopFor::update(void)
+void dtkComposerNodeLoopWhile::update(void)
 {
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
     
-    if (!this->isPreRunning() && !this->isRunning() && !this->isPostRunning()) {
+    if (!this->isPreRunning() && !this->isRunning()) {
 
         if (!this->dirty())
             return;
-
-        // -- Check dirty input value
-
-        if (this->dirtyInputValue())
-            return;
-
-#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-        qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "Dirty input value OK" << DTK_NO_COLOR;
-#endif
-
-        // -- Retrieve input value
-
-        d->loop_variable = dtkComposerNodeControl::value();
-
-        if (!d->loop_variable.isValid())
-            return;
-
-#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-        qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "Input value valid" << DTK_NO_COLOR;
-#endif
 
         // -- Check dirty inputs
 
@@ -213,14 +169,8 @@ void dtkComposerNodeLoopFor::update(void)
                     d->node_cond = o_route->source()->node();
                     d->prop_cond = o_route->source();
                 }
-            } else if (o_route->destination()->blockedFrom() == d->block_post->title()) {
-                if (o_route->destination()->name() == "variable") {
-                    d->node_post = o_route->source()->node();
-                    d->prop_post = o_route->source();
-                }
             }
-        }  
-        
+        }
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
         qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Pull done" << DTK_NO_COLOR;
@@ -257,7 +207,7 @@ void dtkComposerNodeLoopFor::update(void)
 
                 this->setCurrentBlock(d->block_loop);
                 this->setRunning(true);
-                this->setPostRunning(false);
+                this->setPreRunning(false);
                 this->run();
                 this->update();
 
@@ -267,35 +217,12 @@ void dtkComposerNodeLoopFor::update(void)
                 qDebug() << DTK_COLOR_BG_RED  << "Condition is no more fulfilled" << DTK_NO_COLOR;
 #endif
 
-                d->loop_variable = d->loop_variable_old;
                 this->setPreRunning(true);
                 this->setRunning(true);
-                this->setPostRunning(true);
                 this->update();
 
             }
 
-        } else if (!this->isPostRunning()) {
-
-            if (this->dirtyBlockEndNodes())
-                return;
-
-            foreach(dtkComposerNode *node, this->currentBlock()->nodes())
-                if(!node->outputEdges().count() && node->inputEdges().count() && node->dirty())
-                    return;
-
-#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-            qDebug() << DTK_COLOR_BG_RED  << "Running Post block" << DTK_NO_COLOR;
-#endif
-                
-            d->loop_variable_old = d->loop_variable;
-            this->updatePassThroughVariables();
-            this->setCurrentBlock(d->block_post);
-            this->setPostRunning(true);
-            this->setPreRunning(false);
-            this->run();
-            this->update();
-            
         } else if (!this->isPreRunning()) {
 
             if (this->dirtyBlockEndNodes())
@@ -305,8 +232,7 @@ void dtkComposerNodeLoopFor::update(void)
             qDebug() << DTK_COLOR_BG_RED  << "Running Condition block" << DTK_NO_COLOR;
 #endif
             
-            d->loop_variable = d->node_post->value(d->prop_post);
-            
+            this->updatePassThroughVariables();
             this->setCurrentBlock(d->block_cond);
             this->setPreRunning(true);
             this->setRunning(false);
@@ -337,7 +263,6 @@ void dtkComposerNodeLoopFor::update(void)
             this->setDirty(false);
             this->setPreRunning(false);
             this->setRunning(false);
-            this->setPostRunning(false);
             
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
             qDebug() << DTK_COLOR_BG_BLUE << DTK_PRETTY_FUNCTION << "Forward done" << DTK_NO_COLOR;
@@ -348,15 +273,4 @@ void dtkComposerNodeLoopFor::update(void)
             
         }
     }
-}
-    
-QVariant dtkComposerNodeLoopFor::value(dtkComposerNodeProperty *property)
-{
-    QVariant value;
-    if (property == this->inputProperty())
-        value = d->loop_variable;
-    else
-        value = dtkComposerNodeLoop::value(property);
-
-    return value;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: lun. mai  2 19:58:53 2011 (+0200)
+ * Last-Updated: Tue May  3 17:08:00 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 2365
+ *     Update #: 2366
  */
 
 /* Commentary: 
@@ -330,7 +330,8 @@ void dtkComposerNode::setObject(dtkAbstractObject *object)
 
     d->object = object;
 
-    d->title->setHtml(object->name());
+    if (d->object)
+        d->title->setHtml(object->name());
 }
 
 dtkComposerNode::Kind dtkComposerNode::kind(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 26 16:30:32 2011 (+0200)
+ * Last-Updated: Wed May  4 10:49:16 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 398
+ *     Update #: 402
  */
 
 /* Commentary: 
@@ -466,6 +466,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
             
             QDomElement block_element = document.createElement("block");
             block_element.setAttribute("title", block->title());
+            block_element.setAttribute("h", QString::number(block->height()));
 
             foreach(dtkComposerNode *block_node, block->nodes())
                 this->writeNode(block_node, block_element, document);

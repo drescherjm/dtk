@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 10 21:08:39 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr 29 12:31:42 2011 (+0200)
+ * Last-Updated: Mon May  9 14:47:37 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 75
+ *     Update #: 78
  */
 
 /* Commentary: 
@@ -23,7 +23,6 @@
 #include <QtCore>
 
 class dtkDistributedCommunicator;
-class dtkVrDevice;
 class dtkVrProcessPrivate;
 
 class dtkVrProcess : public QObject
@@ -50,6 +49,7 @@ public:
 protected:
     virtual void process(void) = 0;
 
+protected:
     void broadcast(void);
     void synchronize(void);
 

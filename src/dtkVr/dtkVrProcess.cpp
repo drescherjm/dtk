@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 10 21:11:31 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May  5 09:16:22 2011 (+0200)
+ * Last-Updated: Mon May  9 14:49:56 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 174
+ *     Update #: 178
  */
 
 /* Commentary: 
@@ -21,8 +21,6 @@
 #include "dtkVrSlave.h"
 
 #include <dtkCore/dtkLog.h>
-#include <dtkCore/dtkVec3.h>
-#include <dtkCore/dtkQuat.h>
 
 #include <dtkDistributed/dtkDistributedCommunicator.h>
 
@@ -109,21 +107,6 @@ bool dtkVrProcess::running(void)
 void dtkVrProcess::broadcast(void)
 {
     char status[1]; status[0] = d->running;
-
-    // d->communicator->broadcast(&status, 1, dtkDistributedCommunicator::dtkDistributedCommunicatorChar, 0);
-
-    // d->communicator->broadcast(d->user->position().values(), 3, dtkDistributedCommunicator::dtkDistributedCommunicatorDouble, 0);
-    // d->communicator->broadcast(d->user->orientation().values(), 4, dtkDistributedCommunicator::dtkDistributedCommunicatorDouble, 0);
-
-    // d->communicator->broadcast(&(d->wand->action()), 1, dtkDistributedCommunicator::dtkDistributedCommunicatorInt, 0);
-
-    // d->communicator->broadcast(&(d->wand->mode()), 1, dtkDistributedCommunicator::dtkDistributedCommunicatorInt, 0);
-
-    // d->communicator->broadcast(d->wand->referencePosition().values(), 3, dtkDistributedCommunicator::dtkDistributedCommunicatorDouble, 0);
-    // d->communicator->broadcast(d->wand->referenceOrientation().values(), 4, dtkDistributedCommunicator::dtkDistributedCommunicatorDouble, 0);
-
-    // d->communicator->broadcast(d->wand->currentPosition().values(), 3, dtkDistributedCommunicator::dtkDistributedCommunicatorDouble, 0);
-    // d->communicator->broadcast(d->wand->currentOrientation().values(), 4, dtkDistributedCommunicator::dtkDistributedCommunicatorDouble, 0);
 
     d->running = status[0];
 }

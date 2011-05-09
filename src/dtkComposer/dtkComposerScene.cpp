@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 26 13:00:24 2011 (+0200)
+ * Last-Updated: Thu May  5 13:27:05 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 2660
+ *     Update #: 2661
  */
 
 /* Commentary: 
@@ -689,10 +689,10 @@ void dtkComposerScene::startEvaluation(void)
     //     else
     //         node->setDirty(true);
 
-    foreach(dtkComposerNode *node, this->nodes()) {
-        node->setActive(false);
-        node->setDirty(true);
-    }
+    // foreach(dtkComposerNode *node, this->nodes()) {
+    //     node->setActive(false);
+    //     node->setDirty(true);
+    // }
 
     if (this->selectedItems().count()) {
         foreach(QGraphicsItem *item, this->selectedItems()) {

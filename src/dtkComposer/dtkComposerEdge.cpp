@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 27 19:59:58 2011 (+0200)
+ * Last-Updated: Wed May  4 15:00:04 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 415
+ *     Update #: 416
  */
 
 /* Commentary: 
@@ -201,6 +201,8 @@ bool dtkComposerEdge::link(bool anyway)
             d->destination->node()->addOutputRelayEdge(this, d->destination);
         else
             d->destination->node()->addInputEdge(this, d->destination);
+        
+        d->destination->node()->onEdgeConnected(this);
 
         return true;
     }

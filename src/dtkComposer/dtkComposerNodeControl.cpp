@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mai  2 20:11:12 2011 (+0200)
+ * Last-Updated: Wed May  4 14:49:28 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 814
+ *     Update #: 825
  */
 
 /* Commentary: 
@@ -313,9 +313,16 @@ QVariant dtkComposerNodeControl::value(void)
             return i_route->source()->node()->value(i_route->source());
 }
 
-dtkComposerNodeProperty * dtkComposerNodeControl::inputProperty(void)
+dtkComposerNodeProperty *dtkComposerNodeControl::inputProperty(void)
 {
     return d->property_input;
+}
+
+void dtkComposerNodeControl::disableInputProperty(void)
+{
+    this->removeInputProperty(d->property_input);
+    delete d->property_input;
+    d->property_input = NULL;
 }
 
 void dtkComposerNodeControl::setRunning(bool running)
@@ -331,7 +338,7 @@ void dtkComposerNodeControl::setCurrentBlock(dtkComposerNodeControlBlock *block)
 bool dtkComposerNodeControl::dirtyInputValue(void)
 {
     foreach(dtkComposerEdge *i_route, this->inputRoutes()) {
-        if (i_route->destination() == this->inputProperty()) {
+        if (i_route->destination() == d->property_input) {
             if(dtkComposerNodeLoop *loop = dynamic_cast<dtkComposerNodeLoop *>(i_route->source()->node())) {
 
                 if(this->isChildOf(loop)) {
@@ -489,13 +496,13 @@ void dtkComposerNodeControl::layout(void)
 {
     dtkComposerNode::layout();
 
-    d->property_input->setRect(QRectF(this->boundingRect().left() + this->nodeRadius(), 
-                                      this->boundingRect().top()  + this->nodeRadius(), 
-                                      2 * + this->nodeRadius(), 
-                                      2 * + this->nodeRadius()));
+    if (d->property_input)
+        d->property_input->setRect(QRectF(this->boundingRect().left() + this->nodeRadius(), 
+                                          this->boundingRect().top()  + this->nodeRadius(), 
+                                          2 * + this->nodeRadius(), 
+                                          2 * + this->nodeRadius()));
 
-    if (d->block_added || d->block_removed)
-        this->resize();
+    this->resize();
 }
 
 void dtkComposerNodeControl::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -570,10 +577,10 @@ void dtkComposerNodeControl::resize(qreal dw, qreal dh)
 
 void dtkComposerNodeControl::resize(void)
 {
-    QRectF node_rect = this->boundingRect();
-    QRectF mini_rect = this->minimalBoundingRect();
-
     if (d->block_added) {
+
+        QRectF node_rect = this->boundingRect();
+        QRectF mini_rect = this->minimalBoundingRect();
 
         if (node_rect.height() < mini_rect.height()) {
 
@@ -588,14 +595,17 @@ void dtkComposerNodeControl::resize(void)
                 block->setHeight((node_rect.height() - 46) / d->blocks.count());
         }
 
+        d->block_added = false;
+
     } else if (d->block_removed) {
+
+        QRectF node_rect = this->boundingRect();
 
         foreach(dtkComposerNodeControlBlock *block, d->blocks)
             block->setHeight((node_rect.height() - 46) / d->blocks.count());
 
+        d->block_removed = false;
     }
-    d->block_added = false;
-    d->block_removed = false;
 }
 
 QRectF dtkComposerNodeControl::minimalBoundingRect(void)

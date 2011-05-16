@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 10 21:06:57 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  2 14:15:51 2010 (+0100)
+ * Last-Updated: Mon May  9 14:45:37 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 67
+ *     Update #: 68
  */
 
 /* Commentary: 
@@ -51,23 +51,6 @@ public:
 
 protected:
     void process(void);
-
-    dtkVec3 scenePosition(void) const;
-    dtkQuat sceneOrientation(void) const;
-
-    void setupWandPosition(const dtkVec3& position);
-    void setupWandOrientation(const dtkQuat& orientation);
-
-    void setupScenePosition(const dtkVec3& position);
-    void setupSceneOrientation(const dtkQuat& orientation);
-
-    void         setupCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up);
-    void  setupLeftEyeCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up);
-    void setupRightEyeCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up);
-
-    void         setupCameraFrustum(double left, double right, double bottom, double top, double near, double far);
-    void  setupLeftEyeCameraFrustum(double left, double right, double bottom, double top, double near, double far);
-    void setupRightEyeCameraFrustum(double left, double right, double bottom, double top, double near, double far);
 
 private:
     dtkVrSlavePrivate *d;

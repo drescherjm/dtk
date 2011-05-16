@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 10:09:51 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  2 15:13:49 2010 (+0100)
+ * Last-Updated: Mon May  9 14:43:57 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 81
+ *     Update #: 86
  */
 
 /* Commentary: 
@@ -33,9 +33,6 @@ class dtkVrManagerPrivate
 public:
     bool stereo;
 
-    QUrl device;
-    QUrl tracker;
-
     dtkDistributedCommunicatorMpi *communicator;
 };
 
@@ -55,16 +52,6 @@ void dtkVrManager::initialize(void)
 void dtkVrManager::uninitialize(void)
 {
     d->communicator->uninitialize();
-}
-
-void dtkVrManager::setTracker(const QUrl& url)
-{
-    d->tracker = url;
-}
-
-void dtkVrManager::setDevice(const QUrl& url)
-{
-    d->device = url;
 }
 
 void dtkVrManager::setStereo(bool on)
@@ -87,10 +74,6 @@ dtkVrProcess *dtkVrManager::create(QString type)
         dynamic_cast <dtkVrSlave *>(process)->setStereo(d->stereo);
     } else {
         process = new dtkVrMaster(d->communicator);
-        if(d->tracker.isValid())
-            dynamic_cast <dtkVrMaster *>(process)->setTracker(d->tracker);
-        if(d->device.isValid())
-            dynamic_cast <dtkVrMaster *>(process)->setDevice(d->device);
     }
 
     return process;

@@ -839,15 +839,15 @@ bool DTrack2::receive(void)
                     return false;
                 }
 
-                strcpy(sfmt, "");
+                strcpy_s(sfmt, "");
                 j = 0;
                 while(j < act_flystick[i].num_button){
-                    strcat(sfmt, "i");
+                    strcat_s(sfmt, "i");
                     j += 32;
                 }
                 j = 0;
                 while(j < act_flystick[i].num_joystick){
-                    strcat(sfmt, "f");
+                    strcat_s(sfmt, "f");
                     j++;
                 }
 				
@@ -1524,7 +1524,7 @@ int DTrack2::cmd_sendreceive(const char* cmd, char* res)
             set_server_neterror();
         }
 
-        strcpy(res, "");
+        strcpy_s(res, "");
         return len;
     }
 	

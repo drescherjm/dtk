@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May  5 13:27:05 2011 (+0200)
+ * Last-Updated: Tue May 17 11:38:26 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 2661
+ *     Update #: 2662
  */
 
 /* Commentary: 
@@ -993,9 +993,12 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
     // Item deletion - Delete | Backspace
 
     if ((event->key() == Qt::Key_Backspace || event->key() == Qt::Key_Delete) && (event->modifiers() & Qt::ControlModifier))
-        foreach(QGraphicsItem *item, this->selectedItems())
+        foreach(QGraphicsItem *item, this->selectedItems()) {
             if (dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item))
                 this->removeNode(node);
+            if (dtkComposerNote *note = dynamic_cast<dtkComposerNote *>(item))
+                this->removeNote(note);
+        }
 
     // Item Copy - Ctrl + C
 

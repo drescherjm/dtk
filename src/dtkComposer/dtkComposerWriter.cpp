@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May  4 10:49:16 2011 (+0200)
+ * Last-Updated: Wed May 18 10:08:00 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 402
+ *     Update #: 408
  */
 
 /* Commentary: 
@@ -215,40 +215,38 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
         QDomText text;
         QString value;
 
-        dtkComposerNodeNumber::Genre genre =  number_node->genre();
-
-        switch (genre) {
+        switch (number_node->value().userType()) {
         case (dtkComposerNodeNumber::Int):
             text = document.createTextNode("int");
-            value = QString::number(number_node->number().toInt());
+            value = QString::number(number_node->value().toInt());
             break;        
         case (dtkComposerNodeNumber::UInt):
             text = document.createTextNode("uint");
-            value = QString::number(number_node->number().toUInt());
+            value = QString::number(number_node->value().toUInt());
             break;
         case (dtkComposerNodeNumber::Long):
             text = document.createTextNode("long");
-            value = QString::number((long)number_node->number().toLongLong());
+            value = QString::number((long)number_node->value().toLongLong());
             break;
         case (dtkComposerNodeNumber::ULong):
             text = document.createTextNode("ulong");
-            value = QString::number((ulong)number_node->number().toULongLong());
+            value = QString::number((ulong)number_node->value().toULongLong());
             break;
         case (dtkComposerNodeNumber::LongLong):
             text = document.createTextNode("longlong");
-            value = QString::number(number_node->number().toLongLong());
+            value = QString::number(number_node->value().toLongLong());
             break;
         case (dtkComposerNodeNumber::ULongLong):
             text = document.createTextNode("ulonglong");
-            value = QString::number(number_node->number().toULongLong());
+            value = QString::number(number_node->value().toULongLong());
             break;
         case (dtkComposerNodeNumber::Float):
             text = document.createTextNode("float");
-            value = QString::number((float)number_node->number().toDouble());
+            value = QString::number((float)number_node->value().toDouble());
             break;
         case (dtkComposerNodeNumber::Double):
             text = document.createTextNode("double");
-            value = QString::number(number_node->number().toDouble());
+            value = QString::number(number_node->value().toDouble());
             break;
         } 
        

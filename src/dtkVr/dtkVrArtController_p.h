@@ -26,6 +26,11 @@
 #include <vector>
 #include <string>
 
+#if !defined(_MSC_VER)
+    #define strcpy_s(dest,sz,src) strcpy(dest,src)
+    #define strcat_s(dest,sz,src) strcat(dest,src)
+#endif
+
 // --------------------------------------------------------------------------
 // Data types
 
@@ -839,15 +844,15 @@ bool DTrack2::receive(void)
                     return false;
                 }
 
-                strcpy_s(sfmt,0, "");
+                strcpy_s(sfmt,sizeof(sfmt), "");
                 j = 0;
                 while(j < act_flystick[i].num_button){
-                    strcat_s(sfmt,1, "i");
+                    strcat_s(sfmt,sizeof(sfmt), "i");
                     j += 32;
                 }
                 j = 0;
                 while(j < act_flystick[i].num_joystick){
-                    strcat_s(sfmt,1, "f");
+                    strcat_s(sfmt,sizeof(sfmt), "f");
                     j++;
                 }
 				
@@ -1524,7 +1529,7 @@ int DTrack2::cmd_sendreceive(const char* cmd, char* res)
             set_server_neterror();
         }
 
-        strcpy_s(res,0, "");
+        strcpy_s(res,DTRACK2_PROT_MAXLEN+1, "");
         return len;
     }
 	

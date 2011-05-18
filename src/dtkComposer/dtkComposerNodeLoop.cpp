@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar  7 09:26:54 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  4 09:53:02 2011 (+0200)
+ * Last-Updated: Wed May 18 13:58:27 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 166
+ *     Update #: 195
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 #include "dtkComposerNodeLoop.h"
 #include "dtkComposerNodeProperty.h"
 
+#include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
@@ -155,19 +156,29 @@ void dtkComposerNodeLoop::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty
             }
         }
 
-    } else if (property->type() == dtkComposerNodeProperty::PassThroughInput && i_route->source()->node()->value(i_route->source()).isValid()) {
-        
-        d->pass_through_variables.insert(property, i_route->source()->node()->value(i_route->source()));
+    } else if (property->type() == dtkComposerNodeProperty::PassThroughInput) {
+
+        dtkComposerNodeProperty *i_source;
+        if (i_route->source()->node()->value(i_route->source()).convert(QVariant::Double)) {
+
+            i_source = property;        
+            d->pass_through_variables.insert(property, i_route->source()->node()->value(i_route->source()));
+
+        } else {
+
+            i_source = i_route->source();
+
+        }
 
         foreach(dtkComposerNodeProperty *twin, this->outputProperties())
             if (twin->type() == dtkComposerNodeProperty::PassThroughOutput && twin->name() == property->name())
-                d->twin_properties.insert(twin, property);
+                d->twin_properties.insert(twin, i_source);
         
         foreach(dtkComposerEdge *relay_route, this->inputRelayRoutes()) {
             if (relay_route->source()->name() == property->name()) {
                 
                 dtkComposerEdge *route = new dtkComposerEdge;
-                route->setSource(property);
+                route->setSource(i_source);
                 route->setDestination(relay_route->destination());
                 
                 relay_route->destination()->node()->addInputRoute(route);
@@ -205,7 +216,7 @@ void dtkComposerNodeLoop::push(dtkComposerEdge *o_route, dtkComposerNodeProperty
         }
 
     } else if (property->type() == dtkComposerNodeProperty::PassThroughOutput && this->value(property).isValid()) {
-        
+
         dtkComposerEdge *route = new dtkComposerEdge;
         route->setSource(d->twin_properties.value(property));
         route->setDestination(o_route->destination());

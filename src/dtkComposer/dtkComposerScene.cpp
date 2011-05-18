@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 17 11:38:26 2011 (+0200)
+ * Last-Updated: Wed May 18 11:07:45 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 2662
+ *     Update #: 2666
  */
 
 /* Commentary: 
@@ -683,32 +683,27 @@ void dtkComposerScene::startEvaluation(void)
 
     emit evaluationStarted();
 
-    // foreach(dtkComposerNode *node, this->nodes())
-    //     if (node->kind() == dtkComposerNode::Data)
-    //         node->setDirty(false);
-    //     else
-    //         node->setDirty(true);
-
-    // foreach(dtkComposerNode *node, this->nodes()) {
-    //     node->setActive(false);
-    //     node->setDirty(true);
-    // }
+    QList<dtkComposerNode *> starting_nodes;
 
     if (this->selectedItems().count()) {
         foreach(QGraphicsItem *item, this->selectedItems()) {
             if (dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) { 
                 node->setActive(false);        
                 node->setDirty(true);
-                node->update();
+                starting_nodes << node;
             }
         }
     } else {
         foreach(dtkComposerNode *node, this->startNodes()) {
             node->setActive(false);
             node->setDirty(true);
-            node->update();
+            starting_nodes << node;
         }
     }
+
+    foreach(dtkComposerNode *node, starting_nodes)
+        node->update();
+
 }
 
 void dtkComposerScene::stopEvaluation(void)

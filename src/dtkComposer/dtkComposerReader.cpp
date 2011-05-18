@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 18 10:22:06 2011 (+0200)
+ * Last-Updated: Wed May 18 14:43:49 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 742
+ *     Update #: 743
  */
 
 /* Commentary: 
@@ -581,6 +581,8 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
 
             string_node->setValue(children.at(i).childNodes().at(0).toText().data());
         }
+
+        string_node->touch();
     }
 
     // String comparator

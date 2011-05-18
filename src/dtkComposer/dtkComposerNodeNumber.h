@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Feb 25 16:19:59 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 18 10:06:58 2011 (+0200)
+ * Last-Updated: Wed May 18 15:43:15 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 78
+ *     Update #: 83
  */
 
 /* Commentary: 
@@ -52,9 +52,14 @@ public:
     QVariant value(void);
     void setValue(QVariant value);
 
+protected:
+    void convertTo(int genre);
+
 public:
     void expand(void);
     void collapse(void);
+
+public slots:
     void touch(void);
 
 protected slots:

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Feb 25 16:21:13 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 18 10:21:34 2011 (+0200)
+ * Last-Updated: Wed May 18 16:23:31 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 339
+ *     Update #: 391
  */
 
 /* Commentary: 
@@ -293,6 +293,8 @@ void dtkComposerNodeNumberEditor::paint(QPainter *painter, const QStyleOptionGra
 void dtkComposerNodeNumberEditor::keyPressEvent(QKeyEvent *event)
 {
     QGraphicsTextItem::keyPressEvent(event);
+
+    this->parent_node->setValue(qVariantFromValue(this->toPlainText()));
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -336,7 +338,7 @@ dtkComposerNodeNumber::dtkComposerNodeNumber(dtkComposerNode *parent) : dtkCompo
     d->button = new dtkComposerNodeNumberButton(this);
     d->button->setPos(0, 0);
     
-    d->value = QVariant((int)0);
+    d->value = QVariant();
     d->source_node = true;
 
     d->genres.insert(   QString("INT"),       (int)dtkComposerNodeNumber::Int);
@@ -388,12 +390,53 @@ QVariant dtkComposerNodeNumber::value(dtkComposerNodeProperty *property)
 
 QVariant dtkComposerNodeNumber::value(void)
 {
+    if (d->value.userType() != d->genres.value(d->label->text))
+        this->convertTo(d->genres.value(d->label->text));
+
     return d->value;
 }
 
 void dtkComposerNodeNumber::setValue(QVariant value)
 {
     d->value = value;
+}
+
+//! Convenient function to sidestep the bug in
+//! QVariant::convert(QVariant::Type) method.
+/*! 
+ * 
+ * 
+ */
+void dtkComposerNodeNumber::convertTo(int genre)
+{
+    switch (genre) { 
+    case (dtkComposerNodeNumber::Int): 
+        this->setValue(qVariantFromValue(d->editor->toPlainText().toInt()));
+        break; 
+    case (dtkComposerNodeNumber::UInt): 
+        this->setValue(qVariantFromValue(d->editor->toPlainText().toUInt())); 
+        break; 
+    case (dtkComposerNodeNumber::Long): 
+        this->setValue(qVariantFromValue(d->editor->toPlainText().toLong())); 
+        break; 
+    case (dtkComposerNodeNumber::ULong): 
+        this->setValue(qVariantFromValue(d->editor->toPlainText().toULong())); 
+        break; 
+    case (dtkComposerNodeNumber::LongLong): 
+        this->setValue(qVariantFromValue(d->editor->toPlainText().toLongLong())); 
+        break; 
+    case (dtkComposerNodeNumber::ULongLong): 
+        this->setValue(qVariantFromValue(d->editor->toPlainText().toULongLong())); 
+        break; 
+    case (dtkComposerNodeNumber::Float): 
+        this->setValue(qVariantFromValue(d->editor->toPlainText().toFloat())); 
+        break; 
+    case (dtkComposerNodeNumber::Double): 
+        this->setValue(qVariantFromValue(d->editor->toPlainText().toDouble())); 
+        break; 
+     default: 
+         break;
+    }
 }
 
 void dtkComposerNodeNumber::expand(void)
@@ -453,46 +496,9 @@ void dtkComposerNodeNumber::pull(dtkComposerEdge *edge, dtkComposerNodeProperty 
 
 void dtkComposerNodeNumber::run(void)
 {
-    if (d->source_node) {
-        switch (d->genres.value(d->label->text)) {
-
-        case (dtkComposerNodeNumber::Int):
-            this->setValue(qVariantFromValue(d->editor->toPlainText().toInt()));
-            break;
-        
-        case (dtkComposerNodeNumber::UInt):
-            this->setValue(qVariantFromValue(d->editor->toPlainText().toUInt()));
-            break;
-
-        case (dtkComposerNodeNumber::Long):
-            this->setValue(qVariantFromValue((long)d->editor->toPlainText().toLongLong()));
-            break;
-
-        case (dtkComposerNodeNumber::ULong):
-            this->setValue(qVariantFromValue((ulong)d->editor->toPlainText().toULongLong()));
-            break;
-
-        case (dtkComposerNodeNumber::LongLong):
-            this->setValue(qVariantFromValue(d->editor->toPlainText().toLongLong()));
-            break;
-
-        case (dtkComposerNodeNumber::ULongLong):
-            this->setValue(qVariantFromValue(d->editor->toPlainText().toULongLong()));
-            break;
-
-        case (dtkComposerNodeNumber::Float):
-            this->setValue(qVariantFromValue((float)d->editor->toPlainText().toDouble()));
-            break;
-
-        case (dtkComposerNodeNumber::Double):
-            this->setValue(qVariantFromValue(d->editor->toPlainText().toDouble()));
-            break;
-
-        default:
-            break;
-        }
-    }
-        
+    if (d->source_node)
+        this->convertTo(d->genres.value(d->label->text));
+    
     d->source_node = true;
 }
 

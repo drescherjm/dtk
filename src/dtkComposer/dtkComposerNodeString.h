@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 15:08:06 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 18 10:16:04 2011 (+0200)
+ * Last-Updated: Wed May 18 14:41:54 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 12
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -42,6 +42,9 @@ public:
 public:
     void expand(void);
     void collapse(void);
+
+public slots:
+    void touch(void);
 
 protected slots:
     void onCollapseFinised(void);

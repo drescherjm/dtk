@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 15:12:01 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 18 10:15:55 2011 (+0200)
+ * Last-Updated: Wed May 18 14:42:26 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 267
+ *     Update #: 269
  */
 
 /* Commentary: 
@@ -182,6 +182,8 @@ void dtkComposerNodeStringEditor::paint(QPainter *painter, const QStyleOptionGra
 void dtkComposerNodeStringEditor::keyPressEvent(QKeyEvent *event)
 {
     QGraphicsTextItem::keyPressEvent(event);
+
+    this->parent_node->setValue(this->toPlainText());
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -283,6 +285,14 @@ void dtkComposerNodeString::collapse(void)
     d->animation->start();
 
     connect(d->animation, SIGNAL(finished()), this, SLOT(onCollapseFinised()));
+}
+
+void dtkComposerNodeString::touch(void)
+{
+    d->editor->setPlainText(d->value); 
+    d->editor->update();
+
+    dtkComposerNode::touch();
 }
 
 void dtkComposerNodeString::onCollapseFinised(void)

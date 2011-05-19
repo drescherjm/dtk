@@ -23,7 +23,7 @@
 #include <dtkCore/dtkPlugin.h>
 #include <dtkCore/dtkLog.h>
 
-#define DTK_VERBOSE_LOAD false
+#define DTK_VERBOSE_LOAD true
 
 class dtkPluginManagerPrivate
 {
@@ -49,22 +49,8 @@ void dtkPluginManager::initialize(void)
     if(d->path.isNull())
         this->readSettings();
 
-    QString paths = "";
+    QString paths = d->path;
 
-    if (!d->path.isEmpty())
-        paths = d->path + ":";
-
-#ifdef Q_WS_MAC
-    QDir plugins_dir = qApp->applicationDirPath() + "/../PlugIns";
-
-    if(plugins_dir.exists())
-        paths = paths + plugins_dir.absolutePath();;
-#else
-    QDir plugins_dir = qApp->applicationDirPath() + "/../plugins";
-
-    if(plugins_dir.exists())
-        paths = paths + plugins_dir.absolutePath();
-#endif
 
 #ifdef Q_WS_WIN
     QStringList pathList;
@@ -114,19 +100,32 @@ void dtkPluginManager::uninitialize(void)
 void dtkPluginManager::readSettings(void)
 {
     QSettings settings("inria", "dtk");
-
-    settings.beginGroup("plugins");
-#ifdef Q_WS_WIN
-    d->path = settings.value("path", "C:\\Program Files\\inria\\plugins").toString();
+    QString defaultPath;
+    QDir plugins_dir;
+#ifdef Q_WS_MAC
+    plugins_dir = qApp->applicationDirPath() + "/../PlugIns";
 #else
-    d->path = settings.value("path", "/usr/local/inria/plugins").toString();
+    plugins_dir = qApp->applicationDirPath() + "/../plugins";
 #endif
 
+    defaultPath = plugins_dir.absolutePath();
+    settings.beginGroup("plugins");
+
+    //initialize settings if never set before.
+    if (!settings.contains("path"))
+    {
+        dtkDebug()<<"Filling in empty path in settings with default path:"
+               << defaultPath;
+        settings.setValue("path", defaultPath);
+    }
+    d->path = settings.value("path", defaultPath).toString();
     settings.endGroup();
 
+    //Warn if path still empty either because of a user's mistake, or for debugging purposes.
     if(d->path.isEmpty()) {
         dtkWarning() << "Your dtk config does not seem to be set correctly.";
         dtkWarning() << "Please set plugins.path.";
+        dtkWarning() << "Default directory should probably be: " << plugins_dir.absolutePath();
     }
 }
 

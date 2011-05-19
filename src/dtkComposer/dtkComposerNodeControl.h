@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:47:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr  8 16:29:00 2011 (+0200)
+ * Last-Updated: Wed May  4 09:03:47 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 86
+ *     Update #: 124
  */
 
 /* Commentary: 
@@ -23,7 +23,9 @@
 #include "dtkComposerExport.h"
 #include "dtkComposerNode.h"
 
+class dtkComposerEdge;
 class dtkComposerNodeControlBlock;
+
 class dtkComposerNodeControlPrivate;
 
 class DTKCOMPOSER_EXPORT dtkComposerNodeControl : public dtkComposerNode
@@ -34,6 +36,7 @@ public:
      dtkComposerNodeControl(dtkComposerNode *parent = 0);
     ~dtkComposerNodeControl(void);
   
+public:
     dtkComposerNodeControlBlock    *block(const QString& title);
     dtkComposerNodeControlBlock *addBlock(const QString& title);
 
@@ -42,14 +45,74 @@ public:
 
     QList<dtkComposerNodeControlBlock *> blocks(void);
 
+    dtkComposerNodeControlBlock *currentBlock(void);
+
+public:
     dtkComposerNodeProperty  *inputProperty(const QString& block_title, const QString& name) const;
     dtkComposerNodeProperty *outputProperty(const QString& block_title, const QString& name) const;
+
+public:
+    void  addInputRelayRoute(dtkComposerEdge *route);
+    void addOutputRelayRoute(dtkComposerEdge *route);
+
+    void  removeInputRelayRoute(dtkComposerEdge *route);
+    void removeOutputRelayRoute(dtkComposerEdge *route);
+    void   removeAllRelayRoutes(void);
+
+    QList<dtkComposerEdge *>  inputRelayRoutes(void);
+    QList<dtkComposerEdge *> outputRelayRoutes(void);
+
+    void  addInputActiveRoute(dtkComposerEdge *route);
+    void addOutputActiveRoute(dtkComposerEdge *route);
+
+    void  removeInputActiveRoute(dtkComposerEdge *route);
+    void removeOutputActiveRoute(dtkComposerEdge *route);
+    void   removeAllActiveRoutes(void);
+
+    QList<dtkComposerEdge *>  inputActiveRoutes(void);
+    QList<dtkComposerEdge *> outputActiveRoutes(void);
+
+    QList<dtkComposerEdge *> allRoutes(void);
+    void removeRoute(dtkComposerEdge *route);
+
+public:
+    bool isRunning(void);
+
+protected:
+    bool condition(void);
+    QVariant value(void);
+
+    dtkComposerNodeProperty *inputProperty(void);
+    void disableInputProperty(void);
+
+protected:
+    void setRunning(bool running);
+
+    void setCurrentBlock(dtkComposerNodeControlBlock *block);
+
+public slots:
+    virtual void update(void) = 0;
+
+protected:
+            bool dirtyInputValue(void);
+            bool dirtyUpstreamNodes(void);
+    virtual bool dirtyBlockEndNodes(void);
+
+    void markDirtyDownstreamNodes(void);
+
+    void cleanInputActiveRoutes(void);
+    void cleanOutputActiveRoutes(void);
+
+protected:
+    void pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property);
+    void  run(void);
+    void push(dtkComposerEdge *o_route, dtkComposerNodeProperty *property);
 
 public:
     void layout(void);
   
 public:
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     void resize(const QRectF& rect);
     void resize(const QPointF& delta);
@@ -57,13 +120,6 @@ public:
     void resize(void);
 
     QRectF minimalBoundingRect(void);
-
-public slots:
-    virtual void update(void) = 0;
-
-protected:
-    bool condition(void);
-    QVariant value(void);
 
 protected:
     void setColor(const QColor& color);

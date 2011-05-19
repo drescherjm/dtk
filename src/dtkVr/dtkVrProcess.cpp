@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 10 21:11:31 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 24 19:27:34 2010 (+0100)
+ * Last-Updated: Mon May  9 14:49:56 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 168
+ *     Update #: 178
  */
 
 /* Commentary: 
@@ -19,12 +19,8 @@
 
 #include "dtkVrProcess.h"
 #include "dtkVrSlave.h"
-#include "dtkVrUser.h"
-#include "dtkVrWand.h"
 
 #include <dtkCore/dtkLog.h>
-#include <dtkCore/dtkVec3.h>
-#include <dtkCore/dtkQuat.h>
 
 #include <dtkDistributed/dtkDistributedCommunicator.h>
 
@@ -39,23 +35,16 @@ class dtkVrProcessPrivate
 public:
     char running;
 
-    dtkVrUser *user;
-    dtkVrWand *wand;
-
     dtkDistributedCommunicator *communicator;
 };
 
 dtkVrProcess::dtkVrProcess(dtkDistributedCommunicator *communicator) : d(new dtkVrProcessPrivate)
 {
-    d->user = new dtkVrUser;
-    d->wand = new dtkVrWand;
     d->communicator = communicator;
 }
 
 dtkVrProcess::~dtkVrProcess(void)
 {
-    delete d->user;
-    delete d->wand;
     delete d;
 
     d = NULL;
@@ -115,34 +104,9 @@ bool dtkVrProcess::running(void)
     return d->running ? (++(d->running) < 3) : true;
 }
 
-dtkVrUser *dtkVrProcess::user(void)
-{
-    return d->user;
-}
-
-dtkVrWand *dtkVrProcess::wand(void)
-{
-    return d->wand;
-}
-
 void dtkVrProcess::broadcast(void)
 {
     char status[1]; status[0] = d->running;
-
-    d->communicator->broadcast(&status, 1, dtkDistributedCommunicator::dtkDistributedCommunicatorChar, 0);
-
-    d->communicator->broadcast(d->user->position().values(), 3, dtkDistributedCommunicator::dtkDistributedCommunicatorDouble, 0);
-    d->communicator->broadcast(d->user->orientation().values(), 4, dtkDistributedCommunicator::dtkDistributedCommunicatorDouble, 0);
-
-    d->communicator->broadcast(&(d->wand->action()), 1, dtkDistributedCommunicator::dtkDistributedCommunicatorInt, 0);
-
-    d->communicator->broadcast(&(d->wand->mode()), 1, dtkDistributedCommunicator::dtkDistributedCommunicatorInt, 0);
-
-    d->communicator->broadcast(d->wand->referencePosition().values(), 3, dtkDistributedCommunicator::dtkDistributedCommunicatorDouble, 0);
-    d->communicator->broadcast(d->wand->referenceOrientation().values(), 4, dtkDistributedCommunicator::dtkDistributedCommunicatorDouble, 0);
-
-    d->communicator->broadcast(d->wand->currentPosition().values(), 3, dtkDistributedCommunicator::dtkDistributedCommunicatorDouble, 0);
-    d->communicator->broadcast(d->wand->currentOrientation().values(), 4, dtkDistributedCommunicator::dtkDistributedCommunicatorDouble, 0);
 
     d->running = status[0];
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 11 11:08:02 2011 (+0200)
+ * Last-Updated: Wed May 18 14:43:49 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 698
+ *     Update #: 743
  */
 
 /* Commentary: 
@@ -26,7 +26,8 @@
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeFile.h"
-#include "dtkComposerNodeLoop.h"
+#include "dtkComposerNodeLoopFor.h"
+#include "dtkComposerNodeLoopWhile.h"
 #include "dtkComposerNodeNumber.h"
 #include "dtkComposerNodeNumberComparator.h"
 #include "dtkComposerNodeNumberOperator.h"
@@ -309,6 +310,8 @@ void dtkComposerReader::read(const QString& fileName)
         
         d->scene->createNote(notes.at(i).childNodes().at(0).toText().data(), QPointF(x, y), QSizeF(w, h));
     }
+
+    d->scene->touch();
 }
 
 dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
@@ -404,13 +407,13 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
     if(dtkComposerNodeNumber *number_node = dynamic_cast<dtkComposerNodeNumber *>(n)) {
         
         QDomNodeList children = node.childNodes();
+
+        dtkComposerNodeNumber::Genre genre;
         
         for(int i = 0; i < children.count(); i++) {
 
             if(children.at(i).toElement().tagName() != "genre") 
                 continue;
-
-            dtkComposerNodeNumber::Genre genre;
 
             if(children.at(i).childNodes().at(0).toText().data() == "int")
                 genre = dtkComposerNodeNumber::Int;
@@ -428,8 +431,6 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
                 genre = dtkComposerNodeNumber::Float;
             else if(children.at(i).childNodes().at(0).toText().data() == "double")
                 genre = dtkComposerNodeNumber::Double;
-
-            number_node->setGenre(genre);
         }
         
         for(int i = 0; i < children.count(); i++) {
@@ -439,48 +440,47 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
 
             QString value = children.at(i).childNodes().at(0).toText().data();
 
-            switch (number_node->genre()) {
+            switch (genre) {
 
             case (dtkComposerNodeNumber::Int):
-                number_node->setValue(value.toInt());
+                number_node->setValue(qVariantFromValue(value.toInt()));
                 break;
         
             case (dtkComposerNodeNumber::UInt):
-                number_node->setValue(value.toUInt());
+                number_node->setValue(qVariantFromValue(value.toUInt()));
                 break;
                 
             case (dtkComposerNodeNumber::Long):
-                number_node->setValue((long)value.toLongLong());
+                number_node->setValue(qVariantFromValue((long)value.toLongLong()));
                 break;
                 
             case (dtkComposerNodeNumber::ULong):
-                number_node->setValue((ulong)value.toULongLong());
+                number_node->setValue(qVariantFromValue((ulong)value.toULongLong()));
                 break;
                 
             case (dtkComposerNodeNumber::LongLong):
-                number_node->setValue(value.toLongLong());
+                number_node->setValue(qVariantFromValue(value.toLongLong()));
                 break;
                 
             case (dtkComposerNodeNumber::ULongLong):
-                number_node->setValue(value.toULongLong());
+                number_node->setValue(qVariantFromValue(value.toULongLong()));
                 break;
                 
             case (dtkComposerNodeNumber::Float):
-                number_node->setValue((float)value.toDouble());
+                number_node->setValue(qVariantFromValue((float)value.toDouble()));
                 break;
                 
             case (dtkComposerNodeNumber::Double):
-                number_node->setValue(value.toDouble());
+                number_node->setValue(qVariantFromValue(value.toDouble()));
                 break;
                 
             default:
-                number_node->setGenre(dtkComposerNodeNumber::Int);
-                number_node->setValue(value.toInt());
+                number_node->setValue(qVariantFromValue(value.toInt()));
                 break;
             }
         }
 
-        number_node->refresh();
+        number_node->touch();
     }
 
     // Number comparator
@@ -581,6 +581,8 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
 
             string_node->setValue(children.at(i).childNodes().at(0).toText().data());
         }
+
+        string_node->touch();
     }
 
     // String comparator
@@ -659,7 +661,7 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
     if(dtkComposerNodeControl *control_node = dynamic_cast<dtkComposerNodeControl *>(n)) {
 
         qreal w = node.toElement().attribute("w").toFloat();
-        qreal h = node.toElement().attribute("h").toFloat();
+        qreal h = node.toElement().attribute("h").toFloat(); 
 
         if(dtkComposerNodeCase *case_node = dynamic_cast<dtkComposerNodeCase *>(control_node)) {
 
@@ -684,17 +686,17 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
                 if(children.at(i).toElement().tagName() != "property")
                     continue;
 
-                if(children.at(i).toElement().attribute("name") == "condition")
+                if(children.at(i).toElement().attribute("name") == "condition" || children.at(i).toElement().attribute("name") == "variable" || children.at(i).toElement().attribute("name") == "constant")
                     continue;
 
                 // Assign the property
 
-                if(children.at(i).toElement().attribute("type") == "hybridinput" && children.at(i).toElement().attribute("name") != "constant") {
+                if(children.at(i).toElement().attribute("type") == "hybridinput") {
                     dtkComposerNodeProperty *i_p = case_node->block(children.at(i).toElement().attribute("block"))->addInputProperty(children.at(i).toElement().attribute("name"), case_node);
                     case_node->addInputProperty(i_p);
                 }
                 
-                if(children.at(i).toElement().attribute("type") == "hybridoutput" && children.at(i).toElement().attribute("name") != "constant") {
+                if(children.at(i).toElement().attribute("type") == "hybridoutput") {
                     dtkComposerNodeProperty *o_p = case_node->block(children.at(i).toElement().attribute("block"))->addOutputProperty(children.at(i).toElement().attribute("name"), case_node);
                     case_node->addOutputProperty(o_p);
                 }
@@ -703,7 +705,7 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
             
         }
 
-        if(dynamic_cast<dtkComposerNodeConditional *>(control_node) || dynamic_cast<dtkComposerNodeLoop *>(control_node)) {
+        if(dynamic_cast<dtkComposerNodeConditional *>(control_node)) {
 
             QDomNodeList children = node.childNodes();
 
@@ -729,7 +731,98 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
             }
         }
 
+        if(dynamic_cast<dtkComposerNodeLoopFor *>(control_node)) {
+
+            QDomNodeList children = node.childNodes();
+
+            for(int i = 0; i < children.count(); i++) {
+                
+                if(children.at(i).toElement().tagName() != "property")
+                    continue;
+
+                if(children.at(i).toElement().attribute("name") == "condition" || children.at(i).toElement().attribute("name") == "variable")
+                    continue;
+
+                // Assign the property
+
+                if(children.at(i).toElement().attribute("type") == "hybridinput") {
+                    dtkComposerNodeProperty *i_p = control_node->block(children.at(i).toElement().attribute("block"))->addInputProperty(children.at(i).toElement().attribute("name"), control_node);
+                    control_node->addInputProperty(i_p);
+                }
+
+                if(children.at(i).toElement().attribute("type") == "passthroughinput") {
+                    dtkComposerNodeProperty *i_p = control_node->block(children.at(i).toElement().attribute("block"))->addInputPassThroughProperty(children.at(i).toElement().attribute("name"), control_node);
+                    control_node->addInputProperty(i_p);
+                }
+                
+                if(children.at(i).toElement().attribute("type") == "passthroughoutput") {
+                    dtkComposerNodeProperty *o_p = control_node->block(children.at(i).toElement().attribute("block"))->addOutputPassThroughProperty(children.at(i).toElement().attribute("name"), control_node);
+                    control_node->addOutputProperty(o_p);
+                }
+                
+                if(children.at(i).toElement().attribute("type") == "hybridoutput") {
+                    dtkComposerNodeProperty *o_p = control_node->block(children.at(i).toElement().attribute("block"))->addOutputProperty(children.at(i).toElement().attribute("name"), control_node);
+                    control_node->addOutputProperty(o_p);
+                }
+            }
+        }
+
+        if(dynamic_cast<dtkComposerNodeLoopWhile *>(control_node)) {
+
+            QDomNodeList children = node.childNodes();
+
+            for(int i = 0; i < children.count(); i++) {
+                
+                if(children.at(i).toElement().tagName() != "property")
+                    continue;
+
+                if(children.at(i).toElement().attribute("name") == "condition")
+                    continue;
+
+                // Assign the property
+
+                if(children.at(i).toElement().attribute("type") == "hybridinput") {
+                    dtkComposerNodeProperty *i_p = control_node->block(children.at(i).toElement().attribute("block"))->addInputProperty(children.at(i).toElement().attribute("name"), control_node);
+                    control_node->addInputProperty(i_p);
+                }
+
+                if(children.at(i).toElement().attribute("type") == "passthroughinput") {
+                    dtkComposerNodeProperty *i_p = control_node->block(children.at(i).toElement().attribute("block"))->addInputPassThroughProperty(children.at(i).toElement().attribute("name"), control_node);
+                    control_node->addInputProperty(i_p);
+                }
+                
+                if(children.at(i).toElement().attribute("type") == "passthroughoutput") {
+                    dtkComposerNodeProperty *o_p = control_node->block(children.at(i).toElement().attribute("block"))->addOutputPassThroughProperty(children.at(i).toElement().attribute("name"), control_node);
+                    control_node->addOutputProperty(o_p);
+                }
+                
+                if(children.at(i).toElement().attribute("type") == "hybridoutput") {
+                    dtkComposerNodeProperty *o_p = control_node->block(children.at(i).toElement().attribute("block"))->addOutputProperty(children.at(i).toElement().attribute("name"), control_node);
+                    control_node->addOutputProperty(o_p);
+                }
+            }
+        }
+
         control_node->setSize(w, h);
+
+        foreach(dtkComposerNodeControlBlock *block, control_node->blocks()) {
+
+            QDomNodeList children = node.childNodes();
+            
+            for(int j = 0; j < children.count(); j++) {
+
+                if (children.at(j).toElement().tagName() == "block") {                
+                
+                    QDomElement block_element = children.at(j).toElement();
+              
+                    if (block_element.attribute("title") == block->title()) {
+
+                        if (block_element.hasAttribute("h"))
+                            block->setHeight(block_element.attribute("h").toFloat());
+                    }
+                }
+            }
+        }
         control_node->layout();
 
         foreach(dtkComposerNodeControlBlock *block, control_node->blocks()) {
@@ -737,28 +830,28 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
             QDomNodeList children = node.childNodes();
             
             for(int j = 0; j < children.count(); j++) {
-                
-                if(children.at(j).toElement().tagName() != "block")
-                    continue;
 
-                if(children.at(j).toElement().attribute("title") != block->title())
-                    continue;
-
-                QDomNodeList block_node_elements = children.at(j).childNodes();
+                if (children.at(j).toElement().tagName() == "block") {
+              
+                    if (children.at(j).toElement().attribute("title") == block->title()) {
                 
-                for(int k = 0; k < block_node_elements.count(); k++) {
+                        QDomNodeList block_node_elements = children.at(j).childNodes();
+                
+                        for(int k = 0; k < block_node_elements.count(); k++) {
                     
-                    dtkComposerNode *block_node = this->readNode(block_node_elements.at(k));
-                    block_node->setParentNode(block->parentNode());
-                    block_node->setParentItem(block);
-                    block_node->setPos(block_node->pos());
-                    block->parentNode()->addChildNode(block_node);
-                    block->addNode(block_node);
-                    
+                            dtkComposerNode *block_node = this->readNode(block_node_elements.at(k));
+                            block_node->setParentNode(block->parentNode());
+                            block_node->setParentItem(block);
+                            block_node->setPos(block_node->pos());
+                            block->parentNode()->addChildNode(block_node);
+                            block->addNode(block_node);
+                            
+                        }
+                    }
                 }
             }
         }
-        control_node->resize();
+        control_node->layout();
     }
 
     // Generic node

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 12 09:37:36 2011 (+0200)
+ * Last-Updated: Wed May 18 11:07:45 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 2639
+ *     Update #: 2666
  */
 
 /* Commentary: 
@@ -151,9 +151,22 @@ QList<dtkComposerNode *> dtkComposerScene::startNodes(void)
 {
     QList<dtkComposerNode *> list;
 
-    foreach(dtkComposerNode *node, d->nodes)
-        if (!node->inputEdges().count() && node->outputEdges().count() && node->kind() != dtkComposerNode::Composite)
-            list << node;
+    dtkComposerNode *p = NULL;
+
+    foreach(dtkComposerNode *node, d->nodes) {
+        if (!node->inputEdges().count() && node->outputEdges().count() && node->kind() != dtkComposerNode::Composite) {
+
+            p = node->parentNode();
+            while (p) {
+                if (p->kind() == dtkComposerNode::Control)
+                    break;
+                else
+                    p = p->parentNode();
+            }
+            if (!p)
+                list << node;
+        }
+    }
 
     return list;
 }
@@ -162,9 +175,22 @@ QList<dtkComposerNode *> dtkComposerScene::endNodes(void)
 {
     QList<dtkComposerNode *> list;
 
-    foreach(dtkComposerNode *node, d->nodes)
-        if (node->inputEdges().count() && !node->outputEdges().count() && node->kind() != dtkComposerNode::Composite)
-            list << node;
+    dtkComposerNode *p = NULL;
+
+    foreach(dtkComposerNode *node, d->nodes) {
+        if (node->inputEdges().count() && !node->outputEdges().count() && node->kind() != dtkComposerNode::Composite) {
+
+            p = node->parentNode();
+            while (p) {
+                if (p->kind() == dtkComposerNode::Control)
+                    break;
+                else
+                    p = p->parentNode();
+            }
+            if (!p)
+                list << node;
+        }
+    }
 
     return list;
 }
@@ -309,9 +335,15 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
         n = parent;
     }
 
+    QList<dtkComposerNode *> selected_nodes;
+    foreach(QGraphicsItem *item, this->selectedItems())
+        if (dtkComposerNode *sn = dynamic_cast<dtkComposerNode *>(item))
+            selected_nodes << sn;
+
     foreach(dtkComposerNode *child, node->childNodes()) {
         node->removeChildNode(child);
-        this->removeNode(child);
+        if (!selected_nodes.contains(child))
+            this->removeNode(child);
     }
 
     d->nodes.removeAll(node);
@@ -651,28 +683,27 @@ void dtkComposerScene::startEvaluation(void)
 
     emit evaluationStarted();
 
-    // foreach(dtkComposerNode *node, this->nodes())
-    //     if (node->kind() == dtkComposerNode::Data)
-    //         node->setDirty(false);
-    //     else
-    //         node->setDirty(true);
-
-    foreach(dtkComposerNode *node, this->nodes())
-        node->setDirty(true);
+    QList<dtkComposerNode *> starting_nodes;
 
     if (this->selectedItems().count()) {
         foreach(QGraphicsItem *item, this->selectedItems()) {
-            if (dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) {         
+            if (dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) { 
+                node->setActive(false);        
                 node->setDirty(true);
-                node->update();
+                starting_nodes << node;
             }
         }
     } else {
         foreach(dtkComposerNode *node, this->startNodes()) {
+            node->setActive(false);
             node->setDirty(true);
-            node->update();
+            starting_nodes << node;
         }
     }
+
+    foreach(dtkComposerNode *node, starting_nodes)
+        node->update();
+
 }
 
 void dtkComposerScene::stopEvaluation(void)
@@ -957,9 +988,12 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
     // Item deletion - Delete | Backspace
 
     if ((event->key() == Qt::Key_Backspace || event->key() == Qt::Key_Delete) && (event->modifiers() & Qt::ControlModifier))
-        foreach(QGraphicsItem *item, this->selectedItems())
+        foreach(QGraphicsItem *item, this->selectedItems()) {
             if (dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item))
                 this->removeNode(node);
+            if (dtkComposerNote *note = dynamic_cast<dtkComposerNote *>(item))
+                this->removeNote(note);
+        }
 
     // Item Copy - Ctrl + C
 
@@ -1065,7 +1099,7 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
                 d->edges.removeAll(d->edge(d->current_edge));
             }
 
-        } else if (!property->node()->isGhost() && property->type() == dtkComposerNodeProperty::HybridOutput) {
+        } else if (!property->node()->isGhost() && (property->type() == dtkComposerNodeProperty::HybridOutput || property->type() == dtkComposerNodeProperty::PassThroughOutput)) {
         
             if (property->contains(mouseEvent->pos())) {
         
@@ -1090,7 +1124,7 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
                 }
             }
 
-        } else if (!property->node()->isGhost() && property->type() == dtkComposerNodeProperty::HybridInput) {
+        } else if (!property->node()->isGhost() && (property->type() == dtkComposerNodeProperty::HybridInput || property->type() == dtkComposerNodeProperty::PassThroughInput)) {
         
             if (property->contains(mouseEvent->pos())) {
 
@@ -1198,8 +1232,6 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
                 
             } else {
                 
-                d->current_edge->destination()->node()->onEdgeConnected(d->current_edge);
-                
                 dtkComposerEdge *edge = d->current_edge;
 
                 d->edges << edge;
@@ -1210,8 +1242,6 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             this->setModified(true);
 
         } else {
-                
-            d->current_edge->destination()->node()->onEdgeDeconnected(d->current_edge);
 
             delete d->current_edge;
 

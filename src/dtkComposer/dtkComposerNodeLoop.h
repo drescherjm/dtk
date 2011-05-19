@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar  7 09:21:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr  8 16:30:33 2011 (+0200)
+ * Last-Updated: Thu Apr 28 09:53:36 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 7
+ *     Update #: 48
  */
 
 /* Commentary: 
@@ -23,6 +23,9 @@
 #include "dtkComposerExport.h"
 #include "dtkComposerNodeControl.h"
 
+class dtkComposerNodeControlBlock;
+class dtkComposerNodeProperty;
+
 class dtkComposerNodeLoopPrivate;
 
 class DTKCOMPOSER_EXPORT dtkComposerNodeLoop : public dtkComposerNodeControl
@@ -33,13 +36,32 @@ public:
      dtkComposerNodeLoop(dtkComposerNode *parent = 0);
     ~dtkComposerNodeLoop(void);
 
-public slots:
-    void update(void);
+    bool  isPreRunning(void);
+    bool isPostRunning(void);
+
+    bool loopConditon(void);
+
+    QVariant value(dtkComposerNodeProperty *property);
+
+    QList<QVariant> passThroughVariables(void);
 
 protected:
-    void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    void  run(void);
-    void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void  setPreRunning(bool pre_running);
+    void setPostRunning(bool post_running);
+
+    void setLoopCondition(bool loop_condition);
+
+    void setPassThroughVariable(dtkComposerNodeProperty *property, QVariant pass_through_variable);
+
+protected:
+    bool dirtyBlockEndNodes(void);
+
+protected:
+    void pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property);
+    void push(dtkComposerEdge *o_route, dtkComposerNodeProperty *property);
+
+protected:
+    void updatePassThroughVariables(void);
 
 private:
     dtkComposerNodeLoopPrivate *d;

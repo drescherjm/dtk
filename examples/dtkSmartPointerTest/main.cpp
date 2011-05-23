@@ -31,9 +31,10 @@
 #include <dtkCore/dtkSmartPointer.h>
 
 #include <iostream>
+#include <stdexcept>
 #include <vector>
 
-#include <qHash>
+#include <QHash>
 
 // /////////////////////////////////////////////////////////////////
 // 

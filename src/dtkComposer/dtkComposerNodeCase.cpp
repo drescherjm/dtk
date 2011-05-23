@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mai  2 18:24:07 2011 (+0200)
+ * Last-Updated: Mon May 23 14:38:31 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 669
+ *     Update #: 670
  */
 
 /* Commentary: 
@@ -156,7 +156,7 @@ dtkComposerNodeControlBlock *dtkComposerNodeCase::addBlock(const QString& title)
 
     if (title == "default") {
 
-        block->setInteractive(true);
+        block->setInteractive(false);
 
         dtkComposerNodeProperty *i_variable = block->addInputProperty("variable", this);
         i_variable->setBlockedFrom(title);
@@ -168,7 +168,7 @@ dtkComposerNodeControlBlock *dtkComposerNodeCase::addBlock(const QString& title)
 
     } else {
 
-        block->setInteractive(true);
+        block->setInteractive(false);
 
         block->setRemoveButtonVisible(true);
 

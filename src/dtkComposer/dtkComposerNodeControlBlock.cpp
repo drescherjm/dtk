@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  4 15:05:36 2011 (+0200)
+ * Last-Updated: Mon May 23 14:24:28 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 945
+ *     Update #: 956
  */
 
 /* Commentary: 
@@ -555,52 +555,52 @@ void dtkComposerNodeControlBlock::setInteractive(bool interactive)
 {
     d->interactive = interactive;
 
-    if(d->interactive && !d->button_add_left) {
+    if(!d->button_add_left) {
         d->button_add_left = new dtkComposerNodeControlBlockButton(this);
         d->button_add_left->setZValue(this->zValue() - 1);
-        d->button_add_left->setVisible(false);
+        d->button_add_left->setVisible(!d->interactive);
         d->button_add_left->left = true;
     }
 
-    if(d->interactive && !d->button_rem_left) {
+    if(!d->button_rem_left) {
         d->button_rem_left = new dtkComposerNodeControlBlockButton(this);
         d->button_rem_left->setZValue(this->zValue() - 1);
-        d->button_rem_left->setVisible(false);
+        d->button_rem_left->setVisible(!d->interactive);
         d->button_rem_left->left = true;
     }
 
-    if(d->interactive && !d->button_add_right) {
+    if(!d->button_add_right) {
         d->button_add_right = new dtkComposerNodeControlBlockButton(this);
         d->button_add_right->setZValue(this->zValue() - 1);
-        d->button_add_right->setVisible(false);
+        d->button_add_right->setVisible(!d->interactive);
         d->button_add_right->right = true;
     }
 
-    if(d->interactive && !d->button_rem_right) {
+    if(!d->button_rem_right) {
         d->button_rem_right = new dtkComposerNodeControlBlockButton(this);
         d->button_rem_right->setZValue(this->zValue() - 1);
-        d->button_rem_right->setVisible(false);
+        d->button_rem_right->setVisible(!d->interactive);
         d->button_rem_right->right = true;
     }
 
-    if(d->interactive && !d->button_add_both && this->title() == "loop") {
+    if(!d->button_add_both && this->title() == "loop") {
         d->button_add_both = new dtkComposerNodeControlBlockButton(this);
         d->button_add_both->setZValue(this->zValue() - 1);
-        d->button_add_both->setVisible(false);
+        d->button_add_both->setVisible(!d->interactive);
         d->button_add_both->both = true;
     }
 
-    if(d->interactive && !d->button_rem_both && this->title() == "loop") {
+    if(!d->button_rem_both && this->title() == "loop") {
         d->button_rem_both = new dtkComposerNodeControlBlockButton(this);
         d->button_rem_both->setZValue(this->zValue() - 1);
-        d->button_rem_both->setVisible(false);
+        d->button_rem_both->setVisible(!d->interactive);
         d->button_rem_both->both = true;
     }
 
-    if(d->interactive && !d->label) {
+    if(!d->label) {
         d->label = new dtkComposerNodeControlBlockLabel(this);
         d->label->setZValue(this->zValue() - 1);
-        d->label->setVisible(false);
+        d->label->setVisible(!d->interactive);
 
         if(d->button_add_left)
             if(!d->button_add_left->label)
@@ -626,6 +626,78 @@ void dtkComposerNodeControlBlock::setInteractive(bool interactive)
             if(!d->button_rem_both->label)
                 d->button_rem_both->label = d->label;
     }
+
+    // if(d->interactive && !d->button_add_left) {
+    //     d->button_add_left = new dtkComposerNodeControlBlockButton(this);
+    //     d->button_add_left->setZValue(this->zValue() - 1);
+    //     d->button_add_left->setVisible(false);
+    //     d->button_add_left->left = true;
+    // }
+
+    // if(d->interactive && !d->button_rem_left) {
+    //     d->button_rem_left = new dtkComposerNodeControlBlockButton(this);
+    //     d->button_rem_left->setZValue(this->zValue() - 1);
+    //     d->button_rem_left->setVisible(false);
+    //     d->button_rem_left->left = true;
+    // }
+
+    // if(d->interactive && !d->button_add_right) {
+    //     d->button_add_right = new dtkComposerNodeControlBlockButton(this);
+    //     d->button_add_right->setZValue(this->zValue() - 1);
+    //     d->button_add_right->setVisible(false);
+    //     d->button_add_right->right = true;
+    // }
+
+    // if(d->interactive && !d->button_rem_right) {
+    //     d->button_rem_right = new dtkComposerNodeControlBlockButton(this);
+    //     d->button_rem_right->setZValue(this->zValue() - 1);
+    //     d->button_rem_right->setVisible(false);
+    //     d->button_rem_right->right = true;
+    // }
+
+    // if(d->interactive && !d->button_add_both && this->title() == "loop") {
+    //     d->button_add_both = new dtkComposerNodeControlBlockButton(this);
+    //     d->button_add_both->setZValue(this->zValue() - 1);
+    //     d->button_add_both->setVisible(false);
+    //     d->button_add_both->both = true;
+    // }
+
+    // if(d->interactive && !d->button_rem_both && this->title() == "loop") {
+    //     d->button_rem_both = new dtkComposerNodeControlBlockButton(this);
+    //     d->button_rem_both->setZValue(this->zValue() - 1);
+    //     d->button_rem_both->setVisible(false);
+    //     d->button_rem_both->both = true;
+    // }
+
+    // if(d->interactive && !d->label) {
+    //     d->label = new dtkComposerNodeControlBlockLabel(this);
+    //     d->label->setZValue(this->zValue() - 1);
+    //     d->label->setVisible(false);
+
+    //     if(d->button_add_left)
+    //         if(!d->button_add_left->label)
+    //             d->button_add_left->label = d->label;
+
+    //     if(d->button_rem_left)
+    //         if(!d->button_rem_left->label)
+    //             d->button_rem_left->label = d->label;
+
+    //     if(d->button_add_right)
+    //         if(!d->button_add_right->label)
+    //             d->button_add_right->label = d->label;
+
+    //     if(d->button_rem_right)
+    //         if(!d->button_rem_right->label)
+    //             d->button_rem_right->label = d->label;
+
+    //     if(d->button_add_both)
+    //         if(!d->button_add_both->label)
+    //             d->button_add_both->label = d->label;
+
+    //     if(d->button_rem_both)
+    //         if(!d->button_rem_both->label)
+    //             d->button_rem_both->label = d->label;
+    // }
     
     this->setAcceptHoverEvents(interactive);
 }
@@ -958,8 +1030,8 @@ QRectF dtkComposerNodeControlBlock::minimalBoundingRect(void)
     foreach(dtkComposerNodeProperty *p, d->output_properties)
         prop_rect = prop_rect.united(p->mapRectToParent(p->boundingRect()));
 
-    qreal min_height = 70;
-    qreal  min_width = 220;
+    qreal min_height = 170;
+    qreal  min_width = 370;
     min_height = prop_rect.height() > min_height ? prop_rect.height() : min_height;
     QRectF block_rect(this->boundingRect().left(), this->boundingRect().top(), min_width, min_height);
 

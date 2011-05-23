@@ -45,7 +45,7 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     string(REPLACE "\\" "/" ProgramFiles "$ENV{ProgramFiles}")
     set(CMAKE_INSTALL_PREFIX "${ProgramFiles}/Inria/${PROJECT_NAME}" CACHE PATH "${PROJECT_NAME} install prefix" FORCE)
   else(WIN32)
-    set(CMAKE_INSTALL_PREFIX "/usr/local/inria/" CACHE PATH "${PROJECT_NAME} install prefix" FORCE)
+    set(CMAKE_INSTALL_PREFIX "/usr/local/inria/${PROJECT_NAME}" CACHE PATH "${PROJECT_NAME} install prefix" FORCE)
   endif(WIN32)
 endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 

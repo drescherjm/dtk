@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:48:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Jan 15 13:38:08 2011 (+0100)
+ * Last-Updated: Mon May 23 11:39:33 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 83
+ *     Update #: 86
  */
 
 /* Commentary:
@@ -41,7 +41,7 @@ public:
 public:
     static dtkAbstractDataFactory *instance(void);
 
-    bool registerDataType         (const QString& type,                      dtkAbstractDataCreator          func);
+    bool registerDataType         (const QString& type,                             dtkAbstractDataCreator          func);
     bool registerDataReaderType   (const QString& type, const QStringList& handled, dtkAbstractDataReaderCreator    func);
     bool registerDataWriterType   (const QString& type, const QStringList& handled, dtkAbstractDataWriterCreator    func);
     bool registerDataConverterType(const QString& type, const QStringList& fromTypes, const QString& toType,  dtkAbstractDataConverterCreator func);
@@ -51,13 +51,10 @@ public:
     unsigned int countWriters   (const QString& type) const;
     unsigned int countConverters(const QString& type) const;
 
-    dtkAbstractData *get(const QString& type, int index = 0);
-    dtkAbstractData *get(const QString& type, const QString& name);
-
-    QList<QString>                             creators(void) const;
-    QList<QString>                             readers(void) const;
-    QList<QString>                             writers(void) const;
-    QList<QString>                             converters(void) const;
+    QList<QString> creators(void) const;
+    QList<QString> readers(void) const;
+    QList<QString> writers(void) const;
+    QList<QString> converters(void) const;
 
 signals:
     void created(dtkAbstractData *data, const QString& type);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Jan 16 19:34:47 2011 (+0100)
+ * Last-Updated: Mon May 23 11:32:11 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 162
+ *     Update #: 263
  */
 
 /* Commentary:
@@ -29,7 +29,6 @@
 class dtkAbstractDataPrivate
 {
 public:
-    // Map < name , isEnabled >
     QMap<QString, bool> readers;
     QMap<QString, bool> writers;
     QMap<QString, bool> converters;
@@ -86,57 +85,63 @@ void dtkAbstractData::addConverter(const QString& converter)
 
 void dtkAbstractData::enableReader(const QString& reader)
 {
-    QMap<QString, bool>::iterator it(d->readers.find( reader ));
-    if (it != d->readers.end() ) {
+    QMap<QString, bool>::iterator it(d->readers.find(reader));
+
+    if (it != d->readers.end())
         it.value() = true;
-    } else
+    else
         dtkDebug() << description() << " has no such reader: " << reader;
 }
 
 void dtkAbstractData::disableReader(const QString& reader)
 {
-    QMap<QString, bool>::iterator it(d->readers.find( reader ));
-    if (it != d->readers.end() )
+    QMap<QString, bool>::iterator it(d->readers.find(reader));
+
+    if (it != d->readers.end())
         it.value() = false;
 }
 
 void dtkAbstractData::enableWriter(const QString& writer)
 {
-    QMap<QString, bool>::iterator it(d->writers.find( writer ));
-    if (it != d->writers.end() ) {
+    QMap<QString, bool>::iterator it(d->writers.find(writer));
+
+    if (it != d->writers.end())
         it.value() = true;
-    } else
+    else
         dtkDebug() << description() << " has no such writer: " << writer;
 }
 
 void dtkAbstractData::disableWriter(const QString& writer)
 {
-    QMap<QString, bool>::iterator it(d->writers.find( writer ));
-    if (it != d->writers.end() )
+    QMap<QString, bool>::iterator it(d->writers.find(writer));
+
+    if (it != d->writers.end())
         it.value() = false;
 }
 
 void dtkAbstractData::enableConverter(const QString& converter)
 {
-    QMap<QString, bool>::iterator it(d->converters.find( converter ));
-    if (it != d->converters.end() ) {
+    QMap<QString, bool>::iterator it(d->converters.find(converter));
+
+    if (it != d->converters.end())
         it.value() = true;
-    } else
+    else
         dtkDebug() << description() << " has no such converter: " << converter;
 }
 
 void dtkAbstractData::disableConverter(const QString& converter)
 {
-    QMap<QString, bool>::iterator it(d->converters.find( converter ));
-    if (it != d->converters.end() )
+    QMap<QString, bool>::iterator it(d->converters.find(converter));
+
+    if (it != d->converters.end())
         it.value() = false;
 }
 
 dtkAbstractDataReader *dtkAbstractData::reader(const QString& type)
 {
-    // Return data if reader type is known to us and enabled
-    QMap<QString, bool>::const_iterator it(d->readers.find( type ));
-    if (it != d->readers.end() && (it.value() == true) )
+    QMap<QString, bool>::const_iterator it(d->readers.find(type));
+
+    if (it != d->readers.end() && (it.value() == true))
         return dtkAbstractDataFactory::instance()->reader(type);
     else 
         return NULL;
@@ -144,9 +149,9 @@ dtkAbstractDataReader *dtkAbstractData::reader(const QString& type)
 
 dtkAbstractDataWriter *dtkAbstractData::writer(const QString& type)
 {
-    // Return data if writer type is known to us and enabled
-    QMap<QString, bool>::const_iterator it(d->writers.find( type ));
-    if (it != d->writers.end() && (it.value() == true) )
+    QMap<QString, bool>::const_iterator it(d->writers.find(type));
+
+    if (it != d->writers.end() && (it.value() == true))
         return dtkAbstractDataFactory::instance()->writer(type);
     else 
         return NULL;
@@ -154,9 +159,9 @@ dtkAbstractDataWriter *dtkAbstractData::writer(const QString& type)
 
 dtkAbstractDataConverter *dtkAbstractData::converter(const QString& type)
 {
-    // Return data if writer type is known to us and enabled
-    QMap<QString, bool>::const_iterator it(d->converters.find( type ));
-    if (it != d->converters.end() && (it.value() == true) )
+    QMap<QString, bool>::const_iterator it(d->converters.find(type));
+
+    if (it != d->converters.end() && (it.value() == true))
         return dtkAbstractDataFactory::instance()->converter(type);
     else 
         return NULL;
@@ -170,44 +175,54 @@ void dtkAbstractData::update(void)
 bool dtkAbstractData::read(const QString& file)
 {
     bool read = false;
-    dtkAbstractDataFactory * factoryInstance = dtkAbstractDataFactory::instance();
-    for (QMap<QString, bool>::const_iterator it(d->readers.begin()); it != d->readers.end(); ++it ) {
-        if ( it.value() ) {  // The reader is enabled
-            QScopedPointer<dtkAbstractDataReader> reader( factoryInstance->reader( it.key() ) );
-            if ( !reader ) 
-              continue;
-            // The factory could create the reader.
+
+    dtkAbstractDataFactory *factoryInstance = dtkAbstractDataFactory::instance();
+
+    for (QMap<QString, bool>::const_iterator it(d->readers.begin()); it != d->readers.end(); ++it) {
+
+        if (it.value()) {
+            QScopedPointer<dtkAbstractDataReader> reader( factoryInstance->reader(it.key()));
+
+            if (!reader)
+                continue;
+
             reader->setData(this);
-            if ( reader->read( file ) ) { 
-            // The reader could read the file
+
+            if (reader->read(file)) { 
                 read = true;
                 break;
             }
         }
     }
-
+    
     if (read) {
         if (d->path.isEmpty())
             d->path = file;
         if (!d->paths.contains(file))
             d->paths << file;
     }
+
     return read;
 }
 
 bool dtkAbstractData::read(const QStringList& files)
 {
     bool read = false;
-    dtkAbstractDataFactory * factoryInstance = dtkAbstractDataFactory::instance();
-    for (QMap<QString, bool>::const_iterator it(d->readers.begin()); it != d->readers.end(); ++it ) {
-        if ( it.value() ) {  // The reader is enabled
-            QScopedPointer<dtkAbstractDataReader> reader( factoryInstance->reader( it.key() ) );
-            if ( !reader ) 
+
+    dtkAbstractDataFactory *factoryInstance = dtkAbstractDataFactory::instance();
+
+    for (QMap<QString, bool>::const_iterator it(d->readers.begin()); it != d->readers.end(); ++it) {
+
+        if (it.value()) {
+
+            QScopedPointer<dtkAbstractDataReader> reader(factoryInstance->reader(it.key()));
+
+            if (!reader) 
                 continue;
-            // The factory could create the reader.
+
             reader->setData(this);
-            if ( reader->read( files ) ) { 
-                // The reader could read the file
+
+            if (reader->read(files)) { 
                 read = true;
                 break;
             }
@@ -220,6 +235,7 @@ bool dtkAbstractData::read(const QStringList& files)
                 d->paths << file;
         }
     }
+
     return read;
 }
 
@@ -227,16 +243,20 @@ bool dtkAbstractData::write(const QString& file)
 {
     bool written = false;
 
-    dtkAbstractDataFactory * factoryInstance = dtkAbstractDataFactory::instance();
-    for (QMap<QString, bool>::const_iterator it(d->writers.begin()); it != d->writers.end(); ++it ) {
-        if ( it.value() ) {  // The reader is enabled
-            QScopedPointer<dtkAbstractDataWriter> writer( factoryInstance->writer( it.key() ) );
-            if ( !writer ) 
+    dtkAbstractDataFactory *factoryInstance = dtkAbstractDataFactory::instance();
+
+    for (QMap<QString, bool>::const_iterator it(d->writers.begin()); it != d->writers.end(); ++it) {
+
+        if (it.value()) {
+
+            QScopedPointer<dtkAbstractDataWriter> writer(factoryInstance->writer(it.key()));
+
+            if (!writer) 
                 continue;
-            // The factory could create the writer.
+
             writer->setData(this);
-            if ( writer->write( file ) ) { 
-                // The writer could write the file
+
+            if (writer->write(file)) { 
                 written = true;
                 break;
             }
@@ -250,16 +270,20 @@ bool dtkAbstractData::write(const QStringList& files)
 {
     bool written = false;
 
-    dtkAbstractDataFactory * factoryInstance = dtkAbstractDataFactory::instance();
-    for (QMap<QString, bool>::const_iterator it(d->writers.begin()); it != d->writers.end(); ++it ) {
-        if ( it.value() ) {  // The reader is enabled
-            QScopedPointer<dtkAbstractDataWriter> writer( factoryInstance->writer( it.key() ) );
-            if ( !writer ) 
+    dtkAbstractDataFactory *factoryInstance = dtkAbstractDataFactory::instance();
+
+    for (QMap<QString, bool>::const_iterator it(d->writers.begin()); it != d->writers.end(); ++it) {
+
+        if (it.value()) {
+
+            QScopedPointer<dtkAbstractDataWriter> writer( factoryInstance->writer(it.key()));
+
+            if (!writer)
                 continue;
-            // The factory could create the writer.
+
             writer->setData(this);
-            if ( writer->write( files ) ) { 
-                // The writer could write the file
+
+            if(writer->write(files)) { 
                 written = true;
                 break;
             }
@@ -272,14 +296,16 @@ bool dtkAbstractData::write(const QStringList& files)
 
 dtkAbstractData *dtkAbstractData::convert(const QString& toType)
 {
-    dtkAbstractData *conversion = 0;
-    for (QMap<QString, bool>::const_iterator it(d->converters.begin()); it!= d->converters.end() && !conversion ; ++it ) {
+    dtkAbstractData *conversion = NULL;
 
-        if ( it.value() ) { // enabled ?
+    for (QMap<QString, bool>::const_iterator it(d->converters.begin()); it!= d->converters.end() && !conversion ; ++it) {
 
-            QScopedPointer< dtkAbstractDataConverter > converter( dtkAbstractDataFactory::instance()->converter(it.key()) );
+        if (it.value()) {
+
+            QScopedPointer< dtkAbstractDataConverter > converter( dtkAbstractDataFactory::instance()->converter(it.key()));
+
             if (converter) {
-                if (converter->canConvert( toType ))
+                if (converter->canConvert(toType))
                     conversion = converter->convert();
             }
         }

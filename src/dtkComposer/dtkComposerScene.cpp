@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 23 15:33:09 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 2780
+ * Last-Updated: Mon May 23 16:06:55 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 2786
  */
 
 /* Commentary: 
@@ -589,6 +589,8 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
     group->setGhost(false);
 
     this->updateEdgesVisibility();
+
+    this->update();
         
     return group;
 }
@@ -787,6 +789,8 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
         parent_block->parentNode()->resize();
         
     this->updateEdgesVisibility();
+
+    this->update();
 }
 
 //! Sets the node factory.
@@ -1222,6 +1226,8 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
     }
 
     QGraphicsScene::keyPressEvent(event);
+
+    this->update();
 }
 
 //! Receives key release events.
@@ -1433,7 +1439,8 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         mouseEvent->accept();
         return;
     }
-    
+
+    this->update();    
 }
 
 //! Receives mouse release events.
@@ -1558,6 +1565,7 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
         
     d->grabber_node = NULL;
 
+    this->update();
 }
 
 //! Receives mouse double click events.
@@ -1634,6 +1642,8 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEven
     this->updateEdgesVisibility();
     emit centerOn(scene_center);
     emit pathChanged(d->current_node);
+
+    this->update();
 }
 
 //! Emits that selection has changed.

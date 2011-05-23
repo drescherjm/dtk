@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:07:37 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 23 15:27:06 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 192
+ * Last-Updated: Mon May 23 16:00:24 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 196
  */
 
 /* Commentary: 
@@ -24,6 +24,7 @@ dtkComposerView::dtkComposerView(QWidget *parent) : QGraphicsView(parent)
     this->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     this->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
     this->setViewportUpdateMode(QGraphicsView::NoViewportUpdate);
+    this->setOptimizationFlag(QGraphicsView::DontSavePainterState);
     this->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     this->setResizeAnchor(QGraphicsView::AnchorViewCenter);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

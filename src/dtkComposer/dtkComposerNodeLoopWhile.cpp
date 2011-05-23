@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May  4 08:51:21 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May  4 15:04:07 2011 (+0200)
+ * Last-Updated: Mon May 23 11:37:16 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 30
+ *     Update #: 32
  */
 
 /* Commentary: 
@@ -48,12 +48,12 @@ public:
 dtkComposerNodeLoopWhile::dtkComposerNodeLoopWhile(dtkComposerNode *parent) : dtkComposerNodeLoop(parent), d(new dtkComposerNodeLoopWhilePrivate)
 {
     d->block_cond = this->addBlock("condition");
-    d->block_cond->setInteractive(true);
+    d->block_cond->setInteractive(false);
     d->block_cond->setHeightRatio(0.95);
     this->addOutputProperty(d->block_cond->addOutputProperty("condition", this));
 
     d->block_loop = this->addBlock("loop");
-    d->block_loop->setInteractive(true);
+    d->block_loop->setInteractive(false);
     d->block_loop->setHeightRatio(1.05);
 
     this->disableInputProperty();

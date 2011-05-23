@@ -214,6 +214,7 @@ public:
 signals:
     void changed(const QString& path);
     void bookmarked(const QString& path);
+    void fileDoubleClicked(const QString &filename);
 
 public slots:
     void setPath(const QString& path);

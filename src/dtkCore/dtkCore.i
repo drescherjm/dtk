@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May  9 14:42:46 2011 (+0200)
+ * Last-Updated: Mon May 23 11:39:57 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 333
+ *     Update #: 335
  */
 
 /* Commentary:
@@ -146,6 +146,12 @@
 
 %ignore   loaded(const QString& path);
 %ignore unloaded(const QString& path);
+
+// /////////////////////////////////////////////////////////////////
+// Ignore rules for dtkAbstractDataImage
+// /////////////////////////////////////////////////////////////////
+
+%immutable PixelMeaningMetaData;
 
 // /////////////////////////////////////////////////////////////////
 // Typemaps

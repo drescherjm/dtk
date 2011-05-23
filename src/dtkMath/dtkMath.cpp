@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jul  6 16:57:24 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Mar 16 10:55:40 2011 (+0100)
+ * Last-Updated: Mon May 16 11:17:28 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 129
+ *     Update #: 170
  */
 
 /* Commentary: 
@@ -27,6 +27,11 @@
 #include "dtkConfig.h"
 #include "dtkMath.h"
 #include "dtkVector3D.h"
+
+#if defined(Q_WS_WIN)
+// on vs 9 abs() does not work with long long int or __uint64
+#define abs qAbs
+#endif
 
 //! dtkBubbleSort(unsigned int indices[], int size) 
 /*! 
@@ -168,7 +173,7 @@ bool dtkAlmostEqualUlpsSimple(float A, float B, int32_t maxUlps)
 {
     if (A == B)
         return true; 
-
+ 
     int32_t intDiff = abs(*(int32_t*)&A - *(int32_t*)&B);
 
     if (intDiff <= maxUlps)
@@ -182,7 +187,7 @@ bool dtkAlmostEqualUlpsSimple(double A, double B, int64_t maxUlps)
     if (A == B)
         return true; 
 
-    int64_t intDiff = abs(*(int64_t*)&A - *(int64_t*)&B);
+    int64_t intDiff = labs(*(int64_t*)&A - *(int64_t*)&B);
 
     if (intDiff <= maxUlps)
         return true;
@@ -227,7 +232,7 @@ bool dtkAlmostEqual2sComplement(double A, double B, int64_t maxUlps)
     if (bInt < 0)
         bInt = HIGH_BIT_64 - bInt;
 
-    int64_t intDiff = abs(aInt - bInt);
+    int64_t intDiff = labs(aInt - bInt);
     if (intDiff <= maxUlps)
         return true;
 
@@ -397,7 +402,7 @@ bool dtkAlmostEqualUlps(double A, double B, int64_t maxUlps)
     if (bInt < 0)
         bInt = HIGH_BIT_64 - bInt;
 
-    int64_t intDiff = abs(aInt - bInt);
+    int64_t intDiff = labs(aInt - bInt);
     if (intDiff <= maxUlps)
         return true;
 
@@ -504,14 +509,14 @@ bool dtkLesserThanUlps(double A, double B, int64_t maxUlps)
         bInt = HIGH_BIT_64 - bInt;
 
     int64_t intDiff = aInt - bInt;
-    if (abs(intDiff) <= maxUlps)
+    if (labs(intDiff) <= maxUlps)
         return false;
 
     else if (intDiff > 0)
         return false;
 
     else
-        return true; 
+        return true;  
 }
 
 //! Returns true when \a A and \B are not too far apart or A smaller than B.
@@ -580,7 +585,7 @@ bool dtkLesserThanOrAlmostEqualUlps(double A, double B, int64_t maxUlps)
         bInt = HIGH_BIT_64 - bInt;
 
     int64_t intDiff = aInt - bInt;
-    if (abs(intDiff) <= maxUlps)
+    if (labs(intDiff) <= maxUlps)
         return true;
 
     else if (intDiff > 0)
@@ -656,7 +661,7 @@ bool dtkGreaterThanUlps(double A, double B, int64_t maxUlps)
         bInt = HIGH_BIT_64 - bInt;
 
     int64_t intDiff = aInt - bInt;
-    if (abs(intDiff) <= maxUlps)
+    if (labs(intDiff) <= maxUlps)
         return false;
 
     else if (intDiff < 0)
@@ -733,7 +738,7 @@ bool dtkGreaterThanOrAlmostEqualUlps(double A, double B, int64_t maxUlps)
         bInt = HIGH_BIT_64 - bInt;
 
     int64_t intDiff = aInt - bInt;
-    if (abs(intDiff) <= maxUlps)
+    if (labs(intDiff) <= maxUlps)
         return true;
 
     else if (intDiff < 0)

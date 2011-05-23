@@ -598,10 +598,7 @@ void dtkFinderListView::mouseDoubleClickEvent(QMouseEvent *event)
         if(!index.isValid())
             return;
 
-        QFileInfo info = model->fileInfo(index);
-
-        if(info.isDir())
-            QListView::mouseDoubleClickEvent(event);
+        QListView::mouseDoubleClickEvent(event);
     }
 }
 
@@ -744,10 +741,7 @@ void dtkFinderTreeView::mouseDoubleClickEvent(QMouseEvent *event)
         if(!index.isValid())
             return;
    
-        QFileInfo info = model->fileInfo(index);
-
-        if(info.isDir())
-            QTreeView::mouseDoubleClickEvent(event);
+        QTreeView::mouseDoubleClickEvent(event);
     }
 }
 
@@ -881,13 +875,16 @@ void dtkFinder::switchToTreeView(void)
 
 void dtkFinder::onIndexDoubleClicked(QModelIndex index)
 {
-    QModelIndex idx = d->model->index(d->model->filePath(index));
-
-    d->list->setRootIndex(idx);
-    d->tree->setRootIndex(idx);
-
     QFileInfo selection = d->model->fileInfo(index);
 
-    if(selection.isDir())
+    if(selection.isDir()) {
+        QModelIndex idx = d->model->index(d->model->filePath(index));
+
+        d->list->setRootIndex(idx);
+        d->tree->setRootIndex(idx);
+
         emit changed(selection.absoluteFilePath());
+    }
+    else
+        emit fileDoubleClicked(selection.absoluteFilePath());
 }

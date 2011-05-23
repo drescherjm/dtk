@@ -25,35 +25,45 @@
 // dtkAbstractDataImagePrivate
 // /////////////////////////////////////////////////////////////////
 
-class dtkAbstractDataImagePrivate
-{
-public:
-};
+//  Unneeded in this case.
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractDataImage
 // /////////////////////////////////////////////////////////////////
 
-dtkAbstractDataImage::dtkAbstractDataImage(void) : dtkAbstractData(), d(new dtkAbstractDataImagePrivate)
+const char* dtkAbstractDataImage::PixelMeaningMetaData = "PixelMeaning";
+
+dtkAbstractDataImage::dtkAbstractDataImage(void) : dtkAbstractData()
 {
 
 }
 
-dtkAbstractDataImage::dtkAbstractDataImage(const dtkAbstractDataImage& other): dtkAbstractData(other), d(new dtkAbstractDataImagePrivate)
+dtkAbstractDataImage::dtkAbstractDataImage(const dtkAbstractDataImage& other): dtkAbstractData(other)
 {
 
 }
 
 dtkAbstractDataImage::~dtkAbstractDataImage(void)
 {
-    delete d;
-
-    d = NULL;
 }
 
 void *dtkAbstractDataImage::image(void)
 {
     return this->data();
+}
+
+int dtkAbstractDataImage::Dimension() const
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return 0;
+}
+
+const dtkAbstractDataImage::PixId& dtkAbstractDataImage::PixelType() const
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return typeid(void);
 }
 
 int dtkAbstractDataImage::xDimension(void)

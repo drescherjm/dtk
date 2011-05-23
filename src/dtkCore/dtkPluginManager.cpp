@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 19:18:51 2011 (+0100)
+ * Last-Updated: Mon May 23 12:43:36 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 156
+ *     Update #: 168
  */
 
 /* Commentary:
@@ -49,22 +49,7 @@ void dtkPluginManager::initialize(void)
     if(d->path.isNull())
         this->readSettings();
 
-    QString paths = "";
-
-    if (!d->path.isEmpty())
-        paths = d->path + ":";
-
-#ifdef Q_WS_MAC
-    QDir plugins_dir = qApp->applicationDirPath() + "/../PlugIns";
-
-    if(plugins_dir.exists())
-        paths = paths + plugins_dir.absolutePath();;
-#else
-    QDir plugins_dir = qApp->applicationDirPath() + "/../plugins";
-
-    if(plugins_dir.exists())
-        paths = paths + plugins_dir.absolutePath();
-#endif
+    QString paths = d->path;
 
 #ifdef Q_WS_WIN
     QStringList pathList;
@@ -114,13 +99,23 @@ void dtkPluginManager::uninitialize(void)
 void dtkPluginManager::readSettings(void)
 {
     QSettings settings("inria", "dtk");
-
-    settings.beginGroup("plugins");
-#ifdef Q_WS_WIN
-    d->path = settings.value("path", "C:\\Program Files\\inria\\plugins").toString();
+    QString defaultPath;
+    QDir plugins_dir;
+#ifdef Q_WS_MAC
+    plugins_dir = qApp->applicationDirPath() + "/../PlugIns";
 #else
-    d->path = settings.value("path", "/usr/local/inria/plugins").toString();
+    plugins_dir = qApp->applicationDirPath() + "/../plugins";
 #endif
+
+    defaultPath = plugins_dir.absolutePath();
+    settings.beginGroup("plugins");
+
+    if (!settings.contains("path")) {
+        dtkDebug() << "Filling in empty path in settings with default path:" << defaultPath;
+        settings.setValue("path", defaultPath);
+    }
+
+    d->path = settings.value("path", defaultPath).toString();
 
     settings.endGroup();
 

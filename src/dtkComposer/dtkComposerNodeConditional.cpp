@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mai  2 20:00:37 2011 (+0200)
+ * Last-Updated: Mon May 23 14:39:17 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 76
+ *     Update #: 77
  */
 
 /* Commentary: 
@@ -46,10 +46,10 @@ public:
 dtkComposerNodeConditional::dtkComposerNodeConditional(dtkComposerNode *parent) : dtkComposerNodeControl(parent), d(new dtkComposerNodeConditionalPrivate)
 {
     d->block_then = this->addBlock("then");
-    d->block_then->setInteractive(true);
+    d->block_then->setInteractive(false);
 
     d->block_else = this->addBlock("else");
-    d->block_else->setInteractive(true);
+    d->block_else->setInteractive(false);
 
     this->setColor(QColor("#aa7845"));
     this->setTitle("Conditional");

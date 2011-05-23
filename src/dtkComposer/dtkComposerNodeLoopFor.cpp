@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  4 10:47:59 2011 (+0200)
+ * Last-Updated: Mon May 23 14:38:59 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 263
+ *     Update #: 264
  */
 
 /* Commentary: 
@@ -57,19 +57,19 @@ public:
 dtkComposerNodeLoopFor::dtkComposerNodeLoopFor(dtkComposerNode *parent) : dtkComposerNodeLoop(parent), d(new dtkComposerNodeLoopForPrivate)
 {
     d->block_cond = this->addBlock("condition");
-    d->block_cond->setInteractive(true);
+    d->block_cond->setInteractive(false);
     d->block_cond->setHeightRatio(0.95);
     this->addInputProperty(d->block_cond->addInputProperty("variable", this));
     this->addOutputProperty(d->block_cond->addOutputProperty("condition", this));
 
     d->block_loop = this->addBlock("loop");
-    d->block_loop->setInteractive(true);
+    d->block_loop->setInteractive(false);
     d->block_loop->setHeightRatio(1.1);
     this->addInputProperty(d->block_loop->addInputProperty("variable", this));
     this->addOutputProperty(d->block_loop->addOutputProperty("variable", this));
 
     d->block_post = this->addBlock("post");
-    d->block_post->setInteractive(true);
+    d->block_post->setInteractive(false);
     d->block_post->setHeightRatio(0.95);
     this->addInputProperty(d->block_post->addInputProperty("variable", this));
     this->addOutputProperty(d->block_post->addOutputProperty("variable", this));

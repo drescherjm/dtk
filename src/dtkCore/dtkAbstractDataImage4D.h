@@ -1,4 +1,4 @@
-/* dtkAbstractDataImage3D.h --- 
+/* dtkAbstractDataImage4D.h --- 
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
@@ -17,25 +17,25 @@
  * 
  */
 
-#ifndef DTKABSTRACTDATAIMAGE3D_H
-#define DTKABSTRACTDATAIMAGE3D_H
+#ifndef DTKABSTRACTDATAIMAGE4D_H
+#define DTKABSTRACTDATAIMAGE4D_H
 
 #include <dtkCore/dtkAbstractDataImage.h>
 
-class dtkAbstractDataImage3DPrivate;
+class dtkAbstractDataImage4DPrivate;
 
-class DTKCORE_EXPORT dtkAbstractDataImage3D : public dtkAbstractDataImage
+class DTKCORE_EXPORT dtkAbstractDataImage4D : public dtkAbstractDataImage
 {
     Q_OBJECT
 
 public:
-    dtkAbstractDataImage3D(void);
-   ~dtkAbstractDataImage3D(void);
+    dtkAbstractDataImage4D(void);
+   ~dtkAbstractDataImage4D(void);
 
     virtual int Dimension() const;
 
 private:
-   dtkAbstractDataImage3DPrivate *d;
+   dtkAbstractDataImage4DPrivate *d;
 };
 
 #endif

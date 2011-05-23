@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May  4 14:30:50 2011 (+0200)
+ * Last-Updated: Wed May 18 14:43:49 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 733
+ *     Update #: 743
  */
 
 /* Commentary: 
@@ -407,13 +407,13 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
     if(dtkComposerNodeNumber *number_node = dynamic_cast<dtkComposerNodeNumber *>(n)) {
         
         QDomNodeList children = node.childNodes();
+
+        dtkComposerNodeNumber::Genre genre;
         
         for(int i = 0; i < children.count(); i++) {
 
             if(children.at(i).toElement().tagName() != "genre") 
                 continue;
-
-            dtkComposerNodeNumber::Genre genre;
 
             if(children.at(i).childNodes().at(0).toText().data() == "int")
                 genre = dtkComposerNodeNumber::Int;
@@ -431,8 +431,6 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
                 genre = dtkComposerNodeNumber::Float;
             else if(children.at(i).childNodes().at(0).toText().data() == "double")
                 genre = dtkComposerNodeNumber::Double;
-
-            number_node->setGenre(genre);
         }
         
         for(int i = 0; i < children.count(); i++) {
@@ -442,48 +440,47 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
 
             QString value = children.at(i).childNodes().at(0).toText().data();
 
-            switch (number_node->genre()) {
+            switch (genre) {
 
             case (dtkComposerNodeNumber::Int):
-                number_node->setValue(value.toInt());
+                number_node->setValue(qVariantFromValue(value.toInt()));
                 break;
         
             case (dtkComposerNodeNumber::UInt):
-                number_node->setValue(value.toUInt());
+                number_node->setValue(qVariantFromValue(value.toUInt()));
                 break;
                 
             case (dtkComposerNodeNumber::Long):
-                number_node->setValue((long)value.toLongLong());
+                number_node->setValue(qVariantFromValue((long)value.toLongLong()));
                 break;
                 
             case (dtkComposerNodeNumber::ULong):
-                number_node->setValue((ulong)value.toULongLong());
+                number_node->setValue(qVariantFromValue((ulong)value.toULongLong()));
                 break;
                 
             case (dtkComposerNodeNumber::LongLong):
-                number_node->setValue(value.toLongLong());
+                number_node->setValue(qVariantFromValue(value.toLongLong()));
                 break;
                 
             case (dtkComposerNodeNumber::ULongLong):
-                number_node->setValue(value.toULongLong());
+                number_node->setValue(qVariantFromValue(value.toULongLong()));
                 break;
                 
             case (dtkComposerNodeNumber::Float):
-                number_node->setValue((float)value.toDouble());
+                number_node->setValue(qVariantFromValue((float)value.toDouble()));
                 break;
                 
             case (dtkComposerNodeNumber::Double):
-                number_node->setValue(value.toDouble());
+                number_node->setValue(qVariantFromValue(value.toDouble()));
                 break;
                 
             default:
-                number_node->setGenre(dtkComposerNodeNumber::Int);
-                number_node->setValue(value.toInt());
+                number_node->setValue(qVariantFromValue(value.toInt()));
                 break;
             }
         }
 
-        number_node->refresh();
+        number_node->touch();
     }
 
     // Number comparator
@@ -584,6 +581,8 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
 
             string_node->setValue(children.at(i).childNodes().at(0).toText().data());
         }
+
+        string_node->touch();
     }
 
     // String comparator

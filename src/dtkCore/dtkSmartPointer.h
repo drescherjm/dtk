@@ -14,16 +14,16 @@ public:
     typedef T ObjectType;
 
     /** Constructor  */
-    dtkSmartPointer () : d(0) { }
+    dtkSmartPointer() : d(0) { }
 
     /** Copy constructor  */
-    dtkSmartPointer (const dtkSmartPointer<T> &p):
-    d(p.d)
+    dtkSmartPointer( const dtkSmartPointer<T>& p) :
+        d(p.d)
     { this->retain(); }
 
     /** Constructor to pointer p  */
-    dtkSmartPointer (T *p):
-    d(p)
+    dtkSmartPointer (T* p) :
+        d(p)
     { this->retain(); }
 
     /** Destructor  */
@@ -34,11 +34,11 @@ public:
     }
 
     /** Overload operator ->  */
-    T *operator -> () const
+    T* operator->() const
     { return d; }
 
     /** Return pointer to object.  */
-    operator T * () const
+    operator T* () const
     { return d; }
 
     /** Test if the pointer has been initialized */
@@ -55,38 +55,38 @@ public:
     { return (d != static_cast<const T*>(r) ); }
 
     /* Operators allow the pointer to be used in containers */
-    bool operator == ( const dtkSmartPointer & r ) const
+    bool operator==( const dtkSmartPointer& r ) const
         { return d == r.d; }
-    bool operator != ( const dtkSmartPointer & r ) const
+    bool operator!=( const dtkSmartPointer& r ) const
         { return d != r.d; }
-    bool operator < ( const dtkSmartPointer & r ) const
+    bool operator<( const dtkSmartPointer& r ) const
         { return d < r.d; }
-    bool operator <= ( const dtkSmartPointer & r ) const
+    bool operator<=( const dtkSmartPointer& r ) const
         { return d <= r.d; }
-    bool operator > ( const dtkSmartPointer & r ) const
+    bool operator>( const dtkSmartPointer& r ) const
         { return d > r.d; }
-    bool operator >= ( const dtkSmartPointer & r ) const
+    bool operator>=( const dtkSmartPointer& r ) const
         { return d >= r.d; }
 
     /** Access functions to pointer. */
-    T *data ()
+    T* data()
     { return d; }
 
-    const T * constData () const
+    const T* constData() const
     { return d; }
 
-    T & operator*()
+    T& operator*()
     { return *d; }
 
-    const T & operator*() const
+    const T& operator*() const
     { return *d; }
 
     /** Overload operator assignment.  */
-    dtkSmartPointer &operator = (const dtkSmartPointer &r)
-    { return this->operator = (r.d); }
+    dtkSmartPointer& operator=(const dtkSmartPointer& r)
+    { return this->operator=(r.d); }
 
     /** Overload operator assignment.  */
-    dtkSmartPointer &operator = (T *r)
+    dtkSmartPointer &operator = (T* r)
     {
         if (d != r)
         {
@@ -99,7 +99,7 @@ public:
     }
 
     //! Swap this instance's shared data pointer with the shared data pointer in other
-    void swap( dtkSmartPointer & other)
+    void swap( dtkSmartPointer& other)
     {
         T* tmp = d;
         d = other.d;
@@ -107,7 +107,7 @@ public:
     }
 
     /** Assign without incrementing reference count of assigned object.  */
-    dtkSmartPointer & take (T *r)
+    dtkSmartPointer& take(T*r)
     {
         if (d != r)
         {
@@ -134,6 +134,6 @@ private:
 };
 
 template <class T>
-inline uint qHash(const dtkSmartPointer<T> & key) { return qHash(key.constData()); }
+inline uint qHash(const dtkSmartPointer<T>& key) { return qHash(key.constData()); }
 
 #endif // DTKSMARTPOINTER_H

@@ -24,7 +24,7 @@
 
 class dtkAbstractDataImage3DPrivate;
 
-class DTKCORE_EXPORT dtkAbstractDataImage3D : public dtkAbstractDataImage
+class dtkAbstractDataImage3D : public dtkAbstractDataImage
 {
     Q_OBJECT
 

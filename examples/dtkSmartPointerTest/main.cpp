@@ -73,6 +73,9 @@ inline void CheckTestResult( bool condition, const char * cond, const char * fil
 
 int main(int argc, char* argv[])
 {
+    Q_UNUSED(argc);
+    Q_UNUSED(argv);
+
     int ret = DTK_FAILURE;
     try {
 #if 0
@@ -86,7 +89,7 @@ int main(int argc, char* argv[])
 
         dtkAbstractDataFactory * factory = dtkAbstractDataFactory::instance();
 
-        dtkAbstractData * pData = dtkAbstractDataFactory::instance()->create( TestData::s_TypeName );
+        dtkAbstractData * pData = factory->create( TestData::s_TypeName );
         CHECK_TEST_RESULT(pData != NULL);
         CHECK_TEST_RESULT(pData->count() == 1);
 
@@ -100,7 +103,7 @@ int main(int argc, char* argv[])
         CHECK_TEST_RESULT( !myInstance );  // Check cast-to-bool
         CHECK_TEST_RESULT( myInstance.isNull() );
 
-        myInstance.take( dynamic_cast< TestData *>(dtkAbstractDataFactory::instance()->create( TestData::s_TypeName )) );
+        myInstance.take( dynamic_cast< TestData *>(factory->create( TestData::s_TypeName )) );
         CHECK_TEST_RESULT( myInstance );
         CHECK_TEST_RESULT( !myInstance.isNull() );
         CHECK_TEST_RESULT( myInstance->count() == 1 );
@@ -110,7 +113,7 @@ int main(int argc, char* argv[])
         CHECK_TEST_RESULT( !myInstance );
         CHECK_TEST_RESULT( notSmartPtr->count() == 0 );
 
-        myInstance.take( dynamic_cast< TestData *>(dtkAbstractDataFactory::instance()->create( TestData::s_TypeName )) );
+        myInstance.take( dynamic_cast< TestData *>(factory->create( TestData::s_TypeName )) );
 
         {   // Scope a pointer
             // Test assignment
@@ -124,10 +127,10 @@ int main(int argc, char* argv[])
         CHECK_TEST_RESULT( myInstance->count() == 1);
 
         dtkSmartPointer< TestData > myOtherInstance;
-        myOtherInstance.take( dynamic_cast< TestData *>(dtkAbstractDataFactory::instance()->create( TestData::s_TypeName )) );
+        myOtherInstance.take( dynamic_cast< TestData *>(factory->create( TestData::s_TypeName )) );
 
         dtkSmartPointer< TestData > myOtherInstance2;
-        myOtherInstance2.take( dynamic_cast< TestData *>(dtkAbstractDataFactory::instance()->create( TestData::s_TypeName )) );
+        myOtherInstance2.take( dynamic_cast< TestData *>(factory->create( TestData::s_TypeName )) );
 
         
         {   // Test copy-construction

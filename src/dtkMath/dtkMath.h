@@ -27,8 +27,8 @@
 #if !defined(Q_WS_WIN)
 #include <inttypes.h>
 #else
-#define int32_t __int32
-#define int64_t __int64
+#define int32_t qint32
+#define int64_t qint64
 #endif
 
 // /////////////////////////////////////////////////////////////////

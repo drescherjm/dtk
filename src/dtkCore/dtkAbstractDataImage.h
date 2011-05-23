@@ -20,20 +20,22 @@
 #ifndef DTKABSTRACTIMAGEDATA_H
 #define DTKABSTRACTIMAGEDATA_H
 
+#include <typeinfo>
 #include <dtkCore/dtkAbstractData.h>
 
-class dtkAbstractDataImagePrivate;
-
-class DTKCORE_EXPORT dtkAbstractDataImage : public dtkAbstractData
-{
-    Q_OBJECT
-
+class DTKCORE_EXPORT dtkAbstractDataImage: public dtkAbstractData {
 public:
+
+    typedef std::type_info PixId;
+
              dtkAbstractDataImage(void);
              dtkAbstractDataImage(const dtkAbstractDataImage& other);
     virtual ~dtkAbstractDataImage(void);
 
     void *image(void);
+
+    virtual int   Dimension() const;
+    virtual const PixId& PixelType() const;
 
     virtual int xDimension(void);
     virtual int yDimension(void);
@@ -47,8 +49,7 @@ public:
     virtual int scalarValueMinCount(void);
     virtual int scalarValueMaxCount(void);
 
-private:
-    dtkAbstractDataImagePrivate *d;
+    static const char* PixelMeaningMetaData;
 };
 
 #endif

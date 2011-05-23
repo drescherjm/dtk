@@ -29,8 +29,11 @@ class DTKCORE_EXPORT dtkAbstractDataImage2D : public dtkAbstractDataImage
     Q_OBJECT
 
 public:
+
     dtkAbstractDataImage2D(void);
    ~dtkAbstractDataImage2D(void);
+
+   virtual int Dimension() const;
 
 private:
    dtkAbstractDataImage2DPrivate *d;

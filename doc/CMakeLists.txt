@@ -33,7 +33,7 @@ if (DOXYGEN_FOUND)
   configure_file(Doxyfile.in     ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile IMMEDIATE @ONLY)
   configure_file(qhc/dtk.qhcp.in ${CMAKE_CURRENT_BINARY_DIR}/dtk.qhcp IMMEDIATE @ONLY)
 
-  add_custom_target(doc
+  add_custom_target(${PROJECT_NAME}-doc
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/DoxygenLayout.xml  ${CMAKE_CURRENT_BINARY_DIR}/DoxygenLayout.xml
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/DoxygenHeader.html ${CMAKE_CURRENT_BINARY_DIR}/DoxygenHeader.html

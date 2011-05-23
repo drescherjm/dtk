@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon May 23 12:26:46 2011 (+0200)
+## Last-Updated: Mon May 23 14:36:15 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 178
+##     Update #: 179
 ######################################################################
 ## 
 ### Commentary: 
@@ -66,15 +66,9 @@ endif()
 include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(${PROJECT_BINARY_DIR})
 
-if(WIN32)
-  set(${PROJECT_NAME}_ARCHIVE_OUTPUT_DIRECTORY lib)
-  set(${PROJECT_NAME}_RUNTIME_OUTPUT_DIRECTORY bin)
-  set(${PROJECT_NAME}_LIBRARY_OUTPUT_DIRECTORY bin)
-else()
-  set(${PROJECT_NAME}_ARCHIVE_OUTPUT_DIRECTORY lib)
-  set(${PROJECT_NAME}_RUNTIME_OUTPUT_DIRECTORY bin)
-  set(${PROJECT_NAME}_LIBRARY_OUTPUT_DIRECTORY lib)
-endif()
+set(${PROJECT_NAME}_ARCHIVE_OUTPUT_DIRECTORY lib)
+set(${PROJECT_NAME}_RUNTIME_OUTPUT_DIRECTORY bin)
+set(${PROJECT_NAME}_LIBRARY_OUTPUT_DIRECTORY bin)
 
 set(LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/${${PROJECT_NAME}_LIBRARY_OUTPUT_DIRECTORY})
 set(ARCHIVE_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/${${PROJECT_NAME}_ARCHIVE_OUTPUT_DIRECTORY})

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 23 10:42:20 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 2774
+ * Last-Updated: Mon May 23 15:33:09 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 2780
  */
 
 /* Commentary: 
@@ -1246,6 +1246,7 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
         d->current_edge->adjust(d->current_edge->start(), mouseEvent->scenePos());
 
     this->updateEdgesVisibility();
+    this->update();
 
     // -- Control nodes handling
 
@@ -1255,41 +1256,41 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
     if (!d->grabber_node || d->grabber_node->isGhost())
         return;
 
-    QList<dtkComposerNodeControlBlock *> hovered_control_blocks = this->hoveredControlBlocks(d->grabber_node);
+    // QList<dtkComposerNodeControlBlock *> hovered_control_blocks = this->hoveredControlBlocks(d->grabber_node);
 
-    if (hovered_control_blocks.count() > 1) {
+    // if (hovered_control_blocks.count() > 1) {
 
-        foreach(dtkComposerNodeControlBlock *block, hovered_control_blocks)
-            block->highlight(false);
+    //     foreach(dtkComposerNodeControlBlock *block, hovered_control_blocks)
+    //         block->highlight(false);
 
-        d->grabber_node->highlight(false);
+    //     d->grabber_node->highlight(false);
 
-    } else if (hovered_control_blocks.count() == 1) {
+    // } else if (hovered_control_blocks.count() == 1) {
 
-        if (d->grabber_node_has_edges && d->grabber_node->parentItem() != hovered_control_blocks.first()) {
+    //     if (d->grabber_node_has_edges && d->grabber_node->parentItem() != hovered_control_blocks.first()) {
 
-            hovered_control_blocks.first()->highlight(false);
-            d->grabber_node->highlight(false);
+    //         hovered_control_blocks.first()->highlight(false);
+    //         d->grabber_node->highlight(false);
 
-        } else {
+    //     } else {
 
-            hovered_control_blocks.first()->highlight(true);
-            d->grabber_node->highlight(true);
+    //         hovered_control_blocks.first()->highlight(true);
+    //         d->grabber_node->highlight(true);
 
-        }
+    //     }
 
-    } else {
+    // } else {
 
-        if (d->grabber_node_has_edges && d->grabber_node->parentItem() != d->current_node) {
+    //     if (d->grabber_node_has_edges && d->grabber_node->parentItem() != d->current_node) {
 
-            d->grabber_node->highlight(false);
+    //         d->grabber_node->highlight(false);
 
-        } else {
+    //     } else {
 
-            d->grabber_node->highlight(true);
+    //         d->grabber_node->highlight(true);
             
-        }
-    }
+    //     }
+    // }
 }
 
 //! Receives mouse press events.

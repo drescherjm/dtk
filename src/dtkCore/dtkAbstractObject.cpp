@@ -20,6 +20,9 @@
 #include <dtkCore/dtkAbstractObject.h>
 #include <dtkCore/dtkLog.h>
 
+#include <QMutex>
+#include <QMutexLocker>
+
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractObjectPrivate
 // /////////////////////////////////////////////////////////////////
@@ -28,6 +31,7 @@ class dtkAbstractObjectPrivate
 {
 public:
     int count;
+    QMutex countMutex;
 
     QHash<QString, QStringList> values;
     QHash<QString, QString> properties;
@@ -85,6 +89,8 @@ int dtkAbstractObject::count(void)
 
 int dtkAbstractObject::retain(void)
 {
+    QMutexLocker lock( &(d->countMutex) );
+
     return d->count++;
 }
 
@@ -97,6 +103,8 @@ int dtkAbstractObject::retain(void)
 
 int dtkAbstractObject::release(void)
 {
+    QMutexLocker lock( &(d->countMutex) );
+
     if(!(--(d->count)))
         this->deleteLater();
 

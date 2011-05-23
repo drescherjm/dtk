@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 23 12:19:32 2011 (+0200)
+ * Last-Updated: Mon May 23 12:43:36 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 157
+ *     Update #: 168
  */
 
 /* Commentary:
@@ -23,7 +23,7 @@
 #include <dtkCore/dtkPlugin.h>
 #include <dtkCore/dtkLog.h>
 
-#define DTK_VERBOSE_LOAD true
+#define DTK_VERBOSE_LOAD false
 
 class dtkPluginManagerPrivate
 {
@@ -50,7 +50,6 @@ void dtkPluginManager::initialize(void)
         this->readSettings();
 
     QString paths = d->path;
-
 
 #ifdef Q_WS_WIN
     QStringList pathList;
@@ -111,21 +110,18 @@ void dtkPluginManager::readSettings(void)
     defaultPath = plugins_dir.absolutePath();
     settings.beginGroup("plugins");
 
-    //initialize settings if never set before.
-    if (!settings.contains("path"))
-    {
-        dtkDebug()<<"Filling in empty path in settings with default path:"
-               << defaultPath;
+    if (!settings.contains("path")) {
+        dtkDebug() << "Filling in empty path in settings with default path:" << defaultPath;
         settings.setValue("path", defaultPath);
     }
+
     d->path = settings.value("path", defaultPath).toString();
+
     settings.endGroup();
 
-    //Warn if path still empty either because of a user's mistake, or for debugging purposes.
     if(d->path.isEmpty()) {
         dtkWarning() << "Your dtk config does not seem to be set correctly.";
         dtkWarning() << "Please set plugins.path.";
-        dtkWarning() << "Default directory should probably be: " << plugins_dir.absolutePath();
     }
 }
 

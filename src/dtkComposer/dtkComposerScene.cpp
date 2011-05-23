@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 18 11:07:45 2011 (+0200)
+ * Last-Updated: Mon May 23 10:42:20 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 2666
+ *     Update #: 2774
  */
 
 /* Commentary: 
@@ -68,6 +68,12 @@ bool dtkComposerScenePrivate::isChildOf(QGraphicsItem *item, QGraphicsItem *pare
 // dtkComposerScene
 // /////////////////////////////////////////////////////////////////
 
+//! Constructs a dtkComposerScene with parent \a parent of QObject type.
+/*! 
+ *  The parent of an object may be viewed as the object's owner. The
+ *  destructor of a parent object destroys all child objects. Setting
+ *  parent to 0 constructs a scene with no parent.
+ */
 dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(new dtkComposerScenePrivate)
 {
     d->grabber_node_origin = QPointF(0,0);
@@ -84,6 +90,10 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
     connect(this, SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));
 }
 
+//! Destroys the dtk composer scene.
+/*! 
+ *  
+ */
 dtkComposerScene::~dtkComposerScene(void)
 {
     delete d->factory;
@@ -92,21 +102,37 @@ dtkComposerScene::~dtkComposerScene(void)
     d = NULL;
 }
 
+//! Returns a QList of all the notes in the scene.
+/*! 
+ *  
+ */
 QList<dtkComposerNote *> dtkComposerScene::notes(void)
 {
     return d->notes;
 }
 
+//! Returns a QList of all the edges in the scene.
+/*! 
+ *  
+ */
 QList<dtkComposerEdge *> dtkComposerScene::edges(void)
 {
     return d->edges;
 }
 
+//! Returns a QList of all the nodes in the scene.
+/*! 
+ *  
+ */
 QList<dtkComposerNode *> dtkComposerScene::nodes(void)
 {
     return d->nodes;
 }
 
+//! Returns a QList of all the nodes sharing name \a name.
+/*! 
+ *  
+ */
 QList<dtkComposerNode *> dtkComposerScene::nodes(QString name)
 {
     QList<dtkComposerNode *> list;
@@ -118,6 +144,10 @@ QList<dtkComposerNode *> dtkComposerScene::nodes(QString name)
     return list;
 }
 
+//! Returns a QList of all the properties in the scene.
+/*! 
+ *  
+ */
 QList<dtkComposerNodeProperty *> dtkComposerScene::properties(void)
 {
     QList<dtkComposerNodeProperty *> list;
@@ -129,6 +159,10 @@ QList<dtkComposerNodeProperty *> dtkComposerScene::properties(void)
     return list;
 }
 
+//! Returns a QList of all the properties sharing name \a name.
+/*! 
+ *  
+ */
 QList<dtkComposerNodeProperty *> dtkComposerScene::properties(QString name)
 {
     QList<dtkComposerNodeProperty *> list;
@@ -144,9 +178,9 @@ QList<dtkComposerNodeProperty *> dtkComposerScene::properties(QString name)
 //! Start nodes
 /*! 
  *  Returns the list of nodes that are not within a composite nor
- *  within a control block, with no input edges
+ *  within a control block, and that have no input edges but output
+ *  edges.
  */
-
 QList<dtkComposerNode *> dtkComposerScene::startNodes(void)
 {
     QList<dtkComposerNode *> list;
@@ -171,6 +205,12 @@ QList<dtkComposerNode *> dtkComposerScene::startNodes(void)
     return list;
 }
 
+//! End nodes
+/*! 
+ *  Returns the list of nodes that are not within a composite nor
+ *  within a control block, and that have no output edges but input
+ *  edges.
+ */
 QList<dtkComposerNode *> dtkComposerScene::endNodes(void)
 {
     QList<dtkComposerNode *> list;
@@ -195,11 +235,19 @@ QList<dtkComposerNode *> dtkComposerScene::endNodes(void)
     return list;
 }
 
+//! Updates position and visibility of the edges in the scene.
+/*! 
+ *  
+ */
 void dtkComposerScene::touch(void)
 {
     this->updateEdgesVisibility();
 }
 
+//! Removes nodes and notes from the scene.
+/*! 
+ *  
+ */
 void dtkComposerScene::clear(void)
 {
     foreach(dtkComposerNode *node, this->nodes())
@@ -212,11 +260,20 @@ void dtkComposerScene::clear(void)
     d->notes.clear();
 }
 
+//! Returns true when scene has been modified.
+/*! 
+ *  
+ */
 bool dtkComposerScene::isModified(void)
 {
     return d->modified;
 }
 
+//! Sets modified flag to \a modified.
+/*! 
+ *  When the flag is set to true, the signal \b compositionChanged is
+ *  emitted.
+ */
 void dtkComposerScene::setModified(bool modified)
 {
     d->modified = modified;           
@@ -225,6 +282,10 @@ void dtkComposerScene::setModified(bool modified)
         emit compositionChanged();
 }
 
+//! Adds \a edge to the scene.
+/*! 
+ *  
+ */
 void dtkComposerScene::addEdge(dtkComposerEdge *edge)
 {
     this->addItem(edge);
@@ -234,6 +295,10 @@ void dtkComposerScene::addEdge(dtkComposerEdge *edge)
     //this->setModified(true);
 }
 
+//! Adds \a node to the scene.
+/*! 
+ *  
+ */
 void dtkComposerScene::addNode(dtkComposerNode *node)
 {
     d->nodes << node;
@@ -243,6 +308,10 @@ void dtkComposerScene::addNode(dtkComposerNode *node)
     //this->setModified(true);
 }
 
+//! Adds \a note to the scene.
+/*! 
+ *  
+ */
 void dtkComposerScene::addNote(dtkComposerNote *note)
 {
     this->addItem(note);
@@ -252,6 +321,11 @@ void dtkComposerScene::addNote(dtkComposerNote *note)
     //this->setModified(true);
 }
 
+//! Removes \a edge from the scene.
+/*! 
+ *  Firstly, the edge is unlinked (see dtkComposerEdge), then it is
+ *  removed from the list of the edges then deleted.
+ */
 void dtkComposerScene::removeEdge(dtkComposerEdge *edge)
 {
     edge->unlink();
@@ -262,6 +336,17 @@ void dtkComposerScene::removeEdge(dtkComposerEdge *edge)
     edge = NULL;
 }
 
+//! Removes \a node from the scene.
+/*! 
+ *  Firstly, all edges connected to this node are removed from the
+ *  scene (see dtkComposerScene::removeEdge). Then, if \a node has a
+ *  parent node, it is removed from its lists. Moreover, if the node
+ *  is inside a composite one, properties cloned from \a node and
+ *  related edges are also deleted. Eventually, if \a node has child
+ *  nodes, these latter are also removed from the scene.
+ *
+ *  Finally, the node is remove from the scene list and deleted.
+ */
 void dtkComposerScene::removeNode(dtkComposerNode *node)
 {
     foreach(dtkComposerEdge *edge, node->inputEdges())
@@ -352,6 +437,10 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
     node = NULL;
 }
 
+//! Removes \a note from the scene.
+/*! 
+ *  
+ */
 void dtkComposerScene::removeNote(dtkComposerNote *note)
 {
     d->notes.removeAll(note);
@@ -359,15 +448,18 @@ void dtkComposerScene::removeNote(dtkComposerNote *note)
     delete note;
 }
 
-//! Group creation. Creates a composite node.
+//! Group creation. Creates a composite node and adds it to the scene.
 /*! 
- * \param nodes The list of nodes to be grouped together. Beware not
- * to group a not together with a composite node the node is a child
- * of.
- * 
- * \return The composite node that form the group.
+ *  \param nodes The list of nodes to be grouped together.
+ *  \param position Never used.
+ *  \return The composite node that forms the group.
+ *
+ *  Selected nodes to be grouped can be linked each other or with
+ *  other nodes by edges. In this case, group creation preserves the
+ *  logic of such connections through the composite node. Impacted
+ *  edges are deleted and new edges that both connect outside nodes
+ *  and inside grouped nodes to the created composite one are created.
  */
-
 dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, QPointF position)
 {
     if (d->grabber_node)
@@ -501,6 +593,16 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
     return group;
 }
 
+//! Creates a node and adds it to the scene.
+/*! 
+ *  \param type The type that is given to the node factory to create
+ *  the current node.
+ *  \param position Position of the node in the scene.
+ *  \return The created node.
+ *
+ *  If the created node is a composite one, then properties of all its
+ *  childs are cloned into it.
+ */
 dtkComposerNode *dtkComposerScene::createNode(QString type, QPointF position)
 {
     if (dtkComposerNode *node = d->factory->create(type)) {
@@ -536,6 +638,13 @@ dtkComposerNode *dtkComposerScene::createNode(QString type, QPointF position)
     }
 }
 
+//! Creates a note and adds it to the scene.
+/*! 
+ *  \param text Content of the note.
+ *  \param position Position of the note in the scene.
+ *  \param size Size of the note.
+ *  \return The created note.
+ */
 dtkComposerNote *dtkComposerScene::createNote(QString text, QPointF position, QSizeF size)
 {
     dtkComposerNote *note = new dtkComposerNote(d->current_node);
@@ -554,6 +663,14 @@ dtkComposerNote *dtkComposerScene::createNote(QString text, QPointF position, QS
     return note;
 }
 
+//! Group deletion. Deletes a composite node and removes it from the scene.
+/*! 
+ *  The nodes forming the composite are just ungroupped not
+ *  deleted. Logic connections defined by the edges between these
+ *  nodes and outside nodes are conserved after the composite
+ *  deletion. In practice, all impacted edges are deleted and new
+ *  edges preserving the logic are created.
+ */
 void dtkComposerScene::explodeGroup(dtkComposerNode *node)
 {
     if (!node)
@@ -672,11 +789,19 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
     this->updateEdgesVisibility();
 }
 
+//! Sets the node factory.
+/*! 
+ *  
+ */
 void dtkComposerScene::setFactory(dtkComposerNodeFactory *factory)
 {
     d->factory = factory;
 }
 
+//! Starts evaluation of the data flow defined in the scene.
+/*! 
+ *  
+ */
 void dtkComposerScene::startEvaluation(void)
 {
     s_evaluate = true;
@@ -706,6 +831,10 @@ void dtkComposerScene::startEvaluation(void)
 
 }
 
+//! Stops evaluation of the data flow.
+/*! 
+ *  
+ */
 void dtkComposerScene::stopEvaluation(void)
 {
     s_evaluate = false;
@@ -713,6 +842,10 @@ void dtkComposerScene::stopEvaluation(void)
     emit evaluationStopped();
 }
 
+//! Copy selected nodes and related edges.
+/*! 
+ *  Nodes and edges are stored in a clipboard.
+ */
 void dtkComposerScene::copy(void)
 {
     d->clipboard.nodes.clear();
@@ -736,6 +869,10 @@ void dtkComposerScene::copy(void)
     }
 }
 
+//! Paste nodes and edges stored in the clipboard.
+/*! 
+ *  
+ */
 void dtkComposerScene::paste(void)
 {
     QMap<dtkComposerNode *, dtkComposerNode *> node_map;
@@ -756,6 +893,10 @@ void dtkComposerScene::paste(void)
     }
 }
 
+//! Returns node which position is at \a point.
+/*! 
+ *  Returns NULL when no node is under \a point.
+ */
 dtkComposerNode *dtkComposerScene::nodeAt(const QPointF& point) const
 {
     QList<QGraphicsItem *> items = this->items(point.x(), point.y(), 1, 1, Qt::IntersectsItemBoundingRect);
@@ -767,6 +908,10 @@ dtkComposerNode *dtkComposerScene::nodeAt(const QPointF& point) const
     return NULL;
 }
 
+//! Returns property which position is at \a point.
+/*! 
+ *  Returns NULL when no property is under \a point.
+ */
 dtkComposerNodeProperty *dtkComposerScene::propertyAt(const QPointF& point) const
 {
     QList<QGraphicsItem *> items = this->items(point.x(), point.y(), 1, 1, Qt::IntersectsItemBoundingRect);
@@ -778,11 +923,22 @@ dtkComposerNodeProperty *dtkComposerScene::propertyAt(const QPointF& point) cons
     return NULL;
 }
 
+//! Sets current node to \a node.
+/*! 
+ *  When browsing through the different levels of composite nodes,
+ *  current node is set to the composite node in which the scene takes
+ *  place. Hence, at the top level current node is set to NULL and for
+ *  the other levels the current node is necessarily ghost.
+ */
 void dtkComposerScene::setCurrentNode(dtkComposerNode *node)
 {
     d->current_node = node;
 }
 
+//! Hides all the nodes in the scene.
+/*! 
+ *  
+ */
 void dtkComposerScene::hideAllNodes(void)
 {
     foreach(QGraphicsItem *item, this->items()) {
@@ -794,6 +950,10 @@ void dtkComposerScene::hideAllNodes(void)
     }
 }
 
+//! Shows all the nodes in the scene.
+/*! 
+ *  
+ */
 void dtkComposerScene::showAllNodes(void)
 {
     foreach(dtkComposerNode *node, d->nodes) {
@@ -802,6 +962,10 @@ void dtkComposerScene::showAllNodes(void)
     }
 }
 
+//! Hides all the child nodes of node \a node.
+/*! 
+ *  
+ */
 void dtkComposerScene::hideChildNodes(dtkComposerNode *node)
 {
     foreach(dtkComposerNode *child, node->childNodes())
@@ -810,6 +974,10 @@ void dtkComposerScene::hideChildNodes(dtkComposerNode *node)
     node->hide();
 }
 
+//! Shows all the child nodes of node \a node.
+/*! 
+ *  
+ */
 void dtkComposerScene::showChildNodes(dtkComposerNode *node)
 {
     node->show();
@@ -821,6 +989,11 @@ void dtkComposerScene::showChildNodes(dtkComposerNode *node)
             child->show();
 }
 
+//! Updates visibility of each edge in the scene.
+/*! 
+ *  Hides or shows the edges with respect to their states. Then
+ *  adjusts their positions.
+ */
 void dtkComposerScene::updateEdgesVisibility(void)
 {
     foreach(dtkComposerEdge *edge, d->edges) {
@@ -841,6 +1014,19 @@ void dtkComposerScene::updateEdgesVisibility(void)
     }
 }
 
+//! Returns the list of blocks intersected by \a node after it was
+//! dropped.
+/*! 
+ *  When droping a node over a control node, it is necessary to know
+ *  whether its position is acceptable or not. For instance, it is a
+ *  nonsense that a node straddles two blocks of a same control
+ *  node. This method retrieves items that intersect boundingRect of
+ *  \a node. Then, for each blocks among these items, we find out the
+ *  one that fully contains \a node. The case of several nested
+ *  control nodes is recursively solved using
+ *  hoveredControlBlocks(dtkComposerNode *node,
+ *  QList<dtkComposerNode*> parents) function.
+ */
 QList<dtkComposerNodeControlBlock *> dtkComposerScene::hoveredControlBlocks(dtkComposerNode *node)
 {
     QList<dtkComposerNodeControlBlock *> blocks;
@@ -892,6 +1078,12 @@ QList<dtkComposerNodeControlBlock *> dtkComposerScene::hoveredControlBlocks(dtkC
     return blocks;
 }
 
+//! Returns the list of blocks intersected by \a node after it was
+//! dropped.
+/*! 
+ *  This method is used by hoveredControlBlocks(dtkComposerNode *node)
+ *  to deal with imbrication of several control nodes.
+ */
 QList<dtkComposerNodeControlBlock *> dtkComposerScene::hoveredControlBlocks(dtkComposerNode *node, QList<dtkComposerNode *> parents)
 {
     QList<dtkComposerNodeControlBlock *> blocks;
@@ -942,6 +1134,10 @@ QList<dtkComposerNodeControlBlock *> dtkComposerScene::hoveredControlBlocks(dtkC
     return blocks;
 }
 
+//! Receives drag enter events.
+/*! 
+ *  
+ */
 void dtkComposerScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
     if (event->mimeData()->hasUrls())
@@ -950,11 +1146,19 @@ void dtkComposerScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
         event->ignore();
 }
 
+//! Receives drag leave events.
+/*! 
+ *  
+ */
 void dtkComposerScene::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 {
     event->accept();
 }
 
+//! Receives drag move events.
+/*! 
+ *  
+ */
 void dtkComposerScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
     if (event->mimeData()->hasUrls())
@@ -963,6 +1167,10 @@ void dtkComposerScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
         event->ignore();
 }
 
+//! Receives drop events.
+/*! 
+ *  
+ */
 void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
     QUrl url = event->mimeData()->urls().first();
@@ -983,6 +1191,12 @@ void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
     event->acceptProposedAction();
 }
 
+//! Receives key press events.
+/*! 
+ *  - Ctrl + Delete or Ctrl + Backspace: Node and note deletion (see removeNode(dtkComposerNode *node) and removeNote(dtkComposerNote *note))
+ *  - Ctrl + C : copy nodes and edges (see copy(void))
+ *  - Ctrl + V : paste nodes and edges (see paste(void))
+ */
 void dtkComposerScene::keyPressEvent(QKeyEvent *event)
 {
     // Item deletion - Delete | Backspace
@@ -1010,11 +1224,20 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
     QGraphicsScene::keyPressEvent(event);
 }
 
+//! Receives key release events.
+/*! 
+ *  
+ */
 void dtkComposerScene::keyReleaseEvent(QKeyEvent *event)
 {
     Q_UNUSED(event);
 }
 
+//! Receives mouse move events.
+/*! 
+ *  - Adjusts grabbed edge position
+ *  - Highlights blocks of control node hovered by grabbed node
+ */
 void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     QGraphicsScene::mouseMoveEvent(mouseEvent);
@@ -1069,6 +1292,11 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
     }
 }
 
+//! Receives mouse press events.
+/*! 
+ *  - When property is grabbed, according to its type, an edge is either pulled or disconnected.
+ *  - When a node is grabbed, external edges connected to it are seeked.
+ */
 void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     QGraphicsScene::mousePressEvent(mouseEvent);
@@ -1196,11 +1424,8 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
         foreach(QGraphicsItem *item, this->items(node_rec)) {
             if (dtkComposerEdge *edge = dynamic_cast<dtkComposerEdge *>(item)) {
-                if (d->isChildOf(edge->source()->node(), d->grabber_node) && d->isChildOf(edge->destination()->node(), d->grabber_node)) {
-
-                } else if (d->isChildOf(edge->source()->node(), d->grabber_node) || d->isChildOf(edge->destination()->node(), d->grabber_node)) {
+                if (d->isChildOf(edge->source()->node(), d->grabber_node) ^ d->isChildOf(edge->destination()->node(), d->grabber_node))
                     d->grabber_node_has_edges = true;
-                }
             }
         }
         
@@ -1210,6 +1435,11 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     
 }
 
+//! Receives mouse release events.
+/*! 
+ *  - Determines whether the grabbed edge has to be connected or not.
+ *  - Determines whether the grabbed node can be dropped or not at the mouse position.
+ */
 void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     QGraphicsScene::mouseReleaseEvent(mouseEvent);
@@ -1329,6 +1559,10 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 }
 
+//! Receives mouse double click events.
+/*! 
+ *  - Enables to enter or exit a composite node.
+ */
 void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
 
@@ -1401,6 +1635,10 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEven
     emit pathChanged(d->current_node);
 }
 
+//! Emits that selection has changed.
+/*! 
+ *  
+ */
 void dtkComposerScene::onSelectionChanged(void)
 {
     foreach(QGraphicsItem *item, this->selectedItems()) {
@@ -1425,3 +1663,17 @@ void dtkComposerScene::onSelectionChanged(void)
 }
 
 bool dtkComposerScene::s_evaluate = false;
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerScene documentation
+// /////////////////////////////////////////////////////////////////
+
+/*! \class dtkComposerScene
+ *
+ *  \brief Class dtkComposerScene manages the items (nodes, edges,
+ *  notes) provided by the composition layer of dtk.
+ *
+ *  dtkComposerScene features a large amount of methods that enable to
+ *  add, remove, move, group or ungroup these items. Furthermore it is
+ *  responsible for starting and stopping data flow evaluation.
+ */

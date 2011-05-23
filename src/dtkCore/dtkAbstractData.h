@@ -82,9 +82,9 @@ public slots:
 
     virtual void update(void);
 
-    void addReader   (dtkAbstractDataReader    *reader);
-    void addWriter   (dtkAbstractDataWriter    *writer);
-    void addConverter(dtkAbstractDataConverter *converter);
+    void addReader   (const QString& reader);
+    void addWriter   (const QString& writer);
+    void addConverter(const QString& converter);
 
     void  enableReader(const QString& reader);
     void disableReader(const QString& reader);

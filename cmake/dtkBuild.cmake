@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Mar 15 18:05:10 2011 (+0100)
+## Last-Updated: Mon May 23 14:36:15 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 176
+##     Update #: 179
 ######################################################################
 ## 
 ### Commentary: 
@@ -45,7 +45,7 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     string(REPLACE "\\" "/" ProgramFiles "$ENV{ProgramFiles}")
     set(CMAKE_INSTALL_PREFIX "${ProgramFiles}/Inria/${PROJECT_NAME}" CACHE PATH "${PROJECT_NAME} install prefix" FORCE)
   else()
-    set(CMAKE_INSTALL_PREFIX "/usr/local/inria/" CACHE PATH "${PROJECT_NAME} install prefix" FORCE)
+    set(CMAKE_INSTALL_PREFIX "/usr/local/inria/${PROJECT_NAME}" CACHE PATH "${PROJECT_NAME} install prefix" FORCE)
   endif()
 endif()
 

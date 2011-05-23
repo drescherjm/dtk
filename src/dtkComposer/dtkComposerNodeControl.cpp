@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  4 14:49:28 2011 (+0200)
+ * Last-Updated: Mon May 23 14:20:29 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 825
+ *     Update #: 827
  */
 
 /* Commentary: 
@@ -72,7 +72,7 @@ dtkComposerNodeControl::dtkComposerNodeControl(dtkComposerNode *parent) : dtkCom
     this->setKind(dtkComposerNode::Control);
     this->setResizable(true);
     this->setZValue(-2000);
-    this->setSize(250, 146);
+    this->setSize(400, 246);
 
     d->color = Qt::transparent;
 
@@ -610,8 +610,8 @@ void dtkComposerNodeControl::resize(void)
 
 QRectF dtkComposerNodeControl::minimalBoundingRect(void)
 {
-    qreal min_height = 100;
-    qreal  min_width = 250;
+    qreal min_height = 200;
+    qreal  min_width = 400;
     QRectF node_rect(this->boundingRect().left(), this->boundingRect().top(), min_width, min_height);
 
     QRectF block_rect;

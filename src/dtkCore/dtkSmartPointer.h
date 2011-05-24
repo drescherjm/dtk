@@ -118,6 +118,14 @@ public:
         return *this;
     }
 
+    /** Release the pointer without decreasing the reference count.*/
+    T* releasePointer()
+    {
+        T* tmp = d;
+        d = 0;
+        return tmp;
+    }
+
 private:
     /** The pointer to the object referred to by this smart pointer. */
     T* d;

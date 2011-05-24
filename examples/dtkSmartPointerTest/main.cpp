@@ -60,8 +60,6 @@ QString TestData::s_TypeName = "TestDataType";
 // 
 // /////////////////////////////////////////////////////////////////
 
-#define CHECK_TEST_RESULT( cond ) CheckTestResult( cond , DTK_STRINGIZE(cond), __FILE__, __LINE__ )
-
 inline void CheckTestResult( bool condition, const char * cond, const char * file, const int line = 0 )
 {
     if ( ! condition ) {
@@ -70,6 +68,8 @@ inline void CheckTestResult( bool condition, const char * cond, const char * fil
         throw std::runtime_error(msg.toStdString());
     }
 }
+
+#define CHECK_TEST_RESULT( cond ) CheckTestResult( (cond) , DTK_STRINGIZE(cond), __FILE__, __LINE__ )
 
 int main(int argc, char* argv[])
 {
@@ -200,6 +200,24 @@ int main(int argc, char* argv[])
         CHECK_TEST_RESULT( myVector.at(0) == myInstance);
         CHECK_TEST_RESULT( myVector.at(1) == myOtherInstance);
         CHECK_TEST_RESULT( myVector.at(9).isNull());
+
+        myVector.clear();
+        CHECK_TEST_RESULT( myInstance->count() == 1);
+        CHECK_TEST_RESULT( myOtherInstance->count() == 1);
+        CHECK_TEST_RESULT( myOtherInstance2->count() == 1);
+
+        // Test releasePointer();
+        notSmartPtr = myInstance.releasePointer();
+        CHECK_TEST_RESULT( myInstance.isNull() );
+        CHECK_TEST_RESULT( notSmartPtr != NULL );
+        CHECK_TEST_RESULT( notSmartPtr->count() == 1 );
+
+        // Test constructor from pointer.
+        // This constructs the smart pointer, and adds a reference.
+        myInstance = dtkSmartPointer<TestData>( notSmartPtr );
+        CHECK_TEST_RESULT( !myInstance.isNull() );
+        CHECK_TEST_RESULT( myInstance->count() == 2 );
+        notSmartPtr->release();
 
         ret = DTK_SUCCEED;
     }

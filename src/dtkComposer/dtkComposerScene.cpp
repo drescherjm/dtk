@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 23 10:42:20 2011 (+0200)
+ * Last-Updated: Mon May 23 16:06:55 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 2774
+ *     Update #: 2786
  */
 
 /* Commentary: 
@@ -589,6 +589,8 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
     group->setGhost(false);
 
     this->updateEdgesVisibility();
+
+    this->update();
         
     return group;
 }
@@ -787,6 +789,8 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
         parent_block->parentNode()->resize();
         
     this->updateEdgesVisibility();
+
+    this->update();
 }
 
 //! Sets the node factory.
@@ -1222,6 +1226,8 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
     }
 
     QGraphicsScene::keyPressEvent(event);
+
+    this->update();
 }
 
 //! Receives key release events.
@@ -1246,6 +1252,7 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
         d->current_edge->adjust(d->current_edge->start(), mouseEvent->scenePos());
 
     this->updateEdgesVisibility();
+    this->update();
 
     // -- Control nodes handling
 
@@ -1255,41 +1262,41 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
     if (!d->grabber_node || d->grabber_node->isGhost())
         return;
 
-    QList<dtkComposerNodeControlBlock *> hovered_control_blocks = this->hoveredControlBlocks(d->grabber_node);
+    // QList<dtkComposerNodeControlBlock *> hovered_control_blocks = this->hoveredControlBlocks(d->grabber_node);
 
-    if (hovered_control_blocks.count() > 1) {
+    // if (hovered_control_blocks.count() > 1) {
 
-        foreach(dtkComposerNodeControlBlock *block, hovered_control_blocks)
-            block->highlight(false);
+    //     foreach(dtkComposerNodeControlBlock *block, hovered_control_blocks)
+    //         block->highlight(false);
 
-        d->grabber_node->highlight(false);
+    //     d->grabber_node->highlight(false);
 
-    } else if (hovered_control_blocks.count() == 1) {
+    // } else if (hovered_control_blocks.count() == 1) {
 
-        if (d->grabber_node_has_edges && d->grabber_node->parentItem() != hovered_control_blocks.first()) {
+    //     if (d->grabber_node_has_edges && d->grabber_node->parentItem() != hovered_control_blocks.first()) {
 
-            hovered_control_blocks.first()->highlight(false);
-            d->grabber_node->highlight(false);
+    //         hovered_control_blocks.first()->highlight(false);
+    //         d->grabber_node->highlight(false);
 
-        } else {
+    //     } else {
 
-            hovered_control_blocks.first()->highlight(true);
-            d->grabber_node->highlight(true);
+    //         hovered_control_blocks.first()->highlight(true);
+    //         d->grabber_node->highlight(true);
 
-        }
+    //     }
 
-    } else {
+    // } else {
 
-        if (d->grabber_node_has_edges && d->grabber_node->parentItem() != d->current_node) {
+    //     if (d->grabber_node_has_edges && d->grabber_node->parentItem() != d->current_node) {
 
-            d->grabber_node->highlight(false);
+    //         d->grabber_node->highlight(false);
 
-        } else {
+    //     } else {
 
-            d->grabber_node->highlight(true);
+    //         d->grabber_node->highlight(true);
             
-        }
-    }
+    //     }
+    // }
 }
 
 //! Receives mouse press events.
@@ -1432,7 +1439,8 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         mouseEvent->accept();
         return;
     }
-    
+
+    this->update();    
 }
 
 //! Receives mouse release events.
@@ -1557,6 +1565,7 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
         
     d->grabber_node = NULL;
 
+    this->update();
 }
 
 //! Receives mouse double click events.
@@ -1633,6 +1642,8 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEven
     this->updateEdgesVisibility();
     emit centerOn(scene_center);
     emit pathChanged(d->current_node);
+
+    this->update();
 }
 
 //! Emits that selection has changed.

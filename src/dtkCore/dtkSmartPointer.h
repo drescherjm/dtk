@@ -107,7 +107,7 @@ public:
     }
 
     /** Assign without incrementing reference count of assigned object.  */
-    dtkSmartPointer& take(T*r)
+    dtkSmartPointer& takePointer(T*r)
     {
         if (d != r)
         {

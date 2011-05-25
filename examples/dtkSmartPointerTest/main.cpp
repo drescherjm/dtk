@@ -103,7 +103,7 @@ int main(int argc, char* argv[])
         CHECK_TEST_RESULT( !myInstance );  // Check cast-to-bool
         CHECK_TEST_RESULT( myInstance.isNull() );
 
-        myInstance.take( dynamic_cast< TestData *>(factory->create( TestData::s_TypeName )) );
+        myInstance.takePointer( dynamic_cast< TestData *>(factory->create( TestData::s_TypeName )) );
         CHECK_TEST_RESULT( myInstance );
         CHECK_TEST_RESULT( !myInstance.isNull() );
         CHECK_TEST_RESULT( myInstance->count() == 1 );
@@ -113,7 +113,7 @@ int main(int argc, char* argv[])
         CHECK_TEST_RESULT( !myInstance );
         CHECK_TEST_RESULT( notSmartPtr->count() == 0 );
 
-        myInstance.take( dynamic_cast< TestData *>(factory->create( TestData::s_TypeName )) );
+        myInstance.takePointer( dynamic_cast< TestData *>(factory->create( TestData::s_TypeName )) );
 
         {   // Scope a pointer
             // Test assignment
@@ -127,10 +127,10 @@ int main(int argc, char* argv[])
         CHECK_TEST_RESULT( myInstance->count() == 1);
 
         dtkSmartPointer< TestData > myOtherInstance;
-        myOtherInstance.take( dynamic_cast< TestData *>(factory->create( TestData::s_TypeName )) );
+        myOtherInstance.takePointer( dynamic_cast< TestData *>(factory->create( TestData::s_TypeName )) );
 
         dtkSmartPointer< TestData > myOtherInstance2;
-        myOtherInstance2.take( dynamic_cast< TestData *>(factory->create( TestData::s_TypeName )) );
+        myOtherInstance2.takePointer( dynamic_cast< TestData *>(factory->create( TestData::s_TypeName )) );
 
         
         {   // Test copy-construction

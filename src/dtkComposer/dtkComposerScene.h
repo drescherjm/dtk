@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 23 16:12:50 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 161
+ * Last-Updated: Wed May 25 14:48:40 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 162
  */
 
 /* Commentary: 
@@ -65,6 +65,8 @@ public:
     void removeEdge(dtkComposerEdge *edge);
     void removeNode(dtkComposerNode *node);
     void removeNote(dtkComposerNote *note);
+
+    void removeNodes(QList<dtkComposerNode *> nodes);
 
     void setFactory(dtkComposerNodeFactory *factory);
 

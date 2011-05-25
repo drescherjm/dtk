@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:06:43 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue May 24 17:34:08 2011 (+0200)
+## Last-Updated: Wed May 25 16:05:12 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 29
+##     Update #: 35
 ######################################################################
 ## 
 ### Commentary: 
@@ -33,3 +33,6 @@ add_subdirectory(dtkInsetMenu)
 add_subdirectory(dtkFinder)
 add_subdirectory(dtkVrGestureRecognizer)
 add_subdirectory(dtkPlotPoints)
+add_subdirectory(dtkDistributedController)
+add_subdirectory(dtkDistributedServer)
+add_subdirectory(dtkDistributedClient)

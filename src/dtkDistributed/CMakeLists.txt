@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue May 24 17:33:25 2011 (+0200)
+## Last-Updated: Wed May 25 14:20:44 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 80
+##     Update #: 92
 ######################################################################
 ## 
 ### Commentary: 
@@ -26,15 +26,24 @@ project(dtkDistributed)
 set(${PROJECT_NAME}_HEADERS
   dtkDistributedCommunicator.h
   dtkDistributedCommunicatorTcp.h
-  dtkDistributedExport.h)
+  dtkDistributedClient.h
+  dtkDistributedController.h
+  dtkDistributedExport.h
+  dtkDistributedServer.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkDistributedCommunicator.h
-  dtkDistributedCommunicatorTcp.h)
+  dtkDistributedCommunicatorTcp.h
+  dtkDistributedClient.h
+  dtkDistributedController.h
+  dtkDistributedServer.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkDistributedCommunicator.cpp
-  dtkDistributedCommunicatorTcp.cpp)
+  dtkDistributedCommunicatorTcp.cpp
+  dtkDistributedClient.cpp
+  dtkDistributedController.cpp
+  dtkDistributedServer.cpp)
 
 ## #################################################################
 ## Mpi sources

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 25 14:14:55 2011 (+0200)
+ * Last-Updated: Wed May 25 17:03:30 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 7
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -22,7 +22,7 @@
 
 #include "dtkDistributedExport.h"
 
-#include <QtCore/QObject>
+#include <QtCore>
 
 class dtkDistributedControllerPrivate;
 
@@ -33,6 +33,9 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedController : public QObject
 public:
      dtkDistributedController(void);
     ~dtkDistributedController(void);
+
+public slots:
+    void connect(const QUrl& server);
 
 private:
     dtkDistributedControllerPrivate *d;

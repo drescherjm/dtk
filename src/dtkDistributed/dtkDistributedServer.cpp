@@ -76,6 +76,19 @@ void dtkDistributedServerDaemon::discard(void)
 
 dtkDistributedServer::dtkDistributedServer(int argc, char **argv) : dtkDistributedService<QCoreApplication>(argc, argv, "dtkDistributedServer")
 {
+    quint16 port;
+
+    QCoreApplication *app = this->application();
+
+    if(dtkApplicationArgumentsContain(app, "-p"))
+        port = dtkApplicationArgumentsValue(app, "-p").toInt();
+    else if(dtkApplicationArgumentsContain(app, "--port"))
+        port = dtkApplicationArgumentsValue(app, "--port").toInt();
+    else
+        port = 9999;
+
+    daemon = new dtkDistributedServerDaemon(port, app);
+
     this->setServiceDescription("dtkDistributedServer");
 }
 
@@ -86,18 +99,8 @@ quint16 dtkDistributedServer::port(void)
 
 void dtkDistributedServer::start(void)
 {
+
     QCoreApplication *app = this->application();
-
-    quint16 port;
-
-    if(dtkApplicationArgumentsContain(app, "-p"))
-        port = dtkApplicationArgumentsValue(app, "-p").toInt();
-    else if(dtkApplicationArgumentsContain(app, "--port"))
-        port = dtkApplicationArgumentsValue(app, "--port").toInt();
-    else
-        port = 9999;
-
-    daemon = new dtkDistributedServerDaemon(port, app);
 
     if (!daemon->isListening()) {
         logMessage(QString("Failed to bind port %1").arg(daemon->serverPort()), dtkDistributedServiceBase::Error);

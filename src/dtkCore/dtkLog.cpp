@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2009 - Jean-Christophe Lombardo, Inria.
  * Created: Thu May 14 14:32:46 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 19:18:12 2011 (+0100)
+ * Last-Updated: Thu May 26 16:34:24 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 121
+ *     Update #: 129
  */
 
 /* Commentary: 
@@ -60,21 +60,6 @@ private:
 dtkStandardRedirector *dtkStandardRedirector::s_err = NULL;
 dtkStandardRedirector *dtkStandardRedirector::s_out = NULL;
 dtkStandardRedirector *dtkStandardRedirector::s_log = NULL;
-
-// This class initializes and destroys the redirector instances.
-class dtkStandardRedirectorInitialiser {
-public:
-    dtkStandardRedirectorInitialiser() {
-        dtkStandardRedirector::initialize();
-    }
-    ~dtkStandardRedirectorInitialiser() {
-        dtkStandardRedirector::uninitialize();
-    }
-};
-
-// This has to be performed after s_err, s_out and s_log have been set to NULL. 
-// This should be OK as C++ guarantees that variables in compilation unit are initialized in order of declaration.
-static dtkStandardRedirectorInitialiser initializerInstance;
 
 dtkStandardRedirector::dtkStandardRedirector(std::ostream &stream, Channel channel) : m_stream(stream), m_channel(channel)
 {
@@ -248,7 +233,6 @@ dtkLog::~dtkLog(void)
              break;
          }
      }
-
 }
 
 void dtkLog::registerHandler(Handler handler, const QString& source)
@@ -267,6 +251,25 @@ void dtkLog::disableRedirection(void)
 
     s_handlers.clear();
 }
+
+// /////////////////////////////////////////////////////////////////
+// dtkStandardRedirectorInitialiser
+// /////////////////////////////////////////////////////////////////
+
+class dtkStandardRedirectorInitialiser {
+public:
+    dtkStandardRedirectorInitialiser(void) {
+        dtkStandardRedirector::initialize();
+    }
+    
+    ~dtkStandardRedirectorInitialiser(void) {
+        dtkStandardRedirector::uninitialize();
+    }
+};
+
+#if defined(Q_WS_WIN)
+static dtkStandardRedirectorInitialiser initializerInstance;
+#endif
 
 // /////////////////////////////////////////////////////////////////
 // dtkLogEvent

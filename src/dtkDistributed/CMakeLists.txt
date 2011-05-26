@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Wed May 25 14:20:44 2011 (+0200)
+## Last-Updated: Thu May 26 11:09:48 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 92
+##     Update #: 120
 ######################################################################
 ## 
 ### Commentary: 
@@ -29,21 +29,54 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedClient.h
   dtkDistributedController.h
   dtkDistributedExport.h
-  dtkDistributedServer.h)
+  dtkDistributedServer.h
+  dtkDistributedService.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkDistributedCommunicator.h
   dtkDistributedCommunicatorTcp.h
   dtkDistributedClient.h
   dtkDistributedController.h
-  dtkDistributedServer.h)
+  dtkDistributedServer.h
+  dtkDistributedService_p.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkDistributedCommunicator.cpp
   dtkDistributedCommunicatorTcp.cpp
   dtkDistributedClient.cpp
   dtkDistributedController.cpp
-  dtkDistributedServer.cpp)
+  dtkDistributedServer.cpp
+  dtkDistributedService.cpp)
+
+## #################################################################
+## Platform specific sources
+## #################################################################
+
+if(WIN32)
+
+set(${PROJECT_NAME}_HEADERS_MOC
+  ${${PROJECT_NAME}_HEADERS_MOC}
+  dtkDistributedServiceWin_p.h)
+
+set(${PROJECT_NAME}_SOURCES
+  ${${PROJECT_NAME}_SOURCES}
+  dtkDistributedServiceWin.cpp)
+
+else(WIN32)
+
+set(${PROJECT_NAME}_HEADERS_MOC
+  ${${PROJECT_NAME}_HEADERS_MOC}
+  dtkDistributedServiceUnix_p.h
+  dtkDistributedUnixServerSocket.h
+  dtkDistributedUnixSocket.h)
+
+set(${PROJECT_NAME}_SOURCES
+  ${${PROJECT_NAME}_SOURCES}
+  dtkDistributedServiceUnix.cpp
+  dtkDistributedUnixServerSocket.cpp
+  dtkDistributedUnixSocket.cpp)
+
+endif(WIN32)
 
 ## #################################################################
 ## Mpi sources

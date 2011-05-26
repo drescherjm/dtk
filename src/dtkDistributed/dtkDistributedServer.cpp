@@ -57,7 +57,7 @@ void dtkDistributedServerDaemon::read(void)
 {
     QTcpSocket *socket = (QTcpSocket *)sender();
 
-    if(socket->canReadLine()) {   
+    if(socket->canReadLine()) {
         dtkDistributedServiceBase::instance()->logMessage(QString("Read: %1").arg(QString(socket->readLine())));
     }
 }
@@ -91,11 +91,13 @@ void dtkDistributedServer::start(void)
         port = dtkApplicationArgumentsValue(app, "--port").toInt();
     else
         port = 9999;
-    
+
     daemon = new dtkDistributedServerDaemon(port, app);
 
     if (!daemon->isListening()) {
         logMessage(QString("Failed to bind port %1").arg(daemon->serverPort()), dtkDistributedServiceBase::Error);
         app->quit();
     }
+
+    qDebug() << port;
 }

@@ -43,19 +43,20 @@ void dtkDistributedController::connect(const QUrl& server)
 {
     qDebug() << "Connecting to" << server;
 
-    QProcess ssh; ssh.start("ssh", QStringList() << server.toString());
+    QProcess ssh; ssh.start("ssh", QStringList() << server.toString() << "dtkDistributedServer");
 
     if (!ssh.waitForStarted()) {
         qCritical() << "Unable to launch ssh command";
         return;
     }
 
-    // if (!ssh.waitForFinished()) {
-    //     qCritical() << "Unable to complete ssh command";
-    //     return;
-    // }
 
     QString result = ssh.readAll();
 
     qDebug() << "Connected to" << server << ":" << result;
+
+    if (!ssh.waitForFinished()) {
+        qCritical() << "Unable to complete ssh command";
+        return;
+    }
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 26 15:04:10 2011 (+0200)
+ * Last-Updated: Thu May 26 16:02:41 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 91
+ *     Update #: 114
  */
 
 /* Commentary: 
@@ -94,9 +94,15 @@ dtkDistributedServer::dtkDistributedServer(int argc, char **argv) : dtkDistribut
     else
         d->port = 9999;
 
-    std::cout << d->port << std::endl;
+    if(!dtkApplicationArgumentsContain(argc, argv, "-t"))
+        std::cout << d->port << std::endl;
 
     this->setServiceDescription("dtkDistributedServer");
+}
+
+dtkDistributedServer::~dtkDistributedServer(void)
+{
+
 }
 
 void dtkDistributedServer::start(void)

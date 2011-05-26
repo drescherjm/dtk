@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 26 14:26:07 2011 (+0200)
+ * Last-Updated: Thu May 26 15:52:33 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 39
+ *     Update #: 40
  */
 
 /* Commentary: 
@@ -60,7 +60,8 @@ class dtkDistributedServerPrivate;
 class DTKDISTRIBUTED_EXPORT dtkDistributedServer : public dtkDistributedService<QCoreApplication>
 {
 public:
-    dtkDistributedServer(int argc, char **argv);
+     dtkDistributedServer(int argc, char **argv);
+    ~dtkDistributedServer(void);
 
 protected:
     void start(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 25 14:19:45 2011 (+0200)
+ * Last-Updated: Thu May 26 11:29:33 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 9
+ *     Update #: 20
  */
 
 /* Commentary: 
@@ -22,17 +22,25 @@
 
 #include "dtkDistributedExport.h"
 
-#include <QtCore/QObject>
+#include <QtCore>
+#include <QtNetwork>
 
 class dtkDistributedServerPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedServer : public QObject
+class DTKDISTRIBUTED_EXPORT dtkDistributedServer : public QTcpServer
 {
     Q_OBJECT
 
 public:
-     dtkDistributedServer(void);
+     dtkDistributedServer(quint16 port, QObject *parent = 0);
     ~dtkDistributedServer(void);
+
+protected:
+    void incomingConnection(int descriptor);
+
+private slots:
+    void read(void);
+    void discard(void);
 
 private:
     dtkDistributedServerPrivate *d;

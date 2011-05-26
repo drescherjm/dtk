@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 26 11:44:06 2011 (+0200)
+ * Last-Updated: Thu May 26 14:29:15 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 64
+ *     Update #: 89
  */
 
 /* Commentary: 
@@ -74,36 +74,37 @@ void dtkDistributedServerDaemon::discard(void)
 // dtkDistributedServer
 // /////////////////////////////////////////////////////////////////
 
-dtkDistributedServer::dtkDistributedServer(int argc, char **argv) : dtkDistributedService<QCoreApplication>(argc, argv, "dtkDistributedServer")
+class dtkDistributedServerPrivate
 {
+public:
+    dtkDistributedServerDaemon *daemon;
+
+public:
     quint16 port;
+};
 
-    QCoreApplication *app = this->application();
-
-    if(dtkApplicationArgumentsContain(app, "-p"))
-        port = dtkApplicationArgumentsValue(app, "-p").toInt();
-    else if(dtkApplicationArgumentsContain(app, "--port"))
-        port = dtkApplicationArgumentsValue(app, "--port").toInt();
+dtkDistributedServer::dtkDistributedServer(int argc, char **argv) : dtkDistributedService<QCoreApplication>(argc, argv, "dtkDistributedServer"), d(new dtkDistributedServerPrivate)
+{
+    if(dtkApplicationArgumentsContain(argc, argv, "-p"))
+        d->port = dtkApplicationArgumentsValue(argc, argv, "-p").toInt();
+    else if(dtkApplicationArgumentsContain(argc, argv, "--port"))
+        d->port = dtkApplicationArgumentsValue(argc, argv, "--port").toInt();
     else
-        port = 9999;
+        d->port = 9999;
 
-    daemon = new dtkDistributedServerDaemon(port, app);
+    qDebug() << d->port;
 
     this->setServiceDescription("dtkDistributedServer");
 }
 
-quint16 dtkDistributedServer::port(void)
-{
-    return daemon->serverPort();
-}
-
 void dtkDistributedServer::start(void)
 {
-
     QCoreApplication *app = this->application();
 
-    if (!daemon->isListening()) {
-        logMessage(QString("Failed to bind port %1").arg(daemon->serverPort()), dtkDistributedServiceBase::Error);
+    d->daemon = new dtkDistributedServerDaemon(d->port, app);
+
+    if (!d->daemon->isListening()) {
+        logMessage(QString("Failed to bind port %1").arg(d->daemon->serverPort()), dtkDistributedServiceBase::Error);
         app->quit();
     }
 }

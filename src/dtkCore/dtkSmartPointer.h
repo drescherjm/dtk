@@ -27,11 +27,11 @@ public:
     typedef T ObjectType;
     dtkSmartPointer() : d(0) { }
 
-    dtkSmartPointer( const dtkSmartPointer<T>& p) :
+    dtkSmartPointer( const dtkSmartPointer<T> &p) :
         d(p.d)
     { this->retain(); }
 
-    dtkSmartPointer (T* p) :
+    dtkSmartPointer (T *p) :
         d(p)
     { this->retain(); }
 
@@ -65,17 +65,17 @@ public:
     bool operator != ( const dtkSmartPointer< TR > &r ) const
     { return (d != static_cast<const T*>(r.constData()) ); }
 
-    bool operator==( const dtkSmartPointer& r ) const
+    bool operator==( const dtkSmartPointer &r ) const
         { return d == r.d; }
-    bool operator!=( const dtkSmartPointer& r ) const
+    bool operator!=( const dtkSmartPointer &r ) const
         { return d != r.d; }
-    bool operator<( const dtkSmartPointer& r ) const
+    bool operator<( const dtkSmartPointer &r ) const
         { return d < r.d; }
-    bool operator<=( const dtkSmartPointer& r ) const
+    bool operator<=( const dtkSmartPointer &r ) const
         { return d <= r.d; }
-    bool operator>( const dtkSmartPointer& r ) const
+    bool operator>( const dtkSmartPointer &r ) const
         { return d > r.d; }
-    bool operator>=( const dtkSmartPointer& r ) const
+    bool operator>=( const dtkSmartPointer &r ) const
         { return d >= r.d; }
 
     T* data()
@@ -90,14 +90,14 @@ public:
     const T& operator*() const
     { return *d; }
 
-    dtkSmartPointer& operator=(const dtkSmartPointer& r)
+    dtkSmartPointer& operator=(const dtkSmartPointer &r)
     { return this->operator=(r.d); }
 
-    dtkSmartPointer &operator = (T* r)
+    dtkSmartPointer& operator = (T *r)
     {
         if (d != r)
         {
-            T* tmp = d; //avoid recursive unregisters by retaining temporarily
+            T *tmp = d; //avoid recursive unregisters by retaining temporarily
             d = r;
             this->retain();
             if ( tmp ) { tmp->release(); }
@@ -105,18 +105,18 @@ public:
         return *this;
     }
 
-    void swap( dtkSmartPointer& other)
+    void swap( dtkSmartPointer &other)
     {
-        T* tmp = d;
+        T *tmp = d;
         d = other.d;
         other.d = tmp;
     }
 
-    dtkSmartPointer& takePointer(T*r)
+    dtkSmartPointer& takePointer(T *r)
     {
         if (d != r)
         {
-            T* tmp = d; //avoid recursive unregisters by retaining temporarily
+            T *tmp = d; //avoid recursive unregisters by retaining temporarily
             d = r;
             if ( tmp ) { tmp->release(); }
         }
@@ -125,13 +125,13 @@ public:
 
     T* releasePointer()
     {
-        T* tmp = d;
+        T *tmp = d;
         d = 0;
         return tmp;
     }
 
 private:
-    T* d;
+    T *d;
 
     void retain()
     {
@@ -145,7 +145,7 @@ private:
 };
 
 template <class T>
-inline uint qHash(const dtkSmartPointer<T>& key) { return qHash(key.constData()); }
+inline uint qHash(const dtkSmartPointer<T> &key) { return qHash(key.constData()); }
 
 #endif // DTKSMARTPOINTER_H
 

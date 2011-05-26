@@ -79,6 +79,11 @@ dtkDistributedServer::dtkDistributedServer(int argc, char **argv) : dtkDistribut
     this->setServiceDescription("dtkDistributedServer");
 }
 
+quint16 dtkDistributedServer::port(void)
+{
+    return daemon->serverPort();
+}
+
 void dtkDistributedServer::start(void)
 {
     QCoreApplication *app = this->application();
@@ -98,6 +103,4 @@ void dtkDistributedServer::start(void)
         logMessage(QString("Failed to bind port %1").arg(daemon->serverPort()), dtkDistributedServiceBase::Error);
         app->quit();
     }
-
-    qDebug() << port;
 }

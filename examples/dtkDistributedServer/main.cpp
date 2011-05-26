@@ -27,5 +27,6 @@ int main(int argc, char **argv)
 {
     dtkDistributedServer server(argc, argv);
 
+    qDebug() << server.port();
     return server.exec();
 }

@@ -60,6 +60,8 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedServer : public dtkDistributedService<
 public:
     dtkDistributedServer(int argc, char **argv);
 
+    quint16 port(void);
+
 protected:
     void start(void);
 

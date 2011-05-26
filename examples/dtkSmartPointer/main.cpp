@@ -46,7 +46,7 @@ public:
     TestData() { }
     ~TestData() { }
 
-    static dtkAbstractData * create() { return new  TestData(); }
+    static dtkAbstractData *create() { return new  TestData(); }
 
     static bool registerType() {
         return dtkAbstractDataFactory::instance()->registerDataType(s_TypeName, create );
@@ -60,7 +60,7 @@ QString TestData::s_TypeName = "TestDataType";
 // 
 // /////////////////////////////////////////////////////////////////
 
-inline void CheckTestResult( bool condition, const char * cond, const char * file, const int line = 0 )
+inline void CheckTestResult( bool condition, const char *cond, const char *file, const int line = 0 )
 {
     if ( ! condition ) {
         QString msg;
@@ -71,29 +71,23 @@ inline void CheckTestResult( bool condition, const char * cond, const char * fil
 
 #define CHECK_TEST_RESULT( cond ) CheckTestResult( (cond) , DTK_STRINGIZE(cond), __FILE__, __LINE__ )
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
-    Q_UNUSED(argc);
-    Q_UNUSED(argv);
-
     int ret = DTK_FAILURE;
     try {
-#if 0
+        // An app is needed for the factory to connect signals to.
         QApplication app( argc, argv );
 
-        dtkPluginManager::instance()->setPath (argv[1]);
-        dtkPluginManager::instance()->initialize();
-#endif
         if  (!TestData::registerType())
             throw( std::runtime_error( "Failed to register data type" ) );
 
-        dtkAbstractDataFactory * factory = dtkAbstractDataFactory::instance();
+        dtkAbstractDataFactory *factory = dtkAbstractDataFactory::instance();
 
-        dtkAbstractData * pData = factory->create( TestData::s_TypeName );
+        dtkAbstractData *pData = factory->create( TestData::s_TypeName );
         CHECK_TEST_RESULT(pData != NULL);
         CHECK_TEST_RESULT(pData->count() == 1);
 
-        TestData * pTestData = dynamic_cast< TestData * >( pData );
+        TestData *pTestData = dynamic_cast< TestData * >( pData );
         CHECK_TEST_RESULT(pTestData != NULL);
 
         delete pTestData; pTestData = NULL;
@@ -108,7 +102,7 @@ int main(int argc, char* argv[])
         CHECK_TEST_RESULT( !myInstance.isNull() );
         CHECK_TEST_RESULT( myInstance->count() == 1 );
 
-        TestData * notSmartPtr = myInstance;
+        TestData *notSmartPtr = myInstance;
         myInstance = NULL;
         CHECK_TEST_RESULT( !myInstance );
         CHECK_TEST_RESULT( notSmartPtr->count() == 0 );
@@ -138,6 +132,20 @@ int main(int argc, char* argv[])
             CHECK_TEST_RESULT( !copyInstance.isNull() );
             CHECK_TEST_RESULT( copyInstance == myInstance );
             CHECK_TEST_RESULT( copyInstance != myOtherInstance );
+            CHECK_TEST_RESULT( copyInstance->count() == 2 );
+        }
+
+        {   // Test assignment construction (same type)
+            dtkSmartPointer< TestData > copyInstance = myInstance;
+            CHECK_TEST_RESULT( !copyInstance.isNull() );
+            CHECK_TEST_RESULT( copyInstance == myInstance );
+            CHECK_TEST_RESULT( copyInstance != myOtherInstance );
+            CHECK_TEST_RESULT( copyInstance->count() == 2 );
+            // Test assignment (same type)
+            copyInstance = myOtherInstance;
+            CHECK_TEST_RESULT( !copyInstance.isNull() );
+            CHECK_TEST_RESULT( copyInstance != myInstance );
+            CHECK_TEST_RESULT( copyInstance == myOtherInstance );
             CHECK_TEST_RESULT( copyInstance->count() == 2 );
         }
 
@@ -221,7 +229,7 @@ int main(int argc, char* argv[])
 
         ret = DTK_SUCCEED;
     }
-    catch (std::exception & e) {
+    catch (std::exception &e) {
         dtkDebug() << e.what();
     }
     catch (...) {

@@ -1,11 +1,11 @@
 ### CMakeLists.txt --- 
 ## 
-## Author: Thibaud Kloczko
+## Author: John Stark
 ## Copyright (C) 2011 - Thibaud Kloczko, Inria.
-## Created: Wed Mar  9 14:15:50 2011 (+0100)
+## Created: Wed May 25 16:00:00 2011 (+0100)
 ## Version: $Id$
-## Last-Updated: Wed Mar  9 14:15:54 2011 (+0100)
-##           By: Thibaud Kloczko
+## Last-Updated: Wed May 25 16:00:00 2011 (+0100)
+##           By: John Stark
 ##     Update #: 1
 ######################################################################
 ## 

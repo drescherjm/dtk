@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 26 16:05:29 2011 (+0200)
+ * Last-Updated: Thu May 26 16:28:28 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 47
+ *     Update #: 108
  */
 
 /* Commentary: 
@@ -41,10 +41,10 @@ dtkDistributedController::~dtkDistributedController(void)
 
 void dtkDistributedController::connect(const QUrl& server)
 {
-    qDebug() << "Connecting to" << server;
+    QString result;
 
     QProcess ssh;
-    ssh.setProcessChannelMode(QProcess::MergedChannels);
+    ssh.setReadChannel(QProcess::StandardOutput);
     ssh.start("ssh", QStringList() << server.toString() << "dtkDistributedServer");
 
     if (!ssh.waitForStarted()) {
@@ -57,9 +57,9 @@ void dtkDistributedController::connect(const QUrl& server)
         return;
     }
 
-    QString result = ssh.readAll();
+    result = ssh.readAllStandardOutput().simplified();
 
-    qDebug() << "Connected to" << server << ":" << result;
+    qDebug() << server << ":" << result;
 }
 
 void dtkDistributedController::disconnect(const QUrl& server)

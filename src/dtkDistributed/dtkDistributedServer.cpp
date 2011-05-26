@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 26 14:29:15 2011 (+0200)
+ * Last-Updated: Thu May 26 15:04:10 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 89
+ *     Update #: 91
  */
 
 /* Commentary: 
@@ -83,6 +83,8 @@ public:
     quint16 port;
 };
 
+#include <iostream>
+
 dtkDistributedServer::dtkDistributedServer(int argc, char **argv) : dtkDistributedService<QCoreApplication>(argc, argv, "dtkDistributedServer"), d(new dtkDistributedServerPrivate)
 {
     if(dtkApplicationArgumentsContain(argc, argv, "-p"))
@@ -92,7 +94,7 @@ dtkDistributedServer::dtkDistributedServer(int argc, char **argv) : dtkDistribut
     else
         d->port = 9999;
 
-    qDebug() << d->port;
+    std::cout << d->port << std::endl;
 
     this->setServiceDescription("dtkDistributedServer");
 }

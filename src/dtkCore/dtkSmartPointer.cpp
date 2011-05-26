@@ -154,13 +154,13 @@
     \return     *this
 */
 
-/*! \fn         void dtkSmartPointer::swap( dtkSmartPointer& other)
+/*! \fn         void dtkSmartPointer::swap( dtkSmartPointer &other)
     \brief      Swap this instance's shared data pointer with the shared data
                 pointer in other. Reference counts are unchanged.
     \param      other : dtkSmartPointer to swap with.
 */
 
-/*! \fn         dtkSmartPointer& dtkSmartPointer::takePointer(T*r)
+/*! \fn         dtkSmartPointer& dtkSmartPointer::takePointer(T *r)
     \brief      Assign without incrementing reference count of assigned object.
     \param      r object to take, can be NULL.
     \return     *this
@@ -182,7 +182,7 @@
                 d->release() if d is not NULL.
 */
 
-/*! \fn         uint qHash(const dtkSmartPointer<T>& key)
+/*! \fn         uint qHash(const dtkSmartPointer<T> &key)
     \brief      Template which allows dtkSmartPointer to be used in Qt's hash
                 based containers.
 */

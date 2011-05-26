@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 26 11:29:33 2011 (+0200)
+ * Last-Updated: Thu May 26 11:38:08 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 20
+ *     Update #: 34
  */
 
 /* Commentary: 
@@ -21,19 +21,24 @@
 #define DTKDISTRIBUTEDSERVER_H
 
 #include "dtkDistributedExport.h"
+#include "dtkDistributedService.h"
 
 #include <QtCore>
 #include <QtNetwork>
 
-class dtkDistributedServerPrivate;
+// /////////////////////////////////////////////////////////////////
+// dtkDistributedServerDaemon
+// /////////////////////////////////////////////////////////////////
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedServer : public QTcpServer
+class dtkDistributedServerDaemonPrivate;
+
+class DTKDISTRIBUTED_EXPORT dtkDistributedServerDaemon : public QTcpServer
 {
     Q_OBJECT
 
 public:
-     dtkDistributedServer(quint16 port, QObject *parent = 0);
-    ~dtkDistributedServer(void);
+     dtkDistributedServerDaemon(quint16 port, QObject *parent = 0);
+    ~dtkDistributedServerDaemon(void);
 
 protected:
     void incomingConnection(int descriptor);
@@ -43,7 +48,23 @@ private slots:
     void discard(void);
 
 private:
-    dtkDistributedServerPrivate *d;
+    dtkDistributedServerDaemonPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkDistributedServer
+// /////////////////////////////////////////////////////////////////
+
+class DTKDISTRIBUTED_EXPORT dtkDistributedServer : dtkDistributedService<QCoreApplication>
+{
+public:
+    dtkDistributedServer(int argc, char **argv);
+
+protected:
+    void start(void);
+
+private:
+    dtkDistributedServerDaemon *daemon;
 };
 
 #endif

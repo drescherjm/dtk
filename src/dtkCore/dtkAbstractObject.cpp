@@ -20,8 +20,7 @@
 #include <dtkCore/dtkAbstractObject.h>
 #include <dtkCore/dtkLog.h>
 
-#include <QMutex>
-#include <QMutexLocker>
+#include <QAtomicInt>
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractObjectPrivate
@@ -30,8 +29,7 @@
 class dtkAbstractObjectPrivate
 {
 public:
-    int count;
-    QMutex countMutex;
+    QAtomicInt count;
 
     QHash<QString, QStringList> values;
     QHash<QString, QString> properties;
@@ -89,9 +87,7 @@ int dtkAbstractObject::count(void)
 
 int dtkAbstractObject::retain(void)
 {
-    QMutexLocker lock( &(d->countMutex) );
-
-    return d->count++;
+    return d->count.fetchAndAddOrdered ( 1 ) + 1;
 }
 
 //! Release reference count.
@@ -103,12 +99,12 @@ int dtkAbstractObject::retain(void)
 
 int dtkAbstractObject::release(void)
 {
-    QMutexLocker lock( &(d->countMutex) );
+    int newCount = d->count.fetchAndAddOrdered ( -1 ) - 1;
 
-    if(!(--(d->count)))
+    if(!(newCount))
         this->deleteLater();
 
-    return d->count;
+    return newCount;
 }
 
 void dtkAbstractObject::addProperty(const QString& key, const QStringList& values)

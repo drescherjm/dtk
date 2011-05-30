@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 26 09:19:18 2011 (+0200)
+ * Last-Updated: Thu May 26 16:54:11 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 29
+ *     Update #: 134
  */
 
 /* Commentary: 
@@ -25,6 +25,9 @@ class dtkDistributedControllerPrivate
 {
 public:
     QList<QTcpSocket *> sockets;
+
+public:
+    QProcess *ssh;
 };
 
 dtkDistributedController::dtkDistributedController(void) : d(new dtkDistributedControllerPrivate)
@@ -41,21 +44,10 @@ dtkDistributedController::~dtkDistributedController(void)
 
 void dtkDistributedController::connect(const QUrl& server)
 {
-    qDebug() << "Connecting to" << server;
+    
+}
 
-    QProcess ssh; ssh.start("ssh", QStringList() << server.toString());
-
-    if (!ssh.waitForStarted()) {
-        qCritical() << "Unable to launch ssh command";
-        return;
-    }
-
-    // if (!ssh.waitForFinished()) {
-    //     qCritical() << "Unable to complete ssh command";
-    //     return;
-    // }
-
-    QString result = ssh.readAll();
-
-    qDebug() << "Connected to" << server << ":" << result;
+void dtkDistributedController::disconnect(const QUrl& server)
+{
+    
 }

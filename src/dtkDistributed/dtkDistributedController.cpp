@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 30 10:50:09 2011 (+0200)
+ * Last-Updated: Mon May 30 11:29:16 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 164
+ *     Update #: 169
  */
 
 /* Commentary: 
@@ -47,22 +47,26 @@ dtkDistributedController::~dtkDistributedController(void)
 void dtkDistributedController::connect(const QUrl& server)
 {
     if(!d->sockets.keys().contains(server)) {
-        
-        qDebug() << server;
-        qDebug() << server.host();
-        qDebug() << server.port();
 
         QTcpSocket *socket = new QTcpSocket(this);
         socket->connectToHost(server.host(), server.port());
 
         QObject::connect(socket, SIGNAL(readyRead()), this, SLOT(read()));
         QObject::connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
+
+        d->sockets.insert(server, socket);
     }
 }
 
 void dtkDistributedController::disconnect(const QUrl& server)
 {
-    
+    if(d->sockets.keys().contains(server)) {
+
+        QTcpSocket *socket = d->sockets.value(server);
+        socket->disconnectFromHost();
+
+        d->sockets.remove(server);
+    }
 }
 
 void dtkDistributedController::read(void)

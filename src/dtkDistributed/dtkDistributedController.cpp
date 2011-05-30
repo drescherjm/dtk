@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 30 13:04:30 2011 (+0200)
+ * Last-Updated: Mon May 30 13:07:52 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 170
+ *     Update #: 172
  */
 
 /* Commentary: 
@@ -54,7 +54,7 @@ void dtkDistributedController::connect(const QUrl& server)
         QObject::connect(socket, SIGNAL(readyRead()), this, SLOT(read()));
         QObject::connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
 
-        d->sockets.insert(server, socket);
+        d->sockets.insert(server.toString(), socket);
 
         socket->write("** status **");
     }
@@ -64,7 +64,7 @@ void dtkDistributedController::disconnect(const QUrl& server)
 {
     if(d->sockets.keys().contains(server)) {
 
-        QTcpSocket *socket = d->sockets.value(server);
+        QTcpSocket *socket = d->sockets.value(server.toString());
         socket->disconnectFromHost();
 
         d->sockets.remove(server);

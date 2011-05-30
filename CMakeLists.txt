@@ -21,6 +21,8 @@ cmake_minimum_required(VERSION 2.6.4)
 
 project(dtk)
 
+
+
 set(${PROJECT_NAME}_VERSION_MAJOR 0 CACHE STRING "dtk major version number.")
 set(${PROJECT_NAME}_VERSION_MINOR 1 CACHE STRING "dtk minor version number.")
 set(${PROJECT_NAME}_VERSION_BUILD 28 CACHE STRING "dtk build version number.")
@@ -44,8 +46,14 @@ option(BUILD_WRAPPERS      "Build wrappers"         true)
 include(dtkDependencies)
 include(dtkBuild)
 include(dtkNightly)
-include(dtkDart)
+#include(dtkDart)
 include(dtkPack)
+
+# -----------------------------------------------------------------------------
+# Include Dart/CTest for testing
+# -----------------------------------------------------------------------------
+include(Dart)
+include(CTest)
 
 add_subdirectory(src)
 
@@ -60,3 +68,5 @@ endif(BUILD_EXAMPLES)
 if(BUILD_DOCUMENTATION)
   add_subdirectory(doc)
 endif(BUILD_DOCUMENTATION)
+
+

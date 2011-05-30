@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 30 13:15:25 2011 (+0200)
+ * Last-Updated: Mon May 30 14:05:58 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 152
+ *     Update #: 154
  */
 
 /* Commentary: 
@@ -109,7 +109,14 @@ void dtkDistributedServer::start(void)
 {
     QCoreApplication *app = this->application();
 
-    d->daemon = new dtkDistributedServerDaemon(9999, app);
+    quint16 port;
+
+    if(dtkApplicationArgumentsContain(app, "-p"))
+        port = dtkApplicationArgumentsValue(app, "-p").toInt();
+    else
+        port = 9999;
+
+    d->daemon = new dtkDistributedServerDaemon(port, app);
 
     if (!d->daemon->isListening()) {
         logMessage(QString("Failed to bind port %1").arg(d->daemon->serverPort()), dtkDistributedServiceBase::Error);

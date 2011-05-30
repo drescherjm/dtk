@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 30 13:10:17 2011 (+0200)
+ * Last-Updated: Mon May 30 13:59:48 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 176
+ *     Update #: 197
  */
 
 /* Commentary: 
@@ -44,6 +44,30 @@ dtkDistributedController::~dtkDistributedController(void)
     d = NULL;
 }
 
+bool dtkDistributedController::isConnected(const QUrl& server)
+{
+    if(d->sockets.keys().contains(server.toString())) {
+
+        QTcpSocket *socket = d->sockets.value(server.toString());
+
+        return (socket->state() == QAbstractSocket::ConnectedState);
+    }  
+
+    return false;
+}
+
+bool dtkDistributedController::isDisconnected(const QUrl& server)
+{
+    if(d->sockets.keys().contains(server.toString())) {
+
+        QTcpSocket *socket = d->sockets.value(server.toString());
+
+        return (socket->state() == QAbstractSocket::UnconnectedState);
+    }  
+
+    return true;
+}
+
 void dtkDistributedController::connect(const QUrl& server)
 {
     if(!d->sockets.keys().contains(server.toString())) {
@@ -51,12 +75,21 @@ void dtkDistributedController::connect(const QUrl& server)
         QTcpSocket *socket = new QTcpSocket(this);
         socket->connectToHost(server.host(), server.port());
 
-        QObject::connect(socket, SIGNAL(readyRead()), this, SLOT(read()));
-        QObject::connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
+        if(socket->waitForConnected()) {
 
-        d->sockets.insert(server.toString(), socket);
+            QObject::connect(socket, SIGNAL(readyRead()), this, SLOT(read()));
+            QObject::connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
+            
+            d->sockets.insert(server.toString(), socket);
+            
+            emit connect(server);
 
-        socket->write("** status **");
+            socket->write("** status **");
+
+        } else {
+
+            qDebug() << "Unable to connect to" << server.toString();
+        }
     }
 }
 
@@ -68,6 +101,8 @@ void dtkDistributedController::disconnect(const QUrl& server)
         socket->disconnectFromHost();
 
         d->sockets.remove(server.toString());
+
+        emit disconnected(server);
     }
 }
 

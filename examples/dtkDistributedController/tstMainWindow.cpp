@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 16:12:47 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 30 13:27:28 2011 (+0200)
+ * Last-Updated: Mon May 30 13:57:45 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 31
+ *     Update #: 36
  */
 
 /* Commentary: 
@@ -85,6 +85,9 @@ void tstMainWindow::showInspector(void)
 
         connect(page, SIGNAL(   connect(const QUrl&)), d->controller, SLOT(   connect(const QUrl&)));
         connect(page, SIGNAL(disconnect(const QUrl&)), d->controller, SLOT(disconnect(const QUrl&)));
+
+        connect(d->controller, SIGNAL(   connected(const QUrl&)), page, SLOT(   onConnected(const QUrl&)));
+        connect(d->controller, SIGNAL(disconnected(const QUrl&)), page, SLOT(onDisconnected(const QUrl&)));
     }
 
     d->inspector->setVisible(!d->inspector->isVisible());

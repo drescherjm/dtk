@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 16:17:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 30 11:03:52 2011 (+0200)
+ * Last-Updated: Mon May 30 11:15:18 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 88
+ *     Update #: 97
  */
 
 /* Commentary: 
@@ -76,6 +76,7 @@ tstInspectorDistributed::~tstInspectorDistributed(void)
 
 void tstInspectorDistributed::onConnect(void)
 {
+    d->box_connection_address->setStyleSheet("background: green;");
     d->box_connection_connect->setText("Disconnect");
     
     QObject::disconnect(d->box_connection_connect, SIGNAL(clicked()), this, SLOT(onConnect()));
@@ -86,6 +87,7 @@ void tstInspectorDistributed::onConnect(void)
 
 void tstInspectorDistributed::onDisconnect(void)
 {
+    d->box_connection_address->setStyleSheet("background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #5d5d5d, stop: 1 #4a4a4a);");
     d->box_connection_connect->setText("Connect");
     
     QObject::disconnect(d->box_connection_connect, SIGNAL(clicked()), this, SLOT(onDisconnect()));

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 16:16:50 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 30 10:57:39 2011 (+0200)
+ * Last-Updated: Mon May 30 13:33:43 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 18
+ *     Update #: 21
  */
 
 /* Commentary: 
@@ -36,12 +36,10 @@ public:
 signals:
     void    connect(const QUrl& server);
     void disconnect(const QUrl& server);
-    void submit(void);
 
 protected slots:
     void    onConnect(void);
     void onDisconnect(void);
-    void onSubmit(void);
 
 private:
     tstInspectorDistributedPrivate *d;

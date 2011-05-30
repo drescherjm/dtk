@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu May 26 11:09:48 2011 (+0200)
+## Last-Updated: Mon May 30 13:26:45 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 120
+##     Update #: 126
 ######################################################################
 ## 
 ### Commentary: 
@@ -28,6 +28,9 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedCommunicatorTcp.h
   dtkDistributedClient.h
   dtkDistributedController.h
+  dtkDistributedControllerViewFiltering.h
+  dtkDistributedControllerViewOverall.h
+  dtkDistributedControllerViewDetailed.h
   dtkDistributedExport.h
   dtkDistributedServer.h
   dtkDistributedService.h)
@@ -37,6 +40,9 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkDistributedCommunicatorTcp.h
   dtkDistributedClient.h
   dtkDistributedController.h
+  dtkDistributedControllerViewFiltering.h
+  dtkDistributedControllerViewOverall.h
+  dtkDistributedControllerViewDetailed.h
   dtkDistributedServer.h
   dtkDistributedService_p.h)
 
@@ -45,6 +51,9 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedCommunicatorTcp.cpp
   dtkDistributedClient.cpp
   dtkDistributedController.cpp
+  dtkDistributedControllerViewFiltering.cpp
+  dtkDistributedControllerViewOverall.cpp
+  dtkDistributedControllerViewDetailed.cpp
   dtkDistributedServer.cpp
   dtkDistributedService.cpp)
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 26 16:53:51 2011 (+0200)
+ * Last-Updated: Mon May 30 10:30:02 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 119
+ *     Update #: 124
  */
 
 /* Commentary: 
@@ -50,7 +50,9 @@ void dtkDistributedServerDaemon::incomingConnection(int descriptor)
     connect(socket, SIGNAL(disconnected()), this, SLOT(discard()));
     socket->setSocketDescriptor(descriptor);
 
-    dtkDistributedServiceBase::instance()->logMessage("New connection");
+    // dtkDistributedServiceBase::instance()->logMessage("New connection");
+
+    socket->write("Prout");
 }
 
 void dtkDistributedServerDaemon::read(void)
@@ -58,7 +60,11 @@ void dtkDistributedServerDaemon::read(void)
     QTcpSocket *socket = (QTcpSocket *)sender();
 
     if(socket->canReadLine()) {
-        dtkDistributedServiceBase::instance()->logMessage(QString("Read: %1").arg(QString(socket->readLine())));
+        qDebug() << DTK_PRETTY_FUNCTION << "-- Begin read --";
+        qDebug() << DTK_PRETTY_FUNCTION << socket->readAll();
+        qDebug() << DTK_PRETTY_FUNCTION << "--   End read --";
+
+        // dtkDistributedServiceBase::instance()->logMessage(QString("Read: %1").arg(QString(socket->readLine())));
     }
 }
 
@@ -67,7 +73,7 @@ void dtkDistributedServerDaemon::discard(void)
     QTcpSocket *socket = (QTcpSocket *)sender();
     socket->deleteLater();
 
-    dtkDistributedServiceBase::instance()->logMessage("Connection closed");
+    // dtkDistributedServiceBase::instance()->logMessage("Connection closed");
 }
 
 // /////////////////////////////////////////////////////////////////

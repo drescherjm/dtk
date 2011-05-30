@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 30 13:07:52 2011 (+0200)
+ * Last-Updated: Mon May 30 13:10:17 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 172
+ *     Update #: 176
  */
 
 /* Commentary: 
@@ -26,7 +26,7 @@
 class dtkDistributedControllerPrivate
 {
 public:
-    QHash<QUrl, QTcpSocket *> sockets;
+    QHash<QString, QTcpSocket *> sockets;
 
 public:
     QProcess *ssh;
@@ -46,7 +46,7 @@ dtkDistributedController::~dtkDistributedController(void)
 
 void dtkDistributedController::connect(const QUrl& server)
 {
-    if(!d->sockets.keys().contains(server)) {
+    if(!d->sockets.keys().contains(server.toString())) {
 
         QTcpSocket *socket = new QTcpSocket(this);
         socket->connectToHost(server.host(), server.port());
@@ -62,12 +62,12 @@ void dtkDistributedController::connect(const QUrl& server)
 
 void dtkDistributedController::disconnect(const QUrl& server)
 {
-    if(d->sockets.keys().contains(server)) {
+    if(d->sockets.keys().contains(server.toString())) {
 
         QTcpSocket *socket = d->sockets.value(server.toString());
         socket->disconnectFromHost();
 
-        d->sockets.remove(server);
+        d->sockets.remove(server.toString());
     }
 }
 

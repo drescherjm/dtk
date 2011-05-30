@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 30 13:59:48 2011 (+0200)
+ * Last-Updated: Mon May 30 14:10:51 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 197
+ *     Update #: 198
  */
 
 /* Commentary: 
@@ -82,7 +82,7 @@ void dtkDistributedController::connect(const QUrl& server)
             
             d->sockets.insert(server.toString(), socket);
             
-            emit connect(server);
+            emit connected(server);
 
             socket->write("** status **");
 

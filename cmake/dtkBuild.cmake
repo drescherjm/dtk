@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon May 23 14:36:15 2011 (+0200)
-##           By: Julien Wintz
-##     Update #: 179
+## Last-Updated: Mon May 30 09:34:23 2011 (+0200)
+##           By: Thibaud Kloczko
+##     Update #: 181
 ######################################################################
 ## 
 ### Commentary: 
@@ -138,19 +138,15 @@ endif()
 ## Path relocation
 ## #################################################################
 
-set(CMAKE_SKIP_BUILD_RPATH FALSE)
-
-set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-
 if (APPLE)
   set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
-endif ()
+endif (APPLE)
 
 if (UNIX AND NOT APPLE)
   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-endif ()
+endif (UNIX AND NOT APPLE)
 
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 ## #################################################################
 ## Uninstall target

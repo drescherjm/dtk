@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon May 30 09:34:23 2011 (+0200)
-##           By: Thibaud Kloczko
-##     Update #: 181
+## Last-Updated: Mon May 30 11:01:55 2011 (+0200)
+##           By: Julien Wintz
+##     Update #: 182
 ######################################################################
 ## 
 ### Commentary: 
@@ -68,7 +68,7 @@ include_directories(${PROJECT_BINARY_DIR})
 
 set(${PROJECT_NAME}_ARCHIVE_OUTPUT_DIRECTORY lib)
 set(${PROJECT_NAME}_RUNTIME_OUTPUT_DIRECTORY bin)
-set(${PROJECT_NAME}_LIBRARY_OUTPUT_DIRECTORY bin)
+set(${PROJECT_NAME}_LIBRARY_OUTPUT_DIRECTORY lib)
 
 set(LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/${${PROJECT_NAME}_LIBRARY_OUTPUT_DIRECTORY})
 set(ARCHIVE_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/${${PROJECT_NAME}_ARCHIVE_OUTPUT_DIRECTORY})

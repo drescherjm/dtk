@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 30 10:26:05 2011 (+0200)
+ * Last-Updated: Mon May 30 10:50:09 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 161
+ *     Update #: 164
  */
 
 /* Commentary: 
@@ -48,6 +48,10 @@ void dtkDistributedController::connect(const QUrl& server)
 {
     if(!d->sockets.keys().contains(server)) {
         
+        qDebug() << server;
+        qDebug() << server.host();
+        qDebug() << server.port();
+
         QTcpSocket *socket = new QTcpSocket(this);
         socket->connectToHost(server.host(), server.port());
 

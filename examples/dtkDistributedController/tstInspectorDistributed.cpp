@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 16:17:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri May 27 17:29:42 2011 (+0200)
+ * Last-Updated: Mon May 30 11:03:52 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 68
+ *     Update #: 88
  */
 
 /* Commentary: 
@@ -50,7 +50,7 @@ tstInspectorDistributed::tstInspectorDistributed(QWidget *parent) : QFrame(paren
     d->box_submission_layout = new QVBoxLayout(d->box_submission);
     
     d->box_connection_address = new QLineEdit(d->box_connection);
-    d->box_connection_address->setText("nef-devel.inria.fr:9999");
+    d->box_connection_address->setText("dtk://nef-devel.inria.fr:9999");
 
     d->box_connection_layout->addWidget(d->box_connection_address);
     d->box_connection_layout->addStretch(1);
@@ -76,7 +76,22 @@ tstInspectorDistributed::~tstInspectorDistributed(void)
 
 void tstInspectorDistributed::onConnect(void)
 {
+    d->box_connection_connect->setText("Disconnect");
+    
+    QObject::disconnect(d->box_connection_connect, SIGNAL(clicked()), this, SLOT(onConnect()));
+       QObject::connect(d->box_connection_connect, SIGNAL(clicked()), this, SLOT(onDisconnect()));
+
     emit connect(QUrl(d->box_connection_address->text()));
+}
+
+void tstInspectorDistributed::onDisconnect(void)
+{
+    d->box_connection_connect->setText("Connect");
+    
+    QObject::disconnect(d->box_connection_connect, SIGNAL(clicked()), this, SLOT(onDisconnect()));
+       QObject::connect(d->box_connection_connect, SIGNAL(clicked()), this, SLOT(onConnect()));
+
+    emit disconnect(QUrl(d->box_connection_address->text()));
 }
 
 void tstInspectorDistributed::onSubmit(void)

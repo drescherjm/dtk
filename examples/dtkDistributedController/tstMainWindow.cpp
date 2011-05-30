@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 16:12:47 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 25 17:06:41 2011 (+0200)
+ * Last-Updated: Mon May 30 10:58:25 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 28
+ *     Update #: 30
  */
 
 /* Commentary: 
@@ -84,7 +84,8 @@ void tstMainWindow::showInspector(void)
         d->inspector->addPage("Distributed", page);
         d->inspector->setToolBarVisible(true);
 
-        connect(page, SIGNAL(connect(const QUrl&)), d->controller, SLOT(connect(const QUrl&)));
+        connect(page, SIGNAL(   connect(const QUrl&)), d->controller, SLOT(   connect(const QUrl&)));
+        connect(page, SIGNAL(disconnect(const QUrl&)), d->controller, SLOT(disconnect(const QUrl&)));
     }
 
     d->inspector->setVisible(!d->inspector->isVisible());

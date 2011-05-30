@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 30 11:18:09 2011 (+0200)
+ * Last-Updated: Mon May 30 13:04:10 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 127
+ *     Update #: 138
  */
 
 /* Commentary: 
@@ -51,8 +51,6 @@ void dtkDistributedServerDaemon::incomingConnection(int descriptor)
     socket->setSocketDescriptor(descriptor);
 
     dtkDistributedServiceBase::instance()->logMessage("New connection");
-
-    socket->write("Prout");
 }
 
 void dtkDistributedServerDaemon::read(void)
@@ -60,11 +58,19 @@ void dtkDistributedServerDaemon::read(void)
     QTcpSocket *socket = (QTcpSocket *)sender();
 
     if(socket->canReadLine()) {
+
+        QString contents = socket->readAll();
+
         qDebug() << DTK_PRETTY_FUNCTION << "-- Begin read --";
         qDebug() << DTK_PRETTY_FUNCTION << socket->readAll();
         qDebug() << DTK_PRETTY_FUNCTION << "--   End read --";
 
         dtkDistributedServiceBase::instance()->logMessage(QString("Read: %1").arg(QString(socket->readLine())));
+
+        if(contents == "** status **") {
+
+            socket->write("magic ninietsch was here");
+        }
     }
 }
 

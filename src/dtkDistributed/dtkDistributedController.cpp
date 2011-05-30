@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 30 11:29:16 2011 (+0200)
+ * Last-Updated: Mon May 30 13:04:30 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 169
+ *     Update #: 170
  */
 
 /* Commentary: 
@@ -55,6 +55,8 @@ void dtkDistributedController::connect(const QUrl& server)
         QObject::connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
 
         d->sockets.insert(server, socket);
+
+        socket->write("** status **");
     }
 }
 

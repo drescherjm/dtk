@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 16:12:47 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 31 14:54:11 2011 (+0200)
+ * Last-Updated: Tue May 31 23:50:17 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 192
+ *     Update #: 195
  */
 
 /* Commentary: 
@@ -72,12 +72,12 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
     d->host_address = new QLineEdit("dtk://nef-devel.inria.fr:9999", anchoredBar);
     d->host_address->setAttribute(Qt::WA_MacShowFocusRect, false);
     d->host_address->setFixedHeight(16);
-    d->host_address->setStyleSheet("border: 1px solid darkGray; border-radius: 8px; background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ffffff, stop: 1 #cccccc); color: black; font-size: 10px;");
+    d->host_address->setStyleSheet("border: 1px solid darkGray; border-radius: 8px; background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ffffff, stop: 1 #cccccc); color: black; font-size: 10px; padding-left: 4px; padding-right: 4px;");
 
     d->host_button = new QPushButton("Connect", anchoredBar);
     d->host_button->setAttribute(Qt::WA_MacShowFocusRect, false);
     d->host_button->setFixedHeight(16);
-    d->host_button->setStyleSheet("border: 1px solid darkGray; border-radius: 8px; background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ffffff, stop: 1 #cccccc); color: black; font-size: 10px;");
+    d->host_button->setStyleSheet("border: 1px solid darkGray; border-radius: 8px; background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ffffff, stop: 1 #cccccc); color: black; font-size: 10px; padding-left: 4px; padding-right: 4px;");
 
     anchoredBar->addWidget(d->host_address);
     anchoredBar->addWidget(d->host_button);

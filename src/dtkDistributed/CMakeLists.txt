@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon May 30 13:26:45 2011 (+0200)
+## Last-Updated: Tue May 31 23:14:32 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 126
+##     Update #: 133
 ######################################################################
 ## 
 ### Commentary: 
@@ -33,6 +33,9 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedControllerViewDetailed.h
   dtkDistributedExport.h
   dtkDistributedServer.h
+  dtkDistributedServerManager.h
+  dtkDistributedServerManagerOar.h
+  dtkDistributedServerManagerTorque.h
   dtkDistributedService.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
@@ -44,6 +47,9 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkDistributedControllerViewOverall.h
   dtkDistributedControllerViewDetailed.h
   dtkDistributedServer.h
+  dtkDistributedServerManager.h
+  dtkDistributedServerManagerOar.h
+  dtkDistributedServerManagerTorque.h
   dtkDistributedService_p.h)
 
 set(${PROJECT_NAME}_SOURCES
@@ -55,6 +61,9 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedControllerViewOverall.cpp
   dtkDistributedControllerViewDetailed.cpp
   dtkDistributedServer.cpp
+  dtkDistributedServerManager.cpp
+  dtkDistributedServerManagerOar.cpp
+  dtkDistributedServerManagerTorque.cpp
   dtkDistributedService.cpp)
 
 ## #################################################################

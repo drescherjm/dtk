@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue May 31 23:14:32 2011 (+0200)
+## Last-Updated: Tue May 31 23:39:27 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 133
+##     Update #: 150
 ######################################################################
 ## 
 ### Commentary: 
@@ -31,9 +31,14 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedControllerViewFiltering.h
   dtkDistributedControllerViewOverall.h
   dtkDistributedControllerViewDetailed.h
+  dtkDistributedCore.h
+  dtkDistributedCpu.h
   dtkDistributedExport.h
+  dtkDistributedGpu.h
+  dtkDistributedNode.h
   dtkDistributedServer.h
   dtkDistributedServerManager.h
+  dtkDistributedServerManager_p.h
   dtkDistributedServerManagerOar.h
   dtkDistributedServerManagerTorque.h
   dtkDistributedService.h)
@@ -46,6 +51,10 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkDistributedControllerViewFiltering.h
   dtkDistributedControllerViewOverall.h
   dtkDistributedControllerViewDetailed.h
+  dtkDistributedCore.h
+  dtkDistributedCpu.h
+  dtkDistributedGpu.h
+  dtkDistributedNode.h
   dtkDistributedServer.h
   dtkDistributedServerManager.h
   dtkDistributedServerManagerOar.h
@@ -60,6 +69,10 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedControllerViewFiltering.cpp
   dtkDistributedControllerViewOverall.cpp
   dtkDistributedControllerViewDetailed.cpp
+  dtkDistributedCore.cpp
+  dtkDistributedCpu.cpp
+  dtkDistributedGpu.cpp
+  dtkDistributedNode.cpp
   dtkDistributedServer.cpp
   dtkDistributedServerManager.cpp
   dtkDistributedServerManagerOar.cpp

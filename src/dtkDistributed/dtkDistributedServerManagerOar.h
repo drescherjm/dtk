@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:08:25 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 31 23:13:39 2011 (+0200)
+ * Last-Updated: Tue May 31 23:18:44 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 9
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -29,15 +29,8 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedServerManagerOar : public dtkDistribut
 {
     Q_OBJECT
 
-public:
-     dtkDistributedServerManagerOar(void);
-    ~dtkDistributedServerManagerOar(void);
-
 public slots:
     void discover(const QUrl& url);
-
-private:
-    dtkDistributedServerManagerOarPrivate *d;
 };
 
 #endif

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 16:12:47 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 30 13:57:45 2011 (+0200)
+ * Last-Updated: Tue May 31 14:54:11 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 36
+ *     Update #: 192
  */
 
 /* Commentary: 
@@ -20,12 +20,14 @@
 #include <QtGui>
 
 #include "tstMainWindow.h"
-#include "tstInspectorDistributed.h"
 
-#include <dtkGui/dtkInspector.h>
+#include <dtkGui/dtkAnchoredBar.h>
 #include <dtkGui/dtkSpacer.h>
 
 #include <dtkDistributed/dtkDistributedController.h>
+#include <dtkDistributed/dtkDistributedControllerViewFiltering.h>
+#include <dtkDistributed/dtkDistributedControllerViewOverall.h>
+#include <dtkDistributed/dtkDistributedControllerViewDetailed.h>
 
 // /////////////////////////////////////////////////////////////////
 // tstMainWindowPrivate
@@ -34,10 +36,14 @@
 class tstMainWindowPrivate
 {
 public:
-    dtkInspector *inspector;
+    dtkDistributedController *controller;
+    dtkDistributedControllerViewFiltering *view_filtering;
+    dtkDistributedControllerViewOverall *view_overall;
+    dtkDistributedControllerViewDetailed *view_detailed;
 
 public:
-    dtkDistributedController *controller;
+    QLineEdit *host_address;
+    QPushButton *host_button;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -47,24 +53,57 @@ public:
 tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
 {
     d = new tstMainWindowPrivate;
-    d->inspector = NULL;
+
     d->controller = new dtkDistributedController;
 
-    QAction *inspectorAction = new QAction("Inspector", this);
-    inspectorAction->setIcon(QIcon(":dtkGui/pixmaps/dtk-inspector.png"));
-    inspectorAction->setShortcut(Qt::ControlModifier + Qt::Key_I);
+    // d->view_filtering = new dtkDistributedControllerViewFiltering(this);
+    // d->view_filtering->setController(d->controller);
 
-    QToolBar *toolBar = this->addToolBar("Main");
-    toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-    toolBar->setIconSize(QSize(32, 32));
-    toolBar->addWidget(new dtkSpacer(toolBar));
-    toolBar->addAction(inspectorAction);
+    d->view_overall = new dtkDistributedControllerViewOverall(this);
+    d->view_overall->setController(d->controller);
 
-    QObject::connect(inspectorAction, SIGNAL(triggered()), this, SLOT(showInspector()));
+    d->view_detailed = new dtkDistributedControllerViewDetailed(this);
+    d->view_detailed->setController(d->controller);
 
-    this->setCentralWidget(new QWidget(this));
+    dtkAnchoredBar *anchoredBar = new dtkAnchoredBar(d->view_overall);
+    anchoredBar->setMinimumWidth(200);
+    anchoredBar->setMaximumWidth(400);
+
+    d->host_address = new QLineEdit("dtk://nef-devel.inria.fr:9999", anchoredBar);
+    d->host_address->setAttribute(Qt::WA_MacShowFocusRect, false);
+    d->host_address->setFixedHeight(16);
+    d->host_address->setStyleSheet("border: 1px solid darkGray; border-radius: 8px; background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ffffff, stop: 1 #cccccc); color: black; font-size: 10px;");
+
+    d->host_button = new QPushButton("Connect", anchoredBar);
+    d->host_button->setAttribute(Qt::WA_MacShowFocusRect, false);
+    d->host_button->setFixedHeight(16);
+    d->host_button->setStyleSheet("border: 1px solid darkGray; border-radius: 8px; background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ffffff, stop: 1 #cccccc); color: black; font-size: 10px;");
+
+    anchoredBar->addWidget(d->host_address);
+    anchoredBar->addWidget(d->host_button);
+    anchoredBar->addWidget(new dtkSpacer(anchoredBar, 16));
+
+    QWidget *side = new QWidget(this);
+
+    QVBoxLayout *side_layout = new QVBoxLayout(side);
+    side_layout->setContentsMargins(0, 0, 0, 0);
+    side_layout->setSpacing(0);
+    side_layout->addWidget(d->view_overall);
+    side_layout->addWidget(anchoredBar);
+
+    QWidget *central = new QWidget(this);
+
+    QHBoxLayout *layout = new QHBoxLayout(central);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    layout->addWidget(side);
+    layout->addWidget(d->view_detailed);
+
+    this->setCentralWidget(central);
     this->setUnifiedTitleAndToolBarOnMac(true);
     this->setWindowTitle("dtkDistributedController");
+
+    connect(d->host_button, SIGNAL(clicked()), this, SLOT(onConnect()));
 }
 
 tstMainWindow::~tstMainWindow(void)
@@ -73,22 +112,32 @@ tstMainWindow::~tstMainWindow(void)
     delete d;
 }
 
-void tstMainWindow::showInspector(void)
+void tstMainWindow::onConnect(void)
 {
-    if(!d->inspector) {
-        d->inspector = new dtkInspector;
+    d->controller->connect(QUrl(d->host_address->text()));
+}
 
-        tstInspectorDistributed *page = new tstInspectorDistributed(d->inspector);
+void tstMainWindow::onConnected(const QUrl& server)
+{
+    Q_UNUSED(server);
 
-        d->inspector->addPage("Distributed", page);
-        d->inspector->setToolBarVisible(true);
+    d->host_button->setText("Disconnect");
+    
+    QObject::disconnect(d->host_button, SIGNAL(clicked()), this, SLOT(onConnect()));
+       QObject::connect(d->host_button, SIGNAL(clicked()), this, SLOT(onDisconnect()));
+}
 
-        connect(page, SIGNAL(   connect(const QUrl&)), d->controller, SLOT(   connect(const QUrl&)));
-        connect(page, SIGNAL(disconnect(const QUrl&)), d->controller, SLOT(disconnect(const QUrl&)));
+void tstMainWindow::onDisconnect(void)
+{
+    d->controller->disconnect(QUrl(d->host_address->text()));
+}
 
-        connect(d->controller, SIGNAL(   connected(const QUrl&)), page, SLOT(   onConnected(const QUrl&)));
-        connect(d->controller, SIGNAL(disconnected(const QUrl&)), page, SLOT(onDisconnected(const QUrl&)));
-    }
+void tstMainWindow::onDisconnected(const QUrl& server)
+{
+    Q_UNUSED(server);
 
-    d->inspector->setVisible(!d->inspector->isVisible());
+    d->host_button->setText("Connect");
+    
+    QObject::disconnect(d->host_button, SIGNAL(clicked()), this, SLOT(onDisconnect()));
+       QObject::connect(d->host_button, SIGNAL(clicked()), this, SLOT(onConnect()));
 }

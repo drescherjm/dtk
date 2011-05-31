@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed May 25 16:01:47 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed May 25 16:19:17 2011 (+0200)
+## Last-Updated: Mon May 30 16:28:20 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 13
+##     Update #: 15
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,11 +24,9 @@ project(dtkDistributedController)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS_MOC
-  tstInspectorDistributed.h
   tstMainWindow.h)
 
 set(${PROJECT_NAME}_SOURCES
-  tstInspectorDistributed.cpp
   tstMainWindow.cpp
   main.cpp)
 

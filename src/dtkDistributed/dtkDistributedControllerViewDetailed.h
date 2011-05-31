@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon May 30 13:19:21 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 30 13:45:06 2011 (+0200)
+ * Last-Updated: Mon May 30 16:36:16 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -27,7 +27,7 @@
 class dtkDistributedController;
 class dtkDistributedControllerViewDetailedPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedControllerViewDetailed : public QWidget
+class DTKDISTRIBUTED_EXPORT dtkDistributedControllerViewDetailed : public QListWidget
 {
     Q_OBJECT
 

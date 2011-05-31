@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon May 30 13:21:43 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 30 13:25:26 2011 (+0200)
+ * Last-Updated: Tue May 31 14:47:08 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 7
+ *     Update #: 17
  */
 
 /* Commentary: 
@@ -25,9 +25,14 @@ public:
     dtkDistributedController *controller;
 };
 
-dtkDistributedControllerViewOverall::dtkDistributedControllerViewOverall(QWidget *parent) : QWidget(parent), d(new dtkDistributedControllerViewOverallPrivate)
+dtkDistributedControllerViewOverall::dtkDistributedControllerViewOverall(QWidget *parent) : QTreeWidget(parent), d(new dtkDistributedControllerViewOverallPrivate)
 {
     d->controller = NULL;
+
+    this->setAttribute(Qt::WA_MacShowFocusRect, false);
+    this->setFrameStyle(QFrame::NoFrame);
+    this->setHeaderLabels(QStringList() << "Core" << "Node" << "Status");
+    this->viewport()->setStyleSheet("background-color: #dfe4ea; border-right: 1px solid lightGray;");
 }
 
 dtkDistributedControllerViewOverall::~dtkDistributedControllerViewOverall(void)

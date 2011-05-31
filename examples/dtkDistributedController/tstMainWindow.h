@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 16:12:05 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 25 17:04:36 2011 (+0200)
+ * Last-Updated: Tue May 31 14:52:52 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 6
+ *     Update #: 10
  */
 
 /* Commentary: 
@@ -33,8 +33,12 @@ public:
      tstMainWindow(QWidget *parent = 0);
     ~tstMainWindow(void);
 
-public slots:
-    void showInspector(void);
+protected slots:
+    void onConnect(void);
+    void onConnected(const QUrl& server);
+
+    void onDisconnect(void);
+    void onDisconnected(const QUrl& server);
 
 private:
     tstMainWindowPrivate *d;

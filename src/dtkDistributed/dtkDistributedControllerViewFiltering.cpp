@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon May 30 13:21:43 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 30 13:47:14 2011 (+0200)
+ * Last-Updated: Mon May 30 16:47:10 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 17
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -25,7 +25,7 @@ public:
     dtkDistributedController *controller;
 };
 
-dtkDistributedControllerViewFiltering::dtkDistributedControllerViewFiltering(QWidget *parent) : QWidget(parent), d(new dtkDistributedControllerViewFilteringPrivate)
+dtkDistributedControllerViewFiltering::dtkDistributedControllerViewFiltering(QWidget *parent) : QFrame(parent), d(new dtkDistributedControllerViewFilteringPrivate)
 {
     d->controller = NULL;
 
@@ -35,12 +35,16 @@ dtkDistributedControllerViewFiltering::dtkDistributedControllerViewFiltering(QWi
     QComboBox *filter_d = new QComboBox(this);
 
     QHBoxLayout *filter_layout = new QHBoxLayout(this);
-    filter_layout->setContentsMargins(0, 0, 0, 0);
+    filter_layout->setContentsMargins(10, 0, 0, 1);
     filter_layout->setSpacing(0);
+    filter_layout->addWidget(new QLabel("Filters:", this));
     filter_layout->addWidget(filter_a);
     filter_layout->addWidget(filter_b);
     filter_layout->addWidget(filter_c);
     filter_layout->addWidget(filter_d);
+
+    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    this->setStyleSheet("border-bottom: 1px solid darkGray;");
 }
 
 dtkDistributedControllerViewFiltering::~dtkDistributedControllerViewFiltering(void)

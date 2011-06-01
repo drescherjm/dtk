@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:00:53 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 31 23:36:43 2011 (+0200)
+ * Last-Updated: Wed Jun  1 11:27:20 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -37,6 +37,11 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedServerManager : public QObject
 public:
              dtkDistributedServerManager(void);
     virtual ~dtkDistributedServerManager(void);
+
+    enum Type {
+        Oar,
+        Torque
+    };
 
     QList<dtkDistributedNode *> nodes(void);
     QList<dtkDistributedCpu *> cpus(void);

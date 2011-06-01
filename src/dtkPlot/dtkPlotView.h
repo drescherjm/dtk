@@ -1,12 +1,12 @@
 /* dtkPlotView.h --- 
  * 
  * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Mon Nov 22 10:22:04 2010 (+0100)
+ * Copyright (C) 2008-2011 - Julien Wintz, Inria.
+ * Created: Wed Jun  1 17:02:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Feb 23 09:42:34 2011 (+0100)
+ * Last-Updated: Wed Jun  1 17:03:54 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 15
+ *     Update #: 7
  */
 
 /* Commentary: 
@@ -20,13 +20,14 @@
 #ifndef DTKPLOTVIEW_H
 #define DTKPLOTVIEW_H
 
-#include <QtGui>
-
 #include "dtkPlotExport.h"
+
+#include <QtCore>
+#include <QtGui>
 
 class dtkPlotViewPrivate;
 
-class DTKPLOT_EXPORT dtkPlotView : public QGraphicsView
+class DTKPLOT_EXPORT dtkPlotView : public QWidget
 {
     Q_OBJECT
 
@@ -39,4 +40,3 @@ private:
 };
 
 #endif
-

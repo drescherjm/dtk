@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue Jun  8 11:34:56 2010 (+0200)
+## Last-Updated: Tue May 31 23:39:27 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 67
+##     Update #: 150
 ######################################################################
 ## 
 ### Commentary: 
@@ -26,48 +26,88 @@ project(dtkDistributed)
 set(${PROJECT_NAME}_HEADERS
   dtkDistributedCommunicator.h
   dtkDistributedCommunicatorTcp.h
+  dtkDistributedClient.h
+  dtkDistributedController.h
+  dtkDistributedControllerViewFiltering.h
+  dtkDistributedControllerViewOverall.h
+  dtkDistributedControllerViewDetailed.h
   dtkDistributedCore.h
-  dtkDistributedDiscoverer.h
-  dtkDistributedDiscovererOar.h
-  dtkDistributedDiscovererTorque.h
   dtkDistributedCpu.h
-  dtkDistributedGpu.h
   dtkDistributedExport.h
+  dtkDistributedGpu.h
   dtkDistributedNode.h
-  dtkDistributor.h
-  dtkDistributorController.h
-  dtkDistributorScene.h
-  dtkDistributorView.h)
+  dtkDistributedServer.h
+  dtkDistributedServerManager.h
+  dtkDistributedServerManager_p.h
+  dtkDistributedServerManagerOar.h
+  dtkDistributedServerManagerTorque.h
+  dtkDistributedService.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkDistributedCommunicator.h
   dtkDistributedCommunicatorTcp.h
+  dtkDistributedClient.h
+  dtkDistributedController.h
+  dtkDistributedControllerViewFiltering.h
+  dtkDistributedControllerViewOverall.h
+  dtkDistributedControllerViewDetailed.h
   dtkDistributedCore.h
-  dtkDistributedDiscoverer.h
   dtkDistributedCpu.h
   dtkDistributedGpu.h
   dtkDistributedNode.h
-  dtkDistributor.h
-  dtkDistributorController.h
-  dtkDistributorScene.h
-  dtkDistributorView.h)
+  dtkDistributedServer.h
+  dtkDistributedServerManager.h
+  dtkDistributedServerManagerOar.h
+  dtkDistributedServerManagerTorque.h
+  dtkDistributedService_p.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkDistributedCommunicator.cpp
   dtkDistributedCommunicatorTcp.cpp
+  dtkDistributedClient.cpp
+  dtkDistributedController.cpp
+  dtkDistributedControllerViewFiltering.cpp
+  dtkDistributedControllerViewOverall.cpp
+  dtkDistributedControllerViewDetailed.cpp
   dtkDistributedCore.cpp
-  dtkDistributedDiscoverer.cpp
-  dtkDistributedDiscovererOar.cpp
-  dtkDistributedDiscovererTorque.cpp
   dtkDistributedCpu.cpp
   dtkDistributedGpu.cpp
   dtkDistributedNode.cpp
-  dtkDistributor.cpp
-  dtkDistributorController.cpp
-  dtkDistributorScene.cpp
-  dtkDistributorView.cpp)
+  dtkDistributedServer.cpp
+  dtkDistributedServerManager.cpp
+  dtkDistributedServerManagerOar.cpp
+  dtkDistributedServerManagerTorque.cpp
+  dtkDistributedService.cpp)
 
-set(${PROJECT_NAME}_RESOURCES dtkDistributed.qrc)
+## #################################################################
+## Platform specific sources
+## #################################################################
+
+if(WIN32)
+
+set(${PROJECT_NAME}_HEADERS_MOC
+  ${${PROJECT_NAME}_HEADERS_MOC}
+  dtkDistributedServiceWin_p.h)
+
+set(${PROJECT_NAME}_SOURCES
+  ${${PROJECT_NAME}_SOURCES}
+  dtkDistributedServiceWin.cpp)
+
+else(WIN32)
+
+set(${PROJECT_NAME}_HEADERS_MOC
+  ${${PROJECT_NAME}_HEADERS_MOC}
+  dtkDistributedServiceUnix_p.h
+  dtkDistributedUnixServerSocket.h
+  dtkDistributedUnixSocket.h)
+
+set(${PROJECT_NAME}_SOURCES
+  ${${PROJECT_NAME}_SOURCES}
+  dtkDistributedServiceUnix.cpp
+  dtkDistributedUnixServerSocket.cpp
+  dtkDistributedUnixSocket.cpp)
+
+endif(WIN32)
 
 ## #################################################################
 ## Mpi sources
@@ -89,18 +129,15 @@ endif(MPI_FOUND)
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)
 if(NOT MSVC)
-  # Shouldn't the QT_USE_FILE set this appropriately?
   add_definitions(-DQT_NO_DEBUG)
 endif(NOT MSVC)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
-qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
 
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
-  ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES_QRC})
+  ${${PROJECT_NAME}_SOURCES_MOC})
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
@@ -108,8 +145,7 @@ target_link_libraries(${PROJECT_NAME}
   dtkGui)
 
 if(MPI_FOUND)
-target_link_libraries(${PROJECT_NAME}
-  ${MPI_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${MPI_LIBRARIES})
 endif(MPI_FOUND)
 
 ## #################################################################
@@ -128,4 +164,3 @@ install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib)
-

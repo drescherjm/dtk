@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May  3 17:08:00 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 2366
+ * Last-Updated: Mon May 23 14:54:01 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 2367
  */
 
 /* Commentary: 
@@ -220,13 +220,13 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
     this->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
     this->setZValue(10);
 
-#if QT_VERSION >= 0x040600
-    QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(this);
-    shadow->setBlurRadius(5);
-    shadow->setOffset(3);
-    shadow->setColor(QColor(0, 0, 0, 127));
-    this->setGraphicsEffect(shadow);
-#endif
+// #if QT_VERSION >= 0x040600
+//     QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(this);
+//     shadow->setBlurRadius(5);
+//     shadow->setOffset(3);
+//     shadow->setColor(QColor(0, 0, 0, 127));
+//     this->setGraphicsEffect(shadow);
+// #endif
 
     d->clicked_property = NULL;
 

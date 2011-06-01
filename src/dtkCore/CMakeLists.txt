@@ -50,6 +50,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkPluginManager.h
   dtkQuat.h
   dtkUpdater.h
+  dtkSmartPointer.h
   dtkVec3.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
@@ -99,6 +100,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkLog.cpp
   dtkPluginManager.cpp
   dtkQuat.cpp
+  dtkSmartPointer.cpp
   dtkUpdater.cpp)
 
 ## #################################################################

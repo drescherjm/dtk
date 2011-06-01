@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Jan 31 11:09:59 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr 20 12:46:36 2011 (+0200)
+ * Last-Updated: Wed May 25 16:35:54 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 121
+ *     Update #: 124
  */
 
 /* Commentary: 
@@ -112,6 +112,11 @@ QAction *dtkInspector::addPage(const QString& title, QWidget *page, const QIcon&
         action->trigger();
 
     return action;
+}
+
+void dtkInspector::setToolBarVisible(bool visible)
+{
+    d->tool_bar->setVisible(visible);
 }
 
 void dtkInspector::setTitle(const QString& title)

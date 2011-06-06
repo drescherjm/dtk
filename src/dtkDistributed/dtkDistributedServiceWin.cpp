@@ -107,7 +107,7 @@ bool dtkDistributedServiceController::isInstalled(void) const
     SC_HANDLE hSCM = pOpenSCManager(0, 0, 0);
     if (hSCM) {
         // Try to open the service
-        SC_HANDLE hService = pOpenService(hSCM, (wchar_t*)d->serviceName.utf16(),
+        SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(),
                                           SERVICE_QUERY_CONFIG);
 
         if (hService) {
@@ -130,7 +130,7 @@ bool dtkDistributedServiceController::isRunning(void) const
     SC_HANDLE hSCM = pOpenSCManager(0, 0, 0);
     if (hSCM) {
         // Try to open the service
-        SC_HANDLE hService = pOpenService(hSCM, (wchar_t *)d->serviceName.utf16(),
+        SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(),
                                           SERVICE_QUERY_STATUS);
         if (hService) {
             SERVICE_STATUS info;
@@ -155,7 +155,7 @@ QString dtkDistributedServiceController::serviceFilePath(void) const
     SC_HANDLE hSCM = pOpenSCManager(0, 0, 0);
     if (hSCM) {
         // Try to open the service
-        SC_HANDLE hService = pOpenService(hSCM, (wchar_t *)d->serviceName.utf16(),
+        SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(),
                                           SERVICE_QUERY_CONFIG);
         if (hService) {
             DWORD sizeNeeded = 0;
@@ -182,7 +182,7 @@ QString dtkDistributedServiceController::serviceDescription(void) const
     SC_HANDLE hSCM = pOpenSCManager(0, 0, 0);
     if (hSCM) {
         // Try to open the service
-        SC_HANDLE hService = pOpenService(hSCM, (wchar_t *)d->serviceName.utf16(),
+        SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(),
              SERVICE_QUERY_CONFIG);
         if (hService) {
             DWORD dwBytesNeeded;
@@ -215,7 +215,7 @@ dtkDistributedServiceController::StartupType dtkDistributedServiceController::st
     SC_HANDLE hSCM = pOpenSCManager(0, 0, 0);
     if (hSCM) {
         // Try to open the service
-        SC_HANDLE hService = pOpenService(hSCM, (wchar_t *)d->serviceName.utf16(),
+        SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(),
                                           SERVICE_QUERY_CONFIG);
         if (hService) {
             DWORD sizeNeeded = 0;
@@ -242,7 +242,7 @@ bool dtkDistributedServiceController::uninstall(void)
     SC_HANDLE hSCM = pOpenSCManager(0, 0, SC_MANAGER_ALL_ACCESS);
     if (hSCM) {
         // Try to open the service
-        SC_HANDLE hService = pOpenService(hSCM, (wchar_t *)d->serviceName.utf16(), DELETE);
+        SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(), DELETE);
         if (hService) {
             if (pDeleteService(hService))
                 result = true;
@@ -264,7 +264,7 @@ bool dtkDistributedServiceController::start(const QStringList &args)
     SC_HANDLE hSCM = pOpenSCManager(0, 0, SC_MANAGER_CONNECT);
     if (hSCM) {
         // Try to open the service
-        SC_HANDLE hService = pOpenService(hSCM, (wchar_t *)d->serviceName.utf16(), SERVICE_START);
+        SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(), SERVICE_START);
         if (hService) {
             QVector<const wchar_t *> argv(args.size());
             for (int i = 0; i < args.size(); ++i)
@@ -288,7 +288,7 @@ bool dtkDistributedServiceController::stop(void)
 
     SC_HANDLE hSCM = pOpenSCManager(0, 0, SC_MANAGER_CONNECT);
     if (hSCM) {
-        SC_HANDLE hService = pOpenService(hSCM, (wchar_t *)d->serviceName.utf16(), SERVICE_STOP|SERVICE_QUERY_STATUS);
+        SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(), SERVICE_STOP|SERVICE_QUERY_STATUS);
         if (hService) {
             SERVICE_STATUS status;
             if (pControlService(hService, SERVICE_CONTROL_STOP, &status)) {
@@ -321,7 +321,7 @@ bool dtkDistributedServiceController::pause(void)
 
     SC_HANDLE hSCM = pOpenSCManager(0, 0, SC_MANAGER_CONNECT);
     if (hSCM) {
-        SC_HANDLE hService = pOpenService(hSCM, (wchar_t *)d->serviceName.utf16(),
+        SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(),
                              SERVICE_PAUSE_CONTINUE);
         if (hService) {
             SERVICE_STATUS status;
@@ -343,7 +343,7 @@ bool dtkDistributedServiceController::resume(void)
 
     SC_HANDLE hSCM = pOpenSCManager(0, 0, SC_MANAGER_CONNECT);
     if (hSCM) {
-        SC_HANDLE hService = pOpenService(hSCM, (wchar_t *)d->serviceName.utf16(),
+        SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(),
                              SERVICE_PAUSE_CONTINUE);
         if (hService) {
             SERVICE_STATUS status;
@@ -368,7 +368,7 @@ bool dtkDistributedServiceController::sendCommand(int code)
 
     SC_HANDLE hSCM = pOpenSCManager(0, 0, SC_MANAGER_CONNECT);
     if (hSCM) {
-        SC_HANDLE hService = pOpenService(hSCM, (wchar_t *)d->serviceName.utf16(),
+        SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(),
                                           SERVICE_USER_DEFINED_CONTROL);
         if (hService) {
             SERVICE_STATUS status;
@@ -410,11 +410,11 @@ void dtkDistributedServiceBase::logMessage(const QString &message, MessageType t
     case Information: wType = EVENTLOG_INFORMATION_TYPE; break;
     default: wType = EVENTLOG_SUCCESS; break;
     }
-    HANDLE h = pRegisterEventSource(0, (wchar_t *)d->controller.serviceName().utf16());
+    HANDLE h = pRegisterEventSource(0, (LPCSTR)d->controller.serviceName().utf16());
     if (h) {
         const wchar_t *msg = (wchar_t*)message.utf16();
         const char *bindata = data.size() ? data.constData() : 0;
-        pReportEvent(h, wType, category, id, 0, 1, data.size(),(const wchar_t **)&msg,
+        pReportEvent(h, wType, category, id, 0, 1, data.size(),(LPCTSTR*)&msg,
                      const_cast<char *>(bindata));
         pDeregisterEventSource(h);
     }
@@ -493,7 +493,7 @@ void WINAPI dtkDistributedServiceSysPrivate::serviceMain(DWORD dwArgc, wchar_t**
     instance->startSemaphore.release(); // let the qapp creation start
     instance->startSemaphore2.acquire(); // wait until its done
     // Register the control request handler
-    instance->serviceStatus = pRegisterServiceCtrlHandler((TCHAR*)dtkDistributedServiceBase::instance()->serviceName().utf16(), handler);
+    instance->serviceStatus = pRegisterServiceCtrlHandler((const wchar_t *)dtkDistributedServiceBase::instance()->serviceName().utf16(), handler);
 
     if (!instance->serviceStatus) // cannot happen - something is utterly wrong
         return;
@@ -647,7 +647,7 @@ protected:
         st[1].lpServiceName = 0;
         st[1].lpServiceProc = 0;
         
-        success = (pStartServiceCtrlDispatcher(st) != 0); // should block
+        success = (pStartServiceCtrlDispatcher((const SERVICE_TABLE_ENTRY *)st) != 0); // should block
         
         if (!success) {
             if (GetLastError() == ERROR_FAILED_SERVICE_CONTROLLER_CONNECT) {
@@ -793,18 +793,18 @@ bool dtkDistributedServiceBasePrivate::install(const QString &account, const QSt
         if (!act) dwServiceType |= SERVICE_INTERACTIVE_PROCESS;
 
         // Create the service
-        SC_HANDLE hService = pCreateService(hSCM, (wchar_t *)controller.serviceName().utf16(),
-                                            (wchar_t *)controller.serviceName().utf16(),
+        SC_HANDLE hService = pCreateService(hSCM, (LPCTSTR)controller.serviceName().utf16(),
+                                            (LPCTSTR)controller.serviceName().utf16(),
                                             SERVICE_ALL_ACCESS,
                                             dwServiceType, // QObject::inherits ( const char * className ) for no inter active ????
-                                            dwStartType, SERVICE_ERROR_NORMAL, (wchar_t *)filePath().utf16(),
+                                            dwStartType, SERVICE_ERROR_NORMAL, (LPCTSTR)filePath().utf16(),
                                             0, 0, 0,
-                                            act, pwd);
+                                            (LPCTSTR)act, (LPCTSTR)pwd);
         if (hService) {
             result = true;
             if (!serviceDescription.isEmpty()) {
                 SERVICE_DESCRIPTION sdesc;
-                sdesc.lpDescription = (wchar_t *)serviceDescription.utf16();
+                sdesc.lpDescription = (LPSTR)serviceDescription.utf16();
                 pChangeServiceConfig2(hService, SERVICE_CONFIG_DESCRIPTION, &sdesc);
             }
             pCloseServiceHandle(hService);

@@ -1,8 +1,0 @@
-set(NIGHTLY_START_TIME "21:00:00 EST")
-set(CTEST_PROJECT_NAME "dtk")
-set(CTEST_UPDATE_TYPE "git")
-set(CTEST_UPDATE_COMMAND "git")
-set(CTEST_DROP_METHOD "http")
-set(CTEST_DROP_SITE "cdash.inria.fr")
-set(CTEST_DROP_LOCATION "/CDash/submit.php?project=dtk")
-set(CTEST_DROP_SITE_CDASH TRUE)

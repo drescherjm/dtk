@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 23 16:06:55 2011 (+0200)
+ * Last-Updated: Wed May 25 14:48:06 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 2786
+ *     Update #: 2859
  */
 
 /* Commentary: 
@@ -250,11 +250,10 @@ void dtkComposerScene::touch(void)
  */
 void dtkComposerScene::clear(void)
 {
-    foreach(dtkComposerNode *node, this->nodes())
-        delete node;
+    this->removeNodes(this->nodes());
 
     foreach(dtkComposerNote *note, this->notes())
-        delete note;
+        this->removeNote(note);
 
     d->nodes.clear();
     d->notes.clear();
@@ -420,19 +419,13 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
         n = parent;
     }
 
-    QList<dtkComposerNode *> selected_nodes;
-    foreach(QGraphicsItem *item, this->selectedItems())
-        if (dtkComposerNode *sn = dynamic_cast<dtkComposerNode *>(item))
-            selected_nodes << sn;
-
     foreach(dtkComposerNode *child, node->childNodes()) {
         node->removeChildNode(child);
-        if (!selected_nodes.contains(child))
-            this->removeNode(child);
+        this->removeNode(child);
     }
 
     d->nodes.removeAll(node);
-    
+
     delete node;
     node = NULL;
 }
@@ -446,6 +439,22 @@ void dtkComposerScene::removeNote(dtkComposerNote *note)
     d->notes.removeAll(note);
 
     delete note;
+}
+
+//! Removes a list of nodes from the scene.
+/*! 
+ *  In practice, when a node and its parent are in the list the node
+ *  is removed from it since the parent will delete the node.
+ */
+void dtkComposerScene::removeNodes(QList<dtkComposerNode *> nodes)
+{
+    QList<dtkComposerNode *> nodes_to_remove;
+    foreach(dtkComposerNode *n, nodes)
+        if (!n->parentNode() || !nodes.contains(n->parentNode()))
+            nodes_to_remove << n;
+
+    foreach(dtkComposerNode *n, nodes_to_remove)
+        this->removeNode(n);
 }
 
 //! Group creation. Creates a composite node and adds it to the scene.
@@ -1197,7 +1206,7 @@ void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
 
 //! Receives key press events.
 /*! 
- *  - Ctrl + Delete or Ctrl + Backspace: Node and note deletion (see removeNode(dtkComposerNode *node) and removeNote(dtkComposerNote *note))
+ *  - Ctrl + Delete or Ctrl + Backspace: Node and note deletion (see removeNodes(QList<dtkComposerNode *> nodes) and removeNote(dtkComposerNote *note))
  *  - Ctrl + C : copy nodes and edges (see copy(void))
  *  - Ctrl + V : paste nodes and edges (see paste(void))
  */
@@ -1205,13 +1214,21 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
 {
     // Item deletion - Delete | Backspace
 
-    if ((event->key() == Qt::Key_Backspace || event->key() == Qt::Key_Delete) && (event->modifiers() & Qt::ControlModifier))
+    if ((event->key() == Qt::Key_Backspace || event->key() == Qt::Key_Delete) && (event->modifiers() & Qt::ControlModifier)) {
+        QList<dtkComposerNode *> selected_nodes;
+        QList<dtkComposerNote *> selected_notes;
         foreach(QGraphicsItem *item, this->selectedItems()) {
-            if (dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item))
-                this->removeNode(node);
-            if (dtkComposerNote *note = dynamic_cast<dtkComposerNote *>(item))
-                this->removeNote(note);
+            if (dtkComposerNode *snode = dynamic_cast<dtkComposerNode *>(item))
+                selected_nodes << snode;
+            if (dtkComposerNote *snote = dynamic_cast<dtkComposerNote *>(item))
+                selected_notes << snote;
         }
+
+        this->removeNodes(selected_nodes);
+
+        foreach(dtkComposerNote *snote, selected_notes)
+            if (snote) this->removeNote(snote);
+    }
 
     // Item Copy - Ctrl + C
 
@@ -1248,55 +1265,61 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     QGraphicsScene::mouseMoveEvent(mouseEvent);
 
-    if (d->current_edge)
-        d->current_edge->adjust(d->current_edge->start(), mouseEvent->scenePos());
+    if (mouseEvent->buttons().testFlag(Qt::LeftButton)  || 
+        mouseEvent->buttons().testFlag(Qt::RightButton) || 
+        mouseEvent->buttons().testFlag(Qt::MidButton)) {
 
-    this->updateEdgesVisibility();
-    this->update();
+        if (d->current_edge)
+            d->current_edge->adjust(d->current_edge->start(), mouseEvent->scenePos());
 
-    // -- Control nodes handling
+        // -- Control nodes handling
 
-    d->grabber_node = NULL;
-    d->grabber_node = dynamic_cast<dtkComposerNode *>(this->mouseGrabberItem());
+        // d->grabber_node = NULL;
+        // d->grabber_node = dynamic_cast<dtkComposerNode *>(this->mouseGrabberItem());
 
-    if (!d->grabber_node || d->grabber_node->isGhost())
-        return;
+        // if (!d->grabber_node || d->grabber_node->isGhost())
+        //     return;
 
-    // QList<dtkComposerNodeControlBlock *> hovered_control_blocks = this->hoveredControlBlocks(d->grabber_node);
+        // QList<dtkComposerNodeControlBlock *> hovered_control_blocks = this->hoveredControlBlocks(d->grabber_node);
 
-    // if (hovered_control_blocks.count() > 1) {
+        // if (hovered_control_blocks.count() > 1) {
 
-    //     foreach(dtkComposerNodeControlBlock *block, hovered_control_blocks)
-    //         block->highlight(false);
+        //     foreach(dtkComposerNodeControlBlock *block, hovered_control_blocks)
+        //         block->highlight(false);
 
-    //     d->grabber_node->highlight(false);
+        //     d->grabber_node->highlight(false);
 
-    // } else if (hovered_control_blocks.count() == 1) {
+        // } else if (hovered_control_blocks.count() == 1) {
 
-    //     if (d->grabber_node_has_edges && d->grabber_node->parentItem() != hovered_control_blocks.first()) {
+        //     if (d->grabber_node_has_edges && d->grabber_node->parentItem() != hovered_control_blocks.first()) {
 
-    //         hovered_control_blocks.first()->highlight(false);
-    //         d->grabber_node->highlight(false);
+        //         hovered_control_blocks.first()->highlight(false);
+        //         d->grabber_node->highlight(false);
 
-    //     } else {
+        //     } else {
 
-    //         hovered_control_blocks.first()->highlight(true);
-    //         d->grabber_node->highlight(true);
+        //         hovered_control_blocks.first()->highlight(true);
+        //         d->grabber_node->highlight(true);
 
-    //     }
+        //     }
 
-    // } else {
+        // } else {
 
-    //     if (d->grabber_node_has_edges && d->grabber_node->parentItem() != d->current_node) {
+        //     if (d->grabber_node_has_edges && d->grabber_node->parentItem() != d->current_node) {
 
-    //         d->grabber_node->highlight(false);
+        //         d->grabber_node->highlight(false);
 
-    //     } else {
+        //     } else {
 
-    //         d->grabber_node->highlight(true);
+        //         d->grabber_node->highlight(true);
             
-    //     }
-    // }
+        //     }
+        // }
+
+        this->updateEdgesVisibility();
+        this->update();
+    }
+
 }
 
 //! Receives mouse press events.

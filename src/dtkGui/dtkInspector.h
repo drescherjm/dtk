@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Jan 31 11:07:21 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 16 22:09:53 2011 (+0100)
+ * Last-Updated: Wed May 25 16:35:27 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 25
+ *     Update #: 27
  */
 
 /* Commentary: 
@@ -36,6 +36,8 @@ public:
 
     QAction *addPage(const QString& title, QWidget *page);
     QAction *addPage(const QString& title, QWidget *page, const QIcon& icon);
+
+    void setToolBarVisible(bool visible);
 
 public slots:
     void setTitle(const QString& title);

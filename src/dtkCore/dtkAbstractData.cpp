@@ -306,7 +306,10 @@ dtkAbstractData *dtkAbstractData::convert(const QString& toType)
 
             if (converter) {
                 if (converter->canConvert(toType))
+                {
+                  converter->setData(this);
                     conversion = converter->convert();
+                }
             }
         }
     }

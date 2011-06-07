@@ -39,7 +39,7 @@ option(BUILD_SHARED_LIBS   "Build shared libraries" true)
 option(BUILD_TOOLS         "Build tools"            true)
 option(BUILD_EXAMPLES      "Build examples"         true)
 option(BUILD_DOCUMENTATION "Build documentation"    true)
-option(BUILD_WRAPPERS      "Build wrappers"         true)
+option(BUILD_WRAPPERS      "Build wrappers"         false)
 
 include(dtkDependencies)
 include(dtkBuild)

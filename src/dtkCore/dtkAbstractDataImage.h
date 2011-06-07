@@ -20,13 +20,11 @@
 #ifndef DTKABSTRACTIMAGEDATA_H
 #define DTKABSTRACTIMAGEDATA_H
 
-#include <typeinfo>
+#include <QMetaType>
 #include <dtkCore/dtkAbstractData.h>
 
 class DTKCORE_EXPORT dtkAbstractDataImage: public dtkAbstractData {
 public:
-
-    typedef std::type_info PixId;
 
              dtkAbstractDataImage(void);
              dtkAbstractDataImage(const dtkAbstractDataImage& other);
@@ -35,7 +33,7 @@ public:
     void *image(void);
 
     virtual int   Dimension() const;
-    virtual const PixId& PixelType() const;
+    virtual QMetaType::Type PixelType() const;
 
     virtual int xDimension(void);
     virtual int yDimension(void);

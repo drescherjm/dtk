@@ -59,11 +59,11 @@ int dtkAbstractDataImage::Dimension() const
     return 0;
 }
 
-const dtkAbstractDataImage::PixId& dtkAbstractDataImage::PixelType() const
+QMetaType::Type dtkAbstractDataImage::PixelType() const
 {
     DTK_DEFAULT_IMPLEMENTATION;
 
-    return typeid(void);
+    return QMetaType::Void;
 }
 
 int dtkAbstractDataImage::xDimension(void)

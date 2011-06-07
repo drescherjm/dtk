@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Mar 30 08:49:17 2011 (+0200)
+## Last-Updated: Mon Jun  6 16:23:48 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 54
+##     Update #: 56
 ######################################################################
 ## 
 ### Commentary: 
@@ -113,7 +113,7 @@ endif(TCL_FOUND)
 find_package(PythonLibs QUIET)
 
 if(PYTHONLIBS_FOUND)
-    include_directories(${PYTHON_INCLUDE_DIRS})
+  include_directories(${PYTHON_INCLUDE_DIRS})
   get_filename_component(PYTHON_PATH ${PYTHON_LIBRARIES} PATH)
   link_directories(${PYTHON_PATH})
 endif(PYTHONLIBS_FOUND)
@@ -220,3 +220,9 @@ mark_as_advanced(VRPN_LIBRARIES)
 if(MPI_FOUND AND QUAT_LIBRARIES AND VRPN_LIBRARIES)
   add_definitions(-DDTK_WRAP_VRPN)
 endif(MPI_FOUND AND QUAT_LIBRARIES AND VRPN_LIBRARIES)
+
+## #################################################################
+## Qwt
+## #################################################################
+
+find_package(QWT QUIET)

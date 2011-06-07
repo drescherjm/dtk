@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun  1 17:05:02 2011 (+0200)
+ * Last-Updated: Mon Jun  6 16:14:16 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 3
+ *     Update #: 4
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 class dtkPlotViewPrivate
 {
 public:
+    
 };
 
 dtkPlotView::dtkPlotView(QWidget *parent) : QWidget(parent), d(new dtkPlotViewPrivate)

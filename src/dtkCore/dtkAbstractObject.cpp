@@ -42,7 +42,7 @@ public:
 // /////////////////////////////////////////////////////////////////
 
 //! Constructs an object with parent \a parent
-/*! 
+/*!
  *  The parent of an object may be viewed as the object's owner. The
  *  destructor of a parent object destroys all child objects. Setting
  *  parent to 0 constructs an object with no parent.
@@ -54,8 +54,8 @@ dtkAbstractObject::dtkAbstractObject(dtkAbstractObject *parent) : QObject(parent
 }
 
 //! Destroys the object, deleting all its child objects.
-/*! 
- *  
+/*!
+ *
  */
 
 dtkAbstractObject::~dtkAbstractObject(void)
@@ -71,7 +71,7 @@ QString dtkAbstractObject::name(void) const
 }
 
 //! Reference count.
-/*! 
+/*!
  *  Returns the current reference count.
  */
 
@@ -81,7 +81,7 @@ int dtkAbstractObject::count(void)
 }
 
 //! Retain reference count.
-/*! 
+/*!
  *  This method increments the reference counter once.
  */
 
@@ -91,7 +91,7 @@ int dtkAbstractObject::retain(void)
 }
 
 //! Release reference count.
-/*! 
+/*!
  *  This method decrements the reference counter once. Should the
  *  count be null, the object is scheduled for deletion. Note it send
  *  the destroyed signal just before beeing actually deleted.
@@ -165,7 +165,7 @@ QString dtkAbstractObject::property(const QString& key) const
 }
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 void dtkAbstractObject::addMetaData(const QString& key, const QStringList& values)
@@ -266,7 +266,7 @@ QStringList dtkAbstractObject::metadatas(const QString& key) const
 // dtkAbstractObject documentation
 // /////////////////////////////////////////////////////////////////
 
-/*! \class dtkAbstractObject 
+/*! \class dtkAbstractObject
  *
  *  \brief The dtkAbstractObject is the base class of all dtk abstract
  *  concepts.
@@ -279,7 +279,7 @@ QStringList dtkAbstractObject::metadatas(const QString& key) const
  *  values. It is no possible to assign a value that has not been
  *  declared together with the property. A property has a unique
  *  value.
- * 
+ *
  *  \code
  *  object->addProperty("key", QStringList() << "value1" << "value2");
  *  object->setProperty("key", "value3");   // Wrong, "value3" has not been assigned to "key".
@@ -299,7 +299,7 @@ QStringList dtkAbstractObject::metadatas(const QString& key) const
  *  object->setMetaData("key", "value3");   // Right, "value3" is now mapped to "key".
  *  object->setMetaData("key", "value4");   // Right, "value4" is now mapped to "key".
  *  object->addMetaData("key", QStringList() << "value1" << "value2");
- *   
+ *
  *  dtkOutput() << object->metaData("key"); // ("value4", "value1", "value2")
  *  \endcode
  *

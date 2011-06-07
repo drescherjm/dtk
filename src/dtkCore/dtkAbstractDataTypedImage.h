@@ -18,7 +18,7 @@
 #include <dtkCore/dtkAbstractDataImage.h>
 
 template <unsigned DIM,typename T>
-class DTKCORE_EXPORT dtkAbstractDataTypedImage: public dtkAbstractDataImage {
+class dtkAbstractDataTypedImage: public dtkAbstractDataImage {
 public:
 
     dtkAbstractDataTypedImage() { }

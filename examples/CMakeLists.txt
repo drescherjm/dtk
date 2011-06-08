@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:06:43 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Wed Jun  1 17:06:35 2011 (+0200)
+## Last-Updated: Tue Jun  7 15:33:18 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 37
+##     Update #: 38
 ######################################################################
 ## 
 ### Commentary: 
@@ -36,3 +36,4 @@ add_subdirectory(dtkDistributedController)
 add_subdirectory(dtkDistributedServer)
 add_subdirectory(dtkDistributedClient)
 add_subdirectory(dtkSmartPointer)
+add_subdirectory(dtkPlotEcg)

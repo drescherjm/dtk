@@ -75,7 +75,7 @@ QString dtkAbstractObject::name(void) const
  *  Returns the current reference count.
  */
 
-int dtkAbstractObject::count(void)
+int dtkAbstractObject::count(void) const
 {
     return d->count;
 }
@@ -85,7 +85,7 @@ int dtkAbstractObject::count(void)
  *  This method increments the reference counter once.
  */
 
-int dtkAbstractObject::retain(void)
+int dtkAbstractObject::retain(void) const
 {
     return d->count.fetchAndAddOrdered ( 1 ) + 1;
 }
@@ -93,16 +93,17 @@ int dtkAbstractObject::retain(void)
 //! Release reference count.
 /*!
  *  This method decrements the reference counter once. Should the
- *  count be null, the object is scheduled for deletion. Note it send
- *  the destroyed signal just before beeing actually deleted.
+ *  count be null, the object is scheduled for deletion. Note it sends
+ *  the destroyed signal just before being actually deleted.
  */
 
-int dtkAbstractObject::release(void)
+int dtkAbstractObject::release(void) const
 {
     int newCount = d->count.fetchAndAddOrdered ( -1 ) - 1;
 
+    // Need to cast away const-ness to call deleteLater().
     if(!(newCount))
-        this->deleteLater();
+        const_cast<dtkAbstractObject *>(this)->deleteLater();
 
     return newCount;
 }

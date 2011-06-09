@@ -35,9 +35,9 @@ public:
 
    QString name(void) const;
 
-   int count(void);
-   int retain(void);
-   int release(void);
+   int count(void) const;
+   int retain(void) const;
+   int release(void) const;
 
    bool hasProperty(const QString& key) const;
    void addProperty(const QString& key, const QStringList& values);

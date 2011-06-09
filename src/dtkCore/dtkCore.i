@@ -146,6 +146,7 @@
 
 %ignore   loaded(const QString& path);
 %ignore unloaded(const QString& path);
+%ignore loadError(const QString& path);
 
 // /////////////////////////////////////////////////////////////////
 // Ignore rules for dtkAbstractDataImage
@@ -191,7 +192,7 @@
         int end = PyList_Size($input);
         for(i;i!=end; ++i) {
             $1 << QString(PyString_AsString(PyList_GET_ITEM($input, i)));
-            } 
+            }
         }
     else {
         qDebug("QStringList expected");
@@ -206,7 +207,7 @@
         for(i;i!=end; ++i) {
             char *t = PyString_AsString(PyList_GET_ITEM($input, i));
             (*$1) << QString(t);
-            } 
+            }
         }
     else {
         qDebug("QStringList expected");
@@ -224,29 +225,29 @@
 }
 
 %define %QList_typemapsPtr(DATA_TYPE)
- 
+
 %typemap(out) QList<DATA_TYPE> {
   $result = PyList_New($1.size());
   int i = 0;
-  QList<DATA_TYPE>::iterator it = $1.begin(); 
-  QList<DATA_TYPE>::iterator end = $1.end(); 
+  QList<DATA_TYPE>::iterator it = $1.begin();
+  QList<DATA_TYPE>::iterator end = $1.end();
   for(;it!=end; ++it, ++i)  {
     PyObject* obj = SWIG_NewPointerObj((*it), $descriptor(DATA_TYPE), 0|0);
     PyList_SET_ITEM($result, i, obj);
   }
 }
 
-%enddef // %QList_typemapsPtr() 
+%enddef // %QList_typemapsPtr()
 
 %QList_typemapsPtr(dtkPlugin *)
 
 %define %QList_typemaps(DATA_TYPE)
- 
+
 %typemap(out) QList<DATA_TYPE> {
   $result = PyList_New($1.size());
   int i = 0;
-  QList<DATA_TYPE>::iterator it = $1.begin(); 
-  QList<DATA_TYPE>::iterator end = $1.end(); 
+  QList<DATA_TYPE>::iterator it = $1.begin();
+  QList<DATA_TYPE>::iterator end = $1.end();
   for(;it!=end; ++it, ++i)  {
     DATA_TYPE *newItem = new DATA_TYPE(*it);
     PyObject* obj = SWIG_NewPointerObj(newItem, $descriptor(DATA_TYPE*), 0|0);
@@ -287,7 +288,7 @@ public:
 };
 
 %define %QPair_typemaps(DATA_TYPE_1, DATA_TYPE_2)
- 
+
 %typemap(out) QPair<DATA_TYPE_1, DATA_TYPE_2> {
   $result = PyTuple_New(2);
   PyObject* obj1 = SWIG_NewPointerObj(*$1.first, $descriptor(DATA_TYPE_1), 0|0);
@@ -319,7 +320,7 @@ public:
 
 // C++ -> Tcl
 
-%typemap(out) QString { 
+%typemap(out) QString {
     Tcl_SetStringObj($result, $1.toAscii().constData(), $1.size());
 }
 

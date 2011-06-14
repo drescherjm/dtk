@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2009 - Jean-Christophe Lombardo, Inria.
  * Created: Thu May 14 14:32:46 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 19:18:12 2011 (+0100)
+ * Last-Updated: Thu May 26 16:34:24 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 121
+ *     Update #: 129
  */
 
 /* Commentary: 
@@ -124,8 +124,6 @@ void dtkStandardRedirector::uninitialize(void)
     if (s_log) { delete s_log; s_log = NULL; }
 }
 
-static bool log_initialized = dtkStandardRedirector::initialize();
-
 // /////////////////////////////////////////////////////////////////
 // dtkLog
 // /////////////////////////////////////////////////////////////////
@@ -154,6 +152,23 @@ dtkLog& dtkLog::operator<<(double value)
 dtkLog& dtkLog::operator<<(const QString& value)
 { 
     m_log += value;
+
+    return *this;
+}
+
+dtkLog& dtkLog::operator<<(const QStringList& value)
+{ 
+    QStringList::const_iterator it(value.begin());
+    if ( it == value.end() ) {
+        m_log += "()";  // List is empty.
+    } else {
+        m_log += "(" + *it;  // First entry displayed, no comma.
+        ++it;
+        for( ; it != value.end(); ++it ) {
+            m_log += "," + *it;
+        }
+        m_log += ")";
+    }
 
     return *this;
 }
@@ -198,9 +213,26 @@ dtkLog::~dtkLog(void)
      if (s_handlers.keys().contains(m_source))
          foreach(Handler handler, s_handlers.values(m_source)) handler(m_level, m_log);
      else
-         qDebug() << m_log.toAscii().constData();
-
-     // qDebug().nospace() << QDate::currentDate().toString().toAscii().constData() << QTime::currentTime().toString().toAscii() << "(" << m_source << ") Level=" << m_level << "-" << m_log.toAscii();
+     {
+         switch(m_level)
+         {
+         case Debug:
+             qDebug() << m_log.toAscii().constData();
+             break;
+         case Warning:
+             qWarning() << m_log.toAscii().constData();
+             break;
+         case Error:
+             qCritical() << m_log.toAscii().constData();
+             break;
+         case Fatal:
+             qCritical() << m_log.toAscii().constData();
+             break;
+         default:
+             qDebug() << m_log.toAscii().constData();
+             break;
+         }
+     }
 }
 
 void dtkLog::registerHandler(Handler handler, const QString& source)
@@ -219,6 +251,25 @@ void dtkLog::disableRedirection(void)
 
     s_handlers.clear();
 }
+
+// /////////////////////////////////////////////////////////////////
+// dtkStandardRedirectorInitialiser
+// /////////////////////////////////////////////////////////////////
+
+class dtkStandardRedirectorInitialiser {
+public:
+    dtkStandardRedirectorInitialiser(void) {
+        dtkStandardRedirector::initialize();
+    }
+    
+    ~dtkStandardRedirectorInitialiser(void) {
+        dtkStandardRedirector::uninitialize();
+    }
+};
+
+#if defined(Q_WS_WIN)
+static dtkStandardRedirectorInitialiser initializerInstance;
+#endif
 
 // /////////////////////////////////////////////////////////////////
 // dtkLogEvent

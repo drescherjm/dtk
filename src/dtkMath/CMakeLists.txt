@@ -18,7 +18,7 @@
 ######################################################################
 
 project(dtkMath)
-
+  
 ## #################################################################
 ## Sources
 ## #################################################################
@@ -67,8 +67,7 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_WRAP})
 
-target_link_libraries(${PROJECT_NAME}
-  ${QT_LBRARIES})
+target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES})
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

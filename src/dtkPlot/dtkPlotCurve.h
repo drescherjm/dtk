@@ -1,12 +1,12 @@
 /* dtkPlotCurve.h --- 
  * 
  * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Wed Nov 24 13:54:26 2010 (+0100)
+ * Copyright (C) 2008-2011 - Julien Wintz, Inria.
+ * Created: Tue Jun  7 16:05:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov 24 14:09:27 2010 (+0100)
+ * Last-Updated: Tue Jun  7 16:38:47 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 8
+ *     Update #: 3
  */
 
 /* Commentary: 
@@ -20,15 +20,14 @@
 #ifndef DTKPLOTCURVE_H
 #define DTKPLOTCURVE_H
 
-#include <QtGui>
-#include "dtkPlotExport.h"
+#include <qwt_plot_curve.h>
 
 class dtkPlotCurvePrivate;
 
-class DTKPLOT_EXPORT dtkPlotCurve : public QGraphicsPathItem
+class dtkPlotCurve : public QwtPlotCurve
 {
 public:
-     dtkPlotCurve(void);
+     dtkPlotCurve(const QString& title = QString());
     ~dtkPlotCurve(void);
 
 private:

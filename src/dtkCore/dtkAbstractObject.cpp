@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:54:04 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 19:17:33 2011 (+0100)
+ * Last-Updated: Mon May 23 12:27:36 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 171
+ *     Update #: 180
  */
 
 /* Commentary:
@@ -20,6 +20,8 @@
 #include <dtkCore/dtkAbstractObject.h>
 #include <dtkCore/dtkLog.h>
 
+#include <QAtomicInt>
+
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractObjectPrivate
 // /////////////////////////////////////////////////////////////////
@@ -27,7 +29,7 @@
 class dtkAbstractObjectPrivate
 {
 public:
-    int count;
+    QAtomicInt count;
 
     QHash<QString, QStringList> values;
     QHash<QString, QString> properties;
@@ -40,7 +42,7 @@ public:
 // /////////////////////////////////////////////////////////////////
 
 //! Constructs an object with parent \a parent
-/*! 
+/*!
  *  The parent of an object may be viewed as the object's owner. The
  *  destructor of a parent object destroys all child objects. Setting
  *  parent to 0 constructs an object with no parent.
@@ -52,8 +54,8 @@ dtkAbstractObject::dtkAbstractObject(dtkAbstractObject *parent) : QObject(parent
 }
 
 //! Destroys the object, deleting all its child objects.
-/*! 
- *  
+/*!
+ *
  */
 
 dtkAbstractObject::~dtkAbstractObject(void)
@@ -69,38 +71,41 @@ QString dtkAbstractObject::name(void) const
 }
 
 //! Reference count.
-/*! 
+/*!
  *  Returns the current reference count.
  */
 
-int dtkAbstractObject::count(void)
+int dtkAbstractObject::count(void) const
 {
     return d->count;
 }
 
 //! Retain reference count.
-/*! 
+/*!
  *  This method increments the reference counter once.
  */
 
-int dtkAbstractObject::retain(void)
+int dtkAbstractObject::retain(void) const
 {
-    return d->count++;
+    return d->count.fetchAndAddOrdered ( 1 ) + 1;
 }
 
 //! Release reference count.
-/*! 
+/*!
  *  This method decrements the reference counter once. Should the
- *  count be null, the object is scheduled for deletion. Note it send
- *  the destroyed signal just before beeing actually deleted.
+ *  count be null, the object is scheduled for deletion. Note it sends
+ *  the destroyed signal just before being actually deleted.
  */
 
-int dtkAbstractObject::release(void)
+int dtkAbstractObject::release(void) const
 {
-    if(!(--(d->count)))
-        this->deleteLater();
+    int newCount = d->count.fetchAndAddOrdered ( -1 ) - 1;
 
-    return d->count;
+    // Need to cast away const-ness to call deleteLater().
+    if(!(newCount))
+        const_cast<dtkAbstractObject *>(this)->deleteLater();
+
+    return newCount;
 }
 
 void dtkAbstractObject::addProperty(const QString& key, const QStringList& values)
@@ -132,6 +137,11 @@ void dtkAbstractObject::setProperty(const QString& key, const QString& value)
     emit propertySet(key, value);
 }
 
+QStringList dtkAbstractObject::propertyList(void) const
+{
+    return d->properties.keys();
+}
+
 QStringList dtkAbstractObject::propertyValues(const QString& key) const
 {
     if(d->values.contains(key))
@@ -156,7 +166,7 @@ QString dtkAbstractObject::property(const QString& key) const
 }
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 void dtkAbstractObject::addMetaData(const QString& key, const QStringList& values)
@@ -201,6 +211,11 @@ void dtkAbstractObject::setMetaData(const QString& key, const QString& value)
     onMetaDataSet(key, value);
 
     emit metaDataSet(key, value);
+}
+
+QStringList dtkAbstractObject::metaDataList(void) const
+{
+    return d->metadatas.keys();
 }
 
 QStringList dtkAbstractObject::metaDataValues(const QString& key) const
@@ -252,7 +267,7 @@ QStringList dtkAbstractObject::metadatas(const QString& key) const
 // dtkAbstractObject documentation
 // /////////////////////////////////////////////////////////////////
 
-/*! \class dtkAbstractObject 
+/*! \class dtkAbstractObject
  *
  *  \brief The dtkAbstractObject is the base class of all dtk abstract
  *  concepts.
@@ -265,7 +280,7 @@ QStringList dtkAbstractObject::metadatas(const QString& key) const
  *  values. It is no possible to assign a value that has not been
  *  declared together with the property. A property has a unique
  *  value.
- * 
+ *
  *  \code
  *  object->addProperty("key", QStringList() << "value1" << "value2");
  *  object->setProperty("key", "value3");   // Wrong, "value3" has not been assigned to "key".
@@ -285,7 +300,7 @@ QStringList dtkAbstractObject::metadatas(const QString& key) const
  *  object->setMetaData("key", "value3");   // Right, "value3" is now mapped to "key".
  *  object->setMetaData("key", "value4");   // Right, "value4" is now mapped to "key".
  *  object->addMetaData("key", QStringList() << "value1" << "value2");
- *   
+ *
  *  dtkOutput() << object->metaData("key"); // ("value4", "value1", "value2")
  *  \endcode
  *

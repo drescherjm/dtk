@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Nov  7 16:41:51 2010 (+0100)
+ * Last-Updated: Mon May  9 14:40:41 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 280
+ *     Update #: 282
  */
 
 /* Commentary:
@@ -112,8 +112,6 @@ public slots:
     virtual void   initialize(void);
     virtual void uninitialize(void);
 
-    // -- The following methods are needed to get tracking
-
     virtual void  enableInteraction(void);
     virtual void disableInteraction(void);
 
@@ -126,25 +124,6 @@ public slots:
     virtual void setCameraPosition(double x, double y, double z);
 
     virtual void setCameraClippingRange(double near, double far);
-
-    // --
-
-    virtual dtkVec3 scenePosition(void) const;
-    virtual dtkQuat sceneOrientation(void) const;
-
-    virtual void setupWandPosition(const dtkVec3& position);
-    virtual void setupWandOrientation(const dtkQuat& orientation);
-
-    virtual void setupScenePosition(const dtkVec3& position);
-    virtual void setupSceneOrientation(const dtkQuat& orientation);
-
-    virtual void         setupCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up);
-    virtual void  setupLeftEyeCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up);
-    virtual void setupRightEyeCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up);
-
-    virtual void        setupCameraFrustum(double left, double right, double bottom, double top, double near, double far);
-    virtual void  setupLeftEyeCameraFrustum(double left, double right, double bottom, double top, double near, double far);
-    virtual void setupRightEyeCameraFrustum(double left, double right, double bottom, double top, double near, double far);
 
     virtual QString cameraProjectionMode(void);
     virtual double cameraViewAngle(void);

@@ -35,3 +35,8 @@ dtkAbstractDataImage2D::~dtkAbstractDataImage2D(void)
 
     d = NULL;
 }
+
+int dtkAbstractDataImage2D::Dimension() const {
+    return 2;
+}
+

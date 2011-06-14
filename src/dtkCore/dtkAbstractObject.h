@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:43:14 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 19:16:01 2011 (+0100)
+ * Last-Updated: Thu May  5 09:20:50 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 92
+ *     Update #: 94
  */
 
 /* Commentary:
@@ -35,14 +35,15 @@ public:
 
    QString name(void) const;
 
-   int count(void);
-   int retain(void);
-   int release(void);
+   int count(void) const;
+   int retain(void) const;
+   int release(void) const;
 
    bool hasProperty(const QString& key) const;
    void addProperty(const QString& key, const QStringList& values);
    void addProperty(const QString& key, const QString& value);
    void setProperty(const QString& key, const QString& value);
+   QStringList propertyList(void) const;
    QStringList propertyValues(const QString& key) const;
    QString property(const QString& key) const;
 
@@ -51,6 +52,7 @@ public:
    void addMetaData(const QString& key, const QString& value);
    void setMetaData(const QString& key, const QStringList& values);
    void setMetaData(const QString& key, const QString& value);
+   QStringList metaDataList(void) const;
    QStringList metaDataValues(const QString& key) const;
    QString metadata(const QString& key) const;
    QStringList metadatas(const QString& key) const;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 21:01:33 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jul  9 10:44:55 2010 (+0200)
+ * Last-Updated: Mon May  9 14:57:16 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 145
+ *     Update #: 153
  */
 
 /* Commentary: 
@@ -30,7 +30,7 @@
 int main(int argc, char **argv)
 {
     if (argc < 3) {
-        qDebug() << "Usage: dtkVrProcess --view <type> [--tracker <url>] [--device <url>] [--fullscreen] [--stereo]";
+        qDebug() << "Usage: dtkVrProcess --view <type> [--fullscreen] [--stereo]";
         return 1;
     }
 
@@ -45,25 +45,17 @@ int main(int argc, char **argv)
        QGLFormat::setDefaultFormat(format);
     }
 
-    QUrl trackerUrl, deviceUrl;
-    
-    for(int i = 0; i < qApp->arguments().count(); i++) if(qApp->arguments().at(i) == "--tracker") trackerUrl = QUrl(qApp->arguments().at(i+1));
-    for(int i = 0; i < qApp->arguments().count(); i++) if(qApp->arguments().at(i) == "--device")  deviceUrl  = QUrl(qApp->arguments().at(i+1));
-
-    dtkPluginManager::instance()->initialize();
-    
-    dtkVrManager::instance()->setTracker(trackerUrl);
-    dtkVrManager::instance()->setDevice(deviceUrl);
+    dtkPluginManager::instance()->initialize();    
     dtkVrManager::instance()->setStereo(application.arguments().contains("--stereo"));
-
     dtkVrManager::instance()->initialize();
 
     dtkVrProcess *process = dtkVrManager::instance()->create(argv[2]);
     process->show(application.arguments().contains("--fullscreen"));
     process->start();
 
-    dtkVrManager::instance()->uninitialize();
+    delete process;
 
+    dtkVrManager::instance()->uninitialize();
     dtkPluginManager::instance()->uninitialize();
 
     return 0;

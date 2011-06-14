@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 15:08:06 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr  8 16:34:16 2011 (+0200)
+ * Last-Updated: Wed May 18 14:41:54 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 11
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -37,13 +37,14 @@ public:
 
 public:
     QString value(void);
-
-    void setText(QString text);
     void setValue(QString value);
 
 public:
     void expand(void);
     void collapse(void);
+
+public slots:
+    void touch(void);
 
 protected slots:
     void onCollapseFinised(void);

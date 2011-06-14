@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 10:07:17 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  2 14:10:19 2010 (+0100)
+ * Last-Updated: Mon May  9 14:43:09 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 32
+ *     Update #: 33
  */
 
 /* Commentary: 
@@ -37,8 +37,6 @@ public:
     void   initialize(void);
     void uninitialize(void);
 
-    void setTracker(const QUrl& url);
-    void setDevice(const QUrl& url);
     void setStereo(bool stereo);
 
     dtkVrProcess *create(QString type);

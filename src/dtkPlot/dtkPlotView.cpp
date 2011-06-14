@@ -1,12 +1,12 @@
 /* dtkPlotView.cpp --- 
  * 
  * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Mon Nov 22 10:25:08 2010 (+0100)
+ * Copyright (C) 2008-2011 - Julien Wintz, Inria.
+ * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb 17 12:49:01 2011 (+0100)
+ * Last-Updated: Tue Jun  7 18:19:23 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -19,15 +19,17 @@
 
 #include "dtkPlotView.h"
 
+#include <qwt_plot_canvas.h>
+
 class dtkPlotViewPrivate
 {
 public:
-
+    
 };
 
-dtkPlotView::dtkPlotView(QWidget *parent) : QGraphicsView(parent), d(new dtkPlotViewPrivate)
+dtkPlotView::dtkPlotView(QWidget *parent) : QwtPlot(parent), d(new dtkPlotViewPrivate)
 {
-    this->setRenderHints(QPainter::Antialiasing);
+    this->canvas()->setFrameStyle(QFrame::NoFrame);
 }
 
 dtkPlotView::~dtkPlotView(void)

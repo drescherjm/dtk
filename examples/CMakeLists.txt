@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:06:43 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Wed Mar  9 14:06:57 2011 (+0100)
-##           By: Thibaud Kloczko
-##     Update #: 27
+## Last-Updated: Tue Jun  7 15:33:18 2011 (+0200)
+##           By: Julien Wintz
+##     Update #: 38
 ######################################################################
 ## 
 ### Commentary: 
@@ -27,11 +27,13 @@ add_subdirectory(dtkUpdater)
 add_subdirectory(dtkSettingsEditor)
 add_subdirectory(dtkLicenseManager)
 add_subdirectory(dtkVrProcess)
-add_subdirectory(dtkVrDevice)
-add_subdirectory(dtkDistributedDiscovery)
 add_subdirectory(dtkInspector)
 add_subdirectory(dtkReferenceCounting)
 add_subdirectory(dtkInsetMenu)
 add_subdirectory(dtkFinder)
 add_subdirectory(dtkVrGestureRecognizer)
-add_subdirectory(dtkPlotPoints)
+add_subdirectory(dtkDistributedController)
+add_subdirectory(dtkDistributedServer)
+add_subdirectory(dtkDistributedClient)
+add_subdirectory(dtkSmartPointer)
+add_subdirectory(dtkPlotEcg)

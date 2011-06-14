@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 15:12:01 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr  8 16:34:26 2011 (+0200)
+ * Last-Updated: Wed May 18 14:42:26 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 257
+ *     Update #: 269
  */
 
 /* Commentary: 
@@ -183,7 +183,7 @@ void dtkComposerNodeStringEditor::keyPressEvent(QKeyEvent *event)
 {
     QGraphicsTextItem::keyPressEvent(event);
 
-    this->parent_node->setText(this->toPlainText());
+    this->parent_node->setValue(this->toPlainText());
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -205,6 +205,8 @@ public:
 
 public:
     QString value;
+
+    bool source_node;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -218,6 +220,9 @@ dtkComposerNodeString::dtkComposerNodeString(dtkComposerNode *parent) : dtkCompo
 
     d->button = new dtkComposerNodeStringButton(this);
     d->button->setPos(0,0);
+    
+    d->value = QString();
+    d->source_node = true;
 
     this->setTitle("String");
     this->setKind(dtkComposerNode::Atomic);
@@ -262,17 +267,9 @@ QString dtkComposerNodeString::value(void)
     return d->value;
 }
 
-void dtkComposerNodeString::setText(QString text)
-{
-    d->value = text;
-}
-
 void dtkComposerNodeString::setValue(QString value)
 {
     d->value = value;
-
-    d->editor->setPlainText(d->value);
-    d->editor->update();
 }
 
 void dtkComposerNodeString::expand(void)
@@ -288,6 +285,14 @@ void dtkComposerNodeString::collapse(void)
     d->animation->start();
 
     connect(d->animation, SIGNAL(finished()), this, SLOT(onCollapseFinised()));
+}
+
+void dtkComposerNodeString::touch(void)
+{
+    d->editor->setPlainText(d->value); 
+    d->editor->update();
+
+    dtkComposerNode::touch();
 }
 
 void dtkComposerNodeString::onCollapseFinised(void)
@@ -309,12 +314,20 @@ void dtkComposerNodeString::pull(dtkComposerEdge *edge, dtkComposerNodeProperty 
             qDebug() << DTK_PRETTY_FUNCTION << "Input value expected to be a string. Assuming empty string.";
             this->setValue(QString());
         }
+
+        d->source_node = false;
+
+        d->editor->setPlainText(d->value); 
+        d->editor->update();
     }
 }
 
 void dtkComposerNodeString::run(void)
 {
-    return;
+    if (d->source_node)
+        this->setValue(d->editor->toPlainText());    
+        
+    d->source_node = true;
 }
 
 void dtkComposerNodeString::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)

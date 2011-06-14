@@ -1,12 +1,12 @@
 /* dtkPlotCurve.cpp --- 
  * 
  * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Wed Nov 24 13:56:44 2010 (+0100)
+ * Copyright (C) 2008-2011 - Julien Wintz, Inria.
+ * Created: Tue Jun  7 16:09:17 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov 24 14:43:28 2010 (+0100)
+ * Last-Updated: Tue Jun  7 16:26:00 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 9
+ *     Update #: 3
  */
 
 /* Commentary: 
@@ -22,10 +22,9 @@
 class dtkPlotCurvePrivate
 {
 public:
-    
 };
 
-dtkPlotCurve::dtkPlotCurve(void) : QGraphicsPathItem(), d(new dtkPlotCurvePrivate)
+dtkPlotCurve::dtkPlotCurve(const QString& title) : QwtPlotCurve(title), d(new dtkPlotCurvePrivate)
 {
 
 }

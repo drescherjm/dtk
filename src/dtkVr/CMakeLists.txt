@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Feb  7 10:09:07 2011 (+0100)
+## Last-Updated: Tue Jun  7 16:00:27 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 269
+##     Update #: 279
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,21 +24,15 @@ project(dtkVr)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkVrArtController.h
-  dtkVrController.h
   dtkVrDevice.h
   dtkVrExport.h
   dtkVrFlystickRecognizer.h
   dtkVrGestureRecognizer.h
   dtkVrHeadRecognizer.h
   dtkVrScreen.h
-  dtkVrTracker.h
-  dtkVrUser.h
-  dtkVrWand.h)
+  dtkVrTracker.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
-  dtkVrArtController.h
-  dtkVrController.h
   dtkVrDevice.h
   dtkVrFlystickRecognizer.h
   dtkVrFlystickRecognizer_p.h
@@ -46,21 +40,15 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkVrGestureRecognizer_p.h
   dtkVrHeadRecognizer.h
   dtkVrHeadRecognizer_p.h
-  dtkVrTracker.h
-  dtkVrUser.h
-  dtkVrWand.h)
+  dtkVrTracker.h)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkVrArtController.cpp
-  dtkVrController.cpp
   dtkVrDevice.cpp
   dtkVrFlystickRecognizer.cpp
   dtkVrGestureRecognizer.cpp
   dtkVrHeadRecognizer.cpp
   dtkVrScreen.cpp
-  dtkVrTracker.cpp
-  dtkVrUser.cpp
-  dtkVrWand.cpp)
+  dtkVrTracker.cpp)
 
 ## #################################################################
 ## Vrpn sources
@@ -155,11 +143,11 @@ target_link_libraries(${PROJECT_NAME}
   ${MPI_LIBRARIES})
 endif(MPI_FOUND)
 
-if(QUAT_LIBRARIES AND VRPN_LIBRARIES)
+if(QUAT_LIBRARY AND VRPN_LIBRARY)
 target_link_libraries(${PROJECT_NAME}
-  ${QUAT_LIBRARIES}
-  ${VRPN_LIBRARIES})
-endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)
+  ${QUAT_LIBRARY}
+  ${VRPN_LIBRARY})
+endif(QUAT_LIBRARY AND VRPN_LIBRARY)
 
 ## #################################################################
 ## Handling of generated script modules
@@ -171,8 +159,8 @@ if(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i
-  COMMAND ${CMAKE_COMMAND} ARGS -E  make_directory ${CMAKE_BINARY_DIR}/modules
-  COMMAND ${CMAKE_COMMAND} ARGS -E  copy ${${PROJECT_NAME}_BINARY_DIR}/vr.py ${CMAKE_BINARY_DIR}/modules
+  COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${CMAKE_BINARY_DIR}/modules
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy ${${PROJECT_NAME}_BINARY_DIR}/vr.py ${CMAKE_BINARY_DIR}/modules
   COMMENT "-- Moving python modules to ${CMAKE_BINARY_DIR}/modules"
 )
 
@@ -197,4 +185,3 @@ install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib)
-

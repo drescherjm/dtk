@@ -83,18 +83,8 @@ void tstWidget::panGestureEvent(QPanGesture *event)
 
 void tstWidget::pinchGestureEvent(QPinchGesture *event)
 {
-    if(event->property("State").toString() == "Started")
-        qDebug() << DTK_PRETTY_FUNCTION << "Gesture started";
-    
-    if(event->property("State").toString() == "Updated")
-        qDebug() << DTK_PRETTY_FUNCTION << "Gesture updated";
-    
-    if(event->property("State").toString() == "Finished")
-        qDebug() << DTK_PRETTY_FUNCTION << "Gesture finished";
-    
-    qDebug() << DTK_PRETTY_FUNCTION << "     scale factor is" << event->scaleFactor();
-    qDebug() << DTK_PRETTY_FUNCTION << "last scale factor is" << event->lastScaleFactor();
-    
+    Q_UNUSED(event);
+
     d->bg = Qt::green;
     
     this->update();

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul 15 11:23:54 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr  8 16:33:53 2011 (+0200)
+ * Last-Updated: Tue May  3 17:14:56 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 111
+ *     Update #: 117
  */
 
 /* Commentary: 
@@ -37,8 +37,10 @@ dtkComposerNodeProcess::dtkComposerNodeProcess(dtkComposerNode *parent) : dtkCom
 
 dtkComposerNodeProcess::~dtkComposerNodeProcess(void)
 {
-    if(this->object())
+    if(this->object()) {
         delete this->object();
+        this->setObject(NULL);
+    }
 
     delete d;
 

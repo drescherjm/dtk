@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Mar  1 10:18:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr  8 16:32:50 2011 (+0200)
+ * Last-Updated: Wed May 18 17:36:52 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 147
+ *     Update #: 156
  */
 
 /* Commentary: 
@@ -296,10 +296,10 @@ void dtkComposerNodeNumberOperator::run(void)
                 r = qVariantFromValue(a.toUInt() + b.toUInt());
                 break;
             case dtkComposerNodeNumber::Long:
-                r = qVariantFromValue((long)(a.toLongLong() + b.toLongLong()));
+                r = qVariantFromValue(qVariantValue<long>(a) + qVariantValue<long>(b));
                 break;
             case dtkComposerNodeNumber::ULong:
-                r = qVariantFromValue((ulong)(a.toULongLong() + b.toULongLong()));
+                r = qVariantFromValue(qVariantValue<ulong>(a) + qVariantValue<ulong>(b));
                 break;
             case dtkComposerNodeNumber::LongLong:
                 r = qVariantFromValue(a.toLongLong() + b.toLongLong());
@@ -308,7 +308,7 @@ void dtkComposerNodeNumberOperator::run(void)
                 r = qVariantFromValue(a.toULongLong() + b.toULongLong());
                 break;
             case dtkComposerNodeNumber::Float:
-                r = qVariantFromValue((float)(a.toDouble() + b.toDouble()));
+                r = qVariantFromValue(qVariantValue<float>(a) + qVariantValue<float>(b));
                 break;
             case dtkComposerNodeNumber::Double:
                 r = qVariantFromValue(a.toDouble() + b.toDouble());
@@ -325,10 +325,10 @@ void dtkComposerNodeNumberOperator::run(void)
                 r = qVariantFromValue(a.toUInt() - b.toUInt());
                 break;
             case dtkComposerNodeNumber::Long:
-                r = qVariantFromValue((long)(a.toLongLong() - b.toLongLong()));
+                r = qVariantFromValue(qVariantValue<long>(a) - qVariantValue<long>(b));
                 break;
             case dtkComposerNodeNumber::ULong:
-                r = qVariantFromValue((ulong)(a.toULongLong() - b.toULongLong()));
+                r = qVariantFromValue(qVariantValue<ulong>(a) - qVariantValue<ulong>(b));
                 break;
             case dtkComposerNodeNumber::LongLong:
                 r = qVariantFromValue(a.toLongLong() - b.toLongLong());
@@ -337,7 +337,7 @@ void dtkComposerNodeNumberOperator::run(void)
                 r = qVariantFromValue(a.toULongLong() - b.toULongLong());
                 break;
             case dtkComposerNodeNumber::Float:
-                r = qVariantFromValue((float)(a.toDouble() - b.toDouble()));
+                r = qVariantFromValue(qVariantValue<float>(a) - qVariantValue<float>(b));
                 break;
             case dtkComposerNodeNumber::Double:
                 r = qVariantFromValue(a.toDouble() - b.toDouble());
@@ -354,10 +354,10 @@ void dtkComposerNodeNumberOperator::run(void)
                 r = qVariantFromValue(a.toUInt() * b.toUInt());
                 break;
             case dtkComposerNodeNumber::Long:
-                r = qVariantFromValue((long)(a.toLongLong() * b.toLongLong()));
+                r = qVariantFromValue(qVariantValue<long>(a) * qVariantValue<long>(b));
                 break;
             case dtkComposerNodeNumber::ULong:
-                r = qVariantFromValue((ulong)(a.toULongLong() * b.toULongLong()));
+                r = qVariantFromValue(qVariantValue<ulong>(a) * qVariantValue<ulong>(b));
                 break;
             case dtkComposerNodeNumber::LongLong:
                 r = qVariantFromValue(a.toLongLong() * b.toLongLong());
@@ -366,7 +366,7 @@ void dtkComposerNodeNumberOperator::run(void)
                 r = qVariantFromValue(a.toULongLong() * b.toULongLong());
                 break;
             case dtkComposerNodeNumber::Float:
-                r = qVariantFromValue((float)(a.toDouble() * b.toDouble()));
+                r = qVariantFromValue(qVariantValue<float>(a) * qVariantValue<float>(b));
                 break;
             case dtkComposerNodeNumber::Double:
                 r = qVariantFromValue(a.toDouble() * b.toDouble());
@@ -383,10 +383,10 @@ void dtkComposerNodeNumberOperator::run(void)
                 r = qVariantFromValue(a.toUInt() / b.toUInt());
                 break;
             case dtkComposerNodeNumber::Long:
-                r = qVariantFromValue((long)(a.toLongLong() / b.toLongLong()));
+                r = qVariantFromValue(qVariantValue<long>(a) / qVariantValue<long>(b));
                 break;
             case dtkComposerNodeNumber::ULong:
-                r = qVariantFromValue((ulong)(a.toULongLong() / b.toULongLong()));
+                r = qVariantFromValue(qVariantValue<ulong>(a) / qVariantValue<ulong>(b));
                 break;
             case dtkComposerNodeNumber::LongLong:
                 r = qVariantFromValue(a.toLongLong() / b.toLongLong());
@@ -395,7 +395,7 @@ void dtkComposerNodeNumberOperator::run(void)
                 r = qVariantFromValue(a.toULongLong() / b.toULongLong());
                 break;
             case dtkComposerNodeNumber::Float:
-                r = qVariantFromValue((float)(a.toDouble() / b.toDouble()));
+                r = qVariantFromValue(qVariantValue<float>(a) / qVariantValue<float>(b));
                 break;
             case dtkComposerNodeNumber::Double:
                 r = qVariantFromValue(a.toDouble() / b.toDouble());
@@ -411,10 +411,10 @@ void dtkComposerNodeNumberOperator::run(void)
                 r = qVariantFromValue(a.toUInt() + 1);
                 break;
             case dtkComposerNodeNumber::Long:
-                r = qVariantFromValue((long)a.toLongLong() + 1);
+                r = qVariantFromValue(qVariantValue<long>(a) + 1);
                 break;
             case dtkComposerNodeNumber::ULong:
-                r = qVariantFromValue((ulong)a.toULongLong() + 1);
+                r = qVariantFromValue(qVariantValue<ulong>(a) + 1);
                 break;
             case dtkComposerNodeNumber::LongLong:
                 r = qVariantFromValue(a.toLongLong() + 1);
@@ -423,7 +423,7 @@ void dtkComposerNodeNumberOperator::run(void)
                 r = qVariantFromValue(a.toULongLong() + 1);
                 break;
             case dtkComposerNodeNumber::Float:
-                r = qVariantFromValue((float)a.toDouble() + 1);
+                r = qVariantFromValue(qVariantValue<float>(a) + 1);
                 break;
             case dtkComposerNodeNumber::Double:
                 r = qVariantFromValue(a.toDouble() + 1);
@@ -439,10 +439,10 @@ void dtkComposerNodeNumberOperator::run(void)
                 r = qVariantFromValue(a.toUInt() - 1);
                 break;
             case dtkComposerNodeNumber::Long:
-                r = qVariantFromValue((long)a.toLongLong() - 1);
+                r = qVariantFromValue(qVariantValue<long>(a) - 1);
                 break;
             case dtkComposerNodeNumber::ULong:
-                r = qVariantFromValue((ulong)a.toULongLong() - 1);
+                r = qVariantFromValue(qVariantValue<ulong>(a) - 1);
                 break;
             case dtkComposerNodeNumber::LongLong:
                 r = qVariantFromValue(a.toLongLong() - 1);
@@ -451,7 +451,7 @@ void dtkComposerNodeNumberOperator::run(void)
                 r = qVariantFromValue(a.toULongLong() - 1);
                 break;
             case dtkComposerNodeNumber::Float:
-                r = qVariantFromValue((float)a.toDouble() - 1);
+                r = qVariantFromValue(qVariantValue<float>(a) - 1);
                 break;
             case dtkComposerNodeNumber::Double:
                 r = qVariantFromValue(a.toDouble() - 1);

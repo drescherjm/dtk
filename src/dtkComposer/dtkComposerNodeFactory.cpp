@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb  7 22:37:03 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  8 15:48:02 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 168
+ * Last-Updated: Wed May  4 09:48:51 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 174
  */
 
 /* Commentary: 
@@ -33,7 +33,8 @@
 #include "dtkComposerNodeFactory.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeLog.h"
-#include "dtkComposerNodeLoop.h"
+#include "dtkComposerNodeLoopFor.h"
+#include "dtkComposerNodeLoopWhile.h"
 #include "dtkComposerNodeNumber.h"
 #include "dtkComposerNodeNumberComparator.h"
 #include "dtkComposerNodeNumberOperator.h"
@@ -86,8 +87,11 @@ dtkComposerNode *dtkComposerNodeFactory::create(QString type)
     if (type == "dtkComposerLog")
         return new dtkComposerNodeLog;
 
-    if (type == "dtkComposerLoop")
-        return new dtkComposerNodeLoop;
+    if (type == "dtkComposerLoopFor")
+        return new dtkComposerNodeLoopFor;
+
+    if (type == "dtkComposerLoopWhile")
+        return new dtkComposerNodeLoopWhile;
 
     if (type == "dtkComposerFile")
         return new dtkComposerNodeFile;

@@ -39,6 +39,7 @@ public:
     dtkLog& operator<<(float value);
     dtkLog& operator<<(double value);
     dtkLog& operator<<(const QString& value);
+    dtkLog& operator<<(const QStringList& value);
 
     ~dtkLog(void);
 

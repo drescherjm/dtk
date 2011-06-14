@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Nov  7 16:42:20 2010 (+0100)
+ * Last-Updated: Mon May  9 14:41:38 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 271
+ *     Update #: 272
  */
 
 /* Commentary:
@@ -380,101 +380,6 @@ void dtkAbstractView::setCameraClippingRange(double near, double far)
     DTK_UNUSED(far);
 
     DTK_DEFAULT_IMPLEMENTATION;
-}
-
-dtkVec3 dtkAbstractView::scenePosition(void) const
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return dtkVec3();
-}
-
-dtkQuat dtkAbstractView::sceneOrientation(void) const
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-    
-    return dtkQuat();
-}
-
-void dtkAbstractView::setupWandPosition(const dtkVec3& position)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(position);
-}
-
-void dtkAbstractView::setupWandOrientation(const dtkQuat& orientation)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(orientation);
-}
-
-void dtkAbstractView::setupScenePosition(const dtkVec3& position)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(position);
-}
-
-void dtkAbstractView::setupSceneOrientation(const dtkQuat& orientation)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(orientation);
-}
-
-void dtkAbstractView::setupCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(eye);
-    DTK_UNUSED(center);
-    DTK_UNUSED(up);
-}
-
-void dtkAbstractView::setupLeftEyeCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(eye);
-    DTK_UNUSED(center);
-    DTK_UNUSED(up);
-}
-
-void dtkAbstractView::setupRightEyeCameraLookAt(const dtkVec3& eye, const dtkVec3& center, const dtkVec3& up)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(eye);
-    DTK_UNUSED(center);
-    DTK_UNUSED(up);
-}
-
-void dtkAbstractView::setupCameraFrustum(double left, double right, double bottom, double top, double near, double far)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(left);
-    DTK_UNUSED(right);
-    DTK_UNUSED(bottom);
-    DTK_UNUSED(top);
-    DTK_UNUSED(near);
-    DTK_UNUSED(far);
-}
-
-void dtkAbstractView::setupLeftEyeCameraFrustum(double left, double right, double bottom, double top, double near, double far)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(left);
-    DTK_UNUSED(right);
-    DTK_UNUSED(bottom);
-    DTK_UNUSED(top);
-    DTK_UNUSED(near);
-    DTK_UNUSED(far);
-}
-
-void dtkAbstractView::setupRightEyeCameraFrustum(double left, double right, double bottom, double top, double near, double far)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(left);
-    DTK_UNUSED(right);
-    DTK_UNUSED(bottom);
-    DTK_UNUSED(top);
-    DTK_UNUSED(near);
-    DTK_UNUSED(far);
 }
 
 QString dtkAbstractView::cameraProjectionMode(void)

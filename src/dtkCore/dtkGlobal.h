@@ -86,7 +86,21 @@
 
 #define DTK_SUCCEED 1
 #define DTK_FAILURE 0
- 
+
+// Turn given bare text into a quoted string.
+#define _DTK_STRINGIZE( x ) #x
+#define DTK_STRINGIZE(x) _DTK_STRINGIZE(x)
+
+// Use:
+// #pragma message DTK_COMPILER_WARNING("your warning message here")
+#ifdef _MSC_VER
+#  define _LINK_TEXT __FILE__ "(" DTK_STRINGIZE(__LINE__) ") : "
+#  define DTK_COMPILER_WARNING(str) (_LINK_TEXT "WARNING: " str)
+#else
+// gcc automatically generates line number info.
+#  define DTK_COMPILER_WARNING(str) ("WARNING: " str)
+#endif
+
 // /////////////////////////////////////////////////////////////////
 // Helper functions
 // /////////////////////////////////////////////////////////////////

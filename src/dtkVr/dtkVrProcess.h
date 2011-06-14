@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 10 21:08:39 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 24 19:18:59 2010 (+0100)
+ * Last-Updated: Mon May  9 14:47:37 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 73
+ *     Update #: 78
  */
 
 /* Commentary: 
@@ -23,9 +23,6 @@
 #include <QtCore>
 
 class dtkDistributedCommunicator;
-class dtkVrDevice;
-class dtkVrUser;
-class dtkVrWand;
 class dtkVrProcessPrivate;
 
 class dtkVrProcess : public QObject
@@ -48,13 +45,11 @@ public:
     int size(void) const;
 
     bool running(void);
-    
-    dtkVrUser *user(void);
-    dtkVrWand *wand(void);
 
 protected:
     virtual void process(void) = 0;
 
+protected:
     void broadcast(void);
     void synchronize(void);
 

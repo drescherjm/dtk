@@ -24,13 +24,15 @@
 
 class dtkAbstractDataImage3DPrivate;
 
-class DTKCORE_EXPORT dtkAbstractDataImage3D : public dtkAbstractDataImage
+class dtkAbstractDataImage3D : public dtkAbstractDataImage
 {
     Q_OBJECT
 
 public:
     dtkAbstractDataImage3D(void);
    ~dtkAbstractDataImage3D(void);
+
+    virtual int Dimension() const;
 
 private:
    dtkAbstractDataImage3DPrivate *d;

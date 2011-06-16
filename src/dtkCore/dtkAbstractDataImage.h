@@ -32,8 +32,8 @@ public:
 
     void *image(void);
 
-    virtual int   Dimension() const;
-    virtual QMetaType::Type PixelType() const;
+    virtual int   dimension() const;
+    virtual QMetaType::Type pixelType() const;
 
     virtual int xDimension(void);
     virtual int yDimension(void);

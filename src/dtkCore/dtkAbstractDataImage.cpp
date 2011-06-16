@@ -52,14 +52,14 @@ void *dtkAbstractDataImage::image(void)
     return this->data();
 }
 
-int dtkAbstractDataImage::Dimension() const
+int dtkAbstractDataImage::dimension() const
 {
     DTK_DEFAULT_IMPLEMENTATION;
 
     return 0;
 }
 
-QMetaType::Type dtkAbstractDataImage::PixelType() const
+QMetaType::Type dtkAbstractDataImage::pixelType() const
 {
     DTK_DEFAULT_IMPLEMENTATION;
 

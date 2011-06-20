@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Mar  9 14:13:06 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar  9 15:17:44 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 14
+ * Last-Updated: Mon Jun 20 19:22:54 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -18,6 +18,8 @@
  */
 
 #include <dtkMath/dtkMath.h>
+
+#include <dtkCore/dtkGlobal.h>
 
 #include <float.h>
 #include <math.h>
@@ -84,5 +86,5 @@ int main(int argc, char* argv[])
     printf("14 - \n"); TestCompare2sComplement(smallestDenormal, -smallestDenormal, true);
     printf("15 - \n"); TestCompareFinal(smallestDenormal, -smallestDenormal, false);
 
-    return 0;
+    return DTK_SUCCEED;
 }

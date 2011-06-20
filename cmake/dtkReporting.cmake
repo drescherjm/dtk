@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Mon Jun  6 14:49:42 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Jun 20 10:37:10 2011 (+0200)
+## Last-Updated: Mon Jun 20 18:02:41 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 8
+##     Update #: 9
 ######################################################################
 ## 
 ### Commentary: 
@@ -31,7 +31,6 @@ if (EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Dart.cmake.in)
     "${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Dart.cmake.in"
     "${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}Dart.cmake")
 
-  mark_as_advanced(BUILD_TESTING)
   mark_as_advanced(DART_TESTING_TIMEOUT)
   mark_as_advanced(DTK_CTEST_PROJECT_NAME)
   mark_as_advanced(DTK_CTEST_UPDATE_TYPE)

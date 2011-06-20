@@ -4,9 +4,9 @@
  * Copyright (C) 2011 -John Stark, Inria.
  * Created: 
  * Version: $Id$
- * Last-Updated: 
- *           By: John Stark
- *     Update #: 0
+ * Last-Updated: Mon Jun 20 19:22:12 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 37
  */
 
 /* Commentary: 
@@ -43,13 +43,20 @@
 class TestData : public dtkAbstractData {
 public:
     static QString s_TypeName;
-    TestData() { }
-    ~TestData() { }
 
-    static dtkAbstractData *create() { return new  TestData(); }
-    QString description(void) const {return s_TypeName;}
-    static bool registerType() {
-        return dtkAbstractDataFactory::instance()->registerDataType(s_TypeName, create );
+     TestData(void) {}
+    ~TestData(void) {}
+
+    static dtkAbstractData *create(void) {
+        return new  TestData();
+    }
+
+    QString description(void) const {
+        return s_TypeName;
+    }
+
+    static bool registerType(void) {
+        return dtkAbstractDataFactory::instance()->registerDataType(s_TypeName, create);
     }
 
 };
@@ -62,24 +69,24 @@ QString TestData::s_TypeName = "TestDataType";
 
 inline void CheckTestResult( bool condition, const char *cond, const char *file, const int line = 0 )
 {
-    if ( ! condition ) {
-        QString msg;
-        msg = QString( "%1(%2): Test failed (%3)" ).arg(file).arg(line).arg(cond);
+    if (!condition) {
+        QString msg = QString("%1(%2): Test failed (%3)").arg(file).arg(line).arg(cond);
         throw std::runtime_error(msg.toStdString());
     }
 }
 
-#define CHECK_TEST_RESULT( cond ) CheckTestResult( (cond) , DTK_STRINGIZE(cond), __FILE__, __LINE__ )
+#define CHECK_TEST_RESULT(cond) CheckTestResult((cond), DTK_STRINGIZE(cond), __FILE__, __LINE__)
 
 int main(int argc, char *argv[])
 {
     int ret = DTK_FAILURE;
+
     try {
-        // An app is needed for the factory to connect signals to.
+
         QApplication app( argc, argv );
 
-        if  (!TestData::registerType())
-            throw( std::runtime_error( "Failed to register data type" ) );
+        if (!TestData::registerType())
+            throw(std::runtime_error( "Failed to register data type"));
 
         dtkAbstractDataFactory *factory = dtkAbstractDataFactory::instance();
 
@@ -178,7 +185,9 @@ int main(int argc, char *argv[])
         CHECK_TEST_RESULT( myInstance->count() == 2);
         CHECK_TEST_RESULT( myOtherInstance->count() == 2);
         CHECK_TEST_RESULT( myOtherInstance2->count() == 2);
+
         myHashMapContainer.clear();
+
         CHECK_TEST_RESULT( myInstance->count() == 1);
         CHECK_TEST_RESULT( myOtherInstance->count() == 1);
         CHECK_TEST_RESULT( myOtherInstance2->count() == 1);
@@ -220,8 +229,7 @@ int main(int argc, char *argv[])
         CHECK_TEST_RESULT( notSmartPtr != NULL );
         CHECK_TEST_RESULT( notSmartPtr->count() == 1 );
 
-        {
-            // Test const-ness
+        {   // Test const-ness
             const TestData* pConstData = myOtherInstance;
             dtkSmartPointer<const TestData> myConstInstance;
             myConstInstance = pConstData;
@@ -248,10 +256,12 @@ int main(int argc, char *argv[])
     catch (...) {
         dtkDebug() << "Caught an unknown exception" ;
     }
-    if ( ret ) {
+
+    if (ret == DTK_SUCCEED) {
         dtkDebug() << " Test succeeded";
     } else {
         dtkDebug() << " Test failed";
     }
+
     return ret;
 }

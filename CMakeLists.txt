@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Jun  6 14:49:23 2011 (+0200)
+## Last-Updated: Mon Jun 20 18:03:23 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 344
+##     Update #: 348
 ######################################################################
 ## 
 ### Commentary: 
@@ -36,6 +36,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 option(BUILD_SHARED_LIBS   "Build shared libraries" true)
 option(BUILD_TOOLS         "Build tools"            true)
 option(BUILD_EXAMPLES      "Build examples"         true)
+option(BUILD_TESTING       "Build testing"          true)
 option(BUILD_DOCUMENTATION "Build documentation"    true)
 option(BUILD_WRAPPERS      "Build wrappers"         true)
 option(BUILD_REPORTING     "Build reporting"        false)
@@ -53,6 +54,10 @@ endif(BUILD_TOOLS)
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif(BUILD_EXAMPLES)
+
+if(BUILD_TESTING)
+  add_subdirectory(tests)
+endif(BUILD_TESTING)
 
 if(BUILD_DOCUMENTATION)
   add_subdirectory(doc)

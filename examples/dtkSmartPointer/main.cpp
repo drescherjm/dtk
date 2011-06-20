@@ -47,7 +47,7 @@ public:
     ~TestData() { }
 
     static dtkAbstractData *create() { return new  TestData(); }
-
+    QString description(void) const {return s_TypeName;}
     static bool registerType() {
         return dtkAbstractDataFactory::instance()->registerDataType(s_TypeName, create );
     }
@@ -219,6 +219,19 @@ int main(int argc, char *argv[])
         CHECK_TEST_RESULT( myInstance.isNull() );
         CHECK_TEST_RESULT( notSmartPtr != NULL );
         CHECK_TEST_RESULT( notSmartPtr->count() == 1 );
+
+        {
+            // Test const-ness
+            const TestData* pConstData = myOtherInstance;
+            dtkSmartPointer<const TestData> myConstInstance;
+            myConstInstance = pConstData;
+            CHECK_TEST_RESULT( !myConstInstance.isNull() );
+            CHECK_TEST_RESULT( myConstInstance == myOtherInstance );
+            CHECK_TEST_RESULT( myOtherInstance->count() == 2 );
+
+            dtkSmartPointer<const TestData> myOtherConstInstance = myConstInstance;
+            CHECK_TEST_RESULT(myOtherConstInstance->description() == TestData::s_TypeName);
+        }
 
         // Test constructor from pointer.
         // This constructs the smart pointer, and adds a reference.

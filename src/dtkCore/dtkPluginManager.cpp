@@ -190,7 +190,10 @@ void dtkPluginManager::loadPlugin(const QString& path)
     loader->setLoadHints (QLibrary::ExportExternalSymbolsHint);
 
     if(!loader->load()) {
-        if(DTK_VERBOSE_LOAD) dtkDebug() << "Unable to load - " << loader->errorString();
+        QString error = "Unable to load - ";
+        error += loader->errorString();
+        if(DTK_VERBOSE_LOAD) dtkDebug() << error;
+        emit loadError(error);
         delete loader;
         return;
     }
@@ -198,12 +201,19 @@ void dtkPluginManager::loadPlugin(const QString& path)
     dtkPlugin *plugin = qobject_cast<dtkPlugin *>(loader->instance());
 
     if(!plugin) {
-        if(DTK_VERBOSE_LOAD) dtkDebug() << "Unable to retrieve " << path;
+        QString error = "Unable to retrieve ";
+        error += path;
+        if(DTK_VERBOSE_LOAD) dtkDebug() << error;
+        emit loadError(error);
         return;
     }
 
     if(!plugin->initialize()) {
-        if(DTK_VERBOSE_LOAD) dtkOutput() << "Unable to initialize " << plugin->name() << " plugin";
+        QString error = "Unable to initialize ";
+        error += plugin->name();
+        error += " plugin";
+        if(DTK_VERBOSE_LOAD) dtkOutput() << error;
+        emit loadError(error);
         return;
     }
 

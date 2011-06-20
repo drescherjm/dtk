@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Mon Jun  6 16:20:06 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Jun  6 16:22:16 2011 (+0200)
+## Last-Updated: Tue Jun  7 15:13:19 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 6
+##     Update #: 7
 ######################################################################
 ## 
 ### Commentary: 
@@ -36,8 +36,7 @@ if(QT4_FOUND)
 
   find_library(QWT_LIBRARY
     NAMES ${QWT_NAMES}
-    PATHS /usr/local/qwt/lib /usr/local/lib /usr/lib
-    )
+    PATHS /usr/local/qwt/lib /usr/local/lib /usr/lib)
   
   if(QWT_LIBRARY)
     set(QWT_LIBRARIES ${QWT_LIBRARY})

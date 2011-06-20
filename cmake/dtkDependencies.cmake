@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Jun  6 16:23:48 2011 (+0200)
+## Last-Updated: Tue Jun  7 15:59:40 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 56
+##     Update #: 60
 ######################################################################
 ## 
 ### Commentary: 
@@ -198,31 +198,30 @@ endif(QUAT_INCLUDES AND VRPN_INCLUDES)
 mark_as_advanced(VRPN_INCLUDES)
 mark_as_advanced(QUAT_INCLUDES)
 
-find_library(QUAT_LIBRARIES NAMES quat PATHS /usr/lib /usr/local/lib)
-find_library(VRPN_LIBRARIES NAMES vrpn PATHS /usr/lib /usr/local/lib)
+find_library(QUAT_LIBRARY NAMES quat PATHS /usr/lib /usr/local/lib)
+find_library(VRPN_LIBRARY NAMES vrpn PATHS /usr/lib /usr/local/lib)
 
-if(QUAT_LIBRARIES AND VRPN_LIBRARIES)
-link_directories(${QUAT_LIBRARIES})
-link_directories(${VRPN_LIBRARIES})
-endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)
-
-if(QUAT_LIBRARIES AND VRPN_LIBRARIES)
+if(QUAT_LIBRARY AND VRPN_LIBRARY)
   add_definitions(-DHAVE_VRPN)
-endif(QUAT_LIBRARIES AND VRPN_LIBRARIES)
+endif(QUAT_LIBRARY AND VRPN_LIBRARY)
 
-mark_as_advanced(QUAT_LIBRARIES)
-mark_as_advanced(VRPN_LIBRARIES)
+mark_as_advanced(QUAT_LIBRARY)
+mark_as_advanced(VRPN_LIBRARY)
 
 ## #################################################################
 ## 
 ## #################################################################
 
-if(MPI_FOUND AND QUAT_LIBRARIES AND VRPN_LIBRARIES)
+if(MPI_FOUND AND QUAT_LIBRARY AND VRPN_LIBRARY)
   add_definitions(-DDTK_WRAP_VRPN)
-endif(MPI_FOUND AND QUAT_LIBRARIES AND VRPN_LIBRARIES)
+endif(MPI_FOUND AND QUAT_LIBRARY AND VRPN_LIBRARY)
 
 ## #################################################################
 ## Qwt
 ## #################################################################
 
 find_package(QWT QUIET)
+
+if(QWT_FOUND)
+  include_directories(${QWT_INCLUDE_DIR})
+endif(QWT_FOUND)

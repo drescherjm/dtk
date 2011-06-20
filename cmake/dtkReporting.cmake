@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Mon Jun  6 14:49:42 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Jun  6 14:52:41 2011 (+0200)
+## Last-Updated: Mon Jun 20 10:37:10 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 7
+##     Update #: 8
 ######################################################################
 ## 
 ### Commentary: 
@@ -16,8 +16,9 @@
 ### Change log:
 ## 
 ######################################################################
+
 if (EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Dart.cmake.in)
-#only create test variables if the project contains a proj_nameDart.cmake.in template file.
+
   set(DTK_CTEST_PROJECT_NAME ${PROJECT_NAME} CACHE STRING "Reporting project name.")
   set(DTK_CTEST_UPDATE_TYPE "git" CACHE STRING "Reporting update type.")
   set(DTK_CTEST_UPDATE_COMMAND "git" CACHE STRING "Reporting update command.")

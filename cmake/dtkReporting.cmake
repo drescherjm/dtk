@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Mon Jun  6 14:49:42 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Jun 20 18:02:41 2011 (+0200)
+## Last-Updated: Mon Jun 20 19:38:50 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 9
+##     Update #: 10
 ######################################################################
 ## 
 ### Commentary: 
@@ -23,8 +23,8 @@ if (EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Dart.cmake.in)
   set(DTK_CTEST_UPDATE_TYPE "git" CACHE STRING "Reporting update type.")
   set(DTK_CTEST_UPDATE_COMMAND "git" CACHE STRING "Reporting update command.")
   set(DTK_CTEST_DROP_METHOD "http" CACHE STRING "Reporting drop method.")
-  set(DTK_CTEST_DROP_SITE "cdash.inria.fr" CACHE STRING "Reporting drop site.")
-  set(DTK_CTEST_DROP_LOCATION "/CDash/submit.php?project=${PROJECT_NAME}" CACHE STRING "Reporting drop location.")
+  set(DTK_CTEST_DROP_SITE "dtk.inria.fr" CACHE STRING "Reporting drop site.")
+  set(DTK_CTEST_DROP_LOCATION "/dashboard/submit.php?project=${PROJECT_NAME}" CACHE STRING "Reporting drop location.")
   set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_BINARY_DIR}/cmake")
 
   configure_file (

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb  2 09:08:09 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jan 27 15:37:26 2010 (+0100)
+ * Last-Updated: Thu Jun 16 14:58:37 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 40
+ *     Update #: 42
  */
 
 /* Commentary: 
@@ -23,9 +23,9 @@
 #include <typeinfo>
 #include <dtkCore/dtkAbstractData.h>
 
-class DTKCORE_EXPORT dtkAbstractDataImage: public dtkAbstractData {
+class DTKCORE_EXPORT dtkAbstractDataImage: public dtkAbstractData
+{
 public:
-
     typedef std::type_info PixId;
 
              dtkAbstractDataImage(void);
@@ -34,8 +34,8 @@ public:
 
     void *image(void);
 
-    virtual int   Dimension() const;
-    virtual const PixId& PixelType() const;
+    virtual int   Dimension(void) const;
+    virtual const PixId& PixelType(void) const;
 
     virtual int xDimension(void);
     virtual int yDimension(void);

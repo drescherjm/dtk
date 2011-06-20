@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Jun 20 18:03:23 2011 (+0200)
+## Last-Updated: Mon Jun 20 19:41:01 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 348
+##     Update #: 349
 ######################################################################
 ## 
 ### Commentary: 
@@ -39,7 +39,7 @@ option(BUILD_EXAMPLES      "Build examples"         true)
 option(BUILD_TESTING       "Build testing"          true)
 option(BUILD_DOCUMENTATION "Build documentation"    true)
 option(BUILD_WRAPPERS      "Build wrappers"         true)
-option(BUILD_REPORTING     "Build reporting"        false)
+option(BUILD_REPORTING     "Build reporting"        true)
 
 include(dtkDependencies)
 include(dtkBuild)

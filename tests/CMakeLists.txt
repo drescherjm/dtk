@@ -21,7 +21,7 @@ add_subdirectory(dtkCompareDouble)
 add_subdirectory(dtkCompareFloat)
 add_subdirectory(dtkSmartPointer)
 add_subdirectory(dtkZipZip)
-add_subdirectory(dtkZipUnZip)
+add_subdirectory(dtkZipUnzip)
 add_subdirectory(dtkZipChecksum)
 
 enable_testing()

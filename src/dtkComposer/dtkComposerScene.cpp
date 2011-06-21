@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 21 10:23:30 2011 (+0200)
+ * Last-Updated: Tue Jun 21 11:35:34 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 2871
+ *     Update #: 2886
  */
 
 /* Commentary: 
@@ -749,9 +749,13 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
     bool node_was_ghost = node->isGhost();
     QPointF scene_center = node->mapRectToScene(node->boundingRect()).center();
 
-    // -- For each child nodes, the edge logic is saved.
+    // -- For each child nodes, we save the edge logic.
+
+    QList<dtkComposerEdge *> edge_logic;
 
     foreach(dtkComposerNode *child, node->childNodes()) {
+        
+        child->setParentNode(parent);
 
         foreach(dtkComposerEdge *ghost, node->inputGhostEdges()) {
             if (ghost->destination()->node() == child) {
@@ -760,8 +764,7 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
                         dtkComposerEdge *e = new dtkComposerEdge;
                         e->setSource(input->source());
                         e->setDestination(ghost->destination());
-                        e->link(true);
-                        this->addEdge(e);
+                        edge_logic << e;
                     }
                  }
             }
@@ -774,15 +777,27 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
                         dtkComposerEdge *e = new dtkComposerEdge;
                         e->setSource(ghost->source());
                         e->setDestination(output->destination());
-                        e->link(true);
-                        this->addEdge(e);
+                        edge_logic << e;
                     }
                 }
             }
-        }        
-    }
+        }   
+
+        child->setParentNode(node);
+    }       
     
+    // -- Node is removed. This action destroys the edge logic.
+
     this->removeNode(node);
+
+    // -- Now edge logic is recovered using the saved edges
+
+    foreach(dtkComposerEdge *e, edge_logic) {
+        e->link(true);
+        this->addEdge(e);
+    }
+
+    // -- Nodes positions are then reset
 
     if (node_was_ghost && composite_parent) {
     

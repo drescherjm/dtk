@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 25 14:48:06 2011 (+0200)
+ * Last-Updated: Tue Jun 21 10:23:30 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 2859
+ *     Update #: 2871
  */
 
 /* Commentary: 
@@ -365,16 +365,20 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
     
     foreach(dtkComposerEdge *edge, node->outputGhostEdges())
         this->removeEdge(edge);
-
     
     dtkComposerNode *parent = node->parentNode();
     if (parent)
         parent->removeChildNode(node); 
 
-    if (parent && parent->kind() == dtkComposerNode::Control)        
-        foreach(dtkComposerNodeControlBlock *parent_block, (dynamic_cast<dtkComposerNodeControl *>(parent))->blocks())
-            if (parent_block->nodes().contains(node))
-                parent_block->removeNode(node);
+    dtkComposerNodeControlBlock *parent_block = NULL;
+    if (parent && parent->kind() == dtkComposerNode::Control) {
+        foreach(dtkComposerNodeControlBlock *block, (dynamic_cast<dtkComposerNodeControl *>(parent))->blocks()) {
+            if (block->nodes().contains(node)) {
+                block->removeNode(node);
+                parent_block = block;
+            }
+        }
+    }
 
     dtkComposerNode *n = node;
 
@@ -417,6 +421,30 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
         }
 
         n = parent;
+    }
+
+    // -- In case of composite node, parenthood of child nodes is reset
+
+    if (node->kind() == dtkComposerNode::Composite) {
+
+        foreach(dtkComposerNode *child, node->childNodes()) {
+
+            if (parent)
+                parent->addChildNode(child);
+
+            child->setParentNode(parent);
+
+            if (parent_block) {
+                parent_block->addNode(child);
+                child->setParentItem(parent_block);
+            } else {
+                child->setParentItem(node->parentItem());
+            }
+
+            node->removeChildNode(child);
+            
+        }
+
     }
 
     foreach(dtkComposerNode *child, node->childNodes()) {
@@ -707,13 +735,13 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
 
     // -- Looking for a composite parent node through the parent ancestors.
 
-    dtkComposerNode *ghost_parent = NULL;        
-    ghost_parent = node->parentNode();
-    while (ghost_parent) {
-        if (ghost_parent->kind() == dtkComposerNode::Composite)  
+    dtkComposerNode *composite_parent = NULL;        
+    composite_parent = node->parentNode();
+    while (composite_parent) {
+        if (composite_parent->kind() == dtkComposerNode::Composite)  
             break; 
         else
-            ghost_parent = ghost_parent->parentNode();
+            composite_parent = composite_parent->parentNode();
     }
     
     // -- 
@@ -721,21 +749,9 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
     bool node_was_ghost = node->isGhost();
     QPointF scene_center = node->mapRectToScene(node->boundingRect()).center();
 
-    // -- For each child nodes, the parenthood is reset and the edge logic is saved.
+    // -- For each child nodes, the edge logic is saved.
 
     foreach(dtkComposerNode *child, node->childNodes()) {
-
-        if (parent)
-            parent->addChildNode(child);
-
-        child->setParentNode(parent);
-
-        if (parent_block) {
-            parent_block->addNode(child);
-            child->setParentItem(parent_block);
-        } else {
-            child->setParentItem(node->parentItem());
-        }
 
         foreach(dtkComposerEdge *ghost, node->inputGhostEdges()) {
             if (ghost->destination()->node() == child) {
@@ -763,27 +779,24 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
                     }
                 }
             }
-        }
-
-        node->removeChildNode(child);
-        
-    }        
+        }        
+    }
     
     this->removeNode(node);
 
-    if (node_was_ghost && ghost_parent) {
+    if (node_was_ghost && composite_parent) {
     
-        ghost_parent->setGhost(true);
-        ghost_parent->setPos(ghost_parent->ghostPosition());
-        this->showChildNodes(ghost_parent);
-        this->setCurrentNode(ghost_parent);
+        composite_parent->setGhost(true);
+        composite_parent->setPos(composite_parent->ghostPosition());
+        this->showChildNodes(composite_parent);
+        this->setCurrentNode(composite_parent);
             
-        emit centerOn(ghost_parent->mapRectToScene(parent->boundingRect()).center());
+        emit centerOn(composite_parent->mapRectToScene(parent->boundingRect()).center());
         emit pathChanged(d->current_node);
 
-    } else if (ghost_parent) {
+    } else if (composite_parent) {
 
-        this->showChildNodes(ghost_parent);
+        this->showChildNodes(composite_parent);
         
     } else {
 

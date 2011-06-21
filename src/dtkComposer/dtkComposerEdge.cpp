@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 25 14:34:56 2011 (+0200)
+ * Last-Updated: Tue Jun 21 10:19:59 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 418
+ *     Update #: 421
  */
 
 /* Commentary: 
@@ -323,19 +323,23 @@ bool dtkComposerEdge::unlink(void)
     
     d->destination->node()->onEdgeDisconnected(this);
 
-    if (d->source->node()->isGhost())
-        d->source->node()->removeGhostInputEdge(this);
-    else if (d->source->node()->kind() == dtkComposerNode::Control && d->destination->node()->parentNode() == d->source->node())
-        d->source->node()->removeInputRelayEdge(this);
-    else
+    if (d->source->node()->kind() == dtkComposerNode::Composite) {
         d->source->node()->removeOutputEdge(this);
+        d->source->node()->removeGhostInputEdge(this);
+    } else if (d->source->node()->kind() == dtkComposerNode::Control && d->destination->node()->parentNode() == d->source->node()) {
+        d->source->node()->removeInputRelayEdge(this);
+    } else {
+        d->source->node()->removeOutputEdge(this);
+    }
 
-    if (d->destination->node()->isGhost())
-        d->destination->node()->removeGhostOutputEdge(this);
-    else if (d->destination->node()->kind() == dtkComposerNode::Control && d->source->node()->parentNode() == d->destination->node())
-        d->destination->node()->removeOutputRelayEdge(this);
-    else
+    if (d->destination->node()->kind() == dtkComposerNode::Composite) {
         d->destination->node()->removeInputEdge(this);
+        d->destination->node()->removeGhostOutputEdge(this);
+    } else if (d->destination->node()->kind() == dtkComposerNode::Control && d->source->node()->parentNode() == d->destination->node()) {
+        d->destination->node()->removeOutputRelayEdge(this);
+    } else {
+        d->destination->node()->removeInputEdge(this);
+    }
 
     return true;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 16 09:54:33 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug 24 12:47:35 2010 (+0200)
+ * Last-Updated: Mon Jun 20 19:21:52 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 111
+ *     Update #: 112
  */
 
 /* Commentary: 
@@ -84,8 +84,8 @@
 
 #define DTK_DEPRECATED Q_DECL_DEPRECATED
 
-#define DTK_SUCCEED 1
-#define DTK_FAILURE 0
+#define DTK_SUCCEED 0
+#define DTK_FAILURE 1
 
 // Turn given bare text into a quoted string.
 #define _DTK_STRINGIZE( x ) #x

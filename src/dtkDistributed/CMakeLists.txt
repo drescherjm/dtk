@@ -56,7 +56,6 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkDistributedCpu.h
   dtkDistributedGpu.h
   dtkDistributedNode.h
-  dtkDistributedServer.h
   dtkDistributedServerDaemon.h
   dtkDistributedServerManager.h
   dtkDistributedServerManagerOar.h

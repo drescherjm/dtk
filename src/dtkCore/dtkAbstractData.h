@@ -80,6 +80,9 @@ public slots:
     virtual void setData(void* data);
     virtual void setData(void* data, int channel);
 
+    virtual int numberOfChannels (void);
+    virtual void setNumberOfChannels(int number);
+    
     virtual void update(void);
 
     void addReader   (const QString& reader);

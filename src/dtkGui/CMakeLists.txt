@@ -48,6 +48,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkPopup.h
   dtkPreferencesWidget.h
   dtkProgressIndicator.h
+  dtkQSignalBlocker.h
   dtkRecentFilesMenu.h
   dtkRegistrationBar.h
   dtkSearchBar.h
@@ -126,6 +127,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkPopup.cpp
   dtkPreferencesWidget.cpp
   dtkProgressIndicator.cpp
+  dtkQSignalBlocker.cpp
   dtkRecentFilesMenu.cpp
   dtkRegistrationBar.cpp
   dtkSearchBar.cpp

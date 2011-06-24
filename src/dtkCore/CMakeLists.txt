@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Mar 15 18:07:12 2011 (+0100)
+## Last-Updated: Fri Jun 24 16:21:49 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 186
+##     Update #: 190
 ######################################################################
 ## 
 ### Commentary: 
@@ -50,6 +50,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkPluginManager.h
   dtkQuat.h
   dtkUpdater.h
+  dtkSignalBlocker.h
   dtkSmartPointer.h
   dtkVec3.h)
 
@@ -100,6 +101,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkLog.cpp
   dtkPluginManager.cpp
   dtkQuat.cpp
+  dtkSignalBlocker.h
   dtkSmartPointer.cpp
   dtkUpdater.cpp)
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May 23 11:39:57 2011 (+0200)
+ * Last-Updated: Sat Jun 25 15:50:33 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 335
+ *     Update #: 342
  */
 
 /* Commentary:
@@ -29,11 +29,9 @@
 
 #include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkAbstractDataFactory.h>
-#include <dtkCore/dtkAbstractDataMesh.h>
 #include <dtkCore/dtkAbstractDataReader.h>
 #include <dtkCore/dtkAbstractDataWriter.h>
 #include <dtkCore/dtkAbstractDataConverter.h>
-#include <dtkCore/dtkAbstractDataImage.h>
 #include <dtkCore/dtkAbstractObject.h>
 #include <dtkCore/dtkAbstractProcess.h>
 #include <dtkCore/dtkAbstractProcessFactory.h>
@@ -147,12 +145,6 @@
 %ignore   loaded(const QString& path);
 %ignore unloaded(const QString& path);
 %ignore loadError(const QString& path);
-
-// /////////////////////////////////////////////////////////////////
-// Ignore rules for dtkAbstractDataImage
-// /////////////////////////////////////////////////////////////////
-
-%immutable PixelMeaningMetaData;
 
 // /////////////////////////////////////////////////////////////////
 // Typemaps
@@ -337,12 +329,10 @@ public:
 %include <dtkCore/dtkAbstractObject.h>
 
 %include <dtkCore/dtkAbstractData.h>
-%include <dtkCore/dtkAbstractDataMesh.h>
 %include <dtkCore/dtkAbstractDataFactory.h>
 %include <dtkCore/dtkAbstractDataReader.h>
 %include <dtkCore/dtkAbstractDataWriter.h>
 %include <dtkCore/dtkAbstractDataConverter.h>
-%include <dtkCore/dtkAbstractDataImage.h>
 %include <dtkCore/dtkAbstractProcess.h>
 %include <dtkCore/dtkAbstractProcessFactory.h>
 %include <dtkCore/dtkAbstractView.h>
@@ -354,22 +344,5 @@ public:
 %include <dtkCore/dtkPluginManager.h>
 %include <dtkCore/dtkVec3.h>
 %include <dtkCore/dtkQuat.h>
-
-#ifdef SWIGPYTHON
-
-// /////////////////////////////////////////////////////////////////
-// Helper functions
-// /////////////////////////////////////////////////////////////////
-
-%inline %{
-
-dtkAbstractDataMesh *dtk_as_mesh(dtkAbstractData *data)
-{
-    return dynamic_cast<dtkAbstractDataMesh *>(data);
-}
-
-%}
-
-#endif
 
 #endif

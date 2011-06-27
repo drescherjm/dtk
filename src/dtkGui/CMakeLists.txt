@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Mar 18 15:43:15 2011 (+0100)
+## Last-Updated: Fri Jun 24 16:16:33 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 172
+##     Update #: 175
 ######################################################################
 ## 
 ### Commentary: 
@@ -38,10 +38,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkInspectorTitleBar.h
   dtkInspectorToolBar.h
   dtkInspectorSwitch.h
-
-  # dtkInspectorComposer.h
-  # dtkInspectorScene.h
-
   dtkInterpreter.h
   dtkInterpreterPreferencesWidget.h
   dtkNavigationBar.h
@@ -77,10 +73,6 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkInspectorTitleBar.h
   dtkInspectorToolBar.h
   dtkInspectorSwitch.h
-
-  # dtkInspectorComposer.h
-  # dtkInspectorScene.h
-
   dtkInterpreter.h
   dtkInterpreterPreferencesWidget.h
   dtkNavigationBar.h
@@ -103,23 +95,16 @@ set(${PROJECT_NAME}_SOURCES
   dtkAboutBox.cpp
   dtkAddressBar.cpp
   dtkAnchoredBar.cpp
-
   dtkColorButton.cpp
   dtkColorGrid.cpp
-
   dtkFinder.cpp
   dtkInsetMenu.cpp
-
   dtkInspector.cpp
   dtkInspectorBox.cpp
   dtkInspectorButton.cpp
   dtkInspectorTitleBar.cpp
   dtkInspectorToolBar.cpp
   dtkInspectorSwitch.cpp
-
-  # dtkInspectorComposer.cpp
-  # dtkInspectorScene.cpp
-
   dtkInterpreter.cpp
   dtkInterpreterPreferencesWidget.cpp
   dtkNavigationBar.cpp

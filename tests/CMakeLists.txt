@@ -38,9 +38,6 @@ if(ZLIB_FOUND)
     add_test(dtkZipChecksum       ${CMAKE_BINARY_DIR}/bin/dtkZipChecksum ${CMAKE_CURRENT_SOURCE_DIR}/dtkZipChecksum/archive.zip)
 endif(ZLIB_FOUND)
 
-set(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
-
-
 if(MSVC)
     #May need to add zlib path?
     set(PATH_STRING_FOR_TESTS "${QT_LIBRARY_DIR}")

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 -John Stark, Inria.
  * Created: 
  * Version: $Id$
- * Last-Updated: Mon Jun 20 19:22:12 2011 (+0200)
+ * Last-Updated: Tue Jun 28 16:52:15 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 37
+ *     Update #: 39
  */
 
 /* Commentary: 
@@ -34,7 +34,7 @@
 #include <stdexcept>
 #include <vector>
 
-#include <QHash>
+#include <QtCore>
 
 // /////////////////////////////////////////////////////////////////
 // 
@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 
     try {
 
-        QApplication app( argc, argv );
+        QCoreApplication app( argc, argv );
 
         if (!TestData::registerType())
             throw(std::runtime_error( "Failed to register data type"));

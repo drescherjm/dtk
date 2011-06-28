@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 28 15:26:18 2011 (+0200)
+ * Last-Updated: Tue Jun 28 16:13:07 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 238
+ *     Update #: 316
  */
 
 /* Commentary: 
@@ -116,22 +116,26 @@ void dtkDistributedController::read(void)
 {
     QTcpSocket *socket = (QTcpSocket *)sender();
 
-    QString response = socket->readAll();
+    QString buffer = socket->readAll();
 
-    if(response == "!! status !!") {
+    static QString status_contents;
 
-        QString contents;
+    if(buffer.startsWith("!! status !!")) {
 
-        QString p = socket->readAll();
+        status_contents.clear();
+        status_contents += buffer.remove("!! status !!");
+    }
 
-        while(p != "!! endstatus !!") {
-            contents += p;
-            p = socket->readAll();
-        }
+    if(!status_contents.isEmpty())
+        status_contents += buffer;
 
+    if(buffer.endsWith("!! endstatus !!")) {
+
+        status_contents += buffer.remove("!! endstatus !!");
+    
         QDomDocument document; QString error;
         
-        if(!document.setContent(contents, false, &error))
+        if(!document.setContent(status_contents, false, &error))
             dtkDebug() << "Error retrieving xml output out of socket" << error;
         
         QDomNodeList nodes = document.elementsByTagName("Node");
@@ -236,13 +240,15 @@ void dtkDistributedController::read(void)
                     for(int i = 0; i < nc; i++)
                         *cpu << new dtkDistributedCore(cpu);
                     
-            *node << cpu;
+                    *node << cpu;
                 }
             
             // d->nodes.prepend(node);
             
             qDebug() << DTK_PRETTY_FUNCTION << "Adding a node";
         }
+
+        status_contents.clear();
     }
 }
 

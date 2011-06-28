@@ -37,3 +37,23 @@ if(ZLIB_FOUND)
     add_test(dtkZipUnzipTest      ${CMAKE_BINARY_DIR}/bin/dtkZipUnzip ${CMAKE_CURRENT_SOURCE_DIR}/dtkZipUnzip/archive.zip)
     add_test(dtkZipChecksum       ${CMAKE_BINARY_DIR}/bin/dtkZipChecksum ${CMAKE_CURRENT_SOURCE_DIR}/dtkZipChecksum/archive.zip)
 endif(ZLIB_FOUND)
+
+set(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
+
+
+if(MSVC)
+    #May need to add zlib path?
+    set(PATH_STRING_FOR_TESTS "${QT_LIBRARY_DIR}")
+else(MSVC)
+    set(PATH_STRING_FOR_TESTS "$ENV{PATH}")
+endif(MSVC)
+
+# ';' deliminates stringlists in CMake, but here we want to preserve them.)
+string(REPLACE ";" "\\;" PATH_STRING_FOR_TESTS "${PATH_STRING_FOR_TESTS}")
+
+set_tests_properties(dtkSmartPointerTest PROPERTIES ENVIRONMENT "PATH=${PATH_STRING_FOR_TESTS}")
+if(ZLIB_FOUND)
+    set_tests_properties(dtkZipZipTest PROPERTIES ENVIRONMENT "PATH=${PATH_STRING_FOR_TESTS}")
+    set_tests_properties(dtkZipUnzipTest PROPERTIES ENVIRONMENT "PATH=${PATH_STRING_FOR_TESTS}")
+    set_tests_properties(dtkZipChecksum PROPERTIES ENVIRONMENT "PATH=${PATH_STRING_FOR_TESTS}")
+endif(ZLIB_FOUND)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 28 14:30:19 2011 (+0200)
+ * Last-Updated: Tue Jun 28 14:45:09 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 217
+ *     Update #: 220
  */
 
 /* Commentary: 
@@ -116,9 +116,10 @@ void dtkDistributedController::read(void)
 {
     QTcpSocket *socket = (QTcpSocket *)sender();
 
+    qDebug() << DTK_PRETTY_FUNCTION << "-- Begin read --";
+
     QString response = socket->readAll();
 
-    qDebug() << DTK_PRETTY_FUNCTION << "-- Begin read --";
     qDebug() << DTK_PRETTY_FUNCTION << response;
     qDebug() << DTK_PRETTY_FUNCTION << "-- End read --";
 

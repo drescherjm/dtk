@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 28 14:31:33 2011 (+0200)
+ * Last-Updated: Tue Jun 28 15:15:11 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 16
+ *     Update #: 22
  */
 
 /* Commentary: 
@@ -85,9 +85,13 @@ void dtkDistributedServerDaemon::read(void)
     
     dtkDistributedServiceBase::instance()->logMessage(QString("Read: %1").arg(QString(socket->readLine())));
     
+    QString r = d->manager->status();
+
+    qDebug() << r;
+
     if(contents == "** status **") {
         
-        socket->write(d->manager->status().toAscii());
+        socket->write(r.toAscii());
     }
 }
 

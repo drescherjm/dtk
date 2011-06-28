@@ -232,3 +232,5 @@ if(QWT_FOUND)
   include_directories(${QWT_INCLUDE_DIR})
 endif(QWT_FOUND)
 
+endif(NOT DTK_DEPENDDENCIES_INCLUDED)
+

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:00:53 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 28 14:26:04 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 16
+ * Last-Updated: mar. juin 28 16:10:14 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -42,6 +42,8 @@ public:
         Oar,
         Torque
     };
+
+    static QString protocol(void) { return "1.0"; };
 
 public slots:
     virtual QString status(void) = 0;

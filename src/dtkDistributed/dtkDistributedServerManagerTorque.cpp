@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. juin 28 16:48:01 2011 (+0200)
+ * Last-Updated: mar. juin 28 18:04:00 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 236
+ *     Update #: 249
  */
 
 /* Commentary: 
@@ -44,7 +44,7 @@ QString dtkDistributedServerManagerTorque::status(void)
         return QString();
     }
 
-    QString result = "status;" + protocol() +"\n";
+    QString result = "version=" + protocol() +"\n";
     QString data = stat.readAll();
     QDomDocument document; QString error;
 
@@ -60,6 +60,8 @@ QString dtkDistributedServerManagerTorque::status(void)
         // Each job is coreid/jobid, count the number of "/" to get the number of jobs
         int njobs  = nodes.item(i).firstChildElement("jobs").text().simplified().count("/");
         QString ngpus  = nodes.item(i).firstChildElement("gpus").text().simplified();
+        // 2 cpus by default
+        QString ncpus  = "2";
 
         // number of busy GPUs not implemented
         QStringList properties = nodes.item(i).firstChildElement("properties").text().simplified().split(",");
@@ -81,8 +83,11 @@ QString dtkDistributedServerManagerTorque::status(void)
             } else if (prop.contains("T10")) {
                 outprops << "gpu=nvidia-T10";
             }
+            if (prop.contains("dellr815")) {
+                ncpus = "4";
+            }
         }
-        result += name + ";" + np + ";" + QString::number(njobs) + ";" + ngpus + ";0;" + "("+outprops.join(",")+");";
+        result += name + ";" + np + ";" + QString::number(njobs) + ";"+ncpus+";" + ngpus + ";0;" + "("+outprops.join(",")+");";
         if (state.contains("job-exclusive")) {
             state="busy";
         } else if (state.contains("free")) {
@@ -93,6 +98,5 @@ QString dtkDistributedServerManagerTorque::status(void)
         result += state+"\n";
     }
 
-    result += "endstatus\n";
     return result;
 }

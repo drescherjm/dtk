@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 13:32:38 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 31 20:51:49 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 11
+ * Last-Updated: mar. juin 28 17:40:50 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -25,7 +25,6 @@
 #include "dtkDistributedExport.h"
 
 class dtkDistributedNode;
-class dtkDistributedCore;
 class dtkDistributedGpuPrivate;
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedGpu : public QObject
@@ -38,8 +37,8 @@ public:
 
 public:
     enum Architecture {
-           x86 = 0x1,
-        x86_64 = 0x2
+           Nvidia = 0x1,
+              AMD = 0x2
     };
 
     Architecture architecture(void);
@@ -47,29 +46,15 @@ public:
     void setArchitecture(Architecture arch);
 
     enum Model {
-           Xeon = 0x1,
-        Opteron = 0x2
+           T10    = 0x1,
+           C2050  = 0x2,
+           C2070  = 0x4
     };
 
     Model model(void);
 
     void setModel(Model model);
 
-    enum Cardinality {
-        Single = 0x1,
-          Dual = 0x2,
-          Quad = 0x4,
-          Octo = 0x8
-    };
-
-    Cardinality cardinality(void);
-    
-    void setCardinality(Cardinality cardinality);
-
-public:
-    QList<dtkDistributedCore *> cores(void);
-
-    void operator << (dtkDistributedCore *core);
 
 private:
     dtkDistributedGpuPrivate *d;

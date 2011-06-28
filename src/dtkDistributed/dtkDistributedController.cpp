@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 28 16:21:13 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 332
+ * Last-Updated: mar. juin 28 18:13:11 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 443
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include "dtkDistributedController.h"
+#include "dtkDistributedServerManager.h"
 #include "dtkDistributedCore.h"
 #include "dtkDistributedNode.h"
 #include "dtkDistributedCpu.h"
@@ -129,120 +130,97 @@ void dtkDistributedController::read(void)
 
     if(buffer.endsWith("!! endstatus !!")) {
 
+      if(!buffer.startsWith("version="+dtkDistributedServerManager::protocol())) {
+        qDebug() << "WARNING: Bad protocol version";
+      }
+
         status_contents += buffer.remove("!! endstatus !!");
-    
-        QDomDocument document; QString error;
-        
-        if(!document.setContent(status_contents, false, &error))
-            dtkDebug() << "Error retrieving xml output out of socket" << error;
-        
-        QDomNodeList nodes = document.elementsByTagName("Node");
-        
-        for(int i = 0; i < nodes.count(); i++) {
-            
-            int np = nodes.item(i).firstChildElement("np").text().simplified().toInt();
-            QString name  = nodes.item(i).firstChildElement("name").text().simplified();
-            QString state = nodes.item(i).firstChildElement("state").text().simplified();
-            QString status = nodes.item(i).firstChildElement("status").text().simplified();
-            QStringList properties = nodes.item(i).firstChildElement("properties").text().simplified().split(",");
-            
+        QStringList nodes = status_contents.split("\n");
+
+        for(int i = 1; i < nodes.size(); i++) {
+
+            QStringList nodestr = nodes.at(i).split(";");
+
+            QString name  = nodestr.at(0);
+            int ncores    = nodestr.at(1).toInt();
+            int ncpus     = nodestr.at(3).toInt();
+            int ngpus     = nodestr.at(4).toInt();
+            QString state = nodestr.at(7);
+            QStringList properties = nodestr.at(6).split(",");
+
             dtkDistributedNode *node = new dtkDistributedNode;
             node->setName(name);
-            
+
             if(state == "free")
                 node->setState(dtkDistributedNode::Free);
-            
-            if(state == "job-exclusive")
-                node->setState(dtkDistributedNode::JobExclusive);
-            
+
+            if(state == "busy")
+                node->setState(dtkDistributedNode::Busy);
+
             if(state == "down")
                 node->setState(dtkDistributedNode::Down);
-            
-            if(state == "offline")
-                node->setState(dtkDistributedNode::Offline);
-            
+
             if(properties.contains("dell"))
                 node->setBrand(dtkDistributedNode::Dell);
-            
+
             if(properties.contains("hp"))
                 node->setBrand(dtkDistributedNode::Hp);
-            
+
             if(properties.contains("ibm"))
                 node->setBrand(dtkDistributedNode::Ibm);
-            
+
             if(properties.contains("myrinet"))
                 node->setNetwork(dtkDistributedNode::Myrinet10G);
+            else if(properties.contains("QDR"))
+                node->setNetwork(dtkDistributedNode::Infiniband40G);
             else
                 node->setNetwork(dtkDistributedNode::Ethernet1G);
-            
-            if(properties.contains("gpu")) for(int i = 0; i < np; i++) {
-                    
+
+            if(properties.contains("gpu")) for(int i = 0; i < ngpus; i++) {
+
                     dtkDistributedGpu *gpu = new dtkDistributedGpu(node);
-                    
-                    if(status.contains("x86_64"))
-                        gpu->setArchitecture(dtkDistributedGpu::x86_64);
-                    else
-                        gpu->setArchitecture(dtkDistributedGpu::x86);
-                    
-                    if(properties.contains("opteron"))
-                        gpu->setModel(dtkDistributedGpu::Opteron);
-                    
-                    if(properties.contains("xeon"))
-                        gpu->setModel(dtkDistributedGpu::Xeon);
-                    
-                    int nc = 0;
-                    
-                    if(properties.contains("singlecore")) {
-                        nc = 1; gpu->setCardinality(dtkDistributedGpu::Single);
-                    } else if(properties.contains("dualcore")) {
-                        nc = 2; gpu->setCardinality(dtkDistributedGpu::Dual);
-                    } else if(properties.contains("quadcore")) {
-                        nc = 4; gpu->setCardinality(dtkDistributedGpu::Quad);
-                    } else if(properties.contains("octocore")) {
-                        nc = 8; gpu->setCardinality(dtkDistributedGpu::Octo);
-                    }
-                    
-                    for(int i = 0; i < nc; i++)
-                        *gpu << new dtkDistributedCore(gpu);
+
+                    if(properties.contains("nvidia-T10"))
+                        gpu->setModel(dtkDistributedGpu::T10);
+                    else if(properties.contains("nvidia-C2050"))
+                        gpu->setModel(dtkDistributedGpu::C2050);
+                    else if(properties.contains("nvidia-C2070"))
+                        gpu->setModel(dtkDistributedGpu::C2070);
+
+                    if(properties.contains("nvidia"))
+                        gpu->setArchitecture(dtkDistributedGpu::Nvidia);
+
+                    if(properties.contains("amd"))
+                        gpu->setArchitecture(dtkDistributedGpu::AMD);
 
                     *node << gpu;
                 }
-            
-            else for(int i = 0; i < np; i++) {
-                    
-                    dtkDistributedCpu *cpu = new dtkDistributedCpu(node);
 
-                    if(status.contains("x86_64"))
-                        cpu->setArchitecture(dtkDistributedCpu::x86_64);
-                    else
+            for(int i = 0; i < ncpus; i++) {
+
+                    dtkDistributedCpu *cpu = new dtkDistributedCpu(node);
+                    int cores = ncores / ncpus;
+                    cpu->setCardinality(cores);
+
+                    if(properties.contains("x86"))
                         cpu->setArchitecture(dtkDistributedCpu::x86);
-                    
+                    else
+                        cpu->setArchitecture(dtkDistributedCpu::x86_64);
+
                     if(properties.contains("opteron"))
                         cpu->setModel(dtkDistributedCpu::Opteron);
-                    
+
                     if(properties.contains("xeon"))
                         cpu->setModel(dtkDistributedCpu::Xeon);
-                    
-                    int nc = 0;
-                    
-                    if(properties.contains("singlecore")) {
-                        nc = 1; cpu->setCardinality(dtkDistributedCpu::Single);
-                    } else if(properties.contains("dualcore")) {
-                        nc = 2; cpu->setCardinality(dtkDistributedCpu::Dual);
-                    } else if(properties.contains("quadcore")) {
-                        nc = 4; cpu->setCardinality(dtkDistributedCpu::Quad);
-                    } else if(properties.contains("octocore")) {
-                        nc = 8; cpu->setCardinality(dtkDistributedCpu::Octo);
-                    }
-                    
-                    for(int i = 0; i < nc; i++)
+
+                    for(int j = 0; j < cores; j++)
                         *cpu << new dtkDistributedCore(cpu);
-                    
+
                     *node << cpu;
                 }
-            
+
             d->nodes[d->sockets.key(socket)] << node;
-            
+
             qDebug() << "Found node" << node->name() << "with" << node->cpus().count() << "cpus";
         }
 

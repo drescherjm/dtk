@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 13:22:24 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 31 19:03:53 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 34
+ * Last-Updated: mar. juin 28 17:28:33 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 39
  */
 
 /* Commentary: 
@@ -48,15 +48,15 @@ public:
 
     enum State {
                 Free = 0x1,
-        JobExclusive = 0x2,
-             Offline = 0x4,
-                Down = 0x8
+                Busy = 0x2,
+                Down = 0x4
     };
 
     enum Brand {
           Hp = 0x1,
          Ibm = 0x2,
-        Dell = 0x4
+        Dell = 0x4,
+       Carri = 0x8
     };
 
     QList<Network> networks(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 28 16:13:07 2011 (+0200)
+ * Last-Updated: Tue Jun 28 16:21:13 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 316
+ *     Update #: 332
  */
 
 /* Commentary: 
@@ -33,9 +33,7 @@ class dtkDistributedControllerPrivate
 {
 public:
     QHash<QString, QTcpSocket *> sockets;
-
-public:
-    QProcess *ssh;
+    QHash<QString, QList<dtkDistributedNode *> > nodes;
 };
 
 dtkDistributedController::dtkDistributedController(void) : d(new dtkDistributedControllerPrivate)
@@ -116,9 +114,9 @@ void dtkDistributedController::read(void)
 {
     QTcpSocket *socket = (QTcpSocket *)sender();
 
-    QString buffer = socket->readAll();
-
     static QString status_contents;
+
+    QString buffer = socket->readAll();
 
     if(buffer.startsWith("!! status !!")) {
 
@@ -243,9 +241,9 @@ void dtkDistributedController::read(void)
                     *node << cpu;
                 }
             
-            // d->nodes.prepend(node);
+            d->nodes[d->sockets.key(socket)] << node;
             
-            qDebug() << DTK_PRETTY_FUNCTION << "Adding a node";
+            qDebug() << "Found node" << node->name() << "with" << node->cpus().count() << "cpus";
         }
 
         status_contents.clear();

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun  1 11:36:34 2011 (+0200)
+ * Last-Updated: Tue Jun 28 14:31:33 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 12
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -87,7 +87,7 @@ void dtkDistributedServerDaemon::read(void)
     
     if(contents == "** status **") {
         
-        socket->write("magic ninietsch was here");
+        socket->write(d->manager->status().toAscii());
     }
 }
 

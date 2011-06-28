@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:00:53 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun  1 11:27:20 2011 (+0200)
+ * Last-Updated: Tue Jun 28 14:26:04 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 13
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -43,18 +43,8 @@ public:
         Torque
     };
 
-    QList<dtkDistributedNode *> nodes(void);
-    QList<dtkDistributedCpu *> cpus(void);
-    QList<dtkDistributedGpu *> gpus(void);
-    QList<dtkDistributedCore *> cores(void);
-
-    bool available(dtkDistributedNode *node, int duration = 60);
-    bool available(dtkDistributedCpu *cpu, int duration = 60);
-    bool available(dtkDistributedGpu *gpu, int duration = 60);
-    bool available(dtkDistributedCore *core, int duration = 60);
-
 public slots:
-    virtual void discover(const QUrl& url) = 0;
+    virtual QString status(void) = 0;
 
 protected:
     dtkDistributedServerManagerPrivate *d;

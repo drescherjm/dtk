@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 28 15:15:11 2011 (+0200)
+ * Last-Updated: Tue Jun 28 15:27:19 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 22
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -91,7 +91,9 @@ void dtkDistributedServerDaemon::read(void)
 
     if(contents == "** status **") {
         
+        socket->write(QString("!! status !!").toAscii());
         socket->write(r.toAscii());
+        socket->write(QString("!! endstatus !!").toAscii());
     }
 }
 

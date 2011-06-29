@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. juin 28 18:13:11 2011 (+0200)
+ * Last-Updated: mer. juin 29 10:00:21 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 443
+ *     Update #: 451
  */
 
 /* Commentary: 
@@ -136,15 +136,17 @@ void dtkDistributedController::read(void)
 
         status_contents += buffer.remove("!! endstatus !!");
         QStringList nodes = status_contents.split("\n");
-
+        // skip the first item (version=XXX), so start at 1 :
         for(int i = 1; i < nodes.size(); i++) {
 
             QStringList nodestr = nodes.at(i).split(";");
 
             QString name  = nodestr.at(0);
             int ncores    = nodestr.at(1).toInt();
+            int usedcores = nodestr.at(2).toInt();
             int ncpus     = nodestr.at(3).toInt();
             int ngpus     = nodestr.at(4).toInt();
+            int usedgpus  = nodestr.at(5).toInt();
             QString state = nodestr.at(7);
             QStringList properties = nodestr.at(6).split(",");
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:00:53 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. juin 28 16:10:14 2011 (+0200)
+ * Last-Updated: mer. juin 29 11:27:34 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 23
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -47,6 +47,7 @@ public:
 
 public slots:
     virtual QString status(void) = 0;
+    virtual QString submit(QString input) = 0;
 
 protected:
     dtkDistributedServerManagerPrivate *d;

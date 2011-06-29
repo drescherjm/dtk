@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 28 15:27:19 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 26
+ * Last-Updated: mer. juin 29 17:51:22 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -78,22 +78,28 @@ void dtkDistributedServerDaemon::read(void)
     QTcpSocket *socket = (QTcpSocket *)sender();
 
     QString contents = socket->readAll();
-    
+
     qDebug() << DTK_PRETTY_FUNCTION << "-- Begin read --";
     qDebug() << DTK_PRETTY_FUNCTION << contents;
     qDebug() << DTK_PRETTY_FUNCTION << "--   End read --";
-    
-    dtkDistributedServiceBase::instance()->logMessage(QString("Read: %1").arg(QString(socket->readLine())));
-    
-    QString r = d->manager->status();
 
-    qDebug() << r;
+    dtkDistributedServiceBase::instance()->logMessage(QString("Read: %1").arg(QString(socket->readLine())));
+
+
 
     if(contents == "** status **") {
-        
+        QString r = d->manager->status();
+        qDebug() << r;
+
         socket->write(QString("!! status !!").toAscii());
         socket->write(r.toAscii());
         socket->write(QString("!! endstatus !!").toAscii());
+    } else if(contents.contains("** submit **")) {
+        QString jobid = d->manager->submit(contents);
+        qDebug() << jobid;
+        socket->write(QString("!! submit !!").toAscii());
+        socket->write(jobid.toAscii());
+        socket->write(QString("!! endsubmit !!").toAscii());
     }
 }
 

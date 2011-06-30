@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Jun 20 19:41:01 2011 (+0200)
+## Last-Updated: Thu Jun 30 22:16:14 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 349
+##     Update #: 352
 ######################################################################
 ## 
 ### Commentary: 
@@ -55,6 +55,10 @@ if(BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif(BUILD_EXAMPLES)
 
+if(BUILD_REPORTING)
+  include(dtkReporting)
+endif(BUILD_REPORTING)
+
 if(BUILD_TESTING)
   add_subdirectory(tests)
 endif(BUILD_TESTING)
@@ -62,7 +66,3 @@ endif(BUILD_TESTING)
 if(BUILD_DOCUMENTATION)
   add_subdirectory(doc)
 endif(BUILD_DOCUMENTATION)
-
-if(BUILD_REPORTING)
-  include(dtkReporting)
-endif(BUILD_REPORTING)

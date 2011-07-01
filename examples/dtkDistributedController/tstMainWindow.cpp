@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 16:12:47 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul  1 14:20:30 2011 (+0200)
+ * Last-Updated: Fri Jul  1 15:29:42 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 218
+ *     Update #: 220
  */
 
 /* Commentary: 
@@ -55,6 +55,8 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
     d->controller = new dtkDistributedController;
 
     d->status_model = new dtkDistributedControllerStatusModel(this);
+    d->status_model->setController(d->controller);
+
     d->status_view = new dtkDistributedControllerStatusView(this);
     d->status_view->setModel(d->status_model);
 

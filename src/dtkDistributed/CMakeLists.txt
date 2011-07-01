@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Jul  1 14:02:45 2011 (+0200)
+## Last-Updated: Fri Jul  1 16:49:44 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 176
+##     Update #: 181
 ######################################################################
 ## 
 ### Commentary: 
@@ -29,6 +29,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedClient.h
   dtkDistributedController.h
   dtkDistributedControllerStatusModel.h
+  dtkDistributedControllerStatusModelItem.h
   dtkDistributedControllerStatusView.h
   dtkDistributedCore.h
   dtkDistributedCpu.h
@@ -66,6 +67,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedClient.cpp
   dtkDistributedController.cpp
   dtkDistributedControllerStatusModel.cpp
+  dtkDistributedControllerStatusModelItem.cpp
   dtkDistributedControllerStatusView.cpp
   dtkDistributedCore.cpp
   dtkDistributedCpu.cpp

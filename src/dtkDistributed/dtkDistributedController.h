@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul  1 15:07:11 2011 (+0200)
+ * Last-Updated: Fri Jul  1 15:17:03 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 33
+ *     Update #: 36
  */
 
 /* Commentary: 
@@ -42,6 +42,9 @@ public:
 signals:
     void    connected(const QUrl& server);
     void disconnected(const QUrl& server);
+
+    void updated(void);
+    void updated(const QUrl& server);
 
 public slots:
     void    connect(const QUrl& server);

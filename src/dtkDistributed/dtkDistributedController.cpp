@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul  1 15:14:41 2011 (+0200)
+ * Last-Updated: Fri Jul  1 15:17:29 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 480
+ *     Update #: 481
  */
 
 /* Commentary: 
@@ -240,6 +240,8 @@ void dtkDistributedController::read(void)
             d->nodes[d->sockets.key(socket)] << node;
 
             qDebug() << "Found node" << node->name() << "with" << node->cpus().count() << "cpus";
+
+            emit updated();
         }
 
         status_contents.clear();

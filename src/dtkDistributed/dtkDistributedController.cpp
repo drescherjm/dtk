@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. juin 29 10:00:21 2011 (+0200)
+ * Last-Updated: ven. juil.  1 15:06:22 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 451
+ *     Update #: 478
  */
 
 /* Commentary: 
@@ -125,21 +125,22 @@ void dtkDistributedController::read(void)
         status_contents += buffer.remove("!! status !!");
     }
 
-    if(!status_contents.isEmpty())
-        status_contents += buffer;
-
     if(buffer.endsWith("!! endstatus !!")) {
 
       if(!buffer.startsWith("version="+dtkDistributedServerManager::protocol())) {
         qDebug() << "WARNING: Bad protocol version";
       }
 
-        status_contents += buffer.remove("!! endstatus !!");
+        status_contents = buffer.remove("!! endstatus !!");
         QStringList nodes = status_contents.split("\n");
         // skip the first item (version=XXX), so start at 1 :
         for(int i = 1; i < nodes.size(); i++) {
-
             QStringList nodestr = nodes.at(i).split(";");
+
+            if  (nodestr.size() < 9) {
+                qDebug() << "Skipping line ";
+                continue;
+            }
 
             QString name  = nodestr.at(0);
             int ncores    = nodestr.at(1).toInt();

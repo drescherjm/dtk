@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 16:12:47 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 31 23:50:17 2011 (+0200)
+ * Last-Updated: Fri Jul  1 14:15:27 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 195
+ *     Update #: 210
  */
 
 /* Commentary: 
@@ -25,9 +25,7 @@
 #include <dtkGui/dtkSpacer.h>
 
 #include <dtkDistributed/dtkDistributedController.h>
-#include <dtkDistributed/dtkDistributedControllerViewFiltering.h>
-#include <dtkDistributed/dtkDistributedControllerViewOverall.h>
-#include <dtkDistributed/dtkDistributedControllerViewDetailed.h>
+#include <dtkDistributed/dtkDistributedControllerStatusView.h>
 
 // /////////////////////////////////////////////////////////////////
 // tstMainWindowPrivate
@@ -37,9 +35,7 @@ class tstMainWindowPrivate
 {
 public:
     dtkDistributedController *controller;
-    dtkDistributedControllerViewFiltering *view_filtering;
-    dtkDistributedControllerViewOverall *view_overall;
-    dtkDistributedControllerViewDetailed *view_detailed;
+    dtkDistributedControllerStatusView *status_view;
 
 public:
     QLineEdit *host_address;
@@ -56,16 +52,9 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
 
     d->controller = new dtkDistributedController;
 
-    // d->view_filtering = new dtkDistributedControllerViewFiltering(this);
-    // d->view_filtering->setController(d->controller);
+    d->status_view = new dtkDistributedControllerStatusView(this);
 
-    d->view_overall = new dtkDistributedControllerViewOverall(this);
-    d->view_overall->setController(d->controller);
-
-    d->view_detailed = new dtkDistributedControllerViewDetailed(this);
-    d->view_detailed->setController(d->controller);
-
-    dtkAnchoredBar *anchoredBar = new dtkAnchoredBar(d->view_overall);
+    dtkAnchoredBar *anchoredBar = new dtkAnchoredBar(d->status_view);
     anchoredBar->setMinimumWidth(200);
     anchoredBar->setMaximumWidth(400);
 
@@ -84,20 +73,25 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
     anchoredBar->addWidget(new dtkSpacer(anchoredBar, 16));
 
     QWidget *side = new QWidget(this);
+    side->setMinimumWidth(200);
+    side->setMaximumWidth(400);
 
     QVBoxLayout *side_layout = new QVBoxLayout(side);
     side_layout->setContentsMargins(0, 0, 0, 0);
     side_layout->setSpacing(0);
-    side_layout->addWidget(d->view_overall);
+    side_layout->addWidget(d->status_view);
     side_layout->addWidget(anchoredBar);
 
     QWidget *central = new QWidget(this);
+
+    QWidget *placeholder = new QWidget(this);
+    placeholder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     QHBoxLayout *layout = new QHBoxLayout(central);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(side);
-    layout->addWidget(d->view_detailed);
+    layout->addWidget(placeholder);
 
     this->setCentralWidget(central);
     this->setUnifiedTitleAndToolBarOnMac(true);

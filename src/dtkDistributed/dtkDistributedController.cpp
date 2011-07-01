@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul  1 15:17:29 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 481
+ * Last-Updated: ven. juil.  1 17:20:44 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 482
  */
 
 /* Commentary: 
@@ -241,9 +241,8 @@ void dtkDistributedController::read(void)
 
             qDebug() << "Found node" << node->name() << "with" << node->cpus().count() << "cpus";
 
-            emit updated();
         }
-
+        emit updated();
         status_contents.clear();
     }
 }

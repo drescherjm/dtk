@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. juil.  1 15:06:22 2011 (+0200)
+ * Last-Updated: ven. juil.  1 15:09:38 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 478
+ *     Update #: 479
  */
 
 /* Commentary: 
@@ -137,7 +137,7 @@ void dtkDistributedController::read(void)
         for(int i = 1; i < nodes.size(); i++) {
             QStringList nodestr = nodes.at(i).split(";");
 
-            if  (nodestr.size() < 9) {
+            if  (nodestr.size() < 8) {
                 qDebug() << "Skipping line ";
                 continue;
             }

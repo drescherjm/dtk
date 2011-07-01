@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jul  1 13:48:10 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul  1 13:54:05 2011 (+0200)
+ * Last-Updated: Fri Jul  1 15:13:18 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 27
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -17,16 +17,19 @@
  * 
  */
 
+#include "dtkDistributedController.h"
 #include "dtkDistributedControllerStatusModel.h"
+#include "dtkDistributedNode.h"
 
 class dtkDistributedControllerStatusModelPrivate
 {
 public:
+    dtkDistributedController *controller;
 };
 
 dtkDistributedControllerStatusModel::dtkDistributedControllerStatusModel(QObject *parent) : QAbstractItemModel(parent), d(new dtkDistributedControllerStatusModelPrivate)
 {
-
+    d->controller = NULL;
 }
 
 dtkDistributedControllerStatusModel::~dtkDistributedControllerStatusModel(void)
@@ -36,26 +39,34 @@ dtkDistributedControllerStatusModel::~dtkDistributedControllerStatusModel(void)
     d = NULL;
 }
 
+void dtkDistributedControllerStatusModel::setController(dtkDistributedController *controller)
+{
+    d->controller = controller;
+}
+
 int dtkDistributedControllerStatusModel::columnCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
 
-    return 0;
+    return 6;
 }
 
 int dtkDistributedControllerStatusModel::rowCount(const QModelIndex& parent) const
 {
-    Q_UNUSED(parent);
+    if (!d->controller)
+        return 0;
 
-    return 0;
+    return d->controller->nodes().count();
 }
 
 QVariant dtkDistributedControllerStatusModel::data(const QModelIndex& index, int role) const
 {
-    Q_UNUSED(index);
     Q_UNUSED(role);
 
-    return QVariant();
+    if (!d->controller)
+        return QVariant();
+
+    return d->controller->nodes().at(index.row())->name();
 }
 
 QModelIndex dtkDistributedControllerStatusModel::index(int row, int column, const QModelIndex& parent) const
@@ -64,7 +75,7 @@ QModelIndex dtkDistributedControllerStatusModel::index(int row, int column, cons
     Q_UNUSED(column);
     Q_UNUSED(parent);
 
-    return QModelIndex();
+    return createIndex(row, column);
 }
 
 QModelIndex dtkDistributedControllerStatusModel::parent(const QModelIndex& index) const

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 13:22:24 2010 (+0100)
  * Version: $Id$
- * Last-Updated: mar. juin 28 17:28:33 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 39
+ * Last-Updated: Fri Jul  1 15:11:04 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 40
  */
 
 /* Commentary: 
@@ -47,9 +47,9 @@ public:
     };
 
     enum State {
-                Free = 0x1,
-                Busy = 0x2,
-                Down = 0x4
+        Free = 0x1,
+        Busy = 0x2,
+        Down = 0x4
     };
 
     enum Brand {

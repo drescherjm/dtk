@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun 29 11:21:32 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul  1 13:48:03 2011 (+0200)
+ * Last-Updated: Fri Jul  1 14:57:15 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 19
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 
 #include <QtGui>
 
+class dtkDistributedController;
 class dtkDistributedControllerStatusModelPrivate;
 
 class dtkDistributedControllerStatusModel : public QAbstractItemModel
@@ -31,6 +32,8 @@ class dtkDistributedControllerStatusModel : public QAbstractItemModel
 public:
      dtkDistributedControllerStatusModel(QObject *parent = 0);
     ~dtkDistributedControllerStatusModel(void);
+
+    void setController(dtkDistributedController *controller);
 
     int columnCount(const QModelIndex & parent = QModelIndex()) const;
     int rowCount(const QModelIndex & parent = QModelIndex()) const;

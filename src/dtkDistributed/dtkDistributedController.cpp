@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. juin 29 10:00:21 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 451
+ * Last-Updated: Fri Jul  1 15:08:00 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 464
  */
 
 /* Commentary: 
@@ -109,6 +109,21 @@ void dtkDistributedController::disconnect(const QUrl& server)
 
         emit disconnected(server);
     }
+}
+
+QList<dtkDistributedNode *> dtkDistributedController::nodes(void)
+{
+    QList<dtkDistributedNode *> n;
+
+    foreach(QList<dtkDistributedNode *> nodeset, d->nodes)
+        n << nodeset;
+
+    return n;
+}
+
+QList<dtkDistributedNode *> dtkDistributedController::nodes(const QString& cluster)
+{
+    return d->nodes.value(cluster);
 }
 
 void dtkDistributedController::read(void)

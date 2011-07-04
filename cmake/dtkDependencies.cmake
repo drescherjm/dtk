@@ -225,4 +225,4 @@ endif(MPI_FOUND AND QUAT_LIBRARIES AND VRPN_LIBRARIES)
 ## Qwt
 ## #################################################################
 
-find_package(QWT QUIET)
+find_package(Qwt QUIET)

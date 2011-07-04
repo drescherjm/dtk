@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 31 23:43:27 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 46
+ * Last-Updated: mer. juin 29 18:32:35 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 428
  */
 
 /* Commentary: 
@@ -30,132 +30,152 @@
 #include <QtCore>
 #include <QtXml>
 
-void dtkDistributedServerManagerTorque::discover(const QUrl& url)
+QString dtkDistributedServerManagerTorque::submit(QString input)
+{
+
+    QString qsub = "qsub ";
+
+    // format: ** submit **; resources; properties; walltime; script; queue ; options
+    QStringList arglist = input.split(";");
+
+    // properties, syntax: (arch=opteron,gpu=nvidia-T10)
+
+    // FIXME: we should read the properties mapping from a file instead of hardcoding it
+    // Everything here is specific to nef setup.
+    QStringList proplist=arglist.at(2).split(",");
+    QString properties = "";
+    QString prop;
+    foreach( prop, proplist ) {
+        if (prop.contains("opteron")) {
+            properties +=  ":opteron";
+        } else if (prop.contains("xeon")) {
+            properties += ":xeon";
+        } else if (prop.contains("nvidia-C2050")) {
+            properties += "C2050";
+        } else if (prop.contains("nvidia-T10")) {
+            properties += "T10";
+        }
+    }
+
+    // resources   syntax: #cores,#nodes
+    QStringList reslist=arglist.at(1).split(",");
+    if (reslist.at(0) == 0) {
+        // no nodes, only cores; TODO
+    } else if (reslist.at(1) == 0) {
+        // no cores, only nodes; TODO
+    } else {
+        qsub += " -l nodes="+reslist.at(0)+properties+":ppn="+reslist.at(1);
+    }
+
+    // walltime, syntax=HH:MM:SS
+    if (!arglist.at(3).isEmpty()) {
+        qsub += ",walltime="+arglist.at(3);
+    }
+
+    // script
+    qsub += " "+arglist.at(4);
+
+    // queue
+    if (!arglist.at(5).isEmpty()) {
+        qsub += " -q "+arglist.at(5);
+    }
+
+    // options
+    if (!arglist.at(6).isEmpty()) {
+        qsub += " "+arglist.at(6);
+    }
+
+    qDebug() << DTK_PRETTY_FUNCTION << qsub;
+    QProcess stat; stat.start(qsub);
+
+    if (!stat.waitForStarted()) {
+        dtkCritical() << "Unable to launch stat command";
+        return QString("error");
+    }
+
+    if (!stat.waitForFinished()) {
+        dtkCritical() << "Unable to completed stat command";
+        return QString("error");
+    }
+    if (stat.exitCode() > 0) {
+        QString error = stat.readAllStandardError();
+        dtkCritical() << "Error running qsub :" << error;
+        return QString("error");
+    } else {
+        QString jobid = stat.readAll();
+        qDebug() << DTK_PRETTY_FUNCTION << jobid;
+        return jobid.split(".").at(0);
+    }
+}
+
+QString dtkDistributedServerManagerTorque::status(void)
 {
     QProcess stat; stat.start("pbsnodes", QStringList() << "-x");
 
     if (!stat.waitForStarted()) {
         dtkCritical() << "Unable to launch stat command";
-        return;
+        return QString();
     }
 
     if (!stat.waitForFinished()) {
         dtkCritical() << "Unable to completed stat command";
-        return;
+        return QString();
     }
-    
-    QString result = stat.readAll();
 
+    QString result = "version=" + protocol() +"\n";
+    QString data = stat.readAll();
     QDomDocument document; QString error;
 
-    if(!document.setContent(result, false, &error))
-        dtkDebug() << "Error retrieving xml output out of " << url.toString() << error;
+    if(!document.setContent(data, false, &error))
+        dtkDebug() << "Error retrieving xml output out of torque "  << error;
 
     QDomNodeList nodes = document.elementsByTagName("Node");
-
     for(int i = 0; i < nodes.count(); i++) {
-
-        int np = nodes.item(i).firstChildElement("np").text().simplified().toInt();
-        QString name  = nodes.item(i).firstChildElement("name").text().simplified();
+        QString np = nodes.item(i).firstChildElement("np").text().simplified();
+        QString name = nodes.item(i).firstChildElement("name").text().simplified();
         QString state = nodes.item(i).firstChildElement("state").text().simplified();
-        QString status = nodes.item(i).firstChildElement("status").text().simplified();
+
+        // Each job is coreid/jobid, count the number of "/" to get the number of jobs
+        int njobs  = nodes.item(i).firstChildElement("jobs").text().simplified().count("/");
+        QString ngpus  = nodes.item(i).firstChildElement("gpus").text().simplified();
+        // 2 cpus by default
+        QString ncpus  = "2";
+
+        // number of busy GPUs not implemented yet
         QStringList properties = nodes.item(i).firstChildElement("properties").text().simplified().split(",");
 
-        dtkDistributedNode *node = new dtkDistributedNode;
-        node->setName(name);
-
-        if(state == "free")
-            node->setState(dtkDistributedNode::Free);
-       
-        if(state == "job-exclusive")
-            node->setState(dtkDistributedNode::JobExclusive);
-
-        if(state == "down")
-            node->setState(dtkDistributedNode::Down);
-        
-        if(state == "offline")
-            node->setState(dtkDistributedNode::Offline);
-
-        if(properties.contains("dell"))
-            node->setBrand(dtkDistributedNode::Dell);
-
-        if(properties.contains("hp"))
-            node->setBrand(dtkDistributedNode::Hp);
-
-        if(properties.contains("ibm"))
-            node->setBrand(dtkDistributedNode::Ibm);
-
-        if(properties.contains("myrinet"))
-            node->setNetwork(dtkDistributedNode::Myrinet10G);
-        else
-            node->setNetwork(dtkDistributedNode::Ethernet1G);
-
-        if(properties.contains("gpu")) for(int i = 0; i < np; i++) {
-
-            dtkDistributedGpu *gpu = new dtkDistributedGpu(node);
-
-            if(status.contains("x86_64"))
-                gpu->setArchitecture(dtkDistributedGpu::x86_64);
-            else
-                gpu->setArchitecture(dtkDistributedGpu::x86);
-
-            if(properties.contains("opteron"))
-                gpu->setModel(dtkDistributedGpu::Opteron);
-
-            if(properties.contains("xeon"))
-                gpu->setModel(dtkDistributedGpu::Xeon);
-
-            int nc = 0;
-            
-            if(properties.contains("singlecore")) {
-                nc = 1; gpu->setCardinality(dtkDistributedGpu::Single);
-            } else if(properties.contains("dualcore")) {
-                nc = 2; gpu->setCardinality(dtkDistributedGpu::Dual);
-            } else if(properties.contains("quadcore")) {
-                nc = 4; gpu->setCardinality(dtkDistributedGpu::Quad);
-            } else if(properties.contains("octocore")) {
-                nc = 8; gpu->setCardinality(dtkDistributedGpu::Octo);
+        QStringList outprops;
+        QString prop;
+        // FIXME: we should read the properties mapping from a file instead of hardcoding it
+        // Everything here is specific to nef setup.
+        outprops << "infiniband=QDR";
+        outprops << "ethernet=1G";
+        foreach( prop, properties ) {
+            if (prop.contains("opteron")) {
+                outprops << "arch=opteron";
+            } else if (prop.contains("xeon")) {
+                outprops << "arch=xeon";
+            } else if (prop.contains("C2050")) {
+                outprops << "gpu=nvidia-C2050";
+            } else if (prop.contains("T10")) {
+                outprops << "gpu=nvidia-T10";
+            } else if (prop.contains("T10")) {
+                outprops << "gpu=nvidia-T10";
             }
-            
-            for(int i = 0; i < nc; i++)
-                *gpu << new dtkDistributedCore(gpu);
-
-            *node << gpu;
-        }
-
-        else for(int i = 0; i < np; i++) {
-
-            dtkDistributedCpu *cpu = new dtkDistributedCpu(node);
-
-            if(status.contains("x86_64"))
-                cpu->setArchitecture(dtkDistributedCpu::x86_64);
-            else
-                cpu->setArchitecture(dtkDistributedCpu::x86);
-
-            if(properties.contains("opteron"))
-                cpu->setModel(dtkDistributedCpu::Opteron);
-
-            if(properties.contains("xeon"))
-                cpu->setModel(dtkDistributedCpu::Xeon);
-
-            int nc = 0;
-            
-            if(properties.contains("singlecore")) {
-                nc = 1; cpu->setCardinality(dtkDistributedCpu::Single);
-            } else if(properties.contains("dualcore")) {
-                nc = 2; cpu->setCardinality(dtkDistributedCpu::Dual);
-            } else if(properties.contains("quadcore")) {
-                nc = 4; cpu->setCardinality(dtkDistributedCpu::Quad);
-            } else if(properties.contains("octocore")) {
-                nc = 8; cpu->setCardinality(dtkDistributedCpu::Octo);
+            if (prop.contains("dellr815")) {
+                ncpus = "4";
             }
-            
-            for(int i = 0; i < nc; i++)
-                *cpu << new dtkDistributedCore(cpu);
-
-            *node << cpu;
         }
-
-        d->nodes.prepend(node);
+        result += name + ";" + np + ";" + QString::number(njobs) + ";"+ncpus+";" + ngpus + ";0;" + "("+outprops.join(",")+");";
+        if (state.contains("job-exclusive")) {
+            state="busy";
+        } else if (state.contains("free")) {
+            state="free";
+        } else {
+            state="down";
+        }
+        result += state+"\n";
     }
+
+    return result;
 }

@@ -29,5 +29,5 @@ if(NOT dtk_USE_FILE_INCLUDED)
    
    include(dtkDependencies)
    include(dtkBuild)
-
+   include(dtkReporting)
 endif(NOT dtk_USE_FILE_INCLUDED)

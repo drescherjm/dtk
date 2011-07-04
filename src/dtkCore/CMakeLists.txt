@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Mar 15 18:07:12 2011 (+0100)
+## Last-Updated: Sat Jun 25 15:49:02 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 186
+##     Update #: 194
 ######################################################################
 ## 
 ### Commentary: 
@@ -26,11 +26,6 @@ project(dtkCore)
 set(${PROJECT_NAME}_HEADERS
   dtkAbstractData.h
   dtkAbstractDataFactory.h
-  dtkAbstractDataImage.h
-  dtkAbstractDataImage2D.h
-  dtkAbstractDataImage3D.h
-  dtkAbstractDataTypedImage.h
-  dtkAbstractDataMesh.h
   dtkAbstractDataReader.h
   dtkAbstractDataWriter.h
   dtkAbstractDataConverter.h
@@ -50,16 +45,13 @@ set(${PROJECT_NAME}_HEADERS
   dtkPluginManager.h
   dtkQuat.h
   dtkUpdater.h
+  dtkSignalBlocker.h
   dtkSmartPointer.h
   dtkVec3.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractData.h
   dtkAbstractDataFactory.h
-  dtkAbstractDataImage2D.h
-  dtkAbstractDataImage3D.h
-  dtkAbstractDataImage4D.h
-  dtkAbstractDataMesh.h
   dtkAbstractDataReader.h
   dtkAbstractDataWriter.h
   dtkAbstractDataConverter.h
@@ -82,11 +74,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkAbstractDataReader.cpp
   dtkAbstractDataWriter.cpp
   dtkAbstractDataConverter.cpp
-  dtkAbstractDataImage.cpp
-  dtkAbstractDataImage2D.cpp
-  dtkAbstractDataImage3D.cpp
-  dtkAbstractDataImage4D.cpp
-  dtkAbstractDataMesh.cpp
   dtkAbstractFactory.cpp
   dtkAbstractObject.cpp
   dtkAbstractProcessFactory.cpp
@@ -100,6 +87,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkLog.cpp
   dtkPluginManager.cpp
   dtkQuat.cpp
+  dtkSignalBlocker.h
   dtkSmartPointer.cpp
   dtkUpdater.cpp)
 

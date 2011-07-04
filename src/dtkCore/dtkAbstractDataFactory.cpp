@@ -107,7 +107,10 @@ dtkAbstractData *dtkAbstractDataFactory::create(const QString& type)
 
     for(dtkAbstractDataConverterCreatorHash::const_iterator it(d->converters.begin() ); it != d->converters.end(); ++it) {
         if(it.value().fromTypes.contains(type))
-            data->addConverter(it.key());
+        {
+          data->addConverter(it.key());
+          data->enableConverter(it.key());
+        }
     }
 
     data->setObjectName(QString("%1%2").arg(data->metaObject()->className()).arg(count++));

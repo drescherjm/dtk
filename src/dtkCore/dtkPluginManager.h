@@ -50,13 +50,14 @@ public:
 signals:
     void   loaded(const QString& plugin);
     void unloaded(const QString& plugin);
+    void loadError(const QString& errorMessage);
 
 protected:
      dtkPluginManager(void);
     ~dtkPluginManager(void);
 
-    void   loadPlugin(const QString& path);
-    void unloadPlugin(const QString& path);
+    virtual void   loadPlugin(const QString& path);
+    virtual void unloadPlugin(const QString& path);
 
     QString path(void) const;
 

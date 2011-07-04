@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon May 30 11:01:55 2011 (+0200)
-##           By: Julien Wintz
-##     Update #: 182
+## Last-Updated: Tue Jun 21 12:27:54 2011 (+0200)
+##           By: Thibaud Kloczko
+##     Update #: 186
 ######################################################################
 ## 
 ### Commentary: 
@@ -171,6 +171,7 @@ endif()
 if( EXISTS ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Dependencies.cmake
 AND EXISTS ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Build.cmake
 AND EXISTS ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Pack.cmake
+AND EXISTS ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Reporting.cmake
 AND EXISTS ${${PROJECT_NAME}_BINARY_DIR}/install/${PROJECT_NAME}Config.cmake
 AND EXISTS ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Use.cmake
 AND EXISTS ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake)
@@ -179,6 +180,7 @@ install(FILES
   ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Dependencies.cmake
   ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Build.cmake
   ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Pack.cmake
+  ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Reporting.cmake
   ${PROJECT_BINARY_DIR}/install/${PROJECT_NAME}Config.cmake
   ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Use.cmake
   ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake

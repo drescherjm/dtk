@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May 23 11:39:57 2011 (+0200)
+ * Last-Updated: Sat Jun 25 15:50:33 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 335
+ *     Update #: 342
  */
 
 /* Commentary:
@@ -29,11 +29,9 @@
 
 #include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkAbstractDataFactory.h>
-#include <dtkCore/dtkAbstractDataMesh.h>
 #include <dtkCore/dtkAbstractDataReader.h>
 #include <dtkCore/dtkAbstractDataWriter.h>
 #include <dtkCore/dtkAbstractDataConverter.h>
-#include <dtkCore/dtkAbstractDataImage.h>
 #include <dtkCore/dtkAbstractObject.h>
 #include <dtkCore/dtkAbstractProcess.h>
 #include <dtkCore/dtkAbstractProcessFactory.h>
@@ -146,12 +144,7 @@
 
 %ignore   loaded(const QString& path);
 %ignore unloaded(const QString& path);
-
-// /////////////////////////////////////////////////////////////////
-// Ignore rules for dtkAbstractDataImage
-// /////////////////////////////////////////////////////////////////
-
-%immutable PixelMeaningMetaData;
+%ignore loadError(const QString& path);
 
 // /////////////////////////////////////////////////////////////////
 // Typemaps
@@ -191,7 +184,7 @@
         int end = PyList_Size($input);
         for(i;i!=end; ++i) {
             $1 << QString(PyString_AsString(PyList_GET_ITEM($input, i)));
-            } 
+            }
         }
     else {
         qDebug("QStringList expected");
@@ -206,7 +199,7 @@
         for(i;i!=end; ++i) {
             char *t = PyString_AsString(PyList_GET_ITEM($input, i));
             (*$1) << QString(t);
-            } 
+            }
         }
     else {
         qDebug("QStringList expected");
@@ -224,29 +217,29 @@
 }
 
 %define %QList_typemapsPtr(DATA_TYPE)
- 
+
 %typemap(out) QList<DATA_TYPE> {
   $result = PyList_New($1.size());
   int i = 0;
-  QList<DATA_TYPE>::iterator it = $1.begin(); 
-  QList<DATA_TYPE>::iterator end = $1.end(); 
+  QList<DATA_TYPE>::iterator it = $1.begin();
+  QList<DATA_TYPE>::iterator end = $1.end();
   for(;it!=end; ++it, ++i)  {
     PyObject* obj = SWIG_NewPointerObj((*it), $descriptor(DATA_TYPE), 0|0);
     PyList_SET_ITEM($result, i, obj);
   }
 }
 
-%enddef // %QList_typemapsPtr() 
+%enddef // %QList_typemapsPtr()
 
 %QList_typemapsPtr(dtkPlugin *)
 
 %define %QList_typemaps(DATA_TYPE)
- 
+
 %typemap(out) QList<DATA_TYPE> {
   $result = PyList_New($1.size());
   int i = 0;
-  QList<DATA_TYPE>::iterator it = $1.begin(); 
-  QList<DATA_TYPE>::iterator end = $1.end(); 
+  QList<DATA_TYPE>::iterator it = $1.begin();
+  QList<DATA_TYPE>::iterator end = $1.end();
   for(;it!=end; ++it, ++i)  {
     DATA_TYPE *newItem = new DATA_TYPE(*it);
     PyObject* obj = SWIG_NewPointerObj(newItem, $descriptor(DATA_TYPE*), 0|0);
@@ -287,7 +280,7 @@ public:
 };
 
 %define %QPair_typemaps(DATA_TYPE_1, DATA_TYPE_2)
- 
+
 %typemap(out) QPair<DATA_TYPE_1, DATA_TYPE_2> {
   $result = PyTuple_New(2);
   PyObject* obj1 = SWIG_NewPointerObj(*$1.first, $descriptor(DATA_TYPE_1), 0|0);
@@ -319,7 +312,7 @@ public:
 
 // C++ -> Tcl
 
-%typemap(out) QString { 
+%typemap(out) QString {
     Tcl_SetStringObj($result, $1.toAscii().constData(), $1.size());
 }
 
@@ -336,12 +329,10 @@ public:
 %include <dtkCore/dtkAbstractObject.h>
 
 %include <dtkCore/dtkAbstractData.h>
-%include <dtkCore/dtkAbstractDataMesh.h>
 %include <dtkCore/dtkAbstractDataFactory.h>
 %include <dtkCore/dtkAbstractDataReader.h>
 %include <dtkCore/dtkAbstractDataWriter.h>
 %include <dtkCore/dtkAbstractDataConverter.h>
-%include <dtkCore/dtkAbstractDataImage.h>
 %include <dtkCore/dtkAbstractProcess.h>
 %include <dtkCore/dtkAbstractProcessFactory.h>
 %include <dtkCore/dtkAbstractView.h>
@@ -353,22 +344,5 @@ public:
 %include <dtkCore/dtkPluginManager.h>
 %include <dtkCore/dtkVec3.h>
 %include <dtkCore/dtkQuat.h>
-
-#ifdef SWIGPYTHON
-
-// /////////////////////////////////////////////////////////////////
-// Helper functions
-// /////////////////////////////////////////////////////////////////
-
-%inline %{
-
-dtkAbstractDataMesh *dtk_as_mesh(dtkAbstractData *data)
-{
-    return dynamic_cast<dtkAbstractDataMesh *>(data);
-}
-
-%}
-
-#endif
 
 #endif

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Nov 22 10:20:27 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Jun  6 16:24:46 2011 (+0200)
+## Last-Updated: Tue Jun  7 16:38:39 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 52
+##     Update #: 63
 ######################################################################
 ## 
 ### Commentary: 
@@ -30,14 +30,15 @@ project(dtkPlot)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkPlotCurve.h
   dtkPlotExport.h
-  dtkPlotView.h
-)
+  dtkPlotView.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkPlotView.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkPlotCurve.cpp
   dtkPlotView.cpp)
 
 ## #################################################################
@@ -64,7 +65,8 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES_MOC})
 
 target_link_libraries(${PROJECT_NAME}
-  ${QT_LIBRARIES})
+  ${QT_LIBRARIES}
+  ${QWT_LIBRARY})
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

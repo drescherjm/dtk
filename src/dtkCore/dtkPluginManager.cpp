@@ -183,6 +183,14 @@ dtkPluginManager::~dtkPluginManager(void)
     d = NULL;
 }
 
+/*!
+    \brief      Loads the plugin from the given filename.
+                Derived classes may override to prevent certain plugins being loaded,
+                or provide additional functionality. In most cases they should still
+                call the base implementation (this).
+    \param      path : Path to plugin file to be loaded.
+*/
+
 void dtkPluginManager::loadPlugin(const QString& path)
 {
     QPluginLoader *loader = new QPluginLoader(path);
@@ -190,7 +198,10 @@ void dtkPluginManager::loadPlugin(const QString& path)
     loader->setLoadHints (QLibrary::ExportExternalSymbolsHint);
 
     if(!loader->load()) {
-        if(DTK_VERBOSE_LOAD) dtkDebug() << "Unable to load - " << loader->errorString();
+        QString error = "Unable to load - ";
+        error += loader->errorString();
+        if(DTK_VERBOSE_LOAD) dtkDebug() << error;
+        emit loadError(error);
         delete loader;
         return;
     }
@@ -198,12 +209,19 @@ void dtkPluginManager::loadPlugin(const QString& path)
     dtkPlugin *plugin = qobject_cast<dtkPlugin *>(loader->instance());
 
     if(!plugin) {
-        if(DTK_VERBOSE_LOAD) dtkDebug() << "Unable to retrieve " << path;
+        QString error = "Unable to retrieve ";
+        error += path;
+        if(DTK_VERBOSE_LOAD) dtkDebug() << error;
+        emit loadError(error);
         return;
     }
 
     if(!plugin->initialize()) {
-        if(DTK_VERBOSE_LOAD) dtkOutput() << "Unable to initialize " << plugin->name() << " plugin";
+        QString error = "Unable to initialize ";
+        error += plugin->name();
+        error += " plugin";
+        if(DTK_VERBOSE_LOAD) dtkOutput() << error;
+        emit loadError(error);
         return;
     }
 
@@ -214,6 +232,13 @@ void dtkPluginManager::loadPlugin(const QString& path)
     emit loaded(plugin->name());
 }
 
+/*!
+    \brief      Unloads the plugin previously loaded from the given filename.
+                Derived classes may override to prevent certain plugins being unloaded,
+                or provide additional functionality. In most cases they should still
+                call the base implementation (this).
+    \param      path : Path to plugin file to be unloaded.
+*/
 void dtkPluginManager::unloadPlugin(const QString& path)
 {
     dtkPlugin *plugin = qobject_cast<dtkPlugin *>(d->loaders.value(path)->instance());

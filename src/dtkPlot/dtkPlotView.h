@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:02:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun  1 17:03:54 2011 (+0200)
+ * Last-Updated: Tue Jun  7 15:11:30 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 7
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -25,9 +25,11 @@
 #include <QtCore>
 #include <QtGui>
 
+#include <qwt_plot.h>
+
 class dtkPlotViewPrivate;
 
-class DTKPLOT_EXPORT dtkPlotView : public QWidget
+class DTKPLOT_EXPORT dtkPlotView : public QwtPlot
 {
     Q_OBJECT
 

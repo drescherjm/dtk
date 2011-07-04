@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jul  1 16:46:29 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul  1 17:11:11 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 32
+ * Last-Updated: ven. juil.  1 17:21:07 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -75,5 +75,5 @@ int dtkDistributedControllerStatusModelItem::row(void) const
     if (d->parentItem)
         return d->parentItem->d->childItems.indexOf(const_cast<dtkDistributedControllerStatusModelItem*>(this));
 
-    return NULL;
+    return 0;
 }

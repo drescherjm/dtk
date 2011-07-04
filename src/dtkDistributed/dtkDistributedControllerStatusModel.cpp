@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jul  1 13:48:10 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul  1 17:15:25 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 154
+ * Last-Updated: ven. juil.  1 17:27:02 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 159
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #include "dtkDistributedController.h"
 #include "dtkDistributedControllerStatusModel.h"
 #include "dtkDistributedControllerStatusModelItem.h"
+#include "dtkDistributedCpu.h"
 #include "dtkDistributedNode.h"
 
 #include <dtkCore/dtkGlobal.h>
@@ -46,8 +47,12 @@ void dtkDistributedControllerStatusModelPrivate::update(void)
     qDebug() << __func__;
 
     foreach(dtkDistributedNode *node, this->controller->nodes()) {
-        
-        this->rootItem->appendChild(new dtkDistributedControllerStatusModelItem(QList<QVariant>() << node->name() << node->cpus().count() << node->gpus().count(), this->rootItem));
+        dtkDistributedControllerStatusModelItem*nodeItem=new dtkDistributedControllerStatusModelItem(QList<QVariant>() << node->name() << node->cpus().count() << node->gpus().count(), this->rootItem);
+        this->rootItem->appendChild(nodeItem);
+        foreach(dtkDistributedCpu *cpu, node->cpus()) {
+            nodeItem->appendChild(new dtkDistributedControllerStatusModelItem(QList<QVariant>() << cpu->cardinality() << "" << "", nodeItem));
+        }
+
     }
 }
 

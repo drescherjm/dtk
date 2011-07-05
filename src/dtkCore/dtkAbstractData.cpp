@@ -309,6 +309,14 @@ dtkAbstractData *dtkAbstractData::convert(const QString& toType)
                 {
                   converter->setData(this);
                     conversion = converter->convert();
+                    if(conversion)
+                    {
+                        foreach(QString metaDataKey, this->metaDataList())
+                                conversion->addMetaData(metaDataKey, this->metaDataValues(metaDataKey));
+
+                        foreach(QString propertyKey, this->propertyList())
+                                conversion->addProperty(propertyKey, this->propertyValues(propertyKey));
+                    }
                 }
             }
         }

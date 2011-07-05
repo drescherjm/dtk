@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:54:04 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May 23 12:27:36 2011 (+0200)
+ * Last-Updated: Tue Jul  5 15:21:03 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 180
+ *     Update #: 187
  */
 
 /* Commentary:
@@ -35,6 +35,8 @@ public:
     QHash<QString, QString> properties;
 
     QHash<QString, QStringList> metadatas;
+
+    bool isDeferredDeletionEnabled;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -46,11 +48,13 @@ public:
  *  The parent of an object may be viewed as the object's owner. The
  *  destructor of a parent object destroys all child objects. Setting
  *  parent to 0 constructs an object with no parent.
+ *  The initial reference count is set to 1, and DeferredDeletion is enabled.
  */
 
 dtkAbstractObject::dtkAbstractObject(dtkAbstractObject *parent) : QObject(parent), d(new dtkAbstractObjectPrivate)
 {
     d->count = 1;
+    d->isDeferredDeletionEnabled = true;
 }
 
 //! Destroys the object, deleting all its child objects.
@@ -60,6 +64,10 @@ dtkAbstractObject::dtkAbstractObject(dtkAbstractObject *parent) : QObject(parent
 
 dtkAbstractObject::~dtkAbstractObject(void)
 {
+    if (d->count != 0) {
+        dtkDebug() << "Warning : deleting object of type " << this->metaObject()->className() << " with non-zero reference count";
+    }
+
     delete d;
 
     d = NULL;
@@ -95,17 +103,42 @@ int dtkAbstractObject::retain(void) const
  *  This method decrements the reference counter once. Should the
  *  count be null, the object is scheduled for deletion. Note it sends
  *  the destroyed signal just before being actually deleted.
+ *  The method of deletion depends on isDeferredDeletionEnabled().
+ *  If it is true (default) the object will be deleted using "this->deleteLater();", 
+ *  otherwise "delete this;" is used.
  */
 
 int dtkAbstractObject::release(void) const
 {
-    int newCount = d->count.fetchAndAddOrdered ( -1 ) - 1;
+    int newCount = d->count.fetchAndAddOrdered(-1) - 1;
 
     // Need to cast away const-ness to call deleteLater().
-    if(!(newCount))
-        const_cast<dtkAbstractObject *>(this)->deleteLater();
+    if(!(newCount)) {
+        if (d->isDeferredDeletionEnabled)
+            const_cast<dtkAbstractObject *>(this)->deleteLater();
+        else
+            delete this;
+    }
 
     return newCount;
+}
+
+/*! 
+ * \brief Enable / disable use of this->deleteLater() when reference count reaches 0.
+ * \param value Changes what happens when the objects reference count reaches 0.
+ *  For most objects this should be set to true, as it allows existing events
+ *  to be processed which may use this object.
+ *  \sa dtkAbstractObject::~dtkAbstractObject();
+ *  \sa QObject::deleteLater();
+ */
+void dtkAbstractObject::enableDeferredDeletion(bool value)
+{
+    d->isDeferredDeletionEnabled = value;
+}
+
+bool dtkAbstractObject::isDeferredDeletionEnabled(void) const
+{
+    return d->isDeferredDeletionEnabled;
 }
 
 void dtkAbstractObject::addProperty(const QString& key, const QStringList& values)
@@ -164,10 +197,6 @@ QString dtkAbstractObject::property(const QString& key) const
 
     return d->properties.value(key);
 }
-
-// /////////////////////////////////////////////////////////////////
-//
-// /////////////////////////////////////////////////////////////////
 
 void dtkAbstractObject::addMetaData(const QString& key, const QStringList& values)
 {

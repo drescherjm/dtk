@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Jan 15 14:23:57 2011 (+0100)
+ * Last-Updated: Tue Jul  5 15:25:47 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 131
+ *     Update #: 136
  */
 
 /* Commentary:
@@ -22,18 +22,22 @@
 #include <dtkCore/dtkAbstractViewAnimator.h>
 #include <dtkCore/dtkAbstractViewNavigator.h>
 #include <dtkCore/dtkAbstractViewInteractor.h>
-
-typedef QHash<QString, QList<dtkAbstractView*> > dtkAbstractViewHash;
+#include <dtkCore/dtkSmartPointer.h>
 
 class dtkAbstractViewFactoryPrivate
 {
 public:
-    dtkAbstractViewHash views;
+    typedef QHash<               QString,      dtkAbstractViewFactory::dtkAbstractViewCreator>           dtkAbstractViewCreatorHash;
+    typedef QHash<QPair<QString, QStringList>, dtkAbstractViewFactory::dtkAbstractViewAnimatorCreator>   dtkAbstractViewAnimatorCreatorHash;
+    typedef QHash<QPair<QString, QStringList>, dtkAbstractViewFactory::dtkAbstractViewNavigatorCreator>  dtkAbstractViewNavigatorCreatorHash;
+    typedef QHash<QPair<QString, QStringList>, dtkAbstractViewFactory::dtkAbstractViewInteractorCreator> dtkAbstractViewInteractorCreatorHash;
 
-    dtkAbstractViewFactory::dtkAbstractViewCreatorHash           creators;
-    dtkAbstractViewFactory::dtkAbstractViewAnimatorCreatorHash   animators;
-    dtkAbstractViewFactory::dtkAbstractViewNavigatorCreatorHash  navigators;
-    dtkAbstractViewFactory::dtkAbstractViewInteractorCreatorHash interactors;
+    QHash<QString, unsigned int> viewCount;
+
+    dtkAbstractViewCreatorHash           creators;
+    dtkAbstractViewAnimatorCreatorHash   animators;
+    dtkAbstractViewNavigatorCreatorHash  navigators;
+    dtkAbstractViewInteractorCreatorHash interactors;
 };
 
 dtkAbstractViewFactory *dtkAbstractViewFactory::instance(void)
@@ -63,33 +67,20 @@ dtkAbstractView *dtkAbstractViewFactory::create(const QString& type)
         if(key.second.contains(type) || key.second.contains("any"))
             view->addInteractor(d->interactors[key]());
 
-    view->setObjectName(QString("%1%2").arg(view->metaObject()->className()).arg(d->views[type].count()));
+    view->setObjectName(QString("%1%2").arg(view->metaObject()->className()).arg(d->viewCount[type]));
 
-    d->views[type] << view;
+    d->viewCount[type]++;
 
     emit created(view, type);
 
     return view;
 }
 
-void dtkAbstractViewFactory::destroy(dtkAbstractView *view)
+dtkSmartPointer<dtkAbstractView> dtkAbstractViewFactory::createSmartPointer(const QString& type)
 {
-  if (!view)
-    return;
-  
-  QList<dtkAbstractViewAnimator*> animators = view->animators();
-  foreach (dtkAbstractViewAnimator* animator, animators)
-      delete animator;
-
-  QList<dtkAbstractViewNavigator*> navigators = view->navigators();
-  foreach (dtkAbstractViewNavigator* navigator, navigators)
-      delete navigator;
-
-  QList<dtkAbstractViewInteractor*> interactors = view->interactors();
-  foreach (dtkAbstractViewInteractor* interactor, interactors)
-      delete interactor;
-
-  delete view;
+    dtkSmartPointer<dtkAbstractView> view;
+    view.takePointer(this->create(type));
+    return view;
 }
 
 dtkAbstractViewAnimator *dtkAbstractViewFactory::animator(const QString& type)
@@ -101,6 +92,13 @@ dtkAbstractViewAnimator *dtkAbstractViewFactory::animator(const QString& type)
     return 0l;
 }
 
+dtkSmartPointer<dtkAbstractViewAnimator> dtkAbstractViewFactory::animatorSmartPointer(const QString& type)
+{
+    dtkSmartPointer<dtkAbstractViewAnimator> animator;
+    animator.takePointer(this->animator(type));
+    return animator;
+}
+
 dtkAbstractViewNavigator *dtkAbstractViewFactory::navigator(const QString& type)
 {
     foreach(dtkAbstractViewTypeHandler key, d->navigators.keys())
@@ -110,6 +108,13 @@ dtkAbstractViewNavigator *dtkAbstractViewFactory::navigator(const QString& type)
     return 0l;
 }
 
+dtkSmartPointer<dtkAbstractViewNavigator> dtkAbstractViewFactory::navigatorSmartPointer(const QString& type)
+{
+    dtkSmartPointer<dtkAbstractViewNavigator> navigator;
+    navigator.takePointer(this->navigator(type));
+    return navigator;
+}
+
 dtkAbstractViewInteractor *dtkAbstractViewFactory::interactor(const QString& type)
 {
     foreach(dtkAbstractViewTypeHandler key, d->interactors.keys())
@@ -117,6 +122,13 @@ dtkAbstractViewInteractor *dtkAbstractViewFactory::interactor(const QString& typ
             return d->interactors[key]();
 
     return 0l;
+}
+
+dtkSmartPointer<dtkAbstractViewInteractor> dtkAbstractViewFactory::interactorSmartPointer(const QString& type)
+{
+    dtkSmartPointer<dtkAbstractViewInteractor> interactor;
+    interactor.takePointer(this->interactor(type));
+    return interactor;
 }
 
 bool dtkAbstractViewFactory::registerViewType(const QString& type, dtkAbstractViewCreator func)
@@ -161,21 +173,7 @@ bool dtkAbstractViewFactory::registerViewInteractorType(const QString& type, con
 
 unsigned int dtkAbstractViewFactory::size(const QString& type) const
 {
-    return d->views[type].size();
-}
-
-dtkAbstractView *dtkAbstractViewFactory::get(const QString& type, int idx)
-{
-    return d->views[type].value(idx);
-}
-
-dtkAbstractView *dtkAbstractViewFactory::get(const QString& type, const QString& name)
-{
-    foreach(dtkAbstractView *view, d->views[type])
-        if(view->name() == name)
-            return view;
-
-    return NULL;
+    return d->viewCount[type];
 }
 
 QList<QString> dtkAbstractViewFactory::creators(void) const

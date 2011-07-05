@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Jun 25 15:50:33 2011 (+0200)
+ * Last-Updated: Tue Jul  5 15:17:19 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 342
+ *     Update #: 346
  */
 
 /* Commentary:
@@ -24,6 +24,7 @@
 %include "carrays.i"
 %array_class(double, doubleArray);
 %{
+
 #include <QtDebug>
 #include <QtCore>
 
@@ -42,6 +43,7 @@
 #include <dtkCore/dtkAbstractViewNavigator.h>
 #include <dtkCore/dtkPlugin.h>
 #include <dtkCore/dtkPluginManager.h>
+#include <dtkCore/dtkSmartPointer.h>
 #include <dtkCore/dtkVec3.h>
 #include <dtkCore/dtkQuat.h>
 %}

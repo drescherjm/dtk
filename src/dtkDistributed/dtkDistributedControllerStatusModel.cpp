@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jul  1 13:48:10 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul  4 14:10:58 2011 (+0200)
+ * Last-Updated: Tue Jul  5 15:14:15 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 173
+ *     Update #: 174
  */
 
 /* Commentary: 
@@ -43,7 +43,7 @@ public:
 };
 
 void dtkDistributedControllerStatusModelPrivate::update(void)
-{   
+{
     foreach(dtkDistributedNode *node, this->controller->nodes()) {
         dtkDistributedControllerStatusModelItem*nodeItem=new dtkDistributedControllerStatusModelItem(QList<QVariant>() << node->name() << node->cpus().count() << node->gpus().count(), this->rootItem);
         this->rootItem->appendChild(nodeItem);

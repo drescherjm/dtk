@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:43:14 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May  5 09:20:50 2011 (+0200)
+ * Last-Updated: Tue Jul  5 15:19:56 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 94
+ *     Update #: 97
  */
 
 /* Commentary:
@@ -38,6 +38,9 @@ public:
    int count(void) const;
    int retain(void) const;
    int release(void) const;
+
+   void enableDeferredDeletion(bool value);
+   bool     isDeferredDeletionEnabled(void) const;
 
    bool hasProperty(const QString& key) const;
    void addProperty(const QString& key, const QStringList& values);

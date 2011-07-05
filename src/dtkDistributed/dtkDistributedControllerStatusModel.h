@@ -22,10 +22,12 @@
 
 #include <QtGui>
 
+#include "dtkDistributedExport.h"
+
 class dtkDistributedController;
 class dtkDistributedControllerStatusModelPrivate;
 
-class dtkDistributedControllerStatusModel : public QAbstractItemModel
+class DTKDISTRIBUTED_EXPORT dtkDistributedControllerStatusModel : public QAbstractItemModel
 {
     Q_OBJECT
 

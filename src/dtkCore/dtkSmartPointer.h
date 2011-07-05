@@ -31,6 +31,11 @@ public:
         d(p.d)
     { this->retain(); }
 
+    template <typename TR>
+    dtkSmartPointer( const dtkSmartPointer<TR> &p) :
+        d(dynamic_cast<T*>( p.operator->() ) )
+    { this->retain(); }
+
     dtkSmartPointer (T *p) :
         d(p)
     { this->retain(); }
@@ -92,6 +97,10 @@ public:
 
     dtkSmartPointer& operator=(const dtkSmartPointer &r)
     { return this->operator=(r.d); }
+
+    template <typename TR>
+    dtkSmartPointer& operator=(const dtkSmartPointer<TR> &r)
+    { return this->operator=(dynamic_cast<T*>( r.operator->() )); }
 
     dtkSmartPointer& operator = (T *r)
     {

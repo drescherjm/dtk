@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun 29 11:21:32 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul  1 17:08:12 2011 (+0200)
+ * Last-Updated: Mon Jul  4 14:08:13 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 33
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -52,7 +52,7 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
 private:
-    dtkDistributedControllerStatusModelPrivate *d;
+    friend class dtkDistributedControllerStatusModelPrivate; dtkDistributedControllerStatusModelPrivate *d;
 };
 
 #endif

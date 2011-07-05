@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 16:12:47 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul  1 15:29:42 2011 (+0200)
+ * Last-Updated: Mon Jul  4 13:51:08 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 220
+ *     Update #: 228
  */
 
 /* Commentary: 
@@ -61,8 +61,7 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
     d->status_view->setModel(d->status_model);
 
     dtkAnchoredBar *anchoredBar = new dtkAnchoredBar(d->status_view);
-    anchoredBar->setMinimumWidth(200);
-    anchoredBar->setMaximumWidth(400);
+    anchoredBar->setDragEnabled(false);
 
     d->host_address = new QLineEdit("dtk://nef-devel.inria.fr:9999", anchoredBar);
     d->host_address->setAttribute(Qt::WA_MacShowFocusRect, false);
@@ -78,26 +77,13 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
     anchoredBar->addWidget(d->host_button);
     anchoredBar->addWidget(new dtkSpacer(anchoredBar, 16));
 
-    QWidget *side = new QWidget(this);
-    side->setMinimumWidth(200);
-    side->setMaximumWidth(400);
-
-    QVBoxLayout *side_layout = new QVBoxLayout(side);
-    side_layout->setContentsMargins(0, 0, 0, 0);
-    side_layout->setSpacing(0);
-    side_layout->addWidget(d->status_view);
-    side_layout->addWidget(anchoredBar);
-
     QWidget *central = new QWidget(this);
 
-    QWidget *placeholder = new QWidget(this);
-    placeholder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-    QHBoxLayout *layout = new QHBoxLayout(central);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(0);
-    layout->addWidget(side);
-    layout->addWidget(placeholder);
+    QVBoxLayout *central_layout = new QVBoxLayout(central);
+    central_layout->setContentsMargins(0, 0, 0, 0);
+    central_layout->setSpacing(0);
+    central_layout->addWidget(d->status_view);
+    central_layout->addWidget(anchoredBar);
 
     this->setCentralWidget(central);
     this->setUnifiedTitleAndToolBarOnMac(true);

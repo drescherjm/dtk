@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:54:04 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  5 15:21:03 2011 (+0200)
+ * Last-Updated: Tue Jul  5 16:58:04 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 187
+ *     Update #: 201
  */
 
 /* Commentary:
@@ -54,6 +54,7 @@ public:
 dtkAbstractObject::dtkAbstractObject(dtkAbstractObject *parent) : QObject(parent), d(new dtkAbstractObjectPrivate)
 {
     d->count = 1;
+
     d->isDeferredDeletionEnabled = true;
 }
 
@@ -64,7 +65,7 @@ dtkAbstractObject::dtkAbstractObject(dtkAbstractObject *parent) : QObject(parent
 
 dtkAbstractObject::~dtkAbstractObject(void)
 {
-    if (d->count != 0) {
+    if ((d->count.fetchAndAddOrdered(-1)-1) != 0) {
         dtkDebug() << "Warning : deleting object of type " << this->metaObject()->className() << " with non-zero reference count";
     }
 
@@ -95,7 +96,7 @@ int dtkAbstractObject::count(void) const
 
 int dtkAbstractObject::retain(void) const
 {
-    return d->count.fetchAndAddOrdered ( 1 ) + 1;
+    return d->count.fetchAndAddOrdered(1)+1;
 }
 
 //! Release reference count.
@@ -110,10 +111,10 @@ int dtkAbstractObject::retain(void) const
 
 int dtkAbstractObject::release(void) const
 {
-    int newCount = d->count.fetchAndAddOrdered(-1) - 1;
+    int newCount = d->count.fetchAndAddOrdered(-1)-1;
 
-    // Need to cast away const-ness to call deleteLater().
     if(!(newCount)) {
+
         if (d->isDeferredDeletionEnabled)
             const_cast<dtkAbstractObject *>(this)->deleteLater();
         else

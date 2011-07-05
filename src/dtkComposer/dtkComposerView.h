@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:52 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb 24 15:09:43 2011 (+0100)
+ * Last-Updated: Tue Jul  5 18:50:08 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 32
+ *     Update #: 34
  */
 
 /* Commentary: 
@@ -38,6 +38,9 @@ public:
 public slots:
     void onCenterOn(const QPointF& point);
     void onFitInView(const QRectF& rect);
+
+protected:
+    void scrollContentsBy(int dx, int dy);
 
 protected:
     void mousePressEvent(QMouseEvent *event);

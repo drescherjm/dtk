@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jul  6 17:10:58 2011 (+0200)
+ * Last-Updated: Wed Jul  6 17:23:08 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 55
+ *     Update #: 56
  */
 
 /* Commentary: 
@@ -89,6 +89,11 @@ void dtkPlotView::setAxisScaleY(dtkPlotView::Scale scale)
 void dtkPlotView::setBackgroundColor(const QColor& color)
 {
     d->setCanvasBackground(color);
+}
+
+void dtkPlotView::setStyleSheet(const QString& sheet)
+{
+    d->setStyleSheet(sheet);
 }
 
 dtkPlotView& dtkPlotView::operator<<(dtkPlotCurve *curve)

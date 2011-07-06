@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul  5 14:23:19 2011 (+0200)
+ * Last-Updated: Wed Jul  6 17:10:58 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 39
+ *     Update #: 55
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include <qwt_plot.h>
 #include <qwt_plot_canvas.h>
 #include <qwt_plot_curve.h>
+#include <qwt_scale_engine.h>
 
 class dtkPlotViewPrivate : public QwtPlot
 {
@@ -33,7 +34,6 @@ dtkPlotView::dtkPlotView(QWidget *parent) : QWidget(parent), d(new dtkPlotViewPr
 {
     d->canvas()->setFrameStyle(QFrame::NoFrame);
     d->setCanvasBackground(Qt::white);
-    d->setStyleSheet("background: white;");
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -68,6 +68,24 @@ void dtkPlotView::setAxisScaleY(double min, double max)
     d->setAxisScale(QwtPlot::yLeft, min, max);
 }
 
+void dtkPlotView::setAxisScaleX(dtkPlotView::Scale scale)
+{
+    if(scale == dtkPlotView::Linear)
+        d->setAxisScaleEngine(QwtPlot::xBottom, new QwtLinearScaleEngine);
+    
+    if(scale == dtkPlotView::Logarithmic)
+        d->setAxisScaleEngine(QwtPlot::xBottom, new QwtLog10ScaleEngine);
+}
+
+void dtkPlotView::setAxisScaleY(dtkPlotView::Scale scale)
+{
+    if(scale == dtkPlotView::Linear)
+        d->setAxisScaleEngine(QwtPlot::yLeft, new QwtLinearScaleEngine);
+    
+    if(scale == dtkPlotView::Logarithmic)
+        d->setAxisScaleEngine(QwtPlot::yLeft, new QwtLog10ScaleEngine);
+}
+
 void dtkPlotView::setBackgroundColor(const QColor& color)
 {
     d->setCanvasBackground(color);
@@ -78,4 +96,9 @@ dtkPlotView& dtkPlotView::operator<<(dtkPlotCurve *curve)
     ((QwtPlotCurve *)(curve->d))->attach((QwtPlot *)d);
 
     return *(this);
+}
+
+void dtkPlotView::update(void)
+{
+    d->replot();
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 15:31:59 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul  5 14:23:56 2011 (+0200)
+ * Last-Updated: Wed Jul  6 16:38:37 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 203
+ *     Update #: 205
  */
 
 /* Commentary: 
@@ -136,7 +136,7 @@ void tstMainWindow::onLoad(void)
 
     (*(d->view)) << d->curve;
 
-    connect(d->curve, SIGNAL(updated()), d->view, SLOT(replot()));
+    connect(d->curve, SIGNAL(updated()), d->view, SLOT(update()));
 
     d->curve->read(":dtkPlotEcg/data");
 }

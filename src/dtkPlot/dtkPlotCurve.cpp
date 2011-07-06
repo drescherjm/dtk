@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:09:17 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul  5 14:17:02 2011 (+0200)
+ * Last-Updated: Wed Jul  6 17:03:36 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 30
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -65,4 +65,6 @@ void dtkPlotCurve::setColor(const QColor& color)
 void dtkPlotCurve::setData(const QVector<QPointF>& data)
 {
     d->setSamples(data);
+
+    emit updated();
 }

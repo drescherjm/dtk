@@ -60,12 +60,15 @@ dtkAbstractObject::dtkAbstractObject(dtkAbstractObject *parent) : QObject(parent
 
 //! Destroys the object, deleting all its child objects.
 /*!
- *
+ * The reference count is checked, and a warning message is output if the reference count is not valid.
+ * There are two valid reference count values at destruction time :<br>
+ *  0 : The object used reference counting, and is no longer referred by any object.<br>
+ *  1 : This occurs if the object was never reference counted, and delete(Later) was manually called.<br>
  */
 
 dtkAbstractObject::~dtkAbstractObject(void)
 {
-    if ((d->count.fetchAndAddOrdered(-1)-1) != 0) {
+    if ( (d->count != 0) && (d->count != 1) ){
         dtkDebug() << "Warning : deleting object of type " << this->metaObject()->className() << " with non-zero reference count";
     }
 

@@ -42,10 +42,6 @@
  * \endcode
  */
 
-/*! \fn         dtkSignalBlocker::ObjectType;
-    \brief      Access to the managed type, typedef for T.
-*/
-
 /*! \fn         dtkSignalBlocker::dtkSignalBlocker(QObject * o)
     \brief      Constructor. Immediately calls o->blockSignals(true);
     \param      o : QObject that is blocked.
@@ -55,7 +51,7 @@
     \brief      Destructor. Calls o->blockSignals(false);
 */
 
-/*! \fn         dtkSmartPointer::blockSignals( bool v )
+/*! \fn         dtkSignalBlocker::blockSignals( bool v )
     \brief      Allows early unblocking / reblocking
     \param      v : passed to object->blockSignals(v).
 */

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:33:55 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun  8 10:03:03 2011 (+0200)
+ * Last-Updated: Mon Jul  4 21:49:39 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 18
+ *     Update #: 36
  */
 
 /* Commentary: 
@@ -40,8 +40,16 @@ void tstPlotCurveEcg::read(const QString& file)
     qreal start = 0.0;
     qreal step = 0.01;
 
-    for(int i = 0; i < contents.count(); i++)
+    for(int i = 0; i < contents.count(); i++) {
+
         values << QPointF(start + i*step, contents.at(i).toDouble());
 
-    this->setSamples(values);
+        this->setData(values);
+
+        // The following mimics a real world computation
+
+        emit updated(); qApp->processEvents();
+
+        usleep(9999);
+    }
 }

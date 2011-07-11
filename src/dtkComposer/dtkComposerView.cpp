@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:07:37 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 23 16:00:24 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 196
+ * Last-Updated: Tue Jul  5 18:50:33 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 199
  */
 
 /* Commentary: 
@@ -53,6 +53,13 @@ void dtkComposerView::onCenterOn(const QPointF& point)
 void dtkComposerView::onFitInView(const QRectF& rect)
 {
     // this->fitInView(rect, Qt::KeepAspectRatio);
+}
+
+void dtkComposerView::scrollContentsBy(int dx, int dy)
+{
+    this->update();
+
+    QGraphicsView::scrollContentsBy(dx, dy);
 }
 
 void dtkComposerView::mousePressEvent(QMouseEvent *event)

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Nov 22 10:20:27 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue Jun  7 16:38:39 2011 (+0200)
+## Last-Updated: Mon Jul  4 21:25:01 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 63
+##     Update #: 67
 ######################################################################
 ## 
 ### Commentary: 
@@ -32,13 +32,16 @@ project(dtkPlot)
 set(${PROJECT_NAME}_HEADERS
   dtkPlotCurve.h
   dtkPlotExport.h
+  dtkPlotRenderer.h
   dtkPlotView.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
+  dtkPlotCurve.h
   dtkPlotView.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkPlotCurve.cpp
+  dtkPlotRenderer.cpp
   dtkPlotView.cpp)
 
 ## #################################################################

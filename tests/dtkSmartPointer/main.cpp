@@ -93,6 +93,7 @@ int main(int argc, char *argv[])
         // First check basic reference counting.
         dtkAbstractData *pData = factory->create( TestData::s_TypeName );
         CHECK_TEST_RESULT(pData != NULL);
+        pData->enableDeferredDeletion(false);
         CHECK_TEST_RESULT(pData->count() == 1);
 
         TestData *pTestData = dynamic_cast< TestData * >( pData );
@@ -110,6 +111,7 @@ int main(int argc, char *argv[])
         CHECK_TEST_RESULT( myInstance );
         CHECK_TEST_RESULT( !myInstance.isNull() );
         CHECK_TEST_RESULT( myInstance->count() == 1 );
+        myInstance->enableDeferredDeletion(false);
 
         // Test assignment to NULL
         TestData *notSmartPtr = myInstance;
@@ -125,11 +127,13 @@ int main(int argc, char *argv[])
 
         dtkSmartPointer< TestData > myOtherInstance;
         myOtherInstance = factory->createSmartPointer( TestData::s_TypeName );
+        myOtherInstance->enableDeferredDeletion(false);
 
         dtkSmartPointer< TestData > myOtherInstance2;
         myOtherInstance2 = factory->createSmartPointer( TestData::s_TypeName );
+        myOtherInstance2->enableDeferredDeletion(false);
 
-        {   // Test copy-construction
+        {   // Test copy-construction of dtkSmartPointer.
             dtkSmartPointer< TestData > copyInstance(myInstance) ;
             CHECK_TEST_RESULT( !copyInstance.isNull() );
             CHECK_TEST_RESULT( copyInstance == myInstance );

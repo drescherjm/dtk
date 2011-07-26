@@ -60,6 +60,13 @@ public:
         return d == 0;
     }
 
+    int refCount(void) const {
+        if (d)
+            return d->count();
+        else
+            return 0;
+    }
+
     template <typename TR> bool operator==(TR r) const {
         return (d == static_cast<const T*>(r));
     }

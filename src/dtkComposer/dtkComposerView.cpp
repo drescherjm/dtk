@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:07:37 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul  5 18:50:33 2011 (+0200)
+ * Last-Updated: Thu Jul 21 00:44:15 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 199
+ *     Update #: 206
  */
 
 /* Commentary: 
@@ -62,6 +62,13 @@ void dtkComposerView::scrollContentsBy(int dx, int dy)
     QGraphicsView::scrollContentsBy(dx, dy);
 }
 
+void dtkComposerView::mouseMoveEvent(QMouseEvent *event)
+{
+    QGraphicsView::mouseMoveEvent(event);
+    
+    this->update();
+}
+
 void dtkComposerView::mousePressEvent(QMouseEvent *event)
 {
     if(event->button() == Qt::LeftButton && (event->modifiers() & Qt::AltModifier))
@@ -70,11 +77,15 @@ void dtkComposerView::mousePressEvent(QMouseEvent *event)
         this->setDragMode(QGraphicsView::RubberBandDrag);
 
     QGraphicsView::mousePressEvent(event);
+
+    this->update();
 }
 
 void dtkComposerView::mouseReleaseEvent(QMouseEvent *event)
 {
     QGraphicsView::mouseReleaseEvent(event);
+
+    this->update();
 }
 
 void dtkComposerView::wheelEvent(QWheelEvent *event)
@@ -83,7 +94,7 @@ void dtkComposerView::wheelEvent(QWheelEvent *event)
 
     qreal factor = this->matrix().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();
 
-    if (factor < 0.1 || factor > 1.25)
+    if (factor < 0.1 || factor > 1.0)
         return;
     
     this->scale(scaleFactor, scaleFactor);

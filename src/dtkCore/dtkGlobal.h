@@ -1,12 +1,13 @@
+
 /* dtkGlobal.h --- 
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 16 09:54:33 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jun 20 19:21:52 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 112
+ * Last-Updated: Mon Jul 11 10:58:10 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 121
  */
 
 /* Commentary: 
@@ -24,6 +25,7 @@
 #include <QtGui>
 #include <QtDebug>
 
+#include <dtkConfig.h>
 #include "dtkCoreExport.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -91,7 +93,6 @@
 #define _DTK_STRINGIZE( x ) #x
 #define DTK_STRINGIZE(x) _DTK_STRINGIZE(x)
 
-// Use:
 // #pragma message DTK_COMPILER_WARNING("your warning message here")
 #ifdef _MSC_VER
 #  define _LINK_TEXT __FILE__ "(" DTK_STRINGIZE(__LINE__) ") : "
@@ -100,6 +101,16 @@
 // gcc automatically generates line number info.
 #  define DTK_COMPILER_WARNING(str) ("WARNING: " str)
 #endif
+
+#ifdef DTK_PLATFORM_32
+#  define dtkxarch_int qint32
+#  define dtkxarch_uint quint32
+#elif defined DTK_PLATFORM_64
+#  define dtkxarch_int qint64
+#  define dtkxarch_uint quint64
+#endif
+
+#define dtkxarch_ptr quintptr
 
 // /////////////////////////////////////////////////////////////////
 // Helper functions

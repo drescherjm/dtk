@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Jun 21 12:27:54 2011 (+0200)
-##           By: Thibaud Kloczko
-##     Update #: 186
+## Last-Updated: Mon Jul 18 09:26:16 2011 (+0200)
+##           By: Julien Wintz
+##     Update #: 190
 ######################################################################
 ## 
 ### Commentary: 
@@ -80,7 +80,7 @@ set(ARCHIVE_INSTALL_OUTPUT_PATH    ${CMAKE_INSTALL_PREFIX}/${${PROJECT_NAME}_ARC
 set(RUNTIME_INSTALL_OUTPUT_PATH    ${CMAKE_INSTALL_PREFIX}/${${PROJECT_NAME}_RUNTIME_OUTPUT_DIRECTORY})
 set(EXECUTABLE_INSTALL_OUTPUT_PATH ${CMAKE_INSTALL_PREFIX}/${${PROJECT_NAME}_RUNTIME_OUTPUT_DIRECTORY})
 
-set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/src) 
+set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/src ${PROJECT_BINARY_DIR}) 
 set(${PROJECT_NAME}_LIBRARY_DIRS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 set(${PROJECT_NAME}_RUNTIME_DIRS ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 set(${PROJECT_NAME}_CMAKE_DIRS ${PROJECT_SOURCE_DIR}/cmake)

@@ -311,6 +311,7 @@ QVariant dtkComposerNodeControl::value(void)
     foreach(dtkComposerEdge *i_route, this->inputRoutes())
         if (i_route->destination() == d->property_input)
             return i_route->source()->node()->value(i_route->source());
+    return QVariant();
 }
 
 dtkComposerNodeProperty *dtkComposerNodeControl::inputProperty(void)

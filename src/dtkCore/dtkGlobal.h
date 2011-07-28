@@ -93,10 +93,11 @@
 #define _DTK_STRINGIZE( x ) #x
 #define DTK_STRINGIZE(x) _DTK_STRINGIZE(x)
 
+#define DTK_LINK_TEXT __FILE__ "(" DTK_STRINGIZE(__LINE__) ") : "
+
 // #pragma message DTK_COMPILER_WARNING("your warning message here")
 #ifdef _MSC_VER
-#  define _LINK_TEXT __FILE__ "(" DTK_STRINGIZE(__LINE__) ") : "
-#  define DTK_COMPILER_WARNING(str) (_LINK_TEXT "WARNING: " str)
+#  define DTK_COMPILER_WARNING(str) (DTK_LINK_TEXT "WARNING: " str)
 #else
 // gcc automatically generates line number info.
 #  define DTK_COMPILER_WARNING(str) ("WARNING: " str)

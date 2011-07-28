@@ -6,49 +6,7 @@
  * Created: July 28 10:28:00 2011 (+0100)
  */
 
-/* Commentary:
 
-Example usage:
-
-{ mySingleton.h }
-
-    // forward templated class
-    class template<T>
-    class dtkSingleton;
-
-    class MySingleton
-    {
-        public:
-        // return instance using the singleton
-        static MySingleton* instance();
-
-        // constructor needs to be public, as the scopedpointer inside the singleton does the deletion
-        ~MySingleton() {};
-
-        protected:
-        // hide the constructor
-        MySingleton() {};
-
-        // class method example
-        void doSomething() {...};
-
-        private:
-
-        // declare the singleton as a friend so it can construct us
-        friend class dtkSingleton<MySingleton>;
-    };
-
-{ mySingleton.cpp }
-
-#include <dtkCore/dtkSingleton>
-
-MySingleton* MySingleton::instance()
-{
-    return &dtkSingleton<MySingleton>::instance();
-}
-
-
- */
 
 /* Change log:
  *
@@ -56,7 +14,7 @@ MySingleton* MySingleton::instance()
 
 #ifndef DTKSINGLETON_H
 #define DTKSINGLETON_H
- 
+
 #include <QtCore/QtGlobal>
 #include <QtCore/QScopedPointer>
 #include <QtCore/QAtomicInt>
@@ -71,10 +29,10 @@ namespace dtkSingletonHelper {
         CO_InProgress,
         CO_Finished
     };
- 
+
     Q_GLOBAL_STATIC(QThreadStorage<QAtomicInt*>, once_flag)
 }
- 
+
 template <class Function>
         inline static void qCallOnce(Function func, QBasicAtomicInt& flag)
 {
@@ -94,7 +52,7 @@ template <class Function>
         while (!flag.testAndSetAcquire(CO_Finished, CO_Finished));
     }
 }
- 
+
 template <class Function>
         inline static void qCallOncePerThread(Function func)
 {
@@ -114,27 +72,30 @@ public:
         qCallOnce(init, flag);
         return *tptr;
     }
- 
+
     static void init()
     {
         tptr.reset(new T);
     }
- 
+
 private:
     dtkSingleton() {};
     ~dtkSingleton() {};
     Q_DISABLE_COPY(dtkSingleton)
- 
+
     static QScopedPointer<T> tptr;
     static QBasicAtomicInt flag;
 
 };
- 
+
 template<class T> QScopedPointer<T> dtkSingleton<T>::tptr(0);
 template<class T> QBasicAtomicInt dtkSingleton<T>::flag
                             = Q_BASIC_ATOMIC_INITIALIZER(dtkSingletonHelper::CO_Request);
-                            
 
-                             
+#define DTK_IMPLEMENT_SINGLETON( T )            \
+    T * T::instance()                           \
+    {                                           \
+        return &(dtkSingleton<T>::instance());  \
+    }
 
 #endif //DTKSINGLETON

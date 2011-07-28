@@ -19,6 +19,7 @@
 
 add_subdirectory(dtkCompareDouble)
 add_subdirectory(dtkCompareFloat)
+add_subdirectory(dtkSingleton)
 add_subdirectory(dtkSmartPointer)
 
 if(ZLIB_FOUND)

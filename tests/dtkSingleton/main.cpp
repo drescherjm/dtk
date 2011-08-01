@@ -64,6 +64,11 @@ int main(int argc, char *argv[])
         CHECK_TEST_RESULT( singletonInstance );
         CHECK_TEST_RESULT( dtkTestSingleton::InstanceCount() == 1 );
 
+        // Repeat : instance count should not change.
+        singletonInstance = dtkTestSingleton::instance();
+        CHECK_TEST_RESULT( singletonInstance );
+        CHECK_TEST_RESULT( dtkTestSingleton::InstanceCount() == 1 );
+
         ret = DTK_SUCCEED;
     }
     catch (std::exception &e) {

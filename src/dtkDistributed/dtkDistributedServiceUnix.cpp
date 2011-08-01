@@ -411,7 +411,7 @@ void dtkDistributedServiceBase::logMessage(const QString &message, dtkDistribute
     closelog();
 }
 
-void dtkDistributedServiceBase::setServiceFlags(dtkDistributedServiceBase::ServiceFlags flags)
+void dtkDistributedServiceBase::setServiceFlags(ServiceFlags flags)
 {
     if (d_ptr->serviceFlags == flags)
         return;

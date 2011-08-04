@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jul  1 13:48:10 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. juil.  1 17:27:02 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 159
+ * Last-Updated: Tue Jul  5 15:14:15 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 174
  */
 
 /* Commentary: 
@@ -44,16 +44,15 @@ public:
 
 void dtkDistributedControllerStatusModelPrivate::update(void)
 {
-    qDebug() << __func__;
-
     foreach(dtkDistributedNode *node, this->controller->nodes()) {
         dtkDistributedControllerStatusModelItem*nodeItem=new dtkDistributedControllerStatusModelItem(QList<QVariant>() << node->name() << node->cpus().count() << node->gpus().count(), this->rootItem);
         this->rootItem->appendChild(nodeItem);
         foreach(dtkDistributedCpu *cpu, node->cpus()) {
             nodeItem->appendChild(new dtkDistributedControllerStatusModelItem(QList<QVariant>() << cpu->cardinality() << "" << "", nodeItem));
         }
-
     }
+
+    q->reset();
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -85,8 +84,9 @@ void dtkDistributedControllerStatusModel::setController(dtkDistributedController
 
 void dtkDistributedControllerStatusModel::update(void)
 {
-    if (d->controller)
+    if (d->controller) {
         d->update();
+    }
 }
 
 int dtkDistributedControllerStatusModel::columnCount(const QModelIndex& parent) const

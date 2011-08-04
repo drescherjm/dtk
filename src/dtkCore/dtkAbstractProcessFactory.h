@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:48:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 16 14:56:22 2011 (+0100)
+ * Last-Updated: Tue Jul  5 15:22:37 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 63
+ *     Update #: 64
  */
 
 /* Commentary:
@@ -24,8 +24,9 @@
 
 #include <dtkCore/dtkAbstractFactory.h>
 
-class dtkAbstractProcess;
-class dtkAbstractProcessFactoryPrivate;
+                  class dtkAbstractProcess;
+                  class dtkAbstractProcessFactoryPrivate;
+template<class T> class dtkSmartPointer;
 
 class DTKCORE_EXPORT dtkAbstractProcessFactory : public dtkAbstractFactory
 {
@@ -33,9 +34,6 @@ class DTKCORE_EXPORT dtkAbstractProcessFactory : public dtkAbstractFactory
 
 public:
     typedef dtkAbstractProcess *(*dtkAbstractProcessCreator)(void);
-
-    typedef QHash<QString, dtkAbstractProcessCreator> dtkAbstractProcessCreatorHash;
-    typedef QHash<QString, QString> dtkAbstractProcessInterfacesHash;
 
 public:
     static dtkAbstractProcessFactory *instance(void);
@@ -45,15 +43,14 @@ public:
 
     unsigned int size(const QString& type);
 
-    dtkAbstractProcess *get(const QString& type, int index = 0);
-    dtkAbstractProcess *get(const QString& type, const QString& name);
-
     bool exists(const QString& type);
 
     QStringList creators(void) const;
 
     QStringList implementations(const QString& interface);
     QStringList interfaces(void);
+
+    dtkSmartPointer<dtkAbstractProcess> createSmartPointer(const QString& type);
 
 signals:
     void created(dtkAbstractProcess *process, const QString& type);

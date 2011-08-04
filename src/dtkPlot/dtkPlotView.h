@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:02:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun  7 15:11:30 2011 (+0200)
+ * Last-Updated: Wed Jul  6 17:22:51 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 9
+ *     Update #: 40
  */
 
 /* Commentary: 
@@ -25,17 +25,43 @@
 #include <QtCore>
 #include <QtGui>
 
-#include <qwt_plot.h>
-
+class dtkPlotCurve;
 class dtkPlotViewPrivate;
 
-class DTKPLOT_EXPORT dtkPlotView : public QwtPlot
+class DTKPLOT_EXPORT dtkPlotView : public QWidget
 {
     Q_OBJECT
 
 public:
      dtkPlotView(QWidget *parent = 0);
     ~dtkPlotView(void);
+
+    enum Scale {
+        Linear,
+        Logarithmic
+    };
+
+    void setAxisTitleX(const QString& title);
+    void setAxisTitleY(const QString& title);
+    
+    void setAxisScaleX(double min, double max);
+    void setAxisScaleY(double min, double max);
+
+    void setAxisScaleX(Scale scale);
+    void setAxisScaleY(Scale scale);
+
+    void setBackgroundColor(const QColor& color);
+
+    void setStyleSheet(const QString& sheet);
+
+    dtkPlotView& operator<<(dtkPlotCurve *curve);
+
+public slots:
+    void update(void);
+
+private:
+    friend class dtkPlotCurve;
+    friend class dtkPlotRenderer;
 
 private:
     dtkPlotViewPrivate *d;

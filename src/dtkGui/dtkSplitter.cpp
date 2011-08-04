@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Oct  7 23:24:59 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 15 18:27:35 2011 (+0100)
+ * Last-Updated: Wed Jul 13 16:50:16 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 85
+ *     Update #: 88
  */
 
 /* Commentary: 
@@ -68,7 +68,7 @@ void dtkSplitterHandle::paintEvent(QPaintEvent *event)
     }
 
     if (orientation() == Qt::Vertical) {
-	painter.setPen(topColor);
+	painter.setPen(QColor("#181818"));
 	painter.drawLine(0, 0, width(), 0);
 
 	if(m_slim)
@@ -90,7 +90,7 @@ void dtkSplitterHandle::paintEvent(QPaintEvent *event)
         painter.drawEllipse(QRect(event->rect().width()/2-1, this->sizeHint().height()/2 - 2, 4, 4));
 
     } else {
-	painter.setPen(topColor);
+	painter.setPen(QColor("#181818"));
 	painter.drawLine(0, 0, 0, height());
     }
 }

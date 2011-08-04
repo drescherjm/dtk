@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Jun 30 22:16:14 2011 (+0200)
+## Last-Updated: Tue Jul  5 15:34:04 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 352
+##     Update #: 353
 ######################################################################
 ## 
 ### Commentary: 
@@ -21,9 +21,9 @@ cmake_minimum_required(VERSION 2.6.4)
 
 project(dtk)
 
-set(${PROJECT_NAME}_VERSION_MAJOR  0 CACHE STRING "dtk major version number.")
-set(${PROJECT_NAME}_VERSION_MINOR  1 CACHE STRING "dtk minor version number.")
-set(${PROJECT_NAME}_VERSION_BUILD 28 CACHE STRING "dtk build version number.")
+set(${PROJECT_NAME}_VERSION_MAJOR 0 CACHE STRING "dtk major version number.")
+set(${PROJECT_NAME}_VERSION_MINOR 5 CACHE STRING "dtk minor version number.")
+set(${PROJECT_NAME}_VERSION_BUILD 1 CACHE STRING "dtk build version number.")
 set(${PROJECT_NAME}_VERSION
   "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD}")
 

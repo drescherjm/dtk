@@ -90,14 +90,17 @@ int main(int argc, char *argv[])
 
         dtkAbstractDataFactory *factory = dtkAbstractDataFactory::instance();
 
+        // First check basic reference counting.
         dtkAbstractData *pData = factory->create( TestData::s_TypeName );
         CHECK_TEST_RESULT(pData != NULL);
+        pData->enableDeferredDeletion(false);
         CHECK_TEST_RESULT(pData->count() == 1);
 
         TestData *pTestData = dynamic_cast< TestData * >( pData );
         CHECK_TEST_RESULT(pTestData != NULL);
 
-        delete pTestData; pTestData = NULL;
+        pTestData = NULL;
+        pData->release();
 
         // Instantiate, test for Null.
         dtkSmartPointer< TestData > myInstance;
@@ -108,33 +111,29 @@ int main(int argc, char *argv[])
         CHECK_TEST_RESULT( myInstance );
         CHECK_TEST_RESULT( !myInstance.isNull() );
         CHECK_TEST_RESULT( myInstance->count() == 1 );
+        myInstance->enableDeferredDeletion(false);
 
+        // Test assignment to NULL
         TestData *notSmartPtr = myInstance;
+        notSmartPtr = myInstance;
+        notSmartPtr->retain();
+        CHECK_TEST_RESULT( notSmartPtr->count() == 2 );
         myInstance = NULL;
         CHECK_TEST_RESULT( !myInstance );
-        CHECK_TEST_RESULT( notSmartPtr->count() == 0 );
-
-        myInstance.takePointer( dynamic_cast< TestData *>(factory->create( TestData::s_TypeName )) );
-
-        {   // Scope a pointer
-            // Test assignment
-            dtkSmartPointer< dtkAbstractData > basePtr;
-            basePtr = myInstance;
-            CHECK_TEST_RESULT( !basePtr.isNull() );
-            CHECK_TEST_RESULT( basePtr == myInstance );
-            CHECK_TEST_RESULT( basePtr->count() == 2);
-            // End of scope, count should decrease.
-        }
-        CHECK_TEST_RESULT( myInstance->count() == 1);
+        CHECK_TEST_RESULT( notSmartPtr->count() == 1 );
+        myInstance.takePointer( notSmartPtr );
+        CHECK_TEST_RESULT( myInstance->count() == 1 );
+        notSmartPtr = NULL;
 
         dtkSmartPointer< TestData > myOtherInstance;
-        myOtherInstance.takePointer( dynamic_cast< TestData *>(factory->create( TestData::s_TypeName )) );
+        myOtherInstance = factory->createSmartPointer( TestData::s_TypeName );
+        myOtherInstance->enableDeferredDeletion(false);
 
         dtkSmartPointer< TestData > myOtherInstance2;
-        myOtherInstance2.takePointer( dynamic_cast< TestData *>(factory->create( TestData::s_TypeName )) );
+        myOtherInstance2 = factory->createSmartPointer( TestData::s_TypeName );
+        myOtherInstance2->enableDeferredDeletion(false);
 
-        
-        {   // Test copy-construction
+        {   // Test copy-construction of dtkSmartPointer.
             dtkSmartPointer< TestData > copyInstance(myInstance) ;
             CHECK_TEST_RESULT( !copyInstance.isNull() );
             CHECK_TEST_RESULT( copyInstance == myInstance );
@@ -156,14 +155,33 @@ int main(int argc, char *argv[])
             CHECK_TEST_RESULT( copyInstance->count() == 2 );
         }
 
+        {   // Scope a pointer
+            // Test copy constructor from other type
+            dtkSmartPointer< dtkAbstractData > basePtr( myInstance );
+            CHECK_TEST_RESULT( !basePtr.isNull() );
+            CHECK_TEST_RESULT( basePtr == myInstance );
+            CHECK_TEST_RESULT( basePtr->count() == 2);
+        }
+
+        {   // Scope a pointer
+            // Test assignment from other type.
+            dtkSmartPointer< dtkAbstractData > basePtr;
+            basePtr = myInstance;
+            CHECK_TEST_RESULT( !basePtr.isNull() );
+            CHECK_TEST_RESULT( basePtr == myInstance );
+            CHECK_TEST_RESULT( basePtr->count() == 2);
+            // End of scope, count should decrease.
+        }
+        CHECK_TEST_RESULT( myInstance->count() == 1);
+
         // Test a set - this needs a hash function
         typedef QSet< dtkSmartPointer< dtkAbstractData > > DataSetContainer;
         DataSetContainer mySetContainer;
 
         // Add smartpointer instances.
-        mySetContainer.insert(dtkSmartPointer< dtkAbstractData >(myInstance));
-        mySetContainer.insert(dtkSmartPointer< dtkAbstractData >(myOtherInstance));
-        mySetContainer.insert(dtkSmartPointer< dtkAbstractData >(myOtherInstance2));
+        mySetContainer.insert(myInstance);
+        mySetContainer.insert(myOtherInstance);
+        mySetContainer.insert(myOtherInstance2);
 
         // Should now have 2 registered instances, 1 in this scope, 1 in container
         CHECK_TEST_RESULT( myInstance->count() == 2);
@@ -195,9 +213,9 @@ int main(int argc, char *argv[])
         // And an stl container
         typedef std::vector< dtkSmartPointer< dtkAbstractData > > StlContainer;
         StlContainer myVector;
-        myVector.push_back( dtkSmartPointer< dtkAbstractData >(myInstance) );
-        myVector.push_back( dtkSmartPointer< dtkAbstractData >(myOtherInstance) );
-        myVector.push_back( dtkSmartPointer< dtkAbstractData >(myOtherInstance2) );
+        myVector.push_back( myInstance );
+        myVector.push_back( myOtherInstance );
+        myVector.push_back( myOtherInstance2 );
         CHECK_TEST_RESULT( myInstance->count() == 2);
         CHECK_TEST_RESULT( myOtherInstance->count() == 2);
         CHECK_TEST_RESULT( myOtherInstance2->count() == 2);

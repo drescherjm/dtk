@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 15:31:59 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun  8 12:19:28 2011 (+0200)
+ * Last-Updated: Wed Jul  6 16:38:37 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 162
+ *     Update #: 205
  */
 
 /* Commentary: 
@@ -24,8 +24,7 @@
 #include <dtkGui/dtkAnchoredBar.h>
 
 #include <dtkPlot/dtkPlotView.h>
-
-#include <qwt_plot_renderer.h>
+#include <dtkPlot/dtkPlotRenderer.h>
 
 class tstMainWindowPrivate
 {
@@ -43,11 +42,10 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent), d(new tstMa
 
     d->view = new dtkPlotView(this);
 
-    d->view->setAxisTitle(QwtPlot::xBottom, "X");
-    d->view->setAxisScale(QwtPlot::xBottom, 0.0, 13);
-    
-    d->view->setAxisTitle(QwtPlot::yLeft, "Y");
-    d->view->setAxisScale(QwtPlot::yLeft, 0.0, 0.03);
+    d->view->setAxisTitleX("X axis title");
+    d->view->setAxisTitleY("Y axis title");
+    d->view->setAxisScaleX(0.0, 13.0);
+    d->view->setAxisScaleY(0.0, 0.03);
 
     tstSidePane *pane = new tstSidePane(this);
     pane->setStyleSheet(
@@ -109,24 +107,24 @@ tstMainWindow::~tstMainWindow(void)
 
 void tstMainWindow::onBackgroundColorChanged(const QColor& color)
 {
-    d->view->setCanvasBackground(color);
-    d->view->replot();
+    d->view->setBackgroundColor(color);
+    d->view->update();
 }
 
 void tstMainWindow::onForegroundColorChanged(const QColor& color)
 {
     if (d->curve)
-        d->curve->setPen(color);
+        d->curve->setColor(color);
 
-    d->view->replot();
+    d->view->update();
 }
 
 void tstMainWindow::onCurveRenderModeChanged(int mode)
 {
     if (d->curve)
-        d->curve->setRenderHint(QwtPlotItem::RenderAntialiased, mode);
+        d->curve->setAntialiased(mode);
 
-    d->view->replot();
+    d->view->update();
 }
 
 void tstMainWindow::onLoad(void)
@@ -135,10 +133,12 @@ void tstMainWindow::onLoad(void)
         return;
 
     d->curve = new tstPlotCurveEcg("ECG");
+
+    (*(d->view)) << d->curve;
+
+    connect(d->curve, SIGNAL(updated()), d->view, SLOT(update()));
+
     d->curve->read(":dtkPlotEcg/data");
-    d->curve->attach(d->view);
-    
-    d->view->replot();
 }
 
 void tstMainWindow::onExport(void)
@@ -175,6 +175,9 @@ void tstMainWindow::onExport(void)
 
 void tstMainWindow::onExport(const QString& file)
 {
-    QwtPlotRenderer renderer;
-    renderer.renderDocument(d->view, file, QSizeF(300, 200), 85);
+    dtkPlotRenderer renderer;
+    renderer.setView(d->view);
+    renderer.setPath(file);
+    renderer.setSize(QSize(300, 200));
+    renderer.render();
 }

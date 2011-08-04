@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon May 30 13:21:43 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul  1 14:19:48 2011 (+0200)
+ * Last-Updated: Mon Jul  4 13:58:48 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 29
+ *     Update #: 30
  */
 
 /* Commentary: 
@@ -32,7 +32,6 @@ dtkDistributedControllerStatusView::dtkDistributedControllerStatusView(QWidget *
 
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setFrameStyle(QFrame::NoFrame);
-    this->viewport()->setStyleSheet("background-color: #dfe4ea; border-right: 1px solid lightGray;");
 }
 
 dtkDistributedControllerStatusView::~dtkDistributedControllerStatusView(void)

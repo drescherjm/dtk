@@ -16,6 +16,7 @@
 /* Change log:
  *
  */
+#include <dtkCore/dtkPch.h>
 
 #include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkAbstractView.h>

@@ -16,6 +16,7 @@
 /* Change log:
  * 
  */
+#include <dtkCore/dtkPch.h>
 
 #include <dtkCore/dtkAbstractProcess.h>
 #include <dtkCore/dtkAbstractProcessFactory.h>

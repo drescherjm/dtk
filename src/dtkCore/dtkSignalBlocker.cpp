@@ -18,6 +18,7 @@
  * 
  */
 
+#include <dtkCore/dtkPch.h>
 
 #include "dtkSignalBlocker.h"
 

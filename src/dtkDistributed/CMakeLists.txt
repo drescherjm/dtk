@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Jul  1 16:49:44 2011 (+0200)
-##           By: Julien Wintz
-##     Update #: 181
+## Last-Updated: ven. août  5 14:25:57 2011 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 182
 ######################################################################
 ## 
 ### Commentary: 
@@ -143,6 +143,7 @@ add_library(${PROJECT_NAME} SHARED
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkCore
+  dtkJson
   dtkGui)
 
 if(MPI_FOUND)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. juin 29 18:32:35 2011 (+0200)
+ * Last-Updated: ven. août  5 15:01:34 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 428
+ *     Update #: 575
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@
 
 #include <dtkCore/dtkGlobal.h>
 #include <dtkCore/dtkLog.h>
+#include <dtkJson/dtkJson.h>
 
 #include <QtCore>
 #include <QtXml>
@@ -108,26 +109,36 @@ QString dtkDistributedServerManagerTorque::submit(QString input)
     }
 }
 
-QString dtkDistributedServerManagerTorque::status(void)
+QDomDocument getXML(QString command)
 {
-    QProcess stat; stat.start("pbsnodes", QStringList() << "-x");
+    QDomDocument document; QString error;
+    QProcess stat; stat.start(command);
 
     if (!stat.waitForStarted()) {
         dtkCritical() << "Unable to launch stat command";
-        return QString();
+        return document;
     }
 
     if (!stat.waitForFinished()) {
         dtkCritical() << "Unable to completed stat command";
-        return QString();
+        return document;
     }
 
-    QString result = "version=" + protocol() +"\n";
     QString data = stat.readAll();
-    QDomDocument document; QString error;
 
     if(!document.setContent(data, false, &error))
         dtkDebug() << "Error retrieving xml output out of torque "  << error;
+
+    stat.close();
+    return document;
+
+}
+
+QString dtkDistributedServerManagerTorque::status(void)
+{
+
+    QDomDocument document = getXML("pbsnodes -x");
+    QString result = "version=" + protocol() +"\n";
 
     QDomNodeList nodes = document.elementsByTagName("Node");
     for(int i = 0; i < nodes.count(); i++) {
@@ -166,7 +177,7 @@ QString dtkDistributedServerManagerTorque::status(void)
                 ncpus = "4";
             }
         }
-        result += name + ";" + np + ";" + QString::number(njobs) + ";"+ncpus+";" + ngpus + ";0;" + "("+outprops.join(",")+");";
+        result += "node;"+name + ";" + np + ";" + QString::number(njobs) + ";"+ncpus+";" + ngpus + ";0;" + "("+outprops.join(",")+");";
         if (state.contains("job-exclusive")) {
             state="busy";
         } else if (state.contains("free")) {
@@ -175,6 +186,45 @@ QString dtkDistributedServerManagerTorque::status(void)
             state="down";
         }
         result += state+"\n";
+    }
+
+    // Now get the jobs
+    document = getXML("qstat -x");
+    QDomNodeList jobs = document.elementsByTagName("Job");
+    for(int i = 0; i < jobs.count(); i++) {
+        QString id = jobs.item(i).firstChildElement("Job_Id").text().simplified().split(".").at(0);
+        QString user = jobs.item(i).firstChildElement("Job_Owner").text().simplified().split("@").at(0);
+        QString queue = jobs.item(i).firstChildElement("queue").text().simplified();
+        QString qtime = jobs.item(i).firstChildElement("ctime").text().simplified();
+        QString stime ;
+        QDomElement resources_list = jobs.item(i).firstChildElement("Resource_List") ;
+        QString resources = resources_list.firstChildElement("nodes").text().simplified() ;
+        QStringList rlist = resources.split(":") ;
+        QStringList ppn = rlist.last().split("=") ;
+        QString nodes = rlist.at(0);
+        QString cores = ppn.last();
+        resources = nodes+","+cores;
+
+        QString walltime = resources_list.firstChildElement("walltime").text().simplified() ;
+        QString state;
+        char J= jobs.item(i).firstChildElement("job_state").text().simplified().at(0).toAscii();
+        switch (J) {
+        case 'R' :
+            state = "running";   break;
+        case 'Q' :
+            state = "queued";    break;
+        case 'S' :
+            state = "suspended"; break;
+        case 'H' :
+            state = "blocked";   break;
+        case 'E' :
+            state = "exiting";   break;
+        case 'W' :
+            state = "scheduled"; break;
+        default  :
+            state = "unknown";   break;
+        };
+        result += "job;"+id + ";" + user + ";" + state+";"+qtime+";"+stime+";"+queue+";"+walltime+";"+resources+"\n";
     }
 
     return result;

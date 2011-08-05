@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. juil.  1 17:20:44 2011 (+0200)
+ * Last-Updated: jeu. août  4 15:39:27 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 482
+ *     Update #: 498
  */
 
 /* Commentary: 
@@ -68,7 +68,7 @@ bool dtkDistributedController::isDisconnected(const QUrl& server)
         QTcpSocket *socket = d->sockets.value(server.toString());
 
         return (socket->state() == QAbstractSocket::UnconnectedState);
-    }  
+    }
 
     return true;
 }
@@ -84,9 +84,9 @@ void dtkDistributedController::connect(const QUrl& server)
 
             QObject::connect(socket, SIGNAL(readyRead()), this, SLOT(read()));
             QObject::connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
-            
+
             d->sockets.insert(server.toString(), socket);
-            
+
             emit connected(server);
 
             socket->write("** status **");
@@ -152,19 +152,23 @@ void dtkDistributedController::read(void)
         for(int i = 1; i < nodes.size(); i++) {
             QStringList nodestr = nodes.at(i).split(";");
 
-            if  (nodestr.size() < 8) {
+            QString type  = nodestr.at(0);
+            qDebug() << "type is "<< type;
+
+            if  (nodestr.size() < 8 or (type  != "node")) {
                 qDebug() << "Skipping line ";
                 continue;
             }
 
-            QString name  = nodestr.at(0);
-            int ncores    = nodestr.at(1).toInt();
-            int usedcores = nodestr.at(2).toInt();
-            int ncpus     = nodestr.at(3).toInt();
-            int ngpus     = nodestr.at(4).toInt();
-            int usedgpus  = nodestr.at(5).toInt();
-            QString state = nodestr.at(7);
-            QStringList properties = nodestr.at(6).split(",");
+            int col = 1;
+            QString name  = nodestr.at(col++);
+            int ncores    = nodestr.at(col++).toInt();
+            int usedcores = nodestr.at(col++).toInt();
+            int ncpus     = nodestr.at(col++).toInt();
+            int ngpus     = nodestr.at(col++).toInt();
+            int usedgpus  = nodestr.at(col++).toInt();
+            QStringList properties = nodestr.at(col++).split(",");
+            QString state = nodestr.at(col++);
 
             dtkDistributedNode *node = new dtkDistributedNode;
             node->setName(name);

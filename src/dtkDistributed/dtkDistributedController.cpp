@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. août  4 15:39:27 2011 (+0200)
+ * Last-Updated: ven. août  5 16:23:58 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 498
+ *     Update #: 540
  */
 
 /* Commentary: 
@@ -89,7 +89,7 @@ void dtkDistributedController::connect(const QUrl& server)
 
             emit connected(server);
 
-            socket->write("** status **");
+            socket->write("GET /status\n");
 
         } else {
 
@@ -132,22 +132,20 @@ void dtkDistributedController::read(void)
 
     static QString status_contents;
 
-    QString buffer = socket->readAll();
+    static const int MAX_LINE_LENGTH = 1024;
+    QString resp = socket->readLine(MAX_LINE_LENGTH);
+    QString buffer;
 
-    if(buffer.startsWith("!! status !!")) {
-
-        status_contents.clear();
-        status_contents += buffer.remove("!! status !!");
+    if(resp == "STATUS:\n") {
+        QString size = socket->readLine(MAX_LINE_LENGTH);
+        qDebug() << "Size to read: " << size;
+        buffer = socket->read(size.toInt());
+        // TODO: read until end of response
+    } else {
+        qDebug() << "unknown response from server: " << resp;
     }
 
-    if(buffer.endsWith("!! endstatus !!")) {
-
-      if(!buffer.startsWith("version="+dtkDistributedServerManager::protocol())) {
-        qDebug() << "WARNING: Bad protocol version";
-      }
-
-        status_contents = buffer.remove("!! endstatus !!");
-        QStringList nodes = status_contents.split("\n");
+        QStringList nodes = buffer.split("\n");
         // skip the first item (version=XXX), so start at 1 :
         for(int i = 1; i < nodes.size(); i++) {
             QStringList nodestr = nodes.at(i).split(";");
@@ -248,7 +246,7 @@ void dtkDistributedController::read(void)
         }
         emit updated();
         status_contents.clear();
-    }
+//    }
 }
 
 void dtkDistributedController::error(QAbstractSocket::SocketError error)

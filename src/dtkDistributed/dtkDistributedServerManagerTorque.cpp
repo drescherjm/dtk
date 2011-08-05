@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. août  5 15:01:34 2011 (+0200)
+ * Last-Updated: ven. août  5 17:17:44 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 575
+ *     Update #: 664
  */
 
 /* Commentary: 
@@ -138,46 +138,66 @@ QString dtkDistributedServerManagerTorque::status(void)
 {
 
     QDomDocument document = getXML("pbsnodes -x");
-    QString result = "version=" + protocol() +"\n";
+    QVariantMap result;
+    QVariantList jnodes;
+    QVariantList jjobs;
+    result.insert("version", protocol());
 
     QDomNodeList nodes = document.elementsByTagName("Node");
     for(int i = 0; i < nodes.count(); i++) {
+        QVariantMap node;
+        QVariantMap props;
         QString np = nodes.item(i).firstChildElement("np").text().simplified();
         QString name = nodes.item(i).firstChildElement("name").text().simplified();
         QString state = nodes.item(i).firstChildElement("state").text().simplified();
+
+        node.insert("name", name);
 
         // Each job is coreid/jobid, count the number of "/" to get the number of jobs
         int njobs  = nodes.item(i).firstChildElement("jobs").text().simplified().count("/");
         QString ngpus  = nodes.item(i).firstChildElement("gpus").text().simplified();
         // 2 cpus by default
         QString ncpus  = "2";
-
         // number of busy GPUs not implemented yet
+
+
+        // properties
         QStringList properties = nodes.item(i).firstChildElement("properties").text().simplified().split(",");
 
         QStringList outprops;
         QString prop;
         // FIXME: we should read the properties mapping from a file instead of hardcoding it
         // Everything here is specific to nef setup.
-        outprops << "infiniband=QDR";
-        outprops << "ethernet=1G";
+        props.insert("infiniband", "QDR");
+        props.insert("ethernet", "1G");
         foreach( prop, properties ) {
             if (prop.contains("opteron")) {
-                outprops << "arch=opteron";
+                props.insert("cpu_model", "opteron");
+                props.insert("cpu_arch", "x86_64");
             } else if (prop.contains("xeon")) {
-                outprops << "arch=xeon";
+                props.insert("cpu_model", "xeon");
+                props.insert("cpu_arch", "x86_64");
             } else if (prop.contains("C2050")) {
-                outprops << "gpu=nvidia-C2050";
+                props.insert("gpu_model", "C2050");
+                props.insert("gpu_arch", "nvidia-2.0");
+            } else if (prop.contains("C2070")) {
+                props.insert("gpu_model", "C2070");
+                props.insert("gpu_arch", "nvidia-2.0");
             } else if (prop.contains("T10")) {
-                outprops << "gpu=nvidia-T10";
-            } else if (prop.contains("T10")) {
-                outprops << "gpu=nvidia-T10";
+                props.insert("gpu_model", "T10");
+                props.insert("gpu_arch", "nvidia-1.3");
             }
             if (prop.contains("dellr815")) {
                 ncpus = "4";
             }
         }
-        result += "node;"+name + ";" + np + ";" + QString::number(njobs) + ";"+ncpus+";" + ngpus + ";0;" + "("+outprops.join(",")+");";
+        node.insert("cores", np);
+        node.insert("cpus", ncpus);
+        node.insert("cores_busy", njobs);
+        node.insert("gpus", ngpus);
+        node.insert("gpus_busy", 0);
+        node.insert("properties", props);
+
         if (state.contains("job-exclusive")) {
             state="busy";
         } else if (state.contains("free")) {
@@ -185,13 +205,18 @@ QString dtkDistributedServerManagerTorque::status(void)
         } else {
             state="down";
         }
-        result += state+"\n";
+        node.insert("state", state);
+        jnodes << node;
+        result.insert("nodes", jnodes);
     }
 
     // Now get the jobs
     document = getXML("qstat -x");
     QDomNodeList jobs = document.elementsByTagName("Job");
     for(int i = 0; i < jobs.count(); i++) {
+        QVariantMap job;
+        QVariantMap jresources;
+
         QString id = jobs.item(i).firstChildElement("Job_Id").text().simplified().split(".").at(0);
         QString user = jobs.item(i).firstChildElement("Job_Owner").text().simplified().split("@").at(0);
         QString queue = jobs.item(i).firstChildElement("queue").text().simplified();
@@ -203,7 +228,9 @@ QString dtkDistributedServerManagerTorque::status(void)
         QStringList ppn = rlist.last().split("=") ;
         QString nodes = rlist.at(0);
         QString cores = ppn.last();
-        resources = nodes+","+cores;
+
+        jresources.insert("nodes",nodes);
+        jresources.insert("cores",cores);
 
         QString walltime = resources_list.firstChildElement("walltime").text().simplified() ;
         QString state;
@@ -224,8 +251,18 @@ QString dtkDistributedServerManagerTorque::status(void)
         default  :
             state = "unknown";   break;
         };
-        result += "job;"+id + ";" + user + ";" + state+";"+qtime+";"+stime+";"+queue+";"+walltime+";"+resources+"\n";
+        job.insert("id", id);
+        job.insert("user", user);
+        job.insert("queue", queue);
+        job.insert("queue_time", qtime);
+        job.insert("start_time", stime);
+        job.insert("walltime", walltime);
+        job.insert("resources", jresources);
+        job.insert("state", state);
+
+        jjobs << job;
+        result.insert("jobs", jjobs);
     }
 
-    return result;
+    return dtkJson::serialize(result);
 }

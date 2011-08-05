@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. juin 29 17:51:22 2011 (+0200)
+ * Last-Updated: ven. août  5 16:32:59 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 46
+ *     Update #: 98
  */
 
 /* Commentary: 
@@ -87,19 +87,23 @@ void dtkDistributedServerDaemon::read(void)
 
 
 
-    if(contents == "** status **") {
+    if(contents == "GET /status\n") {
         QString r = d->manager->status();
         qDebug() << r;
 
-        socket->write(QString("!! status !!").toAscii());
-        socket->write(r.toAscii());
-        socket->write(QString("!! endstatus !!").toAscii());
-    } else if(contents.contains("** submit **")) {
+        socket->write(QString("STATUS:\n").toAscii());
+        QByteArray R = r.toAscii();
+        socket->write(QString::number(R.size()).toAscii()+"\n");
+        socket->write(R);
+    } else if(contents.contains("PUT /job")) {
         QString jobid = d->manager->submit(contents);
+        QByteArray R = jobid.toAscii();
         qDebug() << jobid;
-        socket->write(QString("!! submit !!").toAscii());
-        socket->write(jobid.toAscii());
-        socket->write(QString("!! endsubmit !!").toAscii());
+        socket->write(QString("JOB:\n").toAscii());
+        socket->write(QString::number(R.size()).toAscii()+"\n");
+        socket->write(R);
+    } else {
+        qDebug() << DTK_PRETTY_FUNCTION << "WARNING: Unknown data";
     }
 }
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. août  5 16:23:58 2011 (+0200)
+ * Last-Updated: lun. août  8 10:17:18 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 540
+ *     Update #: 654
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@
 
 #include <dtkCore/dtkGlobal.h>
 #include <dtkCore/dtkLog.h>
+#include <dtkJson/dtkJson.h>
 
 #include <QtNetwork>
 #include <QtXml>
@@ -134,42 +135,35 @@ void dtkDistributedController::read(void)
 
     static const int MAX_LINE_LENGTH = 1024;
     QString resp = socket->readLine(MAX_LINE_LENGTH);
-    QString buffer;
+    QByteArray buffer;
 
     if(resp == "STATUS:\n") {
         QString size = socket->readLine(MAX_LINE_LENGTH);
-        qDebug() << "Size to read: " << size;
-        buffer = socket->read(size.toInt());
-        // TODO: read until end of response
+        qint64 toread= size.toInt();
+        qDebug() << "Size to read: " << toread;
+        while (buffer.size() < toread  ) {
+            socket->waitForReadyRead(-1);
+            buffer.append(socket->read(toread));
+        }
     } else {
         qDebug() << "unknown response from server: " << resp;
     }
 
-        QStringList nodes = buffer.split("\n");
-        // skip the first item (version=XXX), so start at 1 :
-        for(int i = 1; i < nodes.size(); i++) {
-            QStringList nodestr = nodes.at(i).split(";");
+    QVariantMap json = dtkJson::parse(buffer).toMap();
+    //TODO: check version
+    foreach(QVariant qv, json["nodes"].toList()) {
+            QVariantMap jnode=qv.toMap();
 
-            QString type  = nodestr.at(0);
-            qDebug() << "type is "<< type;
-
-            if  (nodestr.size() < 8 or (type  != "node")) {
-                qDebug() << "Skipping line ";
-                continue;
-            }
-
-            int col = 1;
-            QString name  = nodestr.at(col++);
-            int ncores    = nodestr.at(col++).toInt();
-            int usedcores = nodestr.at(col++).toInt();
-            int ncpus     = nodestr.at(col++).toInt();
-            int ngpus     = nodestr.at(col++).toInt();
-            int usedgpus  = nodestr.at(col++).toInt();
-            QStringList properties = nodestr.at(col++).split(",");
-            QString state = nodestr.at(col++);
+            int ncores    = jnode["cores"].toInt();
+            int usedcores = jnode["cores_busy"].toInt();
+            int ncpus     = jnode["cpus"].toInt();
+            int ngpus     = jnode["gpus"].toInt();
+            int usedgpus  = jnode["gpus_busy"].toInt();
+            QVariantMap properties = jnode["properties"].toMap();
+            QString state =  jnode["state"].toString();
 
             dtkDistributedNode *node = new dtkDistributedNode;
-            node->setName(name);
+            node->setName( jnode["name"].toString());
 
             if(state == "free")
                 node->setState(dtkDistributedNode::Free);
@@ -196,21 +190,20 @@ void dtkDistributedController::read(void)
             else
                 node->setNetwork(dtkDistributedNode::Ethernet1G);
 
-            if(properties.contains("gpu")) for(int i = 0; i < ngpus; i++) {
-
+            if(ngpus > 0) for(int i = 0; i < ngpus; i++) {
                     dtkDistributedGpu *gpu = new dtkDistributedGpu(node);
 
-                    if(properties.contains("nvidia-T10"))
+                    if(properties["gpu_model"] == "T10")
                         gpu->setModel(dtkDistributedGpu::T10);
-                    else if(properties.contains("nvidia-C2050"))
+                    else if(properties["gpu_model"] == "C2050")
                         gpu->setModel(dtkDistributedGpu::C2050);
-                    else if(properties.contains("nvidia-C2070"))
+                    else if(properties["gpu_model"] == "C2070")
                         gpu->setModel(dtkDistributedGpu::C2070);
 
-                    if(properties.contains("nvidia"))
+                    if(properties["gpu_arch"].toString().contains("nvidia"))
                         gpu->setArchitecture(dtkDistributedGpu::Nvidia);
 
-                    if(properties.contains("amd"))
+                    if(properties["gpu_arch"].toString().contains("amd"))
                         gpu->setArchitecture(dtkDistributedGpu::AMD);
 
                     *node << gpu;
@@ -222,15 +215,15 @@ void dtkDistributedController::read(void)
                     int cores = ncores / ncpus;
                     cpu->setCardinality(cores);
 
-                    if(properties.contains("x86"))
+                    if(properties["cpu_arch"] == "x86")
                         cpu->setArchitecture(dtkDistributedCpu::x86);
                     else
                         cpu->setArchitecture(dtkDistributedCpu::x86_64);
 
-                    if(properties.contains("opteron"))
+                    if(properties["cpu_model"].toString().contains("opteron"))
                         cpu->setModel(dtkDistributedCpu::Opteron);
 
-                    if(properties.contains("xeon"))
+                    if(properties["cpu_model"].toString().contains("xeon"))
                         cpu->setModel(dtkDistributedCpu::Xeon);
 
                     for(int j = 0; j < cores; j++)
@@ -246,7 +239,6 @@ void dtkDistributedController::read(void)
         }
         emit updated();
         status_contents.clear();
-//    }
 }
 
 void dtkDistributedController::error(QAbstractSocket::SocketError error)

@@ -20,14 +20,8 @@ MACRO(ADD_MSVC_PRECOMPILED_HEADER PrecompiledHeader PrecompiledSource SourcesVar
 
         if( ${nameMatchLength} GREATER 0 AND ( NOT (${fileItAbsolute} STREQUAL ${PchSourceAbsolute}) ) )
 
-            file(STRINGS ${fileIt} foundString REGEX "^[ \\t]*#[ \\t]*include" LIMIT_COUNT 1)
-            string(REGEX MATCH "${PrecompiledHeader}" containsInclude "${foundString}")
-            string(LENGTH "${containsInclude}" foundLength)
-
-            if( ${foundLength} GREATER 0 )
-                LIST(APPEND PchSources ${fileIt})
-                MESSAGE(" Added Precompiled header support to ${fileIt}")
-            endif( ${foundLength} GREATER 0 )
+            LIST(APPEND PchSources ${fileIt})
+            MESSAGE(" Added Precompiled header support to ${fileIt}")
         endif( ${nameMatchLength} GREATER 0 AND ( NOT (${fileItAbsolute} STREQUAL ${PchSourceAbsolute}) ) )
     endforeach(fileIt)
 

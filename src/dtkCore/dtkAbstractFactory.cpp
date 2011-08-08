@@ -16,7 +16,6 @@
 /* Change log:
  * 
  */
-#include <dtkCore/dtkPch.h>
 
 #include <QtCore/QtGlobal>
 

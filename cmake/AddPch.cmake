@@ -1,5 +1,22 @@
-# Given a variable, adds pch support to suitable files.
-# Does nothing if not MSVC
+# #############################################################################
+# Adds precompiled header (pch) support to suitable files.
+# Currently only implemented for MSVC. For platforms the macro does nothing. 
+#
+# Usage : 
+# add_precompiled_header(AddedPrecompiledSource PchIncludeFilename PchSourceFilename CandidateSourceFile [CandidateSourceFile1...])
+# Arguments:
+# Output :
+#   AddedPrecompiledSource  : variable name that will contain source files 
+#       that need to be added to your target.
+# Input : 
+#   PchIncludeFilename : name of the header file
+#   PchSourceFilename : name of the source file used to generate the pch
+#   CandidateSourceFiles : source file names to which pch support may be added.
+#
+# Note : Adding a PCH to a file has the considerable side effect
+# of implicity forcing #include <pchfile.h> at the start of the file. This may
+# have undesired consequences.
+# #############################################################################
 
 macro(add_msvc_precompiled_header AddedPrecompiledSource PrecompiledHeader PrecompiledSource CandidateSourceFiles)
   if(MSVC)
@@ -21,8 +38,8 @@ macro(add_msvc_precompiled_header AddedPrecompiledSource PrecompiledHeader Preco
 
         if( ${nameMatchLength} GREATER 0 AND ( NOT (${fileItAbsolute} STREQUAL ${PchSourceAbsolute}) ) )
 
-            LIST(APPEND PchSources ${fileIt})
-            MESSAGE(" Added Precompiled header support to ${fileIt}")
+            list(APPEND PchSources ${fileIt})
+#            message(" Added Precompiled header support to ${fileIt}")
         endif( ${nameMatchLength} GREATER 0 AND ( NOT (${fileItAbsolute} STREQUAL ${PchSourceAbsolute}) ) )
     endforeach(fileIt)
 
@@ -44,8 +61,10 @@ endif(MSVC)
 
 endmacro(add_msvc_precompiled_header)
 
-# General version.
+
+ 
 macro(add_precompiled_header AddedPrecompiledSource PrecompiledHeader PrecompiledSource CandidateSourceFiles)
+
 if(MSVC)
   add_msvc_precompiled_header(${AddedPrecompiledSource} ${PrecompiledHeader} ${PrecompiledSource} ${CandidateSourceFiles} ${ARGN})
 endif(MSVC)

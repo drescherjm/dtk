@@ -111,7 +111,10 @@ void dtkAbstractDataReader::readInformation(const QString& path)
 
 void dtkAbstractDataReader::readInformation(const QStringList& paths)
 {
-    DTK_UNUSED(paths);
+    //  Provide a sensible default for the case the list contains only one file.
+
+    if (paths.size()==1)
+        return readInformation(paths[0]);
 }
 
 void dtkAbstractDataReader::setProgress(int value)

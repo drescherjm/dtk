@@ -135,9 +135,16 @@ endif(NOT MSVC)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
+add_precompiled_header(${PROJECT_NAME}_SOURCES_PCH 
+  "dtkPch/dtkPch.h" "../dtkPch/dtkPch.cpp" 
+  ${${PROJECT_NAME}_SOURCES}
+  ${${PROJECT_NAME}_HEADERS}
+  ${${PROJECT_NAME}_SOURCES_MOC})
+
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
+  ${${PROJECT_NAME}_SOURCES_PCH}
   ${${PROJECT_NAME}_SOURCES_MOC})
 
 target_link_libraries(${PROJECT_NAME}

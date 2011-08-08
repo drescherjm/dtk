@@ -45,7 +45,7 @@ include(dtkDependencies)
 include(dtkBuild)
 include(dtkPack)
 
-include(AddMsvcPch)
+include(AddPch)
 
 add_subdirectory(src)
 

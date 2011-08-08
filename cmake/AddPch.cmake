@@ -1,18 +1,19 @@
 # Given a variable, adds pch support to suitable files.
 # Does nothing if not MSVC
 
-MACRO(ADD_MSVC_PRECOMPILED_HEADER PrecompiledHeader PrecompiledSource SourcesVar)
-  IF(MSVC)
+macro(add_msvc_precompiled_header AddedPrecompiledSource PrecompiledHeader PrecompiledSource CandidateSourceFiles)
+  if(MSVC)
     get_filename_component(PrecompiledBasename ${PrecompiledHeader} NAME_WE)
     set(PrecompiledBinary "\$(IntDir)/${PrecompiledBasename}.pch")
 
     get_filename_component(PchSourceAbsolute ${PrecompiledSource} ABSOLUTE)
 
-    set(AllSources ${${SourcesVar}})
+    set(_SourceFiles ${CandidateSourceFiles})
+    list(APPEND _SourceFiles ${ARGN})
     set(PchSources)
 
     #Determine files that can use the PCH.
-    foreach(fileIt ${AllSources})
+    foreach(fileIt ${_SourceFiles})
         string(REGEX MATCH "(\\.cpp|\\.cxx|\\.c|\\.C|\\.CPP|\\.cc)\$" nameMatch "${fileIt}")
         string(LENGTH "${nameMatch}" nameMatchLength)
 
@@ -27,7 +28,7 @@ MACRO(ADD_MSVC_PRECOMPILED_HEADER PrecompiledHeader PrecompiledSource SourcesVar
 
     foreach(fileIt ${PchSources})
         set_property(SOURCE "${fileIt}" APPEND PROPERTY
-            COMPILE_FLAGS "/Yu\"${PrecompiledBinary}\" /FI\"${PrecompiledBinary}\" /Fp\"${PrecompiledBinary}\"")
+            COMPILE_FLAGS "/Yu\"${PrecompiledHeader}\" /FI\"${PrecompiledHeader}\" /Fp\"${PrecompiledBinary}\"")
         set_property(SOURCE "${fileIt}" APPEND PROPERTY
             OBJECT_DEPENDS "${PrecompiledBinary}")
     endforeach(fileIt)
@@ -38,7 +39,16 @@ MACRO(ADD_MSVC_PRECOMPILED_HEADER PrecompiledHeader PrecompiledSource SourcesVar
                                 OBJECT_OUTPUTS "${PrecompiledBinary}")
 
     # Add precompiled header to SourcesVar
-    LIST(APPEND ${SourcesVar} ${PrecompiledSource})
-ENDIF(MSVC)
+    list(APPEND ${AddedPrecompiledSource} ${PrecompiledSource})
+endif(MSVC)
 
-ENDMACRO(ADD_MSVC_PRECOMPILED_HEADER)
+endmacro(add_msvc_precompiled_header)
+
+# General version.
+macro(add_precompiled_header AddedPrecompiledSource PrecompiledHeader PrecompiledSource CandidateSourceFiles)
+if(MSVC)
+  add_msvc_precompiled_header(${AddedPrecompiledSource} ${PrecompiledHeader} ${PrecompiledSource} ${CandidateSourceFiles} ${ARGN})
+endif(MSVC)
+
+endmacro(add_precompiled_header)
+  

@@ -1,2 +1,0 @@
-
-#include <dtkCore/dtkPch.h>

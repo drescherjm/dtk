@@ -65,6 +65,8 @@ void dtkAbstractDataReader::setData(dtkAbstractData *data)
     d->data = data;
 }
 
+//  Verify that the reader can handle this/these file(s).
+
 bool dtkAbstractDataReader::canRead(const QString& file)
 {
     DTK_UNUSED(file);
@@ -74,7 +76,10 @@ bool dtkAbstractDataReader::canRead(const QString& file)
 
 bool dtkAbstractDataReader::canRead(const QStringList& files)
 {
-    DTK_UNUSED(files);
+    //  Provide a sensible default for the case the list contains only one file.
+
+    if (files.size()==1)
+        return canRead(files[0]);
 
     return false;
 }

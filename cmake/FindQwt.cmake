@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Mon Jun  6 16:20:06 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Jun  7 15:13:19 2011 (+0200)
+## Last-Updated: Mon Jul  4 11:49:32 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 7
+##     Update #: 8
 ######################################################################
 ## 
 ### Commentary: 
@@ -26,18 +26,19 @@ set(QWT_FOUND "NO")
 
 if(QT4_FOUND)
 
-  find_path(QWT_INCLUDE_DIR qwt.h
+  find_path(QWT_INCLUDE_DIR qwt_plot_renderer.h
     /usr/local/qwt/include
     /usr/local/include
     /usr/include/qwt
+    /usr/include/qwt-qt4
     /usr/include)
 
-  set(QWT_NAMES ${QWT_NAMES} qwt libqwt qwt-qt4)
+  set(QWT_NAMES ${QWT_NAMES} qwt qwt-qt4 libqwt libqwt-qt4)
 
   find_library(QWT_LIBRARY
     NAMES ${QWT_NAMES}
     PATHS /usr/local/qwt/lib /usr/local/lib /usr/lib)
-  
+
   if(QWT_LIBRARY)
     set(QWT_LIBRARIES ${QWT_LIBRARY})
     set(QWT_FOUND "YES")
@@ -51,4 +52,4 @@ if(QT4_FOUND)
   endif(QWT_LIBRARY)
 endif(QT4_FOUND)
 
-mark_as_advanced(QWT_INCLUDE_DIR QWT_LIBRARY)
+mark_as_advanced(QWT_INCLUDE_DIR QWT_LIBRARY QWT_DIR)

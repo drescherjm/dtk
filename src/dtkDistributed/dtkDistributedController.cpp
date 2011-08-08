@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 30 14:10:51 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 198
+ * Last-Updated: ven. juil.  1 17:20:44 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 482
  */
 
 /* Commentary: 
@@ -18,18 +18,23 @@
  */
 
 #include "dtkDistributedController.h"
+#include "dtkDistributedServerManager.h"
+#include "dtkDistributedCore.h"
+#include "dtkDistributedNode.h"
+#include "dtkDistributedCpu.h"
+#include "dtkDistributedGpu.h"
 
 #include <dtkCore/dtkGlobal.h>
+#include <dtkCore/dtkLog.h>
 
 #include <QtNetwork>
+#include <QtXml>
 
 class dtkDistributedControllerPrivate
 {
 public:
     QHash<QString, QTcpSocket *> sockets;
-
-public:
-    QProcess *ssh;
+    QHash<QString, QList<dtkDistributedNode *> > nodes;
 };
 
 dtkDistributedController::dtkDistributedController(void) : d(new dtkDistributedControllerPrivate)
@@ -106,13 +111,140 @@ void dtkDistributedController::disconnect(const QUrl& server)
     }
 }
 
+QList<dtkDistributedNode *> dtkDistributedController::nodes(void)
+{
+    QList<dtkDistributedNode *> n;
+
+    foreach(QList<dtkDistributedNode *> nodeset, d->nodes)
+        n << nodeset;
+
+    return n;
+}
+
+QList<dtkDistributedNode *> dtkDistributedController::nodes(const QString& cluster)
+{
+    return d->nodes.value(cluster);
+}
+
 void dtkDistributedController::read(void)
 {
     QTcpSocket *socket = (QTcpSocket *)sender();
 
-    qDebug() << DTK_PRETTY_FUNCTION << "-- Begin read --";
-    qDebug() << DTK_PRETTY_FUNCTION << socket->readAll();
-    qDebug() << DTK_PRETTY_FUNCTION << "-- End read --";
+    static QString status_contents;
+
+    QString buffer = socket->readAll();
+
+    if(buffer.startsWith("!! status !!")) {
+
+        status_contents.clear();
+        status_contents += buffer.remove("!! status !!");
+    }
+
+    if(buffer.endsWith("!! endstatus !!")) {
+
+      if(!buffer.startsWith("version="+dtkDistributedServerManager::protocol())) {
+        qDebug() << "WARNING: Bad protocol version";
+      }
+
+        status_contents = buffer.remove("!! endstatus !!");
+        QStringList nodes = status_contents.split("\n");
+        // skip the first item (version=XXX), so start at 1 :
+        for(int i = 1; i < nodes.size(); i++) {
+            QStringList nodestr = nodes.at(i).split(";");
+
+            if  (nodestr.size() < 8) {
+                qDebug() << "Skipping line ";
+                continue;
+            }
+
+            QString name  = nodestr.at(0);
+            int ncores    = nodestr.at(1).toInt();
+            int usedcores = nodestr.at(2).toInt();
+            int ncpus     = nodestr.at(3).toInt();
+            int ngpus     = nodestr.at(4).toInt();
+            int usedgpus  = nodestr.at(5).toInt();
+            QString state = nodestr.at(7);
+            QStringList properties = nodestr.at(6).split(",");
+
+            dtkDistributedNode *node = new dtkDistributedNode;
+            node->setName(name);
+
+            if(state == "free")
+                node->setState(dtkDistributedNode::Free);
+
+            if(state == "busy")
+                node->setState(dtkDistributedNode::Busy);
+
+            if(state == "down")
+                node->setState(dtkDistributedNode::Down);
+
+            if(properties.contains("dell"))
+                node->setBrand(dtkDistributedNode::Dell);
+
+            if(properties.contains("hp"))
+                node->setBrand(dtkDistributedNode::Hp);
+
+            if(properties.contains("ibm"))
+                node->setBrand(dtkDistributedNode::Ibm);
+
+            if(properties.contains("myrinet"))
+                node->setNetwork(dtkDistributedNode::Myrinet10G);
+            else if(properties.contains("QDR"))
+                node->setNetwork(dtkDistributedNode::Infiniband40G);
+            else
+                node->setNetwork(dtkDistributedNode::Ethernet1G);
+
+            if(properties.contains("gpu")) for(int i = 0; i < ngpus; i++) {
+
+                    dtkDistributedGpu *gpu = new dtkDistributedGpu(node);
+
+                    if(properties.contains("nvidia-T10"))
+                        gpu->setModel(dtkDistributedGpu::T10);
+                    else if(properties.contains("nvidia-C2050"))
+                        gpu->setModel(dtkDistributedGpu::C2050);
+                    else if(properties.contains("nvidia-C2070"))
+                        gpu->setModel(dtkDistributedGpu::C2070);
+
+                    if(properties.contains("nvidia"))
+                        gpu->setArchitecture(dtkDistributedGpu::Nvidia);
+
+                    if(properties.contains("amd"))
+                        gpu->setArchitecture(dtkDistributedGpu::AMD);
+
+                    *node << gpu;
+                }
+
+            for(int i = 0; i < ncpus; i++) {
+
+                    dtkDistributedCpu *cpu = new dtkDistributedCpu(node);
+                    int cores = ncores / ncpus;
+                    cpu->setCardinality(cores);
+
+                    if(properties.contains("x86"))
+                        cpu->setArchitecture(dtkDistributedCpu::x86);
+                    else
+                        cpu->setArchitecture(dtkDistributedCpu::x86_64);
+
+                    if(properties.contains("opteron"))
+                        cpu->setModel(dtkDistributedCpu::Opteron);
+
+                    if(properties.contains("xeon"))
+                        cpu->setModel(dtkDistributedCpu::Xeon);
+
+                    for(int j = 0; j < cores; j++)
+                        *cpu << new dtkDistributedCore(cpu);
+
+                    *node << cpu;
+                }
+
+            d->nodes[d->sockets.key(socket)] << node;
+
+            qDebug() << "Found node" << node->name() << "with" << node->cpus().count() << "cpus";
+
+        }
+        emit updated();
+        status_contents.clear();
+    }
 }
 
 void dtkDistributedController::error(QAbstractSocket::SocketError error)

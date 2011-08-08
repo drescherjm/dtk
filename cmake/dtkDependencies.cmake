@@ -220,7 +220,7 @@ endif(MPI_FOUND AND QUAT_LIBRARY AND VRPN_LIBRARY)
 ## Qwt
 ## #################################################################
 
-find_package(QWT QUIET)
+find_package(Qwt QUIET)
 
 if(QWT_FOUND)
   include_directories(${QWT_INCLUDE_DIR})

@@ -19,18 +19,20 @@
 
 #include <dtkCore/dtkAbstractDataWriter.h>
 
+#include <dtkCore/dtkAbstractData.h>
+#include <dtkCore/dtkSmartPointer.h>
+
 class dtkAbstractDataWriterPrivate
 {
 public:
     bool enabled;
 
-    dtkAbstractData *data;
+    dtkSmartPointer<dtkAbstractData> data;
 };
 
 dtkAbstractDataWriter::dtkAbstractDataWriter(void) : dtkAbstractObject(), d(new dtkAbstractDataWriterPrivate)
 {
     d->enabled = false;
-    d->data = NULL;
 }
 
 dtkAbstractDataWriter::~dtkAbstractDataWriter(void)
@@ -60,6 +62,10 @@ dtkAbstractData *dtkAbstractDataWriter::data(void)
     return d->data;
 }
 
+/**
+ * Set the data that will be written.
+ * The writer will increase the reference count of the data.
+ */
 void dtkAbstractDataWriter::setData(dtkAbstractData *data)
 {
     d->data = data;

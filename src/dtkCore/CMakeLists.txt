@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Mar 15 18:07:12 2011 (+0100)
-##           By: Julien Wintz
-##     Update #: 186
+## Last-Updated: Mon Jul 11 11:13:07 2011 (+0200)
+##           By: Thibaud Kloczko
+##     Update #: 199
 ######################################################################
 ## 
 ### Commentary: 
@@ -26,11 +26,6 @@ project(dtkCore)
 set(${PROJECT_NAME}_HEADERS
   dtkAbstractData.h
   dtkAbstractDataFactory.h
-  dtkAbstractDataImage.h
-  dtkAbstractDataImage2D.h
-  dtkAbstractDataImage3D.h
-  dtkAbstractDataTypedImage.h
-  dtkAbstractDataMesh.h
   dtkAbstractDataReader.h
   dtkAbstractDataWriter.h
   dtkAbstractDataConverter.h
@@ -50,16 +45,13 @@ set(${PROJECT_NAME}_HEADERS
   dtkPluginManager.h
   dtkQuat.h
   dtkUpdater.h
+  dtkSignalBlocker.h
   dtkSmartPointer.h
   dtkVec3.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractData.h
   dtkAbstractDataFactory.h
-  dtkAbstractDataImage2D.h
-  dtkAbstractDataImage3D.h
-  dtkAbstractDataImage4D.h
-  dtkAbstractDataMesh.h
   dtkAbstractDataReader.h
   dtkAbstractDataWriter.h
   dtkAbstractDataConverter.h
@@ -82,11 +74,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkAbstractDataReader.cpp
   dtkAbstractDataWriter.cpp
   dtkAbstractDataConverter.cpp
-  dtkAbstractDataImage.cpp
-  dtkAbstractDataImage2D.cpp
-  dtkAbstractDataImage3D.cpp
-  dtkAbstractDataImage4D.cpp
-  dtkAbstractDataMesh.cpp
   dtkAbstractFactory.cpp
   dtkAbstractObject.cpp
   dtkAbstractProcessFactory.cpp
@@ -100,6 +87,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkLog.cpp
   dtkPluginManager.cpp
   dtkQuat.cpp
+  dtkSignalBlocker.h
   dtkSmartPointer.cpp
   dtkUpdater.cpp)
 
@@ -143,7 +131,6 @@ endif()
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)
 if(NOT MSVC)
-  # Shouldn't the QT_USE_FILE set this appropriately?
   add_definitions(-DQT_NO_DEBUG)
 endif()
 
@@ -194,6 +181,7 @@ SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 ## Installation
 ## #################################################################
 
+install(FILES ${dtk_BINARY_DIR}/dtkConfig.h DESTINATION include/${PROJECT_NAME})
 install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
 install(FILES ${${PROJECT_NAME}_MODULES} DESTINATION modules)
 install(TARGETS ${PROJECT_NAME}

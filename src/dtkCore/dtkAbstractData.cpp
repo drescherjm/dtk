@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May 23 11:32:11 2011 (+0200)
+ * Last-Updated: Tue Jul  5 15:12:09 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 263
+ *     Update #: 266
  */
 
 /* Commentary:
@@ -315,16 +315,22 @@ dtkAbstractData *dtkAbstractData::convert(const QString& toType)
     dtkAbstractData *conversion = NULL;
 
     for (QMap<QString, bool>::const_iterator it(d->converters.begin()); it!= d->converters.end() && !conversion ; ++it) {
-
+        
         if (it.value()) {
+            
+            QScopedPointer<dtkAbstractDataConverter> converter( dtkAbstractDataFactory::instance()->converter(it.key()));
+            
+            if (converter && converter->canConvert(toType)) {
+                converter->setData(this);
+                conversion = converter->convert();
 
-            QScopedPointer< dtkAbstractDataConverter > converter( dtkAbstractDataFactory::instance()->converter(it.key()));
+                if(conversion) {
 
-            if (converter) {
-                if (converter->canConvert(toType))
-                {
-                  converter->setData(this);
-                    conversion = converter->convert();
+                    foreach(QString metaDataKey, this->metaDataList())
+                        conversion->addMetaData(metaDataKey, this->metaDataValues(metaDataKey));
+                    
+                    foreach(QString propertyKey, this->propertyList())
+                        conversion->addProperty(propertyKey, this->propertyValues(propertyKey));
                 }
             }
         }

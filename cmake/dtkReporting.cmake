@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Mon Jun  6 14:49:42 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Jun 20 19:38:50 2011 (+0200)
+## Last-Updated: Thu Jun 30 22:25:09 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 10
+##     Update #: 31
 ######################################################################
 ## 
 ### Commentary: 
@@ -19,6 +19,27 @@
 
 if (EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Dart.cmake.in)
 
+  find_program(HOSTNAME_CMD NAMES hostname)
+  exec_program(${HOSTNAME_CMD} ARGS OUTPUT_VARIABLE HOSTNAME)
+
+  find_program(UNAME NAMES uname)
+
+  macro(getuname name flag)
+    exec_program("${UNAME}" ARGS "${flag}" OUTPUT_VARIABLE "${name}")
+  endmacro(getuname)
+
+  if ("${UNAME}")
+     getuname(osname -s)
+     getuname(osrel -r)
+     getuname(cpu -m)
+  else ("${UNAME}")
+    set(osname "${CMAKE_HOST_SYSTEM_NAME}")
+    set(osrel  "${CMAKE_HOST_SYSTEM_VERSION}")
+    set(cpu    "${CMAKE_HOST_SYSTEM_PROCESSOR}")
+  endif("${UNAME}")
+
+  set(DTK_CTEST_BUILD_NAME "${osname}-${osrel}-${cpu}" CACHE STRING "Reporting build name.")
+  set(DTK_CTEST_SITE "${HOSTNAME}" CACHE STRING "Reporting site name.")
   set(DTK_CTEST_PROJECT_NAME ${PROJECT_NAME} CACHE STRING "Reporting project name.")
   set(DTK_CTEST_UPDATE_TYPE "git" CACHE STRING "Reporting update type.")
   set(DTK_CTEST_UPDATE_COMMAND "git" CACHE STRING "Reporting update command.")
@@ -32,6 +53,10 @@ if (EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Dart.cmake.in)
     "${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}Dart.cmake")
 
   mark_as_advanced(DART_TESTING_TIMEOUT)
+  mark_as_advanced(HOSTNAME_CMD)
+  mark_as_advanced(UNAME)
+  mark_as_advanced(DTK_CTEST_BUILD_NAME)
+  mark_as_advanced(DTK_CTEST_SITE)
   mark_as_advanced(DTK_CTEST_PROJECT_NAME)
   mark_as_advanced(DTK_CTEST_UPDATE_TYPE)
   mark_as_advanced(DTK_CTEST_UPDATE_COMMAND)

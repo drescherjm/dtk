@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:48:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May 23 11:39:33 2011 (+0200)
+ * Last-Updated: Tue Jul  5 15:18:15 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 86
+ *     Update #: 87
  */
 
 /* Commentary:
@@ -22,11 +22,12 @@
 
 #include <dtkCore/dtkAbstractFactory.h>
 
-class dtkAbstractData;
-class dtkAbstractDataReader;
-class dtkAbstractDataWriter;
-class dtkAbstractDataConverter;
-class dtkAbstractDataFactoryPrivate;
+                  class dtkAbstractData;
+                  class dtkAbstractDataReader;
+                  class dtkAbstractDataWriter;
+                  class dtkAbstractDataConverter;
+                  class dtkAbstractDataFactoryPrivate;
+template<class T> class dtkSmartPointer;
 
 class DTKCORE_EXPORT dtkAbstractDataFactory : public dtkAbstractFactory
 {
@@ -55,6 +56,11 @@ public:
     QList<QString> readers(void) const;
     QList<QString> writers(void) const;
     QList<QString> converters(void) const;
+
+    dtkSmartPointer<dtkAbstractData>          createSmartPointer   (const QString& type);
+    dtkSmartPointer<dtkAbstractDataReader>    readerSmartPointer   (const QString& type);
+    dtkSmartPointer<dtkAbstractDataWriter>    writerSmartPointer   (const QString& type);
+    dtkSmartPointer<dtkAbstractDataConverter> converterSmartPointer(const QString& type);
 
 signals:
     void created(dtkAbstractData *data, const QString& type);

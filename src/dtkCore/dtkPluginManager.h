@@ -56,8 +56,8 @@ protected:
      dtkPluginManager(void);
     ~dtkPluginManager(void);
 
-    void   loadPlugin(const QString& path);
-    void unloadPlugin(const QString& path);
+    virtual void   loadPlugin(const QString& path);
+    virtual void unloadPlugin(const QString& path);
 
     QString path(void) const;
 

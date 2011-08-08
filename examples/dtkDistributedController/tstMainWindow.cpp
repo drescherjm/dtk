@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 16:12:47 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 31 23:50:17 2011 (+0200)
+ * Last-Updated: Mon Jul  4 13:51:08 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 195
+ *     Update #: 228
  */
 
 /* Commentary: 
@@ -25,9 +25,8 @@
 #include <dtkGui/dtkSpacer.h>
 
 #include <dtkDistributed/dtkDistributedController.h>
-#include <dtkDistributed/dtkDistributedControllerViewFiltering.h>
-#include <dtkDistributed/dtkDistributedControllerViewOverall.h>
-#include <dtkDistributed/dtkDistributedControllerViewDetailed.h>
+#include <dtkDistributed/dtkDistributedControllerStatusModel.h>
+#include <dtkDistributed/dtkDistributedControllerStatusView.h>
 
 // /////////////////////////////////////////////////////////////////
 // tstMainWindowPrivate
@@ -37,9 +36,8 @@ class tstMainWindowPrivate
 {
 public:
     dtkDistributedController *controller;
-    dtkDistributedControllerViewFiltering *view_filtering;
-    dtkDistributedControllerViewOverall *view_overall;
-    dtkDistributedControllerViewDetailed *view_detailed;
+    dtkDistributedControllerStatusModel *status_model;
+    dtkDistributedControllerStatusView *status_view;
 
 public:
     QLineEdit *host_address;
@@ -56,18 +54,14 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
 
     d->controller = new dtkDistributedController;
 
-    // d->view_filtering = new dtkDistributedControllerViewFiltering(this);
-    // d->view_filtering->setController(d->controller);
+    d->status_model = new dtkDistributedControllerStatusModel(this);
+    d->status_model->setController(d->controller);
 
-    d->view_overall = new dtkDistributedControllerViewOverall(this);
-    d->view_overall->setController(d->controller);
+    d->status_view = new dtkDistributedControllerStatusView(this);
+    d->status_view->setModel(d->status_model);
 
-    d->view_detailed = new dtkDistributedControllerViewDetailed(this);
-    d->view_detailed->setController(d->controller);
-
-    dtkAnchoredBar *anchoredBar = new dtkAnchoredBar(d->view_overall);
-    anchoredBar->setMinimumWidth(200);
-    anchoredBar->setMaximumWidth(400);
+    dtkAnchoredBar *anchoredBar = new dtkAnchoredBar(d->status_view);
+    anchoredBar->setDragEnabled(false);
 
     d->host_address = new QLineEdit("dtk://nef-devel.inria.fr:9999", anchoredBar);
     d->host_address->setAttribute(Qt::WA_MacShowFocusRect, false);
@@ -83,21 +77,13 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
     anchoredBar->addWidget(d->host_button);
     anchoredBar->addWidget(new dtkSpacer(anchoredBar, 16));
 
-    QWidget *side = new QWidget(this);
-
-    QVBoxLayout *side_layout = new QVBoxLayout(side);
-    side_layout->setContentsMargins(0, 0, 0, 0);
-    side_layout->setSpacing(0);
-    side_layout->addWidget(d->view_overall);
-    side_layout->addWidget(anchoredBar);
-
     QWidget *central = new QWidget(this);
 
-    QHBoxLayout *layout = new QHBoxLayout(central);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(0);
-    layout->addWidget(side);
-    layout->addWidget(d->view_detailed);
+    QVBoxLayout *central_layout = new QVBoxLayout(central);
+    central_layout->setContentsMargins(0, 0, 0, 0);
+    central_layout->setSpacing(0);
+    central_layout->addWidget(d->status_view);
+    central_layout->addWidget(anchoredBar);
 
     this->setCentralWidget(central);
     this->setUnifiedTitleAndToolBarOnMac(true);

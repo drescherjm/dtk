@@ -23,15 +23,16 @@
 #include <dtkCore/dtkAbstractViewNavigator.h>
 #include <dtkCore/dtkAbstractViewInteractor.h>
 #include <dtkCore/dtkLog.h>
+#include <dtkCore/dtkSmartPointer.h>
 
 class dtkAbstractViewPrivate
 {
 public:
     bool stereo;
 
-    QMap<QString, dtkAbstractViewAnimator   *>   animators;
-    QMap<QString, dtkAbstractViewNavigator  *>  navigators;
-    QMap<QString, dtkAbstractViewInteractor *> interactors;
+    QMap<QString, dtkSmartPointer<dtkAbstractViewAnimator> >   animators;
+    QMap<QString, dtkSmartPointer<dtkAbstractViewNavigator> >  navigators;
+    QMap<QString, dtkSmartPointer<dtkAbstractViewInteractor> > interactors;
 };
 
 dtkAbstractView::dtkAbstractView(dtkAbstractView *parent) : dtkAbstractObject(parent), d(new dtkAbstractViewPrivate)
@@ -295,17 +296,29 @@ dtkAbstractViewInteractor *dtkAbstractView::interactor(const QString& type)
 
 QList<dtkAbstractViewAnimator *> dtkAbstractView::animators(void) const
 {
-    return d->animators.values();
+    QList<dtkAbstractViewAnimator *> ret;
+    ret.reserve(d->animators.size());
+    foreach( dtkSmartPointer<dtkAbstractViewAnimator> value, d->animators )
+        ret.push_back(value.data());
+    return ret;
 }
 
 QList<dtkAbstractViewNavigator *> dtkAbstractView::navigators(void) const
 {
-    return d->navigators.values();
+    QList<dtkAbstractViewNavigator *> ret;
+    ret.reserve(d->navigators.size());
+    foreach( dtkSmartPointer<dtkAbstractViewNavigator> value, d->navigators )
+        ret.push_back(value.data());
+    return ret;
 }
 
 QList<dtkAbstractViewInteractor *> dtkAbstractView::interactors(void) const
 {
-    return d->interactors.values();
+    QList<dtkAbstractViewInteractor *> ret;
+    ret.reserve(d->interactors.size());
+    foreach( dtkSmartPointer<dtkAbstractViewInteractor> value, d->interactors )
+        ret.push_back(value.data());
+    return ret;
 }
 
 // /////////////////////////////////////////////////////////////////

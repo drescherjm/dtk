@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jan 29 14:38:31 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  4 21:00:31 2010 (+0100)
+ * Last-Updated: Tue Jul  5 15:26:35 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 54
+ *     Update #: 57
  */
 
 /* Commentary:
@@ -20,19 +20,21 @@
 #include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkAbstractView.h>
 #include <dtkCore/dtkAbstractViewInteractor.h>
+#include <dtkCore/dtkSmartPointer.h>
 
 class dtkAbstractViewInteractorPrivate
 {
 public:
     bool enabled;
-    dtkAbstractData *data;
+
+    dtkSmartPointer<dtkAbstractData> data;
+
     dtkAbstractView *view;
 };
 
 dtkAbstractViewInteractor::dtkAbstractViewInteractor(void) : dtkAbstractObject(), d(new dtkAbstractViewInteractorPrivate)
 {
     d->enabled = false;
-    d->data = NULL;
     d->view = NULL;
 }
 

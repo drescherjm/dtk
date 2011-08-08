@@ -1,0 +1,24 @@
+CHANGELOG.txt --- 
+;; 
+;; Author: Julien Wintz
+;; Copyright (C) 2008-2011 - Julien Wintz, Inria.
+;; Created: Thu Jun 30 00:13:01 2011 (+0200)
+;; Version: $Id$
+;; Last-Updated: Tue Jul  5 15:35:17 2011 (+0200)
+;;           By: Julien Wintz
+;;     Update #: 4
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+Commentary: 
+;; 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+Change log:
+;; 5-Jul-2011    Julien Wintz  
+;;    Last-Updated: Thu Jun 30 00:13:47 2011 (+0200) #3 (Julien Wintz)
+;;    0.5.1: Better handling of smart pointers in core layer. (jstark)
+;; 30-Jun-2011    Julien Wintz  
+;;    Last-Updated: Thu Jun 30 00:13:13 2011 (+0200) #1 (Julien Wintz)
+;;    0.5.0: Initial version. See git logs for details.
+;; 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

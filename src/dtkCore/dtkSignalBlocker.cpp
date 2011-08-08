@@ -1,8 +1,12 @@
-/* dtkQSignalBlocker.h --- 
+/* dtkSignalBlocker.cpp --- 
  * 
  * Author: John Stark
- * Copyright (C) 2011 - John Stark, Inria.
- *     Update #: 1
+ * Copyright (C) 2008-2011 - Julien Wintz, Inria.
+ * Created: Fri Jun 24 16:21:08 2011 (+0200)
+ * Version: $Id$
+ * Last-Updated: Fri Jun 24 16:21:32 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 5
  */
 
 /* Commentary:
@@ -10,11 +14,16 @@
  * is in the header.
  */
 
-#include "dtkQSignalBlocker.h"
+/* Change log:
+ * 
+ */
 
-// dtkQSignalBlocker :
 
-/*! \class      dtkQSignalBlocker
+#include "dtkSignalBlocker.h"
+
+// dtkSignalBlocker :
+
+/*! \class      dtkSignalBlocker
  *  \brief      Blocks signals to a given object as long it remains instantiated.
  *
  * The purpose is to increase exception-safety and to ensure that objects are
@@ -27,26 +36,22 @@
  * Code example :
  * \code
  *  {
- *    dtkQSignalBlocker blocker( mySlider );
+ *    dtkSignalBlocker blocker(mySlider);
  *    // code which generates signals that mySlider needs to be protected from.
  *  }
  * \endcode
-  */
+ */
 
-/*! \fn         dtkQSignalBlocker::ObjectType;
-    \brief      Access to the managed type, typedef for T.
-*/
-
-/*! \fn         dtkQSignalBlocker::dtkQSignalBlocker(QObject * o)
+/*! \fn         dtkSignalBlocker::dtkSignalBlocker(QObject * o)
     \brief      Constructor. Immediately calls o->blockSignals(true);
     \param      o : QObject that is blocked.
 */
 
-/*! \fn         dtkQSignalBlocker::~dtkQSignalBlocker()
+/*! \fn         dtkSignalBlocker::~dtkSignalBlocker()
     \brief      Destructor. Calls o->blockSignals(false);
 */
 
-/*! \fn         dtkSmartPointer::blockSignals( bool v )
+/*! \fn         dtkSignalBlocker::blockSignals( bool v )
     \brief      Allows early unblocking / reblocking
     \param      v : passed to object->blockSignals(v).
 */

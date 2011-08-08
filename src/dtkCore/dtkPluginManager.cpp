@@ -183,6 +183,14 @@ dtkPluginManager::~dtkPluginManager(void)
     d = NULL;
 }
 
+/*!
+    \brief      Loads the plugin from the given filename.
+                Derived classes may override to prevent certain plugins being loaded,
+                or provide additional functionality. In most cases they should still
+                call the base implementation (this).
+    \param      path : Path to plugin file to be loaded.
+*/
+
 void dtkPluginManager::loadPlugin(const QString& path)
 {
     QPluginLoader *loader = new QPluginLoader(path);
@@ -224,6 +232,13 @@ void dtkPluginManager::loadPlugin(const QString& path)
     emit loaded(plugin->name());
 }
 
+/*!
+    \brief      Unloads the plugin previously loaded from the given filename.
+                Derived classes may override to prevent certain plugins being unloaded,
+                or provide additional functionality. In most cases they should still
+                call the base implementation (this).
+    \param      path : Path to plugin file to be unloaded.
+*/
 void dtkPluginManager::unloadPlugin(const QString& path)
 {
     dtkPlugin *plugin = qobject_cast<dtkPlugin *>(d->loaders.value(path)->instance());

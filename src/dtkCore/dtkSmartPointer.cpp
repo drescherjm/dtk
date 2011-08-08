@@ -73,6 +73,13 @@
     \param      p : SmartPointer that is copied.
 */
 
+/*! \fn        template < TR > dtkSmartPointer< T >::dtkSmartPointer(const dtkSmartPointer< TR > &p)
+    \brief      Constructor from SmartPointer of other type. 
+                Managed pointer is initialized with object from p using dynamic_cast. 
+                The reference count of p is increased by 1 if the cast succeeds.
+    \param      p : SmartPointer that is copied.
+*/
+
 /*! \fn         dtkSmartPointer::dtkSmartPointer( T *p )
     \brief      Construct from raw pointer. Managed pointer is initialized with
                 p. The reference count of p is increased by 1.
@@ -100,6 +107,12 @@
 /*! \fn         bool dtkSmartPointer::isNull() const
     \brief      Test if the underlying pointer is NULL.
     \return     True if the underlying pointer is NULL.
+*/
+
+/*! \fn         int dtkSmartPointer::refCount(void) const
+    \brief      Get the reference count of the pointer.
+    \return     The count for the pointer, or 0 if it is NULL.
+    \sa         int dtkAbstractObject::count() const
 */
 
 /*! \fn         bool dtkSmartPointer< T >::operator==(TR r) const
@@ -142,7 +155,7 @@
     \fn         const T& dtkSmartPointer< T >::operator*() const
     \brief      Return object as a reference. (const and non-const versions
                 available)
-    \return     The mamanged pointer (our d)
+    \return     The managed pointer (our d)
 */
 
 /*! \fn         dtkSmartPointer& dtkSmartPointer< T >::operator=(const dtkSmartPointer& r)
@@ -152,6 +165,14 @@
                 Assigns value from parameter given.
                 Increases reference count of assigned pointer if not NULL.
     \return     *this
+*/
+
+/*! \fn         template<TR> dtkSmartPointer& dtkSmartPointer< T >::operator=(const dtkSmartPointer<TR>& r)
+    \brief      Overload operator assignment with dtkSmartPointer of other type. 
+                Managed pointer is assigned using dynamic_cast of pointer in r. 
+                The reference count of p is increased by 1 if the cast succeeds.
+    \param      r : SmartPointer that is copied.
+    \return     *this.
 */
 
 /*! \fn         void dtkSmartPointer::swap( dtkSmartPointer &other)

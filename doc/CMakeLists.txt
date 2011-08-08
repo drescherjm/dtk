@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Tue Feb  2 20:18:37 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Apr  2 11:23:11 2010 (+0200)
-##           By: Julien Wintz
-##     Update #: 39
+## Last-Updated: Mon Jul 11 11:14:42 2011 (+0200)
+##           By: Thibaud Kloczko
+##     Update #: 43
 ######################################################################
 ## 
 ### Commentary: 
@@ -43,11 +43,15 @@ if (DOXYGEN_FOUND)
     COMMAND ${DOXYGEN_EXECUTABLE} Doxyfile
     COMMAND ${QT_BINARY_DIR}/qhelpgenerator html/index.qhp -o dtk.qch
     COMMAND ${QT_BINARY_DIR}/qcollectiongenerator dtk.qhcp -o dtk.qhc
-    COMMENT "-- Generating embedded documentation"
-    )
+    COMMENT "-- Generating embedded documentation")
 
-  install(FILES ${CMAKE_BINARY_DIR}/doc/dtk.qhc DESTINATION doc)
-  install(DIRECTORY ${CMAKE_BINARY_DIR}/doc/html DESTINATION doc)
+  if(EXISTS ${CMAKE_BINARY_DIR}/doc/dtk.qhc)
+    install(FILES ${CMAKE_BINARY_DIR}/doc/dtk.qhc DESTINATION doc)
+  endif(EXISTS ${CMAKE_BINARY_DIR}/doc/dtk.qhc)
+
+  if(EXISTS ${CMAKE_BINARY_DIR}/doc/html)
+    install(DIRECTORY ${CMAKE_BINARY_DIR}/doc/html DESTINATION doc)
+  endif(EXISTS ${CMAKE_BINARY_DIR}/doc/html)
 else (DOXYGEN_FOUND)
   message(INFO "Can't find doxygen. Can't build documentation")
 endif (DOXYGEN_FOUND)

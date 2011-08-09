@@ -41,6 +41,10 @@ option(BUILD_DOCUMENTATION "Build documentation"    true)
 option(BUILD_WRAPPERS      "Build wrappers"         true)
 option(BUILD_REPORTING     "Build reporting"        true)
 
+if(MSVC)
+  option(DTK_USE_PRECOMPILED_HEADERS     "Use precompiled headers"        true)
+endif(MSVC)
+
 include(dtkDependencies)
 include(dtkBuild)
 include(dtkPack)

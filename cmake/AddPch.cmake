@@ -45,7 +45,7 @@ macro(add_msvc_precompiled_header AddedPrecompiledSource PrecompiledHeader Preco
 
     foreach(fileIt ${PchSources})
         set_property(SOURCE "${fileIt}" APPEND PROPERTY
-            COMPILE_FLAGS "/Yu\"${PrecompiledHeader}\" /FI\"${PrecompiledHeader}\" /Fp\"${PrecompiledBinary}\"")
+            COMPILE_FLAGS "/Yu\"${PrecompiledHeader}\" /FI\"${PrecompiledHeader}\" /Fp\"${PrecompiledBinary}\" /MP")
         set_property(SOURCE "${fileIt}" APPEND PROPERTY
             OBJECT_DEPENDS "${PrecompiledBinary}")
     endforeach(fileIt)

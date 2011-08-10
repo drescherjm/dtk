@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. août 10 15:50:45 2011 (+0200)
+ * Last-Updated: mer. août 10 18:17:30 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 808
+ *     Update #: 866
  */
 
 /* Commentary: 
@@ -36,54 +36,54 @@ QString dtkDistributedServerManagerTorque::submit(QString input)
 
     QString qsub = "qsub ";
 
-    // format: ** submit **; resources; properties; walltime; script; queue ; options
-    QStringList arglist = input.split(";");
-
-    // properties, syntax: (arch=opteron,gpu=nvidia-T10)
+    /* format: {"resources": {"nodes": 0..N, "cores": 1..M },
+                "properties": {{"key": "value"}, ...},
+                "walltime": "hh:mm:ss",
+                "script": "script_path",
+                "queue": "queuename";
+                "options": "string"
+                }
+    */
+    QVariantMap json = dtkJson::parse(input).toMap();
 
     // FIXME: we should read the properties mapping from a file instead of hardcoding it
     // Everything here is specific to nef setup.
-    QStringList proplist=arglist.at(2).split(",");
-    QString properties = "";
-    QString prop;
-    foreach( prop, proplist ) {
-        if (prop.contains("opteron")) {
-            properties +=  ":opteron";
-        } else if (prop.contains("xeon")) {
-            properties += ":xeon";
-        } else if (prop.contains("nvidia-C2050")) {
-            properties += "C2050";
-        } else if (prop.contains("nvidia-T10")) {
-            properties += "T10";
-        }
+    QVariantMap jprops = json["properties"].toMap();
+    QString properties ;
+    if (jprops.contains("cpu_model")) {
+        properties +=  ":"+jprops["cpu_model"].toString();
+    } else if (jprops.contains("nvidia-C2050")) {
+        properties += ":C2050";
+    } else if (jprops.contains("nvidia-C2070")) {
+        properties += ":C2070";
+    } else if (jprops.contains("nvidia-T10")) {
+        properties += ":T10";
     }
 
-    // resources   syntax: #cores,#nodes
-    QStringList reslist=arglist.at(1).split(",");
-    if (reslist.at(0) == 0) {
+    QVariantMap res = json["resources"].toMap();
+    if (res["nodes"].toInt() == 0) {
         // no nodes, only cores; TODO
-    } else if (reslist.at(1) == 0) {
+    } else if (res["cores"].toInt() == 0) {
         // no cores, only nodes; TODO
     } else {
-        qsub += " -l nodes="+reslist.at(0)+properties+":ppn="+reslist.at(1);
+        qsub += " -l nodes="+res["nodes"].toString()+properties+":ppn="+res["cores"].toString();
     }
 
     // walltime, syntax=HH:MM:SS
-    if (!arglist.at(3).isEmpty()) {
-        qsub += ",walltime="+arglist.at(3);
+    if (json.contains("walltime")) {
+        qsub += ",walltime="+json["walltime"].toString();
     }
 
     // script
-    qsub += " "+arglist.at(4);
+    qsub += " "+json["script"].toString();
 
     // queue
-    if (!arglist.at(5).isEmpty()) {
-        qsub += " -q "+arglist.at(5);
+    if (json.contains("queue")) {
+        qsub += " -q"+json["queue"].toString();
     }
-
     // options
-    if (!arglist.at(6).isEmpty()) {
-        qsub += " "+arglist.at(6);
+    if (json.contains("options")) {
+        qsub += " "+json["options"].toString();
     }
 
     qDebug() << DTK_PRETTY_FUNCTION << qsub;

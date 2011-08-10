@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: lun. août  8 10:09:27 2011 (+0200)
+ * Last-Updated: mer. août 10 19:05:10 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 106
+ *     Update #: 138
  */
 
 /* Commentary: 
@@ -77,13 +77,15 @@ void dtkDistributedServerDaemon::read(void)
 {
     QTcpSocket *socket = (QTcpSocket *)sender();
 
-    QString contents = socket->readAll();
+    static const int MAX_LINE_LENGTH = 1024;
+
+    QString contents = socket->readLine(MAX_LINE_LENGTH);
 
     qDebug() << DTK_PRETTY_FUNCTION << "-- Begin read --";
     qDebug() << DTK_PRETTY_FUNCTION << contents;
     qDebug() << DTK_PRETTY_FUNCTION << "--   End read --";
 
-    dtkDistributedServiceBase::instance()->logMessage(QString("Read: %1").arg(QString(socket->readLine())));
+//    dtkDistributedServiceBase::instance()->logMessage(QString("Read: %1").arg(QString(socket->readLine())));
 
 
 
@@ -95,13 +97,20 @@ void dtkDistributedServerDaemon::read(void)
         QByteArray R = r.toAscii();
         socket->write(QString::number(R.size()).toAscii()+"\n");
         socket->write(R);
-    } else if(contents.contains("PUT /job")) {
-        QString jobid = d->manager->submit(contents);
-        QByteArray R = jobid.toAscii();
+    } else if(contents == "PUT /job\n") {
+        QByteArray buffer;
+        QString size = socket->readLine(MAX_LINE_LENGTH);
+        qint64 toread= size.toInt();
+        qDebug() << "Size to read: " << toread;
+        while (buffer.size() < toread  ) {
+            qDebug() << "read buffer loop " << buffer.size();
+//            socket->waitForReadyRead(-1); // doesn't work ?!
+            buffer.append(socket->read(toread));
+        }
+        QString jobid = d->manager->submit(buffer);
         qDebug() << jobid;
-        socket->write(QString("JOB:\n").toAscii());
-        socket->write(QString::number(R.size()).toAscii()+"\n");
-        socket->write(R);
+        socket->write(QString("NEWJOB:\n").toAscii());
+        socket->write(jobid.toAscii()+"\n");
     } else {
         qDebug() << DTK_PRETTY_FUNCTION << "WARNING: Unknown data";
     }

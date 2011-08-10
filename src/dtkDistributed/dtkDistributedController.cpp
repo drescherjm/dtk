@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. août 10 17:12:36 2011 (+0200)
+ * Last-Updated: mer. août 10 19:00:45 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 872
+ *     Update #: 881
  */
 
 /* Commentary: 
@@ -76,6 +76,12 @@ bool dtkDistributedController::isDisconnected(const QUrl& server)
     }
 
     return true;
+}
+
+void dtkDistributedController::submit(const QUrl& server, const QByteArray& resources)
+{
+    qDebug() << "Want to submit jobs with resources:" << resources;
+    d->sockets[server.toString()]->write(resources);
 }
 
 void dtkDistributedController::connect(const QUrl& server)
@@ -274,9 +280,9 @@ void dtkDistributedController::read(void)
         }
         d->read_status(buffer,socket);
         emit updated();
-    } else if (resp == "NEWJOB\n") {
+    } else if (resp == "NEWJOB:\n") {
         QString jobId = socket->readLine(MAX_LINE_LENGTH);
-        qDebug() << "New job: " << jobId;
+        qDebug() << "New job queued: " << jobId;
         emit updated();
     } else {
         qDebug() << "unknown response from server: " << resp;

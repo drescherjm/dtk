@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 16:12:05 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 31 14:52:52 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 10
+ * Last-Updated: mer. août 10 17:34:47 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -36,6 +36,8 @@ public:
 protected slots:
     void onConnect(void);
     void onConnected(const QUrl& server);
+
+    void onSubmit(void);
 
     void onDisconnect(void);
     void onDisconnected(const QUrl& server);

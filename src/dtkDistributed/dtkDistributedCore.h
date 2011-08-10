@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 16:24:27 2010 (+0100)
  * Version: $Id$
- * Last-Updated: mer. août 10 12:36:15 2011 (+0200)
+ * Last-Updated: mer. août 10 16:54:16 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 36
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -33,7 +33,7 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedCore : public QObject
     Q_OBJECT
 
 public:
-     dtkDistributedCore(dtkDistributedCpu *parent);
+    dtkDistributedCore(dtkDistributedCpu *parent, qint64 id);
     ~dtkDistributedCore(void);
 
      dtkDistributedJob* job(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. août 10 12:57:00 2011 (+0200)
+ * Last-Updated: mer. août 10 15:50:45 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 665
+ *     Update #: 808
  */
 
 /* Commentary: 
@@ -142,19 +142,19 @@ QString dtkDistributedServerManagerTorque::status(void)
     QVariantList jnodes;
     QVariantList jjobs;
     result.insert("version", protocol());
+    qint64 globalcores = 0;
 
     QDomNodeList nodes = document.elementsByTagName("Node");
     for(int i = 0; i < nodes.count(); i++) {
         QVariantMap node;
         QVariantMap props;
-        QString np = nodes.item(i).firstChildElement("np").text().simplified();
+        int np = nodes.item(i).firstChildElement("np").text().toInt();
         QString name = nodes.item(i).firstChildElement("name").text().simplified();
         QString state = nodes.item(i).firstChildElement("state").text().simplified();
 
         node.insert("name", name);
 
-        // Each job is coreid/jobid, count the number of "/" to get the number of jobs
-        int njobs  = nodes.item(i).firstChildElement("jobs").text().simplified().count("/");
+
         QString ngpus  = nodes.item(i).firstChildElement("gpus").text().simplified();
         // 2 cpus by default
         QString ncpus  = "2";
@@ -191,7 +191,29 @@ QString dtkDistributedServerManagerTorque::status(void)
                 ncpus = "4";
             }
         }
-        node.insert("cores", np);
+
+        // Each job is coreid/jobid, count the number of "/" to get the number of jobs
+        QStringList rjobs  = nodes.item(i).firstChildElement("jobs").text().simplified().split(",");
+        QRegExp rx("(\\d+)/(\\d+)\\..*");
+        QVariantList cores;
+        qint64 njobs = 0;
+        for (int c=0;c<np;c++) {
+            QVariantMap core;
+            core.insert("id",globalcores +c);
+            cores << core;
+        }
+        if (rjobs.at(0).count() > 0) {
+            foreach( QString rjob, rjobs ) {
+                int pos = rx.indexIn(rjob);
+                QStringList list = rx.capturedTexts();
+                njobs++;
+                qint64 jobcore = list.at(1).toInt();
+                QVariantMap q = cores[jobcore].toMap();
+                q.insert("job",list.at(2)); // can we insert without creating a copy ?
+                cores[jobcore] = q;
+            }
+        }
+        node.insert("cores", cores );
         node.insert("cpus", ncpus);
         node.insert("cores_busy", njobs);
         node.insert("gpus", ngpus);
@@ -208,6 +230,7 @@ QString dtkDistributedServerManagerTorque::status(void)
         node.insert("state", state);
         jnodes << node;
         result.insert("nodes", jnodes);
+        globalcores += np;
     }
 
     // Now get the jobs

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. août 10 14:07:56 2011 (+0200)
+ * Last-Updated: mer. août 10 17:12:36 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 793
+ *     Update #: 872
  */
 
 /* Commentary: 
@@ -137,10 +137,14 @@ void dtkDistributedControllerPrivate::read_status(QByteArray & buffer, QTcpSocke
     QVariantMap json = dtkJson::parse(buffer).toMap();
     // TODO: check version
     // First, read nodes status
+
+    // store mapping between cores and jobs in this list
+    QHash<QString,dtkDistributedCore *> coreref;
+
     foreach(QVariant qv, json["nodes"].toList()) {
             QVariantMap jnode=qv.toMap();
 
-            int ncores    = jnode["cores"].toInt();
+            QVariantList cores    = jnode["cores"].toList();
             int usedcores = jnode["cores_busy"].toInt();
             int ncpus     = jnode["cpus"].toInt();
             int ngpus     = jnode["gpus"].toInt();
@@ -148,6 +152,7 @@ void dtkDistributedControllerPrivate::read_status(QByteArray & buffer, QTcpSocke
             QVariantMap properties = jnode["properties"].toMap();
             QString state =  jnode["state"].toString();
 
+            qint64 ncores = cores.count();
             dtkDistributedNode *node = new dtkDistributedNode;
             node->setName( jnode["name"].toString());
 
@@ -202,8 +207,8 @@ void dtkDistributedControllerPrivate::read_status(QByteArray & buffer, QTcpSocke
 
             for(int i = 0; i < ncpus; i++) {
                     dtkDistributedCpu *cpu = new dtkDistributedCpu(node);
-                    int cores = ncores / ncpus;
-                    cpu->setCardinality(cores);
+                    int ppn = ncores / ncpus;
+                    cpu->setCardinality(ppn);
 
                     if(properties["cpu_arch"] == "x86")
                         cpu->setArchitecture(dtkDistributedCpu::x86);
@@ -215,10 +220,14 @@ void dtkDistributedControllerPrivate::read_status(QByteArray & buffer, QTcpSocke
                     } else if(properties["cpu_model"].toString().contains("xeon")) {
                         cpu->setModel(dtkDistributedCpu::Xeon);
                     }
-
-                    for(int j = 0; j < cores; j++)
-                        *cpu << new dtkDistributedCore(cpu);
-
+                    foreach (QVariant jcore, cores) {
+                        QVariantMap qmap = jcore.toMap();
+                        dtkDistributedCore * core = new dtkDistributedCore(cpu, qmap["id"].toInt());
+                        *cpu << core;
+                        if  (qmap.contains("job")) {
+                            coreref[qmap["job"].toString()] = core;
+                        }
+                    }
                     *node << cpu;
                 }
 
@@ -230,7 +239,8 @@ void dtkDistributedControllerPrivate::read_status(QByteArray & buffer, QTcpSocke
 
     foreach(QVariant qv, json["jobs"].toList()) {
         QVariantMap jjob=qv.toMap();
-        job->setId(jjob["id"].toString());
+        QString jobid = jjob["id"].toString();
+        job->setId(jobid);
         job->setState(jjob["state"].toString());
         job->setUsername(jjob["username"].toString());
         job->setName(jjob["name"].toString());
@@ -239,7 +249,8 @@ void dtkDistributedControllerPrivate::read_status(QByteArray & buffer, QTcpSocke
         job->setQtime(jjob["qtime"].toInt());
         job->setStime(jjob["stime"].toInt());
         job->setResources(jjob["resources"].toString());
-
+        if (coreref.contains(jobid))
+            coreref[jobid]->setJob(job);
         jobs[sockets.key(socket)] << job;
         qDebug() << "Found job " << job->Id() <<"from "<< job->Username() << " in queue " << job->Queue();
     }

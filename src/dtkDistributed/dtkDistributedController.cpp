@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: lun. août  8 10:17:18 2011 (+0200)
+ * Last-Updated: mer. août 10 14:07:56 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 654
+ *     Update #: 793
  */
 
 /* Commentary: 
@@ -21,13 +21,14 @@
 #include "dtkDistributedServerManager.h"
 #include "dtkDistributedCore.h"
 #include "dtkDistributedNode.h"
+#include "dtkDistributedJob.h"
 #include "dtkDistributedCpu.h"
 #include "dtkDistributedGpu.h"
 
 #include <dtkCore/dtkGlobal.h>
 #include <dtkCore/dtkLog.h>
 #include <dtkJson/dtkJson.h>
-
+#include <dtkJson/dtkJson.h>
 #include <QtNetwork>
 #include <QtXml>
 
@@ -36,6 +37,9 @@ class dtkDistributedControllerPrivate
 public:
     QHash<QString, QTcpSocket *> sockets;
     QHash<QString, QList<dtkDistributedNode *> > nodes;
+    QHash<QString, QList<dtkDistributedJob *> > jobs;
+
+    void read_status(QByteArray & buffer, QTcpSocket * socket);
 };
 
 dtkDistributedController::dtkDistributedController(void) : d(new dtkDistributedControllerPrivate)
@@ -57,7 +61,7 @@ bool dtkDistributedController::isConnected(const QUrl& server)
         QTcpSocket *socket = d->sockets.value(server.toString());
 
         return (socket->state() == QAbstractSocket::ConnectedState);
-    }  
+    }
 
     return false;
 }
@@ -127,30 +131,12 @@ QList<dtkDistributedNode *> dtkDistributedController::nodes(const QString& clust
     return d->nodes.value(cluster);
 }
 
-void dtkDistributedController::read(void)
+void dtkDistributedControllerPrivate::read_status(QByteArray & buffer, QTcpSocket * socket)
 {
-    QTcpSocket *socket = (QTcpSocket *)sender();
-
-    static QString status_contents;
-
-    static const int MAX_LINE_LENGTH = 1024;
-    QString resp = socket->readLine(MAX_LINE_LENGTH);
-    QByteArray buffer;
-
-    if(resp == "STATUS:\n") {
-        QString size = socket->readLine(MAX_LINE_LENGTH);
-        qint64 toread= size.toInt();
-        qDebug() << "Size to read: " << toread;
-        while (buffer.size() < toread  ) {
-            socket->waitForReadyRead(-1);
-            buffer.append(socket->read(toread));
-        }
-    } else {
-        qDebug() << "unknown response from server: " << resp;
-    }
-
+    dtkDistributedNode *node = new dtkDistributedNode;
     QVariantMap json = dtkJson::parse(buffer).toMap();
-    //TODO: check version
+    // TODO: check version
+    // First, read nodes status
     foreach(QVariant qv, json["nodes"].toList()) {
             QVariantMap jnode=qv.toMap();
 
@@ -167,29 +153,31 @@ void dtkDistributedController::read(void)
 
             if(state == "free")
                 node->setState(dtkDistributedNode::Free);
-
             if(state == "busy")
                 node->setState(dtkDistributedNode::Busy);
-
             if(state == "down")
                 node->setState(dtkDistributedNode::Down);
 
             if(properties.contains("dell"))
                 node->setBrand(dtkDistributedNode::Dell);
-
             if(properties.contains("hp"))
                 node->setBrand(dtkDistributedNode::Hp);
-
             if(properties.contains("ibm"))
                 node->setBrand(dtkDistributedNode::Ibm);
 
-            if(properties.contains("myrinet"))
+            if (properties["myrinet"] == "10G") {
                 node->setNetwork(dtkDistributedNode::Myrinet10G);
-            else if(properties.contains("QDR"))
+            } else if(properties["infiniband"] == "QDR") {
                 node->setNetwork(dtkDistributedNode::Infiniband40G);
-            else
+            } else if(properties["infiniband"] == "DDR") {
+                node->setNetwork(dtkDistributedNode::Infiniband20G);
+            } else if(properties["infiniband"] == "SDR") {
+                node->setNetwork(dtkDistributedNode::Infiniband10G);
+            } else if(properties["ethernet"] == "10G") {
+                node->setNetwork(dtkDistributedNode::Ethernet10G);
+            } else {
                 node->setNetwork(dtkDistributedNode::Ethernet1G);
-
+            }
             if(ngpus > 0) for(int i = 0; i < ngpus; i++) {
                     dtkDistributedGpu *gpu = new dtkDistributedGpu(node);
 
@@ -200,17 +188,19 @@ void dtkDistributedController::read(void)
                     else if(properties["gpu_model"] == "C2070")
                         gpu->setModel(dtkDistributedGpu::C2070);
 
-                    if(properties["gpu_arch"].toString().contains("nvidia"))
-                        gpu->setArchitecture(dtkDistributedGpu::Nvidia);
-
-                    if(properties["gpu_arch"].toString().contains("amd"))
+                    if(properties["gpu_arch"] == "nvidia-1.0")
+                        gpu->setArchitecture(dtkDistributedGpu::Nvidia_10);
+                    else if(properties["gpu_arch"] == "nvidia-1.3")
+                        gpu->setArchitecture(dtkDistributedGpu::Nvidia_13);
+                    else if(properties["gpu_arch"] == "nvidia-2.0")
+                        gpu->setArchitecture(dtkDistributedGpu::Nvidia_20);
+                    else if(properties["gpu_arch"].toString().contains("amd"))
                         gpu->setArchitecture(dtkDistributedGpu::AMD);
 
                     *node << gpu;
                 }
 
             for(int i = 0; i < ncpus; i++) {
-
                     dtkDistributedCpu *cpu = new dtkDistributedCpu(node);
                     int cores = ncores / ncpus;
                     cpu->setCardinality(cores);
@@ -220,11 +210,11 @@ void dtkDistributedController::read(void)
                     else
                         cpu->setArchitecture(dtkDistributedCpu::x86_64);
 
-                    if(properties["cpu_model"].toString().contains("opteron"))
+                    if(properties["cpu_model"].toString().contains("opteron")) {
                         cpu->setModel(dtkDistributedCpu::Opteron);
-
-                    if(properties["cpu_model"].toString().contains("xeon"))
+                    } else if(properties["cpu_model"].toString().contains("xeon")) {
                         cpu->setModel(dtkDistributedCpu::Xeon);
+                    }
 
                     for(int j = 0; j < cores; j++)
                         *cpu << new dtkDistributedCore(cpu);
@@ -232,13 +222,55 @@ void dtkDistributedController::read(void)
                     *node << cpu;
                 }
 
-            d->nodes[d->sockets.key(socket)] << node;
-
+            nodes[sockets.key(socket)] << node;
             qDebug() << "Found node" << node->name() << "with" << node->cpus().count() << "cpus";
+    }
+    // Then, read jobs status
+    dtkDistributedJob *job = new dtkDistributedJob;
 
+    foreach(QVariant qv, json["jobs"].toList()) {
+        QVariantMap jjob=qv.toMap();
+        job->setId(jjob["id"].toString());
+        job->setState(jjob["state"].toString());
+        job->setUsername(jjob["username"].toString());
+        job->setName(jjob["name"].toString());
+        job->setWalltime(jjob["walltime"].toString());
+        job->setQueue(jjob["queue"].toString());
+        job->setQtime(jjob["qtime"].toInt());
+        job->setStime(jjob["stime"].toInt());
+        job->setResources(jjob["resources"].toString());
+
+        jobs[sockets.key(socket)] << job;
+        qDebug() << "Found job " << job->Id() <<"from "<< job->Username() << " in queue " << job->Queue();
+    }
+}
+
+void dtkDistributedController::read(void)
+{
+    QTcpSocket *socket = (QTcpSocket *)sender();
+
+    static const int MAX_LINE_LENGTH = 1024;
+    QString resp = socket->readLine(MAX_LINE_LENGTH);
+    QByteArray buffer;
+
+    if(resp == "STATUS:\n") {
+        QString size = socket->readLine(MAX_LINE_LENGTH);
+        qint64 toread= size.toInt();
+        qDebug() << "Size to read: " << toread;
+        while (buffer.size() < toread  ) {
+            socket->waitForReadyRead(-1);
+            buffer.append(socket->read(toread));
         }
+        d->read_status(buffer,socket);
         emit updated();
-        status_contents.clear();
+    } else if (resp == "NEWJOB\n") {
+        QString jobId = socket->readLine(MAX_LINE_LENGTH);
+        qDebug() << "New job: " << jobId;
+        emit updated();
+    } else {
+        qDebug() << "unknown response from server: " << resp;
+    }
+
 }
 
 void dtkDistributedController::error(QAbstractSocket::SocketError error)

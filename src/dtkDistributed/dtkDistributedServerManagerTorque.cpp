@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. août  5 17:17:44 2011 (+0200)
+ * Last-Updated: mer. août 10 12:57:00 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 664
+ *     Update #: 665
  */
 
 /* Commentary: 
@@ -252,7 +252,7 @@ QString dtkDistributedServerManagerTorque::status(void)
             state = "unknown";   break;
         };
         job.insert("id", id);
-        job.insert("user", user);
+        job.insert("username", user);
         job.insert("queue", queue);
         job.insert("queue_time", qtime);
         job.insert("start_time", stime);

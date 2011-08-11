@@ -99,7 +99,10 @@ bool dtkAbstractDataReader::read(const QString& file)
 
 bool dtkAbstractDataReader::read(const QStringList& files)
 {
-    DTK_UNUSED(files);
+    //  Provide a sensible default for the case the list contains only one file.
+
+    if (files.size()==1)
+        return read(files[0]);
 
     return false;
 }

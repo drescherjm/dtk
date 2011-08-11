@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:08:25 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. juin 29 17:50:09 2011 (+0200)
+ * Last-Updated: jeu. août 11 10:26:09 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 16
+ *     Update #: 18
  */
 
 /* Commentary: 
@@ -33,6 +33,7 @@ public slots:
     QString status(void);
 
     QString submit(QString input);
+    QString deljob(QString jobid);
 };
 
 #endif

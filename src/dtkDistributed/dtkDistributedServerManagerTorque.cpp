@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. août 10 18:17:30 2011 (+0200)
+ * Last-Updated: jeu. août 11 10:26:02 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 866
+ *     Update #: 876
  */
 
 /* Commentary: 
@@ -30,6 +30,33 @@
 
 #include <QtCore>
 #include <QtXml>
+
+
+QString dtkDistributedServerManagerTorque::deljob(QString jobid)
+{
+    QString qdel = "qdel " + jobid;
+    QProcess stat; stat.start(qdel);
+
+    if (!stat.waitForStarted()) {
+        dtkCritical() << "Unable to launch qdel command";
+        return QString("error");
+    }
+
+    if (!stat.waitForFinished()) {
+        dtkCritical() << "Unable to complete qdel command";
+        return QString("error");
+    }
+    if (stat.exitCode() > 0) {
+        QString error = stat.readAllStandardError();
+        dtkCritical() << "Error running qdel :" << error;
+        return QString("error");
+    } else {
+        QString msg = stat.readAll();
+        qDebug() << DTK_PRETTY_FUNCTION << msg;
+        return QString("OK");
+    }
+
+}
 
 QString dtkDistributedServerManagerTorque::submit(QString input)
 {

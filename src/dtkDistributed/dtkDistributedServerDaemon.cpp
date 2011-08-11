@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. août 10 19:05:10 2011 (+0200)
+ * Last-Updated: jeu. août 11 10:36:39 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 138
+ *     Update #: 163
  */
 
 /* Commentary: 
@@ -111,6 +111,10 @@ void dtkDistributedServerDaemon::read(void)
         qDebug() << jobid;
         socket->write(QString("NEWJOB:\n").toAscii());
         socket->write(jobid.toAscii()+"\n");
+    } else if(contents.contains("DELETE /job/")) {
+        QString jobid = contents.split("/").last().trimmed();
+        QString resp  = "DEL "+d->manager->deljob(jobid) +"\n";
+        socket->write(resp.toAscii());
     } else {
         qDebug() << DTK_PRETTY_FUNCTION << "WARNING: Unknown data";
     }

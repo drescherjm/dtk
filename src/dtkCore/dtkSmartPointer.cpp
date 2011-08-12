@@ -109,6 +109,12 @@
     \return     True if the underlying pointer is NULL.
 */
 
+/*! \fn         int dtkSmartPointer::refCount(void) const
+    \brief      Get the reference count of the pointer.
+    \return     The count for the pointer, or 0 if it is NULL.
+    \sa         int dtkAbstractObject::count() const
+*/
+
 /*! \fn         bool dtkSmartPointer< T >::operator==(TR r) const
     \fn         bool dtkSmartPointer< T >::operator==( const dtkSmartPointer< TR > &r ) const
     \fn         bool dtkSmartPointer< T >::operator==(const dtkSmartPointer &r) const

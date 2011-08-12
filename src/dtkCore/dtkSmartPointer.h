@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - John Stark, Inria.
  * Created: Wed May 25 14:00:00 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  5 17:09:00 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 54
+ * Last-Updated: Wed Aug  3 09:00:13 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 55
  */
 
 /* Commentary:
@@ -43,8 +43,7 @@ public:
         this->retain();
     }
 
-    ~dtkSmartPointer(void)
-    {
+    ~dtkSmartPointer(void) {
         this->release();
     }
 
@@ -58,6 +57,13 @@ public:
 
     bool isNull(void) const {
         return d == 0;
+    }
+
+    int refCount(void) const {
+        if (d)
+            return d->count();
+        else
+            return 0;
     }
 
     template <typename TR> bool operator==(TR r) const {

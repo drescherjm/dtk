@@ -46,6 +46,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkQuat.h
   dtkUpdater.h
   dtkSignalBlocker.h
+  dtkSingleton.h
+  dtkSingletonDeclare.h
   dtkSmartPointer.h
   dtkVec3.h)
 
@@ -88,6 +90,8 @@ set(${PROJECT_NAME}_SOURCES
   dtkPluginManager.cpp
   dtkQuat.cpp
   dtkSignalBlocker.h
+  dtkSingleton.cpp
+  dtkSingletonDeclare.cpp
   dtkSmartPointer.cpp
   dtkUpdater.cpp)
 

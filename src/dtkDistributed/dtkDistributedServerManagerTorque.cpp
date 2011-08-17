@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. août 11 10:26:02 2011 (+0200)
+ * Last-Updated: mer. août 17 10:48:57 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 876
+ *     Update #: 877
  */
 
 /* Commentary: 
@@ -106,7 +106,7 @@ QString dtkDistributedServerManagerTorque::submit(QString input)
 
     // queue
     if (json.contains("queue")) {
-        qsub += " -q"+json["queue"].toString();
+        qsub += " -q "+json["queue"].toString();
     }
     // options
     if (json.contains("options")) {

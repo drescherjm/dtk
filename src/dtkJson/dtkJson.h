@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: ven. août  5 10:01:48 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. août  5 14:14:58 2011 (+0200)
+ * Last-Updated: ven. août 12 17:18:23 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 26
+ *     Update #: 28
  */
 
 /* Commentary:
@@ -53,9 +53,6 @@ public:
 
 private:
     dtkJsonPrivate *p;
-
-//private:
-/*     dtkJson(const dtkJson& that); */
 
     static  QString sanitizeString(QString str);
     static  QByteArray join(const QList<QByteArray> &list, const QByteArray &sep);
@@ -198,5 +195,5 @@ private:
 /*
 
 Originally written by Eeli Reilin <eeli@emicode.fi>, PUBLIC DOMAIN.
-
+   https://github.com/ereilin/qt-json
 */

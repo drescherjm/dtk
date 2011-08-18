@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. août 17 10:48:57 2011 (+0200)
+ * Last-Updated: jeu. août 18 13:08:57 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 877
+ *     Update #: 881
  */
 
 /* Commentary: 
@@ -219,17 +219,19 @@ QString dtkDistributedServerManagerTorque::status(void)
             }
         }
 
-        // Each job is coreid/jobid, count the number of "/" to get the number of jobs
+        // Each job is coreid/jobid
         QStringList rjobs  = nodes.item(i).firstChildElement("jobs").text().simplified().split(",");
         QRegExp rx("(\\d+)/(\\d+)\\..*");
         QVariantList cores;
         qint64 njobs = 0;
         for (int c=0;c<np;c++) {
             QVariantMap core;
+            // torque doesn't define a unique id per core, so assigned
+            // a unique number to each core of the cluster
             core.insert("id",globalcores +c);
             cores << core;
         }
-        if (rjobs.at(0).count() > 0) {
+        if (rjobs.at(0).count() > 0) { // running jobs ?
             foreach( QString rjob, rjobs ) {
                 int pos = rx.indexIn(rjob);
                 QStringList list = rx.capturedTexts();

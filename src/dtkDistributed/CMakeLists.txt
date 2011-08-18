@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Jul  1 16:49:44 2011 (+0200)
-##           By: Julien Wintz
-##     Update #: 181
+## Last-Updated: lun. août  8 15:49:28 2011 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 184
 ######################################################################
 ## 
 ### Commentary: 
@@ -54,6 +54,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkDistributedCore.h
   dtkDistributedCpu.h
   dtkDistributedGpu.h
+  dtkDistributedJob.h
   dtkDistributedNode.h
   dtkDistributedServerDaemon.h
   dtkDistributedServerManager.h
@@ -72,6 +73,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedCore.cpp
   dtkDistributedCpu.cpp
   dtkDistributedGpu.cpp
+  dtkDistributedJob.cpp
   dtkDistributedNode.cpp
   dtkDistributedServer.cpp
   dtkDistributedServerDaemon.cpp
@@ -143,6 +145,7 @@ add_library(${PROJECT_NAME} SHARED
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkCore
+  dtkJson
   dtkGui)
 
 if(MPI_FOUND)

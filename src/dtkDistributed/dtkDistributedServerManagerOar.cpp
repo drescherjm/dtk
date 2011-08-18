@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. août 17 17:20:20 2011 (+0200)
+ * Last-Updated: jeu. août 18 13:22:56 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 321
+ *     Update #: 359
  */
 
 /* Commentary: 
@@ -26,75 +26,13 @@
 
 QString dtkDistributedServerManagerOar::status(void)
 {
-    QProcess stat; stat.start("oarnodes -J --sql \"host!=''\"");
-
-    if (!stat.waitForStarted()) {
-        dtkCritical() << "Unable to launch oarnodes command";
-        return QString();
-    }
-
-    if (!stat.waitForFinished()) {
-        dtkCritical() << "Unable to completed oarnodes command";
-        return QString();
-    }
-
+    QProcess stat;
+    bool success;
+    QString data;
+    QVariantMap json;
     QVariantMap result;
 
-    QString data = stat.readAll();
-    bool success;
-    QVariantMap json = dtkJson::parse(data,success).toMap();
-    if(!success)
-        dtkDebug() << "Error retrieving JSON output out of oar  "  ;
-    stat.close();
-
-    QVariantMap nodes;
-    foreach(QVariant qv, json) {
-        QVariantMap jcore = qv.toMap();
-        if (nodes.contains(jcore["host"].toString())) {
-            QVariantMap core;
-            QVariantMap node = nodes[jcore["host"].toString()].toMap();
-            QVariantList cores = node["cores"].toList();
-            core.insert("id",jcore["core"]);
-            cores.append(core);
-            node["cores"] = cores;
-            nodes[jcore["host"].toString()] = node;
-        } else { // new node
-            QVariantList cores;
-            QVariantList props;
-            QVariantMap prop;
-            QVariantMap core;
-            QVariantMap node;
-            if (jcore["cputype"].toString().contains("opteron")) {
-                prop.insert("cpu_model","opteron");
-                prop.insert("cpu_arch","x86_64");
-            } else if (jcore["cputype"].toString().contains("xeon")) {
-                prop.insert("cpu_model","xeon");
-                prop.insert("cpu_arch","x86_64");
-            }
-            node.insert("name",jcore["host"]);
-            node.insert("corespercpu",jcore["cpucore"]); // temporary
-            core.insert("id",jcore["core"]);
-            cores << core;
-            props << prop;
-            node.insert("cores",cores);
-            node.insert("properties",props);
-            nodes.insert(jcore["host"].toString(), node);
-        }
-    }
-    QVariantList realnodes;
-    // now we can compute the number of cpus per node
-    foreach(QVariant qv, nodes) {
-        QVariantMap map = qv.toMap();
-        int corespercpu = map["corespercpu"].toInt();
-        int cores = map["cores"].toList().count();
-        map.insert("cpus", cores/corespercpu);
-        map.remove("corespercpu");
-        realnodes << map;
-    }
-    result.insert("nodes", realnodes);
-
-
-    // Now get the jobs
+    // get the jobs
     stat.start("oarstat -fJ");
 
     if (!stat.waitForStarted()) {
@@ -112,7 +50,9 @@ QString dtkDistributedServerManagerOar::status(void)
     if(!success)
         dtkDebug() << "Error retrieving JSON output out of oar  "  ;
     stat.close();
+
     QVariantList jobs;
+    QHash<QString, QString> activecores; //key is core id, value is jobid
 
     foreach(QVariant qv, json) {
         QVariantMap job = qv.toMap();
@@ -139,7 +79,9 @@ QString dtkDistributedServerManagerOar::status(void)
         else
             state = "unknown";
 
-        //TODO: update nodes status with running jobs
+        foreach(QVariant coreid, job["assigned_resources"].toList()) {
+            activecores[coreid.toString()] = id;
+        }
 
         QRegExp rx("/host=(\\d+|ALL|BEST)(?:/core=)?(\\d+)?.*(?:walltime=)?(\\d+:\\d+:\\d+)");
         int pos = rx.indexIn(job["wanted_resources"].toString());
@@ -169,6 +111,84 @@ QString dtkDistributedServerManagerOar::status(void)
         jobs << dtkjob;
         result.insert("jobs", jobs);
     }
+
+    // Now get the nodes
+
+    stat.start("oarnodes -J --sql \"host!=''\"");
+
+    if (!stat.waitForStarted()) {
+        dtkCritical() << "Unable to launch oarnodes command";
+        return QString();
+    }
+
+    if (!stat.waitForFinished()) {
+        dtkCritical() << "Unable to completed oarnodes command";
+        return QString();
+    }
+
+    data = stat.readAll();
+    json = dtkJson::parse(data,success).toMap();
+    if(!success)
+        dtkDebug() << "Error retrieving JSON output out of oar  "  ;
+    stat.close();
+
+    QVariantMap nodes;
+    foreach(QVariant qv, json) {
+        QVariantMap jcore = qv.toMap();
+        if (nodes.contains(jcore["host"].toString())) {
+            QVariantMap core;
+            QVariantMap node = nodes[jcore["host"].toString()].toMap();
+            QVariantList cores = node["cores"].toList();
+
+            core.insert("id",jcore["core"].toString());
+            if (!activecores[core["id"].toString()].isEmpty()) {
+                core.insert("jobs",activecores[core["id"].toString()]);
+            }
+            cores.append(core);
+            node["cores"] = cores;
+            nodes[jcore["host"].toString()] = node;
+        } else { // new node
+            QVariantList cores;
+            QVariantList props;
+            QVariantMap prop;
+            QVariantMap core;
+            QVariantMap node;
+            if (jcore["cputype"].toString().contains("opteron")) {
+                prop.insert("cpu_model","opteron");
+                prop.insert("cpu_arch","x86_64");
+            } else if (jcore["cputype"].toString().contains("xeon")) {
+                prop.insert("cpu_model","xeon");
+                prop.insert("cpu_arch","x86_64");
+            }
+            node.insert("name",jcore["host"]);
+            node.insert("corespercpu",jcore["cpucore"]); // temporary
+            core.insert("id",jcore["core"]);
+            if (!activecores[core["id"].toString()].isEmpty()) {
+                core.insert("jobs",activecores[core["id"].toString()]);
+            }
+            cores << core;
+            props << prop;
+            node.insert("cores",cores);
+            node.insert("properties",props);
+            nodes.insert(jcore["host"].toString(), node);
+        }
+    }
+    QVariantList realnodes;
+    // now we can compute the number of cpus per node
+    foreach(QVariant qv, nodes) {
+        QVariantMap map = qv.toMap();
+        int corespercpu = map["corespercpu"].toInt();
+        int cores = map["cores"].toList().count();
+        map.insert("cpus", cores/corespercpu);
+        map.remove("corespercpu");
+        realnodes << map;
+    }
+    result.insert("nodes", realnodes);
+
+
+
+
+
     return dtkJson::serialize(result);
 }
 

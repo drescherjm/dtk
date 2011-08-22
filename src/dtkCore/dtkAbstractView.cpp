@@ -357,21 +357,21 @@ void dtkAbstractView::bounds(float& xmin, float& xmax, float& ymin, float& ymax,
     DTK_DEFAULT_IMPLEMENTATION;
 }
 
-void dtkAbstractView::cameraUp(double *coordinates)
+void dtkAbstractView::cameraUp(double *coordinates) const
 {
     DTK_UNUSED(coordinates);
 
     DTK_DEFAULT_IMPLEMENTATION;
 }
 
-void dtkAbstractView::cameraPosition(double *coordinates)
+void dtkAbstractView::cameraPosition(double *coordinates) const
 {
     DTK_UNUSED(coordinates);
 
     DTK_DEFAULT_IMPLEMENTATION;
 }
 
-void dtkAbstractView::cameraFocalPoint(double *coordinates)
+void dtkAbstractView::cameraFocalPoint(double *coordinates) const
 {
     DTK_UNUSED(coordinates);
 
@@ -395,21 +395,21 @@ void dtkAbstractView::setCameraClippingRange(double near, double far)
     DTK_DEFAULT_IMPLEMENTATION;
 }
 
-QString dtkAbstractView::cameraProjectionMode(void)
+QString dtkAbstractView::cameraProjectionMode(void) const
 {
     DTK_DEFAULT_IMPLEMENTATION;
 
     return "None";
 }
 
-double dtkAbstractView::cameraViewAngle(void)
+double dtkAbstractView::cameraViewAngle(void) const
 {
     DTK_DEFAULT_IMPLEMENTATION;
 
     return 0.0;
 }
 
-double dtkAbstractView::cameraZoom(void)
+double dtkAbstractView::cameraZoom(void) const
 {
     DTK_DEFAULT_IMPLEMENTATION;
 

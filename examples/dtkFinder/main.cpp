@@ -19,15 +19,18 @@
 
 #include <QtGui/QApplication>
 
+#include <dtkCore/dtkGlobal.h>
+
 #include "tstMainWindow.h"
 
 int main(int argc, char *argv[])
 {
     QApplication application(argc, argv);
     application.setApplicationName("dtkFinder");
-    application.setOrganizationName("inria");
+    application.setOrganizationName("inria");    
 
     tstMainWindow window;
+    window.setStyleSheet(dtkReadFile(":/dtkGui/dtkFinder.qss"));
     window.show();
 
     return application.exec();

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 21 11:35:34 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 2886
+ * Last-Updated: Thu Jul 28 15:11:59 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 2890
  */
 
 /* Commentary: 
@@ -291,7 +291,7 @@ void dtkComposerScene::addEdge(dtkComposerEdge *edge)
 
     d->edges << edge;
 
-    //this->setModified(true);
+    this->setModified(true);
 }
 
 //! Adds \a node to the scene.
@@ -304,7 +304,7 @@ void dtkComposerScene::addNode(dtkComposerNode *node)
 
     emit nodeAdded(node);
 
-    //this->setModified(true);
+    this->setModified(true);
 }
 
 //! Adds \a note to the scene.
@@ -317,7 +317,7 @@ void dtkComposerScene::addNote(dtkComposerNote *note)
 
     d->notes << note;
 
-    //this->setModified(true);
+    this->setModified(true);
 }
 
 //! Removes \a edge from the scene.
@@ -332,6 +332,7 @@ void dtkComposerScene::removeEdge(dtkComposerEdge *edge)
     d->edges.removeAll(edge);
 
     delete edge;
+
     edge = NULL;
 }
 

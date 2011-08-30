@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul  8 13:28:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug 30 10:10:17 2011 (+0200)
+ * Last-Updated: Tue Aug 30 10:52:37 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 80
+ *     Update #: 94
  */
 
 /* Commentary: 
@@ -85,7 +85,12 @@ void dtkComposerNodeFile::editFile(void)
 
 void dtkComposerNodeFile::getFileName(void)
 {
-    d->file = QFileDialog::getOpenFileName(0, "File node");
+    QFileDialog dialog(0, tr("Choose file"));
+    dialog.setFileMode(QFileDialog::ExistingFile);
+    if (dialog.exec())
+        d->file = dialog.selectedFiles().first();    
+
+    //d->file = QFileDialog::getOpenFileName(0, tr("Choose file"));
 }
 
 void dtkComposerNodeFile::setFileName(const QString& file)

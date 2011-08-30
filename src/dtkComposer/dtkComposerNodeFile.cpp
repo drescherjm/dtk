@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul  8 13:28:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr  8 16:26:53 2011 (+0200)
+ * Last-Updated: Tue Aug 30 10:10:17 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 78
+ *     Update #: 80
  */
 
 /* Commentary: 
@@ -96,9 +96,7 @@ void dtkComposerNodeFile::setFileName(const QString& file)
 void dtkComposerNodeFile::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(edge);
-    Q_UNUSED(property);
-
-    DTK_DEFAULT_IMPLEMENTATION;    
+    Q_UNUSED(property);    
 }
 
 void dtkComposerNodeFile::run(void)
@@ -112,7 +110,5 @@ void dtkComposerNodeFile::run(void)
 void dtkComposerNodeFile::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(edge);
-    Q_UNUSED(property);
-
-    DTK_DEFAULT_IMPLEMENTATION;    
+    Q_UNUSED(property); 
 }

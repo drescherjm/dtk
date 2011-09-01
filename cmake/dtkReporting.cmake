@@ -20,7 +20,7 @@
 if (EXISTS ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Dart.cmake.in)
 
   find_program(HOSTNAME_CMD NAMES hostname)
-  exec_program(${HOSTNAME_CMD} ARGS "-s" OUTPUT_VARIABLE HOSTNAME)
+  exec_program(${HOSTNAME_CMD} ARGS OUTPUT_VARIABLE HOSTNAME)
 
   find_program(UNAME NAMES uname)
 

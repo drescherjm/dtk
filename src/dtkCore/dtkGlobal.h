@@ -25,7 +25,7 @@
 #include <QtGui>
 #include <QtDebug>
 
-#include <dtkConfig.h>
+#include "dtkConfig.h"
 #include "dtkCoreExport.h"
 
 // /////////////////////////////////////////////////////////////////

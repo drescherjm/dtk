@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Jun 24 16:16:33 2011 (+0200)
+## Last-Updated: Thu Sep  1 17:22:09 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 175
+##     Update #: 177
 ######################################################################
 ## 
 ### Commentary: 
@@ -148,7 +148,6 @@ set(${PROJECT_NAME}_RESOURCES dtkGui.qrc)
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)
 if(NOT MSVC)
-  # Shouldn't the QT_USE_FILE set this appropriately?
   add_definitions(-DQT_NO_DEBUG)
 endif(NOT MSVC)
 
@@ -199,4 +198,3 @@ install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib)
-

@@ -5,8 +5,8 @@
  * Created: August 2011
  * Version: $Id$
  * Last-Updated:
- *           By: John Stark
- *     Update #: 1
+ *           By: Julien Wintz
+ *     Update #: 2
  */
 
 /* Commentary:
@@ -16,7 +16,6 @@
 /* Change log:
  *
  */
-
 
 #ifndef DTKPCH_H
 #define DTKPCH_H

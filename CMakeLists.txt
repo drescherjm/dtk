@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Jul  5 15:34:04 2011 (+0200)
+## Last-Updated: Thu Sep  1 17:18:14 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 353
+##     Update #: 355
 ######################################################################
 ## 
 ### Commentary: 
@@ -48,8 +48,7 @@ endif(MSVC)
 include(dtkDependencies)
 include(dtkBuild)
 include(dtkPack)
-
-include(AddPch)
+include(dtkPch)
 
 add_subdirectory(src)
 

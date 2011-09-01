@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed May  4 09:22:45 2011 (+0200)
-##           By: Thibaud Kloczko
-##     Update #: 131
+## Last-Updated: Thu Sep  1 17:20:40 2011 (+0200)
+##           By: Julien Wintz
+##     Update #: 133
 ######################################################################
 ## 
 ### Commentary: 
@@ -127,7 +127,6 @@ set(${PROJECT_NAME}_SOURCES
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)
 if(NOT MSVC)
-  # Shouldn't the QT_USE_FILE set this appropriately?
   add_definitions(-DQT_NO_DEBUG)
 endif(NOT MSVC)
 
@@ -135,7 +134,7 @@ add_definitions(-DQSTATEMACHINE_DEBUG)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
-if (DTK_USE_PRECOMPILED_HEADERS)
+if(DTK_USE_PRECOMPILED_HEADERS)
   add_precompiled_header(${PROJECT_NAME}_SOURCES_PCH 
     "dtkPch/dtkPch.h" "../dtkPch/dtkPch.cpp" 
     ${${PROJECT_NAME}_SOURCES}

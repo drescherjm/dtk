@@ -1,13 +1,12 @@
-
 /* dtkGlobal.h --- 
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 16 09:54:33 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul 11 10:58:10 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 121
+ * Last-Updated: Thu Sep  1 17:34:13 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 124
  */
 
 /* Commentary: 
@@ -89,17 +88,14 @@
 #define DTK_SUCCEED 0
 #define DTK_FAILURE 1
 
-// Turn given bare text into a quoted string.
 #define _DTK_STRINGIZE( x ) #x
 #define DTK_STRINGIZE(x) _DTK_STRINGIZE(x)
 
 #define DTK_LINK_TEXT __FILE__ "(" DTK_STRINGIZE(__LINE__) ") : "
 
-// #pragma message DTK_COMPILER_WARNING("your warning message here")
 #ifdef _MSC_VER
 #  define DTK_COMPILER_WARNING(str) (DTK_LINK_TEXT "WARNING: " str)
 #else
-// gcc automatically generates line number info.
 #  define DTK_COMPILER_WARNING(str) ("WARNING: " str)
 #endif
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May  9 14:41:38 2011 (+0200)
+ * Last-Updated: Thu Sep  1 17:45:57 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 272
+ *     Update #: 279
  */
 
 /* Commentary:
@@ -297,7 +297,9 @@ dtkAbstractViewInteractor *dtkAbstractView::interactor(const QString& type)
 QList<dtkAbstractViewAnimator *> dtkAbstractView::animators(void) const
 {
     QList<dtkAbstractViewAnimator *> ret;
+#if QT_VERSION > 0x040600
     ret.reserve(d->animators.size());
+#endif
     foreach( dtkSmartPointer<dtkAbstractViewAnimator> value, d->animators )
         ret.push_back(value.data());
     return ret;
@@ -306,7 +308,9 @@ QList<dtkAbstractViewAnimator *> dtkAbstractView::animators(void) const
 QList<dtkAbstractViewNavigator *> dtkAbstractView::navigators(void) const
 {
     QList<dtkAbstractViewNavigator *> ret;
+#if QT_VERSION > 0x040600
     ret.reserve(d->navigators.size());
+#endif
     foreach( dtkSmartPointer<dtkAbstractViewNavigator> value, d->navigators )
         ret.push_back(value.data());
     return ret;
@@ -315,7 +319,9 @@ QList<dtkAbstractViewNavigator *> dtkAbstractView::navigators(void) const
 QList<dtkAbstractViewInteractor *> dtkAbstractView::interactors(void) const
 {
     QList<dtkAbstractViewInteractor *> ret;
+#if QT_VERSION > 0x040600
     ret.reserve(d->interactors.size());
+#endif
     foreach( dtkSmartPointer<dtkAbstractViewInteractor> value, d->interactors )
         ret.push_back(value.data());
     return ret;

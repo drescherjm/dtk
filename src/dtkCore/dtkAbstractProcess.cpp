@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jan  4 15:40:54 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 86
+ * Last-Updated: Mon Sep  5 12:52:18 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 87
  */
 
 /* Commentary: 
@@ -36,14 +36,14 @@ dtkAbstractProcess::~dtkAbstractProcess(void)
 
 QDebug operator<<(QDebug debug, const dtkAbstractProcess& process)
 {
-    debug.nospace() << process.description();
+    debug.nospace() << process.identifier();
 
     return debug.space();
 }
 
 QDebug operator<<(QDebug debug, dtkAbstractProcess *process)
 {
-    debug.nospace() << process->description();
+    debug.nospace() << process->identifier();
 
     return debug.space();
 }

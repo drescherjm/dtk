@@ -20,6 +20,7 @@ public:
     virtual ~%1(void);
 
     virtual QString description(void) const;
+    virtual QString identifier(void) const;
 
     static bool registered(void);
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep  5 13:55:59 2011 (+0200)
+ * Last-Updated: Mon Sep  5 14:14:31 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 169
+ *     Update #: 170
  */
 
 /* Commentary:
@@ -23,7 +23,7 @@
 #include <dtkCore/dtkPlugin.h>
 #include <dtkCore/dtkLog.h>
 
-#define DTK_VERBOSE_LOAD true
+#define DTK_VERBOSE_LOAD false
 
 class dtkPluginManagerPrivate
 {

@@ -4,9 +4,9 @@
 ## Copyright (C) 2011 - Nicolas Niclausse, Inria.
 ## Created: ven. août  5 09:57:25 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: ven. août  5 10:00:01 2011 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 11
+## Last-Updated: Fri Sep  2 14:07:03 2011 (+0200)
+##           By: Julien Wintz
+##     Update #: 15
 ######################################################################
 ##
 ### Commentary:
@@ -49,10 +49,21 @@ endif(NOT WIN32)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
+if(BUILD_SHARED_LIBS)
+
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_MOC})
+
+else(BUILD_SHARED_LIBS)
+
+add_library(${PROJECT_NAME} STATIC
+  ${${PROJECT_NAME}_SOURCES}
+  ${${PROJECT_NAME}_HEADERS}
+  ${${PROJECT_NAME}_SOURCES_MOC})
+
+endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES})

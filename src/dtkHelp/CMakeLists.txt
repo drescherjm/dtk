@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Feb  3 16:10:15 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Apr 26 13:13:17 2010 (+0200)
+## Last-Updated: Fri Sep  2 14:07:52 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 20
+##     Update #: 28
 ######################################################################
 ## 
 ### Commentary: 
@@ -26,8 +26,7 @@ project(dtkHelp)
 set(${PROJECT_NAME}_HEADERS
   dtkHelpBrowser.h
   dtkHelpController.h
-  dtkHelpExport.h
-)
+  dtkHelpExport.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkHelpBrowser.h
@@ -50,11 +49,23 @@ endif(NOT MSVC)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
+if(BUILD_SHARED_LIBS)
+
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_WRAP})
+
+else(BUILD_SHARED_LIBS)
+
+add_library(${PROJECT_NAME} STATIC
+  ${${PROJECT_NAME}_SOURCES}
+  ${${PROJECT_NAME}_HEADERS}
+  ${${PROJECT_NAME}_SOURCES_MOC}
+  ${${PROJECT_NAME}_SOURCES_WRAP})
+
+endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:24:22 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Dec 23 10:40:58 2009 (+0100)
+ * Last-Updated: Mon Sep  5 10:44:52 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 23
+ *     Update #: 27
  */
 
 /* Commentary: 
@@ -18,6 +18,8 @@
  */
 
 #include <QtGui>
+
+#include <dtkCore/dtkGlobal.h>
 
 #include <dtkGui/dtkTextEditor.h>
 #include <dtkGui/dtkTextEditorPreferencesWidget.h>

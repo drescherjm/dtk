@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 16:12:47 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. août 10 18:56:50 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 297
+ * Last-Updated: Mon Sep  5 11:08:38 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 298
  */
 
 /* Commentary: 
@@ -27,6 +27,7 @@
 #include <dtkDistributed/dtkDistributedController.h>
 #include <dtkDistributed/dtkDistributedControllerStatusModel.h>
 #include <dtkDistributed/dtkDistributedControllerStatusView.h>
+
 #include <dtkJson/dtkJson.h>
 
 // /////////////////////////////////////////////////////////////////

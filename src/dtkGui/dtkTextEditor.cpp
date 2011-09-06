@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:23:18 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep  5 10:52:16 2011 (+0200)
+ * Last-Updated: Tue Sep  6 09:19:07 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 128
+ *     Update #: 129
  */
 
 /* Commentary: 
@@ -41,11 +41,13 @@ public:
     }
 
 protected:
+#if defined(Q_WS_MAC)
     bool macEvent(EventHandlerCallRef caller, EventRef event) {
         DTK_UNUSED(caller);
         DTK_UNUSED(event);
         return true;
     }
+#endif
 
     void paintEvent(QPaintEvent *event) {
         editor->extraAreaPaintEvent(event);

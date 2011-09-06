@@ -4,9 +4,9 @@
 ## Copyright (C) 2011 - Nicolas Niclausse, Inria.
 ## Created: ven. août  5 09:57:25 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Sep  2 14:07:03 2011 (+0200)
+## Last-Updated: Tue Sep  6 10:17:31 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 15
+##     Update #: 16
 ######################################################################
 ##
 ### Commentary:
@@ -26,8 +26,7 @@ project(dtkJson)
 set(${PROJECT_NAME}_HEADERS
   dtkJson.h)
 
-set(${PROJECT_NAME}_HEADERS_MOC
-  dtkJson.h)
+set(${PROJECT_NAME}_HEADERS_MOC)
 
 set(${PROJECT_NAME}_SOURCES
   dtkJson.cpp)

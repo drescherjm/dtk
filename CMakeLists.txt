@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Sep  8 09:49:42 2011 (+0200)
-##           By: jwintz
-##     Update #: 360
+## Last-Updated: Thu Sep  8 16:04:03 2011 (+0200)
+##           By: Julien Wintz
+##     Update #: 361
 ######################################################################
 ## 
 ### Commentary: 
@@ -51,6 +51,7 @@ include(dtkBuild)
 include(dtkPack)
 include(dtkPch)
 
+add_subdirectory(include)
 add_subdirectory(src)
 
 if(BUILD_TOOLS)

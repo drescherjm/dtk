@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Sep  8 09:42:18 2011 (+0200)
+## Last-Updated: Thu Sep  8 09:49:42 2011 (+0200)
 ##           By: jwintz
-##     Update #: 357
+##     Update #: 360
 ######################################################################
 ## 
 ### Commentary: 
@@ -40,6 +40,7 @@ option(BUILD_TESTING       "Build testing"          true)
 option(BUILD_DOCUMENTATION "Build documentation"    true)
 option(BUILD_WRAPPERS      "Build wrappers"         true)
 option(BUILD_REPORTING     "Build reporting"        true)
+option(BUILD_TUTORIALS     "Build tutorials"        true)
 
 if(MSVC)
   option(DTK_USE_PRECOMPILED_HEADERS "Use precompiled headers" true)
@@ -71,3 +72,7 @@ endif(BUILD_TESTING)
 if(BUILD_DOCUMENTATION)
   add_subdirectory(doc)
 endif(BUILD_DOCUMENTATION)
+
+if(BUILD_TUTORIALS)
+  add_subdirectory(tutorials)
+endif(BUILD_TUTORIALS)

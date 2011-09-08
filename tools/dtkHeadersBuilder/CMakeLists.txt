@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Thu Sep  8 10:54:10 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Sep  8 10:55:44 2011 (+0200)
+## Last-Updated: Thu Sep  8 13:20:15 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 6
+##     Update #: 7
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,7 +17,7 @@
 ## 
 ######################################################################
 
-project(dtkHeaders)
+project(dtkHeadersBuilder)
 
 ## #################################################################
 ## Sources

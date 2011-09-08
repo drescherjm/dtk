@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Sep  2 14:11:32 2011 (+0200)
+## Last-Updated: Thu Sep  8 14:40:18 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 291
+##     Update #: 294
 ######################################################################
 ## 
 ### Commentary: 
@@ -198,7 +198,22 @@ SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 ## Installation
 ## #################################################################
 
+string(REGEX REPLACE ".h" ""
+     ${PROJECT_NAME}_HEADERS_QTS
+  "${${PROJECT_NAME}_HEADERS}")
+
 install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
+## #################################################################
+## Installation
+## #################################################################
+
+foreach(header ${${PROJECT_NAME}_HEADERS})
+  string(REGEX REPLACE "(.*)\\.h\$" "\\1" h ${header})
+  set(${PROJECT_NAME}_HEADERS_QTS "${${PROJECT_NAME}_HEADERS_QTS}" ${h})
+endforeach(header)
+
+install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
+install(FILES ${${PROJECT_NAME}_HEADERS_QTS} DESTINATION include/${PROJECT_NAME})
 install(FILES ${${PROJECT_NAME}_MODULES} DESTINATION modules)
 install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin

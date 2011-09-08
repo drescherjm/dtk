@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Feb  3 16:10:15 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Sep  2 14:07:52 2011 (+0200)
+## Last-Updated: Thu Sep  8 14:38:39 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 28
+##     Update #: 30
 ######################################################################
 ## 
 ### Commentary: 
@@ -82,7 +82,17 @@ SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 ## Installation
 ## #################################################################
 
+string(REGEX REPLACE ".h" ""
+     ${PROJECT_NAME}_HEADERS_QTS
+  "${${PROJECT_NAME}_HEADERS}")
+
+foreach(header ${${PROJECT_NAME}_HEADERS})
+  string(REGEX REPLACE "(.*)\\.h\$" "\\1" h ${header})
+  set(${PROJECT_NAME}_HEADERS_QTS "${${PROJECT_NAME}_HEADERS_QTS}" ${h})
+endforeach(header)
+
 install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
+install(FILES ${${PROJECT_NAME}_HEADERS_QTS} DESTINATION include/${PROJECT_NAME})
 install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib

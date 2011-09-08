@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Tue Jun 21 12:08:14 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Sep  2 14:06:24 2011 (+0200)
+## Last-Updated: Thu Sep  8 14:40:29 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 34
+##     Update #: 39
 ######################################################################
 ## 
 ### Commentary: 
@@ -93,7 +93,13 @@ SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 ## Installation
 ## #################################################################
 
+foreach(header ${${PROJECT_NAME}_HEADERS})
+  string(REGEX REPLACE "(.*)\\.h\$" "\\1" h ${header})
+  set(${PROJECT_NAME}_HEADERS_QTS "${${PROJECT_NAME}_HEADERS_QTS}" ${h})
+endforeach(header)
+
 install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
+install(FILES ${${PROJECT_NAME}_HEADERS_QTS} DESTINATION include/${PROJECT_NAME})
 install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
@@ -102,4 +108,3 @@ install(TARGETS ${PROJECT_NAME}
 ## #################################################################
 
 endif(ZLIB_FOUND)
-

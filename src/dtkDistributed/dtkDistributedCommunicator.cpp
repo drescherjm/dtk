@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 13:38:59 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 16 13:40:24 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 86
+ * Last-Updated: Fri Sep  9 13:04:12 2011 (+0200)
+ *           By: jwintz
+ *     Update #: 91
  */
 
 /* Commentary: 
@@ -53,6 +53,11 @@ void dtkDistributedCommunicator::send(int *data, quint16 size, quint16 target, i
     return this->send(data, size, dtkDistributedCommunicatorInt, target, tag);
 }
 
+void dtkDistributedCommunicator::send(long *data, quint16 size, quint16 target, int tag)
+{
+    return this->send(data, size, dtkDistributedCommunicatorInt, target, tag);
+}
+
 void dtkDistributedCommunicator::send(float *data, quint16 size, quint16 target, int tag)
 {
     return this->send(data, size, dtkDistributedCommunicatorFloat, target, tag);
@@ -74,6 +79,11 @@ void dtkDistributedCommunicator::receive(char *data, quint16 size, quint16 sourc
 }
 
 void dtkDistributedCommunicator::receive(int *data, quint16 size, quint16 source, int tag)
+{
+    return this->receive(data, size, dtkDistributedCommunicatorInt, source, tag);
+}
+
+void dtkDistributedCommunicator::receive(long *data, quint16 size, quint16 source, int tag)
 {
     return this->receive(data, size, dtkDistributedCommunicatorInt, source, tag);
 }

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Thu Sep  8 09:45:54 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Sep  8 10:38:57 2011 (+0200)
+## Last-Updated: Fri Sep  9 10:24:59 2011 (+0200)
 ##           By: jwintz
-##     Update #: 7
+##     Update #: 9
 ######################################################################
 ## 
 ### Commentary: 
@@ -22,5 +22,6 @@ add_subdirectory(0)
 if(DTK_HAVE_MPI)
 
 add_subdirectory(1)
+add_subdirectory(2)
 
 endif(DTK_HAVE_MPI)

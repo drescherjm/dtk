@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Sep  6 14:15:35 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep  9 13:01:26 2011 (+0200)
+ * Last-Updated: Fri Sep  9 13:09:47 2011 (+0200)
  *           By: jwintz
- *     Update #: 153
+ *     Update #: 218
  */
 
 /* Commentary: 
@@ -19,13 +19,16 @@
 
 #include <QtCore>
 
-#include <mpi.h>
+#include <dtkConfig.h>
 
-#define SEND_TAG 2001
-#define RECV_TAG 2002
+#include <dtkDistributed/dtkDistributedCommunicator.h>
+#include <dtkDistributed/dtkDistributedCommunicatorMpi.h>
+#include <dtkDistributed/dtkDistributedCommunicatorTcp.h>
 
 int main(int argc, char **argv)
 {
+    QCoreApplication application(argc, argv);
+
     if(argc < 2) {
         qDebug() << "Usage:" << argv[0] << "count";
         return 0;
@@ -44,10 +47,15 @@ int main(int argc, char **argv)
 // Initialize distribution
 // /////////////////////////////////////////////////////////////////
 
-    MPI::Init(argc, argv);
+#if defined(DTK_HAVE_MPI)
+    dtkDistributedCommunicator *communicator = new dtkDistributedCommunicatorMpi;
+#else
+    dtkDistributedCommunicator *communicator = new dtkDistributedCommunicatorTcp;
+#endif
+    communicator->initialize();
 
-    int rank = MPI::COMM_WORLD.Get_rank();
-    int size = MPI::COMM_WORLD.Get_size();
+    int rank = communicator->rank();
+    int size = communicator->size();
 
     if(size > count/2) {
         
@@ -92,8 +100,8 @@ int main(int argc, char **argv)
 // Root - send sub array size
 // /////////////////////////////////////////////////////////////////
 
-            MPI::COMM_WORLD.Send(          &send,    1, MPI_INT, slave, SEND_TAG);
-            MPI::COMM_WORLD.Send(&m_array[start], send, MPI_INT, slave, SEND_TAG);
+            communicator->send(          &send,    1, dtkDistributedCommunicator::dtkDistributedCommunicatorInt, slave, dtkDistributedCommunicator::dtkDistributedCommunicatorSend);
+            communicator->send(&m_array[start], send, dtkDistributedCommunicator::dtkDistributedCommunicatorInt, slave, dtkDistributedCommunicator::dtkDistributedCommunicatorSend);
         }
 
 // /////////////////////////////////////////////////////////////////
@@ -106,7 +114,11 @@ int main(int argc, char **argv)
         for(int i = 0; i < average; i++)
             sum += m_array[i];
         
+#if defined(DTK_HAVE_MPI)
+        qDebug() << "Rank" << rank << "(" << ((dtkDistributedCommunicatorMpi *)communicator)->name() << ")" << "has partial sum" << sum;
+#else
         qDebug() << "Rank" << rank << "has partial sum" << sum;
+#endif
         
 // /////////////////////////////////////////////////////////////////
 // Root - collect slaves partial sums
@@ -114,7 +126,7 @@ int main(int argc, char **argv)
 
         for(int slave = 1; slave < size; slave++) {
 
-            MPI::COMM_WORLD.Recv(&partial_sum, 1, MPI_LONG, slave, RECV_TAG);
+            communicator->receive(&partial_sum, 1, dtkDistributedCommunicator::dtkDistributedCommunicatorLong, slave, dtkDistributedCommunicator::dtkDistributedCommunicatorReceive);
 
             qDebug() << "Rank" << slave << "has partial sum" << partial_sum;
             
@@ -131,8 +143,8 @@ int main(int argc, char **argv)
 
         int recv;
 
-        MPI::COMM_WORLD.Recv(   &recv,    1, MPI_INT, 0, SEND_TAG);
-        MPI::COMM_WORLD.Recv(&s_array, recv, MPI_INT, 0, SEND_TAG);
+        communicator->receive(   &recv,    1, dtkDistributedCommunicator::dtkDistributedCommunicatorInt, 0, dtkDistributedCommunicator::dtkDistributedCommunicatorSend);
+        communicator->receive(&s_array, recv, dtkDistributedCommunicator::dtkDistributedCommunicatorInt, 0, dtkDistributedCommunicator::dtkDistributedCommunicatorSend);
 
 // /////////////////////////////////////////////////////////////////
 // Slave - compute the partial sum
@@ -143,11 +155,11 @@ int main(int argc, char **argv)
         for(int i = 0; i < recv; i++)
             partial_sum += s_array[i];
 
-        MPI::COMM_WORLD.Send(&partial_sum, 1, MPI_LONG, 0, RECV_TAG);
+        communicator->send(&partial_sum, 1, dtkDistributedCommunicator::dtkDistributedCommunicatorLong, 0, dtkDistributedCommunicator::dtkDistributedCommunicatorReceive);
     }
 
 finalize:
-    MPI::Finalize();
+    communicator->uninitialize();
 
     return 0;
 }

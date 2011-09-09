@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 09:18:40 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 16 16:40:50 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 59
+ * Last-Updated: Fri Sep  9 13:04:03 2011 (+0200)
+ *           By: jwintz
+ *     Update #: 72
  */
 
 /* Commentary: 
@@ -38,6 +38,7 @@ public:
         dtkDistributedCommunicatorBool,
         dtkDistributedCommunicatorChar,
         dtkDistributedCommunicatorInt,
+        dtkDistributedCommunicatorLong,
         dtkDistributedCommunicatorFloat,
         dtkDistributedCommunicatorDouble
     };
@@ -59,6 +60,11 @@ public:
         dtkDistributedCommunicatorBarrier = 1
     };
 
+    enum MessageTag {
+        dtkDistributedCommunicatorSend    = 2001,
+        dtkDistributedCommunicatorReceive = 2002
+    };
+
     virtual void   initialize(void) = 0;
     virtual void uninitialize(void) = 0;
 
@@ -69,6 +75,7 @@ public:
     virtual void      send(bool   *data, quint16 size, quint16 target, int tag);
     virtual void      send(char   *data, quint16 size, quint16 target, int tag);
     virtual void      send(int    *data, quint16 size, quint16 target, int tag);
+    virtual void      send(long   *data, quint16 size, quint16 target, int tag);
     virtual void      send(float  *data, quint16 size, quint16 target, int tag);
     virtual void      send(double *data, quint16 size, quint16 target, int tag);
 
@@ -76,6 +83,7 @@ public:
     virtual void   receive(bool   *data, quint16 size, quint16 source, int tag);
     virtual void   receive(char   *data, quint16 size, quint16 source, int tag);
     virtual void   receive(int    *data, quint16 size, quint16 source, int tag);
+    virtual void   receive(long   *data, quint16 size, quint16 source, int tag);
     virtual void   receive(float  *data, quint16 size, quint16 source, int tag);
     virtual void   receive(double *data, quint16 size, quint16 source, int tag);
 

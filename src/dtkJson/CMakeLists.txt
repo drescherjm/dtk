@@ -4,9 +4,9 @@
 ## Copyright (C) 2011 - Nicolas Niclausse, Inria.
 ## Created: ven. août  5 09:57:25 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Sep  6 10:17:31 2011 (+0200)
+## Last-Updated: Thu Sep  8 14:38:58 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 16
+##     Update #: 22
 ######################################################################
 ##
 ### Commentary:
@@ -78,12 +78,17 @@ SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 ## Installation
 ## #################################################################
 
+foreach(header ${${PROJECT_NAME}_HEADERS})
+  string(REGEX REPLACE "(.*)\\.h\$" "\\1" h ${header})
+  set(${PROJECT_NAME}_HEADERS_QTS "${${PROJECT_NAME}_HEADERS_QTS}" ${h})
+endforeach(header)
+
 install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
+install(FILES ${${PROJECT_NAME}_HEADERS_QTS} DESTINATION include/${PROJECT_NAME})
 install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib)
 
-## #################################################################
 
 

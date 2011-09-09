@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May  9 14:41:38 2011 (+0200)
+ * Last-Updated: Mon Sep  5 12:54:48 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 272
+ *     Update #: 288
  */
 
 /* Commentary:
@@ -211,18 +211,33 @@ void dtkAbstractView::resize(int width, int height)
 
 void dtkAbstractView::addAnimator(dtkAbstractViewAnimator *animator)
 {
-    d->animators.insert(animator->description(), animator);
+    if(animator->identifier().isEmpty()) {
+        qDebug() << "No identifier specified for animator. Not add to" << this->identifier();
+        return;
+    }
+
+    d->animators.insert(animator->identifier(), animator);
 }
 
 void dtkAbstractView::addNavigator(dtkAbstractViewNavigator *navigator)
 {
-    d->navigators.insert(navigator->description(), navigator);
+    if(navigator->identifier().isEmpty()) {
+        qDebug() << "No identifier specified for navigator. Not add to" << this->identifier();
+        return;
+    }
+
+    d->navigators.insert(navigator->identifier(), navigator);
 }
 
 void dtkAbstractView::addInteractor(dtkAbstractViewInteractor *interactor)
 {
+    if(interactor->identifier().isEmpty()) {
+        qDebug() << "No identifier specified for interactor. Not add to" << this->identifier();
+        return;
+    }
+
     if(interactor)
-        d->interactors.insert(interactor->description(), interactor);
+        d->interactors.insert(interactor->identifier(), interactor);
 }
 
 void dtkAbstractView::enableAnimator(const QString& animator)
@@ -231,7 +246,7 @@ void dtkAbstractView::enableAnimator(const QString& animator)
         d->animators.value(animator)->setView(this);
         d->animators.value(animator)->enable();
     } else
-        dtkDebug() << description() << " has no such animator: " << animator;
+        dtkDebug() << identifier() << " has no such animator: " << animator;
 }
 
 void dtkAbstractView::disableAnimator(const QString& animator)
@@ -246,7 +261,7 @@ void dtkAbstractView::enableNavigator(const QString& navigator)
 //      d->navigators.value(navigator)->setView(this);
         d->navigators.value(navigator)->enable();
     } else
-        dtkDebug() << description() << " has no such navigator: " << navigator;
+        dtkDebug() << identifier() << " has no such navigator: " << navigator;
 }
 
 void dtkAbstractView::disableNavigator(const QString& navigator)
@@ -261,7 +276,7 @@ void dtkAbstractView::enableInteractor(const QString& interactor)
         d->interactors.value(interactor)->setView(this);
         d->interactors.value(interactor)->enable();
     } else
-        dtkDebug() << description() << " has no such interactor: " << interactor;
+        dtkDebug() << identifier() << " has no such interactor: " << interactor;
 }
 
 void dtkAbstractView::disableInteractor(const QString& interactor)
@@ -297,7 +312,9 @@ dtkAbstractViewInteractor *dtkAbstractView::interactor(const QString& type)
 QList<dtkAbstractViewAnimator *> dtkAbstractView::animators(void) const
 {
     QList<dtkAbstractViewAnimator *> ret;
+#if QT_VERSION > 0x040600
     ret.reserve(d->animators.size());
+#endif
     foreach( dtkSmartPointer<dtkAbstractViewAnimator> value, d->animators )
         ret.push_back(value.data());
     return ret;
@@ -306,7 +323,9 @@ QList<dtkAbstractViewAnimator *> dtkAbstractView::animators(void) const
 QList<dtkAbstractViewNavigator *> dtkAbstractView::navigators(void) const
 {
     QList<dtkAbstractViewNavigator *> ret;
+#if QT_VERSION > 0x040600
     ret.reserve(d->navigators.size());
+#endif
     foreach( dtkSmartPointer<dtkAbstractViewNavigator> value, d->navigators )
         ret.push_back(value.data());
     return ret;
@@ -315,7 +334,9 @@ QList<dtkAbstractViewNavigator *> dtkAbstractView::navigators(void) const
 QList<dtkAbstractViewInteractor *> dtkAbstractView::interactors(void) const
 {
     QList<dtkAbstractViewInteractor *> ret;
+#if QT_VERSION > 0x040600
     ret.reserve(d->interactors.size());
+#endif
     foreach( dtkSmartPointer<dtkAbstractViewInteractor> value, d->interactors )
         ret.push_back(value.data());
     return ret;
@@ -422,14 +443,14 @@ double dtkAbstractView::cameraZoom(void) const
 
 QDebug operator<<(QDebug debug, const dtkAbstractView& viewer)
 {
-    debug.nospace() << viewer.description();
+    debug.nospace() << viewer.identifier();
 
     return debug.space();
 }
 
 QDebug operator<<(QDebug debug, dtkAbstractView *viewer)
 {
-    debug.nospace() << viewer->description();
+    debug.nospace() << viewer->identifier();
 
     return debug.space();
 }

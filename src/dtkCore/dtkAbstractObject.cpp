@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:54:04 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  5 16:58:04 2011 (+0200)
+ * Last-Updated: Mon Sep  5 12:59:00 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 201
+ *     Update #: 209
  */
 
 /* Commentary:
@@ -75,6 +75,20 @@ dtkAbstractObject::~dtkAbstractObject(void)
     delete d;
 
     d = NULL;
+}
+
+QString dtkAbstractObject::description(void) const
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return "";
+}
+
+QString dtkAbstractObject::identifier(void) const
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return "";
 }
 
 QString dtkAbstractObject::name(void) const

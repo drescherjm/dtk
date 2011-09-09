@@ -33,9 +33,15 @@ find_package(dtk REQUIRED)
 include(${dtk_USE_FILE})
 include(dtkPlugin)
 
+include_directories(${PROJECT_BINARY_DIR})
+
 ## #################################################################
 ## Input
 ## #################################################################
+
+configure_file (
+  "${PROJECT_SOURCE_DIR}/%1PluginConfig.h.in"
+  "${PROJECT_BINARY_DIR}/%1PluginConfig.h")
 
 set(${PROJECT_NAME}_HEADERS_MOC
   %1Plugin.h

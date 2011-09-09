@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Thu Jan  7 10:37:04 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Mar 14 19:53:32 2011 (+0100)
+## Last-Updated: Thu Sep  8 14:37:24 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 37
+##     Update #: 46
 ######################################################################
 ## 
 ### Commentary: 
@@ -50,10 +50,21 @@ endif(NOT MSVC)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
+if(BUILD_SHARED_LIBS)
+
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_MOC})
+
+else(BUILD_SHARED_LIBS)
+
+add_library(${PROJECT_NAME} STATIC
+  ${${PROJECT_NAME}_SOURCES}
+  ${${PROJECT_NAME}_HEADERS}
+  ${${PROJECT_NAME}_SOURCES_MOC})
+
+endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES})
@@ -74,7 +85,13 @@ SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 ## Installation
 ## #################################################################
 
+foreach(header ${${PROJECT_NAME}_HEADERS})
+  string(REGEX REPLACE "(.*)\\.h\$" "\\1" h ${header})
+  set(${PROJECT_NAME}_HEADERS_QTS "${${PROJECT_NAME}_HEADERS_QTS}" ${h})
+endforeach(header)
+
 install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
+install(FILES ${${PROJECT_NAME}_HEADERS_QTS} DESTINATION include/${PROJECT_NAME})
 install(FILES ${${PROJECT_NAME}_MODULES} DESTINATION modules)
 install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin

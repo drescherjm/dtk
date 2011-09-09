@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Aug  6 09:48:31 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Oct  6 14:40:39 2009 (+0200)
+ * Last-Updated: Mon Sep  5 10:51:37 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 24
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -40,6 +40,15 @@ public:
 signals:
     void accepted(void);
     void rejected(void);
+
+#if defined(Q_WS_MAC)
+protected:
+    bool macEvent(EventHandlerCallRef caller, EventRef event) {
+        Q_UNUSED(caller);
+        Q_UNUSED(event);
+        return true;
+    }
+#endif
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -61,7 +70,15 @@ public:
 
 protected:
     void showEvent(QShowEvent *event);
-    
+
+#if defined(Q_WS_MAC)
+    bool macEvent(EventHandlerCallRef caller, EventRef event) {
+        Q_UNUSED(caller);
+        Q_UNUSED(event);
+        return true;
+    }
+#endif
+
 private slots:
     void onActionTriggered(void);
     

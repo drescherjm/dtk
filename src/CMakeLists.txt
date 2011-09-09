@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 19:22:37 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Jun 21 13:40:25 2011 (+0200)
-##           By: Julien Wintz
-##     Update #: 34
+## Last-Updated: ven. août  5 09:59:21 2011 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 35
 ######################################################################
 ## 
 ### Commentary: 
@@ -28,3 +28,4 @@ add_subdirectory(dtkHelp)
 add_subdirectory(dtkDistributed)
 add_subdirectory(dtkVr)
 add_subdirectory(dtkPlot)
+add_subdirectory(dtkJson)

@@ -1,0 +1,4 @@
+#include "../src/dtkPlot/dtkPlotCurve.h"
+#include "../src/dtkPlot/dtkPlotExport.h"
+#include "../src/dtkPlot/dtkPlotRenderer.h"
+#include "../src/dtkPlot/dtkPlotView.h"

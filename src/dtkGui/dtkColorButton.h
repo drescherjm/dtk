@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Mar 18 14:42:33 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 18 15:21:24 2011 (+0100)
+ * Last-Updated: Mon Sep  5 11:04:53 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 45
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -81,6 +81,14 @@ protected:
 protected:
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void resizeEvent(QResizeEvent *event);
+
+#if defined(Q_WS_MAC)
+    bool macEvent(EventHandlerCallRef caller, EventRef event) {
+        Q_UNUSED(caller);
+        Q_UNUSED(event);
+        return true;
+    }
+#endif
 
 private:
     dtkColorButtonPrivate *d;

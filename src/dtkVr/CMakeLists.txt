@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue Jun  7 16:00:27 2011 (+0200)
+## Last-Updated: Thu Sep  8 14:40:18 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 279
+##     Update #: 294
 ######################################################################
 ## 
 ### Commentary: 
@@ -116,7 +116,6 @@ endif(NOT WIN32)
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)
 if(NOT MSVC)
-  # Shouldn't the QT_USE_FILE set this appropriately?
   add_definitions(-DQT_NO_DEBUG)
 endif(NOT MSVC)
 
@@ -131,6 +130,8 @@ if(DTK_USE_PRECOMPILED_HEADERS)
     ${${PROJECT_NAME}_SOURCES_WRAP})
 endif(DTK_USE_PRECOMPILED_HEADERS)
 
+if(BUILD_SHARED_LIBS)
+
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
@@ -138,25 +139,34 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES_PCH}
   ${${PROJECT_NAME}_SOURCES_WRAP})
 
+else(BUILD_SHARED_LIBS)
+
+add_library(${PROJECT_NAME} STATIC
+  ${${PROJECT_NAME}_SOURCES}
+  ${${PROJECT_NAME}_HEADERS}
+  ${${PROJECT_NAME}_SOURCES_MOC}
+  ${${PROJECT_NAME}_SOURCES_PCH}
+  ${${PROJECT_NAME}_SOURCES_WRAP})
+
+endif(BUILD_SHARED_LIBS)
+
 target_link_libraries(${PROJECT_NAME}
   dtkMath
   dtkCore
   dtkDistributed)
 
 if(MSVC)
-  target_link_libraries(${PROJECT_NAME}
-    wsock32)
+  target_link_libraries(${PROJECT_NAME} wsock32)
 endif()
 
 if(MPI_FOUND)
-target_link_libraries(${PROJECT_NAME}
-  ${MPI_LIBRARIES})
+  target_link_libraries(${PROJECT_NAME} ${MPI_LIBRARIES})
 endif(MPI_FOUND)
 
 if(QUAT_LIBRARY AND VRPN_LIBRARY)
-target_link_libraries(${PROJECT_NAME}
-  ${QUAT_LIBRARY}
-  ${VRPN_LIBRARY})
+  target_link_libraries(${PROJECT_NAME}
+    ${QUAT_LIBRARY}
+    ${VRPN_LIBRARY})
 endif(QUAT_LIBRARY AND VRPN_LIBRARY)
 
 ## #################################################################
@@ -171,8 +181,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i
   COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${CMAKE_BINARY_DIR}/modules
   COMMAND ${CMAKE_COMMAND} ARGS -E copy ${${PROJECT_NAME}_BINARY_DIR}/vr.py ${CMAKE_BINARY_DIR}/modules
-  COMMENT "-- Moving python modules to ${CMAKE_BINARY_DIR}/modules"
-)
+  COMMENT "-- Moving python modules to ${CMAKE_BINARY_DIR}/modules")
 
 set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/vr.py)
 
@@ -189,7 +198,22 @@ SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 ## Installation
 ## #################################################################
 
+string(REGEX REPLACE ".h" ""
+     ${PROJECT_NAME}_HEADERS_QTS
+  "${${PROJECT_NAME}_HEADERS}")
+
 install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
+## #################################################################
+## Installation
+## #################################################################
+
+foreach(header ${${PROJECT_NAME}_HEADERS})
+  string(REGEX REPLACE "(.*)\\.h\$" "\\1" h ${header})
+  set(${PROJECT_NAME}_HEADERS_QTS "${${PROJECT_NAME}_HEADERS_QTS}" ${h})
+endforeach(header)
+
+install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
+install(FILES ${${PROJECT_NAME}_HEADERS_QTS} DESTINATION include/${PROJECT_NAME})
 install(FILES ${${PROJECT_NAME}_MODULES} DESTINATION modules)
 install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin

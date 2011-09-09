@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed May  4 09:22:45 2011 (+0200)
-##           By: Thibaud Kloczko
-##     Update #: 131
+## Last-Updated: Thu Sep  8 14:36:42 2011 (+0200)
+##           By: Julien Wintz
+##     Update #: 142
 ######################################################################
 ## 
 ### Commentary: 
@@ -127,7 +127,6 @@ set(${PROJECT_NAME}_SOURCES
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)
 if(NOT MSVC)
-  # Shouldn't the QT_USE_FILE set this appropriately?
   add_definitions(-DQT_NO_DEBUG)
 endif(NOT MSVC)
 
@@ -135,7 +134,7 @@ add_definitions(-DQSTATEMACHINE_DEBUG)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
-if (DTK_USE_PRECOMPILED_HEADERS)
+if(DTK_USE_PRECOMPILED_HEADERS)
   add_precompiled_header(${PROJECT_NAME}_SOURCES_PCH 
     "dtkPch/dtkPch.h" "../dtkPch/dtkPch.cpp" 
     ${${PROJECT_NAME}_SOURCES}
@@ -144,12 +143,25 @@ if (DTK_USE_PRECOMPILED_HEADERS)
     ${${PROJECT_NAME}_SOURCES_WRAP})
 endif(DTK_USE_PRECOMPILED_HEADERS)
 
+if(BUILD_SHARED_LIBS)
+
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_PCH}
   ${${PROJECT_NAME}_SOURCES_WRAP})
+
+else(BUILD_SHARED_LIBS)
+
+add_library(${PROJECT_NAME} STATIC
+  ${${PROJECT_NAME}_SOURCES}
+  ${${PROJECT_NAME}_HEADERS}
+  ${${PROJECT_NAME}_SOURCES_MOC}
+  ${${PROJECT_NAME}_SOURCES_PCH}
+  ${${PROJECT_NAME}_SOURCES_WRAP})
+
+endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
@@ -168,7 +180,13 @@ SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 ## Installation
 ## #################################################################
 
+foreach(header ${${PROJECT_NAME}_HEADERS})
+  string(REGEX REPLACE "(.*)\\.h\$" "\\1" h ${header})
+  set(${PROJECT_NAME}_HEADERS_QTS "${${PROJECT_NAME}_HEADERS_QTS}" ${h})
+endforeach(header)
+
 install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
+install(FILES ${${PROJECT_NAME}_HEADERS_QTS} DESTINATION include/${PROJECT_NAME})
 install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib

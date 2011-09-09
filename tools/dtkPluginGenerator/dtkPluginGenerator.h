@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar  9 21:40:22 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 26 16:51:11 2010 (+0200)
+ * Last-Updated: Mon Sep  5 14:53:38 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 28
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -56,6 +56,7 @@ protected:
    bool generateCMakeLists(void);
    bool generateTypeHeaderFile(void);
    bool generateTypeSourceFile(void);
+   bool generatePluginConfigFile(void);
    bool generatePluginHeaderFile(void);
    bool generatePluginSourceFile(void);
    bool generateExportHeaderFile(void);

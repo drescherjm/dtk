@@ -152,6 +152,12 @@ public:
 
     QString selectedPath(void) const;
 
+    /**
+    * Set the allowance of file bookmarking.
+    * @param isAllowed - whether is allowed to bookmark files
+    **/
+    void allowFileBookmarking(bool isAllowed);
+
 signals:
     void changed(const QString& path);
     void bookmarked(const QString& path);
@@ -189,6 +195,12 @@ public:
 
     QString selectedPath(void) const;
 
+    /**
+    * Set the allowance of file bookmarking.
+    * @param isAllowed - whether is allowed to bookmark files
+    **/
+    void allowFileBookmarking(bool isAllowed);
+
 signals:
     void changed(const QString& path);
     void bookmarked(const QString& path);
@@ -223,6 +235,12 @@ public:
     void addContextMenuAction(QAction *action);
 
     QString selectedPath(void) const;
+
+    /**
+    * Set the allowance of file bookmarking.
+    * @param isAllowed - whether is allowed to bookmark files
+    **/
+    void allowFileBookmarking(bool isAllowed);
 
 signals:
     void changed(const QString& path);

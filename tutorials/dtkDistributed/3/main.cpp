@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Sep 12 09:58:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 12 11:10:11 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 72
+ * Last-Updated: Mon Sep 12 12:31:55 2011 (+0200)
+ *           By: jwintz
+ *     Update #: 81
  */
 
 /* Commentary: 
@@ -106,9 +106,6 @@ int main(int argc, char **argv)
 
         m_array->setMetaData("count", QString::number(count));
 
-        // for(int i = 0; i < count; i++)
-        //     m_array[i] = i+1;
-
 // /////////////////////////////////////////////////////////////////
 // Root - distribute data
 // /////////////////////////////////////////////////////////////////
@@ -127,9 +124,6 @@ int main(int argc, char **argv)
 // Root - send sub array size
 // /////////////////////////////////////////////////////////////////
 
-            // communicator->send(          &send,    1, dtkDistributedCommunicator::dtkDistributedCommunicatorInt, slave, dtkDistributedCommunicator::dtkDistributedCommunicatorSend);
-            // communicator->send(&m_array[start], send, dtkDistributedCommunicator::dtkDistributedCommunicatorInt, slave, dtkDistributedCommunicator::dtkDistributedCommunicatorSend);
-
             communicator->send(                                      &send,    1, dtkDistributedCommunicator::dtkDistributedCommunicatorInt, slave, dtkDistributedCommunicator::dtkDistributedCommunicatorSend);
             communicator->send(static_cast<int *>(m_array->data()) + start, send, dtkDistributedCommunicator::dtkDistributedCommunicatorInt, slave, dtkDistributedCommunicator::dtkDistributedCommunicatorSend);
         }
@@ -142,6 +136,7 @@ int main(int argc, char **argv)
         int partial_sum = 0;
         
         summer->setInput(m_array);
+        summer->setMetaData("until", QString::number(average));
         sum += summer->run();
         
 #if defined(DTK_HAVE_MPI)

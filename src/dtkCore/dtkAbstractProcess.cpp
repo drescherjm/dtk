@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep  5 12:52:18 2011 (+0200)
+ * Last-Updated: Mon Sep 12 11:01:28 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 87
+ *     Update #: 89
  */
 
 /* Commentary: 
@@ -51,7 +51,8 @@ QDebug operator<<(QDebug debug, dtkAbstractProcess *process)
 int dtkAbstractProcess::run(void)
 {
     int retval = this->update();
-    if (retval==0)
+
+    if (retval == 0)
         emit success();
     else
         emit failure();

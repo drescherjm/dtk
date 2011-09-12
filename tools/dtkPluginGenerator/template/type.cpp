@@ -26,7 +26,9 @@ public:
 
 %1::~%1(void)
 {
+    delete d;
 
+    d = NULL;
 }
 
 bool %1::registered(void)

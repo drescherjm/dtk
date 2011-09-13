@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun  1 11:36:34 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 12
+ * Last-Updated: jeu. août 11 10:36:39 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 163
  */
 
 /* Commentary: 
@@ -77,17 +77,46 @@ void dtkDistributedServerDaemon::read(void)
 {
     QTcpSocket *socket = (QTcpSocket *)sender();
 
-    QString contents = socket->readAll();
-    
+    static const int MAX_LINE_LENGTH = 1024;
+
+    QString contents = socket->readLine(MAX_LINE_LENGTH);
+
     qDebug() << DTK_PRETTY_FUNCTION << "-- Begin read --";
     qDebug() << DTK_PRETTY_FUNCTION << contents;
     qDebug() << DTK_PRETTY_FUNCTION << "--   End read --";
-    
-    dtkDistributedServiceBase::instance()->logMessage(QString("Read: %1").arg(QString(socket->readLine())));
-    
-    if(contents == "** status **") {
-        
-        socket->write("magic ninietsch was here");
+
+//    dtkDistributedServiceBase::instance()->logMessage(QString("Read: %1").arg(QString(socket->readLine())));
+
+
+
+    if(contents == "GET /status\n") {
+        QString r = d->manager->status();
+        qDebug() << r;
+
+        socket->write(QString("STATUS:\n").toAscii());
+        QByteArray R = r.toAscii();
+        socket->write(QString::number(R.size()).toAscii()+"\n");
+        socket->write(R);
+    } else if(contents == "PUT /job\n") {
+        QByteArray buffer;
+        QString size = socket->readLine(MAX_LINE_LENGTH);
+        qint64 toread= size.toInt();
+        qDebug() << "Size to read: " << toread;
+        while (buffer.size() < toread  ) {
+            qDebug() << "read buffer loop " << buffer.size();
+//            socket->waitForReadyRead(-1); // doesn't work ?!
+            buffer.append(socket->read(toread));
+        }
+        QString jobid = d->manager->submit(buffer);
+        qDebug() << jobid;
+        socket->write(QString("NEWJOB:\n").toAscii());
+        socket->write(jobid.toAscii()+"\n");
+    } else if(contents.contains("DELETE /job/")) {
+        QString jobid = contents.split("/").last().trimmed();
+        QString resp  = "DEL "+d->manager->deljob(jobid) +"\n";
+        socket->write(resp.toAscii());
+    } else {
+        qDebug() << DTK_PRETTY_FUNCTION << "WARNING: Unknown data";
     }
 }
 

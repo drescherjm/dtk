@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Sat Jun 25 15:49:02 2011 (+0200)
+## Last-Updated: Thu Sep  8 14:37:08 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 194
+##     Update #: 214
 ######################################################################
 ## 
 ### Commentary: 
@@ -46,6 +46,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkQuat.h
   dtkUpdater.h
   dtkSignalBlocker.h
+  dtkSingleton.h
+  dtkSingletonDeclare.h
   dtkSmartPointer.h
   dtkVec3.h)
 
@@ -88,6 +90,8 @@ set(${PROJECT_NAME}_SOURCES
   dtkPluginManager.cpp
   dtkQuat.cpp
   dtkSignalBlocker.h
+  dtkSingleton.cpp
+  dtkSingletonDeclare.cpp
   dtkSmartPointer.cpp
   dtkUpdater.cpp)
 
@@ -131,18 +135,40 @@ endif()
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)
 if(NOT MSVC)
-  # Shouldn't the QT_USE_FILE set this appropriately?
   add_definitions(-DQT_NO_DEBUG)
 endif()
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
+if(DTK_USE_PRECOMPILED_HEADERS)
+  add_precompiled_header(${PROJECT_NAME}_SOURCES_PCH 
+    "dtkPch/dtkPch.h" "../dtkPch/dtkPch.cpp" 
+    ${${PROJECT_NAME}_SOURCES}
+    ${${PROJECT_NAME}_HEADERS}
+    ${${PROJECT_NAME}_SOURCES_MOC}
+    ${${PROJECT_NAME}_SOURCES_WRAP})
+endif(DTK_USE_PRECOMPILED_HEADERS)
+
+if(BUILD_SHARED_LIBS)
+
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_MOC}
+  ${${PROJECT_NAME}_SOURCES_PCH}
   ${${PROJECT_NAME}_SOURCES_WRAP})
 
+else(BUILD_SHARED_LIBS)
+
+add_library(${PROJECT_NAME} STATIC
+  ${${PROJECT_NAME}_SOURCES}
+  ${${PROJECT_NAME}_HEADERS}
+  ${${PROJECT_NAME}_SOURCES_MOC}
+  ${${PROJECT_NAME}_SOURCES_PCH}
+  ${${PROJECT_NAME}_SOURCES_WRAP})
+
+endif(BUILD_SHARED_LIBS)
+  
 target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES})
 
 if(TCL_FOUND)
@@ -163,8 +189,8 @@ if(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   DEPENDS ${PROJECT_SOURCE_DIR}/dtkCore.i
-  COMMAND ${CMAKE_COMMAND} ARGS -E  make_directory ${PROJECT_BINARY_DIR}/modules
-  COMMAND ${CMAKE_COMMAND} ARGS -E  copy ${${PROJECT_NAME}_BINARY_DIR}/core.py ${PROJECT_BINARY_DIR}/modules
+  COMMAND ${CMAKE_COMMAND} ARGS -E  make_directory ${CMAKE_BINARY_DIR}/modules
+  COMMAND ${CMAKE_COMMAND} ARGS -E  copy ${${PROJECT_NAME}_BINARY_DIR}/core.py ${CMAKE_BINARY_DIR}/modules
   COMMENT "-- Moving python modules to ${CMAKE_BINARY_DIR}/modules")
 
 set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/core.py)
@@ -182,10 +208,16 @@ SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 ## Installation
 ## #################################################################
 
+foreach(header ${${PROJECT_NAME}_HEADERS})
+  string(REGEX REPLACE "(.*)\\.h\$" "\\1" h ${header})
+  set(${PROJECT_NAME}_HEADERS_QTS "${${PROJECT_NAME}_HEADERS_QTS}" ${h})
+endforeach(header)
+
+install(FILES ${dtk_BINARY_DIR}/dtkConfig.h DESTINATION include/${PROJECT_NAME})
 install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
+install(FILES ${${PROJECT_NAME}_HEADERS_QTS} DESTINATION include/${PROJECT_NAME})
 install(FILES ${${PROJECT_NAME}_MODULES} DESTINATION modules)
 install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib)
-

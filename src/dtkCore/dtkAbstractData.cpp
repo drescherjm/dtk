@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May 23 11:32:11 2011 (+0200)
+ * Last-Updated: Mon Sep  5 12:51:51 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 263
+ *     Update #: 275
  */
 
 /* Commentary:
@@ -60,14 +60,6 @@ dtkAbstractData::~dtkAbstractData(void)
     d = NULL;
 }
 
-
-QString dtkAbstractData::description(void) const
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return "";
-}
-
 void dtkAbstractData::addReader(const QString& reader)
 {
     d->readers.insert(reader, false);
@@ -90,7 +82,7 @@ void dtkAbstractData::enableReader(const QString& reader)
     if (it != d->readers.end())
         it.value() = true;
     else
-        dtkDebug() << description() << " has no such reader: " << reader;
+        dtkDebug() << this->identifier() << " has no such reader: " << reader;
 }
 
 void dtkAbstractData::disableReader(const QString& reader)
@@ -108,7 +100,7 @@ void dtkAbstractData::enableWriter(const QString& writer)
     if (it != d->writers.end())
         it.value() = true;
     else
-        dtkDebug() << description() << " has no such writer: " << writer;
+        dtkDebug() << this->identifier() << " has no such writer: " << writer;
 }
 
 void dtkAbstractData::disableWriter(const QString& writer)
@@ -126,7 +118,7 @@ void dtkAbstractData::enableConverter(const QString& converter)
     if (it != d->converters.end())
         it.value() = true;
     else
-        dtkDebug() << description() << " has no such converter: " << converter;
+        dtkDebug() << this->identifier() << " has no such converter: " << converter;
 }
 
 void dtkAbstractData::disableConverter(const QString& converter)
@@ -299,16 +291,22 @@ dtkAbstractData *dtkAbstractData::convert(const QString& toType)
     dtkAbstractData *conversion = NULL;
 
     for (QMap<QString, bool>::const_iterator it(d->converters.begin()); it!= d->converters.end() && !conversion ; ++it) {
-
+        
         if (it.value()) {
+            
+            QScopedPointer<dtkAbstractDataConverter> converter( dtkAbstractDataFactory::instance()->converter(it.key()));
+            
+            if (converter && converter->canConvert(toType)) {
+                converter->setData(this);
+                conversion = converter->convert();
 
-            QScopedPointer< dtkAbstractDataConverter > converter( dtkAbstractDataFactory::instance()->converter(it.key()));
+                if(conversion) {
 
-            if (converter) {
-                if (converter->canConvert(toType))
-                {
-                  converter->setData(this);
-                    conversion = converter->convert();
+                    foreach(QString metaDataKey, this->metaDataList())
+                        conversion->addMetaData(metaDataKey, this->metaDataValues(metaDataKey));
+                    
+                    foreach(QString propertyKey, this->propertyList())
+                        conversion->addProperty(propertyKey, this->propertyValues(propertyKey));
                 }
             }
         }
@@ -499,14 +497,14 @@ dtkAbstractData::operator double (void)
 
 QDebug operator<<(QDebug debug, const dtkAbstractData& data)
 {
-    debug.nospace() << data.description();
+    debug.nospace() << data.identifier();
 
     return debug.space();
 }
 
 QDebug operator<<(QDebug debug, dtkAbstractData *data)
 {
-    debug.nospace() << data->description();
+    debug.nospace() << data->identifier();
 
     return debug.space();
 }

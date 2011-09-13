@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Wed Jun  1 11:30:08 2011 (+0200)
+## Last-Updated: Thu Sep  8 14:42:38 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 156
+##     Update #: 192
 ######################################################################
 ## 
 ### Commentary: 
@@ -28,9 +28,9 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedCommunicatorTcp.h
   dtkDistributedClient.h
   dtkDistributedController.h
-  dtkDistributedControllerViewFiltering.h
-  dtkDistributedControllerViewOverall.h
-  dtkDistributedControllerViewDetailed.h
+  dtkDistributedControllerStatusModel.h
+  dtkDistributedControllerStatusModelItem.h
+  dtkDistributedControllerStatusView.h
   dtkDistributedCore.h
   dtkDistributedCpu.h
   dtkDistributedExport.h
@@ -39,7 +39,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedServer.h
   dtkDistributedServerDaemon.h
   dtkDistributedServerManager.h
-  dtkDistributedServerManager_p.h
   dtkDistributedServerManagerOar.h
   dtkDistributedServerManagerTorque.h
   dtkDistributedService.h)
@@ -49,12 +48,12 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkDistributedCommunicatorTcp.h
   dtkDistributedClient.h
   dtkDistributedController.h
-  dtkDistributedControllerViewFiltering.h
-  dtkDistributedControllerViewOverall.h
-  dtkDistributedControllerViewDetailed.h
+  dtkDistributedControllerStatusModel.h
+  dtkDistributedControllerStatusView.h
   dtkDistributedCore.h
   dtkDistributedCpu.h
   dtkDistributedGpu.h
+  dtkDistributedJob.h
   dtkDistributedNode.h
   dtkDistributedServerDaemon.h
   dtkDistributedServerManager.h
@@ -67,12 +66,13 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedCommunicatorTcp.cpp
   dtkDistributedClient.cpp
   dtkDistributedController.cpp
-  dtkDistributedControllerViewFiltering.cpp
-  dtkDistributedControllerViewOverall.cpp
-  dtkDistributedControllerViewDetailed.cpp
+  dtkDistributedControllerStatusModel.cpp
+  dtkDistributedControllerStatusModelItem.cpp
+  dtkDistributedControllerStatusView.cpp
   dtkDistributedCore.cpp
   dtkDistributedCpu.cpp
   dtkDistributedGpu.cpp
+  dtkDistributedJob.cpp
   dtkDistributedNode.cpp
   dtkDistributedServer.cpp
   dtkDistributedServerDaemon.cpp
@@ -136,14 +136,36 @@ endif(NOT MSVC)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
+if(DTK_USE_PRECOMPILED_HEADERS)
+  add_precompiled_header(${PROJECT_NAME}_SOURCES_PCH 
+    "dtkPch/dtkPch.h" "../dtkPch/dtkPch.cpp" 
+    ${${PROJECT_NAME}_SOURCES}
+    ${${PROJECT_NAME}_HEADERS}
+    ${${PROJECT_NAME}_SOURCES_MOC})
+endif(DTK_USE_PRECOMPILED_HEADERS)
+
+if(BUILD_SHARED_LIBS)
+
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
+  ${${PROJECT_NAME}_SOURCES_PCH}
   ${${PROJECT_NAME}_SOURCES_MOC})
+
+else(BUILD_SHARED_LIBS)
+
+add_library(${PROJECT_NAME} STATIC
+  ${${PROJECT_NAME}_SOURCES}
+  ${${PROJECT_NAME}_HEADERS}
+  ${${PROJECT_NAME}_SOURCES_PCH}
+  ${${PROJECT_NAME}_SOURCES_MOC})
+
+endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkCore
+  dtkJson
   dtkGui)
 
 if(MPI_FOUND)
@@ -161,7 +183,13 @@ SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC} ${${PROJECT_
 ## Installation
 ## #################################################################
 
+foreach(header ${${PROJECT_NAME}_HEADERS})
+  string(REGEX REPLACE "(.*)\\.h\$" "\\1" h ${header})
+  set(${PROJECT_NAME}_HEADERS_QTS "${${PROJECT_NAME}_HEADERS_QTS}" ${h})
+endforeach(header)
+
 install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
+install(FILES ${${PROJECT_NAME}_HEADERS_QTS} DESTINATION include/${PROJECT_NAME})
 install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 16 17:25:26 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 125
+ * Last-Updated: Fri Sep  9 13:03:09 2011 (+0200)
+ *           By: jwintz
+ *     Update #: 132
  */
 
 /* Commentary: 
@@ -31,6 +31,7 @@ MPI::Datatype data_type(dtkDistributedCommunicator::DataType type)
     case dtkDistributedCommunicator::dtkDistributedCommunicatorBool:   return MPI::BOOL;
     case dtkDistributedCommunicator::dtkDistributedCommunicatorChar:   return MPI::CHAR;
     case dtkDistributedCommunicator::dtkDistributedCommunicatorInt:    return MPI::INT;
+    case dtkDistributedCommunicator::dtkDistributedCommunicatorLong:   return MPI::LONG;
     case dtkDistributedCommunicator::dtkDistributedCommunicatorFloat:  return MPI::FLOAT;
     case dtkDistributedCommunicator::dtkDistributedCommunicatorDouble: return MPI::DOUBLE;
     default:
@@ -216,6 +217,13 @@ void dtkDistributedCommunicatorMpi::send(void *data, quint16 size, DataType data
 void dtkDistributedCommunicatorMpi::receive(void *data, quint16 size, DataType dataType, quint16 source, int tag)
 {
     MPI::COMM_WORLD.Recv(data, size, data_type(dataType), source, tag);
+}
+
+void dtkDistributedCommunicatorMpi::receive(void *data, quint16 size, DataType dataType, quint16 source, int tag, int& from)
+{
+    MPI::Status status;
+    MPI::COMM_WORLD.Recv(data, size, data_type(dataType), source, tag, status);
+    from = status.Get_source();
 }
 
 //! Barrier.

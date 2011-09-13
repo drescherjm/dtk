@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Mon Jun  6 16:20:06 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Jun  7 15:13:19 2011 (+0200)
+## Last-Updated: Mon Jul  4 11:49:32 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 7
+##     Update #: 8
 ######################################################################
 ## 
 ### Commentary: 
@@ -26,7 +26,7 @@ set(QWT_FOUND "NO")
 
 if(QT4_FOUND)
 
-  find_path(QWT_INCLUDE_DIR qwt.h
+  find_path(QWT_INCLUDE_DIR qwt_plot_renderer.h
     /usr/local/qwt/include
     /usr/local/include
     /usr/include/qwt

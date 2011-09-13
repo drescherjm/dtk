@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Jun 20 19:41:01 2011 (+0200)
+## Last-Updated: Thu Sep  8 16:04:03 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 349
+##     Update #: 361
 ######################################################################
 ## 
 ### Commentary: 
@@ -21,11 +21,9 @@ cmake_minimum_required(VERSION 2.6.4)
 
 project(dtk)
 
-
-set(FIND_NAME Dtk)
-set(${PROJECT_NAME}_VERSION_MAJOR  0 CACHE STRING "dtk major version number.")
-set(${PROJECT_NAME}_VERSION_MINOR  1 CACHE STRING "dtk minor version number.")
-set(${PROJECT_NAME}_VERSION_BUILD 28 CACHE STRING "dtk build version number.")
+set(${PROJECT_NAME}_VERSION_MAJOR 0 CACHE STRING "dtk major version number.")
+set(${PROJECT_NAME}_VERSION_MINOR 6 CACHE STRING "dtk minor version number.")
+set(${PROJECT_NAME}_VERSION_BUILD 0 CACHE STRING "dtk build version number.")
 
 set(${PROJECT_NAME}_VERSION
   "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD}")
@@ -43,11 +41,18 @@ option(BUILD_TESTING       "Build testing"          true)
 option(BUILD_DOCUMENTATION "Build documentation"    true)
 option(BUILD_WRAPPERS      "Build wrappers"         true)
 option(BUILD_REPORTING     "Build reporting"        true)
+option(BUILD_TUTORIALS     "Build tutorials"        true)
+
+if(MSVC)
+  option(DTK_USE_PRECOMPILED_HEADERS "Use precompiled headers" true)
+endif(MSVC)
 
 include(dtkDependencies)
 include(dtkBuild)
 include(dtkPack)
+include(dtkPch)
 
+add_subdirectory(include)
 add_subdirectory(src)
 
 if(BUILD_TOOLS)
@@ -58,6 +63,10 @@ if(BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif(BUILD_EXAMPLES)
 
+if(BUILD_REPORTING)
+  include(dtkReporting)
+endif(BUILD_REPORTING)
+
 if(BUILD_TESTING)
   add_subdirectory(tests)
 endif(BUILD_TESTING)
@@ -66,6 +75,6 @@ if(BUILD_DOCUMENTATION)
   add_subdirectory(doc)
 endif(BUILD_DOCUMENTATION)
 
-if(BUILD_REPORTING)
-  include(dtkReporting)
-endif(BUILD_REPORTING)
+if(BUILD_TUTORIALS)
+  add_subdirectory(tutorials)
+endif(BUILD_TUTORIALS)

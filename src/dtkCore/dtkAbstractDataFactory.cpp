@@ -19,6 +19,10 @@
 
 #include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkAbstractDataFactory.h>
+#include <dtkCore/dtkAbstractDataReader.h>
+#include <dtkCore/dtkAbstractDataWriter.h>
+#include <dtkCore/dtkAbstractDataConverter.h>
+#include <dtkCore/dtkSmartPointer.h>
 
 // /////////////////////////////////////////////////////////////////
 // Anonymous namespace declarations
@@ -120,6 +124,13 @@ dtkAbstractData *dtkAbstractDataFactory::create(const QString& type)
     return data;
 }
 
+dtkSmartPointer<dtkAbstractData> dtkAbstractDataFactory::createSmartPointer(const QString& type)
+{
+    dtkSmartPointer<dtkAbstractData> data;
+    data.takePointer( this->create(type) );
+    return data;
+}
+
 dtkAbstractDataReader *dtkAbstractDataFactory::reader(const QString& type)
 {
     dtkAbstractDataReaderCreatorHash::const_iterator it(d->readers.find(type));
@@ -128,6 +139,13 @@ dtkAbstractDataReader *dtkAbstractDataFactory::reader(const QString& type)
         return NULL;
     else
         return it->creator();
+}
+
+dtkSmartPointer<dtkAbstractDataReader> dtkAbstractDataFactory::readerSmartPointer(const QString& type)
+{
+    dtkSmartPointer<dtkAbstractDataReader> reader;
+    reader.takePointer( this->reader(type) );
+    return reader;
 }
 
 dtkAbstractDataWriter *dtkAbstractDataFactory::writer(const QString& type)
@@ -140,6 +158,13 @@ dtkAbstractDataWriter *dtkAbstractDataFactory::writer(const QString& type)
         return it->creator();
 }
 
+dtkSmartPointer<dtkAbstractDataWriter> dtkAbstractDataFactory::writerSmartPointer(const QString& type)
+{
+    dtkSmartPointer<dtkAbstractDataWriter> writer;
+    writer.takePointer( this->writer(type) );
+    return writer;
+}
+
 dtkAbstractDataConverter *dtkAbstractDataFactory::converter(const QString& type)
 {
     dtkAbstractDataConverterCreatorHash::const_iterator it(d->converters.find(type));
@@ -148,6 +173,13 @@ dtkAbstractDataConverter *dtkAbstractDataFactory::converter(const QString& type)
         return NULL;
     else
         return it->creator();
+}
+
+dtkSmartPointer<dtkAbstractDataConverter> dtkAbstractDataFactory::converterSmartPointer(const QString& type)
+{
+    dtkSmartPointer<dtkAbstractDataConverter> converter;
+    converter.takePointer( this->converter(type) );
+    return converter;
 }
 
 bool dtkAbstractDataFactory::registerDataType(const QString& type, dtkAbstractDataCreator func)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 30 13:59:00 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 24
+ * Last-Updated: mer. août 10 18:31:58 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@
 #include <QtNetwork>
 
 class dtkDistributedControllerPrivate;
+class dtkDistributedNode;
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedController : public QObject
 {
@@ -42,9 +43,17 @@ signals:
     void    connected(const QUrl& server);
     void disconnected(const QUrl& server);
 
+    void updated(void);
+    void updated(const QUrl& server);
+
 public slots:
     void    connect(const QUrl& server);
     void disconnect(const QUrl& server);
+    void    submit(const QUrl& server, const QByteArray& resources);
+
+public:
+    QList<dtkDistributedNode *> nodes(void);
+    QList<dtkDistributedNode *> nodes(const QString& cluster);
 
 protected slots:
     void read(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:23:52 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jul 22 16:32:59 2010 (+0200)
+ * Last-Updated: Mon Sep  5 10:52:10 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 47
+ *     Update #: 57
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include "dtkGuiExport.h"
 
 #include <QtGui/QPlainTextEdit>
+#include <QtGui/QWidget>
 
 class dtkTextEditorPreferencesWidget;
 class dtkTextEditorPrivate;
@@ -147,11 +148,15 @@ protected:
     void changeEvent(QEvent *event);
     void focusInEvent(QFocusEvent *event);
     void keyPressEvent(QKeyEvent *event);
-
     bool eventFilter(QObject *object, QEvent *event);
+#if defined(Q_WS_MAC)
+    bool macEvent(EventHandlerCallRef caller, EventRef event);
+#endif
 
 protected:
     friend class dtkTextEditorExtraArea;
+
+protected:
     int  extraAreaWidth(void) const;
     void extraAreaPaintEvent(QPaintEvent *event);
 

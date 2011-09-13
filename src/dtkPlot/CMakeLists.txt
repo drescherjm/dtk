@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Nov 22 10:20:27 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue Jun  7 16:38:39 2011 (+0200)
+## Last-Updated: Thu Sep  8 14:39:45 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 63
+##     Update #: 77
 ######################################################################
 ## 
 ### Commentary: 
@@ -32,13 +32,16 @@ project(dtkPlot)
 set(${PROJECT_NAME}_HEADERS
   dtkPlotCurve.h
   dtkPlotExport.h
+  dtkPlotRenderer.h
   dtkPlotView.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
+  dtkPlotCurve.h
   dtkPlotView.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkPlotCurve.cpp
+  dtkPlotRenderer.cpp
   dtkPlotView.cpp)
 
 ## #################################################################
@@ -59,10 +62,21 @@ endif(NOT WIN32)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
+if(BUILD_SHARED_LIBS)
+
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_MOC})
+
+else(BUILD_SHARED_LIBS)
+
+add_library(${PROJECT_NAME} STATIC
+  ${${PROJECT_NAME}_SOURCES}
+  ${${PROJECT_NAME}_HEADERS}
+  ${${PROJECT_NAME}_SOURCES_MOC})
+
+endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
@@ -79,7 +93,13 @@ SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 ## Installation
 ## #################################################################
 
+foreach(header ${${PROJECT_NAME}_HEADERS})
+  string(REGEX REPLACE "(.*)\\.h\$" "\\1" h ${header})
+  set(${PROJECT_NAME}_HEADERS_QTS "${${PROJECT_NAME}_HEADERS_QTS}" ${h})
+endforeach(header)
+
 install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
+install(FILES ${${PROJECT_NAME}_HEADERS_QTS} DESTINATION include/${PROJECT_NAME})
 install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib

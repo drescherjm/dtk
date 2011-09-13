@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:43:14 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May  5 09:20:50 2011 (+0200)
+ * Last-Updated: Mon Sep  5 12:58:36 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 94
+ *     Update #: 112
  */
 
 /* Commentary:
@@ -33,11 +33,16 @@ public:
             dtkAbstractObject(dtkAbstractObject *parent = 0);
    virtual ~dtkAbstractObject(void);
 
-   QString name(void) const;
+   virtual QString description(void) const;
+   virtual QString identifier(void) const;
+   virtual QString name(void) const;
 
    int count(void) const;
    int retain(void) const;
    int release(void) const;
+
+   void enableDeferredDeletion(bool value);
+   bool     isDeferredDeletionEnabled(void) const;
 
    bool hasProperty(const QString& key) const;
    void addProperty(const QString& key, const QStringList& values);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 16:26:17 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 22 10:14:41 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 9
+ * Last-Updated: mer. août 10 16:47:53 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 59
  */
 
 /* Commentary: 
@@ -19,24 +19,23 @@
 
 #include "dtkDistributedCore.h"
 #include "dtkDistributedCpu.h"
+#include "dtkDistributedJob.h"
 
 class dtkDistributedCorePrivate
 {
 public:
     dtkDistributedCpu *cpu;
-    dtkDistributedGpu *gpu;
+
+    dtkDistributedJob *job;
+
+    qint64 id;
+
 };
 
-dtkDistributedCore::dtkDistributedCore(dtkDistributedCpu *parent) : QObject(), d(new dtkDistributedCorePrivate)
+dtkDistributedCore::dtkDistributedCore(dtkDistributedCpu *parent, qint64 id) : QObject(), d(new dtkDistributedCorePrivate)
 {
     d->cpu = parent;
-    d->gpu = NULL;
-}
-
-dtkDistributedCore::dtkDistributedCore(dtkDistributedGpu *parent) : QObject(), d(new dtkDistributedCorePrivate)
-{
-    d->cpu = NULL;
-    d->gpu = parent;
+    d->id = id;
 }
 
 dtkDistributedCore::~dtkDistributedCore(void)
@@ -45,3 +44,20 @@ dtkDistributedCore::~dtkDistributedCore(void)
 
     d = NULL;
 }
+
+
+dtkDistributedJob* dtkDistributedCore::job(void)
+{
+    return d->job;
+}
+
+void dtkDistributedCore::setJob(dtkDistributedJob *job)
+{
+    d->job = job;
+}
+
+void dtkDistributedCore::delJob(void)
+{
+    d->job = NULL;
+}
+

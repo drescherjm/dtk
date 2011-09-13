@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Oct 31 13:49:50 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 16 16:31:11 2010 (+0100)
+ * Last-Updated: Mon Sep  5 13:13:16 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 51
+ *     Update #: 64
  */
 
 /* Commentary: 
@@ -37,9 +37,14 @@ public:
     virtual bool initialize(void) = 0;
     virtual bool uninitialize(void) = 0;
     
-    virtual QString name(void) const = 0;
+    virtual QString contact(void) const;
     virtual QString description(void) const = 0;
+    virtual QString name(void) const = 0;
+    virtual QString version(void) const;
 
+    virtual QStringList authors(void) const;
+    virtual QStringList contributors(void) const;
+    virtual QStringList dependencies(void) const;
     virtual QStringList tags(void) const = 0;
     virtual QStringList types(void) const = 0;
 

@@ -19,18 +19,20 @@
 
 #include <dtkCore/dtkAbstractDataReader.h>
 
+#include <dtkCore/dtkAbstractData.h>
+#include <dtkCore/dtkSmartPointer.h>
+
 class dtkAbstractDataReaderPrivate
 {
 public:
     bool enabled;
 
-    dtkAbstractData *data;
+    dtkSmartPointer<dtkAbstractData> data;
 };
 
 dtkAbstractDataReader::dtkAbstractDataReader(void) : dtkAbstractObject(), d(new dtkAbstractDataReaderPrivate)
 {
     d->enabled = false;
-    d->data = NULL;
 }
 
 dtkAbstractDataReader::~dtkAbstractDataReader(void)
@@ -60,6 +62,10 @@ dtkAbstractData *dtkAbstractDataReader::data(void)
     return d->data;
 }
 
+/**
+ * Set the data that has been read.
+ * The reader will increase the reference count of the data.
+ */
 void dtkAbstractDataReader::setData(dtkAbstractData *data)
 {
     d->data = data;

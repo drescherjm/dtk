@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 16:12:47 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 31 23:50:17 2011 (+0200)
+ * Last-Updated: Mon Sep  5 11:08:38 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 195
+ *     Update #: 298
  */
 
 /* Commentary: 
@@ -25,9 +25,10 @@
 #include <dtkGui/dtkSpacer.h>
 
 #include <dtkDistributed/dtkDistributedController.h>
-#include <dtkDistributed/dtkDistributedControllerViewFiltering.h>
-#include <dtkDistributed/dtkDistributedControllerViewOverall.h>
-#include <dtkDistributed/dtkDistributedControllerViewDetailed.h>
+#include <dtkDistributed/dtkDistributedControllerStatusModel.h>
+#include <dtkDistributed/dtkDistributedControllerStatusView.h>
+
+#include <dtkJson/dtkJson.h>
 
 // /////////////////////////////////////////////////////////////////
 // tstMainWindowPrivate
@@ -37,13 +38,13 @@ class tstMainWindowPrivate
 {
 public:
     dtkDistributedController *controller;
-    dtkDistributedControllerViewFiltering *view_filtering;
-    dtkDistributedControllerViewOverall *view_overall;
-    dtkDistributedControllerViewDetailed *view_detailed;
+    dtkDistributedControllerStatusModel *status_model;
+    dtkDistributedControllerStatusView *status_view;
 
 public:
     QLineEdit *host_address;
     QPushButton *host_button;
+    QPushButton *submit_button;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -56,18 +57,14 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
 
     d->controller = new dtkDistributedController;
 
-    // d->view_filtering = new dtkDistributedControllerViewFiltering(this);
-    // d->view_filtering->setController(d->controller);
+    d->status_model = new dtkDistributedControllerStatusModel(this);
+    d->status_model->setController(d->controller);
 
-    d->view_overall = new dtkDistributedControllerViewOverall(this);
-    d->view_overall->setController(d->controller);
+    d->status_view = new dtkDistributedControllerStatusView(this);
+    d->status_view->setModel(d->status_model);
 
-    d->view_detailed = new dtkDistributedControllerViewDetailed(this);
-    d->view_detailed->setController(d->controller);
-
-    dtkAnchoredBar *anchoredBar = new dtkAnchoredBar(d->view_overall);
-    anchoredBar->setMinimumWidth(200);
-    anchoredBar->setMaximumWidth(400);
+    dtkAnchoredBar *anchoredBar = new dtkAnchoredBar(d->status_view);
+    anchoredBar->setDragEnabled(false);
 
     d->host_address = new QLineEdit("dtk://nef-devel.inria.fr:9999", anchoredBar);
     d->host_address->setAttribute(Qt::WA_MacShowFocusRect, false);
@@ -79,31 +76,30 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
     d->host_button->setFixedHeight(16);
     d->host_button->setStyleSheet("border: 1px solid darkGray; border-radius: 8px; background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ffffff, stop: 1 #cccccc); color: black; font-size: 10px; padding-left: 4px; padding-right: 4px;");
 
+    d->submit_button = new QPushButton("Submit", anchoredBar);
+    d->submit_button->setAttribute(Qt::WA_MacShowFocusRect, false);
+    d->submit_button->setFixedHeight(16);
+    d->submit_button->setStyleSheet("border: 1px solid darkGray; border-radius: 8px; background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ffffff, stop: 1 #cccccc); color: black; font-size: 10px; padding-left: 4px; padding-right: 4px;");
+
     anchoredBar->addWidget(d->host_address);
     anchoredBar->addWidget(d->host_button);
+    anchoredBar->addWidget(d->submit_button);
     anchoredBar->addWidget(new dtkSpacer(anchoredBar, 16));
-
-    QWidget *side = new QWidget(this);
-
-    QVBoxLayout *side_layout = new QVBoxLayout(side);
-    side_layout->setContentsMargins(0, 0, 0, 0);
-    side_layout->setSpacing(0);
-    side_layout->addWidget(d->view_overall);
-    side_layout->addWidget(anchoredBar);
 
     QWidget *central = new QWidget(this);
 
-    QHBoxLayout *layout = new QHBoxLayout(central);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(0);
-    layout->addWidget(side);
-    layout->addWidget(d->view_detailed);
+    QVBoxLayout *central_layout = new QVBoxLayout(central);
+    central_layout->setContentsMargins(0, 0, 0, 0);
+    central_layout->setSpacing(0);
+    central_layout->addWidget(d->status_view);
+    central_layout->addWidget(anchoredBar);
 
     this->setCentralWidget(central);
     this->setUnifiedTitleAndToolBarOnMac(true);
     this->setWindowTitle("dtkDistributedController");
 
     connect(d->host_button, SIGNAL(clicked()), this, SLOT(onConnect()));
+    connect(d->submit_button, SIGNAL(clicked()), this, SLOT(onSubmit()));
 }
 
 tstMainWindow::~tstMainWindow(void)
@@ -115,6 +111,19 @@ tstMainWindow::~tstMainWindow(void)
 void tstMainWindow::onConnect(void)
 {
     d->controller->connect(QUrl(d->host_address->text()));
+}
+
+void tstMainWindow::onSubmit(void)
+{
+    QVariantMap job;
+    QVariantMap resources;
+    resources.insert("cores", 2);
+    resources.insert("nodes", 2);
+    job.insert("resources", resources);
+    job.insert("script", "/home/nniclaus/sleep.sh");
+    QByteArray data = dtkJson::serialize(job);
+    QByteArray request = QString("PUT /job\n"+ QString::number(data.size()) + "\n").toAscii() + data;
+    d->controller->submit(QUrl(d->host_address->text()),request);
 }
 
 void tstMainWindow::onConnected(const QUrl& server)

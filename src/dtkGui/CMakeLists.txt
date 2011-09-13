@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Jun 24 16:16:33 2011 (+0200)
+## Last-Updated: Thu Sep  8 14:41:36 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 175
+##     Update #: 188
 ######################################################################
 ## 
 ### Commentary: 
@@ -25,6 +25,7 @@ project(dtkGui)
 
 set(${PROJECT_NAME}_HEADERS
   dtkAboutBox.h
+  dtkAboutPlugin.h
   dtkAddressBar.h
   dtkAnchoredBar.h
   dtkColorButton.h
@@ -61,6 +62,7 @@ set(${PROJECT_NAME}_HEADERS
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkAboutBox.h
+  dtkAboutPlugin.h
   dtkAddressBar.h
   dtkAnchoredBar.h
   dtkColorButton.h
@@ -93,6 +95,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
 
 set(${PROJECT_NAME}_SOURCES
   dtkAboutBox.cpp
+  dtkAboutPlugin.cpp
   dtkAddressBar.cpp
   dtkAnchoredBar.cpp
   dtkColorButton.cpp
@@ -148,7 +151,6 @@ set(${PROJECT_NAME}_RESOURCES dtkGui.qrc)
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)
 if(NOT MSVC)
-  # Shouldn't the QT_USE_FILE set this appropriately?
   add_definitions(-DQT_NO_DEBUG)
 endif(NOT MSVC)
 
@@ -156,12 +158,37 @@ qt4_wrap_ui(${PROJECT_NAME}_SOURCES_UIC ${${PROJECT_NAME}_FORMS})
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
 
+if(DTK_USE_PRECOMPILED_HEADERS)
+  add_precompiled_header(${PROJECT_NAME}_SOURCES_PCH 
+    "dtkPch/dtkPch.h" "../dtkPch/dtkPch.cpp" 
+    ${${PROJECT_NAME}_SOURCES}
+    ${${PROJECT_NAME}_HEADERS}
+    ${${PROJECT_NAME}_SOURCES_UIC}
+    ${${PROJECT_NAME}_SOURCES_MOC}
+    ${${PROJECT_NAME}_SOURCES_QRC})
+endif(DTK_USE_PRECOMPILED_HEADERS)
+
+if(BUILD_SHARED_LIBS)
+
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
+  ${${PROJECT_NAME}_SOURCES_PCH}
   ${${PROJECT_NAME}_SOURCES_UIC}
   ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_QRC})
+
+else(BUILD_SHARED_LIBS)
+
+add_library(${PROJECT_NAME} STATIC
+  ${${PROJECT_NAME}_SOURCES}
+  ${${PROJECT_NAME}_HEADERS}
+  ${${PROJECT_NAME}_SOURCES_PCH}
+  ${${PROJECT_NAME}_SOURCES_UIC}
+  ${${PROJECT_NAME}_SOURCES_MOC}
+  ${${PROJECT_NAME}_SOURCES_QRC})
+
+endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
@@ -183,9 +210,14 @@ SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_UIC} ${${PROJECT_
 ## Installation
 ## #################################################################
 
+foreach(header ${${PROJECT_NAME}_HEADERS})
+  string(REGEX REPLACE "(.*)\\.h\$" "\\1" h ${header})
+  set(${PROJECT_NAME}_HEADERS_QTS "${${PROJECT_NAME}_HEADERS_QTS}" ${h})
+endforeach(header)
+
 install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
+install(FILES ${${PROJECT_NAME}_HEADERS_QTS} DESTINATION include/${PROJECT_NAME})
 install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib)
-

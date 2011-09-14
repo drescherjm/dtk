@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Sep 14 13:26:49 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 14 14:00:50 2011 (+0200)
+ * Last-Updated: Wed Sep 14 15:59:45 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 35
+ *     Update #: 48
  */
 
 /* Commentary: 
@@ -129,6 +129,15 @@ int dtkDistributedTutorial4Slave::exec(void)
         }
 
         qDebug() << "Sum is" << sum;
+
+// /////////////////////////////////////////////////////////////////
+// Slave of rank 0 sends result to server
+// /////////////////////////////////////////////////////////////////
+
+        this->write(QByteArray::number(sum));
+        
+// /////////////////////////////////////////////////////////////////
+
 
     } else {
 

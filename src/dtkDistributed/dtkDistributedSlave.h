@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 14 13:59:22 2011 (+0200)
+ * Last-Updated: Wed Sep 14 16:01:42 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 26
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -36,7 +36,7 @@ public:
     ~dtkDistributedSlave(void);
 
 public:
-    virtual int exec(void);
+    virtual int run(void);
 
 public:
     bool    isConnected(void);
@@ -53,12 +53,16 @@ public slots:
     void    connect(const QUrl& server);
     void disconnect(const QUrl& server);
 
+protected:
+    virtual int exec(void) = 0;
+
 protected slots:
     void onStarted(void);
     void   onEnded(void);
 
 protected slots:
     void read(void);
+    void write(const QByteArray& array);
     void error(QAbstractSocket::SocketError error);
 
 private:

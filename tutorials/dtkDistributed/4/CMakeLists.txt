@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Wed Sep 14 13:17:50 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Sep 14 13:19:26 2011 (+0200)
+## Last-Updated: Wed Sep 14 13:22:58 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 11
+##     Update #: 14
 ######################################################################
 ## 
 ### Commentary: 
@@ -23,9 +23,11 @@ project(dtkDistributedTutorial4)
 ## Sources
 ## #################################################################
 
-set(${PROJECT_NAME}_HEADERS)
+set(${PROJECT_NAME}_HEADERS
+  dtkDistributedTutorial4Slave.h)
 
-set(${PROJECT_NAME}_SOURCES)
+set(${PROJECT_NAME}_SOURCES
+  dtkDistributedTutorial4Slave.cpp)
 
 ## #################################################################
 ## Build rules

@@ -36,12 +36,14 @@ public:
     QString     path;
     QStringList paths;
 
+    int numberOfChannels;
+
     QList<QImage> thumbnails;
 };
 
 dtkAbstractData::dtkAbstractData(dtkAbstractData *parent) : dtkAbstractObject(parent), d(new dtkAbstractDataPrivate)
 {
-
+  d->numberOfChannels = 0;
 }
 
 dtkAbstractData::dtkAbstractData(const dtkAbstractData& data) : dtkAbstractObject(), d(new dtkAbstractDataPrivate)
@@ -158,6 +160,20 @@ dtkAbstractDataConverter *dtkAbstractData::converter(const QString& type)
     else 
         return NULL;
 }
+
+
+int dtkAbstractData::numberOfChannels(void)
+{
+  return d->numberOfChannels;
+}
+
+
+void dtkAbstractData::setNumberOfChannels(int number)
+{
+  d->numberOfChannels = number;
+}
+
+
 
 void dtkAbstractData::update(void)
 {

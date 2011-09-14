@@ -55,12 +55,14 @@ dtkFinderToolBar::dtkFinderToolBar(QWidget *parent) : QToolBar(parent), d(new dt
     d->nextButton->setIconSize(QSize(16, 16));
     
     d->listViewButton = new QToolButton (this);
+    d->listViewButton->setCheckable(true);
+    d->listViewButton->setChecked (true);
     d->listViewButton->setIcon(QIcon(":dtkGui/pixmaps/dtk-view-list.png"));
     d->listViewButton->setIconSize(QSize(16, 16));
     
     d->treeViewButton = new QToolButton (this);
-    d->treeViewButton->setIcon(QIcon(":dtkGui/pixmaps/dtk-view-tree.png"));
-    d->treeViewButton->setChecked (true);
+    d->treeViewButton->setCheckable(true);
+    d->treeViewButton->setIcon(QIcon(":dtkGui/pixmaps/dtk-view-tree.png"));    
     d->treeViewButton->setIconSize(QSize(16, 16));
     
     QButtonGroup *viewButtonGroup = new QButtonGroup (this);
@@ -78,8 +80,6 @@ dtkFinderToolBar::dtkFinderToolBar(QWidget *parent) : QToolBar(parent), d(new dt
     
     connect (d->listViewButton, SIGNAL (clicked()), this, SIGNAL (listView()));
     connect (d->treeViewButton, SIGNAL (clicked()), this, SIGNAL (treeView()));
-
-    this->setFixedHeight(23);
 }
 
 dtkFinderToolBar::~dtkFinderToolBar(void)
@@ -87,6 +87,13 @@ dtkFinderToolBar::~dtkFinderToolBar(void)
     delete d;
 
     d = NULL;
+}
+
+QSize dtkFinderToolBar::sizeHint (void) const
+{
+    QSize size = QToolBar::sizeHint();
+    size.setHeight(23);
+    return size;
 }
 
 void dtkFinderToolBar::setPath (const QString &path)
@@ -139,20 +146,22 @@ class dtkFinderSideViewPrivate
 {
 public:
     QList<QTreeWidgetItem *> items;
+    int headerFontSize;
 };
 
 dtkFinderSideView::dtkFinderSideView(QWidget *parent) : QTreeWidget(parent), d(new dtkFinderSideViewPrivate)
 {
+    d->headerFontSize = 12;
+
     this->header()->hide();
     this->setAcceptDrops(true);
     this->setDropIndicatorShown(true);
     this->setDragDropMode(QAbstractItemView::DropOnly);
     this->setIndentation(10);
     this->setFrameStyle(QFrame::NoFrame);
-    this->setAttribute(Qt::WA_MacShowFocusRect, false);
-    this->setStyleSheet(dtkReadFile(":dtkGui/dtkFinder.qss"));
+    this->setAttribute(Qt::WA_MacShowFocusRect, false);    
     this->setFocusPolicy(Qt::NoFocus);
-    this->populate();
+    this->populate();    
 
     connect(this, SIGNAL(itemClicked(QTreeWidgetItem *,int)), this, SLOT(onItemCicked(QTreeWidgetItem *, int)));
 }
@@ -169,15 +178,15 @@ void dtkFinderSideView::populate(void)
     this->clear(); d->items.clear();
 
     QFont groupFont;
-    groupFont.setPointSize(11);
+    groupFont.setPointSize(d->headerFontSize);
     groupFont.setBold(true);
     groupFont.setCapitalization(QFont::AllUppercase);
 
     QBrush groupBrush;
     groupBrush.setColor(QColor("#758192"));
 
-    QFont itemFont;
-    itemFont.setPointSize(10);
+    // QFont itemFont;
+    // itemFont.setPointSize(10);
 
     QFileIconProvider provider;
 
@@ -199,7 +208,7 @@ void dtkFinderSideView::populate(void)
 		QString dlabel = this->driveLabel( info.absoluteFilePath() );
         QTreeWidgetItem *item = new QTreeWidgetItem(item1, QStringList() << (dlabel.isEmpty() ? "HD" : dlabel));
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-        item->setData(0, Qt::FontRole, itemFont);
+        // item->setData(0, Qt::FontRole, itemFont);
         item->setData(0, Qt::UserRole, info.absoluteFilePath());
         item->setIcon(0, provider.icon(QFileIconProvider::Drive));
 
@@ -213,32 +222,28 @@ void dtkFinderSideView::populate(void)
 
     QTreeWidgetItem *item21 = new QTreeWidgetItem(item2, QStringList() << "Desktop");
     item21->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-    item21->setData(0, Qt::FontRole, itemFont);
-    item21->setData(0, Qt::UserRole, QDir::homePath() + "/Desktop");
-    item21->setIcon(0, provider.icon(QFileInfo(QDir::homePath() + "/Desktop")));
+    // item21->setData(0, Qt::FontRole, itemFont);
+    item21->setData(0, Qt::UserRole, QDesktopServices::storageLocation(QDesktopServices::DesktopLocation));
+    item21->setIcon(0, provider.icon(QFileInfo(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation))));
 
     QTreeWidgetItem *item22 = new QTreeWidgetItem(item2, QStringList() << "Home");
     item22->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-    item22->setData(0, Qt::FontRole, itemFont);
-    item22->setData(0, Qt::UserRole, QDir::homePath());
-    item22->setIcon(0, provider.icon(QFileInfo(QDir::homePath())));
+    // item22->setData(0, Qt::FontRole, itemFont);
+    item22->setData(0, Qt::UserRole, QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    item22->setIcon(0, provider.icon(QFileInfo(QDesktopServices::storageLocation(QDesktopServices::HomeLocation))));
 
-    QTreeWidgetItem *item23 = new QTreeWidgetItem(item2, QStringList() << "Downloads");
+    QTreeWidgetItem *item23 = new QTreeWidgetItem(item2, QStringList() << "Documents");
     item23->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-    item23->setData(0, Qt::FontRole, itemFont);
-    item23->setData(0, Qt::UserRole, QDir::homePath() + "/Downloads");
-    item23->setIcon(0, provider.icon(QFileInfo(QDir::homePath() + "/Downloads")));
+    // item23->setData(0, Qt::FontRole, itemFont);
+    item23->setData(0, Qt::UserRole, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+    item23->setIcon(0, provider.icon(QFileInfo(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation))));
+
+    d->items << item21 << item22 << item23;
 
     QTreeWidgetItem *item3  = new QTreeWidgetItem(this, QStringList() << "Bookmarks");
     item3->setFlags(Qt::ItemIsEnabled);
     item3->setData(0, Qt::FontRole, groupFont);
     item3->setData(0, Qt::ForegroundRole, groupBrush);
-
-    QTreeWidgetItem *item31 = new QTreeWidgetItem(item3, QStringList() << "Home");
-    item31->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-    item31->setData(0, Qt::FontRole, itemFont);
-    item31->setData(0, Qt::UserRole, QDir::homePath());
-    item31->setIcon(0, provider.icon(QFileInfo(QDir::homePath())));
 
     QSettings settings; QStringList bookmarks = settings.value("dtkFinderBookmarks").toStringList();
 
@@ -248,7 +253,7 @@ void dtkFinderSideView::populate(void)
 
         QTreeWidgetItem *item = new QTreeWidgetItem(item3, QStringList() << info.baseName());
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-        item->setData(0, Qt::FontRole, itemFont);
+        // item->setData(0, Qt::FontRole, itemFont);
         item->setData(0, Qt::UserRole, info.absoluteFilePath());
         item->setIcon(0, provider.icon(info));
 
@@ -258,8 +263,22 @@ void dtkFinderSideView::populate(void)
     this->expandItem(item1);
     this->expandItem(item2);
     this->expandItem(item3);
+}
 
-    d->items << item21 << item22 << item23;
+void dtkFinderSideView::setHeaderFontSize(int value)
+{
+    d->headerFontSize = value;
+    this->populate();
+}
+
+int dtkFinderSideView::headerFontSize(void) const
+{
+    return d->headerFontSize;
+}
+
+QSize dtkFinderSideView::sizeHint(void) const
+{
+    return QSize (-1, -1);
 }
 
 void dtkFinderSideView::setPath(const QString& path)
@@ -409,8 +428,8 @@ public:
 dtkFinderPathBar::dtkFinderPathBar(QWidget *parent) : QFrame(parent), d(new dtkFinderPathBarPrivate)
 {
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    this->setFixedHeight(23);
-    this->setStyleSheet("font: 11px; border-top: 1px solid #d4d4d4;");
+    // this->setFixedHeight(23);
+    // this->setStyleSheet("font: 11px; border-top: 1px solid #d4d4d4;");
 }
 
 dtkFinderPathBar::~dtkFinderPathBar(void)
@@ -421,6 +440,11 @@ dtkFinderPathBar::~dtkFinderPathBar(void)
     delete d;
 
     d = NULL;
+}
+
+QSize dtkFinderPathBar::sizeHint (void) const
+{
+    return QSize (-1, 23);
 }
 
 void dtkFinderPathBar::setPath(const QString &path)
@@ -461,8 +485,10 @@ void dtkFinderPathBar::mousePressEvent(QMouseEvent *event)
 
 void dtkFinderPathBar::paintEvent(QPaintEvent *event)
 {
+    QRect rect = this->rect();
+
     int x = 10;
-    int y = 3;
+    int y = (rect.height()-16)/2;
 
     QPainter painter(this);
 
@@ -472,15 +498,15 @@ void dtkFinderPathBar::paintEvent(QPaintEvent *event)
 
         int delta = 16 + 4 + painter.fontMetrics().width(item->text) + 10;
 
-        item->rect = QRect(x, 0, delta, 23);
+        item->rect = QRect(x, 0, delta, rect.height());
 
         x += delta;
     }
 
     if(d->items.last()->rect.right() >= this->width()) {
-        QRect rect(this->width()-30, 0, 30, 23);
-        painter.fillRect(rect, this->palette().background());
-        painter.drawText(rect.left(), y+14, "...");
+        QRect prect(this->width()-30, 0, 30, rect.height());
+        painter.fillRect(prect, this->palette().background());
+        painter.drawText(prect.left(), y+14, "...");
     }
 }
 
@@ -492,6 +518,8 @@ class dtkFinderListViewPrivate
 {
 public:
     QMenu *menu;
+    QAction *bookmarkAction;
+    bool allowFileBookmarking;
 };
 
 dtkFinderListView::dtkFinderListView(QWidget *parent) : QListView(parent), d(new dtkFinderListViewPrivate)
@@ -508,7 +536,10 @@ dtkFinderListView::dtkFinderListView(QWidget *parent) : QListView(parent), d(new
     this->setContextMenuPolicy(Qt::CustomContextMenu);
 
     d->menu = new QMenu(this);
-    d->menu->addAction("Bookmark", this, SLOT(onBookmarkContextMenuClicked()));
+    d->allowFileBookmarking = true;
+    d->bookmarkAction = new QAction(tr("Bookmark"), this);
+    connect(d->bookmarkAction, SIGNAL(triggered()), this, SLOT(onBookmarkContextMenuClicked()));
+    d->menu->addAction(d->bookmarkAction);
 
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(updateContextMenu(const QPoint&)));
 }
@@ -536,6 +567,11 @@ QString dtkFinderListView::selectedPath(void) const
     return QString();
 }
 
+void dtkFinderListView::allowFileBookmarking(bool isAllowed)
+{
+    d->allowFileBookmarking = isAllowed;
+}
+
 void dtkFinderListView::updateContextMenu(const QPoint& point)
 {
     QModelIndex index = this->indexAt(point);
@@ -543,7 +579,35 @@ void dtkFinderListView::updateContextMenu(const QPoint& point)
     if(!index.isValid())
         return;
 
-    d->menu->exec(mapToGlobal(point));
+    // if d->allowFileBookmarking is false
+    // we won't show the 'bookmark' option
+    // for files in the context menu
+
+    if(!d->allowFileBookmarking) {
+        bool removed = false;
+        QString selectedPath = this->selectedPath();
+        if (!selectedPath.isEmpty())
+        {
+            QFileInfo fileInfo = QFileInfo(selectedPath);
+            if (fileInfo.isFile())
+            {
+                d->menu->removeAction(d->bookmarkAction);
+                removed = true;
+            }
+        }
+
+        d->menu->exec(mapToGlobal(point));
+
+        if (removed)
+        {
+            if(d->menu->actions().size() > 0)
+                d->menu->insertAction(d->menu->actions()[0], d->bookmarkAction);
+            else
+                d->menu->addAction(d->bookmarkAction);
+        }
+    }
+    else
+        d->menu->exec(mapToGlobal(point));
 }
 
 void dtkFinderListView::onBookmarkContextMenuClicked(void)
@@ -631,6 +695,8 @@ class dtkFinderTreeViewPrivate
 {
 public:
     QMenu *menu;
+    QAction *bookmarkAction;
+    bool allowFileBookmarking;
 };
 
 dtkFinderTreeView::dtkFinderTreeView(QWidget *parent) : QTreeView(parent), d(new dtkFinderTreeViewPrivate)
@@ -643,7 +709,10 @@ dtkFinderTreeView::dtkFinderTreeView(QWidget *parent) : QTreeView(parent), d(new
     this->sortByColumn(0, Qt::AscendingOrder);
 
     d->menu = new QMenu(this);
-    d->menu->addAction("Bookmark", this, SLOT(onBookmarkContextMenuClicked()));
+    d->allowFileBookmarking = true;
+    d->bookmarkAction = new QAction(tr("Bookmark"), this);
+    connect(d->bookmarkAction, SIGNAL(triggered()), this, SLOT(onBookmarkContextMenuClicked()));
+    d->menu->addAction(d->bookmarkAction);
 
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(updateContextMenu(const QPoint&)));
 }
@@ -679,6 +748,11 @@ QString dtkFinderTreeView::selectedPath(void) const
     return QString();
 }
 
+void dtkFinderTreeView::allowFileBookmarking(bool isAllowed)
+{
+    d->allowFileBookmarking = isAllowed;
+}
+
 void dtkFinderTreeView::updateContextMenu(const QPoint& point)
 {
     QModelIndex index = this->indexAt(point);
@@ -686,7 +760,36 @@ void dtkFinderTreeView::updateContextMenu(const QPoint& point)
     if(!index.isValid())
         return;
 
-    d->menu->exec(mapToGlobal(point));
+    // if d->allowFileBookmarking is false
+    // we won't show the 'bookmark' option
+    // for files in the context menu
+
+    if(!d->allowFileBookmarking) {
+        bool removed = false;
+        QString selectedPath = this->selectedPath();
+        if (!selectedPath.isEmpty())
+        {
+            QFileInfo fileInfo = QFileInfo(selectedPath);
+            if (fileInfo.isFile())
+            {
+                d->menu->removeAction(d->bookmarkAction);
+                removed = true;
+            }
+        }
+
+        d->menu->exec(mapToGlobal(point));
+
+        if (removed)
+        {
+            if(d->menu->actions().size() > 0)
+                d->menu->insertAction(d->menu->actions()[0], d->bookmarkAction);
+            else
+                d->menu->addAction(d->bookmarkAction);
+        }
+    }
+    else
+        d->menu->exec(mapToGlobal(point));
+
 }
 
 void dtkFinderTreeView::onBookmarkContextMenuClicked(void)
@@ -852,6 +955,12 @@ QString dtkFinder::selectedPath(void) const
         return d->tree->selectedPath();
 
     return QString();
+}
+
+void dtkFinder::allowFileBookmarking(bool isAllowed)
+{
+    d->list->allowFileBookmarking(isAllowed);
+    d->tree->allowFileBookmarking(isAllowed);
 }
 
 void dtkFinder::setPath(const QString& path)

@@ -17,11 +17,25 @@
 ;; 
 */
 
+dtkFinderToolBar {
+    min-height: 23;
+    max-height: 23;
+}
+
+dtkFinderPathBar {
+    font: 11px;
+    border-top: 1px solid #d4d4d4;
+    min-height: 23;
+    max-height: 23;
+}
+
 dtkFinderSideView {
     padding: 5px;
     background: #dfe4ea;
     border-right: 1px solid #d4d4d4;
     show-decoration-selected: 1;
+    font-size: 10pt;
+    qproperty-headerFontSize: 11;
 }
 
 dtkFinderSideView::item {

@@ -17,50 +17,50 @@
 ## 
 ######################################################################
 
-if(ZLIB_FOUND)
+if (ZLIB_FOUND)
 
-## #################################################################
+  ## #################################################################
 
-project(dtkZip)
+  project(dtkZip)
 
-## #################################################################
-## Sources
-## #################################################################
+  ## #################################################################
+  ## Sources
+  ## #################################################################
 
-set(${PROJECT_NAME}_HEADERS
-  dtkZip.h
-  dtkZipExport.h
-  dtkZipFile.h
-  dtkZipFileInfo.h
-  dtkZipNewInfo.h
-  dtkZipUtils.h)
+  set(${PROJECT_NAME}_HEADERS
+    dtkZip.h
+    dtkZipExport.h
+    dtkZipFile.h
+    dtkZipFileInfo.h
+    dtkZipNewInfo.h
+    dtkZipUtils.h)
 
-set(${PROJECT_NAME}_HEADERS_MOC
-  dtkZipFile.h)
+  set(${PROJECT_NAME}_HEADERS_MOC
+    dtkZipFile.h)
 
-set(${PROJECT_NAME}_SOURCES
-  dtkZip.cpp
-  dtkZipFile.cpp
-  dtkZipNewInfo.cpp
-  dtkZipUtils.cpp)
+  set(${PROJECT_NAME}_SOURCES
+    dtkZip.cpp
+    dtkZipFile.cpp
+    dtkZipNewInfo.cpp
+    dtkZipUtils.cpp)
 
-## #################################################################
-## Build rules
-## #################################################################
+  ## #################################################################
+  ## Build rules
+  ## #################################################################
 
-if(NOT WIN32)
-add_definitions(-Wno-write-strings)
-add_definitions(-Wformat=0)
-endif(NOT WIN32)
+  if (NOT WIN32)
+    add_definitions(-Wno-write-strings)
+    add_definitions(-Wformat=0)
+  endif()
 
-add_definitions(${QT_DEFINITIONS})
-add_definitions(-DQT_SHARED)
+  add_definitions(${QT_DEFINITIONS})
+  add_definitions(-DQT_SHARED)
 
-if(NOT WIN32)
-  add_definitions(-DQT_NO_DEBUG)
-endif(NOT WIN32)
+  if (NOT WIN32)
+    add_definitions(-DQT_NO_DEBUG)
+  endif()
 
-qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
+  qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
 if(BUILD_SHARED_LIBS)
 
@@ -82,16 +82,16 @@ target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   ${ZLIB_LIBRARIES})
 
-## #################################################################
-## Source file layout in development environments like Visual Studio
-## #################################################################
+  ## #################################################################
+  ## Source file layout in development environments like Visual Studio
+  ## #################################################################
 
-SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
-SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
+  SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
+  SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 
-## #################################################################
-## Installation
-## #################################################################
+  ## #################################################################
+  ## Installation
+  ## #################################################################
 
 foreach(header ${${PROJECT_NAME}_HEADERS})
   string(REGEX REPLACE "(.*)\\.h\$" "\\1" h ${header})

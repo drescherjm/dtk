@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Sep 14 13:26:49 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 14 13:27:56 2011 (+0200)
+ * Last-Updated: Wed Sep 14 13:51:27 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 5
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -18,6 +18,8 @@
  */
 
 #include "dtkDistributedTutorial4Slave.h"
+
+#include <dtkCore/dtkGlobal.h>
 
 class dtkDistributedTutorial4SlavePrivate
 {
@@ -35,4 +37,9 @@ dtkDistributedTutorial4Slave::~dtkDistributedTutorial4Slave(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkDistributedTutorial4Slave::exec(void)
+{
+    qDebug() << DTK_PRETTY_FUNCTION;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Sep 14 13:25:20 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 14 13:26:40 2011 (+0200)
+ * Last-Updated: Wed Sep 14 13:50:56 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 6
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -29,6 +29,9 @@ class dtkDistributedTutorial4Slave : public dtkDistributedSlave
 public:
      dtkDistributedTutorial4Slave(void);
     ~dtkDistributedTutorial4Slave(void);
+
+public:
+    void exec(void);
 
 private:
     dtkDistributedTutorial4SlavePrivate *d;

@@ -518,6 +518,8 @@ class dtkFinderListViewPrivate
 {
 public:
     QMenu *menu;
+    QAction *bookmarkAction;
+    bool allowFileBookmarking;
 };
 
 dtkFinderListView::dtkFinderListView(QWidget *parent) : QListView(parent), d(new dtkFinderListViewPrivate)
@@ -534,7 +536,10 @@ dtkFinderListView::dtkFinderListView(QWidget *parent) : QListView(parent), d(new
     this->setContextMenuPolicy(Qt::CustomContextMenu);
 
     d->menu = new QMenu(this);
-    d->menu->addAction("Bookmark", this, SLOT(onBookmarkContextMenuClicked()));
+    d->allowFileBookmarking = true;
+    d->bookmarkAction = new QAction(tr("Bookmark"), this);
+    connect(d->bookmarkAction, SIGNAL(triggered()), this, SLOT(onBookmarkContextMenuClicked()));
+    d->menu->addAction(d->bookmarkAction);
 
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(updateContextMenu(const QPoint&)));
 }
@@ -562,6 +567,11 @@ QString dtkFinderListView::selectedPath(void) const
     return QString();
 }
 
+void dtkFinderListView::allowFileBookmarking(bool isAllowed)
+{
+    d->allowFileBookmarking = isAllowed;
+}
+
 void dtkFinderListView::updateContextMenu(const QPoint& point)
 {
     QModelIndex index = this->indexAt(point);
@@ -569,7 +579,35 @@ void dtkFinderListView::updateContextMenu(const QPoint& point)
     if(!index.isValid())
         return;
 
-    d->menu->exec(mapToGlobal(point));
+    // if d->allowFileBookmarking is false
+    // we won't show the 'bookmark' option
+    // for files in the context menu
+
+    if(!d->allowFileBookmarking) {
+        bool removed = false;
+        QString selectedPath = this->selectedPath();
+        if (!selectedPath.isEmpty())
+        {
+            QFileInfo fileInfo = QFileInfo(selectedPath);
+            if (fileInfo.isFile())
+            {
+                d->menu->removeAction(d->bookmarkAction);
+                removed = true;
+            }
+        }
+
+        d->menu->exec(mapToGlobal(point));
+
+        if (removed)
+        {
+            if(d->menu->actions().size() > 0)
+                d->menu->insertAction(d->menu->actions()[0], d->bookmarkAction);
+            else
+                d->menu->addAction(d->bookmarkAction);
+        }
+    }
+    else
+        d->menu->exec(mapToGlobal(point));
 }
 
 void dtkFinderListView::onBookmarkContextMenuClicked(void)
@@ -657,6 +695,8 @@ class dtkFinderTreeViewPrivate
 {
 public:
     QMenu *menu;
+    QAction *bookmarkAction;
+    bool allowFileBookmarking;
 };
 
 dtkFinderTreeView::dtkFinderTreeView(QWidget *parent) : QTreeView(parent), d(new dtkFinderTreeViewPrivate)
@@ -669,7 +709,10 @@ dtkFinderTreeView::dtkFinderTreeView(QWidget *parent) : QTreeView(parent), d(new
     this->sortByColumn(0, Qt::AscendingOrder);
 
     d->menu = new QMenu(this);
-    d->menu->addAction("Bookmark", this, SLOT(onBookmarkContextMenuClicked()));
+    d->allowFileBookmarking = true;
+    d->bookmarkAction = new QAction(tr("Bookmark"), this);
+    connect(d->bookmarkAction, SIGNAL(triggered()), this, SLOT(onBookmarkContextMenuClicked()));
+    d->menu->addAction(d->bookmarkAction);
 
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(updateContextMenu(const QPoint&)));
 }
@@ -705,6 +748,11 @@ QString dtkFinderTreeView::selectedPath(void) const
     return QString();
 }
 
+void dtkFinderTreeView::allowFileBookmarking(bool isAllowed)
+{
+    d->allowFileBookmarking = isAllowed;
+}
+
 void dtkFinderTreeView::updateContextMenu(const QPoint& point)
 {
     QModelIndex index = this->indexAt(point);
@@ -712,7 +760,36 @@ void dtkFinderTreeView::updateContextMenu(const QPoint& point)
     if(!index.isValid())
         return;
 
-    d->menu->exec(mapToGlobal(point));
+    // if d->allowFileBookmarking is false
+    // we won't show the 'bookmark' option
+    // for files in the context menu
+
+    if(!d->allowFileBookmarking) {
+        bool removed = false;
+        QString selectedPath = this->selectedPath();
+        if (!selectedPath.isEmpty())
+        {
+            QFileInfo fileInfo = QFileInfo(selectedPath);
+            if (fileInfo.isFile())
+            {
+                d->menu->removeAction(d->bookmarkAction);
+                removed = true;
+            }
+        }
+
+        d->menu->exec(mapToGlobal(point));
+
+        if (removed)
+        {
+            if(d->menu->actions().size() > 0)
+                d->menu->insertAction(d->menu->actions()[0], d->bookmarkAction);
+            else
+                d->menu->addAction(d->bookmarkAction);
+        }
+    }
+    else
+        d->menu->exec(mapToGlobal(point));
+
 }
 
 void dtkFinderTreeView::onBookmarkContextMenuClicked(void)
@@ -878,6 +955,12 @@ QString dtkFinder::selectedPath(void) const
         return d->tree->selectedPath();
 
     return QString();
+}
+
+void dtkFinder::allowFileBookmarking(bool isAllowed)
+{
+    d->list->allowFileBookmarking(isAllowed);
+    d->tree->allowFileBookmarking(isAllowed);
 }
 
 void dtkFinder::setPath(const QString& path)

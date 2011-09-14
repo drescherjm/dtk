@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 14 13:50:30 2011 (+0200)
+ * Last-Updated: Wed Sep 14 13:59:33 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 45
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -41,9 +41,11 @@ dtkDistributedSlave::~dtkDistributedSlave(void)
     d = NULL;
 }
 
-void dtkDistributedSlave::exec(void)
+int dtkDistributedSlave::exec(void)
 {
     DTK_DEFAULT_IMPLEMENTATION;
+
+    return DTK_FAILURE;
 }
 
 bool dtkDistributedSlave::isConnected(void)

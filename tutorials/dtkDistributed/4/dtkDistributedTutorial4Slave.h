@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Sep 14 13:25:20 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 14 13:50:56 2011 (+0200)
+ * Last-Updated: Wed Sep 14 13:59:53 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 9
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -30,8 +30,10 @@ public:
      dtkDistributedTutorial4Slave(void);
     ~dtkDistributedTutorial4Slave(void);
 
+    void setCount(int count);
+
 public:
-    void exec(void);
+    int exec(void);
 
 private:
     dtkDistributedTutorial4SlavePrivate *d;

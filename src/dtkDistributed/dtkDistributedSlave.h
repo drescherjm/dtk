@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 14 13:49:53 2011 (+0200)
+ * Last-Updated: Wed Sep 14 13:59:22 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 25
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -36,7 +36,7 @@ public:
     ~dtkDistributedSlave(void);
 
 public:
-    virtual void exec(void);
+    virtual int exec(void);
 
 public:
     bool    isConnected(void);

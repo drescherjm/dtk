@@ -1,4 +1,4 @@
-/* dtkDistributedClient.cpp --- 
+/* dtkDistributedSlave.cpp --- 
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
@@ -17,21 +17,21 @@
  * 
  */
 
-#include "dtkDistributedClient.h"
+#include "dtkDistributedSlave.h"
 
 #include <QtNetwork>
 
-class dtkDistributedClientPrivate : public QTcpSocket
+class dtkDistributedSlavePrivate : public QTcpSocket
 {
 public:
 };
 
-dtkDistributedClient::dtkDistributedClient(void) : d(new dtkDistributedClientPrivate)
+dtkDistributedSlave::dtkDistributedSlave(void) : d(new dtkDistributedSlavePrivate)
 {
 
 }
 
-dtkDistributedClient::~dtkDistributedClient(void)
+dtkDistributedSlave::~dtkDistributedSlave(void)
 {
     delete d;
 

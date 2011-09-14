@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. août 10 19:00:45 2011 (+0200)
+ * Last-Updated: mer. sept. 14 13:14:08 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 881
+ *     Update #: 882
  */
 
 /* Commentary: 
@@ -297,7 +297,7 @@ void dtkDistributedController::error(QAbstractSocket::SocketError error)
         qDebug() << DTK_PRETTY_FUNCTION << "The connection was refused by the peer (or timed out).";
         break;
     case QAbstractSocket::RemoteHostClosedError:
-        qDebug() << DTK_PRETTY_FUNCTION << "The remote host closed the connection. Note that the client socket (i.e., this socket) will be closed after the remote close notification has been sent.";
+        qDebug() << DTK_PRETTY_FUNCTION << "The remote host closed the connection. Note that the slave socket (i.e., this socket) will be closed after the remote close notification has been sent.";
         break;
     case QAbstractSocket::HostNotFoundError:
         qDebug() << DTK_PRETTY_FUNCTION << "The host address was not found.";

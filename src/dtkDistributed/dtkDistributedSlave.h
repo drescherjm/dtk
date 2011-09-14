@@ -1,4 +1,4 @@
-/* dtkDistributedClient.h --- 
+/* dtkDistributedSlave.h --- 
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
@@ -17,25 +17,25 @@
  * 
  */
 
-#ifndef DTKDISTRIBUTEDCLIENT_H
-#define DTKDISTRIBUTEDCLIENT_H
+#ifndef DTKDISTRIBUTEDSLAVE_H
+#define DTKDISTRIBUTEDSLAVE_H
 
 #include "dtkDistributedExport.h"
 
 #include <QtCore/QObject>
 
-class dtkDistributedClientPrivate;
+class dtkDistributedSlavePrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedClient : public QObject
+class DTKDISTRIBUTED_EXPORT dtkDistributedSlave : public QObject
 {
     Q_OBJECT
 
 public:
-     dtkDistributedClient(void);
-    ~dtkDistributedClient(void);
+     dtkDistributedSlave(void);
+    ~dtkDistributedSlave(void);
 
 private:
-    dtkDistributedClientPrivate *d;
+    dtkDistributedSlavePrivate *d;
 };
 
 #endif

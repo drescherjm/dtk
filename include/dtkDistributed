@@ -1,4 +1,4 @@
-#include "../src/dtkDistributed/dtkDistributedClient.h"
+#include "../src/dtkDistributed/dtkDistributedSlave.h"
 #include "../src/dtkDistributed/dtkDistributedCommunicator.h"
 #include "../src/dtkDistributed/dtkDistributedCommunicatorMpi.h"
 #include "../src/dtkDistributed/dtkDistributedCommunicatorTcp.h"

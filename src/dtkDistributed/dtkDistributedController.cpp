@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. sept. 14 13:14:08 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 882
+ * Last-Updated: Wed Sep 14 13:33:22 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 883
  */
 
 /* Commentary: 
@@ -81,6 +81,7 @@ bool dtkDistributedController::isDisconnected(const QUrl& server)
 void dtkDistributedController::submit(const QUrl& server, const QByteArray& resources)
 {
     qDebug() << "Want to submit jobs with resources:" << resources;
+
     d->sockets[server.toString()]->write(resources);
 }
 

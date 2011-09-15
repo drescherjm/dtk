@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. août 18 13:22:56 2011 (+0200)
+ * Last-Updated: jeu. sept. 15 14:21:49 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 359
+ *     Update #: 360
  */
 
 /* Commentary: 
@@ -66,7 +66,7 @@ QString dtkDistributedServerManagerOar::status(void)
         QString state =job["state"].toString();
         if (state == "Running")
             state = "running";
-        else if (state == "Waiting" and (job["reservation"].toString() == "scheduled"))
+        else if ((state == "Waiting") and (job["reservation"].toString() == "scheduled"))
             state = "scheduled";
         else if (state == "Waiting")
             state = "queued";

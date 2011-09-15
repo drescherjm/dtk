@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Sep 14 13:20:15 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. sept. 15 13:55:19 2011 (+0200)
+ * Last-Updated: jeu. sept. 15 14:23:05 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 155
+ *     Update #: 156
  */
 
 /* Commentary: 
@@ -64,6 +64,6 @@ int main(int argc, char **argv)
 
 
     int status = application.exec();
-    QDir::current()->remove(scriptName);
+//    QDir::current()->remove(scriptName);
     return status;
 }

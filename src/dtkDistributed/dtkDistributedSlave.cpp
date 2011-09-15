@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 14 16:03:32 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 65
+ * Last-Updated: jeu. sept. 15 13:44:12 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 69
  */
 
 /* Commentary: 
@@ -78,7 +78,7 @@ void dtkDistributedSlave::connect(const QUrl& server)
         QObject::connect(d->socket, SIGNAL(readyRead()), this, SLOT(read()));
         QObject::connect(d->socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
 
-        emit connect(server);
+        emit connected(server);
         
     } else {
         qDebug() << "Unable to connect to" << server.toString();

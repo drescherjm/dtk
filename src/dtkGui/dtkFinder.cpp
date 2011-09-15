@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Jun 12 15:47:45 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov 10 09:57:39 2010 (+0100)
+ * Last-Updated: Thu Sep 15 15:14:27 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 65
+ *     Update #: 75
  */
 
 /* Commentary: 
@@ -567,6 +567,11 @@ QString dtkFinderListView::selectedPath(void) const
     return QString();
 }
 
+/**
+ * Set the allowance of file bookmarking.
+ * @param isAllowed - whether is allowed to bookmark files
+ **/
+
 void dtkFinderListView::allowFileBookmarking(bool isAllowed)
 {
     d->allowFileBookmarking = isAllowed;
@@ -747,6 +752,11 @@ QString dtkFinderTreeView::selectedPath(void) const
 
     return QString();
 }
+
+/**
+ * Set the allowance of file bookmarking.
+ * @param isAllowed - whether is allowed to bookmark files
+ **/
 
 void dtkFinderTreeView::allowFileBookmarking(bool isAllowed)
 {
@@ -956,6 +966,11 @@ QString dtkFinder::selectedPath(void) const
 
     return QString();
 }
+
+/**
+ * Set the allowance of file bookmarking.
+ * @param isAllowed - whether is allowed to bookmark files
+ **/
 
 void dtkFinder::allowFileBookmarking(bool isAllowed)
 {

@@ -37,7 +37,7 @@ public:
     virtual QStringList handled(void) const = 0;
     
     bool enabled(void) const;
-    void  enable(void);
+    void enable(void);
     void disable(void);
     
     dtkAbstractData *data(void);

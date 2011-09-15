@@ -1,5 +1,5 @@
-/* dtkDistributedServerManagerOar.cpp --- 
- * 
+/* dtkDistributedServerManagerOar.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 359
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedServerManager_p.h"
@@ -66,7 +66,7 @@ QString dtkDistributedServerManagerOar::status(void)
         QString state =job["state"].toString();
         if (state == "Running")
             state = "running";
-        else if (state == "Waiting" and (job["reservation"].toString() == "scheduled"))
+        else if (state == "Waiting" && (job["reservation"].toString() == "scheduled"))
             state = "scheduled";
         else if (state == "Waiting")
             state = "queued";

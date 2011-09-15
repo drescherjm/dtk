@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: Tue Feb 16 16:26:17 2010 (+0100)
  * Version: $Id$
- * Last-Updated: mer. août 10 12:55:47 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 105
+ * Last-Updated: Thu Sep 15 15:44:16 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 123
  */
 
 /* Commentary:
@@ -111,8 +111,17 @@ QDateTime dtkDistributedJob::Stime(void) {
     return d->stime;
 }
 
+#include <time.h>
+
 void dtkDistributedJob::setStime(qint64 stime) {
+#if QT_VERSION > 0x0406FF
     d->stime = QDateTime::fromMSecsSinceEpoch(stime);
+#else
+    QDateTime dtime = QDateTime(QDate(1970, 1, 1));
+    dtime.addMSecs(stime);
+
+    d->stime = dtime;
+#endif
 }
 
 QDateTime dtkDistributedJob::Qtime(void) {
@@ -120,7 +129,14 @@ QDateTime dtkDistributedJob::Qtime(void) {
 }
 
 void dtkDistributedJob::setQtime(qint64 qtime) {
+#if QT_VERSION > 0x0406FF
     d->qtime = QDateTime::fromMSecsSinceEpoch(qtime);
+#else
+    QDateTime dtime = QDateTime(QDate(1970, 1, 1));
+    dtime.addMSecs(qtime);
+
+    d->qtime = dtime;
+#endif
 }
 
 QString dtkDistributedJob::Walltime(void) {

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Jun 12 15:45:12 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov 10 09:57:22 2010 (+0100)
+ * Last-Updated: Thu Sep 15 15:14:42 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 25
+ *     Update #: 28
  */
 
 /* Commentary: 
@@ -152,10 +152,6 @@ public:
 
     QString selectedPath(void) const;
 
-    /**
-    * Set the allowance of file bookmarking.
-    * @param isAllowed - whether is allowed to bookmark files
-    **/
     void allowFileBookmarking(bool isAllowed);
 
 signals:
@@ -195,10 +191,6 @@ public:
 
     QString selectedPath(void) const;
 
-    /**
-    * Set the allowance of file bookmarking.
-    * @param isAllowed - whether is allowed to bookmark files
-    **/
     void allowFileBookmarking(bool isAllowed);
 
 signals:
@@ -236,10 +228,6 @@ public:
 
     QString selectedPath(void) const;
 
-    /**
-    * Set the allowance of file bookmarking.
-    * @param isAllowed - whether is allowed to bookmark files
-    **/
     void allowFileBookmarking(bool isAllowed);
 
 signals:

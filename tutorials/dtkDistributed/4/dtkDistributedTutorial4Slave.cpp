@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Sep 14 13:26:49 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 14 15:59:45 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 48
+ * Last-Updated: jeu. sept. 15 11:31:27 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 54
  */
 
 /* Commentary: 
@@ -134,8 +134,11 @@ int dtkDistributedTutorial4Slave::exec(void)
 // Slave of rank 0 sends result to server
 // /////////////////////////////////////////////////////////////////
 
-        this->write(QByteArray::number(sum));
-        
+        if (this->isConnected())
+            this->write(QByteArray::number(sum));
+        else
+            qDebug() << "unable to send result to server: not connected ";
+
 // /////////////////////////////////////////////////////////////////
 
 

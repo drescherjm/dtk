@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep  5 12:51:51 2011 (+0200)
+ * Last-Updated: Thu Sep 15 15:09:12 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 275
+ *     Update #: 280
  */
 
 /* Commentary:
@@ -43,7 +43,7 @@ public:
 
 dtkAbstractData::dtkAbstractData(dtkAbstractData *parent) : dtkAbstractObject(parent), d(new dtkAbstractDataPrivate)
 {
-  d->numberOfChannels = 0;
+    d->numberOfChannels = 0;
 }
 
 dtkAbstractData::dtkAbstractData(const dtkAbstractData& data) : dtkAbstractObject(), d(new dtkAbstractDataPrivate)
@@ -164,16 +164,13 @@ dtkAbstractDataConverter *dtkAbstractData::converter(const QString& type)
 
 int dtkAbstractData::numberOfChannels(void)
 {
-  return d->numberOfChannels;
+    return d->numberOfChannels;
 }
-
 
 void dtkAbstractData::setNumberOfChannels(int number)
 {
-  d->numberOfChannels = number;
+    d->numberOfChannels = number;
 }
-
-
 
 void dtkAbstractData::update(void)
 {

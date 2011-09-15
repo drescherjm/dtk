@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. août 11 10:36:39 2011 (+0200)
+ * Last-Updated: jeu. sept. 15 09:22:29 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 163
+ *     Update #: 169
  */
 
 /* Commentary: 
@@ -31,6 +31,7 @@ public:
     dtkDistributedServerManager *manager;
 };
 
+
 dtkDistributedServerDaemon::dtkDistributedServerDaemon(quint16 port, QObject *parent) : QTcpServer(parent), d(new dtkDistributedServerDaemonPrivate)
 {
     d->manager = NULL;
@@ -43,6 +44,10 @@ dtkDistributedServerDaemon::~dtkDistributedServerDaemon(void)
     delete d;
 
     d = NULL;
+}
+
+dtkDistributedServerManager * dtkDistributedServerDaemon::manager(void) {
+    return d->manager;
 }
 
 void dtkDistributedServerDaemon::setManager(dtkDistributedServerManager::Type type)

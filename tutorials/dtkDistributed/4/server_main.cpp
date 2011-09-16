@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Sep 14 13:20:15 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. sept. 15 14:23:05 2011 (+0200)
+ * Last-Updated: ven. sept. 16 17:22:04 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 156
+ *     Update #: 215
  */
 
 /* Commentary: 
@@ -63,7 +63,13 @@ int main(int argc, char **argv)
     qDebug() << DTK_PRETTY_FUNCTION << "Job Id is: " << jobid;
 
 
-    int status = application.exec();
-//    QDir::current()->remove(scriptName);
+    qDebug() << "starting application ";
+
+    int status = application.exec(); //never returns
+
+    qDebug() << "waiting result ";
+    QByteArray res = server.wait(0); //for for rank 0 message
+    qDebug() << "result is " << res;
+    script.remove();
     return status;
 }

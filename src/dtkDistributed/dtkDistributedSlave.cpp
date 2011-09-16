@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. sept. 15 13:44:12 2011 (+0200)
+ * Last-Updated: ven. sept. 16 15:49:44 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 69
+ *     Update #: 71
  */
 
 /* Commentary: 
@@ -113,6 +113,12 @@ void dtkDistributedSlave::write(const QByteArray& array)
 {
     d->socket->write(array);
 }
+
+bool  dtkDistributedSlave::flush(void)
+{
+    return d->socket->flush();
+}
+
 
 void dtkDistributedSlave::error(QAbstractSocket::SocketError error)
 {

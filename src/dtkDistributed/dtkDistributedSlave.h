@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 14 16:01:42 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 45
+ * Last-Updated: ven. sept. 16 15:49:21 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -41,6 +41,8 @@ public:
 public:
     bool    isConnected(void);
     bool isDisconnected(void);
+
+    bool flush(void);
 
 signals:
     void    connected(const QUrl& server);

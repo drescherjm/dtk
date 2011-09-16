@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. sept. 15 10:50:01 2011 (+0200)
+ * Last-Updated: jeu. sept. 15 17:58:58 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 59
+ *     Update #: 62
  */
 
 /* Commentary: 
@@ -35,6 +35,7 @@ public:
     ~dtkDistributedServer(void);
 
     dtkDistributedServerManager * manager(void);
+    QByteArray  wait(int rank);
 
     public slots:
     void run(void);

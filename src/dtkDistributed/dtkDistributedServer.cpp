@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. sept. 15 11:06:31 2011 (+0200)
+ * Last-Updated: jeu. sept. 15 17:59:02 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 197
+ *     Update #: 202
  */
 
 /* Commentary: 
@@ -42,6 +42,10 @@ dtkDistributedServer::~dtkDistributedServer(void)
 
 dtkDistributedServerManager * dtkDistributedServer::manager(void) {
     return d->daemon->manager();
+}
+
+QByteArray dtkDistributedServer::wait(int rank) {
+    return d->daemon->wait(rank);
 }
 
 /*! launch server using service

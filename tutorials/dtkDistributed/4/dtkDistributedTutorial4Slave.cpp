@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Sep 14 13:26:49 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. sept. 15 11:31:27 2011 (+0200)
+ * Last-Updated: ven. sept. 16 16:55:41 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 54
+ *     Update #: 90
  */
 
 /* Commentary: 
@@ -63,6 +63,12 @@ int dtkDistributedTutorial4Slave::exec(void)
 
     int rank = communicator->rank();
     int size = communicator->size();
+
+    if (this->isConnected()) {
+        QByteArray myrank = QString("rank:"+QString::number(rank)+"\n").toAscii();
+        this->write(myrank);
+        this->flush(); // is it necessary ?
+    }
 
     dtkAbstractData *m_array = dtkAbstractDataFactory::instance()->create("dtkDataArray");
     dtkAbstractData *s_array = dtkAbstractDataFactory::instance()->create("dtkDataArray");
@@ -134,9 +140,10 @@ int dtkDistributedTutorial4Slave::exec(void)
 // Slave of rank 0 sends result to server
 // /////////////////////////////////////////////////////////////////
 
-        if (this->isConnected())
+        if (this->isConnected()) {
             this->write(QByteArray::number(sum));
-        else
+            this->flush(); // is it necessary ?
+        } else
             qDebug() << "unable to send result to server: not connected ";
 
 // /////////////////////////////////////////////////////////////////
@@ -155,7 +162,7 @@ int dtkDistributedTutorial4Slave::exec(void)
         long partial_sum = 0;
 
         summer->setInput(s_array);
-        
+
         partial_sum = summer->run();
 
         communicator->send(&partial_sum, 1, dtkDistributedCommunicator::dtkDistributedCommunicatorLong, 0, dtkDistributedCommunicator::dtkDistributedCommunicatorReceive);
@@ -166,6 +173,15 @@ finalize:
     delete s_array;
 
     delete summer;
+
+    if(!rank) {
+        if (this->isConnected()) {
+            QString jobid = "ENDJOB\n"+QString(getenv("PBS_JOBID")).split(".").first()+"\n";
+            this->write(jobid.toAscii());
+            this->flush(); // is it necessary ?
+        } else
+            qDebug() << "unable to send result to server: not connected ";
+    }
 
     communicator->uninitialize();
 

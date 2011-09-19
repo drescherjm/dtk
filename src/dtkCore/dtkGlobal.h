@@ -144,11 +144,12 @@ inline bool dtkApplicationArgumentsContain(QCoreApplication *application, QStrin
 inline QString dtkApplicationArgumentsValue(int argc, char **argv, QString key)
 {
     for(int i = 1; i < argc; i++)
-        if(QString(argv[i]) == key)
+        if(QString(argv[i]) == key) {
 			if(i+1 < argc)
 	            return QString(argv[i+1]);
 			else
 				return QString();
+        }
     return QString();
 }
 

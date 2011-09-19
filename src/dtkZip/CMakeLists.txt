@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Tue Jun 21 12:08:14 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Sep  8 14:40:29 2011 (+0200)
+## Last-Updated: Thu Sep 15 15:16:08 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 39
+##     Update #: 40
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,7 +17,7 @@
 ## 
 ######################################################################
 
-if(ZLIB_FOUND)
+if (ZLIB_FOUND)
 
 ## #################################################################
 
@@ -48,22 +48,22 @@ set(${PROJECT_NAME}_SOURCES
 ## Build rules
 ## #################################################################
 
-if(NOT WIN32)
-add_definitions(-Wno-write-strings)
-add_definitions(-Wformat=0)
-endif(NOT WIN32)
+if (NOT WIN32)
+  add_definitions(-Wno-write-strings)
+  add_definitions(-Wformat=0)
+endif()
 
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)
 
-if(NOT WIN32)
+if (NOT WIN32)
   add_definitions(-DQT_NO_DEBUG)
-endif(NOT WIN32)
+endif()
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
 if(BUILD_SHARED_LIBS)
-
+  
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}

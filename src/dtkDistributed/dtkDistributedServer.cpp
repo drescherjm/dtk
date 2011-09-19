@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun  1 11:30:48 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 177
+ * Last-Updated: jeu. sept. 15 17:59:02 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 202
  */
 
 /* Commentary: 
@@ -40,6 +40,17 @@ dtkDistributedServer::~dtkDistributedServer(void)
 
 }
 
+dtkDistributedServerManager * dtkDistributedServer::manager(void) {
+    return d->daemon->manager();
+}
+
+QByteArray dtkDistributedServer::wait(int rank) {
+    return d->daemon->wait(rank);
+}
+
+/*! launch server using service
+ *  invoked by exec()
+ */
 void dtkDistributedServer::start(void)
 {
     QCoreApplication *app = this->application();
@@ -58,9 +69,34 @@ void dtkDistributedServer::start(void)
 
     if(dtkApplicationArgumentsContain(app, "--torque"))
         d->daemon->setManager(dtkDistributedServerManager::Torque);
-    
+
     if (!d->daemon->isListening()) {
         logMessage(QString("Failed to bind port %1").arg(d->daemon->serverPort()), dtkDistributedServiceBase::Error);
         app->quit();
+    }
+}
+
+/*! launch server bypassing service
+ *
+ */
+void dtkDistributedServer::run(void)
+{
+    quint16 port;
+
+    if(dtkApplicationArgumentsContain(qApp, "-p"))
+        port = dtkApplicationArgumentsValue(qApp, "-p").toInt();
+    else
+        port = 9999;
+
+    d->daemon = new dtkDistributedServerDaemon(port, qApp);
+
+    if(dtkApplicationArgumentsContain(qApp, "--oar"))
+        d->daemon->setManager(dtkDistributedServerManager::Oar);
+
+    if(dtkApplicationArgumentsContain(qApp, "--torque"))
+        d->daemon->setManager(dtkDistributedServerManager::Torque);
+
+    if (!d->daemon->isListening()) {
+        logMessage(QString("Failed to bind port %1").arg(d->daemon->serverPort()), dtkDistributedServiceBase::Error);
     }
 }

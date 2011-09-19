@@ -26,7 +26,7 @@ project(dtkDistributed)
 set(${PROJECT_NAME}_HEADERS
   dtkDistributedCommunicator.h
   dtkDistributedCommunicatorTcp.h
-  dtkDistributedClient.h
+  dtkDistributedSlave.h
   dtkDistributedController.h
   dtkDistributedControllerStatusModel.h
   dtkDistributedControllerStatusModelItem.h
@@ -46,7 +46,7 @@ set(${PROJECT_NAME}_HEADERS
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkDistributedCommunicator.h
   dtkDistributedCommunicatorTcp.h
-  dtkDistributedClient.h
+  dtkDistributedSlave.h
   dtkDistributedController.h
   dtkDistributedControllerStatusModel.h
   dtkDistributedControllerStatusView.h
@@ -64,7 +64,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
 set(${PROJECT_NAME}_SOURCES
   dtkDistributedCommunicator.cpp
   dtkDistributedCommunicatorTcp.cpp
-  dtkDistributedClient.cpp
+  dtkDistributedSlave.cpp
   dtkDistributedController.cpp
   dtkDistributedControllerStatusModel.cpp
   dtkDistributedControllerStatusModelItem.cpp

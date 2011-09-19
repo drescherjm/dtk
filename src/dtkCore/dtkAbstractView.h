@@ -115,17 +115,17 @@ public slots:
 
     virtual void bounds(float& xmin, float& xmax, float& ymin, float& ymax, float &zmin, float& zmax);
 
-    virtual void cameraUp(double *coordinates);
-    virtual void cameraPosition(double *coordinates);
-    virtual void cameraFocalPoint(double *coordinates);
+    virtual void cameraUp(double *coordinates) const;
+    virtual void cameraPosition(double *coordinates) const;
+    virtual void cameraFocalPoint(double *coordinates) const;
 
     virtual void setCameraPosition(double x, double y, double z);
 
     virtual void setCameraClippingRange(double near, double far);
 
-    virtual QString cameraProjectionMode(void);
-    virtual double cameraViewAngle(void);
-    virtual double cameraZoom(void);
+    virtual QString cameraProjectionMode(void) const;
+    virtual double cameraViewAngle(void) const;
+    virtual double cameraZoom(void) const;
 
 private:
     dtkAbstractViewPrivate *d;

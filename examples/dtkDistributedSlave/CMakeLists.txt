@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed May 25 16:01:47 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed May 25 16:07:27 2011 (+0200)
-##           By: Julien Wintz
-##     Update #: 8
+## Last-Updated: mer. sept. 14 13:13:29 2011 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 9
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,7 +17,7 @@
 ## 
 ######################################################################
 
-project(dtkDistributedClient)
+project(dtkDistributedSlave)
 
 ## #################################################################
 ## Sources

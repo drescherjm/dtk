@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:27:42 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun  1 11:34:01 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 8
+ * Last-Updated: jeu. sept. 15 17:52:32 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -37,6 +37,9 @@ public:
     ~dtkDistributedServerDaemon(void);
 
     void setManager(dtkDistributedServerManager::Type type);
+
+    dtkDistributedServerManager *  manager(void);
+    QByteArray wait(int rank);
 
 protected:
     void incomingConnection(int descriptor);

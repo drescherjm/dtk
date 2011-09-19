@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. août 11 10:36:39 2011 (+0200)
+ * Last-Updated: ven. sept. 16 16:41:51 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 163
+ *     Update #: 232
  */
 
 /* Commentary: 
@@ -29,7 +29,9 @@ class dtkDistributedServerDaemonPrivate
 {
 public:
     dtkDistributedServerManager *manager;
+    QMap<int, QTcpSocket*> sockets;
 };
+
 
 dtkDistributedServerDaemon::dtkDistributedServerDaemon(quint16 port, QObject *parent) : QTcpServer(parent), d(new dtkDistributedServerDaemonPrivate)
 {
@@ -43,6 +45,10 @@ dtkDistributedServerDaemon::~dtkDistributedServerDaemon(void)
     delete d;
 
     d = NULL;
+}
+
+dtkDistributedServerManager * dtkDistributedServerDaemon::manager(void) {
+    return d->manager;
 }
 
 void dtkDistributedServerDaemon::setManager(dtkDistributedServerManager::Type type)
@@ -61,16 +67,29 @@ void dtkDistributedServerDaemon::setManager(dtkDistributedServerManager::Type ty
 
 void dtkDistributedServerDaemon::incomingConnection(int descriptor)
 {
-    qDebug() << DTK_PRETTY_FUNCTION << "-- Connection --";
-    qDebug() << DTK_PRETTY_FUNCTION << descriptor;
-    qDebug() << DTK_PRETTY_FUNCTION << "-- Connection --";
+    qDebug() << DTK_PRETTY_FUNCTION << "-- Connection -- " << descriptor ;
 
     QTcpSocket *socket = new QTcpSocket(this);
     connect(socket, SIGNAL(readyRead()), this, SLOT(read()));
     connect(socket, SIGNAL(disconnected()), this, SLOT(discard()));
     socket->setSocketDescriptor(descriptor);
-
     dtkDistributedServiceBase::instance()->logMessage("New connection");
+}
+
+QByteArray dtkDistributedServerDaemon::wait(int rank)
+{
+    if (d->sockets.contains(rank)) {
+        qDebug() << "blocking signals; we want data from slave rank " << rank;
+        this->blockSignals(true);
+        QByteArray data;
+        if (d->sockets[rank]->waitForReadyRead(30000))
+             data = d->sockets[rank]->readLine(1024); //FIXME: readdata ?
+        this->blockSignals(false);
+        return data;
+    } else {
+        qDebug() << "WARN: no socket found for rank " << rank;
+        return NULL;
+    }
 }
 
 void dtkDistributedServerDaemon::read(void)
@@ -111,6 +130,13 @@ void dtkDistributedServerDaemon::read(void)
         qDebug() << jobid;
         socket->write(QString("NEWJOB:\n").toAscii());
         socket->write(jobid.toAscii()+"\n");
+    } else if(contents == "ENDJOB\n") {
+        QString jobid = socket->readLine(MAX_LINE_LENGTH);
+        qDebug() << DTK_PRETTY_FUNCTION << "Job ended " << jobid;
+    } else if(contents.contains("rank:")) {
+        int rank = contents.split(":").last().trimmed().toInt();
+        qDebug() << DTK_PRETTY_FUNCTION << "connected remote is of rank " << rank;
+        d->sockets.insert(rank, socket);
     } else if(contents.contains("DELETE /job/")) {
         QString jobid = contents.split("/").last().trimmed();
         QString resp  = "DEL "+d->manager->deljob(jobid) +"\n";

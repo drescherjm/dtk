@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Sep 14 13:19:42 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. sept. 15 11:43:18 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 50
+ * Last-Updated: Mon Sep 19 10:15:53 2011 (+0200)
+ *           By: jwintz
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -61,6 +61,8 @@ int main(int argc, char **argv)
     slave->setCount(count);
 
     int status = slave->exec();
+
+    delete slave;
 
     dtkPluginManager::instance()->uninitialize();
 

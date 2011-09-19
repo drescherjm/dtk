@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Sep 14 13:20:15 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 19 13:34:56 2011 (+0200)
+ * Last-Updated: Mon Sep 19 13:45:32 2011 (+0200)
  *           By: jwintz
- *     Update #: 298
+ *     Update #: 303
  */
 
 /* Commentary: 
@@ -32,12 +32,13 @@
 
 int main(int argc, char **argv)
 {
-    QCoreApplication application(argc,argv) ;
+    QCoreApplication application(argc, argv) ;
 
-    if(!dtkApplicationArgumentsContain(&application, "--torque")
-    || !dtkApplicationArgumentsContain(&application, "--oar")) {
-        dtkDebug() << "Usage:" << argv[0] << " dtkDistributed://server:port [--oar || --torque]";
-    }
+    // if(!dtkApplicationArgumentsContain(&application, "--torque")
+    // || !dtkApplicationArgumentsContain(&application, "--oar")) {
+    //     dtkDebug() << "Usage:" << argv[0] << " dtkDistributed://server:port [--oar || --torque]";
+    //     return DTK_SUCCEED;
+    // }
 
 // /////////////////////////////////////////////////////////////////
 // Instantiate a server
@@ -51,7 +52,7 @@ int main(int argc, char **argv)
 // submission. For academic purposes only.
 /////////////////////////////////////////////////////////////////
 
-    QString scriptName = QDir::tempPath() + "/dtkDistributedServerScript.sh";
+    QString scriptName = qApp->applicationDirPath() + "/dtkDistributedServerScript.sh";
 
     QVariantMap resources;
     resources.insert("cores", 2);
@@ -72,7 +73,7 @@ int main(int argc, char **argv)
         out << "mpirun "
             + qApp->applicationDirPath()
             + "/dtkDistributedTutorial4Slave "
-            + "10000"
+            + "10000 "
             + "--server "
             + argv[1];
     }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Sep 20 11:31:26 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 20 12:49:48 2011 (+0200)
+ * Last-Updated: Tue Sep 20 15:50:16 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 54
+ *     Update #: 66
  */
 
 /* Commentary: 
@@ -41,6 +41,9 @@ public:
 public:
     QLineEdit *host_address;
     QPushButton *host_button;
+
+    QSpinBox *submit_nodes;
+    QSpinBox *submit_cores;
     QSpinBox *submit_value;
     QPushButton *submit_button;
 };
@@ -68,6 +71,14 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
     d->host_button->setAttribute(Qt::WA_MacShowFocusRect, false);
     d->host_button->setFixedWidth(200);
 
+    d->submit_nodes = new QSpinBox(this);
+    d->submit_nodes->setMaximum(100);
+    d->submit_nodes->setValue(2);
+
+    d->submit_cores = new QSpinBox(this);
+    d->submit_cores->setMaximum(48);
+    d->submit_cores->setValue(8);
+
     d->submit_value = new QSpinBox(this);
     d->submit_value->setMaximum(100000);
     d->submit_value->setValue(100000);
@@ -81,6 +92,8 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
     host_layout->addWidget(d->host_button);
 
     QHBoxLayout *submit_layout = new QHBoxLayout;
+    submit_layout->addWidget(d->submit_nodes);
+    submit_layout->addWidget(d->submit_cores);
     submit_layout->addWidget(d->submit_value);
     submit_layout->addWidget(d->submit_button);
 

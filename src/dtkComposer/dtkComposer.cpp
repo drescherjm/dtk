@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Feb 26 19:53:40 2011 (+0100)
+ * Last-Updated: Tue Sep 20 15:23:12 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 445
+ *     Update #: 457
  */
 
 /* Commentary: 
@@ -128,7 +128,6 @@ bool dtkComposer::open(QString fileName)
 
         d->scene->setModified(false);
 
-        // d->view->fitInView(d->scene->sceneRect(), Qt::KeepAspectRatio);
         d->view->update();
 
         QFileInfo info(fileName);
@@ -157,6 +156,21 @@ bool dtkComposer::save(QString fileName)
     d->scene->setModified(false);
 
     emit titleChanged(fi.fileName());
+
+    return true;
+}
+
+bool dtkComposer::insert(QString fileName)
+{
+    if (!fileName.isEmpty()) {
+        
+        dtkComposerReader reader(d->scene);
+        reader.read(fileName, true);
+
+        d->scene->setModified(true);
+
+        d->view->update();
+    }
 
     return true;
 }

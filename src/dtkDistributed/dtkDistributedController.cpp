@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 14 13:33:22 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 883
+ * Last-Updated: mar. sept. 20 16:04:35 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 936
  */
 
 /* Commentary: 
@@ -24,6 +24,7 @@
 #include "dtkDistributedJob.h"
 #include "dtkDistributedCpu.h"
 #include "dtkDistributedGpu.h"
+#include "dtkDistributedSocket.h"
 
 #include <dtkCore/dtkGlobal.h>
 #include <dtkCore/dtkLog.h>
@@ -35,11 +36,11 @@
 class dtkDistributedControllerPrivate
 {
 public:
-    QHash<QString, QTcpSocket *> sockets;
+    QHash<QString, dtkDistributedSocket *> sockets;
     QHash<QString, QList<dtkDistributedNode *> > nodes;
     QHash<QString, QList<dtkDistributedJob *> > jobs;
 
-    void read_status(QByteArray & buffer, QTcpSocket * socket);
+    void read_status(QByteArray const &buffer, dtkDistributedSocket *socket);
 };
 
 dtkDistributedController::dtkDistributedController(void) : d(new dtkDistributedControllerPrivate)
@@ -58,7 +59,7 @@ bool dtkDistributedController::isConnected(const QUrl& server)
 {
     if(d->sockets.keys().contains(server.toString())) {
 
-        QTcpSocket *socket = d->sockets.value(server.toString());
+        dtkDistributedSocket *socket = d->sockets.value(server.toString());
 
         return (socket->state() == QAbstractSocket::ConnectedState);
     }
@@ -70,7 +71,7 @@ bool dtkDistributedController::isDisconnected(const QUrl& server)
 {
     if(d->sockets.keys().contains(server.toString())) {
 
-        QTcpSocket *socket = d->sockets.value(server.toString());
+        dtkDistributedSocket *socket = d->sockets.value(server.toString());
 
         return (socket->state() == QAbstractSocket::UnconnectedState);
     }
@@ -89,7 +90,7 @@ void dtkDistributedController::connect(const QUrl& server)
 {
     if(!d->sockets.keys().contains(server.toString())) {
 
-        QTcpSocket *socket = new QTcpSocket(this);
+        dtkDistributedSocket *socket = new dtkDistributedSocket(this);
         socket->connectToHost(server.host(), server.port());
 
         if(socket->waitForConnected()) {
@@ -101,7 +102,7 @@ void dtkDistributedController::connect(const QUrl& server)
 
             emit connected(server);
 
-            socket->write("GET /status\n");
+            socket->sendRequest("GET","/status");
 
         } else {
 
@@ -114,7 +115,7 @@ void dtkDistributedController::disconnect(const QUrl& server)
 {
     if(d->sockets.keys().contains(server.toString())) {
 
-        QTcpSocket *socket = d->sockets.value(server.toString());
+        dtkDistributedSocket *socket = d->sockets.value(server.toString());
         socket->disconnectFromHost();
 
         d->sockets.remove(server.toString());
@@ -138,7 +139,7 @@ QList<dtkDistributedNode *> dtkDistributedController::nodes(const QString& clust
     return d->nodes.value(cluster);
 }
 
-void dtkDistributedControllerPrivate::read_status(QByteArray & buffer, QTcpSocket * socket)
+void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkDistributedSocket *socket)
 {
     dtkDistributedNode *node = new dtkDistributedNode;
     QVariantMap json = dtkJson::parse(buffer).toMap();
@@ -265,24 +266,21 @@ void dtkDistributedControllerPrivate::read_status(QByteArray & buffer, QTcpSocke
 
 void dtkDistributedController::read(void)
 {
-    QTcpSocket *socket = (QTcpSocket *)sender();
+    dtkDistributedSocket *socket = (dtkDistributedSocket *)sender();
 
     static const int MAX_LINE_LENGTH = 1024;
     QString resp = socket->readLine(MAX_LINE_LENGTH);
-    QByteArray buffer;
 
-    if(resp == "STATUS:\n") {
-        QString size = socket->readLine(MAX_LINE_LENGTH);
-        qint64 toread= size.toInt();
-        qDebug() << "Size to read: " << toread;
-        while (buffer.size() < toread  ) {
-            socket->waitForReadyRead(-1);
-            buffer.append(socket->read(toread));
-        }
+    QVariantMap request = socket->parseRequest();
+    QString method= request["method"].toString();
+    QString path= request["path"].toString();
+
+    if( method == "OK" && path   == "/status") {
+        QByteArray buffer = request["content"].toByteArray();
         d->read_status(buffer,socket);
         emit updated();
-    } else if (resp == "NEWJOB:\n") {
-        QString jobId = socket->readLine(MAX_LINE_LENGTH);
+    } else if( method == "OK" && path.startsWith("/job/")) {
+        QString jobId = path.split("/").at(2);
         qDebug() << "New job queued: " << jobId;
         emit updated();
     } else {

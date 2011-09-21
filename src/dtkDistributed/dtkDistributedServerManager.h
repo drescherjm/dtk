@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:00:53 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 19 11:20:17 2011 (+0200)
- *           By: jwintz
- *     Update #: 33
+ * Last-Updated: mar. sept. 20 15:08:29 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 34
  */
 
 /* Commentary: 
@@ -46,7 +46,7 @@ public:
     static QString protocol(void) { return "1.0"; };
 
 public slots:
-    virtual QString status(void) = 0;
+    virtual QByteArray status(void) = 0;
     virtual QString submit(QString input) = 0;
     virtual QString deljob(QString jobid) = 0;
 

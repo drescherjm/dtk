@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. sept. 16 15:49:21 2011 (+0200)
+ * Last-Updated: mer. sept. 21 00:10:33 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 47
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -43,6 +43,7 @@ public:
     bool isDisconnected(void);
 
     bool flush(void);
+    void close(void);
 
 signals:
     void    connected(const QUrl& server);
@@ -57,6 +58,7 @@ public slots:
 
 protected:
     virtual int exec(void) = 0;
+    qint64 sendRequest(QString method, QString path, int size = 0, QString type = "json", const QByteArray  &content = NULL,  const QHash<QString,QString>  & headers = QHash<QString,QString>() );
 
 protected slots:
     void onStarted(void);

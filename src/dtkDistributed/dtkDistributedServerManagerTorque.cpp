@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 19 11:21:19 2011 (+0200)
- *           By: jwintz
- *     Update #: 901
+ * Last-Updated: mar. sept. 20 15:21:14 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 904
  */
 
 /* Commentary: 
@@ -42,7 +42,7 @@ QDomDocument getXML(QString command);
 // dtkDistributedServerManagerTorque
 // /////////////////////////////////////////////////////////////////
 
-QString dtkDistributedServerManagerTorque::status(void)
+QByteArray  dtkDistributedServerManagerTorque::status(void)
 {
     QDomDocument document = getXML("pbsnodes -x");
     QVariantMap result;
@@ -257,17 +257,17 @@ QString dtkDistributedServerManagerTorque::submit(QString input)
 
     if (!stat.waitForStarted()) {
         dtkCritical() << "Unable to launch stat command";
-        return QString("error");
+        return QString("ERROR");
     }
 
     if (!stat.waitForFinished()) {
         dtkCritical() << "Unable to completed stat command";
-        return QString("error");
+        return QString("ERROR");
     }
     if (stat.exitCode() > 0) {
         QString error = stat.readAllStandardError();
         dtkCritical() << "Error running qsub :" << error;
-        return QString("error");
+        return QString("ERROR");
     } else {
         QString jobid = stat.readAll();
         qDebug() << DTK_PRETTY_FUNCTION << jobid;
@@ -282,17 +282,17 @@ QString dtkDistributedServerManagerTorque::deljob(QString jobid)
 
     if (!stat.waitForStarted()) {
         dtkCritical() << "Unable to launch qdel command";
-        return QString("error");
+        return QString("ERROR");
     }
 
     if (!stat.waitForFinished()) {
         dtkCritical() << "Unable to complete qdel command";
-        return QString("error");
+        return QString("ERROR");
     }
     if (stat.exitCode() > 0) {
         QString error = stat.readAllStandardError();
         dtkCritical() << "Error running qdel :" << error;
-        return QString("error");
+        return QString("ERROR");
     } else {
         QString msg = stat.readAll();
         qDebug() << DTK_PRETTY_FUNCTION << msg;

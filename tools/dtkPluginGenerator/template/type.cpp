@@ -26,7 +26,9 @@ public:
 
 %1::~%1(void)
 {
+    delete d;
 
+    d = NULL;
 }
 
 bool %1::registered(void)
@@ -35,6 +37,11 @@ bool %1::registered(void)
 }
 
 QString %1::description(void) const
+{
+    return "%1";
+}
+
+QString %1::identifier(void) const
 {
     return "%1";
 }

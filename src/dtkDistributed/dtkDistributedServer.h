@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun  1 11:28:37 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 45
+ * Last-Updated: jeu. sept. 15 10:50:01 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 59
  */
 
 /* Commentary: 
@@ -26,12 +26,18 @@
 #include <QtCore>
 
 class dtkDistributedServerPrivate;
+class dtkDistributedServerManager;
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedServer : public dtkDistributedService<QCoreApplication>
 {
 public:
      dtkDistributedServer(int argc, char **argv);
     ~dtkDistributedServer(void);
+
+    dtkDistributedServerManager * manager(void);
+
+    public slots:
+    void run(void);
 
 protected:
     void start(void);

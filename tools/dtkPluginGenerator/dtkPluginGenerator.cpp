@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar  9 21:41:18 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 11 14:51:33 2011 (+0100)
+ * Last-Updated: Mon Sep  5 14:58:40 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 176
+ *     Update #: 187
  */
 
 /* Commentary: 
@@ -89,6 +89,7 @@ bool dtkPluginGenerator::run(void)
     return generateCMakeLists()
         && generateTypeHeaderFile()
         && generateTypeSourceFile()
+        && generatePluginConfigFile()
         && generatePluginHeaderFile()
         && generatePluginSourceFile()
         && generateExportHeaderFile()
@@ -190,6 +191,39 @@ bool dtkPluginGenerator::generateTypeSourceFile(void)
         .arg(QString(d->plugin))
 	.arg(QString(d->type))
 	.arg(QString(d->plugin).remove(d->prefix).prepend(QString(d->prefix).replace(0, 1, QString(d->prefix).left(1).toUpper())));
+    
+    targetFile.close();
+    
+    templateFile.close();
+
+    return true;
+}
+
+// /////////////////////////////////////////////////////////////////
+// Plugin config file
+// /////////////////////////////////////////////////////////////////
+
+bool dtkPluginGenerator::generatePluginConfigFile(void)
+{
+    QFile targetFile(d->target.absoluteFilePath(QString(d->plugin).append("PluginConfig.h.in")));
+
+    if(!targetFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+	qWarning() << "dtkPluginGenerator: unable to open" << QString(d->plugin).append("PluginConfig.h.in") << "for writing";
+	return false;
+    }
+
+    QFile templateFile(":template/config.h");
+
+    if(!templateFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "dtkPluginGenerator: unable to open template file " << templateFile.fileName() << " for reading";
+        return false;
+    }
+
+    QTextStream stream(&targetFile);
+    
+    stream << QString(templateFile.readAll())
+	.arg(QString(d->plugin).toUpper())
+        .arg(QString(d->plugin));
     
     targetFile.close();
     

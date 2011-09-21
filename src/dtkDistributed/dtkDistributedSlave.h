@@ -1,0 +1,72 @@
+/* dtkDistributedSlave.h --- 
+ * 
+ * Author: Julien Wintz
+ * Copyright (C) 2008 - Julien Wintz, Inria.
+ * Created: Wed May 25 14:13:03 2011 (+0200)
+ * Version: $Id$
+ * Last-Updated: Wed Sep 14 16:01:42 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 45
+ */
+
+/* Commentary: 
+ * 
+ */
+
+/* Change log:
+ * 
+ */
+
+#ifndef DTKDISTRIBUTEDSLAVE_H
+#define DTKDISTRIBUTEDSLAVE_H
+
+#include "dtkDistributedExport.h"
+
+#include <QtCore>
+#include <QtNetwork>
+
+class dtkDistributedSlavePrivate;
+
+class DTKDISTRIBUTED_EXPORT dtkDistributedSlave : public QObject
+{
+    Q_OBJECT
+
+public:
+     dtkDistributedSlave(void);
+    ~dtkDistributedSlave(void);
+
+public:
+    virtual int run(void);
+
+public:
+    bool    isConnected(void);
+    bool isDisconnected(void);
+
+signals:
+    void    connected(const QUrl& server);
+    void disconnected(const QUrl& server);
+
+    void started(void);
+    void   ended(void);
+
+public slots:
+    void    connect(const QUrl& server);
+    void disconnect(const QUrl& server);
+
+protected:
+    virtual int exec(void) = 0;
+
+protected slots:
+    void onStarted(void);
+    void   onEnded(void);
+
+protected slots:
+    void read(void);
+    void write(const QByteArray& array);
+    void error(QAbstractSocket::SocketError error);
+
+private:
+    dtkDistributedSlavePrivate *d;
+};
+
+#endif

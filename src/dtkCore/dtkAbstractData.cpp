@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  5 15:12:09 2011 (+0200)
+ * Last-Updated: Thu Sep 15 15:09:12 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 266
+ *     Update #: 280
  */
 
 /* Commentary:
@@ -43,7 +43,7 @@ public:
 
 dtkAbstractData::dtkAbstractData(dtkAbstractData *parent) : dtkAbstractObject(parent), d(new dtkAbstractDataPrivate)
 {
-  d->numberOfChannels = 0;
+    d->numberOfChannels = 0;
 }
 
 dtkAbstractData::dtkAbstractData(const dtkAbstractData& data) : dtkAbstractObject(), d(new dtkAbstractDataPrivate)
@@ -60,14 +60,6 @@ dtkAbstractData::~dtkAbstractData(void)
     delete d;
 
     d = NULL;
-}
-
-
-QString dtkAbstractData::description(void) const
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return "";
 }
 
 void dtkAbstractData::addReader(const QString& reader)
@@ -92,7 +84,7 @@ void dtkAbstractData::enableReader(const QString& reader)
     if (it != d->readers.end())
         it.value() = true;
     else
-        dtkDebug() << description() << " has no such reader: " << reader;
+        dtkDebug() << this->identifier() << " has no such reader: " << reader;
 }
 
 void dtkAbstractData::disableReader(const QString& reader)
@@ -110,7 +102,7 @@ void dtkAbstractData::enableWriter(const QString& writer)
     if (it != d->writers.end())
         it.value() = true;
     else
-        dtkDebug() << description() << " has no such writer: " << writer;
+        dtkDebug() << this->identifier() << " has no such writer: " << writer;
 }
 
 void dtkAbstractData::disableWriter(const QString& writer)
@@ -128,7 +120,7 @@ void dtkAbstractData::enableConverter(const QString& converter)
     if (it != d->converters.end())
         it.value() = true;
     else
-        dtkDebug() << description() << " has no such converter: " << converter;
+        dtkDebug() << this->identifier() << " has no such converter: " << converter;
 }
 
 void dtkAbstractData::disableConverter(const QString& converter)
@@ -172,16 +164,13 @@ dtkAbstractDataConverter *dtkAbstractData::converter(const QString& type)
 
 int dtkAbstractData::numberOfChannels(void)
 {
-  return d->numberOfChannels;
+    return d->numberOfChannels;
 }
-
 
 void dtkAbstractData::setNumberOfChannels(int number)
 {
-  d->numberOfChannels = number;
+    d->numberOfChannels = number;
 }
-
-
 
 void dtkAbstractData::update(void)
 {
@@ -521,14 +510,14 @@ dtkAbstractData::operator double (void)
 
 QDebug operator<<(QDebug debug, const dtkAbstractData& data)
 {
-    debug.nospace() << data.description();
+    debug.nospace() << data.identifier();
 
     return debug.space();
 }
 
 QDebug operator<<(QDebug debug, dtkAbstractData *data)
 {
-    debug.nospace() << data->description();
+    debug.nospace() << data->identifier();
 
     return debug.space();
 }

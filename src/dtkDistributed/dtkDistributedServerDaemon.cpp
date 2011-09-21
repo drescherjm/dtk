@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. juin 29 17:51:22 2011 (+0200)
+ * Last-Updated: jeu. sept. 15 09:22:29 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 46
+ *     Update #: 169
  */
 
 /* Commentary: 
@@ -31,6 +31,7 @@ public:
     dtkDistributedServerManager *manager;
 };
 
+
 dtkDistributedServerDaemon::dtkDistributedServerDaemon(quint16 port, QObject *parent) : QTcpServer(parent), d(new dtkDistributedServerDaemonPrivate)
 {
     d->manager = NULL;
@@ -43,6 +44,10 @@ dtkDistributedServerDaemon::~dtkDistributedServerDaemon(void)
     delete d;
 
     d = NULL;
+}
+
+dtkDistributedServerManager * dtkDistributedServerDaemon::manager(void) {
+    return d->manager;
 }
 
 void dtkDistributedServerDaemon::setManager(dtkDistributedServerManager::Type type)
@@ -77,29 +82,46 @@ void dtkDistributedServerDaemon::read(void)
 {
     QTcpSocket *socket = (QTcpSocket *)sender();
 
-    QString contents = socket->readAll();
+    static const int MAX_LINE_LENGTH = 1024;
+
+    QString contents = socket->readLine(MAX_LINE_LENGTH);
 
     qDebug() << DTK_PRETTY_FUNCTION << "-- Begin read --";
     qDebug() << DTK_PRETTY_FUNCTION << contents;
     qDebug() << DTK_PRETTY_FUNCTION << "--   End read --";
 
-    dtkDistributedServiceBase::instance()->logMessage(QString("Read: %1").arg(QString(socket->readLine())));
+//    dtkDistributedServiceBase::instance()->logMessage(QString("Read: %1").arg(QString(socket->readLine())));
 
 
 
-    if(contents == "** status **") {
+    if(contents == "GET /status\n") {
         QString r = d->manager->status();
         qDebug() << r;
 
-        socket->write(QString("!! status !!").toAscii());
-        socket->write(r.toAscii());
-        socket->write(QString("!! endstatus !!").toAscii());
-    } else if(contents.contains("** submit **")) {
-        QString jobid = d->manager->submit(contents);
+        socket->write(QString("STATUS:\n").toAscii());
+        QByteArray R = r.toAscii();
+        socket->write(QString::number(R.size()).toAscii()+"\n");
+        socket->write(R);
+    } else if(contents == "PUT /job\n") {
+        QByteArray buffer;
+        QString size = socket->readLine(MAX_LINE_LENGTH);
+        qint64 toread= size.toInt();
+        qDebug() << "Size to read: " << toread;
+        while (buffer.size() < toread  ) {
+            qDebug() << "read buffer loop " << buffer.size();
+//            socket->waitForReadyRead(-1); // doesn't work ?!
+            buffer.append(socket->read(toread));
+        }
+        QString jobid = d->manager->submit(buffer);
         qDebug() << jobid;
-        socket->write(QString("!! submit !!").toAscii());
-        socket->write(jobid.toAscii());
-        socket->write(QString("!! endsubmit !!").toAscii());
+        socket->write(QString("NEWJOB:\n").toAscii());
+        socket->write(jobid.toAscii()+"\n");
+    } else if(contents.contains("DELETE /job/")) {
+        QString jobid = contents.split("/").last().trimmed();
+        QString resp  = "DEL "+d->manager->deljob(jobid) +"\n";
+        socket->write(resp.toAscii());
+    } else {
+        qDebug() << DTK_PRETTY_FUNCTION << "WARNING: Unknown data";
     }
 }
 

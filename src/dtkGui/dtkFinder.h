@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Jun 12 15:45:12 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov 10 09:57:22 2010 (+0100)
+ * Last-Updated: Thu Sep 15 15:14:42 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 25
+ *     Update #: 28
  */
 
 /* Commentary: 
@@ -39,6 +39,8 @@ public:
      dtkFinderToolBar(QWidget *parent = 0);
     ~dtkFinderToolBar(void);
 
+     QSize sizeHint (void) const;
+
 signals:
     void changed(const QString& path);
     void listView (void);
@@ -65,11 +67,19 @@ class DTKGUI_EXPORT dtkFinderSideView : public QTreeWidget
 {
     Q_OBJECT
 
+    Q_PROPERTY(int   headerFontSize
+               READ  headerFontSize
+               WRITE setHeaderFontSize)
+
 public:
      dtkFinderSideView(QWidget *parent = 0);
     ~dtkFinderSideView(void);
 
     void populate(void);
+
+    int headerFontSize(void) const;
+
+    QSize sizeHint (void) const;
 
 signals:
     void changed(const QString& path);
@@ -77,7 +87,8 @@ signals:
 public slots:
     void setPath(const QString& path);
     void addBookmark(const QString& path);
-    void clearBookmarks(void);
+    void clearBookmarks(void);    
+    void setHeaderFontSize(int value);
 
 private slots:
     void onItemCicked(QTreeWidgetItem *, int);
@@ -106,6 +117,8 @@ class DTKGUI_EXPORT dtkFinderPathBar : public QFrame
 public:
      dtkFinderPathBar(QWidget *parent = 0);
     ~dtkFinderPathBar(void);
+
+     QSize sizeHint (void) const;
 
 signals:
     void changed(const QString& path);
@@ -138,6 +151,8 @@ public:
     void addContextMenuAction(QAction *action);
 
     QString selectedPath(void) const;
+
+    void allowFileBookmarking(bool isAllowed);
 
 signals:
     void changed(const QString& path);
@@ -176,6 +191,8 @@ public:
 
     QString selectedPath(void) const;
 
+    void allowFileBookmarking(bool isAllowed);
+
 signals:
     void changed(const QString& path);
     void bookmarked(const QString& path);
@@ -210,6 +227,8 @@ public:
     void addContextMenuAction(QAction *action);
 
     QString selectedPath(void) const;
+
+    void allowFileBookmarking(bool isAllowed);
 
 signals:
     void changed(const QString& path);

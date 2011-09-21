@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Jan 16 19:34:51 2011 (+0100)
+ * Last-Updated: Thu Sep 15 15:09:33 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 196
+ *     Update #: 202
  */
 
 /* Commentary:
@@ -38,8 +38,6 @@ public:
              dtkAbstractData(const dtkAbstractData& data);
     virtual ~dtkAbstractData(void);
 
-    virtual QString description(void) const;
-
     friend DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractData& data);
     friend DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractData *data);
 
@@ -62,6 +60,8 @@ public slots:
 
     virtual double parameter(int channel);
 
+    virtual int numberOfChannels(void);
+
     virtual void setParameter(int parameter);
     virtual void setParameter(int parameter, int channel);
 
@@ -80,7 +80,6 @@ public slots:
     virtual void setData(void* data);
     virtual void setData(void* data, int channel);
 
-    virtual int numberOfChannels (void);
     virtual void setNumberOfChannels(int number);
     
     virtual void update(void);

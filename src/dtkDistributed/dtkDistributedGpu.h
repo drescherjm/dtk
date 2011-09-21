@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 13:32:38 2010 (+0100)
  * Version: $Id$
- * Last-Updated: mar. juin 28 17:40:50 2011 (+0200)
+ * Last-Updated: lun. août  8 14:47:23 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 23
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -37,8 +37,10 @@ public:
 
 public:
     enum Architecture {
-           Nvidia = 0x1,
-              AMD = 0x2
+           Nvidia_10 = 0x1,
+           Nvidia_13 = 0x2,
+           Nvidia_20 = 0x4,
+              AMD = 0x8
     };
 
     Architecture architecture(void);

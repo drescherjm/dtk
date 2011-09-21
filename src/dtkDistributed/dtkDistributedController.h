@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul  1 15:17:03 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 36
+ * Last-Updated: mer. août 10 18:31:58 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -49,6 +49,7 @@ signals:
 public slots:
     void    connect(const QUrl& server);
     void disconnect(const QUrl& server);
+    void    submit(const QUrl& server, const QByteArray& resources);
 
 public:
     QList<dtkDistributedNode *> nodes(void);

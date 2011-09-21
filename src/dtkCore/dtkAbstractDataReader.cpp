@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 22:03:03 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jun 15 11:09:09 2010 (+0200)
+ * Last-Updated: Thu Sep 15 15:11:44 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 36
+ *     Update #: 38
  */
 
 /* Commentary: 
@@ -82,8 +82,6 @@ bool dtkAbstractDataReader::canRead(const QString& file)
 
 bool dtkAbstractDataReader::canRead(const QStringList& files)
 {
-    //  Provide a sensible default for the case the list contains only one file.
-
     if (files.size()==1)
         return canRead(files[0]);
 
@@ -114,8 +112,6 @@ void dtkAbstractDataReader::readInformation(const QString& path)
 
 void dtkAbstractDataReader::readInformation(const QStringList& paths)
 {
-    //  Provide a sensible default for the case the list contains only one file.
-
     if (paths.size()==1)
         return readInformation(paths[0]);
 }

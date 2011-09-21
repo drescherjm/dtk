@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:12:32 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Feb 26 19:53:07 2011 (+0100)
+ * Last-Updated: Tue Sep 20 15:22:41 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 78
+ *     Update #: 82
  */
 
 /* Commentary: 
@@ -50,8 +50,9 @@ public:
 
     QString fileName(void);
 
-    bool open(QString fileName);
-    bool save(QString fileName = QString());
+    bool   open(QString fileName);
+    bool   save(QString fileName = QString());
+    bool insert(QString fileName);
 
 signals:
     void compositionChanged(void);

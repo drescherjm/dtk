@@ -41,6 +41,7 @@ struct DTKZIP_EXPORT dtkZipNewInfo
     dtkZipNewInfo(const QString& name, const QString& file);
 
     void setFileDateTime(const QString& file);
+    void setPermissions(const QString& file);
 };
 
 #endif

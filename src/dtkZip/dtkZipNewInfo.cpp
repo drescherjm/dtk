@@ -29,20 +29,25 @@ dtkZipNewInfo::dtkZipNewInfo(const QString& name):
 dtkZipNewInfo::dtkZipNewInfo(const QString& name, const QString& file):
     name(name), internalAttr(0), externalAttr(0)
 {
-    QFileInfo info(file);
-    QDateTime lm = info.lastModified();
-    if (!info.exists())
-        dateTime = QDateTime::currentDateTime();
-    else
-        dateTime = lm;
+    dateTime = QDateTime::currentDateTime();
+    setFileDateTime(file);
+    setPermissions(file);
 }
 
 void dtkZipNewInfo::setFileDateTime(const QString& file)
 {
     QFileInfo info(file);
-    QDateTime lm = info.lastModified();
     if (info.exists())
-        dateTime = lm;
+        dateTime = info.lastModified();
+}
+
+void dtkZipNewInfo::setPermissions(const QString& file) {
+    QFileInfo info(file);
+    if (info.exists()) {
+        const long perms = info.permissions();
+        //externalAttr = 0x81a40000;
+        externalAttr = 0x81000000;
+    }
 }
 
 // /////////////////////////////////////////////////////////////////

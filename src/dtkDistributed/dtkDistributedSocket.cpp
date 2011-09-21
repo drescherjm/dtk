@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: mer. sept. 21 10:03:12 2011 (+0200)
+ * Last-Updated: mer. sept. 21 12:36:23 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 348
+ *     Update #: 395
  */
 
 /* Commentary:
@@ -71,6 +71,7 @@ QVariantMap dtkDistributedSocket::parseRequest(void)
     request.insert("method", tokens[0]);
     request.insert("path", tokens[1].trimmed());
 
+
     // read content-size
     tokens = QString(this->readLine()).split(QRegExp(":\\s*"));
     if (tokens[0].toLower() != "content-size") {
@@ -95,14 +96,17 @@ QVariantMap dtkDistributedSocket::parseRequest(void)
         // read optional headers
         QByteArray line = this->readLine();
         while (!QString(line).trimmed().isEmpty()) {// empty line after last header
-            tokens = QString(this->readLine()).split(QRegExp(":\\s*"));
+            tokens = QString(line).split(QRegExp(":\\s*"));
             request.insert(tokens[0], tokens[1].trimmed());
+            line=this->readLine();
         }
 
         // read content
         QByteArray buffer;
+        int toread = size;
         while (buffer.size() < size ) {
             buffer.append(this->read(size));
+            toread = size - buffer.size();
         }
         request.insert("content", buffer);
     } else

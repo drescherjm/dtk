@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. sept. 20 16:04:35 2011 (+0200)
+ * Last-Updated: mer. sept. 21 12:37:14 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 936
+ *     Update #: 957
  */
 
 /* Commentary: 
@@ -83,7 +83,7 @@ void dtkDistributedController::submit(const QUrl& server, const QByteArray& reso
 {
     qDebug() << "Want to submit jobs with resources:" << resources;
 
-    d->sockets[server.toString()]->write(resources);
+    d->sockets[server.toString()]->sendRequest("PUT","/job",resources.size(),"json",resources);
 }
 
 void dtkDistributedController::connect(const QUrl& server)
@@ -268,8 +268,6 @@ void dtkDistributedController::read(void)
 {
     dtkDistributedSocket *socket = (dtkDistributedSocket *)sender();
 
-    static const int MAX_LINE_LENGTH = 1024;
-    QString resp = socket->readLine(MAX_LINE_LENGTH);
 
     QVariantMap request = socket->parseRequest();
     QString method= request["method"].toString();
@@ -283,8 +281,16 @@ void dtkDistributedController::read(void)
         QString jobId = path.split("/").at(2);
         qDebug() << "New job queued: " << jobId;
         emit updated();
+    } else if( method == "ENDED" && path.startsWith("/job/")) {
+        QString jobId = path.split("/").at(2);
+        qDebug() << "job finished: " << jobId;
+        emit updated();
+    } else if( method == "POST" && path.startsWith("/data")) {
+        QByteArray result = request["content"].toByteArray();
+        qDebug() << "Result: " << result;
+        emit updated();
     } else {
-        qDebug() << "unknown response from server: " << resp;
+        qDebug() << "unknown response from server: " << method << " " <<  path;
     }
 
 }

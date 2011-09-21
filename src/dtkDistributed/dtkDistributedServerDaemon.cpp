@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. sept. 21 10:04:28 2011 (+0200)
+ * Last-Updated: mer. sept. 21 12:23:17 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 476
+ *     Update #: 498
  */
 
 /* Commentary: 
@@ -133,6 +133,9 @@ void dtkDistributedServerDaemon::read(void)
 
         QByteArray r = d->manager->status();
         socket->sendRequest("OK","/status",r.size(),"json",r);
+        // GET status is from the controller, store the socket in sockets using rank=-1
+        if (!d->sockets.contains(-1))
+            d->sockets.insert(-1, socket);
 
     } else if( method == "PUT" && path == "/job" ) {
 
@@ -171,14 +174,13 @@ void dtkDistributedServerDaemon::read(void)
         int torank = path.split("/").at(3).toInt();
         int size = request["size"].toInt();
         QString type = request["type"].toString();
-        int fromrank;
+        int fromrank = 0;
         //TODO: what is the rank of this socket ?
 
         dtkDistributedSocket *dest =  d->sockets[torank];
         QHash<QString,QString> headers;
-        headers["x-forwarded-for"] = fromrank;
+        headers["x-forwarded-for"] = QString::number(fromrank);
         dest->sendRequest(method,"/data/"+jobid, size, type, request["content"].toByteArray(),headers);
-
 
     } else {
         qDebug() << DTK_PRETTY_FUNCTION << "WARNING: Unknown data";

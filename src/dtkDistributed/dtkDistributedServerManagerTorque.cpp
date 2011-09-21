@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. sept. 20 15:21:14 2011 (+0200)
+ * Last-Updated: mer. sept. 21 11:43:52 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 904
+ *     Update #: 932
  */
 
 /* Commentary: 
@@ -204,7 +204,7 @@ QString dtkDistributedServerManagerTorque::submit(QString input)
     /* format: {"resources": {"nodes": 0..N, "cores": 1..M },
                 "properties": {{"key": "value"}, ...},
                 "walltime": "hh:mm:ss",
-                "script": "script_path",
+                "script": "script_path" | "application": "app_args",
                 "queue": "queuename";
                 "options": "string"
                 }
@@ -240,7 +240,32 @@ QString dtkDistributedServerManagerTorque::submit(QString input)
     }
 
     // script
-    qsub += " "+json["script"].toString();
+    if (json.contains("script")) {
+        qsub += " "+json["script"].toString();
+    } else if (json.contains("application")) {
+
+        QString scriptName = qApp->applicationDirPath() + "/dtkDistributedServerScript.sh";
+        QFile script(scriptName);
+
+        if (!script.open(QFile::WriteOnly|QFile::Truncate)) {
+            qDebug() << "unable to open script for writing";
+        } else {
+            QTextStream out(&script);
+            out << "#!/bin/bash\n";
+            out << "mpirun "
+                + qApp->applicationDirPath()
+                + "/"
+                + json["application"].toString();
+        }
+
+        script.close();
+
+        qsub += " " + scriptName;
+
+    } else {
+        qDebug() << "no script and no application";
+        return QString("ERROR");
+    }
 
     // queue
     if (json.contains("queue")) {

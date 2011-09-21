@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Sep 20 11:31:26 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 20 15:50:16 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 66
+ * Last-Updated: mer. sept. 21 11:51:09 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 74
  */
 
 /* Commentary: 
@@ -138,10 +138,10 @@ void tstMainWindow::onSubmit(void)
     resources.insert("cores", 2);
     resources.insert("nodes", 2);
     job.insert("resources", resources);
-    job.insert("script", "/home/nniclaus/sleep.sh");
+    job.insert("walltime", "00:15:00");
+    job.insert("application", "dtkDistributedTutorial4Slave 10000 --server dtk://nef-devel:9999/");
     QByteArray data = dtkJson::serialize(job);
-    QByteArray request = QString("PUT /job\n"+ QString::number(data.size()) + "\n").toAscii() + data;
-    d->controller->submit(QUrl(d->host_address->text()),request);
+    d->controller->submit(QUrl(d->host_address->text()),data);
 }
 
 void tstMainWindow::onConnected(const QUrl& server)

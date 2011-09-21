@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Sep 20 11:31:26 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. sept. 21 11:51:09 2011 (+0200)
+ * Last-Updated: mer. sept. 21 12:48:10 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 74
+ *     Update #: 88
  */
 
 /* Commentary: 
@@ -135,11 +135,13 @@ void tstMainWindow::onSubmit(void)
 {
     QVariantMap job;
     QVariantMap resources;
-    resources.insert("cores", 2);
-    resources.insert("nodes", 2);
+    resources.insert("cores", d->submit_cores->text());
+    resources.insert("nodes", d->submit_nodes->text());
     job.insert("resources", resources);
     job.insert("walltime", "00:15:00");
-    job.insert("application", "dtkDistributedTutorial4Slave 10000 --server dtk://nef-devel:9999/");
+    job.insert("application", "dtkDistributedTutorial4Slave "
+               + d->submit_value->text()
+               + " --server " + d->host_address->text());
     QByteArray data = dtkJson::serialize(job);
     d->controller->submit(QUrl(d->host_address->text()),data);
 }

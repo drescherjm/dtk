@@ -4,13 +4,15 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. sept. 16 16:41:51 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 232
+ * Last-Updated: Mon Sep 19 11:15:43 2011 (+0200)
+ *           By: jwintz
+ *     Update #: 334
  */
 
 /* Commentary: 
  * 
+ * debug logging: use dtkLog() << "message" or qDebug() << "message"
+ *   run logging: use dtkDistributedServiceBase::instance()->logMessage("message");
  */
 
 /* Change log:
@@ -25,19 +27,23 @@
 
 #include <dtkCore/dtkGlobal.h>
 
+#define DTK_DEBUG_SERVER_DAEMON 0
+
 class dtkDistributedServerDaemonPrivate
 {
 public:
     dtkDistributedServerManager *manager;
+
     QMap<int, QTcpSocket*> sockets;
 };
-
 
 dtkDistributedServerDaemon::dtkDistributedServerDaemon(quint16 port, QObject *parent) : QTcpServer(parent), d(new dtkDistributedServerDaemonPrivate)
 {
     d->manager = NULL;
 
     this->listen(QHostAddress::Any, port);
+
+    dtkDistributedServiceBase::instance()->logMessage("Server daemon listening on port " + QString::number(port));
 }
 
 dtkDistributedServerDaemon::~dtkDistributedServerDaemon(void)
@@ -47,7 +53,8 @@ dtkDistributedServerDaemon::~dtkDistributedServerDaemon(void)
     d = NULL;
 }
 
-dtkDistributedServerManager * dtkDistributedServerDaemon::manager(void) {
+dtkDistributedServerManager * dtkDistributedServerDaemon::manager(void)
+{
     return d->manager;
 }
 
@@ -67,29 +74,49 @@ void dtkDistributedServerDaemon::setManager(dtkDistributedServerManager::Type ty
 
 void dtkDistributedServerDaemon::incomingConnection(int descriptor)
 {
+#if defined(DTK_DEBUG_SERVER_DAEMON)
     qDebug() << DTK_PRETTY_FUNCTION << "-- Connection -- " << descriptor ;
+#endif
 
     QTcpSocket *socket = new QTcpSocket(this);
     connect(socket, SIGNAL(readyRead()), this, SLOT(read()));
     connect(socket, SIGNAL(disconnected()), this, SLOT(discard()));
     socket->setSocketDescriptor(descriptor);
+
     dtkDistributedServiceBase::instance()->logMessage("New connection");
 }
 
-QByteArray dtkDistributedServerDaemon::wait(int rank)
+//! Wait for incomming connection
+/*! Warning, in its current state, this method may never return if no
+ *  connection is established.
+ * 
+ * \param rank, the identifier of the slave on the cluster side.
+ */
+void dtkDistributedServerDaemon::waitForConnection(int rank)
 {
-    if (d->sockets.contains(rank)) {
-        qDebug() << "blocking signals; we want data from slave rank " << rank;
-        this->blockSignals(true);
-        QByteArray data;
-        if (d->sockets[rank]->waitForReadyRead(30000))
-             data = d->sockets[rank]->readLine(1024); //FIXME: readdata ?
-        this->blockSignals(false);
-        return data;
-    } else {
+    while(!d->sockets.keys().contains(rank))
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+}
+
+QByteArray dtkDistributedServerDaemon::waitForData(int rank)
+{
+    QTcpSocket *socket = d->sockets.value(rank, NULL);
+
+    if(!socket) {
         qDebug() << "WARN: no socket found for rank " << rank;
-        return NULL;
+        return QByteArray();
     }
+
+    socket->blockSignals(true);
+
+    QByteArray data;
+
+    if (d->sockets[rank]->waitForReadyRead(30000))
+        data = d->sockets[rank]->readLine(1024);
+
+    socket->blockSignals(false);
+
+    return data;
 }
 
 void dtkDistributedServerDaemon::read(void)
@@ -100,47 +127,69 @@ void dtkDistributedServerDaemon::read(void)
 
     QString contents = socket->readLine(MAX_LINE_LENGTH);
 
+#if defined(DTK_DEBUG_SERVER_DAEMON)
     qDebug() << DTK_PRETTY_FUNCTION << "-- Begin read --";
     qDebug() << DTK_PRETTY_FUNCTION << contents;
     qDebug() << DTK_PRETTY_FUNCTION << "--   End read --";
-
-//    dtkDistributedServiceBase::instance()->logMessage(QString("Read: %1").arg(QString(socket->readLine())));
-
-
+#endif
 
     if(contents == "GET /status\n") {
-        QString r = d->manager->status();
-        qDebug() << r;
 
+        QString r = d->manager->status();
         socket->write(QString("STATUS:\n").toAscii());
         QByteArray R = r.toAscii();
         socket->write(QString::number(R.size()).toAscii()+"\n");
         socket->write(R);
+
     } else if(contents == "PUT /job\n") {
+
         QByteArray buffer;
         QString size = socket->readLine(MAX_LINE_LENGTH);
         qint64 toread= size.toInt();
-        qDebug() << "Size to read: " << toread;
+#if defined(DTK_DEBUG_SERVER_DAEMON)
+        qDebug() << DTK_PRETTY_FUNCTION << "Size to read:" << toread;
+#endif
         while (buffer.size() < toread  ) {
+#if defined(DTK_DEBUG_SERVER_DAEMON)
             qDebug() << "read buffer loop " << buffer.size();
-//            socket->waitForReadyRead(-1); // doesn't work ?!
+#endif
             buffer.append(socket->read(toread));
         }
+
         QString jobid = d->manager->submit(buffer);
-        qDebug() << jobid;
+#if defined(DTK_DEBUG_SERVER_DAEMON)
+        qDebug() << DTK_PRETTY_FUNCTION << jobid;
+#endif
         socket->write(QString("NEWJOB:\n").toAscii());
         socket->write(jobid.toAscii()+"\n");
+
     } else if(contents == "ENDJOB\n") {
+
         QString jobid = socket->readLine(MAX_LINE_LENGTH);
+#if defined(DTK_DEBUG_SERVER_DAEMON)
         qDebug() << DTK_PRETTY_FUNCTION << "Job ended " << jobid;
+#endif
     } else if(contents.contains("rank:")) {
+
         int rank = contents.split(":").last().trimmed().toInt();
+#if defined(DTK_DEBUG_SERVER_DAEMON)
         qDebug() << DTK_PRETTY_FUNCTION << "connected remote is of rank " << rank;
+#endif
         d->sockets.insert(rank, socket);
+
     } else if(contents.contains("DELETE /job/")) {
+
         QString jobid = contents.split("/").last().trimmed();
         QString resp  = "DEL "+d->manager->deljob(jobid) +"\n";
         socket->write(resp.toAscii());
+
+    } else if(contents.contains("STARTED")) {
+
+        qDebug() << DTK_PRETTY_FUNCTION << "job started";
+
+    } else if(contents.contains("ENDED")) {
+        qDebug() << DTK_PRETTY_FUNCTION << "job ended";
+
     } else {
         qDebug() << DTK_PRETTY_FUNCTION << "WARNING: Unknown data";
     }
@@ -148,7 +197,9 @@ void dtkDistributedServerDaemon::read(void)
 
 void dtkDistributedServerDaemon::discard(void)
 {
+#if defined(DTK_DEBUG_SERVER_DAEMON)
     qDebug() << DTK_PRETTY_FUNCTION << "-- Disconnection --";
+#endif
 
     QTcpSocket *socket = (QTcpSocket *)sender();
     socket->deleteLater();

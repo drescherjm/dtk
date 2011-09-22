@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:01:36 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Feb  1 00:36:17 2011 (+0100)
+ * Last-Updated: Tue Sep 20 15:20:42 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 14
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -38,7 +38,7 @@ public:
     dtkComposerReader(dtkComposerScene *scene);
    ~dtkComposerReader(void);
 
-   void read(const QString& fileName);
+   void read(const QString& fileName, bool append = false);
 
 protected:
    virtual dtkComposerNode *readNode(QDomNode node);

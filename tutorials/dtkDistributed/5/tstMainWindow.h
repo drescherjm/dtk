@@ -1,12 +1,12 @@
 /* tstMainWindow.h --- 
  * 
  * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Wed May 25 16:12:05 2011 (+0200)
+ * Copyright (C) 2008-2011 - Julien Wintz, Inria.
+ * Created: Tue Sep 20 11:30:29 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. août 10 17:34:47 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 11
+ * Last-Updated: Tue Sep 20 11:30:54 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 3
  */
 
 /* Commentary: 

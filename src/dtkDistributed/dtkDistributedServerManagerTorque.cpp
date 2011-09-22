@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. août 18 13:08:57 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 881
+ * Last-Updated: Mon Sep 19 11:21:19 2011 (+0200)
+ *           By: jwintz
+ *     Update #: 901
  */
 
 /* Commentary: 
@@ -26,144 +26,24 @@
 
 #include <dtkCore/dtkGlobal.h>
 #include <dtkCore/dtkLog.h>
+
 #include <dtkJson/dtkJson.h>
 
 #include <QtCore>
 #include <QtXml>
 
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
 
-QString dtkDistributedServerManagerTorque::deljob(QString jobid)
-{
-    QString qdel = "qdel " + jobid;
-    QProcess stat; stat.start(qdel);
+QDomDocument getXML(QString command);
 
-    if (!stat.waitForStarted()) {
-        dtkCritical() << "Unable to launch qdel command";
-        return QString("error");
-    }
-
-    if (!stat.waitForFinished()) {
-        dtkCritical() << "Unable to complete qdel command";
-        return QString("error");
-    }
-    if (stat.exitCode() > 0) {
-        QString error = stat.readAllStandardError();
-        dtkCritical() << "Error running qdel :" << error;
-        return QString("error");
-    } else {
-        QString msg = stat.readAll();
-        qDebug() << DTK_PRETTY_FUNCTION << msg;
-        return QString("OK");
-    }
-
-}
-
-QString dtkDistributedServerManagerTorque::submit(QString input)
-{
-
-    QString qsub = "qsub ";
-
-    /* format: {"resources": {"nodes": 0..N, "cores": 1..M },
-                "properties": {{"key": "value"}, ...},
-                "walltime": "hh:mm:ss",
-                "script": "script_path",
-                "queue": "queuename";
-                "options": "string"
-                }
-    */
-    QVariantMap json = dtkJson::parse(input).toMap();
-
-    // FIXME: we should read the properties mapping from a file instead of hardcoding it
-    // Everything here is specific to nef setup.
-    QVariantMap jprops = json["properties"].toMap();
-    QString properties ;
-    if (jprops.contains("cpu_model")) {
-        properties +=  ":"+jprops["cpu_model"].toString();
-    } else if (jprops.contains("nvidia-C2050")) {
-        properties += ":C2050";
-    } else if (jprops.contains("nvidia-C2070")) {
-        properties += ":C2070";
-    } else if (jprops.contains("nvidia-T10")) {
-        properties += ":T10";
-    }
-
-    QVariantMap res = json["resources"].toMap();
-    if (res["nodes"].toInt() == 0) {
-        // no nodes, only cores; TODO
-    } else if (res["cores"].toInt() == 0) {
-        // no cores, only nodes; TODO
-    } else {
-        qsub += " -l nodes="+res["nodes"].toString()+properties+":ppn="+res["cores"].toString();
-    }
-
-    // walltime, syntax=HH:MM:SS
-    if (json.contains("walltime")) {
-        qsub += ",walltime="+json["walltime"].toString();
-    }
-
-    // script
-    qsub += " "+json["script"].toString();
-
-    // queue
-    if (json.contains("queue")) {
-        qsub += " -q "+json["queue"].toString();
-    }
-    // options
-    if (json.contains("options")) {
-        qsub += " "+json["options"].toString();
-    }
-
-    qDebug() << DTK_PRETTY_FUNCTION << qsub;
-    QProcess stat; stat.start(qsub);
-
-    if (!stat.waitForStarted()) {
-        dtkCritical() << "Unable to launch stat command";
-        return QString("error");
-    }
-
-    if (!stat.waitForFinished()) {
-        dtkCritical() << "Unable to completed stat command";
-        return QString("error");
-    }
-    if (stat.exitCode() > 0) {
-        QString error = stat.readAllStandardError();
-        dtkCritical() << "Error running qsub :" << error;
-        return QString("error");
-    } else {
-        QString jobid = stat.readAll();
-        qDebug() << DTK_PRETTY_FUNCTION << jobid;
-        return jobid.split(".").at(0);
-    }
-}
-
-QDomDocument getXML(QString command)
-{
-    QDomDocument document; QString error;
-    QProcess stat; stat.start(command);
-
-    if (!stat.waitForStarted()) {
-        dtkCritical() << "Unable to launch stat command";
-        return document;
-    }
-
-    if (!stat.waitForFinished()) {
-        dtkCritical() << "Unable to completed stat command";
-        return document;
-    }
-
-    QString data = stat.readAll();
-
-    if(!document.setContent(data, false, &error))
-        dtkDebug() << "Error retrieving xml output out of torque "  << error;
-
-    stat.close();
-    return document;
-
-}
+// /////////////////////////////////////////////////////////////////
+// dtkDistributedServerManagerTorque
+// /////////////////////////////////////////////////////////////////
 
 QString dtkDistributedServerManagerTorque::status(void)
 {
-
     QDomDocument document = getXML("pbsnodes -x");
     QVariantMap result;
     QVariantList jnodes;
@@ -181,12 +61,10 @@ QString dtkDistributedServerManagerTorque::status(void)
 
         node.insert("name", name);
 
-
         QString ngpus  = nodes.item(i).firstChildElement("gpus").text().simplified();
         // 2 cpus by default
         QString ncpus  = "2";
         // number of busy GPUs not implemented yet
-
 
         // properties
         QStringList properties = nodes.item(i).firstChildElement("properties").text().simplified().split(",");
@@ -317,4 +195,136 @@ QString dtkDistributedServerManagerTorque::status(void)
     }
 
     return dtkJson::serialize(result);
+}
+
+QString dtkDistributedServerManagerTorque::submit(QString input)
+{
+    QString qsub = "qsub ";
+
+    /* format: {"resources": {"nodes": 0..N, "cores": 1..M },
+                "properties": {{"key": "value"}, ...},
+                "walltime": "hh:mm:ss",
+                "script": "script_path",
+                "queue": "queuename";
+                "options": "string"
+                }
+    */
+    QVariantMap json = dtkJson::parse(input).toMap();
+
+    // FIXME: we should read the properties mapping from a file instead of hardcoding it
+    // Everything here is specific to nef setup.
+    QVariantMap jprops = json["properties"].toMap();
+    QString properties ;
+    if (jprops.contains("cpu_model")) {
+        properties +=  ":"+jprops["cpu_model"].toString();
+    } else if (jprops.contains("nvidia-C2050")) {
+        properties += ":C2050";
+    } else if (jprops.contains("nvidia-C2070")) {
+        properties += ":C2070";
+    } else if (jprops.contains("nvidia-T10")) {
+        properties += ":T10";
+    }
+
+    QVariantMap res = json["resources"].toMap();
+    if (res["nodes"].toInt() == 0) {
+        // no nodes, only cores; TODO
+    } else if (res["cores"].toInt() == 0) {
+        // no cores, only nodes; TODO
+    } else {
+        qsub += " -l nodes="+res["nodes"].toString()+properties+":ppn="+res["cores"].toString();
+    }
+
+    // walltime, syntax=HH:MM:SS
+    if (json.contains("walltime")) {
+        qsub += ",walltime="+json["walltime"].toString();
+    }
+
+    // script
+    qsub += " "+json["script"].toString();
+
+    // queue
+    if (json.contains("queue")) {
+        qsub += " -q "+json["queue"].toString();
+    }
+
+    // options
+    if (json.contains("options")) {
+        qsub += " "+json["options"].toString();
+    }
+
+    qDebug() << DTK_PRETTY_FUNCTION << qsub;
+    QProcess stat; stat.start(qsub);
+
+    if (!stat.waitForStarted()) {
+        dtkCritical() << "Unable to launch stat command";
+        return QString("error");
+    }
+
+    if (!stat.waitForFinished()) {
+        dtkCritical() << "Unable to completed stat command";
+        return QString("error");
+    }
+    if (stat.exitCode() > 0) {
+        QString error = stat.readAllStandardError();
+        dtkCritical() << "Error running qsub :" << error;
+        return QString("error");
+    } else {
+        QString jobid = stat.readAll();
+        qDebug() << DTK_PRETTY_FUNCTION << jobid;
+        return jobid.split(".").at(0);
+    }
+}
+
+QString dtkDistributedServerManagerTorque::deljob(QString jobid)
+{
+    QString qdel = "qdel " + jobid;
+    QProcess stat; stat.start(qdel);
+
+    if (!stat.waitForStarted()) {
+        dtkCritical() << "Unable to launch qdel command";
+        return QString("error");
+    }
+
+    if (!stat.waitForFinished()) {
+        dtkCritical() << "Unable to complete qdel command";
+        return QString("error");
+    }
+    if (stat.exitCode() > 0) {
+        QString error = stat.readAllStandardError();
+        dtkCritical() << "Error running qdel :" << error;
+        return QString("error");
+    } else {
+        QString msg = stat.readAll();
+        qDebug() << DTK_PRETTY_FUNCTION << msg;
+        return QString("OK");
+    }
+}
+
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+QDomDocument getXML(QString command)
+{
+    QDomDocument document; QString error;
+    QProcess stat; stat.start(command);
+
+    if (!stat.waitForStarted()) {
+        dtkCritical() << "Unable to launch stat command";
+        return document;
+    }
+
+    if (!stat.waitForFinished()) {
+        dtkCritical() << "Unable to completed stat command";
+        return document;
+    }
+
+    QString data = stat.readAll();
+
+    if(!document.setContent(data, false, &error))
+        dtkDebug() << "Error retrieving xml output out of torque "  << error;
+
+    stat.close();
+
+    return document;
 }

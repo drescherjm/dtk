@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. sept. 21 00:10:33 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 51
+ * Last-Updated: Thu Sep 22 10:10:34 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #define DTKDISTRIBUTEDSLAVE_H
 
 #include "dtkDistributedExport.h"
+#include "dtkDistributedSocket.h"
 
 #include <QtCore>
 #include <QtNetwork>
@@ -58,7 +59,8 @@ public slots:
 
 protected:
     virtual int exec(void) = 0;
-    qint64 sendRequest(QString method, QString path, int size = 0, QString type = "json", const QByteArray  &content = NULL,  const QHash<QString,QString>  & headers = QHash<QString,QString>() );
+
+    qint64 sendRequest(QString method, QString path, int size = 0, QString type = "json", const QByteArray& content = QByteArray(), const dtkDistributedSocket::dtkDistributedSocketHeaders& headers = dtkDistributedSocket::dtkDistributedSocketHeaders());
 
 protected slots:
     void onStarted(void);

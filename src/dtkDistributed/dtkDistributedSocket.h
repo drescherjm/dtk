@@ -4,8 +4,8 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. sept. 20 21:57:26 2011 (+0200)
- *           By: Nicolas Niclausse
+ * Last-Updated: Thu Sep 22 10:11:34 2011 (+0200)
+ *           By: Julien Wintz
  *     Update #:
  */
 
@@ -31,12 +31,15 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedSocket : public QTcpSocket
     Q_OBJECT
 
 public:
-    dtkDistributedSocket( QObject *parent = 0);
+    typedef QHash<QString, QString> dtkDistributedSocketHeaders;
+
+public:
+             dtkDistributedSocket( QObject *parent = 0);
     virtual ~dtkDistributedSocket(void);
 
-    qint64 sendRequest(QString method, QString path, int size = 0, QString type = "json", const QByteArray  &content = NULL,  const QHash<QString,QString>  & headers = QHash<QString,QString>() );
-    QVariantMap parseRequest(void);
+    qint64 sendRequest(QString method, QString path, int size = 0, QString type = "json", const QByteArray& content = QByteArray(),  const dtkDistributedSocketHeaders& headers = dtkDistributedSocketHeaders());
 
+    QVariantMap parseRequest(void);
 };
 
 #endif

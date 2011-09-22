@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb  6 14:37:24 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb  6 14:54:02 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 5
+ * Last-Updated: jeu. sept. 22 10:47:01 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -22,8 +22,9 @@
   Also referred to as layers, dtk modules decompose the source tree into the following structure
 
   <ul>
-  <li> \subpage dtkCore: the core module contains ...
-  <li> \subpage dtkScript: the script module contains ...
+  <li> \subpage dtkCore : the core module contains ...
+  <li> \subpage dtkScript : the script module contains ...
+  <li> \subpage dtkDistributed : the distributed module contains ...
   </ul>
 
  */

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun 21 15:15:05 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 21 15:15:37 2011 (+0200)
+ * Last-Updated: Thu Sep 22 10:36:45 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 2
+ *     Update #: 5
  */
 
 /* Commentary: 
@@ -21,16 +21,15 @@
 
 #include "dtkZipNewInfo.h"
 
-dtkZipNewInfo::dtkZipNewInfo(const QString& name):
-    name(name), dateTime(QDateTime::currentDateTime()), internalAttr(0), externalAttr(0)
+dtkZipNewInfo::dtkZipNewInfo(const QString& name): name(name), dateTime(QDateTime::currentDateTime()), internalAttr(0), externalAttr(0)
 {
 }
 
-dtkZipNewInfo::dtkZipNewInfo(const QString& name, const QString& file):
-    name(name), internalAttr(0), externalAttr(0)
+dtkZipNewInfo::dtkZipNewInfo(const QString& name, const QString& file): name(name), internalAttr(0), externalAttr(0)
 {
     QFileInfo info(file);
     QDateTime lm = info.lastModified();
+
     if (!info.exists())
         dateTime = QDateTime::currentDateTime();
     else
@@ -41,6 +40,7 @@ void dtkZipNewInfo::setFileDateTime(const QString& file)
 {
     QFileInfo info(file);
     QDateTime lm = info.lastModified();
+
     if (info.exists())
         dateTime = lm;
 }

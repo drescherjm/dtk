@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun 21 15:36:56 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 21 16:18:48 2011 (+0200)
+ * Last-Updated: Thu Sep 22 10:59:46 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 35
+ *     Update #: 66
  */
 
 /* Commentary: 
@@ -17,14 +17,17 @@
  * 
  */
 
-#include <QDir>
-#include <QFile>
-#include <QString>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QDir>
+#include <QtCore/QFile>
+#include <QtCore/QString>
 
-#include <dtkZip/dtkZip.h>
-#include <dtkZip/dtkZipFile.h>
+#include <dtkCore/dtkGlobal>
 
-bool testRead(QString path)
+#include <dtkZip/dtkZip>
+#include <dtkZip/dtkZipFile>
+
+bool testRead(QString path, QCoreApplication *application)
 {
     QFile zipFile(path);
 
@@ -49,6 +52,8 @@ bool testRead(QString path)
     QFile out;
     QString name;
     char c;
+
+    QStringList extracted;
 
     for(bool more=zip.goToFirstFile(); more; more=zip.goToNextFile()) {
 
@@ -77,14 +82,18 @@ bool testRead(QString path)
             return false;
         }
 
-        QString dirn = "out/" + name;
+        QString dirn = application->applicationDirPath() + "/out";
+
+        QDir().mkpath(dirn);
+
+        dirn += "/" + name;
 
         if (name.contains('/')) {
             dirn.chop(dirn.length() - dirn.lastIndexOf("/"));
             QDir().mkpath(dirn);
         }
 
-        out.setFileName("out/" + name);
+        out.setFileName(dirn);
         out.open(QIODevice::WriteOnly);
 
         char buf[4096];
@@ -121,6 +130,8 @@ bool testRead(QString path)
             qWarning("testRead(): file.close(): %d", file.getZipError());
             return false;
         }
+
+        extracted << dirn;
     }
 
     zip.close();
@@ -129,6 +140,10 @@ bool testRead(QString path)
         qWarning("testRead(): zip.close(): %d", zip.getZipError());
         return false;
     }
+
+    foreach(QString file, extracted)
+        qDebug() << DTK_COLOR_FG_LTGREEN << "Extracted:" << DTK_NO_COLOR << file;
+
     return true;
 }
 
@@ -263,7 +278,9 @@ int main(int argc, char **argv)
     if(argc < 2)
         return 1;
 
-    if(!testRead(QString(argv[1])))
+    QCoreApplication application(argc, argv);
+
+    if(!testRead(QString(argv[1]), &application))
         return 1;
 
     if(!testPos(QString(argv[1])))

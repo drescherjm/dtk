@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 21:58:48 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jul 21 09:13:43 2010 (+0200)
+ * Last-Updated: Wed Sep 21 12:53:26 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 44
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -60,6 +60,10 @@ public slots:
     virtual void readInformation(const QStringList& paths);
     
     virtual void setProgress(int value);
+
+protected:
+    const QString&     file(void);
+    const QStringList& files(void);
     
 private:
     dtkAbstractDataReaderPrivate *d;

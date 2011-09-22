@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Sep 14 13:20:15 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. sept. 15 14:23:05 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 156
+ * Last-Updated: Mon Sep 19 13:45:32 2011 (+0200)
+ *           By: jwintz
+ *     Update #: 303
  */
 
 /* Commentary: 
@@ -21,49 +21,84 @@
 #include <QtGui>
 #include <QtDebug>
 #include <QtCore>
+
 #include <dtkCore/dtkLog.h>
 #include <dtkCore/dtkGlobal.h>
 
 #include <dtkJson/dtkJson.h>
+
 #include <dtkDistributed/dtkDistributedServer.h>
 #include <dtkDistributed/dtkDistributedServerManager.h>
 
-
-
 int main(int argc, char **argv)
 {
-    QCoreApplication application(argc,argv) ;
+    QCoreApplication application(argc, argv) ;
+
+    // if(!dtkApplicationArgumentsContain(&application, "--torque")
+    // || !dtkApplicationArgumentsContain(&application, "--oar")) {
+    //     dtkDebug() << "Usage:" << argv[0] << " dtkDistributed://server:port [--oar || --torque]";
+    //     return DTK_SUCCEED;
+    // }
+
+// /////////////////////////////////////////////////////////////////
+// Instantiate a server
+// /////////////////////////////////////////////////////////////////
 
     dtkDistributedServer server(argc, argv);
-
     server.run();
 
-    QVariantMap job;
+// /////////////////////////////////////////////////////////////////
+// Create a dummy job description. To be serialized at the time of the
+// submission. For academic purposes only.
+/////////////////////////////////////////////////////////////////
+
+    QString scriptName = qApp->applicationDirPath() + "/dtkDistributedServerScript.sh";
+
     QVariantMap resources;
     resources.insert("cores", 2);
     resources.insert("nodes", 2);
+
+    QVariantMap job;
     job.insert("resources", resources);
-    QString scriptName=qApp->applicationDirPath()+"/dtkDistributedServerScript.sh";
     job.insert("script", scriptName);
     job.insert("walltime", "1:0:0");
-    QString data = dtkJson::serialize(job);
-    dtkDistributedServerManager *  manager = server.manager();
 
     QFile script(scriptName);
+
     if (!script.open(QFile::WriteOnly|QFile::Truncate)) {
         qDebug() << "unable to open script for writing";
     } else {
         QTextStream out(&script);
         out << "#!/bin/bash\n";
-        out << "mpirun " +qApp->applicationDirPath()+"/"+"dtkDistributedTutorial4Slave "+"10000"+ "  --server " + "dtk://nef-devel:9999";
+        out << "mpirun "
+            + qApp->applicationDirPath()
+            + "/dtkDistributedTutorial4Slave "
+            + "10000 "
+            + "--server "
+            + argv[1];
     }
+
     script.close();
 
-    QString jobid = manager->submit(data);
-    qDebug() << DTK_PRETTY_FUNCTION << "Job Id is: " << jobid;
+// /////////////////////////////////////////////////////////////////
+// Submit the job
+// /////////////////////////////////////////////////////////////////
 
+    dtkDistributedServerManager *manager = server.manager();
 
-    int status = application.exec();
-//    QDir::current()->remove(scriptName);
-    return status;
+    QString jobid = manager->submit(dtkJson::serialize(job));
+
+    server.waitForConnection(0);
+
+// /////////////////////////////////////////////////////////////////
+// Server waits for result on rank 0.
+// /////////////////////////////////////////////////////////////////
+
+    QByteArray res = server.waitForData(0);
+
+    qDebug() << "result is " << res;
+
+    script.remove();
+
+    return DTK_SUCCEED;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. sept. 15 10:50:01 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 59
+ * Last-Updated: Mon Sep 19 10:38:36 2011 (+0200)
+ *           By: jwintz
+ *     Update #: 73
  */
 
 /* Commentary: 
@@ -34,9 +34,12 @@ public:
      dtkDistributedServer(int argc, char **argv);
     ~dtkDistributedServer(void);
 
-    dtkDistributedServerManager * manager(void);
+    dtkDistributedServerManager *manager(void);
 
-    public slots:
+          void waitForConnection(int rank);
+    QByteArray waitForData(int rank);
+
+public slots:
     void run(void);
 
 protected:

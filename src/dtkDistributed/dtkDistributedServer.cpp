@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. sept. 15 11:06:31 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 197
+ * Last-Updated: Mon Sep 19 10:38:54 2011 (+0200)
+ *           By: jwintz
+ *     Update #: 213
  */
 
 /* Commentary: 
@@ -40,8 +40,19 @@ dtkDistributedServer::~dtkDistributedServer(void)
 
 }
 
-dtkDistributedServerManager * dtkDistributedServer::manager(void) {
+dtkDistributedServerManager *dtkDistributedServer::manager(void)
+{
     return d->daemon->manager();
+}
+
+void dtkDistributedServer::waitForConnection(int rank)
+{
+    d->daemon->waitForConnection(rank);
+}
+
+QByteArray dtkDistributedServer::waitForData(int rank)
+{
+    return d->daemon->waitForData(rank);
 }
 
 /*! launch server using service

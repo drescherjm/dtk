@@ -1,12 +1,12 @@
 /* tstMainWindow.h --- 
  * 
  * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Wed May 25 16:12:05 2011 (+0200)
+ * Copyright (C) 2008-2011 - Julien Wintz, Inria.
+ * Created: Tue Sep 20 11:30:29 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. août 10 17:34:47 2011 (+0200)
+ * Last-Updated: mer. sept. 21 14:31:26 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 11
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -41,6 +41,9 @@ protected slots:
 
     void onDisconnect(void);
     void onDisconnected(const QUrl& server);
+
+private slots:
+    void onDataPosted(const QByteArray& data);
 
 private:
     tstMainWindowPrivate *d;

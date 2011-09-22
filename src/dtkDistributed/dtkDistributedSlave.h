@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 14 16:01:42 2011 (+0200)
+ * Last-Updated: Thu Sep 22 10:10:34 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 45
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #define DTKDISTRIBUTEDSLAVE_H
 
 #include "dtkDistributedExport.h"
+#include "dtkDistributedSocket.h"
 
 #include <QtCore>
 #include <QtNetwork>
@@ -42,6 +43,9 @@ public:
     bool    isConnected(void);
     bool isDisconnected(void);
 
+    bool flush(void);
+    void close(void);
+
 signals:
     void    connected(const QUrl& server);
     void disconnected(const QUrl& server);
@@ -55,6 +59,8 @@ public slots:
 
 protected:
     virtual int exec(void) = 0;
+
+    qint64 sendRequest(QString method, QString path, int size = 0, QString type = "json", const QByteArray& content = QByteArray(), const dtkDistributedSocket::dtkDistributedSocketHeaders& headers = dtkDistributedSocket::dtkDistributedSocketHeaders());
 
 protected slots:
     void onStarted(void);

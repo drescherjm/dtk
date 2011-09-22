@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 22:03:03 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 15 15:11:44 2011 (+0200)
+ * Last-Updated: Wed Sep 21 12:52:26 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 38
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -28,6 +28,9 @@ public:
     bool enabled;
 
     dtkSmartPointer<dtkAbstractData> data;
+
+    QString file;
+    QStringList files;
 };
 
 dtkAbstractDataReader::dtkAbstractDataReader(void) : dtkAbstractObject(), d(new dtkAbstractDataReaderPrivate)
@@ -90,13 +93,15 @@ bool dtkAbstractDataReader::canRead(const QStringList& files)
 
 bool dtkAbstractDataReader::read(const QString& file)
 {
-    DTK_UNUSED(file);
+    d->file = file;
 
     return false;
 }
 
 bool dtkAbstractDataReader::read(const QStringList& files)
 {
+    d->files = files;
+
     //  Provide a sensible default for the case the list contains only one file.
 
     if (files.size()==1)
@@ -119,4 +124,14 @@ void dtkAbstractDataReader::readInformation(const QStringList& paths)
 void dtkAbstractDataReader::setProgress(int value)
 {
     emit progressed (value);
+}
+
+const QString& dtkAbstractDataReader::file(void)
+{
+    return d->file;
+}
+
+const QStringList& dtkAbstractDataReader::files(void)
+{
+    return d->files;
 }

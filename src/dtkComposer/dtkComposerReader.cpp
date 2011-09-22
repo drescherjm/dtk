@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 18 14:43:49 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 743
+ * Last-Updated: Tue Sep 20 15:21:13 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 746
  */
 
 /* Commentary: 
@@ -71,7 +71,7 @@ dtkComposerReader::~dtkComposerReader(void)
     d = NULL;
 }
 
-void dtkComposerReader::read(const QString& fileName)
+void dtkComposerReader::read(const QString& fileName, bool append)
 {
     // Setting dom document
 
@@ -89,9 +89,10 @@ void dtkComposerReader::read(const QString& fileName)
 
     file.close();
 
-    // Clear scene
+    // Clear scene if applicable
 
-    d->scene->clear();
+    if(!append)
+        d->scene->clear();
 
     d->node_map.clear();
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Sep 14 13:26:49 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. sept. 15 11:31:27 2011 (+0200)
+ * Last-Updated: mer. sept. 21 00:08:37 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 54
+ *     Update #: 162
  */
 
 /* Commentary: 
@@ -54,6 +54,8 @@ void dtkDistributedTutorial4Slave::setCount(int count)
 
 int dtkDistributedTutorial4Slave::exec(void)
 {
+
+
 #if defined(DTK_HAVE_MPI)
     dtkDistributedCommunicator *communicator = new dtkDistributedCommunicatorMpi;
 #else
@@ -63,6 +65,12 @@ int dtkDistributedTutorial4Slave::exec(void)
 
     int rank = communicator->rank();
     int size = communicator->size();
+    static QString jobid ;
+
+
+    if (this->isConnected()) {
+        this->sendRequest("PUT","/rank/"+QString::number(rank));
+    }
 
     dtkAbstractData *m_array = dtkAbstractDataFactory::instance()->create("dtkDataArray");
     dtkAbstractData *s_array = dtkAbstractDataFactory::instance()->create("dtkDataArray");
@@ -70,9 +78,9 @@ int dtkDistributedTutorial4Slave::exec(void)
     dtkAbstractProcess *summer = dtkAbstractProcessFactory::instance()->create("dtkProcessArray");
 
     if(size > d->count/2) {
-        
+
         qDebug() << "Too many slaves. Some would not perform any computation. For count" << d->count << "use at most" << d->count/2 << "processes";
-        
+
         goto finalize;
     }
 
@@ -86,8 +94,8 @@ int dtkDistributedTutorial4Slave::exec(void)
         return 0;
     }
 
-    if(!rank) {
 
+    if(!rank) {
         int average = ceil(double(d->count)/double(size));
 
         m_array->setMetaData("count", QString::number(d->count));
@@ -108,11 +116,11 @@ int dtkDistributedTutorial4Slave::exec(void)
 
         int         sum = 0;
         int partial_sum = 0;
-        
+
         summer->setInput(m_array);
         summer->setMetaData("until", QString::number(average));
         sum += summer->run();
-        
+
 #if defined(DTK_HAVE_MPI)
         qDebug() << "Rank" << rank << "(" << ((dtkDistributedCommunicatorMpi *)communicator)->name() << ")" << "has partial sum" << sum;
 #else
@@ -124,7 +132,7 @@ int dtkDistributedTutorial4Slave::exec(void)
             communicator->receive(&partial_sum, 1, dtkDistributedCommunicator::dtkDistributedCommunicatorLong, slave, dtkDistributedCommunicator::dtkDistributedCommunicatorReceive);
 
             qDebug() << "Rank" << slave << "has partial sum" << partial_sum;
-            
+
             sum += partial_sum;
         }
 
@@ -134,9 +142,13 @@ int dtkDistributedTutorial4Slave::exec(void)
 // Slave of rank 0 sends result to server
 // /////////////////////////////////////////////////////////////////
 
-        if (this->isConnected())
-            this->write(QByteArray::number(sum));
-        else
+        if (this->isConnected()) {
+            QByteArray data = QByteArray::number(sum);
+            jobid = QString(getenv("PBS_JOBID")).split(".").first();
+            QString path="/data/"+jobid+"/-1";
+            this->sendRequest("POST",path,data.size(),"text", data);
+
+        } else
             qDebug() << "unable to send result to server: not connected ";
 
 // /////////////////////////////////////////////////////////////////
@@ -155,7 +167,7 @@ int dtkDistributedTutorial4Slave::exec(void)
         long partial_sum = 0;
 
         summer->setInput(s_array);
-        
+
         partial_sum = summer->run();
 
         communicator->send(&partial_sum, 1, dtkDistributedCommunicator::dtkDistributedCommunicatorLong, 0, dtkDistributedCommunicator::dtkDistributedCommunicatorReceive);
@@ -166,6 +178,14 @@ finalize:
     delete s_array;
 
     delete summer;
+
+    if(!rank) {
+        if (this->isConnected()) {
+            this->sendRequest("ENDED","/job/"+jobid);
+            this->close();
+        } else
+            qDebug() << "unable to send result to server: not connected ";
+    }
 
     communicator->uninitialize();
 

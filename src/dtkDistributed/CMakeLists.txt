@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Sep  8 14:42:38 2011 (+0200)
-##           By: Julien Wintz
-##     Update #: 192
+## Last-Updated: mar. sept. 20 13:01:38 2011 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 196
 ######################################################################
 ## 
 ### Commentary: 
@@ -41,7 +41,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedServerManager.h
   dtkDistributedServerManagerOar.h
   dtkDistributedServerManagerTorque.h
-  dtkDistributedService.h)
+  dtkDistributedService.h
+  dtkDistributedSocket.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkDistributedCommunicator.h
@@ -59,7 +60,8 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkDistributedServerManager.h
   dtkDistributedServerManagerOar.h
   dtkDistributedServerManagerTorque.h
-  dtkDistributedService_p.h)
+  dtkDistributedService_p.h
+  dtkDistributedSocket.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkDistributedCommunicator.cpp
@@ -79,7 +81,8 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedServerManager.cpp
   dtkDistributedServerManagerOar.cpp
   dtkDistributedServerManagerTorque.cpp
-  dtkDistributedService.cpp)
+  dtkDistributedService.cpp
+  dtkDistributedSocket.cpp)
 
 ## #################################################################
 ## Platform specific sources

@@ -1,12 +1,12 @@
 ### CMakeLists.txt --- 
 ## 
 ## Author: Julien Wintz
-## Copyright (C) 2008 - Julien Wintz, Inria.
-## Created: Wed May 25 16:01:47 2011 (+0200)
+## Copyright (C) 2008-2011 - Julien Wintz, Inria.
+## Created: Tue Sep 20 11:20:07 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: mer. sept. 14 13:13:29 2011 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 9
+## Last-Updated: Tue Sep 20 16:15:27 2011 (+0200)
+##           By: Julien Wintz
+##     Update #: 25
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,16 +17,20 @@
 ## 
 ######################################################################
 
-project(dtkDistributedSlave)
+project(dtkDistributedTutorial5)
 
 ## #################################################################
 ## Sources
 ## #################################################################
 
-set(${PROJECT_NAME}_HEADERS_MOC)
+set(${PROJECT_NAME}_HEADERS
+  tstMainWindow.h)
+
+set(${PROJECT_NAME}_HEADERS_MOC
+  tstMainWindow.h)
 
 set(${PROJECT_NAME}_SOURCES
-  main.cpp)
+  tstMainWindow.cpp)
 
 ## #################################################################
 ## Build rules
@@ -34,12 +38,20 @@ set(${PROJECT_NAME}_SOURCES
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
-add_executable(${PROJECT_NAME} MACOSX_BUNDLE
+add_executable(dtkDistributedTutorial5Controller
+  ${${PROJECT_NAME}_HEADERS}
+  ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES})
+  controller_main.cpp)
 
-target_link_libraries(${PROJECT_NAME}
-  ${QT_LIBRARIES}
+add_executable(dtkDistributedTutorial5Server
+  server_main.cpp)
+
+target_link_libraries(dtkDistributedTutorial5Controller
   dtkCore
   dtkGui
+  dtkDistributed)
+
+target_link_libraries(dtkDistributedTutorial5Server
+  dtkCore
   dtkDistributed)

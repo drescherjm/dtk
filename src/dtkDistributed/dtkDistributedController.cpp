@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. sept. 21 12:37:14 2011 (+0200)
+ * Last-Updated: jeu. sept. 22 09:51:16 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 957
+ *     Update #: 971
  */
 
 /* Commentary: 
@@ -270,8 +270,10 @@ void dtkDistributedController::read(void)
 
 
     QVariantMap request = socket->parseRequest();
+
     QString method= request["method"].toString();
     QString path= request["path"].toString();
+
 
     if( method == "OK" && path   == "/status") {
         QByteArray buffer = request["content"].toByteArray();
@@ -288,11 +290,13 @@ void dtkDistributedController::read(void)
     } else if( method == "POST" && path.startsWith("/data")) {
         QByteArray result = request["content"].toByteArray();
         qDebug() << "Result: " << result;
+        emit dataPosted(result);
         emit updated();
     } else {
         qDebug() << "unknown response from server: " << method << " " <<  path;
     }
-
+    if (socket->bytesAvailable() > 0)
+        this->read();
 }
 
 void dtkDistributedController::error(QAbstractSocket::SocketError error)

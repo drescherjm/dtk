@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. sept. 21 12:23:17 2011 (+0200)
+ * Last-Updated: jeu. sept. 22 09:28:11 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 498
+ *     Update #: 513
  */
 
 /* Commentary: 
@@ -153,7 +153,7 @@ void dtkDistributedServerDaemon::read(void)
 #endif
         //TODO: check if exists
         dtkDistributedSocket *controller =  d->sockets[-1];
-        controller->sendRequest("ENDED",path);
+        controller->sendRequest(method,path);
 
     } else if( method == "PUT" && path.startsWith("/rank")) {
 
@@ -181,10 +181,11 @@ void dtkDistributedServerDaemon::read(void)
         QHash<QString,QString> headers;
         headers["x-forwarded-for"] = QString::number(fromrank);
         dest->sendRequest(method,"/data/"+jobid, size, type, request["content"].toByteArray(),headers);
-
     } else {
         qDebug() << DTK_PRETTY_FUNCTION << "WARNING: Unknown data";
     }
+    if (socket->bytesAvailable() > 0)
+        this->read();
 }
 
 void dtkDistributedServerDaemon::discard(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: mer. sept. 21 12:36:23 2011 (+0200)
+ * Last-Updated: jeu. sept. 22 09:49:35 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 395
+ *     Update #: 472
  */
 
 /* Commentary:
@@ -65,12 +65,10 @@ qint64 dtkDistributedSocket::sendRequest(QString method, QString path, int size,
  */
 QVariantMap dtkDistributedSocket::parseRequest(void)
 {
-
     QVariantMap request;
     QStringList tokens = QString(this->readLine()).split(" ");
     request.insert("method", tokens[0]);
     request.insert("path", tokens[1].trimmed());
-
 
     // read content-size
     tokens = QString(this->readLine()).split(QRegExp(":\\s*"));
@@ -103,12 +101,14 @@ QVariantMap dtkDistributedSocket::parseRequest(void)
 
         // read content
         QByteArray buffer;
-        int toread = size;
+        buffer.append(this->read(size));
         while (buffer.size() < size ) {
-            buffer.append(this->read(size));
-            toread = size - buffer.size();
+            if (this->waitForReadyRead()) {
+                buffer.append(this->read(size-buffer.size()));
+            } else
+                break;
         }
-        request.insert("content", buffer);
+        request["content"] = buffer;
     } else
         // end of request == empty line
         this->readLine();

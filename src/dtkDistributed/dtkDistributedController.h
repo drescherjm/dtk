@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 20 11:28:57 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 45
+ * Last-Updated: mer. sept. 21 14:28:28 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -45,6 +45,8 @@ signals:
 
     void updated(void);
     void updated(const QUrl& server);
+
+    void dataPosted(const QByteArray& data);
 
 public slots:
     void    connect(const QUrl& server);

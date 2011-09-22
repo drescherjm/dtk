@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Sep 20 11:31:26 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. sept. 21 12:48:10 2011 (+0200)
+ * Last-Updated: mer. sept. 21 14:36:13 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 88
+ *     Update #: 99
  */
 
 /* Commentary: 
@@ -118,6 +118,8 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
 
     connect(d->host_button, SIGNAL(clicked()), this, SLOT(onConnect()));
     connect(d->submit_button, SIGNAL(clicked()), this, SLOT(onSubmit()));
+
+    connect(d->controller, SIGNAL(dataPosted(const QByteArray&)), this, SLOT(onDataPosted(const QByteArray&)));
 }
 
 tstMainWindow::~tstMainWindow(void)
@@ -166,7 +168,15 @@ void tstMainWindow::onDisconnected(const QUrl& server)
     Q_UNUSED(server);
 
     d->host_button->setText("Connect");
-    
+
     QObject::disconnect(d->host_button, SIGNAL(clicked()), this, SLOT(onDisconnect()));
        QObject::connect(d->host_button, SIGNAL(clicked()), this, SLOT(onConnect()));
+}
+
+void tstMainWindow::onDataPosted(const QByteArray& data)
+{
+    bool ok = false;
+    int result = data.toInt(&ok);
+    if (ok)
+        QMessageBox::information(this,"dtkDistributedTutorial5 ",QString("result is: %1").arg(result));
 }

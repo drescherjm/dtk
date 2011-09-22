@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. sept. 22 09:28:11 2011 (+0200)
+ * Last-Updated: jeu. sept. 22 10:25:14 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 513
+ *     Update #: 519
  */
 
 /* Commentary: 
@@ -174,8 +174,7 @@ void dtkDistributedServerDaemon::read(void)
         int torank = path.split("/").at(3).toInt();
         int size = request["size"].toInt();
         QString type = request["type"].toString();
-        int fromrank = 0;
-        //TODO: what is the rank of this socket ?
+        int fromrank = d->sockets.key(socket);
 
         dtkDistributedSocket *dest =  d->sockets[torank];
         QHash<QString,QString> headers;

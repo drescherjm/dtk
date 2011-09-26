@@ -1,5 +1,5 @@
-/* main.cpp --- 
- * 
+/* main.cpp ---
+ *
  * Author: Thibaud Kloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Sep 26 09:28:44 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 135
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include <QtCore/QObject>
@@ -33,7 +33,7 @@ class xyzData : public dtkAbstractData
 public:
      xyzData(void) : dtkAbstractData() {;}
     ~xyzData(void) {;}
-        
+
 public:
     void setData(void *data) {;}
 };
@@ -146,7 +146,7 @@ int main(int argc, char **argv)
     foreach(xyzData *xyz, xyz_vector) {
         qDebug() << xyz->name();
     }
-    qDebug() << " ";     
+    qDebug() << " ";
 
     return 0;
 }

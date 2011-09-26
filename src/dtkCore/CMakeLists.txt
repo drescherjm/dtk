@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Sep  8 14:37:08 2011 (+0200)
-##           By: Julien Wintz
-##     Update #: 214
+## Last-Updated: Fri Sep 23 16:53:44 2011 (+0200)
+##           By: Thibaud Kloczko
+##     Update #: 220
 ######################################################################
 ## 
 ### Commentary: 
@@ -28,6 +28,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractDataFactory.h
   dtkAbstractDataReader.h
   dtkAbstractDataWriter.h
+  dtkAbstractDataComposite.h
+  dtkAbstractDataComposite.tpp
   dtkAbstractDataConverter.h
   dtkAbstractFactory.h
   dtkAbstractObject.h
@@ -56,6 +58,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractDataFactory.h
   dtkAbstractDataReader.h
   dtkAbstractDataWriter.h
+  dtkAbstractDataComposite.h
   dtkAbstractDataConverter.h
   dtkAbstractFactory.h
   dtkAbstractObject.h
@@ -75,6 +78,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkAbstractData.cpp
   dtkAbstractDataReader.cpp
   dtkAbstractDataWriter.cpp
+  dtkAbstractDataComposite.cpp
   dtkAbstractDataConverter.cpp
   dtkAbstractFactory.cpp
   dtkAbstractObject.cpp

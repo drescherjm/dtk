@@ -1,5 +1,5 @@
-/* dtkAboutPlugin.h --- 
- * 
+/* dtkAboutPlugin.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Sep  5 13:21:30 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 14
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABOUTPLUGIN_H
@@ -34,6 +34,8 @@ class DTKGUI_EXPORT dtkAboutPlugin : public QWidget
 public:
      dtkAboutPlugin(dtkPlugin *plugin, QWidget *parent = 0);
      dtkAboutPlugin(const QString& plugin, QWidget *parent = 0);
+     void setOpenExternalLinks(bool open);
+     bool openExternalLinks();
     ~dtkAboutPlugin(void);
 
 protected:

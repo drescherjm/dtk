@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Mon Jun 20 18:01:59 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Sep 23 10:43:06 2011 (+0200)
+## Last-Updated: Sun Sep 25 01:05:32 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 49
+##     Update #: 54
 ######################################################################
 ## 
 ### Commentary: 
@@ -21,12 +21,17 @@ add_subdirectory(dtkCompareDouble)
 add_subdirectory(dtkCompareFloat)
 add_subdirectory(dtkSingleton)
 add_subdirectory(dtkSmartPointer)
+add_subdirectory(dtkZipTest)
 
 enable_testing()
 
 add_test(dtkCompareDoubleTest ${CMAKE_BINARY_DIR}/bin/dtkCompareDouble)
 add_test(dtkCompareFloatTest  ${CMAKE_BINARY_DIR}/bin/dtkCompareFloat)
 add_test(dtkSmartPointerTest  ${CMAKE_BINARY_DIR}/bin/dtkSmartPointer)
+
+if(ZLIB_FOUND)
+add_test(dtkZipTest  ${CMAKE_BINARY_DIR}/bin/dtkZipTest ${CMAKE_BINARY_DIR}/tests/dtkZip)
+endif(ZLIB_FOUND)
 
 if(MSVC)
     set(PATH_STRING_FOR_TESTS "${QT_LIBRARY_DIR}")

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Sep 14 13:20:15 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 20 16:16:40 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 311
+ * Last-Updated: mer. sept. 21 14:21:57 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 319
  */
 
 /* Commentary: 
@@ -17,11 +17,14 @@
  * 
  */
 
+#include <QtCore>
 #include <dtkDistributed/dtkDistributedServer.h>
 
 int main(int argc, char **argv)
 {
+    QCoreApplication application(argc, argv) ;
     dtkDistributedServer server(argc, argv);
 
-    return server.exec();
+    server.run();
+    return application.exec();
 }

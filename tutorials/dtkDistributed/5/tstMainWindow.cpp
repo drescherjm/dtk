@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Sep 20 11:31:26 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 20 15:50:16 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 66
+ * Last-Updated: mer. sept. 21 14:36:13 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 99
  */
 
 /* Commentary: 
@@ -118,6 +118,8 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
 
     connect(d->host_button, SIGNAL(clicked()), this, SLOT(onConnect()));
     connect(d->submit_button, SIGNAL(clicked()), this, SLOT(onSubmit()));
+
+    connect(d->controller, SIGNAL(dataPosted(const QByteArray&)), this, SLOT(onDataPosted(const QByteArray&)));
 }
 
 tstMainWindow::~tstMainWindow(void)
@@ -135,13 +137,15 @@ void tstMainWindow::onSubmit(void)
 {
     QVariantMap job;
     QVariantMap resources;
-    resources.insert("cores", 2);
-    resources.insert("nodes", 2);
+    resources.insert("cores", d->submit_cores->text());
+    resources.insert("nodes", d->submit_nodes->text());
     job.insert("resources", resources);
-    job.insert("script", "/home/nniclaus/sleep.sh");
+    job.insert("walltime", "00:15:00");
+    job.insert("application", "dtkDistributedTutorial4Slave "
+               + d->submit_value->text()
+               + " --server " + d->host_address->text());
     QByteArray data = dtkJson::serialize(job);
-    QByteArray request = QString("PUT /job\n"+ QString::number(data.size()) + "\n").toAscii() + data;
-    d->controller->submit(QUrl(d->host_address->text()),request);
+    d->controller->submit(QUrl(d->host_address->text()),data);
 }
 
 void tstMainWindow::onConnected(const QUrl& server)
@@ -164,7 +168,15 @@ void tstMainWindow::onDisconnected(const QUrl& server)
     Q_UNUSED(server);
 
     d->host_button->setText("Connect");
-    
+
     QObject::disconnect(d->host_button, SIGNAL(clicked()), this, SLOT(onDisconnect()));
        QObject::connect(d->host_button, SIGNAL(clicked()), this, SLOT(onConnect()));
+}
+
+void tstMainWindow::onDataPosted(const QByteArray& data)
+{
+    bool ok = false;
+    int result = data.toInt(&ok);
+    if (ok)
+        QMessageBox::information(this,"dtkDistributedTutorial5 ",QString("result is: %1").arg(result));
 }

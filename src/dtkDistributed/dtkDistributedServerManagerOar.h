@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:08:25 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. août 11 10:25:35 2011 (+0200)
+ * Last-Updated: mar. sept. 20 15:08:12 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 15
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -30,7 +30,7 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedServerManagerOar : public dtkDistribut
     Q_OBJECT
 
 public slots:
-    QString status(void);
+    QByteArray status(void);
     QString submit(QString input);
     QString deljob(QString input);
 };

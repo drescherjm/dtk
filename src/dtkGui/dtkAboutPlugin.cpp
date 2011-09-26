@@ -1,5 +1,5 @@
-/* dtkAboutPlugin.cpp --- 
- * 
+/* dtkAboutPlugin.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Sep  5 13:23:20 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 56
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkAboutPlugin.h"
@@ -25,6 +25,7 @@
 class dtkAboutPluginPrivate
 {
 public:
+    QTextBrowser* description;
 };
 
 dtkAboutPlugin::dtkAboutPlugin(dtkPlugin *plugin, QWidget *parent) : QWidget(parent), d(new dtkAboutPluginPrivate)
@@ -49,8 +50,9 @@ void dtkAboutPlugin::setup(dtkPlugin *plugin)
     if(!plugin)
         return;
 
-    QTextBrowser *description = new QTextBrowser(this);
-    description->setHtml(plugin->description());
+    d->description = new QTextBrowser(this);
+    d->description->setOpenExternalLinks(true);
+    d->description->setHtml(plugin->description());
 
     QListWidget *authors = new QListWidget(this);
     foreach(const QString& author, plugin->authors())
@@ -67,9 +69,19 @@ void dtkAboutPlugin::setup(dtkPlugin *plugin)
     QFormLayout *layout = new QFormLayout(this);
     layout->addRow("Name", new QLabel(plugin->name(), this));
     layout->addRow("Version", new QLabel(plugin->version(), this));
-    layout->addRow("Description", description);
+    layout->addRow("Description", d->description);
     layout->addRow("Authors", authors);
     layout->addRow("Contact", new QLabel(plugin->contact(), this));
     layout->addRow("Contributors", contributors);
     layout->addRow("Dependencies", dependencies);
+}
+
+void dtkAboutPlugin::setOpenExternalLinks(bool open)
+{
+        d->description->setOpenExternalLinks(open);
+}
+
+bool dtkAboutPlugin::openExternalLinks()
+{
+    return d->description->openExternalLinks();
 }

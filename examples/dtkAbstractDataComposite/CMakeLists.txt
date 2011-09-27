@@ -4,9 +4,9 @@
 ## Copyright (C) 2011 - Thibaud Kloczko, Inria.
 ## Created: Mon Sep 26 09:27:41 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Sep 26 15:17:39 2011 (+0200)
+## Last-Updated: Tue Sep 27 09:44:50 2011 (+0200)
 ##           By: Thibaud Kloczko
-##     Update #: 20
+##     Update #: 22
 ######################################################################
 ## 
 ### Commentary: 
@@ -28,10 +28,11 @@ set(${PROJECT_NAME}_SOURCE_MOC main.moc)
 qt4_generate_moc(main.cpp ${CMAKE_CURRENT_BINARY_DIR}/main.moc)
 
 add_executable(${PROJECT_NAME} MACOSX_BUNDLE
-  ${${PROJECT_NAME}_SOURCES_MOC}
-  main.cpp)
+  main.cpp
+  ${${PROJECT_NAME}_SOURCE_MOC})
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
-  dtkCore)
+  dtkCore
+  dtkGui)
   

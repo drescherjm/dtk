@@ -26,7 +26,6 @@ project(dtkAbstractDataComposite)
 set(${PROJECT_NAME}_SOURCE_MOC ${CMAKE_CURRENT_BINARY_DIR}/main.moc)
 
 qt4_generate_moc(main.cpp ${CMAKE_CURRENT_BINARY_DIR}/main.moc)
-SET_SOURCE_FILES_PROPERTIES(main.cpp PROPERTIES OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/main.moc)
 
 add_executable(${PROJECT_NAME} MACOSX_BUNDLE
   ${${PROJECT_NAME}_SOURCES_MOC}

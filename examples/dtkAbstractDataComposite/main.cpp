@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Sep 26 09:28:44 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 26 15:23:00 2011 (+0200)
+ * Last-Updated: Tue Sep 27 10:21:50 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 135
+ *     Update #: 150
  */
 
 /* Commentary: 
@@ -21,6 +21,10 @@
 
 #include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkAbstractDataComposite.h>
+#include <dtkCore/dtkGlobal.h>
+#include <dtkCore/dtkLog.h>
+
+#include <dtkGui/dtkAboutBox.h>
 
 // /////////////////////////////////////////////////////////////////
 // Dummy concrete dtkAbstractData
@@ -40,9 +44,8 @@ public:
 
 // /////////////////////////////////////////////////////////////////
 
-int main(int argc, char **argv)
+void run(void)
 {
-
     // /////////////////////////////////////////////////////////////////
     // Handling a composite created from a vector of xyzData
     // /////////////////////////////////////////////////////////////////
@@ -146,9 +149,30 @@ int main(int argc, char **argv)
     foreach(xyzData *xyz, xyz_vector) {
         qDebug() << xyz->name();
     }
-    qDebug() << " ";     
+}
 
-    return 0;
+// /////////////////////////////////////////////////////////////////
+// main
+// /////////////////////////////////////////////////////////////////
+
+int main(int argc, char **argv)
+{
+    QApplication application(argc, argv);
+
+    dtkAboutBox *about = new dtkAboutBox();
+    about->setText("dtkAbstractDataComposite Example");
+    about->setInformativeText(
+        "This example aims at showing how creating and handling composite "
+        "of dtkAbstractData or derivative classes. A dtkAbstractDataComposite "
+        "enables to carry vector or list of datas as a dtkAbstractData. ");
+    about->setDefaultButton(QMessageBox::Ok);
+    about->open();
+
+    int status = application.exec();
+
+    run();
+
+    return status;
 }
 
 #include "main.moc"

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Sep  5 13:23:20 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep  5 14:10:46 2011 (+0200)
+ * Last-Updated: Wed Sep 28 12:39:04 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 56
+ *     Update #: 59
  */
 
 /* Commentary:
@@ -25,7 +25,7 @@
 class dtkAboutPluginPrivate
 {
 public:
-    QTextBrowser* description;
+    QTextBrowser *description;
 };
 
 dtkAboutPlugin::dtkAboutPlugin(dtkPlugin *plugin, QWidget *parent) : QWidget(parent), d(new dtkAboutPluginPrivate)
@@ -76,12 +76,12 @@ void dtkAboutPlugin::setup(dtkPlugin *plugin)
     layout->addRow("Dependencies", dependencies);
 }
 
-void dtkAboutPlugin::setOpenExternalLinks(bool open)
-{
-        d->description->setOpenExternalLinks(open);
-}
-
-bool dtkAboutPlugin::openExternalLinks()
+bool dtkAboutPlugin::openExternalLinks(void)
 {
     return d->description->openExternalLinks();
+}
+
+void dtkAboutPlugin::setOpenExternalLinks(bool open)
+{
+    d->description->setOpenExternalLinks(open);
 }

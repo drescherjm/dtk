@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Sep  5 13:21:30 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep  5 13:27:20 2011 (+0200)
+ * Last-Updated: Wed Sep 28 12:38:24 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 14
+ *     Update #: 20
  */
 
 /* Commentary:
@@ -34,9 +34,11 @@ class DTKGUI_EXPORT dtkAboutPlugin : public QWidget
 public:
      dtkAboutPlugin(dtkPlugin *plugin, QWidget *parent = 0);
      dtkAboutPlugin(const QString& plugin, QWidget *parent = 0);
-     void setOpenExternalLinks(bool open);
-     bool openExternalLinks();
     ~dtkAboutPlugin(void);
+
+     bool openExternalLinks(void);
+
+     void setOpenExternalLinks(bool open);
 
 protected:
     void setup(dtkPlugin *plugin);

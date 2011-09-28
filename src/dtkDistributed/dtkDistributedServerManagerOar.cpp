@@ -1,5 +1,5 @@
-/* dtkDistributedServerManagerOar.cpp --- 
- * 
+/* dtkDistributedServerManagerOar.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 374
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedServerManager_p.h"

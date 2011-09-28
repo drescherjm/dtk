@@ -2,9 +2,9 @@
 ## 
 ## Author: Julien Wintz
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
-## Created: Tue Jun 21 15:40:51 2011 (+0200)
+## Created: Fri Sep 23 13:19:32 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Jun 21 15:41:09 2011 (+0200)
+## Last-Updated: Fri Sep 23 13:19:56 2011 (+0200)
 ##           By: Julien Wintz
 ##     Update #: 2
 ######################################################################
@@ -17,7 +17,7 @@
 ## 
 ######################################################################
 
-project(dtkZipChecksum)
+project(dtkZipTest)
 
 ## #################################################################
 ## Build rules

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Mar 18 14:42:33 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep  5 11:04:53 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 46
+ * Last-Updated: Fri Sep 30 10:21:08 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -22,6 +22,8 @@
 
 #include <QtGui/QToolButton>
 
+#include "dtkGuiExport.h"
+
 class dtkColorButtonPrivate;
 class dtkColorGrid;
 class dtkColorPopup;
@@ -36,7 +38,7 @@ typedef QList<QColor> dtkColorList;
 // 
 // /////////////////////////////////////////////////////////////////
 
-class dtkColorButton : public QToolButton
+class DTKGUI_EXPORT dtkColorButton : public QToolButton
 {
     Q_OBJECT
 

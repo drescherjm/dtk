@@ -1,6 +1,3 @@
-#include "../src/dtkZip/dtkZip.h"
 #include "../src/dtkZip/dtkZipExport.h"
-#include "../src/dtkZip/dtkZipFile.h"
-#include "../src/dtkZip/dtkZipFileInfo.h"
-#include "../src/dtkZip/dtkZipNewInfo.h"
-#include "../src/dtkZip/dtkZipUtils.h"
+#include "../src/dtkZip/dtkZipReader.h"
+#include "../src/dtkZip/dtkZipWriter.h"

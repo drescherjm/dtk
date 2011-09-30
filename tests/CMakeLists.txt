@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Mon Jun 20 18:01:59 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Sun Sep 25 01:05:32 2011 (+0200)
+## Last-Updated: Fri Sep 30 00:23:57 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 54
+##     Update #: 56
 ######################################################################
 ## 
 ### Commentary: 
@@ -30,7 +30,7 @@ add_test(dtkCompareFloatTest  ${CMAKE_BINARY_DIR}/bin/dtkCompareFloat)
 add_test(dtkSmartPointerTest  ${CMAKE_BINARY_DIR}/bin/dtkSmartPointer)
 
 if(ZLIB_FOUND)
-add_test(dtkZipTest  ${CMAKE_BINARY_DIR}/bin/dtkZipTest ${CMAKE_BINARY_DIR}/tests/dtkZip)
+add_test(dtkZipTest  ${CMAKE_BINARY_DIR}/bin/dtkZipTest ${CMAKE_SOURCE_DIR}/tests/dtkZipTest)
 endif(ZLIB_FOUND)
 
 if(MSVC)

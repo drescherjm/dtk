@@ -1,20 +1,20 @@
-/* dtkDistributedServerManagerOar.cpp --- 
- * 
+/* dtkDistributedServerManagerOar.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 19 11:22:23 2011 (+0200)
- *           By: jwintz
- *     Update #: 366
+ * Last-Updated: mar. sept. 20 15:35:21 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 374
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedServerManager_p.h"
@@ -24,7 +24,7 @@
 #include <dtkCore/dtkLog.h>
 #include <dtkJson/dtkJson.h>
 
-QString dtkDistributedServerManagerOar::submit(QString input)
+QString  dtkDistributedServerManagerOar::submit(QString input)
 {
     QString oarsub = "oarsub ";
 
@@ -104,17 +104,17 @@ QString dtkDistributedServerManagerOar::deljob(QString jobid)
 
     if (!stat.waitForStarted()) {
         dtkCritical() << "Unable to launch oardel command";
-        return QString("error");
+        return QString("ERROR");
     }
 
     if (!stat.waitForFinished()) {
         dtkCritical() << "Unable to complete oardel command";
-        return QString("error");
+        return QString("ERROR");
     }
     if (stat.exitCode() > 0) {
         QString error = stat.readAllStandardError();
         dtkCritical() << "Error running oardel :" << error;
-        return QString("error");
+        return QString("ERROR");
     } else {
         QString msg = stat.readAll();
         qDebug() << DTK_PRETTY_FUNCTION << msg;
@@ -122,7 +122,7 @@ QString dtkDistributedServerManagerOar::deljob(QString jobid)
     }
 }
 
-QString dtkDistributedServerManagerOar::status(void)
+QByteArray dtkDistributedServerManagerOar::status(void)
 {
     QProcess stat;
     bool success;
@@ -135,12 +135,12 @@ QString dtkDistributedServerManagerOar::status(void)
 
     if (!stat.waitForStarted()) {
         dtkCritical() << "Unable to launch oarstat command";
-        return QString();
+        return QByteArray();
     }
 
     if (!stat.waitForFinished()) {
         dtkCritical() << "Unable to completed oarstat command";
-        return QString();
+        return QByteArray();
     }
 
     data = stat.readAll();
@@ -216,12 +216,12 @@ QString dtkDistributedServerManagerOar::status(void)
 
     if (!stat.waitForStarted()) {
         dtkCritical() << "Unable to launch oarnodes command";
-        return QString();
+        return QByteArray();
     }
 
     if (!stat.waitForFinished()) {
         dtkCritical() << "Unable to completed oarnodes command";
-        return QString();
+        return QByteArray();
     }
 
     data = stat.readAll();

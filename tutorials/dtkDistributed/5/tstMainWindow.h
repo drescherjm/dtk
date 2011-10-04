@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Sep 20 11:30:29 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 20 11:30:54 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 3
+ * Last-Updated: mer. sept. 21 14:31:26 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -41,6 +41,9 @@ protected slots:
 
     void onDisconnect(void);
     void onDisconnected(const QUrl& server);
+
+private slots:
+    void onDataPosted(const QByteArray& data);
 
 private:
     tstMainWindowPrivate *d;

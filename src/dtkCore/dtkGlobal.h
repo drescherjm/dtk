@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 16 09:54:33 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep  1 17:34:13 2011 (+0200)
+ * Last-Updated: Wed Sep 28 12:33:44 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 124
+ *     Update #: 127
  */
 
 /* Commentary: 
@@ -24,7 +24,8 @@
 #include <QtGui>
 #include <QtDebug>
 
-#include "dtkConfig.h"
+#include <dtkConfig.h>
+
 #include "dtkCoreExport.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -143,9 +144,14 @@ inline bool dtkApplicationArgumentsContain(QCoreApplication *application, QStrin
 
 inline QString dtkApplicationArgumentsValue(int argc, char **argv, QString key)
 {
-    for(int i = 1; i < argc; i++)
-        if(QString(argv[i]) == key)
-            return QString(argv[i+1]);
+    for(int i = 1; i < argc; i++) {
+        if(QString(argv[i]) == key) {
+            if(i+1 < argc)
+                return QString(argv[i+1]);
+            else
+                return QString();
+        }
+    }
 
     return QString();
 }

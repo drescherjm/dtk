@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 23 14:54:01 2011 (+0200)
+ * Last-Updated: Fri Sep 30 02:17:25 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 2367
+ *     Update #: 2373
  */
 
 /* Commentary: 
@@ -1225,6 +1225,8 @@ void dtkComposerNode::update(void)
 
     emit evaluated(this); qApp->processEvents();
 
+    // -- Pull
+
     foreach(dtkComposerEdge *i_route, d->input_routes) {            
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
         qDebug() << DTK_COLOR_BG_YELLOW << "Pulling" << this->title() << i_route << DTK_NO_COLOR;
@@ -1818,12 +1820,14 @@ bool dtkComposerNode::dirtyUpstreamNodes(void)
         if(dtkComposerNodeLoop *loop = dynamic_cast<dtkComposerNodeLoop *>(i_route->source()->node())) {
 
             if(this->isChildOf(loop)) {
-                if(loop->isPreRunning() || loop->isRunning() || loop->isPostRunning()) {
+
+                if(loop->isPreRunning() || loop->isRunning() || loop->isPostRunning())
                     continue;
-                } else {
+                else
                     return true;
-                }
+
             } else {
+
                 if (i_route->source()->node()->dirty())
                     return true;
             }
@@ -1832,7 +1836,6 @@ bool dtkComposerNode::dirtyUpstreamNodes(void)
 
             if (i_route->source()->node()->dirty())
                 return true;
-            
         }
     }
     return false;

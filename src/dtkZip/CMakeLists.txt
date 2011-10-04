@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Tue Jun 21 12:08:14 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Sep 15 15:16:08 2011 (+0200)
+## Last-Updated: Fri Sep 23 13:17:25 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 40
+##     Update #: 56
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,32 +17,25 @@
 ## 
 ######################################################################
 
-if (ZLIB_FOUND)
+project(dtkZip)
 
 ## #################################################################
 
-project(dtkZip)
+if(ZLIB_FOUND)
 
 ## #################################################################
 ## Sources
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkZip.h
-  dtkZipExport.h
-  dtkZipFile.h
-  dtkZipFileInfo.h
-  dtkZipNewInfo.h
-  dtkZipUtils.h)
+  dtkZipReader.h
+  dtkZipWriter.h
+  dtkZipExport.h)
 
-set(${PROJECT_NAME}_HEADERS_MOC
-  dtkZipFile.h)
+set(${PROJECT_NAME}_HEADERS_MOC)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkZip.cpp
-  dtkZipFile.cpp
-  dtkZipNewInfo.cpp
-  dtkZipUtils.cpp)
+  dtkZip.cpp)
 
 ## #################################################################
 ## Build rules
@@ -108,3 +101,5 @@ install(TARGETS ${PROJECT_NAME}
 ## #################################################################
 
 endif(ZLIB_FOUND)
+
+## #################################################################

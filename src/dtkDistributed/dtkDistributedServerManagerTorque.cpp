@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 19 11:21:19 2011 (+0200)
- *           By: jwintz
- *     Update #: 901
+ * Last-Updated: mer. sept. 21 11:43:52 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 932
  */
 
 /* Commentary: 
@@ -42,7 +42,7 @@ QDomDocument getXML(QString command);
 // dtkDistributedServerManagerTorque
 // /////////////////////////////////////////////////////////////////
 
-QString dtkDistributedServerManagerTorque::status(void)
+QByteArray  dtkDistributedServerManagerTorque::status(void)
 {
     QDomDocument document = getXML("pbsnodes -x");
     QVariantMap result;
@@ -204,7 +204,7 @@ QString dtkDistributedServerManagerTorque::submit(QString input)
     /* format: {"resources": {"nodes": 0..N, "cores": 1..M },
                 "properties": {{"key": "value"}, ...},
                 "walltime": "hh:mm:ss",
-                "script": "script_path",
+                "script": "script_path" | "application": "app_args",
                 "queue": "queuename";
                 "options": "string"
                 }
@@ -240,7 +240,32 @@ QString dtkDistributedServerManagerTorque::submit(QString input)
     }
 
     // script
-    qsub += " "+json["script"].toString();
+    if (json.contains("script")) {
+        qsub += " "+json["script"].toString();
+    } else if (json.contains("application")) {
+
+        QString scriptName = qApp->applicationDirPath() + "/dtkDistributedServerScript.sh";
+        QFile script(scriptName);
+
+        if (!script.open(QFile::WriteOnly|QFile::Truncate)) {
+            qDebug() << "unable to open script for writing";
+        } else {
+            QTextStream out(&script);
+            out << "#!/bin/bash\n";
+            out << "mpirun "
+                + qApp->applicationDirPath()
+                + "/"
+                + json["application"].toString();
+        }
+
+        script.close();
+
+        qsub += " " + scriptName;
+
+    } else {
+        qDebug() << "no script and no application";
+        return QString("ERROR");
+    }
 
     // queue
     if (json.contains("queue")) {
@@ -257,17 +282,17 @@ QString dtkDistributedServerManagerTorque::submit(QString input)
 
     if (!stat.waitForStarted()) {
         dtkCritical() << "Unable to launch stat command";
-        return QString("error");
+        return QString("ERROR");
     }
 
     if (!stat.waitForFinished()) {
         dtkCritical() << "Unable to completed stat command";
-        return QString("error");
+        return QString("ERROR");
     }
     if (stat.exitCode() > 0) {
         QString error = stat.readAllStandardError();
         dtkCritical() << "Error running qsub :" << error;
-        return QString("error");
+        return QString("ERROR");
     } else {
         QString jobid = stat.readAll();
         qDebug() << DTK_PRETTY_FUNCTION << jobid;
@@ -282,17 +307,17 @@ QString dtkDistributedServerManagerTorque::deljob(QString jobid)
 
     if (!stat.waitForStarted()) {
         dtkCritical() << "Unable to launch qdel command";
-        return QString("error");
+        return QString("ERROR");
     }
 
     if (!stat.waitForFinished()) {
         dtkCritical() << "Unable to complete qdel command";
-        return QString("error");
+        return QString("ERROR");
     }
     if (stat.exitCode() > 0) {
         QString error = stat.readAllStandardError();
         dtkCritical() << "Error running qdel :" << error;
-        return QString("error");
+        return QString("ERROR");
     } else {
         QString msg = stat.readAll();
         qDebug() << DTK_PRETTY_FUNCTION << msg;

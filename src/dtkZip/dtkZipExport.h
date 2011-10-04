@@ -1,10 +1,10 @@
 /* dtkZipExport.h --- 
  * 
  * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Thu Sep  9 11:29:49 2010 (+0200)
+ * Copyright (C) 2008-2011 - Julien Wintz, Inria.
+ * Created: Fri Sep 23 10:43:26 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 21 12:16:50 2011 (+0200)
+ * Last-Updated: Fri Sep 23 10:44:18 2011 (+0200)
  *           By: Julien Wintz
  *     Update #: 4
  */

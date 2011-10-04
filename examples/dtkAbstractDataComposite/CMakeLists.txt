@@ -1,12 +1,12 @@
 ### CMakeLists.txt --- 
 ## 
-## Author: Julien Wintz
-## Copyright (C) 2008-2011 - Julien Wintz, Inria.
-## Created: Tue Jun 21 15:29:32 2011 (+0200)
+## Author: Thibaud Kloczko
+## Copyright (C) 2011 - Thibaud Kloczko, Inria.
+## Created: Mon Sep 26 09:27:41 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Jun 21 15:31:21 2011 (+0200)
-##           By: Julien Wintz
-##     Update #: 6
+## Last-Updated: Tue Sep 27 09:44:50 2011 (+0200)
+##           By: Thibaud Kloczko
+##     Update #: 22
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,14 +17,22 @@
 ## 
 ######################################################################
 
-project(dtkZipZip)
+project(dtkAbstractDataComposite)
 
 ## #################################################################
 ## Build rules
 ## #################################################################
 
-add_executable(${PROJECT_NAME}
-  main.cpp)
+set(${PROJECT_NAME}_SOURCE_MOC main.moc)
+
+qt4_generate_moc(main.cpp ${CMAKE_CURRENT_BINARY_DIR}/main.moc)
+
+add_executable(${PROJECT_NAME} MACOSX_BUNDLE
+  main.cpp
+  ${${PROJECT_NAME}_SOURCE_MOC})
 
 target_link_libraries(${PROJECT_NAME}
-  dtkZip)
+  ${QT_LIBRARIES}
+  dtkCore
+  dtkGui)
+  

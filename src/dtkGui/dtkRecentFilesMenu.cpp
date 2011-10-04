@@ -87,7 +87,7 @@ void dtkRecentFilesMenu::updateRecentFileActions(void)
 
     for (int i = 0; i < numRecentFiles; ++i) {
         QString strippedName = QFileInfo(files[i]).fileName();
-        QString text = tr("%1").arg(strippedName);
+        QString text = QString("%1").arg(strippedName);
 
         QAction* recentFileAct = addAction(text);
         if(i+1 == 1)

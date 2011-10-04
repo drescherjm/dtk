@@ -1,4 +1,3 @@
-#include "../src/dtkDistributed/dtkDistributedSlave.h"
 #include "../src/dtkDistributed/dtkDistributedCommunicator.h"
 #include "../src/dtkDistributed/dtkDistributedCommunicatorMpi.h"
 #include "../src/dtkDistributed/dtkDistributedCommunicatorTcp.h"
@@ -18,5 +17,7 @@
 #include "../src/dtkDistributed/dtkDistributedServerManagerOar.h"
 #include "../src/dtkDistributed/dtkDistributedServerManagerTorque.h"
 #include "../src/dtkDistributed/dtkDistributedService.h"
+#include "../src/dtkDistributed/dtkDistributedSlave.h"
+#include "../src/dtkDistributed/dtkDistributedSocket.h"
 #include "../src/dtkDistributed/dtkDistributedUnixServerSocket.h"
 #include "../src/dtkDistributed/dtkDistributedUnixSocket.h"

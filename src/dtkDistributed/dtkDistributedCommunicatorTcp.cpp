@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep  9 13:03:51 2011 (+0200)
- *           By: jwintz
- *     Update #: 47
+ * Last-Updated: mar. oct.  4 16:06:37 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 91
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include "dtkDistributedCommunicatorTcp.h"
+#include "dtkDistributedSocket.h"
 
 #include <dtkCore/dtkLog.h>
 
@@ -27,10 +28,10 @@
 class dtkDistributedCommunicatorTcpPrivate
 {
 public:
-    QTcpServer *server;
-    QTcpSocket *socket;
-    
-    QList<QTcpSocket *> sockets;
+    dtkDistributedSocket *server;
+    dtkDistributedSocket *socket;
+
+    QList<dtkDistributedSocket *> sockets;
 };
 
 dtkDistributedCommunicatorTcp::dtkDistributedCommunicatorTcp(void) : dtkDistributedCommunicator(), d(new dtkDistributedCommunicatorTcpPrivate)
@@ -46,9 +47,39 @@ dtkDistributedCommunicatorTcp::~dtkDistributedCommunicatorTcp(void)
     d = NULL;
 }
 
+void dtkDistributedCommunicatorTcp::connectToHost(const QString &host , qint16 port)
+{
+    if (!d->socket) {
+        d->socket = new dtkDistributedSocket();
+        d->socket->connectToHost(host,port);
+    }
+}
+
+void dtkDistributedCommunicatorTcp::disconnectFromHost()
+{
+    if (d->socket)
+        d->socket->disconnectFromHost();
+}
+
+dtkDistributedSocket *dtkDistributedCommunicatorTcp::socket(void)
+{
+    return d->socket;
+}
+
+
+// QAbstractSocket::SocketState dtkDistributedCommunicatorTcp::state(void)
+// {
+//     return d->socket->state();
+// }
+
+// bool  dtkDistributedCommunicatorTcp::waitForConnected(void)
+// {
+//     return d->socket->waitForConnected();
+// }
+
 void dtkDistributedCommunicatorTcp::initialize(void)
 {
-    
+
 }
 
 void dtkDistributedCommunicatorTcp::uninitialize(void)
@@ -92,6 +123,27 @@ void dtkDistributedCommunicatorTcp::barrier(void)
                    dtkDistributedCommunicator::dtkDistributedCommunicatorBarrier);
     }
 }
+
+// qint64 dtkDistributedCommunicatorTcp::sendRequest(QString method, QString path, int size, QString type, const QByteArray& content,  const dtkDistributedSocket::dtkDistributedSocketHeaders& headers)
+// {
+//     return d->socket->sendRequest(method,path,size,type,content,headers);
+// }
+
+// qint64 dtkDistributedCommunicatorTcp::write(const QByteArray &array)
+// {
+//     return d->socket->write(array);
+// }
+
+// void dtkDistributedCommunicatorTcp::close()
+// {
+//     d->socket->close();
+// }
+
+// bool dtkDistributedCommunicatorTcp::flush()
+// {
+//     return d->socket->flush();
+// }
+
 
 void dtkDistributedCommunicatorTcp::send(void *data, quint16 size, DataType dataType, quint16 target, int tag)
 {

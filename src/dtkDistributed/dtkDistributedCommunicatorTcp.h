@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep  9 13:03:39 2011 (+0200)
- *           By: jwintz
- *     Update #: 16
+ * Last-Updated: mar. oct.  4 16:25:42 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -21,6 +21,8 @@
 #define DTKDISTRIBUTEDCOMMUNICATORTCP_H
 
 #include "dtkDistributedCommunicator.h"
+#include "dtkDistributedSocket.h"
+#include <QAbstractSocket>
 
 class dtkDistributedCommunicatorTcpPrivate;
 
@@ -45,6 +47,11 @@ public:
     void    gather(void *send, void *recv, quint16 size, DataType dataType, quint16 target, bool all = false);
     void   scatter(void *send, void *recv, quint16 size, DataType dataType, quint16 source);
     void    reduce(void *send, void *recv, quint16 size, DataType dataType, OperationType operationType, quint16 target, bool all = false);
+
+
+    void                 connectToHost(const QString &host , qint16 port);
+    void            disconnectFromHost();
+    dtkDistributedSocket *socket();
 
 private:
     dtkDistributedCommunicatorTcpPrivate *d;

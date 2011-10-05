@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct  5 14:13:37 2011 (+0200)
+ * Last-Updated: Wed Oct  5 15:03:55 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 2423
+ *     Update #: 2429
  */
 
 /* Commentary: 
@@ -1196,7 +1196,11 @@ void dtkComposerNode::touch(void)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
+
     QGraphicsItem::update(this->boundingRect());
+    
+    if (this->scene()->views().count())
+        this->scene()->views().first()->update();
 }
 
 //! 
@@ -1381,12 +1385,12 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
                                        << QPoint(rect.bottomRight().x() - 1*p_w - 2* p_d, rect.bottomRight().y())
                                        << QPoint(rect.bottomRight().x(), rect.bottomRight().y() - 1*p_h - 2* p_d)
                                        << QPoint(rect.bottomRight().x(), rect.bottomRight().y() - 2*p_h - 2* p_d);
-        QPolygon b_rubber = QPolygon() << QPoint(rect.bottomRight().x() - 2*p_w - 2* p_d, rect.bottomRight().y())
-                                       << QPoint(rect.bottomRight().x() - 1*p_w - 2* p_d, rect.bottomRight().y())
-                                       << QPoint(rect.bottomRight().x(), rect.bottomRight().y() - 1*p_h - 2* p_d)
-                                       << QPoint(rect.bottomRight().x(), rect.bottomRight().y() - 2*p_h - 2* p_d);
+        QPolygon b_rubber = QPolygon() << QPoint(rect.bottomRight().x() - 1*p_w - 1* p_d, rect.bottomRight().y())
+                                       << QPoint(rect.bottomRight().x() - 0*p_w - 1* p_d, rect.bottomRight().y())
+                                       << QPoint(rect.bottomRight().x(), rect.bottomRight().y() - 0*p_h - 1* p_d)
+                                       << QPoint(rect.bottomRight().x(), rect.bottomRight().y() - 1*p_h - 1* p_d);
 
-        painter->setPen(QPen(Qt::gray, 2));
+        painter->setPen(QPen(Qt::darkGray, 1));
         painter->setBrush(Qt::black);
         painter->drawPolygon(t_rubber);
         painter->drawPolygon(b_rubber);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 27 18:47:04 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 288
+ * Last-Updated: Wed Oct  5 13:39:54 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 291
  */
 
 /* Commentary: 
@@ -52,11 +52,17 @@ public:
         View
     };
 
+    enum Attribute {
+        Sequential,
+        Parallel
+    };
+
              dtkComposerNode(dtkComposerNode *parent = 0);
     virtual ~dtkComposerNode(void);
 
     virtual QString description(void); 
 
+    void setAttribute(Attribute attribute);
     void setTitle(const QString& title);
     void setKind(Kind kind);
     void setType(QString type);
@@ -101,6 +107,7 @@ public:
     int  count(dtkComposerNodeProperty *property);
     int number(dtkComposerNodeProperty *property);
 
+    Attribute attribute(void);
     Kind kind(void);
     QString type(void);
 

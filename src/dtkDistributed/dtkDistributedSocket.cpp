@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: mar. oct.  4 14:48:31 2011 (+0200)
+ * Last-Updated: jeu. oct.  6 09:17:36 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 480
+ *     Update #: 509
  */
 
 /* Commentary:
@@ -42,22 +42,25 @@ qint64 dtkDistributedSocket::sendRequest(QString method, QString path, int size,
         qint64 ret = this->write(buffer.toAscii());
         this->flush();
         return ret;
-    }
-    buffer += "content-size: "+ QString::number(size) +"\n";
-    if (!type.isEmpty() && !type.isNull())
-        buffer += "content-type: " +type +"\n";
+    } else if (size > 0) {
+        buffer += "content-size: "+ QString::number(size) +"\n";
+        if (!type.isEmpty() && !type.isNull())
+            buffer += "content-type: " +type +"\n";
 
-    foreach (const QString &key, headers.keys())
-        buffer += key +": " + headers[key] +"\n";
-    buffer += "\n";
+        foreach (const QString &key, headers.keys())
+            buffer += key +": " + headers[key] +"\n";
+        buffer += "\n";
+    }
 
     qint64 ret;
-    if (content.isEmpty()) // no content provided, the caller is supposed to send the content itself
+    if (content.isNull() || content.isEmpty()) {
+        // no content provided, the caller is supposed to send the content itself
         ret = this->write(buffer.toAscii());
-    else
+    } else {
         ret = this->write(buffer.toAscii() + content);
+        this->flush();
+    }
 
-    this->flush();
     return ret;
 }
 

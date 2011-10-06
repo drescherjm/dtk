@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: mar. oct.  4 16:06:37 2011 (+0200)
+ * Last-Updated: mer. oct.  5 14:45:39 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 91
+ *     Update #: 107
  */
 
 /* Commentary: 
@@ -124,30 +124,12 @@ void dtkDistributedCommunicatorTcp::barrier(void)
     }
 }
 
-// qint64 dtkDistributedCommunicatorTcp::sendRequest(QString method, QString path, int size, QString type, const QByteArray& content,  const dtkDistributedSocket::dtkDistributedSocketHeaders& headers)
-// {
-//     return d->socket->sendRequest(method,path,size,type,content,headers);
-// }
-
-// qint64 dtkDistributedCommunicatorTcp::write(const QByteArray &array)
-// {
-//     return d->socket->write(array);
-// }
-
-// void dtkDistributedCommunicatorTcp::close()
-// {
-//     d->socket->close();
-// }
-
-// bool dtkDistributedCommunicatorTcp::flush()
-// {
-//     return d->socket->flush();
-// }
-
 
 void dtkDistributedCommunicatorTcp::send(void *data, quint16 size, DataType dataType, quint16 target, int tag)
 {
-    
+    // TODO: handle target and tag, and check return value of write
+    d->socket->write((char *)data,size);
+
 }
 
 void dtkDistributedCommunicatorTcp::receive(void *data, quint16 size, DataType dataType, quint16 source, int tag)

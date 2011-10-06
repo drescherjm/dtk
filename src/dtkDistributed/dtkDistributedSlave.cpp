@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. oct.  4 16:30:01 2011 (+0200)
+ * Last-Updated: jeu. oct.  6 09:37:35 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 145
+ *     Update #: 163
  */
 
 /* Commentary: 
@@ -34,6 +34,11 @@ public:
 dtkDistributedSlave::dtkDistributedSlave(void) : d(new dtkDistributedSlavePrivate)
 {
     d->communicator = new dtkDistributedCommunicatorTcp();
+}
+
+dtkDistributedSlave::dtkDistributedSlave(dtkDistributedCommunicatorTcp *communicator) : d(new dtkDistributedSlavePrivate)
+{
+    d->communicator = communicator;
 }
 
 dtkDistributedSlave::~dtkDistributedSlave(void)
@@ -71,13 +76,37 @@ bool dtkDistributedSlave::isDisconnected(void)
     return (d->communicator->socket()->state() == QAbstractSocket::UnconnectedState);
 }
 
+
+void dtkDistributedSlave::read(void)
+{
+    dtkDistributedSocket *socket = d->communicator->socket();
+
+
+    QVariantMap request = socket->parseRequest();
+    QString method= request["method"].toString();
+    QString path= request["path"].toString();
+
+    if( method == "POST" && path.startsWith("/data")) {
+        QString jobid = path.split("/").at(2);
+        int torank = path.split("/").at(3).toInt();
+        int size = request["size"].toInt();
+        QString type = request["type"].toString();
+        socket->sendRequest(method,"/data/"+jobid, size, type, request["content"].toByteArray());
+    } else {
+        qDebug() << DTK_PRETTY_FUNCTION << "WARNING: Unknown data";
+    }
+    if (socket->bytesAvailable() > 0)
+        this->read();
+}
+
+
 void dtkDistributedSlave::connect(const QUrl& server)
 {
     d->communicator->connectToHost(server.host(), server.port());
 
     if(d->communicator->socket()->waitForConnected()) {
 
-        QObject::connect(d->communicator->socket(), SIGNAL(readyRead()), this, SLOT(read()));
+        QObject::connect(d->communicator->socket(), SIGNAL(readyRead()), this , SLOT(read()));
         QObject::connect(d->communicator->socket(), SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
 
         emit connected(server);

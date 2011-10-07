@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: jeu. oct.  6 09:17:36 2011 (+0200)
+ * Last-Updated: ven. oct.  7 09:47:17 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 509
+ *     Update #: 564
  */
 
 /* Commentary:
@@ -21,17 +21,24 @@
 
 #include "dtkDistributedSocket.h"
 
+class dtkDistributedSocketPrivate
+{
+public:
+    QVariantMap *request;
+};
 
-dtkDistributedSocket::dtkDistributedSocket( QObject* parent ) : QTcpSocket(parent)
+dtkDistributedSocket::dtkDistributedSocket( QObject* parent ) :  d(new dtkDistributedSocketPrivate), QTcpSocket(parent)
 {
 }
 
 dtkDistributedSocket::~dtkDistributedSocket( )
 {
+    delete d;
+    d = NULL;
 }
 
 
-qint64 dtkDistributedSocket::sendRequest(QString method, QString path, int size, QString type, const QByteArray  &content,  const QHash<QString,QString>  &headers )
+qint64 dtkDistributedSocket::sendRequest(QString method, QString path, qint64 size, QString type, const QByteArray  &content,  const QHash<QString,QString>  &headers )
 {
 
     QString buffer;
@@ -71,8 +78,8 @@ qint64 dtkDistributedSocket::sendRequest(QString method, QString path, int size,
  */
 QVariantMap dtkDistributedSocket::parseRequest(void)
 {
-    QVariantMap request;
     QStringList tokens = QString(this->readLine()).split(" ");
+    QVariantMap request;
     request.insert("method", tokens[0]);
     request.insert("path", tokens[1].trimmed());
 
@@ -84,7 +91,7 @@ QVariantMap dtkDistributedSocket::parseRequest(void)
     }
 
     int size = tokens[1].toInt();
-    request["size"] = size;
+    request.insert("size", size);
 
     if (size > 0) {
         //read content-type
@@ -111,10 +118,14 @@ QVariantMap dtkDistributedSocket::parseRequest(void)
         while (buffer.size() < size ) {
             if (this->waitForReadyRead()) {
                 buffer.append(this->read(size-buffer.size()));
-            } else
+            } else {
+                qDebug() << "not enough data received, only  " << buffer.size() << "out of " << size ;
+                request.insert("content", buffer);
+                request.insert("missing_data", size-buffer.size());
                 break;
+            }
         }
-        request["content"] = buffer;
+        request.insert("content", buffer);
     } else
         // end of request == empty line
         this->readLine();

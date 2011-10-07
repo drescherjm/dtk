@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:27:42 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 19 10:39:02 2011 (+0200)
- *           By: jwintz
- *     Update #: 30
+ * Last-Updated: jeu. oct.  6 09:51:20 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -47,7 +47,7 @@ protected:
     void incomingConnection(int descriptor);
 
 private slots:
-    void read(void);
+    virtual void read(void);
     void discard(void);
 
 private:

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: mer. oct.  5 14:45:39 2011 (+0200)
+ * Last-Updated: jeu. oct.  6 18:55:18 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 107
+ *     Update #: 112
  */
 
 /* Commentary: 
@@ -84,7 +84,8 @@ void dtkDistributedCommunicatorTcp::initialize(void)
 
 void dtkDistributedCommunicatorTcp::uninitialize(void)
 {
-
+    if (d->socket)
+        d->socket->close();
 }
 
 int dtkDistributedCommunicatorTcp::rank(void)
@@ -125,34 +126,34 @@ void dtkDistributedCommunicatorTcp::barrier(void)
 }
 
 
-void dtkDistributedCommunicatorTcp::send(void *data, quint16 size, DataType dataType, quint16 target, int tag)
+void dtkDistributedCommunicatorTcp::send(void *data, qint64 size, DataType dataType, quint16 target, int tag)
 {
     // TODO: handle target and tag, and check return value of write
     d->socket->write((char *)data,size);
 
 }
 
-void dtkDistributedCommunicatorTcp::receive(void *data, quint16 size, DataType dataType, quint16 source, int tag)
+void dtkDistributedCommunicatorTcp::receive(void *data, qint64 size, DataType dataType, quint16 source, int tag)
 {
 
 }
 
-void dtkDistributedCommunicatorTcp::broadcast(void *data, quint16 size, DataType dataType, quint16 source)
+void dtkDistributedCommunicatorTcp::broadcast(void *data, qint64 size, DataType dataType, quint16 source)
 {
 
 }
 
-void dtkDistributedCommunicatorTcp::gather(void *send, void *recv, quint16 size, DataType dataType, quint16 target, bool all)
-{
-    dtkWarning() << "Collective operations are not supported on sockets";
-}
-
-void dtkDistributedCommunicatorTcp::scatter(void *send, void *recv, quint16 size, DataType dataType, quint16 source)
+void dtkDistributedCommunicatorTcp::gather(void *send, void *recv, qint64 size, DataType dataType, quint16 target, bool all)
 {
     dtkWarning() << "Collective operations are not supported on sockets";
 }
 
-void dtkDistributedCommunicatorTcp::reduce(void *send, void *recv, quint16 size, DataType dataType, OperationType operationType, quint16 target, bool all)
+void dtkDistributedCommunicatorTcp::scatter(void *send, void *recv, qint64 size, DataType dataType, quint16 source)
+{
+    dtkWarning() << "Collective operations are not supported on sockets";
+}
+
+void dtkDistributedCommunicatorTcp::reduce(void *send, void *recv, qint64 size, DataType dataType, OperationType operationType, quint16 target, bool all)
 {
     dtkWarning() << "Collective operations are not supported on sockets";
 }

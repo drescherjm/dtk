@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: mar. oct.  4 16:25:42 2011 (+0200)
+ * Last-Updated: jeu. oct.  6 17:58:34 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 41
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -41,12 +41,12 @@ public:
     int size(void);
 
     void   barrier(void);
-    void      send(void *data,             quint16 size, DataType dataType, quint16 target, int tag);
-    void   receive(void *data,             quint16 size, DataType dataType, quint16 source, int tag);
-    void broadcast(void *data,             quint16 size, DataType dataType, quint16 source);
-    void    gather(void *send, void *recv, quint16 size, DataType dataType, quint16 target, bool all = false);
-    void   scatter(void *send, void *recv, quint16 size, DataType dataType, quint16 source);
-    void    reduce(void *send, void *recv, quint16 size, DataType dataType, OperationType operationType, quint16 target, bool all = false);
+    void      send(void *data,             qint64 size, DataType dataType, quint16 target, int tag);
+    void   receive(void *data,             qint64 size, DataType dataType, quint16 source, int tag);
+    void broadcast(void *data,             qint64 size, DataType dataType, quint16 source);
+    void    gather(void *send, void *recv, qint64 size, DataType dataType, quint16 target, bool all = false);
+    void   scatter(void *send, void *recv, qint64 size, DataType dataType, quint16 source);
+    void    reduce(void *send, void *recv, qint64 size, DataType dataType, OperationType operationType, quint16 target, bool all = false);
 
 
     void                 connectToHost(const QString &host , qint16 port);

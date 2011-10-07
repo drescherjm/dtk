@@ -4,7 +4,7 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. oct.  4 15:42:56 2011 (+0200)
+ * Last-Updated: jeu. oct.  6 18:25:50 2011 (+0200)
  *           By: Nicolas Niclausse
  *     Update #:
  */
@@ -25,6 +25,7 @@
 #include <QTcpSocket>
 #include "dtkDistributedExport.h"
 
+class dtkDistributedSocketPrivate;
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedSocket : public QTcpSocket
 {
@@ -37,9 +38,14 @@ public:
              dtkDistributedSocket( QObject *parent = 0);
     virtual ~dtkDistributedSocket(void);
 
-    qint64       sendRequest(QString method, QString path, int size = 0, QString type = "json", const QByteArray& content = QByteArray(),  const dtkDistributedSocketHeaders& headers = dtkDistributedSocketHeaders());
+    qint64       sendRequest(QString method, QString path, qint64 size = 0, QString type = "json", const QByteArray& content = QByteArray(),  const dtkDistributedSocketHeaders& headers = dtkDistributedSocketHeaders());
 
     QVariantMap parseRequest(void);
+
+private:
+
+    dtkDistributedSocketPrivate *d;
+
 };
 
 #endif

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May 23 11:46:44 2011 (+0200)
+ * Last-Updated: Thu Oct  6 10:48:44 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 126
+ *     Update #: 148
  */
 
 /* Commentary:
@@ -63,6 +63,7 @@ namespace {
     typedef QPair<QString, QStringList>  dtkAbstractDataTypeHandler;
     typedef QPair<QString, QPair<QStringList, QString> > dtkAbstractDataConverterTypeHandler;
 
+    typedef QHash<QString, QString> dtkAbstractDataInterfacesHash;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -76,6 +77,7 @@ public:
     dtkAbstractDataReaderCreatorHash    readers;
     dtkAbstractDataWriterCreatorHash    writers;
     dtkAbstractDataConverterCreatorHash converters;
+    dtkAbstractDataInterfacesHash       interfaces;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -182,10 +184,38 @@ dtkSmartPointer<dtkAbstractDataConverter> dtkAbstractDataFactory::converterSmart
     return converter;
 }
 
+QStringList dtkAbstractDataFactory::implementations(const QString& interface)
+{
+    QStringList implementations;
+
+    if(d->interfaces.keys().contains(interface))
+        implementations << d->interfaces.values(interface);
+    else
+        qDebug() << "There is no available implementation of " << interface ;
+
+    return implementations;
+}
+
+QStringList dtkAbstractDataFactory::interfaces(void)
+{
+    return d->interfaces.keys();
+}
+
 bool dtkAbstractDataFactory::registerDataType(const QString& type, dtkAbstractDataCreator func)
 {
     if(!d->creators.contains(type)) {
         d->creators.insert(type, func);
+        return true;
+    }
+
+    return false;
+}
+
+bool dtkAbstractDataFactory::registerDataType(const QString& type, dtkAbstractDataCreator func, const QString& interface)
+{
+    if(!d->creators.contains(type)) {
+        d->creators.insert(type, func);
+        d->interfaces.insertMulti(interface, type);
         return true;
     }
 

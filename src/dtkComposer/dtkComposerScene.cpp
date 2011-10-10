@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jul 28 15:11:59 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 2890
+ * Last-Updated: Thu Sep 29 10:51:25 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 2900
  */
 
 /* Commentary: 
@@ -541,12 +541,16 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
     dtkComposerNodeProperty *destin;
     dtkComposerNodeProperty *clone;
 
+    dtkComposerNode *former_parent;
+
     foreach(dtkComposerNode *node, nodes) {
 
         group_ave_pos += node->pos();
        
-        if (dtkComposerNode *parent = node->parentNode())
+        if (dtkComposerNode *parent = node->parentNode()) {
             parent->removeChildNode(node);
+            former_parent = parent;
+        }
         if (parent_block = dynamic_cast<dtkComposerNodeControlBlock *>(node->parentItem()))
             parent_block->removeNode(node);
 
@@ -573,7 +577,9 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
 
                 clone->show();
 
+                node->setParentNode(former_parent);
                 this->removeEdge(edge);
+                node->setParentNode(group);
 
                 dtkComposerEdge *input = new dtkComposerEdge;
                 input->setSource(source);
@@ -603,7 +609,9 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
 
                 clone->show();
 
+                node->setParentNode(former_parent);
                 this->removeEdge(edge);
+                node->setParentNode(group);
 
                 dtkComposerEdge *output = new dtkComposerEdge;
                 output->setSource(clone);

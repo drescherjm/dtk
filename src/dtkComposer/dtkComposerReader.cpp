@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 20 15:21:13 2011 (+0200)
+ * Last-Updated: Thu Oct  6 15:08:39 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 746
+ *     Update #: 759
  */
 
 /* Commentary: 
@@ -927,6 +927,23 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
                     }
                 }
             }
+        }
+    }
+
+    { // -- attribute
+        
+        QDomNodeList children = node.childNodes();
+        
+        for(int i = 0; i < children.count(); i++) {
+
+            if(children.at(i).toElement().tagName() != "attribute")
+                continue;
+
+            if(children.at(i).childNodes().at(0).toText().data() == "sequential")
+                n->setAttribute(dtkComposerNode::Sequential);
+
+            if(children.at(i).childNodes().at(0).toText().data() == "parallel")
+                n->setAttribute(dtkComposerNode::Parallel);
         }
     }
 

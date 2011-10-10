@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:48:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  5 15:18:15 2011 (+0200)
+ * Last-Updated: Thu Oct  6 10:47:37 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 87
+ *     Update #: 92
  */
 
 /* Commentary:
@@ -43,6 +43,7 @@ public:
     static dtkAbstractDataFactory *instance(void);
 
     bool registerDataType         (const QString& type,                             dtkAbstractDataCreator          func);
+    bool registerDataType         (const QString& type,                             dtkAbstractDataCreator          func, const QString& interface);
     bool registerDataReaderType   (const QString& type, const QStringList& handled, dtkAbstractDataReaderCreator    func);
     bool registerDataWriterType   (const QString& type, const QStringList& handled, dtkAbstractDataWriterCreator    func);
     bool registerDataConverterType(const QString& type, const QStringList& fromTypes, const QString& toType,  dtkAbstractDataConverterCreator func);
@@ -61,6 +62,10 @@ public:
     dtkSmartPointer<dtkAbstractDataReader>    readerSmartPointer   (const QString& type);
     dtkSmartPointer<dtkAbstractDataWriter>    writerSmartPointer   (const QString& type);
     dtkSmartPointer<dtkAbstractDataConverter> converterSmartPointer(const QString& type);
+
+public:
+    QStringList implementations(const QString& interface);
+    QStringList interfaces(void);
 
 signals:
     void created(dtkAbstractData *data, const QString& type);

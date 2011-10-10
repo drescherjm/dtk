@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 23 14:54:01 2011 (+0200)
+ * Last-Updated: Wed Oct  5 15:03:55 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 2367
+ *     Update #: 2429
  */
 
 /* Commentary: 
@@ -76,6 +76,7 @@ public:
 
     dtkComposerNodeProperty *clicked_property;
 
+    dtkComposerNode::Attribute attribute;
     dtkComposerNode::Kind kind;
 
     QString type;
@@ -193,6 +194,7 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
 
     d->q = this;
     
+    d->attribute = Sequential;
     d->kind = Unknown;
     d->object = NULL;
     d->parent = parent;
@@ -304,6 +306,15 @@ void dtkComposerNode::setTitle(const QString& title)
     d->title->setPlainText(title);
 }
 
+void dtkComposerNode::setAttribute(Attribute attribute)
+{
+#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
+    qDebug() << DTK_PRETTY_FUNCTION << this;
+#endif
+
+    d->attribute = attribute;
+}
+
 void dtkComposerNode::setKind(Kind kind)
 {
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
@@ -332,6 +343,15 @@ void dtkComposerNode::setObject(dtkAbstractObject *object)
 
     if (d->object)
         d->title->setHtml(object->name());
+}
+
+dtkComposerNode::Attribute dtkComposerNode::attribute(void)
+{
+#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
+    qDebug() << DTK_PRETTY_FUNCTION << this;
+#endif
+
+    return d->attribute;
 }
 
 dtkComposerNode::Kind dtkComposerNode::kind(void)
@@ -1176,7 +1196,11 @@ void dtkComposerNode::touch(void)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
+
     QGraphicsItem::update(this->boundingRect());
+    
+    if (this->scene()->views().count())
+        this->scene()->views().first()->update();
 }
 
 //! 
@@ -1224,6 +1248,8 @@ void dtkComposerNode::update(void)
     // -- Event handling
 
     emit evaluated(this); qApp->processEvents();
+
+    // -- Pull
 
     foreach(dtkComposerEdge *i_route, d->input_routes) {            
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
@@ -1334,6 +1360,7 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
             this->setPen(Qt::black, Qt::SolidLine, 1);
     }
     painter->setPen(d->pen);
+
     d->pen_color = Qt::transparent;
 
     if (this->kind() == dtkComposerNode::Control) {
@@ -1345,6 +1372,29 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     }
 
     painter->drawRoundedRect(rect, d->node_radius, d->node_radius);
+
+    // Draw attribute visual couterpart
+
+    if(d->attribute == dtkComposerNode::Parallel) {
+
+        int p_d = 10;
+        int p_w = 10;
+        int p_h = 10;
+
+        QPolygon t_rubber = QPolygon() << QPoint(rect.bottomRight().x() - 2*p_w - 2* p_d, rect.bottomRight().y())
+                                       << QPoint(rect.bottomRight().x() - 1*p_w - 2* p_d, rect.bottomRight().y())
+                                       << QPoint(rect.bottomRight().x(), rect.bottomRight().y() - 1*p_h - 2* p_d)
+                                       << QPoint(rect.bottomRight().x(), rect.bottomRight().y() - 2*p_h - 2* p_d);
+        QPolygon b_rubber = QPolygon() << QPoint(rect.bottomRight().x() - 1*p_w - 1* p_d, rect.bottomRight().y())
+                                       << QPoint(rect.bottomRight().x() - 0*p_w - 1* p_d, rect.bottomRight().y())
+                                       << QPoint(rect.bottomRight().x(), rect.bottomRight().y() - 0*p_h - 1* p_d)
+                                       << QPoint(rect.bottomRight().x(), rect.bottomRight().y() - 1*p_h - 1* p_d);
+
+        painter->setPen(QPen(Qt::darkGray, 1));
+        painter->setBrush(Qt::black);
+        painter->drawPolygon(t_rubber);
+        painter->drawPolygon(b_rubber);
+    }
 
     // Drawing size grip
 
@@ -1818,12 +1868,14 @@ bool dtkComposerNode::dirtyUpstreamNodes(void)
         if(dtkComposerNodeLoop *loop = dynamic_cast<dtkComposerNodeLoop *>(i_route->source()->node())) {
 
             if(this->isChildOf(loop)) {
-                if(loop->isPreRunning() || loop->isRunning() || loop->isPostRunning()) {
+
+                if(loop->isPreRunning() || loop->isRunning() || loop->isPostRunning())
                     continue;
-                } else {
+                else
                     return true;
-                }
+
             } else {
+
                 if (i_route->source()->node()->dirty())
                     return true;
             }
@@ -1832,7 +1884,6 @@ bool dtkComposerNode::dirtyUpstreamNodes(void)
 
             if (i_route->source()->node()->dirty())
                 return true;
-            
         }
     }
     return false;

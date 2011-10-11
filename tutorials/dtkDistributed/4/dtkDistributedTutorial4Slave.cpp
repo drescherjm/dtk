@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Sep 14 13:26:49 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. oct.  4 16:34:14 2011 (+0200)
+ * Last-Updated: mar. oct. 11 16:39:59 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 170
+ *     Update #: 181
  */
 
 /* Commentary: 
@@ -69,7 +69,7 @@ int dtkDistributedTutorial4Slave::exec(void)
 
 
     if (this->isConnected()) {
-        this->communicator()->socket()->sendRequest("PUT","/rank/"+QString::number(rank));
+        this->communicator()->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::SETRANK,"",rank));
     }
 
     dtkAbstractData *m_array = dtkAbstractDataFactory::instance()->create("dtkDataArray");
@@ -145,8 +145,7 @@ int dtkDistributedTutorial4Slave::exec(void)
         if (this->isConnected()) {
             QByteArray data = QByteArray::number(sum);
             jobid = QString(getenv("PBS_JOBID")).split(".").first();
-            QString path="/data/"+jobid+"/-1";
-            this->communicator()->socket()->sendRequest("POST",path,data.size(),"text", data);
+            this->communicator()->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,jobid,-1,data.size(),"text", data));
 
         } else
             qDebug() << "unable to send result to server: not connected ";
@@ -181,7 +180,7 @@ finalize:
 
     if(!rank) {
         if (this->isConnected()) {
-            this->communicator()->socket()->sendRequest("ENDED","/job/"+jobid);
+            this->communicator()->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::ENDJOB,jobid));
             this->communicator()->socket()->close();
         } else
             qDebug() << "unable to send result to server: not connected ";

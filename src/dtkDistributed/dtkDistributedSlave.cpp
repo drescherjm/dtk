@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. oct.  6 09:37:35 2011 (+0200)
+ * Last-Updated: mar. oct. 11 14:59:59 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 163
+ *     Update #: 188
  */
 
 /* Commentary: 
@@ -17,6 +17,7 @@
  * 
  */
 
+#include "dtkDistributedMessage.h"
 #include "dtkDistributedSlave.h"
 #include "dtkDistributedSocket.h"
 #include "dtkDistributedCommunicatorTcp.h"
@@ -80,18 +81,10 @@ bool dtkDistributedSlave::isDisconnected(void)
 void dtkDistributedSlave::read(void)
 {
     dtkDistributedSocket *socket = d->communicator->socket();
+    dtkDistributedMessage request = socket->parseRequest();
 
-
-    QVariantMap request = socket->parseRequest();
-    QString method= request["method"].toString();
-    QString path= request["path"].toString();
-
-    if( method == "POST" && path.startsWith("/data")) {
-        QString jobid = path.split("/").at(2);
-        int torank = path.split("/").at(3).toInt();
-        int size = request["size"].toInt();
-        QString type = request["type"].toString();
-        socket->sendRequest(method,"/data/"+jobid, size, type, request["content"].toByteArray());
+    if( request.method() == dtkDistributedMessage::DATA) {
+        // TODO
     } else {
         qDebug() << DTK_PRETTY_FUNCTION << "WARNING: Unknown data";
     }
@@ -126,13 +119,13 @@ void dtkDistributedSlave::disconnect(const QUrl& server)
 void dtkDistributedSlave::onStarted(void)
 {
     QString jobid = "unknown"; //FIXME
-    d->communicator->socket()->sendRequest("STARTED","/job/"+jobid);
+    d->communicator->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::STARTJOB,jobid));
 }
 
 void dtkDistributedSlave::onEnded(void)
 {
     QString jobid = "unknown"; //FIXME
-    d->communicator->socket()->sendRequest("ENDED","/job/"+jobid);
+    d->communicator->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::ENDJOB,jobid));
 }
 
 dtkDistributedCommunicatorTcp *dtkDistributedSlave::communicator(void)

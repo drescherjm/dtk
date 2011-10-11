@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. sept. 22 09:51:16 2011 (+0200)
+ * Last-Updated: mar. oct. 11 16:57:47 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 971
+ *     Update #: 1040
  */
 
 /* Commentary: 
@@ -79,11 +79,11 @@ bool dtkDistributedController::isDisconnected(const QUrl& server)
     return true;
 }
 
-void dtkDistributedController::submit(const QUrl& server, const QByteArray& resources)
+void dtkDistributedController::submit(const QUrl& server,  QByteArray& resources)
 {
     qDebug() << "Want to submit jobs with resources:" << resources;
-
-    d->sockets[server.toString()]->sendRequest("PUT","/job",resources.size(),"json",resources);
+    dtkDistributedMessage *msg  = new dtkDistributedMessage(dtkDistributedMessage::NEWJOB,"",-2,resources.size(),"json",resources);
+    d->sockets[server.toString()]->sendRequest(msg);
 }
 
 void dtkDistributedController::connect(const QUrl& server)
@@ -102,7 +102,7 @@ void dtkDistributedController::connect(const QUrl& server)
 
             emit connected(server);
 
-            socket->sendRequest("GET","/status");
+            socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::STATUS));
 
         } else {
 
@@ -269,32 +269,33 @@ void dtkDistributedController::read(void)
     dtkDistributedSocket *socket = (dtkDistributedSocket *)sender();
 
 
-    QVariantMap request = socket->parseRequest();
+    dtkDistributedMessage msg = socket->parseRequest();
+    QByteArray result;
 
-    QString method= request["method"].toString();
-    QString path= request["path"].toString();
-
-
-    if( method == "OK" && path   == "/status") {
-        QByteArray buffer = request["content"].toByteArray();
-        d->read_status(buffer,socket);
-        emit updated();
-    } else if( method == "OK" && path.startsWith("/job/")) {
-        QString jobId = path.split("/").at(2);
-        qDebug() << "New job queued: " << jobId;
-        emit updated();
-    } else if( method == "ENDED" && path.startsWith("/job/")) {
-        QString jobId = path.split("/").at(2);
-        qDebug() << "job finished: " << jobId;
-        emit updated();
-    } else if( method == "POST" && path.startsWith("/data")) {
-        QByteArray result = request["content"].toByteArray();
-        qDebug() << "Result: " << result;
-        emit dataPosted(result);
-        emit updated();
-    } else {
-        qDebug() << "unknown response from server: " << method << " " <<  path;
-    }
+    dtkDistributedMessage::Method method = msg.method();
+    switch (method) {
+        case dtkDistributedMessage::OKSTATUS:
+            result = msg.content();
+            d->read_status(result,socket);
+            emit updated();
+            break;
+        case dtkDistributedMessage::OKJOB:
+            qDebug() << "New job queued: " << msg.jobid();
+            emit updated();
+            break;
+        case dtkDistributedMessage::ENDJOB:
+            qDebug() << "job finished: " << msg.jobid();
+            emit updated();
+            break;
+        case dtkDistributedMessage::DATA:
+            result = msg.content();
+            qDebug() << "Result: " << result;
+            emit dataPosted(result);
+            emit updated();
+            break;
+        default:
+            qDebug() << "unknown response from server ";
+        };
     if (socket->bytesAvailable() > 0)
         this->read();
 }

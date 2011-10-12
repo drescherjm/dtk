@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct  6 15:08:39 2011 (+0200)
+ * Last-Updated: Thu Oct 13 00:09:24 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 759
+ *     Update #: 763
  */
 
 /* Commentary: 
@@ -562,10 +562,13 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
         
         for(int i = 0; i < children.count(); i++) {
 
-            if(children.at(i).toElement().tagName() != "name")
-                continue;
-
-            file_node->setFileName(children.at(i).childNodes().at(0).toText().data());
+            if(children.at(i).toElement().tagName() == "name") {
+                file_node->setFileName(children.at(i).childNodes().at(0).toText().data());
+            }
+            
+            if(children.at(i).toElement().tagName() == "url") {
+                file_node->setUrl(children.at(i).childNodes().at(0).toText().data());
+            }
         }        
     }
 

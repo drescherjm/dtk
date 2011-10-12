@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Oct  6 19:57:04 2011 (+0200)
+## Last-Updated: Thu Oct 13 01:17:06 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 146
+##     Update #: 148
 ######################################################################
 ## 
 ### Commentary: 
@@ -71,6 +71,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerNodeData.h
   dtkComposerNodeFactory.h
   dtkComposerNodeFile.h
+  dtkComposerNodeFile_p.h
   dtkComposerNodeLog.h
   dtkComposerNodeLoop.h
   dtkComposerNodeLoopFor.h

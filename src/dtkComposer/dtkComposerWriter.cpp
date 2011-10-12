@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct  6 15:05:33 2011 (+0200)
+ * Last-Updated: Thu Oct 13 00:08:27 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 417
+ *     Update #: 438
  */
 
 /* Commentary: 
@@ -347,9 +347,20 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
     
     if(dtkComposerNodeFile *file_node = dynamic_cast<dtkComposerNodeFile *>(node)) {
         
+        QUrl file_url = file_node->value(file_node->outputProperty("url")).toUrl();
+
         QString file_name = file_node->value(file_node->outputProperty("name")).toString();
-        
-        if(!file_name.isEmpty()) {
+
+        if(!file_url.isEmpty() && file_url.isValid()) {
+
+            QDomText text = document.createTextNode(file_url.toString());
+            
+            QDomElement url = document.createElement("url");
+            url.appendChild(text);
+            
+            tag.appendChild(url);
+
+        } else if(!file_name.isEmpty()) {
             
             QDomText text = document.createTextNode(file_name);
             

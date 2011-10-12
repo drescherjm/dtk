@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: mar. oct. 11 16:35:50 2011 (+0200)
+ * Last-Updated: mer. oct. 12 14:08:11 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 629
+ *     Update #: 633
  */
 
 /* Commentary:
@@ -23,8 +23,6 @@
 
 class dtkDistributedSocketPrivate
 {
-public:
-    QVariantMap *request;
 };
 
 dtkDistributedSocket::dtkDistributedSocket( QObject* parent ) :  d(new dtkDistributedSocketPrivate), QTcpSocket(parent)
@@ -78,40 +76,40 @@ qint64 dtkDistributedSocket::sendRequest( dtkDistributedMessage *msg)
  */
 dtkDistributedMessage dtkDistributedSocket::parseRequest(void)
 {
-    dtkDistributedMessage request ;
-    request.setMethod(this->readLine());
+    dtkDistributedMessage msg ;
+    msg.setMethod(this->readLine());
 
     // read content-size
-    request.setSize(this->readLine());
+    msg.setSize(this->readLine());
 
-    if (request.size() > 0) {
+    if (msg.size() > 0) {
         //read content-type
-        request.setType(this->readLine());
+        msg.setType(this->readLine());
 
         // read optional headers
         QByteArray line = this->readLine();
         while (!QString(line).trimmed().isEmpty()) {// empty line after last header
-            request.setHeader(QString(line));
+            msg.setHeader(QString(line));
             line=this->readLine();
         }
 
         // read content
         QByteArray buffer;
-        buffer.append(this->read(request.size()));
-        while (buffer.size() < request.size() ) {
+        buffer.append(this->read(msg.size()));
+        while (buffer.size() < msg.size() ) {
             if (this->waitForReadyRead()) {
-                buffer.append(this->read(request.size()-buffer.size()));
+                buffer.append(this->read(msg.size()-buffer.size()));
             } else {
-                qDebug() << "not enough data received, only  " << buffer.size() << "out of " << request.size() ;
-                request.setContent(buffer);
-                request.addHeader("missing_data",QString::number(request.size()-buffer.size()));
+                qDebug() << "not enough data received, only  " << buffer.size() << "out of " << msg.size() ;
+                msg.setContent(buffer);
+                msg.addHeader("missing_data",QString::number(msg.size()-buffer.size()));
                 break;
             }
         }
-        request.setContent(buffer);
+        msg.setContent(buffer);
     } else
         // end of request == empty line
         this->readLine();
 
-    return request;
+    return msg;
 }

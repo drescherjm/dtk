@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul  8 13:28:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 13 01:24:50 2011 (+0200)
+ * Last-Updated: Thu Oct 13 01:28:51 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 210
+ *     Update #: 214
  */
 
 /* Commentary: 
@@ -161,22 +161,16 @@ void dtkComposerNodeFile::run(void)
             return;
         }
         
-        qDebug() << DTK_PRETTY_FUNCTION << "Downloading" << d->url;
-
         d->dwnl_id = http.get(path, &file);
 
         while(!d->dwnl_ok)
             qApp->processEvents();
 
-        qDebug() << DTK_PRETTY_FUNCTION << "Download complete";
-        
         file.close();
 
         QFileInfo info(file);
         
         d->file = info.absoluteFilePath();
-
-        qDebug() << DTK_PRETTY_FUNCTION << dtkReadFile(d->file);
     }
     
     if (d->file.isEmpty())

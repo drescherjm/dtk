@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Oct 12 16:02:18 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 13 16:50:54 2011 (+0200)
+ * Last-Updated: Thu Oct 13 17:40:52 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 112
+ *     Update #: 130
  */
 
 /* Commentary: 
@@ -31,8 +31,8 @@
 #include <dtkCore/dtkGlobal>
 #include <dtkCore/dtkLog>
 
-// #define DTK_DEBUG_COMPOSER_INTERACTION 1
-// #define DTK_DEBUG_COMPOSER_EVALUATION 1
+#define DTK_DEBUG_COMPOSER_INTERACTION 1
+#define DTK_DEBUG_COMPOSER_EVALUATION 1
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeLoopDataCompositePrivate declaration
@@ -56,6 +56,8 @@ public:
     dtkAbstractData *item;
 
     dtkAbstractDataComposite *composite;
+
+    bool valid_input_composite;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -74,7 +76,7 @@ dtkComposerNodeLoopDataComposite::dtkComposerNodeLoopDataComposite(dtkComposerNo
 
     this->setColor(QColor("#2ABFFF"));
     this->setInputPropertyName("composite");
-    this->setTitle("Loop On Composite Data");
+    this->setTitle("Composite Data Loop");
     this->setType("dtkComposerLoopDataComposite");
 
     d->from_default = 0;
@@ -89,6 +91,8 @@ dtkComposerNodeLoopDataComposite::dtkComposerNodeLoopDataComposite(dtkComposerNo
 
     d->item = NULL;
     d->composite = NULL;
+
+    d->valid_input_composite = false;
 }
 
 dtkComposerNodeLoopDataComposite::~dtkComposerNodeLoopDataComposite(void)
@@ -218,6 +222,7 @@ void dtkComposerNodeLoopDataComposite::update(void)
                 }
                 
                 if (data) {
+
                     d->composite = qobject_cast<dtkAbstractDataComposite *>(data);
                     if (!d->composite) {
                         dtkDebug() << DTK_PRETTY_FUNCTION << "input data is not of dtkAbstractDataComposite* type.";
@@ -225,25 +230,50 @@ void dtkComposerNodeLoopDataComposite::update(void)
                     }
                     if (d->composite->count())
                         this->setObject((*d->composite)[0]);
+
                     d->to_default = d->composite->count()-1;
+                    
+                    d->valid_input_composite = true;
+
                 } else {
+
                     dtkDebug() << DTK_PRETTY_FUNCTION << "input data is not defined";
                     return;
+
                 }
 
             } else if (i_route->destination()->name() == "from") {
 
-                d->from = (dtkxarch_int)(i_route->source()->node()->value(i_route->source()).toLongLong());
+                d->from = (dtkxarch_int)(i_route->source()->node()->value(i_route->source()).toLongLong());   
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+                qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "from value =" << d->from << DTK_NO_COLOR;
+#endif
 
             } else if (i_route->destination()->name() == "to") {
 
-                d->to = (dtkxarch_int)(i_route->source()->node()->value(i_route->source()).toLongLong());
+                d->to = (dtkxarch_int)(i_route->source()->node()->value(i_route->source()).toLongLong()); 
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+                qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "to value =" << d->to << DTK_NO_COLOR;
+#endif
 
             } else if (i_route->destination()->name() == "step") {
 
                 d->step = (dtkxarch_int)(i_route->source()->node()->value(i_route->source()).toLongLong());
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+                qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "step value =" << d->step << DTK_NO_COLOR;
+#endif
 
             }
+
+            qDebug() << i_route;
+
+        }
+ 
+        if (!d->valid_input_composite) {
+            dtkDebug() << DTK_PRETTY_FUNCTION << " input composite property is not connected.";
+            return;   
         }
 
         if ((d->from > d->to) && (d->from > d->to_default))
@@ -310,6 +340,14 @@ void dtkComposerNodeLoopDataComposite::update(void)
             o_route->destination()->node()->update();
             
     }
+}
+
+void dtkComposerNodeLoopDataComposite::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property)
+{
+    if (property->name() == "from" || property->name() == "to" || property->name() == "step")
+        this->addInputActiveRoute(i_route);
+
+    dtkComposerNodeLoop::pull(i_route, property);
 }
     
 QVariant dtkComposerNodeLoopDataComposite::value(dtkComposerNodeProperty *property)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May 23 14:38:59 2011 (+0200)
+ * Last-Updated: Thu Oct 13 17:40:17 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 264
+ *     Update #: 267
  */
 
 /* Commentary: 
@@ -360,3 +360,25 @@ QVariant dtkComposerNodeLoopFor::value(dtkComposerNodeProperty *property)
 
     return value;
 }
+
+void dtkComposerNodeLoopFor::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property)
+{
+    if (this->inputProperty() && property == this->inputProperty()) {
+        
+        foreach(dtkComposerEdge *relay_route, this->inputRelayRoutes()) {
+            if (relay_route->source()->name() == this->inputProperty()->name()) {
+
+                dtkComposerEdge *route = new dtkComposerEdge;
+                route->setSource(this->inputProperty());
+                route->setDestination(relay_route->destination());
+                
+                relay_route->destination()->node()->addInputRoute(route);
+                this->addInputActiveRoute(route);
+            }
+        }
+
+    }
+
+    dtkComposerNodeLoop::pull(i_route, property);
+}
+    

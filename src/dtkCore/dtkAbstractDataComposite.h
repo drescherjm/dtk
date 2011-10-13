@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Sep 21 13:46:31 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 26 14:34:55 2011 (+0200)
+ * Last-Updated: Thu Oct 13 15:36:16 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 252
+ *     Update #: 258
  */
 
 /* Commentary: 
@@ -52,15 +52,23 @@ public:
     void remove(dtkAbstractData *data);
      
     bool has(dtkAbstractData *data) const;
+
+    dtkxarch_int count(void);
     
     dtkxarch_int indexOf(dtkAbstractData *data, dtkxarch_int from = 0);
 
     Type type(void);
      
     const dtkAbstractData *at(dtkxarch_int index) const;
+ 
+          dtkAbstractData *operator[] (dtkxarch_int index);
+    const dtkAbstractData *operator[] (dtkxarch_int index) const;
      
-    const QVector<dtkAbstractData *>& vector(void) const;     
-    const   QList<dtkAbstractData *>&   list(void) const;
+    const QVector<dtkAbstractData *>& vector(void) const;  
+          QVector<dtkAbstractData *>& vector(void);
+
+    const QList<dtkAbstractData *>& list(void) const;
+          QList<dtkAbstractData *>& list(void);
 
 private:
     dtkAbstractDataCompositePrivate *d;

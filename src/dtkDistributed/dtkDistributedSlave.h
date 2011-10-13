@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. oct.  4 16:31:23 2011 (+0200)
+ * Last-Updated: jeu. oct.  6 09:32:56 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 66
+ *     Update #: 76
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@
 #include <QtCore>
 #include <QtNetwork>
 
+class dtkDistributedCommunicatorTcp;
 class dtkDistributedSlavePrivate;
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedSlave : public QObject
@@ -34,6 +35,7 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedSlave : public QObject
 
 public:
      dtkDistributedSlave(void);
+     dtkDistributedSlave(dtkDistributedCommunicatorTcp *communicator);
     ~dtkDistributedSlave(void);
 
 public:
@@ -63,6 +65,7 @@ protected:
     dtkDistributedCommunicatorTcp *communicator();
 
 protected slots:
+    void      read(void);
     void onStarted(void);
     void   onEnded(void);
 

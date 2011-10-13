@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Jul 20 12:41:15 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul 20 12:48:36 2009 (+0200)
+ * Last-Updated: Thu Oct 13 01:21:58 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 5
+ *     Update #: 6
  */
 
 /* Commentary: 
@@ -23,7 +23,7 @@
 //  W A R N I N G
 //
 // This file is not part of the dtk API.  It exists for the convenience
-// of dtkupdater. This header file may change from version to
+// of dtkUpdater. This header file may change from version to
 // version without notice, or even be removed.
 //
 // We mean it.

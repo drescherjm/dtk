@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep  9 13:02:59 2011 (+0200)
- *           By: jwintz
- *     Update #: 48
+ * Last-Updated: jeu. oct.  6 18:01:32 2011 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 49
  */
 
 /* Commentary: 
@@ -45,13 +45,13 @@ public:
     QString name(void) const;
 
     void   barrier(void);
-    void      send(void *data,             quint16 size, DataType dataType, quint16 target, int tag);
-    void   receive(void *data,             quint16 size, DataType dataType, quint16 source, int tag);
-    void   receive(void *data,             quint16 size, DataType dataType, quint16 source, int tag, int& from);
-    void broadcast(void *data,             quint16 size, DataType dataType, quint16 source);
-    void    gather(void *send, void *recv, quint16 size, DataType dataType, quint16 target, bool all = false);
-    void   scatter(void *send, void *recv, quint16 size, DataType dataType, quint16 source);
-    void    reduce(void *send, void *recv, quint16 size, DataType dataType, OperationType operationType, quint16 target, bool all = false);
+    void      send(void *data,             qint64 size, DataType dataType, quint16 target, int tag);
+    void   receive(void *data,             qint64 size, DataType dataType, quint16 source, int tag);
+    void   receive(void *data,             qint64 size, DataType dataType, quint16 source, int tag, int& from);
+    void broadcast(void *data,             qint64 size, DataType dataType, quint16 source);
+    void    gather(void *send, void *recv, qint64 size, DataType dataType, quint16 target, bool all = false);
+    void   scatter(void *send, void *recv, qint64 size, DataType dataType, quint16 source);
+    void    reduce(void *send, void *recv, qint64 size, DataType dataType, OperationType operationType, quint16 target, bool all = false);
 
 private:
     dtkDistributedCommunicatorMpiPrivate *d;

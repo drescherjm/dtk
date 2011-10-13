@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep  5 14:14:31 2011 (+0200)
+ * Last-Updated: Wed Oct 12 14:46:43 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 170
+ *     Update #: 190
  */
 
 /* Commentary:
@@ -24,6 +24,10 @@
 #include <dtkCore/dtkLog.h>
 
 #define DTK_VERBOSE_LOAD false
+
+// /////////////////////////////////////////////////////////////////
+// dtkPluginManagerPrivate
+// /////////////////////////////////////////////////////////////////
 
 class dtkPluginManagerPrivate
 {
@@ -43,6 +47,10 @@ dtkPluginManager *dtkPluginManager::instance(void)
 
     return s_instance;
 }
+
+// /////////////////////////////////////////////////////////////////
+// dtkPluginManager
+// /////////////////////////////////////////////////////////////////
 
 void dtkPluginManager::initialize(void)
 {
@@ -232,13 +240,14 @@ void dtkPluginManager::loadPlugin(const QString& path)
     emit loaded(plugin->name());
 }
 
-/*!
-    \brief      Unloads the plugin previously loaded from the given filename.
-                Derived classes may override to prevent certain plugins being unloaded,
-                or provide additional functionality. In most cases they should still
-                call the base implementation (this).
-    \param      path : Path to plugin file to be unloaded.
-*/
+//! Unloads the plugin previously loaded from the given filename.
+/*! Derived classes may override to prevent certain plugins being
+ *  unloaded, or provide additional functionality. In most
+ *  cases they should still call the base implementation
+ *  (this).
+ *
+ * \param path Path to plugin file to be unloaded.
+ */
 void dtkPluginManager::unloadPlugin(const QString& path)
 {
     dtkPlugin *plugin = qobject_cast<dtkPlugin *>(d->loaders.value(path)->instance());

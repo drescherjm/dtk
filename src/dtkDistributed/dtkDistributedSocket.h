@@ -4,8 +4,8 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. oct. 11 15:12:34 2011 (+0200)
- *           By: Nicolas Niclausse
+ * Last-Updated: Thu Oct 13 17:07:38 2011 (+0200)
+ *           By: Julien Wintz
  *     Update #:
  */
 
@@ -36,14 +36,12 @@ public:
              dtkDistributedSocket( QObject *parent = 0);
     virtual ~dtkDistributedSocket(void);
 
-    qint64       sendRequest(dtkDistributedMessage *msg);
+    qint64 sendRequest(dtkDistributedMessage *msg);
 
     dtkDistributedMessage parseRequest(void);
 
 private:
-
     dtkDistributedSocketPrivate *d;
-
 };
 
 #endif

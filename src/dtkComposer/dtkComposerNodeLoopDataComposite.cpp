@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Oct 12 16:02:18 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 13 17:40:52 2011 (+0200)
+ * Last-Updated: Fri Oct 14 12:11:33 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 130
+ *     Update #: 131
  */
 
 /* Commentary: 
@@ -306,6 +306,7 @@ void dtkComposerNodeLoopDataComposite::update(void)
             
             d->item = (*d->composite)[d->index];            
             this->run();
+            this->updatePassThroughVariables();
             d->index += d->step;
             
         }

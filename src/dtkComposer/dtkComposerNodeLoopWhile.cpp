@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May  4 08:51:21 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 23 11:37:16 2011 (+0200)
+ * Last-Updated: Fri Oct 14 13:27:42 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 32
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -131,8 +131,16 @@ void dtkComposerNodeLoopWhile::update(void)
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
+
+    // -- If update is invoked while node is running, update is not necessary.
     
-    if (!this->isPreRunning() && !this->isRunning()) {
+    if (this->isRunning()) {
+
+        return;
+
+    } else {
+
+        // -- Check that node is ready (ie not dirty)
 
         if (!this->dirty())
             return;
@@ -176,101 +184,65 @@ void dtkComposerNodeLoopWhile::update(void)
         qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Pull done" << DTK_NO_COLOR;
 #endif
         
-        // -- Running logics of conditional block
+        // -- Node is now ready to run
         
-        this->setPreRunning(true);
+        this->setRunning(true);
+
+        // -- First of all, condition of loop evaluation is evaluated from conditional block.
+
         this->setCurrentBlock(d->block_cond);
-
-#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-        qDebug() << DTK_COLOR_BG_RED  << "Running Condition block" << DTK_NO_COLOR;
-#endif
-
         this->run();
-        this->update();
 
-    } else {
-            
-        if (!this->isRunning()) {
+        // -- Loop evaluation is performed while condition is fullfilled
 
-            // -- Check Dirty end nodes for conditional block
+        while(d->node_cond->value(d->prop_cond).toBool()) {
 
-            if (this->dirtyBlockEndNodes())
-                return;
-        
-            this->setLoopCondition(d->node_cond->value(d->prop_cond).toBool());
-        
-            if (this->loopConditon()) {
+            // -- Workflow of loop block is evaluated
 
-#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-                qDebug() << DTK_COLOR_BG_RED  << "Running Loop block" << DTK_NO_COLOR;
-#endif
-
-                this->setCurrentBlock(d->block_loop);
-                this->setRunning(true);
-                this->setPreRunning(false);
-                this->run();
-                this->update();
-
-            } else {
-
-#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-                qDebug() << DTK_COLOR_BG_RED  << "Condition is no more fulfilled" << DTK_NO_COLOR;
-#endif
-
-                this->setPreRunning(true);
-                this->setRunning(true);
-                this->update();
-
-            }
-
-        } else if (!this->isPreRunning()) {
-
-            if (this->dirtyBlockEndNodes())
-                return;
-            
-#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-            qDebug() << DTK_COLOR_BG_RED  << "Running Condition block" << DTK_NO_COLOR;
-#endif
-            
-            this->updatePassThroughVariables();
-            this->setCurrentBlock(d->block_cond);
-            this->setPreRunning(true);
-            this->setRunning(false);
+            this->setCurrentBlock(d->block_loop);
             this->run();
-            this->update();
-            
-        } else {
-            
-            // -- Clean active output routes
 
-            this->cleanOutputActiveRoutes();
+            // -- Loop variables, if present, are updated.
 
-#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-            qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Output active routes cleaned" << DTK_NO_COLOR;
-#endif
-            
-            // -- Push
-            
-            foreach(dtkComposerEdge *o_route, this->outputRoutes())
-                this->push(o_route, o_route->source());
+            this->updatePassThroughVariables();
 
-#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-            qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Push done" << DTK_NO_COLOR;
-#endif
+            // -- Loop condition is re-calculated from condition block.
 
-            // -- Forward
-            
-            this->setDirty(false);
-            this->setPreRunning(false);
-            this->setRunning(false);
-            
-#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-            qDebug() << DTK_COLOR_BG_BLUE << DTK_PRETTY_FUNCTION << "Forward done" << DTK_NO_COLOR;
-#endif
+            this->setCurrentBlock(d->block_cond);
+            this->run();
 
-            foreach(dtkComposerEdge *o_route, this->outputRoutes())
-                o_route->destination()->node()->update();
-            
         }
+            
+        // -- Clean active output routes
+        
+        this->cleanOutputActiveRoutes();
+        
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Output active routes cleaned" << DTK_NO_COLOR;
+#endif
+        
+        // -- Push
+        
+        foreach(dtkComposerEdge *o_route, this->outputRoutes())
+            this->push(o_route, o_route->source());
+        
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Push done" << DTK_NO_COLOR;
+#endif
+
+        // -- Node is now clean and is no more running
+        
+        this->setDirty(false);
+        this->setRunning(false);
+
+        // -- Forward to downstream nodes
+        
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_BLUE << DTK_PRETTY_FUNCTION << "Forward is about to be done" << DTK_NO_COLOR;
+#endif
+        
+        foreach(dtkComposerEdge *o_route, this->outputRoutes())
+            o_route->destination()->node()->update();
+            
     }
 }

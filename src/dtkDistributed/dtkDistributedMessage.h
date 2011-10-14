@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: mar. oct. 11 10:46:57 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. oct. 11 16:29:28 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 135
+ * Last-Updated: Thu Oct 13 17:12:24 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 139
  */
 
 /* Commentary:
@@ -70,11 +70,8 @@ public:
     qint64 size(void);
     QByteArray &content(void);
 
-
 private:
-
     dtkDistributedMessagePrivate *d;
-
 };
 
 #endif

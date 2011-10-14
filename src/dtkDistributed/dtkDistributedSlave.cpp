@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. oct. 11 14:59:59 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 188
+ * Last-Updated: Thu Oct 13 17:19:53 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 204
  */
 
 /* Commentary: 
@@ -47,6 +47,17 @@ dtkDistributedSlave::~dtkDistributedSlave(void)
     delete d;
 
     d = NULL;
+}
+
+QString dtkDistributedSlave::jobId(void)
+{
+    if(!(QString(getenv("PBS_JOBID")).isEmpty()))
+        return QString(getenv("PBS_JOBID")).split(".").first();
+
+    if(!(QString(getenv("OAR_JOBID")).isEmpty()))
+        return QString(getenv("OAR_JOBID"));
+
+    return QString();
 }
 
 int dtkDistributedSlave::run(void)

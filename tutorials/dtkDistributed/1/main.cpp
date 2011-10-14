@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Sep  6 14:15:35 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep  9 13:01:26 2011 (+0200)
- *           By: jwintz
- *     Update #: 153
+ * Last-Updated: Thu Oct 13 17:31:19 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 159
  */
 
 /* Commentary: 
@@ -114,11 +114,13 @@ int main(int argc, char **argv)
 
         for(int slave = 1; slave < size; slave++) {
 
-            MPI::COMM_WORLD.Recv(&partial_sum, 1, MPI_LONG, slave, RECV_TAG);
+            int external_sum = 0;
 
-            qDebug() << "Rank" << slave << "has partial sum" << partial_sum;
+            MPI::COMM_WORLD.Recv(&external_sum, 1, MPI_LONG, slave, RECV_TAG);
+
+            qDebug() << "Rank" << slave << "has partial sum" << external_sum;
             
-            sum += partial_sum;
+            sum += external_sum;
         }
 
         qDebug() << "Sum is" << sum;

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May  4 08:51:21 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Oct 14 13:27:42 2011 (+0200)
+ * Last-Updated: ven. oct. 14 23:30:02 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 41
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -98,11 +98,12 @@ void dtkComposerNodeLoopWhile::layout(void)
                                      block->mapRectToParent(block->rect()).top()  + node_radius * (4*j + 1),
                                      2 * node_radius,
                                      2 * node_radius ));
-
+            
             if (property->type() == dtkComposerNodeProperty::Output)
                 property->mirror();
-
+            
             j++;
+
         }
         
         if (block == d->block_cond)
@@ -110,18 +111,19 @@ void dtkComposerNodeLoopWhile::layout(void)
         else
             j = 1;
         foreach(dtkComposerNodeProperty *property, block->outputProperties()) {
-
+            
             property->setRect(QRectF(block->mapRectToParent(block->rect()).right() - node_radius * 3,
                                      block->mapRectToParent(block->rect()).top()   + node_radius * (4*j + 1),
                                      2 * node_radius,
                                      2 * node_radius ));
-
+            
             if (property->name() == "condition") {
                 property->mirror();
                 j++;
             }
-
+            
             j++;
+
         }
     }     
 }
@@ -131,46 +133,46 @@ void dtkComposerNodeLoopWhile::update(void)
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
-
+    
     // -- If update is invoked while node is running, update is not necessary.
     
     if (this->isRunning()) {
-
+        
         return;
-
+        
     } else {
-
+        
         // -- Check that node is ready (ie not dirty)
-
+        
         if (!this->dirty())
             return;
-
+        
         // -- Check dirty inputs
-
+        
         if (this->dtkComposerNode::dirtyUpstreamNodes())
             return;
-
+        
         // -- Mark dirty outputs
-
+        
         this->dtkComposerNode::markDirtyDownstreamNodes();
-
+        
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
         qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "All output nodes are set to dirty" << DTK_NO_COLOR;
 #endif
-
+        
         // -- Clean active input routes
-
+        
         this->cleanInputActiveRoutes();
-
+        
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
         qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Input active routes cleaned" << DTK_NO_COLOR;
 #endif
-
+        
         // -- Pull
-
+        
         foreach(dtkComposerEdge *i_route, this->inputRoutes())
             this->pull(i_route, i_route->destination());
-
+        
         foreach(dtkComposerEdge *o_route, this->outputRelayRoutes()) {
             if (o_route->destination()->blockedFrom() == d->block_cond->title()) {
                 if (o_route->destination()->name() == "condition") {
@@ -183,9 +185,9 @@ void dtkComposerNodeLoopWhile::update(void)
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
         qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Pull done" << DTK_NO_COLOR;
 #endif
-        
+
         // -- Node is now ready to run
-        
+
         this->setRunning(true);
 
         // -- First of all, condition of loop evaluation is evaluated from conditional block.
@@ -212,26 +214,26 @@ void dtkComposerNodeLoopWhile::update(void)
             this->run();
 
         }
-            
+
         // -- Clean active output routes
-        
+
         this->cleanOutputActiveRoutes();
-        
+
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
         qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Output active routes cleaned" << DTK_NO_COLOR;
 #endif
-        
+
         // -- Push
-        
+
         foreach(dtkComposerEdge *o_route, this->outputRoutes())
             this->push(o_route, o_route->source());
-        
+
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
         qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Push done" << DTK_NO_COLOR;
 #endif
 
         // -- Node is now clean and is no more running
-        
+
         this->setDirty(false);
         this->setRunning(false);
 

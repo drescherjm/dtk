@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Oct 12 16:02:18 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Oct 14 12:11:33 2011 (+0200)
+ * Last-Updated: ven. oct. 14 23:26:00 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 131
+ *     Update #: 154
  */
 
 /* Commentary: 
@@ -31,8 +31,8 @@
 #include <dtkCore/dtkGlobal>
 #include <dtkCore/dtkLog>
 
-#define DTK_DEBUG_COMPOSER_INTERACTION 1
-#define DTK_DEBUG_COMPOSER_EVALUATION 1
+// #define DTK_DEBUG_COMPOSER_INTERACTION 1
+// #define DTK_DEBUG_COMPOSER_EVALUATION 1
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeLoopDataCompositePrivate declaration
@@ -69,10 +69,14 @@ dtkComposerNodeLoopDataComposite::dtkComposerNodeLoopDataComposite(dtkComposerNo
     d->block_loop = this->addBlock("loop");
     d->block_loop->setInteractive(false);
     d->block_loop->setHeightRatio(1);
+
     this->addInputProperty(d->block_loop->addInputProperty("from", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, dtkComposerNodeProperty::None, this));
     this->addInputProperty(d->block_loop->addInputProperty("to", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, dtkComposerNodeProperty::None, this));
     this->addInputProperty(d->block_loop->addInputProperty("step", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, dtkComposerNodeProperty::None, this));
     this->addInputProperty(d->block_loop->addInputProperty("item", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, dtkComposerNodeProperty::AsLoopInput, this));
+    this->addInputProperty(d->block_loop->addInputProperty("index", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, dtkComposerNodeProperty::AsLoopInput, this));
+
+    this->setCurrentBlock(d->block_loop);
 
     this->setColor(QColor("#2ABFFF"));
     this->setInputPropertyName("composite");
@@ -127,7 +131,11 @@ void dtkComposerNodeLoopDataComposite::layout(void)
                                  2 * node_radius,
                                  2 * node_radius ));
 
-        if (property->name() == "item") {
+        if (property->name() == "step") {
+            j++;
+        } else if (property->name() == "item") {
+            property->mirror();
+        } else if (property->name() == "index") {
             property->mirror();
             j++;
         }
@@ -152,12 +160,16 @@ void dtkComposerNodeLoopDataComposite::update(void)
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
-
+    
+    // -- If update is invoked while node is running, update is not necessary.
+    
     if (this->isRunning()) {
 
         return;
     
     } else {
+
+         // -- Check that node is ready (ie not dirty)
 
         if (!this->dirty())
             return;
@@ -201,6 +213,20 @@ void dtkComposerNodeLoopDataComposite::update(void)
         qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Pull done" << DTK_NO_COLOR;
 #endif
 
+        // -- Set input relay routes connected to item and index properties
+
+        foreach(dtkComposerEdge *relay_route, this->inputRelayRoutes()) {
+            if (relay_route->source()->name() == "item" || relay_route->source()->name() == "index") {
+
+                dtkComposerEdge *route = new dtkComposerEdge;
+                route->setSource(relay_route->source());
+                route->setDestination(relay_route->destination());
+                
+                relay_route->destination()->node()->addInputRoute(route);   
+            
+            }
+        }
+
         // -- Set input composite and loop options
 
         foreach(dtkComposerEdge *i_route, this->inputActiveRoutes()) {
@@ -228,11 +254,7 @@ void dtkComposerNodeLoopDataComposite::update(void)
                         dtkDebug() << DTK_PRETTY_FUNCTION << "input data is not of dtkAbstractDataComposite* type.";
                         return;
                     }
-                    if (d->composite->count())
-                        this->setObject((*d->composite)[0]);
-
                     d->to_default = d->composite->count()-1;
-                    
                     d->valid_input_composite = true;
 
                 } else {
@@ -266,9 +288,6 @@ void dtkComposerNodeLoopDataComposite::update(void)
 #endif
 
             }
-
-            qDebug() << i_route;
-
         }
  
         if (!d->valid_input_composite) {
@@ -276,40 +295,60 @@ void dtkComposerNodeLoopDataComposite::update(void)
             return;   
         }
 
-        if ((d->from > d->to) && (d->from > d->to_default))
-            d->from = d->to_default;
-        else if (d->from < 0)
-            d->from = d->from_default;
-        else if (d->to < d->from && d->to < 0)
-            d->to = d->from_default;
-        else if (d->to > d->to_default)
-            d->to = d->to_default;
+        // -- Set ranges and step of the loop
 
-        if (d->step < 0 && (d->from < d->to))
-            d->step = d->step_default;
+        if (d->from > d->to) {
 
+            if (d->from > d->to_default)
+                d->from = d->to_default;
+            if (d->to < 0)
+                d->to = d->from_default;
+            if (d->step > 0)
+                d->step *= -1;
+
+        } else {
+
+            if (d->from < 0)
+                d->from = d->from_default;
+            if (d->to > d->to_default)
+                d->to = d->to_default;
+            if (d->step < 0)
+                d->step = d->step_default;
+
+        }
         d->index = d->from;
         
-        // -- Running logics of conditional block
-        
-        this->setRunning(true);
+         // -- Node is now ready to run
 
-#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-        qDebug() << DTK_COLOR_BG_RED  << "Loop initialization done" << DTK_NO_COLOR;
-#endif
+         this->setRunning(true);
+
+         // -- Loop evaluation is performed while condition is fullfilled
 
         while(d->index <= d->to) {
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
             qDebug() << DTK_COLOR_BG_RED  << "Loop is running, index = " << d->index << DTK_NO_COLOR;
 #endif
-            
+
+            // -- Set current available item of the composite
+
             d->item = (*d->composite)[d->index];            
+            this->setObject(d->item);
+
+             // -- Workflow of loop block is evaluated            
+
             this->run();
+
+            // -- Loop variables, if present, are updated.
+
             this->updatePassThroughVariables();
+
+            // -- Increment loop index
+
             d->index += d->step;
             
         }
+        d->index -= d->step;
             
         // -- Clean active output routes
 
@@ -328,8 +367,8 @@ void dtkComposerNodeLoopDataComposite::update(void)
         qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Push done" << DTK_NO_COLOR;
 #endif
 
-        // -- Forward
-            
+         // -- Node is now clean and is no more running
+
         this->setDirty(false);
         this->setRunning(false);
             
@@ -337,6 +376,8 @@ void dtkComposerNodeLoopDataComposite::update(void)
         qDebug() << DTK_COLOR_BG_BLUE << DTK_PRETTY_FUNCTION << "Forward done" << DTK_NO_COLOR;
 #endif
 
+        // -- Forward
+            
         foreach(dtkComposerEdge *o_route, this->outputRoutes())
             o_route->destination()->node()->update();
             
@@ -345,19 +386,21 @@ void dtkComposerNodeLoopDataComposite::update(void)
 
 void dtkComposerNodeLoopDataComposite::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property)
 {
-    if (property->name() == "from" || property->name() == "to" || property->name() == "step")
+    if (property->name() == "composite" || property->name() == "from" || property->name() == "to" || property->name() == "step"){
+
         this->addInputActiveRoute(i_route);
 
-    dtkComposerNodeLoop::pull(i_route, property);
+    } else {
+
+        dtkComposerNodeLoop::pull(i_route, property);
+    }
 }
     
 QVariant dtkComposerNodeLoopDataComposite::value(dtkComposerNodeProperty *property)
 {
     QVariant value;
-    // if (property == this->inputProperty())
-    //     value = d->loop_variable;
-    // else
-    //     value = dtkComposerNodeLoop::value(property);
+    if (property->name() == "index")
+        value = QVariant(d->index);
 
     return value;
 }

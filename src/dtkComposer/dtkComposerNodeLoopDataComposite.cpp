@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Oct 12 16:02:18 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Oct 14 12:11:33 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 131
+ * Last-Updated: Fri Oct 14 16:21:27 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 138
  */
 
 /* Commentary: 
@@ -339,8 +339,14 @@ void dtkComposerNodeLoopDataComposite::update(void)
 
         foreach(dtkComposerEdge *o_route, this->outputRoutes())
             o_route->destination()->node()->update();
-            
     }
+}
+
+void dtkComposerNodeLoopDataComposite::onEdgeConnected(dtkComposerEdge *edge)
+{
+    edge->invalidate();
+    
+    dtkComposerNodeLoop::onEdgeConnected(edge);
 }
 
 void dtkComposerNodeLoopDataComposite::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property)
@@ -353,11 +359,5 @@ void dtkComposerNodeLoopDataComposite::pull(dtkComposerEdge *i_route, dtkCompose
     
 QVariant dtkComposerNodeLoopDataComposite::value(dtkComposerNodeProperty *property)
 {
-    QVariant value;
-    // if (property == this->inputProperty())
-    //     value = d->loop_variable;
-    // else
-    //     value = dtkComposerNodeLoop::value(property);
-
-    return value;
+    return QVariant();
 }

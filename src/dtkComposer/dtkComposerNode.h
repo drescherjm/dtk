@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct  5 14:51:01 2011 (+0200)
+ * Last-Updated: Fri Oct 14 16:19:09 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 291
+ *     Update #: 292
  */
 
 /* Commentary: 
@@ -221,8 +221,8 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 public:
-    void    onEdgeConnected(dtkComposerEdge *edge);
-    void onEdgeDisconnected(dtkComposerEdge *edge);
+    virtual void    onEdgeConnected(dtkComposerEdge *edge);
+    virtual void onEdgeDisconnected(dtkComposerEdge *edge);
 
     virtual QList<dtkComposerEdge *> allRoutes(void);
     virtual void removeRoute(dtkComposerEdge *route);

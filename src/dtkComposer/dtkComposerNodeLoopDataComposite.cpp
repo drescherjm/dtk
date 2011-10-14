@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Oct 12 16:02:18 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. oct. 14 23:26:00 2011 (+0200)
+ * Last-Updated: ven. oct. 14 23:35:03 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 154
+ *     Update #: 156
  */
 
 /* Commentary: 
@@ -380,8 +380,17 @@ void dtkComposerNodeLoopDataComposite::update(void)
             
         foreach(dtkComposerEdge *o_route, this->outputRoutes())
             o_route->destination()->node()->update();
-            
     }
+}
+
+void dtkComposerNodeLoopDataComposite::onEdgeConnected(dtkComposerEdge *edge)
+{
+    if(true)
+        edge->invalidate();
+    else
+        ; // dtkComposerNodeLoop::onEdgeConnected(edge);
+
+    dtkComposerNodeLoop::onEdgeConnected(edge); // TO BE REMOVED LATER ON
 }
 
 void dtkComposerNodeLoopDataComposite::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:26:53 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Mar  5 20:48:57 2011 (+0100)
+ * Last-Updated: Fri Oct 14 16:02:07 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 41
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -38,6 +38,12 @@ class DTKCOMPOSER_EXPORT dtkComposerEdge : public QObject, public QGraphicsItem
 #endif
 
 public:
+    enum Flag {
+          Valid,
+        Invalid
+    };
+
+public:
      dtkComposerEdge(void);
     ~dtkComposerEdge(void);
 
@@ -67,6 +73,10 @@ public:
 
     bool   link(bool anyway = false);
     bool unlink(void);
+
+public slots:
+    void   validate(void);
+    void invalidate(void);
 
 private:
     dtkComposerEdgePrivate *d;

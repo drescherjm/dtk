@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 13 11:37:56 2011 (+0200)
+ * Last-Updated: Sun Oct 16 20:46:33 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 764
+ *     Update #: 833
  */
 
 /* Commentary: 
@@ -40,6 +40,9 @@
 #include "dtkComposerScene.h"
 
 #include <dtkCore/dtkGlobal.h>
+#include <dtkCore/dtkAbstractDataFactory.h>
+#include <dtkCore/dtkAbstractProcessFactory.h>
+#include <dtkCore/dtkAbstractViewFactory.h>
 
 #include <QtXml>
 
@@ -50,10 +53,49 @@
 class dtkComposerReaderPrivate
 {
 public:
+    bool check(const QDomDocument& document);
+
+public:
     dtkComposerScene *scene;
 
     QHash<int, dtkComposerNode *> node_map;
 };
+
+bool dtkComposerReaderPrivate::check(const QDomDocument& document)
+{
+    QStringList implementations;
+
+    QDomNodeList implementation_nodes = document.elementsByTagName("implementation");
+
+    for(int i = 0; i < implementation_nodes.count(); i++)
+        implementations << implementation_nodes.at(i).toElement().text();
+
+    foreach(QString implementation, implementations) {
+        if(dtkAbstractDataFactory::instance()->creators().contains(implementation))
+            implementations.removeOne(implementation);
+        if(dtkAbstractProcessFactory::instance()->creators().contains(implementation))
+            implementations.removeOne(implementation);
+        if(dtkAbstractViewFactory::instance()->creators().contains(implementation))
+            implementations.removeOne(implementation);
+    }
+
+    if(implementations.isEmpty())
+        return true;
+
+    QString details;
+    details += "The following implementations are missing:\n";
+    foreach(QString implementation, implementations)
+        details += QString("- %1\n").arg(implementation);
+
+    QMessageBox box;
+    box.setText("Node implementations are missing.");
+    box.setInformativeText("You will be able to load the composition, but its evaluation will not behave as excpected.");
+    box.setStandardButtons(QMessageBox::Abort | QMessageBox::Ignore);
+    box.setDefaultButton(QMessageBox::Abort);
+    box.setDetailedText(details);
+
+    return (box.exec() == QMessageBox::Ignore);
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerReader
@@ -71,23 +113,26 @@ dtkComposerReader::~dtkComposerReader(void)
     d = NULL;
 }
 
-void dtkComposerReader::read(const QString& fileName, bool append)
+bool dtkComposerReader::read(const QString& fileName, bool append)
 {
     // Setting dom document
 
-    QDomDocument doc("dtk");
+    QDomDocument document("dtk");
 
     QFile file(fileName);
 
     if (!file.open(QIODevice::ReadOnly))
-        return;
+        return false;
 
-    if (!doc.setContent(&file)) {
+    if (!document.setContent(&file)) {
         file.close();
-        return;
+        return false;
     }
 
     file.close();
+
+    if(!d->check(document))
+        return false;
 
     // Clear scene if applicable
 
@@ -98,7 +143,7 @@ void dtkComposerReader::read(const QString& fileName, bool append)
 
     // Feeding scene with nodes
 
-    QDomNodeList nodes = doc.firstChild().childNodes();
+    QDomNodeList nodes = document.firstChild().childNodes();
 
     for(int i = 0; i < nodes.count(); i++)
         if(nodes.at(i).toElement().tagName() == "node")
@@ -106,7 +151,7 @@ void dtkComposerReader::read(const QString& fileName, bool append)
 
     // Feeding scene with edges
 
-    QDomNodeList edges = doc.firstChild().childNodes();
+    QDomNodeList edges = document.firstChild().childNodes();
 
     for(int i = 0; i < edges.count(); i++) {
 
@@ -297,7 +342,7 @@ void dtkComposerReader::read(const QString& fileName, bool append)
 
     // Feeding scene with notes
     
-    QDomNodeList notes = doc.firstChild().childNodes();
+    QDomNodeList notes = document.firstChild().childNodes();
 
     for(int i = 0; i < notes.count(); i++) {
         
@@ -313,6 +358,8 @@ void dtkComposerReader::read(const QString& fileName, bool append)
     }
 
     d->scene->touch();
+
+    return true;
 }
 
 dtkComposerNode *dtkComposerReader::readNode(QDomNode node)

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Oct 12 15:59:53 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Oct 14 16:06:32 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 8
+ * Last-Updated: Mon Oct 17 16:25:47 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -48,9 +48,6 @@ public:
 
 public:
     void onEdgeConnected(dtkComposerEdge *edge);
-
-protected:
-    void pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property);
 
 private:
     dtkComposerNodeLoopDataCompositePrivate *d;

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Oct 12 16:02:18 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 17 16:06:43 2011 (+0200)
+ * Last-Updated: Mon Oct 17 16:28:28 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 183
+ *     Update #: 186
  */
 
 /* Commentary: 
@@ -32,7 +32,7 @@
 #include <dtkCore/dtkLog>
 
 // #define DTK_DEBUG_COMPOSER_INTERACTION 1
-#define DTK_DEBUG_COMPOSER_EVALUATION 1
+// #define DTK_DEBUG_COMPOSER_EVALUATION 1
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeLoopDataCompositePrivate declaration
@@ -225,9 +225,6 @@ void dtkComposerNodeLoopDataComposite::update(void)
                 
                 relay_route->destination()->node()->addInputRoute(route);
                 this->addInputActiveRoute(route);
-
-                foreach(dtkComposerEdge *rr,relay_route->destination()->node()->inputRoutes())
-                    qDebug() << rr;
             
             }
         }
@@ -296,14 +293,12 @@ void dtkComposerNodeLoopDataComposite::update(void)
             }
         }
  
-        // if (!d->valid_input_composite) {
-        //     dtkDebug() << DTK_PRETTY_FUNCTION << " input composite property is not connected.";
-        //     return;   
-        // }
+        if (!d->valid_input_composite) {
+            dtkDebug() << DTK_PRETTY_FUNCTION << " input composite property is not connected.";
+            return;   
+        }
 
         // -- Set ranges and step of the loop
-
-        qDebug() << d->index << d->step << d->from << d->to;
 
         if (d->from > d->to) {
 
@@ -325,8 +320,6 @@ void dtkComposerNodeLoopDataComposite::update(void)
 
         }
         d->index = d->from;
-
-        qDebug() << d->index << d->step << d->from << d->to;
         
          // -- Node is now ready to run
 
@@ -356,8 +349,6 @@ void dtkComposerNodeLoopDataComposite::update(void)
             // -- Increment loop index
 
             d->index += d->step;
-
-            qDebug() << d->index;
             
         }
         d->index -= d->step;
@@ -403,18 +394,6 @@ void dtkComposerNodeLoopDataComposite::onEdgeConnected(dtkComposerEdge *edge)
     //     ; // dtkComposerNodeLoop::onEdgeConnected(edge);
 
     dtkComposerNode::onEdgeConnected(edge); // TO BE REMOVED LATER ON
-}
-
-void dtkComposerNodeLoopDataComposite::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property)
-{
-    // if (property->name() == "composite" || property->name() == "from" || property->name() == "to" || property->name() == "step"){
-
-    //     this->addInputActiveRoute(i_route);
-
-    // } else {
-
-        dtkComposerNodeLoop::pull(i_route, property);
-//    }
 }
     
 QVariant dtkComposerNodeLoopDataComposite::value(dtkComposerNodeProperty *property)

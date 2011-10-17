@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May  4 08:51:21 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. oct. 14 23:30:02 2011 (+0200)
+ * Last-Updated: Mon Oct 17 12:30:40 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 45
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -142,7 +142,7 @@ void dtkComposerNodeLoopWhile::update(void)
         
     } else {
         
-        // -- Check that node is ready (ie not dirty)
+        // -- Check that node is ready (ie dirty)
         
         if (!this->dirty())
             return;

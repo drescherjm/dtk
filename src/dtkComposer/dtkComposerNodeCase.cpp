@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May 23 14:38:31 2011 (+0200)
+ * Last-Updated: Mon Oct 17 12:32:01 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 670
+ *     Update #: 671
  */
 
 /* Commentary: 
@@ -326,8 +326,16 @@ void dtkComposerNodeCase::update(void)
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
         qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
-
-    if (!this->isRunning()) {
+    
+    // -- If update is invoked while node is running, update is not necessary.
+    
+    if (this->isRunning()) {
+        
+        return;
+        
+    } else {
+        
+        // -- Check that node is ready (ie dirty)
 
         if (!this->dirty())
             return;
@@ -432,17 +440,6 @@ void dtkComposerNodeCase::update(void)
         this->setRunning(true);
         this->run();
 
-    } else {
-
-        // -- Check Dirty end nodes
-
-        if (this->dirtyBlockEndNodes())
-            return;
-
-#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-        qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "All end block nodes have finished their work" << DTK_NO_COLOR;
-#endif
-
         // -- Clean active output routes
 
         this->cleanOutputActiveRoutes();
@@ -461,10 +458,12 @@ void dtkComposerNodeCase::update(void)
         qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Push done" << DTK_NO_COLOR;
 #endif
 
-        // -- Forward
+        // -- Node is now clean and is no more running
 
         this->setDirty(false);
         this->setRunning(false);
+
+        // -- Forward to downstream nodes
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
         qDebug() << DTK_COLOR_BG_BLUE << DTK_PRETTY_FUNCTION << "Forward done" << DTK_NO_COLOR;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 29 10:51:25 2011 (+0200)
+ * Last-Updated: Mon Oct 17 17:16:19 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 2900
+ *     Update #: 2903
  */
 
 /* Commentary: 
@@ -879,6 +879,7 @@ void dtkComposerScene::startEvaluation(void)
     foreach(dtkComposerNode *node, starting_nodes)
         node->update();
 
+    this->stopEvaluation();
 }
 
 //! Stops evaluation of the data flow.

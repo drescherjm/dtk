@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Oct 12 16:02:18 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 17 12:39:14 2011 (+0200)
+ * Last-Updated: Mon Oct 17 16:06:43 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 158
+ *     Update #: 183
  */
 
 /* Commentary: 
@@ -32,7 +32,7 @@
 #include <dtkCore/dtkLog>
 
 // #define DTK_DEBUG_COMPOSER_INTERACTION 1
-// #define DTK_DEBUG_COMPOSER_EVALUATION 1
+#define DTK_DEBUG_COMPOSER_EVALUATION 1
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeLoopDataCompositePrivate declaration
@@ -84,10 +84,10 @@ dtkComposerNodeLoopDataComposite::dtkComposerNodeLoopDataComposite(dtkComposerNo
     this->setType("dtkComposerLoopDataComposite");
 
     d->from_default = 0;
-    d->to_default = 0;
+    d->to_default = 20;
     d->step_default = 1;
 
-    d->from = -1;
+    d->from = -2;
     d->to = -1;
     d->step = -1;
 
@@ -207,7 +207,7 @@ void dtkComposerNodeLoopDataComposite::update(void)
         // -- Pull
 
         foreach(dtkComposerEdge *i_route, this->inputRoutes())
-            this->pull(i_route, i_route->destination());        
+            this->pull(i_route, i_route->destination());
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
         qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Pull done" << DTK_NO_COLOR;
@@ -216,20 +216,25 @@ void dtkComposerNodeLoopDataComposite::update(void)
         // -- Set input relay routes connected to item and index properties
 
         foreach(dtkComposerEdge *relay_route, this->inputRelayRoutes()) {
+
             if (relay_route->source()->name() == "item" || relay_route->source()->name() == "index") {
 
                 dtkComposerEdge *route = new dtkComposerEdge;
                 route->setSource(relay_route->source());
                 route->setDestination(relay_route->destination());
                 
-                relay_route->destination()->node()->addInputRoute(route);   
+                relay_route->destination()->node()->addInputRoute(route);
+                this->addInputActiveRoute(route);
+
+                foreach(dtkComposerEdge *rr,relay_route->destination()->node()->inputRoutes())
+                    qDebug() << rr;
             
             }
         }
 
         // -- Set input composite and loop options
 
-        foreach(dtkComposerEdge *i_route, this->inputActiveRoutes()) {
+        foreach(dtkComposerEdge *i_route, this->inputRoutes()) {
             if (i_route->destination() == this->inputProperty()) {
         
                 dtkAbstractData *data = NULL;
@@ -283,6 +288,7 @@ void dtkComposerNodeLoopDataComposite::update(void)
             } else if (i_route->destination()->name() == "step") {
 
                 d->step = (dtkxarch_int)(i_route->source()->node()->value(i_route->source()).toLongLong());
+
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
                 qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "step value =" << d->step << DTK_NO_COLOR;
 #endif
@@ -290,12 +296,14 @@ void dtkComposerNodeLoopDataComposite::update(void)
             }
         }
  
-        if (!d->valid_input_composite) {
-            dtkDebug() << DTK_PRETTY_FUNCTION << " input composite property is not connected.";
-            return;   
-        }
+        // if (!d->valid_input_composite) {
+        //     dtkDebug() << DTK_PRETTY_FUNCTION << " input composite property is not connected.";
+        //     return;   
+        // }
 
         // -- Set ranges and step of the loop
+
+        qDebug() << d->index << d->step << d->from << d->to;
 
         if (d->from > d->to) {
 
@@ -317,6 +325,8 @@ void dtkComposerNodeLoopDataComposite::update(void)
 
         }
         d->index = d->from;
+
+        qDebug() << d->index << d->step << d->from << d->to;
         
          // -- Node is now ready to run
 
@@ -332,8 +342,8 @@ void dtkComposerNodeLoopDataComposite::update(void)
 
             // -- Set current available item of the composite
 
-            d->item = d->composite->at(d->index);
-            this->setObject(d->item);
+            //d->item = d->composite->at(d->index);
+            //this->setObject(d->item);
 
              // -- Workflow of loop block is evaluated            
 
@@ -346,6 +356,8 @@ void dtkComposerNodeLoopDataComposite::update(void)
             // -- Increment loop index
 
             d->index += d->step;
+
+            qDebug() << d->index;
             
         }
         d->index -= d->step;
@@ -385,24 +397,24 @@ void dtkComposerNodeLoopDataComposite::update(void)
 
 void dtkComposerNodeLoopDataComposite::onEdgeConnected(dtkComposerEdge *edge)
 {
-    if(true)
-        edge->invalidate();
-    else
-        ; // dtkComposerNodeLoop::onEdgeConnected(edge);
+    // if(true)
+    //     edge->invalidate();
+    // else
+    //     ; // dtkComposerNodeLoop::onEdgeConnected(edge);
 
-    dtkComposerNodeLoop::onEdgeConnected(edge); // TO BE REMOVED LATER ON
+    dtkComposerNode::onEdgeConnected(edge); // TO BE REMOVED LATER ON
 }
 
 void dtkComposerNodeLoopDataComposite::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property)
 {
-    if (property->name() == "composite" || property->name() == "from" || property->name() == "to" || property->name() == "step"){
+    // if (property->name() == "composite" || property->name() == "from" || property->name() == "to" || property->name() == "step"){
 
-        this->addInputActiveRoute(i_route);
+    //     this->addInputActiveRoute(i_route);
 
-    } else {
+    // } else {
 
         dtkComposerNodeLoop::pull(i_route, property);
-    }
+//    }
 }
     
 QVariant dtkComposerNodeLoopDataComposite::value(dtkComposerNodeProperty *property)

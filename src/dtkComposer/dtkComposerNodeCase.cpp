@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Oct 17 12:32:01 2011 (+0200)
+ * Last-Updated: Mon Oct 17 12:43:58 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 671
+ *     Update #: 673
  */
 
 /* Commentary: 
@@ -437,7 +437,16 @@ void dtkComposerNodeCase::update(void)
     qDebug() << DTK_COLOR_BG_RED  << "Running node" << this->title() << "'s logics" << DTK_NO_COLOR;
 #endif
 
+        // -- Node is now ready to run
+
         this->setRunning(true);
+        
+        // -- Running logics
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+    qDebug() << DTK_COLOR_BG_RED  << "Running node" << this->title() << "'s logics" << DTK_NO_COLOR;
+#endif
+
         this->run();
 
         // -- Clean active output routes

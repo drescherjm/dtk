@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Sep 21 14:28:37 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 13 15:46:46 2011 (+0200)
+ * Last-Updated: Mon Oct 17 10:07:44 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 448
+ *     Update #: 465
  */
 
 /* Commentary: 
@@ -331,8 +331,12 @@ const dtkAbstractData *dtkAbstractDataComposite::at(dtkxarch_int index) const
 
     return data;
 }
- 
-dtkAbstractData *dtkAbstractDataComposite::operator[] (dtkxarch_int index)
+
+//! Returns the item at index position \a index in the composite.
+/*! 
+ *   \a index must be a valid index position in the composite (i.e., 0 <= i < size).
+ */
+dtkAbstractData *dtkAbstractDataComposite::at(dtkxarch_int index)
 {
     dtkAbstractData *data = NULL;
 
@@ -357,14 +361,13 @@ dtkAbstractData *dtkAbstractDataComposite::operator[] (dtkxarch_int index)
     return data;
 }
 
-const dtkAbstractData *dtkAbstractDataComposite::operator[] (dtkxarch_int index) const
-{
-    return this->at(index);
-}
-
-//! Returns the vector of the composite.
+//! Returns the data of the composite as a Qt vector.
 /*! 
- *  
+ *  When composite has been created using a Qt vector, a reference to
+ *  this original vector is returned.
+ *
+ *  When composite has been created using a Qt list, a reference to a
+ *  vector containing a copy of the original list is returned.
  */
 const QVector<dtkAbstractData *>& dtkAbstractDataComposite::vector(void) const
 {
@@ -375,28 +378,74 @@ const QVector<dtkAbstractData *>& dtkAbstractDataComposite::vector(void) const
     case dtkAbstractDataComposite::ConstVector:
         return d->const_vector;
         break;
+    case dtkAbstractDataComposite::List:
+        d->vector = d->list.toVector();
+        return d->vector;
+        break;
+    case dtkAbstractDataComposite::ConstList:
+        d->vector = d->const_list.toVector();
+        return d->vector;
+        break;
     default:
         return d->vector;
         break;
     }
 }
 
-//! Returns the vector of the composite.
+//! Returns the data of the composite as a Qt vector.
 /*! 
- *  
+ *  When composite has been created using a non const Qt vector, a
+ *  reference to this original vector is returned.
+ *
+ *  When composite has been created using a const Qt vector, a
+ *  reference to a copy of this original vector is returned.
+ *
+ *  When composite has been created using a Qt list, a reference to a
+ *  vector containing a copy of the original list is returned.
  */
 QVector<dtkAbstractData *>& dtkAbstractDataComposite::vector(void)
 {
-    return d->vector;
+    switch(d->type){
+    case dtkAbstractDataComposite::Vector:
+        return d->vector;
+        break;
+    case dtkAbstractDataComposite::ConstVector:
+        d->vector = d->const_vector;
+        return d->vector;
+        break;
+    case dtkAbstractDataComposite::List:
+        d->vector = d->list.toVector();
+        return d->vector;
+        break;
+    case dtkAbstractDataComposite::ConstList:
+        d->vector = d->const_list.toVector();
+        return d->vector;
+        break;
+    default:
+        return d->vector;
+        break;
+    }
 }
 
-//! Returns the list of the composite.
+//! Returns the data of the composite as a Qt list.
 /*! 
- *  
+ *  When composite has been created using a Qt list, a reference to
+ *  this original list is returned.
+ *
+ *  When composite has been created using a Qt vector, a reference to a
+ *  list containing a copy of the original vector is returned.
  */
 const QList<dtkAbstractData *>& dtkAbstractDataComposite::list(void) const
 {
     switch(d->type){
+    case dtkAbstractDataComposite::Vector:
+        d->list = d->vector.toList();
+        return d->list;
+        break;
+    case dtkAbstractDataComposite::ConstVector:
+        d->list = d->const_vector.toList();
+        return d->list;
+        break;
     case dtkAbstractDataComposite::List:
         return d->list;
         break;
@@ -409,13 +458,39 @@ const QList<dtkAbstractData *>& dtkAbstractDataComposite::list(void) const
     }
 }
 
-//! Returns the list of the composite.
+//! Returns the data of the composite as a Qt list.
 /*! 
- *  
+ *  When composite has been created using a non const Qt list, a
+ *  reference to this original list is returned.
+ *
+ *  When composite has been created using a const Qt list, a
+ *  reference to a copy of this original list is returned.
+ *
+ *  When composite has been created using a Qt vector, a reference to a
+ *  list containing a copy of the original vector is returned.
  */
 QList<dtkAbstractData *>& dtkAbstractDataComposite::list(void)
 {
-    return d->list;
+    switch(d->type){
+    case dtkAbstractDataComposite::Vector:
+        d->list = d->vector.toList();
+        return d->list;
+        break;
+    case dtkAbstractDataComposite::ConstVector:
+        d->list = d->const_vector.toList();
+        return d->list;
+        break;
+    case dtkAbstractDataComposite::List:
+        return d->list;
+        break;
+    case dtkAbstractDataComposite::ConstList:
+        d->list = d->const_list;
+        return d->list;
+        break;
+    default:
+        return d->list;
+        break;
+    }
 }
 
 // /////////////////////////////////////////////////////////////////

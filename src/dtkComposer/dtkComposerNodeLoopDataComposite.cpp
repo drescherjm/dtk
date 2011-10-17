@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Oct 12 16:02:18 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. oct. 14 23:35:03 2011 (+0200)
+ * Last-Updated: Mon Oct 17 10:04:47 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 156
+ *     Update #: 157
  */
 
 /* Commentary: 
@@ -332,7 +332,7 @@ void dtkComposerNodeLoopDataComposite::update(void)
 
             // -- Set current available item of the composite
 
-            d->item = (*d->composite)[d->index];            
+            d->item = d->composite->at(d->index);
             this->setObject(d->item);
 
              // -- Workflow of loop block is evaluated            

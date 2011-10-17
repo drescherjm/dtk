@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Sep 21 13:46:31 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 13 15:36:16 2011 (+0200)
+ * Last-Updated: Mon Oct 17 09:03:23 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 258
+ *     Update #: 259
  */
 
 /* Commentary: 
@@ -60,9 +60,7 @@ public:
     Type type(void);
      
     const dtkAbstractData *at(dtkxarch_int index) const;
- 
-          dtkAbstractData *operator[] (dtkxarch_int index);
-    const dtkAbstractData *operator[] (dtkxarch_int index) const;
+          dtkAbstractData *at(dtkxarch_int index);
      
     const QVector<dtkAbstractData *>& vector(void) const;  
           QVector<dtkAbstractData *>& vector(void);

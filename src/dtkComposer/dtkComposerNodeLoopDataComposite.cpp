@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Oct 12 16:02:18 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 17 16:30:05 2011 (+0200)
+ * Last-Updated: Tue Oct 18 16:25:38 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 187
+ *     Update #: 190
  */
 
 /* Commentary: 
@@ -46,7 +46,6 @@ public:
 public:
     dtkxarch_int from_default;
     dtkxarch_int to_default;
-    dtkxarch_int step_default;
 
     dtkxarch_int from;
     dtkxarch_int to;
@@ -84,8 +83,7 @@ dtkComposerNodeLoopDataComposite::dtkComposerNodeLoopDataComposite(dtkComposerNo
     this->setType("dtkComposerLoopDataComposite");
 
     d->from_default = 0;
-    d->to_default = 20;
-    d->step_default = 1;
+    d->to_default = 0;
 
     d->from = -2;
     d->to = -1;
@@ -313,10 +311,10 @@ void dtkComposerNodeLoopDataComposite::update(void)
 
             if (d->from < 0)
                 d->from = d->from_default;
-            if (d->to > d->to_default)
+            if (d->to > d->to_default || d->to < 0)
                 d->to = d->to_default;
             if (d->step < 0)
-                d->step = d->step_default;
+                d->step *= -1;
 
         }
         d->index = d->from;

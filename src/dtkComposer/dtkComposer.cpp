@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 20 15:23:12 2011 (+0200)
+ * Last-Updated: Tue Oct 18 10:37:59 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 457
+ *     Update #: 466
  */
 
 /* Commentary: 
@@ -43,7 +43,7 @@ public:
 
 dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPrivate)
 {
-    d->scene = new dtkComposerScene(this);
+    d->scene = new dtkComposerScene;
     d->view = new dtkComposerView(this);
     d->view->setScene(d->scene);
 
@@ -77,8 +77,6 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
 
 dtkComposer::~dtkComposer(void)
 {
-    delete d->scene;
-    delete d->view;
     delete d;
     
     d = NULL;

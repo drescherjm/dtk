@@ -1344,6 +1344,9 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
         gradiant.setColorAt(0.3, QColor(Qt::green));
         gradiant.setColorAt(1.0, QColor(Qt::green).darker());
         break;
+    case Control:
+    default:
+        break;
     }
 
     if (this->isSelected()) {

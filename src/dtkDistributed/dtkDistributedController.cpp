@@ -141,7 +141,6 @@ QList<dtkDistributedNode *> dtkDistributedController::nodes(const QString& clust
 
 void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkDistributedSocket *socket)
 {
-    dtkDistributedNode *node = new dtkDistributedNode;
     QVariantMap json = dtkJson::parse(buffer).toMap();
     // TODO: check version
     // First, read nodes status
@@ -150,15 +149,19 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
     QHash<QString,dtkDistributedCore *> coreref;
 
     foreach(QVariant qv, json["nodes"].toList()) {
-            QVariantMap jnode=qv.toMap();
+        
+        QVariantMap jnode=qv.toMap();
 
-            QVariantList cores    = jnode["cores"].toList();
-            int usedcores = jnode["cores_busy"].toInt();
-            int ncpus     = jnode["cpus"].toInt();
-            int ngpus     = jnode["gpus"].toInt();
-            int usedgpus  = jnode["gpus_busy"].toInt();
-            QVariantMap properties = jnode["properties"].toMap();
-            QString state =  jnode["state"].toString();
+        QVariantList cores    = jnode["cores"].toList();
+        int usedcores = jnode["cores_busy"].toInt();
+        int ncpus     = jnode["cpus"].toInt();
+        int ngpus     = jnode["gpus"].toInt();
+        int usedgpus  = jnode["gpus_busy"].toInt();
+        QVariantMap properties = jnode["properties"].toMap();
+        QString state =  jnode["state"].toString();
+        
+        Q_UNUSED(usedcores);
+        Q_UNUSED(usedgpus);
 
             qint64 ncores = cores.count();
             dtkDistributedNode *node = new dtkDistributedNode;

@@ -518,9 +518,13 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
                 case dtkComposerNodeProperty::HybridInput:
                     property_element.setAttribute("type", "hybridinput");
                     break;
+                case dtkComposerNodeProperty::HybridOutput:
+                    break;
                 case dtkComposerNodeProperty::PassThroughInput:
                     property_element.setAttribute("type", "passthroughinput");
                     break;
+                case dtkComposerNodeProperty::PassThroughOutput:
+                        break;
                 case dtkComposerNodeProperty::Output:
                     property_element.setAttribute("type", "passthroughinput");
                     break;
@@ -538,11 +542,17 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
                 QDomElement property_element = document.createElement("property");
                 property_element.setAttribute("name", property->name());
                 switch (property->type()) {
+                case dtkComposerNodeProperty::Input:
+                    break;
                 case dtkComposerNodeProperty::Output:
                     property_element.setAttribute("type", "output");
                     break;
+                case dtkComposerNodeProperty::HybridInput:
+                    break;
                 case dtkComposerNodeProperty::HybridOutput:
                     property_element.setAttribute("type", "hybridoutput");
+                    break;
+                case dtkComposerNodeProperty::PassThroughInput:
                     break;
                 case dtkComposerNodeProperty::PassThroughOutput:
                     property_element.setAttribute("type", "passthroughoutput");

@@ -25,11 +25,11 @@ class dtkDistributedSocketPrivate
 {
 };
 
-dtkDistributedSocket::dtkDistributedSocket( QObject* parent ) :  d(new dtkDistributedSocketPrivate), QTcpSocket(parent)
+dtkDistributedSocket::dtkDistributedSocket( QObject* parent ) :  QTcpSocket(parent), d(new dtkDistributedSocketPrivate)
 {
 }
 
-dtkDistributedSocket::~dtkDistributedSocket( )
+dtkDistributedSocket::~dtkDistributedSocket(void)
 {
     delete d;
     d = NULL;

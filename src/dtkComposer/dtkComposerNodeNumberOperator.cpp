@@ -313,6 +313,9 @@ void dtkComposerNodeNumberOperator::run(void)
             case dtkComposerNodeNumber::Double:
                 r = qVariantFromValue(a.toDouble() + b.toDouble());
                 break;
+            case dtkComposerNodeNumber::Invalid:
+            default:
+                break;
             }
             break;
 
@@ -341,6 +344,9 @@ void dtkComposerNodeNumberOperator::run(void)
                 break;
             case dtkComposerNodeNumber::Double:
                 r = qVariantFromValue(a.toDouble() - b.toDouble());
+                break;
+            case dtkComposerNodeNumber::Invalid:
+            default:
                 break;
             }
             break;
@@ -371,6 +377,9 @@ void dtkComposerNodeNumberOperator::run(void)
             case dtkComposerNodeNumber::Double:
                 r = qVariantFromValue(a.toDouble() * b.toDouble());
                 break;
+            case dtkComposerNodeNumber::Invalid:
+            default:
+                break;
             }
             break;
 
@@ -400,6 +409,9 @@ void dtkComposerNodeNumberOperator::run(void)
             case dtkComposerNodeNumber::Double:
                 r = qVariantFromValue(a.toDouble() / b.toDouble());
                 break;
+            case dtkComposerNodeNumber::Invalid:
+            default:
+                break;
             }
             break;
         case dtkComposerNodeNumberOperator::Increment:
@@ -427,6 +439,9 @@ void dtkComposerNodeNumberOperator::run(void)
                 break;
             case dtkComposerNodeNumber::Double:
                 r = qVariantFromValue(a.toDouble() + 1);
+                break;
+            case dtkComposerNodeNumber::Invalid:
+            default:
                 break;
             }
             break;
@@ -456,6 +471,9 @@ void dtkComposerNodeNumberOperator::run(void)
             case dtkComposerNodeNumber::Double:
                 r = qVariantFromValue(a.toDouble() - 1);
                 break;
+            case dtkComposerNodeNumber::Invalid:
+            default:
+                break;
             }
             break;
 
@@ -478,6 +496,9 @@ void dtkComposerNodeNumberOperator::run(void)
             case dtkComposerNodeNumber::Float:
             case dtkComposerNodeNumber::Double:
                 r = qVariantFromValue(a.toLongLong() % b.toLongLong());
+                break;
+            case dtkComposerNodeNumber::Invalid:
+            default:
                 break;
             }
             break;
@@ -502,6 +523,9 @@ void dtkComposerNodeNumberOperator::run(void)
             case dtkComposerNodeNumber::Double:
                 a.toDouble() < b.toDouble() ? r = a : r = b;
                 break;
+            case dtkComposerNodeNumber::Invalid:
+            default:
+                break;
             }
             break;
 
@@ -524,6 +548,9 @@ void dtkComposerNodeNumberOperator::run(void)
             case dtkComposerNodeNumber::Float:
             case dtkComposerNodeNumber::Double:
                 a.toDouble() > b.toDouble() ? r = a : r = b;
+                break;
+            case dtkComposerNodeNumber::Invalid:
+            default:
                 break;
             }
             break;

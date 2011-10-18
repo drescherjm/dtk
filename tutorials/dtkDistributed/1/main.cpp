@@ -114,13 +114,11 @@ int main(int argc, char **argv)
 
         for(int slave = 1; slave < size; slave++) {
 
-            int external_sum = 0;
+            MPI::COMM_WORLD.Recv(&partial_sum, 1, MPI_LONG, slave, RECV_TAG);
 
-            MPI::COMM_WORLD.Recv(&external_sum, 1, MPI_LONG, slave, RECV_TAG);
-
-            qDebug() << "Rank" << slave << "has partial sum" << external_sum;
+            qDebug() << "Rank" << slave << "has partial sum" << partial_sum;
             
-            sum += external_sum;
+            sum += partial_sum;
         }
 
         qDebug() << "Sum is" << sum;

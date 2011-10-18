@@ -132,7 +132,7 @@ bool dtkComposer::open(const QUrl& url)
 {
     d->download(url);
 
-    // ...
+    return true;
 }
 
 bool dtkComposer::open(QString fileName)

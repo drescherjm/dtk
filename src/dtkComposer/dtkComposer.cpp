@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Oct 18 10:37:59 2011 (+0200)
+ * Last-Updated: Tue Oct 18 13:32:01 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 466
+ *     Update #: 486
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include "dtkComposer.h"
+#include "dtkComposer_p.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeFactory.h"
 #include "dtkComposerReader.h"
@@ -32,14 +33,24 @@
 #include <QtCore>
 #include <QtGui>
 
-class dtkComposerPrivate
-{
-public:
-    dtkComposerScene *scene;
-    dtkComposerView *view;
+// /////////////////////////////////////////////////////////////////
+// dtkComposerPrivate
+// /////////////////////////////////////////////////////////////////
 
-    QString fileName;
-};
+void dtkComposerPrivate::download(const QUrl& url)
+{
+    qDebug() << DTK_PRETTY_FUNCTION << url;
+}
+
+void dtkComposerPrivate::onRequestFinished(int id, bool error)
+{
+    if(id == this->dwnl_id)
+        this->dwnl_ok = 1;
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposer
+// /////////////////////////////////////////////////////////////////
 
 dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPrivate)
 {
@@ -115,6 +126,13 @@ dtkComposerScene *dtkComposer::scene(void)
 dtkComposerView *dtkComposer::view(void)
 {
     return d->view;
+}
+
+bool dtkComposer::open(const QUrl& url)
+{
+    d->download(url);
+
+    // ...
 }
 
 bool dtkComposer::open(QString fileName)

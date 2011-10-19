@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul  8 13:28:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 13 01:28:51 2011 (+0200)
+ * Last-Updated: Wed Oct 19 01:36:18 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 214
+ *     Update #: 215
  */
 
 /* Commentary: 
@@ -135,8 +135,7 @@ void dtkComposerNodeFile::run(void)
 {
     if (!d->url.isEmpty()) {
 
-        QTemporaryFile file;
-        file.setAutoRemove(false);
+        QTemporaryFile file; file.setAutoRemove(false);
         
         if (!file.open()) {
             qDebug() << DTK_PRETTY_FUNCTION << "Unable to file for saving";

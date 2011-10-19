@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:12:32 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Oct 18 13:25:35 2011 (+0200)
+ * Last-Updated: Wed Oct 19 02:31:45 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 94
+ *     Update #: 95
  */
 
 /* Commentary: 
@@ -53,10 +53,10 @@ public:
     QString fileName(void);
 
 public slots:
-    bool   open(const QUrl& url);
-    bool   open(QString fileName);
-    bool   save(QString fileName = QString());
-    bool insert(QString fileName);
+    virtual bool   open(const QUrl& url);
+    virtual bool   open(QString fileName);
+    virtual bool   save(QString fileName = QString());
+    virtual bool insert(QString fileName);
 
 signals:
     void compositionChanged(void);

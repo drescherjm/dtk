@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Oct 18 13:32:01 2011 (+0200)
+ * Last-Updated: Wed Oct 19 02:21:59 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 486
+ *     Update #: 521
  */
 
 /* Commentary: 
@@ -32,6 +32,7 @@
 
 #include <QtCore>
 #include <QtGui>
+#include <QtNetwork>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerPrivate
@@ -39,7 +40,41 @@
 
 void dtkComposerPrivate::download(const QUrl& url)
 {
-    qDebug() << DTK_PRETTY_FUNCTION << url;
+    QTemporaryFile file; file.setAutoRemove(false);
+    
+    if (!file.open()) {
+        qDebug() << DTK_PRETTY_FUNCTION << "Unable to file for saving";
+        return;
+    }
+        
+    this->dwnl_ok = 0;
+    
+    QHttp http;
+    
+    connect(&http, SIGNAL(requestFinished(int, bool)), this, SLOT(onRequestFinished(int, bool)));
+
+    http.setHost(url.host(), url.scheme().toLower() == "https" ? QHttp::ConnectionModeHttps : QHttp::ConnectionModeHttp, url.port() == -1 ? 0 : url.port());
+        
+    if (!url.userName().isEmpty())
+        http.setUser(url.userName(), url.password());
+        
+    QByteArray path = QUrl::toPercentEncoding(url.path(), "!$&'()*+,;=:@/");
+    
+    if (path.isEmpty()) {
+        qDebug() << DTK_PRETTY_FUNCTION << "Invalid path" << url.path();
+        return;
+    }
+    
+    this->dwnl_id = http.get(path, &file);
+    
+    while(!this->dwnl_ok)
+        qApp->processEvents();
+
+    file.close();
+
+    QFileInfo info(file);
+    
+    this->tempName = info.absoluteFilePath();
 }
 
 void dtkComposerPrivate::onRequestFinished(int id, bool error)
@@ -130,9 +165,21 @@ dtkComposerView *dtkComposer::view(void)
 
 bool dtkComposer::open(const QUrl& url)
 {
+    QString path;
+
     d->download(url);
 
-    return true;
+    bool status = false;
+
+    if(!d->tempName.isEmpty())
+        status = this->open(d->tempName);
+
+    qDebug() << d->tempName;
+
+    // if(!d->tempName.isEmpty())
+    //     QFile::remove(d->tempName);
+
+    return status;
 }
 
 bool dtkComposer::open(QString fileName)

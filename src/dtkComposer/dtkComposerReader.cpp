@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 19 16:24:14 2011 (+0200)
+ * Last-Updated: Wed Oct 19 16:34:19 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 839
+ *     Update #: 843
  */
 
 /* Commentary: 
@@ -790,7 +790,10 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
                 if(children.at(i).toElement().tagName() != "property")
                     continue;
 
-                if(children.at(i).toElement().attribute("name") == "condition" || children.at(i).toElement().attribute("name") == "variable")
+                if(children.at(i).toElement().attribute("name") == "item")
+                    continue;
+
+                if(children.at(i).toElement().attribute("name") == "index")
                     continue;
 
                 // Assign the property

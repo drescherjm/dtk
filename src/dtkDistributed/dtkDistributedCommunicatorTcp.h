@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. oct.  6 17:58:34 2011 (+0200)
+ * Last-Updated: mer. oct. 19 13:15:34 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 44
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include "dtkDistributedCommunicator.h"
 #include "dtkDistributedSocket.h"
 #include <QAbstractSocket>
+#include <dtkCore/dtkAbstractDataSerializer.h>
 
 class dtkDistributedCommunicatorTcpPrivate;
 
@@ -52,6 +53,11 @@ public:
     void                 connectToHost(const QString &host , qint16 port);
     void            disconnectFromHost();
     dtkDistributedSocket *socket();
+
+    void send(dtkAbstractData &data, dtkAbstractDataSerializer *serializer, QString type, quint16 target, int tag);
+
+    void flush();
+
 
 private:
     dtkDistributedCommunicatorTcpPrivate *d;

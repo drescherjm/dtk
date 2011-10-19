@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. oct.  6 18:55:18 2011 (+0200)
+ * Last-Updated: mer. oct. 19 13:17:39 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 112
+ *     Update #: 113
  */
 
 /* Commentary: 
@@ -66,17 +66,6 @@ dtkDistributedSocket *dtkDistributedCommunicatorTcp::socket(void)
     return d->socket;
 }
 
-
-// QAbstractSocket::SocketState dtkDistributedCommunicatorTcp::state(void)
-// {
-//     return d->socket->state();
-// }
-
-// bool  dtkDistributedCommunicatorTcp::waitForConnected(void)
-// {
-//     return d->socket->waitForConnected();
-// }
-
 void dtkDistributedCommunicatorTcp::initialize(void)
 {
 
@@ -123,6 +112,26 @@ void dtkDistributedCommunicatorTcp::barrier(void)
                    dtkDistributedCommunicator::dtkDistributedCommunicatorChar, 0,
                    dtkDistributedCommunicator::dtkDistributedCommunicatorBarrier);
     }
+}
+
+void dtkDistributedCommunicatorTcp::flush(void)
+{
+    while (this->socket()->bytesToWrite() > 0) {
+        this->socket()->flush();
+    }
+}
+
+void dtkDistributedCommunicatorTcp::send(dtkAbstractData &data, dtkAbstractDataSerializer *serializer, QString type , quint16 target, int tag)
+{
+    QByteArray *array;
+    qDebug() << "send: need to serialize mesh" ;
+    if (serializer->serialize(data))
+        array = serializer->data();
+    else
+        qDebug() << "error while serializing" ;
+
+    d->socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,QString::number(tag),target, array->size(), type));
+    d->socket->write(*array);
 }
 
 

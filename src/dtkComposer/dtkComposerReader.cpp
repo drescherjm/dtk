@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 19 16:34:19 2011 (+0200)
+ * Last-Updated: Thu Oct 20 00:34:04 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 843
+ *     Update #: 854
  */
 
 /* Commentary: 
@@ -125,9 +125,23 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
     if (!file.open(QIODevice::ReadOnly))
         return false;
 
-    if (!document.setContent(&file)) {
-        file.close();
-        return false;
+    if (!dtkIsBinary(fileName)) {
+
+        if (!document.setContent(&file)) {
+            file.close();
+            return false;
+        }
+
+    } else {
+
+        QByteArray c_bytes;
+        QDataStream stream(&file); stream >> c_bytes;
+        QByteArray u_bytes = QByteArray::fromHex(qUncompress(c_bytes));
+
+        if(!document.setContent(QString::fromUtf8(u_bytes.data(), u_bytes.size()))) {
+            file.close();
+            return false;
+        }
     }
 
     file.close();

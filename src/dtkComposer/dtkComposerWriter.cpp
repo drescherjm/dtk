@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 13 00:08:27 2011 (+0200)
+ * Last-Updated: Thu Oct 20 00:06:05 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 438
+ *     Update #: 444
  */
 
 /* Commentary: 
@@ -68,7 +68,7 @@ dtkComposerWriter::~dtkComposerWriter(void)
     d = NULL;
 }
 
-void dtkComposerWriter::write(const QString& fileName)
+void dtkComposerWriter::write(const QString& fileName, Type type)
 {
     d->node_ids.clear();
     d->id = 0;
@@ -136,7 +136,11 @@ void dtkComposerWriter::write(const QString& fileName)
     if (!file.open(QIODevice::WriteOnly))
         return;
 
-    QTextStream out(&file); out << document.toString();
+    if(type == dtkComposerWriter::Ascii) {
+        QTextStream out(&file); out << document.toString();
+    } else {
+        QDataStream out(&file); out << qCompress(document.toByteArray().toHex());
+    }
 
     file.close();
 }

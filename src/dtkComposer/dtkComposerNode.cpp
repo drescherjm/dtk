@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Oct 14 16:21:33 2011 (+0200)
+ * Last-Updated: Fri Oct 21 01:43:41 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 2431
+ *     Update #: 2474
  */
 
 /* Commentary: 
@@ -333,6 +333,28 @@ void dtkComposerNode::setType(QString type)
     d->type = type;
 }
 
+//! Sets the wrappee of the node
+/*! A node is nothing more than a visual wrapper around a core concept
+ *  of dtk, a subclass of dtkAbstractObject among dtkAbstractData,
+ *  dtkAbstractProcess or dtkAbstractView.
+ * 
+ * This method allows to set this object up and performs the following
+ * things:
+ * - sets the title of the node to the one of the object
+ * - checks wether the obejct has "hidden-input-properties" metadata,
+ *   if so, should corresponding properties exist, they will be hidden
+ *   regardless of their default state.
+ * - checks wether the obejct has "hidden-output-properties" metadata,
+ *   if so, should corresponding properties exist, they will be hidden
+ *   regardless of their default state.
+ * - checks wether the obejct has "shown-input-properties" metadata,
+ *   if so, should corresponding properties exist, they will be shown
+ *   regardless of their default state.
+ * - checks wether the obejct has "shown-output-properties" metadata,
+ *   if so, should corresponding properties exist, they will be shown
+ *   regardless of their default state.
+ */
+
 void dtkComposerNode::setObject(dtkAbstractObject *object)
 {
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
@@ -340,6 +362,26 @@ void dtkComposerNode::setObject(dtkAbstractObject *object)
 #endif
 
     d->object = object;
+
+    if(object->hasMetaData("hidden-input-properties"))
+        foreach(QString property, object->metaDataValues("hidden-input-properties"))
+            if(dtkComposerNodeProperty *p = this->inputProperty(property))
+                p->hide();
+
+    if(object->hasMetaData("hidden-output-properties"))
+        foreach(QString property, object->metaDataValues("hidden-output-properties"))
+            if(dtkComposerNodeProperty *p = this->outputProperty(property))
+                p->hide();
+
+    if(object->hasMetaData("shown-input-properties"))
+        foreach(QString property, object->metaDataValues("shown-input-properties"))
+            if(dtkComposerNodeProperty *p = this->inputProperty(property))
+                p->show();
+
+    if(object->hasMetaData("shown-output-properties"))
+        foreach(QString property, object->metaDataValues("shown-output-properties"))
+            if(dtkComposerNodeProperty *p = this->outputProperty(property))
+                p->show();
 
     if (d->object)
         d->title->setHtml(object->name());
@@ -1343,6 +1385,9 @@ void dtkComposerNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
         gradiant.setColorAt(0.0, QColor(Qt::white));
         gradiant.setColorAt(0.3, QColor(Qt::green));
         gradiant.setColorAt(1.0, QColor(Qt::green).darker());
+        break;
+    case Control:
+    default:
         break;
     }
 

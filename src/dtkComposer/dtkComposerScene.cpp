@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 29 10:51:25 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 2900
+ * Last-Updated: Tue Oct 18 10:36:27 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 2906
  */
 
 /* Commentary: 
@@ -96,6 +96,8 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
  */
 dtkComposerScene::~dtkComposerScene(void)
 {
+    qDebug() << DTK_PRETTY_FUNCTION;
+
     delete d->factory;
     delete d;
 
@@ -845,6 +847,9 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
  */
 void dtkComposerScene::setFactory(dtkComposerNodeFactory *factory)
 {
+    if(d->factory)
+        delete d->factory;
+
     d->factory = factory;
 }
 
@@ -879,6 +884,7 @@ void dtkComposerScene::startEvaluation(void)
     foreach(dtkComposerNode *node, starting_nodes)
         node->update();
 
+    this->stopEvaluation();
 }
 
 //! Stops evaluation of the data flow.

@@ -112,6 +112,9 @@ QByteArray  dtkDistributedServerManagerTorque::status(void)
         if (rjobs.at(0).count() > 0) { // running jobs ?
             foreach( QString rjob, rjobs ) {
                 int pos = rx.indexIn(rjob);
+                
+                Q_UNUSED(pos);
+                
                 QStringList list = rx.capturedTexts();
                 njobs++;
                 qint64 jobcore = list.at(1).toInt();

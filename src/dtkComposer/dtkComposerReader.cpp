@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Oct 16 20:46:33 2011 (+0200)
+ * Last-Updated: Thu Oct 20 00:34:04 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 833
+ *     Update #: 854
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeFile.h"
+#include "dtkComposerNodeLoopDataComposite.h"
 #include "dtkComposerNodeLoopFor.h"
 #include "dtkComposerNodeLoopWhile.h"
 #include "dtkComposerNodeNumber.h"
@@ -124,9 +125,23 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
     if (!file.open(QIODevice::ReadOnly))
         return false;
 
-    if (!document.setContent(&file)) {
-        file.close();
-        return false;
+    if (!dtkIsBinary(fileName)) {
+
+        if (!document.setContent(&file)) {
+            file.close();
+            return false;
+        }
+
+    } else {
+
+        QByteArray c_bytes;
+        QDataStream stream(&file); stream >> c_bytes;
+        QByteArray u_bytes = QByteArray::fromHex(qUncompress(c_bytes));
+
+        if(!document.setContent(QString::fromUtf8(u_bytes.data(), u_bytes.size()))) {
+            file.close();
+            return false;
+        }
     }
 
     file.close();
@@ -331,8 +346,6 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
         }
 
         edge->link(true);
-
-        edge->destination()->node()->onEdgeConnected(edge);
 
         d->scene->addEdge(edge);
 
@@ -773,6 +786,45 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
                 if(children.at(i).toElement().attribute("type") == "hybridinput") {
                     dtkComposerNodeProperty *i_p = control_node->block(children.at(i).toElement().attribute("block"))->addInputProperty(children.at(i).toElement().attribute("name"), control_node);
                     control_node->addInputProperty(i_p);
+                }
+                
+                if(children.at(i).toElement().attribute("type") == "hybridoutput") {
+                    dtkComposerNodeProperty *o_p = control_node->block(children.at(i).toElement().attribute("block"))->addOutputProperty(children.at(i).toElement().attribute("name"), control_node);
+                    control_node->addOutputProperty(o_p);
+                }
+            }
+        }
+
+        if(dynamic_cast<dtkComposerNodeLoopDataComposite *>(control_node)) {
+
+            QDomNodeList children = node.childNodes();
+
+            for(int i = 0; i < children.count(); i++) {
+                
+                if(children.at(i).toElement().tagName() != "property")
+                    continue;
+
+                if(children.at(i).toElement().attribute("name") == "item")
+                    continue;
+
+                if(children.at(i).toElement().attribute("name") == "index")
+                    continue;
+
+                // Assign the property
+
+                if(children.at(i).toElement().attribute("type") == "hybridinput") {
+                    dtkComposerNodeProperty *i_p = control_node->block(children.at(i).toElement().attribute("block"))->addInputProperty(children.at(i).toElement().attribute("name"), control_node);
+                    control_node->addInputProperty(i_p);
+                }
+
+                if(children.at(i).toElement().attribute("type") == "passthroughinput") {
+                    dtkComposerNodeProperty *i_p = control_node->block(children.at(i).toElement().attribute("block"))->addInputPassThroughProperty(children.at(i).toElement().attribute("name"), control_node);
+                    control_node->addInputProperty(i_p);
+                }
+                
+                if(children.at(i).toElement().attribute("type") == "passthroughoutput") {
+                    dtkComposerNodeProperty *o_p = control_node->block(children.at(i).toElement().attribute("block"))->addOutputPassThroughProperty(children.at(i).toElement().attribute("name"), control_node);
+                    control_node->addOutputProperty(o_p);
                 }
                 
                 if(children.at(i).toElement().attribute("type") == "hybridoutput") {

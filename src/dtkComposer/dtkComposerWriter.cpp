@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 13 00:08:27 2011 (+0200)
+ * Last-Updated: Thu Oct 20 00:06:05 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 438
+ *     Update #: 444
  */
 
 /* Commentary: 
@@ -68,7 +68,7 @@ dtkComposerWriter::~dtkComposerWriter(void)
     d = NULL;
 }
 
-void dtkComposerWriter::write(const QString& fileName)
+void dtkComposerWriter::write(const QString& fileName, Type type)
 {
     d->node_ids.clear();
     d->id = 0;
@@ -136,7 +136,11 @@ void dtkComposerWriter::write(const QString& fileName)
     if (!file.open(QIODevice::WriteOnly))
         return;
 
-    QTextStream out(&file); out << document.toString();
+    if(type == dtkComposerWriter::Ascii) {
+        QTextStream out(&file); out << document.toString();
+    } else {
+        QDataStream out(&file); out << qCompress(document.toByteArray().toHex());
+    }
 
     file.close();
 }
@@ -518,9 +522,13 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
                 case dtkComposerNodeProperty::HybridInput:
                     property_element.setAttribute("type", "hybridinput");
                     break;
+                case dtkComposerNodeProperty::HybridOutput:
+                    break;
                 case dtkComposerNodeProperty::PassThroughInput:
                     property_element.setAttribute("type", "passthroughinput");
                     break;
+                case dtkComposerNodeProperty::PassThroughOutput:
+                        break;
                 case dtkComposerNodeProperty::Output:
                     property_element.setAttribute("type", "passthroughinput");
                     break;
@@ -538,11 +546,17 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
                 QDomElement property_element = document.createElement("property");
                 property_element.setAttribute("name", property->name());
                 switch (property->type()) {
+                case dtkComposerNodeProperty::Input:
+                    break;
                 case dtkComposerNodeProperty::Output:
                     property_element.setAttribute("type", "output");
                     break;
+                case dtkComposerNodeProperty::HybridInput:
+                    break;
                 case dtkComposerNodeProperty::HybridOutput:
                     property_element.setAttribute("type", "hybridoutput");
+                    break;
+                case dtkComposerNodeProperty::PassThroughInput:
                     break;
                 case dtkComposerNodeProperty::PassThroughOutput:
                     property_element.setAttribute("type", "passthroughoutput");

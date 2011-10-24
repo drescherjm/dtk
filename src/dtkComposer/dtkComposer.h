@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:12:32 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 20 15:22:41 2011 (+0200)
+ * Last-Updated: Wed Oct 19 02:31:45 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 82
+ *     Update #: 95
  */
 
 /* Commentary: 
@@ -21,6 +21,8 @@
 #define DTKCOMPOSER_H
 
 #include "dtkComposerExport.h"
+
+#include <QtCore/QUrl>
 
 #include <QtGui/QWidget>
 
@@ -50,9 +52,11 @@ public:
 
     QString fileName(void);
 
-    bool   open(QString fileName);
-    bool   save(QString fileName = QString());
-    bool insert(QString fileName);
+public slots:
+    virtual bool   open(const QUrl& url);
+    virtual bool   open(QString fileName);
+    virtual bool   save(QString fileName = QString());
+    virtual bool insert(QString fileName);
 
 signals:
     void compositionChanged(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 13:25:28 2011 (+0200)
+ * Last-Updated: Mon Oct 24 13:46:23 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 2476
+ *     Update #: 2478
  */
 
 /* Commentary: 
@@ -958,22 +958,6 @@ QString dtkComposerNode::title(void)
     return QString(d->title->toPlainText());
 }
 
-bool dtkComposerNode::active(void)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-    return d->active;
-}
-
-void dtkComposerNode::setActive(bool active)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-    d->active = active;
-}
-
 bool dtkComposerNode::dirty(void)
 {
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
@@ -1316,7 +1300,6 @@ void dtkComposerNode::update(void)
 
     // -- Forward
 
-    this->setActive(false);
     this->setDirty(false);
 
     foreach(dtkComposerEdge *o_route, d->output_routes) {

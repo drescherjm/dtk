@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 13:25:34 2011 (+0200)
+ * Last-Updated: Mon Oct 24 13:46:31 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 296
+ *     Update #: 297
  */
 
 /* Commentary: 
@@ -141,9 +141,6 @@ public:
     dtkComposerNodeProperty *outputProperty(const QString& name, dtkComposerNode *from) const;
 
     QString title(void);
-
-    bool active(void);
-    void setActive(bool active);
 
     virtual bool dirty(void);
     virtual void setDirty(bool dirty);

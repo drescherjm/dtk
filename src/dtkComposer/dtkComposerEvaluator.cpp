@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Oct 24 12:57:38 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 13:08:56 2011 (+0200)
+ * Last-Updated: Mon Oct 24 13:14:29 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 41
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -38,7 +38,7 @@ void dtkComposerEvaluatorPrivate::run(void)
 // dtkComposerEvaluator
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerEvaluator::dtkComposerEvaluator(void) : QObject(), d(new dtkComposerEvaluatorPrivate)
+dtkComposerEvaluator::dtkComposerEvaluator(QObject *parent) : QObject(parent), d(new dtkComposerEvaluatorPrivate)
 {
     d->scene = NULL;
 }

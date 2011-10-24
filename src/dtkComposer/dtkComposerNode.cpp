@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Oct 21 01:43:41 2011 (+0200)
+ * Last-Updated: Mon Oct 24 13:25:28 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 2474
+ *     Update #: 2476
  */
 
 /* Commentary: 
@@ -1215,19 +1215,19 @@ void dtkComposerNode::setSize(qreal w, qreal h)
     QGraphicsItem::update();
 }
 
-void dtkComposerNode::alter(void)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
+// void dtkComposerNode::alter(void)
+// {
+// #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
+//     qDebug() << DTK_PRETTY_FUNCTION << this;
+// #endif
 
-    if (dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene())) {
-        scene->stopEvaluation();
-        scene->clearSelection();
-        this->setSelected(true);
-        scene->startEvaluation();
-    }
-}
+//     if (dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene())) {
+//         scene->stopEvaluation();
+//         scene->clearSelection();
+//         this->setSelected(true);
+//         scene->startEvaluation();
+//     }
+// }
 
 //! Ask the node to redraw itself
 /*! 
@@ -1254,9 +1254,6 @@ void dtkComposerNode::update(void)
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
-
-    if (!dtkComposerScene::s_evaluate)
-        return;
 
     // if (d->kind == dtkComposerNode::Process && !d->dirty)
     //     return;

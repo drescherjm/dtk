@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Oct 18 13:26:40 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 19 02:14:39 2011 (+0200)
+ * Last-Updated: Mon Oct 24 13:15:48 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 19
+ *     Update #: 21
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #ifndef DTKCOMPOSER_P_H
 #define DTKCOMPOSER_P_H
 
+class dtkComposerEvaluator;
 class dtkComposerScene;
 class dtkComposerView;
 
@@ -36,6 +37,7 @@ public slots:
     void onRequestFinished(int id, bool error);
 
 public:
+    dtkComposerEvaluator *evaluator;
     dtkComposerScene *scene;
     dtkComposerView *view;
 

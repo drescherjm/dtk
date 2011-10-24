@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 19 02:21:59 2011 (+0200)
+ * Last-Updated: Mon Oct 24 13:26:17 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 521
+ *     Update #: 538
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include "dtkComposer.h"
 #include "dtkComposer_p.h"
+#include "dtkComposerEvaluator.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeFactory.h"
 #include "dtkComposerReader.h"
@@ -89,9 +90,13 @@ void dtkComposerPrivate::onRequestFinished(int id, bool error)
 
 dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPrivate)
 {
-    d->scene = new dtkComposerScene;
+    d->scene = new dtkComposerScene(this);
+
     d->view = new dtkComposerView(this);
     d->view->setScene(d->scene);
+
+    d->evaluator = new dtkComposerEvaluator(this);
+    d->evaluator->setScene(d->scene);
 
     d->fileName = "untitled";
 
@@ -251,35 +256,26 @@ void dtkComposer::ungroup(dtkComposerNode *node)
 void dtkComposer::onDataSelected(dtkAbstractData *data)
 {
     d->scene->clearSelection();
-
-    // if(dtkComposerNode *node = data->node())
-    //     node->setSelected(true);
 }
 
 void dtkComposer::onProcessSelected(dtkAbstractProcess *process)
 {
     d->scene->clearSelection();
-
-    // if(dtkComposerNode *node = process->node())
-    //     node->setSelected(true);
 }
 
 void dtkComposer::onViewSelected(dtkAbstractView *view)
 {
     d->scene->clearSelection();
-
-    // if(dtkComposerNode *node = view->node())
-    //     node->setSelected(true);
 }
 
 void dtkComposer::startEvaluation(void)
 {
-    d->scene->startEvaluation();
+    d->evaluator->start();
 }
 
 void dtkComposer::stopEvaluation(void)
 {
-    d->scene->stopEvaluation();
+    d->evaluator->stop();
 }
 
 void dtkComposer::copy(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Oct 18 10:36:27 2011 (+0200)
+ * Last-Updated: Mon Oct 24 13:18:08 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 2906
+ *     Update #: 2908
  */
 
 /* Commentary: 
@@ -853,50 +853,50 @@ void dtkComposerScene::setFactory(dtkComposerNodeFactory *factory)
     d->factory = factory;
 }
 
-//! Starts evaluation of the data flow defined in the scene.
-/*! 
- *  
- */
-void dtkComposerScene::startEvaluation(void)
-{
-    s_evaluate = true;
+// //! Starts evaluation of the data flow defined in the scene.
+// /*! 
+//  *  
+//  */
+// void dtkComposerScene::startEvaluation(void)
+// {
+//     s_evaluate = true;
 
-    emit evaluationStarted();
+//     emit evaluationStarted();
 
-    QList<dtkComposerNode *> starting_nodes;
+//     QList<dtkComposerNode *> starting_nodes;
 
-    if (this->selectedItems().count()) {
-        foreach(QGraphicsItem *item, this->selectedItems()) {
-            if (dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) { 
-                node->setActive(false);        
-                node->setDirty(true);
-                starting_nodes << node;
-            }
-        }
-    } else {
-        foreach(dtkComposerNode *node, this->startNodes()) {
-            node->setActive(false);
-            node->setDirty(true);
-            starting_nodes << node;
-        }
-    }
+//     if (this->selectedItems().count()) {
+//         foreach(QGraphicsItem *item, this->selectedItems()) {
+//             if (dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(item)) { 
+//                 node->setActive(false);        
+//                 node->setDirty(true);
+//                 starting_nodes << node;
+//             }
+//         }
+//     } else {
+//         foreach(dtkComposerNode *node, this->startNodes()) {
+//             node->setActive(false);
+//             node->setDirty(true);
+//             starting_nodes << node;
+//         }
+//     }
 
-    foreach(dtkComposerNode *node, starting_nodes)
-        node->update();
+//     foreach(dtkComposerNode *node, starting_nodes)
+//         node->update();
 
-    this->stopEvaluation();
-}
+//     this->stopEvaluation();
+// }
 
-//! Stops evaluation of the data flow.
-/*! 
- *  
- */
-void dtkComposerScene::stopEvaluation(void)
-{
-    s_evaluate = false;
+// //! Stops evaluation of the data flow.
+// /*! 
+//  *  
+//  */
+// void dtkComposerScene::stopEvaluation(void)
+// {
+//     s_evaluate = false;
 
-    emit evaluationStopped();
-}
+//     emit evaluationStopped();
+// }
 
 //! Copy selected nodes and related edges.
 /*! 
@@ -1739,7 +1739,7 @@ void dtkComposerScene::onSelectionChanged(void)
         emit selectionCleared();
 }
 
-bool dtkComposerScene::s_evaluate = false;
+// bool dtkComposerScene::s_evaluate = false;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerScene documentation

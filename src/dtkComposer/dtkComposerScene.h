@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 25 14:48:40 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 162
+ * Last-Updated: Mon Oct 24 13:18:52 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 165
  */
 
 /* Commentary: 
@@ -93,13 +93,13 @@ signals:
 
     void selectionCleared(void);
 
-signals:
-    void evaluationStarted(void);
-    void evaluationStopped(void);
+// signals:
+//     void evaluationStarted(void);
+//     void evaluationStopped(void);
 
-public slots:
-   void startEvaluation(void);
-   void stopEvaluation(void);
+// public slots:
+//    void startEvaluation(void);
+//    void stopEvaluation(void);
 
 public slots:
    void copy(void);
@@ -138,8 +138,8 @@ protected:
 protected slots:
     void onSelectionChanged(void);
 
-private:
-    static bool s_evaluate;
+// private:
+//     static bool s_evaluate;
 
 private:
     friend class dtkComposerNode;

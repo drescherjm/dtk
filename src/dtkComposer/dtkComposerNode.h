@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 14:41:49 2011 (+0200)
+ * Last-Updated: Mon Oct 24 15:09:18 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 302
+ *     Update #: 304
  */
 
 /* Commentary: 
@@ -192,8 +192,8 @@ public slots:
     // void alter(void);
     void touch(void);
 
-public slots:
-    virtual void update(void);
+// public slots:
+//     virtual void update(void);
 
 public:
     virtual QRectF boundingRect(void) const;
@@ -246,7 +246,7 @@ private:
 private:
     dtkComposerNodePrivate *d;
 
-private:
+protected:
     friend class dtkComposerEvaluatorPrivate;
 };
 

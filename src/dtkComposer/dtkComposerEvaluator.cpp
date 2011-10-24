@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Oct 24 12:57:38 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 14:43:11 2011 (+0200)
+ * Last-Updated: Mon Oct 24 15:20:51 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 154
+ *     Update #: 174
  */
 
 /* Commentary: 
@@ -24,6 +24,11 @@
 
 #include <dtkComposer/dtkComposerEdge.h>
 #include <dtkComposer/dtkComposerNode.h>
+#include <dtkComposer/dtkComposerNodeCase.h>
+#include <dtkComposer/dtkComposerNodeConditional.h>
+#include <dtkComposer/dtkComposerNodeLoopDataComposite.h>
+#include <dtkComposer/dtkComposerNodeLoopFor.h>
+#include <dtkComposer/dtkComposerNodeLoopWhile.h>
 #include <dtkComposer/dtkComposerNodeProperty.h>
 #include <dtkComposer/dtkComposerScene.h>
 
@@ -130,6 +135,41 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNode *node)
     // --
 
     return status;
+}
+
+bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeCase *node)
+{
+    qDebug() << DTK_PRETTY_FUNCTION << node;
+
+    return true;
+}
+
+bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeConditional *node)
+{
+    qDebug() << DTK_PRETTY_FUNCTION << node;
+
+    return true;
+}
+
+bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopDataComposite *node)
+{
+    qDebug() << DTK_PRETTY_FUNCTION << node;
+
+    return true;
+}
+
+bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopFor *node)
+{
+    qDebug() << DTK_PRETTY_FUNCTION << node;
+
+    return true;
+}
+
+bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopWhile *node)
+{
+    qDebug() << DTK_PRETTY_FUNCTION << node;
+
+    return true;
 }
 
 // /////////////////////////////////////////////////////////////////

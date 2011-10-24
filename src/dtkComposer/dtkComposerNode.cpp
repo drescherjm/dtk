@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 14:25:47 2011 (+0200)
+ * Last-Updated: Mon Oct 24 14:45:35 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 2485
+ *     Update #: 2486
  */
 
 /* Commentary: 
@@ -1226,15 +1226,6 @@ void dtkComposerNode::touch(void)
     
     if (this->scene()->views().count())
         this->scene()->views().first()->update();
-}
-
-//! 
-/*! 
- * 
- */
-void dtkComposerNode::update(void)
-{
-
 }
 
 QRectF dtkComposerNode::boundingRect(void) const

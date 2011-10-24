@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Oct 24 12:54:41 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 14:34:10 2011 (+0200)
+ * Last-Updated: Mon Oct 24 15:21:55 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 31
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -24,6 +24,11 @@
 #include <QtCore/QStack>
 
 class dtkComposerNode;
+class dtkComposerNodeCase;
+class dtkComposerNodeConditional;
+class dtkComposerNodeLoopDataComposite;
+class dtkComposerNodeLoopFor;
+class dtkComposerNodeLoopWhile;
 class dtkComposerScene;
 
 class dtkComposerEvaluatorPrivate : public QThread
@@ -35,6 +40,11 @@ public:
 
 private:
     bool evaluate(dtkComposerNode *node);
+    bool evaluate(dtkComposerNodeCase *node);
+    bool evaluate(dtkComposerNodeConditional *node);
+    bool evaluate(dtkComposerNodeLoopDataComposite *node);
+    bool evaluate(dtkComposerNodeLoopFor *node);
+    bool evaluate(dtkComposerNodeLoopWhile *node);
 
 public:
     dtkComposerScene *scene;

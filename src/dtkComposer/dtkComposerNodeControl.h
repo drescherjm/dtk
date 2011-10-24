@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:47:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Oct 13 17:42:54 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 125
+ * Last-Updated: Mon Oct 24 14:36:53 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 126
  */
 
 /* Commentary: 
@@ -89,9 +89,6 @@ protected:
     void setRunning(bool running);
 
     void setCurrentBlock(dtkComposerNodeControlBlock *block);
-
-public slots:
-    virtual void update(void) = 0;
 
 protected:
             bool dirtyInputValue(void);

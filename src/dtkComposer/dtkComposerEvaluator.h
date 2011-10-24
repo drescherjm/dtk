@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Oct 24 12:51:53 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 13:14:21 2011 (+0200)
+ * Last-Updated: Mon Oct 24 13:42:07 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 16
+ *     Update #: 17
  */
 
 /* Commentary: 
@@ -36,6 +36,10 @@ public:
     ~dtkComposerEvaluator(void);
 
     void setScene(dtkComposerScene *scene);
+
+signals:
+    void evaluationStarted(void);
+    void evaluationStopped(void);
 
 public slots:
     void start(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 13:46:31 2011 (+0200)
+ * Last-Updated: Mon Oct 24 14:41:49 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 297
+ *     Update #: 302
  */
 
 /* Commentary: 
@@ -245,6 +245,9 @@ private:
 
 private:
     dtkComposerNodePrivate *d;
+
+private:
+    friend class dtkComposerEvaluatorPrivate;
 };
 
 // /////////////////////////////////////////////////////////////////

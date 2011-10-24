@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 13:46:23 2011 (+0200)
+ * Last-Updated: Mon Oct 24 14:25:47 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 2478
+ *     Update #: 2485
  */
 
 /* Commentary: 
@@ -32,7 +32,6 @@
 #include <dtkCore/dtkGlobal.h>
 
 // #define DTK_DEBUG_COMPOSER_INTERACTION 1
-// #define DTK_DEBUG_COMPOSER_EVALUATION 1
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodePrivate
@@ -1235,79 +1234,7 @@ void dtkComposerNode::touch(void)
  */
 void dtkComposerNode::update(void)
 {
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
 
-    // if (d->kind == dtkComposerNode::Process && !d->dirty)
-    //     return;
-
-    if (!d->dirty)
-        return;
-
-    if (d->kind == dtkComposerNode::Composite) {
-        foreach(dtkComposerNode *child, d->children)
-            child->update();
-        return;
-    }
-
-    // -- Check dirty inputs
-
-#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-    qDebug() << DTK_COLOR_BG_GREEN << "-- Check dirty inputs" << this->title() << DTK_NO_COLOR;
-#endif
-
-    if (this->dirtyUpstreamNodes())
-        return;
-
-    // -- Mark dirty outputs
-
-#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-    qDebug() << DTK_COLOR_BG_GREEN << "-- Mark dirty outputs" << this->title() << DTK_NO_COLOR;
-#endif
-
-    this->markDirtyDownstreamNodes();
-
-    // -- Event handling
-
-    emit evaluated(this); qApp->processEvents();
-
-    // -- Pull
-
-    foreach(dtkComposerEdge *i_route, d->input_routes) {            
-#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-        qDebug() << DTK_COLOR_BG_YELLOW << "Pulling" << this->title() << i_route << DTK_NO_COLOR;
-#endif
-        this->pull(i_route, i_route->destination());
-    }
-
-    // -- Run node's logics
-
-#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-    qDebug() << DTK_COLOR_BG_RED  << "Running node" << this->title() << "'s logics" << DTK_NO_COLOR;
-#endif
-
-    this->run();
-
-    // -- Push
-
-    foreach(dtkComposerEdge *o_route, d->output_routes) {            
-#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-        qDebug() << DTK_COLOR_BG_YELLOW << "Pushing" << this->title() << o_route << DTK_NO_COLOR;
-#endif
-        this->push(o_route, o_route->source());
-    }
-
-    // -- Forward
-
-    this->setDirty(false);
-
-    foreach(dtkComposerEdge *o_route, d->output_routes) {
-#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
-        qDebug() << DTK_COLOR_BG_BLUE << "Forwarding" << this->title() << "->" << o_route->destination()->node()->title() << DTK_NO_COLOR;
-#endif
-        o_route->destination()->node()->update();
-    }
 }
 
 QRectF dtkComposerNode::boundingRect(void) const

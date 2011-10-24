@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 14:45:35 2011 (+0200)
+ * Last-Updated: Mon Oct 24 16:59:54 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 2486
+ *     Update #: 2490
  */
 
 /* Commentary: 
@@ -354,13 +354,16 @@ void dtkComposerNode::setType(QString type)
  *   regardless of their default state.
  */
 
-void dtkComposerNode::setObject(dtkAbstractObject *object)
+void dtkComposerNode::setObject(dtkAbstractObject *object, bool update)
 {
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
 
     d->object = object;
+
+    if(!update)
+        return;
 
     if(object->hasMetaData("hidden-input-properties"))
         foreach(QString property, object->metaDataValues("hidden-input-properties"))

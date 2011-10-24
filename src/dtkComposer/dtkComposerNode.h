@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 15:09:18 2011 (+0200)
+ * Last-Updated: Mon Oct 24 16:59:43 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 304
+ *     Update #: 306
  */
 
 /* Commentary: 
@@ -66,7 +66,7 @@ public:
     void setTitle(const QString& title);
     void setKind(Kind kind);
     void setType(QString type);
-    void setObject(dtkAbstractObject *object);
+    void setObject(dtkAbstractObject *object, bool update = true);
 
     void  addInputProperty(dtkComposerNodeProperty *property);
     void addOutputProperty(dtkComposerNodeProperty *property);

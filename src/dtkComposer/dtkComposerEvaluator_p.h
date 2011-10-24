@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Oct 24 12:54:41 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 15:21:55 2011 (+0200)
+ * Last-Updated: Mon Oct 24 16:38:07 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 46
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -50,8 +50,8 @@ public:
     dtkComposerScene *scene;
 
 signals:
-    void evaluationStarted();
-    void evaluationStopped();
+    void evaluationStarted(void);
+    void evaluationStopped(void);
 
 public:
     QStack<dtkComposerNode *> stack;

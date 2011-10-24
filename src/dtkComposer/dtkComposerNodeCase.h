@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:01:16 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr 27 22:05:48 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 16
+ * Last-Updated: Mon Oct 24 16:34:32 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 20
  */
 
 /* Commentary: 
@@ -46,15 +46,15 @@ public:
 public:
     void layout(void);
 
-public slots:
-    void update(void);
-
 protected:
     void pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property);
     void push(dtkComposerEdge *o_route, dtkComposerNodeProperty *property);
 
 private:
     dtkComposerNodeCasePrivate *d;
+
+private:
+    friend class dtkComposerEvaluatorPrivate;
 };
 
 #endif

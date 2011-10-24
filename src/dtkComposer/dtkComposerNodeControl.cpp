@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 15:17:18 2011 (+0200)
+ * Last-Updated: Mon Oct 24 16:43:25 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 836
+ *     Update #: 838
  */
 
 /* Commentary: 
@@ -452,6 +452,7 @@ void dtkComposerNodeControl::pull(dtkComposerEdge *i_route, dtkComposerNodePrope
             route->setDestination(relay_route->destination());
                 
             relay_route->destination()->node()->addInputRoute(route);
+
             this->addInputActiveRoute(route);
         }
     }
@@ -484,10 +485,8 @@ void dtkComposerNodeControl::push(dtkComposerEdge *o_route, dtkComposerNodePrope
                 dtkComposerNodeControl *output_control_node = dynamic_cast<dtkComposerNodeControl *>(o_route->destination()->node());
                 output_control_node->addOutputRelayRoute(route);
                 
-            } else {
-                
+            } else {                
                 o_route->destination()->node()->addInputRoute(route);
-                
             }
         }
     }

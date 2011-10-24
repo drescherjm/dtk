@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 13:41:41 2011 (+0200)
+ * Last-Updated: Mon Oct 24 16:05:59 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 542
+ *     Update #: 543
  */
 
 /* Commentary: 
@@ -90,7 +90,7 @@ void dtkComposerPrivate::onRequestFinished(int id, bool error)
 
 dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPrivate)
 {
-    d->scene = new dtkComposerScene(this);
+    d->scene = new dtkComposerScene;
 
     d->view = new dtkComposerView(this);
     d->view->setScene(d->scene);

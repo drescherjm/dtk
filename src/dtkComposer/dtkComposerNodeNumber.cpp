@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Feb 25 16:21:13 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 18 16:23:31 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 391
+ * Last-Updated: Mon Oct 24 17:13:52 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 392
  */
 
 /* Commentary: 
@@ -485,11 +485,11 @@ void dtkComposerNodeNumber::pull(dtkComposerEdge *edge, dtkComposerNodeProperty 
 
         d->source_node = false;
 
-        d->editor->setPlainText(d->value.toString()); 
-        d->editor->update();
+        // d->editor->setPlainText(d->value.toString()); 
+        // d->editor->update();
 
-        d->label->text = d->genres.key(d->value.userType()); 
-        d->label->update();
+        // d->label->text = d->genres.key(d->value.userType()); 
+        // d->label->update();
     }
     return;
 }

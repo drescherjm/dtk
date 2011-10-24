@@ -118,14 +118,14 @@ endif(WIN32)
 ## Mpi sources
 ## #################################################################
 
-if(MPI_FOUND)
+if(USE_MPI AND MPI_FOUND)
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkDistributedCommunicatorMpi.h)
 set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
   dtkDistributedCommunicatorMpi.h)
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkDistributedCommunicatorMpi.cpp)
-endif(MPI_FOUND)
+endif(USE_MPI AND MPI_FOUND)
 
 ## #################################################################
 ## Build rules
@@ -171,9 +171,9 @@ target_link_libraries(${PROJECT_NAME}
   dtkJson
   dtkGui)
 
-if(MPI_FOUND)
+if(USE_MPI AND MPI_FOUND)
 target_link_libraries(${PROJECT_NAME} ${MPI_LIBRARIES})
-endif(MPI_FOUND)
+endif(USE_MPI AND MPI_FOUND)
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

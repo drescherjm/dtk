@@ -23,7 +23,7 @@ project(dtkVrProcess)
 ## Build rules
 ## #################################################################
 
-if(QUAT_LIBRARIES AND VRPN_LIBRARIES AND MPI_FOUND)
+if(QUAT_LIBRARIES AND VRPN_LIBRARIES AND USE_MPI AND MPI_FOUND)
 
 add_executable(${PROJECT_NAME}
   main.cpp)
@@ -32,4 +32,4 @@ target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkVr)
 
-endif(QUAT_LIBRARIES AND VRPN_LIBRARIES AND MPI_FOUND)
+endif(QUAT_LIBRARIES AND VRPN_LIBRARIES AND USE_MPI AND MPI_FOUND)

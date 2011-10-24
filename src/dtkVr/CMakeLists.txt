@@ -54,7 +54,7 @@ set(${PROJECT_NAME}_SOURCES
 ## Vrpn sources
 ## #################################################################
 
-if(QUAT_LIBRARIES AND VRPN_LIBRARIES AND MPI_FOUND)
+if(QUAT_LIBRARIES AND VRPN_LIBRARIES AND USE_MPI AND MPI_FOUND)
 
 add_definitions(-DDTK_WRAP_VR)
 
@@ -82,7 +82,7 @@ set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkVrSlave.cpp
   dtkVrTrackerVrpn.cpp)
 
-endif(QUAT_LIBRARIES AND VRPN_LIBRARIES AND MPI_FOUND)
+endif(QUAT_LIBRARIES AND VRPN_LIBRARIES AND USE_MPI AND MPI_FOUND)
 
 ## #################################################################
 ## Wrapping
@@ -159,9 +159,9 @@ if(MSVC)
   target_link_libraries(${PROJECT_NAME} wsock32)
 endif()
 
-if(MPI_FOUND)
+if(USE_MPI AND MPI_FOUND)
   target_link_libraries(${PROJECT_NAME} ${MPI_LIBRARIES})
-endif(MPI_FOUND)
+endif(USE_MPI AND MPI_FOUND)
 
 if(QUAT_LIBRARY AND VRPN_LIBRARY)
   target_link_libraries(${PROJECT_NAME}

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 16:43:25 2011 (+0200)
+ * Last-Updated: Tue Oct 25 14:55:26 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 838
+ *     Update #: 841
  */
 
 /* Commentary: 
@@ -44,7 +44,7 @@ public:
     QList<dtkComposerEdge *>  input_relay_routes;
     QList<dtkComposerEdge *> output_relay_routes;
 
-    QList<dtkComposerEdge *> input_active_routes;
+    QList<dtkComposerEdge *>  input_active_routes;
     QList<dtkComposerEdge *> output_active_routes;
 
 public:
@@ -445,6 +445,7 @@ void dtkComposerNodeControl::cleanOutputActiveRoutes(void)
 void dtkComposerNodeControl::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property)
 {
     foreach(dtkComposerEdge *relay_route, this->inputRelayRoutes()) {
+
         if (relay_route->source() == property) {
                 
             dtkComposerEdge *route = new dtkComposerEdge;
@@ -480,7 +481,7 @@ void dtkComposerNodeControl::push(dtkComposerEdge *o_route, dtkComposerNodePrope
             
             if (o_route->destination()->type() == dtkComposerNodeProperty::HybridOutput || 
                 o_route->destination()->type() == dtkComposerNodeProperty::PassThroughOutput || 
-                (o_route->destination()->type() == dtkComposerNodeProperty::Input && o_route->destination()->node()->kind() == dtkComposerNode::Control && relay_route->source()->node()->isChildOfControlNode(o_route->destination()->node()))) {
+               (o_route->destination()->type() == dtkComposerNodeProperty::Input && o_route->destination()->node()->kind() == dtkComposerNode::Control && relay_route->source()->node()->isChildOfControlNode(o_route->destination()->node()))) {
                 
                 dtkComposerNodeControl *output_control_node = dynamic_cast<dtkComposerNodeControl *>(o_route->destination()->node());
                 output_control_node->addOutputRelayRoute(route);

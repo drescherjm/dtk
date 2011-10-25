@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:46:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep 16 17:13:23 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 90
+ * Last-Updated: Tue Oct 25 15:19:10 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 91
  */
 
 /* Commentary: 
@@ -60,8 +60,8 @@ public:
     void setRect(qreal x, qreal y, qreal width, qreal height);
 
     QList<dtkComposerNode *>      nodes(void);
-    QList<dtkComposerNode *> startNodes(void);
-    QList<dtkComposerNode *>   endNodes(void);
+    QList<dtkComposerNode *> startNodes(QList<dtkComposerNode *> parents = QList<dtkComposerNode *>());
+    QList<dtkComposerNode *>   endNodes(QList<dtkComposerNode *> parents = QList<dtkComposerNode *>());
 
     void        addNode(dtkComposerNode *node);
     void     removeNode(dtkComposerNode *node);

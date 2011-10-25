@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep 19 10:03:39 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 970
+ * Last-Updated: Tue Oct 25 15:33:08 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 999
  */
 
 /* Commentary: 
@@ -774,13 +774,25 @@ QList<dtkComposerNode *> dtkComposerNodeControlBlock::nodes(void)
     return d->nodes;
 }
 
-QList<dtkComposerNode *> dtkComposerNodeControlBlock::startNodes(void)
+QList<dtkComposerNode *> dtkComposerNodeControlBlock::startNodes(QList<dtkComposerNode *> parents)
 {
     QList<dtkComposerNode *> nodes;
+    QList<dtkComposerNode *> scope;
 
-    foreach(dtkComposerNode *node, this->nodes())
-        if (!node->inputEdges().count() && node->outputEdges().count())
-            nodes << node;
+    if(parents.isEmpty())
+        scope = this->nodes();
+    else
+        scope = parents;
+
+    foreach(dtkComposerNode *node, scope) {
+
+        if (node->kind() != dtkComposerNode::Composite) {
+            if(!node->inputEdges().count() && node->outputEdges().count())
+                nodes << node;
+        } else {
+            nodes << this->startNodes(node->childNodes());
+        }
+    }
 
     foreach(dtkComposerEdge *edge, d->parent->inputRelayEdges())
         if (edge->source()->blockedFrom() == this->title() && !nodes.contains(edge->destination()->node()))
@@ -789,13 +801,25 @@ QList<dtkComposerNode *> dtkComposerNodeControlBlock::startNodes(void)
     return nodes;
 }
 
-QList<dtkComposerNode *> dtkComposerNodeControlBlock::endNodes(void)
+QList<dtkComposerNode *> dtkComposerNodeControlBlock::endNodes(QList<dtkComposerNode *> parents)
 {
     QList<dtkComposerNode *> nodes;
+    QList<dtkComposerNode *> scope;
 
-    foreach(dtkComposerNode *node, this->nodes())
-        if(!node->outputEdges().count() && node->inputEdges().count())
-            nodes << node;
+    if(parents.isEmpty())
+        scope = this->nodes();
+    else
+        scope = parents;
+
+    foreach(dtkComposerNode *node, scope) {
+
+        if(node->kind() != dtkComposerNode::Composite) {
+            if(!node->outputEdges().count() && node->inputEdges().count())
+                nodes << node;
+        } else {
+            nodes << this->endNodes(node->childNodes());
+        }
+    }
 
     foreach(dtkComposerEdge *edge, d->parent->outputRelayRoutes())
         if (edge->destination()->blockedFrom() == this->title() && !nodes.contains(edge->source()->node()))
@@ -806,7 +830,7 @@ QList<dtkComposerNode *> dtkComposerNodeControlBlock::endNodes(void)
 
 void dtkComposerNodeControlBlock::addNode(dtkComposerNode *node)
 {
-    if (!d->nodes.contains(node))
+    if(!d->nodes.contains(node))
         d->nodes << node;
 }
 

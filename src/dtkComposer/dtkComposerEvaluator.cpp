@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Oct 24 12:57:38 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 17:15:42 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 329
+ * Last-Updated: Tue Oct 25 10:24:12 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 338
  */
 
 /* Commentary: 
@@ -26,12 +26,16 @@
 #include "dtkComposerNodeConditional.h"
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeLoopDataComposite.h"
+#include "dtkComposerNodeLoopDataComposite_p.h"
 #include "dtkComposerNodeLoopFor.h"
 #include "dtkComposerNodeLoopWhile.h"
 #include "dtkComposerNodeLoopWhile_p.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerScene.h"
 
+#include <dtkCore/dtkAbstractData.h>
+#include <dtkCore/dtkAbstractDataComposite.h>
+#include <dtkCore/dtkAbstractProcess.h>
 #include <dtkCore/dtkGlobal.h>
 
 #include <QtCore>
@@ -364,7 +368,245 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeConditional *node)
 
 bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopDataComposite *node)
 {
-    qDebug() << DTK_PRETTY_FUNCTION << node;
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_PRETTY_FUNCTION << node;
+#endif
+    
+    // -- If update is invoked while node is running, update is not necessary.
+    
+    if (node->isRunning()) {
+
+        return true;
+    
+    } else {
+
+         // -- Check that node is ready (ie dirty)
+
+        if (!node->dirty())
+            return true;
+
+        // -- Check dirty input value
+
+        if (node->dirtyInputValue())
+            return true;
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "Dirty input value OK" << DTK_NO_COLOR;
+#endif
+
+        // -- Check dirty inputs
+
+        if (node->dtkComposerNode::dirtyUpstreamNodes())
+            return true;
+
+        // -- Mark dirty outputs
+
+        node->dtkComposerNode::markDirtyDownstreamNodes();
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "All output nodes are set to dirty" << DTK_NO_COLOR;
+#endif
+
+        // -- Clean active input routes
+
+        node->cleanInputActiveRoutes();
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Input active routes cleaned" << DTK_NO_COLOR;
+#endif
+
+        // -- Pull
+
+        foreach(dtkComposerEdge *i_route, node->inputRoutes())
+            node->pull(i_route, i_route->destination());
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Pull done" << DTK_NO_COLOR;
+#endif
+
+        // -- Set input relay routes connected to item and index properties
+
+        foreach(dtkComposerEdge *relay_route, node->inputRelayRoutes()) {
+
+            if (relay_route->source()->name() == "item" || relay_route->source()->name() == "index") {
+
+                dtkComposerEdge *route = new dtkComposerEdge;
+                route->setSource(relay_route->source());
+                route->setDestination(relay_route->destination());
+                
+                relay_route->destination()->node()->addInputRoute(route);
+                node->addInputActiveRoute(route);
+            
+            }
+        }
+
+        // -- Set input composite and loop options
+
+        foreach(dtkComposerEdge *i_route, node->inputRoutes()) {
+            if (i_route->destination() == node->inputProperty()) {
+        
+                dtkAbstractData *data = NULL;
+
+                if(dtkAbstractData *dt = qobject_cast<dtkAbstractData *>(i_route->source()->node()->object())) {
+                    
+                    data = dt;                    
+
+                } else if(dtkAbstractProcess *process = qobject_cast<dtkAbstractProcess *>(i_route->source()->node()->object())) {
+                                        
+                    if(i_route->source()->node()->outputProperties().count() >= 1)
+                        data = process->output(i_route->source()->node()->number(i_route->source()));
+                    else
+                        data = process->output();
+
+                }
+                
+                if (data) {
+
+                    node->d->composite = qobject_cast<dtkAbstractDataComposite *>(data);
+                    if (!node->d->composite) {
+                        dtkDebug() << DTK_PRETTY_FUNCTION << "input data is not of dtkAbstractDataComposite* type.";
+                        return true;
+                    }
+                    node->d->to_default = node->d->composite->count()-1;
+                    node->d->valid_input_composite = true;
+
+                } else {
+
+                    dtkDebug() << DTK_PRETTY_FUNCTION << "input data is not defined";
+                    return true;
+
+                }
+
+            } else if (i_route->destination()->name() == "from") {
+
+                node->d->from = (dtkxarch_int)(i_route->source()->node()->value(i_route->source()).toLongLong());   
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+                qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "from value =" << node->d->from << DTK_NO_COLOR;
+#endif
+
+            } else if (i_route->destination()->name() == "to") {
+
+                node->d->to = (dtkxarch_int)(i_route->source()->node()->value(i_route->source()).toLongLong()); 
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+                qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "to value =" << node->d->to << DTK_NO_COLOR;
+#endif
+
+            } else if (i_route->destination()->name() == "step") {
+
+                node->d->step = (dtkxarch_int)(i_route->source()->node()->value(i_route->source()).toLongLong());
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+                qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "step value =" << node->d->step << DTK_NO_COLOR;
+#endif
+
+            }
+        }
+ 
+        if (!node->d->valid_input_composite) {
+            dtkDebug() << DTK_PRETTY_FUNCTION << " input composite property is not connected.";
+            return true;   
+        }
+
+        // -- Set ranges and step of the loop
+
+        if (node->d->from > node->d->to) {
+
+            if (node->d->from > node->d->to_default)
+                node->d->from = node->d->to_default;
+            if (node->d->to < 0)
+                node->d->to = node->d->from_default;
+            if (node->d->step > 0)
+                node->d->step *= -1;
+
+        } else {
+
+            if (node->d->from < 0)
+                node->d->from = node->d->from_default;
+            if (node->d->to > node->d->to_default || node->d->to < 0)
+                node->d->to = node->d->to_default;
+            if (node->d->step < 0)
+                node->d->step *= -1;
+
+        }
+        node->d->index = node->d->from;
+        
+         // -- Node is now ready to run
+
+         node->setRunning(true);
+
+         // -- Loop evaluation is performed while condition is fullfilled
+
+        while(node->d->index <= node->d->to) {
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+            qDebug() << DTK_COLOR_BG_RED  << "Loop is running, index = " << node->d->index << DTK_NO_COLOR;
+#endif
+
+            // -- Set current available item of the composite
+
+            node->d->item = node->d->composite->at(node->d->index);
+            node->setObject(node->d->item, false);
+
+             // -- Workflow of loop block is evaluated
+
+            { // node->run()
+
+                dtkComposerEvaluatorPrivate evaluator;
+                
+                foreach(dtkComposerNode *child, node->currentBlock()->nodes())
+                    child->setDirty(true);
+                
+                foreach(dtkComposerNode *child, node->currentBlock()->startNodes())
+                    evaluator.stack.push(child);
+                
+                evaluator.run();
+                
+            }
+
+            // -- Loop variables, if present, are updated.
+
+            node->updatePassThroughVariables();
+
+            // -- Increment loop index
+
+            node->d->index += node->d->step;
+            
+        }
+        node->d->index -= node->d->step;
+            
+        // -- Clean active output routes
+
+        node->cleanOutputActiveRoutes();
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Output active routes cleaned" << DTK_NO_COLOR;
+#endif
+            
+        // -- Push
+            
+        foreach(dtkComposerEdge *o_route, node->outputRoutes())
+            node->push(o_route, o_route->source());
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Push done" << DTK_NO_COLOR;
+#endif
+
+         // -- Node is now clean and is no more running
+
+        node->setDirty(false);
+        node->setRunning(false);
+            
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_BLUE << DTK_PRETTY_FUNCTION << "Forward done" << DTK_NO_COLOR;
+#endif
+
+        // -- Forward
+            
+        foreach(dtkComposerEdge *o_route, node->outputRoutes())
+            o_route->destination()->node()->update();
+    }
 
     return true;
 }

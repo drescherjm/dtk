@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Oct 12 16:02:18 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Oct 18 16:25:38 2011 (+0200)
+ * Last-Updated: Tue Oct 25 10:17:10 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 190
+ *     Update #: 191
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include "dtkComposerNodeLoopDataComposite.h"
+#include "dtkComposerNodeLoopDataComposite_p.h"
 
 #include <dtkComposer/dtkComposerEdge>
 #include <dtkComposer/dtkComposerNode>
@@ -38,26 +39,6 @@
 // dtkComposerNodeLoopDataCompositePrivate declaration
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNodeLoopDataCompositePrivate
-{
-public:
-    dtkComposerNodeControlBlock *block_loop;
-
-public:
-    dtkxarch_int from_default;
-    dtkxarch_int to_default;
-
-    dtkxarch_int from;
-    dtkxarch_int to;
-    dtkxarch_int step;
-    dtkxarch_int index;
-
-    dtkAbstractData *item;
-
-    dtkAbstractDataComposite *composite;
-
-    bool valid_input_composite;
-};
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeLoopDataComposite implementation

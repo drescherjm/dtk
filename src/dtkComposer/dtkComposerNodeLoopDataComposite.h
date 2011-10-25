@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Oct 12 15:59:53 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 17 16:25:47 2011 (+0200)
+ * Last-Updated: Tue Oct 25 10:06:34 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 9
+ *     Update #: 10
  */
 
 /* Commentary: 
@@ -51,6 +51,9 @@ public:
 
 private:
     dtkComposerNodeLoopDataCompositePrivate *d;
+
+private:
+    friend class dtkComposerEvaluatorPrivate;
 };
 
 #endif

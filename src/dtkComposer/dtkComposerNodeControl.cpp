@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Oct 25 14:55:26 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 841
+ * Last-Updated: Wed Oct 26 18:24:32 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 848
  */
 
 /* Commentary: 
@@ -343,11 +343,14 @@ bool dtkComposerNodeControl::dirtyInputValue(void)
             if(dtkComposerNodeLoop *loop = dynamic_cast<dtkComposerNodeLoop *>(i_route->source()->node())) {
 
                 if(this->isChildOf(loop)) {
-                    if(loop->isPreRunning() || loop->isRunning() || loop->isPostRunning()) {
-                        continue;
-                    } else {
-                        return true;
-                    }
+
+                    continue;
+                    
+                    // if(loop->isRunning()) {
+                    //     continue;
+                    // } else {
+                    //     return true;
+                    // }
                 } else {
                     if (i_route->source()->node()->dirty())
                         return true;
@@ -373,11 +376,14 @@ bool dtkComposerNodeControl::dirtyUpstreamNodes(void)
             if(dtkComposerNodeLoop *loop = dynamic_cast<dtkComposerNodeLoop *>(i_route->source()->node())) {
                 
                 if(this->isChildOf(loop)) {
-                    if(loop->isPreRunning() || loop->isRunning() || loop->isPostRunning()) {
-                        continue;
-                    } else {
-                        return true;
-                    }
+
+                    continue;
+
+                    // if(loop->isRunning()) {
+                    //     continue;
+                    // } else {
+                    //     return true;
+                    // }
                 } else {
                     if (i_route->source()->node()->dirty())
                         return true;

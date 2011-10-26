@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May  4 08:51:21 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 16:29:09 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 53
+ * Last-Updated: Wed Oct 26 16:24:31 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 55
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include "dtkComposerEdge.h"
+#include "dtkComposerEvaluator_p.h"
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeLoopWhile.h"
 #include "dtkComposerNodeLoopWhile_p.h"
@@ -111,4 +112,14 @@ void dtkComposerNodeLoopWhile::layout(void)
 
         }
     }     
+}
+
+//! Node delegates its own evaluation to the evaluator according to
+//! Visitor Design Pattern.
+/*! 
+ * 
+ */
+bool dtkComposerNodeLoopWhile::evaluate(dtkComposerEvaluatorPrivate *evaluator)
+{
+    return evaluator->evaluate(this);
 }

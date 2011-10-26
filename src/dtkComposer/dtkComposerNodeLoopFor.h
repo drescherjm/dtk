@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:01:16 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Oct 13 17:40:54 2011 (+0200)
+ * Last-Updated: Wed Oct 26 16:36:55 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 21
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include "dtkComposerExport.h"
 #include "dtkComposerNodeLoop.h"
 
+class dtkComposerEvaluatorPrivate;
 class dtkComposerNodeLoopForPrivate;
 
 class DTKCOMPOSER_EXPORT dtkComposerNodeLoopFor : public dtkComposerNodeLoop
@@ -37,7 +38,8 @@ public:
     void layout(void);
 
 public slots:
-    void update(void);
+    bool evaluate(dtkComposerEvaluatorPrivate *evaluator);
+    /* void update(void); */
 
 public:
     QVariant value(dtkComposerNodeProperty *property);
@@ -47,6 +49,9 @@ protected:
 
 private:
     dtkComposerNodeLoopForPrivate *d;
+
+private:
+    friend class dtkComposerEvaluatorPrivate;
 };
 
 #endif

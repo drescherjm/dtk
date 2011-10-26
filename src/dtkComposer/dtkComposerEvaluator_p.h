@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Oct 24 12:54:41 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 16:38:07 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 47
+ * Last-Updated: Wed Oct 26 16:12:29 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 48
  */
 
 /* Commentary: 
@@ -55,6 +55,14 @@ signals:
 
 public:
     QStack<dtkComposerNode *> stack;
+
+private:
+    friend class dtkComposerNode;
+    friend class dtkComposerNodeCase;
+    friend class dtkComposerNodeConditional;
+    friend class dtkComposerNodeLoopDataComposite;
+    friend class dtkComposerNodeLoopFor;
+    friend class dtkComposerNodeLoopWhile;
 };
 
 #endif

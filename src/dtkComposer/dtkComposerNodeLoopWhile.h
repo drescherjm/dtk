@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May  4 08:44:22 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 16:28:59 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 9
+ * Last-Updated: Wed Oct 26 16:23:57 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 10
  */
 
 /* Commentary: 
@@ -35,6 +35,9 @@ public:
 
 public:
     void layout(void);
+
+public slots:
+    bool evaluate(dtkComposerEvaluatorPrivate *evaluator);
 
 private:
     dtkComposerNodeLoopWhilePrivate *d;

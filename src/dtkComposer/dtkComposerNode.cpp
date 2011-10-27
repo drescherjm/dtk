@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 27 15:00:10 2011 (+0200)
+ * Last-Updated: Thu Oct 27 17:15:49 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 2524
+ *     Update #: 2531
  */
 
 /* Commentary: 
@@ -977,18 +977,18 @@ void dtkComposerNode::setDirty(bool dirty)
 
     d->dirty = dirty;
 
-    if (d->kind == dtkComposerNode::Composite) {
-        if (d->dirty) {
-            foreach(dtkComposerNode *child, d->children)
-                if(!child->inputEdges().count() && child->outputEdges().count())
-                    child->setDirty(dirty);
-            foreach(dtkComposerEdge *ghost_edge, d->ghost_input_edges.keys())
-                ghost_edge->destination()->node()->setDirty(dirty);
-        } else {
-            foreach(dtkComposerNode *child, d->children)
-                child->setDirty(dirty);
-        }
-    }
+    // if (d->kind == dtkComposerNode::Composite) {
+    //     if (d->dirty) {
+    //         foreach(dtkComposerNode *child, d->children)
+    //             if(!child->inputEdges().count() && child->outputEdges().count())
+    //                 child->setDirty(dirty);
+    //         foreach(dtkComposerEdge *ghost_edge, d->ghost_input_edges.keys())
+    //             ghost_edge->destination()->node()->setDirty(dirty);
+    //     } else {
+    //         foreach(dtkComposerNode *child, d->children)
+    //             child->setDirty(dirty);
+    //     }
+    // }
 }
 
 bool dtkComposerNode::resizable(void)

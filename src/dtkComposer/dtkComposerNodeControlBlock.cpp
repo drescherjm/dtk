@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Oct 25 15:33:08 2011 (+0200)
+ * Last-Updated: Thu Oct 27 17:37:52 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 999
+ *     Update #: 1035
  */
 
 /* Commentary: 
@@ -784,19 +784,35 @@ QList<dtkComposerNode *> dtkComposerNodeControlBlock::startNodes(QList<dtkCompos
     else
         scope = parents;
 
-    foreach(dtkComposerNode *node, scope) {
+    // foreach(dtkComposerNode *node, scope) {
 
+    //     if (node->kind() != dtkComposerNode::Composite) {
+
+    //         if(!node->inputEdges().count() && node->outputEdges().count()) {
+    //             node->setDirty(true);
+    //             nodes << node;
+    //         } else {
+    //             foreach(dtkComposerEdge *edge, d->parent->inputRelayRoutes()) {
+    //                 if (edge->source()->blockedFrom() == this->title() && !nodes.contains(edge->destination()->node())) {
+    //                     dtkComposerNode *node = edge->destination()->node();
+    //                     node->setDirty(true);
+    //                     nodes << node;
+    //                 }
+    //             }
+    //         }
+    //     } else {
+    //         nodes << this->startNodes(node->childNodes());
+    //     }
+    // }
+
+    foreach(dtkComposerNode *node, scope) {
         if (node->kind() != dtkComposerNode::Composite) {
-            if(!node->inputEdges().count() && node->outputEdges().count())
-                nodes << node;
+            node->setDirty(true);
+            nodes << node;
         } else {
             nodes << this->startNodes(node->childNodes());
         }
     }
-
-    foreach(dtkComposerEdge *edge, d->parent->inputRelayEdges())
-        if (edge->source()->blockedFrom() == this->title() && !nodes.contains(edge->destination()->node()))
-            nodes << edge->destination()->node();
 
     return nodes;
 }

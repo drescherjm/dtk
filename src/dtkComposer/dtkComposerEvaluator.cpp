@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Oct 24 12:57:38 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 27 15:34:49 2011 (+0200)
+ * Last-Updated: Thu Oct 27 17:35:21 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 398
+ *     Update #: 399
  */
 
 /* Commentary: 
@@ -289,8 +289,8 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeCase *node)
 
         dtkComposerEvaluatorPrivate evaluator;
 
-        foreach(dtkComposerNode *child, node->currentBlock()->nodes())
-            child->setDirty(true);
+        // foreach(dtkComposerNode *child, node->currentBlock()->nodes())
+        //     child->setDirty(true);
         
         foreach(dtkComposerNode *child, node->currentBlock()->startNodes())
             evaluator.stack.push(child);
@@ -656,8 +656,8 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopDataComposite *nod
 
                 dtkComposerEvaluatorPrivate evaluator;
                 
-                foreach(dtkComposerNode *child, node->currentBlock()->nodes())
-                    child->setDirty(true);
+                // foreach(dtkComposerNode *child, node->currentBlock()->nodes())
+                //     child->setDirty(true);
                 
                 foreach(dtkComposerNode *child, node->currentBlock()->startNodes())
                     evaluator.stack.push(child);
@@ -946,8 +946,8 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopWhile *node)
 
             dtkComposerEvaluatorPrivate evaluator;
             
-            foreach(dtkComposerNode *child, node->currentBlock()->nodes())
-                child->setDirty(true);
+            // foreach(dtkComposerNode *child, node->currentBlock()->nodes())
+            //     child->setDirty(true);
             
             foreach(dtkComposerNode *child, node->currentBlock()->startNodes())
                 evaluator.stack.push(child);
@@ -967,8 +967,8 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopWhile *node)
 
                 dtkComposerEvaluatorPrivate evaluator;
                 
-                foreach(dtkComposerNode *child, node->currentBlock()->nodes())
-                    child->setDirty(true);
+                // foreach(dtkComposerNode *child, node->currentBlock()->nodes())
+                //     child->setDirty(true);
                 
                 foreach(dtkComposerNode *child, node->currentBlock()->startNodes())
                     evaluator.stack.push(child);
@@ -989,8 +989,8 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopWhile *node)
 
                 dtkComposerEvaluatorPrivate evaluator;
                 
-                foreach(dtkComposerNode *child, node->currentBlock()->nodes())
-                    child->setDirty(true);
+                // foreach(dtkComposerNode *child, node->currentBlock()->nodes())
+                //     child->setDirty(true);
                 
                 foreach(dtkComposerNode *child, node->currentBlock()->startNodes())
                     evaluator.stack.push(child);

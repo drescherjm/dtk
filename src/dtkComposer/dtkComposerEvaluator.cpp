@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Oct 24 12:57:38 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Oct 25 15:40:46 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 375
+ * Last-Updated: Wed Oct 26 17:10:26 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 392
  */
 
 /* Commentary: 
@@ -24,10 +24,12 @@
 #include "dtkComposerNodeCase.h"
 #include "dtkComposerNodeCase_p.h"
 #include "dtkComposerNodeConditional.h"
+#include "dtkComposerNodeConditional_p.h"
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeLoopDataComposite.h"
 #include "dtkComposerNodeLoopDataComposite_p.h"
 #include "dtkComposerNodeLoopFor.h"
+#include "dtkComposerNodeLoopFor_p.h"
 #include "dtkComposerNodeLoopWhile.h"
 #include "dtkComposerNodeLoopWhile_p.h"
 #include "dtkComposerNodeProperty.h"
@@ -56,28 +58,9 @@ void dtkComposerEvaluatorPrivate::run(void)
     emit evaluationStarted();
 
     while(!this->stack.isEmpty()) {
-
         dtkComposerNode *node = this->stack.pop();
-
-        if(dtkComposerNodeCase *n = qobject_cast<dtkComposerNodeCase *>(node)) {
-            if(!this->evaluate(n))
-                this->stack.push(n);
-        } else if(dtkComposerNodeConditional *n = qobject_cast<dtkComposerNodeConditional *>(node)) {
-            if(!this->evaluate(n))
-                this->stack.push(n);
-        } else if(dtkComposerNodeLoopDataComposite *n = qobject_cast<dtkComposerNodeLoopDataComposite *>(node)) {
-            if(!this->evaluate(n))
-                this->stack.push(n);
-        } else if(dtkComposerNodeLoopFor *n = qobject_cast<dtkComposerNodeLoopFor *>(node)) {
-            if(!this->evaluate(n))
-                this->stack.push(n);
-        } else if(dtkComposerNodeLoopWhile *n = qobject_cast<dtkComposerNodeLoopWhile *>(node)) {
-            if(!this->evaluate(n))
-                this->stack.push(n);
-        } else {
-            if(!this->evaluate(node))
-                this->stack.push(node);
-        }
+        if(!node->evaluate(this))
+            this->stack.push(node);
     }
 
     emit evaluationStopped();
@@ -361,7 +344,121 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeCase *node)
 
 bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeConditional *node)
 {
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
     qDebug() << DTK_PRETTY_FUNCTION << node;
+#endif
+    
+    // -- If update is invoked while node is running, update is not necessary.
+    
+    if (node->isRunning()) {
+
+        return true;
+    
+    } else {
+
+         // -- Check that node is ready (ie dirty)
+
+        if (!node->dirty())
+            return true;
+
+        // -- Check dirty input value
+
+        if (node->dirtyInputValue())
+            return true;
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "Dirty input value OK" << DTK_NO_COLOR;
+#endif
+
+        // -- Block selection
+
+        if(node->condition())
+            node->setCurrentBlock(node->d->block_then);
+        else
+            node->setCurrentBlock(node->d->block_else);
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "Selected block is" << node->currentBlock()->title() << DTK_NO_COLOR;
+#endif
+
+        // -- Check dirty inputs
+
+        if (node->dirtyUpstreamNodes())
+            return true;
+
+        // -- Mark dirty outputs
+
+        node->markDirtyDownstreamNodes();
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "All output nodes are set to dirty" << DTK_NO_COLOR;
+#endif
+
+        // -- Clean active input routes
+
+        node->cleanInputActiveRoutes();
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Input active routes cleaned" << DTK_NO_COLOR;
+#endif
+
+        // -- Pull
+
+        foreach(dtkComposerEdge *i_route, node->inputRoutes())
+            if (i_route->destination()->blockedFrom() == node->currentBlock()->title())
+                node->pull(i_route, i_route->destination());
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Pull done" << DTK_NO_COLOR;
+#endif
+
+        // -- Node is now ready to run
+
+        node->setRunning(true);
+        
+        // -- Running logics
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+    qDebug() << DTK_COLOR_BG_RED  << "Running node" << node->title() << "'s logics" << DTK_NO_COLOR;
+#endif
+
+        node->run();
+
+        // -- Clean active output routes
+
+        node->cleanOutputActiveRoutes();
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Output active routes cleaned" << DTK_NO_COLOR;
+#endif
+
+        // -- Push
+
+        foreach(dtkComposerEdge *o_route, node->outputRoutes())
+            if (o_route->source()->blockedFrom() == node->currentBlock()->title())
+                node->push(o_route, o_route->source());
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Push done" << DTK_NO_COLOR;
+#endif
+
+        // -- Node is now clean and is no more running
+
+        node->setDirty(false);
+        node->setRunning(false);
+
+        // -- Forward to downstream nodes
+
+        foreach(dtkComposerEdge *o_route, node->outputRoutes()) {
+            if (o_route->source()->blockedFrom() == node->currentBlock()->title()) {
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+                qDebug() << DTK_COLOR_BG_BLUE << "Forwarding" << node->title() << "->" << o_route->destination()->node()->title() << DTK_NO_COLOR;
+#endif      
+                if(!this->stack.contains(o_route->destination()->node()))
+                    this->stack.push(o_route->destination()->node());
+            }
+        }
+    }
 
     return true;
 }
@@ -622,7 +719,155 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopDataComposite *nod
 
 bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopFor *node)
 {
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
     qDebug() << DTK_PRETTY_FUNCTION << node;
+#endif
+    
+    // -- If update is invoked while node is running, update is not necessary.
+    
+    if (node->isRunning()) {
+        
+        return true;
+        
+    } else {
+        
+        // -- Check that node is ready (ie dirty)
+
+        if (!node->dirty())
+            return true;
+
+        // -- Check dirty input value
+
+        if (node->dirtyInputValue())
+            return true;
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "Dirty input value OK" << DTK_NO_COLOR;
+#endif
+
+        // -- Retrieve input value
+
+        node->d->loop_variable = node->dtkComposerNodeControl::value();
+
+        if (!node->d->loop_variable.isValid())
+            return true;
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "Input value valid" << DTK_NO_COLOR;
+#endif
+
+        // -- Check dirty inputs
+
+        if (node->dtkComposerNode::dirtyUpstreamNodes())
+            return true;
+
+        // -- Mark dirty outputs
+
+        node->dtkComposerNode::markDirtyDownstreamNodes();
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "All output nodes are set to dirty" << DTK_NO_COLOR;
+#endif
+
+        // -- Clean active input routes
+
+        node->cleanInputActiveRoutes();
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Input active routes cleaned" << DTK_NO_COLOR;
+#endif
+
+        // -- Pull
+
+        foreach(dtkComposerEdge *i_route, node->inputRoutes())
+            node->pull(i_route, i_route->destination());
+
+        foreach(dtkComposerEdge *o_route, node->outputRelayRoutes()) {
+            if (o_route->destination()->blockedFrom() == node->d->block_cond->title()) {
+                if (o_route->destination()->name() == "condition") {
+                    node->d->node_cond = o_route->source()->node();
+                    node->d->prop_cond = o_route->source();
+                }
+            } else if (o_route->destination()->blockedFrom() == node->d->block_post->title()) {
+                if (o_route->destination()->name() == "variable") {
+                    node->d->node_post = o_route->source()->node();
+                    node->d->prop_post = o_route->source();
+                }
+            }
+        }
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Pull done" << DTK_NO_COLOR;
+#endif
+
+        // -- Node is now ready to run
+
+        node->setRunning(true);
+
+        // -- First of all, condition of loop evaluation is evaluated from conditional block.
+
+        node->setCurrentBlock(node->d->block_cond);
+        node->run();
+
+        // -- Loop evaluation is performed while condition is fullfilled
+
+        while(node->d->node_cond->value(node->d->prop_cond).toBool()) {
+
+            // -- Workflow of loop block is evaluated
+
+            node->setCurrentBlock(node->d->block_loop);
+            node->run();
+
+            // -- Loop variables, if present, are updated.
+                
+            node->d->loop_variable_old = node->d->loop_variable;
+            node->updatePassThroughVariables();
+
+            // -- Loop variable is updated from post block.
+
+            node->setCurrentBlock(node->d->block_post);
+            node->run();            
+            node->d->loop_variable = node->d->node_post->value(node->d->prop_post);
+
+            // -- Loop condition is re-calculated from condition block.
+            
+            node->setCurrentBlock(node->d->block_cond);
+            node->run();
+            
+        }
+            
+        // -- Clean active output routes
+
+        node->cleanOutputActiveRoutes();
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Output active routes cleaned" << DTK_NO_COLOR;
+#endif
+        
+        // -- Push
+        
+        foreach(dtkComposerEdge *o_route, node->outputRoutes())
+            node->push(o_route, o_route->source());
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+        qDebug() << DTK_COLOR_BG_YELLOW << DTK_PRETTY_FUNCTION << "Push done" << DTK_NO_COLOR;
+#endif
+
+        // -- Node is now clean and is no more running
+
+        node->setDirty(false);
+        node->setRunning(false);
+
+        // -- Forward to downstream nodes
+                
+        foreach(dtkComposerEdge *o_route, node->outputRoutes()) {
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
+            qDebug() << DTK_COLOR_BG_BLUE << "Forwarding" << node->title() << "->" << o_route->destination()->node()->title() << DTK_NO_COLOR;
+#endif
+            if(!this->stack.contains(o_route->destination()->node()))
+                this->stack.push(o_route->destination()->node());
+        }            
+    }
 
     return true;
 }

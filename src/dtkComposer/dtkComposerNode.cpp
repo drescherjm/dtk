@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Oct 25 18:57:12 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 2512
+ * Last-Updated: Wed Oct 26 18:23:51 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 2520
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include "dtkComposerEdge.h"
+#include "dtkComposerEvaluator_p.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeControlBlock.h"
@@ -1232,6 +1233,16 @@ void dtkComposerNode::touch(void)
         this->scene()->views().first()->update();
 }
 
+//! Node delegates its own evaluation to the evaluator according to
+//! Visitor Design Pattern.
+/*! 
+ * 
+ */
+bool dtkComposerNode::evaluate(dtkComposerEvaluatorPrivate *evaluator)
+{
+    return evaluator->evaluate(this);
+}
+
 QRectF dtkComposerNode::boundingRect(void) const
 {
     if (d->ghost)
@@ -1816,10 +1827,13 @@ bool dtkComposerNode::dirtyUpstreamNodes(void)
 
             if(this->isChildOf(loop)) {
 
-                if(loop->isPreRunning() || loop->isRunning() || loop->isPostRunning())
-                    continue;
-                else
-                    return true;
+                continue;
+
+                // if(loop->isRunning())
+                //     continue;
+                // else {
+                //     qDebug() << DTK_PRETTY_FUNCTION;
+                //     return true;}
 
             } else {
 

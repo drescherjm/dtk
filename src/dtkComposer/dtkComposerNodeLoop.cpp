@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar  7 09:26:54 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Oct 13 17:41:41 2011 (+0200)
+ * Last-Updated: Wed Oct 26 17:54:29 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 197
+ *     Update #: 200
  */
 
 /* Commentary: 
@@ -32,10 +32,6 @@
 class dtkComposerNodeLoopPrivate
 {
 public:
-    bool pre_running;
-    bool post_running;
-
-public:
     bool loop_condition;
 
 public:
@@ -53,9 +49,6 @@ dtkComposerNodeLoop::dtkComposerNodeLoop(dtkComposerNode *parent) : dtkComposerN
     this->setTitle("Loop");
     this->setType("dtkComposerLoop");
 
-    d->pre_running = false;
-    d->post_running = false;
-
     d->loop_condition = false;
 }
 
@@ -64,16 +57,6 @@ dtkComposerNodeLoop::~dtkComposerNodeLoop(void)
     delete d;
     
     d = NULL;
-}
-
-bool dtkComposerNodeLoop::isPreRunning(void)
-{
-    return d->pre_running;
-}
-
-bool dtkComposerNodeLoop::isPostRunning(void)
-{
-    return d->post_running;
 }
 
 bool dtkComposerNodeLoop::loopConditon(void)
@@ -89,16 +72,6 @@ QVariant dtkComposerNodeLoop::value(dtkComposerNodeProperty *property)
 QList<QVariant> dtkComposerNodeLoop::passThroughVariables(void)
 {
     return d->pass_through_variables.values();
-}
-
-void dtkComposerNodeLoop::setPreRunning(bool pre_running)
-{
-    d->pre_running = pre_running;
-}
-
-void dtkComposerNodeLoop::setPostRunning(bool post_running)
-{
-    d->post_running = post_running;
 }
 
 void dtkComposerNodeLoop::setLoopCondition(bool loop_condition)
@@ -117,7 +90,7 @@ bool dtkComposerNodeLoop::dirtyBlockEndNodes(void)
         if (o_route->destination()->blockedFrom() == this->currentBlock()->title()) {
             if(dtkComposerNodeLoop *loop = dynamic_cast<dtkComposerNodeLoop *>(o_route->source()->node())) {
                 if(this->isChildOf(loop)) {
-                    if(loop->isPreRunning() || loop->isRunning() || loop->isPostRunning()) {
+                    if(loop->isRunning()) {
                         continue;
                     } else {
                         return true;

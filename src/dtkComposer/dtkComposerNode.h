@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 16:59:43 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 306
+ * Last-Updated: Wed Oct 26 16:10:20 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 311
  */
 
 /* Commentary: 
@@ -28,6 +28,7 @@
 
 class dtkAbstractObject;
 class dtkComposerEdge;
+class dtkComposerEvaluatorPrivate;
 class dtkComposerNodePrivate;
 class dtkComposerNodeProperty;
 class stkComspoerScene;
@@ -194,6 +195,9 @@ public slots:
 
 // public slots:
 //     virtual void update(void);
+
+public slots:
+    virtual bool evaluate(dtkComposerEvaluatorPrivate *evaluator);
 
 public:
     virtual QRectF boundingRect(void) const;

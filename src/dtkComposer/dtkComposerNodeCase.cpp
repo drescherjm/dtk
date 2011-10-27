@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Oct 25 19:22:35 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 676
+ * Last-Updated: Wed Oct 26 16:15:34 2011 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 678
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include "dtkComposerEdge.h"
+#include "dtkComposerEvaluator_p.h"
 #include "dtkComposerNodeCase.h"
 #include "dtkComposerNodeCase_p.h"
 #include "dtkComposerNodeControlBlock.h"
@@ -319,6 +320,16 @@ void dtkComposerNodeCase::layout(void)
     } 
 
     d->add_button->setPos(node_rect.left() + 0.5 * node_rect.width(), node_rect.bottom());
+}
+
+//! Node delegates its own evaluation to the evaluator according to
+//! Visitor Design Pattern.
+/*! 
+ * 
+ */
+bool dtkComposerNodeCase::evaluate(dtkComposerEvaluatorPrivate *evaluator)
+{
+    return evaluator->evaluate(this);
 }
 
 void dtkComposerNodeCase::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property)

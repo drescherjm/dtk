@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 12 14:46:43 2011 (+0200)
+ * Last-Updated: Thu Oct 27 13:49:21 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 190
+ *     Update #: 215
  */
 
 /* Commentary:
@@ -24,6 +24,37 @@
 #include <dtkCore/dtkLog.h>
 
 #define DTK_VERBOSE_LOAD false
+
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+QStringList dtkPluginManagerPathSplitter(QString path)
+{
+    QString paths = path;
+
+#ifdef Q_WS_WIN
+    QStringList pathList;
+    QRegExp pathFilterRx("(([a-zA-Z]:|)[^:]+)");
+
+    int pos = 0;
+
+    while ((pos = pathFilterRx.indexIn(paths, pos)) != -1) {
+
+        QString pathItem = pathFilterRx.cap(1);
+        pathItem.replace( "\\" , "/" );
+
+        if (!pathItem.isEmpty())
+            pathList << pathItem;
+
+        pos += pathFilterRx.matchedLength();
+    }
+#else
+    QStringList pathList = paths.split(":", QString::SkipEmptyParts);
+#endif
+
+    return pathList;
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkPluginManagerPrivate
@@ -57,27 +88,7 @@ void dtkPluginManager::initialize(void)
     if(d->path.isNull())
         this->readSettings();
 
-    QString paths = d->path;
-
-#ifdef Q_WS_WIN
-    QStringList pathList;
-    QRegExp pathFilterRx("(([a-zA-Z]:|)[^:]+)");
-
-    int pos = 0;
-
-    while ((pos = pathFilterRx.indexIn(paths, pos)) != -1) {
-
-        QString pathItem = pathFilterRx.cap(1);
-        pathItem.replace( "\\" , "/" );
-
-        if (!pathItem.isEmpty())
-            pathList << pathItem;
-
-        pos += pathFilterRx.matchedLength();
-    }
-#else
-    QStringList pathList = paths.split(":", QString::SkipEmptyParts);
-#endif
+    QStringList pathList = dtkPluginManagerPathSplitter(d->path);
 
     const QString appDir = qApp->applicationDirPath();
 
@@ -102,6 +113,69 @@ void dtkPluginManager::uninitialize(void)
 
     foreach(QString path, d->loaders.keys())
         unloadPlugin(path);
+}
+
+//! Load a specific plugin designated by its name.
+/*! The path is retrieved through the plugin manager settings.
+ * 
+ * \param name The name of the plugin, without platform specific prefix (.e.g lib) and suffix (e.g. .so or .dylib or .dll)
+ */
+
+void dtkPluginManager::load(const QString& name)
+{
+    if(d->path.isNull())
+        this->readSettings();
+
+    QStringList pathList = dtkPluginManagerPathSplitter(d->path);
+
+    const QString appDir = qApp->applicationDirPath();
+
+    foreach(QString path, pathList) {
+
+        QDir dir(appDir);
+
+        if (dir.cd(path)) {
+            dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
+
+            foreach (QFileInfo entry, dir.entryInfoList())
+                if(entry.fileName().contains(name))
+                    loadPlugin(entry.absoluteFilePath());
+        } else {
+            dtkWarning() << "Failed to load plugins from path " << path << ". Could not cd to directory.";
+        }
+    }
+}
+
+//! Unload a specific plugin designated by its name.
+/*! The path is retrieved through the plugin manager settings.
+ * 
+ * \param name The name of the plugin, without platform specific prefix (.e.g lib) and suffix (e.g. .so or .dylib or .dll)
+ */
+
+void dtkPluginManager::unload(const QString& name)
+{
+    if(d->path.isNull())
+        this->readSettings();
+
+    QStringList pathList = dtkPluginManagerPathSplitter(d->path);
+
+    const QString appDir = qApp->applicationDirPath();
+
+    foreach(QString path, pathList) {
+
+        QDir dir(appDir);
+
+        if (dir.cd(path)) {
+            dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
+
+            foreach (QFileInfo entry, dir.entryInfoList())
+                if(entry.fileName().contains(name))
+                    if (this->plugin(name))
+                        this->unloadPlugin(entry.absoluteFilePath());
+        } else {
+            dtkWarning() << "Failed to load plugins from path " << path << ". Could not cd to directory.";
+        }
+    }
 }
 
 void dtkPluginManager::readSettings(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 22 10:10:34 2011 (+0200)
+ * Last-Updated: Thu Oct 13 17:19:22 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 61
+ *     Update #: 79
  */
 
 /* Commentary: 
@@ -21,11 +21,12 @@
 #define DTKDISTRIBUTEDSLAVE_H
 
 #include "dtkDistributedExport.h"
-#include "dtkDistributedSocket.h"
+#include "dtkDistributedCommunicatorTcp.h"
 
 #include <QtCore>
 #include <QtNetwork>
 
+class dtkDistributedCommunicatorTcp;
 class dtkDistributedSlavePrivate;
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedSlave : public QObject
@@ -34,7 +35,10 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedSlave : public QObject
 
 public:
      dtkDistributedSlave(void);
+     dtkDistributedSlave(dtkDistributedCommunicatorTcp *communicator);
     ~dtkDistributedSlave(void);
+
+    QString jobId(void);
 
 public:
     virtual int run(void);
@@ -60,15 +64,14 @@ public slots:
 protected:
     virtual int exec(void) = 0;
 
-    qint64 sendRequest(QString method, QString path, int size = 0, QString type = "json", const QByteArray& content = QByteArray(), const dtkDistributedSocket::dtkDistributedSocketHeaders& headers = dtkDistributedSocket::dtkDistributedSocketHeaders());
+    dtkDistributedCommunicatorTcp *communicator();
 
 protected slots:
+    void      read(void);
     void onStarted(void);
     void   onEnded(void);
 
 protected slots:
-    void read(void);
-    void write(const QByteArray& array);
     void error(QAbstractSocket::SocketError error);
 
 private:

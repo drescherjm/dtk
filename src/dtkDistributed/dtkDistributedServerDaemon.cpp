@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. sept. 22 10:25:14 2011 (+0200)
+ * Last-Updated: mar. oct. 11 16:27:21 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 519
+ *     Update #: 603
  */
 
 /* Commentary: 
@@ -110,79 +110,74 @@ QByteArray dtkDistributedServerDaemon::waitForData(int rank)
 
     socket->blockSignals(true);
 
-    QVariantMap data;
+    dtkDistributedMessage data;
 
     if (d->sockets[rank]->waitForReadyRead(30000))
         data = d->sockets[rank]->parseRequest();
 
     socket->blockSignals(false);
 
-    return data["content"].toByteArray() ;
+    return data.content() ;
 }
 
 void dtkDistributedServerDaemon::read(void)
 {
     dtkDistributedSocket *socket = (dtkDistributedSocket *)sender();
+    dtkDistributedMessage msg = socket->parseRequest();
 
+    QByteArray r;
+    QString jobid;
 
-    QVariantMap request = socket->parseRequest();
-    QString method= request["method"].toString();
-    QString path= request["path"].toString();
-
-    if( method == "GET" && path   == "/status") {
-
-        QByteArray r = d->manager->status();
-        socket->sendRequest("OK","/status",r.size(),"json",r);
+    switch (msg.method()) {
+    case dtkDistributedMessage::STATUS:
+        r = d->manager->status();
+        socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::OKSTATUS,"",-2,r.size(),"json",r));
         // GET status is from the controller, store the socket in sockets using rank=-1
         if (!d->sockets.contains(-1))
             d->sockets.insert(-1, socket);
+        break;
 
-    } else if( method == "PUT" && path == "/job" ) {
-
-        QString jobid = d->manager->submit(request["content"].toByteArray());
+    case dtkDistributedMessage::NEWJOB:
+        jobid = d->manager->submit(msg.content());
 #if defined(DTK_DEBUG_SERVER_DAEMON)
         qDebug() << DTK_PRETTY_FUNCTION << jobid;
 #endif
-        socket->sendRequest("OK","/job/"+jobid);
+        socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::OKJOB, jobid));
+        break;
 
-    } else if( method == "ENDED" && path.startsWith("/job")) {
-
-        QString jobid = path.split("/").at(2);
+    case dtkDistributedMessage::ENDJOB:
 #if defined(DTK_DEBUG_SERVER_DAEMON)
-        qDebug() << DTK_PRETTY_FUNCTION << "Job ended " << jobid;
+        qDebug() << DTK_PRETTY_FUNCTION << "Job ended " << msg.jobid();
 #endif
         //TODO: check if exists
-        dtkDistributedSocket *controller =  d->sockets[-1];
-        controller->sendRequest(method,path);
+        d->sockets[-1]->sendRequest(&msg);
+        break;
 
-    } else if( method == "PUT" && path.startsWith("/rank")) {
-
-        int rank = path.split("/").at(2).toInt();
+    case dtkDistributedMessage::SETRANK:
 
 #if defined(DTK_DEBUG_SERVER_DAEMON)
-        qDebug() << DTK_PRETTY_FUNCTION << "connected remote is of rank " << rank;
+        qDebug() << DTK_PRETTY_FUNCTION << "connected remote is of rank " << msg.rank();
 #endif
-        d->sockets.insert(rank, socket);
+        d->sockets.insert(msg.rank(), socket);
+        break;
 
-    } else if( method == "DELETE" && path.startsWith("/job")) {
+    case dtkDistributedMessage::DELJOB:
+        jobid = msg.jobid();
+        if (d->manager->deljob(jobid).startsWith("OK"))
+            socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::OKDEL, jobid) );
+        else
+            socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::ERRORDEL, jobid) );
+        break;
 
-        QString jobid = path.split("/").at(2);
-        socket->sendRequest(d->manager->deljob(jobid),"/job/"+jobid);
+    case dtkDistributedMessage::DATA:
+        msg.addHeader("x-forwarded-for", QString::number(d->sockets.key(socket)));
+        (d->sockets[msg.rank()])->sendRequest(&msg);
+        break;
 
-    } else if( method == "POST" && path.startsWith("/data")) {
-        QString jobid = path.split("/").at(2);
-        int torank = path.split("/").at(3).toInt();
-        int size = request["size"].toInt();
-        QString type = request["type"].toString();
-        int fromrank = d->sockets.key(socket);
-
-        dtkDistributedSocket *dest =  d->sockets[torank];
-        QHash<QString,QString> headers;
-        headers["x-forwarded-for"] = QString::number(fromrank);
-        dest->sendRequest(method,"/data/"+jobid, size, type, request["content"].toByteArray(),headers);
-    } else {
+    default:
         qDebug() << DTK_PRETTY_FUNCTION << "WARNING: Unknown data";
-    }
+    };
+
     if (socket->bytesAvailable() > 0)
         this->read();
 }

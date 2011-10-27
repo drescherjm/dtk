@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Sep  6 09:29:11 2011 (+0200)
+## Last-Updated: Wed Oct  5 23:19:29 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 64
+##     Update #: 67
 ######################################################################
 ## 
 ### Commentary: 
@@ -229,6 +229,8 @@ endif(MPI_FOUND AND QUAT_LIBRARY AND VRPN_LIBRARY)
 find_package(Qwt QUIET)
 
 if(QWT_FOUND)
+  add_definitions(-DHAVE_PLOT)
+  set(DTK_HAVE_PLOT "YES")
   include_directories(${QWT_INCLUDE_DIR})
 endif(QWT_FOUND)
 

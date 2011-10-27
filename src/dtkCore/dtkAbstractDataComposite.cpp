@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Sep 21 14:28:37 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 26 13:55:06 2011 (+0200)
+ * Last-Updated: Mon Oct 17 10:07:44 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 433
+ *     Update #: 465
  */
 
 /* Commentary: 
@@ -221,10 +221,10 @@ bool dtkAbstractDataComposite::has(dtkAbstractData *data) const
         has = d->list.contains(data);
         break;
     case dtkAbstractDataComposite::ConstVector:
-        has = d->vector.contains(data);
+        has = d->const_vector.contains(data);
         break;
     case dtkAbstractDataComposite::ConstList:
-        has = d->list.contains(data);
+        has = d->const_list.contains(data);
         break;
     default:
         dtkDebug() << DTK_PRETTY_FUNCTION << "Composite data is empty. Returns false.";
@@ -232,6 +232,35 @@ bool dtkAbstractDataComposite::has(dtkAbstractData *data) const
     }
 
     return has;
+}
+
+//! Returns the number of items in the composite.
+/*! 
+ *  
+ */
+dtkxarch_int dtkAbstractDataComposite::count(void)
+{
+    dtkxarch_int count = 0;
+
+    switch(d->type){
+    case dtkAbstractDataComposite::Vector:
+        count = d->vector.count();
+        break;
+    case dtkAbstractDataComposite::List:
+        count = d->list.count();
+        break;
+    case dtkAbstractDataComposite::ConstVector:
+        count = d->const_vector.count();
+        break;
+    case dtkAbstractDataComposite::ConstList:
+        count = d->const_list.count();
+        break;
+    default:
+        dtkDebug() << DTK_PRETTY_FUNCTION << "Composite data is empty. Returns 0.";
+        break;
+    }
+
+    return count;
 }
 
 //! Returns the index position of the first occurrence of \a data in
@@ -252,10 +281,10 @@ dtkxarch_int dtkAbstractDataComposite::indexOf(dtkAbstractData *data, dtkxarch_i
         index = d->list.indexOf(data, from);
         break;
     case dtkAbstractDataComposite::ConstVector:
-        index = d->vector.indexOf(data, from);
+        index = d->const_vector.indexOf(data, from);
         break;
     case dtkAbstractDataComposite::ConstList:
-        index = d->list.indexOf(data, from);
+        index = d->const_list.indexOf(data, from);
         break;
     default:
         dtkDebug() << DTK_PRETTY_FUNCTION << "Composite data is empty. Returns -1.";
@@ -290,10 +319,10 @@ const dtkAbstractData *dtkAbstractDataComposite::at(dtkxarch_int index) const
         data = d->list.at(index);
         break;
     case dtkAbstractDataComposite::ConstVector:
-        data = d->vector.at(index);
+        data = d->const_vector.at(index);
         break;
     case dtkAbstractDataComposite::ConstList:
-        data = d->list.at(index);
+        data = d->const_list.at(index);
         break;
     default:
         dtkDebug() << DTK_PRETTY_FUNCTION << "Composite data is empty. Returns NULL.";
@@ -303,9 +332,42 @@ const dtkAbstractData *dtkAbstractDataComposite::at(dtkxarch_int index) const
     return data;
 }
 
-//! Returns the vector of the composite.
+//! Returns the item at index position \a index in the composite.
 /*! 
- *  
+ *   \a index must be a valid index position in the composite (i.e., 0 <= i < size).
+ */
+dtkAbstractData *dtkAbstractDataComposite::at(dtkxarch_int index)
+{
+    dtkAbstractData *data = NULL;
+
+    switch(d->type){
+    case dtkAbstractDataComposite::Vector:
+        data = d->vector[index];
+        break;
+    case dtkAbstractDataComposite::List:
+        data = d->list[index];
+        break;
+    case dtkAbstractDataComposite::ConstVector:
+        data = d->const_vector[index];
+        break;
+    case dtkAbstractDataComposite::ConstList:
+        data = d->const_list[index];
+        break;
+    default:
+        dtkDebug() << DTK_PRETTY_FUNCTION << "Composite data is empty. Returns NULL.";
+        break;
+    }
+
+    return data;
+}
+
+//! Returns the data of the composite as a Qt vector.
+/*! 
+ *  When composite has been created using a Qt vector, a reference to
+ *  this original vector is returned.
+ *
+ *  When composite has been created using a Qt list, a reference to a
+ *  vector containing a copy of the original list is returned.
  */
 const QVector<dtkAbstractData *>& dtkAbstractDataComposite::vector(void) const
 {
@@ -316,24 +378,114 @@ const QVector<dtkAbstractData *>& dtkAbstractDataComposite::vector(void) const
     case dtkAbstractDataComposite::ConstVector:
         return d->const_vector;
         break;
+    case dtkAbstractDataComposite::List:
+        d->vector = d->list.toVector();
+        return d->vector;
+        break;
+    case dtkAbstractDataComposite::ConstList:
+        d->vector = d->const_list.toVector();
+        return d->vector;
+        break;
     default:
         return d->vector;
         break;
     }
 }
 
-//! Returns the list of the composite.
+//! Returns the data of the composite as a Qt vector.
 /*! 
- *  
+ *  When composite has been created using a non const Qt vector, a
+ *  reference to this original vector is returned.
+ *
+ *  When composite has been created using a const Qt vector, a
+ *  reference to a copy of this original vector is returned.
+ *
+ *  When composite has been created using a Qt list, a reference to a
+ *  vector containing a copy of the original list is returned.
+ */
+QVector<dtkAbstractData *>& dtkAbstractDataComposite::vector(void)
+{
+    switch(d->type){
+    case dtkAbstractDataComposite::Vector:
+        return d->vector;
+        break;
+    case dtkAbstractDataComposite::ConstVector:
+        d->vector = d->const_vector;
+        return d->vector;
+        break;
+    case dtkAbstractDataComposite::List:
+        d->vector = d->list.toVector();
+        return d->vector;
+        break;
+    case dtkAbstractDataComposite::ConstList:
+        d->vector = d->const_list.toVector();
+        return d->vector;
+        break;
+    default:
+        return d->vector;
+        break;
+    }
+}
+
+//! Returns the data of the composite as a Qt list.
+/*! 
+ *  When composite has been created using a Qt list, a reference to
+ *  this original list is returned.
+ *
+ *  When composite has been created using a Qt vector, a reference to a
+ *  list containing a copy of the original vector is returned.
  */
 const QList<dtkAbstractData *>& dtkAbstractDataComposite::list(void) const
 {
     switch(d->type){
+    case dtkAbstractDataComposite::Vector:
+        d->list = d->vector.toList();
+        return d->list;
+        break;
+    case dtkAbstractDataComposite::ConstVector:
+        d->list = d->const_vector.toList();
+        return d->list;
+        break;
     case dtkAbstractDataComposite::List:
         return d->list;
         break;
     case dtkAbstractDataComposite::ConstList:
         return d->const_list;
+        break;
+    default:
+        return d->list;
+        break;
+    }
+}
+
+//! Returns the data of the composite as a Qt list.
+/*! 
+ *  When composite has been created using a non const Qt list, a
+ *  reference to this original list is returned.
+ *
+ *  When composite has been created using a const Qt list, a
+ *  reference to a copy of this original list is returned.
+ *
+ *  When composite has been created using a Qt vector, a reference to a
+ *  list containing a copy of the original vector is returned.
+ */
+QList<dtkAbstractData *>& dtkAbstractDataComposite::list(void)
+{
+    switch(d->type){
+    case dtkAbstractDataComposite::Vector:
+        d->list = d->vector.toList();
+        return d->list;
+        break;
+    case dtkAbstractDataComposite::ConstVector:
+        d->list = d->const_vector.toList();
+        return d->list;
+        break;
+    case dtkAbstractDataComposite::List:
+        return d->list;
+        break;
+    case dtkAbstractDataComposite::ConstList:
+        d->list = d->const_list;
+        return d->list;
         break;
     default:
         return d->list;

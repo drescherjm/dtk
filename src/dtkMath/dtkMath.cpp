@@ -257,7 +257,7 @@ inline bool dtkIsInfinite(float A)
 {
     const int32_t kInfAsInt = EXP_255_BIT_32;
 
-    if ((*(int32_t*)&A & (HIGH_BIT_32 - ONE_BIT_32)) == kInfAsInt)
+    if ((int32_t)((*(int32_t*)&A & (HIGH_BIT_32 - ONE_BIT_32))) == kInfAsInt)
         return true;
 
     return false;
@@ -267,7 +267,7 @@ inline bool dtkIsInfinite(double A)
 {
     const int64_t kInfAsInt = EXP_255_BIT_64;
 
-    if ((*(int64_t*)&A & (HIGH_BIT_64 - ONE_BIT_64)) == kInfAsInt)
+    if ((int64_t)((*(int64_t*)&A & (HIGH_BIT_64 - ONE_BIT_64))) == kInfAsInt)
         return true;
 
     return false;

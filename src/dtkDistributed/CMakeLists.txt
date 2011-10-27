@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: mar. sept. 20 13:01:38 2011 (+0200)
+## Last-Updated: mar. oct. 11 13:38:34 2011 (+0200)
 ##           By: Nicolas Niclausse
-##     Update #: 196
+##     Update #: 198
 ######################################################################
 ## 
 ### Commentary: 
@@ -35,6 +35,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedCpu.h
   dtkDistributedExport.h
   dtkDistributedGpu.h
+  dtkDistributedMessage.h
   dtkDistributedNode.h
   dtkDistributedServer.h
   dtkDistributedServerDaemon.h
@@ -75,6 +76,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedCpu.cpp
   dtkDistributedGpu.cpp
   dtkDistributedJob.cpp
+  dtkDistributedMessage.cpp
   dtkDistributedNode.cpp
   dtkDistributedServer.cpp
   dtkDistributedServerDaemon.cpp

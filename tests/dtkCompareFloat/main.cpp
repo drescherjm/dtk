@@ -81,6 +81,8 @@ int main(int argc, char* argv[])
     float nan4 = nan3; (*(int*)&nan4) += 1;
     float smallestDenormal = 0; (*(int*)&smallestDenormal) += 1;
 
+    Q_UNUSED(nan1);
+    
     int status = 0;
 
     printf("01 - \n"); status  = TestCompareAll(zero1, negativeZero, true);

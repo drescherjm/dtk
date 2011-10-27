@@ -662,6 +662,8 @@ void dtkFinderListView::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if(QFileSystemModel *model = qobject_cast<QFileSystemModel *>(this->model())) {
 
+        Q_UNUSED(model);
+        
         QModelIndex index = indexAt(event->pos());
         
         if(!index.isValid())
@@ -848,6 +850,8 @@ void dtkFinderTreeView::keyPressEvent(QKeyEvent *event)
 void dtkFinderTreeView::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if(QFileSystemModel *model = qobject_cast<QFileSystemModel *>(this->model())) {
+        
+        Q_UNUSED(model);
 
         QModelIndex index = indexAt(event->pos());
      

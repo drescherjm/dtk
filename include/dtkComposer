@@ -1,6 +1,7 @@
 #include "../src/dtkComposer/dtkComposer.h"
 #include "../src/dtkComposer/dtkComposerEdge.h"
 #include "../src/dtkComposer/dtkComposerExport.h"
+#include "../src/dtkComposer/dtkComposerExtractor.h"
 #include "../src/dtkComposer/dtkComposerNode.h"
 #include "../src/dtkComposer/dtkComposerNodeBoolean.h"
 #include "../src/dtkComposer/dtkComposerNodeBooleanOperator.h"

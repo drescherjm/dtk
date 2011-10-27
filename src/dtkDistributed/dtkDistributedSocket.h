@@ -4,7 +4,7 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 22 10:11:34 2011 (+0200)
+ * Last-Updated: Thu Oct 13 17:07:38 2011 (+0200)
  *           By: Julien Wintz
  *     Update #:
  */
@@ -24,22 +24,24 @@
 #include <QtCore>
 #include <QTcpSocket>
 #include "dtkDistributedExport.h"
+#include "dtkDistributedMessage.h"
 
+class dtkDistributedSocketPrivate;
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedSocket : public QTcpSocket
 {
     Q_OBJECT
 
 public:
-    typedef QHash<QString, QString> dtkDistributedSocketHeaders;
-
-public:
              dtkDistributedSocket( QObject *parent = 0);
     virtual ~dtkDistributedSocket(void);
 
-    qint64 sendRequest(QString method, QString path, int size = 0, QString type = "json", const QByteArray& content = QByteArray(),  const dtkDistributedSocketHeaders& headers = dtkDistributedSocketHeaders());
+    qint64 sendRequest(dtkDistributedMessage *msg);
 
-    QVariantMap parseRequest(void);
+    dtkDistributedMessage parseRequest(void);
+
+private:
+    dtkDistributedSocketPrivate *d;
 };
 
 #endif

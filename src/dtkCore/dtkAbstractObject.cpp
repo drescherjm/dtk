@@ -190,7 +190,7 @@ void dtkAbstractObject::setProperty(const QString& key, const QString& value)
 
 QStringList dtkAbstractObject::propertyList(void) const
 {
-    return d->properties.keys();
+    return d->values.keys();
 }
 
 QStringList dtkAbstractObject::propertyValues(const QString& key) const

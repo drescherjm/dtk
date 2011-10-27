@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Oct 24 12:51:53 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 13:42:07 2011 (+0200)
+ * Last-Updated: Thu Oct 27 14:15:23 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 17
+ *     Update #: 20
  */
 
 /* Commentary: 
@@ -33,6 +33,7 @@ class DTKCOMPOSER_EXPORT dtkComposerEvaluator : public QObject
 
 public:
      dtkComposerEvaluator(QObject *parent = 0);
+     dtkComposerEvaluator(dtkComposerScene *scene, QObject *parent = 0);
     ~dtkComposerEvaluator(void);
 
     void setScene(dtkComposerScene *scene);

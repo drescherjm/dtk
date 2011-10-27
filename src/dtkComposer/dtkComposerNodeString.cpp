@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 15:12:01 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 18 14:42:26 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 269
+ * Last-Updated: Thu Oct 27 14:30:37 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 270
  */
 
 /* Commentary: 
@@ -317,8 +317,8 @@ void dtkComposerNodeString::pull(dtkComposerEdge *edge, dtkComposerNodeProperty 
 
         d->source_node = false;
 
-        d->editor->setPlainText(d->value); 
-        d->editor->update();
+        // d->editor->setPlainText(d->value); 
+        // d->editor->update();
     }
 }
 

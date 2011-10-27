@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Oct 24 12:57:38 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 26 17:10:26 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 392
+ * Last-Updated: Thu Oct 27 14:16:20 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 395
  */
 
 /* Commentary: 
@@ -1044,6 +1044,14 @@ dtkComposerEvaluator::dtkComposerEvaluator(QObject *parent) : QObject(parent), d
 {
     d->scene = NULL;
 
+    connect(d, SIGNAL(evaluationStarted()), this, SIGNAL(evaluationStarted()));
+    connect(d, SIGNAL(evaluationStarted()), this, SIGNAL(evaluationStopped()));
+}
+
+dtkComposerEvaluator::dtkComposerEvaluator(dtkComposerScene *scene, QObject *parent) : QObject(parent), d(new dtkComposerEvaluatorPrivate)
+{
+    d->scene = scene;
+    
     connect(d, SIGNAL(evaluationStarted()), this, SIGNAL(evaluationStarted()));
     connect(d, SIGNAL(evaluationStarted()), this, SIGNAL(evaluationStopped()));
 }

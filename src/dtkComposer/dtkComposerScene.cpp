@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Oct 25 12:43:32 2011 (+0200)
+ * Last-Updated: Thu Oct 27 14:35:48 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 2912
+ *     Update #: 2913
  */
 
 /* Commentary: 
@@ -96,8 +96,6 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
  */
 dtkComposerScene::~dtkComposerScene(void)
 {
-    qDebug() << DTK_PRETTY_FUNCTION;
-
     delete d->factory;
     delete d;
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Oct 24 12:57:38 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 27 14:16:20 2011 (+0200)
+ * Last-Updated: Thu Oct 27 15:34:49 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 395
+ *     Update #: 398
  */
 
 /* Commentary: 
@@ -1045,7 +1045,7 @@ dtkComposerEvaluator::dtkComposerEvaluator(QObject *parent) : QObject(parent), d
     d->scene = NULL;
 
     connect(d, SIGNAL(evaluationStarted()), this, SIGNAL(evaluationStarted()));
-    connect(d, SIGNAL(evaluationStarted()), this, SIGNAL(evaluationStopped()));
+    connect(d, SIGNAL(evaluationStopped()), this, SIGNAL(evaluationStopped()));
 }
 
 dtkComposerEvaluator::dtkComposerEvaluator(dtkComposerScene *scene, QObject *parent) : QObject(parent), d(new dtkComposerEvaluatorPrivate)
@@ -1053,7 +1053,7 @@ dtkComposerEvaluator::dtkComposerEvaluator(dtkComposerScene *scene, QObject *par
     d->scene = scene;
     
     connect(d, SIGNAL(evaluationStarted()), this, SIGNAL(evaluationStarted()));
-    connect(d, SIGNAL(evaluationStarted()), this, SIGNAL(evaluationStopped()));
+    connect(d, SIGNAL(evaluationStopped()), this, SIGNAL(evaluationStopped()));
 }
 
 dtkComposerEvaluator::~dtkComposerEvaluator(void)
@@ -1094,8 +1094,6 @@ void dtkComposerEvaluator::start(void)
             d->stack.push(node);
         }
     }
-
-    qDebug() << DTK_PRETTY_FUNCTION << d->stack;
 
     d->start();
 }

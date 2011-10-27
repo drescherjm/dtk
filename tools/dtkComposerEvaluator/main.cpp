@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Oct 27 14:10:37 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 27 14:34:50 2011 (+0200)
+ * Last-Updated: Thu Oct 27 14:48:23 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 38
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -26,12 +26,12 @@
 int main(int argc, char **argv)
 {
     if(argc != 2) {
-        qDebug() << "Usage: ./" << argv[1] << " <composition>";
+        qDebug() << "Usage: " << argv[0] << " <composition>";
         return 0;
     }
 
     QApplication application(argc, argv);
-    application.setApplicationName("dtkComposerEvaluator");
+    application.setApplicationName(argv[0]);
     application.setApplicationVersion("0.0.1");
     application.setOrganizationName("inria");
     application.setOrganizationDomain("fr");

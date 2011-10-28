@@ -37,4 +37,6 @@ int main(int argc, char **argv)
     delete window;
 
     dtkHelpController::instance()->uninitialize();
+    
+    return status;
 }

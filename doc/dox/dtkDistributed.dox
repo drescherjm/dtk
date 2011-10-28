@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: Sat Feb  6 14:33:47 2010 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. sept. 22 15:35:06 2011 (+0200)
+ * Last-Updated: lun. oct. 10 17:02:21 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 178
+ *     Update #: 179
  */
 
 /* Commentary:
@@ -123,7 +123,7 @@ content-size: 0
 
 the slave or the controller sends:
 @code
-POST /data/<rank_dest>
+POST /data/<jobid>/<rank_dest>
 content-size: <size>
 content-type: json|text|binary
 <data>
@@ -131,7 +131,7 @@ content-type: json|text|binary
 
 and the server forwards to  <rank_dest>:
 @code
-POST /data/
+POST /data/<jobid>
 x-forwarded-for: <rank_src>
 content-size: 0
 content-type: json|text|binary

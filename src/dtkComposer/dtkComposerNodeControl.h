@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:47:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  4 09:03:47 2011 (+0200)
+ * Last-Updated: Thu Oct 13 17:42:54 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 124
+ *     Update #: 125
  */
 
 /* Commentary: 
@@ -104,9 +104,10 @@ protected:
     void cleanOutputActiveRoutes(void);
 
 protected:
-    void pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property);
-    void  run(void);
-    void push(dtkComposerEdge *o_route, dtkComposerNodeProperty *property);
+    virtual void pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property);
+    virtual void push(dtkComposerEdge *o_route, dtkComposerNodeProperty *property);
+
+    void run(void);
 
 public:
     void layout(void);

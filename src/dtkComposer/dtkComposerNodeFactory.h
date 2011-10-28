@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb  7 22:27:06 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 25 10:13:39 2011 (+0100)
+ * Last-Updated: Tue Oct 18 10:27:24 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 17
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -32,8 +32,8 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeFactory : public QObject
     Q_OBJECT
 
 public:
-     dtkComposerNodeFactory(void);
-    ~dtkComposerNodeFactory(void);
+             dtkComposerNodeFactory(void);
+    virtual ~dtkComposerNodeFactory(void);
 
 public slots:
     virtual dtkComposerNode *create(QString type);

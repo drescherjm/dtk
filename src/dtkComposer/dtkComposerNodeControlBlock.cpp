@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May 23 14:24:28 2011 (+0200)
+ * Last-Updated: Mon Sep 19 10:03:39 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 956
+ *     Update #: 970
  */
 
 /* Commentary: 
@@ -957,6 +957,29 @@ dtkComposerNodeProperty *dtkComposerNodeControlBlock::addOutputPassThroughProper
             d->output_properties << property;
         }
     }
+    
+    return property;
+}
+
+dtkComposerNodeProperty *dtkComposerNodeControlBlock::addInputProperty(QString name, dtkComposerNodeProperty::Type type, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeProperty::Behavior behavior, dtkComposerNode *parent)
+{
+
+    dtkComposerNodeProperty *property = NULL;
+    property = new dtkComposerNodeProperty(name, type, multiplicity, parent);
+    property->setBehavior(behavior);
+    property->setBlockedFrom(this->title());
+    d->input_properties << property;
+    
+    return property;
+}
+
+dtkComposerNodeProperty *dtkComposerNodeControlBlock::addOutputProperty(QString name, dtkComposerNodeProperty::Type type, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeProperty::Behavior behavior, dtkComposerNode *parent)
+{
+    dtkComposerNodeProperty *property = NULL;
+    property = new dtkComposerNodeProperty(name, type, multiplicity, parent);
+    property->setBehavior(behavior);
+    property->setBlockedFrom(this->title());
+    d->output_properties << property;
     
     return property;
 }

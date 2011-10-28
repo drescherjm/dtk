@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 26 09:51:12 2011 (+0200)
+ * Last-Updated: Mon Sep 19 09:45:18 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 421
+ *     Update #: 422
  */
 
 /* Commentary: 
@@ -164,7 +164,7 @@ QString dtkComposerNodeProperty::description(void)
     switch(d->behavior) {
         
     case(dtkComposerNodeProperty::None):
-        property_behavior = "Node";
+        property_behavior = "None";
         break;
         
     case(dtkComposerNodeProperty::AsRelay):

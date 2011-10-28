@@ -50,10 +50,10 @@ void dtkSplitterHandle::paintEvent(QPaintEvent *event)
 
     QPainter painter(this);
     
-    QColor topColor;(145, 145, 145);
-    QColor bottomColor;(142, 142, 142);
-    QColor gradientStart;(252, 252, 252);
-    QColor gradientStop;(223, 223, 223);
+    QColor topColor(145, 145, 145);
+    QColor bottomColor(142, 142, 142);
+    QColor gradientStart(252, 252, 252);
+    QColor gradientStop(223, 223, 223);
     
     if(!m_hud) {
         topColor = QColor(145, 145, 145);

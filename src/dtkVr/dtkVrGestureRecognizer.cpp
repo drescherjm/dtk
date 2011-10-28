@@ -442,9 +442,8 @@ void dtkVrGestureRecognizer::postSwipeEvent(Qt::GestureState state)
         d->mutex.unlock();
     }
 
-    QSwipeGesture *gesture = new QSwipeGesture(this);
-    QGestureEvent *event = new QGestureEvent(QList<QGesture *>() << gesture);
-
+    // QSwipeGesture *gesture = new QSwipeGesture(this);
+    // QGestureEvent *event = new QGestureEvent(QList<QGesture *>() << gesture);
     // QCoreApplication::postEvent(d->receiver, event);
 }
 

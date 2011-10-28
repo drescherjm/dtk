@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: mar. oct.  4 16:06:37 2011 (+0200)
+ * Last-Updated: mer. oct. 19 13:17:39 2011 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 91
+ *     Update #: 113
  */
 
 /* Commentary: 
@@ -66,17 +66,6 @@ dtkDistributedSocket *dtkDistributedCommunicatorTcp::socket(void)
     return d->socket;
 }
 
-
-// QAbstractSocket::SocketState dtkDistributedCommunicatorTcp::state(void)
-// {
-//     return d->socket->state();
-// }
-
-// bool  dtkDistributedCommunicatorTcp::waitForConnected(void)
-// {
-//     return d->socket->waitForConnected();
-// }
-
 void dtkDistributedCommunicatorTcp::initialize(void)
 {
 
@@ -84,7 +73,8 @@ void dtkDistributedCommunicatorTcp::initialize(void)
 
 void dtkDistributedCommunicatorTcp::uninitialize(void)
 {
-
+    if (d->socket)
+        d->socket->close();
 }
 
 int dtkDistributedCommunicatorTcp::rank(void)
@@ -124,53 +114,55 @@ void dtkDistributedCommunicatorTcp::barrier(void)
     }
 }
 
-// qint64 dtkDistributedCommunicatorTcp::sendRequest(QString method, QString path, int size, QString type, const QByteArray& content,  const dtkDistributedSocket::dtkDistributedSocketHeaders& headers)
-// {
-//     return d->socket->sendRequest(method,path,size,type,content,headers);
-// }
-
-// qint64 dtkDistributedCommunicatorTcp::write(const QByteArray &array)
-// {
-//     return d->socket->write(array);
-// }
-
-// void dtkDistributedCommunicatorTcp::close()
-// {
-//     d->socket->close();
-// }
-
-// bool dtkDistributedCommunicatorTcp::flush()
-// {
-//     return d->socket->flush();
-// }
-
-
-void dtkDistributedCommunicatorTcp::send(void *data, quint16 size, DataType dataType, quint16 target, int tag)
+void dtkDistributedCommunicatorTcp::flush(void)
 {
-    
+    while (this->socket()->bytesToWrite() > 0) {
+        this->socket()->flush();
+    }
 }
 
-void dtkDistributedCommunicatorTcp::receive(void *data, quint16 size, DataType dataType, quint16 source, int tag)
+void dtkDistributedCommunicatorTcp::send(dtkAbstractData &data, dtkAbstractDataSerializer *serializer, QString type , quint16 target, int tag)
 {
+    QByteArray *array;
+    qDebug() << "send: need to serialize mesh" ;
+    if (serializer->serialize(data))
+        array = serializer->data();
+    else
+        qDebug() << "error while serializing" ;
+
+    d->socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,QString::number(tag),target, array->size(), type));
+    d->socket->write(*array);
+}
+
+
+void dtkDistributedCommunicatorTcp::send(void *data, qint64 size, DataType dataType, quint16 target, int tag)
+{
+    // TODO: handle target and tag, and check return value of write
+    d->socket->write((char *)data,size);
 
 }
 
-void dtkDistributedCommunicatorTcp::broadcast(void *data, quint16 size, DataType dataType, quint16 source)
+void dtkDistributedCommunicatorTcp::receive(void *data, qint64 size, DataType dataType, quint16 source, int tag)
 {
 
 }
 
-void dtkDistributedCommunicatorTcp::gather(void *send, void *recv, quint16 size, DataType dataType, quint16 target, bool all)
+void dtkDistributedCommunicatorTcp::broadcast(void *data, qint64 size, DataType dataType, quint16 source)
 {
-    dtkWarning() << "Collective operations are not supported on sockets";
+
 }
 
-void dtkDistributedCommunicatorTcp::scatter(void *send, void *recv, quint16 size, DataType dataType, quint16 source)
+void dtkDistributedCommunicatorTcp::gather(void *send, void *recv, qint64 size, DataType dataType, quint16 target, bool all)
 {
     dtkWarning() << "Collective operations are not supported on sockets";
 }
 
-void dtkDistributedCommunicatorTcp::reduce(void *send, void *recv, quint16 size, DataType dataType, OperationType operationType, quint16 target, bool all)
+void dtkDistributedCommunicatorTcp::scatter(void *send, void *recv, qint64 size, DataType dataType, quint16 source)
+{
+    dtkWarning() << "Collective operations are not supported on sockets";
+}
+
+void dtkDistributedCommunicatorTcp::reduce(void *send, void *recv, qint64 size, DataType dataType, OperationType operationType, quint16 target, bool all)
 {
     dtkWarning() << "Collective operations are not supported on sockets";
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar  7 09:26:54 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 18 13:58:27 2011 (+0200)
+ * Last-Updated: Thu Oct 13 17:41:41 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 195
+ *     Update #: 197
  */
 
 /* Commentary: 
@@ -142,21 +142,7 @@ bool dtkComposerNodeLoop::dirtyBlockEndNodes(void)
 
 void dtkComposerNodeLoop::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property)
 {
-    if (this->inputProperty() && property == this->inputProperty()) {
-        
-        foreach(dtkComposerEdge *relay_route, this->inputRelayRoutes()) {
-            if (relay_route->source()->name() == this->inputProperty()->name()) {
-
-                dtkComposerEdge *route = new dtkComposerEdge;
-                route->setSource(this->inputProperty());
-                route->setDestination(relay_route->destination());
-                
-                relay_route->destination()->node()->addInputRoute(route);
-                this->addInputActiveRoute(route);
-            }
-        }
-
-    } else if (property->type() == dtkComposerNodeProperty::PassThroughInput) {
+    if (property->type() == dtkComposerNodeProperty::PassThroughInput) {
 
         dtkComposerNodeProperty *i_source;
         if (i_route->source()->node()->value(i_route->source()).convert(QVariant::Double)) {

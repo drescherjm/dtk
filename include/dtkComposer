@@ -14,6 +14,7 @@
 #include "../src/dtkComposer/dtkComposerNodeFile.h"
 #include "../src/dtkComposer/dtkComposerNodeLog.h"
 #include "../src/dtkComposer/dtkComposerNodeLoop.h"
+#include "../src/dtkComposer/dtkComposerNodeLoopDataComposite.h"
 #include "../src/dtkComposer/dtkComposerNodeLoopFor.h"
 #include "../src/dtkComposer/dtkComposerNodeLoopWhile.h"
 #include "../src/dtkComposer/dtkComposerNodeNumber.h"

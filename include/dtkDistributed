@@ -10,6 +10,7 @@
 #include "../src/dtkDistributed/dtkDistributedExport.h"
 #include "../src/dtkDistributed/dtkDistributedGpu.h"
 #include "../src/dtkDistributed/dtkDistributedJob.h"
+#include "../src/dtkDistributed/dtkDistributedMessage.h"
 #include "../src/dtkDistributed/dtkDistributedNode.h"
 #include "../src/dtkDistributed/dtkDistributedServer.h"
 #include "../src/dtkDistributed/dtkDistributedServerDaemon.h"

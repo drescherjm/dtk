@@ -157,9 +157,9 @@ endif(BUILD_WRAPPERS)
 
 find_package(ZLIB QUIET)
 
-if(Z_LIBRARY)
+if(ZLIB_FOUND)
 include_directories(${ZLIB_INCLUDE_DIRS})
-endif(Z_LIBRARY)
+endif(ZLIB_FOUND)
 
 ## #################################################################
 ## Ssl

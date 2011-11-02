@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Sep  8 16:04:03 2011 (+0200)
+## Last-Updated: Fri Oct 28 15:30:27 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 361
+##     Update #: 362
 ######################################################################
 ## 
 ### Commentary: 
@@ -44,7 +44,7 @@ option(BUILD_REPORTING     "Build reporting"        true)
 option(BUILD_TUTORIALS     "Build tutorials"        true)
 
 if(MSVC)
-  option(DTK_USE_PRECOMPILED_HEADERS "Use precompiled headers" true)
+option(DTK_USE_PRECOMPILED_HEADERS "Use precompiled headers" true)
 endif(MSVC)
 
 include(dtkDependencies)

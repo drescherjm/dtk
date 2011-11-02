@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Sep  8 16:34:26 2011 (+0200)
+## Last-Updated: Thu Oct 27 14:21:21 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 197
+##     Update #: 199
 ######################################################################
 ## 
 ### Commentary: 
@@ -63,6 +63,7 @@ endif()
 ## Configure path
 ## #################################################################
 
+include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(${PROJECT_BINARY_DIR})
 

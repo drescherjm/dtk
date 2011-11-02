@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Oct 25 12:43:32 2011 (+0200)
+ * Last-Updated: Thu Oct 27 17:07:19 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 2912
+ *     Update #: 2949
  */
 
 /* Commentary: 
@@ -96,8 +96,6 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
  */
 dtkComposerScene::~dtkComposerScene(void)
 {
-    qDebug() << DTK_PRETTY_FUNCTION;
-
     delete d->factory;
     delete d;
 
@@ -179,33 +177,58 @@ QList<dtkComposerNodeProperty *> dtkComposerScene::properties(QString name)
 
 //! Start nodes
 /*! 
- *  Returns the list of nodes that are not within a composite nor
- *  within a control block, and that have no input edges but output
- *  edges.
+ *  Returns the list of nodes that are not within a control block, and
+ *  that have no input edges but output edges.
  */
-QList<dtkComposerNode *> dtkComposerScene::startNodes(void)
+QList<dtkComposerNode *> dtkComposerScene::startNodes(QList<dtkComposerNode *> parents)
 {
+    static int depth = -1;
+
+    depth++;
+
+    qDebug() << DTK_PRETTY_FUNCTION << "(" << depth << ")" << "1 -" << parents;
+
     QList<dtkComposerNode *> list;
+    QList<dtkComposerNode *> scope;
+
+    if(parents.isEmpty())
+        scope = d->nodes;
+    else
+        scope = parents;
 
     dtkComposerNode *p = NULL;
 
-    foreach(dtkComposerNode *node, d->nodes) {
+    foreach(dtkComposerNode *node, scope) {
 
-        if (!node->inputEdges().count() && node->outputEdges().count() && node->kind() != dtkComposerNode::Composite) {
+        // if (!node->inputEdges().count() && node->outputEdges().count() && node->kind() != dtkComposerNode::Composite) {
 
-            p = node->parentNode();
+        if(node->kind() != dtkComposerNode::Composite) {
+            
+            if(!node->inputEdges().count() && node->outputEdges().count()) {
 
-            while (p) {
-                if (p->kind() == dtkComposerNode::Control)
-                    break;
-                else
-                    p = p->parentNode();
+                p = node->parentNode();
+                
+                while (p) {
+                    if (p->kind() == dtkComposerNode::Control) {
+                        break;
+                    } else {
+                        p = p->parentNode();
+                    }
+                }
+
+                if (!p) {
+                    // node->setDirty(true);
+                    list << node;
+                }
             }
-
-            if (!p)
-                list << node;
+        } else {
+            list << this->startNodes(node->childNodes());
         }
     }
+
+    qDebug() << DTK_PRETTY_FUNCTION << "(" << depth << ")" << "2 -" << list;
+
+    depth--;
 
     return list;
 }

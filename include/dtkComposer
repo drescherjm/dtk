@@ -26,6 +26,7 @@
 #include "../src/dtkComposer/dtkComposerNodeString.h"
 #include "../src/dtkComposer/dtkComposerNodeStringComparator.h"
 #include "../src/dtkComposer/dtkComposerNodeStringOperator.h"
+#include "../src/dtkComposer/dtkComposerNodeTransmitter.h"
 #include "../src/dtkComposer/dtkComposerNodeView.h"
 #include "../src/dtkComposer/dtkComposerNote.h"
 #include "../src/dtkComposer/dtkComposerReader.h"

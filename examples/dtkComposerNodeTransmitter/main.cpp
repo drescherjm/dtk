@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Nov  2 10:48:42 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov  2 13:25:38 2011 (+0100)
+ * Last-Updated: Wed Nov  2 13:30:47 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 35
+ *     Update #: 36
  */
 
 /* Commentary: 
@@ -19,13 +19,13 @@
 
 #include <QtCore/QObject>
 
-#include <dtkComposer/dtkComposerNodeTransmitter.h>
+#include <dtkComposer/dtkComposerNodeTransmitter>
 
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkGlobal.h>
-#include <dtkCore/dtkLog.h>
+#include <dtkCore/dtkAbstractData>
+#include <dtkCore/dtkGlobal>
+#include <dtkCore/dtkLog>
 
-#include <dtkGui/dtkAboutBox.h>
+#include <dtkGui/dtkAboutBox>
 
 // /////////////////////////////////////////////////////////////////
 // Dummy concrete dtkAbstractData

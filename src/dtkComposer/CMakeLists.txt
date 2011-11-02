@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Oct 26 16:40:49 2011 (+0200)
+## Last-Updated: Wed Nov  2 11:07:16 2011 (+0100)
 ##           By: Thibaud Kloczko
-##     Update #: 158
+##     Update #: 160
 ######################################################################
 ## 
 ### Commentary: 
@@ -57,6 +57,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeString.h
   dtkComposerNodeStringComparator.h
   dtkComposerNodeStringOperator.h
+  dtkComposerNodeTransmitter.h
+  dtkComposerNodeTransmitter.tpp
   dtkComposerNodeView.h
   dtkComposerNote.h
   dtkComposerReader.h
@@ -130,6 +132,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeString.cpp
   dtkComposerNodeStringComparator.cpp
   dtkComposerNodeStringOperator.cpp
+  dtkComposerNodeTransmitter.cpp
   dtkComposerNodeView.cpp
   dtkComposerNote.cpp
   dtkComposerReader.cpp

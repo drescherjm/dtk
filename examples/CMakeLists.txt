@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:06:43 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Sep 26 09:36:50 2011 (+0200)
+## Last-Updated: Wed Nov  2 11:33:52 2011 (+0100)
 ##           By: Thibaud Kloczko
-##     Update #: 46
+##     Update #: 47
 ######################################################################
 ## 
 ### Commentary: 
@@ -33,3 +33,4 @@ add_subdirectory(dtkVrGestureRecognizer)
 add_subdirectory(dtkPlotEcg)
 add_subdirectory(dtkAboutPlugin)
 add_subdirectory(dtkAbstractDataComposite)
+add_subdirectory(dtkComposerNodeTransmitter)

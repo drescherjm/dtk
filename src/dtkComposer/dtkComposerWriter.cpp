@@ -159,7 +159,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
     
     if(dtkComposerNodeBoolean *boolean_node = dynamic_cast<dtkComposerNodeBoolean *>(node)) {
         
-        bool value = boolean_node->value(boolean_node->outputProperty("value")).toBool();
+        bool value = boolean_node->value(boolean_node->g->rightProperty("value")).toBool();
         
         QDomText text = document.createTextNode(value ? "true" : "false");
         
@@ -351,9 +351,9 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
     
     if(dtkComposerNodeFile *file_node = dynamic_cast<dtkComposerNodeFile *>(node)) {
         
-        QUrl file_url = file_node->value(file_node->outputProperty("url")).toUrl();
+        QUrl file_url = file_node->value(file_node->g->rightProperty("url")).toUrl();
 
-        QString file_name = file_node->value(file_node->outputProperty("name")).toString();
+        QString file_name = file_node->value(file_node->g->rightProperty("name")).toString();
 
         if(!file_url.isEmpty() && file_url.isValid()) {
 
@@ -379,7 +379,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
     
     if(dtkComposerNodeString *string_node = dynamic_cast<dtkComposerNodeString *>(node)) {
         
-        QString value = string_node->value(string_node->outputProperty("value")).toString();
+        QString value = string_node->value(string_node->g->rightProperty("value")).toString();
         
         QDomText text = document.createTextNode(value);
         

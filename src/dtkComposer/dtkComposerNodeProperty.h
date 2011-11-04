@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 26 08:38:21 2011 (+0200)
+ * Last-Updated: Fri Nov  4 16:54:35 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 129
+ *     Update #: 136
  */
 
 /* Commentary: 
@@ -40,12 +40,20 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeProperty : public QObject, public QGraph
 
 public:
     enum Type {
+        Generic,
         Input,
         Output,
         HybridInput,
         HybridOutput,
         PassThroughInput,
         PassThroughOutput
+    };
+
+    enum Position {
+        Top,
+        Bottom,
+        Left,
+        Right
     };
     
     enum Multiplicity {
@@ -56,14 +64,16 @@ public:
 
     enum Behavior {
         None,
-        AsRelay,
         AsInput,
         AsOutput,
+        AsRelay,
+        AsLoop,
         AsLoopInput,
         AsLoopOutput
     };
 
      dtkComposerNodeProperty(QString name, Type type, Multiplicity multiplicity, dtkComposerNode *parent);
+     dtkComposerNodeProperty(QString name, Position position, Behavior behavior, Multiplicity multiplicity, dtkComposerNode *parent);
     ~dtkComposerNodeProperty(void);
 
     QString description(void);    
@@ -76,6 +86,7 @@ public:
     QString name(void) const;
 
             Type type(void);
+        Position position(void);
     Multiplicity multiplicity(void);
         Behavior behavior(void);
 
@@ -100,6 +111,7 @@ public:
 
     void setName(const QString& name);
 
+    void setPosition(Position position);
     void setBehavior(Behavior behavior);
 
     friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNodeProperty& property);

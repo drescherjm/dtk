@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Oct 12 15:59:53 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 26 16:25:23 2011 (+0200)
+ * Last-Updated: Fri Nov  4 15:48:29 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 11
+ *     Update #: 12
  */
 
 /* Commentary: 
@@ -45,9 +45,6 @@ public slots:
 
 public:
     QVariant value(dtkComposerNodeProperty *property);
-
-public:
-    void onEdgeConnected(dtkComposerEdge *edge);
 
 private:
     dtkComposerNodeLoopDataCompositePrivate *d;

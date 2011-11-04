@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Nov  4 13:49:39 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 14:29:05 2011 (+0100)
+ * Last-Updated: Fri Nov  4 15:42:19 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 10
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -49,8 +49,8 @@ public:
     void  removeAllRoutes(void);
 
 public:
-    QList<dtkComposerEdge *>  leftRoutes(void);
-    QList<dtkComposerEdge *> rightRoutes(void);    
+    const QList<dtkComposerEdge *>&  leftRoutes(void) const;
+    const QList<dtkComposerEdge *>& rightRoutes(void) const;    
 
 private:
     dtkComposerNodeLogicPrivate *d;

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Nov  4 14:16:40 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 14:42:19 2011 (+0100)
+ * Last-Updated: Fri Nov  4 15:42:45 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 23
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -124,7 +124,7 @@ void dtkComposerNodeLogic::removeAllRoutes(void)
 /*! 
  *  
  */
-QList<dtkComposerEdge *> dtkComposerNodeLogic::leftRoutes(void)
+const QList<dtkComposerEdge *>& dtkComposerNodeLogic::leftRoutes(void) const
 {
     return d->left_routes;
 }
@@ -133,7 +133,7 @@ QList<dtkComposerEdge *> dtkComposerNodeLogic::leftRoutes(void)
 /*! 
  *  
  */
-QList<dtkComposerEdge *> dtkComposerNodeLogic::rightRoutes(void)
+const QList<dtkComposerEdge *>& dtkComposerNodeLogic::rightRoutes(void) const
 {
     return d->right_routes;
 }

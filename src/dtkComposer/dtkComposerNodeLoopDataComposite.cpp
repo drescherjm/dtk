@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Oct 12 16:02:18 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 10:20:07 2011 (+0100)
+ * Last-Updated: Fri Nov  4 15:48:24 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 198
+ *     Update #: 199
  */
 
 /* Commentary: 
@@ -154,20 +154,6 @@ void dtkComposerNodeLoopDataComposite::layout(void)
 bool dtkComposerNodeLoopDataComposite::evaluate(dtkComposerEvaluatorPrivate *evaluator)
 {
     return evaluator->evaluate(this);
-}
-
-//! 
-/*! 
- * 
- */
-void dtkComposerNodeLoopDataComposite::onEdgeConnected(dtkComposerEdge *edge)
-{
-    // if(true)
-    //     edge->invalidate();
-    // else
-    //     ; // dtkComposerNodeLoop::onEdgeConnected(edge);
-
-    dtkComposerNode::onEdgeConnected(edge); // TO BE REMOVED LATER ON
 }
  
 //! 

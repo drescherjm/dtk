@@ -965,11 +965,11 @@ void dtkComposerScene::paste(void)
     foreach(dtkComposerEdge *edge, d->clipboard.edges) {
 
         dtkComposerEdge *e = new dtkComposerEdge;
-        e->setSource(node_map.value(edge->source()->node())->outputProperty(edge->source()->name()));
-        e->setDestination(node_map.value(edge->destination()->node())->inputProperty(edge->destination()->name()));
+        e->setSource(node_map.value(edge->source()->node())->g->rightProperty(edge->source()->name()));
+        e->setDestination(node_map.value(edge->destination()->node())->g->leftProperty(edge->destination()->name()));
 
-        node_map.value(edge->source()->node())->g->appendRightEdge(e, node_map.value(edge->source()->node())->outputProperty(edge->source()->name()));
-        node_map.value(edge->destination()->node())->g->appendLeftEdge(e, node_map.value(edge->destination()->node())->inputProperty(edge->destination()->name()));
+        node_map.value(edge->source()->node())->g->appendRightEdge(e, node_map.value(edge->source()->node())->g->rightProperty(edge->source()->name()));
+        node_map.value(edge->destination()->node())->g->appendLeftEdge(e, node_map.value(edge->destination()->node())->g->leftProperty(edge->destination()->name()));
 
         this->addEdge(e);
     }

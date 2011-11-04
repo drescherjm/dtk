@@ -202,8 +202,8 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
         
         if (source_property_id.isEmpty() && destin_property_id.isEmpty() && source_property_block.isEmpty() && destin_property_block.isEmpty()) {
 
-            edge->setSource(d->node_map.value(source_id)->outputProperty(source_property));
-            edge->setDestination(d->node_map.value(destin_id)->inputProperty(destin_property));
+            edge->setSource(d->node_map.value(source_id)->g->rightProperty(source_property));
+            edge->setDestination(d->node_map.value(destin_id)->g->leftProperty(destin_property));
 
         } else if (!source_property_block.isEmpty() && !destin_property_block.isEmpty()) {
 
@@ -257,7 +257,7 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
                 else
                     edge->setSource(dynamic_cast<dtkComposerNodeControl *>(d->node_map.value(source_id))->outputProperty(source_property_block, source_property));
                 
-                edge->setDestination(d->node_map.value(destin_id)->inputProperty(destin_property));                
+                edge->setDestination(d->node_map.value(destin_id)->g->leftProperty(destin_property));                
                 
             }
             
@@ -285,7 +285,7 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
 
             } else {
 
-                edge->setSource(d->node_map.value(source_id)->outputProperty(source_property));
+                edge->setSource(d->node_map.value(source_id)->g->rightProperty(source_property));
 
                 if (l->parentNode() == r)
                     edge->setDestination(dynamic_cast<dtkComposerNodeControl *>(d->node_map.value(destin_id))->outputProperty(destin_property_block, destin_property));
@@ -331,12 +331,12 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
                 else
                     edge->setSource(d->node_map.value(source_id)->outputProperty(source_property, d->node_map.value(source_property_id.toInt())));
 
-                edge->setDestination(d->node_map.value(destin_id)->inputProperty(destin_property));
+                edge->setDestination(d->node_map.value(destin_id)->g->leftProperty(destin_property));
             }
 
             else {
                 
-                edge->setSource(d->node_map.value(source_id)->outputProperty(source_property));
+                edge->setSource(d->node_map.value(source_id)->g->rightProperty(source_property));
 
                 if (l->parentNode() == r)
                     edge->setDestination(d->node_map.value(destin_id)->outputProperty(destin_property, d->node_map.value(destin_property_id.toInt())));

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 15:11:12 2011 (+0100)
+ * Last-Updated: Fri Nov  4 16:07:24 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 332
+ *     Update #: 340
  */
 
 /* Commentary: 
@@ -86,9 +86,7 @@ public:
 
     dtkComposerNodeProperty *propertyAt(const QPointF& point) const;
 
-    dtkComposerNodeProperty  *inputProperty(const QString& name) const;
     dtkComposerNodeProperty  *inputProperty(const QString& name, dtkComposerNode *from) const;
-    dtkComposerNodeProperty *outputProperty(const QString& name) const;
     dtkComposerNodeProperty *outputProperty(const QString& name, dtkComposerNode *from) const;
 
     QString title(void);
@@ -172,9 +170,6 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 public:
-    virtual void    onEdgeConnected(dtkComposerEdge *edge);
-    virtual void onEdgeDisconnected(dtkComposerEdge *edge);
-
     virtual QList<dtkComposerEdge *> allRoutes(void);
     virtual void removeRoute(dtkComposerEdge *route);
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 15:08:02 2011 (+0100)
+ * Last-Updated: Fri Nov  4 16:54:58 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 423
+ *     Update #: 443
  */
 
 /* Commentary: 
@@ -30,6 +30,7 @@ public:
     dtkComposerNode *clone;
 
     dtkComposerNodeProperty::Type type;
+    dtkComposerNodeProperty::Position position;
     dtkComposerNodeProperty::Multiplicity multiplicity;
     dtkComposerNodeProperty::Behavior behavior;
 
@@ -93,6 +94,55 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multip
     this->setZValue(20);
 }
 
+dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Position position, Behavior behavior, Multiplicity multiplicity, dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePropertyPrivate)
+{
+    d->type = dtkComposerNodeProperty::Generic;
+    d->position = position;
+    d->behavior = behavior;
+    d->multiplicity = multiplicity;
+    d->parent = parent;
+    d->clone = NULL;
+
+    d->displayed = true;
+
+    d->text = new QGraphicsTextItem(this);
+#if defined(Q_WS_MAC)
+    d->text->setFont(QFont("Lucida Grande", 11));
+#else
+    d->text->setFont(QFont("Lucida Grande", 9));
+#endif
+    d->text->setPlainText(name);
+    d->text->setDefaultTextColor(Qt::white);
+
+    switch(d->behavior) {
+    case AsInput:
+    case AsOutput:
+        d->ellipse = new QGraphicsEllipseItem(this);
+        d->ellipse->setPen(QPen(Qt::gray, 1));
+        d->path_left = NULL;
+        d->path_right = NULL;
+        break;
+    case AsRelay:
+        d->ellipse = NULL;
+        d->path_left = new QGraphicsPathItem(this);
+        d->path_left->setPen(QPen(Qt::gray, 1));
+        d->path_right = new QGraphicsPathItem(this);
+        d->path_right->setPen(QPen(Qt::gray, 1));
+        break;
+    case AsLoop:
+        d->ellipse = NULL;
+        d->path_left = new QGraphicsPathItem(this);
+        d->path_left->setPen(QPen(Qt::black, 1));
+        d->path_right = new QGraphicsPathItem(this);
+        d->path_right->setPen(QPen(Qt::black, 1));
+        break;
+    default:
+        break;
+    };
+
+    this->setZValue(20);
+}
+
 dtkComposerNodeProperty::~dtkComposerNodeProperty(void)
 {
     d->parent = NULL;
@@ -105,112 +155,8 @@ dtkComposerNodeProperty::~dtkComposerNodeProperty(void)
 
 QString dtkComposerNodeProperty::description(void)
 {
-    QString property_type;
-
-    switch(d->type) {
-        
-    case(dtkComposerNodeProperty::Input):
-        property_type = "Input";
-        break;
-        
-    case(dtkComposerNodeProperty::Output):
-        property_type = "Output";
-        break;
-
-    case(dtkComposerNodeProperty::HybridInput):
-        property_type = "HybridInput";
-        break;
-
-    case(dtkComposerNodeProperty::HybridOutput):
-        property_type = "HybridInput";
-        break;
-
-    case(dtkComposerNodeProperty::PassThroughInput):
-        property_type = "PassThroughInput";
-        break;
-
-    case(dtkComposerNodeProperty::PassThroughOutput):
-        property_type = "PassThroughOutput";
-        break;
-
-    default:
-        property_type = "";
-        break;
-    }
-
-    QString property_multiplicity;
-
-    switch(d->multiplicity) {
-        
-    case(dtkComposerNodeProperty::Null):
-        property_multiplicity = "Null";
-        break;
-        
-    case(dtkComposerNodeProperty::Single):
-        property_multiplicity = "Single";
-        break;
-        
-    case(dtkComposerNodeProperty::Multiple):
-        property_multiplicity = "Multiple";
-        break;
-
-    default:
-        property_multiplicity = "";
-        break;
-    }
-
-    QString property_behavior;
-
-    switch(d->behavior) {
-        
-    case(dtkComposerNodeProperty::None):
-        property_behavior = "None";
-        break;
-        
-    case(dtkComposerNodeProperty::AsRelay):
-        property_behavior = "AsRelay";
-        break;
-        
-    case(dtkComposerNodeProperty::AsInput):
-        property_behavior = "AsInput";
-        break;
-        
-    case(dtkComposerNodeProperty::AsOutput):
-        property_behavior = "AsOutput";
-        break;
-        
-    case(dtkComposerNodeProperty::AsLoopInput):
-        property_behavior = "AsLoopInput";
-        break;
-        
-    case(dtkComposerNodeProperty::AsLoopOutput):
-        property_behavior = "AsLoopOutput";
-        break;
-
-    default:
-        property_behavior = "";
-        break;
-    }
-
     if(!d->parent)
         return QString("Invalid property");
-
-    // if(d->clone)
-    //     return QString("Property: name %1, parent %2, clone of %3, type %4, multiplicity %5, displayed %6")
-    //         .arg(d->text->toPlainText())
-    //         .arg(d->parent->description())
-    //         .arg(d->clone->description())
-    //         .arg(property_type)
-    //         .arg(property_multiplicity)
-    //         .arg(d->displayed);
-
-    // else
-        // return QString("Property: name %1, parent %2, no cloned, type %3, multiplicty %4, displayed %5")
-        //     .arg(d->text->toPlainText())
-        //     .arg(d->parent->description())
-        //     .arg(property_type)
-        //     .arg(property_multiplicity)
-        //     .arg(d->displayed);
 
     return QString("Valid property %1").arg(d->text->toPlainText());
 }
@@ -253,6 +199,11 @@ QString dtkComposerNodeProperty::name(void) const
 dtkComposerNodeProperty::Type dtkComposerNodeProperty::type(void)
 {
     return d->type;
+}
+
+dtkComposerNodeProperty::Position dtkComposerNodeProperty::position(void)
+{
+    return d->position;
 }
 
 dtkComposerNodeProperty::Multiplicity dtkComposerNodeProperty::multiplicity(void)
@@ -355,6 +306,11 @@ void dtkComposerNodeProperty::setName(const QString& name)
     this->update();
 }
 
+void dtkComposerNodeProperty::setPosition(dtkComposerNodeProperty::Position position)
+{
+    d->position = position;
+}
+
 void dtkComposerNodeProperty::setBehavior(dtkComposerNodeProperty::Behavior behavior)
 {
     d->behavior = behavior;
@@ -389,6 +345,7 @@ void dtkComposerNodeProperty::setRect(const QRectF& rect)
     QPainterPath rp; 
 
     switch(d->type) {
+
     case Input:
         d->ellipse->setRect(rect);
         d->ellipse->setBrush(Qt::yellow);
@@ -397,6 +354,7 @@ void dtkComposerNodeProperty::setRect(const QRectF& rect)
         else
             d->text->setPos(rect.topRight() + QPointF(0, (fm.height() / 2. - 1) * (-1)));
         break;
+
     case Output:
         d->ellipse->setRect(rect);
         d->ellipse->setBrush(Qt::red);
@@ -405,6 +363,7 @@ void dtkComposerNodeProperty::setRect(const QRectF& rect)
         else
             d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText()) * (-1) - rect.width(), (fm.height() / 2. - 1) * (-1)));
         break;
+
     case HybridInput:
     case PassThroughInput:
         lp.moveTo(rect.center()); lp.arcTo(rect, 90., 180.); lp.closeSubpath();
@@ -415,6 +374,7 @@ void dtkComposerNodeProperty::setRect(const QRectF& rect)
         d->path_right->setBrush(Qt::red);
         d->text->setPos(rect.topRight() + QPointF(0, (fm.height() / 2. - 1) * (-1)));
         break;
+
     case HybridOutput:
     case PassThroughOutput:
         lp.moveTo(rect.center()); lp.arcTo(rect, 90., 180.); lp.closeSubpath();
@@ -425,6 +385,48 @@ void dtkComposerNodeProperty::setRect(const QRectF& rect)
         d->path_right->setBrush(Qt::red);
         d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText()) * (-1) - rect.width(), (fm.height() / 2. - 1) * (-1)));
         break;
+
+    case Generic:
+        switch(d->behavior) {
+        case AsInput:
+            d->ellipse->setRect(rect);
+            d->ellipse->setBrush(Qt::yellow);
+            break;
+        case AsOutput:
+            d->ellipse->setRect(rect);
+            d->ellipse->setBrush(Qt::red);
+            break;
+        case AsRelay:
+        case AsLoop:
+            lp.moveTo(rect.center()); lp.arcTo(rect, 90., 180.); lp.closeSubpath();
+            d->path_left->setPath(lp);
+            d->path_left->setBrush(Qt::yellow);
+            rp.moveTo(rect.center()); rp.arcTo(rect, 270., 180.); rp.closeSubpath();
+            d->path_right->setPath(rp);
+            d->path_right->setBrush(Qt::red);
+            break;
+        default:
+            break;
+        };
+    
+        switch(d->position) {
+        case Left:
+            if (d->parent->isGhost())
+                d->text->setPos(rect.topRight() + QPointF(fm.width(d->text->toPlainText()) * (-1) - 3 * rect.width(), (fm.height() / 2. - 1) * (-1)));
+            else
+                d->text->setPos(rect.topRight() + QPointF(0, (fm.height() / 2. - 1) * (-1)));
+            break;
+        case Right:
+            if (d->parent->isGhost())
+                d->text->setPos(rect.topRight() + QPointF(rect.width(), (fm.height() / 2. - 1) * (-1)));
+            else
+                d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText()) * (-1) - rect.width(), (fm.height() / 2. - 1) * (-1)));
+            break;
+        default:
+            break;
+        };
+        break;
+
     default:
         break;
     };

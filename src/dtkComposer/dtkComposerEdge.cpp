@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Oct 14 16:25:06 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 463
+ * Last-Updated: Fri Nov  4 16:06:59 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 466
  */
 
 /* Commentary: 
@@ -196,7 +196,7 @@ bool dtkComposerEdge::link(bool anyway)
         else
             d->destination->node()->g->appendLeftEdge(this, d->destination);
         
-        d->destination->node()->onEdgeConnected(this);
+        d->destination->node()->g->onEdgeConnected(this);
 
         return true;
     }
@@ -313,7 +313,7 @@ bool dtkComposerEdge::link(bool anyway)
     else
         d->destination->node()->g->appendLeftEdge(this, d->destination);
 
-    d->destination->node()->onEdgeConnected(this);
+    d->destination->node()->g->onEdgeConnected(this);
 
     return true;
 }
@@ -326,7 +326,7 @@ bool dtkComposerEdge::unlink(void)
     if (!d->destination)
         return false;
     
-    d->destination->node()->onEdgeDisconnected(this);
+    d->destination->node()->g->onEdgeDisconnected(this);
 
     if (d->source->node()->kind() == dtkComposerNode::Composite && d->destination->node()->parentNode() == d->source->node()) {
         d->source->node()->g->removeLeftRelayEdge(this);

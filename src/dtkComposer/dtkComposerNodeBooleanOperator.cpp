@@ -202,9 +202,9 @@ dtkComposerNodeBooleanOperator::dtkComposerNodeBooleanOperator(dtkComposerNode *
     this->setKind(dtkComposerNode::Process);
     this->setType("dtkComposerBooleanOperator");
 
-    this->addInputProperty(d->property_input_value_op1);
-    this->addInputProperty(d->property_input_value_op2);
-    this->addOutputProperty(d->property_output_value);
+    this->g->appendLeftProperty(d->property_input_value_op1);
+    this->g->appendLeftProperty(d->property_input_value_op2);
+    this->g->appendRightProperty(d->property_output_value);
 }
 
 dtkComposerNodeBooleanOperator::~dtkComposerNodeBooleanOperator(void)

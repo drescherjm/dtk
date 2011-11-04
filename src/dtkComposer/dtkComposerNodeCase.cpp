@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Oct 26 16:15:34 2011 (+0200)
+ * Last-Updated: Fri Nov  4 10:20:23 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 678
+ *     Update #: 684
  */
 
 /* Commentary: 
@@ -159,13 +159,13 @@ dtkComposerNodeControlBlock *dtkComposerNodeCase::addBlock(const QString& title)
 
         block->setInteractive(false);
 
-        dtkComposerNodeProperty *i_variable = block->addInputProperty("variable", this);
+        dtkComposerNodeProperty *i_variable = block->appendLeftProperty("variable", this);
         i_variable->setBlockedFrom(title);
-        this->addInputProperty(i_variable);
+        this->g->appendLeftProperty(i_variable);
     
-        dtkComposerNodeProperty *o_variable = block->addOutputProperty("variable", this);
+        dtkComposerNodeProperty *o_variable = block->appendRightProperty("variable", this);
         o_variable->setBlockedFrom(title);
-        this->addOutputProperty(o_variable);
+        this->g->appendRightProperty(o_variable);
 
     } else {
 
@@ -173,17 +173,17 @@ dtkComposerNodeControlBlock *dtkComposerNodeCase::addBlock(const QString& title)
 
         block->setRemoveButtonVisible(true);
 
-        dtkComposerNodeProperty *i_constant = block->addInputProperty("constant", this);
+        dtkComposerNodeProperty *i_constant = block->appendLeftProperty("constant", this);
         i_constant->setBlockedFrom(title);
-        this->addInputProperty(i_constant);
+        this->g->appendLeftProperty(i_constant);
 
-        dtkComposerNodeProperty *i_variable = block->addInputProperty("variable", this);
+        dtkComposerNodeProperty *i_variable = block->appendLeftProperty("variable", this);
         i_variable->setBlockedFrom(title);
-        this->addInputProperty(i_variable);
+        this->g->appendLeftProperty(i_variable);
     
-        dtkComposerNodeProperty *o_variable = block->addOutputProperty("variable", this);
+        dtkComposerNodeProperty *o_variable = block->appendRightProperty("variable", this);
         o_variable->setBlockedFrom(title);
-        this->addOutputProperty(o_variable);
+        this->g->appendRightProperty(o_variable);
     
         d->block_cases << block;
 
@@ -209,43 +209,43 @@ int dtkComposerNodeCase::removeBlock(dtkComposerNodeControlBlock *block, bool cl
 
         removed_blocks = d->block_cases.removeAll(block);
 
-        foreach(dtkComposerNodeProperty *property, block->inputProperties()) {
+        foreach(dtkComposerNodeProperty *property, block->leftProperties()) {
        
-            foreach(dtkComposerEdge *edge, this->inputEdges()) {
+            foreach(dtkComposerEdge *edge, this->g->leftEdges()) {
                 if(edge->destination() == property) {
-                    this->removeInputEdge(edge);
+                    this->g->removeLeftEdge(edge);
                     scene->removeEdge(edge);
                 }
             }
        
-            foreach(dtkComposerEdge *edge, this->inputRelayEdges()) {
+            foreach(dtkComposerEdge *edge, this->g->leftRelayEdges()) {
                 if(edge->source() == property) {
-                    this->removeInputRelayEdge(edge);
+                    this->g->removeLeftRelayEdge(edge);
                     scene->removeEdge(edge);
                 }
             }
 
-            this->removeInputProperty(property);
+            this->g->removeLeftProperty(property);
             delete property;
         }
         
-        foreach(dtkComposerNodeProperty *property, block->outputProperties()) {
+        foreach(dtkComposerNodeProperty *property, block->rightProperties()) {
        
-            foreach(dtkComposerEdge *edge, this->outputEdges()) {
+            foreach(dtkComposerEdge *edge, this->g->rightEdges()) {
                 if(edge->source() == property) {
-                    this->removeOutputEdge(edge);
+                    this->g->removeRightEdge(edge);
                     scene->removeEdge(edge);
                 }
             }
        
-            foreach(dtkComposerEdge *edge, this->outputRelayEdges()) {
+            foreach(dtkComposerEdge *edge, this->g->rightRelayEdges()) {
                 if(edge->destination() == property) {
-                    this->removeOutputRelayEdge(edge);
+                    this->g->removeRightRelayEdge(edge);
                     scene->removeEdge(edge);
                 }
             }
             
-            this->removeOutputProperty(property);
+            this->g->removeRightProperty(property);
             delete property;
         }
         
@@ -287,7 +287,7 @@ void dtkComposerNodeCase::layout(void)
         offset += block->rect().height();        
 
         j = 0;
-        foreach(dtkComposerNodeProperty *property, block->inputProperties()) {
+        foreach(dtkComposerNodeProperty *property, block->leftProperties()) {
 
             property->setRect(QRectF(block->mapRectToParent(block->rect()).left() + node_radius,
                                      block->mapRectToParent(block->rect()).top()  + node_radius * (4*j + 1),
@@ -305,7 +305,7 @@ void dtkComposerNodeCase::layout(void)
             j = 0;
         else
             j = 1;
-        foreach(dtkComposerNodeProperty *property, block->outputProperties()) {
+        foreach(dtkComposerNodeProperty *property, block->rightProperties()) {
 
             property->setRect(QRectF(block->mapRectToParent(block->rect()).right() - node_radius * 3,
                                      block->mapRectToParent(block->rect()).top()   + node_radius * (4*j + 1),
@@ -343,7 +343,7 @@ void dtkComposerNodeCase::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty
                 route->setSource(i_route->source());
                 route->setDestination(relay_route->destination());
                 
-                relay_route->destination()->node()->addInputRoute(route);
+                relay_route->destination()->node()->l->appendLeftRoute(route);
                 this->addInputActiveRoute(route);                
             }
         }
@@ -360,7 +360,7 @@ void dtkComposerNodeCase::push(dtkComposerEdge *o_route, dtkComposerNodeProperty
     if (property->name() == this->inputProperty()->name()) {  
 
         dtkComposerNodeProperty *source = NULL;
-        foreach(dtkComposerEdge *i_route, this->inputRoutes())
+        foreach(dtkComposerEdge *i_route, this->l->leftRoutes())
             if (i_route->destination() == this->inputProperty())
                 source = i_route->source();
 
@@ -378,7 +378,7 @@ void dtkComposerNodeCase::push(dtkComposerEdge *o_route, dtkComposerNodeProperty
             
         } else {
 
-            o_route->destination()->node()->addInputRoute(route);
+            o_route->destination()->node()->l->appendLeftRoute(route);
 
         }
 

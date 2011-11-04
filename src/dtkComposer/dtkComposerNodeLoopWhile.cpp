@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May  4 08:51:21 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 26 16:24:31 2011 (+0200)
+ * Last-Updated: Fri Nov  4 10:17:21 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 55
+ *     Update #: 59
  */
 
 /* Commentary: 
@@ -36,7 +36,7 @@ dtkComposerNodeLoopWhile::dtkComposerNodeLoopWhile(dtkComposerNode *parent) : dt
     d->block_cond = this->addBlock("condition");
     d->block_cond->setInteractive(false);
     d->block_cond->setHeightRatio(0.95);
-    this->addOutputProperty(d->block_cond->addOutputProperty("condition", this));
+    this->g->appendRightProperty(d->block_cond->appendRightProperty("condition", this));
 
     d->block_loop = this->addBlock("loop");
     d->block_loop->setInteractive(false);
@@ -78,7 +78,7 @@ void dtkComposerNodeLoopWhile::layout(void)
         offset += block->rect().height();
 
         j = 1;
-        foreach(dtkComposerNodeProperty *property, block->inputProperties()) {
+        foreach(dtkComposerNodeProperty *property, block->leftProperties()) {
 
             property->setRect(QRectF(block->mapRectToParent(block->rect()).left() + node_radius,
                                      block->mapRectToParent(block->rect()).top()  + node_radius * (4*j + 1),
@@ -96,7 +96,7 @@ void dtkComposerNodeLoopWhile::layout(void)
             j = 0;
         else
             j = 1;
-        foreach(dtkComposerNodeProperty *property, block->outputProperties()) {
+        foreach(dtkComposerNodeProperty *property, block->rightProperties()) {
             
             property->setRect(QRectF(block->mapRectToParent(block->rect()).right() - node_radius * 3,
                                      block->mapRectToParent(block->rect()).top()   + node_radius * (4*j + 1),

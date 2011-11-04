@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:46:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Oct 25 15:19:10 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 91
+ * Last-Updated: Fri Nov  4 10:16:48 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 94
  */
 
 /* Commentary: 
@@ -67,21 +67,21 @@ public:
     void     removeNode(dtkComposerNode *node);
     void removeAllNodes(void);
 
-    QList<dtkComposerNodeProperty *>  inputProperties(void);
-    QList<dtkComposerNodeProperty *> outputProperties(void);
+    QList<dtkComposerNodeProperty *>  leftProperties(void);
+    QList<dtkComposerNodeProperty *> rightProperties(void);
 
-    dtkComposerNodeProperty  *addInputProperty(QString name, dtkComposerNode *parent = 0);
-    dtkComposerNodeProperty *addOutputProperty(QString name, dtkComposerNode *parent = 0);
+    dtkComposerNodeProperty  *appendLeftProperty(QString name, dtkComposerNode *parent = 0);
+    dtkComposerNodeProperty *appendRightProperty(QString name, dtkComposerNode *parent = 0);
 
-    dtkComposerNodeProperty  *addInputPassThroughProperty(QString name, dtkComposerNode *parent = 0);
-    dtkComposerNodeProperty *addOutputPassThroughProperty(QString name, dtkComposerNode *parent = 0);
+    dtkComposerNodeProperty  *appendLeftPassThroughProperty(QString name, dtkComposerNode *parent = 0);
+    dtkComposerNodeProperty *appendRightPassThroughProperty(QString name, dtkComposerNode *parent = 0);
 
-    dtkComposerNodeProperty  *addInputProperty(QString name, dtkComposerNodeProperty::Type type, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeProperty::Behavior behavior, dtkComposerNode *parent = 0);
-    dtkComposerNodeProperty *addOutputProperty(QString name, dtkComposerNodeProperty::Type type, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeProperty::Behavior behavior, dtkComposerNode *parent = 0);
+    dtkComposerNodeProperty  *appendLeftProperty(QString name, dtkComposerNodeProperty::Type type, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeProperty::Behavior behavior, dtkComposerNode *parent = 0);
+    dtkComposerNodeProperty *appendRightProperty(QString name, dtkComposerNodeProperty::Type type, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeProperty::Behavior behavior, dtkComposerNode *parent = 0);
 
-    void  removeInputProperty(dtkComposerNodeProperty *property);
-    void removeOutputProperty(dtkComposerNodeProperty *property);
-    void  removeAllProperties(void);
+    void  removeLeftProperty(dtkComposerNodeProperty *property);
+    void removeRightProperty(dtkComposerNodeProperty *property);
+    void removeAllProperties(void);
 
 public:
     qreal height(void);

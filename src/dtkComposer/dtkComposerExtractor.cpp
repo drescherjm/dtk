@@ -50,7 +50,7 @@ void dtkComposerExtractor::extract(dtkComposerNode::Attribute attribute)
             scene->addNode(node);
 
     foreach(dtkComposerNode *node, scene->nodes())
-        foreach(dtkComposerEdge *edge, node->outputEdges())
+        foreach(dtkComposerEdge *edge, node->g->rightEdges())
             if(edge->destination()->node()->attribute() == attribute)
                 scene->addEdge(edge);
 

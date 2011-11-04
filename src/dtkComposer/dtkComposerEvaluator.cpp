@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Oct 24 12:57:38 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 27 17:35:21 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 399
+ * Last-Updated: Fri Nov  4 15:07:44 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 401
  */
 
 /* Commentary: 
@@ -106,7 +106,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNode *node)
 
     // -- Pull
 
-    foreach(dtkComposerEdge *i_route, node->inputRoutes()) {
+    foreach(dtkComposerEdge *i_route, node->l->leftRoutes()) {
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
         qDebug() << DTK_COLOR_BG_YELLOW << "Pulling" << node->title() << i_route << DTK_NO_COLOR;
 #endif
@@ -125,7 +125,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNode *node)
 
     // -- Push
 
-    foreach(dtkComposerEdge *o_route, node->outputRoutes()) {
+    foreach(dtkComposerEdge *o_route, node->l->rightRoutes()) {
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
         qDebug() << DTK_COLOR_BG_YELLOW << "Pushing" << node->title() << o_route << DTK_NO_COLOR;
 #endif
@@ -138,7 +138,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNode *node)
 
     // -- Forward
 
-    foreach(dtkComposerEdge *o_route, node->outputRoutes()) {
+    foreach(dtkComposerEdge *o_route, node->l->rightRoutes()) {
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
         qDebug() << DTK_COLOR_BG_BLUE << "Forwarding" << node->title() << "->" << o_route->destination()->node()->title() << DTK_NO_COLOR;
 #endif
@@ -267,7 +267,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeCase *node)
 
         // -- Pull
 
-        foreach(dtkComposerEdge *i_route, node->inputRoutes())
+        foreach(dtkComposerEdge *i_route, node->l->leftRoutes())
             if (i_route->destination()->blockedFrom() == node->currentBlock()->title() || i_route->destination() == node->inputProperty())
                 node->pull(i_route, i_route->destination());
 
@@ -309,7 +309,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeCase *node)
 
         // -- Push
 
-        foreach(dtkComposerEdge *o_route, node->outputRoutes())
+        foreach(dtkComposerEdge *o_route, node->l->rightRoutes())
             if (o_route->source()->blockedFrom() == node->currentBlock()->title())
                 node->push(o_route, o_route->source());
 
@@ -324,7 +324,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeCase *node)
 
         // -- Forward to downstream nodes
 
-        foreach(dtkComposerEdge *o_route, node->outputRoutes()) {
+        foreach(dtkComposerEdge *o_route, node->l->rightRoutes()) {
             if (o_route->source()->blockedFrom() == node->currentBlock()->title()) {
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
                 qDebug() << DTK_COLOR_BG_BLUE << "Forwarding" << node->title() << "->" << o_route->destination()->node()->title() << DTK_NO_COLOR;
@@ -404,7 +404,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeConditional *node)
 
         // -- Pull
 
-        foreach(dtkComposerEdge *i_route, node->inputRoutes())
+        foreach(dtkComposerEdge *i_route, node->l->leftRoutes())
             if (i_route->destination()->blockedFrom() == node->currentBlock()->title())
                 node->pull(i_route, i_route->destination());
 
@@ -434,7 +434,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeConditional *node)
 
         // -- Push
 
-        foreach(dtkComposerEdge *o_route, node->outputRoutes())
+        foreach(dtkComposerEdge *o_route, node->l->rightRoutes())
             if (o_route->source()->blockedFrom() == node->currentBlock()->title())
                 node->push(o_route, o_route->source());
 
@@ -449,7 +449,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeConditional *node)
 
         // -- Forward to downstream nodes
 
-        foreach(dtkComposerEdge *o_route, node->outputRoutes()) {
+        foreach(dtkComposerEdge *o_route, node->l->rightRoutes()) {
             if (o_route->source()->blockedFrom() == node->currentBlock()->title()) {
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
                 qDebug() << DTK_COLOR_BG_BLUE << "Forwarding" << node->title() << "->" << o_route->destination()->node()->title() << DTK_NO_COLOR;
@@ -518,7 +518,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopDataComposite *nod
 
         // -- Pull
 
-        foreach(dtkComposerEdge *i_route, node->inputRoutes())
+        foreach(dtkComposerEdge *i_route, node->l->leftRoutes())
             node->pull(i_route, i_route->destination());
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
@@ -535,7 +535,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopDataComposite *nod
                 route->setSource(relay_route->source());
                 route->setDestination(relay_route->destination());
                 
-                relay_route->destination()->node()->addInputRoute(route);
+                relay_route->destination()->node()->l->appendLeftRoute(route);
                 node->addInputActiveRoute(route);
             
             }
@@ -543,7 +543,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopDataComposite *nod
 
         // -- Set input composite and loop options
 
-        foreach(dtkComposerEdge *i_route, node->inputRoutes()) {
+        foreach(dtkComposerEdge *i_route, node->l->leftRoutes()) {
             if (i_route->destination() == node->inputProperty()) {
         
                 dtkAbstractData *data = NULL;
@@ -554,8 +554,8 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopDataComposite *nod
 
                 } else if(dtkAbstractProcess *process = qobject_cast<dtkAbstractProcess *>(i_route->source()->node()->object())) {
                                         
-                    if(i_route->source()->node()->outputProperties().count() >= 1)
-                        data = process->output(i_route->source()->node()->number(i_route->source()));
+                    if(i_route->source()->node()->g->rightProperties().count() >= 1)
+                        data = process->output(i_route->source()->node()->g->indexOf(i_route->source()));
                     else
                         data = process->output();
 
@@ -687,7 +687,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopDataComposite *nod
             
         // -- Push
             
-        foreach(dtkComposerEdge *o_route, node->outputRoutes())
+        foreach(dtkComposerEdge *o_route, node->l->rightRoutes())
             node->push(o_route, o_route->source());
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
@@ -701,7 +701,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopDataComposite *nod
             
         // -- Forward
 
-        foreach(dtkComposerEdge *o_route, node->outputRoutes()) {
+        foreach(dtkComposerEdge *o_route, node->l->rightRoutes()) {
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
             qDebug() << DTK_COLOR_BG_BLUE << "Forwarding" << node->title() << "->" << o_route->destination()->node()->title() << DTK_NO_COLOR;
 #endif
@@ -779,7 +779,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopFor *node)
 
         // -- Pull
 
-        foreach(dtkComposerEdge *i_route, node->inputRoutes())
+        foreach(dtkComposerEdge *i_route, node->l->leftRoutes())
             node->pull(i_route, i_route->destination());
 
         foreach(dtkComposerEdge *o_route, node->outputRelayRoutes()) {
@@ -846,7 +846,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopFor *node)
         
         // -- Push
         
-        foreach(dtkComposerEdge *o_route, node->outputRoutes())
+        foreach(dtkComposerEdge *o_route, node->l->rightRoutes())
             node->push(o_route, o_route->source());
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
@@ -860,7 +860,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopFor *node)
 
         // -- Forward to downstream nodes
                 
-        foreach(dtkComposerEdge *o_route, node->outputRoutes()) {
+        foreach(dtkComposerEdge *o_route, node->l->rightRoutes()) {
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
             qDebug() << DTK_COLOR_BG_BLUE << "Forwarding" << node->title() << "->" << o_route->destination()->node()->title() << DTK_NO_COLOR;
 #endif
@@ -918,7 +918,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopWhile *node)
         
         // -- Pull
         
-        foreach(dtkComposerEdge *i_route, node->inputRoutes())
+        foreach(dtkComposerEdge *i_route, node->l->leftRoutes())
             node->pull(i_route, i_route->destination());
         
         foreach(dtkComposerEdge *o_route, node->outputRelayRoutes()) {
@@ -1010,7 +1010,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopWhile *node)
 
         // -- Push
 
-        foreach(dtkComposerEdge *o_route, node->outputRoutes())
+        foreach(dtkComposerEdge *o_route, node->l->rightRoutes())
             node->push(o_route, o_route->source());
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
@@ -1024,7 +1024,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopWhile *node)
 
         // -- Forward to downstream nodes
                 
-        foreach(dtkComposerEdge *o_route, node->outputRoutes()) {
+        foreach(dtkComposerEdge *o_route, node->l->rightRoutes()) {
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
             qDebug() << DTK_COLOR_BG_BLUE << "Forwarding" << node->title() << "->" << o_route->destination()->node()->title() << DTK_NO_COLOR;
 #endif

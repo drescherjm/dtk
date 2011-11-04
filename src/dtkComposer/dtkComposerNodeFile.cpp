@@ -51,9 +51,9 @@ dtkComposerNodeFile::dtkComposerNodeFile(dtkComposerNode *parent) : dtkComposerN
     this->setKind(dtkComposerNode::Atomic);
     this->setType("dtkComposerFile");
 
-    this->addOutputProperty(d->property_output_file_name);
-    this->addOutputProperty(d->property_output_file_text);
-    this->addOutputProperty(d->property_output_file_url);
+    this->g->appendRightProperty(d->property_output_file_name);
+    this->g->appendRightProperty(d->property_output_file_text);
+    this->g->appendRightProperty(d->property_output_file_url);
     
     this->addAction("Choose file", this, SLOT(getFileName()));
     this->addAction("Setup url", this, SLOT(getUrl()));

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 20 00:06:05 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 444
+ * Last-Updated: Fri Nov  4 14:52:59 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 446
  */
 
 /* Commentary: 
@@ -511,7 +511,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
 
         { // -- properties
 
-            foreach(dtkComposerNodeProperty *property, node->inputProperties()) {
+            foreach(dtkComposerNodeProperty *property, node->g->leftProperties()) {
                 
                 QDomElement property_element = document.createElement("property");
                 property_element.setAttribute("name", property->name());
@@ -541,7 +541,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
                 tag.appendChild(property_element);
             }
 
-            foreach(dtkComposerNodeProperty *property, node->outputProperties()) {
+            foreach(dtkComposerNodeProperty *property, node->g->rightProperties()) {
                 
                 QDomElement property_element = document.createElement("property");
                 property_element.setAttribute("name", property->name());

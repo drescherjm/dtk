@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Oct 26 18:24:32 2011 (+0200)
+ * Last-Updated: Fri Nov  4 10:21:44 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 848
+ *     Update #: 849
  */
 
 /* Commentary: 
@@ -66,7 +66,7 @@ dtkComposerNodeControl::dtkComposerNodeControl(dtkComposerNode *parent) : dtkCom
     d->current_block = NULL;
 
     d->property_input = new dtkComposerNodeProperty("condition", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, this);
-    this->addInputProperty(d->property_input);
+    this->g->appendLeftProperty(d->property_input);
 
     this->setAcceptHoverEvents(true);
     this->setKind(dtkComposerNode::Control);
@@ -152,7 +152,7 @@ dtkComposerNodeProperty *dtkComposerNodeControl::inputProperty(const QString& bl
 {
     foreach(dtkComposerNodeControlBlock *block, d->blocks)
         if(block->title() == block_title)
-            foreach(dtkComposerNodeProperty *property, block->inputProperties())
+            foreach(dtkComposerNodeProperty *property, block->leftProperties())
                 if(property->name() == name)
                     return property;
 
@@ -163,7 +163,7 @@ dtkComposerNodeProperty *dtkComposerNodeControl::outputProperty(const QString& b
 {
     foreach(dtkComposerNodeControlBlock *block, d->blocks)
         if(block->title() == block_title)
-            foreach(dtkComposerNodeProperty *property, block->outputProperties())
+            foreach(dtkComposerNodeProperty *property, block->rightProperties())
                 if(property->name() == name)
                     return property;
 
@@ -284,7 +284,7 @@ bool dtkComposerNodeControl::condition(void)
     if(!d->property_input->edge())
         return value;
 
-    foreach(dtkComposerEdge *i_route, this->inputRoutes()) {
+    foreach(dtkComposerEdge *i_route, this->l->leftRoutes()) {
         if (i_route->destination() == d->property_input) {
 
             QVariant p_value = i_route->source()->node()->value(i_route->source());
@@ -308,7 +308,7 @@ QVariant dtkComposerNodeControl::value(void)
         return QVariant();
     }
 
-    foreach(dtkComposerEdge *i_route, this->inputRoutes())
+    foreach(dtkComposerEdge *i_route, this->l->leftRoutes())
         if (i_route->destination() == d->property_input)
             return i_route->source()->node()->value(i_route->source());
     return QVariant();
@@ -321,7 +321,7 @@ dtkComposerNodeProperty *dtkComposerNodeControl::inputProperty(void)
 
 void dtkComposerNodeControl::disableInputProperty(void)
 {
-    this->removeInputProperty(d->property_input);
+    this->g->removeLeftProperty(d->property_input);
     delete d->property_input;
     d->property_input = NULL;
 }
@@ -338,7 +338,7 @@ void dtkComposerNodeControl::setCurrentBlock(dtkComposerNodeControlBlock *block)
 
 bool dtkComposerNodeControl::dirtyInputValue(void)
 {
-    foreach(dtkComposerEdge *i_route, this->inputRoutes()) {
+    foreach(dtkComposerEdge *i_route, this->l->leftRoutes()) {
         if (i_route->destination() == d->property_input) {
             if(dtkComposerNodeLoop *loop = dynamic_cast<dtkComposerNodeLoop *>(i_route->source()->node())) {
 
@@ -370,7 +370,7 @@ bool dtkComposerNodeControl::dirtyInputValue(void)
 
 bool dtkComposerNodeControl::dirtyUpstreamNodes(void)
 {
-    foreach(dtkComposerEdge *i_route, this->inputRoutes()) {
+    foreach(dtkComposerEdge *i_route, this->l->leftRoutes()) {
         if (i_route->destination()->blockedFrom() == d->current_block->title()) {
             
             if(dtkComposerNodeLoop *loop = dynamic_cast<dtkComposerNodeLoop *>(i_route->source()->node())) {
@@ -413,7 +413,7 @@ bool dtkComposerNodeControl::dirtyBlockEndNodes(void)
 
 void dtkComposerNodeControl::markDirtyDownstreamNodes(void)
 {
-    foreach(dtkComposerEdge *o_route, this->outputRoutes())
+    foreach(dtkComposerEdge *o_route, this->l->rightRoutes())
         if (o_route->source()->blockedFrom() == d->current_block->title())
             o_route->destination()->node()->setDirty(true);
 }
@@ -458,7 +458,7 @@ void dtkComposerNodeControl::pull(dtkComposerEdge *i_route, dtkComposerNodePrope
             route->setSource(i_route->source());
             route->setDestination(relay_route->destination());
                 
-            relay_route->destination()->node()->addInputRoute(route);
+            relay_route->destination()->node()->l->appendLeftRoute(route);
 
             this->addInputActiveRoute(route);
         }
@@ -493,7 +493,7 @@ void dtkComposerNodeControl::push(dtkComposerEdge *o_route, dtkComposerNodePrope
                 output_control_node->addOutputRelayRoute(route);
                 
             } else {                
-                o_route->destination()->node()->addInputRoute(route);
+                o_route->destination()->node()->l->appendLeftRoute(route);
             }
         }
     }

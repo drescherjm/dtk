@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 25 10:07:34 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr  8 16:26:40 2011 (+0200)
+ * Last-Updated: Fri Nov  4 09:40:49 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 206
+ *     Update #: 208
  */
 
 /* Commentary: 
@@ -155,8 +155,8 @@ dtkComposerNodeBoolean::dtkComposerNodeBoolean(dtkComposerNode *parent) : dtkCom
     this->setKind(dtkComposerNode::Atomic);
     this->setType("dtkComposerBoolean");
 
-    this->addInputProperty(d->property_input_value);
-    this->addOutputProperty(d->property_output_value);
+    this->g->appendLeftProperty(d->property_input_value);
+    this->g->appendRightProperty(d->property_output_value);
 }
 
 dtkComposerNodeBoolean::~dtkComposerNodeBoolean(void)

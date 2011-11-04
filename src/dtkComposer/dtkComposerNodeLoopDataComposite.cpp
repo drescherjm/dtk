@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Oct 12 16:02:18 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 26 16:28:03 2011 (+0200)
+ * Last-Updated: Fri Nov  4 10:20:07 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 195
+ *     Update #: 198
  */
 
 /* Commentary: 
@@ -55,11 +55,11 @@ dtkComposerNodeLoopDataComposite::dtkComposerNodeLoopDataComposite(dtkComposerNo
     d->block_loop->setInteractive(false);
     d->block_loop->setHeightRatio(1);
 
-    this->addInputProperty(d->block_loop->addInputProperty("from", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, dtkComposerNodeProperty::None, this));
-    this->addInputProperty(d->block_loop->addInputProperty("to", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, dtkComposerNodeProperty::None, this));
-    this->addInputProperty(d->block_loop->addInputProperty("step", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, dtkComposerNodeProperty::None, this));
-    this->addInputProperty(d->block_loop->addInputProperty("item", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, dtkComposerNodeProperty::AsLoopInput, this));
-    this->addInputProperty(d->block_loop->addInputProperty("index", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, dtkComposerNodeProperty::AsLoopInput, this));
+    this->g->appendLeftProperty(d->block_loop->appendLeftProperty("from", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, dtkComposerNodeProperty::None, this));
+    this->g->appendLeftProperty(d->block_loop->appendLeftProperty("to", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, dtkComposerNodeProperty::None, this));
+    this->g->appendLeftProperty(d->block_loop->appendLeftProperty("step", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, dtkComposerNodeProperty::None, this));
+    this->g->appendLeftProperty(d->block_loop->appendLeftProperty("item", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, dtkComposerNodeProperty::AsLoopInput, this));
+    this->g->appendLeftProperty(d->block_loop->appendLeftProperty("index", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, dtkComposerNodeProperty::AsLoopInput, this));
 
     this->setCurrentBlock(d->block_loop);
 
@@ -116,7 +116,7 @@ void dtkComposerNodeLoopDataComposite::layout(void)
                           block->height()));
 
     j = 0;
-    foreach(dtkComposerNodeProperty *property, block->inputProperties()) {
+    foreach(dtkComposerNodeProperty *property, block->leftProperties()) {
 
         property->setRect(QRectF(block->mapRectToParent(block->rect()).left() + node_radius,
                                  block->mapRectToParent(block->rect()).top()  + node_radius * (4*j + 1),
@@ -135,7 +135,7 @@ void dtkComposerNodeLoopDataComposite::layout(void)
         j++;
     }
     j = 5;
-    foreach(dtkComposerNodeProperty *property, block->outputProperties()) {
+    foreach(dtkComposerNodeProperty *property, block->rightProperties()) {
 
         property->setRect(QRectF(block->mapRectToParent(block->rect()).right() - node_radius * 3,
                                  block->mapRectToParent(block->rect()).top()   + node_radius * (4*j + 1),

@@ -183,18 +183,18 @@ bool dtkComposerEdge::link(bool anyway)
     if(anyway) {
 
         if (d->source->node()->kind() == dtkComposerNode::Composite && d->destination->node()->parentNode() == d->source->node())
-            d->source->node()->addGhostInputEdge(this, d->source);
+            d->source->node()->g->appendLeftRelayEdge(this, d->source);
         else if (d->source->node()->kind() == dtkComposerNode::Control && d->destination->node()->parentNode() == d->source->node())
-            d->source->node()->addInputRelayEdge(this, d->source);
+            d->source->node()->g->appendLeftRelayEdge(this, d->source);
         else
-            d->source->node()->addOutputEdge(this, d->source);
+            d->source->node()->g->appendRightEdge(this, d->source);
         
         if (d->destination->node()->kind() == dtkComposerNode::Composite && d->source->node()->parentNode() == d->destination->node())
-            d->destination->node()->addGhostOutputEdge(this, d->destination);
+            d->destination->node()->g->appendRightRelayEdge(this, d->destination);
         else if (d->destination->node()->kind() == dtkComposerNode::Control && d->source->node()->parentNode() == d->destination->node())
-            d->destination->node()->addOutputRelayEdge(this, d->destination);
+            d->destination->node()->g->appendRightRelayEdge(this, d->destination);
         else
-            d->destination->node()->addInputEdge(this, d->destination);
+            d->destination->node()->g->appendLeftEdge(this, d->destination);
         
         d->destination->node()->onEdgeConnected(this);
 
@@ -264,7 +264,7 @@ bool dtkComposerEdge::link(bool anyway)
     }            
 
     if (d->source->type() == dtkComposerNodeProperty::Output || d->source->type() == dtkComposerNodeProperty::HybridOutput || d->source->type() == dtkComposerNodeProperty::PassThroughOutput) {
-        foreach (dtkComposerEdge *edge, d->source->node()->outputEdges()) {
+        foreach (dtkComposerEdge *edge, d->source->node()->g->rightEdges()) {
             if (edge->source() == d->source && edge->destination() == d->destination) {
                 qDebug() << "Edge already exist.";
                 return false;
@@ -273,7 +273,7 @@ bool dtkComposerEdge::link(bool anyway)
     }
 
     if (d->destination->type() == dtkComposerNodeProperty::Input || d->destination->type() == dtkComposerNodeProperty::HybridInput || d->destination->type() == dtkComposerNodeProperty::PassThroughInput) {        
-        foreach (dtkComposerEdge *edge, d->destination->node()->inputEdges()) {
+        foreach (dtkComposerEdge *edge, d->destination->node()->g->leftEdges()) {
             if (edge->source() == d->source && edge->destination() == d->destination) {
                 qDebug() << "Edge already exist.";
                 return false;
@@ -282,7 +282,7 @@ bool dtkComposerEdge::link(bool anyway)
     }
 
     if (d->destination->type() == dtkComposerNodeProperty::HybridOutput || d->destination->type() == dtkComposerNodeProperty::PassThroughOutput) {
-        foreach (dtkComposerEdge *edge, d->destination->node()->outputRelayEdges()) {
+        foreach (dtkComposerEdge *edge, d->destination->node()->g->rightRelayEdges()) {
             if (edge->source() == d->source && edge->destination() == d->destination) {
                 qDebug() << "Edge already exist.";
                 return false;
@@ -291,7 +291,7 @@ bool dtkComposerEdge::link(bool anyway)
     }
 
     if (d->source->type() == dtkComposerNodeProperty::HybridInput || d->source->type() == dtkComposerNodeProperty::PassThroughInput) {
-        foreach (dtkComposerEdge *edge, d->source->node()->inputRelayEdges()) {
+        foreach (dtkComposerEdge *edge, d->source->node()->g->leftRelayEdges()) {
             if (edge->source() == d->source && edge->destination() == d->destination) {
                 qDebug() << "Edge already exist.";
                 return false;
@@ -300,18 +300,18 @@ bool dtkComposerEdge::link(bool anyway)
     }
 
     if (d->source->node()->kind() == dtkComposerNode::Composite && d->destination->node()->parentNode() == d->source->node())
-        d->source->node()->addGhostInputEdge(this, d->source);
+        d->source->node()->g->appendLeftRelayEdge(this, d->source);
     else if (d->source->node()->kind() == dtkComposerNode::Control && d->destination->node()->parentNode() == d->source->node())
-        d->source->node()->addInputRelayEdge(this, d->source);
+        d->source->node()->g->appendLeftRelayEdge(this, d->source);
     else
-        d->source->node()->addOutputEdge(this, d->source);
+        d->source->node()->g->appendRightEdge(this, d->source);
 
     if (d->destination->node()->kind() == dtkComposerNode::Composite && d->source->node()->parentNode() == d->destination->node())
-        d->destination->node()->addGhostOutputEdge(this, d->destination);
+        d->destination->node()->g->appendRightRelayEdge(this, d->destination);
     else if (d->destination->node()->kind() == dtkComposerNode::Control && d->source->node()->parentNode() == d->destination->node())
-        d->destination->node()->addOutputRelayEdge(this, d->destination);
+        d->destination->node()->g->appendRightRelayEdge(this, d->destination);
     else
-        d->destination->node()->addInputEdge(this, d->destination);
+        d->destination->node()->g->appendLeftEdge(this, d->destination);
 
     d->destination->node()->onEdgeConnected(this);
 
@@ -329,19 +329,19 @@ bool dtkComposerEdge::unlink(void)
     d->destination->node()->onEdgeDisconnected(this);
 
     if (d->source->node()->kind() == dtkComposerNode::Composite && d->destination->node()->parentNode() == d->source->node()) {
-        d->source->node()->removeGhostInputEdge(this);
+        d->source->node()->g->removeLeftRelayEdge(this);
     } else if (d->source->node()->kind() == dtkComposerNode::Control && d->destination->node()->parentNode() == d->source->node()) {
-        d->source->node()->removeInputRelayEdge(this);
+        d->source->node()->g->removeLeftRelayEdge(this);
     } else {
-        d->source->node()->removeOutputEdge(this);
+        d->source->node()->g->removeRightEdge(this);
     }
 
     if (d->destination->node()->kind() == dtkComposerNode::Composite && d->source->node()->parentNode() == d->destination->node()) {
-        d->destination->node()->removeGhostOutputEdge(this);
+        d->destination->node()->g->removeRightRelayEdge(this);
     } else if (d->destination->node()->kind() == dtkComposerNode::Control && d->source->node()->parentNode() == d->destination->node()) {
-        d->destination->node()->removeOutputRelayEdge(this);
+        d->destination->node()->g->removeRightRelayEdge(this);
     } else {
-        d->destination->node()->removeInputEdge(this);
+        d->destination->node()->g->removeLeftEdge(this);
     }
 
     return true;

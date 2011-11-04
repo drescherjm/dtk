@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 27 17:15:49 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 2531
+ * Last-Updated: Fri Nov  4 15:11:25 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 2560
  */
 
 /* Commentary: 
@@ -134,14 +134,14 @@ QList<dtkComposerEdge *> dtkComposerNodePrivate::iRoute(dtkComposerEdge *edge)
 
             // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->source()->node()->title() << "parent is composite" << DTK_NO_COLOR;
 
-            foreach(dtkComposerEdge *i_edge, edge->source()->node()->inputEdges())
+            foreach(dtkComposerEdge *i_edge, edge->source()->node()->g->leftEdges())
                 if (i_edge->destination() == edge->source())
                     edges << iRoute(i_edge);
         } else {
 
             // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->source()->node()->title() << "source is composite" << DTK_NO_COLOR;
 
-            foreach(dtkComposerEdge *ghost, edge->source()->node()->outputGhostEdges())
+            foreach(dtkComposerEdge *ghost, edge->source()->node()->g->rightRelayEdges())
                 if (ghost->destination() == edge->source())
                     edges << iRoute(ghost);
         }
@@ -166,7 +166,7 @@ QList<dtkComposerEdge *> dtkComposerNodePrivate::oRoute(dtkComposerEdge *edge)
 
             // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->destination()->node()->title() << "parent is composite" << DTK_NO_COLOR;
 
-            foreach(dtkComposerEdge *o_edge, edge->destination()->node()->outputEdges())
+            foreach(dtkComposerEdge *o_edge, edge->destination()->node()->g->rightEdges())
                 if (o_edge->source() == edge->destination())
                     edges << oRoute(o_edge);
 
@@ -174,7 +174,7 @@ QList<dtkComposerEdge *> dtkComposerNodePrivate::oRoute(dtkComposerEdge *edge)
 
             // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->destination()->node()->title() << "destination is composite" << DTK_NO_COLOR;
 
-            foreach(dtkComposerEdge *ghost, edge->destination()->node()->inputGhostEdges())
+            foreach(dtkComposerEdge *ghost, edge->destination()->node()->g->leftRelayEdges())
                 if (ghost->source() == edge->destination())
                     edges << oRoute(ghost);
 
@@ -188,7 +188,7 @@ QList<dtkComposerEdge *> dtkComposerNodePrivate::oRoute(dtkComposerEdge *edge)
 // dtkComposerNode
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePrivate)
+dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePrivate), g(new dtkComposerNodeGraphic(this)), l(new dtkComposerNodeLogic(this)) 
 {
     d->count = 0; // TO BE REMOVED
 
@@ -477,228 +477,6 @@ dtkComposerEdge *dtkComposerNode::edge(dtkComposerNodeProperty *property)
     return NULL;
 }
 
-void dtkComposerNode::addInputProperty(dtkComposerNodeProperty *property)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->input_properties << property;
-
-    this->layout();
-}
-
-void dtkComposerNode::addOutputProperty(dtkComposerNodeProperty *property)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->output_properties << property;
-
-    this->layout();
-}
-
-void dtkComposerNode::removeInputProperty(dtkComposerNodeProperty *property)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->input_properties.removeAll(property);
-}
-
-void dtkComposerNode::removeOutputProperty(dtkComposerNodeProperty *property)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->output_properties.removeAll(property);
-}
-
-void dtkComposerNode::addInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->input_edges.insert(edge, property);
-}
-
-void dtkComposerNode::addOutputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-    d->output_edges.insert(edge, property);
-}
-
-void dtkComposerNode::addGhostInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->ghost_input_edges.insert(edge, property);
-}
-
-void dtkComposerNode::addGhostOutputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->ghost_output_edges.insert(edge, property);
-}
-
-void dtkComposerNode::addInputRelayEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->input_relay_edges.insert(edge, property);
-}
-
-void dtkComposerNode::addOutputRelayEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-    d->output_relay_edges.insert(edge, property);
-}
-
-void dtkComposerNode::addInputRoute(dtkComposerEdge *route)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->input_routes << route;
-}
-
-void dtkComposerNode::addOutputRoute(dtkComposerEdge *route)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->output_routes << route;
-}
-
-void dtkComposerNode::removeInputEdge(dtkComposerEdge *edge)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->input_edges.remove(edge);
-}
-
-void dtkComposerNode::removeOutputEdge(dtkComposerEdge *edge)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->output_edges.remove(edge);
-}
-
-void dtkComposerNode::removeAllEdges(void)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->input_edges.clear();
-    d->output_edges.clear();
-}
-
-void dtkComposerNode::removeGhostInputEdge(dtkComposerEdge *edge)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->ghost_input_edges.remove(edge);
-}
-
-void dtkComposerNode::removeGhostOutputEdge(dtkComposerEdge *edge)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->ghost_output_edges.remove(edge);
-}
-
-void dtkComposerNode::removeAllGhostEdges(void)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->ghost_input_edges.clear();
-    d->ghost_output_edges.clear();
-}
-
-void dtkComposerNode::removeInputRelayEdge(dtkComposerEdge *edge)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->input_relay_edges.remove(edge);
-}
-
-void dtkComposerNode::removeOutputRelayEdge(dtkComposerEdge *edge)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->output_relay_edges.remove(edge);
-}
-
-void dtkComposerNode::removeAllRelayEdges(void)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->input_relay_edges.clear();
-    d->output_relay_edges.clear();
-}
-
-void dtkComposerNode::removeInputRoute(dtkComposerEdge *route)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->input_routes.removeAll(route);
-}
-
-void dtkComposerNode::removeOutputRoute(dtkComposerEdge *route)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->output_routes.removeAll(route);
-}
-
-void dtkComposerNode::removeAllRoutes(void)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    d->input_routes.clear();
-    d->output_routes.clear();
-}
-
 void dtkComposerNode::addAction(const QString& text, const QObject *receiver, const char *slot)
 {
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
@@ -709,149 +487,6 @@ void dtkComposerNode::addAction(const QString& text, const QObject *receiver, co
     connect(action, SIGNAL(triggered()), receiver, slot);
 
     d->actions << action;
-}
-
-int dtkComposerNode::count(dtkComposerNodeProperty *property)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    int property_count = 0;
-
-    if (property->type() == dtkComposerNodeProperty::Input) {
-
-        property_count = d->input_edges.keys(property).count();
-
-    } else if (property->type() == dtkComposerNodeProperty::HybridInput) {
-
-        if (!d->input_edges.keys(property).count())
-            property_count = d->input_relay_edges.keys(property).count();
-        else
-            property_count = d->input_edges.keys(property).count();
-
-    } else if (property->type() == dtkComposerNodeProperty::PassThroughInput) {
-
-        if (!d->input_edges.keys(property).count())
-            property_count = d->input_relay_edges.keys(property).count();
-        else
-            property_count = d->input_edges.keys(property).count();
-
-    } else if (property->type() == dtkComposerNodeProperty::Output) {
-
-        property_count = d->output_edges.keys(property).count();
-
-    } else if (property->type() == dtkComposerNodeProperty::HybridOutput) {
-
-        if (!d->output_edges.keys(property).count())
-            property_count = d->output_relay_edges.keys(property).count();
-        else
-            property_count = d->output_edges.keys(property).count();
-
-    } else if (property->type() == dtkComposerNodeProperty::PassThroughOutput) {
-
-        if (!d->output_edges.keys(property).count())
-            property_count = d->output_relay_edges.keys(property).count();
-        else
-            property_count = d->output_edges.keys(property).count();
-
-    }
-    return property_count;
-}
-
-int dtkComposerNode::number(dtkComposerNodeProperty *property)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-
-    int index = -1;
-
-    if (property->type() == dtkComposerNodeProperty::Input) {
-        index = d->input_properties.indexOf(property);
-
-    } else if (property->type() == dtkComposerNodeProperty::HybridInput) {
-        index = d->input_properties.indexOf(property);
-
-    } else if (property->type() == dtkComposerNodeProperty::PassThroughInput) {
-        index = d->input_properties.indexOf(property);
-
-    } else if (property->type() == dtkComposerNodeProperty::Output) {
-        index = d->output_properties.indexOf(property);
-
-    } else if (property->type() == dtkComposerNodeProperty::HybridOutput) {
-        index = d->output_properties.indexOf(property);
-
-    } else if (property->type() == dtkComposerNodeProperty::PassThroughOutput) {
-        index = d->output_properties.indexOf(property);
-
-    }
-
-    return index;
-}
-
-QList<dtkComposerNodeProperty *> dtkComposerNode::inputProperties(void)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-    return d->input_properties;
-}
-
-QList<dtkComposerNodeProperty *> dtkComposerNode::outputProperties(void)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-    return d->output_properties;
-}
-
-QList<dtkComposerEdge *> dtkComposerNode::inputEdges(void)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-    return d->input_edges.keys();
-}
-
-QList<dtkComposerEdge *> dtkComposerNode::outputEdges(void)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-    return d->output_edges.keys();
-}
-
-QList<dtkComposerEdge *> dtkComposerNode::inputGhostEdges(void)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-    return d->ghost_input_edges.keys();
-}
-
-QList<dtkComposerEdge *> dtkComposerNode::outputGhostEdges(void)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-    return d->ghost_output_edges.keys();
-}
-
-QList<dtkComposerEdge *> dtkComposerNode::inputRelayEdges(void)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-    return d->input_relay_edges.keys();
-}
-
-QList<dtkComposerEdge *> dtkComposerNode::outputRelayEdges(void)
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-    return d->output_relay_edges.keys();
 }
 
 QList<dtkComposerNode *> dtkComposerNode::inputNodes(void)
@@ -878,16 +513,6 @@ QList<dtkComposerNode *> dtkComposerNode::outputNodes(void)
         nodes << edge->destination()->node();
 
     return nodes;
-}
-
-QList<dtkComposerEdge *> dtkComposerNode::inputRoutes(void)
-{
-    return d->input_routes;
-}
-
-QList<dtkComposerEdge *> dtkComposerNode::outputRoutes(void)
-{
-    return d->output_routes;
 }
 
 dtkComposerNodeProperty *dtkComposerNode::propertyAt(const QPointF& point) const
@@ -980,7 +605,7 @@ void dtkComposerNode::setDirty(bool dirty)
     // if (d->kind == dtkComposerNode::Composite) {
     //     if (d->dirty) {
     //         foreach(dtkComposerNode *child, d->children)
-    //             if(!child->inputEdges().count() && child->outputEdges().count())
+    //             if(!child->g->leftEdges().count() && child->g->rightEdges().count())
     //                 child->setDirty(dirty);
     //         foreach(dtkComposerEdge *ghost_edge, d->ghost_input_edges.keys())
     //             ghost_edge->destination()->node()->setDirty(dirty);
@@ -1590,7 +1215,7 @@ void dtkComposerNode::onEdgeConnected(dtkComposerEdge *edge)
                 (source->type() == dtkComposerNodeProperty::Output && source->node()->kind() == dtkComposerNode::Control && !destin->node()->isChildOfControlNode(source->node()))) {
 
                 dtkComposerNodeControl *control_node = dynamic_cast<dtkComposerNodeControl *>(source->node());                    
-                control_node->addOutputRoute(route);
+                control_node->l->appendRightRoute(route);
 
                 dtkComposerEdge *active_route = new dtkComposerEdge;
                 active_route->setSource(route->source());
@@ -1716,7 +1341,7 @@ void dtkComposerNode::onEdgeDisconnected(dtkComposerEdge *edge)
                     if (o_route->source() == source && o_route->destination() == destin) {
                         input_route = o_route;
                         control_node->removeOutputRelayRoute(input_route);
-                        input_route->source()->node()->removeOutputRoute(input_route);
+                        input_route->source()->node()->l->removeRightRoute(input_route);
                         break;
                     }
                 }
@@ -1740,7 +1365,7 @@ void dtkComposerNode::onEdgeDisconnected(dtkComposerEdge *edge)
                         }
                         input_route = o_route;
                         control_node->removeOutputRelayRoute(input_route);
-                        input_route->source()->node()->removeOutputRoute(input_route);
+                        input_route->source()->node()->l->removeRightRoute(input_route);
                         break;
                     }
                 }

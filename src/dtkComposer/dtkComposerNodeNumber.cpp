@@ -354,8 +354,8 @@ dtkComposerNodeNumber::dtkComposerNodeNumber(dtkComposerNode *parent) : dtkCompo
     this->setKind(dtkComposerNode::Atomic);
     this->setType("dtkComposerNumber");
 
-    this->addInputProperty(d->property_input_value);
-    this->addOutputProperty(d->property_output_value);
+    this->g->appendLeftProperty(d->property_input_value);
+    this->g->appendRightProperty(d->property_output_value);
 
     // --
     

@@ -168,9 +168,9 @@ dtkComposerNodeStringOperator::dtkComposerNodeStringOperator(dtkComposerNode *pa
     this->setKind(dtkComposerNode::Process);
     this->setType("dtkComposerStringOperator");
 
-    this->addInputProperty(d->property_input_value_op1);
-    this->addInputProperty(d->property_input_value_op2);
-    this->addOutputProperty(d->property_output_value);
+    this->g->appendLeftProperty(d->property_input_value_op1);
+    this->g->appendLeftProperty(d->property_input_value_op2);
+    this->g->appendRightProperty(d->property_output_value);
 }
 
 dtkComposerNodeStringOperator::~dtkComposerNodeStringOperator(void)

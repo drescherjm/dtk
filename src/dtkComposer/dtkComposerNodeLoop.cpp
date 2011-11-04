@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar  7 09:26:54 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Oct 26 17:54:29 2011 (+0200)
+ * Last-Updated: Fri Nov  4 14:52:29 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 200
+ *     Update #: 201
  */
 
 /* Commentary: 
@@ -107,7 +107,7 @@ bool dtkComposerNodeLoop::dirtyBlockEndNodes(void)
     }
     
     foreach(dtkComposerNode *node, this->currentBlock()->nodes())
-        if(!node->outputEdges().count() && node->inputEdges().count() && node->dirty())
+        if(!node->g->rightEdges().count() && node->g->leftEdges().count() && node->dirty())
             return true;
     
     return false;
@@ -129,7 +129,7 @@ void dtkComposerNodeLoop::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty
 
         }
 
-        foreach(dtkComposerNodeProperty *twin, this->outputProperties())
+        foreach(dtkComposerNodeProperty *twin, this->g->rightProperties())
             if (twin->type() == dtkComposerNodeProperty::PassThroughOutput && twin->name() == property->name())
                 d->twin_properties.insert(twin, i_source);
         
@@ -140,7 +140,7 @@ void dtkComposerNodeLoop::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty
                 route->setSource(i_source);
                 route->setDestination(relay_route->destination());
                 
-                relay_route->destination()->node()->addInputRoute(route);
+                relay_route->destination()->node()->l->appendLeftRoute(route);
                 this->addInputActiveRoute(route);
             }
         }
@@ -170,7 +170,7 @@ void dtkComposerNodeLoop::push(dtkComposerEdge *o_route, dtkComposerNodeProperty
             
         } else {
 
-            o_route->destination()->node()->addInputRoute(route);
+            o_route->destination()->node()->l->appendLeftRoute(route);
 
         }
 
@@ -180,7 +180,7 @@ void dtkComposerNodeLoop::push(dtkComposerEdge *o_route, dtkComposerNodeProperty
         route->setSource(d->twin_properties.value(property));
         route->setDestination(o_route->destination());
                 
-        o_route->destination()->node()->addInputRoute(route);
+        o_route->destination()->node()->l->appendLeftRoute(route);
         this->addOutputActiveRoute(route);
                 
         if (o_route->destination()->type() == dtkComposerNodeProperty::HybridOutput || 
@@ -192,7 +192,7 @@ void dtkComposerNodeLoop::push(dtkComposerEdge *o_route, dtkComposerNodeProperty
             
         } else {
 
-            o_route->destination()->node()->addInputRoute(route);
+            o_route->destination()->node()->l->appendLeftRoute(route);
 
         }
         

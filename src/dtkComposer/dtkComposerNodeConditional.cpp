@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Oct 26 16:36:13 2011 (+0200)
+ * Last-Updated: Fri Nov  4 10:17:45 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 84
+ *     Update #: 85
  */
 
 /* Commentary: 
@@ -74,7 +74,7 @@ void dtkComposerNodeConditional::layout(void)
         offset += block->rect().height(); 
 
         j = 0;
-        foreach(dtkComposerNodeProperty *property, block->inputProperties()) {
+        foreach(dtkComposerNodeProperty *property, block->leftProperties()) {
 
             property->setRect(QRectF(block->mapRectToParent(block->rect()).left() + node_radius,
                                      block->mapRectToParent(block->rect()).top()  + node_radius * (4*j + 1),
@@ -84,7 +84,7 @@ void dtkComposerNodeConditional::layout(void)
             j++;
         }
         j = 0;
-        foreach(dtkComposerNodeProperty *property, block->outputProperties()) {
+        foreach(dtkComposerNodeProperty *property, block->rightProperties()) {
 
             property->setRect(QRectF(block->mapRectToParent(block->rect()).right() - node_radius * 3,
                                      block->mapRectToParent(block->rect()).top()   + node_radius * (4*j + 1),
@@ -168,7 +168,7 @@ bool dtkComposerNodeConditional::evaluate(dtkComposerEvaluatorPrivate *evaluator
 
 //         // -- Pull
 
-//         foreach(dtkComposerEdge *i_route, this->inputRoutes())
+//         foreach(dtkComposerEdge *i_route, this->l->leftRoutes())
 //             if (i_route->destination()->blockedFrom() == this->currentBlock()->title())
 //                 this->pull(i_route, i_route->destination());
 
@@ -198,7 +198,7 @@ bool dtkComposerNodeConditional::evaluate(dtkComposerEvaluatorPrivate *evaluator
 
 //         // -- Push
 
-//         foreach(dtkComposerEdge *o_route, this->outputRoutes())
+//         foreach(dtkComposerEdge *o_route, this->l->rightRoutes())
 //             if (o_route->source()->blockedFrom() == this->currentBlock()->title())
 //                 this->push(o_route, o_route->source());
 
@@ -217,7 +217,7 @@ bool dtkComposerNodeConditional::evaluate(dtkComposerEvaluatorPrivate *evaluator
 //         qDebug() << DTK_COLOR_BG_BLUE << DTK_PRETTY_FUNCTION << "Forward done" << DTK_NO_COLOR;
 // #endif
 
-//         foreach(dtkComposerEdge *o_route, this->outputRoutes())
+//         foreach(dtkComposerEdge *o_route, this->l->rightRoutes())
 //             if (o_route->source()->blockedFrom() == this->currentBlock()->title())
 //                 o_route->destination()->node()->update();
 

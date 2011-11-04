@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 27 17:07:19 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 2949
+ * Last-Updated: Fri Nov  4 14:54:14 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 2952
  */
 
 /* Commentary: 
@@ -200,11 +200,11 @@ QList<dtkComposerNode *> dtkComposerScene::startNodes(QList<dtkComposerNode *> p
 
     foreach(dtkComposerNode *node, scope) {
 
-        // if (!node->inputEdges().count() && node->outputEdges().count() && node->kind() != dtkComposerNode::Composite) {
+        // if (!node->g->leftEdges().count() && node->g->rightEdges().count() && node->kind() != dtkComposerNode::Composite) {
 
         if(node->kind() != dtkComposerNode::Composite) {
             
-            if(!node->inputEdges().count() && node->outputEdges().count()) {
+            if(!node->g->leftEdges().count() && node->g->rightEdges().count()) {
 
                 p = node->parentNode();
                 
@@ -246,7 +246,7 @@ QList<dtkComposerNode *> dtkComposerScene::endNodes(void)
     dtkComposerNode *p = NULL;
 
     foreach(dtkComposerNode *node, d->nodes) {
-        if (node->inputEdges().count() && !node->outputEdges().count() && node->kind() != dtkComposerNode::Composite) {
+        if (node->g->leftEdges().count() && !node->g->rightEdges().count() && node->kind() != dtkComposerNode::Composite) {
 
             p = node->parentNode();
             while (p) {
@@ -377,22 +377,22 @@ void dtkComposerScene::removeEdge(dtkComposerEdge *edge)
  */
 void dtkComposerScene::removeNode(dtkComposerNode *node)
 {
-    foreach(dtkComposerEdge *edge, node->inputEdges())
+    foreach(dtkComposerEdge *edge, node->g->leftEdges())
         this->removeEdge(edge);
     
-    foreach(dtkComposerEdge *edge, node->outputEdges())
+    foreach(dtkComposerEdge *edge, node->g->rightEdges())
         this->removeEdge(edge);
 
-    foreach(dtkComposerEdge *edge, node->inputRelayEdges())
+    foreach(dtkComposerEdge *edge, node->g->leftRelayEdges())
         this->removeEdge(edge);
     
-    foreach(dtkComposerEdge *edge, node->outputRelayEdges())
+    foreach(dtkComposerEdge *edge, node->g->rightRelayEdges())
         this->removeEdge(edge);
 
-    foreach(dtkComposerEdge *edge, node->inputGhostEdges())
+    foreach(dtkComposerEdge *edge, node->g->leftRelayEdges())
         this->removeEdge(edge);
     
-    foreach(dtkComposerEdge *edge, node->outputGhostEdges())
+    foreach(dtkComposerEdge *edge, node->g->rightRelayEdges())
         this->removeEdge(edge);
     
     dtkComposerNode *parent = node->parentNode();
@@ -415,35 +415,35 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
 
         parent = n->parentNode();
 
-        foreach(dtkComposerNodeProperty *property, parent->inputProperties()) {
+        foreach(dtkComposerNodeProperty *property, parent->g->leftProperties()) {
             if (property->clonedFrom() == node) {
 
-                foreach(dtkComposerEdge *edge, parent->inputEdges())
+                foreach(dtkComposerEdge *edge, parent->g->leftEdges())
                     if (edge->destination() == property)
                         this->removeEdge(edge);
 
-                foreach(dtkComposerEdge *edge, parent->inputGhostEdges())
+                foreach(dtkComposerEdge *edge, parent->g->leftRelayEdges())
                     if (edge->source() == property)
                         this->removeEdge(edge);
 
-                parent->removeInputProperty(property);
+                parent->g->removeLeftProperty(property);
                 delete property;
                 property = NULL;
             }
         }
 
-        foreach(dtkComposerNodeProperty *property, parent->outputProperties()) {
+        foreach(dtkComposerNodeProperty *property, parent->g->rightProperties()) {
             if (property->clonedFrom() == node) {
 
-                foreach(dtkComposerEdge *edge, parent->outputEdges())
+                foreach(dtkComposerEdge *edge, parent->g->rightEdges())
                     if (edge->source() == property)
                         this->removeEdge(edge);
 
-                foreach(dtkComposerEdge *edge, parent->outputGhostEdges()) 
+                foreach(dtkComposerEdge *edge, parent->g->rightRelayEdges()) 
                     if (edge->destination() == property) 
                         this->removeEdge(edge);
 
-                parent->removeOutputProperty(property);
+                parent->g->removeRightProperty(property);
                 delete property;
                 property = NULL;
             }
@@ -585,13 +585,13 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
         node->setParentNode(group);
         group->addChildNode(node);
 
-        foreach(dtkComposerNodeProperty *property, node->inputProperties())
-            group->addInputProperty(property->clone(group));
+        foreach(dtkComposerNodeProperty *property, node->g->leftProperties())
+            group->g->appendLeftProperty(property->clone(group));
 
-        foreach(dtkComposerNodeProperty *property, node->outputProperties())
-            group->addOutputProperty(property->clone(group));
+        foreach(dtkComposerNodeProperty *property, node->g->rightProperties())
+            group->g->appendRightProperty(property->clone(group));
 
-        foreach(dtkComposerEdge *edge, node->inputEdges()) {
+        foreach(dtkComposerEdge *edge, node->g->leftEdges()) {
             
             if (!nodes.contains(edge->source()->node())) {
                     
@@ -623,7 +623,7 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
             }
         }
         
-        foreach(dtkComposerEdge *edge, node->outputEdges()) {
+        foreach(dtkComposerEdge *edge, node->g->rightEdges()) {
 
             if (!nodes.contains(edge->destination()->node())) {
                     
@@ -693,11 +693,11 @@ dtkComposerNode *dtkComposerScene::createNode(QString type, QPointF position)
 
         while (n) {
             
-            foreach(dtkComposerNodeProperty *property, node->inputProperties())
-                n->addInputProperty(property->clone(n));
+            foreach(dtkComposerNodeProperty *property, node->g->leftProperties())
+                n->g->appendLeftProperty(property->clone(n));
             
-            foreach(dtkComposerNodeProperty *property, node->outputProperties())
-                n->addOutputProperty(property->clone(n));
+            foreach(dtkComposerNodeProperty *property, node->g->rightProperties())
+                n->g->appendRightProperty(property->clone(n));
             
             n = n->parentNode();
 
@@ -794,9 +794,9 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
         
         child->setParentNode(parent);
 
-        foreach(dtkComposerEdge *ghost, node->inputGhostEdges()) {
+        foreach(dtkComposerEdge *ghost, node->g->leftRelayEdges()) {
             if (ghost->destination()->node() == child) {
-                foreach(dtkComposerEdge *input, node->inputEdges()) {
+                foreach(dtkComposerEdge *input, node->g->leftEdges()) {
                     if (input->destination() == ghost->source()) {
                         dtkComposerEdge *e = new dtkComposerEdge;
                         e->setSource(input->source());
@@ -807,9 +807,9 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
             }
         } 
 
-        foreach(dtkComposerEdge *ghost, node->outputGhostEdges()) {
+        foreach(dtkComposerEdge *ghost, node->g->rightRelayEdges()) {
             if (ghost->source()->node() == child) {
-                foreach(dtkComposerEdge *output, node->outputEdges()) {
+                foreach(dtkComposerEdge *output, node->g->rightEdges()) {
                     if (output->source() == ghost->destination()) {
                         dtkComposerEdge *e = new dtkComposerEdge;
                         e->setSource(ghost->source());
@@ -968,8 +968,8 @@ void dtkComposerScene::paste(void)
         e->setSource(node_map.value(edge->source()->node())->outputProperty(edge->source()->name()));
         e->setDestination(node_map.value(edge->destination()->node())->inputProperty(edge->destination()->name()));
 
-        node_map.value(edge->source()->node())->addOutputEdge(e, node_map.value(edge->source()->node())->outputProperty(edge->source()->name()));
-        node_map.value(edge->destination()->node())->addInputEdge(e, node_map.value(edge->destination()->node())->inputProperty(edge->destination()->name()));
+        node_map.value(edge->source()->node())->g->appendRightEdge(e, node_map.value(edge->source()->node())->outputProperty(edge->source()->name()));
+        node_map.value(edge->destination()->node())->g->appendLeftEdge(e, node_map.value(edge->destination()->node())->inputProperty(edge->destination()->name()));
 
         this->addEdge(e);
     }

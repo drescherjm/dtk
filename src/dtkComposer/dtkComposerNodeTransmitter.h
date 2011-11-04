@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Nov  2 09:44:16 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov  2 11:59:34 2011 (+0100)
+ * Last-Updated: Wed Nov  2 14:33:51 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 34
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -89,7 +89,7 @@ public:
     QString identifier(void) const;
 
 private:
-    T           m_data;
+            T   m_data;
     QVector<T> *m_vector;
       QList<T> *m_list;
 };

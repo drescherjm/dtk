@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 19 09:45:18 2011 (+0200)
+ * Last-Updated: Fri Nov  4 15:08:02 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 422
+ *     Update #: 423
  */
 
 /* Commentary: 
@@ -278,7 +278,7 @@ int dtkComposerNodeProperty::count(void)
     if(!d->parent)
         return -1;
 
-    return d->parent->count(this);
+    return d->parent->g->edgeCount(this);
 }
 
 void dtkComposerNodeProperty::hide(void)

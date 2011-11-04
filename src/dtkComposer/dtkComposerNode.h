@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 26 16:10:20 2011 (+0200)
+ * Last-Updated: Fri Nov  4 15:11:12 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 311
+ *     Update #: 332
  */
 
 /* Commentary: 
@@ -21,6 +21,8 @@
 #define DTKCOMPOSERNODE_H
 
 #include "dtkComposerExport.h"
+#include "dtkComposerNodeGraphic.h"
+#include "dtkComposerNodeLogic.h"
 
 #include <QtCore>
 #include <QtDebug>
@@ -31,7 +33,7 @@ class dtkComposerEdge;
 class dtkComposerEvaluatorPrivate;
 class dtkComposerNodePrivate;
 class dtkComposerNodeProperty;
-class stkComspoerScene;
+class dtkComposerScene;
 
 class DTKCOMPOSER_EXPORT dtkComposerNode : public QObject, public QGraphicsItem
 {
@@ -69,44 +71,7 @@ public:
     void setType(QString type);
     void setObject(dtkAbstractObject *object, bool update = true);
 
-    void  addInputProperty(dtkComposerNodeProperty *property);
-    void addOutputProperty(dtkComposerNodeProperty *property);
-
-    void  removeInputProperty(dtkComposerNodeProperty *property);
-    void removeOutputProperty(dtkComposerNodeProperty *property);
-
-    void  addInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    void addOutputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-
-    void  addGhostInputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    void addGhostOutputEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-
-    void  addInputRelayEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    void addOutputRelayEdge(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-
-    void  addInputRoute(dtkComposerEdge *route);
-    void addOutputRoute(dtkComposerEdge *route);
-
-    void  removeInputEdge(dtkComposerEdge *edge);
-    void removeOutputEdge(dtkComposerEdge *edge);
-    void   removeAllEdges(void);
-
-    void  removeGhostInputEdge(dtkComposerEdge *edge);
-    void removeGhostOutputEdge(dtkComposerEdge *edge);
-    void   removeAllGhostEdges(void);
-
-    void  removeInputRelayEdge(dtkComposerEdge *edge);
-    void removeOutputRelayEdge(dtkComposerEdge *edge);
-    void   removeAllRelayEdges(void);
-
-    void  removeInputRoute(dtkComposerEdge *route);
-    void removeOutputRoute(dtkComposerEdge *route);
-    void   removeAllRoutes(void);
-
     void addAction(const QString& text, const QObject *receiver, const char *slot);
-
-    int  count(dtkComposerNodeProperty *property);
-    int number(dtkComposerNodeProperty *property);
 
     Attribute attribute(void);
     Kind kind(void);
@@ -114,23 +79,8 @@ public:
 
     dtkAbstractObject *object(void);
 
-    QList<dtkComposerNodeProperty *> inputProperties(void);
-    QList<dtkComposerNodeProperty *> outputProperties(void);
-
-    QList<dtkComposerEdge *> inputEdges(void);
-    QList<dtkComposerEdge *> outputEdges(void);
-
-    QList<dtkComposerEdge *> inputGhostEdges(void);
-    QList<dtkComposerEdge *> outputGhostEdges(void);
-
-    QList<dtkComposerEdge *> inputRelayEdges(void);
-    QList<dtkComposerEdge *> outputRelayEdges(void);
-
     QList<dtkComposerNode *> inputNodes(void);
     QList<dtkComposerNode *> outputNodes(void);
-
-    QList<dtkComposerEdge *> inputRoutes(void);
-    QList<dtkComposerEdge *> outputRoutes(void);
 
     dtkComposerEdge *edge(dtkComposerNodeProperty *property);
 
@@ -249,6 +199,10 @@ private:
 
 private:
     dtkComposerNodePrivate *d;
+
+public:
+    dtkComposerNodeGraphic *g;
+      dtkComposerNodeLogic *l;
 
 protected:
     friend class dtkComposerEvaluatorPrivate;

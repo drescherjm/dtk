@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Oct 26 16:44:19 2011 (+0200)
+ * Last-Updated: Fri Nov  4 10:21:28 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 276
+ *     Update #: 279
  */
 
 /* Commentary: 
@@ -39,20 +39,20 @@ dtkComposerNodeLoopFor::dtkComposerNodeLoopFor(dtkComposerNode *parent) : dtkCom
     d->block_cond = this->addBlock("condition");
     d->block_cond->setInteractive(false);
     d->block_cond->setHeightRatio(0.95);
-    this->addInputProperty(d->block_cond->addInputProperty("variable", this));
-    this->addOutputProperty(d->block_cond->addOutputProperty("condition", this));
+    this->g->appendLeftProperty(d->block_cond->appendLeftProperty("variable", this));
+    this->g->appendRightProperty(d->block_cond->appendRightProperty("condition", this));
 
     d->block_loop = this->addBlock("loop");
     d->block_loop->setInteractive(false);
     d->block_loop->setHeightRatio(1.1);
-    this->addInputProperty(d->block_loop->addInputProperty("variable", this));
-    this->addOutputProperty(d->block_loop->addOutputProperty("variable", this));
+    this->g->appendLeftProperty(d->block_loop->appendLeftProperty("variable", this));
+    this->g->appendRightProperty(d->block_loop->appendRightProperty("variable", this));
 
     d->block_post = this->addBlock("post");
     d->block_post->setInteractive(false);
     d->block_post->setHeightRatio(0.95);
-    this->addInputProperty(d->block_post->addInputProperty("variable", this));
-    this->addOutputProperty(d->block_post->addOutputProperty("variable", this));
+    this->g->appendLeftProperty(d->block_post->appendLeftProperty("variable", this));
+    this->g->appendRightProperty(d->block_post->appendRightProperty("variable", this));
 
     this->setColor(QColor("#005b07"));
     this->setInputPropertyName("variable");
@@ -96,7 +96,7 @@ void dtkComposerNodeLoopFor::layout(void)
         offset += block->rect().height();
 
         j = 0;
-        foreach(dtkComposerNodeProperty *property, block->inputProperties()) {
+        foreach(dtkComposerNodeProperty *property, block->leftProperties()) {
 
             property->setRect(QRectF(block->mapRectToParent(block->rect()).left() + node_radius,
                                      block->mapRectToParent(block->rect()).top()  + node_radius * (4*j + 1),
@@ -112,7 +112,7 @@ void dtkComposerNodeLoopFor::layout(void)
             j++;
         }
         j = 0;
-        foreach(dtkComposerNodeProperty *property, block->outputProperties()) {
+        foreach(dtkComposerNodeProperty *property, block->rightProperties()) {
 
             property->setRect(QRectF(block->mapRectToParent(block->rect()).right() - node_radius * 3,
                                      block->mapRectToParent(block->rect()).top()   + node_radius * (4*j + 1),
@@ -202,7 +202,7 @@ bool dtkComposerNodeLoopFor::evaluate(dtkComposerEvaluatorPrivate *evaluator)
 
 //         // -- Pull
 
-//         foreach(dtkComposerEdge *i_route, this->inputRoutes())
+//         foreach(dtkComposerEdge *i_route, this->l->leftRoutes())
 //             this->pull(i_route, i_route->destination());
 
 //         foreach(dtkComposerEdge *o_route, this->outputRelayRoutes()) {
@@ -269,7 +269,7 @@ bool dtkComposerNodeLoopFor::evaluate(dtkComposerEvaluatorPrivate *evaluator)
         
 //         // -- Push
         
-//         foreach(dtkComposerEdge *o_route, this->outputRoutes())
+//         foreach(dtkComposerEdge *o_route, this->l->rightRoutes())
 //             this->push(o_route, o_route->source());
 
 // #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
@@ -287,7 +287,7 @@ bool dtkComposerNodeLoopFor::evaluate(dtkComposerEvaluatorPrivate *evaluator)
 //         qDebug() << DTK_COLOR_BG_BLUE << DTK_PRETTY_FUNCTION << "Forward done" << DTK_NO_COLOR;
 // #endif
 
-//         foreach(dtkComposerEdge *o_route, this->outputRoutes())
+//         foreach(dtkComposerEdge *o_route, this->l->rightRoutes())
 //             o_route->destination()->node()->update();
             
 //     }
@@ -315,7 +315,7 @@ void dtkComposerNodeLoopFor::pull(dtkComposerEdge *i_route, dtkComposerNodePrope
                 route->setSource(this->inputProperty());
                 route->setDestination(relay_route->destination());
                 
-                relay_route->destination()->node()->addInputRoute(route);
+                relay_route->destination()->node()->l->appendLeftRoute(route);
                 this->addInputActiveRoute(route);
             }
         }

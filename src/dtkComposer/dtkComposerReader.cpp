@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 20 15:21:13 2011 (+0200)
+ * Last-Updated: Thu Oct 20 00:34:04 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 746
+ *     Update #: 854
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeFile.h"
+#include "dtkComposerNodeLoopDataComposite.h"
 #include "dtkComposerNodeLoopFor.h"
 #include "dtkComposerNodeLoopWhile.h"
 #include "dtkComposerNodeNumber.h"
@@ -40,6 +41,9 @@
 #include "dtkComposerScene.h"
 
 #include <dtkCore/dtkGlobal.h>
+#include <dtkCore/dtkAbstractDataFactory.h>
+#include <dtkCore/dtkAbstractProcessFactory.h>
+#include <dtkCore/dtkAbstractViewFactory.h>
 
 #include <QtXml>
 
@@ -50,10 +54,49 @@
 class dtkComposerReaderPrivate
 {
 public:
+    bool check(const QDomDocument& document);
+
+public:
     dtkComposerScene *scene;
 
     QHash<int, dtkComposerNode *> node_map;
 };
+
+bool dtkComposerReaderPrivate::check(const QDomDocument& document)
+{
+    QStringList implementations;
+
+    QDomNodeList implementation_nodes = document.elementsByTagName("implementation");
+
+    for(int i = 0; i < implementation_nodes.count(); i++)
+        implementations << implementation_nodes.at(i).toElement().text();
+
+    foreach(QString implementation, implementations) {
+        if(dtkAbstractDataFactory::instance()->creators().contains(implementation))
+            implementations.removeOne(implementation);
+        if(dtkAbstractProcessFactory::instance()->creators().contains(implementation))
+            implementations.removeOne(implementation);
+        if(dtkAbstractViewFactory::instance()->creators().contains(implementation))
+            implementations.removeOne(implementation);
+    }
+
+    if(implementations.isEmpty())
+        return true;
+
+    QString details;
+    details += "The following implementations are missing:\n";
+    foreach(QString implementation, implementations)
+        details += QString("- %1\n").arg(implementation);
+
+    QMessageBox box;
+    box.setText("Node implementations are missing.");
+    box.setInformativeText("You will be able to load the composition, but its evaluation will not behave as excpected.");
+    box.setStandardButtons(QMessageBox::Abort | QMessageBox::Ignore);
+    box.setDefaultButton(QMessageBox::Abort);
+    box.setDetailedText(details);
+
+    return (box.exec() == QMessageBox::Ignore);
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerReader
@@ -71,23 +114,40 @@ dtkComposerReader::~dtkComposerReader(void)
     d = NULL;
 }
 
-void dtkComposerReader::read(const QString& fileName, bool append)
+bool dtkComposerReader::read(const QString& fileName, bool append)
 {
     // Setting dom document
 
-    QDomDocument doc("dtk");
+    QDomDocument document("dtk");
 
     QFile file(fileName);
 
     if (!file.open(QIODevice::ReadOnly))
-        return;
+        return false;
 
-    if (!doc.setContent(&file)) {
-        file.close();
-        return;
+    if (!dtkIsBinary(fileName)) {
+
+        if (!document.setContent(&file)) {
+            file.close();
+            return false;
+        }
+
+    } else {
+
+        QByteArray c_bytes;
+        QDataStream stream(&file); stream >> c_bytes;
+        QByteArray u_bytes = QByteArray::fromHex(qUncompress(c_bytes));
+
+        if(!document.setContent(QString::fromUtf8(u_bytes.data(), u_bytes.size()))) {
+            file.close();
+            return false;
+        }
     }
 
     file.close();
+
+    if(!d->check(document))
+        return false;
 
     // Clear scene if applicable
 
@@ -98,7 +158,7 @@ void dtkComposerReader::read(const QString& fileName, bool append)
 
     // Feeding scene with nodes
 
-    QDomNodeList nodes = doc.firstChild().childNodes();
+    QDomNodeList nodes = document.firstChild().childNodes();
 
     for(int i = 0; i < nodes.count(); i++)
         if(nodes.at(i).toElement().tagName() == "node")
@@ -106,7 +166,7 @@ void dtkComposerReader::read(const QString& fileName, bool append)
 
     // Feeding scene with edges
 
-    QDomNodeList edges = doc.firstChild().childNodes();
+    QDomNodeList edges = document.firstChild().childNodes();
 
     for(int i = 0; i < edges.count(); i++) {
 
@@ -287,8 +347,6 @@ void dtkComposerReader::read(const QString& fileName, bool append)
 
         edge->link(true);
 
-        edge->destination()->node()->onEdgeConnected(edge);
-
         d->scene->addEdge(edge);
 
         if (edge->source()->node()->parentNode() || edge->destination()->node()->parentNode())
@@ -297,7 +355,7 @@ void dtkComposerReader::read(const QString& fileName, bool append)
 
     // Feeding scene with notes
     
-    QDomNodeList notes = doc.firstChild().childNodes();
+    QDomNodeList notes = document.firstChild().childNodes();
 
     for(int i = 0; i < notes.count(); i++) {
         
@@ -313,6 +371,8 @@ void dtkComposerReader::read(const QString& fileName, bool append)
     }
 
     d->scene->touch();
+
+    return true;
 }
 
 dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
@@ -562,10 +622,13 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
         
         for(int i = 0; i < children.count(); i++) {
 
-            if(children.at(i).toElement().tagName() != "name")
-                continue;
-
-            file_node->setFileName(children.at(i).childNodes().at(0).toText().data());
+            if(children.at(i).toElement().tagName() == "name") {
+                file_node->setFileName(children.at(i).childNodes().at(0).toText().data());
+            }
+            
+            if(children.at(i).toElement().tagName() == "url") {
+                file_node->setUrl(children.at(i).childNodes().at(0).toText().data());
+            }
         }        
     }
 
@@ -723,6 +786,45 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
                 if(children.at(i).toElement().attribute("type") == "hybridinput") {
                     dtkComposerNodeProperty *i_p = control_node->block(children.at(i).toElement().attribute("block"))->addInputProperty(children.at(i).toElement().attribute("name"), control_node);
                     control_node->addInputProperty(i_p);
+                }
+                
+                if(children.at(i).toElement().attribute("type") == "hybridoutput") {
+                    dtkComposerNodeProperty *o_p = control_node->block(children.at(i).toElement().attribute("block"))->addOutputProperty(children.at(i).toElement().attribute("name"), control_node);
+                    control_node->addOutputProperty(o_p);
+                }
+            }
+        }
+
+        if(dynamic_cast<dtkComposerNodeLoopDataComposite *>(control_node)) {
+
+            QDomNodeList children = node.childNodes();
+
+            for(int i = 0; i < children.count(); i++) {
+                
+                if(children.at(i).toElement().tagName() != "property")
+                    continue;
+
+                if(children.at(i).toElement().attribute("name") == "item")
+                    continue;
+
+                if(children.at(i).toElement().attribute("name") == "index")
+                    continue;
+
+                // Assign the property
+
+                if(children.at(i).toElement().attribute("type") == "hybridinput") {
+                    dtkComposerNodeProperty *i_p = control_node->block(children.at(i).toElement().attribute("block"))->addInputProperty(children.at(i).toElement().attribute("name"), control_node);
+                    control_node->addInputProperty(i_p);
+                }
+
+                if(children.at(i).toElement().attribute("type") == "passthroughinput") {
+                    dtkComposerNodeProperty *i_p = control_node->block(children.at(i).toElement().attribute("block"))->addInputPassThroughProperty(children.at(i).toElement().attribute("name"), control_node);
+                    control_node->addInputProperty(i_p);
+                }
+                
+                if(children.at(i).toElement().attribute("type") == "passthroughoutput") {
+                    dtkComposerNodeProperty *o_p = control_node->block(children.at(i).toElement().attribute("block"))->addOutputPassThroughProperty(children.at(i).toElement().attribute("name"), control_node);
+                    control_node->addOutputProperty(o_p);
                 }
                 
                 if(children.at(i).toElement().attribute("type") == "hybridoutput") {
@@ -927,6 +1029,23 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
                     }
                 }
             }
+        }
+    }
+
+    { // -- attribute
+        
+        QDomNodeList children = node.childNodes();
+        
+        for(int i = 0; i < children.count(); i++) {
+
+            if(children.at(i).toElement().tagName() != "attribute")
+                continue;
+
+            if(children.at(i).childNodes().at(0).toText().data() == "sequential")
+                n->setAttribute(dtkComposerNode::Sequential);
+
+            if(children.at(i).childNodes().at(0).toText().data() == "parallel")
+                n->setAttribute(dtkComposerNode::Parallel);
         }
     }
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 16 09:54:33 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 28 12:33:44 2011 (+0200)
+ * Last-Updated: Thu Oct 20 00:22:44 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 127
+ *     Update #: 137
  */
 
 /* Commentary: 
@@ -113,6 +113,17 @@
 // /////////////////////////////////////////////////////////////////
 // Helper functions
 // /////////////////////////////////////////////////////////////////
+
+#include <fstream>
+
+inline bool dtkIsBinary(const QString& path)
+{
+    int c; std::ifstream a(path.toAscii().constData());
+
+    while((c = a.get()) != EOF && c <= 127);
+
+    return (c != EOF);
+}
 
 inline QString dtkReadFile(const QString& path)
 {

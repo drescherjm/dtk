@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Sep 14 13:26:49 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. sept. 21 00:08:37 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 162
+ * Last-Updated: Thu Oct 13 17:21:09 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 190
  */
 
 /* Commentary: 
@@ -54,8 +54,6 @@ void dtkDistributedTutorial4Slave::setCount(int count)
 
 int dtkDistributedTutorial4Slave::exec(void)
 {
-
-
 #if defined(DTK_HAVE_MPI)
     dtkDistributedCommunicator *communicator = new dtkDistributedCommunicatorMpi;
 #else
@@ -65,11 +63,9 @@ int dtkDistributedTutorial4Slave::exec(void)
 
     int rank = communicator->rank();
     int size = communicator->size();
-    static QString jobid ;
-
 
     if (this->isConnected()) {
-        this->sendRequest("PUT","/rank/"+QString::number(rank));
+        this->communicator()->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::SETRANK,"",rank));
     }
 
     dtkAbstractData *m_array = dtkAbstractDataFactory::instance()->create("dtkDataArray");
@@ -143,10 +139,10 @@ int dtkDistributedTutorial4Slave::exec(void)
 // /////////////////////////////////////////////////////////////////
 
         if (this->isConnected()) {
+
             QByteArray data = QByteArray::number(sum);
-            jobid = QString(getenv("PBS_JOBID")).split(".").first();
-            QString path="/data/"+jobid+"/-1";
-            this->sendRequest("POST",path,data.size(),"text", data);
+
+            this->communicator()->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA, this->jobId(), -1,data.size(),"text", data));
 
         } else
             qDebug() << "unable to send result to server: not connected ";
@@ -181,8 +177,8 @@ finalize:
 
     if(!rank) {
         if (this->isConnected()) {
-            this->sendRequest("ENDED","/job/"+jobid);
-            this->close();
+            this->communicator()->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::ENDJOB, this->jobId()));
+            this->communicator()->socket()->close();
         } else
             qDebug() << "unable to send result to server: not connected ";
     }

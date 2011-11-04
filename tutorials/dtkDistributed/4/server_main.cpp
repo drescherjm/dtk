@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Sep 14 13:20:15 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 19 13:45:32 2011 (+0200)
- *           By: jwintz
- *     Update #: 303
+ * Last-Updated: Thu Oct 13 17:40:02 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 304
  */
 
 /* Commentary: 
@@ -34,11 +34,11 @@ int main(int argc, char **argv)
 {
     QCoreApplication application(argc, argv) ;
 
-    // if(!dtkApplicationArgumentsContain(&application, "--torque")
-    // || !dtkApplicationArgumentsContain(&application, "--oar")) {
-    //     dtkDebug() << "Usage:" << argv[0] << " dtkDistributed://server:port [--oar || --torque]";
-    //     return DTK_SUCCEED;
-    // }
+    if(!dtkApplicationArgumentsContain(&application, "--torque")
+    || !dtkApplicationArgumentsContain(&application, "--oar")) {
+        dtkDebug() << "Usage:" << argv[0] << " dtkDistributed://server:port [--oar || --torque]";
+        return DTK_SUCCEED;
+    }
 
 // /////////////////////////////////////////////////////////////////
 // Instantiate a server

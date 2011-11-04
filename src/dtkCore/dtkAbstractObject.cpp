@@ -190,7 +190,7 @@ void dtkAbstractObject::setProperty(const QString& key, const QString& value)
 
 QStringList dtkAbstractObject::propertyList(void) const
 {
-    return d->properties.keys();
+    return d->values.keys();
 }
 
 QStringList dtkAbstractObject::propertyValues(const QString& key) const
@@ -308,6 +308,16 @@ QStringList dtkAbstractObject::metadatas(const QString& key) const
     }
 
     return d->metadatas.value(key);
+}
+
+void dtkAbstractObject::copyMetaDataFrom(const dtkAbstractObject *obj)
+{
+    if (!obj)
+        return;
+
+    foreach(QString key, obj->metaDataList()) {
+        this->setMetaData(key, obj->metadatas(key));
+    }
 }
 
 // /////////////////////////////////////////////////////////////////

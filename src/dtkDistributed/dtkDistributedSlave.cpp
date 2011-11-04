@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 22 10:04:05 2011 (+0200)
+ * Last-Updated: Thu Oct 13 17:19:53 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 108
+ *     Update #: 204
  */
 
 /* Commentary: 
@@ -17,22 +17,29 @@
  * 
  */
 
+#include "dtkDistributedMessage.h"
 #include "dtkDistributedSlave.h"
 #include "dtkDistributedSocket.h"
+#include "dtkDistributedCommunicatorTcp.h"
 
 #include <dtkCore/dtkGlobal.h>
 
 #include <QtNetwork>
 
-class dtkDistributedSlavePrivate : public dtkDistributedSocket
+class dtkDistributedSlavePrivate
 {
 public:
-    dtkDistributedSocket *socket;
+    dtkDistributedCommunicatorTcp *communicator;
 };
 
 dtkDistributedSlave::dtkDistributedSlave(void) : d(new dtkDistributedSlavePrivate)
 {
-    d->socket = new dtkDistributedSocket(this);
+    d->communicator = new dtkDistributedCommunicatorTcp();
+}
+
+dtkDistributedSlave::dtkDistributedSlave(dtkDistributedCommunicatorTcp *communicator) : d(new dtkDistributedSlavePrivate)
+{
+    d->communicator = communicator;
 }
 
 dtkDistributedSlave::~dtkDistributedSlave(void)
@@ -40,6 +47,17 @@ dtkDistributedSlave::~dtkDistributedSlave(void)
     delete d;
 
     d = NULL;
+}
+
+QString dtkDistributedSlave::jobId(void)
+{
+    if(!(QString(getenv("PBS_JOBID")).isEmpty()))
+        return QString(getenv("PBS_JOBID")).split(".").first();
+
+    if(!(QString(getenv("OAR_JOBID")).isEmpty()))
+        return QString(getenv("OAR_JOBID"));
+
+    return QString();
 }
 
 int dtkDistributedSlave::run(void)
@@ -62,22 +80,38 @@ int dtkDistributedSlave::exec(void)
 
 bool dtkDistributedSlave::isConnected(void)
 {
-    return (d->socket->state() == QAbstractSocket::ConnectedState);
+    return (d->communicator->socket()->state() == QAbstractSocket::ConnectedState);
 }
 
 bool dtkDistributedSlave::isDisconnected(void)
 {
-    return (d->socket->state() == QAbstractSocket::UnconnectedState);
+    return (d->communicator->socket()->state() == QAbstractSocket::UnconnectedState);
 }
+
+
+void dtkDistributedSlave::read(void)
+{
+    dtkDistributedSocket *socket = d->communicator->socket();
+    dtkDistributedMessage request = socket->parseRequest();
+
+    if( request.method() == dtkDistributedMessage::DATA) {
+        // TODO
+    } else {
+        qDebug() << DTK_PRETTY_FUNCTION << "WARNING: Unknown data";
+    }
+    if (socket->bytesAvailable() > 0)
+        this->read();
+}
+
 
 void dtkDistributedSlave::connect(const QUrl& server)
 {
-    d->socket->connectToHost(server.host(), server.port());
+    d->communicator->connectToHost(server.host(), server.port());
 
-    if(d->socket->waitForConnected()) {
+    if(d->communicator->socket()->waitForConnected()) {
 
-        QObject::connect(d->socket, SIGNAL(readyRead()), this, SLOT(read()));
-        QObject::connect(d->socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
+        QObject::connect(d->communicator->socket(), SIGNAL(readyRead()), this , SLOT(read()));
+        QObject::connect(d->communicator->socket(), SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
 
         emit connected(server);
 
@@ -88,7 +122,7 @@ void dtkDistributedSlave::connect(const QUrl& server)
 
 void dtkDistributedSlave::disconnect(const QUrl& server)
 {
-    d->socket->disconnectFromHost();
+    d->communicator->disconnectFromHost();
 
     emit disconnected(server);
 }
@@ -96,40 +130,18 @@ void dtkDistributedSlave::disconnect(const QUrl& server)
 void dtkDistributedSlave::onStarted(void)
 {
     QString jobid = "unknown"; //FIXME
-    d->socket->sendRequest("STARTED","/job/"+jobid);
+    d->communicator->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::STARTJOB,jobid));
 }
 
 void dtkDistributedSlave::onEnded(void)
 {
     QString jobid = "unknown"; //FIXME
-    d->socket->sendRequest("ENDED","/job/"+jobid);
+    d->communicator->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::ENDJOB,jobid));
 }
 
-void dtkDistributedSlave::read(void)
+dtkDistributedCommunicatorTcp *dtkDistributedSlave::communicator(void)
 {
-    dtkDistributedSocket *socket = (dtkDistributedSocket *)sender();
-
-    Q_UNUSED(socket);
-}
-
-void dtkDistributedSlave::write(const QByteArray& array)
-{
-    d->socket->write(array);
-}
-
-qint64 dtkDistributedSlave::sendRequest(QString method, QString path, int size , QString type, const QByteArray& content,  const QHash<QString,QString>& headers )
-{
-    return d->socket->sendRequest(method,path,size,type,content,headers);
-}
-
-bool  dtkDistributedSlave::flush(void)
-{
-    return d->socket->flush();
-}
-
-void  dtkDistributedSlave::close(void)
-{
-    return d->socket->close();
+    return d->communicator;
 }
 
 

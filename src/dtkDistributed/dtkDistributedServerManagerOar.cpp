@@ -91,6 +91,8 @@ QString  dtkDistributedServerManagerOar::submit(QString input)
         int pos = rx.indexIn(oarsubout);
         QStringList jobid = rx.capturedTexts();
 
+        Q_UNUSED(pos);
+        
         qDebug() << DTK_PRETTY_FUNCTION << jobid.at(0);
         return jobid.at(0);
     }
@@ -182,7 +184,11 @@ QByteArray dtkDistributedServerManagerOar::status(void)
         }
 
         QRegExp rx("/host=(\\d+|ALL|BEST)(?:/core=)?(\\d+)?.*(?:walltime=)?(\\d+:\\d+:\\d+)");
+        
         int pos = rx.indexIn(job["wanted_resources"].toString());
+        
+        Q_UNUSED(pos);
+        
         QStringList resources_list = rx.capturedTexts();
         QString nodes = resources_list.at(1);
         QString cores = resources_list.at(2);

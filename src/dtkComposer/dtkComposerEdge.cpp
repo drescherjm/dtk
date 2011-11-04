@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 21 10:58:51 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 424
+ * Last-Updated: Fri Oct 14 16:25:06 2011 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 463
  */
 
 /* Commentary: 
@@ -31,16 +31,18 @@ public:
     QRectF sourceRect;
     QRectF destRect;
 
-    QPointF progress;
-
     dtkComposerNodeProperty *source;
     dtkComposerNodeProperty *destination;
+
+    dtkComposerEdge::Flag flag;
 };
 
 dtkComposerEdge::dtkComposerEdge(void) : QObject(), QGraphicsItem(), d(new dtkComposerEdgePrivate)
 {
     d->source = NULL;
     d->destination = NULL;
+
+    d->flag = dtkComposerEdge::Valid;
 
     this->setZValue(5);
 }
@@ -119,14 +121,18 @@ void dtkComposerEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     Q_UNUSED(widget);
 
     painter->save();
-    painter->setPen(QPen(Qt::black, 1));
-    painter->setBrush(Qt::yellow);
-    painter->drawPath(d->path);
 
-    if(!d->progress.isNull()) {
-        painter->setBrush(Qt::cyan);
-        painter->drawEllipse(d->progress.x()-8, d->progress.y()-8, 16, 16);
+    if(d->flag == dtkComposerEdge::Valid) {
+        painter->setPen(QPen(Qt::black, 1));
+        painter->setBrush(Qt::yellow);
     }
+
+    if(d->flag == dtkComposerEdge::Invalid) {
+        painter->setPen(QPen(Qt::gray, 1, Qt::DashLine));
+        painter->setBrush(Qt::red);
+    }
+
+    painter->drawPath(d->path);
 
     painter->restore();
 }
@@ -306,7 +312,7 @@ bool dtkComposerEdge::link(bool anyway)
         d->destination->node()->addOutputRelayEdge(this, d->destination);
     else
         d->destination->node()->addInputEdge(this, d->destination);
-        
+
     d->destination->node()->onEdgeConnected(this);
 
     return true;
@@ -341,34 +347,19 @@ bool dtkComposerEdge::unlink(void)
     return true;
 }
 
-// void dtkComposerEdge::onTransition(QEvent *event)
-// {
-//     QRectF rect;
+void dtkComposerEdge::validate(void)
+{
+    d->flag = dtkComposerEdge::Valid;
 
-//     rect = d->source->rect();
-//     QPointF start = d->source->mapToScene(rect.center());
+    this->update();
+}
 
-//     rect = d->destination->rect();
-//     QPointF end = d->destination->mapToScene(rect.center());
+void dtkComposerEdge::invalidate(void)
+{
+    d->flag = dtkComposerEdge::Invalid;
 
-//     QPointF midPoint = (start + end) / 2;
-
-//     qreal halfMid = (midPoint.x() - start.x())/2;
-
-//     QPainterPath path;
-//     path.moveTo(start);
-//     path.cubicTo(QPointF(end.x() - halfMid, start.y()), QPointF(start.x() + halfMid, end.y()), end);
-
-//     for(int i = 0; i <= 100; i++) {
-//         usleep(10000);
-//         d->progress = path.pointAtPercent(i/100.0);
-//         this->scene()->update(this->boundingRect());
-//         this->scene()->views().first()->update();
-//         qApp->processEvents();
-//     }
-
-//     d->progress = QPointF(0, 0);
-// }
+    this->update();
+}
 
 // /////////////////////////////////////////////////////////////////
 // Debug operators

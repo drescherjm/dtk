@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 20 15:23:12 2011 (+0200)
+ * Last-Updated: Wed Oct 19 02:21:59 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 457
+ *     Update #: 521
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include "dtkComposer.h"
+#include "dtkComposer_p.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeFactory.h"
 #include "dtkComposerReader.h"
@@ -31,19 +32,64 @@
 
 #include <QtCore>
 #include <QtGui>
+#include <QtNetwork>
 
-class dtkComposerPrivate
+// /////////////////////////////////////////////////////////////////
+// dtkComposerPrivate
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerPrivate::download(const QUrl& url)
 {
-public:
-    dtkComposerScene *scene;
-    dtkComposerView *view;
+    QTemporaryFile file; file.setAutoRemove(false);
+    
+    if (!file.open()) {
+        qDebug() << DTK_PRETTY_FUNCTION << "Unable to file for saving";
+        return;
+    }
+        
+    this->dwnl_ok = 0;
+    
+    QHttp http;
+    
+    connect(&http, SIGNAL(requestFinished(int, bool)), this, SLOT(onRequestFinished(int, bool)));
 
-    QString fileName;
-};
+    http.setHost(url.host(), url.scheme().toLower() == "https" ? QHttp::ConnectionModeHttps : QHttp::ConnectionModeHttp, url.port() == -1 ? 0 : url.port());
+        
+    if (!url.userName().isEmpty())
+        http.setUser(url.userName(), url.password());
+        
+    QByteArray path = QUrl::toPercentEncoding(url.path(), "!$&'()*+,;=:@/");
+    
+    if (path.isEmpty()) {
+        qDebug() << DTK_PRETTY_FUNCTION << "Invalid path" << url.path();
+        return;
+    }
+    
+    this->dwnl_id = http.get(path, &file);
+    
+    while(!this->dwnl_ok)
+        qApp->processEvents();
+
+    file.close();
+
+    QFileInfo info(file);
+    
+    this->tempName = info.absoluteFilePath();
+}
+
+void dtkComposerPrivate::onRequestFinished(int id, bool error)
+{
+    if(id == this->dwnl_id)
+        this->dwnl_ok = 1;
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposer
+// /////////////////////////////////////////////////////////////////
 
 dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPrivate)
 {
-    d->scene = new dtkComposerScene(this);
+    d->scene = new dtkComposerScene;
     d->view = new dtkComposerView(this);
     d->view->setScene(d->scene);
 
@@ -77,8 +123,6 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
 
 dtkComposer::~dtkComposer(void)
 {
-    delete d->scene;
-    delete d->view;
     delete d;
     
     d = NULL;
@@ -117,6 +161,25 @@ dtkComposerScene *dtkComposer::scene(void)
 dtkComposerView *dtkComposer::view(void)
 {
     return d->view;
+}
+
+bool dtkComposer::open(const QUrl& url)
+{
+    QString path;
+
+    d->download(url);
+
+    bool status = false;
+
+    if(!d->tempName.isEmpty())
+        status = this->open(d->tempName);
+
+    qDebug() << d->tempName;
+
+    // if(!d->tempName.isEmpty())
+    //     QFile::remove(d->tempName);
+
+    return status;
 }
 
 bool dtkComposer::open(QString fileName)

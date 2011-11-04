@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Sep  8 14:36:42 2011 (+0200)
+## Last-Updated: Tue Oct 18 13:31:33 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 142
+##     Update #: 151
 ######################################################################
 ## 
 ### Commentary: 
@@ -27,6 +27,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposer.h
   dtkComposerEdge.h
   dtkComposerExport.h
+  dtkComposerExtractor.h
   dtkComposerNode.h
   dtkComposerNodeBoolean.h
   dtkComposerNodeBooleanOperator.h
@@ -39,6 +40,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeFile.h
   dtkComposerNodeLog.h
   dtkComposerNodeLoop.h
+  dtkComposerNodeLoopDataComposite.h
   dtkComposerNodeLoopFor.h
   dtkComposerNodeLoopWhile.h
   dtkComposerNodeNumber.h
@@ -58,7 +60,9 @@ set(${PROJECT_NAME}_HEADERS
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposer.h
+  dtkComposer_p.h
   dtkComposerEdge.h
+  dtkComposerExtractor.h
   dtkComposerNode.h
   dtkComposerNodeBoolean.h
   dtkComposerNodeBooleanOperator.h
@@ -69,8 +73,10 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerNodeData.h
   dtkComposerNodeFactory.h
   dtkComposerNodeFile.h
+  dtkComposerNodeFile_p.h
   dtkComposerNodeLog.h
   dtkComposerNodeLoop.h
+  dtkComposerNodeLoopDataComposite.h
   dtkComposerNodeLoopFor.h
   dtkComposerNodeLoopWhile.h
   dtkComposerNodeNumber.h
@@ -91,6 +97,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
 set(${PROJECT_NAME}_SOURCES
   dtkComposer.cpp
   dtkComposerEdge.cpp
+  dtkComposerExtractor.cpp
   dtkComposerNode.cpp
   dtkComposerNodeBoolean.cpp
   dtkComposerNodeBooleanOperator.cpp
@@ -103,6 +110,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeFile.cpp
   dtkComposerNodeLog.cpp
   dtkComposerNodeLoop.cpp
+  dtkComposerNodeLoopDataComposite.cpp
   dtkComposerNodeLoopFor.cpp
   dtkComposerNodeLoopWhile.cpp
   dtkComposerNodeNumber.cpp

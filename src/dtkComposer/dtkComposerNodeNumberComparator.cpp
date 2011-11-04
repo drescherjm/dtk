@@ -288,6 +288,9 @@ void dtkComposerNodeNumberComparator::run(void)
             case dtkComposerNodeNumber::Double:
                 d->value = dtkLesserThanUlps(a.toDouble(), b.toDouble(), (int64_t)10);
                 break;
+            case dtkComposerNodeNumber::Invalid:
+            default:
+                break;
             }
             break;
 
@@ -312,6 +315,9 @@ void dtkComposerNodeNumberComparator::run(void)
                 break;
             case dtkComposerNodeNumber::Double:
                 d->value = dtkLesserThanOrAlmostEqualUlps(a.toDouble(), b.toDouble(), (int64_t)10);
+                break;
+            case dtkComposerNodeNumber::Invalid:
+            default:
                 break;
             }
             break;
@@ -338,6 +344,9 @@ void dtkComposerNodeNumberComparator::run(void)
             case dtkComposerNodeNumber::Double:
                 d->value = dtkGreaterThanUlps(a.toDouble(), b.toDouble(), (int64_t)10);
                 break;
+            case dtkComposerNodeNumber::Invalid:
+            default:
+                break;
             }
             break;
 
@@ -362,6 +371,9 @@ void dtkComposerNodeNumberComparator::run(void)
                 break;
             case dtkComposerNodeNumber::Double:
                 d->value = dtkGreaterThanOrAlmostEqualUlps(a.toDouble(), b.toDouble(), (int64_t)10);
+                break;
+            case dtkComposerNodeNumber::Invalid:
+            default:
                 break;
             }
             break;
@@ -388,6 +400,9 @@ void dtkComposerNodeNumberComparator::run(void)
             case dtkComposerNodeNumber::Double:
                 d->value = dtkAlmostEqualUlps(a.toDouble(), b.toDouble(), (int64_t)10);
                 break;
+            case dtkComposerNodeNumber::Invalid:
+            default:
+                break;
             }
             break;
 
@@ -412,6 +427,9 @@ void dtkComposerNodeNumberComparator::run(void)
                 break;
             case dtkComposerNodeNumber::Double:
                 d->value = !(dtkAlmostEqualUlps(a.toDouble(), b.toDouble(), (int64_t)10));
+                break;
+            case dtkComposerNodeNumber::Invalid:
+            default:
                 break;
             }
             break;

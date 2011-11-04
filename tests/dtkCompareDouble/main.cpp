@@ -84,6 +84,8 @@ int main(int argc, char* argv[])
     double nan4 = nan3; (*(long long int*)&nan4) += 1;
     double smallestDenormal = 0; (*(long long int*)&smallestDenormal) += 1;
 
+    Q_UNUSED(nan1);
+    
     int status = 0;
 
     printf("01 - \n"); status  = TestCompareAll(zero1, negativeZero, true);

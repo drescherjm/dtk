@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jul 28 15:11:59 2011 (+0200)
+ * Last-Updated: Tue Oct 18 10:36:27 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 2890
+ *     Update #: 2906
  */
 
 /* Commentary: 
@@ -96,6 +96,8 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
  */
 dtkComposerScene::~dtkComposerScene(void)
 {
+    qDebug() << DTK_PRETTY_FUNCTION;
+
     delete d->factory;
     delete d;
 
@@ -541,12 +543,16 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
     dtkComposerNodeProperty *destin;
     dtkComposerNodeProperty *clone;
 
+    dtkComposerNode *former_parent;
+
     foreach(dtkComposerNode *node, nodes) {
 
         group_ave_pos += node->pos();
        
-        if (dtkComposerNode *parent = node->parentNode())
+        if (dtkComposerNode *parent = node->parentNode()) {
             parent->removeChildNode(node);
+            former_parent = parent;
+        }
         if (parent_block = dynamic_cast<dtkComposerNodeControlBlock *>(node->parentItem()))
             parent_block->removeNode(node);
 
@@ -573,7 +579,9 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
 
                 clone->show();
 
+                node->setParentNode(former_parent);
                 this->removeEdge(edge);
+                node->setParentNode(group);
 
                 dtkComposerEdge *input = new dtkComposerEdge;
                 input->setSource(source);
@@ -603,7 +611,9 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
 
                 clone->show();
 
+                node->setParentNode(former_parent);
                 this->removeEdge(edge);
+                node->setParentNode(group);
 
                 dtkComposerEdge *output = new dtkComposerEdge;
                 output->setSource(clone);
@@ -837,6 +847,9 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
  */
 void dtkComposerScene::setFactory(dtkComposerNodeFactory *factory)
 {
+    if(d->factory)
+        delete d->factory;
+
     d->factory = factory;
 }
 
@@ -871,6 +884,7 @@ void dtkComposerScene::startEvaluation(void)
     foreach(dtkComposerNode *node, starting_nodes)
         node->update();
 
+    this->stopEvaluation();
 }
 
 //! Stops evaluation of the data flow.

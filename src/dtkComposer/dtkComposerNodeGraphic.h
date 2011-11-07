@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Nov  2 17:10:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 14:11:18 2011 (+0100)
+ * Last-Updated: Mon Nov  7 12:26:21 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 31
+ *     Update #: 32
  */
 
 /* Commentary: 
@@ -77,7 +77,7 @@ public:
     const QList<dtkComposerEdge *>& rightRelayEdges(void) const;
 
 public:
-    //dtkComposerEdge *edge(dtkComposerNodeProperty *property) const;
+    dtkComposerEdge *edge(dtkComposerNodeProperty *property) const;
 
     int edgeCount(dtkComposerNodeProperty *property) const;
     int indexOf(dtkComposerNodeProperty *property) const;

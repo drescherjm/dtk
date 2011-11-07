@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 16:54:58 2011 (+0100)
+ * Last-Updated: Mon Nov  7 12:42:24 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 443
+ *     Update #: 444
  */
 
 /* Commentary: 
@@ -183,7 +183,7 @@ dtkComposerEdge *dtkComposerNodeProperty::edge(void)
     if(!d->parent)
         return NULL;
 
-    return d->parent->edge(this);
+    return d->parent->g->edge(this);
 }
 
 dtkComposerNode *dtkComposerNodeProperty::node(void)

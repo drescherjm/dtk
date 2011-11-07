@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 16:07:24 2011 (+0100)
+ * Last-Updated: Mon Nov  7 14:12:08 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 340
+ *     Update #: 342
  */
 
 /* Commentary: 
@@ -81,8 +81,6 @@ public:
 
     QList<dtkComposerNode *> inputNodes(void);
     QList<dtkComposerNode *> outputNodes(void);
-
-    dtkComposerEdge *edge(dtkComposerNodeProperty *property);
 
     dtkComposerNodeProperty *propertyAt(const QPointF& point) const;
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 16:07:19 2011 (+0100)
+ * Last-Updated: Mon Nov  7 14:12:00 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 2596
+ *     Update #: 2598
  */
 
 /* Commentary: 
@@ -412,57 +412,6 @@ dtkAbstractObject *dtkComposerNode::object(void)
 #endif
 
     return d->object;
-}
-
-dtkComposerEdge *dtkComposerNode::edge(dtkComposerNodeProperty *property)
-{
-// #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-//     qDebug() << DTK_PRETTY_FUNCTION << this;
-// #endif
-
-//     if (this->kind() != dtkComposerNode::Composite) {
-
-//         if (property->type() == dtkComposerNodeProperty::Input && property->behavior() == dtkComposerNodeProperty::AsLoopOutput) {
-//             return d->output_relay_edges.key(property);
-
-//         } else if (property->type() == dtkComposerNodeProperty::Input) {
-//             return d->input_edges.key(property);
-
-//         } else if (property->type() == dtkComposerNodeProperty::HybridInput || property->type() == dtkComposerNodeProperty::PassThroughInput) {
-//             if (property->behavior() == dtkComposerNodeProperty::AsInput)
-//                 return d->input_edges.key(property);
-//             else if (property->behavior() == dtkComposerNodeProperty::AsRelay)
-//                 return d->input_relay_edges.key(property);
-        
-//             else if (property->type() == dtkComposerNodeProperty::Output)
-//                 return d->output_edges.key(property);
-
-//         } else if (property->type() == dtkComposerNodeProperty::HybridOutput || property->type() == dtkComposerNodeProperty::PassThroughOutput) {
-//             if (property->behavior() == dtkComposerNodeProperty::AsRelay)
-//                 return d->output_relay_edges.key(property);
-//             else if (property->behavior() == dtkComposerNodeProperty::AsOutput)
-//                 return d->output_edges.key(property);
-
-//         }
-
-//     } else {
-
-//         if (property->type() == dtkComposerNodeProperty::Input) {
-//             if (this->isGhost())            
-//                 return d->ghost_input_edges.key(property);
-//             else
-//                 return d->input_edges.key(property);
-//         }
-
-//         if (property->type() == dtkComposerNodeProperty::Output) {
-//             if (this->isGhost())
-//                 return d->ghost_output_edges.key(property);
-//             else 
-//                 return d->output_edges.key(property);
-//         }
-//     }
-        
-//     return NULL;
 }
 
 void dtkComposerNode::addAction(const QString& text, const QObject *receiver, const char *slot)

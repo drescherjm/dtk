@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Nov  3 13:28:33 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 16:06:15 2011 (+0100)
+ * Last-Updated: Mon Nov  7 14:51:31 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 118
+ *     Update #: 167
  */
 
 /* Commentary: 
@@ -33,6 +33,13 @@ class dtkComposerNodeGraphicPrivate
 public:
     QList<dtkComposerEdge *>  leftRoute(dtkComposerEdge *edge);
     QList<dtkComposerEdge *> rightRoute(dtkComposerEdge *edge);
+
+public:
+    dtkComposerEdge  *leftEdge(dtkComposerNodeProperty *property);
+    dtkComposerEdge *rightEdge(dtkComposerNodeProperty *property);
+
+    dtkComposerEdge  *leftRelayEdge(dtkComposerNodeProperty *property);
+    dtkComposerEdge *rightRelayEdge(dtkComposerNodeProperty *property);
 
 public:
     QList<dtkComposerNodeProperty *>  left_properties;
@@ -153,6 +160,62 @@ QList<dtkComposerEdge *> dtkComposerNodeGraphicPrivate::rightRoute(dtkComposerEd
     return edges;
 }
 
+//! Returns the last left edge connected to \a property.
+/*! 
+ *  Returns NULL, when no edge is connected to \a property.
+ */
+dtkComposerEdge *dtkComposerNodeGraphicPrivate::leftEdge(dtkComposerNodeProperty *property)
+{
+    int index = this->left_edges_to_left_property.lastIndexOf(property);
+
+    if (index < 0)
+        return NULL;
+
+    return this->left_edges.at(index);
+}
+
+//! Returns the last right edge connected to \a property.
+/*! 
+ *  Returns NULL, when no edge is connected to \a property.
+ */
+dtkComposerEdge *dtkComposerNodeGraphicPrivate::rightEdge(dtkComposerNodeProperty *property)
+{
+    int index = this->right_edges_to_right_property.lastIndexOf(property);
+
+    if (index < 0)
+        return NULL;
+
+    return this->right_edges.at(index);
+}
+
+//! Returns the last left relay edge connected to \a property.
+/*! 
+ *  Returns NULL, when no edge is connected to \a property.
+ */
+dtkComposerEdge *dtkComposerNodeGraphicPrivate::leftRelayEdge(dtkComposerNodeProperty *property)
+{
+    int index = this->left_relay_edges_to_left_property.lastIndexOf(property);
+
+    if (index < 0)
+        return NULL;
+
+    return this->left_relay_edges.at(index);
+}
+
+//! Returns the last right relay edge connected to \a property.
+/*! 
+ *  Returns NULL, when no edge is connected to \a property.
+ */
+dtkComposerEdge *dtkComposerNodeGraphicPrivate::rightRelayEdge(dtkComposerNodeProperty *property)
+{
+    int index = this->right_relay_edges_to_right_property.lastIndexOf(property);
+
+    if (index < 0)
+        return NULL;
+
+    return  this->right_relay_edges.at(index);
+}
+
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeGraphic implementation
 // /////////////////////////////////////////////////////////////////
@@ -195,6 +258,8 @@ void dtkComposerNodeGraphic::appendLeftProperty(dtkComposerNodeProperty *propert
         return;
 
     d->left_properties << property;
+
+    d->node->layout();
 }
 
 //! Appends \a property in list of right properties
@@ -207,6 +272,8 @@ void dtkComposerNodeGraphic::appendRightProperty(dtkComposerNodeProperty *proper
         return;
 
     d->right_properties << property;
+
+    d->node->layout();
 }
 
 //! Removes \a property from list of left properties
@@ -216,6 +283,8 @@ void dtkComposerNodeGraphic::appendRightProperty(dtkComposerNodeProperty *proper
 void dtkComposerNodeGraphic::removeLeftProperty(dtkComposerNodeProperty *property)
 {
     d->left_properties.removeAll(property);
+
+    d->node->layout();
 }
 
 //! Removes \a property from list of right properties
@@ -225,6 +294,8 @@ void dtkComposerNodeGraphic::removeLeftProperty(dtkComposerNodeProperty *propert
 void dtkComposerNodeGraphic::removeRightProperty(dtkComposerNodeProperty *property)
 {
     d->right_properties.removeAll(property);
+
+    d->node->layout();
 }
 
 //! Clears left and right lists of properties
@@ -235,6 +306,8 @@ void dtkComposerNodeGraphic::removeAllProperties(void)
 {
     d->left_properties.clear();
     d->right_properties.clear();
+
+    d->node->layout();
 }
 
 //! Appends \a edge connected to \a property to the list of left edges.
@@ -433,6 +506,58 @@ const QList<dtkComposerEdge *>& dtkComposerNodeGraphic::leftRelayEdges(void) con
 const QList<dtkComposerEdge *>& dtkComposerNodeGraphic::rightRelayEdges(void) const
 {
     return d->right_relay_edges;
+}
+
+//! Returns last edge connected to \a property.
+/*! 
+ *  Returns NULL, when no edge has been found.
+ */
+dtkComposerEdge *dtkComposerNodeGraphic::edge(dtkComposerNodeProperty *property) const
+{
+    dtkComposerEdge *edge = NULL;
+    
+    if (d->node->kind() != dtkComposerNode::Composite) {
+
+         if (property->type() == dtkComposerNodeProperty::Input && property->behavior() == dtkComposerNodeProperty::AsLoopOutput) {
+             edge = d->rightRelayEdge(property);
+
+         } else if (property->type() == dtkComposerNodeProperty::Input) {
+             edge = d->leftEdge(property);
+
+         } else if (property->type() == dtkComposerNodeProperty::HybridInput || property->type() == dtkComposerNodeProperty::PassThroughInput) {
+             if (property->behavior() == dtkComposerNodeProperty::AsInput)
+                 edge = d->leftEdge(property);
+             else if (property->behavior() == dtkComposerNodeProperty::AsRelay)
+                 edge = d->leftRelayEdge(property);
+             else if (property->type() == dtkComposerNodeProperty::Output)
+                 edge = d->rightEdge(property);
+
+         } else if (property->type() == dtkComposerNodeProperty::HybridOutput || property->type() == dtkComposerNodeProperty::PassThroughOutput) {
+             if (property->behavior() == dtkComposerNodeProperty::AsRelay)
+                 edge = d->rightRelayEdge(property);
+             else if (property->behavior() == dtkComposerNodeProperty::AsOutput)
+                 edge = d->rightEdge(property);
+
+         }
+    } else {
+
+        if (property->type() == dtkComposerNodeProperty::Input) {
+            if (d->node->isGhost())            
+                edge = d->leftRelayEdge(property);
+            else
+                edge = d->leftEdge(property);
+        }
+        
+        if (property->type() == dtkComposerNodeProperty::Output) {
+            if (d->node->isGhost())
+                edge = d->rightRelayEdge(property);
+            else 
+                edge = d->rightEdge(property);
+        }
+        
+    }
+    
+    return edge;
 }
 
 //! Returns the number of edges connected to \a property.

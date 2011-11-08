@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Apr  7 09:09:18 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Sat Jun 26 18:42:50 2010 (+0200)
+## Last-Updated: Tue Nov  8 22:11:24 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 16
+##     Update #: 17
 ######################################################################
 ## 
 ### Commentary: This script overrides some of the dtkBuild script
@@ -44,7 +44,5 @@ macro(dtk_build_doc plugin)
       COMMAND qhelpgenerator html/index.qhp -o ${plugin}.qch
       COMMAND qcollectiongenerator ${plugin}.qhcp -o ${plugin}.qhc
       COMMENT "-- Generating embedded documentation")
-  else (DOXYGEN_FOUND)
-    message(INFO "Can't find doxygen. Can't build documentation")
   endif (DOXYGEN_FOUND)
 endmacro(dtk_build_doc)

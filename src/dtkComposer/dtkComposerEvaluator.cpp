@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Oct 24 12:57:38 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov  8 14:34:10 2011 (+0100)
+ * Last-Updated: Tue Nov  8 15:55:04 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 406
+ *     Update #: 407
  */
 
 /* Commentary: 
@@ -376,9 +376,9 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeConditional *node)
         // -- Block selection
 
         if(node->condition())
-            node->setCurrentBlock(node->d->block_then);
+            node->setCurrentBlock(node->blocks().at(0));
         else
-            node->setCurrentBlock(node->d->block_else);
+            node->setCurrentBlock(node->blocks().at(1));
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
         qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "Selected block is" << node->currentBlock()->title() << DTK_NO_COLOR;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov  7 15:53:42 2011 (+0100)
+ * Last-Updated: Tue Nov  8 17:01:39 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 2959
+ *     Update #: 2966
  */
 
 /* Commentary: 
@@ -381,12 +381,6 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
         this->removeEdge(edge);
     
     foreach(dtkComposerEdge *edge, node->g->rightEdges())
-        this->removeEdge(edge);
-
-    foreach(dtkComposerEdge *edge, node->g->leftRelayEdges())
-        this->removeEdge(edge);
-    
-    foreach(dtkComposerEdge *edge, node->g->rightRelayEdges())
         this->removeEdge(edge);
 
     foreach(dtkComposerEdge *edge, node->g->leftRelayEdges())
@@ -1410,11 +1404,15 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
              
              if (property->behavior() == dtkComposerNodeProperty::AsInput) {
 
-                 d->current_edge = property->edge();
+                 if (property->position() == dtkComposerNodeProperty::Left)
+                     d->current_edge = property->node()->g->leftEdge(property);
+                 else if (property->position() == dtkComposerNodeProperty::Right)
+                     d->current_edge = property->node()->g->rightRelayEdge(property);
+
                  if (d->current_edge) {
                      d->current_edge->unlink();
                      d->edges.removeAll(d->edge(d->current_edge));
-                 } 
+                 }
 
              } else if (property->behavior() == dtkComposerNodeProperty::AsOutput) {
 
@@ -1445,7 +1443,11 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
                      
                  } else {
 
-                     d->current_edge = property->edge();
+                     if (property->position() == dtkComposerNodeProperty::Left)
+                         d->current_edge = property->node()->g->leftEdge(property);
+                     else if (property->position() == dtkComposerNodeProperty::Right)
+                         d->current_edge = property->node()->g->rightRelayEdge(property);
+
                      if (d->current_edge) {
                          d->current_edge->unlink();
                          d->edges.removeAll(d->edge(d->current_edge));

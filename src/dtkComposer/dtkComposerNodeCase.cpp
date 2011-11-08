@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Nov  8 15:38:04 2011 (+0100)
+ * Last-Updated: Tue Nov  8 15:53:28 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 733
+ *     Update #: 734
  */
 
 /* Commentary: 
@@ -136,7 +136,7 @@ void dtkComposerNodeCaseButton::mousePressEvent(QGraphicsSceneMouseEvent *event)
  *  When block title is default, the block corresponding to default
  *  case is created.
  */
-dtkComposerNodeControlBlock *dtkComposerNodeCasePrivate::createBlock(const QString& title, dtkComposerNodeCase *parent)
+void dtkComposerNodeCasePrivate::createBlock(const QString& title, dtkComposerNodeCase *parent)
 {
     dtkComposerNodeControlBlock *block = new dtkComposerNodeControlBlock(title, parent);
     parent->appendBlock(block);

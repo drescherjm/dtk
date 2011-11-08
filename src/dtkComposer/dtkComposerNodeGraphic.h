@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Nov  2 17:10:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Nov  7 12:26:21 2011 (+0100)
+ * Last-Updated: Tue Nov  8 17:07:34 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 32
+ *     Update #: 36
  */
 
 /* Commentary: 
@@ -21,6 +21,8 @@
 #define DTKCOMPOSERNODEGRAPHIC_H
 
 #include "dtkComposerExport.h"
+
+#include <dtkCore/dtkGlobal>
 
 #include <QtCore>
 
@@ -77,7 +79,13 @@ public:
     const QList<dtkComposerEdge *>& rightRelayEdges(void) const;
 
 public:
-    dtkComposerEdge *edge(dtkComposerNodeProperty *property) const;
+    dtkComposerEdge  *leftEdge(dtkComposerNodeProperty *property) const;
+    dtkComposerEdge *rightEdge(dtkComposerNodeProperty *property) const;
+
+    dtkComposerEdge  *leftRelayEdge(dtkComposerNodeProperty *property) const;
+    dtkComposerEdge *rightRelayEdge(dtkComposerNodeProperty *property) const;
+
+    dtkComposerEdge DTK_DEPRECATED *edge(dtkComposerNodeProperty *property) const;
 
     int edgeCount(dtkComposerNodeProperty *property) const;
     int indexOf(dtkComposerNodeProperty *property) const;

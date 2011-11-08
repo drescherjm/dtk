@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Mar  4 21:57:30 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Nov  8 14:34:43 2011 (+0100)
+ * Last-Updated: Tue Nov  8 15:53:39 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 22
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -30,7 +30,7 @@ class dtkComposerNodeControlBlock;
 class dtkComposerNodeCasePrivate
 {
 public:
-    dtkComposerNodeControlBlock *createBlock(const QString& title, dtkComposerNodeCase *parent);
+    void createBlock(const QString& title, dtkComposerNodeCase *parent);
 
 public:
     dtkComposerNodeCaseButton *add_button;

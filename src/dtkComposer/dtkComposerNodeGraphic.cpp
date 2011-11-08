@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Nov  3 13:28:33 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Nov  8 14:23:22 2011 (+0100)
+ * Last-Updated: Tue Nov  8 16:27:12 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 181
+ *     Update #: 183
  */
 
 /* Commentary: 
@@ -526,6 +526,42 @@ const QList<dtkComposerEdge *>& dtkComposerNodeGraphic::leftRelayEdges(void) con
 const QList<dtkComposerEdge *>& dtkComposerNodeGraphic::rightRelayEdges(void) const
 {
     return d->right_relay_edges;
+}
+
+//! Returns last left edge connected to \a property.
+/*! 
+ *  Returns NULL, when no edge has been found.
+ */
+dtkComposerEdge *dtkComposerNodeGraphic::leftEdge(dtkComposerNodeProperty *property) const
+{
+    return d->leftEdge(property);
+}
+
+//! Returns last right edge connected to \a property.
+/*! 
+ *  Returns NULL, when no edge has been found.
+ */
+dtkComposerEdge *dtkComposerNodeGraphic::rightEdge(dtkComposerNodeProperty *property) const
+{
+    return d->rightEdge(property);
+}
+
+//! Returns last left relay edge connected to \a property.
+/*! 
+ *  Returns NULL, when no edge has been found.
+ */
+dtkComposerEdge *dtkComposerNodeGraphic::leftRelayEdge(dtkComposerNodeProperty *property) const
+{
+    return d->leftRelayEdge(property);
+}
+
+//! Returns last right relay edge connected to \a property.
+/*! 
+ *  Returns NULL, when no edge has been found.
+ */
+dtkComposerEdge *dtkComposerNodeGraphic::rightRelayEdge(dtkComposerNodeProperty *property) const
+{
+    return d->rightRelayEdge(property);
 }
 
 //! Returns last edge connected to \a property.

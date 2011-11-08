@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:59:35 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Oct 26 16:36:21 2011 (+0200)
+ * Last-Updated: Tue Nov  8 15:41:21 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 14
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -41,7 +41,6 @@ public:
 
 public slots:
     bool evaluate(dtkComposerEvaluatorPrivate *evaluator);
-    /* void update(void); */
 
 private:
     dtkComposerNodeConditionalPrivate *d;

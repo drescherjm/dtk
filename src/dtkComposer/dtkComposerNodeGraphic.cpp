@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Nov  3 13:28:33 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Nov  7 14:51:31 2011 (+0100)
+ * Last-Updated: Tue Nov  8 14:23:22 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 167
+ *     Update #: 181
  */
 
 /* Commentary: 
@@ -23,6 +23,8 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeProperty.h"
+
+#include <dtkCore/dtkGlobal>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeGraphicPrivate declaration
@@ -283,8 +285,6 @@ void dtkComposerNodeGraphic::appendRightProperty(dtkComposerNodeProperty *proper
 void dtkComposerNodeGraphic::removeLeftProperty(dtkComposerNodeProperty *property)
 {
     d->left_properties.removeAll(property);
-
-    d->node->layout();
 }
 
 //! Removes \a property from list of right properties
@@ -294,8 +294,6 @@ void dtkComposerNodeGraphic::removeLeftProperty(dtkComposerNodeProperty *propert
 void dtkComposerNodeGraphic::removeRightProperty(dtkComposerNodeProperty *property)
 {
     d->right_properties.removeAll(property);
-
-    d->node->layout();
 }
 
 //! Clears left and right lists of properties
@@ -306,8 +304,6 @@ void dtkComposerNodeGraphic::removeAllProperties(void)
 {
     d->left_properties.clear();
     d->right_properties.clear();
-
-    d->node->layout();
 }
 
 //! Appends \a edge connected to \a property to the list of left edges.
@@ -342,7 +338,13 @@ void dtkComposerNodeGraphic::appendRightEdge(dtkComposerEdge *edge, dtkComposerN
  */
 void dtkComposerNodeGraphic::removeLeftEdge(dtkComposerEdge *edge)
 {
-    d->left_edges_to_left_property.remove(d->left_edges.indexOf(edge));
+    int index = d->left_edges.indexOf(edge);
+    if (index < 0) {
+        qDebug() << "Edge" << edge << "is no more in the list. Bad use of " << DTK_PRETTY_FUNCTION;
+        return;
+    }
+
+    d->left_edges_to_left_property.remove(index);
     d->left_edges.removeAll(edge);
 }
 
@@ -352,7 +354,13 @@ void dtkComposerNodeGraphic::removeLeftEdge(dtkComposerEdge *edge)
  */
 void dtkComposerNodeGraphic::removeRightEdge(dtkComposerEdge *edge)
 {
-    d->right_edges_to_right_property.remove(d->right_edges.indexOf(edge));
+    int index = d->right_edges.indexOf(edge);
+    if (index < 0) {
+        qDebug() << "Edge" << edge << "is no more in the list. Bad use of " << DTK_PRETTY_FUNCTION;
+        return;
+    }
+
+    d->right_edges_to_right_property.remove(index);
     d->right_edges.removeAll(edge);
 }
 
@@ -401,7 +409,13 @@ void dtkComposerNodeGraphic::appendRightRelayEdge(dtkComposerEdge *edge, dtkComp
  */
 void dtkComposerNodeGraphic::removeLeftRelayEdge(dtkComposerEdge *edge)
 {
-    d->left_relay_edges_to_left_property.remove(d->left_relay_edges.indexOf(edge));
+    int index = d->left_relay_edges.indexOf(edge);
+    if (index < 0) {
+        qDebug() << "Edge" << edge << "is no more in the list. Bad use of " << DTK_PRETTY_FUNCTION;
+        return;
+    }
+
+    d->left_relay_edges_to_left_property.remove(index);
     d->left_relay_edges.removeAll(edge);
 }
 
@@ -411,7 +425,13 @@ void dtkComposerNodeGraphic::removeLeftRelayEdge(dtkComposerEdge *edge)
  */
 void dtkComposerNodeGraphic::removeRightRelayEdge(dtkComposerEdge *edge)
 {
-    d->right_relay_edges_to_right_property.remove(d->right_relay_edges.indexOf(edge));
+    int index = d->right_relay_edges.indexOf(edge);
+    if (index < 0) {
+        qDebug() << "Edge" << edge << "is no more in the list. Bad use of " << DTK_PRETTY_FUNCTION;
+        return;
+    }
+
+    d->right_relay_edges_to_right_property.remove(index);
     d->right_relay_edges.removeAll(edge);
 }
 
@@ -518,7 +538,24 @@ dtkComposerEdge *dtkComposerNodeGraphic::edge(dtkComposerNodeProperty *property)
     
     if (d->node->kind() != dtkComposerNode::Composite) {
 
-         if (property->type() == dtkComposerNodeProperty::Input && property->behavior() == dtkComposerNodeProperty::AsLoopOutput) {
+        if (property->type() == dtkComposerNodeProperty::Generic) {
+
+            if (property->position() == dtkComposerNodeProperty::Left) {
+
+                if (property->behavior() == dtkComposerNodeProperty::AsInput)
+                    edge = d->leftEdge(property);
+                else
+                    edge = d->leftRelayEdge(property);
+
+            } else if (property->position() == dtkComposerNodeProperty::Right) {
+
+                if (property->behavior() == dtkComposerNodeProperty::AsOutput)
+                    edge = d->rightEdge(property);
+                else
+                    edge = d->rightRelayEdge(property);
+            }
+
+        } else if (property->type() == dtkComposerNodeProperty::Input && property->behavior() == dtkComposerNodeProperty::AsLoopOutput) {
              edge = d->rightRelayEdge(property);
 
          } else if (property->type() == dtkComposerNodeProperty::Input) {
@@ -529,7 +566,8 @@ dtkComposerEdge *dtkComposerNodeGraphic::edge(dtkComposerNodeProperty *property)
                  edge = d->leftEdge(property);
              else if (property->behavior() == dtkComposerNodeProperty::AsRelay)
                  edge = d->leftRelayEdge(property);
-             else if (property->type() == dtkComposerNodeProperty::Output)
+        
+        } else if (property->type() == dtkComposerNodeProperty::Output) {
                  edge = d->rightEdge(property);
 
          } else if (property->type() == dtkComposerNodeProperty::HybridOutput || property->type() == dtkComposerNodeProperty::PassThroughOutput) {

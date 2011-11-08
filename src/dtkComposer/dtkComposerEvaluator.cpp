@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Oct 24 12:57:38 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 15:21:35 2011 (+0100)
+ * Last-Updated: Tue Nov  8 14:34:10 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 403
+ *     Update #: 406
  */
 
 /* Commentary: 
@@ -201,8 +201,11 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeCase *node)
         QVariant constant;
 
         node->setCurrentBlock(NULL);
-
-        foreach(dtkComposerNodeControlBlock *block, node->d->block_cases) {
+        
+        dtkComposerNodeControlBlock *block;
+        for(int i = 1; i < node->blocks().count(); i++) {
+            block = node->blocks().at(i);
+            // foreach(dtkComposerNodeControlBlock *block, node->d->block_cases) {
 
             property = node->inputProperty(block->title(), "constant");
 
@@ -230,7 +233,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeCase *node)
         }
 
         if(!node->currentBlock())
-            node->setCurrentBlock(node->d->block_default);
+            node->setCurrentBlock(node->blocks().at(0));
 
 #if defined(DTK_DEBUG_COMPOSER_EVALUATION)
         qDebug() << DTK_COLOR_BG_GREEN << DTK_PRETTY_FUNCTION << "Selected block is" << node->currentBlock()->title() << DTK_NO_COLOR;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:46:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 10:16:48 2011 (+0100)
+ * Last-Updated: Tue Nov  8 14:11:24 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 94
+ *     Update #: 101
  */
 
 /* Commentary: 
@@ -79,9 +79,20 @@ public:
     dtkComposerNodeProperty  *appendLeftProperty(QString name, dtkComposerNodeProperty::Type type, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeProperty::Behavior behavior, dtkComposerNode *parent = 0);
     dtkComposerNodeProperty *appendRightProperty(QString name, dtkComposerNodeProperty::Type type, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeProperty::Behavior behavior, dtkComposerNode *parent = 0);
 
+    void appendProperty(QString name, dtkComposerNodeProperty::Position position, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNode *parent);
+
+
+public:
+    void appendLeftProperty(dtkComposerNodeProperty *property);
+    void appendRightProperty(dtkComposerNodeProperty *property);
+
+    dtkComposerNodeProperty *property(QString name, dtkComposerNodeProperty::Position position);
+
     void  removeLeftProperty(dtkComposerNodeProperty *property);
     void removeRightProperty(dtkComposerNodeProperty *property);
     void removeAllProperties(void);
+
+    void clear(void);
 
 public:
     qreal height(void);

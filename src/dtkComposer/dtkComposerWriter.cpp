@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 14:52:59 2011 (+0100)
+ * Last-Updated: Mon Nov  7 17:01:32 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 446
+ *     Update #: 453
  */
 
 /* Commentary: 
@@ -516,6 +516,24 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
                 QDomElement property_element = document.createElement("property");
                 property_element.setAttribute("name", property->name());
                 switch (property->type()) {
+                case dtkComposerNodeProperty::Generic:
+                    property_element.setAttribute("type", "generic");
+                    property_element.setAttribute("position", "left");
+                    switch (property->behavior()) {
+                    case dtkComposerNodeProperty::AsInput:
+                        property_element.setAttribute("behavior", "asInput");
+                        break;
+                    case dtkComposerNodeProperty::AsOutput:
+                        property_element.setAttribute("behavior", "asOutput");
+                        break;
+                    case dtkComposerNodeProperty::AsRelay:
+                        property_element.setAttribute("behavior", "asRelay");
+                        break;
+                    case dtkComposerNodeProperty::AsLoop:
+                        property_element.setAttribute("behavior", "asLoop");
+                        break;
+                    }
+                    break;
                 case dtkComposerNodeProperty::Input:
                     property_element.setAttribute("type", "input");
                     break;
@@ -546,6 +564,24 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
                 QDomElement property_element = document.createElement("property");
                 property_element.setAttribute("name", property->name());
                 switch (property->type()) {
+                case dtkComposerNodeProperty::Generic:
+                    property_element.setAttribute("type", "generic");
+                    property_element.setAttribute("position", "right");
+                    switch (property->behavior()) {
+                    case dtkComposerNodeProperty::AsInput:
+                        property_element.setAttribute("behavior", "asInput");
+                        break;
+                    case dtkComposerNodeProperty::AsOutput:
+                        property_element.setAttribute("behavior", "asOutput");
+                        break;
+                    case dtkComposerNodeProperty::AsRelay:
+                        property_element.setAttribute("behavior", "asRelay");
+                        break;
+                    case dtkComposerNodeProperty::AsLoop:
+                        property_element.setAttribute("behavior", "asLoop");
+                        break;
+                    }
+                    break;
                 case dtkComposerNodeProperty::Input:
                     break;
                 case dtkComposerNodeProperty::Output:

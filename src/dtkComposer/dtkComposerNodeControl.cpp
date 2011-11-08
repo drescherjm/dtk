@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 10:21:44 2011 (+0100)
+ * Last-Updated: Tue Nov  8 15:30:31 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 849
+ *     Update #: 901
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include "dtkComposerEdge.h"
 #include "dtkComposerNodeControl.h"
+#include "dtkComposerNodeControl_p.h"
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeLoop.h"
 #include "dtkComposerNodeProperty.h"
@@ -26,46 +27,18 @@
 #include <dtkCore/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeControlPrivate
+// dtkComposerNodeControl implementation
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNodeControlPrivate
-{
-public:
-    dtkComposerNodeControlBlock *current_block;
-
-public:
-    QList<dtkComposerNodeControlBlock *> blocks;
-
-public:
-    dtkComposerNodeProperty *property_input;
-
-public:
-    QList<dtkComposerEdge *>  input_relay_routes;
-    QList<dtkComposerEdge *> output_relay_routes;
-
-    QList<dtkComposerEdge *>  input_active_routes;
-    QList<dtkComposerEdge *> output_active_routes;
-
-public:
-    QColor color;
-
-    bool block_added;
-    bool block_removed;
-
-    bool running;
-};
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerNodeControl
-// /////////////////////////////////////////////////////////////////
-
+//! Constructs a control node.
+/*! 
+ *  
+ */
 dtkComposerNodeControl::dtkComposerNodeControl(dtkComposerNode *parent) : dtkComposerNode(parent), d(new dtkComposerNodeControlPrivate)
 {
-
     d->current_block = NULL;
 
-    d->property_input = new dtkComposerNodeProperty("condition", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, this);
+    d->property_input = new dtkComposerNodeProperty("condition", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
     this->g->appendLeftProperty(d->property_input);
 
     this->setAcceptHoverEvents(true);
@@ -74,13 +47,17 @@ dtkComposerNodeControl::dtkComposerNodeControl(dtkComposerNode *parent) : dtkCom
     this->setZValue(-2000);
     this->setSize(400, 246);
 
-    d->color = Qt::transparent;
-
     d->block_added = false;
     d->block_removed = false;
     d->running = false;
+
+    d->color = Qt::transparent;
 }
 
+//! Destroys control node.
+/*! 
+ *  
+ */
 dtkComposerNodeControl::~dtkComposerNodeControl(void)
 {
     delete d;
@@ -88,6 +65,53 @@ dtkComposerNodeControl::~dtkComposerNodeControl(void)
     d = NULL;
 }
 
+//! Appends \a block in the list of blocks.
+/*! 
+ *  Automatic redraw is performed.
+ */
+void dtkComposerNodeControl::appendBlock(dtkComposerNodeControlBlock *block)
+{
+    if (d->blocks.contains(block))
+        return;
+
+    d->blocks << block;
+    d->block_added = true;
+    this->layout();
+}
+
+//! Removes \a block from the list of blocks.
+/*! 
+ *  Automatic redraw is performed.
+ */
+void dtkComposerNodeControl::removeBlock(dtkComposerNodeControlBlock *block)
+{
+    block->clear();
+
+    d->blocks.removeAll(block);
+
+    d->block_removed = true;
+
+    delete block;
+    block = NULL;
+
+    this->layout();
+}
+
+//! Sets \a block as the current block.
+/*! 
+ *  The current block is typically the place where the logic of the
+ *  control node is performed. The current block can vary dynamically
+ *  according to the conditions arising in the composer logic.
+ */
+void dtkComposerNodeControl::setCurrentBlock(dtkComposerNodeControlBlock *block)
+{
+    d->current_block = block;
+}
+
+//! Returns block naming \a title.
+/*! 
+ *  
+ */
 dtkComposerNodeControlBlock *dtkComposerNodeControl::block(const QString& title)
 {
     foreach(dtkComposerNodeControlBlock *block, d->blocks)
@@ -110,42 +134,78 @@ dtkComposerNodeControlBlock *dtkComposerNodeControl::addBlock(const QString& tit
     return block;
 }
 
-int dtkComposerNodeControl::removeBlock(dtkComposerNodeControlBlock *block, bool clean)
-{
-    int removed_blocks = 0;
-
-    if (d->blocks.contains(block)) {
-
-        removed_blocks = d->blocks.removeAll(block); 
-        
-        d->block_removed = true;
-
-        if (clean) {
-            delete block;
-            this->layout();
-        }
-    }
-
-    return removed_blocks;
-}
-
-int dtkComposerNodeControl::removeBlock(const QString& title)
-{
-    foreach(dtkComposerNodeControlBlock *block, d->blocks)
-        if(block->title() == title)
-            return this->removeBlock(block, true);
-
-    return 0;
-}
-
+//! Returns list of all the blocks.
+/*! 
+ *  The current block is typically the place where the logic of the
+ *  control node is performed. The current block can vary dynamically
+ *  according to the conditions arising in the composer logic.
+ *
+ *  See also setCurrentBlock.
+ */
 QList<dtkComposerNodeControlBlock *> dtkComposerNodeControl::blocks(void)
 {
     return d->blocks;
 }
 
+//! Returns the current block.
+/*! 
+ *  
+ */
 dtkComposerNodeControlBlock *dtkComposerNodeControl::currentBlock(void)
 {
     return d->current_block;
+}
+
+//! Appends a property defined by its name, its behavior and its
+//! multiplicity in the list of left properties of \a block.
+/*! 
+ *  When block already contains a left property with the same name,
+ *  nothing is done.
+ */
+void dtkComposerNodeControl::appendBlockLeftProperty(QString name, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeControlBlock *block)
+{
+    if (block->property(name, dtkComposerNodeProperty::Left)) {
+        qDebug() << QString("Property %1 already exists. Please choose another name.").arg(name);
+        return;
+    }
+
+    dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Left, behavior, multiplicity, this);
+    property->setType(dtkComposerNodeProperty::Generic);
+    property->setBlockedFrom(block->title());
+
+    block->appendLeftProperty(property);
+    this->g->appendLeftProperty(property);
+}
+
+//! Appends a property defined by its name, its behavior and its
+//! multiplicity in the list of right properties of \a block.
+/*! 
+ *  When block already contains a right property with the same name,
+ *  nothing is done.
+ */
+void dtkComposerNodeControl::appendBlockRightProperty(QString name, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeControlBlock *block)
+{
+    if (block->property(name, dtkComposerNodeProperty::Right)) {
+        qDebug() << QString("Property %1 already exists. Please choose another name.").arg(name);
+        return;
+    }
+
+    dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Right, behavior, multiplicity, this);
+    property->setType(dtkComposerNodeProperty::Generic);
+    property->setBlockedFrom(block->title());
+
+    block->appendRightProperty(property);
+    this->g->appendRightProperty(property);
+}
+
+QList<dtkComposerNodeProperty *> dtkComposerNodeControl::leftProperties(dtkComposerNodeControlBlock *block)
+{
+    return d->block_left_properties.values(block);
+}
+
+QList<dtkComposerNodeProperty *> dtkComposerNodeControl::rightProperties(dtkComposerNodeControlBlock *block)
+{
+    return d->block_right_properties.values(block);
 }
 
 dtkComposerNodeProperty *dtkComposerNodeControl::inputProperty(const QString& block_title, const QString& name) const
@@ -331,11 +391,6 @@ void dtkComposerNodeControl::setRunning(bool running)
     d->running = running;
 }
 
-void dtkComposerNodeControl::setCurrentBlock(dtkComposerNodeControlBlock *block)
-{
-    d->current_block = block;
-}
-
 bool dtkComposerNodeControl::dirtyInputValue(void)
 {
     foreach(dtkComposerEdge *i_route, this->l->leftRoutes()) {
@@ -499,6 +554,10 @@ void dtkComposerNodeControl::push(dtkComposerEdge *o_route, dtkComposerNodePrope
     }
 }
 
+//! Reimplements dtkComposerNode::layout.
+/*! 
+ *  Defines the layout of the control node.
+ */
 void dtkComposerNodeControl::layout(void)
 {
     dtkComposerNode::layout();
@@ -512,6 +571,10 @@ void dtkComposerNodeControl::layout(void)
     this->resize();
 }
 
+//! Reimplements QGraphicsItem::paint to define control node identity.
+/*! 
+ *  
+ */
 void dtkComposerNodeControl::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     QPainterPath path;
@@ -566,6 +629,8 @@ void dtkComposerNodeControl::resize(const QPointF& delta)
 
 void dtkComposerNodeControl::resize(qreal dw, qreal dh)
 {
+    this->prepareGeometryChange();
+
     QRectF mini_rect = this->minimalBoundingRect();
     QRectF node_rect = this->boundingRect();
 
@@ -584,6 +649,8 @@ void dtkComposerNodeControl::resize(qreal dw, qreal dh)
 
 void dtkComposerNodeControl::resize(void)
 {
+    this->prepareGeometryChange();
+
     if (d->block_added) {
 
         QRectF node_rect = this->boundingRect();

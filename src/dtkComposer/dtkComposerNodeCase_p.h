@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Mar  4 21:57:30 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Oct 26 17:22:43 2011 (+0200)
+ * Last-Updated: Tue Nov  8 14:34:43 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 13
+ *     Update #: 22
  */
 
 /* Commentary: 
@@ -21,18 +21,19 @@
 #define DTKCOMPOSERNODECASE_P_H
 
 #include <QtCore/QList>
+#include <QtCore/QString>
 
+class dtkComposerNodeCase;
 class dtkComposerNodeCaseButton;
 class dtkComposerNodeControlBlock;
 
 class dtkComposerNodeCasePrivate
 {
 public:
-    dtkComposerNodeCaseButton *add_button;
+    dtkComposerNodeControlBlock *createBlock(const QString& title, dtkComposerNodeCase *parent);
 
 public:
-    QList<dtkComposerNodeControlBlock *> block_cases;
-          dtkComposerNodeControlBlock *  block_default;
+    dtkComposerNodeCaseButton *add_button;
 
 public:
     QList<QVariant> constants;

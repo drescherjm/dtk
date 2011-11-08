@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar  8 13:31:11 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Oct 25 15:33:41 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 43
+ * Last-Updated: Tue Nov  8 10:32:03 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -50,8 +50,8 @@ public:
 public:
     QList<dtkComposerNode *> nodes; 
 
-    QList<dtkComposerNodeProperty *>  input_properties;
-    QList<dtkComposerNodeProperty *> output_properties;
+    QList<dtkComposerNodeProperty *>  left_properties;
+    QList<dtkComposerNodeProperty *> right_properties;
 
 public:
     bool interactive;

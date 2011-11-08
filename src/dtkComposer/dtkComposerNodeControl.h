@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:47:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 16:23:11 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 130
+ * Last-Updated: Tue Nov  8 14:41:02 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 142
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 
 #include "dtkComposerExport.h"
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeProperty.h"
 
 class dtkComposerEdge;
 class dtkComposerNodeControlBlock;
@@ -35,17 +36,27 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeControl : public dtkComposerNode
 public:
      dtkComposerNodeControl(dtkComposerNode *parent = 0);
     ~dtkComposerNodeControl(void);
+
+public:
+    void appendBlock(dtkComposerNodeControlBlock *block);
+    void removeBlock(dtkComposerNodeControlBlock *block);
+
+    void setCurrentBlock(dtkComposerNodeControlBlock *block);
   
 public:
     dtkComposerNodeControlBlock    *block(const QString& title);
     dtkComposerNodeControlBlock *addBlock(const QString& title);
 
-    virtual int removeBlock(dtkComposerNodeControlBlock *block, bool clean = false);
-    virtual int removeBlock(const QString& title);
-
     QList<dtkComposerNodeControlBlock *> blocks(void);
 
     dtkComposerNodeControlBlock *currentBlock(void);
+
+public:
+    virtual void appendBlockLeftProperty(QString name, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeControlBlock *block);
+    virtual void appendBlockRightProperty(QString name, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeControlBlock *block);
+
+    QList<dtkComposerNodeProperty *>  leftProperties(dtkComposerNodeControlBlock *block);
+    QList<dtkComposerNodeProperty *> rightProperties(dtkComposerNodeControlBlock *block);
 
 public:
     dtkComposerNodeProperty  *inputProperty(const QString& block_title, const QString& name) const;
@@ -87,8 +98,6 @@ protected:
 
 protected:
     void setRunning(bool running);
-
-    void setCurrentBlock(dtkComposerNodeControlBlock *block);
 
 protected:
             bool dirtyInputValue(void);

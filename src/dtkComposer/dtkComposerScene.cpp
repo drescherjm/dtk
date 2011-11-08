@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 14:54:14 2011 (+0100)
+ * Last-Updated: Mon Nov  7 15:53:42 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 2952
+ *     Update #: 2959
  */
 
 /* Commentary: 
@@ -1406,7 +1406,55 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
      if (property && property->node() == dynamic_cast<dtkComposerNode *>(this->mouseGrabberItem())) {
 
-        if (!property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Output) {
+         if (property->type() == dtkComposerNodeProperty::Generic) {
+             
+             if (property->behavior() == dtkComposerNodeProperty::AsInput) {
+
+                 d->current_edge = property->edge();
+                 if (d->current_edge) {
+                     d->current_edge->unlink();
+                     d->edges.removeAll(d->edge(d->current_edge));
+                 } 
+
+             } else if (property->behavior() == dtkComposerNodeProperty::AsOutput) {
+
+                 if (d->current_edge) {
+                     d->current_edge->hide();
+                     delete d->current_edge;
+                     d->current_edge = NULL;
+                 }
+                 d->current_edge = new dtkComposerEdge;
+                 this->addItem(d->current_edge);
+                 d->current_edge->setSource(property);
+                 d->current_edge->show();
+
+             } else if (property->behavior() == dtkComposerNodeProperty::AsRelay || 
+                        property->behavior() == dtkComposerNodeProperty::AsLoop) {
+
+                 if (property->contains(mouseEvent->pos())) {
+
+                     if (d->current_edge) {
+                         d->current_edge->hide();
+                         delete d->current_edge;
+                         d->current_edge = NULL;
+                     }
+                     d->current_edge = new dtkComposerEdge;
+                     this->addItem(d->current_edge);
+                     d->current_edge->setSource(property);
+                     d->current_edge->show();
+                     
+                 } else {
+
+                     d->current_edge = property->edge();
+                     if (d->current_edge) {
+                         d->current_edge->unlink();
+                         d->edges.removeAll(d->edge(d->current_edge));
+                     }
+                 }
+
+             }
+
+        } else if (!property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Output) {
 
             if (d->current_edge) {
                 d->current_edge->hide();

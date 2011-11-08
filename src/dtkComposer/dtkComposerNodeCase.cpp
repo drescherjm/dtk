@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 15:21:18 2011 (+0100)
+ * Last-Updated: Tue Nov  8 15:38:04 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 688
+ *     Update #: 733
  */
 
 /* Commentary: 
@@ -122,21 +122,59 @@ void dtkComposerNodeCaseButton::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
 
-    QString block_name = QString("case%1").arg(parent_node_d->block_cases.count());
-    
-    this->parent_node->addBlock(block_name);  
+    QString block_name = QString("case%1").arg(this->parent_node->blocks().count()-1);
+
+    this->parent_node_d->createBlock(block_name, this->parent_node);
 }
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeCase
+// dtkComposerNodeCasePrivate implementation
 // /////////////////////////////////////////////////////////////////
 
+//! Creates a block defined by its \a title inside the case node \a parent.
+/*! 
+ *  When block title is default, the block corresponding to default
+ *  case is created.
+ */
+dtkComposerNodeControlBlock *dtkComposerNodeCasePrivate::createBlock(const QString& title, dtkComposerNodeCase *parent)
+{
+    dtkComposerNodeControlBlock *block = new dtkComposerNodeControlBlock(title, parent);
+    parent->appendBlock(block);
+
+    if (title == "default") {
+
+        block->setInteractive(false);
+
+        parent->appendBlockLeftProperty("variable", dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, block);
+        parent->appendBlockRightProperty("variable", dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, block);
+
+    } else {
+
+        block->setInteractive(false);
+        block->setRemoveButtonVisible(true);
+
+        parent->appendBlockLeftProperty("constant", dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Single, block);
+        parent->appendBlockLeftProperty("variable", dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, block);
+        parent->appendBlockRightProperty("variable", dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, block);
+
+    }
+
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeCase implementation
+// /////////////////////////////////////////////////////////////////
+
+//! Constructs a control case node.
+/*! 
+ *  
+ */
 dtkComposerNodeCase::dtkComposerNodeCase(dtkComposerNode *parent) : dtkComposerNodeControl(parent), d(new dtkComposerNodeCasePrivate)
 {
     d->add_button = new dtkComposerNodeCaseButton(this, d);
     d->add_button->setZValue(this->zValue() + 1);
 
-    d->block_default = this->addBlock("default");
+    d->createBlock("default", this);
 
     this->setColor(QColor("#922891"));
     this->setInputPropertyName("variable");
@@ -144,6 +182,10 @@ dtkComposerNodeCase::dtkComposerNodeCase(dtkComposerNode *parent) : dtkComposerN
     this->setType("dtkComposerCase");
 }
 
+//! Destroys control case node.
+/*! 
+ *  
+ */
 dtkComposerNodeCase::~dtkComposerNodeCase(void)
 {
     delete d;
@@ -151,122 +193,10 @@ dtkComposerNodeCase::~dtkComposerNodeCase(void)
     d = NULL;
 }
 
-dtkComposerNodeControlBlock *dtkComposerNodeCase::addBlock(const QString& title)
-{
-    dtkComposerNodeControlBlock *block = dtkComposerNodeControl::addBlock(title);
-
-    if (title == "default") {
-
-        block->setInteractive(false);
-
-        dtkComposerNodeProperty *i_variable = block->appendLeftProperty("variable", this);
-        i_variable->setBlockedFrom(title);
-        this->g->appendLeftProperty(i_variable);
-    
-        dtkComposerNodeProperty *o_variable = block->appendRightProperty("variable", this);
-        o_variable->setBlockedFrom(title);
-        this->g->appendRightProperty(o_variable);
-
-    } else {
-
-        block->setInteractive(false);
-
-        block->setRemoveButtonVisible(true);
-
-        dtkComposerNodeProperty *i_constant = block->appendLeftProperty("constant", this);
-        i_constant->setBlockedFrom(title);
-        this->g->appendLeftProperty(i_constant);
-
-        dtkComposerNodeProperty *i_variable = block->appendLeftProperty("variable", this);
-        i_variable->setBlockedFrom(title);
-        this->g->appendLeftProperty(i_variable);
-    
-        dtkComposerNodeProperty *o_variable = block->appendRightProperty("variable", this);
-        o_variable->setBlockedFrom(title);
-        this->g->appendRightProperty(o_variable);
-    
-        d->block_cases << block;
-
-    }
-
-    return block;
-}
-
-int dtkComposerNodeCase::removeBlock(dtkComposerNodeControlBlock *block, bool clean)
-{
-    dtkComposerNodeControl::removeBlock(block, false);
-
-    int removed_blocks = 0;
-
-    if (d->block_cases.contains(block)) {
-
-        dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene());
-        if(!scene)
-            return 0;
-
-        foreach(dtkComposerNode *child, block->nodes())
-            scene->removeNode(child);
-
-        removed_blocks = d->block_cases.removeAll(block);
-
-        foreach(dtkComposerNodeProperty *property, block->leftProperties()) {
-       
-            foreach(dtkComposerEdge *edge, this->g->leftEdges()) {
-                if(edge->destination() == property) {
-                    this->g->removeLeftEdge(edge);
-                    scene->removeEdge(edge);
-                }
-            }
-       
-            foreach(dtkComposerEdge *edge, this->g->leftRelayEdges()) {
-                if(edge->source() == property) {
-                    this->g->removeLeftRelayEdge(edge);
-                    scene->removeEdge(edge);
-                }
-            }
-
-            this->g->removeLeftProperty(property);
-            delete property;
-        }
-        
-        foreach(dtkComposerNodeProperty *property, block->rightProperties()) {
-       
-            foreach(dtkComposerEdge *edge, this->g->rightEdges()) {
-                if(edge->source() == property) {
-                    this->g->removeRightEdge(edge);
-                    scene->removeEdge(edge);
-                }
-            }
-       
-            foreach(dtkComposerEdge *edge, this->g->rightRelayEdges()) {
-                if(edge->destination() == property) {
-                    this->g->removeRightRelayEdge(edge);
-                    scene->removeEdge(edge);
-                }
-            }
-            
-            this->g->removeRightProperty(property);
-            delete property;
-        }
-        
-        if (clean) {
-            delete block;
-            this->layout();
-        }
-    }
-
-    return removed_blocks;
-}
-
-int dtkComposerNodeCase::removeBlock(const QString& title)
-{
-    foreach(dtkComposerNodeControlBlock *block, d->block_cases)
-        if(block->title() == title)
-            return this->removeBlock(block, true);
-
-    return 0;
-}
-
+//! Reimplements dtkComposerNodeControl::layout.
+/*! 
+ *  Defines the layout of the control case node.
+ */
 void dtkComposerNodeCase::layout(void)
 {
     dtkComposerNodeControl::layout();  
@@ -332,6 +262,10 @@ bool dtkComposerNodeCase::evaluate(dtkComposerEvaluatorPrivate *evaluator)
     return evaluator->evaluate(this);
 }
 
+//! 
+/*! 
+ * 
+ */
 void dtkComposerNodeCase::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property)
 {
     if (property == this->inputProperty()) {
@@ -355,6 +289,10 @@ void dtkComposerNodeCase::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty
     }
 }
 
+//! 
+/*! 
+ * 
+ */
 void dtkComposerNodeCase::push(dtkComposerEdge *o_route, dtkComposerNodeProperty *property)
 {
     if (property->name() == this->inputProperty()->name()) {  

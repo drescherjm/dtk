@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 25 10:07:34 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr  8 16:27:36 2011 (+0200)
+ * Last-Updated: Mon Nov  7 15:03:39 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 231
+ *     Update #: 233
  */
 
 /* Commentary: 
@@ -185,9 +185,10 @@ public:
 
 dtkComposerNodeBooleanOperator::dtkComposerNodeBooleanOperator(dtkComposerNode *parent) : dtkComposerNode(parent), d(new dtkComposerNodeBooleanOperatorPrivate)
 {
-    d->property_input_value_op1 = new dtkComposerNodeProperty("operand 1", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, this);
-    d->property_input_value_op2 = new dtkComposerNodeProperty("operand 2", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, this);
-    d->property_output_value = new dtkComposerNodeProperty("result", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, this);
+    d->property_input_value_op1 = new dtkComposerNodeProperty("left operand", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
+    d->property_input_value_op2 = new dtkComposerNodeProperty("right operand", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
+
+    d->property_output_value = new dtkComposerNodeProperty("result", dtkComposerNodeProperty::Right, dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, this);
 
     d->label = new dtkComposerNodeBooleanOperatorLabel(this);
     d->label->setPos(0, 0);

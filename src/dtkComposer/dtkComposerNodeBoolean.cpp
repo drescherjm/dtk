@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 25 10:07:34 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 09:40:49 2011 (+0100)
+ * Last-Updated: Mon Nov  7 14:44:12 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 208
+ *     Update #: 210
  */
 
 /* Commentary: 
@@ -142,8 +142,8 @@ public:
 
 dtkComposerNodeBoolean::dtkComposerNodeBoolean(dtkComposerNode *parent) : dtkComposerNode(parent), d(new dtkComposerNodeBooleanPrivate)
 {
-    d->property_input_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, this);
-    d->property_output_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, this);
+    d->property_input_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
+    d->property_output_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Right, dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, this);
 
     d->label = new dtkComposerNodeBooleanLabel(this);
     d->label->setPos(0, 0);

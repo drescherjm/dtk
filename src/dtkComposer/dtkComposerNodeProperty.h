@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 16:54:35 2011 (+0100)
+ * Last-Updated: Mon Nov  7 17:31:13 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 136
+ *     Update #: 137
  */
 
 /* Commentary: 
@@ -111,6 +111,7 @@ public:
 
     void setName(const QString& name);
 
+    void     setType(Type type);
     void setPosition(Position position);
     void setBehavior(Behavior behavior);
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov  7 12:42:24 2011 (+0100)
+ * Last-Updated: Mon Nov  7 17:31:43 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 444
+ *     Update #: 445
  */
 
 /* Commentary: 
@@ -304,6 +304,11 @@ void dtkComposerNodeProperty::setName(const QString& name)
     d->text->setPlainText(name);
 
     this->update();
+}
+
+void dtkComposerNodeProperty::setType(dtkComposerNodeProperty::Type type)
+{
+    d->type = type;
 }
 
 void dtkComposerNodeProperty::setPosition(dtkComposerNodeProperty::Position position)

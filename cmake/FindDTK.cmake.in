@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Tue Nov 16 15:32:20 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Oct 28 15:31:12 2011 (+0200)
+## Last-Updated: Sat Oct 29 12:54:35 2011 (+0200)
 ##           By: Julien Wintz
-##     Update #: 18
+##     Update #: 19
 ######################################################################
 ## 
 ### Commentary: 
@@ -35,4 +35,4 @@ set(QT_QMAKE_EXECUTABLE "@QT_QMAKE_EXECUTABLE@")
 
 include(${dtk_USE_FILE})
 
-set(DTK_FOUND 1)
+set(DTK_FOUND TRUE)

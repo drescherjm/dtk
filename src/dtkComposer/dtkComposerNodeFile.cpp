@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul  8 13:28:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 19 01:36:18 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 215
+ * Last-Updated: Wed Nov  9 11:18:09 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 217
  */
 
 /* Commentary: 
@@ -42,9 +42,10 @@ void dtkComposerNodeFilePrivate::onRequestFinished(int id, bool error)
 
 dtkComposerNodeFile::dtkComposerNodeFile(dtkComposerNode *parent) : dtkComposerNode(parent), d(new dtkComposerNodeFilePrivate)
 {
-    d->property_output_file_name = new dtkComposerNodeProperty("name", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, this);
-    d->property_output_file_text = new dtkComposerNodeProperty("text", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, this);
-    d->property_output_file_url = new dtkComposerNodeProperty("url", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, this);
+    d->property_output_file_name = new dtkComposerNodeProperty("name", dtkComposerNodeProperty::Right, dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, this);
+    d->property_output_file_text = new dtkComposerNodeProperty("text", dtkComposerNodeProperty::Right, dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, this);
+    d->property_output_file_url = new dtkComposerNodeProperty("url", dtkComposerNodeProperty::Right, dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, this);
+
     d->property_output_file_url->hide();
 
     this->setTitle("File");

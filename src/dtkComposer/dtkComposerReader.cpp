@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 14:53:25 2011 (+0100)
+ * Last-Updated: Wed Nov  9 14:15:55 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 872
+ *     Update #: 907
  */
 
 /* Commentary: 
@@ -725,185 +725,92 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
     if(dtkComposerNodeControl *control_node = dynamic_cast<dtkComposerNodeControl *>(n)) {
 
         qreal w = node.toElement().attribute("w").toFloat();
-        qreal h = node.toElement().attribute("h").toFloat(); 
+        qreal h = node.toElement().attribute("h").toFloat();
 
-        if(dtkComposerNodeCase *case_node = dynamic_cast<dtkComposerNodeCase *>(control_node)) {
+        QDomNodeList children = node.childNodes();
 
-            int case_block_count = 0; 
+        // -- According to the type of control node, some properties
+        //    are treated using special cares. Hence, they are
+        //    registered in a protected list.
 
-            QDomNodeList children = node.childNodes();
+        QStringList protected_properties;
 
+        if (dtkComposerNodeCase *case_node = dynamic_cast<dtkComposerNodeCase *>(control_node)) {
+
+            // -- In the case of Case control node, we need to add the
+            //    blocks after parsing the tree.
+
+            int case_block_count = 0;
             for(int i = 0; i < children.count(); i++) {
-                
                 if(children.at(i).toElement().tagName() != "block")
                     continue;
-
                 if(children.at(i).toElement().attribute("title").startsWith("case"))
                     case_block_count++;
             }
-
             for(int i = 0; i < case_block_count; i++)
-                case_node->addBlock(QString("case%1").arg(i));
+                case_node->createBlock(QString("case%1").arg(i));
 
-            for(int i = 0; i < children.count(); i++) {
-                
-                if(children.at(i).toElement().tagName() != "property")
-                    continue;
+            protected_properties << "variable" << "constant";
 
-                if(children.at(i).toElement().attribute("name") == "condition" || children.at(i).toElement().attribute("name") == "variable" || children.at(i).toElement().attribute("name") == "constant")
-                    continue;
+        } else if (dynamic_cast<dtkComposerNodeConditional *>(control_node)) {
+            protected_properties << "condition";
 
-                // Assign the property
+        } else if (dynamic_cast<dtkComposerNodeLoopDataComposite *>(control_node)) {
+            protected_properties << "from" << "to" << "step" << "item" << "index";
 
-                if(children.at(i).toElement().attribute("type") == "hybridinput") {
-                    dtkComposerNodeProperty *i_p = case_node->block(children.at(i).toElement().attribute("block"))->appendLeftProperty(children.at(i).toElement().attribute("name"), case_node);
-                    case_node->g->appendLeftProperty(i_p);
-                }
-                
-                if(children.at(i).toElement().attribute("type") == "hybridoutput") {
-                    dtkComposerNodeProperty *o_p = case_node->block(children.at(i).toElement().attribute("block"))->appendRightProperty(children.at(i).toElement().attribute("name"), case_node);
-                    case_node->g->appendRightProperty(o_p);
-                }
-            }
+        } else if (dynamic_cast<dtkComposerNodeLoopFor *>(control_node)) {
+            protected_properties << "variable" << "condition";
 
+        } else if (dynamic_cast<dtkComposerNodeLoopWhile *>(control_node)) {
+            protected_properties << "condition";
+
+        }
+
+        // -- Now, properties can be added in the same way for all
+        //    types of control node.
+
+        dtkComposerNodeProperty::Behavior behavior;
+        dtkComposerNodeProperty::Multiplicity multiplicity;
+
+        for(int i = 0; i < children.count(); i++) {
+            if (children.at(i).toElement().tagName() != "property")
+                continue;
+
+            if (protected_properties.contains(children.at(i).toElement().attribute("name")))
+                continue;
+
+            dtkComposerNodeControlBlock *current_block = control_node->block(children.at(i).toElement().attribute("block"));
+
+            qDebug() << children.at(i).toElement().attribute("block") << children.at(i).toElement().attribute("name");
+            if(current_block)
+                qDebug() << current_block->title();
             
-        }
+            if (children.at(i).toElement().attribute("behavior") == "asinput")
+                behavior = dtkComposerNodeProperty::AsInput;
+            else if (children.at(i).toElement().attribute("behavior") == "asoutput")
+                behavior = dtkComposerNodeProperty::AsOutput;
+            else if (children.at(i).toElement().attribute("behavior") == "asrelay")
+                behavior = dtkComposerNodeProperty::AsRelay;
+            else if (children.at(i).toElement().attribute("behavior") == "asloop")
+                behavior = dtkComposerNodeProperty::AsLoop;
 
-        if(dynamic_cast<dtkComposerNodeConditional *>(control_node)) {
+            if (children.at(i).toElement().attribute("multiplicity") == "null")
+                multiplicity = dtkComposerNodeProperty::Null;
+            else if (children.at(i).toElement().attribute("behavior") == "single")
+                multiplicity = dtkComposerNodeProperty::Single;
+            else if (children.at(i).toElement().attribute("behavior") == "multiple")
+                multiplicity = dtkComposerNodeProperty::Multiple;
 
-            QDomNodeList children = node.childNodes();
+            if(children.at(i).toElement().attribute("position") == "left") {
 
-            for(int i = 0; i < children.count(); i++) {
-                
-                if(children.at(i).toElement().tagName() != "property")
-                    continue;
+                control_node->appendBlockLeftProperty(children.at(i).toElement().attribute("name"), behavior, multiplicity, current_block);
 
-                if(children.at(i).toElement().attribute("name") == "condition")
-                    continue;
+            } else if(children.at(i).toElement().attribute("position") == "right") {
 
-                // Assign the property
+                control_node->appendBlockRightProperty(children.at(i).toElement().attribute("name"), behavior, multiplicity, current_block);
 
-                if(children.at(i).toElement().attribute("type") == "hybridinput") {
-                    dtkComposerNodeProperty *i_p = control_node->block(children.at(i).toElement().attribute("block"))->appendLeftProperty(children.at(i).toElement().attribute("name"), control_node);
-                    control_node->g->appendLeftProperty(i_p);
-                }
-                
-                if(children.at(i).toElement().attribute("type") == "hybridoutput") {
-                    dtkComposerNodeProperty *o_p = control_node->block(children.at(i).toElement().attribute("block"))->appendRightProperty(children.at(i).toElement().attribute("name"), control_node);
-                    control_node->g->appendRightProperty(o_p);
-                }
             }
-        }
 
-        if(dynamic_cast<dtkComposerNodeLoopDataComposite *>(control_node)) {
-
-            QDomNodeList children = node.childNodes();
-
-            for(int i = 0; i < children.count(); i++) {
-                
-                if(children.at(i).toElement().tagName() != "property")
-                    continue;
-
-                if(children.at(i).toElement().attribute("name") == "item")
-                    continue;
-
-                if(children.at(i).toElement().attribute("name") == "index")
-                    continue;
-
-                // Assign the property
-
-                if(children.at(i).toElement().attribute("type") == "hybridinput") {
-                    dtkComposerNodeProperty *i_p = control_node->block(children.at(i).toElement().attribute("block"))->appendLeftProperty(children.at(i).toElement().attribute("name"), control_node);
-                    control_node->g->appendLeftProperty(i_p);
-                }
-
-                if(children.at(i).toElement().attribute("type") == "passthroughinput") {
-                    dtkComposerNodeProperty *i_p = control_node->block(children.at(i).toElement().attribute("block"))->appendLeftPassThroughProperty(children.at(i).toElement().attribute("name"), control_node);
-                    control_node->g->appendLeftProperty(i_p);
-                }
-                
-                if(children.at(i).toElement().attribute("type") == "passthroughoutput") {
-                    dtkComposerNodeProperty *o_p = control_node->block(children.at(i).toElement().attribute("block"))->appendRightPassThroughProperty(children.at(i).toElement().attribute("name"), control_node);
-                    control_node->g->appendRightProperty(o_p);
-                }
-                
-                if(children.at(i).toElement().attribute("type") == "hybridoutput") {
-                    dtkComposerNodeProperty *o_p = control_node->block(children.at(i).toElement().attribute("block"))->appendRightProperty(children.at(i).toElement().attribute("name"), control_node);
-                    control_node->g->appendRightProperty(o_p);
-                }
-            }
-        }
-
-        if(dynamic_cast<dtkComposerNodeLoopFor *>(control_node)) {
-
-            QDomNodeList children = node.childNodes();
-
-            for(int i = 0; i < children.count(); i++) {
-                
-                if(children.at(i).toElement().tagName() != "property")
-                    continue;
-
-                if(children.at(i).toElement().attribute("name") == "condition" || children.at(i).toElement().attribute("name") == "variable")
-                    continue;
-
-                // Assign the property
-
-                if(children.at(i).toElement().attribute("type") == "hybridinput") {
-                    dtkComposerNodeProperty *i_p = control_node->block(children.at(i).toElement().attribute("block"))->appendLeftProperty(children.at(i).toElement().attribute("name"), control_node);
-                    control_node->g->appendLeftProperty(i_p);
-                }
-
-                if(children.at(i).toElement().attribute("type") == "passthroughinput") {
-                    dtkComposerNodeProperty *i_p = control_node->block(children.at(i).toElement().attribute("block"))->appendLeftPassThroughProperty(children.at(i).toElement().attribute("name"), control_node);
-                    control_node->g->appendLeftProperty(i_p);
-                }
-                
-                if(children.at(i).toElement().attribute("type") == "passthroughoutput") {
-                    dtkComposerNodeProperty *o_p = control_node->block(children.at(i).toElement().attribute("block"))->appendRightPassThroughProperty(children.at(i).toElement().attribute("name"), control_node);
-                    control_node->g->appendRightProperty(o_p);
-                }
-                
-                if(children.at(i).toElement().attribute("type") == "hybridoutput") {
-                    dtkComposerNodeProperty *o_p = control_node->block(children.at(i).toElement().attribute("block"))->appendRightProperty(children.at(i).toElement().attribute("name"), control_node);
-                    control_node->g->appendRightProperty(o_p);
-                }
-            }
-        }
-
-        if(dynamic_cast<dtkComposerNodeLoopWhile *>(control_node)) {
-
-            QDomNodeList children = node.childNodes();
-
-            for(int i = 0; i < children.count(); i++) {
-                
-                if(children.at(i).toElement().tagName() != "property")
-                    continue;
-
-                if(children.at(i).toElement().attribute("name") == "condition")
-                    continue;
-
-                // Assign the property
-
-                if(children.at(i).toElement().attribute("type") == "hybridinput") {
-                    dtkComposerNodeProperty *i_p = control_node->block(children.at(i).toElement().attribute("block"))->appendLeftProperty(children.at(i).toElement().attribute("name"), control_node);
-                    control_node->g->appendLeftProperty(i_p);
-                }
-
-                if(children.at(i).toElement().attribute("type") == "passthroughinput") {
-                    dtkComposerNodeProperty *i_p = control_node->block(children.at(i).toElement().attribute("block"))->appendLeftPassThroughProperty(children.at(i).toElement().attribute("name"), control_node);
-                    control_node->g->appendLeftProperty(i_p);
-                }
-                
-                if(children.at(i).toElement().attribute("type") == "passthroughoutput") {
-                    dtkComposerNodeProperty *o_p = control_node->block(children.at(i).toElement().attribute("block"))->appendRightPassThroughProperty(children.at(i).toElement().attribute("name"), control_node);
-                    control_node->g->appendRightProperty(o_p);
-                }
-                
-                if(children.at(i).toElement().attribute("type") == "hybridoutput") {
-                    dtkComposerNodeProperty *o_p = control_node->block(children.at(i).toElement().attribute("block"))->appendRightProperty(children.at(i).toElement().attribute("name"), control_node);
-                    control_node->g->appendRightProperty(o_p);
-                }
-            }
         }
 
         control_node->setSize(w, h);

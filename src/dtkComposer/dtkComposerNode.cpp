@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov  7 14:12:00 2011 (+0100)
+ * Last-Updated: Wed Nov  9 10:32:27 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 2598
+ *     Update #: 2600
  */
 
 /* Commentary: 
@@ -1140,18 +1140,23 @@ bool dtkComposerNode::dirtyUpstreamNodes(void)
                 //     continue;
                 // else {
                 //     qDebug() << DTK_PRETTY_FUNCTION;
-                //     return true;}
+                //     return true;
+                // }
 
             } else {
 
-                if (i_route->source()->node()->dirty())
+                if (i_route->source()->node()->dirty()) {
+                    qDebug() << i_route->source()->node();
                     return true;
+                }
             }
 
         } else {
 
-            if (i_route->source()->node()->dirty())
+            if (i_route->source()->node()->dirty()) {
+                qDebug() << i_route->source()->node();
                 return true;
+            }
         }
     }
     return false;

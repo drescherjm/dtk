@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov  8 17:01:39 2011 (+0100)
+ * Last-Updated: Wed Nov  9 10:22:09 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 2966
+ *     Update #: 2967
  */
 
 /* Commentary: 
@@ -217,7 +217,7 @@ QList<dtkComposerNode *> dtkComposerScene::startNodes(QList<dtkComposerNode *> p
                 }
 
                 if (!p) {
-                    // node->setDirty(true);
+                    node->setDirty(true);
                     list << node;
                 }
             }

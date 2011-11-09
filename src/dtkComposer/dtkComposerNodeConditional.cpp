@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Nov  8 16:08:57 2011 (+0100)
+ * Last-Updated: Wed Nov  9 12:14:44 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 103
+ *     Update #: 108
  */
 
 /* Commentary: 
@@ -35,7 +35,7 @@
 /*! 
  *  
  */
-void dtkComposerNodeConditionalPrivate::createBlock(const QString& title, dtkComposerNodeConditional *parent)
+dtkComposerNodeControlBlock *dtkComposerNodeConditionalPrivate::createBlock(const QString& title, dtkComposerNodeConditional *parent)
 {
     dtkComposerNodeControlBlock *block = new dtkComposerNodeControlBlock(title, parent);
     block->setInteractive(false);
@@ -71,9 +71,9 @@ dtkComposerNodeConditional::~dtkComposerNodeConditional(void)
     d = NULL;
 }
 
-//! Reimplements dtkComposerNodeControl::layout.
+//! Defines the layout of the control conditional node.
 /*! 
- *  Defines the layout of the control conditional node.
+ *  Reimplemented from dtkComposerNodeControl
  */
 void dtkComposerNodeConditional::layout(void)
 {

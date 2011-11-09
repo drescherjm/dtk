@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Nov  3 13:28:33 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Nov  8 16:27:12 2011 (+0100)
+ * Last-Updated: Wed Nov  9 11:07:04 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 183
+ *     Update #: 195
  */
 
 /* Commentary: 
@@ -709,7 +709,7 @@ void dtkComposerNodeGraphic::onEdgeConnected(dtkComposerEdge *edge)
             dtkComposerEdge *route = new dtkComposerEdge;
             route->setSource(source);
             route->setDestination(destin);
-                
+            
             foreach(dtkComposerEdge *input, destin->node()->l->leftRoutes()) {
                 if (input->source() == source && input->destination() == destin) {
                     delete route;                    
@@ -722,10 +722,66 @@ void dtkComposerNodeGraphic::onEdgeConnected(dtkComposerEdge *edge)
                     return;
                 }
             }
+            
+            if (source->type() == dtkComposerNodeProperty::Generic) {
+                
+                if (source->position() == dtkComposerNodeProperty::Right) {
+                    
+                    if (source->node()->kind() == dtkComposerNode::Control) {
+                        
+                        dtkComposerNodeControl *control_node = dynamic_cast<dtkComposerNodeControl *>(source->node());                    
+                        control_node->l->appendRightRoute(route);
+                    
+                        dtkComposerEdge *active_route = new dtkComposerEdge;
+                        active_route->setSource(route->source());
+                        active_route->setDestination(route->destination());
+                        
+                        control_node->addOutputActiveRoute(active_route);
+                        
+                        if (destin->position() == dtkComposerNodeProperty::Right) {   
+                            
+                            qDebug() << DTK_PRETTY_FUNCTION << "right + control + right" << active_route;                         
+                            dtkComposerNodeControl *output_control_node = dynamic_cast<dtkComposerNodeControl *>(destin->node());
+                            output_control_node->addOutputRelayRoute(active_route);
+                        } else {
+                            
+                            qDebug() << DTK_PRETTY_FUNCTION << "right + control + left" << active_route;   
+                            destin->node()->l->appendLeftRoute(active_route);                            
+                        }
+                        
+                    } else {
+                        
+                        source->node()->l->appendRightRoute(route);
+                        
+                        if (destin->position() == dtkComposerNodeProperty::Right && 
+                            source->node()->isChildOfControlNode(destin->node())) { 
+                            
+                            qDebug() << DTK_PRETTY_FUNCTION << "right + right" << route;  
+                            
+                            dtkComposerNodeControl *control_node = dynamic_cast<dtkComposerNodeControl *>(destin->node());
+                            control_node->addOutputRelayRoute(route);
+                            
+                        } else {
+                            
+                            qDebug() << DTK_PRETTY_FUNCTION << "right + left" << route;  
+                            
+                            destin->node()->l->appendLeftRoute(route);
+                            
+                        }
+                    }
+                    
+                } else {
 
-            if (source->type() == dtkComposerNodeProperty::HybridOutput || 
-                source->type() == dtkComposerNodeProperty::PassThroughOutput || 
-                (source->type() == dtkComposerNodeProperty::Output && source->node()->kind() == dtkComposerNode::Control && !destin->node()->isChildOfControlNode(source->node()))) {
+                    qDebug() << DTK_PRETTY_FUNCTION << "right + left" << route;  
+
+                    dtkComposerNodeControl *control_node = dynamic_cast<dtkComposerNodeControl *>(source->node());
+                    control_node->addInputRelayRoute(route);
+                    
+                }
+
+            } else if (source->type() == dtkComposerNodeProperty::HybridOutput || 
+                       source->type() == dtkComposerNodeProperty::PassThroughOutput || 
+                       (source->type() == dtkComposerNodeProperty::Output && source->node()->kind() == dtkComposerNode::Control && !destin->node()->isChildOfControlNode(source->node()))) {
 
                 dtkComposerNodeControl *control_node = dynamic_cast<dtkComposerNodeControl *>(source->node());                    
                 control_node->l->appendRightRoute(route);

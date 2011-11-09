@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov  7 17:01:32 2011 (+0100)
+ * Last-Updated: Wed Nov  9 14:00:20 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 453
+ *     Update #: 457
  */
 
 /* Commentary: 
@@ -521,16 +521,27 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
                     property_element.setAttribute("position", "left");
                     switch (property->behavior()) {
                     case dtkComposerNodeProperty::AsInput:
-                        property_element.setAttribute("behavior", "asInput");
+                        property_element.setAttribute("behavior", "asinput");
                         break;
                     case dtkComposerNodeProperty::AsOutput:
-                        property_element.setAttribute("behavior", "asOutput");
+                        property_element.setAttribute("behavior", "asoutput");
                         break;
                     case dtkComposerNodeProperty::AsRelay:
-                        property_element.setAttribute("behavior", "asRelay");
+                        property_element.setAttribute("behavior", "asrelay");
                         break;
                     case dtkComposerNodeProperty::AsLoop:
-                        property_element.setAttribute("behavior", "asLoop");
+                        property_element.setAttribute("behavior", "asloop");
+                        break;
+                    }
+                    switch (property->multiplicity()) {
+                    case dtkComposerNodeProperty::Null:
+                        property_element.setAttribute("multiplicity", "null");
+                        break;
+                    case dtkComposerNodeProperty::Single:
+                        property_element.setAttribute("multiplicity", "single");
+                        break;
+                    case dtkComposerNodeProperty::Multiple:
+                        property_element.setAttribute("multiplicity", "multiple");
                         break;
                     }
                     break;
@@ -569,16 +580,27 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
                     property_element.setAttribute("position", "right");
                     switch (property->behavior()) {
                     case dtkComposerNodeProperty::AsInput:
-                        property_element.setAttribute("behavior", "asInput");
+                        property_element.setAttribute("behavior", "asinput");
                         break;
                     case dtkComposerNodeProperty::AsOutput:
-                        property_element.setAttribute("behavior", "asOutput");
+                        property_element.setAttribute("behavior", "asoutput");
                         break;
                     case dtkComposerNodeProperty::AsRelay:
-                        property_element.setAttribute("behavior", "asRelay");
+                        property_element.setAttribute("behavior", "asrelay");
                         break;
                     case dtkComposerNodeProperty::AsLoop:
-                        property_element.setAttribute("behavior", "asLoop");
+                        property_element.setAttribute("behavior", "asloop");
+                        break;
+                    }
+                    switch (property->multiplicity()) {
+                    case dtkComposerNodeProperty::Null:
+                        property_element.setAttribute("multiplicity", "null");
+                        break;
+                    case dtkComposerNodeProperty::Single:
+                        property_element.setAttribute("multiplicity", "single");
+                        break;
+                    case dtkComposerNodeProperty::Multiple:
+                        property_element.setAttribute("multiplicity", "multiple");
                         break;
                     }
                     break;

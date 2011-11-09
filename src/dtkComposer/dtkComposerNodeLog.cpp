@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 20:51:32 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 09:41:12 2011 (+0100)
+ * Last-Updated: Wed Nov  9 11:11:01 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 36
+ *     Update #: 37
  */
 
 /* Commentary: 
@@ -32,7 +32,7 @@ public:
 
 dtkComposerNodeLog::dtkComposerNodeLog(dtkComposerNode *parent) : dtkComposerNode(parent), d(new dtkComposerNodeLogPrivate)
 {
-    d->property_input_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, this);
+    d->property_input_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
 
     this->setTitle("Log");
     this->setKind(dtkComposerNode::View);

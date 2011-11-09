@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Oct 24 12:57:38 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov  8 15:55:04 2011 (+0100)
+ * Last-Updated: Wed Nov  9 11:38:28 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 407
+ *     Update #: 411
  */
 
 /* Commentary: 
@@ -47,7 +47,7 @@
 // Helper definitions
 // /////////////////////////////////////////////////////////////////
 
-// #define DTK_DEBUG_COMPOSER_EVALUATION 1
+#define DTK_DEBUG_COMPOSER_EVALUATION 1
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerEvaluatorPrivate - evaluation
@@ -212,7 +212,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeCase *node)
             if(!property)
                 continue;
 
-            property->setBehavior(dtkComposerNodeProperty::AsInput);
+            // property->setBehavior(dtkComposerNodeProperty::AsInput);
 
             if(!property->edge())
                 continue;
@@ -425,7 +425,19 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeConditional *node)
     qDebug() << DTK_COLOR_BG_RED  << "Running node" << node->title() << "'s logics" << DTK_NO_COLOR;
 #endif
 
-        node->run();
+        { // node->run();
+
+        dtkComposerEvaluatorPrivate evaluator;
+
+        // foreach(dtkComposerNode *child, node->currentBlock()->nodes())
+        //     child->setDirty(true);
+        
+        foreach(dtkComposerNode *child, node->currentBlock()->startNodes())
+            evaluator.stack.push(child);
+
+        evaluator.run();
+
+        }
 
         // -- Clean active output routes
 

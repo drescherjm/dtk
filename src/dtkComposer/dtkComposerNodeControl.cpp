@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Nov  8 15:30:31 2011 (+0100)
+ * Last-Updated: Wed Nov  9 12:14:20 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 901
+ *     Update #: 909
  */
 
 /* Commentary: 
@@ -24,7 +24,7 @@
 #include "dtkComposerNodeLoop.h"
 #include "dtkComposerNodeProperty.h"
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCore/dtkGlobal>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControl implementation
@@ -426,6 +426,8 @@ bool dtkComposerNodeControl::dirtyInputValue(void)
 bool dtkComposerNodeControl::dirtyUpstreamNodes(void)
 {
     foreach(dtkComposerEdge *i_route, this->l->leftRoutes()) {
+        qDebug() << i_route;
+
         if (i_route->destination()->blockedFrom() == d->current_block->title()) {
             
             if(dtkComposerNodeLoop *loop = dynamic_cast<dtkComposerNodeLoop *>(i_route->source()->node())) {
@@ -440,14 +442,18 @@ bool dtkComposerNodeControl::dirtyUpstreamNodes(void)
                     //     return true;
                     // }
                 } else {
-                    if (i_route->source()->node()->dirty())
+                    if (i_route->source()->node()->dirty()) {
+                        qDebug() << i_route->source()->node();
                         return true;
+                    }
                 }
                 
             } else {
                 
-                if (i_route->source()->node()->dirty())
-                    return true;;
+                if (i_route->source()->node()->dirty()) {
+                    qDebug() << i_route->source()->node();
+                    return true;
+                }
                 
             }
         }

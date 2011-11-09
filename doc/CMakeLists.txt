@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Tue Feb  2 20:18:37 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Jul 11 11:14:42 2011 (+0200)
-##           By: Thibaud Kloczko
-##     Update #: 43
+## Last-Updated: Tue Nov  8 17:36:39 2011 (+0100)
+##           By: Julien Wintz
+##     Update #: 47
 ######################################################################
 ## 
 ### Commentary: 
@@ -21,7 +21,7 @@
 ## Retrieve dependencies
 ## #################################################################
 
-set(DOXYGEN_FIND_QUIETLY TRUE)
+set(Doxygen_FIND_QUIETLY TRUE)
 
 find_package(Doxygen)
 
@@ -52,6 +52,4 @@ if (DOXYGEN_FOUND)
   if(EXISTS ${CMAKE_BINARY_DIR}/doc/html)
     install(DIRECTORY ${CMAKE_BINARY_DIR}/doc/html DESTINATION doc)
   endif(EXISTS ${CMAKE_BINARY_DIR}/doc/html)
-else (DOXYGEN_FOUND)
-  message(INFO "Can't find doxygen. Can't build documentation")
 endif (DOXYGEN_FOUND)

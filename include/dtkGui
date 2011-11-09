@@ -18,6 +18,7 @@
 #include "../src/dtkGui/dtkInterpreter.h"
 #include "../src/dtkGui/dtkInterpreterPreferencesWidget.h"
 #include "../src/dtkGui/dtkNavigationBar.h"
+#include "../src/dtkGui/dtkPluginsEditor.h"
 #include "../src/dtkGui/dtkPopup.h"
 #include "../src/dtkGui/dtkPreferencesWidget.h"
 #include "../src/dtkGui/dtkProgressIndicator.h"

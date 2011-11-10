@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Oct 24 12:57:38 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov  9 11:38:28 2011 (+0100)
+ * Last-Updated: Wed Nov  9 16:50:40 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 411
+ *     Update #: 427
  */
 
 /* Commentary: 
@@ -47,7 +47,7 @@
 // Helper definitions
 // /////////////////////////////////////////////////////////////////
 
-#define DTK_DEBUG_COMPOSER_EVALUATION 1
+// #define DTK_DEBUG_COMPOSER_EVALUATION 1
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerEvaluatorPrivate - evaluation
@@ -207,7 +207,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeCase *node)
             block = node->blocks().at(i);
             // foreach(dtkComposerNodeControlBlock *block, node->d->block_cases) {
 
-            property = node->inputProperty(block->title(), "constant");
+            property = node->leftProperty(block->title(), "constant");
 
             if(!property)
                 continue;
@@ -798,12 +798,12 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopFor *node)
             node->pull(i_route, i_route->destination());
 
         foreach(dtkComposerEdge *o_route, node->outputRelayRoutes()) {
-            if (o_route->destination()->blockedFrom() == node->d->block_cond->title()) {
+            if (o_route->destination()->blockedFrom() == node->blocks().at(0)->title()) {
                 if (o_route->destination()->name() == "condition") {
                     node->d->node_cond = o_route->source()->node();
                     node->d->prop_cond = o_route->source();
                 }
-            } else if (o_route->destination()->blockedFrom() == node->d->block_post->title()) {
+            } else if (o_route->destination()->blockedFrom() == node->blocks().at(2)->title()) {
                 if (o_route->destination()->name() == "variable") {
                     node->d->node_post = o_route->source()->node();
                     node->d->prop_post = o_route->source();
@@ -821,8 +821,20 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopFor *node)
 
         // -- First of all, condition of loop evaluation is evaluated from conditional block.
 
-        node->setCurrentBlock(node->d->block_cond);
-        node->run();
+        node->setCurrentBlock(node->blocks().at(0));
+        { // node->run()
+
+            dtkComposerEvaluatorPrivate evaluator;
+            
+            // foreach(dtkComposerNode *child, node->currentBlock()->nodes())
+            //     child->setDirty(true);
+            
+            foreach(dtkComposerNode *child, node->currentBlock()->startNodes())
+                evaluator.stack.push(child);
+            
+            evaluator.run();
+            
+        }
 
         // -- Loop evaluation is performed while condition is fullfilled
 
@@ -830,8 +842,20 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopFor *node)
 
             // -- Workflow of loop block is evaluated
 
-            node->setCurrentBlock(node->d->block_loop);
-            node->run();
+            node->setCurrentBlock(node->blocks().at(1));
+            { // node->run()
+
+                dtkComposerEvaluatorPrivate evaluator;
+                
+                // foreach(dtkComposerNode *child, node->currentBlock()->nodes())
+                //     child->setDirty(true);
+                
+                foreach(dtkComposerNode *child, node->currentBlock()->startNodes())
+                    evaluator.stack.push(child);
+                
+                evaluator.run();
+                
+            }
 
             // -- Loop variables, if present, are updated.
                 
@@ -840,14 +864,38 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopFor *node)
 
             // -- Loop variable is updated from post block.
 
-            node->setCurrentBlock(node->d->block_post);
-            node->run();            
+            node->setCurrentBlock(node->blocks().at(2));
+            { // node->run()
+
+                dtkComposerEvaluatorPrivate evaluator;
+                
+                // foreach(dtkComposerNode *child, node->currentBlock()->nodes())
+                //     child->setDirty(true);
+                
+                foreach(dtkComposerNode *child, node->currentBlock()->startNodes())
+                    evaluator.stack.push(child);
+                
+                evaluator.run();
+                
+            }
             node->d->loop_variable = node->d->node_post->value(node->d->prop_post);
 
             // -- Loop condition is re-calculated from condition block.
             
-            node->setCurrentBlock(node->d->block_cond);
-            node->run();
+            node->setCurrentBlock(node->blocks().at(0));
+            { // node->run()
+
+                dtkComposerEvaluatorPrivate evaluator;
+                
+                // foreach(dtkComposerNode *child, node->currentBlock()->nodes())
+                //     child->setDirty(true);
+                
+                foreach(dtkComposerNode *child, node->currentBlock()->startNodes())
+                    evaluator.stack.push(child);
+                
+                evaluator.run();
+                
+            }
             
         }
             
@@ -937,7 +985,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopWhile *node)
             node->pull(i_route, i_route->destination());
         
         foreach(dtkComposerEdge *o_route, node->outputRelayRoutes()) {
-            if (o_route->destination()->blockedFrom() == node->d->block_cond->title()) {
+            if (o_route->destination()->blockedFrom() == node->blocks().at(0)->title()) {
                 if (o_route->destination()->name() == "condition") {
                     node->d->node_cond = o_route->source()->node();
                     node->d->prop_cond = o_route->source();
@@ -955,7 +1003,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopWhile *node)
 
         // -- First of all, condition of loop evaluation is evaluated from conditional block.
 
-        node->setCurrentBlock(node->d->block_cond);
+        node->setCurrentBlock(node->blocks().at(0));
 
         { // node->run()
 
@@ -976,7 +1024,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopWhile *node)
 
             // -- Workflow of loop block is evaluated
 
-            node->setCurrentBlock(node->d->block_loop);
+            node->setCurrentBlock(node->blocks().at(1));
 
             { // node->run()
 
@@ -998,7 +1046,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopWhile *node)
 
             // -- Loop condition is re-calculated from condition block.
 
-            node->setCurrentBlock(node->d->block_cond);
+            node->setCurrentBlock(node->blocks().at(0));
 
             { // node->run()
 

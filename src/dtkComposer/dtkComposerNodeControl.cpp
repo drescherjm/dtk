@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov  9 12:14:20 2011 (+0100)
+ * Last-Updated: Thu Nov 10 14:05:54 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 909
+ *     Update #: 991
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeLoop.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerScene.h"
 
 #include <dtkCore/dtkGlobal>
 
@@ -64,6 +65,10 @@ dtkComposerNodeControl::~dtkComposerNodeControl(void)
 
     d = NULL;
 }
+
+// /////////////////////////////////////////////////////////////////
+// Methods dealing with composition graphical logics.
+// /////////////////////////////////////////////////////////////////
 
 //! Appends \a block in the list of blocks.
 /*! 
@@ -108,61 +113,43 @@ void dtkComposerNodeControl::setCurrentBlock(dtkComposerNodeControlBlock *block)
     d->current_block = block;
 }
 
-//! Returns block naming \a title.
+//! Appends a property defined by its \a name, its \a behavior and its
+//! \a multiplicity in the list of left and right properties of \a
+//! block.
 /*! 
- *  
+ *  When block already contains a left or a right property with the
+ *  same name, nothing is done.
  */
-dtkComposerNodeControlBlock *dtkComposerNodeControl::block(const QString& title)
+void dtkComposerNodeControl::appendBlockProperty(const QString& name, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeControlBlock *block)
 {
-    foreach(dtkComposerNodeControlBlock *block, d->blocks)
-        if(block->title() == title)
-            return block;
+    if (block->property(name, dtkComposerNodeProperty::Left) || 
+        block->property(name, dtkComposerNodeProperty::Right)) {
+        qDebug() << QString("Property %1 already exists. Please choose another name.").arg(name);
+        return;
+    }
 
-    return NULL;
+    dtkComposerNodeProperty *left_property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Left, behavior, multiplicity, this);
+    left_property->setType(dtkComposerNodeProperty::Generic);
+    left_property->setBlockedFrom(block->title());
+
+    block->appendLeftProperty(left_property);
+    this->g->appendLeftProperty(left_property);
+
+    dtkComposerNodeProperty *right_property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Right, behavior, multiplicity, this);
+    right_property->setType(dtkComposerNodeProperty::Generic);
+    right_property->setBlockedFrom(block->title());
+
+    block->appendRightProperty(right_property);
+    this->g->appendRightProperty(right_property);
 }
 
-dtkComposerNodeControlBlock *dtkComposerNodeControl::addBlock(const QString& title)
-{
-    dtkComposerNodeControlBlock *block = new dtkComposerNodeControlBlock(title, this);
-    
-    d->blocks << block;
-
-    d->block_added = true;
-
-    this->layout();
-
-    return block;
-}
-
-//! Returns list of all the blocks.
-/*! 
- *  The current block is typically the place where the logic of the
- *  control node is performed. The current block can vary dynamically
- *  according to the conditions arising in the composer logic.
- *
- *  See also setCurrentBlock.
- */
-QList<dtkComposerNodeControlBlock *> dtkComposerNodeControl::blocks(void)
-{
-    return d->blocks;
-}
-
-//! Returns the current block.
-/*! 
- *  
- */
-dtkComposerNodeControlBlock *dtkComposerNodeControl::currentBlock(void)
-{
-    return d->current_block;
-}
-
-//! Appends a property defined by its name, its behavior and its
-//! multiplicity in the list of left properties of \a block.
+//! Appends a property defined by its \a name, its \a behavior and its
+//! \a multiplicity in the list of left properties of \a block.
 /*! 
  *  When block already contains a left property with the same name,
  *  nothing is done.
  */
-void dtkComposerNodeControl::appendBlockLeftProperty(QString name, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeControlBlock *block)
+void dtkComposerNodeControl::appendBlockLeftProperty(const QString& name, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeControlBlock *block)
 {
     if (block->property(name, dtkComposerNodeProperty::Left)) {
         qDebug() << QString("Property %1 already exists. Please choose another name.").arg(name);
@@ -177,13 +164,13 @@ void dtkComposerNodeControl::appendBlockLeftProperty(QString name, dtkComposerNo
     this->g->appendLeftProperty(property);
 }
 
-//! Appends a property defined by its name, its behavior and its
-//! multiplicity in the list of right properties of \a block.
+//! Appends a property defined by its \a name, its \a behavior and its
+//! \a multiplicity in the list of right properties of \a block.
 /*! 
  *  When block already contains a right property with the same name,
  *  nothing is done.
  */
-void dtkComposerNodeControl::appendBlockRightProperty(QString name, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeControlBlock *block)
+void dtkComposerNodeControl::appendBlockRightProperty(const QString& name, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeControlBlock *block)
 {
     if (block->property(name, dtkComposerNodeProperty::Right)) {
         qDebug() << QString("Property %1 already exists. Please choose another name.").arg(name);
@@ -198,17 +185,236 @@ void dtkComposerNodeControl::appendBlockRightProperty(QString name, dtkComposerN
     this->g->appendRightProperty(property);
 }
 
-QList<dtkComposerNodeProperty *> dtkComposerNodeControl::leftProperties(dtkComposerNodeControlBlock *block)
+//! Removes a property defined by its \a name from the list of left
+//! and right properties of \a block.
+/*! 
+ *  When block does not contain this property, nothing is done.
+ */
+void dtkComposerNodeControl::removeBlockProperty(const QString& name, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeControlBlock *block)
 {
-    return d->block_left_properties.values(block);
+    if (!block->property(name, dtkComposerNodeProperty::Left) &&
+        !block->property(name, dtkComposerNodeProperty::Right)) {
+        qDebug() << QString("No property named %1 exists. Nothing is done.").arg(name);
+        return;
+    }
+
+    if (dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene())) {
+
+        dtkComposerNodeProperty *property = block->property(name, dtkComposerNodeProperty::Left);
+
+        if (property) {
+
+            if (property->behavior() == behavior) {
+
+                block->removeLeftProperty(property);
+       
+                foreach(dtkComposerEdge *edge, this->g->leftEdges()) {
+                    if(edge->destination() == property)
+                        scene->removeEdge(edge);
+                }
+                
+                foreach(dtkComposerEdge *edge, this->g->leftRelayEdges()) {
+                    if(edge->source() == property)
+                        scene->removeEdge(edge);
+                }
+                
+                this->g->removeLeftProperty(property);
+                delete property;
+
+            } else {
+
+                qDebug() << DTK_PRETTY_FUNCTION << "The input behavior does not match with the left property of name" << name;
+
+            }
+                
+        } else {
+
+                qDebug() << DTK_PRETTY_FUNCTION << "Left property of name" << name << "does not exist.";
+
+        }
+
+        property = block->property(name, dtkComposerNodeProperty::Right);
+
+        if (property) {
+
+            if (property->behavior() == behavior) {
+
+                block->removeRightProperty(property);
+       
+                foreach(dtkComposerEdge *edge, this->g->rightEdges()) {
+                    if(edge->source() == property)
+                        scene->removeEdge(edge);
+                }
+            
+                foreach(dtkComposerEdge *edge, this->g->rightRelayEdges()) {
+                    if(edge->destination() == property)
+                        scene->removeEdge(edge);
+                }
+                    
+                this->g->removeRightProperty(property);
+                delete property;
+
+            } else {
+
+                qDebug() << DTK_PRETTY_FUNCTION << "The input behavior does not match with the right property of name" << name;
+
+            }
+                
+        } else {
+
+                qDebug() << DTK_PRETTY_FUNCTION << "Right property of name" << name << "does not exist.";
+
+        }
+    }
 }
 
-QList<dtkComposerNodeProperty *> dtkComposerNodeControl::rightProperties(dtkComposerNodeControlBlock *block)
+//! Removes a property defined by its \a name from the list of right
+//! properties of \a block.
+/*! 
+ *  When block does not contain this property, nothing is done.
+ */
+void dtkComposerNodeControl::removeBlockLeftProperty(const QString& name, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeControlBlock *block)
 {
-    return d->block_right_properties.values(block);
+    if (!block->property(name, dtkComposerNodeProperty::Left)) {
+        qDebug() << QString("No left property named %1 exists. Nothing is done.").arg(name);
+        return;
+    }
+
+    if (dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene())) {
+
+        dtkComposerNodeProperty *property = block->property(name, dtkComposerNodeProperty::Left);
+
+        if (property->behavior() == behavior) {
+
+            block->removeLeftProperty(property);
+            
+            foreach(dtkComposerEdge *edge, this->g->leftEdges()) {
+                if(edge->destination() == property)
+                    scene->removeEdge(edge);
+            }
+            
+            foreach(dtkComposerEdge *edge, this->g->leftRelayEdges()) {
+                if(edge->source() == property)
+                    scene->removeEdge(edge);
+            }
+            
+            this->g->removeLeftProperty(property);
+            delete property;
+            
+        } else {
+            
+            qDebug() << DTK_PRETTY_FUNCTION << "The input behavior does not match with the left property of name" << name;
+            
+        }
+    }
 }
 
-dtkComposerNodeProperty *dtkComposerNodeControl::inputProperty(const QString& block_title, const QString& name) const
+//! Removes a property defined by its \a name from the list of left
+//! properties of \a block.
+/*! 
+ *  When block does not contain this property, nothing is done.
+ */
+void dtkComposerNodeControl::removeBlockRightProperty(const QString& name, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeControlBlock *block)
+{    
+    if (!block->property(name, dtkComposerNodeProperty::Right)) {
+        qDebug() << QString("No right property named %1 exists. Nothing is done.").arg(name);
+        return;
+    }
+
+    if (dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene())) {
+
+        dtkComposerNodeProperty *property = block->property(name, dtkComposerNodeProperty::Right);
+
+        if (property->behavior() == behavior) {
+            
+            block->removeRightProperty(property);
+            
+            foreach(dtkComposerEdge *edge, this->g->rightEdges()) {
+                if(edge->source() == property)
+                    scene->removeEdge(edge);
+            }
+            
+            foreach(dtkComposerEdge *edge, this->g->rightRelayEdges()) {
+                if(edge->destination() == property)
+                    scene->removeEdge(edge);
+            }
+            
+            this->g->removeRightProperty(property);
+            delete property;
+            
+        } else {
+            
+            qDebug() << DTK_PRETTY_FUNCTION << "The input behavior does not match with found property";
+
+        }
+    }
+}
+
+//! Returns list of all the blocks.
+/*! 
+ *  The current block is typically the place where the logic of the
+ *  control node is performed. The current block can vary dynamically
+ *  according to the conditions arising in the composer logic.
+ *
+ *  See also setCurrentBlock.
+ */
+const QList<dtkComposerNodeControlBlock *>& dtkComposerNodeControl::blocks(void) const
+{
+    return d->blocks;
+}
+
+//! Returns block naming \a title.
+/*! 
+ *  
+ */
+dtkComposerNodeControlBlock *dtkComposerNodeControl::block(const QString& title) const
+{
+    foreach(dtkComposerNodeControlBlock *block, d->blocks)
+        if(block->title() == title)
+            return block;
+
+    return NULL;
+}
+
+//! Returns the current block.
+/*! 
+ *  
+ */
+dtkComposerNodeControlBlock *dtkComposerNodeControl::currentBlock(void) const
+{
+    return d->current_block;
+}
+
+//! Returns the list of left properties owned by the block of name \a
+//! title.
+/*! 
+ *  
+ */
+const QList<dtkComposerNodeProperty *>& dtkComposerNodeControl::leftProperties(const QString& block_title) const
+{
+    foreach(dtkComposerNodeControlBlock *block, d->blocks)
+        if(block->title() == block_title)
+            return block->leftProperties();
+}
+
+//! Returns the list of right properties owned by the block of name \a
+//! title.
+/*! 
+ *  
+ */
+const QList<dtkComposerNodeProperty *>& dtkComposerNodeControl::rightProperties(const QString& block_title) const
+{
+    foreach(dtkComposerNodeControlBlock *block, d->blocks)
+        if(block->title() == block_title)
+            return block->rightProperties();
+}
+
+//! Returns the left property defined by its \a name and owned by the
+//! block named \a title.
+/*! 
+ *  
+ */
+dtkComposerNodeProperty *dtkComposerNodeControl::leftProperty(const QString& block_title, const QString& name) const
 {
     foreach(dtkComposerNodeControlBlock *block, d->blocks)
         if(block->title() == block_title)
@@ -219,7 +425,12 @@ dtkComposerNodeProperty *dtkComposerNodeControl::inputProperty(const QString& bl
     return NULL;
 }
 
-dtkComposerNodeProperty *dtkComposerNodeControl::outputProperty(const QString& block_title, const QString& name) const
+//! Returns the right property defined by its \a name and owned by the
+//! block named \a title.
+/*! 
+ *  
+ */
+dtkComposerNodeProperty *dtkComposerNodeControl::rightProperty(const QString& block_title, const QString& name) const
 {
     foreach(dtkComposerNodeControlBlock *block, d->blocks)
         if(block->title() == block_title)
@@ -229,6 +440,10 @@ dtkComposerNodeProperty *dtkComposerNodeControl::outputProperty(const QString& b
 
     return NULL;
 }
+
+// /////////////////////////////////////////////////////////////////
+// Methods dealing with composition evaluation logics
+// /////////////////////////////////////////////////////////////////
 
 void dtkComposerNodeControl::addInputRelayRoute(dtkComposerEdge *route)
 {
@@ -258,16 +473,6 @@ void dtkComposerNodeControl::removeAllRelayRoutes(void)
     d->output_relay_routes.clear();
 }
 
-QList<dtkComposerEdge *> dtkComposerNodeControl::inputRelayRoutes(void)
-{
-    return d->input_relay_routes;
-}
-
-QList<dtkComposerEdge *> dtkComposerNodeControl::outputRelayRoutes(void)
-{
-    return d->output_relay_routes;
-}
-
 void dtkComposerNodeControl::addInputActiveRoute(dtkComposerEdge *route)
 {
     if (!d->input_active_routes.contains(route))
@@ -294,6 +499,16 @@ void dtkComposerNodeControl::removeAllActiveRoutes(void)
 {
     d->input_active_routes.clear();
     d->output_active_routes.clear();
+}
+
+QList<dtkComposerEdge *> dtkComposerNodeControl::inputRelayRoutes(void)
+{
+    return d->input_relay_routes;
+}
+
+QList<dtkComposerEdge *> dtkComposerNodeControl::outputRelayRoutes(void)
+{
+    return d->output_relay_routes;
 }
 
 QList<dtkComposerEdge *> dtkComposerNodeControl::inputActiveRoutes(void)
@@ -426,8 +641,6 @@ bool dtkComposerNodeControl::dirtyInputValue(void)
 bool dtkComposerNodeControl::dirtyUpstreamNodes(void)
 {
     foreach(dtkComposerEdge *i_route, this->l->leftRoutes()) {
-        qDebug() << i_route;
-
         if (i_route->destination()->blockedFrom() == d->current_block->title()) {
             
             if(dtkComposerNodeLoop *loop = dynamic_cast<dtkComposerNodeLoop *>(i_route->source()->node())) {
@@ -443,7 +656,6 @@ bool dtkComposerNodeControl::dirtyUpstreamNodes(void)
                     // }
                 } else {
                     if (i_route->source()->node()->dirty()) {
-                        qDebug() << i_route->source()->node();
                         return true;
                     }
                 }
@@ -451,23 +663,12 @@ bool dtkComposerNodeControl::dirtyUpstreamNodes(void)
             } else {
                 
                 if (i_route->source()->node()->dirty()) {
-                    qDebug() << i_route->source()->node();
                     return true;
                 }
                 
             }
         }
     }
-
-    return false;
-}
-
-bool dtkComposerNodeControl::dirtyBlockEndNodes(void)
-{        
-    foreach(dtkComposerEdge *o_route, this->outputRelayRoutes())
-        if (o_route->destination()->blockedFrom() == this->currentBlock()->title())
-            if (o_route->source()->node()->dirty())
-                return true;
 
     return false;
 }

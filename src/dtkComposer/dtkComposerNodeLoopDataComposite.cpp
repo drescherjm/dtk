@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Oct 12 16:02:18 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 15:48:24 2011 (+0100)
+ * Last-Updated: Wed Nov  9 15:50:28 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 199
+ *     Update #: 211
  */
 
 /* Commentary: 
@@ -33,35 +33,44 @@
 #include <dtkCore/dtkGlobal>
 #include <dtkCore/dtkLog>
 
-// #define DTK_DEBUG_COMPOSER_INTERACTION 1
-// #define DTK_DEBUG_COMPOSER_EVALUATION 1
-
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeLoopDataCompositePrivate declaration
+// dtkComposerNodeLoopDataCompositePrivate implementation
 // /////////////////////////////////////////////////////////////////
 
+//! Creates a block defined by its \a title inside the data composite
+//! loop node \a parent.
+/*! 
+ *  
+ */
+dtkComposerNodeControlBlock *dtkComposerNodeLoopDataCompositePrivate::createBlock(const QString& title, dtkComposerNodeLoopDataComposite *parent)
+{
+    dtkComposerNodeControlBlock *block = new dtkComposerNodeControlBlock(title, parent);
+    parent->appendBlock(block);
+
+    block->setInteractive(false);
+    block->setHeightRatio(1);
+
+    parent->appendBlockLeftProperty("from", dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Single, block);
+    parent->appendBlockLeftProperty("to", dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Single, block);
+    parent->appendBlockLeftProperty("step", dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Single, block);
+    parent->appendBlockLeftProperty("item", dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, block);
+    parent->appendBlockLeftProperty("index", dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, block);
+
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeLoopDataComposite implementation
 // /////////////////////////////////////////////////////////////////
 
-//! 
+//! Constructs a dtkComposerNodeLoopDataComposite.
 /*! 
  * 
  */
 dtkComposerNodeLoopDataComposite::dtkComposerNodeLoopDataComposite(dtkComposerNode *parent) : dtkComposerNodeLoop(parent), d(new dtkComposerNodeLoopDataCompositePrivate)
 {
-    d->block_loop = this->addBlock("loop");
-    d->block_loop->setInteractive(false);
-    d->block_loop->setHeightRatio(1);
+    d->createBlock("loop", this);
 
-    this->g->appendLeftProperty(d->block_loop->appendLeftProperty("from", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, dtkComposerNodeProperty::None, this));
-    this->g->appendLeftProperty(d->block_loop->appendLeftProperty("to", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, dtkComposerNodeProperty::None, this));
-    this->g->appendLeftProperty(d->block_loop->appendLeftProperty("step", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, dtkComposerNodeProperty::None, this));
-    this->g->appendLeftProperty(d->block_loop->appendLeftProperty("item", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, dtkComposerNodeProperty::AsLoopInput, this));
-    this->g->appendLeftProperty(d->block_loop->appendLeftProperty("index", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, dtkComposerNodeProperty::AsLoopInput, this));
-
-    this->setCurrentBlock(d->block_loop);
+    this->setCurrentBlock(this->blocks().at(0));
 
     this->setColor(QColor("#2ABFFF"));
     this->setInputPropertyName("composite");
@@ -83,7 +92,7 @@ dtkComposerNodeLoopDataComposite::dtkComposerNodeLoopDataComposite(dtkComposerNo
     d->valid_input_composite = false;
 }
 
-//! 
+//! Destroys dtkComposerNodeLoopDataComposite.
 /*! 
  * 
  */
@@ -94,9 +103,9 @@ dtkComposerNodeLoopDataComposite::~dtkComposerNodeLoopDataComposite(void)
     d = NULL;
 }
 
-//! 
+//! Defines the layout of the control DataComposite loop node.
 /*! 
- * 
+ *  Reimplemented from dtkComposerNodeControl.
  */
 void dtkComposerNodeLoopDataComposite::layout(void)
 {

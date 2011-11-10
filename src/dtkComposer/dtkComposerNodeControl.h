@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:47:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov  9 12:14:27 2011 (+0100)
+ * Last-Updated: Thu Nov 10 14:05:43 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 145
+ *     Update #: 172
  */
 
 /* Commentary: 
@@ -38,29 +38,29 @@ public:
     ~dtkComposerNodeControl(void);
 
 public:
-    void appendBlock(dtkComposerNodeControlBlock *block);
-    void removeBlock(dtkComposerNodeControlBlock *block);
-
+    void     appendBlock(dtkComposerNodeControlBlock *block);
+    void     removeBlock(dtkComposerNodeControlBlock *block);
     void setCurrentBlock(dtkComposerNodeControlBlock *block);
 
-public:
-    dtkComposerNodeControlBlock    *block(const QString& title);
-    dtkComposerNodeControlBlock *addBlock(const QString& title);
+    void      appendBlockProperty(const QString& name, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeControlBlock *block);
+    void  appendBlockLeftProperty(const QString& name, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeControlBlock *block);
+    void appendBlockRightProperty(const QString& name, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeControlBlock *block);
 
-    QList<dtkComposerNodeControlBlock *> blocks(void);
-
-    dtkComposerNodeControlBlock *currentBlock(void);
-
-public:
-    virtual void appendBlockLeftProperty(QString name, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeControlBlock *block);
-    virtual void appendBlockRightProperty(QString name, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeControlBlock *block);
-
-    QList<dtkComposerNodeProperty *>  leftProperties(dtkComposerNodeControlBlock *block);
-    QList<dtkComposerNodeProperty *> rightProperties(dtkComposerNodeControlBlock *block);
+    void      removeBlockProperty(const QString& name, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeControlBlock *block);
+    void  removeBlockLeftProperty(const QString& name, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeControlBlock *block);
+    void removeBlockRightProperty(const QString& name, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeControlBlock *block);
 
 public:
-    dtkComposerNodeProperty  *inputProperty(const QString& block_title, const QString& name) const;
-    dtkComposerNodeProperty *outputProperty(const QString& block_title, const QString& name) const;
+    const QList<dtkComposerNodeControlBlock *>& blocks(void) const;
+
+    dtkComposerNodeControlBlock        *block(const QString& title) const;
+    dtkComposerNodeControlBlock *currentBlock(void) const;
+
+    const QList<dtkComposerNodeProperty *>&  leftProperties(const QString& block_title) const;
+    const QList<dtkComposerNodeProperty *>& rightProperties(const QString& block_title) const;
+
+    dtkComposerNodeProperty  *leftProperty(const QString& block_title, const QString& name) const;
+    dtkComposerNodeProperty *rightProperty(const QString& block_title, const QString& name) const;
 
 public:
     void  addInputRelayRoute(dtkComposerEdge *route);
@@ -70,15 +70,16 @@ public:
     void removeOutputRelayRoute(dtkComposerEdge *route);
     void   removeAllRelayRoutes(void);
 
-    QList<dtkComposerEdge *>  inputRelayRoutes(void);
-    QList<dtkComposerEdge *> outputRelayRoutes(void);
-
     void  addInputActiveRoute(dtkComposerEdge *route);
     void addOutputActiveRoute(dtkComposerEdge *route);
 
     void  removeInputActiveRoute(dtkComposerEdge *route);
     void removeOutputActiveRoute(dtkComposerEdge *route);
     void   removeAllActiveRoutes(void);
+
+public:
+    QList<dtkComposerEdge *>  inputRelayRoutes(void);
+    QList<dtkComposerEdge *> outputRelayRoutes(void);
 
     QList<dtkComposerEdge *>  inputActiveRoutes(void);
     QList<dtkComposerEdge *> outputActiveRoutes(void);
@@ -100,9 +101,8 @@ protected:
     void setRunning(bool running);
 
 protected:
-            bool dirtyInputValue(void);
-            bool dirtyUpstreamNodes(void);
-    virtual bool dirtyBlockEndNodes(void);
+    bool    dirtyInputValue(void);
+    bool dirtyUpstreamNodes(void);
 
     void markDirtyDownstreamNodes(void);
 

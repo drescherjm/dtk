@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:46:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Nov  8 14:11:24 2011 (+0100)
+ * Last-Updated: Thu Nov 10 13:44:03 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 101
+ *     Update #: 126
  */
 
 /* Commentary: 
@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODECONTROLBLOCK_H
 #define DTKCOMPOSERNODECONTROLBLOCK_H
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCore/dtkGlobal>
 
 #include "dtkComposerExport.h"
 #include "dtkComposerNodeProperty.h"
@@ -45,9 +45,36 @@ public:
      dtkComposerNodeControlBlock(const QString& title, dtkComposerNodeControl *parent);
     ~dtkComposerNodeControlBlock(void);
 
-    dtkComposerNodeControl *parentNode(void);
+public:
+    dtkComposerNodeControl *parentNode(void) const;
 
     QString title(void) const;
+
+public:
+    void     appendNode(dtkComposerNode *node);
+    void     removeNode(dtkComposerNode *node);
+    void removeAllNodes(void);
+
+    void appendLeftProperty(dtkComposerNodeProperty *property);
+    void appendRightProperty(dtkComposerNodeProperty *property);
+
+    void  removeLeftProperty(dtkComposerNodeProperty *property);
+    void removeRightProperty(dtkComposerNodeProperty *property);
+    void removeAllProperties(void);
+
+    void clear(void);
+    void clearProperty(dtkComposerNodeProperty *property);
+
+public:
+    const QList<dtkComposerNode *>&      nodes(void) const;
+          QList<dtkComposerNode *>  startNodes(QList<dtkComposerNode *> parents = QList<dtkComposerNode *>());
+
+    const QList<dtkComposerNodeProperty *>&  leftProperties(void) const;
+    const QList<dtkComposerNodeProperty *>& rightProperties(void) const;
+
+    dtkComposerNodeProperty *property(QString name, dtkComposerNodeProperty::Position position);
+
+public:
     QColor brushColor(void) const;
     QColor penColor(void) const;
 
@@ -58,41 +85,6 @@ public:
     void setPenColor(const QColor& color);
     void setRect(const QRectF& rectangle);
     void setRect(qreal x, qreal y, qreal width, qreal height);
-
-    QList<dtkComposerNode *>      nodes(void);
-    QList<dtkComposerNode *> startNodes(QList<dtkComposerNode *> parents = QList<dtkComposerNode *>());
-    QList<dtkComposerNode *>   endNodes(QList<dtkComposerNode *> parents = QList<dtkComposerNode *>());
-
-    void        addNode(dtkComposerNode *node);
-    void     removeNode(dtkComposerNode *node);
-    void removeAllNodes(void);
-
-    QList<dtkComposerNodeProperty *>  leftProperties(void);
-    QList<dtkComposerNodeProperty *> rightProperties(void);
-
-    dtkComposerNodeProperty  *appendLeftProperty(QString name, dtkComposerNode *parent = 0);
-    dtkComposerNodeProperty *appendRightProperty(QString name, dtkComposerNode *parent = 0);
-
-    dtkComposerNodeProperty  *appendLeftPassThroughProperty(QString name, dtkComposerNode *parent = 0);
-    dtkComposerNodeProperty *appendRightPassThroughProperty(QString name, dtkComposerNode *parent = 0);
-
-    dtkComposerNodeProperty  *appendLeftProperty(QString name, dtkComposerNodeProperty::Type type, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeProperty::Behavior behavior, dtkComposerNode *parent = 0);
-    dtkComposerNodeProperty *appendRightProperty(QString name, dtkComposerNodeProperty::Type type, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeProperty::Behavior behavior, dtkComposerNode *parent = 0);
-
-    void appendProperty(QString name, dtkComposerNodeProperty::Position position, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNode *parent);
-
-
-public:
-    void appendLeftProperty(dtkComposerNodeProperty *property);
-    void appendRightProperty(dtkComposerNodeProperty *property);
-
-    dtkComposerNodeProperty *property(QString name, dtkComposerNodeProperty::Position position);
-
-    void  removeLeftProperty(dtkComposerNodeProperty *property);
-    void removeRightProperty(dtkComposerNodeProperty *property);
-    void removeAllProperties(void);
-
-    void clear(void);
 
 public:
     qreal height(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Oct 25 10:15:48 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Oct 25 10:18:26 2011 (+0200)
+ * Last-Updated: Wed Nov  9 15:23:27 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 3
+ *     Update #: 5
  */
 
 /* Commentary: 
@@ -28,7 +28,7 @@ class dtkAbstractDataComposite;
 class dtkComposerNodeLoopDataCompositePrivate
 {
 public:
-    dtkComposerNodeControlBlock *block_loop;
+    dtkComposerNodeControlBlock *createBlock(const QString& title, dtkComposerNodeLoopDataComposite *parent);
 
 public:
     dtkxarch_int from_default;

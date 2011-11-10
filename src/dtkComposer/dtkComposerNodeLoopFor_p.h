@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Oct 26 16:37:12 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 26 16:39:07 2011 (+0200)
+ * Last-Updated: Wed Nov  9 16:08:16 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 5
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -22,16 +22,16 @@
 class QVariant;
 
 class dtkComposerNode;
+class dtkComposerNodeLoopFor;
 class dtkComposerNodeControlBlock;
 class dtkComposerNodeProperty;
 
 class dtkComposerNodeLoopForPrivate
 {
 public:
-    dtkComposerNodeControlBlock *block_cond;
-    dtkComposerNodeControlBlock *block_loop;
-    dtkComposerNodeControlBlock *block_post;
+    dtkComposerNodeControlBlock *createBlock(const QString& title, dtkComposerNodeLoopFor *parent);
 
+public:
     dtkComposerNode *node_cond;
     dtkComposerNode *node_post;
 

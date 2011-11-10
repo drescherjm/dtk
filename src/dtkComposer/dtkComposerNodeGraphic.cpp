@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Nov  3 13:28:33 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov  9 11:07:04 2011 (+0100)
+ * Last-Updated: Thu Nov 10 09:59:34 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 195
+ *     Update #: 199
  */
 
 /* Commentary: 
@@ -252,7 +252,7 @@ dtkComposerNode *dtkComposerNodeGraphic::node(void)
 
 //! Appends \a property in list of left properties
 /*! 
- *  
+ *  Owner node layout is also updated.
  */
 void dtkComposerNodeGraphic::appendLeftProperty(dtkComposerNodeProperty *property)
 {
@@ -266,7 +266,7 @@ void dtkComposerNodeGraphic::appendLeftProperty(dtkComposerNodeProperty *propert
 
 //! Appends \a property in list of right properties
 /*! 
- *  
+ *  Owner node layout is also updated.
  */
 void dtkComposerNodeGraphic::appendRightProperty(dtkComposerNodeProperty *property)
 {
@@ -740,12 +740,10 @@ void dtkComposerNodeGraphic::onEdgeConnected(dtkComposerEdge *edge)
                         
                         if (destin->position() == dtkComposerNodeProperty::Right) {   
                             
-                            qDebug() << DTK_PRETTY_FUNCTION << "right + control + right" << active_route;                         
                             dtkComposerNodeControl *output_control_node = dynamic_cast<dtkComposerNodeControl *>(destin->node());
                             output_control_node->addOutputRelayRoute(active_route);
                         } else {
                             
-                            qDebug() << DTK_PRETTY_FUNCTION << "right + control + left" << active_route;   
                             destin->node()->l->appendLeftRoute(active_route);                            
                         }
                         
@@ -756,14 +754,10 @@ void dtkComposerNodeGraphic::onEdgeConnected(dtkComposerEdge *edge)
                         if (destin->position() == dtkComposerNodeProperty::Right && 
                             source->node()->isChildOfControlNode(destin->node())) { 
                             
-                            qDebug() << DTK_PRETTY_FUNCTION << "right + right" << route;  
-                            
                             dtkComposerNodeControl *control_node = dynamic_cast<dtkComposerNodeControl *>(destin->node());
                             control_node->addOutputRelayRoute(route);
                             
                         } else {
-                            
-                            qDebug() << DTK_PRETTY_FUNCTION << "right + left" << route;  
                             
                             destin->node()->l->appendLeftRoute(route);
                             
@@ -771,8 +765,6 @@ void dtkComposerNodeGraphic::onEdgeConnected(dtkComposerEdge *edge)
                     }
                     
                 } else {
-
-                    qDebug() << DTK_PRETTY_FUNCTION << "right + left" << route;  
 
                     dtkComposerNodeControl *control_node = dynamic_cast<dtkComposerNodeControl *>(source->node());
                     control_node->addInputRelayRoute(route);

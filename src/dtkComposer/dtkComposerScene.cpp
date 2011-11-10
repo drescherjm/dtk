@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov  9 10:22:09 2011 (+0100)
+ * Last-Updated: Thu Nov 10 10:40:37 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 2967
+ *     Update #: 2971
  */
 
 /* Commentary: 
@@ -458,7 +458,7 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
             child->setParentNode(parent);
 
             if (parent_block) {
-                parent_block->addNode(child);
+                parent_block->appendNode(child);
                 child->setParentItem(parent_block);
             } else {
                 child->setParentItem(node->parentItem());
@@ -547,7 +547,7 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
         group->setParentNode(parent_block->parentNode());
         group->setParentItem(parent_block);
         parent_block->parentNode()->addChildNode(group);
-        parent_block->addNode(group);
+        parent_block->appendNode(group);
     } else if (d->current_node) {
         group->setParentNode(d->current_node);
         group->setParentItem(d->current_node);
@@ -593,9 +593,9 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
                 destin = edge->destination();
 
                 if (node->kind() == dtkComposerNode::Composite)
-                    clone = group->inputProperty(destin->name(), destin->clonedFrom());
+                    clone = group->leftProperty(destin->name(), destin->clonedFrom());
                 else
-                    clone = group->inputProperty(destin->name(), node);
+                    clone = group->leftProperty(destin->name(), node);
 
                 clone->show();
 
@@ -625,9 +625,9 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
                 destin = edge->destination();
 
                 if (node->kind() == dtkComposerNode::Composite)
-                    clone = group->outputProperty(source->name(), source->clonedFrom());
+                    clone = group->rightProperty(source->name(), source->clonedFrom());
                 else
-                    clone = group->outputProperty(source->name(), node);
+                    clone = group->rightProperty(source->name(), node);
 
                 clone->show();
 
@@ -1672,7 +1672,7 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             d->grabber_node->setParentNode(blocks.first()->parentNode());
 
             blocks.first()->parentNode()->addChildNode(d->grabber_node);
-            blocks.first()->addNode(d->grabber_node);
+            blocks.first()->appendNode(d->grabber_node);
 
         }
             

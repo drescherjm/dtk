@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Nov  8 14:49:28 2011 (+0100)
+ * Last-Updated: Thu Nov 10 13:56:33 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 1107
+ *     Update #: 1162
  */
 
 /* Commentary: 
@@ -305,159 +305,40 @@ void dtkComposerNodeControlBlockButton::mousePressEvent(QGraphicsSceneMouseEvent
 
             this->block->parentNode()->appendBlockRightProperty(this->label->toPlainText(), dtkComposerNodeProperty::AsRelay, dtkComposerNodeProperty::Multiple, this->block);
 
-        } else if (this->both) {
+        } else if (this->both) {          
 
-            foreach(dtkComposerNodeControlBlock *other, this->block->parentNode()->blocks()) {
+            foreach(dtkComposerNodeControlBlock *other, block->parentNode()->blocks()) {
 
-                if (other->property(this->label->toPlainText(), dtkComposerNodeProperty::Left)) {
-                    qDebug() << QString("Property %1 already exists. Please choose another name.").arg(this->label->toPlainText());
-                    return;
-                }
+                if (other != this->block)
+                    this->block->parentNode()->appendBlockLeftProperty(this->label->toPlainText(), dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, other);
+                else
+                   this->block->parentNode()->appendBlockProperty(this->label->toPlainText(), dtkComposerNodeProperty::AsLoop, dtkComposerNodeProperty::Multiple, other); 
 
-                if (other->property(this->label->toPlainText(), dtkComposerNodeProperty::Right)) {
-                    qDebug() << QString("Property %1 already exists. Please choose another name.").arg(this->label->toPlainText());
-                    return;
-                }
             }
 
-            foreach(dtkComposerNodeControlBlock *other, this->block->parentNode()->blocks()) {
-                dtkComposerNodeProperty *input_property = other->appendLeftPassThroughProperty(this->label->toPlainText(), block->parentNode());
-                if (input_property)
-                    this->block->parentNode()->g->appendLeftProperty(input_property);
-                dtkComposerNodeProperty *output_property = other->appendRightPassThroughProperty(this->label->toPlainText(), block->parentNode());
-                if (output_property)
-                    this->block->parentNode()->g->appendRightProperty(output_property);
-            }
         }
 
     } else if (this->text == "-") {
 
-        dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene());
-        if(!scene)
-            return;
-
         if (this->left) {
 
-            dtkComposerNodeProperty *property = this->block->property(this->label->toPlainText(), dtkComposerNodeProperty::Left);
-
-            if (property && property->behavior() == dtkComposerNodeProperty::AsRelay) {
-
-                this->block->removeLeftProperty(property);
-       
-                foreach(dtkComposerEdge *edge, this->block->parentNode()->g->leftEdges()) {
-                    if(edge->destination() == property)
-                        scene->removeEdge(edge);
-                }
-                
-                foreach(dtkComposerEdge *edge, this->block->parentNode()->g->leftRelayEdges()) {
-                    if(edge->source() == property)
-                        scene->removeEdge(edge);
-                }
-                    
-                this->block->parentNode()->g->removeLeftProperty(property);
-                delete property;
-                
-            }
+            this->block->parentNode()->removeBlockLeftProperty(this->label->toPlainText(), dtkComposerNodeProperty::AsRelay, this->block);
 
         } else if (this->right) {
 
-            dtkComposerNodeProperty *property = this->block->property(this->label->toPlainText(), dtkComposerNodeProperty::Right);
+            this->block->parentNode()->removeBlockRightProperty(this->label->toPlainText(), dtkComposerNodeProperty::AsRelay, this->block);
 
-            if (property && property->behavior() == dtkComposerNodeProperty::AsRelay) {
+        } else if (this->both) {            
 
-                this->block->removeRightProperty(property);
-       
-                foreach(dtkComposerEdge *edge, this->block->parentNode()->g->rightEdges()) {
-                    if(edge->destination() == property)
-                        scene->removeEdge(edge);
-                }
-                
-                foreach(dtkComposerEdge *edge, this->block->parentNode()->g->rightRelayEdges()) {
-                    if(edge->source() == property)
-                        scene->removeEdge(edge);
-                }
-                    
-                this->block->parentNode()->g->removeRightProperty(property);
-                delete property;
-                
+            foreach(dtkComposerNodeControlBlock *other, block->parentNode()->blocks()) {
+
+                if (other != this->block)
+                    this->block->parentNode()->removeBlockLeftProperty(this->label->toPlainText(), dtkComposerNodeProperty::AsOutput, other);
+                else
+                   this->block->parentNode()->removeBlockProperty(this->label->toPlainText(), dtkComposerNodeProperty::AsLoop, other); 
+
             }
 
-            foreach(dtkComposerNodeProperty *property, block->rightProperties()) {
-                if (property->name() == this->label->toPlainText() && property->type() == dtkComposerNodeProperty::HybridOutput) {
-                    
-                    block->removeRightProperty(property);
-                    
-                    foreach(dtkComposerEdge *edge, block->parentNode()->g->rightEdges()) {
-                        if(edge->source() == property) {
-                            block->parentNode()->g->removeRightEdge(edge);
-                            scene->removeEdge(edge);
-                        }
-                    }
-                    
-                    foreach(dtkComposerEdge *edge, block->parentNode()->g->rightRelayEdges()) {
-                        if(edge->destination() == property) {
-                            block->parentNode()->g->removeRightRelayEdge(edge);
-                            scene->removeEdge(edge);
-                        }
-                    }
-                    
-                    block->parentNode()->g->removeRightProperty(property);
-                    delete property;                
-                }
-            }
-
-        } else if (this->both) {
-
-            foreach(dtkComposerNodeControlBlock *other, block->parentNode()->blocks()) { 
-
-                foreach(dtkComposerNodeProperty *property, other->leftProperties()) {
-                    if (property->name() == this->label->toPlainText() && (property->type() == dtkComposerNodeProperty::PassThroughInput || property->type() == dtkComposerNodeProperty::Output)) {
-
-                        other->removeLeftProperty(property);
-       
-                        foreach(dtkComposerEdge *edge, block->parentNode()->g->leftEdges()) {
-                            if(edge->destination() == property) {
-                                block->parentNode()->g->removeLeftEdge(edge);
-                                scene->removeEdge(edge);
-                            }
-                        }
-                    
-                        foreach(dtkComposerEdge *edge, block->parentNode()->g->leftRelayEdges()) {
-                            if(edge->source() == property) {
-                                block->parentNode()->g->removeLeftRelayEdge(edge);
-                                scene->removeEdge(edge);
-                            }
-                        }
-                    
-                        block->parentNode()->g->removeLeftProperty(property);
-                        delete property;
-                    }
-                }
-
-                foreach(dtkComposerNodeProperty *property, other->rightProperties()) {
-                    if (property->name() == this->label->toPlainText() && property->type() == dtkComposerNodeProperty::PassThroughOutput) {
-                    
-                        other->removeRightProperty(property);
-                    
-                        foreach(dtkComposerEdge *edge, block->parentNode()->g->rightEdges()) {
-                            if(edge->source() == property) {
-                                block->parentNode()->g->removeRightEdge(edge);
-                                scene->removeEdge(edge);
-                            }
-                        }
-                    
-                        foreach(dtkComposerEdge *edge, block->parentNode()->g->rightRelayEdges()) {
-                            if(edge->destination() == property) {
-                                block->parentNode()->g->removeRightRelayEdge(edge);
-                                scene->removeEdge(edge);
-                            }
-                        }
-                    
-                        block->parentNode()->g->removeRightProperty(property);
-                        delete property;                
-                    }
-                }
-            }
         }
     }
     
@@ -469,6 +350,10 @@ void dtkComposerNodeControlBlockButton::mousePressEvent(QGraphicsSceneMouseEvent
 // dtkComposerNodeControlBlock
 // /////////////////////////////////////////////////////////////////
 
+//! Constructs a block for a control node.
+/*! 
+ *  
+ */
 dtkComposerNodeControlBlock::dtkComposerNodeControlBlock(const QString& title, dtkComposerNodeControl *parent) : QGraphicsRectItem(parent), d(new dtkComposerNodeControlBlockPrivate)
 {
     d->parent = parent;
@@ -501,6 +386,10 @@ dtkComposerNodeControlBlock::dtkComposerNodeControlBlock(const QString& title, d
     d->height_ratio = 1.0;
 }
 
+//! Destroys block.
+/*! 
+ *  
+ */
 dtkComposerNodeControlBlock::~dtkComposerNodeControlBlock(void)
 {
     delete d;
@@ -508,15 +397,254 @@ dtkComposerNodeControlBlock::~dtkComposerNodeControlBlock(void)
     d = NULL;
 }
 
-dtkComposerNodeControl *dtkComposerNodeControlBlock::parentNode(void)
+//! Returns node that contains the block.
+/*! 
+ *  
+ */
+dtkComposerNodeControl *dtkComposerNodeControlBlock::parentNode(void) const
 {
     return d->parent;
 }
 
+//! Returns title of the block.
+/*! 
+ *  
+ */
 QString dtkComposerNodeControlBlock::title(void) const
 {
     return d->title;
 }
+
+//! Appends \a node in the list of nodes.
+/*! 
+ *  
+ */
+void dtkComposerNodeControlBlock::appendNode(dtkComposerNode *node)
+{
+    if(!d->nodes.contains(node))
+        d->nodes << node;
+}
+
+//! Removes \a node from the list of nodes.
+/*! 
+ *  
+ */
+void dtkComposerNodeControlBlock::removeNode(dtkComposerNode *node)
+{
+    d->nodes.removeAll(node);
+}
+
+//! Clears list of nodes.
+/*! 
+ *  
+ */
+void dtkComposerNodeControlBlock::removeAllNodes(void)
+{
+    d->nodes.clear();
+}
+
+//! Appends \a property in list of left properties.
+/*! 
+ *  
+ */
+void dtkComposerNodeControlBlock::appendLeftProperty(dtkComposerNodeProperty *property)
+{ 
+    if (d->left_properties.contains(property))
+        return;
+
+    d->left_properties << property;
+}
+
+//! Appends \a property in list of right properties.
+/*! 
+ *  
+ */
+void dtkComposerNodeControlBlock::appendRightProperty(dtkComposerNodeProperty *property)
+{ 
+    if (d->right_properties.contains(property))
+        return;
+
+    d->right_properties << property;
+}
+
+//! Removes \a property from list of left properties
+/*! 
+ *  
+ */
+void dtkComposerNodeControlBlock::removeLeftProperty(dtkComposerNodeProperty *property)
+{
+    d->left_properties.removeAll(property);
+}
+
+//! Removes \a property from list of right properties
+/*! 
+ *  
+ */
+void dtkComposerNodeControlBlock::removeRightProperty(dtkComposerNodeProperty *property)
+{
+    d->right_properties.removeAll(property);
+}
+
+//! Clears left and right lists of properties
+/*! 
+ *  
+ */
+void dtkComposerNodeControlBlock::removeAllProperties(void)
+{
+    d->left_properties.clear();
+    d->right_properties.clear();
+}
+
+//! Clears all nodes, edges and properties that the node contains.
+/*! 
+ *  
+ */
+void dtkComposerNodeControlBlock::clear(void)
+{
+    dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(d->parent->scene());
+    if(!scene)
+        return;
+
+    foreach(dtkComposerNode *child, d->nodes)
+        scene->removeNode(child);
+    
+    foreach(dtkComposerNodeProperty *property, d->left_properties) {
+        
+        foreach(dtkComposerEdge *edge, d->parent->g->leftEdges()) {
+            if(edge->destination() == property)
+                scene->removeEdge(edge);
+        }
+        
+        foreach(dtkComposerEdge *edge, d->parent->g->leftRelayEdges()) {
+            if(edge->source() == property)
+                scene->removeEdge(edge);
+        }
+        
+        d->parent->g->removeLeftProperty(property);
+        delete property;
+    }
+        
+    foreach(dtkComposerNodeProperty *property, d->right_properties) {
+       
+        foreach(dtkComposerEdge *edge, d->parent->g->rightEdges()) {
+            if(edge->source() == property)
+                scene->removeEdge(edge);
+        }
+        
+        foreach(dtkComposerEdge *edge, d->parent->g->rightRelayEdges()) {
+            if(edge->destination() == property)
+                scene->removeEdge(edge);
+        }
+        
+        d->parent->g->removeRightProperty(property);
+        delete property;
+    }
+}
+
+//! Returns the list of nodes.
+/*! 
+ *  
+ */
+const QList<dtkComposerNode *>& dtkComposerNodeControlBlock::nodes(void) const
+{
+    return d->nodes;
+}
+
+//! Returns the list of start nodes.
+/*! 
+ *  There are two types of start nodes: the ones with no left edges
+ *  but with right edges and the ones that are connected to left
+ *  properties of the block.
+ */
+QList<dtkComposerNode *> dtkComposerNodeControlBlock::startNodes(QList<dtkComposerNode *> parents)
+{
+    QList<dtkComposerNode *> nodes;
+    QList<dtkComposerNode *> scope;
+
+    if(parents.isEmpty())
+        scope = this->nodes();
+    else
+        scope = parents;
+
+    foreach(dtkComposerNode *node, scope) {
+
+        if (node->kind() != dtkComposerNode::Composite) {
+
+            if(!node->g->leftEdges().count() && node->g->rightEdges().count()) {
+                node->setDirty(true);
+                nodes << node;
+            } else {
+                foreach(dtkComposerEdge *edge, d->parent->inputRelayRoutes()) {
+                    if (edge->source()->blockedFrom() == this->title() && !nodes.contains(edge->destination()->node())) {
+                        dtkComposerNode *node = edge->destination()->node();
+                        node->setDirty(true);
+                        nodes << node;
+                    }
+                }
+            }
+        } else {
+            nodes << this->startNodes(node->childNodes());
+        }
+    }
+
+    // foreach(dtkComposerNode *node, scope) {
+    //     if (node->kind() != dtkComposerNode::Composite) {
+    //         node->setDirty(true);
+    //         nodes << node;
+    //     } else {
+    //         nodes << this->startNodes(node->childNodes());
+    //     }
+    // }
+
+    return nodes;
+}
+
+//! Returns the list of left properties.
+/*! 
+ *  
+ */
+const QList<dtkComposerNodeProperty *>& dtkComposerNodeControlBlock::leftProperties(void) const
+{
+    return d->left_properties;
+}
+
+//! Returns the list of right properties.
+/*! 
+ *  
+ */
+const QList<dtkComposerNodeProperty *>& dtkComposerNodeControlBlock::rightProperties(void) const
+{
+    return d->right_properties;
+}
+
+//! Returns the property defined by its \a name and its \a position.
+/*! 
+ *  The property is searched in both left and right lists. When input
+ *  \a name does not match with any property, NULL is returned.
+ */
+dtkComposerNodeProperty *dtkComposerNodeControlBlock::property(QString name, dtkComposerNodeProperty::Position position)
+{
+    switch(position) {
+    case dtkComposerNodeProperty::Left:
+        foreach(dtkComposerNodeProperty *property, d->left_properties) {
+            if(property->name() == name)
+                return property;
+        }
+        break;
+    case dtkComposerNodeProperty::Right:
+        foreach(dtkComposerNodeProperty *property, d->right_properties) {
+            if(property->name() == name)
+                return property;
+        }        
+        break;
+    }
+
+    return NULL;
+}
+
+// /////////////////////////////////////////////////////////////////
+// Methods dealing with graphical aspects.
+// /////////////////////////////////////////////////////////////////
 
 QColor dtkComposerNodeControlBlock::brushColor(void) const
 {
@@ -763,383 +891,28 @@ void dtkComposerNodeControlBlock::setRect(qreal x, qreal y, qreal width, qreal h
     this->setRect(QRectF(x, y, width, height));
 }
 
-QList<dtkComposerNode *> dtkComposerNodeControlBlock::nodes(void)
-{
-    return d->nodes;
-}
-
-QList<dtkComposerNode *> dtkComposerNodeControlBlock::startNodes(QList<dtkComposerNode *> parents)
-{
-    QList<dtkComposerNode *> nodes;
-    QList<dtkComposerNode *> scope;
-
-    if(parents.isEmpty())
-        scope = this->nodes();
-    else
-        scope = parents;
-
-    // foreach(dtkComposerNode *node, scope) {
-
-    //     if (node->kind() != dtkComposerNode::Composite) {
-
-    //         if(!node->g->leftEdges().count() && node->g->rightEdges().count()) {
-    //             node->setDirty(true);
-    //             nodes << node;
-    //         } else {
-    //             foreach(dtkComposerEdge *edge, d->parent->inputRelayRoutes()) {
-    //                 if (edge->source()->blockedFrom() == this->title() && !nodes.contains(edge->destination()->node())) {
-    //                     dtkComposerNode *node = edge->destination()->node();
-    //                     node->setDirty(true);
-    //                     nodes << node;
-    //                 }
-    //             }
-    //         }
-    //     } else {
-    //         nodes << this->startNodes(node->childNodes());
-    //     }
-    // }
-
-    foreach(dtkComposerNode *node, scope) {
-        if (node->kind() != dtkComposerNode::Composite) {
-            node->setDirty(true);
-            nodes << node;
-        } else {
-            nodes << this->startNodes(node->childNodes());
-        }
-    }
-
-    return nodes;
-}
-
-QList<dtkComposerNode *> dtkComposerNodeControlBlock::endNodes(QList<dtkComposerNode *> parents)
-{
-    QList<dtkComposerNode *> nodes;
-    QList<dtkComposerNode *> scope;
-
-    if(parents.isEmpty())
-        scope = this->nodes();
-    else
-        scope = parents;
-
-    foreach(dtkComposerNode *node, scope) {
-
-        if(node->kind() != dtkComposerNode::Composite) {
-            if(!node->g->rightEdges().count() && node->g->leftEdges().count())
-                nodes << node;
-        } else {
-            nodes << this->endNodes(node->childNodes());
-        }
-    }
-
-    foreach(dtkComposerEdge *edge, d->parent->outputRelayRoutes())
-        if (edge->destination()->blockedFrom() == this->title() && !nodes.contains(edge->source()->node()))
-            nodes << edge->source()->node();
-
-    return nodes;
-}
-
-void dtkComposerNodeControlBlock::addNode(dtkComposerNode *node)
-{
-    if(!d->nodes.contains(node))
-        d->nodes << node;
-}
-
-void dtkComposerNodeControlBlock::removeNode(dtkComposerNode *node)
-{
-    d->nodes.removeAll(node);
-}
-
-void dtkComposerNodeControlBlock::removeAllNodes(void)
-{
-    d->nodes.clear();
-}
-
-QList<dtkComposerNodeProperty *> dtkComposerNodeControlBlock::leftProperties(void)
-{
-    return d->left_properties;
-}
-
-QList<dtkComposerNodeProperty *> dtkComposerNodeControlBlock::rightProperties(void)
-{
-    return d->right_properties;
-}
-
-dtkComposerNodeProperty *dtkComposerNodeControlBlock::appendLeftProperty(QString name, dtkComposerNode *parent)
-{
-    dtkComposerNodeProperty *property = NULL;
-    dtkComposerNodeCase *node_case = dynamic_cast<dtkComposerNodeCase *>(d->parent);
-    dtkComposerNodeLoop *node_loop = dynamic_cast<dtkComposerNodeLoop *>(d->parent);
-
-    if (node_case) {
-
-        if (name == "constant") {
-
-            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, parent);
-
-        } else if (name == "variable") {
-
-            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, parent);
-
-        } else {
-
-            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::HybridInput, dtkComposerNodeProperty::Multiple, parent);
-
-        }
-
-    } else if (node_loop) {
-
-        if (name == "variable") {
-
-            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, parent);
-            property->setBehavior(dtkComposerNodeProperty::AsLoopInput);
-
-        } else {
-
-            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::HybridInput, dtkComposerNodeProperty::Multiple, parent);
-
-        }
-
-    } else {
-
-        property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::HybridInput, dtkComposerNodeProperty::Multiple, parent);
-
-    }
-
-    property->setBlockedFrom(this->title());
-
-    d->left_properties << property;
-    
-    return property;
-}
-
-dtkComposerNodeProperty *dtkComposerNodeControlBlock::appendRightProperty(QString name, dtkComposerNode *parent)
-{
-    dtkComposerNodeProperty *property = NULL;
-    dtkComposerNodeCase *node_case = NULL;
-    dtkComposerNodeLoop *node_loop = NULL;
-
-    if ((node_case = dynamic_cast<dtkComposerNodeCase *>(d->parent)) && (name == "variable")) {
-
-        property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, parent);
-
-    } else if (node_loop = dynamic_cast<dtkComposerNodeLoop *>(d->parent)) {
-
-        if (this->title() == "loop" && name == "variable") {
-
-            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, parent);
-
-        } else if (this->title() == "post" && name == "variable") {
-
-            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, parent);
-            property->setBehavior(dtkComposerNodeProperty::AsLoopOutput);
-
-        } else if (this->title() == "condition" && name == "condition") {
-
-            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Single, parent);
-            property->setBehavior(dtkComposerNodeProperty::AsLoopOutput);
-
-        } else {
-
-            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::HybridOutput, dtkComposerNodeProperty::Multiple, parent);
-
-        }
-
-    } else {
-
-        property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::HybridOutput, dtkComposerNodeProperty::Multiple, parent);
-
-    }
-
-    property->setBlockedFrom(this->title());
-
-    d->right_properties << property;
-
-    return property;
-}
-
-dtkComposerNodeProperty *dtkComposerNodeControlBlock::appendLeftPassThroughProperty(QString name, dtkComposerNode *parent)
-{
-    dtkComposerNodeProperty *property = NULL;
-    dtkComposerNodeLoop *node_loop = dynamic_cast<dtkComposerNodeLoop *>(d->parent);
-
-    if (node_loop) {
-
-        if (this->title() == "loop")
-            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::PassThroughInput, dtkComposerNodeProperty::Single, parent);
-        else
-            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, parent);
-
-        property->setBlockedFrom(this->title());
-        
-        d->left_properties << property;
-    }
-    
-    return property;
-}
-
-dtkComposerNodeProperty *dtkComposerNodeControlBlock::appendRightPassThroughProperty(QString name, dtkComposerNode *parent)
-{
-    dtkComposerNodeProperty *property = NULL;
-    dtkComposerNodeLoop *node_loop = dynamic_cast<dtkComposerNodeLoop *>(d->parent);
-
-    if (node_loop) {
-        if (this->title() == "loop") {
-            property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::PassThroughOutput, dtkComposerNodeProperty::Single, parent);
-
-            property->setBlockedFrom(this->title());
-            
-            d->right_properties << property;
-        }
-    }
-    
-    return property;
-}
-
-dtkComposerNodeProperty *dtkComposerNodeControlBlock::appendLeftProperty(QString name, dtkComposerNodeProperty::Type type, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeProperty::Behavior behavior, dtkComposerNode *parent)
-{
-
-    dtkComposerNodeProperty *property = NULL;
-    property = new dtkComposerNodeProperty(name, type, multiplicity, parent);
-    property->setBehavior(behavior);
-    property->setBlockedFrom(this->title());
-    d->left_properties << property;
-    
-    return property;
-}
-
-dtkComposerNodeProperty *dtkComposerNodeControlBlock::appendRightProperty(QString name, dtkComposerNodeProperty::Type type, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeProperty::Behavior behavior, dtkComposerNode *parent)
-{
-    dtkComposerNodeProperty *property = NULL;
-    property = new dtkComposerNodeProperty(name, type, multiplicity, parent);
-    property->setBehavior(behavior);
-    property->setBlockedFrom(this->title());
-    d->right_properties << property;
-    
-    return property;
-}
-
-void dtkComposerNodeControlBlock::appendProperty(QString name, dtkComposerNodeProperty::Position position, dtkComposerNodeProperty::Behavior behavior, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNode *parent)
-{
-    dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, position, behavior, multiplicity, parent);
-    property->setType(dtkComposerNodeProperty::Generic);
-    property->setBlockedFrom(this->title());
-
-    switch(property->position()) {
-    case dtkComposerNodeProperty::Left:
-        d->left_properties << property;
-        d->parent->g->appendLeftProperty(property);
-        break;
-    case dtkComposerNodeProperty::Right:
-        d->right_properties << property;
-        d->parent->g->appendRightProperty(property);
-        break;
-    }
-}
-
-void dtkComposerNodeControlBlock::appendLeftProperty(dtkComposerNodeProperty *property)
-{ 
-    if (d->left_properties.contains(property))
-        return;
-
-    d->left_properties << property;
-}
-
-void dtkComposerNodeControlBlock::appendRightProperty(dtkComposerNodeProperty *property)
-{ 
-    if (d->right_properties.contains(property))
-        return;
-
-    d->right_properties << property;
-}
-
-dtkComposerNodeProperty *dtkComposerNodeControlBlock::property(QString name, dtkComposerNodeProperty::Position position)
-{
-    switch(position) {
-    case dtkComposerNodeProperty::Left:
-        foreach(dtkComposerNodeProperty *property, d->left_properties) {
-            if(property->name() == name)
-                return property;
-        }
-        break;
-    case dtkComposerNodeProperty::Right:
-        foreach(dtkComposerNodeProperty *property, d->right_properties) {
-            if(property->name() == name)
-                return property;
-        }        
-        break;
-    }
-
-    return NULL;
-}
-
-void dtkComposerNodeControlBlock::removeLeftProperty(dtkComposerNodeProperty *property)
-{
-    d->left_properties.removeAll(property);
-}
-
-void dtkComposerNodeControlBlock::removeRightProperty(dtkComposerNodeProperty *property)
-{
-    d->right_properties.removeAll(property);
-}
-
-void dtkComposerNodeControlBlock::removeAllProperties(void)
-{
-    d->left_properties.clear();
-    d->right_properties.clear();
-}
-
-void dtkComposerNodeControlBlock::clear(void)
-{
-    dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(d->parent->scene());
-    if(!scene)
-        return;
-
-    foreach(dtkComposerNode *child, d->nodes)
-        scene->removeNode(child);
-    
-    foreach(dtkComposerNodeProperty *property, d->left_properties) {
-        
-            foreach(dtkComposerEdge *edge, d->parent->g->leftEdges()) {
-                if(edge->destination() == property)
-                    scene->removeEdge(edge);
-            }
-       
-            foreach(dtkComposerEdge *edge, d->parent->g->leftRelayEdges()) {
-                if(edge->source() == property)
-                    scene->removeEdge(edge);
-            }
-
-            d->parent->g->removeLeftProperty(property);
-            delete property;
-        }
-        
-        foreach(dtkComposerNodeProperty *property, d->right_properties) {
-       
-            foreach(dtkComposerEdge *edge, d->parent->g->rightEdges()) {
-                if(edge->source() == property)
-                    scene->removeEdge(edge);
-            }
-       
-            foreach(dtkComposerEdge *edge, d->parent->g->rightRelayEdges()) {
-                if(edge->destination() == property)
-                    scene->removeEdge(edge);
-            }
-            
-            d->parent->g->removeRightProperty(property);
-            delete property;
-        }   
-}
-
+//! Returns height of the block.
+/*! 
+ *  
+ */
 qreal dtkComposerNodeControlBlock::height(void)
 {
     return d->height;
 }
 
+//! Returns height ratio of the block.
+/*! 
+ *  
+ */
 qreal dtkComposerNodeControlBlock::heightRatio(void)
 {
     return d->height_ratio;
 }
 
+//! Sets the value of block height.
+/*! 
+ *  Calls also prepareGeometryChange().
+ */
 void dtkComposerNodeControlBlock::setHeight(qreal height)
 {
     this->prepareGeometryChange();
@@ -1147,6 +920,10 @@ void dtkComposerNodeControlBlock::setHeight(qreal height)
     d->height = height;
 }
 
+//! Sets the value of block height ratio.
+/*! 
+ *  
+ */
 void dtkComposerNodeControlBlock::setHeightRatio(qreal height_ratio)
 {
     d->height_ratio = height_ratio;

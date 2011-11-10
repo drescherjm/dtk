@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:01:16 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Oct 26 16:36:55 2011 (+0200)
+ * Last-Updated: Wed Nov  9 15:48:44 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 25
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -39,7 +39,6 @@ public:
 
 public slots:
     bool evaluate(dtkComposerEvaluatorPrivate *evaluator);
-    /* void update(void); */
 
 public:
     QVariant value(dtkComposerNodeProperty *property);

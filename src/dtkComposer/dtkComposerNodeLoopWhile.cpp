@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May  4 08:51:21 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 10:17:21 2011 (+0100)
+ * Last-Updated: Wed Nov  9 16:14:56 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 59
+ *     Update #: 68
  */
 
 /* Commentary: 
@@ -25,22 +25,42 @@
 #include "dtkComposerNodeNumber.h"
 #include "dtkComposerNodeProperty.h"
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCore/dtkGlobal>
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeLoopPrivate implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerNodeControlBlock *dtkComposerNodeLoopWhilePrivate::createBlock(const QString& title, dtkComposerNodeLoopWhile *parent)
+{
+    dtkComposerNodeControlBlock *block = new dtkComposerNodeControlBlock(title, parent);
+    parent->appendBlock(block);
+    block->setInteractive(false);
+
+    if (title == "condition") {
+
+        block->setHeightRatio(0.95);
+        parent->appendBlockRightProperty("condition", dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Single, block);
+
+    } else if (title == "loop") {
+
+        block->setHeightRatio(1.05);
+
+    }
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeLoop implementation
 // /////////////////////////////////////////////////////////////////
 
+//! Constructs a while loop control node.
+/*! 
+ *  
+ */
 dtkComposerNodeLoopWhile::dtkComposerNodeLoopWhile(dtkComposerNode *parent) : dtkComposerNodeLoop(parent), d(new dtkComposerNodeLoopWhilePrivate)
 {
-    d->block_cond = this->addBlock("condition");
-    d->block_cond->setInteractive(false);
-    d->block_cond->setHeightRatio(0.95);
-    this->g->appendRightProperty(d->block_cond->appendRightProperty("condition", this));
-
-    d->block_loop = this->addBlock("loop");
-    d->block_loop->setInteractive(false);
-    d->block_loop->setHeightRatio(1.05);
+    d->createBlock("condition", this);
+    d->createBlock("loop", this);
 
     this->disableInputProperty();
     this->setColor(QColor("#30DC7B"));
@@ -51,6 +71,10 @@ dtkComposerNodeLoopWhile::dtkComposerNodeLoopWhile(dtkComposerNode *parent) : dt
     d->prop_cond = NULL;
 }
 
+//! Destroys while loop control node.
+/*! 
+ *  
+ */
 dtkComposerNodeLoopWhile::~dtkComposerNodeLoopWhile(void)
 {
     delete d;
@@ -58,6 +82,10 @@ dtkComposerNodeLoopWhile::~dtkComposerNodeLoopWhile(void)
     d = NULL;
 }
 
+//! Defines the layout of the while loop node.
+/*! 
+ *  Reimplemented from dtkComposerNodeControl.
+ */
 void dtkComposerNodeLoopWhile::layout(void)
 {
     dtkComposerNodeControl::layout();
@@ -92,7 +120,7 @@ void dtkComposerNodeLoopWhile::layout(void)
 
         }
         
-        if (block == d->block_cond)
+        if (block == this->blocks().at(0))
             j = 0;
         else
             j = 1;

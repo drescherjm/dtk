@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov  9 12:14:44 2011 (+0100)
+ * Last-Updated: Wed Nov  9 15:51:09 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 108
+ *     Update #: 109
  */
 
 /* Commentary: 
@@ -31,7 +31,8 @@
 // dtkComposerNodeConditionalPrivate implementation
 // /////////////////////////////////////////////////////////////////
 
-//! Creates a block defined by its \a title inside the conditional node \a parent.
+//! Creates a block defined by its \a title inside the conditional
+//! node \a parent.
 /*! 
  *  
  */

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov  9 10:32:27 2011 (+0100)
+ * Last-Updated: Wed Nov  9 16:44:58 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 2600
+ *     Update #: 2602
  */
 
 /* Commentary: 
@@ -468,7 +468,7 @@ dtkComposerNodeProperty *dtkComposerNode::propertyAt(const QPointF& point) const
     return NULL;
 }
 
-dtkComposerNodeProperty *dtkComposerNode::inputProperty(const QString& name, dtkComposerNode *from) const
+dtkComposerNodeProperty *dtkComposerNode::leftProperty(const QString& name, dtkComposerNode *from) const
 {
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
@@ -481,7 +481,7 @@ dtkComposerNodeProperty *dtkComposerNode::inputProperty(const QString& name, dtk
     return NULL;
 }
 
-dtkComposerNodeProperty *dtkComposerNode::outputProperty(const QString& name, dtkComposerNode *from) const
+dtkComposerNodeProperty *dtkComposerNode::rightProperty(const QString& name, dtkComposerNode *from) const
 {
 #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
     qDebug() << DTK_PRETTY_FUNCTION << this;
@@ -1146,7 +1146,6 @@ bool dtkComposerNode::dirtyUpstreamNodes(void)
             } else {
 
                 if (i_route->source()->node()->dirty()) {
-                    qDebug() << i_route->source()->node();
                     return true;
                 }
             }
@@ -1154,7 +1153,6 @@ bool dtkComposerNode::dirtyUpstreamNodes(void)
         } else {
 
             if (i_route->source()->node()->dirty()) {
-                qDebug() << i_route->source()->node();
                 return true;
             }
         }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 10 14:05:54 2011 (+0100)
+ * Last-Updated: Thu Nov 10 14:32:17 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 991
+ *     Update #: 998
  */
 
 /* Commentary: 
@@ -747,7 +747,17 @@ void dtkComposerNodeControl::push(dtkComposerEdge *o_route, dtkComposerNodePrope
             
             this->addOutputActiveRoute(route);
             
-            if (o_route->destination()->type() == dtkComposerNodeProperty::HybridOutput || 
+            if (o_route->destination()->type() == dtkComposerNodeProperty::Generic) {
+                        
+                if (o_route->destination()->position() == dtkComposerNodeProperty::Right) {
+                    dtkComposerNodeControl *output_control_node = dynamic_cast<dtkComposerNodeControl *>(o_route->destination()->node());
+                    output_control_node->addOutputRelayRoute(route);
+
+                } else {
+                    o_route->destination()->node()->l->appendLeftRoute(route);                            
+                }
+
+            } else if (o_route->destination()->type() == dtkComposerNodeProperty::HybridOutput || 
                 o_route->destination()->type() == dtkComposerNodeProperty::PassThroughOutput || 
                (o_route->destination()->type() == dtkComposerNodeProperty::Input && o_route->destination()->node()->kind() == dtkComposerNode::Control && relay_route->source()->node()->isChildOfControlNode(o_route->destination()->node()))) {
                 
@@ -761,9 +771,13 @@ void dtkComposerNodeControl::push(dtkComposerEdge *o_route, dtkComposerNodePrope
     }
 }
 
-//! Reimplements dtkComposerNode::layout.
+// /////////////////////////////////////////////////////////////////
+// Methods dealing with graphical identity of the control node
+// /////////////////////////////////////////////////////////////////
+
+//! Defines the layout of the control node.
 /*! 
- *  Defines the layout of the control node.
+ *  Reimplemented from dtkComposerNode.
  */
 void dtkComposerNodeControl::layout(void)
 {
@@ -778,9 +792,9 @@ void dtkComposerNodeControl::layout(void)
     this->resize();
 }
 
-//! Reimplements QGraphicsItem::paint to define control node identity.
+//! Defines the control node identity.
 /*! 
- *  
+ *  Reimplemented from QGraphicsItem.
  */
 void dtkComposerNodeControl::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {

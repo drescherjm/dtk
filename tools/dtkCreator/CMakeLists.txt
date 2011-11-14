@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Aug  3 17:34:51 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Oct 14 21:03:39 2010 (+0200)
+## Last-Updated: Mon Nov 14 13:07:07 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 142
+##     Update #: 143
 ######################################################################
 ## 
 ### Commentary: 
@@ -101,8 +101,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dtkCreator.i
   COMMAND ${CMAKE_COMMAND} ARGS -E  make_directory ${CMAKE_BINARY_DIR}/modules
   COMMAND ${CMAKE_COMMAND} ARGS -E  copy ${${PROJECT_NAME}_BINARY_DIR}/creator.py ${CMAKE_BINARY_DIR}/modules
-  COMMENT "-- Moving python modules to ${CMAKE_BINARY_DIR}/modules"
-)
+  COMMENT "-- Moving python modules to ${CMAKE_BINARY_DIR}/modules")
 
 set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/creator.py)
 

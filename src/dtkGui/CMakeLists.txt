@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Nov  9 16:14:55 2011 (+0100)
+## Last-Updated: Mon Nov 14 12:58:24 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 193
+##     Update #: 203
 ######################################################################
 ## 
 ### Commentary: 
@@ -53,13 +53,18 @@ set(${PROJECT_NAME}_HEADERS
   dtkSettingsEditorPreferencesWidget.h
   dtkSpacer.h
   dtkSplitter.h
-  dtkTagCloud.h
   dtkTextEditor.h
   dtkTextEditorPreferencesWidget.h
   dtkTextEditorSyntaxHighlighter.h
   dtkTextEditorSyntaxHighlighterCpp.h
   dtkTextEditorSyntaxHighlighterPython.h
   dtkTextEditorSyntaxHighlighterTcl.h)
+
+if(QT_QTWEBKIT_FOUND)
+set(${PROJECT_NAME}_HEADERS
+  ${${PROJECT_NAME}_HEADERS}
+  dtkTagCloud.h)
+endif(QT_QTWEBKIT_FOUND)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkAboutBox.h
@@ -90,10 +95,15 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkSettingsEditorPreferencesWidget.h
   dtkSpacer.h
   dtkSplitter.h
-  dtkTagCloud.h
   dtkTextEditor.h
   dtkTextEditorPreferencesWidget.h
   dtkTextEditorSyntaxHighlighter.h)
+
+if(QT_QTWEBKIT_FOUND)
+set(${PROJECT_NAME}_HEADERS_MOC
+  ${${PROJECT_NAME}_HEADERS_MOC}
+  dtkTagCloud.h)
+endif(QT_QTWEBKIT_FOUND)
 
 set(${PROJECT_NAME}_SOURCES
   dtkAboutBox.cpp
@@ -124,13 +134,18 @@ set(${PROJECT_NAME}_SOURCES
   dtkSettingsEditorPreferencesWidget.cpp
   dtkSpacer.cpp
   dtkSplitter.cpp
-  dtkTagCloud.cpp
   dtkTextEditor.cpp
   dtkTextEditorPreferencesWidget.cpp
   dtkTextEditorSyntaxHighlighter.cpp
   dtkTextEditorSyntaxHighlighterCpp.cpp
   dtkTextEditorSyntaxHighlighterPython.cpp
   dtkTextEditorSyntaxHighlighterTcl.cpp)
+
+if(QT_QTWEBKIT_FOUND)
+set(${PROJECT_NAME}_SOURCES
+  ${${PROJECT_NAME}_SOURCES}
+  dtkTagCloud.h)
+endif(QT_QTWEBKIT_FOUND)
 
 if(APPLE)
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}

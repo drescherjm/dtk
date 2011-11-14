@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Feb  3 17:00:27 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Apr 26 16:42:04 2010 (+0200)
+## Last-Updated: Mon Nov 14 13:06:49 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 36
+##     Update #: 38
 ######################################################################
 ## 
 ### Commentary: 
@@ -16,6 +16,12 @@
 ### Change log:
 ## 
 ######################################################################
+
+if(QT_QTHELP_FOUND)
+
+## #################################################################
+## 
+## #################################################################
 
 project(dtkAssistant)
 
@@ -85,3 +91,9 @@ install(TARGETS ${PROJECT_NAME}
 if(APPLE)
   install(CODE "execute_process(COMMAND macdeployqt \${CMAKE_INSTALL_PREFIX}/bin/${PROJECT_NAME}.app)")
 endif(APPLE)
+
+## #################################################################
+## 
+## #################################################################
+
+endif(QT_QTHELP_FOUND)

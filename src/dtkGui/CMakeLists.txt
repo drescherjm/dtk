@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Nov 14 12:58:24 2011 (+0100)
+## Last-Updated: Mon Nov 14 15:02:51 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 203
+##     Update #: 204
 ######################################################################
 ## 
 ### Commentary: 
@@ -144,7 +144,7 @@ set(${PROJECT_NAME}_SOURCES
 if(QT_QTWEBKIT_FOUND)
 set(${PROJECT_NAME}_SOURCES
   ${${PROJECT_NAME}_SOURCES}
-  dtkTagCloud.h)
+  dtkTagCloud.cpp)
 endif(QT_QTWEBKIT_FOUND)
 
 if(APPLE)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Mar 18 14:42:33 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep 30 10:21:08 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 47
+ * Last-Updated: Mon Nov 14 12:32:29 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 54
  */
 
 /* Commentary: 
@@ -20,7 +20,7 @@
 #ifndef DTKCOLORBUTTON_H
 #define DTKCOLORBUTTON_H
 
-#include <QtGui/QToolButton>
+#include <QtGui/QPushButton>
 
 #include "dtkGuiExport.h"
 
@@ -38,7 +38,7 @@ typedef QList<QColor> dtkColorList;
 // 
 // /////////////////////////////////////////////////////////////////
 
-class DTKGUI_EXPORT dtkColorButton : public QToolButton
+class DTKGUI_EXPORT dtkColorButton : public QPushButton
 {
     Q_OBJECT
 
@@ -81,16 +81,8 @@ protected:
     virtual void drawColorItem(QPixmap &pm, const QColor& color);
 
 protected:
-    virtual void mousePressEvent(QMouseEvent *event);
-    virtual void resizeEvent(QResizeEvent *event);
-
-#if defined(Q_WS_MAC)
-    bool macEvent(EventHandlerCallRef caller, EventRef event) {
-        Q_UNUSED(caller);
-        Q_UNUSED(event);
-        return true;
-    }
-#endif
+    void mousePressEvent(QMouseEvent *event);
+    void resizeEvent(QResizeEvent *event);
 
 private:
     dtkColorButtonPrivate *d;

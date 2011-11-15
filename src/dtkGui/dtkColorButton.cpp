@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Mar 18 14:45:33 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Nov 14 12:35:16 2011 (+0100)
+ * Last-Updated: Tue Nov 15 10:07:35 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 44
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -45,7 +45,8 @@ dtkColorButton::dtkColorButton(QWidget *parent) : QPushButton(parent), d(new dtk
     d->cellSize = 12;
     d->colors = 0;
 
-    setColor(Qt::white);
+    this->setColor(Qt::white);
+    this->setFocusPolicy(Qt::NoFocus);
 }
 
 dtkColorButton::~dtkColorButton(void)

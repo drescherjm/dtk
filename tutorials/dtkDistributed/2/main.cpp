@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Sep  6 14:15:35 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep  9 13:09:47 2011 (+0200)
- *           By: jwintz
- *     Update #: 218
+ * Last-Updated: Tue Nov 15 11:32:28 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 219
  */
 
 /* Commentary: 
@@ -108,8 +108,8 @@ int main(int argc, char **argv)
 // Root - compute partial sum
 // /////////////////////////////////////////////////////////////////
 
-        int         sum = 0;
-        int partial_sum = 0;
+        long         sum = 0;
+        long partial_sum = 0;
         
         for(int i = 0; i < average; i++)
             sum += m_array[i];

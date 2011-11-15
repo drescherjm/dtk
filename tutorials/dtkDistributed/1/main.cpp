@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Sep  6 14:15:35 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 13 17:31:19 2011 (+0200)
+ * Last-Updated: Tue Nov 15 10:15:04 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 159
+ *     Update #: 182
  */
 
 /* Commentary: 
@@ -100,9 +100,9 @@ int main(int argc, char **argv)
 // Root - compute partial sum
 // /////////////////////////////////////////////////////////////////
 
-        int         sum = 0;
-        int partial_sum = 0;
-        
+        long         sum = 0;
+        long partial_sum = 0;
+            
         for(int i = 0; i < average; i++)
             sum += m_array[i];
         
@@ -117,7 +117,7 @@ int main(int argc, char **argv)
             MPI::COMM_WORLD.Recv(&partial_sum, 1, MPI_LONG, slave, RECV_TAG);
 
             qDebug() << "Rank" << slave << "has partial sum" << partial_sum;
-            
+
             sum += partial_sum;
         }
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2009 - Jean-Christophe Lombardo, Inria.
  * Created: Thu May 14 14:32:46 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 26 16:34:24 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 129
+ * Last-Updated: Wed Nov 16 10:41:04 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 130
  */
 
 /* Commentary: 
@@ -129,6 +129,41 @@ void dtkStandardRedirector::uninitialize(void)
 // /////////////////////////////////////////////////////////////////
 
 dtkLog& dtkLog::operator<<(int value)
+{
+    m_log += QString::number(value);
+    
+    return *this;
+}
+
+dtkLog& dtkLog::operator<<(uint value)
+{
+    m_log += QString::number(value);
+    
+    return *this;
+}
+
+dtkLog& dtkLog::operator<<(long value)
+{
+    m_log += QString::number(value);
+    
+    return *this;
+}
+
+dtkLog& dtkLog::operator<<(ulong value)
+{
+    m_log += QString::number(value);
+    
+    return *this;
+}
+
+dtkLog& dtkLog::operator<<(qlonglong value)
+{
+    m_log += QString::number(value);
+    
+    return *this;
+}
+
+dtkLog& dtkLog::operator<<(qulonglong value)
 {
     m_log += QString::number(value);
     

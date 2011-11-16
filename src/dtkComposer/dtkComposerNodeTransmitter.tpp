@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Nov  2 10:14:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov  2 11:56:47 2011 (+0100)
+ * Last-Updated: Wed Nov 16 08:57:06 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 42
+ *     Update #: 79
  */
 
 /* Commentary: 
@@ -26,6 +26,8 @@
 #include <QtCore/QString>
 #include <QtCore/QVector>
 
+#include <typeinfo>
+
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeTransmitter implementation
 // /////////////////////////////////////////////////////////////////
@@ -36,7 +38,6 @@
  */
 template <typename T> inline dtkComposerNodeTransmitter<T>::dtkComposerNodeTransmitter(void) : dtkComposerNodeAbstractTransmitter() 
 {
-    m_data = 0;
     m_vector = 0;
     m_list = 0;
 };
@@ -47,7 +48,6 @@ template <typename T> inline dtkComposerNodeTransmitter<T>::dtkComposerNodeTrans
  */
 template <typename T> inline dtkComposerNodeTransmitter<T>::~dtkComposerNodeTransmitter(void)
 {
-    m_data = 0;
     m_vector = 0;
     m_list = 0;
 };
@@ -59,6 +59,7 @@ template <typename T> inline dtkComposerNodeTransmitter<T>::~dtkComposerNodeTran
 template <typename T> inline void dtkComposerNodeTransmitter<T>::setData(const T& data)
 {
     m_data = data;
+    this->setMetaData("Type", typeid(m_data).name());
 };
 
 //! Returns the data as a modifiable reference.
@@ -132,15 +133,11 @@ template <typename T> void dtkComposerNodeTransmitter<T>::setCurrentData(dtkxarc
 
         if(!m_vector->isEmpty())
             m_data = (*m_vector)[index];
-        else
-            m_data = 0;
 
     } else if (m_list) {
 
         if(!m_list->isEmpty())
             m_data = (*m_list)[index];
-        else
-            m_data = 0;
 
     }
 };
@@ -151,7 +148,6 @@ template <typename T> void dtkComposerNodeTransmitter<T>::setCurrentData(dtkxarc
  */
 template <typename T> void dtkComposerNodeTransmitter<T>::clear(void)
 {
-    m_data = 0;
     m_vector = 0;
     m_list = 0;
 };

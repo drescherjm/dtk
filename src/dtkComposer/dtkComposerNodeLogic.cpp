@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Nov  4 14:16:40 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 15:42:45 2011 (+0100)
+ * Last-Updated: Mon Nov 14 09:22:37 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 24
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -56,7 +56,7 @@ dtkComposerNodeLogic::dtkComposerNodeLogic(dtkComposerNode *node) : QObject(node
 dtkComposerNodeLogic::~dtkComposerNodeLogic(void)
 {
     delete d;
-    d= NULL;
+    d = NULL;
 }
 
 //! Return pointer to the owner node.

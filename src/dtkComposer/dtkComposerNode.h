@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov  9 14:29:11 2011 (+0100)
+ * Last-Updated: Tue Nov 15 15:17:08 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 344
+ *     Update #: 351
  */
 
 /* Commentary: 
@@ -29,6 +29,7 @@
 #include <QtGui>
 
 class dtkAbstractObject;
+class dtkComposerNodeAbstractTransmitter;
 class dtkComposerEdge;
 class dtkComposerEvaluatorPrivate;
 class dtkComposerNodePrivate;
@@ -196,6 +197,11 @@ private:
 public:
     dtkComposerNodeGraphic *g;
       dtkComposerNodeLogic *l;
+
+public:
+    virtual dtkComposerNodeAbstractTransmitter *emitter(dtkComposerNodeProperty *property);
+    virtual bool  onLeftRouteConnected(dtkComposerEdge *route);
+    virtual bool onRightRouteConnected(dtkComposerEdge *route);
 
 protected:
     friend class dtkComposerEvaluatorPrivate;

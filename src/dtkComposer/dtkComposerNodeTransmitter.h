@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Nov  2 09:44:16 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov  2 14:33:51 2011 (+0100)
+ * Last-Updated: Wed Nov 16 08:52:44 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 35
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -22,6 +22,8 @@
 
 #include "dtkComposerExport.h"
 
+#include <dtkCore/dtkLog>
+
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeAbstractTransmitter declaration
 // /////////////////////////////////////////////////////////////////
@@ -31,10 +33,13 @@
 class QDebug;
 class QString;
 
+class dtkComposerNodeAbstractTransmitterPrivate;
+
 class DTKCOMPOSER_EXPORT dtkComposerNodeAbstractTransmitter
 {
 public:
-    virtual ~dtkComposerNodeAbstractTransmitter(void) {;}
+             dtkComposerNodeAbstractTransmitter(void);
+    virtual ~dtkComposerNodeAbstractTransmitter(void);
 
 public:
     virtual void setCurrentData(dtkxarch_int index) = 0;
@@ -44,8 +49,24 @@ public:
     virtual QString identifier(void) const = 0;
 
 public:
+    void addMetaData(const QString& key, const QStringList& values);
+    void addMetaData(const QString& key, const QString& value);
+    void setMetaData(const QString& key, const QStringList& values);
+    void setMetaData(const QString& key, const QString& value);
+
+    bool hasMetaData(const QString& key) const;
+
+    QStringList metaDataList(void) const;
+    QStringList metaDataValues(const QString& key) const;
+    QString metadata(const QString& key) const;
+    QStringList metadatas(const QString& key) const;
+    
+public:
     friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug, const dtkComposerNodeAbstractTransmitter& transmitter);
     friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug,       dtkComposerNodeAbstractTransmitter *transmitter);
+
+private:
+    dtkComposerNodeAbstractTransmitterPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////

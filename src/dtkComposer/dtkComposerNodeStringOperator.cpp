@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 18:00:48 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov  9 11:15:26 2011 (+0100)
+ * Last-Updated: Wed Nov 16 09:21:35 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 38
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #include "dtkComposerEdge.h"
 #include "dtkComposerNodeStringOperator.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerNodeTransmitter.h"
 
 #include <dtkCore/dtkGlobal.h>
 
@@ -147,6 +148,11 @@ public:
     QString value_op1;
     QString value_op2;
     QString value;
+
+public:
+    dtkComposerNodeTransmitter<QString> *emitter;
+    dtkComposerNodeTransmitter<QString> *receiver_op1;
+    dtkComposerNodeTransmitter<QString> *receiver_op2;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -172,6 +178,10 @@ dtkComposerNodeStringOperator::dtkComposerNodeStringOperator(dtkComposerNode *pa
     this->g->appendLeftProperty(d->property_input_value_op1);
     this->g->appendLeftProperty(d->property_input_value_op2);
     this->g->appendRightProperty(d->property_output_value);
+
+    d->emitter = new dtkComposerNodeTransmitter<QString>();
+    d->receiver_op1 = NULL;
+    d->receiver_op2 = NULL;
 }
 
 dtkComposerNodeStringOperator::~dtkComposerNodeStringOperator(void)
@@ -213,32 +223,64 @@ void dtkComposerNodeStringOperator::setOperation(dtkComposerNodeStringOperator::
 void dtkComposerNodeStringOperator::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     if(property == d->property_input_value_op1)
-        d->value_op1 = edge->source()->node()->value(edge->source()).toString();
+        d->value_op1 = d->receiver_op1->data();
 
     if(property == d->property_input_value_op2)
-        d->value_op2 = edge->source()->node()->value(edge->source()).toString();
+        d->value_op2 = d->receiver_op2->data();
 }
 
 void dtkComposerNodeStringOperator::run(void)
 {
-    QString a = d->value_op1;
-    QString b = d->value_op2;
-    QString r = a;
-
     switch(d->operation) {
     case dtkComposerNodeStringOperator::Append:
-        d->value = r.append(b);
+        d->value = d->value_op1.append(d->value_op2);
         break;
     case dtkComposerNodeStringOperator::Prepend:
-        d->value = r.prepend(b);
+        d->value = d->value_op1.prepend(d->value_op2);
         break;
     default:
         break;
     }
+
+    d->emitter->setData(d->value);
 }
 
 void dtkComposerNodeStringOperator::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(edge);
     Q_UNUSED(property);
+}
+
+dtkComposerNodeAbstractTransmitter *dtkComposerNodeStringOperator::emitter(dtkComposerNodeProperty *property)
+{
+    if (property == d->property_output_value)
+        return d->emitter;
+    
+    return NULL;
+}
+
+bool dtkComposerNodeStringOperator::onLeftRouteConnected(dtkComposerEdge *route)
+{
+    if (route->destination() == d->property_input_value_op1) {
+
+        if (!(d->receiver_op1 = dynamic_cast<dtkComposerNodeTransmitter<QString> *> (route->source()->node()->emitter(route->source())))) {
+            qDebug() << DTK_PRETTY_FUNCTION << "Invalid connection between these two properties.";
+            return false;
+        }
+
+    } else if (route->destination() == d->property_input_value_op2) {
+
+         if (!(d->receiver_op2 = dynamic_cast<dtkComposerNodeTransmitter<QString> *> (route->source()->node()->emitter(route->source())))) {
+            qDebug() << DTK_PRETTY_FUNCTION << "Invalid connection between these two properties.";
+            return false;
+        }
+
+    }
+
+    return dtkComposerNode::onLeftRouteConnected(route);
+}
+
+bool dtkComposerNodeStringOperator::onRightRouteConnected(dtkComposerEdge *route)
+{
+    return dtkComposerNode::onRightRouteConnected(route);
 }

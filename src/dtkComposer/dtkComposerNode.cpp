@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov  9 16:44:58 2011 (+0100)
+ * Last-Updated: Tue Nov 15 15:16:38 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 2602
+ *     Update #: 2619
  */
 
 /* Commentary: 
@@ -43,9 +43,6 @@ class dtkComposerNodePrivate
 public:
     QRectF ghostRect(void);
 
-    QList<dtkComposerEdge *> iRoute(dtkComposerEdge *edge);
-    QList<dtkComposerEdge *> oRoute(dtkComposerEdge *edge);
-
 public:
     dtkComposerNode *q;
 
@@ -58,9 +55,6 @@ public:
     qreal margin_bottom;
 
     QGraphicsTextItem *title;
-
-    // QList<dtkComposerEdge *> input_routes;
-    // QList<dtkComposerEdge *> output_routes;
 
     dtkComposerNodeProperty *clicked_property;
 
@@ -104,72 +98,6 @@ QRectF dtkComposerNodePrivate::ghostRect(void)
     rect.adjust(-75, -40, 75, 40);
 
     return rect;
-}
-
-QList<dtkComposerEdge *> dtkComposerNodePrivate::iRoute(dtkComposerEdge *edge)
-{
-    QList<dtkComposerEdge *> edges;
-
-    if (edge->source()->node()->kind() != dtkComposerNode::Composite) {
-
-        // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->source()->node()->title() << "is not composite" << DTK_NO_COLOR;
-
-        edges << edge;
-
-    } else {
-
-        if (edge->source()->node() == edge->destination()->node()->parentNode()) {
-
-            // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->source()->node()->title() << "parent is composite" << DTK_NO_COLOR;
-
-            foreach(dtkComposerEdge *i_edge, edge->source()->node()->g->leftEdges())
-                if (i_edge->destination() == edge->source())
-                    edges << iRoute(i_edge);
-        } else {
-
-            // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->source()->node()->title() << "source is composite" << DTK_NO_COLOR;
-
-            foreach(dtkComposerEdge *ghost, edge->source()->node()->g->rightRelayEdges())
-                if (ghost->destination() == edge->source())
-                    edges << iRoute(ghost);
-        }
-    }
-
-    return edges;
-}
-
-QList<dtkComposerEdge *> dtkComposerNodePrivate::oRoute(dtkComposerEdge *edge)
-{
-    QList<dtkComposerEdge *> edges;
-
-    if (edge->destination()->node()->kind() != dtkComposerNode::Composite) {
-
-        // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->destination()->node()->title() << "is not composite" << DTK_NO_COLOR;
-
-        edges << edge;
-
-    } else {
-
-        if (edge->destination()->node() == edge->source()->node()->parentNode()) {
-
-            // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->destination()->node()->title() << "parent is composite" << DTK_NO_COLOR;
-
-            foreach(dtkComposerEdge *o_edge, edge->destination()->node()->g->rightEdges())
-                if (o_edge->source() == edge->destination())
-                    edges << oRoute(o_edge);
-
-        } else {
-
-            // qDebug() << DTK_COLOR_BG_WHITE << DTK_PRETTY_FUNCTION << edge->destination()->node()->title() << "destination is composite" << DTK_NO_COLOR;
-
-            foreach(dtkComposerEdge *ghost, edge->destination()->node()->g->leftRelayEdges())
-                if (ghost->source() == edge->destination())
-                    edges << oRoute(ghost);
-
-        }
-    }
-
-    return edges;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -1185,6 +1113,25 @@ void dtkComposerNode::push(dtkComposerEdge *edge, dtkComposerNodeProperty *prope
     Q_UNUSED(property);
 
     DTK_DEFAULT_IMPLEMENTATION;    
+}
+
+dtkComposerNodeAbstractTransmitter *dtkComposerNode::emitter(dtkComposerNodeProperty *property)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    
+    return NULL;
+}
+
+bool dtkComposerNode::onLeftRouteConnected(dtkComposerEdge *route)
+{
+    this->l->appendLeftRoute(route);
+    return true;
+}
+
+bool dtkComposerNode::onRightRouteConnected(dtkComposerEdge *route)
+{
+    this->l->appendRightRoute(route);
+    return true;
 }
 
 // /////////////////////////////////////////////////////////////////

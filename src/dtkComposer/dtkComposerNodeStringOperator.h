@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 17:59:17 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr  8 16:34:43 2011 (+0200)
+ * Last-Updated: Tue Nov 15 15:36:32 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 12
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -50,6 +50,11 @@ protected:
     void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
     void  run(void);
     void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+
+public:
+    dtkComposerNodeAbstractTransmitter *emitter(dtkComposerNodeProperty *property);
+    bool  onLeftRouteConnected(dtkComposerEdge *route);
+    bool onRightRouteConnected(dtkComposerEdge *route);
 
 private:
     dtkComposerNodeStringOperatorPrivate *d;

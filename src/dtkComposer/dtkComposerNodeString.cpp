@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 15:12:01 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov  9 11:09:14 2011 (+0100)
+ * Last-Updated: Tue Nov 15 15:35:59 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 271
+ *     Update #: 326
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #include "dtkComposerEdge.h"
 #include "dtkComposerNodeString.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerNodeTransmitter.h"
 
 #include <dtkCore/dtkGlobal.h>
 
@@ -206,7 +207,14 @@ public:
 public:
     QString value;
 
-    bool source_node;
+    bool interactive;
+
+public:
+    typedef dtkComposerNodeTransmitter<QString> stringTransmitter;
+
+public:
+    stringTransmitter *emitter;
+    stringTransmitter *receiver;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -225,7 +233,10 @@ dtkComposerNodeString::dtkComposerNodeString(dtkComposerNode *parent) : dtkCompo
     d->button->setPos(0,0);
     
     d->value = QString();
-    d->source_node = true;
+    d->interactive = true;
+
+    d->emitter = new dtkComposerNodeTransmitter<QString>();
+    d->receiver = NULL;
 
     this->setTitle("String");
     this->setKind(dtkComposerNode::Atomic);
@@ -307,34 +318,61 @@ void dtkComposerNodeString::onCollapseFinised(void)
 
 void dtkComposerNodeString::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
-    if (property == d->property_input_value) {
+    Q_UNUSED(edge);
+    Q_UNUSED(property);
+    // if (property == d->property_input_value) {
 
-        QVariant value = edge->source()->node()->value(edge->source());
+    //     QVariant value = edge->source()->node()->value(edge->source());
         
-        if(value.canConvert(QVariant::String)) {
-            this->setValue(value.toString());
-        } else {
-            qDebug() << DTK_PRETTY_FUNCTION << "Input value expected to be a string. Assuming empty string.";
-            this->setValue(QString());
-        }
+    //     if(value.canConvert(QVariant::String)) {
+    //         this->setValue(value.toString());
+    //     } else {
+    //         qDebug() << DTK_PRETTY_FUNCTION << "Input value expected to be a string. Assuming empty string.";
+    //         this->setValue(QString());
+    //     }
 
-        d->source_node = false;
+    //     d->source_node = false;
 
-        // d->editor->setPlainText(d->value); 
-        // d->editor->update();
-    }
+    //     // d->editor->setPlainText(d->value);
+    //     // d->editor->update();
+    // }
 }
 
 void dtkComposerNodeString::run(void)
 {
-    if (d->source_node)
-        this->setValue(d->editor->toPlainText());    
-        
-    d->source_node = true;
+    if (d->interactive)
+        d->emitter->setData(d->editor->toPlainText());
+    else
+        d->emitter->setData(d->receiver->data());
 }
 
 void dtkComposerNodeString::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(edge);
     Q_UNUSED(property);
+}
+
+dtkComposerNodeAbstractTransmitter *dtkComposerNodeString::emitter(dtkComposerNodeProperty *property)
+{
+    if (property == d->property_output_value)
+        return d->emitter;
+    
+    return NULL;
+}
+
+bool dtkComposerNodeString::onLeftRouteConnected(dtkComposerEdge *route)
+{
+    if (!(d->receiver = dynamic_cast<dtkComposerNodeStringPrivate::stringTransmitter *> (route->source()->node()->emitter(route->source())))) {
+        qDebug() << DTK_PRETTY_FUNCTION << "Invalid connection between these two properties.";
+        return false;
+    }
+
+    d->interactive = false;
+
+    return dtkComposerNode::onLeftRouteConnected(route);
+}
+
+bool dtkComposerNodeString::onRightRouteConnected(dtkComposerEdge *route)
+{
+    return dtkComposerNode::onRightRouteConnected(route);
 }

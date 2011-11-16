@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 15:08:06 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 18 14:41:54 2011 (+0200)
+ * Last-Updated: Tue Nov 15 15:12:45 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 13
+ *     Update #: 18
  */
 
 /* Commentary: 
@@ -22,6 +22,8 @@
 
 #include "dtkComposerExport.h"
 #include "dtkComposerNode.h"
+
+class dtkComposerNodeAbstractTransmitter;
 
 class dtkComposerNodeStringPrivate;
 
@@ -53,6 +55,11 @@ protected:
     void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
     void  run(void);
     void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+
+public:
+    dtkComposerNodeAbstractTransmitter *emitter(dtkComposerNodeProperty *property);
+    bool  onLeftRouteConnected(dtkComposerEdge *route);
+    bool onRightRouteConnected(dtkComposerEdge *route);
 
 private:
     dtkComposerNodeStringPrivate *d;

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Oct  5 23:19:29 2011 (+0200)
+## Last-Updated: Tue Nov  8 17:33:44 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 67
+##     Update #: 75
 ######################################################################
 ## 
 ### Commentary: 
@@ -55,6 +55,10 @@ if(BUILD_WRAPPERS)
 ## Swig
 ## #################################################################
 
+mark_as_advanced(SWIG_DIR)
+mark_as_advanced(SWIG_EXECUTABLE)
+mark_as_advanced(SWIG_VERSION)
+
 find_package(SWIG QUIET)
 
 if(SWIG_FOUND)
@@ -82,10 +86,6 @@ if(SWIG_FOUND)
     set(${target} ${${target}} ${wrap_output})
     
   endmacro(dtk_wrap)
-  
-  mark_as_advanced(SWIG_DIR)
-  mark_as_advanced(SWIG_EXECUTABLE)
-  mark_as_advanced(SWIG_VERSION)
 endif(SWIG_FOUND)
 
 if(SWIG_FOUND)
@@ -175,6 +175,9 @@ endif(OPENSSL_FOUND)
 ## Mpi
 ## #################################################################
 
+mark_as_advanced(MPI_EXTRA_LIBRARY)
+mark_as_advanced(MPI_LIBRARY)
+
 find_package(MPI QUIET)
 
 if(MPI_FOUND)
@@ -227,3 +230,9 @@ if(QWT_FOUND)
   set(DTK_HAVE_PLOT "YES")
   include_directories(${QWT_INCLUDE_DIR})
 endif(QWT_FOUND)
+
+## #################################################################
+## 
+## #################################################################
+
+mark_as_advanced(file_cmd)

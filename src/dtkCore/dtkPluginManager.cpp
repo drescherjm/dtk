@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 27 13:49:21 2011 (+0200)
+ * Last-Updated: Thu Nov 17 16:18:41 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 215
+ *     Update #: 218
  */
 
 /* Commentary:
@@ -280,7 +280,9 @@ void dtkPluginManager::loadPlugin(const QString& path)
     loader->setLoadHints (QLibrary::ExportExternalSymbolsHint);
 
     if(!loader->load()) {
-        QString error = "Unable to load - ";
+        QString error = "Unable to load ";
+        error += path;
+        error += " - ";
         error += loader->errorString();
         if(DTK_VERBOSE_LOAD) dtkDebug() << error;
         emit loadError(error);

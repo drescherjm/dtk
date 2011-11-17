@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Apr  7 09:09:18 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Nov 10 17:32:32 2011 (+0100)
+## Last-Updated: Thu Nov 17 15:49:07 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 18
+##     Update #: 19
 ######################################################################
 ## 
 ### Commentary: This script overrides some of the dtkBuild script
@@ -27,7 +27,6 @@ add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_PLUGIN)
 add_definitions(-DQT_SHARED)
 if(NOT MSVC)
-  # Shouldn't the QT_USE_FILE set this appropriately?
   add_definitions(-DQT_NO_DEBUG)
 endif(NOT MSVC)
 

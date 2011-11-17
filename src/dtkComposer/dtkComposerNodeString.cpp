@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 15:12:01 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Nov 15 15:35:59 2011 (+0100)
+ * Last-Updated: Thu Nov 17 14:59:52 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 326
+ *     Update #: 406
  */
 
 /* Commentary: 
@@ -25,7 +25,7 @@
 #include <dtkCore/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeStringButton
+// dtkComposerNodeStringButton declaration
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeStringButton : public QGraphicsItem
@@ -50,6 +50,14 @@ public:
     bool expanded;
 };
 
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeStringButton implementation
+// /////////////////////////////////////////////////////////////////
+
+//! Constructs string button.
+/*! 
+ *  It enables to hide or show edition aera.
+ */
 dtkComposerNodeStringButton::dtkComposerNodeStringButton(dtkComposerNodeString *parent) : QGraphicsItem(parent)
 {
     int margin = 10;
@@ -73,16 +81,28 @@ dtkComposerNodeStringButton::dtkComposerNodeStringButton(dtkComposerNodeString *
     expanded = false;
 }
 
+//! Destroys string button.
+/*! 
+ *  
+ */
 dtkComposerNodeStringButton::~dtkComposerNodeStringButton(void)
 {
 
 }
 
+//! 
+/*! 
+ *  Reimplemented from QGraphicsItem.
+ */
 QRectF dtkComposerNodeStringButton::boundingRect(void) const
 {
     return path.boundingRect();
 }
 
+//! 
+/*! 
+ *  Reimplemented from QGraphicsItem.
+ */
 void dtkComposerNodeStringButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
@@ -111,6 +131,10 @@ void dtkComposerNodeStringButton::paint(QPainter *painter, const QStyleOptionGra
     painter->drawText(this->boundingRect(), Qt::AlignCenter, text);
 }
 
+//! Enables to expand or collapse edition aera.
+/*! 
+ *  Reimplemented from QGraphicsItem.
+ */
 void dtkComposerNodeStringButton::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
@@ -122,12 +146,14 @@ void dtkComposerNodeStringButton::mousePressEvent(QGraphicsSceneMouseEvent *even
         parent_node->collapse();
         text = "+";
     }
+        
+    parent_node->touch();
 
     this->expanded = !this->expanded;
 }
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeStringEditor
+// dtkComposerNodeStringEditor declaration
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeStringEditor : public QGraphicsTextItem
@@ -145,6 +171,14 @@ private:
     dtkComposerNodeString *parent_node;
 };
 
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeStringEditor implementation
+// /////////////////////////////////////////////////////////////////
+
+//! Constructs string editor.
+/*! 
+ *  It enables to edit the text of the string node.
+ */
 dtkComposerNodeStringEditor::dtkComposerNodeStringEditor(dtkComposerNodeString *parent) : QGraphicsTextItem(parent)
 {
 #if defined(Q_WS_MAC)
@@ -161,6 +195,10 @@ dtkComposerNodeStringEditor::dtkComposerNodeStringEditor(dtkComposerNodeString *
     this->parent_node = parent;
 }
 
+//! 
+/*! 
+ *  Reimplemented from QGraphicsTextItem.
+ */
 void dtkComposerNodeStringEditor::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     QPainterPath s_rect; s_rect.addRect(QRectF(option->rect.topLeft(), QSizeF(option->rect.width(), option->rect.height() / 2)));
@@ -180,22 +218,24 @@ void dtkComposerNodeStringEditor::paint(QPainter *painter, const QStyleOptionGra
     QGraphicsTextItem::paint(painter, option, widget);
 }
 
+//! 
+/*! 
+ *  Reimplemented from QGraphicsTextItem.
+ */
 void dtkComposerNodeStringEditor::keyPressEvent(QKeyEvent *event)
 {
     QGraphicsTextItem::keyPressEvent(event);
-
-    this->parent_node->setValue(this->toPlainText());
 }
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeStringPrivate
+// dtkComposerNodeStringPrivate declaration
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeStringPrivate
 {
 public:
-    dtkComposerNodeProperty *property_input_value;
-    dtkComposerNodeProperty *property_output_value;
+    dtkComposerNodeProperty *property_left_value;
+    dtkComposerNodeProperty *property_right_value;
 
 public:
     dtkComposerNodeStringButton *button;
@@ -205,45 +245,35 @@ public:
     QPropertyAnimation *animation;
 
 public:
-    QString value;
-
     bool interactive;
 
 public:
-    typedef dtkComposerNodeTransmitter<QString> stringTransmitter;
-
-public:
-    stringTransmitter *emitter;
-    stringTransmitter *receiver;
+    dtkComposerNodeTransmitter<QString> *emitter;
+    dtkComposerNodeTransmitter<QString> *receiver;
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeString
+// dtkComposerNodeString implementation
 // /////////////////////////////////////////////////////////////////
 
+//! Constructs string node.
+/*! 
+ *  String node is interactive by while it has no left edge.
+ */
 dtkComposerNodeString::dtkComposerNodeString(dtkComposerNode *parent) : dtkComposerNode(parent), d(new dtkComposerNodeStringPrivate)
 {
-    d->property_input_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
-    d->property_output_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Right, dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, this);
-
-    // d->property_input_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Input, dtkComposerNodeProperty::Multiple, this);
-    // d->property_output_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, this);
+    d->property_left_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
+    d->property_right_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Right, dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, this);
 
     d->button = new dtkComposerNodeStringButton(this);
     d->button->setPos(0,0);
-    
-    d->value = QString();
-    d->interactive = true;
-
-    d->emitter = new dtkComposerNodeTransmitter<QString>();
-    d->receiver = NULL;
 
     this->setTitle("String");
     this->setKind(dtkComposerNode::Atomic);
     this->setType("dtkComposerString");
 
-    this->g->appendLeftProperty(d->property_input_value);
-    this->g->appendRightProperty(d->property_output_value);
+    this->g->appendLeftProperty(d->property_left_value);
+    this->g->appendRightProperty(d->property_right_value);
 
     // --
     
@@ -259,8 +289,19 @@ dtkComposerNodeString::dtkComposerNodeString(dtkComposerNode *parent) : dtkCompo
     d->animation->setStartValue(QPointF(-d->editor->boundingRect().width()/2, 0));
     d->animation->setEndValue(QPointF(-d->editor->boundingRect().width()/2, 0.85 * d->editor->boundingRect().height()));
     d->animation->setEasingCurve(QEasingCurve::OutBounce);
+
+    // --
+
+    d->interactive = true;
+
+    d->emitter = new dtkComposerNodeTransmitter<QString>();
+    d->receiver = NULL;
 }
 
+//! Destroys string node.
+/*! 
+ *  
+ */
 dtkComposerNodeString::~dtkComposerNodeString(void)
 {
     delete d;
@@ -268,24 +309,19 @@ dtkComposerNodeString::~dtkComposerNodeString(void)
     d = NULL;
 }
 
-QVariant dtkComposerNodeString::value(dtkComposerNodeProperty *property)
+//! Sets the text of the node.
+/*! 
+ *  
+ */
+void dtkComposerNodeString::setEditorText(const QString& value)
 {
-    if(property == d->property_output_value)
-        return QVariant(d->value);
-
-	return QVariant();
+    d->editor->setPlainText(value);
 }
 
-QString dtkComposerNodeString::value(void)
-{
-    return d->value;
-}
-
-void dtkComposerNodeString::setValue(QString value)
-{
-    d->value = value;
-}
-
+//! Expands node to show edition aera.
+/*! 
+ *  
+ */
 void dtkComposerNodeString::expand(void)
 {
     d->editor->show();
@@ -293,6 +329,10 @@ void dtkComposerNodeString::expand(void)
     d->animation->start();
 }
 
+//! Collapses node to hide edition aera.
+/*! 
+ *  
+ */
 void dtkComposerNodeString::collapse(void)
 {
     d->animation->setDirection(QAbstractAnimation::Backward);
@@ -301,14 +341,24 @@ void dtkComposerNodeString::collapse(void)
     connect(d->animation, SIGNAL(finished()), this, SLOT(onCollapseFinised()));
 }
 
+//! Updates the graphical aspect of the node.
+/*! 
+ *  
+ */
 void dtkComposerNodeString::touch(void)
 {
-    d->editor->setPlainText(d->value); 
-    d->editor->update();
+    if (!d->interactive) {
+        d->editor->setPlainText(d->receiver->data());
+        d->editor->update();
+    }
 
     dtkComposerNode::touch();
 }
 
+//! Hides edition aera at the end of collapsing.
+/*! 
+ *  
+ */
 void dtkComposerNodeString::onCollapseFinised(void)
 {
     d->editor->hide();
@@ -316,63 +366,81 @@ void dtkComposerNodeString::onCollapseFinised(void)
     disconnect(d->animation, SIGNAL(finished()), this, SLOT(onCollapseFinised()));    
 }
 
-void dtkComposerNodeString::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
+void dtkComposerNodeString::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
 {
-    Q_UNUSED(edge);
+    Q_UNUSED(route);
     Q_UNUSED(property);
-    // if (property == d->property_input_value) {
-
-    //     QVariant value = edge->source()->node()->value(edge->source());
-        
-    //     if(value.canConvert(QVariant::String)) {
-    //         this->setValue(value.toString());
-    //     } else {
-    //         qDebug() << DTK_PRETTY_FUNCTION << "Input value expected to be a string. Assuming empty string.";
-    //         this->setValue(QString());
-    //     }
-
-    //     d->source_node = false;
-
-    //     // d->editor->setPlainText(d->value);
-    //     // d->editor->update();
-    // }
 }
 
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
 void dtkComposerNodeString::run(void)
 {
-    if (d->interactive)
+    if (d->interactive) {
         d->emitter->setData(d->editor->toPlainText());
-    else
+    } else {
         d->emitter->setData(d->receiver->data());
+    }
 }
 
-void dtkComposerNodeString::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
+void dtkComposerNodeString::push(dtkComposerEdge *route, dtkComposerNodeProperty *property)
 {
-    Q_UNUSED(edge);
+    Q_UNUSED(route);
     Q_UNUSED(property);
 }
 
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
 dtkComposerNodeAbstractTransmitter *dtkComposerNodeString::emitter(dtkComposerNodeProperty *property)
 {
-    if (property == d->property_output_value)
+    if (property == d->property_right_value)
         return d->emitter;
     
     return NULL;
 }
 
-bool dtkComposerNodeString::onLeftRouteConnected(dtkComposerEdge *route)
+//! Sets the receiver from the emitter of the node at the source of \a
+//! route.
+/*! 
+ *  When the source emitter can be casted into current receiver type,
+ *  true is returned. Else it returns false.
+ *
+ *  It makes also the node non-interactive nad clears the text of
+ *  edition aera.
+ *
+ *  Reimplemented from dtkComposerNode.
+ */
+bool dtkComposerNodeString::setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
 {
-    if (!(d->receiver = dynamic_cast<dtkComposerNodeStringPrivate::stringTransmitter *> (route->source()->node()->emitter(route->source())))) {
-        qDebug() << DTK_PRETTY_FUNCTION << "Invalid connection between these two properties.";
+    Q_UNUSED(destination);
+
+    if (!(d->receiver = dynamic_cast<dtkComposerNodeTransmitter<QString> *> (route->source()->node()->emitter(route->source()))))
         return false;
-    }
 
     d->interactive = false;
+    d->editor->setTextInteractionFlags(Qt::NoTextInteraction);
+    d->editor->setPlainText("");    
 
-    return dtkComposerNode::onLeftRouteConnected(route);
+    return true;
 }
 
-bool dtkComposerNodeString::onRightRouteConnected(dtkComposerEdge *route)
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
+bool dtkComposerNodeString::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
 {
-    return dtkComposerNode::onRightRouteConnected(route);
+    return true;
 }

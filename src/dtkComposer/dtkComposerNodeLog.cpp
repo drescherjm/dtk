@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 20:51:32 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov 16 10:46:28 2011 (+0100)
+ * Last-Updated: Thu Nov 17 15:32:58 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 103
+ *     Update #: 143
  */
 
 /* Commentary: 
@@ -29,17 +29,19 @@
 
 #include <typeinfo>
 
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeLogPrivate declaration
+// /////////////////////////////////////////////////////////////////
+
 class dtkComposerNodeLogPrivate
 {
 public:
-    dtkComposerNodeProperty *property_input_value;
+    dtkComposerNodeProperty *property_left_value;
 
-    QHash<dtkComposerEdge *, dtkComposerNodeAbstractTransmitter *> receivers;
+    dtkComposerNodeAbstractTransmitter *receiver;
 
-    QHash<dtkComposerEdge *, QVariant::Type> types;
-
-    QString message;
-
+public:
+    QString type_bool;
     QString type_int;
     QString type_uint;
     QString type_long;
@@ -52,28 +54,43 @@ public:
     QString type_string_list;
 };
 
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeLog implementation
+// /////////////////////////////////////////////////////////////////
+
+//! Constructs logger node.
+/*! 
+ *  
+ */
 dtkComposerNodeLog::dtkComposerNodeLog(dtkComposerNode *parent) : dtkComposerNode(parent), d(new dtkComposerNodeLogPrivate)
 {
-    d->property_input_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
+    d->property_left_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
 
     this->setTitle("Log");
     this->setKind(dtkComposerNode::View);
     this->setType("dtkComposerLog");
 
-    this->g->appendLeftProperty(d->property_input_value);
+    this->g->appendLeftProperty(d->property_left_value);
 
+    d->type_bool        = typeid(bool).name();
     d->type_int         = typeid(int).name();
     d->type_uint        = typeid(uint).name();
     d->type_long        = typeid(long).name();
     d->type_ulong       = typeid(ulong).name();
-    d->type_long        = typeid(qlonglong).name();
+    d->type_llong       = typeid(qlonglong).name();
     d->type_ullong      = typeid(qulonglong).name();
     d->type_float       = typeid(float).name();
     d->type_double      = typeid(double).name();
     d->type_string      = typeid(QString).name();
     d->type_string_list = typeid(QStringList).name();
+
+    d->receiver = NULL;
 }
 
+//! Destroys logger node.
+/*! 
+ *  
+ */
 dtkComposerNodeLog::~dtkComposerNodeLog(void)
 {
     delete d;
@@ -81,53 +98,70 @@ dtkComposerNodeLog::~dtkComposerNodeLog(void)
     d = NULL;
 }
 
-void dtkComposerNodeLog::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+//! Casts the receiver into the correct type before logging the data
+//! it contains.
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
+void dtkComposerNodeLog::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(property);
 
-    QString type = d->receivers.value(edge)->metadata("Type");
+    d->receiver = route->source()->node()->emitter(route->source());
 
-    if (type == d->type_int)
-        d->message = QString("%1").arg(static_cast<dtkComposerNodeTransmitter<int> *>(d->receivers.value(edge))->data());
+    QString type = d->receiver->metadata("Type");
+
+    if (type == d->type_bool)
+       dtkOutput() << static_cast<dtkComposerNodeTransmitter<bool> *>(d->receiver)->data();
+
+    else if (type == d->type_int)
+        dtkOutput() << static_cast<dtkComposerNodeTransmitter<int> *>(d->receiver)->data();
 
     else if (type == d->type_uint)
-        d->message = QString("%1").arg(static_cast<dtkComposerNodeTransmitter<uint> *>(d->receivers.value(edge))->data());
+        dtkOutput() << static_cast<dtkComposerNodeTransmitter<uint> *>(d->receiver)->data();
 
     else if (type == d->type_long)
-        d->message = QString("%1").arg(static_cast<dtkComposerNodeTransmitter<long> *>(d->receivers.value(edge))->data());
+       dtkOutput() << static_cast<dtkComposerNodeTransmitter<long> *>(d->receiver)->data();
 
     else if (type == d->type_ulong)
-        d->message = QString("%1").arg(static_cast<dtkComposerNodeTransmitter<ulong> *>(d->receivers.value(edge))->data());
+        dtkOutput() << static_cast<dtkComposerNodeTransmitter<ulong> *>(d->receiver)->data();
 
     else if (type == d->type_llong)
-        d->message = QString("%1").arg(static_cast<dtkComposerNodeTransmitter<qlonglong> *>(d->receivers.value(edge))->data());
+        dtkOutput() << static_cast<dtkComposerNodeTransmitter<qlonglong> *>(d->receiver)->data();
 
     else if (type == d->type_ullong)
-        d->message = QString("%1").arg(static_cast<dtkComposerNodeTransmitter<qulonglong> *>(d->receivers.value(edge))->data());
+        dtkOutput() << static_cast<dtkComposerNodeTransmitter<qulonglong> *>(d->receiver)->data();
 
     else if (type == d->type_float)
-          d->message = QString("%1").arg(static_cast<dtkComposerNodeTransmitter<float> *>(d->receivers.value(edge))->data());  
+        dtkOutput() << static_cast<dtkComposerNodeTransmitter<float> *>(d->receiver)->data();  
 
     else if (type == d->type_double)
-            d->message = QString("%1").arg(static_cast<dtkComposerNodeTransmitter<double> *>(d->receivers.value(edge))->data());
+        dtkOutput() << static_cast<dtkComposerNodeTransmitter<double> *>(d->receiver)->data();
 
     else if (type == d->type_string)
-        d->message = QString("%1").arg(static_cast<dtkComposerNodeTransmitter<QString> *>(d->receivers.value(edge))->data());
+        dtkOutput() << static_cast<dtkComposerNodeTransmitter<QString> *>(d->receiver)->data();
 
     else if (type == d->type_string_list)
-        d->message = QString("%1").arg(static_cast<dtkComposerNodeTransmitter<QStringList> *>(d->receivers.value(edge))->data().first());
-    
-    dtkOutput() << d->message;
+        dtkOutput() << static_cast<dtkComposerNodeTransmitter<QStringList> *>(d->receiver)->data();
+
+    else
+        dtkOutput() << type << " is not supported by the logger.";
 }
 
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
 void dtkComposerNodeLog::run(void)
 {
     return;
 }
 
-bool dtkComposerNodeLog::onLeftRouteConnected(dtkComposerEdge *route)
-{
-    d->receivers.insert(route, route->source()->node()->emitter(route->source()));
-        
-    return dtkComposerNode::onLeftRouteConnected(route);
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
+bool dtkComposerNodeLog::setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+{        
+    return true;
 }

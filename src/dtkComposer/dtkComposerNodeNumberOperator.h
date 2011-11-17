@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Mar  1 10:13:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr  8 16:32:39 2011 (+0200)
+ * Last-Updated: Thu Nov 17 14:57:24 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 7
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -46,17 +46,23 @@ public:
      dtkComposerNodeNumberOperator(dtkComposerNode *parent = 0);
     ~dtkComposerNodeNumberOperator(void);
 
-    QVariant value(dtkComposerNodeProperty *property);
-
 public:
     Operation operation(void);
 
     void setOperation(Operation operation);
 
 protected:
-    void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void pull(dtkComposerEdge *route, dtkComposerNodeProperty *property);
     void  run(void);
-    void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void push(dtkComposerEdge *route, dtkComposerNodeProperty *property);
+
+public:
+    dtkComposerNodeAbstractTransmitter *emitter(dtkComposerNodeProperty *property);
+
+public:
+    bool setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
+
+    bool onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property);
 
 private:
     dtkComposerNodeNumberOperatorPrivate *d;

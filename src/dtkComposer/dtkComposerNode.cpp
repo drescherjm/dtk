@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov 15 15:16:38 2011 (+0100)
+ * Last-Updated: Wed Nov 16 13:26:14 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 2619
+ *     Update #: 2628
  */
 
 /* Commentary: 
@@ -1094,9 +1094,9 @@ void dtkComposerNode::markDirtyDownstreamNodes(void)
         o_route->destination()->node()->setDirty(true);
 }
 
-void dtkComposerNode::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNode::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
 {
-    Q_UNUSED(edge);
+    Q_UNUSED(route);
     Q_UNUSED(property);
 
     DTK_DEFAULT_IMPLEMENTATION;    
@@ -1107,9 +1107,9 @@ void dtkComposerNode::run(void)
     DTK_DEFAULT_IMPLEMENTATION;
 }
 
-void dtkComposerNode::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNode::push(dtkComposerEdge *route, dtkComposerNodeProperty *property)
 {
-    Q_UNUSED(edge);
+    Q_UNUSED(route);
     Q_UNUSED(property);
 
     DTK_DEFAULT_IMPLEMENTATION;    
@@ -1117,20 +1117,27 @@ void dtkComposerNode::push(dtkComposerEdge *edge, dtkComposerNodeProperty *prope
 
 dtkComposerNodeAbstractTransmitter *dtkComposerNode::emitter(dtkComposerNodeProperty *property)
 {
+    DTK_UNUSED(property);
+
     DTK_DEFAULT_IMPLEMENTATION;
-    
     return NULL;
 }
 
-bool dtkComposerNode::onLeftRouteConnected(dtkComposerEdge *route)
+bool dtkComposerNode::setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
 {
-    this->l->appendLeftRoute(route);
-    return true;
+    DTK_UNUSED(route);
+    DTK_UNUSED(destination);
+
+    DTK_DEFAULT_IMPLEMENTATION;
+    return false;
 }
 
-bool dtkComposerNode::onRightRouteConnected(dtkComposerEdge *route)
+bool dtkComposerNode::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
 {
-    this->l->appendRightRoute(route);
+    DTK_UNUSED(route);
+    DTK_UNUSED(property);
+
+    DTK_DEFAULT_IMPLEMENTATION;
     return true;
 }
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 25 10:04:24 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr  8 16:26:28 2011 (+0200)
+ * Last-Updated: Wed Nov 16 15:19:49 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 16
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -33,17 +33,23 @@ public:
      dtkComposerNodeBoolean(dtkComposerNode *parent = 0);
     ~dtkComposerNodeBoolean(void);
 
-    QVariant value(dtkComposerNodeProperty *property);
+protected:
+    void pull(dtkComposerEdge *route, dtkComposerNodeProperty *property);
+    void  run(void);
+    void push(dtkComposerEdge *route, dtkComposerNodeProperty *property);
 
 public:
-    bool value(void);
+    dtkComposerNodeAbstractTransmitter *emitter(dtkComposerNodeProperty *property);
 
-    void setValue(bool value);
+public:
+    bool setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
 
-protected:
-    void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    void  run(void);
-    void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    bool onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property);
+
+public:
+    bool interactive(void);
+
+    void setLabelText(bool value);
 
 private:
     dtkComposerNodeBooleanPrivate *d;

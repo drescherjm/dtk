@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov 15 15:17:08 2011 (+0100)
+ * Last-Updated: Wed Nov 16 13:26:11 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 351
+ *     Update #: 358
  */
 
 /* Commentary: 
@@ -183,9 +183,9 @@ protected:
     virtual void markDirtyDownstreamNodes(void);
 
 protected:
-    virtual void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    virtual void pull(dtkComposerEdge *route, dtkComposerNodeProperty *property);
     virtual void  run(void);
-    virtual void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    virtual void push(dtkComposerEdge *route, dtkComposerNodeProperty *property);
 
 private:
     friend class dtkComposerScene; 
@@ -200,8 +200,11 @@ public:
 
 public:
     virtual dtkComposerNodeAbstractTransmitter *emitter(dtkComposerNodeProperty *property);
-    virtual bool  onLeftRouteConnected(dtkComposerEdge *route);
-    virtual bool onRightRouteConnected(dtkComposerEdge *route);
+
+public:
+    virtual bool setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
+
+    virtual bool onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property);
 
 protected:
     friend class dtkComposerEvaluatorPrivate;

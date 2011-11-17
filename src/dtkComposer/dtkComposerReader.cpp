@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Nov 10 10:40:47 2011 (+0100)
+ * Last-Updated: Thu Nov 17 09:38:58 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 911
+ *     Update #: 913
  */
 
 /* Commentary: 
@@ -423,7 +423,7 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
             if(children.at(i).toElement().tagName() != "value")
                 continue;
 
-            boolean_node->setValue((children.at(i).childNodes().at(0).toText().data() == "true"));
+            boolean_node->setLabelText((children.at(i).childNodes().at(0).toText().data() == "true"));
         }
     }
 
@@ -643,7 +643,7 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
             if(children.at(i).toElement().tagName() != "value")
                 continue;
 
-            string_node->setValue(children.at(i).childNodes().at(0).toText().data());
+            string_node->setEditorText(children.at(i).childNodes().at(0).toText().data());
         }
 
         string_node->touch();

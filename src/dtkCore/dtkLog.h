@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2009 - Jean-Christophe Lombardo, Inria.
  * Created: Thu May 14 14:02:22 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov 16 10:40:43 2011 (+0100)
+ * Last-Updated: Wed Nov 16 15:04:25 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 90
+ *     Update #: 91
  */
 
 /* Commentary: 
@@ -35,6 +35,7 @@ public:
 
     typedef void (*Handler)(Level level, const QString &message);
 
+    dtkLog& operator<<(bool value);
     dtkLog& operator<<(int value);
     dtkLog& operator<<(uint value);
     dtkLog& operator<<(long value);

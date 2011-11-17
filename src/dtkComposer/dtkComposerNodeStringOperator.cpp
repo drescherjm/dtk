@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 18:00:48 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov 16 09:21:35 2011 (+0100)
+ * Last-Updated: Thu Nov 17 11:11:07 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 61
+ *     Update #: 85
  */
 
 /* Commentary: 
@@ -25,7 +25,7 @@
 #include <dtkCore/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeStringOperatorLabel
+// dtkComposerNodeStringOperatorLabel declaration
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeStringOperatorLabel : public QGraphicsItem
@@ -49,6 +49,14 @@ public:
     QString text;
 };
 
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeStringOperatorLabel implementation
+// /////////////////////////////////////////////////////////////////
+
+//! Constructs string operator label.
+/*! 
+ *  It is set to << by default.
+ */
 dtkComposerNodeStringOperatorLabel::dtkComposerNodeStringOperatorLabel(dtkComposerNodeStringOperator *parent) : QGraphicsItem(parent)
 {
     int margin = 10;
@@ -70,16 +78,28 @@ dtkComposerNodeStringOperatorLabel::dtkComposerNodeStringOperatorLabel(dtkCompos
     text = "<<";
 }
 
+//! Destroys string operator label.
+/*! 
+ *  
+ */
 dtkComposerNodeStringOperatorLabel::~dtkComposerNodeStringOperatorLabel(void)
 {
 
 }
 
+//! 
+/*! 
+ *  Reimplemented from QGraphicsItem.
+ */
 QRectF dtkComposerNodeStringOperatorLabel::boundingRect(void) const
 {
     return path.boundingRect();
 }
 
+//! 
+/*! 
+ *  Reimplemented from QGraphicsItem.
+ */
 void dtkComposerNodeStringOperatorLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
@@ -108,6 +128,10 @@ void dtkComposerNodeStringOperatorLabel::paint(QPainter *painter, const QStyleOp
     painter->drawText(this->boundingRect(), Qt::AlignCenter, text);
 }
 
+//! Enables to switch between string operations.
+/*! 
+ *  Reimplemented from QGraphicsItem.
+ */
 void dtkComposerNodeStringOperatorLabel::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
@@ -128,15 +152,15 @@ void dtkComposerNodeStringOperatorLabel::mousePressEvent(QGraphicsSceneMouseEven
 }
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeStringOperatorPrivate
+// dtkComposerNodeStringOperatorPrivate declaration
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeStringOperatorPrivate
 {
 public:
-    dtkComposerNodeProperty *property_input_value_op1;
-    dtkComposerNodeProperty *property_input_value_op2;
-    dtkComposerNodeProperty *property_output_value;
+    dtkComposerNodeProperty *property_left_value_op1;
+    dtkComposerNodeProperty *property_left_value_op2;
+    dtkComposerNodeProperty *property_right_value;
 
 public:
     dtkComposerNodeStringOperatorLabel *label;
@@ -156,15 +180,19 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeStringOperator
+// dtkComposerNodeStringOperator implementation
 // /////////////////////////////////////////////////////////////////
 
+//! Constructs string operator node.
+/*! 
+ *  << operation is set by default.
+ */
 dtkComposerNodeStringOperator::dtkComposerNodeStringOperator(dtkComposerNode *parent) : dtkComposerNode(parent), d(new dtkComposerNodeStringOperatorPrivate)
 {
-    d->property_input_value_op1 = new dtkComposerNodeProperty("left operand", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
-    d->property_input_value_op2 = new dtkComposerNodeProperty("right operand", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
+    d->property_left_value_op1 = new dtkComposerNodeProperty("left operand", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
+    d->property_left_value_op2 = new dtkComposerNodeProperty("right operand", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
 
-    d->property_output_value = new dtkComposerNodeProperty("result", dtkComposerNodeProperty::Right, dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, this);
+    d->property_right_value = new dtkComposerNodeProperty("result", dtkComposerNodeProperty::Right, dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, this);
 
     d->label = new dtkComposerNodeStringOperatorLabel(this);
     d->label->setPos(0, 0);
@@ -175,15 +203,19 @@ dtkComposerNodeStringOperator::dtkComposerNodeStringOperator(dtkComposerNode *pa
     this->setKind(dtkComposerNode::Process);
     this->setType("dtkComposerStringOperator");
 
-    this->g->appendLeftProperty(d->property_input_value_op1);
-    this->g->appendLeftProperty(d->property_input_value_op2);
-    this->g->appendRightProperty(d->property_output_value);
+    this->g->appendLeftProperty(d->property_left_value_op1);
+    this->g->appendLeftProperty(d->property_left_value_op2);
+    this->g->appendRightProperty(d->property_right_value);
 
     d->emitter = new dtkComposerNodeTransmitter<QString>();
     d->receiver_op1 = NULL;
     d->receiver_op2 = NULL;
 }
 
+//! Destroys string operator node.
+/*! 
+ *  
+ */
 dtkComposerNodeStringOperator::~dtkComposerNodeStringOperator(void)
 {
     delete d;
@@ -191,19 +223,13 @@ dtkComposerNodeStringOperator::~dtkComposerNodeStringOperator(void)
     d = NULL;
 }
 
-QVariant dtkComposerNodeStringOperator::value(dtkComposerNodeProperty *property)
-{
-    if(property == d->property_output_value)
-        return QVariant(d->value);
-
-	return QVariant();
-}
-
-dtkComposerNodeStringOperator::Operation dtkComposerNodeStringOperator::operation(void)
-{
-    return d->operation;
-}
-
+//! Sets current operator type.
+/*! 
+ *  Following types are avalaible:
+ *
+ *  - << operator
+ *  - >> operator
+ */
 void dtkComposerNodeStringOperator::setOperation(dtkComposerNodeStringOperator::Operation operation)
 {
     d->operation = operation;
@@ -220,15 +246,34 @@ void dtkComposerNodeStringOperator::setOperation(dtkComposerNodeStringOperator::
     }
 }
 
-void dtkComposerNodeStringOperator::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+//! Returns current operation type.
+/*! 
+ *  
+ */
+dtkComposerNodeStringOperator::Operation dtkComposerNodeStringOperator::operation(void)
 {
-    if(property == d->property_input_value_op1)
+    return d->operation;
+}
+
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
+void dtkComposerNodeStringOperator::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+{
+    Q_UNUSED(route);
+
+    if(property == d->property_left_value_op1)
         d->value_op1 = d->receiver_op1->data();
 
-    if(property == d->property_input_value_op2)
+    else if(property == d->property_left_value_op2)
         d->value_op2 = d->receiver_op2->data();
 }
 
+//! Runs node logics.
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
 void dtkComposerNodeStringOperator::run(void)
 {
     switch(d->operation) {
@@ -245,42 +290,59 @@ void dtkComposerNodeStringOperator::run(void)
     d->emitter->setData(d->value);
 }
 
-void dtkComposerNodeStringOperator::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
+void dtkComposerNodeStringOperator::push(dtkComposerEdge *route, dtkComposerNodeProperty *property)
 {
-    Q_UNUSED(edge);
+    Q_UNUSED(route);
     Q_UNUSED(property);
 }
 
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
 dtkComposerNodeAbstractTransmitter *dtkComposerNodeStringOperator::emitter(dtkComposerNodeProperty *property)
 {
-    if (property == d->property_output_value)
+    if (property == d->property_right_value)
         return d->emitter;
     
     return NULL;
 }
 
-bool dtkComposerNodeStringOperator::onLeftRouteConnected(dtkComposerEdge *route)
+//! Sets the receiver from the emitter of the node at the source of \a
+//! route.
+/*! 
+ *  When the source emitter can be casted into current receiver type,
+ *  true is returned. Else it returns false.
+ *
+ *  Reimplemented from dtkComposerNode.
+ */
+bool dtkComposerNodeStringOperator::setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
 {
-    if (route->destination() == d->property_input_value_op1) {
 
-        if (!(d->receiver_op1 = dynamic_cast<dtkComposerNodeTransmitter<QString> *> (route->source()->node()->emitter(route->source())))) {
-            qDebug() << DTK_PRETTY_FUNCTION << "Invalid connection between these two properties.";
+    if (destination == d->property_left_value_op1) {
+
+        if (!(d->receiver_op1 = dynamic_cast<dtkComposerNodeTransmitter<QString> *> (route->source()->node()->emitter(route->source()))))
             return false;
-        }
 
-    } else if (route->destination() == d->property_input_value_op2) {
+    } else if (destination == d->property_left_value_op2) {
 
-         if (!(d->receiver_op2 = dynamic_cast<dtkComposerNodeTransmitter<QString> *> (route->source()->node()->emitter(route->source())))) {
-            qDebug() << DTK_PRETTY_FUNCTION << "Invalid connection between these two properties.";
+         if (!(d->receiver_op2 = dynamic_cast<dtkComposerNodeTransmitter<QString> *> (route->source()->node()->emitter(route->source()))))
             return false;
-        }
 
     }
 
-    return dtkComposerNode::onLeftRouteConnected(route);
+    return true;
 }
 
-bool dtkComposerNodeStringOperator::onRightRouteConnected(dtkComposerEdge *route)
+//! 
+/*! 
+ *  
+ */
+bool dtkComposerNodeStringOperator::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
 {
-    return dtkComposerNode::onRightRouteConnected(route);
+    return true;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 15:08:06 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Nov 15 15:12:45 2011 (+0100)
+ * Last-Updated: Thu Nov 17 14:02:40 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 18
+ *     Update #: 27
  */
 
 /* Commentary: 
@@ -35,11 +35,8 @@ public:
      dtkComposerNodeString(dtkComposerNode *parent = 0);
     ~dtkComposerNodeString(void);
 
-    QVariant value(dtkComposerNodeProperty *property);
-
 public:
-    QString value(void);
-    void setValue(QString value);
+    void setEditorText(const QString& value);
 
 public:
     void expand(void);
@@ -52,14 +49,17 @@ protected slots:
     void onCollapseFinised(void);
 
 protected:
-    void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void pull(dtkComposerEdge *route, dtkComposerNodeProperty *property);
     void  run(void);
-    void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void push(dtkComposerEdge *route, dtkComposerNodeProperty *property);
 
 public:
     dtkComposerNodeAbstractTransmitter *emitter(dtkComposerNodeProperty *property);
-    bool  onLeftRouteConnected(dtkComposerEdge *route);
-    bool onRightRouteConnected(dtkComposerEdge *route);
+
+public:
+    bool setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
+
+    bool onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property);
 
 private:
     dtkComposerNodeStringPrivate *d;

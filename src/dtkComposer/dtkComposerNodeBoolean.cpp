@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 25 10:07:34 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Nov  7 14:44:12 2011 (+0100)
+ * Last-Updated: Thu Nov 17 13:44:20 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 210
+ *     Update #: 270
  */
 
 /* Commentary: 
@@ -20,11 +20,12 @@
 #include "dtkComposerEdge.h"
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerNodeTransmitter.h"
 
 #include <dtkCore/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeBooleanLabel
+// dtkComposerNodeBooleanLabel declaration
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeBooleanLabel : public QGraphicsItem
@@ -43,11 +44,22 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
 public:
+    void setLabelText(bool value);
+
+public:
     dtkComposerNodeBoolean *parent_node;
     QPainterPath path;
     QString text;
 };
 
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeBooleanLabel implementation
+// /////////////////////////////////////////////////////////////////
+
+//! Constructs boolean label.
+/*! 
+ *  
+ */
 dtkComposerNodeBooleanLabel::dtkComposerNodeBooleanLabel(dtkComposerNodeBoolean *parent) : QGraphicsItem(parent)
 {
     int margin = 10;
@@ -67,16 +79,28 @@ dtkComposerNodeBooleanLabel::dtkComposerNodeBooleanLabel(dtkComposerNodeBoolean 
     parent_node = parent;
 }
 
+//! Destroys boolean label
+/*! 
+ *  
+ */
 dtkComposerNodeBooleanLabel::~dtkComposerNodeBooleanLabel(void)
 {
 
 }
 
+//! 
+/*! 
+ *  Reimplemented from QGraphicsItem.
+ */
 QRectF dtkComposerNodeBooleanLabel::boundingRect(void) const
 {
     return path.boundingRect();
 }
 
+//! 
+/*! 
+ *  Reimplemented from QGraphicsItem.
+ */
 void dtkComposerNodeBooleanLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
@@ -105,16 +129,28 @@ void dtkComposerNodeBooleanLabel::paint(QPainter *painter, const QStyleOptionGra
     painter->drawText(this->boundingRect(), Qt::AlignCenter, text);
 }
 
+//! 
+/*! 
+ *  Reimplemented from QGraphicsItem.
+ */
 void dtkComposerNodeBooleanLabel::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
 
-    if (text == "T")
-        text = "F";
-    else
-        text = "T";
+    if (parent_node->interactive())
+        this->setLabelText((text != "T"));
+}
 
-    parent_node->setValue((text == "T"));
+//! Sets label text.
+/*! 
+ *  
+ */
+void dtkComposerNodeBooleanLabel::setLabelText(bool value)
+{
+    if (value)
+        text = "T";
+    else
+        text = "F";
 
     this->update();
 }
@@ -126,39 +162,54 @@ void dtkComposerNodeBooleanLabel::mousePressEvent(QGraphicsSceneMouseEvent *even
 class dtkComposerNodeBooleanPrivate
 {
 public:
-    dtkComposerNodeProperty *property_input_value;
-    dtkComposerNodeProperty *property_output_value;
+    dtkComposerNodeProperty *property_left_value;
+    dtkComposerNodeProperty *property_right_value;
 
 public:
     dtkComposerNodeBooleanLabel *label;
 
 public:
-    bool value;
+    bool interactive;
+
+public:
+    dtkComposerNodeTransmitter<bool> *emitter;
+    dtkComposerNodeTransmitter<bool> *receiver;
 };
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeBoolean
 // /////////////////////////////////////////////////////////////////
 
+//! Constructs boolean node.
+/*! 
+ *  Boolean node is set to false by default and it is interactive.
+ */
 dtkComposerNodeBoolean::dtkComposerNodeBoolean(dtkComposerNode *parent) : dtkComposerNode(parent), d(new dtkComposerNodeBooleanPrivate)
 {
-    d->property_input_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
-    d->property_output_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Right, dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, this);
+    d->property_left_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
+    d->property_right_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Right, dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, this);
 
     d->label = new dtkComposerNodeBooleanLabel(this);
     d->label->setPos(0, 0);
     d->label->text = "F";
 
-    d->value = false;
+    d->interactive = true;
+
+    d->emitter = new dtkComposerNodeTransmitter<bool>();
+    d->receiver = NULL;
 
     this->setTitle("Boolean");
     this->setKind(dtkComposerNode::Atomic);
     this->setType("dtkComposerBoolean");
 
-    this->g->appendLeftProperty(d->property_input_value);
-    this->g->appendRightProperty(d->property_output_value);
+    this->g->appendLeftProperty(d->property_left_value);
+    this->g->appendRightProperty(d->property_right_value);
 }
 
+//! Destroys boolean node.
+/*! 
+ *  
+ */
 dtkComposerNodeBoolean::~dtkComposerNodeBoolean(void)
 {
     delete d;
@@ -166,53 +217,97 @@ dtkComposerNodeBoolean::~dtkComposerNodeBoolean(void)
     d = NULL;
 }
 
-QVariant dtkComposerNodeBoolean::value(dtkComposerNodeProperty *property)
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
+void dtkComposerNodeBoolean::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
 {
-    if(property == d->property_output_value)
-        return QVariant(d->value);
-
-	return QVariant();
+    Q_UNUSED(route);
+    Q_UNUSED(property);
 }
 
-bool dtkComposerNodeBoolean::value(void)
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
+void dtkComposerNodeBoolean::run(void)
 {
-    return d->value;
-}
-
-void dtkComposerNodeBoolean::setValue(bool value)
-{
-    d->value = value;
-
-    if(d->value)
-        d->label->text = "T";
-    else
-        d->label->text = "F";
-
-    d->label->update();
-}
-
-void dtkComposerNodeBoolean::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
-{
-    if (property == d->property_input_value) {
-
-        QVariant value = edge->source()->node()->value(edge->source());
-        
-        if(value.canConvert(QVariant::Bool)) {
-            this->setValue(value.toBool());
-        } else {
-            qDebug() << DTK_PRETTY_FUNCTION << "Input value expected to be boolean. Assuming false.";
-            this->setValue(false);
-        }
+    if (d->interactive) {
+        d->emitter->setData(d->label->text == "T");
+    } else {
+        d->emitter->setData(d->receiver->data());
+        d->label->setLabelText(d->receiver->data());
     }
 }
 
-void dtkComposerNodeBoolean::run(void)
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
+void dtkComposerNodeBoolean::push(dtkComposerEdge *route, dtkComposerNodeProperty *property)
 {
-    return;
+    Q_UNUSED(route);
+    Q_UNUSED(property);
 }
 
-void dtkComposerNodeBoolean::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+//! Returns emitter containing boolean value.
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
+dtkComposerNodeAbstractTransmitter *dtkComposerNodeBoolean::emitter(dtkComposerNodeProperty *property)
 {
-    Q_UNUSED(edge);
-    Q_UNUSED(property);
+    if (property == d->property_right_value)
+        return d->emitter;
+    
+    return NULL;
+}
+
+//! Sets the receiver from the emitter of the node at the source of \a
+//! route.
+/*! 
+ *  When the source emitter can be casted into current receiver type,
+ *  true is returned. Else it returns false.
+ *
+ *  It makes also the node non-interactive.
+ *
+ *  Reimplemented from dtkComposerNode.
+ */
+bool dtkComposerNodeBoolean::setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+{
+    Q_UNUSED(destination);
+
+    if (!(d->receiver = dynamic_cast<dtkComposerNodeTransmitter<bool> *> (route->source()->node()->emitter(route->source()))))
+        return false;
+
+    d->interactive = false;
+
+    return true;
+}
+
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
+bool dtkComposerNodeBoolean::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+{
+    return true;
+}
+
+//! Returns true when node is interactive.
+/*! 
+ *  
+ */
+bool dtkComposerNodeBoolean::interactive(void)
+{
+    return d->interactive;
+}
+
+//! Sets the label of the node.
+/*! 
+ *  
+ */
+void dtkComposerNodeBoolean::setLabelText(bool value)
+{
+    d->label->setLabelText(value);
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Feb 25 16:19:59 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 18 15:43:15 2011 (+0200)
+ * Last-Updated: Thu Nov 17 16:39:29 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 83
+ *     Update #: 102
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include "dtkComposerExport.h"
 #include "dtkComposerNode.h"
 
+class dtkComposerNodeAbstractTransmitter;
 class dtkComposerNodeNumberPrivate;
 
 class DTKCOMPOSER_EXPORT dtkComposerNodeNumber : public dtkComposerNode
@@ -46,14 +47,9 @@ public:
      dtkComposerNodeNumber(dtkComposerNode *parent = 0);
     ~dtkComposerNodeNumber(void);
 
-    QVariant value(dtkComposerNodeProperty *property);
-
 public:
     QVariant value(void);
     void setValue(QVariant value);
-
-protected:
-    void convertTo(int genre);
 
 public:
     void expand(void);
@@ -66,11 +62,29 @@ protected slots:
     void onCollapseFinised(void);
 
 protected:
-    void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void pull(dtkComposerEdge *route, dtkComposerNodeProperty *property);
     void  run(void);
-    void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void push(dtkComposerEdge *route, dtkComposerNodeProperty *property);
 
 public:
+    dtkComposerNodeAbstractTransmitter *emitter(dtkComposerNodeProperty *property);
+
+public:
+    bool setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
+
+    bool onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property);
+
+public:
+    bool interactive(void) const;
+
+    void  setLabelText(const QString& value);
+    void setEditorText(const QString& value);
+
+private:
+    void setTransmitterData(const QString& value);
+
+public:
+    static Genre compatibleType(const QString& left_type, const QString& right_type);
     static Genre genre(QVariant& a, QVariant& b);
 
 private:

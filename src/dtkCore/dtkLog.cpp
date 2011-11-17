@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2009 - Jean-Christophe Lombardo, Inria.
  * Created: Thu May 14 14:32:46 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov 16 10:41:04 2011 (+0100)
+ * Last-Updated: Wed Nov 16 15:06:15 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 130
+ *     Update #: 132
  */
 
 /* Commentary: 
@@ -127,6 +127,16 @@ void dtkStandardRedirector::uninitialize(void)
 // /////////////////////////////////////////////////////////////////
 // dtkLog
 // /////////////////////////////////////////////////////////////////
+
+dtkLog& dtkLog::operator<<(bool value)
+{
+    if (value)
+        m_log += "true";
+    else
+        m_log += "false";
+    
+    return *this;
+}
 
 dtkLog& dtkLog::operator<<(int value)
 {

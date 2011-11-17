@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 25 10:07:34 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Nov  7 15:03:39 2011 (+0100)
+ * Last-Updated: Thu Nov 17 11:11:34 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 233
+ *     Update #: 270
  */
 
 /* Commentary: 
@@ -20,11 +20,12 @@
 #include "dtkComposerEdge.h"
 #include "dtkComposerNodeBooleanOperator.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerNodeTransmitter.h"
 
 #include <dtkCore/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeBooleanOperatorLabel
+// dtkComposerNodeBooleanOperatorLabel declaration
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeBooleanOperatorLabel : public QGraphicsItem
@@ -48,6 +49,14 @@ public:
     QString text;
 };
 
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeBooleanOperatorLabel implementations
+// /////////////////////////////////////////////////////////////////
+
+//! Constructs boolean operator label.
+/*! 
+ *  It is set to AND by default.
+ */
 dtkComposerNodeBooleanOperatorLabel::dtkComposerNodeBooleanOperatorLabel(dtkComposerNodeBooleanOperator *parent) : QGraphicsItem(parent)
 {
     int margin = 10;
@@ -69,16 +78,28 @@ dtkComposerNodeBooleanOperatorLabel::dtkComposerNodeBooleanOperatorLabel(dtkComp
     text = "AND";
 }
 
+//! Destroys boolean operator label.
+/*! 
+ *  
+ */
 dtkComposerNodeBooleanOperatorLabel::~dtkComposerNodeBooleanOperatorLabel(void)
 {
 
 }
 
+//! 
+/*! 
+ *  Reimplemented from QGraphicsItem.
+ */
 QRectF dtkComposerNodeBooleanOperatorLabel::boundingRect(void) const
 {
     return path.boundingRect();
 }
 
+//! 
+/*! 
+ *  Reimplemented from QGraphicsItem.
+ */
 void dtkComposerNodeBooleanOperatorLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
@@ -107,6 +128,10 @@ void dtkComposerNodeBooleanOperatorLabel::paint(QPainter *painter, const QStyleO
     painter->drawText(this->boundingRect(), Qt::AlignCenter, text);
 }
 
+//! Enables to switch between boolean operations.
+/*! 
+ *  Reimplemented from QGraphicsItem.
+ */
 void dtkComposerNodeBooleanOperatorLabel::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
@@ -157,15 +182,15 @@ void dtkComposerNodeBooleanOperatorLabel::mousePressEvent(QGraphicsSceneMouseEve
 }
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeBooleanOperatorPrivate
+// dtkComposerNodeBooleanOperatorPrivate declaration
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeBooleanOperatorPrivate
 {
 public:
-    dtkComposerNodeProperty *property_input_value_op1;
-    dtkComposerNodeProperty *property_input_value_op2;
-    dtkComposerNodeProperty *property_output_value;
+    dtkComposerNodeProperty *property_left_value_op1;
+    dtkComposerNodeProperty *property_left_value_op2;
+    dtkComposerNodeProperty *property_right_value;
 
 public:
     dtkComposerNodeBooleanOperatorLabel *label;
@@ -177,18 +202,27 @@ public:
     bool value_op1;
     bool value_op2;
     bool value;
+
+public:
+    dtkComposerNodeTransmitter<bool> *emitter;
+    dtkComposerNodeTransmitter<bool> *receiver_op1;
+    dtkComposerNodeTransmitter<bool> *receiver_op2;
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeBooleanOperator
+// dtkComposerNodeBooleanOperator implementation
 // /////////////////////////////////////////////////////////////////
 
+//! Constructs boolean operator node.
+/*! 
+ *  AND operation is set by default.
+ */
 dtkComposerNodeBooleanOperator::dtkComposerNodeBooleanOperator(dtkComposerNode *parent) : dtkComposerNode(parent), d(new dtkComposerNodeBooleanOperatorPrivate)
 {
-    d->property_input_value_op1 = new dtkComposerNodeProperty("left operand", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
-    d->property_input_value_op2 = new dtkComposerNodeProperty("right operand", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
+    d->property_left_value_op1 = new dtkComposerNodeProperty("left operand", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
+    d->property_left_value_op2 = new dtkComposerNodeProperty("right operand", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
 
-    d->property_output_value = new dtkComposerNodeProperty("result", dtkComposerNodeProperty::Right, dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, this);
+    d->property_right_value = new dtkComposerNodeProperty("result", dtkComposerNodeProperty::Right, dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, this);
 
     d->label = new dtkComposerNodeBooleanOperatorLabel(this);
     d->label->setPos(0, 0);
@@ -203,11 +237,19 @@ dtkComposerNodeBooleanOperator::dtkComposerNodeBooleanOperator(dtkComposerNode *
     this->setKind(dtkComposerNode::Process);
     this->setType("dtkComposerBooleanOperator");
 
-    this->g->appendLeftProperty(d->property_input_value_op1);
-    this->g->appendLeftProperty(d->property_input_value_op2);
-    this->g->appendRightProperty(d->property_output_value);
+    this->g->appendLeftProperty(d->property_left_value_op1);
+    this->g->appendLeftProperty(d->property_left_value_op2);
+    this->g->appendRightProperty(d->property_right_value);
+
+    d->emitter = new dtkComposerNodeTransmitter<bool>();
+    d->receiver_op1 = NULL;
+    d->receiver_op2 = NULL;
 }
 
+//! Destroys boolean operator node.
+/*! 
+ *  
+ */
 dtkComposerNodeBooleanOperator::~dtkComposerNodeBooleanOperator(void)
 {
     delete d;
@@ -215,19 +257,19 @@ dtkComposerNodeBooleanOperator::~dtkComposerNodeBooleanOperator(void)
     d = NULL;
 }
 
-QVariant dtkComposerNodeBooleanOperator::value(dtkComposerNodeProperty *property)
-{
-    if(property == d->property_output_value)
-        return QVariant(d->value);
-
-	return QVariant();
-}
-
-dtkComposerNodeBooleanOperator::Operation dtkComposerNodeBooleanOperator::operation(void)
-{
-    return d->operation;
-}
-
+//! Sets current operator type.
+/*! 
+ *  Following types are avalaible:
+ *
+ *  -  AND operator
+ *  -   OR operator
+ *  -  XOR operator (exclusive OR)
+ *  - NAND operator (AND negation)
+ *  -  NOR operator (OR negation)
+ *  - XNOR operator (exclusive OR negation)
+ *  -  IMP operator (implication)
+ *  - NIMP operator (negation of implication)
+ */
 void dtkComposerNodeBooleanOperator::setOperation(dtkComposerNodeBooleanOperator::Operation operation)
 {
     d->operation = operation;
@@ -262,15 +304,34 @@ void dtkComposerNodeBooleanOperator::setOperation(dtkComposerNodeBooleanOperator
     }
 }
 
-void dtkComposerNodeBooleanOperator::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+//! Returns current operation type.
+/*! 
+ *  
+ */
+dtkComposerNodeBooleanOperator::Operation dtkComposerNodeBooleanOperator::operation(void)
 {
-    if(property == d->property_input_value_op1)
-        d->value_op1 = edge->source()->node()->value(edge->source()).toBool();
-
-    if(property == d->property_input_value_op2)
-        d->value_op2 = edge->source()->node()->value(edge->source()).toBool();
+    return d->operation;
 }
 
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
+void dtkComposerNodeBooleanOperator::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+{
+    Q_UNUSED(route);
+
+    if(property == d->property_left_value_op1)
+        d->value_op1 = d->receiver_op1->data();
+
+    else if(property == d->property_left_value_op2)
+        d->value_op2 = d->receiver_op2->data();
+}
+
+//! Runs node logics.
+/*! 
+ *  
+ */
 void dtkComposerNodeBooleanOperator::run(void)
 {
     bool a = d->value_op1;
@@ -304,10 +365,63 @@ void dtkComposerNodeBooleanOperator::run(void)
     default:
         break;
     }
+
+    d->emitter->setData(d->value);
 }
 
-void dtkComposerNodeBooleanOperator::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
+void dtkComposerNodeBooleanOperator::push(dtkComposerEdge *route, dtkComposerNodeProperty *property)
 {
-    Q_UNUSED(edge);
+    Q_UNUSED(route);
     Q_UNUSED(property);
+}
+
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
+dtkComposerNodeAbstractTransmitter *dtkComposerNodeBooleanOperator::emitter(dtkComposerNodeProperty *property)
+{
+    if (property == d->property_right_value)
+        return d->emitter;
+    
+    return NULL;
+}
+
+//! Sets the receiver from the emitter of the node at the source of \a
+//! route.
+/*! 
+ *  When the source emitter can be casted into current receiver type,
+ *  true is returned. Else it returns false.
+ *
+ *  Reimplemented from dtkComposerNode.
+ */
+bool dtkComposerNodeBooleanOperator::setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+{
+
+    if (destination == d->property_left_value_op1) {
+
+        if (!(d->receiver_op1 = dynamic_cast<dtkComposerNodeTransmitter<bool> *> (route->source()->node()->emitter(route->source()))))
+            return false;
+
+    } else if (destination == d->property_left_value_op2) {
+
+         if (!(d->receiver_op2 = dynamic_cast<dtkComposerNodeTransmitter<bool> *> (route->source()->node()->emitter(route->source()))))
+            return false;
+
+    }
+
+    return true;
+}
+
+//! 
+/*! 
+ *  
+ */
+bool dtkComposerNodeBooleanOperator::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+{
+    return true;
 }

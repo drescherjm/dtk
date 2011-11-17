@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Nov  4 13:49:39 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Nov 14 17:21:24 2011 (+0100)
+ * Last-Updated: Wed Nov 16 12:51:24 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 12
+ *     Update #: 18
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@
 
 class dtkComposerEdge;
 class dtkComposerNode;
+class dtkComposerNodeProperty;
 
 class dtkComposerNodeLogicPrivate;
 
@@ -51,6 +52,9 @@ public:
 public:
     const QList<dtkComposerEdge *>&  leftRoutes(void) const;
     const QList<dtkComposerEdge *>& rightRoutes(void) const;
+
+public:
+    bool canConnectRoute(dtkComposerNodeProperty *source, dtkComposerNodeProperty *destination, dtkComposerNode *destin_node);
 
 private:
     dtkComposerNodeLogicPrivate *d;

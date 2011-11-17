@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Mar  1 10:18:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov  9 11:20:58 2011 (+0100)
+ * Last-Updated: Thu Nov 17 16:17:54 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 157
+ *     Update #: 168
  */
 
 /* Commentary: 
@@ -163,7 +163,7 @@ void dtkComposerNodeNumberOperatorLabel::mousePressEvent(QGraphicsSceneMouseEven
 }
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeNumberOperatorPrivate
+// dtkComposerNodeNumberOperatorPrivate declaration
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeNumberOperatorPrivate
@@ -186,9 +186,13 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeNumberOperator
+// dtkComposerNodeNumberOperator implementation
 // /////////////////////////////////////////////////////////////////
 
+//! Constructs number operator node.
+/*! 
+ *  + operation is set by default.
+ */
 dtkComposerNodeNumberOperator::dtkComposerNodeNumberOperator(dtkComposerNode *parent) : dtkComposerNode(parent), d(new dtkComposerNodeNumberOperatorPrivate)
 {
     d->property_input_value_op1 = new dtkComposerNodeProperty("left operand", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
@@ -210,6 +214,10 @@ dtkComposerNodeNumberOperator::dtkComposerNodeNumberOperator(dtkComposerNode *pa
     this->g->appendRightProperty(d->property_output_value);
 }
 
+//! Destroys number operator node.
+/*! 
+ *  
+ */
 dtkComposerNodeNumberOperator::~dtkComposerNodeNumberOperator(void)
 {
     delete d;
@@ -217,19 +225,20 @@ dtkComposerNodeNumberOperator::~dtkComposerNodeNumberOperator(void)
     d = NULL;
 }
 
-QVariant dtkComposerNodeNumberOperator::value(dtkComposerNodeProperty *property)
-{
-    if(property == d->property_output_value)
-        return d->value;
-
-    return QVariant();
-}
-
-dtkComposerNodeNumberOperator::Operation dtkComposerNodeNumberOperator::operation(void)
-{
-    return d->operation;
-}
-
+//! Sets current operator type.
+/*! 
+ *  Following types are avalaible:
+ *
+ *  -   + operator
+ *  -   - operator
+ *  -   x operator
+ *  -   / operator
+ *  -  ++ operator
+ *  -  -- operator
+ *  -   % operator
+ *  - MIN operator
+ *  - MAX operator
+ */
 void dtkComposerNodeNumberOperator::setOperation(dtkComposerNodeNumberOperator::Operation operation)
 {
     d->operation = operation;
@@ -267,6 +276,19 @@ void dtkComposerNodeNumberOperator::setOperation(dtkComposerNodeNumberOperator::
     }
 }
 
+//! Returns current operation type.
+/*! 
+ *  
+ */
+dtkComposerNodeNumberOperator::Operation dtkComposerNodeNumberOperator::operation(void)
+{
+    return d->operation;
+}
+
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
 void dtkComposerNodeNumberOperator::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     if(property == d->property_input_value_op1)
@@ -276,6 +298,10 @@ void dtkComposerNodeNumberOperator::pull(dtkComposerEdge *edge, dtkComposerNodeP
         d->value_op2 = edge->source()->node()->value(edge->source());
 }
 
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
 void dtkComposerNodeNumberOperator::run(void)
 {
     QVariant a = d->value_op1;
@@ -564,8 +590,82 @@ void dtkComposerNodeNumberOperator::run(void)
     d->value = r;
 }
 
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
 void dtkComposerNodeNumberOperator::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(edge);
     Q_UNUSED(property);
+}
+
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
+dtkComposerNodeAbstractTransmitter *dtkComposerNodeNumberOperator::emitter(dtkComposerNodeProperty *property)
+{
+    // if (property == d->property_right_value) {
+    //     if (!d->transmitter)
+    //         return d->default_emitter;
+    //     else
+    //         return d->transmitter;
+    // }
+    
+    return NULL;
+}
+
+//! Sets the receiver from the emitter of the node at the source of \a
+//! route.
+/*! 
+ *  When the source emitter can be casted into current receiver type,
+ *  true is returned. Else it returns false.
+ *
+ *  It makes also the node non-interactive nad clears the text of
+ *  edition aera.
+ *
+ *  Reimplemented from dtkComposerNode.
+ */
+bool dtkComposerNodeNumberOperator::setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+{
+    Q_UNUSED(destination);
+
+    // d->transmitter = route->source()->node()->emitter(route->source());
+
+    // if (d->transmitter) {
+
+    //     if (!(dynamic_cast<dtkComposerNodeTransmitter<int>        *>(d->transmitter)) &&
+    //         !(dynamic_cast<dtkComposerNodeTransmitter<uint>       *>(d->transmitter)) &&
+    //         !(dynamic_cast<dtkComposerNodeTransmitter<long>       *>(d->transmitter)) &&
+    //         !(dynamic_cast<dtkComposerNodeTransmitter<ulong>      *>(d->transmitter)) &&
+    //         !(dynamic_cast<dtkComposerNodeTransmitter<qlonglong>  *>(d->transmitter)) &&
+    //         !(dynamic_cast<dtkComposerNodeTransmitter<qulonglong> *>(d->transmitter)) &&
+    //         !(dynamic_cast<dtkComposerNodeTransmitter<float>      *>(d->transmitter)) &&
+    //         !(dynamic_cast<dtkComposerNodeTransmitter<double>     *>(d->transmitter))) {
+
+    //         qDebug() << DTK_PRETTY_FUNCTION << ": Type from node" << route->source()->node() << "is not handled by node number.";
+    //         return false;
+            
+    //     }
+
+    //     d->interactive = false;
+    //     d->editor->setTextInteractionFlags(Qt::NoTextInteraction);
+    //     d->editor->setPlainText("");    
+        
+    //     return true;
+
+    // }
+
+    // qDebug() << DTK_PRETTY_FUNCTION << "Transmitter of source node" << route->source()->node() << "has not been instanciated. Connection failed.";
+    return false;
+}
+
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
+bool dtkComposerNodeNumberOperator::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+{
+    return true;
 }

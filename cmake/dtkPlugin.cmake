@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Apr  7 09:09:18 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Nov  8 22:11:24 2011 (+0100)
+## Last-Updated: Thu Nov 10 17:32:32 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 17
+##     Update #: 18
 ######################################################################
 ## 
 ### Commentary: This script overrides some of the dtkBuild script
@@ -32,8 +32,7 @@ if(NOT MSVC)
 endif(NOT MSVC)
 
 macro(dtk_build_doc plugin)
-  set(DOXYGEN_FIND_QUIETLY TRUE)
-  find_package(Doxygen)
+  find_package(Doxygen QUIET)
   if (DOXYGEN_FOUND)
     configure_file(${plugin}.doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/${plugin}.doxyfile IMMEDIATE @ONLY)
     configure_file(${plugin}.qhcp.in ${CMAKE_CURRENT_BINARY_DIR}/${plugin}.qhcp IMMEDIATE @ONLY)

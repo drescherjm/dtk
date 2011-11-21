@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. oct. 11 16:57:47 2011 (+0200)
+ * Last-Updated: lun. nov. 21 16:57:04 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1040
+ *     Update #: 1043
  */
 
 /* Commentary: 
@@ -272,26 +272,26 @@ void dtkDistributedController::read(void)
     dtkDistributedSocket *socket = (dtkDistributedSocket *)sender();
 
 
-    dtkDistributedMessage msg = socket->parseRequest();
+    dtkDistributedMessage *msg = socket->parseRequest();
     QByteArray result;
 
-    dtkDistributedMessage::Method method = msg.method();
+    dtkDistributedMessage::Method method = msg->method();
     switch (method) {
         case dtkDistributedMessage::OKSTATUS:
-            result = msg.content();
+            result = msg->content();
             d->read_status(result,socket);
             emit updated();
             break;
         case dtkDistributedMessage::OKJOB:
-            qDebug() << "New job queued: " << msg.jobid();
+            qDebug() << "New job queued: " << msg->jobid();
             emit updated();
             break;
         case dtkDistributedMessage::ENDJOB:
-            qDebug() << "job finished: " << msg.jobid();
+            qDebug() << "job finished: " << msg->jobid();
             emit updated();
             break;
         case dtkDistributedMessage::DATA:
-            result = msg.content();
+            result = msg->content();
             qDebug() << "Result: " << result;
             emit dataPosted(result);
             emit updated();

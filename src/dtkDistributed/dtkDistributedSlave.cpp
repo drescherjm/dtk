@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 13 17:19:53 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 204
+ * Last-Updated: lun. nov. 21 16:56:32 2011 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 206
  */
 
 /* Commentary: 
@@ -92,9 +92,9 @@ bool dtkDistributedSlave::isDisconnected(void)
 void dtkDistributedSlave::read(void)
 {
     dtkDistributedSocket *socket = d->communicator->socket();
-    dtkDistributedMessage request = socket->parseRequest();
+    dtkDistributedMessage *request = socket->parseRequest();
 
-    if( request.method() == dtkDistributedMessage::DATA) {
+    if( request->method() == dtkDistributedMessage::DATA) {
         // TODO
     } else {
         qDebug() << DTK_PRETTY_FUNCTION << "WARNING: Unknown data";

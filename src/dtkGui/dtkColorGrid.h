@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Mar 18 15:03:54 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep 30 10:20:26 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 56
+ * Last-Updated: Mon Nov 14 12:33:24 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -92,16 +92,10 @@ protected:
     virtual void leaveEvent(QEvent *event);
     virtual void keyPressEvent(QKeyEvent *event);
 
-#if defined(Q_WS_MAC)
-    bool macEvent(EventHandlerCallRef caller, EventRef event) {
-        Q_UNUSED(caller);
-        Q_UNUSED(event);
-        return true;
-    }
-#endif
-
+protected:
     void redraw(void);
 
+protected:
     int index(void) const;
 
 private:

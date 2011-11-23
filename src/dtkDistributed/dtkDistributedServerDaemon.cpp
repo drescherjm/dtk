@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. oct. 11 16:27:21 2011 (+0200)
+ * Last-Updated: lun. nov. 21 17:08:18 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 603
+ *     Update #: 655
  */
 
 /* Commentary: 
@@ -110,25 +110,27 @@ QByteArray dtkDistributedServerDaemon::waitForData(int rank)
 
     socket->blockSignals(true);
 
-    dtkDistributedMessage data;
+    dtkDistributedMessage *data;
 
-    if (d->sockets[rank]->waitForReadyRead(30000))
-        data = d->sockets[rank]->parseRequest();
+    if (socket->waitForReadyRead(30000))
+        data = socket->parseRequest();
+    else
+        qDebug() << "WARN: data not ready for rank " << rank;
 
     socket->blockSignals(false);
 
-    return data.content() ;
+    return data->content() ;
 }
 
 void dtkDistributedServerDaemon::read(void)
 {
     dtkDistributedSocket *socket = (dtkDistributedSocket *)sender();
-    dtkDistributedMessage msg = socket->parseRequest();
+    dtkDistributedMessage *msg = socket->parseRequest();
 
     QByteArray r;
     QString jobid;
 
-    switch (msg.method()) {
+    switch (msg->method()) {
     case dtkDistributedMessage::STATUS:
         r = d->manager->status();
         socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::OKSTATUS,"",-2,r.size(),"json",r));
@@ -138,7 +140,7 @@ void dtkDistributedServerDaemon::read(void)
         break;
 
     case dtkDistributedMessage::NEWJOB:
-        jobid = d->manager->submit(msg.content());
+        jobid = d->manager->submit(msg->content());
 #if defined(DTK_DEBUG_SERVER_DAEMON)
         qDebug() << DTK_PRETTY_FUNCTION << jobid;
 #endif
@@ -147,22 +149,22 @@ void dtkDistributedServerDaemon::read(void)
 
     case dtkDistributedMessage::ENDJOB:
 #if defined(DTK_DEBUG_SERVER_DAEMON)
-        qDebug() << DTK_PRETTY_FUNCTION << "Job ended " << msg.jobid();
+        qDebug() << DTK_PRETTY_FUNCTION << "Job ended " << msg->jobid();
 #endif
         //TODO: check if exists
-        d->sockets[-1]->sendRequest(&msg);
+        d->sockets[-1]->sendRequest(msg);
         break;
 
     case dtkDistributedMessage::SETRANK:
 
 #if defined(DTK_DEBUG_SERVER_DAEMON)
-        qDebug() << DTK_PRETTY_FUNCTION << "connected remote is of rank " << msg.rank();
+        qDebug() << DTK_PRETTY_FUNCTION << "connected remote is of rank " << msg->rank();
 #endif
-        d->sockets.insert(msg.rank(), socket);
+        d->sockets.insert(msg->rank(), socket);
         break;
 
     case dtkDistributedMessage::DELJOB:
-        jobid = msg.jobid();
+        jobid = msg->jobid();
         if (d->manager->deljob(jobid).startsWith("OK"))
             socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::OKDEL, jobid) );
         else
@@ -170,14 +172,15 @@ void dtkDistributedServerDaemon::read(void)
         break;
 
     case dtkDistributedMessage::DATA:
-        msg.addHeader("x-forwarded-for", QString::number(d->sockets.key(socket)));
-        (d->sockets[msg.rank()])->sendRequest(&msg);
+        msg->addHeader("x-forwarded-for", QString::number(d->sockets.key(socket)));
+        (d->sockets[msg->rank()])->sendRequest(msg);
         break;
 
     default:
         qDebug() << DTK_PRETTY_FUNCTION << "WARNING: Unknown data";
     };
 
+    delete msg;
     if (socket->bytesAvailable() > 0)
         this->read();
 }

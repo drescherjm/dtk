@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Sep  6 14:15:35 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep  8 09:48:36 2011 (+0200)
- *           By: jwintz
- *     Update #: 157
+ * Last-Updated: Tue Nov 15 10:14:26 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 162
  */
 
 /* Commentary: 
@@ -34,12 +34,12 @@ int main(int argc, char **argv)
         qDebug() << "Count is too large";
         return 0;
     }
-    
-    int m_array[max];
 
 // /////////////////////////////////////////////////////////////////
 // Initialize data
 // /////////////////////////////////////////////////////////////////
+
+    int m_array[max];
 
     for(int i = 0; i < count; i++)
         m_array[i] = i+1;

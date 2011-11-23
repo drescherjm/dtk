@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Sep  8 14:41:36 2011 (+0200)
+## Last-Updated: Thu Nov 17 10:16:46 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 188
+##     Update #: 206
 ######################################################################
 ## 
 ### Commentary: 
@@ -42,6 +42,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkInterpreter.h
   dtkInterpreterPreferencesWidget.h
   dtkNavigationBar.h
+  dtkPluginsEditor.h
   dtkPopup.h
   dtkPreferencesWidget.h
   dtkProgressIndicator.h
@@ -52,13 +53,18 @@ set(${PROJECT_NAME}_HEADERS
   dtkSettingsEditorPreferencesWidget.h
   dtkSpacer.h
   dtkSplitter.h
-  dtkTagCloud.h
   dtkTextEditor.h
   dtkTextEditorPreferencesWidget.h
   dtkTextEditorSyntaxHighlighter.h
   dtkTextEditorSyntaxHighlighterCpp.h
   dtkTextEditorSyntaxHighlighterPython.h
   dtkTextEditorSyntaxHighlighterTcl.h)
+
+if(QT_QTWEBKIT_FOUND)
+set(${PROJECT_NAME}_HEADERS
+  ${${PROJECT_NAME}_HEADERS}
+  dtkTagCloud.h)
+endif(QT_QTWEBKIT_FOUND)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkAboutBox.h
@@ -78,6 +84,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkInterpreter.h
   dtkInterpreterPreferencesWidget.h
   dtkNavigationBar.h
+  dtkPluginsEditor.h
   dtkPopup.h
   dtkPreferencesWidget.h
   dtkProgressIndicator.h
@@ -88,10 +95,15 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkSettingsEditorPreferencesWidget.h
   dtkSpacer.h
   dtkSplitter.h
-  dtkTagCloud.h
   dtkTextEditor.h
   dtkTextEditorPreferencesWidget.h
   dtkTextEditorSyntaxHighlighter.h)
+
+if(QT_QTWEBKIT_FOUND)
+set(${PROJECT_NAME}_HEADERS_MOC
+  ${${PROJECT_NAME}_HEADERS_MOC}
+  dtkTagCloud.h)
+endif(QT_QTWEBKIT_FOUND)
 
 set(${PROJECT_NAME}_SOURCES
   dtkAboutBox.cpp
@@ -111,6 +123,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkInterpreter.cpp
   dtkInterpreterPreferencesWidget.cpp
   dtkNavigationBar.cpp
+  dtkPluginsEditor.cpp
   dtkPopup.cpp
   dtkPreferencesWidget.cpp
   dtkProgressIndicator.cpp
@@ -121,7 +134,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkSettingsEditorPreferencesWidget.cpp
   dtkSpacer.cpp
   dtkSplitter.cpp
-  dtkTagCloud.cpp
   dtkTextEditor.cpp
   dtkTextEditorPreferencesWidget.cpp
   dtkTextEditorSyntaxHighlighter.cpp
@@ -129,14 +141,11 @@ set(${PROJECT_NAME}_SOURCES
   dtkTextEditorSyntaxHighlighterPython.cpp
   dtkTextEditorSyntaxHighlighterTcl.cpp)
 
-if(APPLE)
-set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
-  dtkCocoaController.h
-  dtkCocoaUtils.h)
-set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
-  dtkCocoaController.mm
-  dtkCocoaUtils.mm)
-endif(APPLE)
+if(QT_QTWEBKIT_FOUND)
+set(${PROJECT_NAME}_SOURCES
+  ${${PROJECT_NAME}_SOURCES}
+  dtkTagCloud.cpp)
+endif(QT_QTWEBKIT_FOUND)
 
 set(${PROJECT_NAME}_FORMS
   dtkInterpreterPreferencesWidget.ui
@@ -194,10 +203,6 @@ target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkCore
   dtkScript)
-
-if(APPLE)
-target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
-endif(APPLE)
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

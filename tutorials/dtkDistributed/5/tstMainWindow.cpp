@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Sep 20 11:31:26 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. sept. 21 14:36:13 2011 (+0200)
+ * Last-Updated: lun. nov. 21 17:31:58 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 99
+ *     Update #: 108
  */
 
 /* Commentary: 
@@ -176,7 +176,9 @@ void tstMainWindow::onDisconnected(const QUrl& server)
 void tstMainWindow::onDataPosted(const QByteArray& data)
 {
     bool ok = false;
-    int result = data.toInt(&ok);
+    long result = data.toLong(&ok);
     if (ok)
         QMessageBox::information(this,"dtkDistributedTutorial5 ",QString("result is: %1").arg(result));
+    else
+        qDebug() << "can't convert result to long";
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Sep 14 13:26:49 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 13 17:21:09 2011 (+0200)
+ * Last-Updated: Tue Nov 15 11:34:25 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 190
+ *     Update #: 192
  */
 
 /* Commentary: 
@@ -110,8 +110,8 @@ int dtkDistributedTutorial4Slave::exec(void)
             communicator->send(static_cast<int *>(m_array->data()) + start, send, dtkDistributedCommunicator::dtkDistributedCommunicatorInt, slave, dtkDistributedCommunicator::dtkDistributedCommunicatorSend);
         }
 
-        int         sum = 0;
-        int partial_sum = 0;
+        long         sum = 0;
+        long partial_sum = 0;
 
         summer->setInput(m_array);
         summer->setMetaData("until", QString::number(average));
@@ -140,7 +140,7 @@ int dtkDistributedTutorial4Slave::exec(void)
 
         if (this->isConnected()) {
 
-            QByteArray data = QByteArray::number(sum);
+            QByteArray data = QByteArray::number((qlonglong)sum);
 
             this->communicator()->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA, this->jobId(), -1,data.size(),"text", data));
 

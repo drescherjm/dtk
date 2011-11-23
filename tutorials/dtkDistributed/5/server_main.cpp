@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Sep 14 13:20:15 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov 23 09:52:53 2011 (+0100)
+ * Last-Updated: Wed Nov 23 12:06:55 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 326
+ *     Update #: 328
  */
 
 /* Commentary: 
@@ -18,7 +18,9 @@
  */
 
 #include <QtCore>
-#include <dtkDistributed/dtkDistributedServer.h>
+
+#include <dtkCore>
+#include <dtkDistributed>
 
 int main(int argc, char **argv)
 {

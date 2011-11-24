@@ -1,4 +1,4 @@
-/* dtkComposerNodeNumberLongInteger.cpp --- 
+/* dtkComposerNodeNumberLong.cpp --- 
  * 
  * Author: Thibaud Kloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
@@ -18,17 +18,17 @@
  */
 
 #include "dtkComposerEdge.h"
-#include "dtkComposerNodeNumberLongInteger.h"
+#include "dtkComposerNodeNumberLong.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerNodeTransmitter.h"
 
 #include <dtkCore/dtkGlobal.h>
  
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeNumberLongIntegerPrivate declaration
+// dtkComposerNodeNumberLongPrivate declaration
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNodeNumberLongIntegerPrivate
+class dtkComposerNodeNumberLongPrivate
 {
 public:
     dtkComposerNodeProperty *property_left_value;
@@ -47,14 +47,14 @@ public:
 /*! 
  *  
  */
-dtkComposerNodeNumberLongInteger::dtkComposerNodeNumberLongInteger(dtkComposerNode *parent) : dtkComposerNodeNumber(parent), d(new dtkComposerNodeNumberLongIntegerPrivate)
+dtkComposerNodeNumberLong::dtkComposerNodeNumberLong(dtkComposerNode *parent) : dtkComposerNodeNumber(parent), d(new dtkComposerNodeNumberLongPrivate)
 {
     d->property_left_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
     d->property_right_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Right, dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, this);
 
     this->setTitle("Number");
     this->setKind(dtkComposerNode::Atomic);
-    this->setType("dtkComposerNumberLongInteger");
+    this->setType("dtkComposerNumberLong");
 
     this->setLabelText("LONG");
 
@@ -71,7 +71,7 @@ dtkComposerNodeNumberLongInteger::dtkComposerNodeNumberLongInteger(dtkComposerNo
 /*! 
  *  
  */
-dtkComposerNodeNumberLongInteger::~dtkComposerNodeNumberLongInteger(void)
+dtkComposerNodeNumberLong::~dtkComposerNodeNumberLong(void)
 {
     delete d;
 
@@ -82,7 +82,7 @@ dtkComposerNodeNumberLongInteger::~dtkComposerNodeNumberLongInteger(void)
 /*! 
  *  
  */
-void dtkComposerNodeNumberLongInteger::touch(void)
+void dtkComposerNodeNumberLong::touch(void)
 {
     if (!this->isInteractive())
         this->setEditorText(QString::number(d->receiver->data()));
@@ -94,7 +94,7 @@ void dtkComposerNodeNumberLongInteger::touch(void)
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-void dtkComposerNodeNumberLongInteger::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+void dtkComposerNodeNumberLong::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(route);
     Q_UNUSED(property);
@@ -104,7 +104,7 @@ void dtkComposerNodeNumberLongInteger::pull(dtkComposerEdge *route, dtkComposerN
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-void dtkComposerNodeNumberLongInteger::run(void)
+void dtkComposerNodeNumberLong::run(void)
 {
     if (this->isInteractive())
         d->emitter->setData(this->editorText().toLongLong());
@@ -116,7 +116,7 @@ void dtkComposerNodeNumberLongInteger::run(void)
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-void dtkComposerNodeNumberLongInteger::push(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+void dtkComposerNodeNumberLong::push(dtkComposerEdge *route, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(route);
     Q_UNUSED(property);
@@ -126,7 +126,7 @@ void dtkComposerNodeNumberLongInteger::push(dtkComposerEdge *route, dtkComposerN
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-dtkComposerNodeAbstractTransmitter *dtkComposerNodeNumberLongInteger::emitter(dtkComposerNodeProperty *property)
+dtkComposerNodeAbstractTransmitter *dtkComposerNodeNumberLong::emitter(dtkComposerNodeProperty *property)
 {
     if (property == d->property_right_value)
         return d->emitter;
@@ -145,7 +145,7 @@ dtkComposerNodeAbstractTransmitter *dtkComposerNodeNumberLongInteger::emitter(dt
  *
  *  Reimplemented from dtkComposerNode.
  */
-bool dtkComposerNodeNumberLongInteger::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+bool dtkComposerNodeNumberLong::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
 {
     Q_UNUSED(destination);
 
@@ -161,7 +161,7 @@ bool dtkComposerNodeNumberLongInteger::onLeftRouteConnected(dtkComposerEdge *rou
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-bool dtkComposerNodeNumberLongInteger::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+bool dtkComposerNodeNumberLong::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
 {
     return true;
 }

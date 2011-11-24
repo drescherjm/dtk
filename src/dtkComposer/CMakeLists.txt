@@ -55,7 +55,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeNumber.h
   dtkComposerNodeNumberDouble.h
   dtkComposerNodeNumberInteger.h
-  dtkComposerNodeNumberLongInteger.h
+  dtkComposerNodeNumberLong.h
   dtkComposerNodeNumberComparator.h
   dtkComposerNodeNumberOperator.h
   dtkComposerNodeProcess.h
@@ -100,7 +100,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerNodeNumber.h
   dtkComposerNodeNumberDouble.h
   dtkComposerNodeNumberInteger.h
-  dtkComposerNodeNumberLongInteger.h
+  dtkComposerNodeNumberLong.h
   dtkComposerNodeNumberComparator.h
   dtkComposerNodeNumberOperator.h
   dtkComposerNodeProcess.h
@@ -140,7 +140,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeNumber.cpp
   dtkComposerNodeNumberDouble.cpp
   dtkComposerNodeNumberInteger.cpp
-  dtkComposerNodeNumberLongInteger.cpp
+  dtkComposerNodeNumberLong.cpp
   dtkComposerNodeNumberComparator.cpp
   dtkComposerNodeNumberOperator.cpp
   dtkComposerNodeProcess.cpp

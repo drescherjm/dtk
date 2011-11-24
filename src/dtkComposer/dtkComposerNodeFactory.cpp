@@ -38,7 +38,7 @@
 #include "dtkComposerNodeLoopWhile.h"
 #include "dtkComposerNodeNumberDouble.h"
 #include "dtkComposerNodeNumberInteger.h"
-#include "dtkComposerNodeNumberLongInteger.h"
+#include "dtkComposerNodeNumberLong.h"
 #include "dtkComposerNodeNumberComparator.h"
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeProcess.h"
@@ -117,8 +117,8 @@ dtkComposerNode *dtkComposerNodeFactory::create(QString type)
     if (type == "dtkComposerNumberInteger")
         return new dtkComposerNodeNumberInteger;
 
-    if (type == "dtkComposerNumberLongInteger")
-        return new dtkComposerNodeNumberLongInteger;
+    if (type == "dtkComposerNumberLong")
+        return new dtkComposerNodeNumberLong;
 
     if (type == "dtkComposerNumberComparator")
         return new dtkComposerNodeNumberComparator;

@@ -1,4 +1,4 @@
-/* dtkComposerNodeNumberLongInteger.h --- 
+/* dtkComposerNodeNumberLong.h --- 
  * 
  * Author: Thibaud Kloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
@@ -23,15 +23,15 @@
 #include "dtkComposerExport.h"
 #include "dtkComposerNodeNumber.h"
 
-class dtkComposerNodeNumberLongIntegerPrivate;
+class dtkComposerNodeNumberLongPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberLongInteger : public dtkComposerNodeNumber
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberLong : public dtkComposerNodeNumber
 {
     Q_OBJECT
 
 public:
-     dtkComposerNodeNumberLongInteger(dtkComposerNode *parent = 0);
-    ~dtkComposerNodeNumberLongInteger(void);
+     dtkComposerNodeNumberLong(dtkComposerNode *parent = 0);
+    ~dtkComposerNodeNumberLong(void);
 
 public slots:
     void touch(void);
@@ -50,7 +50,7 @@ public:
     bool onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property);
 
 private:
-    dtkComposerNodeNumberLongIntegerPrivate *d;
+    dtkComposerNodeNumberLongPrivate *d;
 };
 
 #endif

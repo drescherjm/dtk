@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 18:00:48 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov  9 11:16:49 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 21
+ * Last-Updated: Thu Nov 24 14:24:14 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 48
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #include "dtkComposerEdge.h"
 #include "dtkComposerNodeStringComparator.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerNodeTransmitter.h"
 
 #include <dtkCore/dtkGlobal.h>
 
@@ -157,6 +158,11 @@ public:
     dtkComposerNodeProperty *property_input_value_op2;
     dtkComposerNodeProperty *property_output_value;
 
+    dtkComposerNodeTransmitter<bool> *emitter;
+
+public:
+    QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<QString> *> receivers;
+
 public:
     dtkComposerNodeStringComparatorLabel *label;
 
@@ -194,6 +200,8 @@ dtkComposerNodeStringComparator::dtkComposerNodeStringComparator(dtkComposerNode
     this->g->appendLeftProperty(d->property_input_value_op1);
     this->g->appendLeftProperty(d->property_input_value_op2);
     this->g->appendRightProperty(d->property_output_value);
+
+    d->emitter = new dtkComposerNodeTransmitter<bool>();
 }
 
 dtkComposerNodeStringComparator::~dtkComposerNodeStringComparator(void)
@@ -244,13 +252,13 @@ void dtkComposerNodeStringComparator::setOperation(dtkComposerNodeStringComparat
     }
 }
 
-void dtkComposerNodeStringComparator::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNodeStringComparator::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
 {
     if(property == d->property_input_value_op1)
-        d->value_op1 = edge->source()->node()->value(edge->source()).toString();
+        d->value_op1 = d->receivers.value(route)->data();
 
-    if(property == d->property_input_value_op2)
-        d->value_op2 = edge->source()->node()->value(edge->source()).toString();
+    else if(property == d->property_input_value_op2)
+        d->value_op2 = d->receivers.value(route)->data();
 }
 
 void dtkComposerNodeStringComparator::run(void)
@@ -280,10 +288,37 @@ void dtkComposerNodeStringComparator::run(void)
     default:
         break;
     }
+
+    d->emitter->setData(d->value);
 }
 
-void dtkComposerNodeStringComparator::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNodeStringComparator::push(dtkComposerEdge *route, dtkComposerNodeProperty *property)
 {
-    Q_UNUSED(edge);
+    Q_UNUSED(route);
     Q_UNUSED(property);
+}
+
+dtkComposerNodeAbstractTransmitter *dtkComposerNodeStringComparator::emitter(dtkComposerNodeProperty *property)
+{
+    if (property == d->property_output_value)
+        return d->emitter;
+    
+    return NULL;
+}
+
+bool dtkComposerNodeStringComparator::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+{
+    Q_UNUSED(destination);
+
+    if (!(dynamic_cast<dtkComposerNodeTransmitter<QString> *> (route->source()->node()->emitter(route->source()))))
+        return false;
+    
+    d->receivers.insert(route, static_cast<dtkComposerNodeTransmitter<QString> *> (route->source()->node()->emitter(route->source())));
+    
+    return true;
+}
+
+bool dtkComposerNodeStringComparator::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+{
+    return true;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 15:12:01 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 14:08:09 2011 (+0100)
+ * Last-Updated: Thu Nov 24 14:39:45 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 421
+ *     Update #: 430
  */
 
 /* Commentary: 
@@ -312,6 +312,11 @@ dtkComposerNodeString::~dtkComposerNodeString(void)
     d = NULL;
 }
 
+const QString dtkComposerNodeString::value(void)
+{
+    return d->editor->toPlainText();
+}
+
 //! Sets the text of the node.
 /*! 
  *  
@@ -387,7 +392,7 @@ void dtkComposerNodeString::pull(dtkComposerEdge *route, dtkComposerNodeProperty
 void dtkComposerNodeString::run(void)
 {
     if (d->interactive) {
-        d->emitter->setData(d->editor->toPlainText());
+        d->emitter->setData(this->value());
     } else {
         d->emitter->setData(d->receiver->data());
     }

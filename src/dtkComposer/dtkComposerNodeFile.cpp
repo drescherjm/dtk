@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul  8 13:28:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 13:03:24 2011 (+0100)
+ * Last-Updated: Thu Nov 24 14:43:02 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 239
+ *     Update #: 252
  */
 
 /* Commentary: 
@@ -75,21 +75,14 @@ dtkComposerNodeFile::~dtkComposerNodeFile(void)
     d = NULL;
 }
 
-QVariant dtkComposerNodeFile::value(dtkComposerNodeProperty *property)
+const QUrl& dtkComposerNodeFile::url(void)
 {
-    if(property == d->property_output_file_name) {
-        return QVariant(d->file);
-    }
+    return d->url;
+}
 
-    if(property == d->property_output_file_text) {
-        return QVariant(dtkReadFile(d->file));
-    }
-
-    if(property == d->property_output_file_url) {
-        return QVariant(d->url);
-    }
-
-    return QVariant();
+const QString& dtkComposerNodeFile::name(void)
+{
+    return d->file;
 }
 
 void dtkComposerNodeFile::editFile(void)
@@ -204,4 +197,16 @@ void dtkComposerNodeFile::push(dtkComposerEdge *edge, dtkComposerNodeProperty *p
 {
     Q_UNUSED(edge);
     Q_UNUSED(property); 
+}
+
+bool dtkComposerNodeFile::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+{
+    Q_UNUSED(route);
+    Q_UNUSED(destination);
+}
+
+bool dtkComposerNodeFile::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+{
+    Q_UNUSED(route);
+    Q_UNUSED(property);
 }

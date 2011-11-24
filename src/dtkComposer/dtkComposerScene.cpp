@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Nov 10 10:40:37 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 2971
+ * Last-Updated: Thu Nov 24 14:45:07 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 2973
  */
 
 /* Commentary: 
@@ -186,7 +186,7 @@ QList<dtkComposerNode *> dtkComposerScene::startNodes(QList<dtkComposerNode *> p
 
     depth++;
 
-    qDebug() << DTK_PRETTY_FUNCTION << "(" << depth << ")" << "1 -" << parents;
+    // qDebug() << DTK_PRETTY_FUNCTION << "(" << depth << ")" << "1 -" << parents;
 
     QList<dtkComposerNode *> list;
     QList<dtkComposerNode *> scope;
@@ -226,7 +226,7 @@ QList<dtkComposerNode *> dtkComposerScene::startNodes(QList<dtkComposerNode *> p
         }
     }
 
-    qDebug() << DTK_PRETTY_FUNCTION << "(" << depth << ")" << "2 -" << list;
+    // qDebug() << DTK_PRETTY_FUNCTION << "(" << depth << ")" << "2 -" << list;
 
     depth--;
 

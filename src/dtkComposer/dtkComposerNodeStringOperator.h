@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 17:59:17 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 17 11:13:56 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 21
+ * Last-Updated: Thu Nov 24 14:16:13 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -40,9 +40,10 @@ public:
     ~dtkComposerNodeStringOperator(void);
 
 public:
-    void setOperation(Operation operation);
-
     Operation operation(void);
+
+public slots:
+    void setOperation(Operation operation);
 
 protected:
     void pull(dtkComposerEdge *route, dtkComposerNodeProperty *property);
@@ -54,7 +55,6 @@ public:
 
 public:
     bool onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
-
     bool onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property);
 
 private:

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 12:54:32 2011 (+0100)
+ * Last-Updated: Thu Nov 24 14:15:24 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 361
+ *     Update #: 362
  */
 
 /* Commentary: 
@@ -173,7 +173,7 @@ public:
     virtual void removeRoute(dtkComposerEdge *route);
 
 public:
-    virtual QVariant value(dtkComposerNodeProperty *property);
+    virtual QVariant DTK_DEPRECATED value(dtkComposerNodeProperty *property);
 
     virtual void chooseImplementation(void);
     virtual void  setupImplementation(QString implementation = QString());

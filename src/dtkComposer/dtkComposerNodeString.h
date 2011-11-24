@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 15:08:06 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 17 14:02:40 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 27
+ * Last-Updated: Thu Nov 24 14:39:48 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -35,6 +35,8 @@ public:
      dtkComposerNodeString(dtkComposerNode *parent = 0);
     ~dtkComposerNodeString(void);
 
+    const QString value(void);
+
 public:
     void setEditorText(const QString& value);
 
@@ -58,7 +60,6 @@ public:
 
 public:
     bool onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
-
     bool onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property);
 
 private:

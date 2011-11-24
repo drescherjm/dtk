@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 25 10:04:24 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov 16 15:19:49 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 23
+ * Last-Updated: Thu Nov 24 14:29:30 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -33,6 +33,8 @@ public:
      dtkComposerNodeBoolean(dtkComposerNode *parent = 0);
     ~dtkComposerNodeBoolean(void);
 
+    bool value(void);
+
 protected:
     void pull(dtkComposerEdge *route, dtkComposerNodeProperty *property);
     void  run(void);
@@ -43,7 +45,6 @@ public:
 
 public:
     bool onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
-
     bool onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property);
 
 public:

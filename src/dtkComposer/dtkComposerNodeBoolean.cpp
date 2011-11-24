@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 25 10:07:34 2011 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. nov. 17 22:51:16 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 283
+ * Last-Updated: Thu Nov 24 14:30:27 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 288
  */
 
 /* Commentary: 
@@ -219,6 +219,11 @@ dtkComposerNodeBoolean::~dtkComposerNodeBoolean(void)
     d = NULL;
 }
 
+bool dtkComposerNodeBoolean::value(void)
+{
+    return (d->label->text == "T");
+}
+
 //! 
 /*! 
  *  Reimplemented from dtkComposerNode.
@@ -237,7 +242,7 @@ void dtkComposerNodeBoolean::pull(dtkComposerEdge *route, dtkComposerNodePropert
 void dtkComposerNodeBoolean::run(void)
 {
     if (d->interactive) {
-        d->emitter->setData(d->label->text == "T");
+        d->emitter->setData(this->value());
     } else {
         d->emitter->setData(d->receiver->data());
         d->label->setLabelText(d->receiver->data());

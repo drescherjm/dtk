@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Oct 24 12:57:38 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov 15 14:54:31 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 432
+ * Last-Updated: Thu Nov 24 14:44:01 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 434
  */
 
 /* Commentary: 
@@ -47,7 +47,7 @@
 // Helper definitions
 // /////////////////////////////////////////////////////////////////
 
-#define DTK_DEBUG_COMPOSER_EVALUATION 1
+// #define DTK_DEBUG_COMPOSER_EVALUATION 1
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerEvaluatorPrivate - evaluation
@@ -147,7 +147,10 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNode *node)
         if (o_route->active()) {
             if(!this->stack.contains(o_route->destination()->node()))
                 this->stack.push(o_route->destination()->node());
+
+#if defined(DTK_DEBUG_COMPOSER_EVALUATION)
             qDebug() << o_route->destination()->node();
+#endif
         }
     }
 

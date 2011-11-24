@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov 21 09:57:34 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 464
+ * Last-Updated: Thu Nov 24 14:39:04 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 470
  */
 
 /* Commentary: 
@@ -159,7 +159,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
     
     if(dtkComposerNodeBoolean *boolean_node = dynamic_cast<dtkComposerNodeBoolean *>(node)) {
         
-        bool value = boolean_node->value(boolean_node->g->rightProperty("value")).toBool();
+        bool value = boolean_node->value();
         
         QDomText text = document.createTextNode(value ? "true" : "false");
         
@@ -311,9 +311,9 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
     
     if(dtkComposerNodeFile *file_node = dynamic_cast<dtkComposerNodeFile *>(node)) {
         
-        QUrl file_url = file_node->value(file_node->g->rightProperty("url")).toUrl();
+        QUrl file_url = file_node->url();
 
-        QString file_name = file_node->value(file_node->g->rightProperty("name")).toString();
+        QString file_name = file_node->name();
 
         if(!file_url.isEmpty() && file_url.isValid()) {
 
@@ -339,7 +339,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
     
     if(dtkComposerNodeString *string_node = dynamic_cast<dtkComposerNodeString *>(node)) {
         
-        QString value = string_node->value(string_node->g->rightProperty("value")).toString();
+        QString value = string_node->value();
         
         QDomText text = document.createTextNode(value);
         

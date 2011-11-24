@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Feb 25 16:19:59 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 11:33:29 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 128
+ * Last-Updated: Thu Nov 24 15:14:19 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 131
  */
 
 /* Commentary: 
@@ -33,11 +33,8 @@ public:
      dtkComposerNodeNumber(dtkComposerNode *parent = 0);
     ~dtkComposerNodeNumber(void);
 
-protected:
-    void setGenre(const QVariant::Type& genre);
-
 public:
-    const QVariant::Type& genre(void) const;
+    virtual const QVariant::Type genre(void) const = 0;
 
 public:
     void  setLabelText(const QString& value);

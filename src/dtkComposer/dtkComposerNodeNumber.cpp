@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Feb 25 16:21:13 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Nov 21 09:51:20 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 627
+ * Last-Updated: Thu Nov 24 15:13:02 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 632
  */
 
 /* Commentary: 
@@ -359,9 +359,6 @@ public:
 
 public:
     bool interactive;
-
-public:
-    QVariant::Type genre;    
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -392,8 +389,6 @@ dtkComposerNodeNumber::dtkComposerNodeNumber(dtkComposerNode *parent) : dtkCompo
     d->animation->setEasingCurve(QEasingCurve::OutBounce);
 
     d->interactive = true;
-
-    d->genre = QVariant::Invalid;
 }
 
 //! Destroys number node.
@@ -405,24 +400,6 @@ dtkComposerNodeNumber::~dtkComposerNodeNumber(void)
     delete d;
 
     d = NULL;
-}
-
-//! Sets number type using QVariant flags.
-/*! 
- *  
- */
-void dtkComposerNodeNumber::setGenre(const QVariant::Type& genre)
-{
-    d->genre = genre;
-}
-
-//! Returns number type using QVariant flags.
-/*! 
- *  
- */
-const QVariant::Type& dtkComposerNodeNumber::genre(void) const
-{
-    return d->genre;
 }
 
 //! Sets the label of the node.

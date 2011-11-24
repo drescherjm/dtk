@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: jeu. nov. 17 21:55:21 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Nov 21 09:51:50 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 16
+ * Last-Updated: Thu Nov 24 15:14:43 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 22
  */
 
 /* Commentary: 
@@ -63,8 +63,6 @@ dtkComposerNodeNumberLong::dtkComposerNodeNumberLong(dtkComposerNode *parent) : 
 
     d->emitter = new dtkComposerNodeTransmitter<qlonglong>();
     d->receiver = NULL;
-
-    this->setGenre(QVariant::LongLong);
 }
 
 //! Destroys long integer number node.
@@ -76,6 +74,15 @@ dtkComposerNodeNumberLong::~dtkComposerNodeNumberLong(void)
     delete d;
 
     d = NULL;
+}
+
+//! Returns number type using QVariant flags.
+/*! 
+ *  
+ */
+const QVariant::Type dtkComposerNodeNumberLong::genre(void) const
+{
+    return QVariant::LongLong;
 }
 
 //! Updates the graphical aspect of the node.

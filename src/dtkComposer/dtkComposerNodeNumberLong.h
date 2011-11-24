@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: jeu. nov. 17 21:53:26 2011 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. nov. 17 21:54:24 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 1
+ * Last-Updated: Thu Nov 24 15:14:46 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 3
  */
 
 /* Commentary: 
@@ -32,6 +32,9 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeNumberLong : public dtkComposerNodeNumbe
 public:
      dtkComposerNodeNumberLong(dtkComposerNode *parent = 0);
     ~dtkComposerNodeNumberLong(void);
+
+public:
+    const QVariant::Type genre(void) const;
 
 public slots:
     void touch(void);

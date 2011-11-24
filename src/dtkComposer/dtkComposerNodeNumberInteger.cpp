@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: jeu. nov. 17 20:50:45 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Nov 21 09:51:38 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 22
+ * Last-Updated: Thu Nov 24 15:14:38 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -63,8 +63,6 @@ dtkComposerNodeNumberInteger::dtkComposerNodeNumberInteger(dtkComposerNode *pare
 
     d->emitter = new dtkComposerNodeTransmitter<int>();
     d->receiver = NULL;
-
-    this->setGenre(QVariant::Int);
 }
 
 //! Destroys integer number node.
@@ -76,6 +74,15 @@ dtkComposerNodeNumberInteger::~dtkComposerNodeNumberInteger(void)
     delete d;
 
     d = NULL;
+}
+
+//! Returns number type using QVariant flags.
+/*! 
+ *  
+ */
+const QVariant::Type dtkComposerNodeNumberInteger::genre(void) const
+{
+    return QVariant::Int;
 }
 
 //! Updates the graphical aspect of the node.

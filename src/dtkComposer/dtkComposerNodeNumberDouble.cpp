@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: jeu. nov. 17 22:13:04 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Nov 21 09:52:03 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 8
+ * Last-Updated: Thu Nov 24 15:14:13 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -63,8 +63,6 @@ dtkComposerNodeNumberDouble::dtkComposerNodeNumberDouble(dtkComposerNode *parent
 
     d->emitter = new dtkComposerNodeTransmitter<double>();
     d->receiver = NULL;
-
-    this->setGenre(QVariant::Double);
 }
 
 //! Destroys double number node.
@@ -76,6 +74,15 @@ dtkComposerNodeNumberDouble::~dtkComposerNodeNumberDouble(void)
     delete d;
 
     d = NULL;
+}
+
+//! Returns number type using QVariant flags.
+/*! 
+ *  
+ */
+const QVariant::Type dtkComposerNodeNumberDouble::genre(void) const
+{
+    return QVariant::Double;
 }
 
 //! Updates the graphical aspect of the node.

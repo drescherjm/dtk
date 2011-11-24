@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: mer. oct. 19 13:15:34 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 45
+ * Last-Updated: Thu Nov 24 18:34:32 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 48
  */
 
 /* Commentary: 
@@ -57,7 +57,6 @@ public:
     void send(dtkAbstractData &data, dtkAbstractDataSerializer *serializer, QString type, quint16 target, int tag);
 
     void flush();
-
 
 private:
     dtkDistributedCommunicatorTcpPrivate *d;

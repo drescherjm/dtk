@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 15:12:01 2011 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. nov. 17 23:35:18 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 411
+ * Last-Updated: Thu Nov 24 12:44:53 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 414
  */
 
 /* Commentary: 
@@ -249,8 +249,9 @@ public:
 
 public:
     dtkComposerNodeTransmitter<QString> *emitter;
-
     dtkComposerNodeTransmitter<QString> *receiver;
+
+public:
     QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<QString> *> receivers;
 };
 
@@ -429,12 +430,13 @@ bool dtkComposerNodeString::setReceiver(dtkComposerEdge *route, dtkComposerNodeP
 {
     Q_UNUSED(destination);
 
-    if (!(dynamic_cast<dtkComposerNodeTransmitter<QString> *> (route->source()->node()->emitter(route->source()))))
+    if (!(dynamic_cast<dtkComposerNodeTransmitter<QString> *>(route->source()->node()->emitter(route->source()))))
         return false;
 
-    d->receivers.insert(route, static_cast<dtkComposerNodeTransmitter<QString> *> (route->source()->node()->emitter(route->source())));
+    d->receivers.insert(route, static_cast<dtkComposerNodeTransmitter<QString> *>(route->source()->node()->emitter(route->source())));
 
     d->interactive = false;
+
     d->editor->setTextInteractionFlags(Qt::NoTextInteraction);
     d->editor->setPlainText("");    
 

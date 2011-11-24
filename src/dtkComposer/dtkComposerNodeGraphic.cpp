@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Nov  3 13:28:33 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov 16 12:50:41 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 260
+ * Last-Updated: Thu Nov 24 12:40:34 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 261
  */
 
 /* Commentary: 
@@ -713,7 +713,7 @@ void dtkComposerNodeGraphic::onEdgeConnected(dtkComposerEdge *edge)
                 return;
             }
         }
-    }            
+    }
 }
 
 //! 

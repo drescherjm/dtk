@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Nov  3 13:28:33 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 12:40:34 2011 (+0100)
+ * Last-Updated: Thu Nov 24 16:30:36 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 261
+ *     Update #: 266
  */
 
 /* Commentary: 
@@ -692,6 +692,8 @@ int dtkComposerNodeGraphic::indexOf(dtkComposerNodeProperty *property) const
  */
 void dtkComposerNodeGraphic::onEdgeConnected(dtkComposerEdge *edge)
 {
+    qDebug() << DTK_PRETTY_FUNCTION << this->node();
+
     QList<dtkComposerNodeProperty *> sources;
     QList<dtkComposerNodeProperty *> destinations;
         
@@ -711,7 +713,9 @@ void dtkComposerNodeGraphic::onEdgeConnected(dtkComposerEdge *edge)
             if (!source->node()->l->canConnectRoute(source, destin, destin->node())) {
                 edge->invalidate();
                 return;
-            }
+            } else {
+                edge->validate();
+            }    
         }
     }
 }

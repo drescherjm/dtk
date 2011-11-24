@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 14:15:24 2011 (+0100)
+ * Last-Updated: Thu Nov 24 16:46:15 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 362
+ *     Update #: 363
  */
 
 /* Commentary: 
@@ -138,7 +138,7 @@ signals:
 
 public slots:
     // void alter(void);
-    void touch(void);
+    virtual void touch(void);
 
 // public slots:
 //     virtual void update(void);

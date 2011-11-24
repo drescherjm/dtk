@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Mar  1 10:18:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 11:30:45 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 268
+ * Last-Updated: Thu Nov 24 17:34:18 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 336
  */
 
 /* Commentary: 
@@ -46,6 +46,8 @@ protected:
 
 public:
     dtkComposerNodeNumberOperator *parent_node;
+
+public:
     QPainterPath path;
     QString text;
 };
@@ -224,6 +226,9 @@ public:
     QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<int> *> receivers_i;
     QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<qlonglong> *> receivers_l;
     QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<double> *> receivers_d;
+
+public:
+    dtkComposerNodeNumberOperator *q;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -232,34 +237,105 @@ public:
 
 void dtkComposerNodeNumberOperatorPrivate::setValueType(void)
 {
-    if (this->op1_type == QVariant::Invalid || 
-        this->op2_type == QVariant::Invalid)
+    if (this->op1_type == QVariant::Invalid || this->op2_type == QVariant::Invalid)
         return;
 
-    if (this->op1_type == QVariant::Double ||
-        this->op2_type == QVariant::Double)
+    if (this->op1_type == QVariant::Double || this->op2_type == QVariant::Double) {
         this->value_type = QVariant::Double;
-
-    else if (this->op1_type == QVariant::LongLong ||
-             this->op2_type == QVariant::LongLong)
+        this->emitter_d = new dtkComposerNodeTransmitter<double>();
+    }
+    else if (this->op1_type == QVariant::LongLong || this->op2_type == QVariant::LongLong) {
         this->value_type = QVariant::LongLong;
-
-    else
+        this->emitter_l = new dtkComposerNodeTransmitter<qlonglong>();
+    }
+    else {
         this->value_type = QVariant::Int;
+        this->emitter_i = new dtkComposerNodeTransmitter<int>();
+    }
 
-}
-double dtkComposerNodeNumberOperatorPrivate::operate(const double&, const double&, dtkComposerNodeNumberOperator::Operation)
-{
-    return 0.;
+    qDebug() << "\n\n\n\n\n\n";
+    qDebug() << DTK_PRETTY_FUNCTION << this;
+
+    foreach(dtkComposerEdge *edge, q->g->rightEdges())
+        edge->destination()->node()->g->onEdgeConnected(edge);
 }
 
-qlonglong dtkComposerNodeNumberOperatorPrivate::operate(const qlonglong&, const qlonglong&, dtkComposerNodeNumberOperator::Operation)
+double dtkComposerNodeNumberOperatorPrivate::operate(const double& lhs, const double& rhs, dtkComposerNodeNumberOperator::Operation operation)
 {
-    return 0;
+    switch(operation) {
+    case dtkComposerNodeNumberOperator::Addition:
+        return lhs + rhs;
+    case dtkComposerNodeNumberOperator::Substraction:
+        return lhs - rhs;
+    case dtkComposerNodeNumberOperator::Multiplication:
+        return lhs * rhs;
+    case dtkComposerNodeNumberOperator::Division:
+        return lhs / rhs;
+    case dtkComposerNodeNumberOperator::Increment:
+        return lhs + 1;
+    case dtkComposerNodeNumberOperator::Decrement:
+        return lhs - 1;
+    case dtkComposerNodeNumberOperator::Modulo:
+        return qlonglong(lhs) % qlonglong(rhs);
+    case dtkComposerNodeNumberOperator::Min:
+        return qMin(lhs, rhs);
+    case dtkComposerNodeNumberOperator::Max:
+        return qMax(lhs, rhs);
+    default:
+        return 0;
+    }
 }
-int dtkComposerNodeNumberOperatorPrivate::operate(const int&, const int&, dtkComposerNodeNumberOperator::Operation)
+
+qlonglong dtkComposerNodeNumberOperatorPrivate::operate(const qlonglong& lhs, const qlonglong& rhs, dtkComposerNodeNumberOperator::Operation operation)
 {
-    return 0;
+    switch(operation) {
+    case dtkComposerNodeNumberOperator::Addition:
+        return lhs + rhs;
+    case dtkComposerNodeNumberOperator::Substraction:
+        return lhs - rhs;
+    case dtkComposerNodeNumberOperator::Multiplication:
+        return lhs * rhs;
+    case dtkComposerNodeNumberOperator::Division:
+        return lhs / rhs;
+    case dtkComposerNodeNumberOperator::Increment:
+        return lhs + 1;
+    case dtkComposerNodeNumberOperator::Decrement:
+        return lhs - 1;
+    case dtkComposerNodeNumberOperator::Modulo:
+        return lhs % rhs;
+    case dtkComposerNodeNumberOperator::Min:
+        return qMin(lhs, rhs);
+    case dtkComposerNodeNumberOperator::Max:
+        return qMax(lhs, rhs);
+    default:
+        return 0;
+    }
+}
+
+int dtkComposerNodeNumberOperatorPrivate::operate(const int& lhs, const int& rhs, dtkComposerNodeNumberOperator::Operation operation)
+{
+    switch(operation) {
+    case dtkComposerNodeNumberOperator::Addition:
+        return lhs + rhs;
+    case dtkComposerNodeNumberOperator::Substraction:
+        return lhs - rhs;
+    case dtkComposerNodeNumberOperator::Multiplication:
+        return lhs * rhs;
+    case dtkComposerNodeNumberOperator::Division:
+        return lhs / rhs;
+    case dtkComposerNodeNumberOperator::Increment:
+        return lhs + 1;
+    case dtkComposerNodeNumberOperator::Decrement:
+        return lhs - 1;
+    case dtkComposerNodeNumberOperator::Modulo:
+        return lhs % rhs;
+    case dtkComposerNodeNumberOperator::Min:
+        return qMin(lhs, rhs);
+    case dtkComposerNodeNumberOperator::Max:
+        return qMax(lhs, rhs);
+    default:
+        return 0;
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -272,6 +348,8 @@ int dtkComposerNodeNumberOperatorPrivate::operate(const int&, const int&, dtkCom
  */
 dtkComposerNodeNumberOperator::dtkComposerNodeNumberOperator(dtkComposerNode *parent) : dtkComposerNode(parent), d(new dtkComposerNodeNumberOperatorPrivate)
 {
+    d->q = this;
+
     d->property_left_value_op1 = new dtkComposerNodeProperty("left operand", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
     d->property_left_value_op2 = new dtkComposerNodeProperty("right operand", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
 
@@ -293,9 +371,9 @@ dtkComposerNodeNumberOperator::dtkComposerNodeNumberOperator(dtkComposerNode *pa
     d->op1_type = QVariant::Invalid;
     d->op2_type = QVariant::Invalid;
 
-    d->emitter_i = new dtkComposerNodeTransmitter<int>();
-    d->emitter_l = new dtkComposerNodeTransmitter<qlonglong>();
-    d->emitter_d = new dtkComposerNodeTransmitter<double>();
+    d->emitter_i = NULL;
+    d->emitter_l = NULL;
+    d->emitter_d = NULL;
 }
 
 //! Destroys number operator node.
@@ -445,293 +523,7 @@ void dtkComposerNodeNumberOperator::run(void)
 
         else if (d->op2_type == QVariant::Int)
             d->emitter_i->setData(d->operate(d->op1_value_i, d->op2_value_i, d->operation));
-
     }
-
-    // QVariant a = d->value_op1;
-    // QVariant b = d->value_op2;
-    // QVariant r;
-
-    // dtkComposerNodeNumber::Genre genre = dtkComposerNodeNumber::genre(a, b);
-
-    // if (genre != dtkComposerNodeNumber::Invalid) {
-
-    //     switch (d->operation) {
-
-    //     case dtkComposerNodeNumberOperator::Addition:
-    //         switch (genre) {
-    //         case dtkComposerNodeNumber::Int:
-    //             r = qVariantFromValue(a.toInt() + b.toInt());
-    //             break;
-    //         case dtkComposerNodeNumber::UInt:
-    //             r = qVariantFromValue(a.toUInt() + b.toUInt());
-    //             break;
-    //         case dtkComposerNodeNumber::Long:
-    //             r = qVariantFromValue(qVariantValue<long>(a) + qVariantValue<long>(b));
-    //             break;
-    //         case dtkComposerNodeNumber::ULong:
-    //             r = qVariantFromValue(qVariantValue<ulong>(a) + qVariantValue<ulong>(b));
-    //             break;
-    //         case dtkComposerNodeNumber::LongLong:
-    //             r = qVariantFromValue(a.toLongLong() + b.toLongLong());
-    //             break;
-    //         case dtkComposerNodeNumber::ULongLong:
-    //             r = qVariantFromValue(a.toULongLong() + b.toULongLong());
-    //             break;
-    //         case dtkComposerNodeNumber::Float:
-    //             r = qVariantFromValue(qVariantValue<float>(a) + qVariantValue<float>(b));
-    //             break;
-    //         case dtkComposerNodeNumber::Double:
-    //             r = qVariantFromValue(a.toDouble() + b.toDouble());
-    //             break;
-    //         case dtkComposerNodeNumber::Invalid:
-    //         default:
-    //             break;
-    //         }
-    //         break;
-
-    //     case dtkComposerNodeNumberOperator::Substraction:
-    //         switch (genre) {
-    //         case dtkComposerNodeNumber::Int:
-    //             r = qVariantFromValue(a.toInt() - b.toInt());
-    //             break;
-    //         case dtkComposerNodeNumber::UInt:
-    //             r = qVariantFromValue(a.toUInt() - b.toUInt());
-    //             break;
-    //         case dtkComposerNodeNumber::Long:
-    //             r = qVariantFromValue(qVariantValue<long>(a) - qVariantValue<long>(b));
-    //             break;
-    //         case dtkComposerNodeNumber::ULong:
-    //             r = qVariantFromValue(qVariantValue<ulong>(a) - qVariantValue<ulong>(b));
-    //             break;
-    //         case dtkComposerNodeNumber::LongLong:
-    //             r = qVariantFromValue(a.toLongLong() - b.toLongLong());
-    //             break;
-    //         case dtkComposerNodeNumber::ULongLong:
-    //             r = qVariantFromValue(a.toULongLong() - b.toULongLong());
-    //             break;
-    //         case dtkComposerNodeNumber::Float:
-    //             r = qVariantFromValue(qVariantValue<float>(a) - qVariantValue<float>(b));
-    //             break;
-    //         case dtkComposerNodeNumber::Double:
-    //             r = qVariantFromValue(a.toDouble() - b.toDouble());
-    //             break;
-    //         case dtkComposerNodeNumber::Invalid:
-    //         default:
-    //             break;
-    //         }
-    //         break;
-
-    //     case dtkComposerNodeNumberOperator::Multiplication:
-    //         switch (genre) {
-    //         case dtkComposerNodeNumber::Int:
-    //             r = qVariantFromValue(a.toInt() * b.toInt());
-    //             break;
-    //         case dtkComposerNodeNumber::UInt:
-    //             r = qVariantFromValue(a.toUInt() * b.toUInt());
-    //             break;
-    //         case dtkComposerNodeNumber::Long:
-    //             r = qVariantFromValue(qVariantValue<long>(a) * qVariantValue<long>(b));
-    //             break;
-    //         case dtkComposerNodeNumber::ULong:
-    //             r = qVariantFromValue(qVariantValue<ulong>(a) * qVariantValue<ulong>(b));
-    //             break;
-    //         case dtkComposerNodeNumber::LongLong:
-    //             r = qVariantFromValue(a.toLongLong() * b.toLongLong());
-    //             break;
-    //         case dtkComposerNodeNumber::ULongLong:
-    //             r = qVariantFromValue(a.toULongLong() * b.toULongLong());
-    //             break;
-    //         case dtkComposerNodeNumber::Float:
-    //             r = qVariantFromValue(qVariantValue<float>(a) * qVariantValue<float>(b));
-    //             break;
-    //         case dtkComposerNodeNumber::Double:
-    //             r = qVariantFromValue(a.toDouble() * b.toDouble());
-    //             break;
-    //         case dtkComposerNodeNumber::Invalid:
-    //         default:
-    //             break;
-    //         }
-    //         break;
-
-    //     case dtkComposerNodeNumberOperator::Division:
-    //         switch (genre) {
-    //         case dtkComposerNodeNumber::Int:
-    //             r = qVariantFromValue(a.toInt() / b.toInt());
-    //             break;
-    //         case dtkComposerNodeNumber::UInt:
-    //             r = qVariantFromValue(a.toUInt() / b.toUInt());
-    //             break;
-    //         case dtkComposerNodeNumber::Long:
-    //             r = qVariantFromValue(qVariantValue<long>(a) / qVariantValue<long>(b));
-    //             break;
-    //         case dtkComposerNodeNumber::ULong:
-    //             r = qVariantFromValue(qVariantValue<ulong>(a) / qVariantValue<ulong>(b));
-    //             break;
-    //         case dtkComposerNodeNumber::LongLong:
-    //             r = qVariantFromValue(a.toLongLong() / b.toLongLong());
-    //             break;
-    //         case dtkComposerNodeNumber::ULongLong:
-    //             r = qVariantFromValue(a.toULongLong() / b.toULongLong());
-    //             break;
-    //         case dtkComposerNodeNumber::Float:
-    //             r = qVariantFromValue(qVariantValue<float>(a) / qVariantValue<float>(b));
-    //             break;
-    //         case dtkComposerNodeNumber::Double:
-    //             r = qVariantFromValue(a.toDouble() / b.toDouble());
-    //             break;
-    //         case dtkComposerNodeNumber::Invalid:
-    //         default:
-    //             break;
-    //         }
-    //         break;
-    //     case dtkComposerNodeNumberOperator::Increment:
-    //         switch (genre) {
-    //         case dtkComposerNodeNumber::Int:
-    //             r = qVariantFromValue(a.toInt() + 1);
-    //             break;
-    //         case dtkComposerNodeNumber::UInt:
-    //             r = qVariantFromValue(a.toUInt() + 1);
-    //             break;
-    //         case dtkComposerNodeNumber::Long:
-    //             r = qVariantFromValue(qVariantValue<long>(a) + 1);
-    //             break;
-    //         case dtkComposerNodeNumber::ULong:
-    //             r = qVariantFromValue(qVariantValue<ulong>(a) + 1);
-    //             break;
-    //         case dtkComposerNodeNumber::LongLong:
-    //             r = qVariantFromValue(a.toLongLong() + 1);
-    //             break;
-    //         case dtkComposerNodeNumber::ULongLong:
-    //             r = qVariantFromValue(a.toULongLong() + 1);
-    //             break;
-    //         case dtkComposerNodeNumber::Float:
-    //             r = qVariantFromValue(qVariantValue<float>(a) + 1);
-    //             break;
-    //         case dtkComposerNodeNumber::Double:
-    //             r = qVariantFromValue(a.toDouble() + 1);
-    //             break;
-    //         case dtkComposerNodeNumber::Invalid:
-    //         default:
-    //             break;
-    //         }
-    //         break;
-    //     case dtkComposerNodeNumberOperator::Decrement:
-    //         switch (genre) {
-    //         case dtkComposerNodeNumber::Int:
-    //             r = qVariantFromValue(a.toInt() - 1);
-    //             break;
-    //         case dtkComposerNodeNumber::UInt:
-    //             r = qVariantFromValue(a.toUInt() - 1);
-    //             break;
-    //         case dtkComposerNodeNumber::Long:
-    //             r = qVariantFromValue(qVariantValue<long>(a) - 1);
-    //             break;
-    //         case dtkComposerNodeNumber::ULong:
-    //             r = qVariantFromValue(qVariantValue<ulong>(a) - 1);
-    //             break;
-    //         case dtkComposerNodeNumber::LongLong:
-    //             r = qVariantFromValue(a.toLongLong() - 1);
-    //             break;
-    //         case dtkComposerNodeNumber::ULongLong:
-    //             r = qVariantFromValue(a.toULongLong() - 1);
-    //             break;
-    //         case dtkComposerNodeNumber::Float:
-    //             r = qVariantFromValue(qVariantValue<float>(a) - 1);
-    //             break;
-    //         case dtkComposerNodeNumber::Double:
-    //             r = qVariantFromValue(a.toDouble() - 1);
-    //             break;
-    //         case dtkComposerNodeNumber::Invalid:
-    //         default:
-    //             break;
-    //         }
-    //         break;
-
-    //     case dtkComposerNodeNumberOperator::Modulo:
-    //         switch (genre) {
-    //         case dtkComposerNodeNumber::Int:
-    //             r = qVariantFromValue(a.toInt() % b.toInt());
-    //             break;
-    //         case dtkComposerNodeNumber::UInt:
-    //             r = qVariantFromValue(a.toUInt() % b.toUInt());
-    //             break;
-    //         case dtkComposerNodeNumber::Long:
-    //         case dtkComposerNodeNumber::LongLong:
-    //             r = qVariantFromValue(a.toLongLong() % b.toLongLong());
-    //             break;
-    //         case dtkComposerNodeNumber::ULong:
-    //         case dtkComposerNodeNumber::ULongLong:
-    //             r = qVariantFromValue(a.toULongLong() % b.toULongLong());
-    //             break;
-    //         case dtkComposerNodeNumber::Float:
-    //         case dtkComposerNodeNumber::Double:
-    //             r = qVariantFromValue(a.toLongLong() % b.toLongLong());
-    //             break;
-    //         case dtkComposerNodeNumber::Invalid:
-    //         default:
-    //             break;
-    //         }
-    //         break;
-
-    //     case dtkComposerNodeNumberOperator::Min:
-    //         switch (genre) {
-    //         case dtkComposerNodeNumber::Int:
-    //             a.toInt() < b.toInt() ? r = a : r = b;
-    //             break;
-    //         case dtkComposerNodeNumber::UInt:
-    //             a.toUInt() < b.toUInt() ? r = a : r = b;
-    //             break;
-    //         case dtkComposerNodeNumber::Long:
-    //         case dtkComposerNodeNumber::LongLong:
-    //             a.toLongLong() < b.toLongLong() ? r = a : r = b;
-    //             break;
-    //         case dtkComposerNodeNumber::ULong:
-    //         case dtkComposerNodeNumber::ULongLong:
-    //             a.toULongLong() < b.toULongLong() ? r = a : r = b;
-    //             break;
-    //         case dtkComposerNodeNumber::Float:
-    //         case dtkComposerNodeNumber::Double:
-    //             a.toDouble() < b.toDouble() ? r = a : r = b;
-    //             break;
-    //         case dtkComposerNodeNumber::Invalid:
-    //         default:
-    //             break;
-    //         }
-    //         break;
-
-    //     case dtkComposerNodeNumberOperator::Max:
-    //         switch (genre) {
-    //         case dtkComposerNodeNumber::Int:
-    //             a.toInt() > b.toInt() ? r = a : r = b;
-    //             break;
-    //         case dtkComposerNodeNumber::UInt:
-    //             a.toUInt() > b.toUInt() ? r = a : r = b;
-    //             break;
-    //         case dtkComposerNodeNumber::Long:
-    //         case dtkComposerNodeNumber::LongLong:
-    //             a.toLongLong() > b.toLongLong() ? r = a : r = b;
-    //             break;
-    //         case dtkComposerNodeNumber::ULong:
-    //         case dtkComposerNodeNumber::ULongLong:
-    //             a.toULongLong() > b.toULongLong() ? r = a : r = b;
-    //             break;
-    //         case dtkComposerNodeNumber::Float:
-    //         case dtkComposerNodeNumber::Double:
-    //             a.toDouble() > b.toDouble() ? r = a : r = b;
-    //             break;
-    //         case dtkComposerNodeNumber::Invalid:
-    //         default:
-    //             break;
-    //         }
-    //         break;
-
-    //     default:
-    //         break;
-    //     }
-    // }
-
-    // d->value = r;
 }
 
 //! 
@@ -750,12 +542,15 @@ void dtkComposerNodeNumberOperator::push(dtkComposerEdge *route, dtkComposerNode
  */
 dtkComposerNodeAbstractTransmitter *dtkComposerNodeNumberOperator::emitter(dtkComposerNodeProperty *property)
 {
-    // if (property == d->property_right_value) {
-    //     if (!d->transmitter)
-    //         return d->default_emitter;
-    //     else
-    //         return d->transmitter;
-    // }
+    if(!(property == d->property_right_value))
+        return NULL;
+
+    if(d->value_type == QVariant::Int)
+        return d->emitter_i;
+    else if(d->value_type == QVariant::LongLong)
+        return d->emitter_l;
+    else if(d->value_type == QVariant::Double)
+        return d->emitter_d;
     
     return NULL;
 }
@@ -766,7 +561,7 @@ dtkComposerNodeAbstractTransmitter *dtkComposerNodeNumberOperator::emitter(dtkCo
  *  When the source emitter can be casted into current receiver type,
  *  true is returned. Else it returns false.
  *
- *  It makes also the node non-interactive nad clears the text of
+ *  It makes also the node non-interactive and clears the text of
  *  edition aera.
  *
  *  Reimplemented from dtkComposerNode.
@@ -774,6 +569,8 @@ dtkComposerNodeAbstractTransmitter *dtkComposerNodeNumberOperator::emitter(dtkCo
 bool dtkComposerNodeNumberOperator::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
 {
     Q_UNUSED(destination);
+
+    qDebug() << DTK_PRETTY_FUNCTION << this;
 
     bool receiver_set = true;
     bool emit_message = false;
@@ -797,8 +594,8 @@ bool dtkComposerNodeNumberOperator::onLeftRouteConnected(dtkComposerEdge *route,
                 d->op1_type = QVariant::Double;
                 d->receivers_d.insert(route, receiver_d);
                 message.append("Type of left operand is now Double.");
-
             }
+
             emit_message = true;
 
         } else if (d->op1_type == QVariant::Int) {

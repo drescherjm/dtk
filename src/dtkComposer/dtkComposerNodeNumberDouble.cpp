@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: jeu. nov. 17 22:13:04 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 15:14:13 2011 (+0100)
+ * Last-Updated: Thu Nov 24 17:10:01 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 13
+ *     Update #: 33
  */
 
 /* Commentary: 
@@ -90,11 +90,11 @@ const QVariant::Type dtkComposerNodeNumberDouble::genre(void) const
  *  
  */
 void dtkComposerNodeNumberDouble::touch(void)
-{
-    if (!this->isInteractive())
+{   
+    if(!this->isInteractive())
         this->setEditorText(QString::number(d->receiver->data()));
 
-    dtkComposerNodeNumber::touch();
+    dtkComposerNode::touch();
 }
 
 //! 
@@ -156,7 +156,7 @@ bool dtkComposerNodeNumberDouble::onLeftRouteConnected(dtkComposerEdge *route, d
 {
     Q_UNUSED(destination);
 
-    if (!(d->receiver = dynamic_cast<dtkComposerNodeTransmitter<double> *> (route->source()->node()->emitter(route->source()))))
+    if (!(d->receiver = dynamic_cast<dtkComposerNodeTransmitter<double> *>(route->source()->node()->emitter(route->source()))))
         return false;
 
     this->interactiveOff();

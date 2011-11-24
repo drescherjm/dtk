@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: jeu. nov. 17 21:55:21 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 15:14:43 2011 (+0100)
+ * Last-Updated: Thu Nov 24 16:47:26 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 22
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -94,7 +94,7 @@ void dtkComposerNodeNumberLong::touch(void)
     if (!this->isInteractive())
         this->setEditorText(QString::number(d->receiver->data()));
 
-    dtkComposerNodeNumber::touch();
+    dtkComposerNode::touch();
 }
 
 //! 

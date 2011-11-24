@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 15:12:01 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 17 14:59:52 2011 (+0100)
+ * Last-Updated: jeu. nov. 17 23:35:18 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 406
+ *     Update #: 411
  */
 
 /* Commentary: 
@@ -18,8 +18,8 @@
  */
 
 #include "dtkComposerEdge.h"
-#include "dtkComposerNodeString.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerNodeString.h"
 #include "dtkComposerNodeTransmitter.h"
 
 #include <dtkCore/dtkGlobal.h>
@@ -249,7 +249,9 @@ public:
 
 public:
     dtkComposerNodeTransmitter<QString> *emitter;
+
     dtkComposerNodeTransmitter<QString> *receiver;
+    QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<QString> *> receivers;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -372,8 +374,9 @@ void dtkComposerNodeString::onCollapseFinised(void)
  */
 void dtkComposerNodeString::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
 {
-    Q_UNUSED(route);
     Q_UNUSED(property);
+
+    d->receiver = d->receivers.value(route);
 }
 
 //! 
@@ -426,8 +429,10 @@ bool dtkComposerNodeString::setReceiver(dtkComposerEdge *route, dtkComposerNodeP
 {
     Q_UNUSED(destination);
 
-    if (!(d->receiver = dynamic_cast<dtkComposerNodeTransmitter<QString> *> (route->source()->node()->emitter(route->source()))))
+    if (!(dynamic_cast<dtkComposerNodeTransmitter<QString> *> (route->source()->node()->emitter(route->source()))))
         return false;
+
+    d->receivers.insert(route, static_cast<dtkComposerNodeTransmitter<QString> *> (route->source()->node()->emitter(route->source())));
 
     d->interactive = false;
     d->editor->setTextInteractionFlags(Qt::NoTextInteraction);

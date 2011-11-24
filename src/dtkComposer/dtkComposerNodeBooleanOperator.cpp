@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 25 10:07:34 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 17 11:11:34 2011 (+0100)
+ * Last-Updated: jeu. nov. 17 23:38:17 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 270
+ *     Update #: 276
  */
 
 /* Commentary: 
@@ -205,8 +205,8 @@ public:
 
 public:
     dtkComposerNodeTransmitter<bool> *emitter;
-    dtkComposerNodeTransmitter<bool> *receiver_op1;
-    dtkComposerNodeTransmitter<bool> *receiver_op2;
+
+    QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<bool> *> receivers;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -242,8 +242,6 @@ dtkComposerNodeBooleanOperator::dtkComposerNodeBooleanOperator(dtkComposerNode *
     this->g->appendRightProperty(d->property_right_value);
 
     d->emitter = new dtkComposerNodeTransmitter<bool>();
-    d->receiver_op1 = NULL;
-    d->receiver_op2 = NULL;
 }
 
 //! Destroys boolean operator node.
@@ -319,13 +317,11 @@ dtkComposerNodeBooleanOperator::Operation dtkComposerNodeBooleanOperator::operat
  */
 void dtkComposerNodeBooleanOperator::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
 {
-    Q_UNUSED(route);
-
     if(property == d->property_left_value_op1)
-        d->value_op1 = d->receiver_op1->data();
+        d->value_op1 = d->receivers.value(route)->data();
 
     else if(property == d->property_left_value_op2)
-        d->value_op2 = d->receiver_op2->data();
+        d->value_op2 = d->receivers.value(route)->data();
 }
 
 //! Runs node logics.
@@ -401,18 +397,12 @@ dtkComposerNodeAbstractTransmitter *dtkComposerNodeBooleanOperator::emitter(dtkC
  */
 bool dtkComposerNodeBooleanOperator::setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
 {
+    Q_UNUSED(destination);
 
-    if (destination == d->property_left_value_op1) {
-
-        if (!(d->receiver_op1 = dynamic_cast<dtkComposerNodeTransmitter<bool> *> (route->source()->node()->emitter(route->source()))))
-            return false;
-
-    } else if (destination == d->property_left_value_op2) {
-
-         if (!(d->receiver_op2 = dynamic_cast<dtkComposerNodeTransmitter<bool> *> (route->source()->node()->emitter(route->source()))))
-            return false;
-
-    }
+    if (!(dynamic_cast<dtkComposerNodeTransmitter<bool> *> (route->source()->node()->emitter(route->source()))))
+        return false;
+    
+    d->receivers.insert(route, static_cast<dtkComposerNodeTransmitter<bool> *> (route->source()->node()->emitter(route->source())));
 
     return true;
 }

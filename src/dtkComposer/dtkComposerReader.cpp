@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Nov 17 09:38:58 2011 (+0100)
+ * Last-Updated: Mon Nov 21 09:56:29 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 913
+ *     Update #: 915
  */
 
 /* Commentary: 
@@ -468,77 +468,13 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
     if(dtkComposerNodeNumber *number_node = dynamic_cast<dtkComposerNodeNumber *>(n)) {
         
         QDomNodeList children = node.childNodes();
-
-        dtkComposerNodeNumber::Genre genre;
-        
-        for(int i = 0; i < children.count(); i++) {
-
-            if(children.at(i).toElement().tagName() != "genre") 
-                continue;
-
-            if(children.at(i).childNodes().at(0).toText().data() == "int")
-                genre = dtkComposerNodeNumber::Int;
-            else if(children.at(i).childNodes().at(0).toText().data() == "uint")
-                genre = dtkComposerNodeNumber::UInt;
-            else if(children.at(i).childNodes().at(0).toText().data() == "long")
-                genre = dtkComposerNodeNumber::Long;
-            else if(children.at(i).childNodes().at(0).toText().data() == "ulong")
-                genre = dtkComposerNodeNumber::ULong;
-            else if(children.at(i).childNodes().at(0).toText().data() == "longlong")
-                genre = dtkComposerNodeNumber::LongLong;
-            else if(children.at(i).childNodes().at(0).toText().data() == "ulonglong")
-                genre = dtkComposerNodeNumber::ULongLong;
-            else if(children.at(i).childNodes().at(0).toText().data() == "float")
-                genre = dtkComposerNodeNumber::Float;
-            else if(children.at(i).childNodes().at(0).toText().data() == "double")
-                genre = dtkComposerNodeNumber::Double;
-        }
         
         for(int i = 0; i < children.count(); i++) {
 
             if(children.at(i).toElement().tagName() != "value") 
                 continue;
 
-            QString value = children.at(i).childNodes().at(0).toText().data();
-
-            switch (genre) {
-
-            case (dtkComposerNodeNumber::Int):
-                number_node->setValue(qVariantFromValue(value.toInt()));
-                break;
-        
-            case (dtkComposerNodeNumber::UInt):
-                number_node->setValue(qVariantFromValue(value.toUInt()));
-                break;
-                
-            case (dtkComposerNodeNumber::Long):
-                number_node->setValue(qVariantFromValue((long)value.toLongLong()));
-                break;
-                
-            case (dtkComposerNodeNumber::ULong):
-                number_node->setValue(qVariantFromValue((ulong)value.toULongLong()));
-                break;
-                
-            case (dtkComposerNodeNumber::LongLong):
-                number_node->setValue(qVariantFromValue(value.toLongLong()));
-                break;
-                
-            case (dtkComposerNodeNumber::ULongLong):
-                number_node->setValue(qVariantFromValue(value.toULongLong()));
-                break;
-                
-            case (dtkComposerNodeNumber::Float):
-                number_node->setValue(qVariantFromValue((float)value.toDouble()));
-                break;
-                
-            case (dtkComposerNodeNumber::Double):
-                number_node->setValue(qVariantFromValue(value.toDouble()));
-                break;
-                
-            default:
-                number_node->setValue(qVariantFromValue(value.toInt()));
-                break;
-            }
+            number_node->setEditorText(children.at(i).childNodes().at(0).toText().data());
         }
 
         number_node->touch();

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Mar  7 09:24:11 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov  9 11:21:27 2011 (+0100)
+ * Last-Updated: Thu Nov 24 11:24:44 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 54
+ *     Update #: 55
  */
 
 /* Commentary: 
@@ -261,184 +261,184 @@ void dtkComposerNodeNumberComparator::run(void)
     QVariant a = d->value_op1;
     QVariant b = d->value_op2;
 
-    dtkComposerNodeNumber::Genre genre = dtkComposerNodeNumber::genre(a, b);
+    // dtkComposerNodeNumber::Genre genre = dtkComposerNodeNumber::genre(a, b);
 
-    if (genre != dtkComposerNodeNumber::Invalid) {
+    // if (genre != dtkComposerNodeNumber::Invalid) {
 
-        switch (d->operation) {
+    //     switch (d->operation) {
 
-        case dtkComposerNodeNumberComparator::LesserThan:
-            switch (genre) {
-            case dtkComposerNodeNumber::Int:
-                d->value = a.toInt() < b.toInt();
-                break;
-            case dtkComposerNodeNumber::UInt:
-                d->value = a.toUInt() < b.toUInt();
-                break;
-            case dtkComposerNodeNumber::Long:
-            case dtkComposerNodeNumber::LongLong:
-                d->value = a.toLongLong() < b.toLongLong();
-                break;
-            case dtkComposerNodeNumber::ULong:
-            case dtkComposerNodeNumber::ULongLong:
-                d->value = a.toULongLong() < b.toULongLong();
-                break;
-            case dtkComposerNodeNumber::Float:
-                d->value = dtkLesserThanUlps(qVariantValue<float>(a), qVariantValue<float>(b), (int32_t)10);
-                break;
-            case dtkComposerNodeNumber::Double:
-                d->value = dtkLesserThanUlps(a.toDouble(), b.toDouble(), (int64_t)10);
-                break;
-            case dtkComposerNodeNumber::Invalid:
-            default:
-                break;
-            }
-            break;
+    //     case dtkComposerNodeNumberComparator::LesserThan:
+    //         switch (genre) {
+    //         case dtkComposerNodeNumber::Int:
+    //             d->value = a.toInt() < b.toInt();
+    //             break;
+    //         case dtkComposerNodeNumber::UInt:
+    //             d->value = a.toUInt() < b.toUInt();
+    //             break;
+    //         case dtkComposerNodeNumber::Long:
+    //         case dtkComposerNodeNumber::LongLong:
+    //             d->value = a.toLongLong() < b.toLongLong();
+    //             break;
+    //         case dtkComposerNodeNumber::ULong:
+    //         case dtkComposerNodeNumber::ULongLong:
+    //             d->value = a.toULongLong() < b.toULongLong();
+    //             break;
+    //         case dtkComposerNodeNumber::Float:
+    //             d->value = dtkLesserThanUlps(qVariantValue<float>(a), qVariantValue<float>(b), (int32_t)10);
+    //             break;
+    //         case dtkComposerNodeNumber::Double:
+    //             d->value = dtkLesserThanUlps(a.toDouble(), b.toDouble(), (int64_t)10);
+    //             break;
+    //         case dtkComposerNodeNumber::Invalid:
+    //         default:
+    //             break;
+    //         }
+    //         break;
 
-        case dtkComposerNodeNumberComparator::LesserThanOrEqual:
-            switch (genre) {
-            case dtkComposerNodeNumber::Int:
-                d->value = a.toInt() <= b.toInt();
-                break;
-            case dtkComposerNodeNumber::UInt:
-                d->value = a.toUInt() <= b.toUInt();
-                break;
-            case dtkComposerNodeNumber::Long:
-            case dtkComposerNodeNumber::LongLong:
-                d->value = a.toLongLong() <= b.toLongLong();
-                break;
-            case dtkComposerNodeNumber::ULong:
-            case dtkComposerNodeNumber::ULongLong:
-                d->value = a.toULongLong() <= b.toULongLong();
-                break;
-            case dtkComposerNodeNumber::Float:
-                d->value = dtkLesserThanOrAlmostEqualUlps(qVariantValue<float>(a), qVariantValue<float>(b), (int32_t)10);
-                break;
-            case dtkComposerNodeNumber::Double:
-                d->value = dtkLesserThanOrAlmostEqualUlps(a.toDouble(), b.toDouble(), (int64_t)10);
-                break;
-            case dtkComposerNodeNumber::Invalid:
-            default:
-                break;
-            }
-            break;
+    //     case dtkComposerNodeNumberComparator::LesserThanOrEqual:
+    //         switch (genre) {
+    //         case dtkComposerNodeNumber::Int:
+    //             d->value = a.toInt() <= b.toInt();
+    //             break;
+    //         case dtkComposerNodeNumber::UInt:
+    //             d->value = a.toUInt() <= b.toUInt();
+    //             break;
+    //         case dtkComposerNodeNumber::Long:
+    //         case dtkComposerNodeNumber::LongLong:
+    //             d->value = a.toLongLong() <= b.toLongLong();
+    //             break;
+    //         case dtkComposerNodeNumber::ULong:
+    //         case dtkComposerNodeNumber::ULongLong:
+    //             d->value = a.toULongLong() <= b.toULongLong();
+    //             break;
+    //         case dtkComposerNodeNumber::Float:
+    //             d->value = dtkLesserThanOrAlmostEqualUlps(qVariantValue<float>(a), qVariantValue<float>(b), (int32_t)10);
+    //             break;
+    //         case dtkComposerNodeNumber::Double:
+    //             d->value = dtkLesserThanOrAlmostEqualUlps(a.toDouble(), b.toDouble(), (int64_t)10);
+    //             break;
+    //         case dtkComposerNodeNumber::Invalid:
+    //         default:
+    //             break;
+    //         }
+    //         break;
 
-        case dtkComposerNodeNumberComparator::GreaterThan:
-            switch (genre) {
-            case dtkComposerNodeNumber::Int:
-                d->value = a.toInt() > b.toInt();
-                break;
-            case dtkComposerNodeNumber::UInt:
-                d->value = a.toUInt() > b.toUInt();
-                break;
-            case dtkComposerNodeNumber::Long:
-            case dtkComposerNodeNumber::LongLong:
-                d->value = a.toLongLong() > b.toLongLong();
-                break;
-            case dtkComposerNodeNumber::ULong:
-            case dtkComposerNodeNumber::ULongLong:
-                d->value = a.toULongLong() > b.toULongLong();
-                break;
-            case dtkComposerNodeNumber::Float:
-                d->value = dtkGreaterThanUlps(qVariantValue<float>(a), qVariantValue<float>(b), (int32_t)10);
-                break;
-            case dtkComposerNodeNumber::Double:
-                d->value = dtkGreaterThanUlps(a.toDouble(), b.toDouble(), (int64_t)10);
-                break;
-            case dtkComposerNodeNumber::Invalid:
-            default:
-                break;
-            }
-            break;
+    //     case dtkComposerNodeNumberComparator::GreaterThan:
+    //         switch (genre) {
+    //         case dtkComposerNodeNumber::Int:
+    //             d->value = a.toInt() > b.toInt();
+    //             break;
+    //         case dtkComposerNodeNumber::UInt:
+    //             d->value = a.toUInt() > b.toUInt();
+    //             break;
+    //         case dtkComposerNodeNumber::Long:
+    //         case dtkComposerNodeNumber::LongLong:
+    //             d->value = a.toLongLong() > b.toLongLong();
+    //             break;
+    //         case dtkComposerNodeNumber::ULong:
+    //         case dtkComposerNodeNumber::ULongLong:
+    //             d->value = a.toULongLong() > b.toULongLong();
+    //             break;
+    //         case dtkComposerNodeNumber::Float:
+    //             d->value = dtkGreaterThanUlps(qVariantValue<float>(a), qVariantValue<float>(b), (int32_t)10);
+    //             break;
+    //         case dtkComposerNodeNumber::Double:
+    //             d->value = dtkGreaterThanUlps(a.toDouble(), b.toDouble(), (int64_t)10);
+    //             break;
+    //         case dtkComposerNodeNumber::Invalid:
+    //         default:
+    //             break;
+    //         }
+    //         break;
 
-        case dtkComposerNodeNumberComparator::GreaterThanOrEqual:
-            switch (genre) {
-            case dtkComposerNodeNumber::Int:
-                d->value = a.toInt() >= b.toInt();
-                break;
-            case dtkComposerNodeNumber::UInt:
-                d->value = a.toUInt() >= b.toUInt();
-                break;
-            case dtkComposerNodeNumber::Long:
-            case dtkComposerNodeNumber::LongLong:
-                d->value = a.toLongLong() >= b.toLongLong();
-                break;
-            case dtkComposerNodeNumber::ULong:
-            case dtkComposerNodeNumber::ULongLong:
-                d->value = a.toULongLong() >= b.toULongLong();
-                break;
-            case dtkComposerNodeNumber::Float:
-                d->value = dtkGreaterThanOrAlmostEqualUlps(qVariantValue<float>(a), qVariantValue<float>(b), (int32_t)10);
-                break;
-            case dtkComposerNodeNumber::Double:
-                d->value = dtkGreaterThanOrAlmostEqualUlps(a.toDouble(), b.toDouble(), (int64_t)10);
-                break;
-            case dtkComposerNodeNumber::Invalid:
-            default:
-                break;
-            }
-            break;
+    //     case dtkComposerNodeNumberComparator::GreaterThanOrEqual:
+    //         switch (genre) {
+    //         case dtkComposerNodeNumber::Int:
+    //             d->value = a.toInt() >= b.toInt();
+    //             break;
+    //         case dtkComposerNodeNumber::UInt:
+    //             d->value = a.toUInt() >= b.toUInt();
+    //             break;
+    //         case dtkComposerNodeNumber::Long:
+    //         case dtkComposerNodeNumber::LongLong:
+    //             d->value = a.toLongLong() >= b.toLongLong();
+    //             break;
+    //         case dtkComposerNodeNumber::ULong:
+    //         case dtkComposerNodeNumber::ULongLong:
+    //             d->value = a.toULongLong() >= b.toULongLong();
+    //             break;
+    //         case dtkComposerNodeNumber::Float:
+    //             d->value = dtkGreaterThanOrAlmostEqualUlps(qVariantValue<float>(a), qVariantValue<float>(b), (int32_t)10);
+    //             break;
+    //         case dtkComposerNodeNumber::Double:
+    //             d->value = dtkGreaterThanOrAlmostEqualUlps(a.toDouble(), b.toDouble(), (int64_t)10);
+    //             break;
+    //         case dtkComposerNodeNumber::Invalid:
+    //         default:
+    //             break;
+    //         }
+    //         break;
 
-        case dtkComposerNodeNumberComparator::Equal:
-            switch (genre) {
-            case dtkComposerNodeNumber::Int:
-                d->value = a.toInt() == b.toInt();
-                break;
-            case dtkComposerNodeNumber::UInt:
-                d->value = a.toUInt() == b.toUInt();
-                break;
-            case dtkComposerNodeNumber::Long:
-            case dtkComposerNodeNumber::LongLong:
-                d->value = a.toLongLong() == b.toLongLong();
-                break;
-            case dtkComposerNodeNumber::ULong:
-            case dtkComposerNodeNumber::ULongLong:
-                d->value = a.toULongLong() == b.toULongLong();
-                break;
-            case dtkComposerNodeNumber::Float:
-                d->value = dtkAlmostEqualUlps(qVariantValue<float>(a), qVariantValue<float>(b), (int32_t)10);
-                break;
-            case dtkComposerNodeNumber::Double:
-                d->value = dtkAlmostEqualUlps(a.toDouble(), b.toDouble(), (int64_t)10);
-                break;
-            case dtkComposerNodeNumber::Invalid:
-            default:
-                break;
-            }
-            break;
+    //     case dtkComposerNodeNumberComparator::Equal:
+    //         switch (genre) {
+    //         case dtkComposerNodeNumber::Int:
+    //             d->value = a.toInt() == b.toInt();
+    //             break;
+    //         case dtkComposerNodeNumber::UInt:
+    //             d->value = a.toUInt() == b.toUInt();
+    //             break;
+    //         case dtkComposerNodeNumber::Long:
+    //         case dtkComposerNodeNumber::LongLong:
+    //             d->value = a.toLongLong() == b.toLongLong();
+    //             break;
+    //         case dtkComposerNodeNumber::ULong:
+    //         case dtkComposerNodeNumber::ULongLong:
+    //             d->value = a.toULongLong() == b.toULongLong();
+    //             break;
+    //         case dtkComposerNodeNumber::Float:
+    //             d->value = dtkAlmostEqualUlps(qVariantValue<float>(a), qVariantValue<float>(b), (int32_t)10);
+    //             break;
+    //         case dtkComposerNodeNumber::Double:
+    //             d->value = dtkAlmostEqualUlps(a.toDouble(), b.toDouble(), (int64_t)10);
+    //             break;
+    //         case dtkComposerNodeNumber::Invalid:
+    //         default:
+    //             break;
+    //         }
+    //         break;
 
-        case dtkComposerNodeNumberComparator::Differ:
-            switch (genre) {
-            case dtkComposerNodeNumber::Int:
-                d->value = a.toInt() != b.toInt();
-                break;
-            case dtkComposerNodeNumber::UInt:
-                d->value = a.toUInt() != b.toUInt();
-                break;
-            case dtkComposerNodeNumber::Long:
-            case dtkComposerNodeNumber::LongLong:
-                d->value = a.toLongLong() != b.toLongLong();
-                break;
-            case dtkComposerNodeNumber::ULong:
-            case dtkComposerNodeNumber::ULongLong:
-                d->value = a.toULongLong() != b.toULongLong();
-                break;
-            case dtkComposerNodeNumber::Float:
-                d->value = !(dtkAlmostEqualUlps(qVariantValue<float>(a), qVariantValue<float>(b), (int32_t)10));
-                break;
-            case dtkComposerNodeNumber::Double:
-                d->value = !(dtkAlmostEqualUlps(a.toDouble(), b.toDouble(), (int64_t)10));
-                break;
-            case dtkComposerNodeNumber::Invalid:
-            default:
-                break;
-            }
-            break;
+    //     case dtkComposerNodeNumberComparator::Differ:
+    //         switch (genre) {
+    //         case dtkComposerNodeNumber::Int:
+    //             d->value = a.toInt() != b.toInt();
+    //             break;
+    //         case dtkComposerNodeNumber::UInt:
+    //             d->value = a.toUInt() != b.toUInt();
+    //             break;
+    //         case dtkComposerNodeNumber::Long:
+    //         case dtkComposerNodeNumber::LongLong:
+    //             d->value = a.toLongLong() != b.toLongLong();
+    //             break;
+    //         case dtkComposerNodeNumber::ULong:
+    //         case dtkComposerNodeNumber::ULongLong:
+    //             d->value = a.toULongLong() != b.toULongLong();
+    //             break;
+    //         case dtkComposerNodeNumber::Float:
+    //             d->value = !(dtkAlmostEqualUlps(qVariantValue<float>(a), qVariantValue<float>(b), (int32_t)10));
+    //             break;
+    //         case dtkComposerNodeNumber::Double:
+    //             d->value = !(dtkAlmostEqualUlps(a.toDouble(), b.toDouble(), (int64_t)10));
+    //             break;
+    //         case dtkComposerNodeNumber::Invalid:
+    //         default:
+    //             break;
+    //         }
+    //         break;
 
-        default:
-            break;
-        }
-    }
+    //     default:
+    //         break;
+    //     }
+    // }
 }
 
 void dtkComposerNodeNumberComparator::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Feb 25 16:21:13 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 17 17:02:57 2011 (+0100)
+ * Last-Updated: Mon Nov 21 09:51:20 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 582
+ *     Update #: 627
  */
 
 /* Commentary: 
@@ -40,24 +40,14 @@ public:
 public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
-protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
-
 public:
-    void setLabelText(void);
     void setLabelText(const QString& value);
-
-public:
-    dtkComposerNodeNumber::Genre genre(void);
-    void setLabelText(dtkComposerNodeNumber::Genre genre);
 
 public:
     dtkComposerNodeNumber *parent_node;
     QPainterPath path;
     QString text;
     bool expanded;
-
-    QHash<QString, dtkComposerNodeNumber::Genre> genres;    
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -86,18 +76,9 @@ dtkComposerNodeNumberLabel::dtkComposerNodeNumberLabel(dtkComposerNodeNumber *pa
 
     parent_node = parent;
 
-    text = "INT";
+    text = "";
 
     expanded = false;
-
-    genres.insert(   QString("INT"),       dtkComposerNodeNumber::Int);
-    genres.insert(  QString("UINT"),      dtkComposerNodeNumber::UInt);
-    genres.insert(  QString("LONG"),      dtkComposerNodeNumber::Long);
-    genres.insert( QString("ULONG"),     dtkComposerNodeNumber::ULong);
-    genres.insert( QString("LLONG"),  dtkComposerNodeNumber::LongLong);
-    genres.insert(QString("ULLONG"), dtkComposerNodeNumber::ULongLong);
-    genres.insert( QString("FLOAT"),     dtkComposerNodeNumber::Float);
-    genres.insert(QString("DOUBLE"),    dtkComposerNodeNumber::Double);
 }
 
 //! Destroys number label.
@@ -150,44 +131,6 @@ void dtkComposerNodeNumberLabel::paint(QPainter *painter, const QStyleOptionGrap
     painter->drawText(this->boundingRect(), Qt::AlignCenter, text);
 }
 
-//! Enables to switch between number types.
-/*! 
- *  Reimplemented from QGraphicsItem.
- */
-void dtkComposerNodeNumberLabel::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-    Q_UNUSED(event); 
-
-    if (parent_node->interactive())
-        this->setLabelText();
-}
-
-//! Sets label text.
-/*! 
- *  
- */
-void dtkComposerNodeNumberLabel::setLabelText(void)
-{
-    if (text == "INT")
-        text = "UINT";
-    else if (text == "UINT")
-        text = "LONG";
-    else if (text == "LONG")
-        text = "ULONG";
-    else if (text == "ULONG")
-        text = "LLONG";
-    else if (text == "LLONG")
-        text = "ULLONG";
-    else if (text == "ULLONG")
-        text = "FLOAT";
-    else if (text == "FLOAT")
-        text = "DOUBLE";
-    else if (text == "DOUBLE")
-        text = "INT";
-
-    this->update();
-}
-
 //! Sets label text.
 /*! 
  *  
@@ -195,24 +138,6 @@ void dtkComposerNodeNumberLabel::setLabelText(void)
 void dtkComposerNodeNumberLabel::setLabelText(const QString& value)
 {
     text = value;
-}
-
-//! Sets label text.
-/*! 
- *  
- */
-void dtkComposerNodeNumberLabel::setLabelText(dtkComposerNodeNumber::Genre genre)
-{
-    text = genres.key(genre);
-}
-
-//! Sets label text.
-/*! 
- *  
- */
-dtkComposerNodeNumber::Genre dtkComposerNodeNumberLabel::genre(void)
-{
-    return genres.value(text);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -425,10 +350,6 @@ void dtkComposerNodeNumberEditor::keyPressEvent(QKeyEvent *event)
 class dtkComposerNodeNumberPrivate
 {
 public:
-    dtkComposerNodeProperty *property_left_value;
-    dtkComposerNodeProperty *property_right_value;
-
-public:
     dtkComposerNodeNumberLabel *label;
     dtkComposerNodeNumberButton *button;
     dtkComposerNodeNumberEditor *editor;
@@ -437,28 +358,10 @@ public:
     QPropertyAnimation *animation;
 
 public:
-    QHash<QString, int> genres;
-
-    QVariant value;
-
-public:
     bool interactive;
 
 public:
-    dtkComposerNodeAbstractTransmitter *transmitter;
-    dtkComposerNodeTransmitter<int>    *default_emitter;
-
-public:
-    QString type_int;
-    QString type_uint;
-    QString type_long;
-    QString type_ulong;
-    QString type_llong;
-    QString type_ullong;
-    QString type_float;
-    QString type_double;
-
-    QHash<dtkComposerNodeNumber::Genre, QString> types;
+    QVariant::Type genre;    
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -471,59 +374,16 @@ public:
  */
 dtkComposerNodeNumber::dtkComposerNodeNumber(dtkComposerNode *parent) : dtkComposerNode(parent), d(new dtkComposerNodeNumberPrivate)
 {
-    d->property_left_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
-    d->property_right_value = new dtkComposerNodeProperty("value", dtkComposerNodeProperty::Right, dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, this);
-
     d->label = new dtkComposerNodeNumberLabel(this);
     d->label->setPos(0, 0);
 
     d->button = new dtkComposerNodeNumberButton(this);
     d->button->setPos(0, 0);
     
-    d->value = QVariant();
-
-    d->type_int    = typeid(int).name();
-    d->type_uint   = typeid(uint).name();
-    d->type_long   = typeid(long).name();
-    d->type_ulong  = typeid(ulong).name();
-    d->type_llong  = typeid(qlonglong).name();
-    d->type_ullong = typeid(qulonglong).name();
-    d->type_float  = typeid(float).name();
-    d->type_double = typeid(double).name();
-
-    d->types.insert(      dtkComposerNodeNumber::Int,    d->type_int);
-    d->types.insert(     dtkComposerNodeNumber::UInt,   d->type_uint);
-    d->types.insert(     dtkComposerNodeNumber::Long,   d->type_long);
-    d->types.insert(    dtkComposerNodeNumber::ULong,  d->type_ulong);
-    d->types.insert( dtkComposerNodeNumber::LongLong,  d->type_llong);
-    d->types.insert(dtkComposerNodeNumber::ULongLong, d->type_ullong);
-    d->types.insert(    dtkComposerNodeNumber::Float,  d->type_float);
-    d->types.insert(   dtkComposerNodeNumber::Double, d->type_double);
-
-    d->genres.insert(   QString("INT"),       (int)dtkComposerNodeNumber::Int);
-    d->genres.insert(  QString("UINT"),      (int)dtkComposerNodeNumber::UInt);
-    d->genres.insert(  QString("LONG"),      (int)dtkComposerNodeNumber::Long);
-    d->genres.insert( QString("ULONG"),     (int)dtkComposerNodeNumber::ULong);
-    d->genres.insert( QString("LLONG"),  (int)dtkComposerNodeNumber::LongLong);
-    d->genres.insert(QString("ULLONG"), (int)dtkComposerNodeNumber::ULongLong);
-    d->genres.insert( QString("FLOAT"),     (int)dtkComposerNodeNumber::Float);
-    d->genres.insert(QString("DOUBLE"),    (int)dtkComposerNodeNumber::Double);
-
-    this->setTitle("Number");
-    this->setKind(dtkComposerNode::Atomic);
-    this->setType("dtkComposerNumber");
-
-    this->g->appendLeftProperty(d->property_left_value);
-    this->g->appendRightProperty(d->property_right_value);
-
-    // --
-    
     d->editor = new dtkComposerNodeNumberEditor(this);
     d->editor->setPos(-d->editor->boundingRect().width() / 2, 0);
     d->editor->setTextWidth(0.8 * this->boundingRect().width());
     d->editor->hide();
-
-    // --
 
     d->animation = new QPropertyAnimation(d->editor, "pos");
     d->animation->setDuration(500);
@@ -531,12 +391,9 @@ dtkComposerNodeNumber::dtkComposerNodeNumber(dtkComposerNode *parent) : dtkCompo
     d->animation->setEndValue(QPointF(-d->editor->boundingRect().width()/2, 0.85 * d->editor->boundingRect().height()));
     d->animation->setEasingCurve(QEasingCurve::OutBounce);
 
-    // --
-
     d->interactive = true;
 
-    d->transmitter = NULL;
-    d->default_emitter = new dtkComposerNodeTransmitter<int>();
+    d->genre = QVariant::Invalid;
 }
 
 //! Destroys number node.
@@ -545,26 +402,84 @@ dtkComposerNodeNumber::dtkComposerNodeNumber(dtkComposerNode *parent) : dtkCompo
  */
 dtkComposerNodeNumber::~dtkComposerNodeNumber(void)
 {
-    delete d->default_emitter;
-
     delete d;
 
     d = NULL;
 }
 
-QVariant dtkComposerNodeNumber::value(void)
+//! Sets number type using QVariant flags.
+/*! 
+ *  
+ */
+void dtkComposerNodeNumber::setGenre(const QVariant::Type& genre)
 {
-    // if (d->value.userType() != d->genres.value(d->label->text))
-    //     this->convertTo(d->genres.value(d->label->text));
-
-    // return d->value;
-
-    return QVariant();
+    d->genre = genre;
 }
 
-void dtkComposerNodeNumber::setValue(QVariant value)
+//! Returns number type using QVariant flags.
+/*! 
+ *  
+ */
+const QVariant::Type& dtkComposerNodeNumber::genre(void) const
 {
-    d->value = value;
+    return d->genre;
+}
+
+//! Sets the label of the node.
+/*! 
+ *  
+ */
+void dtkComposerNodeNumber::setLabelText(const QString& value)
+{
+    d->label->setLabelText(value);
+}
+
+//! Sets the text of the node.
+/*! 
+ *  
+ */
+void dtkComposerNodeNumber::setEditorText(const QString& value)
+{
+    d->editor->setPlainText(value);
+}
+
+//! Turns on interactive mode.
+/*! 
+ *  
+ */
+void dtkComposerNodeNumber::interactiveOn(void)
+{
+    d->interactive = true;
+    d->editor->setTextInteractionFlags(Qt::TextEditorInteraction);
+}
+
+//! Turns off interactive mode.
+/*! 
+ *  
+ */
+void dtkComposerNodeNumber::interactiveOff(void)
+{
+    d->interactive = false;
+    d->editor->setTextInteractionFlags(Qt::NoTextInteraction);
+    d->editor->setPlainText("");
+}
+
+//! Returns true when interactive mode is on. 
+/*! 
+ *  
+ */
+QString dtkComposerNodeNumber::editorText(void) const
+{
+    return d->editor->toPlainText();
+}
+
+//! Returns true when interactive mode is on. 
+/*! 
+ *  
+ */
+bool dtkComposerNodeNumber::isInteractive(void) const
+{
+    return d->interactive;
 }
 
 //! Expands node to show edition aera.
@@ -590,61 +505,6 @@ void dtkComposerNodeNumber::collapse(void)
     connect(d->animation, SIGNAL(finished()), this, SLOT(onCollapseFinised()));
 }
 
-//! Updates the graphical aspect of the node.
-/*! 
- *  
- */
-void dtkComposerNodeNumber::touch(void)
-{
-    QString value;
-
-    if (!d->interactive && d->transmitter) {
-
-        dtkComposerNodeNumber::Genre genre = d->types.key(d->transmitter->metadata("Type"));
-
-        switch (genre) {
-
-        case dtkComposerNodeNumber::Int:
-            value = QString("%1").arg(static_cast<dtkComposerNodeTransmitter<int> *>(d->transmitter)->data());
-            break;
-
-        case dtkComposerNodeNumber::UInt:
-            value = QString("%1").arg(static_cast<dtkComposerNodeTransmitter<uint> *>(d->transmitter)->data());
-            break;
-
-        case dtkComposerNodeNumber::Long:
-            value = QString("%1").arg(static_cast<dtkComposerNodeTransmitter<long> *>(d->transmitter)->data());
-            break;
-
-        case dtkComposerNodeNumber::ULong:
-            value = QString("%1").arg(static_cast<dtkComposerNodeTransmitter<ulong> *>(d->transmitter)->data());
-            break;
-
-        case dtkComposerNodeNumber::LongLong:
-            value = QString("%1").arg(static_cast<dtkComposerNodeTransmitter<qlonglong> *>(d->transmitter)->data());
-            break;
-
-        case dtkComposerNodeNumber::ULongLong:
-            value = QString("%1").arg(static_cast<dtkComposerNodeTransmitter<qulonglong> *>(d->transmitter)->data());
-            break;
-
-        case dtkComposerNodeNumber::Float:
-            value = QString("%1").arg((double)static_cast<dtkComposerNodeTransmitter<float> *>(d->transmitter)->data());
-            break;
-
-        case dtkComposerNodeNumber::Double:
-            value = QString("%1").arg(static_cast<dtkComposerNodeTransmitter<double> *>(d->transmitter)->data());
-            break;
-
-        }
-    
-        d->editor->setPlainText(value); 
-        d->editor->update();
-    }
-
-    dtkComposerNode::touch();
-}
-
 //! Hides edition aera at the end of collapsing.
 /*! 
  *  
@@ -654,290 +514,4 @@ void dtkComposerNodeNumber::onCollapseFinised(void)
     d->editor->hide();
 
     disconnect(d->animation, SIGNAL(finished()), this, SLOT(onCollapseFinised()));
-}
-
-//! 
-/*! 
- *  Reimplemented from dtkComposerNode.
- */
-void dtkComposerNodeNumber::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
-{
-    Q_UNUSED(property);
-
-    d->transmitter = route->source()->node()->emitter(route->source());
-}
-
-//! 
-/*! 
- *  Reimplemented from dtkComposerNode.
- */
-void dtkComposerNodeNumber::run(void)
-{
-    if (d->interactive)
-        this->setTransmitterData(d->editor->toPlainText());
-    else
-        d->label->setLabelText(d->types.key(d->transmitter->metadata("Type")));
-}
-
-//! 
-/*! 
- *  Reimplemented from dtkComposerNode.
- */
-void dtkComposerNodeNumber::push(dtkComposerEdge *route, dtkComposerNodeProperty *property)
-{
-    Q_UNUSED(route);
-    Q_UNUSED(property);
-}
-
-//! 
-/*! 
- *  Reimplemented from dtkComposerNode.
- */
-dtkComposerNodeAbstractTransmitter *dtkComposerNodeNumber::emitter(dtkComposerNodeProperty *property)
-{
-    if (property == d->property_right_value) {
-        if (!d->transmitter)
-            return d->default_emitter;
-        else
-            return d->transmitter;
-    }
-    
-    return NULL;
-}
-
-//! Sets the receiver from the emitter of the node at the source of \a
-//! route.
-/*! 
- *  When the source emitter can be casted into current receiver type,
- *  true is returned. Else it returns false.
- *
- *  It makes also the node non-interactive nad clears the text of
- *  edition aera.
- *
- *  Reimplemented from dtkComposerNode.
- */
-bool dtkComposerNodeNumber::setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
-{
-    Q_UNUSED(destination);
-
-    d->transmitter = route->source()->node()->emitter(route->source());
-
-    if (d->transmitter) {
-
-        if (!(dynamic_cast<dtkComposerNodeTransmitter<int>        *>(d->transmitter)) &&
-            !(dynamic_cast<dtkComposerNodeTransmitter<uint>       *>(d->transmitter)) &&
-            !(dynamic_cast<dtkComposerNodeTransmitter<long>       *>(d->transmitter)) &&
-            !(dynamic_cast<dtkComposerNodeTransmitter<ulong>      *>(d->transmitter)) &&
-            !(dynamic_cast<dtkComposerNodeTransmitter<qlonglong>  *>(d->transmitter)) &&
-            !(dynamic_cast<dtkComposerNodeTransmitter<qulonglong> *>(d->transmitter)) &&
-            !(dynamic_cast<dtkComposerNodeTransmitter<float>      *>(d->transmitter)) &&
-            !(dynamic_cast<dtkComposerNodeTransmitter<double>     *>(d->transmitter))) {
-
-            qDebug() << DTK_PRETTY_FUNCTION << ": Type from node" << route->source()->node() << "is not handled by node number.";
-            return false;
-            
-        }
-
-        d->interactive = false;
-        d->editor->setTextInteractionFlags(Qt::NoTextInteraction);
-        d->editor->setPlainText("");    
-        
-        return true;
-
-    }
-
-    qDebug() << DTK_PRETTY_FUNCTION << "Transmitter of source node" << route->source()->node() << "has not been instanciated. Connection failed.";
-    return false;
-}
-
-//! 
-/*! 
- *  Reimplemented from dtkComposerNode.
- */
-bool dtkComposerNodeNumber::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
-{
-    return true;
-}
-
-//! Returns true when node is interactive.
-/*! 
- *  
- */
-bool dtkComposerNodeNumber::interactive(void) const
-{
-    return d->interactive;
-}
-
-//! Sets the label of the node.
-/*! 
- *  
- */
-void dtkComposerNodeNumber::setLabelText(const QString& value)
-{
-    d->label->setLabelText(value);
-}
-
-//! Sets the text of the node.
-/*! 
- *  
- */
-void dtkComposerNodeNumber::setEditorText(const QString& value)
-{
-    d->editor->setPlainText(value);
-}
-
-//! Sets the label of the node.
-/*! 
- *  
- */
-void dtkComposerNodeNumber::setTransmitterData(const QString& value)
-{    
-    dtkComposerNodeTransmitter<int>        *emitter_i   = NULL;
-    dtkComposerNodeTransmitter<uint>       *emitter_ui  = NULL;
-    dtkComposerNodeTransmitter<long>       *emitter_l   = NULL;
-    dtkComposerNodeTransmitter<ulong>      *emitter_ul  = NULL;
-    dtkComposerNodeTransmitter<qlonglong>  *emitter_ll  = NULL;
-    dtkComposerNodeTransmitter<qulonglong> *emitter_ull = NULL;
-    dtkComposerNodeTransmitter<float>      *emitter_f   = NULL;
-    dtkComposerNodeTransmitter<double>     *emitter_d   = NULL;
-
-    switch (d->label->genre()) {
-
-    case dtkComposerNodeNumber::Int:
-        emitter_i = new dtkComposerNodeTransmitter<int>();
-        emitter_i->setData(value.toInt());
-        d->transmitter = emitter_i;
-        break;
-
-    case dtkComposerNodeNumber::UInt:
-        emitter_ui = new dtkComposerNodeTransmitter<uint>();
-        emitter_ui->setData(value.toUInt());
-        d->transmitter = emitter_ui;
-        break;
-
-    case dtkComposerNodeNumber::Long:
-        emitter_l = new dtkComposerNodeTransmitter<long>();
-        emitter_l->setData(value.toLong());
-        d->transmitter = emitter_l;
-        break;
-
-    case dtkComposerNodeNumber::ULong:
-        emitter_ul = new dtkComposerNodeTransmitter<ulong>();
-        emitter_ul->setData(value.toULong());
-        d->transmitter = emitter_ul;
-        break;
-
-    case dtkComposerNodeNumber::LongLong:
-        emitter_ll = new dtkComposerNodeTransmitter<qlonglong>();
-        emitter_ll->setData(value.toLongLong());
-        d->transmitter = emitter_ll;
-        break;
-
-    case dtkComposerNodeNumber::ULongLong:
-        emitter_ull = new dtkComposerNodeTransmitter<qulonglong>();
-        emitter_ull->setData(value.toULongLong());
-        d->transmitter = emitter_ull;
-        break;
-
-    case dtkComposerNodeNumber::Float:
-        emitter_f = new dtkComposerNodeTransmitter<float>();
-        emitter_f->setData(value.toFloat());
-        d->transmitter = emitter_f;
-        break;
-
-    case dtkComposerNodeNumber::Double:
-        emitter_d = new dtkComposerNodeTransmitter<double>();
-        emitter_d->setData(value.toDouble());
-        d->transmitter = emitter_d;
-        break;
-
-    }
-}
-
-//! 
-/*! 
- *  
- */
-dtkComposerNodeNumber::Genre dtkComposerNodeNumber::compatibleType(const QString& left_type, const QString& right_type)
-{
-
-
-}
-
-//! 
-/*! 
- *  
- */
-dtkComposerNodeNumber::Genre dtkComposerNodeNumber::genre(QVariant& a, QVariant& b)
-{
-    if (a.userType() == dtkComposerNodeNumber::Invalid && b.userType() == dtkComposerNodeNumber::Invalid) {
-
-        return dtkComposerNodeNumber::Invalid;
-
-    } else if (a.userType() == dtkComposerNodeNumber::Invalid) {
-
-        return (dtkComposerNodeNumber::Genre)b.userType();
-
-    } else if (b.userType() == dtkComposerNodeNumber::Invalid) {
-
-        return (dtkComposerNodeNumber::Genre)a.userType();
-
-    } else if (a.userType() == dtkComposerNodeNumber::Double || b.userType() == dtkComposerNodeNumber::Double) {
-
-        return dtkComposerNodeNumber::Double;
-
-    } else if (a.userType() == dtkComposerNodeNumber::Float || b.userType() == dtkComposerNodeNumber::Float) {
-
-        return dtkComposerNodeNumber::Float;
-
-    } else if (a.userType() == dtkComposerNodeNumber::ULongLong) {
-
-        if (b.userType() == dtkComposerNodeNumber::ULongLong || b.userType() == dtkComposerNodeNumber::ULong || b.userType() == dtkComposerNodeNumber::UInt)
-            return dtkComposerNodeNumber::ULongLong;
-        else
-            return dtkComposerNodeNumber::Invalid;
-
-    } else if (b.userType() == dtkComposerNodeNumber::ULongLong) {
-
-        if (a.userType() == dtkComposerNodeNumber::ULong || a.userType() == dtkComposerNodeNumber::UInt)
-            return dtkComposerNodeNumber::ULongLong;
-        else
-            return dtkComposerNodeNumber::Invalid;
-
-    } else if (a.userType() == dtkComposerNodeNumber::ULong) {
-
-        if (b.userType() == dtkComposerNodeNumber::ULong || b.userType() == dtkComposerNodeNumber::UInt)
-            return dtkComposerNodeNumber::ULong;
-        else
-            return dtkComposerNodeNumber::Invalid;
-
-    } else if (b.userType() == dtkComposerNodeNumber::ULong) {
-
-        if (a.userType() == dtkComposerNodeNumber::UInt)
-            return dtkComposerNodeNumber::ULong;
-        else
-            return dtkComposerNodeNumber::Invalid;
-
-    } else if (a.userType() == dtkComposerNodeNumber::UInt) {
-
-        if (b.userType() == dtkComposerNodeNumber::UInt)
-            return dtkComposerNodeNumber::UInt;
-        else
-            return dtkComposerNodeNumber::Invalid;
-
-    } else if (a.userType() == dtkComposerNodeNumber::LongLong || b.userType() == dtkComposerNodeNumber::LongLong) {
-
-        return dtkComposerNodeNumber::LongLong;
-
-    } else if (a.userType() == dtkComposerNodeNumber::Long || b.userType() == dtkComposerNodeNumber::Long) {
-
-        return dtkComposerNodeNumber::Long;
-
-    } else if (a.userType() == dtkComposerNodeNumber::Int || b.userType() == dtkComposerNodeNumber::Int) {
-
-        return dtkComposerNodeNumber::Int;
-
-    }
-
-    return dtkComposerNodeNumber::Invalid;
 }

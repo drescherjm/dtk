@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Nov  7 16:12:48 2011 (+0100)
+## Last-Updated: jeu. nov. 17 22:16:21 2011 (+0100)
 ##           By: Thibaud Kloczko
-##     Update #: 163
+##     Update #: 168
 ######################################################################
 ## 
 ### Commentary: 
@@ -53,6 +53,9 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeLoopWhile.h
   dtkComposerNodeLoopWhile_p.h
   dtkComposerNodeNumber.h
+  dtkComposerNodeNumberDouble.h
+  dtkComposerNodeNumberInteger.h
+  dtkComposerNodeNumberLongInteger.h
   dtkComposerNodeNumberComparator.h
   dtkComposerNodeNumberOperator.h
   dtkComposerNodeProcess.h
@@ -95,6 +98,9 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerNodeLoopFor.h
   dtkComposerNodeLoopWhile.h
   dtkComposerNodeNumber.h
+  dtkComposerNodeNumberDouble.h
+  dtkComposerNodeNumberInteger.h
+  dtkComposerNodeNumberLongInteger.h
   dtkComposerNodeNumberComparator.h
   dtkComposerNodeNumberOperator.h
   dtkComposerNodeProcess.h
@@ -132,6 +138,9 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeLoopFor.cpp
   dtkComposerNodeLoopWhile.cpp
   dtkComposerNodeNumber.cpp
+  dtkComposerNodeNumberDouble.cpp
+  dtkComposerNodeNumberInteger.cpp
+  dtkComposerNodeNumberLongInteger.cpp
   dtkComposerNodeNumberComparator.cpp
   dtkComposerNodeNumberOperator.cpp
   dtkComposerNodeProcess.cpp

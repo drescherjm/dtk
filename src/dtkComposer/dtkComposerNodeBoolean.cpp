@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 25 10:07:34 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 17 13:44:20 2011 (+0100)
+ * Last-Updated: jeu. nov. 17 22:51:16 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 270
+ *     Update #: 283
  */
 
 /* Commentary: 
@@ -173,7 +173,9 @@ public:
 
 public:
     dtkComposerNodeTransmitter<bool> *emitter;
+
     dtkComposerNodeTransmitter<bool> *receiver;
+    QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<bool> *> receivers;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -193,17 +195,17 @@ dtkComposerNodeBoolean::dtkComposerNodeBoolean(dtkComposerNode *parent) : dtkCom
     d->label->setPos(0, 0);
     d->label->text = "F";
 
-    d->interactive = true;
-
-    d->emitter = new dtkComposerNodeTransmitter<bool>();
-    d->receiver = NULL;
-
     this->setTitle("Boolean");
     this->setKind(dtkComposerNode::Atomic);
     this->setType("dtkComposerBoolean");
 
     this->g->appendLeftProperty(d->property_left_value);
     this->g->appendRightProperty(d->property_right_value);
+
+    d->interactive = true;
+
+    d->receiver = NULL;
+    d->emitter = new dtkComposerNodeTransmitter<bool>();
 }
 
 //! Destroys boolean node.
@@ -223,8 +225,9 @@ dtkComposerNodeBoolean::~dtkComposerNodeBoolean(void)
  */
 void dtkComposerNodeBoolean::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
 {
-    Q_UNUSED(route);
     Q_UNUSED(property);
+
+    d->receiver = d->receivers.value(route);
 }
 
 //! 
@@ -277,8 +280,10 @@ bool dtkComposerNodeBoolean::setReceiver(dtkComposerEdge *route, dtkComposerNode
 {
     Q_UNUSED(destination);
 
-    if (!(d->receiver = dynamic_cast<dtkComposerNodeTransmitter<bool> *> (route->source()->node()->emitter(route->source()))))
+    if (!(dynamic_cast<dtkComposerNodeTransmitter<bool> *> (route->source()->node()->emitter(route->source()))))
         return false;
+
+    d->receivers.insert(route, static_cast<dtkComposerNodeTransmitter<bool> *> (route->source()->node()->emitter(route->source())));
 
     d->interactive = false;
 

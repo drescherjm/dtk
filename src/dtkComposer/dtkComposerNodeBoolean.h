@@ -42,7 +42,7 @@ public:
     dtkComposerNodeAbstractTransmitter *emitter(dtkComposerNodeProperty *property);
 
 public:
-    bool setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
+    bool onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
 
     bool onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property);
 

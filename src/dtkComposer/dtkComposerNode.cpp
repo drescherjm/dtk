@@ -1123,7 +1123,7 @@ dtkComposerNodeAbstractTransmitter *dtkComposerNode::emitter(dtkComposerNodeProp
     return NULL;
 }
 
-bool dtkComposerNode::setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+bool dtkComposerNode::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
 {
     DTK_UNUSED(route);
     DTK_UNUSED(destination);

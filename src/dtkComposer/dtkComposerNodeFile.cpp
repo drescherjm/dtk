@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul  8 13:28:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov  9 11:18:09 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 217
+ * Last-Updated: Thu Nov 24 13:03:24 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 239
  */
 
 /* Commentary: 
@@ -45,6 +45,10 @@ dtkComposerNodeFile::dtkComposerNodeFile(dtkComposerNode *parent) : dtkComposerN
     d->property_output_file_name = new dtkComposerNodeProperty("name", dtkComposerNodeProperty::Right, dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, this);
     d->property_output_file_text = new dtkComposerNodeProperty("text", dtkComposerNodeProperty::Right, dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, this);
     d->property_output_file_url = new dtkComposerNodeProperty("url", dtkComposerNodeProperty::Right, dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, this);
+
+    d->file_name_emitter = new dtkComposerNodeTransmitter<QString>();
+    d->file_text_emitter = new dtkComposerNodeTransmitter<QString>();
+    d->file_url_emitter = new dtkComposerNodeTransmitter<QUrl>();
 
     d->property_output_file_url->hide();
 
@@ -126,6 +130,20 @@ void dtkComposerNodeFile::setUrl(const QString& url)
     d->url = url;
 }
 
+dtkComposerNodeAbstractTransmitter *dtkComposerNodeFile::emitter(dtkComposerNodeProperty *property)
+{
+    if(property == d->property_output_file_name)
+        return d->file_name_emitter;
+
+    if(property == d->property_output_file_text)
+        return d->file_text_emitter;
+
+    if(property == d->property_output_file_url)
+        return d->file_url_emitter;
+
+    return NULL;
+}
+
 void dtkComposerNodeFile::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(edge);
@@ -176,7 +194,10 @@ void dtkComposerNodeFile::run(void)
     if (d->file.isEmpty())
         dtkDebug() << "File has not been initialized.";
     
-    return;
+
+    d->file_name_emitter->setData(d->file);
+    d->file_text_emitter->setData(dtkReadFile(d->file));
+    d->file_url_emitter->setData(d->url);
 }
 
 void dtkComposerNodeFile::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)

@@ -771,7 +771,7 @@ dtkComposerNodeAbstractTransmitter *dtkComposerNodeNumberOperator::emitter(dtkCo
  *
  *  Reimplemented from dtkComposerNode.
  */
-bool dtkComposerNodeNumberOperator::setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+bool dtkComposerNodeNumberOperator::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
 {
     Q_UNUSED(destination);
 

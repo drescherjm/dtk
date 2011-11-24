@@ -145,7 +145,7 @@ dtkComposerNodeAbstractTransmitter *dtkComposerNodeNumberInteger::emitter(dtkCom
  *
  *  Reimplemented from dtkComposerNode.
  */
-bool dtkComposerNodeNumberInteger::setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+bool dtkComposerNodeNumberInteger::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
 {
     Q_UNUSED(destination);
 

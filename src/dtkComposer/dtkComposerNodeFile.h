@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jul  8 13:26:20 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 12 23:38:50 2011 (+0200)
+ * Last-Updated: Thu Nov 24 12:55:12 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 28
+ *     Update #: 34
  */
 
 /* Commentary: 
@@ -41,6 +41,9 @@ public slots:
     void setFileName(const QString& file);
     void getUrl(void);
     void setUrl(const QString& url);
+
+public:
+    virtual dtkComposerNodeAbstractTransmitter *emitter(dtkComposerNodeProperty *property);
 
 protected:
     void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);

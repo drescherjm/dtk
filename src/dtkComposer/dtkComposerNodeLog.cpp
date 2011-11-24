@@ -161,7 +161,7 @@ void dtkComposerNodeLog::run(void)
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-bool dtkComposerNodeLog::setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+bool dtkComposerNodeLog::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
 {        
     return true;
 }

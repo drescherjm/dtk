@@ -276,7 +276,7 @@ dtkComposerNodeAbstractTransmitter *dtkComposerNodeBoolean::emitter(dtkComposerN
  *
  *  Reimplemented from dtkComposerNode.
  */
-bool dtkComposerNodeBoolean::setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+bool dtkComposerNodeBoolean::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
 {
     Q_UNUSED(destination);
 

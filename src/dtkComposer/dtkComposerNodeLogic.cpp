@@ -159,7 +159,7 @@ bool dtkComposerNodeLogic::canConnectRoute(dtkComposerNodeProperty *source, dtkC
     route->setSource(source);
     route->setDestination(destination);
 
-    if (!destin_node->setReceiver(route, destination)) {
+    if (!destin_node->onLeftRouteConnected(route, destination)) {
         delete route;
         return false;
     }

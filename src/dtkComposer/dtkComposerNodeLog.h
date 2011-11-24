@@ -38,7 +38,7 @@ protected:
     void  run(void);
 
 public:
-    bool setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
+    bool onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
 
 private:
     dtkComposerNodeLogPrivate *d;

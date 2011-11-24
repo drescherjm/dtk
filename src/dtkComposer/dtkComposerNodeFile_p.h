@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Oct 13 01:14:28 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 13 01:22:19 2011 (+0200)
+ * Last-Updated: Thu Nov 24 13:04:45 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 10
+ *     Update #: 18
  */
 
 /* Commentary: 
@@ -24,6 +24,8 @@
 #include <QtGui>
 #include <QtNetwork>
 
+#include "dtkComposerNodeTransmitter.h"
+
 class dtkComposerNodeProperty;
 
 class dtkComposerNodeFilePrivate : public QObject
@@ -34,6 +36,11 @@ public:
     dtkComposerNodeProperty *property_output_file_name;
     dtkComposerNodeProperty *property_output_file_text;
     dtkComposerNodeProperty *property_output_file_url;
+
+public:
+    dtkComposerNodeTransmitter<QString> *file_name_emitter;
+    dtkComposerNodeTransmitter<QString> *file_text_emitter;
+    dtkComposerNodeTransmitter<QUrl> *file_url_emitter;
 
 public slots:
     void onRequestFinished(int id, bool error);

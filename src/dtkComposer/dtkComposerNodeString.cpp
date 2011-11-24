@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 15:12:01 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 12:44:53 2011 (+0100)
+ * Last-Updated: Thu Nov 24 14:08:09 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 414
+ *     Update #: 421
  */
 
 /* Commentary: 
@@ -350,7 +350,7 @@ void dtkComposerNodeString::collapse(void)
  */
 void dtkComposerNodeString::touch(void)
 {
-    if (!d->interactive) {
+    if(!d->interactive && d->receiver) {
         d->editor->setPlainText(d->receiver->data());
         d->editor->update();
     }
@@ -426,7 +426,7 @@ dtkComposerNodeAbstractTransmitter *dtkComposerNodeString::emitter(dtkComposerNo
  *
  *  Reimplemented from dtkComposerNode.
  */
-bool dtkComposerNodeString::setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+bool dtkComposerNodeString::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
 {
     Q_UNUSED(destination);
 
@@ -435,10 +435,13 @@ bool dtkComposerNodeString::setReceiver(dtkComposerEdge *route, dtkComposerNodeP
 
     d->receivers.insert(route, static_cast<dtkComposerNodeTransmitter<QString> *>(route->source()->node()->emitter(route->source())));
 
+    if (d->receivers.count() == 1)
+        d->receiver = d->receivers.values().first();
+
     d->interactive = false;
 
     d->editor->setTextInteractionFlags(Qt::NoTextInteraction);
-    d->editor->setPlainText("");    
+    d->editor->setPlainText("");
 
     return true;
 }

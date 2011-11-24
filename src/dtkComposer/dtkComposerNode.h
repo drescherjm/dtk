@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. nov. 17 20:48:36 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 359
+ * Last-Updated: Thu Nov 24 12:54:32 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 361
  */
 
 /* Commentary: 
@@ -202,8 +202,7 @@ public:
     virtual dtkComposerNodeAbstractTransmitter *emitter(dtkComposerNodeProperty *property);
 
 public:
-    virtual bool setReceiver(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
-
+    virtual bool onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
     virtual bool onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property);
 
 protected:

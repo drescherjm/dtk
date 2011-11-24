@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: lun. nov. 21 16:57:04 2011 (+0100)
+ * Last-Updated: jeu. nov. 24 16:44:31 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1043
+ *     Update #: 1204
  */
 
 /* Commentary: 
@@ -39,6 +39,7 @@ public:
     QHash<QString, dtkDistributedSocket *> sockets;
     QHash<QString, QList<dtkDistributedNode *> > nodes;
     QHash<QString, QList<dtkDistributedJob *> > jobs;
+    QHash<QString, QList<QProcess *> > servers;
 
     void read_status(QByteArray const &buffer, dtkDistributedSocket *socket);
 };
@@ -86,12 +87,64 @@ void dtkDistributedController::submit(const QUrl& server,  QByteArray& resources
     d->sockets[server.toString()]->sendRequest(msg);
 }
 
+// deploy a server instance on remote host (to be executed before connect)
+void dtkDistributedController::deploy(const QUrl& server)
+{
+    if(!d->servers.keys().contains(server.toString())) {
+        QProcess *serverProc = new QProcess (this);
+        QStringList args;
+        args << server.host();
+
+        QSettings settings("inria", "dtk");
+        settings.beginGroup("distributed");
+        QString defaultPath;
+        if (!settings.contains(server.host()+"_server_path")) {
+            defaultPath =  "./dtkDistributedServer";
+            dtkDebug() << "Filling in empty path in settings with default path:" << defaultPath;
+        }
+
+        QString path = settings.value(server.host()+"_server_path", defaultPath).toString();
+
+        QString forward = server.host()+"_server_forward";
+        if (settings.contains(forward) && settings.value(forward).toString() == "true") {
+            dtkDebug() << "ssh port forwarding is set for server " << server.host();
+            args << "-L" << QString::number(server.port())+":localhost:"+QString::number(server.port());
+        }
+
+        args << path;
+        args << "-p";
+        args << QString::number(server.port());
+        args << "--"+settings.value(server.host()+"_server_type", "torque").toString();
+
+        settings.endGroup();
+        serverProc->start("ssh", args);
+        if (!serverProc->waitForStarted(5000))
+            dtkDebug() << "server not yet started  " << args;
+        if (!serverProc->waitForReadyRead(2000))
+            dtkDebug() << "no output from server yet" << args;
+        d->servers[server.toString()] << serverProc;
+    } else {
+        dtkDebug() << "dtkDistributedServer already started on " << server.host();
+    }
+}
+
 void dtkDistributedController::connect(const QUrl& server)
 {
     if(!d->sockets.keys().contains(server.toString())) {
 
         dtkDistributedSocket *socket = new dtkDistributedSocket(this);
-        socket->connectToHost(server.host(), server.port());
+
+        QSettings settings("inria", "dtk");
+        settings.beginGroup("distributed");
+        QString forward = server.host()+"_server_forward";
+
+        if (settings.contains(forward) && settings.value(forward).toString() == "true")
+            socket->connectToHost("localhost", server.port());
+        else
+            socket->connectToHost(server.host(), server.port());
+
+        settings.endGroup();
+
 
         if(socket->waitForConnected()) {
 

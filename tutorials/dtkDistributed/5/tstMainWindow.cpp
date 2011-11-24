@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Sep 20 11:31:26 2011 (+0200)
  * Version: $Id$
- * Last-Updated: lun. nov. 21 17:31:58 2011 (+0100)
+ * Last-Updated: jeu. nov. 24 16:04:20 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 108
+ *     Update #: 117
  */
 
 /* Commentary: 
@@ -130,6 +130,7 @@ tstMainWindow::~tstMainWindow(void)
 
 void tstMainWindow::onConnect(void)
 {
+    d->controller->deploy(QUrl(d->host_address->text()));
     d->controller->connect(QUrl(d->host_address->text()));
 }
 
@@ -137,9 +138,12 @@ void tstMainWindow::onSubmit(void)
 {
     QVariantMap job;
     QVariantMap resources;
+    QVariantMap properties;
+    properties.insert("cpu_model","xeon");
     resources.insert("cores", d->submit_cores->text());
     resources.insert("nodes", d->submit_nodes->text());
     job.insert("resources", resources);
+    job.insert("properties", properties);
     job.insert("walltime", "00:15:00");
     job.insert("application", "dtkDistributedTutorial4Slave "
                + d->submit_value->text()

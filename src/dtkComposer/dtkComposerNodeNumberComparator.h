@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Mar  7 09:22:35 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr  8 16:33:05 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 4
+ * Last-Updated: Thu Nov 24 17:42:03 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 7
  */
 
 /* Commentary: 
@@ -44,8 +44,6 @@ public:
      dtkComposerNodeNumberComparator(dtkComposerNode *parent = 0);
     ~dtkComposerNodeNumberComparator(void);
 
-    QVariant value(dtkComposerNodeProperty *property);
-
 public:
     Operation operation(void);
 
@@ -55,6 +53,13 @@ protected:
     void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
     void  run(void);
     void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+
+public:
+    dtkComposerNodeAbstractTransmitter *emitter(dtkComposerNodeProperty *property);
+
+public:
+    bool  onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property);
+    bool onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property);
 
 private:
     dtkComposerNodeNumberComparatorPrivate *d;

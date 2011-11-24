@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Mar  1 10:18:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 17:34:18 2011 (+0100)
+ * Last-Updated: Thu Nov 24 17:52:49 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 336
+ *     Update #: 343
  */
 
 /* Commentary: 
@@ -195,25 +195,11 @@ public:
     dtkComposerNodeNumberOperator::Operation operation;
 
 public:
-    QVariant value_op1;
-    QVariant value_op2;
-    QVariant value;
-
-    int       value_i;
-    qlonglong value_l;
-    double    value_d;
-
     QVariant::Type value_type;
 
 public:    
-    int op1_value_i;
-    int op2_value_i;
-
-    qlonglong op1_value_l;
-    qlonglong op2_value_l;
-
-    double op1_value_d;
-    double op2_value_d;
+    int op1_value_i; qlonglong op1_value_l; double op1_value_d;
+    int op2_value_i; qlonglong op2_value_l; double op2_value_d;
 
     QVariant::Type op1_type;
     QVariant::Type op2_type;
@@ -252,9 +238,6 @@ void dtkComposerNodeNumberOperatorPrivate::setValueType(void)
         this->value_type = QVariant::Int;
         this->emitter_i = new dtkComposerNodeTransmitter<int>();
     }
-
-    qDebug() << "\n\n\n\n\n\n";
-    qDebug() << DTK_PRETTY_FUNCTION << this;
 
     foreach(dtkComposerEdge *edge, q->g->rightEdges())
         edge->destination()->node()->g->onEdgeConnected(edge);

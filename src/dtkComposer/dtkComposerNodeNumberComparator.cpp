@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Mar  7 09:24:11 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 11:24:44 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 55
+ * Last-Updated: Thu Nov 24 18:15:00 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 129
  */
 
 /* Commentary: 
@@ -17,17 +17,16 @@
  * 
  */
 
-
 #include "dtkComposerEdge.h"
 #include "dtkComposerNodeNumber.h"
 #include "dtkComposerNodeNumberComparator.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerNodeTransmitter.h"
 
 #include <dtkCore/dtkGlobal.h>
-#include <dtkMath/dtkMath.h>
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeNumberComparatorLabel
+// dtkComposerNodeNumberComparatorLabel declaration
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeNumberComparatorLabel : public QGraphicsItem
@@ -47,9 +46,15 @@ protected:
 
 public:
     dtkComposerNodeNumberComparator *parent_node;
+
+public:
     QPainterPath path;
     QString text;
 };
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberComparatorLabel implementation
+// /////////////////////////////////////////////////////////////////
 
 dtkComposerNodeNumberComparatorLabel::dtkComposerNodeNumberComparatorLabel(dtkComposerNodeNumberComparator *parent) : QGraphicsItem(parent)
 {
@@ -150,15 +155,20 @@ void dtkComposerNodeNumberComparatorLabel::mousePressEvent(QGraphicsSceneMouseEv
 }
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeNumberComparatorPrivate
+// dtkComposerNodeNumberComparatorPrivate declaration
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeNumberComparatorPrivate
 {
 public:
-    dtkComposerNodeProperty *property_input_value_op1;
-    dtkComposerNodeProperty *property_input_value_op2;
-    dtkComposerNodeProperty *property_output_value;
+    bool compare(const double&, const double&, dtkComposerNodeNumberComparator::Operation);
+    bool compare(const qlonglong&, const qlonglong&, dtkComposerNodeNumberComparator::Operation);
+    bool compare(const int&, const int&, dtkComposerNodeNumberComparator::Operation);
+
+public:
+    dtkComposerNodeProperty *property_left_value_op1;
+    dtkComposerNodeProperty *property_left_value_op2;
+    dtkComposerNodeProperty *property_right_value;
 
 public:
     dtkComposerNodeNumberComparatorLabel *label;
@@ -166,39 +176,128 @@ public:
 public:
     dtkComposerNodeNumberComparator::Operation operation;
 
+public:    
+    int op1_value_i; qlonglong op1_value_l; double op1_value_d;
+    int op2_value_i; qlonglong op2_value_l; double op2_value_d;
+
+    QVariant::Type op1_type;
+    QVariant::Type op2_type;
+
 public:
-    QVariant value_op1;
-    QVariant value_op2;
-    bool value;
+    dtkComposerNodeTransmitter<bool> *emitter;
+
+    QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<int> *> receivers_i;
+    QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<qlonglong> *> receivers_l;
+    QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<double> *> receivers_d;
+
+public:
+    dtkComposerNodeNumberComparator *q;
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeNumberComparator
+// dtkComposerNodeNumberComparatorPrivate implementation
 // /////////////////////////////////////////////////////////////////
 
+bool dtkComposerNodeNumberComparatorPrivate::compare(const double& lhs, const double& rhs, dtkComposerNodeNumberComparator::Operation operation)
+{
+    switch(operation) {
+    case dtkComposerNodeNumberComparator::LesserThan:
+        return lhs < rhs;
+    case dtkComposerNodeNumberComparator::LesserThanOrEqual:
+        return lhs <= rhs;
+    case dtkComposerNodeNumberComparator::GreaterThan:
+        return lhs > rhs;
+    case dtkComposerNodeNumberComparator::GreaterThanOrEqual:
+        return lhs >= rhs;
+    case dtkComposerNodeNumberComparator::Equal:
+        return lhs == rhs;
+    case dtkComposerNodeNumberComparator::Differ:
+        return lhs != rhs;
+    default:
+        return false;
+    }
+}
+
+bool dtkComposerNodeNumberComparatorPrivate::compare(const qlonglong& lhs, const qlonglong& rhs, dtkComposerNodeNumberComparator::Operation operation)
+{
+    switch(operation) {
+    case dtkComposerNodeNumberComparator::LesserThan:
+        return lhs < rhs;
+    case dtkComposerNodeNumberComparator::LesserThanOrEqual:
+        return lhs <= rhs;
+    case dtkComposerNodeNumberComparator::GreaterThan:
+        return lhs > rhs;
+    case dtkComposerNodeNumberComparator::GreaterThanOrEqual:
+        return lhs >= rhs;
+    case dtkComposerNodeNumberComparator::Equal:
+        return lhs == rhs;
+    case dtkComposerNodeNumberComparator::Differ:
+        return lhs != rhs;
+    default:
+        return false;
+    }
+}
+
+bool dtkComposerNodeNumberComparatorPrivate::compare(const int& lhs, const int& rhs, dtkComposerNodeNumberComparator::Operation operation)
+{
+    switch(operation) {
+    case dtkComposerNodeNumberComparator::LesserThan:
+        return lhs < rhs;
+    case dtkComposerNodeNumberComparator::LesserThanOrEqual:
+        return lhs <= rhs;
+    case dtkComposerNodeNumberComparator::GreaterThan:
+        return lhs > rhs;
+    case dtkComposerNodeNumberComparator::GreaterThanOrEqual:
+        return lhs >= rhs;
+    case dtkComposerNodeNumberComparator::Equal:
+        return lhs == rhs;
+    case dtkComposerNodeNumberComparator::Differ:
+        return lhs != rhs;
+    default:
+        return false;
+    }
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberComparator implementation
+// /////////////////////////////////////////////////////////////////
+
+//! Constructs number operator node.
+/*! 
+ *  operation < is set by default.
+ */
 dtkComposerNodeNumberComparator::dtkComposerNodeNumberComparator(dtkComposerNode *parent) : dtkComposerNode(parent), d(new dtkComposerNodeNumberComparatorPrivate)
 {
-    d->property_input_value_op1 = new dtkComposerNodeProperty("left operand", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
-    d->property_input_value_op2 = new dtkComposerNodeProperty("right operand", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
+    d->q = this;
 
-    d->property_output_value = new dtkComposerNodeProperty("result", dtkComposerNodeProperty::Right, dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, this);
+    d->property_left_value_op1 = new dtkComposerNodeProperty("left operand", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
+    d->property_left_value_op2 = new dtkComposerNodeProperty("right operand", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
+
+    d->property_right_value = new dtkComposerNodeProperty("result", dtkComposerNodeProperty::Right, dtkComposerNodeProperty::AsOutput, dtkComposerNodeProperty::Multiple, this);
 
     d->label = new dtkComposerNodeNumberComparatorLabel(this);
     d->label->setPos(0, 0);
 
     d->operation = dtkComposerNodeNumberComparator::LesserThan;
 
-    d->value = false;
-
     this->setTitle("NumberComparator");
     this->setKind(dtkComposerNode::Process);
     this->setType("dtkComposerNumberComparator");
 
-    this->g->appendLeftProperty(d->property_input_value_op1);
-    this->g->appendLeftProperty(d->property_input_value_op2);
-    this->g->appendRightProperty(d->property_output_value);
+    this->g->appendLeftProperty(d->property_left_value_op1);
+    this->g->appendLeftProperty(d->property_left_value_op2);
+    this->g->appendRightProperty(d->property_right_value);
+
+    d->op1_type = QVariant::Invalid;
+    d->op2_type = QVariant::Invalid;
+
+    d->emitter = new dtkComposerNodeTransmitter<bool>();
 }
 
+//! Destroys number operator node.
+/*! 
+ *  
+ */
 dtkComposerNodeNumberComparator::~dtkComposerNodeNumberComparator(void)
 {
     delete d;
@@ -206,19 +305,10 @@ dtkComposerNodeNumberComparator::~dtkComposerNodeNumberComparator(void)
     d = NULL;
 }
 
-QVariant dtkComposerNodeNumberComparator::value(dtkComposerNodeProperty *property)
-{
-    if(property == d->property_output_value)
-        return d->value;
-
-    return QVariant();
-}
-
-dtkComposerNodeNumberComparator::Operation dtkComposerNodeNumberComparator::operation(void)
-{
-    return d->operation;
-}
-
+//! Sets current operator type.
+/*! 
+ *
+ */
 void dtkComposerNodeNumberComparator::setOperation(dtkComposerNodeNumberComparator::Operation operation)
 {
     d->operation = operation;
@@ -247,19 +337,245 @@ void dtkComposerNodeNumberComparator::setOperation(dtkComposerNodeNumberComparat
     }
 }
 
-void dtkComposerNodeNumberComparator::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+//! Returns current operation type.
+/*! 
+ *  
+ */
+dtkComposerNodeNumberComparator::Operation dtkComposerNodeNumberComparator::operation(void)
 {
-    if(property == d->property_input_value_op1)
-        d->value_op1 = edge->source()->node()->value(edge->source());
-
-    if(property == d->property_input_value_op2)
-        d->value_op2 = edge->source()->node()->value(edge->source());
+    return d->operation;
 }
 
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
+void dtkComposerNodeNumberComparator::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+{
+    if(property == d->property_left_value_op1) {
+
+        switch(d->op1_type) {
+            
+        case QVariant::Int:
+            d->op1_value_i = d->receivers_i.value(route)->data();
+            break;
+        case QVariant::LongLong:
+            d->op1_value_l = d->receivers_l.value(route)->data();
+            break;
+        case QVariant::Double:
+            d->op1_value_d = d->receivers_d.value(route)->data();
+            break;
+        }
+
+    } else if (property == d->property_left_value_op2) {
+
+        switch(d->op2_type) {
+            
+        case QVariant::Int:
+            d->op2_value_i = d->receivers_i.value(route)->data();
+            break;
+        case QVariant::LongLong:
+            d->op2_value_l = d->receivers_l.value(route)->data();
+            break;
+        case QVariant::Double:
+            d->op2_value_d = d->receivers_d.value(route)->data();
+            break;
+        }
+    }
+}
+
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
 void dtkComposerNodeNumberComparator::run(void)
 {
-    QVariant a = d->value_op1;
-    QVariant b = d->value_op2;
+    if (d->op1_type == QVariant::Double) {
+
+        if (d->op2_type == QVariant::Double)
+            d->emitter->setData(d->compare(d->op1_value_d, d->op2_value_d, d->operation));
+
+        else if (d->op2_type == QVariant::LongLong)
+            d->emitter->setData(d->compare(d->op1_value_d, (double)d->op2_value_l, d->operation));
+
+        else if (d->op2_type == QVariant::Int)
+            d->emitter->setData(d->compare(d->op1_value_d, (double)d->op2_value_i, d->operation));
+
+    } else if (d->op1_type == QVariant::LongLong) {
+
+        if (d->op2_type == QVariant::Double)
+            d->emitter->setData(d->compare((double)d->op1_value_l, d->op2_value_d, d->operation));
+
+        else if (d->op2_type == QVariant::LongLong)
+            d->emitter->setData(d->compare(d->op1_value_l, d->op2_value_l, d->operation));
+
+        else if (d->op2_type == QVariant::Int)
+            d->emitter->setData(d->compare(d->op1_value_l, (qlonglong)d->op2_value_i, d->operation));
+    
+    } else if (d->op1_type == QVariant::Int) {
+
+        if (d->op2_type == QVariant::Double)
+            d->emitter->setData(d->compare((double)d->op1_value_i, d->op2_value_d, d->operation));
+
+        else if (d->op2_type == QVariant::LongLong)
+            d->emitter->setData(d->compare((qlonglong)d->op1_value_i, d->op2_value_l, d->operation));
+
+        else if (d->op2_type == QVariant::Int)
+            d->emitter->setData(d->compare(d->op1_value_i, d->op2_value_i, d->operation));
+    }
+}
+
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
+void dtkComposerNodeNumberComparator::push(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+{
+    Q_UNUSED(route);
+    Q_UNUSED(property);
+}
+
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
+dtkComposerNodeAbstractTransmitter *dtkComposerNodeNumberComparator::emitter(dtkComposerNodeProperty *property)
+{
+    if(!(property == d->property_right_value))
+        return NULL;
+
+    return d->emitter;
+}
+
+//! Sets the receiver from the emitter of the node at the source of \a
+//! route.
+/*! 
+ *  When the source emitter can be casted into current receiver type,
+ *  true is returned. Else it returns false.
+ *
+ *  It makes also the node non-interactive and clears the text of
+ *  edition aera.
+ *
+ *  Reimplemented from dtkComposerNode.
+ */
+bool dtkComposerNodeNumberComparator::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+{
+    Q_UNUSED(destination);
+
+    bool receiver_set = true;
+
+    if (destination == d->property_left_value_op1) {
+
+        if (d->op1_type == QVariant::Invalid) {
+
+            if (dtkComposerNodeTransmitter<int> *receiver_i = dynamic_cast<dtkComposerNodeTransmitter<int> *>(route->source()->node()->emitter(route->source()))) {
+                d->op1_type = QVariant::Int;
+                d->receivers_i.insert(route, receiver_i);
+
+            } else if (dtkComposerNodeTransmitter<qlonglong> *receiver_l = dynamic_cast<dtkComposerNodeTransmitter<qlonglong> *>(route->source()->node()->emitter(route->source()))) {
+                d->op1_type = QVariant::LongLong;
+                d->receivers_l.insert(route, receiver_l);
+
+            } else if (dtkComposerNodeTransmitter<double> *receiver_d = dynamic_cast<dtkComposerNodeTransmitter<double> *>(route->source()->node()->emitter(route->source()))) {
+                d->op1_type = QVariant::Double;
+                d->receivers_d.insert(route, receiver_d);
+            }
+
+        } else if (d->op1_type == QVariant::Int) {
+
+            if (dtkComposerNodeTransmitter<int> *receiver_i = dynamic_cast<dtkComposerNodeTransmitter<int> *>(route->source()->node()->emitter(route->source()))) {
+                d->receivers_i.insert(route, receiver_i);
+
+            } else {
+
+                receiver_set = false;
+            }
+
+        } else if (d->op1_type == QVariant::LongLong) {
+
+            if (dtkComposerNodeTransmitter<qlonglong> *receiver_l = dynamic_cast<dtkComposerNodeTransmitter<qlonglong> *>(route->source()->node()->emitter(route->source()))) {
+                d->receivers_l.insert(route, receiver_l);
+
+            } else {
+
+                receiver_set = false;
+            }
+
+        } else if (d->op1_type == QVariant::Double) {
+
+            if (dtkComposerNodeTransmitter<double> *receiver_d = dynamic_cast<dtkComposerNodeTransmitter<double> *>(route->source()->node()->emitter(route->source()))) {
+                d->receivers_d.insert(route, receiver_d);
+
+            } else {
+
+                receiver_set = false;
+            }
+        }
+    
+    } else {
+
+        if (d->op2_type == QVariant::Invalid) {
+
+            if (dtkComposerNodeTransmitter<int> *receiver_i = dynamic_cast<dtkComposerNodeTransmitter<int> *>(route->source()->node()->emitter(route->source()))) {
+                d->op2_type = QVariant::Int;
+                d->receivers_i.insert(route, receiver_i);
+
+            } else if (dtkComposerNodeTransmitter<qlonglong> *receiver_l = dynamic_cast<dtkComposerNodeTransmitter<qlonglong> *>(route->source()->node()->emitter(route->source()))) {
+                d->op2_type = QVariant::LongLong;
+                d->receivers_l.insert(route, receiver_l);
+
+            } else if (dtkComposerNodeTransmitter<double> *receiver_d = dynamic_cast<dtkComposerNodeTransmitter<double> *>(route->source()->node()->emitter(route->source()))) {
+                d->op2_type = QVariant::Double;
+                d->receivers_d.insert(route, receiver_d);
+            }
+
+        } else if (d->op2_type == QVariant::Int) {
+
+            if (dtkComposerNodeTransmitter<int> *receiver_i = dynamic_cast<dtkComposerNodeTransmitter<int> *>(route->source()->node()->emitter(route->source()))) {
+                d->receivers_i.insert(route, receiver_i);
+
+            } else {
+
+                receiver_set = false;
+            }
+
+        } else if (d->op2_type == QVariant::LongLong) {
+
+            if (dtkComposerNodeTransmitter<qlonglong> *receiver_l = dynamic_cast<dtkComposerNodeTransmitter<qlonglong> *>(route->source()->node()->emitter(route->source()))) {
+                d->receivers_l.insert(route, receiver_l);
+
+            } else {
+
+                receiver_set = false;
+            }
+
+        } else if (d->op2_type == QVariant::Double) {
+
+            if (dtkComposerNodeTransmitter<double> *receiver_d = dynamic_cast<dtkComposerNodeTransmitter<double> *>(route->source()->node()->emitter(route->source()))) {
+                d->receivers_d.insert(route, receiver_d);
+
+            } else {
+
+                receiver_set = false;
+            }
+        }
+    }
+
+    return receiver_set;
+}
+
+//! 
+/*! 
+ *  Reimplemented from dtkComposerNode.
+ */
+bool dtkComposerNodeNumberComparator::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+{
+    return true;
+}
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
 
     // dtkComposerNodeNumber::Genre genre = dtkComposerNodeNumber::genre(a, b);
 
@@ -439,10 +755,3 @@ void dtkComposerNodeNumberComparator::run(void)
     //         break;
     //     }
     // }
-}
-
-void dtkComposerNodeNumberComparator::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
-{
-    Q_UNUSED(edge);
-    Q_UNUSED(property);
-}

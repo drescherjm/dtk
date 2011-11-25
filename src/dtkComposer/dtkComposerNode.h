@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 16:46:15 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 363
+ * Last-Updated: Fri Nov 25 15:35:47 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 367
  */
 
 /* Commentary: 
@@ -204,6 +204,13 @@ public:
 public:
     virtual bool onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
     virtual bool onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property);
+
+public:
+    virtual void      updateSourceRoutes(dtkComposerEdge *route);
+    virtual void updateDestinationRoutes(dtkComposerEdge *route);
+
+    virtual void      updateSourceNodes(dtkComposerEdge *route);
+    virtual void updateDestinationNodes(dtkComposerEdge *route);
 
 protected:
     friend class dtkComposerEvaluatorPrivate;

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Nov  4 13:49:39 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov 16 12:51:24 2011 (+0100)
+ * Last-Updated: Fri Nov 25 16:14:54 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 18
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -49,9 +49,29 @@ public:
     void removeRightRoute(dtkComposerEdge *route);
     void  removeAllRoutes(void);
 
+    void  appendLeftRelayRoute(dtkComposerEdge *route);
+    void appendRightRelayRoute(dtkComposerEdge *route);
+
+    void  removeLeftRelayRoute(dtkComposerEdge *route);
+    void removeRightRelayRoute(dtkComposerEdge *route);
+    void  removeAllRelayRoutes(void);
+
+    void  appendLeftNode(dtkComposerNode *node);
+    void appendRightNode(dtkComposerNode *node);
+
+    void  removeLeftNode(dtkComposerNode *node);
+    void removeRightNode(dtkComposerNode *node);
+    void  removeAllNodes(void);
+
 public:
     const QList<dtkComposerEdge *>&  leftRoutes(void) const;
     const QList<dtkComposerEdge *>& rightRoutes(void) const;
+
+    const QList<dtkComposerEdge *>&  leftRelayRoutes(void) const;
+    const QList<dtkComposerEdge *>& rightRelayRoutes(void) const;
+
+    const QList<dtkComposerNode *>&  leftNodes(void) const;
+    const QList<dtkComposerNode *>& rightNodes(void) const;
 
 public:
     bool canConnectRoute(dtkComposerNodeProperty *source, dtkComposerNodeProperty *destination, dtkComposerNode *destin_node);

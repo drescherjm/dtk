@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov 16 13:26:14 2011 (+0100)
+ * Last-Updated: Fri Nov 25 16:11:58 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 2628
+ *     Update #: 2637
  */
 
 /* Commentary: 
@@ -1056,42 +1056,52 @@ void dtkComposerNode::setupImplementation(QString implementation)
 
 bool dtkComposerNode::dirtyUpstreamNodes(void)
 {
-    foreach(dtkComposerEdge *i_route, l->leftRoutes()) {
+    foreach(dtkComposerNode *up_node, this->l->leftNodes())
+        if (up_node->dirty())
+            return true;
 
-        if(dtkComposerNodeLoop *loop = dynamic_cast<dtkComposerNodeLoop *>(i_route->source()->node())) {
-
-            if(this->isChildOf(loop)) {
-
-                continue;
-
-                // if(loop->isRunning())
-                //     continue;
-                // else {
-                //     qDebug() << DTK_PRETTY_FUNCTION;
-                //     return true;
-                // }
-
-            } else {
-
-                if (i_route->source()->node()->dirty()) {
-                    return true;
-                }
-            }
-
-        } else {
-
-            if (i_route->source()->node()->dirty()) {
-                return true;
-            }
-        }
-    }
     return false;
+
+
+    // foreach(dtkComposerEdge *i_route, l->leftRoutes()) {
+
+    //     if(dtkComposerNodeLoop *loop = dynamic_cast<dtkComposerNodeLoop *>(i_route->source()->node())) {
+
+    //         if(this->isChildOf(loop)) {
+
+    //             continue;
+
+    //             // if(loop->isRunning())
+    //             //     continue;
+    //             // else {
+    //             //     qDebug() << DTK_PRETTY_FUNCTION;
+    //             //     return true;
+    //             // }
+
+    //         } else {
+
+    //             if (i_route->source()->node()->dirty()) {
+    //                 return true;
+    //             }
+    //         }
+
+    //     } else {
+
+    //         if (i_route->source()->node()->dirty()) {
+    //             return true;
+    //         }
+    //     }
+    // }
+    // return false;
 }
 
 void dtkComposerNode::markDirtyDownstreamNodes(void)
 {
-    foreach(dtkComposerEdge *o_route, l->rightRoutes())
-        o_route->destination()->node()->setDirty(true);
+    foreach(dtkComposerNode *down_node, this->l->rightNodes())
+        down_node->setDirty(true);
+
+    // foreach(dtkComposerEdge *o_route, l->rightRoutes())
+    //     o_route->destination()->node()->setDirty(true);
 }
 
 void dtkComposerNode::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
@@ -1139,6 +1149,26 @@ bool dtkComposerNode::onRightRouteConnected(dtkComposerEdge *route, dtkComposerN
 
     DTK_DEFAULT_IMPLEMENTATION;
     return true;
+}
+
+void dtkComposerNode::updateSourceRoutes(dtkComposerEdge *route)
+{
+    this->l->appendLeftRoute(route);
+}
+
+void dtkComposerNode::updateDestinationRoutes(dtkComposerEdge *route)
+{
+    this->l->appendRightRoute(route);
+}
+
+void dtkComposerNode::updateSourceNodes(dtkComposerEdge *route)
+{
+    this->l->appendLeftNode(route->source()->node());
+}
+
+void dtkComposerNode::updateDestinationNodes(dtkComposerEdge *route)
+{
+    this->l->appendRightNode(route->destination()->node());
 }
 
 // /////////////////////////////////////////////////////////////////

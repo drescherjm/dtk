@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Nov  4 14:16:40 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Nov 25 15:04:53 2011 (+0100)
+ * Last-Updated: Fri Nov 25 16:17:42 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 66
+ *     Update #: 76
  */
 
 /* Commentary: 
@@ -32,6 +32,12 @@ class dtkComposerNodeLogicPrivate
 public:
     QList<dtkComposerEdge *>  left_routes;
     QList<dtkComposerEdge *> right_routes;
+
+    QList<dtkComposerEdge *>  left_relay_routes;
+    QList<dtkComposerEdge *> right_relay_routes;
+
+    QList<dtkComposerNode *>  left_nodes;
+    QList<dtkComposerNode *> right_nodes;
 
 public:
     dtkComposerNode *node;
@@ -121,6 +127,110 @@ void dtkComposerNodeLogic::removeAllRoutes(void)
     d->right_routes.clear();
 }
 
+//! Appends \a route to the list of left relay routes.
+/*! 
+ *  
+ */
+void dtkComposerNodeLogic::appendLeftRelayRoute(dtkComposerEdge *route)
+{
+    if (d->left_relay_routes.contains(route))
+        return;
+
+    d->left_relay_routes << route;
+}
+
+//! Appends \a route to the list of right relay routes.
+/*! 
+ *  
+ */
+void dtkComposerNodeLogic::appendRightRelayRoute(dtkComposerEdge *route)
+{
+    if (d->right_relay_routes.contains(route))
+        return;
+
+    d->right_relay_routes << route;
+}
+
+//! Removes \a route from the list of left relay routes.
+/*! 
+ *  
+ */
+void dtkComposerNodeLogic::removeLeftRelayRoute(dtkComposerEdge *route)
+{
+    d->left_relay_routes.removeAll(route);
+}
+
+//! Removes \a route from the list of right relay routes.
+/*! 
+ *  
+ */
+void dtkComposerNodeLogic::removeRightRelayRoute(dtkComposerEdge *route)
+{
+    d->right_relay_routes.removeAll(route);
+}
+
+//! Clears left and right lists of relay routes.
+/*! 
+ *  
+ */
+void dtkComposerNodeLogic::removeAllRelayRoutes(void)
+{
+    d->left_relay_routes.clear();
+    d->right_relay_routes.clear();
+}
+
+//! Appends \a node to the list of left nodes.
+/*! 
+ *  
+ */
+void dtkComposerNodeLogic::appendLeftNode(dtkComposerNode *node)
+{
+    if (d->left_nodes.contains(node))
+        return;
+
+    d->left_nodes << node;
+}
+
+//! Appends \a node to the list of right nodes.
+/*! 
+ *  
+ */
+void dtkComposerNodeLogic::appendRightNode(dtkComposerNode *node)
+{
+    if (d->right_nodes.contains(node))
+        return;
+
+    d->right_nodes << node;
+}
+
+//! Removes \a node from the list of left nodes.
+/*! 
+ *  
+ */
+void dtkComposerNodeLogic::removeLeftNode(dtkComposerNode *node)
+{
+    d->left_nodes.removeAll(node);
+}
+
+//! Removes \a node from the list of right nodes.
+/*! 
+ *  
+ */
+void dtkComposerNodeLogic::removeRightNode(dtkComposerNode *node)
+{
+    d->right_nodes.removeAll(node);
+}
+
+//! Clears left and right lists of nodes.
+/*! 
+ *  
+ */
+void dtkComposerNodeLogic::removeAllNodes(void)
+{
+    d->left_nodes.clear();
+    d->right_nodes.clear();
+}
+
 //! Returns list of left routes.
 /*! 
  *  
@@ -139,7 +249,43 @@ const QList<dtkComposerEdge *>& dtkComposerNodeLogic::rightRoutes(void) const
     return d->right_routes;
 }
 
-//! Returns list of right routes.
+//! Returns list of left relay routes.
+/*! 
+ *  
+ */
+const QList<dtkComposerEdge *>& dtkComposerNodeLogic::leftRelayRoutes(void) const
+{
+    return d->left_relay_routes;
+}
+
+//! Returns list of right relay routes.
+/*! 
+ *  
+ */
+const QList<dtkComposerEdge *>& dtkComposerNodeLogic::rightRelayRoutes(void) const
+{
+    return d->right_relay_routes;
+}
+
+//! Returns list of left nodes.
+/*! 
+ *  
+ */
+const QList<dtkComposerNode *>& dtkComposerNodeLogic::leftNodes(void) const
+{
+    return d->left_nodes;
+}
+
+//! Returns list of right nodes.
+/*! 
+ *  
+ */
+const QList<dtkComposerNode *>& dtkComposerNodeLogic::rightNodes(void) const
+{
+    return d->right_nodes;
+}
+
+//! 
 /*! 
  *  
  */
@@ -166,13 +312,17 @@ bool dtkComposerNodeLogic::canConnectRoute(dtkComposerNodeProperty *source, dtkC
         return false;
     }
 
-    if (!d->node->onRightRouteConnected(route, source)) {
-        delete route;
-        return false;
-    }
+    // if (!d->node->onRightRouteConnected(route, source)) {
+    //     delete route;
+    //     return false;
+    // }
+
+    destin_node->updateSourceRoutes(route);
+    d->node->updateDestinationRoutes(route);
+
+    destin_node->updateSourceNodes(route);
+    d->node->updateDestinationNodes(route);
     
-    destin_node->l->appendLeftRoute(route);
-    this->appendRightRoute(route);
 
     return true;
 }

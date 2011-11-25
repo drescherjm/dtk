@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 25 10:07:34 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 14:30:27 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 288
+ * Last-Updated: Fri Nov 25 14:07:00 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 289
  */
 
 /* Commentary: 
@@ -173,8 +173,9 @@ public:
 
 public:
     dtkComposerNodeTransmitter<bool> *emitter;
-
     dtkComposerNodeTransmitter<bool> *receiver;
+
+public:
     QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<bool> *> receivers;
 };
 

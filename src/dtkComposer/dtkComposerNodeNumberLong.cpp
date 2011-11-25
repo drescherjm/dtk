@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: jeu. nov. 17 21:55:21 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 16:47:26 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 23
+ * Last-Updated: Fri Nov 25 14:06:31 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -37,6 +37,9 @@ public:
 public:
     dtkComposerNodeTransmitter<qlonglong> *emitter;
     dtkComposerNodeTransmitter<qlonglong> *receiver;
+
+public:
+    QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<qlonglong> *> receivers;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -103,8 +106,9 @@ void dtkComposerNodeNumberLong::touch(void)
  */
 void dtkComposerNodeNumberLong::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
 {
-    Q_UNUSED(route);
     Q_UNUSED(property);
+
+    d->receiver = d->receivers.value(route);
 }
 
 //! 
@@ -158,6 +162,11 @@ bool dtkComposerNodeNumberLong::onLeftRouteConnected(dtkComposerEdge *route, dtk
 
     if (!(d->receiver = dynamic_cast<dtkComposerNodeTransmitter<qlonglong> *> (route->source()->node()->emitter(route->source()))))
         return false;
+
+    d->receivers.insert(route, static_cast<dtkComposerNodeTransmitter<qlonglong> *>(route->source()->node()->emitter(route->source())));
+
+    if (d->receivers.count() == 1)
+        d->receiver = d->receivers.values().first();
 
     this->interactiveOff();
 

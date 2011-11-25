@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Mar  1 10:18:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 17:52:49 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 343
+ * Last-Updated: Fri Nov 25 15:07:02 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 348
  */
 
 /* Commentary: 
@@ -528,11 +528,11 @@ dtkComposerNodeAbstractTransmitter *dtkComposerNodeNumberOperator::emitter(dtkCo
     if(!(property == d->property_right_value))
         return NULL;
 
-    if(d->value_type == QVariant::Int)
+    if (d->value_type == QVariant::Int)
         return d->emitter_i;
-    else if(d->value_type == QVariant::LongLong)
+    else if (d->value_type == QVariant::LongLong)
         return d->emitter_l;
-    else if(d->value_type == QVariant::Double)
+    else if (d->value_type == QVariant::Double)
         return d->emitter_d;
     
     return NULL;
@@ -553,8 +553,6 @@ bool dtkComposerNodeNumberOperator::onLeftRouteConnected(dtkComposerEdge *route,
 {
     Q_UNUSED(destination);
 
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-
     bool receiver_set = true;
     bool emit_message = false;
     QString message;
@@ -566,17 +564,21 @@ bool dtkComposerNodeNumberOperator::onLeftRouteConnected(dtkComposerEdge *route,
             if (dtkComposerNodeTransmitter<int> *receiver_i = dynamic_cast<dtkComposerNodeTransmitter<int> *>(route->source()->node()->emitter(route->source()))) {
                 d->op1_type = QVariant::Int;
                 d->receivers_i.insert(route, receiver_i);
-                message.append("Type of left operand is now Int.");
+                message.append("Type of left operand is Int.");
 
             } else if (dtkComposerNodeTransmitter<qlonglong> *receiver_l = dynamic_cast<dtkComposerNodeTransmitter<qlonglong> *>(route->source()->node()->emitter(route->source()))) {
                 d->op1_type = QVariant::LongLong;
                 d->receivers_l.insert(route, receiver_l);
-                message.append("Type of left operand is now LongLong.");
+                message.append("Type of left operand is LongLong.");
 
             } else if (dtkComposerNodeTransmitter<double> *receiver_d = dynamic_cast<dtkComposerNodeTransmitter<double> *>(route->source()->node()->emitter(route->source()))) {
                 d->op1_type = QVariant::Double;
                 d->receivers_d.insert(route, receiver_d);
-                message.append("Type of left operand is now Double.");
+                message.append("Type of left operand is Double.");
+
+            } else {
+
+                receiver_set = false;
             }
 
             emit_message = true;
@@ -625,17 +627,17 @@ bool dtkComposerNodeNumberOperator::onLeftRouteConnected(dtkComposerEdge *route,
             if (dtkComposerNodeTransmitter<int> *receiver_i = dynamic_cast<dtkComposerNodeTransmitter<int> *>(route->source()->node()->emitter(route->source()))) {
                 d->op2_type = QVariant::Int;
                 d->receivers_i.insert(route, receiver_i);
-                message.append("Type of right operand is now Int.");
+                message.append("Type of right operand is Int.");
 
             } else if (dtkComposerNodeTransmitter<qlonglong> *receiver_l = dynamic_cast<dtkComposerNodeTransmitter<qlonglong> *>(route->source()->node()->emitter(route->source()))) {
                 d->op2_type = QVariant::LongLong;
                 d->receivers_l.insert(route, receiver_l);
-                message.append("Type of right operand is now LongLong.");
+                message.append("Type of right operand is LongLong.");
 
             } else if (dtkComposerNodeTransmitter<double> *receiver_d = dynamic_cast<dtkComposerNodeTransmitter<double> *>(route->source()->node()->emitter(route->source()))) {
                 d->op2_type = QVariant::Double;
                 d->receivers_d.insert(route, receiver_d);
-                message.append("Type of right operand is now Double.");
+                message.append("Type of right operand is Double.");
 
             }
             emit_message = true;

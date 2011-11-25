@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Mar  7 09:24:11 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 18:15:00 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 129
+ * Last-Updated: Fri Nov 25 15:04:27 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 133
  */
 
 /* Commentary: 
@@ -464,7 +464,7 @@ bool dtkComposerNodeNumberComparator::onLeftRouteConnected(dtkComposerEdge *rout
 
     bool receiver_set = true;
 
-    if (destination == d->property_left_value_op1) {
+    if (destination == d->property_left_value_op1) {        
 
         if (d->op1_type == QVariant::Invalid) {
 
@@ -479,6 +479,10 @@ bool dtkComposerNodeNumberComparator::onLeftRouteConnected(dtkComposerEdge *rout
             } else if (dtkComposerNodeTransmitter<double> *receiver_d = dynamic_cast<dtkComposerNodeTransmitter<double> *>(route->source()->node()->emitter(route->source()))) {
                 d->op1_type = QVariant::Double;
                 d->receivers_d.insert(route, receiver_d);
+
+            } else {
+
+                receiver_set = false;
             }
 
         } else if (d->op1_type == QVariant::Int) {

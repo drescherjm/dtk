@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Nov  4 14:16:40 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 16:30:05 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 64
+ * Last-Updated: Fri Nov 25 15:04:53 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 66
  */
 
 /* Commentary: 
@@ -145,7 +145,7 @@ const QList<dtkComposerEdge *>& dtkComposerNodeLogic::rightRoutes(void) const
  */
 bool dtkComposerNodeLogic::canConnectRoute(dtkComposerNodeProperty *source, dtkComposerNodeProperty *destination, dtkComposerNode *destin_node)
 {
-    qDebug() << DTK_PRETTY_FUNCTION << this->node();
+    // qDebug() << DTK_PRETTY_FUNCTION << this->node();
 
     foreach(dtkComposerEdge *left, destin_node->l->leftRoutes()) {
         if (left->source() == source && left->destination() == destination)
@@ -172,7 +172,7 @@ bool dtkComposerNodeLogic::canConnectRoute(dtkComposerNodeProperty *source, dtkC
     }
     
     destin_node->l->appendLeftRoute(route);
-    d->node->l->appendRightRoute(route);
+    this->appendRightRoute(route);
 
     return true;
 }

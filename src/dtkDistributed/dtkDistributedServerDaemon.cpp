@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: lun. nov. 21 17:08:18 2011 (+0100)
+ * Last-Updated: jeu. nov. 24 17:52:06 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 655
+ *     Update #: 672
  */
 
 /* Commentary: 
@@ -42,7 +42,11 @@ dtkDistributedServerDaemon::dtkDistributedServerDaemon(quint16 port, QObject *pa
 {
     d->manager = NULL;
 
-    this->listen(QHostAddress::Any, port);
+    if (!this->listen(QHostAddress::Any, port)) {
+        qDebug() << "Can't listen on port"  << port << ", aborting";
+        exit(1);
+    } else
+        qDebug() << "OK, server is waiting for incoming connection on port"  << port ;
 
     dtkDistributedServiceBase::instance()->logMessage("Server daemon listening on port " + QString::number(port));
 }

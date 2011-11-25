@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. nov. 24 16:44:31 2011 (+0100)
+ * Last-Updated: ven. nov. 25 10:22:38 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1204
+ *     Update #: 1280
  */
 
 /* Commentary: 
@@ -93,8 +93,13 @@ void dtkDistributedController::deploy(const QUrl& server)
     if(!d->servers.keys().contains(server.toString())) {
         QProcess *serverProc = new QProcess (this);
         QStringList args;
+        args << "-t"; // that way, ssh will forward the SIGINT signal,
+                      // and the server will stop when the ssh process
+                      // is killed
+        args << "-t"; // do it twice to force tty allocation
         args << server.host();
 
+        serverProc->setProcessChannelMode(QProcess::MergedChannels);
         QSettings settings("inria", "dtk");
         settings.beginGroup("distributed");
         QString defaultPath;
@@ -102,7 +107,6 @@ void dtkDistributedController::deploy(const QUrl& server)
             defaultPath =  "./dtkDistributedServer";
             dtkDebug() << "Filling in empty path in settings with default path:" << defaultPath;
         }
-
         QString path = settings.value(server.host()+"_server_path", defaultPath).toString();
 
         QString forward = server.host()+"_server_forward";
@@ -120,8 +124,13 @@ void dtkDistributedController::deploy(const QUrl& server)
         serverProc->start("ssh", args);
         if (!serverProc->waitForStarted(5000))
             dtkDebug() << "server not yet started  " << args;
-        if (!serverProc->waitForReadyRead(2000))
+        if (!serverProc->waitForReadyRead(3000))
             dtkDebug() << "no output from server yet" << args;
+
+        QObject::connect(serverProc, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onProcessFinished(int,QProcess::ExitStatus)));
+
+        QObject::connect (qApp, SIGNAL(aboutToQuit()), this, SLOT(cleanup()));
+
         d->servers[server.toString()] << serverProc;
     } else {
         dtkDebug() << "dtkDistributedServer already started on " << server.host();
@@ -354,6 +363,21 @@ void dtkDistributedController::read(void)
         };
     if (socket->bytesAvailable() > 0)
         this->read();
+}
+
+void dtkDistributedController::cleanup()
+{
+    foreach (const QString& key, d->servers.keys()) {
+        foreach (QProcess* server, d->servers[key]) {
+            qDebug() << "terminating servers started on" << key;
+            server->terminate();
+        }
+    }
+}
+
+void dtkDistributedController::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus )
+{
+    qDebug() << DTK_PRETTY_FUNCTION << "remote server deployment failure" << exitStatus ;
 }
 
 void dtkDistributedController::error(QAbstractSocket::SocketError error)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. nov. 24 14:30:39 2011 (+0100)
+ * Last-Updated: ven. nov. 25 09:54:00 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 48
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -61,6 +61,8 @@ public:
 protected slots:
     void read(void);
     void error(QAbstractSocket::SocketError error);
+    void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus );
+    void cleanup(void);
 
 private:
     dtkDistributedControllerPrivate *d;

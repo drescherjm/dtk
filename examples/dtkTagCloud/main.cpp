@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue May 12 10:34:30 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov 28 16:34:28 2011 (+0100)
+ * Last-Updated: Mon Nov 28 23:55:04 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 12
+ *     Update #: 48
  */
 
 /* Commentary: 
@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
     cloud->setFontRange(10);
 
     dtkItemView *view = new dtkItemView;
+    view->setItemDelegate(new dtkItemViewDelegate(view));
 
     dtkTagController *controller = new dtkTagController;
     controller->attach(scope);
@@ -47,19 +48,27 @@ int main(int argc, char *argv[])
     controller->addItem("name7", "description7", QStringList() << "tag3" << "tag1" << "tag9" << "tag2");
 
     QSplitter *splitter = new QSplitter;
-    splitter->addWidget(view);
     splitter->addWidget(cloud);
-    splitter->setSizes(QList<int>() << 350 << 150);
+    splitter->addWidget(view);
+    splitter->setSizes(QList<int>() << 150 << 350);
 
-    QWidget widget;
-    QVBoxLayout layout(&widget);
-    layout.setContentsMargins(0, 0, 0, 0);
-    layout.setSpacing(0);
-    layout.addWidget(scope);
-    layout.addWidget(splitter);
-    widget.setWindowTitle("Items & tags");
-    widget.show();
-    widget.resize(500, 245);
+    QWidget *widget = new QWidget;
 
-    return a.exec();
+    QVBoxLayout *layout = new QVBoxLayout(widget);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    layout->addWidget(scope);
+    layout->addWidget(splitter);
+
+    QMainWindow *window = new QMainWindow;
+    window->setCentralWidget(widget);
+    window->setUnifiedTitleAndToolBarOnMac(true);
+    window->show();
+    window->raise();
+
+    int status = a.exec();
+
+    delete window;
+
+    return status;
 }

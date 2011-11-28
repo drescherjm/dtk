@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:01 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov 28 15:21:02 2011 (+0100)
+ * Last-Updated: Mon Nov 28 23:58:19 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 94
+ *     Update #: 126
  */
 
 /* Commentary: 
@@ -147,13 +147,14 @@ private:
 
 class dtkItemPrivate;
 
-class DTKGUI_EXPORT dtkItem
+class DTKGUI_EXPORT dtkItem : public QListWidgetItem
 {
 public:
      dtkItem(QString name);
      dtkItem(QString name, QString description);
      dtkItem(QString name, QString description, QStringList tags);
      dtkItem(QString name, QString description, QStringList tags, QStringList types);
+     dtkItem(const dtkItem& item);
     ~dtkItem(void);
 
     QString name(void) const;
@@ -171,7 +172,7 @@ private:
 
 class dtkItemViewPrivate;
 
-class DTKGUI_EXPORT dtkItemView : public QTextBrowser
+class DTKGUI_EXPORT dtkItemView : public QListWidget
 {
     Q_OBJECT
 
@@ -186,7 +187,6 @@ public:
     void addItem(dtkItem item);
 
     void clear(void);
-    void render(void);
 
 signals:
     void tagClicked(QString tag);
@@ -198,11 +198,33 @@ signals:
     void typeClicked(QString type);
     void typeClicked(QString type, QStringList tags);
 
-private slots:
-    void onLinkClicked(const QUrl& item);
+// private slots:
+//     void onLinkClicked(const QUrl& item);
 
 private:
     dtkItemViewPrivate *d;
+
+private:
+    friend class dtkItemViewDelegate;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkItemViewDelegate
+// /////////////////////////////////////////////////////////////////
+
+class dtkItemViewDelegate: public QStyledItemDelegate
+{
+public:
+    dtkItemViewDelegate(dtkItemView *view);
+
+public:
+    virtual void paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+
+public:
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
+
+protected:
+    dtkItemView *view;
 };
 
 // /////////////////////////////////////////////////////////////////

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Nov 17 10:16:46 2011 (+0100)
+## Last-Updated: Tue Nov 29 00:05:24 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 206
+##     Update #: 210
 ######################################################################
 ## 
 ### Commentary: 
@@ -30,6 +30,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkAnchoredBar.h
   dtkColorButton.h
   dtkColorGrid.h
+  dtkFlowLayout.h
   dtkFinder.h
   dtkGuiExport.h
   dtkInsetMenu.h
@@ -112,6 +113,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkAnchoredBar.cpp
   dtkColorButton.cpp
   dtkColorGrid.cpp
+  dtkFlowLayout.cpp
   dtkFinder.cpp
   dtkInsetMenu.cpp
   dtkInspector.cpp

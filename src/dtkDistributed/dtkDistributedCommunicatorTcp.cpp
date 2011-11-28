@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: mer. oct. 19 13:17:39 2011 (+0200)
+ * Last-Updated: lun. nov. 28 16:45:23 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 113
+ *     Update #: 143
  */
 
 /* Commentary: 
@@ -121,17 +121,24 @@ void dtkDistributedCommunicatorTcp::flush(void)
     }
 }
 
-void dtkDistributedCommunicatorTcp::send(dtkAbstractData &data, dtkAbstractDataSerializer *serializer, QString type , quint16 target, int tag)
+void dtkDistributedCommunicatorTcp::send(dtkAbstractData *data, quint16 target, int tag)
 {
     QByteArray *array;
-    qDebug() << "send: need to serialize mesh" ;
-    if (serializer->serialize(data))
-        array = serializer->data();
-    else
-        qDebug() << "error while serializing" ;
+    QString type = data->identifier();
 
-    d->socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,QString::number(tag),target, array->size(), type));
-    d->socket->write(*array);
+    qDebug() << "send: need to serialize mesh" ;
+    array = data->serialize();
+    if (!array->isNull()) {
+        d->socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,QString::number(tag),target, array->size(), type));
+        d->socket->write(*array);
+    } else {
+        qDebug() << "serialization failed";
+    }
+}
+
+void dtkDistributedCommunicatorTcp::receive(dtkAbstractData *data, quint16 source, int tag)
+{
+    qDebug() << "warning: receive  abstract data not (yet) implemented for tcp communicator";
 }
 
 

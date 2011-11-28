@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 15 15:09:12 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 280
+ * Last-Updated: lun. nov. 28 17:54:32 2011 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 393
  */
 
 /* Commentary:
@@ -22,6 +22,8 @@
 #include <dtkCore/dtkAbstractDataReader.h>
 #include <dtkCore/dtkAbstractDataWriter.h>
 #include <dtkCore/dtkAbstractDataConverter.h>
+#include <dtkCore/dtkAbstractDataSerializer.h>
+#include <dtkCore/dtkAbstractDataDeserializer.h>
 #include <dtkCore/dtkLog.h>
 
 #include <QtGui>
@@ -32,6 +34,8 @@ public:
     QMap<QString, bool> readers;
     QMap<QString, bool> writers;
     QMap<QString, bool> converters;
+    QMap<QString, bool> serializers;
+    QMap<QString, bool> deserializers;
 
     QString     path;
     QStringList paths;
@@ -53,6 +57,8 @@ dtkAbstractData::dtkAbstractData(const dtkAbstractData& data) : dtkAbstractObjec
     d->readers    = data.d->readers;
     d->writers    = data.d->writers;
     d->converters = data.d->converters;
+    d->serializers = data.d->serializers;
+    d->deserializers = data.d->deserializers;
 }
 
 dtkAbstractData::~dtkAbstractData(void)
@@ -75,6 +81,16 @@ void dtkAbstractData::addWriter(const QString& writer)
 void dtkAbstractData::addConverter(const QString& converter)
 {
     d->converters.insert(converter, false);
+}
+
+void dtkAbstractData::addSerializer(const QString& serializer)
+{
+    d->serializers.insert(serializer, false);
+}
+
+void dtkAbstractData::addDeserializer(const QString& deserializer)
+{
+    d->deserializers.insert(deserializer, false);
 }
 
 void dtkAbstractData::enableReader(const QString& reader)
@@ -131,6 +147,42 @@ void dtkAbstractData::disableConverter(const QString& converter)
         it.value() = false;
 }
 
+void dtkAbstractData::enableSerializer(const QString& serializer)
+{
+    QMap<QString, bool>::iterator it(d->serializers.find(serializer));
+
+    if (it != d->serializers.end())
+        it.value() = true;
+    else
+        dtkDebug() << this->identifier() << " has no such serializer: " << serializer;
+}
+
+void dtkAbstractData::disableSerializer(const QString& serializer)
+{
+    QMap<QString, bool>::iterator it(d->serializers.find(serializer));
+
+    if (it != d->serializers.end())
+        it.value() = false;
+}
+
+void dtkAbstractData::enableDeserializer(const QString& deserializer)
+{
+    QMap<QString, bool>::iterator it(d->deserializers.find(deserializer));
+
+    if (it != d->deserializers.end())
+        it.value() = true;
+    else
+        dtkDebug() << this->identifier() << " has no such deserializer: " << deserializer;
+}
+
+void dtkAbstractData::disableDeserializer(const QString& deserializer)
+{
+    QMap<QString, bool>::iterator it(d->deserializers.find(deserializer));
+
+    if (it != d->deserializers.end())
+        it.value() = false;
+}
+
 dtkAbstractDataReader *dtkAbstractData::reader(const QString& type)
 {
     QMap<QString, bool>::const_iterator it(d->readers.find(type));
@@ -158,6 +210,26 @@ dtkAbstractDataConverter *dtkAbstractData::converter(const QString& type)
     if (it != d->converters.end() && (it.value() == true))
         return dtkAbstractDataFactory::instance()->converter(type);
     else 
+        return NULL;
+}
+
+dtkAbstractDataSerializer *dtkAbstractData::serializer(const QString& type)
+{
+    QMap<QString, bool>::const_iterator it(d->serializers.find(type));
+
+    if (it != d->serializers.end() && (it.value() == true))
+        return dtkAbstractDataFactory::instance()->serializer(type);
+    else
+        return NULL;
+}
+
+dtkAbstractDataDeserializer *dtkAbstractData::deserializer(const QString& type)
+{
+    QMap<QString, bool>::const_iterator it(d->deserializers.find(type));
+
+    if (it != d->deserializers.end() && (it.value() == true))
+        return dtkAbstractDataFactory::instance()->deserializer(type);
+    else
         return NULL;
 }
 
@@ -304,11 +376,11 @@ dtkAbstractData *dtkAbstractData::convert(const QString& toType)
     dtkAbstractData *conversion = NULL;
 
     for (QMap<QString, bool>::const_iterator it(d->converters.begin()); it!= d->converters.end() && !conversion ; ++it) {
-        
+
         if (it.value()) {
-            
+
             QScopedPointer<dtkAbstractDataConverter> converter( dtkAbstractDataFactory::instance()->converter(it.key()));
-            
+
             if (converter && converter->canConvert(toType)) {
                 converter->setData(this);
                 conversion = converter->convert();
@@ -317,7 +389,7 @@ dtkAbstractData *dtkAbstractData::convert(const QString& toType)
 
                     foreach(QString metaDataKey, this->metaDataList())
                         conversion->addMetaData(metaDataKey, this->metaDataValues(metaDataKey));
-                    
+
                     foreach(QString propertyKey, this->propertyList())
                         conversion->addProperty(propertyKey, this->propertyValues(propertyKey));
                 }
@@ -326,6 +398,52 @@ dtkAbstractData *dtkAbstractData::convert(const QString& toType)
     }
 
     return conversion;
+}
+
+QByteArray *dtkAbstractData::serialize(void)
+{
+    QByteArray *array ;
+
+    for (QMap<QString, bool>::const_iterator it(d->serializers.begin()); it!= d->serializers.end() && array->isNull() ; ++it) {
+
+        if (it.value()) {
+
+            QScopedPointer<dtkAbstractDataSerializer> serializer( dtkAbstractDataFactory::instance()->serializer(it.key()));
+
+            if (serializer) {
+
+                array = serializer->serialize(this);
+                if (!array->isNull()) {
+                    break;
+                }
+            }
+        }
+    }
+    return array;
+}
+
+bool dtkAbstractData::deserialize(QByteArray *array)
+{
+
+    bool deserialized = false;
+
+    for (QMap<QString, bool>::const_iterator it(d->deserializers.begin()); it!= d->deserializers.end() && !deserialized ; ++it) {
+
+        if (it.value()) {
+
+            QScopedPointer<dtkAbstractDataDeserializer> deserializer( dtkAbstractDataFactory::instance()->deserializer(it.key()));
+
+            if (deserializer) {
+                deserializer->setData(this);
+
+                deserialized = deserializer->deserialize(array);
+                if(deserialized) {
+                    break;
+                }
+            }
+        }
+    }
+    return deserialized;
 }
 
 QString dtkAbstractData::path(void)

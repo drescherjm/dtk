@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 13:38:59 2010 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. oct.  6 18:00:24 2011 (+0200)
+ * Last-Updated: lun. nov. 28 17:56:43 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 92
+ *     Update #: 101
  */
 
 /* Commentary: 
@@ -55,7 +55,12 @@ void dtkDistributedCommunicator::send(int *data, qint64 size, quint16 target, in
 
 void dtkDistributedCommunicator::send(long *data, qint64 size, quint16 target, int tag)
 {
-    return this->send(data, size, dtkDistributedCommunicatorInt, target, tag);
+    return this->send(data, size, dtkDistributedCommunicatorLong, target, tag);
+}
+
+void dtkDistributedCommunicator::send(qint64 *data, qint64 size, quint16 target, int tag)
+{
+    return this->send(data, size, dtkDistributedCommunicatorInt64, target, tag);
 }
 
 void dtkDistributedCommunicator::send(float *data, qint64 size, quint16 target, int tag)
@@ -85,7 +90,12 @@ void dtkDistributedCommunicator::receive(int *data, qint64 size, quint16 source,
 
 void dtkDistributedCommunicator::receive(long *data, qint64 size, quint16 source, int tag)
 {
-    return this->receive(data, size, dtkDistributedCommunicatorInt, source, tag);
+    return this->receive(data, size, dtkDistributedCommunicatorLong, source, tag);
+}
+
+void dtkDistributedCommunicator::receive(qint64 *data, qint64 size, quint16 source, int tag)
+{
+    return this->receive(data, size, dtkDistributedCommunicatorInt64, source, tag);
 }
 
 void dtkDistributedCommunicator::receive(float *data, qint64 size, quint16 source, int tag)
@@ -111,6 +121,16 @@ void dtkDistributedCommunicator::broadcast(char *data, qint64 size, quint16 sour
 void dtkDistributedCommunicator::broadcast(int *data, qint64 size, quint16 source)
 {
     return this->broadcast(data, size, dtkDistributedCommunicatorInt, source);
+}
+
+void dtkDistributedCommunicator::broadcast(long *data, qint64 size, quint16 source)
+{
+    return this->broadcast(data, size, dtkDistributedCommunicatorLong, source);
+}
+
+void dtkDistributedCommunicator::broadcast(qint64 *data, qint64 size, quint16 source)
+{
+    return this->broadcast(data, size, dtkDistributedCommunicatorInt64, source);
 }
 
 void dtkDistributedCommunicator::broadcast(float *data, qint64 size, quint16 source)

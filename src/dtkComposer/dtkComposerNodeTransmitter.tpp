@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Nov  2 10:14:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov 16 08:57:06 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 79
+ * Last-Updated: Mon Nov 28 13:07:28 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 83
  */
 
 /* Commentary: 
@@ -59,14 +59,15 @@ template <typename T> inline dtkComposerNodeTransmitter<T>::~dtkComposerNodeTran
 template <typename T> inline void dtkComposerNodeTransmitter<T>::setData(const T& data)
 {
     m_data = data;
-    this->setMetaData("Type", typeid(m_data).name());
+
+    // this->setMetaData("Type", typeid(m_data).name());
 };
 
 //! Returns the data as a modifiable reference.
 /*! 
  *  
  */
-template <typename T> inline T& dtkComposerNodeTransmitter<T>::data(void) 
+template <typename T> inline T& dtkComposerNodeTransmitter<T>::data(void)
 {
     return m_data;
 };
@@ -74,7 +75,7 @@ template <typename T> inline T& dtkComposerNodeTransmitter<T>::data(void)
 //! Returns the data as a non-modifiable reference.
 /*! 
  *  
- */
+ */ 
 template <typename T> inline const T& dtkComposerNodeTransmitter<T>::data(void) const 
 {
     return m_data;
@@ -83,7 +84,7 @@ template <typename T> inline const T& dtkComposerNodeTransmitter<T>::data(void) 
 //! Sets the vector pointer.
 /*! 
  *  
- */
+ */ 
 template <typename T> inline void dtkComposerNodeTransmitter<T>::setVector(QVector<T> *vector) 
 {
     if(!m_list)
@@ -159,6 +160,7 @@ template <typename T> void dtkComposerNodeTransmitter<T>::clear(void)
 template <typename T> QString dtkComposerNodeTransmitter<T>::identifier(void) const
 {
     QString container;
+
     if (m_vector)
         container = "vector";
     else if (m_list)
@@ -166,8 +168,7 @@ template <typename T> QString dtkComposerNodeTransmitter<T>::identifier(void) co
     else
         container = "no";
 
-    return QString("Transmitter with %1 container")
-        .arg(container);
+    return QString("Transmitter with %1 container").arg(container);
 };
 
 #endif

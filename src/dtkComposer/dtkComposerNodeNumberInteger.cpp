@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: jeu. nov. 17 20:50:45 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Nov 25 14:05:32 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 34
+ * Last-Updated: Mon Nov 28 14:33:34 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 35
  */
 
 /* Commentary: 

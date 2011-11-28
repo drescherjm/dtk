@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:27 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Mar 16 16:11:32 2011 (+0100)
+ * Last-Updated: Mon Nov 28 16:27:18 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 651
+ *     Update #: 740
  */
 
 /* Commentary: 
@@ -184,8 +184,6 @@ public:
     int maxcount;
     int tagCount;
 
-    QString stylesheet;
-
     dtkTagCloud::SortingType  sortingType;
     dtkTagCloud::SortingOrder sortingOrder;
 };
@@ -194,7 +192,7 @@ public:
 // dtkTagCloud
 // /////////////////////////////////////////////////////////////////
 
-dtkTagCloud::dtkTagCloud(QWidget *parent) : QWebView(parent)
+dtkTagCloud::dtkTagCloud(QWidget *parent) : QTextBrowser(parent)
 {
     d = new dtkTagCloudPrivate;
 
@@ -204,9 +202,9 @@ dtkTagCloud::dtkTagCloud(QWidget *parent) : QWebView(parent)
     d->sortingType  = Alpha;
     d->sortingOrder = Asc;
 
-    this->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+    this->setFrameShape(QFrame::NoFrame);
 
-    connect(this->page(), SIGNAL(linkClicked(const QUrl&)), this, SLOT(onLinkClicked(const QUrl&)));
+    connect(this, SIGNAL(anchorClicked(const QUrl&)), this, SLOT(onLinkClicked(const QUrl&)));
 }
 
 dtkTagCloud::~dtkTagCloud(void)
@@ -252,15 +250,6 @@ void dtkTagCloud::setSortingType(SortingType type)
 void dtkTagCloud::setSortingOrder(SortingOrder order)
 {
     d->sortingOrder = order;
-}
-
-void dtkTagCloud::setStyleSheet(QString stylesheet)
-{
-    d->stylesheet.clear();
-
-    d->stylesheet += "<style type=\"text/css\">";
-    d->stylesheet += stylesheet;
-    d->stylesheet += "</style>";
 }
 
 void dtkTagCloud::sort(void)
@@ -340,7 +329,7 @@ void dtkTagCloud::render(void)
     }
     cloud.append("</div>\n");
 
-    this->setHtml(d->stylesheet + cloud);
+    this->setHtml(cloud);
 }
 
 void dtkTagCloud::onLinkClicked(const QUrl& url)
@@ -357,18 +346,39 @@ class dtkTagScopePrivate
 public:
     QStringList filters;
 
-    QString stylesheet;
+    QTextBrowser *browser;
+    QLineEdit *edit;
+    QToolButton *clear;
 };
 
-dtkTagScope::dtkTagScope(QWidget *parent) : QWebView(parent)
+dtkTagScope::dtkTagScope(QWidget *parent) : QFrame(parent)
 {
     d = new dtkTagScopePrivate;
 
-    this->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
-    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    this->setStyleSheet("");
+    d->browser = new QTextBrowser(this);
+    d->browser->setFixedHeight(24);
+    d->browser->setFrameShape(QFrame::NoFrame);
 
-    connect(this->page(), SIGNAL(linkClicked(const QUrl&)), this, SLOT(onLinkClicked(const QUrl&)));
+    d->edit = new QLineEdit(this);
+    d->edit->setFixedHeight(24);
+    d->edit->setFixedWidth(100);
+
+    d->clear = new QToolButton(this);
+    d->clear->setFixedHeight(24);
+    
+    QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    layout->addWidget(d->browser);
+    layout->addWidget(d->edit);
+    layout->addWidget(d->clear);
+
+    this->setFrameShape(QFrame::NoFrame);
+    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+    connect(d->browser, SIGNAL(anchorClicked(const QUrl&)), this, SLOT(onLinkClicked(const QUrl&)));
+    connect(d->edit, SIGNAL(returnPressed()), this, SLOT(onTagAdded()));
+    connect(d->clear, SIGNAL(clicked()), this, SIGNAL(cleared()));
 }
 
 dtkTagScope::~dtkTagScope(void)
@@ -378,23 +388,7 @@ dtkTagScope::~dtkTagScope(void)
 
 QSize dtkTagScope::sizeHint(void) const
 {
-    return QSize(100, 32);
-}
-
-static QString scope_stylesheet = 
-"body       { margin: 0px; padding: 3px; background: rgb(%1, %2, %3); font-size: 90%; color: rgb(100, 100, 100); }"
-"form       { padding-left: 5px; display: inline; height: 16px; } "
-"input.text { border: 1px solid #cccccc; color: rgb(140, 140, 140); font-size: 80%; width: 100px; }"
-"a          { text-decoration: none; color: rgb(140, 140, 140); float: right;}";
-
-void dtkTagScope::setStyleSheet(QString user_stylesheet)
-{
-    d->stylesheet.clear();
-
-    d->stylesheet += "<style type=\"text/css\">";
-    d->stylesheet += scope_stylesheet;
-    d->stylesheet +=  user_stylesheet;
-    d->stylesheet += "</style>";
+    return QSize(100, 24);
 }
 
 void dtkTagScope::clear(void)
@@ -405,16 +399,12 @@ void dtkTagScope::clear(void)
 void dtkTagScope::render(void)
 {
     QString scope = "";
-    scope += "<form name=\"scope\">";
-    scope += "<strong>scope</strong> > ";
+    scope += "<strong>scope</strong> : ";
     foreach(QString filter, d->filters) {
     scope += "  " + filter + " > ";
     }
-    scope += "<input type=\"text\" class=\"text\" name=\"tag\" value=\"Type a tag\" onFocus=\"document.scope.tag.value=''\"/>";
-    scope += "<a href=\"action://clear\">clear</a>";
-    scope += "</form>";
 
-    this->setHtml(d->stylesheet + scope);
+    d->browser->setHtml(scope);
 }
 
 void dtkTagScope::addTag(QString tag)
@@ -424,21 +414,13 @@ void dtkTagScope::addTag(QString tag)
     this->render();
 }
 
-void dtkTagScope::keyPressEvent(QKeyEvent *event)
+void dtkTagScope::onTagAdded(void)
 {
-    QString tag;
+    QString tag = d->edit->text();
 
-    switch(event->key()) {
-    case Qt::Key_Return:
-        tag = this->page()->currentFrame()->evaluateJavaScript("document.forms['scope'].elements['tag'].value;").toString();
-        if(!tag.isEmpty())
-            if(tag == "!") emit cleared();
-            else           emit tagAdded(tag);
-        break;
-    default:
-        QWebView::keyPressEvent(event);
-        break;
-    };
+    emit tagAdded(tag);
+
+    d->edit->clear();
 }
 
 void dtkTagScope::onLinkClicked(const QUrl& url)
@@ -530,19 +512,15 @@ class dtkItemViewPrivate
 {
 public:
     QList<dtkItem> items;
-
-    QString stylesheet;
 };
 
-dtkItemView::dtkItemView(QWidget *parent) : QWebView(parent)
+dtkItemView::dtkItemView(QWidget *parent) : QTextBrowser(parent)
 {
     d = new dtkItemViewPrivate;
     
-    this->setStyleSheet("");
+    this->setFrameShape(QFrame::NoFrame);
 
-    this->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
-
-    connect(this->page(), SIGNAL(linkClicked(const QUrl&)), this, SLOT(onLinkClicked(const QUrl&)));
+    connect(this, SIGNAL(anchorClicked(const QUrl&)), this, SLOT(onLinkClicked(const QUrl&)));
 }
 
 dtkItemView::~dtkItemView(void)
@@ -608,29 +586,7 @@ void dtkItemView::render(void)
     }
     list += "</ul>\n";
 
-    this->setHtml(d->stylesheet + list);
-}
-
-static QString view_stylesheet =
-"ul            { margin: 0px; padding: 0px; }\n"
-"li            { list-style: none; }\n"
-".name         { font-size: 130%; color: rgb(18,  89, 199); }\n"
-".desc         { display: inline; font-size: 100%; color: rgb(153, 153, 153); }\n"
-".types        { display: inline; font-size: 100%; color: rgb( 18,  89, 199); }\n"
-".types a      { color: rgb( 18,  89, 199); text-decoration: none; }\n"
-".tags         { font-size: 100%; color: gray; }\n"
-".tags a       { color: gray;  text-decoration: none; }\n"
-".tags a:hover { color: rgb( 18,  89, 199); text-decoration: none; }\n"
-"hr            { border: 0; width: 100%; color: rgb(200, 200, 200); background-color: rgb(200, 200, 200); height: 1px; }";
-
-void dtkItemView::setStyleSheet(QString user_stylesheet)
-{
-    d->stylesheet.clear();
-
-    d->stylesheet += "<style type=\"text/css\">\n";
-    d->stylesheet += view_stylesheet;
-    d->stylesheet += user_stylesheet;
-    d->stylesheet += "</style>\n";
+    this->setHtml(list);
 }
 
 void dtkItemView::onLinkClicked(const QUrl& url)

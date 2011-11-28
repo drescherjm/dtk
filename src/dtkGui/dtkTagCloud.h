@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:01 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep  8 23:41:56 2009 (+0200)
+ * Last-Updated: Mon Nov 28 15:21:02 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 78
+ *     Update #: 94
  */
 
 /* Commentary: 
@@ -21,7 +21,6 @@
 #define DTKTAGCLOUD_H
 
 #include <QtGui>
-#include <QtWebKit>
 
 #include "dtkGuiExport.h"
 
@@ -60,7 +59,7 @@ private:
 
 class dtkTagCloudPrivate;
 
-class DTKGUI_EXPORT dtkTagCloud : public QWebView
+class DTKGUI_EXPORT dtkTagCloud : public QTextBrowser
 {
     Q_OBJECT
 
@@ -89,8 +88,6 @@ public:
     void setSortingType(SortingType type);
     void setSortingOrder(SortingOrder order);
 
-    void setStyleSheet(QString stylesheet);
-
 signals:
     void tagClicked(QString tag);
     void tagClicked(QString tag, QStringList items);
@@ -113,7 +110,7 @@ private:
 
 class dtkTagScopePrivate;
 
-class DTKGUI_EXPORT dtkTagScope : public QWebView
+class DTKGUI_EXPORT dtkTagScope : public QFrame
 {
     Q_OBJECT
 
@@ -123,12 +120,9 @@ public:
 
     QSize sizeHint(void) const;
 
-    void clear(void);
     void render(void);
 
     void addTag(QString tag);
-
-    void setStyleSheet(QString stylesheet);
 
 signals:
     void tagSet(QString tag);
@@ -136,10 +130,11 @@ signals:
     void tagRemoved(QString tag);
     void cleared(void);
 
-private slots:
-    void keyPressEvent(QKeyEvent *event);
+public slots:
+    void clear(void);
 
 private slots:
+    void onTagAdded(void);
     void onLinkClicked(const QUrl& item);
 
 private:
@@ -176,7 +171,7 @@ private:
 
 class dtkItemViewPrivate;
 
-class DTKGUI_EXPORT dtkItemView : public QWebView
+class DTKGUI_EXPORT dtkItemView : public QTextBrowser
 {
     Q_OBJECT
 
@@ -192,8 +187,6 @@ public:
 
     void clear(void);
     void render(void);
-
-    void setStyleSheet(QString stylesheet);
 
 signals:
     void tagClicked(QString tag);

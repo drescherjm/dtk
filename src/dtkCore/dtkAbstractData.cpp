@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: lun. nov. 28 17:54:32 2011 (+0100)
+ * Last-Updated: ven. déc.  2 15:55:46 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 393
+ *     Update #: 395
  */
 
 /* Commentary:
@@ -402,9 +402,9 @@ dtkAbstractData *dtkAbstractData::convert(const QString& toType)
 
 QByteArray *dtkAbstractData::serialize(void)
 {
-    QByteArray *array ;
+    QByteArray *array = NULL;
 
-    for (QMap<QString, bool>::const_iterator it(d->serializers.begin()); it!= d->serializers.end() && array->isNull() ; ++it) {
+    for (QMap<QString, bool>::const_iterator it(d->serializers.begin()); it!= d->serializers.end() && array == NULL ; ++it) {
 
         if (it.value()) {
 
@@ -413,7 +413,7 @@ QByteArray *dtkAbstractData::serialize(void)
             if (serializer) {
 
                 array = serializer->serialize(this);
-                if (!array->isNull()) {
+                if (array != NULL) {
                     break;
                 }
             }

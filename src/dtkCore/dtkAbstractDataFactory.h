@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:48:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: lun. nov. 28 11:14:15 2011 (+0100)
+ * Last-Updated: ven. déc.  2 12:31:48 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 121
+ *     Update #: 122
  */
 
 /* Commentary:
@@ -22,13 +22,13 @@
 
 #include <dtkCore/dtkAbstractFactory.h>
 
-                  class dtkAbstractData;
-                  class dtkAbstractDataReader;
-                  class dtkAbstractDataWriter;
-                  class dtkAbstractDataConverter;
-                  class dtkAbstractDataSerializer;
-                  class dtkAbstractDataDeserializer;
-                  class dtkAbstractDataFactoryPrivate;
+class dtkAbstractData;
+class dtkAbstractDataReader;
+class dtkAbstractDataWriter;
+class dtkAbstractDataConverter;
+class dtkAbstractDataSerializer;
+class dtkAbstractDataDeserializer;
+class dtkAbstractDataFactoryPrivate;
 template<class T> class dtkSmartPointer;
 
 class DTKCORE_EXPORT dtkAbstractDataFactory : public dtkAbstractFactory

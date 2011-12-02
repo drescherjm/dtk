@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov  9 15:51:09 2011 (+0100)
+ * Last-Updated: Mon Nov 28 17:09:26 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 109
+ *     Update #: 126
  */
 
 /* Commentary: 
@@ -24,6 +24,7 @@
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeLoop.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerNodeTransmitter.h"
 
 #include <dtkCore/dtkGlobal>
 
@@ -126,4 +127,65 @@ void dtkComposerNodeConditional::layout(void)
 bool dtkComposerNodeConditional::evaluate(dtkComposerEvaluatorPrivate *evaluator)
 {
     return evaluator->evaluate(this);
+}
+
+
+
+bool dtkComposerNodeConditional::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+{
+    if (destination == this->inputProperty()) {
+
+        if(!(dynamic_cast<dtkComposerNodeTransmitter<bool> *>(route->source()->node()->emitter(route->source()))))
+            return false;
+    
+        d->receivers.insert(route, static_cast<dtkComposerNodeTransmitter<bool> *>(route->source()->node()->emitter(route->source())));
+
+        return true;
+
+    }
+
+    if (this->g->leftProperties().contains(destination)) {
+
+        
+
+    } else if (this->g->rightProperties().contains(destination)) {
+
+
+
+    }
+
+    return false;
+}
+
+bool dtkComposerNodeConditional::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+{
+    if (this->g->leftProperties().contains(property)) {
+
+        this->l->appendRightRelayRoute(route);
+
+    }
+
+    return true;
+}
+
+void dtkComposerNodeConditional::updateSourceRoutes(dtkComposerEdge *route)
+{
+    if (route->destination() == this->inputProperty())
+        this->l->appendLeftRoute(route);
+}
+
+void dtkComposerNodeConditional::updateDestinationRoutes(dtkComposerEdge *route)
+{
+    this->l->appendRightRoute(route);
+}
+
+void dtkComposerNodeConditional::updateSourceNodes(dtkComposerEdge *route)
+{
+    if (route->destination() == this->inputProperty())
+        this->l->appendLeftNode(route->source()->node());
+}
+
+void dtkComposerNodeConditional::updateDestinationNodes(dtkComposerEdge *route)
+{
+    this->l->appendRightNode(route->destination()->node());
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Oct 26 16:33:37 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov  9 12:01:26 2011 (+0100)
+ * Last-Updated: Mon Nov 28 17:07:22 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 5
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -20,13 +20,18 @@
 #ifndef DTKCOMPOSERNODECONDITIONAL_P
 #define DTKCOMPOSERNODECONDITIONAL_P
 
+class dtkComposerEdge;
 class dtkComposerNodeConditional;
 class dtkComposerNodeControlBlock;
+template <class T> class dtkComposerNodeTransmitter;
 
 class dtkComposerNodeConditionalPrivate
 {
 public:
     dtkComposerNodeControlBlock *createBlock(const QString& title, dtkComposerNodeConditional *parent);
+
+public:
+    QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<bool> *> receivers;
 };
 
 #endif

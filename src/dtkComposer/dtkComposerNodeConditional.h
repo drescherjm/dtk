@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:59:35 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov  9 12:14:37 2011 (+0100)
+ * Last-Updated: Mon Nov 28 17:05:23 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 18
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -41,6 +41,17 @@ public:
 
 public slots:
     bool evaluate(dtkComposerEvaluatorPrivate *evaluator);
+
+public:
+    bool  onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
+    bool onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property);
+
+public:
+    void      updateSourceRoutes(dtkComposerEdge *route);
+    void updateDestinationRoutes(dtkComposerEdge *route);
+
+    void      updateSourceNodes(dtkComposerEdge *route);
+    void updateDestinationNodes(dtkComposerEdge *route);
 
 private:
     dtkComposerNodeConditionalPrivate *d;

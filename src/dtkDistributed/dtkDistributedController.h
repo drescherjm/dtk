@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. oct. 11 15:09:18 2011 (+0200)
+ * Last-Updated: ven. nov. 25 09:54:00 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 47
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -50,6 +50,7 @@ signals:
 
 public slots:
     void    connect(const QUrl& server);
+    void     deploy(const QUrl& server);
     void disconnect(const QUrl& server);
     void     submit(const QUrl& server, QByteArray& resources);
 
@@ -60,6 +61,8 @@ public:
 protected slots:
     void read(void);
     void error(QAbstractSocket::SocketError error);
+    void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus );
+    void cleanup(void);
 
 private:
     dtkDistributedControllerPrivate *d;

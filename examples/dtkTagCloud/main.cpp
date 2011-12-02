@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue May 12 10:34:30 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 12 16:08:03 2009 (+0200)
+ * Last-Updated: Mon Nov 28 23:55:04 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 4
+ *     Update #: 48
  */
 
 /* Commentary: 
@@ -17,35 +17,23 @@
  * 
  */
 
-#include <QtGui>
-
-#include <dtkGui/dtkSplitter.h>
+#include  <QtGui>
 #include <dtkGui/dtkTagCloud.h>
-
-static QString cloud_stylesheet =
-"body      { color: rgb(99, 99,  99); background:#ffffff; }"
-"a:link    { color: rgb(18, 89, 199); text-decoration:none; }"
-"a:active  { color: rgb(81, 86, 151); text-decoration:none; }"
-"a:hover   { color: rgb(81, 86, 151); text-decoration:underline; }";
-
-static QString scope_stylesheet =
-"body { border-bottom: 1px solid rgb(145, 145, 145); }";
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
     dtkTagScope *scope = new dtkTagScope;
-    scope->setStyleSheet(scope_stylesheet);
 
     dtkTagCloud *cloud = new dtkTagCloud;
     cloud->setSortingType(dtkTagCloud::Alpha);
     cloud->setSortingOrder(dtkTagCloud::Asc);
     cloud->setFontSize(18);
     cloud->setFontRange(10);
-    cloud->setStyleSheet(cloud_stylesheet);
 
     dtkItemView *view = new dtkItemView;
+    view->setItemDelegate(new dtkItemViewDelegate(view));
 
     dtkTagController *controller = new dtkTagController;
     controller->attach(scope);
@@ -59,20 +47,28 @@ int main(int argc, char *argv[])
     controller->addItem("name6", "description6", QStringList() << "tag7" << "tag8" << "tag9");
     controller->addItem("name7", "description7", QStringList() << "tag3" << "tag1" << "tag9" << "tag2");
 
-    dtkSplitter *splitter = new dtkSplitter;
-    splitter->addWidget(view);
+    QSplitter *splitter = new QSplitter;
     splitter->addWidget(cloud);
-    splitter->setSizes(QList<int>() << 350 << 150);
+    splitter->addWidget(view);
+    splitter->setSizes(QList<int>() << 150 << 350);
 
-    QWidget widget;
-    QVBoxLayout layout(&widget);
-    layout.setContentsMargins(0, 0, 0, 0);
-    layout.setSpacing(0);
-    layout.addWidget(scope);
-    layout.addWidget(splitter);
-    widget.setWindowTitle("Items & tags");
-    widget.show();
-    widget.resize(500, 245);
+    QWidget *widget = new QWidget;
 
-    return a.exec();
+    QVBoxLayout *layout = new QVBoxLayout(widget);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    layout->addWidget(scope);
+    layout->addWidget(splitter);
+
+    QMainWindow *window = new QMainWindow;
+    window->setCentralWidget(widget);
+    window->setUnifiedTitleAndToolBarOnMac(true);
+    window->show();
+    window->raise();
+
+    int status = a.exec();
+
+    delete window;
+
+    return status;
 }

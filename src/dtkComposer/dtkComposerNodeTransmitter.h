@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Nov  2 09:44:16 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov 16 08:52:44 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 51
+ * Last-Updated: Mon Nov 28 14:36:50 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 56
  */
 
 /* Commentary: 
@@ -90,23 +90,26 @@ public:
     ~dtkComposerNodeTransmitter(void);
 
 public:
-    void setData(const T& data);
+    inline void setData(const T& data);
 
-          T& data(void);
-    const T& data(void) const;
+    inline       T& data(void);
+    inline const T& data(void) const;
 
 public:
     void setVector(QVector<T> *vector);
     void   setList(  QList<T> *list);
 
+public:
     QVector<T> *vector(void);
       QList<T> *list(void);
 
 public:
     void setCurrentData(dtkxarch_int index);
 
+public:
     void clear(void);
 
+public:
     QString identifier(void) const;
 
 private:

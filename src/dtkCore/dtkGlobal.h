@@ -120,7 +120,7 @@ inline bool dtkIsBinary(const QString& path)
 {
     int c; std::ifstream a(path.toAscii().constData());
 
-    while((c = a.get()) != EOF && c <= 127);
+    while(((c = a.get()) != EOF) && (c <= 127)) { ; }
 
     return (c != EOF);
 }

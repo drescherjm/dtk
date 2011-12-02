@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Nov 14 15:02:51 2011 (+0100)
+## Last-Updated: Tue Nov 29 00:05:24 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 204
+##     Update #: 210
 ######################################################################
 ## 
 ### Commentary: 
@@ -30,6 +30,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkAnchoredBar.h
   dtkColorButton.h
   dtkColorGrid.h
+  dtkFlowLayout.h
   dtkFinder.h
   dtkGuiExport.h
   dtkInsetMenu.h
@@ -112,6 +113,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkAnchoredBar.cpp
   dtkColorButton.cpp
   dtkColorGrid.cpp
+  dtkFlowLayout.cpp
   dtkFinder.cpp
   dtkInsetMenu.cpp
   dtkInspector.cpp
@@ -146,15 +148,6 @@ set(${PROJECT_NAME}_SOURCES
   ${${PROJECT_NAME}_SOURCES}
   dtkTagCloud.cpp)
 endif(QT_QTWEBKIT_FOUND)
-
-if(APPLE)
-set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
-  dtkCocoaController.h
-  dtkCocoaUtils.h)
-set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
-  dtkCocoaController.mm
-  dtkCocoaUtils.mm)
-endif(APPLE)
 
 set(${PROJECT_NAME}_FORMS
   dtkInterpreterPreferencesWidget.ui
@@ -212,10 +205,6 @@ target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkCore
   dtkScript)
-
-if(APPLE)
-target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
-endif(APPLE)
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

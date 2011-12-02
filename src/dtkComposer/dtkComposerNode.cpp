@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Nov 25 16:11:58 2011 (+0100)
+ * Last-Updated: Mon Nov 28 15:05:36 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 2637
+ *     Update #: 2638
  */
 
 /* Commentary: 
@@ -1138,7 +1138,6 @@ bool dtkComposerNode::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNo
     DTK_UNUSED(route);
     DTK_UNUSED(destination);
 
-    DTK_DEFAULT_IMPLEMENTATION;
     return false;
 }
 
@@ -1147,7 +1146,6 @@ bool dtkComposerNode::onRightRouteConnected(dtkComposerEdge *route, dtkComposerN
     DTK_UNUSED(route);
     DTK_UNUSED(property);
 
-    DTK_DEFAULT_IMPLEMENTATION;
     return true;
 }
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Nov  4 14:16:40 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Nov 25 16:17:42 2011 (+0100)
+ * Last-Updated: Thu Dec  1 15:21:30 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 76
+ *     Update #: 83
  */
 
 /* Commentary: 
@@ -293,6 +293,9 @@ bool dtkComposerNodeLogic::canConnectRoute(dtkComposerNodeProperty *source, dtkC
 {
     // qDebug() << DTK_PRETTY_FUNCTION << this->node();
 
+    bool  left_connection_ok = true;
+    bool right_connection_ok = true;
+
     foreach(dtkComposerEdge *left, destin_node->l->leftRoutes()) {
         if (left->source() == source && left->destination() == destination)
             return true;
@@ -307,22 +310,26 @@ bool dtkComposerNodeLogic::canConnectRoute(dtkComposerNodeProperty *source, dtkC
     route->setSource(source);
     route->setDestination(destination);
 
-    if (!destin_node->onLeftRouteConnected(route, destination)) {
-        delete route;
-        return false;
+    left_connection_ok  = destin_node->onLeftRouteConnected(route, destination);
+    right_connection_ok = d->node->onRightRouteConnected(route, source);
+
+    if (left_connection_ok) {
+        destin_node->updateSourceRoutes(route);
+        d->node->updateDestinationRoutes(route);
+    }
+    
+    if (right_connection_ok) {
+        destin_node->updateSourceNodes(route);
+        d->node->updateDestinationNodes(route);
     }
 
-    // if (!d->node->onRightRouteConnected(route, source)) {
-    //     delete route;
-    //     return false;
-    // }
+    if (!left_connection_ok && !right_connection_ok) {
+        delete route;
+        route = NULL;
+    }
 
-    destin_node->updateSourceRoutes(route);
-    d->node->updateDestinationRoutes(route);
-
-    destin_node->updateSourceNodes(route);
-    d->node->updateDestinationNodes(route);
-    
+    if (!left_connection_ok || !right_connection_ok)
+        return false;
 
     return true;
 }

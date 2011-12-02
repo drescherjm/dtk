@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Nov  3 13:28:33 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 16:30:36 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 266
+ * Last-Updated: Fri Dec  2 12:24:03 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 358
  */
 
 /* Commentary: 
@@ -33,8 +33,18 @@
 class dtkComposerNodeGraphicPrivate
 {
 public:
+    typedef QPair<dtkComposerNodeProperty *, dtkComposerNodeProperty *> Route;
+    typedef QMultiHash<dtkComposerNodeProperty *, dtkComposerEdge *> EdgesToProperty;
+    typedef QHash<Route, QList<dtkComposerEdge *> > EdgesAlongRoutes;
+
+public:
     QList<dtkComposerEdge *>  leftRoute(dtkComposerEdge *edge);
     QList<dtkComposerEdge *> rightRoute(dtkComposerEdge *edge);
+
+    EdgesToProperty  leftRoute(dtkComposerEdge *edge, QList<dtkComposerEdge *>& list);
+    EdgesToProperty rightRoute(dtkComposerEdge *edge, QList<dtkComposerEdge *>& list);
+
+    EdgesAlongRoutes edgesAlongRoutes(dtkComposerEdge *edge);
 
 public:
     dtkComposerEdge  *leftEdge(dtkComposerNodeProperty *property);
@@ -160,6 +170,162 @@ QList<dtkComposerEdge *> dtkComposerNodeGraphicPrivate::rightRoute(dtkComposerEd
     }
 
     return edges;
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeGraphicPrivate implementation
+// /////////////////////////////////////////////////////////////////
+
+//! Computes potential left routes related to \a edge.
+/*! 
+ *  Three cases can occur:
+ *
+ *  - the source node is not a composite, the route is then the same than the edge.
+ *
+ *  - the source node is a composite, then two cases remain to distinct:
+ *
+ *    + the composite is the parent of the destination node, then all
+ *    left edges of the composite connected to the source property of
+ *    \a edge would likely provide left routes, so the same method is
+ *    reccursively applied to them.
+ *
+ *    + the composite is not the parent of the destination node, then
+ *    all right relay edges connected to the source property of \a
+ *    edge would likely provide left routes, so the same method is
+ *    reccursively applied to them.
+ */
+dtkComposerNodeGraphicPrivate::EdgesToProperty dtkComposerNodeGraphicPrivate::leftRoute(dtkComposerEdge *edge, QList<dtkComposerEdge *>& list)
+{
+    qDebug() << DTK_PRETTY_FUNCTION;
+
+    dtkComposerNodeGraphicPrivate::EdgesToProperty map_edges_to_property;
+
+    if (edge->source()->node()->kind() != dtkComposerNode::Composite) {
+
+        map_edges_to_property.insert(edge->source(), edge);
+
+        foreach(dtkComposerEdge *e, list)
+            map_edges_to_property.insert(edge->destination(), e);
+
+    } else {
+
+        list << edge;
+
+        if (edge->source()->node() == edge->destination()->node()->parentNode()) {
+
+            foreach(dtkComposerEdge *l_edge, edge->source()->node()->g->leftEdges()) {
+                if (l_edge->destination() == edge->source()) {
+                    //list << l_edge;
+                    map_edges_to_property += this->leftRoute(l_edge, list);
+                }
+            }
+
+        } else {
+
+            foreach(dtkComposerEdge *relay, edge->source()->node()->g->rightRelayEdges()) {
+                if (relay->destination() == edge->source()) {
+                    //list << relay;
+                    map_edges_to_property += this->leftRoute(relay, list);                    
+                }
+            }
+        }
+    }
+
+    return map_edges_to_property;
+}
+
+//! Computes potential right routes related to \a edge.
+/*! 
+ *  Three cases can occur:
+ *
+ *  - the destination node is not a composite, the route is then the same than the edge.
+ *
+ *  - the destination node is a composite, then two cases remain to distinct:
+ *
+ *    + the composite is the parent of the source node, then all
+ *    right edges of the composite connected to the destination
+ *    property of \a edge would likely provide right routes, so the
+ *    same method is reccursively applied to them.
+ *
+ *    + the composite is not the parent of the source node, then all
+ *    left relay edges connected to the destination property of \a
+ *    edge would likely provide right routes, so the same method is
+ *    reccursively applied to them.
+ */
+dtkComposerNodeGraphicPrivate::EdgesToProperty dtkComposerNodeGraphicPrivate::rightRoute(dtkComposerEdge *edge, QList<dtkComposerEdge *>& list)
+{
+    qDebug() << DTK_PRETTY_FUNCTION;
+
+    dtkComposerNodeGraphicPrivate::EdgesToProperty map_edges_to_property;
+
+    if (edge->destination()->node()->kind() != dtkComposerNode::Composite) {
+
+        map_edges_to_property.insert(edge->destination(), edge);
+
+        foreach(dtkComposerEdge *e, list)
+            map_edges_to_property.insert(edge->destination(), e);
+
+    } else {
+
+        list << edge;
+
+        if (edge->destination()->node() == edge->source()->node()->parentNode()) {
+
+            foreach(dtkComposerEdge *r_edge, edge->destination()->node()->g->rightEdges()) {
+                if (r_edge->source() == edge->destination()) {
+                    //list << r_edge;
+                    map_edges_to_property += this->rightRoute(r_edge, list);                        
+                }
+            }
+
+        } else {
+                
+            foreach(dtkComposerEdge *relay, edge->destination()->node()->g->leftRelayEdges()) {
+                if (relay->source() == edge->destination()) {
+                    //list << relay;
+                    map_edges_to_property += this->rightRoute(relay, list);
+                }                
+            }
+        }        
+    }
+
+    return map_edges_to_property;
+}
+
+//! 
+/*! 
+ *  
+ */
+dtkComposerNodeGraphicPrivate::EdgesAlongRoutes dtkComposerNodeGraphicPrivate::edgesAlongRoutes(dtkComposerEdge *edge)
+{
+    qDebug() << DTK_PRETTY_FUNCTION << "enter";
+
+    dtkComposerNodeGraphicPrivate::EdgesAlongRoutes map;
+
+    QList<dtkComposerEdge *> list;
+
+    dtkComposerNodeGraphicPrivate::EdgesToProperty  left_map =  this->leftRoute(edge, list);
+    dtkComposerNodeGraphicPrivate::EdgesToProperty right_map = this->rightRoute(edge, list);
+
+    qDebug() << DTK_PRETTY_FUNCTION << "left and right maps." << left_map.values() << right_map.values();
+
+    foreach(dtkComposerNodeProperty *source, left_map.uniqueKeys()) {
+        foreach(dtkComposerNodeProperty *destin, right_map.uniqueKeys()) {
+
+            QList<dtkComposerEdge *> edges_along_route;
+            foreach(dtkComposerEdge *e, left_map.values(source))
+                if(!edges_along_route.contains(e))
+                    edges_along_route << e;
+
+            foreach(dtkComposerEdge *e, right_map.values(destin))
+                if(!edges_along_route.contains(e))
+                    edges_along_route << e;
+
+            map.insert(qMakePair(source, destin), edges_along_route);
+        }
+    }
+
+    return map;
 }
 
 //! Returns the last left edge connected to \a property.
@@ -694,30 +860,49 @@ void dtkComposerNodeGraphic::onEdgeConnected(dtkComposerEdge *edge)
 {
     qDebug() << DTK_PRETTY_FUNCTION << this->node();
 
-    QList<dtkComposerNodeProperty *> sources;
-    QList<dtkComposerNodeProperty *> destinations;
-        
-    foreach(dtkComposerEdge *e, d->leftRoute(edge))
-        if (!sources.contains(e->source()) && 
-            e->source()->node()->kind() != dtkComposerNode::Composite)
-            sources << e->source();
-        
-    foreach(dtkComposerEdge *e, d->rightRoute(edge))
-        if (!destinations.contains(e->destination()) && 
-            e->destination()->node()->kind() != dtkComposerNode::Composite)
-            destinations << e->destination();
+    dtkComposerNodeGraphicPrivate::EdgesAlongRoutes map = d->edgesAlongRoutes(edge);
 
-    foreach(dtkComposerNodeProperty *source, sources) {
-        foreach(dtkComposerNodeProperty *destin, destinations) {
+    if (!map.count()) {
+        edge->invalidate();
 
-            if (!source->node()->l->canConnectRoute(source, destin, destin->node())) {
-                edge->invalidate();
-                return;
-            } else {
-                edge->validate();
-            }    
+    } else {
+
+        foreach(dtkComposerNodeGraphicPrivate::Route pair, map.keys()) {
+            if (pair.first->node()->l->canConnectRoute(pair.first, pair.second, pair.second->node())) {
+                foreach(dtkComposerEdge *e, map.value(pair))
+                    e->validate();
+            }
         }
     }
+
+    // QList<dtkComposerNodeProperty *> sources;
+    // QList<dtkComposerNodeProperty *> destinations;
+        
+    // foreach(dtkComposerEdge *e, d->leftRoute(edge))
+    //     if (!sources.contains(e->source()) && 
+    //         e->source()->node()->kind() != dtkComposerNode::Composite)
+    //         sources << e->source();
+        
+    // foreach(dtkComposerEdge *e, d->rightRoute(edge))
+    //     if (!destinations.contains(e->destination()) && 
+    //         e->destination()->node()->kind() != dtkComposerNode::Composite)
+    //         destinations << e->destination();
+
+    // dtkComposerEdge *current_route = NULL;
+
+    // foreach(dtkComposerNodeProperty *source, sources) {
+    //     foreach(dtkComposerNodeProperty *destin, destinations) {
+
+    //         current_route = source->node()->l->canConnectRoute(source, destin, destin->node());
+    //         if (current_route) {
+    //             foreach(dtkComposerEdge *edge_on_route, d->edgesAlongRoute(current_route))
+    //                 edge_on_route->invalidate();
+    //         } else {
+    //             foreach(dtkComposerEdge *edge_on_route, d->edgesAlongRoute(current_route))
+    //                 edge_on_route->validate();
+    //         }    
+    //     }
+    // }
 }
 
 //! 

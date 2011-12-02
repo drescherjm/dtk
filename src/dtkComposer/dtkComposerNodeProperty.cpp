@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov  7 17:31:43 2011 (+0100)
+ * Last-Updated: Fri Dec  2 12:43:52 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 445
+ *     Update #: 458
  */
 
 /* Commentary: 
@@ -163,7 +163,11 @@ QString dtkComposerNodeProperty::description(void)
 
 dtkComposerNodeProperty *dtkComposerNodeProperty::clone(dtkComposerNode *node)
 {
-    dtkComposerNodeProperty *property = new dtkComposerNodeProperty(d->text->toPlainText(), d->type, d->multiplicity, node);
+    QString name = d->text->toPlainText();
+    name.append(" ");
+    name.append(d->parent->title());
+
+    dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, d->position, AsRelay, d->multiplicity, node);
 
     if(d->parent && d->parent->kind() == dtkComposerNode::Composite)
         property->d->clone = d->clone;
@@ -220,6 +224,14 @@ bool dtkComposerNodeProperty::contains(const QPointF& point) const
 {
     if (d->ellipse)
         return d->ellipse->contains(point);
+
+    if (d->parent->kind() == dtkComposerNode::Composite) {
+        if ((d->parent->isGhost() && d->position == Left) || 
+            (!d->parent->isGhost() && d->position == Right))
+            return d->path_right->contains(point);
+        else 
+            return false;
+    }
 
     return d->path_right->contains(point);
 }
@@ -416,16 +428,24 @@ void dtkComposerNodeProperty::setRect(const QRectF& rect)
     
         switch(d->position) {
         case Left:
-            if (d->parent->isGhost())
+            if (d->parent->isGhost()) {
+                d->path_left->setBrush(Qt::lightGray);
                 d->text->setPos(rect.topRight() + QPointF(fm.width(d->text->toPlainText()) * (-1) - 3 * rect.width(), (fm.height() / 2. - 1) * (-1)));
-            else
+            } else {
+                if (d->parent->kind() == dtkComposerNode::Composite)
+                    d->path_right->setBrush(Qt::lightGray);
                 d->text->setPos(rect.topRight() + QPointF(0, (fm.height() / 2. - 1) * (-1)));
+            }
             break;
         case Right:
-            if (d->parent->isGhost())
+            if (d->parent->isGhost()) {
+                d->path_right->setBrush(Qt::lightGray);
                 d->text->setPos(rect.topRight() + QPointF(rect.width(), (fm.height() / 2. - 1) * (-1)));
-            else
+            } else {
+                if (d->parent->kind() == dtkComposerNode::Composite)
+                    d->path_left->setBrush(Qt::lightGray);
                 d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText()) * (-1) - rect.width(), (fm.height() / 2. - 1) * (-1)));
+            }
             break;
         default:
             break;

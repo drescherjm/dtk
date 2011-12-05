@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec  5 12:35:21 2011 (+0100)
+ * Last-Updated: Mon Dec  5 12:56:16 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 498
+ *     Update #: 499
  */
 
 /* Commentary: 
@@ -547,7 +547,7 @@ QGraphicsTextItem *dtkComposerNodePropertyElided(QGraphicsTextItem *item)
 {
     QFontMetricsF metrics(item->font());
     
-    item->setPlainText(metrics.elidedText(item->toPlainText(), Qt::ElideMiddle, 60));
+    item->setPlainText(metrics.elidedText(item->toPlainText(), Qt::ElideMiddle, 50));
 
     return item;
 }

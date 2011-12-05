@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec  5 12:35:28 2011 (+0100)
+ * Last-Updated: Mon Dec  5 12:54:09 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 2658
+ *     Update #: 2660
  */
 
 /* Commentary: 
@@ -549,7 +549,7 @@ void dtkComposerNode::addChildNode(dtkComposerNode *node)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
 
-    if (!d->children.contains(node))
+    if(!d->children.contains(node))
         d->children << node;
 }
 

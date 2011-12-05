@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Oct 24 12:57:38 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 14:44:01 2011 (+0100)
+ * Last-Updated: Mon Dec  5 12:58:32 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 434
+ *     Update #: 435
  */
 
 /* Commentary: 
@@ -81,8 +81,10 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNode *node)
 
     if (node->kind() == dtkComposerNode::Composite) {
 
-        foreach(dtkComposerNode *child, node->childNodes())
+        foreach(dtkComposerNode *child, node->childNodes()) {
+            child->setDirty(true);
             this->stack.push(child);
+        }
 
         return true;
     }

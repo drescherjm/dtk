@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec  5 13:10:11 2011 (+0100)
+ * Last-Updated: Mon Dec  5 13:27:07 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 476
+ *     Update #: 500
  */
 
 /* Commentary: 
@@ -22,6 +22,16 @@
 #include "dtkComposerNodeProperty.h"
 
 #include <dtkCore/dtkGlobal.h>
+
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+QGraphicsTextItem *dtkComposerNodePropertyElided(QGraphicsTextItem *item);
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeProperty
+// /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodePropertyPrivate
 {
@@ -41,6 +51,7 @@ public:
     bool displayed;
 
     QString block;
+    QString name;
 };
 
 dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multiplicity multiplicity, dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePropertyPrivate)
@@ -59,6 +70,7 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multip
     d->text->setFont(QFont("Lucida Grande", 9));
 #endif
     d->text->setPlainText(name);
+    d->name = name;
     d->text->setDefaultTextColor(Qt::white);
 
     switch(d->type) {
@@ -90,6 +102,8 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multip
     };
 
     this->setZValue(20);
+    
+    Q_UNUSED (dtkComposerNodePropertyElided(d->text));
 }
 
 dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Position position, Behavior behavior, Multiplicity multiplicity, dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePropertyPrivate)
@@ -110,6 +124,8 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Position position
 #endif
     d->text->setPlainText(name);
     d->text->setDefaultTextColor(Qt::white);
+
+    d->name = name;
 
     switch(d->behavior) {
     case AsInput:
@@ -138,6 +154,8 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Position position
     };
 
     this->setZValue(20);
+
+    Q_UNUSED(dtkComposerNodePropertyElided(d->text));
 }
 
 dtkComposerNodeProperty::~dtkComposerNodeProperty(void)
@@ -154,7 +172,7 @@ QString dtkComposerNodeProperty::description(void)
     if(!d->parent)
         return QString("Invalid property");
 
-    return QString("Valid property %1").arg(d->text->toPlainText());
+    return QString("Valid property %1").arg(d->name);
 }
 
 dtkComposerEdge *dtkComposerNodeProperty::edge(void)
@@ -172,7 +190,7 @@ dtkComposerNode *dtkComposerNodeProperty::node(void)
 
 QString dtkComposerNodeProperty::name(void) const
 {
-    return d->text->toPlainText();
+    return d->name;
 }
 
 dtkComposerNodeProperty::Type dtkComposerNodeProperty::type(void)
@@ -280,6 +298,10 @@ void dtkComposerNodeProperty::setName(const QString& name)
 {
     d->text->setPlainText(name);
 
+    d->name = name;
+
+    Q_UNUSED(dtkComposerNodePropertyElided(d->text));
+
     this->update();
 }
 
@@ -333,6 +355,8 @@ QRectF dtkComposerNodeProperty::rect(void) const
 void dtkComposerNodeProperty::setText(const QString& text)
 {
     d->text->setPlainText(text);
+
+    Q_UNUSED(dtkComposerNodePropertyElided(d->text));
 }
 
 void dtkComposerNodeProperty::setRect(const QRectF& rect)
@@ -494,4 +518,17 @@ QDebug operator<<(QDebug dbg, dtkComposerNodeProperty *property)
     dbg.nospace() << property->description();
 
     return dbg.space();
+}
+
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+QGraphicsTextItem *dtkComposerNodePropertyElided(QGraphicsTextItem *item)
+{
+    QFontMetricsF metrics(item->font());
+    
+    item->setPlainText(metrics.elidedText(item->toPlainText(), Qt::ElideMiddle, 50));
+
+    return item;
 }

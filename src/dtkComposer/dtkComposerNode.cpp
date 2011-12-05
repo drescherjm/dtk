@@ -4,9 +4,15 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
+<<<<<<< HEAD
  * Last-Updated: Mon Dec  5 13:10:52 2011 (+0100)
  *           By: Thibaud Kloczko
  *     Update #: 2640
+=======
+ * Last-Updated: Mon Dec  5 12:54:09 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 2660
+>>>>>>> 24384be6c876dbd7ed94b0db20bb45bcbc582a8f
  */
 
 /* Commentary: 
@@ -35,6 +41,12 @@
 // #define DTK_DEBUG_COMPOSER_INTERACTION 1
 
 // /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+QGraphicsTextItem *dtkComposerNodeElided(QGraphicsTextItem *item);
+
+// /////////////////////////////////////////////////////////////////
 // dtkComposerNodePrivate
 // /////////////////////////////////////////////////////////////////
 
@@ -55,6 +67,8 @@ public:
     qreal margin_bottom;
 
     QGraphicsTextItem *title;
+
+    QString name;
 
     dtkComposerNodeProperty *clicked_property;
 
@@ -134,6 +148,8 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
     d->title->setPlainText("Title");
     d->title->setDefaultTextColor(Qt::white);
     d->title->setPos(d->bounding_rect.topLeft());
+
+    Q_UNUSED(dtkComposerNodeElided(d->title));
 
     this->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
     this->setZValue(10);
@@ -220,6 +236,10 @@ QString dtkComposerNode::description(void)
 void dtkComposerNode::setTitle(const QString& title)
 {
     d->title->setPlainText(title);
+
+    d->name = title;
+
+    Q_UNUSED(dtkComposerNodeElided(d->title));
 }
 
 void dtkComposerNode::setAttribute(Attribute attribute)
@@ -302,8 +322,13 @@ void dtkComposerNode::setObject(dtkAbstractObject *object, bool update)
             if(dtkComposerNodeProperty *p = this->g->rightProperty(property))
                 p->show();
 
-    if (d->object)
-        d->title->setHtml(object->name());
+    if (d->object) {
+        d->title->setPlainText(object->name());
+
+        d->name = object->name();
+    }
+
+    Q_UNUSED(dtkComposerNodeElided(d->title));
 }
 
 dtkComposerNode::Attribute dtkComposerNode::attribute(void)
@@ -424,7 +449,7 @@ dtkComposerNodeProperty *dtkComposerNode::rightProperty(const QString& name, dtk
 
 QString dtkComposerNode::title(void)
 {
-    return QString(d->title->toPlainText());
+    return QString(d->name);
 }
 
 bool dtkComposerNode::dirty(void)
@@ -530,7 +555,7 @@ void dtkComposerNode::addChildNode(dtkComposerNode *node)
     qDebug() << DTK_PRETTY_FUNCTION << this;
 #endif
 
-    if (!d->children.contains(node))
+    if(!d->children.contains(node))
         d->children << node;
 }
 
@@ -1192,4 +1217,17 @@ QDebug operator<<(QDebug dbg, dtkComposerNode *node)
     dbg.nospace() << node->description();
     
     return dbg.space();
+}
+
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+QGraphicsTextItem *dtkComposerNodeElided(QGraphicsTextItem *item)
+{
+    QFontMetricsF metrics(item->font());
+    
+    item->setPlainText(metrics.elidedText(item->toPlainText(), Qt::ElideMiddle, 130));
+
+    return item;
 }

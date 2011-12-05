@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Nov  4 14:16:40 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Dec  1 15:21:30 2011 (+0100)
+ * Last-Updated: Mon Dec  5 10:36:25 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 83
+ *     Update #: 96
  */
 
 /* Commentary: 
@@ -291,8 +291,6 @@ const QList<dtkComposerNode *>& dtkComposerNodeLogic::rightNodes(void) const
  */
 bool dtkComposerNodeLogic::canConnectRoute(dtkComposerNodeProperty *source, dtkComposerNodeProperty *destination, dtkComposerNode *destin_node)
 {
-    // qDebug() << DTK_PRETTY_FUNCTION << this->node();
-
     bool  left_connection_ok = true;
     bool right_connection_ok = true;
 
@@ -423,3 +421,47 @@ bool dtkComposerNodeLogic::canConnectRoute(dtkComposerNodeProperty *source, dtkC
             //     destin->node()->l->appendLeftRoute(route);
             //     source->node()->l->appendRightRoute(route);
             // }
+
+//! 
+/*! 
+ *  
+ */
+void dtkComposerNodeLogic::onRouteDiconnected(dtkComposerNodeProperty *source, dtkComposerNodeProperty *destination, dtkComposerNode *destin_node)
+{
+    dtkComposerEdge  *left_route = NULL;
+    dtkComposerEdge *right_route = NULL;
+
+    foreach(dtkComposerEdge *l_route, destin_node->l->leftRoutes()) {
+        if (l_route->source() == source && l_route->destination() == destination) {
+            left_route = l_route;
+            destin_node->l->removeLeftRoute(left_route);
+            break;
+        }
+    }
+    
+    foreach(dtkComposerEdge *r_route, this->rightRoutes()) {
+        if (r_route->source() == source && r_route->destination() == destination) {
+            right_route = r_route;
+            this->removeRightRoute(right_route);
+            break;
+        }
+    }
+
+    if (left_route)
+        qDebug() << left_route;
+
+    if (right_route)
+        qDebug() << right_route;
+    
+    if (left_route == right_route)
+        right_route = NULL;
+    
+    if (left_route)
+        delete left_route;
+    
+    if (right_route)
+        delete right_route;
+    
+    left_route = NULL;
+    right_route = NULL;
+}

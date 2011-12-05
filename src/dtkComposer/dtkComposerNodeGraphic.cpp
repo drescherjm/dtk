@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Nov  3 13:28:33 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Dec  5 09:48:31 2011 (+0100)
+ * Last-Updated: Mon Dec  5 10:48:42 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 364
+ *     Update #: 374
  */
 
 /* Commentary: 
@@ -106,7 +106,7 @@ dtkComposerNodeGraphicPrivate::EdgesToProperty dtkComposerNodeGraphicPrivate::le
         map_edges_to_property.insert(edge->source(), edge);
 
         foreach(dtkComposerEdge *e, list)
-            map_edges_to_property.insert(edge->destination(), e);
+            map_edges_to_property.insert(edge->source(), e);
 
     } else {
 
@@ -801,6 +801,25 @@ void dtkComposerNodeGraphic::onEdgeConnected(dtkComposerEdge *edge)
  */
 void dtkComposerNodeGraphic::onEdgeDisconnected(dtkComposerEdge *edge)
 {
+    dtkComposerNodeGraphicPrivate::EdgesAlongRoutes map = d->edgesAlongRoutes(edge);
+
+    if (!map.count()) {
+        edge->validate();
+
+    } else {
+
+        foreach(dtkComposerNodeGraphicPrivate::Route pair, map.keys()) {
+            pair.first->node()->l->onRouteDiconnected(pair.first, pair.second, pair.second->node());
+            foreach(dtkComposerEdge *e, map.value(pair)) {
+                if (e != edge)
+                    e->invalidate();
+                else
+                    e->validate();
+            }
+            
+        }
+    }
+
     // QList<dtkComposerNodeProperty *> sources;
     // QList<dtkComposerNodeProperty *> destinations;
 

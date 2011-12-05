@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec  5 12:56:16 2011 (+0100)
+ * Last-Updated: Mon Dec  5 14:10:09 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 499
+ *     Update #: 520
  */
 
 /* Commentary: 
@@ -336,8 +336,6 @@ void dtkComposerNodeProperty::setName(const QString& name)
     d->name = name;
 
     Q_UNUSED(dtkComposerNodePropertyElided(d->text));
-
-    this->update();
 }
 
 void dtkComposerNodeProperty::setType(dtkComposerNodeProperty::Type type)

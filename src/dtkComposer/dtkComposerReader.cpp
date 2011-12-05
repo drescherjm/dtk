@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov 21 09:56:29 2011 (+0100)
+ * Last-Updated: Mon Dec  5 13:12:01 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 915
+ *     Update #: 916
  */
 
 /* Commentary: 
@@ -833,9 +833,9 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
                 foreach(dtkComposerNodeProperty *property, n->g->leftProperties()) {
                     if(property->name() == name) {
                         if(p_id >= 0) {
-                            if(p_id == d->node_map.key(property->clonedFrom()) && hidden == "false") {
-                                property->show();
-                            }
+                            // if(p_id == d->node_map.key(property->clonedFrom()) && hidden == "false") {
+                            //     property->show();
+                            // }
                         } else {
                             if(hidden == "true") {
                                 property->hide();
@@ -853,9 +853,9 @@ dtkComposerNode *dtkComposerReader::readNode(QDomNode node)
                 foreach(dtkComposerNodeProperty *property, n->g->rightProperties()) {
                     if(property->name() == name) {
                         if(p_id >= 0) {
-                            if(p_id == d->node_map.key(property->clonedFrom()) && hidden == "false") {
-                                property->show();
-                            }
+                            // if(p_id == d->node_map.key(property->clonedFrom()) && hidden == "false") {
+                            //     property->show();
+                            // }
                         } else {
                             if(hidden == "true") {
                                 property->hide();

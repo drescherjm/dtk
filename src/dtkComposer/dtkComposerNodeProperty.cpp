@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec  2 12:43:52 2011 (+0100)
+ * Last-Updated: Mon Dec  5 13:10:11 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 458
+ *     Update #: 476
  */
 
 /* Commentary: 
@@ -27,7 +27,6 @@ class dtkComposerNodePropertyPrivate
 {
 public:
     dtkComposerNode *parent;
-    dtkComposerNode *clone;
 
     dtkComposerNodeProperty::Type type;
     dtkComposerNodeProperty::Position position;
@@ -50,7 +49,6 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multip
     d->multiplicity = multiplicity;
     d->behavior = dtkComposerNodeProperty::None;
     d->parent = parent;
-    d->clone = NULL;
 
     d->displayed = true;
 
@@ -101,7 +99,6 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Position position
     d->behavior = behavior;
     d->multiplicity = multiplicity;
     d->parent = parent;
-    d->clone = NULL;
 
     d->displayed = true;
 
@@ -146,7 +143,6 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Position position
 dtkComposerNodeProperty::~dtkComposerNodeProperty(void)
 {
     d->parent = NULL;
-    d->clone = NULL;
 
     delete d;
 
@@ -159,27 +155,6 @@ QString dtkComposerNodeProperty::description(void)
         return QString("Invalid property");
 
     return QString("Valid property %1").arg(d->text->toPlainText());
-}
-
-dtkComposerNodeProperty *dtkComposerNodeProperty::clone(dtkComposerNode *node)
-{
-    QString name = d->text->toPlainText();
-    name.append(" ");
-    name.append(d->parent->title());
-
-    dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, d->position, AsRelay, d->multiplicity, node);
-
-    if(d->parent && d->parent->kind() == dtkComposerNode::Composite)
-        property->d->clone = d->clone;
-    else
-        property->d->clone = d->parent;
-
-    property->d->displayed = false;
-
-    if(node)
-        property->hide();
-    
-    return property;
 }
 
 dtkComposerEdge *dtkComposerNodeProperty::edge(void)
@@ -269,11 +244,6 @@ dtkComposerNode *dtkComposerNodeProperty::parent(void)
     return d->parent;
 }
 
-dtkComposerNode *dtkComposerNodeProperty::clonedFrom(void)
-{
-    return d->clone;
-}
-
 QString dtkComposerNodeProperty::blockedFrom(void) const
 {
     return d->block;
@@ -282,11 +252,6 @@ QString dtkComposerNodeProperty::blockedFrom(void) const
 void dtkComposerNodeProperty::setBlockedFrom(const QString& name)
 {
     d->block = name;
-}
-
-void dtkComposerNodeProperty::setClonedFrom(dtkComposerNode *node)
-{
-    d->clone = node;
 }
 
 void dtkComposerNodeProperty::setParentNode(dtkComposerNode *node)
@@ -331,6 +296,22 @@ void dtkComposerNodeProperty::setPosition(dtkComposerNodeProperty::Position posi
 void dtkComposerNodeProperty::setBehavior(dtkComposerNodeProperty::Behavior behavior)
 {
     d->behavior = behavior;
+}
+
+dtkComposerNodeProperty *dtkComposerNodeProperty::createCompositeProperty(dtkComposerNodeProperty *origin, dtkComposerNode *node)
+{
+    QString name = origin->name();
+    name.append("_");
+    name.append(origin->parent()->title());
+
+    dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, origin->position(), AsRelay, origin->multiplicity(), node);
+
+    property->d->displayed = false;
+
+    if(node)
+        property->hide();
+    
+    return property;
 }
 
 QRectF dtkComposerNodeProperty::boundingRect(void) const

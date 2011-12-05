@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec  5 12:28:40 2011 (+0100)
+ * Last-Updated: Mon Dec  5 12:35:21 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 484
+ *     Update #: 498
  */
 
 /* Commentary: 
@@ -52,6 +52,7 @@ public:
     bool displayed;
 
     QString block;
+    QString name;
 };
 
 dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multiplicity multiplicity, dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePropertyPrivate)
@@ -71,6 +72,7 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multip
     d->text->setFont(QFont("Lucida Grande", 9));
 #endif
     d->text->setPlainText(name);
+    d->name = name;
     d->text->setDefaultTextColor(Qt::white);
 
     switch(d->type) {
@@ -126,6 +128,8 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Position position
     d->text->setPlainText(name);
     d->text->setDefaultTextColor(Qt::white);
 
+    d->name = name;
+
     switch(d->behavior) {
     case AsInput:
     case AsOutput:
@@ -172,12 +176,12 @@ QString dtkComposerNodeProperty::description(void)
     if(!d->parent)
         return QString("Invalid property");
 
-    return QString("Valid property %1").arg(d->text->toPlainText());
+    return QString("Valid property %1").arg(d->name);
 }
 
 dtkComposerNodeProperty *dtkComposerNodeProperty::clone(dtkComposerNode *node)
 {
-    QString name = d->text->toPlainText();
+    QString name = d->name;
     name.append(" ");
     name.append(d->parent->title());
 
@@ -211,7 +215,7 @@ dtkComposerNode *dtkComposerNodeProperty::node(void)
 
 QString dtkComposerNodeProperty::name(void) const
 {
-    return d->text->toPlainText();
+    return d->name;
 }
 
 dtkComposerNodeProperty::Type dtkComposerNodeProperty::type(void)
@@ -328,6 +332,8 @@ void dtkComposerNodeProperty::setDisplayed(bool displayed)
 void dtkComposerNodeProperty::setName(const QString& name)
 {
     d->text->setPlainText(name);
+
+    d->name = name;
 
     Q_UNUSED(dtkComposerNodePropertyElided(d->text));
 
@@ -541,7 +547,7 @@ QGraphicsTextItem *dtkComposerNodePropertyElided(QGraphicsTextItem *item)
 {
     QFontMetricsF metrics(item->font());
     
-    item->setPlainText(metrics.elidedText(item->toPlainText(), Qt::ElideRight, 60));
+    item->setPlainText(metrics.elidedText(item->toPlainText(), Qt::ElideMiddle, 60));
 
     return item;
 }

@@ -4,9 +4,15 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
+<<<<<<< HEAD
  * Last-Updated: Mon Dec  5 14:10:12 2011 (+0100)
  *           By: Julien Wintz
  *     Update #: 139
+=======
+ * Last-Updated: Mon Dec  5 13:09:44 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 147
+>>>>>>> 1de27d7fd67bf54273589ac53a89f681c90aae5b
  */
 
 /* Commentary: 
@@ -76,9 +82,7 @@ public:
      dtkComposerNodeProperty(QString name, Position position, Behavior behavior, Multiplicity multiplicity, dtkComposerNode *parent);
     ~dtkComposerNodeProperty(void);
 
-    QString description(void);    
-
-    dtkComposerNodeProperty *clone(dtkComposerNode *node = 0);
+    QString description(void);
 
     dtkComposerEdge *edge(void);
     dtkComposerNode *node(void);
@@ -98,12 +102,11 @@ public:
     void show(void);
 
     dtkComposerNode *parent(void);
-    dtkComposerNode *clonedFrom(void);
     
     QString blockedFrom(void) const;
 
     void setBlockedFrom(const QString& name);
-    void setClonedFrom(dtkComposerNode *node);
+
     void setParentNode(dtkComposerNode *node);
 
     bool  isDisplayed(void);
@@ -117,6 +120,9 @@ public:
 
     friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNodeProperty& property);
     friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug dbg, dtkComposerNodeProperty *property);
+
+public:
+    static dtkComposerNodeProperty *createCompositeProperty(dtkComposerNodeProperty *origin, dtkComposerNode *node);
 
 public:
     QRectF boundingRect(void) const;

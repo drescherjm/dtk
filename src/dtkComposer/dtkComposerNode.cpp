@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec  5 12:54:09 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 2660
+ * Last-Updated: Mon Dec  5 13:28:03 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 2661
  */
 
 /* Commentary: 
@@ -422,7 +422,7 @@ dtkComposerNodeProperty *dtkComposerNode::leftProperty(const QString& name, dtkC
 #endif
     foreach(dtkComposerNodeProperty *property, g->leftProperties())
         if (property->name() == name)
-            if (property->clonedFrom() == from)
+            // if (property->clonedFrom() == from)
                 return property;
     
     return NULL;
@@ -435,7 +435,7 @@ dtkComposerNodeProperty *dtkComposerNode::rightProperty(const QString& name, dtk
 #endif
     foreach(dtkComposerNodeProperty *property, g->rightProperties())
         if (property->name() == name)
-            if (property->clonedFrom() == from)
+            // if (property->clonedFrom() == from)
                 return property;
 
     return NULL;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 14:45:07 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 2973
+ * Last-Updated: Mon Dec  5 13:15:20 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 2984
  */
 
 /* Commentary: 
@@ -409,39 +409,39 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
 
         parent = n->parentNode();
 
-        foreach(dtkComposerNodeProperty *property, parent->g->leftProperties()) {
-            if (property->clonedFrom() == node) {
+        // foreach(dtkComposerNodeProperty *property, parent->g->leftProperties()) {
+        //     if (property->clonedFrom() == node) {
 
-                foreach(dtkComposerEdge *edge, parent->g->leftEdges())
-                    if (edge->destination() == property)
-                        this->removeEdge(edge);
+        //         foreach(dtkComposerEdge *edge, parent->g->leftEdges())
+        //             if (edge->destination() == property)
+        //                 this->removeEdge(edge);
 
-                foreach(dtkComposerEdge *edge, parent->g->leftRelayEdges())
-                    if (edge->source() == property)
-                        this->removeEdge(edge);
+        //         foreach(dtkComposerEdge *edge, parent->g->leftRelayEdges())
+        //             if (edge->source() == property)
+        //                 this->removeEdge(edge);
 
-                parent->g->removeLeftProperty(property);
-                delete property;
-                property = NULL;
-            }
-        }
+        //         parent->g->removeLeftProperty(property);
+        //         delete property;
+        //         property = NULL;
+        //     }
+        // }
 
-        foreach(dtkComposerNodeProperty *property, parent->g->rightProperties()) {
-            if (property->clonedFrom() == node) {
+        // foreach(dtkComposerNodeProperty *property, parent->g->rightProperties()) {
+        //     if (property->clonedFrom() == node) {
 
-                foreach(dtkComposerEdge *edge, parent->g->rightEdges())
-                    if (edge->source() == property)
-                        this->removeEdge(edge);
+        //         foreach(dtkComposerEdge *edge, parent->g->rightEdges())
+        //             if (edge->source() == property)
+        //                 this->removeEdge(edge);
 
-                foreach(dtkComposerEdge *edge, parent->g->rightRelayEdges()) 
-                    if (edge->destination() == property) 
-                        this->removeEdge(edge);
+        //         foreach(dtkComposerEdge *edge, parent->g->rightRelayEdges()) 
+        //             if (edge->destination() == property) 
+        //                 this->removeEdge(edge);
 
-                parent->g->removeRightProperty(property);
-                delete property;
-                property = NULL;
-            }
-        }
+        //         parent->g->removeRightProperty(property);
+        //         delete property;
+        //         property = NULL;
+        //     }
+        // }
 
         n = parent;
     }
@@ -532,10 +532,15 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
             qDebug() << "Cannot create group of nodes that do not share the same parent item.";
             return NULL;
         }
-    }        
+    }
+
+    int count = 0;
+    foreach(dtkComposerNode *n, d->nodes)
+        if (n->kind() == dtkComposerNode::Composite)
+            count++;
 
     dtkComposerNode *group = new dtkComposerNode;
-    group->setTitle("Composite node");
+    group->setTitle(QString("Composite node %1").arg(count));
     group->setType("dtkComposerNodeComposite");
     group->setKind(dtkComposerNode::Composite);
 
@@ -579,12 +584,6 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
         node->setParentNode(group);
         group->addChildNode(node);
 
-        foreach(dtkComposerNodeProperty *property, node->g->leftProperties())
-            group->g->appendLeftProperty(property->clone(group));
-
-        foreach(dtkComposerNodeProperty *property, node->g->rightProperties())
-            group->g->appendRightProperty(property->clone(group));
-
         foreach(dtkComposerEdge *edge, node->g->leftEdges()) {
             
             if (!nodes.contains(edge->source()->node())) {
@@ -592,11 +591,8 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
                 source = edge->source();
                 destin = edge->destination();
 
-                if (node->kind() == dtkComposerNode::Composite)
-                    clone = group->leftProperty(destin->name(), destin->clonedFrom());
-                else
-                    clone = group->leftProperty(destin->name(), node);
-
+                clone = dtkComposerNodeProperty::createCompositeProperty(destin, group);
+                group->g->appendLeftProperty(clone);
                 clone->show();
 
                 node->setParentNode(former_parent);
@@ -624,10 +620,9 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
                 source = edge->source();
                 destin = edge->destination();
 
-                if (node->kind() == dtkComposerNode::Composite)
-                    clone = group->rightProperty(source->name(), source->clonedFrom());
-                else
-                    clone = group->rightProperty(source->name(), node);
+                clone = dtkComposerNodeProperty::createCompositeProperty(source, group);
+                group->g->appendRightProperty(clone);
+                clone->show();
 
                 clone->show();
 
@@ -685,17 +680,17 @@ dtkComposerNode *dtkComposerScene::createNode(QString type, QPointF position)
 
         dtkComposerNode *n = d->current_node;
 
-        while (n) {
+        // while (n) {
             
-            foreach(dtkComposerNodeProperty *property, node->g->leftProperties())
-                n->g->appendLeftProperty(property->clone(n));
+        //     foreach(dtkComposerNodeProperty *property, node->g->leftProperties())
+        //         n->g->appendLeftProperty(property->clone(n));
             
-            foreach(dtkComposerNodeProperty *property, node->g->rightProperties())
-                n->g->appendRightProperty(property->clone(n));
+        //     foreach(dtkComposerNodeProperty *property, node->g->rightProperties())
+        //         n->g->appendRightProperty(property->clone(n));
             
-            n = n->parentNode();
+        //     n = n->parentNode();
 
-        }
+        // }
 
         this->addNode(node);
         this->addItem(node);

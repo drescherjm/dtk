@@ -4,9 +4,15 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec  5 14:10:09 2011 (+0100)
+]<<<<<<< HEAD
+ * Last-Updated: Mon Dec  5 16:30:05 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 520
+ *     Update #: 521
+=======
+ * Last-Updated: Mon Dec  5 14:20:38 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 507
+>>>>>>> 1de27d7fd67bf54273589ac53a89f681c90aae5b
  */
 
 /* Commentary: 
@@ -37,7 +43,6 @@ class dtkComposerNodePropertyPrivate
 {
 public:
     dtkComposerNode *parent;
-    dtkComposerNode *clone;
 
     dtkComposerNodeProperty::Type type;
     dtkComposerNodeProperty::Position position;
@@ -61,7 +66,6 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multip
     d->multiplicity = multiplicity;
     d->behavior = dtkComposerNodeProperty::None;
     d->parent = parent;
-    d->clone = NULL;
 
     d->displayed = true;
 
@@ -115,7 +119,6 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Position position
     d->behavior = behavior;
     d->multiplicity = multiplicity;
     d->parent = parent;
-    d->clone = NULL;
 
     d->displayed = true;
 
@@ -164,7 +167,6 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Position position
 dtkComposerNodeProperty::~dtkComposerNodeProperty(void)
 {
     d->parent = NULL;
-    d->clone = NULL;
 
     delete d;
 
@@ -177,27 +179,6 @@ QString dtkComposerNodeProperty::description(void)
         return QString("Invalid property");
 
     return QString("Valid property %1").arg(d->name);
-}
-
-dtkComposerNodeProperty *dtkComposerNodeProperty::clone(dtkComposerNode *node)
-{
-    QString name = d->name;
-    name.append(" ");
-    name.append(d->parent->title());
-
-    dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, d->position, AsRelay, d->multiplicity, node);
-
-    if(d->parent && d->parent->kind() == dtkComposerNode::Composite)
-        property->d->clone = d->clone;
-    else
-        property->d->clone = d->parent;
-
-    property->d->displayed = false;
-
-    if(node)
-        property->hide();
-    
-    return property;
 }
 
 dtkComposerEdge *dtkComposerNodeProperty::edge(void)
@@ -244,11 +225,17 @@ bool dtkComposerNodeProperty::contains(const QPointF& point) const
         return d->ellipse->contains(point);
 
     if (d->parent->kind() == dtkComposerNode::Composite) {
-        if ((d->parent->isGhost() && d->position == Left) || 
-            (!d->parent->isGhost() && d->position == Right))
-            return d->path_right->contains(point);
-        else 
-            return false;
+        if (d->parent->isGhost()) {
+            if (d->position == Left)
+                return (d->path_right->contains(point) || d->path_left->contains(point));
+            else
+                return false;
+        } else {
+            if (d->position == Right)
+                return (d->path_right->contains(point) || d->path_left->contains(point));
+            else 
+                return false;
+        }
     }
 
     return d->path_right->contains(point);
@@ -287,11 +274,6 @@ dtkComposerNode *dtkComposerNodeProperty::parent(void)
     return d->parent;
 }
 
-dtkComposerNode *dtkComposerNodeProperty::clonedFrom(void)
-{
-    return d->clone;
-}
-
 QString dtkComposerNodeProperty::blockedFrom(void) const
 {
     return d->block;
@@ -300,11 +282,6 @@ QString dtkComposerNodeProperty::blockedFrom(void) const
 void dtkComposerNodeProperty::setBlockedFrom(const QString& name)
 {
     d->block = name;
-}
-
-void dtkComposerNodeProperty::setClonedFrom(dtkComposerNode *node)
-{
-    d->clone = node;
 }
 
 void dtkComposerNodeProperty::setParentNode(dtkComposerNode *node)
@@ -351,6 +328,22 @@ void dtkComposerNodeProperty::setPosition(dtkComposerNodeProperty::Position posi
 void dtkComposerNodeProperty::setBehavior(dtkComposerNodeProperty::Behavior behavior)
 {
     d->behavior = behavior;
+}
+
+dtkComposerNodeProperty *dtkComposerNodeProperty::createCompositeProperty(dtkComposerNodeProperty *origin, dtkComposerNode *node)
+{
+    QString name = origin->name();
+    name.append("_");
+    name.append(origin->parent()->title());
+
+    dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, origin->position(), AsRelay, origin->multiplicity(), node);
+
+    property->d->displayed = false;
+
+    if(node)
+        property->hide();
+    
+    return property;
 }
 
 QRectF dtkComposerNodeProperty::boundingRect(void) const

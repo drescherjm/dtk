@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov 15 12:24:35 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 471
+ * Last-Updated: Mon Dec  5 17:00:09 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 475
  */
 
 /* Commentary: 
@@ -185,6 +185,16 @@ void dtkComposerEdge::adjust(const QPointF& start, const QPointF& end)
 
 bool dtkComposerEdge::link(bool anyway)
 {
+    if(!d->source) {
+        qDebug() << DTK_PRETTY_FUNCTION << "No source set";
+        return false;
+    }
+
+    if(!d->destination) {
+        qDebug() << DTK_PRETTY_FUNCTION << "No destination set";
+        return false;
+    }
+
     if(anyway) {
 
         if (d->source->node()->kind() == dtkComposerNode::Composite && d->destination->node()->parentNode() == d->source->node())

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Nov  4 14:16:40 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Dec  5 10:36:25 2011 (+0100)
+ * Last-Updated: Mon Dec  5 13:59:28 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 96
+ *     Update #: 106
  */
 
 /* Commentary: 
@@ -426,7 +426,7 @@ bool dtkComposerNodeLogic::canConnectRoute(dtkComposerNodeProperty *source, dtkC
 /*! 
  *  
  */
-void dtkComposerNodeLogic::onRouteDiconnected(dtkComposerNodeProperty *source, dtkComposerNodeProperty *destination, dtkComposerNode *destin_node)
+void dtkComposerNodeLogic::onRouteDisconnected(dtkComposerNodeProperty *source, dtkComposerNodeProperty *destination, dtkComposerNode *destin_node)
 {
     dtkComposerEdge  *left_route = NULL;
     dtkComposerEdge *right_route = NULL;
@@ -464,4 +464,35 @@ void dtkComposerNodeLogic::onRouteDiconnected(dtkComposerNodeProperty *source, d
     
     left_route = NULL;
     right_route = NULL;
+}
+
+//! 
+/*! 
+ *  
+ */
+bool dtkComposerNodeLogic::isRoute(dtkComposerNodeProperty *source, dtkComposerNodeProperty *destination)
+{
+    dtkComposerNode *destin_node = destination->node();
+
+    foreach(dtkComposerEdge *left, destin_node->l->leftRoutes()) {
+        if (left->source() == source && left->destination() == destination)
+            return true;
+    }
+
+    foreach(dtkComposerEdge *left, destin_node->l->rightRelayRoutes()) {
+        if (left->source() == source && left->destination() == destination)
+            return true;
+    }
+
+    foreach(dtkComposerEdge *right, this->rightRoutes()) {
+        if (right->source() == source && right->destination() == destination)
+            return true;
+    }
+
+    foreach(dtkComposerEdge *right, this->leftRelayRoutes()) {
+        if (right->source() == source && right->destination() == destination)
+            return true;
+    }
+
+    return false;
 }

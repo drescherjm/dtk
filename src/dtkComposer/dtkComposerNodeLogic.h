@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Nov  4 13:49:39 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Dec  5 10:31:18 2011 (+0100)
+ * Last-Updated: Mon Dec  5 13:59:16 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 25
+ *     Update #: 30
  */
 
 /* Commentary: 
@@ -75,7 +75,9 @@ public:
 
 public:
     bool canConnectRoute(dtkComposerNodeProperty *source, dtkComposerNodeProperty *destination, dtkComposerNode *destin_node);
-    void onRouteDiconnected(dtkComposerNodeProperty *source, dtkComposerNodeProperty *destination, dtkComposerNode *destin_node);
+    void onRouteDisconnected(dtkComposerNodeProperty *source, dtkComposerNodeProperty *destination, dtkComposerNode *destin_node);
+
+    bool isRoute(dtkComposerNodeProperty *source, dtkComposerNodeProperty *destination);
 
 private:
     dtkComposerNodeLogicPrivate *d;

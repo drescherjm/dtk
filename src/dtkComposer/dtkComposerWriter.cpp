@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 14:39:04 2011 (+0100)
+ * Last-Updated: Mon Dec  5 16:49:00 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 470
+ *     Update #: 474
  */
 
 /* Commentary: 
@@ -93,16 +93,12 @@ void dtkComposerWriter::write(const QString& fileName, Type type)
         QDomElement source = document.createElement("source");
         source.setAttribute("node", d->node_ids.key(edge->source()->node()));
         source.setAttribute("property", edge->source()->name());
-        if(edge->source()->clonedFrom())
-            source.setAttribute("id", d->node_ids.key(edge->source()->clonedFrom()));
         if(!edge->source()->blockedFrom().isEmpty())
             source.setAttribute("block", edge->source()->blockedFrom());
 
         QDomElement destin = document.createElement("destination");
         destin.setAttribute("node", d->node_ids.key(edge->destination()->node()));
         destin.setAttribute("property", edge->destination()->name());
-        if(edge->destination()->clonedFrom())
-            destin.setAttribute("id", d->node_ids.key(edge->destination()->clonedFrom()));
         if(!edge->destination()->blockedFrom().isEmpty())
             destin.setAttribute("block", edge->destination()->blockedFrom());
 
@@ -523,8 +519,6 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
                     break;
                 }
                 property_element.setAttribute("hidden", property->isDisplayed() ? "false" : "true");
-                if(node->kind() == dtkComposerNode::Composite)
-                    property_element.setAttribute("id", d->node_ids.key(property->clonedFrom()));
                 if(node->kind() == dtkComposerNode::Control && !property->blockedFrom().isEmpty())
                     property_element.setAttribute("block", property->blockedFrom());
                 tag.appendChild(property_element);
@@ -581,8 +575,6 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
                     break;
                 }
                 property_element.setAttribute("hidden", property->isDisplayed() ? "false" : "true");
-                if(node->kind() == dtkComposerNode::Composite)
-                    property_element.setAttribute("id", d->node_ids.key(property->clonedFrom()));
                 if(node->kind() == dtkComposerNode::Control && !property->blockedFrom().isEmpty())
                     property_element.setAttribute("block", property->blockedFrom());
                 tag.appendChild(property_element);

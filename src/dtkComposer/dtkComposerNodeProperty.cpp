@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec  5 13:27:07 2011 (+0100)
+ * Last-Updated: Mon Dec  5 14:20:38 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 500
+ *     Update #: 507
  */
 
 /* Commentary: 
@@ -219,11 +219,17 @@ bool dtkComposerNodeProperty::contains(const QPointF& point) const
         return d->ellipse->contains(point);
 
     if (d->parent->kind() == dtkComposerNode::Composite) {
-        if ((d->parent->isGhost() && d->position == Left) || 
-            (!d->parent->isGhost() && d->position == Right))
-            return d->path_right->contains(point);
-        else 
-            return false;
+        if (d->parent->isGhost()) {
+            if (d->position == Left)
+                return (d->path_right->contains(point) || d->path_left->contains(point));
+            else
+                return false;
+        } else {
+            if (d->position == Right)
+                return (d->path_right->contains(point) || d->path_left->contains(point));
+            else 
+                return false;
+        }
     }
 
     return d->path_right->contains(point);

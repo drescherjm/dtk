@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Nov  3 13:28:33 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Dec  5 10:48:42 2011 (+0100)
+ * Last-Updated: Mon Dec  5 14:04:39 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 374
+ *     Update #: 385
  */
 
 /* Commentary: 
@@ -760,7 +760,8 @@ void dtkComposerNodeGraphic::onEdgeConnected(dtkComposerEdge *edge)
                     e->validate();
             } else {
                 foreach(dtkComposerEdge *e, map.value(pair))
-                    e->invalidate();
+                    if (!this->isEdgeAlongRoute(e))
+                        e->invalidate();
             }
         }
     }
@@ -809,9 +810,9 @@ void dtkComposerNodeGraphic::onEdgeDisconnected(dtkComposerEdge *edge)
     } else {
 
         foreach(dtkComposerNodeGraphicPrivate::Route pair, map.keys()) {
-            pair.first->node()->l->onRouteDiconnected(pair.first, pair.second, pair.second->node());
+            pair.first->node()->l->onRouteDisconnected(pair.first, pair.second, pair.second->node());
             foreach(dtkComposerEdge *e, map.value(pair)) {
-                if (e != edge)
+                if (e != edge && !this->isEdgeAlongRoute(e))
                     e->invalidate();
                 else
                     e->validate();
@@ -1086,4 +1087,19 @@ void dtkComposerNodeGraphic::onEdgeDisconnected(dtkComposerEdge *edge)
     //         }
     //     }
     // }
+}
+
+//! 
+/*! 
+ *  
+ */
+bool dtkComposerNodeGraphic::isEdgeAlongRoute(dtkComposerEdge *edge)
+{    
+    dtkComposerNodeGraphicPrivate::EdgesAlongRoutes map = d->edgesAlongRoutes(edge);
+
+    foreach(dtkComposerNodeGraphicPrivate::Route pair, map.keys())
+        if(pair.first->node()->l->isRoute(pair.first, pair.second))
+            return true;
+
+    return false;    
 }

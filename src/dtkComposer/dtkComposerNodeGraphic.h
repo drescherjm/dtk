@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Nov  2 17:10:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Nov  8 17:07:34 2011 (+0100)
+ * Last-Updated: Mon Dec  5 13:48:27 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 36
+ *     Update #: 37
  */
 
 /* Commentary: 
@@ -93,7 +93,8 @@ public:
 public:
     void    onEdgeConnected(dtkComposerEdge *edge);
     void onEdgeDisconnected(dtkComposerEdge *edge);
-    
+
+    bool isEdgeAlongRoute(dtkComposerEdge *edge);
 
 private:
     dtkComposerNodeGraphicPrivate *d;

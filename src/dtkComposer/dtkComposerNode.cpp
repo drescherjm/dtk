@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov 28 15:05:36 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 2638
+ * Last-Updated: Mon Dec  5 12:28:55 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 2651
  */
 
 /* Commentary: 
@@ -33,6 +33,12 @@
 #include <dtkCore/dtkGlobal.h>
 
 // #define DTK_DEBUG_COMPOSER_INTERACTION 1
+
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+QGraphicsTextItem *dtkComposerNodeElided(QGraphicsTextItem *item);
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodePrivate
@@ -135,6 +141,8 @@ dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphics
     d->title->setDefaultTextColor(Qt::white);
     d->title->setPos(d->bounding_rect.topLeft());
 
+    Q_UNUSED(dtkComposerNodeElided(d->title));
+
     this->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
     this->setZValue(10);
 
@@ -220,6 +228,8 @@ QString dtkComposerNode::description(void)
 void dtkComposerNode::setTitle(const QString& title)
 {
     d->title->setPlainText(title);
+
+    Q_UNUSED(dtkComposerNodeElided(d->title));
 }
 
 void dtkComposerNode::setAttribute(Attribute attribute)
@@ -304,6 +314,8 @@ void dtkComposerNode::setObject(dtkAbstractObject *object, bool update)
 
     if (d->object)
         d->title->setHtml(object->name());
+
+    Q_UNUSED(dtkComposerNodeElided(d->title));
 }
 
 dtkComposerNode::Attribute dtkComposerNode::attribute(void)
@@ -1192,4 +1204,17 @@ QDebug operator<<(QDebug dbg, dtkComposerNode *node)
     dbg.nospace() << node->description();
     
     return dbg.space();
+}
+
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+QGraphicsTextItem *dtkComposerNodeElided(QGraphicsTextItem *item)
+{
+    QFontMetricsF metrics(item->font());
+    
+    item->setPlainText(metrics.elidedText(item->toPlainText(), Qt::ElideRight, 130));
+
+    return item;
 }

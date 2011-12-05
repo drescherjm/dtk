@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec  2 12:43:52 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 458
+ * Last-Updated: Mon Dec  5 12:28:40 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 484
  */
 
 /* Commentary: 
@@ -22,6 +22,16 @@
 #include "dtkComposerNodeProperty.h"
 
 #include <dtkCore/dtkGlobal.h>
+
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+QGraphicsTextItem *dtkComposerNodePropertyElided(QGraphicsTextItem *item);
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeProperty
+// /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodePropertyPrivate
 {
@@ -92,6 +102,8 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multip
     };
 
     this->setZValue(20);
+    
+    Q_UNUSED (dtkComposerNodePropertyElided(d->text));
 }
 
 dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Position position, Behavior behavior, Multiplicity multiplicity, dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePropertyPrivate)
@@ -141,6 +153,8 @@ dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Position position
     };
 
     this->setZValue(20);
+
+    Q_UNUSED(dtkComposerNodePropertyElided(d->text));
 }
 
 dtkComposerNodeProperty::~dtkComposerNodeProperty(void)
@@ -315,6 +329,8 @@ void dtkComposerNodeProperty::setName(const QString& name)
 {
     d->text->setPlainText(name);
 
+    Q_UNUSED(dtkComposerNodePropertyElided(d->text));
+
     this->update();
 }
 
@@ -352,6 +368,8 @@ QRectF dtkComposerNodeProperty::rect(void) const
 void dtkComposerNodeProperty::setText(const QString& text)
 {
     d->text->setPlainText(text);
+
+    Q_UNUSED(dtkComposerNodePropertyElided(d->text));
 }
 
 void dtkComposerNodeProperty::setRect(const QRectF& rect)
@@ -513,4 +531,17 @@ QDebug operator<<(QDebug dbg, dtkComposerNodeProperty *property)
     dbg.nospace() << property->description();
 
     return dbg.space();
+}
+
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+QGraphicsTextItem *dtkComposerNodePropertyElided(QGraphicsTextItem *item)
+{
+    QFontMetricsF metrics(item->font());
+    
+    item->setPlainText(metrics.elidedText(item->toPlainText(), Qt::ElideRight, 60));
+
+    return item;
 }

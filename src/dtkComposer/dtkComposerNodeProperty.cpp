@@ -4,15 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
-]<<<<<<< HEAD
- * Last-Updated: Mon Dec  5 16:30:05 2011 (+0100)
+ * Last-Updated: Tue Dec  6 13:17:14 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 521
-=======
- * Last-Updated: Mon Dec  5 14:20:38 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 507
->>>>>>> 1de27d7fd67bf54273589ac53a89f681c90aae5b
+ *     Update #: 524
  */
 
 /* Commentary: 
@@ -332,9 +326,11 @@ void dtkComposerNodeProperty::setBehavior(dtkComposerNodeProperty::Behavior beha
 
 dtkComposerNodeProperty *dtkComposerNodeProperty::createCompositeProperty(dtkComposerNodeProperty *origin, dtkComposerNode *node)
 {
+    static int count = 0;
+
     QString name = origin->name();
     name.append("_");
-    name.append(origin->parent()->title());
+    name.append(QString::number(++count));
 
     dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, origin->position(), AsRelay, origin->multiplicity(), node);
 

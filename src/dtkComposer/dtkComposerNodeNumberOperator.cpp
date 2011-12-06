@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Mar  1 10:18:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Nov 25 15:07:02 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 348
+ * Last-Updated: Tue Dec  6 11:56:54 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 351
  */
 
 /* Commentary: 
@@ -554,8 +554,6 @@ bool dtkComposerNodeNumberOperator::onLeftRouteConnected(dtkComposerEdge *route,
     Q_UNUSED(destination);
 
     bool receiver_set = true;
-    bool emit_message = false;
-    QString message;
 
     if (destination == d->property_left_value_op1) {
 
@@ -564,24 +562,19 @@ bool dtkComposerNodeNumberOperator::onLeftRouteConnected(dtkComposerEdge *route,
             if (dtkComposerNodeTransmitter<int> *receiver_i = dynamic_cast<dtkComposerNodeTransmitter<int> *>(route->source()->node()->emitter(route->source()))) {
                 d->op1_type = QVariant::Int;
                 d->receivers_i.insert(route, receiver_i);
-                message.append("Type of left operand is Int.");
 
             } else if (dtkComposerNodeTransmitter<qlonglong> *receiver_l = dynamic_cast<dtkComposerNodeTransmitter<qlonglong> *>(route->source()->node()->emitter(route->source()))) {
                 d->op1_type = QVariant::LongLong;
                 d->receivers_l.insert(route, receiver_l);
-                message.append("Type of left operand is LongLong.");
 
             } else if (dtkComposerNodeTransmitter<double> *receiver_d = dynamic_cast<dtkComposerNodeTransmitter<double> *>(route->source()->node()->emitter(route->source()))) {
                 d->op1_type = QVariant::Double;
                 d->receivers_d.insert(route, receiver_d);
-                message.append("Type of left operand is Double.");
 
             } else {
 
                 receiver_set = false;
             }
-
-            emit_message = true;
 
         } else if (d->op1_type == QVariant::Int) {
 
@@ -591,8 +584,6 @@ bool dtkComposerNodeNumberOperator::onLeftRouteConnected(dtkComposerEdge *route,
             } else {
 
                 receiver_set = false;
-                message.append("Source number of current edge is not of left operand type : Int.");
-                emit_message = true;
             }
 
         } else if (d->op1_type == QVariant::LongLong) {
@@ -603,8 +594,6 @@ bool dtkComposerNodeNumberOperator::onLeftRouteConnected(dtkComposerEdge *route,
             } else {
 
                 receiver_set = false;
-                message.append("Source number of current edge is not of left operand type : LongLong.");
-                emit_message = true;
             }
 
         } else if (d->op1_type == QVariant::Double) {
@@ -615,8 +604,6 @@ bool dtkComposerNodeNumberOperator::onLeftRouteConnected(dtkComposerEdge *route,
             } else {
 
                 receiver_set = false;
-                message.append("Source number of current edge is not of left operand type : Double.");
-                emit_message = true;
             }
         }
     
@@ -627,20 +614,16 @@ bool dtkComposerNodeNumberOperator::onLeftRouteConnected(dtkComposerEdge *route,
             if (dtkComposerNodeTransmitter<int> *receiver_i = dynamic_cast<dtkComposerNodeTransmitter<int> *>(route->source()->node()->emitter(route->source()))) {
                 d->op2_type = QVariant::Int;
                 d->receivers_i.insert(route, receiver_i);
-                message.append("Type of right operand is Int.");
 
             } else if (dtkComposerNodeTransmitter<qlonglong> *receiver_l = dynamic_cast<dtkComposerNodeTransmitter<qlonglong> *>(route->source()->node()->emitter(route->source()))) {
                 d->op2_type = QVariant::LongLong;
                 d->receivers_l.insert(route, receiver_l);
-                message.append("Type of right operand is LongLong.");
 
             } else if (dtkComposerNodeTransmitter<double> *receiver_d = dynamic_cast<dtkComposerNodeTransmitter<double> *>(route->source()->node()->emitter(route->source()))) {
                 d->op2_type = QVariant::Double;
                 d->receivers_d.insert(route, receiver_d);
-                message.append("Type of right operand is Double.");
 
             }
-            emit_message = true;
 
         } else if (d->op2_type == QVariant::Int) {
 
@@ -650,8 +633,6 @@ bool dtkComposerNodeNumberOperator::onLeftRouteConnected(dtkComposerEdge *route,
             } else {
 
                 receiver_set = false;
-                message.append("Source number of current edge is not of right operand type : Int.");
-                emit_message = true;
             }
 
         } else if (d->op2_type == QVariant::LongLong) {
@@ -662,8 +643,6 @@ bool dtkComposerNodeNumberOperator::onLeftRouteConnected(dtkComposerEdge *route,
             } else {
 
                 receiver_set = false;
-                message.append("Source number of current edge is not of right operand type : LongLong.");
-                emit_message = true;
             }
 
         } else if (d->op2_type == QVariant::Double) {
@@ -674,16 +653,11 @@ bool dtkComposerNodeNumberOperator::onLeftRouteConnected(dtkComposerEdge *route,
             } else {
 
                 receiver_set = false;
-                message.append("Source number of current edge is not of right operand type : Double.");
-                emit_message = true;
             }
         }
     }
 
     d->setValueType();
-
-    if (emit_message)
-        qDebug() << DTK_PRETTY_FUNCTION << message;
 
     return receiver_set;
 }

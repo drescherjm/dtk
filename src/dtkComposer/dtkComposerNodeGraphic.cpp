@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Nov  3 13:28:33 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Dec  5 14:04:39 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 385
+ * Last-Updated: Tue Dec  6 13:56:47 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 386
  */
 
 /* Commentary: 
@@ -745,8 +745,6 @@ int dtkComposerNodeGraphic::indexOf(dtkComposerNodeProperty *property) const
  */
 void dtkComposerNodeGraphic::onEdgeConnected(dtkComposerEdge *edge)
 {
-    qDebug() << DTK_PRETTY_FUNCTION << this->node();
-
     dtkComposerNodeGraphicPrivate::EdgesAlongRoutes map = d->edgesAlongRoutes(edge);
 
     if (!map.count()) {

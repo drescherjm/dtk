@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec  5 13:15:20 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 2984
+ * Last-Updated: Tue Dec  6 14:18:15 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 3001
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include "dtkComposerEdge.h"
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeFactory.h"
@@ -525,7 +526,7 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
     if (d->grabber_node)
         d->grabber_node = NULL;
 
-    dtkComposerNodeControlBlock * parent_block = NULL;
+    dtkComposerNodeControlBlock *parent_block = NULL;
 
     foreach(dtkComposerNode *node, nodes) {
         if (node->parentItem() != nodes.first()->parentItem()) {
@@ -539,10 +540,7 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
         if (n->kind() == dtkComposerNode::Composite)
             count++;
 
-    dtkComposerNode *group = new dtkComposerNode;
-    group->setTitle(QString("Composite node %1").arg(count));
-    group->setType("dtkComposerNodeComposite");
-    group->setKind(dtkComposerNode::Composite);
+    dtkComposerNodeComposite *group = new dtkComposerNodeComposite;
 
     this->addNode(group);
     this->addItem(group);
@@ -644,17 +642,15 @@ dtkComposerNode *dtkComposerScene::createGroup(QList<dtkComposerNode *> nodes, Q
             }
 
         }
-
-        //node->removeAllEdges();
         node->hide();
     }
+
     group->setPos(group_ave_pos / nodes.count());
     group->setGhost(false);
 
     this->updateEdgesVisibility();
-
     this->update();
-        
+
     return group;
 }
 

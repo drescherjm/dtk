@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Feb 25 16:21:13 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 15:13:02 2011 (+0100)
+ * Last-Updated: Tue Dec  6 14:45:54 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 632
+ *     Update #: 633
  */
 
 /* Commentary: 
@@ -428,6 +428,7 @@ void dtkComposerNodeNumber::interactiveOn(void)
 {
     d->interactive = true;
     d->editor->setTextInteractionFlags(Qt::TextEditorInteraction);
+    d->editor->setPlainText("");
 }
 
 //! Turns off interactive mode.

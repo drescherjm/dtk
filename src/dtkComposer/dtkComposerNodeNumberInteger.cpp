@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: jeu. nov. 17 20:50:45 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Nov 28 14:33:34 2011 (+0100)
+ * Last-Updated: Tue Dec  6 14:45:26 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 35
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -178,6 +178,17 @@ bool dtkComposerNodeNumberInteger::onLeftRouteConnected(dtkComposerEdge *route, 
  *  Reimplemented from dtkComposerNode.
  */
 bool dtkComposerNodeNumberInteger::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+{
+    return true;
+}
+
+
+bool dtkComposerNodeNumberInteger::onLeftRouteDisconnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+{
+    this->interactiveOn();
+}
+
+bool dtkComposerNodeNumberInteger::onRightRouteDisconnected(dtkComposerEdge *route, dtkComposerNodeProperty *source)
 {
     return true;
 }

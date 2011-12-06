@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Dec  6 13:17:14 2011 (+0100)
+ * Last-Updated: Tue Dec  6 14:51:20 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 524
+ *     Update #: 576
  */
 
 /* Commentary: 
@@ -326,11 +326,25 @@ void dtkComposerNodeProperty::setBehavior(dtkComposerNodeProperty::Behavior beha
 
 dtkComposerNodeProperty *dtkComposerNodeProperty::createCompositeProperty(dtkComposerNodeProperty *origin, dtkComposerNode *node)
 {
-    static int count = 0;
+    static QHash<dtkComposerNode *, QHash<QString, int> *> names_per_node;
 
     QString name = origin->name();
-    name.append("_");
-    name.append(QString::number(++count));
+
+    if(!names_per_node.keys().contains(node)) {
+        names_per_node.insert(node, new QHash<QString, int>);
+        names_per_node.value(node)->insert(origin->name(), 0);
+    } else {
+
+        QHash<QString, int> *hash = names_per_node.value(node);
+
+        if(!hash->contains(origin->name())) {
+            hash->insert(origin->name(), 0);
+        } else {
+            name.append("_");
+            name.append(QString::number(hash->value(origin->name()) + 1));
+            hash->insert(origin->name(), hash->value(origin->name()) + 1);
+        }
+    }
 
     dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, origin->position(), AsRelay, origin->multiplicity(), node);
 

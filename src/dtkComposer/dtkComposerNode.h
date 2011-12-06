@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Dec  6 12:52:39 2011 (+0100)
+ * Last-Updated: Tue Dec  6 14:32:31 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 373
+ *     Update #: 380
  */
 
 /* Commentary: 
@@ -84,9 +84,6 @@ public:
     QList<dtkComposerNode *> outputNodes(void);
 
     dtkComposerNodeProperty *propertyAt(const QPointF& point) const;
-
-    dtkComposerNodeProperty DTK_DEPRECATED  *leftProperty(const QString& name, dtkComposerNode *from) const;
-    dtkComposerNodeProperty DTK_DEPRECATED *rightProperty(const QString& name, dtkComposerNode *from) const;
 
     QString title(void);
 
@@ -202,8 +199,11 @@ public:
     virtual dtkComposerNodeAbstractTransmitter *emitter(dtkComposerNodeProperty *property);
 
 public:
-    virtual bool onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
-    virtual bool onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property);
+    virtual bool  onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
+    virtual bool onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *source);
+
+    virtual bool  onLeftRouteDisconnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
+    virtual bool onRightRouteDisconnected(dtkComposerEdge *route, dtkComposerNodeProperty *source);
 
 public:
     virtual void      updateSourceRoutes(dtkComposerEdge *route);

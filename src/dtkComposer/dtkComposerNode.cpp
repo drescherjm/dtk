@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec  5 13:28:03 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 2661
+ * Last-Updated: Tue Dec  6 14:33:25 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 2667
  */
 
 /* Commentary: 
@@ -412,32 +412,6 @@ dtkComposerNodeProperty *dtkComposerNode::propertyAt(const QPointF& point) const
         if (property->rect().contains(point))
             return property;
     
-    return NULL;
-}
-
-dtkComposerNodeProperty *dtkComposerNode::leftProperty(const QString& name, dtkComposerNode *from) const
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-    foreach(dtkComposerNodeProperty *property, g->leftProperties())
-        if (property->name() == name)
-            // if (property->clonedFrom() == from)
-                return property;
-    
-    return NULL;
-}
-
-dtkComposerNodeProperty *dtkComposerNode::rightProperty(const QString& name, dtkComposerNode *from) const
-{
-#if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-    qDebug() << DTK_PRETTY_FUNCTION << this;
-#endif
-    foreach(dtkComposerNodeProperty *property, g->rightProperties())
-        if (property->name() == name)
-            // if (property->clonedFrom() == from)
-                return property;
-
     return NULL;
 }
 
@@ -1160,10 +1134,26 @@ bool dtkComposerNode::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNo
     return false;
 }
 
-bool dtkComposerNode::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+bool dtkComposerNode::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *source)
 {
     DTK_UNUSED(route);
-    DTK_UNUSED(property);
+    DTK_UNUSED(source);
+
+    return true;
+}
+
+bool dtkComposerNode::onLeftRouteDisconnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+{
+    DTK_UNUSED(route);
+    DTK_UNUSED(destination);
+
+    return true;
+}
+
+bool dtkComposerNode::onRightRouteDisconnected(dtkComposerEdge *route, dtkComposerNodeProperty *source)
+{
+    DTK_UNUSED(route);
+    DTK_UNUSED(source);
 
     return true;
 }

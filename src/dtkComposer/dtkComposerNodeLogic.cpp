@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Nov  4 14:16:40 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Dec  5 13:59:28 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 106
+ * Last-Updated: Tue Dec  6 14:38:56 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 124
  */
 
 /* Commentary: 
@@ -434,6 +434,7 @@ void dtkComposerNodeLogic::onRouteDisconnected(dtkComposerNodeProperty *source, 
     foreach(dtkComposerEdge *l_route, destin_node->l->leftRoutes()) {
         if (l_route->source() == source && l_route->destination() == destination) {
             left_route = l_route;
+            Q_UNUSED(this->node()->onLeftRouteDisconnected(left_route, destination));
             destin_node->l->removeLeftRoute(left_route);
             break;
         }
@@ -442,6 +443,7 @@ void dtkComposerNodeLogic::onRouteDisconnected(dtkComposerNodeProperty *source, 
     foreach(dtkComposerEdge *r_route, this->rightRoutes()) {
         if (r_route->source() == source && r_route->destination() == destination) {
             right_route = r_route;
+            Q_UNUSED(this->node()->onRightRouteDisconnected(right_route, source));
             this->removeRightRoute(right_route);
             break;
         }
@@ -462,7 +464,7 @@ void dtkComposerNodeLogic::onRouteDisconnected(dtkComposerNodeProperty *source, 
     if (right_route)
         delete right_route;
     
-    left_route = NULL;
+     left_route = NULL;
     right_route = NULL;
 }
 

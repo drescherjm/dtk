@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Dec  6 14:32:31 2011 (+0100)
+ * Last-Updated: Tue Dec  6 16:01:54 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 380
+ *     Update #: 387
  */
 
 /* Commentary: 
@@ -109,7 +109,8 @@ public:
     bool isChildOf(dtkComposerNode *node);
     bool isChildOfControlNode(dtkComposerNode *node);
 
-    void setGhost(bool ghost);
+    virtual void setGhost(bool ghost);
+
     bool  isGhost(void);
 
     void    setGhostPosition(QPointF pos);
@@ -214,6 +215,7 @@ public:
 
 protected:
     friend class dtkComposerEvaluatorPrivate;
+    friend class dtkComposerNodeComposite;
 };
 
 // /////////////////////////////////////////////////////////////////

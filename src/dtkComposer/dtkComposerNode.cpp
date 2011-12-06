@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Dec  6 14:33:25 2011 (+0100)
+ * Last-Updated: Tue Dec  6 16:04:57 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 2667
+ *     Update #: 2670
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #include "dtkComposerEdge.h"
 #include "dtkComposerEvaluator_p.h"
 #include "dtkComposerNode.h"
+#include "dtkComposerNode_p.h"
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeLoop.h"
@@ -43,58 +44,6 @@ QGraphicsTextItem *dtkComposerNodeElided(QGraphicsTextItem *item);
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodePrivate
 // /////////////////////////////////////////////////////////////////
-
-class dtkComposerNodePrivate
-{
-public:
-    QRectF ghostRect(void);
-
-public:
-    dtkComposerNode *q;
-
-    qreal penWidth;
-    qreal header_height;
-    qreal node_radius;
-    qreal margin_left;
-    qreal margin_right;
-    qreal margin_top;
-    qreal margin_bottom;
-
-    QGraphicsTextItem *title;
-
-    QString name;
-
-    dtkComposerNodeProperty *clicked_property;
-
-    dtkComposerNode::Attribute attribute;
-    dtkComposerNode::Kind kind;
-
-    QString type;
-
-    dtkAbstractObject *object;
-
-    QList<QAction *> actions;
-
-    bool active;
-    bool dirty;
-    bool ghost;
-    bool resizable;
-
-          dtkComposerNode *  parent;
-    QList<dtkComposerNode *> children;
-
-    int count;
-
-    QPointF ghost_position;
-    QPointF non_ghost_position;
-
-public:
-    QPointF drag_point;
-    QRectF bounding_rect;
-
-    QColor pen_color;
-    QPen pen;
-};
 
 QRectF dtkComposerNodePrivate::ghostRect(void)
 {

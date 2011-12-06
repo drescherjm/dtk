@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Dec  6 13:59:21 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Dec  6 14:01:22 2011 (+0100)
+ * Last-Updated: Tue Dec  6 16:15:52 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 7
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -32,6 +32,12 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeComposite : public dtkComposerNode
 public:
      dtkComposerNodeComposite(dtkComposerNode *parent = 0);
     ~dtkComposerNodeComposite(void);
+
+/* public: */
+/*     void setGhost(bool ghost); */
+
+/* public: */
+/*     void layout(void); */
 
 private:
     dtkComposerNodeCompositePrivate *d;

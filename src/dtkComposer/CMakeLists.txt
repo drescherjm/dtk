@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Dec  6 14:03:58 2011 (+0100)
+## Last-Updated: Tue Dec  6 16:04:43 2011 (+0100)
 ##           By: Julien Wintz
-##     Update #: 172
+##     Update #: 174
 ######################################################################
 ## 
 ### Commentary: 
@@ -30,6 +30,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerExport.h
   dtkComposerExtractor.h
   dtkComposerNode.h
+  dtkComposerNode_p.h
   dtkComposerNodeBoolean.h
   dtkComposerNodeBooleanOperator.h
   dtkComposerNodeCase.h

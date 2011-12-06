@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Dec  6 14:01:34 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Dec  6 16:15:47 2011 (+0100)
+ * Last-Updated: Tue Dec  6 17:32:21 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 108
+ *     Update #: 148
  */
 
 /* Commentary: 
@@ -117,7 +117,7 @@ dtkComposerNodeCompositeButton::dtkComposerNodeCompositeButton(dtkComposerNodeCo
     this->right = false;
     this->both = false;
 
-    this->setFlag(QGraphicsItem::ItemStacksBehindParent, true);
+    this->setFlag(QGraphicsItem::ItemStacksBehindParent, false);
 }
 
 dtkComposerNodeCompositeButton::~dtkComposerNodeCompositeButton(void)
@@ -195,13 +195,22 @@ void dtkComposerNodeCompositeButton::mousePressEvent(QGraphicsSceneMouseEvent *e
 
         if (this->left) {
 
+            if(this->node->g->leftProperty(this->label->toPlainText()))
+                return;
+            
             this->node->g->appendLeftProperty(new dtkComposerNodeProperty(this->label->toPlainText(), dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsRelay, dtkComposerNodeProperty::Multiple, this->node));
 
         } else if (this->right) { 
 
+            if(this->node->g->rightProperty(this->label->toPlainText()))
+                return;
+
             this->node->g->appendRightProperty(new dtkComposerNodeProperty(this->label->toPlainText(), dtkComposerNodeProperty::Right, dtkComposerNodeProperty::AsRelay, dtkComposerNodeProperty::Multiple, this->node));
 
-        } else if (this->both) {          
+        } else if (this->both) {   
+
+            if(this->node->g->leftProperty(this->label->toPlainText()) || this->node->g->rightProperty(this->label->toPlainText()))
+                return;
 
             this->node->g->appendLeftProperty(new dtkComposerNodeProperty(this->label->toPlainText(), dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsRelay, dtkComposerNodeProperty::Multiple, this->node));
             this->node->g->appendRightProperty(new dtkComposerNodeProperty(this->label->toPlainText(), dtkComposerNodeProperty::Right, dtkComposerNodeProperty::AsRelay, dtkComposerNodeProperty::Multiple, this->node));
@@ -211,16 +220,30 @@ void dtkComposerNodeCompositeButton::mousePressEvent(QGraphicsSceneMouseEvent *e
 
         if (this->left) {
 
-            this->node->g->removeLeftProperty(this->node->g->leftProperty(this->label->toPlainText()));
+            dtkComposerNodeProperty *property = this->node->g->leftProperty(this->label->toPlainText());
+
+            this->node->g->removeLeftProperty(property);
+
+            delete property;
 
         } else if (this->right) {
 
-            this->node->g->removeRightProperty(this->node->g->rightProperty(this->label->toPlainText()));
+            dtkComposerNodeProperty *property = this->node->g->rightProperty(this->label->toPlainText());
+
+            this->node->g->removeRightProperty(property);
+
+            delete property;
 
         } else if (this->both) {            
 
-            this->node->g->removeLeftProperty(this->node->g->leftProperty(this->label->toPlainText()));
-            this->node->g->removeRightProperty(this->node->g->rightProperty(this->label->toPlainText()));
+            dtkComposerNodeProperty *l_property = this->node->g->leftProperty(this->label->toPlainText());
+            dtkComposerNodeProperty *r_property = this->node->g->rightProperty(this->label->toPlainText());
+
+            this->node->g->removeLeftProperty(l_property);
+            this->node->g->removeRightProperty(r_property);
+
+            delete l_property;
+            delete r_property;
         }
     }
     
@@ -262,27 +285,22 @@ dtkComposerNodeComposite::dtkComposerNodeComposite(dtkComposerNode *parent) : dt
     d->button_rem_left->left = true;
 
     d->button_add_right = new dtkComposerNodeCompositeButton(this);
-    d->button_add_right->setZValue(this->zValue() - 1);
     d->button_add_right->setVisible(false);
     d->button_add_right->right = true;
 
     d->button_rem_right = new dtkComposerNodeCompositeButton(this);
-    d->button_rem_right->setZValue(this->zValue() - 1);
     d->button_rem_right->setVisible(false);
     d->button_rem_right->right = true;
 
     d->button_add_both = new dtkComposerNodeCompositeButton(this);
-    d->button_add_both->setZValue(this->zValue() - 1);
     d->button_add_both->setVisible(false);
     d->button_add_both->both = true;
 
     d->button_rem_both = new dtkComposerNodeCompositeButton(this);
-    d->button_rem_both->setZValue(this->zValue() - 1);
     d->button_rem_both->setVisible(false);
     d->button_rem_both->both = true;
 
     d->label = new dtkComposerNodeCompositeLabel(this);
-    d->label->setZValue(this->zValue() - 1);
     d->label->setVisible(false);
 
     if(d->button_add_left)
@@ -321,13 +339,11 @@ dtkComposerNodeComposite::~dtkComposerNodeComposite(void)
     d = NULL;
 }
 
-/*
-
 void dtkComposerNodeComposite::setGhost(bool ghost)
 {
     dtkComposerNode::setGhost(ghost);
 
-    d->button_add_left->setVisible(ghost);
+    d->button_add_left->setVisible(ghost);    
     d->button_rem_left->setVisible(ghost);
     d->button_add_right->setVisible(ghost);
     d->button_rem_right->setVisible(ghost);
@@ -340,9 +356,25 @@ void dtkComposerNodeComposite::layout(void)
 {
     dtkComposerNode::layout();
 
-    // QRectF rect = dtkComposerNode::d->ghostRect();
+    QRectF rect = dtkComposerNode::d->ghostRect();
+    
+    d->button_add_left->text = "+";
+    d->button_add_left->setPos(rect.left() + (rect.width() - d->label->boundingRect().width()) / 2 - d->button_add_left->boundingRect().width(), rect.top() + d->button_add_left->boundingRect().height());
 
-    // qDebug() << rect;
+    d->button_rem_left->text = "-";
+    d->button_rem_left->setPos(rect.left() + (rect.width() - d->label->boundingRect().width()) / 2 - d->button_rem_left->boundingRect().width(), rect.top());
+
+    d->button_add_right->text = "+";
+    d->button_add_right->setPos(rect.left() + (rect.width() + d->label->boundingRect().width()) / 2, rect.top() + d->button_add_right->boundingRect().height());
+
+    d->button_rem_right->text = "-";
+    d->button_rem_right->setPos(rect.left() + (rect.width() + d->label->boundingRect().width()) / 2, rect.top());
+
+    d->button_add_both->text = "+";
+    d->button_add_both->setPos(rect.left() + rect.width() / 2, rect.top() + d->label->boundingRect().height());
+
+    d->button_rem_both->text = "-";
+    d->button_rem_both->setPos(rect.left() + rect.width() / 2 - d->button_rem_both->boundingRect().width(), rect.top() + d->label->boundingRect().height());
+
+    d->label->setPos(rect.left() + (rect.width() - d->label->boundingRect().width()) / 2, rect.top());
 }
-
-*/

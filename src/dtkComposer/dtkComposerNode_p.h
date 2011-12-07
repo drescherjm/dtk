@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Dec  6 16:03:06 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Dec  6 16:04:07 2011 (+0100)
+ * Last-Updated: Wed Dec  7 14:33:16 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 6
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -60,8 +60,6 @@ public:
 
           dtkComposerNode *  parent;
     QList<dtkComposerNode *> children;
-
-    int count;
 
     QPointF ghost_position;
     QPointF non_ghost_position;

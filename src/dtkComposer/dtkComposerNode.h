@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Dec  6 16:01:54 2011 (+0100)
+ * Last-Updated: Wed Dec  7 14:32:23 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 387
+ *     Update #: 389
  */
 
 /* Commentary: 
@@ -135,11 +135,7 @@ signals:
     void progressed(int progress);
 
 public slots:
-    // void alter(void);
     virtual void touch(void);
-
-// public slots:
-//     virtual void update(void);
 
 public slots:
     virtual bool evaluate(dtkComposerEvaluatorPrivate *evaluator);

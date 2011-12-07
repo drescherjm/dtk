@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Dec  6 16:04:57 2011 (+0100)
+ * Last-Updated: Wed Dec  7 14:33:07 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 2670
+ *     Update #: 2673
  */
 
 /* Commentary: 
@@ -63,8 +63,6 @@ QRectF dtkComposerNodePrivate::ghostRect(void)
 
 dtkComposerNode::dtkComposerNode(dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePrivate), g(new dtkComposerNodeGraphic(this)), l(new dtkComposerNodeLogic(this)) 
 {
-    d->count = 0; // TO BE REMOVED
-
     d->q = this;
     
     d->attribute = Sequential;
@@ -610,20 +608,6 @@ void dtkComposerNode::setSize(qreal w, qreal h)
 
     QGraphicsItem::update();
 }
-
-// void dtkComposerNode::alter(void)
-// {
-// #if defined(DTK_DEBUG_COMPOSER_INTERACTION)
-//     qDebug() << DTK_PRETTY_FUNCTION << this;
-// #endif
-
-//     if (dtkComposerScene *scene = dynamic_cast<dtkComposerScene *>(this->scene())) {
-//         scene->stopEvaluation();
-//         scene->clearSelection();
-//         this->setSelected(true);
-//         scene->startEvaluation();
-//     }
-// }
 
 //! Ask the node to redraw itself
 /*! 

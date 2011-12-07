@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:47:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 10 14:05:43 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 172
+ * Last-Updated: Wed Dec  7 14:56:06 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 174
  */
 
 /* Commentary: 
@@ -84,8 +84,8 @@ public:
     QList<dtkComposerEdge *>  inputActiveRoutes(void);
     QList<dtkComposerEdge *> outputActiveRoutes(void);
 
-    QList<dtkComposerEdge *> allRoutes(void);
-    void removeRoute(dtkComposerEdge *route);
+    QList<dtkComposerRoute *> allRoutes(void);
+    void removeRoute(dtkComposerRoute *route);
 
 public:
     bool isRunning(void);

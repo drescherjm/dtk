@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Dec  7 14:32:23 2011 (+0100)
+ * Last-Updated: Wed Dec  7 14:56:32 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 389
+ *     Update #: 392
  */
 
 /* Commentary: 
@@ -34,6 +34,7 @@ class dtkComposerEdge;
 class dtkComposerEvaluatorPrivate;
 class dtkComposerNodePrivate;
 class dtkComposerNodeProperty;
+class dtkComposerRoute;
 class dtkComposerScene;
 
 class DTKCOMPOSER_EXPORT dtkComposerNode : public QObject, public QGraphicsItem
@@ -163,8 +164,8 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 public:
-    virtual QList<dtkComposerEdge *> allRoutes(void);
-    virtual void removeRoute(dtkComposerEdge *route);
+    virtual QList<dtkComposerRoute *> allRoutes(void);
+    virtual void removeRoute(dtkComposerRoute *route);
 
 public:
     virtual QVariant DTK_DEPRECATED value(dtkComposerNodeProperty *property);

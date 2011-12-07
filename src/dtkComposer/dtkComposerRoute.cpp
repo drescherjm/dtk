@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Dec  7 14:25:56 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Dec  7 14:36:53 2011 (+0100)
+ * Last-Updated: Wed Dec  7 15:04:51 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 18
+ *     Update #: 21
  */
 
 /* Commentary: 
@@ -40,6 +40,11 @@ dtkComposerRoute::~dtkComposerRoute(void)
     delete d;
 
     d = NULL;
+}
+
+bool dtkComposerRoute::active(void)
+{
+    return true;
 }
 
 dtkComposerNodeProperty *dtkComposerRoute::source(void)

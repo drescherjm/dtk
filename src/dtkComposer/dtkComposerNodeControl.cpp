@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 10 14:32:17 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 998
+ * Last-Updated: Wed Dec  7 14:58:38 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 1000
  */
 
 /* Commentary: 
@@ -521,9 +521,9 @@ QList<dtkComposerEdge *> dtkComposerNodeControl::outputActiveRoutes(void)
     return d->output_active_routes;
 }
 
-QList<dtkComposerEdge *> dtkComposerNodeControl::allRoutes(void)
+QList<dtkComposerRoute *> dtkComposerNodeControl::allRoutes(void)
 {
-    QList<dtkComposerEdge *> routes;
+    QList<dtkComposerRoute *> routes;
     routes << dtkComposerNode::allRoutes();
     routes << d->input_relay_routes;
     routes << d->output_relay_routes;
@@ -533,7 +533,7 @@ QList<dtkComposerEdge *> dtkComposerNodeControl::allRoutes(void)
     return routes;
 }
 
-void dtkComposerNodeControl::removeRoute(dtkComposerEdge *route)
+void dtkComposerNodeControl::removeRoute(dtkComposerRoute *route)
 {
     dtkComposerNode::removeRoute(route);
 

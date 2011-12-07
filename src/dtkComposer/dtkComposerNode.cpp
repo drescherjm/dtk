@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Dec  7 14:33:07 2011 (+0100)
+ * Last-Updated: Wed Dec  7 14:54:54 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 2673
+ *     Update #: 2675
  */
 
 /* Commentary: 
@@ -944,9 +944,9 @@ void dtkComposerNode::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     d->clicked_property = NULL;
 }
 
-QList<dtkComposerEdge *> dtkComposerNode::allRoutes(void)
+QList<dtkComposerRoute *> dtkComposerNode::allRoutes(void)
 {
-    QList<dtkComposerEdge *> routes;
+    QList<dtkComposerRoute *> routes;
     routes << l->leftRoutes();
     routes << l->rightRoutes();
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Nov  4 13:49:39 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Dec  6 14:30:06 2011 (+0100)
+ * Last-Updated: Wed Dec  7 14:48:50 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 31
+ *     Update #: 32
  */
 
 /* Commentary: 
@@ -24,7 +24,7 @@
 
 #include <QtCore>
 
-class dtkComposerEdge;
+class dtkComposerRoute;
 class dtkComposerNode;
 class dtkComposerNodeProperty;
 
@@ -42,18 +42,18 @@ public:
     dtkComposerNode *node(void);
 
 public:
-    void  appendLeftRoute(dtkComposerEdge *route);
-    void appendRightRoute(dtkComposerEdge *route);
+    void  appendLeftRoute(dtkComposerRoute *route);
+    void appendRightRoute(dtkComposerRoute *route);
 
-    void  removeLeftRoute(dtkComposerEdge *route);
-    void removeRightRoute(dtkComposerEdge *route);
+    void  removeLeftRoute(dtkComposerRoute *route);
+    void removeRightRoute(dtkComposerRoute *route);
     void  removeAllRoutes(void);
 
-    void  appendLeftRelayRoute(dtkComposerEdge *route);
-    void appendRightRelayRoute(dtkComposerEdge *route);
+    void  appendLeftRelayRoute(dtkComposerRoute *route);
+    void appendRightRelayRoute(dtkComposerRoute *route);
 
-    void  removeLeftRelayRoute(dtkComposerEdge *route);
-    void removeRightRelayRoute(dtkComposerEdge *route);
+    void  removeLeftRelayRoute(dtkComposerRoute *route);
+    void removeRightRelayRoute(dtkComposerRoute *route);
     void  removeAllRelayRoutes(void);
 
     void  appendLeftNode(dtkComposerNode *node);
@@ -64,11 +64,11 @@ public:
     void  removeAllNodes(void);
 
 public:
-    const QList<dtkComposerEdge *>&  leftRoutes(void) const;
-    const QList<dtkComposerEdge *>& rightRoutes(void) const;
+    const QList<dtkComposerRoute *>&  leftRoutes(void) const;
+    const QList<dtkComposerRoute *>& rightRoutes(void) const;
 
-    const QList<dtkComposerEdge *>&  leftRelayRoutes(void) const;
-    const QList<dtkComposerEdge *>& rightRelayRoutes(void) const;
+    const QList<dtkComposerRoute *>&  leftRelayRoutes(void) const;
+    const QList<dtkComposerRoute *>& rightRelayRoutes(void) const;
 
     const QList<dtkComposerNode *>&  leftNodes(void) const;
     const QList<dtkComposerNode *>& rightNodes(void) const;

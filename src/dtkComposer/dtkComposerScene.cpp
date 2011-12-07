@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Dec  6 16:32:13 2011 (+0100)
+ * Last-Updated: Tue Dec  6 18:41:05 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 3009
+ *     Update #: 3049
  */
 
 /* Commentary: 
@@ -378,21 +378,31 @@ void dtkComposerScene::removeEdge(dtkComposerEdge *edge)
  */
 void dtkComposerScene::removeNode(dtkComposerNode *node)
 {
+    qDebug() << DTK_PRETTY_FUNCTION << node << "-- removing left edges";
+
     foreach(dtkComposerEdge *edge, node->g->leftEdges())
         this->removeEdge(edge);
     
+    qDebug() << DTK_PRETTY_FUNCTION << node << "-- removing right edges";
+
     foreach(dtkComposerEdge *edge, node->g->rightEdges())
         this->removeEdge(edge);
+
+    qDebug() << DTK_PRETTY_FUNCTION << node << "-- removing left relay edges";
 
     foreach(dtkComposerEdge *edge, node->g->leftRelayEdges())
         this->removeEdge(edge);
     
+    qDebug() << DTK_PRETTY_FUNCTION << node << "-- removing right relay edges";
+
     foreach(dtkComposerEdge *edge, node->g->rightRelayEdges())
         this->removeEdge(edge);
     
+    qDebug() << DTK_PRETTY_FUNCTION << node << "-- delaing with the rest";
+
     dtkComposerNode *parent = node->parentNode();
     if (parent)
-        parent->removeChildNode(node); 
+        parent->removeChildNode(node);
 
     dtkComposerNodeControlBlock *parent_block = NULL;
     if (parent && parent->kind() == dtkComposerNode::Control) {
@@ -402,49 +412,6 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
                 parent_block = block;
             }
         }
-    }
-
-    dtkComposerNode *n = node;
-
-    while(n->parentNode()) {
-
-        parent = n->parentNode();
-
-        // foreach(dtkComposerNodeProperty *property, parent->g->leftProperties()) {
-        //     if (property->clonedFrom() == node) {
-
-        //         foreach(dtkComposerEdge *edge, parent->g->leftEdges())
-        //             if (edge->destination() == property)
-        //                 this->removeEdge(edge);
-
-        //         foreach(dtkComposerEdge *edge, parent->g->leftRelayEdges())
-        //             if (edge->source() == property)
-        //                 this->removeEdge(edge);
-
-        //         parent->g->removeLeftProperty(property);
-        //         delete property;
-        //         property = NULL;
-        //     }
-        // }
-
-        // foreach(dtkComposerNodeProperty *property, parent->g->rightProperties()) {
-        //     if (property->clonedFrom() == node) {
-
-        //         foreach(dtkComposerEdge *edge, parent->g->rightEdges())
-        //             if (edge->source() == property)
-        //                 this->removeEdge(edge);
-
-        //         foreach(dtkComposerEdge *edge, parent->g->rightRelayEdges()) 
-        //             if (edge->destination() == property) 
-        //                 this->removeEdge(edge);
-
-        //         parent->g->removeRightProperty(property);
-        //         delete property;
-        //         property = NULL;
-        //     }
-        // }
-
-        n = parent;
     }
 
     // -- In case of composite node, parenthood of child nodes is reset
@@ -468,7 +435,6 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
             node->removeChildNode(child);
             
         }
-
     }
 
     foreach(dtkComposerNode *child, node->childNodes()) {
@@ -479,6 +445,7 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
     d->nodes.removeAll(node);
 
     delete node;
+
     node = NULL;
 }
 
@@ -771,14 +738,12 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
     bool node_was_ghost = node->isGhost();
     QPointF scene_center = node->mapRectToScene(node->boundingRect()).center();
 
-    // -- For each child nodes, we save the edge logic.
+    // -- For each child node, we save the edge logic.
 
     QList<dtkComposerEdge *> edge_logic;
 
     foreach(dtkComposerNode *child, node->childNodes()) {
         
-        child->setParentNode(parent);
-
         foreach(dtkComposerEdge *ghost, node->g->leftRelayEdges()) {
             if (ghost->destination()->node() == child) {
                 foreach(dtkComposerEdge *input, node->g->leftEdges()) {
@@ -805,8 +770,8 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
             }
         }   
 
-        child->setParentNode(node);
-    }       
+        child->setParentNode(parent);
+    }
     
     // -- Node is removed. This action destroys the edge logic.
 

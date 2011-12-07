@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Nov  4 14:16:40 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Dec  6 14:38:56 2011 (+0100)
+ * Last-Updated: Tue Dec  6 18:38:02 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 124
+ *     Update #: 126
  */
 
 /* Commentary: 
@@ -450,10 +450,10 @@ void dtkComposerNodeLogic::onRouteDisconnected(dtkComposerNodeProperty *source, 
     }
 
     if (left_route)
-        qDebug() << left_route;
+        qDebug() << DTK_PRETTY_FUNCTION << left_route;
 
     if (right_route)
-        qDebug() << right_route;
+        qDebug() << DTK_PRETTY_FUNCTION << right_route;
     
     if (left_route == right_route)
         right_route = NULL;

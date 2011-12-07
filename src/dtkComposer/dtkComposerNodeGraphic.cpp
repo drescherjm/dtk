@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Nov  3 13:28:33 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Dec  6 13:56:47 2011 (+0100)
+ * Last-Updated: Tue Dec  6 18:17:03 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 386
+ *     Update #: 389
  */
 
 /* Commentary: 
@@ -152,6 +152,12 @@ dtkComposerNodeGraphicPrivate::EdgesToProperty dtkComposerNodeGraphicPrivate::le
 dtkComposerNodeGraphicPrivate::EdgesToProperty dtkComposerNodeGraphicPrivate::rightRoute(dtkComposerEdge *edge, QList<dtkComposerEdge *>& list)
 {
     dtkComposerNodeGraphicPrivate::EdgesToProperty map_edges_to_property;
+
+    if(!edge)
+        return map_edges_to_property;
+
+    if(!edge->destination() || !edge->source())
+        return map_edges_to_property;
 
     if (edge->destination()->node()->kind() != dtkComposerNode::Composite) {
 

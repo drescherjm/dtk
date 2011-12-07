@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 09:18:40 2010 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. oct.  6 17:59:59 2011 (+0200)
+ * Last-Updated: lun. nov. 28 17:29:52 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 73
+ *     Update #: 95
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include <QtCore>
 
 #include "dtkDistributedExport.h"
+#include <dtkCore/dtkAbstractData.h>
 
 class dtkDistributedCommunicatorPrivate;
 
@@ -39,6 +40,7 @@ public:
         dtkDistributedCommunicatorChar,
         dtkDistributedCommunicatorInt,
         dtkDistributedCommunicatorLong,
+        dtkDistributedCommunicatorInt64,
         dtkDistributedCommunicatorFloat,
         dtkDistributedCommunicatorDouble
     };
@@ -76,16 +78,20 @@ public:
     virtual void      send(char   *data, qint64 size, quint16 target, int tag);
     virtual void      send(int    *data, qint64 size, quint16 target, int tag);
     virtual void      send(long   *data, qint64 size, quint16 target, int tag);
+    virtual void      send(qint64 *data, qint64 size, quint16 target, int tag);
     virtual void      send(float  *data, qint64 size, quint16 target, int tag);
     virtual void      send(double *data, qint64 size, quint16 target, int tag);
+    virtual void      send(dtkAbstractData *data,     quint16 target, int tag) = 0;
 
     virtual void   receive(void   *data, qint64 size, DataType dataType, quint16 source, int tag) = 0;
     virtual void   receive(bool   *data, qint64 size, quint16 source, int tag);
     virtual void   receive(char   *data, qint64 size, quint16 source, int tag);
     virtual void   receive(int    *data, qint64 size, quint16 source, int tag);
     virtual void   receive(long   *data, qint64 size, quint16 source, int tag);
+    virtual void   receive(qint64 *data, qint64 size, quint16 source, int tag);
     virtual void   receive(float  *data, qint64 size, quint16 source, int tag);
     virtual void   receive(double *data, qint64 size, quint16 source, int tag);
+    virtual void   receive(dtkAbstractData *data, quint16 source, int tag) = 0;
 
     virtual void   barrier(void) = 0;
 
@@ -93,6 +99,8 @@ public:
     virtual void broadcast(bool   *data, qint64 size, quint16 source);
     virtual void broadcast(char   *data, qint64 size, quint16 source);
     virtual void broadcast(int    *data, qint64 size, quint16 source);
+    virtual void broadcast(long   *data, qint64 size, quint16 source);
+    virtual void broadcast(qint64 *data, qint64 size, quint16 source);
     virtual void broadcast(float  *data, qint64 size, quint16 source);
     virtual void broadcast(double *data, qint64 size, quint16 source);
 
@@ -102,14 +110,14 @@ public:
     virtual void    gather(int    *send, int    *recv, qint64 size, quint16 target, bool all = false);
     virtual void    gather(float  *send, float  *recv, qint64 size, quint16 target, bool all = false);
     virtual void    gather(double *send, double *recv, qint64 size, quint16 target, bool all = false);
-                                         
+
     virtual void   scatter(void   *send, void   *recv, qint64 size, DataType dataType, quint16 source) = 0;
     virtual void   scatter(bool   *send, bool   *recv, qint64 size, quint16 source);
     virtual void   scatter(char   *send, char   *recv, qint64 size, quint16 source);
     virtual void   scatter(int    *send, int    *recv, qint64 size, quint16 source);
     virtual void   scatter(float  *send, float  *recv, qint64 size, quint16 source);
     virtual void   scatter(double *send, double *recv, qint64 size, quint16 source);
-                                         
+
     virtual void    reduce(void   *send, void   *recv, qint64 size, DataType dataType, OperationType operationType, quint16 target, bool all = false) = 0;
     virtual void    reduce(bool   *send, bool   *recv, qint64 size, OperationType operationType, quint16 target, bool all = false);
     virtual void    reduce(char   *send, char   *recv, qint64 size, OperationType operationType, quint16 target, bool all = false);

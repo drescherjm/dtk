@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: lun. oct. 17 13:20:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. oct. 19 12:47:17 2011 (+0200)
+ * Last-Updated: lun. nov. 28 15:26:02 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 31
+ *     Update #: 37
  */
 
 /* Commentary:
@@ -24,6 +24,7 @@
 #include <dtkCore/dtkAbstractObject.h>
 #include <dtkCore/dtkAbstractData.h>
 
+class dtkAbstractData;
 class dtkAbstractDataSerializerPrivate;
 
 class DTKCORE_EXPORT dtkAbstractDataSerializer : public dtkAbstractObject
@@ -49,8 +50,8 @@ signals:
 
 public slots:
 
-    virtual bool canSerialize(const dtkAbstractData &data);
-    virtual bool serialize(  dtkAbstractData &data);
+    virtual QByteArray *serialize(  void );
+    virtual QByteArray *serialize(  dtkAbstractData *data);
 
     virtual void setProgress(int value);
 

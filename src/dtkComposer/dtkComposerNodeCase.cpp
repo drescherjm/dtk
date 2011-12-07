@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 10 14:32:35 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 744
+ * Last-Updated: Wed Dec  7 15:52:22 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 749
  */
 
 /* Commentary: 
@@ -24,6 +24,7 @@
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeLoop.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerRoute.h"
 #include "dtkComposerScene.h"
 
 #include <dtkCore/dtkGlobal.h>
@@ -275,14 +276,14 @@ bool dtkComposerNodeCase::evaluate(dtkComposerEvaluatorPrivate *evaluator)
 /*! 
  * 
  */
-void dtkComposerNodeCase::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property)
+void dtkComposerNodeCase::pull(dtkComposerRoute *i_route, dtkComposerNodeProperty *property)
 {
     if (property == this->inputProperty()) {
         
-        foreach(dtkComposerEdge *relay_route, this->inputRelayRoutes()) {
+        foreach(dtkComposerRoute *relay_route, this->inputRelayRoutes()) {
             if (relay_route->source()->name() == this->inputProperty()->name()) {
 
-                dtkComposerEdge *route = new dtkComposerEdge;
+                dtkComposerRoute *route = new dtkComposerRoute;
                 route->setSource(i_route->source());
                 route->setDestination(relay_route->destination());
                 
@@ -302,16 +303,16 @@ void dtkComposerNodeCase::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty
 /*! 
  * 
  */
-void dtkComposerNodeCase::push(dtkComposerEdge *o_route, dtkComposerNodeProperty *property)
+void dtkComposerNodeCase::push(dtkComposerRoute *o_route, dtkComposerNodeProperty *property)
 {
     if (property->name() == this->inputProperty()->name()) {  
 
         dtkComposerNodeProperty *source = NULL;
-        foreach(dtkComposerEdge *i_route, this->l->leftRoutes())
+        foreach(dtkComposerRoute *i_route, this->l->leftRoutes())
             if (i_route->destination() == this->inputProperty())
                 source = i_route->source();
 
-        dtkComposerEdge *route = new dtkComposerEdge;
+        dtkComposerRoute *route = new dtkComposerRoute;
         route->setSource(source);
         route->setDestination(o_route->destination());
         this->addOutputActiveRoute(route);

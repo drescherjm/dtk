@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Oct 24 12:57:38 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Dec  7 14:59:29 2011 (+0100)
+ * Last-Updated: Wed Dec  7 15:27:21 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 459
+ *     Update #: 462
  */
 
 /* Commentary: 
@@ -553,7 +553,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopDataComposite *nod
 
         // -- Set input relay routes connected to item and index properties
 
-        foreach(dtkComposerEdge *relay_route, node->inputRelayRoutes()) {
+        foreach(dtkComposerRoute *relay_route, node->inputRelayRoutes()) {
 
             if (relay_route->source()->name() == "item" || relay_route->source()->name() == "index") {
 
@@ -563,7 +563,6 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopDataComposite *nod
                 
                 relay_route->destination()->node()->l->appendLeftRoute(route);
                 node->addInputActiveRoute(route);
-            
             }
         }
 
@@ -808,7 +807,7 @@ bool dtkComposerEvaluatorPrivate::evaluate(dtkComposerNodeLoopFor *node)
         foreach(dtkComposerRoute *i_route, node->l->leftRoutes())
             node->pull(i_route, i_route->destination());
 
-        foreach(dtkComposerEdge *o_route, node->outputRelayRoutes()) {
+        foreach(dtkComposerRoute *o_route, node->outputRelayRoutes()) {
             if (o_route->destination()->blockedFrom() == node->blocks().at(0)->title()) {
                 if (o_route->destination()->name() == "condition") {
                     node->d->node_cond = o_route->source()->node();

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: jeu. nov. 17 20:50:45 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Dec  6 14:45:26 2011 (+0100)
+ * Last-Updated: Wed Dec  7 16:17:00 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 43
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #include "dtkComposerNodeNumberInteger.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerNodeTransmitter.h"
+#include "dtkComposerRoute.h"
 
 #include <dtkCore/dtkGlobal.h>
  
@@ -39,7 +40,7 @@ public:
     dtkComposerNodeTransmitter<int> *receiver;
 
 public:
-    QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<int> *> receivers;
+    QHash<dtkComposerRoute *, dtkComposerNodeTransmitter<int> *> receivers;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -104,7 +105,7 @@ void dtkComposerNodeNumberInteger::touch(void)
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-void dtkComposerNodeNumberInteger::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+void dtkComposerNodeNumberInteger::pull(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(property);
 
@@ -127,7 +128,7 @@ void dtkComposerNodeNumberInteger::run(void)
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-void dtkComposerNodeNumberInteger::push(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+void dtkComposerNodeNumberInteger::push(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(route);
     Q_UNUSED(property);
@@ -156,7 +157,7 @@ dtkComposerNodeAbstractTransmitter *dtkComposerNodeNumberInteger::emitter(dtkCom
  *
  *  Reimplemented from dtkComposerNode.
  */
-bool dtkComposerNodeNumberInteger::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+bool dtkComposerNodeNumberInteger::onLeftRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *destination)
 {
     Q_UNUSED(destination);
 
@@ -177,18 +178,18 @@ bool dtkComposerNodeNumberInteger::onLeftRouteConnected(dtkComposerEdge *route, 
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-bool dtkComposerNodeNumberInteger::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+bool dtkComposerNodeNumberInteger::onRightRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     return true;
 }
 
 
-bool dtkComposerNodeNumberInteger::onLeftRouteDisconnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+bool dtkComposerNodeNumberInteger::onLeftRouteDisconnected(dtkComposerRoute *route, dtkComposerNodeProperty *destination)
 {
     this->interactiveOn();
 }
 
-bool dtkComposerNodeNumberInteger::onRightRouteDisconnected(dtkComposerEdge *route, dtkComposerNodeProperty *source)
+bool dtkComposerNodeNumberInteger::onRightRouteDisconnected(dtkComposerRoute *route, dtkComposerNodeProperty *source)
 {
     return true;
 }

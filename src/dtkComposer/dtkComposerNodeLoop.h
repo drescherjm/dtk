@@ -48,8 +48,8 @@ protected:
     void setPassThroughVariable(dtkComposerNodeProperty *property, QVariant pass_through_variable);
 
 protected:
-    virtual void pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property);
-    virtual void push(dtkComposerEdge *o_route, dtkComposerNodeProperty *property);
+    virtual void pull(dtkComposerRoute *i_route, dtkComposerNodeProperty *property);
+    virtual void push(dtkComposerRoute *o_route, dtkComposerNodeProperty *property);
 
 protected:
     void updatePassThroughVariables(void);

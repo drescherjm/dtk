@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: jeu. nov. 17 22:13:04 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Nov 25 14:04:20 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 44
+ * Last-Updated: Wed Dec  7 16:06:53 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #include "dtkComposerNodeNumberDouble.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerNodeTransmitter.h"
+#include "dtkComposerRoute.h"
 
 #include <dtkCore/dtkGlobal.h>
  
@@ -39,7 +40,7 @@ public:
     dtkComposerNodeTransmitter<double> *receiver;
 
 public:
-    QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<double> *> receivers;
+    QHash<dtkComposerRoute *, dtkComposerNodeTransmitter<double> *> receivers;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -104,7 +105,7 @@ void dtkComposerNodeNumberDouble::touch(void)
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-void dtkComposerNodeNumberDouble::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+void dtkComposerNodeNumberDouble::pull(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(property);
 
@@ -127,7 +128,7 @@ void dtkComposerNodeNumberDouble::run(void)
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-void dtkComposerNodeNumberDouble::push(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+void dtkComposerNodeNumberDouble::push(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(route);
     Q_UNUSED(property);
@@ -156,7 +157,7 @@ dtkComposerNodeAbstractTransmitter *dtkComposerNodeNumberDouble::emitter(dtkComp
  *
  *  Reimplemented from dtkComposerNode.
  */
-bool dtkComposerNodeNumberDouble::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+bool dtkComposerNodeNumberDouble::onLeftRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *destination)
 {
     Q_UNUSED(destination);
 
@@ -177,7 +178,7 @@ bool dtkComposerNodeNumberDouble::onLeftRouteConnected(dtkComposerEdge *route, d
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-bool dtkComposerNodeNumberDouble::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+bool dtkComposerNodeNumberDouble::onRightRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     return true;
 }

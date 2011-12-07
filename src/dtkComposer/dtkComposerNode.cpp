@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Dec  7 14:54:54 2011 (+0100)
+ * Last-Updated: Wed Dec  7 15:46:53 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 2675
+ *     Update #: 2680
  */
 
 /* Commentary: 
@@ -25,6 +25,7 @@
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeLoop.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerRoute.h"
 #include "dtkComposerScene.h"
 
 #include <dtkCore/dtkAbstractData.h>
@@ -953,7 +954,7 @@ QList<dtkComposerRoute *> dtkComposerNode::allRoutes(void)
     return routes;
 }
 
-void dtkComposerNode::removeRoute(dtkComposerEdge *route)
+void dtkComposerNode::removeRoute(dtkComposerRoute *route)
 {
     l->removeLeftRoute(route);
     l->removeRightRoute(route);
@@ -1030,7 +1031,7 @@ void dtkComposerNode::markDirtyDownstreamNodes(void)
     //     o_route->destination()->node()->setDirty(true);
 }
 
-void dtkComposerNode::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+void dtkComposerNode::pull(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(route);
     Q_UNUSED(property);
@@ -1043,7 +1044,7 @@ void dtkComposerNode::run(void)
     DTK_DEFAULT_IMPLEMENTATION;
 }
 
-void dtkComposerNode::push(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+void dtkComposerNode::push(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(route);
     Q_UNUSED(property);
@@ -1059,7 +1060,7 @@ dtkComposerNodeAbstractTransmitter *dtkComposerNode::emitter(dtkComposerNodeProp
     return NULL;
 }
 
-bool dtkComposerNode::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+bool dtkComposerNode::onLeftRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *destination)
 {
     DTK_UNUSED(route);
     DTK_UNUSED(destination);
@@ -1067,7 +1068,7 @@ bool dtkComposerNode::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNo
     return false;
 }
 
-bool dtkComposerNode::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *source)
+bool dtkComposerNode::onRightRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *source)
 {
     DTK_UNUSED(route);
     DTK_UNUSED(source);
@@ -1075,7 +1076,7 @@ bool dtkComposerNode::onRightRouteConnected(dtkComposerEdge *route, dtkComposerN
     return true;
 }
 
-bool dtkComposerNode::onLeftRouteDisconnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+bool dtkComposerNode::onLeftRouteDisconnected(dtkComposerRoute *route, dtkComposerNodeProperty *destination)
 {
     DTK_UNUSED(route);
     DTK_UNUSED(destination);
@@ -1083,7 +1084,7 @@ bool dtkComposerNode::onLeftRouteDisconnected(dtkComposerEdge *route, dtkCompose
     return true;
 }
 
-bool dtkComposerNode::onRightRouteDisconnected(dtkComposerEdge *route, dtkComposerNodeProperty *source)
+bool dtkComposerNode::onRightRouteDisconnected(dtkComposerRoute *route, dtkComposerNodeProperty *source)
 {
     DTK_UNUSED(route);
     DTK_UNUSED(source);
@@ -1091,22 +1092,22 @@ bool dtkComposerNode::onRightRouteDisconnected(dtkComposerEdge *route, dtkCompos
     return true;
 }
 
-void dtkComposerNode::updateSourceRoutes(dtkComposerEdge *route)
+void dtkComposerNode::updateSourceRoutes(dtkComposerRoute *route)
 {
     this->l->appendLeftRoute(route);
 }
 
-void dtkComposerNode::updateDestinationRoutes(dtkComposerEdge *route)
+void dtkComposerNode::updateDestinationRoutes(dtkComposerRoute *route)
 {
     this->l->appendRightRoute(route);
 }
 
-void dtkComposerNode::updateSourceNodes(dtkComposerEdge *route)
+void dtkComposerNode::updateSourceNodes(dtkComposerRoute *route)
 {
     this->l->appendLeftNode(route->source()->node());
 }
 
-void dtkComposerNode::updateDestinationNodes(dtkComposerEdge *route)
+void dtkComposerNode::updateDestinationNodes(dtkComposerRoute *route)
 {
     this->l->appendRightNode(route->destination()->node());
 }

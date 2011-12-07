@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: jeu. nov. 17 21:55:21 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Nov 25 14:06:31 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 25
+ * Last-Updated: Wed Dec  7 16:17:37 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #include "dtkComposerNodeNumberLong.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerNodeTransmitter.h"
+#include "dtkComposerRoute.h"
 
 #include <dtkCore/dtkGlobal.h>
  
@@ -39,7 +40,7 @@ public:
     dtkComposerNodeTransmitter<qlonglong> *receiver;
 
 public:
-    QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<qlonglong> *> receivers;
+    QHash<dtkComposerRoute *, dtkComposerNodeTransmitter<qlonglong> *> receivers;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -104,7 +105,7 @@ void dtkComposerNodeNumberLong::touch(void)
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-void dtkComposerNodeNumberLong::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+void dtkComposerNodeNumberLong::pull(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(property);
 
@@ -127,7 +128,7 @@ void dtkComposerNodeNumberLong::run(void)
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-void dtkComposerNodeNumberLong::push(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+void dtkComposerNodeNumberLong::push(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(route);
     Q_UNUSED(property);
@@ -156,7 +157,7 @@ dtkComposerNodeAbstractTransmitter *dtkComposerNodeNumberLong::emitter(dtkCompos
  *
  *  Reimplemented from dtkComposerNode.
  */
-bool dtkComposerNodeNumberLong::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+bool dtkComposerNodeNumberLong::onLeftRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *destination)
 {
     Q_UNUSED(destination);
 
@@ -177,7 +178,7 @@ bool dtkComposerNodeNumberLong::onLeftRouteConnected(dtkComposerEdge *route, dtk
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-bool dtkComposerNodeNumberLong::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+bool dtkComposerNodeNumberLong::onRightRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     return true;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 25 10:07:34 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Nov 25 14:07:43 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 277
+ * Last-Updated: Wed Dec  7 15:50:47 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 278
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #include "dtkComposerNodeBooleanOperator.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerNodeTransmitter.h"
+#include "dtkComposerRoute.h"
 
 #include <dtkCore/dtkGlobal.h>
 
@@ -207,7 +208,7 @@ public:
     dtkComposerNodeTransmitter<bool> *emitter;
 
 public:
-    QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<bool> *> receivers;
+    QHash<dtkComposerRoute *, dtkComposerNodeTransmitter<bool> *> receivers;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -316,7 +317,7 @@ dtkComposerNodeBooleanOperator::Operation dtkComposerNodeBooleanOperator::operat
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-void dtkComposerNodeBooleanOperator::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+void dtkComposerNodeBooleanOperator::pull(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     if(property == d->property_left_value_op1)
         d->value_op1 = d->receivers.value(route)->data();
@@ -370,7 +371,7 @@ void dtkComposerNodeBooleanOperator::run(void)
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-void dtkComposerNodeBooleanOperator::push(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+void dtkComposerNodeBooleanOperator::push(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(route);
     Q_UNUSED(property);
@@ -396,7 +397,7 @@ dtkComposerNodeAbstractTransmitter *dtkComposerNodeBooleanOperator::emitter(dtkC
  *
  *  Reimplemented from dtkComposerNode.
  */
-bool dtkComposerNodeBooleanOperator::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+bool dtkComposerNodeBooleanOperator::onLeftRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *destination)
 {
     Q_UNUSED(destination);
 
@@ -412,7 +413,7 @@ bool dtkComposerNodeBooleanOperator::onLeftRouteConnected(dtkComposerEdge *route
 /*! 
  *  
  */
-bool dtkComposerNodeBooleanOperator::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+bool dtkComposerNodeBooleanOperator::onRightRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     return true;
 }

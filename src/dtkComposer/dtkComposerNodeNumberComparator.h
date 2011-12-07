@@ -50,16 +50,16 @@ public:
     void setOperation(Operation operation);
 
 protected:
-    void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void pull(dtkComposerRoute *edge, dtkComposerNodeProperty *property);
     void  run(void);
-    void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void push(dtkComposerRoute *edge, dtkComposerNodeProperty *property);
 
 public:
     dtkComposerNodeAbstractTransmitter *emitter(dtkComposerNodeProperty *property);
 
 public:
-    bool  onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property);
-    bool onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property);
+    bool  onLeftRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *property);
+    bool onRightRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *property);
 
 private:
     dtkComposerNodeNumberComparatorPrivate *d;

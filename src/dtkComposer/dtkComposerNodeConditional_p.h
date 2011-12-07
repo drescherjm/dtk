@@ -31,7 +31,7 @@ public:
     dtkComposerNodeControlBlock *createBlock(const QString& title, dtkComposerNodeConditional *parent);
 
 public:
-    QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<bool> *> receivers;
+    QHash<dtkComposerRoute *, dtkComposerNodeTransmitter<bool> *> receivers;
 };
 
 #endif

@@ -137,7 +137,7 @@ dtkComposerNodeAbstractTransmitter *dtkComposerNodeFile::emitter(dtkComposerNode
     return NULL;
 }
 
-void dtkComposerNodeFile::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNodeFile::pull(dtkComposerRoute *edge, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(edge);
     Q_UNUSED(property);    
@@ -193,19 +193,19 @@ void dtkComposerNodeFile::run(void)
     d->file_url_emitter->setData(d->url);
 }
 
-void dtkComposerNodeFile::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNodeFile::push(dtkComposerRoute *edge, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(edge);
     Q_UNUSED(property); 
 }
 
-bool dtkComposerNodeFile::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+bool dtkComposerNodeFile::onLeftRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *destination)
 {
     Q_UNUSED(route);
     Q_UNUSED(destination);
 }
 
-bool dtkComposerNodeFile::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+bool dtkComposerNodeFile::onRightRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(route);
     Q_UNUSED(property);

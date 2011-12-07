@@ -34,7 +34,7 @@ public:
     ~dtkComposerNodeView(void);
 
 protected:
-    virtual void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    virtual void pull(dtkComposerRoute *edge, dtkComposerNodeProperty *property);
     virtual void  run(void);
 
 private:

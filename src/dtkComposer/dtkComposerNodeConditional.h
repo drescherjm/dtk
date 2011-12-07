@@ -43,12 +43,12 @@ public slots:
     bool evaluate(dtkComposerEvaluatorPrivate *evaluator);
 
 public:
-    bool  onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
-    bool onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property);
+    bool  onLeftRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *destination);
+    bool onRightRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *property);
 
 public:
-    void      updateSourceRoutes(dtkComposerEdge *route);
-    void updateDestinationRoutes(dtkComposerEdge *route);
+    void      updateSourceRoutes(dtkComposerRoute *route);
+    void updateDestinationRoutes(dtkComposerRoute *route);
 
     void      updateSourceNodes(dtkComposerEdge *route);
     void updateDestinationNodes(dtkComposerEdge *route);

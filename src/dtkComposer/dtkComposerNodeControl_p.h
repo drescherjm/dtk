@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Nov  7 16:06:43 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Nov  8 15:52:52 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 17
+ * Last-Updated: Wed Dec  7 15:26:01 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 20
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@ class dtkComposerEdge;
 class dtkComposerNode;
 class dtkComposerNodeControlBlock;
 class dtkComposerNodeProperty;
+class dtkComposerRoute;
 
 class dtkComposerNodeControlPrivate
 {
@@ -45,11 +46,11 @@ public:
     dtkComposerNodeProperty *property_input;
 
 public:
-    QList<dtkComposerEdge *>  input_relay_routes;
-    QList<dtkComposerEdge *> output_relay_routes;
+    QList<dtkComposerRoute *>  input_relay_routes;
+    QList<dtkComposerRoute *> output_relay_routes;
 
-    QList<dtkComposerEdge *>  input_active_routes;
-    QList<dtkComposerEdge *> output_active_routes;
+    QList<dtkComposerRoute *>  input_active_routes;
+    QList<dtkComposerRoute *> output_active_routes;
 
 public:
     bool block_added;
@@ -59,7 +60,6 @@ public:
 
 public:
     QColor color;
-    
 };
 
 #endif

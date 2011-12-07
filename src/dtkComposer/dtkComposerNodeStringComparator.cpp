@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun Feb 27 18:00:48 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 24 14:24:14 2011 (+0100)
+ * Last-Updated: Wed Dec  7 16:20:18 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 48
+ *     Update #: 49
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #include "dtkComposerNodeStringComparator.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerNodeTransmitter.h"
+#include "dtkComposerRoute.h"
 
 #include <dtkCore/dtkGlobal.h>
 
@@ -161,7 +162,7 @@ public:
     dtkComposerNodeTransmitter<bool> *emitter;
 
 public:
-    QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<QString> *> receivers;
+    QHash<dtkComposerRoute *, dtkComposerNodeTransmitter<QString> *> receivers;
 
 public:
     dtkComposerNodeStringComparatorLabel *label;
@@ -252,7 +253,7 @@ void dtkComposerNodeStringComparator::setOperation(dtkComposerNodeStringComparat
     }
 }
 
-void dtkComposerNodeStringComparator::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+void dtkComposerNodeStringComparator::pull(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     if(property == d->property_input_value_op1)
         d->value_op1 = d->receivers.value(route)->data();
@@ -292,7 +293,7 @@ void dtkComposerNodeStringComparator::run(void)
     d->emitter->setData(d->value);
 }
 
-void dtkComposerNodeStringComparator::push(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+void dtkComposerNodeStringComparator::push(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(route);
     Q_UNUSED(property);
@@ -306,7 +307,7 @@ dtkComposerNodeAbstractTransmitter *dtkComposerNodeStringComparator::emitter(dtk
     return NULL;
 }
 
-bool dtkComposerNodeStringComparator::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+bool dtkComposerNodeStringComparator::onLeftRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *destination)
 {
     Q_UNUSED(destination);
 
@@ -318,7 +319,7 @@ bool dtkComposerNodeStringComparator::onLeftRouteConnected(dtkComposerEdge *rout
     return true;
 }
 
-bool dtkComposerNodeStringComparator::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+bool dtkComposerNodeStringComparator::onRightRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     return true;
 }

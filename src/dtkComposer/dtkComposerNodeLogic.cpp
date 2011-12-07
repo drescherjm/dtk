@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Nov  4 14:16:40 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Dec  6 18:38:02 2011 (+0100)
+ * Last-Updated: Wed Dec  7 16:01:15 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 126
+ *     Update #: 131
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 #include "dtkComposerEdge.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerRoute.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeLogicPrivate declaration
@@ -30,11 +31,11 @@
 class dtkComposerNodeLogicPrivate
 {
 public:
-    QList<dtkComposerEdge *>  left_routes;
-    QList<dtkComposerEdge *> right_routes;
+    QList<dtkComposerRoute *>  left_routes;
+    QList<dtkComposerRoute *> right_routes;
 
-    QList<dtkComposerEdge *>  left_relay_routes;
-    QList<dtkComposerEdge *> right_relay_routes;
+    QList<dtkComposerRoute *>  left_relay_routes;
+    QList<dtkComposerRoute *> right_relay_routes;
 
     QList<dtkComposerNode *>  left_nodes;
     QList<dtkComposerNode *> right_nodes;
@@ -79,7 +80,7 @@ dtkComposerNode *dtkComposerNodeLogic::node(void)
 /*! 
  *  
  */
-void dtkComposerNodeLogic::appendLeftRoute(dtkComposerEdge *route)
+void dtkComposerNodeLogic::appendLeftRoute(dtkComposerRoute *route)
 {
     if (d->left_routes.contains(route))
         return;
@@ -91,7 +92,7 @@ void dtkComposerNodeLogic::appendLeftRoute(dtkComposerEdge *route)
 /*! 
  *  
  */
-void dtkComposerNodeLogic::appendRightRoute(dtkComposerEdge *route)
+void dtkComposerNodeLogic::appendRightRoute(dtkComposerRoute *route)
 {
     if (d->right_routes.contains(route))
         return;
@@ -103,7 +104,7 @@ void dtkComposerNodeLogic::appendRightRoute(dtkComposerEdge *route)
 /*! 
  *  
  */
-void dtkComposerNodeLogic::removeLeftRoute(dtkComposerEdge *route)
+void dtkComposerNodeLogic::removeLeftRoute(dtkComposerRoute *route)
 {
     d->left_routes.removeAll(route);
 }
@@ -112,7 +113,7 @@ void dtkComposerNodeLogic::removeLeftRoute(dtkComposerEdge *route)
 /*! 
  *  
  */
-void dtkComposerNodeLogic::removeRightRoute(dtkComposerEdge *route)
+void dtkComposerNodeLogic::removeRightRoute(dtkComposerRoute *route)
 {
     d->right_routes.removeAll(route);
 }
@@ -131,7 +132,7 @@ void dtkComposerNodeLogic::removeAllRoutes(void)
 /*! 
  *  
  */
-void dtkComposerNodeLogic::appendLeftRelayRoute(dtkComposerEdge *route)
+void dtkComposerNodeLogic::appendLeftRelayRoute(dtkComposerRoute *route)
 {
     if (d->left_relay_routes.contains(route))
         return;
@@ -143,7 +144,7 @@ void dtkComposerNodeLogic::appendLeftRelayRoute(dtkComposerEdge *route)
 /*! 
  *  
  */
-void dtkComposerNodeLogic::appendRightRelayRoute(dtkComposerEdge *route)
+void dtkComposerNodeLogic::appendRightRelayRoute(dtkComposerRoute *route)
 {
     if (d->right_relay_routes.contains(route))
         return;
@@ -155,7 +156,7 @@ void dtkComposerNodeLogic::appendRightRelayRoute(dtkComposerEdge *route)
 /*! 
  *  
  */
-void dtkComposerNodeLogic::removeLeftRelayRoute(dtkComposerEdge *route)
+void dtkComposerNodeLogic::removeLeftRelayRoute(dtkComposerRoute *route)
 {
     d->left_relay_routes.removeAll(route);
 }
@@ -164,7 +165,7 @@ void dtkComposerNodeLogic::removeLeftRelayRoute(dtkComposerEdge *route)
 /*! 
  *  
  */
-void dtkComposerNodeLogic::removeRightRelayRoute(dtkComposerEdge *route)
+void dtkComposerNodeLogic::removeRightRelayRoute(dtkComposerRoute *route)
 {
     d->right_relay_routes.removeAll(route);
 }
@@ -235,7 +236,7 @@ void dtkComposerNodeLogic::removeAllNodes(void)
 /*! 
  *  
  */
-const QList<dtkComposerEdge *>& dtkComposerNodeLogic::leftRoutes(void) const
+const QList<dtkComposerRoute *>& dtkComposerNodeLogic::leftRoutes(void) const
 {
     return d->left_routes;
 }
@@ -244,7 +245,7 @@ const QList<dtkComposerEdge *>& dtkComposerNodeLogic::leftRoutes(void) const
 /*! 
  *  
  */
-const QList<dtkComposerEdge *>& dtkComposerNodeLogic::rightRoutes(void) const
+const QList<dtkComposerRoute *>& dtkComposerNodeLogic::rightRoutes(void) const
 {
     return d->right_routes;
 }
@@ -253,7 +254,7 @@ const QList<dtkComposerEdge *>& dtkComposerNodeLogic::rightRoutes(void) const
 /*! 
  *  
  */
-const QList<dtkComposerEdge *>& dtkComposerNodeLogic::leftRelayRoutes(void) const
+const QList<dtkComposerRoute *>& dtkComposerNodeLogic::leftRelayRoutes(void) const
 {
     return d->left_relay_routes;
 }
@@ -262,7 +263,7 @@ const QList<dtkComposerEdge *>& dtkComposerNodeLogic::leftRelayRoutes(void) cons
 /*! 
  *  
  */
-const QList<dtkComposerEdge *>& dtkComposerNodeLogic::rightRelayRoutes(void) const
+const QList<dtkComposerRoute *>& dtkComposerNodeLogic::rightRelayRoutes(void) const
 {
     return d->right_relay_routes;
 }
@@ -294,17 +295,17 @@ bool dtkComposerNodeLogic::canConnectRoute(dtkComposerNodeProperty *source, dtkC
     bool  left_connection_ok = true;
     bool right_connection_ok = true;
 
-    foreach(dtkComposerEdge *left, destin_node->l->leftRoutes()) {
+    foreach(dtkComposerRoute *left, destin_node->l->leftRoutes()) {
         if (left->source() == source && left->destination() == destination)
             return true;
     }
 
-    foreach(dtkComposerEdge *right, this->rightRoutes()) {
+    foreach(dtkComposerRoute *right, this->rightRoutes()) {
         if (right->source() == source && right->destination() == destination)
             return true;
     }
   
-    dtkComposerEdge *route = new dtkComposerEdge;
+    dtkComposerRoute *route = new dtkComposerRoute;
     route->setSource(source);
     route->setDestination(destination);
 
@@ -341,7 +342,7 @@ bool dtkComposerNodeLogic::canConnectRoute(dtkComposerNodeProperty *source, dtkC
             //             dtkComposerNodeControl *control_node = dynamic_cast<dtkComposerNodeControl *>(source->node());                    
             //             control_node->l->appendRightRoute(route);
                     
-            //             // dtkComposerEdge *active_route = new dtkComposerEdge;
+            //             // dtkComposerRoute *active_route = new dtkComposerRoute;
             //             // active_route->setSource(route->source());
             //             // active_route->setDestination(route->destination());
                         
@@ -386,7 +387,7 @@ bool dtkComposerNodeLogic::canConnectRoute(dtkComposerNodeProperty *source, dtkC
             //     dtkComposerNodeControl *control_node = dynamic_cast<dtkComposerNodeControl *>(source->node());                    
             //     control_node->l->appendRightRoute(route);
 
-            //     dtkComposerEdge *active_route = new dtkComposerEdge;
+            //     dtkComposerRoute *active_route = new dtkComposerRoute;
             //     active_route->setSource(route->source());
             //     active_route->setDestination(route->destination());
 
@@ -428,10 +429,10 @@ bool dtkComposerNodeLogic::canConnectRoute(dtkComposerNodeProperty *source, dtkC
  */
 void dtkComposerNodeLogic::onRouteDisconnected(dtkComposerNodeProperty *source, dtkComposerNodeProperty *destination, dtkComposerNode *destin_node)
 {
-    dtkComposerEdge  *left_route = NULL;
-    dtkComposerEdge *right_route = NULL;
+    dtkComposerRoute  *left_route = NULL;
+    dtkComposerRoute *right_route = NULL;
 
-    foreach(dtkComposerEdge *l_route, destin_node->l->leftRoutes()) {
+    foreach(dtkComposerRoute *l_route, destin_node->l->leftRoutes()) {
         if (l_route->source() == source && l_route->destination() == destination) {
             left_route = l_route;
             Q_UNUSED(this->node()->onLeftRouteDisconnected(left_route, destination));
@@ -440,7 +441,7 @@ void dtkComposerNodeLogic::onRouteDisconnected(dtkComposerNodeProperty *source, 
         }
     }
     
-    foreach(dtkComposerEdge *r_route, this->rightRoutes()) {
+    foreach(dtkComposerRoute *r_route, this->rightRoutes()) {
         if (r_route->source() == source && r_route->destination() == destination) {
             right_route = r_route;
             Q_UNUSED(this->node()->onRightRouteDisconnected(right_route, source));
@@ -476,22 +477,22 @@ bool dtkComposerNodeLogic::isRoute(dtkComposerNodeProperty *source, dtkComposerN
 {
     dtkComposerNode *destin_node = destination->node();
 
-    foreach(dtkComposerEdge *left, destin_node->l->leftRoutes()) {
+    foreach(dtkComposerRoute *left, destin_node->l->leftRoutes()) {
         if (left->source() == source && left->destination() == destination)
             return true;
     }
 
-    foreach(dtkComposerEdge *left, destin_node->l->rightRelayRoutes()) {
+    foreach(dtkComposerRoute *left, destin_node->l->rightRelayRoutes()) {
         if (left->source() == source && left->destination() == destination)
             return true;
     }
 
-    foreach(dtkComposerEdge *right, this->rightRoutes()) {
+    foreach(dtkComposerRoute *right, this->rightRoutes()) {
         if (right->source() == source && right->destination() == destination)
             return true;
     }
 
-    foreach(dtkComposerEdge *right, this->leftRelayRoutes()) {
+    foreach(dtkComposerRoute *right, this->leftRelayRoutes()) {
         if (right->source() == source && right->destination() == destination)
             return true;
     }

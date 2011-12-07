@@ -46,7 +46,7 @@ dtkComposerNodeView::~dtkComposerNodeView(void)
     d = NULL;
 }
 
-void dtkComposerNodeView::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNodeView::pull(dtkComposerRoute *edge, dtkComposerNodeProperty *property)
 {
     DTK_UNUSED(edge);
     DTK_UNUSED(property);

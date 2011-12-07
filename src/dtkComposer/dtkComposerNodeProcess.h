@@ -38,9 +38,9 @@ public:
     virtual QString implementation(void);
 
 protected:
-    virtual void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    virtual void pull(dtkComposerRoute *edge, dtkComposerNodeProperty *property);
     virtual void  run(void);
-    virtual void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    virtual void push(dtkComposerRoute *edge, dtkComposerNodeProperty *property);
 
 private:
     dtkComposerNodeProcessPrivate *d;

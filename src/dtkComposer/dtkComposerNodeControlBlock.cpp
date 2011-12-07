@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 10 13:56:33 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 1162
+ * Last-Updated: Wed Dec  7 15:57:24 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 1164
  */
 
 /* Commentary: 
@@ -25,6 +25,7 @@
 #include "dtkComposerNodeControlBlock_p.h"
 #include "dtkComposerNodeLoop.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerRoute.h"
 #include "dtkComposerScene.h"
 
 #include <dtkCore/dtkGlobal.h>
@@ -574,7 +575,7 @@ QList<dtkComposerNode *> dtkComposerNodeControlBlock::startNodes(QList<dtkCompos
                 node->setDirty(true);
                 nodes << node;
             } else {
-                foreach(dtkComposerEdge *edge, d->parent->inputRelayRoutes()) {
+                foreach(dtkComposerRoute *edge, d->parent->inputRelayRoutes()) {
                     if (edge->source()->blockedFrom() == this->title() && !nodes.contains(edge->destination()->node())) {
                         dtkComposerNode *node = edge->destination()->node();
                         node->setDirty(true);

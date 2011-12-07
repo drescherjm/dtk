@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 20:51:32 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 17 15:32:58 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 143
+ * Last-Updated: Wed Dec  7 15:58:53 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 144
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #include "dtkComposerNodeLog.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerNodeTransmitter.h"
+#include "dtkComposerRoute.h"
 
 #include <dtkCore/dtkGlobal.h>
 #include <dtkCore/dtkLog.h>
@@ -103,7 +104,7 @@ dtkComposerNodeLog::~dtkComposerNodeLog(void)
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-void dtkComposerNodeLog::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+void dtkComposerNodeLog::pull(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(property);
 
@@ -161,7 +162,7 @@ void dtkComposerNodeLog::run(void)
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-bool dtkComposerNodeLog::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+bool dtkComposerNodeLog::onLeftRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *destination)
 {        
     return true;
 }

@@ -44,7 +44,7 @@ public:
     QVariant value(dtkComposerNodeProperty *property);
 
 protected:
-    void pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property);
+    void pull(dtkComposerRoute *i_route, dtkComposerNodeProperty *property);
 
 private:
     dtkComposerNodeLoopForPrivate *d;

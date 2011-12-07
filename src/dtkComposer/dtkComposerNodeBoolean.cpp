@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 25 10:07:34 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Nov 25 14:07:00 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 289
+ * Last-Updated: Wed Dec  7 15:47:46 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 290
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerNodeTransmitter.h"
+#include "dtkComposerRoute.h"
 
 #include <dtkCore/dtkGlobal.h>
 
@@ -176,7 +177,7 @@ public:
     dtkComposerNodeTransmitter<bool> *receiver;
 
 public:
-    QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<bool> *> receivers;
+    QHash<dtkComposerRoute *, dtkComposerNodeTransmitter<bool> *> receivers;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -229,7 +230,7 @@ bool dtkComposerNodeBoolean::value(void)
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-void dtkComposerNodeBoolean::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+void dtkComposerNodeBoolean::pull(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(property);
 
@@ -254,7 +255,7 @@ void dtkComposerNodeBoolean::run(void)
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-void dtkComposerNodeBoolean::push(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+void dtkComposerNodeBoolean::push(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(route);
     Q_UNUSED(property);
@@ -282,7 +283,7 @@ dtkComposerNodeAbstractTransmitter *dtkComposerNodeBoolean::emitter(dtkComposerN
  *
  *  Reimplemented from dtkComposerNode.
  */
-bool dtkComposerNodeBoolean::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+bool dtkComposerNodeBoolean::onLeftRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *destination)
 {
     Q_UNUSED(destination);
 
@@ -300,7 +301,7 @@ bool dtkComposerNodeBoolean::onLeftRouteConnected(dtkComposerEdge *route, dtkCom
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-bool dtkComposerNodeBoolean::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+bool dtkComposerNodeBoolean::onRightRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     return true;
 }

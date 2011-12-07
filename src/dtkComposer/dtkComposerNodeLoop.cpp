@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar  7 09:26:54 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov 10 15:25:33 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 214
+ * Last-Updated: Wed Dec  7 16:03:19 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 220
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #include "dtkComposerNodeControlBlock.h"
 #include "dtkComposerNodeLoop.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerRoute.h"
 
 #include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkGlobal.h>
@@ -84,7 +85,7 @@ void dtkComposerNodeLoop::setPassThroughVariable(dtkComposerNodeProperty *proper
     d->pass_through_variables.insert(property, loop_variable);
 }
 
-void dtkComposerNodeLoop::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property)
+void dtkComposerNodeLoop::pull(dtkComposerRoute *i_route, dtkComposerNodeProperty *property)
 {
     if (property->type() == dtkComposerNodeProperty::PassThroughInput || (property->type() == dtkComposerNodeProperty::Generic && property->behavior() == dtkComposerNodeProperty::AsLoop)) {
 
@@ -104,10 +105,10 @@ void dtkComposerNodeLoop::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty
             if ((twin->type() == dtkComposerNodeProperty::PassThroughOutput || (twin->type() == dtkComposerNodeProperty::Generic && property->behavior() == dtkComposerNodeProperty::AsLoop)) && twin->name() == property->name())
                 d->twin_properties.insert(twin, i_source);
             
-            foreach(dtkComposerEdge *relay_route, this->inputRelayRoutes()) {
+            foreach(dtkComposerRoute *relay_route, this->inputRelayRoutes()) {
                 if (relay_route->source()->name() == property->name()) {
                     
-                    dtkComposerEdge *route = new dtkComposerEdge;
+                    dtkComposerRoute *route = new dtkComposerRoute;
                     route->setSource(i_source);
                     route->setDestination(relay_route->destination());
                     
@@ -124,11 +125,11 @@ void dtkComposerNodeLoop::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty
     }
 }
 
-void dtkComposerNodeLoop::push(dtkComposerEdge *o_route, dtkComposerNodeProperty *property)
+void dtkComposerNodeLoop::push(dtkComposerRoute *o_route, dtkComposerNodeProperty *property)
 {
     if (this->inputProperty() && property->name() == this->inputProperty()->name() && (property->type() == dtkComposerNodeProperty::Output || (property->type() == dtkComposerNodeProperty::Generic && property->behavior() == dtkComposerNodeProperty::AsOutput))) {
         
-        dtkComposerEdge *route = new dtkComposerEdge;
+        dtkComposerRoute *route = new dtkComposerRoute;
         route->setSource(this->inputProperty());
         route->setDestination(o_route->destination());
         this->addOutputActiveRoute(route);
@@ -158,7 +159,7 @@ void dtkComposerNodeLoop::push(dtkComposerEdge *o_route, dtkComposerNodeProperty
 
     } else if ((property->type() == dtkComposerNodeProperty::PassThroughOutput || (property->type() == dtkComposerNodeProperty::Generic && property->behavior() == dtkComposerNodeProperty::AsLoop)) && this->value(property).isValid()) {
 
-        dtkComposerEdge *route = new dtkComposerEdge;
+        dtkComposerRoute *route = new dtkComposerRoute;
         route->setSource(d->twin_properties.value(property));
         route->setDestination(o_route->destination());
                 
@@ -198,7 +199,7 @@ void dtkComposerNodeLoop::push(dtkComposerEdge *o_route, dtkComposerNodeProperty
 void dtkComposerNodeLoop::updatePassThroughVariables(void)
 {
     if (this->currentBlock()->title() == "loop")
-        foreach(dtkComposerEdge *o_route, this->outputRelayRoutes())
+        foreach(dtkComposerRoute *o_route, this->outputRelayRoutes())
             if (o_route->destination()->type() == dtkComposerNodeProperty::PassThroughOutput || (o_route->destination()->type() == dtkComposerNodeProperty::Generic && o_route->destination()->behavior() == dtkComposerNodeProperty::AsLoop)) {
                 this->setPassThroughVariable(d->twin_properties.value(o_route->destination()), o_route->source()->node()->value(o_route->source()));
             }

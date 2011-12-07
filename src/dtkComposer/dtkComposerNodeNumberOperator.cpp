@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Mar  1 10:18:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Dec  6 11:56:54 2011 (+0100)
+ * Last-Updated: Wed Dec  7 16:19:14 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 351
+ *     Update #: 352
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerNodeTransmitter.h"
+#include "dtkComposerRoute.h"
 
 #include <dtkCore/dtkGlobal.h>
 
@@ -209,9 +210,9 @@ public:
     dtkComposerNodeTransmitter<qlonglong> *emitter_l;
     dtkComposerNodeTransmitter<double>    *emitter_d;
 
-    QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<int> *> receivers_i;
-    QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<qlonglong> *> receivers_l;
-    QHash<dtkComposerEdge *, dtkComposerNodeTransmitter<double> *> receivers_d;
+    QHash<dtkComposerRoute *, dtkComposerNodeTransmitter<int> *> receivers_i;
+    QHash<dtkComposerRoute *, dtkComposerNodeTransmitter<qlonglong> *> receivers_l;
+    QHash<dtkComposerRoute *, dtkComposerNodeTransmitter<double> *> receivers_d;
 
 public:
     dtkComposerNodeNumberOperator *q;
@@ -434,7 +435,7 @@ dtkComposerNodeNumberOperator::Operation dtkComposerNodeNumberOperator::operatio
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-void dtkComposerNodeNumberOperator::pull(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+void dtkComposerNodeNumberOperator::pull(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     if(property == d->property_left_value_op1) {
 
@@ -513,7 +514,7 @@ void dtkComposerNodeNumberOperator::run(void)
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-void dtkComposerNodeNumberOperator::push(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+void dtkComposerNodeNumberOperator::push(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(route);
     Q_UNUSED(property);
@@ -549,7 +550,7 @@ dtkComposerNodeAbstractTransmitter *dtkComposerNodeNumberOperator::emitter(dtkCo
  *
  *  Reimplemented from dtkComposerNode.
  */
-bool dtkComposerNodeNumberOperator::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+bool dtkComposerNodeNumberOperator::onLeftRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *destination)
 {
     Q_UNUSED(destination);
 
@@ -666,7 +667,7 @@ bool dtkComposerNodeNumberOperator::onLeftRouteConnected(dtkComposerEdge *route,
 /*! 
  *  Reimplemented from dtkComposerNode.
  */
-bool dtkComposerNodeNumberOperator::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+bool dtkComposerNodeNumberOperator::onRightRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     return true;
 }

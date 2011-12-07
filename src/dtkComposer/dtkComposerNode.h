@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Dec  7 14:56:32 2011 (+0100)
+ * Last-Updated: Wed Dec  7 15:29:10 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 392
+ *     Update #: 394
  */
 
 /* Commentary: 
@@ -178,9 +178,9 @@ protected:
     virtual void markDirtyDownstreamNodes(void);
 
 protected:
-    virtual void pull(dtkComposerEdge *route, dtkComposerNodeProperty *property);
+    virtual void pull(dtkComposerRoute *route, dtkComposerNodeProperty *property);
     virtual void  run(void);
-    virtual void push(dtkComposerEdge *route, dtkComposerNodeProperty *property);
+    virtual void push(dtkComposerRoute *route, dtkComposerNodeProperty *property);
 
 private:
     friend class dtkComposerScene; 
@@ -197,18 +197,18 @@ public:
     virtual dtkComposerNodeAbstractTransmitter *emitter(dtkComposerNodeProperty *property);
 
 public:
-    virtual bool  onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
-    virtual bool onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *source);
+    virtual bool  onLeftRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *destination);
+    virtual bool onRightRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *source);
 
-    virtual bool  onLeftRouteDisconnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
-    virtual bool onRightRouteDisconnected(dtkComposerEdge *route, dtkComposerNodeProperty *source);
+    virtual bool  onLeftRouteDisconnected(dtkComposerRoute *route, dtkComposerNodeProperty *destination);
+    virtual bool onRightRouteDisconnected(dtkComposerRoute *route, dtkComposerNodeProperty *source);
 
 public:
-    virtual void      updateSourceRoutes(dtkComposerEdge *route);
-    virtual void updateDestinationRoutes(dtkComposerEdge *route);
+    virtual void      updateSourceRoutes(dtkComposerRoute *route);
+    virtual void updateDestinationRoutes(dtkComposerRoute *route);
 
-    virtual void      updateSourceNodes(dtkComposerEdge *route);
-    virtual void updateDestinationNodes(dtkComposerEdge *route);
+    virtual void      updateSourceNodes(dtkComposerRoute *route);
+    virtual void updateDestinationNodes(dtkComposerRoute *route);
 
 protected:
     friend class dtkComposerEvaluatorPrivate;

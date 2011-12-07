@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov  9 16:25:13 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 300
+ * Last-Updated: Wed Dec  7 16:05:34 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 306
  */
 
 /* Commentary: 
@@ -24,6 +24,7 @@
 #include "dtkComposerNodeLoopFor_p.h"
 #include "dtkComposerNodeNumber.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerRoute.h"
 
 #include <dtkCore/dtkGlobal.h>
 
@@ -190,14 +191,14 @@ QVariant dtkComposerNodeLoopFor::value(dtkComposerNodeProperty *property)
 /*! 
  * 
  */ 
-void dtkComposerNodeLoopFor::pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property)
+void dtkComposerNodeLoopFor::pull(dtkComposerRoute *i_route, dtkComposerNodeProperty *property)
 {
     if (this->inputProperty() && property == this->inputProperty()) {
         
-        foreach(dtkComposerEdge *relay_route, this->inputRelayRoutes()) {
+        foreach(dtkComposerRoute *relay_route, this->inputRelayRoutes()) {
             if (relay_route->source()->name() == this->inputProperty()->name()) {
 
-                dtkComposerEdge *route = new dtkComposerEdge;
+                dtkComposerRoute *route = new dtkComposerRoute;
                 route->setSource(this->inputProperty());
                 route->setDestination(relay_route->destination());
                 
@@ -210,4 +211,4 @@ void dtkComposerNodeLoopFor::pull(dtkComposerEdge *i_route, dtkComposerNodePrope
 
     dtkComposerNodeLoop::pull(i_route, property);
 }
-    
+

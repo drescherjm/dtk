@@ -58,7 +58,7 @@ QString dtkComposerNodeProcess::implementation(void)
     return QString();
 }
 
-void dtkComposerNodeProcess::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNodeProcess::pull(dtkComposerRoute *edge, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(edge);
     Q_UNUSED(property);
@@ -71,7 +71,7 @@ void dtkComposerNodeProcess::run(void)
     DTK_DEFAULT_IMPLEMENTATION;
 }
 
-void dtkComposerNodeProcess::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+void dtkComposerNodeProcess::push(dtkComposerRoute *edge, dtkComposerNodeProperty *property)
 {
     Q_UNUSED(edge);
     Q_UNUSED(property);

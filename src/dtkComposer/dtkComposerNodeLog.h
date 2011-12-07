@@ -34,11 +34,11 @@ public:
     ~dtkComposerNodeLog(void);
 
 protected:
-    void pull(dtkComposerEdge *route, dtkComposerNodeProperty *property);
+    void pull(dtkComposerRoute *route, dtkComposerNodeProperty *property);
     void  run(void);
 
 public:
-    bool onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
+    bool onLeftRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *destination);
 
 private:
     dtkComposerNodeLogPrivate *d;

@@ -40,17 +40,17 @@ public slots:
     void touch(void);
 
 protected:
-    void pull(dtkComposerEdge *route, dtkComposerNodeProperty *property);
+    void pull(dtkComposerRoute *route, dtkComposerNodeProperty *property);
     void  run(void);
-    void push(dtkComposerEdge *route, dtkComposerNodeProperty *property);
+    void push(dtkComposerRoute *route, dtkComposerNodeProperty *property);
 
 public:
     dtkComposerNodeAbstractTransmitter *emitter(dtkComposerNodeProperty *property);
 
 public:
-    bool onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination);
+    bool onLeftRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *destination);
 
-    bool onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property);
+    bool onRightRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *property);
 
 private:
     dtkComposerNodeNumberDoublePrivate *d;

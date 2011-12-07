@@ -47,8 +47,8 @@ public slots:
     bool evaluate(dtkComposerEvaluatorPrivate *evaluator);
 
 protected:
-    void pull(dtkComposerEdge *i_route, dtkComposerNodeProperty *property);
-    void push(dtkComposerEdge *o_route, dtkComposerNodeProperty *property);
+    void pull(dtkComposerRoute *i_route, dtkComposerNodeProperty *property);
+    void push(dtkComposerRoute *o_route, dtkComposerNodeProperty *property);
 
 private:
     dtkComposerNodeCasePrivate *d;

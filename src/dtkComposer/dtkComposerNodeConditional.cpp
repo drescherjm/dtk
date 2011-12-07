@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Nov 28 17:09:26 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 126
+ * Last-Updated: Wed Dec  7 15:53:01 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 127
  */
 
 /* Commentary: 
@@ -25,6 +25,7 @@
 #include "dtkComposerNodeLoop.h"
 #include "dtkComposerNodeProperty.h"
 #include "dtkComposerNodeTransmitter.h"
+#include "dtkComposerRoute.h"
 
 #include <dtkCore/dtkGlobal>
 
@@ -131,7 +132,7 @@ bool dtkComposerNodeConditional::evaluate(dtkComposerEvaluatorPrivate *evaluator
 
 
 
-bool dtkComposerNodeConditional::onLeftRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *destination)
+bool dtkComposerNodeConditional::onLeftRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *destination)
 {
     if (destination == this->inputProperty()) {
 
@@ -157,7 +158,7 @@ bool dtkComposerNodeConditional::onLeftRouteConnected(dtkComposerEdge *route, dt
     return false;
 }
 
-bool dtkComposerNodeConditional::onRightRouteConnected(dtkComposerEdge *route, dtkComposerNodeProperty *property)
+bool dtkComposerNodeConditional::onRightRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
     if (this->g->leftProperties().contains(property)) {
 
@@ -168,13 +169,13 @@ bool dtkComposerNodeConditional::onRightRouteConnected(dtkComposerEdge *route, d
     return true;
 }
 
-void dtkComposerNodeConditional::updateSourceRoutes(dtkComposerEdge *route)
+void dtkComposerNodeConditional::updateSourceRoutes(dtkComposerRoute *route)
 {
     if (route->destination() == this->inputProperty())
         this->l->appendLeftRoute(route);
 }
 
-void dtkComposerNodeConditional::updateDestinationRoutes(dtkComposerEdge *route)
+void dtkComposerNodeConditional::updateDestinationRoutes(dtkComposerRoute *route)
 {
     this->l->appendRightRoute(route);
 }

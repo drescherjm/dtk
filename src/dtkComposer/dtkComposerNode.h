@@ -205,7 +205,7 @@ public:
 
 public:
     virtual void      appendSourceRoutes(dtkComposerRoute *route);
-    virtual void updateDestinationRoutes(dtkComposerRoute *route);
+    virtual void appendDestinationRoutes(dtkComposerRoute *route);
 
     virtual void      appendSourceNodes(dtkComposerRoute *route);
     virtual void appendDestinationNodes(dtkComposerRoute *route);

@@ -48,7 +48,7 @@ public:
 
 public:
     void      appendSourceRoutes(dtkComposerRoute *route);
-    void updateDestinationRoutes(dtkComposerRoute *route);
+    void appendDestinationRoutes(dtkComposerRoute *route);
 
     void      appendSourceNodes(dtkComposerEdge *route);
     void appendDestinationNodes(dtkComposerEdge *route);

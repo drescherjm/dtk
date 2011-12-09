@@ -1097,7 +1097,7 @@ void dtkComposerNode::appendSourceRoutes(dtkComposerRoute *route)
     this->l->appendLeftRoute(route);
 }
 
-void dtkComposerNode::updateDestinationRoutes(dtkComposerRoute *route)
+void dtkComposerNode::appendDestinationRoutes(dtkComposerRoute *route)
 {
     this->l->appendRightRoute(route);
 }

@@ -345,7 +345,7 @@ bool dtkComposerNodeLogic::connectRoute(dtkComposerNodeProperty *source, dtkComp
 
     if (left_connection_ok) {
         destin_node->appendSourceRoutes(route);
-        d->node->updateDestinationRoutes(route);
+        d->node->appendDestinationRoutes(route);
     }
     
     if (right_connection_ok) {

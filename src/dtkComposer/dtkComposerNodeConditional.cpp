@@ -175,7 +175,7 @@ void dtkComposerNodeConditional::appendSourceRoutes(dtkComposerRoute *route)
         this->l->appendLeftRoute(route);
 }
 
-void dtkComposerNodeConditional::updateDestinationRoutes(dtkComposerRoute *route)
+void dtkComposerNodeConditional::appendDestinationRoutes(dtkComposerRoute *route)
 {
     this->l->appendRightRoute(route);
 }

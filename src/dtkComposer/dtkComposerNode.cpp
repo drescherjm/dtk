@@ -1092,7 +1092,7 @@ bool dtkComposerNode::onRightRouteDisconnected(dtkComposerRoute *route, dtkCompo
     return true;
 }
 
-void dtkComposerNode::updateSourceRoutes(dtkComposerRoute *route)
+void dtkComposerNode::appendSourceRoutes(dtkComposerRoute *route)
 {
     this->l->appendLeftRoute(route);
 }
@@ -1102,12 +1102,12 @@ void dtkComposerNode::updateDestinationRoutes(dtkComposerRoute *route)
     this->l->appendRightRoute(route);
 }
 
-void dtkComposerNode::updateSourceNodes(dtkComposerRoute *route)
+void dtkComposerNode::appendSourceNodes(dtkComposerRoute *route)
 {
     this->l->appendLeftNode(route->source()->node());
 }
 
-void dtkComposerNode::updateDestinationNodes(dtkComposerRoute *route)
+void dtkComposerNode::appendDestinationNodes(dtkComposerRoute *route)
 {
     this->l->appendRightNode(route->destination()->node());
 }

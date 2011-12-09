@@ -169,7 +169,7 @@ bool dtkComposerNodeConditional::onRightRouteConnected(dtkComposerRoute *route, 
     return true;
 }
 
-void dtkComposerNodeConditional::updateSourceRoutes(dtkComposerRoute *route)
+void dtkComposerNodeConditional::appendSourceRoutes(dtkComposerRoute *route)
 {
     if (route->destination() == this->inputProperty())
         this->l->appendLeftRoute(route);
@@ -180,13 +180,13 @@ void dtkComposerNodeConditional::updateDestinationRoutes(dtkComposerRoute *route
     this->l->appendRightRoute(route);
 }
 
-void dtkComposerNodeConditional::updateSourceNodes(dtkComposerEdge *route)
+void dtkComposerNodeConditional::appendSourceNodes(dtkComposerEdge *route)
 {
     if (route->destination() == this->inputProperty())
         this->l->appendLeftNode(route->source()->node());
 }
 
-void dtkComposerNodeConditional::updateDestinationNodes(dtkComposerEdge *route)
+void dtkComposerNodeConditional::appendDestinationNodes(dtkComposerEdge *route)
 {
     this->l->appendRightNode(route->destination()->node());
 }

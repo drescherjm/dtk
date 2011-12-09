@@ -204,11 +204,11 @@ public:
     virtual bool onRightRouteDisconnected(dtkComposerRoute *route, dtkComposerNodeProperty *source);
 
 public:
-    virtual void      updateSourceRoutes(dtkComposerRoute *route);
+    virtual void      appendSourceRoutes(dtkComposerRoute *route);
     virtual void updateDestinationRoutes(dtkComposerRoute *route);
 
-    virtual void      updateSourceNodes(dtkComposerRoute *route);
-    virtual void updateDestinationNodes(dtkComposerRoute *route);
+    virtual void      appendSourceNodes(dtkComposerRoute *route);
+    virtual void appendDestinationNodes(dtkComposerRoute *route);
 
 protected:
     friend class dtkComposerEvaluatorPrivate;

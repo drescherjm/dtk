@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Nov  3 13:28:33 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Dec  8 11:08:08 2011 (+0100)
+ * Last-Updated: Sat Dec 10 00:23:37 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 404
+ *     Update #: 414
  */
 
 /* Commentary: 
@@ -71,9 +71,6 @@ public:
 
 public:
     dtkComposerNode *node;
-    // dtkComposerNode *parent;
-    // QList<dtkComposerNode *> children;
-    
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -208,6 +205,7 @@ dtkComposerNodeGraphicPrivate::EdgesAlongRoutes dtkComposerNodeGraphicPrivate::e
         foreach(dtkComposerNodeProperty *destin, right_map.uniqueKeys()) {
 
             QList<dtkComposerEdge *> edges_along_route;
+
             foreach(dtkComposerEdge *e, left_map.values(source))
                 if(!edges_along_route.contains(e))
                     edges_along_route << e;
@@ -764,7 +762,7 @@ void dtkComposerNodeGraphic::onEdgeConnected(dtkComposerEdge *edge)
 
         foreach(dtkComposerNodeGraphicPrivate::Route pair, map.keys()) {
 
-            if (pair.first->node()->l->canConnectRoute(pair.first, pair.second, pair.second->node())) {
+            if (pair.first->node()->l->connectRoute(pair.first, pair.second, pair.second->node())) {
                 foreach(dtkComposerEdge *e, map.value(pair))
                     e->validate();
             } else {
@@ -813,22 +811,23 @@ void dtkComposerNodeGraphic::onEdgeDisconnected(dtkComposerEdge *edge)
 {
     dtkComposerNodeGraphicPrivate::EdgesAlongRoutes map = d->edgesAlongRoutes(edge);
 
-    if (!map.count()) {
-        edge->validate();
+//     if (!map.count()) {
 
-    } else {
+//         edge->validate();
 
-        foreach(dtkComposerNodeGraphicPrivate::Route pair, map.keys()) {
-            pair.first->node()->l->onRouteDisconnected(pair.first, pair.second, pair.second->node());
-            foreach(dtkComposerEdge *e, map.value(pair)) {
-                if (e != edge && !this->isEdgeAlongRoute(e))
-                    e->invalidate();
-                else
-                    e->validate();
-            }
+//     } else {
+
+    foreach(dtkComposerNodeGraphicPrivate::Route pair, map.keys()) // {
+        pair.first->node()->l->disconnectRoute(pair.first, pair.second, pair.second->node());
+//             foreach(dtkComposerEdge *e, map.value(pair)) {
+//                 if (e != edge && !this->isEdgeAlongRoute(e))
+//                     e->invalidate();
+//                 else
+//                     e->validate();
+//             }
             
-        }
-    }
+//         }
+//     }
 
     // QList<dtkComposerNodeProperty *> sources;
     // QList<dtkComposerNodeProperty *> destinations;

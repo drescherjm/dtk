@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Nov  4 13:49:39 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Dec  7 14:48:50 2011 (+0100)
+ * Last-Updated: Fri Dec  9 23:49:57 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 32
+ *     Update #: 36
  */
 
 /* Commentary: 
@@ -74,13 +74,11 @@ public:
     const QList<dtkComposerNode *>& rightNodes(void) const;
 
 public:
-    bool canConnectRoute(dtkComposerNodeProperty *source, dtkComposerNodeProperty *destination, dtkComposerNode *destin_node);
-
-public:
-    void onRouteDisconnected(dtkComposerNodeProperty *source, dtkComposerNodeProperty *destination, dtkComposerNode *destin_node);
-
-public:
     bool isRoute(dtkComposerNodeProperty *source, dtkComposerNodeProperty *destination);
+
+public:
+    bool    connectRoute(dtkComposerNodeProperty *source, dtkComposerNodeProperty *destination, dtkComposerNode *destin_node);
+    bool disconnectRoute(dtkComposerNodeProperty *source, dtkComposerNodeProperty *destination, dtkComposerNode *destin_node);
 
 private:
     dtkComposerNodeLogicPrivate *d;

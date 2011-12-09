@@ -47,11 +47,11 @@ public:
     bool onRightRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *property);
 
 public:
-    void      updateSourceRoutes(dtkComposerRoute *route);
+    void      appendSourceRoutes(dtkComposerRoute *route);
     void updateDestinationRoutes(dtkComposerRoute *route);
 
-    void      updateSourceNodes(dtkComposerEdge *route);
-    void updateDestinationNodes(dtkComposerEdge *route);
+    void      appendSourceNodes(dtkComposerEdge *route);
+    void appendDestinationNodes(dtkComposerEdge *route);
 
 private:
     dtkComposerNodeConditionalPrivate *d;

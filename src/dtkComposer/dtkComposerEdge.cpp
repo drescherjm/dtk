@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec  9 17:33:10 2011 (+0100)
+ * Last-Updated: Fri Dec  9 22:57:52 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 486
+ *     Update #: 490
  */
 
 /* Commentary: 
@@ -35,9 +35,6 @@ public:
     dtkComposerNodeProperty *destination;
 
     dtkComposerEdge::Flag flag;
-
-public:
-    bool active;
 };
 
 dtkComposerEdge::dtkComposerEdge(void) : QObject(), QGraphicsItem(), d(new dtkComposerEdgePrivate)
@@ -46,8 +43,6 @@ dtkComposerEdge::dtkComposerEdge(void) : QObject(), QGraphicsItem(), d(new dtkCo
     d->destination = NULL;
 
     d->flag = dtkComposerEdge::Valid;
-
-    d->active = true;
 
     this->setZValue(5);
 }
@@ -372,21 +367,6 @@ void dtkComposerEdge::invalidate(void)
 
     this->update();
 }
-
-// void dtkComposerEdge::activate(void)
-// {
-//     d->active = true;
-// }
-
-// void dtkComposerEdge::inactivate(void)
-// {
-//     d->active = false;
-// }
-
-// bool dtkComposerEdge::active(void)
-// {
-//     return d->active;
-// }
 
 // /////////////////////////////////////////////////////////////////
 // Debug operators

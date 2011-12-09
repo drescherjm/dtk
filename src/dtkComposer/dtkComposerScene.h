@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Dec  8 10:51:49 2011 (+0100)
+ * Last-Updated: Fri Dec  9 22:26:40 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 178
+ *     Update #: 180
  */
 
 /* Commentary: 
@@ -64,6 +64,7 @@ public:
     void removeNode(dtkComposerNode *node);
     void removeNote(dtkComposerNote *note);
     void removeNodes(QList<dtkComposerNode *> nodes);
+    void removeNotes(QList<dtkComposerNote *> notes);
 
     dtkComposerNode *createNode(QString type, QPointF position = QPointF());
     dtkComposerNote *createNote(QString text, QPointF position = QPointF(), QSizeF size = QSizeF());

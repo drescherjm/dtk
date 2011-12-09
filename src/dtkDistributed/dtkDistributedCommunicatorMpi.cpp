@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: ven. déc.  9 15:46:40 2011 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 326
+ * Last-Updated: Fri Dec  9 18:27:20 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 334
  */
 
 /* Commentary: 
@@ -16,6 +16,8 @@
 /* Change log:
  * 
  */
+
+#include <dtkCore/dtkAbstractDataFactory.h>
 
 #include "dtkDistributedCommunicatorMpi.h"
 
@@ -267,9 +269,16 @@ void dtkDistributedCommunicatorMpi::receive(dtkAbstractData *data, qint16 source
     char     rawArray[arrayLength];
     dtkDistributedCommunicator::receive(rawArray, arrayLength, source,tag);
 
+    if(!data)
+        data = dtkAbstractDataFactory::instance()->create(QString(type));
+    else
+        if(data->identifier() != QString(type))
+            qDebug() << DTK_PRETTY_FUNCTION << "Warning, type mismatch";
+
     QByteArray array = QByteArray::fromRawData(rawArray, arrayLength);
     // FIXME: array is not null-terminated, does it matter ??
-    if (!data->deserialize(array))
+
+    if (data && !data->deserialize(array))
         qDebug() << "Warning: deserialization failed";
 }
 

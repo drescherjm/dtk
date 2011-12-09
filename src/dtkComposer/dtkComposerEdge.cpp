@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec  9 17:28:30 2011 (+0100)
+ * Last-Updated: Fri Dec  9 17:33:10 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 485
+ *     Update #: 486
  */
 
 /* Commentary: 
@@ -36,8 +36,8 @@ public:
 
     dtkComposerEdge::Flag flag;
 
-// public:
-//     bool active;
+public:
+    bool active;
 };
 
 dtkComposerEdge::dtkComposerEdge(void) : QObject(), QGraphicsItem(), d(new dtkComposerEdgePrivate)

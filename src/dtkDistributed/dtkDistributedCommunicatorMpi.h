@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. oct.  6 18:01:32 2011 (+0200)
+ * Last-Updated: lun. nov. 28 16:51:27 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 49
+ *     Update #: 50
  */
 
 /* Commentary: 
@@ -52,6 +52,10 @@ public:
     void    gather(void *send, void *recv, qint64 size, DataType dataType, quint16 target, bool all = false);
     void   scatter(void *send, void *recv, qint64 size, DataType dataType, quint16 source);
     void    reduce(void *send, void *recv, qint64 size, DataType dataType, OperationType operationType, quint16 target, bool all = false);
+
+    void    send(dtkAbstractData *data, quint16 target, int tag);
+    void receive(dtkAbstractData *data, quint16 source, int tag);
+
 
 private:
     dtkDistributedCommunicatorMpiPrivate *d;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. oct. 11 16:57:47 2011 (+0200)
+ * Last-Updated: ven. nov. 25 10:22:38 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1040
+ *     Update #: 1280
  */
 
 /* Commentary: 
@@ -39,6 +39,7 @@ public:
     QHash<QString, dtkDistributedSocket *> sockets;
     QHash<QString, QList<dtkDistributedNode *> > nodes;
     QHash<QString, QList<dtkDistributedJob *> > jobs;
+    QHash<QString, QList<QProcess *> > servers;
 
     void read_status(QByteArray const &buffer, dtkDistributedSocket *socket);
 };
@@ -86,12 +87,73 @@ void dtkDistributedController::submit(const QUrl& server,  QByteArray& resources
     d->sockets[server.toString()]->sendRequest(msg);
 }
 
+// deploy a server instance on remote host (to be executed before connect)
+void dtkDistributedController::deploy(const QUrl& server)
+{
+    if(!d->servers.keys().contains(server.toString())) {
+        QProcess *serverProc = new QProcess (this);
+        QStringList args;
+        args << "-t"; // that way, ssh will forward the SIGINT signal,
+                      // and the server will stop when the ssh process
+                      // is killed
+        args << "-t"; // do it twice to force tty allocation
+        args << server.host();
+
+        serverProc->setProcessChannelMode(QProcess::MergedChannels);
+        QSettings settings("inria", "dtk");
+        settings.beginGroup("distributed");
+        QString defaultPath;
+        if (!settings.contains(server.host()+"_server_path")) {
+            defaultPath =  "./dtkDistributedServer";
+            dtkDebug() << "Filling in empty path in settings with default path:" << defaultPath;
+        }
+        QString path = settings.value(server.host()+"_server_path", defaultPath).toString();
+
+        QString forward = server.host()+"_server_forward";
+        if (settings.contains(forward) && settings.value(forward).toString() == "true") {
+            dtkDebug() << "ssh port forwarding is set for server " << server.host();
+            args << "-L" << QString::number(server.port())+":localhost:"+QString::number(server.port());
+        }
+
+        args << path;
+        args << "-p";
+        args << QString::number(server.port());
+        args << "--"+settings.value(server.host()+"_server_type", "torque").toString();
+
+        settings.endGroup();
+        serverProc->start("ssh", args);
+        if (!serverProc->waitForStarted(5000))
+            dtkDebug() << "server not yet started  " << args;
+        if (!serverProc->waitForReadyRead(3000))
+            dtkDebug() << "no output from server yet" << args;
+
+        QObject::connect(serverProc, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onProcessFinished(int,QProcess::ExitStatus)));
+
+        QObject::connect (qApp, SIGNAL(aboutToQuit()), this, SLOT(cleanup()));
+
+        d->servers[server.toString()] << serverProc;
+    } else {
+        dtkDebug() << "dtkDistributedServer already started on " << server.host();
+    }
+}
+
 void dtkDistributedController::connect(const QUrl& server)
 {
     if(!d->sockets.keys().contains(server.toString())) {
 
         dtkDistributedSocket *socket = new dtkDistributedSocket(this);
-        socket->connectToHost(server.host(), server.port());
+
+        QSettings settings("inria", "dtk");
+        settings.beginGroup("distributed");
+        QString forward = server.host()+"_server_forward";
+
+        if (settings.contains(forward) && settings.value(forward).toString() == "true")
+            socket->connectToHost("localhost", server.port());
+        else
+            socket->connectToHost(server.host(), server.port());
+
+        settings.endGroup();
+
 
         if(socket->waitForConnected()) {
 
@@ -272,26 +334,26 @@ void dtkDistributedController::read(void)
     dtkDistributedSocket *socket = (dtkDistributedSocket *)sender();
 
 
-    dtkDistributedMessage msg = socket->parseRequest();
+    dtkDistributedMessage *msg = socket->parseRequest();
     QByteArray result;
 
-    dtkDistributedMessage::Method method = msg.method();
+    dtkDistributedMessage::Method method = msg->method();
     switch (method) {
         case dtkDistributedMessage::OKSTATUS:
-            result = msg.content();
+            result = msg->content();
             d->read_status(result,socket);
             emit updated();
             break;
         case dtkDistributedMessage::OKJOB:
-            qDebug() << "New job queued: " << msg.jobid();
+            qDebug() << "New job queued: " << msg->jobid();
             emit updated();
             break;
         case dtkDistributedMessage::ENDJOB:
-            qDebug() << "job finished: " << msg.jobid();
+            qDebug() << "job finished: " << msg->jobid();
             emit updated();
             break;
         case dtkDistributedMessage::DATA:
-            result = msg.content();
+            result = msg->content();
             qDebug() << "Result: " << result;
             emit dataPosted(result);
             emit updated();
@@ -301,6 +363,21 @@ void dtkDistributedController::read(void)
         };
     if (socket->bytesAvailable() > 0)
         this->read();
+}
+
+void dtkDistributedController::cleanup()
+{
+    foreach (const QString& key, d->servers.keys()) {
+        foreach (QProcess* server, d->servers[key]) {
+            qDebug() << "terminating servers started on" << key;
+            server->terminate();
+        }
+    }
+}
+
+void dtkDistributedController::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus )
+{
+    qDebug() << DTK_PRETTY_FUNCTION << "remote server deployment failure" << exitStatus ;
 }
 
 void dtkDistributedController::error(QAbstractSocket::SocketError error)

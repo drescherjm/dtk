@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: mer. oct. 19 13:15:34 2011 (+0200)
+ * Last-Updated: lun. nov. 28 16:43:35 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 45
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -54,7 +54,8 @@ public:
     void            disconnectFromHost();
     dtkDistributedSocket *socket();
 
-    void send(dtkAbstractData &data, dtkAbstractDataSerializer *serializer, QString type, quint16 target, int tag);
+    void    send(dtkAbstractData *data, quint16 target, int tag);
+    void receive(dtkAbstractData *data, quint16 source, int tag);
 
     void flush();
 

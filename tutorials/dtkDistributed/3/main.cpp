@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Sep 12 09:58:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 12 12:31:55 2011 (+0200)
- *           By: jwintz
- *     Update #: 81
+ * Last-Updated: Tue Nov 15 11:33:06 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 82
  */
 
 /* Commentary: 
@@ -132,8 +132,8 @@ int main(int argc, char **argv)
 // Root - compute partial sum
 // /////////////////////////////////////////////////////////////////
 
-        int         sum = 0;
-        int partial_sum = 0;
+        long         sum = 0;
+        long partial_sum = 0;
         
         summer->setInput(m_array);
         summer->setMetaData("until", QString::number(average));

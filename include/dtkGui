@@ -2,8 +2,6 @@
 #include "../src/dtkGui/dtkAboutPlugin.h"
 #include "../src/dtkGui/dtkAddressBar.h"
 #include "../src/dtkGui/dtkAnchoredBar.h"
-#include "../src/dtkGui/dtkCocoaController.h"
-#include "../src/dtkGui/dtkCocoaUtils.h"
 #include "../src/dtkGui/dtkColorButton.h"
 #include "../src/dtkGui/dtkColorGrid.h"
 #include "../src/dtkGui/dtkFinder.h"

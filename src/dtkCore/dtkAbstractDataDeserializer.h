@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: lun. oct. 17 13:20:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. oct. 19 12:46:59 2011 (+0200)
+ * Last-Updated: lun. nov. 28 15:54:40 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 4
+ *     Update #: 11
  */
 
 /* Commentary:
@@ -41,6 +41,7 @@ public:
     void disable(void);
 
     dtkAbstractData *data(void);
+    virtual void setData(dtkAbstractData *data);
 
 signals:
     void started(const QString& message);
@@ -48,14 +49,10 @@ signals:
     void finished(void);
 
 public slots:
-    virtual bool canDeserialize(const QByteArray& binary);
 
-    virtual bool deserialize(const QByteArray& binary);
+    virtual bool deserialize(QByteArray *array);
 
     virtual void setProgress(int value);
-
-protected:
-    virtual void setData(dtkAbstractData *data);
 
 private:
     dtkAbstractDataDeserializerPrivate *d;

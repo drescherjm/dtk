@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. oct.  6 18:01:48 2011 (+0200)
+ * Last-Updated: lun. nov. 28 17:53:03 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 133
+ *     Update #: 255
  */
 
 /* Commentary: 
@@ -32,6 +32,7 @@ MPI::Datatype data_type(dtkDistributedCommunicator::DataType type)
     case dtkDistributedCommunicator::dtkDistributedCommunicatorChar:   return MPI::CHAR;
     case dtkDistributedCommunicator::dtkDistributedCommunicatorInt:    return MPI::INT;
     case dtkDistributedCommunicator::dtkDistributedCommunicatorLong:   return MPI::LONG;
+    case dtkDistributedCommunicator::dtkDistributedCommunicatorInt64:  return MPI::LONG_LONG;
     case dtkDistributedCommunicator::dtkDistributedCommunicatorFloat:  return MPI::FLOAT;
     case dtkDistributedCommunicator::dtkDistributedCommunicatorDouble: return MPI::DOUBLE;
     default:
@@ -225,6 +226,48 @@ void dtkDistributedCommunicatorMpi::receive(void *data, qint64 size, DataType da
     MPI::COMM_WORLD.Recv(data, size, data_type(dataType), source, tag, status);
     from = status.Get_source();
 }
+
+
+/*!
+ *  send a dtkAbstractData object; we need to send it's type (with the
+ *  size type) and then serialize the object.
+ */
+
+void dtkDistributedCommunicatorMpi::send(dtkAbstractData *data, quint16 target, int tag)
+{
+    QString type = data->identifier();
+    qint64  typeLength = type.length();
+    qint64  s=1;
+    dtkDistributedCommunicator::send(&typeLength,s,target,tag);
+    char typeChar = type.data()->toAscii();
+    dtkDistributedCommunicator::send(&typeChar,typeLength,target,tag);
+    QByteArray *array    = data->serialize();
+    if (!array->isNull()) {
+        qint64   arrayLength = array->length();
+        dtkDistributedCommunicator::send(&arrayLength,1,target,tag);
+        dtkDistributedCommunicator::send(array->data(),arrayLength,target,tag);
+    } else {
+        qDebug() << "serialization failed";
+    }
+}
+
+void dtkDistributedCommunicatorMpi::receive(dtkAbstractData *data, quint16 source, int tag)
+{
+    char *type;
+    qint64   typeLength;
+    qint64   arrayLength;
+    char *rawArray;
+
+    dtkDistributedCommunicator::receive(&typeLength,1,source,tag);
+    dtkDistributedCommunicator::receive(type, typeLength, source,tag);
+    dtkDistributedCommunicator::receive(&arrayLength,1,source,tag);
+    dtkDistributedCommunicator::receive(rawArray, arrayLength, source,tag);
+    QByteArray array = QByteArray::fromRawData(rawArray, sizeof(rawArray));
+    // FIXME: array is not null-terminated, does it matter ??
+    if (!data->deserialize(&array))
+        qDebug() << "Warning: deserialization failed";
+}
+
 
 //! Barrier.
 /*!

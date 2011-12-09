@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. nov. 25 10:22:38 2011 (+0100)
+ * Last-Updated: mar. déc.  6 18:23:02 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1280
+ *     Update #: 1400
  */
 
 /* Commentary: 
@@ -38,7 +38,8 @@ class dtkDistributedControllerPrivate
 public:
     QHash<QString, dtkDistributedSocket *> sockets;
     QHash<QString, QList<dtkDistributedNode *> > nodes;
-    QHash<QString, QList<dtkDistributedJob *> > jobs;
+    QHash<QString, QString > jobids;
+    QHash<QString, QList<dtkDistributedJob*> > jobs;// list of all queued and running jobs on each server
     QHash<QString, QList<QProcess *> > servers;
 
     void read_status(QByteArray const &buffer, dtkDistributedSocket *socket);
@@ -137,6 +138,31 @@ void dtkDistributedController::deploy(const QUrl& server)
     }
 }
 
+void dtkDistributedController::send(dtkDistributedMessage *msg)
+{
+    QString server = d->jobids[msg->jobid()];
+    dtkDistributedSocket *socket = d->sockets[server];
+
+    socket->sendRequest(msg);
+}
+
+void dtkDistributedController::send(dtkAbstractData *data, QString jobid, qint16 rank)
+{
+    QString server = d->jobids[jobid];
+    dtkDistributedSocket *socket = d->sockets[server];
+    QByteArray *array = data->serialize();
+    if (!array) {
+        dtkDebug() << "serialization failed for jobid" << jobid;
+        return;
+    }
+
+    QString type = data->identifier();
+
+    socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,jobid,rank, array->size(), type));
+    socket->write(*array);
+
+}
+
 void dtkDistributedController::connect(const QUrl& server)
 {
     if(!d->sockets.keys().contains(server.toString())) {
@@ -211,7 +237,7 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
     QHash<QString,dtkDistributedCore *> coreref;
 
     foreach(QVariant qv, json["nodes"].toList()) {
-        
+
         QVariantMap jnode=qv.toMap();
 
         QVariantList cores    = jnode["cores"].toList();
@@ -221,7 +247,7 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
         int usedgpus  = jnode["gpus_busy"].toInt();
         QVariantMap properties = jnode["properties"].toMap();
         QString state =  jnode["state"].toString();
-        
+
         Q_UNUSED(usedcores);
         Q_UNUSED(usedgpus);
 
@@ -333,7 +359,7 @@ void dtkDistributedController::read(void)
 {
     dtkDistributedSocket *socket = (dtkDistributedSocket *)sender();
 
-
+    QString server = d->sockets.key(socket);
     dtkDistributedMessage *msg = socket->parseRequest();
     QByteArray result;
 
@@ -345,11 +371,21 @@ void dtkDistributedController::read(void)
             emit updated();
             break;
         case dtkDistributedMessage::OKJOB:
-            qDebug() << "New job queued: " << msg->jobid();
+            qDebug() << DTK_PRETTY_FUNCTION << "New job queued: " << msg->jobid();
+            d->jobids[msg->jobid()] = server;
             emit updated();
+            break;
+        case dtkDistributedMessage::SETRANK:
+            qDebug() << DTK_PRETTY_FUNCTION << "set rank received";
+            if (msg->rank() == 0) {
+                qDebug() << DTK_PRETTY_FUNCTION << "job started";
+                emit jobStarted(msg->jobid());
+                emit updated();
+            }
             break;
         case dtkDistributedMessage::ENDJOB:
             qDebug() << "job finished: " << msg->jobid();
+            d->jobids.remove(msg->jobid());
             emit updated();
             break;
         case dtkDistributedMessage::DATA:

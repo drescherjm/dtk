@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: lun. nov. 28 16:51:27 2011 (+0100)
+ * Last-Updated: lun. déc.  5 14:23:28 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 50
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -45,16 +45,16 @@ public:
     QString name(void) const;
 
     void   barrier(void);
-    void      send(void *data,             qint64 size, DataType dataType, quint16 target, int tag);
-    void   receive(void *data,             qint64 size, DataType dataType, quint16 source, int tag);
-    void   receive(void *data,             qint64 size, DataType dataType, quint16 source, int tag, int& from);
-    void broadcast(void *data,             qint64 size, DataType dataType, quint16 source);
-    void    gather(void *send, void *recv, qint64 size, DataType dataType, quint16 target, bool all = false);
-    void   scatter(void *send, void *recv, qint64 size, DataType dataType, quint16 source);
-    void    reduce(void *send, void *recv, qint64 size, DataType dataType, OperationType operationType, quint16 target, bool all = false);
+    void      send(void *data,             qint64 size, DataType dataType, qint16 target, int tag);
+    void   receive(void *data,             qint64 size, DataType dataType, qint16 source, int tag);
+    void   receive(void *data,             qint64 size, DataType dataType, qint16 source, int tag, int& from);
+    void broadcast(void *data,             qint64 size, DataType dataType, qint16 source);
+    void    gather(void *send, void *recv, qint64 size, DataType dataType, qint16 target, bool all = false);
+    void   scatter(void *send, void *recv, qint64 size, DataType dataType, qint16 source);
+    void    reduce(void *send, void *recv, qint64 size, DataType dataType, OperationType operationType, qint16 target, bool all = false);
 
-    void    send(dtkAbstractData *data, quint16 target, int tag);
-    void receive(dtkAbstractData *data, quint16 source, int tag);
+    void    send(dtkAbstractData *data, qint16 target, int tag);
+    void receive(dtkAbstractData *data, qint16 source, int tag);
 
 
 private:

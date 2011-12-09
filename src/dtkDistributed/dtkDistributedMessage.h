@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: mar. oct. 11 10:46:57 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 13 17:12:24 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 139
+ * Last-Updated: lun. déc.  5 16:54:18 2011 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 151
  */
 
 /* Commentary:
@@ -31,6 +31,10 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedMessage
 public:
     typedef QHash<QString, QString> dtkDistributedHeaders;
 
+
+    static const qint16 CONTROLLER_RANK = -1 ;
+    static const qint16 SERVER_RANK     = -2 ;
+
     enum Method {
         STATUS  ,
         OKSTATUS,
@@ -46,7 +50,7 @@ public:
     };
 
              dtkDistributedMessage(void);
-             dtkDistributedMessage(Method method, QString jobid="", qint16 rank=-2,qint64 size=0, QString type ="json", const QByteArray  &content = QByteArray(), const dtkDistributedHeaders& headers = dtkDistributedHeaders());
+             dtkDistributedMessage(Method method, QString jobid="", qint16 rank= SERVER_RANK,qint64 size=0, QString type ="json",  const QByteArray  &content = QByteArray(), const dtkDistributedHeaders& headers = dtkDistributedHeaders());
     virtual ~dtkDistributedMessage(void);
 
 

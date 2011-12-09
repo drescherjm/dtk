@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:14:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 24 16:05:59 2011 (+0200)
+ * Last-Updated: Thu Dec  8 10:36:46 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 543
+ *     Update #: 544
  */
 
 /* Commentary: 
@@ -178,11 +178,6 @@ bool dtkComposer::open(const QUrl& url)
 
     if(!d->tempName.isEmpty())
         status = this->open(d->tempName);
-
-    qDebug() << d->tempName;
-
-    // if(!d->tempName.isEmpty())
-    //     QFile::remove(d->tempName);
 
     return status;
 }

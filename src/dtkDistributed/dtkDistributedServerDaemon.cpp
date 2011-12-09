@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. nov. 24 17:52:06 2011 (+0100)
+ * Last-Updated: mar. déc.  6 11:13:56 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 672
+ *     Update #: 678
  */
 
 /* Commentary: 
@@ -139,8 +139,8 @@ void dtkDistributedServerDaemon::read(void)
         r = d->manager->status();
         socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::OKSTATUS,"",-2,r.size(),"json",r));
         // GET status is from the controller, store the socket in sockets using rank=-1
-        if (!d->sockets.contains(-1))
-            d->sockets.insert(-1, socket);
+        if (!d->sockets.contains(dtkDistributedMessage::CONTROLLER_RANK))
+            d->sockets.insert(dtkDistributedMessage::CONTROLLER_RANK, socket);
         break;
 
     case dtkDistributedMessage::NEWJOB:
@@ -156,7 +156,7 @@ void dtkDistributedServerDaemon::read(void)
         qDebug() << DTK_PRETTY_FUNCTION << "Job ended " << msg->jobid();
 #endif
         //TODO: check if exists
-        d->sockets[-1]->sendRequest(msg);
+        d->sockets[dtkDistributedMessage::CONTROLLER_RANK]->sendRequest(msg);
         break;
 
     case dtkDistributedMessage::SETRANK:
@@ -165,6 +165,10 @@ void dtkDistributedServerDaemon::read(void)
         qDebug() << DTK_PRETTY_FUNCTION << "connected remote is of rank " << msg->rank();
 #endif
         d->sockets.insert(msg->rank(), socket);
+        // rank 0 is alive, warn the controller
+        if (msg->rank() == 0 && d->sockets.contains(dtkDistributedMessage::CONTROLLER_RANK))
+            (d->sockets[dtkDistributedMessage::CONTROLLER_RANK])->sendRequest(msg);
+
         break;
 
     case dtkDistributedMessage::DELJOB:

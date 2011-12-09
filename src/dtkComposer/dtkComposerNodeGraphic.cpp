@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Nov  3 13:28:33 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Dec  6 18:17:03 2011 (+0100)
+ * Last-Updated: Thu Dec  8 11:08:08 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 389
+ *     Update #: 404
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeProperty.h"
+#include "dtkComposerRoute.h"
 
 #include <dtkCore/dtkGlobal>
 
@@ -203,6 +204,7 @@ dtkComposerNodeGraphicPrivate::EdgesAlongRoutes dtkComposerNodeGraphicPrivate::e
     dtkComposerNodeGraphicPrivate::EdgesToProperty right_map = this->rightRoute(edge, list);
 
     foreach(dtkComposerNodeProperty *source, left_map.uniqueKeys()) {
+
         foreach(dtkComposerNodeProperty *destin, right_map.uniqueKeys()) {
 
             QList<dtkComposerEdge *> edges_along_route;
@@ -297,6 +299,7 @@ dtkComposerNodeGraphic::dtkComposerNodeGraphic(dtkComposerNode *node) : QObject(
 dtkComposerNodeGraphic::~dtkComposerNodeGraphic(void)
 {
     delete d;
+
     d = NULL;
 }
 
@@ -754,11 +757,13 @@ void dtkComposerNodeGraphic::onEdgeConnected(dtkComposerEdge *edge)
     dtkComposerNodeGraphicPrivate::EdgesAlongRoutes map = d->edgesAlongRoutes(edge);
 
     if (!map.count()) {
+
         edge->invalidate();
 
     } else {
 
         foreach(dtkComposerNodeGraphicPrivate::Route pair, map.keys()) {
+
             if (pair.first->node()->l->canConnectRoute(pair.first, pair.second, pair.second->node())) {
                 foreach(dtkComposerEdge *e, map.value(pair))
                     e->validate();

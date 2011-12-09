@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: lun. nov. 21 16:56:32 2011 (+0100)
+ * Last-Updated: mer. déc.  7 11:28:53 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 206
+ *     Update #: 209
  */
 
 /* Commentary: 
@@ -95,7 +95,7 @@ void dtkDistributedSlave::read(void)
     dtkDistributedMessage *request = socket->parseRequest();
 
     if( request->method() == dtkDistributedMessage::DATA) {
-        // TODO
+        qDebug() << DTK_PRETTY_FUNCTION << "DATA received in slave, unimplemented";
     } else {
         qDebug() << DTK_PRETTY_FUNCTION << "WARNING: Unknown data";
     }

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Nov  4 14:16:40 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Dec  7 16:01:15 2011 (+0100)
+ * Last-Updated: Thu Dec  8 14:27:46 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 131
+ *     Update #: 133
  */
 
 /* Commentary: 
@@ -309,7 +309,7 @@ bool dtkComposerNodeLogic::canConnectRoute(dtkComposerNodeProperty *source, dtkC
     route->setSource(source);
     route->setDestination(destination);
 
-    left_connection_ok  = destin_node->onLeftRouteConnected(route, destination);
+     left_connection_ok = destin_node->onLeftRouteConnected(route, destination);
     right_connection_ok = d->node->onRightRouteConnected(route, source);
 
     if (left_connection_ok) {

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Dec  6 18:41:05 2011 (+0100)
+ * Last-Updated: Thu Dec  8 10:52:01 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 3049
+ *     Update #: 3054
  */
 
 /* Commentary: 
@@ -145,37 +145,6 @@ QList<dtkComposerNode *> dtkComposerScene::nodes(QString name)
     return list;
 }
 
-//! Returns a QList of all the properties in the scene.
-/*! 
- *  
- */
-QList<dtkComposerNodeProperty *> dtkComposerScene::properties(void)
-{
-    QList<dtkComposerNodeProperty *> list;
-
-    foreach(QGraphicsItem *item, this->items())
-        if (dtkComposerNodeProperty *property = dynamic_cast<dtkComposerNodeProperty *>(item))
-            list << property;
-
-    return list;
-}
-
-//! Returns a QList of all the properties sharing name \a name.
-/*! 
- *  
- */
-QList<dtkComposerNodeProperty *> dtkComposerScene::properties(QString name)
-{
-    QList<dtkComposerNodeProperty *> list;
-
-    foreach(QGraphicsItem *item, this->items())
-        if (dtkComposerNodeProperty *property = dynamic_cast<dtkComposerNodeProperty *>(item))
-            if (property->name() == name)
-                list << property;
-
-    return list;
-}
-
 //! Start nodes
 /*! 
  *  Returns the list of nodes that are not within a control block, and
@@ -201,8 +170,6 @@ QList<dtkComposerNode *> dtkComposerScene::startNodes(QList<dtkComposerNode *> p
 
     foreach(dtkComposerNode *node, scope) {
 
-        // if (!node->g->leftEdges().count() && node->g->rightEdges().count() && node->kind() != dtkComposerNode::Composite) {
-
         if(node->kind() != dtkComposerNode::Composite) {
             
             if(!node->g->leftEdges().count() && node->g->rightEdges().count()) {
@@ -227,8 +194,6 @@ QList<dtkComposerNode *> dtkComposerScene::startNodes(QList<dtkComposerNode *> p
         }
     }
 
-    // qDebug() << DTK_PRETTY_FUNCTION << "(" << depth << ")" << "2 -" << list;
-
     depth--;
 
     return list;
@@ -247,6 +212,7 @@ QList<dtkComposerNode *> dtkComposerScene::endNodes(void)
     dtkComposerNode *p = NULL;
 
     foreach(dtkComposerNode *node, d->nodes) {
+
         if (node->g->leftEdges().count() && !node->g->rightEdges().count() && node->kind() != dtkComposerNode::Composite) {
 
             p = node->parentNode();

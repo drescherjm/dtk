@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:05:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 27 16:42:09 2011 (+0200)
+ * Last-Updated: Thu Dec  8 10:51:49 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 166
+ *     Update #: 178
  */
 
 /* Commentary: 
@@ -47,8 +47,6 @@ public:
     QList<dtkComposerEdge *> edges(void);
     QList<dtkComposerNode *> nodes(void);
     QList<dtkComposerNode *> nodes(QString name);
-    QList<dtkComposerNodeProperty *> properties(void);
-    QList<dtkComposerNodeProperty *> properties(QString name);
 
     QList<dtkComposerNode *> startNodes(QList<dtkComposerNode *> = QList<dtkComposerNode *>());
     QList<dtkComposerNode *>   endNodes(void);
@@ -65,16 +63,15 @@ public:
     void removeEdge(dtkComposerEdge *edge);
     void removeNode(dtkComposerNode *node);
     void removeNote(dtkComposerNote *note);
-
     void removeNodes(QList<dtkComposerNode *> nodes);
 
-    void setFactory(dtkComposerNodeFactory *factory);
-
-    dtkComposerNode *createGroup(QList<dtkComposerNode *> nodes, QPointF position = QPointF());
     dtkComposerNode *createNode(QString type, QPointF position = QPointF());
     dtkComposerNote *createNote(QString text, QPointF position = QPointF(), QSizeF size = QSizeF());
+    dtkComposerNode *createGroup(QList<dtkComposerNode *> nodes, QPointF position = QPointF());
+               void explodeGroup(dtkComposerNode *node);
 
-    void explodeGroup(dtkComposerNode *node);
+public slots:
+    void setFactory(dtkComposerNodeFactory *factory);
 
 signals:
     void dataSelected(dtkAbstractData *data);
@@ -92,14 +89,6 @@ signals:
     void pathChanged(dtkComposerNode *);
 
     void selectionCleared(void);
-
-// signals:
-//     void evaluationStarted(void);
-//     void evaluationStopped(void);
-
-// public slots:
-//    void startEvaluation(void);
-//    void stopEvaluation(void);
 
 public slots:
    void copy(void);
@@ -137,9 +126,6 @@ protected:
 
 protected slots:
     void onSelectionChanged(void);
-
-// private:
-//     static bool s_evaluate;
 
 private:
     friend class dtkComposerNode;

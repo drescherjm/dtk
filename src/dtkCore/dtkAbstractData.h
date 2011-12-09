@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: mar. nov. 29 13:57:38 2011 (+0100)
+ * Last-Updated: lun. déc.  5 16:56:23 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 235
+ *     Update #: 237
  */
 
 /* Commentary:
@@ -54,7 +54,7 @@ public slots:
 
     virtual dtkAbstractData *convert(const QString& toType);
     virtual QByteArray    *serialize(void);
-    virtual bool         deserialize(QByteArray *array);
+    virtual bool         deserialize(const QByteArray& array);
 
     virtual void *output(void);
     virtual void *output(int channel);

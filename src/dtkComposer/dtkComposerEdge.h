@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:26:53 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov 15 12:24:29 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 51
+ * Last-Updated: Thu Dec  8 10:55:08 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -79,11 +79,10 @@ public slots:
     void   validate(void);
     void invalidate(void);
 
-public:
-    void   activate(void);
-    void inactivate(void);
-
-    bool active(void);
+// public:
+//     void   activate(void);
+//     void inactivate(void);
+//     bool active(void);
 
 private:
     dtkComposerEdgePrivate *d;

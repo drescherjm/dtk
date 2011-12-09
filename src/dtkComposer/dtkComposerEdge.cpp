@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Dec  6 18:31:31 2011 (+0100)
+ * Last-Updated: Fri Dec  9 17:28:30 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 477
+ *     Update #: 485
  */
 
 /* Commentary: 
@@ -36,8 +36,8 @@ public:
 
     dtkComposerEdge::Flag flag;
 
-public:
-    bool active;
+// public:
+//     bool active;
 };
 
 dtkComposerEdge::dtkComposerEdge(void) : QObject(), QGraphicsItem(), d(new dtkComposerEdgePrivate)
@@ -84,15 +84,11 @@ dtkComposerNodeProperty *dtkComposerEdge::destination(void)
 void dtkComposerEdge::setSource(dtkComposerNodeProperty *property)
 {
     d->source = property;
-
-    //this->adjust();
 }
 
 void dtkComposerEdge::setDestination(dtkComposerNodeProperty *property)
 {
     d->destination = property;
-
-    //this->adjust();
 }
 
 QRectF dtkComposerEdge::boundingRect(void) const
@@ -211,6 +207,7 @@ bool dtkComposerEdge::link(bool anyway)
         else
             d->destination->node()->g->appendLeftEdge(this, d->destination);
         
+        d->source->node()->g->onEdgeConnected(this);
         d->destination->node()->g->onEdgeConnected(this);
 
         return true;
@@ -376,20 +373,20 @@ void dtkComposerEdge::invalidate(void)
     this->update();
 }
 
-void dtkComposerEdge::activate(void)
-{
-    d->active = true;
-}
+// void dtkComposerEdge::activate(void)
+// {
+//     d->active = true;
+// }
 
-void dtkComposerEdge::inactivate(void)
-{
-    d->active = false;
-}
+// void dtkComposerEdge::inactivate(void)
+// {
+//     d->active = false;
+// }
 
-bool dtkComposerEdge::active(void)
-{
-    return d->active;
-}
+// bool dtkComposerEdge::active(void)
+// {
+//     return d->active;
+// }
 
 // /////////////////////////////////////////////////////////////////
 // Debug operators

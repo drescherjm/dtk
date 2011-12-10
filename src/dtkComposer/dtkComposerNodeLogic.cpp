@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Nov  4 14:16:40 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Dec 10 00:19:14 2011 (+0100)
+ * Last-Updated: Sat Dec 10 00:54:30 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 141
+ *     Update #: 166
  */
 
 /* Commentary: 
@@ -466,8 +466,6 @@ bool dtkComposerNodeLogic::disconnectRoute(dtkComposerNodeProperty *source, dtkC
     foreach(dtkComposerRoute *l_route, destin_node->l->leftRoutes()) {
         if (l_route->source() == source && l_route->destination() == destination) {
             left_route = l_route;
-            Q_UNUSED(destin_node->onLeftRouteDisconnected(left_route, destination));
-            destin_node->l->removeLeftRoute(left_route);
             break;
         }
     }
@@ -475,17 +473,22 @@ bool dtkComposerNodeLogic::disconnectRoute(dtkComposerNodeProperty *source, dtkC
     foreach(dtkComposerRoute *r_route, this->rightRoutes()) {
         if (r_route->source() == source && r_route->destination() == destination) {
             right_route = r_route;
-            Q_UNUSED(this->node()->onRightRouteDisconnected(right_route, source));
-            this->removeRightRoute(right_route);
             break;
         }
     }
 
-    if (left_route)
-        qDebug() << DTK_PRETTY_FUNCTION << left_route;
+    Q_UNUSED(destin_node->onLeftRouteDisconnected(left_route, destination));
+    Q_UNUSED(this->node()->onRightRouteDisconnected(right_route, source));    
+    
+    if (left_route) {
+        destin_node->removeSourceRoutes(left_route);
+        destin_node->removeSourceNodes(left_route);
+    }
 
-    if (right_route)
-        qDebug() << DTK_PRETTY_FUNCTION << right_route;
+    if (right_route) {
+        d->node->removeDestinationRoutes(right_route);
+        d->node->removeDestinationNodes(right_route);
+    }
     
     if (left_route == right_route)
         right_route = NULL;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec  9 22:53:42 2011 (+0100)
+ * Last-Updated: Sat Dec 10 01:19:55 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 3090
+ *     Update #: 3098
  */
 
 /* Commentary: 
@@ -322,6 +322,8 @@ void dtkComposerScene::addNote(dtkComposerNote *note)
  */
 void dtkComposerScene::removeEdge(dtkComposerEdge *edge)
 {
+    qDebug() << DTK_PRETTY_FUNCTION << edge;
+
     edge->unlink();
 
     d->edges.removeAll(edge);
@@ -345,6 +347,7 @@ void dtkComposerScene::removeEdge(dtkComposerEdge *edge)
 void dtkComposerScene::removeNode(dtkComposerNode *node)
 {
     qDebug() << d->edges;
+    qDebug() << node->childNodes().count();
     qDebug() << node->g->leftEdges().count();
     qDebug() << node->g->rightEdges().count();
     qDebug() << node->g->leftRelayEdges().count();
@@ -737,7 +740,25 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
                 }
             }
         }   
+    }
 
+    // Delete relay edges
+
+    foreach(dtkComposerEdge *edge, node->g->leftEdges())
+        this->removeEdge(edge);
+    
+    foreach(dtkComposerEdge *edge, node->g->rightEdges())
+        this->removeEdge(edge);
+
+    foreach(dtkComposerEdge *edge, node->g->leftRelayEdges())
+        this->removeEdge(edge);
+    
+    foreach(dtkComposerEdge *edge, node->g->rightRelayEdges())
+        this->removeEdge(edge);
+
+    // Reparent before deleting composite node
+
+    foreach(dtkComposerNode *child, node->childNodes()) {
         node->removeChildNode(child);
         child->setParentNode(parent);
     }

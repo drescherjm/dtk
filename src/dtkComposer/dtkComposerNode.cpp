@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:23 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Dec  7 15:46:53 2011 (+0100)
+ * Last-Updated: Sat Dec 10 00:55:34 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 2680
+ *     Update #: 2681
  */
 
 /* Commentary: 
@@ -1110,6 +1110,26 @@ void dtkComposerNode::appendSourceNodes(dtkComposerRoute *route)
 void dtkComposerNode::appendDestinationNodes(dtkComposerRoute *route)
 {
     this->l->appendRightNode(route->destination()->node());
+}
+
+void dtkComposerNode::removeSourceRoutes(dtkComposerRoute *route)
+{
+    this->l->removeLeftRoute(route);
+}
+
+void dtkComposerNode::removeDestinationRoutes(dtkComposerRoute *route)
+{
+    this->l->removeRightRoute(route);
+}
+
+void dtkComposerNode::removeSourceNodes(dtkComposerRoute *route)
+{
+    this->l->removeLeftNode(route->source()->node());
+}
+
+void dtkComposerNode::removeDestinationNodes(dtkComposerRoute *route)
+{
+    this->l->removeRightNode(route->destination()->node());
 }
 
 // /////////////////////////////////////////////////////////////////

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 13:48:02 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Dec  7 15:29:10 2011 (+0100)
+ * Last-Updated: Sat Dec 10 00:55:09 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 394
+ *     Update #: 396
  */
 
 /* Commentary: 
@@ -209,6 +209,12 @@ public:
 
     virtual void      appendSourceNodes(dtkComposerRoute *route);
     virtual void appendDestinationNodes(dtkComposerRoute *route);
+
+    virtual void      removeSourceRoutes(dtkComposerRoute *route);
+    virtual void removeDestinationRoutes(dtkComposerRoute *route);
+
+    virtual void      removeSourceNodes(dtkComposerRoute *route);
+    virtual void removeDestinationNodes(dtkComposerRoute *route);
 
 protected:
     friend class dtkComposerEvaluatorPrivate;

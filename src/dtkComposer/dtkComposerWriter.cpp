@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec  5 16:49:00 2011 (+0100)
+ * Last-Updated: Sat Dec 10 17:51:21 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 474
+ *     Update #: 478
  */
 
 /* Commentary: 
@@ -214,9 +214,12 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
 
         number_node->touch(); // enables to update text in edition aera.
 
-        QDomText text = document.createTextNode(number_node->editorText());        
+        QDomText text;
+        text = document.createTextNode(number_node->editorText());
+
         QDomElement e_value = document.createElement("value");
         e_value.appendChild(text);        
+
         tag.appendChild(e_value);
     }
 

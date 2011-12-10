@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Feb 25 16:21:13 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Dec 10 17:40:31 2011 (+0100)
+ * Last-Updated: Sat Dec 10 17:51:52 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 644
+ *     Update #: 645
  */
 
 /* Commentary: 
@@ -448,7 +448,10 @@ void dtkComposerNodeNumber::interactiveOff(void)
  */
 QString dtkComposerNodeNumber::editorText(void) const
 {
-    return d->editor->toPlainText();
+    if(this->isInteractive())
+        return d->editor->toPlainText();
+    else
+        return QString::number(0);
 }
 
 //! Returns true when interactive mode is on. 

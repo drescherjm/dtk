@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Dec 10 01:19:55 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 3098
+ * Last-Updated: Mon Dec 12 13:34:03 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 3156
  */
 
 /* Commentary: 
@@ -379,6 +379,8 @@ void dtkComposerScene::removeNode(dtkComposerNode *node)
 
     delete node;
 
+    node = NULL;
+
 //     dtkComposerNodeControlBlock *parent_block = NULL;
 //     if (parent && parent->kind() == dtkComposerNode::Control) {
 //         foreach(dtkComposerNodeControlBlock *block, (dynamic_cast<dtkComposerNodeControl *>(parent))->blocks()) {
@@ -439,9 +441,46 @@ void dtkComposerScene::removeNote(dtkComposerNote *note)
 /*! 
  *  In practice, when a node and its parent are in the list the node
  *  is removed from it since the parent will delete the node.
+ *
+ *  This process is tricky when nodes selected for deletion contains
+ *  the current node (which is ghost). It is then necessary to make it
+ *  non-ghost before deleting it. 
+ *  However, this has to be done in three steps: 
+ *  - first, we store its position and its possible composite parent; 
+ *  - second, the deletion process is performed; 
+ *  - third, the new configuration of the nodes is redrawn from the
+ *    information of the first step. 
+ *
+ *  When the current node is not involved, only step two is carried
+ *  out.
  */
 void dtkComposerScene::removeNodes(QList<dtkComposerNode *> nodes)
 {
+    // 
+
+    // -- First step
+
+    bool ghost_node_removed = false;        
+    QPointF scene_center;            
+    dtkComposerNode *ghost_parent = NULL;
+
+    foreach(dtkComposerNode *n, nodes) {
+        if (n == d->current_node) {            
+            ghost_parent = n->parentNode();
+            while (ghost_parent) {
+                if (ghost_parent->kind() == dtkComposerNode::Composite) {
+                    break; 
+                } else {
+                    ghost_parent = ghost_parent->parentNode();
+                }
+            }        
+            scene_center = n->mapRectToScene(n->boundingRect()).center();            
+            ghost_node_removed = true;
+        }
+    }
+
+    // -- Second step
+
     QList<dtkComposerNode *> nodes_to_remove;
 
     foreach(dtkComposerNode *n, nodes)
@@ -450,6 +489,26 @@ void dtkComposerScene::removeNodes(QList<dtkComposerNode *> nodes)
 
     foreach(dtkComposerNode *n, nodes_to_remove)
         this->removeNode(n);
+
+    // -- Third step
+
+    if (ghost_node_removed) {
+            
+        this->hideAllNodes();
+        
+        this->setCurrentNode(ghost_parent);
+
+        if (d->current_node) {
+            d->current_node->setGhost(true);
+            d->current_node->setPos(d->current_node->ghostPosition());
+            this->showChildNodes(d->current_node);
+        } else {
+            this->showAllNodes();
+        }
+        
+        emit centerOn(scene_center);
+        emit pathChanged(d->current_node);
+    }
 }
 
 void dtkComposerScene::removeNotes(QList<dtkComposerNote *> notes)
@@ -726,7 +785,7 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
                     }
                  }
             }
-        } 
+        }
 
         foreach(dtkComposerEdge *relay, node->g->rightRelayEdges()) {
             if (relay->source()->node() == child) {
@@ -739,7 +798,7 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
                     }
                 }
             }
-        }   
+        }
     }
 
     // Delete relay edges
@@ -759,8 +818,20 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
     // Reparent before deleting composite node
 
     foreach(dtkComposerNode *child, node->childNodes()) {
-        node->removeChildNode(child);
+
+        if (parent)
+            parent->addChildNode(child);
+
         child->setParentNode(parent);
+
+        if (parent_block) {
+            parent_block->appendNode(child);
+            child->setParentItem(parent_block);
+        } else {
+            child->setParentItem(node->parentItem());
+        }
+        
+        node->removeChildNode(child);
     }
     
     // -- Node is removed. This action destroys the edge logic.
@@ -780,8 +851,8 @@ void dtkComposerScene::explodeGroup(dtkComposerNode *node)
     
         composite_parent->setGhost(true);
         composite_parent->setPos(composite_parent->ghostPosition());
-        this->showChildNodes(composite_parent);
         this->setCurrentNode(composite_parent);
+        this->showChildNodes(composite_parent);
             
         emit centerOn(composite_parent->mapRectToScene(parent->boundingRect()).center());
         emit pathChanged(d->current_node);

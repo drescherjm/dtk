@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 20:51:32 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Dec 12 10:28:00 2011 (+0100)
+ * Last-Updated: Mon Dec 12 13:59:54 2011 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 148
+ *     Update #: 162
  */
 
 /* Commentary: 
@@ -109,6 +109,11 @@ void dtkComposerNodeLog::pull(dtkComposerRoute *route, dtkComposerNodeProperty *
     Q_UNUSED(property);
 
     d->receiver = route->source()->node()->emitter(route->source());
+
+    if (!d->receiver) {
+        qDebug() << DTK_PRETTY_FUNCTION << "Receiver is not valid. Logging failed.";
+        return;
+    }
 
     QString type = d->receiver->identifier();
 

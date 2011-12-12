@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Nov  2 10:14:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Nov 28 13:07:28 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 83
+ * Last-Updated: Mon Dec 12 10:24:45 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 90
  */
 
 /* Commentary: 
@@ -59,8 +59,6 @@ template <typename T> inline dtkComposerNodeTransmitter<T>::~dtkComposerNodeTran
 template <typename T> inline void dtkComposerNodeTransmitter<T>::setData(const T& data)
 {
     m_data = data;
-
-    // this->setMetaData("Type", typeid(m_data).name());
 };
 
 //! Returns the data as a modifiable reference.
@@ -162,13 +160,13 @@ template <typename T> QString dtkComposerNodeTransmitter<T>::identifier(void) co
     QString container;
 
     if (m_vector)
-        container = "vector";
+        container = typeid(m_vector).name();
     else if (m_list)
-        container = "list";
+        container = typeid(m_list).name();
     else
-        container = "no";
+        container = typeid(m_data).name();
 
-    return QString("Transmitter with %1 container").arg(container);
+    return container;
 };
 
 #endif

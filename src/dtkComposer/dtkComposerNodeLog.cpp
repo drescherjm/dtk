@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 20:51:32 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Dec  7 15:58:53 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 144
+ * Last-Updated: Mon Dec 12 10:28:00 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 148
  */
 
 /* Commentary: 
@@ -110,7 +110,7 @@ void dtkComposerNodeLog::pull(dtkComposerRoute *route, dtkComposerNodeProperty *
 
     d->receiver = route->source()->node()->emitter(route->source());
 
-    QString type = d->receiver->metadata("Type");
+    QString type = d->receiver->identifier();
 
     if (type == d->type_bool)
        dtkOutput() << static_cast<dtkComposerNodeTransmitter<bool> *>(d->receiver)->data();

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Mar  1 10:18:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Dec  7 16:19:14 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 352
+ * Last-Updated: Mon Dec 12 14:08:18 2011 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 354
  */
 
 /* Commentary: 
@@ -355,6 +355,8 @@ dtkComposerNodeNumberOperator::dtkComposerNodeNumberOperator(dtkComposerNode *pa
     d->op1_type = QVariant::Invalid;
     d->op2_type = QVariant::Invalid;
 
+    d->value_type = QVariant::Invalid;
+
     d->emitter_i = NULL;
     d->emitter_l = NULL;
     d->emitter_d = NULL;
@@ -669,5 +671,8 @@ bool dtkComposerNodeNumberOperator::onLeftRouteConnected(dtkComposerRoute *route
  */
 bool dtkComposerNodeNumberOperator::onRightRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *property)
 {
+    if (d->value_type == QVariant::Invalid)
+        return false;
+
     return true;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:48:10 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Dec  7 15:57:24 2011 (+0100)
+ * Last-Updated: Tue Dec 13 13:08:49 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1164
+ *     Update #: 1165
  */
 
 /* Commentary: 
@@ -575,7 +575,7 @@ QList<dtkComposerNode *> dtkComposerNodeControlBlock::startNodes(QList<dtkCompos
                 node->setDirty(true);
                 nodes << node;
             } else {
-                foreach(dtkComposerRoute *edge, d->parent->inputRelayRoutes()) {
+                foreach(dtkComposerRoute *edge, d->parent->leftRelayRoutes()) {
                     if (edge->source()->blockedFrom() == this->title() && !nodes.contains(edge->destination()->node())) {
                         dtkComposerNode *node = edge->destination()->node();
                         node->setDirty(true);

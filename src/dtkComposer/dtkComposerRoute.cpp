@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Dec  7 14:25:56 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Dec 10 17:29:08 2011 (+0100)
+ * Last-Updated: Tue Dec 13 12:31:11 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 35
+ *     Update #: 36
  */
 
 /* Commentary: 
@@ -48,7 +48,7 @@ dtkComposerRoute::dtkComposerRoute(void) : d(new dtkComposerRoutePrivate)
     d->source = NULL;
     d->destination = NULL;
 
-    d->active = false;
+    d->active = true;
 }
 
 //! Destroys dtkComposerRoute.
@@ -62,32 +62,32 @@ dtkComposerRoute::~dtkComposerRoute(void)
     d = NULL;
 }
 
-// //! Returns true when route is active.
-// /*! 
-//  *  
-//  */
-// bool dtkComposerRoute::active(void)
-// {
-//     return d->active;
-// }
+//! Returns true when route is active.
+/*! 
+ *  
+ */
+bool dtkComposerRoute::active(void)
+{
+    return d->active;
+}
 
-// //! Sets route as active.
-// /*! 
-//  *  
-//  */
-// void dtkComposerRoute::activate(void)
-// {
-//     d->active = true;
-// }
+//! Sets route as active.
+/*! 
+ *  
+ */
+void dtkComposerRoute::activate(void)
+{
+    d->active = true;
+}
 
-// //! Sets route as inactive.
-// /*! 
-//  *  
-//  */
-// void dtkComposerRoute::inactivate(void)
-// {
-//     d->active = false;
-// }
+//! Sets route as inactive.
+/*! 
+ *  
+ */
+void dtkComposerRoute::inactivate(void)
+{
+    d->active = false;
+}
 
 //! Returns source property of the route.
 /*! 

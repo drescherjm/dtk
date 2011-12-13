@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:49:38 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Dec  7 15:56:31 2011 (+0100)
+ * Last-Updated: Tue Dec 13 14:01:56 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 1015
+ *     Update #: 1027
  */
 
 /* Commentary: 
@@ -41,6 +41,7 @@ dtkComposerNodeControl::dtkComposerNodeControl(dtkComposerNode *parent) : dtkCom
     d->current_block = NULL;
 
     d->property_input = new dtkComposerNodeProperty("condition", dtkComposerNodeProperty::Left, dtkComposerNodeProperty::AsInput, dtkComposerNodeProperty::Multiple, this);
+
     this->g->appendLeftProperty(d->property_input);
 
     this->setAcceptHoverEvents(true);
@@ -82,6 +83,7 @@ void dtkComposerNodeControl::appendBlock(dtkComposerNodeControlBlock *block)
 
     d->blocks << block;
     d->block_added = true;
+
     this->layout();
 }
 
@@ -130,14 +132,14 @@ void dtkComposerNodeControl::appendBlockProperty(const QString& name, dtkCompose
     }
 
     dtkComposerNodeProperty *left_property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Left, behavior, multiplicity, this);
-    left_property->setType(dtkComposerNodeProperty::Generic);
+    // left_property->setType(dtkComposerNodeProperty::Generic);
     left_property->setBlockedFrom(block->title());
 
     block->appendLeftProperty(left_property);
     this->g->appendLeftProperty(left_property);
 
     dtkComposerNodeProperty *right_property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Right, behavior, multiplicity, this);
-    right_property->setType(dtkComposerNodeProperty::Generic);
+    // right_property->setType(dtkComposerNodeProperty::Generic);
     right_property->setBlockedFrom(block->title());
 
     block->appendRightProperty(right_property);
@@ -158,7 +160,7 @@ void dtkComposerNodeControl::appendBlockLeftProperty(const QString& name, dtkCom
     }
 
     dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Left, behavior, multiplicity, this);
-    property->setType(dtkComposerNodeProperty::Generic);
+    // property->setType(dtkComposerNodeProperty::Generic);
     property->setBlockedFrom(block->title());
 
     block->appendLeftProperty(property);
@@ -179,7 +181,7 @@ void dtkComposerNodeControl::appendBlockRightProperty(const QString& name, dtkCo
     }
 
     dtkComposerNodeProperty *property = new dtkComposerNodeProperty(name, dtkComposerNodeProperty::Right, behavior, multiplicity, this);
-    property->setType(dtkComposerNodeProperty::Generic);
+    // property->setType(dtkComposerNodeProperty::Generic);
     property->setBlockedFrom(block->title());
 
     block->appendRightProperty(property);
@@ -446,90 +448,90 @@ dtkComposerNodeProperty *dtkComposerNodeControl::rightProperty(const QString& bl
 // Methods dealing with composition evaluation logics
 // /////////////////////////////////////////////////////////////////
 
-void dtkComposerNodeControl::addInputRelayRoute(dtkComposerRoute *route)
+void dtkComposerNodeControl::addLeftRelayRoute(dtkComposerRoute *route)
 {
-    if(!d->input_relay_routes.contains(route))
-        d->input_relay_routes << route;
+    if(!d->left_relay_routes.contains(route))
+        d->left_relay_routes << route;
 }
 
-void dtkComposerNodeControl::addOutputRelayRoute(dtkComposerRoute *route)
+void dtkComposerNodeControl::addRightRelayRoute(dtkComposerRoute *route)
 {
-    if (!d->output_relay_routes.contains(route))
-        d->output_relay_routes << route;
+    if (!d->right_relay_routes.contains(route))
+        d->right_relay_routes << route;
 }
 
-void dtkComposerNodeControl::removeInputRelayRoute(dtkComposerRoute *route)
+void dtkComposerNodeControl::removeLeftRelayRoute(dtkComposerRoute *route)
 {
-    d->input_relay_routes.removeAll(route);
+    d->left_relay_routes.removeAll(route);
 }
 
-void dtkComposerNodeControl::removeOutputRelayRoute(dtkComposerRoute *route)
+void dtkComposerNodeControl::removeRightRelayRoute(dtkComposerRoute *route)
 {
-    d->output_relay_routes.removeAll(route);
+    d->right_relay_routes.removeAll(route);
 }
 
 void dtkComposerNodeControl::removeAllRelayRoutes(void)
 {
-    d->input_relay_routes.clear();
-    d->output_relay_routes.clear();
+    d->left_relay_routes.clear();
+    d->right_relay_routes.clear();
 }
 
-void dtkComposerNodeControl::addInputActiveRoute(dtkComposerRoute *route)
+void dtkComposerNodeControl::addLeftActiveRoute(dtkComposerRoute *route)
 {
-    if (!d->input_active_routes.contains(route))
-        d->input_active_routes << route;
+    if (!d->left_active_routes.contains(route))
+        d->left_active_routes << route;
 }
 
-void dtkComposerNodeControl::addOutputActiveRoute(dtkComposerRoute *route)
+void dtkComposerNodeControl::addRightActiveRoute(dtkComposerRoute *route)
 {
-    if (!d->output_active_routes.contains(route))
-        d->output_active_routes << route;
+    if (!d->right_active_routes.contains(route))
+        d->right_active_routes << route;
 }
 
-void dtkComposerNodeControl::removeInputActiveRoute(dtkComposerRoute *route)
+void dtkComposerNodeControl::removeLeftActiveRoute(dtkComposerRoute *route)
 {
-    d->input_active_routes.removeAll(route);
+    d->left_active_routes.removeAll(route);
 }
 
-void dtkComposerNodeControl::removeOutputActiveRoute(dtkComposerRoute *route)
+void dtkComposerNodeControl::removeRightActiveRoute(dtkComposerRoute *route)
 {
-    d->output_active_routes.removeAll(route);
+    d->right_active_routes.removeAll(route);
 }
 
 void dtkComposerNodeControl::removeAllActiveRoutes(void)
 {
-    d->input_active_routes.clear();
-    d->output_active_routes.clear();
+    d->left_active_routes.clear();
+    d->right_active_routes.clear();
 }
 
-QList<dtkComposerRoute *> dtkComposerNodeControl::inputRelayRoutes(void)
+QList<dtkComposerRoute *> dtkComposerNodeControl::leftRelayRoutes(void)
 {
-    return d->input_relay_routes;
+    return d->left_relay_routes;
 }
 
-QList<dtkComposerRoute *> dtkComposerNodeControl::outputRelayRoutes(void)
+QList<dtkComposerRoute *> dtkComposerNodeControl::rightRelayRoutes(void)
 {
-    return d->output_relay_routes;
+    return d->right_relay_routes;
 }
 
-QList<dtkComposerRoute *> dtkComposerNodeControl::inputActiveRoutes(void)
+QList<dtkComposerRoute *> dtkComposerNodeControl::leftActiveRoutes(void)
 {
-    return d->input_active_routes;
+    return d->left_active_routes;
 }
 
-QList<dtkComposerRoute *> dtkComposerNodeControl::outputActiveRoutes(void)
+QList<dtkComposerRoute *> dtkComposerNodeControl::rightActiveRoutes(void)
 {
-    return d->output_active_routes;
+    return d->right_active_routes;
 }
 
 QList<dtkComposerRoute *> dtkComposerNodeControl::allRoutes(void)
 {
     QList<dtkComposerRoute *> routes;
     routes << dtkComposerNode::allRoutes();
-    routes << d->input_relay_routes;
-    routes << d->output_relay_routes;
-    routes << d->input_active_routes;
-    routes << d->output_active_routes;
+    routes << d->left_relay_routes;
+    routes << d->right_relay_routes;
+    routes << d->left_active_routes;
+    routes << d->right_active_routes;
 
     return routes;
 }
@@ -538,11 +540,11 @@ void dtkComposerNodeControl::removeRoute(dtkComposerRoute *route)
 {
     dtkComposerNode::removeRoute(route);
 
-    d->input_relay_routes.removeAll(route);
-    d->output_relay_routes.removeAll(route);
+    d->left_relay_routes.removeAll(route);
+    d->right_relay_routes.removeAll(route);
 
-    d->input_active_routes.removeAll(route);
-    d->output_active_routes.removeAll(route);
+    d->left_active_routes.removeAll(route);
+    d->right_active_routes.removeAll(route);
 }
 
 bool dtkComposerNodeControl::isRunning(void)
@@ -580,7 +582,7 @@ bool dtkComposerNodeControl::condition(void)
 QVariant dtkComposerNodeControl::value(void)
 {
     if(!d->property_input->edge()) {
-        qDebug() << DTK_PRETTY_FUNCTION << "No input property edge !!!";
+        qDebug() << DTK_PRETTY_FUNCTION << "No left property edge !!!";
         return QVariant();
     }
 
@@ -607,7 +609,7 @@ void dtkComposerNodeControl::setRunning(bool running)
     d->running = running;
 }
 
-bool dtkComposerNodeControl::dirtyInputValue(void)
+bool dtkComposerNodeControl::dirtyLeftValue(void)
 {
     foreach(dtkComposerRoute *i_route, this->l->leftRoutes()) {
         if (i_route->destination() == d->property_input) {
@@ -681,31 +683,31 @@ void dtkComposerNodeControl::markDirtyDownstreamNodes(void)
             o_route->destination()->node()->setDirty(true);
 }
 
-void dtkComposerNodeControl::cleanInputActiveRoutes(void)
+void dtkComposerNodeControl::cleanLeftActiveRoutes(void)
 {
-    foreach(dtkComposerRoute *active_route, this->inputActiveRoutes()) {
+    foreach(dtkComposerRoute *active_route, this->leftActiveRoutes()) {
         foreach(dtkComposerRoute *i_route, active_route->destination()->node()->allRoutes()) {
             if (i_route == active_route) {
                 active_route->destination()->node()->removeRoute(i_route);
                 break;
             }
         }
-        this->removeInputActiveRoute(active_route);
+        this->removeLeftActiveRoute(active_route);
         delete active_route;
         active_route = NULL;
     }
 }
 
-void dtkComposerNodeControl::cleanOutputActiveRoutes(void)
+void dtkComposerNodeControl::cleanRightActiveRoutes(void)
 {            
-    foreach(dtkComposerRoute *active_route, this->outputActiveRoutes()) {
+    foreach(dtkComposerRoute *active_route, this->rightActiveRoutes()) {
         foreach(dtkComposerRoute *i_route, active_route->destination()->node()->allRoutes()) {
             if (i_route == active_route) {
                 active_route->destination()->node()->removeRoute(i_route);
                 break;
             }
         }
-        this->removeOutputActiveRoute(active_route);
+        this->removeRightActiveRoute(active_route);
         delete active_route;
         active_route = NULL;
     }
@@ -713,7 +715,7 @@ void dtkComposerNodeControl::cleanOutputActiveRoutes(void)
 
 void dtkComposerNodeControl::pull(dtkComposerRoute *i_route, dtkComposerNodeProperty *property)
 {
-    foreach(dtkComposerRoute *relay_route, this->inputRelayRoutes()) {
+    foreach(dtkComposerRoute *relay_route, this->leftRelayRoutes()) {
 
         if (relay_route->source() == property) {
                 
@@ -723,7 +725,7 @@ void dtkComposerNodeControl::pull(dtkComposerRoute *i_route, dtkComposerNodeProp
                 
             relay_route->destination()->node()->l->appendLeftRoute(route);
 
-            this->addInputActiveRoute(route);
+            this->addLeftActiveRoute(route);
         }
     }
 }
@@ -739,37 +741,37 @@ void dtkComposerNodeControl::run(void)
 
 void dtkComposerNodeControl::push(dtkComposerRoute *o_route, dtkComposerNodeProperty *property)
 {
-    foreach(dtkComposerRoute *relay_route, this->outputRelayRoutes()) {
-        if (relay_route->destination() == o_route->source()) {
+    // foreach(dtkComposerRoute *relay_route, this->rightRelayRoutes()) {
+    //     if (relay_route->destination() == o_route->source()) {
             
-            dtkComposerRoute *route = new dtkComposerRoute;
-            route->setSource(relay_route->source());
-            route->setDestination(o_route->destination());
+    //         dtkComposerRoute *route = new dtkComposerRoute;
+    //         route->setSource(relay_route->source());
+    //         route->setDestination(o_route->destination());
             
-            this->addOutputActiveRoute(route);
+    //         this->addRightActiveRoute(route);
             
-            if (o_route->destination()->type() == dtkComposerNodeProperty::Generic) {
+    //         if (o_route->destination()->type() == dtkComposerNodeProperty::Generic) {
                         
-                if (o_route->destination()->position() == dtkComposerNodeProperty::Right) {
-                    dtkComposerNodeControl *output_control_node = dynamic_cast<dtkComposerNodeControl *>(o_route->destination()->node());
-                    output_control_node->addOutputRelayRoute(route);
+    //             if (o_route->destination()->position() == dtkComposerNodeProperty::Right) {
+    //                 dtkComposerNodeControl *right_control_node = dynamic_cast<dtkComposerNodeControl *>(o_route->destination()->node());
+    //                 right_control_node->addRightRelayRoute(route);
 
-                } else {
-                    o_route->destination()->node()->l->appendLeftRoute(route);                            
-                }
+    //             } else {
+    //                 o_route->destination()->node()->l->appendLeftRoute(route);                            
+    //             }
 
-            } else if (o_route->destination()->type() == dtkComposerNodeProperty::HybridOutput || 
-                o_route->destination()->type() == dtkComposerNodeProperty::PassThroughOutput || 
-               (o_route->destination()->type() == dtkComposerNodeProperty::Input && o_route->destination()->node()->kind() == dtkComposerNode::Control && relay_route->source()->node()->isChildOfControlNode(o_route->destination()->node()))) {
+    //         } else if (o_route->destination()->type() == dtkComposerNodeProperty::HybridOutput || 
+    //             o_route->destination()->type() == dtkComposerNodeProperty::PassThroughOutput || 
+    //            (o_route->destination()->type() == dtkComposerNodeProperty::Left && o_route->destination()->node()->kind() == dtkComposerNode::Control && relay_route->source()->node()->isChildOfControlNode(o_route->destination()->node()))) {
                 
-                dtkComposerNodeControl *output_control_node = dynamic_cast<dtkComposerNodeControl *>(o_route->destination()->node());
-                output_control_node->addOutputRelayRoute(route);
+    //             dtkComposerNodeControl *right_control_node = dynamic_cast<dtkComposerNodeControl *>(o_route->destination()->node());
+    //             right_control_node->addRightRelayRoute(route);
                 
-            } else {                
-                o_route->destination()->node()->l->appendLeftRoute(route);
-            }
-        }
-    }
+    //         } else {                
+    //             o_route->destination()->node()->l->appendLeftRoute(route);
+    //         }
+    //     }
+    // }
 }
 
 // /////////////////////////////////////////////////////////////////

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:26:05 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Dec  6 14:51:20 2011 (+0100)
+ * Last-Updated: Tue Dec 13 13:53:39 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 576
+ *     Update #: 582
  */
 
 /* Commentary: 
@@ -38,7 +38,6 @@ class dtkComposerNodePropertyPrivate
 public:
     dtkComposerNode *parent;
 
-    dtkComposerNodeProperty::Type type;
     dtkComposerNodeProperty::Position position;
     dtkComposerNodeProperty::Multiplicity multiplicity;
     dtkComposerNodeProperty::Behavior behavior;
@@ -54,61 +53,8 @@ public:
     QString name;
 };
 
-dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Type type, Multiplicity multiplicity, dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePropertyPrivate)
-{
-    d->type = type;
-    d->multiplicity = multiplicity;
-    d->behavior = dtkComposerNodeProperty::None;
-    d->parent = parent;
-
-    d->displayed = true;
-
-    d->text = new QGraphicsTextItem(this);
-#if defined(Q_WS_MAC)
-    d->text->setFont(QFont("Lucida Grande", 11));
-#else
-    d->text->setFont(QFont("Lucida Grande", 9));
-#endif
-    d->text->setPlainText(name);
-    d->name = name;
-    d->text->setDefaultTextColor(Qt::white);
-
-    switch(d->type) {
-    case Input:
-    case Output:
-        d->ellipse = new QGraphicsEllipseItem(this);
-        d->ellipse->setPen(QPen(Qt::gray, 1));
-        d->path_left = NULL;
-        d->path_right = NULL;
-        break;
-    case HybridInput:
-    case HybridOutput:
-        d->ellipse = NULL;
-        d->path_left = new QGraphicsPathItem(this);
-        d->path_left->setPen(QPen(Qt::gray, 1));
-        d->path_right = new QGraphicsPathItem(this);
-        d->path_right->setPen(QPen(Qt::gray, 1));
-        break;
-    case PassThroughInput:
-    case PassThroughOutput:
-        d->ellipse = NULL;
-        d->path_left = new QGraphicsPathItem(this);
-        d->path_left->setPen(QPen(Qt::black, 1));
-        d->path_right = new QGraphicsPathItem(this);
-        d->path_right->setPen(QPen(Qt::black, 1));
-        break;
-    default:
-        break;
-    };
-
-    this->setZValue(20);
-    
-    Q_UNUSED (dtkComposerNodePropertyElided(d->text));
-}
-
 dtkComposerNodeProperty::dtkComposerNodeProperty(QString name, Position position, Behavior behavior, Multiplicity multiplicity, dtkComposerNode *parent) : QObject(), QGraphicsItem(parent), d(new dtkComposerNodePropertyPrivate)
 {
-    d->type = dtkComposerNodeProperty::Generic;
     d->position = position;
     d->behavior = behavior;
     d->multiplicity = multiplicity;
@@ -193,10 +139,10 @@ QString dtkComposerNodeProperty::name(void) const
     return d->name;
 }
 
-dtkComposerNodeProperty::Type dtkComposerNodeProperty::type(void)
-{
-    return d->type;
-}
+// dtkComposerNodeProperty::Type dtkComposerNodeProperty::type(void)
+// {
+//     return d->type;
+// }
 
 dtkComposerNodeProperty::Position dtkComposerNodeProperty::position(void)
 {
@@ -309,11 +255,6 @@ void dtkComposerNodeProperty::setName(const QString& name)
     Q_UNUSED(dtkComposerNodePropertyElided(d->text));
 }
 
-void dtkComposerNodeProperty::setType(dtkComposerNodeProperty::Type type)
-{
-    d->type = type;
-}
-
 void dtkComposerNodeProperty::setPosition(dtkComposerNodeProperty::Position position)
 {
     d->position = position;
@@ -386,49 +327,49 @@ void dtkComposerNodeProperty::setRect(const QRectF& rect)
     QPainterPath lp; 
     QPainterPath rp; 
 
-    switch(d->type) {
+    // switch(d->type) {
 
-    case Input:
-        d->ellipse->setRect(rect);
-        d->ellipse->setBrush(Qt::yellow);
-        if (d->parent->isGhost())
-            d->text->setPos(rect.topRight() + QPointF(fm.width(d->text->toPlainText()) * (-1) - 3 * rect.width(), (fm.height() / 2. - 1) * (-1)));
-        else
-            d->text->setPos(rect.topRight() + QPointF(0, (fm.height() / 2. - 1) * (-1)));
-        break;
+    // case Input:
+    //     d->ellipse->setRect(rect);
+    //     d->ellipse->setBrush(Qt::yellow);
+    //     if (d->parent->isGhost())
+    //         d->text->setPos(rect.topRight() + QPointF(fm.width(d->text->toPlainText()) * (-1) - 3 * rect.width(), (fm.height() / 2. - 1) * (-1)));
+    //     else
+    //         d->text->setPos(rect.topRight() + QPointF(0, (fm.height() / 2. - 1) * (-1)));
+    //     break;
 
-    case Output:
-        d->ellipse->setRect(rect);
-        d->ellipse->setBrush(Qt::red);
-        if (d->parent->isGhost())
-            d->text->setPos(rect.topRight() + QPointF(rect.width(), (fm.height() / 2. - 1) * (-1)));
-        else
-            d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText()) * (-1) - rect.width(), (fm.height() / 2. - 1) * (-1)));
-        break;
+    // case Output:
+    //     d->ellipse->setRect(rect);
+    //     d->ellipse->setBrush(Qt::red);
+    //     if (d->parent->isGhost())
+    //         d->text->setPos(rect.topRight() + QPointF(rect.width(), (fm.height() / 2. - 1) * (-1)));
+    //     else
+    //         d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText()) * (-1) - rect.width(), (fm.height() / 2. - 1) * (-1)));
+    //     break;
 
-    case HybridInput:
-    case PassThroughInput:
-        lp.moveTo(rect.center()); lp.arcTo(rect, 90., 180.); lp.closeSubpath();
-        d->path_left->setPath(lp);
-        d->path_left->setBrush(Qt::yellow);
-        rp.moveTo(rect.center()); rp.arcTo(rect, 270., 180.); rp.closeSubpath();
-        d->path_right->setPath(rp);
-        d->path_right->setBrush(Qt::red);
-        d->text->setPos(rect.topRight() + QPointF(0, (fm.height() / 2. - 1) * (-1)));
-        break;
+    // case HybridInput:
+    // case PassThroughInput:
+    //     lp.moveTo(rect.center()); lp.arcTo(rect, 90., 180.); lp.closeSubpath();
+    //     d->path_left->setPath(lp);
+    //     d->path_left->setBrush(Qt::yellow);
+    //     rp.moveTo(rect.center()); rp.arcTo(rect, 270., 180.); rp.closeSubpath();
+    //     d->path_right->setPath(rp);
+    //     d->path_right->setBrush(Qt::red);
+    //     d->text->setPos(rect.topRight() + QPointF(0, (fm.height() / 2. - 1) * (-1)));
+    //     break;
 
-    case HybridOutput:
-    case PassThroughOutput:
-        lp.moveTo(rect.center()); lp.arcTo(rect, 90., 180.); lp.closeSubpath();
-        d->path_left->setPath(lp);
-        d->path_left->setBrush(Qt::yellow);
-        rp.moveTo(rect.center()); rp.arcTo(rect, 270., 180.); rp.closeSubpath();
-        d->path_right->setPath(rp);
-        d->path_right->setBrush(Qt::red);
-        d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText()) * (-1) - rect.width(), (fm.height() / 2. - 1) * (-1)));
-        break;
+    // case HybridOutput:
+    // case PassThroughOutput:
+    //     lp.moveTo(rect.center()); lp.arcTo(rect, 90., 180.); lp.closeSubpath();
+    //     d->path_left->setPath(lp);
+    //     d->path_left->setBrush(Qt::yellow);
+    //     rp.moveTo(rect.center()); rp.arcTo(rect, 270., 180.); rp.closeSubpath();
+    //     d->path_right->setPath(rp);
+    //     d->path_right->setBrush(Qt::red);
+    //     d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText()) * (-1) - rect.width(), (fm.height() / 2. - 1) * (-1)));
+    //     break;
 
-    case Generic:
+    // case Generic:
         switch(d->behavior) {
         case AsInput:
             d->ellipse->setRect(rect);
@@ -475,37 +416,37 @@ void dtkComposerNodeProperty::setRect(const QRectF& rect)
         default:
             break;
         };
-        break;
+    //     break;
 
-    default:
-        break;
-    };
+    // default:
+    //     break;
+    // };
 }
 
 void dtkComposerNodeProperty::mirror(void)
 {
-    const QRectF& rect = this->rect();
+    // const QRectF& rect = this->rect();
 
-    QFontMetrics fm(d->text->font());
+    // QFontMetrics fm(d->text->font());
 
-    switch(d->type) {
-    case Output:
-        d->text->setPos(rect.topRight() + QPointF(0, (fm.height()/2-1)*-1));
-        break;
-    case Input:
-        d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText())*-1 - rect.width(), (fm.height()/2-1)*-1));
-        break;
-    case HybridOutput:
-    case PassThroughInput:
-        d->text->setPos(rect.topRight() + QPointF(0, (fm.height()/2-1)*-1));
-        break;
-    case HybridInput:
-    case PassThroughOutput:
-        d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText())*-1 - rect.width(), (fm.height()/2-1)*-1));
-        break;
-    default:
-        break;
-    };
+    // switch(d->type) {
+    // case Output:
+    //     d->text->setPos(rect.topRight() + QPointF(0, (fm.height()/2-1)*-1));
+    //     break;
+    // case Input:
+    //     d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText())*-1 - rect.width(), (fm.height()/2-1)*-1));
+    //     break;
+    // case HybridOutput:
+    // case PassThroughInput:
+    //     d->text->setPos(rect.topRight() + QPointF(0, (fm.height()/2-1)*-1));
+    //     break;
+    // case HybridInput:
+    // case PassThroughOutput:
+    //     d->text->setPos(rect.topLeft() + QPointF(fm.width(d->text->toPlainText())*-1 - rect.width(), (fm.height()/2-1)*-1));
+    //     break;
+    // default:
+    //     break;
+    // };
 }
 
 void dtkComposerNodeProperty::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

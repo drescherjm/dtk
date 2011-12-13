@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Nov  3 13:28:33 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Dec 10 00:23:37 2011 (+0100)
+ * Last-Updated: Tue Dec 13 13:09:53 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 414
+ *     Update #: 415
  */
 
 /* Commentary: 
@@ -632,64 +632,64 @@ dtkComposerEdge *dtkComposerNodeGraphic::edge(dtkComposerNodeProperty *property)
 {
     dtkComposerEdge *edge = NULL;
     
-    if (d->node->kind() != dtkComposerNode::Composite) {
+    // if (d->node->kind() != dtkComposerNode::Composite) {
 
-        if (property->type() == dtkComposerNodeProperty::Generic) {
+    //     if (property->type() == dtkComposerNodeProperty::Generic) {
 
-            if (property->position() == dtkComposerNodeProperty::Left) {
+    //         if (property->position() == dtkComposerNodeProperty::Left) {
 
-                if (property->behavior() == dtkComposerNodeProperty::AsInput)
-                    edge = d->leftEdge(property);
-                else
-                    edge = d->leftRelayEdge(property);
+    //             if (property->behavior() == dtkComposerNodeProperty::AsInput)
+    //                 edge = d->leftEdge(property);
+    //             else
+    //                 edge = d->leftRelayEdge(property);
 
-            } else if (property->position() == dtkComposerNodeProperty::Right) {
+    //         } else if (property->position() == dtkComposerNodeProperty::Right) {
 
-                if (property->behavior() == dtkComposerNodeProperty::AsOutput)
-                    edge = d->rightEdge(property);
-                else
-                    edge = d->rightRelayEdge(property);
-            }
+    //             if (property->behavior() == dtkComposerNodeProperty::AsOutput)
+    //                 edge = d->rightEdge(property);
+    //             else
+    //                 edge = d->rightRelayEdge(property);
+    //         }
 
-        } else if (property->type() == dtkComposerNodeProperty::Input && property->behavior() == dtkComposerNodeProperty::AsLoopOutput) {
-             edge = d->rightRelayEdge(property);
+    //     } else if (property->type() == dtkComposerNodeProperty::Input && property->behavior() == dtkComposerNodeProperty::AsLoopOutput) {
+    //          edge = d->rightRelayEdge(property);
 
-         } else if (property->type() == dtkComposerNodeProperty::Input) {
-             edge = d->leftEdge(property);
+    //      } else if (property->type() == dtkComposerNodeProperty::Input) {
+    //          edge = d->leftEdge(property);
 
-         } else if (property->type() == dtkComposerNodeProperty::HybridInput || property->type() == dtkComposerNodeProperty::PassThroughInput) {
-             if (property->behavior() == dtkComposerNodeProperty::AsInput)
-                 edge = d->leftEdge(property);
-             else if (property->behavior() == dtkComposerNodeProperty::AsRelay)
-                 edge = d->leftRelayEdge(property);
+    //      } else if (property->type() == dtkComposerNodeProperty::HybridInput || property->type() == dtkComposerNodeProperty::PassThroughInput) {
+    //          if (property->behavior() == dtkComposerNodeProperty::AsInput)
+    //              edge = d->leftEdge(property);
+    //          else if (property->behavior() == dtkComposerNodeProperty::AsRelay)
+    //              edge = d->leftRelayEdge(property);
         
-        } else if (property->type() == dtkComposerNodeProperty::Output) {
-                 edge = d->rightEdge(property);
+    //     } else if (property->type() == dtkComposerNodeProperty::Output) {
+    //              edge = d->rightEdge(property);
 
-         } else if (property->type() == dtkComposerNodeProperty::HybridOutput || property->type() == dtkComposerNodeProperty::PassThroughOutput) {
-             if (property->behavior() == dtkComposerNodeProperty::AsRelay)
-                 edge = d->rightRelayEdge(property);
-             else if (property->behavior() == dtkComposerNodeProperty::AsOutput)
-                 edge = d->rightEdge(property);
+    //      } else if (property->type() == dtkComposerNodeProperty::HybridOutput || property->type() == dtkComposerNodeProperty::PassThroughOutput) {
+    //          if (property->behavior() == dtkComposerNodeProperty::AsRelay)
+    //              edge = d->rightRelayEdge(property);
+    //          else if (property->behavior() == dtkComposerNodeProperty::AsOutput)
+    //              edge = d->rightEdge(property);
 
-         }
-    } else {
+    //      }
+    // } else {
 
-        if (property->type() == dtkComposerNodeProperty::Input) {
-            if (d->node->isGhost())            
-                edge = d->leftRelayEdge(property);
-            else
-                edge = d->leftEdge(property);
-        }
+    //     if (property->type() == dtkComposerNodeProperty::Input) {
+    //         if (d->node->isGhost())            
+    //             edge = d->leftRelayEdge(property);
+    //         else
+    //             edge = d->leftEdge(property);
+    //     }
         
-        if (property->type() == dtkComposerNodeProperty::Output) {
-            if (d->node->isGhost())
-                edge = d->rightRelayEdge(property);
-            else 
-                edge = d->rightEdge(property);
-        }
+    //     if (property->type() == dtkComposerNodeProperty::Output) {
+    //         if (d->node->isGhost())
+    //             edge = d->rightRelayEdge(property);
+    //         else 
+    //             edge = d->rightEdge(property);
+    //     }
         
-    }
+    // }
     
     return edge;
 }

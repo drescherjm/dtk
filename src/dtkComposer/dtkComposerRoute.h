@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Dec  7 14:13:33 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Dec 10 17:28:58 2011 (+0100)
+ * Last-Updated: Tue Dec 13 12:30:51 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 19
+ *     Update #: 20
  */
 
 /* Commentary: 
@@ -29,10 +29,10 @@ public:
      dtkComposerRoute(void);
     ~dtkComposerRoute(void);
 
-// public:
-//     bool   active(void);
-//     void   activate(void);
-//     void inactivate(void);
+public:
+    bool   active(void);
+    void   activate(void);
+    void inactivate(void);
 
 public:
     dtkComposerNodeProperty *source(void);

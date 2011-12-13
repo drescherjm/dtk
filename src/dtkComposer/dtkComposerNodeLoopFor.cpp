@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Dec  7 16:05:34 2011 (+0100)
+ * Last-Updated: Tue Dec 13 13:53:14 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 306
+ *     Update #: 309
  */
 
 /* Commentary: 
@@ -135,8 +135,8 @@ void dtkComposerNodeLoopFor::layout(void)
                                      2 * node_radius,
                                      2 * node_radius ));
 
-            if (property->type() == dtkComposerNodeProperty::Output)
-                property->mirror();
+            // if (property->type() == dtkComposerNodeProperty::Output)
+            //     property->mirror();
 
             if (property->name() == "variable")
                 j++;
@@ -151,8 +151,8 @@ void dtkComposerNodeLoopFor::layout(void)
                                      2 * node_radius,
                                      2 * node_radius ));
 
-            if (property->type() == dtkComposerNodeProperty::Input)
-                property->mirror();    
+            // if (property->type() == dtkComposerNodeProperty::Input)
+            //     property->mirror();    
 
             if (property->name() == "variable" || property->name() == "condition") 
                 j++;
@@ -193,21 +193,21 @@ QVariant dtkComposerNodeLoopFor::value(dtkComposerNodeProperty *property)
  */ 
 void dtkComposerNodeLoopFor::pull(dtkComposerRoute *i_route, dtkComposerNodeProperty *property)
 {
-    if (this->inputProperty() && property == this->inputProperty()) {
+    // if (this->inputProperty() && property == this->inputProperty()) {
         
-        foreach(dtkComposerRoute *relay_route, this->inputRelayRoutes()) {
-            if (relay_route->source()->name() == this->inputProperty()->name()) {
+    //     foreach(dtkComposerRoute *relay_route, this->inputRelayRoutes()) {
+    //         if (relay_route->source()->name() == this->inputProperty()->name()) {
 
-                dtkComposerRoute *route = new dtkComposerRoute;
-                route->setSource(this->inputProperty());
-                route->setDestination(relay_route->destination());
+    //             dtkComposerRoute *route = new dtkComposerRoute;
+    //             route->setSource(this->inputProperty());
+    //             route->setDestination(relay_route->destination());
                 
-                relay_route->destination()->node()->l->appendLeftRoute(route);
-                this->addInputActiveRoute(route);
-            }
-        }
+    //             relay_route->destination()->node()->l->appendLeftRoute(route);
+    //             this->addInputActiveRoute(route);
+    //         }
+    //     }
 
-    }
+    // }
 
     dtkComposerNodeLoop::pull(i_route, property);
 }

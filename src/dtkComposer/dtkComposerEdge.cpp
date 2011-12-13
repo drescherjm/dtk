@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 14:30:13 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Dec  9 22:57:52 2011 (+0100)
+ * Last-Updated: Tue Dec 13 13:01:15 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 490
+ *     Update #: 491
  */
 
 /* Commentary: 
@@ -223,88 +223,88 @@ bool dtkComposerEdge::link(bool anyway)
         return false;
     }
 
-    if (d->source->node()->isGhost() && d->source->type() == dtkComposerNodeProperty::Output) {
-        qDebug() << "Source property cannot be the output property of a ghost";
-        return false;
-    }
+    // if (d->source->node()->isGhost() && d->source->type() == dtkComposerNodeProperty::Output) {
+    //     qDebug() << "Source property cannot be the output property of a ghost";
+    //     return false;
+    // }
 
-    if (d->source->node()->isGhost() && d->destination->type() == dtkComposerNodeProperty::Output) {
-        qDebug() << "Destination property cannot be the output property of a non ghost node if source property node is a ghost.";
-        return false;
-    }
+    // if (d->source->node()->isGhost() && d->destination->type() == dtkComposerNodeProperty::Output) {
+    //     qDebug() << "Destination property cannot be the output property of a non ghost node if source property node is a ghost.";
+    //     return false;
+    // }
 
-    if (d->destination->node()->isGhost() && d->destination->type() == dtkComposerNodeProperty::Input) {
-        qDebug() << "Destination property cannot be the input property of a ghost";
-        return false;
-    }
+    // if (d->destination->node()->isGhost() && d->destination->type() == dtkComposerNodeProperty::Input) {
+    //     qDebug() << "Destination property cannot be the input property of a ghost";
+    //     return false;
+    // }
 
-    if (!d->source->node()->isGhost() && !d->destination->node()->isGhost() && d->source->type() == d->destination->type() && (d->source->type() == dtkComposerNodeProperty::Input || d->source->type() == dtkComposerNodeProperty::Output)) {
-        qDebug() << "Cannot connect properties of non ghost nodes if they are of the same type";
-        return false;
-    }
+    // if (!d->source->node()->isGhost() && !d->destination->node()->isGhost() && d->source->type() == d->destination->type() && (d->source->type() == dtkComposerNodeProperty::Input || d->source->type() == dtkComposerNodeProperty::Output)) {
+    //     qDebug() << "Cannot connect properties of non ghost nodes if they are of the same type";
+    //     return false;
+    // }
 
-    if (d->destination->node()->kind() == dtkComposerNode::Control && d->destination->node() == d->source->node()->parentNode() && (d->destination->type() == dtkComposerNodeProperty::HybridInput || d->destination->type() == dtkComposerNodeProperty::PassThroughInput)) {
-        qDebug() << "Hybrid input property of a block cannot be the destination property of a node contained by this block";
-        return false;
-    }
+    // if (d->destination->node()->kind() == dtkComposerNode::Control && d->destination->node() == d->source->node()->parentNode() && (d->destination->type() == dtkComposerNodeProperty::HybridInput || d->destination->type() == dtkComposerNodeProperty::PassThroughInput)) {
+    //     qDebug() << "Hybrid input property of a block cannot be the destination property of a node contained by this block";
+    //     return false;
+    // }
 
-    if ((d->source->type() == dtkComposerNodeProperty::HybridInput || d->source->type() == dtkComposerNodeProperty::PassThroughInput) && d->destination->type() == dtkComposerNodeProperty::Output) {
-        qDebug() << "Cannot connect Hybrid input property to an Output property";
-        return false;
-    }
+    // if ((d->source->type() == dtkComposerNodeProperty::HybridInput || d->source->type() == dtkComposerNodeProperty::PassThroughInput) && d->destination->type() == dtkComposerNodeProperty::Output) {
+    //     qDebug() << "Cannot connect Hybrid input property to an Output property";
+    //     return false;
+    // }
 
-    if ((d->source->type() == dtkComposerNodeProperty::HybridInput || d->source->type() == dtkComposerNodeProperty::PassThroughInput) && d->source->node() != d->destination->node()->parentNode()) {
-        qDebug() << "Cannot connect Hybrid input property of a control node to a node that is not inside this control node";
-        return false;
-    }
+    // if ((d->source->type() == dtkComposerNodeProperty::HybridInput || d->source->type() == dtkComposerNodeProperty::PassThroughInput) && d->source->node() != d->destination->node()->parentNode()) {
+    //     qDebug() << "Cannot connect Hybrid input property of a control node to a node that is not inside this control node";
+    //     return false;
+    // }
 
-    if (d->source->node() == d->destination->node()->parentNode() && (d->source->type() == dtkComposerNodeProperty::HybridOutput || d->source->type() == dtkComposerNodeProperty::PassThroughOutput)) {
-        qDebug() << "Hybrid output property of a block cannot be the source of an edge whose destination is a node contained by this block";
-        return false;
-    }
+    // if (d->source->node() == d->destination->node()->parentNode() && (d->source->type() == dtkComposerNodeProperty::HybridOutput || d->source->type() == dtkComposerNodeProperty::PassThroughOutput)) {
+    //     qDebug() << "Hybrid output property of a block cannot be the source of an edge whose destination is a node contained by this block";
+    //     return false;
+    // }
 
-    if (d->destination->type() == dtkComposerNodeProperty::Input && d->destination->multiplicity() == dtkComposerNodeProperty::Single) {
-        if (d->destination->edge()) {
-            qDebug() << "This input property only accepts one edge.";
-            return false;
-        }
-    }            
+    // if (d->destination->type() == dtkComposerNodeProperty::Input && d->destination->multiplicity() == dtkComposerNodeProperty::Single) {
+    //     if (d->destination->edge()) {
+    //         qDebug() << "This input property only accepts one edge.";
+    //         return false;
+    //     }
+    // }            
 
-    if (d->source->type() == dtkComposerNodeProperty::Output || d->source->type() == dtkComposerNodeProperty::HybridOutput || d->source->type() == dtkComposerNodeProperty::PassThroughOutput) {
-        foreach (dtkComposerEdge *edge, d->source->node()->g->rightEdges()) {
-            if (edge->source() == d->source && edge->destination() == d->destination) {
-                qDebug() << "Edge already exist.";
-                return false;
-            }
-        }
-    }
+    // if (d->source->type() == dtkComposerNodeProperty::Output || d->source->type() == dtkComposerNodeProperty::HybridOutput || d->source->type() == dtkComposerNodeProperty::PassThroughOutput) {
+    //     foreach (dtkComposerEdge *edge, d->source->node()->g->rightEdges()) {
+    //         if (edge->source() == d->source && edge->destination() == d->destination) {
+    //             qDebug() << "Edge already exist.";
+    //             return false;
+    //         }
+    //     }
+    // }
 
-    if (d->destination->type() == dtkComposerNodeProperty::Input || d->destination->type() == dtkComposerNodeProperty::HybridInput || d->destination->type() == dtkComposerNodeProperty::PassThroughInput) {        
-        foreach (dtkComposerEdge *edge, d->destination->node()->g->leftEdges()) {
-            if (edge->source() == d->source && edge->destination() == d->destination) {
-                qDebug() << "Edge already exist.";
-                return false;
-            }
-        }
-    }
+    // if (d->destination->type() == dtkComposerNodeProperty::Input || d->destination->type() == dtkComposerNodeProperty::HybridInput || d->destination->type() == dtkComposerNodeProperty::PassThroughInput) {        
+    //     foreach (dtkComposerEdge *edge, d->destination->node()->g->leftEdges()) {
+    //         if (edge->source() == d->source && edge->destination() == d->destination) {
+    //             qDebug() << "Edge already exist.";
+    //             return false;
+    //         }
+    //     }
+    // }
 
-    if (d->destination->type() == dtkComposerNodeProperty::HybridOutput || d->destination->type() == dtkComposerNodeProperty::PassThroughOutput) {
-        foreach (dtkComposerEdge *edge, d->destination->node()->g->rightRelayEdges()) {
-            if (edge->source() == d->source && edge->destination() == d->destination) {
-                qDebug() << "Edge already exist.";
-                return false;
-            }
-        }
-    }
+    // if (d->destination->type() == dtkComposerNodeProperty::HybridOutput || d->destination->type() == dtkComposerNodeProperty::PassThroughOutput) {
+    //     foreach (dtkComposerEdge *edge, d->destination->node()->g->rightRelayEdges()) {
+    //         if (edge->source() == d->source && edge->destination() == d->destination) {
+    //             qDebug() << "Edge already exist.";
+    //             return false;
+    //         }
+    //     }
+    // }
 
-    if (d->source->type() == dtkComposerNodeProperty::HybridInput || d->source->type() == dtkComposerNodeProperty::PassThroughInput) {
-        foreach (dtkComposerEdge *edge, d->source->node()->g->leftRelayEdges()) {
-            if (edge->source() == d->source && edge->destination() == d->destination) {
-                qDebug() << "Edge already exist.";
-                return false;
-            }
-        }
-    }
+    // if (d->source->type() == dtkComposerNodeProperty::HybridInput || d->source->type() == dtkComposerNodeProperty::PassThroughInput) {
+    //     foreach (dtkComposerEdge *edge, d->source->node()->g->leftRelayEdges()) {
+    //         if (edge->source() == d->source && edge->destination() == d->destination) {
+    //             qDebug() << "Edge already exist.";
+    //             return false;
+    //         }
+    //     }
+    // }
 
     if (d->source->node()->kind() == dtkComposerNode::Composite && d->destination->node()->parentNode() == d->source->node())
         d->source->node()->g->appendLeftRelayEdge(this, d->source);

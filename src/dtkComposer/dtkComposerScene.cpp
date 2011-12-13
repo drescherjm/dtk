@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:06:06 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec 12 13:34:03 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 3156
+ * Last-Updated: Tue Dec 13 13:55:48 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 3157
  */
 
 /* Commentary: 
@@ -1416,7 +1416,7 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
      if (property && property->node() == dynamic_cast<dtkComposerNode *>(this->mouseGrabberItem())) {
 
-         if (property->type() == dtkComposerNodeProperty::Generic) {
+//         if (property->type() == dtkComposerNodeProperty::Generic) {
              
              if (property->behavior() == dtkComposerNodeProperty::AsInput) {
 
@@ -1472,96 +1472,96 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
              }
 
-        } else if (!property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Output) {
+        // } else if (!property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Output) {
 
-            if (d->current_edge) {
-                d->current_edge->hide();
-                delete d->current_edge;
-                d->current_edge = NULL;
-            }
-            d->current_edge = new dtkComposerEdge;
-            this->addItem(d->current_edge);
-            d->current_edge->setSource(property);
-            d->current_edge->show();
+        //     if (d->current_edge) {
+        //         d->current_edge->hide();
+        //         delete d->current_edge;
+        //         d->current_edge = NULL;
+        //     }
+        //     d->current_edge = new dtkComposerEdge;
+        //     this->addItem(d->current_edge);
+        //     d->current_edge->setSource(property);
+        //     d->current_edge->show();
 
-        } else if (!property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Input) {
+        // } else if (!property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Input) {
 
-            d->current_edge = property->edge();
-            if (d->current_edge) {
-                d->current_edge->unlink();
-                d->edges.removeAll(d->edge(d->current_edge));
-            }
+        //     d->current_edge = property->edge();
+        //     if (d->current_edge) {
+        //         d->current_edge->unlink();
+        //         d->edges.removeAll(d->edge(d->current_edge));
+        //     }
 
-        } else if (!property->node()->isGhost() && (property->type() == dtkComposerNodeProperty::HybridOutput || property->type() == dtkComposerNodeProperty::PassThroughOutput)) {
+        // } else if (!property->node()->isGhost() && (property->type() == dtkComposerNodeProperty::HybridOutput || property->type() == dtkComposerNodeProperty::PassThroughOutput)) {
         
-            if (property->contains(mouseEvent->pos())) {
+        //     if (property->contains(mouseEvent->pos())) {
         
-                property->setBehavior(dtkComposerNodeProperty::AsOutput);
-                if (d->current_edge) {
-                    d->current_edge->hide();
-                    delete d->current_edge;
-                    d->current_edge = NULL;
-                }
-                d->current_edge = new dtkComposerEdge;
-                this->addItem(d->current_edge);
-                d->current_edge->setSource(property);
-                d->current_edge->show();
+        //         property->setBehavior(dtkComposerNodeProperty::AsOutput);
+        //         if (d->current_edge) {
+        //             d->current_edge->hide();
+        //             delete d->current_edge;
+        //             d->current_edge = NULL;
+        //         }
+        //         d->current_edge = new dtkComposerEdge;
+        //         this->addItem(d->current_edge);
+        //         d->current_edge->setSource(property);
+        //         d->current_edge->show();
 
-            } else {
+        //     } else {
             
-                property->setBehavior(dtkComposerNodeProperty::AsRelay);
-                d->current_edge = property->edge();
-                if (d->current_edge) {
-                    d->current_edge->unlink();
-                    d->edges.removeAll(d->edge(d->current_edge));
-                }
-            }
+        //         property->setBehavior(dtkComposerNodeProperty::AsRelay);
+        //         d->current_edge = property->edge();
+        //         if (d->current_edge) {
+        //             d->current_edge->unlink();
+        //             d->edges.removeAll(d->edge(d->current_edge));
+        //         }
+        //     }
 
-        } else if (!property->node()->isGhost() && (property->type() == dtkComposerNodeProperty::HybridInput || property->type() == dtkComposerNodeProperty::PassThroughInput)) {
+        // } else if (!property->node()->isGhost() && (property->type() == dtkComposerNodeProperty::HybridInput || property->type() == dtkComposerNodeProperty::PassThroughInput)) {
         
-            if (property->contains(mouseEvent->pos())) {
+        //     if (property->contains(mouseEvent->pos())) {
 
-                property->setBehavior(dtkComposerNodeProperty::AsRelay);
-                if (d->current_edge) {
-                    d->current_edge->hide();
-                    delete d->current_edge;
-                    d->current_edge = NULL;
-                }
-                d->current_edge = new dtkComposerEdge;
-                this->addItem(d->current_edge);
-                d->current_edge->setSource(property);
-                d->current_edge->show();
+        //         property->setBehavior(dtkComposerNodeProperty::AsRelay);
+        //         if (d->current_edge) {
+        //             d->current_edge->hide();
+        //             delete d->current_edge;
+        //             d->current_edge = NULL;
+        //         }
+        //         d->current_edge = new dtkComposerEdge;
+        //         this->addItem(d->current_edge);
+        //         d->current_edge->setSource(property);
+        //         d->current_edge->show();
 
-            } else {
+        //     } else {
 
-                property->setBehavior(dtkComposerNodeProperty::AsInput);
-                d->current_edge = property->edge();
-                if (d->current_edge) {
-                    d->current_edge->unlink();
-                    d->edges.removeAll(d->edge(d->current_edge));
-                }
-            }
+        //         property->setBehavior(dtkComposerNodeProperty::AsInput);
+        //         d->current_edge = property->edge();
+        //         if (d->current_edge) {
+        //             d->current_edge->unlink();
+        //             d->edges.removeAll(d->edge(d->current_edge));
+        //         }
+        //     }
 
-        } else if (property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Input) {
+        // } else if (property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Input) {
 
-            if (d->current_edge) {
-                d->current_edge->hide();
-                delete d->current_edge;
-                d->current_edge = NULL;
-            }
-            d->current_edge = new dtkComposerEdge;
-            this->addItem(d->current_edge);
-            d->current_edge->setSource(property);
-            d->current_edge->show();
+        //     if (d->current_edge) {
+        //         d->current_edge->hide();
+        //         delete d->current_edge;
+        //         d->current_edge = NULL;
+        //     }
+        //     d->current_edge = new dtkComposerEdge;
+        //     this->addItem(d->current_edge);
+        //     d->current_edge->setSource(property);
+        //     d->current_edge->show();
 
-        } else if (property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Output) {
+        // } else if (property->node()->isGhost() && property->type() == dtkComposerNodeProperty::Output) {
 
-            d->current_edge = property->edge();
-            if (d->current_edge) {
-                d->current_edge->unlink();
-                d->edges.removeAll(d->edge(d->current_edge));
-            }
-        }
+        //     d->current_edge = property->edge();
+        //     if (d->current_edge) {
+        //         d->current_edge->unlink();
+        //         d->edges.removeAll(d->edge(d->current_edge));
+        //     }
+        // }
 
         mouseEvent->accept();
         return;

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May  4 08:51:21 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov  9 16:14:56 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 68
+ * Last-Updated: Tue Dec 13 13:25:30 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 69
  */
 
 /* Commentary: 
@@ -113,8 +113,8 @@ void dtkComposerNodeLoopWhile::layout(void)
                                      2 * node_radius,
                                      2 * node_radius ));
             
-            if (property->type() == dtkComposerNodeProperty::Output)
-                property->mirror();
+            // if (property->type() == dtkComposerNodeProperty::Output)
+            //     property->mirror();
             
             j++;
 

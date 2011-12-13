@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug 16 15:02:49 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Dec 10 17:51:21 2011 (+0100)
+ * Last-Updated: Tue Dec 13 13:57:18 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 478
+ *     Update #: 484
  */
 
 /* Commentary: 
@@ -474,8 +474,8 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
                 
                 QDomElement property_element = document.createElement("property");
                 property_element.setAttribute("name", property->name());
-                switch (property->type()) {
-                case dtkComposerNodeProperty::Generic:
+             // switch (property->type()) {
+             // case dtkComposerNodeProperty::Generic:
                     property_element.setAttribute("type", "generic");
                     property_element.setAttribute("position", "left");
                     switch (property->behavior()) {
@@ -504,23 +504,23 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
                         break;
                     }
                     break;
-                case dtkComposerNodeProperty::Input:
-                    property_element.setAttribute("type", "input");
-                    break;
-                case dtkComposerNodeProperty::HybridInput:
-                    property_element.setAttribute("type", "hybridinput");
-                    break;
-                case dtkComposerNodeProperty::HybridOutput:
-                    break;
-                case dtkComposerNodeProperty::PassThroughInput:
-                    property_element.setAttribute("type", "passthroughinput");
-                    break;
-                case dtkComposerNodeProperty::PassThroughOutput:
-                        break;
-                case dtkComposerNodeProperty::Output:
-                    property_element.setAttribute("type", "passthroughinput");
-                    break;
-                }
+                // case dtkComposerNodeProperty::Input:
+                //     property_element.setAttribute("type", "input");
+                //     break;
+                // case dtkComposerNodeProperty::HybridInput:
+                //     property_element.setAttribute("type", "hybridinput");
+                //     break;
+                // case dtkComposerNodeProperty::HybridOutput:
+                //     break;
+                // case dtkComposerNodeProperty::PassThroughInput:
+                //     property_element.setAttribute("type", "passthroughinput");
+                //     break;
+                // case dtkComposerNodeProperty::PassThroughOutput:
+                //         break;
+                // case dtkComposerNodeProperty::Output:
+                //     property_element.setAttribute("type", "passthroughinput");
+                //     break;
+                // }
                 property_element.setAttribute("hidden", property->isDisplayed() ? "false" : "true");
                 if(node->kind() == dtkComposerNode::Control && !property->blockedFrom().isEmpty())
                     property_element.setAttribute("block", property->blockedFrom());
@@ -531,8 +531,8 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
                 
                 QDomElement property_element = document.createElement("property");
                 property_element.setAttribute("name", property->name());
-                switch (property->type()) {
-                case dtkComposerNodeProperty::Generic:
+                // switch (property->type()) {
+                // case dtkComposerNodeProperty::Generic:
                     property_element.setAttribute("type", "generic");
                     property_element.setAttribute("position", "right");
                     switch (property->behavior()) {
@@ -560,23 +560,23 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerNode *node, QDomElement& ele
                         property_element.setAttribute("multiplicity", "multiple");
                         break;
                     }
-                    break;
-                case dtkComposerNodeProperty::Input:
-                    break;
-                case dtkComposerNodeProperty::Output:
-                    property_element.setAttribute("type", "output");
-                    break;
-                case dtkComposerNodeProperty::HybridInput:
-                    break;
-                case dtkComposerNodeProperty::HybridOutput:
-                    property_element.setAttribute("type", "hybridoutput");
-                    break;
-                case dtkComposerNodeProperty::PassThroughInput:
-                    break;
-                case dtkComposerNodeProperty::PassThroughOutput:
-                    property_element.setAttribute("type", "passthroughoutput");
-                    break;
-                }
+                //     break;
+                // case dtkComposerNodeProperty::Input:
+                //     break;
+                // case dtkComposerNodeProperty::Output:
+                //     property_element.setAttribute("type", "output");
+                //     break;
+                // case dtkComposerNodeProperty::HybridInput:
+                //     break;
+                // case dtkComposerNodeProperty::HybridOutput:
+                //     property_element.setAttribute("type", "hybridoutput");
+                //     break;
+                // case dtkComposerNodeProperty::PassThroughInput:
+                //     break;
+                // case dtkComposerNodeProperty::PassThroughOutput:
+                //     property_element.setAttribute("type", "passthroughoutput");
+                //     break;
+                // }
                 property_element.setAttribute("hidden", property->isDisplayed() ? "false" : "true");
                 if(node->kind() == dtkComposerNode::Control && !property->blockedFrom().isEmpty())
                     property_element.setAttribute("block", property->blockedFrom());

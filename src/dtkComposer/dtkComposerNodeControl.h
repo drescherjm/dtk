@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:47:08 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Dec  7 15:19:48 2011 (+0100)
+ * Last-Updated: Tue Dec 13 13:25:12 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 178
+ *     Update #: 188
  */
 
 /* Commentary: 
@@ -63,26 +63,26 @@ public:
     dtkComposerNodeProperty *rightProperty(const QString& block_title, const QString& name) const;
 
 public:
-    void  addInputRelayRoute(dtkComposerRoute *route);
-    void addOutputRelayRoute(dtkComposerRoute *route);
+    void  addLeftRelayRoute(dtkComposerRoute *route);
+    void addRightRelayRoute(dtkComposerRoute *route);
 
-    void  removeInputRelayRoute(dtkComposerRoute *route);
-    void removeOutputRelayRoute(dtkComposerRoute *route);
+    void  removeLeftRelayRoute(dtkComposerRoute *route);
+    void removeRightRelayRoute(dtkComposerRoute *route);
     void   removeAllRelayRoutes(void);
 
-    void  addInputActiveRoute(dtkComposerRoute *route);
-    void addOutputActiveRoute(dtkComposerRoute *route);
+    void  addLeftActiveRoute(dtkComposerRoute *route);
+    void addRightActiveRoute(dtkComposerRoute *route);
 
-    void  removeInputActiveRoute(dtkComposerRoute *route);
-    void removeOutputActiveRoute(dtkComposerRoute *route);
+    void  removeLeftActiveRoute(dtkComposerRoute *route);
+    void removeRightActiveRoute(dtkComposerRoute *route);
     void   removeAllActiveRoutes(void);
 
 public:
-    QList<dtkComposerRoute *>  inputRelayRoutes(void);
-    QList<dtkComposerRoute *> outputRelayRoutes(void);
+    QList<dtkComposerRoute *>  leftRelayRoutes(void);
+    QList<dtkComposerRoute *> rightRelayRoutes(void);
 
-    QList<dtkComposerRoute *>  inputActiveRoutes(void);
-    QList<dtkComposerRoute *> outputActiveRoutes(void);
+    QList<dtkComposerRoute *>  leftActiveRoutes(void);
+    QList<dtkComposerRoute *> rightActiveRoutes(void);
 
     QList<dtkComposerRoute *> allRoutes(void);
     void removeRoute(dtkComposerRoute *route);
@@ -101,19 +101,18 @@ protected:
     void setRunning(bool running);
 
 protected:
-    bool    dirtyInputValue(void);
+    bool    dirtyLeftValue(void);
     bool dirtyUpstreamNodes(void);
 
     void markDirtyDownstreamNodes(void);
 
-    void cleanInputActiveRoutes(void);
-    void cleanOutputActiveRoutes(void);
+    void  cleanLeftActiveRoutes(void);
+    void cleanRightActiveRoutes(void);
 
 protected:
     virtual void pull(dtkComposerRoute *i_route, dtkComposerNodeProperty *property);
+    virtual void run(void);
     virtual void push(dtkComposerRoute *o_route, dtkComposerNodeProperty *property);
-
-    void run(void);
 
 public:
     void layout(void);

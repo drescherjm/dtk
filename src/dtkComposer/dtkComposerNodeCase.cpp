@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Dec  7 15:52:22 2011 (+0100)
+ * Last-Updated: Tue Dec 13 13:07:28 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 749
+ *     Update #: 753
  */
 
 /* Commentary: 
@@ -280,7 +280,7 @@ void dtkComposerNodeCase::pull(dtkComposerRoute *i_route, dtkComposerNodePropert
 {
     if (property == this->inputProperty()) {
         
-        foreach(dtkComposerRoute *relay_route, this->inputRelayRoutes()) {
+        foreach(dtkComposerRoute *relay_route, this->leftRelayRoutes()) {
             if (relay_route->source()->name() == this->inputProperty()->name()) {
 
                 dtkComposerRoute *route = new dtkComposerRoute;
@@ -288,7 +288,7 @@ void dtkComposerNodeCase::pull(dtkComposerRoute *i_route, dtkComposerNodePropert
                 route->setDestination(relay_route->destination());
                 
                 relay_route->destination()->node()->l->appendLeftRoute(route);
-                this->addInputActiveRoute(route);                
+                this->addLeftActiveRoute(route);                
             }
         }
 
@@ -305,44 +305,44 @@ void dtkComposerNodeCase::pull(dtkComposerRoute *i_route, dtkComposerNodePropert
  */
 void dtkComposerNodeCase::push(dtkComposerRoute *o_route, dtkComposerNodeProperty *property)
 {
-    if (property->name() == this->inputProperty()->name()) {  
+    // if (property->name() == this->inputProperty()->name()) {  
 
-        dtkComposerNodeProperty *source = NULL;
-        foreach(dtkComposerRoute *i_route, this->l->leftRoutes())
-            if (i_route->destination() == this->inputProperty())
-                source = i_route->source();
+    //     dtkComposerNodeProperty *source = NULL;
+    //     foreach(dtkComposerRoute *i_route, this->l->leftRoutes())
+    //         if (i_route->destination() == this->inputProperty())
+    //             source = i_route->source();
 
-        dtkComposerRoute *route = new dtkComposerRoute;
-        route->setSource(source);
-        route->setDestination(o_route->destination());
-        this->addOutputActiveRoute(route);
+    //     dtkComposerRoute *route = new dtkComposerRoute;
+    //     route->setSource(source);
+    //     route->setDestination(o_route->destination());
+    //     this->addLeftActiveRoute(route);
 
-        if (o_route->destination()->type() == dtkComposerNodeProperty::Generic) {
+    //     if (o_route->destination()->type() == dtkComposerNodeProperty::Generic) {
                
-            if (o_route->destination()->position() == dtkComposerNodeProperty::Right) {
-                dtkComposerNodeControl *output_control_node = dynamic_cast<dtkComposerNodeControl *>(o_route->destination()->node());
-                output_control_node->addOutputRelayRoute(route);
+    //         if (o_route->destination()->position() == dtkComposerNodeProperty::Right) {
+    //             dtkComposerNodeControl *output_control_node = dynamic_cast<dtkComposerNodeControl *>(o_route->destination()->node());
+    //             output_control_node->addOutputRelayRoute(route);
                 
-            } else {
-                o_route->destination()->node()->l->appendLeftRoute(route);                            
-            }
+    //         } else {
+    //             o_route->destination()->node()->l->appendLeftRoute(route);                            
+    //         }
             
-        } else if (o_route->destination()->type() == dtkComposerNodeProperty::HybridOutput || 
-            o_route->destination()->type() == dtkComposerNodeProperty::PassThroughOutput || 
-            (o_route->destination()->type() == dtkComposerNodeProperty::Input && o_route->destination()->node()->kind() == dtkComposerNode::Control && source->node()->isChildOfControlNode(o_route->destination()->node()))) {
+    //     } else if (o_route->destination()->type() == dtkComposerNodeProperty::HybridOutput || 
+    //         o_route->destination()->type() == dtkComposerNodeProperty::PassThroughOutput || 
+    //         (o_route->destination()->type() == dtkComposerNodeProperty::Input && o_route->destination()->node()->kind() == dtkComposerNode::Control && source->node()->isChildOfControlNode(o_route->destination()->node()))) {
 
-            dtkComposerNodeControl *output_control_node = dynamic_cast<dtkComposerNodeControl *>(o_route->destination()->node());
-            output_control_node->addOutputRelayRoute(route);
+    //         dtkComposerNodeControl *output_control_node = dynamic_cast<dtkComposerNodeControl *>(o_route->destination()->node());
+    //         output_control_node->addOutputRelayRoute(route);
             
-        } else {
+    //     } else {
 
-            o_route->destination()->node()->l->appendLeftRoute(route);
+    //         o_route->destination()->node()->l->appendLeftRoute(route);
 
-        }
+    //     }
 
-    } else {
+    // } else {
 
-        dtkComposerNodeControl::push(o_route, property);
+    //     dtkComposerNodeControl::push(o_route, property);
 
-    }
+    // }
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Sep  7 15:23:07 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Dec  6 15:34:45 2011 (+0100)
+ * Last-Updated: Tue Dec 13 13:00:15 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 148
+ *     Update #: 153
  */
 
 /* Commentary: 
@@ -39,15 +39,15 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeProperty : public QObject, public QGraph
 #endif
 
 public:
-    enum Type {
-        Generic,
-        Input,
-        Output,
-        HybridInput,
-        HybridOutput,
-        PassThroughInput,
-        PassThroughOutput
-    };
+    // enum Type {
+    //     Generic,
+    //     Input,
+    //     Output,
+    //     HybridInput,
+    //     HybridOutput,
+    //     PassThroughInput,
+    //     PassThroughOutput
+    // };
 
     enum Position {
         Top,
@@ -67,12 +67,11 @@ public:
         AsInput,
         AsOutput,
         AsRelay,
-        AsLoop,
-        AsLoopInput,
-        AsLoopOutput
+        AsLoop
+        // AsLoopInput,
+        // AsLoopOutput
     };
 
-     dtkComposerNodeProperty(QString name, Type type, Multiplicity multiplicity, dtkComposerNode *parent);
      dtkComposerNodeProperty(QString name, Position position, Behavior behavior, Multiplicity multiplicity, dtkComposerNode *parent);
     ~dtkComposerNodeProperty(void);
 
@@ -83,7 +82,7 @@ public:
 
     QString name(void) const;
 
-            Type type(void);
+//            Type type(void);
         Position position(void);
     Multiplicity multiplicity(void);
         Behavior behavior(void);
@@ -108,7 +107,6 @@ public:
 
     void setName(const QString& name);
 
-    void     setType(Type type);
     void setPosition(Position position);
     void setBehavior(Behavior behavior);
 

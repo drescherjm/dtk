@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 13:03:58 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Dec  7 15:53:01 2011 (+0100)
+ * Last-Updated: Tue Dec 13 14:30:51 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 127
+ *     Update #: 128
  */
 
 /* Commentary: 
@@ -129,8 +129,6 @@ bool dtkComposerNodeConditional::evaluate(dtkComposerEvaluatorPrivate *evaluator
 {
     return evaluator->evaluate(this);
 }
-
-
 
 bool dtkComposerNodeConditional::onLeftRouteConnected(dtkComposerRoute *route, dtkComposerNodeProperty *destination)
 {

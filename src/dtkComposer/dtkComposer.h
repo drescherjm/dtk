@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Sep  4 10:12:32 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 19 02:31:45 2011 (+0200)
+ * Last-Updated: Tue Dec 13 15:30:28 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 95
+ *     Update #: 101
  */
 
 /* Commentary: 
@@ -44,12 +44,19 @@ public:
              dtkComposer(QWidget *parent = 0);
     virtual ~dtkComposer(void);
 
+public:
     void setBackgroundColor(const QColor& color);
+
+public:
     void setFactory(dtkComposerNodeFactory *factory);
+
+public:
     void setFileName(const QString& fileName);
 
+public:
     bool isModified(void);
 
+public:
     QString fileName(void);
 
 public slots:
@@ -60,7 +67,7 @@ public slots:
 
 signals:
     void compositionChanged(void);
-    void titleChanged(QString title);
+    void       titleChanged(QString title);
 
 signals:
     void dataSelected(dtkAbstractData *data);

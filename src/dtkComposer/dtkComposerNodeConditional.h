@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 28 12:59:35 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Nov 28 17:05:23 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 19
+ * Last-Updated: Tue Dec 13 14:29:38 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 20
  */
 
 /* Commentary: 
@@ -25,7 +25,6 @@
 
 class dtkComposerEdge;
 class dtkComposerNodeProperty;
-
 class dtkComposerNodeConditionalPrivate;
 
 class DTKCOMPOSER_EXPORT dtkComposerNodeConditional : public dtkComposerNodeControl

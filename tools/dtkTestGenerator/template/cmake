@@ -49,10 +49,7 @@ target_link_libraries(${PROJECT_NAME}
 set_target_properties(${PROJECT_NAME} PROPERTIES
   RUNTIME_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}")
 
-# path where the tests will be
-set(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
-
-add_test(${PROJECT_NAME} ${CXX_TEST_PATH}/${PROJECT_NAME})
+add_test(NAME ${PROJECT_NAME} COMMAND $<TARGET_FILE:${PROJECT_NAME}>)
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

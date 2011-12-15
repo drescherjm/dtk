@@ -5,15 +5,15 @@
 #ifndef %2_H
 #define %2_H
 
-#include <QtTest/QTest>
+#include <dtkCore/dtkTest.h>
 
-class %1 : public QObject
+class %1Object : public QObject
 {
     Q_OBJECT
 
 public:
-             %1(void);
-    virtual ~%1(void);
+             %1Object(void);
+    virtual ~%1Object(void);
 
 
 private slots:

@@ -52,21 +52,25 @@ bool dtkTestGenerator::run(void)
     d->classTestName = QString("%1Test")
             .arg(QString(d->className));
 
+    /*
     if(!d->parent.mkdir(QString(d->classTestName))) {
         qWarning() << "dtkTestGenerator: unable to create target directory.";
         return false;
     }
+    */
 
     d->target = QDir(d->parent);
 
+    /*
     if(!d->target.cd(QString(d->classTestName))) {
         qWarning() << "dtkTestGenerator: unable to move to target directory.";
         return false;
     }
+    */
     
-    return generateCMakeLists()
-            && generateTestHeaderFile()
-            && generateTestSourceFile();
+    return /*generateCMakeLists() &&*/
+            generateTestHeaderFile() &&
+            generateTestSourceFile();
 }
 
 // /////////////////////////////////////////////////////////////////

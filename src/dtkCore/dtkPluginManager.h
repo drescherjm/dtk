@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:21:09 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar  3 19:02:15 2011 (+0100)
+ * Last-Updated: Thu Oct 27 13:47:57 2011 (+0200)
  *           By: Julien Wintz
- *     Update #: 36
+ *     Update #: 40
  */
 
 /* Commentary:
@@ -37,6 +37,9 @@ public:
     void   initialize(void);
     void uninitialize(void);
 
+    virtual void   load(const QString& name);
+    virtual void unload(const QString& name);
+
     virtual void  readSettings(void);
     virtual void writeSettings(void);
 
@@ -50,7 +53,7 @@ public:
 signals:
     void   loaded(const QString& plugin);
     void unloaded(const QString& plugin);
-    void loadError(const QString& errorMessage);
+    void   loadError(const QString& errorMessage);
 
 protected:
      dtkPluginManager(void);

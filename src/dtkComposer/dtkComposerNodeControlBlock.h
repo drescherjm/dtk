@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Mar  3 14:46:36 2011 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mai  2 18:21:49 2011 (+0200)
+ * Last-Updated: Fri Sep 16 17:13:23 2011 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 82
+ *     Update #: 90
  */
 
 /* Commentary: 
@@ -20,14 +20,16 @@
 #ifndef DTKCOMPOSERNODECONTROLBLOCK_H
 #define DTKCOMPOSERNODECONTROLBLOCK_H
 
+#include <dtkCore/dtkGlobal.h>
+
 #include "dtkComposerExport.h"
+#include "dtkComposerNodeProperty.h"
 
 #include <QtGui>
 
 class dtkComposerNode;
 class dtkComposerNodeControl;
 class dtkComposerNodeControlBlockPrivate;
-class dtkComposerNodeProperty;
 
 class DTKCOMPOSER_EXPORT dtkComposerNodeControlBlock : public QObject, public QGraphicsRectItem
 {
@@ -73,6 +75,9 @@ public:
 
     dtkComposerNodeProperty  *addInputPassThroughProperty(QString name, dtkComposerNode *parent = 0);
     dtkComposerNodeProperty *addOutputPassThroughProperty(QString name, dtkComposerNode *parent = 0);
+
+    dtkComposerNodeProperty  *addInputProperty(QString name, dtkComposerNodeProperty::Type type, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeProperty::Behavior behavior, dtkComposerNode *parent = 0);
+    dtkComposerNodeProperty *addOutputProperty(QString name, dtkComposerNodeProperty::Type type, dtkComposerNodeProperty::Multiplicity multiplicity, dtkComposerNodeProperty::Behavior behavior, dtkComposerNode *parent = 0);
 
     void  removeInputProperty(dtkComposerNodeProperty *property);
     void removeOutputProperty(dtkComposerNodeProperty *property);

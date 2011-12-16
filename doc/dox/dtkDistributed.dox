@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: Sat Feb  6 14:33:47 2010 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. sept. 22 15:35:06 2011 (+0200)
+ * Last-Updated: ven. nov. 25 16:02:18 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 178
+ *     Update #: 187
  */
 
 /* Commentary:
@@ -36,9 +36,26 @@ communication between the controller and the slaves.
 
 Currently, the server is able to take resources from OAR (see dtkDistributedServerManagerOar) and Torque (see dtkDistributedServerManagerTorque)
 
+The server can be started by the controller (with the deploy method)
+using ssh; setup for a given server can be specified into the dtk.conf file,
+within the distributed group, like this:
+
+
+@code
+[distributed]
+nef-devel.inria.fr_server_path=/home/nniclaus/git/dtk/build/bin/dtkDistributedTutorial5Server
+nef-devel.inria.fr_server_type=torque
+nef-devel.inria.fr_server_forward=false
+@endcode
+
+If forward is set to true, then a ssh tunnel will be used for
+communications between the controller and the server (useful to bypass
+firewalls).
+
 \section protocol dtkDistributed protocol
 
-dtkDistributed protocol is loosely based on HTTP.
+dtkDistributed protocol is loosely based on HTTP. This is encapsulated
+into the dtkDistributedMessage class.
 
 \subsection status get the status of a cluster
 
@@ -123,7 +140,7 @@ content-size: 0
 
 the slave or the controller sends:
 @code
-POST /data/<rank_dest>
+POST /data/<jobid>/<rank_dest>
 content-size: <size>
 content-type: json|text|binary
 <data>
@@ -131,7 +148,7 @@ content-type: json|text|binary
 
 and the server forwards to  <rank_dest>:
 @code
-POST /data/
+POST /data/<jobid>
 x-forwarded-for: <rank_src>
 content-size: 0
 content-type: json|text|binary

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. oct.  4 16:30:01 2011 (+0200)
+ * Last-Updated: mer. déc.  7 11:28:53 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 145
+ *     Update #: 209
  */
 
 /* Commentary: 
@@ -17,6 +17,7 @@
  * 
  */
 
+#include "dtkDistributedMessage.h"
 #include "dtkDistributedSlave.h"
 #include "dtkDistributedSocket.h"
 #include "dtkDistributedCommunicatorTcp.h"
@@ -36,11 +37,27 @@ dtkDistributedSlave::dtkDistributedSlave(void) : d(new dtkDistributedSlavePrivat
     d->communicator = new dtkDistributedCommunicatorTcp();
 }
 
+dtkDistributedSlave::dtkDistributedSlave(dtkDistributedCommunicatorTcp *communicator) : d(new dtkDistributedSlavePrivate)
+{
+    d->communicator = communicator;
+}
+
 dtkDistributedSlave::~dtkDistributedSlave(void)
 {
     delete d;
 
     d = NULL;
+}
+
+QString dtkDistributedSlave::jobId(void)
+{
+    if(!(QString(getenv("PBS_JOBID")).isEmpty()))
+        return QString(getenv("PBS_JOBID")).split(".").first();
+
+    if(!(QString(getenv("OAR_JOBID")).isEmpty()))
+        return QString(getenv("OAR_JOBID"));
+
+    return QString();
 }
 
 int dtkDistributedSlave::run(void)
@@ -71,13 +88,29 @@ bool dtkDistributedSlave::isDisconnected(void)
     return (d->communicator->socket()->state() == QAbstractSocket::UnconnectedState);
 }
 
+
+void dtkDistributedSlave::read(void)
+{
+    dtkDistributedSocket *socket = d->communicator->socket();
+    dtkDistributedMessage *request = socket->parseRequest();
+
+    if( request->method() == dtkDistributedMessage::DATA) {
+        qDebug() << DTK_PRETTY_FUNCTION << "DATA received in slave, unimplemented";
+    } else {
+        qDebug() << DTK_PRETTY_FUNCTION << "WARNING: Unknown data";
+    }
+    if (socket->bytesAvailable() > 0)
+        this->read();
+}
+
+
 void dtkDistributedSlave::connect(const QUrl& server)
 {
     d->communicator->connectToHost(server.host(), server.port());
 
     if(d->communicator->socket()->waitForConnected()) {
 
-        QObject::connect(d->communicator->socket(), SIGNAL(readyRead()), this, SLOT(read()));
+        QObject::connect(d->communicator->socket(), SIGNAL(readyRead()), this , SLOT(read()));
         QObject::connect(d->communicator->socket(), SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
 
         emit connected(server);
@@ -97,13 +130,13 @@ void dtkDistributedSlave::disconnect(const QUrl& server)
 void dtkDistributedSlave::onStarted(void)
 {
     QString jobid = "unknown"; //FIXME
-    d->communicator->socket()->sendRequest("STARTED","/job/"+jobid);
+    d->communicator->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::STARTJOB,jobid));
 }
 
 void dtkDistributedSlave::onEnded(void)
 {
     QString jobid = "unknown"; //FIXME
-    d->communicator->socket()->sendRequest("ENDED","/job/"+jobid);
+    d->communicator->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::ENDJOB,jobid));
 }
 
 dtkDistributedCommunicatorTcp *dtkDistributedSlave::communicator(void)

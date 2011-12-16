@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 15 15:09:33 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 202
+ * Last-Updated: lun. déc.  5 16:56:23 2011 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 237
  */
 
 /* Commentary:
@@ -27,6 +27,8 @@
 class dtkAbstractDataReader;
 class dtkAbstractDataWriter;
 class dtkAbstractDataConverter;
+class dtkAbstractDataSerializer;
+class dtkAbstractDataDeserializer;
 class dtkAbstractDataPrivate;
 
 class DTKCORE_EXPORT dtkAbstractData : public dtkAbstractObject
@@ -51,6 +53,8 @@ public slots:
     virtual bool write(const QStringList& files);
 
     virtual dtkAbstractData *convert(const QString& toType);
+    virtual QByteArray    *serialize(void);
+    virtual bool         deserialize(const QByteArray& array);
 
     virtual void *output(void);
     virtual void *output(int channel);
@@ -81,12 +85,14 @@ public slots:
     virtual void setData(void* data, int channel);
 
     virtual void setNumberOfChannels(int number);
-    
+
     virtual void update(void);
 
-    void addReader   (const QString& reader);
-    void addWriter   (const QString& writer);
-    void addConverter(const QString& converter);
+    void addReader      (const QString& reader);
+    void addWriter      (const QString& writer);
+    void addConverter   (const QString& converter);
+    void addSerializer  (const QString& serializer);
+    void addDeserializer(const QString& deserializer);
 
     void  enableReader(const QString& reader);
     void disableReader(const QString& reader);
@@ -97,9 +103,17 @@ public slots:
     void  enableConverter(const QString& converter);
     void disableConverter(const QString& converter);
 
-    dtkAbstractDataReader    *reader   (const QString& type);
-    dtkAbstractDataWriter    *writer   (const QString& type);
-    dtkAbstractDataConverter *converter(const QString& type);
+    void  enableSerializer(const QString& serializer);
+    void disableSerializer(const QString& serializer);
+
+    void  enableDeserializer(const QString& deserializer);
+    void disableDeserializer(const QString& deserializer);
+
+    dtkAbstractDataReader       *reader   (const QString& type);
+    dtkAbstractDataWriter       *writer   (const QString& type);
+    dtkAbstractDataConverter    *converter(const QString& type);
+    dtkAbstractDataSerializer   *serializer(const QString& type);
+    dtkAbstractDataDeserializer *deserializer(const QString& type);
 
     QString     path(void);
     QStringList paths(void);

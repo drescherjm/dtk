@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: mar. oct.  4 14:48:31 2011 (+0200)
+ * Last-Updated: lun. nov. 21 17:09:32 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 480
+ *     Update #: 655
  */
 
 /* Commentary:
@@ -21,100 +21,96 @@
 
 #include "dtkDistributedSocket.h"
 
+class dtkDistributedSocketPrivate
+{
+};
 
-dtkDistributedSocket::dtkDistributedSocket( QObject* parent ) : QTcpSocket(parent)
+dtkDistributedSocket::dtkDistributedSocket( QObject* parent ) :  QTcpSocket(parent), d(new dtkDistributedSocketPrivate)
 {
 }
 
-dtkDistributedSocket::~dtkDistributedSocket( )
+dtkDistributedSocket::~dtkDistributedSocket(void)
 {
+    delete d;
+    d = NULL;
 }
 
-
-qint64 dtkDistributedSocket::sendRequest(QString method, QString path, int size, QString type, const QByteArray  &content,  const QHash<QString,QString>  &headers )
+qint64 dtkDistributedSocket::sendRequest( dtkDistributedMessage *msg)
 {
 
     QString buffer;
 
-    buffer += method +" "+ path +"\n";
-    if (size == 0 ) {
+    buffer += msg->req();
+    if (msg->size() == 0 ) {
         buffer += "content-size: 0\n\n";
         qint64 ret = this->write(buffer.toAscii());
         this->flush();
         return ret;
-    }
-    buffer += "content-size: "+ QString::number(size) +"\n";
-    if (!type.isEmpty() && !type.isNull())
-        buffer += "content-type: " +type +"\n";
+    } else if (msg->size() > 0) {
+        buffer += "content-size: "+ QString::number(msg->size()) +"\n";
+        if (!msg->type().isEmpty() && !msg->type().isNull())
+            buffer += "content-type: " +msg->type() +"\n";
 
-    foreach (const QString &key, headers.keys())
-        buffer += key +": " + headers[key] +"\n";
-    buffer += "\n";
+        foreach (const QString &key, (msg->headers()).keys())
+            buffer += key +": " + msg->header(key) +"\n";
+        buffer += "\n";
+    }
 
     qint64 ret;
-    if (content.isEmpty()) // no content provided, the caller is supposed to send the content itself
+    if (msg->content().isNull() || msg->content().isEmpty()) {
+        // no content provided, the caller is supposed to send the content itself
         ret = this->write(buffer.toAscii());
-    else
-        ret = this->write(buffer.toAscii() + content);
+    } else {
+        ret = this->write(buffer.toAscii());
+        ret += this->write(msg->content());
+        this->flush();
+    }
 
-    this->flush();
     return ret;
 }
 
 /**
  * read and parse data from socket
  *
- * @return QVariantMap
+ * @return dtkDistributedMessage
  */
-QVariantMap dtkDistributedSocket::parseRequest(void)
+dtkDistributedMessage *dtkDistributedSocket::parseRequest(void)
 {
-    QVariantMap request;
-    QStringList tokens = QString(this->readLine()).split(" ");
-    request.insert("method", tokens[0]);
-    request.insert("path", tokens[1].trimmed());
+    dtkDistributedMessage * msg = new dtkDistributedMessage ;
+
+    msg->setMethod(this->readLine());
 
     // read content-size
-    tokens = QString(this->readLine()).split(QRegExp(":\\s*"));
-    if (tokens[0].toLower() != "content-size") {
-        request.insert("error", "No Content Size");
-        return request;
-    }
+    msg->setSize(this->readLine());
 
-    int size = tokens[1].toInt();
-    request["size"] = size;
-
-    if (size > 0) {
+    if (msg->size() > 0) {
         //read content-type
-        tokens = QString(this->readLine()).split(QRegExp(":\\s*"));
-
-        if (tokens[0].toLower() != "content-type") {
-            request.insert("error", "No Content Type");
-            return request;
-        }
-
-        request.insert("type", tokens[1].trimmed());
+        msg->setType(this->readLine());
 
         // read optional headers
         QByteArray line = this->readLine();
         while (!QString(line).trimmed().isEmpty()) {// empty line after last header
-            tokens = QString(line).split(QRegExp(":\\s*"));
-            request.insert(tokens[0], tokens[1].trimmed());
+            msg->setHeader(QString(line));
             line=this->readLine();
         }
 
         // read content
         QByteArray buffer;
-        buffer.append(this->read(size));
-        while (buffer.size() < size ) {
+        buffer.append(this->read(msg->size()));
+        while (buffer.size() < msg->size() ) {
             if (this->waitForReadyRead()) {
-                buffer.append(this->read(size-buffer.size()));
-            } else
+                buffer.append(this->read(msg->size()-buffer.size()));
+            } else {
+                qDebug() << "not enough data received, only  " << buffer.size() << "out of " << msg->size() ;
+                msg->setContent(buffer);
+                msg->addHeader("missing_data",QString::number(msg->size()-buffer.size()));
                 break;
+            }
         }
-        request["content"] = buffer;
+        msg->setContent(buffer);
     } else
         // end of request == empty line
         this->readLine();
 
-    return request;
+    return msg;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. sept. 22 09:51:16 2011 (+0200)
+ * Last-Updated: mar. déc.  6 18:23:02 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 971
+ *     Update #: 1400
  */
 
 /* Commentary: 
@@ -38,7 +38,9 @@ class dtkDistributedControllerPrivate
 public:
     QHash<QString, dtkDistributedSocket *> sockets;
     QHash<QString, QList<dtkDistributedNode *> > nodes;
-    QHash<QString, QList<dtkDistributedJob *> > jobs;
+    QHash<QString, QString > jobids;
+    QHash<QString, QList<dtkDistributedJob*> > jobs;// list of all queued and running jobs on each server
+    QHash<QString, QList<QProcess *> > servers;
 
     void read_status(QByteArray const &buffer, dtkDistributedSocket *socket);
 };
@@ -79,11 +81,86 @@ bool dtkDistributedController::isDisconnected(const QUrl& server)
     return true;
 }
 
-void dtkDistributedController::submit(const QUrl& server, const QByteArray& resources)
+void dtkDistributedController::submit(const QUrl& server,  QByteArray& resources)
 {
     qDebug() << "Want to submit jobs with resources:" << resources;
+    dtkDistributedMessage *msg  = new dtkDistributedMessage(dtkDistributedMessage::NEWJOB,"",-2,resources.size(),"json",resources);
+    d->sockets[server.toString()]->sendRequest(msg);
+}
 
-    d->sockets[server.toString()]->sendRequest("PUT","/job",resources.size(),"json",resources);
+// deploy a server instance on remote host (to be executed before connect)
+void dtkDistributedController::deploy(const QUrl& server)
+{
+    if(!d->servers.keys().contains(server.toString())) {
+        QProcess *serverProc = new QProcess (this);
+        QStringList args;
+        args << "-t"; // that way, ssh will forward the SIGINT signal,
+                      // and the server will stop when the ssh process
+                      // is killed
+        args << "-t"; // do it twice to force tty allocation
+        args << server.host();
+
+        serverProc->setProcessChannelMode(QProcess::MergedChannels);
+        QSettings settings("inria", "dtk");
+        settings.beginGroup("distributed");
+        QString defaultPath;
+        if (!settings.contains(server.host()+"_server_path")) {
+            defaultPath =  "./dtkDistributedServer";
+            dtkDebug() << "Filling in empty path in settings with default path:" << defaultPath;
+        }
+        QString path = settings.value(server.host()+"_server_path", defaultPath).toString();
+
+        QString forward = server.host()+"_server_forward";
+        if (settings.contains(forward) && settings.value(forward).toString() == "true") {
+            dtkDebug() << "ssh port forwarding is set for server " << server.host();
+            args << "-L" << QString::number(server.port())+":localhost:"+QString::number(server.port());
+        }
+
+        args << path;
+        args << "-p";
+        args << QString::number(server.port());
+        args << "--"+settings.value(server.host()+"_server_type", "torque").toString();
+
+        settings.endGroup();
+        serverProc->start("ssh", args);
+        if (!serverProc->waitForStarted(5000))
+            dtkDebug() << "server not yet started  " << args;
+        if (!serverProc->waitForReadyRead(3000))
+            dtkDebug() << "no output from server yet" << args;
+
+        QObject::connect(serverProc, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onProcessFinished(int,QProcess::ExitStatus)));
+
+        QObject::connect (qApp, SIGNAL(aboutToQuit()), this, SLOT(cleanup()));
+
+        d->servers[server.toString()] << serverProc;
+    } else {
+        dtkDebug() << "dtkDistributedServer already started on " << server.host();
+    }
+}
+
+void dtkDistributedController::send(dtkDistributedMessage *msg)
+{
+    QString server = d->jobids[msg->jobid()];
+    dtkDistributedSocket *socket = d->sockets[server];
+
+    socket->sendRequest(msg);
+}
+
+void dtkDistributedController::send(dtkAbstractData *data, QString jobid, qint16 rank)
+{
+    QString server = d->jobids[jobid];
+    dtkDistributedSocket *socket = d->sockets[server];
+    QByteArray *array = data->serialize();
+    if (!array) {
+        dtkDebug() << "serialization failed for jobid" << jobid;
+        return;
+    }
+
+    QString type = data->identifier();
+
+    socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,jobid,rank, array->size(), type));
+    socket->write(*array);
+
 }
 
 void dtkDistributedController::connect(const QUrl& server)
@@ -91,7 +168,18 @@ void dtkDistributedController::connect(const QUrl& server)
     if(!d->sockets.keys().contains(server.toString())) {
 
         dtkDistributedSocket *socket = new dtkDistributedSocket(this);
-        socket->connectToHost(server.host(), server.port());
+
+        QSettings settings("inria", "dtk");
+        settings.beginGroup("distributed");
+        QString forward = server.host()+"_server_forward";
+
+        if (settings.contains(forward) && settings.value(forward).toString() == "true")
+            socket->connectToHost("localhost", server.port());
+        else
+            socket->connectToHost(server.host(), server.port());
+
+        settings.endGroup();
+
 
         if(socket->waitForConnected()) {
 
@@ -102,7 +190,7 @@ void dtkDistributedController::connect(const QUrl& server)
 
             emit connected(server);
 
-            socket->sendRequest("GET","/status");
+            socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::STATUS));
 
         } else {
 
@@ -141,7 +229,6 @@ QList<dtkDistributedNode *> dtkDistributedController::nodes(const QString& clust
 
 void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkDistributedSocket *socket)
 {
-    dtkDistributedNode *node = new dtkDistributedNode;
     QVariantMap json = dtkJson::parse(buffer).toMap();
     // TODO: check version
     // First, read nodes status
@@ -150,15 +237,19 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
     QHash<QString,dtkDistributedCore *> coreref;
 
     foreach(QVariant qv, json["nodes"].toList()) {
-            QVariantMap jnode=qv.toMap();
 
-            QVariantList cores    = jnode["cores"].toList();
-            int usedcores = jnode["cores_busy"].toInt();
-            int ncpus     = jnode["cpus"].toInt();
-            int ngpus     = jnode["gpus"].toInt();
-            int usedgpus  = jnode["gpus_busy"].toInt();
-            QVariantMap properties = jnode["properties"].toMap();
-            QString state =  jnode["state"].toString();
+        QVariantMap jnode=qv.toMap();
+
+        QVariantList cores    = jnode["cores"].toList();
+        int usedcores = jnode["cores_busy"].toInt();
+        int ncpus     = jnode["cpus"].toInt();
+        int ngpus     = jnode["gpus"].toInt();
+        int usedgpus  = jnode["gpus_busy"].toInt();
+        QVariantMap properties = jnode["properties"].toMap();
+        QString state =  jnode["state"].toString();
+
+        Q_UNUSED(usedcores);
+        Q_UNUSED(usedgpus);
 
             qint64 ncores = cores.count();
             dtkDistributedNode *node = new dtkDistributedNode;
@@ -268,35 +359,61 @@ void dtkDistributedController::read(void)
 {
     dtkDistributedSocket *socket = (dtkDistributedSocket *)sender();
 
+    QString server = d->sockets.key(socket);
+    dtkDistributedMessage *msg = socket->parseRequest();
+    QByteArray result;
 
-    QVariantMap request = socket->parseRequest();
-
-    QString method= request["method"].toString();
-    QString path= request["path"].toString();
-
-
-    if( method == "OK" && path   == "/status") {
-        QByteArray buffer = request["content"].toByteArray();
-        d->read_status(buffer,socket);
-        emit updated();
-    } else if( method == "OK" && path.startsWith("/job/")) {
-        QString jobId = path.split("/").at(2);
-        qDebug() << "New job queued: " << jobId;
-        emit updated();
-    } else if( method == "ENDED" && path.startsWith("/job/")) {
-        QString jobId = path.split("/").at(2);
-        qDebug() << "job finished: " << jobId;
-        emit updated();
-    } else if( method == "POST" && path.startsWith("/data")) {
-        QByteArray result = request["content"].toByteArray();
-        qDebug() << "Result: " << result;
-        emit dataPosted(result);
-        emit updated();
-    } else {
-        qDebug() << "unknown response from server: " << method << " " <<  path;
-    }
+    dtkDistributedMessage::Method method = msg->method();
+    switch (method) {
+        case dtkDistributedMessage::OKSTATUS:
+            result = msg->content();
+            d->read_status(result,socket);
+            emit updated();
+            break;
+        case dtkDistributedMessage::OKJOB:
+            qDebug() << DTK_PRETTY_FUNCTION << "New job queued: " << msg->jobid();
+            d->jobids[msg->jobid()] = server;
+            emit updated();
+            break;
+        case dtkDistributedMessage::SETRANK:
+            qDebug() << DTK_PRETTY_FUNCTION << "set rank received";
+            if (msg->rank() == 0) {
+                qDebug() << DTK_PRETTY_FUNCTION << "job started";
+                emit jobStarted(msg->jobid());
+                emit updated();
+            }
+            break;
+        case dtkDistributedMessage::ENDJOB:
+            qDebug() << "job finished: " << msg->jobid();
+            d->jobids.remove(msg->jobid());
+            emit updated();
+            break;
+        case dtkDistributedMessage::DATA:
+            result = msg->content();
+            qDebug() << "Result: " << result;
+            emit dataPosted(result);
+            emit updated();
+            break;
+        default:
+            qDebug() << "unknown response from server ";
+        };
     if (socket->bytesAvailable() > 0)
         this->read();
+}
+
+void dtkDistributedController::cleanup()
+{
+    foreach (const QString& key, d->servers.keys()) {
+        foreach (QProcess* server, d->servers[key]) {
+            qDebug() << "terminating servers started on" << key;
+            server->terminate();
+        }
+    }
+}
+
+void dtkDistributedController::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus )
+{
+    qDebug() << DTK_PRETTY_FUNCTION << "remote server deployment failure" << exitStatus ;
 }
 
 void dtkDistributedController::error(QAbstractSocket::SocketError error)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep  5 14:14:31 2011 (+0200)
+ * Last-Updated: Thu Nov 17 16:18:41 2011 (+0100)
  *           By: Julien Wintz
- *     Update #: 170
+ *     Update #: 218
  */
 
 /* Commentary:
@@ -25,31 +25,13 @@
 
 #define DTK_VERBOSE_LOAD false
 
-class dtkPluginManagerPrivate
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+QStringList dtkPluginManagerPathSplitter(QString path)
 {
-public:
-    QString path;
-
-    QHash<QString, QPluginLoader *> loaders;
-};
-
-dtkPluginManager *dtkPluginManager::instance(void)
-{
-    if(!s_instance) {
-        s_instance = new dtkPluginManager;
-
-        qRegisterMetaType<dtkAbstractData>("dtkAbstractData");
-    }
-
-    return s_instance;
-}
-
-void dtkPluginManager::initialize(void)
-{
-    if(d->path.isNull())
-        this->readSettings();
-
-    QString paths = d->path;
+    QString paths = path;
 
 #ifdef Q_WS_WIN
     QStringList pathList;
@@ -70,6 +52,43 @@ void dtkPluginManager::initialize(void)
 #else
     QStringList pathList = paths.split(":", QString::SkipEmptyParts);
 #endif
+
+    return pathList;
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkPluginManagerPrivate
+// /////////////////////////////////////////////////////////////////
+
+class dtkPluginManagerPrivate
+{
+public:
+    QString path;
+
+    QHash<QString, QPluginLoader *> loaders;
+};
+
+dtkPluginManager *dtkPluginManager::instance(void)
+{
+    if(!s_instance) {
+        s_instance = new dtkPluginManager;
+
+        qRegisterMetaType<dtkAbstractData>("dtkAbstractData");
+    }
+
+    return s_instance;
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkPluginManager
+// /////////////////////////////////////////////////////////////////
+
+void dtkPluginManager::initialize(void)
+{
+    if(d->path.isNull())
+        this->readSettings();
+
+    QStringList pathList = dtkPluginManagerPathSplitter(d->path);
 
     const QString appDir = qApp->applicationDirPath();
 
@@ -94,6 +113,69 @@ void dtkPluginManager::uninitialize(void)
 
     foreach(QString path, d->loaders.keys())
         unloadPlugin(path);
+}
+
+//! Load a specific plugin designated by its name.
+/*! The path is retrieved through the plugin manager settings.
+ * 
+ * \param name The name of the plugin, without platform specific prefix (.e.g lib) and suffix (e.g. .so or .dylib or .dll)
+ */
+
+void dtkPluginManager::load(const QString& name)
+{
+    if(d->path.isNull())
+        this->readSettings();
+
+    QStringList pathList = dtkPluginManagerPathSplitter(d->path);
+
+    const QString appDir = qApp->applicationDirPath();
+
+    foreach(QString path, pathList) {
+
+        QDir dir(appDir);
+
+        if (dir.cd(path)) {
+            dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
+
+            foreach (QFileInfo entry, dir.entryInfoList())
+                if(entry.fileName().contains(name))
+                    loadPlugin(entry.absoluteFilePath());
+        } else {
+            dtkWarning() << "Failed to load plugins from path " << path << ". Could not cd to directory.";
+        }
+    }
+}
+
+//! Unload a specific plugin designated by its name.
+/*! The path is retrieved through the plugin manager settings.
+ * 
+ * \param name The name of the plugin, without platform specific prefix (.e.g lib) and suffix (e.g. .so or .dylib or .dll)
+ */
+
+void dtkPluginManager::unload(const QString& name)
+{
+    if(d->path.isNull())
+        this->readSettings();
+
+    QStringList pathList = dtkPluginManagerPathSplitter(d->path);
+
+    const QString appDir = qApp->applicationDirPath();
+
+    foreach(QString path, pathList) {
+
+        QDir dir(appDir);
+
+        if (dir.cd(path)) {
+            dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
+
+            foreach (QFileInfo entry, dir.entryInfoList())
+                if(entry.fileName().contains(name))
+                    if (this->plugin(name))
+                        this->unloadPlugin(entry.absoluteFilePath());
+        } else {
+            dtkWarning() << "Failed to load plugins from path " << path << ". Could not cd to directory.";
+        }
+    }
 }
 
 void dtkPluginManager::readSettings(void)
@@ -198,7 +280,9 @@ void dtkPluginManager::loadPlugin(const QString& path)
     loader->setLoadHints (QLibrary::ExportExternalSymbolsHint);
 
     if(!loader->load()) {
-        QString error = "Unable to load - ";
+        QString error = "Unable to load ";
+        error += path;
+        error += " - ";
         error += loader->errorString();
         if(DTK_VERBOSE_LOAD) dtkDebug() << error;
         emit loadError(error);
@@ -232,13 +316,14 @@ void dtkPluginManager::loadPlugin(const QString& path)
     emit loaded(plugin->name());
 }
 
-/*!
-    \brief      Unloads the plugin previously loaded from the given filename.
-                Derived classes may override to prevent certain plugins being unloaded,
-                or provide additional functionality. In most cases they should still
-                call the base implementation (this).
-    \param      path : Path to plugin file to be unloaded.
-*/
+//! Unloads the plugin previously loaded from the given filename.
+/*! Derived classes may override to prevent certain plugins being
+ *  unloaded, or provide additional functionality. In most
+ *  cases they should still call the base implementation
+ *  (this).
+ *
+ * \param path Path to plugin file to be unloaded.
+ */
 void dtkPluginManager::unloadPlugin(const QString& path)
 {
     dtkPlugin *plugin = qobject_cast<dtkPlugin *>(d->loaders.value(path)->instance());

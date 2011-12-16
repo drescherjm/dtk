@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. sept. 21 14:28:28 2011 (+0200)
+ * Last-Updated: mar. déc.  6 14:26:30 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 46
+ *     Update #: 67
  */
 
 /* Commentary: 
@@ -21,6 +21,9 @@
 #define DTKDISTRIBUTEDCONTROLLER_H
 
 #include "dtkDistributedExport.h"
+#include "dtkDistributedMessage.h"
+
+#include <dtkCore/dtkAbstractData.h>
 
 #include <QtCore>
 #include <QtNetwork>
@@ -47,11 +50,15 @@ signals:
     void updated(const QUrl& server);
 
     void dataPosted(const QByteArray& data);
+    void jobStarted(QString jobid);
 
 public slots:
     void    connect(const QUrl& server);
+    void     deploy(const QUrl& server);
     void disconnect(const QUrl& server);
-    void     submit(const QUrl& server, const QByteArray& resources);
+    void     submit(const QUrl& server, QByteArray& resources);
+    void       send(dtkDistributedMessage *msg);
+    void       send(dtkAbstractData *data, QString jobid, qint16 destrank);
 
 public:
     QList<dtkDistributedNode *> nodes(void);
@@ -60,6 +67,8 @@ public:
 protected slots:
     void read(void);
     void error(QAbstractSocket::SocketError error);
+    void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus );
+    void cleanup(void);
 
 private:
     dtkDistributedControllerPrivate *d;

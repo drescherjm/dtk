@@ -27,20 +27,10 @@ endif(ZLIB_FOUND)
 
 enable_testing()
 
-add_test(dtkCompareDoubleTest ${CMAKE_BINARY_DIR}/bin/dtkCompareDouble)
-add_test(dtkCompareFloatTest  ${CMAKE_BINARY_DIR}/bin/dtkCompareFloat)
-add_test(dtkSmartPointerTest  ${CMAKE_BINARY_DIR}/bin/dtkSmartPointer)
+add_test(NAME dtkCompareDoubleTest COMMAND $<TARGET_FILE:dtkCompareDouble>)
+add_test(NAME dtkCompareFloatTest  COMMAND $<TARGET_FILE:dtkCompareFloat>)
+add_test(NAME dtkSmartPointerTest  COMMAND $<TARGET_FILE:dtkSmartPointer>)
 
 if(ZLIB_FOUND)
-add_test(dtkZipTest ${CMAKE_BINARY_DIR}/bin/dtkZipTest ${CMAKE_SOURCE_DIR}/tests/dtkZipTest)
+add_test(NAME dtkZipTest COMMAND $<TARGET_FILE:dtkZipTest> ${CMAKE_SOURCE_DIR}/tests/dtkZipTest)
 endif(ZLIB_FOUND)
-
-if(MSVC)
-    set(PATH_STRING_FOR_TESTS "${QT_LIBRARY_DIR}")
-else(MSVC)
-    set(PATH_STRING_FOR_TESTS "$ENV{PATH}")
-endif(MSVC)
-
-string(REPLACE ";" "\\;" PATH_STRING_FOR_TESTS "${PATH_STRING_FOR_TESTS}")
-
-set_tests_properties(dtkSmartPointerTest PROPERTIES ENVIRONMENT "PATH=${PATH_STRING_FOR_TESTS}")

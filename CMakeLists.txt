@@ -68,6 +68,10 @@ endif(BUILD_REPORTING)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
+
+  #Set PATH environment in tests
+  configure_file(cmake/dtkSetTestEnvironment.cmake.in "${CMAKE_CURRENT_BINARY_DIR}/dtkSetTestEnvironment.cmake" @ONLY)
+  set_directory_properties(PROPERTIES TEST_INCLUDE_FILE dtkSetTestEnvironment.cmake)
 endif(BUILD_TESTING)
 
 if(BUILD_DOCUMENTATION)

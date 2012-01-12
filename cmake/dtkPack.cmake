@@ -75,7 +75,7 @@ if(WIN32)
 endif(WIN32)
 
 if(UNIX AND NOT APPLE)
-  set(CPACK_GENERATOR "RPM")
+  set(CPACK_GENERATOR "DEB;RPM")
 endif(UNIX AND NOT APPLE)
 
 ## #################################################################

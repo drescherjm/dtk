@@ -45,6 +45,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractViewNavigator.h
   dtkCoreExport.h
   dtkGlobal.h
+  dtkTest.h
   dtkLog.h
   dtkPluginManager.h
   dtkQuat.h

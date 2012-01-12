@@ -4,45 +4,44 @@
 
 #include "%1.h"
 
-%1::%1(void)
-{
-
-}
-
-%1::~%1(void)
+%1Object::%1Object(void)
 {
 }
 
-void %1::initTestCase()
+%1Object::~%1Object(void)
 {
 }
 
-void %1::init()
+void %1Object::initTestCase()
 {
 }
 
-void %1::cleanup()
+void %1Object::init()
 {
 }
 
-void %1::cleanupTestCase()
+void %1Object::cleanup()
+{
+}
+
+void %1Object::cleanupTestCase()
 {
 }
 
 /*
-void %1::testFoo_data()
+void %1Object::testFoo_data()
 {
 }
 */
 
-void %1::testFoo()
+void %1Object::testFoo()
 {
     QVERIFY(true==false);
 }
 
 /**
-   QTEST_APPLESS_MAIN will create the entry point without running
+   DTKTEST_NOGUI_MAIN will create the entry point without running
    a window manager (such as X on linux). If you need one, change
-   it to QTEST_MAIN().
+   it to DTKTEST_MAIN().
  **/
-QTEST_APPLESS_MAIN(%1)
+DTKTEST_NOGUI_MAIN(%1,%1Object)

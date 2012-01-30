@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Oct 12 15:59:53 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Nov  4 15:48:29 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 12
+ * Last-Updated: Mon Jan 30 10:35:46 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -22,7 +22,7 @@
 #define DTKCOMPOSERNODELOOPDATACOMPOSITE_H
 
 #include "dtkComposerExport.h"
-#include <dtkComposer/dtkComposerNodeLoop>
+#include "dtkComposerNodeLoop.h"
 
 class dtkComposerNode;
 class dtkComposerNodeProperty;

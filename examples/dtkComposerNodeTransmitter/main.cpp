@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Nov  2 10:48:42 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov  2 13:30:47 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 36
+ * Last-Updated: Mon Jan 30 10:38:17 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 38
  */
 
 /* Commentary: 
@@ -19,7 +19,7 @@
 
 #include <QtCore/QObject>
 
-#include <dtkComposer/dtkComposerNodeTransmitter>
+#include <dtkComposerOld/dtkComposerNodeTransmitter.h>
 
 #include <dtkCore/dtkAbstractData>
 #include <dtkCore/dtkGlobal>

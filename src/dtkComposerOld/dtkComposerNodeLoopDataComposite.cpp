@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Oct 12 16:02:18 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov  9 15:50:28 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 211
+ * Last-Updated: Mon Jan 30 10:40:28 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 212
  */
 
 /* Commentary: 
@@ -20,12 +20,12 @@
 #include "dtkComposerNodeLoopDataComposite.h"
 #include "dtkComposerNodeLoopDataComposite_p.h"
 
-#include <dtkComposer/dtkComposerEdge>
-#include <dtkComposer/dtkComposerEvaluator_p.h>
-#include <dtkComposer/dtkComposerNode>
-#include <dtkComposer/dtkComposerNodeControlBlock>
-#include <dtkComposer/dtkComposerNodeNumber>
-#include <dtkComposer/dtkComposerNodeProperty>
+#include <dtkComposerOld/dtkComposerEdge>
+#include <dtkComposerOld/dtkComposerEvaluator_p.h>
+#include <dtkComposerOld/dtkComposerNode>
+#include <dtkComposerOld/dtkComposerNodeControlBlock>
+#include <dtkComposerOld/dtkComposerNodeNumber>
+#include <dtkComposerOld/dtkComposerNodeProperty>
 
 #include <dtkCore/dtkAbstractData>
 #include <dtkCore/dtkAbstractDataComposite>

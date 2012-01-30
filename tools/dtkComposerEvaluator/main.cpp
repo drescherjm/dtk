@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Oct 27 14:10:37 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 27 14:48:23 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 41
+ * Last-Updated: Mon Jan 30 10:45:32 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 42
  */
 
 /* Commentary: 
@@ -38,16 +38,16 @@ int main(int argc, char **argv)
 
     dtkPluginManager::instance()->initialize();
 
-    dtkComposerScene scene;
+    // dtkComposerScene scene;
 
-    dtkComposerReader reader(&scene);
-    reader.read(argv[1]);
+    // dtkComposerReader reader(&scene);
+    // reader.read(argv[1]);
 
-    dtkComposerEvaluator evaluator(&scene);
+    // dtkComposerEvaluator evaluator(&scene);
 
-    QObject::connect(&evaluator, SIGNAL(evaluationStopped()), &application, SLOT(quit()));
+    // QObject::connect(&evaluator, SIGNAL(evaluationStopped()), &application, SLOT(quit()));
     
-    evaluator.start();
+    // evaluator.start();
 
     int status = application.exec();
 

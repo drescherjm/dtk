@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Dec  7 14:30:20 2011 (+0100)
-##           By: Julien Wintz
-##     Update #: 179
+## Last-Updated: Mon Jan 30 10:47:34 2012 (+0100)
+##           By: tkloczko
+##     Update #: 183
 ######################################################################
 ## 
 ### Commentary: 
@@ -25,142 +25,14 @@ project(dtkComposer)
 
 set(${PROJECT_NAME}_HEADERS
   dtkComposer.h
-  dtkComposerEdge.h
-  dtkComposerEvaluator.h
-  dtkComposerExport.h
-  dtkComposerExtractor.h
-  dtkComposerNode.h
-  dtkComposerNode_p.h
-  dtkComposerNodeBoolean.h
-  dtkComposerNodeBooleanOperator.h
-  dtkComposerNodeCase.h
-  dtkComposerNodeCase_p.h
-  dtkComposerNodeComposite.h
-  dtkComposerNodeConditional.h
-  dtkComposerNodeConditional_p.h
-  dtkComposerNodeControl.h
-  dtkComposerNodeControl_p.h
-  dtkComposerNodeControlBlock.h
-  dtkComposerNodeData.h
-  dtkComposerNodeFactory.h
-  dtkComposerNodeFile.h
-  dtkComposerNodeGraphic.h
-  dtkComposerNodeLog.h
-  dtkComposerNodeLogic.h
-  dtkComposerNodeLoop.h
-  dtkComposerNodeLoopDataComposite.h
-  dtkComposerNodeLoopDataComposite_p.h
-  dtkComposerNodeLoopFor.h
-  dtkComposerNodeLoopFor_p.h
-  dtkComposerNodeLoopWhile.h
-  dtkComposerNodeLoopWhile_p.h
-  dtkComposerNodeNumber.h
-  dtkComposerNodeNumberDouble.h
-  dtkComposerNodeNumberInteger.h
-  dtkComposerNodeNumberLong.h
-  dtkComposerNodeNumberComparator.h
-  dtkComposerNodeNumberOperator.h
-  dtkComposerNodeProcess.h
-  dtkComposerNodeProperty.h
-  dtkComposerNodeString.h
-  dtkComposerNodeStringComparator.h
-  dtkComposerNodeStringOperator.h
-  dtkComposerNodeTransmitter.h
-  dtkComposerNodeTransmitter.tpp
-  dtkComposerNodeView.h
-  dtkComposerNote.h
-  dtkComposerReader.h
-  dtkComposerRoute.h
-  dtkComposerScene.h
-  dtkComposerView.h
-  dtkComposerWriter.h)
+  dtkComposerExport.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposer.h
-  dtkComposer_p.h
-  dtkComposerEdge.h
-  dtkComposerEvaluator.h
-  dtkComposerEvaluator_p.h
-  dtkComposerExtractor.h
-  dtkComposerNode.h
-  dtkComposerNodeBoolean.h
-  dtkComposerNodeBooleanOperator.h
-  dtkComposerNodeCase.h
-  dtkComposerNodeComposite.h
-  dtkComposerNodeConditional.h
-  dtkComposerNodeControl.h
-  dtkComposerNodeControlBlock.h
-  dtkComposerNodeData.h
-  dtkComposerNodeFactory.h
-  dtkComposerNodeFile.h
-  dtkComposerNodeFile_p.h
-  dtkComposerNodeGraphic.h
-  dtkComposerNodeLog.h
-  dtkComposerNodeLogic.h
-  dtkComposerNodeLoop.h
-  dtkComposerNodeLoopDataComposite.h
-  dtkComposerNodeLoopFor.h
-  dtkComposerNodeLoopWhile.h
-  dtkComposerNodeNumber.h
-  dtkComposerNodeNumberDouble.h
-  dtkComposerNodeNumberInteger.h
-  dtkComposerNodeNumberLong.h
-  dtkComposerNodeNumberComparator.h
-  dtkComposerNodeNumberOperator.h
-  dtkComposerNodeProcess.h
-  dtkComposerNodeProperty.h
-  dtkComposerNodeString.h
-  dtkComposerNodeStringComparator.h
-  dtkComposerNodeStringOperator.h
-  dtkComposerNodeView.h
-  dtkComposerNote.h
-  dtkComposerReader.h
-  dtkComposerScene.h
-  dtkComposerView.h
-  dtkComposerWriter.h)
+  dtkComposer_p.h)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkComposer.cpp
-  dtkComposerEdge.cpp
-  dtkComposerEvaluator.cpp
-  dtkComposerExtractor.cpp
-  dtkComposerNode.cpp
-  dtkComposerNodeBoolean.cpp
-  dtkComposerNodeBooleanOperator.cpp
-  dtkComposerNodeCase.cpp
-  dtkComposerNodeComposite.cpp
-  dtkComposerNodeConditional.cpp
-  dtkComposerNodeControl.cpp
-  dtkComposerNodeControlBlock.cpp
-  dtkComposerNodeData.cpp
-  dtkComposerNodeFactory.cpp
-  dtkComposerNodeFile.cpp
-  dtkComposerNodeGraphic.cpp
-  dtkComposerNodeLog.cpp
-  dtkComposerNodeLogic.cpp
-  dtkComposerNodeLoop.cpp
-  dtkComposerNodeLoopDataComposite.cpp
-  dtkComposerNodeLoopFor.cpp
-  dtkComposerNodeLoopWhile.cpp
-  dtkComposerNodeNumber.cpp
-  dtkComposerNodeNumberDouble.cpp
-  dtkComposerNodeNumberInteger.cpp
-  dtkComposerNodeNumberLong.cpp
-  dtkComposerNodeNumberComparator.cpp
-  dtkComposerNodeNumberOperator.cpp
-  dtkComposerNodeProcess.cpp
-  dtkComposerNodeProperty.cpp
-  dtkComposerNodeString.cpp
-  dtkComposerNodeStringComparator.cpp
-  dtkComposerNodeStringOperator.cpp
-  dtkComposerNodeTransmitter.cpp
-  dtkComposerNodeView.cpp
-  dtkComposerNote.cpp
-  dtkComposerReader.cpp
-  dtkComposerRoute.cpp
-  dtkComposerScene.cpp
-  dtkComposerView.cpp
-  dtkComposerWriter.cpp)
+  dtkComposer.cpp)
 
 ## #################################################################
 ## Build rules

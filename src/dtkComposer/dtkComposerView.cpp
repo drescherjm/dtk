@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:02:53
  * Version: $Id$
- * Last-Updated: lun. janv. 30 11:07:56 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 5
+ * Last-Updated: Mon Jan 30 15:52:27 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 36
  */
 
 /* Commentary:
@@ -17,12 +17,22 @@
  *
  */
 
-
 #include "dtkComposerView.h"
 
-dtkComposerView::dtkComposerView(QWidget *parent) : QGraphicsView(parent)
+class dtkComposerViewPrivate
 {
+public:
 
+};
+
+dtkComposerView::dtkComposerView(QWidget *parent) : QGraphicsView(parent), d(new dtkComposerViewPrivate)
+{
+    this->setAttribute(Qt::WA_MacShowFocusRect, false);
+    this->setBackgroundBrush(QColor(0x55, 0x55, 0x55));
+    this->setDragMode(QGraphicsView::RubberBandDrag);
+    this->setFrameStyle(QFrame::NoFrame);
+    this->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
+    this->setRubberBandSelectionMode(Qt::IntersectsItemShape);
 }
 
 dtkComposerView::~dtkComposerView(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:00:30
  * Version: $Id$
- * Last-Updated: lun. janv. 30 11:10:50 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 7
+ * Last-Updated: Mon Jan 30 15:12:12 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 15
  */
 
 /* Commentary:
@@ -22,8 +22,9 @@
 
 #include "dtkComposerExport.h"
 
-#include <QtCore>
 #include <QtGui>
+
+class dtkComposerViewPrivate;
 
 class DTKCOMPOSER_EXPORT dtkComposerView : public QGraphicsView
 {
@@ -33,8 +34,8 @@ public:
              dtkComposerView(QWidget *parent = 0);
     virtual ~dtkComposerView(void);
 
+private:
+    dtkComposerViewPrivate *d;
 };
 
-
-#endif /* DTKCOMPOSERVIEW_H */
-
+#endif

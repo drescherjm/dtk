@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:37:15 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 12:38:26 2012 (+0100)
+ * Last-Updated: Mon Jan 30 19:43:43 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 59
+ *     Update #: 60
  */
 
 /* Commentary: 
@@ -33,7 +33,9 @@ int main(int argc, char **argv)
 
     dtkPluginManager::instance()->initialize();
 
-    dtkCreatorMainWindow mainwindow; mainwindow.show();
+    dtkCreatorMainWindow mainwindow;
+    mainwindow.show();
+    mainwindow.raise();
 
     int status = application.exec();
 

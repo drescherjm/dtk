@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 12:42:42 2012 (+0100)
+ * Last-Updated: Mon Jan 30 19:43:29 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 529
+ *     Update #: 532
  */
 
 /* Commentary: 
@@ -48,6 +48,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     this->setCentralWidget(d->composer);
     this->setWindowTitle("dtk Creator");
+
+    this->readSettings();
 }
 
 dtkCreatorMainWindow::~dtkCreatorMainWindow(void)
@@ -73,4 +75,11 @@ void dtkCreatorMainWindow::writeSettings(void)
     settings.setValue("pos", pos());
     settings.setValue("size", size());
     settings.endGroup();
+}
+
+void dtkCreatorMainWindow::closeEvent(QCloseEvent *event)
+{
+    Q_UNUSED(event);
+
+    this->writeSettings();
 }

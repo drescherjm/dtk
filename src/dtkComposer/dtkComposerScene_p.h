@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 15:32:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 17:40:17 2012 (+0100)
+ * Last-Updated: Mon Jan 30 18:36:20 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 49
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -69,13 +69,15 @@ public:
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
 public:
+    dtkComposerScenePort *source(void);
+    dtkComposerScenePort *destination(void);
+
+public:
     void setSource(dtkComposerScenePort *port);
     void setDestination(dtkComposerScenePort *port);
 
 public:
     void adjust(void);
-
-protected:
     void adjust(const QPointF& start, const QPointF& end);
 
 private:
@@ -122,6 +124,7 @@ private:
 class dtkComposerScenePrivate
 {
 public:
+    dtkComposerSceneEdge *current_edge;
 };
 
 #endif

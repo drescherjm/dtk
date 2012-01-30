@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:38:47 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 12:23:05 2012 (+0100)
+ * Last-Updated: Mon Jan 30 19:42:02 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 32
+ *     Update #: 33
  */
 
 /* Commentary: 
@@ -34,6 +34,9 @@ public:
 
     void readSettings(void);
     void writeSettings(void);
+
+protected:
+    void closeEvent(QCloseEvent *event);
 
 private:
     dtkCreatorMainWindowPrivate *d;

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Mon Jan 30 17:42:57 2012 (+0100)
+ * Last-Updated: Mon Jan 30 19:44:14 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 193
+ *     Update #: 283
  */
 
 /* Commentary:
@@ -37,6 +37,7 @@ dtkComposerScenePort::dtkComposerScenePort(QGraphicsItem *parent) : QGraphicsIte
     d->ellipse->setBrush(Qt::yellow);
     d->ellipse->setRect(0, 0, 10, 10);
     
+    this->setFlags(QGraphicsItem::ItemIsSelectable);
     this->setZValue(1);
 }
 
@@ -88,7 +89,7 @@ dtkComposerSceneEdge::~dtkComposerSceneEdge(void)
 
 QRectF dtkComposerSceneEdge::boundingRect(void) const
 {
-
+    return d->path.boundingRect();
 }
 
 void dtkComposerSceneEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -104,6 +105,16 @@ void dtkComposerSceneEdge::paint(QPainter *painter, const QStyleOptionGraphicsIt
     painter->drawPath(d->path);
 
     painter->restore();
+}
+
+dtkComposerScenePort *dtkComposerSceneEdge::source(void)
+{
+    return d->source;
+}
+
+dtkComposerScenePort *dtkComposerSceneEdge::destination(void)
+{
+    return d->destination;
 }
 
 void dtkComposerSceneEdge::setSource(dtkComposerScenePort *port)
@@ -230,8 +241,6 @@ void dtkComposerSceneNode::layout(void)
     for(int i = 0; i < d->output_ports.count(); i++)
         d->output_ports.at(i)->setPos(QPointF(node_width - port_margin_left - d->output_ports.at(i)->boundingRect().width(), i*d->output_ports.at(i)->boundingRect().height() + i*port_spacing + port_margin_top));
 
-    qDebug() << "Done positionnign ports";
-
     if(d->input_ports.count() || d->output_ports.count())
         if(d->input_ports.count() >= d->output_ports.count())
             d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), d->input_ports.count() * d->input_ports.at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (d->input_ports.count()-1) * port_spacing));
@@ -245,21 +254,17 @@ void dtkComposerSceneNode::layout(void)
 
 dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(new dtkComposerScenePrivate)
 {
+    d->current_edge = NULL;
+
     // temporary scene
 
     dtkComposerSceneNode *n1 = new dtkComposerSceneNode;
     dtkComposerSceneNode *n2 = new dtkComposerSceneNode;
     dtkComposerSceneNode *n3 = new dtkComposerSceneNode;
 
-    dtkComposerSceneEdge *e1 = new dtkComposerSceneEdge;
-    e1->setSource(n1->outputPorts().at(0));
-    e1->setDestination(n2->inputPorts().at(0));
-
     this->addItem(n1);
     this->addItem(n2);
     this->addItem(n3);
-
-    this->addItem(e1);
 }
 
 dtkComposerScene::~dtkComposerScene(void)
@@ -267,4 +272,70 @@ dtkComposerScene::~dtkComposerScene(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    QGraphicsScene::mouseMoveEvent(event);
+
+    if (d->current_edge)
+        d->current_edge->adjust(d->current_edge->source()->scenePos(), event->scenePos());
+
+    if (d->current_edge)
+        this->update(d->current_edge->boundingRect());
+
+    if (d->current_edge)
+        event->accept();
+}
+
+void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    QGraphicsScene::mousePressEvent(event);
+
+    dtkComposerScenePort *source = this->portAt(event->scenePos());
+
+    if(!source)
+        return;
+
+    if(d->current_edge)
+        return;
+
+    qDebug() << "Creating edge";
+
+    d->current_edge = new dtkComposerSceneEdge;
+    d->current_edge->setSource(source);
+
+    this->addItem(d->current_edge);
+}
+
+void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    QGraphicsScene::mouseReleaseEvent(event);
+
+    if(!d->current_edge)
+        return;
+
+    qDebug() << "destorying edge";
+
+    this->removeItem(d->current_edge);
+
+    delete d->current_edge;
+
+    d->current_edge = NULL;
+}
+
+void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+{
+    QGraphicsScene::mouseDoubleClickEvent(event);
+}
+
+dtkComposerScenePort *dtkComposerScene::portAt(const QPointF& point) const
+{
+    QList<QGraphicsItem *> items = this->items(point.x(), point.y(), 1, 1, Qt::IntersectsItemBoundingRect);
+
+    foreach(QGraphicsItem *item, items)
+        if (dtkComposerScenePort *port = dynamic_cast<dtkComposerScenePort *>(item))
+            return port;
+
+    return NULL;
 }

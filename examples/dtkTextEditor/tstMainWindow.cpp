@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:19:56 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun  8 16:34:16 2010 (+0200)
+ * Last-Updated: Mon Jan 30 14:30:13 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 51
+ *     Update #: 55
  */
 
 /* Commentary: 
@@ -23,10 +23,6 @@
 
 #include <dtkGui/dtkRecentFilesMenu.h>
 #include <dtkGui/dtkTextEditor.h>
-#include <dtkGui/dtkTextEditorPreferencesWidget.h>
-#include <dtkGui/dtkTextEditorSyntaxHighlighterCpp.h>
-#include <dtkGui/dtkTextEditorSyntaxHighlighterPython.h>
-#include <dtkGui/dtkTextEditorSyntaxHighlighterTcl.h>
 
 class tstMainWindowPrivate
 {
@@ -40,10 +36,7 @@ public:
     QAction *fileSaveAction;
     QAction *fileSaveAsAction;
 
-    QAction *preferencesAction;
-
     dtkTextEditor *editor;
-    dtkTextEditorSyntaxHighlighter *highlighter;
 
     dtkRecentFilesMenu *recentFilesMenu;
 
@@ -76,9 +69,6 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
     d->editor = new dtkTextEditor(this);
     d->editor->readSettings();
 
-    d->highlighter = new dtkTextEditorSyntaxHighlighterCpp(d->editor);
-    Q_UNUSED(d->highlighter);
-
     d->fileOpenAction = new QAction("Open", this);
     d->fileOpenAction->setShortcut(Qt::ControlModifier + Qt::Key_O);
     connect(d->fileOpenAction, SIGNAL(triggered()), this, SLOT(fileOpen()));
@@ -93,16 +83,11 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
     d->fileSaveAsAction->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_S);
     connect(d->fileSaveAsAction, SIGNAL(triggered()), this, SLOT(fileSaveAs()));
 
-    d->preferencesAction = new QAction("Preferences", this);
-    d->preferencesAction->setShortcut(Qt::ControlModifier + Qt::Key_Comma);
-    connect(d->preferencesAction, SIGNAL(triggered()), this, SLOT(showPreferences()));
-
     d->fileMenu = this->menuBar()->addMenu("File");
     d->fileMenu->addAction(d->fileOpenAction);
     d->fileMenu->addMenu(d->recentFilesMenu);
     d->fileMenu->addAction(d->fileSaveAction);
     d->fileMenu->addAction(d->fileSaveAsAction);
-    d->fileMenu->addAction(d->preferencesAction);
 
     d->q = this;
 
@@ -118,7 +103,6 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
 tstMainWindow::~tstMainWindow(void)
 {
     delete d->editor;
-    delete d->highlighter;
     delete d;
 }
 
@@ -167,13 +151,6 @@ bool tstMainWindow::fileSaveAs(void)
         return d->editor->save(fileName);
 
     return false;
-}
-
-void tstMainWindow::showPreferences(void)
-{
-    dtkTextEditorPreferencesWidget *widget = d->editor->preferencesWidget(this);
-    widget->setWindowFlags(Qt::Sheet);
-    widget->show();
 }
 
 void tstMainWindow::closeEvent(QCloseEvent *event)

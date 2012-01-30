@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:23:18 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep  6 09:19:07 2011 (+0200)
+ * Last-Updated: Mon Jan 30 14:26:23 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 129
+ *     Update #: 135
  */
 
 /* Commentary: 
@@ -23,10 +23,6 @@
 #include <dtkCore/dtkLog.h>
 
 #include <dtkGui/dtkTextEditor.h>
-#include <dtkGui/dtkTextEditorSyntaxHighlighterCpp.h>
-#include <dtkGui/dtkTextEditorSyntaxHighlighterPython.h>
-#include <dtkGui/dtkTextEditorSyntaxHighlighterTcl.h>
-#include <dtkGui/dtkTextEditorPreferencesWidget.h>
 
 class dtkTextEditorExtraArea : public QWidget
 {
@@ -290,7 +286,6 @@ public:
     dtkTextEditorDocument *document;
 
     dtkTextEditorExtraArea *extraArea;
-    dtkTextEditorPreferencesWidget *preferences;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -305,7 +300,6 @@ dtkTextEditor::dtkTextEditor(QWidget *parent) : QPlainTextEdit(parent)
     d->showRevisions = true;
 
     d->extraArea = new dtkTextEditorExtraArea(this);
-    d->preferences = NULL;
 
     d->document = new dtkTextEditorDocument;
     // begin setting up document
@@ -379,14 +373,14 @@ bool dtkTextEditor::open(const QString& fileName)
         moveCursor(QTextCursor::Start);
         setReadOnly(d->document->hasDecodingError());
 
-        if(fileName.endsWith(".cpp") || fileName.endsWith(".cxx") || fileName.endsWith(".c") || fileName.endsWith(".h"))
-            new dtkTextEditorSyntaxHighlighterCpp(this);
+        // if(fileName.endsWith(".cpp") || fileName.endsWith(".cxx") || fileName.endsWith(".c") || fileName.endsWith(".h"))
+        //     new dtkTextEditorSyntaxHighlighterCpp(this);
 
-        if(fileName.endsWith(".py"))
-            new dtkTextEditorSyntaxHighlighterPython(this);
+        // if(fileName.endsWith(".py"))
+        //     new dtkTextEditorSyntaxHighlighterPython(this);
 
-        if(fileName.endsWith(".tcl"))
-            new dtkTextEditorSyntaxHighlighterTcl(this);
+        // if(fileName.endsWith(".tcl"))
+        //     new dtkTextEditorSyntaxHighlighterTcl(this);
 
         return true;
     }
@@ -460,14 +454,6 @@ QColor dtkTextEditor::foregroundColor(void) const
 {
     QPalette p(palette());
     return p.color(QPalette::Text);
-}
-
-dtkTextEditorPreferencesWidget *dtkTextEditor::preferencesWidget(QWidget *parent)
-{
-    if(!d->preferences)
-        d->preferences = new dtkTextEditorPreferencesWidget(this, parent);
-
-    return d->preferences;
 }
 
 void dtkTextEditor::setShowLineNumbers(bool show)

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Nov 29 00:05:24 2011 (+0100)
+## Last-Updated: Mon Jan 30 13:08:21 2012 (+0100)
 ##           By: Julien Wintz
-##     Update #: 210
+##     Update #: 222
 ######################################################################
 ## 
 ### Commentary: 
@@ -26,132 +26,59 @@ project(dtkGui)
 set(${PROJECT_NAME}_HEADERS
   dtkAboutBox.h
   dtkAboutPlugin.h
-  dtkAddressBar.h
   dtkAnchoredBar.h
   dtkColorButton.h
   dtkColorGrid.h
   dtkFlowLayout.h
   dtkFinder.h
   dtkGuiExport.h
-  dtkInsetMenu.h
-  dtkInspector.h
-  dtkInspectorBox.h
-  dtkInspectorButton.h
-  dtkInspectorTitleBar.h
-  dtkInspectorToolBar.h
-  dtkInspectorSwitch.h
   dtkInterpreter.h
-  dtkInterpreterPreferencesWidget.h
-  dtkNavigationBar.h
   dtkPluginsEditor.h
   dtkPopup.h
-  dtkPreferencesWidget.h
   dtkProgressIndicator.h
   dtkRecentFilesMenu.h
-  dtkRegistrationBar.h
-  dtkSearchBar.h
   dtkSettingsEditor.h
-  dtkSettingsEditorPreferencesWidget.h
   dtkSpacer.h
   dtkSplitter.h
-  dtkTextEditor.h
-  dtkTextEditorPreferencesWidget.h
-  dtkTextEditorSyntaxHighlighter.h
-  dtkTextEditorSyntaxHighlighterCpp.h
-  dtkTextEditorSyntaxHighlighterPython.h
-  dtkTextEditorSyntaxHighlighterTcl.h)
-
-if(QT_QTWEBKIT_FOUND)
-set(${PROJECT_NAME}_HEADERS
-  ${${PROJECT_NAME}_HEADERS}
-  dtkTagCloud.h)
-endif(QT_QTWEBKIT_FOUND)
+  dtkTagCloud.h
+  dtkTextEditor.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkAboutBox.h
   dtkAboutPlugin.h
-  dtkAddressBar.h
   dtkAnchoredBar.h
   dtkColorButton.h
   dtkColorGrid.h
   dtkFinder.h
-  dtkInsetMenu.h
-  dtkInspector.h
-  dtkInspectorBox.h
-  dtkInspectorButton.h
-  dtkInspectorTitleBar.h
-  dtkInspectorToolBar.h
-  dtkInspectorSwitch.h
   dtkInterpreter.h
-  dtkInterpreterPreferencesWidget.h
-  dtkNavigationBar.h
   dtkPluginsEditor.h
   dtkPopup.h
-  dtkPreferencesWidget.h
   dtkProgressIndicator.h
   dtkRecentFilesMenu.h
-  dtkRegistrationBar.h
-  dtkSearchBar.h
   dtkSettingsEditor.h
-  dtkSettingsEditorPreferencesWidget.h
   dtkSpacer.h
   dtkSplitter.h
-  dtkTextEditor.h
-  dtkTextEditorPreferencesWidget.h
-  dtkTextEditorSyntaxHighlighter.h)
-
-if(QT_QTWEBKIT_FOUND)
-set(${PROJECT_NAME}_HEADERS_MOC
-  ${${PROJECT_NAME}_HEADERS_MOC}
-  dtkTagCloud.h)
-endif(QT_QTWEBKIT_FOUND)
+  dtkTagCloud.h
+  dtkTextEditor.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkAboutBox.cpp
   dtkAboutPlugin.cpp
-  dtkAddressBar.cpp
   dtkAnchoredBar.cpp
   dtkColorButton.cpp
   dtkColorGrid.cpp
   dtkFlowLayout.cpp
   dtkFinder.cpp
-  dtkInsetMenu.cpp
-  dtkInspector.cpp
-  dtkInspectorBox.cpp
-  dtkInspectorButton.cpp
-  dtkInspectorTitleBar.cpp
-  dtkInspectorToolBar.cpp
-  dtkInspectorSwitch.cpp
   dtkInterpreter.cpp
-  dtkInterpreterPreferencesWidget.cpp
-  dtkNavigationBar.cpp
   dtkPluginsEditor.cpp
   dtkPopup.cpp
-  dtkPreferencesWidget.cpp
   dtkProgressIndicator.cpp
   dtkRecentFilesMenu.cpp
-  dtkRegistrationBar.cpp
-  dtkSearchBar.cpp
   dtkSettingsEditor.cpp
-  dtkSettingsEditorPreferencesWidget.cpp
   dtkSpacer.cpp
   dtkSplitter.cpp
-  dtkTextEditor.cpp
-  dtkTextEditorPreferencesWidget.cpp
-  dtkTextEditorSyntaxHighlighter.cpp
-  dtkTextEditorSyntaxHighlighterCpp.cpp
-  dtkTextEditorSyntaxHighlighterPython.cpp
-  dtkTextEditorSyntaxHighlighterTcl.cpp)
-
-if(QT_QTWEBKIT_FOUND)
-set(${PROJECT_NAME}_SOURCES
-  ${${PROJECT_NAME}_SOURCES}
-  dtkTagCloud.cpp)
-endif(QT_QTWEBKIT_FOUND)
-
-set(${PROJECT_NAME}_FORMS
-  dtkInterpreterPreferencesWidget.ui
-  dtkTextEditorPreferencesWidget.ui)
+  dtkTagCloud.cpp
+  dtkTextEditor.cpp)
 
 set(${PROJECT_NAME}_RESOURCES dtkGui.qrc)
 

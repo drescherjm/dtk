@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Mon Jan 30 19:44:14 2012 (+0100)
+ * Last-Updated: Tue Jan 31 00:17:49 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 283
+ *     Update #: 434
  */
 
 /* Commentary:
@@ -33,8 +33,8 @@ public:
 dtkComposerScenePort::dtkComposerScenePort(QGraphicsItem *parent) : QGraphicsItem(parent), d(new dtkComposerScenePortPrivate)
 {
     d->ellipse = new QGraphicsEllipseItem(this);
-    d->ellipse->setPen(QPen(Qt::gray, 1));
-    d->ellipse->setBrush(Qt::yellow);
+    d->ellipse->setPen(QPen(Qt::darkGray, 1));
+    d->ellipse->setBrush(Qt::lightGray);
     d->ellipse->setRect(0, 0, 10, 10);
     
     this->setFlags(QGraphicsItem::ItemIsSelectable);
@@ -43,7 +43,9 @@ dtkComposerScenePort::dtkComposerScenePort(QGraphicsItem *parent) : QGraphicsIte
 
 dtkComposerScenePort::~dtkComposerScenePort(void)
 {
-    
+    delete d;
+
+    d = NULL;
 }
 
 QRectF dtkComposerScenePort::boundingRect(void) const
@@ -100,7 +102,7 @@ void dtkComposerSceneEdge::paint(QPainter *painter, const QStyleOptionGraphicsIt
     painter->save();
 
     painter->setPen(QPen(Qt::black, 1));
-    painter->setBrush(Qt::yellow);
+    painter->setBrush(Qt::gray);
 
     painter->drawPath(d->path);
 
@@ -168,6 +170,22 @@ void dtkComposerSceneEdge::adjust(const QPointF& start, const QPointF& end)
     this->update();
 }
 
+bool dtkComposerSceneEdge::link(bool anyway)
+{
+    if(!d->source || !d->destination)
+        return false;
+
+    dynamic_cast<dtkComposerSceneNode *>(d->source->parentItem())->addOutputEdge(this);
+    dynamic_cast<dtkComposerSceneNode *>(d->destination->parentItem())->addInputEdge(this);
+
+    return true;
+}
+
+bool dtkComposerSceneEdge::unlink(void)
+{
+    return true;
+}
+
 // /////////////////////////////////////////////////////////////////
 // dtkComposerSceneNode
 // /////////////////////////////////////////////////////////////////
@@ -177,6 +195,9 @@ class dtkComposerSceneNodePrivate
 public:
     QList<dtkComposerScenePort *>  input_ports;
     QList<dtkComposerScenePort *> output_ports;
+
+    QList<dtkComposerSceneEdge *>  input_edges;
+    QList<dtkComposerSceneEdge *> output_edges;
 
 public:
     QRectF rect;
@@ -203,6 +224,36 @@ dtkComposerSceneNode::~dtkComposerSceneNode(void)
     d = NULL;
 }
 
+void dtkComposerSceneNode::addInputEdge(dtkComposerSceneEdge *edge)
+{
+    d->input_edges << edge;
+}
+
+void dtkComposerSceneNode::addOutputEdge(dtkComposerSceneEdge *edge)
+{
+    d->output_edges << edge;
+}
+
+void dtkComposerSceneNode::removeInputEdge(dtkComposerSceneEdge *edge)
+{
+    d->input_edges.removeAll(edge);
+}
+
+void dtkComposerSceneNode::removeOutputEdge(dtkComposerSceneEdge *edge)
+{
+    d->output_edges.removeAll(edge);
+}
+
+QList<dtkComposerSceneEdge *> dtkComposerSceneNode::inputEdges(void)
+{
+    return d->input_edges;
+}
+
+QList<dtkComposerSceneEdge *> dtkComposerSceneNode::outputEdges(void)
+{
+    return d->output_edges;
+}
+
 QRectF dtkComposerSceneNode::boundingRect(void) const
 {
     return d->rect;
@@ -210,10 +261,21 @@ QRectF dtkComposerSceneNode::boundingRect(void) const
 
 void dtkComposerSceneNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    if(this->isSelected())
-        painter->fillRect(option->rect, Qt::red);
+    static qreal radius = 5.0;
+
+    QLinearGradient gradiant(this->boundingRect().left(), this->boundingRect().top(), this->boundingRect().left(), this->boundingRect().bottom());
+    gradiant.setColorAt(0.0, QColor(Qt::white));
+    gradiant.setColorAt(0.3, QColor(Qt::gray));
+    gradiant.setColorAt(1.0, QColor(Qt::gray).darker());
+
+    if (this->isSelected())
+        painter->setPen(QPen(Qt::magenta, 2, Qt::SolidLine));
     else
-        painter->fillRect(option->rect, Qt::magenta);
+        painter->setPen(QPen(Qt::black, 1, Qt::SolidLine));
+
+    painter->setBrush(gradiant);
+
+    painter->drawRoundedRect(this->boundingRect(), radius, radius);
 }
 
 QList<dtkComposerScenePort *> dtkComposerSceneNode::inputPorts(void)
@@ -248,6 +310,20 @@ void dtkComposerSceneNode::layout(void)
             d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), d->output_ports.count() * d->output_ports.at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (d->output_ports.count()-1) * port_spacing));
 }
 
+QVariant dtkComposerSceneNode::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
+{
+    if(change == QGraphicsItem::ItemSelectedHasChanged) {
+
+        if(value.toBool()) {
+            ; // TO SELECTED STATE
+        } else {
+            ; // TO UNUSELECTED STATE
+        }
+    }
+
+    return QGraphicsItem::itemChange(change, value);
+}
+
 // /////////////////////////////////////////////////////////////////
 // 
 // /////////////////////////////////////////////////////////////////
@@ -278,6 +354,30 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsScene::mouseMoveEvent(event);
 
+    // Managnig grabbing of selected nodes
+
+    foreach(QGraphicsItem *item, this->selectedItems()) {
+
+        if(dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>(item)) {
+
+            QRectF updateRect;
+
+            foreach(dtkComposerSceneEdge *edge, node->inputEdges()) {
+                edge->adjust();
+                updateRect |= edge->boundingRect();
+            }
+            
+            foreach(dtkComposerSceneEdge *edge, node->outputEdges()) {
+                edge->adjust();
+                updateRect |= edge->boundingRect();
+            }
+            
+            this->update(updateRect);
+        }
+    }
+
+    // Managing grabbing of current edge
+
     if (d->current_edge)
         d->current_edge->adjust(d->current_edge->source()->scenePos(), event->scenePos());
 
@@ -300,8 +400,6 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     if(d->current_edge)
         return;
 
-    qDebug() << "Creating edge";
-
     d->current_edge = new dtkComposerSceneEdge;
     d->current_edge->setSource(source);
 
@@ -315,12 +413,16 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     if(!d->current_edge)
         return;
 
-    qDebug() << "destorying edge";
+    if(dtkComposerScenePort *destination = this->portAt(event->scenePos()))
+        d->current_edge->setDestination(destination);
 
-    this->removeItem(d->current_edge);
-
-    delete d->current_edge;
-
+    if(!d->current_edge->link()) {
+        this->removeItem(d->current_edge);
+        delete d->current_edge;
+    } else {
+        d->edges << d->current_edge;
+    }
+    
     d->current_edge = NULL;
 }
 

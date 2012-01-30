@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 15:32:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 18:36:20 2012 (+0100)
+ * Last-Updated: Mon Jan 30 23:53:11 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 53
+ *     Update #: 77
  */
 
 /* Commentary: 
@@ -80,6 +80,10 @@ public:
     void adjust(void);
     void adjust(const QPointF& start, const QPointF& end);
 
+public:
+    bool   link(bool anyway = false);
+    bool unlink(void);
+
 private:
     dtkComposerSceneEdgePrivate *d;
 };
@@ -101,6 +105,16 @@ public:
     ~dtkComposerSceneNode(void);
 
 public:
+    void  addInputEdge(dtkComposerSceneEdge *edge);
+    void addOutputEdge(dtkComposerSceneEdge *edge);
+
+    void  removeInputEdge(dtkComposerSceneEdge *edge);
+    void removeOutputEdge(dtkComposerSceneEdge *edge);
+
+    QList<dtkComposerSceneEdge *> inputEdges(void);
+    QList<dtkComposerSceneEdge *> outputEdges(void);
+
+public:
     virtual QRectF boundingRect(void) const;
 
 public:
@@ -112,6 +126,9 @@ public:
 
 protected:
     void layout(void);
+
+protected:
+    QVariant itemChange(GraphicsItemChange change, const QVariant& value);
 
 private:
     dtkComposerSceneNodePrivate *d;
@@ -125,6 +142,10 @@ class dtkComposerScenePrivate
 {
 public:
     dtkComposerSceneEdge *current_edge;
+
+public:
+    QList<dtkComposerSceneEdge *> edges;
+    QList<dtkComposerSceneNode *> nodes;
 };
 
 #endif

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 15:29:01 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 11 13:43:41 2009 (+0200)
+ * Last-Updated: Mon Jan 30 14:25:34 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 40
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -29,7 +29,6 @@
 class dtkScriptInterpreter;
 
 class dtkInterpreterPrivate;
-class dtkInterpreterPreferencesWidget;
 
 class DTKGUI_EXPORT dtkInterpreter : public dtkTextEditor
 {
@@ -46,8 +45,6 @@ public:
     void registerAsHandler(dtkLog::Handler handler);
 
     QString filter(QString text);
-
-    dtkInterpreterPreferencesWidget *preferencesWidget(QWidget *parent = 0);
 
     dtkScriptInterpreter *interpreter(void);
 

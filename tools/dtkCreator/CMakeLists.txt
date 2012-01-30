@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Aug  3 17:34:51 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Nov 14 13:07:07 2011 (+0100)
+## Last-Updated: Mon Jan 30 12:22:39 2012 (+0100)
 ##           By: Julien Wintz
-##     Update #: 143
+##     Update #: 151
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,44 +24,14 @@ project(dtkCreator)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS_MOC
-  dtkCreatorMainWindow.h
-  dtkCreatorPluginBrowser.h
-  dtkCreatorScriptBrowser.h
-  dtkCreatorViewer.h
-  dtkCreatorWidgetFactory.h)
+  dtkCreatorMainWindow.h)
 
 set(${PROJECT_NAME}_HEADERS
-    ${${PROJECT_NAME}_HEADERS_MOC}
-    )
+  ${${PROJECT_NAME}_HEADERS_MOC})
 
 set(${PROJECT_NAME}_SOURCES
-  dtkCreatorController.cpp
   dtkCreatorMainWindow.cpp
-  dtkCreatorPluginBrowser.cpp
-  dtkCreatorScriptBrowser.cpp
-  dtkCreatorViewer.cpp
-  dtkCreatorWidgetFactory.cpp
   main.cpp)
-
-## #################################################################
-## Wrapping
-## #################################################################
-
-set(${PROJECT_NAME}_SOURCES_WRAP)
-
-if(BUILD_WRAPPERS AND SWIG_FOUND)
-
-  set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS_MOC})
-  
-  if(PYTHONLIBS_FOUND)
-    dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP creator python ${CMAKE_CURRENT_SOURCE_DIR}/dtkCreator.i ${${PROJECT_NAME}_WRAP_DEPENDS})
-  endif(PYTHONLIBS_FOUND)
-
-  if(TCL_FOUND)
-    dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP creator tcl    ${CMAKE_CURRENT_SOURCE_DIR}/dtkCreator.i ${${PROJECT_NAME}_WRAP_DEPENDS})
-  endif(TCL_FOUND)
-
-endif(BUILD_WRAPPERS AND SWIG_FOUND)
 
 ## #################################################################
 ## Build rules
@@ -83,29 +53,7 @@ add_executable(${PROJECT_NAME} MACOSX_BUNDLE WIN32
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkCore
-  dtkScript
-  dtkGui
-  dtkComposer
-  dtkDistributed
-  dtkVr)
-
-## #################################################################
-## Handling of generated script modules
-## #################################################################
-
-set(${PROJECT_NAME}_MODULES)
-
-if(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dtkCreator.i
-  COMMAND ${CMAKE_COMMAND} ARGS -E  make_directory ${CMAKE_BINARY_DIR}/modules
-  COMMAND ${CMAKE_COMMAND} ARGS -E  copy ${${PROJECT_NAME}_BINARY_DIR}/creator.py ${CMAKE_BINARY_DIR}/modules
-  COMMENT "-- Moving python modules to ${CMAKE_BINARY_DIR}/modules")
-
-set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/creator.py)
-
-endif(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
+  dtkComposer)
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

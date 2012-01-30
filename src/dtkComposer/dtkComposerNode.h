@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 14:50:46 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 16:22:40 2012 (+0100)
+ * Last-Updated: Mon Jan 30 16:49:54 2012 (+0100)
  *           By: tkloczko
- *     Update #: 24
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -22,18 +22,14 @@
 
 #include "dtkComposerExport.h"
 
-#include <QtCore/QPair>
+#include <QObject>
 
 class dtkComposerAbstractTransmitter;
 class dtkComposerNodePrivate;
 
-class QDebug;
-class QString;
-
-class DTKCOMPOSER_EXPORT dtkComposerNode
+class DTKCOMPOSER_EXPORT dtkComposerNode : public QObject
 {
-public:
-    typedef QPair<dtkComposerNode *, int> emission_source;
+    Q_OBJECT
 
 public:
              dtkComposerNode(void);

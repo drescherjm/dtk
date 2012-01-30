@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:59:27 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 11:21:40 2012 (+0100)
+ * Last-Updated: Mon Jan 30 17:07:35 2012 (+0100)
  *           By: tkloczko
- *     Update #: 9
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -20,40 +20,9 @@
 #ifndef DTKCOMPOSERTRANSMITTER_H
 #define DTKCOMPOSERTRANSMITTER_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerAbstractTransmitter.h"
 
-class QDebug;
-class QString;
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerAbstractTransmitter declaration
-// /////////////////////////////////////////////////////////////////
-
-class dtkComposerAbstractTransmitterPrivate;
-
-class DTKCOMPOSER_EXPORT dtkComposerAbstractTransmitter
-{
-public:
-             dtkComposerAbstractTransmitter(void);
-    virtual ~dtkComposerAbstractTransmitter(void);
-
-public:
-    virtual QString identifier(void) const = 0;
-    
-public:
-    friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug, const dtkComposerAbstractTransmitter& transmitter);
-    friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug,       dtkComposerAbstractTransmitter *transmitter);
-
-private:
-    dtkComposerAbstractTransmitterPrivate *d;
-};
-
-// /////////////////////////////////////////////////////////////////
-// Debug operators
-// /////////////////////////////////////////////////////////////////
-
-DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug, const dtkComposerAbstractTransmitter& transmitter);
-DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug,       dtkComposerAbstractTransmitter *transmitter);
+class dtkComposerNode;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitter declaration
@@ -62,7 +31,7 @@ DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug,       dtkComposerAbstractTran
 template <typename T> class DTKCOMPOSER_EXPORT dtkComposerTransmitter : public dtkComposerAbstractTransmitter
 {
 public:
-     dtkComposerTransmitter(void);
+     dtkComposerTransmitter(dtkComposerNode *parent = 0);
     ~dtkComposerTransmitter(void);
 
 public:

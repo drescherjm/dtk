@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 14:56:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 16:14:58 2012 (+0100)
+ * Last-Updated: Mon Jan 30 16:51:48 2012 (+0100)
  *           By: tkloczko
- *     Update #: 23
+ *     Update #: 27
  */
 
 /* Commentary: 
@@ -18,11 +18,11 @@
  */
 
 #include "dtkComposerNode.h"
-#include "dtkComposerTransmitter.h"
+#include "dtkComposerAbstractTransmitter.h"
 
 #include <dtkCore/dtkGlobal.h>
 
-#include <QtCore>
+#include <QDebug>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodePrivate declaration
@@ -42,7 +42,7 @@ public:
 /*! 
  *  
  */
-dtkComposerNode::dtkComposerNode(void) : d(new dtkComposerNodePrivate)
+dtkComposerNode::dtkComposerNode(void) : QObject(), d(new dtkComposerNodePrivate)
 {
 
 }

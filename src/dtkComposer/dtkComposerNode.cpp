@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 14:56:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 15:02:42 2012 (+0100)
+ * Last-Updated: Mon Jan 30 16:51:48 2012 (+0100)
  *           By: tkloczko
- *     Update #: 7
+ *     Update #: 27
  */
 
 /* Commentary: 
@@ -18,8 +18,11 @@
  */
 
 #include "dtkComposerNode.h"
+#include "dtkComposerAbstractTransmitter.h"
 
-#include <QtCore/QDebug>
+#include <dtkCore/dtkGlobal.h>
+
+#include <QDebug>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodePrivate declaration
@@ -28,21 +31,76 @@
 class dtkComposerNodePrivate
 {
 public:
+    QList<dtkComposerAbstractTransmitter *> emitters;
 };
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNode implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNode::dtkComposerNode(void) : d(new dtkComposerNodePrivate)
+//! Constructs node.
+/*! 
+ *  
+ */
+dtkComposerNode::dtkComposerNode(void) : QObject(), d(new dtkComposerNodePrivate)
 {
 
 }
 
+//! Destroys node.
+/*! 
+ *  
+ */
 dtkComposerNode::~dtkComposerNode(void)
 {
     delete d;
     d = NULL;
+}
+
+//! Appends /a emitter in the list of emitters.
+/*! 
+ *  
+ */
+void dtkComposerNode::appendEmitter(dtkComposerAbstractTransmitter *emitter)
+{
+    if(!d->emitters.contains(emitter))
+        d->emitters << emitter;
+}
+
+//! Removes /a emitter from the list of emitters.
+/*! 
+ *  
+ */
+void dtkComposerNode::removeEmitter(dtkComposerAbstractTransmitter *emitter)
+{
+    d->emitters.removeAll(emitter);
+}
+
+//! Removes emitter at position /a index from the list of emitters.
+/*! 
+ *  
+ */
+void dtkComposerNode::removeEmitter(int index)
+{
+    d->emitters.removeAt(index);
+}
+
+//! Returns emitter at position /a index.
+/*! 
+ *  
+ */
+dtkComposerAbstractTransmitter *dtkComposerNode::emitter(int index)
+{
+    return d->emitters.at(index);
+}
+
+//! Returns emitter at position /a index.
+/*! 
+ *  
+ */
+void dtkComposerNode::setReceiver(dtkComposerAbstractTransmitter *transmitter)
+{
+    DTK_UNUSED(transmitter);
 }
 
 // /////////////////////////////////////////////////////////////////

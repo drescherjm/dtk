@@ -1,12 +1,12 @@
-/* dtkComposerTransmitter.cpp --- 
+/* dtkComposerAbstractTransmitter.cpp --- 
  * 
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
- * Created: Mon Jan 30 11:03:44 2012 (+0100)
+ * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 11:25:15 2012 (+0100)
+ * Last-Updated: Mon Jan 30 16:51:07 2012 (+0100)
  *           By: tkloczko
- *     Update #: 4
+ *     Update #: 3
  */
 
 /* Commentary: 
@@ -17,9 +17,10 @@
  * 
  */
 
-#include "dtkComposerTransmitter.h"
+#include "dtkComposerAbstractTransmitter.h"
+#include "dtkComposerNode.h"
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerAbstractTransmitterPrivate declaration
@@ -28,21 +29,27 @@
 class dtkComposerAbstractTransmitterPrivate
 {
 public:
+    dtkComposerNode *parent;
 };
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerAbstractTransmitter implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerAbstractTransmitter::dtkComposerAbstractTransmitter(void) : d(new dtkComposerAbstractTransmitterPrivate)
+dtkComposerAbstractTransmitter::dtkComposerAbstractTransmitter(dtkComposerNode *parent) : QObject(parent), d(new dtkComposerAbstractTransmitterPrivate)
 {
-
+    d->parent = parent;
 }
 
 dtkComposerAbstractTransmitter::~dtkComposerAbstractTransmitter(void)
 {
     delete d;
     d = NULL;
+}
+
+dtkComposerNode *dtkComposerAbstractTransmitter::parentNode(void) const
+{
+    return d->parent;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -70,3 +77,4 @@ QDebug operator<<(QDebug debug, dtkComposerAbstractTransmitter *transmitter)
     
     return debug.space();
 };
+

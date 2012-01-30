@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:14:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 11:27:24 2012 (+0100)
+ * Last-Updated: Mon Jan 30 17:07:20 2012 (+0100)
  *           By: tkloczko
- *     Update #: 4
+ *     Update #: 5
  */
 
 /* Commentary: 
@@ -30,7 +30,7 @@
 /*! 
  *  
  */
-template <typename T> inline dtkComposerTransmitter<T>::dtkComposerTransmitter(void) : dtkComposerAbstractTransmitter() 
+template <typename T> inline dtkComposerTransmitter<T>::dtkComposerTransmitter(dtkComposerNode *parent) : dtkComposerAbstractTransmitter(parent) 
 {
 
 };

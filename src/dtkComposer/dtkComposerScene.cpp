@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Tue Jan 31 18:22:25 2012 (+0100)
+ * Last-Updated: Tue Jan 31 19:12:12 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 573
+ *     Update #: 625
  */
 
 /* Commentary:
@@ -462,6 +462,54 @@ void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
     d->stack->push(command);
     
     event->acceptProposedAction();
+}
+
+void dtkComposerScene::keyPressEvent(QKeyEvent *event)
+{
+    if ((event->key() == Qt::Key_Backspace || event->key() == Qt::Key_Delete) && (event->modifiers() & Qt::ControlModifier)) {
+
+        QList<dtkComposerSceneNode *> selected_nodes;
+        // QList<dtkComposerSceneNote *> selected_notes;
+
+        foreach(QGraphicsItem *item, this->selectedItems()) {
+            if (dtkComposerSceneNode *snode = dynamic_cast<dtkComposerSceneNode *>(item))
+                selected_nodes << snode;
+            // if (dtkComposerSceneNote *snote = dynamic_cast<dtkComposerSceneNote *>(item))
+            //     selected_notes << snote;
+        }
+
+        
+        if(selected_nodes.count() > 1) {
+
+            dtkComposerStackCommand *group = new dtkComposerStackCommand;
+            group->setText("Destroy a set of nodes");
+            
+            foreach(dtkComposerSceneNode *node, selected_nodes) {
+
+                dtkComposerStackCommandDestroyNode *command = new dtkComposerStackCommandDestroyNode(group);
+                command->setScene(this);
+                command->setNode(node);
+            }
+
+            d->stack->push(group);
+
+        } else if(selected_nodes.count() == 1) {
+
+            dtkComposerStackCommandDestroyNode *command = new dtkComposerStackCommandDestroyNode;
+            command->setScene(this);
+            command->setNode(selected_nodes.first());
+
+            d->stack->push(command);
+        }
+
+        // this->removeNodes(selected_nodes);
+        // this->removeNotes(selected_notes);
+    }
+}
+
+void dtkComposerScene::keyReleaseEvent(QKeyEvent *event)
+{
+    Q_UNUSED(event);
 }
 
 void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)

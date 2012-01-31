@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jan 31 18:25:46 2012 (+0100)
+ * Last-Updated: Tue Jan 31 19:09:24 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 13
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -25,13 +25,14 @@
 
 class dtkComposerFactory;
 class dtkComposerScene;
+class dtkComposerSceneNode;
 class dtkComposerScenePort;
 class dtkComposerStackCommandPrivate;
 
 class dtkComposerStackCommand : public QUndoCommand
 {
 public:
-             dtkComposerStackCommand(void);
+             dtkComposerStackCommand(dtkComposerStackCommand *parent = 0);
     virtual ~dtkComposerStackCommand(void);
 
 public:
@@ -39,8 +40,8 @@ public:
     void setScene(dtkComposerScene *scene);
 
 public:
-    virtual void redo(void) = 0;
-    virtual void undo(void) = 0;
+    // virtual void redo(void) = 0;
+    // virtual void undo(void) = 0;
 
 protected:
     dtkComposerStackCommandPrivate *d;
@@ -69,6 +70,29 @@ public:
 
 private:
     dtkComposerStackCommandCreateNodePrivate *e;
+};
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandDestroyNodePrivate;
+
+class dtkComposerStackCommandDestroyNode : public dtkComposerStackCommand
+{
+public:
+     dtkComposerStackCommandDestroyNode(dtkComposerStackCommand *parent = 0);
+    ~dtkComposerStackCommandDestroyNode(void);
+
+public:
+    void setNode(dtkComposerSceneNode *node);
+
+public:
+    void redo(void);
+    void undo(void);
+
+private:
+    dtkComposerStackCommandDestroyNodePrivate *e;
 };
 
 // /////////////////////////////////////////////////////////////////

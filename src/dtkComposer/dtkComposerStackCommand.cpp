@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jan 31 18:24:39 2012 (+0100)
+ * Last-Updated: Tue Jan 31 19:09:38 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 9
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -29,7 +29,7 @@ public:
     dtkComposerScene *scene;
 };
 
-dtkComposerStackCommand::dtkComposerStackCommand(void) : QUndoCommand(), d(new dtkComposerStackCommandPrivate)
+dtkComposerStackCommand::dtkComposerStackCommand(dtkComposerStackCommand *parent) : QUndoCommand(parent), d(new dtkComposerStackCommandPrivate)
 {
     d->factory = NULL;
     d->scene = NULL;
@@ -124,6 +124,54 @@ void dtkComposerStackCommandCreateNode::undo(void)
     e->position = e->node->scenePos();
 
     d->scene->removeNode(e->node);
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerStackCommandDestroyNode
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandDestroyNodePrivate
+{
+public:
+    dtkComposerSceneNode *node;
+};
+
+dtkComposerStackCommandDestroyNode::dtkComposerStackCommandDestroyNode(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandDestroyNodePrivate)
+{
+    e->node = NULL;
+
+    this->setText("Destroy node");
+}
+
+dtkComposerStackCommandDestroyNode::~dtkComposerStackCommandDestroyNode(void)
+{
+    delete e;
+
+    e = NULL;
+}
+
+void dtkComposerStackCommandDestroyNode::setNode(dtkComposerSceneNode *node)
+{
+    e->node = node;
+}
+
+void dtkComposerStackCommandDestroyNode::redo(void)
+{
+    if(!d->scene)
+        return;
+
+    if(!e->node)
+        return;
+
+    d->scene->removeNode(e->node);
+}
+
+void dtkComposerStackCommandDestroyNode::undo(void)
+{
+    if(!e->node)
+        return;
+
+    d->scene->addNode(e->node);
 }
 
 // /////////////////////////////////////////////////////////////////

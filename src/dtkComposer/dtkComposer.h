@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 10:34:39 2012 (+0100)
- *           By: tkloczko
- *     Update #: 1
+ * Last-Updated: Tue Jan 31 18:13:36 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -24,7 +24,10 @@
 
 #include <QtGui/QWidget>
 
+class dtkComposerFactory;
+class dtkComposerMachine;
 class dtkComposerPrivate;
+class dtkComposerStack;
 
 class DTKCOMPOSER_EXPORT dtkComposer : public QWidget
 {
@@ -33,6 +36,11 @@ class DTKCOMPOSER_EXPORT dtkComposer : public QWidget
 public:
              dtkComposer(QWidget *parent = 0);
     virtual ~dtkComposer(void);
+
+public:
+    dtkComposerFactory *factory(void);
+    dtkComposerMachine *machine(void);
+    dtkComposerStack *stack(void);
 
 private:
     dtkComposerPrivate *d;

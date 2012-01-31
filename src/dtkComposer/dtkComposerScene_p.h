@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 15:32:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 23:53:11 2012 (+0100)
+ * Last-Updated: Tue Jan 31 18:06:56 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 77
+ *     Update #: 84
  */
 
 /* Commentary: 
@@ -19,6 +19,12 @@
 
 #ifndef DTKCOMPOSERSCENE_P_H
 #define DTKCOMPOSERSCENE_P_H
+
+#include <QtGui>
+
+class dtkComposerFactory;
+class dtkComposerMachine;
+class dtkComposerStack;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerSceneEdge
@@ -75,7 +81,7 @@ public:
 public:
     void setSource(dtkComposerScenePort *port);
     void setDestination(dtkComposerScenePort *port);
-
+    
 public:
     void adjust(void);
     void adjust(const QPointF& start, const QPointF& end);
@@ -140,6 +146,11 @@ private:
 
 class dtkComposerScenePrivate
 {
+public:
+    dtkComposerMachine *machine;
+    dtkComposerFactory *factory;
+    dtkComposerStack *stack;
+
 public:
     dtkComposerSceneEdge *current_edge;
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Tue Jan 31 00:17:49 2012 (+0100)
+ * Last-Updated: Tue Jan 31 18:22:25 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 434
+ *     Update #: 573
  */
 
 /* Commentary:
@@ -17,8 +17,12 @@
  *
  */
 
+#include "dtkComposerMachine.h"
+#include "dtkComposerMachineState.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
+#include "dtkComposerStack.h"
+#include "dtkComposerStackCommand.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerScenePort
@@ -172,6 +176,8 @@ void dtkComposerSceneEdge::adjust(const QPointF& start, const QPointF& end)
 
 bool dtkComposerSceneEdge::link(bool anyway)
 {
+    Q_UNUSED(anyway);
+    
     if(!d->source || !d->destination)
         return false;
 
@@ -183,6 +189,12 @@ bool dtkComposerSceneEdge::link(bool anyway)
 
 bool dtkComposerSceneEdge::unlink(void)
 {
+    if(!d->source || !d->destination)
+        return false;
+
+    dynamic_cast<dtkComposerSceneNode *>(d->source->parentItem())->removeOutputEdge(this);
+    dynamic_cast<dtkComposerSceneNode *>(d->destination->parentItem())->removeInputEdge(this);
+
     return true;
 }
 
@@ -330,17 +342,11 @@ QVariant dtkComposerSceneNode::itemChange(QGraphicsItem::GraphicsItemChange chan
 
 dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(new dtkComposerScenePrivate)
 {
+    d->factory = NULL;
+    d->machine = NULL;
+    d->stack = NULL;
+
     d->current_edge = NULL;
-
-    // temporary scene
-
-    dtkComposerSceneNode *n1 = new dtkComposerSceneNode;
-    dtkComposerSceneNode *n2 = new dtkComposerSceneNode;
-    dtkComposerSceneNode *n3 = new dtkComposerSceneNode;
-
-    this->addItem(n1);
-    this->addItem(n2);
-    this->addItem(n3);
 }
 
 dtkComposerScene::~dtkComposerScene(void)
@@ -348,6 +354,114 @@ dtkComposerScene::~dtkComposerScene(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkComposerScene::setFactory(dtkComposerFactory *factory)
+{
+    d->factory = factory;
+}
+
+void dtkComposerScene::setMachine(dtkComposerMachine *machine)
+{
+    d->machine = machine;
+}
+
+void dtkComposerScene::setStack(dtkComposerStack *stack)
+{
+    d->stack = stack;
+}
+
+void dtkComposerScene::addNode(dtkComposerSceneNode *node)
+{
+    d->nodes << node;
+
+    this->addItem(node);
+}
+
+void dtkComposerScene::removeNode(dtkComposerSceneNode *node)
+{
+    d->nodes.removeAll(node);
+
+    this->removeItem(node);
+}
+
+void dtkComposerScene::addEdge(dtkComposerSceneEdge *edge)
+{
+    d->edges << edge;
+
+    this->addItem(edge);
+}
+
+void dtkComposerScene::removeEdge(dtkComposerSceneEdge *edge)
+{
+    d->edges.removeAll(edge);
+
+    this->removeItem(edge);
+}
+
+//! Receives drag enter events.
+/*! 
+ *  
+ */
+void dtkComposerScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if (event->mimeData()->hasUrls())
+        event->acceptProposedAction();
+    else
+        event->ignore();
+}
+
+//! Receives drag leave events.
+/*! 
+ *  
+ */
+void dtkComposerScene::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
+{
+    event->accept();
+}
+
+//! Receives drag move events.
+/*! 
+ *  
+ */
+void dtkComposerScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if (event->mimeData()->hasUrls())
+        event->acceptProposedAction();
+    else
+        event->ignore();
+}
+
+//! Receives drop events.
+/*! 
+ *  
+ */
+void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
+{
+    QString name = event->mimeData()->text();
+    QUrl url = event->mimeData()->urls().first();
+
+    // if (url.scheme() == "note") {
+    //     this->createNote(url.path(), event->scenePos());
+    //     event->acceptProposedAction();
+    //     return;
+    // }
+
+    if (url.scheme() != "type") {
+        event->ignore();
+        return;
+    }
+
+    dtkComposerStackCommandCreateNode *command = new dtkComposerStackCommandCreateNode;
+    command->setFactory(d->factory);
+    command->setScene(this);
+    command->setPosition(event->scenePos());
+    command->setType(url.path());
+    command->setName(name);
+
+    d->stack->push(command);
+    
+    event->acceptProposedAction();
 }
 
 void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -416,12 +530,21 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     if(dtkComposerScenePort *destination = this->portAt(event->scenePos()))
         d->current_edge->setDestination(destination);
 
-    if(!d->current_edge->link()) {
-        this->removeItem(d->current_edge);
-        delete d->current_edge;
-    } else {
-        d->edges << d->current_edge;
+    if(d->current_edge->link()) {
+
+        dtkComposerStackCommandCreateEdge *command = new dtkComposerStackCommandCreateEdge;
+        command->setScene(this);
+        command->setSource(d->current_edge->source());
+        command->setDestination(d->current_edge->destination());
+
+        d->stack->push(command);
     }
+
+    d->current_edge->unlink();
+
+    this->removeItem(d->current_edge);
+
+    delete d->current_edge;
     
     d->current_edge = NULL;
 }

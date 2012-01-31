@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:17
  * Version: $Id$
- * Last-Updated: lun. janv. 30 11:41:10 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 9
+ * Last-Updated: Tue Jan 31 15:55:56 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 23
  */
 
 /* Commentary:
@@ -25,6 +25,7 @@
 #include <QtCore>
 
 class dtkComposerFactoryPrivate;
+class dtkComposerSceneNode;
 
 class DTKCOMPOSER_EXPORT dtkComposerFactory : public QObject
 {
@@ -34,13 +35,14 @@ public:
              dtkComposerFactory(void);
     virtual ~dtkComposerFactory(void);
 
+public slots:
+    virtual dtkComposerSceneNode *create(const QString& type);
+
+public:
+    QHash<QString, QString> nodes(void);
+
 private:
     dtkComposerFactoryPrivate *d;
-
 };
 
-
-
-
-#endif /* DTKCOMPOSERFACTORY_H */
-
+#endif

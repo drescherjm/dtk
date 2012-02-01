@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Wed Feb  1 11:21:16 2012 (+0100)
+ * Last-Updated: Wed Feb  1 15:13:55 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 638
+ *     Update #: 647
  */
 
 /* Commentary:
@@ -376,6 +376,8 @@ void dtkComposerScene::addNode(dtkComposerSceneNode *node)
     d->nodes << node;
 
     this->addItem(node);
+
+    emit modified(true);
 }
 
 void dtkComposerScene::removeNode(dtkComposerSceneNode *node)
@@ -384,6 +386,8 @@ void dtkComposerScene::removeNode(dtkComposerSceneNode *node)
         d->nodes.removeAll(node);
 
     this->removeItem(node);
+
+    emit modified(true);
 }
 
 void dtkComposerScene::addEdge(dtkComposerSceneEdge *edge)
@@ -391,6 +395,8 @@ void dtkComposerScene::addEdge(dtkComposerSceneEdge *edge)
     d->edges << edge;
 
     this->addItem(edge);
+
+    emit modified(true);
 }
 
 void dtkComposerScene::removeEdge(dtkComposerSceneEdge *edge)
@@ -399,6 +405,8 @@ void dtkComposerScene::removeEdge(dtkComposerSceneEdge *edge)
         d->edges.removeAll(edge);
 
     this->removeItem(edge);
+
+    emit modified(true);
 }
 
 bool dtkComposerScene::contains(dtkComposerSceneEdge *edge)
@@ -409,6 +417,16 @@ bool dtkComposerScene::contains(dtkComposerSceneEdge *edge)
 bool dtkComposerScene::contains(dtkComposerSceneNode *node)
 {
     return d->nodes.contains(node);
+}
+
+QList<dtkComposerSceneNode *> dtkComposerScene::nodes(void)
+{
+    return d->nodes;
+}
+
+QList<dtkComposerSceneEdge *> dtkComposerScene::edges(void)
+{
+    return d->edges;
 }
 
 //! Receives drag enter events.

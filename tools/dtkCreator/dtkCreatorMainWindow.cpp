@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Feb  1 14:42:38 2012 (+0100)
- *           By: David Rey
- *     Update #: 752
+ * Last-Updated: Wed Feb  1 15:21:24 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 768
  */
 
 /* Commentary: 
@@ -36,6 +36,9 @@
 
 bool dtkCreatorMainWindowPrivate::maySave(void)
 {
+    if(this->closing)
+        return true;
+
     if (q->isWindowModified()) {
         QMessageBox::StandardButton ret = QMessageBox::warning(0,
             q->tr("Creator"),
@@ -68,6 +71,8 @@ void dtkCreatorMainWindowPrivate::setCurrentFile(const QString &file)
 
 void dtkCreatorMainWindowPrivate::setModified(bool modified)
 {
+    qDebug() << __func__ << modified;
+
     q->setWindowModified(modified);
 }
 
@@ -88,6 +93,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->nodes = new dtkComposerFactoryView;
     d->nodes->setFixedWidth(300);
     d->nodes->setFactory(d->composer->factory());
+
+    d->closing = false;
 
     // Menus & Actions
 
@@ -131,6 +138,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->edit_menu->addAction(d->redo_action);
 
     // Connections
+
+    connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(close()));
 
     connect(d->composer, SIGNAL(modified(bool)), d, SLOT(setModified(bool)));
 
@@ -205,7 +214,7 @@ bool dtkCreatorMainWindow::compositionOpen(void)
     if(!d->maySave())
         return true;
 
-    QFileDialog *dialog = new QFileDialog(this, tr("Open composition"), QDir::homePath(), QString("num3sis composition (*.num)"));
+    QFileDialog *dialog = new QFileDialog(this, tr("Open composition"), QDir::homePath(), QString("dtk composition (*.dtk)"));
     dialog->setStyleSheet("background-color: none ; color: none;");
     dialog->setAcceptMode(QFileDialog::AcceptOpen);
     dialog->setFileMode(QFileDialog::AnyFile);
@@ -305,7 +314,11 @@ bool dtkCreatorMainWindow::compositionInsert(const QString& file)
 
 void dtkCreatorMainWindow::closeEvent(QCloseEvent *event)
 {
-    Q_UNUSED(event);
-
-    this->writeSettings();
+    if (d->maySave()) {
+         writeSettings();
+         d->closing = true;
+         event->accept();
+     } else {
+         event->ignore();
+     }
 }

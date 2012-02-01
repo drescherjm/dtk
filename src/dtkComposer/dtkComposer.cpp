@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  1 13:47:48 2012 (+0100)
+ * Last-Updated: Wed Feb  1 15:16:40 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 146
+ *     Update #: 152
  */
 
 /* Commentary: 
@@ -106,6 +106,8 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(d->view);
+
+    connect(d->scene, SIGNAL(modified(bool)), this, SIGNAL(modified(bool)));
 }
 
 dtkComposer::~dtkComposer(void)

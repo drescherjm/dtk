@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 15:31:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 14:25:23 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 407
+ * Last-Updated: mer. févr.  1 14:08:42 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 409
  */
 
 /* Commentary: 
@@ -175,16 +175,6 @@ void dtkInterpreter::registerInterpreter(dtkScriptInterpreter *interpreter)
     connect(this, SIGNAL( save(const QString&)),        interpreter,    SLOT(     save(const QString&)));
     connect(this, SIGNAL(stopped(void)),                interpreter,  SIGNAL(  stopped(void)));
 
-#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
-    if(dynamic_cast<dtkScriptInterpreterPython *>(interpreter))
-        highlighter = new dtkTextEditorSyntaxHighlighterPython(this);
-#endif
-
-#if defined(HAVE_SWIG) && defined(HAVE_TCL)
-    if(dynamic_cast<dtkScriptInterpreterTcl *>(interpreter))
-        highlighter = new dtkTextEditorSyntaxHighlighterTcl(this);
-#endif
-
     this->appendPlainText(filter(d->interpreter->prompt()));
 }
 
@@ -200,7 +190,7 @@ void dtkInterpreter::onKeyUpPressed(void)
         QString line = currentLine();
         if(d->interpreter)
             line.remove(filter(d->interpreter->prompt()));
-        
+ 
         d->history.push_front(line);
         d->history_dirty = true;
     }

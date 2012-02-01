@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Tue Jan 31 19:12:12 2012 (+0100)
+ * Last-Updated: Wed Feb  1 11:21:16 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 625
+ *     Update #: 638
  */
 
 /* Commentary:
@@ -380,7 +380,8 @@ void dtkComposerScene::addNode(dtkComposerSceneNode *node)
 
 void dtkComposerScene::removeNode(dtkComposerSceneNode *node)
 {
-    d->nodes.removeAll(node);
+    if (d->nodes.contains(node))
+        d->nodes.removeAll(node);
 
     this->removeItem(node);
 }
@@ -394,9 +395,20 @@ void dtkComposerScene::addEdge(dtkComposerSceneEdge *edge)
 
 void dtkComposerScene::removeEdge(dtkComposerSceneEdge *edge)
 {
-    d->edges.removeAll(edge);
+    if (d->edges.contains(edge))
+        d->edges.removeAll(edge);
 
     this->removeItem(edge);
+}
+
+bool dtkComposerScene::contains(dtkComposerSceneEdge *edge)
+{
+    return d->edges.contains(edge);
+}
+
+bool dtkComposerScene::contains(dtkComposerSceneNode *node)
+{
+    return d->nodes.contains(node);
 }
 
 //! Receives drag enter events.

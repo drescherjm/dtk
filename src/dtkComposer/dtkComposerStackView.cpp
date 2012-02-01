@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 11:14:21 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jan 31 18:08:49 2012 (+0100)
+ * Last-Updated: Wed Feb  1 10:41:34 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 54
+ *     Update #: 62
  */
 
 /* Commentary: 
@@ -35,9 +35,11 @@ dtkComposerStackView::dtkComposerStackView(QWidget *parent) : QWidget(parent), d
 
     QPushButton *undo_button = new QPushButton("Undo", this);
     QPushButton *redo_button = new QPushButton("Redo", this);
+    QPushButton *clear_button = new QPushButton("Clear", this);
     QHBoxLayout *unre_layout = new QHBoxLayout;
     unre_layout->addWidget(undo_button);
     unre_layout->addWidget(redo_button);
+    unre_layout->addWidget(clear_button);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -47,6 +49,7 @@ dtkComposerStackView::dtkComposerStackView(QWidget *parent) : QWidget(parent), d
 
     connect(undo_button, SIGNAL(clicked()), this, SLOT(undo()));
     connect(redo_button, SIGNAL(clicked()), this, SLOT(redo()));
+    connect(clear_button, SIGNAL(clicked()), this, SLOT(clear()));
 }
 
 dtkComposerStackView::~dtkComposerStackView(void)
@@ -71,4 +74,9 @@ void dtkComposerStackView::undo(void)
 void dtkComposerStackView::redo(void)
 {
     d->stack->redo();
+}
+
+void dtkComposerStackView::clear(void)
+{
+    d->stack->clear();
 }

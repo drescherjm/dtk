@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jan 31 18:13:36 2012 (+0100)
+ * Last-Updated: Wed Feb  1 13:34:31 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 9
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -21,8 +21,10 @@
 #define DTKCOMPOSER_H
 
 #include "dtkComposerExport.h"
+#include "dtkComposerWriter.h"
 
-#include <QtGui/QWidget>
+#include <QtCore>
+#include <QtGui>
 
 class dtkComposerFactory;
 class dtkComposerMachine;
@@ -36,6 +38,15 @@ class DTKCOMPOSER_EXPORT dtkComposer : public QWidget
 public:
              dtkComposer(QWidget *parent = 0);
     virtual ~dtkComposer(void);
+
+public slots:
+    virtual bool   open(const QUrl& url);
+    virtual bool   open(QString file);
+    virtual bool   save(QString file = QString(), dtkComposerWriter::Type type = dtkComposerWriter::Ascii);
+    virtual bool insert(QString file);
+
+signals:
+    void modified(bool);
 
 public:
     dtkComposerFactory *factory(void);

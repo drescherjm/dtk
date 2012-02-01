@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Jan 31 18:30:48 2012 (+0100)
+## Last-Updated: Wed Feb  1 13:40:42 2012 (+0100)
 ##           By: Julien Wintz
-##     Update #: 255
+##     Update #: 259
 ######################################################################
 ## 
 ### Commentary: 
@@ -46,6 +46,7 @@ set(${PROJECT_NAME}_HEADERS
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerAbstractTransmitter.h
   dtkComposer.h
+  dtkComposer_p.h
   dtkComposerEvaluator.h
   dtkComposerFactory.h
   dtkComposerFactoryView.h

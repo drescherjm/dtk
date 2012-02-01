@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:11:39
  * Version: $Id$
- * Last-Updated: Tue Jan 31 18:54:02 2012 (+0100)
+ * Last-Updated: Wed Feb  1 11:20:27 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 41
+ *     Update #: 42
  */
 
 /* Commentary:
@@ -51,6 +51,9 @@ public:
 
     void    addEdge(dtkComposerSceneEdge *edge);
     void removeEdge(dtkComposerSceneEdge *edge);
+
+    bool contains(dtkComposerSceneEdge *edge);
+    bool contains(dtkComposerSceneNode *node);
 
 protected:
     void dragEnterEvent(QGraphicsSceneDragDropEvent *event);

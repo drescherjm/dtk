@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:38:47 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 19:42:02 2012 (+0100)
+ * Last-Updated: Wed Feb  1 12:20:26 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 33
+ *     Update #: 40
  */
 
 /* Commentary: 
@@ -20,7 +20,9 @@
 #ifndef DTKCREATORMAINWINDOW_H
 #define DTKCREATORMAINWINDOW_H
 
-#include <QtGui/QMainWindow>
+#include <dtkComposer/dtkComposerWriter.h>
+
+#include <QtGui>
 
 class dtkCreatorMainWindowPrivate;
 
@@ -34,6 +36,15 @@ public:
 
     void readSettings(void);
     void writeSettings(void);
+
+public slots:
+    bool compositionOpen(void);
+    bool compositionOpen(const QString& file);
+    bool compositionSave(void);
+    bool compositionSaveAs(void);
+    bool compositionSaveAs(const QString& file, dtkComposerWriter::Type type = dtkComposerWriter::Ascii);
+    bool compositionInsert(void);
+    bool compositionInsert(const QString& file);
 
 protected:
     void closeEvent(QCloseEvent *event);

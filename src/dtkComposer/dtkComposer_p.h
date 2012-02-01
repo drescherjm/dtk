@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:35:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jan 31 18:11:23 2012 (+0100)
+ * Last-Updated: Wed Feb  1 13:40:28 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 48
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -28,14 +28,29 @@ class dtkComposerScene;
 class dtkComposerStack;
 class dtkComposerView;
 
-class dtkComposerPrivate
+class dtkComposerPrivate : public QObject
 {
+    Q_OBJECT
+
+public:
+    void download(const QUrl& url);
+
+public slots:
+    void onRequestFinished(int id, bool error);
+
 public:
     dtkComposerFactory *factory;
     dtkComposerMachine *machine;
     dtkComposerScene *scene;
     dtkComposerStack *stack;
     dtkComposerView *view;
+
+public:
+    QString fileName;
+    QString tempName;
+
+    int dwnl_id;
+    int dwnl_ok;
 };
 
 #endif

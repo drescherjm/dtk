@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Aug  3 17:34:51 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Jan 30 12:22:39 2012 (+0100)
+## Last-Updated: Wed Feb  1 13:41:07 2012 (+0100)
 ##           By: Julien Wintz
-##     Update #: 151
+##     Update #: 156
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,7 +24,8 @@ project(dtkCreator)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS_MOC
-  dtkCreatorMainWindow.h)
+  dtkCreatorMainWindow.h
+  dtkCreatorMainWindow_p.h)
 
 set(${PROJECT_NAME}_HEADERS
   ${${PROJECT_NAME}_HEADERS_MOC})
@@ -32,6 +33,12 @@ set(${PROJECT_NAME}_HEADERS
 set(${PROJECT_NAME}_SOURCES
   dtkCreatorMainWindow.cpp
   main.cpp)
+
+if(APPLE)
+set(${PROJECT_NAME}_SOURCES
+  ${${PROJECT_NAME}_SOURCES}
+  dtkCreatorMainWindow.mm)
+endif(APPLE)
 
 ## #################################################################
 ## Build rules
@@ -54,6 +61,11 @@ target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkCore
   dtkComposer)
+
+if(APPLE)
+target_link_libraries(${PROJECT_NAME}
+  "-framework Cocoa")
+endif(APPLE)
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

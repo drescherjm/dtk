@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Feb  1 13:36:34 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 750
+ * Last-Updated: mer. févr.  1 14:12:05 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 751
  */
 
 /* Commentary: 
@@ -168,7 +168,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     this->setUnifiedTitleAndToolBarOnMac(true);
     this->setWindowTitle("Creator");
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
+#if defined (Q_WS_MAC) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7)
     d->enableFullScreenSupport();
 #endif
 

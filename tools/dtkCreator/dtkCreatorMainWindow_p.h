@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  1 12:37:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. févr.  1 14:13:46 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 18
+ * Last-Updated: Wed Feb  1 14:41:59 2012 (+0100)
+ *           By: David Rey
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -41,7 +41,7 @@ public:
 public:
     void setCurrentFile(const QString& file);
 
-#if defined (Q_WS_MAC) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7)
+#if defined(Q_WS_MAC) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
     void enableFullScreenSupport(void);
 #endif
 

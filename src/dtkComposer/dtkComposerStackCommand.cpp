@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  2 11:56:59 2012 (+0100)
+ * Last-Updated: Thu Feb  2 13:47:05 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 77
+ *     Update #: 103
  */
 
 /* Commentary: 
@@ -390,4 +390,55 @@ void dtkComposerStackCommandDestroyNote::undo(void)
         return;
 
     d->scene->addNote(e->note);
+}
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandCreateGroupPrivate
+{
+public:
+    dtkComposerSceneNode *node;
+
+public:
+    QList<dtkComposerSceneNode *> children;
+};
+
+dtkComposerStackCommandCreateGroup::dtkComposerStackCommandCreateGroup(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandCreateGroupPrivate)
+{
+    e->node = NULL;
+
+    this->setText("Create group");
+}
+
+dtkComposerStackCommandCreateGroup::~dtkComposerStackCommandCreateGroup(void)
+{
+    delete e;
+
+    e = NULL;
+}
+
+void dtkComposerStackCommandCreateGroup::setNodes(QList<dtkComposerSceneNode *> nodes)
+{
+    e->children = nodes;
+}
+
+void dtkComposerStackCommandCreateGroup::redo(void)
+{
+    if(!d->scene)
+        return;
+
+    if(e->node)
+        return;
+
+    qDebug() << __func__;
+}
+
+void dtkComposerStackCommandCreateGroup::undo(void)
+{
+    if(!d->scene)
+        return;
+
+    qDebug() << __func__;
 }

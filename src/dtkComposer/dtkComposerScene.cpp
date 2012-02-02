@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Thu Feb  2 12:11:10 2012 (+0100)
+ * Last-Updated: Thu Feb  2 14:23:39 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 719
+ *     Update #: 801
  */
 
 /* Commentary:
@@ -220,23 +220,11 @@ public:
 
     QList<dtkComposerSceneEdge *>  input_edges;
     QList<dtkComposerSceneEdge *> output_edges;
-
-public:
-    QRectF rect;
 };
 
 dtkComposerSceneNode::dtkComposerSceneNode(void) : QGraphicsItem(), d(new dtkComposerSceneNodePrivate)
 {
-    d->input_ports << new dtkComposerScenePort(0, this);
-    d->input_ports << new dtkComposerScenePort(1, this);
-
-    d->output_ports << new dtkComposerScenePort(2, this);
-
-    d->rect = QRectF(0, 0, 150, 50);
-
     this->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-
-    this->layout();
 }
 
 dtkComposerSceneNode::~dtkComposerSceneNode(void)
@@ -291,16 +279,85 @@ dtkComposerScenePort *dtkComposerSceneNode::port(unsigned int id)
     return p;
 }
 
-QRectF dtkComposerSceneNode::boundingRect(void) const
+QList<dtkComposerScenePort *> dtkComposerSceneNode::inputPorts(void)
 {
-    return d->rect;
+    return d->input_ports;
 }
 
-void dtkComposerSceneNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+QList<dtkComposerScenePort *> dtkComposerSceneNode::outputPorts(void)
+{
+    return d->output_ports;
+}
+
+// QVariant dtkComposerSceneNode::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
+// {
+//     if(change == QGraphicsItem::ItemSelectedHasChanged) {
+
+//         if(value.toBool()) {
+//             ; // TO SELECTED STATE
+//         } else {
+//             ; // TO UNUSELECTED STATE
+//         }
+//     }
+
+//     return QGraphicsItem::itemChange(change, value);
+// }
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerSceneNodeComposite
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerSceneNodeCompositePrivate
+{
+public:
+    dtkComposerSceneNodeList children;
+
+public:
+    QRectF rect;
+};
+
+dtkComposerSceneNodeComposite::dtkComposerSceneNodeComposite(void) : dtkComposerSceneNode(), d(new dtkComposerSceneNodeCompositePrivate)
+{
+    d->rect = QRectF(0, 0, 150, 50);
+}
+
+dtkComposerSceneNodeComposite::~dtkComposerSceneNodeComposite(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+void dtkComposerSceneNodeComposite::addNode(dtkComposerSceneNode *node)
+{
+    d->children << node;
+}
+
+void dtkComposerSceneNodeComposite::removeNode(dtkComposerSceneNode *node)
+{
+    d->children.removeAll(node);
+}
+
+dtkComposerSceneNodeList dtkComposerSceneNodeComposite::children(void)
+{
+    return d->children;
+}
+
+void dtkComposerSceneNodeComposite::layout(void)
+{
+    
+}
+
+QRectF dtkComposerSceneNodeComposite::boundingRect(void) const
+{
+    return d->rect.adjusted(-2, -2, 2, 2);
+}
+
+void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     static qreal radius = 5.0;
 
-    QLinearGradient gradiant(this->boundingRect().left(), this->boundingRect().top(), this->boundingRect().left(), this->boundingRect().bottom());
+    QLinearGradient gradiant(d->rect.left(), d->rect.top(), d->rect.left(), d->rect.bottom());
     gradiant.setColorAt(0.0, QColor(Qt::white));
     gradiant.setColorAt(0.3, QColor(Qt::gray));
     gradiant.setColorAt(1.0, QColor(Qt::gray).darker());
@@ -312,20 +369,39 @@ void dtkComposerSceneNode::paint(QPainter *painter, const QStyleOptionGraphicsIt
 
     painter->setBrush(gradiant);
 
-    painter->drawRoundedRect(this->boundingRect(), radius, radius);
+    painter->drawRoundedRect(d->rect, radius, radius);
 }
 
-QList<dtkComposerScenePort *> dtkComposerSceneNode::inputPorts(void)
+// /////////////////////////////////////////////////////////////////
+// dtkComposerSceneNodeLeaf
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerSceneNodeLeafPrivate
 {
-    return d->input_ports;
-}
+public:
+    QRectF rect;
+};
 
-QList<dtkComposerScenePort *> dtkComposerSceneNode::outputPorts(void)
+dtkComposerSceneNodeLeaf::dtkComposerSceneNodeLeaf(void) : dtkComposerSceneNode(), d(new dtkComposerSceneNodeLeafPrivate)
 {
-    return d->output_ports;
+    dtkComposerSceneNode::d->input_ports << new dtkComposerScenePort(0, this);
+    dtkComposerSceneNode::d->input_ports << new dtkComposerScenePort(1, this);
+
+    dtkComposerSceneNode::d->output_ports << new dtkComposerScenePort(2, this);
+
+    d->rect = QRectF(0, 0, 150, 50);
+
+    this->layout();
 }
 
-void dtkComposerSceneNode::layout(void)
+dtkComposerSceneNodeLeaf::~dtkComposerSceneNodeLeaf(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+void dtkComposerSceneNodeLeaf::layout(void)
 {
     int port_margin_top = 10;
     int port_margin_bottom = 10;
@@ -334,31 +410,42 @@ void dtkComposerSceneNode::layout(void)
 
     int node_width = d->rect.width();
 
-    for(int i = 0; i < d->input_ports.count(); i++)
-        d->input_ports.at(i)->setPos(QPointF(port_margin_left, i*d->input_ports.at(i)->boundingRect().height() + i*port_spacing + port_margin_top));
+    for(int i = 0; i < dtkComposerSceneNode::d->input_ports.count(); i++)
+        dtkComposerSceneNode::d->input_ports.at(i)->setPos(QPointF(port_margin_left, i*dtkComposerSceneNode::d->input_ports.at(i)->boundingRect().height() + i*port_spacing + port_margin_top));
 
-    for(int i = 0; i < d->output_ports.count(); i++)
-        d->output_ports.at(i)->setPos(QPointF(node_width - port_margin_left - d->output_ports.at(i)->boundingRect().width(), i*d->output_ports.at(i)->boundingRect().height() + i*port_spacing + port_margin_top));
+    for(int i = 0; i < dtkComposerSceneNode::d->output_ports.count(); i++)
+        dtkComposerSceneNode::d->output_ports.at(i)->setPos(QPointF(node_width - port_margin_left - dtkComposerSceneNode::d->output_ports.at(i)->boundingRect().width(), i*dtkComposerSceneNode::d->output_ports.at(i)->boundingRect().height() + i*port_spacing + port_margin_top));
 
-    if(d->input_ports.count() || d->output_ports.count())
-        if(d->input_ports.count() >= d->output_ports.count())
-            d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), d->input_ports.count() * d->input_ports.at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (d->input_ports.count()-1) * port_spacing));
+    if(dtkComposerSceneNode::d->input_ports.count() || dtkComposerSceneNode::d->output_ports.count())
+        if(dtkComposerSceneNode::d->input_ports.count() >= dtkComposerSceneNode::d->output_ports.count())
+            d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), dtkComposerSceneNode::d->input_ports.count() * dtkComposerSceneNode::d->input_ports.at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (dtkComposerSceneNode::d->input_ports.count()-1) * port_spacing));
         else
-            d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), d->output_ports.count() * d->output_ports.at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (d->output_ports.count()-1) * port_spacing));
+            d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), dtkComposerSceneNode::d->output_ports.count() * dtkComposerSceneNode::d->output_ports.at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (dtkComposerSceneNode::d->output_ports.count()-1) * port_spacing));
 }
 
-QVariant dtkComposerSceneNode::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
+QRectF dtkComposerSceneNodeLeaf::boundingRect(void) const
 {
-    if(change == QGraphicsItem::ItemSelectedHasChanged) {
+    return d->rect.adjusted(-2, -2, 2, 2);
+}
 
-        if(value.toBool()) {
-            ; // TO SELECTED STATE
-        } else {
-            ; // TO UNUSELECTED STATE
-        }
+void dtkComposerSceneNodeLeaf::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    static qreal radius = 5.0;
+
+    QLinearGradient gradiant(d->rect.left(), d->rect.top(), d->rect.left(), d->rect.bottom());
+    gradiant.setColorAt(0.0, QColor(Qt::white));
+    gradiant.setColorAt(0.3, QColor(Qt::gray));
+    gradiant.setColorAt(1.0, QColor(Qt::gray).darker());
+
+    if (this->isSelected()) {
+        painter->setPen(QPen(Qt::magenta, 2, Qt::SolidLine));
+        painter->setBrush(Qt::NoBrush);
+        painter->drawRoundedRect(d->rect.adjusted(-2, -2, 2, 2), radius, radius);
     }
 
-    return QGraphicsItem::itemChange(change, value);
+    painter->setPen(QPen(Qt::black, 1, Qt::SolidLine));
+    painter->setBrush(gradiant);
+    painter->drawRoundedRect(d->rect, radius, radius);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -771,6 +858,21 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
             d->stack->push(command);
         }
 
+    } else if ((event->key() == Qt::Key_G) && (event->modifiers() & Qt::ControlModifier)) {
+
+        QList<dtkComposerSceneNode *> selected_nodes;
+
+        foreach(QGraphicsItem *item, this->selectedItems()) {
+            if (dtkComposerSceneNode *snode = dynamic_cast<dtkComposerSceneNode *>(item))
+                selected_nodes << snode;
+        }
+
+        dtkComposerStackCommandCreateGroup *command = new dtkComposerStackCommandCreateGroup;
+        command->setScene(this);
+        command->setNodes(selected_nodes);
+        
+        d->stack->push(command);
+
     } else {
         QGraphicsScene::keyPressEvent(event);
     }
@@ -810,7 +912,7 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     // Managing grabbing of current edge
 
     if (d->current_edge)
-        d->current_edge->adjust(d->current_edge->source()->scenePos(), event->scenePos());
+        d->current_edge->adjust(d->current_edge->source()->mapToScene(d->current_edge->source()->boundingRect().center()), event->scenePos());
 
     if (d->current_edge)
         this->update(d->current_edge->boundingRect());

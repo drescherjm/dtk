@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 15:32:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  2 12:09:36 2012 (+0100)
+ * Last-Updated: Thu Feb  2 14:07:04 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 110
+ *     Update #: 144
  */
 
 /* Commentary: 
@@ -98,8 +98,8 @@ class dtkComposerSceneNodePrivate;
 class dtkComposerSceneNode : public QGraphicsItem
 {
 public:
-     dtkComposerSceneNode(void);
-    ~dtkComposerSceneNode(void);
+             dtkComposerSceneNode(void);
+    virtual ~dtkComposerSceneNode(void);
 
 public:
     void  addInputEdge(dtkComposerSceneEdge *edge);
@@ -112,26 +112,89 @@ public:
     QList<dtkComposerSceneEdge *> outputEdges(void);
 
 public:
-    dtkComposerScenePort *port(unsigned int id);
-
-public:
-    virtual QRectF boundingRect(void) const;
-
-public:
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-
-public:
     QList<dtkComposerScenePort *>  inputPorts(void);
     QList<dtkComposerScenePort *> outputPorts(void);
 
+public:
+    dtkComposerScenePort *port(unsigned int id);
+
+public:
+    virtual QRectF boundingRect(void) const = 0;
+
+public:
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) = 0;
+
 protected:
+    virtual void layout(void) = 0;
+
+// protected:
+//     QVariant itemChange(GraphicsItemChange change, const QVariant& value);
+
+protected:
+    dtkComposerSceneNodePrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerSceneNodeList
+// /////////////////////////////////////////////////////////////////
+
+typedef QList<dtkComposerSceneNode *> dtkComposerSceneNodeList;
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerSceneNodeComposite
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerSceneNodeCompositePrivate;
+
+class dtkComposerSceneNodeComposite : public dtkComposerSceneNode
+{
+public:
+     dtkComposerSceneNodeComposite(void);
+    ~dtkComposerSceneNodeComposite(void);
+
+public:
+    void    addNode(dtkComposerSceneNode *node);
+    void removeNode(dtkComposerSceneNode *node);
+
+public:
     void layout(void);
 
-protected:
-    QVariant itemChange(GraphicsItemChange change, const QVariant& value);
+public:
+    dtkComposerSceneNodeList children(void);
+
+public:
+    QRectF boundingRect(void) const;
+
+public:
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
 private:
-    dtkComposerSceneNodePrivate *d;
+    dtkComposerSceneNodeCompositePrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerSceneNodeLeaf
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerSceneNodeLeafPrivate;
+
+class dtkComposerSceneNodeLeaf : public dtkComposerSceneNode
+{
+public:
+     dtkComposerSceneNodeLeaf(void);
+    ~dtkComposerSceneNodeLeaf(void);
+
+public:
+    void layout(void);
+
+public:
+    QRectF boundingRect(void) const;
+
+public:
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
+private:
+    dtkComposerSceneNodeLeafPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////

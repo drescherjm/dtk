@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Tue Jan 31 15:56:07 2012 (+0100)
+ * Last-Updated: Thu Feb  2 13:58:28 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 27
+ *     Update #: 28
  */
 
 /* Commentary:
@@ -44,7 +44,7 @@ dtkComposerSceneNode *dtkComposerFactory::create(const QString& type)
 {
     Q_UNUSED(type);
 
-    return new dtkComposerSceneNode;
+    return new dtkComposerSceneNodeLeaf;
 }
 
 QHash<QString, QString> dtkComposerFactory::nodes(void)

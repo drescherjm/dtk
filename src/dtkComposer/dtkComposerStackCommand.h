@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  2 16:09:38 2012 (+0100)
+ * Last-Updated: Thu Feb  2 23:52:42 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 55
+ *     Update #: 63
  */
 
 /* Commentary: 
@@ -212,6 +212,46 @@ public:
 
 private:
     dtkComposerStackCommandExplodeGroupPrivate *e;
+};
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandEnterGroupPrivate;
+
+class dtkComposerStackCommandEnterGroup : public dtkComposerStackCommand
+{
+public:
+     dtkComposerStackCommandEnterGroup(dtkComposerStackCommand *parent = 0);
+    ~dtkComposerStackCommandEnterGroup(void);
+
+public:
+    void redo(void);
+    void undo(void);
+
+private:
+    dtkComposerStackCommandEnterGroupPrivate *e;
+};
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandLeaveGroupPrivate;
+
+class dtkComposerStackCommandLeaveGroup : public dtkComposerStackCommand
+{
+public:
+     dtkComposerStackCommandLeaveGroup(dtkComposerStackCommand *parent = 0);
+    ~dtkComposerStackCommandLeaveGroup(void);
+
+public:
+    void redo(void);
+    void undo(void);
+
+private:
+    dtkComposerStackCommandLeaveGroupPrivate *e;
 };
 
 #endif

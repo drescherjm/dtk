@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 15:32:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  2 18:36:57 2012 (+0100)
+ * Last-Updated: Thu Feb  2 23:56:57 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 153
+ *     Update #: 157
  */
 
 /* Commentary: 
@@ -244,6 +244,9 @@ public:
     dtkComposerMachine *machine;
     dtkComposerFactory *factory;
     dtkComposerStack *stack;
+
+// public:
+//     dtkComposerSceneNodeComposite *root_node;
 
 public:
     dtkComposerSceneNode *current_node;

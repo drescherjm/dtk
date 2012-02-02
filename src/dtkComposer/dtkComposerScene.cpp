@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Thu Feb  2 19:32:24 2012 (+0100)
+ * Last-Updated: Thu Feb  2 23:38:55 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 998
+ *     Update #: 1051
  */
 
 /* Commentary:
@@ -369,9 +369,9 @@ void dtkComposerSceneNodeComposite::leave(void)
 
 void dtkComposerSceneNodeComposite::layout(void)
 {
-    if(!d->entered)
+    if(!d->entered) {
         d->rect = QRectF(0, 0, 150, 50);
-    else {
+    } else {
         QRectF rect;
         
         foreach(dtkComposerSceneNode *node, d->children)
@@ -1058,67 +1058,82 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
     if(!composite)
         return;
 
-    foreach(QGraphicsItem *item, this->items())
-        this->removeItem(item);
-
     if(!composite->entered()) {
-
-        composite->enter();
-
-        this->addItem(composite);
-        
-        foreach(dtkComposerSceneNode *node, composite->children()) {
-            this->addItem(node);
-            node->setParentItem(composite);
-        }
-        
-        foreach(dtkComposerSceneEdge *edge, d->edges) {
-            
-            dtkComposerSceneNode *s_node = dynamic_cast<dtkComposerSceneNode *>(edge->source()->parentItem());
-            dtkComposerSceneNode *d_node = dynamic_cast<dtkComposerSceneNode *>(edge->destination()->parentItem());
-            
-            if(s_node && d_node && this->displays(s_node) && this->displays(d_node)) {
-                this->addItem(edge);
-            }
-        }
-        
-        foreach(dtkComposerSceneNote *note, d->notes) {
-            
-            if (note->parentItem() == composite)
-                this->addItem(note);
-        }
-
-        d->current_node = composite;
-
-    } else { // DEPTH MAX IS 1 SO FAR
-        
-        composite->leave();
-        
-        this->addItem(composite);
-        
-        foreach(dtkComposerSceneNode *node, d->nodes)
-            this->addItem(node);
-        
-        foreach(dtkComposerSceneEdge *edge, d->edges) {
-            
-            dtkComposerSceneNode *s_node = dynamic_cast<dtkComposerSceneNode *>(edge->source()->parentItem());
-            dtkComposerSceneNode *d_node = dynamic_cast<dtkComposerSceneNode *>(edge->destination()->parentItem());
-            
-            if(s_node && d_node && this->displays(s_node) && this->displays(d_node)) {
-                this->addItem(edge);
-            }
-        }
-        
-        foreach(dtkComposerSceneNote *note, d->notes) {
-            
-            if (!note->parentItem())
-                this->addItem(note);
-        }
-
-        d->current_node = NULL;
+        dtkComposerStackCommandEnterGroup *command = new dtkComposerStackCommandEnterGroup;
+        command->setScene(this);
+        d->stack->push(command);
+    } else {
+        dtkComposerStackCommandLeaveGroup *command = new dtkComposerStackCommandLeaveGroup;
+        command->setScene(this);
+        d->stack->push(command);
     }
 
-    this->clearSelection();
+    // foreach(QGraphicsItem *item, this->items()) {
+    //     if(dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>(item))
+    //         this->removeItem(node);
+    //     if(dtkComposerSceneNote *note = dynamic_cast<dtkComposerSceneNote *>(item))
+    //         this->removeItem(note);
+    //     if(dtkComposerSceneEdge *edge = dynamic_cast<dtkComposerSceneEdge *>(item))
+    //         this->removeItem(edge);
+    // }
+
+    // if(!composite->entered()) {
+
+    //     this->addItem(composite);
+        
+    //     foreach(dtkComposerSceneNode *node, composite->children()) {
+    //         node->setPos(node->pos() - composite->pos());
+    //         node->setParentItem(composite);
+    //         this->addItem(node);
+    //     }
+        
+    //     foreach(dtkComposerSceneEdge *edge, d->edges) {
+            
+    //         dtkComposerSceneNode *s_node = dynamic_cast<dtkComposerSceneNode *>(edge->source()->parentItem());
+    //         dtkComposerSceneNode *d_node = dynamic_cast<dtkComposerSceneNode *>(edge->destination()->parentItem());
+            
+    //         if(s_node && d_node && this->displays(s_node) && this->displays(d_node)) {
+    //             this->addItem(edge);
+    //         }
+    //     }
+        
+    //     // foreach(dtkComposerSceneNote *note, d->notes) {
+    //     //     if (note->parentItem() == composite)
+    //     //         this->addItem(note);
+    //     // }
+
+    //     composite->enter();
+
+    //     d->current_node = composite;
+
+    // } else { // DEPTH MAX IS 1 SO FAR
+        
+    //     this->addItem(composite);
+        
+    //     foreach(dtkComposerSceneNode *node, d->nodes)
+    //         this->addItem(node);
+        
+    //     foreach(dtkComposerSceneEdge *edge, d->edges) {
+            
+    //         dtkComposerSceneNode *s_node = dynamic_cast<dtkComposerSceneNode *>(edge->source()->parentItem());
+    //         dtkComposerSceneNode *d_node = dynamic_cast<dtkComposerSceneNode *>(edge->destination()->parentItem());
+            
+    //         if(s_node && d_node && this->displays(s_node) && this->displays(d_node)) {
+    //             this->addItem(edge);
+    //         }
+    //     }
+        
+    //     // foreach(dtkComposerSceneNote *note, d->notes) {
+    //     //     if (!note->parentItem())
+    //     //         this->addItem(note);
+    //     // }
+
+    //     d->current_node = NULL;
+
+    //     composite->leave();
+    // }
+
+    // this->clearSelection();
 }
 
 dtkComposerSceneNode *dtkComposerScene::nodeAt(const QPointF& point) const

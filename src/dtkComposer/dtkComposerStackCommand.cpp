@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  2 17:59:25 2012 (+0100)
+ * Last-Updated: Thu Feb  2 23:52:14 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 267
+ *     Update #: 282
  */
 
 /* Commentary: 
@@ -108,10 +108,10 @@ void dtkComposerStackCommandCreateNode::redo(void)
     if(e->type.isEmpty())
         return;
 
-    if(!e->node) {
+    if(!e->node)
         e->node = d->factory->create("");
-        e->node->setPos(e->position);
-    }
+
+    e->node->setPos(e->position);
 
     d->scene->addNode(e->node);
 }
@@ -181,9 +181,6 @@ void dtkComposerStackCommandDestroyNode::redo(void)
         if (d->scene->contains(edge))
             d->scene->removeEdge(edge);
 
-    // qDebug() << __func__ << "input edges has" << e->input_edges.count() << "items";
-    // qDebug() << __func__ << "output edges has" << e->output_edges.count() << "items";
-
     d->scene->removeNode(e->node);
 }
 
@@ -199,18 +196,6 @@ void dtkComposerStackCommandDestroyNode::undo(void)
         dtkComposerSceneNode *s_node = dynamic_cast<dtkComposerSceneNode *>(edge->source()->parentItem());
         dtkComposerSceneNode *d_node = dynamic_cast<dtkComposerSceneNode *>(edge->destination()->parentItem());
 
-        // if(!s_node)
-        //     qDebug() << "Unable to retrieve source node (i)";
-
-        // if(!d_node)
-        //     qDebug() << "Unable to retrieve source node (i)";
-
-        // if(!d->scene->contains(s_node))
-        //     qDebug() << "source node is not in scene (i)";
-
-        // if(!d->scene->contains(d_node))
-        //     qDebug() << "destination node is not in scene (i)";
-
         if(s_node && d_node && d->scene->contains(s_node) && d->scene->contains(d_node)) {
             d->scene->addEdge(edge);
         }
@@ -220,18 +205,6 @@ void dtkComposerStackCommandDestroyNode::undo(void)
 
         dtkComposerSceneNode *s_node = dynamic_cast<dtkComposerSceneNode *>(edge->source()->parentItem());
         dtkComposerSceneNode *d_node = dynamic_cast<dtkComposerSceneNode *>(edge->destination()->parentItem());
-
-        // if(!s_node)
-        //     qDebug() << "Unable to retrieve source node (o)";
-
-        // if(!d_node)
-        //     qDebug() << "Unable to retrieve source node (o)";
-
-        // if(!d->scene->contains(s_node))
-        //     qDebug() << "source node is not in scene (o)";
-
-        // if(!d->scene->contains(d_node))
-        //     qDebug() << "destination node is not in scene (o)";
 
         if(s_node && d_node && d->scene->contains(s_node) && d->scene->contains(d_node)) {
             d->scene->addEdge(edge);
@@ -583,4 +556,66 @@ void dtkComposerStackCommandExplodeGroup::undo(void)
 
     foreach(dtkComposerStackCommandDestroyNode *command, e->commands)
         command->redo();
+}
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandEnterGroupPrivate
+{
+public:
+};
+
+dtkComposerStackCommandEnterGroup::dtkComposerStackCommandEnterGroup(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandEnterGroupPrivate)
+{
+    this->setText("Enter group");
+}
+
+dtkComposerStackCommandEnterGroup::~dtkComposerStackCommandEnterGroup(void)
+{
+    delete e;
+
+    e = NULL;
+}
+
+void dtkComposerStackCommandEnterGroup::redo(void)
+{
+
+}
+
+void dtkComposerStackCommandEnterGroup::undo(void)
+{
+
+}
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandLeaveGroupPrivate
+{
+public:
+};
+
+dtkComposerStackCommandLeaveGroup::dtkComposerStackCommandLeaveGroup(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandLeaveGroupPrivate)
+{
+    this->setText("Leave group");
+}
+
+dtkComposerStackCommandLeaveGroup::~dtkComposerStackCommandLeaveGroup(void)
+{
+    delete e;
+
+    e = NULL;
+}
+
+void dtkComposerStackCommandLeaveGroup::redo(void)
+{
+
+}
+
+void dtkComposerStackCommandLeaveGroup::undo(void)
+{
+
 }

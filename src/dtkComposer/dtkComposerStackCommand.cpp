@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  1 11:30:54 2012 (+0100)
+ * Last-Updated: Thu Feb  2 11:56:59 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 63
+ *     Update #: 77
  */
 
 /* Commentary: 
@@ -283,4 +283,111 @@ void dtkComposerStackCommandCreateEdge::undo(void)
     e->edge->unlink();
 
     d->scene->removeEdge(e->edge);
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerStackCommandCreateNote
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandCreateNotePrivate
+{
+public:
+    QPointF position;
+
+public:
+    dtkComposerSceneNote *note;
+};
+
+dtkComposerStackCommandCreateNote::dtkComposerStackCommandCreateNote(void) : dtkComposerStackCommand(), e(new dtkComposerStackCommandCreateNotePrivate)
+{
+    e->note = NULL;
+
+    this->setText("Create note");
+}
+
+dtkComposerStackCommandCreateNote::~dtkComposerStackCommandCreateNote(void)
+{
+    delete e->note;
+    delete e;
+
+    e = NULL;
+}
+
+void dtkComposerStackCommandCreateNote::setPosition(const QPointF& position)
+{
+    e->position = position;
+}
+
+void dtkComposerStackCommandCreateNote::redo(void)
+{
+    if(!d->scene)
+        return;
+
+    if(!e->note) {
+        e->note = new dtkComposerSceneNote;
+        e->note->setPos(e->position);
+    }
+
+    d->scene->addNote(e->note);
+}
+
+void dtkComposerStackCommandCreateNote::undo(void)
+{
+    if(!e->note)
+        return;
+
+    e->position = e->note->scenePos();
+
+    d->scene->removeNote(e->note);
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerStackCommandDestroyNote
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandDestroyNotePrivate
+{
+public:
+    dtkComposerSceneNote *note;
+};
+
+dtkComposerStackCommandDestroyNote::dtkComposerStackCommandDestroyNote(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandDestroyNotePrivate)
+{
+    e->note = NULL;
+
+    this->setText("Destroy note");
+}
+
+dtkComposerStackCommandDestroyNote::~dtkComposerStackCommandDestroyNote(void)
+{
+    delete e;
+
+    e = NULL;
+}
+
+void dtkComposerStackCommandDestroyNote::setNote(dtkComposerSceneNote *note)
+{
+    e->note = note;
+}
+
+void dtkComposerStackCommandDestroyNote::redo(void)
+{
+    if(!d->scene)
+        return;
+
+    if(!e->note)
+        return;
+
+    d->scene->removeNote(e->note);
+}
+
+void dtkComposerStackCommandDestroyNote::undo(void)
+{
+    if(!d->scene)
+        return;
+
+    if(!e->note)
+        return;
+
+    d->scene->addNote(e->note);
 }

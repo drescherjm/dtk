@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:38:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  1 13:48:20 2012 (+0100)
+ * Last-Updated: Wed Feb  1 21:24:09 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 16
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -23,9 +23,12 @@
 #include "dtkComposerExport.h"
 
 #include <QtCore>
+#include <QtXml>
 
+class dtkComposerFactory;
 class dtkComposerReaderPrivate;
 class dtkComposerScene;
+class dtkComposerSceneNode;
 
 class DTKCOMPOSER_EXPORT dtkComposerReader
 {
@@ -34,10 +37,14 @@ public:
     virtual ~dtkComposerReader(void);
 
 public:
+    void setFactory(dtkComposerFactory *factory);
     void setScene(dtkComposerScene *scene);
 
 public:
    bool read(const QString& file, bool append = false);
+
+protected:
+   virtual dtkComposerSceneNode *readNode(QDomNode node);
 
 private:
     dtkComposerReaderPrivate *d;

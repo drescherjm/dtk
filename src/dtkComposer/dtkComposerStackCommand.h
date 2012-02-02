@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jan 31 19:09:24 2012 (+0100)
+ * Last-Updated: Thu Feb  2 11:57:21 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 25
+ *     Update #: 34
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@
 class dtkComposerFactory;
 class dtkComposerScene;
 class dtkComposerSceneNode;
+class dtkComposerSceneNote;
 class dtkComposerScenePort;
 class dtkComposerStackCommandPrivate;
 
@@ -117,6 +118,52 @@ public:
 
 private:
     dtkComposerStackCommandCreateEdgePrivate *e;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerStackCommandCreateNote
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandCreateNotePrivate;
+
+class dtkComposerStackCommandCreateNote : public dtkComposerStackCommand
+{
+public:
+     dtkComposerStackCommandCreateNote(void);
+    ~dtkComposerStackCommandCreateNote(void);
+
+public:
+    void setPosition(const QPointF& position);
+
+public:
+    void redo(void);
+    void undo(void);
+
+private:
+    dtkComposerStackCommandCreateNotePrivate *e;
+};
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandDestroyNotePrivate;
+
+class dtkComposerStackCommandDestroyNote : public dtkComposerStackCommand
+{
+public:
+     dtkComposerStackCommandDestroyNote(dtkComposerStackCommand *parent = 0);
+    ~dtkComposerStackCommandDestroyNote(void);
+
+public:
+    void setNote(dtkComposerSceneNote *note);
+
+public:
+    void redo(void);
+    void undo(void);
+
+private:
+    dtkComposerStackCommandDestroyNotePrivate *e;
 };
 
 #endif

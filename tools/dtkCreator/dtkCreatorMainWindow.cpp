@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Feb  1 15:21:24 2012 (+0100)
+ * Last-Updated: Thu Feb  2 12:00:36 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 768
+ *     Update #: 773
  */
 
 /* Commentary: 
@@ -244,6 +244,9 @@ bool dtkCreatorMainWindow::compositionSave(void)
     else
         status = d->composer->save();
 
+    if(status)
+        this->setWindowModified(false);
+
     return status;
 }
 
@@ -261,7 +264,7 @@ bool dtkCreatorMainWindow::compositionSaveAs(void)
     dialog.setConfirmOverwrite(true);
     dialog.setFileMode(QFileDialog::AnyFile);
     dialog.setNameFilters(nameFilters);
-    dialog.setDefaultSuffix("num");
+    dialog.setDefaultSuffix("dtk");
 
     if(dialog.exec()) {
 
@@ -293,7 +296,7 @@ bool dtkCreatorMainWindow::compositionSaveAs(const QString& file, dtkComposerWri
 
 bool dtkCreatorMainWindow::compositionInsert(void)
 {
-    QFileDialog *dialog = new QFileDialog(this, tr("Insert composition"), QDir::homePath(), QString("num3sis composition (*.num)"));
+    QFileDialog *dialog = new QFileDialog(this, tr("Insert composition"), QDir::homePath(), QString("dtk composition (*.dtk)"));
     dialog->setStyleSheet("background-color: none ; color: none;");
     dialog->setAcceptMode(QFileDialog::AcceptOpen);
     dialog->setFileMode(QFileDialog::AnyFile);

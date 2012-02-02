@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 13:24:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jan 31 16:16:51 2012 (+0100)
+ * Last-Updated: Thu Feb  2 10:11:10 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 25
+ *     Update #: 38
  */
 
 /* Commentary: 
@@ -27,6 +27,7 @@ public:
 
 public:
     QTreeWidgetItem *root;
+    QTreeWidgetItem *note;
 };
 
 dtkComposerFactoryView::dtkComposerFactoryView(QWidget *parent) : QTreeWidget(parent), d(new dtkComposerFactoryViewPrivate)
@@ -35,6 +36,9 @@ dtkComposerFactoryView::dtkComposerFactoryView(QWidget *parent) : QTreeWidget(pa
 
     d->root = new QTreeWidgetItem(this, QStringList() << "Nodes");
     d->root->setExpanded(true);
+
+    d->note = new QTreeWidgetItem(this, QStringList() << "Note");
+    d->note->setData(0, Qt::UserRole, QUrl(QString("note://")));
 
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setCursor(Qt::ArrowCursor);
@@ -62,7 +66,7 @@ void dtkComposerFactoryView::setFactory(dtkComposerFactory *factory)
 void dtkComposerFactoryView::addItem(const QString& node, const QString& type)
 {
     QTreeWidgetItem *item = new QTreeWidgetItem(d->root, QStringList() << node);
-    item->setData(0, Qt::UserRole, QUrl(QString("type:%1").arg(type)));
+    item->setData(0, Qt::UserRole, QUrl(QString("node:%1").arg(type)));
 
     this->addTopLevelItem(item);
 }

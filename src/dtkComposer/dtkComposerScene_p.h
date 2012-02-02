@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 15:32:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jan 31 18:06:56 2012 (+0100)
+ * Last-Updated: Thu Feb  2 12:09:36 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 84
+ *     Update #: 110
  */
 
 /* Commentary: 
@@ -34,13 +34,12 @@ class dtkComposerScenePortPrivate;
 
 class dtkComposerScenePort : public QGraphicsItem
 {
-#if QT_VERSION >= 0x040600
-    Q_INTERFACES(QGraphicsItem)
-#endif
+public:
+     dtkComposerScenePort(unsigned int id, QGraphicsItem *parent);
+    ~dtkComposerScenePort(void);
 
 public:
-     dtkComposerScenePort(QGraphicsItem *parent);
-    ~dtkComposerScenePort(void);
+    unsigned int id(void) const;
 
 public:
     virtual QRectF boundingRect(void) const;
@@ -60,10 +59,6 @@ class dtkComposerSceneEdgePrivate;
 
 class dtkComposerSceneEdge : public QGraphicsItem
 {
-#if QT_VERSION >= 0x040600
-    Q_INTERFACES(QGraphicsItem)
-#endif
-
 public:
      dtkComposerSceneEdge(void);
     ~dtkComposerSceneEdge(void);
@@ -102,10 +97,6 @@ class dtkComposerSceneNodePrivate;
 
 class dtkComposerSceneNode : public QGraphicsItem
 {
-#if QT_VERSION >= 0x040600
-    Q_INTERFACES(QGraphicsItem)
-#endif
-
 public:
      dtkComposerSceneNode(void);
     ~dtkComposerSceneNode(void);
@@ -119,6 +110,9 @@ public:
 
     QList<dtkComposerSceneEdge *> inputEdges(void);
     QList<dtkComposerSceneEdge *> outputEdges(void);
+
+public:
+    dtkComposerScenePort *port(unsigned int id);
 
 public:
     virtual QRectF boundingRect(void) const;
@@ -141,6 +135,38 @@ private:
 };
 
 // /////////////////////////////////////////////////////////////////
+// dtkComposerSceneNote
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerSceneNotePrivate;
+
+class dtkComposerSceneNote : public QGraphicsItem
+{
+public:
+     dtkComposerSceneNote(dtkComposerSceneNode *parent = 0);
+    ~dtkComposerSceneNote(void);
+
+    QString text(void) const;
+
+    void setSize(const QSizeF& size);
+    void setText(const QString& text);
+
+public:
+    QRectF boundingRect(void) const;
+
+public:
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
+protected:
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
+private:
+    dtkComposerSceneNotePrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
 // 
 // /////////////////////////////////////////////////////////////////
 
@@ -157,6 +183,7 @@ public:
 public:
     QList<dtkComposerSceneEdge *> edges;
     QList<dtkComposerSceneNode *> nodes;
+    QList<dtkComposerSceneNote *> notes;
 };
 
 #endif

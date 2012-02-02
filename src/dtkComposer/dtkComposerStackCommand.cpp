@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  2 16:27:55 2012 (+0100)
+ * Last-Updated: Thu Feb  2 17:59:25 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 251
+ *     Update #: 267
  */
 
 /* Commentary: 
@@ -174,15 +174,15 @@ void dtkComposerStackCommandDestroyNode::redo(void)
         return;
 
     foreach(dtkComposerSceneEdge *edge, e->input_edges)
-        if(d->scene->contains(edge))
+        if (d->scene->contains(edge))
             d->scene->removeEdge(edge);
 
     foreach(dtkComposerSceneEdge *edge, e->output_edges)
-        if(d->scene->contains(edge))
+        if (d->scene->contains(edge))
             d->scene->removeEdge(edge);
 
-    qDebug() << __func__ << "input edges has" << e->input_edges.count() << "items";
-    qDebug() << __func__ << "output edges has" << e->output_edges.count() << "items";
+    // qDebug() << __func__ << "input edges has" << e->input_edges.count() << "items";
+    // qDebug() << __func__ << "output edges has" << e->output_edges.count() << "items";
 
     d->scene->removeNode(e->node);
 }
@@ -199,17 +199,17 @@ void dtkComposerStackCommandDestroyNode::undo(void)
         dtkComposerSceneNode *s_node = dynamic_cast<dtkComposerSceneNode *>(edge->source()->parentItem());
         dtkComposerSceneNode *d_node = dynamic_cast<dtkComposerSceneNode *>(edge->destination()->parentItem());
 
-        if(!s_node)
-            qDebug() << "Unable to retrieve source node (i)";
+        // if(!s_node)
+        //     qDebug() << "Unable to retrieve source node (i)";
 
-        if(!d_node)
-            qDebug() << "Unable to retrieve source node (i)";
+        // if(!d_node)
+        //     qDebug() << "Unable to retrieve source node (i)";
 
-        if(!d->scene->contains(s_node))
-            qDebug() << "source node is not in scene (i)";
+        // if(!d->scene->contains(s_node))
+        //     qDebug() << "source node is not in scene (i)";
 
-        if(!d->scene->contains(d_node))
-            qDebug() << "destination node is not in scene (i)";
+        // if(!d->scene->contains(d_node))
+        //     qDebug() << "destination node is not in scene (i)";
 
         if(s_node && d_node && d->scene->contains(s_node) && d->scene->contains(d_node)) {
             d->scene->addEdge(edge);
@@ -221,17 +221,17 @@ void dtkComposerStackCommandDestroyNode::undo(void)
         dtkComposerSceneNode *s_node = dynamic_cast<dtkComposerSceneNode *>(edge->source()->parentItem());
         dtkComposerSceneNode *d_node = dynamic_cast<dtkComposerSceneNode *>(edge->destination()->parentItem());
 
-        if(!s_node)
-            qDebug() << "Unable to retrieve source node (o)";
+        // if(!s_node)
+        //     qDebug() << "Unable to retrieve source node (o)";
 
-        if(!d_node)
-            qDebug() << "Unable to retrieve source node (o)";
+        // if(!d_node)
+        //     qDebug() << "Unable to retrieve source node (o)";
 
-        if(!d->scene->contains(s_node))
-            qDebug() << "source node is not in scene (o)";
+        // if(!d->scene->contains(s_node))
+        //     qDebug() << "source node is not in scene (o)";
 
-        if(!d->scene->contains(d_node))
-            qDebug() << "destination node is not in scene (o)";
+        // if(!d->scene->contains(d_node))
+        //     qDebug() << "destination node is not in scene (o)";
 
         if(s_node && d_node && d->scene->contains(s_node) && d->scene->contains(d_node)) {
             d->scene->addEdge(edge);
@@ -264,6 +264,9 @@ dtkComposerStackCommandCreateEdge::dtkComposerStackCommandCreateEdge(void) : dtk
 
 dtkComposerStackCommandCreateEdge::~dtkComposerStackCommandCreateEdge(void)
 {
+    if (d->scene->contains(e->edge))
+        d->scene->removeEdge(e->edge);
+
     delete e->edge;
     delete e;
 
@@ -291,11 +294,13 @@ void dtkComposerStackCommandCreateEdge::redo(void)
     if(!e->destination)
         return;
 
-    e->edge = new dtkComposerSceneEdge;
-    e->edge->setSource(e->source);
-    e->edge->setDestination(e->destination);
-    e->edge->link();
-    e->edge->adjust();
+    if(!e->edge) {
+        e->edge = new dtkComposerSceneEdge;
+        e->edge->setSource(e->source);
+        e->edge->setDestination(e->destination);
+        e->edge->link();
+        e->edge->adjust();
+    }
 
     d->scene->addEdge(e->edge);
 }
@@ -304,8 +309,6 @@ void dtkComposerStackCommandCreateEdge::undo(void)
 {
     if(!e->edge)
         return;
-    
-    e->edge->unlink();
 
     d->scene->removeEdge(e->edge);
 }
@@ -332,6 +335,9 @@ dtkComposerStackCommandCreateNote::dtkComposerStackCommandCreateNote(void) : dtk
 
 dtkComposerStackCommandCreateNote::~dtkComposerStackCommandCreateNote(void)
 {
+    if (d->scene->contains(e->note))
+        d->scene->removeNote(e->note);
+
     delete e->note;
     delete e;
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb  2 12:00:36 2012 (+0100)
+ * Last-Updated: Thu Feb  2 12:28:41 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 773
+ *     Update #: 774
  */
 
 /* Commentary: 
@@ -71,8 +71,6 @@ void dtkCreatorMainWindowPrivate::setCurrentFile(const QString &file)
 
 void dtkCreatorMainWindowPrivate::setModified(bool modified)
 {
-    qDebug() << __func__ << modified;
-
     q->setWindowModified(modified);
 }
 

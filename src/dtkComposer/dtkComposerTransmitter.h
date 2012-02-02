@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:59:27 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 17:07:35 2012 (+0100)
+ * Last-Updated: Thu Feb  2 17:05:02 2012 (+0100)
  *           By: tkloczko
- *     Update #: 23
+ *     Update #: 28
  */
 
 /* Commentary: 
@@ -22,11 +22,20 @@
 
 #include "dtkComposerAbstractTransmitter.h"
 
+#include <QSharedData>
+#include <QSharedDataPointer>
+
 class dtkComposerNode;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitter declaration
 // /////////////////////////////////////////////////////////////////
+
+template <typename T> class dtkComposerTransmitterPrivate : public QSharedData
+{
+public:
+    T data;
+ };
 
 template <typename T> class DTKCOMPOSER_EXPORT dtkComposerTransmitter : public dtkComposerAbstractTransmitter
 {
@@ -35,9 +44,16 @@ public:
     ~dtkComposerTransmitter(void);
 
 public:
-    QString identifier(void) const;
+    inline void setData(const T& data);
+
+    inline       T& data(void);
+    inline const T& data(void) const;
 
 public:
+    QString identifier(void) const;
+
+private:
+    QSharedDataPointer<dtkComposerTransmitterPrivate<T> > d;
 };
 
 // /////////////////////////////////////////////////////////////////

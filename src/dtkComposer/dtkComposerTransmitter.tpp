@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:14:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 17:07:20 2012 (+0100)
+ * Last-Updated: Thu Feb  2 17:06:43 2012 (+0100)
  *           By: tkloczko
- *     Update #: 5
+ *     Update #: 12
  */
 
 /* Commentary: 
@@ -30,7 +30,7 @@
 /*! 
  *  
  */
-template <typename T> inline dtkComposerTransmitter<T>::dtkComposerTransmitter(dtkComposerNode *parent) : dtkComposerAbstractTransmitter(parent) 
+template <typename T> inline dtkComposerTransmitter<T>::dtkComposerTransmitter(dtkComposerNode *parent) : dtkComposerAbstractTransmitter(parent), d(new dtkComposerTransmitterPrivate<T>)
 {
 
 };
@@ -42,6 +42,33 @@ template <typename T> inline dtkComposerTransmitter<T>::dtkComposerTransmitter(d
 template <typename T> inline dtkComposerTransmitter<T>::~dtkComposerTransmitter(void)
 {
 
+};
+
+//! Sets the data with \a data.
+/*! 
+ *  
+ */
+template <typename T> inline void dtkComposerTransmitter<T>::setData(const T& data)
+{
+    d->data = data;
+};
+
+//! Returns the data as a modifiable reference.
+/*! 
+ *  
+ */
+template <typename T> inline T& dtkComposerTransmitter<T>::data(void)
+{
+    return d->data;
+};
+
+//! Returns the data as a non-modifiable reference.
+/*! 
+ *  
+ */ 
+template <typename T> inline const T& dtkComposerTransmitter<T>::data(void) const 
+{
+    return d->data;
 };
 
 //! Returns description of the transmitter.

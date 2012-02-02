@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Thu Feb  2 14:44:48 2012 (+0100)
+ * Last-Updated: Thu Feb  2 16:17:45 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 803
+ *     Update #: 827
  */
 
 /* Commentary:
@@ -804,7 +804,7 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
                 selected_notes << snote;
         }
 
-        // single node deletion
+        // multiple node deletion
         
         if(selected_nodes.count() > 1) {
 
@@ -820,7 +820,7 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
 
             d->stack->push(group);
 
-        // multiple node deletion
+        // single node deletion
 
         } else if(selected_nodes.count() == 1) {
 
@@ -831,9 +831,9 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
             d->stack->push(command);
         }
 
-        // single note deletion
+        // multiple note deletion
 
-        if(selected_nodes.count() > 1) {
+        if(selected_notes.count() > 1) {
 
             dtkComposerStackCommand *group = new dtkComposerStackCommand;
             group->setText("Destroy a set of notes");
@@ -847,7 +847,7 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
 
             d->stack->push(group);
 
-        // multiple note deletion
+        // single note deletion
 
         } else if(selected_notes.count() == 1) {
 
@@ -872,6 +872,17 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
         command->setNodes(selected_nodes);
         
         d->stack->push(command);
+
+    } else if ((event->key() == Qt::Key_U) && (event->modifiers() & Qt::ControlModifier) && (this->selectedItems().count() == 1)) {
+
+        if(dtkComposerSceneNodeComposite *group = dynamic_cast<dtkComposerSceneNodeComposite *>(this->selectedItems().first())) {
+
+            dtkComposerStackCommandExplodeGroup *command = new dtkComposerStackCommandExplodeGroup;
+            command->setScene(this);
+            command->setNode(group);
+        
+            d->stack->push(command);
+        }
 
     } else {
         QGraphicsScene::keyPressEvent(event);

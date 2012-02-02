@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  2 14:43:38 2012 (+0100)
+ * Last-Updated: Thu Feb  2 16:09:38 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 47
+ *     Update #: 55
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@
 class dtkComposerFactory;
 class dtkComposerScene;
 class dtkComposerSceneNode;
+class dtkComposerSceneNodeComposite;
 class dtkComposerSceneNodeList;
 class dtkComposerSceneNote;
 class dtkComposerScenePort;
@@ -188,6 +189,29 @@ public:
 
 private:
     dtkComposerStackCommandCreateGroupPrivate *e;
+};
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandExplodeGroupPrivate;
+
+class dtkComposerStackCommandExplodeGroup : public dtkComposerStackCommand
+{
+public:
+     dtkComposerStackCommandExplodeGroup(dtkComposerStackCommand *parent = 0);
+    ~dtkComposerStackCommandExplodeGroup(void);
+
+public:
+    void setNode(dtkComposerSceneNodeComposite *node);
+
+public:
+    void redo(void);
+    void undo(void);
+
+private:
+    dtkComposerStackCommandExplodeGroupPrivate *e;
 };
 
 #endif

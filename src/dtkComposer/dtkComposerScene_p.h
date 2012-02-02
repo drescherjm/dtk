@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 15:32:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  2 14:07:04 2012 (+0100)
+ * Last-Updated: Thu Feb  2 14:45:42 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 144
+ *     Update #: 147
  */
 
 /* Commentary: 
@@ -138,7 +138,7 @@ protected:
 // dtkComposerSceneNodeList
 // /////////////////////////////////////////////////////////////////
 
-typedef QList<dtkComposerSceneNode *> dtkComposerSceneNodeList;
+class dtkComposerSceneNodeList : public QList<dtkComposerSceneNode *> {};
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerSceneNodeComposite

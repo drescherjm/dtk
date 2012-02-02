@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb  2 12:28:41 2012 (+0100)
+ * Last-Updated: Thu Feb  2 15:39:44 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 774
+ *     Update #: 779
  */
 
 /* Commentary: 
@@ -125,10 +125,10 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->composition_menu->addSeparator();
     d->composition_menu->addAction(d->composition_quit_action);
 
-    d->undo_action = new QAction("Undo", this);
+    d->undo_action = d->composer->stack()->createUndoAction(this);
     d->undo_action->setShortcut(QKeySequence::Undo);
 
-    d->redo_action = new QAction("Redo", this);
+    d->redo_action = d->composer->stack()->createRedoAction(this);
     d->redo_action->setShortcut(QKeySequence::Redo);
 
     d->edit_menu = menu_bar->addMenu("Edit");
@@ -149,8 +149,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     connect(d->recent_compositions_menu, SIGNAL(recentFileTriggered(const QString&)), this, SLOT(compositionOpen(const QString&)));
 
-    connect(d->undo_action, SIGNAL(triggered()), d->composer->stack(), SLOT(undo()));
-    connect(d->redo_action, SIGNAL(triggered()), d->composer->stack(), SLOT(redo()));
+    // connect(d->undo_action, SIGNAL(triggered()), d->composer->stack(), SLOT(undo()));
+    // connect(d->redo_action, SIGNAL(triggered()), d->composer->stack(), SLOT(redo()));
 
     // Layout
 

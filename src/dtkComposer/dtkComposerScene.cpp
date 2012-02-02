@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Thu Feb  2 14:23:39 2012 (+0100)
+ * Last-Updated: Thu Feb  2 14:44:48 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 801
+ *     Update #: 803
  */
 
 /* Commentary:
@@ -359,8 +359,8 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
 
     QLinearGradient gradiant(d->rect.left(), d->rect.top(), d->rect.left(), d->rect.bottom());
     gradiant.setColorAt(0.0, QColor(Qt::white));
-    gradiant.setColorAt(0.3, QColor(Qt::gray));
-    gradiant.setColorAt(1.0, QColor(Qt::gray).darker());
+    gradiant.setColorAt(0.3, QColor(Qt::black).lighter());
+    gradiant.setColorAt(1.0, QColor(Qt::black));
 
     if (this->isSelected())
         painter->setPen(QPen(Qt::magenta, 2, Qt::SolidLine));
@@ -860,7 +860,7 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
 
     } else if ((event->key() == Qt::Key_G) && (event->modifiers() & Qt::ControlModifier)) {
 
-        QList<dtkComposerSceneNode *> selected_nodes;
+        dtkComposerSceneNodeList selected_nodes;
 
         foreach(QGraphicsItem *item, this->selectedItems()) {
             if (dtkComposerSceneNode *snode = dynamic_cast<dtkComposerSceneNode *>(item))

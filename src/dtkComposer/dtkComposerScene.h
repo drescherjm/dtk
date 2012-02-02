@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:11:39
  * Version: $Id$
- * Last-Updated: Thu Feb  2 10:19:54 2012 (+0100)
+ * Last-Updated: Thu Feb  2 18:27:29 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 58
+ *     Update #: 65
  */
 
 /* Commentary:
@@ -60,6 +60,10 @@ public:
     bool contains(dtkComposerSceneNode *node);
     bool contains(dtkComposerSceneNote *note);
 
+    bool displays(dtkComposerSceneEdge *edge);
+    bool displays(dtkComposerSceneNode *node);
+    bool displays(dtkComposerSceneNote *note);
+
 public:
     void clear(void);
 
@@ -86,6 +90,7 @@ protected:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent);
 
 protected:
+    dtkComposerSceneNode *nodeAt(const QPointF& point) const;
     dtkComposerScenePort *portAt(const QPointF& point) const;
 
 private:

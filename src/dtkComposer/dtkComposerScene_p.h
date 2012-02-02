@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 15:32:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  2 14:45:42 2012 (+0100)
+ * Last-Updated: Thu Feb  2 18:36:57 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 147
+ *     Update #: 153
  */
 
 /* Commentary: 
@@ -157,6 +157,11 @@ public:
     void removeNode(dtkComposerSceneNode *node);
 
 public:
+    bool entered(void);
+    void enter(void);
+    void leave(void);
+
+public:
     void layout(void);
 
 public:
@@ -241,6 +246,7 @@ public:
     dtkComposerStack *stack;
 
 public:
+    dtkComposerSceneNode *current_node;
     dtkComposerSceneEdge *current_edge;
 
 public:

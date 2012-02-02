@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Thu Feb  2 17:08:37 2012 (+0100)
+ * Last-Updated: Thu Feb  2 19:32:24 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 828
+ *     Update #: 998
  */
 
 /* Commentary:
@@ -314,11 +314,16 @@ public:
 
 public:
     QRectF rect;
+
+public:
+    bool entered;
 };
 
 dtkComposerSceneNodeComposite::dtkComposerSceneNodeComposite(void) : dtkComposerSceneNode(), d(new dtkComposerSceneNodeCompositePrivate)
 {
     d->rect = QRectF(0, 0, 150, 50);
+
+    d->entered = false;
 }
 
 dtkComposerSceneNodeComposite::~dtkComposerSceneNodeComposite(void)
@@ -343,9 +348,43 @@ dtkComposerSceneNodeList dtkComposerSceneNodeComposite::children(void)
     return d->children;
 }
 
+bool dtkComposerSceneNodeComposite::entered(void)
+{
+    return d->entered;
+}
+
+void dtkComposerSceneNodeComposite::enter(void)
+{
+    d->entered = true;
+
+    this->layout();
+}
+
+void dtkComposerSceneNodeComposite::leave(void)
+{
+    d->entered = false;
+
+    this->layout();
+}
+
 void dtkComposerSceneNodeComposite::layout(void)
 {
-    
+    if(!d->entered)
+        d->rect = QRectF(0, 0, 150, 50);
+    else {
+        QRectF rect;
+        
+        foreach(dtkComposerSceneNode *node, d->children)
+            rect |= node->mapRectToScene(node->boundingRect());
+
+        d->rect = QRectF(-rect.width()/2, -rect.height()/2, rect.width(), rect.height());
+        d->rect = d->rect.adjusted(-10, -10, 10, 10);
+
+        foreach(dtkComposerSceneNode *node, d->children)
+            node->setPos(node->pos() + d->rect.topLeft() - rect.topLeft() + QPointF(10, 10));
+    }
+
+    this->update();
 }
 
 QRectF dtkComposerSceneNodeComposite::boundingRect(void) const
@@ -357,17 +396,24 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
 {
     static qreal radius = 5.0;
 
-    QLinearGradient gradiant(d->rect.left(), d->rect.top(), d->rect.left(), d->rect.bottom());
-    gradiant.setColorAt(0.0, QColor(Qt::white));
-    gradiant.setColorAt(0.3, QColor(Qt::black).lighter());
-    gradiant.setColorAt(1.0, QColor(Qt::black));
-
-    if (this->isSelected())
+    if (this->isSelected()) {
         painter->setPen(QPen(Qt::magenta, 2, Qt::SolidLine));
-    else
-        painter->setPen(QPen(Qt::black, 1, Qt::SolidLine));
+        painter->setBrush(Qt::NoBrush);
+        painter->drawRoundedRect(d->rect.adjusted(-2, -2, 2, 2), radius, radius);
+    }
 
-    painter->setBrush(gradiant);
+    if(d->entered) {
+        painter->setPen(QPen(Qt::black, 1, Qt::DashLine));
+        painter->setBrush(Qt::NoBrush);
+    } else {
+        QLinearGradient gradiant(d->rect.left(), d->rect.top(), d->rect.left(), d->rect.bottom());
+        gradiant.setColorAt(0.0, QColor(Qt::darkGray));
+        gradiant.setColorAt(0.3, QColor(Qt::darkGray).darker().darker());
+        gradiant.setColorAt(1.0, QColor(Qt::darkGray).darker().darker().darker());
+
+        painter->setPen(QPen(Qt::black, 1, Qt::SolidLine));
+        painter->setBrush(gradiant);
+    }
 
     painter->drawRoundedRect(d->rect, radius, radius);
 }
@@ -591,6 +637,7 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
     d->stack = NULL;
 
     d->current_edge = NULL;
+    d->current_node = NULL;
 }
 
 dtkComposerScene::~dtkComposerScene(void)
@@ -697,6 +744,21 @@ bool dtkComposerScene::contains(dtkComposerSceneNode *node)
 bool dtkComposerScene::contains(dtkComposerSceneNote *note)
 {
     return d->notes.contains(note);
+}
+
+bool dtkComposerScene::displays(dtkComposerSceneEdge *edge)
+{
+    return this->items().contains(edge);
+}
+
+bool dtkComposerScene::displays(dtkComposerSceneNode *node)
+{
+    return this->items().contains(node);
+}
+
+bool dtkComposerScene::displays(dtkComposerSceneNote *note)
+{
+    return this->items().contains(note);
 }
 
 QList<dtkComposerSceneEdge *> dtkComposerScene::edges(void)
@@ -985,6 +1047,89 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsScene::mouseDoubleClickEvent(event);
+
+    dtkComposerSceneNode *node = this->nodeAt(event->scenePos());
+
+    if(!node)
+        return;
+
+    dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node);
+
+    if(!composite)
+        return;
+
+    foreach(QGraphicsItem *item, this->items())
+        this->removeItem(item);
+
+    if(!composite->entered()) {
+
+        composite->enter();
+
+        this->addItem(composite);
+        
+        foreach(dtkComposerSceneNode *node, composite->children()) {
+            this->addItem(node);
+            node->setParentItem(composite);
+        }
+        
+        foreach(dtkComposerSceneEdge *edge, d->edges) {
+            
+            dtkComposerSceneNode *s_node = dynamic_cast<dtkComposerSceneNode *>(edge->source()->parentItem());
+            dtkComposerSceneNode *d_node = dynamic_cast<dtkComposerSceneNode *>(edge->destination()->parentItem());
+            
+            if(s_node && d_node && this->displays(s_node) && this->displays(d_node)) {
+                this->addItem(edge);
+            }
+        }
+        
+        foreach(dtkComposerSceneNote *note, d->notes) {
+            
+            if (note->parentItem() == composite)
+                this->addItem(note);
+        }
+
+        d->current_node = composite;
+
+    } else { // DEPTH MAX IS 1 SO FAR
+        
+        composite->leave();
+        
+        this->addItem(composite);
+        
+        foreach(dtkComposerSceneNode *node, d->nodes)
+            this->addItem(node);
+        
+        foreach(dtkComposerSceneEdge *edge, d->edges) {
+            
+            dtkComposerSceneNode *s_node = dynamic_cast<dtkComposerSceneNode *>(edge->source()->parentItem());
+            dtkComposerSceneNode *d_node = dynamic_cast<dtkComposerSceneNode *>(edge->destination()->parentItem());
+            
+            if(s_node && d_node && this->displays(s_node) && this->displays(d_node)) {
+                this->addItem(edge);
+            }
+        }
+        
+        foreach(dtkComposerSceneNote *note, d->notes) {
+            
+            if (!note->parentItem())
+                this->addItem(note);
+        }
+
+        d->current_node = NULL;
+    }
+
+    this->clearSelection();
+}
+
+dtkComposerSceneNode *dtkComposerScene::nodeAt(const QPointF& point) const
+{
+    QList<QGraphicsItem *> items = this->items(point.x(), point.y(), 1, 1, Qt::IntersectsItemBoundingRect);
+
+    foreach(QGraphicsItem *item, items)
+        if (dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>(item))
+            return node;
+
+    return NULL;
 }
 
 dtkComposerScenePort *dtkComposerScene::portAt(const QPointF& point) const

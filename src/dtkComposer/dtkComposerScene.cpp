@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Thu Feb  2 16:17:45 2012 (+0100)
+ * Last-Updated: Thu Feb  2 17:08:37 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 827
+ *     Update #: 828
  */
 
 /* Commentary:
@@ -867,11 +867,14 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
                 selected_nodes << snode;
         }
 
-        dtkComposerStackCommandCreateGroup *command = new dtkComposerStackCommandCreateGroup;
-        command->setScene(this);
-        command->setNodes(selected_nodes);
-        
-        d->stack->push(command);
+        if(selected_nodes.count()) {
+
+            dtkComposerStackCommandCreateGroup *command = new dtkComposerStackCommandCreateGroup;
+            command->setScene(this);
+            command->setNodes(selected_nodes);
+            
+            d->stack->push(command);
+        }
 
     } else if ((event->key() == Qt::Key_U) && (event->modifiers() & Qt::ControlModifier) && (this->selectedItems().count() == 1)) {
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  2 23:52:14 2012 (+0100)
+ * Last-Updated: Fri Feb  3 14:07:01 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 282
+ *     Update #: 284
  */
 
 /* Commentary: 
@@ -20,6 +20,12 @@
 #include "dtkComposerFactory.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
+#include "dtkComposerSceneEdge.h"
+#include "dtkComposerSceneNode.h"
+#include "dtkComposerSceneNodeComposite.h"
+#include "dtkComposerSceneNodeLeaf.h"
+#include "dtkComposerSceneNote.h"
+#include "dtkComposerScenePort.h"
 #include "dtkComposerStackCommand.h"
 
 class dtkComposerStackCommandPrivate
@@ -518,7 +524,7 @@ void dtkComposerStackCommandExplodeGroup::setNode(dtkComposerSceneNodeComposite 
     if(!e->node)
         return;
 
-    e->children = e->node->children();
+    e->children = e->node->nodes();
 
     foreach(dtkComposerSceneNode *node, e->children) {
 

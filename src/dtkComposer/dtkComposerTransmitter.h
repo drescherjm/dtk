@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:59:27 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  2 17:05:02 2012 (+0100)
- *           By: tkloczko
- *     Update #: 28
+ * Last-Updated: Fri Feb  3 14:20:26 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -40,7 +40,7 @@ public:
 template <typename T> class DTKCOMPOSER_EXPORT dtkComposerTransmitter : public dtkComposerAbstractTransmitter
 {
 public:
-     dtkComposerTransmitter(dtkComposerNode *parent = 0);
+     dtkComposerTransmitter(dtkComposerSceneNode *parent = 0);
     ~dtkComposerTransmitter(void);
 
 public:

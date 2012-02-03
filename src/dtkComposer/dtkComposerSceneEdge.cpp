@@ -1,0 +1,152 @@
+/* dtkComposerSceneEdge.cpp --- 
+ * 
+ * Author: Julien Wintz
+ * Copyright (C) 2008-2011 - Julien Wintz, Inria.
+ * Created: Fri Feb  3 14:00:23 2012 (+0100)
+ * Version: $Id$
+ * Last-Updated: Fri Feb  3 14:13:49 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 7
+ */
+
+/* Commentary: 
+ * 
+ */
+
+/* Change log:
+ * 
+ */
+
+#include "dtkComposerSceneEdge.h"
+#include "dtkComposerSceneNode.h"
+#include "dtkComposerScenePort.h"
+
+class dtkComposerSceneEdgePrivate
+{
+public:
+    dtkComposerScenePort *source;
+    dtkComposerScenePort *destination;
+
+public:
+    QPainterPath path;
+};
+
+dtkComposerSceneEdge::dtkComposerSceneEdge(void) : QGraphicsItem(), d(new dtkComposerSceneEdgePrivate)
+{
+    d->source = NULL;
+    d->destination = NULL;
+
+    this->setZValue(-1);
+}
+
+dtkComposerSceneEdge::~dtkComposerSceneEdge(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+QRectF dtkComposerSceneEdge::boundingRect(void) const
+{
+    return d->path.boundingRect();
+}
+
+void dtkComposerSceneEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
+    painter->save();
+
+    painter->setPen(QPen(Qt::black, 1));
+    painter->setBrush(Qt::gray);
+
+    painter->drawPath(d->path);
+
+    painter->restore();
+}
+
+dtkComposerScenePort *dtkComposerSceneEdge::source(void)
+{
+    return d->source;
+}
+
+dtkComposerScenePort *dtkComposerSceneEdge::destination(void)
+{
+    return d->destination;
+}
+
+void dtkComposerSceneEdge::setSource(dtkComposerScenePort *port)
+{
+    d->source = port;
+
+    this->adjust();
+}
+
+void dtkComposerSceneEdge::setDestination(dtkComposerScenePort *port)
+{
+    d->destination = port;
+
+    this->adjust();
+}
+
+void dtkComposerSceneEdge::adjust(void)
+{
+    if (!d->source || !d->destination)
+        return;
+
+    if (!this->isVisible())
+        return;
+
+    QRectF rect;
+    rect = d->source->boundingRect();
+    QPointF start = d->source->mapToScene(rect.center());
+    rect = d->destination->boundingRect();
+    QPointF end = d->destination->mapToScene(rect.center());
+
+    this->adjust(start, end);
+}
+
+void dtkComposerSceneEdge::adjust(const QPointF& start, const QPointF& end)
+{
+    this->prepareGeometryChange();
+    
+    QPointF midPoint = (start + end) / 2;
+
+    qreal halfMid = (midPoint.x() - start.x())/2;
+
+    QPainterPath path;
+    path.moveTo(start);
+    path.cubicTo(QPointF(end.x() - halfMid, start.y()), QPointF(start.x() + halfMid, end.y()), end);
+
+    QPainterPathStroker stroker;
+    stroker.setWidth(3);
+    stroker.setCapStyle(Qt::RoundCap);
+    d->path = stroker.createStroke(path);
+
+    this->update();
+}
+
+bool dtkComposerSceneEdge::link(bool anyway)
+{
+    Q_UNUSED(anyway);
+    
+    if(!d->source || !d->destination)
+        return false;
+
+    dynamic_cast<dtkComposerSceneNode *>(d->source->parentItem())->addOutputEdge(this);
+    dynamic_cast<dtkComposerSceneNode *>(d->destination->parentItem())->addInputEdge(this);
+
+    return true;
+}
+
+bool dtkComposerSceneEdge::unlink(void)
+{
+    if(!d->source || !d->destination)
+        return false;
+
+    dynamic_cast<dtkComposerSceneNode *>(d->source->parentItem())->removeOutputEdge(this);
+    dynamic_cast<dtkComposerSceneNode *>(d->destination->parentItem())->removeInputEdge(this);
+
+    return true;
+}

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 16:50:47 2012 (+0100)
- *           By: tkloczko
- *     Update #: 4
+ * Last-Updated: Fri Feb  3 14:08:23 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -24,7 +24,7 @@
 
 #include <QObject>
 
-class dtkComposerNode;
+class dtkComposerSceneNode;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerAbstractTransmitter declaration
@@ -32,19 +32,17 @@ class dtkComposerNode;
 
 class dtkComposerAbstractTransmitterPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerAbstractTransmitter : public QObject
+class DTKCOMPOSER_EXPORT dtkComposerAbstractTransmitter
 {
-    Q_OBJECT
-
 public:
-             dtkComposerAbstractTransmitter(dtkComposerNode *parent = 0);
+             dtkComposerAbstractTransmitter(dtkComposerSceneNode *parent = 0);
     virtual ~dtkComposerAbstractTransmitter(void);
 
 public:
     virtual QString identifier(void) const = 0;
 
 public:
-    dtkComposerNode *parentNode(void) const;
+    dtkComposerSceneNode *parentNode(void) const;
     
 public:
     friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug, const dtkComposerAbstractTransmitter& transmitter);

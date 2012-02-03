@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Feb  1 13:40:42 2012 (+0100)
+## Last-Updated: Fri Feb  3 14:18:04 2012 (+0100)
 ##           By: Julien Wintz
-##     Update #: 259
+##     Update #: 281
 ######################################################################
 ## 
 ### Commentary: 
@@ -32,8 +32,13 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerFactoryView.h
   dtkComposerMachine.h
   dtkComposerMachineState.h
-  dtkComposerNode.h
   dtkComposerScene.h
+  dtkComposerSceneEdge.h
+  dtkComposerSceneNode.h
+  dtkComposerSceneNodeLeaf.h
+  dtkComposerSceneNodeComposite.h
+  dtkComposerSceneNote.h
+  dtkComposerScenePort.h
   dtkComposerStack.h
   dtkComposerStackCommand.h
   dtkComposerStackView.h
@@ -44,7 +49,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerWriter.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
-  dtkComposerAbstractTransmitter.h
   dtkComposer.h
   dtkComposer_p.h
   dtkComposerEvaluator.h
@@ -52,7 +56,6 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerFactoryView.h
   dtkComposerMachine.h
   dtkComposerMachineState.h
-  dtkComposerNode.h
   dtkComposerScene.h
   dtkComposerStackView.h
   dtkComposerView.h)
@@ -65,8 +68,13 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerFactoryView.cpp
   dtkComposerMachine.cpp
   dtkComposerMachineState.cpp
-  dtkComposerNode.cpp
   dtkComposerScene.cpp
+  dtkComposerSceneEdge.cpp
+  dtkComposerSceneNode.cpp
+  dtkComposerSceneNodeLeaf.cpp
+  dtkComposerSceneNodeComposite.cpp
+  dtkComposerSceneNote.cpp
+  dtkComposerScenePort.cpp
   dtkComposerStack.cpp
   dtkComposerStackView.cpp
   dtkComposerStackCommand.cpp

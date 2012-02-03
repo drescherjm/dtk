@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 16:51:07 2012 (+0100)
- *           By: tkloczko
- *     Update #: 3
+ * Last-Updated: Fri Feb  3 14:12:42 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -18,7 +18,7 @@
  */
 
 #include "dtkComposerAbstractTransmitter.h"
-#include "dtkComposerNode.h"
+#include "dtkComposerSceneNode.h"
 
 #include <QDebug>
 
@@ -29,14 +29,14 @@
 class dtkComposerAbstractTransmitterPrivate
 {
 public:
-    dtkComposerNode *parent;
+    dtkComposerSceneNode *parent;
 };
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerAbstractTransmitter implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerAbstractTransmitter::dtkComposerAbstractTransmitter(dtkComposerNode *parent) : QObject(parent), d(new dtkComposerAbstractTransmitterPrivate)
+dtkComposerAbstractTransmitter::dtkComposerAbstractTransmitter(dtkComposerSceneNode *parent) : d(new dtkComposerAbstractTransmitterPrivate)
 {
     d->parent = parent;
 }
@@ -44,10 +44,11 @@ dtkComposerAbstractTransmitter::dtkComposerAbstractTransmitter(dtkComposerNode *
 dtkComposerAbstractTransmitter::~dtkComposerAbstractTransmitter(void)
 {
     delete d;
+
     d = NULL;
 }
 
-dtkComposerNode *dtkComposerAbstractTransmitter::parentNode(void) const
+dtkComposerSceneNode *dtkComposerAbstractTransmitter::parentNode(void) const
 {
     return d->parent;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Thu Feb  2 13:58:28 2012 (+0100)
+ * Last-Updated: Fri Feb  3 13:58:15 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 28
+ *     Update #: 30
  */
 
 /* Commentary:
@@ -18,7 +18,8 @@
  */
 
 #include "dtkComposerFactory.h"
-#include "dtkComposerScene_p.h"
+#include "dtkComposerSceneNode.h"
+#include "dtkComposerSceneNodeLeaf.h"
 
 class dtkComposerFactoryPrivate
 {

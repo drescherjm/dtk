@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:38:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  1 21:24:09 2012 (+0100)
+ * Last-Updated: Fri Feb  3 17:36:00 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 24
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -28,7 +28,9 @@
 class dtkComposerFactory;
 class dtkComposerReaderPrivate;
 class dtkComposerScene;
+class dtkComposerSceneEdge;
 class dtkComposerSceneNode;
+class dtkComposerSceneNote;
 
 class DTKCOMPOSER_EXPORT dtkComposerReader
 {
@@ -44,7 +46,9 @@ public:
    bool read(const QString& file, bool append = false);
 
 protected:
+   virtual dtkComposerSceneNote *readNote(QDomNode node);
    virtual dtkComposerSceneNode *readNode(QDomNode node);
+   virtual dtkComposerSceneEdge *readEdge(QDomNode node);
 
 private:
     dtkComposerReaderPrivate *d;

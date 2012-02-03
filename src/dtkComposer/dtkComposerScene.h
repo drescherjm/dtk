@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:11:39
  * Version: $Id$
- * Last-Updated: Thu Feb  2 18:27:29 2012 (+0100)
+ * Last-Updated: Fri Feb  3 17:25:09 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 65
+ *     Update #: 81
  */
 
 /* Commentary:
@@ -28,6 +28,7 @@ class dtkComposerMachine;
 class dtkComposerFactory;
 class dtkComposerSceneEdge;
 class dtkComposerSceneNode;
+class dtkComposerSceneNodeComposite;
 class dtkComposerSceneNote;
 class dtkComposerScenePort;
 class dtkComposerScenePrivate;
@@ -56,21 +57,12 @@ public:
     void    addNote(dtkComposerSceneNote *note);
     void removeNote(dtkComposerSceneNote *note);
 
-    bool contains(dtkComposerSceneEdge *edge);
-    bool contains(dtkComposerSceneNode *node);
-    bool contains(dtkComposerSceneNote *note);
-
-    bool displays(dtkComposerSceneEdge *edge);
-    bool displays(dtkComposerSceneNode *node);
-    bool displays(dtkComposerSceneNote *note);
+public:
+    dtkComposerSceneNodeComposite *root(void);
+    dtkComposerSceneNodeComposite *current(void);
 
 public:
     void clear(void);
-
-public:
-    QList<dtkComposerSceneEdge *> edges(void);
-    QList<dtkComposerSceneNode *> nodes(void);
-    QList<dtkComposerSceneNote *> notes(void);
 
 signals:
     void modified(bool);

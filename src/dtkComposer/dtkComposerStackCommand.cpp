@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  3 14:07:01 2012 (+0100)
+ * Last-Updated: Fri Feb  3 17:00:08 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 284
+ *     Update #: 352
  */
 
 /* Commentary: 
@@ -27,6 +27,10 @@
 #include "dtkComposerSceneNote.h"
 #include "dtkComposerScenePort.h"
 #include "dtkComposerStackCommand.h"
+
+// /////////////////////////////////////////////////////////////////
+// Base Command
+// /////////////////////////////////////////////////////////////////
 
 class dtkComposerStackCommandPrivate
 {
@@ -59,7 +63,7 @@ void dtkComposerStackCommand::setScene(dtkComposerScene *scene)
 }
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerStackCommandCreateNode
+// Create Node Command
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerStackCommandCreateNodePrivate
@@ -73,7 +77,7 @@ public:
     dtkComposerSceneNode *node;
 };
 
-dtkComposerStackCommandCreateNode::dtkComposerStackCommandCreateNode(void) : dtkComposerStackCommand(), e(new dtkComposerStackCommandCreateNodePrivate)
+dtkComposerStackCommandCreateNode::dtkComposerStackCommandCreateNode(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandCreateNodePrivate)
 {
     e->node = NULL;
 }
@@ -115,7 +119,7 @@ void dtkComposerStackCommandCreateNode::redo(void)
         return;
 
     if(!e->node)
-        e->node = d->factory->create("");
+        e->node = d->factory->create(e->type);
 
     e->node->setPos(e->position);
 
@@ -133,7 +137,7 @@ void dtkComposerStackCommandCreateNode::undo(void)
 }
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerStackCommandDestroyNode
+// Destroy Node Command
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerStackCommandDestroyNodePrivate
@@ -180,12 +184,10 @@ void dtkComposerStackCommandDestroyNode::redo(void)
         return;
 
     foreach(dtkComposerSceneEdge *edge, e->input_edges)
-        if (d->scene->contains(edge))
-            d->scene->removeEdge(edge);
+        d->scene->removeEdge(edge);
 
     foreach(dtkComposerSceneEdge *edge, e->output_edges)
-        if (d->scene->contains(edge))
-            d->scene->removeEdge(edge);
+        d->scene->removeEdge(edge);
 
     d->scene->removeNode(e->node);
 }
@@ -199,27 +201,25 @@ void dtkComposerStackCommandDestroyNode::undo(void)
 
     foreach(dtkComposerSceneEdge *edge, e->input_edges) {
 
-        dtkComposerSceneNode *s_node = dynamic_cast<dtkComposerSceneNode *>(edge->source()->parentItem());
-        dtkComposerSceneNode *d_node = dynamic_cast<dtkComposerSceneNode *>(edge->destination()->parentItem());
+        dtkComposerSceneNode *s_node = edge->source()->node();
+        dtkComposerSceneNode *d_node = edge->destination()->node();
 
-        if(s_node && d_node && d->scene->contains(s_node) && d->scene->contains(d_node)) {
+        if(s_node && d_node)
             d->scene->addEdge(edge);
-        }
     }
 
     foreach(dtkComposerSceneEdge *edge, e->output_edges) {
 
-        dtkComposerSceneNode *s_node = dynamic_cast<dtkComposerSceneNode *>(edge->source()->parentItem());
-        dtkComposerSceneNode *d_node = dynamic_cast<dtkComposerSceneNode *>(edge->destination()->parentItem());
+        dtkComposerSceneNode *s_node = edge->source()->node();
+        dtkComposerSceneNode *d_node = edge->destination()->node();
 
-        if(s_node && d_node && d->scene->contains(s_node) && d->scene->contains(d_node)) {
+        if(s_node && d_node)
             d->scene->addEdge(edge);
-        }
     }
 }
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerStackCommandCreateEdge
+// Create Edge Command
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerStackCommandCreateEdgePrivate
@@ -243,9 +243,6 @@ dtkComposerStackCommandCreateEdge::dtkComposerStackCommandCreateEdge(void) : dtk
 
 dtkComposerStackCommandCreateEdge::~dtkComposerStackCommandCreateEdge(void)
 {
-    if (d->scene->contains(e->edge))
-        d->scene->removeEdge(e->edge);
-
     delete e->edge;
     delete e;
 
@@ -286,6 +283,9 @@ void dtkComposerStackCommandCreateEdge::redo(void)
 
 void dtkComposerStackCommandCreateEdge::undo(void)
 {
+    if(!d->scene)
+        return;
+
     if(!e->edge)
         return;
 
@@ -293,7 +293,46 @@ void dtkComposerStackCommandCreateEdge::undo(void)
 }
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerStackCommandCreateNote
+// Destroy Edge Command
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandDestroyEdgePrivate
+{
+public:
+    dtkComposerSceneEdge *edge;
+};
+
+dtkComposerStackCommandDestroyEdge::dtkComposerStackCommandDestroyEdge(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandDestroyEdgePrivate)
+{
+    e->edge = NULL;
+
+    this->setText("Destroy edge");
+}
+
+dtkComposerStackCommandDestroyEdge::~dtkComposerStackCommandDestroyEdge(void)
+{
+    delete e;
+
+    e = NULL;
+}
+
+void dtkComposerStackCommandDestroyEdge::setEdge(dtkComposerSceneEdge *edge)
+{
+    e->edge = edge;
+}
+
+void dtkComposerStackCommandDestroyEdge::redo(void)
+{
+
+}
+
+void dtkComposerStackCommandDestroyEdge::undo(void)
+{
+
+}
+
+// /////////////////////////////////////////////////////////////////
+// Create Note Command
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerStackCommandCreateNotePrivate
@@ -305,7 +344,7 @@ public:
     dtkComposerSceneNote *note;
 };
 
-dtkComposerStackCommandCreateNote::dtkComposerStackCommandCreateNote(void) : dtkComposerStackCommand(), e(new dtkComposerStackCommandCreateNotePrivate)
+dtkComposerStackCommandCreateNote::dtkComposerStackCommandCreateNote(dtkComposerStackCommand *parent) : dtkComposerStackCommand(), e(new dtkComposerStackCommandCreateNotePrivate)
 {
     e->note = NULL;
 
@@ -314,9 +353,6 @@ dtkComposerStackCommandCreateNote::dtkComposerStackCommandCreateNote(void) : dtk
 
 dtkComposerStackCommandCreateNote::~dtkComposerStackCommandCreateNote(void)
 {
-    if (d->scene->contains(e->note))
-        d->scene->removeNote(e->note);
-
     delete e->note;
     delete e;
 
@@ -333,10 +369,10 @@ void dtkComposerStackCommandCreateNote::redo(void)
     if(!d->scene)
         return;
 
-    if(!e->note) {
+    if(!e->note)
         e->note = new dtkComposerSceneNote;
-        e->note->setPos(e->position);
-    }
+
+    e->note->setPos(e->position);
 
     d->scene->addNote(e->note);
 }
@@ -352,7 +388,7 @@ void dtkComposerStackCommandCreateNote::undo(void)
 }
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerStackCommandDestroyNote
+// Destroy Note Command
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerStackCommandDestroyNotePrivate
@@ -403,7 +439,7 @@ void dtkComposerStackCommandDestroyNote::undo(void)
 }
 
 // /////////////////////////////////////////////////////////////////
-// 
+// Create Group Command
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerStackCommandCreateGroupPrivate
@@ -439,10 +475,11 @@ void dtkComposerStackCommandCreateGroup::setNodes(dtkComposerSceneNodeList nodes
     if(e->children.isEmpty())
         return;
 
+    if(!e->node)
+        e->node = new dtkComposerSceneNodeComposite;
+    
     QRectF rect;
 
-    e->node = new dtkComposerSceneNodeComposite;
-    
     foreach(dtkComposerSceneNode *node, e->children) {
 
         dtkComposerStackCommandDestroyNode *command = new dtkComposerStackCommandDestroyNode(this);
@@ -467,10 +504,10 @@ void dtkComposerStackCommandCreateGroup::redo(void)
     if(!e->node)
         return;
 
-    d->scene->addNode(e->node);
-
     foreach(dtkComposerStackCommandDestroyNode *command, e->commands)
         command->redo();
+
+    d->scene->addNode(e->node);
 }
 
 void dtkComposerStackCommandCreateGroup::undo(void)
@@ -488,10 +525,10 @@ void dtkComposerStackCommandCreateGroup::undo(void)
 }
 
 // /////////////////////////////////////////////////////////////////
-// 
+// Destroy Group Command
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerStackCommandExplodeGroupPrivate
+class dtkComposerStackCommandDestroyGroupPrivate
 {
 public:
     dtkComposerSceneNodeComposite *node;
@@ -503,21 +540,21 @@ public:
     QList<dtkComposerStackCommandDestroyNode *> commands;
 };
 
-dtkComposerStackCommandExplodeGroup::dtkComposerStackCommandExplodeGroup(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandExplodeGroupPrivate)
+dtkComposerStackCommandDestroyGroup::dtkComposerStackCommandDestroyGroup(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandDestroyGroupPrivate)
 {
     e->node = NULL;
 
-    this->setText("Explode group");
+    this->setText("Destroy group");
 }
 
-dtkComposerStackCommandExplodeGroup::~dtkComposerStackCommandExplodeGroup(void)
+dtkComposerStackCommandDestroyGroup::~dtkComposerStackCommandDestroyGroup(void)
 {
     delete e;
     
     e = NULL;
 }
 
-void dtkComposerStackCommandExplodeGroup::setNode(dtkComposerSceneNodeComposite *node)
+void dtkComposerStackCommandDestroyGroup::setNode(dtkComposerSceneNodeComposite *node)
 {
     e->node = node;
 
@@ -536,7 +573,7 @@ void dtkComposerStackCommandExplodeGroup::setNode(dtkComposerSceneNodeComposite 
     }
 }
 
-void dtkComposerStackCommandExplodeGroup::redo(void)
+void dtkComposerStackCommandDestroyGroup::redo(void)
 {
     if(!d->scene)
         return;
@@ -550,7 +587,7 @@ void dtkComposerStackCommandExplodeGroup::redo(void)
         command->undo();
 }
 
-void dtkComposerStackCommandExplodeGroup::undo(void)
+void dtkComposerStackCommandDestroyGroup::undo(void)
 {
     if(!d->scene)
         return;
@@ -558,23 +595,26 @@ void dtkComposerStackCommandExplodeGroup::undo(void)
     if(!e->node)
         return;
 
-    d->scene->addNode(e->node);
-
     foreach(dtkComposerStackCommandDestroyNode *command, e->commands)
         command->redo();
+
+    d->scene->addNode(e->node);
 }
 
 // /////////////////////////////////////////////////////////////////
-// 
+// Enter Group Command
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerStackCommandEnterGroupPrivate
 {
 public:
+    dtkComposerSceneNodeComposite *node;
 };
 
 dtkComposerStackCommandEnterGroup::dtkComposerStackCommandEnterGroup(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandEnterGroupPrivate)
 {
+    e->node = NULL;
+
     this->setText("Enter group");
 }
 
@@ -585,27 +625,37 @@ dtkComposerStackCommandEnterGroup::~dtkComposerStackCommandEnterGroup(void)
     e = NULL;
 }
 
+void dtkComposerStackCommandEnterGroup::setNode(dtkComposerSceneNodeComposite *node)
+{
+    e->node = node;
+}
+
 void dtkComposerStackCommandEnterGroup::redo(void)
 {
-
+    if(!e->node)
+        return;
 }
 
 void dtkComposerStackCommandEnterGroup::undo(void)
 {
-
+    if(!e->node)
+        return;
 }
 
 // /////////////////////////////////////////////////////////////////
-// 
+// Leave Group Command
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerStackCommandLeaveGroupPrivate
 {
 public:
+    dtkComposerSceneNodeComposite *node;
 };
 
 dtkComposerStackCommandLeaveGroup::dtkComposerStackCommandLeaveGroup(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandLeaveGroupPrivate)
 {
+    e->node = NULL;
+
     this->setText("Leave group");
 }
 
@@ -616,12 +666,19 @@ dtkComposerStackCommandLeaveGroup::~dtkComposerStackCommandLeaveGroup(void)
     e = NULL;
 }
 
+void dtkComposerStackCommandLeaveGroup::setNode(dtkComposerSceneNodeComposite *node)
+{
+    e->node = node;
+}
+
 void dtkComposerStackCommandLeaveGroup::redo(void)
 {
-
+    if(!e->node)
+        return;
 }
 
 void dtkComposerStackCommandLeaveGroup::undo(void)
 {
-
+    if(!e->node)
+        return;
 }

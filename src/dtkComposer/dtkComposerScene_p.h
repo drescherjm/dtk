@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 15:32:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  3 13:57:38 2012 (+0100)
+ * Last-Updated: Fri Feb  3 14:50:13 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 205
+ *     Update #: 206
  */
 
 /* Commentary: 
@@ -44,11 +44,6 @@ public:
 
 public:
     dtkComposerSceneEdge *current_edge;
-
-public:
-    QList<dtkComposerSceneEdge *> edges;
-    QList<dtkComposerSceneNode *> nodes;
-    QList<dtkComposerSceneNote *> notes;
 };
 
 #endif

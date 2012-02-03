@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  2 23:52:42 2012 (+0100)
+ * Last-Updated: Fri Feb  3 16:58:39 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 63
+ *     Update #: 84
  */
 
 /* Commentary: 
@@ -25,6 +25,7 @@
 
 class dtkComposerFactory;
 class dtkComposerScene;
+class dtkComposerSceneEdge;
 class dtkComposerSceneNode;
 class dtkComposerSceneNodeComposite;
 class dtkComposerSceneNodeList;
@@ -42,16 +43,12 @@ public:
     void setFactory(dtkComposerFactory *factory);
     void setScene(dtkComposerScene *scene);
 
-public:
-    // virtual void redo(void) = 0;
-    // virtual void undo(void) = 0;
-
 protected:
     dtkComposerStackCommandPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+// Create Node Command
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerStackCommandCreateNodePrivate;
@@ -59,7 +56,7 @@ class dtkComposerStackCommandCreateNodePrivate;
 class dtkComposerStackCommandCreateNode : public dtkComposerStackCommand
 {
 public:
-     dtkComposerStackCommandCreateNode(void);
+     dtkComposerStackCommandCreateNode(dtkComposerStackCommand *parent = 0);
     ~dtkComposerStackCommandCreateNode(void);
 
 public:
@@ -76,7 +73,7 @@ private:
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+// Destroy Node Command
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerStackCommandDestroyNodePrivate;
@@ -99,7 +96,7 @@ private:
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+// Create Edge Command
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerStackCommandCreateEdgePrivate;
@@ -123,7 +120,30 @@ private:
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerStackCommandCreateNote
+// Destroy Edge Command
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandDestroyEdgePrivate;
+
+class dtkComposerStackCommandDestroyEdge : public dtkComposerStackCommand
+{
+public:
+     dtkComposerStackCommandDestroyEdge(dtkComposerStackCommand *parent = 0);
+    ~dtkComposerStackCommandDestroyEdge(void);
+
+public:
+    void setEdge(dtkComposerSceneEdge *edge);
+
+public:
+    void redo(void);
+    void undo(void);
+
+private:
+    dtkComposerStackCommandDestroyEdgePrivate *e;
+};
+
+// /////////////////////////////////////////////////////////////////
+// Create Note Command
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerStackCommandCreateNotePrivate;
@@ -131,7 +151,7 @@ class dtkComposerStackCommandCreateNotePrivate;
 class dtkComposerStackCommandCreateNote : public dtkComposerStackCommand
 {
 public:
-     dtkComposerStackCommandCreateNote(void);
+     dtkComposerStackCommandCreateNote(dtkComposerStackCommand *parent = 0);
     ~dtkComposerStackCommandCreateNote(void);
 
 public:
@@ -146,7 +166,7 @@ private:
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+// Destroy Note Command
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerStackCommandDestroyNotePrivate;
@@ -169,7 +189,7 @@ private:
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+// Create Group Command
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerStackCommandCreateGroupPrivate;
@@ -192,16 +212,16 @@ private:
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+// Destroy Group Command
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerStackCommandExplodeGroupPrivate;
+class dtkComposerStackCommandDestroyGroupPrivate;
 
-class dtkComposerStackCommandExplodeGroup : public dtkComposerStackCommand
+class dtkComposerStackCommandDestroyGroup : public dtkComposerStackCommand
 {
 public:
-     dtkComposerStackCommandExplodeGroup(dtkComposerStackCommand *parent = 0);
-    ~dtkComposerStackCommandExplodeGroup(void);
+     dtkComposerStackCommandDestroyGroup(dtkComposerStackCommand *parent = 0);
+    ~dtkComposerStackCommandDestroyGroup(void);
 
 public:
     void setNode(dtkComposerSceneNodeComposite *node);
@@ -211,11 +231,11 @@ public:
     void undo(void);
 
 private:
-    dtkComposerStackCommandExplodeGroupPrivate *e;
+    dtkComposerStackCommandDestroyGroupPrivate *e;
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+// Enter Group Command
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerStackCommandEnterGroupPrivate;
@@ -227,6 +247,9 @@ public:
     ~dtkComposerStackCommandEnterGroup(void);
 
 public:
+    void setNode(dtkComposerSceneNodeComposite *node);
+
+public:
     void redo(void);
     void undo(void);
 
@@ -235,7 +258,7 @@ private:
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+// Leave Group Command
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerStackCommandLeaveGroupPrivate;
@@ -245,6 +268,9 @@ class dtkComposerStackCommandLeaveGroup : public dtkComposerStackCommand
 public:
      dtkComposerStackCommandLeaveGroup(dtkComposerStackCommand *parent = 0);
     ~dtkComposerStackCommandLeaveGroup(void);
+
+public:
+    void setNode(dtkComposerSceneNodeComposite *node);
 
 public:
     void redo(void);

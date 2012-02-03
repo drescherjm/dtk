@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:40:30 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  1 15:05:35 2012 (+0100)
+ * Last-Updated: Fri Feb  3 17:20:55 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 23
+ *     Update #: 36
  */
 
 /* Commentary: 
@@ -26,7 +26,9 @@
 #include <QtXml>
 
 class dtkComposerScene;
+class dtkComposerSceneEdge;
 class dtkComposerSceneNode;
+class dtkComposerSceneNote;
 class dtkComposerWriterPrivate;
 
 class DTKCOMPOSER_EXPORT dtkComposerWriter
@@ -36,7 +38,10 @@ public:
     virtual ~dtkComposerWriter(void);
 
 public:
-    enum Type { Ascii, Binary };
+    enum Type {
+        Ascii,
+        Binary
+    };
 
 public:
     void setScene(dtkComposerScene *scene);
@@ -45,7 +50,9 @@ public:
    void write(const QString& file, Type type = Ascii);
 
 protected:
+   virtual QDomElement writeNote(dtkComposerSceneNote *note, QDomElement& element, QDomDocument& document);
    virtual QDomElement writeNode(dtkComposerSceneNode *node, QDomElement& element, QDomDocument& document);
+   virtual QDomElement writeEdge(dtkComposerSceneEdge *edge, QDomElement& element, QDomDocument& document);
 
 protected:
    virtual void extend(dtkComposerSceneNode *node, QDomElement& element, QDomDocument& document);

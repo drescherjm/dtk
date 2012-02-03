@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Fri Feb  3 14:06:17 2012 (+0100)
+ * Last-Updated: Fri Feb  3 17:28:23 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1075
+ *     Update #: 1122
  */
 
 /* Commentary:
@@ -36,8 +36,11 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
     d->machine = NULL;
     d->stack = NULL;
 
+    d->root_node = new dtkComposerSceneNodeComposite;
+    d->root_node->setRoot(true);
+
+    d->current_node = d->root_node;
     d->current_edge = NULL;
-    d->current_node = NULL;
 }
 
 dtkComposerScene::~dtkComposerScene(void)
@@ -64,7 +67,7 @@ void dtkComposerScene::setStack(dtkComposerStack *stack)
 
 void dtkComposerScene::addNode(dtkComposerSceneNode *node)
 {
-    d->nodes << node;
+    d->current_node->addNode(node);
 
     this->addItem(node);
 
@@ -73,8 +76,7 @@ void dtkComposerScene::addNode(dtkComposerSceneNode *node)
 
 void dtkComposerScene::removeNode(dtkComposerSceneNode *node)
 {
-    if (d->nodes.contains(node))
-        d->nodes.removeAll(node);
+    d->current_node->removeNode(node);
 
     this->removeItem(node);
 
@@ -83,7 +85,7 @@ void dtkComposerScene::removeNode(dtkComposerSceneNode *node)
 
 void dtkComposerScene::addEdge(dtkComposerSceneEdge *edge)
 {
-    d->edges << edge;
+    d->current_node->addEdge(edge);
 
     this->addItem(edge);
 
@@ -92,8 +94,7 @@ void dtkComposerScene::addEdge(dtkComposerSceneEdge *edge)
 
 void dtkComposerScene::removeEdge(dtkComposerSceneEdge *edge)
 {
-    if (d->edges.contains(edge))
-        d->edges.removeAll(edge);
+    d->current_node->removeEdge(edge);
 
     this->removeItem(edge);
 
@@ -102,7 +103,7 @@ void dtkComposerScene::removeEdge(dtkComposerSceneEdge *edge)
 
 void dtkComposerScene::addNote(dtkComposerSceneNote *note)
 {
-    d->notes << note;
+    d->current_node->addNote(note);
 
     this->addItem(note);
 
@@ -111,75 +112,28 @@ void dtkComposerScene::addNote(dtkComposerSceneNote *note)
 
 void dtkComposerScene::removeNote(dtkComposerSceneNote *note)
 {
-    if (d->notes.contains(note))
-        d->notes.removeAll(note);
+    d->current_node->removeNote(note);
 
     this->removeItem(note);
 
     emit modified(true);
 }
 
+dtkComposerSceneNodeComposite *dtkComposerScene::root(void)
+{
+    return d->root_node;
+}
+
+dtkComposerSceneNodeComposite *dtkComposerScene::current(void)
+{
+    return d->current_node;
+}
+
 void dtkComposerScene::clear(void)
 {
-    foreach(dtkComposerSceneNode *node, d->nodes)
-        this->removeNode(node);
-
-    foreach(dtkComposerSceneNote *note, d->notes)
-        this->removeNote(note);
-
-    d->nodes.clear();
-    d->notes.clear();
+    qDebug() << "-- CLEAR --";
 }
 
-bool dtkComposerScene::contains(dtkComposerSceneEdge *edge)
-{
-    return d->edges.contains(edge);
-}
-
-bool dtkComposerScene::contains(dtkComposerSceneNode *node)
-{
-    return d->nodes.contains(node);
-}
-
-bool dtkComposerScene::contains(dtkComposerSceneNote *note)
-{
-    return d->notes.contains(note);
-}
-
-bool dtkComposerScene::displays(dtkComposerSceneEdge *edge)
-{
-    return this->items().contains(edge);
-}
-
-bool dtkComposerScene::displays(dtkComposerSceneNode *node)
-{
-    return this->items().contains(node);
-}
-
-bool dtkComposerScene::displays(dtkComposerSceneNote *note)
-{
-    return this->items().contains(note);
-}
-
-QList<dtkComposerSceneEdge *> dtkComposerScene::edges(void)
-{
-    return d->edges;
-}
-
-QList<dtkComposerSceneNode *> dtkComposerScene::nodes(void)
-{
-    return d->nodes;
-}
-
-QList<dtkComposerSceneNote *> dtkComposerScene::notes(void)
-{
-    return d->notes;
-}
-
-//! Receives drag enter events.
-/*! 
- *  
- */
 void dtkComposerScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
     if (event->mimeData()->hasUrls())
@@ -188,19 +142,11 @@ void dtkComposerScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
         event->ignore();
 }
 
-//! Receives drag leave events.
-/*! 
- *  
- */
 void dtkComposerScene::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 {
     event->accept();
 }
 
-//! Receives drag move events.
-/*! 
- *  
- */
 void dtkComposerScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
     if (event->mimeData()->hasUrls())
@@ -209,10 +155,6 @@ void dtkComposerScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
         event->ignore();
 }
 
-//! Receives drop events.
-/*! 
- *  
- */
 void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
     QString name = event->mimeData()->text();
@@ -342,7 +284,7 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
 
         if(dtkComposerSceneNodeComposite *group = dynamic_cast<dtkComposerSceneNodeComposite *>(this->selectedItems().first())) {
 
-            dtkComposerStackCommandExplodeGroup *command = new dtkComposerStackCommandExplodeGroup;
+            dtkComposerStackCommandDestroyGroup *command = new dtkComposerStackCommandDestroyGroup;
             command->setScene(this);
             command->setNode(group);
         
@@ -461,10 +403,12 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
     if(!composite->entered()) {
         dtkComposerStackCommandEnterGroup *command = new dtkComposerStackCommandEnterGroup;
         command->setScene(this);
+        command->setNode(composite);
         d->stack->push(command);
     } else {
         dtkComposerStackCommandLeaveGroup *command = new dtkComposerStackCommandLeaveGroup;
         command->setScene(this);
+        command->setNode(composite);
         d->stack->push(command);
     }
 

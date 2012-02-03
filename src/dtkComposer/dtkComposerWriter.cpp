@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  3 14:07:32 2012 (+0100)
+ * Last-Updated: Fri Feb  3 17:22:52 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 83
+ *     Update #: 161
  */
 
 /* Commentary: 
@@ -37,6 +37,7 @@ public:
 public:
     QHash<int, dtkComposerSceneNode *> node_ids;
 
+public:
     int id;
 };
 
@@ -65,55 +66,20 @@ void dtkComposerWriter::write(const QString& fileName, Type type)
     d->node_ids.clear();
     d->id = 0;
 
-    // Building dom document
-
     QDomDocument document("dtk");
 
     QDomElement root = document.createElement("dtk");
     document.appendChild(root);
 
-    // -- Writing nodes
-
-    foreach(dtkComposerSceneNode *node, d->scene->nodes())
+    foreach(dtkComposerSceneNote *note, d->scene->root()->notes())
+        this->writeNote(note, root, document);
+    
+    foreach(dtkComposerSceneNode *node, d->scene->root()->nodes())
         this->writeNode(node, root, document);
-
-    // -- Writing edges
-
-    foreach(dtkComposerSceneEdge *edge, d->scene->edges()) {
-        
-        QDomElement source = document.createElement("source");
-        source.setAttribute("node", d->node_ids.key(dynamic_cast<dtkComposerSceneNode *>(edge->source()->parentItem())));
-        source.setAttribute("id", edge->source()->id());
-        
-        QDomElement destin = document.createElement("destination");
-        destin.setAttribute("node", d->node_ids.key(dynamic_cast<dtkComposerSceneNode *>(edge->destination()->parentItem())));
-        destin.setAttribute("id", edge->destination()->id());
-
-        QDomElement tag = document.createElement("edge");
-        tag.appendChild(source);
-        tag.appendChild(destin);
-
-        root.appendChild(tag);
-    }
-
-    // -- Writing notes
-
-    foreach(dtkComposerSceneNote *note, d->scene->notes()) {
-
-        QDomText text = document.createTextNode(note->text());
-
-        QDomElement tag = document.createElement("note");
-        tag.setAttribute("x", QString::number(note->pos().x()));
-        tag.setAttribute("y", QString::number(note->pos().y()));
-        tag.setAttribute("w", QString::number(note->boundingRect().width()));
-        tag.setAttribute("h", QString::number(note->boundingRect().height()));
-        tag.appendChild(text);
-
-        root.appendChild(tag);
-    }
-
-    // Writing file
-
+    
+    foreach(dtkComposerSceneEdge *edge, d->scene->root()->edges())
+        this->writeEdge(edge, root, document);
+    
     QFile file(fileName);
 
     if (!file.open(QIODevice::WriteOnly))
@@ -126,6 +92,20 @@ void dtkComposerWriter::write(const QString& fileName, Type type)
     }
 
     file.close();
+}
+
+QDomElement dtkComposerWriter::writeNote(dtkComposerSceneNote *note, QDomElement& element, QDomDocument& document)
+{
+    QDomText text = document.createTextNode(note->text());
+    
+    QDomElement tag = document.createElement("note");
+    tag.setAttribute("x", QString::number(note->pos().x()));
+    tag.setAttribute("y", QString::number(note->pos().y()));
+    tag.setAttribute("w", QString::number(note->boundingRect().width()));
+    tag.setAttribute("h", QString::number(note->boundingRect().height()));
+    tag.appendChild(text);
+    
+    element.appendChild(tag);
 }
 
 QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement& element, QDomDocument& document)
@@ -141,9 +121,39 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
     
     d->node_ids.insert(current_id, node);
 
-    this->extend(node, tag, document);
+    if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
+
+        foreach(dtkComposerSceneNote *note, composite->notes())
+            this->writeNote(note, tag, document);
+        
+        foreach(dtkComposerSceneNode *child, composite->nodes())
+            this->writeNode(child, tag, document);
+        
+        foreach(dtkComposerSceneEdge *edge, composite->edges())
+            this->writeEdge(edge, tag, document);
+
+    } else {
+        this->extend(node, tag, document);
+    }
 
     return tag;
+}
+
+QDomElement dtkComposerWriter::writeEdge(dtkComposerSceneEdge *edge, QDomElement& element, QDomDocument& document)
+{
+    QDomElement source = document.createElement("source");
+    source.setAttribute("node", d->node_ids.key(edge->source()->node()));
+    source.setAttribute("id", edge->source()->id());
+    
+    QDomElement destin = document.createElement("destination");
+    destin.setAttribute("node", d->node_ids.key(edge->destination()->node()));
+    destin.setAttribute("id", edge->destination()->id());
+    
+    QDomElement tag = document.createElement("edge");
+    tag.appendChild(source);
+    tag.appendChild(destin);
+
+    element.appendChild(tag);
 }
 
 void dtkComposerWriter::extend(dtkComposerSceneNode *node, QDomElement& element, QDomDocument& document)

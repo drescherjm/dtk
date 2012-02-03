@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:35:30 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  3 14:18:21 2012 (+0100)
+ * Last-Updated: Fri Feb  3 16:37:20 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 7
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -24,6 +24,10 @@
 
 class dtkComposerSceneNode;
 class dtkComposerSceneNotePrivate;
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerSceneNote
+// /////////////////////////////////////////////////////////////////
 
 class dtkComposerSceneNote : public QGraphicsItem
 {
@@ -50,5 +54,11 @@ protected:
 private:
     dtkComposerSceneNotePrivate *d;
 };
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerSceneNoteList
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerSceneNoteList : public QList<dtkComposerSceneNote *> {};
 
 #endif

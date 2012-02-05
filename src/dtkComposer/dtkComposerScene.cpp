@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Sun Feb  5 15:20:24 2012 (+0100)
+ * Last-Updated: Sun Feb  5 16:38:51 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1147
+ *     Update #: 1148
  */
 
 /* Commentary:
@@ -144,13 +144,13 @@ void dtkComposerScene::clear(void)
 void dtkComposerScene::setRoot(dtkComposerSceneNodeComposite *root)
 {
     foreach(dtkComposerSceneNote *note, root->notes())
-        this->addNote(note);
+        this->addItem(note);
 
     foreach(dtkComposerSceneNode *node, root->nodes())
-        this->addNode(node);
+        this->addItem(node);
 
     foreach(dtkComposerSceneEdge *edge, root->edges())
-        this->addEdge(edge);
+        this->addItem(edge);
 }
 
 void dtkComposerScene::setCurrent(dtkComposerSceneNode *node)

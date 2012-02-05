@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  1 12:37:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  1 15:21:36 2012 (+0100)
+ * Last-Updated: Sun Feb  5 15:45:22 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 25
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -25,6 +25,8 @@
 
 class dtkComposer;
 class dtkComposerFactoryView;
+class dtkComposerSceneModel;
+class dtkComposerSceneView;
 class dtkComposerStackView;
 
 class dtkRecentFilesMenu;
@@ -51,6 +53,8 @@ public slots:
 public:
     dtkComposer *composer;
     dtkComposerFactoryView *nodes;
+    dtkComposerSceneModel *model;
+    dtkComposerSceneView *scene;
     dtkComposerStackView *stack;
 
 public:

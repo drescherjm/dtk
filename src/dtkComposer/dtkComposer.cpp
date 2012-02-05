@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  1 22:39:24 2012 (+0100)
+ * Last-Updated: Sun Feb  5 15:51:55 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 159
+ *     Update #: 161
  */
 
 /* Commentary: 
@@ -184,6 +184,11 @@ dtkComposerMachine *dtkComposer::machine(void)
 dtkComposerFactory *dtkComposer::factory(void)
 {
     return d->factory;
+}
+
+dtkComposerScene *dtkComposer::scene(void)
+{
+    return d->scene;
 }
 
 dtkComposerStack *dtkComposer::stack(void)

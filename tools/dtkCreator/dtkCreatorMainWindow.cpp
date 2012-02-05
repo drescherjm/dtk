@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb  2 15:39:44 2012 (+0100)
+ * Last-Updated: Sun Feb  5 15:55:24 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 779
+ *     Update #: 796
  */
 
 /* Commentary: 
@@ -22,6 +22,9 @@
 
 #include <dtkComposer/dtkComposer.h>
 #include <dtkComposer/dtkComposerFactoryView.h>
+#include <dtkComposer/dtkComposerScene.h>
+#include <dtkComposer/dtkComposerSceneModel.h>
+#include <dtkComposer/dtkComposerSceneView.h>
 #include <dtkComposer/dtkComposerStack.h>
 #include <dtkComposer/dtkComposerStackView.h>
 
@@ -84,11 +87,18 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     d->composer = new dtkComposer;
 
-    d->stack = new dtkComposerStackView;
+    d->model = new dtkComposerSceneModel(this);
+    d->model->setScene(d->composer->scene());
+
+    d->scene = new dtkComposerSceneView(this);
+    d->scene->setModel(d->model);
+    d->scene->setFixedWidth(300);
+
+    d->stack = new dtkComposerStackView(this);
     d->stack->setStack(d->composer->stack());
     d->stack->setFixedWidth(300);
 
-    d->nodes = new dtkComposerFactoryView;
+    d->nodes = new dtkComposerFactoryView(this);
     d->nodes->setFixedWidth(300);
     d->nodes->setFactory(d->composer->factory());
 
@@ -159,6 +169,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     lateral->setSpacing(0);
     lateral->addWidget(d->nodes);
     lateral->addWidget(d->stack);
+    lateral->addWidget(d->scene);
 
     QHBoxLayout *layout = new QHBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);

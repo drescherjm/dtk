@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb  5 15:21:26 2012 (+0100)
+ * Last-Updated: Sun Feb  5 16:19:23 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 203
+ *     Update #: 206
  */
 
 /* Commentary: 
@@ -131,8 +131,12 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
 
     // --
 
-    d->root = new dtkComposerSceneNodeComposite;
-    d->node = d->root;
+    if(!append) {
+        d->root = d->scene->root();
+        d->node = d->root;
+    } else {
+        d->node = d->scene->current();
+    }
 
     // Feeding scene with notes
     
@@ -159,8 +163,9 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
             this->readEdge(edges.at(i));
 
     // --
-
-    d->scene->setRoot(d->root);
+    
+    if(!append)
+        d->scene->setRoot(d->root);
 
     // --
     

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:35:30 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  3 16:37:20 2012 (+0100)
+ * Last-Updated: Sun Feb  5 18:08:34 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 14
+ *     Update #: 18
  */
 
 /* Commentary: 
@@ -32,7 +32,7 @@ class dtkComposerSceneNotePrivate;
 class dtkComposerSceneNote : public QGraphicsItem
 {
 public:
-     dtkComposerSceneNote(dtkComposerSceneNode *parent = 0);
+     dtkComposerSceneNote(void);
     ~dtkComposerSceneNote(void);
 
     QString text(void) const;

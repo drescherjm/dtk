@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:31:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  3 12:31:58 2012 (+0100)
+ * Last-Updated: Sat Feb  4 14:51:56 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 5
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -44,7 +44,7 @@ public:
     void  removeInputEdge(dtkComposerSceneEdge *edge);
     void removeOutputEdge(dtkComposerSceneEdge *edge);
 
-    QList<dtkComposerSceneEdge *> inputEdges(void);
+    QList<dtkComposerSceneEdge *>  inputEdges(void);
     QList<dtkComposerSceneEdge *> outputEdges(void);
 
 public:
@@ -52,7 +52,13 @@ public:
     QList<dtkComposerScenePort *> outputPorts(void);
 
 public:
+    dtkComposerSceneNode *parent(void);
+
+public:
     dtkComposerScenePort *port(unsigned int id);
+
+public:
+    void setParent(dtkComposerSceneNode *parent);
 
 public:
     virtual QRectF boundingRect(void) const = 0;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  3 19:03:44 2012 (+0100)
+ * Last-Updated: Sun Feb  5 15:21:26 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 196
+ *     Update #: 203
  */
 
 /* Commentary: 
@@ -129,7 +129,7 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
 
     d->node_map.clear();
 
-//
+    // --
 
     d->root = new dtkComposerSceneNodeComposite;
     d->node = d->root;
@@ -160,7 +160,7 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
 
     // --
 
-    // d->scene->setRoot(d->root);
+    d->scene->setRoot(d->root);
 
     // --
     
@@ -186,8 +186,6 @@ dtkComposerSceneNote *dtkComposerReader::readNote(QDomNode node)
 
 dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
 {
-// --
-
     QDomNodeList childNodes = node.childNodes();
 
     QList<QDomNode> notes;
@@ -215,6 +213,8 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
     else
         n = d->factory->create("");
 
+    n->setParent(d->node);
+
     QPointF position;
     
     if(node.toElement().hasAttribute("x"))
@@ -233,6 +233,8 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
 
     // --
 
+    dtkComposerSceneNodeComposite *t = d->node;
+
     if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(n)) {
 
         d->node = composite;
@@ -246,6 +248,8 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
         for(int i = 0; i < edges.count(); i++)
             this->readEdge(edges.at(i));
     }
+
+    d->node = t;
 
     // --
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:11:39
  * Version: $Id$
- * Last-Updated: Fri Feb  3 17:25:09 2012 (+0100)
+ * Last-Updated: Sat Feb  4 21:55:35 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 81
+ *     Update #: 91
  */
 
 /* Commentary:
@@ -63,6 +63,11 @@ public:
 
 public:
     void clear(void);
+
+public:
+    void setCurrent(dtkComposerSceneNode *node);
+    void setCurrent(dtkComposerSceneNodeComposite *current);
+    void setRoot(dtkComposerSceneNodeComposite *root);
 
 signals:
     void modified(bool);

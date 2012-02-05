@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  3 14:15:26 2012 (+0100)
+ * Last-Updated: Sat Feb  4 14:52:19 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 8
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -23,6 +23,8 @@
 
 dtkComposerSceneNode::dtkComposerSceneNode(void) : QGraphicsItem(), d(new dtkComposerSceneNodePrivate)
 {
+    d->parent = NULL;
+
     this->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
 }
 
@@ -78,6 +80,11 @@ dtkComposerScenePort *dtkComposerSceneNode::port(unsigned int id)
     return p;
 }
 
+void dtkComposerSceneNode::setParent(dtkComposerSceneNode *parent)
+{
+    d->parent = parent;
+}
+
 QList<dtkComposerScenePort *> dtkComposerSceneNode::inputPorts(void)
 {
     return d->input_ports;
@@ -86,6 +93,11 @@ QList<dtkComposerScenePort *> dtkComposerSceneNode::inputPorts(void)
 QList<dtkComposerScenePort *> dtkComposerSceneNode::outputPorts(void)
 {
     return d->output_ports;
+}
+
+dtkComposerSceneNode *dtkComposerSceneNode::parent(void)
+{
+    return d->parent;
 }
 
 // QVariant dtkComposerSceneNode::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)

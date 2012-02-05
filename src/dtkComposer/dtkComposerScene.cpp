@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Fri Feb  3 17:28:23 2012 (+0100)
+ * Last-Updated: Sun Feb  5 15:20:24 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1122
+ *     Update #: 1147
  */
 
 /* Commentary:
@@ -131,7 +131,41 @@ dtkComposerSceneNodeComposite *dtkComposerScene::current(void)
 
 void dtkComposerScene::clear(void)
 {
-    qDebug() << "-- CLEAR --";
+    foreach(dtkComposerSceneNote *note, d->root_node->notes())
+        this->removeNote(note);
+
+    foreach(dtkComposerSceneNode *node, d->root_node->nodes())
+        this->removeNode(node);
+
+    foreach(dtkComposerSceneEdge *edge, d->root_node->edges())
+        this->removeEdge(edge);
+}
+
+void dtkComposerScene::setRoot(dtkComposerSceneNodeComposite *root)
+{
+    foreach(dtkComposerSceneNote *note, root->notes())
+        this->addNote(note);
+
+    foreach(dtkComposerSceneNode *node, root->nodes())
+        this->addNode(node);
+
+    foreach(dtkComposerSceneEdge *edge, root->edges())
+        this->addEdge(edge);
+}
+
+void dtkComposerScene::setCurrent(dtkComposerSceneNode *node)
+{
+    if(!node)
+        d->current_node = d->root_node;
+    else if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node))
+        d->current_node = composite;
+    else
+        qDebug() << __func__ << "Node should be a composite one";
+}
+
+void dtkComposerScene::setCurrent(dtkComposerSceneNodeComposite *current)
+{
+    d->current_node = current;
 }
 
 void dtkComposerScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
@@ -276,6 +310,7 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
             dtkComposerStackCommandCreateGroup *command = new dtkComposerStackCommandCreateGroup;
             command->setScene(this);
             command->setNodes(selected_nodes);
+            command->setEdges(d->current_node->edges());
             
             d->stack->push(command);
         }
@@ -411,73 +446,6 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
         command->setNode(composite);
         d->stack->push(command);
     }
-
-    // foreach(QGraphicsItem *item, this->items()) {
-    //     if(dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>(item))
-    //         this->removeItem(node);
-    //     if(dtkComposerSceneNote *note = dynamic_cast<dtkComposerSceneNote *>(item))
-    //         this->removeItem(note);
-    //     if(dtkComposerSceneEdge *edge = dynamic_cast<dtkComposerSceneEdge *>(item))
-    //         this->removeItem(edge);
-    // }
-
-    // if(!composite->entered()) {
-
-    //     this->addItem(composite);
-        
-    //     foreach(dtkComposerSceneNode *node, composite->children()) {
-    //         node->setPos(node->pos() - composite->pos());
-    //         node->setParentItem(composite);
-    //         this->addItem(node);
-    //     }
-        
-    //     foreach(dtkComposerSceneEdge *edge, d->edges) {
-            
-    //         dtkComposerSceneNode *s_node = dynamic_cast<dtkComposerSceneNode *>(edge->source()->parentItem());
-    //         dtkComposerSceneNode *d_node = dynamic_cast<dtkComposerSceneNode *>(edge->destination()->parentItem());
-            
-    //         if(s_node && d_node && this->displays(s_node) && this->displays(d_node)) {
-    //             this->addItem(edge);
-    //         }
-    //     }
-        
-    //     // foreach(dtkComposerSceneNote *note, d->notes) {
-    //     //     if (note->parentItem() == composite)
-    //     //         this->addItem(note);
-    //     // }
-
-    //     composite->enter();
-
-    //     d->current_node = composite;
-
-    // } else { // DEPTH MAX IS 1 SO FAR
-        
-    //     this->addItem(composite);
-        
-    //     foreach(dtkComposerSceneNode *node, d->nodes)
-    //         this->addItem(node);
-        
-    //     foreach(dtkComposerSceneEdge *edge, d->edges) {
-            
-    //         dtkComposerSceneNode *s_node = dynamic_cast<dtkComposerSceneNode *>(edge->source()->parentItem());
-    //         dtkComposerSceneNode *d_node = dynamic_cast<dtkComposerSceneNode *>(edge->destination()->parentItem());
-            
-    //         if(s_node && d_node && this->displays(s_node) && this->displays(d_node)) {
-    //             this->addItem(edge);
-    //         }
-    //     }
-        
-    //     // foreach(dtkComposerSceneNote *note, d->notes) {
-    //     //     if (!note->parentItem())
-    //     //         this->addItem(note);
-    //     // }
-
-    //     d->current_node = NULL;
-
-    //     composite->leave();
-    // }
-
-    // this->clearSelection();
 }
 
 dtkComposerSceneNode *dtkComposerScene::nodeAt(const QPointF& point) const

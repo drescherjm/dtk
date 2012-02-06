@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Mon Feb  6 11:19:01 2012 (+0100)
+ * Last-Updated: Mon Feb  6 14:05:21 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1164
+ *     Update #: 1194
  */
 
 /* Commentary:
@@ -482,10 +482,12 @@ void dtkComposerScene::onSelectionChanged(void)
 {
     QList<QGraphicsItem *> selection = this->selectedItems();
 
-    if(!selection.count())
-        emit selectionCleared();
-    else if(selection.count() > 1)
-        emit selectionCleared();
-    else
-        emit selected(selection.first());
+    // if(!selection.count())
+    //     emit selectionCleared();
+    // else if(selection.count() > 1)
+    //     emit selectionCleared();
+    // else
+    //     emit selected(selection.first());
+
+    emit selectionCleared();
 }

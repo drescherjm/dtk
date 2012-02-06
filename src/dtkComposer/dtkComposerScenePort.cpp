@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 13:59:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  3 16:31:23 2012 (+0100)
+ * Last-Updated: Mon Feb  6 14:03:10 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 14
+ *     Update #: 18
  */
 
 /* Commentary: 
@@ -43,6 +43,7 @@ dtkComposerScenePort::dtkComposerScenePort(unsigned int id, dtkComposerSceneNode
     d->ellipse->setRect(0, 0, 10, 10);
     
     this->setFlags(QGraphicsItem::ItemIsSelectable);
+
     this->setZValue(1);
 }
 

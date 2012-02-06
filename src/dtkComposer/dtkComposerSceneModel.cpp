@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Feb  5 15:30:18 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 11:41:33 2012 (+0100)
+ * Last-Updated: Mon Feb  6 13:54:28 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 743
+ *     Update #: 752
  */
 
 /* Commentary: 
@@ -137,6 +137,8 @@ QModelIndex dtkComposerSceneModel::index(int row, int column, const QModelIndex&
     else if (c_edges && row < c_notes + c_nodes + c_edges)
         return this->createIndex(row, column, composite->edges().at(row - c_notes - c_nodes));
 
+    qDebug() << "CRETED DUMMY INDEX";
+
     return QModelIndex();
 }
 
@@ -168,7 +170,7 @@ int dtkComposerSceneModel::rowCount(const QModelIndex& parent) const
     if(!parent.isValid())
         return d->scene->root()->notes().count() + d->scene->root()->nodes().count() + d->scene->root()->edges().count();
 
-    if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>((QGraphicsItem *)(parent.internalPointer())))
+     if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>((QGraphicsItem *)(parent.internalPointer())))
         return composite->notes().count() + composite->nodes().count() + composite->edges().count();
     
     return 0;

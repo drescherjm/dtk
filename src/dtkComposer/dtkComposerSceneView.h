@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Feb  5 15:23:02 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 14:03:52 2012 (+0100)
+ * Last-Updated: Mon Feb  6 14:11:04 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 28
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -35,6 +35,9 @@ public:
 
 public:
     void setScene(dtkComposerScene *scene);
+
+public:
+    void reset(void);
 
 public slots:
     void clearSelection(void);

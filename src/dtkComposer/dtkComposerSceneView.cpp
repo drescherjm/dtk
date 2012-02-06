@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Feb  5 15:25:21 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 14:03:43 2012 (+0100)
+ * Last-Updated: Mon Feb  6 14:11:30 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 180
+ *     Update #: 184
  */
 
 /* Commentary: 
@@ -47,7 +47,15 @@ void dtkComposerSceneView::setScene(dtkComposerScene *scene)
     d->scene = scene;
 
     // connect(d->scene, SIGNAL(selected(QGraphicsItem *)), this, SLOT(select(QGraphicsItem *)));
+
     connect(d->scene, SIGNAL(selectionCleared()), this, SLOT(clearSelection()));
+}
+
+void dtkComposerSceneView::reset(void)
+{
+    QTreeView::reset();
+    
+    this->expandAll();
 }
 
 void dtkComposerSceneView::clearSelection(void)

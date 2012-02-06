@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Mon Feb  6 14:29:54 2012 (+0100)
+ * Last-Updated: Mon Feb  6 16:52:09 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1195
+ *     Update #: 1203
  */
 
 /* Commentary:
@@ -317,7 +317,7 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
             dtkComposerStackCommandCreateGroup *command = new dtkComposerStackCommandCreateGroup;
             command->setScene(this);
             command->setNodes(selected_nodes);
-            command->setEdges(d->current_node->edges());
+            // command->setEdges(d->current_node->edges());
             command->setNotes(selected_notes);
             
             d->stack->push(command);
@@ -325,14 +325,19 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
 
     } else if ((event->key() == Qt::Key_U) && (event->modifiers() & Qt::ControlModifier) && (this->selectedItems().count() == 1)) {
 
-        if(dtkComposerSceneNodeComposite *group = dynamic_cast<dtkComposerSceneNodeComposite *>(this->selectedItems().first())) {
+        // if(dtkComposerSceneNodeComposite *group = dynamic_cast<dtkComposerSceneNodeComposite *>(this->selectedItems().first())) {
 
-            dtkComposerStackCommandDestroyGroup *command = new dtkComposerStackCommandDestroyGroup;
-            command->setScene(this);
-            command->setNode(group);
-        
-            d->stack->push(command);
-        }
+        //     if(!group->entered()) {
+
+        //         dtkComposerStackCommandDestroyGroup *command = new dtkComposerStackCommandDestroyGroup;
+        //         command->setScene(this);
+        //         command->setNode(group);
+                
+        //         d->stack->push(command);
+        //     }
+        // }
+
+        qDebug() << "Ungroup command needs to be updated";
 
     } else {
         QGraphicsScene::keyPressEvent(event);

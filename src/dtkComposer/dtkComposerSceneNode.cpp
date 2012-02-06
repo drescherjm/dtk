@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb  5 22:38:13 2012 (+0100)
+ * Last-Updated: Mon Feb  6 14:38:14 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 16
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -65,6 +65,37 @@ QList<dtkComposerSceneEdge *> dtkComposerSceneNode::outputEdges(void)
     return d->output_edges;
 }
 
+void dtkComposerSceneNode::addInputPort(dtkComposerScenePort *port)
+{
+    d->input_ports << port;
+}
+
+void dtkComposerSceneNode::addOutputPort(dtkComposerScenePort *port)
+{
+    d->output_ports << port;
+}
+
+void dtkComposerSceneNode::removeInputPort(dtkComposerScenePort *port)
+{
+    d->input_ports.removeAll(port);
+}
+
+void dtkComposerSceneNode::removeOutputPort(dtkComposerScenePort *port)
+{
+    d->output_ports.removeAll(port);
+}
+
+QList<dtkComposerScenePort *> dtkComposerSceneNode::inputPorts(void)
+{
+    return d->input_ports;
+}
+
+QList<dtkComposerScenePort *> dtkComposerSceneNode::outputPorts(void)
+{
+    return d->output_ports;
+}
+
+
 dtkComposerScenePort *dtkComposerSceneNode::port(unsigned int id)
 {
     dtkComposerScenePort *p = NULL;
@@ -83,16 +114,6 @@ dtkComposerScenePort *dtkComposerSceneNode::port(unsigned int id)
 void dtkComposerSceneNode::setParent(dtkComposerSceneNodeComposite *parent)
 {
     d->parent = parent;
-}
-
-QList<dtkComposerScenePort *> dtkComposerSceneNode::inputPorts(void)
-{
-    return d->input_ports;
-}
-
-QList<dtkComposerScenePort *> dtkComposerSceneNode::outputPorts(void)
-{
-    return d->output_ports;
 }
 
 dtkComposerSceneNodeComposite *dtkComposerSceneNode::parent(void)

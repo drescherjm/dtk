@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 09:20:14 2012 (+0100)
+ * Last-Updated: Mon Feb  6 16:49:15 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 94
+ *     Update #: 96
  */
 
 /* Commentary: 
@@ -203,7 +203,7 @@ public:
     ~dtkComposerStackCommandCreateGroup(void);
 
 public:
-    void setEdges(dtkComposerSceneEdgeList edges);
+ // void setEdges(dtkComposerSceneEdgeList edges);
     void setNodes(dtkComposerSceneNodeList nodes);
     void setNotes(dtkComposerSceneNoteList notes);
 

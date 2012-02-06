@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  3 16:43:20 2012 (+0100)
+ * Last-Updated: Mon Feb  6 14:51:13 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -30,10 +30,10 @@ public:
 
 dtkComposerSceneNodeLeaf::dtkComposerSceneNodeLeaf(void) : dtkComposerSceneNode(), d(new dtkComposerSceneNodeLeafPrivate)
 {
-    dtkComposerSceneNode::d->input_ports << new dtkComposerScenePort(0, this);
-    dtkComposerSceneNode::d->input_ports << new dtkComposerScenePort(1, this);
+    this->addInputPort(new dtkComposerScenePort(0, this));
+    this->addInputPort(new dtkComposerScenePort(1, this));
 
-    dtkComposerSceneNode::d->output_ports << new dtkComposerScenePort(2, this);
+    this->addOutputPort(new dtkComposerScenePort(2, this));
 
     d->rect = QRectF(0, 0, 150, 50);
 
@@ -56,17 +56,17 @@ void dtkComposerSceneNodeLeaf::layout(void)
 
     int node_width = d->rect.width();
 
-    for(int i = 0; i < dtkComposerSceneNode::d->input_ports.count(); i++)
-        dtkComposerSceneNode::d->input_ports.at(i)->setPos(QPointF(port_margin_left, i*dtkComposerSceneNode::d->input_ports.at(i)->boundingRect().height() + i*port_spacing + port_margin_top));
+    for(int i = 0; i < this->inputPorts().count(); i++)
+        this->inputPorts().at(i)->setPos(QPointF(port_margin_left, i*this->inputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top));
 
-    for(int i = 0; i < dtkComposerSceneNode::d->output_ports.count(); i++)
-        dtkComposerSceneNode::d->output_ports.at(i)->setPos(QPointF(node_width - port_margin_left - dtkComposerSceneNode::d->output_ports.at(i)->boundingRect().width(), i*dtkComposerSceneNode::d->output_ports.at(i)->boundingRect().height() + i*port_spacing + port_margin_top));
+    for(int i = 0; i < this->outputPorts().count(); i++)
+        this->outputPorts().at(i)->setPos(QPointF(node_width - port_margin_left - this->outputPorts().at(i)->boundingRect().width(), i*this->outputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top));
 
-    if(dtkComposerSceneNode::d->input_ports.count() || dtkComposerSceneNode::d->output_ports.count())
-        if(dtkComposerSceneNode::d->input_ports.count() >= dtkComposerSceneNode::d->output_ports.count())
-            d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), dtkComposerSceneNode::d->input_ports.count() * dtkComposerSceneNode::d->input_ports.at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (dtkComposerSceneNode::d->input_ports.count()-1) * port_spacing));
+    if(this->inputPorts().count() || this->outputPorts().count())
+        if(this->inputPorts().count() >= this->outputPorts().count())
+            d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->inputPorts().count() * this->inputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->inputPorts().count()-1) * port_spacing));
         else
-            d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), dtkComposerSceneNode::d->output_ports.count() * dtkComposerSceneNode::d->output_ports.at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (dtkComposerSceneNode::d->output_ports.count()-1) * port_spacing));
+            d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->outputPorts().count() * this->outputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->outputPorts().count()-1) * port_spacing));
 }
 
 QRectF dtkComposerSceneNodeLeaf::boundingRect(void) const

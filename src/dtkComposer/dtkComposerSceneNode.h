@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:31:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb  5 22:37:34 2012 (+0100)
+ * Last-Updated: Mon Feb  6 14:36:43 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 21
  */
 
 /* Commentary: 
@@ -49,6 +49,12 @@ public:
     QList<dtkComposerSceneEdge *> outputEdges(void);
 
 public:
+    void  addInputPort(dtkComposerScenePort *port);
+    void addOutputPort(dtkComposerScenePort *port);
+
+    void  removeInputPort(dtkComposerScenePort *port);
+    void removeOutputPort(dtkComposerScenePort *port);
+
     QList<dtkComposerScenePort *>  inputPorts(void);
     QList<dtkComposerScenePort *> outputPorts(void);
 

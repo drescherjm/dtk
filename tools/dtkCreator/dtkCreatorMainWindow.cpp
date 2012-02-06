@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Feb  5 15:55:24 2012 (+0100)
+ * Last-Updated: Mon Feb  6 11:15:31 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 796
+ *     Update #: 797
  */
 
 /* Commentary: 
@@ -91,6 +91,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->model->setScene(d->composer->scene());
 
     d->scene = new dtkComposerSceneView(this);
+    d->scene->setScene(d->composer->scene());
     d->scene->setModel(d->model);
     d->scene->setFixedWidth(300);
 

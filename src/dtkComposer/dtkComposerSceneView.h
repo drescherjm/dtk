@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Feb  5 15:23:02 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb  5 15:49:31 2012 (+0100)
+ * Last-Updated: Mon Feb  6 11:42:25 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 9
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -32,6 +32,15 @@ class dtkComposerSceneView : public QTreeView
 public:
      dtkComposerSceneView(QWidget *parent = 0);
     ~dtkComposerSceneView(void);
+
+public:
+    void setScene(dtkComposerScene *scene);
+
+public slots:
+    void clearSelection(void);
+
+protected slots:
+    void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
 private:
     dtkComposerSceneViewPrivate *d;

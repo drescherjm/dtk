@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Feb  5 15:22:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb  5 17:23:19 2012 (+0100)
+ * Last-Updated: Mon Feb  6 11:41:37 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 22
+ *     Update #: 28
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #define DTKCOMPOSERSCENEMODEL_H
 
 #include <QtCore>
+#include <QtGui>
 
 class dtkComposerScene;
 class dtkComposerSceneModelPrivate;

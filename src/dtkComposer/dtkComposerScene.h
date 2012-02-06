@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:11:39
  * Version: $Id$
- * Last-Updated: Mon Feb  6 00:59:36 2012 (+0100)
+ * Last-Updated: Mon Feb  6 11:19:29 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 92
+ *     Update #: 103
  */
 
 /* Commentary:
@@ -71,7 +71,13 @@ public:
 
 signals:
     void reset(void);
+
+signals:
     void modified(bool);
+
+signals:
+    void selected(QGraphicsItem *item);
+    void selectionCleared(void);
 
 protected:
     void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
@@ -90,6 +96,9 @@ protected:
 protected:
     dtkComposerSceneNode *nodeAt(const QPointF& point) const;
     dtkComposerScenePort *portAt(const QPointF& point) const;
+
+protected slots:
+    void onSelectionChanged(void);
 
 private:
     dtkComposerScenePrivate *d;

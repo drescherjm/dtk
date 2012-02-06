@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Mon Feb  6 14:05:21 2012 (+0100)
+ * Last-Updated: Mon Feb  6 14:29:54 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1194
+ *     Update #: 1195
  */
 
 /* Commentary:
@@ -480,7 +480,7 @@ dtkComposerScenePort *dtkComposerScene::portAt(const QPointF& point) const
 
 void dtkComposerScene::onSelectionChanged(void)
 {
-    QList<QGraphicsItem *> selection = this->selectedItems();
+    // QList<QGraphicsItem *> selection = this->selectedItems();
 
     // if(!selection.count())
     //     emit selectionCleared();

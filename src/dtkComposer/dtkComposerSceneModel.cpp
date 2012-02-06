@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Feb  5 15:30:18 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 01:17:23 2012 (+0100)
+ * Last-Updated: Mon Feb  6 09:35:52 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 742
+ *     Update #: 743
  */
 
 /* Commentary: 
@@ -167,6 +167,7 @@ int dtkComposerSceneModel::rowCount(const QModelIndex& parent) const
 
     if(!parent.isValid())
         return d->scene->root()->notes().count() + d->scene->root()->nodes().count() + d->scene->root()->edges().count();
+
     if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>((QGraphicsItem *)(parent.internalPointer())))
         return composite->notes().count() + composite->nodes().count() + composite->edges().count();
     

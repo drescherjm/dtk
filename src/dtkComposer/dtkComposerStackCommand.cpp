@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 09:18:45 2012 (+0100)
+ * Last-Updated: Mon Feb  6 10:48:04 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 584
+ *     Update #: 600
  */
 
 /* Commentary: 
@@ -236,9 +236,9 @@ public:
 
 dtkComposerStackCommandCreateEdge::dtkComposerStackCommandCreateEdge(void) : dtkComposerStackCommand(), e(new dtkComposerStackCommandCreateEdgePrivate)
 {
+    e->edge = NULL;
     e->source = NULL;
     e->destination = NULL;
-    e->edge = NULL;
 
     this->setText("Create edge");
 }
@@ -277,9 +277,10 @@ void dtkComposerStackCommandCreateEdge::redo(void)
         e->edge->setSource(e->source);
         e->edge->setDestination(e->destination);
         e->edge->setParent(d->scene->current());
-        e->edge->link();
-        e->edge->adjust();
     }
+
+    e->edge->link();
+    e->edge->adjust();
 
     d->scene->addEdge(e->edge);
 }
@@ -291,6 +292,8 @@ void dtkComposerStackCommandCreateEdge::undo(void)
 
     if(!e->edge)
         return;
+
+    e->edge->unlink();
 
     d->scene->removeEdge(e->edge);
 }

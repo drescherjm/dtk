@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:11:39
  * Version: $Id$
- * Last-Updated: Sat Feb  4 21:55:35 2012 (+0100)
+ * Last-Updated: Mon Feb  6 00:59:36 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 91
+ *     Update #: 92
  */
 
 /* Commentary:
@@ -70,6 +70,7 @@ public:
     void setRoot(dtkComposerSceneNodeComposite *root);
 
 signals:
+    void reset(void);
     void modified(bool);
 
 protected:

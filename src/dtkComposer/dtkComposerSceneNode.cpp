@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb  4 14:52:19 2012 (+0100)
+ * Last-Updated: Sun Feb  5 22:38:13 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 13
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -80,7 +80,7 @@ dtkComposerScenePort *dtkComposerSceneNode::port(unsigned int id)
     return p;
 }
 
-void dtkComposerSceneNode::setParent(dtkComposerSceneNode *parent)
+void dtkComposerSceneNode::setParent(dtkComposerSceneNodeComposite *parent)
 {
     d->parent = parent;
 }
@@ -95,7 +95,7 @@ QList<dtkComposerScenePort *> dtkComposerSceneNode::outputPorts(void)
     return d->output_ports;
 }
 
-dtkComposerSceneNode *dtkComposerSceneNode::parent(void)
+dtkComposerSceneNodeComposite *dtkComposerSceneNode::parent(void)
 {
     return d->parent;
 }

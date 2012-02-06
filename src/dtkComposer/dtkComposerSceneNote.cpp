@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:44 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb  5 18:10:07 2012 (+0100)
+ * Last-Updated: Sun Feb  5 23:04:15 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 21
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -23,6 +23,9 @@
 
 class dtkComposerSceneNotePrivate
 {
+public:
+    dtkComposerSceneNodeComposite *parent;
+
 public:
     QPointF drag_point;
 
@@ -41,6 +44,8 @@ dtkComposerSceneNote::dtkComposerSceneNote(void) : QGraphicsItem(), d(new dtkCom
     d->text->setPos(-100, -100);
     d->text->setTextInteractionFlags(Qt::TextEditorInteraction);
     d->text->setTextWidth(200);
+
+    d->parent = NULL;
 
     this->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
     this->setZValue(-4000);
@@ -147,4 +152,14 @@ void dtkComposerSceneNote::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
 
     QGraphicsItem::mouseReleaseEvent(event);
+}
+
+dtkComposerSceneNodeComposite *dtkComposerSceneNote::parent(void)
+{
+    return d->parent;
+}
+
+void dtkComposerSceneNote::setParent(dtkComposerSceneNodeComposite *parent)
+{
+    d->parent = parent;
 }

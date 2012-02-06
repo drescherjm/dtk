@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:00:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  3 14:13:49 2012 (+0100)
+ * Last-Updated: Sun Feb  5 23:02:27 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 7
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -19,10 +19,14 @@
 
 #include "dtkComposerSceneEdge.h"
 #include "dtkComposerSceneNode.h"
+#include "dtkComposerSceneNodeComposite.h"
 #include "dtkComposerScenePort.h"
 
 class dtkComposerSceneEdgePrivate
 {
+public:
+    dtkComposerSceneNodeComposite *parent;
+
 public:
     dtkComposerScenePort *source;
     dtkComposerScenePort *destination;
@@ -35,6 +39,8 @@ dtkComposerSceneEdge::dtkComposerSceneEdge(void) : QGraphicsItem(), d(new dtkCom
 {
     d->source = NULL;
     d->destination = NULL;
+
+    d->parent = NULL;
 
     this->setZValue(-1);
 }
@@ -149,4 +155,14 @@ bool dtkComposerSceneEdge::unlink(void)
     dynamic_cast<dtkComposerSceneNode *>(d->destination->parentItem())->removeInputEdge(this);
 
     return true;
+}
+
+dtkComposerSceneNodeComposite *dtkComposerSceneEdge::parent(void)
+{
+    return d->parent;
+}
+
+void dtkComposerSceneEdge::setParent(dtkComposerSceneNodeComposite *parent)
+{
+    d->parent = parent;
 }

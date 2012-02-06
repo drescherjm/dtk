@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb  5 16:19:23 2012 (+0100)
+ * Last-Updated: Sun Feb  5 23:06:58 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 206
+ *     Update #: 208
  */
 
 /* Commentary: 
@@ -186,6 +186,8 @@ dtkComposerSceneNote *dtkComposerReader::readNote(QDomNode node)
     
     d->node->addNote(note);
 
+    note->setParent(d->node);
+
     return note;
 }
 
@@ -279,6 +281,8 @@ dtkComposerSceneEdge *dtkComposerReader::readEdge(QDomNode node)
     edge->adjust();
     
     d->node->addEdge(edge);
+
+    edge->setParent(d->node);
 
     return edge;
 }

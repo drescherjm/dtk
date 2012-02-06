@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Sun Feb  5 16:38:51 2012 (+0100)
+ * Last-Updated: Mon Feb  6 00:59:48 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1148
+ *     Update #: 1149
  */
 
 /* Commentary:
@@ -151,6 +151,8 @@ void dtkComposerScene::setRoot(dtkComposerSceneNodeComposite *root)
 
     foreach(dtkComposerSceneEdge *edge, root->edges())
         this->addItem(edge);
+
+    emit reset();
 }
 
 void dtkComposerScene::setCurrent(dtkComposerSceneNode *node)

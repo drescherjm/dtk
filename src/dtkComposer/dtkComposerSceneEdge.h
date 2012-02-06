@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:29:21 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb  5 18:08:10 2012 (+0100)
+ * Last-Updated: Sun Feb  5 23:02:07 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 13
+ *     Update #: 17
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include <QtGui>
 
 class dtkComposerSceneEdgePrivate;
+class dtkComposerSceneNodeComposite;
 class dtkComposerScenePort;
 
 // /////////////////////////////////////////////////////////////////
@@ -56,6 +57,12 @@ public:
 public:
     bool   link(bool anyway = false);
     bool unlink(void);
+
+public:
+    dtkComposerSceneNodeComposite *parent(void);
+
+public:
+    void setParent(dtkComposerSceneNodeComposite *parent);
 
 private:
     dtkComposerSceneEdgePrivate *d;

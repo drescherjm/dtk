@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb  5 16:22:09 2012 (+0100)
+ * Last-Updated: Sun Feb  5 23:08:44 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 557
+ *     Update #: 563
  */
 
 /* Commentary: 
@@ -276,6 +276,7 @@ void dtkComposerStackCommandCreateEdge::redo(void)
         e->edge = new dtkComposerSceneEdge;
         e->edge->setSource(e->source);
         e->edge->setDestination(e->destination);
+        e->edge->setParent(d->scene->current());
         e->edge->link();
         e->edge->adjust();
     }
@@ -371,8 +372,10 @@ void dtkComposerStackCommandCreateNote::redo(void)
     if(!d->scene)
         return;
 
-    if(!e->note)
+    if(!e->note) {
         e->note = new dtkComposerSceneNote;
+        e->note->setParent(d->scene->current());
+    }
 
     e->note->setPos(e->position);
 

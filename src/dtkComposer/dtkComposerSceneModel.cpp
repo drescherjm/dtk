@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Feb  5 15:30:18 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 13:54:28 2012 (+0100)
+ * Last-Updated: Mon Feb  6 22:07:55 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 752
+ *     Update #: 753
  */
 
 /* Commentary: 
@@ -136,8 +136,6 @@ QModelIndex dtkComposerSceneModel::index(int row, int column, const QModelIndex&
         return this->createIndex(row, column, composite->nodes().at(row - c_notes));
     else if (c_edges && row < c_notes + c_nodes + c_edges)
         return this->createIndex(row, column, composite->edges().at(row - c_notes - c_nodes));
-
-    qDebug() << "CRETED DUMMY INDEX";
 
     return QModelIndex();
 }

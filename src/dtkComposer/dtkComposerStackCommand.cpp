@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 22:00:43 2012 (+0100)
+ * Last-Updated: Mon Feb  6 22:11:04 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 956
+ *     Update #: 972
  */
 
 /* Commentary: 
@@ -490,11 +490,6 @@ void dtkComposerStackCommandCreateGroup::setNodes(dtkComposerSceneNodeList nodes
     e->nodes = nodes;
 }
 
-// void dtkComposerStackCommandCreateGroup::setEdges(dtkComposerSceneEdgeList edges)
-// {
-//     e->edges = edges;
-// }
-
 void dtkComposerStackCommandCreateGroup::setNotes(dtkComposerSceneNoteList notes)
 {
     e->notes = notes;
@@ -505,11 +500,7 @@ void dtkComposerStackCommandCreateGroup::redo(void)
     if(!d->scene)
         return;
 
-// --
-
     e->edges = d->scene->current()->edges();
-
-// --
 
     if(e->nodes.isEmpty())
         return;
@@ -535,7 +526,11 @@ void dtkComposerStackCommandCreateGroup::redo(void)
             d->scene->removeEdge(edge);
             e->node->addEdge(edge);
             edge->setParent(e->node);
-// --
+
+// /////////////////////////////////////////////////////////////////
+// -- Experimental: Handling external edges
+// /////////////////////////////////////////////////////////////////
+
         } else if (!e->nodes.contains(edge->source()->node()) && e->nodes.contains(edge->destination()->node())) {
 
             edge->unlink();
@@ -602,7 +597,9 @@ void dtkComposerStackCommandCreateGroup::redo(void)
             e->olhses << lhs;
             e->orhses << rhs;
         }
-// --
+
+// /////////////////////////////////////////////////////////////////
+
     }
 
     foreach(dtkComposerSceneNote *note, e->notes) {
@@ -636,7 +633,11 @@ void dtkComposerStackCommandCreateGroup::undo(void)
             d->scene->addEdge(edge);
             e->node->removeEdge(edge);
             edge->setParent(e->node->parent());
-// --
+
+// /////////////////////////////////////////////////////////////////
+// -- Experimental: Handling external edges
+// /////////////////////////////////////////////////////////////////
+
         } else if (!e->nodes.contains(edge->source()->node()) && e->nodes.contains(edge->destination()->node())) {
 
             edge->link();
@@ -695,7 +696,7 @@ void dtkComposerStackCommandCreateGroup::undo(void)
     e->olhses.clear();
     e->orhses.clear();
     
-// --
+// /////////////////////////////////////////////////////////////////
 
     foreach(dtkComposerSceneNote *note, e->notes) {
         d->scene->addNote(note);
@@ -774,7 +775,11 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
             d->scene->addEdge(edge);
             e->node->removeEdge(edge);
             edge->setParent(e->node->parent());
-// --
+
+// /////////////////////////////////////////////////////////////////
+// -- Experimental: Handling external edges
+// /////////////////////////////////////////////////////////////////
+
         } else if(!e->nodes.contains(edge->source()->node()) && e->nodes.contains(edge->destination()->node())) {
 
             dtkComposerSceneEdge *lhs = NULL;
@@ -839,7 +844,9 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
             e->rlhses << lhs;
             e->rrhses << rhs;
         }
-// --
+
+// /////////////////////////////////////////////////////////////////
+
     }
 
     foreach(dtkComposerSceneNote *note, e->notes) {
@@ -871,7 +878,11 @@ void dtkComposerStackCommandDestroyGroup::undo(void)
             d->scene->removeEdge(edge);
             e->node->addEdge(edge);
             edge->setParent(e->node);
-// --
+
+// /////////////////////////////////////////////////////////////////
+// -- Experimental: Handling external edges
+// /////////////////////////////////////////////////////////////////
+
         } else if(!e->nodes.contains(edge->source()->node()) && e->nodes.contains(edge->destination()->node())) {
 
             
@@ -922,7 +933,7 @@ void dtkComposerStackCommandDestroyGroup::undo(void)
     e->rlhses.clear();
     e->rrhses.clear();
 
-// --
+// /////////////////////////////////////////////////////////////////
 
     foreach(dtkComposerSceneNote *note, e->notes) {
         d->scene->removeNote(note);

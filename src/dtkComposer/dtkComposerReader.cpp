@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb  5 23:06:58 2012 (+0100)
+ * Last-Updated: Mon Feb  6 21:50:37 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 208
+ *     Update #: 219
  */
 
 /* Commentary: 
@@ -195,9 +195,14 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
 {
     QDomNodeList childNodes = node.childNodes();
 
+    QList<QDomNode> ports;
     QList<QDomNode> notes;
     QList<QDomNode> nodes;
     QList<QDomNode> edges;
+
+    for(int i = 0; i < childNodes.count(); i++)
+        if(childNodes.at(i).toElement().tagName() == "port")
+            ports << childNodes.at(i);
 
     for(int i = 0; i < childNodes.count(); i++)
         if(childNodes.at(i).toElement().tagName() == "note")
@@ -245,6 +250,16 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
     if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(n)) {
 
         d->node = composite;
+
+        for(int i = 0; i < ports.count(); i++) {
+            dtkComposerScenePort *port = new dtkComposerScenePort(ports.at(i).toElement().attribute("id").toInt(), composite);
+            if(ports.at(i).toElement().attribute("type") == "input")
+                composite->addInputPort(port);
+            else
+                composite->addOutputPort(port);
+        }
+
+        composite->layout();
 
         for(int i = 0; i < notes.count(); i++)
             this->readNote(notes.at(i));

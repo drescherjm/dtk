@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 20:48:00 2012 (+0100)
+ * Last-Updated: Mon Feb  6 22:00:43 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 944
+ *     Update #: 956
  */
 
 /* Commentary: 
@@ -536,7 +536,7 @@ void dtkComposerStackCommandCreateGroup::redo(void)
             e->node->addEdge(edge);
             edge->setParent(e->node);
 // --
-        } else if (!e->nodes.contains(edge->source()->node())) {
+        } else if (!e->nodes.contains(edge->source()->node()) && e->nodes.contains(edge->destination()->node())) {
 
             edge->unlink();
             
@@ -569,7 +569,7 @@ void dtkComposerStackCommandCreateGroup::redo(void)
             e->ilhses << lhs;
             e->irhses << rhs;
 
-        } else if (!e->nodes.contains(edge->destination()->node())) {
+        } else if (!e->nodes.contains(edge->destination()->node()) && e->nodes.contains(edge->source()->node())) {
 
             edge->unlink();
 
@@ -637,13 +637,13 @@ void dtkComposerStackCommandCreateGroup::undo(void)
             e->node->removeEdge(edge);
             edge->setParent(e->node->parent());
 // --
-        } else if (!e->nodes.contains(edge->source()->node())) {
+        } else if (!e->nodes.contains(edge->source()->node()) && e->nodes.contains(edge->destination()->node())) {
 
             edge->link();
 
             d->scene->addEdge(edge);
 
-        } else if (!e->nodes.contains(edge->destination()->node())) {
+        } else if (!e->nodes.contains(edge->destination()->node()) && e->nodes.contains(edge->source()->node())) {
             
             edge->link();
 
@@ -775,7 +775,7 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
             e->node->removeEdge(edge);
             edge->setParent(e->node->parent());
 // --
-        } else if(!e->nodes.contains(edge->source()->node())) {
+        } else if(!e->nodes.contains(edge->source()->node()) && e->nodes.contains(edge->destination()->node())) {
 
             dtkComposerSceneEdge *lhs = NULL;
             dtkComposerSceneEdge *rhs = edge;
@@ -807,7 +807,7 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
             e->llhses << lhs;
             e->lrhses << rhs;
 
-        } else if(!e->nodes.contains(edge->destination()->node())) {
+        } else if(!e->nodes.contains(edge->destination()->node()) && e->nodes.contains(edge->source()->node())) {
 
             dtkComposerSceneEdge *lhs = edge;
             dtkComposerSceneEdge *rhs = NULL;
@@ -872,11 +872,11 @@ void dtkComposerStackCommandDestroyGroup::undo(void)
             e->node->addEdge(edge);
             edge->setParent(e->node);
 // --
-        } else if(!e->nodes.contains(edge->source()->node())) {
+        } else if(!e->nodes.contains(edge->source()->node()) && e->nodes.contains(edge->destination()->node())) {
 
             
 
-        } else if(!e->nodes.contains(edge->destination()->node())) {
+        } else if(!e->nodes.contains(edge->destination()->node()) && e->nodes.contains(edge->source()->node())) {
 
 
         }

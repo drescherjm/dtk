@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb  4 15:35:03 2012 (+0100)
+ * Last-Updated: Mon Feb  6 21:39:49 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 197
+ *     Update #: 214
  */
 
 /* Commentary: 
@@ -120,6 +120,22 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
     tag.setAttribute("id", QString::number(current_id));
 
     if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
+
+        foreach(dtkComposerScenePort *port, composite->inputPorts()) {
+
+            QDomElement property = document.createElement("port");
+            property.setAttribute("id", port->id());
+            property.setAttribute("type", "input");
+            tag.appendChild(property);
+        }
+
+        foreach(dtkComposerScenePort *port, composite->outputPorts()) {
+
+            QDomElement property = document.createElement("port");
+            property.setAttribute("id", port->id());
+            property.setAttribute("type", "output");
+            tag.appendChild(property);
+        }
 
         foreach(dtkComposerSceneNote *note, composite->notes())
             tag.appendChild(this->writeNote(note, tag, document));

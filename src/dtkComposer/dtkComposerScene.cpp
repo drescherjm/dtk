@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Mon Feb  6 18:49:11 2012 (+0100)
+ * Last-Updated: Mon Feb  6 22:50:10 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1206
+ *     Update #: 1212
  */
 
 /* Commentary:
@@ -90,6 +90,8 @@ void dtkComposerScene::addEdge(dtkComposerSceneEdge *edge)
     d->current_node->addEdge(edge);
 
     this->addItem(edge);
+
+    edge->adjust();
 
     emit modified(true);
 }

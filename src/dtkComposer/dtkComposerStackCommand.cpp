@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 22:14:18 2012 (+0100)
+ * Last-Updated: Mon Feb  6 22:55:06 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 972
+ *     Update #: 1006
  */
 
 /* Commentary: 
@@ -280,7 +280,6 @@ void dtkComposerStackCommandCreateEdge::redo(void)
     }
 
     e->edge->link();
-    e->edge->adjust();
 
     d->scene->addEdge(e->edge);
 }
@@ -519,6 +518,8 @@ void dtkComposerStackCommandCreateGroup::redo(void)
         node->setParent(e->node);
     }
 
+    e->node->setPos(rect.center() - e->node->boundingRect().center());
+
     foreach(dtkComposerSceneEdge *edge, e->edges) {
 
         if (e->nodes.contains(edge->source()->node()) && e->nodes.contains(edge->destination()->node())) {
@@ -557,9 +558,6 @@ void dtkComposerStackCommandCreateGroup::redo(void)
             d->scene->addEdge(lhs);
             e->node->addEdge(rhs);
 
-            lhs->adjust();
-            rhs->adjust();
-
             e->iports << port;
             e->ilhses << lhs;
             e->irhses << rhs;
@@ -590,9 +588,6 @@ void dtkComposerStackCommandCreateGroup::redo(void)
             e->node->addEdge(lhs);            
             d->scene->addEdge(rhs);
 
-            lhs->adjust();
-            rhs->adjust();
-
             e->oports << port;
             e->olhses << lhs;
             e->orhses << rhs;
@@ -607,8 +602,6 @@ void dtkComposerStackCommandCreateGroup::redo(void)
         e->node->addNote(note);
         note->setParent(e->node);
     }
-
-    e->node->setPos(rect.center());
 
     d->scene->addNode(e->node);
 }
@@ -795,7 +788,6 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
                 ed->setSource(lhs->source());
                 ed->setDestination(rhs->destination());
                 ed->link();
-                ed->adjust();
                 ed->setParent(e->node->parent());
 
                 d->scene->addEdge(ed);
@@ -827,7 +819,6 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
                 ed->setSource(lhs->source());
                 ed->setDestination(rhs->destination());
                 ed->link();
-                ed->adjust();
                 ed->setParent(e->node->parent());
 
                 d->scene->addEdge(ed);
@@ -1002,12 +993,8 @@ void dtkComposerStackCommandEnterGroup::redo(void)
     foreach(dtkComposerSceneNode *node, d->scene->current()->nodes())
         d->scene->addItem(node);
 
-    foreach(dtkComposerSceneEdge *edge, d->scene->current()->edges()) {
+    foreach(dtkComposerSceneEdge *edge, d->scene->current()->edges())
         d->scene->addItem(edge);
-        edge->adjust();
-    }
-
-    d->scene->update();
 }
 
 void dtkComposerStackCommandEnterGroup::undo(void)
@@ -1039,12 +1026,8 @@ void dtkComposerStackCommandEnterGroup::undo(void)
     foreach(dtkComposerSceneNode *node, d->scene->current()->nodes())
         d->scene->addItem(node);
 
-    foreach(dtkComposerSceneEdge *edge, d->scene->current()->edges()) {
+    foreach(dtkComposerSceneEdge *edge, d->scene->current()->edges())
         d->scene->addItem(edge);
-        edge->adjust();
-    }
-
-    d->scene->update();
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -1105,10 +1088,8 @@ void dtkComposerStackCommandLeaveGroup::redo(void)
     foreach(dtkComposerSceneNode *node, d->scene->current()->nodes())
         d->scene->addItem(node);
 
-    foreach(dtkComposerSceneEdge *edge, d->scene->current()->edges()) {
+    foreach(dtkComposerSceneEdge *edge, d->scene->current()->edges())
         d->scene->addItem(edge);
-        edge->adjust();
-    }
 
     d->scene->update();
 }
@@ -1142,10 +1123,8 @@ void dtkComposerStackCommandLeaveGroup::undo(void)
     foreach(dtkComposerSceneNode *node, d->scene->current()->nodes())
         d->scene->addItem(node);
 
-    foreach(dtkComposerSceneEdge *edge, d->scene->current()->edges()) {
+    foreach(dtkComposerSceneEdge *edge, d->scene->current()->edges())
         d->scene->addItem(edge);
-        edge->adjust();
-    }
 
     d->scene->update();
 }

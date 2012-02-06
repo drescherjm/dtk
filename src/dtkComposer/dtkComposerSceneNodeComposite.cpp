@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 22:15:29 2012 (+0100)
+ * Last-Updated: Mon Feb  6 22:29:30 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 49
+ *     Update #: 56
  */
 
 /* Commentary: 
@@ -135,16 +135,8 @@ void dtkComposerSceneNodeComposite::layout(void)
 
     } else {
 
-        QRectF rect;
-        
-        foreach(dtkComposerSceneNode *node, d->nodes)
-            rect |= node->mapRectToScene(node->boundingRect());
+        d->rect = QRectF(0, 0, 150, 50);
 
-        d->rect = QRectF(-rect.width()/2, -rect.height()/2, rect.width(), rect.height());
-        d->rect = d->rect.adjusted(-10, -10, 10, 10);
-
-        foreach(dtkComposerSceneNode *node, d->nodes)
-            node->setPos(node->pos() + d->rect.topLeft() - rect.topLeft() + QPointF(10, 10));
     }
 
     int port_margin_top = 10;

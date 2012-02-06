@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 14:38:14 2012 (+0100)
+ * Last-Updated: Mon Feb  6 22:14:41 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 26
+ *     Update #: 27
  */
 
 /* Commentary: 
@@ -124,13 +124,13 @@ dtkComposerSceneNodeComposite *dtkComposerSceneNode::parent(void)
 // QVariant dtkComposerSceneNode::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
 // {
 //     if(change == QGraphicsItem::ItemSelectedHasChanged) {
-
+//
 //         if(value.toBool()) {
 //             ; // TO SELECTED STATE
 //         } else {
 //             ; // TO UNUSELECTED STATE
 //         }
 //     }
-
+//
 //     return QGraphicsItem::itemChange(change, value);
 // }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 14:58:10 2012 (+0100)
+ * Last-Updated: Mon Feb  6 22:15:29 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 48
+ *     Update #: 49
  */
 
 /* Commentary: 
@@ -147,26 +147,25 @@ void dtkComposerSceneNodeComposite::layout(void)
             node->setPos(node->pos() + d->rect.topLeft() - rect.topLeft() + QPointF(10, 10));
     }
 
-        int port_margin_top = 10;
-        int port_margin_bottom = 10;
-        int port_margin_left = 10;
-        int port_spacing = 10;
-        
-        int node_width = d->rect.width();
-        
-        for(int i = 0; i < this->inputPorts().count(); i++)
-            this->inputPorts().at(i)->setPos(QPointF(port_margin_left, i*this->inputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top));
-        
-        for(int i = 0; i < this->outputPorts().count(); i++)
-            this->outputPorts().at(i)->setPos(QPointF(node_width - port_margin_left - this->outputPorts().at(i)->boundingRect().width(), i*this->outputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top));
-        
-        if(this->inputPorts().count() || this->outputPorts().count())
-            if(this->inputPorts().count() >= this->outputPorts().count())
-                d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->inputPorts().count() * this->inputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->inputPorts().count()-1) * port_spacing));
-            else
-                d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->outputPorts().count() * this->outputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->outputPorts().count()-1) * port_spacing));        
-
-
+    int port_margin_top = 10;
+    int port_margin_bottom = 10;
+    int port_margin_left = 10;
+    int port_spacing = 10;
+    
+    int node_width = d->rect.width();
+    
+    for(int i = 0; i < this->inputPorts().count(); i++)
+        this->inputPorts().at(i)->setPos(QPointF(port_margin_left, i*this->inputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top));
+    
+    for(int i = 0; i < this->outputPorts().count(); i++)
+        this->outputPorts().at(i)->setPos(QPointF(node_width - port_margin_left - this->outputPorts().at(i)->boundingRect().width(), i*this->outputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top));
+    
+    if(this->inputPorts().count() || this->outputPorts().count())
+        if(this->inputPorts().count() >= this->outputPorts().count())
+            d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->inputPorts().count() * this->inputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->inputPorts().count()-1) * port_spacing));
+        else
+            d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->outputPorts().count() * this->outputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->outputPorts().count()-1) * port_spacing));        
+    
     this->update();
 }
 

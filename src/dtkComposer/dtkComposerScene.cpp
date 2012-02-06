@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Mon Feb  6 16:52:09 2012 (+0100)
+ * Last-Updated: Mon Feb  6 18:49:11 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1203
+ *     Update #: 1206
  */
 
 /* Commentary:
@@ -325,19 +325,17 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
 
     } else if ((event->key() == Qt::Key_U) && (event->modifiers() & Qt::ControlModifier) && (this->selectedItems().count() == 1)) {
 
-        // if(dtkComposerSceneNodeComposite *group = dynamic_cast<dtkComposerSceneNodeComposite *>(this->selectedItems().first())) {
+        if(dtkComposerSceneNodeComposite *group = dynamic_cast<dtkComposerSceneNodeComposite *>(this->selectedItems().first())) {
 
-        //     if(!group->entered()) {
+            if(!group->entered()) {
 
-        //         dtkComposerStackCommandDestroyGroup *command = new dtkComposerStackCommandDestroyGroup;
-        //         command->setScene(this);
-        //         command->setNode(group);
+                dtkComposerStackCommandDestroyGroup *command = new dtkComposerStackCommandDestroyGroup;
+                command->setScene(this);
+                command->setNode(group);
                 
-        //         d->stack->push(command);
-        //     }
-        // }
-
-        qDebug() << "Ungroup command needs to be updated";
+                d->stack->push(command);
+            }
+        }
 
     } else {
         QGraphicsScene::keyPressEvent(event);

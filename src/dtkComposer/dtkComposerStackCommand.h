@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb  4 15:39:13 2012 (+0100)
+ * Last-Updated: Mon Feb  6 09:20:14 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 89
+ *     Update #: 94
  */
 
 /* Commentary: 
@@ -31,6 +31,7 @@ class dtkComposerSceneNode;
 class dtkComposerSceneNodeComposite;
 class dtkComposerSceneNodeList;
 class dtkComposerSceneNote;
+class dtkComposerSceneNoteList;
 class dtkComposerScenePort;
 class dtkComposerStackCommandPrivate;
 
@@ -204,6 +205,7 @@ public:
 public:
     void setEdges(dtkComposerSceneEdgeList edges);
     void setNodes(dtkComposerSceneNodeList nodes);
+    void setNotes(dtkComposerSceneNoteList notes);
 
 public:
     void redo(void);

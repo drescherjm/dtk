@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Mon Feb  6 00:59:48 2012 (+0100)
+ * Last-Updated: Mon Feb  6 09:16:21 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1149
+ *     Update #: 1154
  */
 
 /* Commentary:
@@ -301,10 +301,13 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
     } else if ((event->key() == Qt::Key_G) && (event->modifiers() & Qt::ControlModifier)) {
 
         dtkComposerSceneNodeList selected_nodes;
+        dtkComposerSceneNoteList selected_notes;
 
         foreach(QGraphicsItem *item, this->selectedItems()) {
             if (dtkComposerSceneNode *snode = dynamic_cast<dtkComposerSceneNode *>(item))
                 selected_nodes << snode;
+            if (dtkComposerSceneNote *snote = dynamic_cast<dtkComposerSceneNote *>(item))
+                selected_notes << snote;
         }
 
         if(selected_nodes.count()) {
@@ -313,6 +316,7 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
             command->setScene(this);
             command->setNodes(selected_nodes);
             command->setEdges(d->current_node->edges());
+            command->setNotes(selected_notes);
             
             d->stack->push(command);
         }

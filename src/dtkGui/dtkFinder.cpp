@@ -538,7 +538,7 @@ dtkFinderListView::dtkFinderListView(QWidget *parent) : QListView(parent), d(new
     d->menu = new QMenu(this);
     d->allowFileBookmarking = true;
     d->bookmarkAction = new QAction(tr("Bookmark"), this);
-    connect(d->bookmarkAction, SIGNAL(triggered()), this, SLOT(onBookmarkContextMenuClicked()));
+    connect(d->bookmarkAction, SIGNAL(triggered()), this, SLOT(onBookmarkSelectedItemRequested()));
     d->menu->addAction(d->bookmarkAction);
 
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(updateContextMenu(const QPoint&)));
@@ -615,7 +615,7 @@ void dtkFinderListView::updateContextMenu(const QPoint& point)
         d->menu->exec(mapToGlobal(point));
 }
 
-void dtkFinderListView::onBookmarkContextMenuClicked(void)
+void dtkFinderListView::onBookmarkSelectedItemRequested(void)
 {
     if(!selectedIndexes().count())
         return;
@@ -718,7 +718,7 @@ dtkFinderTreeView::dtkFinderTreeView(QWidget *parent) : QTreeView(parent), d(new
     d->menu = new QMenu(this);
     d->allowFileBookmarking = true;
     d->bookmarkAction = new QAction(tr("Bookmark"), this);
-    connect(d->bookmarkAction, SIGNAL(triggered()), this, SLOT(onBookmarkContextMenuClicked()));
+    connect(d->bookmarkAction, SIGNAL(triggered()), this, SLOT(onBookmarkSelectedItemRequested()));
     d->menu->addAction(d->bookmarkAction);
 
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(updateContextMenu(const QPoint&)));
@@ -804,7 +804,7 @@ void dtkFinderTreeView::updateContextMenu(const QPoint& point)
 
 }
 
-void dtkFinderTreeView::onBookmarkContextMenuClicked(void)
+void dtkFinderTreeView::onBookmarkSelectedItemRequested(void)
 {
     if(!selectedIndexes().count())
         return;
@@ -934,6 +934,9 @@ dtkFinder::dtkFinder(QWidget *parent) : QWidget(parent), d(new dtkFinderPrivate)
     connect(d->list, SIGNAL(bookmarked(QString)), this, SIGNAL(bookmarked(QString)));
     connect(d->tree, SIGNAL(bookmarked(QString)), this, SIGNAL(bookmarked(QString)));
 
+    connect(d->list->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(onSelectionChanged(const QItemSelection&, const QItemSelection&)));
+    connect(d->tree->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(onSelectionChanged(const QItemSelection&, const QItemSelection&)));
+
     QAction *switchToListViewAction = new QAction(this);
     QAction *switchToTreeViewAction = new QAction(this);
 
@@ -975,7 +978,6 @@ QString dtkFinder::selectedPath(void) const
  * Set the allowance of file bookmarking.
  * @param isAllowed - whether is allowed to bookmark files
  **/
-
 void dtkFinder::allowFileBookmarking(bool isAllowed)
 {
     d->list->allowFileBookmarking(isAllowed);
@@ -1015,4 +1017,19 @@ void dtkFinder::onIndexDoubleClicked(QModelIndex index)
     }
     else
         emit fileDoubleClicked(selection.absoluteFilePath());
+}
+
+void dtkFinder::onBookmarkSelectedItemRequested(void)
+{
+    if(d->stack->currentIndex() == 0)
+        d->list->onBookmarkSelectedItemRequested();
+
+    if(d->stack->currentIndex() == 1)
+        d->tree->onBookmarkSelectedItemRequested();
+}
+
+
+void dtkFinder::onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
+{
+    emit itemSelected(this->selectedPath());
 }

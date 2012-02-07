@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:32:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb  7 16:03:18 2012 (+0100)
+ * Last-Updated: Tue Feb  7 23:27:22 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 23
+ *     Update #: 33
  */
 
 /* Commentary: 
@@ -51,9 +51,16 @@ public:
     dtkComposerSceneEdgeList edges(void);
 
 public:
-    bool   revealed(void);
-    void   reveal(void);
-    void unreveal(void);
+    bool entered(void);
+    bool flattened(void);
+
+public:
+    void enter(void);
+    void leave(void);
+
+public:
+    void flatten(void);
+    void unflatten(void);
 
 public:
     bool root(void);
@@ -69,6 +76,10 @@ public:
 
 public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
+protected:
+    void   reveal(void);
+    void unreveal(void);
 
 private:
     dtkComposerSceneNodeCompositePrivate *d;

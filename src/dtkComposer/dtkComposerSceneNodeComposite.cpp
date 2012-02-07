@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb  7 16:03:27 2012 (+0100)
+ * Last-Updated: Tue Feb  7 23:43:15 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 199
+ *     Update #: 231
  */
 
 /* Commentary: 
@@ -31,11 +31,16 @@ public:
     dtkComposerSceneEdgeList edges;
 
 public:
+    QPointF offset;
     QPointF pos;
     QRectF rect;
 
 public:
     bool root;
+
+public:
+    bool flattened;
+    bool entered;
     bool revealed;
 };
 
@@ -44,6 +49,9 @@ dtkComposerSceneNodeComposite::dtkComposerSceneNodeComposite(void) : dtkComposer
     d->rect = QRectF(0, 0, 150, 50);
 
     d->root = false;
+
+    d->flattened = false;
+    d->entered = false;
     d->revealed = false;
 }
 
@@ -99,9 +107,42 @@ dtkComposerSceneEdgeList dtkComposerSceneNodeComposite::edges(void)
     return d->edges;
 }
 
-bool dtkComposerSceneNodeComposite::revealed(void)
+bool dtkComposerSceneNodeComposite::entered(void)
 {
-    return d->revealed;
+    return d->entered;
+}
+
+bool dtkComposerSceneNodeComposite::flattened(void)
+{
+    return d->flattened;
+}
+
+void dtkComposerSceneNodeComposite::enter(void)
+{
+    d->entered = true;
+
+    this->reveal();
+}
+
+void dtkComposerSceneNodeComposite::leave(void)
+{
+    d->entered = false;
+
+    this->unreveal();
+}
+
+void dtkComposerSceneNodeComposite::flatten(void)
+{
+    d->flattened = true;
+
+    this->reveal();
+}
+
+void dtkComposerSceneNodeComposite::unflatten(void)
+{
+    d->flattened = false;
+
+    this->unreveal();
 }
 
 void dtkComposerSceneNodeComposite::reveal(void)
@@ -119,10 +160,10 @@ void dtkComposerSceneNodeComposite::reveal(void)
 // --
 
     if(!old.isNull()) {
-        QPointF offset = d->pos - old;
+        d->offset = d->pos - old;
 
         foreach(dtkComposerSceneNode *node, d->nodes)
-            node->setPos(node->pos() + offset);
+            node->setPos(node->pos() + d->offset);
     }
 
 // --
@@ -135,6 +176,15 @@ void dtkComposerSceneNodeComposite::reveal(void)
 void dtkComposerSceneNodeComposite::unreveal(void)
 {
     d->revealed = false;
+
+// --
+
+    if(!d->offset.isNull()) {
+        foreach(dtkComposerSceneNode *node, d->nodes)
+            node->setPos(node->pos() - d->offset);
+    }
+
+// --
 
     this->setFlag(QGraphicsItem::ItemIsMovable, true);
 
@@ -211,7 +261,13 @@ void dtkComposerSceneNodeComposite::layout(void)
 // Update edges geometry
 // /////////////////////////////////////////////////////////////////
 
+    foreach(dtkComposerSceneEdge *edge, this->inputEdges())
+        edge->adjust();
+
     foreach(dtkComposerSceneEdge *edge, d->edges)
+        edge->adjust();
+
+    foreach(dtkComposerSceneEdge *edge, this->outputEdges())
         edge->adjust();
     
 // /////////////////////////////////////////////////////////////////

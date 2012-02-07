@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Tue Feb  7 16:56:04 2012 (+0100)
+ * Last-Updated: Tue Feb  7 23:41:27 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1227
+ *     Update #: 1239
  */
 
 /* Commentary:
@@ -319,7 +319,6 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
             dtkComposerStackCommandCreateGroup *command = new dtkComposerStackCommandCreateGroup;
             command->setScene(this);
             command->setNodes(selected_nodes);
-            // command->setEdges(d->current_node->edges());
             command->setNotes(selected_notes);
             
             d->stack->push(command);
@@ -329,7 +328,7 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
 
         if(dtkComposerSceneNodeComposite *group = dynamic_cast<dtkComposerSceneNodeComposite *>(this->selectedItems().first())) {
 
-            if(!group->revealed()) {
+            if(!group->entered() || !group->flattened()) {
 
                 dtkComposerStackCommandDestroyGroup *command = new dtkComposerStackCommandDestroyGroup;
                 command->setScene(this);
@@ -455,12 +454,12 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 
     if(event->modifiers() & Qt::ControlModifier) {
 
-        if(!composite->revealed()) {
+        if(!composite->flattened() && !composite->entered()) {
             dtkComposerStackCommandFlattenGroup *command = new dtkComposerStackCommandFlattenGroup;
             command->setScene(this);
             command->setNode(composite);
             d->stack->push(command);
-        } else {
+        } else if(!composite->entered()) {
             dtkComposerStackCommandUnflattenGroup *command = new dtkComposerStackCommandUnflattenGroup;
             command->setScene(this);
             command->setNode(composite);
@@ -469,12 +468,12 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 
     } else {
 
-        if(!composite->revealed()) {
+        if(!composite->entered() && !composite->flattened()) {
             dtkComposerStackCommandEnterGroup *command = new dtkComposerStackCommandEnterGroup;
             command->setScene(this);
             command->setNode(composite);
             d->stack->push(command);
-        } else {
+        } else if(!composite->flattened()) {
             dtkComposerStackCommandLeaveGroup *command = new dtkComposerStackCommandLeaveGroup;
             command->setScene(this);
             command->setNode(composite);

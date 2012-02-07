@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 21:50:37 2012 (+0100)
+ * Last-Updated: Tue Feb  7 15:40:42 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 219
+ *     Update #: 225
  */
 
 /* Commentary: 
@@ -252,11 +252,10 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
         d->node = composite;
 
         for(int i = 0; i < ports.count(); i++) {
-            dtkComposerScenePort *port = new dtkComposerScenePort(ports.at(i).toElement().attribute("id").toInt(), composite);
             if(ports.at(i).toElement().attribute("type") == "input")
-                composite->addInputPort(port);
+                composite->addInputPort(new dtkComposerScenePort(ports.at(i).toElement().attribute("id").toInt(), dtkComposerScenePort::Input, composite));
             else
-                composite->addOutputPort(port);
+                composite->addOutputPort(new dtkComposerScenePort(ports.at(i).toElement().attribute("id").toInt(), dtkComposerScenePort::Output, composite));
         }
 
         composite->layout();

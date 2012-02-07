@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 13:59:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 14:03:10 2012 (+0100)
+ * Last-Updated: Tue Feb  7 15:38:01 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 18
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -26,15 +26,19 @@ public:
     unsigned int id;
 
 public:
+    dtkComposerScenePort::Type type;
+
+public:
     dtkComposerSceneNode *node;
 
 public:
     QGraphicsEllipseItem *ellipse;
 };
 
-dtkComposerScenePort::dtkComposerScenePort(unsigned int id, dtkComposerSceneNode *parent) : QGraphicsItem(parent), d(new dtkComposerScenePortPrivate)
+dtkComposerScenePort::dtkComposerScenePort(unsigned int id, Type type, dtkComposerSceneNode *parent) : QGraphicsItem(parent), d(new dtkComposerScenePortPrivate)
 {
     d->id = id;
+    d->type = type;
     d->node = parent;
 
     d->ellipse = new QGraphicsEllipseItem(this);
@@ -57,6 +61,11 @@ dtkComposerScenePort::~dtkComposerScenePort(void)
 unsigned int dtkComposerScenePort::id(void) const
 {
     return d->id;
+}
+
+dtkComposerScenePort::Type dtkComposerScenePort::type(void)
+{
+    return d->type;
 }
 
 dtkComposerSceneNode *dtkComposerScenePort::node(void)

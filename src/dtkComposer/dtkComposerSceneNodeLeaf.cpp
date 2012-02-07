@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb  7 10:41:36 2012 (+0100)
+ * Last-Updated: Tue Feb  7 15:39:03 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 22
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -30,10 +30,10 @@ public:
 
 dtkComposerSceneNodeLeaf::dtkComposerSceneNodeLeaf(void) : dtkComposerSceneNode(), d(new dtkComposerSceneNodeLeafPrivate)
 {
-    this->addInputPort(new dtkComposerScenePort(0, this));
-    this->addInputPort(new dtkComposerScenePort(1, this));
+    this->addInputPort(new dtkComposerScenePort(0, dtkComposerScenePort::Input, this));
+    this->addInputPort(new dtkComposerScenePort(1, dtkComposerScenePort::Input, this));
 
-    this->addOutputPort(new dtkComposerScenePort(2, this));
+    this->addOutputPort(new dtkComposerScenePort(2, dtkComposerScenePort::Output, this));
 
     d->rect = QRectF(0, 0, 150, 50);
 

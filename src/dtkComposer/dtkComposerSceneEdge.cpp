@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:00:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb  7 12:54:31 2012 (+0100)
+ * Last-Updated: Tue Feb  7 15:41:19 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 32
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -146,8 +146,12 @@ bool dtkComposerSceneEdge::link(bool anyway)
     if(d->source->node() == d->destination->node())
         return false;
 
-    d->source->node()->addOutputEdge(this);
-    d->destination->node()->addInputEdge(this);
+    if (d->source->type() == dtkComposerScenePort::Output)
+        d->source->node()->addOutputEdge(this);
+
+
+    if (d->destination->type() == dtkComposerScenePort::Input)
+        d->destination->node()->addInputEdge(this);
 
     return true;
 }
@@ -157,8 +161,11 @@ bool dtkComposerSceneEdge::unlink(void)
     if(!d->source || !d->destination)
         return false;
 
-    d->source->node()->removeOutputEdge(this);
-    d->destination->node()->removeInputEdge(this);
+    if (d->source->type() == dtkComposerScenePort::Output)
+        d->source->node()->removeOutputEdge(this);
+
+    if (d->destination->type() == dtkComposerScenePort::Input)
+        d->destination->node()->removeInputEdge(this);
 
     return true;
 }

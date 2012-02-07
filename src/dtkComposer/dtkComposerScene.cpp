@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Tue Feb  7 12:43:17 2012 (+0100)
+ * Last-Updated: Tue Feb  7 15:17:14 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1213
+ *     Update #: 1215
  */
 
 /* Commentary:
@@ -359,8 +359,10 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
         if(dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>(item)) {
 
-            if (node->parent() != d->root_node)
+            if (node->parent() != d->root_node) {
                 node->parent()->layout();
+                this->update();
+            }
             
             QRectF updateRect;
 

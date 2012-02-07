@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb  7 11:39:14 2012 (+0100)
+ * Last-Updated: Tue Feb  7 15:39:52 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1046
+ *     Update #: 1062
  */
 
 /* Commentary: 
@@ -191,10 +191,12 @@ void dtkComposerStackCommandDestroyNode::redo(void)
         return;
 
     foreach(dtkComposerSceneEdge *edge, e->input_edges)
-        d->scene->removeEdge(edge);
+        if (d->scene->items().contains(edge))
+            d->scene->removeEdge(edge);
 
     foreach(dtkComposerSceneEdge *edge, e->output_edges)
-        d->scene->removeEdge(edge);
+        if (d->scene->items().contains(edge))
+            d->scene->removeEdge(edge);
 
     d->scene->removeNode(e->node);
 }
@@ -206,23 +208,13 @@ void dtkComposerStackCommandDestroyNode::undo(void)
 
     d->scene->addNode(e->node);
 
-    foreach(dtkComposerSceneEdge *edge, e->input_edges) {
-
-        dtkComposerSceneNode *s_node = edge->source()->node();
-        dtkComposerSceneNode *d_node = edge->destination()->node();
-
-        if(s_node && d_node)
+    foreach(dtkComposerSceneEdge *edge, e->input_edges)
+        if(!d->scene->items().contains(edge))
             d->scene->addEdge(edge);
-    }
 
-    foreach(dtkComposerSceneEdge *edge, e->output_edges) {
-
-        dtkComposerSceneNode *s_node = edge->source()->node();
-        dtkComposerSceneNode *d_node = edge->destination()->node();
-
-        if(s_node && d_node)
+    foreach(dtkComposerSceneEdge *edge, e->output_edges)
+        if(!d->scene->items().contains(edge))
             d->scene->addEdge(edge);
-    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -558,7 +550,7 @@ void dtkComposerStackCommandCreateGroup::redo(void)
 
             if(e->dirty) {
 
-                dtkComposerScenePort *port = new dtkComposerScenePort(e->node->inputPorts().count()+e->node->outputPorts().count(), e->node);
+                dtkComposerScenePort *port = new dtkComposerScenePort(e->node->inputPorts().count()+e->node->outputPorts().count(), dtkComposerScenePort::Input, e->node);
                 
                 e->node->addInputPort(port);
                 e->node->layout();
@@ -592,7 +584,7 @@ void dtkComposerStackCommandCreateGroup::redo(void)
 
             if(e->dirty) {
 
-                dtkComposerScenePort *port = new dtkComposerScenePort(e->node->inputPorts().count()+e->node->outputPorts().count(), e->node);
+                dtkComposerScenePort *port = new dtkComposerScenePort(e->node->inputPorts().count()+e->node->outputPorts().count(), dtkComposerScenePort::Output, e->node);
                 
                 e->node->addOutputPort(port);
                 e->node->layout();

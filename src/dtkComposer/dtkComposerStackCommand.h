@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 22:08:42 2012 (+0100)
+ * Last-Updated: Tue Feb  7 15:54:17 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 97
+ *     Update #: 104
  */
 
 /* Commentary: 
@@ -281,6 +281,52 @@ public:
 
 private:
     dtkComposerStackCommandLeaveGroupPrivate *e;
+};
+
+// /////////////////////////////////////////////////////////////////
+// Flatten Group Command
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandFlattenGroupPrivate;
+
+class dtkComposerStackCommandFlattenGroup : public dtkComposerStackCommand
+{
+public:
+     dtkComposerStackCommandFlattenGroup(dtkComposerStackCommand *parent = 0);
+    ~dtkComposerStackCommandFlattenGroup(void);
+
+public:
+    void setNode(dtkComposerSceneNodeComposite *node);
+
+public:
+    void redo(void);
+    void undo(void);
+
+private:
+    dtkComposerStackCommandFlattenGroupPrivate *e;
+};
+
+// /////////////////////////////////////////////////////////////////
+// Unflatten Group Command
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandUnflattenGroupPrivate;
+
+class dtkComposerStackCommandUnflattenGroup : public dtkComposerStackCommand
+{
+public:
+     dtkComposerStackCommandUnflattenGroup(dtkComposerStackCommand *parent = 0);
+    ~dtkComposerStackCommandUnflattenGroup(void);
+
+public:
+    void setNode(dtkComposerSceneNodeComposite *node);
+
+public:
+    void redo(void);
+    void undo(void);
+
+private:
+    dtkComposerStackCommandUnflattenGroupPrivate *e;
 };
 
 #endif

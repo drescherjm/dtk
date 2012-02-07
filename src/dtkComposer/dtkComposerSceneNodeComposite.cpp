@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb  7 15:16:31 2012 (+0100)
+ * Last-Updated: Tue Feb  7 16:03:27 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 197
+ *     Update #: 199
  */
 
 /* Commentary: 
@@ -36,7 +36,7 @@ public:
 
 public:
     bool root;
-    bool entered;
+    bool revealed;
 };
 
 dtkComposerSceneNodeComposite::dtkComposerSceneNodeComposite(void) : dtkComposerSceneNode(), d(new dtkComposerSceneNodeCompositePrivate)
@@ -44,7 +44,7 @@ dtkComposerSceneNodeComposite::dtkComposerSceneNodeComposite(void) : dtkComposer
     d->rect = QRectF(0, 0, 150, 50);
 
     d->root = false;
-    d->entered = false;
+    d->revealed = false;
 }
 
 dtkComposerSceneNodeComposite::~dtkComposerSceneNodeComposite(void)
@@ -99,14 +99,14 @@ dtkComposerSceneEdgeList dtkComposerSceneNodeComposite::edges(void)
     return d->edges;
 }
 
-bool dtkComposerSceneNodeComposite::entered(void)
+bool dtkComposerSceneNodeComposite::revealed(void)
 {
-    return d->entered;
+    return d->revealed;
 }
 
-void dtkComposerSceneNodeComposite::enter(void)
+void dtkComposerSceneNodeComposite::reveal(void)
 {
-    d->entered = true;
+    d->revealed = true;
 
 // --
 
@@ -132,9 +132,9 @@ void dtkComposerSceneNodeComposite::enter(void)
     this->layout();
 }
 
-void dtkComposerSceneNodeComposite::leave(void)
+void dtkComposerSceneNodeComposite::unreveal(void)
 {
-    d->entered = false;
+    d->revealed = false;
 
     this->setFlag(QGraphicsItem::ItemIsMovable, true);
 
@@ -159,7 +159,7 @@ void dtkComposerSceneNodeComposite::layout(void)
 // Rect calculation
 // /////////////////////////////////////////////////////////////////
 
-    if(!d->entered) {
+    if(!d->revealed) {
 
         d->rect = QRectF(0, 0, 150, 50);
 
@@ -218,7 +218,7 @@ void dtkComposerSceneNodeComposite::layout(void)
 // Height calculation
 // /////////////////////////////////////////////////////////////////
 
-    if(!d->entered) {
+    if(!d->revealed) {
 
         if(this->inputPorts().count() || this->outputPorts().count())
             if(this->inputPorts().count() >= this->outputPorts().count())
@@ -246,7 +246,7 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
         painter->drawRoundedRect(d->rect.adjusted(-2, -2, 2, 2), radius, radius);
     }
 
-    if(d->entered) {
+    if(d->revealed) {
         painter->setPen(QPen(Qt::black, 1, Qt::DashLine));
         painter->setBrush(Qt::NoBrush);
     } else {

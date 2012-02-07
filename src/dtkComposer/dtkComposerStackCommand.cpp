@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb  7 15:39:52 2012 (+0100)
+ * Last-Updated: Tue Feb  7 16:03:55 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1062
+ *     Update #: 1075
  */
 
 /* Commentary: 
@@ -1031,7 +1031,7 @@ void dtkComposerStackCommandEnterGroup::redo(void)
     foreach(dtkComposerSceneEdge *edge, d->scene->current()->edges())
         d->scene->removeItem(edge);
 
-    e->node->enter();
+    e->node->reveal();
     
     d->scene->addItem(e->node);
 
@@ -1065,7 +1065,7 @@ void dtkComposerStackCommandEnterGroup::undo(void)
 
     d->scene->removeItem(d->scene->current());
 
-    e->node->leave();
+    e->node->unreveal();
 
     d->scene->setCurrent(e->node->parent());
     
@@ -1129,7 +1129,7 @@ void dtkComposerStackCommandLeaveGroup::redo(void)
 
     d->scene->removeItem(d->scene->current());
 
-    e->node->leave();
+    e->node->unreveal();
 
     d->scene->setCurrent(e->node->parent());
     
@@ -1167,7 +1167,7 @@ void dtkComposerStackCommandLeaveGroup::undo(void)
     foreach(dtkComposerSceneEdge *edge, d->scene->current()->edges())
         d->scene->removeItem(edge);
 
-    e->node->enter();
+    e->node->reveal();
     
     d->scene->addItem(e->node);
 
@@ -1185,4 +1185,82 @@ void dtkComposerStackCommandLeaveGroup::undo(void)
     }
 
     d->scene->update();
+}
+
+// /////////////////////////////////////////////////////////////////
+// Flatten Group Command
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandFlattenGroupPrivate
+{
+public:
+    dtkComposerSceneNodeComposite *node;
+};
+
+dtkComposerStackCommandFlattenGroup::dtkComposerStackCommandFlattenGroup(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandFlattenGroupPrivate)
+{
+    e->node = NULL;
+
+    this->setText("Flatten group");
+}
+
+dtkComposerStackCommandFlattenGroup::~dtkComposerStackCommandFlattenGroup(void)
+{
+    delete e;
+
+    e = NULL;
+}
+
+void dtkComposerStackCommandFlattenGroup::setNode(dtkComposerSceneNodeComposite *node)
+{
+    e->node = node;
+}
+
+void dtkComposerStackCommandFlattenGroup::redo(void)
+{
+
+}
+
+void dtkComposerStackCommandFlattenGroup::undo(void)
+{
+
+}
+
+// /////////////////////////////////////////////////////////////////
+// Unflatten Group Command
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandUnflattenGroupPrivate
+{
+public:
+    dtkComposerSceneNodeComposite *node;
+};
+
+dtkComposerStackCommandUnflattenGroup::dtkComposerStackCommandUnflattenGroup(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandUnflattenGroupPrivate)
+{
+    e->node = NULL;
+
+    this->setText("Unflatten group");
+}
+
+dtkComposerStackCommandUnflattenGroup::~dtkComposerStackCommandUnflattenGroup(void)
+{
+    delete e;
+
+    e = NULL;
+}
+
+void dtkComposerStackCommandUnflattenGroup::setNode(dtkComposerSceneNodeComposite *node)
+{
+    e->node = node;
+}
+
+void dtkComposerStackCommandUnflattenGroup::redo(void)
+{
+
+}
+
+void dtkComposerStackCommandUnflattenGroup::undo(void)
+{
+
 }

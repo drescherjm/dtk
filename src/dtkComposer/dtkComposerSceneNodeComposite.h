@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:32:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  3 14:16:48 2012 (+0100)
+ * Last-Updated: Tue Feb  7 16:03:18 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 17
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -51,9 +51,11 @@ public:
     dtkComposerSceneEdgeList edges(void);
 
 public:
-    bool entered(void);
-    void enter(void);
-    void leave(void);
+    bool   revealed(void);
+    void   reveal(void);
+    void unreveal(void);
+
+public:
     bool root(void);
 
 public:

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 22:29:30 2012 (+0100)
+ * Last-Updated: Tue Feb  7 11:16:50 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 56
+ *     Update #: 183
  */
 
 /* Commentary: 
@@ -31,6 +31,7 @@ public:
     dtkComposerSceneEdgeList edges;
 
 public:
+    QPointF pos;
     QRectF rect;
 
 public:
@@ -107,12 +108,16 @@ void dtkComposerSceneNodeComposite::enter(void)
 {
     d->entered = true;
 
+    this->setFlag(QGraphicsItem::ItemIsMovable, false);
+
     this->layout();
 }
 
 void dtkComposerSceneNodeComposite::leave(void)
 {
     d->entered = false;
+
+    this->setFlag(QGraphicsItem::ItemIsMovable, true);
 
     this->layout();
 }
@@ -127,16 +132,47 @@ void dtkComposerSceneNodeComposite::setRoot(bool root)
     d->root = root;
 }
 
+#include <float.h>
+
 void dtkComposerSceneNodeComposite::layout(void)
 {
+// /////////////////////////////////////////////////////////////////
+// Rect calculation
+// /////////////////////////////////////////////////////////////////
+
     if(!d->entered) {
 
         d->rect = QRectF(0, 0, 150, 50);
 
+        if(!d->pos.isNull())
+            this->setPos(d->pos);
+
     } else {
 
-        d->rect = QRectF(0, 0, 150, 50);
+        qreal xmin =  FLT_MAX;
+        qreal xmax = -FLT_MAX;
 
+        qreal ymin =  FLT_MAX;
+        qreal ymax = -FLT_MAX;
+
+        foreach(dtkComposerSceneNode *node, d->nodes) {
+            xmin = qMin(xmin, node->scenePos().x());
+            xmax = qMax(xmax, node->scenePos().x() + node->boundingRect().width());
+            ymin = qMin(ymin, node->scenePos().y());
+            ymax = qMax(ymax, node->scenePos().y() + node->boundingRect().height());
+        }
+
+        qreal w_offset = 100;
+        qreal h_offset = 100;
+
+        qreal w = xmax-xmin; w+= w_offset;
+        qreal h = ymax-ymin; h+= h_offset;
+
+        d->rect = QRectF(0, 0, w, h);
+
+        d->pos = this->pos();
+
+        this->setPos(xmin - w_offset/2, ymin - h_offset/2);
     }
 
     int port_margin_top = 10;
@@ -144,20 +180,37 @@ void dtkComposerSceneNodeComposite::layout(void)
     int port_margin_left = 10;
     int port_spacing = 10;
     
-    int node_width = d->rect.width();
-    
+// /////////////////////////////////////////////////////////////////
+// Port location
+// /////////////////////////////////////////////////////////////////
+
     for(int i = 0; i < this->inputPorts().count(); i++)
         this->inputPorts().at(i)->setPos(QPointF(port_margin_left, i*this->inputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top));
     
     for(int i = 0; i < this->outputPorts().count(); i++)
-        this->outputPorts().at(i)->setPos(QPointF(node_width - port_margin_left - this->outputPorts().at(i)->boundingRect().width(), i*this->outputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top));
+        this->outputPorts().at(i)->setPos(QPointF(d->rect.right() - port_margin_left - this->outputPorts().at(i)->boundingRect().width(), i*this->outputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top));
+
+// /////////////////////////////////////////////////////////////////
+// Update edges geometry
+// /////////////////////////////////////////////////////////////////
+
+    foreach(dtkComposerSceneEdge *edge, d->edges)
+        edge->adjust();
     
-    if(this->inputPorts().count() || this->outputPorts().count())
-        if(this->inputPorts().count() >= this->outputPorts().count())
-            d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->inputPorts().count() * this->inputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->inputPorts().count()-1) * port_spacing));
-        else
-            d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->outputPorts().count() * this->outputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->outputPorts().count()-1) * port_spacing));        
-    
+// /////////////////////////////////////////////////////////////////
+// Height calculation
+// /////////////////////////////////////////////////////////////////
+
+    if(!d->entered) {
+
+        if(this->inputPorts().count() || this->outputPorts().count())
+            if(this->inputPorts().count() >= this->outputPorts().count())
+                d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->inputPorts().count() * this->inputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->inputPorts().count()-1) * port_spacing));
+            else
+                d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->outputPorts().count() * this->outputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->outputPorts().count()-1) * port_spacing));        
+
+    }
+
     this->update();
 }
 

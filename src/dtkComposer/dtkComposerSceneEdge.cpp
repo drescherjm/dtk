@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:00:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 22:44:15 2012 (+0100)
+ * Last-Updated: Tue Feb  7 12:39:55 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 17
+ *     Update #: 30
  */
 
 /* Commentary: 
@@ -140,8 +140,8 @@ bool dtkComposerSceneEdge::link(bool anyway)
     if(!d->source || !d->destination)
         return false;
 
-    dynamic_cast<dtkComposerSceneNode *>(d->source->parentItem())->addOutputEdge(this);
-    dynamic_cast<dtkComposerSceneNode *>(d->destination->parentItem())->addInputEdge(this);
+    d->source->node()->addOutputEdge(this);
+    d->destination->node()->addInputEdge(this);
 
     return true;
 }
@@ -151,8 +151,8 @@ bool dtkComposerSceneEdge::unlink(void)
     if(!d->source || !d->destination)
         return false;
 
-    dynamic_cast<dtkComposerSceneNode *>(d->source->parentItem())->removeOutputEdge(this);
-    dynamic_cast<dtkComposerSceneNode *>(d->destination->parentItem())->removeInputEdge(this);
+    d->source->node()->removeOutputEdge(this);
+    d->destination->node()->removeInputEdge(this);
 
     return true;
 }

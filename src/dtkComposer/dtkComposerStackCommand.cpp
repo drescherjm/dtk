@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 22:55:06 2012 (+0100)
+ * Last-Updated: Tue Feb  7 11:39:14 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1006
+ *     Update #: 1046
  */
 
 /* Commentary: 
@@ -126,6 +126,11 @@ void dtkComposerStackCommandCreateNode::redo(void)
     e->node->setPos(e->position);
 
     d->scene->addNode(e->node);
+
+// --
+
+    if (d->scene->current() != d->scene->root())
+        d->scene->current()->layout();
 }
 
 void dtkComposerStackCommandCreateNode::undo(void)
@@ -468,17 +473,30 @@ public:
     QList<dtkComposerScenePort *> oports;
     QList<dtkComposerSceneEdge *> olhses;
     QList<dtkComposerSceneEdge *> orhses;
+
+public:
+    bool dirty;
 };
 
 dtkComposerStackCommandCreateGroup::dtkComposerStackCommandCreateGroup(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandCreateGroupPrivate)
 {
     e->node = NULL;
 
+    e->dirty = true;
+
     this->setText("Create group");
 }
 
 dtkComposerStackCommandCreateGroup::~dtkComposerStackCommandCreateGroup(void)
 {
+    qDeleteAll(e->iports);
+    qDeleteAll(e->ilhses);
+    qDeleteAll(e->irhses);
+    
+    qDeleteAll(e->oports);
+    qDeleteAll(e->olhses);
+    qDeleteAll(e->orhses);
+
     delete e;
 
     e = NULL;
@@ -538,29 +556,33 @@ void dtkComposerStackCommandCreateGroup::redo(void)
             
             d->scene->removeEdge(edge);
 
-            dtkComposerScenePort *port = new dtkComposerScenePort(e->node->inputPorts().count()+e->node->outputPorts().count(), e->node);
+            if(e->dirty) {
 
-            e->node->addInputPort(port);
-            e->node->layout();
-            
-            dtkComposerSceneEdge *lhs = new dtkComposerSceneEdge;
-            lhs->setSource(edge->source());
-            lhs->setDestination(port);
-            lhs->link();
-            lhs->setParent(d->scene->current());
+                dtkComposerScenePort *port = new dtkComposerScenePort(e->node->inputPorts().count()+e->node->outputPorts().count(), e->node);
+                
+                e->node->addInputPort(port);
+                e->node->layout();
+                
+                dtkComposerSceneEdge *lhs = new dtkComposerSceneEdge;
+                lhs->setSource(edge->source());
+                lhs->setDestination(port);
+                lhs->link();
+                lhs->setParent(d->scene->current());
+                
+                dtkComposerSceneEdge *rhs = new dtkComposerSceneEdge;
+                rhs->setSource(port);
+                rhs->setDestination(edge->destination());
+                rhs->link();
+                rhs->setParent(e->node);
+                
+                d->scene->addEdge(lhs);
+                e->node->addEdge(rhs);
+                
+                e->iports << port;
+                e->ilhses << lhs;
+                e->irhses << rhs;
 
-            dtkComposerSceneEdge *rhs = new dtkComposerSceneEdge;
-            rhs->setSource(port);
-            rhs->setDestination(edge->destination());
-            rhs->link();
-            rhs->setParent(e->node);
-
-            d->scene->addEdge(lhs);
-            e->node->addEdge(rhs);
-
-            e->iports << port;
-            e->ilhses << lhs;
-            e->irhses << rhs;
+            }
 
         } else if (!e->nodes.contains(edge->destination()->node()) && e->nodes.contains(edge->source()->node())) {
 
@@ -568,34 +590,70 @@ void dtkComposerStackCommandCreateGroup::redo(void)
 
             d->scene->removeEdge(edge);
 
-            dtkComposerScenePort *port = new dtkComposerScenePort(e->node->inputPorts().count()+e->node->outputPorts().count(), e->node);
+            if(e->dirty) {
 
-            e->node->addOutputPort(port);
-            e->node->layout();
+                dtkComposerScenePort *port = new dtkComposerScenePort(e->node->inputPorts().count()+e->node->outputPorts().count(), e->node);
+                
+                e->node->addOutputPort(port);
+                e->node->layout();
+                
+                dtkComposerSceneEdge *lhs = new dtkComposerSceneEdge;
+                lhs->setSource(edge->source());
+                lhs->setDestination(port);
+                lhs->link();
+                lhs->setParent(e->node);
+                
+                dtkComposerSceneEdge *rhs = new dtkComposerSceneEdge;
+                rhs->setSource(port);
+                rhs->setDestination(edge->destination());
+                rhs->link();
+                rhs->setParent(d->scene->current());
+                
+                e->node->addEdge(lhs);            
+                d->scene->addEdge(rhs);
+                
+                e->oports << port;
+                e->olhses << lhs;
+                e->orhses << rhs;
 
-            dtkComposerSceneEdge *lhs = new dtkComposerSceneEdge;
-            lhs->setSource(edge->source());
-            lhs->setDestination(port);
-            lhs->link();
-            lhs->setParent(e->node);
-
-            dtkComposerSceneEdge *rhs = new dtkComposerSceneEdge;
-            rhs->setSource(port);
-            rhs->setDestination(edge->destination());
-            rhs->link();
-            rhs->setParent(d->scene->current());
-
-            e->node->addEdge(lhs);            
-            d->scene->addEdge(rhs);
-
-            e->oports << port;
-            e->olhses << lhs;
-            e->orhses << rhs;
+            }
         }
-
-// /////////////////////////////////////////////////////////////////
-
     }
+
+    if(!e->dirty) {
+
+        foreach(dtkComposerScenePort *port, e->iports) {
+            e->node->addInputPort(port);
+        }
+        
+        foreach(dtkComposerSceneEdge *edge, e->ilhses) {
+            edge->link();
+            d->scene->addEdge(edge);
+        }
+        
+        foreach(dtkComposerSceneEdge *edge, e->irhses) {
+            edge->link();
+            e->node->addEdge(edge);
+        }
+        
+        foreach(dtkComposerScenePort *port, e->oports) {
+            e->node->addOutputPort(port);
+        }
+        
+        foreach(dtkComposerSceneEdge *edge, e->olhses) {
+            edge->link();
+            e->node->addEdge(edge);
+        }
+        
+        foreach(dtkComposerSceneEdge *edge, e->orhses) {
+            edge->link();
+            d->scene->addEdge(edge);
+        }
+    }
+
+    e->dirty = false;
+    
+// /////////////////////////////////////////////////////////////////
 
     foreach(dtkComposerSceneNote *note, e->notes) {
         d->scene->removeNote(note);
@@ -659,13 +717,13 @@ void dtkComposerStackCommandCreateGroup::undo(void)
         e->node->removeEdge(edge);
     }
     
-    qDeleteAll(e->iports);
-    qDeleteAll(e->ilhses);
-    qDeleteAll(e->irhses);
+    // qDeleteAll(e->iports);
+    // qDeleteAll(e->ilhses);
+    // qDeleteAll(e->irhses);
     
-    e->iports.clear();
-    e->ilhses.clear();
-    e->irhses.clear();
+    // e->iports.clear();
+    // e->ilhses.clear();
+    // e->irhses.clear();
     
     foreach(dtkComposerScenePort *port, e->oports) {
         e->node->removeOutputPort(port);
@@ -681,13 +739,13 @@ void dtkComposerStackCommandCreateGroup::undo(void)
         d->scene->removeEdge(edge);
     }
     
-    qDeleteAll(e->oports);
-    qDeleteAll(e->olhses);
-    qDeleteAll(e->orhses);
+    // qDeleteAll(e->oports);
+    // qDeleteAll(e->olhses);
+    // qDeleteAll(e->orhses);
     
-    e->oports.clear();
-    e->olhses.clear();
-    e->orhses.clear();
+    // e->oports.clear();
+    // e->olhses.clear();
+    // e->orhses.clear();
     
 // /////////////////////////////////////////////////////////////////
 
@@ -993,8 +1051,10 @@ void dtkComposerStackCommandEnterGroup::redo(void)
     foreach(dtkComposerSceneNode *node, d->scene->current()->nodes())
         d->scene->addItem(node);
 
-    foreach(dtkComposerSceneEdge *edge, d->scene->current()->edges())
+    foreach(dtkComposerSceneEdge *edge, d->scene->current()->edges()) {
+        edge->adjust();
         d->scene->addItem(edge);
+    }
 }
 
 void dtkComposerStackCommandEnterGroup::undo(void)
@@ -1026,8 +1086,10 @@ void dtkComposerStackCommandEnterGroup::undo(void)
     foreach(dtkComposerSceneNode *node, d->scene->current()->nodes())
         d->scene->addItem(node);
 
-    foreach(dtkComposerSceneEdge *edge, d->scene->current()->edges())
+    foreach(dtkComposerSceneEdge *edge, d->scene->current()->edges()) {
+        edge->adjust();
         d->scene->addItem(edge);
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -1088,8 +1150,10 @@ void dtkComposerStackCommandLeaveGroup::redo(void)
     foreach(dtkComposerSceneNode *node, d->scene->current()->nodes())
         d->scene->addItem(node);
 
-    foreach(dtkComposerSceneEdge *edge, d->scene->current()->edges())
+    foreach(dtkComposerSceneEdge *edge, d->scene->current()->edges()) {
+        edge->adjust();
         d->scene->addItem(edge);
+    }
 
     d->scene->update();
 }
@@ -1123,8 +1187,10 @@ void dtkComposerStackCommandLeaveGroup::undo(void)
     foreach(dtkComposerSceneNode *node, d->scene->current()->nodes())
         d->scene->addItem(node);
 
-    foreach(dtkComposerSceneEdge *edge, d->scene->current()->edges())
+    foreach(dtkComposerSceneEdge *edge, d->scene->current()->edges()) {
+        edge->adjust();
         d->scene->addItem(edge);
+    }
 
     d->scene->update();
 }

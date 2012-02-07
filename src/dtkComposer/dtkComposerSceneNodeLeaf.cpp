@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 22:06:28 2012 (+0100)
+ * Last-Updated: Tue Feb  7 10:41:36 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 17
+ *     Update #: 22
  */
 
 /* Commentary: 
@@ -54,13 +54,15 @@ void dtkComposerSceneNodeLeaf::layout(void)
     int port_margin_left = 10;
     int port_spacing = 10;
 
-    int node_width = d->rect.width();
+    // Setting up port position
 
     for(int i = 0; i < this->inputPorts().count(); i++)
         this->inputPorts().at(i)->setPos(QPointF(port_margin_left, i*this->inputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top));
 
     for(int i = 0; i < this->outputPorts().count(); i++)
-        this->outputPorts().at(i)->setPos(QPointF(node_width - port_margin_left - this->outputPorts().at(i)->boundingRect().width(), i*this->outputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top));
+        this->outputPorts().at(i)->setPos(QPointF(d->rect.right() - port_margin_left - this->outputPorts().at(i)->boundingRect().width(), i*this->outputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top));
+
+    // Height calculation
 
     if(this->inputPorts().count() || this->outputPorts().count())
         if(this->inputPorts().count() >= this->outputPorts().count())

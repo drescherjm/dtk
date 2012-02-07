@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:00:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb  7 12:39:55 2012 (+0100)
+ * Last-Updated: Tue Feb  7 12:54:31 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 30
+ *     Update #: 32
  */
 
 /* Commentary: 
@@ -138,6 +138,12 @@ bool dtkComposerSceneEdge::link(bool anyway)
     Q_UNUSED(anyway);
     
     if(!d->source || !d->destination)
+        return false;
+
+    if(d->source == d->destination)
+        return false;
+
+    if(d->source->node() == d->destination->node())
         return false;
 
     d->source->node()->addOutputEdge(this);

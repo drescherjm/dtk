@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb  7 12:45:06 2012 (+0100)
+ * Last-Updated: Tue Feb  7 13:30:28 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 186
+ *     Update #: 193
  */
 
 /* Commentary: 
@@ -108,7 +108,24 @@ void dtkComposerSceneNodeComposite::enter(void)
 {
     d->entered = true;
 
+// --
+
+    QPointF old = d->pos;
+
+// --
+
     d->pos = this->pos();
+
+// --
+
+    if(!old.isNull()) {
+        QPointF offset = d->pos - old;
+
+        foreach(dtkComposerSceneNode *node, d->nodes)
+            node->setPos(node->pos() + offset);
+    }
+
+// --
 
     this->setFlag(QGraphicsItem::ItemIsMovable, false);
 

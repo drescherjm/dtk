@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  8 09:51:49 2012 (+0100)
+ * Last-Updated: Wed Feb  8 15:14:44 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 243
+ *     Update #: 247
  */
 
 /* Commentary: 
@@ -220,6 +220,8 @@ void dtkComposerSceneNodeComposite::layout(void)
         if(!d->pos.isNull())
             this->setPos(d->pos);
 
+        this->setZValue(0);
+
     } else {
 
         qreal xmin =  FLT_MAX;
@@ -244,6 +246,8 @@ void dtkComposerSceneNodeComposite::layout(void)
         d->rect = QRectF(0, 0, w, h);
 
         this->setPos(xmin - w_offset/2, ymin - h_offset/2);
+
+        this->setZValue(-INT_MAX);
     }
 
     int port_margin_top = 10;

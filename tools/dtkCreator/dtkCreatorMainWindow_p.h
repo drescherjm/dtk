@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  1 12:37:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb  5 15:45:22 2012 (+0100)
+ * Last-Updated: Wed Feb  8 10:17:14 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 29
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@
 class dtkComposer;
 class dtkComposerFactoryView;
 class dtkComposerSceneModel;
+class dtkComposerSceneNodeEditor;
 class dtkComposerSceneView;
 class dtkComposerStackView;
 
@@ -54,6 +55,7 @@ public:
     dtkComposer *composer;
     dtkComposerFactoryView *nodes;
     dtkComposerSceneModel *model;
+    dtkComposerSceneNodeEditor *editor;
     dtkComposerSceneView *scene;
     dtkComposerStackView *stack;
 

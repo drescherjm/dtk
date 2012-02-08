@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb  7 23:43:15 2012 (+0100)
+ * Last-Updated: Wed Feb  8 09:51:49 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 231
+ *     Update #: 243
  */
 
 /* Commentary: 
@@ -22,6 +22,10 @@
 #include "dtkComposerSceneNodeComposite.h"
 #include "dtkComposerSceneNote.h"
 #include "dtkComposerScenePort.h"
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerSceneNodeComposite
+// /////////////////////////////////////////////////////////////////
 
 class dtkComposerSceneNodeCompositePrivate
 {

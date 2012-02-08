@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 22:24:48 2012 (+0100)
+ * Last-Updated: Wed Feb  8 10:31:18 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 798
+ *     Update #: 813
  */
 
 /* Commentary: 
@@ -24,6 +24,7 @@
 #include <dtkComposer/dtkComposerFactoryView.h>
 #include <dtkComposer/dtkComposerScene.h>
 #include <dtkComposer/dtkComposerSceneModel.h>
+#include <dtkComposer/dtkComposerSceneNodeEditor.h>
 #include <dtkComposer/dtkComposerSceneView.h>
 #include <dtkComposer/dtkComposerStack.h>
 #include <dtkComposer/dtkComposerStackView.h>
@@ -86,6 +87,10 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->q = this;
 
     d->composer = new dtkComposer;
+
+    d->editor = new dtkComposerSceneNodeEditor(this);
+    d->editor->setScene(d->composer->scene());
+    d->editor->setFixedWidth(300);
 
     d->model = new dtkComposerSceneModel(this);
     d->model->setScene(d->composer->scene());
@@ -165,18 +170,24 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     // Layout
 
-    QVBoxLayout *lateral = new QVBoxLayout;
-    lateral->setContentsMargins(0, 0, 0, 0);
-    lateral->setSpacing(0);
-    lateral->addWidget(d->nodes);
-    lateral->addWidget(d->stack);
-    lateral->addWidget(d->scene);
+    QVBoxLayout *l_lateral = new QVBoxLayout;
+    l_lateral->setContentsMargins(0, 0, 0, 0);
+    l_lateral->setSpacing(0);
+    l_lateral->addWidget(d->nodes);
+    l_lateral->addWidget(d->editor);
+
+    QVBoxLayout *r_lateral = new QVBoxLayout;
+    r_lateral->setContentsMargins(0, 0, 0, 0);
+    r_lateral->setSpacing(0);
+    r_lateral->addWidget(d->scene);
+    r_lateral->addWidget(d->stack);
 
     QHBoxLayout *layout = new QHBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    layout->addLayout(lateral);
+    layout->addLayout(l_lateral);
     layout->addWidget(d->composer);
+    layout->addLayout(r_lateral);
 
     QWidget *central = new QWidget(this);
     central->setLayout(layout);

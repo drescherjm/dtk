@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb  7 23:39:56 2012 (+0100)
+ * Last-Updated: Wed Feb  8 15:05:21 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1112
+ *     Update #: 1239
  */
 
 /* Commentary: 
@@ -1314,6 +1314,9 @@ void dtkComposerStackCommandUnflattenGroup::redo(void)
 
 void dtkComposerStackCommandUnflattenGroup::undo(void)
 {
+    if(!e->node)
+        return;
+
     d->scene->removeItem(e->node);
 
     e->node->flatten();
@@ -1330,4 +1333,196 @@ void dtkComposerStackCommandUnflattenGroup::undo(void)
         edge->adjust();
         d->scene->addItem(edge);
     }
+}
+
+// /////////////////////////////////////////////////////////////////
+// Create Port Command
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandCreatePortPrivate
+{
+public:
+    dtkComposerSceneNodeComposite *node;
+    dtkComposerScenePort *port;
+
+public:
+    int type;
+};
+
+dtkComposerStackCommandCreatePort::dtkComposerStackCommandCreatePort(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandCreatePortPrivate)
+{
+    e->node = NULL;
+    e->port = NULL;
+    e->type = -1;
+
+    this->setText("Create port");
+}
+
+dtkComposerStackCommandCreatePort::~dtkComposerStackCommandCreatePort(void)
+{
+    if(e->port)
+        delete e->port;
+
+    delete e;
+
+    e = NULL;
+}
+
+void dtkComposerStackCommandCreatePort::setNode(dtkComposerSceneNodeComposite *node)
+{
+    e->node = node;
+}
+
+void dtkComposerStackCommandCreatePort::setType(int type)
+{
+    e->type = type;
+}
+
+void dtkComposerStackCommandCreatePort::redo(void)
+{
+    if(!e->node)
+        return;
+
+    if(e->type < 0)
+        return;
+
+    switch(e->type) {
+    case dtkComposerScenePort::Input:
+        if(!e->port)
+            e->port = new dtkComposerScenePort(e->node->inputPorts().count()+e->node->outputPorts().count(), dtkComposerScenePort::Input, e->node);
+        e->node->addInputPort(e->port);
+        e->node->layout();
+        break;
+    case dtkComposerScenePort::Output:
+        if(!e->port)
+            e->port = new dtkComposerScenePort(e->node->inputPorts().count()+e->node->outputPorts().count(), dtkComposerScenePort::Output, e->node);
+        e->node->addOutputPort(e->port);
+        e->node->layout();
+        break;
+    default:
+        break;
+    };
+
+    e->port->setVisible(true);
+}
+
+void dtkComposerStackCommandCreatePort::undo(void)
+{
+    if(!e->node)
+        return;
+
+    if(!e->port)
+        return;
+
+    if(!d->scene)
+        return;
+
+    if(e->type < 0)
+        return;
+
+    switch(e->type) {
+    case dtkComposerScenePort::Input:
+        e->node->removeInputPort(e->port);
+        e->node->layout();
+        break;
+    case dtkComposerScenePort::Output:
+        e->node->removeOutputPort(e->port);
+        e->node->layout();
+        break;
+    default:
+        break;
+    };
+
+    d->scene->update();
+
+    e->port->setVisible(false);
+}
+
+// /////////////////////////////////////////////////////////////////
+// Unflatten Group Command
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandDestroyPortPrivate
+{
+public:
+    dtkComposerSceneNodeComposite *node;
+    dtkComposerScenePort *port;
+};
+
+dtkComposerStackCommandDestroyPort::dtkComposerStackCommandDestroyPort(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandDestroyPortPrivate)
+{
+    e->node = NULL;
+    e->port = NULL;
+
+    this->setText("Destroy port");
+}
+
+dtkComposerStackCommandDestroyPort::~dtkComposerStackCommandDestroyPort(void)
+{
+    delete e;
+
+    e = NULL;
+}
+
+void dtkComposerStackCommandDestroyPort::setNode(dtkComposerSceneNodeComposite *node)
+{
+    e->node = node;
+}
+
+void dtkComposerStackCommandDestroyPort::setPort(dtkComposerScenePort *port)
+{
+    e->port = port;
+}
+
+void dtkComposerStackCommandDestroyPort::redo(void)
+{
+    if(!e->node)
+        return;
+
+    if(!e->port)
+        return;
+
+    if(!d->scene)
+        return;
+
+    switch(e->port->type()) {
+    case dtkComposerScenePort::Input:
+        e->node->removeInputPort(e->port);
+        e->node->layout();
+        break;
+    case dtkComposerScenePort::Output:
+        e->node->removeOutputPort(e->port);
+        e->node->layout();
+        break;
+    default:
+        break;
+    };
+
+    e->port->setVisible(false);
+
+    d->scene->update();
+}
+
+void dtkComposerStackCommandDestroyPort::undo(void)
+{
+    if(!e->node)
+        return;
+
+    if(!e->port)
+        return;
+
+    switch(e->port->type()) {
+    case dtkComposerScenePort::Input:
+        e->node->addInputPort(e->port);
+        e->node->layout();
+        break;
+    case dtkComposerScenePort::Output:
+        e->node->addOutputPort(e->port);
+        e->node->layout();
+        break;
+    default:
+        break;
+    };
+
+    e->port->setVisible(true);
 }

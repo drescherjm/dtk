@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:08:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  8 11:29:04 2012 (+0100)
+ * Last-Updated: Wed Feb  8 14:02:44 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 14
+ *     Update #: 18
  */
 
 /* Commentary: 
@@ -25,6 +25,7 @@
 class dtkComposerScene;
 class dtkComposerSceneNode;
 class dtkComposerSceneNodeEditorPrivate;
+class dtkComposerStack;
 
 class dtkComposerSceneNodeEditor : public QWidget
 {
@@ -37,6 +38,7 @@ public:
 public slots:
     void setNode(dtkComposerSceneNode *node);
     void setScene(dtkComposerScene *scene);
+    void setStack(dtkComposerStack *stack);
 
 public slots:
     void clear(void);

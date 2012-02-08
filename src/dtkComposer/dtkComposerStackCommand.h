@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb  7 15:54:17 2012 (+0100)
+ * Last-Updated: Wed Feb  8 13:44:30 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 104
+ *     Update #: 113
  */
 
 /* Commentary: 
@@ -327,6 +327,54 @@ public:
 
 private:
     dtkComposerStackCommandUnflattenGroupPrivate *e;
+};
+
+// /////////////////////////////////////////////////////////////////
+// Create Port Command
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandCreatePortPrivate;
+
+class dtkComposerStackCommandCreatePort : public dtkComposerStackCommand
+{
+public:
+     dtkComposerStackCommandCreatePort(dtkComposerStackCommand *parent = 0);
+    ~dtkComposerStackCommandCreatePort(void);
+
+public:
+    void setNode(dtkComposerSceneNodeComposite *node);
+    void setType(int type);
+
+public:
+    void redo(void);
+    void undo(void);
+
+private:
+    dtkComposerStackCommandCreatePortPrivate *e;
+};
+
+// /////////////////////////////////////////////////////////////////
+// Destroy Port Command
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandDestroyPortPrivate;
+
+class dtkComposerStackCommandDestroyPort : public dtkComposerStackCommand
+{
+public:
+     dtkComposerStackCommandDestroyPort(dtkComposerStackCommand *parent = 0);
+    ~dtkComposerStackCommandDestroyPort(void);
+
+public:
+    void setNode(dtkComposerSceneNodeComposite *node);
+    void setPort(dtkComposerScenePort *port);
+
+public:
+    void redo(void);
+    void undo(void);
+
+private:
+    dtkComposerStackCommandDestroyPortPrivate *e;
 };
 
 #endif

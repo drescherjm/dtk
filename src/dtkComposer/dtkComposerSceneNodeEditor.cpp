@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  8 11:29:46 2012 (+0100)
+ * Last-Updated: Wed Feb  8 14:16:36 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 147
+ *     Update #: 202
  */
 
 /* Commentary: 
@@ -23,6 +23,8 @@
 #include "dtkComposerSceneNodeEditor.h"
 #include "dtkComposerSceneNodeEditor_p.h"
 #include "dtkComposerScenePort.h"
+#include "dtkComposerStack.h"
+#include "dtkComposerStackCommand.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerSceneNodeEditorList
@@ -185,6 +187,11 @@ void dtkComposerSceneNodeEditor::setScene(dtkComposerScene *scene)
     connect(d->scene, SIGNAL(selectionCleared()), this, SLOT(clear()));
 }
 
+void dtkComposerSceneNodeEditor::setStack(dtkComposerStack *stack)
+{
+    d->stack = stack;
+}
+
 void dtkComposerSceneNodeEditor::clear(void)
 {
     d->node = NULL;
@@ -201,20 +208,58 @@ void dtkComposerSceneNodeEditor::clear(void)
 
 void dtkComposerSceneNodeEditor::addInputPort(void)
 {
-    qDebug() << __func__;
+    dtkComposerStackCommandCreatePort *command = new dtkComposerStackCommandCreatePort;
+    command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(d->node));
+    command->setScene(d->scene);
+    command->setType(dtkComposerScenePort::Input);
+
+    d->stack->push(command);
+
+    this->setNode(d->node);
 }
 
 void dtkComposerSceneNodeEditor::removeInputPort(void)
 {
-    qDebug() << __func__;
+    dtkComposerSceneNodeEditorListItem *item = dynamic_cast<dtkComposerSceneNodeEditorListItem *>(d->input_ports->currentItem());
+
+    if(!item)
+        return;
+
+    dtkComposerStackCommandDestroyPort *command = new dtkComposerStackCommandDestroyPort;
+    command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(d->node));
+    command->setPort(item->port());
+    command->setScene(d->scene);
+
+    d->stack->push(command);
+
+    this->setNode(d->node);
 }
 
 void dtkComposerSceneNodeEditor::addOutputPort(void)
 {
-    qDebug() << __func__;
+    dtkComposerStackCommandCreatePort *command = new dtkComposerStackCommandCreatePort;
+    command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(d->node));
+    command->setScene(d->scene);
+    command->setType(dtkComposerScenePort::Output);
+
+    d->stack->push(command);
+
+    this->setNode(d->node);
 }
 
 void dtkComposerSceneNodeEditor::removeOutputPort(void)
 {
-    qDebug() << __func__;
+    dtkComposerSceneNodeEditorListItem *item = dynamic_cast<dtkComposerSceneNodeEditorListItem *>(d->output_ports->currentItem());
+
+    if(!item)
+        return;
+
+    dtkComposerStackCommandDestroyPort *command = new dtkComposerStackCommandDestroyPort;
+    command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(d->node));
+    command->setPort(item->port());
+    command->setScene(d->scene);
+
+    d->stack->push(command);
+
+    this->setNode(d->node);
 }

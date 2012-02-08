@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  8 15:14:44 2012 (+0100)
+ * Last-Updated: Wed Feb  8 16:08:42 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 247
+ *     Update #: 250
  */
 
 /* Commentary: 
@@ -109,6 +109,11 @@ dtkComposerSceneNodeList dtkComposerSceneNodeComposite::nodes(void)
 dtkComposerSceneEdgeList dtkComposerSceneNodeComposite::edges(void)
 {
     return d->edges;
+}
+
+QString dtkComposerSceneNodeComposite::type(void)
+{
+    return "composite";
 }
 
 bool dtkComposerSceneNodeComposite::entered(void)

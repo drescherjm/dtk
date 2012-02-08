@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:32:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb  7 23:27:22 2012 (+0100)
+ * Last-Updated: Wed Feb  8 16:07:58 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 33
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -49,6 +49,9 @@ public:
     dtkComposerSceneNoteList notes(void);
     dtkComposerSceneNodeList nodes(void);
     dtkComposerSceneEdgeList edges(void);
+
+public:
+    QString type(void);
 
 public:
     bool entered(void);

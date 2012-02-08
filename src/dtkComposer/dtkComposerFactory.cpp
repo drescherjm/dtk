@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Fri Feb  3 13:58:15 2012 (+0100)
+ * Last-Updated: Wed Feb  8 16:02:53 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 30
+ *     Update #: 39
  */
 
 /* Commentary:
@@ -29,9 +29,7 @@ public:
 
 dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 {
-    d->nodes.insert("Node A", "typeA");
-    d->nodes.insert("Node B", "typeB");
-    d->nodes.insert("Node C", "typeC");
+    d->nodes.insert("Node", "leaf");
 }
 
 dtkComposerFactory::~dtkComposerFactory(void)
@@ -43,9 +41,10 @@ dtkComposerFactory::~dtkComposerFactory(void)
 
 dtkComposerSceneNode *dtkComposerFactory::create(const QString& type)
 {
-    Q_UNUSED(type);
+    if(type == "leaf")
+        return new dtkComposerSceneNodeLeaf;
 
-    return new dtkComposerSceneNodeLeaf;
+    return NULL;
 }
 
 QHash<QString, QString> dtkComposerFactory::nodes(void)

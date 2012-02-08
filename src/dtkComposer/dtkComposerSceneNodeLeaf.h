@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:34:45 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  3 14:14:26 2012 (+0100)
+ * Last-Updated: Wed Feb  8 16:06:15 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 3
+ *     Update #: 4
  */
 
 /* Commentary: 
@@ -29,6 +29,9 @@ class dtkComposerSceneNodeLeaf : public dtkComposerSceneNode
 public:
      dtkComposerSceneNodeLeaf(void);
     ~dtkComposerSceneNodeLeaf(void);
+
+public:
+    virtual QString type(void);
 
 public:
     void layout(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  1 12:37:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  8 10:17:14 2012 (+0100)
+ * Last-Updated: Thu Feb  9 14:55:38 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 31
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -25,6 +25,7 @@
 
 class dtkComposer;
 class dtkComposerFactoryView;
+class dtkComposerGraphView;
 class dtkComposerSceneModel;
 class dtkComposerSceneNodeEditor;
 class dtkComposerSceneView;
@@ -54,6 +55,7 @@ public slots:
 public:
     dtkComposer *composer;
     dtkComposerFactoryView *nodes;
+    dtkComposerGraphView *graph;
     dtkComposerSceneModel *model;
     dtkComposerSceneNodeEditor *editor;
     dtkComposerSceneView *scene;
@@ -66,6 +68,9 @@ public:
     QAction *composition_saveas_action;
     QAction *composition_insert_action;
     QAction *composition_quit_action;
+
+    QMenu *graph_menu;
+    QAction *graph_show_action;
 
     QMenu *edit_menu;
     QAction *undo_action;

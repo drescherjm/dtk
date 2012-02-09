@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:11:39
  * Version: $Id$
- * Last-Updated: Wed Feb  8 10:39:18 2012 (+0100)
+ * Last-Updated: Thu Feb  9 15:45:32 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 112
+ *     Update #: 115
  */
 
 /* Commentary:
@@ -26,6 +26,7 @@
 
 class dtkComposerMachine;
 class dtkComposerFactory;
+class dtkComposerGraph;
 class dtkComposerSceneEdge;
 class dtkComposerSceneNode;
 class dtkComposerSceneNodeComposite;
@@ -46,6 +47,7 @@ public:
     void setFactory(dtkComposerFactory *factory);
     void setMachine(dtkComposerMachine *machine);
     void setStack(dtkComposerStack *stack);
+    void setGraph(dtkComposerGraph *graph);
 
 public:
     void    addNode(dtkComposerSceneNode *node);

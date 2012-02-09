@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Wed Feb  8 10:58:49 2012 (+0100)
+ * Last-Updated: Thu Feb  9 16:03:50 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1242
+ *     Update #: 1247
  */
 
 /* Commentary:
@@ -35,6 +35,7 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
     d->factory = NULL;
     d->machine = NULL;
     d->stack = NULL;
+    d->graph = NULL;
 
     d->root_node = new dtkComposerSceneNodeComposite;
     d->root_node->setRoot(true);
@@ -65,6 +66,11 @@ void dtkComposerScene::setMachine(dtkComposerMachine *machine)
 void dtkComposerScene::setStack(dtkComposerStack *stack)
 {
     d->stack = stack;
+}
+
+void dtkComposerScene::setGraph(dtkComposerGraph *graph)
+{
+    d->graph = graph;
 }
 
 void dtkComposerScene::addNode(dtkComposerSceneNode *node)
@@ -218,6 +224,7 @@ void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
         dtkComposerStackCommandCreateNode *command = new dtkComposerStackCommandCreateNode;
         command->setFactory(d->factory);
         command->setScene(this);
+        command->setGraph(d->graph);
         command->setPosition(event->scenePos());
         command->setType(url.path());
         command->setName(name);

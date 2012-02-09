@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Feb  8 13:34:06 2012 (+0100)
+ * Last-Updated: Thu Feb  9 16:25:50 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 814
+ *     Update #: 847
  */
 
 /* Commentary: 
@@ -22,6 +22,8 @@
 
 #include <dtkComposer/dtkComposer.h>
 #include <dtkComposer/dtkComposerFactoryView.h>
+#include <dtkComposer/dtkComposerGraph.h>
+#include <dtkComposer/dtkComposerGraphView.h>
 #include <dtkComposer/dtkComposerScene.h>
 #include <dtkComposer/dtkComposerSceneModel.h>
 #include <dtkComposer/dtkComposerSceneNodeEditor.h>
@@ -109,6 +111,10 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->nodes->setFixedWidth(300);
     d->nodes->setFactory(d->composer->factory());
 
+    d->graph = new dtkComposerGraphView;
+    d->graph->setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
+    d->graph->setScene(d->composer->graph());
+
     d->closing = false;
 
     // Menus & Actions
@@ -152,6 +158,12 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->edit_menu->addAction(d->undo_action);
     d->edit_menu->addAction(d->redo_action);
 
+    d->graph_show_action = new QAction("Show", this);
+    d->graph_show_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_G);
+
+    d->graph_menu = menu_bar->addMenu("Graph");
+    d->graph_menu->addAction(d->graph_show_action);
+
     // Connections
 
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(close()));
@@ -168,6 +180,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     // connect(d->undo_action, SIGNAL(triggered()), d->composer->stack(), SLOT(undo()));
     // connect(d->redo_action, SIGNAL(triggered()), d->composer->stack(), SLOT(redo()));
+
+    connect(d->graph_show_action, SIGNAL(triggered()), this, SLOT(showGraph()));
 
     // Layout
 
@@ -334,6 +348,13 @@ bool dtkCreatorMainWindow::compositionInsert(const QString& file)
         this->setWindowModified(true);
 
     return status;
+}
+
+void dtkCreatorMainWindow::showGraph(void)
+{
+    d->graph->resize(200, 200);
+    d->graph->show();
+    d->graph->raise();
 }
 
 void dtkCreatorMainWindow::closeEvent(QCloseEvent *event)

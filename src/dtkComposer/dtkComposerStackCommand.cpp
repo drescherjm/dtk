@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  8 15:05:21 2012 (+0100)
+ * Last-Updated: Thu Feb  9 16:18:22 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1239
+ *     Update #: 1279
  */
 
 /* Commentary: 
@@ -18,6 +18,8 @@
  */
 
 #include "dtkComposerFactory.h"
+#include "dtkComposerGraph.h"
+#include "dtkComposerGraphNode.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
 #include "dtkComposerSceneEdge.h"
@@ -37,12 +39,14 @@ class dtkComposerStackCommandPrivate
 public:
     dtkComposerFactory *factory;
     dtkComposerScene *scene;
+    dtkComposerGraph *graph;
 };
 
 dtkComposerStackCommand::dtkComposerStackCommand(dtkComposerStackCommand *parent) : QUndoCommand(parent), d(new dtkComposerStackCommandPrivate)
 {
     d->factory = NULL;
     d->scene = NULL;
+    d->graph = NULL;
 }
 
 dtkComposerStackCommand::~dtkComposerStackCommand(void)
@@ -60,6 +64,11 @@ void dtkComposerStackCommand::setFactory(dtkComposerFactory *factory)
 void dtkComposerStackCommand::setScene(dtkComposerScene *scene)
 {
     d->scene = scene;
+}
+
+void dtkComposerStackCommand::setGraph(dtkComposerGraph *graph)
+{
+    d->graph = graph;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -115,6 +124,9 @@ void dtkComposerStackCommandCreateNode::redo(void)
     if(!d->scene)
         return;
 
+    if(!d->graph)
+        return;
+
     if(e->type.isEmpty())
         return;
 
@@ -122,10 +134,11 @@ void dtkComposerStackCommandCreateNode::redo(void)
         e->node = d->factory->create(e->type);
         e->node->setParent(d->scene->current());
     }
-
+    
     e->node->setPos(e->position);
 
     d->scene->addNode(e->node);
+    d->graph->addNode(e->node);
 
 // --
 
@@ -135,12 +148,19 @@ void dtkComposerStackCommandCreateNode::redo(void)
 
 void dtkComposerStackCommandCreateNode::undo(void)
 {
+    if(!d->scene)
+        return;
+
+    if(!d->graph)
+        return;
+
     if(!e->node)
         return;
 
     e->position = e->node->scenePos();
 
     d->scene->removeNode(e->node);
+    d->graph->removeNode(e->node);
 }
 
 // /////////////////////////////////////////////////////////////////

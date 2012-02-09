@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  8 13:44:30 2012 (+0100)
+ * Last-Updated: Thu Feb  9 16:07:30 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 113
+ *     Update #: 116
  */
 
 /* Commentary: 
@@ -24,6 +24,7 @@
 #include <QtGui>
 
 class dtkComposerFactory;
+class dtkComposerGraph;
 class dtkComposerScene;
 class dtkComposerSceneEdge;
 class dtkComposerSceneEdgeList;
@@ -44,6 +45,7 @@ public:
 public:
     void setFactory(dtkComposerFactory *factory);
     void setScene(dtkComposerScene *scene);
+    void setGraph(dtkComposerGraph *graph);
 
 protected:
     dtkComposerStackCommandPrivate *d;

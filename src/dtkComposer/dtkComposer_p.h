@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:35:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  1 13:40:28 2012 (+0100)
+ * Last-Updated: Thu Feb  9 14:49:57 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 53
+ *     Update #: 55
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include <QtCore>
 
 class dtkComposerFactory;
+class dtkComposerGraph;
 class dtkComposerMachine;
 class dtkComposerScene;
 class dtkComposerStack;
@@ -40,6 +41,7 @@ public slots:
 
 public:
     dtkComposerFactory *factory;
+    dtkComposerGraph *graph;
     dtkComposerMachine *machine;
     dtkComposerScene *scene;
     dtkComposerStack *stack;

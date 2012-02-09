@@ -893,6 +893,11 @@ void dtkFinderTreeView::startDrag(Qt::DropActions supportedActions)
     }
 }
 
+void dtkFinderTreeView::resizeEvent(QResizeEvent *event)
+{
+    this->setColumnWidth(0, this->width() / 2);
+}
+
 // /////////////////////////////////////////////////////////////////
 // dtkFinder
 // /////////////////////////////////////////////////////////////////

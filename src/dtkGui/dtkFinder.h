@@ -206,6 +206,7 @@ protected:
      void keyPressEvent(QKeyEvent *event);
      void mouseDoubleClickEvent(QMouseEvent *event);
      void startDrag(Qt::DropActions supportedActions);
+     void resizeEvent(QResizeEvent * event);
 
 private:
      dtkFinderTreeViewPrivate *d;

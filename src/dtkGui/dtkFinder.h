@@ -45,6 +45,7 @@ signals:
     void changed(const QString& path);
     void listView (void);
     void treeView (void);
+    void showHiddenFiles(bool);
 
 public slots:
     void setPath(const QString& path);
@@ -244,6 +245,7 @@ public slots:
     void setPath(const QString& path);
     void switchToListView(void);
     void switchToTreeView(void);
+    void onShowHiddenFiles(bool);
 
     /** Bookmarks the currently selected item. */
     void onBookmarkSelectedItemRequested(void);

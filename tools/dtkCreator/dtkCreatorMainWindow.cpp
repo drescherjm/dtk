@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb  9 16:25:50 2012 (+0100)
+ * Last-Updated: Thu Feb  9 16:47:21 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 847
+ *     Update #: 848
  */
 
 /* Commentary: 
@@ -111,7 +111,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->nodes->setFixedWidth(300);
     d->nodes->setFactory(d->composer->factory());
 
-    d->graph = new dtkComposerGraphView;
+    d->graph = new dtkComposerGraphView(this);
     d->graph->setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
     d->graph->setScene(d->composer->graph());
 

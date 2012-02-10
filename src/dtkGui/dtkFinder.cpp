@@ -90,6 +90,11 @@ dtkFinderToolBar::dtkFinderToolBar(QWidget *parent) : QToolBar(parent), d(new dt
     connect (d->treeViewButton, SIGNAL (clicked()), this, SIGNAL (treeView()));
 
     connect (d->showHiddenFilesButton, SIGNAL(toggled(bool)), this, SIGNAL(showHiddenFiles(bool)));
+
+    //By default the showHiddenFilesButton is enabled in MacOS
+#ifdef Q_WS_MAC
+    d->showHiddenFilesButton->setChecked(Qt::Checked);
+#endif
 }
 
 dtkFinderToolBar::~dtkFinderToolBar(void)

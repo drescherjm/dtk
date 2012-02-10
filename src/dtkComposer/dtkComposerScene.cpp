@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Thu Feb  9 16:03:50 2012 (+0100)
+ * Last-Updated: Fri Feb 10 12:45:29 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1247
+ *     Update #: 1248
  */
 
 /* Commentary:
@@ -429,6 +429,7 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     if(d->current_edge->link()) {
 
         dtkComposerStackCommandCreateEdge *command = new dtkComposerStackCommandCreateEdge;
+        command->setGraph(d->graph);
         command->setScene(this);
         command->setSource(d->current_edge->source());
         command->setDestination(d->current_edge->destination());

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  9 16:18:22 2012 (+0100)
+ * Last-Updated: Fri Feb 10 12:46:33 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1279
+ *     Update #: 1283
  */
 
 /* Commentary: 
@@ -280,6 +280,9 @@ void dtkComposerStackCommandCreateEdge::setDestination(dtkComposerScenePort *des
 
 void dtkComposerStackCommandCreateEdge::redo(void)
 {
+    if(!d->graph)
+        return;
+
     if(!d->scene)
         return;
 
@@ -299,6 +302,7 @@ void dtkComposerStackCommandCreateEdge::redo(void)
     e->edge->link();
 
     d->scene->addEdge(e->edge);
+    d->graph->addEdge(e->edge);
 }
 
 void dtkComposerStackCommandCreateEdge::undo(void)
@@ -312,6 +316,7 @@ void dtkComposerStackCommandCreateEdge::undo(void)
     e->edge->unlink();
 
     d->scene->removeEdge(e->edge);
+    d->graph->removeEdge(e->edge);
 }
 
 // /////////////////////////////////////////////////////////////////

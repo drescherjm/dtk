@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 10 12:43:14 2012 (+0100)
+ * Last-Updated: Fri Feb 10 13:47:06 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 212
+ *     Update #: 213
  */
 
 /* Commentary: 
@@ -113,6 +113,9 @@ void dtkComposerGraph::addEdge(dtkComposerSceneEdge *edge)
 
 void dtkComposerGraph::removeEdge(dtkComposerSceneEdge *edge)
 {
+    if(!d->edges.contains(edge))
+        return;
+
     dtkComposerGraphEdge *e = d->edges.value(edge);
     
     d->edges.remove(edge);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  9 15:31:49 2012 (+0100)
+ * Last-Updated: Fri Feb 10 12:38:04 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 46
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -42,6 +42,16 @@ dtkComposerGraphEdge::~dtkComposerGraphEdge(void)
     d = NULL;
 }
 
+dtkComposerGraphNode *dtkComposerGraphEdge::source(void)
+{
+    return d->source;
+}
+
+dtkComposerGraphNode *dtkComposerGraphEdge::destination(void)
+{
+    return d->destination;
+}
+
 void dtkComposerGraphEdge::setSource(dtkComposerGraphNode *source)
 {
     d->source = source;
@@ -72,4 +82,18 @@ void dtkComposerGraphEdge::paint(QPainter *painter, const QStyleOptionGraphicsIt
     QPointF e = d->destination->sceneBoundingRect().center();
 
     painter->drawLine(s, e);
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerGraphEdgeList
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerGraphEdgeList::dtkComposerGraphEdgeList(void) : QList<dtkComposerGraphEdge *>()
+{
+
+}
+
+dtkComposerGraphEdgeList::dtkComposerGraphEdgeList(const QList<dtkComposerGraphEdge *>& other) : QList<dtkComposerGraphEdge *>(other)
+{
+
 }

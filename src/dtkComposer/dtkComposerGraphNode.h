@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:08:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  9 15:59:04 2012 (+0100)
+ * Last-Updated: Fri Feb 10 12:18:01 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 22
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -49,6 +49,11 @@ private:
 // dtkComposerGraphNodeList
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerGraphNodeList : public QList<dtkComposerGraphNode *> {};
+class dtkComposerGraphNodeList : public QList<dtkComposerGraphNode *>
+{
+public:
+    dtkComposerGraphNodeList(void);
+    dtkComposerGraphNodeList(const QList<dtkComposerGraphNode *>& other);
+};
 
 #endif

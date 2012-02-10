@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  9 16:32:31 2012 (+0100)
+ * Last-Updated: Fri Feb 10 12:43:14 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 127
+ *     Update #: 212
  */
 
 /* Commentary: 
@@ -19,43 +19,45 @@
 
 #include "dtkComposerGraph.h"
 #include "dtkComposerGraphEdge.h"
+#include "dtkComposerGraphLayouter.h"
 #include "dtkComposerGraphNode.h"
 #include "dtkComposerSceneEdge.h"
 #include "dtkComposerSceneNode.h"
+#include "dtkComposerScenePort.h"
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerGraphPrivate
+// /////////////////////////////////////////////////////////////////
 
 class dtkComposerGraphPrivate
 {
+public:
+    bool exists(dtkComposerSceneEdge *edge);
+
 public:
     QHash<dtkComposerSceneEdge *, dtkComposerGraphEdge *> edges;
     QHash<dtkComposerSceneNode *, dtkComposerGraphNode *> nodes;
 };
 
+bool dtkComposerGraphPrivate::exists(dtkComposerSceneEdge *edge)
+{
+    dtkComposerGraphNode *s = this->nodes.value(edge->source()->node());
+    dtkComposerGraphNode *d = this->nodes.value(edge->destination()->node());
+
+    foreach(dtkComposerGraphEdge *e, this->edges)
+        if(e->source() == s && e->destination() == d)
+            return true;
+
+    return false;
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerGraph
+// /////////////////////////////////////////////////////////////////
+
 dtkComposerGraph::dtkComposerGraph(void) : QGraphicsScene(),d(new dtkComposerGraphPrivate)
 {
-    // dtkComposerGraphNode *n1 = new dtkComposerGraphNode;
-    // n1->setPos(-100, 0);
-
-    // dtkComposerGraphNode *n2 = new dtkComposerGraphNode;
-    // n2->setPos(100, 0);
-
-    // dtkComposerGraphNode *n3 = new dtkComposerGraphNode;
-    // n3->setPos(0, 200);
-
-    // dtkComposerGraphEdge *e1 = new dtkComposerGraphEdge;
-    // e1->setSource(n1);
-    // e1->setDestination(n3);
-
-    // dtkComposerGraphEdge *e2 = new dtkComposerGraphEdge;
-    // e2->setSource(n2);
-    // e2->setDestination(n3);
-
-    // this->addNode(n1);
-    // this->addNode(n2);
-    // this->addNode(n3);
-    // this->addEdge(e1);
-    // this->addEdge(e2);
-
-    connect(this, SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));
+    this->connect(this, SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));
 }
 
 dtkComposerGraph::~dtkComposerGraph(void)
@@ -87,54 +89,55 @@ void dtkComposerGraph::removeNode(dtkComposerSceneNode *node)
     this->layout();
 }
 
-// void dtkComposerGraph::addEdge(dtkComposerGraphEdge *edge)
-// {
-//     d->edges << edge;
+void dtkComposerGraph::addEdge(dtkComposerSceneEdge *edge)
+{
+    if(!d->nodes.contains(edge->source()->node()))
+        return;
+    
+    if(!d->nodes.contains(edge->destination()->node()))
+        return;
 
-//     this->addItem(edge);
+    if(d->exists(edge))
+        return;
 
-//     this->layout();
-// }
+    dtkComposerGraphEdge *e = new dtkComposerGraphEdge;
+    e->setSource(d->nodes.value(edge->source()->node()));
+    e->setDestination(d->nodes.value(edge->destination()->node()));
+    
+    d->edges.insert(edge, e);
 
-// void dtkComposerGraph::removeEdge(dtkComposerGraphEdge *edge)
-// {
-//     d->edges.removeAll(edge);
+    this->addItem(e);
 
-//     this->removeItem(edge);
+    this->layout();
+}
 
-//     this->layout();
-// }
+void dtkComposerGraph::removeEdge(dtkComposerSceneEdge *edge)
+{
+    dtkComposerGraphEdge *e = d->edges.value(edge);
+    
+    d->edges.remove(edge);
 
-// void dtkComposerGraph::addNode(dtkComposerGraphNode *node)
-// {
-//     d->nodes << node;
+    this->removeItem(e);
 
-//     this->addItem(node);
+    this->layout();
+}
 
-//     this->layout();
-// }
+dtkComposerGraphEdgeList dtkComposerGraph::edges(void)
+{
+    return dtkComposerGraphEdgeList(d->edges.values());
+}
 
-// void dtkComposerGraph::removeNode(dtkComposerGraphNode *node)
-// {
-//     d->nodes.removeAll(node);
-
-//     this->removeItem(node);
-
-//     this->layout();
-// }
-
-// dtkComposerGraphEdgeList dtkComposerGraph::edges(void)
-// {
-//     return d->edges;
-// }
-
-// dtkComposerGraphNodeList dtkComposerGraph::nodes(void)
-// {
-//     return d->nodes;
-// }
+dtkComposerGraphNodeList dtkComposerGraph::nodes(void)
+{
+    return dtkComposerGraphNodeList(d->nodes.values());
+}
 
 void dtkComposerGraph::layout(void)
 {
+    dtkComposerGraphLayouter layouter;
+    layouter.setGraph(this);
+    layouter.layout();
+
     this->update();
 }
 

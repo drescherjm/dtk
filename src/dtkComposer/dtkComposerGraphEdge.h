@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:08:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  9 15:59:01 2012 (+0100)
+ * Last-Updated: Fri Feb 10 12:37:21 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 17
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -37,6 +37,10 @@ public:
     ~dtkComposerGraphEdge(void);
 
 public:
+    dtkComposerGraphNode *source(void);
+    dtkComposerGraphNode *destination(void);
+
+public:
     void setSource(dtkComposerGraphNode *source);
     void setDestination(dtkComposerGraphNode *destination);
 
@@ -54,6 +58,11 @@ private:
 // dtkComposerGraphEdgeList
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerGraphEdgeList : public QList<dtkComposerGraphEdge *> {};
+class dtkComposerGraphEdgeList : public QList<dtkComposerGraphEdge *>
+{
+public:
+    dtkComposerGraphEdgeList(void);
+    dtkComposerGraphEdgeList(const QList<dtkComposerGraphEdge *>& other);
+};
 
 #endif

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:42:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  9 16:34:47 2012 (+0100)
+ * Last-Updated: Fri Feb 10 12:22:44 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 38
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -42,15 +42,12 @@ public:
     void    addNode(dtkComposerSceneNode *node);
     void removeNode(dtkComposerSceneNode *node);
 
-// public:
-//     void    addEdge(dtkComposerGraphEdge *edge);
-//     void removeEdge(dtkComposerGraphEdge *edge);
+    void    addEdge(dtkComposerSceneEdge *edge);
+    void removeEdge(dtkComposerSceneEdge *edge);
 
-//     void    addNode(dtkComposerGraphNode *node);
-//     void removeNode(dtkComposerGraphNode *node);
-
-//     dtkComposerGraphEdgeList edges(void);
-//     dtkComposerGraphNodeList nodes(void);
+public:
+    dtkComposerGraphEdgeList edges(void);
+    dtkComposerGraphNodeList nodes(void);
 
 public:
     void layout(void);

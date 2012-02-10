@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  9 16:38:08 2012 (+0100)
+ * Last-Updated: Fri Feb 10 12:18:08 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 23
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -53,4 +53,18 @@ void dtkComposerGraphNode::paint(QPainter *painter, const QStyleOptionGraphicsIt
         painter->setPen(Qt::black);
     painter->setBrush(Qt::white);
     painter->drawRect(this->boundingRect());
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerGraphNodeList
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerGraphNodeList::dtkComposerGraphNodeList(void) : QList<dtkComposerGraphNode *>()
+{
+
+}
+
+dtkComposerGraphNodeList::dtkComposerGraphNodeList(const QList<dtkComposerGraphNode *>& other) : QList<dtkComposerGraphNode *>(other)
+{
+
 }

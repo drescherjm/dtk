@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:42:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 10 12:22:44 2012 (+0100)
+ * Last-Updated: Sat Feb 11 12:35:30 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 44
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -36,6 +36,7 @@ class dtkComposerGraph : public QGraphicsScene
 
 public:
      dtkComposerGraph(void);
+     dtkComposerGraph(const dtkComposerGraph& other);
     ~dtkComposerGraph(void);
 
 public:

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 10 13:47:06 2012 (+0100)
+ * Last-Updated: Sat Feb 11 12:39:14 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 213
+ *     Update #: 218
  */
 
 /* Commentary: 
@@ -55,8 +55,16 @@ bool dtkComposerGraphPrivate::exists(dtkComposerSceneEdge *edge)
 // dtkComposerGraph
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerGraph::dtkComposerGraph(void) : QGraphicsScene(),d(new dtkComposerGraphPrivate)
+dtkComposerGraph::dtkComposerGraph(void) : QGraphicsScene(), d(new dtkComposerGraphPrivate)
 {
+    this->connect(this, SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));
+}
+
+dtkComposerGraph::dtkComposerGraph(const dtkComposerGraph& other) : QGraphicsScene(), d(new dtkComposerGraphPrivate)
+{
+    d->edges = QHash<dtkComposerSceneEdge *, dtkComposerGraphEdge *>(other.d->edges);
+    d->nodes = QHash<dtkComposerSceneNode *, dtkComposerGraphNode *>(other.d->nodes);
+
     this->connect(this, SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));
 }
 

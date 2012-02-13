@@ -158,9 +158,11 @@ signals:
     void changed(const QString& path);
     void bookmarked(const QString& path);
 
+public slots:
+    void onBookmarkSelectedItemRequested(void);
+
 protected slots:
     void updateContextMenu(const QPoint&);
-    void onBookmarkContextMenuClicked(void);
 
 protected:
      void keyPressEvent(QKeyEvent *event);
@@ -197,9 +199,11 @@ signals:
     void changed(const QString& path);
     void bookmarked(const QString& path);
 
+public slots:
+    void onBookmarkSelectedItemRequested(void);
+
 protected slots:
     void updateContextMenu(const QPoint&);
-    void onBookmarkContextMenuClicked(void);
 
 protected:
      void keyPressEvent(QKeyEvent *event);
@@ -234,14 +238,19 @@ signals:
     void changed(const QString& path);
     void bookmarked(const QString& path);
     void fileDoubleClicked(const QString &filename);
+    void itemSelected(const QString& path);
 
 public slots:
     void setPath(const QString& path);
     void switchToListView(void);
     void switchToTreeView(void);
 
+    /** Bookmarks the currently selected item. */
+    void onBookmarkSelectedItemRequested(void);
+
 protected slots:
     void onIndexDoubleClicked(QModelIndex);
+    void onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
 private:
     dtkFinderPrivate *d;

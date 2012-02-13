@@ -70,7 +70,11 @@ dtkFinderToolBar::dtkFinderToolBar(QWidget *parent) : QToolBar(parent), d(new dt
     d->showHiddenFilesButton->setCheckable(true);
     d->showHiddenFilesButton->setIcon(QIcon(":dtkGui/pixmaps/dtk-anchored-bar-action.png"));
     d->showHiddenFilesButton->setIconSize(QSize(16, 16));
-    d->showHiddenFilesButton->setToolTip(tr("Show hidden files"));
+    d->showHiddenFilesButton->setToolTip(tr("Show/Hide hidden files"));
+    //By default the showHiddenFilesButton is enabled in MacOS
+#ifdef Q_WS_MAC
+    d->showHiddenFilesButton->setChecked(Qt::Checked);
+#endif
     
     QButtonGroup *viewButtonGroup = new QButtonGroup (this);
     viewButtonGroup->setExclusive (true);
@@ -90,11 +94,6 @@ dtkFinderToolBar::dtkFinderToolBar(QWidget *parent) : QToolBar(parent), d(new dt
     connect (d->treeViewButton, SIGNAL (clicked()), this, SIGNAL (treeView()));
 
     connect (d->showHiddenFilesButton, SIGNAL(toggled(bool)), this, SIGNAL(showHiddenFiles(bool)));
-
-    //By default the showHiddenFilesButton is enabled in MacOS
-#ifdef Q_WS_MAC
-    d->showHiddenFilesButton->setChecked(Qt::Checked);
-#endif
 }
 
 dtkFinderToolBar::~dtkFinderToolBar(void)
@@ -922,6 +921,10 @@ dtkFinder::dtkFinder(QWidget *parent) : QWidget(parent), d(new dtkFinderPrivate)
 {
     d->model = new QFileSystemModel(this);
     d->model->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
+    //By default the showHiddenFilesButton is enabled in MacOS
+#ifdef Q_WS_MAC
+    d->model->setFilter(QDir::AllEntries | QDir::Hidden | QDir::NoDotAndDotDot);
+#endif
     d->model->setRootPath(QDir::rootPath());
 
     d->list = new dtkFinderListView(this);

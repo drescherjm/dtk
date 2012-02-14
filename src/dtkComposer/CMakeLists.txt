@@ -1,20 +1,20 @@
-### CMakeLists.txt --- 
-## 
+### CMakeLists.txt ---
+##
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: mar. févr. 14 16:30:46 2012 (+0100)
+## Last-Updated: mar. févr. 14 16:42:26 2012 (+0100)
 ##           By: Nicolas Niclausse
-##     Update #: 339
+##     Update #: 346
 ######################################################################
-## 
-### Commentary: 
-## 
+##
+### Commentary:
+##
 ######################################################################
-## 
+##
 ### Change log:
-## 
+##
 ######################################################################
 
 project(dtkComposer)
@@ -47,6 +47,9 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerGraphView.h
   dtkComposerMachine.h
   dtkComposerMachineState.h
+  dtkComposerNode.h
+  dtkComposerNodeControl.h
+  dtkComposerNodeLeaf.h
   dtkComposerReceiver.h
   dtkComposerReceiver.tpp
   dtkComposerScene.h
@@ -55,7 +58,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerSceneNode.h
   dtkComposerSceneNodeComposite.h
   dtkComposerSceneNodeControl.h
-  dtkComposerSceneNodeControlIf.h
   dtkComposerSceneNodeEditor.h
   dtkComposerSceneNodeLeaf.h
   dtkComposerSceneNote.h
@@ -107,13 +109,15 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerGraphView.cpp
   dtkComposerMachine.cpp
   dtkComposerMachineState.cpp
+  dtkComposerNode.cpp
+  dtkComposerNodeControl.cpp
+  dtkComposerNodeLeaf.cpp
   dtkComposerScene.cpp
   dtkComposerSceneEdge.cpp
   dtkComposerSceneModel.cpp
   dtkComposerSceneNode.cpp
   dtkComposerSceneNodeComposite.cpp
   dtkComposerSceneNodeControl.cpp
-  dtkComposerSceneNodeControlIf.cpp
   dtkComposerSceneNodeEditor.cpp
   dtkComposerSceneNodeLeaf.cpp
   dtkComposerSceneNote.cpp

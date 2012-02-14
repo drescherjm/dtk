@@ -166,8 +166,7 @@ dtkAbstractData *dtkAbstractDataFactory::create(const QString& type)
 
 dtkSmartPointer<dtkAbstractData> dtkAbstractDataFactory::createSmartPointer(const QString& type)
 {
-    dtkSmartPointer<dtkAbstractData> data;
-    data.takePointer( this->create(type) );
+    dtkSmartPointer<dtkAbstractData> data = this->create(type);
     return data;
 }
 
@@ -183,8 +182,7 @@ dtkAbstractDataReader *dtkAbstractDataFactory::reader(const QString& type)
 
 dtkSmartPointer<dtkAbstractDataReader> dtkAbstractDataFactory::readerSmartPointer(const QString& type)
 {
-    dtkSmartPointer<dtkAbstractDataReader> reader;
-    reader.takePointer( this->reader(type) );
+    dtkSmartPointer<dtkAbstractDataReader> reader = this->reader(type);
     return reader;
 }
 
@@ -200,8 +198,7 @@ dtkAbstractDataWriter *dtkAbstractDataFactory::writer(const QString& type)
 
 dtkSmartPointer<dtkAbstractDataWriter> dtkAbstractDataFactory::writerSmartPointer(const QString& type)
 {
-    dtkSmartPointer<dtkAbstractDataWriter> writer;
-    writer.takePointer( this->writer(type) );
+    dtkSmartPointer<dtkAbstractDataWriter> writer = this->writer(type);
     return writer;
 }
 
@@ -217,8 +214,7 @@ dtkAbstractDataConverter *dtkAbstractDataFactory::converter(const QString& type)
 
 dtkSmartPointer<dtkAbstractDataConverter> dtkAbstractDataFactory::converterSmartPointer(const QString& type)
 {
-    dtkSmartPointer<dtkAbstractDataConverter> converter;
-    converter.takePointer( this->converter(type) );
+    dtkSmartPointer<dtkAbstractDataConverter> converter = this->converter(type);
     return converter;
 }
 

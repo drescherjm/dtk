@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 14 12:50:16 2012 (+0100)
- *           By: tkloczko
- *     Update #: 13
+ * Last-Updated: Tue Feb 14 14:33:14 2012 (+0100)
+ *           By: David Rey
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -30,6 +30,7 @@ class dtkComposerTransmitterPrivate
 {
 public:
     bool active;
+    bool required;
 
     dtkComposerSceneNode *parent;
 };
@@ -41,6 +42,7 @@ public:
 dtkComposerTransmitter::dtkComposerTransmitter(dtkComposerSceneNode *parent) : d(new dtkComposerTransmitterPrivate)
 {
     d->active = true;
+    d->required = true;
     d->parent = parent;
 }
 
@@ -70,6 +72,17 @@ bool dtkComposerTransmitter::active(void)
 {
     return d->active;
 }
+
+void dtkComposerTransmitter::setRequired(bool required)
+{
+    d->required = required;
+}
+
+bool dtkComposerTransmitter::required(void)
+{
+    return d->required;
+}
+
 // /////////////////////////////////////////////////////////////////
 // Debug operators
 // /////////////////////////////////////////////////////////////////

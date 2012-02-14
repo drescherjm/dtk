@@ -48,12 +48,12 @@ public:
  *  The parent of an object may be viewed as the object's owner. The
  *  destructor of a parent object destroys all child objects. Setting
  *  parent to 0 constructs an object with no parent.
- *  The initial reference count is set to 1, and DeferredDeletion is enabled.
+ *  The initial reference count is set to 0, and DeferredDeletion is enabled.
  */
 
 dtkAbstractObject::dtkAbstractObject(dtkAbstractObject *parent) : QObject(parent), d(new dtkAbstractObjectPrivate)
 {
-    d->count = 1;
+    d->count = 0;
 
     d->isDeferredDeletionEnabled = true;
 }
@@ -68,7 +68,7 @@ dtkAbstractObject::dtkAbstractObject(dtkAbstractObject *parent) : QObject(parent
 
 dtkAbstractObject::~dtkAbstractObject(void)
 {
-    if ( (d->count != 0) && (d->count != 1) ){
+    if ( d->count != 0 ){
         dtkDebug() << "Warning : deleting object of type " << this->metaObject()->className() << " with non-zero reference count";
     }
 

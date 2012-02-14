@@ -1,20 +1,20 @@
-/* dtkComposerGraphNode.cpp --- 
- * 
+/* dtkComposerGraphNode.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 14 12:03:56 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 46
+ * Last-Updated: mar. févr. 14 15:41:44 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 64
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerGraphEdge.h"
@@ -25,7 +25,7 @@ class dtkComposerGraphNodePrivate
 public:
 };
 
-dtkComposerGraphNode::dtkComposerGraphNode(void) : QGraphicsItem(),d(new dtkComposerGraphNodePrivate)
+dtkComposerGraphNode::dtkComposerGraphNode() : QGraphicsItem(),d(new dtkComposerGraphNodePrivate)
 {
     this->setFlag(QGraphicsItem::ItemIsSelectable, true);
     this->setZValue(1);
@@ -37,6 +37,7 @@ dtkComposerGraphNode::~dtkComposerGraphNode(void)
 
     d = NULL;
 }
+
 
 QRectF dtkComposerGraphNode::boundingRect(void) const
 {
@@ -54,6 +55,12 @@ void dtkComposerGraphNode::paint(QPainter *painter, const QStyleOptionGraphicsIt
         painter->setPen(Qt::black);
     painter->setBrush(Qt::white);
     painter->drawRect(this->boundingRect());
+}
+
+
+void dtkComposerGraphNode::eval(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
 }
 
 // /////////////////////////////////////////////////////////////////

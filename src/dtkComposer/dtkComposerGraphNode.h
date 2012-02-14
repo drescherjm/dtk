@@ -1,20 +1,20 @@
-/* dtkComposerGraphNode.h --- 
- * 
+/* dtkComposerGraphNode.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:08:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 14 12:03:42 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 33
+ * Last-Updated: mar. févr. 14 15:42:03 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 49
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERGRAPHNODE_H
@@ -40,6 +40,8 @@ public:
 
 public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
+    virtual void eval() ;
 
 private:
     dtkComposerGraphNodePrivate *d;

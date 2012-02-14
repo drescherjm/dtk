@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Feb 14 11:46:00 2012 (+0100)
-##           By: tkloczko
-##     Update #: 338
+## Last-Updated: mar. févr. 14 16:30:46 2012 (+0100)
+##           By: Nicolas Niclausse
+##     Update #: 339
 ######################################################################
 ## 
 ### Commentary: 
@@ -35,6 +35,15 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerGraphEdge.h
   dtkComposerGraphLayouter.h
   dtkComposerGraphNode.h
+  dtkComposerGraphNodeBegin.h
+  dtkComposerGraphNodeEnd.h
+  dtkComposerGraphNode.h
+  dtkComposerGraphNodeLeaf.h
+  dtkComposerGraphNodeSelectBranch.h
+  dtkComposerGraphNodeSetConditions.h
+  dtkComposerGraphNodeSetInputs.h
+  dtkComposerGraphNodeSetOutputs.h
+  dtkComposerGraphNodeSetVariables.h
   dtkComposerGraphView.h
   dtkComposerMachine.h
   dtkComposerMachineState.h
@@ -86,7 +95,15 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerGraph.cpp
   dtkComposerGraphEdge.cpp
   dtkComposerGraphLayouter.cpp
+  dtkComposerGraphNodeBegin.cpp
   dtkComposerGraphNode.cpp
+  dtkComposerGraphNodeEnd.cpp
+  dtkComposerGraphNodeLeaf.cpp
+  dtkComposerGraphNodeSelectBranch.cpp
+  dtkComposerGraphNodeSetConditions.cpp
+  dtkComposerGraphNodeSetInputs.cpp
+  dtkComposerGraphNodeSetOutputs.cpp
+  dtkComposerGraphNodeSetVariables.cpp
   dtkComposerGraphView.cpp
   dtkComposerMachine.cpp
   dtkComposerMachineState.cpp

@@ -1,20 +1,20 @@
-/* dtkComposerGraph.cpp --- 
- * 
+/* dtkComposerGraph.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 14 14:13:03 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 284
+ * Last-Updated: mar. févr. 14 15:43:43 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 291
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerGraph.h"
@@ -37,6 +37,7 @@ public:
 public:
     QHash<dtkComposerSceneEdge *, dtkComposerGraphEdge *> edges;
     QHash<dtkComposerSceneNode *, dtkComposerGraphNode *> nodes;
+
 };
 
 bool dtkComposerGraphPrivate::exists(dtkComposerSceneEdge *edge)
@@ -130,7 +131,7 @@ dtkComposerGraph::~dtkComposerGraph(void)
 void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
 {
     dtkComposerGraphNode *n = new dtkComposerGraphNode;
-    
+
     d->nodes.insert(node, n);
 
     this->addItem(n);
@@ -141,7 +142,7 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
 void dtkComposerGraph::removeNode(dtkComposerSceneNode *node)
 {
     dtkComposerGraphNode *n = d->nodes.value(node);
-    
+
     d->nodes.remove(node);
 
     this->removeItem(n);
@@ -153,7 +154,7 @@ void dtkComposerGraph::addEdge(dtkComposerSceneEdge *edge)
 {
     if(!d->nodes.contains(edge->source()->node()))
         return;
-    
+
     if(!d->nodes.contains(edge->destination()->node()))
         return;
 
@@ -163,7 +164,7 @@ void dtkComposerGraph::addEdge(dtkComposerSceneEdge *edge)
     dtkComposerGraphEdge *e = new dtkComposerGraphEdge;
     e->setSource(d->nodes.value(edge->source()->node()));
     e->setDestination(d->nodes.value(edge->destination()->node()));
-    
+
     d->edges.insert(edge, e);
 
     this->addItem(e);
@@ -177,7 +178,7 @@ void dtkComposerGraph::removeEdge(dtkComposerSceneEdge *edge)
         return;
 
     dtkComposerGraphEdge *e = d->edges.value(edge);
-    
+
     d->edges.remove(edge);
 
     this->removeItem(e);

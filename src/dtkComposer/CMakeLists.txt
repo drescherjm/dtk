@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Feb  1 13:40:42 2012 (+0100)
-##           By: Julien Wintz
-##     Update #: 259
+## Last-Updated: Tue Feb 14 11:46:00 2012 (+0100)
+##           By: tkloczko
+##     Update #: 338
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,52 +24,88 @@ project(dtkComposer)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkComposerAbstractTransmitter.h
   dtkComposer.h
+  dtkComposerEmitter.h
+  dtkComposerEmitter.tpp
   dtkComposerEvaluator.h
   dtkComposerExport.h
   dtkComposerFactory.h
   dtkComposerFactoryView.h
+  dtkComposerGraph.h
+  dtkComposerGraphEdge.h
+  dtkComposerGraphLayouter.h
+  dtkComposerGraphNode.h
+  dtkComposerGraphView.h
   dtkComposerMachine.h
   dtkComposerMachineState.h
-  dtkComposerNode.h
+  dtkComposerReceiver.h
+  dtkComposerReceiver.tpp
   dtkComposerScene.h
+  dtkComposerSceneEdge.h
+  dtkComposerSceneModel.h
+  dtkComposerSceneNode.h
+  dtkComposerSceneNodeComposite.h
+  dtkComposerSceneNodeControl.h
+  dtkComposerSceneNodeControlIf.h
+  dtkComposerSceneNodeEditor.h
+  dtkComposerSceneNodeLeaf.h
+  dtkComposerSceneNote.h
+  dtkComposerScenePort.h
+  dtkComposerSceneView.h
   dtkComposerStack.h
   dtkComposerStackCommand.h
   dtkComposerStackView.h
   dtkComposerTransmitter.h
-  dtkComposerTransmitter.tpp
   dtkComposerView.h
   dtkComposerReader.h
   dtkComposerWriter.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
-  dtkComposerAbstractTransmitter.h
   dtkComposer.h
   dtkComposer_p.h
   dtkComposerEvaluator.h
   dtkComposerFactory.h
   dtkComposerFactoryView.h
+  dtkComposerGraph.h
+  dtkComposerGraphView.h
   dtkComposerMachine.h
   dtkComposerMachineState.h
-  dtkComposerNode.h
+  dtkComposerSceneModel.h
   dtkComposerScene.h
+  dtkComposerSceneNodeEditor.h
+  dtkComposerSceneNodeEditor_p.h
+  dtkComposerSceneView.h
   dtkComposerStackView.h
   dtkComposerView.h)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkComposerAbstractTransmitter.cpp
   dtkComposer.cpp
   dtkComposerEvaluator.cpp
   dtkComposerFactory.cpp
   dtkComposerFactoryView.cpp
+  dtkComposerGraph.cpp
+  dtkComposerGraphEdge.cpp
+  dtkComposerGraphLayouter.cpp
+  dtkComposerGraphNode.cpp
+  dtkComposerGraphView.cpp
   dtkComposerMachine.cpp
   dtkComposerMachineState.cpp
-  dtkComposerNode.cpp
   dtkComposerScene.cpp
+  dtkComposerSceneEdge.cpp
+  dtkComposerSceneModel.cpp
+  dtkComposerSceneNode.cpp
+  dtkComposerSceneNodeComposite.cpp
+  dtkComposerSceneNodeControl.cpp
+  dtkComposerSceneNodeControlIf.cpp
+  dtkComposerSceneNodeEditor.cpp
+  dtkComposerSceneNodeLeaf.cpp
+  dtkComposerSceneNote.cpp
+  dtkComposerScenePort.cpp
+  dtkComposerSceneView.cpp
   dtkComposerStack.cpp
   dtkComposerStackView.cpp
   dtkComposerStackCommand.cpp
+  dtkComposerTransmitter.cpp
   dtkComposerView.cpp
   dtkComposerView.cpp
   dtkComposerReader.cpp

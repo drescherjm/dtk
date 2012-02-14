@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:02:53
  * Version: $Id$
- * Last-Updated: Tue Jan 31 15:33:12 2012 (+0100)
+ * Last-Updated: Mon Feb  6 22:34:01 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 38
+ *     Update #: 41
  */
 
 /* Commentary:
@@ -35,6 +35,7 @@ dtkComposerView::dtkComposerView(QWidget *parent) : QGraphicsView(parent), d(new
     this->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
     this->setRubberBandSelectionMode(Qt::IntersectsItemShape);
 }
+
 dtkComposerView::~dtkComposerView(void)
 {
 

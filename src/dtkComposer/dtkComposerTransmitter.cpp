@@ -1,12 +1,12 @@
-/* dtkComposerAbstractTransmitter.cpp --- 
+/* dtkComposerTransmitter.cpp --- 
  * 
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 16:51:07 2012 (+0100)
+ * Last-Updated: Tue Feb 14 12:50:16 2012 (+0100)
  *           By: tkloczko
- *     Update #: 3
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -17,41 +17,59 @@
  * 
  */
 
-#include "dtkComposerAbstractTransmitter.h"
-#include "dtkComposerNode.h"
+#include "dtkComposerTransmitter.h"
+#include "dtkComposerSceneNode.h"
 
 #include <QDebug>
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerAbstractTransmitterPrivate declaration
+// dtkComposerTransmitterPrivate declaration
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerAbstractTransmitterPrivate
+class dtkComposerTransmitterPrivate
 {
 public:
-    dtkComposerNode *parent;
+    bool active;
+
+    dtkComposerSceneNode *parent;
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerAbstractTransmitter implementation
+// dtkComposerTransmitter implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerAbstractTransmitter::dtkComposerAbstractTransmitter(dtkComposerNode *parent) : QObject(parent), d(new dtkComposerAbstractTransmitterPrivate)
+dtkComposerTransmitter::dtkComposerTransmitter(dtkComposerSceneNode *parent) : d(new dtkComposerTransmitterPrivate)
 {
+    d->active = true;
     d->parent = parent;
 }
 
-dtkComposerAbstractTransmitter::~dtkComposerAbstractTransmitter(void)
+dtkComposerTransmitter::~dtkComposerTransmitter(void)
 {
     delete d;
+
     d = NULL;
 }
 
-dtkComposerNode *dtkComposerAbstractTransmitter::parentNode(void) const
+dtkComposerSceneNode *dtkComposerTransmitter::parentNode(void) const
 {
     return d->parent;
 }
 
+void dtkComposerTransmitter::activate(void)
+{
+    d->active = true;
+}
+
+void dtkComposerTransmitter::inactivate(void)
+{
+    d->active = false;
+}
+
+bool dtkComposerTransmitter::active(void)
+{
+    return d->active;
+}
 // /////////////////////////////////////////////////////////////////
 // Debug operators
 // /////////////////////////////////////////////////////////////////
@@ -60,7 +78,7 @@ dtkComposerNode *dtkComposerAbstractTransmitter::parentNode(void) const
 /*! 
  *  
  */
-QDebug operator<<(QDebug debug, const dtkComposerAbstractTransmitter& transmitter)
+QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter)
 {
     debug.nospace() << transmitter.identifier();
     
@@ -71,7 +89,7 @@ QDebug operator<<(QDebug debug, const dtkComposerAbstractTransmitter& transmitte
 /*! 
  *  
  */
-QDebug operator<<(QDebug debug, dtkComposerAbstractTransmitter *transmitter)
+QDebug operator<<(QDebug debug, dtkComposerTransmitter *transmitter)
 {
     debug.nospace() << transmitter->identifier();
     

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  1 13:47:48 2012 (+0100)
+ * Last-Updated: Thu Feb  9 15:46:15 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 146
+ *     Update #: 166
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #include "dtkComposer.h"
 #include "dtkComposer_p.h"
 #include "dtkComposerFactory.h"
+#include "dtkComposerGraph.h"
 #include "dtkComposerMachine.h"
 #include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
@@ -92,12 +93,15 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
 
     d->factory = new dtkComposerFactory;
 
+    d->graph = new dtkComposerGraph;
+
     d->stack = new dtkComposerStack;
 
     d->scene = new dtkComposerScene;
     d->scene->setFactory(d->factory);
     d->scene->setMachine(d->machine);
     d->scene->setStack(d->stack);
+    d->scene->setGraph(d->graph);
 
     d->view = new dtkComposerView;
     d->view->setScene(d->scene);
@@ -106,6 +110,8 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(d->view);
+
+    connect(d->scene, SIGNAL(modified(bool)), this, SIGNAL(modified(bool)));
 }
 
 dtkComposer::~dtkComposer(void)
@@ -135,6 +141,7 @@ bool dtkComposer::open(QString file)
     if (!file.isEmpty()) {
         
         dtkComposerReader reader;
+        reader.setFactory(d->factory);
         reader.setScene(d->scene);
         reader.read(file);
         
@@ -181,6 +188,16 @@ dtkComposerMachine *dtkComposer::machine(void)
 dtkComposerFactory *dtkComposer::factory(void)
 {
     return d->factory;
+}
+
+dtkComposerGraph *dtkComposer::graph(void)
+{
+    return d->graph;
+}
+
+dtkComposerScene *dtkComposer::scene(void)
+{
+    return d->scene;
 }
 
 dtkComposerStack *dtkComposer::stack(void)

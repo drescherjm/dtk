@@ -2,11 +2,11 @@
  * 
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
- * Created: Mon Jan 30 10:59:27 2012 (+0100)
+ * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 17:07:35 2012 (+0100)
+ * Last-Updated: Tue Feb 14 12:44:59 2012 (+0100)
  *           By: tkloczko
- *     Update #: 23
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -20,30 +20,49 @@
 #ifndef DTKCOMPOSERTRANSMITTER_H
 #define DTKCOMPOSERTRANSMITTER_H
 
-#include "dtkComposerAbstractTransmitter.h"
+#include "dtkComposerExport.h"
 
-class dtkComposerNode;
+class dtkComposerSceneNode;
+class QDebug;
+class QString;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitter declaration
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class DTKCOMPOSER_EXPORT dtkComposerTransmitter : public dtkComposerAbstractTransmitter
+class dtkComposerTransmitterPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerTransmitter
 {
 public:
-     dtkComposerTransmitter(dtkComposerNode *parent = 0);
-    ~dtkComposerTransmitter(void);
+             dtkComposerTransmitter(dtkComposerSceneNode *parent = 0);
+    virtual ~dtkComposerTransmitter(void);
 
 public:
-    QString identifier(void) const;
+    virtual QString identifier(void) const = 0;
 
 public:
+    dtkComposerSceneNode *parentNode(void) const;
+
+public:
+    void   activate(void);
+    void inactivate(void);
+
+    bool active(void);
+    
+public:
+    friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter);
+    friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug,       dtkComposerTransmitter *transmitter);
+
+private:
+    dtkComposerTransmitterPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitter implementation
+// Debug operators
 // /////////////////////////////////////////////////////////////////
 
-#include "dtkComposerTransmitter.tpp"
+DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter);
+DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug,       dtkComposerTransmitter *transmitter);
 
 #endif

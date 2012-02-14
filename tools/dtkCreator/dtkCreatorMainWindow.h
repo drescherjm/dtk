@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:38:47 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Feb  1 12:20:26 2012 (+0100)
+ * Last-Updated: Thu Feb  9 14:58:31 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 40
+ *     Update #: 42
  */
 
 /* Commentary: 
@@ -45,6 +45,9 @@ public slots:
     bool compositionSaveAs(const QString& file, dtkComposerWriter::Type type = dtkComposerWriter::Ascii);
     bool compositionInsert(void);
     bool compositionInsert(const QString& file);
+
+protected slots:
+    void showGraph(void);
 
 protected:
     void closeEvent(QCloseEvent *event);

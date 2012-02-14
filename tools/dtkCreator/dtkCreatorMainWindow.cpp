@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Feb  1 14:42:38 2012 (+0100)
- *           By: David Rey
- *     Update #: 752
+ * Last-Updated: Thu Feb  9 16:47:21 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 848
  */
 
 /* Commentary: 
@@ -22,6 +22,12 @@
 
 #include <dtkComposer/dtkComposer.h>
 #include <dtkComposer/dtkComposerFactoryView.h>
+#include <dtkComposer/dtkComposerGraph.h>
+#include <dtkComposer/dtkComposerGraphView.h>
+#include <dtkComposer/dtkComposerScene.h>
+#include <dtkComposer/dtkComposerSceneModel.h>
+#include <dtkComposer/dtkComposerSceneNodeEditor.h>
+#include <dtkComposer/dtkComposerSceneView.h>
 #include <dtkComposer/dtkComposerStack.h>
 #include <dtkComposer/dtkComposerStackView.h>
 
@@ -36,6 +42,9 @@
 
 bool dtkCreatorMainWindowPrivate::maySave(void)
 {
+    if(this->closing)
+        return true;
+
     if (q->isWindowModified()) {
         QMessageBox::StandardButton ret = QMessageBox::warning(0,
             q->tr("Creator"),
@@ -81,13 +90,32 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     d->composer = new dtkComposer;
 
-    d->stack = new dtkComposerStackView;
+    d->editor = new dtkComposerSceneNodeEditor(this);
+    d->editor->setScene(d->composer->scene());
+    d->editor->setStack(d->composer->stack());
+    d->editor->setFixedWidth(300);
+
+    d->model = new dtkComposerSceneModel(this);
+    d->model->setScene(d->composer->scene());
+
+    d->scene = new dtkComposerSceneView(this);
+    d->scene->setScene(d->composer->scene());
+    d->scene->setModel(d->model);
+    d->scene->setFixedWidth(300);
+
+    d->stack = new dtkComposerStackView(this);
     d->stack->setStack(d->composer->stack());
     d->stack->setFixedWidth(300);
 
-    d->nodes = new dtkComposerFactoryView;
+    d->nodes = new dtkComposerFactoryView(this);
     d->nodes->setFixedWidth(300);
     d->nodes->setFactory(d->composer->factory());
+
+    d->graph = new dtkComposerGraphView(this);
+    d->graph->setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
+    d->graph->setScene(d->composer->graph());
+
+    d->closing = false;
 
     // Menus & Actions
 
@@ -120,17 +148,25 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->composition_menu->addSeparator();
     d->composition_menu->addAction(d->composition_quit_action);
 
-    d->undo_action = new QAction("Undo", this);
+    d->undo_action = d->composer->stack()->createUndoAction(this);
     d->undo_action->setShortcut(QKeySequence::Undo);
 
-    d->redo_action = new QAction("Redo", this);
+    d->redo_action = d->composer->stack()->createRedoAction(this);
     d->redo_action->setShortcut(QKeySequence::Redo);
 
     d->edit_menu = menu_bar->addMenu("Edit");
     d->edit_menu->addAction(d->undo_action);
     d->edit_menu->addAction(d->redo_action);
 
+    d->graph_show_action = new QAction("Show", this);
+    d->graph_show_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_G);
+
+    d->graph_menu = menu_bar->addMenu("Graph");
+    d->graph_menu->addAction(d->graph_show_action);
+
     // Connections
+
+    connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(close()));
 
     connect(d->composer, SIGNAL(modified(bool)), d, SLOT(setModified(bool)));
 
@@ -142,22 +178,31 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     connect(d->recent_compositions_menu, SIGNAL(recentFileTriggered(const QString&)), this, SLOT(compositionOpen(const QString&)));
 
-    connect(d->undo_action, SIGNAL(triggered()), d->composer->stack(), SLOT(undo()));
-    connect(d->redo_action, SIGNAL(triggered()), d->composer->stack(), SLOT(redo()));
+    // connect(d->undo_action, SIGNAL(triggered()), d->composer->stack(), SLOT(undo()));
+    // connect(d->redo_action, SIGNAL(triggered()), d->composer->stack(), SLOT(redo()));
+
+    connect(d->graph_show_action, SIGNAL(triggered()), this, SLOT(showGraph()));
 
     // Layout
 
-    QVBoxLayout *lateral = new QVBoxLayout;
-    lateral->setContentsMargins(0, 0, 0, 0);
-    lateral->setSpacing(0);
-    lateral->addWidget(d->nodes);
-    lateral->addWidget(d->stack);
+    QVBoxLayout *l_lateral = new QVBoxLayout;
+    l_lateral->setContentsMargins(0, 0, 0, 0);
+    l_lateral->setSpacing(0);
+    l_lateral->addWidget(d->nodes);
+    l_lateral->addWidget(d->editor);
+
+    QVBoxLayout *r_lateral = new QVBoxLayout;
+    r_lateral->setContentsMargins(0, 0, 0, 0);
+    r_lateral->setSpacing(0);
+    r_lateral->addWidget(d->scene);
+    r_lateral->addWidget(d->stack);
 
     QHBoxLayout *layout = new QHBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    layout->addLayout(lateral);
+    layout->addLayout(l_lateral);
     layout->addWidget(d->composer);
+    layout->addLayout(r_lateral);
 
     QWidget *central = new QWidget(this);
     central->setLayout(layout);
@@ -166,7 +211,6 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     this->setCentralWidget(central);
     this->setUnifiedTitleAndToolBarOnMac(true);
-    this->setWindowTitle("Creator");
 
 #if defined(Q_WS_MAC) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
     d->enableFullScreenSupport();
@@ -205,7 +249,7 @@ bool dtkCreatorMainWindow::compositionOpen(void)
     if(!d->maySave())
         return true;
 
-    QFileDialog *dialog = new QFileDialog(this, tr("Open composition"), QDir::homePath(), QString("num3sis composition (*.num)"));
+    QFileDialog *dialog = new QFileDialog(this, tr("Open composition"), QDir::homePath(), QString("dtk composition (*.dtk)"));
     dialog->setStyleSheet("background-color: none ; color: none;");
     dialog->setAcceptMode(QFileDialog::AcceptOpen);
     dialog->setFileMode(QFileDialog::AnyFile);
@@ -235,6 +279,9 @@ bool dtkCreatorMainWindow::compositionSave(void)
     else
         status = d->composer->save();
 
+    if(status)
+        this->setWindowModified(false);
+
     return status;
 }
 
@@ -252,7 +299,7 @@ bool dtkCreatorMainWindow::compositionSaveAs(void)
     dialog.setConfirmOverwrite(true);
     dialog.setFileMode(QFileDialog::AnyFile);
     dialog.setNameFilters(nameFilters);
-    dialog.setDefaultSuffix("num");
+    dialog.setDefaultSuffix("dtk");
 
     if(dialog.exec()) {
 
@@ -284,7 +331,7 @@ bool dtkCreatorMainWindow::compositionSaveAs(const QString& file, dtkComposerWri
 
 bool dtkCreatorMainWindow::compositionInsert(void)
 {
-    QFileDialog *dialog = new QFileDialog(this, tr("Insert composition"), QDir::homePath(), QString("num3sis composition (*.num)"));
+    QFileDialog *dialog = new QFileDialog(this, tr("Insert composition"), QDir::homePath(), QString("dtk composition (*.dtk)"));
     dialog->setStyleSheet("background-color: none ; color: none;");
     dialog->setAcceptMode(QFileDialog::AcceptOpen);
     dialog->setFileMode(QFileDialog::AnyFile);
@@ -303,9 +350,20 @@ bool dtkCreatorMainWindow::compositionInsert(const QString& file)
     return status;
 }
 
+void dtkCreatorMainWindow::showGraph(void)
+{
+    d->graph->resize(200, 200);
+    d->graph->show();
+    d->graph->raise();
+}
+
 void dtkCreatorMainWindow::closeEvent(QCloseEvent *event)
 {
-    Q_UNUSED(event);
-
-    this->writeSettings();
+    if (d->maySave()) {
+         writeSettings();
+         d->closing = true;
+         event->accept();
+     } else {
+         event->ignore();
+     }
 }

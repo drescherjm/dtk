@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 15:40:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 14 16:32:51 2012 (+0100)
+ * Last-Updated: Tue Feb 14 16:45:39 2012 (+0100)
  *           By: David Rey
- *     Update #: 19
+ *     Update #: 20
  */
 
 /* Commentary: 
@@ -43,6 +43,7 @@ dtkComposerNodeControl::dtkComposerNodeControl(void) : dtkComposerNode(), d(new 
 dtkComposerNodeControl::~dtkComposerNodeControl(void)
 {
     delete d;
+
     d = NULL;
 }
 

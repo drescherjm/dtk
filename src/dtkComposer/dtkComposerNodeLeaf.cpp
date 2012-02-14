@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 15:40:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 14 16:30:48 2012 (+0100)
+ * Last-Updated: Tue Feb 14 16:46:38 2012 (+0100)
  *           By: David Rey
- *     Update #: 23
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -43,6 +43,7 @@ dtkComposerNodeLeaf::dtkComposerNodeLeaf(void) : dtkComposerNode(), d(new dtkCom
 dtkComposerNodeLeaf::~dtkComposerNodeLeaf(void)
 {
     delete d;
+
     d = NULL;
 }
 

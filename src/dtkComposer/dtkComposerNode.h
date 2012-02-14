@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:24:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 14 15:38:29 2012 (+0100)
+ * Last-Updated: Tue Feb 14 16:47:15 2012 (+0100)
  *           By: David Rey
- *     Update #: 27
+ *     Update #: 28
  */
 
 /* Commentary: 
@@ -19,7 +19,6 @@
 
 #ifndef DTKCOMPOSERNODE_H
 #define DTKCOMPOSERNODE_H
-#endif
 
 #include "dtkComposerExport.h"
 
@@ -47,9 +46,10 @@ public:
     void removeReceiver(dtkComposerTransmitter *receiver);
 
     QList<dtkComposerTransmitter *> emitters(void);
-
     QList<dtkComposerTransmitter *> receivers(void);
 
 private:
     dtkComposerNodePrivate *d;
 };
+
+#endif

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 14 12:44:59 2012 (+0100)
- *           By: tkloczko
- *     Update #: 15
+ * Last-Updated: Tue Feb 14 14:29:59 2012 (+0100)
+ *           By: David Rey
+ *     Update #: 18
  */
 
 /* Commentary: 
@@ -50,6 +50,10 @@ public:
 
     bool active(void);
     
+    void setRequired(bool required);
+
+    bool required(void);
+
 public:
     friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter);
     friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug,       dtkComposerTransmitter *transmitter);

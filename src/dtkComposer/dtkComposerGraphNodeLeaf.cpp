@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: mar. févr. 14 16:26:16 2012 (+0100)
+ * Last-Updated: mar. févr. 14 17:01:11 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 33
+ *     Update #: 45
  */
 
 /* Commentary:
@@ -19,28 +19,29 @@
 
 
 #include "dtkComposerGraphNodeLeaf.h"
+#include "dtkComposerNodeLeaf.h"
 
 class dtkComposerGraphNodeLeafPrivate
 {
 public:
-    dtkComposerControlNode *composer_node;
+    dtkComposerNodeLeaf *composer_node;
 
 };
 
 
 dtkComposerGraphNodeLeaf::dtkComposerGraphNodeLeaf(dtkComposerNode *cnode) : dtkComposerGraphNode(),d(new dtkComposerGraphNodeLeafPrivate)
 {
-    d->composerNode = dynamic_cast<dtkComposerControlNode *>(cnode);
+    d->composer_node = dynamic_cast<dtkComposerNodeLeaf *>(cnode);
 }
 
 
 
 void dtkComposerGraphNodeLeaf::eval(void)
 {
-    if (this->composerNode() == NULL)
+    if (d->composer_node == NULL)
         return;
 
-    this->composerNode()->run();
+    d->composer_node->run();
 }
 
 

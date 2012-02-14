@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: mar. févr. 14 15:39:55 2012 (+0100)
+ * Last-Updated: mar. févr. 14 16:56:51 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 32
+ *     Update #: 41
  */
 
 /* Commentary:
@@ -19,28 +19,29 @@
 
 
 #include "dtkComposerGraphNodeSetVariables.h"
+#include "dtkComposerNodeControl.h"
 
 class dtkComposerGraphNodeSetVariablesPrivate
 {
 public:
-    dtkComposerControlNode *composer_node;
+    dtkComposerNodeControl *composer_node;
 
 };
 
 
 dtkComposerGraphNodeSetVariables::dtkComposerGraphNodeSetVariables(dtkComposerNode *cnode) : dtkComposerGraphNode(),d(new dtkComposerGraphNodeSetVariablesPrivate)
 {
-    d->composerNode = dynamic_cast<dtkComposerControlNode *>(cnode);
+    d->composer_node = dynamic_cast<dtkComposerNodeControl *>(cnode);
 }
 
 
 
 void dtkComposerGraphNodeSetVariables::eval(void)
 {
-    if (this->composerNode() == NULL)
+    if (d->composer_node == NULL)
         return;
 
-    this->composerNode()->setVariables();
+    d->composer_node->setVariables();
 }
 
 

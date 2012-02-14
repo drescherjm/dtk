@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:55:56
  * Version: $Id$
- * Last-Updated: mar. févr. 14 15:01:30 2012 (+0100)
+ * Last-Updated: mar. févr. 14 16:49:55 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 17
+ *     Update #: 28
  */
 
 /* Commentary:
@@ -20,6 +20,7 @@
 #ifndef DTKCOMPOSERGRAPHNODELEAF_H
 #define DTKCOMPOSERGRAPHNODELEAF_H
 
+#include "dtkComposerNode.h"
 #include "dtkComposerGraphNode.h"
 
 class dtkComposerGraphNodeLeafPrivate;
@@ -32,12 +33,16 @@ class dtkComposerGraphNodeLeaf : public dtkComposerGraphNode
 {
 
 public:
+     dtkComposerGraphNodeLeaf(dtkComposerNode *node);
+
+
+public:
     void eval(void);
 
 private:
 
     dtkComposerGraphNodeLeafPrivate *d;
-}
+};
 
 
 #endif /* DTKCOMPOSERGRAPHNODELEAF_H */

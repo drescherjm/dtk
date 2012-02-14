@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. févr. 14 15:41:44 2012 (+0100)
+ * Last-Updated: mar. févr. 14 16:58:14 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 64
+ *     Update #: 68
  */
 
 /* Commentary:
@@ -16,6 +16,8 @@
 /* Change log:
  *
  */
+
+#include <dtkCore/dtkGlobal.h>
 
 #include "dtkComposerGraphEdge.h"
 #include "dtkComposerGraphNode.h"
@@ -60,7 +62,7 @@ void dtkComposerGraphNode::paint(QPainter *painter, const QStyleOptionGraphicsIt
 
 void dtkComposerGraphNode::eval(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
 }
 
 // /////////////////////////////////////////////////////////////////

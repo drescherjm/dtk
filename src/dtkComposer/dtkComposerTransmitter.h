@@ -2,11 +2,11 @@
  * 
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
- * Created: Mon Jan 30 10:59:27 2012 (+0100)
+ * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  3 14:20:26 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 29
+ * Last-Updated: Tue Feb 14 12:44:59 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -20,46 +20,49 @@
 #ifndef DTKCOMPOSERTRANSMITTER_H
 #define DTKCOMPOSERTRANSMITTER_H
 
-#include "dtkComposerAbstractTransmitter.h"
+#include "dtkComposerExport.h"
 
-#include <QSharedData>
-#include <QSharedDataPointer>
-
-class dtkComposerNode;
+class dtkComposerSceneNode;
+class QDebug;
+class QString;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitter declaration
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class dtkComposerTransmitterPrivate : public QSharedData
+class dtkComposerTransmitterPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerTransmitter
 {
 public:
-    T data;
- };
-
-template <typename T> class DTKCOMPOSER_EXPORT dtkComposerTransmitter : public dtkComposerAbstractTransmitter
-{
-public:
-     dtkComposerTransmitter(dtkComposerSceneNode *parent = 0);
-    ~dtkComposerTransmitter(void);
+             dtkComposerTransmitter(dtkComposerSceneNode *parent = 0);
+    virtual ~dtkComposerTransmitter(void);
 
 public:
-    inline void setData(const T& data);
-
-    inline       T& data(void);
-    inline const T& data(void) const;
+    virtual QString identifier(void) const = 0;
 
 public:
-    QString identifier(void) const;
+    dtkComposerSceneNode *parentNode(void) const;
+
+public:
+    void   activate(void);
+    void inactivate(void);
+
+    bool active(void);
+    
+public:
+    friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter);
+    friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug,       dtkComposerTransmitter *transmitter);
 
 private:
-    QSharedDataPointer<dtkComposerTransmitterPrivate<T> > d;
+    dtkComposerTransmitterPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitter implementation
+// Debug operators
 // /////////////////////////////////////////////////////////////////
 
-#include "dtkComposerTransmitter.tpp"
+DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter);
+DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug,       dtkComposerTransmitter *transmitter);
 
 #endif

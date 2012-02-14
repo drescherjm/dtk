@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 14 12:58:00 2012 (+0100)
+ * Last-Updated: Tue Feb 14 16:56:24 2012 (+0100)
  *           By: tkloczko
- *     Update #: 10
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -25,6 +25,7 @@
 #include <QList>
 
 class QString;
+
 template <typename T> class dtkComposerEmitter;
 
 // /////////////////////////////////////////////////////////////////

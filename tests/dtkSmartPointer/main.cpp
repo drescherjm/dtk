@@ -90,17 +90,18 @@ int main(int argc, char *argv[])
 
         dtkAbstractDataFactory *factory = dtkAbstractDataFactory::instance();
 
-        // First check basic reference counting.
+        // First check basic factory creation.
         dtkAbstractData *pData = factory->create( TestData::s_TypeName );
         CHECK_TEST_RESULT(pData != NULL);
         pData->enableDeferredDeletion(false);
-        CHECK_TEST_RESULT(pData->count() == 1);
+        CHECK_TEST_RESULT(pData->count() == 0);
 
         TestData *pTestData = dynamic_cast< TestData * >( pData );
         CHECK_TEST_RESULT(pTestData != NULL);
 
         pTestData = NULL;
-        pData->release();
+        delete pData;
+        pData = NULL;
 
         // Instantiate, test for Null.
         dtkSmartPointer< TestData > myInstance;
@@ -108,7 +109,9 @@ int main(int argc, char *argv[])
         CHECK_TEST_RESULT( myInstance.isNull() );
         CHECK_TEST_RESULT( myInstance.refCount() == 0 );
 
-        myInstance.takePointer( dynamic_cast< TestData *>(factory->create( TestData::s_TypeName )) );
+        pData = factory->create( TestData::s_TypeName );
+        CHECK_TEST_RESULT(pData != NULL);
+        myInstance = dynamic_cast<TestData*>(pData);
         CHECK_TEST_RESULT( myInstance );
         CHECK_TEST_RESULT( !myInstance.isNull() );
         CHECK_TEST_RESULT( myInstance.refCount() == 1 );

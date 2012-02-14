@@ -78,8 +78,7 @@ dtkAbstractView *dtkAbstractViewFactory::create(const QString& type)
 
 dtkSmartPointer<dtkAbstractView> dtkAbstractViewFactory::createSmartPointer(const QString& type)
 {
-    dtkSmartPointer<dtkAbstractView> view;
-    view.takePointer(this->create(type));
+    dtkSmartPointer<dtkAbstractView> view = this->create(type);
     return view;
 }
 
@@ -94,8 +93,7 @@ dtkAbstractViewAnimator *dtkAbstractViewFactory::animator(const QString& type)
 
 dtkSmartPointer<dtkAbstractViewAnimator> dtkAbstractViewFactory::animatorSmartPointer(const QString& type)
 {
-    dtkSmartPointer<dtkAbstractViewAnimator> animator;
-    animator.takePointer(this->animator(type));
+    dtkSmartPointer<dtkAbstractViewAnimator> animator = this->animator(type);
     return animator;
 }
 
@@ -110,8 +108,7 @@ dtkAbstractViewNavigator *dtkAbstractViewFactory::navigator(const QString& type)
 
 dtkSmartPointer<dtkAbstractViewNavigator> dtkAbstractViewFactory::navigatorSmartPointer(const QString& type)
 {
-    dtkSmartPointer<dtkAbstractViewNavigator> navigator;
-    navigator.takePointer(this->navigator(type));
+    dtkSmartPointer<dtkAbstractViewNavigator> navigator = this->navigator(type);
     return navigator;
 }
 
@@ -126,8 +123,7 @@ dtkAbstractViewInteractor *dtkAbstractViewFactory::interactor(const QString& typ
 
 dtkSmartPointer<dtkAbstractViewInteractor> dtkAbstractViewFactory::interactorSmartPointer(const QString& type)
 {
-    dtkSmartPointer<dtkAbstractViewInteractor> interactor;
-    interactor.takePointer(this->interactor(type));
+    dtkSmartPointer<dtkAbstractViewInteractor> interactor = this->interactor(type);
     return interactor;
 }
 

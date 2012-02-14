@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 10 12:18:08 2012 (+0100)
+ * Last-Updated: Tue Feb 14 12:03:56 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 29
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -17,6 +17,7 @@
  * 
  */
 
+#include "dtkComposerGraphEdge.h"
 #include "dtkComposerGraphNode.h"
 
 class dtkComposerGraphNodePrivate

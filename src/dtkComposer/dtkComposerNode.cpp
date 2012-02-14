@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:25:11 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 14 15:30:37 2012 (+0100)
+ * Last-Updated: Tue Feb 14 16:49:35 2012 (+0100)
  *           By: David Rey
- *     Update #: 26
+ *     Update #: 28
  */
 
 /* Commentary: 
@@ -27,7 +27,6 @@ class dtkComposerNodePrivate
 {
 public:
     QList<dtkComposerTransmitter *> emitters;
-
     QList<dtkComposerTransmitter *> receivers;
 };
 
@@ -43,6 +42,7 @@ dtkComposerNode::dtkComposerNode(void) : d(new dtkComposerNodePrivate)
 dtkComposerNode::~dtkComposerNode(void)
 {
     delete d;
+
     d = NULL;
 }
 

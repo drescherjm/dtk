@@ -538,7 +538,7 @@ dtkFinderListView::dtkFinderListView(QWidget *parent) : QListView(parent), d(new
     d->menu = new QMenu(this);
     d->allowFileBookmarking = true;
     d->bookmarkAction = new QAction(tr("Bookmark"), this);
-    connect(d->bookmarkAction, SIGNAL(triggered()), this, SLOT(onBookmarkSelectedItemRequested()));
+    connect(d->bookmarkAction, SIGNAL(triggered()), this, SLOT(onBookmarkSelectedItemsRequested()));
     d->menu->addAction(d->bookmarkAction);
 
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(updateContextMenu(const QPoint&)));
@@ -556,21 +556,31 @@ void dtkFinderListView::addContextMenuAction(QAction *action)
     d->menu->addAction(action);
 }
 
-QString dtkFinderListView::selectedPath(void) const
+QString dtkFinderListView::selectedPath() const
 {
     if(!selectedIndexes().count())
         return QString();
 
-    if(QFileSystemModel *model = qobject_cast<QFileSystemModel *>(this->model()))
-        return model->filePath(selectedIndexes().first());
-
-    return QString();
+    return this->selectedPaths()[0];
 }
 
-/**
- * Set the allowance of file bookmarking.
- * @param isAllowed - whether is allowed to bookmark files
- **/
+QStringList dtkFinderListView::selectedPaths() const
+{
+    if(!selectedIndexes().count())
+        return QStringList();
+
+    if(QFileSystemModel *model = qobject_cast<QFileSystemModel *>(this->model()))
+    {
+        QStringList selectedPaths = *(new QStringList());
+
+        foreach(QModelIndex index, selectedIndexes())
+            selectedPaths << model->filePath(index);
+
+        return selectedPaths;
+    }
+    else
+        return QStringList();
+}
 
 void dtkFinderListView::allowFileBookmarking(bool isAllowed)
 {
@@ -615,13 +625,13 @@ void dtkFinderListView::updateContextMenu(const QPoint& point)
         d->menu->exec(mapToGlobal(point));
 }
 
-void dtkFinderListView::onBookmarkSelectedItemRequested(void)
+void dtkFinderListView::onBookmarkSelectedItemsRequested(void)
 {
     if(!selectedIndexes().count())
         return;
 
-    if(QFileSystemModel *model = qobject_cast<QFileSystemModel *>(this->model()))
-            emit bookmarked(model->filePath(selectedIndexes().first()));
+    foreach(QString path, this->selectedPaths())
+        emit bookmarked(path);
 }
 
 void dtkFinderListView::keyPressEvent(QKeyEvent *event)
@@ -718,7 +728,7 @@ dtkFinderTreeView::dtkFinderTreeView(QWidget *parent) : QTreeView(parent), d(new
     d->menu = new QMenu(this);
     d->allowFileBookmarking = true;
     d->bookmarkAction = new QAction(tr("Bookmark"), this);
-    connect(d->bookmarkAction, SIGNAL(triggered()), this, SLOT(onBookmarkSelectedItemRequested()));
+    connect(d->bookmarkAction, SIGNAL(triggered()), this, SLOT(onBookmarkSelectedItemsRequested()));
     d->menu->addAction(d->bookmarkAction);
 
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(updateContextMenu(const QPoint&)));
@@ -744,21 +754,31 @@ void dtkFinderTreeView::addContextMenuAction(QAction *action)
     d->menu->addAction(action);
 }
 
-QString dtkFinderTreeView::selectedPath(void) const
+QString dtkFinderTreeView::selectedPath() const
 {
     if(!selectedIndexes().count())
         return QString();
 
-    if(QFileSystemModel *model = qobject_cast<QFileSystemModel *>(this->model()))
-        return model->filePath(selectedIndexes().first());
-
-    return QString();
+    return this->selectedPaths()[0];
 }
 
-/**
- * Set the allowance of file bookmarking.
- * @param isAllowed - whether is allowed to bookmark files
- **/
+QStringList dtkFinderTreeView::selectedPaths() const
+{
+    if(!selectedIndexes().count())
+        return QStringList();
+
+    if(QFileSystemModel *model = qobject_cast<QFileSystemModel *>(this->model()))
+    {
+        QStringList selectedPaths = *(new QStringList());
+
+        foreach(QModelIndex index, selectedIndexes())
+            selectedPaths << model->filePath(index);
+
+        return selectedPaths;
+    }
+    else
+        return QStringList();
+}
 
 void dtkFinderTreeView::allowFileBookmarking(bool isAllowed)
 {
@@ -804,13 +824,13 @@ void dtkFinderTreeView::updateContextMenu(const QPoint& point)
 
 }
 
-void dtkFinderTreeView::onBookmarkSelectedItemRequested(void)
+void dtkFinderTreeView::onBookmarkSelectedItemsRequested(void)
 {
     if(!selectedIndexes().count())
         return;
 
-    if(QFileSystemModel *model = qobject_cast<QFileSystemModel *>(this->model()))
-            emit bookmarked(model->filePath(selectedIndexes().first()));
+    foreach(QString path, this->selectedPaths())
+        emit bookmarked(path);
 }
 
 void dtkFinderTreeView::keyPressEvent(QKeyEvent *event)
@@ -891,6 +911,7 @@ class dtkFinderPrivate
 {
 public:
     QFileSystemModel *model;
+    bool isAllowedMultipleSelection;
 
     dtkFinderListView *list;
     dtkFinderTreeView *tree;
@@ -974,14 +995,37 @@ QString dtkFinder::selectedPath(void) const
     return QString();
 }
 
-/**
- * Set the allowance of file bookmarking.
- * @param isAllowed - whether is allowed to bookmark files
- **/
+QStringList dtkFinder::selectedPaths() const
+{
+    if(d->stack->currentIndex() == 0)
+        return d->list->selectedPaths();
+
+    if(d->stack->currentIndex() == 1)
+        return d->tree->selectedPaths();
+
+    return QStringList();
+}
+
 void dtkFinder::allowFileBookmarking(bool isAllowed)
 {
     d->list->allowFileBookmarking(isAllowed);
     d->tree->allowFileBookmarking(isAllowed);
+}
+
+void dtkFinder::allowMultipleSelection(bool isAllowed)
+{
+    d->isAllowedMultipleSelection = isAllowed;
+
+    if (isAllowed)
+    {
+        d->list->setSelectionMode(QAbstractItemView::ExtendedSelection);
+        d->tree->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    }
+    else
+    {
+        d->list->setSelectionMode(QAbstractItemView::SingleSelection);
+        d->tree->setSelectionMode(QAbstractItemView::SingleSelection);
+    }
 }
 
 void dtkFinder::setPath(const QString& path)
@@ -1019,17 +1063,30 @@ void dtkFinder::onIndexDoubleClicked(QModelIndex index)
         emit fileDoubleClicked(selection.absoluteFilePath());
 }
 
-void dtkFinder::onBookmarkSelectedItemRequested(void)
+void dtkFinder::onBookmarkSelectedItemsRequested(void)
 {
     if(d->stack->currentIndex() == 0)
-        d->list->onBookmarkSelectedItemRequested();
+        d->list->onBookmarkSelectedItemsRequested();
 
     if(d->stack->currentIndex() == 1)
-        d->tree->onBookmarkSelectedItemRequested();
+        d->tree->onBookmarkSelectedItemsRequested();
 }
 
 
 void dtkFinder::onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
 {
-    emit itemSelected(this->selectedPath());
+    QStringList selectedPaths = *(new QStringList());
+
+    QItemSelection selection;
+
+    if(d->stack->currentIndex() == 0)
+        selection = d->list->selectionModel()->selection();
+
+    if(d->stack->currentIndex() == 1)
+        selection = d->tree->selectionModel()->selection();
+
+    foreach(QModelIndex index, selection.indexes())
+        selectedPaths << d->model->filePath(index);
+
+    emit selectionChanged(selectedPaths);
 }

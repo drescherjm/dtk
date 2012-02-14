@@ -150,8 +150,13 @@ public:
 
     void addContextMenuAction(QAction *action);
 
-    QString selectedPath(void) const;
+    /** Returns the currently selected path, or the first one if more than one item is selected. */
+    QString selectedPath() const;
 
+    /** Returns the currently selected paths. */
+    QStringList selectedPaths() const;
+
+    /** Set whether it is allowed to bookmark files. */
     void allowFileBookmarking(bool isAllowed);
 
 signals:
@@ -159,7 +164,7 @@ signals:
     void bookmarked(const QString& path);
 
 public slots:
-    void onBookmarkSelectedItemRequested(void);
+    void onBookmarkSelectedItemsRequested(void);
 
 protected slots:
     void updateContextMenu(const QPoint&);
@@ -191,8 +196,13 @@ public:
 
     void addContextMenuAction(QAction *action);
 
-    QString selectedPath(void) const;
+    /** Returns the currently selected path, or the first one if more than one item is selected. */
+    QString selectedPath() const;
 
+    /** Returns the currently selected paths. */
+    QStringList selectedPaths() const;
+
+    /** Set whether it is allowed to bookmark files. */
     void allowFileBookmarking(bool isAllowed);
 
 signals:
@@ -200,7 +210,7 @@ signals:
     void bookmarked(const QString& path);
 
 public slots:
-    void onBookmarkSelectedItemRequested(void);
+    void onBookmarkSelectedItemsRequested(void);
 
 protected slots:
     void updateContextMenu(const QPoint&);
@@ -230,23 +240,31 @@ public:
 
     void addContextMenuAction(QAction *action);
 
-    QString selectedPath(void) const;
+    /** Returns the currently selected path, or the first one if more than one item is selected. */
+    QString selectedPath() const;
 
+    /** Returns the currently selected paths. */
+    QStringList selectedPaths() const;
+
+    /** Set whether it is allowed to bookmark files. */
     void allowFileBookmarking(bool isAllowed);
+
+    /** Set whether multiple files can be selected at the same time. */
+    void allowMultipleSelection(bool isAllowed);
 
 signals:
     void changed(const QString& path);
     void bookmarked(const QString& path);
     void fileDoubleClicked(const QString &filename);
-    void itemSelected(const QString& path);
+    void selectionChanged(const QStringList& paths);
 
 public slots:
     void setPath(const QString& path);
     void switchToListView(void);
     void switchToTreeView(void);
 
-    /** Bookmarks the currently selected item. */
-    void onBookmarkSelectedItemRequested(void);
+    /** Bookmarks the currently selected item(s). */
+    void onBookmarkSelectedItemsRequested(void);
 
 protected slots:
     void onIndexDoubleClicked(QModelIndex);

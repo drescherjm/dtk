@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:28:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb  7 15:36:50 2012 (+0100)
+ * Last-Updated: Wed Feb 15 17:10:10 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 13
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -42,6 +42,9 @@ public:
 
 public:
     dtkComposerSceneNode *node(void);
+
+public:
+    void setLabel(const QString& label);
 
 public:
     virtual QRectF boundingRect(void) const;

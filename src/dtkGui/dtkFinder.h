@@ -272,6 +272,7 @@ public slots:
 protected slots:
     void onIndexDoubleClicked(QModelIndex);
     void onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
+    void emitSelectedItems();
 
 private:
     dtkFinderPrivate *d;

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:51:36 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 10:08:18 2012 (+0100)
- *           By: tkloczko
- *     Update #: 5
+ * Last-Updated: Wed Feb 15 16:02:44 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -33,6 +33,11 @@ public:
 
 public:
     void run(void);
+
+public:
+    inline QString type(void) {
+        return "boolean operator";
+    }
 
 private:
     dtkComposerNodeBooleanOperatorPrivate *d;

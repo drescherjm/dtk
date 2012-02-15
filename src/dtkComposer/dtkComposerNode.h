@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:24:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 14 16:47:15 2012 (+0100)
- *           By: David Rey
- *     Update #: 28
+ * Last-Updated: Wed Feb 15 16:06:14 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 38
  */
 
 /* Commentary: 
@@ -22,7 +22,7 @@
 
 #include "dtkComposerExport.h"
 
-#include <QList>
+#include <QtCore>
 
 class dtkComposerTransmitter;
 
@@ -47,6 +47,13 @@ public:
 
     QList<dtkComposerTransmitter *> emitters(void);
     QList<dtkComposerTransmitter *> receivers(void);
+
+public:
+    virtual QString type(void) = 0;
+
+public:
+    virtual QString titleHint(void);
+    virtual QString labelHint(int port);
 
 private:
     dtkComposerNodePrivate *d;

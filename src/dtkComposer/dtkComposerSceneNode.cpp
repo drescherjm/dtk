@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 18:26:07 2012 (+0100)
+ * Last-Updated: Wed Feb 15 23:46:49 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 54
+ *     Update #: 58
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@
 
 dtkComposerSceneNode::dtkComposerSceneNode(void) : QGraphicsItem(), d(new dtkComposerSceneNodePrivate)
 {
+    d->wrapee = NULL;
     d->parent = NULL;
 
     this->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
@@ -40,14 +41,14 @@ dtkComposerSceneNode::~dtkComposerSceneNode(void)
 
 void dtkComposerSceneNode::wrap(dtkComposerNode *wrapee)
 {
-    d->node = wrapee;
+    d->wrapee = wrapee;
 
     d->title = wrapee->titleHint();
 }
 
 dtkComposerNode *dtkComposerSceneNode::wrapee(void)
 {
-    return d->node;
+    return d->wrapee;
 }
 
 void dtkComposerSceneNode::addInputEdge(dtkComposerSceneEdge *edge)

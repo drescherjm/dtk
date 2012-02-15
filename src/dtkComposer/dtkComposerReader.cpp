@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 19:37:15 2012 (+0100)
+ * Last-Updated: Wed Feb 15 23:36:56 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 229
+ *     Update #: 242
  */
 
 /* Commentary: 
@@ -239,6 +239,9 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
 
     n->setPos(position);
 
+    if(node.toElement().hasAttribute("title"))
+        n->setTitle(node.toElement().attribute("title"));
+
     int id = node.toElement().attribute("id").toInt();
 
     d->node_map.insert(id, n);
@@ -254,10 +257,17 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
         d->node = composite;
 
         for(int i = 0; i < ports.count(); i++) {
-            if(ports.at(i).toElement().attribute("type") == "input")
-                composite->addInputPort(new dtkComposerScenePort(ports.at(i).toElement().attribute("id").toInt(), dtkComposerScenePort::Input, composite));
-            else
-                composite->addOutputPort(new dtkComposerScenePort(ports.at(i).toElement().attribute("id").toInt(), dtkComposerScenePort::Output, composite));
+            if(ports.at(i).toElement().attribute("type") == "input") {
+                dtkComposerScenePort *port = new dtkComposerScenePort(ports.at(i).toElement().attribute("id").toInt(), dtkComposerScenePort::Input, composite);
+                if (ports.at(i).toElement().hasAttribute("label"))
+                    port->setLabel(ports.at(i).toElement().attribute("label"));
+                composite->addInputPort(port);
+            } else {
+                dtkComposerScenePort *port = new dtkComposerScenePort(ports.at(i).toElement().attribute("id").toInt(), dtkComposerScenePort::Output, composite);
+                if (ports.at(i).toElement().hasAttribute("label"))
+                    port->setLabel(ports.at(i).toElement().attribute("label"));
+                composite->addOutputPort(port);
+            }
         }
 
         composite->layout();
@@ -270,6 +280,13 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
         
         for(int i = 0; i < edges.count(); i++)
             this->readEdge(edges.at(i));
+    }
+
+    if(dtkComposerSceneNodeLeaf *leaf = dynamic_cast<dtkComposerSceneNodeLeaf *>(n)) {
+
+        for(int i = 0; i < ports.count(); i++)
+            if (ports.at(i).toElement().hasAttribute("label"))
+                leaf->port(ports.at(i).toElement().attribute("id").toUInt())->setLabel(ports.at(i).toElement().attribute("label"));
     }
 
     d->node = t;

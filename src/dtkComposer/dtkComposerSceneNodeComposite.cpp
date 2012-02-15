@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 15:53:23 2012 (+0100)
+ * Last-Updated: Thu Feb 16 00:27:44 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 251
+ *     Update #: 269
  */
 
 /* Commentary: 
@@ -57,6 +57,8 @@ dtkComposerSceneNodeComposite::dtkComposerSceneNodeComposite(void) : dtkComposer
     d->flattened = false;
     d->entered = false;
     d->revealed = false;
+
+    this->setTitle("Composite");
 }
 
 dtkComposerSceneNodeComposite::~dtkComposerSceneNodeComposite(void)
@@ -250,6 +252,8 @@ void dtkComposerSceneNodeComposite::layout(void)
         this->setZValue(-INT_MAX);
     }
 
+    int header = 15;
+
     int port_margin_top = 10;
     int port_margin_bottom = 10;
     int port_margin_left = 10;
@@ -260,10 +264,10 @@ void dtkComposerSceneNodeComposite::layout(void)
 // /////////////////////////////////////////////////////////////////
 
     for(int i = 0; i < this->inputPorts().count(); i++)
-        this->inputPorts().at(i)->setPos(QPointF(port_margin_left, i*this->inputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top));
+        this->inputPorts().at(i)->setPos(QPointF(port_margin_left, i*this->inputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top + header));
     
     for(int i = 0; i < this->outputPorts().count(); i++)
-        this->outputPorts().at(i)->setPos(QPointF(d->rect.right() - port_margin_left - this->outputPorts().at(i)->boundingRect().width(), i*this->outputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top));
+        this->outputPorts().at(i)->setPos(QPointF(d->rect.right() - port_margin_left - this->outputPorts().at(i)->boundingRect().width(), i*this->outputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top + header));
 
 // /////////////////////////////////////////////////////////////////
 // Update edges geometry
@@ -286,9 +290,9 @@ void dtkComposerSceneNodeComposite::layout(void)
 
         if(this->inputPorts().count() || this->outputPorts().count())
             if(this->inputPorts().count() >= this->outputPorts().count())
-                d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->inputPorts().count() * this->inputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->inputPorts().count()-1) * port_spacing));
+                d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->inputPorts().count() * this->inputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->inputPorts().count()-1) * port_spacing + header));
             else
-                d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->outputPorts().count() * this->outputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->outputPorts().count()-1) * port_spacing));        
+                d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->outputPorts().count() * this->outputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->outputPorts().count()-1) * port_spacing + header));        
 
     }
 
@@ -324,4 +328,19 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
     }
 
     painter->drawRoundedRect(d->rect, radius, radius);
+
+    // Drawing node's title
+
+    QFont font = painter->font();
+    QFontMetricsF metrics(font);
+    QString title_text = metrics.elidedText(this->title(), Qt::ElideMiddle, this->boundingRect().width()-2-4*radius);
+    QRectF title_rect = metrics.boundingRect(title_text);
+    QPointF title_pos = QPointF(2*radius, 2*radius + metrics.xHeight());
+
+    painter->setPen(QPen(QColor(Qt::gray).darker()));
+    painter->drawText(title_pos + QPointF(0, -1), title_text);
+    painter->setPen(QPen(QColor(Qt::gray)));
+    painter->drawText(title_pos + QPointF(0, 1), title_text);
+    painter->setPen(QPen(QColor(Qt::white)));
+    painter->drawText(title_pos, title_text);
 }

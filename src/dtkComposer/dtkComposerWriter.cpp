@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 23:28:33 2012 (+0100)
+ * Last-Updated: Thu Feb 16 00:23:13 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 238
+ *     Update #: 243
  */
 
 /* Commentary: 
@@ -120,10 +120,9 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
     tag.setAttribute("y", QString::number(node->pos().y()));
     tag.setAttribute("id", QString::number(current_id));
 
-    if(node->wrapee() && node->title() != node->wrapee()->titleHint())
-        tag.setAttribute("title", node->title());
-
     if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
+
+        tag.setAttribute("title", node->title());
 
         foreach(dtkComposerScenePort *port, composite->inputPorts()) {
 
@@ -157,6 +156,9 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
     if(dtkComposerSceneNodeLeaf *leaf = dynamic_cast<dtkComposerSceneNodeLeaf *>(node)) {
 
         tag.setAttribute("type", leaf->wrapee()->type());
+
+        if(node->wrapee() && node->title() != node->wrapee()->titleHint())
+            tag.setAttribute("title", node->title());
 
         foreach(dtkComposerScenePort *port, leaf->inputPorts()) {
 

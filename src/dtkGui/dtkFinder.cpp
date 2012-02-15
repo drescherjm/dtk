@@ -1108,12 +1108,6 @@ void dtkFinder::onShowHiddenFiles(bool show)
 void dtkFinder::onIndexClicked(QModelIndex index)
 {
     emit fileClicked(d->model->fileInfo(index));
-//    QFileInfo selection = d->model->fileInfo(index);
-
-//    if (! selection.isDir()) {
-//        qDebug() << "emit selected filename:" << selection.fileName();
-//        emit fileClicked(selection.fileName());
-//    }
 }
 
 void dtkFinder::onIndexDoubleClicked(QModelIndex index)
@@ -1130,6 +1124,8 @@ void dtkFinder::onIndexDoubleClicked(QModelIndex index)
     }
     else
         emit fileDoubleClicked(selection.absoluteFilePath());
+
+    emit nothingSelected();
 }
 
 void dtkFinder::onBookmarkSelectedItemsRequested(void)

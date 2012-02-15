@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  8 16:06:38 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 28
+ * Last-Updated: Wed Feb 15 11:14:32 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 37
  */
 
 /* Commentary: 
@@ -17,10 +17,12 @@
  * 
  */
 
+#include "dtkComposerNode.h"
 #include "dtkComposerSceneNode.h"
 #include "dtkComposerSceneNode_p.h"
 #include "dtkComposerSceneNodeLeaf.h"
 #include "dtkComposerScenePort.h"
+#include "dtkComposerTransmitter.h"
 
 class dtkComposerSceneNodeLeafPrivate
 {
@@ -30,14 +32,7 @@ public:
 
 dtkComposerSceneNodeLeaf::dtkComposerSceneNodeLeaf(void) : dtkComposerSceneNode(), d(new dtkComposerSceneNodeLeafPrivate)
 {
-    this->addInputPort(new dtkComposerScenePort(0, dtkComposerScenePort::Input, this));
-    this->addInputPort(new dtkComposerScenePort(1, dtkComposerScenePort::Input, this));
-
-    this->addOutputPort(new dtkComposerScenePort(2, dtkComposerScenePort::Output, this));
-
     d->rect = QRectF(0, 0, 150, 50);
-
-    this->layout();
 }
 
 dtkComposerSceneNodeLeaf::~dtkComposerSceneNodeLeaf(void)
@@ -45,6 +40,19 @@ dtkComposerSceneNodeLeaf::~dtkComposerSceneNodeLeaf(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkComposerSceneNodeLeaf::wrap(dtkComposerNode *node)
+{
+    int index = 0;
+
+    foreach(dtkComposerTransmitter *receiver, node->receivers())
+        this->addInputPort(new dtkComposerScenePort(index++, dtkComposerScenePort::Input, this));
+
+    foreach(dtkComposerTransmitter *emitter, node->emitters())
+        this->addOutputPort(new dtkComposerScenePort(index++, dtkComposerScenePort::Output, this));
+
+    this->layout();
 }
 
 QString dtkComposerSceneNodeLeaf::type(void)

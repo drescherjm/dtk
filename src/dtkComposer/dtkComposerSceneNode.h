@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:31:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  8 16:06:58 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 22
+ * Last-Updated: Wed Feb 15 11:05:17 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 
 #include <QtGui>
 
+class dtkComposerNode;
 class dtkComposerSceneEdge;
 class dtkComposerSceneNodeComposite;
 class dtkComposerScenePort;
@@ -37,6 +38,9 @@ class dtkComposerSceneNode : public QGraphicsItem
 public:
              dtkComposerSceneNode(void);
     virtual ~dtkComposerSceneNode(void);
+
+public:
+    virtual void wrap(dtkComposerNode *node);
 
 public:
     void  addInputEdge(dtkComposerSceneEdge *edge);

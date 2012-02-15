@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:34:45 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  8 16:06:15 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 4
+ * Last-Updated: Wed Feb 15 11:07:48 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 6
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 
 #include "dtkComposerSceneNode.h"
 
+class dtkComposerNode;
 class dtkComposerSceneNodeLeafPrivate;
 
 class dtkComposerSceneNodeLeaf : public dtkComposerSceneNode
@@ -29,6 +30,9 @@ class dtkComposerSceneNodeLeaf : public dtkComposerSceneNode
 public:
      dtkComposerSceneNodeLeaf(void);
     ~dtkComposerSceneNodeLeaf(void);
+
+public:
+    void wrap(dtkComposerNode *node);
 
 public:
     virtual QString type(void);

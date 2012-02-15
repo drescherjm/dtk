@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  8 14:47:23 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 40
+ * Last-Updated: Wed Feb 15 10:56:32 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 42
  */
 
 /* Commentary: 
@@ -21,6 +21,8 @@
 #include "dtkComposerSceneNode_p.h"
 #include "dtkComposerScenePort.h"
 
+#include <dtkCore/dtkGlobal>
+
 dtkComposerSceneNode::dtkComposerSceneNode(void) : QGraphicsItem(), d(new dtkComposerSceneNodePrivate)
 {
     d->parent = NULL;
@@ -33,6 +35,11 @@ dtkComposerSceneNode::~dtkComposerSceneNode(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkComposerSceneNode::wrap(dtkComposerNode *node)
+{
+    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
 }
 
 void dtkComposerSceneNode::addInputEdge(dtkComposerSceneEdge *edge)

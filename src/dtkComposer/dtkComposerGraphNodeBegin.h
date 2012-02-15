@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:55:56
  * Version: $Id$
- * Last-Updated: mer. févr. 15 09:54:17 2012 (+0100)
+ * Last-Updated: mer. févr. 15 16:09:14 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 32
+ *     Update #: 33
  */
 
 /* Commentary:
@@ -21,8 +21,8 @@
 #define DTKCOMPOSERGRAPHNODEBEGIN_H
 
 #include "dtkComposerGraphNode.h"
-#include "dtkComposerNode.h"
 
+class dtkComposerNode;
 class dtkComposerGraphNodeBeginPrivate;
 
 // /////////////////////////////////////////////////////////////////

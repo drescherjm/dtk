@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 15:57:19 2012 (+0100)
+ * Last-Updated: Wed Feb 15 16:02:05 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 220
+ *     Update #: 221
  */
 
 /* Commentary: 
@@ -17,6 +17,7 @@
  * 
  */
 
+#include "dtkComposerNode.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
 #include "dtkComposerSceneEdge.h"
@@ -147,6 +148,8 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
             tag.appendChild(this->writeEdge(edge, tag, document));
 
     } else {
+
+        tag.setAttribute("type", node->wrapee()->type());
 
         this->extend(node, tag, document);
 

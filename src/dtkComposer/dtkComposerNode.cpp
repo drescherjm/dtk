@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:25:11 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 14 16:49:35 2012 (+0100)
- *           By: David Rey
- *     Update #: 28
+ * Last-Updated: Wed Feb 15 16:06:03 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 39
  */
 
 /* Commentary: 
@@ -78,4 +78,14 @@ QList<dtkComposerTransmitter *> dtkComposerNode::emitters(void)
 QList<dtkComposerTransmitter *> dtkComposerNode::receivers(void)
 {
     return d->receivers;
+}
+
+QString dtkComposerNode::titleHint(void)
+{
+    return "Node";
+}
+
+QString dtkComposerNode::labelHint(int port)
+{
+    return "port";
 }

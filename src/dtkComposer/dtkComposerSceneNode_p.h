@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:15:01 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb  5 22:36:24 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 13
+ * Last-Updated: Wed Feb 15 11:23:54 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 
 #include <QtCore>
 
+class dtkComposerNode;
 class dtkComposerSceneEdge;
 class dtkComposerSceneNode;
 class dtkComposerSceneNodeComposite;
@@ -29,6 +30,9 @@ class dtkComposerScenePort;
 
 class dtkComposerSceneNodePrivate
 {
+public:
+    dtkComposerNode *node;
+
 public:
     QList<dtkComposerScenePort *>  input_ports;
     QList<dtkComposerScenePort *> output_ports;

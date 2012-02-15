@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 11:14:32 2012 (+0100)
+ * Last-Updated: Wed Feb 15 11:24:34 2012 (+0100)
  *           By: tkloczko
- *     Update #: 37
+ *     Update #: 38
  */
 
 /* Commentary: 
@@ -44,6 +44,8 @@ dtkComposerSceneNodeLeaf::~dtkComposerSceneNodeLeaf(void)
 
 void dtkComposerSceneNodeLeaf::wrap(dtkComposerNode *node)
 {
+    dtkComposerSceneNode::wrap(node);
+
     int index = 0;
 
     foreach(dtkComposerTransmitter *receiver, node->receivers())

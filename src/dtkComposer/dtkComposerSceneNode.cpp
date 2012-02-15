@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 10:56:32 2012 (+0100)
+ * Last-Updated: Wed Feb 15 12:06:58 2012 (+0100)
  *           By: tkloczko
- *     Update #: 42
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -37,9 +37,14 @@ dtkComposerSceneNode::~dtkComposerSceneNode(void)
     d = NULL;
 }
 
-void dtkComposerSceneNode::wrap(dtkComposerNode *node)
+void dtkComposerSceneNode::wrap(dtkComposerNode *wrapee)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+    d->node = wrapee;
+}
+
+dtkComposerNode *dtkComposerSceneNode::wrapee(void)
+{
+    return d->node;
 }
 
 void dtkComposerSceneNode::addInputEdge(dtkComposerSceneEdge *edge)

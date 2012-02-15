@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 11:08:25 2012 (+0100)
+ * Last-Updated: Wed Feb 15 11:41:08 2012 (+0100)
  *           By: tkloczko
- *     Update #: 1296
+ *     Update #: 1312
  */
 
 /* Commentary: 
@@ -21,10 +21,12 @@
 #include "dtkComposerGraph.h"
 #include "dtkComposerGraphNode.h"
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeLeaf.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
 #include "dtkComposerSceneEdge.h"
 #include "dtkComposerSceneNode.h"
+#include "dtkComposerSceneNodeControl.h"
 #include "dtkComposerSceneNodeComposite.h"
 #include "dtkComposerSceneNodeLeaf.h"
 #include "dtkComposerSceneNote.h"
@@ -84,22 +86,17 @@ public:
     QPointF position;
 
 public:
-    dtkComposerNode *node;
-
-public:
-    dtkComposerSceneNode *scene_node;
+    dtkComposerSceneNode *node;
 };
 
 dtkComposerStackCommandCreateNode::dtkComposerStackCommandCreateNode(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandCreateNodePrivate)
 {
     e->node = NULL;
-    e->scene_node = NULL;
 }
 
 dtkComposerStackCommandCreateNode::~dtkComposerStackCommandCreateNode(void)
 {
     delete e->node;
-    delete e->scene_node;
     delete e;
 
     e = NULL;
@@ -137,17 +134,22 @@ void dtkComposerStackCommandCreateNode::redo(void)
         return;
 
     if(!e->node) {
-        e->node = d->factory->create(e->type);
 
-        e->scene_node = new dtkComposerSceneNodeLeaf;
-        e->scene_node->wrap(e->node);
-        e->scene_node->setParent(d->scene->current());
+        dtkComposerNode *node = d->factory->create(e->type);
+
+        if(dynamic_cast<dtkComposerNodeLeaf *>(node))
+            e->node = new dtkComposerSceneNodeLeaf;
+        // else
+        //     e->node = new dtkComposerSceneNodeControl;
+
+        e->node->wrap(node);
+        e->node->setParent(d->scene->current());
     }
     
-    e->scene_node->setPos(e->position);
+    e->node->setPos(e->position);
 
-    d->scene->addNode(e->scene_node);
-    d->graph->addNode(e->scene_node);
+    d->scene->addNode(e->node);
+    d->graph->addNode(e->node);
 
 // --
 
@@ -166,13 +168,13 @@ void dtkComposerStackCommandCreateNode::undo(void)
     if(!e->node)
         return;
 
-    if(!e->scene_node)
+    if(!e->node)
         return;
 
-    e->position = e->scene_node->scenePos();
+    e->position = e->node->scenePos();
 
-    d->scene->removeNode(e->scene_node);
-    d->graph->removeNode(e->scene_node);
+    d->scene->removeNode(e->node);
+    d->graph->removeNode(e->node);
 }
 
 // /////////////////////////////////////////////////////////////////

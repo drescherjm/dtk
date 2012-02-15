@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:31:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 11:05:17 2012 (+0100)
+ * Last-Updated: Wed Feb 15 12:06:41 2012 (+0100)
  *           By: tkloczko
- *     Update #: 26
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -40,7 +40,9 @@ public:
     virtual ~dtkComposerSceneNode(void);
 
 public:
-    virtual void wrap(dtkComposerNode *node);
+    virtual void wrap(dtkComposerNode *wrapee);
+    
+    dtkComposerNode *wrapee(void);
 
 public:
     void  addInputEdge(dtkComposerSceneEdge *edge);

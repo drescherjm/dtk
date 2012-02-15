@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 11:08:38 2012 (+0100)
- *           By: tkloczko
- *     Update #: 228
+ * Last-Updated: Wed Feb 15 19:37:15 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 229
  */
 
 /* Commentary: 
@@ -220,10 +220,12 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
 
     dtkComposerSceneNode *n = NULL;
 
-    if(notes.count() || nodes.count() || edges.count())
+    if(notes.count() || nodes.count() || edges.count()) {
         n = new dtkComposerSceneNodeComposite;
-    // else
-    //     n = d->factory->create(node.toElement().attribute("type"));
+    } else {
+        n = new dtkComposerSceneNodeLeaf;
+        n->wrap(d->factory->create(node.toElement().attribute("type")));
+    }
 
     n->setParent(d->node);
 

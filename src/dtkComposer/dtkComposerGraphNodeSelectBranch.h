@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:55:56
  * Version: $Id$
- * Last-Updated: mer. févr. 15 09:55:20 2012 (+0100)
+ * Last-Updated: mer. févr. 15 16:09:36 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 29
+ *     Update #: 31
  */
 
 /* Commentary:
@@ -21,8 +21,8 @@
 #define DTKCOMPOSERGRAPHNODESELECTBRANCH_H
 
 #include "dtkComposerGraphNode.h"
-#include "dtkComposerNode.h"
 
+class dtkComposerNode;
 class dtkComposerGraphNodeSelectBranchPrivate;
 
 // /////////////////////////////////////////////////////////////////

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 18:57:15 2012 (+0100)
+ * Last-Updated: Wed Feb 15 23:52:44 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 254
+ *     Update #: 256
  */
 
 /* Commentary: 
@@ -43,6 +43,11 @@ dtkComposerSceneNodeEditorList::dtkComposerSceneNodeEditorList(QWidget *parent) 
 dtkComposerSceneNodeEditorList::~dtkComposerSceneNodeEditorList(void)
 {
 
+}
+
+QSize dtkComposerSceneNodeEditorList::sizeHint(void) const
+{
+    return QSize(300, 100);
 }
 
 void dtkComposerSceneNodeEditorList::addInputPort(dtkComposerScenePort *port)

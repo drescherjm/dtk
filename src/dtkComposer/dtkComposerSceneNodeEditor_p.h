@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:28:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 18:54:54 2012 (+0100)
+ * Last-Updated: Wed Feb 15 23:52:11 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 37
+ *     Update #: 42
  */
 
 /* Commentary: 
@@ -38,6 +38,9 @@ class dtkComposerSceneNodeEditorList : public QListWidget
 public:
      dtkComposerSceneNodeEditorList(QWidget *parent = 0);
     ~dtkComposerSceneNodeEditorList(void);
+
+public:
+    QSize sizeHint(void) const;
 
 public:
     void  addInputPort(dtkComposerScenePort *port);

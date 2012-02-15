@@ -9,6 +9,7 @@
     <file>dtkInspectorBox.qss</file>
     <file>dtkAnchoredBar.qss</file>
 
+    <file>pixmaps/star.svg</file>
     <file>pixmaps/dtk-gui-inset-menu-item.png</file>
     <file>pixmaps/dtk-gui-inset-menu-scroller-both.png</file>
     <file>pixmaps/dtk-gui-inset-menu-scroller-left.png</file>

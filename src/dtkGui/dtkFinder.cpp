@@ -157,6 +157,23 @@ void dtkFinderToolBar::onPrev (void)
         d->prevButton->setEnabled (0);
 }
 
+void dtkFinderToolBar::onTreeView(void)
+{
+    d->treeViewButton->setChecked(true);
+    d->listViewButton->setChecked(false);
+}
+
+void dtkFinderToolBar::onListView(void)
+{
+    d->treeViewButton->setChecked(false);
+    d->listViewButton->setChecked(true);
+}
+
+void dtkFinderToolBar::onShowHiddenFiles(bool show)
+{
+    d->showHiddenFilesButton->setChecked(show);
+}
+
 // /////////////////////////////////////////////////////////////////
 // dtkFinderSideView
 // /////////////////////////////////////////////////////////////////
@@ -536,7 +553,8 @@ void dtkFinderPathBar::paintEvent(QPaintEvent *event)
 class dtkFinderListViewPrivate
 {
 public:
-    QMenu *menu;
+    QMenu *itemMenu;
+    QMenu *defaultMenu;
     QAction *bookmarkAction;
     bool allowFileBookmarking;
 };
@@ -554,11 +572,14 @@ dtkFinderListView::dtkFinderListView(QWidget *parent) : QListView(parent), d(new
 
     this->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    d->menu = new QMenu(this);
+    d->itemMenu = new QMenu(this);
+    d->defaultMenu = new QMenu(this);
     d->allowFileBookmarking = true;
     d->bookmarkAction = new QAction(tr("Bookmark"), this);
+    d->bookmarkAction->setIconVisibleInMenu(true);
+    d->bookmarkAction->setIcon(QIcon(":dtkGui/pixmaps/star.svg"));
     connect(d->bookmarkAction, SIGNAL(triggered()), this, SLOT(onBookmarkSelectedItemsRequested()));
-    d->menu->addAction(d->bookmarkAction);
+    d->itemMenu->addAction(d->bookmarkAction);
 
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(updateContextMenu(const QPoint&)));
 }
@@ -572,7 +593,12 @@ dtkFinderListView::~dtkFinderListView(void)
 
 void dtkFinderListView::addContextMenuAction(QAction *action)
 {
-    d->menu->addAction(action);
+    d->itemMenu->addAction(action);
+}
+
+void dtkFinderListView::addDefaultContextMenuAction(QAction *action)
+{
+    d->defaultMenu->addAction(action);
 }
 
 QString dtkFinderListView::selectedPath() const
@@ -610,38 +636,40 @@ void dtkFinderListView::updateContextMenu(const QPoint& point)
 {
     QModelIndex index = this->indexAt(point);
 
-    if(!index.isValid())
-        return;
+    if( !index.isValid()) { //Show default menu when no item is selected
+        d->defaultMenu->exec(mapToGlobal(point));
+    }
+    else {
+        // if d->allowFileBookmarking is false
+        // we won't show the 'bookmark' option
+        // for files in the context menu
 
-    // if d->allowFileBookmarking is false
-    // we won't show the 'bookmark' option
-    // for files in the context menu
-
-    if(!d->allowFileBookmarking) {
-        bool removed = false;
-        QString selectedPath = this->selectedPath();
-        if (!selectedPath.isEmpty())
-        {
-            QFileInfo fileInfo = QFileInfo(selectedPath);
-            if (fileInfo.isFile())
+        if(!d->allowFileBookmarking) {
+            bool removed = false;
+            QString selectedPath = this->selectedPath();
+            if (!selectedPath.isEmpty())
             {
-                d->menu->removeAction(d->bookmarkAction);
-                removed = true;
+                QFileInfo fileInfo = QFileInfo(selectedPath);
+                if (fileInfo.isFile())
+                {
+                    d->itemMenu->removeAction(d->bookmarkAction);
+                    removed = true;
+                }
+            }
+
+            d->itemMenu->exec(mapToGlobal(point));
+
+            if (removed)
+            {
+                if(d->itemMenu->actions().size() > 0)
+                    d->itemMenu->insertAction(d->itemMenu->actions()[0], d->bookmarkAction);
+                else
+                    d->itemMenu->addAction(d->bookmarkAction);
             }
         }
-
-        d->menu->exec(mapToGlobal(point));
-
-        if (removed)
-        {
-            if(d->menu->actions().size() > 0)
-                d->menu->insertAction(d->menu->actions()[0], d->bookmarkAction);
-            else
-                d->menu->addAction(d->bookmarkAction);
-        }
+        else
+            d->itemMenu->exec(mapToGlobal(point));
     }
-    else
-        d->menu->exec(mapToGlobal(point));
 }
 
 void dtkFinderListView::onBookmarkSelectedItemsRequested(void)
@@ -730,7 +758,8 @@ void dtkFinderListView::startDrag(Qt::DropActions supportedActions)
 class dtkFinderTreeViewPrivate
 {
 public:
-    QMenu *menu;
+    QMenu *itemMenu;
+    QMenu *defaultMenu;
     QAction *bookmarkAction;
     bool allowFileBookmarking;
 };
@@ -744,11 +773,14 @@ dtkFinderTreeView::dtkFinderTreeView(QWidget *parent) : QTreeView(parent), d(new
     this->setSortingEnabled(true);
     this->sortByColumn(0, Qt::AscendingOrder);
 
-    d->menu = new QMenu(this);
+    d->itemMenu = new QMenu(this);
+    d->defaultMenu = new QMenu(this);
     d->allowFileBookmarking = true;
     d->bookmarkAction = new QAction(tr("Bookmark"), this);
+    d->bookmarkAction->setIconVisibleInMenu(true);
+    d->bookmarkAction->setIcon(QIcon(":dtkGui/pixmaps/star.svg"));
     connect(d->bookmarkAction, SIGNAL(triggered()), this, SLOT(onBookmarkSelectedItemsRequested()));
-    d->menu->addAction(d->bookmarkAction);
+    d->itemMenu->addAction(d->bookmarkAction);
 
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(updateContextMenu(const QPoint&)));
 }
@@ -770,7 +802,12 @@ int dtkFinderTreeView::sizeHintForColumn(int column) const
 
 void dtkFinderTreeView::addContextMenuAction(QAction *action)
 {
-    d->menu->addAction(action);
+    d->itemMenu->addAction(action);
+}
+
+void dtkFinderTreeView::addDefaultContextMenuAction(QAction *action)
+{
+    d->defaultMenu->addAction(action);
 }
 
 QString dtkFinderTreeView::selectedPath() const
@@ -820,38 +857,40 @@ void dtkFinderTreeView::updateContextMenu(const QPoint& point)
 {
     QModelIndex index = this->indexAt(point);
 
-    if(!index.isValid())
-        return;
+    if(!index.isValid()) {
+        d->defaultMenu->exec(mapToGlobal(point));
+    }
+    else {
+        // if d->allowFileBookmarking is false
+        // we won't show the 'bookmark' option
+        // for files in the context menu
 
-    // if d->allowFileBookmarking is false
-    // we won't show the 'bookmark' option
-    // for files in the context menu
-
-    if(!d->allowFileBookmarking) {
-        bool removed = false;
-        QString selectedPath = this->selectedPath();
-        if (!selectedPath.isEmpty())
-        {
-            QFileInfo fileInfo = QFileInfo(selectedPath);
-            if (fileInfo.isFile())
+        if(!d->allowFileBookmarking) {
+            bool removed = false;
+            QString selectedPath = this->selectedPath();
+            if (!selectedPath.isEmpty())
             {
-                d->menu->removeAction(d->bookmarkAction);
-                removed = true;
+                QFileInfo fileInfo = QFileInfo(selectedPath);
+                if (fileInfo.isFile())
+                {
+                    d->itemMenu->removeAction(d->bookmarkAction);
+                    removed = true;
+                }
+            }
+
+            d->itemMenu->exec(mapToGlobal(point));
+
+            if (removed)
+            {
+                if(d->itemMenu->actions().size() > 0)
+                    d->itemMenu->insertAction(d->itemMenu->actions()[0], d->bookmarkAction);
+                else
+                    d->itemMenu->addAction(d->bookmarkAction);
             }
         }
-
-        d->menu->exec(mapToGlobal(point));
-
-        if (removed)
-        {
-            if(d->menu->actions().size() > 0)
-                d->menu->insertAction(d->menu->actions()[0], d->bookmarkAction);
-            else
-                d->menu->addAction(d->bookmarkAction);
-        }
+        else
+            d->itemMenu->exec(mapToGlobal(point));
     }
-    else
-        d->menu->exec(mapToGlobal(point));
 
 }
 
@@ -948,6 +987,11 @@ class dtkFinderPrivate
 public:
     QFileSystemModel *model;
     bool isAllowedMultipleSelection;
+    bool hiddenFilesShown;
+
+    QAction * iconviewAction;
+    QAction * listviewAction;
+    QAction * showHideAction;
 
     dtkFinderListView *list;
     dtkFinderTreeView *tree;
@@ -959,14 +1003,13 @@ dtkFinder::dtkFinder(QWidget *parent) : QWidget(parent), d(new dtkFinderPrivate)
 {
     d->model = new QFileSystemModel(this);
     d->model->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
+    d->hiddenFilesShown = false;
     //By default the showHiddenFilesButton is enabled in MacOS
 #ifdef Q_WS_MAC
+    d->hiddenFilesShown = true;
     d->model->setFilter(QDir::AllEntries | QDir::Hidden | QDir::NoDotAndDotDot);
 #endif
     d->model->setRootPath(QDir::rootPath());
-
-//    qDebug() << d->model->roleNames();
-//    qDebug() << d->model->data(d->model->index(0,0, QModelIndex()), 34);
 
     d->list = new dtkFinderListView(this);
     d->list->setModel(d->model);
@@ -978,6 +1021,27 @@ dtkFinder::dtkFinder(QWidget *parent) : QWidget(parent), d(new dtkFinderPrivate)
     d->tree->setSelectionBehavior(QAbstractItemView::SelectRows);
     d->tree->setAllColumnsShowFocus(true);
 
+    d->iconviewAction = new QAction(tr("Icon view"), this);
+    d->iconviewAction->setIconVisibleInMenu(true);
+    d->iconviewAction->setIcon(QIcon(":dtkGui/pixmaps/dtk-view-list.png"));
+    d->listviewAction = new QAction(tr("List view"), this);
+    d->listviewAction->setIconVisibleInMenu(true);
+    d->listviewAction->setIcon(QIcon(":dtkGui/pixmaps/dtk-view-tree.png"));
+    d->showHideAction = new QAction(tr("Show hidden files"), this);
+
+    //By default the showHiddenFilesButton is enabled in MacOS
+#ifdef Q_WS_MAC
+    d->showHideAction->setText(tr("Hide hidden files"));
+#endif
+    d->showHideAction->setIconVisibleInMenu(true);
+    d->showHideAction->setIcon(QIcon(":dtkGui/pixmaps/dtk-anchored-bar-action.png"));
+
+    d->list->addDefaultContextMenuAction(d->listviewAction);
+    d->list->addDefaultContextMenuAction(d->showHideAction);
+
+    d->tree->addDefaultContextMenuAction(d->iconviewAction);
+    d->tree->addDefaultContextMenuAction(d->showHideAction);
+
     d->stack = new QStackedWidget(this);
     d->stack->addWidget(d->list);
     d->stack->addWidget(d->tree);
@@ -987,6 +1051,10 @@ dtkFinder::dtkFinder(QWidget *parent) : QWidget(parent), d(new dtkFinderPrivate)
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(d->stack);
+
+    connect(d->iconviewAction, SIGNAL(triggered()), this, SLOT(switchToListView()));
+    connect(d->listviewAction, SIGNAL(triggered()), this, SLOT(switchToTreeView()));
+    connect(d->showHideAction, SIGNAL(triggered()), this, SLOT(switchShowHiddenFiles()));
 
     connect(d->list, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onIndexDoubleClicked(QModelIndex)));
     connect(d->tree, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onIndexDoubleClicked(QModelIndex)));
@@ -1087,22 +1155,37 @@ void dtkFinder::setPath(const QString& path)
 
 void dtkFinder::switchToListView(void)
 {
+    emit listView();
     d->stack->setCurrentIndex(0);
     emitSelectedItems();
 }
 
 void dtkFinder::switchToTreeView(void)
 {
+    emit treeView();
     d->stack->setCurrentIndex(1);
     emitSelectedItems();
 }
 
 void dtkFinder::onShowHiddenFiles(bool show)
 {
-    if (show)
+    if (show) {
+        d->hiddenFilesShown = true;
+        d->showHideAction->setText(tr("Hide hidden files"));
         d->model->setFilter(QDir::Hidden | QDir::AllEntries | QDir::NoDotAndDotDot);
-    else
+    }
+    else {
+        d->hiddenFilesShown = false;
+        d->showHideAction->setText(tr("Show hidden files"));
         d->model->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
+    }
+}
+
+void dtkFinder::switchShowHiddenFiles()
+{
+//    this->onShowHiddenFiles(!d->hiddenFilesShown);
+    emit showHiddenFiles(!d->hiddenFilesShown);
+
 }
 
 void dtkFinder::onIndexClicked(QModelIndex index)

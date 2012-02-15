@@ -1077,15 +1077,7 @@ void dtkFinder::onSelectionChanged(const QItemSelection& selected, const QItemSe
 {
     QStringList selectedPaths = *(new QStringList());
 
-    QItemSelection selection;
-
-    if(d->stack->currentIndex() == 0)
-        selection = d->list->selectionModel()->selection();
-
-    if(d->stack->currentIndex() == 1)
-        selection = d->tree->selectionModel()->selection();
-
-    foreach(QModelIndex index, selection.indexes())
+    foreach(QModelIndex index, selected.indexes())
         selectedPaths << d->model->filePath(index);
 
     emit selectionChanged(selectedPaths);

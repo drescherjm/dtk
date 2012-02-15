@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 14 13:14:39 2012 (+0100)
+ * Last-Updated: Wed Feb 15 08:58:11 2012 (+0100)
  *           By: tkloczko
- *     Update #: 11
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -77,6 +77,18 @@ template <typename T> inline const T& dtkComposerReceiver<T>::data(void) const
     foreach(dtkComposerEmitter<T> *emitter, emitters)
         if (emitter->active())
             return emitter->data();
+};
+
+//! Returns description of the receiver.
+/*! 
+ *  
+ */
+template <typename T> bool dtkComposerReceiver<T>::isEmpty(void) const
+{
+    if (emitters.isEmpty())
+        return true;
+
+    return false;
 };
 
 //! Returns description of the receiver.

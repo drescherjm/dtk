@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 14 16:56:24 2012 (+0100)
+ * Last-Updated: Wed Feb 15 08:56:39 2012 (+0100)
  *           By: tkloczko
- *     Update #: 11
+ *     Update #: 12
  */
 
 /* Commentary: 
@@ -43,6 +43,9 @@ public:
 
     inline       T& data(void);
     inline const T& data(void) const;
+
+public:
+    bool isEmpty(void) const;
 
 public:
     QString identifier(void) const;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 15:40:03 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 14 16:46:22 2012 (+0100)
- *           By: David Rey
- *     Update #: 23
+ * Last-Updated: Wed Feb 15 08:50:04 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -36,6 +36,7 @@ public:
     virtual ~dtkComposerNodeLeaf(void);
 
 public:
+    virtual void setInputs(void);
     virtual void run(void);
 
 private:

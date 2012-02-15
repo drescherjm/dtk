@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 15:40:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 14 16:46:38 2012 (+0100)
- *           By: David Rey
- *     Update #: 24
+ * Last-Updated: Wed Feb 15 08:50:17 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -45,6 +45,11 @@ dtkComposerNodeLeaf::~dtkComposerNodeLeaf(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkComposerNodeLeaf::setInputs(void)
+{
+    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
 }
 
 void dtkComposerNodeLeaf::run(void)

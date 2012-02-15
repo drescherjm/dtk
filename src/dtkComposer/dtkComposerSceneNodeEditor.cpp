@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  8 14:16:36 2012 (+0100)
+ * Last-Updated: Wed Feb 15 18:57:15 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 202
+ *     Update #: 254
  */
 
 /* Commentary: 
@@ -36,7 +36,8 @@ dtkComposerSceneNodeEditorList::dtkComposerSceneNodeEditorList(QWidget *parent) 
     this->setFrameShape(QFrame::NoFrame);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    connect(this, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(onItemChanged(QListWidgetItem *)));
+    connect(this, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(onItemClicked(QListWidgetItem *)));
+    connect(this, SIGNAL(itemChanged(QListWidgetItem *)), this, SLOT(onItemChanged(QListWidgetItem *)));
 }
 
 dtkComposerSceneNodeEditorList::~dtkComposerSceneNodeEditorList(void)
@@ -60,7 +61,7 @@ void dtkComposerSceneNodeEditorList::addOutputPort(dtkComposerScenePort *port)
     this->addItem(item);
 }
 
-void dtkComposerSceneNodeEditorList::onItemChanged(QListWidgetItem *item)
+void dtkComposerSceneNodeEditorList::onItemClicked(QListWidgetItem *item)
 {
     if(dtkComposerSceneNodeEditorListItem *i = dynamic_cast<dtkComposerSceneNodeEditorListItem *>(item)) {        
         if (i->checkState() == Qt::Checked)
@@ -68,6 +69,17 @@ void dtkComposerSceneNodeEditorList::onItemChanged(QListWidgetItem *item)
 
         if (i->checkState() == Qt::Unchecked)
             i->port()->hide();
+    }
+}
+
+void dtkComposerSceneNodeEditorList::onItemChanged(QListWidgetItem *item)
+{
+    if(item->text().isEmpty())
+        return;
+
+    if(dtkComposerSceneNodeEditorListItem *i = dynamic_cast<dtkComposerSceneNodeEditorListItem *>(item)) {        
+        i->port()->setLabel(item->text());
+        i->port()->update();
     }
 }
 
@@ -79,8 +91,8 @@ dtkComposerSceneNodeEditorListItem::dtkComposerSceneNodeEditorListItem(dtkCompos
 {
     this->m_port = port;
 
-    this->setFlags(Qt::ItemIsEnabled | Qt::ItemIsUserCheckable | Qt::ItemIsSelectable);
-    this->setText(QString::number(port->id()));
+    this->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsUserCheckable | Qt::ItemIsSelectable);
+    this->setText(port->label());
 }
 
 dtkComposerSceneNodeEditorListItem::~dtkComposerSceneNodeEditorListItem(void)
@@ -116,6 +128,9 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     d->rem_input_port = new QPushButton("-", this);
     d->rem_input_port->setEnabled(false);
 
+    d->edit = new QLineEdit(this);
+    d->edit->setEnabled(false);
+
     QHBoxLayout *i_layout = new QHBoxLayout;
     i_layout->addWidget(d->add_input_port);
     i_layout->addWidget(d->rem_input_port);
@@ -126,6 +141,10 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     d->rem_output_port = new QPushButton("-", this);
     d->rem_output_port->setEnabled(false);
 
+    QHBoxLayout *t_layout = new QHBoxLayout;
+    t_layout->addWidget(new QLabel("Node:", this));
+    t_layout->addWidget(d->edit);
+
     QHBoxLayout *o_layout = new QHBoxLayout;
     o_layout->addWidget(d->add_output_port);
     o_layout->addWidget(d->rem_output_port);
@@ -133,6 +152,7 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
+    layout->addLayout(t_layout);
     layout->addWidget(d->input_ports);
     layout->addLayout(i_layout);
     layout->addWidget(d->output_ports);
@@ -143,6 +163,8 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
 
     connect(d->add_output_port, SIGNAL(clicked()), this, SLOT(addOutputPort()));
     connect(d->rem_output_port, SIGNAL(clicked()), this, SLOT(removeOutputPort()));
+
+    connect(d->edit, SIGNAL(textChanged(const QString&)), this, SLOT(onTitleChanged(const QString&)));
 }
 
 dtkComposerSceneNodeEditor::~dtkComposerSceneNodeEditor(void)
@@ -177,6 +199,9 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
         d->add_output_port->setEnabled(false);
         d->rem_output_port->setEnabled(false);
     }
+
+    d->edit->setText(d->node->title());
+    d->edit->setEnabled(true);
 }
 
 void dtkComposerSceneNodeEditor::setScene(dtkComposerScene *scene)
@@ -204,6 +229,9 @@ void dtkComposerSceneNodeEditor::clear(void)
 
     d->add_output_port->setEnabled(false);
     d->rem_output_port->setEnabled(false);
+
+    d->edit->clear();
+    d->edit->setEnabled(false);
 }
 
 void dtkComposerSceneNodeEditor::addInputPort(void)
@@ -262,4 +290,12 @@ void dtkComposerSceneNodeEditor::removeOutputPort(void)
     d->stack->push(command);
 
     this->setNode(d->node);
+}
+
+void dtkComposerSceneNodeEditor::onTitleChanged(const QString& text)
+{
+    if (d->node) {
+        d->node->setTitle(d->edit->text());
+	d->node->update();
+    }   
 }

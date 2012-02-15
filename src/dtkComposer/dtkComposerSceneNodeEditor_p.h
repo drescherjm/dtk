@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:28:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  8 13:38:43 2012 (+0100)
+ * Last-Updated: Wed Feb 15 18:54:54 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 30
+ *     Update #: 37
  */
 
 /* Commentary: 
@@ -45,6 +45,7 @@ public:
 
 protected slots:
     void onItemChanged(QListWidgetItem *item);
+    void onItemClicked(QListWidgetItem *item);
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -85,6 +86,9 @@ public:
     QPushButton *rem_input_port;
     QPushButton *add_output_port;
     QPushButton *rem_output_port;
+
+public:
+    QLineEdit *edit;
 };
 
 #endif

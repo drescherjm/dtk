@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:31:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 15:52:22 2012 (+0100)
+ * Last-Updated: Wed Feb 15 18:21:59 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 32
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -64,6 +64,12 @@ public:
 
     QList<dtkComposerScenePort *>  inputPorts(void);
     QList<dtkComposerScenePort *> outputPorts(void);
+
+public:
+    const QString& title(void);
+
+public:
+    void setTitle(const QString& title);
 
 public:
     dtkComposerSceneNodeComposite *parent(void);

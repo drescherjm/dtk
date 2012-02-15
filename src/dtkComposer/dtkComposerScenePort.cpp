@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 13:59:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 18:15:28 2012 (+0100)
+ * Last-Updated: Wed Feb 15 18:45:10 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 78
+ *     Update #: 84
  */
 
 /* Commentary: 
@@ -82,6 +82,11 @@ dtkComposerSceneNode *dtkComposerScenePort::node(void)
     return d->node;
 }
 
+QString dtkComposerScenePort::label(void)
+{
+    return d->label->toPlainText();
+}
+
 void dtkComposerScenePort::setLabel(const QString& label)
 {
     d->label->setPlainText(label);
@@ -92,7 +97,6 @@ void dtkComposerScenePort::setLabel(const QString& label)
         d->label->setPos(d->ellipse->pos() + QPointF(d->ellipse->boundingRect().width(), 0) - QPointF(0, fm.height()/2.0));
     else
         d->label->setPos(d->ellipse->pos() - QPointF(7, 0) - QPointF(fm.width(label), fm.height()/2.0));
-
 }
 
 QRectF dtkComposerScenePort::boundingRect(void) const

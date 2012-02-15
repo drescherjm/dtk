@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:28:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 17:10:10 2012 (+0100)
+ * Last-Updated: Wed Feb 15 18:22:06 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 16
+ *     Update #: 20
  */
 
 /* Commentary: 
@@ -42,6 +42,9 @@ public:
 
 public:
     dtkComposerSceneNode *node(void);
+
+public:
+    QString label(void);
 
 public:
     void setLabel(const QString& label);

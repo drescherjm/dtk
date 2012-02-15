@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 12:06:58 2012 (+0100)
- *           By: tkloczko
- *     Update #: 46
+ * Last-Updated: Wed Feb 15 18:26:07 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 54
  */
 
 /* Commentary: 
@@ -17,6 +17,7 @@
  * 
  */
 
+#include "dtkComposerNode.h"
 #include "dtkComposerSceneNode.h"
 #include "dtkComposerSceneNode_p.h"
 #include "dtkComposerScenePort.h"
@@ -40,6 +41,8 @@ dtkComposerSceneNode::~dtkComposerSceneNode(void)
 void dtkComposerSceneNode::wrap(dtkComposerNode *wrapee)
 {
     d->node = wrapee;
+
+    d->title = wrapee->titleHint();
 }
 
 dtkComposerNode *dtkComposerSceneNode::wrapee(void)
@@ -107,6 +110,15 @@ QList<dtkComposerScenePort *> dtkComposerSceneNode::outputPorts(void)
     return d->output_ports;
 }
 
+const QString& dtkComposerSceneNode::title(void)
+{
+    return d->title;
+}
+
+void dtkComposerSceneNode::setTitle(const QString& title)
+{
+    d->title = title;
+}
 
 dtkComposerScenePort *dtkComposerSceneNode::port(unsigned int id)
 {

@@ -786,12 +786,24 @@ QStringList dtkFinderTreeView::selectedPaths() const
     if(!selectedIndexes().count())
         return QStringList();
 
+    // the treeview considers each cell as a selected item
+    // hence we will need to group items by row
+    // or take one item per row
+
+    QList<int> alreadyReadRows;
+
     if(QFileSystemModel *model = qobject_cast<QFileSystemModel *>(this->model()))
     {
         QStringList selectedPaths = *(new QStringList());
 
         foreach(QModelIndex index, selectedIndexes())
-            selectedPaths << model->filePath(index);
+        {
+            if (!alreadyReadRows.contains(index.row()))
+            {
+                selectedPaths << model->filePath(index);
+                alreadyReadRows << index.row();
+            }
+        }
 
         return selectedPaths;
     }
@@ -963,6 +975,8 @@ dtkFinder::dtkFinder(QWidget *parent) : QWidget(parent), d(new dtkFinderPrivate)
     d->tree = new dtkFinderTreeView(this);
     d->tree->setModel(d->model);
     d->tree->setRootIndex(d->model->index(QDir::currentPath()));
+    d->tree->setSelectionBehavior(QAbstractItemView::SelectRows);
+    d->tree->setAllColumnsShowFocus(true);
 
     d->stack = new QStackedWidget(this);
     d->stack->addWidget(d->list);
@@ -1074,11 +1088,13 @@ void dtkFinder::setPath(const QString& path)
 void dtkFinder::switchToListView(void)
 {
     d->stack->setCurrentIndex(0);
+    emitSelectedItems();
 }
 
 void dtkFinder::switchToTreeView(void)
 {
     d->stack->setCurrentIndex(1);
+    emitSelectedItems();
 }
 
 void dtkFinder::onShowHiddenFiles(bool show)
@@ -1125,24 +1141,26 @@ void dtkFinder::onBookmarkSelectedItemsRequested(void)
         d->tree->onBookmarkSelectedItemsRequested();
 }
 
-
-void dtkFinder::onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
+void dtkFinder::emitSelectedItems()
 {
     QStringList selectedPaths = *(new QStringList());
 
-    QItemSelection selection;
-
     if(d->stack->currentIndex() == 0)
-        selection = d->list->selectionModel()->selection();
+        selectedPaths = d->list->selectedPaths();
 
     if(d->stack->currentIndex() == 1)
-        selection = d->tree->selectionModel()->selection();
-
-    foreach(QModelIndex index, selection.indexes())
-        selectedPaths << d->model->filePath(index);
+        selectedPaths = d->tree->selectedPaths();
 
     emit selectionChanged(selectedPaths);
 
     if (!selectedPaths.size())
         emit nothingSelected();
+}
+
+void dtkFinder::onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
+{
+    // note that only the recently selected items are in the "selected" variable
+    // items previously selected are not
+
+    emitSelectedItems();
 }

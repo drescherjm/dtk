@@ -781,12 +781,24 @@ QStringList dtkFinderTreeView::selectedPaths() const
     if(!selectedIndexes().count())
         return QStringList();
 
+    // the treeview considers each cell as a selected item
+    // hence we will need to group items by row
+    // or take one item per row
+
+    QList<int> alreadyReadRows;
+
     if(QFileSystemModel *model = qobject_cast<QFileSystemModel *>(this->model()))
     {
         QStringList selectedPaths = *(new QStringList());
 
         foreach(QModelIndex index, selectedIndexes())
-            selectedPaths << model->filePath(index);
+        {
+            if (!alreadyReadRows.contains(index.row()))
+            {
+                selectedPaths << model->filePath(index);
+                alreadyReadRows << index.row();
+            }
+        }
 
         return selectedPaths;
     }

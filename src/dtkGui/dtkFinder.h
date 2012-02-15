@@ -258,7 +258,9 @@ signals:
     void changed(const QString& path);
     void bookmarked(const QString& path);
     void fileDoubleClicked(const QString &filename);
+    void fileClicked(const QFileInfo &info);
     void selectionChanged(const QStringList& paths);
+    void nothingSelected();
 
 public slots:
     void setPath(const QString& path);
@@ -271,6 +273,7 @@ public slots:
 
 protected slots:
     void onIndexDoubleClicked(QModelIndex);
+    void onIndexClicked(QModelIndex);
     void onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
 private:

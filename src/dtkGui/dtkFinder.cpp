@@ -953,6 +953,9 @@ dtkFinder::dtkFinder(QWidget *parent) : QWidget(parent), d(new dtkFinderPrivate)
 #endif
     d->model->setRootPath(QDir::rootPath());
 
+//    qDebug() << d->model->roleNames();
+//    qDebug() << d->model->data(d->model->index(0,0, QModelIndex()), 34);
+
     d->list = new dtkFinderListView(this);
     d->list->setModel(d->model);
     d->list->setRootIndex(d->model->index(QDir::currentPath()));
@@ -973,6 +976,9 @@ dtkFinder::dtkFinder(QWidget *parent) : QWidget(parent), d(new dtkFinderPrivate)
 
     connect(d->list, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onIndexDoubleClicked(QModelIndex)));
     connect(d->tree, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onIndexDoubleClicked(QModelIndex)));
+
+    connect(d->list, SIGNAL(clicked(QModelIndex)), this, SLOT(onIndexClicked(QModelIndex)));
+    connect(d->tree, SIGNAL(clicked(QModelIndex)), this, SLOT(onIndexClicked(QModelIndex)));
 
     connect(d->list, SIGNAL(changed(QString)), this, SLOT(setPath(QString)));
     connect(d->tree, SIGNAL(changed(QString)), this, SLOT(setPath(QString)));
@@ -1083,6 +1089,17 @@ void dtkFinder::onShowHiddenFiles(bool show)
         d->model->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
 }
 
+void dtkFinder::onIndexClicked(QModelIndex index)
+{
+    emit fileClicked(d->model->fileInfo(index));
+//    QFileInfo selection = d->model->fileInfo(index);
+
+//    if (! selection.isDir()) {
+//        qDebug() << "emit selected filename:" << selection.fileName();
+//        emit fileClicked(selection.fileName());
+//    }
+}
+
 void dtkFinder::onIndexDoubleClicked(QModelIndex index)
 {
     QFileInfo selection = d->model->fileInfo(index);
@@ -1125,4 +1142,7 @@ void dtkFinder::onSelectionChanged(const QItemSelection& selected, const QItemSe
         selectedPaths << d->model->filePath(index);
 
     emit selectionChanged(selectedPaths);
+
+    if (!selectedPaths.size())
+        emit nothingSelected();
 }

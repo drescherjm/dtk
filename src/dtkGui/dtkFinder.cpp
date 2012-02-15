@@ -49,22 +49,27 @@ dtkFinderToolBar::dtkFinderToolBar(QWidget *parent) : QToolBar(parent), d(new dt
     d->prevButton->setArrowType (Qt::LeftArrow);
     d->prevButton->setEnabled (0);
     d->prevButton->setIconSize(QSize(16, 16));
+    d->prevButton->setToolTip(tr("Back"));
     
     d->nextButton = new QToolButton (this);
     d->nextButton->setArrowType (Qt::RightArrow);
     d->nextButton->setEnabled (0);
     d->nextButton->setIconSize(QSize(16, 16));
+    d->nextButton->setToolTip(tr("Next"));
     
     d->listViewButton = new QToolButton (this);
     d->listViewButton->setCheckable(true);
     d->listViewButton->setChecked (true);
     d->listViewButton->setIcon(QIcon(":dtkGui/pixmaps/dtk-view-list.png"));
     d->listViewButton->setIconSize(QSize(16, 16));
+    d->listViewButton->setToolTip(tr("Icon view"));
     
     d->treeViewButton = new QToolButton (this);
     d->treeViewButton->setCheckable(true);
     d->treeViewButton->setIcon(QIcon(":dtkGui/pixmaps/dtk-view-tree.png"));    
     d->treeViewButton->setIconSize(QSize(16, 16));
+    d->treeViewButton->setToolTip(tr("List view"));
+
 
     d->showHiddenFilesButton = new QToolButton (this);
     d->showHiddenFilesButton->setCheckable(true);

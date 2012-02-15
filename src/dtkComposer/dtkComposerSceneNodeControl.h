@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:43:44 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  8 16:18:07 2012 (+0100)
+ * Last-Updated: Wed Feb 15 15:54:03 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 13
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -30,9 +30,6 @@ class dtkComposerSceneNodeControl : public dtkComposerSceneNode
 public:
      dtkComposerSceneNodeControl(void);
     ~dtkComposerSceneNodeControl(void);
-
-public:
-    virtual QString type(void) = 0;
 
 protected:
     void    addBlock(dtkComposerSceneNodeComposite *block);

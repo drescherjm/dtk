@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:34:45 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 11:07:48 2012 (+0100)
- *           By: tkloczko
- *     Update #: 6
+ * Last-Updated: Wed Feb 15 15:52:36 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 7
  */
 
 /* Commentary: 
@@ -33,9 +33,6 @@ public:
 
 public:
     void wrap(dtkComposerNode *node);
-
-public:
-    virtual QString type(void);
 
 public:
     void layout(void);

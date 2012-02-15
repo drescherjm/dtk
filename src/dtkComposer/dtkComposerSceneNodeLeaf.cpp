@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 11:24:34 2012 (+0100)
- *           By: tkloczko
- *     Update #: 38
+ * Last-Updated: Wed Feb 15 15:52:29 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 39
  */
 
 /* Commentary: 
@@ -55,11 +55,6 @@ void dtkComposerSceneNodeLeaf::wrap(dtkComposerNode *node)
         this->addOutputPort(new dtkComposerScenePort(index++, dtkComposerScenePort::Output, this));
 
     this->layout();
-}
-
-QString dtkComposerSceneNodeLeaf::type(void)
-{
-    return "leaf";
 }
 
 void dtkComposerSceneNodeLeaf::layout(void)

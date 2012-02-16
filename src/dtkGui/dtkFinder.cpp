@@ -553,8 +553,9 @@ void dtkFinderPathBar::paintEvent(QPaintEvent *event)
 class dtkFinderListViewPrivate
 {
 public:
-    QMenu *itemMenu;
-    QMenu *defaultMenu;
+    QMenu *menu;
+    QList<QAction *> defaultActions;
+    QList<QAction *> customActions;
     QAction *bookmarkAction;
     bool allowFileBookmarking;
 };
@@ -572,14 +573,13 @@ dtkFinderListView::dtkFinderListView(QWidget *parent) : QListView(parent), d(new
 
     this->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    d->itemMenu = new QMenu(this);
-    d->defaultMenu = new QMenu(this);
+    d->menu = new QMenu(this);
     d->allowFileBookmarking = true;
     d->bookmarkAction = new QAction(tr("Bookmark"), this);
     d->bookmarkAction->setIconVisibleInMenu(true);
     d->bookmarkAction->setIcon(QIcon(":dtkGui/pixmaps/star.svg"));
     connect(d->bookmarkAction, SIGNAL(triggered()), this, SLOT(onBookmarkSelectedItemsRequested()));
-    d->itemMenu->addAction(d->bookmarkAction);
+    d->menu->addAction(d->bookmarkAction);
 
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(updateContextMenu(const QPoint&)));
 }
@@ -593,12 +593,12 @@ dtkFinderListView::~dtkFinderListView(void)
 
 void dtkFinderListView::addContextMenuAction(QAction *action)
 {
-    d->itemMenu->addAction(action);
+    d->customActions.append(action);
 }
 
 void dtkFinderListView::addDefaultContextMenuAction(QAction *action)
 {
-    d->defaultMenu->addAction(action);
+    d->defaultActions.append(action);
 }
 
 QString dtkFinderListView::selectedPath() const
@@ -636,14 +636,9 @@ void dtkFinderListView::updateContextMenu(const QPoint& point)
 {
     QModelIndex index = this->indexAt(point);
 
-    if( !index.isValid()) { //Show default menu when no item is selected
-        d->defaultMenu->exec(mapToGlobal(point));
-    }
-    else {
-        // if d->allowFileBookmarking is false
-        // we won't show the 'bookmark' option
-        // for files in the context menu
+    d->menu->clear();
 
+    if(index.isValid()) {
         if(!d->allowFileBookmarking) {
             bool removed = false;
             QString selectedPath = this->selectedPath();
@@ -652,24 +647,38 @@ void dtkFinderListView::updateContextMenu(const QPoint& point)
                 QFileInfo fileInfo = QFileInfo(selectedPath);
                 if (fileInfo.isFile())
                 {
-                    d->itemMenu->removeAction(d->bookmarkAction);
+                    d->menu->removeAction(d->bookmarkAction);
                     removed = true;
                 }
             }
 
-            d->itemMenu->exec(mapToGlobal(point));
-
             if (removed)
             {
-                if(d->itemMenu->actions().size() > 0)
-                    d->itemMenu->insertAction(d->itemMenu->actions()[0], d->bookmarkAction);
+                if(d->menu->actions().size() > 0)
+                    d->menu->insertAction(d->menu->actions()[0], d->bookmarkAction);
                 else
-                    d->itemMenu->addAction(d->bookmarkAction);
+                    d->menu->addAction(d->bookmarkAction);
             }
         }
-        else
-            d->itemMenu->exec(mapToGlobal(point));
+
+        //Add custom actions
+        for (int i = 0; i < d->customActions.size(); i++) {
+            d->menu->addAction(d->customActions.value(i));
+        }
+
+        d->menu->addSeparator();
+        d->menu->addSeparator();
+
     }
+
+    //By default add default action
+    for (int i = 0; i < d->defaultActions.size(); i++) {
+        d->menu->addAction(d->defaultActions.value(i));
+    }
+
+    d->menu->exec(mapToGlobal(point));
+
+
 }
 
 void dtkFinderListView::onBookmarkSelectedItemsRequested(void)
@@ -758,8 +767,9 @@ void dtkFinderListView::startDrag(Qt::DropActions supportedActions)
 class dtkFinderTreeViewPrivate
 {
 public:
-    QMenu *itemMenu;
-    QMenu *defaultMenu;
+    QMenu *menu;
+    QList<QAction *> defaultActions;
+    QList<QAction *> customActions;
     QAction *bookmarkAction;
     bool allowFileBookmarking;
 };
@@ -773,14 +783,13 @@ dtkFinderTreeView::dtkFinderTreeView(QWidget *parent) : QTreeView(parent), d(new
     this->setSortingEnabled(true);
     this->sortByColumn(0, Qt::AscendingOrder);
 
-    d->itemMenu = new QMenu(this);
-    d->defaultMenu = new QMenu(this);
+    d->menu = new QMenu(this);
     d->allowFileBookmarking = true;
     d->bookmarkAction = new QAction(tr("Bookmark"), this);
     d->bookmarkAction->setIconVisibleInMenu(true);
     d->bookmarkAction->setIcon(QIcon(":dtkGui/pixmaps/star.svg"));
     connect(d->bookmarkAction, SIGNAL(triggered()), this, SLOT(onBookmarkSelectedItemsRequested()));
-    d->itemMenu->addAction(d->bookmarkAction);
+    d->menu->addAction(d->bookmarkAction);
 
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(updateContextMenu(const QPoint&)));
 }
@@ -802,12 +811,12 @@ int dtkFinderTreeView::sizeHintForColumn(int column) const
 
 void dtkFinderTreeView::addContextMenuAction(QAction *action)
 {
-    d->itemMenu->addAction(action);
+    d->customActions.append(action);
 }
 
 void dtkFinderTreeView::addDefaultContextMenuAction(QAction *action)
 {
-    d->defaultMenu->addAction(action);
+    d->defaultActions.append(action);
 }
 
 QString dtkFinderTreeView::selectedPath() const
@@ -857,14 +866,9 @@ void dtkFinderTreeView::updateContextMenu(const QPoint& point)
 {
     QModelIndex index = this->indexAt(point);
 
-    if(!index.isValid()) {
-        d->defaultMenu->exec(mapToGlobal(point));
-    }
-    else {
-        // if d->allowFileBookmarking is false
-        // we won't show the 'bookmark' option
-        // for files in the context menu
+    d->menu->clear();
 
+    if(index.isValid()) {
         if(!d->allowFileBookmarking) {
             bool removed = false;
             QString selectedPath = this->selectedPath();
@@ -873,24 +877,36 @@ void dtkFinderTreeView::updateContextMenu(const QPoint& point)
                 QFileInfo fileInfo = QFileInfo(selectedPath);
                 if (fileInfo.isFile())
                 {
-                    d->itemMenu->removeAction(d->bookmarkAction);
+                    d->menu->removeAction(d->bookmarkAction);
                     removed = true;
                 }
             }
 
-            d->itemMenu->exec(mapToGlobal(point));
-
             if (removed)
             {
-                if(d->itemMenu->actions().size() > 0)
-                    d->itemMenu->insertAction(d->itemMenu->actions()[0], d->bookmarkAction);
+                if(d->menu->actions().size() > 0)
+                    d->menu->insertAction(d->menu->actions()[0], d->bookmarkAction);
                 else
-                    d->itemMenu->addAction(d->bookmarkAction);
+                    d->menu->addAction(d->bookmarkAction);
             }
         }
-        else
-            d->itemMenu->exec(mapToGlobal(point));
+
+        //Add custom actions
+        for (int i = 0; i < d->customActions.size(); i++) {
+            d->menu->addAction(d->customActions.value(i));
+        }
+
+        d->menu->addSeparator();
+        d->menu->addSeparator();
+
     }
+
+    //By default add default action
+    for (int i = 0; i < d->defaultActions.size(); i++) {
+        d->menu->addAction(d->defaultActions.value(i));
+    }
+
+    d->menu->exec(mapToGlobal(point));
 
 }
 

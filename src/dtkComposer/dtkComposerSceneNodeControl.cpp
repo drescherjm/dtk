@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 18:34:59 2012 (+0100)
+ * Last-Updated: Thu Feb 16 18:56:24 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 287
+ *     Update #: 297
  */
 
 /* Commentary: 
@@ -52,12 +52,15 @@ dtkComposerSceneNodeControl::dtkComposerSceneNodeControl(void) : dtkComposerScen
 
     dtkComposerSceneNodeComposite *cond_block = new dtkComposerSceneNodeComposite;
     cond_block->setParent(this);
+    cond_block->setTitle("Conditional");
     
     dtkComposerSceneNodeComposite *body_block = new dtkComposerSceneNodeComposite;
     body_block->setParent(this);
+    body_block->setTitle("Body");
 
     dtkComposerSceneNodeComposite *incr_block = new dtkComposerSceneNodeComposite;
     incr_block->setParent(this);
+    incr_block->setTitle("Incrementat");
 
     dtkComposerSceneNodeLeaf *footer = new dtkComposerSceneNodeLeaf;
     footer->addOutputPort(new dtkComposerScenePort(1, dtkComposerScenePort::Output, footer));

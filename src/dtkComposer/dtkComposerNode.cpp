@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:25:11 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 16:06:03 2012 (+0100)
+ * Last-Updated: Thu Feb 16 18:57:49 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 39
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -28,6 +28,9 @@ class dtkComposerNodePrivate
 public:
     QList<dtkComposerTransmitter *> emitters;
     QList<dtkComposerTransmitter *> receivers;
+
+public:
+    QString title_hint;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -36,7 +39,7 @@ public:
 
 dtkComposerNode::dtkComposerNode(void) : d(new dtkComposerNodePrivate)
 {
-
+    d->title_hint = "Node";
 }
 
 dtkComposerNode::~dtkComposerNode(void)
@@ -82,10 +85,15 @@ QList<dtkComposerTransmitter *> dtkComposerNode::receivers(void)
 
 QString dtkComposerNode::titleHint(void)
 {
-    return "Node";
+    return d->title_hint;
 }
 
 QString dtkComposerNode::labelHint(int port)
 {
     return "port";
+}
+
+void dtkComposerNode::setTitleHint(const QString& hint)
+{
+    d->title_hint = hint;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 12:09:36 2012 (+0100)
+ * Last-Updated: Thu Feb 16 19:26:23 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1313
+ *     Update #: 1356
  */
 
 /* Commentary: 
@@ -263,6 +263,12 @@ public:
 
 public:
     dtkComposerSceneEdge *edge;
+
+// -- Dealing with the case of flattened composite nodes
+public:
+    dtkComposerSceneNodeComposite *current;
+    dtkComposerSceneNodeComposite *parent;
+// --
 };
 
 dtkComposerStackCommandCreateEdge::dtkComposerStackCommandCreateEdge(void) : dtkComposerStackCommand(), e(new dtkComposerStackCommandCreateEdgePrivate)
@@ -306,6 +312,25 @@ void dtkComposerStackCommandCreateEdge::redo(void)
     if(!e->destination)
         return;
 
+// -- Dealing with the case of flattened composite nodes
+
+    e->current = d->scene->current();
+    e->parent = NULL;
+
+    if(!e->current->entered()) {
+
+        if (e->source->node()->parent() != d->scene->current())
+            e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->source->node()->parent());
+        
+        if (e->destination->node()->parent() != d->scene->current())
+            e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->destination->node()->parent());
+    }
+        
+    if (e->parent)
+        d->scene->setCurrent(e->parent);
+
+// -- 
+
     if(!e->edge) {
         e->edge = new dtkComposerSceneEdge;
         e->edge->setSource(e->source);
@@ -317,6 +342,11 @@ void dtkComposerStackCommandCreateEdge::redo(void)
 
     d->scene->addEdge(e->edge);
     d->graph->addEdge(e->edge);
+
+// -- Dealing with the case of flattened composite nodes
+    if (e->parent)
+        d->scene->setCurrent(e->current);
+// --
 }
 
 void dtkComposerStackCommandCreateEdge::undo(void)
@@ -329,8 +359,18 @@ void dtkComposerStackCommandCreateEdge::undo(void)
 
     e->edge->unlink();
 
+// -- Dealing with the case of flattened composite nodes
+    if (e->parent)
+        d->scene->setCurrent(e->parent);
+// --
+
     d->scene->removeEdge(e->edge);
     d->graph->removeEdge(e->edge);
+
+// -- Dealing with the case of flattened composite nodes
+    if (e->parent)
+        d->scene->setCurrent(e->current);
+// --
 }
 
 // /////////////////////////////////////////////////////////////////

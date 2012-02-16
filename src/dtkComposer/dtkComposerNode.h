@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:24:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 16:25:57 2012 (+0100)
+ * Last-Updated: Thu Feb 16 18:57:11 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 39
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -54,6 +54,9 @@ public:
 public:
     virtual QString titleHint(void);
     virtual QString labelHint(int port);
+
+public:
+    void setTitleHint(const QString& hint);
 
 private:
     dtkComposerNodePrivate *d;

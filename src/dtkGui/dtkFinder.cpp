@@ -667,7 +667,6 @@ void dtkFinderListView::updateContextMenu(const QPoint& point)
         }
 
         d->menu->addSeparator();
-        d->menu->addSeparator();
 
     }
 
@@ -896,7 +895,6 @@ void dtkFinderTreeView::updateContextMenu(const QPoint& point)
             d->menu->addAction(d->customActions.value(i));
         }
 
-        d->menu->addSeparator();
         d->menu->addSeparator();
 
     }

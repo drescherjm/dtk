@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:15:01 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 11:23:54 2012 (+0100)
- *           By: tkloczko
- *     Update #: 14
+ * Last-Updated: Wed Feb 15 23:38:01 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -31,7 +31,7 @@ class dtkComposerScenePort;
 class dtkComposerSceneNodePrivate
 {
 public:
-    dtkComposerNode *node;
+    dtkComposerNode *wrapee;
 
 public:
     QList<dtkComposerScenePort *>  input_ports;
@@ -42,6 +42,9 @@ public:
 
 public:
     dtkComposerSceneNodeComposite *parent;
+
+public:
+    QString title;
 };
 
 #endif

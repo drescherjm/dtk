@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 16:02:05 2012 (+0100)
+ * Last-Updated: Thu Feb 16 00:23:13 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 221
+ *     Update #: 243
  */
 
 /* Commentary: 
@@ -122,11 +122,14 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
 
     if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
 
+        tag.setAttribute("title", node->title());
+
         foreach(dtkComposerScenePort *port, composite->inputPorts()) {
 
             QDomElement property = document.createElement("port");
             property.setAttribute("id", port->id());
             property.setAttribute("type", "input");
+            property.setAttribute("label", port->label());
             tag.appendChild(property);
         }
 
@@ -135,6 +138,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
             QDomElement property = document.createElement("port");
             property.setAttribute("id", port->id());
             property.setAttribute("type", "output");
+            property.setAttribute("label", port->label());
             tag.appendChild(property);
         }
 
@@ -147,15 +151,42 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
         foreach(dtkComposerSceneEdge *edge, composite->edges())
             tag.appendChild(this->writeEdge(edge, tag, document));
 
-    } else {
+    }
 
-        tag.setAttribute("type", node->wrapee()->type());
+    if(dtkComposerSceneNodeLeaf *leaf = dynamic_cast<dtkComposerSceneNodeLeaf *>(node)) {
+
+        tag.setAttribute("type", leaf->wrapee()->type());
+
+        if(node->wrapee() && node->title() != node->wrapee()->titleHint())
+            tag.setAttribute("title", node->title());
+
+        foreach(dtkComposerScenePort *port, leaf->inputPorts()) {
+
+            if(port->label() == leaf->wrapee()->labelHint(port->id()))
+                continue;
+
+            QDomElement property = document.createElement("port");
+            property.setAttribute("id", port->id());
+            property.setAttribute("type", "input");
+            property.setAttribute("label", port->label());
+            tag.appendChild(property);
+        }
+
+        foreach(dtkComposerScenePort *port, leaf->outputPorts()) {
+
+            if(port->label() == leaf->wrapee()->labelHint(port->id()))
+                continue;
+
+            QDomElement property = document.createElement("port");
+            property.setAttribute("id", port->id());
+            property.setAttribute("type", "output");
+            property.setAttribute("label", port->label());
+            tag.appendChild(property);
+        }
 
         this->extend(node, tag, document);
 
     }
-
-    // element.appendChild(tag);
 
     return tag;
 }

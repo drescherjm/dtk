@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:51:36 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 16:02:44 2012 (+0100)
+ * Last-Updated: Wed Feb 15 18:06:00 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 8
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -37,6 +37,19 @@ public:
 public:
     inline QString type(void) {
         return "boolean operator";
+    }
+
+    inline QString titleHint(void) {
+        return "Boolean Operator";
+    }
+
+    inline QString labelHint(int port) {
+        if (port == 0)
+            return "lhs";
+        else if (port == 1)
+            return "rhs";
+        else
+            return "value";
     }
 
 private:

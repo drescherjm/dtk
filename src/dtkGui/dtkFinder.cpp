@@ -1,5 +1,5 @@
-/* dtkFinder.cpp --- 
- * 
+/* dtkFinder.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Jun 12 15:47:45 2010 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 75
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkFinder.h"
@@ -50,23 +50,23 @@ dtkFinderToolBar::dtkFinderToolBar(QWidget *parent) : QToolBar(parent), d(new dt
     d->prevButton->setEnabled (0);
     d->prevButton->setIconSize(QSize(16, 16));
     d->prevButton->setToolTip(tr("Back"));
-    
+
     d->nextButton = new QToolButton (this);
     d->nextButton->setArrowType (Qt::RightArrow);
     d->nextButton->setEnabled (0);
     d->nextButton->setIconSize(QSize(16, 16));
     d->nextButton->setToolTip(tr("Next"));
-    
+
     d->listViewButton = new QToolButton (this);
     d->listViewButton->setCheckable(true);
     d->listViewButton->setChecked (true);
     d->listViewButton->setIcon(QIcon(":dtkGui/pixmaps/dtk-view-list.png"));
     d->listViewButton->setIconSize(QSize(16, 16));
     d->listViewButton->setToolTip(tr("Icon view"));
-    
+
     d->treeViewButton = new QToolButton (this);
     d->treeViewButton->setCheckable(true);
-    d->treeViewButton->setIcon(QIcon(":dtkGui/pixmaps/dtk-view-tree.png"));    
+    d->treeViewButton->setIcon(QIcon(":dtkGui/pixmaps/dtk-view-tree.png"));
     d->treeViewButton->setIconSize(QSize(16, 16));
     d->treeViewButton->setToolTip(tr("List view"));
 
@@ -80,21 +80,21 @@ dtkFinderToolBar::dtkFinderToolBar(QWidget *parent) : QToolBar(parent), d(new dt
 #ifdef Q_WS_MAC
     d->showHiddenFilesButton->setChecked(Qt::Checked);
 #endif
-    
+
     QButtonGroup *viewButtonGroup = new QButtonGroup (this);
     viewButtonGroup->setExclusive (true);
     viewButtonGroup->addButton ( d->listViewButton );
     viewButtonGroup->addButton ( d->treeViewButton );
-    
+
     this->addWidget (d->prevButton);
     this->addWidget (d->nextButton);
     this->addWidget (d->treeViewButton);
     this->addWidget (d->listViewButton);
     this->addWidget (d->showHiddenFilesButton);
-    
+
     connect (d->prevButton, SIGNAL (clicked()), this, SLOT (onPrev()));
     connect (d->nextButton, SIGNAL (clicked()), this, SLOT (onNext()));
-    
+
     connect (d->listViewButton, SIGNAL (clicked()), this, SIGNAL (listView()));
     connect (d->treeViewButton, SIGNAL (clicked()), this, SIGNAL (treeView()));
 
@@ -121,10 +121,10 @@ void dtkFinderToolBar::setPath (const QString &path)
         if (d->iterator!=d->pathList.end())
             d->pathList.erase(d->pathList.begin(), d->iterator);
     }
-    
+
     d->pathList.prepend (path);
     d->iterator = d->pathList.begin();
-    
+
     if (d->pathList.count()>1)
         d->prevButton->setEnabled(1);
     else
@@ -195,9 +195,9 @@ dtkFinderSideView::dtkFinderSideView(QWidget *parent) : QTreeWidget(parent), d(n
     this->setDragDropMode(QAbstractItemView::DropOnly);
     this->setIndentation(10);
     this->setFrameStyle(QFrame::NoFrame);
-    this->setAttribute(Qt::WA_MacShowFocusRect, false);    
+    this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setFocusPolicy(Qt::NoFocus);
-    this->populate();    
+    this->populate();
 
     connect(this, SIGNAL(itemClicked(QTreeWidgetItem *,int)), this, SLOT(onItemCicked(QTreeWidgetItem *, int)));
 }
@@ -238,7 +238,7 @@ void dtkFinderSideView::populate(void)
 #else
 	driveList = QDir::drives();
 #endif
-	
+
     foreach(QFileInfo info, driveList) {
 
 		QString dlabel = this->driveLabel( info.absoluteFilePath() );
@@ -412,16 +412,16 @@ QString dtkFinderSideView::driveLabel(QString drive)
 	DWORD dwSerialNumber = 0;
 	DWORD dwMaxFileNameLength=256;
 	DWORD dwFileSystemFlags=0;
-	bool ret = GetVolumeInformation( drive.toAscii().constData(), 
-									 szVolumeName, 256, 
+	bool ret = GetVolumeInformation( drive.toAscii().constData(),
+									 szVolumeName, 256,
 									 &dwSerialNumber, &dwMaxFileNameLength,
 									 &dwFileSystemFlags, szFileSystemName, 256);
-	if(!ret) { 
+	if(!ret) {
 		drive.remove("\\");
 		QString decoratedDrive = "("+drive+")";
 		return decoratedDrive;
 	}
-	
+
 	QString vName = QString::fromAscii(szVolumeName) ;
 	vName.trimmed();
 	drive.remove("\\");
@@ -652,7 +652,7 @@ void dtkFinderListView::updateContextMenu(const QPoint& point)
                 }
             }
 
-            if (removed)
+            if (!removed)
             {
                 if(d->menu->actions().size() > 0)
                     d->menu->insertAction(d->menu->actions()[0], d->bookmarkAction);
@@ -728,9 +728,9 @@ void dtkFinderListView::mouseDoubleClickEvent(QMouseEvent *event)
     if(QFileSystemModel *model = qobject_cast<QFileSystemModel *>(this->model())) {
 
         Q_UNUSED(model);
-        
+
         QModelIndex index = indexAt(event->pos());
-        
+
         if(!index.isValid())
             return;
 
@@ -880,8 +880,7 @@ void dtkFinderTreeView::updateContextMenu(const QPoint& point)
                     removed = true;
                 }
             }
-
-            if (removed)
+            if (!removed)
             {
                 if(d->menu->actions().size() > 0)
                     d->menu->insertAction(d->menu->actions()[0], d->bookmarkAction);
@@ -954,14 +953,14 @@ void dtkFinderTreeView::keyPressEvent(QKeyEvent *event)
 void dtkFinderTreeView::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if(QFileSystemModel *model = qobject_cast<QFileSystemModel *>(this->model())) {
-        
+
         Q_UNUSED(model);
 
         QModelIndex index = indexAt(event->pos());
-     
+
         if(!index.isValid())
             return;
-   
+
         QTreeView::mouseDoubleClickEvent(event);
     }
 }

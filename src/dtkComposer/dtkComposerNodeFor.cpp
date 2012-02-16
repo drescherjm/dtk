@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 12:04:11 2012 (+0100)
+ * Last-Updated: Thu Feb 16 13:12:31 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 5
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -67,9 +67,9 @@ void dtkComposerNodeFor::setVariables(void)
     DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
 }
 
-void dtkComposerNodeFor::selectBranch(void)
+int dtkComposerNodeFor::selectBranch(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+    return -1;
 }
 
 void dtkComposerNodeFor::begin(void)

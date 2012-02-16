@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: mer. févr. 15 16:09:42 2012 (+0100)
+ * Last-Updated: jeu. févr. 16 10:57:12 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 42
+ *     Update #: 55
  */
 
 /* Commentary:
@@ -42,7 +42,9 @@ void dtkComposerGraphNodeSelectBranch::eval(void)
     if (d->composer_node == NULL)
         return;
 
-    d->composer_node->selectBranch();
+    int branch = d->composer_node->selectBranch();
+
+    //TODO: send the result to the evaluator.
 }
 
 

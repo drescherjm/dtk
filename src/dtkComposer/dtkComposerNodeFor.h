@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:12:58 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 13:12:16 2012 (+0100)
+ * Last-Updated: Thu Feb 16 14:26:13 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 6
+ *     Update #: 7
  */
 
 /* Commentary: 
@@ -46,6 +46,9 @@ public:
 
 public:
     QString type(void);
+
+public:
+    QString titleHint(void);
 
 private:
     dtkComposerNodeForPrivate *d;

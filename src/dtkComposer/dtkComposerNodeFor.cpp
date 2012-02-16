@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 13:12:31 2012 (+0100)
+ * Last-Updated: Thu Feb 16 14:26:30 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 9
+ *     Update #: 12
  */
 
 /* Commentary: 
@@ -85,4 +85,9 @@ void dtkComposerNodeFor::end(void)
 QString dtkComposerNodeFor::type(void)
 {
     return "for";
+}
+
+QString dtkComposerNodeFor::titleHint(void)
+{
+    return "For";
 }

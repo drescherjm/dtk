@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:28:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 18:22:06 2012 (+0100)
+ * Last-Updated: Thu Feb 16 18:04:12 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 20
+ *     Update #: 28
  */
 
 /* Commentary: 
@@ -32,6 +32,7 @@ public:
 
 public:
      dtkComposerScenePort(unsigned int id, Type type, dtkComposerSceneNode *parent);
+     dtkComposerScenePort(unsigned int id, Type type, const QString& label, dtkComposerSceneNode *parent);
     ~dtkComposerScenePort(void);
 
 public:
@@ -58,5 +59,11 @@ public:
 private:
     dtkComposerScenePortPrivate *d;
 };
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerScenePortList
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerScenePortList : public QList<dtkComposerScenePort *> {};
 
 #endif

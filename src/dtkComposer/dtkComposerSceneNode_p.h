@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:15:01 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 12:57:01 2012 (+0100)
+ * Last-Updated: Thu Feb 16 18:13:20 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 19
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -22,10 +22,11 @@
 
 #include <QtCore>
 
+#include "dtkComposerSceneEdge.h"
+#include "dtkComposerSceneNode.h"
+#include "dtkComposerScenePort.h"
+
 class dtkComposerNode;
-class dtkComposerSceneEdge;
-class dtkComposerSceneNode;
-class dtkComposerScenePort;
 
 class dtkComposerSceneNodePrivate
 {
@@ -33,17 +34,20 @@ public:
     dtkComposerNode *wrapee;
 
 public:
-    QList<dtkComposerScenePort *>  input_ports;
-    QList<dtkComposerScenePort *> output_ports;
+    dtkComposerScenePortList  input_ports;
+    dtkComposerScenePortList output_ports;
 
-    QList<dtkComposerSceneEdge *>  input_edges;
-    QList<dtkComposerSceneEdge *> output_edges;
+    dtkComposerSceneEdgeList  input_edges;
+    dtkComposerSceneEdgeList output_edges;
 
 public:
     dtkComposerSceneNode *parent;
 
 public:
     QString title;
+
+public:
+    bool embedded;
 };
 
 #endif

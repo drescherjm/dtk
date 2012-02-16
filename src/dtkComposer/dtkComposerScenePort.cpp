@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 13:59:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 18:45:10 2012 (+0100)
+ * Last-Updated: Thu Feb 16 18:15:37 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 84
+ *     Update #: 101
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include "dtkComposerSceneNode.h"
+#include "dtkComposerSceneNodeControl.h"
 #include "dtkComposerScenePort.h"
 
 class dtkComposerScenePortPrivate
@@ -56,7 +57,30 @@ dtkComposerScenePort::dtkComposerScenePort(unsigned int id, Type type, dtkCompos
     d->label->setDefaultTextColor(Qt::white);
     
     this->setFlags(QGraphicsItem::ItemIsSelectable);
+    this->setZValue(1);
+}
 
+dtkComposerScenePort::dtkComposerScenePort(unsigned int id, Type type, const QString& label, dtkComposerSceneNode *parent) : QGraphicsItem(parent), d(new dtkComposerScenePortPrivate)
+{
+    d->id = id;
+    d->type = type;
+    d->node = parent;
+
+    d->ellipse = new QGraphicsEllipseItem(this);
+    d->ellipse->setPen(QPen(Qt::darkGray, 1));
+    d->ellipse->setBrush(Qt::lightGray);
+    d->ellipse->setRect(0, 0, 10, 10);
+
+    d->label = new QGraphicsTextItem(this);
+#if defined(Q_WS_MAC)
+    d->label->setFont(QFont("Lucida Grande", 11));
+#else
+    d->label->setFont(QFont("Lucida Grande", 9));
+#endif
+    d->label->setDefaultTextColor(Qt::white);
+    
+    this->setLabel(label);
+    this->setFlags(QGraphicsItem::ItemIsSelectable);
     this->setZValue(1);
 }
 
@@ -79,6 +103,9 @@ dtkComposerScenePort::Type dtkComposerScenePort::type(void)
 
 dtkComposerSceneNode *dtkComposerScenePort::node(void)
 {
+    if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(d->node->parent()))
+        return control;
+
     return d->node;
 }
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 12:56:39 2012 (+0100)
+ * Last-Updated: Thu Feb 16 18:05:14 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 62
+ *     Update #: 71
  */
 
 /* Commentary: 
@@ -28,6 +28,7 @@ dtkComposerSceneNode::dtkComposerSceneNode(void) : QGraphicsItem(), d(new dtkCom
 {
     d->wrapee = NULL;
     d->parent = NULL;
+    d->embedded = false;
 
     this->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
 }
@@ -81,12 +82,12 @@ void dtkComposerSceneNode::removeOutputEdge(dtkComposerSceneEdge *edge)
     d->output_edges.removeAll(edge);
 }
 
-QList<dtkComposerSceneEdge *> dtkComposerSceneNode::inputEdges(void)
+dtkComposerSceneEdgeList dtkComposerSceneNode::inputEdges(void)
 {
     return d->input_edges;
 }
 
-QList<dtkComposerSceneEdge *> dtkComposerSceneNode::outputEdges(void)
+dtkComposerSceneEdgeList dtkComposerSceneNode::outputEdges(void)
 {
     return d->output_edges;
 }
@@ -111,12 +112,12 @@ void dtkComposerSceneNode::removeOutputPort(dtkComposerScenePort *port)
     d->output_ports.removeAll(port);
 }
 
-QList<dtkComposerScenePort *> dtkComposerSceneNode::inputPorts(void)
+dtkComposerScenePortList dtkComposerSceneNode::inputPorts(void)
 {
     return d->input_ports;
 }
 
-QList<dtkComposerScenePort *> dtkComposerSceneNode::outputPorts(void)
+dtkComposerScenePortList dtkComposerSceneNode::outputPorts(void)
 {
     return d->output_ports;
 }
@@ -144,6 +145,17 @@ dtkComposerScenePort *dtkComposerSceneNode::port(unsigned int id)
             p = port;
 
     return p;
+}
+
+
+bool dtkComposerSceneNode::embedded(void)
+{
+    return d->embedded;
+}
+
+void dtkComposerSceneNode::setEmbedded(bool embedded)
+{
+    d->embedded = embedded;
 }
 
 // QVariant dtkComposerSceneNode::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)

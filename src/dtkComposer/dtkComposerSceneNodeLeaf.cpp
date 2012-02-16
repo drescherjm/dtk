@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 18:24:33 2012 (+0100)
+ * Last-Updated: Thu Feb 16 18:33:00 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 145
+ *     Update #: 175
  */
 
 /* Commentary: 
@@ -73,7 +73,7 @@ void dtkComposerSceneNodeLeaf::wrap(dtkComposerNode *node)
 
 void dtkComposerSceneNodeLeaf::layout(void)
 {
-    int header = 15;
+    int header = this->embedded() ? 0 : 15;
 
     int port_margin_top = 10;
     int port_margin_bottom = 10;
@@ -97,6 +97,11 @@ void dtkComposerSceneNodeLeaf::layout(void)
             d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->outputPorts().count() * this->outputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->outputPorts().count()-1) * port_spacing + header));
 }
 
+void dtkComposerSceneNodeLeaf::resize(qreal width, qreal height)
+{
+    d->rect = QRectF(d->rect.topLeft(), QSizeF(width, height));
+}
+
 QRectF dtkComposerSceneNodeLeaf::boundingRect(void) const
 {
     return d->rect.adjusted(-2, -2, 2, 2);
@@ -104,12 +109,10 @@ QRectF dtkComposerSceneNodeLeaf::boundingRect(void) const
 
 void dtkComposerSceneNodeLeaf::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    static qreal radius = 5.0;
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
 
-    QLinearGradient gradiant(d->rect.left(), d->rect.top(), d->rect.left(), d->rect.bottom());
-    gradiant.setColorAt(0.0, QColor(Qt::white));
-    gradiant.setColorAt(0.3, QColor(Qt::gray));
-    gradiant.setColorAt(1.0, QColor(Qt::gray).darker());
+    qreal radius = this->embedded() ? 0.0 : 5.0;
 
     if (this->isSelected()) {
         painter->setPen(QPen(Qt::magenta, 2, Qt::SolidLine));
@@ -117,17 +120,35 @@ void dtkComposerSceneNodeLeaf::paint(QPainter *painter, const QStyleOptionGraphi
         painter->drawRoundedRect(d->rect.adjusted(-2, -2, 2, 2), radius, radius);
     }
 
-    painter->setPen(QPen(Qt::black, 1, Qt::SolidLine));
+    if(this->embedded())
+        painter->setPen(Qt::NoPen);
+    else
+        painter->setPen(QPen(Qt::black, 1, Qt::SolidLine));
+
+    QLinearGradient gradiant(d->rect.left(), d->rect.top(), d->rect.left(), d->rect.bottom());
+    gradiant.setColorAt(0.0, QColor(Qt::white));
+    gradiant.setColorAt(0.3, QColor(Qt::gray));
+    gradiant.setColorAt(1.0, QColor(Qt::gray).darker());
+
     painter->setBrush(gradiant);
+
     painter->drawRoundedRect(d->rect, radius, radius);
 
     // Drawing node's title
 
+    qreal margin = 5.0;
+
     QFont font = painter->font();
     QFontMetricsF metrics(font);
-    QString title_text = metrics.elidedText(this->title(), Qt::ElideMiddle, this->boundingRect().width()-2-4*radius);
+    QString title_text = metrics.elidedText(this->title(), Qt::ElideMiddle, this->boundingRect().width()-2-4*margin);
     QRectF title_rect = metrics.boundingRect(title_text);
-    QPointF title_pos = QPointF(2*radius, 2*radius + metrics.xHeight());
+
+    QPointF title_pos;
+
+    if(!this->embedded())
+        title_pos = QPointF(2*margin, 2*margin + metrics.xHeight());
+    else
+        title_pos = QPointF(d->rect.right() - 2*margin - metrics.width(title_text), 2*margin + metrics.xHeight());
 
     painter->setPen(QPen(QColor(Qt::gray).darker()));
     painter->drawText(title_pos + QPointF(0, -1), title_text);

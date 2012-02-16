@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 00:27:44 2012 (+0100)
+ * Last-Updated: Thu Feb 16 18:42:57 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 269
+ *     Update #: 299
  */
 
 /* Commentary: 
@@ -245,6 +245,9 @@ void dtkComposerSceneNodeComposite::layout(void)
         qreal w = xmax-xmin; w+= w_offset;
         qreal h = ymax-ymin; h+= h_offset;
 
+        w = qMax(w, 150.0);
+        h = qMax(h,  50.0);
+
         d->rect = QRectF(0, 0, w, h);
 
         this->setPos(xmin - w_offset/2, ymin - h_offset/2);
@@ -299,6 +302,11 @@ void dtkComposerSceneNodeComposite::layout(void)
     this->update();
 }
 
+void dtkComposerSceneNodeComposite::resize(qreal width, qreal height)
+{
+    d->rect = QRectF(d->rect.topLeft(), QSizeF(width, height));
+}
+
 QRectF dtkComposerSceneNodeComposite::boundingRect(void) const
 {
     return d->rect.adjusted(-2, -2, 2, 2);
@@ -306,7 +314,10 @@ QRectF dtkComposerSceneNodeComposite::boundingRect(void) const
 
 void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    static qreal radius = 5.0;
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
+    qreal radius = this->embedded() ? 0.0 : 5.0;
 
     if (this->isSelected()) {
         painter->setPen(QPen(Qt::magenta, 2, Qt::SolidLine));
@@ -327,20 +338,31 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
         painter->setBrush(gradiant);
     }
 
+    if(this->embedded())
+        painter->setPen(Qt::NoPen);
+
     painter->drawRoundedRect(d->rect, radius, radius);
 
     // Drawing node's title
 
+    qreal margin = 5.0;
+
     QFont font = painter->font();
     QFontMetricsF metrics(font);
-    QString title_text = metrics.elidedText(this->title(), Qt::ElideMiddle, this->boundingRect().width()-2-4*radius);
+    QString title_text = metrics.elidedText(this->title(), Qt::ElideMiddle, this->boundingRect().width()-2-4*margin);
     QRectF title_rect = metrics.boundingRect(title_text);
-    QPointF title_pos = QPointF(2*radius, 2*radius + metrics.xHeight());
 
-    painter->setPen(QPen(QColor(Qt::gray).darker()));
-    painter->drawText(title_pos + QPointF(0, -1), title_text);
-    painter->setPen(QPen(QColor(Qt::gray)));
-    painter->drawText(title_pos + QPointF(0, 1), title_text);
-    painter->setPen(QPen(QColor(Qt::white)));
+    QPointF title_pos;
+
+    if(!this->embedded())
+        title_pos = QPointF(2*margin, 2*margin + metrics.xHeight());
+    else
+        title_pos = QPointF(d->rect.width()/2.0 - metrics.width(title_text)/2.0, d->rect.height()/2.0 + metrics.xHeight()/2.0);
+
+    if(this->embedded() || (!this->embedded() && d->revealed))
+        painter->setPen(QPen(QColor(Qt::darkGray)));
+    else
+        painter->setPen(QPen(QColor(Qt::white)));
+
     painter->drawText(title_pos, title_text);
 }

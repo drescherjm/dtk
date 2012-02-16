@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:31:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 13:00:42 2012 (+0100)
+ * Last-Updated: Thu Feb 16 18:26:24 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 57
+ *     Update #: 69
  */
 
 /* Commentary: 
@@ -24,7 +24,9 @@
 
 class dtkComposerNode;
 class dtkComposerSceneEdge;
+class dtkComposerSceneEdgeList;
 class dtkComposerScenePort;
+class dtkComposerScenePortList;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerSceneNode
@@ -66,8 +68,8 @@ public:
     void  removeInputEdge(dtkComposerSceneEdge *edge);
     void removeOutputEdge(dtkComposerSceneEdge *edge);
 
-    QList<dtkComposerSceneEdge *>  inputEdges(void);
-    QList<dtkComposerSceneEdge *> outputEdges(void);
+    dtkComposerSceneEdgeList  inputEdges(void);
+    dtkComposerSceneEdgeList outputEdges(void);
 
 public:
     void  addInputPort(dtkComposerScenePort *port);
@@ -76,8 +78,8 @@ public:
     void  removeInputPort(dtkComposerScenePort *port);
     void removeOutputPort(dtkComposerScenePort *port);
 
-    QList<dtkComposerScenePort *>  inputPorts(void);
-    QList<dtkComposerScenePort *> outputPorts(void);
+    dtkComposerScenePortList  inputPorts(void);
+    dtkComposerScenePortList outputPorts(void);
 
 #pragma mark -
 #pragma mark Attributes setup
@@ -91,6 +93,12 @@ public:
 public:
     dtkComposerScenePort *port(unsigned int id);
 
+public:
+    bool embedded(void);
+
+public:
+    void setEmbedded(bool embedded);
+
 #pragma mark -
 #pragma mark Graphics
 
@@ -102,6 +110,9 @@ public:
 
 public:
     virtual void layout(void) = 0;
+
+public:
+    virtual void resize(qreal width, qreal height) = 0;
 
 // protected:
 //     QVariant itemChange(GraphicsItemChange change, const QVariant& value);

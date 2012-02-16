@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:43:44 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 12:12:33 2012 (+0100)
+ * Last-Updated: Thu Feb 16 18:26:11 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 31
+ *     Update #: 42
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include "dtkComposerSceneNode.h"
 
 class dtkComposerNodeControl;
+class dtkComposerSceneEdgeList;
 class dtkComposerSceneNodeComposite;
 class dtkComposerSceneNodeControlPrivate;
 class dtkComposerSceneNodeLeaf;
@@ -45,13 +46,16 @@ protected:
     void removeBlock(dtkComposerSceneNodeComposite *block);
 
 public:
-    virtual void layout(void);
+    void layout(void);
 
 public:
-    virtual QRectF boundingRect(void) const;
+    void resize(qreal width, qreal height);
 
 public:
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    QRectF boundingRect(void) const;
+
+public:
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
 private:
     dtkComposerSceneNodeControlPrivate *d;

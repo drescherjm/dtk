@@ -49,22 +49,27 @@ dtkFinderToolBar::dtkFinderToolBar(QWidget *parent) : QToolBar(parent), d(new dt
     d->prevButton->setArrowType (Qt::LeftArrow);
     d->prevButton->setEnabled (0);
     d->prevButton->setIconSize(QSize(16, 16));
+    d->prevButton->setToolTip(tr("Back"));
     
     d->nextButton = new QToolButton (this);
     d->nextButton->setArrowType (Qt::RightArrow);
     d->nextButton->setEnabled (0);
     d->nextButton->setIconSize(QSize(16, 16));
+    d->nextButton->setToolTip(tr("Next"));
     
     d->listViewButton = new QToolButton (this);
     d->listViewButton->setCheckable(true);
     d->listViewButton->setChecked (true);
     d->listViewButton->setIcon(QIcon(":dtkGui/pixmaps/dtk-view-list.png"));
     d->listViewButton->setIconSize(QSize(16, 16));
+    d->listViewButton->setToolTip(tr("Icon view"));
     
     d->treeViewButton = new QToolButton (this);
     d->treeViewButton->setCheckable(true);
     d->treeViewButton->setIcon(QIcon(":dtkGui/pixmaps/dtk-view-tree.png"));    
     d->treeViewButton->setIconSize(QSize(16, 16));
+    d->treeViewButton->setToolTip(tr("List view"));
+
 
     d->showHiddenFilesButton = new QToolButton (this);
     d->showHiddenFilesButton->setCheckable(true);
@@ -781,12 +786,24 @@ QStringList dtkFinderTreeView::selectedPaths() const
     if(!selectedIndexes().count())
         return QStringList();
 
+    // the treeview considers each cell as a selected item
+    // hence we will need to group items by row
+    // or take one item per row
+
+    QList<int> alreadyReadRows;
+
     if(QFileSystemModel *model = qobject_cast<QFileSystemModel *>(this->model()))
     {
         QStringList selectedPaths = *(new QStringList());
 
         foreach(QModelIndex index, selectedIndexes())
-            selectedPaths << model->filePath(index);
+        {
+            if (!alreadyReadRows.contains(index.row()))
+            {
+                selectedPaths << model->filePath(index);
+                alreadyReadRows << index.row();
+            }
+        }
 
         return selectedPaths;
     }
@@ -948,6 +965,9 @@ dtkFinder::dtkFinder(QWidget *parent) : QWidget(parent), d(new dtkFinderPrivate)
 #endif
     d->model->setRootPath(QDir::rootPath());
 
+//    qDebug() << d->model->roleNames();
+//    qDebug() << d->model->data(d->model->index(0,0, QModelIndex()), 34);
+
     d->list = new dtkFinderListView(this);
     d->list->setModel(d->model);
     d->list->setRootIndex(d->model->index(QDir::currentPath()));
@@ -955,6 +975,8 @@ dtkFinder::dtkFinder(QWidget *parent) : QWidget(parent), d(new dtkFinderPrivate)
     d->tree = new dtkFinderTreeView(this);
     d->tree->setModel(d->model);
     d->tree->setRootIndex(d->model->index(QDir::currentPath()));
+    d->tree->setSelectionBehavior(QAbstractItemView::SelectRows);
+    d->tree->setAllColumnsShowFocus(true);
 
     d->stack = new QStackedWidget(this);
     d->stack->addWidget(d->list);
@@ -968,6 +990,9 @@ dtkFinder::dtkFinder(QWidget *parent) : QWidget(parent), d(new dtkFinderPrivate)
 
     connect(d->list, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onIndexDoubleClicked(QModelIndex)));
     connect(d->tree, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onIndexDoubleClicked(QModelIndex)));
+
+    connect(d->list, SIGNAL(clicked(QModelIndex)), this, SLOT(onIndexClicked(QModelIndex)));
+    connect(d->tree, SIGNAL(clicked(QModelIndex)), this, SLOT(onIndexClicked(QModelIndex)));
 
     connect(d->list, SIGNAL(changed(QString)), this, SLOT(setPath(QString)));
     connect(d->tree, SIGNAL(changed(QString)), this, SLOT(setPath(QString)));
@@ -1063,11 +1088,13 @@ void dtkFinder::setPath(const QString& path)
 void dtkFinder::switchToListView(void)
 {
     d->stack->setCurrentIndex(0);
+    emitSelectedItems();
 }
 
 void dtkFinder::switchToTreeView(void)
 {
     d->stack->setCurrentIndex(1);
+    emitSelectedItems();
 }
 
 void dtkFinder::onShowHiddenFiles(bool show)
@@ -1076,6 +1103,17 @@ void dtkFinder::onShowHiddenFiles(bool show)
         d->model->setFilter(QDir::Hidden | QDir::AllEntries | QDir::NoDotAndDotDot);
     else
         d->model->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
+}
+
+void dtkFinder::onIndexClicked(QModelIndex index)
+{
+    emit fileClicked(d->model->fileInfo(index));
+//    QFileInfo selection = d->model->fileInfo(index);
+
+//    if (! selection.isDir()) {
+//        qDebug() << "emit selected filename:" << selection.fileName();
+//        emit fileClicked(selection.fileName());
+//    }
 }
 
 void dtkFinder::onIndexDoubleClicked(QModelIndex index)
@@ -1103,13 +1141,26 @@ void dtkFinder::onBookmarkSelectedItemsRequested(void)
         d->tree->onBookmarkSelectedItemsRequested();
 }
 
-
-void dtkFinder::onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
+void dtkFinder::emitSelectedItems()
 {
     QStringList selectedPaths = *(new QStringList());
 
-    foreach(QModelIndex index, selected.indexes())
-        selectedPaths << d->model->filePath(index);
+    if(d->stack->currentIndex() == 0)
+        selectedPaths = d->list->selectedPaths();
+
+    if(d->stack->currentIndex() == 1)
+        selectedPaths = d->tree->selectedPaths();
 
     emit selectionChanged(selectedPaths);
+
+    if (!selectedPaths.size())
+        emit nothingSelected();
+}
+
+void dtkFinder::onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
+{
+    // note that only the recently selected items are in the "selected" variable
+    // items previously selected are not
+
+    emitSelectedItems();
 }

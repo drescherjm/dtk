@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 11:41:08 2012 (+0100)
- *           By: tkloczko
- *     Update #: 1312
+ * Last-Updated: Thu Feb 16 12:09:36 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 1313
  */
 
 /* Commentary: 
@@ -139,8 +139,8 @@ void dtkComposerStackCommandCreateNode::redo(void)
 
         if(dynamic_cast<dtkComposerNodeLeaf *>(node))
             e->node = new dtkComposerSceneNodeLeaf;
-        // else
-        //     e->node = new dtkComposerSceneNodeControl;
+        else
+            e->node = new dtkComposerSceneNodeControl;
 
         e->node->wrap(node);
         e->node->setParent(d->scene->current());

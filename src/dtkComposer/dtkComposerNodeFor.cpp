@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 09:16:34 2012 (+0100)
- *           By: tkloczko
- *     Update #: 3
+ * Last-Updated: Thu Feb 16 12:04:11 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 5
  */
 
 /* Commentary: 
@@ -80,4 +80,9 @@ void dtkComposerNodeFor::begin(void)
 void dtkComposerNodeFor::end(void)
 {
     DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+}
+
+QString dtkComposerNodeFor::type(void)
+{
+    return "for";
 }

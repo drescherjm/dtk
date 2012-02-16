@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Feb  5 15:30:18 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 00:38:11 2012 (+0100)
+ * Last-Updated: Thu Feb 16 13:05:48 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 757
+ *     Update #: 776
  */
 
 /* Commentary: 
@@ -79,14 +79,17 @@ QVariant dtkComposerSceneModel::data(const QModelIndex& index, int role) const
     if(role != Qt::DisplayRole)
         return QVariant();
 
-    dtkComposerSceneNodeComposite *composite;
+    dtkComposerSceneNodeComposite *composite = NULL;
 
     if(dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>((QGraphicsItem *)(index.internalPointer())))
-        composite = node->parent();
+        composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node->parent());
     else if(dtkComposerSceneNote *note = dynamic_cast<dtkComposerSceneNote *>((QGraphicsItem *)(index.internalPointer())))
-        composite = note->parent();
+        composite = dynamic_cast<dtkComposerSceneNodeComposite *>(note->parent());
     else if(dtkComposerSceneEdge *edge = dynamic_cast<dtkComposerSceneEdge *>((QGraphicsItem *)(index.internalPointer())))
-        composite = edge->parent();
+        composite = dynamic_cast<dtkComposerSceneNodeComposite *>(edge->parent());
+
+    if(!composite)
+        return QVariant();
 
     int c_notes = composite->notes().count();
     int c_nodes = composite->nodes().count();
@@ -146,19 +149,24 @@ QModelIndex dtkComposerSceneModel::parent(const QModelIndex& index) const
     if (!index.isValid())
         return QModelIndex();
 
-    dtkComposerSceneNodeComposite *composite;
+    dtkComposerSceneNodeComposite *composite = NULL;
 
     if(dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>((QGraphicsItem *)(index.internalPointer())))
-        composite = node->parent();
+        composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node->parent());
     else if(dtkComposerSceneNote *note = dynamic_cast<dtkComposerSceneNote *>((QGraphicsItem *)(index.internalPointer())))
-        composite = note->parent();
+        composite = dynamic_cast<dtkComposerSceneNodeComposite *>(note->parent());
     else if(dtkComposerSceneEdge *edge = dynamic_cast<dtkComposerSceneEdge *>((QGraphicsItem *)(index.internalPointer())))
-        composite = edge->parent();
+        composite = dynamic_cast<dtkComposerSceneNodeComposite *>(edge->parent());
+
+    if(!composite)
+        return QModelIndex();
 
     if(composite == d->scene->root())
         return QModelIndex();
-    else
-        return this->createIndex(composite->parent()->notes().count() + composite->parent()->nodes().indexOf(composite), 0, composite);
+
+    dtkComposerSceneNodeComposite *parent = dynamic_cast<dtkComposerSceneNodeComposite *>(composite->parent());
+
+    return this->createIndex(parent->notes().count() + parent->nodes().indexOf(composite), 0, composite);
 }
 
 int dtkComposerSceneModel::rowCount(const QModelIndex& parent) const

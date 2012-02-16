@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Wed Feb 15 11:05:50 2012 (+0100)
- *           By: tkloczko
- *     Update #: 44
+ * Last-Updated: Thu Feb 16 12:45:15 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 51
  */
 
 /* Commentary:
@@ -21,6 +21,7 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
+#include "dtkComposerNodeFor.h"
 #include "dtkComposerSceneNodeLeaf.h"
 
 class dtkComposerFactoryPrivate
@@ -33,6 +34,10 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 {
     d->nodes.insert("Boolean", "boolean");
     d->nodes.insert("Boolean Operator", "boolean operator");
+
+// --
+    d->nodes.insert("For", "for");
+// --
 }
 
 dtkComposerFactory::~dtkComposerFactory(void)
@@ -49,6 +54,11 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "boolean operator")
         return new dtkComposerNodeBooleanOperator;
+
+// --
+    if(type == "for")
+        return new dtkComposerNodeFor;
+// --
 
     return NULL;
 }

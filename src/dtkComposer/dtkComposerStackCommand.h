@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 17 20:07:59 2012 (+0100)
+ * Last-Updated: Fri Feb 17 22:51:11 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 131
+ *     Update #: 132
  */
 
 /* Commentary: 
@@ -393,7 +393,7 @@ public:
 
 public:
     void setOriginNode(dtkComposerSceneNode *node);
-    void setTargetNode(dtkComposerSceneNodeComposite *node);
+    void setTargetNode(dtkComposerSceneNode *node);
 
     void setOriginPosition(QPointF position);
     void setTargetPosition(QPointF position);

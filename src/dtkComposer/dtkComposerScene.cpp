@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Fri Feb 17 22:29:21 2012 (+0100)
+ * Last-Updated: Fri Feb 17 22:59:29 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1445
+ *     Update #: 1462
  */
 
 /* Commentary:
@@ -400,23 +400,35 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             goto adjust_edges;
         }
 
-        d->reparent_target = dynamic_cast<dtkComposerSceneNodeComposite *>(node);
+        if(dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
 
-        if(!d->reparent_target) {
-            goto adjust_edges;
+            d->reparent_target = node;
+
+            if (d->reparent_origin->parent() == d->reparent_target) {
+                d->reparent_target = NULL;
+                goto adjust_edges;
+            }
+            
+            if (dynamic_cast<dtkComposerSceneNodeControl *>(d->reparent_target->parent())) {
+                d->reparent_target = NULL;
+                goto adjust_edges;
+            }
+
+            this->views().at(0)->setCursor(Qt::WaitCursor);
         }
 
-        if (d->reparent_origin->parent() == d->reparent_target) {
-            d->reparent_target = NULL;
-            goto adjust_edges;
+        if(dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
+
+            d->reparent_target = node;
+
+            if (d->reparent_origin->parent() == d->reparent_target) {
+                d->reparent_target = NULL;
+                goto adjust_edges;
+            }
+            
+            this->views().at(0)->setCursor(Qt::WaitCursor);
         }
 
-        if (dynamic_cast<dtkComposerSceneNodeControl *>(d->reparent_target->parent())) {
-            d->reparent_target = NULL;
-            goto adjust_edges;
-        }
-
-        this->views().at(0)->setCursor(Qt::WaitCursor);
     }
 
 // --

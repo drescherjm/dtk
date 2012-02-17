@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 17 21:52:42 2012 (+0100)
+ * Last-Updated: Fri Feb 17 22:56:04 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1485
+ *     Update #: 1495
  */
 
 /* Commentary: 
@@ -1616,11 +1616,14 @@ public:
 
 public:
     dtkComposerSceneNode *origin;
-    dtkComposerSceneNodeComposite *target;
+    dtkComposerSceneNode *target;
 };
 
 dtkComposerStackCommandReparentNode::dtkComposerStackCommandReparentNode(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandReparentNodePrivate)
 {
+    e->origin = NULL;
+    e->target = NULL;
+
     this->setText("Reparent node");
 }
 
@@ -1636,7 +1639,7 @@ void dtkComposerStackCommandReparentNode::setOriginNode(dtkComposerSceneNode *no
     e->origin = node;
 }
 
-void dtkComposerStackCommandReparentNode::setTargetNode(dtkComposerSceneNodeComposite *node)
+void dtkComposerStackCommandReparentNode::setTargetNode(dtkComposerSceneNode *node)
 {
     e->target = node;
 }
@@ -1665,17 +1668,20 @@ void dtkComposerStackCommandReparentNode::redo(void)
     if(!e->target)
         return;
 
-    d->scene->removeNode(e->origin);
+    if(dtkComposerSceneNodeComposite *target = dynamic_cast<dtkComposerSceneNodeComposite *>(e->target)) {
 
-    e->target->addNode(e->origin);
-
-    if (e->target->flattened()) {
-        e->target->layout();
-        d->scene->addItem(e->origin);
+        d->scene->removeNode(e->origin);
+        
+        target->addNode(e->origin);
+        
+        if (target->flattened()) {
+            target->layout();
+            d->scene->addItem(e->origin);
+        }
+        
+        e->origin->setParent(target);
+        e->origin->setPos(e->target_pos);
     }
-
-    e->origin->setParent(e->target);
-    e->origin->setPos(e->target_pos);
 }
 
 void dtkComposerStackCommandReparentNode::undo(void)
@@ -1692,15 +1698,18 @@ void dtkComposerStackCommandReparentNode::undo(void)
     if(!e->target)
         return;
 
-    e->target->removeNode(e->origin);
+    if(dtkComposerSceneNodeComposite *target = dynamic_cast<dtkComposerSceneNodeComposite *>(e->target)) {
 
-    if (e->target->flattened()) {
-        e->target->layout();
-        d->scene->removeItem(e->origin);
+        target->removeNode(e->origin);
+        
+        if (target->flattened()) {
+            target->layout();
+            d->scene->removeItem(e->origin);
+        }
+        
+        d->scene->addNode(e->origin);
+        
+        e->origin->setParent(target->parent());
+        e->origin->setPos(e->origin_pos);
     }
-
-    d->scene->addNode(e->origin);
-
-    e->origin->setParent(e->target->parent());
-    e->origin->setPos(e->origin_pos);
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  9 16:07:30 2012 (+0100)
+ * Last-Updated: Fri Feb 17 20:07:59 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 116
+ *     Update #: 131
  */
 
 /* Commentary: 
@@ -377,6 +377,33 @@ public:
 
 private:
     dtkComposerStackCommandDestroyPortPrivate *e;
+};
+
+// /////////////////////////////////////////////////////////////////
+// Reparent Node Command
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandReparentNodePrivate;
+
+class dtkComposerStackCommandReparentNode : public dtkComposerStackCommand
+{
+public:
+     dtkComposerStackCommandReparentNode(dtkComposerStackCommand *parent = 0);
+    ~dtkComposerStackCommandReparentNode(void);
+
+public:
+    void setOriginNode(dtkComposerSceneNode *node);
+    void setTargetNode(dtkComposerSceneNodeComposite *node);
+
+    void setOriginPosition(QPointF position);
+    void setTargetPosition(QPointF position);
+
+public:
+    void redo(void);
+    void undo(void);
+
+private:
+    dtkComposerStackCommandReparentNodePrivate *e;
 };
 
 #endif

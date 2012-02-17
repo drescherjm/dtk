@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 19:26:23 2012 (+0100)
+ * Last-Updated: Fri Feb 17 21:23:49 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1356
+ *     Update #: 1466
  */
 
 /* Commentary: 
@@ -150,8 +150,6 @@ void dtkComposerStackCommandCreateNode::redo(void)
 
     d->scene->addNode(e->node);
     d->graph->addNode(e->node);
-
-// --
 
     if (d->scene->current() != d->scene->root())
         d->scene->current()->layout();
@@ -1518,7 +1516,7 @@ void dtkComposerStackCommandCreatePort::undo(void)
 }
 
 // /////////////////////////////////////////////////////////////////
-// Unflatten Group Command
+// Destroy Port Command
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerStackCommandDestroyPortPrivate
@@ -1604,4 +1602,105 @@ void dtkComposerStackCommandDestroyPort::undo(void)
     };
 
     e->port->setVisible(true);
+}
+
+// /////////////////////////////////////////////////////////////////
+// Reparent Node Command
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandReparentNodePrivate
+{
+public:
+    QPointF origin_pos;
+    QPointF target_pos;
+
+public:
+    dtkComposerSceneNode *origin;
+    dtkComposerSceneNodeComposite *target;
+};
+
+dtkComposerStackCommandReparentNode::dtkComposerStackCommandReparentNode(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandReparentNodePrivate)
+{
+    this->setText("Reparent node");
+}
+
+dtkComposerStackCommandReparentNode::~dtkComposerStackCommandReparentNode(void)
+{
+    delete e;
+
+    e = NULL;
+}
+
+void dtkComposerStackCommandReparentNode::setOriginNode(dtkComposerSceneNode *node)
+{
+    e->origin = node;
+}
+
+void dtkComposerStackCommandReparentNode::setTargetNode(dtkComposerSceneNodeComposite *node)
+{
+    e->target = node;
+}
+
+void dtkComposerStackCommandReparentNode::setOriginPosition(QPointF position)
+{
+    e->origin_pos = position;
+}
+
+void dtkComposerStackCommandReparentNode::setTargetPosition(QPointF position)
+{
+    e->target_pos = position;
+}
+
+void dtkComposerStackCommandReparentNode::redo(void)
+{
+    if(e->origin_pos.isNull())
+        return;
+
+    if(e->target_pos.isNull())
+        return;
+
+    if(!e->origin)
+        return;
+
+    if(!e->target)
+        return;
+
+    qDebug() << __func__;
+
+    d->scene->removeNode(e->origin);
+
+    e->target->addNode(e->origin);
+
+    if (e->target->flattened())
+        d->scene->addItem(e->origin);
+
+    e->origin->setParent(e->target);
+    e->origin->setPos(e->target_pos);
+}
+
+void dtkComposerStackCommandReparentNode::undo(void)
+{
+    if(e->origin_pos.isNull())
+        return;
+
+    if(e->target_pos.isNull())
+        return;
+
+    if(!e->origin)
+        return;
+
+    if(!e->target)
+        return;
+
+    qDebug() << __func__;
+
+    if (e->target->flattened())
+        d->scene->removeItem(e->origin);
+
+    d->scene->addNode(e->origin);
+
+    e->target->removeNode(e->origin);
+
+    e->origin->setParent(e->target->parent());
+    e->origin->setPos(e->origin_pos);
 }

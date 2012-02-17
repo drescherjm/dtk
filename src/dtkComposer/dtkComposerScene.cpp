@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Fri Feb 10 12:45:29 2012 (+0100)
+ * Last-Updated: Fri Feb 17 21:00:20 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1248
+ *     Update #: 1391
  */
 
 /* Commentary:
@@ -42,6 +42,9 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
 
     d->current_node = d->root_node;
     d->current_edge = NULL;
+
+    d->reparent_origin = NULL;
+    d->reparent_target = NULL;
 
     connect(this, SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));
 }
@@ -359,7 +362,42 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsScene::mouseMoveEvent(event);
 
-    // Managnig grabbing of selected nodes
+    if(!(event->buttons() & Qt::LeftButton))
+        return;
+
+//-- Managing reparenting
+
+    d->reparent_origin = this->nodeAt(event->scenePos());
+    
+    if(!d->reparent_origin)
+        goto adjust_edges;
+
+    if (d->reparent_origin_pos.isNull()) {
+        d->reparent_origin_pos = d->reparent_origin->pos();
+    } else {
+        
+        dtkComposerSceneNode *node = this->nodeAt(event->scenePos(), d->reparent_origin);
+
+        if(!node) {
+            d->reparent_target = NULL;
+            this->views().at(0)->setCursor(Qt::ArrowCursor);
+            goto adjust_edges;
+        }
+
+        d->reparent_target = dynamic_cast<dtkComposerSceneNodeComposite *>(node);
+
+        if (d->reparent_origin->parent() == d->reparent_target)
+            d->reparent_target = NULL;
+
+        if(!d->reparent_target)
+            goto adjust_edges;
+        else
+            this->views().at(0)->setCursor(Qt::WaitCursor);
+    }
+
+// --
+  
+adjust_edges: // Adjusting edges of selected nodes
 
     foreach(QGraphicsItem *item, this->selectedItems()) {
 
@@ -386,7 +424,7 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         }
     }
 
-    // Managing grabbing of current edge
+adjust_current: // Adjusting current edge
 
     if (d->current_edge)
         d->current_edge->adjust(d->current_edge->source()->mapToScene(d->current_edge->source()->boundingRect().center()), event->scenePos());
@@ -419,6 +457,32 @@ void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsScene::mouseReleaseEvent(event);
+
+    // Managing of reparenting
+
+    if (d->reparent_target) {
+        d->reparent_target_pos = event->scenePos();
+
+        this->views().at(0)->setCursor(Qt::ArrowCursor);
+
+        dtkComposerStackCommandReparentNode *command = new dtkComposerStackCommandReparentNode;
+        command->setOriginNode(d->reparent_origin);
+        command->setTargetNode(d->reparent_target);
+        command->setOriginPosition(d->reparent_origin_pos);
+        command->setTargetPosition(d->reparent_target_pos);
+        command->setScene(this);
+        d->stack->push(command);
+
+        d->reparent_origin = NULL;
+        d->reparent_target = NULL;
+
+        this->views().at(0)->setCursor(Qt::ArrowCursor);
+    }
+
+    d->reparent_origin_pos = QPointF();
+    d->reparent_target_pos = QPointF();
+
+    // Managing of current edge
 
     if(!d->current_edge)
         return;
@@ -497,6 +561,18 @@ dtkComposerSceneNode *dtkComposerScene::nodeAt(const QPointF& point) const
     foreach(QGraphicsItem *item, items)
         if (dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>(item))
             return node;
+
+    return NULL;
+}
+
+dtkComposerSceneNode *dtkComposerScene::nodeAt(const QPointF& point, dtkComposerSceneNode *exclude) const
+{
+    QList<QGraphicsItem *> items = this->items(point.x(), point.y(), 1, 1, Qt::IntersectsItemBoundingRect);
+
+    foreach(QGraphicsItem *item, items)
+        if (dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>(item))
+            if(node != exclude)
+                return node;
 
     return NULL;
 }

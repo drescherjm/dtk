@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 15:32:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  9 15:45:22 2012 (+0100)
+ * Last-Updated: Fri Feb 17 20:09:06 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 208
+ *     Update #: 214
  */
 
 /* Commentary: 
@@ -46,6 +46,13 @@ public:
 
 public:
     dtkComposerSceneEdge *current_edge;
+
+public:
+    QPointF reparent_origin_pos;
+    QPointF reparent_target_pos;
+
+    dtkComposerSceneNode          *reparent_origin;
+    dtkComposerSceneNodeComposite *reparent_target;
 };
 
 #endif

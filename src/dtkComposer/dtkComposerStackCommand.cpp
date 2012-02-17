@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 17 21:23:49 2012 (+0100)
+ * Last-Updated: Fri Feb 17 21:26:29 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1466
+ *     Update #: 1469
  */
 
 /* Commentary: 
@@ -1665,8 +1665,6 @@ void dtkComposerStackCommandReparentNode::redo(void)
     if(!e->target)
         return;
 
-    qDebug() << __func__;
-
     d->scene->removeNode(e->origin);
 
     e->target->addNode(e->origin);
@@ -1691,8 +1689,6 @@ void dtkComposerStackCommandReparentNode::undo(void)
 
     if(!e->target)
         return;
-
-    qDebug() << __func__;
 
     if (e->target->flattened())
         d->scene->removeItem(e->origin);

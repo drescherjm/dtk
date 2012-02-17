@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Fri Feb 17 21:00:20 2012 (+0100)
+ * Last-Updated: Fri Feb 17 21:27:57 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1391
+ *     Update #: 1394
  */
 
 /* Commentary:
@@ -370,6 +370,12 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     d->reparent_origin = this->nodeAt(event->scenePos());
     
     if(!d->reparent_origin)
+        goto adjust_edges;
+
+    if(d->reparent_origin->inputEdges().count())
+        goto adjust_edges;
+
+    if(d->reparent_origin->outputEdges().count())
         goto adjust_edges;
 
     if (d->reparent_origin_pos.isNull()) {

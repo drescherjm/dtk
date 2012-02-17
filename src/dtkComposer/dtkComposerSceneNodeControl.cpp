@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 18:56:24 2012 (+0100)
+ * Last-Updated: Fri Feb 17 23:51:23 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 297
+ *     Update #: 304
  */
 
 /* Commentary: 
@@ -188,6 +188,21 @@ void dtkComposerSceneNodeControl::resize(qreal width, qreal height)
 {
     Q_UNUSED(width);
     Q_UNUSED(height);
+}
+
+dtkComposerSceneNodeComposite *dtkComposerSceneNodeControl::blockAt(const QPointF& point) const
+{
+    QPointF position = this->mapFromScene(point);
+
+    foreach(dtkComposerSceneNodeComposite *block, d->blocks) {
+
+        QRectF rect = QRectF(block->pos(), block->boundingRect().size());
+
+        if(rect.contains(position))
+            return block;
+    }
+
+    return NULL;
 }
 
 QRectF dtkComposerSceneNodeControl::boundingRect(void) const

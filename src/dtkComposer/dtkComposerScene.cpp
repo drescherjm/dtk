@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Fri Feb 17 22:59:29 2012 (+0100)
+ * Last-Updated: Fri Feb 17 23:53:40 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1462
+ *     Update #: 1485
  */
 
 /* Commentary:
@@ -417,7 +417,7 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             this->views().at(0)->setCursor(Qt::WaitCursor);
         }
 
-        if(dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
+        if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
 
             d->reparent_target = node;
 
@@ -425,7 +425,19 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 d->reparent_target = NULL;
                 goto adjust_edges;
             }
+
+            // Look for a block within the control node
+
+            dtkComposerSceneNodeComposite *block = control->blockAt(event->scenePos());
+
+            if(!block) {
+                this->views().at(0)->setCursor(Qt::ArrowCursor);
+                d->reparent_target = NULL;
+                goto adjust_edges;
+            }
             
+            qDebug() << "Got block" << block->title();
+
             this->views().at(0)->setCursor(Qt::WaitCursor);
         }
 
@@ -605,10 +617,18 @@ dtkComposerSceneNode *dtkComposerScene::nodeAt(const QPointF& point, dtkComposer
 {
     QList<QGraphicsItem *> items = this->items(point.x(), point.y(), 1, 1, Qt::IntersectsItemBoundingRect);
 
-    foreach(QGraphicsItem *item, items)
-        if (dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>(item))
-            if(node != exclude && !(node->parent() == exclude))
+    foreach(QGraphicsItem *item, items) {
+        if (dtkComposerSceneNode *n = dynamic_cast<dtkComposerSceneNode *>(item)) {
+            
+            dtkComposerSceneNode *node = n;
+
+            if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node->parent()))
+                node = control;
+            
+            if (node != exclude && !(node->parent() == exclude))
                 return node;
+        }
+    }
 
     return NULL;
 }

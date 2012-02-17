@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:11:39
  * Version: $Id$
- * Last-Updated: Fri Feb 17 21:01:25 2012 (+0100)
+ * Last-Updated: Fri Feb 17 23:39:47 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 122
+ *     Update #: 125
  */
 
 /* Commentary:
@@ -83,11 +83,6 @@ signals:
 
     // void selected(QGraphicsItem *item);
 
-public:
-    dtkComposerSceneNode *nodeAt(const QPointF& point, dtkComposerSceneNode *exclude) const;
-    dtkComposerSceneNode *nodeAt(const QPointF& point) const;
-    dtkComposerScenePort *portAt(const QPointF& point) const;
-
 protected:
     void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
     void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
@@ -101,6 +96,11 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent);
+
+protected:
+    dtkComposerSceneNode *nodeAt(const QPointF& point, dtkComposerSceneNode *exclude) const;
+    dtkComposerSceneNode *nodeAt(const QPointF& point) const;
+    dtkComposerScenePort *portAt(const QPointF& point) const;
 
 protected slots:
     void onSelectionChanged(void);

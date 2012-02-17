@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:43:44 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 18:26:11 2012 (+0100)
+ * Last-Updated: Fri Feb 17 23:40:27 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 42
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -50,6 +50,9 @@ public:
 
 public:
     void resize(qreal width, qreal height);
+
+public:
+    dtkComposerSceneNodeComposite *blockAt(const QPointF& point) const;
 
 public:
     QRectF boundingRect(void) const;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 17 21:26:29 2012 (+0100)
+ * Last-Updated: Fri Feb 17 21:52:42 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1469
+ *     Update #: 1485
  */
 
 /* Commentary: 
@@ -1669,8 +1669,10 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
     e->target->addNode(e->origin);
 
-    if (e->target->flattened())
+    if (e->target->flattened()) {
+        e->target->layout();
         d->scene->addItem(e->origin);
+    }
 
     e->origin->setParent(e->target);
     e->origin->setPos(e->target_pos);
@@ -1690,12 +1692,14 @@ void dtkComposerStackCommandReparentNode::undo(void)
     if(!e->target)
         return;
 
-    if (e->target->flattened())
+    e->target->removeNode(e->origin);
+
+    if (e->target->flattened()) {
+        e->target->layout();
         d->scene->removeItem(e->origin);
+    }
 
     d->scene->addNode(e->origin);
-
-    e->target->removeNode(e->origin);
 
     e->origin->setParent(e->target->parent());
     e->origin->setPos(e->origin_pos);

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Fri Feb 17 23:53:40 2012 (+0100)
+ * Last-Updated: Sat Feb 18 14:38:25 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1485
+ *     Update #: 1487
  */
 
 /* Commentary:
@@ -435,8 +435,6 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 d->reparent_target = NULL;
                 goto adjust_edges;
             }
-            
-            qDebug() << "Got block" << block->title();
 
             this->views().at(0)->setCursor(Qt::WaitCursor);
         }

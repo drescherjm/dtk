@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 17 22:56:04 2012 (+0100)
+ * Last-Updated: Sat Feb 18 14:48:40 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1495
+ *     Update #: 1522
  */
 
 /* Commentary: 
@@ -1668,7 +1668,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
     if(!e->target)
         return;
 
-    if(dtkComposerSceneNodeComposite *target = dynamic_cast<dtkComposerSceneNodeComposite *>(e->target)) {
+    if (dtkComposerSceneNodeComposite *target = dynamic_cast<dtkComposerSceneNodeComposite *>(e->target)) {
 
         d->scene->removeNode(e->origin);
         
@@ -1681,6 +1681,27 @@ void dtkComposerStackCommandReparentNode::redo(void)
         
         e->origin->setParent(target);
         e->origin->setPos(e->target_pos);
+    }
+
+    if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(e->target)) {
+
+        dtkComposerSceneNodeComposite *target = control->blockAt(e->target_pos);
+
+        d->scene->removeNode(e->origin);
+        
+        target->addNode(e->origin);
+        
+        if (target->flattened()) {
+            target->layout();
+            d->scene->addItem(e->origin);
+        }
+        
+        e->origin->setParent(target);
+        e->origin->setZValue(control->zValue()+1);
+        e->origin->setParentItem(control);
+        e->origin->setPos(control->mapFromScene(e->target_pos));
+
+        control->layout();
     }
 }
 
@@ -1711,5 +1732,25 @@ void dtkComposerStackCommandReparentNode::undo(void)
         
         e->origin->setParent(target->parent());
         e->origin->setPos(e->origin_pos);
+    }
+
+    if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(e->target)) {
+
+        dtkComposerSceneNodeComposite *target = control->blockAt(e->target_pos);
+
+        target->removeNode(e->origin);
+        
+        if (target->flattened()) {
+            target->layout();
+            d->scene->removeItem(e->origin);
+        }
+        
+        d->scene->addNode(e->origin);
+        
+        e->origin->setParent(target->parent());
+        e->origin->setPos(e->origin_pos);
+        e->origin->setParentItem(0);
+
+        control->layout();
     }
 }

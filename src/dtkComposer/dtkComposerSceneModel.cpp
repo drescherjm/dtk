@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Feb  5 15:30:18 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 13:05:48 2012 (+0100)
+ * Last-Updated: Sat Feb 18 15:37:12 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 776
+ *     Update #: 781
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 #include "dtkComposerSceneNote.h"
 #include "dtkComposerSceneNode.h"
 #include "dtkComposerSceneNodeComposite.h"
+#include "dtkComposerSceneNodeControl.h"
 #include "dtkComposerSceneModel.h"
 #include "dtkComposerScenePort.h"
 
@@ -179,7 +180,7 @@ int dtkComposerSceneModel::rowCount(const QModelIndex& parent) const
 
      if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>((QGraphicsItem *)(parent.internalPointer())))
         return composite->notes().count() + composite->nodes().count() + composite->edges().count();
-    
+
     return 0;
 }
 

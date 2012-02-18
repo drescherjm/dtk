@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:43:44 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 17 23:40:27 2012 (+0100)
+ * Last-Updated: Sat Feb 18 15:40:24 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 46
+ *     Update #: 48
  */
 
 /* Commentary: 
@@ -36,6 +36,9 @@ public:
 
 public:
     void wrap(dtkComposerNode *wrapee);
+
+public:
+    QList<dtkComposerSceneNodeComposite *> blocks(void);
 
 protected:
     void   setHeader(dtkComposerSceneNodeLeaf *header);

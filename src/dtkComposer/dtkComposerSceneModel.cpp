@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Feb  5 15:30:18 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb 18 15:37:12 2012 (+0100)
+ * Last-Updated: Sat Feb 18 16:29:45 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 781
+ *     Update #: 844
  */
 
 /* Commentary: 
@@ -89,19 +89,54 @@ QVariant dtkComposerSceneModel::data(const QModelIndex& index, int role) const
     else if(dtkComposerSceneEdge *edge = dynamic_cast<dtkComposerSceneEdge *>((QGraphicsItem *)(index.internalPointer())))
         composite = dynamic_cast<dtkComposerSceneNodeComposite *>(edge->parent());
 
-    if(!composite)
-        return QVariant();
+    if(composite) {
 
-    int c_notes = composite->notes().count();
-    int c_nodes = composite->nodes().count();
-    int c_edges = composite->edges().count();
+        int c_notes = composite->notes().count();
+        int c_nodes = composite->nodes().count();
+        int c_edges = composite->edges().count();
+        
+        if (c_notes && index.row() < c_notes)
+            return QString("Note");
+        else if (c_nodes && index.row() < c_notes + c_nodes)
+            return QString("Node (%1)").arg(dynamic_cast<dtkComposerSceneNode *>((QGraphicsItem *)(index.internalPointer()))->title());
+        else if (c_edges && index.row() < c_notes + c_nodes + c_edges)
+            return QString("Edge (%1 -> %2)").arg(dynamic_cast<dtkComposerSceneEdge *>((QGraphicsItem *)(index.internalPointer()))->source()->node()->title()).arg(dynamic_cast<dtkComposerSceneEdge *>((QGraphicsItem *)(index.internalPointer()))->destination()->node()->title());
+    }
 
-    if (c_notes && index.row() < c_notes)
-        return QString("Note (%1)").arg(this->rowCount(index));
-    else if (c_nodes && index.row() < c_notes + c_nodes)
-        return QString("Node (%1)").arg(dynamic_cast<dtkComposerSceneNode *>((QGraphicsItem *)(index.internalPointer()))->title());
-    else if (c_edges && index.row() < c_notes + c_nodes + c_edges)
-        return QString("Edge (%1 -> %2)").arg(dynamic_cast<dtkComposerSceneEdge *>((QGraphicsItem *)(index.internalPointer()))->source()->node()->title()).arg(dynamic_cast<dtkComposerSceneEdge *>((QGraphicsItem *)(index.internalPointer()))->destination()->node()->title());
+// --
+
+    dtkComposerSceneNodeControl *control = NULL;
+
+    if(dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>((QGraphicsItem *)(index.internalPointer())))
+        control = dynamic_cast<dtkComposerSceneNodeControl *>(node->parent());
+    else if(dtkComposerSceneNote *note = dynamic_cast<dtkComposerSceneNote *>((QGraphicsItem *)(index.internalPointer())))
+        control = dynamic_cast<dtkComposerSceneNodeControl *>(note->parent());
+    else if(dtkComposerSceneEdge *edge = dynamic_cast<dtkComposerSceneEdge *>((QGraphicsItem *)(index.internalPointer())))
+        control = dynamic_cast<dtkComposerSceneNodeControl *>(edge->parent());
+    
+    if(control) {
+
+        // qDebug() << __func__ << "Got control";
+
+        int c_notes = 0;
+        int c_nodes = 0;
+        int c_edges = 0;
+
+        foreach(dtkComposerSceneNodeComposite *block, control->blocks()) {
+            c_notes += block->notes().count();
+            c_nodes += block->nodes().count();
+            c_edges += block->edges().count();
+        }
+        
+        if (c_notes && index.row() < c_notes)
+            return QString("Note (%1)").arg(this->rowCount(index));
+        else if (c_nodes && index.row() < c_notes + c_nodes)
+            return QString("Node (%1)").arg(dynamic_cast<dtkComposerSceneNode *>((QGraphicsItem *)(index.internalPointer()))->title());
+        else if (c_edges && index.row() < c_notes + c_nodes + c_edges)
+            return QString("Edge (%1 -> %2)").arg(dynamic_cast<dtkComposerSceneEdge *>((QGraphicsItem *)(index.internalPointer()))->source()->node()->title()).arg(dynamic_cast<dtkComposerSceneEdge *>((QGraphicsItem *)(index.internalPointer()))->destination()->node()->title());
+    }
+
+// --
 
     return QVariant();
 }
@@ -124,23 +159,56 @@ QModelIndex dtkComposerSceneModel::index(int row, int column, const QModelIndex&
     if (!hasIndex(row, column, parent))
         return QModelIndex();
 
-    dtkComposerSceneNodeComposite *composite;
+    dtkComposerSceneNodeComposite *composite = NULL;
 
     if(!parent.isValid())
         composite = d->scene->root();
     else
         composite = dynamic_cast<dtkComposerSceneNodeComposite *>((QGraphicsItem *)(parent.internalPointer()));
 
-    int c_notes = composite->notes().count();
-    int c_nodes = composite->nodes().count();
-    int c_edges = composite->edges().count();
+    if(composite) {
 
-    if (c_notes && row < c_notes)
-        return this->createIndex(row, column, composite->notes().at(row));
-    else if (c_nodes && row < c_notes + c_nodes)
-        return this->createIndex(row, column, composite->nodes().at(row - c_notes));
-    else if (c_edges && row < c_notes + c_nodes + c_edges)
-        return this->createIndex(row, column, composite->edges().at(row - c_notes - c_nodes));
+        int c_notes = composite->notes().count();
+        int c_nodes = composite->nodes().count();
+        int c_edges = composite->edges().count();
+        
+        if (c_notes && row < c_notes)
+            return this->createIndex(row, column, composite->notes().at(row));
+        else if (c_nodes && row < c_notes + c_nodes)
+            return this->createIndex(row, column, composite->nodes().at(row - c_notes));
+        else if (c_edges && row < c_notes + c_nodes + c_edges)
+            return this->createIndex(row, column, composite->edges().at(row - c_notes - c_nodes));
+    }
+
+// --
+    else if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>((QGraphicsItem *)(parent.internalPointer()))) {
+
+        int c_notes = 0;
+        int c_nodes = 0;
+        int c_edges = 0;
+
+        dtkComposerSceneNoteList notes;
+        dtkComposerSceneNodeList nodes;
+        dtkComposerSceneEdgeList edges;
+
+        foreach(dtkComposerSceneNodeComposite *block, control->blocks()) {
+            c_notes += block->notes().count();
+            c_nodes += block->nodes().count();
+            c_edges += block->edges().count();
+
+            notes << block->notes();
+            nodes << block->nodes();
+            edges << block->edges();
+        }
+        
+        if (c_notes && row < c_notes)
+            return this->createIndex(row, column, notes.at(row));
+        else if (c_nodes && row < c_notes + c_nodes)
+            return this->createIndex(row, column, nodes.at(row - c_notes));
+        else if (c_edges && row < c_notes + c_nodes + c_edges)
+            return this->createIndex(row, column, edges.at(row - c_notes - c_nodes));
+    }
+// --
 
     return QModelIndex();
 }
@@ -159,15 +227,39 @@ QModelIndex dtkComposerSceneModel::parent(const QModelIndex& index) const
     else if(dtkComposerSceneEdge *edge = dynamic_cast<dtkComposerSceneEdge *>((QGraphicsItem *)(index.internalPointer())))
         composite = dynamic_cast<dtkComposerSceneNodeComposite *>(edge->parent());
 
-    if(!composite)
-        return QModelIndex();
+    if(composite) {
+        
+        if(composite == d->scene->root())
+            return QModelIndex();
 
-    if(composite == d->scene->root())
-        return QModelIndex();
+        dtkComposerSceneNodeComposite *parent = dynamic_cast<dtkComposerSceneNodeComposite *>(composite->parent());
 
-    dtkComposerSceneNodeComposite *parent = dynamic_cast<dtkComposerSceneNodeComposite *>(composite->parent());
+        return this->createIndex(parent->notes().count() + parent->nodes().indexOf(composite), 0, composite);
+    }
+    
+// --
 
-    return this->createIndex(parent->notes().count() + parent->nodes().indexOf(composite), 0, composite);
+    dtkComposerSceneNodeControl *control = NULL;
+
+    if(dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>((QGraphicsItem *)(index.internalPointer())))
+        control = dynamic_cast<dtkComposerSceneNodeControl *>(node->parent());
+    else if(dtkComposerSceneNote *note = dynamic_cast<dtkComposerSceneNote *>((QGraphicsItem *)(index.internalPointer())))
+        control = dynamic_cast<dtkComposerSceneNodeControl *>(note->parent());
+    else if(dtkComposerSceneEdge *edge = dynamic_cast<dtkComposerSceneEdge *>((QGraphicsItem *)(index.internalPointer())))
+        control = dynamic_cast<dtkComposerSceneNodeControl *>(edge->parent());
+
+    if(control) {
+        
+        // qDebug() << __func__ << "Got control";
+
+        dtkComposerSceneNodeComposite *parent = dynamic_cast<dtkComposerSceneNodeComposite *>(control->parent());
+
+        return this->createIndex(parent->notes().count() + parent->nodes().indexOf(control), 0, control);
+    }
+
+// --
+
+    return QModelIndex();
 }
 
 int dtkComposerSceneModel::rowCount(const QModelIndex& parent) const
@@ -180,6 +272,22 @@ int dtkComposerSceneModel::rowCount(const QModelIndex& parent) const
 
      if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>((QGraphicsItem *)(parent.internalPointer())))
         return composite->notes().count() + composite->nodes().count() + composite->edges().count();
+
+// --
+
+     if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>((QGraphicsItem *)(parent.internalPointer()))) {
+
+         int count = 0;
+
+         foreach(dtkComposerSceneNodeComposite *block, control->blocks())
+             count += block->notes().count() + block->nodes().count() + block->edges().count();
+
+         // qDebug() << __func__ << "Got control" << control->title() << ":" << count << "nodes in" << control->blocks().count() << "blocks";
+
+         return count;
+     }
+
+// --
 
     return 0;
 }

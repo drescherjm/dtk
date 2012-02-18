@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb 18 14:44:55 2012 (+0100)
+ * Last-Updated: Sat Feb 18 15:41:02 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 306
+ *     Update #: 308
  */
 
 /* Commentary: 
@@ -96,6 +96,11 @@ void dtkComposerSceneNodeControl::wrap(dtkComposerNode *wrapee)
     
     if (d->header)
         d->header->setTitle(wrapee->titleHint());
+}
+
+QList<dtkComposerSceneNodeComposite *> dtkComposerSceneNodeControl::blocks(void)
+{
+    return d->blocks;
 }
 
 void dtkComposerSceneNodeControl::setHeader(dtkComposerSceneNodeLeaf *header)

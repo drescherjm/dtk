@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb 18 14:48:40 2012 (+0100)
+ * Last-Updated: Sat Feb 18 16:28:18 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1522
+ *     Update #: 1534
  */
 
 /* Commentary: 
@@ -1685,18 +1685,24 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
     if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(e->target)) {
 
+        // qDebug() << "Reparenting to control node";
+
         dtkComposerSceneNodeComposite *target = control->blockAt(e->target_pos);
 
         d->scene->removeNode(e->origin);
         
+        // qDebug() << "Reparenting to control node: target node count BEFORE:" << target->nodes().count();
+
         target->addNode(e->origin);
         
+        // qDebug() << "Reparenting to control node: target node count AFTER:" << target->nodes().count();
+
         if (target->flattened()) {
             target->layout();
             d->scene->addItem(e->origin);
         }
         
-        e->origin->setParent(target);
+        e->origin->setParent(control);
         e->origin->setZValue(control->zValue()+1);
         e->origin->setParentItem(control);
         e->origin->setPos(control->mapFromScene(e->target_pos));

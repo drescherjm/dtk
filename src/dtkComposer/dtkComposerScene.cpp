@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Sat Feb 18 14:38:25 2012 (+0100)
+ * Last-Updated: Sun Feb 19 16:34:31 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1487
+ *     Update #: 1626
  */
 
 /* Commentary:
@@ -57,6 +57,11 @@ dtkComposerScene::~dtkComposerScene(void)
     d = NULL;
 }
 
+// /////////////////////////////////////////////////////////////////
+#pragma mark -
+#pragma mark - Setup
+// /////////////////////////////////////////////////////////////////
+
 void dtkComposerScene::setFactory(dtkComposerFactory *factory)
 {
     d->factory = factory;
@@ -77,61 +82,10 @@ void dtkComposerScene::setGraph(dtkComposerGraph *graph)
     d->graph = graph;
 }
 
-void dtkComposerScene::addNode(dtkComposerSceneNode *node)
-{
-    d->current_node->addNode(node);
-
-    this->addItem(node);
-
-    emit modified(true);
-}
-
-void dtkComposerScene::removeNode(dtkComposerSceneNode *node)
-{
-    d->current_node->removeNode(node);
-
-    this->removeItem(node);
-
-    emit modified(true);
-}
-
-void dtkComposerScene::addEdge(dtkComposerSceneEdge *edge)
-{
-    d->current_node->addEdge(edge);
-
-    this->addItem(edge);
-
-    edge->adjust();
-
-    emit modified(true);
-}
-
-void dtkComposerScene::removeEdge(dtkComposerSceneEdge *edge)
-{
-    d->current_node->removeEdge(edge);
-
-    this->removeItem(edge);
-
-    emit modified(true);
-}
-
-void dtkComposerScene::addNote(dtkComposerSceneNote *note)
-{
-    d->current_node->addNote(note);
-
-    this->addItem(note);
-
-    emit modified(true);
-}
-
-void dtkComposerScene::removeNote(dtkComposerSceneNote *note)
-{
-    d->current_node->removeNote(note);
-
-    this->removeItem(note);
-
-    emit modified(true);
-}
+// /////////////////////////////////////////////////////////////////
+#pragma mark -
+#pragma mark - Composition depth management
+// /////////////////////////////////////////////////////////////////
 
 dtkComposerSceneNodeComposite *dtkComposerScene::root(void)
 {
@@ -141,18 +95,6 @@ dtkComposerSceneNodeComposite *dtkComposerScene::root(void)
 dtkComposerSceneNodeComposite *dtkComposerScene::current(void)
 {
     return d->current_node;
-}
-
-void dtkComposerScene::clear(void)
-{
-    foreach(dtkComposerSceneNote *note, d->root_node->notes())
-        this->removeNote(note);
-
-    foreach(dtkComposerSceneNode *node, d->root_node->nodes())
-        this->removeNode(node);
-
-    foreach(dtkComposerSceneEdge *edge, d->root_node->edges())
-        this->removeEdge(edge);
 }
 
 void dtkComposerScene::setRoot(dtkComposerSceneNodeComposite *root)
@@ -183,6 +125,21 @@ void dtkComposerScene::setCurrent(dtkComposerSceneNodeComposite *current)
 {
     d->current_node = current;
 }
+
+// /////////////////////////////////////////////////////////////////
+#pragma mark -
+#pragma mark - Sig Events
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerScene::touch(void)
+{
+    emit modified(true);
+}
+
+// /////////////////////////////////////////////////////////////////
+#pragma mark -
+#pragma mark - Drag\'n Drop Events
+// /////////////////////////////////////////////////////////////////
 
 void dtkComposerScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
@@ -229,6 +186,7 @@ void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
         command->setFactory(d->factory);
         command->setScene(this);
         command->setGraph(d->graph);
+        command->setParent(this->parentAt(event->scenePos()));
         command->setPosition(event->scenePos());
         command->setType(url.path());
         command->setName(name);
@@ -242,6 +200,11 @@ void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
 
     event->ignore();
 }
+
+// /////////////////////////////////////////////////////////////////
+#pragma mark -
+#pragma mark - Keyboard Events
+// /////////////////////////////////////////////////////////////////
 
 void dtkComposerScene::keyPressEvent(QKeyEvent *event)
 {
@@ -359,12 +322,20 @@ void dtkComposerScene::keyReleaseEvent(QKeyEvent *event)
     QGraphicsScene::keyReleaseEvent(event);
 }
 
+// /////////////////////////////////////////////////////////////////
+#pragma mark -
+#pragma mark - Mouse Events
+// /////////////////////////////////////////////////////////////////
+
 void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsScene::mouseMoveEvent(event);
 
     if(!(event->buttons() & Qt::LeftButton))
         return;
+
+    if(d->current_edge)
+        goto adjust_edges;
 
 //-- Managing reparenting
 
@@ -600,6 +571,11 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
+// /////////////////////////////////////////////////////////////////
+#pragma mark -
+#pragma mark - Geometric queries
+// /////////////////////////////////////////////////////////////////
+
 dtkComposerSceneNode *dtkComposerScene::nodeAt(const QPointF& point) const
 {
     QList<QGraphicsItem *> items = this->items(point.x(), point.y(), 1, 1, Qt::IntersectsItemBoundingRect);
@@ -641,6 +617,62 @@ dtkComposerScenePort *dtkComposerScene::portAt(const QPointF& point) const
 
     return NULL;
 }
+
+dtkComposerSceneNodeComposite *dtkComposerScene::parentAt(const QPointF& point) const
+{
+    dtkComposerSceneNode *node = this->nodeAt(point);
+
+    if(!node) {
+        qDebug() << __func__ << "current node";
+        return d->current_node;
+    }
+    
+    if(dtkComposerSceneNodeLeaf *leaf = dynamic_cast<dtkComposerSceneNodeLeaf *>(node)) {
+        qDebug() << __func__ << "leaf node's parent";
+        return dynamic_cast<dtkComposerSceneNodeComposite *>(leaf->parent());
+    }
+
+    if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
+
+        if(composite->flattened()) {
+            qDebug() << __func__ << "flattened composite node";
+            return composite;
+        }
+
+        if(composite->entered()) {
+            qDebug() << __func__ << "entered composite node";
+            return composite;
+        }
+
+        if(!composite->flattened() && !composite->entered()) {
+            qDebug() << __func__ << "unrevealed composite node's parent";
+            // return dynamic_cast<dtkComposerSceneNodeComposite *>(composite->parent());
+            return composite;
+        }
+    }
+
+    if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
+
+        dtkComposerSceneNodeComposite *block = control->blockAt(control->mapFromScene(point));
+
+        if(!block) {
+            qDebug() << __func__ << "control node's parent" << control->parent()->title();
+            return dynamic_cast<dtkComposerSceneNodeComposite *>(control->parent());
+        }
+
+        qDebug() << __func__ << "control node's block" << block->title();
+        return block;
+    }
+
+    qDebug() << __func__ << "NO PARENT FOUND - DRAMATIC";
+
+    return NULL;
+}
+
+// /////////////////////////////////////////////////////////////////
+#pragma mark -
+#pragma mark - Internal signal handling
+// /////////////////////////////////////////////////////////////////
 
 void dtkComposerScene::onSelectionChanged(void)
 {

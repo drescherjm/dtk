@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 17 22:51:11 2012 (+0100)
+ * Last-Updated: Sun Feb 19 16:12:02 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 132
+ *     Update #: 144
  */
 
 /* Commentary: 
@@ -36,6 +36,10 @@ class dtkComposerSceneNoteList;
 class dtkComposerScenePort;
 class dtkComposerStackCommandPrivate;
 
+// /////////////////////////////////////////////////////////////////
+// Command Interface
+// /////////////////////////////////////////////////////////////////
+
 class dtkComposerStackCommand : public QUndoCommand
 {
 public:
@@ -64,6 +68,7 @@ public:
     ~dtkComposerStackCommandCreateNode(void);
 
 public:
+    void setParent(dtkComposerSceneNodeComposite *parent);
     void setPosition(const QPointF& position);
     void setName(const QString& name);
     void setType(const QString& type);
@@ -89,6 +94,7 @@ public:
     ~dtkComposerStackCommandDestroyNode(void);
 
 public:
+    void setParent(dtkComposerSceneNodeComposite *parent);
     void setNode(dtkComposerSceneNode *node);
 
 public:
@@ -112,6 +118,7 @@ public:
     ~dtkComposerStackCommandCreateEdge(void);
 
 public:
+    void setParent(dtkComposerSceneNodeComposite *parent);
     void setSource(dtkComposerScenePort *source);
     void setDestination(dtkComposerScenePort *destination);
 
@@ -136,6 +143,7 @@ public:
     ~dtkComposerStackCommandDestroyEdge(void);
 
 public:
+    void setParent(dtkComposerSceneNodeComposite *parent);
     void setEdge(dtkComposerSceneEdge *edge);
 
 public:
@@ -159,6 +167,7 @@ public:
     ~dtkComposerStackCommandCreateNote(void);
 
 public:
+    void setParent(dtkComposerSceneNodeComposite *parent);
     void setPosition(const QPointF& position);
 
 public:
@@ -182,6 +191,7 @@ public:
     ~dtkComposerStackCommandDestroyNote(void);
 
 public:
+    void setParent(dtkComposerSceneNodeComposite *parent);
     void setNote(dtkComposerSceneNote *note);
 
 public:
@@ -205,6 +215,7 @@ public:
     ~dtkComposerStackCommandCreateGroup(void);
 
 public:
+    void setParent(dtkComposerSceneNodeComposite *parent);
     void setNodes(dtkComposerSceneNodeList nodes);
     void setNotes(dtkComposerSceneNoteList notes);
 
@@ -229,6 +240,7 @@ public:
     ~dtkComposerStackCommandDestroyGroup(void);
 
 public:
+    void setParent(dtkComposerSceneNodeComposite *parent);
     void setNode(dtkComposerSceneNodeComposite *node);
 
 public:

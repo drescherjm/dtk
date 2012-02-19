@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:11:39
  * Version: $Id$
- * Last-Updated: Fri Feb 17 23:39:47 2012 (+0100)
+ * Last-Updated: Sun Feb 19 16:31:35 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 125
+ *     Update #: 175
  */
 
 /* Commentary:
@@ -43,45 +43,44 @@ public:
              dtkComposerScene(QObject *parent = 0);
     virtual ~dtkComposerScene(void);
 
+// #pragma mark -
+// #pragma mark - Setup
+
 public:
     void setFactory(dtkComposerFactory *factory);
     void setMachine(dtkComposerMachine *machine);
     void setStack(dtkComposerStack *stack);
     void setGraph(dtkComposerGraph *graph);
 
-public:
-    void    addNode(dtkComposerSceneNode *node);
-    void removeNode(dtkComposerSceneNode *node);
-
-    void    addEdge(dtkComposerSceneEdge *edge);
-    void removeEdge(dtkComposerSceneEdge *edge);
-
-    void    addNote(dtkComposerSceneNote *note);
-    void removeNote(dtkComposerSceneNote *note);
+// #pragma mark -
+// #pragma mark - Composition depth management
 
 public:
     dtkComposerSceneNodeComposite *root(void);
     dtkComposerSceneNodeComposite *current(void);
 
 public:
-    void clear(void);
-
-public:
+    void setRoot(dtkComposerSceneNodeComposite *root);
     void setCurrent(dtkComposerSceneNode *node);
     void setCurrent(dtkComposerSceneNodeComposite *current);
-    void setRoot(dtkComposerSceneNodeComposite *root);
+
+// #pragma mark -
+// #pragma mark - Sigs
+
+public slots:
+    void touch(void);
 
 signals:
     void reset(void);
-
-signals:
     void modified(bool);
 
 signals:
     void selectedNode(dtkComposerSceneNode *node);
     void selectionCleared(void);
-
     // void selected(QGraphicsItem *item);
+
+// #pragma mark -
+// #pragma mark - Drag\' Drop Events
 
 protected:
     void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
@@ -89,18 +88,33 @@ protected:
     void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
     void dropEvent(QGraphicsSceneDragDropEvent *event);
 
+// #pragma mark -
+// #pragma mark - Keyboard Events
+
+protected:
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
 
+// #pragma mark -
+// #pragma mark - Mouse Events
+
+protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent);
 
+// #pragma mark -
+// #pragma mark - Geometric queries
+
 protected:
     dtkComposerSceneNode *nodeAt(const QPointF& point, dtkComposerSceneNode *exclude) const;
     dtkComposerSceneNode *nodeAt(const QPointF& point) const;
     dtkComposerScenePort *portAt(const QPointF& point) const;
+    dtkComposerSceneNodeComposite *parentAt(const QPointF& point) const;
+
+// #pragma mark -
+// #pragma mark - Internal sigs handling
 
 protected slots:
     void onSelectionChanged(void);

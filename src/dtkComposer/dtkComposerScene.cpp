@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Sun Feb 19 16:34:31 2012 (+0100)
+ * Last-Updated: Sun Feb 19 18:58:04 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1626
+ *     Update #: 1643
  */
 
 /* Commentary:
@@ -108,7 +108,7 @@ void dtkComposerScene::setRoot(dtkComposerSceneNodeComposite *root)
     foreach(dtkComposerSceneEdge *edge, root->edges())
         this->addItem(edge);
 
-    emit reset();
+    emit modified(true);
 }
 
 void dtkComposerScene::setCurrent(dtkComposerSceneNode *node)
@@ -131,9 +131,9 @@ void dtkComposerScene::setCurrent(dtkComposerSceneNodeComposite *current)
 #pragma mark - Sig Events
 // /////////////////////////////////////////////////////////////////
 
-void dtkComposerScene::touch(void)
+void dtkComposerScene::modify(bool b)
 {
-    emit modified(true);
+    emit modified(b);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -171,6 +171,7 @@ void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
 
         dtkComposerStackCommandCreateNote *command = new dtkComposerStackCommandCreateNote;
         command->setScene(this);
+        command->setParent(this->parentAt(event->scenePos()));
         command->setPosition(event->scenePos());
         
         d->stack->push(command);

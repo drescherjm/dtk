@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Feb  5 15:30:18 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 19 17:22:21 2012 (+0100)
+ * Last-Updated: Sun Feb 19 18:25:26 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 909
+ *     Update #: 911
  */
 
 /* Commentary: 
@@ -60,7 +60,6 @@ void dtkComposerSceneModel::setScene(dtkComposerScene *scene)
 {
     d->scene = scene;
 
-    connect(d->scene, SIGNAL(reset()), this, SIGNAL(modelReset()));
     connect(d->scene, SIGNAL(modified(bool)), this, SIGNAL(modelReset()));
 }
 
@@ -197,7 +196,7 @@ QModelIndex dtkComposerSceneModel::parent(const QModelIndex& index) const
         dtkComposerSceneNodeComposite *parent = dynamic_cast<dtkComposerSceneNodeComposite *>(control->parent());
         
         if(parent)
-            return this->createIndex(parent->notes().count() + parent->nodes().indexOf(composite), 0, control);
+            return this->createIndex(parent->notes().count() + parent->nodes().indexOf(control), 0, control);
     }
 
     if(composite) {

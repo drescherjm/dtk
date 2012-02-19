@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:11:39
  * Version: $Id$
- * Last-Updated: Sun Feb 19 16:31:35 2012 (+0100)
+ * Last-Updated: Sun Feb 19 18:16:20 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 175
+ *     Update #: 179
  */
 
 /* Commentary:
@@ -68,10 +68,9 @@ public:
 // #pragma mark - Sigs
 
 public slots:
-    void touch(void);
+    void modify(bool modified);
 
 signals:
-    void reset(void);
     void modified(bool);
 
 signals:

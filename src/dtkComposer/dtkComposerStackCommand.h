@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 19 16:12:02 2012 (+0100)
+ * Last-Updated: Sun Feb 19 18:59:32 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 144
+ *     Update #: 153
  */
 
 /* Commentary: 
@@ -94,7 +94,6 @@ public:
     ~dtkComposerStackCommandDestroyNode(void);
 
 public:
-    void setParent(dtkComposerSceneNodeComposite *parent);
     void setNode(dtkComposerSceneNode *node);
 
 public:
@@ -118,13 +117,15 @@ public:
     ~dtkComposerStackCommandCreateEdge(void);
 
 public:
-    void setParent(dtkComposerSceneNodeComposite *parent);
     void setSource(dtkComposerScenePort *source);
     void setDestination(dtkComposerScenePort *destination);
 
 public:
     void redo(void);
     void undo(void);
+
+protected:
+    void setParent(void);
 
 private:
     dtkComposerStackCommandCreateEdgePrivate *e;
@@ -143,7 +144,6 @@ public:
     ~dtkComposerStackCommandDestroyEdge(void);
 
 public:
-    void setParent(dtkComposerSceneNodeComposite *parent);
     void setEdge(dtkComposerSceneEdge *edge);
 
 public:
@@ -191,7 +191,6 @@ public:
     ~dtkComposerStackCommandDestroyNote(void);
 
 public:
-    void setParent(dtkComposerSceneNodeComposite *parent);
     void setNote(dtkComposerSceneNote *note);
 
 public:

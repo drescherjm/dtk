@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 20 15:43:12 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 1877
+ * Last-Updated: lun. févr. 20 17:00:40 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 1897
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #include "dtkComposerGraph.h"
 #include "dtkComposerGraphNode.h"
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeLeaf.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
@@ -750,6 +751,9 @@ void dtkComposerStackCommandCreateGroup::redo(void)
     if(!d->scene)
         return;
 
+    if(!d->graph)
+        return;
+
     if(!e->parent)
         return;
 
@@ -757,10 +761,13 @@ void dtkComposerStackCommandCreateGroup::redo(void)
         return;
 
     if(!e->node) {
+        dtkComposerNode *node = new dtkComposerNodeComposite;
         e->node = new dtkComposerSceneNodeComposite;
+
+        e->node->wrap(node);
         e->node->setParent(e->parent);
     }
-    
+
     e->edges = e->parent->edges();
 
     QRectF rect;
@@ -909,6 +916,8 @@ void dtkComposerStackCommandCreateGroup::redo(void)
     e->parent->addNode(e->node);
     d->scene->addItem(e->node);
 
+    d->graph->addNode(e->node);
+
     d->scene->update();
     d->scene->modify(true);
 }
@@ -916,6 +925,9 @@ void dtkComposerStackCommandCreateGroup::redo(void)
 void dtkComposerStackCommandCreateGroup::undo(void)
 {
     if(!d->scene)
+        return;
+
+    if(!d->graph)
         return;
 
     if(!e->parent)
@@ -1016,6 +1028,7 @@ void dtkComposerStackCommandCreateGroup::undo(void)
 
     e->parent->removeNode(e->node);
     d->scene->removeItem(e->node);
+    d->graph->removeNode(e->node);
 
     d->scene->update();
     d->scene->modify(true);
@@ -1079,6 +1092,9 @@ void dtkComposerStackCommandDestroyGroup::setNode(dtkComposerSceneNodeComposite 
 void dtkComposerStackCommandDestroyGroup::redo(void)
 {
     if(!d->scene)
+        return;
+
+    if(!d->graph)
         return;
 
     if(!e->parent)
@@ -1188,6 +1204,7 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
 
     e->parent->removeNode(e->node);
     d->scene->removeItem(e->node);
+    d->graph->removeNode(e->node);
 
     d->scene->update();
     d->scene->modify(true);
@@ -1196,6 +1213,9 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
 void dtkComposerStackCommandDestroyGroup::undo(void)
 {
     if(!d->scene)
+        return;
+
+    if(!d->graph)
         return;
 
     if(!e->parent)
@@ -1287,6 +1307,7 @@ void dtkComposerStackCommandDestroyGroup::undo(void)
     }
 
     e->parent->addNode(e->node);
+    d->graph->addNode(e->node);
     d->scene->addItem(e->node);
 }
 

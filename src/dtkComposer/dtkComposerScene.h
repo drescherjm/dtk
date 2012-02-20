@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:11:39
  * Version: $Id$
- * Last-Updated: Sun Feb 19 18:16:20 2012 (+0100)
+ * Last-Updated: Mon Feb 20 15:51:01 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 179
+ *     Update #: 180
  */
 
 /* Commentary:
@@ -79,7 +79,7 @@ signals:
     // void selected(QGraphicsItem *item);
 
 // #pragma mark -
-// #pragma mark - Drag\' Drop Events
+// #pragma mark - Drag Drop Events
 
 protected:
     void dragEnterEvent(QGraphicsSceneDragDropEvent *event);

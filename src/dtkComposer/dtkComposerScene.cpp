@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Mon Feb 20 15:44:10 2012 (+0100)
+ * Last-Updated: Mon Feb 20 15:50:39 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1664
+ *     Update #: 1666
  */
 
 /* Commentary:
@@ -138,7 +138,7 @@ void dtkComposerScene::modify(bool b)
 
 // /////////////////////////////////////////////////////////////////
 #pragma mark -
-#pragma mark - Drag\'n Drop Events
+#pragma mark - Drag n Drop Events
 // /////////////////////////////////////////////////////////////////
 
 void dtkComposerScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 20 11:28:20 2012 (+0100)
+ * Last-Updated: Mon Feb 20 12:36:25 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1830
+ *     Update #: 1831
  */
 
 /* Commentary: 
@@ -741,7 +741,7 @@ void dtkComposerStackCommandCreateGroup::redo(void)
 
     if(!e->node) {
         e->node = new dtkComposerSceneNodeComposite;
-        e->node->setParent(d->scene->current());
+        e->node->setParent(e->parent);
     }
     
     e->edges = e->parent->edges();

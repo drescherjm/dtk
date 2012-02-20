@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb 10 10:17:18 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 14 13:59:17 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 389
+ * Last-Updated: lun. févr. 20 12:34:00 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 402
  */
 
 /* Commentary: 
@@ -139,7 +139,7 @@ void dtkComposerGraphLayouterPrivate::removeCycles(void)
     foreach(dtkComposerGraphEdge *edge, this->reversed)
         reverse(edge);
 
-    // qDebug() << __func__ << this->reversed.count() << "edges reversed";
+//     qDebug() << __func__ << this->reversed.count() << "edges reversed";
 }
 
 void dtkComposerGraphLayouterPrivate::assignLayers(void)
@@ -256,8 +256,10 @@ dtkComposerGraphNodeList sort(const dtkComposerGraph& graph)
     dtkComposerGraphNodeList sortd;
 
     foreach(dtkComposerGraphNode *node, g.nodes())
-        if(!inset(node, g).count())
+        if(!(inset(node, g).count()))
             nodes << node;
+
+    // qDebug() << __func__ << nodes.count() << "nodes to be sorted";
 
     while(!nodes.isEmpty()) {
 

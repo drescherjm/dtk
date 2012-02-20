@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:33:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 20 14:46:38 2012 (+0100)
+ * Last-Updated: Mon Feb 20 17:06:28 2012 (+0100)
  *           By: tkloczko
- *     Update #: 17
+ *     Update #: 20
  */
 
 /* Commentary: 
@@ -42,7 +42,7 @@ public:
     QString identifier(void) const;
 
 public:
-    Chains leftChains(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
+    LinkMap leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 
 private:
     T m_data;

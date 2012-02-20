@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 20 15:41:12 2012 (+0100)
+ * Last-Updated: Mon Feb 20 17:05:34 2012 (+0100)
  *           By: tkloczko
- *     Update #: 36
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -105,16 +105,22 @@ template <typename T> bool dtkComposerReceiver<T>::connect(dtkComposerTransmitte
     return false;
 };
 
-
-template <typename T> dtkComposerTransmitter::Chains dtkComposerReceiver<T>::rightChains(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
+//! 
+/*! 
+ *  All links from every receiver found to \a transmitter are stored
+ *  in a multi-hash table.
+ *
+ *  By default, an empty multi-hash is returned.
+ */
+template <typename T> dtkComposerTransmitter::LinkMap dtkComposerReceiver<T>::rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
     list << new dtkComposerTransmitterLink(transmitter, this);
 
-    Chains chain;
+    LinkMap link_map;
     foreach(dtkComposerTransmitterLink *l, list)
-        chain.insert(this, l);
+        link_map.insert(this, l);
 
-    return chain;
+    return link_map;
 };
 
 #endif

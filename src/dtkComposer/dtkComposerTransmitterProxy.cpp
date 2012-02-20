@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Feb 20 11:47:39 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 20 14:45:24 2012 (+0100)
+ * Last-Updated: Mon Feb 20 17:07:55 2012 (+0100)
  *           By: tkloczko
- *     Update #: 17
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -51,26 +51,32 @@ QString dtkComposerTransmitterProxy::identifier(void) const
     return "dtkComposerTransmitterProxy";
 };
 
-dtkComposerTransmitter::Chains dtkComposerTransmitterProxy::leftChains(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
+dtkComposerTransmitter::LinkMap dtkComposerTransmitterProxy::leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
-    Chains chains;
+    LinkMap link_map;
+
+    if (!d->next.contains(transmitter))
+        d->next << transmitter;
 
     list << new dtkComposerTransmitterLink(this, transmitter);
 
     foreach(dtkComposerTransmitter *p, d->previous)
-        chains += p->leftChains(this, list);
+        link_map += p->leftLinks(this, list);
 
-    return chains;
+    return link_map;
 };
 
-dtkComposerTransmitter::Chains dtkComposerTransmitterProxy::rightChains(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
+dtkComposerTransmitter::LinkMap dtkComposerTransmitterProxy::rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
-    Chains chains;
+    LinkMap link_map;
+
+    if (!d->previous.contains(transmitter))
+        d->previous << transmitter;
 
     list << new dtkComposerTransmitterLink(transmitter, this);
 
     foreach(dtkComposerTransmitter *n, d->next)
-        chains += n->rightChains(this, list);
+        link_map += n->rightLinks(this, list);
 
-    return chains;
+    return link_map;
 };

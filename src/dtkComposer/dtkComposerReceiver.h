@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 20 15:41:07 2012 (+0100)
+ * Last-Updated: Mon Feb 20 17:04:33 2012 (+0100)
  *           By: tkloczko
- *     Update #: 25
+ *     Update #: 28
  */
 
 /* Commentary: 
@@ -51,7 +51,7 @@ public:
 public:
     bool connect(dtkComposerTransmitter *transmitter);
 
-    Chains rightChains(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
+    LinkMap rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 
 private:
     QList<dtkComposerEmitter<T> *> emitters;

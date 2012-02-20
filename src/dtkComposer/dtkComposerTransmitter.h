@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 20 15:40:56 2012 (+0100)
+ * Last-Updated: Mon Feb 20 17:04:22 2012 (+0100)
  *           By: tkloczko
- *     Update #: 58
+ *     Update #: 65
  */
 
 /* Commentary: 
@@ -37,7 +37,7 @@ class dtkComposerTransmitterLinkList;
 class DTKCOMPOSER_EXPORT dtkComposerTransmitter
 {
 public:
-    typedef QMultiHash<dtkComposerTransmitter *, dtkComposerTransmitterLink *> Chains;
+    typedef QMultiHash<dtkComposerTransmitter *, dtkComposerTransmitterLink *> LinkMap;
 
 public:
              dtkComposerTransmitter(dtkComposerNode *parent = 0);
@@ -50,23 +50,20 @@ public:
     dtkComposerNode *parentNode(void) const;
 
 public:
-    void   activate(void);
-    void inactivate(void);
-
-    bool active(void);
-    
+    void   setActive(bool active);
     void setRequired(bool required);
 
+    bool   active(void);
     bool required(void);
 
 public:
     virtual bool connect(dtkComposerTransmitter *transmitter);
 
-    virtual Chains  leftChains(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
-    virtual Chains rightChains(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
+    virtual LinkMap  leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
+    virtual LinkMap rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 
 public:
-    static bool onTransmittersConnected(dtkComposerTransmitter *source, dtkComposerTransmitter *destination, dtkComposerTransmitterLinkList valid_links, dtkComposerTransmitterLinkList invalid_links);
+    static bool onTransmittersConnected(dtkComposerTransmitter *source, dtkComposerTransmitter *destination, dtkComposerTransmitterLinkList& valid_links, dtkComposerTransmitterLinkList& invalid_links);
 
 public:
     friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter);

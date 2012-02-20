@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. févr. 20 12:34:18 2012 (+0100)
+ * Last-Updated: lun. févr. 20 14:36:49 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 506
+ *     Update #: 577
  */
 
 /* Commentary:
@@ -120,65 +120,97 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
 
     dtkComposerNode *wrapee = node->wrapee();
 
-    if (dynamic_cast<dtkComposerNodeFor *>(wrapee)) {
+    if (!dynamic_cast<dtkComposerNodeLeaf *>(wrapee)) {
+
         dtkComposerGraphNode *inputs    = new dtkComposerGraphNodeSetInputs(wrapee);
         dtkComposerGraphNode *outputs   = new dtkComposerGraphNodeSetOutputs(wrapee);
         dtkComposerGraphNode *begin     = new dtkComposerGraphNodeBegin(wrapee);
         dtkComposerGraphNode *end       = new dtkComposerGraphNodeEnd(wrapee);
         dtkComposerGraphNode *set_conds = new dtkComposerGraphNodeSetConditions(wrapee);
         dtkComposerGraphNode *select    = new dtkComposerGraphNodeSelectBranch(wrapee);
-        dtkComposerGraphNode *begin_cond = new dtkComposerGraphNodeBegin(wrapee,"Begin Cond");
-        dtkComposerGraphNode *end_cond = new dtkComposerGraphNodeEnd(wrapee,"End Cond");
-        dtkComposerGraphNode *begin_block = new dtkComposerGraphNodeBegin(wrapee,"Begin Block");
-        dtkComposerGraphNode *end_block = new dtkComposerGraphNodeEnd(wrapee,"End Block");
-        dtkComposerGraphNode *begin_inc = new dtkComposerGraphNodeBegin(wrapee,"Begin Inc");
-        dtkComposerGraphNode *end_inc = new dtkComposerGraphNodeEnd(wrapee,"End Inc");
+
         d->nodes.insertMulti(node, inputs);
         d->nodes.insertMulti(node, outputs);
         d->nodes.insertMulti(node, begin);
         d->nodes.insertMulti(node, end);
         d->nodes.insertMulti(node, select);
         d->nodes.insertMulti(node, set_conds);
-        d->nodes.insertMulti(node, begin_cond);
-        d->nodes.insertMulti(node, end_cond);
-        d->nodes.insertMulti(node, begin_block);
-        d->nodes.insertMulti(node, end_block);
-        d->nodes.insertMulti(node, begin_inc);
-        d->nodes.insertMulti(node, end_inc);
 
-        this->addItem(inputs);
-        this->addItem(outputs);
-        this->addItem(begin);
-        this->addItem(end);
-        this->addItem(begin_block);
-        this->addItem(end_block);
-        this->addItem(begin_inc);
-        this->addItem(end_inc);
-        this->addItem(begin_cond);
-        this->addItem(end_cond);
-        this->addItem(select);
-        this->addItem(set_conds);
+        if (dynamic_cast<dtkComposerNodeFor *>(wrapee)) {
+            dtkComposerGraphNode *begin_cond  = new dtkComposerGraphNodeBegin(wrapee,"Begin Cond");
+            dtkComposerGraphNode *end_cond      = new dtkComposerGraphNodeEnd(wrapee,"End Cond");
+            dtkComposerGraphNode *begin_block = new dtkComposerGraphNodeBegin(wrapee,"Begin Block");
+            dtkComposerGraphNode *end_block     = new dtkComposerGraphNodeEnd(wrapee,"End Block");
+            dtkComposerGraphNode *begin_inc   = new dtkComposerGraphNodeBegin(wrapee,"Begin Inc");
+            dtkComposerGraphNode *end_inc       = new dtkComposerGraphNodeEnd(wrapee,"End Inc");
+            dtkComposerGraphNode *vars = new dtkComposerGraphNodeSetVariables(wrapee);
 
-        // SetVariables is specific to for/foreach nodes
-        dtkComposerGraphNode *vars = new dtkComposerGraphNodeSetVariables(wrapee);
-        d->nodes.insertMulti(node, vars);
-        this->addItem(vars);
+            d->nodes.insertMulti(node, begin_cond);
+            d->nodes.insertMulti(node, end_cond);
+            d->nodes.insertMulti(node, begin_block);
+            d->nodes.insertMulti(node, end_block);
+            d->nodes.insertMulti(node, begin_inc);
+            d->nodes.insertMulti(node, end_inc);
+            d->nodes.insertMulti(node, vars);
 
-        d->addEdge(   inputs,       begin, node);
-        d->addEdge(    begin,  begin_cond, node);
-        d->addEdge( end_cond,   set_conds, node);
-        d->addEdge(set_conds,      select, node);
-        d->addEdge(   select, begin_block, node);
-        d->addEdge(   select,         end, node);
-        d->addEdge(end_block,     outputs, node);
-        d->addEdge(  outputs,   begin_inc, node);
-        d->addEdge(  end_inc,        vars, node);
-        d->addEdge(      vars,      begin, node);
+            d->addEdge(   begin,        inputs, node);
+            d->addEdge(   inputs,   begin_cond, node);
+            d->addEdge( end_cond,    set_conds, node);
+            d->addEdge(set_conds,       select, node);
+            d->addEdge(   select,  begin_block, node);
+            d->addEdge(   select,          end, node);
+            d->addEdge(end_block,      outputs, node);
+            d->addEdge(  outputs,    begin_inc, node);
+            d->addEdge(  end_inc,         vars, node);
+            d->addEdge(     vars,   begin_cond, node);
+        }
+        // } else if (dynamic_cast<dtkComposerNodeWhile *>(wrapee)) {
+        //     dtkComposerGraphNode *begin_cond  = new dtkComposerGraphNodeBegin(wrapee,"Begin Cond");
+        //     dtkComposerGraphNode *end_cond      = new dtkComposerGraphNodeEnd(wrapee,"End Cond");
+        //     dtkComposerGraphNode *begin_block = new dtkComposerGraphNodeBegin(wrapee,"Begin Block");
+        //     dtkComposerGraphNode *end_block     = new dtkComposerGraphNodeEnd(wrapee,"End Block");
+
+        //     d->nodes.insertMulti(node, begin_cond);
+        //     d->nodes.insertMulti(node, end_cond);
+        //     d->nodes.insertMulti(node, begin_block);
+        //     d->nodes.insertMulti(node, end_block);
+
+        //     d->addEdge(   begin,       inputs, node);
+        //     d->addEdge(   inputs,  begin_cond, node);
+        //     d->addEdge( end_cond,   set_conds, node);
+        //     d->addEdge(set_conds,      select, node);
+
+        //     d->addEdge(   select, begin_block, node);
+        //     d->addEdge(   select,         end, node);
+        //     d->addEdge(end_block,     outputs, node);
+        //     d->addEdge(  outputs, begin_conds, node);
+        // } else if (dynamic_cast<dtkComposerNodeIf *>(wrapee)) {
+        //     dtkComposerGraphNode *begin_true  = new dtkComposerGraphNodeBegin(wrapee,"Begin True");
+        //     dtkComposerGraphNode *end_true      = new dtkComposerGraphNodeEnd(wrapee,"End True");
+        //     dtkComposerGraphNode *begin_false = new dtkComposerGraphNodeBegin(wrapee,"Begin False");
+        //     dtkComposerGraphNode *end_false     = new dtkComposerGraphNodeEnd(wrapee,"End False");
+
+        //     d->nodes.insertMulti(node, begin_true);
+        //     d->nodes.insertMulti(node, end_true);
+        //     d->nodes.insertMulti(node, begin_false);
+        //     d->nodes.insertMulti(node, end_false);
+
+        //     // FIXME: what about inputs ?
+        //     d->addEdge(   begin,    set_conds, node);
+        //     d->addEdge(set_conds,      select, node);
+
+        //     d->addEdge(   select,  begin_true, node);
+        //     d->addEdge(   select, begin_false, node);
+        //     d->addEdge( end_true,     outputs, node);
+        //     d->addEdge(end_false,     outputs, node);
+        //     d->addEdge(  outputs,         end, node);
+        // }
     } else { // Leaf node
         dtkComposerGraphNode *leaf = new dtkComposerGraphNodeLeaf(wrapee);
         d->nodes.insertMulti(node, leaf);
-        this->addItem(leaf);
     }
+    foreach (dtkComposerGraphNode *n, d->nodes.values(node) )
+        this->addItem(n);
     this->layout();
 }
 

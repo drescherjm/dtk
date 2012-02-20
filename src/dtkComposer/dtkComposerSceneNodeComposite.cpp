@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 20 15:43:26 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 313
+ * Last-Updated: lun. févr. 20 16:17:36 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 319
  */
 
 /* Commentary: 
@@ -17,6 +17,7 @@
  * 
  */
 
+#include "dtkComposerNodeComposite.h"
 #include "dtkComposerSceneEdge.h"
 #include "dtkComposerSceneNode.h"
 #include "dtkComposerSceneNodeComposite.h"
@@ -67,6 +68,16 @@ dtkComposerSceneNodeComposite::~dtkComposerSceneNodeComposite(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkComposerSceneNodeComposite::wrap(dtkComposerNode *wrapee)
+{
+    dtkComposerNodeComposite *composite = dynamic_cast<dtkComposerNodeComposite *>(wrapee);
+
+    if(!composite)
+        return;
+
+    dtkComposerSceneNode::wrap(wrapee);
 }
 
 void dtkComposerSceneNodeComposite::addNote(dtkComposerSceneNote *note)

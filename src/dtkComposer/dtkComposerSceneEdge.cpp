@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:00:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 18:25:51 2012 (+0100)
+ * Last-Updated: Mon Feb 20 16:00:49 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 40
+ *     Update #: 67
  */
 
 /* Commentary: 
@@ -33,6 +33,10 @@ public:
 
 public:
     QPainterPath path;
+
+public:
+    bool valid;
+    bool flagged;
 };
 
 dtkComposerSceneEdge::dtkComposerSceneEdge(void) : QGraphicsItem(), d(new dtkComposerSceneEdgePrivate)
@@ -41,6 +45,9 @@ dtkComposerSceneEdge::dtkComposerSceneEdge(void) : QGraphicsItem(), d(new dtkCom
     d->destination = NULL;
 
     d->parent = NULL;
+
+    d->valid = false;
+    d->flagged = false;
 
     this->setZValue(-1);
 }
@@ -65,7 +72,14 @@ void dtkComposerSceneEdge::paint(QPainter *painter, const QStyleOptionGraphicsIt
     painter->save();
 
     painter->setPen(QPen(Qt::black, 1));
-    painter->setBrush(Qt::gray);
+
+    if (!d->flagged)
+        painter->setBrush(Qt::gray);
+    else
+        if(d->valid)
+            painter->setBrush(Qt::green);
+        else
+            painter->setBrush(Qt::red);
 
     painter->drawPath(d->path);
 
@@ -168,6 +182,30 @@ bool dtkComposerSceneEdge::unlink(void)
         d->destination->node()->removeInputEdge(this);
 
     return true;
+}
+
+bool dtkComposerSceneEdge::valid(void)
+{
+    return (d->valid == true);
+}
+
+bool dtkComposerSceneEdge::invalid(void)
+{
+    return (d->valid == false);
+}
+
+void dtkComposerSceneEdge::validate(void)
+{
+    d->valid = true;
+
+    d->flagged = true;
+}
+
+void dtkComposerSceneEdge::invalidate(void)
+{
+    d->valid = false;
+
+    d->flagged = true;
 }
 
 dtkComposerSceneNode *dtkComposerSceneEdge::parent(void)

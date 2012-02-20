@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:32:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 14:50:19 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 39
+ * Last-Updated: lun. févr. 20 16:13:35 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 40
  */
 
 /* Commentary: 
@@ -34,6 +34,9 @@ class dtkComposerSceneNodeComposite : public dtkComposerSceneNode
 public:
      dtkComposerSceneNodeComposite(void);
     ~dtkComposerSceneNodeComposite(void);
+
+public:
+    void wrap(dtkComposerNode *wrapee);
 
 public:
     void    addNote(dtkComposerSceneNote *note);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. févr. 20 14:49:13 2012 (+0100)
+ * Last-Updated: lun. févr. 20 17:01:32 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 583
+ *     Update #: 615
  */
 
 /* Commentary:
@@ -30,7 +30,7 @@
 #include "dtkComposerGraphNodeSetOutputs.h"
 #include "dtkComposerGraphNodeSetVariables.h"
 #include "dtkComposerNode.h"
-//#include "dtkComposerNodeComposite.h"
+#include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeFor.h"
 #include "dtkComposerNodeLeaf.h"
@@ -121,8 +121,7 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
 
     dtkComposerNode *wrapee = node->wrapee();
 
-    if (!dynamic_cast<dtkComposerNodeLeaf *>(wrapee)) {
-
+    if (dynamic_cast<dtkComposerNodeControl *>(wrapee)) {
         dtkComposerGraphNode *inputs    = new dtkComposerGraphNodeSetInputs(wrapee);
         dtkComposerGraphNode *outputs   = new dtkComposerGraphNodeSetOutputs(wrapee);
         dtkComposerGraphNode *begin     = new dtkComposerGraphNodeBegin(wrapee);
@@ -206,6 +205,14 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
         //     d->addEdge(end_false,     outputs, node);
         //     d->addEdge(  outputs,         end, node);
         // }
+    } else if (dynamic_cast<dtkComposerNodeComposite *>(wrapee)) {
+        dtkComposerGraphNode *begin = new dtkComposerGraphNodeBegin(wrapee,"Begin Composite");
+        dtkComposerGraphNode *end   = new dtkComposerGraphNodeEnd(wrapee,"End Composite");
+        d->nodes.insertMulti(node, begin);
+        d->nodes.insertMulti(node, end);
+
+        //todo: update edges of internal/boundary nodes
+
     } else { // Leaf node
         dtkComposerGraphNode *leaf = new dtkComposerGraphNodeLeaf(wrapee);
         d->nodes.insertMulti(node, leaf);
@@ -246,8 +253,14 @@ void dtkComposerGraph::addEdge(dtkComposerSceneEdge *edge)
         return;
 
     dtkComposerGraphEdge *e = new dtkComposerGraphEdge;
-    e->setSource(d->nodes.value(edge->source()->node()));
-    e->setDestination(d->nodes.value(edge->destination()->node()));
+    dtkComposerGraphNode *src = d->nodes.value(edge->source()->node());
+    dtkComposerGraphNode *dest = d->nodes.value(edge->destination()->node());
+    if (dynamic_cast<dtkComposerGraphNodeLeaf *>(src) && dynamic_cast<dtkComposerGraphNodeLeaf *>(dest)) {
+        e->setSource(src);
+        e->setDestination(dest);
+    } else {
+        // todo
+    }
 
     d->edges.insertMulti(edge, e);
 

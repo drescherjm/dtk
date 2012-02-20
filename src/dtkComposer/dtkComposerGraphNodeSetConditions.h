@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:55:56
  * Version: $Id$
- * Last-Updated: mer. févr. 15 16:09:59 2012 (+0100)
+ * Last-Updated: lun. févr. 20 10:37:33 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 30
+ *     Update #: 31
  */
 
 /* Commentary:
@@ -32,7 +32,7 @@ class dtkComposerGraphNodeSetConditionsPrivate;
 class dtkComposerGraphNodeSetConditions : public dtkComposerGraphNode
 {
 public:
-     dtkComposerGraphNodeSetConditions(dtkComposerNode *node);
+     dtkComposerGraphNodeSetConditions(dtkComposerNode *node, const QString& title = "Set Conditions");
 
 public:
     void eval(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:55:56
  * Version: $Id$
- * Last-Updated: mer. févr. 15 16:11:10 2012 (+0100)
+ * Last-Updated: lun. févr. 20 10:32:24 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 30
+ *     Update #: 34
  */
 
 /* Commentary:
@@ -32,7 +32,7 @@ class dtkComposerGraphNodeSetOutputsPrivate;
 class dtkComposerGraphNodeSetOutputs : public dtkComposerGraphNode
 {
 public:
-     dtkComposerGraphNodeSetOutputs(dtkComposerNode *node);
+     dtkComposerGraphNodeSetOutputs(dtkComposerNode *node, const QString &title = "Set Outputs");
 
 public:
     void eval(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 14 11:37:57 2012 (+0100)
+ * Last-Updated: Mon Feb 20 14:48:59 2012 (+0100)
  *           By: tkloczko
- *     Update #: 4
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -20,8 +20,6 @@
 #ifndef DTKCOMPOSEREMITTER_TPP
 #define DTKCOMPOSEREMITTER_TPP
 
-#include <QString>
-
 // /////////////////////////////////////////////////////////////////
 // dtkComposerEmitter implementation
 // /////////////////////////////////////////////////////////////////
@@ -30,7 +28,7 @@
 /*! 
  *  
  */
-template <typename T> inline dtkComposerEmitter<T>::dtkComposerEmitter(dtkComposerSceneNode *parent) : dtkComposerTransmitter(parent)
+template <typename T> inline dtkComposerEmitter<T>::dtkComposerEmitter(dtkComposerNode *parent) : dtkComposerTransmitter(parent)
 {
     
 };
@@ -80,4 +78,15 @@ template <typename T> QString dtkComposerEmitter<T>::identifier(void) const
     return "dtkComposerEmitter";
 };
 
+
+template <typename T> dtkComposerTransmitter::Chains dtkComposerEmitter<T>::leftChains(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
+{
+    list << new dtkComposerTransmitterLink(this, transmitter);
+
+    Chains chain;
+    foreach(dtkComposerTransmitterLink *l, list)
+        chain.insert(this, l);
+
+    return chain;
+};
 #endif

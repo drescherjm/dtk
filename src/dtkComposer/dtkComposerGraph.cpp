@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. févr. 20 14:36:49 2012 (+0100)
+ * Last-Updated: lun. févr. 20 14:49:13 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 577
+ *     Update #: 583
  */
 
 /* Commentary:
@@ -46,7 +46,7 @@ class dtkComposerGraphPrivate
 {
 public:
     bool exists(dtkComposerSceneEdge *edge);
-    void addEdge(dtkComposerGraphNode *source, dtkComposerGraphNode *dest, dtkComposerSceneNode *node);
+    void addEdge(dtkComposerGraphNode *source, dtkComposerGraphNode *dest, dtkComposerSceneNode *node, int id = 0);
 
 public:
     QMultiHash<dtkComposerSceneEdge *, dtkComposerGraphEdge *> edges;
@@ -75,11 +75,12 @@ bool dtkComposerGraphPrivate::exists(dtkComposerSceneEdge *edge)
 }
 
 // add graph edge not related to scene edge (for a scene control nodes)
-void dtkComposerGraphPrivate::addEdge(dtkComposerGraphNode *source, dtkComposerGraphNode *destination, dtkComposerSceneNode *node)
+void dtkComposerGraphPrivate::addEdge(dtkComposerGraphNode *source, dtkComposerGraphNode *destination, dtkComposerSceneNode *node, int id)
 {
     dtkComposerGraphEdge *e = new dtkComposerGraphEdge;
     e->setSource(source);
     e->setDestination(destination);
+    e->setId(id);
     dummy_edges.insertMulti(node, e);
     edges.insertMulti(0, e);
     q->addItem(e);
@@ -158,7 +159,7 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
             d->addEdge( end_cond,    set_conds, node);
             d->addEdge(set_conds,       select, node);
             d->addEdge(   select,  begin_block, node);
-            d->addEdge(   select,          end, node);
+            d->addEdge(   select,          end, node, 1);
             d->addEdge(end_block,      outputs, node);
             d->addEdge(  outputs,    begin_inc, node);
             d->addEdge(  end_inc,         vars, node);
@@ -181,7 +182,7 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
         //     d->addEdge(set_conds,      select, node);
 
         //     d->addEdge(   select, begin_block, node);
-        //     d->addEdge(   select,         end, node);
+        //     d->addEdge(   select,         end, node, 1);
         //     d->addEdge(end_block,     outputs, node);
         //     d->addEdge(  outputs, begin_conds, node);
         // } else if (dynamic_cast<dtkComposerNodeIf *>(wrapee)) {
@@ -200,7 +201,7 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
         //     d->addEdge(set_conds,      select, node);
 
         //     d->addEdge(   select,  begin_true, node);
-        //     d->addEdge(   select, begin_false, node);
+        //     d->addEdge(   select, begin_false, node, 1);
         //     d->addEdge( end_true,     outputs, node);
         //     d->addEdge(end_false,     outputs, node);
         //     d->addEdge(  outputs,         end, node);

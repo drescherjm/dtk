@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:08:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 10 12:37:21 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 25
+ * Last-Updated: lun. févr. 20 14:47:22 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -41,6 +41,10 @@ public:
     dtkComposerGraphNode *destination(void);
 
 public:
+    int id(void);
+
+public:
+    void setId(int id);
     void setSource(dtkComposerGraphNode *source);
     void setDestination(dtkComposerGraphNode *destination);
 

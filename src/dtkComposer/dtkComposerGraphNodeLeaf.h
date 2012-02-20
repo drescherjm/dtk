@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:55:56
  * Version: $Id$
- * Last-Updated: mer. févr. 15 16:08:11 2012 (+0100)
+ * Last-Updated: lun. févr. 20 10:35:20 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 31
+ *     Update #: 32
  */
 
 /* Commentary:
@@ -32,7 +32,7 @@ class dtkComposerGraphNodeLeafPrivate;
 class dtkComposerGraphNodeLeaf : public dtkComposerGraphNode
 {
 public:
-     dtkComposerGraphNodeLeaf(dtkComposerNode *node);
+     dtkComposerGraphNodeLeaf(dtkComposerNode *node, const QString& title = "Leaf");
 
 public:
     void eval(void);

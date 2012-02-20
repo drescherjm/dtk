@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:33:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 14 11:37:29 2012 (+0100)
+ * Last-Updated: Mon Feb 20 14:46:38 2012 (+0100)
  *           By: tkloczko
- *     Update #: 6
+ *     Update #: 17
  */
 
 /* Commentary: 
@@ -29,7 +29,7 @@
 template <typename T> class DTKCOMPOSER_EXPORT dtkComposerEmitter : public dtkComposerTransmitter
 {
 public:
-     dtkComposerEmitter(dtkComposerSceneNode *parent = 0);
+     dtkComposerEmitter(dtkComposerNode *parent = 0);
     ~dtkComposerEmitter(void);
 
 public:
@@ -40,6 +40,9 @@ public:
 
 public:
     QString identifier(void) const;
+
+public:
+    Chains leftChains(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 
 private:
     T m_data;

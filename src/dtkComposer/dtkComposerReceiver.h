@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 08:56:39 2012 (+0100)
+ * Last-Updated: Mon Feb 20 15:41:07 2012 (+0100)
  *           By: tkloczko
- *     Update #: 12
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -22,9 +22,7 @@
 
 #include "dtkComposerTransmitter.h"
 
-#include <QList>
-
-class QString;
+#include <QtCore>
 
 template <typename T> class dtkComposerEmitter;
 
@@ -35,7 +33,7 @@ template <typename T> class dtkComposerEmitter;
 template <typename T> class DTKCOMPOSER_EXPORT dtkComposerReceiver : public dtkComposerTransmitter
 {
 public:
-     dtkComposerReceiver(dtkComposerSceneNode *parent = 0);
+     dtkComposerReceiver(dtkComposerNode *parent = 0);
     ~dtkComposerReceiver(void);
 
 public:
@@ -49,6 +47,11 @@ public:
 
 public:
     QString identifier(void) const;
+
+public:
+    bool connect(dtkComposerTransmitter *transmitter);
+
+    Chains rightChains(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 
 private:
     QList<dtkComposerEmitter<T> *> emitters;

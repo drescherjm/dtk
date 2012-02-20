@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: lun. févr. 20 12:36:42 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 1646
+ * Last-Updated: Mon Feb 20 15:44:10 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 1664
  */
 
 /* Commentary:
@@ -394,14 +394,6 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         }
 
         if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
-
-            d->reparent_target = node;
-
-            if (d->reparent_origin->parent() == d->reparent_target) {
-                d->reparent_target = NULL;
-                goto adjust_edges;
-            }
-
             // Look for a block within the control node
 
             dtkComposerSceneNodeComposite *block = control->blockAt(event->scenePos());
@@ -411,6 +403,13 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 d->reparent_target = NULL;
                 goto adjust_edges;
             }
+
+            if (d->reparent_origin->parent() == block) {
+                d->reparent_target = NULL;
+                goto adjust_edges;
+            }
+
+            d->reparent_target = block;
 
             this->views().at(0)->setCursor(Qt::WaitCursor);
         }
@@ -426,6 +425,7 @@ adjust_edges: // Adjusting edges of selected nodes
         if(dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>(item)) {
 
             if (node->parent() != d->root_node) {
+                // qDebug() << __func__ << "laying out" << node->parent()->title() << "from node" << node->title();
                 node->parent()->layout();
                 this->update();
             }
@@ -628,30 +628,29 @@ dtkComposerSceneNodeComposite *dtkComposerScene::parentAt(const QPointF& point) 
     dtkComposerSceneNode *node = this->nodeAt(point);
 
     if(!node) {
-        qDebug() << __func__ << "current node";
+        // qDebug() << __func__ << "current node";
         return d->current_node;
     }
     
     if(dtkComposerSceneNodeLeaf *leaf = dynamic_cast<dtkComposerSceneNodeLeaf *>(node)) {
-        qDebug() << __func__ << "leaf node's parent";
+        // qDebug() << __func__ << "leaf node's parent";
         return dynamic_cast<dtkComposerSceneNodeComposite *>(leaf->parent());
     }
 
     if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
 
         if(composite->flattened()) {
-            qDebug() << __func__ << "flattened composite node";
+            // qDebug() << __func__ << "flattened composite node";
             return composite;
         }
 
         if(composite->entered()) {
-            qDebug() << __func__ << "entered composite node";
+            // qDebug() << __func__ << "entered composite node";
             return composite;
         }
 
         if(!composite->flattened() && !composite->entered()) {
-            qDebug() << __func__ << "unrevealed composite node's parent";
-            // return dynamic_cast<dtkComposerSceneNodeComposite *>(composite->parent());
+            // qDebug() << __func__ << "unrevealed composite node's parent";
             return composite;
         }
     }
@@ -661,15 +660,16 @@ dtkComposerSceneNodeComposite *dtkComposerScene::parentAt(const QPointF& point) 
         dtkComposerSceneNodeComposite *block = control->blockAt(control->mapFromScene(point));
 
         if(!block) {
-            qDebug() << __func__ << "control node's parent" << control->parent()->title();
+            // qDebug() << __func__ << "control node's parent" << control->parent()->title();
             return dynamic_cast<dtkComposerSceneNodeComposite *>(control->parent());
         }
 
-        qDebug() << __func__ << "control node's block" << block->title();
+        // qDebug() << __func__ << "control node's block" << block->title();
+
         return block;
     }
 
-    qDebug() << __func__ << "NO PARENT FOUND - DRAMATIC";
+    // qDebug() << __func__ << "NO PARENT FOUND - DRAMATIC";
 
     return NULL;
 }

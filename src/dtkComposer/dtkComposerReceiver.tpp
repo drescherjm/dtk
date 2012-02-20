@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 08:58:11 2012 (+0100)
+ * Last-Updated: Mon Feb 20 15:41:12 2012 (+0100)
  *           By: tkloczko
- *     Update #: 13
+ *     Update #: 36
  */
 
 /* Commentary: 
@@ -22,8 +22,6 @@
 
 #include "dtkComposerEmitter.h"
 
-#include <QString>
-
 // /////////////////////////////////////////////////////////////////
 // dtkComposerReceiver implementation
 // /////////////////////////////////////////////////////////////////
@@ -32,7 +30,7 @@
 /*! 
  *  
  */
-template <typename T> inline dtkComposerReceiver<T>::dtkComposerReceiver(dtkComposerSceneNode *parent) : dtkComposerTransmitter(parent)
+template <typename T> inline dtkComposerReceiver<T>::dtkComposerReceiver(dtkComposerNode *parent) : dtkComposerTransmitter(parent)
 {
     
 };
@@ -44,17 +42,6 @@ template <typename T> inline dtkComposerReceiver<T>::dtkComposerReceiver(dtkComp
 template <typename T> inline dtkComposerReceiver<T>::~dtkComposerReceiver(void)
 {
 
-};
-
-//! Connects /a emitter to the receiver.
-/*! 
- *  In practice, the emitter is stored in a list of all potential
- *  emitters that can provide the data.
- */
-template <typename T> inline void dtkComposerReceiver<T>::connect(dtkComposerEmitter<T> *emitter)
-{
-    if (!emitters->contains(emitter))
-        emitters << emitter;
 };
 
 //! Returns the data as a modifiable reference.
@@ -98,6 +85,36 @@ template <typename T> bool dtkComposerReceiver<T>::isEmpty(void) const
 template <typename T> QString dtkComposerReceiver<T>::identifier(void) const
 {
     return "dtkComposerReceiver";
+};
+
+//! 
+/*! 
+ *  
+ */
+template <typename T> bool dtkComposerReceiver<T>::connect(dtkComposerTransmitter *transmitter)
+{
+    dtkComposerEmitter<T> *emitter = NULL;
+
+    if (emitter = dynamic_cast<dtkComposerEmitter<T> *>(transmitter)) {
+        if (!emitters.contains(emitter)) {
+            emitters << emitter;
+            return true;
+        }
+    }
+
+    return false;
+};
+
+
+template <typename T> dtkComposerTransmitter::Chains dtkComposerReceiver<T>::rightChains(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
+{
+    list << new dtkComposerTransmitterLink(transmitter, this);
+
+    Chains chain;
+    foreach(dtkComposerTransmitterLink *l, list)
+        chain.insert(this, l);
+
+    return chain;
 };
 
 #endif

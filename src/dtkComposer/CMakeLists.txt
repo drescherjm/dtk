@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Feb 15 10:07:42 2012 (+0100)
+## Last-Updated: Mon Feb 20 11:59:27 2012 (+0100)
 ##           By: tkloczko
-##     Update #: 349
+##     Update #: 350
 ######################################################################
 ##
 ### Commentary:
@@ -70,6 +70,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerStackCommand.h
   dtkComposerStackView.h
   dtkComposerTransmitter.h
+  dtkComposerTransmitterProxy.h
   dtkComposerView.h
   dtkComposerReader.h
   dtkComposerWriter.h)
@@ -133,6 +134,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerStackView.cpp
   dtkComposerStackCommand.cpp
   dtkComposerTransmitter.cpp
+  dtkComposerTransmitterProxy.cpp
   dtkComposerView.cpp
   dtkComposerView.cpp
   dtkComposerReader.cpp

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Sun Feb 19 18:58:04 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 1643
+ * Last-Updated: lun. févr. 20 12:24:30 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 1645
  */
 
 /* Commentary:
@@ -234,6 +234,7 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
 
                 dtkComposerStackCommandDestroyNode *command = new dtkComposerStackCommandDestroyNode(group);
                 command->setScene(this);
+                command->setGraph(d->graph);
                 command->setNode(node);
             }
 
@@ -245,6 +246,7 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
 
             dtkComposerStackCommandDestroyNode *command = new dtkComposerStackCommandDestroyNode;
             command->setScene(this);
+            command->setGraph(d->graph);
             command->setNode(selected_nodes.first());
 
             d->stack->push(command);

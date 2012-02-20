@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 19 19:08:41 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 1780
+ * Last-Updated: lun. févr. 20 12:23:12 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 1785
  */
 
 /* Commentary: 
@@ -253,6 +253,9 @@ void dtkComposerStackCommandDestroyNode::redo(void)
     if(!d->scene)
         return;
 
+    if(!d->graph)
+        return;
+
     if(!e->parent)
         return;
 
@@ -272,6 +275,7 @@ void dtkComposerStackCommandDestroyNode::redo(void)
     }
 
     e->parent->removeNode(e->node);
+    d->graph->removeNode(e->node);
 
     if (e->parent->root() || e->parent->flattened() || e->parent->entered())
         d->scene->removeItem(e->node);
@@ -281,6 +285,12 @@ void dtkComposerStackCommandDestroyNode::redo(void)
 
 void dtkComposerStackCommandDestroyNode::undo(void)
 {
+    if(!d->scene)
+        return;
+
+    if(!d->graph)
+        return;
+
     if(!e->parent)
         return;
 
@@ -288,6 +298,7 @@ void dtkComposerStackCommandDestroyNode::undo(void)
         return;
 
     e->parent->addNode(e->node);
+    d->graph->addNode(e->node);
 
     foreach(dtkComposerSceneEdge *edge, e->input_edges) {
         if(!d->scene->items().contains(edge))

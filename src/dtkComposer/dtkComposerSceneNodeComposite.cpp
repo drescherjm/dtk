@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 18:42:57 2012 (+0100)
+ * Last-Updated: Mon Feb 20 15:43:26 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 299
+ *     Update #: 313
  */
 
 /* Commentary: 
@@ -58,6 +58,7 @@ dtkComposerSceneNodeComposite::dtkComposerSceneNodeComposite(void) : dtkComposer
     d->entered = false;
     d->revealed = false;
 
+    this->layout();
     this->setTitle("Composite");
 }
 
@@ -211,6 +212,8 @@ void dtkComposerSceneNodeComposite::setRoot(bool root)
 
 void dtkComposerSceneNodeComposite::layout(void)
 {
+    // qDebug() << __func__ << this->title();
+    
 // /////////////////////////////////////////////////////////////////
 // Rect calculation
 // /////////////////////////////////////////////////////////////////
@@ -233,10 +236,10 @@ void dtkComposerSceneNodeComposite::layout(void)
         qreal ymax = -FLT_MAX;
 
         foreach(dtkComposerSceneNode *node, d->nodes) {
-            xmin = qMin(xmin, node->scenePos().x());
-            xmax = qMax(xmax, node->scenePos().x() + node->boundingRect().width());
-            ymin = qMin(ymin, node->scenePos().y());
-            ymax = qMax(ymax, node->scenePos().y() + node->boundingRect().height());
+            xmin = qMin(xmin, node->pos().x());
+            xmax = qMax(xmax, node->pos().x() + node->boundingRect().width());
+            ymin = qMin(ymin, node->pos().y());
+            ymax = qMax(ymax, node->pos().y() + node->boundingRect().height());
         }
 
         qreal w_offset = 100;
@@ -249,6 +252,8 @@ void dtkComposerSceneNodeComposite::layout(void)
         h = qMax(h,  50.0);
 
         d->rect = QRectF(0, 0, w, h);
+
+        // qDebug() << "Got rect" << d->rect << "for" << d->nodes.count();
 
         this->setPos(xmin - w_offset/2, ymin - h_offset/2);
 
@@ -297,6 +302,17 @@ void dtkComposerSceneNodeComposite::layout(void)
             else
                 d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->outputPorts().count() * this->outputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->outputPorts().count()-1) * port_spacing + header));        
 
+    }
+
+// /////////////////////////////////////////////////////////////////
+// Layout parent if applicable
+// /////////////////////////////////////////////////////////////////
+
+    if(this->parentItem()) {
+        dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>(this->parent());
+
+        if (node)
+            node->layout();
     }
 
     this->update();

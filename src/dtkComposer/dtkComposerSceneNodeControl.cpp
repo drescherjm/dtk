@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb 18 15:41:02 2012 (+0100)
+ * Last-Updated: Mon Feb 20 15:04:07 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 308
+ *     Update #: 310
  */
 
 /* Commentary: 
@@ -166,7 +166,7 @@ void dtkComposerSceneNodeControl::layout(void)
     }
 
     foreach(dtkComposerSceneNodeComposite *block, d->blocks) {
-        block->layout();
+        // block->layout();
         block->setPos(0, h);
         w  = qMax(w, block->boundingRect().adjusted(2, 2, -2, -2).width());
         h += block->boundingRect().adjusted(2, 2, -2, -2).height();
@@ -188,6 +188,8 @@ void dtkComposerSceneNodeControl::layout(void)
     
     foreach(dtkComposerSceneNodeComposite *block, d->blocks)
         block->resize(w, block->boundingRect().adjusted(2, 2, -2, -2).height());
+
+    this->update();
 }
 
 void dtkComposerSceneNodeControl::resize(qreal width, qreal height)

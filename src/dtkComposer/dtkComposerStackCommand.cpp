@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 19 19:08:41 2012 (+0100)
+ * Last-Updated: Mon Feb 20 15:43:12 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1780
+ *     Update #: 1877
  */
 
 /* Commentary: 
@@ -157,6 +157,8 @@ void dtkComposerStackCommandCreateNode::redo(void)
         e->node->wrap(node);
         e->node->setParent(e->parent);
     }
+
+    // qDebug() << __func__ << "Node parent is now" << e->node->parent()->title();
     
     e->node->setPos(e->position);
 
@@ -253,6 +255,9 @@ void dtkComposerStackCommandDestroyNode::redo(void)
     if(!d->scene)
         return;
 
+    if(!d->graph)
+        return;
+
     if(!e->parent)
         return;
 
@@ -272,6 +277,9 @@ void dtkComposerStackCommandDestroyNode::redo(void)
     }
 
     e->parent->removeNode(e->node);
+    e->parent->layout();
+
+    d->graph->removeNode(e->node);
 
     if (e->parent->root() || e->parent->flattened() || e->parent->entered())
         d->scene->removeItem(e->node);
@@ -281,6 +289,12 @@ void dtkComposerStackCommandDestroyNode::redo(void)
 
 void dtkComposerStackCommandDestroyNode::undo(void)
 {
+    if(!d->scene)
+        return;
+
+    if(!d->graph)
+        return;
+
     if(!e->parent)
         return;
 
@@ -288,6 +302,9 @@ void dtkComposerStackCommandDestroyNode::undo(void)
         return;
 
     e->parent->addNode(e->node);
+    e->parent->layout();
+
+    d->graph->addNode(e->node);
 
     foreach(dtkComposerSceneEdge *edge, e->input_edges) {
         if(!d->scene->items().contains(edge))
@@ -710,12 +727,22 @@ void dtkComposerStackCommandCreateGroup::setParent(dtkComposerSceneNodeComposite
 
 void dtkComposerStackCommandCreateGroup::setNodes(dtkComposerSceneNodeList nodes)
 {
-    e->nodes = nodes;
+    if(!e->parent)
+        return;
+
+    foreach(dtkComposerSceneNode *node, nodes)
+        if(node->parent() == e->parent)
+            e->nodes << node;
 }
 
 void dtkComposerStackCommandCreateGroup::setNotes(dtkComposerSceneNoteList notes)
 {
-    e->notes = notes;
+    if(!e->parent)
+        return;
+
+    foreach(dtkComposerSceneNote *note, notes)
+        if(note->parent() == e->parent)
+            e->notes << note;
 }
 
 void dtkComposerStackCommandCreateGroup::redo(void)
@@ -726,21 +753,22 @@ void dtkComposerStackCommandCreateGroup::redo(void)
     if(!e->parent)
         return;
 
-    e->edges = d->scene->current()->edges();
-
     if(e->nodes.isEmpty())
         return;
 
     if(!e->node) {
         e->node = new dtkComposerSceneNodeComposite;
-        e->node->setParent(d->scene->current());
+        e->node->setParent(e->parent);
     }
     
+    e->edges = e->parent->edges();
+
     QRectF rect;
 
     foreach(dtkComposerSceneNode *node, e->nodes) {
         rect |= node->sceneBoundingRect();
-        d->scene->current()->removeNode(node);
+        e->parent->removeNode(node);
+        d->scene->removeItem(node);
         e->node->addNode(node);
         node->setParent(e->node);
     }
@@ -751,7 +779,8 @@ void dtkComposerStackCommandCreateGroup::redo(void)
 
         if (e->nodes.contains(edge->source()->node()) && e->nodes.contains(edge->destination()->node())) {
 
-            d->scene->current()->removeEdge(edge);
+            e->parent->removeEdge(edge);
+            d->scene->removeItem(edge);
             e->node->addEdge(edge);
             edge->setParent(e->node);
 
@@ -763,7 +792,8 @@ void dtkComposerStackCommandCreateGroup::redo(void)
 
             edge->unlink();
             
-            d->scene->current()->removeEdge(edge);
+            e->parent->removeEdge(edge);
+            d->scene->removeItem(edge);
 
             if(e->dirty) {
 
@@ -776,7 +806,7 @@ void dtkComposerStackCommandCreateGroup::redo(void)
                 lhs->setSource(edge->source());
                 lhs->setDestination(port);
                 lhs->link();
-                lhs->setParent(d->scene->current());
+                lhs->setParent(e->parent);
                 
                 dtkComposerSceneEdge *rhs = new dtkComposerSceneEdge;
                 rhs->setSource(port);
@@ -784,7 +814,8 @@ void dtkComposerStackCommandCreateGroup::redo(void)
                 rhs->link();
                 rhs->setParent(e->node);
                 
-                d->scene->current()->addEdge(lhs);
+                e->parent->addEdge(lhs);
+                d->scene->addItem(lhs);
                 e->node->addEdge(rhs);
                 
                 e->iports << port;
@@ -797,7 +828,8 @@ void dtkComposerStackCommandCreateGroup::redo(void)
 
             edge->unlink();
 
-            d->scene->current()->removeEdge(edge);
+            e->parent->removeEdge(edge);
+            d->scene->removeItem(edge);
 
             if(e->dirty) {
 
@@ -816,10 +848,11 @@ void dtkComposerStackCommandCreateGroup::redo(void)
                 rhs->setSource(port);
                 rhs->setDestination(edge->destination());
                 rhs->link();
-                rhs->setParent(d->scene->current());
+                rhs->setParent(e->parent);
                 
                 e->node->addEdge(lhs);            
-                d->scene->current()->addEdge(rhs);
+                e->parent->addEdge(rhs);
+                d->scene->addItem(rhs);
                 
                 e->oports << port;
                 e->olhses << lhs;
@@ -837,7 +870,8 @@ void dtkComposerStackCommandCreateGroup::redo(void)
         
         foreach(dtkComposerSceneEdge *edge, e->ilhses) {
             edge->link();
-            d->scene->current()->addEdge(edge);
+            e->parent->addEdge(edge);
+            d->scene->addItem(edge);
         }
         
         foreach(dtkComposerSceneEdge *edge, e->irhses) {
@@ -856,7 +890,8 @@ void dtkComposerStackCommandCreateGroup::redo(void)
         
         foreach(dtkComposerSceneEdge *edge, e->orhses) {
             edge->link();
-            d->scene->current()->addEdge(edge);
+            e->parent->addEdge(edge);
+            d->scene->addItem(edge);
         }
     }
 
@@ -865,12 +900,17 @@ void dtkComposerStackCommandCreateGroup::redo(void)
 // /////////////////////////////////////////////////////////////////
 
     foreach(dtkComposerSceneNote *note, e->notes) {
-        d->scene->current()->removeNote(note);
+        e->parent->removeNote(note);
+        d->scene->removeItem(note);
         e->node->addNote(note);
         note->setParent(e->node);
     }
 
-    d->scene->current()->addNode(e->node);
+    e->parent->addNode(e->node);
+    d->scene->addItem(e->node);
+
+    d->scene->update();
+    d->scene->modify(true);
 }
 
 void dtkComposerStackCommandCreateGroup::undo(void)
@@ -885,7 +925,8 @@ void dtkComposerStackCommandCreateGroup::undo(void)
         return;
 
     foreach(dtkComposerSceneNode *node, e->nodes) {
-        d->scene->current()->addNode(node);
+        e->parent->addNode(node);
+        d->scene->addItem(node);
         e->node->removeNode(node);
         node->setParent(e->node->parent());
     }
@@ -893,7 +934,8 @@ void dtkComposerStackCommandCreateGroup::undo(void)
     foreach(dtkComposerSceneEdge *edge, e->edges) {
 
         if (e->nodes.contains(edge->source()->node()) && e->nodes.contains(edge->destination()->node())) {
-            d->scene->current()->addEdge(edge);
+            e->parent->addEdge(edge);
+            d->scene->addItem(edge);
             e->node->removeEdge(edge);
             edge->setParent(e->node->parent());
 
@@ -905,13 +947,15 @@ void dtkComposerStackCommandCreateGroup::undo(void)
 
             edge->link();
 
-            d->scene->current()->addEdge(edge);
+            e->parent->addEdge(edge);
+            d->scene->addItem(edge);
 
         } else if (!e->nodes.contains(edge->destination()->node()) && e->nodes.contains(edge->source()->node())) {
             
             edge->link();
 
-            d->scene->current()->addEdge(edge);
+            e->parent->addEdge(edge);
+            d->scene->addItem(edge);
         }
     }
 
@@ -921,7 +965,8 @@ void dtkComposerStackCommandCreateGroup::undo(void)
     
     foreach(dtkComposerSceneEdge *edge, e->ilhses) {
         edge->unlink();
-        d->scene->current()->removeEdge(edge);
+        e->parent->removeEdge(edge);
+        d->scene->removeItem(edge);
     }
     
     foreach(dtkComposerSceneEdge *edge, e->irhses) {
@@ -948,7 +993,8 @@ void dtkComposerStackCommandCreateGroup::undo(void)
     
     foreach(dtkComposerSceneEdge *edge, e->orhses) {
         edge->unlink();
-        d->scene->current()->removeEdge(edge);
+        e->parent->removeEdge(edge);
+        d->scene->removeItem(edge);
     }
     
     // qDeleteAll(e->oports);
@@ -962,14 +1008,17 @@ void dtkComposerStackCommandCreateGroup::undo(void)
 // /////////////////////////////////////////////////////////////////
 
     foreach(dtkComposerSceneNote *note, e->notes) {
-        d->scene->current()->addNote(note);
+        e->parent->addNote(note);
+        d->scene->addItem(note);
         e->node->removeNote(note);
         note->setParent(e->node->parent());
     }
 
-    d->scene->current()->removeNode(e->node);
+    e->parent->removeNode(e->node);
+    d->scene->removeItem(e->node);
 
     d->scene->update();
+    d->scene->modify(true);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -1017,7 +1066,7 @@ dtkComposerStackCommandDestroyGroup::~dtkComposerStackCommandDestroyGroup(void)
 
 void dtkComposerStackCommandDestroyGroup::setParent(dtkComposerSceneNodeComposite *parent)
 {
-    e->parent = NULL;
+    e->parent = parent;
 }
 
 void dtkComposerStackCommandDestroyGroup::setNode(dtkComposerSceneNodeComposite *node)
@@ -1041,7 +1090,8 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
     e->edges = e->node->edges();
 
     foreach(dtkComposerSceneNode *node, e->nodes) {
-        d->scene->current()->addNode(node);
+        e->parent->addNode(node);
+        d->scene->addItem(node);
         e->node->removeNode(node);
         node->setParent(e->node->parent());
     }
@@ -1049,7 +1099,8 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
     foreach(dtkComposerSceneEdge *edge, e->edges) {
 
         if (e->nodes.contains(edge->source()->node()) && e->nodes.contains(edge->destination()->node())) {
-            d->scene->current()->addEdge(edge);
+            e->parent->addEdge(edge);
+            d->scene->addItem(edge);
             e->node->removeEdge(edge);
             edge->setParent(e->node->parent());
 
@@ -1074,7 +1125,8 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
                 ed->link();
                 ed->setParent(e->node->parent());
 
-                d->scene->current()->addEdge(ed);
+                e->parent->addEdge(ed);
+                d->scene->addItem(ed);
 
                 e->lflles << ed;
             }
@@ -1082,7 +1134,8 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
             lhs->unlink();
             rhs->unlink();
             
-            d->scene->current()->removeEdge(lhs);
+            e->parent->removeEdge(lhs);
+            d->scene->removeItem(lhs);
             e->node->removeEdge(rhs);
 
             e->llhses << lhs;
@@ -1105,7 +1158,8 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
                 ed->link();
                 ed->setParent(e->node->parent());
 
-                d->scene->current()->addEdge(ed);
+                e->parent->addEdge(ed);
+                d->scene->addItem(ed);
 
                 e->rflles << ed;
             }
@@ -1114,7 +1168,8 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
             rhs->unlink();
             
             e->node->removeEdge(lhs);
-            d->scene->current()->removeEdge(rhs);
+            e->parent->removeEdge(rhs);
+            d->scene->removeItem(rhs);
 
             e->rlhses << lhs;
             e->rrhses << rhs;
@@ -1125,12 +1180,17 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
     }
 
     foreach(dtkComposerSceneNote *note, e->notes) {
-        d->scene->current()->addNote(note);
+        e->parent->addNote(note);
+        d->scene->addItem(note);
         e->node->removeNote(note);
         note->setParent(e->node->parent());
     }
 
-    d->scene->current()->removeNode(e->node);
+    e->parent->removeNode(e->node);
+    d->scene->removeItem(e->node);
+
+    d->scene->update();
+    d->scene->modify(true);
 }
 
 void dtkComposerStackCommandDestroyGroup::undo(void)
@@ -1145,7 +1205,8 @@ void dtkComposerStackCommandDestroyGroup::undo(void)
         return;
 
     foreach(dtkComposerSceneNode *node, e->nodes) {
-        d->scene->current()->removeNode(node);
+        e->parent->removeNode(node);
+        d->scene->removeItem(node);
         e->node->addNode(node);
         node->setParent(e->node);
     }
@@ -1153,7 +1214,8 @@ void dtkComposerStackCommandDestroyGroup::undo(void)
     foreach(dtkComposerSceneEdge *edge, e->edges) {
 
         if (e->nodes.contains(edge->source()->node()) && e->nodes.contains(edge->destination()->node())) {
-            d->scene->current()->removeEdge(edge);
+            e->parent->removeEdge(edge);
+            d->scene->removeItem(edge);
             e->node->addEdge(edge);
             edge->setParent(e->node);
 
@@ -1172,17 +1234,20 @@ void dtkComposerStackCommandDestroyGroup::undo(void)
     }
 
     foreach(dtkComposerSceneEdge *edge, e->lflles) {
-        d->scene->current()->removeEdge(edge);
+        e->parent->removeEdge(edge);
+        d->scene->removeItem(edge);
         edge->unlink();
     }
 
     foreach(dtkComposerSceneEdge *edge, e->rflles) {
-        d->scene->current()->removeEdge(edge);
+        e->parent->removeEdge(edge);
+        d->scene->removeItem(edge);
         edge->unlink();
     }
 
     foreach(dtkComposerSceneEdge *edge, e->llhses) {
-        d->scene->current()->addEdge(edge);
+        e->parent->addEdge(edge);
+        d->scene->addItem(edge);
         edge->link();
     }
 
@@ -1197,7 +1262,8 @@ void dtkComposerStackCommandDestroyGroup::undo(void)
     }
 
     foreach(dtkComposerSceneEdge *edge, e->rrhses) {
-        d->scene->current()->addEdge(edge);
+        e->parent->addEdge(edge);
+        d->scene->addItem(edge);
         edge->link();
     }
 
@@ -1214,12 +1280,14 @@ void dtkComposerStackCommandDestroyGroup::undo(void)
 // /////////////////////////////////////////////////////////////////
 
     foreach(dtkComposerSceneNote *note, e->notes) {
-        d->scene->current()->removeNote(note);
+        e->parent->removeNote(note);
+        d->scene->removeItem(note);
         e->node->addNote(note);
         note->setParent(e->node);
     }
 
-    d->scene->current()->addNode(e->node);
+    e->parent->addNode(e->node);
+    d->scene->addItem(e->node);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -1775,10 +1843,14 @@ public:
 public:
     dtkComposerSceneNode *origin;
     dtkComposerSceneNode *target;
+
+public:
+    dtkComposerSceneNodeComposite *origin_parent;
 };
 
 dtkComposerStackCommandReparentNode::dtkComposerStackCommandReparentNode(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandReparentNodePrivate)
 {
+    e->origin_parent = NULL;
     e->origin = NULL;
     e->target = NULL;
 
@@ -1795,6 +1867,7 @@ dtkComposerStackCommandReparentNode::~dtkComposerStackCommandReparentNode(void)
 void dtkComposerStackCommandReparentNode::setOriginNode(dtkComposerSceneNode *node)
 {
     e->origin = node;
+    e->origin_parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->origin->parent());
 }
 
 void dtkComposerStackCommandReparentNode::setTargetNode(dtkComposerSceneNode *node)
@@ -1828,45 +1901,24 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
     if (dtkComposerSceneNodeComposite *target = dynamic_cast<dtkComposerSceneNodeComposite *>(e->target)) {
 
-        d->scene->current()->removeNode(e->origin);
+        e->origin_parent->removeNode(e->origin);
+
+        d->scene->removeItem(e->origin);
         
         target->addNode(e->origin);
         
         if (target->flattened()) {
-            target->layout();
             d->scene->addItem(e->origin);
+            target->layout();
         }
         
         e->origin->setParent(target);
         e->origin->setPos(e->target_pos);
+
+        target->layout();
     }
 
-    if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(e->target)) {
-
-        // qDebug() << "Reparenting to control node";
-
-        dtkComposerSceneNodeComposite *target = control->blockAt(e->target_pos);
-
-        d->scene->current()->removeNode(e->origin);
-        
-        // qDebug() << "Reparenting to control node: target node count BEFORE:" << target->nodes().count();
-
-        target->addNode(e->origin);
-        
-        // qDebug() << "Reparenting to control node: target node count AFTER:" << target->nodes().count();
-
-        if (target->flattened()) {
-            target->layout();
-            d->scene->addItem(e->origin);
-        }
-        
-        e->origin->setParent(control);
-        e->origin->setZValue(control->zValue()+1);
-        e->origin->setParentItem(control);
-        e->origin->setPos(control->mapFromScene(e->target_pos));
-
-        control->layout();
-    }
+    d->scene->modify(true);
 }
 
 void dtkComposerStackCommandReparentNode::undo(void)
@@ -1892,10 +1944,12 @@ void dtkComposerStackCommandReparentNode::undo(void)
             d->scene->removeItem(e->origin);
         }
         
-        d->scene->current()->addNode(e->origin);
-        
-        e->origin->setParent(target->parent());
+        e->origin_parent->addNode(e->origin);
+        e->origin->setParent(e->origin_parent);
         e->origin->setPos(e->origin_pos);
+
+        if (e->origin_parent->flattened() || e->origin_parent->entered() || e->origin_parent->root())
+            d->scene->addItem(e->origin);
     }
 
     if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(e->target)) {
@@ -1909,12 +1963,17 @@ void dtkComposerStackCommandReparentNode::undo(void)
             d->scene->removeItem(e->origin);
         }
         
-        d->scene->current()->addNode(e->origin);
+        e->origin_parent->addNode(e->origin);
         
-        e->origin->setParent(target->parent());
+        e->origin->setParent(e->origin_parent);
         e->origin->setPos(e->origin_pos);
-        e->origin->setParentItem(0);
+        // e->origin->setParentItem(0);
+
+        if (e->origin_parent->flattened() || e->origin_parent->entered() || e->origin_parent->root())
+            d->scene->addItem(e->origin);
 
         control->layout();
     }
+
+    d->scene->modify(true);
 }

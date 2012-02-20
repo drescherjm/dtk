@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:08:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. févr. 14 16:54:22 2012 (+0100)
+ * Last-Updated: lun. févr. 20 09:39:49 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 52
+ *     Update #: 56
  */
 
 /* Commentary:
@@ -40,6 +40,8 @@ public:
 
 public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    const QString&  title(void);
+    void setTitle(const QString& title);
 
     virtual void eval() ;
 

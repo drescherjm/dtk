@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: mer. févr. 15 16:08:21 2012 (+0100)
+ * Last-Updated: lun. févr. 20 10:36:17 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 46
+ *     Update #: 49
  */
 
 /* Commentary:
@@ -30,9 +30,10 @@ public:
 };
 
 
-dtkComposerGraphNodeLeaf::dtkComposerGraphNodeLeaf(dtkComposerNode *cnode) : dtkComposerGraphNode(),d(new dtkComposerGraphNodeLeafPrivate)
+dtkComposerGraphNodeLeaf::dtkComposerGraphNodeLeaf(dtkComposerNode *cnode, const QString& title) : dtkComposerGraphNode(),d(new dtkComposerGraphNodeLeafPrivate)
 {
     d->composer_node = dynamic_cast<dtkComposerNodeLeaf *>(cnode);
+    this->setTitle(title);
 }
 
 

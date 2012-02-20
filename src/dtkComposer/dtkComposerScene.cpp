@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Sun Feb 19 18:58:04 2012 (+0100)
+ * Last-Updated: Mon Feb 20 11:03:49 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1643
+ *     Update #: 1645
  */
 
 /* Commentary:
@@ -293,6 +293,7 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
 
             dtkComposerStackCommandCreateGroup *command = new dtkComposerStackCommandCreateGroup;
             command->setScene(this);
+            command->setParent(d->current_node);
             command->setNodes(selected_nodes);
             command->setNotes(selected_notes);
             
@@ -306,6 +307,7 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
             if(!group->entered() || !group->flattened()) {
 
                 dtkComposerStackCommandDestroyGroup *command = new dtkComposerStackCommandDestroyGroup;
+                command->setParent(d->current_node);
                 command->setScene(this);
                 command->setNode(group);
                 

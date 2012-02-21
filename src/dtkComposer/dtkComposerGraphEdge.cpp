@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. févr. 20 15:07:43 2012 (+0100)
+ * Last-Updated: mar. févr. 21 13:53:07 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 100
+ *     Update #: 125
  */
 
 /* Commentary: 
@@ -34,6 +34,7 @@ dtkComposerGraphEdge::dtkComposerGraphEdge(void) : QGraphicsItem(), d(new dtkCom
 {
     d->source = NULL;
     d->destination = NULL;
+    d->id = 0;
 
     this->setZValue(0);
 }
@@ -95,15 +96,43 @@ void dtkComposerGraphEdge::paint(QPainter *painter, const QStyleOptionGraphicsIt
     QPointF s = d->source->sceneBoundingRect().center();
     QPointF e = d->destination->sceneBoundingRect().center();
 
-    if (d->id == 1)
+    if (d->id == 0)
+        painter->setPen(Qt::black);
+    else if (d->id == 1)
         painter->setPen(Qt::blue);
     else if (d->id > 1) { // for switch case
         int c = (180 + 10 * d->id) % 255;
         // different levels of blue depending on id value.
         painter->setPen(QColor (50, 50, c));
     }
-    painter->drawLine(s, e);
+    this->drawArrow(painter, s, e);
 }
+
+void dtkComposerGraphEdge::drawArrow(QPainter *p, QPointF from, QPointF to, qreal size, qreal end_margin)
+{
+    QPointF points[3];
+    float a = atan2(from.y()-to.y(), from.x()-to.x());
+    to.setX(to.x()+end_margin*cos(a));
+    to.setY(to.y()+end_margin*sin(a));
+    end_margin += size;
+    a = atan2(from.y()-to.y(), from.x()-to.x());
+
+    QPointF k(to.x()+size*cos(a), to.y()+size*sin(a));
+    a += M_PI/2;
+    size /= 2;
+    QPointF i(k.x()+size*cos(a), k.y()+size*sin(a));
+    QPointF j(k.x()-size*cos(a), k.y()-size*sin(a));
+
+    p->drawLine(from, k);
+    points[0] = to;
+    points[1] = i;
+    points[2] = j;
+    p->save();
+    p->setRenderHint(QPainter::Antialiasing, true);
+    p->drawConvexPolygon(points, 3);
+    p->restore();
+}
+
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerGraphEdgeList

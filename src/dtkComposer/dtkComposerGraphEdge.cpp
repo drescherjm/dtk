@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. févr. 21 13:53:07 2012 (+0100)
+ * Last-Updated: mar. févr. 21 17:04:24 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 125
+ *     Update #: 126
  */
 
 /* Commentary: 
@@ -123,12 +123,12 @@ void dtkComposerGraphEdge::drawArrow(QPainter *p, QPointF from, QPointF to, qrea
     QPointF i(k.x()+size*cos(a), k.y()+size*sin(a));
     QPointF j(k.x()-size*cos(a), k.y()-size*sin(a));
 
+    p->save();
+    p->setRenderHint(QPainter::Antialiasing, true);
     p->drawLine(from, k);
     points[0] = to;
     points[1] = i;
     points[2] = j;
-    p->save();
-    p->setRenderHint(QPainter::Antialiasing, true);
     p->drawConvexPolygon(points, 3);
     p->restore();
 }

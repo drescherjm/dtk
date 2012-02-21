@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. févr. 20 17:00:40 2012 (+0100)
+ * Last-Updated: mar. févr. 21 14:43:08 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1897
+ *     Update #: 1898
  */
 
 /* Commentary: 
@@ -1204,7 +1204,7 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
 
     e->parent->removeNode(e->node);
     d->scene->removeItem(e->node);
-    d->graph->removeNode(e->node);
+    d->graph->removeGroup(e->node);
 
     d->scene->update();
     d->scene->modify(true);

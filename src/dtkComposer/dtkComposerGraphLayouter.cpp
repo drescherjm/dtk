@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb 10 10:17:18 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. févr. 20 12:34:00 2012 (+0100)
+ * Last-Updated: mar. févr. 21 13:26:48 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 402
+ *     Update #: 409
  */
 
 /* Commentary: 
@@ -63,6 +63,7 @@ public:
     void assignLayers(void);
     void createDummys(void);
     void assignPostns(void);
+    void createCycles(void);
 };
 
 void dtkComposerGraphLayouterPrivate::layout(void)
@@ -71,6 +72,7 @@ void dtkComposerGraphLayouterPrivate::layout(void)
     this->assignLayers();
     this->createDummys();
     this->assignPostns();
+    this->createCycles();
 }
 
 void dtkComposerGraphLayouterPrivate::removeCycles(void)
@@ -216,6 +218,12 @@ void dtkComposerGraphLayouterPrivate::assignPostns(void)
     foreach(dtkComposerGraphNode *n, g.nodes())
         if(this->layers[n] != max_layer)
             n->setPos(n->pos() + QPointF((max_width-layer_width[this->layers[n]])/2.0, 0));
+}
+
+void dtkComposerGraphLayouterPrivate::createCycles(void)
+{
+    foreach(dtkComposerGraphEdge *edge, this->reversed)
+        reverse(edge);
 }
 
 // /////////////////////////////////////////////////////////////////

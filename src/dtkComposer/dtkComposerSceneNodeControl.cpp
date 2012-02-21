@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 21 09:13:47 2012 (+0100)
+ * Last-Updated: Tue Feb 21 21:53:08 2012 (+0100)
  *           By: tkloczko
- *     Update #: 311
+ *     Update #: 314
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 #include "dtkComposerSceneNodeComposite.h"
 #include "dtkComposerSceneNodeControl.h"
 #include "dtkComposerSceneNodeLeaf.h"
+#include "dtkComposerSceneNote.h"
 #include "dtkComposerScenePort.h"
 
 class dtkComposerSceneNodeControlPrivate
@@ -264,4 +265,25 @@ void dtkComposerSceneNodeControl::paint(QPainter *painter, const QStyleOptionGra
     painter->setPen(QPen(Qt::black, 0.5, Qt::SolidLine));
     painter->setBrush(Qt::NoBrush);
     painter->drawRect(d->rect.adjusted(-1, -1, 0, 0));
+}
+
+void dtkComposerSceneNodeControl::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    QGraphicsItem::mouseMoveEvent(event);
+
+    foreach(dtkComposerSceneNodeComposite *block, d->blocks) {
+        
+        QPointF delta = event->pos() - event->lastPos();
+        qreal delta_x = delta.x();
+        qreal delta_y = delta.y();
+
+        foreach(dtkComposerSceneNode *node, block->nodes())
+            node->moveBy(delta_x, delta_y);
+
+        foreach(dtkComposerSceneNote *note, block->notes())
+            note->moveBy(delta_x, delta_y);
+
+        foreach(dtkComposerSceneEdge *edge, block->edges())
+            edge->moveBy(delta_x, delta_y);
+    }
 }

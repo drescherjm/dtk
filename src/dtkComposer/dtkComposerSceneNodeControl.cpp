@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 21 22:21:12 2012 (+0100)
+ * Last-Updated: Tue Feb 21 23:10:47 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 372
+ *     Update #: 373
  */
 
 /* Commentary: 
@@ -67,7 +67,7 @@ dtkComposerSceneNodeControl::dtkComposerSceneNodeControl(void) : dtkComposerScen
     incr_block->setTitle("Incrementat");
 
     dtkComposerSceneNodeLeaf *footer = new dtkComposerSceneNodeLeaf;
-    footer->addOutputPort(new dtkComposerScenePort(1, dtkComposerScenePort::Output, footer));
+    footer->addOutputPort(new dtkComposerScenePort(0, dtkComposerScenePort::Output, footer));
     footer->setParent(this);
 
 // --

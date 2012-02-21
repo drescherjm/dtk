@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 21 15:40:57 2012 (+0100)
+ * Last-Updated: Tue Feb 21 22:21:12 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 313
+ *     Update #: 372
  */
 
 /* Commentary: 
@@ -36,6 +36,9 @@ public:
 
 public:
     QRectF rect;
+
+public:
+    QPointF drag_point;
 };
 
 dtkComposerSceneNodeControl::dtkComposerSceneNodeControl(void) : dtkComposerSceneNode(), d(new dtkComposerSceneNodeControlPrivate)
@@ -157,38 +160,38 @@ void dtkComposerSceneNodeControl::removeBlock(dtkComposerSceneNodeComposite *blo
 
 void dtkComposerSceneNodeControl::layout(void)
 {
-    qreal w = 0;
+    if(!d->header)
+        return;
+
+    if(!d->footer)
+        return;
+
+    d->header->layout();
+    d->footer->layout();
+
     qreal h = 0;
+    qreal b = (d->rect.size().height()
+              -d->header->boundingRect().adjusted(2, 2, -2, -2).size().height()
+              -d->footer->boundingRect().adjusted(2, 2, -2, -2).size().height())
+              /d->blocks.count();
 
     if (d->header) {
         d->header->setPos(0, 0);
-        w = d->header->boundingRect().adjusted(2, 2, -2, -2).width();
         h = d->header->boundingRect().adjusted(2, 2, -2, -2).height();
+        d->header->resize(d->rect.size().width(), h);
     }
 
     foreach(dtkComposerSceneNodeComposite *block, d->blocks) {
-        // block->layout();
         block->setPos(0, h);
-        w  = qMax(w, block->boundingRect().adjusted(2, 2, -2, -2).width());
-        h += block->boundingRect().adjusted(2, 2, -2, -2).height();
+        block->resize(d->rect.size().width(), b);
+        h += b;
     }
 
     if (d->footer) {
         d->footer->setPos(0, h);
-        w  = qMax(w, d->footer->boundingRect().adjusted(2, 2, -2, -2).width());
-        h += d->footer->boundingRect().adjusted(2, 2, -2, -2).height();
+        h = d->footer->boundingRect().adjusted(2, 2, -2, -2).height();
+        d->footer->resize(d->rect.size().width(), h);
     }
-
-    d->rect = QRectF(0, 0, w, h);
-
-    if (d->header)
-        d->header->resize(w, d->header->boundingRect().adjusted(2, 2, -2, -2).height());
-
-    if (d->footer)
-        d->footer->resize(w, d->footer->boundingRect().adjusted(2, 2, -2, -2).height());
-    
-    foreach(dtkComposerSceneNodeComposite *block, d->blocks)
-        block->resize(w, block->boundingRect().adjusted(2, 2, -2, -2).height());
 
     this->update();
 }
@@ -269,7 +272,20 @@ void dtkComposerSceneNodeControl::paint(QPainter *painter, const QStyleOptionGra
 
 void dtkComposerSceneNodeControl::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    QGraphicsItem::mouseMoveEvent(event);
+    if (event->buttons() & Qt::LeftButton && !d->drag_point.isNull()) {
+        
+        QPointF delta = QPointF(event->scenePos() - d->drag_point);
+
+        d->rect.setBottomRight(d->rect.bottomRight() + delta);
+
+        d->drag_point = event->scenePos();
+
+        this->layout();
+
+        event->accept();
+
+        return;
+    }
 
     foreach(dtkComposerSceneNodeComposite *block, d->blocks) {
         
@@ -284,6 +300,32 @@ void dtkComposerSceneNodeControl::mouseMoveEvent(QGraphicsSceneMouseEvent *event
             note->moveBy(delta_x, delta_y);
 
         foreach(dtkComposerSceneEdge *edge, block->edges())
-            edge->moveBy(delta_x, delta_y);
+            edge->adjust();
     }
+
+    QGraphicsItem::mouseMoveEvent(event);
+}
+
+void dtkComposerSceneNodeControl::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    QPointF br = d->rect.bottomRight();
+
+    QRectF corner(br.x() - 16, br.y() - 16, 16, 16);
+
+    if (event->button() & Qt::LeftButton && corner.contains(event->pos())) {
+        d->drag_point = event->scenePos();
+        event->accept();
+    }
+
+    QGraphicsItem::mousePressEvent(event);
+}
+
+void dtkComposerSceneNodeControl::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (event->button() & Qt::LeftButton && !d->drag_point.isNull()) {
+        d->drag_point = QPointF(0, 0);
+        event->accept();
+    }
+
+    QGraphicsItem::mouseReleaseEvent(event);
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 21 16:20:36 2012 (+0100)
+ * Last-Updated: Tue Feb 21 23:00:23 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 327
+ *     Update #: 338
  */
 
 /* Commentary: 
@@ -223,8 +223,6 @@ void dtkComposerSceneNodeComposite::setRoot(bool root)
 
 void dtkComposerSceneNodeComposite::layout(void)
 {
-    // qDebug() << __func__ << this->title();
-
 // /////////////////////////////////////////////////////////////////
 // Layout parent if applicable
 // /////////////////////////////////////////////////////////////////
@@ -253,21 +251,13 @@ void dtkComposerSceneNodeComposite::layout(void)
 
     } else {
 
-        qreal xmin =  FLT_MAX;
-        qreal xmax = -FLT_MAX;
-
-        qreal ymin =  FLT_MAX;
-        qreal ymax = -FLT_MAX;
-
-        foreach(dtkComposerSceneNode *node, d->nodes) {
-            xmin = qMin(xmin, node->pos().x());
-            xmax = qMax(xmax, node->pos().x() + node->boundingRect().width());
-            ymin = qMin(ymin, node->pos().y());
-            ymax = qMax(ymax, node->pos().y() + node->boundingRect().height());
-        }
-
         qreal w_offset = 100;
         qreal h_offset = 100;
+
+        qreal xmin, xmax;
+        qreal ymin, ymax;
+
+        this->boundingBox(xmin, xmax, ymin, ymax);
 
         qreal w = xmax-xmin; w+= w_offset;
         qreal h = ymax-ymin; h+= h_offset;
@@ -275,9 +265,7 @@ void dtkComposerSceneNodeComposite::layout(void)
         w = qMax(w, 150.0);
         h = qMax(h,  50.0);
 
-        d->rect = QRectF(0, 0, w, h);
-
-        // qDebug() << "Got rect" << d->rect << "for" << d->nodes.count();
+        d->rect = QRectF(QPointF(0, 0), QSizeF(w, h));
 
         this->setPos(xmin - w_offset/2, ymin - h_offset/2);
 
@@ -334,6 +322,27 @@ void dtkComposerSceneNodeComposite::layout(void)
 void dtkComposerSceneNodeComposite::resize(qreal width, qreal height)
 {
     d->rect = QRectF(d->rect.topLeft(), QSizeF(width, height));
+}
+
+void dtkComposerSceneNodeComposite::boundingBox(qreal& x_min, qreal& x_max, qreal& y_min, qreal& y_max)
+{
+    qreal xmin =  FLT_MAX;
+    qreal xmax = -FLT_MAX;
+    
+    qreal ymin =  FLT_MAX;
+    qreal ymax = -FLT_MAX;
+    
+    foreach(dtkComposerSceneNode *node, d->nodes) {
+        xmin = qMin(xmin, node->pos().x());
+        xmax = qMax(xmax, node->pos().x() + node->boundingRect().width());
+        ymin = qMin(ymin, node->pos().y());
+        ymax = qMax(ymax, node->pos().y() + node->boundingRect().height());
+    }
+    
+    x_min = xmin;
+    x_max = xmax;
+    y_min = ymin;
+    y_max = ymax;
 }
 
 QRectF dtkComposerSceneNodeComposite::boundingRect(void) const

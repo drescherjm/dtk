@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:25:11 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 18:57:49 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 45
+ * Last-Updated: Tue Feb 21 15:17:30 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -57,8 +57,12 @@ void dtkComposerNode::appendEmitter(dtkComposerTransmitter *emitter)
 
 void dtkComposerNode::removeEmitter(dtkComposerTransmitter *emitter)
 {
-    if (d->emitters.contains(emitter))
-        d->emitters.removeOne(emitter);
+    d->emitters.removeOne(emitter);
+}
+
+dtkComposerTransmitter *dtkComposerNode::removeEmitter(int index)
+{
+    return d->emitters.takeAt(index);
 }
 
 void dtkComposerNode::appendReceiver(dtkComposerTransmitter *receiver)
@@ -69,8 +73,12 @@ void dtkComposerNode::appendReceiver(dtkComposerTransmitter *receiver)
 
 void dtkComposerNode::removeReceiver(dtkComposerTransmitter *receiver)
 {
-    if (d->receivers.contains(receiver))
-        d->receivers.removeOne(receiver);
+    d->receivers.removeOne(receiver);
+}
+
+dtkComposerTransmitter *dtkComposerNode::removeReceiver(int index)
+{
+    return d->receivers.takeAt(index);
 }
 
 QList<dtkComposerTransmitter *> dtkComposerNode::emitters(void)

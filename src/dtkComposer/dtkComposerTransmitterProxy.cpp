@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Feb 20 11:47:39 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 20 17:07:55 2012 (+0100)
+ * Last-Updated: Tue Feb 21 14:03:00 2012 (+0100)
  *           By: tkloczko
- *     Update #: 23
+ *     Update #: 32
  */
 
 /* Commentary: 
@@ -58,10 +58,11 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitterProxy::leftLinks(dtkCompos
     if (!d->next.contains(transmitter))
         d->next << transmitter;
 
-    list << new dtkComposerTransmitterLink(this, transmitter);
-
-    foreach(dtkComposerTransmitter *p, d->previous)
+    foreach(dtkComposerTransmitter *p, d->previous) {
+        list << new dtkComposerTransmitterLink(p, this);
         link_map += p->leftLinks(this, list);
+        list.removeLast();
+    }
 
     return link_map;
 };
@@ -73,10 +74,11 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitterProxy::rightLinks(dtkCompo
     if (!d->previous.contains(transmitter))
         d->previous << transmitter;
 
-    list << new dtkComposerTransmitterLink(transmitter, this);
-
-    foreach(dtkComposerTransmitter *n, d->next)
+    foreach(dtkComposerTransmitter *n, d->next) {
+        list << new dtkComposerTransmitterLink(this, n);
         link_map += n->rightLinks(this, list);
+        list.removeLast();
+    }
 
     return link_map;
 };

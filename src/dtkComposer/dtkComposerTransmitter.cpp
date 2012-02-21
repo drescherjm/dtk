@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 20 17:08:10 2012 (+0100)
+ * Last-Updated: Tue Feb 21 14:16:13 2012 (+0100)
  *           By: tkloczko
- *     Update #: 81
+ *     Update #: 103
  */
 
 /* Commentary: 
@@ -122,6 +122,19 @@ bool dtkComposerTransmitter::connect(dtkComposerTransmitter *transmitter)
     return false;
 }
 
+//! Returns true when current transmitter and \a transmitter share
+//! data of same type.
+/*! 
+ *  In practice, this method is only reimplemented in
+ *  dtkComposerReceiver class where the type checking is performed.
+ *
+ *  By default, false is returned.
+ */
+bool dtkComposerTransmitter::disconnect(dtkComposerTransmitter *transmitter)
+{
+    return false;
+}
+
 //! Finds all emitters connected to \a transmitter.
 /*! 
  *  All links from every emitter found to \a transmitter are stored in
@@ -159,6 +172,7 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitter::rightLinks(dtkComposerTr
 bool dtkComposerTransmitter::onTransmittersConnected(dtkComposerTransmitter *source, dtkComposerTransmitter *destination, dtkComposerTransmitterLinkList& valid_link_map, dtkComposerTransmitterLinkList& invalid_link_map)
 {
     dtkComposerTransmitterLinkList list;
+    list << new dtkComposerTransmitterLink(source, destination);
 
     LinkMap  left_link_map =  source->leftLinks(destination, list);
     LinkMap right_link_map = destination->rightLinks(source, list);
@@ -186,6 +200,42 @@ bool dtkComposerTransmitter::onTransmittersConnected(dtkComposerTransmitter *sou
                         invalid_link_map << l;
 
             }
+        }
+    }
+
+    return true;
+}
+//! Connects all emitters and all receivers that share the link (\a
+//! source, \a destination).
+/*! 
+ *  All links from \a destination to all likely emitters are first
+ *  computed. Second, all paths from \a source to all possible receivers
+ *  are also computed. Then, every receiver trys to connect each
+ *  emitter. For every valid connection, the corresponding links
+ *  between receiver and emitter are stored in \a
+ *  valid_list. Otherwise, they are stored in \a invalid_list.
+ */
+bool dtkComposerTransmitter::onTransmittersDisconnected(dtkComposerTransmitter *source, dtkComposerTransmitter *destination, dtkComposerTransmitterLinkList& invalid_link_map)
+{
+    dtkComposerTransmitterLinkList list;
+    list << new dtkComposerTransmitterLink(source, destination);
+
+    LinkMap  left_link_map =  source->leftLinks(destination, list);
+    LinkMap right_link_map = destination->rightLinks(source, list);
+
+    foreach(dtkComposerTransmitter *receiver, right_link_map.uniqueKeys()) {
+
+        foreach(dtkComposerTransmitter *emitter, left_link_map.uniqueKeys()) {
+
+            receiver->disconnect(emitter);
+
+            foreach(dtkComposerTransmitterLink *l, right_link_map.values(receiver))
+                if(!invalid_link_map.contains(l))
+                    invalid_link_map << l;
+            foreach(dtkComposerTransmitterLink *l, left_link_map.values(emitter))
+                if(!invalid_link_map.contains(l))
+                    invalid_link_map << l;
+
         }
     }
 

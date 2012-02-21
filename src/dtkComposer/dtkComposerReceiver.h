@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 20 17:04:33 2012 (+0100)
+ * Last-Updated: Tue Feb 21 09:48:00 2012 (+0100)
  *           By: tkloczko
- *     Update #: 28
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -49,7 +49,8 @@ public:
     QString identifier(void) const;
 
 public:
-    bool connect(dtkComposerTransmitter *transmitter);
+    bool    connect(dtkComposerTransmitter *transmitter);
+    bool disconnect(dtkComposerTransmitter *transmitter);
 
     LinkMap rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 

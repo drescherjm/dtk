@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 20 17:06:25 2012 (+0100)
+ * Last-Updated: Tue Feb 21 14:13:57 2012 (+0100)
  *           By: tkloczko
- *     Update #: 28
+ *     Update #: 36
  */
 
 /* Commentary: 
@@ -81,8 +81,6 @@ template <typename T> QString dtkComposerEmitter<T>::identifier(void) const
 
 template <typename T> dtkComposerTransmitter::LinkMap dtkComposerEmitter<T>::leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
-    list << new dtkComposerTransmitterLink(this, transmitter);
-
     LinkMap link_map;
     foreach(dtkComposerTransmitterLink *l, list)
         link_map.insert(this, l);

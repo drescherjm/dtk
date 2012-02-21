@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 20 17:04:22 2012 (+0100)
+ * Last-Updated: Tue Feb 21 10:12:27 2012 (+0100)
  *           By: tkloczko
- *     Update #: 65
+ *     Update #: 67
  */
 
 /* Commentary: 
@@ -57,13 +57,16 @@ public:
     bool required(void);
 
 public:
-    virtual bool connect(dtkComposerTransmitter *transmitter);
+    virtual bool    connect(dtkComposerTransmitter *transmitter);
+    virtual bool disconnect(dtkComposerTransmitter *transmitter);
 
     virtual LinkMap  leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
     virtual LinkMap rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 
 public:
     static bool onTransmittersConnected(dtkComposerTransmitter *source, dtkComposerTransmitter *destination, dtkComposerTransmitterLinkList& valid_links, dtkComposerTransmitterLinkList& invalid_links);
+
+    static bool onTransmittersDisconnected(dtkComposerTransmitter *source, dtkComposerTransmitter *destination, dtkComposerTransmitterLinkList& invalid_links);
 
 public:
     friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter);

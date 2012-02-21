@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 20 17:05:34 2012 (+0100)
+ * Last-Updated: Tue Feb 21 13:47:22 2012 (+0100)
  *           By: tkloczko
- *     Update #: 41
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -107,6 +107,21 @@ template <typename T> bool dtkComposerReceiver<T>::connect(dtkComposerTransmitte
 
 //! 
 /*! 
+ *  
+ */
+template <typename T> bool dtkComposerReceiver<T>::disconnect(dtkComposerTransmitter *transmitter)
+{
+    dtkComposerEmitter<T> *emitter = NULL;
+
+    if (emitter = dynamic_cast<dtkComposerEmitter<T> *>(transmitter)) {
+        return emitters.removeOne(emitter);
+    }
+
+    return false;
+};
+
+//! 
+/*! 
  *  All links from every receiver found to \a transmitter are stored
  *  in a multi-hash table.
  *
@@ -114,8 +129,6 @@ template <typename T> bool dtkComposerReceiver<T>::connect(dtkComposerTransmitte
  */
 template <typename T> dtkComposerTransmitter::LinkMap dtkComposerReceiver<T>::rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
-    list << new dtkComposerTransmitterLink(transmitter, this);
-
     LinkMap link_map;
     foreach(dtkComposerTransmitterLink *l, list)
         link_map.insert(this, l);

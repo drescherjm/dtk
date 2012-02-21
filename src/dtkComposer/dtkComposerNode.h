@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:24:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 18:57:11 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 41
+ * Last-Updated: Tue Feb 21 15:17:49 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -42,8 +42,12 @@ public:
     void appendEmitter(dtkComposerTransmitter *emitter);
     void removeEmitter(dtkComposerTransmitter *emitter);
 
+    dtkComposerTransmitter *removeEmitter(int index);
+
     void appendReceiver(dtkComposerTransmitter *receiver);
     void removeReceiver(dtkComposerTransmitter *receiver);
+
+    dtkComposerTransmitter *removeReceiver(int index);
 
     QList<dtkComposerTransmitter *> emitters(void);
     QList<dtkComposerTransmitter *> receivers(void);

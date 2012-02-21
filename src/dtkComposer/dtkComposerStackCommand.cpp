@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. févr. 21 14:43:08 2012 (+0100)
+ * Last-Updated: mar. févr. 21 17:27:24 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1898
+ *     Update #: 1899
  */
 
 /* Commentary: 
@@ -443,6 +443,10 @@ void dtkComposerStackCommandCreateEdge::setParent(void)
         e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->source->node());
     else if(e->destination->node() == e->source->node()->parent())
         e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->destination->node());
+    else if(e->source->node()->parent()->parent() == e->destination->node()->parent())
+        e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->source->node()->parent()->parent());
+    else if(e->destination->node()->parent()->parent() == e->source->node()->parent())
+        e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->destination->node()->parent()->parent());
     else
         qDebug() << __func__ << "Unhandled case";
 }

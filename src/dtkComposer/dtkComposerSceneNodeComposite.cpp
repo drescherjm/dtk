@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. févr. 20 16:17:36 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 319
+ * Last-Updated: Tue Feb 21 16:20:36 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 327
  */
 
 /* Commentary: 
@@ -224,6 +224,19 @@ void dtkComposerSceneNodeComposite::setRoot(bool root)
 void dtkComposerSceneNodeComposite::layout(void)
 {
     // qDebug() << __func__ << this->title();
+
+// /////////////////////////////////////////////////////////////////
+// Layout parent if applicable
+// /////////////////////////////////////////////////////////////////
+
+    // if(this->parentItem()) {
+    //     dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>(this->parent());
+    //     if (node)
+    //         node->layout();
+    // }
+
+    if(this->embedded())
+        return;
     
 // /////////////////////////////////////////////////////////////////
 // Rect calculation
@@ -313,17 +326,6 @@ void dtkComposerSceneNodeComposite::layout(void)
             else
                 d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->outputPorts().count() * this->outputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->outputPorts().count()-1) * port_spacing + header));        
 
-    }
-
-// /////////////////////////////////////////////////////////////////
-// Layout parent if applicable
-// /////////////////////////////////////////////////////////////////
-
-    if(this->parentItem()) {
-        dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>(this->parent());
-
-        if (node)
-            node->layout();
     }
 
     this->update();

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 21 23:10:47 2012 (+0100)
+ * Last-Updated: Tue Feb 21 23:20:04 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 373
+ *     Update #: 375
  */
 
 /* Commentary: 
@@ -43,7 +43,7 @@ public:
 
 dtkComposerSceneNodeControl::dtkComposerSceneNodeControl(void) : dtkComposerSceneNode(), d(new dtkComposerSceneNodeControlPrivate)
 {
-    d->rect = QRectF(0, 0, 150, 50);
+    d->rect = QRectF(0, 0, 200, 300);
 
     d->header = NULL;
     d->footer = NULL;

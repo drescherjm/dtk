@@ -1,5 +1,5 @@
-/* dtkFinder.cpp --- 
- * 
+/* dtkFinder.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Jun 12 15:47:45 2010 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 75
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkFinder.h"
@@ -50,23 +50,23 @@ dtkFinderToolBar::dtkFinderToolBar(QWidget *parent) : QToolBar(parent), d(new dt
     d->prevButton->setEnabled (0);
     d->prevButton->setIconSize(QSize(16, 16));
     d->prevButton->setToolTip(tr("Back"));
-    
+
     d->nextButton = new QToolButton (this);
     d->nextButton->setArrowType (Qt::RightArrow);
     d->nextButton->setEnabled (0);
     d->nextButton->setIconSize(QSize(16, 16));
     d->nextButton->setToolTip(tr("Next"));
-    
+
     d->listViewButton = new QToolButton (this);
     d->listViewButton->setCheckable(true);
     d->listViewButton->setChecked (true);
     d->listViewButton->setIcon(QIcon(":dtkGui/pixmaps/dtk-view-list.png"));
     d->listViewButton->setIconSize(QSize(16, 16));
     d->listViewButton->setToolTip(tr("Icon view"));
-    
+
     d->treeViewButton = new QToolButton (this);
     d->treeViewButton->setCheckable(true);
-    d->treeViewButton->setIcon(QIcon(":dtkGui/pixmaps/dtk-view-tree.png"));    
+    d->treeViewButton->setIcon(QIcon(":dtkGui/pixmaps/dtk-view-tree.png"));
     d->treeViewButton->setIconSize(QSize(16, 16));
     d->treeViewButton->setToolTip(tr("List view"));
 
@@ -80,21 +80,21 @@ dtkFinderToolBar::dtkFinderToolBar(QWidget *parent) : QToolBar(parent), d(new dt
 #ifdef Q_WS_MAC
     d->showHiddenFilesButton->setChecked(Qt::Checked);
 #endif
-    
+
     QButtonGroup *viewButtonGroup = new QButtonGroup (this);
     viewButtonGroup->setExclusive (true);
     viewButtonGroup->addButton ( d->listViewButton );
     viewButtonGroup->addButton ( d->treeViewButton );
-    
+
     this->addWidget (d->prevButton);
     this->addWidget (d->nextButton);
     this->addWidget (d->treeViewButton);
     this->addWidget (d->listViewButton);
     this->addWidget (d->showHiddenFilesButton);
-    
+
     connect (d->prevButton, SIGNAL (clicked()), this, SLOT (onPrev()));
     connect (d->nextButton, SIGNAL (clicked()), this, SLOT (onNext()));
-    
+
     connect (d->listViewButton, SIGNAL (clicked()), this, SIGNAL (listView()));
     connect (d->treeViewButton, SIGNAL (clicked()), this, SIGNAL (treeView()));
 
@@ -121,10 +121,10 @@ void dtkFinderToolBar::setPath (const QString &path)
         if (d->iterator!=d->pathList.end())
             d->pathList.erase(d->pathList.begin(), d->iterator);
     }
-    
+
     d->pathList.prepend (path);
     d->iterator = d->pathList.begin();
-    
+
     if (d->pathList.count()>1)
         d->prevButton->setEnabled(1);
     else
@@ -157,6 +157,23 @@ void dtkFinderToolBar::onPrev (void)
         d->prevButton->setEnabled (0);
 }
 
+void dtkFinderToolBar::onTreeView(void)
+{
+    d->treeViewButton->setChecked(true);
+    d->listViewButton->setChecked(false);
+}
+
+void dtkFinderToolBar::onListView(void)
+{
+    d->treeViewButton->setChecked(false);
+    d->listViewButton->setChecked(true);
+}
+
+void dtkFinderToolBar::onShowHiddenFiles(bool show)
+{
+    d->showHiddenFilesButton->setChecked(show);
+}
+
 // /////////////////////////////////////////////////////////////////
 // dtkFinderSideView
 // /////////////////////////////////////////////////////////////////
@@ -178,9 +195,9 @@ dtkFinderSideView::dtkFinderSideView(QWidget *parent) : QTreeWidget(parent), d(n
     this->setDragDropMode(QAbstractItemView::DropOnly);
     this->setIndentation(10);
     this->setFrameStyle(QFrame::NoFrame);
-    this->setAttribute(Qt::WA_MacShowFocusRect, false);    
+    this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setFocusPolicy(Qt::NoFocus);
-    this->populate();    
+    this->populate();
 
     connect(this, SIGNAL(itemClicked(QTreeWidgetItem *,int)), this, SLOT(onItemCicked(QTreeWidgetItem *, int)));
 }
@@ -221,7 +238,7 @@ void dtkFinderSideView::populate(void)
 #else
 	driveList = QDir::drives();
 #endif
-	
+
     foreach(QFileInfo info, driveList) {
 
 		QString dlabel = this->driveLabel( info.absoluteFilePath() );
@@ -395,16 +412,16 @@ QString dtkFinderSideView::driveLabel(QString drive)
 	DWORD dwSerialNumber = 0;
 	DWORD dwMaxFileNameLength=256;
 	DWORD dwFileSystemFlags=0;
-	bool ret = GetVolumeInformation( drive.toAscii().constData(), 
-									 szVolumeName, 256, 
+	bool ret = GetVolumeInformation( drive.toAscii().constData(),
+									 szVolumeName, 256,
 									 &dwSerialNumber, &dwMaxFileNameLength,
 									 &dwFileSystemFlags, szFileSystemName, 256);
-	if(!ret) { 
+	if(!ret) {
 		drive.remove("\\");
 		QString decoratedDrive = "("+drive+")";
 		return decoratedDrive;
 	}
-	
+
 	QString vName = QString::fromAscii(szVolumeName) ;
 	vName.trimmed();
 	drive.remove("\\");
@@ -537,6 +554,8 @@ class dtkFinderListViewPrivate
 {
 public:
     QMenu *menu;
+    QList<QAction *> defaultActions;
+    QList<QAction *> customActions;
     QAction *bookmarkAction;
     bool allowFileBookmarking;
 };
@@ -557,6 +576,8 @@ dtkFinderListView::dtkFinderListView(QWidget *parent) : QListView(parent), d(new
     d->menu = new QMenu(this);
     d->allowFileBookmarking = true;
     d->bookmarkAction = new QAction(tr("Bookmark"), this);
+    d->bookmarkAction->setIconVisibleInMenu(true);
+    d->bookmarkAction->setIcon(QIcon(":dtkGui/pixmaps/star.svg"));
     connect(d->bookmarkAction, SIGNAL(triggered()), this, SLOT(onBookmarkSelectedItemsRequested()));
     d->menu->addAction(d->bookmarkAction);
 
@@ -572,7 +593,12 @@ dtkFinderListView::~dtkFinderListView(void)
 
 void dtkFinderListView::addContextMenuAction(QAction *action)
 {
-    d->menu->addAction(action);
+    d->customActions.append(action);
+}
+
+void dtkFinderListView::addDefaultContextMenuAction(QAction *action)
+{
+    d->defaultActions.append(action);
 }
 
 QString dtkFinderListView::selectedPath() const
@@ -610,38 +636,48 @@ void dtkFinderListView::updateContextMenu(const QPoint& point)
 {
     QModelIndex index = this->indexAt(point);
 
-    if(!index.isValid())
-        return;
+    d->menu->clear();
 
-    // if d->allowFileBookmarking is false
-    // we won't show the 'bookmark' option
-    // for files in the context menu
-
-    if(!d->allowFileBookmarking) {
-        bool removed = false;
-        QString selectedPath = this->selectedPath();
-        if (!selectedPath.isEmpty())
-        {
-            QFileInfo fileInfo = QFileInfo(selectedPath);
-            if (fileInfo.isFile())
+    if(index.isValid()) {
+        if(!d->allowFileBookmarking) {
+            bool removed = false;
+            QString selectedPath = this->selectedPath();
+            if (!selectedPath.isEmpty())
             {
-                d->menu->removeAction(d->bookmarkAction);
-                removed = true;
+                QFileInfo fileInfo = QFileInfo(selectedPath);
+                if (fileInfo.isFile())
+                {
+                    d->menu->removeAction(d->bookmarkAction);
+                    removed = true;
+                }
+            }
+
+            if (!removed)
+            {
+                if(d->menu->actions().size() > 0)
+                    d->menu->insertAction(d->menu->actions()[0], d->bookmarkAction);
+                else
+                    d->menu->addAction(d->bookmarkAction);
             }
         }
 
-        d->menu->exec(mapToGlobal(point));
-
-        if (removed)
-        {
-            if(d->menu->actions().size() > 0)
-                d->menu->insertAction(d->menu->actions()[0], d->bookmarkAction);
-            else
-                d->menu->addAction(d->bookmarkAction);
+        //Add custom actions
+        for (int i = 0; i < d->customActions.size(); i++) {
+            d->menu->addAction(d->customActions.value(i));
         }
+
+        d->menu->addSeparator();
+
     }
-    else
-        d->menu->exec(mapToGlobal(point));
+
+    //By default add default action
+    for (int i = 0; i < d->defaultActions.size(); i++) {
+        d->menu->addAction(d->defaultActions.value(i));
+    }
+
+    d->menu->exec(mapToGlobal(point));
+
+
 }
 
 void dtkFinderListView::onBookmarkSelectedItemsRequested(void)
@@ -692,9 +728,9 @@ void dtkFinderListView::mouseDoubleClickEvent(QMouseEvent *event)
     if(QFileSystemModel *model = qobject_cast<QFileSystemModel *>(this->model())) {
 
         Q_UNUSED(model);
-        
+
         QModelIndex index = indexAt(event->pos());
-        
+
         if(!index.isValid())
             return;
 
@@ -731,6 +767,8 @@ class dtkFinderTreeViewPrivate
 {
 public:
     QMenu *menu;
+    QList<QAction *> defaultActions;
+    QList<QAction *> customActions;
     QAction *bookmarkAction;
     bool allowFileBookmarking;
 };
@@ -747,6 +785,8 @@ dtkFinderTreeView::dtkFinderTreeView(QWidget *parent) : QTreeView(parent), d(new
     d->menu = new QMenu(this);
     d->allowFileBookmarking = true;
     d->bookmarkAction = new QAction(tr("Bookmark"), this);
+    d->bookmarkAction->setIconVisibleInMenu(true);
+    d->bookmarkAction->setIcon(QIcon(":dtkGui/pixmaps/star.svg"));
     connect(d->bookmarkAction, SIGNAL(triggered()), this, SLOT(onBookmarkSelectedItemsRequested()));
     d->menu->addAction(d->bookmarkAction);
 
@@ -770,7 +810,12 @@ int dtkFinderTreeView::sizeHintForColumn(int column) const
 
 void dtkFinderTreeView::addContextMenuAction(QAction *action)
 {
-    d->menu->addAction(action);
+    d->customActions.append(action);
+}
+
+void dtkFinderTreeView::addDefaultContextMenuAction(QAction *action)
+{
+    d->defaultActions.append(action);
 }
 
 QString dtkFinderTreeView::selectedPath() const
@@ -820,38 +865,45 @@ void dtkFinderTreeView::updateContextMenu(const QPoint& point)
 {
     QModelIndex index = this->indexAt(point);
 
-    if(!index.isValid())
-        return;
+    d->menu->clear();
 
-    // if d->allowFileBookmarking is false
-    // we won't show the 'bookmark' option
-    // for files in the context menu
-
-    if(!d->allowFileBookmarking) {
-        bool removed = false;
-        QString selectedPath = this->selectedPath();
-        if (!selectedPath.isEmpty())
-        {
-            QFileInfo fileInfo = QFileInfo(selectedPath);
-            if (fileInfo.isFile())
+    if(index.isValid()) {
+        if(!d->allowFileBookmarking) {
+            bool removed = false;
+            QString selectedPath = this->selectedPath();
+            if (!selectedPath.isEmpty())
             {
-                d->menu->removeAction(d->bookmarkAction);
-                removed = true;
+                QFileInfo fileInfo = QFileInfo(selectedPath);
+                if (fileInfo.isFile())
+                {
+                    d->menu->removeAction(d->bookmarkAction);
+                    removed = true;
+                }
+            }
+            if (!removed)
+            {
+                if(d->menu->actions().size() > 0)
+                    d->menu->insertAction(d->menu->actions()[0], d->bookmarkAction);
+                else
+                    d->menu->addAction(d->bookmarkAction);
             }
         }
 
-        d->menu->exec(mapToGlobal(point));
-
-        if (removed)
-        {
-            if(d->menu->actions().size() > 0)
-                d->menu->insertAction(d->menu->actions()[0], d->bookmarkAction);
-            else
-                d->menu->addAction(d->bookmarkAction);
+        //Add custom actions
+        for (int i = 0; i < d->customActions.size(); i++) {
+            d->menu->addAction(d->customActions.value(i));
         }
+
+        d->menu->addSeparator();
+
     }
-    else
-        d->menu->exec(mapToGlobal(point));
+
+    //By default add default action
+    for (int i = 0; i < d->defaultActions.size(); i++) {
+        d->menu->addAction(d->defaultActions.value(i));
+    }
+
+    d->menu->exec(mapToGlobal(point));
 
 }
 
@@ -901,14 +953,14 @@ void dtkFinderTreeView::keyPressEvent(QKeyEvent *event)
 void dtkFinderTreeView::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if(QFileSystemModel *model = qobject_cast<QFileSystemModel *>(this->model())) {
-        
+
         Q_UNUSED(model);
 
         QModelIndex index = indexAt(event->pos());
-     
+
         if(!index.isValid())
             return;
-   
+
         QTreeView::mouseDoubleClickEvent(event);
     }
 }
@@ -948,6 +1000,11 @@ class dtkFinderPrivate
 public:
     QFileSystemModel *model;
     bool isAllowedMultipleSelection;
+    bool hiddenFilesShown;
+
+    QAction * iconviewAction;
+    QAction * listviewAction;
+    QAction * showHideAction;
 
     dtkFinderListView *list;
     dtkFinderTreeView *tree;
@@ -959,14 +1016,13 @@ dtkFinder::dtkFinder(QWidget *parent) : QWidget(parent), d(new dtkFinderPrivate)
 {
     d->model = new QFileSystemModel(this);
     d->model->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
+    d->hiddenFilesShown = false;
     //By default the showHiddenFilesButton is enabled in MacOS
 #ifdef Q_WS_MAC
+    d->hiddenFilesShown = true;
     d->model->setFilter(QDir::AllEntries | QDir::Hidden | QDir::NoDotAndDotDot);
 #endif
     d->model->setRootPath(QDir::rootPath());
-
-//    qDebug() << d->model->roleNames();
-//    qDebug() << d->model->data(d->model->index(0,0, QModelIndex()), 34);
 
     d->list = new dtkFinderListView(this);
     d->list->setModel(d->model);
@@ -978,6 +1034,27 @@ dtkFinder::dtkFinder(QWidget *parent) : QWidget(parent), d(new dtkFinderPrivate)
     d->tree->setSelectionBehavior(QAbstractItemView::SelectRows);
     d->tree->setAllColumnsShowFocus(true);
 
+    d->iconviewAction = new QAction(tr("Icon view"), this);
+    d->iconviewAction->setIconVisibleInMenu(true);
+    d->iconviewAction->setIcon(QIcon(":dtkGui/pixmaps/dtk-view-list.png"));
+    d->listviewAction = new QAction(tr("List view"), this);
+    d->listviewAction->setIconVisibleInMenu(true);
+    d->listviewAction->setIcon(QIcon(":dtkGui/pixmaps/dtk-view-tree.png"));
+    d->showHideAction = new QAction(tr("Show hidden files"), this);
+
+    //By default the showHiddenFilesButton is enabled in MacOS
+#ifdef Q_WS_MAC
+    d->showHideAction->setText(tr("Hide hidden files"));
+#endif
+    d->showHideAction->setIconVisibleInMenu(true);
+    d->showHideAction->setIcon(QIcon(":dtkGui/pixmaps/dtk-anchored-bar-action.png"));
+
+    d->list->addDefaultContextMenuAction(d->listviewAction);
+    d->list->addDefaultContextMenuAction(d->showHideAction);
+
+    d->tree->addDefaultContextMenuAction(d->iconviewAction);
+    d->tree->addDefaultContextMenuAction(d->showHideAction);
+
     d->stack = new QStackedWidget(this);
     d->stack->addWidget(d->list);
     d->stack->addWidget(d->tree);
@@ -987,6 +1064,10 @@ dtkFinder::dtkFinder(QWidget *parent) : QWidget(parent), d(new dtkFinderPrivate)
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(d->stack);
+
+    connect(d->iconviewAction, SIGNAL(triggered()), this, SLOT(switchToListView()));
+    connect(d->listviewAction, SIGNAL(triggered()), this, SLOT(switchToTreeView()));
+    connect(d->showHideAction, SIGNAL(triggered()), this, SLOT(switchShowHiddenFiles()));
 
     connect(d->list, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onIndexDoubleClicked(QModelIndex)));
     connect(d->tree, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onIndexDoubleClicked(QModelIndex)));
@@ -1087,33 +1168,42 @@ void dtkFinder::setPath(const QString& path)
 
 void dtkFinder::switchToListView(void)
 {
+    emit listView();
     d->stack->setCurrentIndex(0);
     emitSelectedItems();
 }
 
 void dtkFinder::switchToTreeView(void)
 {
+    emit treeView();
     d->stack->setCurrentIndex(1);
     emitSelectedItems();
 }
 
 void dtkFinder::onShowHiddenFiles(bool show)
 {
-    if (show)
+    if (show) {
+        d->hiddenFilesShown = true;
+        d->showHideAction->setText(tr("Hide hidden files"));
         d->model->setFilter(QDir::Hidden | QDir::AllEntries | QDir::NoDotAndDotDot);
-    else
+    }
+    else {
+        d->hiddenFilesShown = false;
+        d->showHideAction->setText(tr("Show hidden files"));
         d->model->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
+    }
+}
+
+void dtkFinder::switchShowHiddenFiles()
+{
+//    this->onShowHiddenFiles(!d->hiddenFilesShown);
+    emit showHiddenFiles(!d->hiddenFilesShown);
+
 }
 
 void dtkFinder::onIndexClicked(QModelIndex index)
 {
     emit fileClicked(d->model->fileInfo(index));
-//    QFileInfo selection = d->model->fileInfo(index);
-
-//    if (! selection.isDir()) {
-//        qDebug() << "emit selected filename:" << selection.fileName();
-//        emit fileClicked(selection.fileName());
-//    }
 }
 
 void dtkFinder::onIndexDoubleClicked(QModelIndex index)
@@ -1130,6 +1220,8 @@ void dtkFinder::onIndexDoubleClicked(QModelIndex index)
     }
     else
         emit fileDoubleClicked(selection.absoluteFilePath());
+
+    emit nothingSelected();
 }
 
 void dtkFinder::onBookmarkSelectedItemsRequested(void)

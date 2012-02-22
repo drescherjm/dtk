@@ -51,6 +51,9 @@ public slots:
     void setPath(const QString& path);
     void onPrev (void);
     void onNext (void);
+    void onListView(void);
+    void onTreeView(void);
+    void onShowHiddenFiles(bool);
 
 protected:
 
@@ -151,6 +154,8 @@ public:
 
     void addContextMenuAction(QAction *action);
 
+    void addDefaultContextMenuAction(QAction *action);
+
     /** Returns the currently selected path, or the first one if more than one item is selected. */
     QString selectedPath() const;
 
@@ -196,6 +201,8 @@ public:
     int	sizeHintForColumn(int column) const;
 
     void addContextMenuAction(QAction *action);
+
+    void addDefaultContextMenuAction(QAction *action);
 
     /** Returns the currently selected path, or the first one if more than one item is selected. */
     QString selectedPath() const;
@@ -261,12 +268,16 @@ signals:
     void fileClicked(const QFileInfo &info);
     void selectionChanged(const QStringList& paths);
     void nothingSelected();
+    void listView (void);
+    void treeView (void);
+    void showHiddenFiles(bool);
 
 public slots:
     void setPath(const QString& path);
     void switchToListView(void);
     void switchToTreeView(void);
     void onShowHiddenFiles(bool);
+    void switchShowHiddenFiles();
 
     /** Bookmarks the currently selected item(s). */
     void onBookmarkSelectedItemsRequested(void);

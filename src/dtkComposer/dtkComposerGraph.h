@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:42:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 14 10:33:34 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 48
+ * Last-Updated: mer. févr. 22 08:57:11 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 52
  */
 
 /* Commentary: 
@@ -45,6 +45,10 @@ public:
 
     void    addEdge(dtkComposerSceneEdge *edge);
     void removeEdge(dtkComposerSceneEdge *edge);
+
+    void createGroup(dtkComposerSceneNode *node);
+    void destroyGroup(dtkComposerSceneNode *node);
+    void removeGroup(dtkComposerSceneNode *node);
 
 public:
     dtkComposerGraphEdgeList edges(void);

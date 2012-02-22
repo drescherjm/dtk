@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 19 18:59:32 2012 (+0100)
+ * Last-Updated: Wed Feb 22 14:45:53 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 153
+ *     Update #: 161
  */
 
 /* Commentary: 
@@ -263,6 +263,7 @@ public:
     ~dtkComposerStackCommandEnterGroup(void);
 
 public:
+    void setBlock(dtkComposerSceneNodeComposite *block);
     void setNode(dtkComposerSceneNodeComposite *node);
 
 public:
@@ -286,6 +287,7 @@ public:
     ~dtkComposerStackCommandLeaveGroup(void);
 
 public:
+    void setBlock(dtkComposerSceneNodeComposite *block);
     void setNode(dtkComposerSceneNodeComposite *node);
 
 public:

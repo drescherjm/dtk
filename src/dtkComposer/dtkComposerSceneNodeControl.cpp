@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 22 11:04:32 2012 (+0100)
+ * Last-Updated: Wed Feb 22 15:44:06 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 376
+ *     Update #: 379
  */
 
 /* Commentary: 
@@ -282,6 +282,21 @@ void dtkComposerSceneNodeControl::mouseMoveEvent(QGraphicsSceneMouseEvent *event
         d->drag_point = event->scenePos();
 
         this->layout();
+
+        foreach(dtkComposerSceneNodeComposite *block, d->blocks) {
+            
+            qreal delta_x = delta.x()/d->blocks.count();
+            qreal delta_y = delta.y()/d->blocks.count();
+            
+            foreach(dtkComposerSceneNode *node, block->nodes())
+                node->moveBy(delta_x, delta_y);
+            
+            foreach(dtkComposerSceneNote *note, block->notes())
+                note->moveBy(delta_x, delta_y);
+            
+            foreach(dtkComposerSceneEdge *edge, block->edges())
+                edge->adjust();
+        }
 
         event->accept();
 

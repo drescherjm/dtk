@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb  9 16:47:21 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 848
+ * Last-Updated: mer. févr. 22 09:41:43 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 850
  */
 
 /* Commentary: 
@@ -352,7 +352,8 @@ bool dtkCreatorMainWindow::compositionInsert(const QString& file)
 
 void dtkCreatorMainWindow::showGraph(void)
 {
-    d->graph->resize(200, 200);
+    d->graph->move(this->geometry().topRight());
+    d->graph->resize(400, this->geometry().size().height() );
     d->graph->show();
     d->graph->raise();
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 22 16:51:40 2012 (+0100)
+ * Last-Updated: Wed Feb 22 23:26:17 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 2044
+ *     Update #: 2056
  */
 
 /* Commentary: 
@@ -205,6 +205,7 @@ void dtkComposerStackCommandCreateNode::undo(void)
 // -- ??
     if (e->parent->root() || e->parent->flattened() || e->parent->entered())
         d->scene->removeItem(e->node);
+
     d->scene->modify(true);
 // --
 }
@@ -1473,6 +1474,8 @@ void dtkComposerStackCommandEnterGroup::undo(void)
         edge->adjust();
         d->scene->addItem(edge);
     }
+
+    e->node->layout();
 }
 
 // /////////////////////////////////////////////////////////////////

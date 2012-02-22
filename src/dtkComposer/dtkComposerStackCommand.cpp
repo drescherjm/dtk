@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 22 15:33:43 2012 (+0100)
+ * Last-Updated: Wed Feb 22 16:51:40 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 2043
+ *     Update #: 2044
  */
 
 /* Commentary: 
@@ -967,7 +967,7 @@ void dtkComposerStackCommandCreateGroup::redo(void)
 
     d->scene->addItem(e->node);
 
-    d->graph->addNode(e->node);
+    d->graph->createGroup(e->node);
 
     d->scene->update();
     d->scene->modify(true);
@@ -1080,7 +1080,7 @@ void dtkComposerStackCommandCreateGroup::undo(void)
     }
 
     d->scene->removeItem(e->node);
-    d->graph->removeNode(e->node);
+    d->graph->removeGroup(e->node);
 
     d->scene->update();
     d->scene->modify(true);
@@ -1256,7 +1256,7 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
 
     e->parent->removeNode(e->node);
     d->scene->removeItem(e->node);
-    d->graph->removeNode(e->node);
+    d->graph->destroyGroup(e->node);
 
     d->scene->update();
     d->scene->modify(true);

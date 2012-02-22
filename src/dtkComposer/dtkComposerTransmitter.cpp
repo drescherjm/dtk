@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 21 14:16:13 2012 (+0100)
+ * Last-Updated: Wed Feb 22 09:22:39 2012 (+0100)
  *           By: tkloczko
- *     Update #: 103
+ *     Update #: 105
  */
 
 /* Commentary: 
@@ -169,7 +169,7 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitter::rightLinks(dtkComposerTr
  *  between receiver and emitter are stored in \a
  *  valid_list. Otherwise, they are stored in \a invalid_list.
  */
-bool dtkComposerTransmitter::onTransmittersConnected(dtkComposerTransmitter *source, dtkComposerTransmitter *destination, dtkComposerTransmitterLinkList& valid_link_map, dtkComposerTransmitterLinkList& invalid_link_map)
+bool dtkComposerTransmitter::onTransmittersConnected(dtkComposerTransmitter *source, dtkComposerTransmitter *destination, dtkComposerTransmitterLinkList& valid_links, dtkComposerTransmitterLinkList& invalid_links)
 {
     dtkComposerTransmitterLinkList list;
     list << new dtkComposerTransmitterLink(source, destination);
@@ -184,20 +184,20 @@ bool dtkComposerTransmitter::onTransmittersConnected(dtkComposerTransmitter *sou
             if (receiver->connect(emitter)) {
 
                 foreach(dtkComposerTransmitterLink *l, right_link_map.values(receiver))
-                    if(!valid_link_map.contains(l))
-                        valid_link_map << l;
+                    if(!valid_links.contains(l))
+                        valid_links << l;
                 foreach(dtkComposerTransmitterLink *l, left_link_map.values(emitter))
-                    if(!valid_link_map.contains(l))
-                        valid_link_map << l;
+                    if(!valid_links.contains(l))
+                        valid_links << l;
             
             } else {
 
                 foreach(dtkComposerTransmitterLink *l, right_link_map.values(receiver))
-                    if(!invalid_link_map.contains(l))
-                        invalid_link_map << l;
+                    if(!invalid_links.contains(l))
+                        invalid_links << l;
                 foreach(dtkComposerTransmitterLink *l, left_link_map.values(emitter))
-                    if(!invalid_link_map.contains(l))
-                        invalid_link_map << l;
+                    if(!invalid_links.contains(l))
+                        invalid_links << l;
 
             }
         }
@@ -215,7 +215,7 @@ bool dtkComposerTransmitter::onTransmittersConnected(dtkComposerTransmitter *sou
  *  between receiver and emitter are stored in \a
  *  valid_list. Otherwise, they are stored in \a invalid_list.
  */
-bool dtkComposerTransmitter::onTransmittersDisconnected(dtkComposerTransmitter *source, dtkComposerTransmitter *destination, dtkComposerTransmitterLinkList& invalid_link_map)
+bool dtkComposerTransmitter::onTransmittersDisconnected(dtkComposerTransmitter *source, dtkComposerTransmitter *destination, dtkComposerTransmitterLinkList& invalid_links)
 {
     dtkComposerTransmitterLinkList list;
     list << new dtkComposerTransmitterLink(source, destination);
@@ -230,11 +230,11 @@ bool dtkComposerTransmitter::onTransmittersDisconnected(dtkComposerTransmitter *
             receiver->disconnect(emitter);
 
             foreach(dtkComposerTransmitterLink *l, right_link_map.values(receiver))
-                if(!invalid_link_map.contains(l))
-                    invalid_link_map << l;
+                if(!invalid_links.contains(l))
+                    invalid_links << l;
             foreach(dtkComposerTransmitterLink *l, left_link_map.values(emitter))
-                if(!invalid_link_map.contains(l))
-                    invalid_link_map << l;
+                if(!invalid_links.contains(l))
+                    invalid_links << l;
 
         }
     }

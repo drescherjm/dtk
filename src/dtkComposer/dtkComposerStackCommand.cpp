@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. févr. 22 08:49:10 2012 (+0100)
+ * Last-Updated: mer. févr. 22 10:18:09 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1995
+ *     Update #: 1996
  */
 
 /* Commentary: 
@@ -792,8 +792,6 @@ void dtkComposerStackCommandCreateGroup::redo(void)
         e->node->setParent(e->parent);
     }
 
-    e->edges = e->parent->edges();
-
     QRectF rect;
 
     foreach(dtkComposerSceneNode *node, e->nodes) {
@@ -807,6 +805,8 @@ void dtkComposerStackCommandCreateGroup::redo(void)
     e->parent->addNode(e->node);
 
     e->node->setPos(rect.center() - e->node->boundingRect().center());
+
+    e->edges = e->parent->edges();
 
     foreach(dtkComposerSceneEdge *edge, e->edges) {
 
@@ -825,7 +825,7 @@ void dtkComposerStackCommandCreateGroup::redo(void)
 
             // Setting up data flow
 
-            dtkComposerTransmitterDisconnection(d->scene->root(), e->node, edge, false);
+            dtkComposerTransmitterDisconnection(d->scene->root(), e->parent, edge, false);
             
             //
 
@@ -874,7 +874,7 @@ void dtkComposerStackCommandCreateGroup::redo(void)
 
             // Setting up data flow
 
-            dtkComposerTransmitterDisconnection(d->scene->root(), e->node, edge, false);
+            dtkComposerTransmitterDisconnection(d->scene->root(), e->parent, edge, false);
             
             // 
 

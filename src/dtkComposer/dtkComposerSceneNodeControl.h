@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:43:44 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 21 15:39:25 2012 (+0100)
+ * Last-Updated: Tue Feb 21 20:57:45 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 50
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -65,6 +65,8 @@ public:
 
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:
     dtkComposerSceneNodeControlPrivate *d;

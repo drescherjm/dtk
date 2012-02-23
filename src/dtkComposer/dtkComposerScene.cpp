@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Wed Feb 22 23:31:47 2012 (+0100)
+ * Last-Updated: Thu Feb 23 12:57:07 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1839
+ *     Update #: 1841
  */
 
 /* Commentary:
@@ -183,8 +183,6 @@ void dtkComposerScene::addItem(QGraphicsItem *item)
 
 void dtkComposerScene::removeItem(QGraphicsItem *item)
 {
-    qDebug() << __func__ << this << d->graph;
-
     if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(item)) {
 
         QGraphicsScene::removeItem(item);

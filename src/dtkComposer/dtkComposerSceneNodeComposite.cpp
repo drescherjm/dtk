@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 22 23:10:18 2012 (+0100)
+ * Last-Updated: Thu Feb 23 12:56:04 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 439
+ *     Update #: 443
  */
 
 /* Commentary: 
@@ -330,6 +330,14 @@ void dtkComposerSceneNodeComposite::obfuscate(void)
 
 void dtkComposerSceneNodeComposite::boundingBox(qreal& x_min, qreal& x_max, qreal& y_min, qreal& y_max)
 {
+    if(!d->nodes.count()) {
+        x_min = 0.0;
+        x_max = 0.0;
+        y_min = 0.0;
+        y_max = 0.0;
+        return;
+    }
+
     qreal xmin =  FLT_MAX;
     qreal xmax = -FLT_MAX;
     

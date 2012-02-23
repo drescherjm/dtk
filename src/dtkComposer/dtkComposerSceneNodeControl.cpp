@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 22 22:42:58 2012 (+0100)
+ * Last-Updated: Thu Feb 23 16:53:25 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 380
+ *     Update #: 394
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include "dtkComposerNodeControl.h"
+#include "dtkComposerNodeComposite.h"
 #include "dtkComposerSceneEdge.h"
 #include "dtkComposerSceneNodeComposite.h"
 #include "dtkComposerSceneNodeControl.h"
@@ -55,14 +56,17 @@ dtkComposerSceneNodeControl::dtkComposerSceneNodeControl(void) : dtkComposerScen
     header->setParent(this);
 
     dtkComposerSceneNodeComposite *cond_block = new dtkComposerSceneNodeComposite;
+    cond_block->wrap(new dtkComposerNodeComposite);
     cond_block->setParent(this);
     cond_block->setTitle("Conditional");
     
     dtkComposerSceneNodeComposite *body_block = new dtkComposerSceneNodeComposite;
+    body_block->wrap(new dtkComposerNodeComposite);
     body_block->setParent(this);
     body_block->setTitle("Body");
 
     dtkComposerSceneNodeComposite *incr_block = new dtkComposerSceneNodeComposite;
+    incr_block->wrap(new dtkComposerNodeComposite);
     incr_block->setParent(this);
     incr_block->setTitle("Incrementat");
 
@@ -182,6 +186,7 @@ void dtkComposerSceneNodeControl::layout(void)
     }
 
     foreach(dtkComposerSceneNodeComposite *block, d->blocks) {
+        block->layout();
         block->setPos(0, h);
         block->resize(d->rect.size().width(), b);
         block->obfuscate();
@@ -199,8 +204,8 @@ void dtkComposerSceneNodeControl::layout(void)
 
 void dtkComposerSceneNodeControl::resize(qreal width, qreal height)
 {
-    Q_UNUSED(width);
-    Q_UNUSED(height);
+    d->rect.setWidth(width);
+    d->rect.setHeight(height);
 }
 
 dtkComposerSceneNodeComposite *dtkComposerSceneNodeControl::blockAt(const QPointF& point) const

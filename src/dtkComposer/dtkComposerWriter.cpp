@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 00:23:13 2012 (+0100)
+ * Last-Updated: Thu Feb 23 17:11:40 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 243
+ *     Update #: 273
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include "dtkComposerSceneEdge.h"
 #include "dtkComposerSceneNode.h"
 #include "dtkComposerSceneNodeComposite.h"
+#include "dtkComposerSceneNodeControl.h"
 #include "dtkComposerSceneNodeLeaf.h"
 #include "dtkComposerSceneNote.h"
 #include "dtkComposerScenePort.h"
@@ -120,7 +121,29 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
     tag.setAttribute("y", QString::number(node->pos().y()));
     tag.setAttribute("id", QString::number(current_id));
 
+    if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
+
+        tag.setAttribute("type", control->wrapee()->type());
+
+        tag.setAttribute("w", control->boundingRect().size().width());
+        tag.setAttribute("h", control->boundingRect().size().height());
+
+        if(node->wrapee() && node->title() != node->wrapee()->titleHint())
+            tag.setAttribute("title", node->title());
+
+        int i = 0;
+
+        foreach(dtkComposerSceneNodeComposite *block, control->blocks()) {
+            QDomElement child = this->writeNode(block, tag, document);
+            child.setAttribute("blockid", i++);
+            tag.appendChild(child);
+        }
+    }
+
     if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
+
+        if(composite->embedded())
+            tag.setTagName("block");
 
         tag.setAttribute("title", node->title());
 
@@ -196,10 +219,18 @@ QDomElement dtkComposerWriter::writeEdge(dtkComposerSceneEdge *edge, QDomElement
     QDomElement source = document.createElement("source");
     source.setAttribute("node", d->node_ids.key(edge->source()->node()));
     source.setAttribute("id", edge->source()->id());
+    if(edge->source()->type() == dtkComposerScenePort::Input)
+        source.setAttribute("type", "input");
+    else
+        source.setAttribute("type", "output");
     
     QDomElement destin = document.createElement("destination");
     destin.setAttribute("node", d->node_ids.key(edge->destination()->node()));
     destin.setAttribute("id", edge->destination()->id());
+    if(edge->destination()->type() == dtkComposerScenePort::Input)
+        destin.setAttribute("type", "input");
+    else
+        destin.setAttribute("type", "output");
     
     QDomElement tag = document.createElement("edge");
     tag.appendChild(source);

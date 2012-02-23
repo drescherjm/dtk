@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 23:36:56 2012 (+0100)
+ * Last-Updated: Thu Feb 23 17:14:02 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 242
+ *     Update #: 359
  */
 
 /* Commentary: 
@@ -24,6 +24,7 @@
 #include "dtkComposerSceneEdge.h"
 #include "dtkComposerSceneNode.h"
 #include "dtkComposerSceneNodeComposite.h"
+#include "dtkComposerSceneNodeControl.h"
 #include "dtkComposerSceneNodeLeaf.h"
 #include "dtkComposerSceneNote.h"
 #include "dtkComposerScenePort.h"
@@ -52,6 +53,9 @@ public:
 public:
     dtkComposerSceneNodeComposite *root;
     dtkComposerSceneNodeComposite *node;
+
+public:
+    dtkComposerSceneNodeControl *control;
 };
 
 bool dtkComposerReaderPrivate::check(const QDomDocument& document)
@@ -68,6 +72,8 @@ dtkComposerReader::dtkComposerReader(void) : d(new dtkComposerReaderPrivate)
     d->factory = NULL;
     d->scene = NULL;
     d->root = NULL;
+
+    d->control = NULL;
 }
 
 dtkComposerReader::~dtkComposerReader(void)
@@ -199,6 +205,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
     QList<QDomNode> notes;
     QList<QDomNode> nodes;
     QList<QDomNode> edges;
+    QList<QDomNode> blocks;
 
     for(int i = 0; i < childNodes.count(); i++)
         if(childNodes.at(i).toElement().tagName() == "port")
@@ -216,18 +223,43 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
         if(childNodes.at(i).toElement().tagName() == "edge")
             edges << childNodes.at(i);
 
+    for(int i = 0; i < childNodes.count(); i++)
+        if(childNodes.at(i).toElement().tagName() == "block")
+            blocks << childNodes.at(i);
+
     // --
 
     dtkComposerSceneNode *n = NULL;
 
-    if(notes.count() || nodes.count() || edges.count()) {
+    if(blocks.count()) {
+
+        qreal w = node.toElement().attribute("w").toFloat();
+        qreal h = node.toElement().attribute("h").toFloat();
+
+        n = new dtkComposerSceneNodeControl;
+        n->wrap(d->factory->create(node.toElement().attribute("type")));
+        n->setParent(d->node);
+        d->node->addNode(n);
+        n->resize(w, h);
+
+    } else if(node.toElement().tagName() == "block") {
+
+        n = d->control->blocks().at(node.toElement().attribute("blockid").toInt());
+
+    } else if(notes.count() || nodes.count() || edges.count()) {
+
         n = new dtkComposerSceneNodeComposite;
+        n->setParent(d->node);
+        d->node->addNode(n);
+
     } else {
+
         n = new dtkComposerSceneNodeLeaf;
         n->wrap(d->factory->create(node.toElement().attribute("type")));
-    }
+        n->setParent(d->node);
+        d->node->addNode(n);
 
-    n->setParent(d->node);
+    }
 
     QPointF position;
     
@@ -246,11 +278,19 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
 
     d->node_map.insert(id, n);
 
-    d->node->addNode(n);
-
     // --
 
     dtkComposerSceneNodeComposite *t = d->node;
+
+    if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(n)) {
+
+        control->layout();
+
+        for(int i = 0; i < blocks.count(); i++) {
+            d->control = control;
+            this->readNode(blocks.at(i));
+        }
+    }
 
     if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(n)) {
 
@@ -286,7 +326,10 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
 
         for(int i = 0; i < ports.count(); i++)
             if (ports.at(i).toElement().hasAttribute("label"))
-                leaf->port(ports.at(i).toElement().attribute("id").toUInt())->setLabel(ports.at(i).toElement().attribute("label"));
+                if(ports.at(i).toElement().attribute("type") == "input")
+                    leaf->inputPorts().at(ports.at(i).toElement().attribute("id").toUInt())->setLabel(ports.at(i).toElement().attribute("label"));
+                else
+                    leaf->outputPorts().at(ports.at(i).toElement().attribute("id").toUInt())->setLabel(ports.at(i).toElement().attribute("label"));
     }
 
     d->node = t;
@@ -306,10 +349,19 @@ dtkComposerSceneEdge *dtkComposerReader::readEdge(QDomNode node)
     
     int source_id = source.attribute("id").toInt();
     int destin_id = destin.attribute("id").toInt();
+
+    QString source_type = source.attribute("type");
+    QString destin_type = destin.attribute("type");
     
     dtkComposerSceneEdge *edge = new dtkComposerSceneEdge;
-    edge->setSource(d->node_map.value(source_node)->port(source_id));
-    edge->setDestination(d->node_map.value(destin_node)->port(destin_id));
+    if(source_type == "input")
+        edge->setSource(d->node_map.value(source_node)->inputPorts().at(source_id));
+    else
+        edge->setSource(d->node_map.value(source_node)->outputPorts().at(source_id));
+    if(destin_type == "input")
+        edge->setDestination(d->node_map.value(destin_node)->inputPorts().at(destin_id));
+    else
+        edge->setDestination(d->node_map.value(destin_node)->outputPorts().at(destin_id));
     edge->link();
     edge->adjust();
     

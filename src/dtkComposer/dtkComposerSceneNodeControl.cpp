@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 21 23:20:04 2012 (+0100)
+ * Last-Updated: Wed Feb 22 22:42:58 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 375
+ *     Update #: 380
  */
 
 /* Commentary: 
@@ -184,6 +184,7 @@ void dtkComposerSceneNodeControl::layout(void)
     foreach(dtkComposerSceneNodeComposite *block, d->blocks) {
         block->setPos(0, h);
         block->resize(d->rect.size().width(), b);
+        block->obfuscate();
         h += b;
     }
 
@@ -281,6 +282,21 @@ void dtkComposerSceneNodeControl::mouseMoveEvent(QGraphicsSceneMouseEvent *event
         d->drag_point = event->scenePos();
 
         this->layout();
+
+        foreach(dtkComposerSceneNodeComposite *block, d->blocks) {
+            
+            qreal delta_x = delta.x();
+            qreal delta_y = delta.y()/d->blocks.count();
+            
+            foreach(dtkComposerSceneNode *node, block->nodes())
+                node->moveBy(delta_x, delta_y);
+            
+            foreach(dtkComposerSceneNote *note, block->notes())
+                note->moveBy(delta_x, delta_y);
+            
+            foreach(dtkComposerSceneEdge *edge, block->edges())
+                edge->adjust();
+        }
 
         event->accept();
 

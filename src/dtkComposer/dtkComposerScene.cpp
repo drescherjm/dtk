@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Tue Feb 21 16:14:42 2012 (+0100)
+ * Last-Updated: Thu Feb 23 12:57:07 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1687
+ *     Update #: 1841
  */
 
 /* Commentary:
@@ -124,6 +124,107 @@ void dtkComposerScene::setCurrent(dtkComposerSceneNode *node)
 void dtkComposerScene::setCurrent(dtkComposerSceneNodeComposite *current)
 {
     d->current_node = current;
+}
+
+// /////////////////////////////////////////////////////////////////
+#pragma mark -
+#pragma mark - Scene management
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerScene::addItem(QGraphicsItem *item)
+{
+    if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(item)) {
+
+        QGraphicsScene::addItem(item);
+
+        foreach(dtkComposerSceneNodeComposite *block, control->blocks()) {
+
+            block->setParentItem(control);
+
+            foreach(dtkComposerSceneNote *note, block->notes())
+                this->addItem(note);
+            
+            foreach(dtkComposerSceneNode *node, block->nodes())
+                this->addItem(node);
+            
+            foreach(dtkComposerSceneEdge *edge, block->edges())
+                this->addItem(edge);
+        }
+
+        control->layout();
+
+        return;
+    }
+
+    if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(item)) {
+
+        QGraphicsScene::addItem(item);
+
+        if(!composite->flattened())
+            return;
+
+        if(composite->entered())
+            return;
+
+        foreach(dtkComposerSceneNote *note, composite->notes())
+            this->addItem(note);
+
+        foreach(dtkComposerSceneNode *node, composite->nodes())
+            this->addItem(node);
+
+        foreach(dtkComposerSceneEdge *edge, composite->edges())
+            this->addItem(edge);
+
+        return;
+    }
+
+    QGraphicsScene::addItem(item);
+}
+
+void dtkComposerScene::removeItem(QGraphicsItem *item)
+{
+    if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(item)) {
+
+        QGraphicsScene::removeItem(item);
+
+        foreach(dtkComposerSceneNodeComposite *block, control->blocks()) {
+
+            foreach(dtkComposerSceneNote *note, block->notes())
+                this->removeItem(note);
+            
+            foreach(dtkComposerSceneNode *node, block->nodes())
+                this->removeItem(node);
+            
+            foreach(dtkComposerSceneEdge *edge, block->edges())
+                this->removeItem(edge);
+        }
+
+        return;
+    }
+
+    if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(item)) {
+
+        QGraphicsScene::removeItem(composite);
+
+        if(!composite->flattened())
+            return;
+
+        if(composite->entered())
+            return;
+
+        foreach(dtkComposerSceneNote *note, composite->notes())
+            this->removeItem(note);
+
+        foreach(dtkComposerSceneNode *node, composite->nodes())
+            this->removeItem(node);
+
+        foreach(dtkComposerSceneEdge *edge, composite->edges())
+            this->removeItem(edge);
+
+        return;
+    }
+
+    QGraphicsScene::removeItem(item);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -434,7 +535,6 @@ adjust_edges: // Adjusting edges of selected nodes
         if(dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>(item)) {
 
             if (node->parent() != d->root_node) {
-                // qDebug() << __func__ << "laying out" << node->parent()->title() << "from node" << node->title();
                 node->parent()->layout();
                 this->update();
             }
@@ -551,36 +651,63 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 
     dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node);
 
-    if(!composite)
-        return;
+    if(composite) {
 
-    if(event->modifiers() & Qt::ControlModifier) {
+        dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node->parent());
 
-        if(!composite->flattened() && !composite->entered()) {
-            dtkComposerStackCommandFlattenGroup *command = new dtkComposerStackCommandFlattenGroup;
-            command->setScene(this);
-            command->setNode(composite);
-            d->stack->push(command);
-        } else if(!composite->entered()) {
-            dtkComposerStackCommandUnflattenGroup *command = new dtkComposerStackCommandUnflattenGroup;
-            command->setScene(this);
-            command->setNode(composite);
-            d->stack->push(command);
-        }
+        if(!control) {
 
-    } else {
-
-        if(!composite->entered() && !composite->flattened()) {
-            dtkComposerStackCommandEnterGroup *command = new dtkComposerStackCommandEnterGroup;
-            command->setScene(this);
-            command->setNode(composite);
-            d->stack->push(command);
-        } else if(!composite->flattened()) {
-            dtkComposerStackCommandLeaveGroup *command = new dtkComposerStackCommandLeaveGroup;
-            command->setScene(this);
-            command->setNode(composite);
-            d->stack->push(command);
-        }
+            if(event->modifiers() & Qt::ControlModifier) {
+                
+                if(!composite->flattened() && !composite->entered()) {
+                    dtkComposerStackCommandFlattenGroup *command = new dtkComposerStackCommandFlattenGroup;
+                    command->setScene(this);
+                    command->setNode(composite);
+                    d->stack->push(command);
+                } else if(!composite->entered()) {
+                    dtkComposerStackCommandUnflattenGroup *command = new dtkComposerStackCommandUnflattenGroup;
+                    command->setScene(this);
+                    command->setNode(composite);
+                    d->stack->push(command);
+                }
+                
+            } else {
+                
+                if(!composite->entered() && !composite->flattened()) {
+                    dtkComposerStackCommandEnterGroup *command = new dtkComposerStackCommandEnterGroup;
+                    command->setScene(this);
+                    command->setNode(composite);
+                    d->stack->push(command);
+                } else if(!composite->flattened()) {
+                    dtkComposerStackCommandLeaveGroup *command = new dtkComposerStackCommandLeaveGroup;
+                    command->setScene(this);
+                    command->setNode(composite);
+                    d->stack->push(command);
+                }
+            }
+            
+        } else {
+            
+            if(event->modifiers() & Qt::ControlModifier) {
+                
+                ; // Do nothing so far
+                
+            } else {
+                
+                if(!composite->entered()) {
+                    dtkComposerStackCommandEnterGroup *command = new dtkComposerStackCommandEnterGroup;
+                    command->setScene(this);
+                    command->setBlock(composite);
+                    d->stack->push(command);
+                } else {
+                    dtkComposerStackCommandLeaveGroup *command = new dtkComposerStackCommandLeaveGroup;
+                    command->setScene(this);
+                    command->setBlock(composite);
+                    d->stack->push(command);
+                }
+            }
+            
+        }        
     }
 }
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 21 23:00:23 2012 (+0100)
+ * Last-Updated: Thu Feb 23 12:56:04 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 338
+ *     Update #: 443
  */
 
 /* Commentary: 
@@ -47,6 +47,7 @@ public:
     bool flattened;
     bool entered;
     bool revealed;
+    bool obfuscated;
 };
 
 dtkComposerSceneNodeComposite::dtkComposerSceneNodeComposite(void) : dtkComposerSceneNode(), d(new dtkComposerSceneNodeCompositePrivate)
@@ -58,6 +59,7 @@ dtkComposerSceneNodeComposite::dtkComposerSceneNodeComposite(void) : dtkComposer
     d->flattened = false;
     d->entered = false;
     d->revealed = false;
+    d->obfuscated = false;
 
     this->layout();
     this->setTitle("Composite");
@@ -167,24 +169,8 @@ void dtkComposerSceneNodeComposite::reveal(void)
 {
     d->revealed = true;
 
-// --
-
-    QPointF old = d->pos;
-
-// --
-
-    d->pos = this->pos();
-
-// --
-
-    if(!old.isNull()) {
-        d->offset = d->pos - old;
-
-        foreach(dtkComposerSceneNode *node, d->nodes)
-            node->setPos(node->pos() + d->offset);
-    }
-
-// --
+    if (this->embedded())
+        this->obfuscate();
 
     this->setFlag(QGraphicsItem::ItemIsMovable, false);
 
@@ -193,18 +179,13 @@ void dtkComposerSceneNodeComposite::reveal(void)
 
 void dtkComposerSceneNodeComposite::unreveal(void)
 {
-    d->revealed = false;
+    if(!d->flattened && !d->entered)
+        d->revealed = false;
 
-// --
-
-    if(!d->offset.isNull()) {
-        foreach(dtkComposerSceneNode *node, d->nodes)
-            node->setPos(node->pos() - d->offset);
-    }
-
-// --
-
-    this->setFlag(QGraphicsItem::ItemIsMovable, true);
+    if(!d->flattened)
+        this->setFlag(QGraphicsItem::ItemIsMovable, true);
+    else
+        this->setFlag(QGraphicsItem::ItemIsMovable, false);
 
     this->layout();
 }
@@ -223,17 +204,7 @@ void dtkComposerSceneNodeComposite::setRoot(bool root)
 
 void dtkComposerSceneNodeComposite::layout(void)
 {
-// /////////////////////////////////////////////////////////////////
-// Layout parent if applicable
-// /////////////////////////////////////////////////////////////////
-
-    // if(this->parentItem()) {
-    //     dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>(this->parent());
-    //     if (node)
-    //         node->layout();
-    // }
-
-    if(this->embedded())
+    if (this->embedded() && !d->entered)
         return;
     
 // /////////////////////////////////////////////////////////////////
@@ -324,8 +295,49 @@ void dtkComposerSceneNodeComposite::resize(qreal width, qreal height)
     d->rect = QRectF(d->rect.topLeft(), QSizeF(width, height));
 }
 
+void dtkComposerSceneNodeComposite::obfuscate(void)
+{
+    QRectF rect = this->sceneBoundingRect();
+
+    d->obfuscated = false;
+
+    foreach(dtkComposerSceneNode *node, d->nodes)
+        if (!rect.contains(node->sceneBoundingRect()))
+            d->obfuscated = true;
+
+    foreach(dtkComposerSceneNote *note, d->notes)
+        if (!rect.contains(note->sceneBoundingRect()))
+            d->obfuscated = true;
+
+    foreach(dtkComposerSceneEdge *edge, d->edges)
+        if (!rect.contains(edge->sceneBoundingRect()))
+            d->obfuscated = true;
+
+    if (d->entered)
+        d->obfuscated = false;
+
+    foreach(dtkComposerSceneNode *node, d->nodes)
+        node->setVisible(!d->obfuscated);
+
+    foreach(dtkComposerSceneNote *note, d->notes)
+        note->setVisible(!d->obfuscated);
+
+    foreach(dtkComposerSceneEdge *edge, d->edges)
+        edge->setVisible(!d->obfuscated);
+
+    this->update();
+}
+
 void dtkComposerSceneNodeComposite::boundingBox(qreal& x_min, qreal& x_max, qreal& y_min, qreal& y_max)
 {
+    if(!d->nodes.count()) {
+        x_min = 0.0;
+        x_max = 0.0;
+        y_min = 0.0;
+        y_max = 0.0;
+        return;
+    }
+
     qreal xmin =  FLT_MAX;
     qreal xmax = -FLT_MAX;
     
@@ -376,8 +388,11 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
         painter->setBrush(gradiant);
     }
 
-    if(this->embedded())
+    if(this->embedded() && !d->entered) {
         painter->setPen(Qt::NoPen);
+        if(d->obfuscated)
+            painter->setBrush(QColor(0, 0, 0, 127));
+    }
 
     painter->drawRoundedRect(d->rect, radius, radius);
 
@@ -387,20 +402,37 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
 
     QFont font = painter->font();
     QFontMetricsF metrics(font);
-    QString title_text = metrics.elidedText(this->title(), Qt::ElideMiddle, this->boundingRect().width()-2-4*margin);
-    QRectF title_rect = metrics.boundingRect(title_text);
 
+    QString title_text = metrics.elidedText(this->title(), Qt::ElideMiddle, this->boundingRect().width()-2-4*margin);
     QPointF title_pos;
 
-    if(!this->embedded())
+    if(!this->embedded() && !d->entered)
         title_pos = QPointF(2*margin, 2*margin + metrics.xHeight());
     else
         title_pos = QPointF(d->rect.width()/2.0 - metrics.width(title_text)/2.0, d->rect.height()/2.0 + metrics.xHeight()/2.0);
 
-    if(this->embedded() || (!this->embedded() && d->revealed))
+    if((this->embedded() && !d->entered) || (!this->embedded() && d->revealed))
         painter->setPen(QPen(QColor(Qt::darkGray)));
     else
         painter->setPen(QPen(QColor(Qt::white)));
 
     painter->drawText(title_pos, title_text);
+
+    if (d->obfuscated) {
+
+        QFont oFont = QFont(font);
+        oFont.setPointSizeF(font.pointSizeF()-2);
+
+        QString title = QString("Obfuscated content. (%1 notes, %2 nodes, %3 edges)")
+            .arg(d->notes.count())
+            .arg(d->nodes.count())
+            .arg(d->edges.count());
+
+        title_text = metrics.elidedText(title, Qt::ElideRight, this->boundingRect().width()-2-4*margin);
+        title_pos = QPointF(d->rect.width()/2.0 - metrics.width(title_text)/2.0, d->rect.height()/2.0 + metrics.xHeight()/2.0 + metrics.height() * 1.5);
+
+        painter->setPen(QPen(QColor(Qt::darkGray)));
+        painter->setFont(oFont);
+        painter->drawText(title_pos, title_text);
+    }
 }

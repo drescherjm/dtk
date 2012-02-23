@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. févr. 23 12:21:05 2012 (+0100)
+ * Last-Updated: jeu. févr. 23 14:26:53 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1140
+ *     Update #: 1141
  */
 
 /* Commentary:
@@ -125,7 +125,7 @@ void dtkComposerGraphPrivate::addEdge(dtkComposerGraphNode *source, dtkComposerG
     e->setSource(source);
     e->setDestination(destination);
     e->setId(id);
-    qDebug() << "adding dummy edge";;
+    // qDebug() << "adding dummy edge";;
     dummy_edges.insertMulti(node, e);
     edges.insertMulti(0, e);
     q->addItem(e);
@@ -163,8 +163,8 @@ dtkComposerGraph::~dtkComposerGraph(void)
 
 void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
 {
+    // qDebug() << " add Node ";
 
-    qDebug() << " add Node ";
     dtkComposerNode *wrapee = node->wrapee();
 
     if (dynamic_cast<dtkComposerNodeControl *>(wrapee)) {
@@ -283,13 +283,14 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
 }
 
 // ungroup
-void dtkComposerGraph::removeGroup(dtkComposerSceneNode *node) {
+void dtkComposerGraph::removeGroup(dtkComposerSceneNode *node)
+{
     dtkComposerGraph::removeNode(node);
 }
 
-void dtkComposerGraph::createGroup(dtkComposerSceneNode *node) {
-
-    qDebug() << " create group";
+void dtkComposerGraph::createGroup(dtkComposerSceneNode *node)
+{
+    // qDebug() << " create group";
 
     dtkComposerNode *wrapee = node->wrapee();
 
@@ -329,8 +330,9 @@ void dtkComposerGraph::createGroup(dtkComposerSceneNode *node) {
 }
 
 // remove composite and all it's child
-void dtkComposerGraph::destroyGroup(dtkComposerSceneNode *node) {
-    qDebug() << " destroy group";
+void dtkComposerGraph::destroyGroup(dtkComposerSceneNode *node)
+{
+    // qDebug() << " destroy group";
     foreach(dtkComposerSceneNode *n, dynamic_cast<dtkComposerSceneNodeComposite *>(node)->nodes()) {
         dtkComposerGraph::removeNode(n);
     }
@@ -341,11 +343,10 @@ void dtkComposerGraph::destroyGroup(dtkComposerSceneNode *node) {
 
 void dtkComposerGraph::removeNode(dtkComposerSceneNode *node)
 {
-    qDebug() << " remove node";
+    // qDebug() << " remove node";
 
     QList<dtkComposerGraphNode *> nodes = d->nodes.values(node);
     QList<dtkComposerGraphEdge *> edges = d->dummy_edges.values(node);
-
 
     if (dynamic_cast<dtkComposerSceneNodeLeaf *>(node))
         Q_ASSERT(edges.count() == 0);
@@ -354,13 +355,13 @@ void dtkComposerGraph::removeNode(dtkComposerSceneNode *node)
 
     // need to also remove blocks begin/end nodes for control nodes
     if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
-        qDebug() << "control node, remove blocks items";
+        // qDebug() << "control node, remove blocks items";
         foreach(  dtkComposerSceneNodeComposite *block, control->blocks()) {
             foreach(dtkComposerGraphNode *n, d->nodes.values(block)) {
                 this->removeItem(n);
             }
             foreach(dtkComposerGraphEdge *e, d->dummy_edges.values(block)) {
-                qDebug() << " remove dummy edge item in block";
+                // qDebug() << " remove dummy edge item in block";
                 d->edges.remove(0,e);
                 this->removeItem(e);
             }
@@ -388,11 +389,8 @@ void dtkComposerGraph::removeNode(dtkComposerSceneNode *node)
         }
     }
 
-    // int rm = d->dummy_edges.remove(node);
-    // qDebug() << rm << " dummy edges removed";
-
     foreach(dtkComposerGraphEdge *e, edges) {
-        qDebug() << "remove dummy edge items";
+//        qDebug() << "remove dummy edge items";
         d->edges.remove(0, e);
         d->dummy_edges.remove(node, e);
         this->removeItem(e);
@@ -502,10 +500,10 @@ void dtkComposerGraph::layout(void)
 
     this->update();
 
-    qDebug() << "nodes:" <<  d->nodes.count();
-    qDebug() << "edges:" <<  d->edges.count();
-    qDebug() << "dummy edges:" <<  d->dummy_edges.count();
-    qDebug() << "items:" <<  this->items().count();
+    // qDebug() << "nodes:" <<  d->nodes.count();
+    // qDebug() << "edges:" <<  d->edges.count();
+    // qDebug() << "dummy edges:" <<  d->dummy_edges.count();
+    // qDebug() << "items:" <<  this->items().count();
 }
 
 void dtkComposerGraph::onSelectionChanged(void)

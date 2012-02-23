@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:31:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 18:26:24 2012 (+0100)
+ * Last-Updated: Thu Feb 23 17:02:17 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 69
+ *     Update #: 70
  */
 
 /* Commentary: 
@@ -89,9 +89,6 @@ public:
 
 public:
     void setTitle(const QString& title);
-
-public:
-    dtkComposerScenePort *port(unsigned int id);
 
 public:
     bool embedded(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 23 14:19:21 2012 (+0100)
+ * Last-Updated: Thu Feb 23 16:53:25 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 393
+ *     Update #: 394
  */
 
 /* Commentary: 
@@ -204,8 +204,8 @@ void dtkComposerSceneNodeControl::layout(void)
 
 void dtkComposerSceneNodeControl::resize(qreal width, qreal height)
 {
-    Q_UNUSED(width);
-    Q_UNUSED(height);
+    d->rect.setWidth(width);
+    d->rect.setHeight(height);
 }
 
 dtkComposerSceneNodeComposite *dtkComposerSceneNodeControl::blockAt(const QPointF& point) const

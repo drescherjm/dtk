@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 21 16:00:07 2012 (+0100)
+ * Last-Updated: Thu Feb 23 17:02:37 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 72
+ *     Update #: 73
  */
 
 /* Commentary: 
@@ -131,22 +131,6 @@ void dtkComposerSceneNode::setTitle(const QString& title)
 {
     d->title = title;
 }
-
-dtkComposerScenePort *dtkComposerSceneNode::port(unsigned int id)
-{
-    dtkComposerScenePort *p = NULL;
-
-    foreach(dtkComposerScenePort *port, d->input_ports)
-        if (port->id() == id)
-            p = port;
-
-    foreach(dtkComposerScenePort *port, d->output_ports)
-        if (port->id() == id)
-            p = port;
-
-    return p;
-}
-
 
 bool dtkComposerSceneNode::embedded(void)
 {

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 22 23:26:17 2012 (+0100)
+ * Last-Updated: Thu Feb 23 14:43:59 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 2056
+ *     Update #: 2071
  */
 
 /* Commentary: 
@@ -724,7 +724,6 @@ dtkComposerStackCommandCreateGroup::dtkComposerStackCommandCreateGroup(dtkCompos
 {
     e->parent = NULL;
     e->node = NULL;
-
     e->dirty = true;
 
     this->setText("Create group");
@@ -787,9 +786,8 @@ void dtkComposerStackCommandCreateGroup::redo(void)
         return;
 
     if(!e->node) {
-        dtkComposerNode *node = new dtkComposerNodeComposite;
         e->node = new dtkComposerSceneNodeComposite;
-        e->node->wrap(node);
+        e->node->wrap(new dtkComposerNodeComposite);
         e->node->setParent(e->parent);
     }
 
@@ -1554,6 +1552,8 @@ void dtkComposerStackCommandLeaveGroup::redo(void)
         d->scene->addItem(edge);
     }
 
+    e->node->layout();
+
     d->scene->update();
 }
 
@@ -1590,6 +1590,8 @@ void dtkComposerStackCommandLeaveGroup::undo(void)
         edge->adjust();
         d->scene->addItem(edge);
     }
+
+    e->node->layout();
 
     d->scene->update();
 }
@@ -1725,9 +1727,6 @@ dtkComposerStackCommandCreatePort::dtkComposerStackCommandCreatePort(dtkComposer
 
 dtkComposerStackCommandCreatePort::~dtkComposerStackCommandCreatePort(void)
 {
-    if(e->port)
-        delete e->port;
-
     delete e;
 
     e = NULL;

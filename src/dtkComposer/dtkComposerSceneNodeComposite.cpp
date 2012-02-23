@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 23 12:56:04 2012 (+0100)
+ * Last-Updated: Thu Feb 23 14:18:07 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 443
+ *     Update #: 453
  */
 
 /* Commentary: 
@@ -205,7 +205,7 @@ void dtkComposerSceneNodeComposite::setRoot(bool root)
 void dtkComposerSceneNodeComposite::layout(void)
 {
     if (this->embedded() && !d->entered)
-        return;
+        goto port_location;
     
 // /////////////////////////////////////////////////////////////////
 // Rect calculation
@@ -242,6 +242,12 @@ void dtkComposerSceneNodeComposite::layout(void)
 
         this->setZValue(-INT_MAX);
     }
+    
+// /////////////////////////////////////////////////////////////////
+// Port location
+// /////////////////////////////////////////////////////////////////
+
+port_location:
 
     int header = 15;
 
@@ -249,16 +255,15 @@ void dtkComposerSceneNodeComposite::layout(void)
     int port_margin_bottom = 10;
     int port_margin_left = 10;
     int port_spacing = 10;
-    
-// /////////////////////////////////////////////////////////////////
-// Port location
-// /////////////////////////////////////////////////////////////////
 
     for(int i = 0; i < this->inputPorts().count(); i++)
         this->inputPorts().at(i)->setPos(QPointF(port_margin_left, i*this->inputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top + header));
     
     for(int i = 0; i < this->outputPorts().count(); i++)
         this->outputPorts().at(i)->setPos(QPointF(d->rect.right() - port_margin_left - this->outputPorts().at(i)->boundingRect().width(), i*this->outputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top + header));
+
+    if(this->embedded())
+        goto update;
 
 // /////////////////////////////////////////////////////////////////
 // Update edges geometry
@@ -286,6 +291,8 @@ void dtkComposerSceneNodeComposite::layout(void)
                 d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->outputPorts().count() * this->outputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->outputPorts().count()-1) * port_spacing + header));        
 
     }
+
+update:
 
     this->update();
 }

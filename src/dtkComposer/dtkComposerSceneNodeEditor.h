@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:08:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 18:34:40 2012 (+0100)
+ * Last-Updated: Thu Feb 23 14:26:01 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 19
+ *     Update #: 22
  */
 
 /* Commentary: 
@@ -52,6 +52,7 @@ protected slots:
     void removeOutputPort(void);
 
 protected slots:
+    void onBlockChanged(int index);
     void onTitleChanged(const QString& text);
 
 private:

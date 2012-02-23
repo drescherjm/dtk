@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 23 17:26:56 2012 (+0100)
+ * Last-Updated: Thu Feb 23 17:36:09 2012 (+0100)
  *           By: tkloczko
- *     Update #: 2135
+ *     Update #: 2136
  */
 
 /* Commentary: 
@@ -203,6 +203,7 @@ void dtkComposerStackCommandCreateNode::undo(void)
 // -- ??
     if (e->parent->root() || e->parent->flattened() || e->parent->entered())
         d->scene->removeItem(e->node);
+
     d->scene->modify(true);
 // --
 }
@@ -866,9 +867,8 @@ void dtkComposerStackCommandCreateGroup::redo(void)
         return;
 
     if(!e->node) {
-        dtkComposerNode *node = new dtkComposerNodeComposite;
         e->node = new dtkComposerSceneNodeComposite;
-        e->node->wrap(node);
+        e->node->wrap(new dtkComposerNodeComposite);
         e->node->setParent(e->parent);
     }
 
@@ -1395,6 +1395,8 @@ void dtkComposerStackCommandEnterGroup::undo(void)
         edge->adjust();
         d->scene->addItem(edge);
     }
+
+    e->node->layout();
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -1473,6 +1475,8 @@ void dtkComposerStackCommandLeaveGroup::redo(void)
         d->scene->addItem(edge);
     }
 
+    e->node->layout();
+
     d->scene->update();
 }
 
@@ -1509,6 +1513,8 @@ void dtkComposerStackCommandLeaveGroup::undo(void)
         edge->adjust();
         d->scene->addItem(edge);
     }
+
+    e->node->layout();
 
     d->scene->update();
 }

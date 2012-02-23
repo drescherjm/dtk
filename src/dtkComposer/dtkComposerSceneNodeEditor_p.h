@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:28:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 23:52:11 2012 (+0100)
+ * Last-Updated: Thu Feb 23 13:43:39 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 42
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -92,6 +92,9 @@ public:
 
 public:
     QLineEdit *edit;
+
+public:
+    QComboBox *selector;
 };
 
 #endif

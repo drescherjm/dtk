@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 22 12:42:59 2012 (+0100)
+ * Last-Updated: Thu Feb 23 14:18:07 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 412
+ *     Update #: 453
  */
 
 /* Commentary: 
@@ -169,24 +169,8 @@ void dtkComposerSceneNodeComposite::reveal(void)
 {
     d->revealed = true;
 
-// --
-
-    QPointF old = d->pos;
-
-// --
-
-    d->pos = this->pos();
-
-// --
-
-    if(!old.isNull()) {
-        d->offset = d->pos - old;
-
-        foreach(dtkComposerSceneNode *node, d->nodes)
-            node->setPos(node->pos() + d->offset);
-    }
-
-// --
+    if (this->embedded())
+        this->obfuscate();
 
     this->setFlag(QGraphicsItem::ItemIsMovable, false);
 
@@ -195,18 +179,13 @@ void dtkComposerSceneNodeComposite::reveal(void)
 
 void dtkComposerSceneNodeComposite::unreveal(void)
 {
-    d->revealed = false;
+    if(!d->flattened && !d->entered)
+        d->revealed = false;
 
-// --
-
-    if(!d->offset.isNull()) {
-        foreach(dtkComposerSceneNode *node, d->nodes)
-            node->setPos(node->pos() - d->offset);
-    }
-
-// --
-
-    this->setFlag(QGraphicsItem::ItemIsMovable, true);
+    if(!d->flattened)
+        this->setFlag(QGraphicsItem::ItemIsMovable, true);
+    else
+        this->setFlag(QGraphicsItem::ItemIsMovable, false);
 
     this->layout();
 }
@@ -225,18 +204,8 @@ void dtkComposerSceneNodeComposite::setRoot(bool root)
 
 void dtkComposerSceneNodeComposite::layout(void)
 {
-// /////////////////////////////////////////////////////////////////
-// Layout parent if applicable
-// /////////////////////////////////////////////////////////////////
-
-    // if(this->parentItem()) {
-    //     dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>(this->parent());
-    //     if (node)
-    //         node->layout();
-    // }
-
-    if(this->embedded())
-        return;
+    if (this->embedded() && !d->entered)
+        goto port_location;
     
 // /////////////////////////////////////////////////////////////////
 // Rect calculation
@@ -273,6 +242,12 @@ void dtkComposerSceneNodeComposite::layout(void)
 
         this->setZValue(-INT_MAX);
     }
+    
+// /////////////////////////////////////////////////////////////////
+// Port location
+// /////////////////////////////////////////////////////////////////
+
+port_location:
 
     int header = 15;
 
@@ -280,16 +255,15 @@ void dtkComposerSceneNodeComposite::layout(void)
     int port_margin_bottom = 10;
     int port_margin_left = 10;
     int port_spacing = 10;
-    
-// /////////////////////////////////////////////////////////////////
-// Port location
-// /////////////////////////////////////////////////////////////////
 
     for(int i = 0; i < this->inputPorts().count(); i++)
         this->inputPorts().at(i)->setPos(QPointF(port_margin_left, i*this->inputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top + header));
     
     for(int i = 0; i < this->outputPorts().count(); i++)
         this->outputPorts().at(i)->setPos(QPointF(d->rect.right() - port_margin_left - this->outputPorts().at(i)->boundingRect().width(), i*this->outputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top + header));
+
+    if(this->embedded())
+        goto update;
 
 // /////////////////////////////////////////////////////////////////
 // Update edges geometry
@@ -318,6 +292,8 @@ void dtkComposerSceneNodeComposite::layout(void)
 
     }
 
+update:
+
     this->update();
 }
 
@@ -344,6 +320,9 @@ void dtkComposerSceneNodeComposite::obfuscate(void)
         if (!rect.contains(edge->sceneBoundingRect()))
             d->obfuscated = true;
 
+    if (d->entered)
+        d->obfuscated = false;
+
     foreach(dtkComposerSceneNode *node, d->nodes)
         node->setVisible(!d->obfuscated);
 
@@ -358,6 +337,14 @@ void dtkComposerSceneNodeComposite::obfuscate(void)
 
 void dtkComposerSceneNodeComposite::boundingBox(qreal& x_min, qreal& x_max, qreal& y_min, qreal& y_max)
 {
+    if(!d->nodes.count()) {
+        x_min = 0.0;
+        x_max = 0.0;
+        y_min = 0.0;
+        y_max = 0.0;
+        return;
+    }
+
     qreal xmin =  FLT_MAX;
     qreal xmax = -FLT_MAX;
     
@@ -408,7 +395,7 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
         painter->setBrush(gradiant);
     }
 
-    if(this->embedded()) {
+    if(this->embedded() && !d->entered) {
         painter->setPen(Qt::NoPen);
         if(d->obfuscated)
             painter->setBrush(QColor(0, 0, 0, 127));
@@ -426,12 +413,12 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
     QString title_text = metrics.elidedText(this->title(), Qt::ElideMiddle, this->boundingRect().width()-2-4*margin);
     QPointF title_pos;
 
-    if(!this->embedded())
+    if(!this->embedded() && !d->entered)
         title_pos = QPointF(2*margin, 2*margin + metrics.xHeight());
     else
         title_pos = QPointF(d->rect.width()/2.0 - metrics.width(title_text)/2.0, d->rect.height()/2.0 + metrics.xHeight()/2.0);
 
-    if(this->embedded() || (!this->embedded() && d->revealed))
+    if((this->embedded() && !d->entered) || (!this->embedded() && d->revealed))
         painter->setPen(QPen(QColor(Qt::darkGray)));
     else
         painter->setPen(QPen(QColor(Qt::white)));

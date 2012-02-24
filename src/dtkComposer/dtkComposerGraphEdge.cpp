@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 24 14:37:55 2012 (+0100)
+ * Last-Updated: Fri Feb 24 16:11:34 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 136
+ *     Update #: 138
  */
 
 /* Commentary: 
@@ -138,6 +138,8 @@ void dtkComposerGraphEdge::drawArrow(QPainter *p, QPointF from, QPointF to, qrea
     points[0] = to;
     points[1] = i;
     points[2] = j;
+    p->setPen(Qt::black);
+    p->setBrush(Qt::black);
     p->drawConvexPolygon(points, 3);
     p->restore();
 }

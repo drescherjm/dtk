@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:12:58 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 14:26:13 2012 (+0100)
+ * Last-Updated: Fri Feb 24 16:21:43 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 7
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -34,6 +34,12 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeFor : public dtkComposerNodeControl
 public:
              dtkComposerNodeFor(void);
     virtual ~dtkComposerNodeFor(void);
+
+public:
+    int blockCount(void);
+    dtkComposerNodeLeaf *header(void);
+    dtkComposerNodeLeaf *footer(void);
+    dtkComposerNodeComposite *block(int id);
 
 public:
     void setInputs(void);

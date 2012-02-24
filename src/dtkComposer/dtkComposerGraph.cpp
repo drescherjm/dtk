@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 24 14:56:24 2012 (+0100)
+ * Last-Updated: Fri Feb 24 15:00:51 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1360
+ *     Update #: 1367
  */
 
 /* Commentary:
@@ -136,10 +136,10 @@ void dtkComposerGraphPrivate::addDummyEdge(dtkComposerGraphNode *source, dtkComp
 
 void dtkComposerGraphPrivate::remDummyEdge(dtkComposerGraphEdge *edge, dtkComposerSceneNode *node)
 {
+    q->removeItem(edge);
+    edges.remove(0, edge);
     if(node)
         dummy_edges.remove(node, edge);
-    edges.remove(0, edge);
-    q->removeItem(edge);
     delete edge;
 }
 
@@ -384,9 +384,9 @@ void dtkComposerGraph::removeEdge(dtkComposerGraphEdge *edge)
 
 void dtkComposerGraph::layout(void)
 {
-    dtkComposerGraphLayouter layouter;
-    layouter.setGraph(this);
-    layouter.layout();
+    // dtkComposerGraphLayouter layouter;
+    // layouter.setGraph(this);
+    // layouter.layout();
 
     this->update();
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 24 15:39:51 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 2139
+ * Last-Updated: ven. févr. 24 15:56:02 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 2146
  */
 
 /* Commentary: 
@@ -285,6 +285,7 @@ void dtkComposerStackCommandDestroyNode::redo(void)
     e->parent->layout();
 
     d->graph->removeNode(e->node);
+    d->graph->layout();
 
     if (e->parent->root() || e->parent->flattened() || e->parent->entered())
         d->scene->removeItem(e->node);
@@ -310,6 +311,7 @@ void dtkComposerStackCommandDestroyNode::undo(void)
     e->parent->layout();
 
     d->graph->addNode(e->node);
+    d->graph->layout();
 
     foreach(dtkComposerSceneEdge *edge, e->input_edges) {
         if(!d->scene->items().contains(edge))
@@ -879,9 +881,11 @@ void dtkComposerStackCommandCreateGroup::redo(void)
     foreach(dtkComposerSceneNode *node, e->nodes) {
         rect |= node->sceneBoundingRect();
         e->parent->removeNode(node);
+        d->graph->removeNode(node);
         d->scene->removeItem(node);
         e->node->addNode(node);
         node->setParent(e->node);
+        d->graph->addNode(node);
     }
 
     e->parent->addNode(e->node);
@@ -996,9 +1000,11 @@ void dtkComposerStackCommandCreateGroup::undo(void)
 
     foreach(dtkComposerSceneNode *node, e->nodes) {
         e->parent->addNode(node);
+        d->graph->addNode(node);
         d->scene->addItem(node);
         e->node->removeNode(node);
         node->setParent(e->node->parent());
+        d->graph->removeNode(node);
     }
 
     e->parent->removeNode(e->node);

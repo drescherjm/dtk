@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. févr. 23 18:43:16 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 1312
+ * Last-Updated: Fri Feb 24 14:21:33 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 1313
  */
 
 /* Commentary:
@@ -138,14 +138,6 @@ void dtkComposerGraphPrivate::addDummyEdge(dtkComposerGraphNode *source, dtkComp
 dtkComposerGraph::dtkComposerGraph(void) : QGraphicsScene(), d(new dtkComposerGraphPrivate)
 {
     d->q = this;
-
-    this->connect(this, SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));
-}
-
-dtkComposerGraph::dtkComposerGraph(const dtkComposerGraph& other) : QGraphicsScene(), d(new dtkComposerGraphPrivate)
-{
-    d->edges = QMultiHash<dtkComposerSceneEdge *, dtkComposerGraphEdge *>(other.d->edges);
-    d->nodes = QMultiHash<dtkComposerSceneNode *, dtkComposerGraphNode *>(other.d->nodes);
 
     this->connect(this, SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));
 }

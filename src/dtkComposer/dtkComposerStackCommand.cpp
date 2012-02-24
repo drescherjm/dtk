@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. févr. 23 18:49:52 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 2137
+ * Last-Updated: Fri Feb 24 15:39:51 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 2139
  */
 
 /* Commentary: 
@@ -168,6 +168,7 @@ void dtkComposerStackCommandCreateNode::redo(void)
     e->parent->layout();
 
     d->graph->addNode(e->node);
+    d->graph->layout();
 
 // -- ??
     if (e->parent->root() || e->parent->flattened() || e->parent->entered())
@@ -199,6 +200,7 @@ void dtkComposerStackCommandCreateNode::undo(void)
     e->parent->layout();
 
     d->graph->removeNode(e->node);
+    d->graph->layout();
 
 // -- ??
     if (e->parent->root() || e->parent->flattened() || e->parent->entered())

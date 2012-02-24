@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: sam. févr. 25 23:43:45 2012 (+0100)
+ * Last-Updated: sam. févr. 25 23:44:08 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1409
+ *     Update #: 1410
  */
 
 /* Commentary:
@@ -281,7 +281,7 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
         // empty composite, add dummy edge between 'begin' and 'end'
 
         // if composite was empty, need to remove dummy edge
-        if (dynamic_cast<dtkComposerSceneNodeComposite *>(node->parent())->nodes().count() == 0) {
+        if (dynamic_cast<dtkComposerSceneNodeComposite *>(node->parent())->nodes().count() == 1) {
             // qDebug() <<  "parent composite no longer empty, remove dummy edge";
             d->removeDummyEdge(  d->begin(node->parent()), d->end(node->parent()), node->parent());
         }
@@ -414,7 +414,7 @@ void dtkComposerGraph::removeEdge(dtkComposerSceneEdge *edge)
     //add back dummy edges if necessary
     dtkComposerSceneNode *scene_src = edge->source()->node();
     dtkComposerSceneNode *scene_dest = edge->destination()->node();
-    d->addDummyEdge(  d->begin(scene_src->parent()), d->begin(scene_src), scene_src->parent());
+    d->addDummyEdge(  d->begin(scene_src->parent()), d->begin(scene_dest), scene_src->parent());
     d->addDummyEdge(  d->end(scene_src), d->end(scene_dest->parent()), scene_src->parent());
 
     d->edges.remove(edge);
@@ -467,7 +467,7 @@ void dtkComposerGraph::layout(void)
     // layouter.layout();
 
     this->update();
-    //    qDebug() << this->toString();
+    // qDebug() << this->toString();
 
     // qDebug() << "nodes:" <<  d->nodes.count();
     // qDebug() << "edges:" <<  d->edges.count();

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb 10 10:17:18 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 24 14:32:01 2012 (+0100)
+ * Last-Updated: Fri Feb 24 14:47:01 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 492
+ *     Update #: 493
  */
 
 /* Commentary: 
@@ -142,7 +142,7 @@ void dtkComposerGraphLayouterPrivate::removeCycles(void)
     foreach(dtkComposerGraphEdge *edge, this->reversed)
         reverse(edge);
 
-    qDebug() << __func__ << this->reversed.count() << "edges reversed";
+    // qDebug() << __func__ << this->reversed.count() << "edges reversed";
 }
 
 void dtkComposerGraphLayouterPrivate::assignLayers(void)

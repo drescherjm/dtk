@@ -1,4 +1,4 @@
-/* dtkComposerNodeFor.cpp --- 
+/* dtkComposerNodeControlFor.cpp --- 
  * 
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
@@ -17,7 +17,7 @@
  * 
  */
 
-#include "dtkComposerNodeFor.h"
+#include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeLeaf.h"
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeComposite.h"
@@ -28,10 +28,10 @@
 #include <dtkCore/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeForPrivate definition
+// dtkComposerNodeControlForPrivate definition
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNodeForPrivate
+class dtkComposerNodeControlForPrivate
 {
 public:    
     dtkComposerNodeBoolean *header;
@@ -43,10 +43,10 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeFor implementation
+// dtkComposerNodeControlFor implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNodeFor::dtkComposerNodeFor(void) : dtkComposerNodeControl(), d(new dtkComposerNodeForPrivate)
+dtkComposerNodeControlFor::dtkComposerNodeControlFor(void) : dtkComposerNodeControl(), d(new dtkComposerNodeControlForPrivate)
 {
     d->header = new dtkComposerNodeBoolean;
     delete d->header->removeEmitter(0);
@@ -64,7 +64,7 @@ dtkComposerNodeFor::dtkComposerNodeFor(void) : dtkComposerNodeControl(), d(new d
     d->incr_block->setTitleHint("Increment");
 }
 
-dtkComposerNodeFor::~dtkComposerNodeFor(void)
+dtkComposerNodeControlFor::~dtkComposerNodeControlFor(void)
 {
     delete d->header;
     delete d->footer;
@@ -76,22 +76,22 @@ dtkComposerNodeFor::~dtkComposerNodeFor(void)
     d = NULL;
 }
 
-int dtkComposerNodeFor::blockCount(void)
+int dtkComposerNodeControlFor::blockCount(void)
 {
     return 3;
 }
 
-dtkComposerNodeLeaf *dtkComposerNodeFor::header(void)
+dtkComposerNodeLeaf *dtkComposerNodeControlFor::header(void)
 {
     return d->header;
 }
 
-dtkComposerNodeLeaf *dtkComposerNodeFor::footer(void)
+dtkComposerNodeLeaf *dtkComposerNodeControlFor::footer(void)
 {
     return d->footer;
 }
 
-dtkComposerNodeComposite *dtkComposerNodeFor::block(int id)
+dtkComposerNodeComposite *dtkComposerNodeControlFor::block(int id)
 {
     if(id == 0)
         return d->cond_block;
@@ -105,47 +105,47 @@ dtkComposerNodeComposite *dtkComposerNodeFor::block(int id)
     return NULL;
 }
 
-void dtkComposerNodeFor::setInputs(void)
+void dtkComposerNodeControlFor::setInputs(void)
 {
     DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
 }
 
-void dtkComposerNodeFor::setConditions(void)
+void dtkComposerNodeControlFor::setConditions(void)
 {
     DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
 }
 
-void dtkComposerNodeFor::setOutputs(void)
+void dtkComposerNodeControlFor::setOutputs(void)
 {
     DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
 }
 
-void dtkComposerNodeFor::setVariables(void)
+void dtkComposerNodeControlFor::setVariables(void)
 {
     DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
 }
 
-int dtkComposerNodeFor::selectBranch(void)
+int dtkComposerNodeControlFor::selectBranch(void)
 {
     return -1;
 }
 
-void dtkComposerNodeFor::begin(void)
+void dtkComposerNodeControlFor::begin(void)
 {
     DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
 }
 
-void dtkComposerNodeFor::end(void)
+void dtkComposerNodeControlFor::end(void)
 {
     DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
 }
 
-QString dtkComposerNodeFor::type(void)
+QString dtkComposerNodeControlFor::type(void)
 {
     return "for";
 }
 
-QString dtkComposerNodeFor::titleHint(void)
+QString dtkComposerNodeControlFor::titleHint(void)
 {
     return "For";
 }

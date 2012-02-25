@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Thu Feb 16 12:45:15 2012 (+0100)
+ * Last-Updated: Sat Feb 25 00:28:21 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 51
+ *     Update #: 83
  */
 
 /* Commentary:
@@ -21,23 +21,24 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
-#include "dtkComposerNodeFor.h"
+#include "dtkComposerNodeControlIf.h"
+#include "dtkComposerNodeControlFor.h"
 #include "dtkComposerSceneNodeLeaf.h"
 
 class dtkComposerFactoryPrivate
 {
 public:
-    QHash<QString, QString> nodes;
+    QMap<QString, QString> primitives;
+    QMap<QString, QString> controls;
 };
 
 dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 {
-    d->nodes.insert("Boolean", "boolean");
-    d->nodes.insert("Boolean Operator", "boolean operator");
+    d->primitives.insert("Boolean", "boolean");
+    d->primitives.insert("Boolean Operator", "boolean operator");
 
-// --
-    d->nodes.insert("For", "for");
-// --
+    d->controls.insert("If", "if");
+    d->controls.insert("For", "for");
 }
 
 dtkComposerFactory::~dtkComposerFactory(void)
@@ -55,15 +56,21 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "boolean operator")
         return new dtkComposerNodeBooleanOperator;
 
-// --
+    if(type == "if")
+        return new dtkComposerNodeControlIf;
+
     if(type == "for")
-        return new dtkComposerNodeFor;
-// --
+        return new dtkComposerNodeControlFor;
 
     return NULL;
 }
 
-QHash<QString, QString> dtkComposerFactory::nodes(void)
+QMap<QString, QString> dtkComposerFactory::primitives(void)
 {
-    return d->nodes;
+    return d->primitives;
+}
+
+QMap<QString, QString> dtkComposerFactory::controls(void)
+{
+    return d->controls;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 24 15:45:17 2012 (+0100)
+ * Last-Updated: Sat Feb 25 00:50:30 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1396
+ *     Update #: 1408
  */
 
 /* Commentary:
@@ -32,7 +32,7 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeControl.h"
-#include "dtkComposerNodeFor.h"
+#include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeLeaf.h"
 #include "dtkComposerSceneEdge.h"
 #include "dtkComposerSceneNode.h"
@@ -200,7 +200,7 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
             // count++;
         }
 
-        if (dynamic_cast<dtkComposerNodeFor *>(wrapee)) {
+        if (dynamic_cast<dtkComposerNodeControlFor *>(wrapee)) {
             dtkComposerGraphNode *vars = new dtkComposerGraphNodeSetVariables(wrapee);
             d->nodes.insertMulti(node, vars);
             this->addItem(vars);
@@ -277,8 +277,6 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
     }
 
     // qDebug() << __func__ << count;
-
-    // this->layout();
 }
 
 void dtkComposerGraph::removeNode(dtkComposerSceneNode *node)
@@ -313,8 +311,6 @@ void dtkComposerGraph::removeNode(dtkComposerSceneNode *node)
     d->nodes.remove(node);
 
     // qDebug() << __func__ << count;
-
-    // this->layout();
 }
 
 void dtkComposerGraph::addEdge(dtkComposerSceneEdge *edge)
@@ -358,8 +354,6 @@ void dtkComposerGraph::addEdge(dtkComposerSceneEdge *edge)
     d->edges.insertMulti(edge, e);
 
     this->addItem(e);
-
-    // this->layout();
 }
 
 void dtkComposerGraph::removeEdge(dtkComposerSceneEdge *edge)
@@ -373,8 +367,6 @@ void dtkComposerGraph::removeEdge(dtkComposerSceneEdge *edge)
 
     foreach (dtkComposerGraphEdge *e, edges)
         this->removeItem(e);
-
-    // this->layout();
 }
 
 dtkComposerGraphEdgeList dtkComposerGraph::edges(void)
@@ -406,16 +398,11 @@ void dtkComposerGraph::removeEdge(dtkComposerGraphEdge *edge)
 
 void dtkComposerGraph::layout(void)
 {
-    dtkComposerGraphLayouter layouter;
-    layouter.setGraph(this);
-    layouter.layout();
+    // dtkComposerGraphLayouter layouter;
+    // layouter.setGraph(this);
+    // layouter.layout();
 
     this->update();
-
-    // qDebug() << "nodes:" <<  d->nodes.count();
-    // qDebug() << "edges:" <<  d->edges.count();
-    // qDebug() << "dummy edges:" <<  d->dummy_edges.count();
-    // qDebug() << "items:" <<  this->items().count();
 }
 
 void dtkComposerGraph::onSelectionChanged(void)

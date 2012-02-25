@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 13:22:54 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jan 31 13:51:20 2012 (+0100)
+ * Last-Updated: Sat Feb 25 00:24:40 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -36,12 +36,6 @@ public:
 
 public:
     void setFactory(dtkComposerFactory *factory);
-
-public slots:
-    void addItem(const QString& node, const QString& type);
-
-public slots:
-    void filter(const QString& text);
 
 protected:
      QMimeData *mimeData(const QList<QTreeWidgetItem *> items) const;

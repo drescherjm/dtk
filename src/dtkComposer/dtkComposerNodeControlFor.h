@@ -1,12 +1,12 @@
-/* dtkComposerNodeFor.h --- 
+/* dtkComposerNodeControlFor.h --- 
  * 
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:12:58 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 24 16:21:43 2012 (+0100)
+ * Last-Updated: Sat Feb 25 00:05:11 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 16
+ *     Update #: 17
  */
 
 /* Commentary: 
@@ -17,23 +17,19 @@
  * 
  */
 
-#ifndef DTKCOMPOSERNODEFOR_H
-#define DTKCOMPOSERNODEFOR_H
+#ifndef DTKCOMPOSERNODECONTROLFOR_H
+#define DTKCOMPOSERNODECONTROLFOR_H
 
 #include "dtkComposerExport.h"
 #include "dtkComposerNodeControl.h"
 
-// /////////////////////////////////////////////////////////////////
-// dtkComposerNodeFor declaration
-// /////////////////////////////////////////////////////////////////
+class dtkComposerNodeControlForPrivate;
 
-class dtkComposerNodeForPrivate;
-
-class DTKCOMPOSER_EXPORT dtkComposerNodeFor : public dtkComposerNodeControl
+class DTKCOMPOSER_EXPORT dtkComposerNodeControlFor : public dtkComposerNodeControl
 {
 public:
-             dtkComposerNodeFor(void);
-    virtual ~dtkComposerNodeFor(void);
+             dtkComposerNodeControlFor(void);
+    virtual ~dtkComposerNodeControlFor(void);
 
 public:
     int blockCount(void);
@@ -57,7 +53,7 @@ public:
     QString titleHint(void);
 
 private:
-    dtkComposerNodeForPrivate *d;
+    dtkComposerNodeControlForPrivate *d;
 };
 
 #endif

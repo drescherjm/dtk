@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: sam. févr. 25 23:45:21 2012 (+0100)
+ * Last-Updated: sam. févr. 25 23:51:31 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1412
+ *     Update #: 1414
  */
 
 /* Commentary:
@@ -145,15 +145,9 @@ void dtkComposerGraphPrivate::remDummyEdge(dtkComposerGraphEdge *edge, dtkCompos
 
 void dtkComposerGraphPrivate::removeDummyEdge(dtkComposerGraphNode *source, dtkComposerGraphNode *destination, dtkComposerSceneNode *node)
 {
-    foreach( dtkComposerGraphEdge *e, dummy_edges.values(node)) {
-        if ((e->source() == begin(node)) && e->destination() == end(node) )  {
-                // qDebug() << "found one dummy edge to remove";
-                edges.remove(0,e);
-                dummy_edges.remove(node, e);
-                q->removeItem(e);
-//                delete e;
-        }
-    }
+    foreach( dtkComposerGraphEdge *e, dummy_edges.values(node))
+        if ((e->source() == begin(node)) && e->destination() == end(node) )
+            remDummyEdge(e,node);
 }
 
 
@@ -322,8 +316,7 @@ void dtkComposerGraph::removeNode(dtkComposerSceneNode *node)
         d->removeDummyEdge(  d->begin(node), d->end(node), node);
     }
 
-    QList<dtkComposerGraphNode *> nodes = d->nodes.values(node);
-    foreach(dtkComposerGraphNode *n, nodes) {
+    foreach(dtkComposerGraphNode *n, d->nodes.values(node)) {
         this->removeItem(n);
         delete n;
     }
@@ -400,7 +393,7 @@ void dtkComposerGraph::removeEdge(dtkComposerSceneEdge *edge)
     d->edges.remove(edge);
     foreach (dtkComposerGraphEdge *e, edges) {
         this->removeItem(e);
-//        delete e;
+        delete e;
     }
 
     // if destination has edges on its input, don't add a dummy edge

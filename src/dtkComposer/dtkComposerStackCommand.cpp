@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. févr. 24 20:08:40 2012 (+0100)
+ * Last-Updated: sam. févr. 25 22:18:39 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 2208
+ *     Update #: 2227
  */
 
 /* Commentary: 
@@ -161,7 +161,7 @@ void dtkComposerStackCommandCreateNode::redo(void)
         e->node->wrap(node);
         e->node->setParent(e->parent);
     }
-    
+
     e->node->setPos(e->position);
 
     e->parent->addNode(e->node);
@@ -169,6 +169,7 @@ void dtkComposerStackCommandCreateNode::redo(void)
 
     d->graph->addNode(e->node);
     d->graph->layout();
+
 
 // -- ??
     if (e->parent->root() || e->parent->flattened() || e->parent->entered())
@@ -196,12 +197,12 @@ void dtkComposerStackCommandCreateNode::undo(void)
 
     e->position = e->node->scenePos();
 
-    e->parent->removeNode(e->node);
-    e->parent->layout();
 
     d->graph->removeNode(e->node);
     d->graph->layout();
 
+    e->parent->removeNode(e->node);
+    e->parent->layout();
 // -- ??
     if (e->parent->root() || e->parent->flattened() || e->parent->entered())
         d->scene->removeItem(e->node);
@@ -884,25 +885,24 @@ void dtkComposerStackCommandCreateGroup::redo(void)
 
     QRectF rect;
 
-    foreach(dtkComposerSceneNode *node, e->nodes) {
+
+    QList<dtkComposerSceneNode *> nodes = e->nodes;
+
+    foreach(dtkComposerSceneNode *node, nodes) {
         rect |= node->sceneBoundingRect();
         e->parent->removeNode(node);
         d->graph->removeNode(node);
         d->scene->removeItem(node);
-        e->node->addNode(node);
-        node->setParent(e->node);
     }
 
-
     e->parent->addNode(e->node);
-
-    foreach(dtkComposerSceneNode *node, e->nodes) {
-        d->graph->removeNode(node);
-
     d->graph->addNode(e->node);
 
+
     // For the Graph, we need to add back nodes after the node group is created
-    foreach(dtkComposerSceneNode *node, e->nodes) {
+    foreach(dtkComposerSceneNode *node, nodes) {
+        e->node->addNode(node);
+        node->setParent(e->node);
         d->graph->addNode(node);
     }
 

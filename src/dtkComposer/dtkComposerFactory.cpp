@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Sat Feb 25 00:28:21 2012 (+0100)
+ * Last-Updated: Sat Feb 25 01:13:09 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 83
+ *     Update #: 101
  */
 
 /* Commentary:
@@ -21,8 +21,10 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
+#include "dtkComposerNodeControlDoWhile.h"
 #include "dtkComposerNodeControlIf.h"
 #include "dtkComposerNodeControlFor.h"
+#include "dtkComposerNodeControlWhile.h"
 #include "dtkComposerSceneNodeLeaf.h"
 
 class dtkComposerFactoryPrivate
@@ -37,8 +39,10 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->primitives.insert("Boolean", "boolean");
     d->primitives.insert("Boolean Operator", "boolean operator");
 
+    d->controls.insert("Do While", "do while");
     d->controls.insert("If", "if");
     d->controls.insert("For", "for");
+    d->controls.insert("While", "while");
 }
 
 dtkComposerFactory::~dtkComposerFactory(void)
@@ -56,11 +60,17 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "boolean operator")
         return new dtkComposerNodeBooleanOperator;
 
+    if(type == "do while")
+        return new dtkComposerNodeControlDoWhile;
+
     if(type == "if")
         return new dtkComposerNodeControlIf;
 
     if(type == "for")
         return new dtkComposerNodeControlFor;
+
+    if(type == "while")
+        return new dtkComposerNodeControlWhile;
 
     return NULL;
 }

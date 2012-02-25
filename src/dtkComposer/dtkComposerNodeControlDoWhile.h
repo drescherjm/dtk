@@ -1,12 +1,12 @@
-/* dtkComposerNodeControlIf.h --- 
+/* dtkComposerNodeControlDoWhile.h --- 
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb 24 16:52:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb 25 01:09:42 2012 (+0100)
+ * Last-Updated: Sat Feb 25 01:07:47 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 5
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -17,19 +17,19 @@
  * 
  */
 
-#ifndef DTKCOMPOSERNODECONTROLIF_H
-#define DTKCOMPOSERNODECONTROLIF_H
+#ifndef DTKCOMPOSERNODECONTROLDOWHILE_H
+#define DTKCOMPOSERNODECONTROLDOWHILE_H
 
 #include "dtkComposerExport.h"
 #include "dtkComposerNodeControl.h"
 
-class dtkComposerNodeControlIfPrivate;
+class dtkComposerNodeControlDoWhilePrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeControlIf : public dtkComposerNodeControl
+class DTKCOMPOSER_EXPORT dtkComposerNodeControlDoWhile : public dtkComposerNodeControl
 {
 public:
-             dtkComposerNodeControlIf(void);
-    virtual ~dtkComposerNodeControlIf(void);
+             dtkComposerNodeControlDoWhile(void);
+    virtual ~dtkComposerNodeControlDoWhile(void);
 
 public:
     int blockCount(void);
@@ -53,7 +53,7 @@ public:
     QString titleHint(void);
 
 private:
-    dtkComposerNodeControlIfPrivate *d;
+    dtkComposerNodeControlDoWhilePrivate *d;
 };
 
 #endif

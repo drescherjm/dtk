@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:52:45 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 15:47:37 2012 (+0100)
+ * Last-Updated: Mon Feb 27 17:15:52 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 106
+ *     Update #: 107
  */
 
 /* Commentary: 
@@ -194,51 +194,3 @@ void dtkComposerNodeBooleanOperatorBinaryNimp::run(void)
 
     d->emitter->setData((a && !b));
 }
-
-// /////////////////////////////////////////////////////////////////
-// 
-// /////////////////////////////////////////////////////////////////
-
-// bool dtkComposerNodeBooleanOperatorPrivate::evaluate(void)
-// {
-//     bool a = receiver_lhs->data();
-//     bool b = receiver_rhs->data();
-
-//     bool value = false;
-
-//     switch(operation) {
-//     case And:
-//         value = a && b;
-//         break;
-//     case Or:
-//         value = a || b;
-//         break;
-//     case Xor:
-//         value = (a && !b) || (!a && b);
-//         break;
-//     case Nand:
-//         value = !(a && b);
-//         break;
-//     case Nor:
-//         value = !(a || b);
-//         break;
-//     case Xnor:
-//         value = ((a && b) || (!a && !b));
-//         break;
-//     case Imp:
-//         value = (!a || b);
-//         break;
-//     case Nimp:
-//         value = (a && !b);
-//         break;
-//     default:
-//         break;
-//     }
-
-//     return value;
-// }
-
-// void dtkComposerNodeBooleanOperator::run(void)
-// {
-//     d->emitter->setData(d->evaluate());
-// }

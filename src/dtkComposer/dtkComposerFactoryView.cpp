@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 13:24:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 12:45:31 2012 (+0100)
+ * Last-Updated: Mon Feb 27 13:02:48 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 78
+ *     Update #: 86
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@ public:
     dtkComposerFactory *factory;
 
 public:
+    QTreeWidgetItem *nodes_s;
     QTreeWidgetItem *nodes_p;
     QTreeWidgetItem *nodes_o;
     QTreeWidgetItem *nodes_c;
@@ -35,6 +36,9 @@ public:
 dtkComposerFactoryView::dtkComposerFactoryView(QWidget *parent) : QTreeWidget(parent), d(new dtkComposerFactoryViewPrivate)
 {
     d->factory = NULL;
+
+    d->nodes_s = new QTreeWidgetItem(this, QStringList() << "Constant nodes");
+    d->nodes_s->setExpanded(true);
 
     d->nodes_p = new QTreeWidgetItem(this, QStringList() << "Primitive nodes");
     d->nodes_p->setExpanded(true);
@@ -66,6 +70,11 @@ dtkComposerFactoryView::~dtkComposerFactoryView(void)
 void dtkComposerFactoryView::setFactory(dtkComposerFactory *factory)
 {
     d->factory = factory;
+
+    foreach(QString node, d->factory->constants().keys()) {
+        QTreeWidgetItem *item = new QTreeWidgetItem(d->nodes_s, QStringList() << node);
+        item->setData(0, Qt::UserRole, QUrl(QString("node:%1").arg(d->factory->constants().value(node))));
+    }
 
     foreach(QString node, d->factory->primitives().keys()) {
         QTreeWidgetItem *item = new QTreeWidgetItem(d->nodes_p, QStringList() << node);

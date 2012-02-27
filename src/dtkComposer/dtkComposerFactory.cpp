@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Mon Feb 27 12:52:36 2012 (+0100)
+ * Last-Updated: Mon Feb 27 13:00:37 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 137
+ *     Update #: 145
  */
 
 /* Commentary:
@@ -26,6 +26,7 @@
 #include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeControlWhile.h"
 #include "dtkComposerNodeInteger.h"
+#include "dtkComposerNodePi.h"
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
 #include "dtkComposerSceneNodeLeaf.h"
@@ -33,6 +34,7 @@
 class dtkComposerFactoryPrivate
 {
 public:
+    QMap<QString, QString> constants;
     QMap<QString, QString> primitives;
     QMap<QString, QString> operators;
     QMap<QString, QString> controls;
@@ -40,6 +42,8 @@ public:
 
 dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 {
+    d->constants.insert("Pi", "pi");
+
     d->primitives.insert("Boolean", "boolean");
     d->primitives.insert("Integer", "integer");
     d->primitives.insert("Real", "real");
@@ -62,6 +66,11 @@ dtkComposerFactory::~dtkComposerFactory(void)
 
 dtkComposerNode *dtkComposerFactory::create(const QString& type)
 {
+    // constant nodes
+
+    if(type == "pi")
+        return new dtkComposerNodePi;
+
     // primitive nodes
 
     if(type == "boolean")
@@ -96,6 +105,11 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
         return new dtkComposerNodeControlWhile;
 
     return NULL;
+}
+
+QMap<QString, QString> dtkComposerFactory::constants(void)
+{
+    return d->constants;
 }
 
 QMap<QString, QString> dtkComposerFactory::primitives(void)

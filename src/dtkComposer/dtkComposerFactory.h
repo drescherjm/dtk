@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:17
  * Version: $Id$
- * Last-Updated: Mon Feb 27 12:43:14 2012 (+0100)
+ * Last-Updated: Mon Feb 27 12:57:32 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 40
+ *     Update #: 44
  */
 
 /* Commentary:
@@ -39,6 +39,7 @@ public slots:
     virtual dtkComposerNode *create(const QString& type);
 
 public:
+    QMap<QString, QString> constants(void);
     QMap<QString, QString> primitives(void);
     QMap<QString, QString> operators(void);
     QMap<QString, QString> controls(void);

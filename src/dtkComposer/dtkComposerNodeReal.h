@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:40:45 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 12:41:11 2012 (+0100)
+ * Last-Updated: Mon Feb 27 16:08:20 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 2
+ *     Update #: 4
  */
 
 /* Commentary: 
@@ -43,7 +43,11 @@ public:
         return "Real";
     }
 
-    inline QString labelHint(int port) {
+    inline QString inputLabelHint(int port) {
+        return "value";
+    }
+
+    inline QString outputLabelHint(int port) {
         return "value";
     }
 

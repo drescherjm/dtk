@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 23 17:11:40 2012 (+0100)
+ * Last-Updated: Mon Feb 27 16:03:38 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 273
+ *     Update #: 275
  */
 
 /* Commentary: 
@@ -185,7 +185,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
 
         foreach(dtkComposerScenePort *port, leaf->inputPorts()) {
 
-            if(port->label() == leaf->wrapee()->labelHint(port->id()))
+            if(port->label() == leaf->wrapee()->inputLabelHint(port->id()))
                 continue;
 
             QDomElement property = document.createElement("port");
@@ -197,7 +197,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
 
         foreach(dtkComposerScenePort *port, leaf->outputPorts()) {
 
-            if(port->label() == leaf->wrapee()->labelHint(port->id()))
+            if(port->label() == leaf->wrapee()->outputLabelHint(port->id()))
                 continue;
 
             QDomElement property = document.createElement("port");

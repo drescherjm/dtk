@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:51:36 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 15:36:44 2012 (+0100)
+ * Last-Updated: Mon Feb 27 16:05:03 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 77
+ *     Update #: 83
  */
 
 /* Commentary: 
@@ -57,13 +57,17 @@ public:
     ~dtkComposerNodeBooleanOperatorBinary(void);
 
 public:
-    inline QString labelHint(int port) {
+    inline QString inputLabelHint(int port) {
         if (port == 0)
             return "lhs";
         else if (port == 1)
             return "rhs";
         else
             return "value";
+    }
+
+    inline QString outputLabelHint(int) {
+        return "value";
     }
 
 protected:

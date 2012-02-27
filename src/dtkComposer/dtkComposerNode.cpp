@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:25:11 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 21 15:17:30 2012 (+0100)
- *           By: tkloczko
- *     Update #: 47
+ * Last-Updated: Mon Feb 27 16:02:27 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 50
  */
 
 /* Commentary: 
@@ -96,7 +96,12 @@ QString dtkComposerNode::titleHint(void)
     return d->title_hint;
 }
 
-QString dtkComposerNode::labelHint(int port)
+QString dtkComposerNode::inputLabelHint(int port)
+{
+    return "port";
+}
+
+QString dtkComposerNode::outputLabelHint(int port)
 {
     return "port";
 }

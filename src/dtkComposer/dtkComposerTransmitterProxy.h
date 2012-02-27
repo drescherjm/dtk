@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Feb 20 11:17:31 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 23 17:17:28 2012 (+0100)
+ * Last-Updated: Fri Feb 24 09:36:52 2012 (+0100)
  *           By: tkloczko
- *     Update #: 12
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -41,9 +41,6 @@ public:
 public:
     LinkMap  leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
     LinkMap rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
-
-public:
-    void clear(void);
 
 private:
     dtkComposerTransmitterProxyPrivate *d;

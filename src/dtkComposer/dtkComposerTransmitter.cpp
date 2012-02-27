@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 22 09:22:39 2012 (+0100)
+ * Last-Updated: Mon Feb 27 10:21:03 2012 (+0100)
  *           By: tkloczko
- *     Update #: 105
+ *     Update #: 132
  */
 
 /* Commentary: 
@@ -30,7 +30,12 @@ public:
     bool active;
     bool required;
 
+public:
     dtkComposerNode *parent;
+
+public:
+    QList<dtkComposerTransmitter *>     next_list;
+    QList<dtkComposerTransmitter *> previous_list;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -109,6 +114,72 @@ bool dtkComposerTransmitter::required(void)
     return d->required;
 }
 
+//! Appends \a transmitter to the list of the transmitters that follow
+//! the current one. 
+/*! 
+ *  This list contains only one reference to each transmitter.
+ */
+void dtkComposerTransmitter::appendNext(dtkComposerTransmitter *transmitter)
+{
+    if (d->next_list.contains(transmitter))
+        return;
+
+    d->next_list << transmitter;
+}
+
+//! Removes \a transmitter from the list of the transmitters that
+//! follow the current one.
+/*! 
+ *  
+ */
+void dtkComposerTransmitter::removeNext(dtkComposerTransmitter *transmitter)
+{
+    d->next_list.removeOne(transmitter);
+}
+
+//! Appends \a transmitter to the list of the transmitters that precede
+//! the current one.
+/*! 
+ *  This list contains only one reference to each transmitter.
+ */
+void dtkComposerTransmitter::appendPrevious(dtkComposerTransmitter *transmitter)
+{
+    if (d->previous_list.contains(transmitter))
+        return;
+
+    d->previous_list << transmitter;
+}
+
+//! Removes \a transmitter from the list of the transmitters that
+//! precede the current one.
+/*! 
+ *  
+ */
+void dtkComposerTransmitter::removePrevious(dtkComposerTransmitter *transmitter)
+{
+    d->previous_list.removeOne(transmitter);
+}
+
+//! Returns a shared copy of the list of the transmitters that follow
+//! the current one.
+/*! 
+ *  
+ */
+QList<dtkComposerTransmitter *> dtkComposerTransmitter::nextList(void)
+{
+    return d->next_list;
+}
+
+//! Returns a shared copy of the list of the transmitters that precede
+//! the current one.
+/*! 
+ *  
+ */
+QList<dtkComposerTransmitter *> dtkComposerTransmitter::previousList(void)
+{
+    return d->previous_list;
+}
+
 //! Returns true when current transmitter and \a transmitter share
 //! data of same type.
 /*! 
@@ -171,6 +242,9 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitter::rightLinks(dtkComposerTr
  */
 bool dtkComposerTransmitter::onTransmittersConnected(dtkComposerTransmitter *source, dtkComposerTransmitter *destination, dtkComposerTransmitterLinkList& valid_links, dtkComposerTransmitterLinkList& invalid_links)
 {
+    source->appendNext(destination);
+    destination->appendPrevious(source);
+
     dtkComposerTransmitterLinkList list;
     list << new dtkComposerTransmitterLink(source, destination);
 
@@ -217,6 +291,9 @@ bool dtkComposerTransmitter::onTransmittersConnected(dtkComposerTransmitter *sou
  */
 bool dtkComposerTransmitter::onTransmittersDisconnected(dtkComposerTransmitter *source, dtkComposerTransmitter *destination, dtkComposerTransmitterLinkList& invalid_links)
 {
+    source->removeNext(destination);
+    destination->removePrevious(source);
+
     dtkComposerTransmitterLinkList list;
     list << new dtkComposerTransmitterLink(source, destination);
 

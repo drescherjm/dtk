@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Feb 20 11:47:39 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 23 17:25:41 2012 (+0100)
+ * Last-Updated: Fri Feb 24 09:35:54 2012 (+0100)
  *           By: tkloczko
- *     Update #: 34
+ *     Update #: 38
  */
 
 /* Commentary: 
@@ -26,8 +26,6 @@
 class dtkComposerTransmitterProxyPrivate
 {
 public:
-    QList<dtkComposerTransmitter *> previous;
-    QList<dtkComposerTransmitter *> next;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -55,10 +53,7 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitterProxy::leftLinks(dtkCompos
 {
     LinkMap link_map;
 
-    if (!d->next.contains(transmitter))
-        d->next << transmitter;
-
-    foreach(dtkComposerTransmitter *p, d->previous) {
+    foreach(dtkComposerTransmitter *p, this->previousList()) {
         list << new dtkComposerTransmitterLink(p, this);
         link_map += p->leftLinks(this, list);
         list.removeLast();
@@ -71,20 +66,11 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitterProxy::rightLinks(dtkCompo
 {
     LinkMap link_map;
 
-    if (!d->previous.contains(transmitter))
-        d->previous << transmitter;
-
-    foreach(dtkComposerTransmitter *n, d->next) {
+    foreach(dtkComposerTransmitter *n, this->nextList()) {
         list << new dtkComposerTransmitterLink(this, n);
         link_map += n->rightLinks(this, list);
         list.removeLast();
     }
 
     return link_map;
-}
-
-void dtkComposerTransmitterProxy::clear(void)
-{
-    d->previous.clear();
-    d->next.clear();
 }

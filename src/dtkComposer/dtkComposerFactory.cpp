@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Mon Feb 27 12:46:32 2012 (+0100)
+ * Last-Updated: Mon Feb 27 12:52:36 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 131
+ *     Update #: 137
  */
 
 /* Commentary:
@@ -27,6 +27,7 @@
 #include "dtkComposerNodeControlWhile.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeReal.h"
+#include "dtkComposerNodeString.h"
 #include "dtkComposerSceneNodeLeaf.h"
 
 class dtkComposerFactoryPrivate
@@ -42,6 +43,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->primitives.insert("Boolean", "boolean");
     d->primitives.insert("Integer", "integer");
     d->primitives.insert("Real", "real");
+    d->primitives.insert("String", "string");
 
     d->operators.insert("Boolean Operator", "boolean operator");
 
@@ -70,6 +72,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "real")
         return new dtkComposerNodeReal;
+
+    if(type == "string")
+        return new dtkComposerNodeString;
 
     // operator nodes
 

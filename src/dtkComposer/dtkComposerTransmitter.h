@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 21 10:12:27 2012 (+0100)
+ * Last-Updated: Fri Feb 24 09:54:48 2012 (+0100)
  *           By: tkloczko
- *     Update #: 67
+ *     Update #: 74
  */
 
 /* Commentary: 
@@ -55,6 +55,16 @@ public:
 
     bool   active(void);
     bool required(void);
+
+protected:
+    void appendNext(dtkComposerTransmitter *transmitter);
+    void removeNext(dtkComposerTransmitter *transmitter);
+    
+    void appendPrevious(dtkComposerTransmitter *transmitter);
+    void removePrevious(dtkComposerTransmitter *transmitter);
+
+    QList<dtkComposerTransmitter *>     nextList(void);
+    QList<dtkComposerTransmitter *> previousList(void);
 
 public:
     virtual bool    connect(dtkComposerTransmitter *transmitter);

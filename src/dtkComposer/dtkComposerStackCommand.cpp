@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 15:49:37 2012 (+0100)
- *           By: tkloczko
- *     Update #: 2315
+ * Last-Updated: lun. févr. 27 17:06:35 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 2318
  */
 
 /* Commentary: 
@@ -478,6 +478,10 @@ void dtkComposerStackCommandCreateEdge::setParent(void)
         e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->source->node()->parent()->parent());
     else if(e->destination->node()->parent()->parent() == e->source->node()->parent())
         e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->destination->node()->parent()->parent());
+    else if(e->source->node()->parent()->parent() == e->destination->node())
+        e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->destination->node());
+    else if(e->destination->node()->parent()->parent() == e->source->node())
+        e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->source->node());
     else
         qDebug() << __func__ << "Unhandled case";
 }
@@ -525,6 +529,9 @@ void dtkComposerStackCommandDestroyEdge::redo(void)
     if(!e->parent)
         return;
 
+    if(!d->graph)
+        return;
+
     // Setting up data flow
 
     dtkComposerTransmitterDisconnection(d->scene->root(), e->parent, e->edge);
@@ -551,6 +558,9 @@ void dtkComposerStackCommandDestroyEdge::undo(void)
         return;
 
     if(!e->parent)
+        return;
+
+    if(!d->graph)
         return;
 
     e->edge->link();
@@ -1952,7 +1962,7 @@ void dtkComposerStackCommandDestroyPort::redo(void)
 
     foreach(dtkComposerStackCommandDestroyEdge *destroy_left_edge, e->destroy_left_edges)
         destroy_left_edge->redo();
-
+        
     foreach(dtkComposerStackCommandDestroyEdge *destroy_right_edge, e->destroy_right_edges)
         destroy_right_edge->redo();
 

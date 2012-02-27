@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:51:36 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 16:05:03 2012 (+0100)
+ * Last-Updated: Mon Feb 27 17:15:04 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 83
+ *     Update #: 88
  */
 
 /* Commentary: 
@@ -36,7 +36,11 @@ public:
     ~dtkComposerNodeBooleanOperatorUnary(void);
 
 public:
-    inline QString labelHint(int) {
+    inline QString inputLabelHint(int) {
+        return "value";
+    }
+
+    inline QString outputLabelHint(int) {
         return "value";
     }
 

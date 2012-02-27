@@ -4,8 +4,13 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
+<<<<<<< HEAD
  * Last-Updated: Mon Feb 27 17:19:55 2012 (+0100)
  *           By: David Rey
+=======
+ * Last-Updated: Mon Feb 27 17:07:30 2012 (+0100)
+ *           By: Julien Wintz
+>>>>>>> efe2353c3c8705b6181286cfa94a720bb5da5ad7
  *     Update #: 225
  */
 
@@ -27,10 +32,12 @@
 #include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeControlForEach.h"
 #include "dtkComposerNodeControlWhile.h"
+#include "dtkComposerNodeList.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
+#include "dtkComposerNodeVector.h"
 #include "dtkComposerSceneNodeLeaf.h"
 
 class dtkComposerFactoryPrivate
@@ -38,6 +45,7 @@ class dtkComposerFactoryPrivate
 public:
     QMap<QString, QString> constants;
     QMap<QString, QString> primitives;
+    QMap<QString, QString> containers;;
     QMap<QString, QString> operators;
     QMap<QString, QString> controls;
 };
@@ -51,6 +59,9 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->primitives.insert("Integer", "integer");
     d->primitives.insert("Real", "real");
     d->primitives.insert("String", "string");
+    
+    d->containers.insert("List", "list");
+    d->containers.insert("Vector", "vector");
 
     d->operators.insert("Abs", "abs");
     d->operators.insert("Acos", "acos");
@@ -129,6 +140,14 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "string")
         return new dtkComposerNodeString;
+
+    // container nodes
+
+    if(type == "list")
+        return new dtkComposerNodeList;
+
+    if(type == "vector")
+        return new dtkComposerNodeVector;
 
     // operator nodes
 
@@ -277,6 +296,11 @@ QMap<QString, QString> dtkComposerFactory::constants(void)
 QMap<QString, QString> dtkComposerFactory::primitives(void)
 {
     return d->primitives;
+}
+
+QMap<QString, QString> dtkComposerFactory::containers(void)
+{
+    return d->containers;
 }
 
 QMap<QString, QString> dtkComposerFactory::operators(void)

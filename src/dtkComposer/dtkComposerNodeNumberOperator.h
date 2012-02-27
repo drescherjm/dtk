@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Mon Feb 27 14:19:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 16:15:09 2012 (+0100)
+ * Last-Updated: Mon Feb 27 17:22:49 2012 (+0100)
  *           By: David Rey
- *     Update #: 34
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -35,7 +35,11 @@ public:
      dtkComposerNodeNumberOperatorUnary(void);
     ~dtkComposerNodeNumberOperatorUnary(void);
 
-    inline QString labelHint(int) {
+    inline QString inputLabelHint(int) {
+        return "value";
+    }
+
+    inline QString outputLabelHint(int) {
         return "value";
     }
 
@@ -55,13 +59,17 @@ public:
      dtkComposerNodeNumberOperatorBinary(void);
     ~dtkComposerNodeNumberOperatorBinary(void);
 
-    inline QString labelHint(int port) {
+    inline QString inputLabelHint(int port) {
         if (port == 0)
             return "lhs";
         else if (port == 1) 
             return "rhs";
         else
             return "value";
+    }
+
+    inline QString outputLabelHint(int) {
+        return "value";
     }
 
 protected:
@@ -80,13 +88,17 @@ public:
      dtkComposerNodeNumberComparator(void);
     ~dtkComposerNodeNumberComparator(void);
 
-    inline QString labelHint(int port) {
+    inline QString inputLabelHint(int port) {
         if (port == 0)
             return "lhs";
         else if (port == 1) 
             return "rhs";
         else
             return "value";
+    }
+
+    inline QString outputLabelHint(int) {
+        return "value";
     }
 
 protected:
@@ -489,6 +501,177 @@ public:
 
     inline QString titleHint(void) {
         return "Abs";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberOperatorBinary - EUCLDIV
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryEucldiv : public dtkComposerNodeNumberOperatorBinary
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "eucldiv";
+    }
+
+    inline QString titleHint(void) {
+        return "Eucldiv";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberOperatorBinary - LOGN
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryLogn : public dtkComposerNodeNumberOperatorBinary
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "logn";
+    }
+
+    inline QString titleHint(void) {
+        return "Logn";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberOperatorBinary - MINUS
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryMinus : public dtkComposerNodeNumberOperatorBinary
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "minus";
+    }
+
+    inline QString titleHint(void) {
+        return "Minus";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberOperatorBinary - MODULO
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryModulo : public dtkComposerNodeNumberOperatorBinary
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "modulo";
+    }
+
+    inline QString titleHint(void) {
+        return "Modulo";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberOperatorBinary - MULT
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryMult : public dtkComposerNodeNumberOperatorBinary
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "mult";
+    }
+
+    inline QString titleHint(void) {
+        return "Mult";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberOperatorBinary - PLUS
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryPlus : public dtkComposerNodeNumberOperatorBinary
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "plus";
+    }
+
+    inline QString titleHint(void) {
+        return "Plus";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberOperatorBinary - POSNTHROOT
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryPosnthroot : public dtkComposerNodeNumberOperatorBinary
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "posnthroot";
+    }
+
+    inline QString titleHint(void) {
+        return "Posnthroot";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberOperatorBinary - POWER
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryPower : public dtkComposerNodeNumberOperatorBinary
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "power";
+    }
+
+    inline QString titleHint(void) {
+        return "Power";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberOperatorBinary - RATIO
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryRatio : public dtkComposerNodeNumberOperatorBinary
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "ratio";
+    }
+
+    inline QString titleHint(void) {
+        return "Ratio";
     }
 };
 

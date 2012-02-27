@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Mon Feb 27 16:43:34 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 205
+ * Last-Updated: Mon Feb 27 17:29:09 2012 (+0100)
+ *           By: David Rey
+ *     Update #: 226
  */
 
 /* Commentary:
@@ -27,10 +27,12 @@
 #include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeControlForEach.h"
 #include "dtkComposerNodeControlWhile.h"
+#include "dtkComposerNodeList.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
+#include "dtkComposerNodeVector.h"
 #include "dtkComposerSceneNodeLeaf.h"
 
 class dtkComposerFactoryPrivate
@@ -38,6 +40,7 @@ class dtkComposerFactoryPrivate
 public:
     QMap<QString, QString> constants;
     QMap<QString, QString> primitives;
+    QMap<QString, QString> containers;;
     QMap<QString, QString> operators;
     QMap<QString, QString> controls;
 };
@@ -51,6 +54,9 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->primitives.insert("Integer", "integer");
     d->primitives.insert("Real", "real");
     d->primitives.insert("String", "string");
+    
+    d->containers.insert("List", "list");
+    d->containers.insert("Vector", "vector");
 
     d->operators.insert("Abs", "abs");
     d->operators.insert("Acos", "acos");
@@ -73,6 +79,15 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->operators.insert("Square", "square");
     d->operators.insert("Sqrt", "sqrt");
     d->operators.insert("Tan", "tan");
+    d->operators.insert("Eucldiv", "eucldiv");
+    d->operators.insert("Logn", "logn");
+    d->operators.insert("Minus", "minus");
+    d->operators.insert("Modulo", "modulo");
+    d->operators.insert("Mult", "mult");
+    d->operators.insert("Plus", "plus");
+    d->operators.insert("Posnthroot", "posnthroot");
+    d->operators.insert("Power", "power");
+    d->operators.insert("Ratio", "ratio");
     d->operators.insert("Not", "not");
     d->operators.insert("And", "and");
     d->operators.insert("Or", "or");
@@ -120,6 +135,14 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "string")
         return new dtkComposerNodeString;
+
+    // container nodes
+
+    if(type == "list")
+        return new dtkComposerNodeList;
+
+    if(type == "vector")
+        return new dtkComposerNodeVector;
 
     // operator nodes
 
@@ -213,6 +236,33 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if (type =="tan")
         return new dtkComposerNodeNumberOperatorUnaryTan;
 
+    if (type =="eucldiv")
+        return new dtkComposerNodeNumberOperatorBinaryEucldiv;
+
+    if (type =="logn")
+        return new dtkComposerNodeNumberOperatorBinaryLogn;
+
+    if (type =="minus")
+        return new dtkComposerNodeNumberOperatorBinaryMinus;
+
+    if (type =="modulo")
+        return new dtkComposerNodeNumberOperatorBinaryModulo;
+
+    if (type =="mult")
+        return new dtkComposerNodeNumberOperatorBinaryMult;
+
+    if (type =="plus")
+        return new dtkComposerNodeNumberOperatorBinaryPlus;
+
+    if (type =="posnthroot")
+        return new dtkComposerNodeNumberOperatorBinaryPosnthroot;
+
+    if (type =="power")
+        return new dtkComposerNodeNumberOperatorBinaryPower;
+
+    if (type =="ratio")
+        return new dtkComposerNodeNumberOperatorBinaryRatio;
+
     // control nodes
 
     if(type == "do while")
@@ -241,6 +291,11 @@ QMap<QString, QString> dtkComposerFactory::constants(void)
 QMap<QString, QString> dtkComposerFactory::primitives(void)
 {
     return d->primitives;
+}
+
+QMap<QString, QString> dtkComposerFactory::containers(void)
+{
+    return d->containers;
 }
 
 QMap<QString, QString> dtkComposerFactory::operators(void)

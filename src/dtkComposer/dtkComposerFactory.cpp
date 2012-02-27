@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Sat Feb 25 01:13:09 2012 (+0100)
+ * Last-Updated: Mon Feb 27 12:52:36 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 101
+ *     Update #: 137
  */
 
 /* Commentary:
@@ -25,19 +25,27 @@
 #include "dtkComposerNodeControlIf.h"
 #include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeControlWhile.h"
+#include "dtkComposerNodeInteger.h"
+#include "dtkComposerNodeReal.h"
+#include "dtkComposerNodeString.h"
 #include "dtkComposerSceneNodeLeaf.h"
 
 class dtkComposerFactoryPrivate
 {
 public:
     QMap<QString, QString> primitives;
+    QMap<QString, QString> operators;
     QMap<QString, QString> controls;
 };
 
 dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 {
     d->primitives.insert("Boolean", "boolean");
-    d->primitives.insert("Boolean Operator", "boolean operator");
+    d->primitives.insert("Integer", "integer");
+    d->primitives.insert("Real", "real");
+    d->primitives.insert("String", "string");
+
+    d->operators.insert("Boolean Operator", "boolean operator");
 
     d->controls.insert("Do While", "do while");
     d->controls.insert("If", "if");
@@ -54,11 +62,26 @@ dtkComposerFactory::~dtkComposerFactory(void)
 
 dtkComposerNode *dtkComposerFactory::create(const QString& type)
 {
+    // primitive nodes
+
     if(type == "boolean")
         return new dtkComposerNodeBoolean;
 
+    if(type == "integer")
+        return new dtkComposerNodeInteger;
+
+    if(type == "real")
+        return new dtkComposerNodeReal;
+
+    if(type == "string")
+        return new dtkComposerNodeString;
+
+    // operator nodes
+
     if(type == "boolean operator")
         return new dtkComposerNodeBooleanOperator;
+
+    // control nodes
 
     if(type == "do while")
         return new dtkComposerNodeControlDoWhile;
@@ -78,6 +101,11 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 QMap<QString, QString> dtkComposerFactory::primitives(void)
 {
     return d->primitives;
+}
+
+QMap<QString, QString> dtkComposerFactory::operators(void)
+{
+    return d->operators;
 }
 
 QMap<QString, QString> dtkComposerFactory::controls(void)

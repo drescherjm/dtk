@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Mon Feb 27 16:37:17 2012 (+0100)
+ * Last-Updated: Mon Feb 27 16:43:34 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 203
+ *     Update #: 205
  */
 
 /* Commentary:
@@ -28,6 +28,7 @@
 #include "dtkComposerNodeControlForEach.h"
 #include "dtkComposerNodeControlWhile.h"
 #include "dtkComposerNodeInteger.h"
+#include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
 #include "dtkComposerSceneNodeLeaf.h"
@@ -51,6 +52,27 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->primitives.insert("Real", "real");
     d->primitives.insert("String", "string");
 
+    d->operators.insert("Abs", "abs");
+    d->operators.insert("Acos", "acos");
+    d->operators.insert("Asin", "asin");
+    d->operators.insert("Atan", "atan");
+    d->operators.insert("Ceil", "ceil");
+    d->operators.insert("Cos", "cos");
+    d->operators.insert("Decr", "decr");
+    d->operators.insert("Deg2Rad", "deg2rad");
+    d->operators.insert("Exp", "exp");
+    d->operators.insert("Floor", "floor");
+    d->operators.insert("Incr", "incr");
+    d->operators.insert("Inv", "inv");
+    d->operators.insert("Ln", "ln");
+    d->operators.insert("Log10", "log10");
+    d->operators.insert("Opp", "opp");
+    d->operators.insert("Round", "round");
+    d->operators.insert("Rad2Deg", "rad2deg");
+    d->operators.insert("Sin", "sin");
+    d->operators.insert("Square", "square");
+    d->operators.insert("Sqrt", "sqrt");
+    d->operators.insert("Tan", "tan");
     d->operators.insert("Not", "not");
     d->operators.insert("And", "and");
     d->operators.insert("Or", "or");
@@ -127,6 +149,69 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "nimp")
         return new dtkComposerNodeBooleanOperatorBinaryNimp;
+
+    if(type == "abs")
+        return new dtkComposerNodeNumberOperatorUnaryAbs;
+
+    if(type == "acos")
+        return new dtkComposerNodeNumberOperatorUnaryAcos;
+
+    if(type == "asin")
+        return new dtkComposerNodeNumberOperatorUnaryAsin;
+
+    if(type == "atan")
+        return new dtkComposerNodeNumberOperatorUnaryAtan;
+
+    if (type =="ceil")
+        return new dtkComposerNodeNumberOperatorUnaryCeil;
+
+    if (type =="cos")
+        return new dtkComposerNodeNumberOperatorUnaryCos;
+
+    if (type =="decr")
+        return new dtkComposerNodeNumberOperatorUnaryDecr;
+
+    if (type =="deg2rad")
+        return new dtkComposerNodeNumberOperatorUnaryDeg2Rad;
+
+    if (type =="exp")
+        return new dtkComposerNodeNumberOperatorUnaryExp;
+
+    if (type =="floor")
+        return new dtkComposerNodeNumberOperatorUnaryFloor;
+
+    if (type =="incr")
+        return new dtkComposerNodeNumberOperatorUnaryIncr;
+
+    if (type =="inv")
+        return new dtkComposerNodeNumberOperatorUnaryInv;
+
+    if (type =="ln")
+        return new dtkComposerNodeNumberOperatorUnaryLn;
+
+    if (type =="log10")
+        return new dtkComposerNodeNumberOperatorUnaryLog10;
+
+    if (type =="opp")
+        return new dtkComposerNodeNumberOperatorUnaryOpp;
+
+    if (type =="rad2deg")
+        return new dtkComposerNodeNumberOperatorUnaryRad2Deg;
+
+    if (type =="round")
+        return new dtkComposerNodeNumberOperatorUnaryRound;
+
+    if (type =="sin")
+        return new dtkComposerNodeNumberOperatorUnarySin;
+
+    if (type =="square")
+        return new dtkComposerNodeNumberOperatorUnarySquare;
+
+    if (type =="sqrt")
+        return new dtkComposerNodeNumberOperatorUnarySqrt;
+
+    if (type =="tan")
+        return new dtkComposerNodeNumberOperatorUnaryTan;
 
     // control nodes
 

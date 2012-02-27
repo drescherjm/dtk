@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb 25 01:06:23 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 22
+ * Last-Updated: lun. févr. 27 10:51:28 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -33,10 +33,11 @@
 
 class dtkComposerNodeControlWhilePrivate
 {
-public:    
+public:
     dtkComposerNodeBoolean *header;
     dtkComposerNodeBoolean *footer;
 
+    dtkComposerNodeComposite *cond_block;
     dtkComposerNodeComposite *body_block;
 };
 
@@ -52,6 +53,9 @@ dtkComposerNodeControlWhile::dtkComposerNodeControlWhile(void) : dtkComposerNode
     d->footer = new dtkComposerNodeBoolean;
     delete d->footer->removeReceiver(0);
 
+    d->cond_block = new dtkComposerNodeComposite;
+    d->cond_block->setTitleHint("Conditional");
+
     d->body_block = new dtkComposerNodeComposite;
     d->body_block->setTitleHint("Body");
 }
@@ -60,6 +64,7 @@ dtkComposerNodeControlWhile::~dtkComposerNodeControlWhile(void)
 {
     delete d->header;
     delete d->footer;
+    delete d->cond_block;
     delete d->body_block;
     delete d;
 
@@ -68,7 +73,7 @@ dtkComposerNodeControlWhile::~dtkComposerNodeControlWhile(void)
 
 int dtkComposerNodeControlWhile::blockCount(void)
 {
-    return 1;
+    return 2;
 }
 
 dtkComposerNodeLeaf *dtkComposerNodeControlWhile::header(void)
@@ -84,6 +89,9 @@ dtkComposerNodeLeaf *dtkComposerNodeControlWhile::footer(void)
 dtkComposerNodeComposite *dtkComposerNodeControlWhile::block(int id)
 {
     if(id == 0)
+        return d->cond_block;
+
+    if(id == 1)
         return d->body_block;
 
     return NULL;

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:17
  * Version: $Id$
- * Last-Updated: Sat Feb 25 00:28:28 2012 (+0100)
+ * Last-Updated: Mon Feb 27 12:43:14 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 37
+ *     Update #: 40
  */
 
 /* Commentary:
@@ -40,6 +40,7 @@ public slots:
 
 public:
     QMap<QString, QString> primitives(void);
+    QMap<QString, QString> operators(void);
     QMap<QString, QString> controls(void);
 
 private:

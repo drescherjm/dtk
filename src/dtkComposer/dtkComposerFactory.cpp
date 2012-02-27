@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Mon Feb 27 16:12:18 2012 (+0100)
+ * Last-Updated: Mon Feb 27 16:37:17 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 190
+ *     Update #: 203
  */
 
 /* Commentary:
@@ -21,13 +21,13 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
+#include "dtkComposerNodeConstants.h"
 #include "dtkComposerNodeControlDoWhile.h"
 #include "dtkComposerNodeControlIf.h"
 #include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeControlForEach.h"
 #include "dtkComposerNodeControlWhile.h"
 #include "dtkComposerNodeInteger.h"
-#include "dtkComposerNodePi.h"
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
 #include "dtkComposerSceneNodeLeaf.h"
@@ -44,6 +44,7 @@ public:
 dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 {
     d->constants.insert("Pi", "pi");
+    d->constants.insert("E", "e");
 
     d->primitives.insert("Boolean", "boolean");
     d->primitives.insert("Integer", "integer");
@@ -80,6 +81,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "pi")
         return new dtkComposerNodePi;
+
+    if(type == "e")
+        return new dtkComposerNodeE;
 
     // primitive nodes
 

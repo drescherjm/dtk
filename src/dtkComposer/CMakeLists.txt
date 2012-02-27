@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: lun. févr. 27 15:33:49 2012 (+0100)
-##           By: Nicolas Niclausse
-##     Update #: 393
+## Last-Updated: Mon Feb 27 16:34:14 2012 (+0100)
+##           By: Julien Wintz
+##     Update #: 403
 ######################################################################
 ##
 ### Commentary:
@@ -51,6 +51,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeBoolean.h
   dtkComposerNodeBooleanOperator.h
   dtkComposerNodeComposite.h
+  dtkComposerNodeConstants.h
   dtkComposerNodeControl.h
   dtkComposerNodeControlDoWhile.h
   dtkComposerNodeControlIf.h
@@ -59,7 +60,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeControlWhile.h
   dtkComposerNodeInteger.h
   dtkComposerNodeLeaf.h
-  dtkComposerNodePi.h
   dtkComposerNodeReal.h
   dtkComposerNodeString.h
   dtkComposerReceiver.h
@@ -127,6 +127,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeBoolean.cpp
   dtkComposerNodeBooleanOperator.cpp
   dtkComposerNodeComposite.cpp
+  dtkComposerNodeConstants.cpp
   dtkComposerNodeControl.cpp
   dtkComposerNodeControlDoWhile.cpp
   dtkComposerNodeControlIf.cpp
@@ -135,7 +136,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeControlWhile.cpp
   dtkComposerNodeInteger.cpp
   dtkComposerNodeLeaf.cpp
-  dtkComposerNodePi.cpp
   dtkComposerNodeReal.cpp
   dtkComposerNodeString.cpp
   dtkComposerScene.cpp

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 23 16:53:25 2012 (+0100)
+ * Last-Updated: Fri Feb 24 16:44:33 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 394
+ *     Update #: 429
  */
 
 /* Commentary: 
@@ -17,8 +17,10 @@
  * 
  */
 
+#include "dtkComposerNode.h"
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeComposite.h"
+#include "dtkComposerNodeLeaf.h"
 #include "dtkComposerSceneEdge.h"
 #include "dtkComposerSceneNodeComposite.h"
 #include "dtkComposerSceneNodeControl.h"
@@ -48,42 +50,6 @@ dtkComposerSceneNodeControl::dtkComposerSceneNodeControl(void) : dtkComposerScen
 
     d->header = NULL;
     d->footer = NULL;
-
-// -- Development code
-
-    dtkComposerSceneNodeLeaf *header = new dtkComposerSceneNodeLeaf;
-    header->addInputPort(new dtkComposerScenePort(0, dtkComposerScenePort::Input, "variable", header));
-    header->setParent(this);
-
-    dtkComposerSceneNodeComposite *cond_block = new dtkComposerSceneNodeComposite;
-    cond_block->wrap(new dtkComposerNodeComposite);
-    cond_block->setParent(this);
-    cond_block->setTitle("Conditional");
-    
-    dtkComposerSceneNodeComposite *body_block = new dtkComposerSceneNodeComposite;
-    body_block->wrap(new dtkComposerNodeComposite);
-    body_block->setParent(this);
-    body_block->setTitle("Body");
-
-    dtkComposerSceneNodeComposite *incr_block = new dtkComposerSceneNodeComposite;
-    incr_block->wrap(new dtkComposerNodeComposite);
-    incr_block->setParent(this);
-    incr_block->setTitle("Incrementat");
-
-    dtkComposerSceneNodeLeaf *footer = new dtkComposerSceneNodeLeaf;
-    footer->addOutputPort(new dtkComposerScenePort(0, dtkComposerScenePort::Output, footer));
-    footer->setParent(this);
-
-// --
-
-    this->setHeader(header);
-    this->setFooter(footer);
-
-    this->addBlock(cond_block);
-    this->addBlock(body_block);
-    this->addBlock(incr_block);
-
-// -- Development code
 }
 
 dtkComposerSceneNodeControl::~dtkComposerSceneNodeControl(void)
@@ -100,10 +66,29 @@ void dtkComposerSceneNodeControl::wrap(dtkComposerNode *wrapee)
     if(!control)
         return;
 
-    dtkComposerSceneNode::wrap(wrapee);    
+    d->header = new dtkComposerSceneNodeLeaf;
+    d->header->wrap(control->header());
+    d->header->setParent(this);
+    d->header->setTitle(wrapee->titleHint());
+    this->setHeader(d->header);
+
+    for(int i = 0; i < control->blockCount(); i++) {
     
-    if (d->header)
-        d->header->setTitle(wrapee->titleHint());
+        dtkComposerSceneNodeComposite *block = new dtkComposerSceneNodeComposite;
+        block->wrap(control->block(i));
+        block->setParent(this);
+        // block->setTitle(block->titleHint());
+        this->addBlock(block);
+
+    }
+    
+    d->footer = new dtkComposerSceneNodeLeaf;
+    d->footer->wrap(control->footer());
+    d->footer->setParent(this);
+    d->footer->setTitle("");
+    this->setFooter(d->footer);
+
+    dtkComposerSceneNode::wrap(wrapee);
 }
 
 QList<dtkComposerSceneNodeComposite *> dtkComposerSceneNodeControl::blocks(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 21 09:13:03 2012 (+0100)
- *           By: tkloczko
- *     Update #: 176
+ * Last-Updated: Sat Feb 25 01:21:34 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 187
  */
 
 /* Commentary: 
@@ -97,6 +97,9 @@ void dtkComposerSceneNodeLeaf::layout(void)
             d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->inputPorts().count() * this->inputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->inputPorts().count()-1) * port_spacing + header));
         else
             d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->outputPorts().count() * this->outputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->outputPorts().count()-1) * port_spacing + header));
+
+    else if(this->embedded())
+        d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), port_margin_top + port_margin_bottom + 10));
 }
 
 void dtkComposerSceneNodeLeaf::resize(qreal width, qreal height)

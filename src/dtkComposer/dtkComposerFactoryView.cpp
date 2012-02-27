@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 13:24:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  2 10:11:10 2012 (+0100)
+ * Last-Updated: Sat Feb 25 00:48:55 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 38
+ *     Update #: 65
  */
 
 /* Commentary: 
@@ -26,7 +26,8 @@ public:
     dtkComposerFactory *factory;
 
 public:
-    QTreeWidgetItem *root;
+    QTreeWidgetItem *nodes_p;
+    QTreeWidgetItem *nodes_c;
     QTreeWidgetItem *note;
 };
 
@@ -34,8 +35,11 @@ dtkComposerFactoryView::dtkComposerFactoryView(QWidget *parent) : QTreeWidget(pa
 {
     d->factory = NULL;
 
-    d->root = new QTreeWidgetItem(this, QStringList() << "Nodes");
-    d->root->setExpanded(true);
+    d->nodes_p = new QTreeWidgetItem(this, QStringList() << "Primitive nodes");
+    d->nodes_p->setExpanded(true);
+
+    d->nodes_c = new QTreeWidgetItem(this, QStringList() << "Control nodes");
+    d->nodes_c->setExpanded(true);
 
     d->note = new QTreeWidgetItem(this, QStringList() << "Note");
     d->note->setData(0, Qt::UserRole, QUrl(QString("note://")));
@@ -59,25 +63,16 @@ void dtkComposerFactoryView::setFactory(dtkComposerFactory *factory)
 {
     d->factory = factory;
 
-    foreach(QString node, d->factory->nodes().keys())
-        this->addItem(node, d->factory->nodes().value(node));
-}
+    foreach(QString node, d->factory->primitives().keys()) {
+        QTreeWidgetItem *item = new QTreeWidgetItem(d->nodes_p, QStringList() << node);
+        item->setData(0, Qt::UserRole, QUrl(QString("node:%1").arg(d->factory->primitives().value(node))));
+        // this->addTopLevelItem(item);
+    }
 
-void dtkComposerFactoryView::addItem(const QString& node, const QString& type)
-{
-    QTreeWidgetItem *item = new QTreeWidgetItem(d->root, QStringList() << node);
-    item->setData(0, Qt::UserRole, QUrl(QString("node:%1").arg(type)));
-
-    this->addTopLevelItem(item);
-}
-
-void dtkComposerFactoryView::filter(const QString& text)
-{
-    for(int i = 0; i < d->root->childCount(); i++) {
-        if (d->root->child(i)->text(0).contains(text))
-            d->root->child(i)->setHidden(false);
-        else
-            d->root->child(i)->setHidden(true);
+    foreach(QString node, d->factory->controls().keys()) {
+        QTreeWidgetItem *item = new QTreeWidgetItem(d->nodes_c, QStringList() << node);
+        item->setData(0, Qt::UserRole, QUrl(QString("node:%1").arg(d->factory->controls().value(node))));
+        // this->addTopLevelItem(item);
     }
 }
 

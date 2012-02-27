@@ -4,9 +4,15 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:42:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. févr. 22 08:57:11 2012 (+0100)
+<<<<<<< HEAD
+ * Last-Updated: Fri Feb 24 14:21:15 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 53
+=======
+ * Last-Updated: ven. févr. 24 14:51:51 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 52
+ *     Update #: 54
+>>>>>>> add dummy edge for empty compistes and some improvement in add/remove
  */
 
 /* Commentary: 
@@ -36,7 +42,6 @@ class dtkComposerGraph : public QGraphicsScene
 
 public:
      dtkComposerGraph(void);
-     dtkComposerGraph(const dtkComposerGraph& other);
     ~dtkComposerGraph(void);
 
 public:
@@ -63,6 +68,7 @@ public:
 
 public:
     void layout(void);
+    QString toString(void);
 
 protected slots:
     void onSelectionChanged(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 10:18:34 2012 (+0100)
+ * Last-Updated: Mon Feb 27 10:41:59 2012 (+0100)
  *           By: tkloczko
- *     Update #: 2255
+ *     Update #: 2257
  */
 
 /* Commentary: 
@@ -161,13 +161,15 @@ void dtkComposerStackCommandCreateNode::redo(void)
         e->node->wrap(node);
         e->node->setParent(e->parent);
     }
-    
+
     e->node->setPos(e->position);
 
     e->parent->addNode(e->node);
     e->parent->layout();
 
     d->graph->addNode(e->node);
+    d->graph->layout();
+
 
 // -- ??
     if (e->parent->root() || e->parent->flattened() || e->parent->entered())
@@ -195,11 +197,12 @@ void dtkComposerStackCommandCreateNode::undo(void)
 
     e->position = e->node->scenePos();
 
-    e->parent->removeNode(e->node);
-    e->parent->layout();
 
     d->graph->removeNode(e->node);
+    d->graph->layout();
 
+    e->parent->removeNode(e->node);
+    e->parent->layout();
 // -- ??
     if (e->parent->root() || e->parent->flattened() || e->parent->entered())
         d->scene->removeItem(e->node);
@@ -271,18 +274,21 @@ void dtkComposerStackCommandDestroyNode::redo(void)
         if (d->scene->items().contains(edge))
             d->scene->removeItem(edge);
         e->parent->removeEdge(edge);
+        d->graph->removeEdge(edge);
     }
 
     foreach(dtkComposerSceneEdge *edge, e->output_edges) {
         if (d->scene->items().contains(edge))
             d->scene->removeItem(edge);
         e->parent->removeEdge(edge);
+        d->graph->removeEdge(edge);
     }
 
     e->parent->removeNode(e->node);
     e->parent->layout();
 
     d->graph->removeNode(e->node);
+    d->graph->layout();
 
     if (e->parent->root() || e->parent->flattened() || e->parent->entered())
         d->scene->removeItem(e->node);
@@ -313,13 +319,17 @@ void dtkComposerStackCommandDestroyNode::undo(void)
         if(!d->scene->items().contains(edge))
             d->scene->addItem(edge);
         e->parent->addEdge(edge);
+        d->graph->addEdge(edge);
     }
 
     foreach(dtkComposerSceneEdge *edge, e->output_edges) {
         if(!d->scene->items().contains(edge))
             d->scene->addItem(edge);
         e->parent->addEdge(edge);
+        d->graph->addEdge(edge);
     }
+
+    d->graph->layout();
 
     if (e->parent->root() || e->parent->flattened() || e->parent->entered())
         d->scene->addItem(e->node);
@@ -433,15 +443,16 @@ void dtkComposerStackCommandCreateEdge::undo(void)
 
     dtkComposerTransmitterDisconnection(d->scene->root(), e->parent, e->edge);
 
-    // Setting up control flow
-
-    d->graph->removeEdge(e->edge);
 
     // Setting up scene
 
     e->edge->unlink();
 
     e->parent->removeEdge(e->edge);
+
+    // Setting up control flow
+
+    d->graph->removeEdge(e->edge);
 
     if(e->parent->entered() || e->parent->flattened() || e->parent->root())
         d->scene->removeItem(e->edge);
@@ -876,15 +887,26 @@ void dtkComposerStackCommandCreateGroup::redo(void)
 
     QRectF rect;
 
-    foreach(dtkComposerSceneNode *node, e->nodes) {
+
+    QList<dtkComposerSceneNode *> nodes = e->nodes;
+
+    foreach(dtkComposerSceneNode *node, nodes) {
         rect |= node->sceneBoundingRect();
         e->parent->removeNode(node);
+        d->graph->removeNode(node);
         d->scene->removeItem(node);
-        e->node->addNode(node);
-        node->setParent(e->node);
     }
 
     e->parent->addNode(e->node);
+    d->graph->addNode(e->node);
+
+
+    // For the Graph, we need to add back nodes after the node group is created
+    foreach(dtkComposerSceneNode *node, nodes) {
+        e->node->addNode(node);
+        node->setParent(e->node);
+        d->graph->addNode(node);
+    }
 
     e->node->setPos(rect.center() - e->node->boundingRect().center());
 
@@ -894,6 +916,7 @@ void dtkComposerStackCommandCreateGroup::redo(void)
         e->node->addEdge(edge);
         edge->setParent(e->node);
     }
+
 
     for(int i = 0; i < e->input_edges.count(); i++) {
 
@@ -932,6 +955,7 @@ void dtkComposerStackCommandCreateGroup::redo(void)
         e->create_output_rhs_edges.at(i)->redo();
 
     }
+    d->graph->layout();
 
     foreach(dtkComposerSceneNote *note, e->notes) {
         e->parent->removeNote(note);
@@ -943,7 +967,6 @@ void dtkComposerStackCommandCreateGroup::redo(void)
     if (e->parent->root() || e->parent->flattened() || e->parent->entered())
         d->scene->addItem(e->node);
 
-    d->graph->addNode(e->node);
 
     d->scene->update();
     d->scene->modify(true);
@@ -992,6 +1015,7 @@ void dtkComposerStackCommandCreateGroup::undo(void)
         e->parent->addNode(node);
         d->scene->addItem(node);
         e->node->removeNode(node);
+        d->graph->removeNode(node);
         node->setParent(e->node->parent());
     }
 
@@ -1008,6 +1032,12 @@ void dtkComposerStackCommandCreateGroup::undo(void)
         d->scene->removeItem(e->node);
 
     d->graph->removeNode(e->node);
+    foreach(dtkComposerSceneNode *node, e->nodes)
+        d->graph->addNode(node);
+
+    d->graph->layout();
+
+    d->scene->removeItem(e->node);
 
     d->scene->update();
     d->scene->modify(true);

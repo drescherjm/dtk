@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. févr. 21 17:04:24 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 126
+ * Last-Updated: Fri Feb 24 16:11:34 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 138
  */
 
 /* Commentary: 
@@ -76,7 +76,6 @@ void dtkComposerGraphEdge::setDestination(dtkComposerGraphNode *destination)
     d->destination = destination;
 }
 
-
 QRectF dtkComposerGraphEdge::boundingRect(void) const
 {
     if(!d->source || !d->destination)
@@ -85,7 +84,17 @@ QRectF dtkComposerGraphEdge::boundingRect(void) const
     QPointF s = d->source->sceneBoundingRect().center();
     QPointF e = d->destination->sceneBoundingRect().center();
 
-    return QRectF(s, e);
+    qreal xmin = qMin(s.x(), e.x());
+    qreal xmax = qMax(s.x(), e.x());
+    qreal ymin = qMin(s.y(), e.y());
+    qreal ymax = qMax(s.y(), e.y());
+
+    qreal x = xmin;
+    qreal y = ymin;
+    qreal w = xmax-xmin;
+    qreal h = ymax-ymin;
+
+    return QRectF(x, y, w, h);
 }
 
 void dtkComposerGraphEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -129,6 +138,8 @@ void dtkComposerGraphEdge::drawArrow(QPainter *p, QPointF from, QPointF to, qrea
     points[0] = to;
     points[1] = i;
     points[2] = j;
+    p->setPen(Qt::black);
+    p->setBrush(Qt::black);
     p->drawConvexPolygon(points, 3);
     p->restore();
 }

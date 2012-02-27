@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. févr. 27 12:54:20 2012 (+0100)
+ * Last-Updated: lun. févr. 27 14:41:49 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 2279
+ *     Update #: 2314
  */
 
 /* Commentary: 
@@ -1236,14 +1236,15 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
         return;
 
     foreach(dtkComposerSceneEdge *edge, e->intern_edges) {
+        d->graph->removeEdge(edge);
         e->node->removeEdge(edge);
         e->parent->addEdge(edge);
         d->scene->addItem(edge);
         edge->setParent(e->parent);
     }
-    
+
     // input connections
-    
+
     foreach(dtkComposerStackCommandDestroyEdge *destroy_edge, e->destroy_input_lhs_edges)
         destroy_edge->redo();
 
@@ -1252,12 +1253,10 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
 
     foreach(dtkComposerStackCommandDestroyPort *destroy_port, e->destroy_input_ports)
         destroy_port->redo();
-    
-    foreach(dtkComposerStackCommandCreateEdge *create_edge, e->create_input_edges)
-        create_edge->redo();
+
 
     // output connections
-    
+
     foreach(dtkComposerStackCommandDestroyEdge *destroy_edge, e->destroy_output_lhs_edges)
         destroy_edge->redo();
 
@@ -1267,11 +1266,9 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
     foreach(dtkComposerStackCommandDestroyPort *destroy_port, e->destroy_output_ports)
         destroy_port->redo();
 
-    foreach(dtkComposerStackCommandCreateEdge *create_edge, e->create_output_edges)
-        create_edge->redo();
 
     foreach(dtkComposerSceneNode *node, e->nodes) {
-        d->graph->removeNode(e->node);
+        d->graph->removeNode(node);
         e->parent->addNode(node);
         d->scene->addItem(node);
         e->node->removeNode(node);
@@ -1279,6 +1276,19 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
     }
 
     e->parent->removeNode(e->node);
+    d->graph->removeNode(e->node);
+
+
+    foreach(dtkComposerSceneNode *node, e->nodes)
+        d->graph->addNode(node);
+
+    foreach(dtkComposerStackCommandCreateEdge *create_edge, e->create_input_edges)
+        create_edge->redo();
+    foreach(dtkComposerStackCommandCreateEdge *create_edge, e->create_output_edges)
+        create_edge->redo();
+    foreach(dtkComposerSceneEdge *edge, e->intern_edges)
+        d->graph->addEdge(edge);
+
 
     foreach(dtkComposerSceneNote *note, e->notes) {
         e->parent->addNote(note);
@@ -1290,8 +1300,8 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
     if (e->parent->root() || e->parent->flattened() || e->parent->entered())
         d->scene->removeItem(e->node);
 
-    d->graph->removeNode(e->node);
 
+    d->graph->layout();
     d->scene->update();
     d->scene->modify(true);
 }
@@ -1310,7 +1320,17 @@ void dtkComposerStackCommandDestroyGroup::undo(void)
     if(!e->node)
         return;
 
+    foreach(dtkComposerSceneEdge *edge, e->intern_edges)
+        d->graph->removeEdge(edge);
+
+    foreach(dtkComposerStackCommandCreateEdge *create_edge, e->create_input_edges)
+        create_edge->undo();
+
+    foreach(dtkComposerStackCommandCreateEdge *create_edge, e->create_output_edges)
+        create_edge->undo();
+
     foreach(dtkComposerSceneNode *node, e->nodes) {
+        d->graph->removeNode(node);
         e->parent->removeNode(node);
         d->scene->removeItem(node);
         e->node->addNode(node);
@@ -1318,18 +1338,20 @@ void dtkComposerStackCommandDestroyGroup::undo(void)
     }
 
     e->parent->addNode(e->node);
+    d->graph->addNode(e->node);
+
+    foreach(dtkComposerSceneNode *node, e->nodes)
+        d->graph->addNode(node);
 
     foreach(dtkComposerSceneEdge *edge, e->intern_edges) {
-        e->node->removeEdge(edge);
-        e->parent->addEdge(edge);
-        d->scene->addItem(edge);
-        edge->setParent(e->parent);
+        d->graph->addEdge(edge);
+        e->parent->removeEdge(edge);
+        e->node->addEdge(edge);
+        d->scene->removeItem(edge);
+        edge->setParent(e->node);
     }
-    
+
     // input connections
-    
-    foreach(dtkComposerStackCommandCreateEdge *create_edge, e->create_input_edges)
-        create_edge->undo();
 
     foreach(dtkComposerStackCommandDestroyPort *destroy_port, e->destroy_input_ports)
         destroy_port->undo();
@@ -1339,15 +1361,12 @@ void dtkComposerStackCommandDestroyGroup::undo(void)
 
     foreach(dtkComposerStackCommandDestroyEdge *destroy_edge, e->destroy_input_rhs_edges)
         destroy_edge->undo();
-    
-    // output connections
 
-    foreach(dtkComposerStackCommandCreateEdge *create_edge, e->create_output_edges)
-        create_edge->undo();
+    // output connections
 
     foreach(dtkComposerStackCommandDestroyPort *destroy_port, e->destroy_output_ports)
         destroy_port->undo();
-    
+
     foreach(dtkComposerStackCommandDestroyEdge *destroy_edge, e->destroy_output_lhs_edges)
         destroy_edge->undo();
 
@@ -1364,8 +1383,7 @@ void dtkComposerStackCommandDestroyGroup::undo(void)
     if (e->parent->root() || e->parent->flattened() || e->parent->entered())
         d->scene->addItem(e->node);
 
-    d->graph->addNode(e->node);
-
+    d->graph->layout();
     d->scene->update();
     d->scene->modify(true);
 }

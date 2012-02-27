@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 23 17:14:02 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 359
+ * Last-Updated: Mon Feb 27 15:32:57 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 361
  */
 
 /* Commentary: 
@@ -298,12 +298,12 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
 
         for(int i = 0; i < ports.count(); i++) {
             if(ports.at(i).toElement().attribute("type") == "input") {
-                dtkComposerScenePort *port = new dtkComposerScenePort(ports.at(i).toElement().attribute("id").toInt(), dtkComposerScenePort::Input, composite);
+                dtkComposerScenePort *port = new dtkComposerScenePort(dtkComposerScenePort::Input, composite);
                 if (ports.at(i).toElement().hasAttribute("label"))
                     port->setLabel(ports.at(i).toElement().attribute("label"));
                 composite->addInputPort(port);
             } else {
-                dtkComposerScenePort *port = new dtkComposerScenePort(ports.at(i).toElement().attribute("id").toInt(), dtkComposerScenePort::Output, composite);
+                dtkComposerScenePort *port = new dtkComposerScenePort(dtkComposerScenePort::Output, composite);
                 if (ports.at(i).toElement().hasAttribute("label"))
                     port->setLabel(ports.at(i).toElement().attribute("label"));
                 composite->addOutputPort(port);

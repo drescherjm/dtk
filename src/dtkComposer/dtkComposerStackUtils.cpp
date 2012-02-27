@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 20 16:08:18 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 21 15:09:27 2012 (+0100)
+ * Last-Updated: Mon Feb 27 15:32:04 2012 (+0100)
  *           By: tkloczko
- *     Update #: 76
+ *     Update #: 93
  */
 
 /* Commentary: 
@@ -34,14 +34,14 @@ void dtkComposerPropagateEdgeValidity(dtkComposerSceneNodeComposite *node, const
     foreach(dtkComposerSceneEdge *edge, node->edges()) {
 
         if (node != edge->source()->node())
-            s = edge->source()->node()->wrapee()->emitters().at(edge->source()->id());
+            s = edge->source()->node()->wrapee()->emitters().at(edge->source()->node()->outputPorts().indexOf(edge->source()));
         else
-            s = edge->source()->node()->wrapee()->receivers().at(edge->source()->id());
+            s = edge->source()->node()->wrapee()->receivers().at(edge->source()->node()->inputPorts().indexOf(edge->source()));
 
         if (node != edge->destination()->node())
-            d = edge->destination()->node()->wrapee()->receivers().at(edge->destination()->id());
+            d = edge->destination()->node()->wrapee()->receivers().at(edge->destination()->node()->inputPorts().indexOf(edge->destination()));
         else
-            d = edge->destination()->node()->wrapee()->emitters().at(edge->destination()->id());
+            d = edge->destination()->node()->wrapee()->emitters().at(edge->destination()->node()->outputPorts().indexOf(edge->destination()));
 
         foreach(dtkComposerTransmitterLink *link, invalid_links)
             if(link->source() == s && link->destination() == d)
@@ -70,16 +70,16 @@ void dtkComposerTransmitterConnection(dtkComposerSceneNodeComposite *root, dtkCo
     dtkComposerTransmitter *s_t = NULL;
 
     if (node != edge->source()->node())
-        s_t = edge->source()->node()->wrapee()->emitters().at(edge->source()->id());
+        s_t = edge->source()->node()->wrapee()->emitters().at(edge->source()->node()->outputPorts().indexOf(edge->source()));
     else
-        s_t = edge->source()->node()->wrapee()->receivers().at(edge->source()->id());
+        s_t = edge->source()->node()->wrapee()->receivers().at(edge->source()->node()->inputPorts().indexOf(edge->source()));
 
     dtkComposerTransmitter *d_t = NULL;
 
     if (node != edge->destination()->node())
-        d_t = edge->destination()->node()->wrapee()->receivers().at(edge->destination()->id());
+        d_t = edge->destination()->node()->wrapee()->receivers().at(edge->destination()->node()->inputPorts().indexOf(edge->destination()));
     else
-        d_t = edge->destination()->node()->wrapee()->emitters().at(edge->destination()->id());
+        d_t = edge->destination()->node()->wrapee()->emitters().at(edge->destination()->node()->outputPorts().indexOf(edge->destination()));
     
     dtkComposerTransmitterLinkList   valid_edges;
     dtkComposerTransmitterLinkList invalid_edges;
@@ -94,16 +94,16 @@ void dtkComposerTransmitterDisconnection(dtkComposerSceneNodeComposite *root, dt
     dtkComposerTransmitter *s_t = NULL;
 
     if (node != edge->source()->node())
-        s_t = edge->source()->node()->wrapee()->emitters().at(edge->source()->id());
+        s_t = edge->source()->node()->wrapee()->emitters().at(edge->source()->node()->outputPorts().indexOf(edge->source()));
     else
-        s_t = edge->source()->node()->wrapee()->receivers().at(edge->source()->id());
+        s_t = edge->source()->node()->wrapee()->receivers().at(edge->source()->node()->inputPorts().indexOf(edge->source()));
 
     dtkComposerTransmitter *d_t = NULL;
 
     if (node != edge->destination()->node())
-        d_t = edge->destination()->node()->wrapee()->receivers().at(edge->destination()->id());
+        d_t = edge->destination()->node()->wrapee()->receivers().at(edge->destination()->node()->inputPorts().indexOf(edge->destination()));
     else
-        d_t = edge->destination()->node()->wrapee()->emitters().at(edge->destination()->id());
+        d_t = edge->destination()->node()->wrapee()->emitters().at(edge->destination()->node()->outputPorts().indexOf(edge->destination()));
 
     dtkComposerTransmitterLinkList invalid_edges;
     dtkComposerTransmitter::onTransmittersDisconnected(s_t, d_t, invalid_edges);

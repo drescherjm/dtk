@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 13:59:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 19 18:55:07 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 104
+ * Last-Updated: Mon Feb 27 15:29:50 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 106
  */
 
 /* Commentary: 
@@ -23,9 +23,6 @@
 class dtkComposerScenePortPrivate
 {
 public:
-    unsigned int id;
-
-public:
     dtkComposerScenePort::Type type;
 
 public:
@@ -36,9 +33,8 @@ public:
     QGraphicsTextItem *label;
 };
 
-dtkComposerScenePort::dtkComposerScenePort(unsigned int id, Type type, dtkComposerSceneNode *parent) : QGraphicsItem(parent), d(new dtkComposerScenePortPrivate)
+dtkComposerScenePort::dtkComposerScenePort(Type type, dtkComposerSceneNode *parent) : QGraphicsItem(parent), d(new dtkComposerScenePortPrivate)
 {
-    d->id = id;
     d->type = type;
     d->node = parent;
 
@@ -59,9 +55,8 @@ dtkComposerScenePort::dtkComposerScenePort(unsigned int id, Type type, dtkCompos
     this->setZValue(1);
 }
 
-dtkComposerScenePort::dtkComposerScenePort(unsigned int id, Type type, const QString& label, dtkComposerSceneNode *parent) : QGraphicsItem(parent), d(new dtkComposerScenePortPrivate)
+dtkComposerScenePort::dtkComposerScenePort(Type type, const QString& label, dtkComposerSceneNode *parent) : QGraphicsItem(parent), d(new dtkComposerScenePortPrivate)
 {
-    d->id = id;
     d->type = type;
     d->node = parent;
 
@@ -88,11 +83,6 @@ dtkComposerScenePort::~dtkComposerScenePort(void)
     delete d;
 
     d = NULL;
-}
-
-unsigned int dtkComposerScenePort::id(void) const
-{
-    return d->id;
 }
 
 dtkComposerScenePort::Type dtkComposerScenePort::type(void)

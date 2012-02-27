@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Mon Feb 27 15:38:13 2012 (+0100)
+ * Last-Updated: Mon Feb 27 15:56:49 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 154
+ *     Update #: 189
  */
 
 /* Commentary:
@@ -51,6 +51,13 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 
     d->operators.insert("Not", "not");
     d->operators.insert("And", "and");
+    d->operators.insert("Or", "or");
+    d->operators.insert("Xor", "xor");
+    d->operators.insert("Nand", "nand");
+    d->operators.insert("Nor", "nor");
+    d->operators.insert("Xnor", "xnor");
+    d->operators.insert("Imp", "imp");
+    d->operators.insert("Nimp", "nimp");
 
     d->controls.insert("Do While", "do while");
     d->controls.insert("If", "if");
@@ -93,6 +100,27 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "and")
         return new dtkComposerNodeBooleanOperatorBinaryAnd;
+
+    if(type == "or")
+        return new dtkComposerNodeBooleanOperatorBinaryOr;
+
+    if(type == "xor")
+        return new dtkComposerNodeBooleanOperatorBinaryXor;
+
+    if(type == "nand")
+        return new dtkComposerNodeBooleanOperatorBinaryNand;
+
+    if(type == "nor")
+        return new dtkComposerNodeBooleanOperatorBinaryNor;
+
+    if(type == "xnor")
+        return new dtkComposerNodeBooleanOperatorBinaryXnor;
+
+    if(type == "imp")
+        return new dtkComposerNodeBooleanOperatorBinaryImp;
+
+    if(type == "nimp")
+        return new dtkComposerNodeBooleanOperatorBinaryNimp;
 
     // control nodes
 

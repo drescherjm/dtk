@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:52:45 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 15:37:25 2012 (+0100)
+ * Last-Updated: Mon Feb 27 15:47:37 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 74
+ *     Update #: 106
  */
 
 /* Commentary: 
@@ -109,6 +109,90 @@ void dtkComposerNodeBooleanOperatorBinaryAnd::run(void)
     bool b = d->receiver_rhs->data();
 
     d->emitter->setData(a && b);
+}
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - OR
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeBooleanOperatorBinaryOr::run(void)
+{
+    bool a = d->receiver_lhs->data();
+    bool b = d->receiver_rhs->data();
+
+    d->emitter->setData(a || b);
+}
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - XOR
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeBooleanOperatorBinaryXor::run(void)
+{
+    bool a = d->receiver_lhs->data();
+    bool b = d->receiver_rhs->data();
+
+    d->emitter->setData((a && !b) || (!a && b));
+}
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - NAND
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeBooleanOperatorBinaryNand::run(void)
+{
+    bool a = d->receiver_lhs->data();
+    bool b = d->receiver_rhs->data();
+
+    d->emitter->setData(!(a && b));
+}
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - NOR
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeBooleanOperatorBinaryNor::run(void)
+{
+    bool a = d->receiver_lhs->data();
+    bool b = d->receiver_rhs->data();
+
+    d->emitter->setData(!(a || b));
+}
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - XNOR
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeBooleanOperatorBinaryXnor::run(void)
+{
+    bool a = d->receiver_lhs->data();
+    bool b = d->receiver_rhs->data();
+
+    d->emitter->setData((a && b) || (!a && !b));
+}
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - IMP
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeBooleanOperatorBinaryImp::run(void)
+{
+    bool a = d->receiver_lhs->data();
+    bool b = d->receiver_rhs->data();
+
+    d->emitter->setData((!a || b));
+}
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - NIMP
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeBooleanOperatorBinaryNimp::run(void)
+{
+    bool a = d->receiver_lhs->data();
+    bool b = d->receiver_rhs->data();
+
+    d->emitter->setData((a && !b));
 }
 
 // /////////////////////////////////////////////////////////////////

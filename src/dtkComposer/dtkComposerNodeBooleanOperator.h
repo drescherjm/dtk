@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:51:36 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 18:06:00 2012 (+0100)
+ * Last-Updated: Mon Feb 27 15:36:44 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 15
+ *     Update #: 77
  */
 
 /* Commentary: 
@@ -23,26 +23,40 @@
 #include "dtkComposerExport.h"
 #include "dtkComposerNodeLeaf.h"
 
-class dtkComposerNodeBooleanOperatorPrivate;
+// /////////////////////////////////////////////////////////////////
+// Unary boolean operator
+// /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperator : public dtkComposerNodeLeaf
+class dtkComposerNodeBooleanOperatorUnaryPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorUnary : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeBooleanOperator(void);
-    ~dtkComposerNodeBooleanOperator(void);
+     dtkComposerNodeBooleanOperatorUnary(void);
+    ~dtkComposerNodeBooleanOperatorUnary(void);
 
 public:
-    void run(void);
+    inline QString labelHint(int) {
+        return "value";
+    }
+
+protected:
+    dtkComposerNodeBooleanOperatorUnaryPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeBooleanOperatorBinaryPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinary : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeBooleanOperatorBinary(void);
+    ~dtkComposerNodeBooleanOperatorBinary(void);
 
 public:
-    inline QString type(void) {
-        return "boolean operator";
-    }
-
-    inline QString titleHint(void) {
-        return "Boolean Operator";
-    }
-
     inline QString labelHint(int port) {
         if (port == 0)
             return "lhs";
@@ -52,8 +66,179 @@ public:
             return "value";
     }
 
-private:
-    dtkComposerNodeBooleanOperatorPrivate *d;
+protected:
+    dtkComposerNodeBooleanOperatorBinaryPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// Unary boolean operator - NOT
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorUnaryNot : public dtkComposerNodeBooleanOperatorUnary
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "not";
+    }
+
+    inline QString titleHint(void) {
+        return "Not";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - AND
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryAnd : public dtkComposerNodeBooleanOperatorBinary
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "and";
+    }
+
+    inline QString titleHint(void) {
+        return "And";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - OR
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryOr : public dtkComposerNodeBooleanOperatorBinary
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "or";
+    }
+
+    inline QString titleHint(void) {
+        return "Or";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - XOR
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryXor : public dtkComposerNodeBooleanOperatorBinary
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "xor";
+    }
+
+    inline QString titleHint(void) {
+        return "Xor";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - NAND
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryNand : public dtkComposerNodeBooleanOperatorBinary
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "nand";
+    }
+
+    inline QString titleHint(void) {
+        return "Nand";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - NOR
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryNor : public dtkComposerNodeBooleanOperatorBinary
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "nor";
+    }
+
+    inline QString titleHint(void) {
+        return "Nor";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - XNOR
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryXnor : public dtkComposerNodeBooleanOperatorBinary
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "xnor";
+    }
+
+    inline QString titleHint(void) {
+        return "Xnor";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - IMP
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryImp : public dtkComposerNodeBooleanOperatorBinary
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "imp";
+    }
+
+    inline QString titleHint(void) {
+        return "Imp";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - NIMP
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryNimp : public dtkComposerNodeBooleanOperatorBinary
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "nimp";
+    }
+
+    inline QString titleHint(void) {
+        return "Nimp";
+    }
 };
 
 #endif

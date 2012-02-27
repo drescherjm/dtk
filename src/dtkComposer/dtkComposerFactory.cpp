@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Mon Feb 27 13:00:37 2012 (+0100)
+ * Last-Updated: Mon Feb 27 15:38:13 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 145
+ *     Update #: 154
  */
 
 /* Commentary:
@@ -49,7 +49,8 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->primitives.insert("Real", "real");
     d->primitives.insert("String", "string");
 
-    d->operators.insert("Boolean Operator", "boolean operator");
+    d->operators.insert("Not", "not");
+    d->operators.insert("And", "and");
 
     d->controls.insert("Do While", "do while");
     d->controls.insert("If", "if");
@@ -87,8 +88,11 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     // operator nodes
 
-    if(type == "boolean operator")
-        return new dtkComposerNodeBooleanOperator;
+    if(type == "not")
+        return new dtkComposerNodeBooleanOperatorUnaryNot;
+
+    if(type == "and")
+        return new dtkComposerNodeBooleanOperatorBinaryAnd;
 
     // control nodes
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:28:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 23 13:43:39 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 43
+ * Last-Updated: Mon Feb 27 16:55:17 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@ class dtkComposerScene;
 class dtkComposerSceneNode;
 class dtkComposerScenePort;
 class dtkComposerStack;
+class dtkComposerGraph;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerSceneNodeEditorList
@@ -83,6 +84,7 @@ public:
     dtkComposerScene *scene;
     dtkComposerSceneNode *node;
     dtkComposerStack *stack;
+    dtkComposerGraph *graph;
 
 public:
     QPushButton *add_input_port;

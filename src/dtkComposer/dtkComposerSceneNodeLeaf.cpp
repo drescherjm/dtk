@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb 25 01:21:34 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 187
+ * Last-Updated: Mon Feb 27 16:29:55 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 201
  */
 
 /* Commentary: 
@@ -46,28 +46,20 @@ void dtkComposerSceneNodeLeaf::wrap(dtkComposerNode *node)
 {
     dtkComposerSceneNode::wrap(node);
 
-    int index = 0;
-
     foreach(dtkComposerTransmitter *receiver, node->receivers()) {
         
-        dtkComposerScenePort *port = new dtkComposerScenePort(index, dtkComposerScenePort::Input, this);
-        port->setLabel(node->labelHint(index));
-
+        dtkComposerScenePort *port = new dtkComposerScenePort(dtkComposerScenePort::Input, this);
         this->addInputPort(port);
+        port->setLabel(node->inputLabelHint(this->inputPorts().indexOf(port)));
         
-        index++;
     }
-
-    index = 0;
 
     foreach(dtkComposerTransmitter *emitter, node->emitters()) {
 
-        dtkComposerScenePort *port = new dtkComposerScenePort(index, dtkComposerScenePort::Output, this);
-        port->setLabel(node->labelHint(index));
-
+        dtkComposerScenePort *port = new dtkComposerScenePort(dtkComposerScenePort::Output, this);
         this->addOutputPort(port);
+        port->setLabel(node->outputLabelHint(this->outputPorts().indexOf(port)));
 
-        index++;
     }
 
     this->layout();

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Mon Feb 27 16:16:27 2012 (+0100)
+ * Last-Updated: Mon Feb 27 16:40:30 2012 (+0100)
  *           By: David Rey
- *     Update #: 178
+ *     Update #: 191
  */
 
 /* Commentary:
@@ -24,6 +24,7 @@
 #include "dtkComposerNodeControlDoWhile.h"
 #include "dtkComposerNodeControlIf.h"
 #include "dtkComposerNodeControlFor.h"
+#include "dtkComposerNodeControlForEach.h"
 #include "dtkComposerNodeControlWhile.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeNumberOperator.h"
@@ -50,7 +51,6 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->primitives.insert("Real", "real");
     d->primitives.insert("String", "string");
 
-    d->operators.insert("Boolean Operator", "boolean operator");
     d->operators.insert("Abs", "abs");
     d->operators.insert("Acos", "acos");
     d->operators.insert("Asin", "asin");
@@ -72,10 +72,20 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->operators.insert("Square", "square");
     d->operators.insert("Sqrt", "sqrt");
     d->operators.insert("Tan", "tan");
+    d->operators.insert("Not", "not");
+    d->operators.insert("And", "and");
+    d->operators.insert("Or", "or");
+    d->operators.insert("Xor", "xor");
+    d->operators.insert("Nand", "nand");
+    d->operators.insert("Nor", "nor");
+    d->operators.insert("Xnor", "xnor");
+    d->operators.insert("Imp", "imp");
+    d->operators.insert("Nimp", "nimp");
 
     d->controls.insert("Do While", "do while");
     d->controls.insert("If", "if");
     d->controls.insert("For", "for");
+    d->controls.insert("For Each", "foreach");
     d->controls.insert("While", "while");
 }
 
@@ -109,8 +119,32 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     // operator nodes
 
-    if(type == "boolean operator")
-        return new dtkComposerNodeBooleanOperator;
+    if(type == "not")
+        return new dtkComposerNodeBooleanOperatorUnaryNot;
+
+    if(type == "and")
+        return new dtkComposerNodeBooleanOperatorBinaryAnd;
+
+    if(type == "or")
+        return new dtkComposerNodeBooleanOperatorBinaryOr;
+
+    if(type == "xor")
+        return new dtkComposerNodeBooleanOperatorBinaryXor;
+
+    if(type == "nand")
+        return new dtkComposerNodeBooleanOperatorBinaryNand;
+
+    if(type == "nor")
+        return new dtkComposerNodeBooleanOperatorBinaryNor;
+
+    if(type == "xnor")
+        return new dtkComposerNodeBooleanOperatorBinaryXnor;
+
+    if(type == "imp")
+        return new dtkComposerNodeBooleanOperatorBinaryImp;
+
+    if(type == "nimp")
+        return new dtkComposerNodeBooleanOperatorBinaryNimp;
 
     if(type == "abs")
         return new dtkComposerNodeNumberOperatorUnaryAbs;
@@ -185,6 +219,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "for")
         return new dtkComposerNodeControlFor;
+
+    if(type == "foreach")
+        return new dtkComposerNodeControlForEach;
 
     if(type == "while")
         return new dtkComposerNodeControlWhile;

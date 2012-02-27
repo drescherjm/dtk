@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:24:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 21 15:17:49 2012 (+0100)
- *           By: tkloczko
- *     Update #: 43
+ * Last-Updated: Mon Feb 27 16:01:41 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -57,7 +57,10 @@ public:
 
 public:
     virtual QString titleHint(void);
-    virtual QString labelHint(int port);
+
+public:
+    virtual QString  inputLabelHint(int port);
+    virtual QString outputLabelHint(int port);
 
 public:
     void setTitleHint(const QString& hint);

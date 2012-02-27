@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:52:45 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 10:08:11 2012 (+0100)
- *           By: tkloczko
- *     Update #: 15
+ * Last-Updated: Mon Feb 27 15:47:37 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 106
  */
 
 /* Commentary: 
@@ -22,85 +22,51 @@
 #include "dtkComposerReceiver.h"
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeBooleanOperatorPrivate declaration
+// dtkComposerNodeBooleanOperatorUnary
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNodeBooleanOperatorPrivate
+class dtkComposerNodeBooleanOperatorUnaryPrivate
 {
-public:    
-    enum Operation {
-        And,
-        Or,
-        Xor,
-        Nand,
-        Nor,
-        Xnor,
-        Imp,
-        Nimp        
-    };
-
 public:
-    bool evaluate(void);
+    dtkComposerReceiver<bool> *receiver;
 
+public:    
+    dtkComposerEmitter<bool> *emitter;
+};
+
+dtkComposerNodeBooleanOperatorUnary::dtkComposerNodeBooleanOperatorUnary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeBooleanOperatorUnaryPrivate)
+{
+    d->receiver = new dtkComposerReceiver<bool>;
+    this->appendReceiver(d->receiver);
+
+    d->emitter = new dtkComposerEmitter<bool>;
+    this->appendEmitter(d->emitter);
+}
+
+dtkComposerNodeBooleanOperatorUnary::~dtkComposerNodeBooleanOperatorUnary(void)
+{
+    delete d->receiver;
+    delete d->emitter;
+    delete d;
+    
+    d = NULL;
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeBooleanOperatorBinary
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeBooleanOperatorBinaryPrivate
+{
 public:
     dtkComposerReceiver<bool> *receiver_lhs;
     dtkComposerReceiver<bool> *receiver_rhs;
 
 public:    
     dtkComposerEmitter<bool> *emitter;
-
-public:
-    Operation operation;
 };
 
-// /////////////////////////////////////////////////////////////////
-// dtkComposerNodeBooleanOperatorPrivate implementation
-// /////////////////////////////////////////////////////////////////
-
-bool dtkComposerNodeBooleanOperatorPrivate::evaluate(void)
-{
-    bool a = receiver_lhs->data();
-    bool b = receiver_rhs->data();
-
-    bool value = false;
-
-    switch(operation) {
-    case And:
-        value = a && b;
-        break;
-    case Or:
-        value = a || b;
-        break;
-    case Xor:
-        value = (a && !b) || (!a && b);
-        break;
-    case Nand:
-        value = !(a && b);
-        break;
-    case Nor:
-        value = !(a || b);
-        break;
-    case Xnor:
-        value = ((a && b) || (!a && !b));
-        break;
-    case Imp:
-        value = (!a || b);
-        break;
-    case Nimp:
-        value = (a && !b);
-        break;
-    default:
-        break;
-    }
-
-    return value;
-}
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerNodeBooleanOperator implementation
-// /////////////////////////////////////////////////////////////////
-
-dtkComposerNodeBooleanOperator::dtkComposerNodeBooleanOperator(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeBooleanOperatorPrivate)
+dtkComposerNodeBooleanOperatorBinary::dtkComposerNodeBooleanOperatorBinary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeBooleanOperatorBinaryPrivate)
 {
     d->receiver_lhs = new dtkComposerReceiver<bool>;
     this->appendReceiver(d->receiver_lhs);
@@ -110,11 +76,9 @@ dtkComposerNodeBooleanOperator::dtkComposerNodeBooleanOperator(void) : dtkCompos
 
     d->emitter = new dtkComposerEmitter<bool>;
     this->appendEmitter(d->emitter);
-
-    d->operation = dtkComposerNodeBooleanOperatorPrivate::And;
 }
 
-dtkComposerNodeBooleanOperator::~dtkComposerNodeBooleanOperator(void)
+dtkComposerNodeBooleanOperatorBinary::~dtkComposerNodeBooleanOperatorBinary(void)
 {
     delete d->receiver_lhs;
     delete d->receiver_rhs;
@@ -124,10 +88,157 @@ dtkComposerNodeBooleanOperator::~dtkComposerNodeBooleanOperator(void)
     d = NULL;
 }
 
-void dtkComposerNodeBooleanOperator::run(void)
+// /////////////////////////////////////////////////////////////////
+// Unary boolean operator - NOT
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeBooleanOperatorUnaryNot::run(void)
 {
-    d->emitter->setData(d->evaluate());
+    bool a = d->receiver->data();
+
+    d->emitter->setData(!a);
 }
 
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - AND
+// /////////////////////////////////////////////////////////////////
 
+void dtkComposerNodeBooleanOperatorBinaryAnd::run(void)
+{
+    bool a = d->receiver_lhs->data();
+    bool b = d->receiver_rhs->data();
 
+    d->emitter->setData(a && b);
+}
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - OR
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeBooleanOperatorBinaryOr::run(void)
+{
+    bool a = d->receiver_lhs->data();
+    bool b = d->receiver_rhs->data();
+
+    d->emitter->setData(a || b);
+}
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - XOR
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeBooleanOperatorBinaryXor::run(void)
+{
+    bool a = d->receiver_lhs->data();
+    bool b = d->receiver_rhs->data();
+
+    d->emitter->setData((a && !b) || (!a && b));
+}
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - NAND
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeBooleanOperatorBinaryNand::run(void)
+{
+    bool a = d->receiver_lhs->data();
+    bool b = d->receiver_rhs->data();
+
+    d->emitter->setData(!(a && b));
+}
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - NOR
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeBooleanOperatorBinaryNor::run(void)
+{
+    bool a = d->receiver_lhs->data();
+    bool b = d->receiver_rhs->data();
+
+    d->emitter->setData(!(a || b));
+}
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - XNOR
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeBooleanOperatorBinaryXnor::run(void)
+{
+    bool a = d->receiver_lhs->data();
+    bool b = d->receiver_rhs->data();
+
+    d->emitter->setData((a && b) || (!a && !b));
+}
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - IMP
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeBooleanOperatorBinaryImp::run(void)
+{
+    bool a = d->receiver_lhs->data();
+    bool b = d->receiver_rhs->data();
+
+    d->emitter->setData((!a || b));
+}
+
+// /////////////////////////////////////////////////////////////////
+// Binary boolean operator - NIMP
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeBooleanOperatorBinaryNimp::run(void)
+{
+    bool a = d->receiver_lhs->data();
+    bool b = d->receiver_rhs->data();
+
+    d->emitter->setData((a && !b));
+}
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
+// bool dtkComposerNodeBooleanOperatorPrivate::evaluate(void)
+// {
+//     bool a = receiver_lhs->data();
+//     bool b = receiver_rhs->data();
+
+//     bool value = false;
+
+//     switch(operation) {
+//     case And:
+//         value = a && b;
+//         break;
+//     case Or:
+//         value = a || b;
+//         break;
+//     case Xor:
+//         value = (a && !b) || (!a && b);
+//         break;
+//     case Nand:
+//         value = !(a && b);
+//         break;
+//     case Nor:
+//         value = !(a || b);
+//         break;
+//     case Xnor:
+//         value = ((a && b) || (!a && !b));
+//         break;
+//     case Imp:
+//         value = (!a || b);
+//         break;
+//     case Nimp:
+//         value = (a && !b);
+//         break;
+//     default:
+//         break;
+//     }
+
+//     return value;
+// }
+
+// void dtkComposerNodeBooleanOperator::run(void)
+// {
+//     d->emitter->setData(d->evaluate());
+// }

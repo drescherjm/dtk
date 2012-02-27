@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Mon Feb 27 13:00:37 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 145
+ * Last-Updated: lun. févr. 27 15:35:35 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 148
  */
 
 /* Commentary:
@@ -24,6 +24,7 @@
 #include "dtkComposerNodeControlDoWhile.h"
 #include "dtkComposerNodeControlIf.h"
 #include "dtkComposerNodeControlFor.h"
+#include "dtkComposerNodeControlForEach.h"
 #include "dtkComposerNodeControlWhile.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodePi.h"
@@ -54,6 +55,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->controls.insert("Do While", "do while");
     d->controls.insert("If", "if");
     d->controls.insert("For", "for");
+    d->controls.insert("For Each", "foreach");
     d->controls.insert("While", "while");
 }
 
@@ -100,6 +102,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "for")
         return new dtkComposerNodeControlFor;
+
+    if(type == "foreach")
+        return new dtkComposerNodeControlForEach;
 
     if(type == "while")
         return new dtkComposerNodeControlWhile;

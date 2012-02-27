@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Mon Feb 27 16:43:34 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 205
+ * Last-Updated: Mon Feb 27 17:19:55 2012 (+0100)
+ *           By: David Rey
+ *     Update #: 225
  */
 
 /* Commentary:
@@ -73,6 +73,15 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->operators.insert("Square", "square");
     d->operators.insert("Sqrt", "sqrt");
     d->operators.insert("Tan", "tan");
+    d->operators.insert("Eucldiv", "eucldiv");
+    d->operators.insert("Logn", "logn");
+    d->operators.insert("Minus", "minus");
+    d->operators.insert("Modulo", "modulo");
+    d->operators.insert("Mult", "mult");
+    d->operators.insert("Plus", "plus");
+    d->operators.insert("Posnthroot", "posnthroot");
+    d->operators.insert("Power", "power");
+    d->operators.insert("Ratio", "ratio");
     d->operators.insert("Not", "not");
     d->operators.insert("And", "and");
     d->operators.insert("Or", "or");
@@ -212,6 +221,33 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if (type =="tan")
         return new dtkComposerNodeNumberOperatorUnaryTan;
+
+    if (type =="eucldiv")
+        return new dtkComposerNodeNumberOperatorBinaryEucldiv;
+
+    if (type =="logn")
+        return new dtkComposerNodeNumberOperatorBinaryLogn;
+
+    if (type =="minus")
+        return new dtkComposerNodeNumberOperatorBinaryMinus;
+
+    if (type =="modulo")
+        return new dtkComposerNodeNumberOperatorBinaryModulo;
+
+    if (type =="mult")
+        return new dtkComposerNodeNumberOperatorBinaryMult;
+
+    if (type =="plus")
+        return new dtkComposerNodeNumberOperatorBinaryPlus;
+
+    if (type =="posnthroot")
+        return new dtkComposerNodeNumberOperatorBinaryPosnthroot;
+
+    if (type =="power")
+        return new dtkComposerNodeNumberOperatorBinaryPower;
+
+    if (type =="ratio")
+        return new dtkComposerNodeNumberOperatorBinaryRatio;
 
     // control nodes
 

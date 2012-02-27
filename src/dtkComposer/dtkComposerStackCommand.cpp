@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 15:49:37 2012 (+0100)
+ * Last-Updated: Mon Feb 27 17:01:57 2012 (+0100)
  *           By: tkloczko
- *     Update #: 2315
+ *     Update #: 2325
  */
 
 /* Commentary: 
@@ -525,6 +525,9 @@ void dtkComposerStackCommandDestroyEdge::redo(void)
     if(!e->parent)
         return;
 
+    if(!d->graph)
+        return;
+
     // Setting up data flow
 
     dtkComposerTransmitterDisconnection(d->scene->root(), e->parent, e->edge);
@@ -551,6 +554,9 @@ void dtkComposerStackCommandDestroyEdge::undo(void)
         return;
 
     if(!e->parent)
+        return;
+
+    if(!d->graph)
         return;
 
     e->edge->link();
@@ -1952,7 +1958,7 @@ void dtkComposerStackCommandDestroyPort::redo(void)
 
     foreach(dtkComposerStackCommandDestroyEdge *destroy_left_edge, e->destroy_left_edges)
         destroy_left_edge->redo();
-
+        
     foreach(dtkComposerStackCommandDestroyEdge *destroy_right_edge, e->destroy_right_edges)
         destroy_right_edge->redo();
 

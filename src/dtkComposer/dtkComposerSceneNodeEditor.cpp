@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb 25 01:11:56 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 357
+ * Last-Updated: Mon Feb 27 17:01:35 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 364
  */
 
 /* Commentary: 
@@ -17,6 +17,7 @@
  * 
  */
 
+#include "dtkComposerGraph.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerSceneNode.h"
 #include "dtkComposerSceneNodeComposite.h"
@@ -269,6 +270,11 @@ void dtkComposerSceneNodeEditor::setStack(dtkComposerStack *stack)
     d->stack = stack;
 }
 
+void dtkComposerSceneNodeEditor::setGraph(dtkComposerGraph *graph)
+{
+    d->graph = graph;
+}
+
 void dtkComposerSceneNodeEditor::clear(void)
 {
     d->node = NULL;
@@ -297,15 +303,15 @@ void dtkComposerSceneNodeEditor::addInputPort(void)
     if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(d->node)) {
 
         command = new dtkComposerStackCommandCreatePort;
-        command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(control->blocks().at(d->selector->currentIndex())));
         command->setScene(d->scene);
+        command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(control->blocks().at(d->selector->currentIndex())));
         command->setType(dtkComposerScenePort::Input);
 
     } else {
 
         command = new dtkComposerStackCommandCreatePort;
-        command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(d->node));
         command->setScene(d->scene);
+        command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(d->node));
         command->setType(dtkComposerScenePort::Input);
 
     }
@@ -335,16 +341,18 @@ void dtkComposerSceneNodeEditor::removeInputPort(void)
     if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(d->node)) {
 
         command = new dtkComposerStackCommandDestroyPort;
+        command->setScene(d->scene);
+        command->setGraph(d->graph);
         command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(control->blocks().at(d->selector->currentIndex())));
         command->setPort(item->port());
-        command->setScene(d->scene);
 
     } else {
 
         command = new dtkComposerStackCommandDestroyPort;
+        command->setScene(d->scene);
+        command->setGraph(d->graph);
         command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(d->node));
         command->setPort(item->port());
-        command->setScene(d->scene);
     }
     
     d->stack->push(command);
@@ -367,15 +375,15 @@ void dtkComposerSceneNodeEditor::addOutputPort(void)
     if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(d->node)) {
 
         command = new dtkComposerStackCommandCreatePort;
-        command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(control->blocks().at(d->selector->currentIndex())));
         command->setScene(d->scene);
+        command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(control->blocks().at(d->selector->currentIndex())));
         command->setType(dtkComposerScenePort::Output);
 
     } else {
 
         command = new dtkComposerStackCommandCreatePort;
-        command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(d->node));
         command->setScene(d->scene);
+        command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(d->node));
         command->setType(dtkComposerScenePort::Output);
 
     }
@@ -405,16 +413,18 @@ void dtkComposerSceneNodeEditor::removeOutputPort(void)
     if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(d->node)) {
 
         command = new dtkComposerStackCommandDestroyPort;
+        command->setScene(d->scene);
+        command->setGraph(d->graph);
         command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(control->blocks().at(d->selector->currentIndex())));
         command->setPort(item->port());
-        command->setScene(d->scene);
 
     } else {
 
         command = new dtkComposerStackCommandDestroyPort;
+        command->setScene(d->scene);
+        command->setGraph(d->graph);
         command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(d->node));
         command->setPort(item->port());
-        command->setScene(d->scene);
     }
     
     d->stack->push(command);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:01 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov 28 23:58:19 2011 (+0100)
+ * Last-Updated: Tue Feb 28 17:32:58 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 126
+ *     Update #: 165
  */
 
 /* Commentary: 
@@ -37,6 +37,7 @@ public:
      dtkTag(QString text, int instances);
      dtkTag(QString text, int instances, QStringList items);
      dtkTag(QString text, int instances, QStringList items, QString color);
+     dtkTag(const dtkTag& other);
     ~dtkTag(void);
 
     int count(void) const;
@@ -135,7 +136,7 @@ public slots:
 
 private slots:
     void onTagAdded(void);
-    void onLinkClicked(const QUrl& item);
+    void onTagRemoved(void);
 
 private:
     dtkTagScopePrivate *d;
@@ -167,18 +168,18 @@ private:
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkItemView
+// dtkItemList
 // /////////////////////////////////////////////////////////////////
 
-class dtkItemViewPrivate;
+class dtkItemListPrivate;
 
-class DTKGUI_EXPORT dtkItemView : public QListWidget
+class DTKGUI_EXPORT dtkItemList : public QListWidget
 {
     Q_OBJECT
 
 public:
-     dtkItemView(QWidget *parent = 0);
-    ~dtkItemView(void);
+     dtkItemList(QWidget *parent = 0);
+    ~dtkItemList(void);
 
     void addItem(QString name);
     void addItem(QString name, QString description);
@@ -189,33 +190,53 @@ public:
     void clear(void);
 
 signals:
-    void tagClicked(QString tag);
-    void tagClicked(QString tag, QStringList items);
+    void itemClicked(const QString& description);
 
-    void itemClicked(QString item);
-    void itemClicked(QString item, QStringList tags);
-
-    void typeClicked(QString type);
-    void typeClicked(QString type, QStringList tags);
-
-// private slots:
-//     void onLinkClicked(const QUrl& item);
+private slots:
+    void onItemClicked(QListWidgetItem *item);
 
 private:
-    dtkItemViewPrivate *d;
+    dtkItemListPrivate *d;
 
 private:
-    friend class dtkItemViewDelegate;
+    friend class dtkItemListDelegate;
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkItemViewDelegate
+// dtkItemDesc
 // /////////////////////////////////////////////////////////////////
 
-class dtkItemViewDelegate: public QStyledItemDelegate
+class dtkItemDescPrivate;
+
+class dtkItemDesc : public QFrame
+{
+    Q_OBJECT
+
+public:
+     dtkItemDesc(QWidget *parent = 0);
+    ~dtkItemDesc(void);
+
+signals:
+    void back(void);
+
+public slots:
+    void clear(void);
+
+public slots:
+    void setDescription(const QString& description);
+
+private:
+    dtkItemDescPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkItemListDelegate
+// /////////////////////////////////////////////////////////////////
+
+class dtkItemListDelegate: public QStyledItemDelegate
 {
 public:
-    dtkItemViewDelegate(dtkItemView *view);
+    dtkItemListDelegate(dtkItemList *list);
 
 public:
     virtual void paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
@@ -224,7 +245,61 @@ public:
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
 protected:
-    dtkItemView *view;
+    dtkItemList *list;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkItemView
+// /////////////////////////////////////////////////////////////////
+
+class dtkItemViewPrivate;
+
+class dtkItemView : public QStackedWidget
+{
+    Q_OBJECT
+
+public:
+    enum Direction {
+        Left2Right,
+        Right2Left,
+        Top2Bottom,
+        Bottom2Top,
+        Automatic
+    };
+    
+public:
+     dtkItemView(QWidget *parent = 0);
+    ~dtkItemView(void);
+
+public:
+    dtkItemList *list(void);
+    dtkItemDesc *desc(void);
+    
+protected slots:
+    void onItemClicked(const QString& description);
+
+protected slots:
+    void setSpeed(int speed);
+    void setAnimation(QEasingCurve::Type type);
+    void setVerticalMode(bool vertical = true);
+    void setWrap(bool wrap);
+
+protected slots:
+    void slideInNext(void);
+    void slideInPrev(void);
+    void slideInIdx(int idx, Direction direction = Automatic);
+    
+signals:
+    void animationFinished(void);
+
+protected slots:
+    void animationDoneSlot(void);
+
+protected:
+    void slideInWgt(QWidget *widget, Direction direction = Automatic);
+
+protected:
+    dtkItemViewPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -256,6 +331,7 @@ public:
 private slots:
     void addFilter(QString tag);
     void setFilter(QString tag);
+    void remFilter(QString tag);
     void clear(void);
 
 private:

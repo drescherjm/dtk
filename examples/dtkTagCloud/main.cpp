@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue May 12 10:34:30 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov 28 23:55:04 2011 (+0100)
+ * Last-Updated: Tue Feb 28 16:09:59 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 48
+ *     Update #: 59
  */
 
 /* Commentary: 
@@ -17,8 +17,10 @@
  * 
  */
 
-#include  <QtGui>
+#include <dtkGui/dtkSplitter.h>
 #include <dtkGui/dtkTagCloud.h>
+
+#include <QtGui>
 
 int main(int argc, char *argv[])
 {
@@ -33,7 +35,6 @@ int main(int argc, char *argv[])
     cloud->setFontRange(10);
 
     dtkItemView *view = new dtkItemView;
-    view->setItemDelegate(new dtkItemViewDelegate(view));
 
     dtkTagController *controller = new dtkTagController;
     controller->attach(scope);
@@ -47,9 +48,10 @@ int main(int argc, char *argv[])
     controller->addItem("name6", "description6", QStringList() << "tag7" << "tag8" << "tag9");
     controller->addItem("name7", "description7", QStringList() << "tag3" << "tag1" << "tag9" << "tag2");
 
-    QSplitter *splitter = new QSplitter;
+    dtkSplitter *splitter = new dtkSplitter(0, true, true);
     splitter->addWidget(cloud);
     splitter->addWidget(view);
+    splitter->setOrientation(Qt::Vertical);
     splitter->setSizes(QList<int>() << 150 << 350);
 
     QWidget *widget = new QWidget;

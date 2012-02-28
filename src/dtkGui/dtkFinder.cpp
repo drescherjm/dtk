@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Jun 12 15:47:45 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 15 15:14:27 2011 (+0200)
+ * Last-Updated: Tue Feb 28 15:35:11 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 75
+ *     Update #: 76
  */
 
 /* Commentary: 
@@ -39,7 +39,8 @@ public:
     QToolButton *listViewButton;
     QToolButton *treeViewButton;
     QToolButton *showHiddenFilesButton;
-    QLinkedList<QString>           pathList;
+
+    QLinkedList<QString> pathList;
     QLinkedList<QString>::iterator iterator;
 };
 

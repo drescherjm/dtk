@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Nov 29 00:02:24 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Nov 29 00:05:50 2011 (+0100)
+ * Last-Updated: Tue Feb 28 12:27:20 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 9
+ *     Update #: 10
  */
 
 /* Commentary: 
@@ -22,12 +22,12 @@
 
 #include <QtGui>
 
-class FlowLayout : public QLayout
+class dtkFlowLayout : public QLayout
 {
 public:
-     FlowLayout(QWidget *parent, int margin = -1, int hSpacing = -1, int vSpacing = -1);
-     FlowLayout(int margin = -1, int hSpacing = -1, int vSpacing = -1);
-    ~FlowLayout();
+     dtkFlowLayout(QWidget *parent, int margin = -1, int hSpacing = -1, int vSpacing = -1);
+     dtkFlowLayout(int margin = -1, int hSpacing = -1, int vSpacing = -1);
+    ~dtkFlowLayout();
 
     void addItem(QLayoutItem *item);
     int horizontalSpacing() const;

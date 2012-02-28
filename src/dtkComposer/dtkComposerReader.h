@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:38:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb  3 17:36:00 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 35
+ * Last-Updated: mar. févr. 28 10:31:58 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 38
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@
 #include <QtXml>
 
 class dtkComposerFactory;
+class dtkComposerGraph;
 class dtkComposerReaderPrivate;
 class dtkComposerScene;
 class dtkComposerSceneEdge;
@@ -41,6 +42,7 @@ public:
 public:
     void setFactory(dtkComposerFactory *factory);
     void setScene(dtkComposerScene *scene);
+    void setGraph(dtkComposerGraph *graph);
 
 public:
    bool read(const QString& file, bool append = false);

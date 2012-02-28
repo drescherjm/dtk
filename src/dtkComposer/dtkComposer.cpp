@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  9 15:46:15 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 166
+ * Last-Updated: mar. févr. 28 10:40:15 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 171
  */
 
 /* Commentary: 
@@ -139,12 +139,13 @@ bool dtkComposer::open(const QUrl& url)
 bool dtkComposer::open(QString file)
 {
     if (!file.isEmpty()) {
-        
+
         dtkComposerReader reader;
         reader.setFactory(d->factory);
         reader.setScene(d->scene);
+        reader.setGraph(d->graph);
         reader.read(file);
-        
+
         d->fileName = file;
     }
 
@@ -171,9 +172,10 @@ bool dtkComposer::save(QString file, dtkComposerWriter::Type type)
 bool dtkComposer::insert(QString file)
 {
     if (!file.isEmpty()) {
-        
+
         dtkComposerReader reader;
         reader.setScene(d->scene);
+        reader.setGraph(d->graph);
         reader.read(file, true);
     }
 

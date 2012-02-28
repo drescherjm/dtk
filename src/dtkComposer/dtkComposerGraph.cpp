@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. févr. 27 15:49:14 2012 (+0100)
+ * Last-Updated: mar. févr. 28 10:53:37 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1549
+ *     Update #: 1579
  */
 
 /* Commentary:
@@ -102,6 +102,7 @@ bool dtkComposerGraphPrivate::exists(dtkComposerGraphNode *s, dtkComposerGraphNo
 
 dtkComposerGraphNode *dtkComposerGraphPrivate::begin(dtkComposerSceneNode *node)
 {
+    // qDebug() << "looking for begin for node" << node->title();
     if (!dynamic_cast<dtkComposerSceneNodeLeaf *>(node)) {
         foreach(dtkComposerGraphNode *n, this->nodes.values(node)) {
             if (dynamic_cast<dtkComposerGraphNodeBegin *>(n) )
@@ -110,6 +111,7 @@ dtkComposerGraphNode *dtkComposerGraphPrivate::begin(dtkComposerSceneNode *node)
     } else { //Leaf
         return this->nodes.value(node);
     }
+    // qDebug() << "no begin found for node" << node->title();
     return NULL;
 }
 
@@ -123,6 +125,7 @@ dtkComposerGraphNode *dtkComposerGraphPrivate::end(dtkComposerSceneNode *node)
     } else { //Leaf
         return this->nodes.value(node);
     }
+    // qDebug() << "no end found for node" << node->title();
     return NULL;
 }
 
@@ -335,6 +338,8 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
 void dtkComposerGraph::removeNode(dtkComposerSceneNode *node)
 {
     // qDebug()<< "removing node" << node->title();
+    dtkComposerSceneNode *parent = node->parent();
+    // qDebug()<< " node parent is " << parent->title();
     // For control nodes, we have to remove its blocks and then it's pending dummy edges
     if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
         foreach( dtkComposerSceneNodeComposite *block, control->blocks())
@@ -345,20 +350,20 @@ void dtkComposerGraph::removeNode(dtkComposerSceneNode *node)
             d->remDummyEdge(e, node);
     }
 
-    if (!dynamic_cast<dtkComposerSceneNodeControl *>(node->parent())) {
+    if (!dynamic_cast<dtkComposerSceneNodeControl *>(parent)) {
         // remove dummy edges for this node on the parent
-        dtkComposerGraphNode *parent_begin = d->begin(node->parent());
-        dtkComposerGraphNode *parent_end   = d->end(node->parent());
+        dtkComposerGraphNode *parent_begin = d->begin(parent);
+        dtkComposerGraphNode *parent_end   = d->end(parent);
 
         // qDebug()<< " removing dummy edges of parent";
-        foreach( dtkComposerGraphEdge *e, d->dummy_edges.values(node->parent())) {
+        foreach( dtkComposerGraphEdge *e, d->dummy_edges.values(parent)) {
             if ((e->source() == parent_begin && e->destination() == d->begin(node) ) || (e->destination() == parent_end && e->source() == d->end(node)))
-                d->remDummyEdge(e, node->parent());
+                d->remDummyEdge(e, parent);
         }
         // if parent composite is empty after removal, add back dummy edge
-        if (d->dummy_edges.values(node->parent()).count() == 0) {
+        if (d->dummy_edges.values(parent).count() == 0) {
             // qDebug()<< " add back dummy edge of empty parent";
-            d->addDummyEdge(  parent_begin, parent_end, node->parent());
+            d->addDummyEdge(  parent_begin, parent_end, parent);
         }
 
     }
@@ -394,8 +399,7 @@ void dtkComposerGraph::addEdge(dtkComposerSceneEdge *edge)
     dtkComposerGraphNode *src;
     dtkComposerGraphNode *dest;
 
-    if (dynamic_cast<dtkComposerSceneNodeControl *>(scene_src->parent()))
-        scene_src = scene_src->parent();
+    // if the destination is a control node port, then we must use the control node parent begin/end
     if (dynamic_cast<dtkComposerSceneNodeControl *>(scene_dest->parent()))
         scene_dest = scene_dest->parent();
 
@@ -502,6 +506,21 @@ QString dtkComposerGraph::toString(void)
         txt <<  e->source()->title() + " -> "+ e->destination()->title();
     }
     return txt.join("\n");
+}
+
+void dtkComposerGraph::clear(void) {
+    d->dummy_edges.clear();
+    foreach(dtkComposerGraphEdge *e, d->edges.values()) {
+        this->removeItem(e);
+        delete e;
+    }
+    d->edges.clear();
+
+    foreach(dtkComposerGraphNode *n, d->nodes.values()) {
+        this->removeItem(n);
+        delete n;
+    }
+    d->nodes.clear();
 }
 
 void dtkComposerGraph::layout(void)

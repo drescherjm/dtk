@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 15:32:57 2012 (+0100)
- *           By: tkloczko
- *     Update #: 361
+ * Last-Updated: mar. févr. 28 10:51:20 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 373
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include "dtkComposerFactory.h"
+#include "dtkComposerGraph.h"
 #include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
@@ -46,6 +47,7 @@ public:
 public:
     dtkComposerFactory *factory;
     dtkComposerScene *scene;
+    dtkComposerGraph *graph;
 
 public:
     QHash<int, dtkComposerSceneNode *> node_map;
@@ -72,6 +74,7 @@ dtkComposerReader::dtkComposerReader(void) : d(new dtkComposerReaderPrivate)
     d->factory = NULL;
     d->scene = NULL;
     d->root = NULL;
+    d->graph = NULL;
 
     d->control = NULL;
 }
@@ -91,6 +94,11 @@ void dtkComposerReader::setFactory(dtkComposerFactory *factory)
 void dtkComposerReader::setScene(dtkComposerScene *scene)
 {
     d->scene = scene;
+}
+
+void dtkComposerReader::setGraph(dtkComposerGraph *graph)
+{
+    d->graph = graph;
 }
 
 bool dtkComposerReader::read(const QString& fileName, bool append)
@@ -130,8 +138,10 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
 
     // Clear scene if applicable
 
-    if(!append)
+    if(!append) {
         d->scene->clear();
+        d->graph->clear();
+    }
 
     d->node_map.clear();
 
@@ -140,6 +150,7 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
     if(!append) {
         d->root = d->scene->root();
         d->node = d->root;
+        d->graph->addNode(d->root);
     } else {
         d->node = d->scene->current();
     }
@@ -172,6 +183,8 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
     
     if(!append)
         d->scene->setRoot(d->root);
+
+    d->graph->layout();
 
     // --
     
@@ -240,6 +253,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
         n->wrap(d->factory->create(node.toElement().attribute("type")));
         n->setParent(d->node);
         d->node->addNode(n);
+        d->graph->addNode(n);
         n->resize(w, h);
 
     } else if(node.toElement().tagName() == "block") {
@@ -251,6 +265,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
         n = new dtkComposerSceneNodeComposite;
         n->setParent(d->node);
         d->node->addNode(n);
+        d->graph->addNode(n);
 
     } else {
 
@@ -258,6 +273,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
         n->wrap(d->factory->create(node.toElement().attribute("type")));
         n->setParent(d->node);
         d->node->addNode(n);
+        d->graph->addNode(n);
 
     }
 
@@ -368,6 +384,7 @@ dtkComposerSceneEdge *dtkComposerReader::readEdge(QDomNode node)
     d->node->addEdge(edge);
 
     edge->setParent(d->node);
+    d->graph->addEdge(edge);
 
     return edge;
 }

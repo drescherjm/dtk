@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:01 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Feb 28 17:32:58 2012 (+0100)
+ * Last-Updated: Wed Feb 29 00:36:31 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 165
+ *     Update #: 177
  */
 
 /* Commentary: 
@@ -106,6 +106,44 @@ private:
 };
 
 // /////////////////////////////////////////////////////////////////
+// dtkTagScopeTag
+// /////////////////////////////////////////////////////////////////
+
+class dtkTagScopeTagPrivate;
+
+class dtkTagScopeTag : public QWidget
+{
+    Q_OBJECT
+
+public:
+     dtkTagScopeTag(QWidget *parent = 0);
+    ~dtkTagScopeTag(void);
+
+signals:
+     void clicked(void);
+
+public:
+    QSize sizeHint(void) const;
+
+public:
+    QString text(void);
+
+public slots:
+    void setText(const QString& text);
+    void setCount(int count);
+
+protected:
+    void enterEvent(QEvent *event);
+    void leaveEvent(QEvent *event);
+
+protected:
+    void mouseReleaseEvent(QMouseEvent *);
+
+private:
+    dtkTagScopeTagPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
 // dtkTagScope
 // /////////////////////////////////////////////////////////////////
 
@@ -124,6 +162,7 @@ public:
     void render(void);
 
     void addTag(QString tag);
+    void addTag(QString tag, int count);
 
 signals:
     void tagSet(QString tag);

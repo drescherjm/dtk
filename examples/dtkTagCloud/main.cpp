@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue May 12 10:34:30 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Feb 28 16:09:59 2012 (+0100)
+ * Last-Updated: Tue Feb 28 18:01:27 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 59
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     controller->addItem("name6", "description6", QStringList() << "tag7" << "tag8" << "tag9");
     controller->addItem("name7", "description7", QStringList() << "tag3" << "tag1" << "tag9" << "tag2");
 
-    dtkSplitter *splitter = new dtkSplitter(0, true, true);
+    dtkSplitter *splitter = new dtkSplitter;
     splitter->addWidget(cloud);
     splitter->addWidget(view);
     splitter->setOrientation(Qt::Vertical);

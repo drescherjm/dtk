@@ -6,6 +6,9 @@
     <file>pixmaps/dtk-anchored-bar-action.png</file>
     <file>pixmaps/dtk-anchored-bar-add.png</file>
     <file>pixmaps/dtk-anchored-bar-handle.png</file>
+    <file>pixmaps/dtk-item-list-delegate-arrow.png</file>
+    <file>pixmaps/dtk-tag_bg.png</file>
+    <file>pixmaps/dtk-tag_fg.png</file>
     <file>pixmaps/dtk-view-tree.png</file>
     <file>pixmaps/dtk-view-list.png</file>
     <file>pixmaps/dtk.png</file>

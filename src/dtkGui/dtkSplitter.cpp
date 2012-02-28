@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Oct  7 23:24:59 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jul 13 16:50:16 2011 (+0200)
+ * Last-Updated: Tue Feb 28 18:23:44 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 88
+ *     Update #: 89
  */
 
 /* Commentary: 
@@ -68,7 +68,7 @@ void dtkSplitterHandle::paintEvent(QPaintEvent *event)
     }
 
     if (orientation() == Qt::Vertical) {
-	painter.setPen(QColor("#181818"));
+	painter.setPen(topColor);
 	painter.drawLine(0, 0, width(), 0);
 
 	if(m_slim)

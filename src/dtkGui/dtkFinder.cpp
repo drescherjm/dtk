@@ -73,7 +73,7 @@ dtkFinderToolBar::dtkFinderToolBar(QWidget *parent) : QToolBar(parent), d(new dt
 
     d->showHiddenFilesButton = new QToolButton (this);
     d->showHiddenFilesButton->setCheckable(true);
-    d->showHiddenFilesButton->setIcon(QIcon(":dtkGui/pixmaps/dtk-anchored-bar-action.png"));
+    d->showHiddenFilesButton->setIcon(QIcon(":dtkGui/pixmaps/hidden-folder.png"));
     d->showHiddenFilesButton->setIconSize(QSize(16, 16));
     d->showHiddenFilesButton->setToolTip(tr("Show/Hide hidden files"));
     //By default the showHiddenFilesButton is enabled in MacOS
@@ -1047,7 +1047,7 @@ dtkFinder::dtkFinder(QWidget *parent) : QWidget(parent), d(new dtkFinderPrivate)
     d->showHideAction->setText(tr("Hide hidden files"));
 #endif
     d->showHideAction->setIconVisibleInMenu(true);
-    d->showHideAction->setIcon(QIcon(":dtkGui/pixmaps/dtk-anchored-bar-action.png"));
+    d->showHideAction->setIcon(QIcon(":dtkGui/pixmaps/hidden-folder.png"));
 
     d->list->addDefaultContextMenuAction(d->listviewAction);
     d->list->addDefaultContextMenuAction(d->showHideAction);

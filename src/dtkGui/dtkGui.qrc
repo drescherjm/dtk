@@ -9,6 +9,7 @@
     <file>dtkInspectorBox.qss</file>
     <file>dtkAnchoredBar.qss</file>
 
+	<file>pixmaps/hidden-folder.png</file>
     <file>pixmaps/star.svg</file>
     <file>pixmaps/dtk-gui-inset-menu-item.png</file>
     <file>pixmaps/dtk-gui-inset-menu-scroller-both.png</file>
@@ -58,6 +59,5 @@
     <file>pixmaps/dtkInspector-scrollbar-vertical-handle.png</file>
     <file>pixmaps/dtkInspector-scrollbar-vertical-sub.png</file>
     <file>pixmaps/dtkInspector-scrollbar-vertical.png</file>
-
   </qresource>
 </RCC>

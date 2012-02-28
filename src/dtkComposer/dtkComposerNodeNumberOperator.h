@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Mon Feb 27 14:19:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 17:22:49 2012 (+0100)
+ * Last-Updated: Tue Feb 28 17:45:00 2012 (+0100)
  *           By: David Rey
- *     Update #: 46
+ *     Update #: 74
  */
 
 /* Commentary: 
@@ -103,6 +103,92 @@ public:
 
 protected:
     dtkComposerNodeNumberComparatorPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeLeaf - ALMOSTEQ
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeNumberAlmosteqPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberAlmosteq : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeNumberAlmosteq(void);
+    ~dtkComposerNodeNumberAlmosteq(void);
+
+public:
+    void run(void);
+    
+public:
+    inline QString inputLabelHint(int port) {
+        if (port == 0)
+            return "lhs";
+        else if (port == 1) 
+            return "rhs";
+        else if (port == 2) 
+            return "eps";
+        else
+            return "value";
+    }
+
+    inline QString outputLabelHint(int) {
+        return "value";
+    }
+
+    inline QString type(void) {
+        return "almosteq";
+    }
+
+    inline QString titleHint(void) {
+        return "Almosteq";
+    }
+
+protected:
+    dtkComposerNodeNumberAlmosteqPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeLeaf - NOTALMOSTEQ
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeNumberNotalmosteqPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberNotalmosteq : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeNumberNotalmosteq(void);
+    ~dtkComposerNodeNumberNotalmosteq(void);
+
+public:
+    void run(void);
+    
+public:
+    inline QString inputLabelHint(int port) {
+        if (port == 0)
+            return "lhs";
+        else if (port == 1) 
+            return "rhs";
+        else if (port == 2) 
+            return "eps";
+        else
+            return "value";
+    }
+
+    inline QString outputLabelHint(int) {
+        return "value";
+    }
+
+    inline QString type(void) {
+        return "notalmosteq";
+    }
+
+    inline QString titleHint(void) {
+        return "Notalmosteq";
+    }
+
+protected:
+    dtkComposerNodeNumberNotalmosteqPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -672,6 +758,139 @@ public:
 
     inline QString titleHint(void) {
         return "Ratio";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberOperatorBinary - EXPN
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryExpn : public dtkComposerNodeNumberOperatorBinary
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "expn";
+    }
+
+    inline QString titleHint(void) {
+        return "Expn";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberOperatorBinary - EQUAL
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberComparatorEqual : public dtkComposerNodeNumberComparator
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "equal";
+    }
+
+    inline QString titleHint(void) {
+        return "Equal";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberOperatorBinary - NOTEQUAL
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberComparatorNotequal : public dtkComposerNodeNumberComparator
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "notequal";
+    }
+
+    inline QString titleHint(void) {
+        return "Notequal";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberOperatorBinary - GT
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberComparatorGt : public dtkComposerNodeNumberComparator
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "gt";
+    }
+
+    inline QString titleHint(void) {
+        return "Gt";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberOperatorBinary - LT
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberComparatorLt : public dtkComposerNodeNumberComparator
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "lt";
+    }
+
+    inline QString titleHint(void) {
+        return "Lt";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberOperatorBinary - GTE
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberComparatorGte : public dtkComposerNodeNumberComparator
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "gte";
+    }
+
+    inline QString titleHint(void) {
+        return "Gte";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberOperatorBinary - LTE
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberComparatorLte : public dtkComposerNodeNumberComparator
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "lte";
+    }
+
+    inline QString titleHint(void) {
+        return "Lte";
     }
 };
 

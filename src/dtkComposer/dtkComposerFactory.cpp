@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Mon Feb 27 17:29:09 2012 (+0100)
+ * Last-Updated: Tue Feb 28 17:42:04 2012 (+0100)
  *           By: David Rey
- *     Update #: 226
+ *     Update #: 237
  */
 
 /* Commentary:
@@ -80,6 +80,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->operators.insert("Sqrt", "sqrt");
     d->operators.insert("Tan", "tan");
     d->operators.insert("Eucldiv", "eucldiv");
+    d->operators.insert("Expn", "expn");
     d->operators.insert("Logn", "logn");
     d->operators.insert("Minus", "minus");
     d->operators.insert("Modulo", "modulo");
@@ -88,6 +89,14 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->operators.insert("Posnthroot", "posnthroot");
     d->operators.insert("Power", "power");
     d->operators.insert("Ratio", "ratio");
+    d->operators.insert("Equal", "equal");
+    d->operators.insert("Notequal", "notequal");
+    d->operators.insert("Gt", "gt");
+    d->operators.insert("Lt", "lt");
+    d->operators.insert("Gte", "gte");
+    d->operators.insert("Lte", "lte");
+    d->operators.insert("Almosteq", "almosteq");
+    d->operators.insert("Notalmosteq", "notalmosteq");
     d->operators.insert("Not", "not");
     d->operators.insert("And", "and");
     d->operators.insert("Or", "or");
@@ -239,6 +248,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if (type =="eucldiv")
         return new dtkComposerNodeNumberOperatorBinaryEucldiv;
 
+    if (type =="expn")
+        return new dtkComposerNodeNumberOperatorBinaryExpn;
+
     if (type =="logn")
         return new dtkComposerNodeNumberOperatorBinaryLogn;
 
@@ -262,6 +274,30 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if (type =="ratio")
         return new dtkComposerNodeNumberOperatorBinaryRatio;
+
+    if (type =="equal")
+        return new dtkComposerNodeNumberComparatorEqual;
+
+    if (type =="notequal")
+        return new dtkComposerNodeNumberComparatorNotequal;
+
+    if (type =="gt")
+        return new dtkComposerNodeNumberComparatorGt;
+
+    if (type =="lt")
+        return new dtkComposerNodeNumberComparatorLt;
+
+    if (type =="gte")
+        return new dtkComposerNodeNumberComparatorGte;
+
+    if (type =="lte")
+        return new dtkComposerNodeNumberComparatorLte;
+
+    if (type =="almosteq")
+        return new dtkComposerNodeNumberAlmosteq;
+
+    if (type =="notalmosteq")
+        return new dtkComposerNodeNumberNotalmosteq;
 
     // control nodes
 

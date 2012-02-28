@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Mon Feb 27 14:28:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 17:20:33 2012 (+0100)
+ * Last-Updated: Tue Feb 28 17:41:08 2012 (+0100)
  *           By: David Rey
- *     Update #: 68
+ *     Update #: 115
  */
 
 /* Commentary: 
@@ -20,6 +20,8 @@
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerEmitter.h"
 #include "dtkComposerReceiver.h"
+
+#include <dtkMath/dtkMath.h>
 
 #include <math.h>
 
@@ -101,7 +103,7 @@ public:
     dtkComposerReceiver<qreal> *receiver_rhs;
 
 public:    
-    dtkComposerEmitter<qreal> *emitter;
+    dtkComposerEmitter<bool> *emitter;
 };
 
 dtkComposerNodeNumberComparator::dtkComposerNodeNumberComparator(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberComparatorPrivate)
@@ -112,7 +114,7 @@ dtkComposerNodeNumberComparator::dtkComposerNodeNumberComparator(void) : dtkComp
     d->receiver_rhs = new dtkComposerReceiver<qreal>;
     this->appendReceiver(d->receiver_rhs);
 
-    d->emitter = new dtkComposerEmitter<qreal>;
+    d->emitter = new dtkComposerEmitter<bool>;
     this->appendEmitter(d->emitter);
 }
 
@@ -124,6 +126,106 @@ dtkComposerNodeNumberComparator::~dtkComposerNodeNumberComparator(void)
     delete d;
     
     d = NULL;
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeLeaf - ALMOSTEQ
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeNumberAlmosteqPrivate
+{
+public:
+    dtkComposerReceiver<qreal> *receiver_lhs;
+    dtkComposerReceiver<qreal> *receiver_rhs;
+    dtkComposerReceiver<qreal> *receiver_eps;
+
+public:    
+    dtkComposerEmitter<bool> *emitter;
+};
+
+dtkComposerNodeNumberAlmosteq::dtkComposerNodeNumberAlmosteq(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberAlmosteqPrivate)
+{
+    d->receiver_lhs = new dtkComposerReceiver<qreal>;
+    this->appendReceiver(d->receiver_lhs);
+
+    d->receiver_rhs = new dtkComposerReceiver<qreal>;
+    this->appendReceiver(d->receiver_rhs);
+
+    d->receiver_eps = new dtkComposerReceiver<qreal>;
+    this->appendReceiver(d->receiver_eps);
+
+    d->emitter = new dtkComposerEmitter<bool>;
+    this->appendEmitter(d->emitter);
+}
+
+dtkComposerNodeNumberAlmosteq::~dtkComposerNodeNumberAlmosteq(void)
+{
+    delete d->receiver_lhs;
+    delete d->receiver_rhs;
+    delete d->receiver_eps;
+    delete d->emitter;
+    delete d;
+    
+    d = NULL;
+}
+
+void dtkComposerNodeNumberAlmosteq::run(void)
+{
+    qreal a = d->receiver_lhs->data();
+    qreal b = d->receiver_rhs->data();
+    qreal eps = d->receiver_eps->data();
+
+    d->emitter->setData(dtkAlmostEqualUlpsSimple(a,b,eps));
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeLeaf - NOTALMOSTEQ
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeNumberNotalmosteqPrivate
+{
+public:
+    dtkComposerReceiver<qreal> *receiver_lhs;
+    dtkComposerReceiver<qreal> *receiver_rhs;
+    dtkComposerReceiver<qreal> *receiver_eps;
+
+public:    
+    dtkComposerEmitter<bool> *emitter;
+};
+
+dtkComposerNodeNumberNotalmosteq::dtkComposerNodeNumberNotalmosteq(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberNotalmosteqPrivate)
+{
+    d->receiver_lhs = new dtkComposerReceiver<qreal>;
+    this->appendReceiver(d->receiver_lhs);
+
+    d->receiver_rhs = new dtkComposerReceiver<qreal>;
+    this->appendReceiver(d->receiver_rhs);
+
+    d->receiver_eps = new dtkComposerReceiver<qreal>;
+    this->appendReceiver(d->receiver_eps);
+
+    d->emitter = new dtkComposerEmitter<bool>;
+    this->appendEmitter(d->emitter);
+}
+
+dtkComposerNodeNumberNotalmosteq::~dtkComposerNodeNumberNotalmosteq(void)
+{
+    delete d->receiver_lhs;
+    delete d->receiver_rhs;
+    delete d->receiver_eps;
+    delete d->emitter;
+    delete d;
+    
+    d = NULL;
+}
+
+void dtkComposerNodeNumberNotalmosteq::run(void)
+{
+    qreal a = d->receiver_lhs->data();
+    qreal b = d->receiver_rhs->data();
+    qreal eps = d->receiver_eps->data();
+
+    d->emitter->setData(!dtkAlmostEqualUlpsSimple(a,b,eps));
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -433,4 +535,81 @@ void dtkComposerNodeNumberOperatorBinaryRatio::run(void)
     qreal a = d->receiver_lhs->data();
     qreal b = d->receiver_rhs->data();
     d->emitter->setData(a/b);
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberOperatorBinary - EXPN
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeNumberOperatorBinaryExpn::run(void)
+{
+    qreal a = d->receiver_lhs->data();
+    qreal b = d->receiver_rhs->data();
+    d->emitter->setData(exp(a*log(b)));
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberComparator - EQUAL
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeNumberComparatorEqual::run(void)
+{
+    qreal a = d->receiver_lhs->data();
+    qreal b = d->receiver_rhs->data();
+    d->emitter->setData(a==b);
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberComparator - NOTEQUAL
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeNumberComparatorNotequal::run(void)
+{
+    qreal a = d->receiver_lhs->data();
+    qreal b = d->receiver_rhs->data();
+    d->emitter->setData(a!=b);
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberComparator - GT
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeNumberComparatorGt::run(void)
+{
+    qreal a = d->receiver_lhs->data();
+    qreal b = d->receiver_rhs->data();
+    d->emitter->setData(a>b);
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberComparator - LT
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeNumberComparatorLt::run(void)
+{
+    qreal a = d->receiver_lhs->data();
+    qreal b = d->receiver_rhs->data();
+    d->emitter->setData(a<b);
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberComparator - GTE
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeNumberComparatorGte::run(void)
+{
+    qreal a = d->receiver_lhs->data();
+    qreal b = d->receiver_rhs->data();
+    d->emitter->setData(a>=b);
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberComparator - LTE
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeNumberComparatorLte::run(void)
+{
+    qreal a = d->receiver_lhs->data();
+    qreal b = d->receiver_rhs->data();
+    d->emitter->setData(a<=b);
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:27 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 01:13:31 2012 (+0100)
+ * Last-Updated: Wed Feb 29 02:54:58 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1357
+ *     Update #: 1378
  */
 
 /* Commentary: 
@@ -23,7 +23,7 @@
 #include <QtDebug>
 
 // /////////////////////////////////////////////////////////////////
-// helper functions
+// Helper functions
 // /////////////////////////////////////////////////////////////////
 
 bool dtkTagAlphaLessThan(const dtkTag &t1, const dtkTag &t2) {
@@ -801,6 +801,22 @@ QStringList dtkItemList::mimeTypes(void) const
 }
 
 // /////////////////////////////////////////////////////////////////
+// Helper function
+// /////////////////////////////////////////////////////////////////
+
+QString dtkItemListDelegateUnhtmlize(const QString &htmlString)
+{
+    QString textString;
+
+    QXmlStreamReader xml(htmlString);
+    while(!xml.atEnd())
+        if(xml.readNext() == QXmlStreamReader::Characters)
+            textString += xml.text();
+
+    return textString;
+}
+
+// /////////////////////////////////////////////////////////////////
 // dtkItemListDelegate
 // /////////////////////////////////////////////////////////////////
 
@@ -828,7 +844,7 @@ void dtkItemListDelegate::paint(QPainter *painter, const QStyleOptionViewItem& o
 
     static int m  =  5;
     static int h1 = 20;
-    static int h2 = 40;
+    static int h2 = 20;
     static int h3 = 20;
     
     int w = option.rect.width();
@@ -837,7 +853,7 @@ void dtkItemListDelegate::paint(QPainter *painter, const QStyleOptionViewItem& o
     int r = option.rect.right();
 
     QRect name_rect = QRect(m, t+1*m,       w-2*m, h1);
-    QRect desc_rect = QRect(m, t+2*m+h1,    w-2*m, h2);
+    QRect desc_rect = QRect(m, t+2*m+h1,    w-6*m, h2);
     QRect tags_rect = QRect(m, t+3*m+h1+h2, w-2*m, h3);
 
     QFontMetrics metrics = QFontMetrics(painter->font());
@@ -846,10 +862,10 @@ void dtkItemListDelegate::paint(QPainter *painter, const QStyleOptionViewItem& o
     painter->drawText(name_rect, Qt::AlignLeft | Qt::AlignTop, item->name());
 
     painter->setPen(Qt::gray);
-    painter->drawText(desc_rect, Qt::AlignLeft | Qt::AlignTop, metrics.elidedText(item->description(), Qt::ElideRight, desc_rect.width()));
+    painter->drawText(desc_rect, Qt::AlignLeft | Qt::AlignTop, metrics.elidedText(dtkItemListDelegateUnhtmlize(item->description()), Qt::ElideRight, desc_rect.width()));
 
     painter->setPen(QColor("#bf6040"));
-    painter->drawText(tags_rect, Qt::AlignLeft | Qt::AlignTop, item->tags().join(" "));
+    painter->drawText(tags_rect, Qt::AlignLeft | Qt::AlignTop, item->tags().join(", "));
 
     painter->setPen(Qt::darkGray);
     painter->drawLine(option.rect.bottomLeft(), option.rect.bottomRight());
@@ -865,7 +881,7 @@ QSize dtkItemListDelegate::sizeHint(const QStyleOptionViewItem& option, const QM
     Q_UNUSED(option);
     Q_UNUSED(index);
 
-    return QSize(100, 100);
+    return QSize(100, 80);
 }
 
 // /////////////////////////////////////////////////////////////////

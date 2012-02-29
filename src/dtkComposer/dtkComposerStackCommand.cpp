@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 18:34:51 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 2807
+ * Last-Updated: mer. févr. 29 19:14:18 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 2835
  */
 
 /* Commentary: 
@@ -863,7 +863,6 @@ void dtkComposerStackCommandCreateGroup::redo(void)
         e->node = new dtkComposerSceneNodeComposite;
         e->node->wrap(new dtkComposerNodeComposite);
         e->node->setParent(e->parent);
-        
     }
 
     QList<dtkComposerSceneNode *> nodes = e->nodes;
@@ -1924,6 +1923,7 @@ public:
 public:
     QList<dtkComposerStackCommandDestroyEdge *> destroy_intern_edges;
     QList<dtkComposerStackCommandCreateEdge *>  create_intern_edges;
+    QList<dtkComposerStackCommandDestroyPort *> destroy_ports;
 
 };
 
@@ -2078,6 +2078,18 @@ void dtkComposerStackCommandReparentNode::setTargetNode(dtkComposerSceneNode *no
                 e->destroy_intern_edges.last()->setScene(d->scene);
                 e->destroy_intern_edges.last()->setGraph(d->graph);
                 e->destroy_intern_edges.last()->setEdge(edge);
+
+                if (port_used[edge->destination()] == 0) {// no extern edge connected either, delete port
+                    qDebug()<< __func__ << "deleting unused port";
+                    e->destroy_ports << new dtkComposerStackCommandDestroyPort;
+                    e->destroy_ports.last()->setFactory(d->factory);
+                    e->destroy_ports.last()->setScene(d->scene);
+                    e->destroy_ports.last()->setGraph(d->graph);
+                    e->destroy_ports.last()->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(e->target));
+                    e->destroy_ports.last()->setPort(edge->destination());
+
+                }
+
             }
         }
     }
@@ -2114,6 +2126,17 @@ void dtkComposerStackCommandReparentNode::setTargetNode(dtkComposerSceneNode *no
                 e->destroy_intern_edges.last()->setScene(d->scene);
                 e->destroy_intern_edges.last()->setGraph(d->graph);
                 e->destroy_intern_edges.last()->setEdge(edge);
+                if (port_used[edge->source()] == 0) {// no extern edge connected either, delete port
+                    qDebug()<< __func__ << "******* deleting unused port";
+                    e->destroy_ports << new dtkComposerStackCommandDestroyPort;
+                    e->destroy_ports.last()->setFactory(d->factory);
+                    e->destroy_ports.last()->setScene(d->scene);
+                    e->destroy_ports.last()->setGraph(d->graph);
+                    e->destroy_ports.last()->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(e->target));
+                    e->destroy_ports.last()->setPort(edge->source());
+                } else {
+                    qDebug()<< __func__ << " **** can't delete port" << port_used[edge->source()] ;
+                }
             }
         }
     }
@@ -2182,6 +2205,8 @@ void dtkComposerStackCommandReparentNode::redo(void)
         foreach(dtkComposerStackCommandDestroyEdge *destroy_edge, e->destroy_intern_edges)
             destroy_edge->redo();
 
+        foreach(dtkComposerStackCommandDestroyPort *destroy_port, e->destroy_ports)
+            destroy_port->redo();
 
         d->graph->reparentNode(e->origin, e->target);
 
@@ -2259,6 +2284,9 @@ void dtkComposerStackCommandReparentNode::undo(void)
 
     if(dtkComposerSceneNodeComposite *target = dynamic_cast<dtkComposerSceneNodeComposite *>(e->target)) {
 
+
+        foreach(dtkComposerStackCommandDestroyPort *destroy_port, e->destroy_ports)
+            destroy_port->undo();
 
         foreach(dtkComposerStackCommandCreateEdge *create_edge, e->create_intern_edges)
             create_edge->undo();

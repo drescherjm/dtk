@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. févr. 28 10:51:20 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 373
+ * Last-Updated: Wed Feb 29 14:27:23 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 381
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include "dtkComposerFactory.h"
 #include "dtkComposerGraph.h"
+#include "dtkComposerNodeComposite.h"
 #include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
@@ -29,6 +30,9 @@
 #include "dtkComposerSceneNodeLeaf.h"
 #include "dtkComposerSceneNote.h"
 #include "dtkComposerScenePort.h"
+#include "dtkComposerStackUtils.h"
+#include "dtkComposerTransmitter.h"
+#include "dtkComposerTransmitterProxy.h"
 
 #include <dtkCore/dtkGlobal.h>
 
@@ -263,6 +267,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
     } else if(notes.count() || nodes.count() || edges.count()) {
 
         n = new dtkComposerSceneNodeComposite;
+        n->wrap(new dtkComposerNodeComposite);
         n->setParent(d->node);
         d->node->addNode(n);
         d->graph->addNode(n);
@@ -318,11 +323,15 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
                 if (ports.at(i).toElement().hasAttribute("label"))
                     port->setLabel(ports.at(i).toElement().attribute("label"));
                 composite->addInputPort(port);
+                dtkComposerTransmitter *proxy = new dtkComposerTransmitterProxy(composite->wrapee());
+                composite->wrapee()->appendReceiver(proxy);
             } else {
                 dtkComposerScenePort *port = new dtkComposerScenePort(dtkComposerScenePort::Output, composite);
                 if (ports.at(i).toElement().hasAttribute("label"))
                     port->setLabel(ports.at(i).toElement().attribute("label"));
                 composite->addOutputPort(port);
+                dtkComposerTransmitter *proxy = new dtkComposerTransmitterProxy(composite->wrapee());
+                composite->wrapee()->appendEmitter(proxy);
             }
         }
 
@@ -384,6 +393,9 @@ dtkComposerSceneEdge *dtkComposerReader::readEdge(QDomNode node)
     d->node->addEdge(edge);
 
     edge->setParent(d->node);
+
+    dtkComposerTransmitterConnection(d->scene->root(), d->node, edge);
+
     d->graph->addEdge(edge);
 
     return edge;

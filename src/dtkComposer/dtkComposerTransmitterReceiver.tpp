@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 10:11:33 2012 (+0100)
+ * Last-Updated: Wed Feb 29 17:24:03 2012 (+0100)
  *           By: tkloczko
- *     Update #: 49
+ *     Update #: 52
  */
 
 /* Commentary: 
@@ -84,7 +84,18 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::isEmpty(void) cons
  */
 template <typename T> QString dtkComposerTransmitterReceiver<T>::identifier(void) const
 {
-    return "dtkComposerTransmitterReceiver";
+    T fake;
+    return QString("dtkComposerTransmitterReceiver<%1>").arg(typeid(fake).name());
+};
+
+//! Returns description of the emitter.
+/*! 
+ *  
+ */
+template <typename T> QString dtkComposerTransmitterReceiver<T>::dataType(void) const
+{
+    T fake;
+    return typeid(fake).name();
 };
 
 //! 

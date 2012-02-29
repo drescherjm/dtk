@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 11:45:45 2012 (+0100)
+ * Last-Updated: Wed Feb 29 17:22:47 2012 (+0100)
  *           By: tkloczko
- *     Update #: 32
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -45,6 +45,7 @@ public:
 
 public:
     QString identifier(void) const;
+    QString   dataType(void) const;
 
 public:
     bool    connect(dtkComposerTransmitter *transmitter);

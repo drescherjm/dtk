@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Feb 20 11:47:39 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 24 09:35:54 2012 (+0100)
+ * Last-Updated: Wed Feb 29 17:08:16 2012 (+0100)
  *           By: tkloczko
- *     Update #: 38
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@
 class dtkComposerTransmitterProxyPrivate
 {
 public:
+    QString data_type;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -47,6 +48,11 @@ dtkComposerTransmitterProxy::~dtkComposerTransmitterProxy(void)
 QString dtkComposerTransmitterProxy::identifier(void) const
 {
     return "dtkComposerTransmitterProxy";
+}
+
+QString dtkComposerTransmitterProxy::dataType(void) const
+{
+    return d->data_type;
 }
 
 dtkComposerTransmitter::LinkMap dtkComposerTransmitterProxy::leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)

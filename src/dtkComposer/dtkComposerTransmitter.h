@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 24 09:54:48 2012 (+0100)
+ * Last-Updated: Wed Feb 29 17:07:11 2012 (+0100)
  *           By: tkloczko
- *     Update #: 74
+ *     Update #: 80
  */
 
 /* Commentary: 
@@ -45,6 +45,7 @@ public:
 
 public:
     virtual QString identifier(void) const = 0;
+    virtual QString   dataType(void) const = 0;
 
 public:
     dtkComposerNode *parentNode(void) const;

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 10:13:20 2012 (+0100)
+ * Last-Updated: Wed Feb 29 17:22:29 2012 (+0100)
  *           By: tkloczko
- *     Update #: 40
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -20,6 +20,8 @@
 #ifndef DTKCOMPOSERTRANSMITTEREMITTER_TPP
 #define DTKCOMPOSERTRANSMITTEREMITTER_TPP
 
+#include <typeinfo>
+
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterEmitter implementation
 // /////////////////////////////////////////////////////////////////
@@ -30,7 +32,7 @@
  */
 template <typename T> inline dtkComposerTransmitterEmitter<T>::dtkComposerTransmitterEmitter(dtkComposerNode *parent) : dtkComposerTransmitter(parent)
 {
-    
+
 };
 
 //! Destroys the emitter.
@@ -75,7 +77,16 @@ template <typename T> inline const T& dtkComposerTransmitterEmitter<T>::data(voi
  */
 template <typename T> QString dtkComposerTransmitterEmitter<T>::identifier(void) const
 {
-    return "dtkComposerTransmitterEmitter";
+    return QString("dtkComposerTransmitterEmitter<%1>").arg(typeid(m_data).name());
+};
+
+//! Returns description of the emitter.
+/*! 
+ *  
+ */
+template <typename T> QString dtkComposerTransmitterEmitter<T>::dataType(void) const
+{
+    return typeid(m_data).name();
 };
 
 

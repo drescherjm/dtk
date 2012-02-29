@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue May 12 10:34:30 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Feb 28 18:01:27 2012 (+0100)
+ * Last-Updated: Wed Feb 29 01:17:04 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 61
+ *     Update #: 63
  */
 
 /* Commentary: 
@@ -40,8 +40,8 @@ int main(int argc, char *argv[])
     controller->attach(scope);
     controller->attach(view);
     controller->attach(cloud);
-    controller->addItem("name1", "description1", QStringList() << "tag1" << "tag2");
-    controller->addItem("name2", "description2", QStringList() << "tag2" << "tag3");
+    controller->addItem("name1", "description1", QStringList() << "tag1" << "tag2", "kind", "type");
+    controller->addItem("name2", "description2", QStringList() << "tag2" << "tag3", "kind", "type");
     controller->addItem("name3", "description3", QStringList() << "tag2" << "tag4" << "tag6");
     controller->addItem("name4", "description4", QStringList() << "tag5" << "tag6");
     controller->addItem("name5", "description5", QStringList() << "tag5" << "tag6" << "tag2");
@@ -65,6 +65,7 @@ int main(int argc, char *argv[])
     QMainWindow *window = new QMainWindow;
     window->setCentralWidget(widget);
     window->setUnifiedTitleAndToolBarOnMac(true);
+    window->setWindowTitle("Tag cloud example");
     window->show();
     window->raise();
 

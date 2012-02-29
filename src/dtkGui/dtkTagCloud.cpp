@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:27 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 00:58:17 2012 (+0100)
+ * Last-Updated: Wed Feb 29 01:13:31 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1317
+ *     Update #: 1357
  */
 
 /* Commentary: 
@@ -624,16 +624,14 @@ public:
     QString name;
     QString description;
     QStringList tags;
-    QStringList types;
+    QString kind;
+    QString type;
 };
 
 dtkItem::dtkItem(QString name) : QListWidgetItem(name)
 {
     d = new dtkItemPrivate;
     d->name = name;
-    d->description = QString();
-    d->tags = QStringList();
-    d->types = QStringList();
 }
 
 dtkItem::dtkItem(QString name, QString description) : QListWidgetItem(name)
@@ -641,8 +639,6 @@ dtkItem::dtkItem(QString name, QString description) : QListWidgetItem(name)
     d = new dtkItemPrivate;
     d->name = name;
     d->description = description;
-    d->tags = QStringList();
-    d->types = QStringList();
 }
 
 dtkItem::dtkItem(QString name, QString description, QStringList tags) : QListWidgetItem(name)
@@ -651,16 +647,16 @@ dtkItem::dtkItem(QString name, QString description, QStringList tags) : QListWid
     d->name = name;
     d->description = description;
     d->tags = tags;
-    d->types = QStringList();
 }
 
-dtkItem::dtkItem(QString name, QString description, QStringList tags, QStringList types) : QListWidgetItem(name)
+dtkItem::dtkItem(QString name, QString description, QStringList tags, QString kind, QString type) : QListWidgetItem(name)
 {
     d = new dtkItemPrivate;
     d->name = name;
     d->description = description;
     d->tags = tags;
-    d->types = types;
+    d->kind = kind;
+    d->type = type;
 }
 
 dtkItem::dtkItem(const dtkItem& item) : QListWidgetItem(item.name())
@@ -669,7 +665,8 @@ dtkItem::dtkItem(const dtkItem& item) : QListWidgetItem(item.name())
     d->name = item.d->name;
     d->description = item.d->description;
     d->tags = item.d->tags;
-    d->types = item.d->types;
+    d->kind = item.d->kind;
+    d->type = item.d->type;
 }
 
 dtkItem::~dtkItem(void)
@@ -694,9 +691,14 @@ QStringList dtkItem::tags(void) const
     return d->tags;
 }
 
-QStringList dtkItem::types(void) const
+QString dtkItem::kind(void) const
 {
-    return d->types;
+    return d->kind;
+}
+
+QString dtkItem::type(void) const
+{
+    return d->type;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -748,9 +750,9 @@ void dtkItemList::addItem(QString name, QString description, QStringList tags)
     QListWidget::addItem(d->items.last());
 }
 
-void dtkItemList::addItem(QString name, QString description, QStringList tags, QStringList types)
+void dtkItemList::addItem(QString name, QString description, QStringList tags, QString kind, QString type)
 {
-    d->items << new dtkItem(name, description, tags, types);
+    d->items << new dtkItem(name, description, tags, kind, type);
 
     QListWidget::addItem(d->items.last());
 }
@@ -777,6 +779,25 @@ void dtkItemList::onItemClicked(QListWidgetItem *item)
         return;
 
     emit itemClicked(i->description());
+}
+
+QMimeData *dtkItemList::mimeData(const QList<QListWidgetItem *> items) const
+{
+    QMimeData *data = NULL;
+
+    dtkItem *i = dynamic_cast<dtkItem *>(items.first());
+
+    if(i) {
+        data = new QMimeData;
+        data->setUrls(QList<QUrl>() << QUrl(QString("%1:%2").arg(i->kind()).arg(i->type())));
+    }
+
+    return data;
+}
+
+QStringList dtkItemList::mimeTypes(void) const
+{
+    return QStringList() << "text/uri-list";
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -1189,9 +1210,9 @@ void dtkTagController::addItem(QString name, QString description, QStringList ta
     this->render();
 }
 
-void dtkTagController::addItem(QString name, QString description, QStringList tags, QStringList types)
+void dtkTagController::addItem(QString name, QString description, QStringList tags, QString kind, QString type)
 {
-    d->items << dtkItem(name, description, tags, types);
+    d->items << dtkItem(name, description, tags, kind, type);
 
     this->update();
     this->render();

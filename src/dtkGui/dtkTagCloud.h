@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:01 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 00:36:31 2012 (+0100)
+ * Last-Updated: Wed Feb 29 01:14:00 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 177
+ *     Update #: 186
  */
 
 /* Commentary: 
@@ -193,14 +193,15 @@ public:
      dtkItem(QString name);
      dtkItem(QString name, QString description);
      dtkItem(QString name, QString description, QStringList tags);
-     dtkItem(QString name, QString description, QStringList tags, QStringList types);
+     dtkItem(QString name, QString description, QStringList tags, QString kind, QString type);
      dtkItem(const dtkItem& item);
     ~dtkItem(void);
 
     QString name(void) const;
     QString description(void) const;
     QStringList tags(void) const;
-    QStringList types(void) const;
+    QString kind(void) const;
+    QString type(void) const;
 
 private:
     dtkItemPrivate *d;
@@ -223,7 +224,7 @@ public:
     void addItem(QString name);
     void addItem(QString name, QString description);
     void addItem(QString name, QString description, QStringList tags);
-    void addItem(QString name, QString description, QStringList tags, QStringList types);
+    void addItem(QString name, QString description, QStringList tags, QString kind, QString type);
     void addItem(dtkItem item);
 
     void clear(void);
@@ -233,6 +234,10 @@ signals:
 
 private slots:
     void onItemClicked(QListWidgetItem *item);
+
+protected:
+     QMimeData *mimeData(const QList<QListWidgetItem *> items) const;
+    QStringList mimeTypes(void) const;
 
 private:
     dtkItemListPrivate *d;
@@ -362,7 +367,7 @@ public:
     void addItem(QString name);
     void addItem(QString name, QString description);
     void addItem(QString name, QString description, QStringList tags);
-    void addItem(QString name, QString description, QStringList tags, QStringList types);
+    void addItem(QString name, QString description, QStringList tags, QString kind, QString type);
 
     void update(void);
     void render(void);

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Feb 27 17:18:26 2012 (+0100)
+## Last-Updated: Wed Feb 29 01:45:51 2012 (+0100)
 ##           By: Julien Wintz
-##     Update #: 424
+##     Update #: 435
 ######################################################################
 ##
 ### Commentary:
@@ -170,6 +170,8 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerReader.cpp
   dtkComposerWriter.cpp)
 
+set(${PROJECT_NAME}_RESOURCES dtkComposer.qrc)
+
 ## #################################################################
 ## Build rules
 ## #################################################################
@@ -183,6 +185,7 @@ endif(NOT MSVC)
 add_definitions(-DQSTATEMACHINE_DEBUG)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
+qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
 
 if(DTK_USE_PRECOMPILED_HEADERS)
   add_precompiled_header(${PROJECT_NAME}_SOURCES_PCH 
@@ -190,7 +193,7 @@ if(DTK_USE_PRECOMPILED_HEADERS)
     ${${PROJECT_NAME}_SOURCES}
     ${${PROJECT_NAME}_HEADERS}
     ${${PROJECT_NAME}_SOURCES_MOC}
-    ${${PROJECT_NAME}_SOURCES_WRAP})
+    ${${PROJECT_NAME}_SOURCES_QRC})
 endif(DTK_USE_PRECOMPILED_HEADERS)
 
 if(BUILD_SHARED_LIBS)
@@ -200,7 +203,7 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_PCH}
-  ${${PROJECT_NAME}_SOURCES_WRAP})
+  ${${PROJECT_NAME}_SOURCES_QRC})
 
 else(BUILD_SHARED_LIBS)
 
@@ -209,7 +212,7 @@ add_library(${PROJECT_NAME} STATIC
   ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_PCH}
-  ${${PROJECT_NAME}_SOURCES_WRAP})
+  ${${PROJECT_NAME}_SOURCES_QRC})
 
 endif(BUILD_SHARED_LIBS)
 

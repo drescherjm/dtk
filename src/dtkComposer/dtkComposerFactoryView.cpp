@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 13:24:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 01:03:32 2012 (+0100)
+ * Last-Updated: Wed Feb 29 01:52:39 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 96
+ *     Update #: 138
  */
 
 /* Commentary: 
@@ -20,52 +20,58 @@
 #include "dtkComposerFactory.h"
 #include "dtkComposerFactoryView.h"
 
+#include <dtkGui/dtkSplitter.h>
+#include <dtkGui/dtkTagCloud.h>
+
 class dtkComposerFactoryViewPrivate
 {
 public:
     dtkComposerFactory *factory;
 
 public:
-    QTreeWidgetItem *nodes_s;
-    QTreeWidgetItem *nodes_p;
-    QTreeWidgetItem *nodes_t;
-    QTreeWidgetItem *nodes_o;
-    QTreeWidgetItem *nodes_c;
-    QTreeWidgetItem *note;
+    dtkTagScope *scope;
+    dtkTagCloud *cloud;
+    dtkItemView *view;
+
+public:
+    dtkTagController *controller;
 };
 
-dtkComposerFactoryView::dtkComposerFactoryView(QWidget *parent) : QTreeWidget(parent), d(new dtkComposerFactoryViewPrivate)
+dtkComposerFactoryView::dtkComposerFactoryView(QWidget *parent) : QWidget(parent), d(new dtkComposerFactoryViewPrivate)
 {
     d->factory = NULL;
 
-    d->nodes_s = new QTreeWidgetItem(this, QStringList() << "Constant nodes");
-    d->nodes_s->setExpanded(true);
+    d->scope = new dtkTagScope(this);
 
-    d->nodes_p = new QTreeWidgetItem(this, QStringList() << "Primitive nodes");
-    d->nodes_p->setExpanded(true);
+    d->cloud = new dtkTagCloud(this);
+    d->cloud->setSortingType(dtkTagCloud::Alpha);
+    d->cloud->setSortingOrder(dtkTagCloud::Asc);
+    d->cloud->setFontSize(18);
+    d->cloud->setFontRange(10);
 
-    d->nodes_t = new QTreeWidgetItem(this, QStringList() << "Container nodes");
-    d->nodes_t->setExpanded(true);
+    d->view = new dtkItemView(this);
 
-    d->nodes_o = new QTreeWidgetItem(this, QStringList() << "Operator nodes");
-    d->nodes_o->setExpanded(true);
+    d->controller = new dtkTagController;
+    d->controller->attach(d->scope);
+    d->controller->attach(d->view);
+    d->controller->attach(d->cloud);
 
-    d->nodes_c = new QTreeWidgetItem(this, QStringList() << "Control nodes");
-    d->nodes_c->setExpanded(true);
+    dtkSplitter *splitter = new dtkSplitter(this);
+    splitter->addWidget(d->cloud);
+    splitter->addWidget(d->view);
+    splitter->setOrientation(Qt::Vertical);
+    splitter->setSizes(QList<int>() << 150 << 350);
 
-    d->note = new QTreeWidgetItem(this, QStringList() << "Note");
-    d->note->setData(0, Qt::UserRole, QUrl(QString("note://")));
-
-    this->setAttribute(Qt::WA_MacShowFocusRect, false);
-    this->setCursor(Qt::ArrowCursor);
-    this->setDragEnabled(true);
-    this->setFrameShape(QFrame::NoFrame);
-    this->setHeaderHidden(true);
-    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    layout->addWidget(d->scope);
+    layout->addWidget(splitter);
 }
 
 dtkComposerFactoryView::~dtkComposerFactoryView(void)
 {
+    delete d->controller;
     delete d;
 
     d = NULL;
@@ -75,48 +81,8 @@ void dtkComposerFactoryView::setFactory(dtkComposerFactory *factory)
 {
     d->factory = factory;
 
-    foreach(QString node, d->factory->constants().keys()) {
-        QTreeWidgetItem *item = new QTreeWidgetItem(d->nodes_s, QStringList() << node);
-        item->setData(0, Qt::UserRole, QUrl(QString("node:%1").arg(d->factory->constants().value(node))));
-    }
-
-    foreach(QString node, d->factory->primitives().keys()) {
-        QTreeWidgetItem *item = new QTreeWidgetItem(d->nodes_p, QStringList() << node);
-        item->setData(0, Qt::UserRole, QUrl(QString("node:%1").arg(d->factory->primitives().value(node))));
-    }
-
-    foreach(QString node, d->factory->containers().keys()) {
-        QTreeWidgetItem *item = new QTreeWidgetItem(d->nodes_t, QStringList() << node);
-        item->setData(0, Qt::UserRole, QUrl(QString("node:%1").arg(d->factory->containers().value(node))));
-    }
-
-    foreach(QString node, d->factory->operators().keys()) {
-        QTreeWidgetItem *item = new QTreeWidgetItem(d->nodes_o, QStringList() << node);
-        item->setData(0, Qt::UserRole, QUrl(QString("node:%1").arg(d->factory->operators().value(node))));
-    }
-
-    foreach(QString node, d->factory->controls().keys()) {
-        QTreeWidgetItem *item = new QTreeWidgetItem(d->nodes_c, QStringList() << node);
-        item->setData(0, Qt::UserRole, QUrl(QString("node:%1").arg(d->factory->controls().value(node))));
-    }
-}
-
-QMimeData *dtkComposerFactoryView::mimeData(const QList<QTreeWidgetItem *> items) const
-{
-    QMimeData *data = NULL;
-
-    QTreeWidgetItem *item = items.first();
-
-    if(item) {
-        data = new QMimeData;
-        data->setText(item->text(0));
-        data->setUrls(QList<QUrl>() << item->data(0, Qt::UserRole).toUrl());
-    }
-
-    return data;
-}
-
-QStringList dtkComposerFactoryView::mimeTypes(void) const
-{
-    return QStringList() << "text/uri-list";
+    foreach(QString node, factory->nodes())
+        d->controller->addItem(node, factory->descriptions().value(node), factory->tags().value(node), "node", factory->types().value(node));
+ 
+    d->controller->addItem("Note", "<h1></h1>", QStringList() << "note", "note", "");
 }

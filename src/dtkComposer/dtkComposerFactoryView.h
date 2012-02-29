@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 13:22:54 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb 25 00:24:40 2012 (+0100)
+ * Last-Updated: Wed Feb 29 01:26:11 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 13
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -26,7 +26,7 @@
 class dtkComposerFactory;
 class dtkComposerFactoryViewPrivate;
 
-class dtkComposerFactoryView : public QTreeWidget
+class dtkComposerFactoryView : public QWidget
 {
     Q_OBJECT
 
@@ -36,10 +36,6 @@ public:
 
 public:
     void setFactory(dtkComposerFactory *factory);
-
-protected:
-     QMimeData *mimeData(const QList<QTreeWidgetItem *> items) const;
-    QStringList mimeTypes(void) const;
 
 private:
     dtkComposerFactoryViewPrivate *d;

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 10:13:34 2012 (+0100)
+ * Last-Updated: Wed Feb 29 11:45:45 2012 (+0100)
  *           By: tkloczko
- *     Update #: 31
+ *     Update #: 32
  */
 
 /* Commentary: 
@@ -37,8 +37,6 @@ public:
     ~dtkComposerTransmitterReceiver(void);
 
 public:
-    inline void connect(dtkComposerTransmitterEmitter<T> *emitter);
-
     inline       T& data(void);
     inline const T& data(void) const;
 

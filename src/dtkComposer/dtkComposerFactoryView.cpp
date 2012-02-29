@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 13:24:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 01:52:39 2012 (+0100)
+ * Last-Updated: Wed Feb 29 03:17:31 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 138
+ *     Update #: 139
  */
 
 /* Commentary: 
@@ -84,5 +84,5 @@ void dtkComposerFactoryView::setFactory(dtkComposerFactory *factory)
     foreach(QString node, factory->nodes())
         d->controller->addItem(node, factory->descriptions().value(node), factory->tags().value(node), "node", factory->types().value(node));
  
-    d->controller->addItem("Note", "<h1></h1>", QStringList() << "note", "note", "");
+    d->controller->addItem("Note", "<p>Notes help to identify and annotate some parts of a composition.</p>", QStringList() << "note", "note", "");
 }

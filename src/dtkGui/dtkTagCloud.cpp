@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:27 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 02:54:58 2012 (+0100)
+ * Last-Updated: Wed Feb 29 03:10:27 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1378
+ *     Update #: 1402
  */
 
 /* Commentary: 
@@ -842,6 +842,9 @@ void dtkItemListDelegate::paint(QPainter *painter, const QStyleOptionViewItem& o
     painter->setPen(Qt::white);
     painter->drawLine(option.rect.topLeft() + QPoint(0, 1), option.rect.topRight() + QPoint(0, 1));
 
+    static QPixmap arrow = QPixmap(":dtkGui/pixmaps/dtk-item-list-delegate-arrow.png");
+    static QPixmap tags = QPixmap(":dtkGui/pixmaps/dtk-item-list-delegate-tags.png");
+
     static int m  =  5;
     static int h1 = 20;
     static int h2 = 20;
@@ -865,15 +868,14 @@ void dtkItemListDelegate::paint(QPainter *painter, const QStyleOptionViewItem& o
     painter->drawText(desc_rect, Qt::AlignLeft | Qt::AlignTop, metrics.elidedText(dtkItemListDelegateUnhtmlize(item->description()), Qt::ElideRight, desc_rect.width()));
 
     painter->setPen(QColor("#bf6040"));
-    painter->drawText(tags_rect, Qt::AlignLeft | Qt::AlignTop, item->tags().join(", "));
+    painter->drawText(tags_rect.adjusted(m + tags.width(), 0, -tags.width(), 0), Qt::AlignLeft | Qt::AlignTop, item->tags().join(", "));
 
     painter->setPen(Qt::darkGray);
     painter->drawLine(option.rect.bottomLeft(), option.rect.bottomRight());
 
-    static QPixmap arrow = QPixmap(":dtkGui/pixmaps/dtk-item-list-delegate-arrow.png");
-
     QPointF arrow_pos = QPointF(r - m - arrow.width(), t + h/2 - arrow.height()/2);
     painter->drawPixmap(arrow_pos, arrow);
+    painter->drawPixmap(tags_rect.topLeft(), tags);
 }
 
 QSize dtkItemListDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const

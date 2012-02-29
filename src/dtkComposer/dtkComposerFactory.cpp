@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Wed Feb 29 02:41:15 2012 (+0100)
+ * Last-Updated: Wed Feb 29 03:15:19 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 387
+ *     Update #: 389
  */
 
 /* Commentary:
@@ -63,305 +63,305 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     // primitive nodes
 
     d->nodes << "Boolean";
-    d->descriptions["Boolean"] = "Not filled yet";
+    d->descriptions["Boolean"] = "<p>Description not yet filled!</p>";
     d->tags["Boolean"] = QStringList() << "primitive" << "boolean";
     d->types["Boolean"] = "boolean";
 
     d->nodes << "Integer";
-    d->descriptions["Integer"] = "Not filled yet";
+    d->descriptions["Integer"] = "<p>Description not yet filled!</p>";
     d->tags["Integer"] = QStringList() << "primitive" << "integer" << "number";
     d->types["Integer"] = "integer";
 
     d->nodes << "Real";
-    d->descriptions["Real"] = "Not filled yet";
+    d->descriptions["Real"] = "<p>Description not yet filled!</p>";
     d->tags["Real"] = QStringList() << "primitive" << "real" << "number";
     d->types["Real"] = "real";
 
     d->nodes << "String";
-    d->descriptions["String"] = "Not filled yet";
+    d->descriptions["String"] = "<p>Description not yet filled!</p>";
     d->tags["String"] = QStringList() << "primitive" << "string";
     d->types["String"] = "string";
     
     // container nodes
 
     d->nodes << "List";
-    d->descriptions["List"] = "Not filled yet";
+    d->descriptions["List"] = "<p>Description not yet filled!</p>";
     d->tags["List"] = QStringList() << "container" << "list";
     d->types["List"] = "list";
 
     d->nodes << "Vector";
-    d->descriptions["Vector"] = "Not filled yet";
+    d->descriptions["Vector"] = "<p>Description not yet filled!</p>";
     d->tags["Vector"] = QStringList() << "container" << "vector";
     d->types["Vector"] = "vector";
 
     // operators
 
     d->nodes << "Abs";
-    d->descriptions["Abs"] = "Not filled yet";
+    d->descriptions["Abs"] = "<p>Description not yet filled!</p>";
     d->tags["Abs"] = QStringList() << "number" << "operator" << "unary" << "abs";
     d->types["Abs"] = "abs";
 
     d->nodes << "Acos";
-    d->descriptions["Acos"] = "Not filled yet";
+    d->descriptions["Acos"] = "<p>Description not yet filled!</p>";
     d->tags["Acos"] = QStringList() << "number" << "operator" << "unary" << "acos";
     d->types["Acos"] = "acos";
 
     d->nodes << "Asin";
-    d->descriptions["Asin"] = "Not filled yet";
+    d->descriptions["Asin"] = "<p>Description not yet filled!</p>";
     d->tags["Asin"] = QStringList() << "number" << "operator" << "unary" << "asin";
     d->types["Asin"] = "asin";
 
     d->nodes << "Atan";
-    d->descriptions["Atan"] = "Not filled yet";
+    d->descriptions["Atan"] = "<p>Description not yet filled!</p>";
     d->tags["Atan"] = QStringList() << "number" << "operator" << "unary" << "atan";
     d->types["Atan"] = "atan";
 
     d->nodes << "Ceil";
-    d->descriptions["Ceil"] = "Not filled yet";
+    d->descriptions["Ceil"] = "<p>Description not yet filled!</p>";
     d->tags["Ceil"] = QStringList() << "number" << "operator" << "unary" << "ceil";
     d->types["Ceil"] = "ceil";
 
     d->nodes << "Cos";
-    d->descriptions["Cos"] = "Not filled yet";
+    d->descriptions["Cos"] = "<p>Description not yet filled!</p>";
     d->tags["Cos"] = QStringList() << "number" << "operator" << "unary" << "cos";
     d->types["Cos"] = "cos";
 
     d->nodes << "Decr";
-    d->descriptions["Decr"] = "Not filled yet";
+    d->descriptions["Decr"] = "<p>Description not yet filled!</p>";
     d->tags["Decr"] = QStringList() << "number" << "operator" << "unary" << "decr";
     d->types["Decr"] = "decr";
 
     d->nodes << "Deg2rad";
-    d->descriptions["Deg2rad"] = "Not filled yet";
+    d->descriptions["Deg2rad"] = "<p>Description not yet filled!</p>";
     d->tags["Deg2rad"] = QStringList() << "number" << "operator" << "unary" << "deg2rad";
     d->types["Deg2rad"] = "deg2rad";
 
     d->nodes << "Exp";
-    d->descriptions["Exp"] = "Not filled yet";
+    d->descriptions["Exp"] = "<p>Description not yet filled!</p>";
     d->tags["Exp"] = QStringList() << "number" << "operator" << "unary" << "exp";
     d->types["Exp"] = "exp";
 
     d->nodes << "Floor";
-    d->descriptions["Floor"] = "Not filled yet";
+    d->descriptions["Floor"] = "<p>Description not yet filled!</p>";
     d->tags["Floor"] = QStringList() << "number" << "operator" << "unary" << "floor";
     d->types["Floor"] = "floor";
 
     d->nodes << "Incr";
-    d->descriptions["Incr"] = "Not filled yet";
+    d->descriptions["Incr"] = "<p>Description not yet filled!</p>";
     d->tags["Incr"] = QStringList() << "number" << "operator" << "unary" << "incr";
     d->types["Incr"] = "incr";
 
     d->nodes << "Inv";
-    d->descriptions["Inv"] = "Not filled yet";
+    d->descriptions["Inv"] = "<p>Description not yet filled!</p>";
     d->tags["Inv"] = QStringList() << "number" << "operator" << "unary" << "inv";
     d->types["Inv"] = "inv";
 
     d->nodes << "Ln";
-    d->descriptions["Ln"] = "Not filled yet";
+    d->descriptions["Ln"] = "<p>Description not yet filled!</p>";
     d->tags["Ln"] = QStringList() << "number" << "operator" << "unary" << "ln";
     d->types["Ln"] = "ln";
 
     d->nodes << "Log10";
-    d->descriptions["Log10"] = "Not filled yet";
+    d->descriptions["Log10"] = "<p>Description not yet filled!</p>";
     d->tags["Log10"] = QStringList() << "number" << "operator" << "unary" << "log10";
     d->types["Log10"] = "log10";
 
     d->nodes << "Opp";
-    d->descriptions["Opp"] = "Not filled yet";
+    d->descriptions["Opp"] = "<p>Description not yet filled!</p>";
     d->tags["Opp"] = QStringList() << "number" << "operator" << "unary" << "opp";
     d->types["Opp"] = "opp";
 
     d->nodes << "Round";
-    d->descriptions["Round"] = "Not filled yet";
+    d->descriptions["Round"] = "<p>Description not yet filled!</p>";
     d->tags["Round"] = QStringList() << "number" << "operator" << "unary" << "round";
     d->types["Round"] = "round";
 
     d->nodes << "Rad2deg";
-    d->descriptions["Rad2deg"] = "Not filled yet";
+    d->descriptions["Rad2deg"] = "<p>Description not yet filled!</p>";
     d->tags["Rad2deg"] = QStringList() << "number" << "operator" << "unary" << "rad2deg";
     d->types["Rad2deg"] = "rad2deg";
 
     d->nodes << "Sin";
-    d->descriptions["Sin"] = "Not filled yet";
+    d->descriptions["Sin"] = "<p>Description not yet filled!</p>";
     d->tags["Sin"] = QStringList() << "number" << "operator" << "unary" << "sin";
     d->types["Sin"] = "sin";
 
     d->nodes << "Square";
-    d->descriptions["Square"] = "Not filled yet";
+    d->descriptions["Square"] = "<p>Description not yet filled!</p>";
     d->tags["Square"] = QStringList() << "number" << "operator" << "unary" << "square";
     d->types["Square"] = "square";
 
     d->nodes << "Sqrt";
-    d->descriptions["Sqrt"] = "Not filled yet";
+    d->descriptions["Sqrt"] = "<p>Description not yet filled!</p>";
     d->tags["Sqrt"] = QStringList() << "number" << "operator" << "unary" << "sqrt";
     d->types["Sqrt"] = "sqrt";
 
     d->nodes << "Tan";
-    d->descriptions["Tan"] = "Not filled yet";
+    d->descriptions["Tan"] = "<p>Description not yet filled!</p>";
     d->tags["Tan"] = QStringList() << "number" << "operator" << "unary" << "tan";
     d->types["Tan"] = "tan";
 
     d->nodes << "Eucldiv";
-    d->descriptions["Eucldiv"] = "Not filled yet";
+    d->descriptions["Eucldiv"] = "<p>Description not yet filled!</p>";
     d->tags["Eucldiv"] = QStringList() << "number" << "operator" << "binary" << "eucldiv";
     d->types["Eucldiv"] = "eucldiv";
 
     d->nodes << "Expn";
-    d->descriptions["Expn"] = "Not filled yet";
+    d->descriptions["Expn"] = "<p>Description not yet filled!</p>";
     d->tags["Expn"] = QStringList() << "number" << "operator" << "binary" << "expn";
     d->types["Expn"] = "expn";
 
     d->nodes << "Logn";
-    d->descriptions["Logn"] = "Not filled yet";
+    d->descriptions["Logn"] = "<p>Description not yet filled!</p>";
     d->tags["Logn"] = QStringList() << "number" << "operator" << "binary" << "logn";
     d->types["Logn"] = "logn";
 
     d->nodes << "Minus";
-    d->descriptions["Minus"] = "Not filled yet";
+    d->descriptions["Minus"] = "<p>Description not yet filled!</p>";
     d->tags["Minus"] = QStringList() << "number" << "operator" << "binary" << "minus";
     d->types["Minus"] = "minus";
 
     d->nodes << "Modulo";
-    d->descriptions["Modulo"] = "Not filled yet";
+    d->descriptions["Modulo"] = "<p>Description not yet filled!</p>";
     d->tags["Modulo"] = QStringList() << "number" << "operator" << "binary" << "modulo";
     d->types["Modulo"] = "modulo";
 
     d->nodes << "Mult";
-    d->descriptions["Mult"] = "Not filled yet";
+    d->descriptions["Mult"] = "<p>Description not yet filled!</p>";
     d->tags["Mult"] = QStringList() << "number" << "operator" << "binary" << "mult";
     d->types["Mult"] = "mult";
 
     d->nodes << "Plus";
-    d->descriptions["Plus"] = "Not filled yet";
+    d->descriptions["Plus"] = "<p>Description not yet filled!</p>";
     d->tags["Plus"] = QStringList() << "number" << "operator" << "binary" << "plus";
     d->types["Plus"] = "plus";
 
     d->nodes << "Posnthroot";
-    d->descriptions["Posnthroot"] = "Not filled yet";
+    d->descriptions["Posnthroot"] = "<p>Description not yet filled!</p>";
     d->tags["Posnthroot"] = QStringList() << "number" << "operator" << "binary" << "posnthroot";
     d->types["Posnthroot"] = "posnthroot";
 
     d->nodes << "Power";
-    d->descriptions["Power"] = "Not filled yet";
+    d->descriptions["Power"] = "<p>Description not yet filled!</p>";
     d->tags["Power"] = QStringList() << "number" << "operator" << "binary" << "power";
     d->types["Power"] = "power";
 
     d->nodes << "Ratio";
-    d->descriptions["Ratio"] = "Not filled yet";
+    d->descriptions["Ratio"] = "<p>Description not yet filled!</p>";
     d->tags["Ratio"] = QStringList() << "number" << "operator" << "binary" << "ratio";
     d->types["Ratio"] = "ratio";
 
     d->nodes << "Equal";
-    d->descriptions["Equal"] = "Not filled yet";
+    d->descriptions["Equal"] = "<p>Description not yet filled!</p>";
     d->tags["Equal"] = QStringList() << "number" << "operator" << "binary" << "equal";
     d->types["Equal"] = "equal";
 
     d->nodes << "Notequal";
-    d->descriptions["Notequal"] = "Not filled yet";
+    d->descriptions["Notequal"] = "<p>Description not yet filled!</p>";
     d->tags["Notequal"] = QStringList() << "number" << "operator" << "binary" << "notequal";
     d->types["Notequal"] = "notequal";
 
     d->nodes << "Gt";
-    d->descriptions["Gt"] = "Not filled yet";
+    d->descriptions["Gt"] = "<p>Description not yet filled!</p>";
     d->tags["Gt"] = QStringList() << "number" << "operator" << "binary" << "gt";
     d->types["Gt"] = "gt";
 
     d->nodes << "Lt";
-    d->descriptions["Lt"] = "Not filled yet";
+    d->descriptions["Lt"] = "<p>Description not yet filled!</p>";
     d->tags["Lt"] = QStringList() << "number" << "operator" << "binary" << "lt";
     d->types["Lt"] = "lt";
 
     d->nodes << "Gte";
-    d->descriptions["Gte"] = "Not filled yet";
+    d->descriptions["Gte"] = "<p>Description not yet filled!</p>";
     d->tags["Gte"] = QStringList() << "number" << "operator" << "binary" << "gte";
     d->types["Gte"] = "gte";
 
     d->nodes << "Lte";
-    d->descriptions["Lte"] = "Not filled yet";
+    d->descriptions["Lte"] = "<p>Description not yet filled!</p>";
     d->tags["Lte"] = QStringList() << "number" << "operator" << "binary" << "lte";
     d->types["Lte"] = "lte";
 
     d->nodes << "Almosteq";
-    d->descriptions["Almosteq"] = "Not filled yet";
+    d->descriptions["Almosteq"] = "<p>Description not yet filled!</p>";
     d->tags["Almosteq"] = QStringList() << "number" << "operator" << "binary" << "almosteq";
     d->types["Almosteq"] = "almosteq";
 
     d->nodes << "Notalmosteq";
-    d->descriptions["Notalmosteq"] = "Not filled yet";
+    d->descriptions["Notalmosteq"] = "<p>Description not yet filled!</p>";
     d->tags["Notalmosteq"] = QStringList() << "number" << "operator" << "binary" << "notalmosteq";
     d->types["Notalmosteq"] = "notalmosteq";
 
 // /////////////////////////////////////////////////////////////////
 
     d->nodes << "Not";
-    d->descriptions["Not"] = "Not filled yet";
+    d->descriptions["Not"] = "<p>Description not yet filled!</p>";
     d->tags["Not"] = QStringList() << "boolean" << "operator" << "unary" << "not";
     d->types["Not"] = "not";
 
     d->nodes << "And";
-    d->descriptions["And"] = "Not filled yet";
+    d->descriptions["And"] = "<p>Description not yet filled!</p>";
     d->tags["And"] = QStringList() << "boolean" << "operator" << "binary" << "and";
     d->types["And"] = "and";
 
     d->nodes << "Or";
-    d->descriptions["Or"] = "Not filled yet";
+    d->descriptions["Or"] = "<p>Description not yet filled!</p>";
     d->tags["Or"] = QStringList() << "boolean" << "operator" << "binary" << "or";
     d->types["Or"] = "or";
 
     d->nodes << "Xor";
-    d->descriptions["Xor"] = "Not filled yet";
+    d->descriptions["Xor"] = "<p>Description not yet filled!</p>";
     d->tags["Xor"] = QStringList() << "boolean" << "operator" << "binary" << "xor";
     d->types["Xor"] = "xor";
 
     d->nodes << "Nand";
-    d->descriptions["Nand"] = "Not filled yet";
+    d->descriptions["Nand"] = "<p>Description not yet filled!</p>";
     d->tags["Nand"] = QStringList() << "boolean" << "operator" << "binary" << "nand";
     d->types["Nand"] = "nand";
 
     d->nodes << "Nor";
-    d->descriptions["Nor"] = "Not filled yet";
+    d->descriptions["Nor"] = "<p>Description not yet filled!</p>";
     d->tags["Nor"] = QStringList() << "boolean" << "operator" << "binary" << "nor";
     d->types["Nor"] = "nor";
 
     d->nodes << "Xnor";
-    d->descriptions["Xnor"] = "Not filled yet";
+    d->descriptions["Xnor"] = "<p>Description not yet filled!</p>";
     d->tags["Xnor"] = QStringList() << "boolean" << "operator" << "binary" << "xnor";
     d->types["Xnor"] = "xnor";
 
     d->nodes << "Imp";
-    d->descriptions["Imp"] = "Not filled yet";
+    d->descriptions["Imp"] = "<p>Description not yet filled!</p>";
     d->tags["Imp"] = QStringList() << "boolean" << "operator" << "binary" << "imp";
     d->types["Imp"] = "imp";
 
     d->nodes << "Nimp";
-    d->descriptions["Nimp"] = "Not filled yet";
+    d->descriptions["Nimp"] = "<p>Description not yet filled!</p>";
     d->tags["Nimp"] = QStringList() << "boolean" << "operator" << "binary" << "nimp";
     d->types["Nimp"] = "nimp";
 
     // control nodes
 
     d->nodes << "Do While";
-    d->descriptions["Do While"] = "Not filled yet";
+    d->descriptions["Do While"] = "<p>Description not yet filled!</p>";
     d->tags["Do While"] = QStringList() << "control" << "do" << "while";
     d->types["Do While"] = "do while";
 
     d->nodes << "If";
-    d->descriptions["If"] = "Not filled yet";
+    d->descriptions["If"] = "<p>Description not yet filled!</p>";
     d->tags["If"] = QStringList() << "control" << "if";
     d->types["If"] = "if";
 
     d->nodes << "For";
-    d->descriptions["For"] = "Not filled yet";
+    d->descriptions["For"] = "<p>Description not yet filled!</p>";
     d->tags["For"] = QStringList() << "control" << "for";
     d->types["For"] = "for";
 
     d->nodes << "Foreach";
-    d->descriptions["Foreach"] = "Not filled yet";
+    d->descriptions["Foreach"] = "<p>Description not yet filled!</p>";
     d->tags["Foreach"] = QStringList() << "control" << "foreach";
     d->types["Foreach"] = "foreach";
 
     d->nodes << "While";
-    d->descriptions["While"] = "Not filled yet";
+    d->descriptions["While"] = "<p>Description not yet filled!</p>";
     d->tags["While"] = QStringList() << "control" << "while";
     d->types["While"] = "while";
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 18:34:51 2012 (+0100)
+ * Last-Updated: Wed Feb 29 19:17:32 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 2807
+ *     Update #: 2838
  */
 
 /* Commentary: 
@@ -1297,34 +1297,14 @@ void dtkComposerStackCommandEnterGroup::redo(void)
     if(!e->node)
         return;
 
-    if (e->former != d->scene->root())
-        d->scene->removeItem(e->former);
-
-    foreach(dtkComposerSceneNote *note, e->former->notes())
-        d->scene->removeItem(note);
-
-    foreach(dtkComposerSceneNode *node, e->former->nodes())
-        d->scene->removeItem(node);
-
-    foreach(dtkComposerSceneEdge *edge, e->former->edges())
-        d->scene->removeItem(edge);
+    d->scene->removeItem(e->former);
 
     e->node->enter();
+    e->node->layout();
     
     d->scene->addItem(e->node);
-
     d->scene->setCurrent(e->node);
-
-    foreach(dtkComposerSceneNote *note, e->node->notes())
-        d->scene->addItem(note);
-
-    foreach(dtkComposerSceneNode *node, e->node->nodes())
-        d->scene->addItem(node);
-
-    foreach(dtkComposerSceneEdge *edge, e->node->edges()) {
-        edge->adjust();
-        d->scene->addItem(edge);
-    }
+    d->scene->update();
 }
 
 void dtkComposerStackCommandEnterGroup::undo(void)
@@ -1332,36 +1312,14 @@ void dtkComposerStackCommandEnterGroup::undo(void)
     if(!e->node)
         return;
 
-    foreach(dtkComposerSceneNote *note, e->node->notes())
-        d->scene->removeItem(note);
-
-    foreach(dtkComposerSceneNode *node, e->node->nodes())
-        d->scene->removeItem(node);
-
-    foreach(dtkComposerSceneEdge *edge, e->node->edges())
-        d->scene->removeItem(edge);
-
     d->scene->removeItem(e->node);
 
     e->node->leave();
-
-    d->scene->setCurrent(e->former);
-    
-    if (e->former != d->scene->root())
-        d->scene->addItem(e->former);
-
-    foreach(dtkComposerSceneNote *note, e->former->notes())
-        d->scene->addItem(note);
-
-    foreach(dtkComposerSceneNode *node, e->former->nodes())
-        d->scene->addItem(node);
-
-    foreach(dtkComposerSceneEdge *edge, e->former->edges()) {
-        edge->adjust();
-        d->scene->addItem(edge);
-    }
-
     e->node->layout();
+
+    d->scene->addItem(e->former);
+    d->scene->setCurrent(e->former);
+    d->scene->update();
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -1411,37 +1369,13 @@ void dtkComposerStackCommandLeaveGroup::redo(void)
     if(!e->node)
         return;
 
-    foreach(dtkComposerSceneNote *note, e->node->notes())
-        d->scene->removeItem(note);
-
-    foreach(dtkComposerSceneNode *node, e->node->nodes())
-        d->scene->removeItem(node);
-
-    foreach(dtkComposerSceneEdge *edge, e->node->edges())
-        d->scene->removeItem(edge);
-
     d->scene->removeItem(e->node);
 
     e->node->leave();
-
-    d->scene->setCurrent(e->former);
-    
-    if (e->former != d->scene->root())
-        d->scene->addItem(e->former);
-
-    foreach(dtkComposerSceneNote *note, e->former->notes())
-        d->scene->addItem(note);
-
-    foreach(dtkComposerSceneNode *node, e->former->nodes())
-        d->scene->addItem(node);
-
-    foreach(dtkComposerSceneEdge *edge, e->former->edges()) {
-        edge->adjust();
-        d->scene->addItem(edge);
-    }
-
     e->node->layout();
 
+    d->scene->addItem(e->former);
+    d->scene->setCurrent(e->former);
     d->scene->update();
 }
 
@@ -1450,37 +1384,13 @@ void dtkComposerStackCommandLeaveGroup::undo(void)
     if(!e->node)
         return;
 
-    if (e->former != d->scene->root())
-        d->scene->removeItem(e->former);
-
-    foreach(dtkComposerSceneNote *note, e->former->notes())
-        d->scene->removeItem(note);
-
-    foreach(dtkComposerSceneNode *node, e->former->nodes())
-        d->scene->removeItem(node);
-
-    foreach(dtkComposerSceneEdge *edge, e->former->edges())
-        d->scene->removeItem(edge);
+    d->scene->removeItem(e->former);
 
     e->node->enter();
+    e->node->layout();
     
     d->scene->addItem(e->node);
-
     d->scene->setCurrent(e->node);
-
-    foreach(dtkComposerSceneNote *note, e->node->notes())
-        d->scene->addItem(note);
-
-    foreach(dtkComposerSceneNode *node, e->node->nodes())
-        d->scene->addItem(node);
-
-    foreach(dtkComposerSceneEdge *edge, e->node->edges()) {
-        edge->adjust();
-        d->scene->addItem(edge);
-    }
-
-    e->node->layout();
-
     d->scene->update();
 }
 

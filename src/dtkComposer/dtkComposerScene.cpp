@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: mer. févr. 29 16:31:44 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 1862
+ * Last-Updated: Wed Feb 29 18:34:19 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 1870
  */
 
 /* Commentary:
@@ -400,7 +400,6 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
             dtkComposerStackCommandCreateGroup *command = new dtkComposerStackCommandCreateGroup;
             command->setScene(this);
             command->setGraph(d->graph);
-            command->setParent(d->current_node);
             command->setNodes(selected_nodes);
             command->setNotes(selected_notes);
 
@@ -414,7 +413,6 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
             if(!group->entered() || !group->flattened()) {
 
                 dtkComposerStackCommandDestroyGroup *command = new dtkComposerStackCommandDestroyGroup;
-                command->setParent(d->current_node);
                 command->setGraph(d->graph);
                 command->setScene(this);
                 command->setNode(group);

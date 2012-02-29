@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. févr. 29 17:44:36 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 2780
+ * Last-Updated: Wed Feb 29 18:34:51 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 2807
  */
 
 /* Commentary: 
@@ -788,6 +788,9 @@ public:
 public:
     QList<dtkComposerStackCommandReparentNode *> reparent;
 
+public:
+    QPointF pos;
+
 };
 
 dtkComposerStackCommandCreateGroup::dtkComposerStackCommandCreateGroup(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandCreateGroupPrivate)
@@ -805,17 +808,15 @@ dtkComposerStackCommandCreateGroup::~dtkComposerStackCommandCreateGroup(void)
     e = NULL;
 }
 
-void dtkComposerStackCommandCreateGroup::setParent(dtkComposerSceneNodeComposite *parent)
-{
-    e->parent = parent;
-}
-
 void dtkComposerStackCommandCreateGroup::setNodes(dtkComposerSceneNodeList nodes)
 {
-    if(!e->parent)
-        return;
-
     QRectF rect;
+
+    e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(nodes.first()->parent());
+
+    foreach(dtkComposerSceneNode *node, nodes)
+        if(node->parent() != e->parent)
+            e->parent = NULL;
 
     foreach(dtkComposerSceneNode *node, nodes) {
         if(node->parent() == e->parent) {
@@ -830,6 +831,8 @@ void dtkComposerStackCommandCreateGroup::setNodes(dtkComposerSceneNodeList nodes
             e->reparent.last()->setTargetPosition(rect.center());
         }
     }
+
+    e->pos = rect.center();
 }
 
 void dtkComposerStackCommandCreateGroup::setNotes(dtkComposerSceneNoteList notes)
@@ -860,15 +863,14 @@ void dtkComposerStackCommandCreateGroup::redo(void)
         e->node = new dtkComposerSceneNodeComposite;
         e->node->wrap(new dtkComposerNodeComposite);
         e->node->setParent(e->parent);
+        
     }
-
-    QRectF rect;
 
     QList<dtkComposerSceneNode *> nodes = e->nodes;
 
     e->parent->addNode(e->node);
     d->graph->addNode(e->node);
-    e->node->setPos(rect.center() - e->node->boundingRect().center());
+    e->node->setPos(e->pos - e->node->boundingRect().center());
 
     foreach(dtkComposerStackCommandReparentNode *cmd, e->reparent) {
         cmd->setTargetNode(e->node);
@@ -985,16 +987,12 @@ dtkComposerStackCommandDestroyGroup::~dtkComposerStackCommandDestroyGroup(void)
     e = NULL;
 }
 
-void dtkComposerStackCommandDestroyGroup::setParent(dtkComposerSceneNodeComposite *parent)
-{
-    e->parent = parent;
-}
-
 void dtkComposerStackCommandDestroyGroup::setNode(dtkComposerSceneNodeComposite *node)
 {
     e->node  = node;
     e->nodes = node->nodes();
     e->notes = node->notes();
+    e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(node->parent());
 
     for(int i = 0; i < e->node->inputPorts().count(); i++) {  
         e->destroy_input_ports << new dtkComposerStackCommandDestroyPort;

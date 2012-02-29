@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: lun. févr. 27 17:58:47 2012 (+0100)
+ * Last-Updated: mer. févr. 29 16:31:44 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1849
+ *     Update #: 1862
  */
 
 /* Commentary:
@@ -277,7 +277,7 @@ void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
         command->setScene(this);
         command->setParent(this->parentAt(event->scenePos()));
         command->setPosition(event->scenePos());
-        
+
         d->stack->push(command);
 
         event->acceptProposedAction();
@@ -295,9 +295,9 @@ void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
         command->setPosition(event->scenePos());
         command->setType(url.path());
         command->setName(name);
-        
+
         d->stack->push(command);
-        
+
         event->acceptProposedAction();
 
         return;
@@ -328,12 +328,12 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
         }
 
         // multiple node deletion
-        
+
         if(selected_nodes.count() > 1) {
 
             dtkComposerStackCommand *group = new dtkComposerStackCommand;
             group->setText("Destroy a set of nodes");
-            
+
             foreach(dtkComposerSceneNode *node, selected_nodes) {
 
                 dtkComposerStackCommandDestroyNode *command = new dtkComposerStackCommandDestroyNode(group);
@@ -362,7 +362,7 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
 
             dtkComposerStackCommand *group = new dtkComposerStackCommand;
             group->setText("Destroy a set of notes");
-            
+
             foreach(dtkComposerSceneNote *note, selected_notes) {
 
                 dtkComposerStackCommandDestroyNote *command = new dtkComposerStackCommandDestroyNote(group);
@@ -403,7 +403,7 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
             command->setParent(d->current_node);
             command->setNodes(selected_nodes);
             command->setNotes(selected_notes);
-            
+
             d->stack->push(command);
         }
 
@@ -418,7 +418,7 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
                 command->setGraph(d->graph);
                 command->setScene(this);
                 command->setNode(group);
-                
+
                 d->stack->push(command);
             }
         }
@@ -453,26 +453,14 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     if (d->reparent_origin_pos.isNull()) {
 
         d->reparent_origin = this->nodeAt(event->scenePos());
-        
+
         if(!d->reparent_origin) {
             this->views().at(0)->setCursor(Qt::ArrowCursor);
             goto adjust_edges;
         }
-        
+
         if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(d->reparent_origin->parent()))
             d->reparent_origin = control;
-
-        if (d->reparent_origin->inputEdges().count()) {
-            d->reparent_origin = NULL;
-            this->views().at(0)->setCursor(Qt::ArrowCursor);
-            goto adjust_edges;
-        }
-
-        if (d->reparent_origin->outputEdges().count()) {
-            d->reparent_origin = NULL;
-            this->views().at(0)->setCursor(Qt::ArrowCursor);
-            goto adjust_edges;
-        }
 
         d->reparent_origin_pos = d->reparent_origin->pos();
 
@@ -495,7 +483,7 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 this->views().at(0)->setCursor(Qt::ArrowCursor);
                 goto adjust_edges;
             }
-            
+
             if (dynamic_cast<dtkComposerSceneNodeControl *>(d->reparent_target->parent())) {
                 d->reparent_target = NULL;
                 this->views().at(0)->setCursor(Qt::ArrowCursor);
@@ -599,12 +587,12 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         d->reparent_target_pos = event->scenePos() - event->pos();
 
         dtkComposerStackCommandReparentNode *command = new dtkComposerStackCommandReparentNode;
+        command->setScene(this);
+        command->setGraph(d->graph);
         command->setOriginNode(d->reparent_origin);
         command->setTargetNode(d->reparent_target);
         command->setOriginPosition(d->reparent_origin_pos);
         command->setTargetPosition(d->reparent_target_pos);
-        command->setScene(this);
-        command->setGraph(d->graph);
         d->stack->push(command);
 
         d->reparent_origin = NULL;

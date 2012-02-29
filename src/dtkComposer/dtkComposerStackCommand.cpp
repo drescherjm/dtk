@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. févr. 28 15:47:18 2012 (+0100)
+ * Last-Updated: mer. févr. 29 17:44:36 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 2427
+ *     Update #: 2780
  */
 
 /* Commentary: 
@@ -786,21 +786,8 @@ public:
     QList<dtkComposerSceneNote *> notes;
 
 public:
-    QList<dtkComposerSceneEdge *> intern_edges;
-    QList<dtkComposerSceneEdge *>  input_edges;
-    QList<dtkComposerSceneEdge *> output_edges;
+    QList<dtkComposerStackCommandReparentNode *> reparent;
 
-public:
-    QList<dtkComposerStackCommandDestroyEdge *> destroy_input_edges;
-    QList<dtkComposerStackCommandCreatePort *>  create_input_ports;
-    QList<dtkComposerStackCommandCreateEdge *>  create_input_lhs_edges;
-    QList<dtkComposerStackCommandCreateEdge *>  create_input_rhs_edges;
-
-public:
-    QList<dtkComposerStackCommandDestroyEdge *> destroy_output_edges;
-    QList<dtkComposerStackCommandCreatePort *>  create_output_ports;
-    QList<dtkComposerStackCommandCreateEdge *>  create_output_lhs_edges;
-    QList<dtkComposerStackCommandCreateEdge *>  create_output_rhs_edges;
 };
 
 dtkComposerStackCommandCreateGroup::dtkComposerStackCommandCreateGroup(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandCreateGroupPrivate)
@@ -828,64 +815,19 @@ void dtkComposerStackCommandCreateGroup::setNodes(dtkComposerSceneNodeList nodes
     if(!e->parent)
         return;
 
-    foreach(dtkComposerSceneNode *node, nodes)
-        if(node->parent() == e->parent)
+    QRectF rect;
+
+    foreach(dtkComposerSceneNode *node, nodes) {
+        if(node->parent() == e->parent) {
+            rect |= node->sceneBoundingRect();
             e->nodes << node;
-
-    foreach(dtkComposerSceneEdge *edge, e->parent->edges()) {
-
-        if (e->nodes.contains(edge->source()->node()) && e->nodes.contains(edge->destination()->node())) {
-
-            e->intern_edges << edge;
-
-        } else if (!e->nodes.contains(edge->source()->node()) && e->nodes.contains(edge->destination()->node())) {
-
-            e->input_edges << edge;
-
-            e->destroy_input_edges << new dtkComposerStackCommandDestroyEdge;
-            e->destroy_input_edges.last()->setFactory(d->factory);
-            e->destroy_input_edges.last()->setScene(d->scene);
-            e->destroy_input_edges.last()->setGraph(d->graph);
-
-            e->create_input_ports << new dtkComposerStackCommandCreatePort;
-            e->create_input_ports.last()->setFactory(d->factory);
-            e->create_input_ports.last()->setScene(d->scene);
-            e->create_input_ports.last()->setGraph(d->graph);
-
-            e->create_input_lhs_edges << new dtkComposerStackCommandCreateEdge;
-            e->create_input_lhs_edges.last()->setFactory(d->factory);
-            e->create_input_lhs_edges.last()->setScene(d->scene);
-            e->create_input_lhs_edges.last()->setGraph(d->graph);
-
-            e->create_input_rhs_edges << new dtkComposerStackCommandCreateEdge;
-            e->create_input_rhs_edges.last()->setFactory(d->factory);
-            e->create_input_rhs_edges.last()->setScene(d->scene);
-            e->create_input_rhs_edges.last()->setGraph(d->graph);
-
-        } else if (!e->nodes.contains(edge->destination()->node()) && e->nodes.contains(edge->source()->node())) {
-
-            e->output_edges << edge;
-
-            e->destroy_output_edges << new dtkComposerStackCommandDestroyEdge;
-            e->destroy_output_edges.last()->setFactory(d->factory);
-            e->destroy_output_edges.last()->setScene(d->scene);
-            e->destroy_output_edges.last()->setGraph(d->graph);
-
-            e->create_output_ports << new dtkComposerStackCommandCreatePort;
-            e->create_output_ports.last()->setFactory(d->factory);
-            e->create_output_ports.last()->setScene(d->scene);
-            e->create_output_ports.last()->setGraph(d->graph);
-
-            e->create_output_lhs_edges << new dtkComposerStackCommandCreateEdge;
-            e->create_output_lhs_edges.last()->setFactory(d->factory);
-            e->create_output_lhs_edges.last()->setScene(d->scene);
-            e->create_output_lhs_edges.last()->setGraph(d->graph);
-
-            e->create_output_rhs_edges << new dtkComposerStackCommandCreateEdge;
-            e->create_output_rhs_edges.last()->setFactory(d->factory);
-            e->create_output_rhs_edges.last()->setScene(d->scene);
-            e->create_output_rhs_edges.last()->setGraph(d->graph);
-
+            e->reparent << new dtkComposerStackCommandReparentNode;
+            e->reparent.last()->setFactory(d->factory);
+            e->reparent.last()->setScene(d->scene);
+            e->reparent.last()->setGraph(d->graph);
+            e->reparent.last()->setOriginNode(node);
+            e->reparent.last()->setOriginPosition(node->boundingRect().center());
+            e->reparent.last()->setTargetPosition(rect.center());
         }
     }
 }
@@ -924,76 +866,15 @@ void dtkComposerStackCommandCreateGroup::redo(void)
 
     QList<dtkComposerSceneNode *> nodes = e->nodes;
 
-    foreach(dtkComposerSceneEdge *edge, e->intern_edges) {
-        d->graph->removeEdge(edge);
-    }
-
-    for(int i = 0; i < e->input_edges.count(); i++) {
-        e->destroy_input_edges.at(i)->setEdge(e->input_edges.at(i));
-        e->destroy_input_edges.at(i)->redo();
-    }
-
-    for(int i = 0; i < e->output_edges.count(); i++) {
-        e->destroy_output_edges.at(i)->setEdge(e->output_edges.at(i));
-        e->destroy_output_edges.at(i)->redo();
-    }
-
-    foreach(dtkComposerSceneNode *node, nodes) {
-        rect |= node->sceneBoundingRect();
-        e->parent->removeNode(node);
-        d->graph->removeNode(node);
-        d->scene->removeItem(node);
-    }
-
     e->parent->addNode(e->node);
     d->graph->addNode(e->node);
-
-    // For the Graph, we need to add back nodes after the node group is created
-    foreach(dtkComposerSceneNode *node, nodes) {
-        e->node->addNode(node);
-        node->setParent(e->node);
-        d->graph->addNode(node);
-    }
-
     e->node->setPos(rect.center() - e->node->boundingRect().center());
 
-    foreach(dtkComposerSceneEdge *edge, e->intern_edges) {
-        e->parent->removeEdge(edge);
-        d->scene->removeItem(edge);
-        e->node->addEdge(edge);
-        d->graph->addEdge(edge);
-        edge->setParent(e->node);
+    foreach(dtkComposerStackCommandReparentNode *cmd, e->reparent) {
+        cmd->setTargetNode(e->node);
+        cmd->redo();
     }
 
-    for(int i = 0; i < e->input_edges.count(); i++) {
-        e->create_input_ports.at(i)->setNode(e->node);
-        e->create_input_ports.at(i)->setType(dtkComposerScenePort::Input);
-        e->create_input_ports.at(i)->redo();
-
-        e->create_input_lhs_edges.at(i)->setSource(e->input_edges.at(i)->source());
-        e->create_input_lhs_edges.at(i)->setDestination(e->node->inputPorts().last());
-        e->create_input_lhs_edges.at(i)->redo();
-
-        e->create_input_rhs_edges.at(i)->setSource(e->node->inputPorts().last());
-        e->create_input_rhs_edges.at(i)->setDestination(e->input_edges.at(i)->destination());
-        e->create_input_rhs_edges.at(i)->redo();
-
-    }
-
-    for(int i = 0; i < e->output_edges.count(); i++) {
-        e->create_output_ports.at(i)->setNode(e->node);
-        e->create_output_ports.at(i)->setType(dtkComposerScenePort::Output);
-        e->create_output_ports.at(i)->redo();
-
-        e->create_output_lhs_edges.at(i)->setSource(e->output_edges.at(i)->source());
-        e->create_output_lhs_edges.at(i)->setDestination(e->node->outputPorts().last());
-        e->create_output_lhs_edges.at(i)->redo();
-
-        e->create_output_rhs_edges.at(i)->setSource(e->node->outputPorts().last());
-        e->create_output_rhs_edges.at(i)->setDestination(e->output_edges.at(i)->destination());
-        e->create_output_rhs_edges.at(i)->redo();
-
-    }
     d->graph->layout();
 
     foreach(dtkComposerSceneNote *note, e->notes) {
@@ -1024,60 +905,21 @@ void dtkComposerStackCommandCreateGroup::undo(void)
     if(!e->node)
         return;
 
-    foreach(dtkComposerSceneEdge *edge, e->intern_edges) {
-        d->graph->removeEdge(edge);
-        e->node->removeEdge(edge);
-        e->parent->addEdge(edge);
-        d->scene->addItem(edge);
-        edge->setParent(e->parent);
+    foreach(dtkComposerStackCommandReparentNode *cmd, e->reparent) {
+        cmd->setTargetNode(e->node);
+        cmd->undo();
     }
 
-    for(int i = 0; i < e->input_edges.count(); i++) {
-        e->create_input_rhs_edges.at(i)->undo();
-        e->create_input_lhs_edges.at(i)->undo();
-    }
 
-    for(int i = 0; i < e->input_edges.count(); i++)
-        e->create_input_ports.at(i)->undo();
-
-    for(int i = 0; i < e->output_edges.count(); i++) {
-        e->create_output_rhs_edges.at(i)->undo();
-        e->create_output_lhs_edges.at(i)->undo();
-    }
-
-    for(int i = 0; i < e->output_edges.count(); i++)
-        e->create_output_ports.at(i)->undo();
-
-    foreach(dtkComposerSceneNode *node, e->nodes) {
-        e->parent->addNode(node);
-        d->scene->addItem(node);
-        e->node->removeNode(node);
-        d->graph->removeNode(node);
-        node->setParent(e->node->parent());
-    }
-
-    e->parent->removeNode(e->node);
-
-    d->graph->removeNode(e->node);
-
-    foreach(dtkComposerSceneNode *node, e->nodes)
-        d->graph->addNode(node);
-
-    foreach(dtkComposerSceneEdge *edge, e->intern_edges)
-        d->graph->addEdge(edge);
-
-    for(int i = 0; i < e->input_edges.count(); i++)
-        e->destroy_input_edges.at(i)->undo();
-    
-    for(int i = 0; i < e->output_edges.count(); i++)
-        e->destroy_output_edges.at(i)->undo();
-    
     foreach(dtkComposerSceneNote *note, e->notes) {
         e->parent->addNote(note);
         d->scene->addItem(note);
         e->node->removeNote(note);
         note->setParent(e->node->parent());
     }
+
+    e->parent->removeNode(e->node);
+    d->graph->removeNode(e->node);
 
     d->graph->layout();
 
@@ -2064,6 +1906,27 @@ public:
 
 public:
     dtkComposerSceneNodeComposite *origin_parent;
+
+public:
+    QList<dtkComposerSceneEdge *>  input_edges;
+    QList<dtkComposerSceneEdge *> output_edges;
+
+public:
+    QList<dtkComposerStackCommandDestroyEdge *> destroy_input_edges;
+    QList<dtkComposerStackCommandCreatePort *>  create_input_ports;
+    QList<dtkComposerStackCommandCreateEdge *>  create_input_lhs_edges;
+    QList<dtkComposerStackCommandCreateEdge *>  create_input_rhs_edges;
+
+public:
+    QList<dtkComposerStackCommandDestroyEdge *> destroy_output_edges;
+    QList<dtkComposerStackCommandCreatePort *>  create_output_ports;
+    QList<dtkComposerStackCommandCreateEdge *>  create_output_lhs_edges;
+    QList<dtkComposerStackCommandCreateEdge *>  create_output_rhs_edges;
+
+public:
+    QList<dtkComposerStackCommandDestroyEdge *> destroy_intern_edges;
+    QList<dtkComposerStackCommandCreateEdge *>  create_intern_edges;
+
 };
 
 dtkComposerStackCommandReparentNode::dtkComposerStackCommandReparentNode(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandReparentNodePrivate)
@@ -2086,11 +1949,197 @@ void dtkComposerStackCommandReparentNode::setOriginNode(dtkComposerSceneNode *no
 {
     e->origin = node;
     e->origin_parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->origin->parent());
+
 }
 
 void dtkComposerStackCommandReparentNode::setTargetNode(dtkComposerSceneNode *node)
 {
     e->target = node;
+
+    QList<dtkComposerSceneEdge *> target_input;
+    QList<dtkComposerSceneEdge *> target_output;
+    QList<dtkComposerSceneEdge *> target_intern;
+
+    QHash<dtkComposerScenePort *, int> port_used;
+
+    foreach(dtkComposerSceneEdge *edge, e->origin_parent->edges()) {
+
+        if (edge->destination()->node() == e->target)
+            target_input << edge;
+        else if (edge->source()->node() == e->target)
+            target_output << edge;
+
+        if ((e->origin != edge->source()->node()) && e->origin == edge->destination()->node()) {
+            if (!(edge->source()->node() == e->target)) {
+
+                e->input_edges << edge;
+
+                e->destroy_input_edges << new dtkComposerStackCommandDestroyEdge;
+                e->destroy_input_edges.last()->setFactory(d->factory);
+                e->destroy_input_edges.last()->setScene(d->scene);
+                e->destroy_input_edges.last()->setGraph(d->graph);
+
+                e->create_input_ports << new dtkComposerStackCommandCreatePort;
+                e->create_input_ports.last()->setFactory(d->factory);
+                e->create_input_ports.last()->setScene(d->scene);
+                e->create_input_ports.last()->setGraph(d->graph);
+
+                e->create_input_lhs_edges << new dtkComposerStackCommandCreateEdge;
+                e->create_input_lhs_edges.last()->setFactory(d->factory);
+                e->create_input_lhs_edges.last()->setScene(d->scene);
+                e->create_input_lhs_edges.last()->setGraph(d->graph);
+
+                e->create_input_rhs_edges << new dtkComposerStackCommandCreateEdge;
+                e->create_input_rhs_edges.last()->setFactory(d->factory);
+                e->create_input_rhs_edges.last()->setScene(d->scene);
+                e->create_input_rhs_edges.last()->setGraph(d->graph);
+            } else {// source is target composite
+                if (port_used.contains(edge->source()))
+                    port_used[edge->source()] ++;
+                else
+                    port_used.insert(edge->source(), 1);
+            }
+        } else if ((e->origin != edge->destination()->node()) && e->origin == edge->source()->node()) {
+            if (!(edge->destination()->node() == e->target)) {
+
+                e->output_edges << edge;
+
+                e->destroy_output_edges << new dtkComposerStackCommandDestroyEdge;
+                e->destroy_output_edges.last()->setFactory(d->factory);
+                e->destroy_output_edges.last()->setScene(d->scene);
+                e->destroy_output_edges.last()->setGraph(d->graph);
+
+                e->create_output_ports << new dtkComposerStackCommandCreatePort;
+                e->create_output_ports.last()->setFactory(d->factory);
+                e->create_output_ports.last()->setScene(d->scene);
+                e->create_output_ports.last()->setGraph(d->graph);
+
+                e->create_output_lhs_edges << new dtkComposerStackCommandCreateEdge;
+                e->create_output_lhs_edges.last()->setFactory(d->factory);
+                e->create_output_lhs_edges.last()->setScene(d->scene);
+                e->create_output_lhs_edges.last()->setGraph(d->graph);
+
+                e->create_output_rhs_edges << new dtkComposerStackCommandCreateEdge;
+                e->create_output_rhs_edges.last()->setFactory(d->factory);
+                e->create_output_rhs_edges.last()->setScene(d->scene);
+                e->create_output_rhs_edges.last()->setGraph(d->graph);
+            } else { // destination is target composite
+                if (port_used.contains(edge->destination()))
+                    port_used[edge->destination()] ++;
+                else
+                    port_used.insert(edge->destination(), 1);
+            }
+        } else if (edge->destination()->node() == e->target) {
+            if (port_used.contains(edge->destination()))
+                port_used[edge->destination()] ++;
+            else
+                port_used.insert(edge->destination(), 1);
+
+        } else if ( edge->source()->node() == e->target) {
+            if (port_used.contains(edge->source()))
+                port_used[edge->source()] ++;
+            else
+                port_used.insert(edge->source(), 1);
+        }
+    }
+
+    // search intern edges (connected to a port) of target composite
+    foreach(dtkComposerSceneEdge *edge, dynamic_cast<dtkComposerSceneNodeComposite *>(e->target)->edges() )
+        if ((edge->source()->node() == e->target) || (edge->destination()->node() == e->target))
+            target_intern << edge;
+
+    foreach(dtkComposerSceneEdge *edge, target_input) {
+        if (edge->source()->node() == e->origin ) {
+            // edge from node to composite; if the composite port is
+            // not connected inside, remove the edge, else connect
+            // directly the nodes inside the composite and destroy the
+            // port and old edge; if the port is also used inside the
+            // composite, don't remove the port
+            int count = 0;
+            foreach(dtkComposerSceneEdge *i_edge, target_intern) {
+                if (i_edge->source() == edge->destination()) { // same port
+                    e->create_intern_edges << new dtkComposerStackCommandCreateEdge;
+                    e->create_intern_edges.last()->setFactory(d->factory);
+                    e->create_intern_edges.last()->setScene(d->scene);
+                    e->create_intern_edges.last()->setGraph(d->graph);
+                    e->create_intern_edges.last()->setSource(edge->source());
+                    e->create_intern_edges.last()->setDestination(i_edge->destination());
+
+                    e->destroy_intern_edges << new dtkComposerStackCommandDestroyEdge;
+                    e->destroy_intern_edges.last()->setFactory(d->factory);
+                    e->destroy_intern_edges.last()->setScene(d->scene);
+                    e->destroy_intern_edges.last()->setGraph(d->graph);
+                    e->destroy_intern_edges.last()->setEdge(edge);
+                    port_used[edge->destination()] --;
+                    count ++;
+                }
+            }
+            if (count == 0) { // no intern edge connected to the port, we can remove this edge
+                e->destroy_intern_edges << new dtkComposerStackCommandDestroyEdge;
+                e->destroy_intern_edges.last()->setFactory(d->factory);
+                e->destroy_intern_edges.last()->setScene(d->scene);
+                e->destroy_intern_edges.last()->setGraph(d->graph);
+                e->destroy_intern_edges.last()->setEdge(edge);
+            }
+        }
+    }
+
+    foreach(dtkComposerSceneEdge *edge, target_output) {
+        if (edge->destination()->node() == e->origin ) {
+            // edge from node to composite; if the composite port is
+            // not connected inside, remove the edge, else connect
+            // directly the nodes inside the composite and destroy the
+            // port and old edge; if the port is also used inside the
+            // composite, don't remove the port
+            int count = 0;
+            foreach(dtkComposerSceneEdge *i_edge, target_intern) {
+                if (i_edge->destination() == edge->source()) { // same port
+                    e->create_intern_edges << new dtkComposerStackCommandCreateEdge;
+                    e->create_intern_edges.last()->setFactory(d->factory);
+                    e->create_intern_edges.last()->setScene(d->scene);
+                    e->create_intern_edges.last()->setGraph(d->graph);
+                    e->create_intern_edges.last()->setSource(i_edge->source());
+                    e->create_intern_edges.last()->setDestination(edge->destination());
+
+                    e->destroy_intern_edges << new dtkComposerStackCommandDestroyEdge;
+                    e->destroy_intern_edges.last()->setFactory(d->factory);
+                    e->destroy_intern_edges.last()->setScene(d->scene);
+                    e->destroy_intern_edges.last()->setGraph(d->graph);
+                    e->destroy_intern_edges.last()->setEdge(edge);
+                    port_used[edge->source()] --;
+                    count ++;
+                }
+            }
+            if (count == 0) { // no intern edge connected to the port, we can remove this edge
+                e->destroy_intern_edges << new dtkComposerStackCommandDestroyEdge;
+                e->destroy_intern_edges.last()->setFactory(d->factory);
+                e->destroy_intern_edges.last()->setScene(d->scene);
+                e->destroy_intern_edges.last()->setGraph(d->graph);
+                e->destroy_intern_edges.last()->setEdge(edge);
+            }
+        }
+    }
+
+    foreach(dtkComposerSceneEdge *edge, target_intern) {
+        if (edge->source()->node() == e->target ) {
+            if (port_used.contains(edge->source()) && port_used[edge->source()] == 0 ) { // port is not used outside, remove edge
+                e->destroy_intern_edges << new dtkComposerStackCommandDestroyEdge;
+                e->destroy_intern_edges.last()->setFactory(d->factory);
+                e->destroy_intern_edges.last()->setScene(d->scene);
+                e->destroy_intern_edges.last()->setGraph(d->graph);
+                e->destroy_intern_edges.last()->setEdge(edge);
+            }
+        } else if (edge->destination()->node() == e->target ) {
+            if (port_used.contains(edge->destination()) && port_used[edge->destination()] == 0) { // port is not used outside, remove edge
+                e->destroy_intern_edges << new dtkComposerStackCommandDestroyEdge;
+                e->destroy_intern_edges.last()->setFactory(d->factory);
+                e->destroy_intern_edges.last()->setScene(d->scene);
+                e->destroy_intern_edges.last()->setGraph(d->graph);
+                e->destroy_intern_edges.last()->setEdge(edge);
+            }
+        }
+    }
+
 }
 
 void dtkComposerStackCommandReparentNode::setOriginPosition(QPointF position)
@@ -2122,7 +2171,21 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
     if (dtkComposerSceneNodeComposite *target = dynamic_cast<dtkComposerSceneNodeComposite *>(e->target)) {
 
-        d->graph->removeNode(e->origin);
+        for(int i = 0; i < e->input_edges.count(); i++) {
+            e->destroy_input_edges.at(i)->setEdge(e->input_edges.at(i));
+            e->destroy_input_edges.at(i)->redo();
+        }
+
+        for(int i = 0; i < e->output_edges.count(); i++) {
+            e->destroy_output_edges.at(i)->setEdge(e->output_edges.at(i));
+            e->destroy_output_edges.at(i)->redo();
+        }
+
+        foreach(dtkComposerStackCommandDestroyEdge *destroy_edge, e->destroy_intern_edges)
+            destroy_edge->redo();
+
+
+        d->graph->reparentNode(e->origin, e->target);
 
         e->origin_parent->removeNode(e->origin);
 
@@ -2132,13 +2195,45 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
         if (target->flattened()) {
             d->scene->addItem(e->origin);
-            target->layout();
+            // target->layout();
         }
 
         e->origin->setParent(target);
         e->origin->setPos(e->target_pos);
 
-        d->graph->addNode(e->origin);
+        for(int i = 0; i < e->input_edges.count(); i++) {
+            e->create_input_ports.at(i)->setNode(target);
+            e->create_input_ports.at(i)->setType(dtkComposerScenePort::Input);
+            e->create_input_ports.at(i)->redo();
+            e->create_input_lhs_edges.at(i)->setSource(e->input_edges.at(i)->source());
+            e->create_input_lhs_edges.at(i)->setDestination(target->inputPorts().last());
+            e->create_input_lhs_edges.at(i)->redo();
+
+            e->create_input_rhs_edges.at(i)->setSource(target->inputPorts().last());
+            e->create_input_rhs_edges.at(i)->setDestination(e->input_edges.at(i)->destination());
+            e->create_input_rhs_edges.at(i)->redo();
+
+        }
+
+        for(int i = 0; i < e->output_edges.count(); i++) {
+            e->create_output_ports.at(i)->setNode(target);
+            e->create_output_ports.at(i)->setType(dtkComposerScenePort::Output);
+            e->create_output_ports.at(i)->redo();
+
+            e->create_output_lhs_edges.at(i)->setSource(e->output_edges.at(i)->source());
+            e->create_output_lhs_edges.at(i)->setDestination(target->outputPorts().last());
+            e->create_output_lhs_edges.at(i)->redo();
+
+            e->create_output_rhs_edges.at(i)->setSource(target->outputPorts().last());
+            e->create_output_rhs_edges.at(i)->setDestination(e->output_edges.at(i)->destination());
+            e->create_output_rhs_edges.at(i)->redo();
+
+        }
+
+        foreach(dtkComposerStackCommandCreateEdge *create_edge, e->create_intern_edges){
+            create_edge->setParent();
+            create_edge->redo();
+        }
 
         target->layout();
         d->graph->layout();
@@ -2166,7 +2261,28 @@ void dtkComposerStackCommandReparentNode::undo(void)
 
     if(dtkComposerSceneNodeComposite *target = dynamic_cast<dtkComposerSceneNodeComposite *>(e->target)) {
 
-        d->graph->removeNode(e->origin);
+
+        foreach(dtkComposerStackCommandCreateEdge *create_edge, e->create_intern_edges)
+            create_edge->undo();
+
+        for(int i = 0; i < e->input_edges.count(); i++) {
+            e->create_input_rhs_edges.at(i)->undo();
+            e->create_input_lhs_edges.at(i)->undo();
+        }
+
+        for(int i = 0; i < e->input_edges.count(); i++)
+            e->create_input_ports.at(i)->undo();
+
+        for(int i = 0; i < e->output_edges.count(); i++) {
+            e->create_output_rhs_edges.at(i)->undo();
+            e->create_output_lhs_edges.at(i)->undo();
+        }
+
+        for(int i = 0; i < e->output_edges.count(); i++)
+            e->create_output_ports.at(i)->undo();
+
+        d->graph->reparentNode(e->origin, e->origin_parent);
+
         target->removeNode(e->origin);
 
         if (target->flattened()) {
@@ -2177,10 +2293,20 @@ void dtkComposerStackCommandReparentNode::undo(void)
         e->origin_parent->addNode(e->origin);
         e->origin->setParent(e->origin_parent);
         e->origin->setPos(e->origin_pos);
-        d->graph->addNode(e->origin);
+
+        for(int i = 0; i < e->input_edges.count(); i++)
+            e->destroy_input_edges.at(i)->undo();
+
+        for(int i = 0; i < e->output_edges.count(); i++)
+            e->destroy_output_edges.at(i)->undo();
+
+        foreach(dtkComposerStackCommandDestroyEdge *destroy_edge, e->destroy_intern_edges)
+            destroy_edge->undo();
 
         if (e->origin_parent->flattened() || e->origin_parent->entered() || e->origin_parent->root())
             d->scene->addItem(e->origin);
+
+        e->origin_parent->layout();
     }
 
     if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(e->target)) {

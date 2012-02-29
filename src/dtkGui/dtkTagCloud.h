@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:01 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 01:14:00 2012 (+0100)
+ * Last-Updated: Wed Feb 29 12:49:27 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 186
+ *     Update #: 192
  */
 
 /* Commentary: 
@@ -163,6 +163,8 @@ public:
 
     void addTag(QString tag);
     void addTag(QString tag, int count);
+
+    void setTags(const QStringList& tags);
 
 signals:
     void tagSet(QString tag);

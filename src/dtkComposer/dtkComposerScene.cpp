@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Wed Feb 29 18:34:19 2012 (+0100)
+ * Last-Updated: Wed Feb 29 19:17:46 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1870
+ *     Update #: 1893
  */
 
 /* Commentary:
@@ -161,12 +161,10 @@ void dtkComposerScene::addItem(QGraphicsItem *item)
 
     if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(item)) {
 
-        QGraphicsScene::addItem(item);
+        if(item != d->root_node)
+            QGraphicsScene::addItem(item);
 
-        if(!composite->flattened())
-            return;
-
-        if(composite->entered())
+        if(!composite->flattened() && !composite->entered() && !composite->root())
             return;
 
         foreach(dtkComposerSceneNote *note, composite->notes())
@@ -207,12 +205,10 @@ void dtkComposerScene::removeItem(QGraphicsItem *item)
 
     if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(item)) {
 
-        QGraphicsScene::removeItem(composite);
+        if(item != d->root_node)
+            QGraphicsScene::removeItem(composite);
 
-        if(!composite->flattened())
-            return;
-
-        if(composite->entered())
+        if(!composite->flattened() && !composite->entered() && !composite->root())
             return;
 
         foreach(dtkComposerSceneNote *note, composite->notes())

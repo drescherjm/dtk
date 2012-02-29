@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:27 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 13:02:50 2012 (+0100)
+ * Last-Updated: Wed Feb 29 14:14:27 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1445
+ *     Update #: 1480
  */
 
 /* Commentary: 
@@ -518,7 +518,7 @@ dtkTagScope::dtkTagScope(QWidget *parent) : QFrame(parent)
 
     d->completer = new QCompleter(this);
     d->completer->setModel(d->completer_model);
-    d->completer->setCompletionMode(QCompleter::InlineCompletion);
+    d->completer->setModelSorting(QCompleter::CaseSensitivelySortedModel);
 
     d->edit = new QLineEdit;
     d->edit->setFixedHeight(24);
@@ -607,7 +607,10 @@ void dtkTagScope::addTag(QString tag, int count)
 
 void dtkTagScope::setTags(const QStringList& tags)
 {
-    d->completer_model->setStringList(tags);
+    QList<QString> t = tags;
+    qSort(t.begin(), t.end(), qLess<QString>());
+
+    d->completer_model->setStringList(t);
 }
 
 void dtkTagScope::onTagAdded(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:52:45 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 17:18:06 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 117
+ * Last-Updated: Wed Feb 29 10:17:18 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 118
  */
 
 /* Commentary: 
@@ -19,8 +19,8 @@
 
 #include "dtkComposerNodeVectorOperator.h"
 
-#include "dtkComposerEmitter.h"
-#include "dtkComposerReceiver.h"
+#include "dtkComposerTransmitterEmitter.h"
+#include "dtkComposerTransmitterReceiver.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeVectorOperatorUnary
@@ -60,22 +60,22 @@ dtkComposerNodeVectorOperatorUnary::~dtkComposerNodeVectorOperatorUnary(void)
 class dtkComposerNodeVectorOperatorBinaryPrivate
 {
 // public:
-//     dtkComposerReceiver<??> *receiver_lhs;
-//     dtkComposerReceiver<??> *receiver_rhs;
+//     dtkComposerTransmitterReceiver<??> *receiver_lhs;
+//     dtkComposerTransmitterReceiver<??> *receiver_rhs;
 
 // public:    
-//     dtkComposerEmitter<??> *emitter;
+//     dtkComposerTransmitterEmitter<??> *emitter;
 };
 
 dtkComposerNodeVectorOperatorBinary::dtkComposerNodeVectorOperatorBinary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVectorOperatorBinaryPrivate)
 {
-    // d->receiver_lhs = new dtkComposerReceiver<??>;
+    // d->receiver_lhs = new dtkComposerTransmitterReceiver<??>;
     // this->appendReceiver(d->receiver_lhs);
 
-    // d->receiver_rhs = new dtkComposerReceiver<??>;
+    // d->receiver_rhs = new dtkComposerTransmitterReceiver<??>;
     // this->appendReceiver(d->receiver_rhs);
 
-    // d->emitter = new dtkComposerEmitter<??>;
+    // d->emitter = new dtkComposerTransmitterEmitter<??>;
     // this->appendEmitter(d->emitter);
 }
 

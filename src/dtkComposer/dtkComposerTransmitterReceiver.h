@@ -1,12 +1,12 @@
-/* dtkComposerReceiver.h --- 
+/* dtkComposerTransmitterReceiver.h --- 
  * 
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 21 09:48:00 2012 (+0100)
+ * Last-Updated: Wed Feb 29 10:13:34 2012 (+0100)
  *           By: tkloczko
- *     Update #: 29
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -17,27 +17,27 @@
  * 
  */
 
-#ifndef DTKCOMPOSERRECEIVER_H
-#define DTKCOMPOSERRECEIVER_H
+#ifndef DTKCOMPOSERTRANSMITTERRECEIVER_H
+#define DTKCOMPOSERTRANSMITTERRECEIVER_H
 
 #include "dtkComposerTransmitter.h"
 
 #include <QtCore>
 
-template <typename T> class dtkComposerEmitter;
+template <typename T> class dtkComposerTransmitterEmitter;
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerReceiver declaration
+// dtkComposerTransmitterReceiver declaration
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class DTKCOMPOSER_EXPORT dtkComposerReceiver : public dtkComposerTransmitter
+template <typename T> class DTKCOMPOSER_EXPORT dtkComposerTransmitterReceiver : public dtkComposerTransmitter
 {
 public:
-     dtkComposerReceiver(dtkComposerNode *parent = 0);
-    ~dtkComposerReceiver(void);
+     dtkComposerTransmitterReceiver(dtkComposerNode *parent = 0);
+    ~dtkComposerTransmitterReceiver(void);
 
 public:
-    inline void connect(dtkComposerEmitter<T> *emitter);
+    inline void connect(dtkComposerTransmitterEmitter<T> *emitter);
 
     inline       T& data(void);
     inline const T& data(void) const;
@@ -55,13 +55,13 @@ public:
     LinkMap rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 
 private:
-    QList<dtkComposerEmitter<T> *> emitters;
+    QList<dtkComposerTransmitterEmitter<T> *> emitters;
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerReceiver implementation
+// dtkComposerTransmitterReceiver implementation
 // /////////////////////////////////////////////////////////////////
 
-#include "dtkComposerReceiver.tpp"
+#include "dtkComposerTransmitterReceiver.tpp"
 
 #endif

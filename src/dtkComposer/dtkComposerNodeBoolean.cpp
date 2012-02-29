@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 16:49:25 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 15 09:09:48 2012 (+0100)
+ * Last-Updated: Wed Feb 29 10:18:05 2012 (+0100)
  *           By: tkloczko
- *     Update #: 11
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -18,8 +18,8 @@
  */
 
 #include "dtkComposerNodeBoolean.h"
-#include "dtkComposerEmitter.h"
-#include "dtkComposerReceiver.h"
+#include "dtkComposerTransmitterEmitter.h"
+#include "dtkComposerTransmitterReceiver.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeBooleanPrivate declaration
@@ -28,10 +28,10 @@
 class dtkComposerNodeBooleanPrivate
 {
 public:
-    dtkComposerReceiver<bool> *receiver;
+    dtkComposerTransmitterReceiver<bool> *receiver;
 
 public:    
-    dtkComposerEmitter<bool> *emitter;
+    dtkComposerTransmitterEmitter<bool> *emitter;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -40,10 +40,10 @@ public:
 
 dtkComposerNodeBoolean::dtkComposerNodeBoolean(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeBooleanPrivate)
 {
-    d->receiver = new dtkComposerReceiver<bool>;
+    d->receiver = new dtkComposerTransmitterReceiver<bool>;
     this->appendReceiver(d->receiver);
 
-    d->emitter = new dtkComposerEmitter<bool>;
+    d->emitter = new dtkComposerTransmitterEmitter<bool>;
     this->appendEmitter(d->emitter);
 }
 

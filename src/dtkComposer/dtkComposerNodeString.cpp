@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:38:46 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 12:51:24 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 11
+ * Last-Updated: Wed Feb 29 10:14:42 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 12
  */
 
 /* Commentary: 
@@ -18,24 +18,24 @@
  */
 
 #include "dtkComposerNodeString.h"
-#include "dtkComposerEmitter.h"
-#include "dtkComposerReceiver.h"
+#include "dtkComposerTransmitterEmitter.h"
+#include "dtkComposerTransmitterReceiver.h"
 
 class dtkComposerNodeStringPrivate
 {
 public:
-    dtkComposerReceiver<QString> *receiver;
+    dtkComposerTransmitterReceiver<QString> *receiver;
 
 public:    
-    dtkComposerEmitter<QString> *emitter;
+    dtkComposerTransmitterEmitter<QString> *emitter;
 };
 
 dtkComposerNodeString::dtkComposerNodeString(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeStringPrivate)
 {
-    d->receiver = new dtkComposerReceiver<QString>;
+    d->receiver = new dtkComposerTransmitterReceiver<QString>;
     this->appendReceiver(d->receiver);
 
-    d->emitter = new dtkComposerEmitter<QString>;
+    d->emitter = new dtkComposerTransmitterEmitter<QString>;
     this->appendEmitter(d->emitter);
 }
 

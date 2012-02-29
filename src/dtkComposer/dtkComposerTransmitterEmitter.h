@@ -1,12 +1,12 @@
-/* dtkComposerEmitter.h --- 
+/* dtkComposerTransmitterEmitter.h --- 
  * 
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:33:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 20 17:06:28 2012 (+0100)
+ * Last-Updated: Wed Feb 29 10:07:40 2012 (+0100)
  *           By: tkloczko
- *     Update #: 20
+ *     Update #: 22
  */
 
 /* Commentary: 
@@ -17,20 +17,20 @@
  * 
  */
 
-#ifndef DTKCOMPOSEREMITTER_H
-#define DTKCOMPOSEREMITTER_H
+#ifndef DTKCOMPOSERTRANSMITTEREMITTER_H
+#define DTKCOMPOSERTRANSMITTEREMITTER_H
 
 #include "dtkComposerTransmitter.h"
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerEmitter declaration
+// dtkComposerTransmitterEmitter declaration
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class DTKCOMPOSER_EXPORT dtkComposerEmitter : public dtkComposerTransmitter
+template <typename T> class DTKCOMPOSER_EXPORT dtkComposerTransmitterEmitter : public dtkComposerTransmitter
 {
 public:
-     dtkComposerEmitter(dtkComposerNode *parent = 0);
-    ~dtkComposerEmitter(void);
+     dtkComposerTransmitterEmitter(dtkComposerNode *parent = 0);
+    ~dtkComposerTransmitterEmitter(void);
 
 public:
     inline void setData(const T& data);
@@ -49,9 +49,9 @@ private:
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerEmitter implementation
+// dtkComposerTransmitterEmitter implementation
 // /////////////////////////////////////////////////////////////////
 
-#include "dtkComposerEmitter.tpp"
+#include "dtkComposerTransmitterEmitter.tpp"
 
 #endif

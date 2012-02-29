@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:58:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 16:34:37 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 17
+ * Last-Updated: Wed Feb 29 10:14:06 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -19,8 +19,8 @@
 
 #include "dtkComposerNodeConstants.h"
 
-#include "dtkComposerEmitter.h"
-#include "dtkComposerReceiver.h"
+#include "dtkComposerTransmitterEmitter.h"
+#include "dtkComposerTransmitterReceiver.h"
 
 #include <math.h>
 
@@ -31,12 +31,12 @@
 class dtkComposerNodePiPrivate
 {
 public:    
-    dtkComposerEmitter<qreal> *emitter;
+    dtkComposerTransmitterEmitter<qreal> *emitter;
 };
 
 dtkComposerNodePi::dtkComposerNodePi(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodePiPrivate)
 {
-    d->emitter = new dtkComposerEmitter<qreal>;
+    d->emitter = new dtkComposerTransmitterEmitter<qreal>;
     this->appendEmitter(d->emitter);
 }
 
@@ -60,12 +60,12 @@ void dtkComposerNodePi::run(void)
 class dtkComposerNodeEPrivate
 {
 public:    
-    dtkComposerEmitter<qreal> *emitter;
+    dtkComposerTransmitterEmitter<qreal> *emitter;
 };
 
 dtkComposerNodeE::dtkComposerNodeE(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeEPrivate)
 {
-    d->emitter = new dtkComposerEmitter<qreal>;
+    d->emitter = new dtkComposerTransmitterEmitter<qreal>;
     this->appendEmitter(d->emitter);
 }
 

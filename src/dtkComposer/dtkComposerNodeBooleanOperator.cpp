@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:52:45 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 17:15:52 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 107
+ * Last-Updated: Wed Feb 29 10:17:44 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 110
  */
 
 /* Commentary: 
@@ -18,8 +18,8 @@
  */
 
 #include "dtkComposerNodeBooleanOperator.h"
-#include "dtkComposerEmitter.h"
-#include "dtkComposerReceiver.h"
+#include "dtkComposerTransmitterEmitter.h"
+#include "dtkComposerTransmitterReceiver.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeBooleanOperatorUnary
@@ -28,18 +28,18 @@
 class dtkComposerNodeBooleanOperatorUnaryPrivate
 {
 public:
-    dtkComposerReceiver<bool> *receiver;
+    dtkComposerTransmitterReceiver<bool> *receiver;
 
 public:    
-    dtkComposerEmitter<bool> *emitter;
+    dtkComposerTransmitterEmitter<bool> *emitter;
 };
 
 dtkComposerNodeBooleanOperatorUnary::dtkComposerNodeBooleanOperatorUnary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeBooleanOperatorUnaryPrivate)
 {
-    d->receiver = new dtkComposerReceiver<bool>;
+    d->receiver = new dtkComposerTransmitterReceiver<bool>;
     this->appendReceiver(d->receiver);
 
-    d->emitter = new dtkComposerEmitter<bool>;
+    d->emitter = new dtkComposerTransmitterEmitter<bool>;
     this->appendEmitter(d->emitter);
 }
 
@@ -59,22 +59,22 @@ dtkComposerNodeBooleanOperatorUnary::~dtkComposerNodeBooleanOperatorUnary(void)
 class dtkComposerNodeBooleanOperatorBinaryPrivate
 {
 public:
-    dtkComposerReceiver<bool> *receiver_lhs;
-    dtkComposerReceiver<bool> *receiver_rhs;
+    dtkComposerTransmitterReceiver<bool> *receiver_lhs;
+    dtkComposerTransmitterReceiver<bool> *receiver_rhs;
 
 public:    
-    dtkComposerEmitter<bool> *emitter;
+    dtkComposerTransmitterEmitter<bool> *emitter;
 };
 
 dtkComposerNodeBooleanOperatorBinary::dtkComposerNodeBooleanOperatorBinary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeBooleanOperatorBinaryPrivate)
 {
-    d->receiver_lhs = new dtkComposerReceiver<bool>;
+    d->receiver_lhs = new dtkComposerTransmitterReceiver<bool>;
     this->appendReceiver(d->receiver_lhs);
 
-    d->receiver_rhs = new dtkComposerReceiver<bool>;
+    d->receiver_rhs = new dtkComposerTransmitterReceiver<bool>;
     this->appendReceiver(d->receiver_rhs);
 
-    d->emitter = new dtkComposerEmitter<bool>;
+    d->emitter = new dtkComposerTransmitterEmitter<bool>;
     this->appendEmitter(d->emitter);
 }
 

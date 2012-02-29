@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Nov  2 10:48:42 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 14 11:34:00 2012 (+0100)
+ * Last-Updated: Wed Feb 29 10:18:26 2012 (+0100)
  *           By: tkloczko
- *     Update #: 126
+ *     Update #: 127
  */
 
 /* Commentary: 
@@ -20,7 +20,7 @@
 #include <QtCore/QObject>
 
 #include <dtkComposer/dtkComposerTransmitter.h>
-#include <dtkComposer/dtkComposerEmitter.h>
+#include <dtkComposer/dtkComposerTransmitterEmitter.h>
 
 #include <dtkCore/dtkAbstractData>
 #include <dtkCore/dtkAbstractProcess>
@@ -184,10 +184,10 @@ int dummyModifier::update(void)
 
 // /////////////////////////////////////////////////////////////////
 
-typedef dtkComposerEmitter<dummyData *> dummyDataTransmitter;
-typedef dtkComposerEmitter<otherData *> otherDataTransmitter;
-typedef dtkComposerEmitter<double> doubleTransmitter;
-typedef dtkComposerEmitter<dtkMatrixSquared<int> *> matrixTransmitter;
+typedef dtkComposerTransmitterEmitter<dummyData *> dummyDataTransmitter;
+typedef dtkComposerTransmitterEmitter<otherData *> otherDataTransmitter;
+typedef dtkComposerTransmitterEmitter<double> doubleTransmitter;
+typedef dtkComposerTransmitterEmitter<dtkMatrixSquared<int> *> matrixTransmitter;
 
 void run(void)
 {

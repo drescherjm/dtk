@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Mon Feb 27 14:28:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 28 17:41:08 2012 (+0100)
- *           By: David Rey
- *     Update #: 115
+ * Last-Updated: Wed Feb 29 10:16:31 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 116
  */
 
 /* Commentary: 
@@ -18,8 +18,8 @@
  */
 
 #include "dtkComposerNodeNumberOperator.h"
-#include "dtkComposerEmitter.h"
-#include "dtkComposerReceiver.h"
+#include "dtkComposerTransmitterEmitter.h"
+#include "dtkComposerTransmitterReceiver.h"
 
 #include <dtkMath/dtkMath.h>
 
@@ -32,18 +32,18 @@
 class dtkComposerNodeNumberOperatorUnaryPrivate
 {
 public:
-    dtkComposerReceiver<qreal> *receiver;
+    dtkComposerTransmitterReceiver<qreal> *receiver;
 
 public:    
-    dtkComposerEmitter<qreal> *emitter;
+    dtkComposerTransmitterEmitter<qreal> *emitter;
 };
 
 dtkComposerNodeNumberOperatorUnary::dtkComposerNodeNumberOperatorUnary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberOperatorUnaryPrivate)
 {
-    d->receiver = new dtkComposerReceiver<qreal>;
+    d->receiver = new dtkComposerTransmitterReceiver<qreal>;
     this->appendReceiver(d->receiver);
 
-    d->emitter = new dtkComposerEmitter<qreal>;
+    d->emitter = new dtkComposerTransmitterEmitter<qreal>;
     this->appendEmitter(d->emitter);
 }
 
@@ -63,22 +63,22 @@ dtkComposerNodeNumberOperatorUnary::~dtkComposerNodeNumberOperatorUnary(void)
 class dtkComposerNodeNumberOperatorBinaryPrivate
 {
 public:
-    dtkComposerReceiver<qreal> *receiver_lhs;
-    dtkComposerReceiver<qreal> *receiver_rhs;
+    dtkComposerTransmitterReceiver<qreal> *receiver_lhs;
+    dtkComposerTransmitterReceiver<qreal> *receiver_rhs;
 
 public:    
-    dtkComposerEmitter<qreal> *emitter;
+    dtkComposerTransmitterEmitter<qreal> *emitter;
 };
 
 dtkComposerNodeNumberOperatorBinary::dtkComposerNodeNumberOperatorBinary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberOperatorBinaryPrivate)
 {
-    d->receiver_lhs = new dtkComposerReceiver<qreal>;
+    d->receiver_lhs = new dtkComposerTransmitterReceiver<qreal>;
     this->appendReceiver(d->receiver_lhs);
 
-    d->receiver_rhs = new dtkComposerReceiver<qreal>;
+    d->receiver_rhs = new dtkComposerTransmitterReceiver<qreal>;
     this->appendReceiver(d->receiver_rhs);
 
-    d->emitter = new dtkComposerEmitter<qreal>;
+    d->emitter = new dtkComposerTransmitterEmitter<qreal>;
     this->appendEmitter(d->emitter);
 }
 
@@ -99,22 +99,22 @@ dtkComposerNodeNumberOperatorBinary::~dtkComposerNodeNumberOperatorBinary(void)
 class dtkComposerNodeNumberComparatorPrivate
 {
 public:
-    dtkComposerReceiver<qreal> *receiver_lhs;
-    dtkComposerReceiver<qreal> *receiver_rhs;
+    dtkComposerTransmitterReceiver<qreal> *receiver_lhs;
+    dtkComposerTransmitterReceiver<qreal> *receiver_rhs;
 
 public:    
-    dtkComposerEmitter<bool> *emitter;
+    dtkComposerTransmitterEmitter<bool> *emitter;
 };
 
 dtkComposerNodeNumberComparator::dtkComposerNodeNumberComparator(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberComparatorPrivate)
 {
-    d->receiver_lhs = new dtkComposerReceiver<qreal>;
+    d->receiver_lhs = new dtkComposerTransmitterReceiver<qreal>;
     this->appendReceiver(d->receiver_lhs);
 
-    d->receiver_rhs = new dtkComposerReceiver<qreal>;
+    d->receiver_rhs = new dtkComposerTransmitterReceiver<qreal>;
     this->appendReceiver(d->receiver_rhs);
 
-    d->emitter = new dtkComposerEmitter<bool>;
+    d->emitter = new dtkComposerTransmitterEmitter<bool>;
     this->appendEmitter(d->emitter);
 }
 
@@ -135,26 +135,26 @@ dtkComposerNodeNumberComparator::~dtkComposerNodeNumberComparator(void)
 class dtkComposerNodeNumberAlmosteqPrivate
 {
 public:
-    dtkComposerReceiver<qreal> *receiver_lhs;
-    dtkComposerReceiver<qreal> *receiver_rhs;
-    dtkComposerReceiver<qreal> *receiver_eps;
+    dtkComposerTransmitterReceiver<qreal> *receiver_lhs;
+    dtkComposerTransmitterReceiver<qreal> *receiver_rhs;
+    dtkComposerTransmitterReceiver<qreal> *receiver_eps;
 
 public:    
-    dtkComposerEmitter<bool> *emitter;
+    dtkComposerTransmitterEmitter<bool> *emitter;
 };
 
 dtkComposerNodeNumberAlmosteq::dtkComposerNodeNumberAlmosteq(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberAlmosteqPrivate)
 {
-    d->receiver_lhs = new dtkComposerReceiver<qreal>;
+    d->receiver_lhs = new dtkComposerTransmitterReceiver<qreal>;
     this->appendReceiver(d->receiver_lhs);
 
-    d->receiver_rhs = new dtkComposerReceiver<qreal>;
+    d->receiver_rhs = new dtkComposerTransmitterReceiver<qreal>;
     this->appendReceiver(d->receiver_rhs);
 
-    d->receiver_eps = new dtkComposerReceiver<qreal>;
+    d->receiver_eps = new dtkComposerTransmitterReceiver<qreal>;
     this->appendReceiver(d->receiver_eps);
 
-    d->emitter = new dtkComposerEmitter<bool>;
+    d->emitter = new dtkComposerTransmitterEmitter<bool>;
     this->appendEmitter(d->emitter);
 }
 
@@ -185,26 +185,26 @@ void dtkComposerNodeNumberAlmosteq::run(void)
 class dtkComposerNodeNumberNotalmosteqPrivate
 {
 public:
-    dtkComposerReceiver<qreal> *receiver_lhs;
-    dtkComposerReceiver<qreal> *receiver_rhs;
-    dtkComposerReceiver<qreal> *receiver_eps;
+    dtkComposerTransmitterReceiver<qreal> *receiver_lhs;
+    dtkComposerTransmitterReceiver<qreal> *receiver_rhs;
+    dtkComposerTransmitterReceiver<qreal> *receiver_eps;
 
 public:    
-    dtkComposerEmitter<bool> *emitter;
+    dtkComposerTransmitterEmitter<bool> *emitter;
 };
 
 dtkComposerNodeNumberNotalmosteq::dtkComposerNodeNumberNotalmosteq(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberNotalmosteqPrivate)
 {
-    d->receiver_lhs = new dtkComposerReceiver<qreal>;
+    d->receiver_lhs = new dtkComposerTransmitterReceiver<qreal>;
     this->appendReceiver(d->receiver_lhs);
 
-    d->receiver_rhs = new dtkComposerReceiver<qreal>;
+    d->receiver_rhs = new dtkComposerTransmitterReceiver<qreal>;
     this->appendReceiver(d->receiver_rhs);
 
-    d->receiver_eps = new dtkComposerReceiver<qreal>;
+    d->receiver_eps = new dtkComposerTransmitterReceiver<qreal>;
     this->appendReceiver(d->receiver_eps);
 
-    d->emitter = new dtkComposerEmitter<bool>;
+    d->emitter = new dtkComposerTransmitterEmitter<bool>;
     this->appendEmitter(d->emitter);
 }
 

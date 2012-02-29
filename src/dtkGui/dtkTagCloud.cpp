@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:27 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 03:10:27 2012 (+0100)
+ * Last-Updated: Wed Feb 29 14:14:27 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1402
+ *     Update #: 1480
  */
 
 /* Commentary: 
@@ -503,6 +503,10 @@ public:
     QHash<QString, int> counts;
 
 public:
+    QCompleter *completer;
+    QStringListModel *completer_model;
+
+public:
     dtkFlowLayout *layout;
 };
 
@@ -510,13 +514,20 @@ dtkTagScope::dtkTagScope(QWidget *parent) : QFrame(parent)
 {
     d = new dtkTagScopePrivate;
 
+    d->completer_model = new QStringListModel(this);
+
+    d->completer = new QCompleter(this);
+    d->completer->setModel(d->completer_model);
+    d->completer->setModelSorting(QCompleter::CaseSensitivelySortedModel);
+
     d->edit = new QLineEdit;
     d->edit->setFixedHeight(24);
     d->edit->setAttribute(Qt::WA_MacShowFocusRect, false);
+    d->edit->setCompleter(d->completer);
 
     d->clear = new QToolButton;
     d->clear->setFixedHeight(24);
-    d->clear->setAttribute(Qt::WA_MacShowFocusRect, false);
+    d->clear->setAttribute(Qt::WA_MacShowFocusRect, false);    
 
     QHBoxLayout *t_layout = new QHBoxLayout;
     t_layout->setContentsMargins(0, 0, 0, 0);
@@ -557,6 +568,7 @@ void dtkTagScope::clear(void)
 {
     d->filters.clear();
     d->counts.clear();
+    d->edit->clear();
 }
 
 void dtkTagScope::render(void)
@@ -591,6 +603,14 @@ void dtkTagScope::addTag(QString tag, int count)
     d->filters << tag;
 
     d->counts[tag] = count;
+}
+
+void dtkTagScope::setTags(const QStringList& tags)
+{
+    QList<QString> t = tags;
+    qSort(t.begin(), t.end(), qLess<QString>());
+
+    d->completer_model->setStringList(t);
 }
 
 void dtkTagScope::onTagAdded(void)
@@ -1238,16 +1258,16 @@ void dtkTagController::addItem(QString name, QString description, QStringList ta
 
 void dtkTagController::update(void)
 {
-    d->tags.clear();
+    // d->tags.clear();
 
-    QHash<QString, QStringList> tags;
+    // QHash<QString, QStringList> tags;
     
-    foreach(dtkItem item, d->items)
-        foreach(QString tag, item.tags())
-            tags[tag] << item.name();
+    // foreach(dtkItem item, d->items)
+    //     foreach(QString tag, item.tags())
+    //         tags[tag] << item.name();
 
-    foreach(QString tag, tags.keys())
-        d->tags << dtkTag(tag, tags[tag].count(), tags[tag]);
+    // foreach(QString tag, tags.keys())
+    //     d->tags << dtkTag(tag, tags[tag].count(), tags[tag]);
 }
 
 static bool filter(QStringList l1, QStringList l2) {
@@ -1260,16 +1280,22 @@ void dtkTagController::clear(void)
 {
     d->filters.clear();
     
+    this->update();
     this->render();
 }
 
 void dtkTagController::render(void)
 {
+    d->tags.clear();
+
     QHash<QString, QStringList> tags;
     
     foreach(dtkItem item, d->items)
         foreach(QString tag, item.tags())
             tags[tag] << item.name();
+
+    foreach(QString tag, tags.keys())
+        d->tags << dtkTag(tag, tags[tag].count(), tags[tag]);
 
     if (d->list) {
         d->list->clear();
@@ -1291,6 +1317,9 @@ void dtkTagController::render(void)
             d->scope->addTag(filter, tags[filter].count());
         d->scope->render();
     }
+
+    if (d->scope)
+        d->scope->setTags(tags.keys());
 }
 
 void dtkTagController::addFilter(QString filter)

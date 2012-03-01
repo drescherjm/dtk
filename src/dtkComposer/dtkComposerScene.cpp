@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Wed Feb 29 19:17:46 2012 (+0100)
+ * Last-Updated: Thu Mar  1 13:15:34 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1893
+ *     Update #: 1898
  */
 
 /* Commentary:
@@ -31,6 +31,7 @@
 #include "dtkComposerScenePort.h"
 #include "dtkComposerStack.h"
 #include "dtkComposerStackCommand.h"
+#include "dtkComposerStackUtils.h"
 
 dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(new dtkComposerScenePrivate)
 {
@@ -399,7 +400,10 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
             command->setNodes(selected_nodes);
             command->setNotes(selected_notes);
 
-            d->stack->push(command);
+            if(areBrothers(selected_nodes, selected_notes))
+                d->stack->push(command);
+            else
+                delete command;
         }
 
     } else if ((event->key() == Qt::Key_U) && (event->modifiers() & Qt::ControlModifier) && (this->selectedItems().count() == 1)) {

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. mars  1 12:28:13 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 2940
+ * Last-Updated: Thu Mar  1 13:03:20 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 2989
  */
 
 /* Commentary: 
@@ -780,9 +780,6 @@ public:
     dtkComposerSceneNodeComposite *parent;
 
 public:
-    QList<dtkComposerSceneNode *> nodes;
-
-public:
     QList<dtkComposerSceneNote *> notes;
 
 public:
@@ -814,20 +811,22 @@ void dtkComposerStackCommandCreateGroup::setNodes(dtkComposerSceneNodeList nodes
 
     e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(nodes.first()->parent());
 
-    foreach(dtkComposerSceneNode *node, nodes)
-        if(node->parent() != e->parent)
-            e->parent = NULL;
+    if(!e->node && e->parent) {
+        e->node = new dtkComposerSceneNodeComposite;
+        e->node->wrap(new dtkComposerNodeComposite);
+        e->node->setParent(e->parent);
+    }
 
     foreach(dtkComposerSceneNode *node, nodes) {
         if(node->parent() == e->parent) {
             rect |= node->sceneBoundingRect();
-            e->nodes << node;
             e->reparent << new dtkComposerStackCommandReparentNode;
             e->reparent.last()->setFactory(d->factory);
             e->reparent.last()->setScene(d->scene);
             e->reparent.last()->setGraph(d->graph);
             e->reparent.last()->setOriginNode(node);
             e->reparent.last()->setOriginPosition(node->boundingRect().center());
+            e->reparent.last()->setTargetNode(e->node);
             e->reparent.last()->setTargetPosition(rect.center());
         }
     }
@@ -856,27 +855,18 @@ void dtkComposerStackCommandCreateGroup::redo(void)
     if(!e->parent)
         return;
 
-    if(e->nodes.isEmpty())
+    if(!e->node)
         return;
 
-    if(!e->node) {
-        e->node = new dtkComposerSceneNodeComposite;
-        e->node->wrap(new dtkComposerNodeComposite);
-        e->node->setParent(e->parent);
-    }
-
-    QList<dtkComposerSceneNode *> nodes = e->nodes;
-
     e->parent->addNode(e->node);
+
     d->graph->addNode(e->node);
+    d->graph->layout();
+
     e->node->setPos(e->pos - e->node->boundingRect().center());
 
-    foreach(dtkComposerStackCommandReparentNode *cmd, e->reparent) {
-        cmd->setTargetNode(e->node);
+    foreach(dtkComposerStackCommandReparentNode *cmd, e->reparent)
         cmd->redo();
-    }
-
-    d->graph->layout();
 
     foreach(dtkComposerSceneNote *note, e->notes) {
         e->parent->removeNote(note);
@@ -906,12 +896,6 @@ void dtkComposerStackCommandCreateGroup::undo(void)
     if(!e->node)
         return;
 
-    foreach(dtkComposerStackCommandReparentNode *cmd, e->reparent) {
-//        cmd->setTargetNode(e->node);
-        cmd->undo();
-    }
-
-
     foreach(dtkComposerSceneNote *note, e->notes) {
         e->parent->addNote(note);
         d->scene->addItem(note);
@@ -919,11 +903,13 @@ void dtkComposerStackCommandCreateGroup::undo(void)
         note->setParent(e->node->parent());
     }
 
+    foreach(dtkComposerStackCommandReparentNode *comand, e->reparent)
+        comand->undo();
+
     d->graph->removeNode(e->node);
-    e->parent->removeNode(e->node);
-
-
     d->graph->layout();
+
+    e->parent->removeNode(e->node);
 
     if (e->parent->root() || e->parent->flattened() || e->parent->entered())
         d->scene->removeItem(e->node);

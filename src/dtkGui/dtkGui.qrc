@@ -1,7 +1,10 @@
 <!DOCTYPE RCC><RCC version="1.0">
   <qresource prefix="dtkGui">
+
     <file>dtkFinder.qss</file>
     <file>dtkAnchoredBar.qss</file>
+
+    <file>dtkSwitch.qml</file>
 
     <file>pixmaps/dtk-anchored-bar-action.png</file>
     <file>pixmaps/dtk-anchored-bar-add.png</file>
@@ -19,5 +22,7 @@
     <file>pixmaps/dtkLedPurple.png</file>
     <file>pixmaps/dtkLedRed.png</file>
     <file>pixmaps/dtkLedYellow.png</file>
+    <file>pixmaps/dtkSwitch-groove.png</file>
+    <file>pixmaps/dtkSwitch-knob.png</file>
   </qresource>
 </RCC>

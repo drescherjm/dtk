@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:27 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 14:14:27 2012 (+0100)
+ * Last-Updated: Thu Mar  1 00:39:50 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1480
+ *     Update #: 1510
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include "dtkFlowLayout.h"
+#include "dtkSwitch.h"
 #include "dtkTagCloud.h"
 
 #include <QtDebug>
@@ -495,6 +496,7 @@ public:
     QStringList filters;
     QLineEdit *edit;
     QToolButton *clear;
+    dtkSwitch *switsh;
 
 public:
     QList<dtkTagScopeTag *> tags;
@@ -521,19 +523,24 @@ dtkTagScope::dtkTagScope(QWidget *parent) : QFrame(parent)
     d->completer->setModelSorting(QCompleter::CaseSensitivelySortedModel);
 
     d->edit = new QLineEdit;
-    d->edit->setFixedHeight(24);
+    d->edit->setFixedHeight(27);
     d->edit->setAttribute(Qt::WA_MacShowFocusRect, false);
     d->edit->setCompleter(d->completer);
 
     d->clear = new QToolButton;
-    d->clear->setFixedHeight(24);
-    d->clear->setAttribute(Qt::WA_MacShowFocusRect, false);    
+    d->clear->setFixedHeight(27);
+    d->clear->setAttribute(Qt::WA_MacShowFocusRect, false);
+
+    d->switsh = new dtkSwitch;
+    d->switsh->setFixedHeight(27);
+    d->switsh->setAttribute(Qt::WA_MacShowFocusRect, false);
 
     QHBoxLayout *t_layout = new QHBoxLayout;
     t_layout->setContentsMargins(0, 0, 0, 0);
     t_layout->setSpacing(0);
     t_layout->addWidget(d->edit);
     t_layout->addWidget(d->clear);
+    t_layout->addWidget(d->switsh);
 
     d->layout = new dtkFlowLayout;
     d->layout->setContentsMargins(5, 5, 5, 5);
@@ -550,6 +557,7 @@ dtkTagScope::dtkTagScope(QWidget *parent) : QFrame(parent)
 
     connect(d->edit, SIGNAL(returnPressed()), this, SLOT(onTagAdded()));
     connect(d->clear, SIGNAL(clicked()), this, SIGNAL(cleared()));
+    connect(d->switsh, SIGNAL(toggled(bool)), this, SIGNAL(unionMode(bool)));
 }
 
 dtkTagScope::~dtkTagScope(void)
@@ -1185,6 +1193,8 @@ public:
     QList<dtkTag>  tags;
     QList<dtkItem> items;
     QStringList    filters;
+
+    bool union_mode;
 };
 
 dtkTagController::dtkTagController(void) : QObject()
@@ -1193,6 +1203,8 @@ dtkTagController::dtkTagController(void) : QObject()
     d->list = NULL;
     d->cloud = NULL;
     d->scope = NULL;
+
+    d->union_mode = false;
 }
 
 dtkTagController::~dtkTagController(void)
@@ -1222,6 +1234,7 @@ void dtkTagController::attach(dtkTagScope *scope)
     connect(d->scope, SIGNAL(tagAdded(QString)), this, SLOT(addFilter(QString)));
     connect(d->scope, SIGNAL(tagRemoved(QString)), this, SLOT(remFilter(QString)));
     connect(d->scope, SIGNAL(cleared(void)), this, SLOT(clear()));
+    connect(d->scope, SIGNAL(unionMode(bool)), this, SLOT(onUnionMode(bool)));
 }
 
 void dtkTagController::addItem(QString name)
@@ -1270,9 +1283,16 @@ void dtkTagController::update(void)
     //     d->tags << dtkTag(tag, tags[tag].count(), tags[tag]);
 }
 
-static bool filter(QStringList l1, QStringList l2) {
+static bool intersect(QStringList l1, QStringList l2) {
     bool pass = true;
     foreach(QString s, l1) if(!l2.contains(s)) pass = false;
+    return pass;
+}
+
+static bool unite(QStringList l1, QStringList l2) {
+    if(l1.isEmpty()) return true;
+    bool pass = false;
+    foreach(QString s, l1) if(l2.contains(s)) pass = true;
     return pass;
 }
 
@@ -1300,7 +1320,7 @@ void dtkTagController::render(void)
     if (d->list) {
         d->list->clear();
         foreach(dtkItem item, d->items)
-            if(filter(d->filters, item.tags()))
+            if((d->union_mode && unite(d->filters, item.tags())) || (!d->union_mode && intersect(d->filters, item.tags())))
                 d->list->addItem(item);
     }
 
@@ -1340,6 +1360,13 @@ void dtkTagController::setFilter(QString filter)
 void dtkTagController::remFilter(QString filter)
 {
     d->filters.removeOne(filter);
+
+    this->render();
+}
+
+void dtkTagController::onUnionMode(bool mode)
+{
+    d->union_mode = !mode;
 
     this->render();
 }

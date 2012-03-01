@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:01 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 12:49:27 2012 (+0100)
+ * Last-Updated: Thu Mar  1 00:17:25 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 192
+ *     Update #: 199
  */
 
 /* Commentary: 
@@ -171,6 +171,7 @@ signals:
     void tagAdded(QString tag);
     void tagRemoved(QString tag);
     void cleared(void);
+    void unionMode(bool);
 
 public slots:
     void clear(void);
@@ -379,6 +380,7 @@ private slots:
     void setFilter(QString tag);
     void remFilter(QString tag);
     void clear(void);
+    void onUnionMode(bool mode);
 
 private:
     dtkTagControllerPrivate *d;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  1 13:03:20 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 2989
+ * Last-Updated: jeu. mars  1 15:58:30 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 3026
  */
 
 /* Commentary: 
@@ -788,12 +788,15 @@ public:
 public:
     QPointF pos;
 
+public:
+    bool dirty;
 };
 
 dtkComposerStackCommandCreateGroup::dtkComposerStackCommandCreateGroup(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandCreateGroupPrivate)
 {
     e->parent = NULL;
-    e->node = NULL;
+    e->node   = NULL;
+    e->dirty  = true;
 
     this->setText("Create group");
 }
@@ -826,7 +829,6 @@ void dtkComposerStackCommandCreateGroup::setNodes(dtkComposerSceneNodeList nodes
             e->reparent.last()->setGraph(d->graph);
             e->reparent.last()->setOriginNode(node);
             e->reparent.last()->setOriginPosition(node->boundingRect().center());
-            e->reparent.last()->setTargetNode(e->node);
             e->reparent.last()->setTargetPosition(rect.center());
         }
     }
@@ -865,8 +867,12 @@ void dtkComposerStackCommandCreateGroup::redo(void)
 
     e->node->setPos(e->pos - e->node->boundingRect().center());
 
-    foreach(dtkComposerStackCommandReparentNode *cmd, e->reparent)
+    foreach(dtkComposerStackCommandReparentNode *cmd, e->reparent) {
+        if (e->dirty)
+            cmd->setTargetNode(e->node);
         cmd->redo();
+    }
+    e->dirty = false;
 
     foreach(dtkComposerSceneNote *note, e->notes) {
         e->parent->removeNote(note);
@@ -903,11 +909,13 @@ void dtkComposerStackCommandCreateGroup::undo(void)
         note->setParent(e->node->parent());
     }
 
-    foreach(dtkComposerStackCommandReparentNode *comand, e->reparent)
-        comand->undo();
+    QListIterator<dtkComposerStackCommandReparentNode *> i(e->reparent);
+    i.toBack();
+    while (i.hasPrevious())
+        i.previous()->undo();
 
-    d->graph->removeNode(e->node);
-    d->graph->layout();
+   d->graph->removeNode(e->node);
+   d->graph->layout();
 
     e->parent->removeNode(e->node);
 
@@ -1822,7 +1830,6 @@ public:
     QList<dtkComposerStackCommandDestroyEdge *> destroy_intern_edges;
     QList<dtkComposerStackCommandCreateEdge *>  create_intern_edges;
     QList<dtkComposerStackCommandDestroyPort *> destroy_ports;
-
 };
 
 dtkComposerStackCommandReparentNode::dtkComposerStackCommandReparentNode(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandReparentNodePrivate)
@@ -2124,6 +2131,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
             e->create_input_ports.at(i)->setNode(target);
             e->create_input_ports.at(i)->setType(dtkComposerScenePort::Input);
             e->create_input_ports.at(i)->redo();
+
             e->create_input_lhs_edges.at(i)->setSource(e->input_edges.at(i)->source());
             e->create_input_lhs_edges.at(i)->setDestination(target->inputPorts().last());
             e->create_input_lhs_edges.at(i)->redo();
@@ -2131,7 +2139,6 @@ void dtkComposerStackCommandReparentNode::redo(void)
             e->create_input_rhs_edges.at(i)->setSource(target->inputPorts().last());
             e->create_input_rhs_edges.at(i)->setDestination(e->input_edges.at(i)->destination());
             e->create_input_rhs_edges.at(i)->redo();
-
         }
 
         for(int i = 0; i < e->output_edges.count(); i++) {
@@ -2146,7 +2153,6 @@ void dtkComposerStackCommandReparentNode::redo(void)
             e->create_output_rhs_edges.at(i)->setSource(target->outputPorts().last());
             e->create_output_rhs_edges.at(i)->setDestination(e->output_edges.at(i)->destination());
             e->create_output_rhs_edges.at(i)->redo();
-
         }
 
         foreach(dtkComposerStackCommandCreateEdge *create_edge, e->create_intern_edges){

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. févr. 29 21:53:07 2012 (+0100)
+ * Last-Updated: jeu. mars  1 12:28:13 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 2836
+ *     Update #: 2940
  */
 
 /* Commentary: 
@@ -907,7 +907,7 @@ void dtkComposerStackCommandCreateGroup::undo(void)
         return;
 
     foreach(dtkComposerStackCommandReparentNode *cmd, e->reparent) {
-        cmd->setTargetNode(e->node);
+//        cmd->setTargetNode(e->node);
         cmd->undo();
     }
 
@@ -919,8 +919,9 @@ void dtkComposerStackCommandCreateGroup::undo(void)
         note->setParent(e->node->parent());
     }
 
-    e->parent->removeNode(e->node);
     d->graph->removeNode(e->node);
+    e->parent->removeNode(e->node);
+
 
     d->graph->layout();
 
@@ -1817,6 +1818,7 @@ public:
 public:
     QList<dtkComposerSceneEdge *>  input_edges;
     QList<dtkComposerSceneEdge *> output_edges;
+    QList<dtkComposerScenePort *>        ports;
 
 public:
     QList<dtkComposerStackCommandDestroyEdge *> destroy_input_edges;
@@ -1988,18 +1990,6 @@ void dtkComposerStackCommandReparentNode::setTargetNode(dtkComposerSceneNode *no
                 e->destroy_intern_edges.last()->setScene(d->scene);
                 e->destroy_intern_edges.last()->setGraph(d->graph);
                 e->destroy_intern_edges.last()->setEdge(edge);
-
-                if (port_used[edge->destination()] == 0) {// no extern edge connected either, delete port
-                    qDebug()<< __func__ << "deleting unused port";
-                    e->destroy_ports << new dtkComposerStackCommandDestroyPort;
-                    e->destroy_ports.last()->setFactory(d->factory);
-                    e->destroy_ports.last()->setScene(d->scene);
-                    e->destroy_ports.last()->setGraph(d->graph);
-                    e->destroy_ports.last()->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(e->target));
-                    e->destroy_ports.last()->setPort(edge->destination());
-
-                }
-
             }
         }
     }
@@ -2036,17 +2026,6 @@ void dtkComposerStackCommandReparentNode::setTargetNode(dtkComposerSceneNode *no
                 e->destroy_intern_edges.last()->setScene(d->scene);
                 e->destroy_intern_edges.last()->setGraph(d->graph);
                 e->destroy_intern_edges.last()->setEdge(edge);
-                if (port_used[edge->source()] == 0) {// no extern edge connected either, delete port
-                    qDebug()<< __func__ << "******* deleting unused port";
-                    e->destroy_ports << new dtkComposerStackCommandDestroyPort;
-                    e->destroy_ports.last()->setFactory(d->factory);
-                    e->destroy_ports.last()->setScene(d->scene);
-                    e->destroy_ports.last()->setGraph(d->graph);
-                    e->destroy_ports.last()->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(e->target));
-                    e->destroy_ports.last()->setPort(edge->source());
-                } else {
-                    qDebug()<< __func__ << " **** can't delete port" << port_used[edge->source()] ;
-                }
             }
         }
     }
@@ -2059,6 +2038,18 @@ void dtkComposerStackCommandReparentNode::setTargetNode(dtkComposerSceneNode *no
                 e->destroy_intern_edges.last()->setScene(d->scene);
                 e->destroy_intern_edges.last()->setGraph(d->graph);
                 e->destroy_intern_edges.last()->setEdge(edge);
+
+                // we can't SetPort now, otherwise, it will add
+                // destroy edges commands for edges that will be
+                // deleted by us, so store the port, and to the Set Port in redo.
+
+                e->ports << edge->source();
+                e->destroy_ports << new dtkComposerStackCommandDestroyPort;
+                e->destroy_ports.last()->setFactory(d->factory);
+                e->destroy_ports.last()->setScene(d->scene);
+                e->destroy_ports.last()->setGraph(d->graph);
+                e->destroy_ports.last()->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(e->target));
+
             }
         } else if (edge->destination()->node() == e->target ) {
             if (port_used.contains(edge->destination()) && port_used[edge->destination()] == 0) { // port is not used outside, remove edge
@@ -2067,6 +2058,13 @@ void dtkComposerStackCommandReparentNode::setTargetNode(dtkComposerSceneNode *no
                 e->destroy_intern_edges.last()->setScene(d->scene);
                 e->destroy_intern_edges.last()->setGraph(d->graph);
                 e->destroy_intern_edges.last()->setEdge(edge);
+
+                e->ports << edge->destination();
+                e->destroy_ports << new dtkComposerStackCommandDestroyPort;
+                e->destroy_ports.last()->setFactory(d->factory);
+                e->destroy_ports.last()->setScene(d->scene);
+                e->destroy_ports.last()->setGraph(d->graph);
+                e->destroy_ports.last()->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(e->target));
             }
         }
     }
@@ -2115,8 +2113,10 @@ void dtkComposerStackCommandReparentNode::redo(void)
         foreach(dtkComposerStackCommandDestroyEdge *destroy_edge, e->destroy_intern_edges)
             destroy_edge->redo();
 
-        foreach(dtkComposerStackCommandDestroyPort *destroy_port, e->destroy_ports)
-            destroy_port->redo();
+        for(int i = 0; i < e->ports.count(); i++) {
+            e->destroy_ports.at(i)->setPort(e->ports.at(i));
+            e->destroy_ports.at(i)->redo();
+        }
 
         d->graph->reparentNode(e->origin, e->target);
 
@@ -2194,28 +2194,20 @@ void dtkComposerStackCommandReparentNode::undo(void)
 
     if(dtkComposerSceneNodeComposite *target = dynamic_cast<dtkComposerSceneNodeComposite *>(e->target)) {
 
-
-        foreach(dtkComposerStackCommandDestroyPort *destroy_port, e->destroy_ports)
-            destroy_port->undo();
-
         foreach(dtkComposerStackCommandCreateEdge *create_edge, e->create_intern_edges)
             create_edge->undo();
-
-        for(int i = 0; i < e->input_edges.count(); i++) {
-            e->create_input_rhs_edges.at(i)->undo();
-            e->create_input_lhs_edges.at(i)->undo();
-        }
-
-        for(int i = 0; i < e->input_edges.count(); i++)
-            e->create_input_ports.at(i)->undo();
 
         for(int i = 0; i < e->output_edges.count(); i++) {
             e->create_output_rhs_edges.at(i)->undo();
             e->create_output_lhs_edges.at(i)->undo();
+            e->create_output_ports.at(i)->undo();
         }
 
-        for(int i = 0; i < e->output_edges.count(); i++)
-            e->create_output_ports.at(i)->undo();
+        for(int i = 0; i < e->input_edges.count(); i++) {
+            e->create_input_rhs_edges.at(i)->undo();
+            e->create_input_lhs_edges.at(i)->undo();
+            e->create_input_ports.at(i)->undo();
+        }
 
         d->graph->reparentNode(e->origin, e->origin_parent);
 
@@ -2230,14 +2222,17 @@ void dtkComposerStackCommandReparentNode::undo(void)
         e->origin->setParent(e->origin_parent);
         e->origin->setPos(e->origin_pos);
 
-        for(int i = 0; i < e->input_edges.count(); i++)
-            e->destroy_input_edges.at(i)->undo();
+       for(int i = 0; i < e->ports.count(); i++)
+            e->destroy_ports.at(i)->undo();
 
-        for(int i = 0; i < e->output_edges.count(); i++)
-            e->destroy_output_edges.at(i)->undo();
-
-        foreach(dtkComposerStackCommandDestroyEdge *destroy_edge, e->destroy_intern_edges)
+       foreach(dtkComposerStackCommandDestroyEdge *destroy_edge, e->destroy_intern_edges)
             destroy_edge->undo();
+
+       for(int i = 0; i < e->output_edges.count(); i++)
+           e->destroy_output_edges.at(i)->undo();
+
+       for(int i = 0; i < e->input_edges.count(); i++)
+           e->destroy_input_edges.at(i)->undo();
 
         if (e->origin_parent->flattened() || e->origin_parent->entered() || e->origin_parent->root())
             d->scene->addItem(e->origin);

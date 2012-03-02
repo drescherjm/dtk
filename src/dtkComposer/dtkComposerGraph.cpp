@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. févr. 29 17:46:58 2012 (+0100)
+ * Last-Updated: ven. mars  2 18:59:02 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1628
+ *     Update #: 1730
  */
 
 /* Commentary:
@@ -135,6 +135,8 @@ void dtkComposerGraphPrivate::addDummyEdge(dtkComposerGraphNode *source, dtkComp
     e->setSource(source);
     e->setDestination(destination);
     e->setId(id);
+    e->source()->addSuccessor(e->destination());
+    e->destination()->addPredecessor(e->source());
     dummy_edges.insertMulti(node, e);
     edges.insertMulti(0, e);
     q->addItem(e);
@@ -144,6 +146,10 @@ void dtkComposerGraphPrivate::remDummyEdge(dtkComposerGraphEdge *edge, dtkCompos
 {
     q->removeItem(edge);
     edges.remove(0, edge);
+
+    edge->source()->removeSuccessor(edge->destination());
+    edge->destination()->removePredecessor(edge->source());
+
     if(node)
         dummy_edges.remove(node, edge);
     delete edge;
@@ -178,6 +184,14 @@ dtkComposerGraph::~dtkComposerGraph(void)
     delete d;
 
     d = NULL;
+}
+
+dtkComposerGraphNode *dtkComposerGraph::root(void)
+{
+    foreach(dtkComposerGraphNode *node, d->nodes)
+        if (node->predecessors().count() == 0)
+            return node;
+    return NULL;
 }
 
 void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
@@ -457,6 +471,9 @@ void dtkComposerGraph::addEdge(dtkComposerSceneEdge *edge)
         return;
     }
 
+    src->addSuccessor(dest);
+    dest->addPredecessor(src);
+
     d->edges.insertMulti(edge, e);
 
     this->addItem(e);
@@ -479,6 +496,9 @@ void dtkComposerGraph::removeEdge(dtkComposerSceneEdge *edge)
     // first remove edges
     d->edges.remove(edge);
     foreach (dtkComposerGraphEdge *e, edges) {
+        e->source()->removeSuccessor(e->destination());
+        e->destination()->removePredecessor(e->source());
+
         this->removeItem(e);
         delete e;
     }

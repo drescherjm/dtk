@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: lun. févr. 20 10:36:17 2012 (+0100)
+ * Last-Updated: ven. mars  2 18:42:15 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 49
+ *     Update #: 58
  */
 
 /* Commentary:
@@ -36,7 +36,15 @@ dtkComposerGraphNodeLeaf::dtkComposerGraphNodeLeaf(dtkComposerNode *cnode, const
     this->setTitle(title);
 }
 
+dtkComposerGraphNode::Kind dtkComposerGraphNodeLeaf::kind(void)
+{
+    return dtkComposerGraphNode::Leaf;
+}
 
+dtkComposerNode *dtkComposerGraphNodeLeaf::wrapee(void)
+{
+    return d->composer_node;
+}
 
 void dtkComposerGraphNodeLeaf::eval(void)
 {
@@ -44,6 +52,7 @@ void dtkComposerGraphNodeLeaf::eval(void)
         return;
 
     d->composer_node->run();
+    this->setStatus(dtkComposerGraphNode::Done);
 }
 
 

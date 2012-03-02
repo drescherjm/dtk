@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:55:56
  * Version: $Id$
- * Last-Updated: lun. févr. 20 10:33:35 2012 (+0100)
+ * Last-Updated: ven. mars  2 18:36:11 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 32
+ *     Update #: 34
  */
 
 /* Commentary:
@@ -35,7 +35,13 @@ public:
     dtkComposerGraphNodeEnd(dtkComposerNode *node, const QString& title = "End");
 
 public:
+    dtkComposerGraphNode::Kind kind(void);
+
+public:
     void eval(void);
+
+public:
+    dtkComposerNode *wrapee(void);
 
 private:
     dtkComposerGraphNodeEndPrivate *d;

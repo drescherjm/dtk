@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 17:26:54 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  1 22:42:02 2012 (+0100)
+ * Last-Updated: Fri Mar  2 18:56:14 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 23
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -25,14 +25,17 @@
 
 #include <QtCore>
 
+class dtkLogViewList;
+
 class dtkLoggerPrivate
 {
 public:
     dtkLog::Level level;
 
 public:
-                   dtkLogDestinationPointer  console;
-    QHash<QString, dtkLogDestinationPointer> files;
+                            dtkLogDestinationPointer  console;
+    QHash<QString,          dtkLogDestinationPointer> files;
+    QHash<dtkLogViewList *, dtkLogDestinationPointer> views;
 
 public:
     QList<dtkLogDestinationPointer> destinations;

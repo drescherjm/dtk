@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 17:19:52 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  1 23:36:24 2012 (+0100)
+ * Last-Updated: Fri Mar  2 18:57:59 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 60
+ *     Update #: 86
  */
 
 /* Commentary: 
@@ -63,6 +63,23 @@ void dtkLogger::detachFile(const QString& path)
     d->destinations.removeOne(d->files[path]);
 
     d->files.remove(path);
+}
+
+void dtkLogger::attachView(dtkLogViewList *view)
+{
+    d->views[view] = dtkLogDestinationPointer(new dtkLogDestinationView(view));
+
+    d->destinations << d->views[view];
+}
+
+void dtkLogger::detachView(dtkLogViewList *view)
+{
+    if(!d->views.contains(view))
+        return;
+
+    d->destinations.removeOne(d->views[view]);
+
+    d->views.remove(view);
 }
 
 dtkLogger::dtkLogger(void) : d(new dtkLoggerPrivate)

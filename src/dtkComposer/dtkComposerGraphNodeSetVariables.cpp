@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: lun. févr. 20 10:39:09 2012 (+0100)
+ * Last-Updated: ven. mars  2 18:43:17 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 44
+ *     Update #: 50
  */
 
 /* Commentary:
@@ -36,7 +36,15 @@ dtkComposerGraphNodeSetVariables::dtkComposerGraphNodeSetVariables(dtkComposerNo
     this->setTitle(title);
 }
 
+dtkComposerGraphNode::Kind dtkComposerGraphNodeSetVariables::kind(void)
+{
+    return dtkComposerGraphNode::SetVariables;
+}
 
+dtkComposerNode *dtkComposerGraphNodeSetVariables::wrapee(void)
+{
+    return d->composer_node;
+}
 
 void dtkComposerGraphNodeSetVariables::eval(void)
 {
@@ -44,6 +52,7 @@ void dtkComposerGraphNodeSetVariables::eval(void)
         return;
 
     d->composer_node->setVariables();
+    this->setStatus(dtkComposerGraphNode::Done);
 }
 
 

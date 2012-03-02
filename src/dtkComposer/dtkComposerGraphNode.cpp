@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 24 14:28:31 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 84
+ * Last-Updated: ven. mars  2 18:45:33 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 125
  */
 
 /* Commentary:
@@ -26,6 +26,13 @@ class dtkComposerGraphNodePrivate
 {
 public:
     QString title;
+
+public:
+    QList<dtkComposerGraphNode *> successors;
+    QList<dtkComposerGraphNode *> predecessors;
+
+public:
+    dtkComposerGraphNode::Status status;
 };
 
 dtkComposerGraphNode::dtkComposerGraphNode() : QGraphicsItem(),d(new dtkComposerGraphNodePrivate)
@@ -34,6 +41,7 @@ dtkComposerGraphNode::dtkComposerGraphNode() : QGraphicsItem(),d(new dtkComposer
     this->setFlag(QGraphicsItem::ItemIsMovable, true);
     this->setZValue(1);
     this->setTitle("Graph node");
+    this->setStatus(dtkComposerGraphNode::Ready);
 }
 
 dtkComposerGraphNode::~dtkComposerGraphNode(void)
@@ -43,6 +51,21 @@ dtkComposerGraphNode::~dtkComposerGraphNode(void)
     d = NULL;
 }
 
+dtkComposerNode *dtkComposerGraphNode::wrapee(void)
+{
+    return NULL;
+}
+
+
+dtkComposerGraphNode::Status dtkComposerGraphNode::status(void)
+{
+    return d->status;
+}
+
+void dtkComposerGraphNode::setStatus(dtkComposerGraphNode::Status status)
+{
+    d->status = status;
+}
 
 QRectF dtkComposerGraphNode::boundingRect(void) const
 {
@@ -58,10 +81,44 @@ void dtkComposerGraphNode::paint(QPainter *painter, const QStyleOptionGraphicsIt
         painter->setPen(Qt::red);
     else
         painter->setPen(Qt::black);
-    painter->setBrush(Qt::white);
+    if (d->status == Done)
+        painter->setBrush(Qt::green);
+    else
+        painter->setBrush(Qt::white);
     painter->drawRect(this->boundingRect());
     painter->drawText(this->boundingRect(), Qt::AlignCenter, d->title);
 }
+
+void dtkComposerGraphNode::addSuccessor(dtkComposerGraphNode *node, int id)
+{
+    d->successors << node;
+}
+
+void dtkComposerGraphNode::addPredecessor(dtkComposerGraphNode *node)
+{
+    d->predecessors << node;
+}
+
+void dtkComposerGraphNode::removePredecessor(dtkComposerGraphNode *node)
+{
+    d->predecessors.removeOne(node);
+}
+
+void dtkComposerGraphNode::removeSuccessor(dtkComposerGraphNode *node)
+{
+    d->successors.removeOne(node);
+}
+
+dtkComposerGraphNodeList dtkComposerGraphNode::successors(void)
+{
+    return d->successors;
+}
+
+dtkComposerGraphNodeList dtkComposerGraphNode::predecessors(void)
+{
+    return d->predecessors;
+}
+
 
 const QString& dtkComposerGraphNode::title(void)
 {

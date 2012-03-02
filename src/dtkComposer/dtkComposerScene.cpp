@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Thu Mar  1 13:15:34 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 1898
+ * Last-Updated: ven. mars  2 17:45:26 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 1902
  */
 
 /* Commentary:
@@ -17,6 +17,7 @@
  *
  */
 
+#include "dtkComposerEvaluator.h"
 #include "dtkComposerGraph.h"
 #include "dtkComposerMachine.h"
 #include "dtkComposerMachineState.h"
@@ -420,6 +421,11 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
                 d->stack->push(command);
             }
         }
+    } else if ((event->key() == Qt::Key_R)  && (event->modifiers() & Qt::ControlModifier)) {
+
+        dtkComposerEvaluator evaluator;
+        evaluator.setGraph(d->graph);
+        evaluator.run();
 
     } else {
         QGraphicsScene::keyPressEvent(event);

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 17:21:37 2012 (+0100)
+ * Last-Updated: Sat Mar  3 16:40:34 2012 (+0100)
  *           By: tkloczko
- *     Update #: 139
+ *     Update #: 151
  */
 
 /* Commentary: 
@@ -329,7 +329,7 @@ bool dtkComposerTransmitter::onTransmittersDisconnected(dtkComposerTransmitter *
  */
 QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter)
 {
-    debug.nospace() << transmitter.identifier() << transmitter.dataType();
+    debug.nospace() << "dtkComposerTransmitter:" << transmitter.kindName() << transmitter.typeName();
     
     return debug.space();
 }
@@ -340,7 +340,7 @@ QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter)
  */
 QDebug operator<<(QDebug debug, dtkComposerTransmitter *transmitter)
 {
-    debug.nospace() << transmitter->identifier() << transmitter->dataType();
+    debug.nospace() << "dtkComposerTransmitter:" << transmitter->kindName() << transmitter->typeName();
     
     return debug.space();
 }

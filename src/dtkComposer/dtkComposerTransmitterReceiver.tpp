@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 17:24:03 2012 (+0100)
+ * Last-Updated: Sat Mar  3 19:02:37 2012 (+0100)
  *           By: tkloczko
- *     Update #: 52
+ *     Update #: 94
  */
 
 /* Commentary: 
@@ -53,6 +53,10 @@ template <typename T> inline T& dtkComposerTransmitterReceiver<T>::data(void)
     foreach(dtkComposerTransmitterEmitter<T> *emitter, emitters)
         if (emitter->active())
             return emitter->data();
+
+    foreach(dtkComposerTransmitter *v, variants)
+        if (v->active())
+            return *(static_cast<T *>(v->variant()));
 };
 
 //! Returns the data as a non-modifiable reference.
@@ -64,6 +68,10 @@ template <typename T> inline const T& dtkComposerTransmitterReceiver<T>::data(vo
     foreach(dtkComposerTransmitterEmitter<T> *emitter, emitters)
         if (emitter->active())
             return emitter->data();
+
+    foreach(dtkComposerTransmitter *v, variants)
+        if (v->active())
+            return *(static_cast<T *>(v->variant()));
 };
 
 //! Returns description of the receiver.
@@ -78,24 +86,41 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::isEmpty(void) cons
     return false;
 };
 
-//! Returns description of the receiver.
+//! Returns.
 /*! 
  *  
  */
-template <typename T> QString dtkComposerTransmitterReceiver<T>::identifier(void) const
+template <typename T> dtkComposerTransmitter::Kind dtkComposerTransmitterReceiver<T>::kind(void) const
 {
-    T fake;
-    return QString("dtkComposerTransmitterReceiver<%1>").arg(typeid(fake).name());
+    return dtkComposerTransmitter::Receiver;
 };
 
-//! Returns description of the emitter.
+template <typename T> QString dtkComposerTransmitterReceiver<T>::kindName(void) const
+{
+    return "Receiver";
+};
+
+template <typename T> QString dtkComposerTransmitterReceiver<T>::typeName(void) const
+{
+    return typeid(this->data()).name();
+};
+
+//! Returns
 /*! 
  *  
  */
-template <typename T> QString dtkComposerTransmitterReceiver<T>::dataType(void) const
+template <typename T> void *dtkComposerTransmitterReceiver<T>::variant(void)
 {
-    T fake;
-    return typeid(fake).name();
+    return static_cast<void *>(&(this->data()));
+};
+
+//! Returns
+/*! 
+ *  
+ */
+template <typename T> const void *dtkComposerTransmitterReceiver<T>::variant(void) const
+{
+    return static_cast<const void *>(&(this->data()));
 };
 
 //! 
@@ -106,9 +131,19 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::connect(dtkCompose
 {
     dtkComposerTransmitterEmitter<T> *emitter = NULL;
 
-    if (emitter = dynamic_cast<dtkComposerTransmitterEmitter<T> *>(transmitter)) {
-        if (!emitters.contains(emitter)) {
-            emitters << emitter;
+    if (transmitter->kind() == Emitter) {
+     
+        if (emitter = dynamic_cast<dtkComposerTransmitterEmitter<T> *>(transmitter)) {
+            if (!emitters.contains(emitter)) {
+                emitters << emitter;
+                return true;
+            }
+        }
+
+    } else if (transmitter->kind() == Variant) {
+
+        if (transmitter->typeName() == this->typeName() && !variants.contains(transmitter)) {
+            variants << transmitter;
             return true;
         }
     }

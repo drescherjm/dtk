@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 17:22:47 2012 (+0100)
+ * Last-Updated: Sat Mar  3 18:04:17 2012 (+0100)
  *           By: tkloczko
- *     Update #: 35
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -44,8 +44,14 @@ public:
     bool isEmpty(void) const;
 
 public:
-    QString identifier(void) const;
-    QString   dataType(void) const;
+    Kind kind(void) const;
+
+    QString kindName(void) const;
+    QString typeName(void) const;
+    
+public:
+          void *variant(void);
+    const void *variant(void) const;
 
 public:
     bool    connect(dtkComposerTransmitter *transmitter);
@@ -55,6 +61,7 @@ public:
 
 private:
     QList<dtkComposerTransmitterEmitter<T> *> emitters;
+    QList<dtkComposerTransmitter *> variants;
 };
 
 // /////////////////////////////////////////////////////////////////

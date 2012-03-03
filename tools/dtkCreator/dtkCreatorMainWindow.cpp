@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 16:54:12 2012 (+0100)
- *           By: tkloczko
- *     Update #: 851
+ * Last-Updated: Thu Mar  1 00:45:03 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 853
  */
 
 /* Commentary: 
@@ -190,12 +190,13 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     l_lateral->setContentsMargins(0, 0, 0, 0);
     l_lateral->setSpacing(0);
     l_lateral->addWidget(d->nodes);
-    l_lateral->addWidget(d->editor);
+    // l_lateral->addWidget(d->editor);
 
     QVBoxLayout *r_lateral = new QVBoxLayout;
     r_lateral->setContentsMargins(0, 0, 0, 0);
     r_lateral->setSpacing(0);
     r_lateral->addWidget(d->scene);
+    r_lateral->addWidget(d->editor);
     r_lateral->addWidget(d->stack);
 
     QHBoxLayout *layout = new QHBoxLayout;

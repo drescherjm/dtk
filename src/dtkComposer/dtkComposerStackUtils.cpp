@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 20 16:08:18 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 15:32:04 2012 (+0100)
- *           By: tkloczko
- *     Update #: 93
+ * Last-Updated: Thu Mar  1 13:15:11 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 115
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 #include "dtkComposerSceneNode.h"
 #include "dtkComposerSceneNodeComposite.h"
 #include "dtkComposerSceneNodeControl.h"
+#include "dtkComposerSceneNote.h"
 #include "dtkComposerScenePort.h"
 #include "dtkComposerStackUtils.h"
 #include "dtkComposerTransmitter.h"
@@ -112,4 +113,60 @@ void dtkComposerTransmitterDisconnection(dtkComposerSceneNodeComposite *root, dt
         dtkComposerTransmitterLinkList   valid_edges;
         dtkComposerPropagateEdgeValidity(root, valid_edges, invalid_edges);
     }
+}
+
+// /////////////////////////////////////////////////////////////////
+// Genealogy utils
+// /////////////////////////////////////////////////////////////////
+
+bool areBrothers(dtkComposerSceneNodeList nodes)
+{
+    if(nodes.isEmpty())
+        return true;
+
+    dtkComposerSceneNode *parent = nodes.first()->parent();
+
+    foreach(dtkComposerSceneNode *node, nodes)
+        if(node->parent() != parent)
+            return false;
+
+    return true;
+}
+
+bool areBrothers(dtkComposerSceneNoteList notes)
+{
+    if(notes.isEmpty())
+        return true;
+
+    dtkComposerSceneNode *parent = notes.first()->parent();
+
+    foreach(dtkComposerSceneNote *note, notes)
+        if(note->parent() != parent)
+            return false;
+
+    return true;
+}
+
+bool areBrothers(dtkComposerSceneNodeList nodes, dtkComposerSceneNoteList notes)
+{
+    if(nodes.isEmpty() && notes.isEmpty())
+        return true;
+
+    if(nodes.isEmpty())
+       return areBrothers(notes);
+
+    if(notes.isEmpty())
+       return areBrothers(nodes);
+
+    dtkComposerSceneNode *parent = nodes.first()->parent();
+
+    foreach(dtkComposerSceneNode *node, nodes)
+        if(node->parent() != parent)
+            return false;
+
+    foreach(dtkComposerSceneNote *note, notes)
+        if(note->parent() != parent)
+            return false;
+
+    return true;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:08:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. févr. 20 09:39:49 2012 (+0100)
+ * Last-Updated: ven. mars  2 18:44:05 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 56
+ *     Update #: 101
  */
 
 /* Commentary:
@@ -24,6 +24,8 @@
 #include <QtGui>
 
 class dtkComposerGraphNodePrivate;
+class dtkComposerGraphNodeList;
+class dtkComposerNode;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerGraphNode
@@ -36,12 +38,42 @@ public:
     ~dtkComposerGraphNode(void);
 
 public:
+    enum Status { Done, Running, BreakPoint, Ready};
+    enum   Kind { SelectBranch, Leaf, Begin, End, SetOutputs, SetInputs, SetVariables, SetConditions };
+
+public:
     QRectF boundingRect(void) const;
 
 public:
+    virtual dtkComposerNode *wrapee(void);
+
+public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-    const QString&  title(void);
     void setTitle(const QString& title);
+
+public:
+    virtual void addSuccessor(dtkComposerGraphNode *node, int id = 0);
+            void addPredecessor(dtkComposerGraphNode *node);
+
+public:
+    virtual void removeSuccessor(dtkComposerGraphNode *node);
+            void removePredecessor(dtkComposerGraphNode *node);
+
+public:
+    virtual Kind kind(void) = 0;
+
+public:
+    Status status(void);
+
+public:
+    void  setStatus(Status status);
+
+public:
+    virtual dtkComposerGraphNodeList successors();
+            dtkComposerGraphNodeList predecessors();
+
+public:
+    const QString&  title(void);
 
     virtual void eval() ;
 

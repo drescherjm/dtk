@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Wed Feb 29 03:15:19 2012 (+0100)
+ * Last-Updated: Thu Mar  1 12:02:21 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 389
+ *     Update #: 402
  */
 
 /* Commentary:
@@ -27,6 +27,8 @@
 #include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeControlForEach.h"
 #include "dtkComposerNodeControlWhile.h"
+#include "dtkComposerNodeFile.h"
+#include "dtkComposerNodeFileOperator.h"
 #include "dtkComposerNodeList.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeNumberOperator.h"
@@ -81,6 +83,11 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["String"] = "<p>Description not yet filled!</p>";
     d->tags["String"] = QStringList() << "primitive" << "string";
     d->types["String"] = "string";
+
+    d->nodes << "File";
+    d->descriptions["File"] = "<p>Description not yet filled!</p>";
+    d->tags["File"] = QStringList() << "primitive" << "file";
+    d->types["File"] = "file";
     
     // container nodes
 
@@ -396,6 +403,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "string")
         return new dtkComposerNodeString;
+
+    if(type == "file")
+        return new dtkComposerNodeFile;
 
     // container nodes
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: lun. févr. 20 10:38:36 2012 (+0100)
+ * Last-Updated: ven. mars  2 18:43:04 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 45
+ *     Update #: 51
  */
 
 /* Commentary:
@@ -37,6 +37,15 @@ dtkComposerGraphNodeSetInputs::dtkComposerGraphNodeSetInputs(dtkComposerNode *cn
 }
 
 
+dtkComposerGraphNode::Kind dtkComposerGraphNodeSetInputs::kind(void)
+{
+    return dtkComposerGraphNode::SetInputs;
+}
+
+dtkComposerNode *dtkComposerGraphNodeSetInputs::wrapee(void)
+{
+    return d->composer_node;
+}
 
 void dtkComposerGraphNodeSetInputs::eval(void)
 {
@@ -44,6 +53,7 @@ void dtkComposerGraphNodeSetInputs::eval(void)
         return;
 
     d->composer_node->setInputs();
+    this->setStatus(dtkComposerGraphNode::Done);
 }
 
 

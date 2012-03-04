@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Mar  3 18:04:17 2012 (+0100)
+ * Last-Updated: Sun Mar  4 16:50:54 2012 (+0100)
  *           By: tkloczko
- *     Update #: 43
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -44,7 +44,8 @@ public:
     bool isEmpty(void) const;
 
 public:
-    Kind kind(void) const;
+    Kind           kind(void) const;
+    QVariant::Type type(void) const;
 
     QString kindName(void) const;
     QString typeName(void) const;

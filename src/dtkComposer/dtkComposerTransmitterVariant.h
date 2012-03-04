@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar  4 00:04:04 2012 (+0100)
+ * Last-Updated: Sun Mar  4 22:40:37 2012 (+0100)
  *           By: tkloczko
- *     Update #: 36
+ *     Update #: 50
  */
 
 /* Commentary: 
@@ -32,11 +32,8 @@ class dtkComposerTransmitterVariantPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerTransmitterVariant : public dtkComposerTransmitter
 {
 public:
-     dtkComposerTransmitterVariant(dtkComposerNode *parent = 0);
+     dtkComposerTransmitterVariant(QList<QVariant::Type> types, dtkComposerNode *parent = 0);
     ~dtkComposerTransmitterVariant(void);
-
-public:
-    QVariant::Type variantType(void) const;
 
 public:
     void setData(const QBitArray& data);
@@ -77,7 +74,8 @@ public:
     QUrl        dataToUrl(void);
 
 public:
-    Kind kind(void) const;
+    Kind           kind(void) const;
+    QVariant::Type type(void) const;
 
     QString kindName(void) const;
     QString typeName(void) const;
@@ -93,12 +91,19 @@ public:
     LinkMap  leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
     LinkMap rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 
-public:
-    static QVariant::Type typeNameToVariantType(const char *type_name);
-    static        QString typeNameToVariantName(const char *type_name);
-
 private:
     dtkComposerTransmitterVariantPrivate *d;
 };
+
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+template <typename T> QString        dtkComposerTransmitterVariantName(const T& t);
+template <typename T> QVariant::Type dtkComposerTransmitterVariantType(const T& t);
+
+// /////////////////////////////////////////////////////////////////
+
+#include "dtkComposerTransmitterVariant.tpp"
 
 #endif

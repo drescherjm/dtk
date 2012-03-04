@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Feb 20 11:47:39 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Mar  3 16:40:01 2012 (+0100)
+ * Last-Updated: Sun Mar  4 16:53:08 2012 (+0100)
  *           By: tkloczko
- *     Update #: 47
+ *     Update #: 48
  */
 
 /* Commentary: 
@@ -52,6 +52,11 @@ dtkComposerTransmitterProxy::~dtkComposerTransmitterProxy(void)
 dtkComposerTransmitter::Kind dtkComposerTransmitterProxy::kind(void) const
 {
     return dtkComposerTransmitter::Proxy;
+}
+
+QVariant::Type dtkComposerTransmitterProxy::type(void) const
+{
+    return QVariant::Invalid;
 }
 
 QString dtkComposerTransmitterProxy::kindName(void) const

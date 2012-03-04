@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:33:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Mar  3 18:04:27 2012 (+0100)
+ * Last-Updated: Sun Mar  4 16:48:49 2012 (+0100)
  *           By: tkloczko
- *     Update #: 42
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -39,7 +39,8 @@ public:
     inline const T& data(void) const;
 
 public:
-    Kind kind(void) const;
+    Kind           kind(void) const;
+    QVariant::Type type(void) const;
 
     QString kindName(void) const;
     QString typeName(void) const;

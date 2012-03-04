@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Mar  3 19:02:37 2012 (+0100)
+ * Last-Updated: Sun Mar  4 23:29:54 2012 (+0100)
  *           By: tkloczko
- *     Update #: 94
+ *     Update #: 97
  */
 
 /* Commentary: 
@@ -95,6 +95,11 @@ template <typename T> dtkComposerTransmitter::Kind dtkComposerTransmitterReceive
     return dtkComposerTransmitter::Receiver;
 };
 
+template <typename T> QVariant::Type dtkComposerTransmitterReceiver<T>::type(void) const
+{
+    return dtkComposerTransmitterVariantType(this->data());
+};
+
 template <typename T> QString dtkComposerTransmitterReceiver<T>::kindName(void) const
 {
     return "Receiver";
@@ -102,7 +107,7 @@ template <typename T> QString dtkComposerTransmitterReceiver<T>::kindName(void) 
 
 template <typename T> QString dtkComposerTransmitterReceiver<T>::typeName(void) const
 {
-    return typeid(this->data()).name();
+    return dtkComposerTransmitterVariantName(this->data());
 };
 
 //! Returns
@@ -142,10 +147,10 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::connect(dtkCompose
 
     } else if (transmitter->kind() == Variant) {
 
-        if (transmitter->typeName() == this->typeName() && !variants.contains(transmitter)) {
+        //if (transmitter->type() == this->type() && !variants.contains(transmitter)) {
             variants << transmitter;
             return true;
-        }
+            //}
     }
 
     return false;

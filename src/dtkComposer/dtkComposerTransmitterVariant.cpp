@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar  4 00:18:01 2012 (+0100)
+ * Last-Updated: Sun Mar  4 22:47:08 2012 (+0100)
  *           By: tkloczko
- *     Update #: 164
+ *     Update #: 239
  */
 
 /* Commentary: 
@@ -18,6 +18,8 @@
  */
 
 #include "dtkComposerTransmitterVariant.h"
+
+#include <dtkCore/dtkGlobal.h>
 
 #include <typeinfo>
 
@@ -48,18 +50,22 @@ public:
 public:
     QVariant::Type type;
 
-    QVariant data;
+public:
+    QList<QVariant::Type> types;
+
+public:
+    int count_ref;
 };
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterVariant implementation
 // /////////////////////////////////////////////////////////////////
 
-
-
-dtkComposerTransmitterVariant::dtkComposerTransmitterVariant(dtkComposerNode *parent) : dtkComposerTransmitter(parent), d(new dtkComposerTransmitterVariantPrivate)
+dtkComposerTransmitterVariant::dtkComposerTransmitterVariant(QList<QVariant::Type> types, dtkComposerNode *parent) : dtkComposerTransmitter(parent), d(new dtkComposerTransmitterVariantPrivate)
 {
-    d->type = QVariant::Invalid; 
+    d->count_ref = 0;
+    d->types = types;
+    d->type  = QVariant::Invalid; 
 }
 
 dtkComposerTransmitterVariant::~dtkComposerTransmitterVariant(void)
@@ -69,125 +75,211 @@ dtkComposerTransmitterVariant::~dtkComposerTransmitterVariant(void)
     d = NULL;
 }
 
-//! Returns.
-/*! 
- *  
- */
-QVariant::Type dtkComposerTransmitterVariant::variantType(void) const
-{
-    return d->type;
-}
-
 void dtkComposerTransmitterVariant::setData(const QBitArray& data)
 {
+    if (!d->types.contains(QVariant::BitArray)) {
+        qDebug() << DTK_PRETTY_FUNCTION << "BitArray type is not handled.";
+        return;
+    }
+
     d->bit_array = data;
     d->type = QVariant::BitArray;
 }
 
 void dtkComposerTransmitterVariant::setData(const QByteArray& data)
 {
+    if (!d->types.contains(QVariant::ByteArray)) {
+        qDebug() << DTK_PRETTY_FUNCTION << "ByteArray type is not handled.";
+        return;
+    }
+
     d->byte_array = data;
     d->type = QVariant::ByteArray;
 }
 
 void dtkComposerTransmitterVariant::setData(const QChar& data)
 {
+    if (!d->types.contains(QVariant::Char)) {
+        qDebug() << DTK_PRETTY_FUNCTION << "Char type is not handled.";
+        return;
+    }
+
     d->char_array = data;
     d->type = QVariant::Char;
 }
 
 void dtkComposerTransmitterVariant::setData(const char *data)
 {
+    if (!d->types.contains(QVariant::String)) {
+        qDebug() << DTK_PRETTY_FUNCTION << "String type is not handled.";
+        return;
+    }
+
     d->string = QString::fromAscii(data);
     d->type = QVariant::String;
 }
 
 void dtkComposerTransmitterVariant::setData(const QString& data)
 {
+    if (!d->types.contains(QVariant::String)) {
+        qDebug() << DTK_PRETTY_FUNCTION << "String type is not handled.";
+        return;
+    }
+
     d->string = data;
     d->type = QVariant::String;
 }
 
 void dtkComposerTransmitterVariant::setData(const QStringList& data)
 {
+    if (!d->types.contains(QVariant::StringList)) {
+        qDebug() << DTK_PRETTY_FUNCTION << "StringList type is not handled.";
+        return;
+    }
+
     d->string_list = data;
     d->type = QVariant::StringList;
 }
 
 void dtkComposerTransmitterVariant::setData(const bool& data)
 {
+    if (!d->types.contains(QVariant::Bool)) {
+        qDebug() << DTK_PRETTY_FUNCTION << "Bool type is not handled.";
+        return;
+    }
+
     d->b = data;
     d->type = QVariant::Bool;
 }
 
 void dtkComposerTransmitterVariant::setData(const short& data)
 {
+    if (!d->types.contains(QVariant::Int)) {
+        qDebug() << DTK_PRETTY_FUNCTION << "Int type is not handled.";
+        return;
+    }
+
     d->i = (int)data;
     d->type = QVariant::Int;
 }
 
 void dtkComposerTransmitterVariant::setData(const int& data)
 {
+    if (!d->types.contains(QVariant::Int)) {
+        qDebug() << DTK_PRETTY_FUNCTION << "Int type is not handled.";
+        return;
+    }
+
     d->i = data;
     d->type = QVariant::Int;
 }
 
 void dtkComposerTransmitterVariant::setData(const long& data)
 {
+    if (!d->types.contains(QVariant::LongLong)) {
+        qDebug() << DTK_PRETTY_FUNCTION << "LongLong type is not handled.";
+        return;
+    }
+
     d->ll = (qlonglong)data;
     d->type = QVariant::LongLong;
 }
 
 void dtkComposerTransmitterVariant::setData(const qlonglong& data)
 {
+    if (!d->types.contains(QVariant::LongLong)) {
+        qDebug() << DTK_PRETTY_FUNCTION << "LongLong type is not handled.";
+        return;
+    }
+
     d->ll = data;
     d->type = QVariant::LongLong;
 }
 
 void dtkComposerTransmitterVariant::setData(const ushort& data)
 {
+    if (!d->types.contains(QVariant::UInt)) {
+        qDebug() << DTK_PRETTY_FUNCTION << "UInt type is not handled.";
+        return;
+    }
+
     d->ui = (uint)data;
     d->type = QVariant::UInt;
 }
 
 void dtkComposerTransmitterVariant::setData(const uint& data)
 {
+    if (!d->types.contains(QVariant::UInt)) {
+        qDebug() << DTK_PRETTY_FUNCTION << "UInt type is not handled.";
+        return;
+    }
+
     d->ui = data;
     d->type = QVariant::UInt;
 }
 
 void dtkComposerTransmitterVariant::setData(const ulong& data)
 {
+    if (!d->types.contains(QVariant::ULongLong)) {
+        qDebug() << DTK_PRETTY_FUNCTION << "ULongLong type is not handled.";
+        return;
+    }
+
     d->ull = (qulonglong)data;
     d->type = QVariant::ULongLong;
 }
 
 void dtkComposerTransmitterVariant::setData(const qulonglong& data)
 {
+    if (!d->types.contains(QVariant::ULongLong)) {
+        qDebug() << DTK_PRETTY_FUNCTION << "ULongLong type is not handled.";
+        return;
+    }
+
     d->ull = data;
     d->type = QVariant::ULongLong;
 }
 
 void dtkComposerTransmitterVariant::setData(const float& data)
 {
+    if (!d->types.contains(QVariant::Double)) {
+        qDebug() << DTK_PRETTY_FUNCTION << "Double type is not handled.";
+        return;
+    }
+
     d->real = (qreal)data;
     d->type = QVariant::Double;
 }
 
 void dtkComposerTransmitterVariant::setData(const qreal& data)
 {
+    if (!d->types.contains(QVariant::Double)) {
+        qDebug() << DTK_PRETTY_FUNCTION << "Double type is not handled.";
+        return;
+    }
+
     d->real = data;
     d->type = QVariant::Double;
 }
 
 void dtkComposerTransmitterVariant::setData(const QRegExp& data)
 {
+    if (!d->types.contains(QVariant::RegExp)) {
+        qDebug() << DTK_PRETTY_FUNCTION << "RegExp type is not handled.";
+        return;
+    }
+
     d->reg_exp = data;
     d->type = QVariant::RegExp;
 }
 
 void dtkComposerTransmitterVariant::setData(const QUrl& data)
 {
+    if (!d->types.contains(QVariant::Url)) {
+        qDebug() << DTK_PRETTY_FUNCTION << "Url type is not handled.";
+        return;
+    }
+
     d->url = data;
     d->type = QVariant::Url;
 }
@@ -235,7 +327,6 @@ void dtkComposerTransmitterVariant::setData(void *data)
         d->url = *(reinterpret_cast<QUrl *>(data));
         break;
     case QVariant::Invalid:
-        d->data = QVariant(d->type);
         break;
     };
 }
@@ -682,6 +773,15 @@ dtkComposerTransmitter::Kind dtkComposerTransmitterVariant::kind(void) const
     return dtkComposerTransmitter::Variant;
 }
 
+//! Returns.
+/*! 
+ *  
+ */
+QVariant::Type dtkComposerTransmitterVariant::type(void) const
+{
+    return d->type;
+}
+
 QString dtkComposerTransmitterVariant::kindName(void) const
 {
     return "Variant";
@@ -806,14 +906,29 @@ const void *dtkComposerTransmitterVariant::variant(void) const
  */
 bool dtkComposerTransmitterVariant::connect(dtkComposerTransmitter *transmitter)
 {
-    // if (transmitter->typeName())
+    if (d->count_ref == 0) {
+        if (d->types.contains(transmitter->type())) {
+            d->type = transmitter->type();
+            d->emitters << transmitter;
+            d->count_ref++;
+            return true;
+        }
+    }
 
-    // if (d->type == QVariant::Invalid) {
+    if (transmitter->type() == d->type) {
+        if (!d->emitters.contains(transmitter)) {
+            d->emitters << transmitter;
+            d->count_ref++;
+            return true;
+        }
+    }
 
-    //     if ()
-
-
-    // }
+    if (d->types.contains(transmitter->type())) {
+        if (!d->emitters.contains(transmitter)) {
+            d->emitters << transmitter;
+            return true;
+        }
+    }
 
     return false;
 }
@@ -824,6 +939,19 @@ bool dtkComposerTransmitterVariant::connect(dtkComposerTransmitter *transmitter)
  */
 bool dtkComposerTransmitterVariant::disconnect(dtkComposerTransmitter *transmitter)
 {
+    if (transmitter->type() == d->type) {
+        if (d->emitters.removeOne(transmitter)) {
+            if (transmitter->type() == d->type)
+                d->count_ref--;
+            if (d->count_ref == 0 && d->emitters.count() > 0) {
+                d->type = d->emitters.first()->type();
+                foreach(dtkComposerTransmitter *t, d->emitters)
+                    if (t->type() == d->type)
+                        d->count_ref++;
+            }
+            return true;
+        }
+    }
 
     return false;
 }
@@ -844,88 +972,4 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitterVariant::rightLinks(dtkCom
         link_map.insert(this, l);
 
     return link_map;
-}
-
-QVariant::Type dtkComposerTransmitterVariant::typeNameToVariantType(const char *type_name)
-{
-    if (strcmp(type_name, "QBitArray") == 0)
-        return QVariant::BitArray;
-    if (strcmp(type_name, typeid(QByteArray).name()) == 0)
-        return QVariant::ByteArray;
-    if (strcmp(type_name, typeid(QChar).name()) == 0)
-        return QVariant::Char;
-    if (strcmp(type_name, typeid(QString).name()) == 0)
-        return QVariant::String;
-    if (strcmp(type_name, typeid(QStringList).name()) == 0)
-        return QVariant::StringList;
-    if (strcmp(type_name, typeid(bool).name()) == 0)
-        return QVariant::Bool;
-    if (strcmp(type_name, typeid(short).name()) == 0)
-        return QVariant::Int;
-    if (strcmp(type_name, typeid(int).name()) == 0)
-        return QVariant::Int;
-    if (strcmp(type_name, typeid(long).name()) == 0)
-        return QVariant::LongLong;
-    if (strcmp(type_name, typeid(qlonglong).name()) == 0)
-        return QVariant::LongLong;
-    if (strcmp(type_name, typeid(ushort).name()) == 0)
-        return QVariant::UInt;
-    if (strcmp(type_name, typeid(uint).name()) == 0)
-        return QVariant::UInt;
-    if (strcmp(type_name, typeid(ulong).name()) == 0)
-        return QVariant::ULongLong;
-    if (strcmp(type_name, typeid(qulonglong).name()) == 0)
-        return QVariant::ULongLong;
-    if (strcmp(type_name, typeid(float).name()) == 0)
-        return QVariant::Double;
-    if (strcmp(type_name, typeid(qreal).name()) == 0)
-        return QVariant::Double;
-    if (strcmp(type_name, typeid(QRegExp).name()) == 0)
-        return QVariant::RegExp;
-    if (strcmp(type_name, typeid(QUrl).name()) == 0)
-        return QVariant::Url;
-
-    return QVariant::Invalid;
-}
-
-QString dtkComposerTransmitterVariant::typeNameToVariantName(const char *type_name)
-{
-    if (strcmp(type_name, typeid(QBitArray).name()) == 0)
-        return "QBitArray";
-    if (strcmp(type_name, typeid(QByteArray).name()) == 0)
-        return "QByteArray";
-    if (strcmp(type_name, typeid(QChar).name()) == 0)
-        return "QChar";
-    if (strcmp(type_name, typeid(QString).name()) == 0)
-        return "QString";
-    if (strcmp(type_name, typeid(QStringList).name()) == 0)
-        return "QStringList";
-    if (strcmp(type_name, typeid(bool).name()) == 0)
-        return "bool";
-    if (strcmp(type_name, typeid(short).name()) == 0)
-        return "int";
-    if (strcmp(type_name, typeid(int).name()) == 0)
-        return "int";
-    if (strcmp(type_name, typeid(long).name()) == 0)
-        return "longlong";
-    if (strcmp(type_name, typeid(qlonglong).name()) == 0)
-        return "longlong";
-    if (strcmp(type_name, typeid(ushort).name()) == 0)
-        return "uint";
-    if (strcmp(type_name, typeid(uint).name()) == 0)
-        return "uint";
-    if (strcmp(type_name, typeid(ulong).name()) == 0)
-        return "ulonglong";
-    if (strcmp(type_name, typeid(qulonglong).name()) == 0)
-        return "ulonglong";
-    if (strcmp(type_name, typeid(float).name()) == 0)
-        return "double";
-    if (strcmp(type_name, typeid(qreal).name()) == 0)
-        return "double";
-    if (strcmp(type_name, typeid(QRegExp).name()) == 0)
-        return "QRegExp";
-    if (strcmp(type_name, typeid(QUrl).name()) == 0)
-        return "QUrl";
-
-    return type_name;
 }

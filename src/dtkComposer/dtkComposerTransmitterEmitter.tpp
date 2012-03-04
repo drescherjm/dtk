@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Mar  3 21:17:11 2012 (+0100)
+ * Last-Updated: Sun Mar  4 16:50:24 2012 (+0100)
  *           By: tkloczko
- *     Update #: 81
+ *     Update #: 83
  */
 
 /* Commentary: 
@@ -82,6 +82,15 @@ template <typename T> dtkComposerTransmitter::Kind dtkComposerTransmitterEmitter
     return dtkComposerTransmitter::Emitter;
 };
 
+//! Returns.
+/*! 
+ *  
+ */
+template <typename T> QVariant::Type dtkComposerTransmitterEmitter<T>::type(void) const
+{
+    return dtkComposerTransmitterVariantType(m_data);
+};
+
 template <typename T> QString dtkComposerTransmitterEmitter<T>::kindName(void) const
 {
     return "Emitter";
@@ -89,7 +98,7 @@ template <typename T> QString dtkComposerTransmitterEmitter<T>::kindName(void) c
 
 template <typename T> QString dtkComposerTransmitterEmitter<T>::typeName(void) const
 {
-    return dtkComposerTransmitterVariant::typeNameToVariantName(typeid(m_data).name());
+    return dtkComposerTransmitterVariantName(m_data);
 };
 
 //! Returns

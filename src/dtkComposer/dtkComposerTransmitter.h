@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar  4 00:17:42 2012 (+0100)
+ * Last-Updated: Sun Mar  4 15:59:28 2012 (+0100)
  *           By: tkloczko
- *     Update #: 98
+ *     Update #: 102
  */
 
 /* Commentary: 
@@ -50,9 +50,8 @@ public:
     virtual ~dtkComposerTransmitter(void);
 
 public:
-    virtual Kind kind(void) const = 0;
-
-    // virtual QVariant::Type type(void) const = 0;
+    virtual Kind           kind(void) const = 0;
+    virtual QVariant::Type type(void) const = 0;
 
     virtual QString kindName(void) const = 0;
     virtual QString typeName(void) const = 0;
@@ -60,6 +59,8 @@ public:
 public:
     virtual       void *variant(void) = 0;
     virtual const void *variant(void) const = 0;
+
+public:
 
 public:
     dtkComposerNode *parentNode(void) const;

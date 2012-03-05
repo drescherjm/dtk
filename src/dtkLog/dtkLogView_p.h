@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Mar  2 15:30:16 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar  5 11:10:55 2012 (+0100)
+ * Last-Updated: Mon Mar  5 13:14:13 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 39
+ *     Update #: 50
  */
 
 /* Commentary: 
@@ -37,6 +37,17 @@ class dtkLogViewTree : public QTreeWidget
 public:
      dtkLogViewTree(QWidget *parent = 0);
     ~dtkLogViewTree(void);
+
+signals:
+    void runtimeClicked(void);
+    void fileClicked(const QString& path);
+
+protected slots:
+    void onItemClicked(QTreeWidgetItem *, int);
+
+private:
+    QTreeWidgetItem *runtime;
+    QTreeWidgetItem *file;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -51,11 +62,15 @@ public:
      dtkLogViewList(QWidget *parent = 0);
     ~dtkLogViewList(void);
 
-public:
+public slots:
     void setRuntime(void);
+    void setFile(const QString& path);
 
 private:
     dtkLogModel *model;
+
+private:
+    QHash<QString, QStringListModel *> models;
 };
 
 // /////////////////////////////////////////////////////////////////

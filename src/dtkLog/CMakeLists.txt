@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Thu Mar  1 14:34:49 2012 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Mar  5 11:07:46 2012 (+0100)
+## Last-Updated: Mon Mar  5 12:56:54 2012 (+0100)
 ##           By: Julien Wintz
-##     Update #: 25
+##     Update #: 26
 ######################################################################
 ## 
 ### Commentary: 
@@ -37,6 +37,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkLogView_p.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkLog.cpp
   dtkLogger.cpp
   dtkLogEngine.cpp
   dtkLogDestination.cpp

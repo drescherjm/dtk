@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 17:19:52 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar  5 11:13:23 2012 (+0100)
+ * Last-Updated: Mon Mar  5 13:04:19 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 87
+ *     Update #: 91
  */
 
 /* Commentary: 
@@ -50,6 +50,9 @@ void dtkLogger::detachConsole(void)
 
 void dtkLogger::attachFile(const QString& path)
 {
+    if(d->files.contains(path))
+        return;
+
     d->files[path] = dtkLogDestinationPointer(new dtkLogDestinationFile(path));
 
     d->destinations << d->files[path];
@@ -67,6 +70,9 @@ void dtkLogger::detachFile(const QString& path)
 
 void dtkLogger::attachModel(dtkLogModel *model)
 {
+    if(d->models.contains(model))
+        return;
+
     d->models[model] = dtkLogDestinationPointer(new dtkLogDestinationModel(model));
 
     d->destinations << d->models[model];

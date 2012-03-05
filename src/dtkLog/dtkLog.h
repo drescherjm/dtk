@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 14:37:36 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  1 21:20:39 2012 (+0100)
+ * Last-Updated: Mon Mar  5 12:56:25 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 126
+ *     Update #: 133
  */
 
 /* Commentary: See credits at EOF.
@@ -92,6 +92,12 @@ namespace dtkLog
 
 #define dtkFatal()                                                      \
         dtkLogEngine(dtkLog::Fatal).stream()
+
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+QString dtkLogPath(QCoreApplication *application);
 
 // /////////////////////////////////////////////////////////////////
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 15:23:18 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar  2 18:53:06 2012 (+0100)
+ * Last-Updated: Mon Mar  5 13:02:50 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 227
+ *     Update #: 228
  */
 
 /* Commentary: 
@@ -73,12 +73,6 @@ QDebug operator<<(QDebug dbg, const Pixel &pixel)
 }
 
 Q_DECLARE_METATYPE(Pixel);
-
-// /////////////////////////////////////////////////////////////////
-// Helper function
-// /////////////////////////////////////////////////////////////////
-
-QString dtkLogPath(QCoreApplication *application);
 
 // /////////////////////////////////////////////////////////////////
 // main
@@ -161,13 +155,4 @@ int main(int argc, char **argv)
     dtkInfo() << "Program exited with return code" << status;
 
     return status;
-}
-
-// /////////////////////////////////////////////////////////////////
-// Helper function
-// /////////////////////////////////////////////////////////////////
-
-QString dtkLogPath(QCoreApplication *application)
-{
-    return QDir(application->applicationDirPath()).filePath(QString("%1.log").arg(application->applicationName()));
 }

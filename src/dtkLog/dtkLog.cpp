@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 14:40:12 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  1 17:22:40 2012 (+0100)
+ * Last-Updated: Mon Mar  5 12:58:55 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 31
+ *     Update #: 39
  */
 
 /* Commentary: 
@@ -18,3 +18,11 @@
  */
 
 #include "dtkLog.h"
+
+#include <QtCore>
+#include <QtGui>
+
+QString dtkLogPath(QCoreApplication *application)
+{
+    return QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation)).filePath(QString("%1.log").arg(application->applicationName()));
+}

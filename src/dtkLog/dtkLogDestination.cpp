@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 15:15:19 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar  5 12:28:40 2012 (+0100)
+ * Last-Updated: Mon Mar  5 13:09:37 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 59
+ *     Update #: 66
  */
 
 /* Commentary: 
@@ -55,7 +55,19 @@ public:
 dtkLogDestinationFile::dtkLogDestinationFile(const QString& path) : d(new dtkLogDestinationFilePrivate)
 {
     d->file.setFileName(path);
-    d->file.open(QFile::WriteOnly | QFile::Text | QIODevice::Append);
+
+    QFileInfo info(path);
+
+    QDir dir(info.absoluteDir());
+
+    if(!dir.exists()) {
+        QString name = dir.dirName();
+        dir.cdUp();
+        dir.mkdir(name);
+    }
+
+    if(!d->file.open(QFile::WriteOnly | QFile::Text | QIODevice::Append))
+        qDebug() << "Unable to open" << path << "for writing";
 
     d->stream.setDevice(&(d->file));
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Mar  2 15:16:32 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar  2 19:09:13 2012 (+0100)
+ * Last-Updated: Mon Mar  5 13:02:15 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 61
+ *     Update #: 73
  */
 
 /* Commentary: 
@@ -21,12 +21,6 @@
 #include <dtkLog/dtkLogView.h>
 
 #include <QtGui>
-
-// /////////////////////////////////////////////////////////////////
-// Helper function
-// /////////////////////////////////////////////////////////////////
-
-QString dtkLogPath(QCoreApplication *application);
 
 // /////////////////////////////////////////////////////////////////
 // Dummy thread
@@ -62,8 +56,11 @@ int main(int argc, char **argv)
 {
     QApplication application(argc, argv);
     application.setApplicationName("dtkLogView");
+    application.setOrganizationName("inria");
+    application.setOrganizationDomain("fr");
 
     dtkLogger::instance().setLevel(dtkLog::Trace);
+    dtkLogger::instance().attachFile(dtkLogPath(&application));
 
     dtkLogView *view = new dtkLogView;
     view->setWindowTitle("dtk Log View");
@@ -82,18 +79,4 @@ int main(int argc, char **argv)
     delete view;
     
     return status;
-}
-
-// /////////////////////////////////////////////////////////////////
-// Helper function
-// /////////////////////////////////////////////////////////////////
-
-QString dtkLogPath(QCoreApplication *application)
-{
-    QString path = QDir(application->applicationDirPath()).filePath(QString("%1.log").arg(application->applicationName()));
-
-    if (path.contains(QString("%1.app/Contents/MacOS/").arg(application->applicationName())))
-        path.remove(QString("%1.app/Contents/MacOS/").arg(application->applicationName()));
-
-    return path;
 }

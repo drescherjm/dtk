@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Feb 20 11:47:39 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 17:08:16 2012 (+0100)
+ * Last-Updated: Sun Mar  4 16:53:08 2012 (+0100)
  *           By: tkloczko
- *     Update #: 41
+ *     Update #: 48
  */
 
 /* Commentary: 
@@ -45,14 +45,46 @@ dtkComposerTransmitterProxy::~dtkComposerTransmitterProxy(void)
     d = NULL;
 }
 
-QString dtkComposerTransmitterProxy::identifier(void) const
+//! Returns.
+/*! 
+ *  
+ */
+dtkComposerTransmitter::Kind dtkComposerTransmitterProxy::kind(void) const
 {
-    return "dtkComposerTransmitterProxy";
+    return dtkComposerTransmitter::Proxy;
 }
 
-QString dtkComposerTransmitterProxy::dataType(void) const
+QVariant::Type dtkComposerTransmitterProxy::type(void) const
 {
-    return d->data_type;
+    return QVariant::Invalid;
+}
+
+QString dtkComposerTransmitterProxy::kindName(void) const
+{
+    return "Proxy";
+}
+
+QString dtkComposerTransmitterProxy::typeName(void) const
+{
+    return "";
+}
+
+//! Returns
+/*! 
+ *  
+ */
+void *dtkComposerTransmitterProxy::variant(void)
+{
+    return (void *)(0);
+}
+
+//! Returns
+/*! 
+ *  
+ */
+const void *dtkComposerTransmitterProxy::variant(void) const
+{
+    return (void *)(0);
 }
 
 dtkComposerTransmitter::LinkMap dtkComposerTransmitterProxy::leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)

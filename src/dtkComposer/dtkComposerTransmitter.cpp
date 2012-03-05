@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 17:21:37 2012 (+0100)
+ * Last-Updated: Sun Mar  4 23:23:12 2012 (+0100)
  *           By: tkloczko
- *     Update #: 139
+ *     Update #: 159
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include "dtkComposerTransmitter.h"
+#include "dtkComposerTransmitterVariant.h"
 #include "dtkComposerNode.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -257,6 +258,11 @@ bool dtkComposerTransmitter::onTransmittersConnected(dtkComposerTransmitter *sou
 
             if (receiver->connect(emitter)) {
 
+                // Add feedback to parent node in order to update all
+                // transmitters !!!  Very useful for number nodes for
+                // instance that need to check compatibility of
+                // input/output types.
+
                 foreach(dtkComposerTransmitterLink *l, right_link_map.values(receiver))
                     if(!valid_links.contains(l))
                         valid_links << l;
@@ -279,6 +285,7 @@ bool dtkComposerTransmitter::onTransmittersConnected(dtkComposerTransmitter *sou
 
     return true;
 }
+
 //! Connects all emitters and all receivers that share the link (\a
 //! source, \a destination).
 /*! 
@@ -329,7 +336,7 @@ bool dtkComposerTransmitter::onTransmittersDisconnected(dtkComposerTransmitter *
  */
 QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter)
 {
-    debug.nospace() << transmitter.identifier() << transmitter.dataType();
+    debug.nospace() << "dtkComposerTransmitter:" << transmitter.kindName() << transmitter.typeName();
     
     return debug.space();
 }
@@ -340,7 +347,7 @@ QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter)
  */
 QDebug operator<<(QDebug debug, dtkComposerTransmitter *transmitter)
 {
-    debug.nospace() << transmitter->identifier() << transmitter->dataType();
+    debug.nospace() << "dtkComposerTransmitter:" << transmitter->kindName() << transmitter->typeName();
     
     return debug.space();
 }

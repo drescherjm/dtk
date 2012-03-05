@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 17:22:29 2012 (+0100)
+ * Last-Updated: Sun Mar  4 16:50:24 2012 (+0100)
  *           By: tkloczko
- *     Update #: 46
+ *     Update #: 83
  */
 
 /* Commentary: 
@@ -19,6 +19,8 @@
 
 #ifndef DTKCOMPOSERTRANSMITTEREMITTER_TPP
 #define DTKCOMPOSERTRANSMITTEREMITTER_TPP
+
+#include "dtkComposerTransmitterVariant.h"
 
 #include <typeinfo>
 
@@ -71,22 +73,50 @@ template <typename T> inline const T& dtkComposerTransmitterEmitter<T>::data(voi
     return m_data;
 };
 
-//! Returns description of the emitter.
+//! Returns.
 /*! 
  *  
  */
-template <typename T> QString dtkComposerTransmitterEmitter<T>::identifier(void) const
+template <typename T> dtkComposerTransmitter::Kind dtkComposerTransmitterEmitter<T>::kind(void) const
 {
-    return QString("dtkComposerTransmitterEmitter<%1>").arg(typeid(m_data).name());
+    return dtkComposerTransmitter::Emitter;
 };
 
-//! Returns description of the emitter.
+//! Returns.
 /*! 
  *  
  */
-template <typename T> QString dtkComposerTransmitterEmitter<T>::dataType(void) const
+template <typename T> QVariant::Type dtkComposerTransmitterEmitter<T>::type(void) const
 {
-    return typeid(m_data).name();
+    return dtkComposerTransmitterVariantType(m_data);
+};
+
+template <typename T> QString dtkComposerTransmitterEmitter<T>::kindName(void) const
+{
+    return "Emitter";
+};
+
+template <typename T> QString dtkComposerTransmitterEmitter<T>::typeName(void) const
+{
+    return dtkComposerTransmitterVariantName(m_data);
+};
+
+//! Returns
+/*! 
+ *  
+ */
+template <typename T> void *dtkComposerTransmitterEmitter<T>::variant(void)
+{
+    return static_cast<void *>(&m_data);
+};
+
+//! Returns
+/*! 
+ *  
+ */
+template <typename T> const void *dtkComposerTransmitterEmitter<T>::variant(void) const
+{
+    return static_cast<const void *>(&m_data);
 };
 
 
@@ -98,4 +128,5 @@ template <typename T> dtkComposerTransmitter::LinkMap dtkComposerTransmitterEmit
 
     return link_map;
 };
+
 #endif

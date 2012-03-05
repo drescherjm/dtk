@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Feb 29 23:51:00 2012 (+0100)
+## Last-Updated: Fri Mar  2 15:40:25 2012 (+0100)
 ##           By: Julien Wintz
-##     Update #: 225
+##     Update #: 227
 ######################################################################
 ## 
 ### Commentary: 
@@ -133,7 +133,6 @@ endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
-  dtkCore
   dtkScript)
 
 ## #################################################################

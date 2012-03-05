@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 15:15:19 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  1 23:37:00 2012 (+0100)
+ * Last-Updated: Fri Mar  2 19:04:40 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 22
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include "dtkLogDestination.h"
+#include "dtkLogView_p.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkLogDestination
@@ -70,4 +71,31 @@ void dtkLogDestinationFile::write(const QString& message)
 {
     d->stream << message << endl;
     d->stream.flush();
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkLogDestinationView
+// /////////////////////////////////////////////////////////////////
+
+class dtkLogDestinationViewPrivate
+{
+public:
+    dtkLogViewList *view;
+};
+
+dtkLogDestinationView::dtkLogDestinationView(dtkLogViewList *view) : d(new dtkLogDestinationViewPrivate)
+{
+    d->view = view;
+}
+
+dtkLogDestinationView::~dtkLogDestinationView(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+void dtkLogDestinationView::write(const QString& message)
+{
+    d->view->append(message);
 }

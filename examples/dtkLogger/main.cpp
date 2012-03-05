@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 15:23:18 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  1 23:14:39 2012 (+0100)
+ * Last-Updated: Fri Mar  2 18:53:06 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 225
+ *     Update #: 227
  */
 
 /* Commentary: 
@@ -87,7 +87,7 @@ QString dtkLogPath(QCoreApplication *application);
 int main(int argc, char **argv)
 {
     QCoreApplication application(argc, argv);
-    application.setApplicationName(argv[0]);
+    application.setApplicationName("dtkLogger");
 
     qRegisterMetaType<Pixel>();
 

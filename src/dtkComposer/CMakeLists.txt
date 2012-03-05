@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Mar  1 11:57:04 2012 (+0100)
-##           By: Julien Wintz
-##     Update #: 442
+## Last-Updated: Sun Mar  4 16:53:53 2012 (+0100)
+##           By: tkloczko
+##     Update #: 444
 ######################################################################
 ##
 ### Commentary:
@@ -25,8 +25,6 @@ project(dtkComposer)
 
 set(${PROJECT_NAME}_HEADERS
   dtkComposer.h
-  dtkComposerTransmitterEmitter.h
-  dtkComposerTransmitterEmitter.tpp
   dtkComposerEvaluator.h
   dtkComposerExport.h
   dtkComposerFactory.h
@@ -69,8 +67,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeString.h
   dtkComposerNodeVector.h
   dtkComposerNodeVectorOperator.h
-  dtkComposerTransmitterReceiver.h
-  dtkComposerTransmitterReceiver.tpp
   dtkComposerScene.h
   dtkComposerSceneEdge.h
   dtkComposerSceneModel.h
@@ -87,7 +83,13 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerStackUtils.h
   dtkComposerStackView.h
   dtkComposerTransmitter.h
+  dtkComposerTransmitterEmitter.h
+  dtkComposerTransmitterEmitter.tpp
   dtkComposerTransmitterProxy.h
+  dtkComposerTransmitterReceiver.h
+  dtkComposerTransmitterReceiver.tpp
+  dtkComposerTransmitterVariant.h
+  dtkComposerTransmitterVariant.tpp
   dtkComposerView.h
   dtkComposerReader.h
   dtkComposerWriter.h)
@@ -169,6 +171,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerStackCommand.cpp
   dtkComposerTransmitter.cpp
   dtkComposerTransmitterProxy.cpp
+  dtkComposerTransmitterVariant.cpp
   dtkComposerView.cpp
   dtkComposerView.cpp
   dtkComposerReader.cpp

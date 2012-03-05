@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 17:18:31 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  1 22:32:31 2012 (+0100)
+ * Last-Updated: Fri Mar  2 18:47:34 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 16
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -25,8 +25,9 @@
 
 #include <QtCore>
 
-class dtkLogDestination;
 class dtkLoggerPrivate;
+class dtkLogDestination;
+class dtkLogViewList;
 
 class DTKLOG_EXPORT dtkLogger
 {
@@ -46,6 +47,10 @@ public:
 public:
     void attachFile(const QString& path);
     void detachFile(const QString& path);
+
+public:
+    void attachView(dtkLogViewList *view);
+    void detachView(dtkLogViewList *view);
 
 private:
      dtkLogger(void);

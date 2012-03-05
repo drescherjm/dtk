@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Mar  2 15:13:52 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar  2 19:08:23 2012 (+0100)
+ * Last-Updated: Mon Mar  5 12:32:17 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 98
+ *     Update #: 107
  */
 
 /* Commentary: 
@@ -17,6 +17,7 @@
  * 
  */
 
+#include "dtkLogModel.h"
 #include "dtkLogView.h"
 #include "dtkLogView_p.h"
 
@@ -53,6 +54,8 @@ dtkLogViewTree::~dtkLogViewTree(void)
 
 dtkLogViewList::dtkLogViewList(QWidget *parent) : QListView(parent)
 {
+    this->model = new dtkLogModel(this);
+
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setFrameShape(QFrame::NoFrame);
     this->setRuntime();
@@ -65,16 +68,9 @@ dtkLogViewList::~dtkLogViewList(void)
 
 void dtkLogViewList::setRuntime(void)
 {
-    dtkLogger::instance().attachView(this);
+    dtkLogger::instance().attachModel(this->model);
 
-    this->setModel(&(this->model));
-}
-
-void dtkLogViewList::append(const QString& message)
-{
-    this->list << message;
-
-    this->model.setStringList(this->list);
+    this->setModel(this->model);
 }
 
 // /////////////////////////////////////////////////////////////////

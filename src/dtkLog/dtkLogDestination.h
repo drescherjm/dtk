@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 15:10:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar  2 19:01:08 2012 (+0100)
+ * Last-Updated: Mon Mar  5 11:11:34 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 35
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -23,6 +23,8 @@
 #include "dtkLogExport.h"
 
 #include <QtCore>
+
+class dtkLogModel;
 
 // /////////////////////////////////////////////////////////////////
 // dtkLogDestination
@@ -70,20 +72,19 @@ private:
 // dtkLogDestinationList
 // /////////////////////////////////////////////////////////////////
 
-class dtkLogDestinationViewPrivate;
-class dtkLogViewList;
+class dtkLogDestinationModelPrivate;
 
-class DTKLOG_EXPORT dtkLogDestinationView : public dtkLogDestination
+class DTKLOG_EXPORT dtkLogDestinationModel : public dtkLogDestination
 {
 public:
-     dtkLogDestinationView(dtkLogViewList *view);
-    ~dtkLogDestinationView(void);
+     dtkLogDestinationModel(dtkLogModel *model);
+    ~dtkLogDestinationModel(void);
 
 public:
     void write(const QString& message);
 
 private:
-    dtkLogDestinationViewPrivate *d;
+    dtkLogDestinationModelPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 17:18:31 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar  2 18:47:34 2012 (+0100)
+ * Last-Updated: Mon Mar  5 11:13:44 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 29
+ *     Update #: 30
  */
 
 /* Commentary: 
@@ -27,7 +27,7 @@
 
 class dtkLoggerPrivate;
 class dtkLogDestination;
-class dtkLogViewList;
+class dtkLogModel;
 
 class DTKLOG_EXPORT dtkLogger
 {
@@ -49,8 +49,8 @@ public:
     void detachFile(const QString& path);
 
 public:
-    void attachView(dtkLogViewList *view);
-    void detachView(dtkLogViewList *view);
+    void attachModel(dtkLogModel *model);
+    void detachModel(dtkLogModel *model);
 
 private:
      dtkLogger(void);

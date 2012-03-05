@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Mar  2 15:30:16 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar  2 19:03:52 2012 (+0100)
+ * Last-Updated: Mon Mar  5 11:10:55 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 35
+ *     Update #: 39
  */
 
 /* Commentary: 
@@ -23,6 +23,8 @@
 #include "dtkLogger.h"
 
 #include <QtGui>
+
+class dtkLogModel;
 
 // /////////////////////////////////////////////////////////////////
 // dtkLogViewTree
@@ -52,12 +54,8 @@ public:
 public:
     void setRuntime(void);
 
-public:
-    void append(const QString& message);
-
 private:
-    QStringList list;
-    QStringListModel model;
+    dtkLogModel *model;
 };
 
 // /////////////////////////////////////////////////////////////////

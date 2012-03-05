@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Thu Mar  1 14:34:49 2012 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Mar  2 15:32:15 2012 (+0100)
+## Last-Updated: Mon Mar  5 11:07:46 2012 (+0100)
 ##           By: Julien Wintz
-##     Update #: 23
+##     Update #: 25
 ######################################################################
 ## 
 ### Commentary: 
@@ -28,9 +28,11 @@ set(${PROJECT_NAME}_HEADERS
   dtkLogger.h
   dtkLogEngine.h
   dtkLogDestination.h
+  dtkLogModel.h
   dtkLogView.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
+  dtkLogModel.h
   dtkLogView.h
   dtkLogView_p.h)
 
@@ -38,6 +40,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkLogger.cpp
   dtkLogEngine.cpp
   dtkLogDestination.cpp
+  dtkLogModel.cpp
   dtkLogView.cpp)
 
 ## #################################################################

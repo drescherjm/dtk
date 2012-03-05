@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 15:15:19 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar  2 19:04:40 2012 (+0100)
+ * Last-Updated: Mon Mar  5 12:28:40 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 53
+ *     Update #: 59
  */
 
 /* Commentary: 
@@ -18,7 +18,7 @@
  */
 
 #include "dtkLogDestination.h"
-#include "dtkLogView_p.h"
+#include "dtkLogModel.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkLogDestination
@@ -74,28 +74,28 @@ void dtkLogDestinationFile::write(const QString& message)
 }
 
 // /////////////////////////////////////////////////////////////////
-// dtkLogDestinationView
+// dtkLogDestinationModel
 // /////////////////////////////////////////////////////////////////
 
-class dtkLogDestinationViewPrivate
+class dtkLogDestinationModelPrivate
 {
 public:
-    dtkLogViewList *view;
+    dtkLogModel *model;
 };
 
-dtkLogDestinationView::dtkLogDestinationView(dtkLogViewList *view) : d(new dtkLogDestinationViewPrivate)
+dtkLogDestinationModel::dtkLogDestinationModel(dtkLogModel *model) : d(new dtkLogDestinationModelPrivate)
 {
-    d->view = view;
+    d->model = model;
 }
 
-dtkLogDestinationView::~dtkLogDestinationView(void)
+dtkLogDestinationModel::~dtkLogDestinationModel(void)
 {
     delete d;
 
     d = NULL;
 }
 
-void dtkLogDestinationView::write(const QString& message)
+void dtkLogDestinationModel::write(const QString& message)
 {
-    d->view->append(message);
+    d->model->append(message);
 }

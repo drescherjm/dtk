@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Mar  2 15:30:16 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar  5 13:14:13 2012 (+0100)
+ * Last-Updated: Tue Mar  6 10:04:35 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 50
+ *     Update #: 66
  */
 
 /* Commentary: 
@@ -25,6 +25,27 @@
 #include <QtGui>
 
 class dtkLogModel;
+
+// /////////////////////////////////////////////////////////////////
+// dtkLogViewBar
+// /////////////////////////////////////////////////////////////////
+
+class dtkLogViewBar : public QFrame
+{
+    Q_OBJECT
+
+public:
+     dtkLogViewBar(QWidget *parent = 0);
+    ~dtkLogViewBar(void);
+
+signals:
+    void displayTrace(bool);
+    void displayDebug(bool);
+    void displayInfo(bool);
+    void displayWarn(bool);
+    void displayError(bool);
+    void displayFatal(bool);
+};
 
 // /////////////////////////////////////////////////////////////////
 // dtkLogViewTree
@@ -66,11 +87,17 @@ public slots:
     void setRuntime(void);
     void setFile(const QString& path);
 
+public:
+    void setFilter(const QRegExp& expression);
+
 private:
     dtkLogModel *model;
 
 private:
     QHash<QString, QStringListModel *> models;
+
+private:
+    QSortFilterProxyModel *proxy;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -80,8 +107,15 @@ private:
 class dtkLogViewPrivate
 {
 public:
+    QRegExp expression(void);
+
+public:
+    dtkLogViewBar  *bar;
     dtkLogViewTree *tree;
     dtkLogViewList *list;
+
+public:
+    QStringList exclude;
 };
 
 #endif

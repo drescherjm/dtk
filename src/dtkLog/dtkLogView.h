@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Mar  2 15:08:10 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar  2 15:15:35 2012 (+0100)
+ * Last-Updated: Mon Mar  5 14:27:11 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 7
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -33,6 +33,14 @@ class DTKLOG_EXPORT dtkLogView : public QWidget
 public:
      dtkLogView(QWidget *parent = 0);
     ~dtkLogView(void);
+
+public slots:
+    void displayTrace(bool display);
+    void displayDebug(bool display);
+    void displayInfo(bool display);
+    void displayWarn(bool display);
+    void displayError(bool display);
+    void displayFatal(bool display);
 
 private:
     dtkLogViewPrivate *d;

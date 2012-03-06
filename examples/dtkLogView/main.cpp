@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Mar  2 15:16:32 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar  5 13:02:15 2012 (+0100)
+ * Last-Updated: Tue Mar  6 11:03:13 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 73
+ *     Update #: 84
  */
 
 /* Commentary: 
@@ -36,7 +36,12 @@ public:
     void run(void) {
         while(this->count) {
             dtkTrace() << count++;
-            sleep(1);
+            dtkDebug() << count;
+            dtkInfo()  << count;
+            dtkWarn()  << count;
+            dtkError() << count;
+            dtkFatal() << count;
+            msleep(500);
         }
     }
 

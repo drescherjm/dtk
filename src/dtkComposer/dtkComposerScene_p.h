@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 15:32:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 17 22:50:30 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 215
+ * Last-Updated: mar. mars 13 09:27:10 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 218
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 
 #include <QtGui>
 
+class dtkComposerEvaluator;
 class dtkComposerFactory;
 class dtkComposerGraph;
 class dtkComposerMachine;
@@ -39,6 +40,7 @@ public:
     dtkComposerFactory *factory;
     dtkComposerStack *stack;
     dtkComposerGraph *graph;
+    dtkComposerEvaluator *evaluator;
 
 public:
     dtkComposerSceneNodeComposite    *root_node;

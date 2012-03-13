@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. mars  2 18:55:02 2012 (+0100)
+ * Last-Updated: mar. mars 13 09:28:40 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 169
+ *     Update #: 208
  */
 
 /* Commentary: 
@@ -24,7 +24,6 @@
 #include "dtkComposerGraphEdge.h"
 
 #include <QtCore>
-
 
 // /////////////////////////////////////////////////////////////////
 // Helper definitions
@@ -59,7 +58,7 @@ void dtkComposerEvaluator::setGraph(dtkComposerGraph *graph)
     d->graph = graph;
 }
 
-void dtkComposerEvaluator::run(void)
+void dtkComposerEvaluator::run(bool run_concurrent)
 {
     dtkComposerGraphEdgeList edges = d->graph->edges();
     dtkComposerGraphNodeList nodes = d->graph->nodes();
@@ -67,27 +66,28 @@ void dtkComposerEvaluator::run(void)
     dtkComposerGraphNode *current;
     dtkComposerGraphNodeList stack ;
 
+    QTime time;
+    time.start();
+
     stack << d->graph->root();
 
     emit started();
-
     while (!stack.isEmpty()) {
         current = stack.takeFirst();
         qDebug() << "current node to evaluate is " << current->title();
-        if (current->status() == dtkComposerGraphNode::Done) {
-            qDebug() << "Warning, node is already done !" ;
-            continue;
-        }
         bool runnable = true;
         foreach (dtkComposerGraphNode *pred, current->predecessors()) {
-            if (pred->status() != dtkComposerGraphNode::Done && (pred->kind() != dtkComposerGraphNode::SelectBranch)) {
+            if (pred->status() != dtkComposerGraphNode::Done) {
                 qDebug() << " predecessor not ready " << pred->title();
                 runnable = false;
                 break;
             }
         }
         if (runnable) {
-            current->eval();
+            if (run_concurrent && current->kind() != dtkComposerGraphNode::SelectBranch)
+                QtConcurrent::run(current, &dtkComposerGraphNode::eval);
+            else
+                current->eval();
             foreach ( dtkComposerGraphNode *s, current->successors())
                 if (!stack.contains(s)) {
                     s->setStatus( dtkComposerGraphNode::Ready);
@@ -97,8 +97,8 @@ void dtkComposerEvaluator::run(void)
             qDebug() << " node not runnable, put it at the end of the list ";
             stack << current; // current is not ready, put it at the end
         }
-        d->graph->layout();
-        QApplication::processEvents();
+        // QApplication::processEvents();
     }
+    qDebug() << "elapsed time:"<< time.elapsed() << "ms";
     emit stopped();
 }

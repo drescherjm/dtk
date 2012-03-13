@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: ven. mars  2 17:45:26 2012 (+0100)
+ * Last-Updated: mar. mars 13 09:33:15 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1902
+ *     Update #: 1940
  */
 
 /* Commentary:
@@ -40,6 +40,7 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
     d->machine = NULL;
     d->stack = NULL;
     d->graph = NULL;
+    d->evaluator = new dtkComposerEvaluator;
 
     d->root_node = new dtkComposerSceneNodeComposite;
     d->root_node->setRoot(true);
@@ -85,6 +86,7 @@ void dtkComposerScene::setGraph(dtkComposerGraph *graph)
     d->graph = graph;
     d->graph->addNode(d->root_node);
     d->graph->layout();
+    d->evaluator->setGraph(graph);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -421,12 +423,10 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
                 d->stack->push(command);
             }
         }
+    } else if ((event->key() == Qt::Key_R)  && (event->modifiers() & Qt::ControlModifier) && (event->modifiers() & Qt::ShiftModifier)) {
+        QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::run, true);
     } else if ((event->key() == Qt::Key_R)  && (event->modifiers() & Qt::ControlModifier)) {
-
-        dtkComposerEvaluator evaluator;
-        evaluator.setGraph(d->graph);
-        evaluator.run();
-
+        QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::run, false);
     } else {
         QGraphicsScene::keyPressEvent(event);
     }

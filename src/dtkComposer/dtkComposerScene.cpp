@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: mar. mars 13 09:33:15 2012 (+0100)
+ * Last-Updated: mar. mars 13 14:46:26 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1940
+ *     Update #: 1945
  */
 
 /* Commentary:
@@ -44,6 +44,7 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
 
     d->root_node = new dtkComposerSceneNodeComposite;
     d->root_node->setRoot(true);
+    d->root_node->setTitle("Root");
 
     d->current_node = d->root_node;
     d->current_edge = NULL;

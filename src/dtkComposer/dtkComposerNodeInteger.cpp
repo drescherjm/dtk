@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:38:46 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 15 18:11:39 2012 (+0100)
+ * Last-Updated: Thu Mar 15 18:36:28 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 22
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -51,7 +51,8 @@ dtkComposerNodeInteger::~dtkComposerNodeInteger(void)
 
 void dtkComposerNodeInteger::run(void)
 {
-    d->emitter->setData(d->receiver->data());
+    // if (d->emitter->active())
+    //     d->emitter->setData(d->receiver->data());
 }
 
 qlonglong dtkComposerNodeInteger::value(void)

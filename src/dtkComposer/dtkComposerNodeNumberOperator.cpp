@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Mon Feb 27 14:28:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 15 17:38:24 2012 (+0100)
- *           By: tkloczko
- *     Update #: 167
+ * Last-Updated: Thu Mar 15 18:24:15 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 174
  */
 
 /* Commentary: 
@@ -545,6 +545,8 @@ void dtkComposerNodeNumberOperatorBinaryPlus::run(void)
     qreal a = d->receiver_lhs->data().toReal();
     qreal b = d->receiver_rhs->data().toReal();
     d->emitter->setData(a+b);
+
+    qDebug() << __func__ << a << b << d->emitter->data();
 }
 
 // /////////////////////////////////////////////////////////////////

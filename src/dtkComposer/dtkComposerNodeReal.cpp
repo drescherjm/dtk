@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:38:46 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 15 18:11:28 2012 (+0100)
+ * Last-Updated: Thu Mar 15 18:36:23 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 25
+ *     Update #: 32
  */
 
 /* Commentary: 
@@ -51,7 +51,8 @@ dtkComposerNodeReal::~dtkComposerNodeReal(void)
 
 void dtkComposerNodeReal::run(void)
 {
-    d->emitter->setData(d->receiver->data());
+    // if (d->emitter->active())
+    //     d->emitter->setData(d->receiver->data());
 }
 
 double dtkComposerNodeReal::value(void)

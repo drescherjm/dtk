@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. mars  2 18:45:33 2012 (+0100)
+ * Last-Updated: mar. mars 13 13:27:22 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 125
+ *     Update #: 130
  */
 
 /* Commentary:
@@ -69,7 +69,7 @@ void dtkComposerGraphNode::setStatus(dtkComposerGraphNode::Status status)
 
 QRectF dtkComposerGraphNode::boundingRect(void) const
 {
-    return QRectF(0, 0, 100, 75);
+    return QRectF(0, 0, 125, 25);
 }
 
 void dtkComposerGraphNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

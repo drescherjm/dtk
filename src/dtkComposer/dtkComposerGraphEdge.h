@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:08:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. févr. 21 13:34:46 2012 (+0100)
+ * Last-Updated: mar. mars 13 14:37:37 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 38
+ *     Update #: 56
  */
 
 /* Commentary: 
@@ -53,7 +53,7 @@ public:
 
 public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-    void drawArrow(QPainter *p, QPointF from, QPointF to, qreal size = 10, qreal end_margin = 62.5);
+    void drawArrow(QPainter *p, QPointF from, QPointF to, qreal size = 10, qreal end_margin = 18);
 
 private:
     dtkComposerGraphEdgePrivate *d;

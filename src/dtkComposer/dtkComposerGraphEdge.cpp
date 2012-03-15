@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 24 16:11:34 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 138
+ * Last-Updated: mar. mars 13 14:35:43 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 144
  */
 
 /* Commentary: 
@@ -121,7 +121,7 @@ void dtkComposerGraphEdge::drawArrow(QPainter *p, QPointF from, QPointF to, qrea
 {
     QPointF points[3];
     float a = atan2(from.y()-to.y(), from.x()-to.x());
-    to.setX(to.x()+end_margin*cos(a));
+    to.setX(to.x()+4*end_margin*cos(a));
     to.setY(to.y()+end_margin*sin(a));
     end_margin += size;
     a = atan2(from.y()-to.y(), from.x()-to.x());

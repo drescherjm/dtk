@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Aug  3 17:34:51 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Feb  1 13:41:07 2012 (+0100)
+## Last-Updated: Thu Mar 15 12:05:11 2012 (+0100)
 ##           By: Julien Wintz
-##     Update #: 156
+##     Update #: 165
 ######################################################################
 ## 
 ### Commentary: 
@@ -40,6 +40,9 @@ set(${PROJECT_NAME}_SOURCES
   dtkCreatorMainWindow.mm)
 endif(APPLE)
 
+set(${PROJECT_NAME}_RESOURCES
+  dtkCreator.qrc)
+
 ## #################################################################
 ## Build rules
 ## #################################################################
@@ -51,9 +54,12 @@ endif(NOT MSVC)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
+qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
+
 add_executable(${PROJECT_NAME} MACOSX_BUNDLE WIN32
   ${${PROJECT_NAME}_SOURCES_WRAP}
   ${${PROJECT_NAME}_SOURCES_MOC}
+  ${${PROJECT_NAME}_SOURCES_QRC}
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS})
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 15 11:53:43 2012 (+0100)
- *           By: tkloczko
- *     Update #: 130
+ * Last-Updated: Thu Mar 15 12:57:55 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 138
  */
 
 /* Commentary: 
@@ -37,13 +37,12 @@ class dtkComposerTransmitterLinkList;
 class DTKCOMPOSER_EXPORT dtkComposerTransmitter
 {
 public:
-    typedef QMultiHash<dtkComposerTransmitter *, dtkComposerTransmitterLink *> LinkMap;
-
-public:
-    enum Kind { Emitter,
-                Receiver,
-                Proxy,
-                Variant };
+    enum Kind {
+        Emitter,
+        Receiver,
+        Proxy,
+        Variant
+    };
 
 public:
              dtkComposerTransmitter(dtkComposerNode *parent = 0);
@@ -57,8 +56,10 @@ public:
 public:
     QVariant variant(void) const;
 
+public:
     QVariant::Type type(void) const;
 
+public:
     QString typeName(void) const;
 
 public:
@@ -82,12 +83,18 @@ public:
     virtual bool    connect(dtkComposerTransmitter *transmitter);
     virtual bool disconnect(dtkComposerTransmitter *transmitter);
 
+#pragma mark -
+#pragma mark Link management
+
+public:
+    typedef QMultiHash<dtkComposerTransmitter *, dtkComposerTransmitterLink *> LinkMap;
+
+public:
     virtual LinkMap  leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
     virtual LinkMap rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 
 public:
     static bool onTransmittersConnected(dtkComposerTransmitter *source, dtkComposerTransmitter *destination, dtkComposerTransmitterLinkList& valid_links, dtkComposerTransmitterLinkList& invalid_links);
-
     static bool onTransmittersDisconnected(dtkComposerTransmitter *source, dtkComposerTransmitter *destination, dtkComposerTransmitterLinkList& invalid_links);
 
 public:
@@ -129,9 +136,6 @@ private:
 // dtkComposerTransmitterLinkList declaration
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerTransmitterLinkList : public QList<dtkComposerTransmitterLink *>
-{
-public:
-};
+class DTKCOMPOSER_EXPORT dtkComposerTransmitterLinkList : public QList<dtkComposerTransmitterLink *> {};
 
 #endif

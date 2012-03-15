@@ -1,0 +1,9 @@
+<RCC>
+  <qresource prefix="dtkCreator">
+    
+    <file>dtkCreator.qss</file>
+    
+    <file>fonts/maven_medium.otf</file>
+    <file>fonts/maven_regular.otf</file>
+  </qresource>
+</RCC>

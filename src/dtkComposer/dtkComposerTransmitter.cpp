@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 15 11:55:43 2012 (+0100)
- *           By: tkloczko
- *     Update #: 174
+ * Last-Updated: Thu Mar 15 12:58:29 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 176
  */
 
 /* Commentary: 
@@ -36,7 +36,6 @@ dtkComposerTransmitter::dtkComposerTransmitter(dtkComposerNode *parent) : d(new 
     d->active = true;
     d->required = true;
     d->parent = parent;
-    d->variant = QVariant();
 }
 
 //! Destroys dtkComposerTransmitter.

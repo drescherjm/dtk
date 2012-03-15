@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  1 12:37:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  9 14:55:38 2012 (+0100)
+ * Last-Updated: Thu Mar 15 12:14:02 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 35
+ *     Update #: 39
  */
 
 /* Commentary: 
@@ -69,8 +69,8 @@ public:
     QAction *composition_insert_action;
     QAction *composition_quit_action;
 
-    QMenu *graph_menu;
-    QAction *graph_show_action;
+    QMenu *view_menu;
+    QAction *view_graph_action;
 
     QMenu *edit_menu;
     QAction *undo_action;
@@ -83,6 +83,9 @@ public:
 
 public:
     QString current_composition;
+
+// public:
+//     QPoint drag_point;
 
 public:
     dtkCreatorMainWindow *q;

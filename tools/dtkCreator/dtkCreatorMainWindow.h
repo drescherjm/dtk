@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:38:47 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Feb  9 14:58:31 2012 (+0100)
+ * Last-Updated: Thu Mar 15 12:13:42 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 42
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -51,6 +51,10 @@ protected slots:
 
 protected:
     void closeEvent(QCloseEvent *event);
+    // void mouseMoveEvent(QMouseEvent *event);
+    // void mousePressEvent(QMouseEvent *event);
+    // void mouseReleaseEvent(QMouseEvent *event);
+    // void resizeEvent(QResizeEvent *event);
 
 private:
     dtkCreatorMainWindowPrivate *d;

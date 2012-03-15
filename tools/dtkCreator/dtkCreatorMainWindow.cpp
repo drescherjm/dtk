@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar  1 00:45:03 2012 (+0100)
+ * Last-Updated: Thu Mar 15 12:14:19 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 853
+ *     Update #: 881
  */
 
 /* Commentary: 
@@ -88,6 +88,15 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 {
     d->q = this;
 
+    // Fonts
+
+    // int id;
+    // id = QFontDatabase::addApplicationFont(":dtkCreator/fonts/maven_medium.otf");
+    // id = QFontDatabase::addApplicationFont(":dtkCreator/fonts/maven_regular.otf");
+    // qApp->setFont(QFont("Maven Pro"));
+
+    // Elements
+
     d->composer = new dtkComposer;
 
     d->editor = new dtkComposerSceneNodeEditor(this);
@@ -159,11 +168,11 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->edit_menu->addAction(d->undo_action);
     d->edit_menu->addAction(d->redo_action);
 
-    d->graph_show_action = new QAction("Show", this);
-    d->graph_show_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_G);
+    d->view_graph_action = new QAction("Graph", this);
+    d->view_graph_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_G);
 
-    d->graph_menu = menu_bar->addMenu("Graph");
-    d->graph_menu->addAction(d->graph_show_action);
+    d->view_menu = menu_bar->addMenu("View");
+    d->view_menu->addAction(d->view_graph_action);
 
     // Connections
 
@@ -182,7 +191,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     // connect(d->undo_action, SIGNAL(triggered()), d->composer->stack(), SLOT(undo()));
     // connect(d->redo_action, SIGNAL(triggered()), d->composer->stack(), SLOT(redo()));
 
-    connect(d->graph_show_action, SIGNAL(triggered()), this, SLOT(showGraph()));
+    connect(d->view_graph_action, SIGNAL(triggered()), this, SLOT(showGraph()));
 
     // Layout
 
@@ -199,12 +208,17 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     r_lateral->addWidget(d->editor);
     r_lateral->addWidget(d->stack);
 
-    QHBoxLayout *layout = new QHBoxLayout;
+    QHBoxLayout *i_layout = new QHBoxLayout;
+    i_layout->setContentsMargins(0, 0, 0, 0);
+    i_layout->setSpacing(0);
+    i_layout->addLayout(l_lateral);
+    i_layout->addWidget(d->composer);
+    i_layout->addLayout(r_lateral);
+
+    QVBoxLayout *layout = new QVBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    layout->addLayout(l_lateral);
-    layout->addWidget(d->composer);
-    layout->addLayout(r_lateral);
+    layout->addLayout(i_layout);
 
     QWidget *central = new QWidget(this);
     central->setLayout(layout);
@@ -212,8 +226,9 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     this->readSettings();
 
     this->setCentralWidget(central);
+    // this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setUnifiedTitleAndToolBarOnMac(true);
-
+    
 #if defined(Q_WS_MAC) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
     d->enableFullScreenSupport();
 #endif
@@ -370,3 +385,54 @@ void dtkCreatorMainWindow::closeEvent(QCloseEvent *event)
          event->ignore();
      }
 }
+
+// void dtkCreatorMainWindow::mouseMoveEvent(QMouseEvent *event)
+// {
+//     if (!d->drag_point.isNull()) {
+        
+//         QPoint dest = QPoint(event->globalPos() - d->drag_point);
+        
+// #if defined(Q_WS_MAC)
+//         if (dest.y() <= 22)
+//             dest.setY(22);
+// #endif
+        
+//         this->move(dest);
+        
+//         event->accept();
+//     }
+
+//     QMainWindow::mouseMoveEvent(event);
+// }
+
+// void dtkCreatorMainWindow::mousePressEvent(QMouseEvent *event)
+// {
+//     if (event->button() == Qt::LeftButton) {
+//         d->drag_point = event->globalPos() - frameGeometry().topLeft();
+//         event->accept();
+//     }
+
+//     QMainWindow::mousePressEvent(event);
+// }
+
+// void dtkCreatorMainWindow::mouseReleaseEvent(QMouseEvent *event)
+// {
+//     if (event->button() == Qt::LeftButton) {
+//         d->drag_point = QPoint(0, 0);
+//     }
+
+//     QMainWindow::mouseReleaseEvent(event);
+// }
+
+// void dtkCreatorMainWindow::resizeEvent(QResizeEvent *event)
+// {
+//     QPainterPath r_path;
+//     r_path.addRoundedRect(QRectF(this->rect()), 2, 5, Qt::AbsoluteSize);
+    
+//     QPainterPath s_path;
+//     s_path.addRect(QRectF(this->rect().x(), this->rect().y()+5, this->rect().width(), this->rect().height()-5));
+    
+//     this->setMask(QRegion(r_path.united(s_path).toFillPolygon().toPolygon()));
+
+//     QMainWindow::resizeEvent(event);
+// }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:38:46 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 10:16:48 2012 (+0100)
- *           By: tkloczko
- *     Update #: 13
+ * Last-Updated: Thu Mar 15 18:11:28 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -36,6 +36,7 @@ dtkComposerNodeReal::dtkComposerNodeReal(void) : dtkComposerNodeLeaf(), d(new dt
     this->appendReceiver(d->receiver);
 
     d->emitter = new dtkComposerTransmitterEmitter<qreal>;
+    d->emitter->setData(0);
     this->appendEmitter(d->emitter);
 }
 
@@ -50,5 +51,15 @@ dtkComposerNodeReal::~dtkComposerNodeReal(void)
 
 void dtkComposerNodeReal::run(void)
 {
-    d->emitter->setData(0);
+    d->emitter->setData(d->receiver->data());
+}
+
+double dtkComposerNodeReal::value(void)
+{
+    return d->emitter->data();
+}
+
+void dtkComposerNodeReal::setValue(double value)
+{
+    d->emitter->setData(value);
 }

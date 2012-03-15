@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:28:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 16:55:17 2012 (+0100)
- *           By: tkloczko
- *     Update #: 45
+ * Last-Updated: Thu Mar 15 17:54:35 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -94,6 +94,12 @@ public:
 
 public:
     QLineEdit *edit;
+
+public:
+    QSpinBox *spin_d;
+
+public:
+    QDoubleSpinBox *spin_f;
 
 public:
     QComboBox *selector;

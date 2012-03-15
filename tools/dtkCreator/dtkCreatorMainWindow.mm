@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  1 12:29:47 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  1 14:41:27 2012 (+0100)
- *           By: David Rey
- *     Update #: 14
+ * Last-Updated: Thu Mar 15 14:52:15 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -26,7 +26,7 @@
 
 void dtkCreatorMainWindowPrivate::enableFullScreenSupport(void)
 {
-    NSView *nsview = (NSView *) q->winId();	
+    NSView *nsview = (NSView *) q->winId();
     NSWindow *nswindow = [nsview window];
     [nswindow setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
 }

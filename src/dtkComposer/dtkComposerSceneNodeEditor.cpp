@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 17:01:35 2012 (+0100)
- *           By: tkloczko
- *     Update #: 364
+ * Last-Updated: Thu Mar 15 18:18:28 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 449
  */
 
 /* Commentary: 
@@ -138,6 +138,22 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     d->edit = new QLineEdit(this);
     d->edit->setEnabled(false);
 
+    d->spin_d = new QSpinBox(this);
+    d->spin_d->setMinimum(-999999);
+    d->spin_d->setMaximum(+999999);
+    d->spin_d->setSingleStep(1);
+    d->spin_d->setEnabled(false);
+    d->spin_d->setVisible(false);
+    d->spin_d->blockSignals(true);
+
+    d->spin_f = new QDoubleSpinBox(this);
+    d->spin_f->setMinimum(-999999);
+    d->spin_f->setMaximum(+999999);
+    d->spin_f->setSingleStep(1.0);
+    d->spin_f->setEnabled(false);
+    d->spin_f->setVisible(false);
+    d->spin_f->blockSignals(true);
+
     d->selector = new QComboBox(this);
     d->selector->setEnabled(false);
     d->selector->setVisible(false);
@@ -170,6 +186,8 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     layout->addLayout(i_layout);
     layout->addWidget(d->output_ports);
     layout->addLayout(o_layout);
+    layout->addWidget(d->spin_d);
+    layout->addWidget(d->spin_f);
 
     connect(d->add_input_port, SIGNAL(clicked()), this, SLOT(addInputPort()));
     connect(d->rem_input_port, SIGNAL(clicked()), this, SLOT(removeInputPort()));
@@ -180,6 +198,9 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     connect(d->edit, SIGNAL(textChanged(const QString&)), this, SLOT(onTitleChanged(const QString&)));
 
     connect(d->selector, SIGNAL(currentIndexChanged(int)), this, SLOT(onBlockChanged(int)));
+
+    connect(d->spin_d, SIGNAL(valueChanged(int)), this, SLOT(onValueChanged(int)));
+    connect(d->spin_f, SIGNAL(valueChanged(double)), this, SLOT(onValueChanged(double)));
 }
 
 dtkComposerSceneNodeEditor::~dtkComposerSceneNodeEditor(void)
@@ -188,6 +209,9 @@ dtkComposerSceneNodeEditor::~dtkComposerSceneNodeEditor(void)
 
     d = NULL;
 }
+
+#include "dtkComposerNodeInteger.h"
+#include "dtkComposerNodeReal.h"
 
 void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
 {
@@ -251,6 +275,39 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
         d->selector->blockSignals(true);
         d->selector->setVisible(false);
         d->selector->setEnabled(false);
+
+        if(dtkComposerNodeInteger *i_node = dynamic_cast<dtkComposerNodeInteger *>(node->wrapee())) {
+
+            d->spin_d->blockSignals(false);
+            d->spin_d->setVisible(true);
+            d->spin_d->setEnabled(true);
+            d->spin_d->setValue(i_node->value());
+
+            d->spin_f->blockSignals(true);
+            d->spin_f->setVisible(false);
+            d->spin_f->setEnabled(false);
+
+        } else if(dtkComposerNodeReal *r_node = dynamic_cast<dtkComposerNodeReal *>(node->wrapee())) {
+
+            d->spin_f->blockSignals(false);
+            d->spin_f->setVisible(true);
+            d->spin_f->setEnabled(true);
+            d->spin_f->setValue(r_node->value());
+
+            d->spin_d->blockSignals(true);
+            d->spin_d->setVisible(false);
+            d->spin_d->setEnabled(false);
+
+        } else {
+
+            d->spin_d->blockSignals(true);
+            d->spin_d->setVisible(false);
+            d->spin_d->setEnabled(false);
+
+            d->spin_f->blockSignals(true);
+            d->spin_f->setVisible(false);
+            d->spin_f->setEnabled(false);
+        }
     }
 
     d->edit->setText(d->node->title());
@@ -294,6 +351,14 @@ void dtkComposerSceneNodeEditor::clear(void)
     d->selector->clear();
     d->selector->setEnabled(false);
     d->selector->setVisible(false);
+
+    d->spin_d->blockSignals(true);
+    d->spin_d->setVisible(false);
+    d->spin_d->setEnabled(false);
+    
+    d->spin_f->blockSignals(true);
+    d->spin_f->setVisible(false);
+    d->spin_f->setEnabled(false);
 }
 
 void dtkComposerSceneNodeEditor::addInputPort(void)
@@ -467,4 +532,16 @@ void dtkComposerSceneNodeEditor::onTitleChanged(const QString& text)
         d->node->setTitle(d->edit->text());
 	d->node->update();
     }   
+}
+
+void dtkComposerSceneNodeEditor::onValueChanged(int value)
+{
+    if(dtkComposerNodeInteger *i_node = dynamic_cast<dtkComposerNodeInteger *>(d->node->wrapee()))
+        i_node->setValue(value);
+}
+
+void dtkComposerSceneNodeEditor::onValueChanged(double value)
+{
+    if(dtkComposerNodeReal *r_node = dynamic_cast<dtkComposerNodeReal *>(d->node->wrapee()))
+        r_node->setValue(value);
 }

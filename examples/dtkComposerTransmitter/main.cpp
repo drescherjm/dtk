@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Nov  2 10:48:42 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 10:18:26 2012 (+0100)
+ * Last-Updated: Mon Mar 12 12:19:49 2012 (+0100)
  *           By: tkloczko
- *     Update #: 127
+ *     Update #: 137
  */
 
 /* Commentary: 
@@ -50,6 +50,8 @@ public:
 private:
     int m_id;
 };
+Q_DECLARE_METATYPE(dummyData);
+Q_DECLARE_METATYPE(dummyData *);
 
 // /////////////////////////////////////////////////////////////////
 // other data
@@ -68,6 +70,8 @@ public:
 private:
     double m_value;
 };
+Q_DECLARE_METATYPE(otherData);
+Q_DECLARE_METATYPE(otherData *);
 
 // /////////////////////////////////////////////////////////////////
 // dummyGenerator
@@ -189,6 +193,8 @@ typedef dtkComposerTransmitterEmitter<otherData *> otherDataTransmitter;
 typedef dtkComposerTransmitterEmitter<double> doubleTransmitter;
 typedef dtkComposerTransmitterEmitter<dtkMatrixSquared<int> *> matrixTransmitter;
 
+Q_DECLARE_METATYPE(dtkMatrixSquared<int> *);
+
 void run(void)
 {
     // generation of dummy datas
@@ -199,15 +205,18 @@ void run(void)
     
     // tranmitter
     
+    qRegisterMetaType<dummyData *>();
     dummyDataTransmitter ddt;
     ddt.setData(gen->dummy());
 
+    qRegisterMetaType<otherData *>();
     otherDataTransmitter odt;
     odt.setData(gen->other());
 
     doubleTransmitter dbt;
     dbt.setData(gen->value());
     
+    qRegisterMetaType<dtkMatrixSquared<int> *>();
     matrixTransmitter mxt;
     mxt.setData(&(gen->matrix()));
 

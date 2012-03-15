@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar  4 23:23:12 2012 (+0100)
+ * Last-Updated: Thu Mar 15 11:55:43 2012 (+0100)
  *           By: tkloczko
- *     Update #: 159
+ *     Update #: 174
  */
 
 /* Commentary: 
@@ -18,26 +18,9 @@
  */
 
 #include "dtkComposerTransmitter.h"
+#include "dtkComposerTransmitter_p.h"
 #include "dtkComposerTransmitterVariant.h"
 #include "dtkComposerNode.h"
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterPrivate declaration
-// /////////////////////////////////////////////////////////////////
-
-class dtkComposerTransmitterPrivate
-{
-public:
-    bool active;
-    bool required;
-
-public:
-    dtkComposerNode *parent;
-
-public:
-    QList<dtkComposerTransmitter *>     next_list;
-    QList<dtkComposerTransmitter *> previous_list;
-};
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitter implementation
@@ -53,6 +36,7 @@ dtkComposerTransmitter::dtkComposerTransmitter(dtkComposerNode *parent) : d(new 
     d->active = true;
     d->required = true;
     d->parent = parent;
+    d->variant = QVariant();
 }
 
 //! Destroys dtkComposerTransmitter.
@@ -64,6 +48,21 @@ dtkComposerTransmitter::~dtkComposerTransmitter(void)
     delete d;
 
     d = NULL;
+}
+
+QVariant dtkComposerTransmitter::variant(void) const
+{
+    return d->variant;
+}
+
+QVariant::Type dtkComposerTransmitter::type(void) const
+{
+    return d->variant.type();
+}
+
+QString dtkComposerTransmitter::typeName(void) const
+{
+    return QVariant::typeToName(d->variant.type());
 }
 
 //! Returns pointer to parent node.
@@ -161,25 +160,25 @@ void dtkComposerTransmitter::removePrevious(dtkComposerTransmitter *transmitter)
     d->previous_list.removeOne(transmitter);
 }
 
-//! Returns a shared copy of the list of the transmitters that follow
-//! the current one.
-/*! 
- *  
- */
-QList<dtkComposerTransmitter *> dtkComposerTransmitter::nextList(void)
-{
-    return d->next_list;
-}
+// //! Returns a shared copy of the list of the transmitters that follow
+// //! the current one.
+// /*! 
+//  *  
+//  */
+// QList<dtkComposerTransmitter *> dtkComposerTransmitter::nextList(void)
+// {
+//     return d->next_list;
+// }
 
-//! Returns a shared copy of the list of the transmitters that precede
-//! the current one.
-/*! 
- *  
- */
-QList<dtkComposerTransmitter *> dtkComposerTransmitter::previousList(void)
-{
-    return d->previous_list;
-}
+// //! Returns a shared copy of the list of the transmitters that precede
+// //! the current one.
+// /*! 
+//  *  
+//  */
+// QList<dtkComposerTransmitter *> dtkComposerTransmitter::previousList(void)
+// {
+//     return d->previous_list;
+// }
 
 //! Returns true when current transmitter and \a transmitter share
 //! data of same type.

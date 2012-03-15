@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 11:45:03 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  1 12:00:24 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 49
+ * Last-Updated: Thu Mar 15 12:45:31 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 52
  */
 
 /* Commentary: 
@@ -32,7 +32,7 @@ public:
 
 public:    
     dtkComposerTransmitterEmitter<QString> *emitter_name;
-    dtkComposerTransmitterEmitter<QFile>   *emitter_file;
+    //dtkComposerTransmitterEmitter<QFile>   *emitter_file;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -45,17 +45,17 @@ dtkComposerNodeFile::dtkComposerNodeFile(void) : dtkComposerNodeLeaf(), d(new dt
     this->appendReceiver(d->receiver);
 
     d->emitter_name = new dtkComposerTransmitterEmitter<QString>;
-    d->emitter_file = new dtkComposerTransmitterEmitter<QFile>;
+    //d->emitter_file = new dtkComposerTransmitterEmitter<File>;
 
     this->appendEmitter(d->emitter_name);
-    this->appendEmitter(d->emitter_file);
+    //this->appendEmitter(d->emitter_file);
 }
 
 dtkComposerNodeFile::~dtkComposerNodeFile(void)
 {
     delete d->receiver;
     delete d->emitter_name;
-    delete d->emitter_file;
+    //delete d->emitter_file;
     delete d;
     
     d = NULL;

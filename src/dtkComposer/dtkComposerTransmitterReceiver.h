@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar  4 16:50:54 2012 (+0100)
+ * Last-Updated: Thu Mar 15 12:38:14 2012 (+0100)
  *           By: tkloczko
- *     Update #: 44
+ *     Update #: 58
  */
 
 /* Commentary: 
@@ -37,22 +37,15 @@ public:
     ~dtkComposerTransmitterReceiver(void);
 
 public:
-    inline       T& data(void);
-    inline const T& data(void) const;
+    T data(void);
 
 public:
     bool isEmpty(void) const;
 
 public:
-    Kind           kind(void) const;
-    QVariant::Type type(void) const;
+    Kind kind(void) const;
 
     QString kindName(void) const;
-    QString typeName(void) const;
-    
-public:
-          void *variant(void);
-    const void *variant(void) const;
 
 public:
     bool    connect(dtkComposerTransmitter *transmitter);
@@ -63,6 +56,8 @@ public:
 private:
     QList<dtkComposerTransmitterEmitter<T> *> emitters;
     QList<dtkComposerTransmitter *> variants;
+
+    T m_data;
 };
 
 // /////////////////////////////////////////////////////////////////

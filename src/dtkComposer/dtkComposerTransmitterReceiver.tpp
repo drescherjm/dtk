@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar  4 23:29:54 2012 (+0100)
+ * Last-Updated: Thu Mar 15 12:38:25 2012 (+0100)
  *           By: tkloczko
- *     Update #: 97
+ *     Update #: 143
  */
 
 /* Commentary: 
@@ -30,16 +30,17 @@
 /*! 
  *  
  */
-template <typename T> inline dtkComposerTransmitterReceiver<T>::dtkComposerTransmitterReceiver(dtkComposerNode *parent) : dtkComposerTransmitter(parent)
+template <typename T> dtkComposerTransmitterReceiver<T>::dtkComposerTransmitterReceiver(dtkComposerNode *parent) : dtkComposerTransmitter(parent)
 {
-    
+    T t;
+    d->variant = qVariantFromValue(t);
 };
 
 //! Destroys the receiver.
 /*! 
  *  
  */
-template <typename T> inline dtkComposerTransmitterReceiver<T>::~dtkComposerTransmitterReceiver(void)
+template <typename T> dtkComposerTransmitterReceiver<T>::~dtkComposerTransmitterReceiver(void)
 {
 
 };
@@ -48,30 +49,18 @@ template <typename T> inline dtkComposerTransmitterReceiver<T>::~dtkComposerTran
 /*! 
  *  
  */
-template <typename T> inline T& dtkComposerTransmitterReceiver<T>::data(void)
+template <typename T> T dtkComposerTransmitterReceiver<T>::data(void)
 {
     foreach(dtkComposerTransmitterEmitter<T> *emitter, emitters)
         if (emitter->active())
             return emitter->data();
 
     foreach(dtkComposerTransmitter *v, variants)
-        if (v->active())
-            return *(static_cast<T *>(v->variant()));
-};
+        if (v->active()) {
+            return qvariant_cast<T>(v->variant());
+        }
 
-//! Returns the data as a non-modifiable reference.
-/*! 
- *  
- */ 
-template <typename T> inline const T& dtkComposerTransmitterReceiver<T>::data(void) const 
-{
-    foreach(dtkComposerTransmitterEmitter<T> *emitter, emitters)
-        if (emitter->active())
-            return emitter->data();
-
-    foreach(dtkComposerTransmitter *v, variants)
-        if (v->active())
-            return *(static_cast<T *>(v->variant()));
+    return m_data;
 };
 
 //! Returns description of the receiver.
@@ -80,7 +69,7 @@ template <typename T> inline const T& dtkComposerTransmitterReceiver<T>::data(vo
  */
 template <typename T> bool dtkComposerTransmitterReceiver<T>::isEmpty(void) const
 {
-    if (emitters.isEmpty())
+    if (emitters.isEmpty() && variants.isEmpty())
         return true;
 
     return false;
@@ -95,37 +84,9 @@ template <typename T> dtkComposerTransmitter::Kind dtkComposerTransmitterReceive
     return dtkComposerTransmitter::Receiver;
 };
 
-template <typename T> QVariant::Type dtkComposerTransmitterReceiver<T>::type(void) const
-{
-    return dtkComposerTransmitterVariantType(this->data());
-};
-
 template <typename T> QString dtkComposerTransmitterReceiver<T>::kindName(void) const
 {
     return "Receiver";
-};
-
-template <typename T> QString dtkComposerTransmitterReceiver<T>::typeName(void) const
-{
-    return dtkComposerTransmitterVariantName(this->data());
-};
-
-//! Returns
-/*! 
- *  
- */
-template <typename T> void *dtkComposerTransmitterReceiver<T>::variant(void)
-{
-    return static_cast<void *>(&(this->data()));
-};
-
-//! Returns
-/*! 
- *  
- */
-template <typename T> const void *dtkComposerTransmitterReceiver<T>::variant(void) const
-{
-    return static_cast<const void *>(&(this->data()));
 };
 
 //! 

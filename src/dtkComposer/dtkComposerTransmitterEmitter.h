@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:33:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar  4 16:48:49 2012 (+0100)
+ * Last-Updated: Thu Mar 15 12:31:32 2012 (+0100)
  *           By: tkloczko
- *     Update #: 43
+ *     Update #: 52
  */
 
 /* Commentary: 
@@ -35,19 +35,12 @@ public:
 public:
     inline void setData(const T& data);
 
-    inline       T& data(void);
-    inline const T& data(void) const;
+    inline T data(void);
 
 public:
-    Kind           kind(void) const;
-    QVariant::Type type(void) const;
+    Kind kind(void) const;
 
     QString kindName(void) const;
-    QString typeName(void) const;
-    
-public:
-          void *variant(void);
-    const void *variant(void) const;
 
 public:
     LinkMap leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);

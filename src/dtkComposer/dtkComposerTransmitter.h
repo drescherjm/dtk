@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar  4 15:59:28 2012 (+0100)
+ * Last-Updated: Thu Mar 15 11:53:43 2012 (+0100)
  *           By: tkloczko
- *     Update #: 102
+ *     Update #: 130
  */
 
 /* Commentary: 
@@ -50,17 +50,16 @@ public:
     virtual ~dtkComposerTransmitter(void);
 
 public:
-    virtual Kind           kind(void) const = 0;
-    virtual QVariant::Type type(void) const = 0;
+    virtual Kind kind(void) const = 0;
 
     virtual QString kindName(void) const = 0;
-    virtual QString typeName(void) const = 0;
 
 public:
-    virtual       void *variant(void) = 0;
-    virtual const void *variant(void) const = 0;
+    QVariant variant(void) const;
 
-public:
+    QVariant::Type type(void) const;
+
+    QString typeName(void) const;
 
 public:
     dtkComposerNode *parentNode(void) const;
@@ -79,9 +78,6 @@ protected:
     void appendPrevious(dtkComposerTransmitter *transmitter);
     void removePrevious(dtkComposerTransmitter *transmitter);
 
-    QList<dtkComposerTransmitter *>     nextList(void);
-    QList<dtkComposerTransmitter *> previousList(void);
-
 public:
     virtual bool    connect(dtkComposerTransmitter *transmitter);
     virtual bool disconnect(dtkComposerTransmitter *transmitter);
@@ -98,7 +94,7 @@ public:
     friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter);
     friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug,       dtkComposerTransmitter *transmitter);
 
-private:
+protected:
     dtkComposerTransmitterPrivate *d;
 };
 

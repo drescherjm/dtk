@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar  4 16:50:24 2012 (+0100)
+ * Last-Updated: Thu Mar 15 12:31:38 2012 (+0100)
  *           By: tkloczko
- *     Update #: 83
+ *     Update #: 110
  */
 
 /* Commentary: 
@@ -20,9 +20,8 @@
 #ifndef DTKCOMPOSERTRANSMITTEREMITTER_TPP
 #define DTKCOMPOSERTRANSMITTEREMITTER_TPP
 
+#include "dtkComposerTransmitter_p.h"
 #include "dtkComposerTransmitterVariant.h"
-
-#include <typeinfo>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterEmitter implementation
@@ -34,7 +33,7 @@
  */
 template <typename T> inline dtkComposerTransmitterEmitter<T>::dtkComposerTransmitterEmitter(dtkComposerNode *parent) : dtkComposerTransmitter(parent)
 {
-
+    d->variant = qVariantFromValue(m_data);
 };
 
 //! Destroys the emitter.
@@ -52,23 +51,15 @@ template <typename T> inline dtkComposerTransmitterEmitter<T>::~dtkComposerTrans
  */
 template <typename T> inline void dtkComposerTransmitterEmitter<T>::setData(const T& data)
 {
-    m_data = data;
+    m_data = data; 
+    d->variant = qVariantFromValue(m_data);
 };
 
 //! Returns the data as a modifiable reference.
 /*! 
  *  
  */
-template <typename T> inline T& dtkComposerTransmitterEmitter<T>::data(void)
-{
-    return m_data;
-};
-
-//! Returns the data as a non-modifiable reference.
-/*! 
- *  
- */ 
-template <typename T> inline const T& dtkComposerTransmitterEmitter<T>::data(void) const 
+template <typename T> inline T dtkComposerTransmitterEmitter<T>::data(void)
 {
     return m_data;
 };
@@ -82,43 +73,10 @@ template <typename T> dtkComposerTransmitter::Kind dtkComposerTransmitterEmitter
     return dtkComposerTransmitter::Emitter;
 };
 
-//! Returns.
-/*! 
- *  
- */
-template <typename T> QVariant::Type dtkComposerTransmitterEmitter<T>::type(void) const
-{
-    return dtkComposerTransmitterVariantType(m_data);
-};
-
 template <typename T> QString dtkComposerTransmitterEmitter<T>::kindName(void) const
 {
     return "Emitter";
 };
-
-template <typename T> QString dtkComposerTransmitterEmitter<T>::typeName(void) const
-{
-    return dtkComposerTransmitterVariantName(m_data);
-};
-
-//! Returns
-/*! 
- *  
- */
-template <typename T> void *dtkComposerTransmitterEmitter<T>::variant(void)
-{
-    return static_cast<void *>(&m_data);
-};
-
-//! Returns
-/*! 
- *  
- */
-template <typename T> const void *dtkComposerTransmitterEmitter<T>::variant(void) const
-{
-    return static_cast<const void *>(&m_data);
-};
-
 
 template <typename T> dtkComposerTransmitter::LinkMap dtkComposerTransmitterEmitter<T>::leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Mon Feb 27 14:28:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar  4 23:26:10 2012 (+0100)
+ * Last-Updated: Thu Mar 15 12:43:25 2012 (+0100)
  *           By: tkloczko
- *     Update #: 137
+ *     Update #: 142
  */
 
 /* Commentary: 
@@ -448,8 +448,8 @@ void dtkComposerNodeNumberOperatorUnaryAbs::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryEucldiv::run(void)
 {
-    qlonglong a = d->receiver_lhs->dataToLongLong();
-    qlonglong b = d->receiver_rhs->dataToLongLong();
+    qlonglong a = d->receiver_lhs->data().toLongLong();
+    qlonglong b = d->receiver_rhs->data().toLongLong();
     d->emitter->setData(a / b);
 }
 
@@ -459,8 +459,8 @@ void dtkComposerNodeNumberOperatorBinaryEucldiv::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryLogn::run(void)
 {
-    qreal a = d->receiver_lhs->dataToReal();
-    qreal b = d->receiver_rhs->dataToReal();
+    qreal a = d->receiver_lhs->data().toReal();
+    qreal b = d->receiver_rhs->data().toReal();
     d->emitter->setData(log(a) / log(b));
 }
 
@@ -470,8 +470,8 @@ void dtkComposerNodeNumberOperatorBinaryLogn::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryMinus::run(void)
 {
-    qreal a = d->receiver_lhs->dataToReal();
-    qreal b = d->receiver_rhs->dataToReal();
+    qreal a = d->receiver_lhs->data().toReal();
+    qreal b = d->receiver_rhs->data().toReal();
     d->emitter->setData(a-b);
 }
 
@@ -481,8 +481,8 @@ void dtkComposerNodeNumberOperatorBinaryMinus::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryModulo::run(void)
 {
-    qlonglong a = d->receiver_lhs->dataToLongLong();
-    qlonglong b = d->receiver_rhs->dataToLongLong();
+    qlonglong a = d->receiver_lhs->data().toLongLong();
+    qlonglong b = d->receiver_rhs->data().toLongLong();
     d->emitter->setData(a % b);
 }
 
@@ -492,8 +492,8 @@ void dtkComposerNodeNumberOperatorBinaryModulo::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryMult::run(void)
 {
-    qreal a = d->receiver_lhs->dataToReal();
-    qreal b = d->receiver_rhs->dataToReal();
+    qreal a = d->receiver_lhs->data().toReal();
+    qreal b = d->receiver_rhs->data().toReal();
     d->emitter->setData(a*b);
 }
 
@@ -503,8 +503,8 @@ void dtkComposerNodeNumberOperatorBinaryMult::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryPlus::run(void)
 {
-    qreal a = d->receiver_lhs->dataToReal();
-    qreal b = d->receiver_rhs->dataToReal();
+    qreal a = d->receiver_lhs->data().toReal();
+    qreal b = d->receiver_rhs->data().toReal();
     d->emitter->setData(a+b);
 }
 
@@ -514,8 +514,8 @@ void dtkComposerNodeNumberOperatorBinaryPlus::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryPosnthroot::run(void)
 {
-    qreal a = d->receiver_lhs->dataToReal();
-    qreal b = d->receiver_rhs->dataToReal();
+    qreal a = d->receiver_lhs->data().toReal();
+    qreal b = d->receiver_rhs->data().toReal();
     d->emitter->setData(pow(a,1/b));
 }
 
@@ -525,8 +525,8 @@ void dtkComposerNodeNumberOperatorBinaryPosnthroot::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryPower::run(void)
 {
-    qreal a = d->receiver_lhs->dataToReal();
-    qreal b = d->receiver_rhs->dataToReal();
+    qreal a = d->receiver_lhs->data().toReal();
+    qreal b = d->receiver_rhs->data().toReal();
     d->emitter->setData(pow(a,b));
 }
 
@@ -536,8 +536,8 @@ void dtkComposerNodeNumberOperatorBinaryPower::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryRatio::run(void)
 {
-    qreal a = d->receiver_lhs->dataToReal();
-    qreal b = d->receiver_rhs->dataToReal();
+    qreal a = d->receiver_lhs->data().toReal();
+    qreal b = d->receiver_rhs->data().toReal();
     d->emitter->setData(a/b);
 }
 
@@ -547,8 +547,8 @@ void dtkComposerNodeNumberOperatorBinaryRatio::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryExpn::run(void)
 {
-    qreal a = d->receiver_lhs->dataToReal();
-    qreal b = d->receiver_rhs->dataToReal();
+    qreal a = d->receiver_lhs->data().toReal();
+    qreal b = d->receiver_rhs->data().toReal();
     d->emitter->setData(exp(a*log(b)));
 }
 

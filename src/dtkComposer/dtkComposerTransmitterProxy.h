@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Feb 20 11:17:31 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Mar  4 23:24:26 2012 (+0100)
+ * Last-Updated: Thu Mar 15 12:01:18 2012 (+0100)
  *           By: tkloczko
- *     Update #: 25
+ *     Update #: 28
  */
 
 /* Commentary: 
@@ -36,15 +36,9 @@ public:
     ~dtkComposerTransmitterProxy(void);
 
 public:
-    Kind           kind(void) const;
-    QVariant::Type type(void) const;
+    Kind kind(void) const;
 
     QString kindName(void) const;
-    QString typeName(void) const;
-    
-public:
-          void *variant(void);
-    const void *variant(void) const;
 
 public:
     // bool canConnect(dtkComposerTransmitter *transmitter);
@@ -54,7 +48,7 @@ public:
     LinkMap rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 
 private:
-    dtkComposerTransmitterProxyPrivate *d;
+    dtkComposerTransmitterProxyPrivate *e;
 };
 
 #endif

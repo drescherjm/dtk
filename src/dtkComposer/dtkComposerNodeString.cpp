@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:38:46 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 10:14:42 2012 (+0100)
+ * Last-Updated: Fri Mar 16 14:03:32 2012 (+0100)
  *           By: tkloczko
- *     Update #: 12
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -50,5 +50,16 @@ dtkComposerNodeString::~dtkComposerNodeString(void)
 
 void dtkComposerNodeString::run(void)
 {
-    d->emitter->setData(0);
+    if (!d->receiver->isEmpty())
+        d->emitter->setData(d->receiver->data());
+}
+
+QString dtkComposerNodeString::value(void)
+{
+    return d->emitter->data();
+}
+
+void dtkComposerNodeString::setValue(QString value)
+{
+    d->emitter->setData(value);
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 16:49:25 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 10:18:05 2012 (+0100)
+ * Last-Updated: Fri Mar 16 14:06:30 2012 (+0100)
  *           By: tkloczko
- *     Update #: 13
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -58,7 +58,18 @@ dtkComposerNodeBoolean::~dtkComposerNodeBoolean(void)
 
 void dtkComposerNodeBoolean::run(void)
 {
-    d->emitter->setData(true);
+    if (!d->receiver->isEmpty())
+        d->emitter->setData(d->receiver->data());
+}
+
+bool dtkComposerNodeBoolean::value(void)
+{
+    return d->emitter->data();
+}
+
+void dtkComposerNodeBoolean::setValue(bool value)
+{
+    d->emitter->setData(value);
 }
 
 

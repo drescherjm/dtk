@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Mon Feb 27 14:28:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 15 18:24:15 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 174
+ * Last-Updated: Fri Mar 16 13:54:09 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 175
  */
 
 /* Commentary: 
@@ -579,6 +579,9 @@ void dtkComposerNodeNumberOperatorBinaryRatio::run(void)
 {
     qreal a = d->receiver_lhs->data().toReal();
     qreal b = d->receiver_rhs->data().toReal();
+    
+    qDebug() << a << b << a/b;
+
     d->emitter->setData(a/b);
 }
 

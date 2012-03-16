@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. mars 13 09:28:40 2012 (+0100)
+ * Last-Updated: jeu. mars 15 18:41:10 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 208
+ *     Update #: 215
  */
 
 /* Commentary: 
@@ -97,8 +97,8 @@ void dtkComposerEvaluator::run(bool run_concurrent)
             qDebug() << " node not runnable, put it at the end of the list ";
             stack << current; // current is not ready, put it at the end
         }
-        // QApplication::processEvents();
     }
+    d->graph->layout();
     qDebug() << "elapsed time:"<< time.elapsed() << "ms";
     emit stopped();
 }

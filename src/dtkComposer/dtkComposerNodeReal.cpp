@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:38:46 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 16 14:00:22 2012 (+0100)
+ * Last-Updated: Fri Mar 16 14:16:34 2012 (+0100)
  *           By: tkloczko
- *     Update #: 34
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -26,7 +26,7 @@ class dtkComposerNodeRealPrivate
 public:
     dtkComposerTransmitterReceiver<qreal> *receiver;
 
-public:    
+public:
     dtkComposerTransmitterEmitter<qreal> *emitter;
 };
 
@@ -45,7 +45,7 @@ dtkComposerNodeReal::~dtkComposerNodeReal(void)
     delete d->receiver;
     delete d->emitter;
     delete d;
-    
+
     d = NULL;
 }
 

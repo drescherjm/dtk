@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 15 18:30:02 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 113
+ * Last-Updated: ven. mars 16 09:58:06 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 114
  */
 
 /* Commentary: 
@@ -53,8 +53,6 @@ template <typename T> inline void dtkComposerTransmitterEmitter<T>::setData(cons
 {
     m_data = data; 
     d->variant = qVariantFromValue(m_data);
-
-    qDebug() << __func__ << d->variant;
 };
 
 //! Returns the data as a modifiable reference.

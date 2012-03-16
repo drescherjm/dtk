@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 15 18:18:28 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 449
+ * Last-Updated: ven. mars 16 09:56:12 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 460
  */
 
 /* Commentary: 
@@ -254,16 +254,16 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
         d->selector->setVisible(true);
         d->selector->setEnabled(true);
         d->selector->setCurrentIndex(0);
-        
+
     } else {
 
         d->input_ports->clear();
-        
+
         foreach(dtkComposerScenePort *port, node->inputPorts())
             d->input_ports->addInputPort(port);
-        
+
         d->output_ports->clear();
-        
+
         foreach(dtkComposerScenePort *port, node->outputPorts())
             d->output_ports->addOutputPort(port);
 
@@ -491,7 +491,7 @@ void dtkComposerSceneNodeEditor::removeOutputPort(void)
         command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(d->node));
         command->setPort(item->port());
     }
-    
+
     d->stack->push(command);
 
     int index = -1;
@@ -516,12 +516,12 @@ void dtkComposerSceneNodeEditor::onBlockChanged(int index)
         return;
 
     d->input_ports->clear();
-    
+
     foreach(dtkComposerScenePort *port, c->blocks().at(index)->inputPorts())
         d->input_ports->addInputPort(port);
-    
+
     d->output_ports->clear();
-    
+
     foreach(dtkComposerScenePort *port, c->blocks().at(index)->outputPorts())
         d->output_ports->addOutputPort(port);
 }
@@ -530,8 +530,8 @@ void dtkComposerSceneNodeEditor::onTitleChanged(const QString& text)
 {
     if (d->node) {
         d->node->setTitle(d->edit->text());
-	d->node->update();
-    }   
+        d->node->update();
+    }
 }
 
 void dtkComposerSceneNodeEditor::onValueChanged(int value)

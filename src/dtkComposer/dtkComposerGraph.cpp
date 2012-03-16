@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. mars  2 18:59:02 2012 (+0100)
+ * Last-Updated: ven. mars 16 14:45:00 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1730
+ *     Update #: 1733
  */
 
 /* Commentary:
@@ -355,12 +355,14 @@ void dtkComposerGraph::removeNode(dtkComposerSceneNode *node)
     // qDebug()<< " node parent is " << parent->title();
     // For control nodes, we have to remove its blocks and then it's pending dummy edges
     if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
-        foreach( dtkComposerSceneNodeComposite *block, control->blocks())
-            this->removeNode(block);
 
         //remove dummy edges for this
         foreach(dtkComposerGraphEdge *e, d->dummy_edges.values(node))
             d->remDummyEdge(e, node);
+
+        foreach( dtkComposerSceneNodeComposite *block, control->blocks())
+            this->removeNode(block);
+
     }
 
     if (!dynamic_cast<dtkComposerSceneNodeControl *>(parent)) {

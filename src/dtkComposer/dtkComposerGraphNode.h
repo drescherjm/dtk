@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:08:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. mars  2 18:44:05 2012 (+0100)
+ * Last-Updated: ven. mars 16 18:05:55 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 101
+ *     Update #: 105
  */
 
 /* Commentary:
@@ -50,6 +50,9 @@ public:
 public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
     void setTitle(const QString& title);
+
+public:
+    void mouseDoubleClickEvent (QGraphicsSceneMouseEvent *event);
 
 public:
     virtual void addSuccessor(dtkComposerGraphNode *node, int id = 0);

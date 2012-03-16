@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. mars 15 18:41:10 2012 (+0100)
+ * Last-Updated: ven. mars 16 18:22:01 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 215
+ *     Update #: 268
  */
 
 /* Commentary: 
@@ -60,45 +60,58 @@ void dtkComposerEvaluator::setGraph(dtkComposerGraph *graph)
 
 void dtkComposerEvaluator::run(bool run_concurrent)
 {
-    dtkComposerGraphEdgeList edges = d->graph->edges();
-    dtkComposerGraphNodeList nodes = d->graph->nodes();
-
-    dtkComposerGraphNode *current;
-    dtkComposerGraphNodeList stack ;
-
     QTime time;
     time.start();
 
-    stack << d->graph->root();
+    d->stack << d->graph->root();
 
     emit started();
-    while (!stack.isEmpty()) {
-        current = stack.takeFirst();
-        qDebug() << "current node to evaluate is " << current->title();
-        bool runnable = true;
-        foreach (dtkComposerGraphNode *pred, current->predecessors()) {
-            if (pred->status() != dtkComposerGraphNode::Done) {
-                qDebug() << " predecessor not ready " << pred->title();
-                runnable = false;
-                break;
-            }
-        }
-        if (runnable) {
-            if (run_concurrent && current->kind() != dtkComposerGraphNode::SelectBranch)
-                QtConcurrent::run(current, &dtkComposerGraphNode::eval);
-            else
-                current->eval();
-            foreach ( dtkComposerGraphNode *s, current->successors())
-                if (!stack.contains(s)) {
-                    s->setStatus( dtkComposerGraphNode::Ready);
-                    stack << s;
-                }
-        } else {
-            qDebug() << " node not runnable, put it at the end of the list ";
-            stack << current; // current is not ready, put it at the end
-        }
-    }
-    d->graph->layout();
+    while (this->step(run_concurrent));
     qDebug() << "elapsed time:"<< time.elapsed() << "ms";
     emit stopped();
+}
+
+void dtkComposerEvaluator::cont(bool run_concurrent)
+{
+    while (this->step(run_concurrent));
+}
+
+bool dtkComposerEvaluator::step(bool run_concurrent)
+{
+    if (d->stack.isEmpty())
+        return false;
+
+    d->current = d->stack.takeFirst();
+    qDebug() << "current node to evaluate is" << d->current->title();
+    bool runnable = true;
+    foreach (dtkComposerGraphNode *pred, d->current->predecessors()) {
+        if (pred->status() != dtkComposerGraphNode::Done) {
+            qDebug() << "predecessor not ready" << pred->title();
+            runnable = false;
+            break;
+        }
+    }
+    if (runnable) {
+        if (d->current->status() == dtkComposerGraphNode::BreakPoint) {
+            qDebug() << "break point reached";
+            d->current->setStatus(dtkComposerGraphNode::Ready);
+            d->stack << d->current;
+            return false;
+        }
+        if (run_concurrent && d->current->kind() != dtkComposerGraphNode::SelectBranch)
+            QtConcurrent::run(d->current, &dtkComposerGraphNode::eval);
+        else
+            d->current->eval();
+        foreach ( dtkComposerGraphNode *s, d->current->successors())
+            if (!d->stack.contains(s)) {
+                if (s->status() == dtkComposerGraphNode::Done) //must reset status
+                    s->setStatus(dtkComposerGraphNode::Ready);
+                d->stack << s;
+            }
+    } else {
+        qDebug() << " node not runnable, put it at the end of the list ";
+        d->stack << d->current; // current is not ready, put it at the end
+    }
+    d->graph->layout();
+    return !d->stack.isEmpty();
 }

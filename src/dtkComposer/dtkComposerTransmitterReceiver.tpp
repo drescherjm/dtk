@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 15 12:38:25 2012 (+0100)
+ * Last-Updated: Fri Mar 16 14:12:50 2012 (+0100)
  *           By: tkloczko
- *     Update #: 143
+ *     Update #: 150
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #define DTKCOMPOSERTRANSMITTERRECEIVER_TPP
 
 #include "dtkComposerTransmitterEmitter.h"
+#include "dtkComposerTransmitterVariant.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterReceiver implementation
@@ -108,10 +109,13 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::connect(dtkCompose
 
     } else if (transmitter->kind() == Variant) {
 
-        //if (transmitter->type() == this->type() && !variants.contains(transmitter)) {
-            variants << transmitter;
-            return true;
-            //}
+        dtkComposerTransmitterVariant *v = dynamic_cast<dtkComposerTransmitterVariant *>(transmitter);
+        foreach(QVariant::Type t, v->types()) {
+            if (t == this->type() && !variants.contains(transmitter)) {
+                variants << transmitter;
+                return true;
+            }
+        }
     }
 
     return false;
@@ -127,6 +131,10 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::disconnect(dtkComp
 
     if (emitter = dynamic_cast<dtkComposerTransmitterEmitter<T> *>(transmitter)) {
         return emitters.removeOne(emitter);
+    }
+
+    if (transmitter->kind() == Variant) {
+        return variants.removeOne(transmitter);
     }
 
     return false;

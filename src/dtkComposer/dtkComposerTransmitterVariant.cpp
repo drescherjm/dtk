@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 15 18:36:02 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 256
+ * Last-Updated: Fri Mar 16 14:13:32 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 261
  */
 
 /* Commentary: 
@@ -79,12 +79,28 @@ QString dtkComposerTransmitterVariant::kindName(void) const
     return "Variant";
 }
 
+QList<QVariant::Type> dtkComposerTransmitterVariant::types(void)
+{
+    return e->types;
+}
+
+
 //! 
 /*! 
  *  
  */
 bool dtkComposerTransmitterVariant::connect(dtkComposerTransmitter *transmitter)
 {
+    if (transmitter->kind() == Variant) {
+        dtkComposerTransmitterVariant *v = dynamic_cast<dtkComposerTransmitterVariant *>(transmitter);
+        foreach(QVariant::Type t, v->types()) {
+            if (e->types.contains(t)) {
+                e->emitters << transmitter;
+                return true;
+            }
+        }
+    }
+
     if (e->types.contains(transmitter->type())) {
         if (!e->emitters.contains(transmitter)) {
             e->emitters << transmitter;
@@ -101,10 +117,7 @@ bool dtkComposerTransmitterVariant::connect(dtkComposerTransmitter *transmitter)
  */
 bool dtkComposerTransmitterVariant::disconnect(dtkComposerTransmitter *transmitter)
 {
-    if (e->emitters.removeOne(transmitter))
-            return true;
-
-    return false;
+    return e->emitters.removeOne(transmitter);
 }
 
 dtkComposerTransmitter::LinkMap dtkComposerTransmitterVariant::leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)

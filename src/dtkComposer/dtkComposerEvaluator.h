@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:30:36 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mars 12 15:52:58 2012 (+0100)
+ * Last-Updated: ven. mars 16 18:23:16 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 7
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -43,7 +43,9 @@ public:
     void setGraph(dtkComposerGraph *graph);
 
 public:
-    void run(bool run_concurrent = false);
+    void  run(bool run_concurrent = false);
+    void cont(bool run_concurrent = false);
+    bool step(bool run_concurrent = false);
 
 private:
     dtkComposerEvaluatorPrivate *d;

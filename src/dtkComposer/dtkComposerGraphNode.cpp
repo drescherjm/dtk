@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. mars 13 13:27:22 2012 (+0100)
+ * Last-Updated: ven. mars 16 18:09:34 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 130
+ *     Update #: 145
  */
 
 /* Commentary:
@@ -72,6 +72,11 @@ QRectF dtkComposerGraphNode::boundingRect(void) const
     return QRectF(0, 0, 125, 25);
 }
 
+void dtkComposerGraphNode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+{
+    this->setStatus(dtkComposerGraphNode::BreakPoint);
+}
+
 void dtkComposerGraphNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
@@ -83,6 +88,8 @@ void dtkComposerGraphNode::paint(QPainter *painter, const QStyleOptionGraphicsIt
         painter->setPen(Qt::black);
     if (d->status == Done)
         painter->setBrush(Qt::green);
+    else if (d->status == BreakPoint)
+        painter->setBrush(Qt::yellow);
     else
         painter->setBrush(Qt::white);
     painter->drawRect(this->boundingRect());

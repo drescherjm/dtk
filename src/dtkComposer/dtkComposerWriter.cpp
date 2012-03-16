@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 16:15:47 2012 (+0100)
+ * Last-Updated: Fri Mar 16 18:43:03 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 293
+ *     Update #: 298
  */
 
 /* Commentary: 
@@ -27,6 +27,9 @@
 #include "dtkComposerSceneNodeLeaf.h"
 #include "dtkComposerSceneNote.h"
 #include "dtkComposerScenePort.h"
+#include "dtkComposerTransmitter.h"
+#include "dtkComposerTransmitterProxy.h"
+#include "dtkComposerTransmitterVariant.h"
 #include "dtkComposerWriter.h"
 
 #include <QtCore>
@@ -154,6 +157,12 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
             property.setAttribute("id", i);
             property.setAttribute("type", "input");
             property.setAttribute("label", port->label());
+            if (port->loop())
+                property.setAttribute("loop", port->loop());
+            if (port->node()->wrapee()->receivers().at(port->node()->inputPorts().indexOf(port))->kind() == dtkComposerTransmitter::Proxy)
+                property.setAttribute("kind", "proxy");
+            if (port->node()->wrapee()->receivers().at(port->node()->inputPorts().indexOf(port))->kind() == dtkComposerTransmitter::Variant)
+                property.setAttribute("kind", "variant");            
             tag.appendChild(property);
         }
         port = NULL;
@@ -163,6 +172,8 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
             property.setAttribute("id", i);
             property.setAttribute("type", "output");
             property.setAttribute("label", port->label());
+            if (port->loop())
+                property.setAttribute("loop", port->loop());
             tag.appendChild(property);
         }
 

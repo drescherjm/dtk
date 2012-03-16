@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 24 16:44:33 2012 (+0100)
+ * Last-Updated: Fri Mar 16 15:49:17 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 429
+ *     Update #: 433
  */
 
 /* Commentary: 
@@ -94,6 +94,15 @@ void dtkComposerSceneNodeControl::wrap(dtkComposerNode *wrapee)
 QList<dtkComposerSceneNodeComposite *> dtkComposerSceneNodeControl::blocks(void)
 {
     return d->blocks;
+}
+
+dtkComposerSceneNodeComposite *dtkComposerSceneNodeControl::block(const QString& title)
+{
+    foreach(dtkComposerSceneNodeComposite *block, d->blocks)
+        if(block->title() == title)
+            return block;
+
+    return NULL;
 }
 
 void dtkComposerSceneNodeControl::setHeader(dtkComposerSceneNodeLeaf *header)

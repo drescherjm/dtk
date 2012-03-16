@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. mars  1 15:58:30 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 3026
+ * Last-Updated: Fri Mar 16 17:30:34 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 3046
  */
 
 /* Commentary: 
@@ -36,6 +36,7 @@
 #include "dtkComposerStackUtils.h"
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitterProxy.h"
+#include "dtkComposerTransmitterVariant.h"
 
 // /////////////////////////////////////////////////////////////////
 // Base Command
@@ -1509,6 +1510,9 @@ public:
 
 public:
     int type;
+
+public:
+    dtkComposerTransmitter::Kind kind;
 };
 
 dtkComposerStackCommandCreatePort::dtkComposerStackCommandCreatePort(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandCreatePortPrivate)
@@ -1517,6 +1521,7 @@ dtkComposerStackCommandCreatePort::dtkComposerStackCommandCreatePort(dtkComposer
     e->port = NULL;
     e->transmitter = NULL;
     e->type = -1;
+    e->kind = dtkComposerTransmitter::Proxy;
 
     this->setText("Create port");
 }
@@ -1531,6 +1536,16 @@ dtkComposerStackCommandCreatePort::~dtkComposerStackCommandCreatePort(void)
     delete e;
 
     e = NULL;
+}
+
+dtkComposerScenePort *dtkComposerStackCommandCreatePort::port(void)
+{
+    return e->port;
+}
+
+void dtkComposerStackCommandCreatePort::setKind(dtkComposerTransmitter::Kind kind)
+{
+    e->kind = kind;
 }
 
 void dtkComposerStackCommandCreatePort::setNode(dtkComposerSceneNodeComposite *node)
@@ -1558,8 +1573,16 @@ void dtkComposerStackCommandCreatePort::redo(void)
     case dtkComposerScenePort::Input:
         if(!e->port)
             e->port = new dtkComposerScenePort(dtkComposerScenePort::Input, e->node);
-        if(!e->transmitter)
-            e->transmitter = new dtkComposerTransmitterProxy(e->node->wrapee());
+        if(!e->transmitter) {
+            switch(e->kind) {
+            case dtkComposerTransmitter::Variant:
+                e->transmitter = new dtkComposerTransmitterVariant(QList<QVariant::Type>(), e->node->wrapee());
+                break;
+            default:
+                e->transmitter = new dtkComposerTransmitterProxy(e->node->wrapee());
+                break;
+            }
+        }
         e->node->addInputPort(e->port);
         e->node->layout();
         e->node->wrapee()->appendReceiver(e->transmitter);
@@ -1567,8 +1590,16 @@ void dtkComposerStackCommandCreatePort::redo(void)
     case dtkComposerScenePort::Output:
         if(!e->port)
             e->port = new dtkComposerScenePort(dtkComposerScenePort::Output, e->node);
-        if(!e->transmitter)
-            e->transmitter = new dtkComposerTransmitterProxy(e->node->wrapee());
+        if(!e->transmitter) {
+            switch(e->kind) {
+            case dtkComposerTransmitter::Variant:
+                e->transmitter = new dtkComposerTransmitterVariant(QList<QVariant::Type>(), e->node->wrapee());
+                break;
+            default:
+                e->transmitter = new dtkComposerTransmitterProxy(e->node->wrapee());
+                break;
+            }
+        }
         e->node->addOutputPort(e->port);
         e->node->layout();
         e->node->wrapee()->appendEmitter(e->transmitter);

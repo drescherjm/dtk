@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 14:27:23 2012 (+0100)
- *           By: tkloczko
- *     Update #: 381
+ * Last-Updated: Fri Mar 16 18:44:12 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 386
  */
 
 /* Commentary: 
@@ -33,6 +33,7 @@
 #include "dtkComposerStackUtils.h"
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitterProxy.h"
+#include "dtkComposerTransmitterVariant.h"
 
 #include <dtkCore/dtkGlobal.h>
 
@@ -323,15 +324,27 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
                 if (ports.at(i).toElement().hasAttribute("label"))
                     port->setLabel(ports.at(i).toElement().attribute("label"));
                 composite->addInputPort(port);
-                dtkComposerTransmitter *proxy = new dtkComposerTransmitterProxy(composite->wrapee());
-                composite->wrapee()->appendReceiver(proxy);
+                if (ports.at(i).toElement().attribute("kind") == "proxy") {
+                    dtkComposerTransmitter *proxy = new dtkComposerTransmitterProxy(composite->wrapee());
+                    composite->wrapee()->appendReceiver(proxy);
+                }
+                if (ports.at(i).toElement().attribute("kind") == "variant") {
+                    dtkComposerTransmitter *variant = new dtkComposerTransmitterVariant(QList<QVariant::Type>(), composite->wrapee());
+                    composite->wrapee()->appendReceiver(variant);
+                }
             } else {
                 dtkComposerScenePort *port = new dtkComposerScenePort(dtkComposerScenePort::Output, composite);
                 if (ports.at(i).toElement().hasAttribute("label"))
                     port->setLabel(ports.at(i).toElement().attribute("label"));
                 composite->addOutputPort(port);
-                dtkComposerTransmitter *proxy = new dtkComposerTransmitterProxy(composite->wrapee());
-                composite->wrapee()->appendEmitter(proxy);
+                if (ports.at(i).toElement().attribute("kind") == "proxy") {
+                    dtkComposerTransmitter *proxy = new dtkComposerTransmitterProxy(composite->wrapee());
+                    composite->wrapee()->appendEmitter(proxy);
+                }
+                if (ports.at(i).toElement().attribute("kind") == "variant") {
+                    dtkComposerTransmitter *variant = new dtkComposerTransmitterVariant(QList<QVariant::Type>(), composite->wrapee());
+                    composite->wrapee()->appendEmitter(variant);
+                }                
             }
         }
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 19 12:16:17 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 735
+ * Last-Updated: Mon Mar 19 17:07:36 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 744
  */
 
 /* Commentary: 
@@ -499,6 +499,8 @@ void dtkComposerSceneNodeEditor::addLoopPort(void)
     dtkComposerStackCommandCreatePort *command_incr_i;
     dtkComposerStackCommandCreatePort *command_incr_o;
 
+    dtkComposerStackCommandCreateEdge *command_edge_bc;
+
     command_body_i = new dtkComposerStackCommandCreatePort;
     command_body_i->setScene(d->scene);
     command_body_i->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(control->block("Body")));
@@ -518,7 +520,7 @@ void dtkComposerSceneNodeEditor::addLoopPort(void)
         command_cond_i->setScene(d->scene);
         command_cond_i->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(control->block("Conditional")));
         command_cond_i->setType(dtkComposerScenePort::Input);
-        command_cond_i->setKind(dtkComposerTransmitter::Variant);
+        command_cond_i->setKind(dtkComposerTransmitter::Proxy);
     }
 
     if(dtkComposerNodeControlFor *f_node = dynamic_cast<dtkComposerNodeControlFor *>(d->node->wrapee())) {
@@ -576,6 +578,9 @@ void dtkComposerSceneNodeEditor::addLoopPort(void)
 
     if (command_incr_o)
         command_incr_o->port()->setLoop(loop_ids[control]);
+
+    dynamic_cast<dtkComposerSceneNodeComposite *>(control->block("Body"))->wrapee()->receivers().last()->appendNext(dynamic_cast<dtkComposerSceneNodeComposite *>(control->block("Conditional"))->wrapee()->receivers().last());    
+    dynamic_cast<dtkComposerSceneNodeComposite *>(control->block("Conditional"))->wrapee()->receivers().last()->appendPrevious(dynamic_cast<dtkComposerSceneNodeComposite *>(control->block("Body"))->wrapee()->receivers().last());
 
 // /////////////////////////////////////////////////////////////////
 // 

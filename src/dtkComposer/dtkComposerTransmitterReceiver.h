@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 15 13:01:07 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 60
+ * Last-Updated: Mon Mar 19 17:28:41 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -25,6 +25,7 @@
 #include <QtCore>
 
 template <typename T> class dtkComposerTransmitterEmitter;
+class dtkComposerTransmitterVariant;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterReceiver declaration
@@ -56,7 +57,7 @@ public:
 
 private:
     QList<dtkComposerTransmitterEmitter<T> *> emitters;
-    QList<dtkComposerTransmitter *> variants;
+    QList<dtkComposerTransmitterVariant *> variants;
 
 private:
     T m_data;

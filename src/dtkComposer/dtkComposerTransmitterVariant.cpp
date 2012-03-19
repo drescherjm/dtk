@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 19 14:52:05 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 275
+ * Last-Updated: Mon Mar 19 17:32:32 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 277
  */
 
 /* Commentary: 
@@ -58,9 +58,11 @@ void dtkComposerTransmitterVariant::setData(const QVariant& data)
 
 QVariant dtkComposerTransmitterVariant::data(void)
 {
-    foreach(dtkComposerTransmitter *emitter, e->emitters)
-        if (emitter->active())
-            return emitter->variant();
+    foreach(dtkComposerTransmitter *emitter, e->emitters) {
+         if (emitter->active()) {
+             return emitter->variant();
+        }
+    }
 
     return d->variant;
 }

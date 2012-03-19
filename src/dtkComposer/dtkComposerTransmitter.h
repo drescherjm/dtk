@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 15 12:57:55 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 138
+ * Last-Updated: Mon Mar 19 17:07:57 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 139
  */
 
 /* Commentary: 
@@ -72,7 +72,7 @@ public:
     bool   active(void);
     bool required(void);
 
-protected:
+public:
     void appendNext(dtkComposerTransmitter *transmitter);
     void removeNext(dtkComposerTransmitter *transmitter);
     

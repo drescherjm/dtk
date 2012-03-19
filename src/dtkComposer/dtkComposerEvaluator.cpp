@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. mars 16 18:22:01 2012 (+0100)
+ * Last-Updated: lun. mars 19 09:54:23 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 268
+ *     Update #: 345
  */
 
 /* Commentary: 
@@ -20,8 +20,10 @@
 #include "dtkComposerEvaluator.h"
 #include "dtkComposerEvaluator_p.h"
 #include "dtkComposerGraph.h"
-#include "dtkComposerGraphNode.h"
 #include "dtkComposerGraphEdge.h"
+#include "dtkComposerGraphNode.h"
+#include "dtkComposerGraphNodeBegin.h"
+#include "dtkComposerGraphNodeEnd.h"
 
 #include <QtCore>
 
@@ -74,6 +76,29 @@ void dtkComposerEvaluator::run(bool run_concurrent)
 void dtkComposerEvaluator::cont(bool run_concurrent)
 {
     while (this->step(run_concurrent));
+}
+
+void dtkComposerEvaluator::next(bool run_concurrent)
+{
+    if (d->stack.isEmpty())
+        return;
+
+    dtkComposerGraphNode *first = d->stack.first();
+    if (dynamic_cast<dtkComposerGraphNodeBegin *>(first)) {
+        // Begin node, look for the corresponding End node
+        dtkComposerGraphNode *end;
+        foreach(dtkComposerGraphNode *n,  d->graph->nodes())
+            if ((dynamic_cast<dtkComposerGraphNodeEnd *>(n)) && n->wrapee() == first->wrapee()) {
+                end = n;
+                end->setStatus(dtkComposerGraphNode::BreakPoint);
+                break;
+            }
+        while (d->current != end) // we must continue if a node inside the begin/end contains a breakpoint
+            this->cont(run_concurrent);
+        this->step(run_concurrent); // eval End
+    } else {
+        this->step(run_concurrent);
+    }
 }
 
 bool dtkComposerEvaluator::step(bool run_concurrent)

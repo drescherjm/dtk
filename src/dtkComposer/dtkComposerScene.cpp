@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: ven. mars 16 18:22:35 2012 (+0100)
+ * Last-Updated: lun. mars 19 09:34:27 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1950
+ *     Update #: 1951
  */
 
 /* Commentary:
@@ -432,6 +432,8 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
         QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::step, false);
     } else if ((event->key() == Qt::Key_C)  && (event->modifiers() & Qt::ControlModifier)) {
         QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::cont, false);
+    } else if ((event->key() == Qt::Key_T)  && (event->modifiers() & Qt::ControlModifier)) {
+        QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::next, false);
     } else {
         QGraphicsScene::keyPressEvent(event);
     }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 19 14:12:19 2012 (+0100)
- *           By: tkloczko
- *     Update #: 303
+ * Last-Updated: Mon Mar 19 15:04:47 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 324
  */
 
 /* Commentary: 
@@ -18,6 +18,8 @@
  */
 
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeInteger.h"
+#include "dtkComposerNodeReal.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
 #include "dtkComposerSceneEdge.h"
@@ -233,8 +235,27 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
             tag.appendChild(property);
         }
 
-        this->extend(node, tag, document);
+        if(dtkComposerNodeInteger *integer = dynamic_cast<dtkComposerNodeInteger *>(node->wrapee())) {
 
+            QDomText text = document.createTextNode(QString::number(integer->value()));
+            
+            QDomElement value = document.createElement("value");
+            value.appendChild(text);
+            
+            tag.appendChild(value);
+        }
+
+        if(dtkComposerNodeReal *real = dynamic_cast<dtkComposerNodeReal *>(node->wrapee())) {
+
+            QDomText text = document.createTextNode(QString::number(real->value()));
+            
+            QDomElement value = document.createElement("value");
+            value.appendChild(text);
+            
+            tag.appendChild(value);
+        }
+
+        this->extend(node, tag, document);
     }
 
     return tag;

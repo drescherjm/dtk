@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 19 12:57:47 2012 (+0100)
+ * Last-Updated: Mon Mar 19 15:05:19 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 401
+ *     Update #: 430
  */
 
 /* Commentary: 
@@ -20,6 +20,8 @@
 #include "dtkComposerFactory.h"
 #include "dtkComposerGraph.h"
 #include "dtkComposerNodeComposite.h"
+#include "dtkComposerNodeInteger.h"
+#include "dtkComposerNodeReal.h"
 #include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
@@ -329,7 +331,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
                     composite->wrapee()->appendReceiver(proxy);
                 }
                 if (ports.at(i).toElement().attribute("kind") == "variant") {
-                    dtkComposerTransmitter *variant = new dtkComposerTransmitterVariant(QList<QVariant::Type>(), composite->wrapee());
+                    dtkComposerTransmitter *variant = new dtkComposerTransmitterVariant(composite->wrapee());
                     composite->wrapee()->appendReceiver(variant);
                 }
                 if (ports.at(i).toElement().hasAttribute("loop"))
@@ -344,7 +346,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
                     composite->wrapee()->appendEmitter(proxy);
                 }
                 if (ports.at(i).toElement().attribute("kind") == "variant") {
-                    dtkComposerTransmitter *variant = new dtkComposerTransmitterVariant(QList<QVariant::Type>(), composite->wrapee());
+                    dtkComposerTransmitter *variant = new dtkComposerTransmitterVariant(composite->wrapee());
                     composite->wrapee()->appendEmitter(variant);
                 }
                 if (ports.at(i).toElement().hasAttribute("loop"))
@@ -372,6 +374,25 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
                     leaf->inputPorts().at(ports.at(i).toElement().attribute("id").toUInt())->setLabel(ports.at(i).toElement().attribute("label"));
                 else
                     leaf->outputPorts().at(ports.at(i).toElement().attribute("id").toUInt())->setLabel(ports.at(i).toElement().attribute("label"));
+
+
+        if(dtkComposerNodeInteger *integer = dynamic_cast<dtkComposerNodeInteger *>(leaf->wrapee())) {
+
+            for(int i = 0; i < childNodes.count(); i++) {
+                if(childNodes.at(i).toElement().tagName() == "value") {
+                    integer->setValue(childNodes.at(i).childNodes().at(0).toText().data().toLongLong());
+                }       
+            }
+        }
+
+        if(dtkComposerNodeReal *real = dynamic_cast<dtkComposerNodeReal *>(leaf->wrapee())) {
+
+            for(int i = 0; i < childNodes.count(); i++) {
+                if(childNodes.at(i).toElement().tagName() == "value") {
+                    real->setValue(childNodes.at(i).childNodes().at(0).toText().data().toDouble());
+                }       
+            }
+        }        
     }
 
     d->node = t;

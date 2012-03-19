@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 16 14:13:32 2012 (+0100)
- *           By: tkloczko
- *     Update #: 261
+ * Last-Updated: Mon Mar 19 14:52:05 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 275
  */
 
 /* Commentary: 
@@ -39,9 +39,9 @@ public:
 // dtkComposerTransmitterVariant implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerTransmitterVariant::dtkComposerTransmitterVariant(QList<QVariant::Type> types, dtkComposerNode *parent) : dtkComposerTransmitter(parent), e(new dtkComposerTransmitterVariantPrivate)
+dtkComposerTransmitterVariant::dtkComposerTransmitterVariant(dtkComposerNode *parent) : dtkComposerTransmitter(parent), e(new dtkComposerTransmitterVariantPrivate)
 {
-    e->types = types;
+
 }
 
 dtkComposerTransmitterVariant::~dtkComposerTransmitterVariant(void)
@@ -79,11 +79,15 @@ QString dtkComposerTransmitterVariant::kindName(void) const
     return "Variant";
 }
 
+void dtkComposerTransmitterVariant::setTypes(QList<QVariant::Type> types)
+{
+    e->types = types;
+}
+
 QList<QVariant::Type> dtkComposerTransmitterVariant::types(void)
 {
     return e->types;
 }
-
 
 //! 
 /*! 
@@ -93,15 +97,24 @@ bool dtkComposerTransmitterVariant::connect(dtkComposerTransmitter *transmitter)
 {
     if (transmitter->kind() == Variant) {
         dtkComposerTransmitterVariant *v = dynamic_cast<dtkComposerTransmitterVariant *>(transmitter);
-        foreach(QVariant::Type t, v->types()) {
-            if (e->types.contains(t)) {
-                e->emitters << transmitter;
-                return true;
+
+        if(e->types.isEmpty() && !e->emitters.contains(transmitter)) {
+            e->emitters << transmitter;
+            return true;
+        } else if(v->types().isEmpty() && !e->emitters.contains(transmitter)) {
+            e->emitters << transmitter;
+            return true;
+        } else {
+            foreach(QVariant::Type t, v->types()) {
+                if (!e->emitters.contains(transmitter) && e->types.contains(t)) {
+                    e->emitters << transmitter;
+                    return true;
+                }
             }
         }
     }
 
-    if (e->types.contains(transmitter->type())) {
+    if (e->types.isEmpty() || e->types.contains(transmitter->type())) {
         if (!e->emitters.contains(transmitter)) {
             e->emitters << transmitter;
             return true;

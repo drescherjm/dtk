@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 16 17:30:34 2012 (+0100)
+ * Last-Updated: Mon Mar 19 14:33:28 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 3046
+ *     Update #: 3047
  */
 
 /* Commentary: 
@@ -1576,7 +1576,7 @@ void dtkComposerStackCommandCreatePort::redo(void)
         if(!e->transmitter) {
             switch(e->kind) {
             case dtkComposerTransmitter::Variant:
-                e->transmitter = new dtkComposerTransmitterVariant(QList<QVariant::Type>(), e->node->wrapee());
+                e->transmitter = new dtkComposerTransmitterVariant(e->node->wrapee());
                 break;
             default:
                 e->transmitter = new dtkComposerTransmitterProxy(e->node->wrapee());
@@ -1593,7 +1593,7 @@ void dtkComposerStackCommandCreatePort::redo(void)
         if(!e->transmitter) {
             switch(e->kind) {
             case dtkComposerTransmitter::Variant:
-                e->transmitter = new dtkComposerTransmitterVariant(QList<QVariant::Type>(), e->node->wrapee());
+                e->transmitter = new dtkComposerTransmitterVariant(e->node->wrapee());
                 break;
             default:
                 e->transmitter = new dtkComposerTransmitterProxy(e->node->wrapee());

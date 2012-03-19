@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. mars 16 14:45:00 2012 (+0100)
+ * Last-Updated: lun. mars 19 15:17:34 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1733
+ *     Update #: 1736
  */
 
 /* Commentary:
@@ -441,6 +441,8 @@ void dtkComposerGraph::addEdge(dtkComposerSceneEdge *edge)
     // if the destination is a control node port, then we must use the control node parent begin/end
     if (dynamic_cast<dtkComposerSceneNodeControl *>(scene_dest->parent()))
         scene_dest = scene_dest->parent();
+    if (dynamic_cast<dtkComposerSceneNodeControl *>(scene_src->parent()))
+        scene_src = scene_src->parent();
 
     if (scene_src->parent() == scene_dest) {
         // qDebug()<< " add edge output edge to end of composite";

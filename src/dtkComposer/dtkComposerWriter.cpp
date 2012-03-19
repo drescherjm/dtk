@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 19 13:01:02 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 302
+ * Last-Updated: Mon Mar 19 14:12:19 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 303
  */
 
 /* Commentary: 
@@ -182,6 +182,10 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
 
             if (port->loop())
                 property.setAttribute("loop", port->loop());
+            if (port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port))->kind() == dtkComposerTransmitter::Proxy)
+                property.setAttribute("kind", "proxy");
+            if (port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port))->kind() == dtkComposerTransmitter::Variant)
+                property.setAttribute("kind", "variant");            
             tag.appendChild(property);
         }
 

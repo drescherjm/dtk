@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:08:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mars 19 14:49:45 2012 (+0100)
+ * Last-Updated: lun. mars 19 16:02:06 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 124
+ *     Update #: 134
  */
 
 /* Commentary:
@@ -38,7 +38,7 @@ public:
     ~dtkComposerGraphNode(void);
 
 public:
-    enum Status { Done, Running, Break, Ready};
+    enum Status { Ready, Done, Running, Break, Empty};
     enum   Kind { SelectBranch, Leaf, Begin, End, SetOutputs, SetInputs, SetVariables, SetConditions };
 
 public:

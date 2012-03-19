@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mars 19 14:49:22 2012 (+0100)
+ * Last-Updated: lun. mars 19 16:06:50 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 352
+ *     Update #: 356
  */
 
 /* Commentary: 
@@ -110,7 +110,7 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
     qDebug() << "current node to evaluate is" << d->current->title();
     bool runnable = true;
     foreach (dtkComposerGraphNode *pred, d->current->predecessors()) {
-        if (pred->status() != dtkComposerGraphNode::Done) {
+        if (pred->status() != dtkComposerGraphNode::Done && (pred->status() != dtkComposerGraphNode::Empty)) {
             qDebug() << "predecessor not ready" << pred->title();
             runnable = false;
             break;
@@ -129,7 +129,7 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
             d->current->eval();
         foreach ( dtkComposerGraphNode *s, d->current->successors())
             if (!d->stack.contains(s)) {
-                if (s->status() == dtkComposerGraphNode::Done) //must reset status
+                if (s->status() == dtkComposerGraphNode::Done || s->status() == dtkComposerGraphNode::Empty) //must reset status
                     s->setStatus(dtkComposerGraphNode::Ready);
                 d->stack << s;
             }

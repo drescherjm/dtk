@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mars 19 14:54:55 2012 (+0100)
+ * Last-Updated: lun. mars 19 16:06:22 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 187
+ *     Update #: 188
  */
 
 /* Commentary:
@@ -44,7 +44,7 @@ dtkComposerGraphNode::dtkComposerGraphNode() : QGraphicsItem(),d(new dtkComposer
     this->setFlag(QGraphicsItem::ItemIsMovable, true);
     this->setZValue(1);
     this->setTitle("Graph node");
-    this->setStatus(dtkComposerGraphNode::Ready);
+    this->setStatus(dtkComposerGraphNode::Empty);
     d->breakpoint = false;
 }
 

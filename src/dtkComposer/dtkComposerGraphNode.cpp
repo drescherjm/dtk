@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. mars 16 18:09:34 2012 (+0100)
+ * Last-Updated: lun. mars 19 14:54:55 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 145
+ *     Update #: 187
  */
 
 /* Commentary:
@@ -33,6 +33,9 @@ public:
 
 public:
     dtkComposerGraphNode::Status status;
+
+public:
+    bool breakpoint;
 };
 
 dtkComposerGraphNode::dtkComposerGraphNode() : QGraphicsItem(),d(new dtkComposerGraphNodePrivate)
@@ -42,6 +45,7 @@ dtkComposerGraphNode::dtkComposerGraphNode() : QGraphicsItem(),d(new dtkComposer
     this->setZValue(1);
     this->setTitle("Graph node");
     this->setStatus(dtkComposerGraphNode::Ready);
+    d->breakpoint = false;
 }
 
 dtkComposerGraphNode::~dtkComposerGraphNode(void)
@@ -67,6 +71,21 @@ void dtkComposerGraphNode::setStatus(dtkComposerGraphNode::Status status)
     d->status = status;
 }
 
+bool dtkComposerGraphNode::breakpoint(void)
+{
+    return d->breakpoint;
+}
+
+void dtkComposerGraphNode::setBreakPoint(void)
+{
+    d->breakpoint = true;
+}
+
+void dtkComposerGraphNode::unsetBreakPoint(void)
+{
+    d->breakpoint = false;
+}
+
 QRectF dtkComposerGraphNode::boundingRect(void) const
 {
     return QRectF(0, 0, 125, 25);
@@ -74,7 +93,7 @@ QRectF dtkComposerGraphNode::boundingRect(void) const
 
 void dtkComposerGraphNode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
-    this->setStatus(dtkComposerGraphNode::BreakPoint);
+    d->breakpoint = !(d->breakpoint);
 }
 
 void dtkComposerGraphNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -86,12 +105,15 @@ void dtkComposerGraphNode::paint(QPainter *painter, const QStyleOptionGraphicsIt
         painter->setPen(Qt::red);
     else
         painter->setPen(Qt::black);
+
     if (d->status == Done)
         painter->setBrush(Qt::green);
-    else if (d->status == BreakPoint)
-        painter->setBrush(Qt::yellow);
     else
-        painter->setBrush(Qt::white);
+        if (d->breakpoint)
+            painter->setBrush(Qt::yellow);
+        else
+            painter->setBrush(Qt::white);
+
     painter->drawRect(this->boundingRect());
     painter->drawText(this->boundingRect(), Qt::AlignCenter, d->title);
 }

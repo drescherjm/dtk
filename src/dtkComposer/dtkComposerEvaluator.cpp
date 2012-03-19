@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mars 19 09:54:23 2012 (+0100)
+ * Last-Updated: lun. mars 19 14:49:22 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 345
+ *     Update #: 352
  */
 
 /* Commentary: 
@@ -90,7 +90,7 @@ void dtkComposerEvaluator::next(bool run_concurrent)
         foreach(dtkComposerGraphNode *n,  d->graph->nodes())
             if ((dynamic_cast<dtkComposerGraphNodeEnd *>(n)) && n->wrapee() == first->wrapee()) {
                 end = n;
-                end->setStatus(dtkComposerGraphNode::BreakPoint);
+                end->setBreakPoint();
                 break;
             }
         while (d->current != end) // we must continue if a node inside the begin/end contains a breakpoint
@@ -117,9 +117,9 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
         }
     }
     if (runnable) {
-        if (d->current->status() == dtkComposerGraphNode::BreakPoint) {
+        if (d->current->breakpoint() && d->current->status() == dtkComposerGraphNode::Ready ) {
             qDebug() << "break point reached";
-            d->current->setStatus(dtkComposerGraphNode::Ready);
+            d->current->setStatus(dtkComposerGraphNode::Break);
             d->stack << d->current;
             return false;
         }

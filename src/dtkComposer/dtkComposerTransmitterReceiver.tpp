@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 16 14:12:50 2012 (+0100)
- *           By: tkloczko
- *     Update #: 150
+ * Last-Updated: Mon Mar 19 14:54:37 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 161
  */
 
 /* Commentary: 
@@ -110,10 +110,16 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::connect(dtkCompose
     } else if (transmitter->kind() == Variant) {
 
         dtkComposerTransmitterVariant *v = dynamic_cast<dtkComposerTransmitterVariant *>(transmitter);
-        foreach(QVariant::Type t, v->types()) {
-            if (t == this->type() && !variants.contains(transmitter)) {
-                variants << transmitter;
-                return true;
+
+        if(v->types().isEmpty() && !variants.contains(transmitter)) {
+            variants << transmitter;
+            return true;
+        } else {
+            foreach(QVariant::Type t, v->types()) {
+                if (t == this->type() && !variants.contains(transmitter)) {
+                    variants << transmitter;
+                    return true;
+                }
             }
         }
     }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Mon Feb 27 14:28:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 16 14:16:59 2012 (+0100)
- *           By: tkloczko
- *     Update #: 177
+ * Last-Updated: Mon Mar 19 14:49:38 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 222
  */
 
 /* Commentary: 
@@ -44,10 +44,12 @@ dtkComposerNodeNumberOperatorUnary::dtkComposerNodeNumberOperatorUnary(void) : d
     QList<QVariant::Type> variant_list;
     variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double;
 
-    d->receiver = new dtkComposerTransmitterVariant(variant_list, this);
+    d->receiver = new dtkComposerTransmitterVariant(this);
+    d->receiver->setTypes(variant_list);
     this->appendReceiver(d->receiver);
 
-    d->emitter = new dtkComposerTransmitterVariant(variant_list, this);
+    d->emitter = new dtkComposerTransmitterVariant(this);
+    d->emitter->setTypes(variant_list);
     this->appendEmitter(d->emitter);
 }
 
@@ -79,13 +81,16 @@ dtkComposerNodeNumberOperatorBinary::dtkComposerNodeNumberOperatorBinary(void) :
     QList<QVariant::Type> variant_list;
     variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double;
 
-    d->receiver_lhs = new dtkComposerTransmitterVariant(variant_list, this);
+    d->receiver_lhs = new dtkComposerTransmitterVariant(this);
+    d->receiver_lhs->setTypes(variant_list);
     this->appendReceiver(d->receiver_lhs);
 
-    d->receiver_rhs = new dtkComposerTransmitterVariant(variant_list, this);
+    d->receiver_rhs = new dtkComposerTransmitterVariant(this);
+    d->receiver_rhs->setTypes(variant_list);
     this->appendReceiver(d->receiver_rhs);
 
-    d->emitter = new dtkComposerTransmitterVariant(variant_list, this);
+    d->emitter = new dtkComposerTransmitterVariant(this);
+    d->emitter->setTypes(variant_list);
     this->appendEmitter(d->emitter);
 }
 
@@ -106,8 +111,8 @@ dtkComposerNodeNumberOperatorBinary::~dtkComposerNodeNumberOperatorBinary(void)
 class dtkComposerNodeNumberComparatorPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<qreal> *receiver_lhs;
-    dtkComposerTransmitterReceiver<qreal> *receiver_rhs;
+    dtkComposerTransmitterVariant *receiver_lhs;
+    dtkComposerTransmitterVariant *receiver_rhs;
 
 public:    
     dtkComposerTransmitterEmitter<bool> *emitter;
@@ -115,13 +120,18 @@ public:
 
 dtkComposerNodeNumberComparator::dtkComposerNodeNumberComparator(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberComparatorPrivate)
 {
-    d->receiver_lhs = new dtkComposerTransmitterReceiver<qreal>;
+    QList<QVariant::Type> variant_list;
+    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double;
+
+    d->receiver_lhs = new dtkComposerTransmitterVariant(this);
+    d->receiver_lhs->setTypes(variant_list);
     this->appendReceiver(d->receiver_lhs);
 
-    d->receiver_rhs = new dtkComposerTransmitterReceiver<qreal>;
+    d->receiver_rhs = new dtkComposerTransmitterVariant(this);
+    d->receiver_rhs->setTypes(variant_list);
     this->appendReceiver(d->receiver_rhs);
 
-    d->emitter = new dtkComposerTransmitterEmitter<bool>;
+    d->emitter = new dtkComposerTransmitterEmitter<bool>(this);
     this->appendEmitter(d->emitter);
 }
 
@@ -142,9 +152,9 @@ dtkComposerNodeNumberComparator::~dtkComposerNodeNumberComparator(void)
 class dtkComposerNodeNumberAlmosteqPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<qreal> *receiver_lhs;
-    dtkComposerTransmitterReceiver<qreal> *receiver_rhs;
-    dtkComposerTransmitterReceiver<qreal> *receiver_eps;
+    dtkComposerTransmitterVariant *receiver_lhs;
+    dtkComposerTransmitterVariant *receiver_rhs;
+    dtkComposerTransmitterVariant *receiver_eps;
 
 public:    
     dtkComposerTransmitterEmitter<bool> *emitter;
@@ -152,16 +162,22 @@ public:
 
 dtkComposerNodeNumberAlmosteq::dtkComposerNodeNumberAlmosteq(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberAlmosteqPrivate)
 {
-    d->receiver_lhs = new dtkComposerTransmitterReceiver<qreal>;
+    QList<QVariant::Type> variant_list;
+    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double;
+
+    d->receiver_lhs = new dtkComposerTransmitterVariant(this);
+    d->receiver_lhs->setTypes(variant_list);
     this->appendReceiver(d->receiver_lhs);
 
-    d->receiver_rhs = new dtkComposerTransmitterReceiver<qreal>;
+    d->receiver_rhs = new dtkComposerTransmitterVariant(this);
+    d->receiver_rhs->setTypes(variant_list);
     this->appendReceiver(d->receiver_rhs);
 
-    d->receiver_eps = new dtkComposerTransmitterReceiver<qreal>;
+    d->receiver_eps = new dtkComposerTransmitterVariant(this);
+    d->receiver_eps->setTypes(variant_list);
     this->appendReceiver(d->receiver_eps);
 
-    d->emitter = new dtkComposerTransmitterEmitter<bool>;
+    d->emitter = new dtkComposerTransmitterEmitter<bool>(this);
     this->appendEmitter(d->emitter);
 }
 
@@ -178,9 +194,9 @@ dtkComposerNodeNumberAlmosteq::~dtkComposerNodeNumberAlmosteq(void)
 
 void dtkComposerNodeNumberAlmosteq::run(void)
 {
-    qreal a = d->receiver_lhs->data();
-    qreal b = d->receiver_rhs->data();
-    qreal eps = d->receiver_eps->data();
+    qreal a = d->receiver_lhs->data().toReal();
+    qreal b = d->receiver_rhs->data().toReal();
+    qreal eps = d->receiver_eps->data().toReal();
 
     d->emitter->setData(dtkAlmostEqualUlpsSimple(a,b,eps));
 }
@@ -192,9 +208,9 @@ void dtkComposerNodeNumberAlmosteq::run(void)
 class dtkComposerNodeNumberNotalmosteqPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<qreal> *receiver_lhs;
-    dtkComposerTransmitterReceiver<qreal> *receiver_rhs;
-    dtkComposerTransmitterReceiver<qreal> *receiver_eps;
+    dtkComposerTransmitterVariant *receiver_lhs;
+    dtkComposerTransmitterVariant *receiver_rhs;
+    dtkComposerTransmitterVariant *receiver_eps;
 
 public:    
     dtkComposerTransmitterEmitter<bool> *emitter;
@@ -202,16 +218,22 @@ public:
 
 dtkComposerNodeNumberNotalmosteq::dtkComposerNodeNumberNotalmosteq(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberNotalmosteqPrivate)
 {
-    d->receiver_lhs = new dtkComposerTransmitterReceiver<qreal>;
+    QList<QVariant::Type> variant_list;
+    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double;
+
+    d->receiver_lhs = new dtkComposerTransmitterVariant(this);
+    d->receiver_lhs->setTypes(variant_list);
     this->appendReceiver(d->receiver_lhs);
 
-    d->receiver_rhs = new dtkComposerTransmitterReceiver<qreal>;
+    d->receiver_rhs = new dtkComposerTransmitterVariant(this);
+    d->receiver_rhs->setTypes(variant_list);
     this->appendReceiver(d->receiver_rhs);
 
-    d->receiver_eps = new dtkComposerTransmitterReceiver<qreal>;
+    d->receiver_eps = new dtkComposerTransmitterVariant(this);
+    d->receiver_eps->setTypes(variant_list);
     this->appendReceiver(d->receiver_eps);
 
-    d->emitter = new dtkComposerTransmitterEmitter<bool>;
+    d->emitter = new dtkComposerTransmitterEmitter<bool>(this);
     this->appendEmitter(d->emitter);
 }
 
@@ -228,9 +250,9 @@ dtkComposerNodeNumberNotalmosteq::~dtkComposerNodeNumberNotalmosteq(void)
 
 void dtkComposerNodeNumberNotalmosteq::run(void)
 {
-    qreal a = d->receiver_lhs->data();
-    qreal b = d->receiver_rhs->data();
-    qreal eps = d->receiver_eps->data();
+    qreal a = d->receiver_lhs->data().toReal();
+    qreal b = d->receiver_rhs->data().toReal();
+    qreal eps = d->receiver_eps->data().toReal();
 
     d->emitter->setData(!dtkAlmostEqualUlpsSimple(a,b,eps));
 }
@@ -598,8 +620,8 @@ void dtkComposerNodeNumberOperatorBinaryExpn::run(void)
 
 void dtkComposerNodeNumberComparatorEqual::run(void)
 {
-    qreal a = d->receiver_lhs->data();
-    qreal b = d->receiver_rhs->data();
+    qreal a = d->receiver_lhs->data().toReal();
+    qreal b = d->receiver_rhs->data().toReal();
     d->emitter->setData(a==b);
 }
 
@@ -609,8 +631,8 @@ void dtkComposerNodeNumberComparatorEqual::run(void)
 
 void dtkComposerNodeNumberComparatorNotequal::run(void)
 {
-    qreal a = d->receiver_lhs->data();
-    qreal b = d->receiver_rhs->data();
+    qreal a = d->receiver_lhs->data().toReal();
+    qreal b = d->receiver_rhs->data().toReal();
     d->emitter->setData(a!=b);
 }
 
@@ -620,8 +642,8 @@ void dtkComposerNodeNumberComparatorNotequal::run(void)
 
 void dtkComposerNodeNumberComparatorGt::run(void)
 {
-    qreal a = d->receiver_lhs->data();
-    qreal b = d->receiver_rhs->data();
+    qreal a = d->receiver_lhs->data().toReal();
+    qreal b = d->receiver_rhs->data().toReal();
     d->emitter->setData(a>b);
 }
 
@@ -631,8 +653,8 @@ void dtkComposerNodeNumberComparatorGt::run(void)
 
 void dtkComposerNodeNumberComparatorLt::run(void)
 {
-    qreal a = d->receiver_lhs->data();
-    qreal b = d->receiver_rhs->data();
+    qreal a = d->receiver_lhs->data().toReal();
+    qreal b = d->receiver_rhs->data().toReal();
     d->emitter->setData(a<b);
 }
 
@@ -642,8 +664,8 @@ void dtkComposerNodeNumberComparatorLt::run(void)
 
 void dtkComposerNodeNumberComparatorGte::run(void)
 {
-    qreal a = d->receiver_lhs->data();
-    qreal b = d->receiver_rhs->data();
+    qreal a = d->receiver_lhs->data().toReal();
+    qreal b = d->receiver_rhs->data().toReal();
     d->emitter->setData(a>=b);
 }
 
@@ -653,7 +675,7 @@ void dtkComposerNodeNumberComparatorGte::run(void)
 
 void dtkComposerNodeNumberComparatorLte::run(void)
 {
-    qreal a = d->receiver_lhs->data();
-    qreal b = d->receiver_rhs->data();
+    qreal a = d->receiver_lhs->data().toReal();
+    qreal b = d->receiver_rhs->data().toReal();
     d->emitter->setData(a<=b);
 }

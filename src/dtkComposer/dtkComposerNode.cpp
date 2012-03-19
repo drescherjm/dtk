@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:25:11 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 16:02:27 2012 (+0100)
+ * Last-Updated: Mon Mar 19 12:38:25 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 50
+ *     Update #: 64
  */
 
 /* Commentary: 
@@ -31,6 +31,10 @@ public:
 
 public:
     QString title_hint;
+
+public:
+    QHash<int, QString>  input_label_hint;
+    QHash<int, QString> output_label_hint;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -98,15 +102,31 @@ QString dtkComposerNode::titleHint(void)
 
 QString dtkComposerNode::inputLabelHint(int port)
 {
+    if(d->input_label_hint.contains(port))
+        return d->input_label_hint[port];
+
     return "port";
 }
 
 QString dtkComposerNode::outputLabelHint(int port)
 {
+    if(d->output_label_hint.contains(port))
+        return d->output_label_hint[port];
+
     return "port";
 }
 
 void dtkComposerNode::setTitleHint(const QString& hint)
 {
     d->title_hint = hint;
+}
+
+void dtkComposerNode::setInputLabelHint(const QString& hint, int port)
+{
+    d->input_label_hint[port] = hint;
+}
+
+void dtkComposerNode::setOutputLabelHint(const QString& hint, int port)
+{
+    d->output_label_hint[port] = hint;
 }

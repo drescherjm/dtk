@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 16 18:46:35 2012 (+0100)
+ * Last-Updated: Mon Mar 19 12:16:17 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 733
+ *     Update #: 735
  */
 
 /* Commentary: 
@@ -527,6 +527,7 @@ void dtkComposerSceneNodeEditor::addLoopPort(void)
         command_incr_i->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(control->block("Increment")));
         command_incr_i->setType(dtkComposerScenePort::Input);
         command_incr_i->setKind(dtkComposerTransmitter::Variant);
+        
         command_incr_o = new dtkComposerStackCommandCreatePort;
         command_incr_o->setScene(d->scene);
         command_incr_o->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(control->block("Increment")));

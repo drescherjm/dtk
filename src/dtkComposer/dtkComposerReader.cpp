@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 16 18:44:12 2012 (+0100)
+ * Last-Updated: Mon Mar 19 12:57:47 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 386
+ *     Update #: 401
  */
 
 /* Commentary: 
@@ -332,6 +332,8 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
                     dtkComposerTransmitter *variant = new dtkComposerTransmitterVariant(QList<QVariant::Type>(), composite->wrapee());
                     composite->wrapee()->appendReceiver(variant);
                 }
+                if (ports.at(i).toElement().hasAttribute("loop"))
+                    port->setLoop(ports.at(i).toElement().attribute("loop").toInt());
             } else {
                 dtkComposerScenePort *port = new dtkComposerScenePort(dtkComposerScenePort::Output, composite);
                 if (ports.at(i).toElement().hasAttribute("label"))
@@ -344,7 +346,9 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
                 if (ports.at(i).toElement().attribute("kind") == "variant") {
                     dtkComposerTransmitter *variant = new dtkComposerTransmitterVariant(QList<QVariant::Type>(), composite->wrapee());
                     composite->wrapee()->appendEmitter(variant);
-                }                
+                }
+                if (ports.at(i).toElement().hasAttribute("loop"))
+                    port->setLoop(ports.at(i).toElement().attribute("loop").toInt());
             }
         }
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 10:13:08 2012 (+0100)
- *           By: tkloczko
- *     Update #: 26
+ * Last-Updated: Mon Mar 19 12:39:04 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 37
  */
 
 /* Commentary: 
@@ -39,6 +39,9 @@ public:
 
     dtkComposerNodeComposite *cond_block;
     dtkComposerNodeComposite *body_block;
+
+public:
+    dtkComposerTransmitterReceiver<bool> cond;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -49,12 +52,16 @@ dtkComposerNodeControlWhile::dtkComposerNodeControlWhile(void) : dtkComposerNode
 {
     d->header = new dtkComposerNodeBoolean;
     delete d->header->removeEmitter(0);
+    delete d->header->removeReceiver(0);
 
     d->footer = new dtkComposerNodeBoolean;
+    delete d->footer->removeEmitter(0);
     delete d->footer->removeReceiver(0);
 
     d->cond_block = new dtkComposerNodeComposite;
     d->cond_block->setTitleHint("Conditional");
+    d->cond_block->appendEmitter(&(d->cond));
+    d->cond_block->setOutputLabelHint("cond", 0);
 
     d->body_block = new dtkComposerNodeComposite;
     d->body_block->setTitleHint("Body");

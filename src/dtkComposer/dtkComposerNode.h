@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:24:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 16:01:41 2012 (+0100)
+ * Last-Updated: Mon Mar 19 12:36:23 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 45
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -64,6 +64,10 @@ public:
 
 public:
     void setTitleHint(const QString& hint);
+
+public:
+    void  setInputLabelHint(const QString& hint, int port);
+    void setOutputLabelHint(const QString& hint, int port);
 
 private:
     dtkComposerNodePrivate *d;

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: lun. mars 19 09:34:27 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 1951
+ * Last-Updated: Mon Mar 19 15:29:14 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 1954
  */
 
 /* Commentary:
@@ -551,6 +551,23 @@ adjust_edges: // Adjusting edges of selected nodes
             foreach(dtkComposerSceneEdge *edge, node->outputEdges()) {
                 edge->adjust();
                 updateRect |= edge->boundingRect();
+            }
+
+            if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
+
+                foreach(dtkComposerSceneNodeComposite *block, control->blocks()) {
+
+                    foreach(dtkComposerSceneEdge *edge, block->inputEdges()) {
+                        edge->adjust();
+                        updateRect |= edge->boundingRect();
+                    }
+                    
+                    foreach(dtkComposerSceneEdge *edge, block->outputEdges()) {
+                        edge->adjust();
+                        updateRect |= edge->boundingRect();
+                    }
+                    
+                }
             }
             
             this->update(updateRect);

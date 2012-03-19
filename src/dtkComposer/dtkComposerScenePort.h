@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:28:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 15:29:10 2012 (+0100)
- *           By: tkloczko
- *     Update #: 30
+ * Last-Updated: Fri Mar 16 17:27:22 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 37
  */
 
 /* Commentary: 
@@ -28,7 +28,10 @@ class dtkComposerSceneNode;
 class dtkComposerScenePort : public QGraphicsItem
 {
 public:
-    enum Type { Input, Output };
+    enum Type {
+        Input,
+        Output
+    };
 
 public:
      dtkComposerScenePort(Type type, dtkComposerSceneNode *parent);
@@ -42,7 +45,13 @@ public:
     dtkComposerSceneNode *node(void);
 
 public:
+    int loop(void);
+
+public:
     QString label(void);
+
+public:
+    void setLoop(int loop);
 
 public:
     void setLabel(const QString& label);

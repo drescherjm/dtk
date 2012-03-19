@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 18:14:53 2012 (+0100)
+ * Last-Updated: Fri Mar 16 17:30:43 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 166
+ *     Update #: 173
  */
 
 /* Commentary: 
@@ -346,6 +346,8 @@ private:
 // Create Port Command
 // /////////////////////////////////////////////////////////////////
 
+#include "dtkComposerTransmitter.h"
+
 class dtkComposerStackCommandCreatePortPrivate;
 
 class dtkComposerStackCommandCreatePort : public dtkComposerStackCommand
@@ -355,6 +357,10 @@ public:
     ~dtkComposerStackCommandCreatePort(void);
 
 public:
+    dtkComposerScenePort *port(void);
+
+public:
+    void setKind(dtkComposerTransmitter::Kind kind);
     void setNode(dtkComposerSceneNodeComposite *node);
     void setType(int type);
 

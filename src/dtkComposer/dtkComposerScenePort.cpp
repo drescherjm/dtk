@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 13:59:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 15:29:50 2012 (+0100)
- *           By: tkloczko
- *     Update #: 106
+ * Last-Updated: Fri Mar 16 17:29:32 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 112
  */
 
 /* Commentary: 
@@ -29,6 +29,9 @@ public:
     dtkComposerSceneNode *node;
 
 public:
+    int loop;
+
+public:
     QGraphicsEllipseItem *ellipse;
     QGraphicsTextItem *label;
 };
@@ -37,6 +40,7 @@ dtkComposerScenePort::dtkComposerScenePort(Type type, dtkComposerSceneNode *pare
 {
     d->type = type;
     d->node = parent;
+    d->loop = 0;
 
     d->ellipse = new QGraphicsEllipseItem(this);
     d->ellipse->setPen(QPen(Qt::darkGray, 1));
@@ -59,6 +63,7 @@ dtkComposerScenePort::dtkComposerScenePort(Type type, const QString& label, dtkC
 {
     d->type = type;
     d->node = parent;
+    d->loop = 0;
 
     d->ellipse = new QGraphicsEllipseItem(this);
     d->ellipse->setPen(QPen(Qt::darkGray, 1));
@@ -95,9 +100,19 @@ dtkComposerSceneNode *dtkComposerScenePort::node(void)
     return d->node;
 }
 
+int dtkComposerScenePort::loop(void)
+{
+    return d->loop;
+}
+
 QString dtkComposerScenePort::label(void)
 {
     return d->label->toPlainText();
+}
+
+void dtkComposerScenePort::setLoop(int loop)
+{
+    d->loop = loop;
 }
 
 void dtkComposerScenePort::setLabel(const QString& label)

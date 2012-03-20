@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 15:15:19 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar  5 13:09:37 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 66
+ * Last-Updated: mar. mars 20 16:14:45 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 77
  */
 
 /* Commentary: 
@@ -61,9 +61,8 @@ dtkLogDestinationFile::dtkLogDestinationFile(const QString& path) : d(new dtkLog
     QDir dir(info.absoluteDir());
 
     if(!dir.exists()) {
-        QString name = dir.dirName();
-        dir.cdUp();
-        dir.mkdir(name);
+        QString name = dir.path();
+        dir.mkpath(name);
     }
 
     if(!d->file.open(QFile::WriteOnly | QFile::Text | QIODevice::Append))

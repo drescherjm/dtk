@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 19 15:04:47 2012 (+0100)
+ * Last-Updated: Tue Mar 20 16:09:44 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 324
+ *     Update #: 396
  */
 
 /* Commentary: 
@@ -33,6 +33,8 @@
 #include "dtkComposerTransmitterProxy.h"
 #include "dtkComposerTransmitterVariant.h"
 #include "dtkComposerWriter.h"
+
+#include <dtkLog/dtkLog.h>
 
 #include <QtCore>
 
@@ -153,6 +155,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
         tag.setAttribute("title", node->title());
 
         dtkComposerScenePort *port = NULL;
+
         for(uint i = 0; i < composite->inputPorts().count(); i++) {
             port = composite->inputPorts().at(i);
             QDomElement property = document.createElement("port");
@@ -168,10 +171,12 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
             if (port->node()->wrapee()->receivers().at(port->node()->inputPorts().indexOf(port))->kind() == dtkComposerTransmitter::Proxy)
                 property.setAttribute("kind", "proxy");
             if (port->node()->wrapee()->receivers().at(port->node()->inputPorts().indexOf(port))->kind() == dtkComposerTransmitter::Variant)
-                property.setAttribute("kind", "variant");            
+                property.setAttribute("kind", "variant");
             tag.appendChild(property);
         }
+
         port = NULL;
+
         for(uint i = 0; i < composite->outputPorts().count(); i++) {
             port = composite->outputPorts().at(i);
             QDomElement property = document.createElement("port");
@@ -187,7 +192,33 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
             if (port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port))->kind() == dtkComposerTransmitter::Proxy)
                 property.setAttribute("kind", "proxy");
             if (port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port))->kind() == dtkComposerTransmitter::Variant)
-                property.setAttribute("kind", "variant");            
+                property.setAttribute("kind", "variant");
+
+// --- twin ports
+
+            if(dtkComposerTransmitterVariant *variant = dynamic_cast<dtkComposerTransmitterVariant *>(port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port)))) {
+                
+                if (dtkComposerTransmitterVariant *twin = variant->twin()) {
+                    
+                    QString block = twin->parentNode()->titleHint();
+                    
+                    if(block != port->node()->title())
+                        property.setAttribute("block", block);
+                    
+                    dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(port->node()->parent());
+                    
+                    if(control) {
+
+                    foreach(dtkComposerScenePort *p, control->block(block)->inputPorts())
+                        if(p->node()->wrapee()->receivers().at(p->node()->inputPorts().indexOf(p)) == twin)
+                            property.setAttribute("twin", p->node()->inputPorts().indexOf(p));
+
+                    }
+                }
+            }
+
+// --
+
             tag.appendChild(property);
         }
 

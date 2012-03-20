@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:27 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar  1 00:39:50 2012 (+0100)
+ * Last-Updated: Mon Mar 19 23:44:16 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1510
+ *     Update #: 1514
  */
 
 /* Commentary: 
@@ -335,7 +335,7 @@ void dtkTagCloud::render(void)
             color += tag.color();
             color += ";";
         } else {
-            color = "color: #bf6040;";
+            color = "color: #6a769d;";
         }
 
         QString count = QString::number(tag.count()) + " item" + ((tag.count() != 1) ? "s" : "");
@@ -523,16 +523,17 @@ dtkTagScope::dtkTagScope(QWidget *parent) : QFrame(parent)
     d->completer->setModelSorting(QCompleter::CaseSensitivelySortedModel);
 
     d->edit = new QLineEdit;
-    d->edit->setFixedHeight(27);
+    d->edit->setFixedHeight(21);
     d->edit->setAttribute(Qt::WA_MacShowFocusRect, false);
     d->edit->setCompleter(d->completer);
 
     d->clear = new QToolButton;
-    d->clear->setFixedHeight(27);
+    d->clear->setFixedHeight(21);
     d->clear->setAttribute(Qt::WA_MacShowFocusRect, false);
 
     d->switsh = new dtkSwitch;
-    d->switsh->setFixedHeight(27);
+    d->switsh->setFixedHeight(21);
+    d->switsh->setFixedWidth(39);
     d->switsh->setAttribute(Qt::WA_MacShowFocusRect, false);
 
     QHBoxLayout *t_layout = new QHBoxLayout;
@@ -895,7 +896,7 @@ void dtkItemListDelegate::paint(QPainter *painter, const QStyleOptionViewItem& o
     painter->setPen(Qt::gray);
     painter->drawText(desc_rect, Qt::AlignLeft | Qt::AlignTop, metrics.elidedText(dtkItemListDelegateUnhtmlize(item->description()), Qt::ElideRight, desc_rect.width()));
 
-    painter->setPen(QColor("#bf6040"));
+    painter->setPen(QColor("#6a769d"));
     painter->drawText(tags_rect.adjusted(m + tags.width(), 0, -tags.width(), 0), Qt::AlignLeft | Qt::AlignTop, item->tags().join(", "));
 
     painter->setPen(Qt::darkGray);

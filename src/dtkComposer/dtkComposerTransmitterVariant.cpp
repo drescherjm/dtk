@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 19 17:32:32 2012 (+0100)
+ * Last-Updated: Tue Mar 20 13:11:58 2012 (+0100)
  *           By: tkloczko
- *     Update #: 277
+ *     Update #: 290
  */
 
 /* Commentary: 
@@ -30,9 +30,15 @@ class dtkComposerTransmitterVariantPrivate
 {
 public:
     QList<dtkComposerTransmitter *> emitters;
+    QList<dtkComposerTransmitterVariant *> variants;
 
 public:
     QList<QVariant::Type> types;
+
+public:
+    dtkComposerTransmitterVariant *twin;
+
+    bool twinned;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -41,7 +47,8 @@ public:
 
 dtkComposerTransmitterVariant::dtkComposerTransmitterVariant(dtkComposerNode *parent) : dtkComposerTransmitter(parent), e(new dtkComposerTransmitterVariantPrivate)
 {
-
+    e->twin = NULL;
+    e->twinned = false;
 }
 
 dtkComposerTransmitterVariant::~dtkComposerTransmitterVariant(void)
@@ -54,17 +61,44 @@ dtkComposerTransmitterVariant::~dtkComposerTransmitterVariant(void)
 void dtkComposerTransmitterVariant::setData(const QVariant& data)
 {
     d->variant = data;
+    
+    if (e->twin)
+        e->twin->setData(data);
 }
 
 QVariant dtkComposerTransmitterVariant::data(void)
 {
+    if (e->twinned)
+        return d->variant;
+
     foreach(dtkComposerTransmitter *emitter, e->emitters) {
          if (emitter->active()) {
              return emitter->variant();
         }
     }
 
+    foreach(dtkComposerTransmitterVariant *v, e->variants) {
+         if (v->active()) {
+             return v->data();
+        }
+    }
+
     return d->variant;
+}
+
+void dtkComposerTransmitterVariant::setTwin(dtkComposerTransmitterVariant *twin)
+{
+    e->twin = twin;
+}
+
+dtkComposerTransmitterVariant *dtkComposerTransmitterVariant::twin(void)
+{
+    return e->twin;
+}
+    
+void dtkComposerTransmitterVariant::setTwinned(bool twinned)
+{
+    e->twinned = twinned;
 }
 
 //! Returns.
@@ -100,19 +134,18 @@ bool dtkComposerTransmitterVariant::connect(dtkComposerTransmitter *transmitter)
     if (transmitter->kind() == Variant) {
         dtkComposerTransmitterVariant *v = dynamic_cast<dtkComposerTransmitterVariant *>(transmitter);
 
-        if(e->types.isEmpty() && !e->emitters.contains(transmitter)) {
-            e->emitters << transmitter;
-            return true;
-        } else if(v->types().isEmpty() && !e->emitters.contains(transmitter)) {
-            e->emitters << transmitter;
-            return true;
+        if (e->types.isEmpty() || v->types().isEmpty()) {
+            if (!e->variants.contains(v)) {
+                e->variants << v;
+                return true;
+            }
         } else {
             foreach(QVariant::Type t, v->types()) {
-                if (!e->emitters.contains(transmitter) && e->types.contains(t)) {
-                    e->emitters << transmitter;
+                if (!e->variants.contains(v) && e->types.contains(t)) {
+                    e->variants << v;
                     return true;
                 }
-            }
+            }            
         }
     }
 

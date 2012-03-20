@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 20 09:15:02 2012 (+0100)
+ * Last-Updated: Tue Mar 20 13:02:38 2012 (+0100)
  *           By: tkloczko
- *     Update #: 747
+ *     Update #: 750
  */
 
 /* Commentary: 
@@ -31,6 +31,8 @@
 #include "dtkComposerNodeControlIf.h"
 #include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeControlForEach.h"
+
+#include "dtkComposerTransmitterVariant.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerSceneNodeEditorList
@@ -591,6 +593,10 @@ void dtkComposerSceneNodeEditor::addLoopPort(void)
     if (command_incr_i){
         control->block("Body")->wrapee()->emitters().last()->appendNext(control->block("Increment")->wrapee()->receivers().last());
         control->block("Increment")->wrapee()->receivers().last()->appendPrevious(control->block("Body")->wrapee()->emitters().last());
+
+        dynamic_cast<dtkComposerTransmitterVariant *>(control->block("Increment")->wrapee()->emitters().last())->setTwin(dynamic_cast<dtkComposerTransmitterVariant *>(control->block("Body")->wrapee()->receivers().last()));
+    } else {
+        dynamic_cast<dtkComposerTransmitterVariant *>(control->block("Body")->wrapee()->emitters().last())->setTwin(dynamic_cast<dtkComposerTransmitterVariant *>(control->block("Body")->wrapee()->receivers().last()));
     }
 
 // /////////////////////////////////////////////////////////////////

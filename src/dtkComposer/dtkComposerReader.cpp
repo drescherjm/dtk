@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 19 15:05:19 2012 (+0100)
+ * Last-Updated: Tue Mar 20 16:09:33 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 430
+ *     Update #: 525
  */
 
 /* Commentary: 
@@ -314,6 +314,73 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
             d->control = control;
             this->readNode(blocks.at(i));
         }
+
+// --- next/previous for loops
+
+        if(dtkComposerSceneNodeComposite *body = control->block("Body")) {
+
+            foreach(dtkComposerScenePort *port, body->inputPorts()) {
+
+                if(int loop = port->loop()) {
+                    
+                    dtkComposerTransmitter *variant = port->node()->wrapee()->receivers().at(port->node()->inputPorts().indexOf(port));
+                    
+                    if(dtkComposerSceneNodeComposite *conditional = control->block("Conditional")) {
+
+                        foreach(dtkComposerScenePort *i, conditional->inputPorts()) {
+
+                            if(i->loop() == loop) {
+
+                                dtkComposerTransmitter *proxy = i->node()->wrapee()->receivers().at(i->node()->inputPorts().indexOf(i));
+
+                                // proxy->appendPrevious(variant);
+                                // variant->appendNext(proxy);
+
+                                // qDebug() << __func__ << "Done" << proxy << variant;
+
+    dtkComposerTransmitterLinkList   valid_edges;
+    dtkComposerTransmitterLinkList invalid_edges;
+    dtkComposerTransmitter::onTransmittersConnected(variant, proxy, valid_edges, invalid_edges);
+    dtkComposerPropagateEdgeValidity(d->root, valid_edges, invalid_edges);
+
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            foreach(dtkComposerScenePort *port, body->outputPorts()) {
+
+                if(int loop = port->loop()) {
+                    
+                    dtkComposerTransmitter *variant = port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port));
+                    
+                    if(dtkComposerSceneNodeComposite *increment = control->block("Increment")) {
+
+                        foreach(dtkComposerScenePort *i, increment->inputPorts()) {
+
+                            if(i->loop() == loop) {
+
+                                dtkComposerTransmitter *proxy = i->node()->wrapee()->receivers().at(i->node()->inputPorts().indexOf(i));
+
+                                // proxy->appendPrevious(variant);
+                                // variant->appendNext(proxy);
+
+                                // qDebug() << __func__ << "Done" << 2;
+
+    dtkComposerTransmitterLinkList   valid_edges;
+    dtkComposerTransmitterLinkList invalid_edges;
+    dtkComposerTransmitter::onTransmittersConnected(variant, proxy, valid_edges, invalid_edges);
+    dtkComposerPropagateEdgeValidity(d->root, valid_edges, invalid_edges);
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+// ---
     }
 
     if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(n)) {
@@ -351,6 +418,40 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
                 }
                 if (ports.at(i).toElement().hasAttribute("loop"))
                     port->setLoop(ports.at(i).toElement().attribute("loop").toInt());
+
+// ---- twins for loops
+
+                if (ports.at(i).toElement().hasAttribute("twin")) {
+                    
+                    int twin = ports.at(i).toElement().attribute("twin").toInt();
+                    
+                    QString block;
+                    
+                    if (ports.at(i).toElement().hasAttribute("block"))
+                        block = ports.at(i).toElement().attribute("block");
+                    
+                    dtkComposerNode *wrapee = NULL;
+                    
+                    if(block.isEmpty())
+                        wrapee = composite->wrapee();
+                    else if(d->control) {
+                        wrapee = d->control->block(block)->wrapee();
+                    }
+                    
+                    if(wrapee) {
+                        
+                        dtkComposerTransmitterVariant *variant = dynamic_cast<dtkComposerTransmitterVariant *>(composite->wrapee()->emitters().last());
+                        
+                        if(variant) {
+
+                            variant->setTwin(dynamic_cast<dtkComposerTransmitterVariant *>(wrapee->receivers().at(twin)));
+
+                            qDebug() << "Setting twin" << variant << variant->twin();
+                        }
+                    }
+                }
+// ----------
+
             }
         }
 

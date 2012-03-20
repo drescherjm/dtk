@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 19 17:07:36 2012 (+0100)
+ * Last-Updated: Tue Mar 20 09:15:02 2012 (+0100)
  *           By: tkloczko
- *     Update #: 744
+ *     Update #: 747
  */
 
 /* Commentary: 
@@ -503,13 +503,13 @@ void dtkComposerSceneNodeEditor::addLoopPort(void)
 
     command_body_i = new dtkComposerStackCommandCreatePort;
     command_body_i->setScene(d->scene);
-    command_body_i->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(control->block("Body")));
+    command_body_i->setNode(control->block("Body"));
     command_body_i->setType(dtkComposerScenePort::Input);
     command_body_i->setKind(dtkComposerTransmitter::Variant);
 
     command_body_o = new dtkComposerStackCommandCreatePort;
     command_body_o->setScene(d->scene);
-    command_body_o->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(control->block("Body")));
+    command_body_o->setNode(control->block("Body"));
     command_body_o->setType(dtkComposerScenePort::Output);
     command_body_o->setKind(dtkComposerTransmitter::Variant);
 
@@ -518,7 +518,7 @@ void dtkComposerSceneNodeEditor::addLoopPort(void)
     } else {
         command_cond_i = new dtkComposerStackCommandCreatePort;
         command_cond_i->setScene(d->scene);
-        command_cond_i->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(control->block("Conditional")));
+        command_cond_i->setNode(control->block("Conditional"));
         command_cond_i->setType(dtkComposerScenePort::Input);
         command_cond_i->setKind(dtkComposerTransmitter::Proxy);
     }
@@ -526,13 +526,13 @@ void dtkComposerSceneNodeEditor::addLoopPort(void)
     if(dtkComposerNodeControlFor *f_node = dynamic_cast<dtkComposerNodeControlFor *>(d->node->wrapee())) {
         command_incr_i = new dtkComposerStackCommandCreatePort;
         command_incr_i->setScene(d->scene);
-        command_incr_i->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(control->block("Increment")));
+        command_incr_i->setNode(control->block("Increment"));
         command_incr_i->setType(dtkComposerScenePort::Input);
-        command_incr_i->setKind(dtkComposerTransmitter::Variant);
+        command_incr_i->setKind(dtkComposerTransmitter::Proxy);
         
         command_incr_o = new dtkComposerStackCommandCreatePort;
         command_incr_o->setScene(d->scene);
-        command_incr_o->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(control->block("Increment")));
+        command_incr_o->setNode(control->block("Increment"));
         command_incr_o->setType(dtkComposerScenePort::Output);
         command_incr_o->setKind(dtkComposerTransmitter::Variant);
     } else {
@@ -579,8 +579,19 @@ void dtkComposerSceneNodeEditor::addLoopPort(void)
     if (command_incr_o)
         command_incr_o->port()->setLoop(loop_ids[control]);
 
-    dynamic_cast<dtkComposerSceneNodeComposite *>(control->block("Body"))->wrapee()->receivers().last()->appendNext(dynamic_cast<dtkComposerSceneNodeComposite *>(control->block("Conditional"))->wrapee()->receivers().last());    
-    dynamic_cast<dtkComposerSceneNodeComposite *>(control->block("Conditional"))->wrapee()->receivers().last()->appendPrevious(dynamic_cast<dtkComposerSceneNodeComposite *>(control->block("Body"))->wrapee()->receivers().last());
+// /////////////////////////////////////////////////////////////////
+// Connect proxy and variant transmitters
+// /////////////////////////////////////////////////////////////////
+
+    if (command_cond_i) {
+        control->block("Body")->wrapee()->receivers().last()->appendNext(control->block("Conditional")->wrapee()->receivers().last());
+        control->block("Conditional")->wrapee()->receivers().last()->appendPrevious(control->block("Body")->wrapee()->receivers().last());
+    }
+    
+    if (command_incr_i){
+        control->block("Body")->wrapee()->emitters().last()->appendNext(control->block("Increment")->wrapee()->receivers().last());
+        control->block("Increment")->wrapee()->receivers().last()->appendPrevious(control->block("Body")->wrapee()->emitters().last());
+    }
 
 // /////////////////////////////////////////////////////////////////
 // 

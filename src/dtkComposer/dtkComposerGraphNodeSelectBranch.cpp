@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: ven. mars  2 22:43:24 2012 (+0100)
+ * Last-Updated: mar. mars 20 14:45:34 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 140
+ *     Update #: 173
  */
 
 /* Commentary:
@@ -22,7 +22,7 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeControl.h"
 
-//#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLog.h>
 
 #include <QVarLengthArray>
 
@@ -48,6 +48,7 @@ dtkComposerGraphNodeSelectBranch::dtkComposerGraphNodeSelectBranch(dtkComposerNo
     this->setTitle(title);
     this->setStatus(dtkComposerGraphNode::Ready);
     d->result =-1;
+    d->successors.resize(dtkComposerGraphNodeSelectBranchPrivate::DEFAULT_SIZE);
 }
 
 
@@ -66,6 +67,7 @@ void dtkComposerGraphNodeSelectBranch::addSuccessor(dtkComposerGraphNode *node, 
     if (id > dtkComposerGraphNodeSelectBranchPrivate::DEFAULT_SIZE)
         d->successors.resize(id*4); //FIXME
 
+    dtkTrace() << "Adding new successor to select branch" << id << node->title();
     d->successors[id]=node;
 }
 
@@ -77,18 +79,16 @@ void dtkComposerGraphNodeSelectBranch::removeSuccessor(dtkComposerGraphNode *nod
             d->successors[i] = NULL;
 }
 
+
 dtkComposerGraphNodeList dtkComposerGraphNodeSelectBranch::successors(void)
 {
     dtkComposerGraphNodeList val;
-    if (d->result < 0) {
-        for (int i=0; i < d->successors.size(); i++)
-            val << d->successors[i];
-        return val;
-    } else if (d->result < d->successors.size())
-        return val << d->successors[d->result];
+    if (d->result >= 0  && d->result < d->successors.size())
+        val << d->successors[d->result];
     else
-//        dtkError() << "Select branch result is out of bound:" << d->result;
-        return val;
+        dtkError() << "Select branch result is out of bound:" << d->result;
+
+    return val;
 }
 
 void dtkComposerGraphNodeSelectBranch::eval(void)

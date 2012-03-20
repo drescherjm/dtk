@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. mars 20 13:13:56 2012 (+0100)
+ * Last-Updated: mar. mars 20 14:35:02 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 366
+ *     Update #: 369
  */
 
 /* Commentary:
@@ -112,7 +112,7 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
     dtkTrace() << "current node to evaluate is" << d->current->title();
     bool runnable = true;
     foreach (dtkComposerGraphNode *pred, d->current->predecessors()) {
-        if (pred->status() != dtkComposerGraphNode::Done && (pred->status() != dtkComposerGraphNode::Empty)) {
+        if (pred->status() != dtkComposerGraphNode::Done && (!pred->endloop())) {
             dtkTrace() << "predecessor not ready" << pred->title();
             runnable = false;
             break;
@@ -125,13 +125,13 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
             d->stack << d->current;
             return false;
         }
-        if (run_concurrent && d->current->kind() != dtkComposerGraphNode::SelectBranch)
+        if (run_concurrent && (d->current->kind() != dtkComposerGraphNode::SelectBranch))
             QtConcurrent::run(d->current, &dtkComposerGraphNode::eval);
         else
             d->current->eval();
         foreach ( dtkComposerGraphNode *s, d->current->successors())
             if (!d->stack.contains(s)) {
-                if (s->status() == dtkComposerGraphNode::Done || s->status() == dtkComposerGraphNode::Empty) //must reset status
+                if (s->status() == dtkComposerGraphNode::Done) //must reset status
                     s->setStatus(dtkComposerGraphNode::Ready);
                 d->stack << s;
             }

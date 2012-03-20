@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. mars 20 13:16:41 2012 (+0100)
+ * Last-Updated: mar. mars 20 14:38:43 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1773
+ *     Update #: 1779
  */
 
 /* Commentary:
@@ -135,7 +135,7 @@ void dtkComposerGraphPrivate::addDummyEdge(dtkComposerGraphNode *source, dtkComp
     e->setSource(source);
     e->setDestination(destination);
     e->setId(id);
-    e->source()->addSuccessor(e->destination());
+    e->source()->addSuccessor(e->destination(),id);
     e->destination()->addPredecessor(e->source());
     dummy_edges.insertMulti(node, e);
     edges.insertMulti(0, e);
@@ -237,6 +237,7 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
             d->addDummyEdge( outputs,  d->begin(blocks[incr]), node);
             d->addDummyEdge( d->end(blocks[incr]), vars,       node);
             d->addDummyEdge(     vars, d->begin(blocks[cond]), node);
+            vars->setEndLoop();
 
         } else if (dynamic_cast<dtkComposerNodeControlForEach *>(wrapee)) {
             dtkComposerGraphNode *vars = new dtkComposerGraphNodeSetVariables(wrapee);
@@ -256,6 +257,7 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
             d->addDummyEdge( d->end(blocks[body]), outputs,  node);
             d->addDummyEdge(outputs, vars, node);
             d->addDummyEdge(     vars, set_conds, node);
+            vars->setEndLoop();
 
         } else if (dynamic_cast<dtkComposerNodeControlWhile *>(wrapee)) {
             QList<dtkComposerSceneNodeComposite *> blocks  = dynamic_cast<dtkComposerSceneNodeControl *>(node)->blocks();
@@ -271,6 +273,7 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
             d->addDummyEdge(   select,         end, node, 1);
             d->addDummyEdge(d->end(blocks[body_block]),     outputs, node);
             d->addDummyEdge(  outputs, d->begin(blocks[cond_block]), node);
+            outputs->setEndLoop();
 
         } else if (dynamic_cast<dtkComposerNodeControlDoWhile *>(wrapee)) {
             QList<dtkComposerSceneNodeComposite *> blocks  = dynamic_cast<dtkComposerSceneNodeControl *>(node)->blocks();
@@ -286,6 +289,7 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
             d->addDummyEdge( set_conds, select, node);
             d->addDummyEdge( select, d->begin(blocks[body_block]), node);
             d->addDummyEdge( select, end, node, 1);
+            outputs->setEndLoop();
 
         } else if (dynamic_cast<dtkComposerNodeControlIf *>(wrapee)) {
             dtkComposerGraphNode *inputs_else = new dtkComposerGraphNodeSetInputs(wrapee);

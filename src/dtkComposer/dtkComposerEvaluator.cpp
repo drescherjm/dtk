@@ -1,20 +1,20 @@
-/* dtkComposerEvaluator.cpp --- 
- * 
+/* dtkComposerEvaluator.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mars 19 16:06:50 2012 (+0100)
+ * Last-Updated: mar. mars 20 13:13:56 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 356
+ *     Update #: 366
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerEvaluator.h"
@@ -25,6 +25,8 @@
 #include "dtkComposerGraphNodeBegin.h"
 #include "dtkComposerGraphNodeEnd.h"
 
+#include <dtkLog/dtkLog.h>
+
 #include <QtCore>
 
 // /////////////////////////////////////////////////////////////////
@@ -34,7 +36,7 @@
 #define DTK_DEBUG_COMPOSER_EVALUATION 0
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerEvaluatorPrivate 
+// dtkComposerEvaluatorPrivate
 // /////////////////////////////////////////////////////////////////
 
 
@@ -69,7 +71,7 @@ void dtkComposerEvaluator::run(bool run_concurrent)
 
     emit started();
     while (this->step(run_concurrent));
-    qDebug() << "elapsed time:"<< time.elapsed() << "ms";
+    dtkInfo() << "elapsed time:"<< time.elapsed() << "ms";
     emit stopped();
 }
 
@@ -107,18 +109,18 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
         return false;
 
     d->current = d->stack.takeFirst();
-    qDebug() << "current node to evaluate is" << d->current->title();
+    dtkTrace() << "current node to evaluate is" << d->current->title();
     bool runnable = true;
     foreach (dtkComposerGraphNode *pred, d->current->predecessors()) {
         if (pred->status() != dtkComposerGraphNode::Done && (pred->status() != dtkComposerGraphNode::Empty)) {
-            qDebug() << "predecessor not ready" << pred->title();
+            dtkTrace() << "predecessor not ready" << pred->title();
             runnable = false;
             break;
         }
     }
     if (runnable) {
         if (d->current->breakpoint() && d->current->status() == dtkComposerGraphNode::Ready ) {
-            qDebug() << "break point reached";
+            dtkTrace() << "break point reached";
             d->current->setStatus(dtkComposerGraphNode::Break);
             d->stack << d->current;
             return false;
@@ -134,7 +136,7 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
                 d->stack << s;
             }
     } else {
-        qDebug() << " node not runnable, put it at the end of the list ";
+        dtkTrace() << " node not runnable, put it at the end of the list ";
         d->stack << d->current; // current is not ready, put it at the end
     }
     d->graph->layout();

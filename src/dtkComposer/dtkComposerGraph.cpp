@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mars 19 15:45:24 2012 (+0100)
+ * Last-Updated: mar. mars 20 13:16:41 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1743
+ *     Update #: 1773
  */
 
 /* Commentary:
@@ -44,6 +44,8 @@
 #include "dtkComposerSceneNodeControl.h"
 #include "dtkComposerSceneNodeLeaf.h"
 #include "dtkComposerScenePort.h"
+
+#include <dtkLog/dtkLog.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerGraphPrivate
@@ -110,7 +112,6 @@ dtkComposerGraphNode *dtkComposerGraphPrivate::begin(dtkComposerSceneNode *node)
     } else { //Leaf
         return this->nodes.value(node);
     }
-    // qDebug() << "no begin found for node" << node->title();
     return NULL;
 }
 
@@ -124,7 +125,6 @@ dtkComposerGraphNode *dtkComposerGraphPrivate::end(dtkComposerSceneNode *node)
     } else { //Leaf
         return this->nodes.value(node);
     }
-    // qDebug() << "no end found for node" << node->title();
     return NULL;
 }
 
@@ -171,7 +171,6 @@ void dtkComposerGraphPrivate::removeDummyEdge(dtkComposerGraphNode *source, dtkC
 dtkComposerGraph::dtkComposerGraph(void) : QGraphicsScene(), d(new dtkComposerGraphPrivate)
 {
     d->q = this;
-
     this->connect(this, SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));
     this->setItemIndexMethod(NoIndex);
 }
@@ -196,10 +195,6 @@ dtkComposerGraphNode *dtkComposerGraph::root(void)
 
 void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
 {
-    // static int count = 0;
-
-    // qDebug()<< "add node";
-
     dtkComposerNode *wrapee = node->wrapee();
     dtkComposerGraphNode *begin;
     dtkComposerGraphNode *end;
@@ -317,7 +312,6 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
         d->addDummyEdge(  end,  d->end(node->parent()),    node->parent());
 
     } else if (dynamic_cast<dtkComposerNodeLeaf *>(wrapee)) { // Leaf node
-        // qDebug()<< " add leaf node";
         dtkComposerGraphNode *leaf = new dtkComposerGraphNodeLeaf(wrapee,node->title());
         d->nodes.insertMulti(node, leaf);
         this->addItem(leaf);
@@ -330,14 +324,12 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
         d->addDummyEdge(  leaf,  d->end(node->parent()),  node->parent());
 
     } else if (dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
-        // qDebug()<< " add composite node";
         begin = new dtkComposerGraphNodeBegin(wrapee,"Begin"+node->title());
         end   = new dtkComposerGraphNodeEnd(wrapee,"End"+node->title());
         d->nodes.insertMulti(node, begin);
         d->nodes.insertMulti(node, end);
         this->addItem(begin);
         this->addItem(end);
-        // count += 2;
         // empty composite, add dummy edge between 'begin' and 'end'
         d->addDummyEdge( begin, end, node);
         if (!composite->root()  && !(dynamic_cast<dtkComposerSceneNodeControl *>(node->parent())) ) {
@@ -350,9 +342,9 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
 
 void dtkComposerGraph::removeNode(dtkComposerSceneNode *node)
 {
-    // qDebug()<< "removing node" << node->title();
+    dtkTrace() << "removing node" << node->title();
     dtkComposerSceneNode *parent = node->parent();
-    // qDebug()<< " node parent is " << parent->title();
+    dtkTrace() <<  "node parent is " << parent->title();
     // For control nodes, we have to remove its blocks and then it's pending dummy edges
     if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
 
@@ -370,20 +362,19 @@ void dtkComposerGraph::removeNode(dtkComposerSceneNode *node)
         dtkComposerGraphNode *parent_begin = d->begin(parent);
         dtkComposerGraphNode *parent_end   = d->end(parent);
 
-        // qDebug()<< " removing dummy edges of parent";
+        dtkTrace() << " removing dummy edges of parent";
         foreach( dtkComposerGraphEdge *e, d->dummy_edges.values(parent)) {
             if ((e->source() == parent_begin && e->destination() == d->begin(node) ) || (e->destination() == parent_end && e->source() == d->end(node)))
                 d->remDummyEdge(e, parent);
         }
         // if parent composite is empty after removal, add back dummy edge
         if (d->dummy_edges.values(parent).count() == 0) {
-            // qDebug()<< " add back dummy edge of empty parent";
+            dtkTrace()<< " add back dummy edge of empty parent";
             d->addDummyEdge(  parent_begin, parent_end, parent);
         }
 
     }
     if (dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
-        // qDebug()<< " removing dummy edge of composite";
         d->removeDummyEdge(  d->begin(node), d->end(node), node);
     }
 
@@ -397,8 +388,6 @@ void dtkComposerGraph::removeNode(dtkComposerSceneNode *node)
 
 void dtkComposerGraph::reparentNode(dtkComposerSceneNode *node, dtkComposerSceneNode *newparent)
 {
-    // qDebug()<< "reparent node" << node->title() << "to" << newparent->title();
-
     // remove dummy edges for this node on the parent
     dtkComposerSceneNode *oldparent = node->parent();
 
@@ -420,8 +409,6 @@ void dtkComposerGraph::reparentNode(dtkComposerSceneNode *node, dtkComposerScene
 
 void dtkComposerGraph::addEdge(dtkComposerSceneEdge *edge)
 {
-    // qDebug()<< "add edge";
-
     dtkComposerSceneNode *scene_src = edge->source()->node();
     dtkComposerSceneNode *scene_dest = edge->destination()->node();
 
@@ -445,15 +432,15 @@ void dtkComposerGraph::addEdge(dtkComposerSceneEdge *edge)
         scene_src = scene_src->parent();
 
     if (scene_src->parent() == scene_dest) {
-        // qDebug()<< " add edge output edge to end of composite";
+        dtkTrace() << " add edge output edge to end of composite";
         src = d->end(scene_src);
         dest = d->end(scene_dest);
     } else if (scene_dest->parent() == scene_src) {
-        // qDebug()<< " add input edge from composite";
+        dtkTrace() << " add input edge from composite";
         src = d->begin(scene_src);
         dest = d->begin(scene_dest);
     } else {
-        // qDebug()<< " add regular edge" << scene_src->title() << scene_dest->title();
+        dtkTrace() << " add regular edge" << scene_src->title() << scene_dest->title();
         src = d->end(scene_src);
         dest = d->begin(scene_dest);
         // need to remove dummy edges that start with src
@@ -461,7 +448,7 @@ void dtkComposerGraph::addEdge(dtkComposerSceneEdge *edge)
         foreach( dtkComposerGraphEdge *e, d->dummy_edges.values()) {
             if ((e->source() == src ) || (e->destination() == dest)) {
                 // FIXME: is the condition ok for dummy edges in control nodes ?
-                // qDebug()<< " remove dummy edge because of addEdge";
+                dtkTrace() << " remove dummy edge because of addEdge";
                 d->remDummyEdge(e,d->dummy_edges.key(e));
             }
         }
@@ -485,7 +472,6 @@ void dtkComposerGraph::addEdge(dtkComposerSceneEdge *edge)
 
 void dtkComposerGraph::removeEdge(dtkComposerSceneEdge *edge)
 {
-    // qDebug() << "remove edge ";
     if(!d->edges.contains(edge))
         return;
 
@@ -494,8 +480,6 @@ void dtkComposerGraph::removeEdge(dtkComposerSceneEdge *edge)
     //add back dummy edges if necessary
     dtkComposerSceneNode *scene_src = edge->source()->node();
     dtkComposerSceneNode *scene_dest = edge->destination()->node();
-
-    // qDebug() << " src/dest is  " << scene_src->title() << scene_dest->title();
 
     // first remove edges
     d->edges.remove(edge);
@@ -512,7 +496,7 @@ void dtkComposerGraph::removeEdge(dtkComposerSceneEdge *edge)
     foreach(dtkComposerGraphEdge *e, d->edges.values())
         doit = doit && (e->destination() !=  d->begin(scene_dest));
     if (doit) {
-        // qDebug() << " add back dummy edge " << scene_src->parent()->title() << scene_dest->title();
+        dtkTrace() << " add back dummy edge " << scene_src->parent()->title() << scene_dest->title();
         d->addDummyEdge(  d->begin(scene_src->parent()), d->begin(scene_dest), scene_src->parent());
     }
 
@@ -521,7 +505,7 @@ void dtkComposerGraph::removeEdge(dtkComposerSceneEdge *edge)
     foreach(dtkComposerGraphEdge *e, d->edges.values())
         doit = doit && (e->source() !=  d->end(scene_src));
     if (doit) {
-        // qDebug() << " add back dummy edge " << scene_src->title() << scene_dest->parent()->title();
+        dtkTrace() << " add back dummy edge " << scene_src->title() << scene_dest->parent()->title();
         d->addDummyEdge(  d->end(scene_src), d->end(scene_dest->parent()), scene_src->parent());
     }
 }
@@ -581,12 +565,6 @@ void dtkComposerGraph::layout(void)
     layouter.setGraph(this);
     layouter.layout();
     this->update();
-    // qDebug() << this->toString();
-
-    // qDebug() << "nodes:" <<  d->nodes.count();
-    // qDebug() << "edges:" <<  d->edges.count();
-    // qDebug() << "dummy edges:" <<  d->dummy_edges.count();
-    // qDebug() << "items:" <<  this->items().count()<< "\n";
 }
 
 void dtkComposerGraph::onSelectionChanged(void)

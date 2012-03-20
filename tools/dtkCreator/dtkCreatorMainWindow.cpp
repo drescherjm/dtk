@@ -1,20 +1,20 @@
 /* dtkCreatorMainWindow.cpp ---
- * 
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 20 13:32:39 2012 (+0100)
+ * Last-Updated: Tue Mar 20 13:34:11 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1094
+ *     Update #: 1095
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkCreatorMainWindow.h"
@@ -102,12 +102,12 @@ dtkCreatorMainWindowTitleBar::dtkCreatorMainWindowTitleBar(QWidget *parent)
     layout->addLayout(b_layout);
 
     this->setFixedHeight(70);
-    this->setMouseTracking(true);    
+    this->setMouseTracking(true);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    
+
     this->maxNormal = false;
     this->mouse_down = false;
-    
+
     connect(close, SIGNAL(clicked()), parent, SLOT(close()));
     connect(minimize, SIGNAL(clicked()), this, SLOT(showSmall()));
     connect(zoom, SIGNAL(clicked()), this, SLOT(showMaxRestore()));
@@ -142,17 +142,17 @@ void dtkCreatorMainWindowTitleBar::mousePressEvent(QMouseEvent *event)
 {
     startPos = event->globalPos();
     clickPos = mapTo(this->window(), event->pos());
-    
+
     mouse_down = event->button() == Qt::LeftButton;
 }
 
 void dtkCreatorMainWindowTitleBar::mouseMoveEvent(QMouseEvent *event)
 {
     this->setCursor(Qt::ArrowCursor);
-    
+
     if (maxNormal)
         return;
-    
+
     if(mouse_down)
         this->window()->move(event->globalPos() - clickPos);
 }
@@ -179,7 +179,7 @@ bool dtkCreatorMainWindowPrivate::maySave(void)
             q->tr("The composition has been modified.\n Do you want to save your changes?"),
             QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
             QMessageBox::Save);
-        
+
         if (ret == QMessageBox::Save)
             return q->compositionSave();
         else
@@ -263,7 +263,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->full = false;
 
     d->mouse_down = false;
-    
+
     d->canvas = new QFrame(this);
     d->canvas->setFixedHeight(15);
     d->canvas->setStyleSheet("background-image: url(:dtkCreator/pixmaps/canvas.png); background-repeat: repeat-x; height: 15px;");
@@ -371,7 +371,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     this->setStyleSheet(dtkReadFile(":dtkCreator/dtkCreator.qss"));
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setUnifiedTitleAndToolBarOnMac(true);
-    
+
 #if defined(Q_WS_MAC) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
     d->enableFullScreenSupport();
 #endif
@@ -581,13 +581,13 @@ void dtkCreatorMainWindow::mouseMoveEvent(QMouseEvent *e)
 {
     int x = e->x();
     int y = e->y();
-    
+
     if (d->mouse_down) {
         int dx = x - d->old_pos.x();
         int dy = y - d->old_pos.y();
-        
+
         QRect g = geometry();
-        
+
         if (d->top)
             g.setTop(g.top() + dy);
         if (d->left)
@@ -596,23 +596,23 @@ void dtkCreatorMainWindow::mouseMoveEvent(QMouseEvent *e)
             g.setRight(g.right() + dx);
         if (d->bottom)
             g.setBottom(g.bottom() + dy);
-        
+
         setGeometry(g);
-        
+
         d->old_pos = QPoint(!d->left ? e->x() : d->old_pos.x(), !d->top ? e->y() : d->old_pos.y());
-        
+
     } else {
-        
+
         QRect r = rect();
-        
+
         d->left = qAbs(x - r.left()) <= 10;
         d->right = qAbs(x - r.right()) <= 10;
         d->bottom = qAbs(y - r.bottom()) <= 10;
         d->top = qAbs(y - r.top()) <= 10;
-        
+
         bool hor = d->left | d->right;
         bool ver = d->bottom | d->top;
-        
+
         if (hor && d->bottom) {
             if (d->left)
                 setCursor(Qt::SizeBDiagCursor);
@@ -641,31 +641,33 @@ void dtkCreatorMainWindow::mouseReleaseEvent(QMouseEvent *e)
 void dtkCreatorMainWindow::resizeEvent(QResizeEvent *event)
 {
     QImage image(this->size(), QImage::Format_Mono); image.fill(0);
-    
+
     if(!this->isFullScreen() && !this->isMaximized())
     {
         image.setPixel(0, 0, 1); image.setPixel(1, 0, 1); image.setPixel(2, 0, 1); image.setPixel(3, 0, 1);
         image.setPixel(0, 1, 1); image.setPixel(1, 1, 1);
         image.setPixel(0, 2, 1);
         image.setPixel(0, 3, 1);
-        
+
         image.setPixel(width() - 4, 0, 1); image.setPixel(width() - 3, 0, 1); image.setPixel(width() - 2, 0, 1); image.setPixel(width() - 1, 0, 1);
         image.setPixel(width() - 2, 1, 1); image.setPixel(width() - 1, 1, 1);
         image.setPixel(width() - 1, 2, 1);
         image.setPixel(width() - 1, 3, 1);
-        
+
         image.setPixel(0, height() - 4, 1);
         image.setPixel(0, height() - 3, 1);
         image.setPixel(0, height() - 2, 1); image.setPixel(1, height() - 2, 1);
         image.setPixel(0, height() - 1, 1); image.setPixel(1, height() - 1, 1); image.setPixel(2, height() - 1, 1); image.setPixel(3, height() - 1, 1);
-        
+
         image.setPixel(width() - 1, height() - 4, 1);
         image.setPixel(width() - 1, height() - 3, 1);
         image.setPixel(width() - 2, height() - 2, 1); image.setPixel(width() - 1, height() - 2, 1);
         image.setPixel(width() - 4, height() - 1, 1); image.setPixel(width() - 3, height() - 1, 1); image.setPixel(width() - 2, height() - 1, 1); image.setPixel(width() - 1, height() - 1, 1);
     }
-    
+
+#if defined(Q_WS_MAC)
     image.invertPixels();
-    
+#endif
+
     this->setMask(QPixmap::fromImage(image));
 }

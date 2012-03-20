@@ -19,6 +19,12 @@
     <file>pixmaps/zoom-pressed.png</file>
     <file>pixmaps/zoom-rollover.png</file>
 
+    <file>pixmaps/title_bar-segment-left.png</file>
+    <file>pixmaps/title_bar-segment-right.png</file>
+
+    <file>pixmaps/title_bar-segment-left-pressed.png</file>
+    <file>pixmaps/title_bar-segment-right-pressed.png</file>
+
     <file>fonts/maven_medium.otf</file>
     <file>fonts/maven_regular.otf</file>
   </qresource>

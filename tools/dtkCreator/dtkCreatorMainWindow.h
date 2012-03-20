@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:38:47 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Mar 19 23:00:29 2012 (+0100)
+ * Last-Updated: Tue Mar 20 13:31:38 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 49
+ *     Update #: 55
  */
 
 /* Commentary: 
@@ -54,7 +54,8 @@ public slots:
     void showFullScreen(void);
 
 protected slots:
-    void showGraph(void);
+    void switchToCompo(void);
+    void switchToDebug(void);
 
 protected:
     void closeEvent(QCloseEvent *event);

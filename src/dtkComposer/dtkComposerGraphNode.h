@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:08:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mars 19 16:02:06 2012 (+0100)
+ * Last-Updated: mar. mars 20 14:04:32 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 134
+ *     Update #: 145
  */
 
 /* Commentary:
@@ -38,7 +38,7 @@ public:
     ~dtkComposerGraphNode(void);
 
 public:
-    enum Status { Ready, Done, Running, Break, Empty};
+    enum Status { Ready, Done, Running, Break};
     enum   Kind { SelectBranch, Leaf, Begin, End, SetOutputs, SetInputs, SetVariables, SetConditions };
 
 public:
@@ -68,13 +68,14 @@ public:
 public:
     Status status(void);
     bool   breakpoint(void);
+    bool   endloop(void);
 
 public:
     void  setStatus(Status status);
+    void  setEndLoop(bool value = true);
 
 public:
-    void  setBreakPoint(void);
-    void  unsetBreakPoint(void);
+    void  setBreakPoint(bool value = true);
 
 public:
     virtual dtkComposerGraphNodeList successors();

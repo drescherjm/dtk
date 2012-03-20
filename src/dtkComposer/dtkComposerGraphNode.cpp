@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mars 19 16:06:22 2012 (+0100)
+ * Last-Updated: mar. mars 20 14:08:53 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 188
+ *     Update #: 201
  */
 
 /* Commentary:
@@ -36,6 +36,7 @@ public:
 
 public:
     bool breakpoint;
+    bool endloop;
 };
 
 dtkComposerGraphNode::dtkComposerGraphNode() : QGraphicsItem(),d(new dtkComposerGraphNodePrivate)
@@ -44,8 +45,9 @@ dtkComposerGraphNode::dtkComposerGraphNode() : QGraphicsItem(),d(new dtkComposer
     this->setFlag(QGraphicsItem::ItemIsMovable, true);
     this->setZValue(1);
     this->setTitle("Graph node");
-    this->setStatus(dtkComposerGraphNode::Empty);
+    this->setStatus(dtkComposerGraphNode::Ready);
     d->breakpoint = false;
+    d->endloop    = false;
 }
 
 dtkComposerGraphNode::~dtkComposerGraphNode(void)
@@ -76,14 +78,19 @@ bool dtkComposerGraphNode::breakpoint(void)
     return d->breakpoint;
 }
 
-void dtkComposerGraphNode::setBreakPoint(void)
+bool dtkComposerGraphNode::endloop(void)
 {
-    d->breakpoint = true;
+    return d->endloop;
 }
 
-void dtkComposerGraphNode::unsetBreakPoint(void)
+void dtkComposerGraphNode::setBreakPoint(bool value)
 {
-    d->breakpoint = false;
+    d->breakpoint = value;
+}
+
+void dtkComposerGraphNode::setEndLoop(bool value)
+{
+    d->endloop = value;
 }
 
 QRectF dtkComposerGraphNode::boundingRect(void) const

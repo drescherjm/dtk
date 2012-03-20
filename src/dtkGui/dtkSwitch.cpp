@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb 29 23:54:03 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 19 23:41:42 2012 (+0100)
+ * Last-Updated: Tue Mar 20 14:13:00 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 12
+ *     Update #: 55
  */
 
 /* Commentary: 
@@ -64,6 +64,8 @@ dtkSwitch::dtkSwitch(QWidget *parent) : QDeclarativeView(parent), d(new dtkSwitc
 
     d->root_item = qobject_cast<QDeclarativeItem *>(this->rootObject());
 
+    QMetaObject::invokeMethod(d->root_item, "init");
+
     connect(d->root_item, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
 }
 
@@ -92,6 +94,11 @@ QString dtkSwitch::leftLabel(void)
 QString dtkSwitch::rightLabel(void)
 {
     return d->r_label;
+}
+
+void dtkSwitch::toggle(void)
+{
+    QMetaObject::invokeMethod(d->root_item, "toggle");
 }
 
 void dtkSwitch::setForeground(const QString& pixmap)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:27 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Mar 19 23:44:16 2012 (+0100)
+ * Last-Updated: Tue Mar 20 14:16:57 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1514
+ *     Update #: 1522
  */
 
 /* Commentary: 
@@ -579,6 +579,13 @@ void dtkTagScope::clear(void)
     d->counts.clear();
     d->edit->clear();
 }
+
+
+void dtkTagScope::toggle(void)
+{
+    d->switsh->toggle();
+}
+
 
 void dtkTagScope::render(void)
 {

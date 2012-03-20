@@ -2,6 +2,7 @@ import QtQuick 1.0
 
 Item {
     id: dtkSwitch;
+    objectName: "dtkSwitch";
 
     width: background.width;
     height: background.height;
@@ -10,11 +11,16 @@ Item {
 
     signal toggled(bool on);
 
+    function init() {
+        dtkSwitch.state = "on";
+    }
+
     function toggle() {
-        if (dtkSwitch.state == "on")
+        if (dtkSwitch.state == "on") {
             dtkSwitch.state = "off";
-        else
+        } else {
             dtkSwitch.state = "on";
+        }
 
         toggled(dtkSwitch.state == "on");
     }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb 29 23:53:52 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  1 00:39:33 2012 (+0100)
+ * Last-Updated: Tue Mar 20 13:43:12 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 8
+ *     Update #: 10
  */
 
 /* Commentary: 
@@ -43,6 +43,9 @@ public:
 public:
      Q_INVOKABLE QString leftLabel(void);
      Q_INVOKABLE QString rightLabel(void);
+
+public slots:
+     void toggle(void);
 
 public slots:
      void setForeground(const QString& pixmap);

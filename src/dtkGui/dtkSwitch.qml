@@ -20,10 +20,10 @@ Item {
     }
 
     function releaseSwitch() {
-        if (knob.x == 2) {
+        if (knob.x == 0) {
             if (dtkSwitch.state == "off") return;
         }
-        if (knob.x == (background.width - knob.width - 2)) {
+        if (knob.x == (background.width - knob.width)) {
             if (dtkSwitch.state == "on") return;
         }
         toggle();
@@ -81,8 +81,8 @@ Item {
             anchors.fill: parent;
             drag.target: knob;
             drag.axis: Drag.XAxis;
-            drag.minimumX: 2;
-            drag.maximumX: background.width - knob.width - 2;
+            drag.minimumX: 0;
+            drag.maximumX: background.width - knob.width;
             onClicked: toggle();
             onReleased: releaseSwitch();
         }
@@ -91,12 +91,12 @@ Item {
     states: [
         State {
             name: "on"
-            PropertyChanges { target: knob; x: background.width - knob.width - 2; }
+            PropertyChanges { target: knob; x: background.width - knob.width; }
             PropertyChanges { target: dtkSwitch; on: true; }
         },
         State {
             name: "off"
-            PropertyChanges { target: knob; x: 2; }
+            PropertyChanges { target: knob; x: 0; }
             PropertyChanges { target: dtkSwitch; on: false; }
         }
     ]

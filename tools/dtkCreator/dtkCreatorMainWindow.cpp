@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar 15 12:14:19 2012 (+0100)
+ * Last-Updated: Tue Mar 20 09:12:00 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 881
+ *     Update #: 951
  */
 
 /* Commentary: 
@@ -103,7 +103,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->editor->setScene(d->composer->scene());
     d->editor->setStack(d->composer->stack());
     d->editor->setGraph(d->composer->graph());
-    d->editor->setFixedWidth(300);
+    d->editor->setFixedWidth(250);
 
     d->model = new dtkComposerSceneModel(this);
     d->model->setScene(d->composer->scene());
@@ -111,21 +111,29 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->scene = new dtkComposerSceneView(this);
     d->scene->setScene(d->composer->scene());
     d->scene->setModel(d->model);
-    d->scene->setFixedWidth(300);
+    d->scene->setFixedWidth(250);
 
     d->stack = new dtkComposerStackView(this);
     d->stack->setStack(d->composer->stack());
-    d->stack->setFixedWidth(300);
+    d->stack->setFixedWidth(250);
 
     d->nodes = new dtkComposerFactoryView(this);
-    d->nodes->setFixedWidth(300);
+    d->nodes->setFixedWidth(250);
     d->nodes->setFactory(d->composer->factory());
 
     d->graph = new dtkComposerGraphView(this);
     d->graph->setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
     d->graph->setScene(d->composer->graph());
 
+    d->title_bar = new dtkCreatorMainWindowTitleBar(this);
+
     d->closing = false;
+
+    d->mouse_down = false;
+    
+    d->canvas = new QFrame(this);
+    d->canvas->setFixedHeight(15);
+    d->canvas->setStyleSheet("background-image: url(:dtkCreator/pixmaps/canvas.png); background-repeat: repeat-x; height: 15px;");
 
     // Menus & Actions
 
@@ -199,7 +207,6 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     l_lateral->setContentsMargins(0, 0, 0, 0);
     l_lateral->setSpacing(0);
     l_lateral->addWidget(d->nodes);
-    // l_lateral->addWidget(d->editor);
 
     QVBoxLayout *r_lateral = new QVBoxLayout;
     r_lateral->setContentsMargins(0, 0, 0, 0);
@@ -216,8 +223,10 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     i_layout->addLayout(r_lateral);
 
     QVBoxLayout *layout = new QVBoxLayout;
-    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setMargin(1);
     layout->setSpacing(0);
+    layout->addWidget(d->title_bar);
+    layout->addWidget(d->canvas);
     layout->addLayout(i_layout);
 
     QWidget *central = new QWidget(this);
@@ -226,7 +235,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     this->readSettings();
 
     this->setCentralWidget(central);
-    // this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
+    this->setMouseTracking(true);
+    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setUnifiedTitleAndToolBarOnMac(true);
     
 #if defined(Q_WS_MAC) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
@@ -367,6 +377,29 @@ bool dtkCreatorMainWindow::compositionInsert(const QString& file)
     return status;
 }
 
+void dtkCreatorMainWindow::setWindowModified(bool modified)
+{
+    QMainWindow::setWindowModified(modified);
+
+    d->title_bar->setTitle(this->windowTitle());
+}
+
+void dtkCreatorMainWindow::setWindowFilePath(const QString& path)
+{
+    QMainWindow::setWindowFilePath(path);
+
+    d->title_bar->setTitle(this->windowTitle());
+}
+
+void dtkCreatorMainWindow::showFullScreen(void)
+{
+#if defined(Q_WS_MAC) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
+    d->showFullScreen();
+#else
+    QMainWindow::showFullScreen();
+#endif
+}
+
 void dtkCreatorMainWindow::showGraph(void)
 {
     d->graph->move(this->geometry().topRight());
@@ -386,53 +419,101 @@ void dtkCreatorMainWindow::closeEvent(QCloseEvent *event)
      }
 }
 
-// void dtkCreatorMainWindow::mouseMoveEvent(QMouseEvent *event)
-// {
-//     if (!d->drag_point.isNull()) {
-        
-//         QPoint dest = QPoint(event->globalPos() - d->drag_point);
-        
-// #if defined(Q_WS_MAC)
-//         if (dest.y() <= 22)
-//             dest.setY(22);
-// #endif
-        
-//         this->move(dest);
-        
-//         event->accept();
-//     }
+void dtkCreatorMainWindow::mousePressEvent(QMouseEvent *e)
+{
+    d->old_pos = e->pos();
+    d->mouse_down = e->button() == Qt::LeftButton;
+}
 
-//     QMainWindow::mouseMoveEvent(event);
-// }
-
-// void dtkCreatorMainWindow::mousePressEvent(QMouseEvent *event)
-// {
-//     if (event->button() == Qt::LeftButton) {
-//         d->drag_point = event->globalPos() - frameGeometry().topLeft();
-//         event->accept();
-//     }
-
-//     QMainWindow::mousePressEvent(event);
-// }
-
-// void dtkCreatorMainWindow::mouseReleaseEvent(QMouseEvent *event)
-// {
-//     if (event->button() == Qt::LeftButton) {
-//         d->drag_point = QPoint(0, 0);
-//     }
-
-//     QMainWindow::mouseReleaseEvent(event);
-// }
-
-// void dtkCreatorMainWindow::resizeEvent(QResizeEvent *event)
-// {
-//     QPainterPath r_path;
-//     r_path.addRoundedRect(QRectF(this->rect()), 2, 5, Qt::AbsoluteSize);
+void dtkCreatorMainWindow::mouseMoveEvent(QMouseEvent *e)
+{
+    int x = e->x();
+    int y = e->y();
     
-//     QPainterPath s_path;
-//     s_path.addRect(QRectF(this->rect().x(), this->rect().y()+5, this->rect().width(), this->rect().height()-5));
-    
-//     this->setMask(QRegion(r_path.united(s_path).toFillPolygon().toPolygon()));
+    if (d->mouse_down) {
+        int dx = x - d->old_pos.x();
+        int dy = y - d->old_pos.y();
+        
+        QRect g = geometry();
+        
+        if (d->top)
+            g.setTop(g.top() + dy);
+        if (d->left)
+            g.setLeft(g.left() + dx);
+        if (d->right)
+            g.setRight(g.right() + dx);
+        if (d->bottom)
+            g.setBottom(g.bottom() + dy);
+        
+        setGeometry(g);
+        
+        d->old_pos = QPoint(!d->left ? e->x() : d->old_pos.x(), !d->top ? e->y() : d->old_pos.y());
+        
+    } else {
+        
+        QRect r = rect();
+        
+        d->left = qAbs(x - r.left()) <= 10;
+        d->right = qAbs(x - r.right()) <= 10;
+        d->bottom = qAbs(y - r.bottom()) <= 10;
+        d->top = qAbs(y - r.top()) <= 10;
+        
+        bool hor = d->left | d->right;
+        bool ver = d->bottom | d->top;
+        
+        if (hor && d->bottom) {
+            if (d->left)
+                setCursor(Qt::SizeBDiagCursor);
+            else
+                setCursor(Qt::SizeFDiagCursor);
+        } else if (hor && d->top) {
+            if (d->left)
+                setCursor(Qt::SizeFDiagCursor);
+            else
+                setCursor(Qt::SizeBDiagCursor);
+        } else if (hor) {
+            setCursor(Qt::SizeHorCursor);
+        } else if (ver) {
+            setCursor(Qt::SizeVerCursor);
+        } else {
+            setCursor(Qt::ArrowCursor);
+        }
+    }
+}
 
-//     QMainWindow::resizeEvent(event);
-// }
+void dtkCreatorMainWindow::mouseReleaseEvent(QMouseEvent *e)
+{
+    d->mouse_down = false;
+}
+
+void dtkCreatorMainWindow::resizeEvent(QResizeEvent *event)
+{
+    QImage image(this->size(), QImage::Format_Mono); image.fill(0);
+    
+    if(!this->isFullScreen() && !this->isMaximized())
+    {
+        image.setPixel(0, 0, 1); image.setPixel(1, 0, 1); image.setPixel(2, 0, 1); image.setPixel(3, 0, 1);
+        image.setPixel(0, 1, 1); image.setPixel(1, 1, 1);
+        image.setPixel(0, 2, 1);
+        image.setPixel(0, 3, 1);
+        
+        image.setPixel(width() - 4, 0, 1); image.setPixel(width() - 3, 0, 1); image.setPixel(width() - 2, 0, 1); image.setPixel(width() - 1, 0, 1);
+        image.setPixel(width() - 2, 1, 1); image.setPixel(width() - 1, 1, 1);
+        image.setPixel(width() - 1, 2, 1);
+        image.setPixel(width() - 1, 3, 1);
+        
+        image.setPixel(0, height() - 4, 1);
+        image.setPixel(0, height() - 3, 1);
+        image.setPixel(0, height() - 2, 1); image.setPixel(1, height() - 2, 1);
+        image.setPixel(0, height() - 1, 1); image.setPixel(1, height() - 1, 1); image.setPixel(2, height() - 1, 1); image.setPixel(3, height() - 1, 1);
+        
+        image.setPixel(width() - 1, height() - 4, 1);
+        image.setPixel(width() - 1, height() - 3, 1);
+        image.setPixel(width() - 2, height() - 2, 1); image.setPixel(width() - 1, height() - 2, 1);
+        image.setPixel(width() - 4, height() - 1, 1); image.setPixel(width() - 3, height() - 1, 1); image.setPixel(width() - 2, height() - 1, 1); image.setPixel(width() - 1, height() - 1, 1);
+    }
+    
+    image.invertPixels();
+    
+    this->setMask(QPixmap::fromImage(image));
+}

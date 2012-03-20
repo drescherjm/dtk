@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb 29 23:54:03 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  1 00:39:25 2012 (+0100)
+ * Last-Updated: Mon Mar 19 23:41:42 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 12
  */
 
 /* Commentary: 
@@ -59,6 +59,7 @@ dtkSwitch::dtkSwitch(QWidget *parent) : QDeclarativeView(parent), d(new dtkSwitc
     d->update();
 
     this->setSource(QUrl("qrc:dtkGui/dtkSwitch.qml"));
+    this->setStyleSheet("background: transparent;");
     this->setResizeMode(QDeclarativeView::SizeViewToRootObject);
 
     d->root_item = qobject_cast<QDeclarativeItem *>(this->rootObject());

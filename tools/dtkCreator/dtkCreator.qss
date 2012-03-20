@@ -4,9 +4,9 @@
 ;; Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ;; Created: Thu Mar 15 12:05:17 2012 (+0100)
 ;; Version: $Id$
-;; Last-Updated: Tue Mar 20 10:00:26 2012 (+0100)
+;; Last-Updated: Tue Mar 20 13:30:19 2012 (+0100)
 ;;           By: Julien Wintz
-;;     Update #: 27
+;;     Update #: 135
 */
 
 /*Commentary: 
@@ -59,3 +59,32 @@ dtkCreatorMainWindowTitleBar QToolButton#full { background-image: url(:dtkCreato
 dtkCreatorMainWindowTitleBar QToolButton#full:active { background-image: url(:dtkCreator/pixmaps/fullscreen-active.png); }
 dtkCreatorMainWindowTitleBar QToolButton#full:active:hover { background-image: url(:dtkCreator/pixmaps/fullscreen-rollover.png); }
 dtkCreatorMainWindowTitleBar QToolButton#full:active:pressed { background-image: url(:dtkCreator/pixmaps/fullscreen-pressed.png); }
+
+
+dtkCreatorMainWindowTitleBar QPushButton#compo {
+    border-image: url(:dtkCreator/pixmaps/title_bar-segment-left.png) 3 2 5 4;
+    border-top: 3px transparent;
+    border-right: 2px transparent;
+    border-bottom: 5px transparent;
+    border-left: 4px transparent;
+    min-width: 100px;
+}
+
+dtkCreatorMainWindowTitleBar QPushButton#compo:checked {
+    color: white;
+    border-image: url(:dtkCreator/pixmaps/title_bar-segment-left-pressed.png) 3 2 5 4;    
+}
+
+dtkCreatorMainWindowTitleBar QPushButton#debug {
+    border-image: url(:dtkCreator/pixmaps/title_bar-segment-right.png) 3 4 5 2;
+    border-top: 3px transparent;
+    border-right: 4px transparent;
+    border-bottom: 5px transparent;
+    border-left: 2px transparent;
+    min-width: 100px;
+}
+
+dtkCreatorMainWindowTitleBar QPushButton#debug:checked {
+    color: white;
+    border-image: url(:dtkCreator/pixmaps/title_bar-segment-right-pressed.png) 3 4 5 2;
+}

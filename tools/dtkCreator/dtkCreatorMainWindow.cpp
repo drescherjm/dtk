@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: mar. mars 20 10:56:36 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 994
+ * Last-Updated: Tue Mar 20 13:34:11 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 1095
  */
 
 /* Commentary:
@@ -35,6 +35,9 @@
 
 #include <dtkCore/dtkGlobal.h>
 
+#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLogView.h>
+
 #include <QtCore>
 #include <QtGui>
 
@@ -59,16 +62,44 @@ dtkCreatorMainWindowTitleBar::dtkCreatorMainWindowTitleBar(QWidget *parent)
     this->label = new QLabel(this);
     this->label->setText("dtkCreator - untitled.txt");
     this->label->setAlignment(Qt::AlignCenter);
+    
+    QPushButton *compo_button = new QPushButton("Composition", this);
+    compo_button->setCheckable(true);
+    compo_button->setChecked(true);
+    compo_button->setObjectName("compo");
 
-    QHBoxLayout *hbox = new QHBoxLayout(this);
-    hbox->setContentsMargins(3, 3, 3, 3);
-    hbox->setSpacing(0);
-    hbox->setAlignment(Qt::AlignTop);
-    hbox->addWidget(close);
-    hbox->addWidget(minimize);
-    hbox->addWidget(zoom);
-    hbox->addWidget(label);
-    hbox->addWidget(full);
+    QPushButton *debug_button = new QPushButton("Debug", this);
+    debug_button->setCheckable(true);
+    debug_button->setChecked(false);
+    debug_button->setObjectName("debug");
+
+    QButtonGroup *button_group = new QButtonGroup(this);
+    button_group->addButton(compo_button);
+    button_group->addButton(debug_button);
+    button_group->setExclusive(true);
+
+    QHBoxLayout *t_layout = new QHBoxLayout;
+    t_layout->setContentsMargins(3, 3, 3, 0);
+    t_layout->setSpacing(0);
+    t_layout->setAlignment(Qt::AlignTop);
+    t_layout->addWidget(close);
+    t_layout->addWidget(minimize);
+    t_layout->addWidget(zoom);
+    t_layout->addWidget(label);
+    t_layout->addWidget(full);
+
+    QHBoxLayout *b_layout = new QHBoxLayout;
+    b_layout->setContentsMargins(0, 0, 10, 20);
+    b_layout->setSpacing(12);
+    b_layout->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
+    b_layout->addWidget(compo_button);
+    b_layout->addWidget(debug_button);
+
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    layout->addLayout(t_layout);
+    layout->addLayout(b_layout);
 
     this->setFixedHeight(70);
     this->setMouseTracking(true);
@@ -81,6 +112,9 @@ dtkCreatorMainWindowTitleBar::dtkCreatorMainWindowTitleBar(QWidget *parent)
     connect(minimize, SIGNAL(clicked()), this, SLOT(showSmall()));
     connect(zoom, SIGNAL(clicked()), this, SLOT(showMaxRestore()));
     connect(full, SIGNAL(clicked()), parent, SLOT(showFullScreen()));
+
+    connect(compo_button, SIGNAL(clicked()), this, SIGNAL(switchToCompo()));
+    connect(debug_button, SIGNAL(clicked()), this, SIGNAL(switchToDebug()));
 }
 
 void dtkCreatorMainWindowTitleBar::setTitle(const QString& title)
@@ -218,10 +252,15 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->graph = new dtkComposerGraphView(this);
     d->graph->setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
     d->graph->setScene(d->composer->graph());
+    d->graph->setVisible(false);
 
     d->title_bar = new dtkCreatorMainWindowTitleBar(this);
 
+    d->log_view = new dtkLogView(this);
+    d->log_view->setVisible(false);
+
     d->closing = false;
+    d->full = false;
 
     d->mouse_down = false;
 
@@ -270,12 +309,6 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->edit_menu->addAction(d->undo_action);
     d->edit_menu->addAction(d->redo_action);
 
-    d->view_graph_action = new QAction("Graph", this);
-    d->view_graph_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_G);
-
-    d->view_menu = menu_bar->addMenu("View");
-    d->view_menu->addAction(d->view_graph_action);
-
     // Connections
 
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(close()));
@@ -290,10 +323,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     connect(d->recent_compositions_menu, SIGNAL(recentFileTriggered(const QString&)), this, SLOT(compositionOpen(const QString&)));
 
-    // connect(d->undo_action, SIGNAL(triggered()), d->composer->stack(), SLOT(undo()));
-    // connect(d->redo_action, SIGNAL(triggered()), d->composer->stack(), SLOT(redo()));
-
-    connect(d->view_graph_action, SIGNAL(triggered()), this, SLOT(showGraph()));
+    connect(d->title_bar, SIGNAL(switchToCompo()), this, SLOT(switchToCompo()));
+    connect(d->title_bar, SIGNAL(switchToDebug()), this, SLOT(switchToDebug()));
 
     // Layout
 
@@ -309,10 +340,16 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     r_lateral->addWidget(d->editor);
     r_lateral->addWidget(d->stack);
 
+    QHBoxLayout *b_layout = new QHBoxLayout;
+    b_layout->setContentsMargins(0, 0, 0, 0);
+    b_layout->setSpacing(0);
+    b_layout->addWidget(d->log_view);
+
     QHBoxLayout *i_layout = new QHBoxLayout;
     i_layout->setContentsMargins(0, 0, 0, 0);
     i_layout->setSpacing(0);
     i_layout->addLayout(l_lateral);
+    i_layout->addWidget(d->graph);
     i_layout->addWidget(d->composer);
     i_layout->addLayout(r_lateral);
 
@@ -322,6 +359,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     layout->addWidget(d->title_bar);
     layout->addWidget(d->canvas);
     layout->addLayout(i_layout);
+    layout->addLayout(b_layout);
 
     QWidget *central = new QWidget(this);
     central->setLayout(layout);
@@ -491,16 +529,35 @@ void dtkCreatorMainWindow::showFullScreen(void)
 #if defined(Q_WS_MAC) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
     d->showFullScreen();
 #else
-    QMainWindow::showFullScreen();
+    d->full = !d->full;
+
+    if(d->full)
+        QMainWindow::showFullScreen();
+    else
+        QMainWindow::showNormal();
 #endif
 }
 
-void dtkCreatorMainWindow::showGraph(void)
+void dtkCreatorMainWindow::switchToCompo(void)
 {
-    d->graph->move(this->geometry().topRight());
-    d->graph->resize(400, this->geometry().size().height() );
-    d->graph->show();
-    d->graph->raise();
+    d->nodes->setVisible(true);
+    d->scene->setVisible(true);
+    d->editor->setVisible(true);
+    d->stack->setVisible(true);
+
+    d->graph->setVisible(false);
+    d->log_view->setVisible(false);
+}
+
+void dtkCreatorMainWindow::switchToDebug(void)
+{
+    d->nodes->setVisible(false);
+    d->scene->setVisible(false);
+    d->editor->setVisible(false);
+    d->stack->setVisible(false);
+
+    d->graph->setVisible(true);
+    d->log_view->setVisible(true);
 }
 
 void dtkCreatorMainWindow::closeEvent(QCloseEvent *event)

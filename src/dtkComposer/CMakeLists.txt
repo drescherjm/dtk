@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Mar 15 12:05:12 2012 (+0100)
-##           By: tkloczko
-##     Update #: 446
+## Last-Updated: mar. mars 20 13:03:55 2012 (+0100)
+##           By: Nicolas Niclausse
+##     Update #: 448
 ######################################################################
 ##
 ### Commentary:
@@ -227,7 +227,8 @@ target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkMath
   dtkCore
-  dtkGui)
+  dtkGui
+  dtkLog)
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

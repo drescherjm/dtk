@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  1 12:37:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 20 09:49:11 2012 (+0100)
+ * Last-Updated: Tue Mar 20 13:31:59 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 88
+ *     Update #: 97
  */
 
 /* Commentary: 
@@ -33,7 +33,22 @@ class dtkComposerStackView;
 
 class dtkRecentFilesMenu;
 
+class dtkLogView;
+
 class dtkCreatorMainWindow;
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
+class dtkCreatorMainWindowDebugControls : public QFrame
+{
+    Q_OBJECT
+
+public:
+     dtkCreatorMainWindowDebugControls(QWidget *parent = 0) {}
+    ~dtkCreatorMainWindowDebugControls(void) {}
+};
 
 // /////////////////////////////////////////////////////////////////
 // dtkCreatorMainWindowTitleBar
@@ -45,6 +60,10 @@ class dtkCreatorMainWindowTitleBar : public QFrame
 
 public:
     dtkCreatorMainWindowTitleBar(QWidget *parent = 0);
+
+signals:
+    void switchToCompo(void);
+    void switchToDebug(void);
 
 public slots:
     void setTitle(const QString& title);
@@ -101,15 +120,15 @@ public:
     dtkComposerStackView *stack;
 
 public:
+    dtkLogView *log_view;
+
+public:
     QMenu *composition_menu;
     QAction *composition_open_action;
     QAction *composition_save_action;
     QAction *composition_saveas_action;
     QAction *composition_insert_action;
     QAction *composition_quit_action;
-
-    QMenu *view_menu;
-    QAction *view_graph_action;
 
     QMenu *edit_menu;
     QAction *undo_action;
@@ -125,6 +144,7 @@ public:
 
 public:
     bool closing;
+    bool full;
 
 public:
     QString current_composition;

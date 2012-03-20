@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Aug  3 17:34:51 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Mar 15 12:05:11 2012 (+0100)
+## Last-Updated: Tue Mar 20 11:33:09 2012 (+0100)
 ##           By: Julien Wintz
-##     Update #: 165
+##     Update #: 166
 ######################################################################
 ## 
 ### Commentary: 
@@ -65,6 +65,7 @@ add_executable(${PROJECT_NAME} MACOSX_BUNDLE WIN32
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
+  dtkLog
   dtkCore
   dtkComposer)
 

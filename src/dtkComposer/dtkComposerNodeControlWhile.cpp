@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 20 13:54:34 2012 (+0100)
- *           By: tkloczko
- *     Update #: 51
+ * Last-Updated: mar. mars 20 16:55:04 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 52
  */
 
 /* Commentary: 
@@ -117,7 +117,6 @@ void dtkComposerNodeControlWhile::setInputs(void)
 
 void dtkComposerNodeControlWhile::setConditions(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
 }
 
 void dtkComposerNodeControlWhile::setOutputs(void)
@@ -131,7 +130,6 @@ void dtkComposerNodeControlWhile::setOutputs(void)
 
 void dtkComposerNodeControlWhile::setVariables(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
 }
 
 int dtkComposerNodeControlWhile::selectBranch(void)
@@ -141,12 +139,10 @@ int dtkComposerNodeControlWhile::selectBranch(void)
 
 void dtkComposerNodeControlWhile::begin(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
 }
 
 void dtkComposerNodeControlWhile::end(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
 }
 
 QString dtkComposerNodeControlWhile::type(void)

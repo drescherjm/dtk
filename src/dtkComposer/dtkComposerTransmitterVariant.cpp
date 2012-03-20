@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 20 13:11:58 2012 (+0100)
+ * Last-Updated: Tue Mar 20 15:14:40 2012 (+0100)
  *           By: tkloczko
- *     Update #: 290
+ *     Update #: 296
  */
 
 /* Commentary: 
@@ -113,6 +113,26 @@ dtkComposerTransmitter::Kind dtkComposerTransmitterVariant::kind(void) const
 QString dtkComposerTransmitterVariant::kindName(void) const
 {
     return "Variant";
+}
+
+QVariant::Type dtkComposerTransmitterVariant::type(void) const
+{
+    if (e->twinned)
+        return d->variant.type();
+
+    foreach(dtkComposerTransmitter *emitter, e->emitters) {
+         if (emitter->active()) {
+             return emitter->variant().type();
+        }
+    }
+
+    foreach(dtkComposerTransmitterVariant *v, e->variants) {
+         if (v->active()) {
+             return v->data().type();
+        }
+    }
+
+    return d->variant.type();
 }
 
 void dtkComposerTransmitterVariant::setTypes(QList<QVariant::Type> types)

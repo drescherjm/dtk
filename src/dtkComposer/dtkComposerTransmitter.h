@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 19 17:07:57 2012 (+0100)
+ * Last-Updated: Tue Mar 20 15:11:32 2012 (+0100)
  *           By: tkloczko
- *     Update #: 139
+ *     Update #: 140
  */
 
 /* Commentary: 
@@ -57,7 +57,7 @@ public:
     QVariant variant(void) const;
 
 public:
-    QVariant::Type type(void) const;
+    virtual QVariant::Type type(void) const;
 
 public:
     QString typeName(void) const;

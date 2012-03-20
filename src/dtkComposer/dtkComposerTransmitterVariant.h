@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 20 12:57:33 2012 (+0100)
+ * Last-Updated: Tue Mar 20 15:11:47 2012 (+0100)
  *           By: tkloczko
- *     Update #: 64
+ *     Update #: 65
  */
 
 /* Commentary: 
@@ -51,6 +51,9 @@ public:
     Kind kind(void) const;
 
     QString kindName(void) const;
+
+public:
+    QVariant::Type type(void) const;
 
 public:
     void setTypes(QList<QVariant::Type> types);

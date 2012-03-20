@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. mars 20 14:35:02 2012 (+0100)
+ * Last-Updated: mar. mars 20 16:57:26 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 369
+ *     Update #: 371
  */
 
 /* Commentary:
@@ -109,7 +109,7 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
         return false;
 
     d->current = d->stack.takeFirst();
-    dtkTrace() << "current node to evaluate is" << d->current->title();
+//    dtkTrace() << "current node to evaluate is" << d->current->title();
     bool runnable = true;
     foreach (dtkComposerGraphNode *pred, d->current->predecessors()) {
         if (pred->status() != dtkComposerGraphNode::Done && (!pred->endloop())) {
@@ -139,6 +139,5 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
         dtkTrace() << " node not runnable, put it at the end of the list ";
         d->stack << d->current; // current is not ready, put it at the end
     }
-    d->graph->layout();
     return !d->stack.isEmpty();
 }

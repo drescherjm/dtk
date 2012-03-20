@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 13:24:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 03:17:31 2012 (+0100)
+ * Last-Updated: Tue Mar 20 14:18:30 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 139
+ *     Update #: 144
  */
 
 /* Commentary: 
@@ -42,6 +42,7 @@ dtkComposerFactoryView::dtkComposerFactoryView(QWidget *parent) : QWidget(parent
     d->factory = NULL;
 
     d->scope = new dtkTagScope(this);
+    d->scope->toggle();
 
     d->cloud = new dtkTagCloud(this);
     d->cloud->setSortingType(dtkTagCloud::Alpha);
@@ -55,6 +56,7 @@ dtkComposerFactoryView::dtkComposerFactoryView(QWidget *parent) : QWidget(parent
     d->controller->attach(d->scope);
     d->controller->attach(d->view);
     d->controller->attach(d->cloud);
+    d->controller->onUnionMode(false);
 
     dtkSplitter *splitter = new dtkSplitter(this);
     splitter->addWidget(d->cloud);

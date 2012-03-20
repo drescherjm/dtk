@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 20 13:34:11 2012 (+0100)
+ * Last-Updated: Tue Mar 20 14:01:41 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1095
+ *     Update #: 1099
  */
 
 /* Commentary:
@@ -30,6 +30,7 @@
 #include <dtkComposer/dtkComposerSceneView.h>
 #include <dtkComposer/dtkComposerStack.h>
 #include <dtkComposer/dtkComposerStackView.h>
+#include <dtkComposer/dtkComposerView.h>
 
 #include <dtkGui/dtkRecentFilesMenu.h>
 

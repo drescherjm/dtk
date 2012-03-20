@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb  9 14:51:48 2012 (+0100)
+ * Last-Updated: Tue Mar 20 13:39:41 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 39
+ *     Update #: 42
  */
 
 /* Commentary: 
@@ -32,6 +32,7 @@ class dtkComposerMachine;
 class dtkComposerPrivate;
 class dtkComposerScene;
 class dtkComposerStack;
+class dtkComposerView;
 
 class DTKCOMPOSER_EXPORT dtkComposer : public QWidget
 {
@@ -56,6 +57,7 @@ public:
     dtkComposerMachine *machine(void);
     dtkComposerScene *scene(void);
     dtkComposerStack *stack(void);
+    dtkComposerView *view(void);
 
 private:
     dtkComposerPrivate *d;

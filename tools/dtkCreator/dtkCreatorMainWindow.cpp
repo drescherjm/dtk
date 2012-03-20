@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 20 09:12:00 2012 (+0100)
+ * Last-Updated: Tue Mar 20 09:58:51 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 951
+ *     Update #: 985
  */
 
 /* Commentary: 
@@ -33,8 +33,102 @@
 
 #include <dtkGui/dtkRecentFilesMenu.h>
 
+#include <dtkCore/dtkGlobal.h>
+
 #include <QtCore>
 #include <QtGui>
+
+// /////////////////////////////////////////////////////////////////
+// dtkCreatorMainWindowTitleBar
+// /////////////////////////////////////////////////////////////////
+
+dtkCreatorMainWindowTitleBar::dtkCreatorMainWindowTitleBar(QWidget *parent)
+{
+    this->minimize = new QToolButton(this);
+    this->minimize->setObjectName("minimize");
+
+    this->zoom = new QToolButton(this);
+    this->zoom->setObjectName("zoom");
+
+    this->close = new QToolButton(this);
+    this->close->setObjectName("close");
+
+    this->full = new QToolButton(this);
+    this->full->setObjectName("full");
+
+    this->label = new QLabel(this);
+    this->label->setText("dtkCreator - untitled.txt");
+    this->label->setAlignment(Qt::AlignCenter);
+    
+    QHBoxLayout *hbox = new QHBoxLayout(this);
+    hbox->setContentsMargins(3, 3, 3, 3);
+    hbox->setSpacing(0);
+    hbox->setAlignment(Qt::AlignTop);
+    hbox->addWidget(close);
+    hbox->addWidget(minimize);
+    hbox->addWidget(zoom);
+    hbox->addWidget(label);
+    hbox->addWidget(full);
+
+    this->setFixedHeight(70);
+    this->setMouseTracking(true);    
+    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    
+    this->maxNormal = false;
+    this->mouse_down = false;
+    
+    connect(close, SIGNAL(clicked()), parent, SLOT(close()));
+    connect(minimize, SIGNAL(clicked()), this, SLOT(showSmall()));
+    connect(zoom, SIGNAL(clicked()), this, SLOT(showMaxRestore()));
+    connect(full, SIGNAL(clicked()), parent, SLOT(showFullScreen()));
+}
+
+void dtkCreatorMainWindowTitleBar::setTitle(const QString& title)
+{
+    this->label->setText(title);
+}
+
+void dtkCreatorMainWindowTitleBar::showSmall(void)
+{
+    this->window()->showMinimized();
+}
+
+void dtkCreatorMainWindowTitleBar::showMaxRestore(void)
+{
+    if (maxNormal) {
+        this->window()->showNormal();
+        maxNormal = !maxNormal;
+    } else {
+        this->window()->showMaximized();
+        maxNormal = !maxNormal;
+    }
+}
+
+void dtkCreatorMainWindowTitleBar::mousePressEvent(QMouseEvent *event)
+{
+    startPos = event->globalPos();
+    clickPos = mapTo(this->window(), event->pos());
+    
+    mouse_down = event->button() == Qt::LeftButton;
+}
+
+void dtkCreatorMainWindowTitleBar::mouseMoveEvent(QMouseEvent *event)
+{
+    this->setCursor(Qt::ArrowCursor);
+    
+    if (maxNormal)
+        return;
+    
+    if(mouse_down)
+        this->window()->move(event->globalPos() - clickPos);
+}
+
+void dtkCreatorMainWindowTitleBar::mouseReleaseEvent(QMouseEvent *event)
+{
+    Q_UNUSED(event);
+
+    mouse_down = false;
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkCreatorMainWindowPrivate
@@ -236,6 +330,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     this->setCentralWidget(central);
     this->setMouseTracking(true);
+    this->setStyleSheet(dtkReadFile(":dtkCreator/dtkCreator.qss"));
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     this->setUnifiedTitleAndToolBarOnMac(true);
     

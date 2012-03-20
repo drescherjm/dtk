@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 19 12:39:04 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 37
+ * Last-Updated: Tue Mar 20 13:54:34 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -24,6 +24,7 @@
 
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
+#include "dtkComposerTransmitterVariant.h"
 
 #include <dtkCore/dtkGlobal.h>
 
@@ -106,7 +107,12 @@ dtkComposerNodeComposite *dtkComposerNodeControlWhile::block(int id)
 
 void dtkComposerNodeControlWhile::setInputs(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+    foreach(dtkComposerTransmitter *t, d->body_block->receivers()) {
+        if (dtkComposerTransmitterVariant *v = dynamic_cast<dtkComposerTransmitterVariant *>(t)) {
+            v->setData(v->data());
+            v->setTwinned(true);
+        }
+    }
 }
 
 void dtkComposerNodeControlWhile::setConditions(void)
@@ -116,7 +122,11 @@ void dtkComposerNodeControlWhile::setConditions(void)
 
 void dtkComposerNodeControlWhile::setOutputs(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+    foreach(dtkComposerTransmitter *t, d->body_block->emitters()) {
+        if (dtkComposerTransmitterVariant *v = dynamic_cast<dtkComposerTransmitterVariant *>(t)) {
+            v->twin()->setData(v->data());
+        }
+    }    
 }
 
 void dtkComposerNodeControlWhile::setVariables(void)
@@ -126,7 +136,7 @@ void dtkComposerNodeControlWhile::setVariables(void)
 
 int dtkComposerNodeControlWhile::selectBranch(void)
 {
-    return -1;
+    return (int)(!d->cond.data());
 }
 
 void dtkComposerNodeControlWhile::begin(void)

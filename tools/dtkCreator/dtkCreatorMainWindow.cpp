@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 09:39:50 2012 (+0100)
+ * Last-Updated: Wed Mar 21 11:48:15 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1136
+ *     Update #: 1252
  */
 
 /* Commentary:
@@ -33,6 +33,7 @@
 #include <dtkComposer/dtkComposerView.h>
 
 #include <dtkGui/dtkRecentFilesMenu.h>
+#include <dtkGui/dtkSplitter.h>
 
 #include <dtkCore/dtkGlobal.h>
 
@@ -94,13 +95,18 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 {
     d->q = this;
 
+    // --
+
+    this->readSettings();
+
+    // -- Elements
+
     d->composer = new dtkComposer;
 
     d->editor = new dtkComposerSceneNodeEditor(this);
     d->editor->setScene(d->composer->scene());
     d->editor->setStack(d->composer->stack());
     d->editor->setGraph(d->composer->graph());
-    d->editor->setFixedWidth(250);
 
     d->model = new dtkComposerSceneModel(this);
     d->model->setScene(d->composer->scene());
@@ -108,14 +114,11 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->scene = new dtkComposerSceneView(this);
     d->scene->setScene(d->composer->scene());
     d->scene->setModel(d->model);
-    d->scene->setFixedWidth(250);
 
     d->stack = new dtkComposerStackView(this);
     d->stack->setStack(d->composer->stack());
-    d->stack->setFixedWidth(250);
 
     d->nodes = new dtkComposerFactoryView(this);
-    d->nodes->setFixedWidth(250);
     d->nodes->setFactory(d->composer->factory());
 
     d->graph = new dtkComposerGraphView(this);
@@ -128,7 +131,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     d->closing = false;
 
-    // Menus & Actions
+    // -- Menus & Actions
 
     QMenuBar *menu_bar = this->menuBar();
 
@@ -178,10 +181,10 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     this->addAction(switchToCompoAction);
     this->addAction(switchToDebugAction);
 
+    // -- Connections
+
     connect(switchToCompoAction, SIGNAL(triggered()), this, SLOT(switchToCompo()));
     connect(switchToDebugAction, SIGNAL(triggered()), this, SLOT(switchToDebug()));
-
-    // Connections
 
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(close()));
 
@@ -195,43 +198,68 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     connect(d->recent_compositions_menu, SIGNAL(recentFileTriggered(const QString&)), this, SLOT(compositionOpen(const QString&)));
 
-    // Layout
+    // -- Layout
 
-    QVBoxLayout *l_lateral = new QVBoxLayout;
-    l_lateral->setContentsMargins(0, 0, 0, 0);
-    l_lateral->setSpacing(0);
-    l_lateral->addWidget(d->nodes);
+    // QVBoxLayout *l_lateral = new QVBoxLayout;
+    // l_lateral->setContentsMargins(0, 0, 0, 0);
+    // l_lateral->setSpacing(0);
+    // l_lateral->addWidget(d->nodes);
 
-    QVBoxLayout *r_lateral = new QVBoxLayout;
-    r_lateral->setContentsMargins(0, 0, 0, 0);
-    r_lateral->setSpacing(0);
-    r_lateral->addWidget(d->scene);
-    r_lateral->addWidget(d->editor);
-    r_lateral->addWidget(d->stack);
+    // QVBoxLayout *r_lateral = new QVBoxLayout;
+    // r_lateral->setContentsMargins(0, 0, 0, 0);
+    // r_lateral->setSpacing(0);
+    // r_lateral->addWidget(d->scene);
+    // r_lateral->addWidget(d->editor);
+    // r_lateral->addWidget(d->stack);
+
+    // QHBoxLayout *i_layout = new QHBoxLayout;
+    // i_layout->setContentsMargins(0, 0, 0, 0);
+    // i_layout->setSpacing(0);
+    // i_layout->addLayout(l_lateral);
+    // i_layout->addWidget(d->graph);
+    // i_layout->addWidget(d->composer);
+    // i_layout->addLayout(r_lateral);
+
+    // QVBoxLayout *layout = new QVBoxLayout;
+    // layout->setContentsMargins(0, 0, 0, 0);
+    // layout->setSpacing(0);
+    // layout->addLayout(i_layout);
+    // layout->addLayout(b_layout);
+
+    dtkSplitter *right = new dtkSplitter(this);
+    right->setOrientation(Qt::Vertical);
+    right->addWidget(d->scene);
+    right->addWidget(d->editor);
+    right->addWidget(d->stack);
+    right->setSizes(QList<int>()
+                    << this->size().height()/3
+                    << this->size().height()/3
+                    << this->size().height()/3);
+
+    d->inner = new dtkSplitter(this);
+    d->inner->setOrientation(Qt::Horizontal);
+    d->inner->addWidget(d->nodes);
+    d->inner->addWidget(d->graph);
+    d->inner->addWidget(d->composer);
+    d->inner->addWidget(right);
+    d->inner->setSizes(QList<int>()
+                    << 300
+                    << 0
+                    << this->size().width()-300-300
+                    << 300);
 
     QHBoxLayout *b_layout = new QHBoxLayout;
     b_layout->setContentsMargins(0, 0, 0, 0);
     b_layout->setSpacing(0);
     b_layout->addWidget(d->log_view);
 
-    QHBoxLayout *i_layout = new QHBoxLayout;
-    i_layout->setContentsMargins(0, 0, 0, 0);
-    i_layout->setSpacing(0);
-    i_layout->addLayout(l_lateral);
-    i_layout->addWidget(d->graph);
-    i_layout->addWidget(d->composer);
-    i_layout->addLayout(r_lateral);
+    QWidget *bottom = new QWidget(this);
+    bottom->setLayout(b_layout);
 
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(0);
-    layout->addLayout(i_layout);
-    layout->addLayout(b_layout);
-
-    QWidget *central = new QWidget(this);
-    central->setLayout(layout);
-
-    this->readSettings();
+    dtkSplitter *central = new dtkSplitter(this);
+    central->setOrientation(Qt::Vertical);
+    central->addWidget(d->inner);
+    central->addWidget(bottom);
 
     this->setCentralWidget(central);
     this->setStyleSheet(dtkReadFile(":dtkCreator/dtkCreator.qss"));
@@ -241,7 +269,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->enableFullScreenSupport();
 #endif
 
-    d->setCurrentFile(QString());
+    d->setCurrentFile("");
 }
 
 dtkCreatorMainWindow::~dtkCreatorMainWindow(void)
@@ -384,10 +412,15 @@ void dtkCreatorMainWindow::switchToCompo(void)
 
     d->graph->setVisible(false);
     d->log_view->setVisible(false);
+    
+    d->inner->setSizes(QList<int>() << d->wl << 0 << this->size().width() - d->wl - d->wr << d->wr);
 }
 
 void dtkCreatorMainWindow::switchToDebug(void)
 {
+    d->wl = d->nodes->size().width();
+    d->wr = d->stack->size().width();
+
     d->nodes->setVisible(false);
     d->scene->setVisible(false);
     d->editor->setVisible(false);
@@ -395,6 +428,10 @@ void dtkCreatorMainWindow::switchToDebug(void)
 
     d->graph->setVisible(true);
     d->log_view->setVisible(true);
+
+    int w = this->size().width() - d->wl - d->wr;
+
+    d->inner->setSizes(QList<int>() << d->wl << w/2 << w/2 << d->wr);
 }
 
 void dtkCreatorMainWindow::closeEvent(QCloseEvent *event)

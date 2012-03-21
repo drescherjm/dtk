@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 20 16:09:44 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 396
+ * Last-Updated: Wed Mar 21 11:12:47 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 404
  */
 
 /* Commentary: 
@@ -140,11 +140,17 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
 
         int i = 0;
 
+        QDomElement child = this->writeNode(control->header(), tag, document);
+        tag.appendChild(child);
+
         foreach(dtkComposerSceneNodeComposite *block, control->blocks()) {
-            QDomElement child = this->writeNode(block, tag, document);
+            child = this->writeNode(block, tag, document);
             child.setAttribute("blockid", i++);
             tag.appendChild(child);
         }
+
+        child = this->writeNode(control->footer(), tag, document);
+        tag.appendChild(child);
     }
 
     if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
@@ -234,6 +240,12 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
     }
 
     if(dtkComposerSceneNodeLeaf *leaf = dynamic_cast<dtkComposerSceneNodeLeaf *>(node)) {
+
+        if (dynamic_cast<dtkComposerNodeLeaf *>(leaf->wrapee())->isHeader())
+            tag.setTagName("header");
+
+        if (dynamic_cast<dtkComposerNodeLeaf *>(leaf->wrapee())->isFooter())
+            tag.setTagName("footer");
 
         tag.setAttribute("type", leaf->wrapee()->type());
 

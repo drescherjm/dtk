@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 10:12:17 2012 (+0100)
+ * Last-Updated: Wed Mar 21 11:53:27 2012 (+0100)
  *           By: tkloczko
- *     Update #: 73
+ *     Update #: 76
  */
 
 /* Commentary: 
@@ -18,12 +18,11 @@
  */
 
 #include "dtkComposerNodeControlFor.h"
-#include "dtkComposerNodeLeaf.h"
-#include "dtkComposerNodeBoolean.h"
-#include "dtkComposerNodeComposite.h"
 
-#include "dtkComposerTransmitterEmitter.h"
-#include "dtkComposerTransmitterReceiver.h"
+#include "dtkComposerNodeComposite.h"
+#include "dtkComposerNodeProxy.h"
+
+#include "dtkComposerTransmitter.h"
 
 #include <dtkCore/dtkGlobal.h>
 
@@ -34,8 +33,8 @@
 class dtkComposerNodeControlForPrivate
 {
 public:    
-    dtkComposerNodeBoolean *header;
-    dtkComposerNodeBoolean *footer;
+    dtkComposerNodeProxy *header;
+    dtkComposerNodeProxy *footer;
 
     dtkComposerNodeComposite *cond_block;
     dtkComposerNodeComposite *body_block;
@@ -48,11 +47,13 @@ public:
 
 dtkComposerNodeControlFor::dtkComposerNodeControlFor(void) : dtkComposerNodeControl(), d(new dtkComposerNodeControlForPrivate)
 {
-    d->header = new dtkComposerNodeBoolean;
+    d->header = new dtkComposerNodeProxy;
     delete d->header->removeEmitter(0);
+    d->header->setAsHeader(true);
 
-    d->footer = new dtkComposerNodeBoolean;
+    d->footer = new dtkComposerNodeProxy;
     delete d->footer->removeReceiver(0);
+    d->footer->setAsFooter(true);
 
     d->cond_block = new dtkComposerNodeComposite;
     d->cond_block->setTitleHint("Conditional");

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 10:09:06 2012 (+0100)
+ * Last-Updated: Wed Mar 21 11:45:31 2012 (+0100)
  *           By: tkloczko
- *     Update #: 11
+ *     Update #: 27
  */
 
 /* Commentary: 
@@ -18,12 +18,12 @@
  */
 
 #include "dtkComposerNodeControlIf.h"
-#include "dtkComposerNodeLeaf.h"
-#include "dtkComposerNodeBoolean.h"
-#include "dtkComposerNodeComposite.h"
 
-#include "dtkComposerTransmitterEmitter.h"
-#include "dtkComposerTransmitterReceiver.h"
+#include "dtkComposerNodeComposite.h"
+#include "dtkComposerNodeProxy.h"
+
+#include "dtkComposerTransmitter.h"
+#include "dtkComposerTransmitterVariant.h"
 
 #include <dtkCore/dtkGlobal.h>
 
@@ -34,11 +34,14 @@
 class dtkComposerNodeControlIfPrivate
 {
 public:    
-    dtkComposerNodeBoolean *header;
-    dtkComposerNodeBoolean *footer;
+    dtkComposerNodeProxy *header;
+    dtkComposerNodeProxy *footer;
 
     dtkComposerNodeComposite *then_block;
     dtkComposerNodeComposite *else_block;
+
+public:
+    dtkComposerTransmitterVariant cond;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -47,11 +50,23 @@ public:
 
 dtkComposerNodeControlIf::dtkComposerNodeControlIf(void) : dtkComposerNodeControl(), d(new dtkComposerNodeControlIfPrivate)
 {
-    d->header = new dtkComposerNodeBoolean;
-    delete d->header->removeEmitter(0);
+    QList<QVariant::Type> variants;
+    variants << QVariant::Bool;
+    d->cond.setTypes(variants);
 
-    d->footer = new dtkComposerNodeBoolean;
+    d->header = new dtkComposerNodeProxy;
+    delete d->header->removeEmitter(0);
+    d->header->setAsHeader(true);
+
+    d->cond.appendPrevious(d->header->receivers().first());
+    d->header->receivers().first()->appendNext(&(d->cond));
+
+    d->footer = new dtkComposerNodeProxy;
     delete d->footer->removeReceiver(0);
+    d->footer->setAsFooter(true);
+
+    d->cond.appendNext(d->footer->emitters().first());
+    d->footer->emitters().first()->appendPrevious(&(d->cond));
 
     d->then_block = new dtkComposerNodeComposite;
     d->then_block->setTitleHint("Then");

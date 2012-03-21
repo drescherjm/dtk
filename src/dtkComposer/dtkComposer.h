@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 20 13:39:41 2012 (+0100)
+ * Last-Updated: Wed Mar 21 14:45:10 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 42
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@
 #include <QtCore>
 #include <QtGui>
 
+class dtkComposerEvaluator;
 class dtkComposerFactory;
 class dtkComposerGraph;
 class dtkComposerMachine;
@@ -48,10 +49,17 @@ public slots:
     virtual bool   save(QString file = QString(), dtkComposerWriter::Type type = dtkComposerWriter::Ascii);
     virtual bool insert(QString file);
 
+public slots:
+    void run(void);
+    void step(void);
+    void cont(void);
+    void next(void);
+
 signals:
     void modified(bool);
 
 public:
+    dtkComposerEvaluator *evaluator(void);
     dtkComposerFactory *factory(void);
     dtkComposerGraph *graph(void);
     dtkComposerMachine *machine(void);

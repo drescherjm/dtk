@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 12:46:51 2012 (+0100)
+ * Last-Updated: Wed Mar 21 14:52:55 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1291
+ *     Update #: 1309
  */
 
 /* Commentary:
@@ -21,6 +21,7 @@
 #include "dtkCreatorMainWindow_p.h"
 
 #include <dtkComposer/dtkComposer.h>
+#include <dtkComposer/dtkComposerEvaluator.h>
 #include <dtkComposer/dtkComposerFactoryView.h>
 #include <dtkComposer/dtkComposerGraph.h>
 #include <dtkComposer/dtkComposerGraphView.h>
@@ -189,11 +190,20 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     mainToolBar = this->addToolBar(tr("Main"));
     mainToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     mainToolBar->setIconSize(QSize(32, 32));
-    mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Run_Active.png"), "Run");
-    mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Continue_Active.png"), "Step");
-    mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Stop_Active.png"), "Stop");
+    
+    QAction *run_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Run_Active.png"), "Run");
+    run_action->setShortcut(Qt::ControlModifier + Qt::Key_R);
+
+    QAction *step_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Continue_Active.png"), "Step");
+    step_action->setShortcut(Qt::ControlModifier + Qt::Key_N);
+
+    QAction *stop_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Stop_Active.png"), "Stop");
+    stop_action->setShortcut(Qt::ControlModifier + Qt::Key_Period);
 
     // -- Connections
+
+    connect(run_action, SIGNAL(triggered()), d->composer, SLOT(run()));
+    connect(step_action, SIGNAL(triggered()), d->composer, SLOT(step()));
 
     connect(switchToCompoAction, SIGNAL(triggered()), this, SLOT(switchToCompo()));
     connect(switchToDebugAction, SIGNAL(triggered()), this, SLOT(switchToDebug()));

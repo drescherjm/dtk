@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 20 13:48:42 2012 (+0100)
+ * Last-Updated: Wed Mar 21 14:44:17 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 175
+ *     Update #: 199
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include "dtkComposer.h"
 #include "dtkComposer_p.h"
+#include "dtkComposerEvaluator.h"
 #include "dtkComposerFactory.h"
 #include "dtkComposerGraph.h"
 #include "dtkComposerMachine.h"
@@ -90,14 +91,12 @@ void dtkComposerPrivate::onRequestFinished(int id, bool error)
 dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPrivate)
 {
     d->machine = new dtkComposerMachine;
-
     d->factory = new dtkComposerFactory;
-
     d->graph = new dtkComposerGraph;
-
     d->stack = new dtkComposerStack;
-
     d->scene = new dtkComposerScene;
+    d->evaluator = new dtkComposerEvaluator;
+
     d->scene->setFactory(d->factory);
     d->scene->setMachine(d->machine);
     d->scene->setStack(d->stack);
@@ -105,6 +104,8 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
 
     d->view = new dtkComposerView;
     d->view->setScene(d->scene);
+
+    d->evaluator->setGraph(d->graph);
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -180,6 +181,58 @@ bool dtkComposer::insert(QString file)
     }
 
     return true;
+}
+
+void dtkComposer::run(void)
+{
+    QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::run, false);
+
+    d->graph->update();
+}
+
+void dtkComposer::step(void)
+{
+    QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::step, false);
+
+    d->graph->update();
+}
+
+void dtkComposer::cont(void)
+{
+    QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::cont, false);
+
+    d->graph->update();
+}
+
+void dtkComposer::next(void)
+{
+    QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::next, false);
+
+    d->graph->update();
+}
+
+/*
+    } else if ((event->key() == Qt::Key_R)  && (event->modifiers() & Qt::ControlModifier)) {
+        QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::run, false);
+        d->graph->update();
+
+    } else if ((event->key() == Qt::Key_N)  && (event->modifiers() & Qt::ControlModifier)) {
+        QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::step, false);
+        d->graph->update();
+
+    } else if ((event->key() == Qt::Key_C)  && (event->modifiers() & Qt::ControlModifier)) {
+        QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::cont, false);
+        d->graph->update();
+
+    } else if ((event->key() == Qt::Key_T)  && (event->modifiers() & Qt::ControlModifier)) {
+        QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::next, false);
+        d->graph->update();
+
+ */
+
+dtkComposerEvaluator *dtkComposer::evaluator(void)
+{
+    return d->evaluator;
 }
 
 dtkComposerMachine *dtkComposer::machine(void)

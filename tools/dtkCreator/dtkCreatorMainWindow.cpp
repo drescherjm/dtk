@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 11:48:15 2012 (+0100)
+ * Last-Updated: Wed Mar 21 12:46:51 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1252
+ *     Update #: 1291
  */
 
 /* Commentary:
@@ -131,9 +131,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     d->closing = false;
 
-    // -- Menus & Actions
-
-    QMenuBar *menu_bar = this->menuBar();
+    // -- Actions
 
     d->composition_open_action = new QAction("Open", this);
     d->composition_open_action->setShortcut(QKeySequence::Open);
@@ -150,6 +148,25 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->composition_quit_action = new QAction("Quit", this);
     d->composition_quit_action->setShortcut(QKeySequence::Quit);
 
+    d->undo_action = d->composer->stack()->createUndoAction(this);
+    d->undo_action->setShortcut(QKeySequence::Undo);
+
+    d->redo_action = d->composer->stack()->createRedoAction(this);
+    d->redo_action->setShortcut(QKeySequence::Redo);
+
+    QAction *switchToCompoAction = new QAction("Switch to composition perspective", this);
+    QAction *switchToDebugAction = new QAction("Switch to debug perspective", this);
+
+    switchToCompoAction->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_C);
+    switchToDebugAction->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_D);
+
+    this->addAction(switchToCompoAction);
+    this->addAction(switchToDebugAction);
+
+    // -- Menus
+
+    QMenuBar *menu_bar = this->menuBar();
+
     d->recent_compositions_menu = new dtkRecentFilesMenu("Open recent...", this);
 
     d->composition_menu = menu_bar->addMenu("Composition");
@@ -162,24 +179,19 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->composition_menu->addSeparator();
     d->composition_menu->addAction(d->composition_quit_action);
 
-    d->undo_action = d->composer->stack()->createUndoAction(this);
-    d->undo_action->setShortcut(QKeySequence::Undo);
-
-    d->redo_action = d->composer->stack()->createRedoAction(this);
-    d->redo_action->setShortcut(QKeySequence::Redo);
-
     d->edit_menu = menu_bar->addMenu("Edit");
     d->edit_menu->addAction(d->undo_action);
     d->edit_menu->addAction(d->redo_action);
 
-    QAction *switchToCompoAction = new QAction("Switch to composition perspective", this);
-    QAction *switchToDebugAction = new QAction("Switch to debug perspective", this);
+    // -- Toolbar
 
-    switchToCompoAction->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_C);
-    switchToDebugAction->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_D);
-
-    this->addAction(switchToCompoAction);
-    this->addAction(switchToDebugAction);
+    QToolBar *mainToolBar;
+    mainToolBar = this->addToolBar(tr("Main"));
+    mainToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    mainToolBar->setIconSize(QSize(32, 32));
+    mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Run_Active.png"), "Run");
+    mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Continue_Active.png"), "Step");
+    mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Stop_Active.png"), "Stop");
 
     // -- Connections
 

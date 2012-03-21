@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. mars 20 14:38:43 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 1779
+ * Last-Updated: Wed Mar 21 12:19:11 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 1780
  */
 
 /* Commentary:
@@ -309,6 +309,8 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
             d->addDummyEdge(d->end(blocks[then_block]), outputs, node);
             d->addDummyEdge(d->end(blocks[else_block]), outputs, node);
             d->addDummyEdge(  outputs, end, node);
+            d->end(blocks[then_block])->setEndLoop();
+            d->end(blocks[else_block])->setEndLoop();
         }
 
         d->removeDummyEdge(  d->begin(node->parent()), d->end(node->parent()), node->parent());

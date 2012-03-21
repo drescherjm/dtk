@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 11:45:31 2012 (+0100)
+ * Last-Updated: Wed Mar 21 12:20:16 2012 (+0100)
  *           By: tkloczko
- *     Update #: 27
+ *     Update #: 38
  */
 
 /* Commentary: 
@@ -114,37 +114,45 @@ dtkComposerNodeComposite *dtkComposerNodeControlIf::block(int id)
 
 void dtkComposerNodeControlIf::setInputs(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+
 }
 
 void dtkComposerNodeControlIf::setConditions(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+    
 }
 
 void dtkComposerNodeControlIf::setOutputs(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+
 }
 
 void dtkComposerNodeControlIf::setVariables(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+    
 }
 
 int dtkComposerNodeControlIf::selectBranch(void)
 {
-    return -1;
+    bool value = d->cond.data().toBool();
+    
+    foreach(dtkComposerTransmitter *t, d->then_block->emitters())
+        t->setActive(value);
+
+    foreach(dtkComposerTransmitter *t, d->else_block->emitters())
+        t->setActive(!value);
+        
+    return (!value);
 }
 
 void dtkComposerNodeControlIf::begin(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+    
 }
 
 void dtkComposerNodeControlIf::end(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+    
 }
 
 QString dtkComposerNodeControlIf::type(void)

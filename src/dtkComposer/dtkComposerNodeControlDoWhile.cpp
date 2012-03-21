@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 11:52:46 2012 (+0100)
+ * Last-Updated: Wed Mar 21 15:15:50 2012 (+0100)
  *           By: tkloczko
- *     Update #: 39
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -23,6 +23,8 @@
 #include "dtkComposerNodeProxy.h"
 
 #include "dtkComposerTransmitter.h"
+#include "dtkComposerTransmitterReceiver.h"
+#include "dtkComposerTransmitterVariant.h"
 
 #include <dtkCore/dtkGlobal.h>
 
@@ -38,6 +40,9 @@ public:
 
     dtkComposerNodeComposite *cond_block;
     dtkComposerNodeComposite *body_block;
+
+public:
+    dtkComposerTransmitterReceiver<bool> cond;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -58,6 +63,8 @@ dtkComposerNodeControlDoWhile::dtkComposerNodeControlDoWhile(void) : dtkComposer
 
     d->cond_block = new dtkComposerNodeComposite;
     d->cond_block->setTitleHint("Conditional");
+    d->cond_block->appendEmitter(&(d->cond));
+    d->cond_block->setOutputLabelHint("cond", 0);
 
     d->body_block = new dtkComposerNodeComposite;
     d->body_block->setTitleHint("Body");
@@ -92,47 +99,52 @@ dtkComposerNodeLeaf *dtkComposerNodeControlDoWhile::footer(void)
 dtkComposerNodeComposite *dtkComposerNodeControlDoWhile::block(int id)
 {
     if(id == 0)
-        return d->cond_block;
+        return d->body_block;
 
     if(id == 1)
-        return d->body_block;
+        return d->cond_block;
 
     return NULL;
 }
 
 void dtkComposerNodeControlDoWhile::setInputs(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+    foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
+        v->setTwinned(false);
+        v->setData(v->data());
+        v->setTwinned(true);        
+    }
 }
 
 void dtkComposerNodeControlDoWhile::setConditions(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+
 }
 
 void dtkComposerNodeControlDoWhile::setOutputs(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+    foreach(dtkComposerTransmitterVariant *v, this->outputTwins())
+        v->twin()->setData(v->data());
 }
 
 void dtkComposerNodeControlDoWhile::setVariables(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+
 }
 
 int dtkComposerNodeControlDoWhile::selectBranch(void)
 {
-    return -1;
+    return (int)(!d->cond.data());
 }
 
 void dtkComposerNodeControlDoWhile::begin(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+
 }
 
 void dtkComposerNodeControlDoWhile::end(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+
 }
 
 QString dtkComposerNodeControlDoWhile::type(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 12:19:11 2012 (+0100)
+ * Last-Updated: Wed Mar 21 15:27:59 2012 (+0100)
  *           By: tkloczko
- *     Update #: 1780
+ *     Update #: 1782
  */
 
 /* Commentary:
@@ -280,7 +280,7 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
             foreach (dtkComposerSceneNodeComposite *block,  blocks)
                  this->addNode(block);
 
-            int cond_block = 0; int body_block = 1;
+            int cond_block = 1; int body_block = 0;
             d->addDummyEdge( begin, inputs, node);
             d->addDummyEdge( inputs,  d->begin(blocks[body_block]), node);
             d->addDummyEdge( d->end(blocks[body_block]), outputs, node);
@@ -289,7 +289,7 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
             d->addDummyEdge( set_conds, select, node);
             d->addDummyEdge( select, d->begin(blocks[body_block]), node);
             d->addDummyEdge( select, end, node, 1);
-            outputs->setEndLoop();
+            select->setEndLoop();
 
         } else if (dynamic_cast<dtkComposerNodeControlIf *>(wrapee)) {
             dtkComposerGraphNode *inputs_else = new dtkComposerGraphNodeSetInputs(wrapee);

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: mar. mars 20 17:05:36 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 1957
+ * Last-Updated: Wed Mar 21 14:39:23 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 1962
  */
 
 /* Commentary:
@@ -40,7 +40,6 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
     d->machine = NULL;
     d->stack = NULL;
     d->graph = NULL;
-    d->evaluator = new dtkComposerEvaluator;
 
     d->root_node = new dtkComposerSceneNodeComposite;
     d->root_node->setRoot(true);
@@ -87,7 +86,6 @@ void dtkComposerScene::setGraph(dtkComposerGraph *graph)
     d->graph = graph;
     d->graph->addNode(d->root_node);
     d->graph->layout();
-    d->evaluator->setGraph(graph);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -424,21 +422,6 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
                 d->stack->push(command);
             }
         }
-    } else if ((event->key() == Qt::Key_R)  && (event->modifiers() & Qt::ControlModifier) && (event->modifiers() & Qt::ShiftModifier)) {
-        QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::run, true);
-        d->graph->update();
-    } else if ((event->key() == Qt::Key_R)  && (event->modifiers() & Qt::ControlModifier)) {
-        QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::run, false);
-        d->graph->update();
-    } else if ((event->key() == Qt::Key_N)  && (event->modifiers() & Qt::ControlModifier)) {
-        QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::step, false);
-        d->graph->update();
-    } else if ((event->key() == Qt::Key_C)  && (event->modifiers() & Qt::ControlModifier)) {
-        QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::cont, false);
-        d->graph->update();
-    } else if ((event->key() == Qt::Key_T)  && (event->modifiers() & Qt::ControlModifier)) {
-        QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::next, false);
-        d->graph->update();
     } else {
         QGraphicsScene::keyPressEvent(event);
     }

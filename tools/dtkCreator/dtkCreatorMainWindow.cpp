@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 09:34:54 2012 (+0100)
+ * Last-Updated: Wed Mar 21 09:39:50 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1123
+ *     Update #: 1136
  */
 
 /* Commentary:
@@ -168,6 +168,18 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->edit_menu = menu_bar->addMenu("Edit");
     d->edit_menu->addAction(d->undo_action);
     d->edit_menu->addAction(d->redo_action);
+
+    QAction *switchToCompoAction = new QAction("Switch to composition perspective", this);
+    QAction *switchToDebugAction = new QAction("Switch to debug perspective", this);
+
+    switchToCompoAction->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_C);
+    switchToDebugAction->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_D);
+
+    this->addAction(switchToCompoAction);
+    this->addAction(switchToDebugAction);
+
+    connect(switchToCompoAction, SIGNAL(triggered()), this, SLOT(switchToCompo()));
+    connect(switchToDebugAction, SIGNAL(triggered()), this, SLOT(switchToDebug()));
 
     // Connections
 

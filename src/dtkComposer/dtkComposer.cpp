@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 14:44:17 2012 (+0100)
+ * Last-Updated: Wed Mar 21 15:00:44 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 199
+ *     Update #: 200
  */
 
 /* Commentary: 
@@ -210,25 +210,6 @@ void dtkComposer::next(void)
 
     d->graph->update();
 }
-
-/*
-    } else if ((event->key() == Qt::Key_R)  && (event->modifiers() & Qt::ControlModifier)) {
-        QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::run, false);
-        d->graph->update();
-
-    } else if ((event->key() == Qt::Key_N)  && (event->modifiers() & Qt::ControlModifier)) {
-        QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::step, false);
-        d->graph->update();
-
-    } else if ((event->key() == Qt::Key_C)  && (event->modifiers() & Qt::ControlModifier)) {
-        QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::cont, false);
-        d->graph->update();
-
-    } else if ((event->key() == Qt::Key_T)  && (event->modifiers() & Qt::ControlModifier)) {
-        QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::next, false);
-        d->graph->update();
-
- */
 
 dtkComposerEvaluator *dtkComposer::evaluator(void)
 {

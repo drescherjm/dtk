@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 20 15:11:32 2012 (+0100)
+ * Last-Updated: Wed Mar 21 11:57:10 2012 (+0100)
  *           By: tkloczko
- *     Update #: 140
+ *     Update #: 142
  */
 
 /* Commentary: 
@@ -66,10 +66,13 @@ public:
     dtkComposerNode *parentNode(void) const;
 
 public:
-    void   setActive(bool active);
+    virtual void setActive(bool active);
+
+    bool active(void);
+
+public:
     void setRequired(bool required);
 
-    bool   active(void);
     bool required(void);
 
 public:

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Feb 20 11:47:39 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 15 12:02:45 2012 (+0100)
+ * Last-Updated: Wed Mar 21 11:59:22 2012 (+0100)
  *           By: tkloczko
- *     Update #: 55
+ *     Update #: 56
  */
 
 /* Commentary: 
@@ -57,6 +57,14 @@ dtkComposerTransmitter::Kind dtkComposerTransmitterProxy::kind(void) const
 QString dtkComposerTransmitterProxy::kindName(void) const
 {
     return "Proxy";
+}
+
+void dtkComposerTransmitterProxy::setActive(bool active)
+{
+    dtkComposerTransmitter::setActive(active);
+
+    foreach(dtkComposerTransmitter *prev, d->previous_list)
+        prev->setActive(active);
 }
 
 dtkComposerTransmitter::LinkMap dtkComposerTransmitterProxy::leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 11:53:27 2012 (+0100)
+ * Last-Updated: Wed Mar 21 17:13:48 2012 (+0100)
  *           By: tkloczko
- *     Update #: 76
+ *     Update #: 104
  */
 
 /* Commentary: 
@@ -23,6 +23,9 @@
 #include "dtkComposerNodeProxy.h"
 
 #include "dtkComposerTransmitter.h"
+#include "dtkComposerTransmitterReceiver.h"
+#include "dtkComposerTransmitterProxy.h"
+#include "dtkComposerTransmitterVariant.h"
 
 #include <dtkCore/dtkGlobal.h>
 
@@ -39,6 +42,9 @@ public:
     dtkComposerNodeComposite *cond_block;
     dtkComposerNodeComposite *body_block;
     dtkComposerNodeComposite *incr_block;
+
+public:
+    dtkComposerTransmitterReceiver<bool> cond;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -53,16 +59,47 @@ dtkComposerNodeControlFor::dtkComposerNodeControlFor(void) : dtkComposerNodeCont
 
     d->footer = new dtkComposerNodeProxy;
     delete d->footer->removeReceiver(0);
+    delete d->footer->removeEmitter(0);
     d->footer->setAsFooter(true);
 
     d->cond_block = new dtkComposerNodeComposite;
     d->cond_block->setTitleHint("Conditional");
+    d->cond_block->appendEmitter(&(d->cond));
+    d->cond_block->setOutputLabelHint("cond", 0);
 
     d->body_block = new dtkComposerNodeComposite;
     d->body_block->setTitleHint("Body");
 
     d->incr_block = new dtkComposerNodeComposite;
     d->incr_block->setTitleHint("Increment");
+
+    d->cond_block->appendReceiver(new dtkComposerTransmitterProxy(d->cond_block));
+    d->cond_block->setInputLabelHint("value", 0);
+    
+    d->body_block->appendReceiver(new dtkComposerTransmitterVariant(d->body_block));
+    d->body_block->setInputLabelHint("value", 0);
+    this->appendInputTwin(dynamic_cast<dtkComposerTransmitterVariant *>(d->body_block->receivers().first()));
+    
+    d->body_block->appendEmitter(new dtkComposerTransmitterVariant(d->body_block));
+    d->body_block->setOutputLabelHint("value", 0);    
+
+    d->incr_block->appendReceiver(new dtkComposerTransmitterProxy(d->incr_block));
+    d->incr_block->setInputLabelHint("value", 0);
+
+    d->incr_block->appendEmitter(new dtkComposerTransmitterVariant(d->incr_block));
+    d->incr_block->setOutputLabelHint("value", 0);
+    this->appendOutputTwin(dynamic_cast<dtkComposerTransmitterVariant *>(d->incr_block->emitters().first()));
+
+    d->body_block->receivers().first()->appendPrevious(d->header->receivers().first());
+    d->header->receivers().first()->appendNext(d->body_block->receivers().first());
+
+    d->cond_block->receivers().first()->appendPrevious(d->body_block->receivers().first());
+    d->body_block->receivers().first()->appendNext(d->cond_block->receivers().first());
+
+    d->incr_block->receivers().first()->appendPrevious(d->body_block->emitters().first());
+    d->body_block->emitters().first()->appendNext(d->incr_block->receivers().first());
+
+    this->outputTwins().first()->setTwin(this->inputTwins().first());
 }
 
 dtkComposerNodeControlFor::~dtkComposerNodeControlFor(void)
@@ -108,37 +145,39 @@ dtkComposerNodeComposite *dtkComposerNodeControlFor::block(int id)
 
 void dtkComposerNodeControlFor::setInputs(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+    foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
+        v->setTwinned(false);
+        v->setData(v->data());
+        v->setTwinned(true);
+    }
 }
 
 void dtkComposerNodeControlFor::setConditions(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
 }
 
 void dtkComposerNodeControlFor::setOutputs(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
 }
 
 void dtkComposerNodeControlFor::setVariables(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+    foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
+        v->twin()->setData(v->data());  
+    }
 }
 
 int dtkComposerNodeControlFor::selectBranch(void)
 {
-    return -1;
+    return (int)(!d->cond.data());
 }
 
 void dtkComposerNodeControlFor::begin(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
 }
 
 void dtkComposerNodeControlFor::end(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
 }
 
 QString dtkComposerNodeControlFor::type(void)

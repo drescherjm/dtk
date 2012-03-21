@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 16 15:49:17 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 433
+ * Last-Updated: Wed Mar 21 11:07:28 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 434
  */
 
 /* Commentary: 
@@ -103,6 +103,16 @@ dtkComposerSceneNodeComposite *dtkComposerSceneNodeControl::block(const QString&
             return block;
 
     return NULL;
+}
+
+dtkComposerSceneNodeLeaf *dtkComposerSceneNodeControl::header(void)
+{
+    return d->header;
+}
+
+dtkComposerSceneNodeLeaf *dtkComposerSceneNodeControl::footer(void)
+{
+    return d->footer;
 }
 
 void dtkComposerSceneNodeControl::setHeader(dtkComposerSceneNodeLeaf *header)

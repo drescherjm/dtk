@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 09:27:44 2012 (+0100)
+ * Last-Updated: Wed Mar 21 11:37:38 2012 (+0100)
  *           By: tkloczko
- *     Update #: 529
+ *     Update #: 536
  */
 
 /* Commentary: 
@@ -228,6 +228,9 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
     QList<QDomNode> edges;
     QList<QDomNode> blocks;
 
+    QDomNode header;
+    QDomNode footer;
+
     for(int i = 0; i < childNodes.count(); i++)
         if(childNodes.at(i).toElement().tagName() == "port")
             ports << childNodes.at(i);
@@ -248,6 +251,14 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
         if(childNodes.at(i).toElement().tagName() == "block")
             blocks << childNodes.at(i);
 
+    for(int i = 0; i < childNodes.count(); i++)
+        if(childNodes.at(i).toElement().tagName() == "header")
+            header = childNodes.at(i);
+
+    for(int i = 0; i < childNodes.count(); i++)
+        if(childNodes.at(i).toElement().tagName() == "footer")
+            footer = childNodes.at(i);
+
     // --
 
     dtkComposerSceneNode *n = NULL;
@@ -267,6 +278,14 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
     } else if(node.toElement().tagName() == "block") {
 
         n = d->control->blocks().at(node.toElement().attribute("blockid").toInt());
+
+    } else if(node.toElement().tagName() == "header") {
+
+        n = d->control->header();
+
+    } else if(node.toElement().tagName() == "footer") {
+
+        n = d->control->footer();
 
     } else if(notes.count() || nodes.count() || edges.count()) {
 
@@ -311,10 +330,16 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
 
         control->layout();
 
+        d->control = control;
+        this->readNode(header);
+
         for(int i = 0; i < blocks.count(); i++) {
             d->control = control;
             this->readNode(blocks.at(i));
         }
+
+        d->control = control;
+        this->readNode(footer);
 
 // --- next/previous for loops
 

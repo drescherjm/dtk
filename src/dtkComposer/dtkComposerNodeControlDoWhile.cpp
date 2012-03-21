@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 10:12:40 2012 (+0100)
+ * Last-Updated: Wed Mar 21 11:45:55 2012 (+0100)
  *           By: tkloczko
- *     Update #: 34
+ *     Update #: 38
  */
 
 /* Commentary: 
@@ -18,12 +18,11 @@
  */
 
 #include "dtkComposerNodeControlDoWhile.h"
-#include "dtkComposerNodeLeaf.h"
-#include "dtkComposerNodeBoolean.h"
-#include "dtkComposerNodeComposite.h"
 
-#include "dtkComposerTransmitterEmitter.h"
-#include "dtkComposerTransmitterReceiver.h"
+#include "dtkComposerNodeComposite.h"
+#include "dtkComposerNodeProxy.h"
+
+#include "dtkComposerTransmitter.h"
 
 #include <dtkCore/dtkGlobal.h>
 
@@ -33,9 +32,9 @@
 
 class dtkComposerNodeControlDoWhilePrivate
 {
-public:    
-    dtkComposerNodeBoolean *header;
-    dtkComposerNodeBoolean *footer;
+public:
+    dtkComposerNodeProxy *header;
+    dtkComposerNodeProxy *footer;
 
     dtkComposerNodeComposite *cond_block;
     dtkComposerNodeComposite *body_block;
@@ -47,11 +46,11 @@ public:
 
 dtkComposerNodeControlDoWhile::dtkComposerNodeControlDoWhile(void) : dtkComposerNodeControl(), d(new dtkComposerNodeControlDoWhilePrivate)
 {
-    d->header = new dtkComposerNodeBoolean;
+    d->header = new dtkComposerNodeProxy;
     delete d->header->removeReceiver(0);
     delete d->header->removeEmitter(0);
 
-    d->footer = new dtkComposerNodeBoolean;
+    d->footer = new dtkComposerNodeProxy;
     delete d->footer->removeEmitter(0);
 
     d->cond_block = new dtkComposerNodeComposite;

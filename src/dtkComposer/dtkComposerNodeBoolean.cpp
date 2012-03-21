@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 16:49:25 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 16 14:06:30 2012 (+0100)
+ * Last-Updated: Wed Mar 21 10:30:54 2012 (+0100)
  *           By: tkloczko
- *     Update #: 15
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -40,10 +40,10 @@ public:
 
 dtkComposerNodeBoolean::dtkComposerNodeBoolean(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeBooleanPrivate)
 {
-    d->receiver = new dtkComposerTransmitterReceiver<bool>;
+    d->receiver = new dtkComposerTransmitterReceiver<bool>(this);
     this->appendReceiver(d->receiver);
 
-    d->emitter = new dtkComposerTransmitterEmitter<bool>;
+    d->emitter = new dtkComposerTransmitterEmitter<bool>(this);
     this->appendEmitter(d->emitter);
 }
 

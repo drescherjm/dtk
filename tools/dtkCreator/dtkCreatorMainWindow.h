@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:38:47 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 20 13:31:38 2012 (+0100)
+ * Last-Updated: Tue Mar 20 22:24:47 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 55
+ *     Update #: 59
  */
 
 /* Commentary: 
@@ -46,23 +46,12 @@ public slots:
     bool compositionInsert(void);
     bool compositionInsert(const QString& file);
 
-public:
-    void setWindowModified(bool modified);
-    void setWindowFilePath(const QString& path);
-
-public slots:
-    void showFullScreen(void);
-
 protected slots:
     void switchToCompo(void);
     void switchToDebug(void);
 
 protected:
     void closeEvent(QCloseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void resizeEvent(QResizeEvent *event);
 
 private:
     dtkCreatorMainWindowPrivate *d;

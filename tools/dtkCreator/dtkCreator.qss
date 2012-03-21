@@ -4,9 +4,9 @@
 ;; Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ;; Created: Thu Mar 15 12:05:17 2012 (+0100)
 ;; Version: $Id$
-;; Last-Updated: Tue Mar 20 13:30:19 2012 (+0100)
+;; Last-Updated: Tue Mar 20 22:23:44 2012 (+0100)
 ;;           By: Julien Wintz
-;;     Update #: 135
+;;     Update #: 137
 */
 
 /*Commentary: 
@@ -17,74 +17,3 @@
 ;; 
 */
 
-dtkCreatorMainWindowTitleBar {
-    background: url(:dtkCreator/pixmaps/leather.png);
-    background-repeat: repeat-x;
-    border:none;
-    border-bottom: 1px solid #555555;
-    color: #777777;
-    font-size: 12px;
-    height: 70px;
-}
-
-dtkCreatorMainWindowTitleBar:active {
-    color: #444444;
-}
-
-dtkCreatorMainWindowTitleBar QLabel {
-    background: transparent;
-    border: none;
-}
-
-dtkCreatorMainWindowTitleBar QToolButton#close { background: transparent; background-repeat: no-repeat; border: none; border-bottom: none; width: 16px; height: 16px; }
-dtkCreatorMainWindowTitleBar QToolButton#close { background-image: url(:dtkCreator/pixmaps/inactive.png); }
-dtkCreatorMainWindowTitleBar QToolButton#close:active { background-image: url(:dtkCreator/pixmaps/close-active.png); }
-dtkCreatorMainWindowTitleBar QToolButton#close:active:hover { background-image: url(:dtkCreator/pixmaps/close-rollover.png); }
-dtkCreatorMainWindowTitleBar QToolButton#close:active:pressed { background-image: url(:dtkCreator/pixmaps/close-pressed.png); }
-  
-dtkCreatorMainWindowTitleBar QToolButton#zoom { background: transparent; background-repeat: no-repeat; border: none; border-bottom: none; width: 16px; height: 16px; }
-dtkCreatorMainWindowTitleBar QToolButton#zoom { background-image: url(:dtkCreator/pixmaps/inactive.png); }
-dtkCreatorMainWindowTitleBar QToolButton#zoom:active { background-image: url(:dtkCreator/pixmaps/zoom-active.png); }
-dtkCreatorMainWindowTitleBar QToolButton#zoom:active:hover { background-image: url(:dtkCreator/pixmaps/zoom-rollover.png); }
-dtkCreatorMainWindowTitleBar QToolButton#zoom:active:pressed { background-image: url(:dtkCreator/pixmaps/zoom-pressed.png); }
-   
-dtkCreatorMainWindowTitleBar QToolButton#minimize { background: transparent; background-repeat: no-repeat; border: none; border-bottom: none; width: 16px; height: 16px; }
-dtkCreatorMainWindowTitleBar QToolButton#minimize { background-image: url(:dtkCreator/pixmaps/inactive.png); }
-dtkCreatorMainWindowTitleBar QToolButton#minimize:active { background-image: url(:dtkCreator/pixmaps/minimize-active.png); }
-dtkCreatorMainWindowTitleBar QToolButton#minimize:active:hover { background-image: url(:dtkCreator/pixmaps/minimize-rollover.png); }
-dtkCreatorMainWindowTitleBar QToolButton#minimize:active:pressed { background-image: url(:dtkCreator/pixmaps/minimize-pressed.png); }
-
-dtkCreatorMainWindowTitleBar QToolButton#full { background: transparent; background-repeat: no-repeat; border: none; border-bottom: none; width: 16px; height: 16px; }
-dtkCreatorMainWindowTitleBar QToolButton#full { background-image: url(:dtkCreator/pixmaps/fullscreen-active.png); }
-dtkCreatorMainWindowTitleBar QToolButton#full:active { background-image: url(:dtkCreator/pixmaps/fullscreen-active.png); }
-dtkCreatorMainWindowTitleBar QToolButton#full:active:hover { background-image: url(:dtkCreator/pixmaps/fullscreen-rollover.png); }
-dtkCreatorMainWindowTitleBar QToolButton#full:active:pressed { background-image: url(:dtkCreator/pixmaps/fullscreen-pressed.png); }
-
-
-dtkCreatorMainWindowTitleBar QPushButton#compo {
-    border-image: url(:dtkCreator/pixmaps/title_bar-segment-left.png) 3 2 5 4;
-    border-top: 3px transparent;
-    border-right: 2px transparent;
-    border-bottom: 5px transparent;
-    border-left: 4px transparent;
-    min-width: 100px;
-}
-
-dtkCreatorMainWindowTitleBar QPushButton#compo:checked {
-    color: white;
-    border-image: url(:dtkCreator/pixmaps/title_bar-segment-left-pressed.png) 3 2 5 4;    
-}
-
-dtkCreatorMainWindowTitleBar QPushButton#debug {
-    border-image: url(:dtkCreator/pixmaps/title_bar-segment-right.png) 3 4 5 2;
-    border-top: 3px transparent;
-    border-right: 4px transparent;
-    border-bottom: 5px transparent;
-    border-left: 2px transparent;
-    min-width: 100px;
-}
-
-dtkCreatorMainWindowTitleBar QPushButton#debug:checked {
-    color: white;
-    border-image: url(:dtkCreator/pixmaps/title_bar-segment-right-pressed.png) 3 4 5 2;
-}

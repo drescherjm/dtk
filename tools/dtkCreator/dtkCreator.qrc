@@ -1,31 +1,5 @@
 <RCC>
-  <qresource prefix="dtkCreator">
-    
+  <qresource prefix="dtkCreator">  
     <file>dtkCreator.qss</file>
-    
-    <file>pixmaps/canvas.png</file>
-    <file>pixmaps/close-active.png</file>
-    <file>pixmaps/close-pressed.png</file>
-    <file>pixmaps/close-rollover.png</file>
-    <file>pixmaps/fullscreen-active.png</file>
-    <file>pixmaps/fullscreen-pressed.png</file>
-    <file>pixmaps/fullscreen-rollover.png</file>
-    <file>pixmaps/inactive.png</file>
-    <file>pixmaps/leather.png</file>
-    <file>pixmaps/minimize-active.png</file>
-    <file>pixmaps/minimize-pressed.png</file>
-    <file>pixmaps/minimize-rollover.png</file>
-    <file>pixmaps/zoom-active.png</file>
-    <file>pixmaps/zoom-pressed.png</file>
-    <file>pixmaps/zoom-rollover.png</file>
-
-    <file>pixmaps/title_bar-segment-left.png</file>
-    <file>pixmaps/title_bar-segment-right.png</file>
-
-    <file>pixmaps/title_bar-segment-left-pressed.png</file>
-    <file>pixmaps/title_bar-segment-right-pressed.png</file>
-
-    <file>fonts/maven_medium.otf</file>
-    <file>fonts/maven_regular.otf</file>
   </qresource>
 </RCC>

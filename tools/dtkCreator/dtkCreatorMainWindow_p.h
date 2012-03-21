@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  1 12:37:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 20 13:31:59 2012 (+0100)
+ * Last-Updated: Tue Mar 20 22:26:01 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 97
+ *     Update #: 102
  */
 
 /* Commentary: 
@@ -36,57 +36,6 @@ class dtkRecentFilesMenu;
 class dtkLogView;
 
 class dtkCreatorMainWindow;
-
-// /////////////////////////////////////////////////////////////////
-// 
-// /////////////////////////////////////////////////////////////////
-
-class dtkCreatorMainWindowDebugControls : public QFrame
-{
-    Q_OBJECT
-
-public:
-     dtkCreatorMainWindowDebugControls(QWidget *parent = 0) {}
-    ~dtkCreatorMainWindowDebugControls(void) {}
-};
-
-// /////////////////////////////////////////////////////////////////
-// dtkCreatorMainWindowTitleBar
-// /////////////////////////////////////////////////////////////////
-
-class dtkCreatorMainWindowTitleBar : public QFrame
-{
-    Q_OBJECT
-
-public:
-    dtkCreatorMainWindowTitleBar(QWidget *parent = 0);
-
-signals:
-    void switchToCompo(void);
-    void switchToDebug(void);
-
-public slots:
-    void setTitle(const QString& title);
-    void showSmall(void);
-    void showMaxRestore(void);
-
-protected:
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-
-private:
-    QToolButton *minimize;
-    QToolButton *zoom;
-    QToolButton *close;
-    QToolButton *full;
-    QPixmap restorePix, maxPix;
-    bool maxNormal;
-    bool mouse_down;
-    QPoint startPos;
-    QPoint clickPos;
-    QLabel *label;
-};
 
 // /////////////////////////////////////////////////////////////////
 // dtkCreatorMainWindowPrivate
@@ -137,29 +86,10 @@ public:
     dtkRecentFilesMenu *recent_compositions_menu;
 
 public:
-    dtkCreatorMainWindowTitleBar *title_bar;
-
-public:
-    QFrame *canvas;
-
-public:
     bool closing;
-    bool full;
 
 public:
     QString current_composition;
-
-public:
-    QPoint old_pos;
-
-public:
-    bool mouse_down;
-
-public:
-    bool left;
-    bool right;
-    bool bottom;
-    bool top;
 
 public:
     dtkCreatorMainWindow *q;

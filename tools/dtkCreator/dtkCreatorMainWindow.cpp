@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 20 22:26:25 2012 (+0100)
+ * Last-Updated: Wed Mar 21 09:34:54 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1119
+ *     Update #: 1123
  */
 
 /* Commentary:
@@ -52,7 +52,7 @@ bool dtkCreatorMainWindowPrivate::maySave(void)
         return true;
 
     if (q->isWindowModified()) {
-        QMessageBox::StandardButton ret = QMessageBox::warning(0,
+        QMessageBox::StandardButton ret = QMessageBox::warning(q,
             q->tr("Creator"),
             q->tr("The composition has been modified.\n Do you want to save your changes?"),
             QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
@@ -130,7 +130,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     // Menus & Actions
 
-    QMenuBar *menu_bar = new QMenuBar(this);
+    QMenuBar *menu_bar = this->menuBar();
 
     d->composition_open_action = new QAction("Open", this);
     d->composition_open_action->setShortcut(QKeySequence::Open);
@@ -211,7 +211,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     i_layout->addLayout(r_lateral);
 
     QVBoxLayout *layout = new QVBoxLayout;
-    layout->setMargin(1);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addLayout(i_layout);
     layout->addLayout(b_layout);
@@ -228,6 +228,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 #if defined(Q_WS_MAC) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
     d->enableFullScreenSupport();
 #endif
+
+    d->setCurrentFile(QString());
 }
 
 dtkCreatorMainWindow::~dtkCreatorMainWindow(void)

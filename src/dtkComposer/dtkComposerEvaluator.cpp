@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. mars 20 16:57:26 2012 (+0100)
+ * Last-Updated: mer. mars 21 10:51:59 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 371
+ *     Update #: 413
  */
 
 /* Commentary:
@@ -111,13 +111,18 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
     d->current = d->stack.takeFirst();
 //    dtkTrace() << "current node to evaluate is" << d->current->title();
     bool runnable = true;
-    foreach (dtkComposerGraphNode *pred, d->current->predecessors()) {
-        if (pred->status() != dtkComposerGraphNode::Done && (!pred->endloop())) {
-            dtkTrace() << "predecessor not ready" << pred->title();
+
+    dtkComposerGraphNodeList preds = d->current->predecessors();
+    int   i = 0;
+    int max = preds.count();
+    while (i < max && runnable) {
+        if (preds.at(i)->status() != dtkComposerGraphNode::Done && (!preds.at(i)->endloop())) {
+            dtkTrace() << "predecessor not ready" << preds.at(i)->title();
             runnable = false;
-            break;
         }
+        i++;
     }
+
     if (runnable) {
         if (d->current->breakpoint() && d->current->status() == dtkComposerGraphNode::Ready ) {
             dtkTrace() << "break point reached";
@@ -129,11 +134,12 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
             QtConcurrent::run(d->current, &dtkComposerGraphNode::eval);
         else
             d->current->eval();
-        foreach ( dtkComposerGraphNode *s, d->current->successors())
-            if (!d->stack.contains(s)) {
-                if (s->status() == dtkComposerGraphNode::Done) //must reset status
-                    s->setStatus(dtkComposerGraphNode::Ready);
-                d->stack << s;
+        dtkComposerGraphNodeList s = d->current->successors();
+        max = s.count();
+        for (int i = 0; i < max; i++)
+            if (!d->stack.contains(s.at(i))) {
+                s.at(i)->setStatus(dtkComposerGraphNode::Ready);
+                d->stack << s.at(i);
             }
     } else {
         dtkTrace() << " node not runnable, put it at the end of the list ";

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 11:48:22 2012 (+0100)
+ * Last-Updated: Wed Mar 21 11:50:55 2012 (+0100)
  *           By: tkloczko
- *     Update #: 85
+ *     Update #: 86
  */
 
 /* Commentary: 
@@ -47,9 +47,11 @@ dtkComposerNodeControlForEach::dtkComposerNodeControlForEach(void) : dtkComposer
 {
     d->header = new dtkComposerNodeProxy;
     delete d->header->removeEmitter(0);
+    d->header->setAsHeader(true);
 
     d->footer = new dtkComposerNodeProxy;
     delete d->footer->removeReceiver(0);
+    d->footer->setAsFooter(true);
 
     d->body_block = new dtkComposerNodeComposite;
     d->body_block->setTitleHint("Body");

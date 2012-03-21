@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 11:46:08 2012 (+0100)
+ * Last-Updated: Wed Mar 21 11:53:27 2012 (+0100)
  *           By: tkloczko
- *     Update #: 75
+ *     Update #: 76
  */
 
 /* Commentary: 
@@ -49,9 +49,11 @@ dtkComposerNodeControlFor::dtkComposerNodeControlFor(void) : dtkComposerNodeCont
 {
     d->header = new dtkComposerNodeProxy;
     delete d->header->removeEmitter(0);
+    d->header->setAsHeader(true);
 
     d->footer = new dtkComposerNodeProxy;
     delete d->footer->removeReceiver(0);
+    d->footer->setAsFooter(true);
 
     d->cond_block = new dtkComposerNodeComposite;
     d->cond_block->setTitleHint("Conditional");

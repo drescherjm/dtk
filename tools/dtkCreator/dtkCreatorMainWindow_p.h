@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  1 12:37:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 20 22:26:01 2012 (+0100)
+ * Last-Updated: Wed Mar 21 11:47:24 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 102
+ *     Update #: 111
  */
 
 /* Commentary: 
@@ -34,6 +34,8 @@ class dtkComposerStackView;
 class dtkRecentFilesMenu;
 
 class dtkLogView;
+
+class dtkSplitter;
 
 class dtkCreatorMainWindow;
 
@@ -72,6 +74,9 @@ public:
     dtkLogView *log_view;
 
 public:
+    dtkSplitter *inner;
+
+public:
     QMenu *composition_menu;
     QAction *composition_open_action;
     QAction *composition_save_action;
@@ -90,6 +95,11 @@ public:
 
 public:
     QString current_composition;
+
+public:
+    int wl;
+    int wr;
+    int wg;
 
 public:
     dtkCreatorMainWindow *q;

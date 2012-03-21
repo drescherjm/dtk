@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 15:40:03 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 24 16:19:56 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 38
+ * Last-Updated: Wed Mar 21 09:18:51 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -31,6 +31,8 @@ class dtkComposerNodeLeaf;
 class dtkComposerNodeComposite;
 class dtkComposerNodeControlPrivate;
 
+class dtkComposerTransmitterVariant;
+
 class DTKCOMPOSER_EXPORT dtkComposerNodeControl : public dtkComposerNode
 {
 public:
@@ -42,6 +44,16 @@ public:
     virtual dtkComposerNodeLeaf *header(void) = 0;
     virtual dtkComposerNodeLeaf *footer(void) = 0;
     virtual dtkComposerNodeComposite *block(int id) = 0;
+
+public:
+    void appendInputTwin(dtkComposerTransmitterVariant *twin);
+    void removeInputTwin(dtkComposerTransmitterVariant *twin);
+
+    void appendOutputTwin(dtkComposerTransmitterVariant *twin);
+    void removeOutputTwin(dtkComposerTransmitterVariant *twin);
+
+    QList<dtkComposerTransmitterVariant *>  inputTwins(void);
+    QList<dtkComposerTransmitterVariant *> outputTwins(void);
 
 public:
     virtual void setInputs(void);

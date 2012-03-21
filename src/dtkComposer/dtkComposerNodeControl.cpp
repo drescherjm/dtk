@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 15:40:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. févr. 16 10:23:43 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 22
+ * Last-Updated: Wed Mar 21 09:20:13 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 30
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include "dtkComposerNodeControl.h"
+#include "dtkComposerTransmitterVariant.h"
 
 #include <dtkCore/dtkGlobal.h>
 
@@ -28,7 +29,8 @@
 class dtkComposerNodeControlPrivate
 {
 public:    
-
+    QList<dtkComposerTransmitterVariant *>  input_twins;
+    QList<dtkComposerTransmitterVariant *> output_twins;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -45,6 +47,38 @@ dtkComposerNodeControl::~dtkComposerNodeControl(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkComposerNodeControl::appendInputTwin(dtkComposerTransmitterVariant *twin)
+{
+    if (!d->input_twins.contains(twin))
+        d->input_twins << twin;
+}
+
+void dtkComposerNodeControl::removeInputTwin(dtkComposerTransmitterVariant *twin)
+{
+    d->input_twins.removeOne(twin);
+}
+
+void dtkComposerNodeControl::appendOutputTwin(dtkComposerTransmitterVariant *twin)
+{
+    if (!d->output_twins.contains(twin))
+        d->output_twins << twin;
+}
+
+void dtkComposerNodeControl::removeOutputTwin(dtkComposerTransmitterVariant *twin)
+{
+    d->output_twins.removeOne(twin);
+}
+
+QList<dtkComposerTransmitterVariant *> dtkComposerNodeControl::inputTwins(void)
+{
+    return d->input_twins;
+}
+
+QList<dtkComposerTransmitterVariant *> dtkComposerNodeControl::outputTwins(void)
+{
+    return d->output_twins;
 }
 
 void dtkComposerNodeControl::setInputs(void)

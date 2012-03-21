@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. mars 20 17:14:22 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 53
+ * Last-Updated: Wed Mar 21 09:29:21 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 55
  */
 
 /* Commentary: 
@@ -107,12 +107,10 @@ dtkComposerNodeComposite *dtkComposerNodeControlWhile::block(int id)
 
 void dtkComposerNodeControlWhile::setInputs(void)
 {
-    foreach(dtkComposerTransmitter *t, d->body_block->receivers()) {
-        if (dtkComposerTransmitterVariant *v = dynamic_cast<dtkComposerTransmitterVariant *>(t)) {
-            v->setTwinned(false);
-            v->setData(v->data());
-            v->setTwinned(true);
-        }
+    foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
+        v->setTwinned(false);
+        v->setData(v->data());
+        v->setTwinned(true);        
     }
 }
 
@@ -122,10 +120,8 @@ void dtkComposerNodeControlWhile::setConditions(void)
 
 void dtkComposerNodeControlWhile::setOutputs(void)
 {
-    foreach(dtkComposerTransmitter *t, d->body_block->emitters()) {
-        if (dtkComposerTransmitterVariant *v = dynamic_cast<dtkComposerTransmitterVariant *>(t)) {
-            v->twin()->setData(v->data());
-        }
+    foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
+        v->twin()->setData(v->data());  
     }    
 }
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 20 16:09:33 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 525
+ * Last-Updated: Wed Mar 21 09:27:44 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 529
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #include "dtkComposerFactory.h"
 #include "dtkComposerGraph.h"
 #include "dtkComposerNodeComposite.h"
+#include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerReader.h"
@@ -333,15 +334,10 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
 
                                 dtkComposerTransmitter *proxy = i->node()->wrapee()->receivers().at(i->node()->inputPorts().indexOf(i));
 
-                                // proxy->appendPrevious(variant);
-                                // variant->appendNext(proxy);
-
-                                // qDebug() << __func__ << "Done" << proxy << variant;
-
-    dtkComposerTransmitterLinkList   valid_edges;
-    dtkComposerTransmitterLinkList invalid_edges;
-    dtkComposerTransmitter::onTransmittersConnected(variant, proxy, valid_edges, invalid_edges);
-    dtkComposerPropagateEdgeValidity(d->root, valid_edges, invalid_edges);
+                                dtkComposerTransmitterLinkList   valid_edges;
+                                dtkComposerTransmitterLinkList invalid_edges;
+                                dtkComposerTransmitter::onTransmittersConnected(variant, proxy, valid_edges, invalid_edges);
+                                dtkComposerPropagateEdgeValidity(d->root, valid_edges, invalid_edges);
 
                             }
                         }
@@ -364,15 +360,10 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
 
                                 dtkComposerTransmitter *proxy = i->node()->wrapee()->receivers().at(i->node()->inputPorts().indexOf(i));
 
-                                // proxy->appendPrevious(variant);
-                                // variant->appendNext(proxy);
-
-                                // qDebug() << __func__ << "Done" << 2;
-
-    dtkComposerTransmitterLinkList   valid_edges;
-    dtkComposerTransmitterLinkList invalid_edges;
-    dtkComposerTransmitter::onTransmittersConnected(variant, proxy, valid_edges, invalid_edges);
-    dtkComposerPropagateEdgeValidity(d->root, valid_edges, invalid_edges);
+                                dtkComposerTransmitterLinkList   valid_edges;
+                                dtkComposerTransmitterLinkList invalid_edges;
+                                dtkComposerTransmitter::onTransmittersConnected(variant, proxy, valid_edges, invalid_edges);
+                                dtkComposerPropagateEdgeValidity(d->root, valid_edges, invalid_edges);
 
                             }
                         }
@@ -434,7 +425,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
                     
                     if(block.isEmpty())
                         wrapee = composite->wrapee();
-                    else if(d->control) {
+                    else if (d->control) {
                         wrapee = d->control->block(block)->wrapee();
                     }
                     
@@ -446,7 +437,9 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
 
                             variant->setTwin(dynamic_cast<dtkComposerTransmitterVariant *>(wrapee->receivers().at(twin)));
 
-                            qDebug() << "Setting twin" << variant << variant->twin();
+                            dynamic_cast<dtkComposerNodeControl *>(d->control->wrapee())->appendInputTwin(variant->twin());
+                            dynamic_cast<dtkComposerNodeControl *>(d->control->wrapee())->appendOutputTwin(variant);
+
                         }
                     }
                 }

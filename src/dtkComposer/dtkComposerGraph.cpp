@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 15:27:59 2012 (+0100)
- *           By: tkloczko
- *     Update #: 1782
+ * Last-Updated: jeu. mars 22 15:16:26 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 1804
  */
 
 /* Commentary:
@@ -483,16 +483,11 @@ void dtkComposerGraph::removeEdge(dtkComposerSceneEdge *edge)
 
     QList<dtkComposerGraphEdge *> edges = d->edges.values(edge);
 
-    //add back dummy edges if necessary
-    dtkComposerSceneNode *scene_src = edge->source()->node();
-    dtkComposerSceneNode *scene_dest = edge->destination()->node();
-
     // first remove edges
     d->edges.remove(edge);
     foreach (dtkComposerGraphEdge *e, edges) {
         e->source()->removeSuccessor(e->destination());
         e->destination()->removePredecessor(e->source());
-
         this->removeItem(e);
         delete e;
     }
@@ -500,19 +495,17 @@ void dtkComposerGraph::removeEdge(dtkComposerSceneEdge *edge)
     // if destination has edges on its input, don't add a dummy edge
     bool doit = true;
     foreach(dtkComposerGraphEdge *e, d->edges.values())
-        doit = doit && (e->destination() !=  d->begin(scene_dest));
+        doit = doit && (e->destination() !=  d->begin(edge->destination()->node()));
     if (doit) {
-        dtkTrace() << " add back dummy edge " << scene_src->parent()->title() << scene_dest->title();
-        d->addDummyEdge(  d->begin(scene_src->parent()), d->begin(scene_dest), scene_src->parent());
+        d->addDummyEdge(  d->begin(edge->source()->owner()->parent()), d->begin(edge->destination()->node()), edge->source()->owner()->parent());
     }
 
     doit = true;
     // if source has edges on its output, don't add a dummy edge
     foreach(dtkComposerGraphEdge *e, d->edges.values())
-        doit = doit && (e->source() !=  d->end(scene_src));
+        doit = doit && (e->source() !=  d->end(edge->source()->node()));
     if (doit) {
-        dtkTrace() << " add back dummy edge " << scene_src->title() << scene_dest->parent()->title();
-        d->addDummyEdge(  d->end(scene_src), d->end(scene_dest->parent()), scene_src->parent());
+        d->addDummyEdge(  d->end(edge->source()->node()), d->end(edge->destination()->owner()->parent()), edge->destination()->owner()->parent());
     }
 }
 

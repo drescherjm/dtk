@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Mar 21 10:25:19 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 10:28:05 2012 (+0100)
+ * Last-Updated: Thu Mar 22 16:04:30 2012 (+0100)
  *           By: tkloczko
- *     Update #: 4
+ *     Update #: 6
  */
 
 /* Commentary: 
@@ -38,14 +38,6 @@ public:
 
     inline QString titleHint(void) {
         return "Proxy";
-    }
-
-    inline QString inputLabelHint(int) {
-        return "value";
-    }
-
-    inline QString outputLabelHint(int) {
-        return "value";
     }
 
 private:

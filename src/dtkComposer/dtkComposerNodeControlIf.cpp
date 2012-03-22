@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 12:20:16 2012 (+0100)
+ * Last-Updated: Thu Mar 22 16:29:40 2012 (+0100)
  *           By: tkloczko
- *     Update #: 38
+ *     Update #: 39
  */
 
 /* Commentary: 
@@ -56,6 +56,7 @@ dtkComposerNodeControlIf::dtkComposerNodeControlIf(void) : dtkComposerNodeContro
 
     d->header = new dtkComposerNodeProxy;
     delete d->header->removeEmitter(0);
+    d->header->setInputLabelHint("cond", 0); 
     d->header->setAsHeader(true);
 
     d->cond.appendPrevious(d->header->receivers().first());
@@ -63,6 +64,7 @@ dtkComposerNodeControlIf::dtkComposerNodeControlIf(void) : dtkComposerNodeContro
 
     d->footer = new dtkComposerNodeProxy;
     delete d->footer->removeReceiver(0);
+    d->footer->setOutputLabelHint("cond", 0);
     d->footer->setAsFooter(true);
 
     d->cond.appendNext(d->footer->emitters().first());

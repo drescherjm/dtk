@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: jeu. mars 22 16:30:32 2012 (+0100)
+ * Last-Updated: jeu. mars 22 17:08:58 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 2050
+ *     Update #: 2064
  */
 
 /* Commentary:
@@ -635,14 +635,17 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         bool dstComposite = dynamic_cast<dtkComposerSceneNodeComposite *>(d->current_edge->destination()->node()) != NULL;
         bool dstParent = d->current_edge->destination()->node() == d->current_edge->source()->owner()->parent() ;
         bool srcParent = d->current_edge->source()->node() == d->current_edge->destination()->owner()->parent() ;
+        bool sameParent = d->current_edge->source()->owner()->parent() == d->current_edge->destination()->owner()->parent() ;
 
         if (!((srcInput  && !dstInput) ||
-              (!srcInput &&  dstInput &&  srcComposite) ||
-              (!srcInput &&  dstInput &&  dstComposite) ||
+              (!srcInput &&  dstInput &&  srcParent) ||
+              (!srcInput &&  dstInput &&  dstParent) ||
               (srcInput  &&  dstInput && !srcComposite) ||
               (!srcInput && !dstInput && !dstComposite) ||
+              (!sameParent && !(dstParent || srcParent)) ||
               (!srcInput && !dstInput &&  srcComposite && dstComposite && srcParent) ||
-              (srcInput  &&  dstInput &&  srcComposite && dstComposite && dstParent))) {
+              (srcInput  &&  dstInput &&  srcComposite && dstComposite && dstParent)))
+            {
                 dtkComposerStackCommandCreateEdge *command = new dtkComposerStackCommandCreateEdge;
                 command->setGraph(d->graph);
                 command->setScene(this);

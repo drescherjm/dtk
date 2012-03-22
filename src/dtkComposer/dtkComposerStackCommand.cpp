@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. mars 22 15:13:10 2012 (+0100)
+ * Last-Updated: jeu. mars 22 15:29:13 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 3075
+ *     Update #: 3078
  */
 
 /* Commentary: 
@@ -510,6 +510,8 @@ void dtkComposerStackCommandCreateEdge::setParent(void)
         e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->destination->node());
     else if(e->destination->node()->parent()->parent() == e->source->node())
         e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->source->node());
+    else if(e->source->node()->parent()->parent() == e->destination->node()->parent()->parent())
+        e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->destination->node()->parent()->parent());
     else
         qDebug() << __func__ << "Unhandled case" ;
 }
@@ -2277,31 +2279,6 @@ void dtkComposerStackCommandReparentNode::undo(void)
             d->scene->addItem(e->origin);
 
         e->origin_parent->layout();
-    }
-
-    if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(e->target)) {
-
-        dtkComposerSceneNodeComposite *target = control->blockAt(e->target_pos);
-
-        d->graph->removeNode(e->origin);
-        target->removeNode(e->origin);
-
-        if (target->flattened()) {
-            target->layout();
-            d->scene->removeItem(e->origin);
-        }
-
-        e->origin_parent->addNode(e->origin);
-
-        e->origin->setParent(e->origin_parent);
-        e->origin->setPos(e->origin_pos);
-        d->graph->addNode(e->origin);
-        // e->origin->setParentItem(0);
-
-        if (e->origin_parent->flattened() || e->origin_parent->entered() || e->origin_parent->root())
-            d->scene->addItem(e->origin);
-
-        control->layout();
     }
 
     d->scene->modify(true);

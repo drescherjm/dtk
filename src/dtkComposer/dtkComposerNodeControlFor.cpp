@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 17:13:48 2012 (+0100)
+ * Last-Updated: Thu Mar 22 10:46:56 2012 (+0100)
  *           By: tkloczko
- *     Update #: 104
+ *     Update #: 105
  */
 
 /* Commentary: 
@@ -158,13 +158,13 @@ void dtkComposerNodeControlFor::setConditions(void)
 
 void dtkComposerNodeControlFor::setOutputs(void)
 {
+    for (int i = 1; i < this->outputTwins().count(); i++)
+        this->outputTwins().at(i)->twin()->setData(this->outputTwins().at(i)->data());
 }
 
 void dtkComposerNodeControlFor::setVariables(void)
 {
-    foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
-        v->twin()->setData(v->data());  
-    }
+    this->outputTwins().first()->twin()->setData(this->outputTwins().first()->data());
 }
 
 int dtkComposerNodeControlFor::selectBranch(void)

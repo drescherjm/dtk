@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 11:07:28 2012 (+0100)
+ * Last-Updated: Thu Mar 22 12:23:35 2012 (+0100)
  *           By: tkloczko
- *     Update #: 434
+ *     Update #: 438
  */
 
 /* Commentary: 
@@ -282,7 +282,7 @@ void dtkComposerSceneNodeControl::paint(QPainter *painter, const QStyleOptionGra
 
 void dtkComposerSceneNodeControl::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (event->buttons() & Qt::LeftButton && !d->drag_point.isNull()) {
+    if (event->buttons() && Qt::LeftButton && !d->drag_point.isNull()) {
         
         QPointF delta = QPointF(event->scenePos() - d->drag_point);
 
@@ -297,11 +297,11 @@ void dtkComposerSceneNodeControl::mouseMoveEvent(QGraphicsSceneMouseEvent *event
             qreal delta_x = delta.x();
             qreal delta_y = delta.y()/d->blocks.count();
             
-            foreach(dtkComposerSceneNode *node, block->nodes())
-                node->moveBy(delta_x, delta_y);
+            // foreach(dtkComposerSceneNode *node, block->nodes())
+            //     node->moveBy(delta_x, delta_y);
             
-            foreach(dtkComposerSceneNote *note, block->notes())
-                note->moveBy(delta_x, delta_y);
+            // foreach(dtkComposerSceneNote *note, block->notes())
+            //     note->moveBy(delta_x, delta_y);
             
             foreach(dtkComposerSceneEdge *edge, block->edges())
                 edge->adjust();

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 17:05:57 2012 (+0100)
+ * Last-Updated: Thu Mar 22 10:29:42 2012 (+0100)
  *           By: tkloczko
- *     Update #: 406
+ *     Update #: 408
  */
 
 /* Commentary: 
@@ -169,10 +169,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
             property.setAttribute("type", "input");
             property.setAttribute("label", port->label());
 
-            if(node->title() == "Conditional" && port->label() == "cond")
-                continue;
-
-            if(port->label() == "value")
+            if (port->node()->wrapee()->receivers().at(port->node()->inputPorts().indexOf(port))->required())
                 continue;
 
             if (port->loop())
@@ -193,10 +190,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
             property.setAttribute("type", "output");
             property.setAttribute("label", port->label());
 
-            if(node->title() == "Conditional" && port->label() == "cond")
-                continue;
-
-            if(port->label() == "value")
+            if (port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port))->required())
                 continue;
 
             if (port->loop())

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 19 14:33:28 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 3047
+ * Last-Updated: Thu Mar 22 10:27:14 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 3048
  */
 
 /* Commentary: 
@@ -1585,6 +1585,7 @@ void dtkComposerStackCommandCreatePort::redo(void)
         }
         e->node->addInputPort(e->port);
         e->node->layout();
+        e->transmitter->setRequired(false);
         e->node->wrapee()->appendReceiver(e->transmitter);
         break;
     case dtkComposerScenePort::Output:
@@ -1602,6 +1603,7 @@ void dtkComposerStackCommandCreatePort::redo(void)
         }
         e->node->addOutputPort(e->port);
         e->node->layout();
+        e->transmitter->setRequired(false);
         e->node->wrapee()->appendEmitter(e->transmitter);
         break;
     default:

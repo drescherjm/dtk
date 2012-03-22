@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 13:59:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 16 17:29:32 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 112
+ * Last-Updated: mer. mars 21 18:24:47 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 120
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include "dtkComposerSceneNode.h"
+#include "dtkComposerSceneNodeControl.h"
 #include "dtkComposerScenePort.h"
 
 class dtkComposerScenePortPrivate
@@ -95,8 +96,10 @@ dtkComposerScenePort::Type dtkComposerScenePort::type(void)
     return d->type;
 }
 
-dtkComposerSceneNode *dtkComposerScenePort::node(void)
+dtkComposerSceneNode *dtkComposerScenePort::node(bool control_if_block)
 {
+    if (control_if_block && (dynamic_cast<dtkComposerSceneNodeControl *>(d->node->parent())))
+        return d->node->parent();
     return d->node;
 }
 

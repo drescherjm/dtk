@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 19 14:33:28 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 3047
+ * Last-Updated: mer. mars 21 18:37:51 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 3061
  */
 
 /* Commentary: 
@@ -509,7 +509,7 @@ void dtkComposerStackCommandCreateEdge::setParent(void)
     else if(e->destination->node()->parent()->parent() == e->source->node())
         e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->source->node());
     else
-        qDebug() << __func__ << "Unhandled case";
+        qDebug() << __func__ << "Unhandled case" ;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -1903,7 +1903,7 @@ void dtkComposerStackCommandReparentNode::setTargetNode(dtkComposerSceneNode *no
         else if (edge->source()->node() == e->target)
             target_output << edge;
 
-        if ((e->origin != edge->source()->node()) && e->origin == edge->destination()->node()) {
+        if ((e->origin != edge->source()->node(true)) && e->origin == edge->destination()->node(true)) {
             if (!(edge->source()->node() == e->target)) {
 
                 e->input_edges << edge;
@@ -1933,7 +1933,7 @@ void dtkComposerStackCommandReparentNode::setTargetNode(dtkComposerSceneNode *no
                 else
                     port_used.insert(edge->source(), 1);
             }
-        } else if ((e->origin != edge->destination()->node()) && e->origin == edge->source()->node()) {
+        } else if ((e->origin != edge->destination()->node(true)) && e->origin == edge->source()->node(true)) {
             if (!(edge->destination()->node() == e->target)) {
 
                 e->output_edges << edge;
@@ -1983,7 +1983,7 @@ void dtkComposerStackCommandReparentNode::setTargetNode(dtkComposerSceneNode *no
             target_intern << edge;
 
     foreach(dtkComposerSceneEdge *edge, target_input) {
-        if (edge->source()->node() == e->origin ) {
+        if (edge->source()->node(node) == e->origin ) {
             // edge from node to composite; if the composite port is
             // not connected inside, remove the edge, else connect
             // directly the nodes inside the composite and destroy the
@@ -2019,7 +2019,7 @@ void dtkComposerStackCommandReparentNode::setTargetNode(dtkComposerSceneNode *no
     }
 
     foreach(dtkComposerSceneEdge *edge, target_output) {
-        if (edge->destination()->node() == e->origin ) {
+        if (edge->destination()->node(true) == e->origin ) {
             // edge from node to composite; if the composite port is
             // not connected inside, remove the edge, else connect
             // directly the nodes inside the composite and destroy the

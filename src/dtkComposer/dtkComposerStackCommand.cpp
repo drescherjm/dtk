@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. mars 22 13:01:39 2012 (+0100)
+ * Last-Updated: jeu. mars 22 15:29:13 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 3062
+ *     Update #: 3078
  */
 
 /* Commentary: 
@@ -37,6 +37,8 @@
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitterProxy.h"
 #include "dtkComposerTransmitterVariant.h"
+
+#include <dtkLog/dtkLog.h>
 
 // /////////////////////////////////////////////////////////////////
 // Base Command
@@ -508,6 +510,8 @@ void dtkComposerStackCommandCreateEdge::setParent(void)
         e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->destination->node());
     else if(e->destination->node()->parent()->parent() == e->source->node())
         e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->source->node());
+    else if(e->source->node()->parent()->parent() == e->destination->node()->parent()->parent())
+        e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->destination->node()->parent()->parent());
     else
         qDebug() << __func__ << "Unhandled case" ;
 }
@@ -549,14 +553,20 @@ void dtkComposerStackCommandDestroyEdge::setEdge(dtkComposerSceneEdge *edge)
 
 void dtkComposerStackCommandDestroyEdge::redo(void)
 {
-    if(!e->edge)
+    if(!e->edge) {
+        dtkError() << "no edge in destroy edge!" ;
         return;
+    }
 
-    if(!e->parent)
+    if(!e->parent) {
+        dtkError() << "no parent in destroy edge!" ;
         return;
+    }
 
-    if(!d->graph)
+    if(!d->graph) {
+        dtkError() << "no graph in destroy edge!" ;
         return;
+    }
 
     // Setting up data flow
 
@@ -580,14 +590,20 @@ void dtkComposerStackCommandDestroyEdge::redo(void)
 
 void dtkComposerStackCommandDestroyEdge::undo(void)
 {
-    if(!e->edge)
+    if(!e->edge) {
+        dtkError() << "no edge in destroy edge undo!" ;
         return;
+    }
 
-    if(!e->parent)
+    if(!e->parent) {
+        dtkError() << "no parent in destroy edge undo!" ;
         return;
+    }
 
-    if(!d->graph)
+    if(!d->graph) {
+        dtkError() << "no graph in destroy edge undo!" ;
         return;
+    }
 
     e->edge->link();
 
@@ -1905,7 +1921,7 @@ void dtkComposerStackCommandReparentNode::setTargetNode(dtkComposerSceneNode *no
         else if (edge->source()->node() == e->target)
             target_output << edge;
 
-        if ((e->origin != edge->source()->node(true)) && e->origin == edge->destination()->node(true)) {
+        if ((e->origin != edge->source()->owner()) && e->origin == edge->destination()->owner()) {
             if (!(edge->source()->node() == e->target)) {
 
                 e->input_edges << edge;
@@ -1935,7 +1951,7 @@ void dtkComposerStackCommandReparentNode::setTargetNode(dtkComposerSceneNode *no
                 else
                     port_used.insert(edge->source(), 1);
             }
-        } else if ((e->origin != edge->destination()->node(true)) && e->origin == edge->source()->node(true)) {
+        } else if ((e->origin != edge->destination()->owner()) && e->origin == edge->source()->owner()) {
             if (!(edge->destination()->node() == e->target)) {
 
                 e->output_edges << edge;
@@ -1985,7 +2001,7 @@ void dtkComposerStackCommandReparentNode::setTargetNode(dtkComposerSceneNode *no
             target_intern << edge;
 
     foreach(dtkComposerSceneEdge *edge, target_input) {
-        if (edge->source()->node(node) == e->origin ) {
+        if (edge->source()->owner() == e->origin ) {
             // edge from node to composite; if the composite port is
             // not connected inside, remove the edge, else connect
             // directly the nodes inside the composite and destroy the
@@ -2021,7 +2037,7 @@ void dtkComposerStackCommandReparentNode::setTargetNode(dtkComposerSceneNode *no
     }
 
     foreach(dtkComposerSceneEdge *edge, target_output) {
-        if (edge->destination()->node(true) == e->origin ) {
+        if (edge->destination()->owner() == e->origin ) {
             // edge from node to composite; if the composite port is
             // not connected inside, remove the edge, else connect
             // directly the nodes inside the composite and destroy the
@@ -2263,31 +2279,6 @@ void dtkComposerStackCommandReparentNode::undo(void)
             d->scene->addItem(e->origin);
 
         e->origin_parent->layout();
-    }
-
-    if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(e->target)) {
-
-        dtkComposerSceneNodeComposite *target = control->blockAt(e->target_pos);
-
-        d->graph->removeNode(e->origin);
-        target->removeNode(e->origin);
-
-        if (target->flattened()) {
-            target->layout();
-            d->scene->removeItem(e->origin);
-        }
-
-        e->origin_parent->addNode(e->origin);
-
-        e->origin->setParent(e->origin_parent);
-        e->origin->setPos(e->origin_pos);
-        d->graph->addNode(e->origin);
-        // e->origin->setParentItem(0);
-
-        if (e->origin_parent->flattened() || e->origin_parent->entered() || e->origin_parent->root())
-            d->scene->addItem(e->origin);
-
-        control->layout();
     }
 
     d->scene->modify(true);

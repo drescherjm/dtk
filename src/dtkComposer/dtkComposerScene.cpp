@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Wed Mar 21 14:39:23 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 1962
+ * Last-Updated: jeu. mars 22 16:30:32 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 2050
  */
 
 /* Commentary:
@@ -629,14 +629,28 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         d->current_edge->setDestination(destination);
 
     if(d->current_edge->link()) {
+        bool srcInput = d->current_edge->source()->type() == dtkComposerScenePort::Input;
+        bool dstInput = d->current_edge->destination()->type() == dtkComposerScenePort::Input;
+        bool srcComposite = dynamic_cast<dtkComposerSceneNodeComposite *>(d->current_edge->source()->node()) != NULL;
+        bool dstComposite = dynamic_cast<dtkComposerSceneNodeComposite *>(d->current_edge->destination()->node()) != NULL;
+        bool dstParent = d->current_edge->destination()->node() == d->current_edge->source()->owner()->parent() ;
+        bool srcParent = d->current_edge->source()->node() == d->current_edge->destination()->owner()->parent() ;
 
-        dtkComposerStackCommandCreateEdge *command = new dtkComposerStackCommandCreateEdge;
-        command->setGraph(d->graph);
-        command->setScene(this);
-        command->setSource(d->current_edge->source());
-        command->setDestination(d->current_edge->destination());
+        if (!((srcInput  && !dstInput) ||
+              (!srcInput &&  dstInput &&  srcComposite) ||
+              (!srcInput &&  dstInput &&  dstComposite) ||
+              (srcInput  &&  dstInput && !srcComposite) ||
+              (!srcInput && !dstInput && !dstComposite) ||
+              (!srcInput && !dstInput &&  srcComposite && dstComposite && srcParent) ||
+              (srcInput  &&  dstInput &&  srcComposite && dstComposite && dstParent))) {
+                dtkComposerStackCommandCreateEdge *command = new dtkComposerStackCommandCreateEdge;
+                command->setGraph(d->graph);
+                command->setScene(this);
+                command->setSource(d->current_edge->source());
+                command->setDestination(d->current_edge->destination());
 
-        d->stack->push(command);
+                d->stack->push(command);
+            }
     }
 
     d->current_edge->unlink();
@@ -644,7 +658,7 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     this->removeItem(d->current_edge);
 
     delete d->current_edge;
-    
+
     d->current_edge = NULL;
 }
 

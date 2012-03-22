@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:28:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mars 21 18:17:02 2012 (+0100)
+ * Last-Updated: jeu. mars 22 15:11:16 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 43
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -42,7 +42,8 @@ public:
     Type type(void);
 
 public:
-    dtkComposerSceneNode *node(bool control_if_block = false);
+    dtkComposerSceneNode *node(void);
+    dtkComposerSceneNode *owner(void);
 
 public:
     int loop(void);

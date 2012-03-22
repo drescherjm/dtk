@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 22 10:46:56 2012 (+0100)
+ * Last-Updated: Thu Mar 22 16:05:42 2012 (+0100)
  *           By: tkloczko
- *     Update #: 105
+ *     Update #: 115
  */
 
 /* Commentary: 
@@ -55,11 +55,12 @@ dtkComposerNodeControlFor::dtkComposerNodeControlFor(void) : dtkComposerNodeCont
 {
     d->header = new dtkComposerNodeProxy;
     delete d->header->removeEmitter(0);
+    d->header->setInputLabelHint("i_begin", 0); 
     d->header->setAsHeader(true);
 
     d->footer = new dtkComposerNodeProxy;
     delete d->footer->removeReceiver(0);
-    delete d->footer->removeEmitter(0);
+    d->footer->setOutputLabelHint("i_end", 0);
     d->footer->setAsFooter(true);
 
     d->cond_block = new dtkComposerNodeComposite;
@@ -74,20 +75,17 @@ dtkComposerNodeControlFor::dtkComposerNodeControlFor(void) : dtkComposerNodeCont
     d->incr_block->setTitleHint("Increment");
 
     d->cond_block->appendReceiver(new dtkComposerTransmitterProxy(d->cond_block));
-    d->cond_block->setInputLabelHint("value", 0);
+    d->cond_block->setInputLabelHint("i", 0);
     
     d->body_block->appendReceiver(new dtkComposerTransmitterVariant(d->body_block));
-    d->body_block->setInputLabelHint("value", 0);
-    this->appendInputTwin(dynamic_cast<dtkComposerTransmitterVariant *>(d->body_block->receivers().first()));
-    
-    d->body_block->appendEmitter(new dtkComposerTransmitterVariant(d->body_block));
-    d->body_block->setOutputLabelHint("value", 0);    
+    d->body_block->setInputLabelHint("i", 0);
+    this->appendInputTwin(dynamic_cast<dtkComposerTransmitterVariant *>(d->body_block->receivers().first()));  
 
     d->incr_block->appendReceiver(new dtkComposerTransmitterProxy(d->incr_block));
-    d->incr_block->setInputLabelHint("value", 0);
+    d->incr_block->setInputLabelHint("i", 0);
 
     d->incr_block->appendEmitter(new dtkComposerTransmitterVariant(d->incr_block));
-    d->incr_block->setOutputLabelHint("value", 0);
+    d->incr_block->setOutputLabelHint("i_next", 0);
     this->appendOutputTwin(dynamic_cast<dtkComposerTransmitterVariant *>(d->incr_block->emitters().first()));
 
     d->body_block->receivers().first()->appendPrevious(d->header->receivers().first());
@@ -96,8 +94,11 @@ dtkComposerNodeControlFor::dtkComposerNodeControlFor(void) : dtkComposerNodeCont
     d->cond_block->receivers().first()->appendPrevious(d->body_block->receivers().first());
     d->body_block->receivers().first()->appendNext(d->cond_block->receivers().first());
 
-    d->incr_block->receivers().first()->appendPrevious(d->body_block->emitters().first());
-    d->body_block->emitters().first()->appendNext(d->incr_block->receivers().first());
+    d->incr_block->receivers().first()->appendPrevious(d->body_block->receivers().first());
+    d->body_block->receivers().first()->appendNext(d->incr_block->receivers().first());
+
+    d->incr_block->emitters().first()->appendNext(d->footer->emitters().first());
+    d->footer->emitters().first()->appendPrevious(d->incr_block->emitters().first());
 
     this->outputTwins().first()->setTwin(this->inputTwins().first());
 }

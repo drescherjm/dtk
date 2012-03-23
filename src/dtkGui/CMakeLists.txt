@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Mar  2 15:40:25 2012 (+0100)
+## Last-Updated: Wed Mar 21 23:58:37 2012 (+0100)
 ##           By: Julien Wintz
-##     Update #: 227
+##     Update #: 241
 ######################################################################
 ## 
 ### Commentary: 
@@ -37,6 +37,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkPopup.h
   dtkProgressIndicator.h
   dtkRecentFilesMenu.h
+  dtkSearchField.h
   dtkSettingsEditor.h
   dtkSpacer.h
   dtkSplitter.h
@@ -56,6 +57,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkPopup.h
   dtkProgressIndicator.h
   dtkRecentFilesMenu.h
+  dtkSearchField.h
   dtkSettingsEditor.h
   dtkSpacer.h
   dtkSplitter.h
@@ -82,6 +84,16 @@ set(${PROJECT_NAME}_SOURCES
   dtkSwitch.cpp
   dtkTagCloud.cpp
   dtkTextEditor.cpp)
+
+if(APPLE)
+set(${PROJECT_NAME}_SOURCES
+  ${${PROJECT_NAME}_SOURCES}
+    dtkSearchField.mm)
+else(APPLE)
+set(${PROJECT_NAME}_SOURCES
+  ${${PROJECT_NAME}_SOURCES}
+    dtkSearchField.cpp)
+endif(APPLE)
 
 set(${PROJECT_NAME}_RESOURCES dtkGui.qrc)
 
@@ -134,6 +146,10 @@ endif(BUILD_SHARED_LIBS)
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkScript)
+
+if(APPLE)
+target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
+endif(APPLE)
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

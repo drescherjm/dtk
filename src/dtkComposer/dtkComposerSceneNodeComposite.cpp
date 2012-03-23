@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 19 12:34:42 2012 (+0100)
+ * Last-Updated: Fri Mar 23 15:56:01 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 459
+ *     Update #: 481
  */
 
 /* Commentary: 
@@ -220,6 +220,8 @@ void dtkComposerSceneNodeComposite::setRoot(bool root)
 
 void dtkComposerSceneNodeComposite::layout(void)
 {
+    QRectF updateRect;
+
     if (this->embedded() && !d->entered)
         goto port_location;
     
@@ -278,22 +280,34 @@ port_location:
     for(int i = 0; i < this->outputPorts().count(); i++)
         this->outputPorts().at(i)->setPos(QPointF(d->rect.right() - port_margin_left - this->outputPorts().at(i)->boundingRect().width(), i*this->outputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top + header));
 
-    if(this->embedded())
-        goto update;
-
 // /////////////////////////////////////////////////////////////////
 // Update edges geometry
 // /////////////////////////////////////////////////////////////////
-
-    foreach(dtkComposerSceneEdge *edge, this->inputEdges())
-        edge->adjust();
-
-    foreach(dtkComposerSceneEdge *edge, d->edges)
-        edge->adjust();
-
-    foreach(dtkComposerSceneEdge *edge, this->outputEdges())
-        edge->adjust();
     
+    foreach(dtkComposerSceneEdge *edge, this->inputEdges()) {
+        edge->adjust();
+        updateRect |= edge->boundingRect();
+    }
+
+    foreach(dtkComposerSceneEdge *edge, d->edges) {
+        edge->adjust();
+        updateRect |= edge->boundingRect();
+    }
+    
+    foreach(dtkComposerSceneEdge *edge, this->outputEdges()) {
+        edge->adjust();
+        updateRect |= edge->boundingRect();
+    }
+
+    this->update(updateRect); 
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
+    if(this->embedded())
+        goto update;
+   
 // /////////////////////////////////////////////////////////////////
 // Height calculation
 // /////////////////////////////////////////////////////////////////
@@ -309,7 +323,6 @@ port_location:
     }
 
 update:
-
     this->update();
 }
 

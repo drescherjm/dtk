@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 22 12:23:35 2012 (+0100)
- *           By: tkloczko
- *     Update #: 438
+ * Last-Updated: Fri Mar 23 15:56:10 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 449
  */
 
 /* Commentary: 
@@ -193,7 +193,8 @@ void dtkComposerSceneNodeControl::layout(void)
         block->layout();
         block->setPos(0, h);
         block->resize(d->rect.size().width(), b);
-        block->obfuscate();
+        // block->obfuscate();
+        block->layout();
         h += b;
     }
 

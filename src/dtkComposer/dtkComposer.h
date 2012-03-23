@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 14:45:10 2012 (+0100)
+ * Last-Updated: Fri Mar 23 13:31:52 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 46
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -54,6 +54,7 @@ public slots:
     void step(void);
     void cont(void);
     void next(void);
+    void stop(void);
 
 signals:
     void modified(bool);

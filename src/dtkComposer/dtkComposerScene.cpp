@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: jeu. mars 22 17:08:58 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 2064
+ * Last-Updated: Fri Mar 23 14:13:02 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 2098
  */
 
 /* Commentary:
@@ -769,7 +769,7 @@ dtkComposerSceneNode *dtkComposerScene::nodeAt(const QPointF& point, dtkComposer
         }
     }
 
-    return NULL;
+    return d->current_node;
 }
 
 dtkComposerScenePort *dtkComposerScene::portAt(const QPointF& point) const
@@ -787,49 +787,33 @@ dtkComposerSceneNodeComposite *dtkComposerScene::parentAt(const QPointF& point) 
 {
     dtkComposerSceneNode *node = this->nodeAt(point);
 
-    if(!node) {
-        // qDebug() << __func__ << "current node";
+    if(!node)
         return d->current_node;
-    }
     
-    if(dtkComposerSceneNodeLeaf *leaf = dynamic_cast<dtkComposerSceneNodeLeaf *>(node)) {
-        // qDebug() << __func__ << "leaf node's parent";
+    if(dtkComposerSceneNodeLeaf *leaf = dynamic_cast<dtkComposerSceneNodeLeaf *>(node))
         return dynamic_cast<dtkComposerSceneNodeComposite *>(leaf->parent());
-    }
 
     if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
 
-        if(composite->flattened()) {
-            // qDebug() << __func__ << "flattened composite node";
+        if(composite->flattened())
             return composite;
-        }
 
-        if(composite->entered()) {
-            // qDebug() << __func__ << "entered composite node";
+        if(composite->entered())
             return composite;
-        }
 
-        if(!composite->flattened() && !composite->entered()) {
-            // qDebug() << __func__ << "unrevealed composite node's parent";
+        if(!composite->flattened() && !composite->entered())
             return composite;
-        }
     }
 
     if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
 
         dtkComposerSceneNodeComposite *block = control->blockAt(control->mapFromScene(point));
 
-        if(!block) {
-            // qDebug() << __func__ << "control node's parent" << control->parent()->title();
+        if(!block)
             return dynamic_cast<dtkComposerSceneNodeComposite *>(control->parent());
-        }
-
-        // qDebug() << __func__ << "control node's block" << block->title();
 
         return block;
     }
-
-    // qDebug() << __func__ << "NO PARENT FOUND - DRAMATIC";
 
     return NULL;
 }

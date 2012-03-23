@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 15:00:51 2012 (+0100)
+ * Last-Updated: Fri Mar 23 13:44:20 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1310
+ *     Update #: 1369
  */
 
 /* Commentary:
@@ -34,6 +34,7 @@
 #include <dtkComposer/dtkComposerView.h>
 
 #include <dtkGui/dtkRecentFilesMenu.h>
+#include <dtkGui/dtkSpacer.h>
 #include <dtkGui/dtkSplitter.h>
 
 #include <dtkCore/dtkGlobal.h>
@@ -43,6 +44,27 @@
 
 #include <QtCore>
 #include <QtGui>
+
+// /////////////////////////////////////////////////////////////////
+// dtkCreatorMainWindowControls
+// /////////////////////////////////////////////////////////////////
+
+dtkCreatorMainWindowControls::dtkCreatorMainWindowControls(QWidget *parent) : QFrame(parent)
+{
+    this->setFixedHeight(46);
+
+    this->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+}
+
+dtkCreatorMainWindowControls::~dtkCreatorMainWindowControls(void)
+{
+
+}
+
+QSize dtkCreatorMainWindowControls::sizeHint(void) const
+{
+    return QSize(350, 46);
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkCreatorMainWindowPrivate
@@ -164,6 +186,29 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     this->addAction(switchToCompoAction);
     this->addAction(switchToDebugAction);
 
+    // -- Toolbar
+
+    QToolBar *mainToolBar;
+    mainToolBar = this->addToolBar(tr("Main"));
+    mainToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    mainToolBar->setIconSize(QSize(32, 32));
+    
+    QAction *run_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Run_Active.png"), "Run");
+    run_action->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_R);
+
+    QAction *step_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Step_Active.png"), "Step");
+    step_action->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_N);
+
+    QAction *continue_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Continue_Active.png"), "Continue");
+    continue_action->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_C);
+
+    QAction *stop_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Stop_Active.png"), "Stop");
+    stop_action->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_Period);
+
+    mainToolBar->addWidget(new dtkSpacer(this));
+    mainToolBar->addWidget(new dtkCreatorMainWindowControls(this));
+    mainToolBar->addWidget(new dtkSpacer(this));
+
     // -- Menus
 
     QMenuBar *menu_bar = this->menuBar();
@@ -184,26 +229,22 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->edit_menu->addAction(d->undo_action);
     d->edit_menu->addAction(d->redo_action);
 
-    // -- Toolbar
+    QMenu *view_menu = menu_bar->addMenu("View");
+    view_menu->addAction(switchToCompoAction);
+    view_menu->addAction(switchToDebugAction);
 
-    QToolBar *mainToolBar;
-    mainToolBar = this->addToolBar(tr("Main"));
-    mainToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-    mainToolBar->setIconSize(QSize(32, 32));
-    
-    QAction *run_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Run_Active.png"), "Run");
-    run_action->setShortcut(Qt::ControlModifier + Qt::Key_R);
-
-    QAction *step_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Continue_Active.png"), "Step");
-    step_action->setShortcut(Qt::ControlModifier + Qt::Key_N);
-
-    QAction *stop_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Stop_Active.png"), "Stop");
-    stop_action->setShortcut(Qt::ControlModifier + Qt::Key_Period);
+    QMenu *debug_menu = menu_bar->addMenu("Debug");
+    debug_menu->addAction(run_action);
+    debug_menu->addAction(step_action);
+    debug_menu->addAction(continue_action);
+    debug_menu->addAction(stop_action);
 
     // -- Connections
 
     connect(run_action, SIGNAL(triggered()), d->composer, SLOT(run()));
     connect(step_action, SIGNAL(triggered()), d->composer, SLOT(step()));
+    connect(continue_action, SIGNAL(triggered()), d->composer, SLOT(cont()));
+    connect(stop_action, SIGNAL(triggered()), d->composer, SLOT(stop()));
 
     connect(switchToCompoAction, SIGNAL(triggered()), this, SLOT(switchToCompo()));
     connect(switchToDebugAction, SIGNAL(triggered()), this, SLOT(switchToDebug()));

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:11:39
  * Version: $Id$
- * Last-Updated: Wed Feb 22 15:15:15 2012 (+0100)
+ * Last-Updated: Fri Mar 23 14:12:35 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 183
+ *     Update #: 189
  */
 
 /* Commentary:
@@ -118,6 +118,7 @@ protected:
     dtkComposerSceneNode *nodeAt(const QPointF& point) const;
     dtkComposerScenePort *portAt(const QPointF& point) const;
     dtkComposerSceneNodeComposite *parentAt(const QPointF& point) const;
+
 
 // #pragma mark -
 // #pragma mark - Internal sigs handling

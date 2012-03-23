@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Thu Mar  1 12:02:21 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 402
+ * Last-Updated: Fri Mar 23 15:43:28 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 410
  */
 
 /* Commentary:
@@ -353,7 +353,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->types["Do While"] = "do while";
 
     d->nodes << "If";
-    d->descriptions["If"] = "<p>Description not yet filled!</p>";
+    d->descriptions["If"] = dtkReadFile(":dtkComposer/dtkComposerNodeControlIf.html");
     d->tags["If"] = QStringList() << "control" << "if";
     d->types["If"] = "if";
 

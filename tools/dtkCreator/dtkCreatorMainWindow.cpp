@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Mar 23 16:48:49 2012 (+0100)
- *           By: tkloczko
- *     Update #: 1372
+ * Last-Updated: Fri Mar 23 22:16:39 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 1391
  */
 
 /* Commentary:
@@ -180,8 +180,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     QAction *switchToCompoAction = new QAction("Switch to composition perspective", this);
     QAction *switchToDebugAction = new QAction("Switch to debug perspective", this);
 
-    switchToCompoAction->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_C);
-    switchToDebugAction->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_D);
+    switchToCompoAction->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_1);
+    switchToDebugAction->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_2);
 
     this->addAction(switchToCompoAction);
     this->addAction(switchToDebugAction);
@@ -339,7 +339,12 @@ bool dtkCreatorMainWindow::compositionOpen(void)
     if(!d->maySave())
         return true;
 
-    QFileDialog *dialog = new QFileDialog(this, tr("Open composition"), QDir::homePath(), QString("dtk composition (*.dtk)"));
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("creator");
+    QString path = settings.value("last_open_dir", QDir::homePath()).toString();
+    settings.endGroup();
+
+    QFileDialog *dialog = new QFileDialog(this, tr("Open composition"), path, QString("dtk composition (*.dtk)"));
     dialog->setStyleSheet("background-color: none ; color: none;");
     dialog->setAcceptMode(QFileDialog::AcceptOpen);
     dialog->setFileMode(QFileDialog::AnyFile);
@@ -356,6 +361,13 @@ bool dtkCreatorMainWindow::compositionOpen(const QString& file)
         d->recent_compositions_menu->addRecentFile(file);
         d->setCurrentFile(file);
     }
+
+    QFileInfo info(file);
+    
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("creator");
+    settings.setValue("last_open_dir", info.absolutePath());
+    settings.endGroup();    
 
     return status;
 }
@@ -379,11 +391,16 @@ bool dtkCreatorMainWindow::compositionSaveAs(void)
 {
     bool status = false;
 
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("creator");
+    QString path = settings.value("last_open_dir", QDir::homePath()).toString();
+    settings.endGroup();
+
     QStringList nameFilters;
     nameFilters <<  "Ascii composition (*.dtk)";
     nameFilters << "Binary composition (*.dtk)";
 
-    QFileDialog dialog(this, "Save composition as ...", QDir::homePath(), QString("dtk composition (*.dtk)"));
+    QFileDialog dialog(this, "Save composition as ...", path, QString("dtk composition (*.dtk)"));
     dialog.setStyleSheet("background-color: none ; color: none;");
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setConfirmOverwrite(true);
@@ -416,12 +433,24 @@ bool dtkCreatorMainWindow::compositionSaveAs(const QString& file, dtkComposerWri
         this->setWindowModified(false);
     }
 
+    QFileInfo info(file);
+    
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("creator");
+    settings.setValue("last_open_dir", info.absolutePath());
+    settings.endGroup();
+
     return status;
 }
 
 bool dtkCreatorMainWindow::compositionInsert(void)
 {
-    QFileDialog *dialog = new QFileDialog(this, tr("Insert composition"), QDir::homePath(), QString("dtk composition (*.dtk)"));
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("creator");
+    QString path = settings.value("last_open_dir", QDir::homePath()).toString();
+    settings.endGroup();
+
+    QFileDialog *dialog = new QFileDialog(this, tr("Insert composition"), path, QString("dtk composition (*.dtk)"));
     dialog->setStyleSheet("background-color: none ; color: none;");
     dialog->setAcceptMode(QFileDialog::AcceptOpen);
     dialog->setFileMode(QFileDialog::AnyFile);
@@ -436,6 +465,13 @@ bool dtkCreatorMainWindow::compositionInsert(const QString& file)
 
     if(status)
         this->setWindowModified(true);
+
+    QFileInfo info(file);
+    
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("creator");
+    settings.setValue("last_open_dir", info.absolutePath());
+    settings.endGroup();    
 
     return status;
 }

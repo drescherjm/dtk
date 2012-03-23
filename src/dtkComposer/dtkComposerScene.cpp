@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Fri Mar 23 15:35:11 2012 (+0100)
+ * Last-Updated: Fri Mar 23 22:22:48 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 2107
+ *     Update #: 2124
  */
 
 /* Commentary:
@@ -159,6 +159,8 @@ void dtkComposerScene::addItem(QGraphicsItem *item)
 
         control->layout();
 
+        emit modified(true);
+
         return;
     }
 
@@ -167,8 +169,10 @@ void dtkComposerScene::addItem(QGraphicsItem *item)
         if(item != d->root_node)
             QGraphicsScene::addItem(item);
 
-        if(!composite->flattened() && !composite->entered() && !composite->root())
+        if(!composite->flattened() && !composite->entered() && !composite->root()) {
+            emit modified(true);
             return;
+        }
 
         foreach(dtkComposerSceneNote *note, composite->notes())
             this->addItem(note);
@@ -181,10 +185,14 @@ void dtkComposerScene::addItem(QGraphicsItem *item)
 
         composite->layout();
 
+        emit modified(true);
+
         return;
     }
 
     QGraphicsScene::addItem(item);
+
+    emit modified(true);
 }
 
 void dtkComposerScene::removeItem(QGraphicsItem *item)
@@ -205,6 +213,8 @@ void dtkComposerScene::removeItem(QGraphicsItem *item)
                 this->removeItem(edge);
         }
 
+        emit modified(true);
+
         return;
     }
 
@@ -213,8 +223,10 @@ void dtkComposerScene::removeItem(QGraphicsItem *item)
         if(item != d->root_node)
             QGraphicsScene::removeItem(composite);
 
-        if(!composite->flattened() && !composite->entered() && !composite->root())
+        if(!composite->flattened() && !composite->entered() && !composite->root()) {
+            emit modified(true);
             return;
+        }
 
         foreach(dtkComposerSceneNote *note, composite->notes())
             this->removeItem(note);
@@ -225,10 +237,14 @@ void dtkComposerScene::removeItem(QGraphicsItem *item)
         foreach(dtkComposerSceneEdge *edge, composite->edges())
             this->removeItem(edge);
 
+        emit modified(true);
+
         return;
     }
 
     QGraphicsScene::removeItem(item);
+
+    emit modified(true);
 }
 
 // /////////////////////////////////////////////////////////////////

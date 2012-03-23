@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Fri Mar 23 14:13:02 2012 (+0100)
+ * Last-Updated: Fri Mar 23 15:35:11 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 2098
+ *     Update #: 2107
  */
 
 /* Commentary:
@@ -178,6 +178,8 @@ void dtkComposerScene::addItem(QGraphicsItem *item)
 
         foreach(dtkComposerSceneEdge *edge, composite->edges())
             this->addItem(edge);
+
+        composite->layout();
 
         return;
     }
@@ -520,47 +522,11 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
   
 adjust_edges: // Adjusting edges of selected nodes
 
-    foreach(QGraphicsItem *item, this->selectedItems()) {
+    foreach(QGraphicsItem *item, this->selectedItems())
+        if(dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>(item))
+            node->layout();
 
-        if(dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>(item)) {
-
-            if (node->parent() != d->root_node) {
-                node->parent()->layout();
-                this->update();
-            }
-            
-            QRectF updateRect;
-
-            foreach(dtkComposerSceneEdge *edge, node->inputEdges()) {
-                edge->adjust();
-                updateRect |= edge->boundingRect();
-            }
-            
-            foreach(dtkComposerSceneEdge *edge, node->outputEdges()) {
-                edge->adjust();
-                updateRect |= edge->boundingRect();
-            }
-
-            if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
-
-                foreach(dtkComposerSceneNodeComposite *block, control->blocks()) {
-
-                    foreach(dtkComposerSceneEdge *edge, block->inputEdges()) {
-                        edge->adjust();
-                        updateRect |= edge->boundingRect();
-                    }
-                    
-                    foreach(dtkComposerSceneEdge *edge, block->outputEdges()) {
-                        edge->adjust();
-                        updateRect |= edge->boundingRect();
-                    }
-                    
-                }
-            }
-            
-            this->update(updateRect);
-        }
-    }
+    this->update();
 
 adjust_current: // Adjusting current edge
 

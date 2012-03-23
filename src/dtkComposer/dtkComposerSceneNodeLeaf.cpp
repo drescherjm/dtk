@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 27 16:29:55 2012 (+0100)
- *           By: tkloczko
- *     Update #: 201
+ * Last-Updated: Fri Mar 23 15:56:05 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 209
  */
 
 /* Commentary: 
@@ -65,6 +65,9 @@ void dtkComposerSceneNodeLeaf::wrap(dtkComposerNode *node)
     this->layout();
 }
 
+#include "dtkComposerSceneNodeComposite.h"
+#include "dtkComposerSceneNodeControl.h"
+
 void dtkComposerSceneNodeLeaf::layout(void)
 {
     int header = this->embedded() ? 0 : 15;
@@ -92,6 +95,30 @@ void dtkComposerSceneNodeLeaf::layout(void)
 
     else if(this->embedded())
         d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), port_margin_top + port_margin_bottom + 10));
+
+    // --
+
+    dtkComposerSceneNode *node = this;
+
+    if (dtkComposerSceneNodeComposite *parent = dynamic_cast<dtkComposerSceneNodeComposite *>(node->parent())) {
+
+        if(!parent->root())
+            node->parent()->layout();
+    }
+    
+    QRectF updateRect;
+    
+    foreach(dtkComposerSceneEdge *edge, node->inputEdges()) {
+        edge->adjust();
+        updateRect |= edge->boundingRect();
+    }
+    
+    foreach(dtkComposerSceneEdge *edge, node->outputEdges()) {
+        edge->adjust();
+        updateRect |= edge->boundingRect();
+    }
+    
+    this->update(updateRect);
 }
 
 void dtkComposerSceneNodeLeaf::resize(qreal width, qreal height)

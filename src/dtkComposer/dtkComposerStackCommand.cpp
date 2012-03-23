@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 23 15:14:03 2012 (+0100)
+ * Last-Updated: Fri Mar 23 15:52:21 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 3135
+ *     Update #: 3153
  */
 
 /* Commentary: 
@@ -1311,16 +1311,10 @@ void dtkComposerStackCommandEnterGroup::redo(void)
     d->scene->removeItem(e->former);
 
     e->node->enter();
+    e->node->layout();
     
     d->scene->addItem(e->node);
     d->scene->setCurrent(e->node);
-
-    e->node->layout();
-    e->node->parent()->layout();
-    
-    if (e->former)
-        e->former->layout();
-
     d->scene->update();
 }
 
@@ -1332,13 +1326,10 @@ void dtkComposerStackCommandEnterGroup::undo(void)
     d->scene->removeItem(e->node);
 
     e->node->leave();
+    e->node->layout();
 
     d->scene->addItem(e->former);
     d->scene->setCurrent(e->former);
-
-    e->node->layout();
-    e->former->layout();
-
     d->scene->update();
 }
 
@@ -1392,16 +1383,10 @@ void dtkComposerStackCommandLeaveGroup::redo(void)
     d->scene->removeItem(e->node);
 
     e->node->leave();
+    e->node->layout();
 
     d->scene->addItem(e->former);
     d->scene->setCurrent(e->former);
-
-    e->node->layout();
-    e->node->parent()->layout();
-    
-    if (e->former)
-        e->former->layout();
-
     d->scene->update();
 }
 
@@ -1417,10 +1402,6 @@ void dtkComposerStackCommandLeaveGroup::undo(void)
     
     d->scene->addItem(e->node);
     d->scene->setCurrent(e->node);
-
-    e->node->layout();
-    e->former->layout();
-
     d->scene->update();
 }
 
@@ -1461,12 +1442,9 @@ void dtkComposerStackCommandFlattenGroup::redo(void)
     d->scene->removeItem(e->node);
 
     e->node->flatten();
+    e->node->layout();
 
     d->scene->addItem(e->node);
-
-    foreach(dtkComposerSceneEdge *edge, e->node->edges())
-        edge->adjust();
-
     d->scene->update();
 }
 
@@ -1478,12 +1456,9 @@ void dtkComposerStackCommandFlattenGroup::undo(void)
     d->scene->removeItem(e->node);
 
     e->node->unflatten();
+    e->node->layout();
 
     d->scene->addItem(e->node);
-
-    foreach(dtkComposerSceneEdge *edge, e->node->edges())
-        edge->adjust();
-
     d->scene->update();
 }
 
@@ -1524,12 +1499,9 @@ void dtkComposerStackCommandUnflattenGroup::redo(void)
     d->scene->removeItem(e->node);
 
     e->node->unflatten();
+    e->node->layout();
 
     d->scene->addItem(e->node);
-
-    foreach(dtkComposerSceneEdge *edge, e->node->edges())
-        edge->adjust();
-
     d->scene->update();
 }
 
@@ -1541,12 +1513,9 @@ void dtkComposerStackCommandUnflattenGroup::undo(void)
     d->scene->removeItem(e->node);
 
     e->node->flatten();
+    e->node->layout();
 
     d->scene->addItem(e->node);
-
-    foreach(dtkComposerSceneEdge *edge, e->node->edges())
-        edge->adjust();
-
     d->scene->update();
 }
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 23 15:56:01 2012 (+0100)
+ * Last-Updated: Fri Mar 23 16:32:28 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 481
+ *     Update #: 484
  */
 
 /* Commentary: 
@@ -413,7 +413,7 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
 
     if(d->revealed) {
         painter->setPen(QPen(Qt::black, 1, Qt::DashLine));
-        painter->setBrush(Qt::NoBrush);
+        painter->setBrush(QColor(10, 10, 10, 120));
     } else {
         QLinearGradient gradiant(d->rect.left(), d->rect.top(), d->rect.left(), d->rect.bottom());
         gradiant.setColorAt(0.0, QColor(Qt::darkGray));

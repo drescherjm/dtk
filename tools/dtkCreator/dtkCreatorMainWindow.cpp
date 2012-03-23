@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Mar 23 21:57:24 2012 (+0100)
+ * Last-Updated: Fri Mar 23 22:01:04 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1386
+ *     Update #: 1389
  */
 
 /* Commentary:
@@ -433,6 +433,13 @@ bool dtkCreatorMainWindow::compositionSaveAs(const QString& file, dtkComposerWri
         this->setWindowModified(false);
     }
 
+    QFileInfo info(file);
+    
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("creator");
+    settings.setValue("last_open_dir", info.absolutePath());
+    settings.endGroup();
+
     return status;
 }
 
@@ -458,6 +465,13 @@ bool dtkCreatorMainWindow::compositionInsert(const QString& file)
 
     if(status)
         this->setWindowModified(true);
+
+    QFileInfo info(file);
+    
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("creator");
+    settings.setValue("last_open_dir", info.absolutePath());
+    settings.endGroup();    
 
     return status;
 }

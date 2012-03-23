@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Mar 23 22:01:04 2012 (+0100)
+ * Last-Updated: Fri Mar 23 22:16:39 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1389
+ *     Update #: 1391
  */
 
 /* Commentary:
@@ -180,8 +180,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     QAction *switchToCompoAction = new QAction("Switch to composition perspective", this);
     QAction *switchToDebugAction = new QAction("Switch to debug perspective", this);
 
-    switchToCompoAction->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_C);
-    switchToDebugAction->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_D);
+    switchToCompoAction->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_1);
+    switchToDebugAction->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_2);
 
     this->addAction(switchToCompoAction);
     this->addAction(switchToDebugAction);

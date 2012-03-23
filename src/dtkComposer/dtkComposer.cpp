@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 23 13:32:04 2012 (+0100)
+ * Last-Updated: Fri Mar 23 22:02:14 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 201
+ *     Update #: 202
  */
 
 /* Commentary: 
@@ -175,6 +175,7 @@ bool dtkComposer::insert(QString file)
     if (!file.isEmpty()) {
 
         dtkComposerReader reader;
+        reader.setFactory(d->factory);
         reader.setScene(d->scene);
         reader.setGraph(d->graph);
         reader.read(file, true);

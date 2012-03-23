@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 11:37:38 2012 (+0100)
- *           By: tkloczko
- *     Update #: 536
+ * Last-Updated: Fri Mar 23 22:13:23 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 553
  */
 
 /* Commentary: 
@@ -155,12 +155,17 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
 
     // --
 
+    d->root = d->scene->root();
+
     if(!append) {
-        d->root = d->scene->root();
         d->node = d->root;
         d->graph->addNode(d->root);
     } else {
-        d->node = d->scene->current();
+        d->node = new dtkComposerSceneNodeComposite;
+        d->node->wrap(new dtkComposerNodeComposite);
+        d->node->setParent(d->scene->current());
+        d->root->addNode(d->node);
+        d->graph->addNode(d->node);
     }
 
     // Feeding scene with notes
@@ -189,8 +194,11 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
 
     // --
     
-    if(!append)
+    if(!append) {
         d->scene->setRoot(d->root);
+    } else {
+        d->scene->addItem(d->node);
+    }
 
     d->graph->layout();
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 23 15:56:10 2012 (+0100)
+ * Last-Updated: Fri Mar 23 16:28:19 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 449
+ *     Update #: 495
  */
 
 /* Commentary: 
@@ -313,19 +313,31 @@ void dtkComposerSceneNodeControl::mouseMoveEvent(QGraphicsSceneMouseEvent *event
         return;
     }
 
-    foreach(dtkComposerSceneNodeComposite *block, d->blocks) {
-        
-        QPointF delta = event->pos() - event->lastPos();
-        qreal delta_x = delta.x();
-        qreal delta_y = delta.y();
+    QPointF delta = event->pos() - event->lastPos();
+    qreal delta_x = delta.x();
+    qreal delta_y = delta.y();
+    
+    QStack<dtkComposerSceneNodeComposite *> nodes; foreach(dtkComposerSceneNodeComposite *block, this->blocks()) nodes.push(block);
 
-        foreach(dtkComposerSceneNode *node, block->nodes())
+    while(!nodes.isEmpty()) {
+
+        dtkComposerSceneNodeComposite *n = nodes.pop();
+
+        foreach(dtkComposerSceneNode *node, n->nodes()) {
             node->moveBy(delta_x, delta_y);
-
-        foreach(dtkComposerSceneNote *note, block->notes())
+            
+            if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node))
+                foreach(dtkComposerSceneNodeComposite *block, control->blocks())
+                    nodes.push(block);
+            
+            if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node))
+                nodes.push(composite);
+        }
+        
+        foreach(dtkComposerSceneNote *note, n->notes())
             note->moveBy(delta_x, delta_y);
-
-        foreach(dtkComposerSceneEdge *edge, block->edges())
+        
+        foreach(dtkComposerSceneEdge *edge, n->edges())
             edge->adjust();
     }
 

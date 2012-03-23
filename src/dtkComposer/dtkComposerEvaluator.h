@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:30:36 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mars 19 09:30:48 2012 (+0100)
+ * Last-Updated: ven. mars 23 21:55:14 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 15
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -36,8 +36,8 @@ public:
     ~dtkComposerEvaluator(void);
 
 signals:
-    void started();
-    void stopped();
+    void evaluationStarted(void);
+    void evaluationStopped(void);
 
 public:
     void setGraph(dtkComposerGraph *graph);

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mars 21 10:51:59 2012 (+0100)
+ * Last-Updated: ven. mars 23 21:55:57 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 413
+ *     Update #: 414
  */
 
 /* Commentary:
@@ -69,10 +69,10 @@ void dtkComposerEvaluator::run(bool run_concurrent)
 
     d->stack << d->graph->root();
 
-    emit started();
+    emit evaluationStarted();
     while (this->step(run_concurrent));
     dtkInfo() << "elapsed time:"<< time.elapsed() << "ms";
-    emit stopped();
+    emit evaluationStopped();
 }
 
 void dtkComposerEvaluator::cont(bool run_concurrent)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Oct 27 14:10:37 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 10:45:32 2012 (+0100)
- *           By: tkloczko
- *     Update #: 42
+ * Last-Updated: ven. mars 23 22:27:53 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 104
  */
 
 /* Commentary: 
@@ -17,8 +17,15 @@
  * 
  */
 
+#include <dtkLog/dtkLog.h>
+
 #include <dtkCore>
-#include <dtkComposer>
+#include "dtkComposer/dtkComposerEvaluator.h"
+#include "dtkComposer/dtkComposerFactory.h"
+#include "dtkComposer/dtkComposerGraph.h"
+#include "dtkComposer/dtkComposerReader.h"
+#include "dtkComposer/dtkComposerScene.h"
+#include "dtkComposer/dtkComposerStack.h"
 
 #include <QtCore>
 #include <QtGui>
@@ -31,23 +38,46 @@ int main(int argc, char **argv)
     }
 
     QApplication application(argc, argv);
-    application.setApplicationName(argv[0]);
-    application.setApplicationVersion("0.0.1");
+    application.setApplicationName("dtkComposerEvaluator");
+    application.setApplicationVersion("0.0.2");
     application.setOrganizationName("inria");
     application.setOrganizationDomain("fr");
 
+    dtkLogger::instance().setLevel(dtkLog::Trace);
+    dtkLogger::instance().attachFile(dtkLogPath(&application));
+
     dtkPluginManager::instance()->initialize();
 
-    // dtkComposerScene scene;
+    dtkComposerScene *scene;
+    dtkComposerStack *stack;
+    dtkComposerGraph *graph;
+    dtkComposerFactory *factory;
+    dtkComposerEvaluator *evaluator;
 
-    // dtkComposerReader reader(&scene);
-    // reader.read(argv[1]);
+    factory = new dtkComposerFactory;
+    graph = new dtkComposerGraph;
+    stack = new dtkComposerStack;
+    scene = new dtkComposerScene;
+    evaluator = new dtkComposerEvaluator;
 
-    // dtkComposerEvaluator evaluator(&scene);
+    scene->setFactory(factory);
+    scene->setStack(stack);
+    scene->setGraph(graph);
 
-    // QObject::connect(&evaluator, SIGNAL(evaluationStopped()), &application, SLOT(quit()));
-    
-    // evaluator.start();
+    evaluator->setGraph(graph);
+
+    dtkComposerReader *reader;
+    reader = new dtkComposerReader;
+    reader->setFactory(factory);
+    reader->setScene(scene);
+    reader->setGraph(graph);
+    if (!reader->read(argv[1])) {
+        dtkError() << "read failure for " << argv[1];
+        return 1;
+    }
+
+    QObject::connect(evaluator, SIGNAL(evaluationStopped()), &application, SLOT(quit()));
+    QtConcurrent::run(evaluator, &dtkComposerEvaluator::run, false);
 
     int status = application.exec();
 

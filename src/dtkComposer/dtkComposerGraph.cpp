@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. mars 22 15:16:26 2012 (+0100)
+ * Last-Updated: ven. mars 23 16:54:23 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1804
+ *     Update #: 1806
  */
 
 /* Commentary:
@@ -497,7 +497,7 @@ void dtkComposerGraph::removeEdge(dtkComposerSceneEdge *edge)
     foreach(dtkComposerGraphEdge *e, d->edges.values())
         doit = doit && (e->destination() !=  d->begin(edge->destination()->node()));
     if (doit) {
-        d->addDummyEdge(  d->begin(edge->source()->owner()->parent()), d->begin(edge->destination()->node()), edge->source()->owner()->parent());
+        d->addDummyEdge(  d->begin(edge->source()->owner()->parent()), d->begin(edge->destination()->owner()), edge->source()->owner()->parent());
     }
 
     doit = true;
@@ -505,7 +505,7 @@ void dtkComposerGraph::removeEdge(dtkComposerSceneEdge *edge)
     foreach(dtkComposerGraphEdge *e, d->edges.values())
         doit = doit && (e->source() !=  d->end(edge->source()->node()));
     if (doit) {
-        d->addDummyEdge(  d->end(edge->source()->node()), d->end(edge->destination()->owner()->parent()), edge->destination()->owner()->parent());
+        d->addDummyEdge(  d->end(edge->source()->owner()), d->end(edge->destination()->owner()->parent()), edge->destination()->owner()->parent());
     }
 }
 

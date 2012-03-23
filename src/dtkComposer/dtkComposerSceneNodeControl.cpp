@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 23 15:56:10 2012 (+0100)
+ * Last-Updated: Fri Mar 23 16:22:15 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 449
+ *     Update #: 492
  */
 
 /* Commentary: 
@@ -313,20 +313,35 @@ void dtkComposerSceneNodeControl::mouseMoveEvent(QGraphicsSceneMouseEvent *event
         return;
     }
 
-    foreach(dtkComposerSceneNodeComposite *block, d->blocks) {
-        
-        QPointF delta = event->pos() - event->lastPos();
-        qreal delta_x = delta.x();
-        qreal delta_y = delta.y();
+    QPointF delta = event->pos() - event->lastPos();
+    qreal delta_x = delta.x();
+    qreal delta_y = delta.y();
+    
+    QStack<dtkComposerSceneNodeComposite *> nodes; foreach(dtkComposerSceneNodeComposite *block, this->blocks()) nodes.push(block);
 
-        foreach(dtkComposerSceneNode *node, block->nodes())
-            node->moveBy(delta_x, delta_y);
+    while(!nodes.isEmpty()) {
 
-        foreach(dtkComposerSceneNote *note, block->notes())
-            note->moveBy(delta_x, delta_y);
+        dtkComposerSceneNodeComposite *n = nodes.pop();
 
-        foreach(dtkComposerSceneEdge *edge, block->edges())
-            edge->adjust();
+        // foreach(dtkComposerSceneNodeComposite *block, node->blocks()) {
+                    
+            foreach(dtkComposerSceneNode *node, n->nodes()) {
+                node->moveBy(delta_x, delta_y);
+
+                if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node))
+                    foreach(dtkComposerSceneNodeComposite *block, control->blocks())
+                        nodes.push(block);
+
+                if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node))
+                    nodes.push(composite);
+            }
+            
+            foreach(dtkComposerSceneNote *note, n->notes())
+                note->moveBy(delta_x, delta_y);
+            
+            foreach(dtkComposerSceneEdge *edge, n->edges())
+                edge->adjust();
+       // }   
     }
 
     QGraphicsItem::mouseMoveEvent(event);

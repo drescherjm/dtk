@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Mar 23 13:44:20 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 1369
+ * Last-Updated: Fri Mar 23 16:48:49 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 1372
  */
 
 /* Commentary:
@@ -194,16 +194,16 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     mainToolBar->setIconSize(QSize(32, 32));
     
     QAction *run_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Run_Active.png"), "Run");
-    run_action->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_R);
+    run_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_R);
 
     QAction *step_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Step_Active.png"), "Step");
-    step_action->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_N);
+    step_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_N);
 
     QAction *continue_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Continue_Active.png"), "Continue");
-    continue_action->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_C);
+    continue_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_C);
 
     QAction *stop_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Stop_Active.png"), "Stop");
-    stop_action->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_Period);
+    stop_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_Period);
 
     mainToolBar->addWidget(new dtkSpacer(this));
     mainToolBar->addWidget(new dtkCreatorMainWindowControls(this));

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Fri Mar 23 15:43:28 2012 (+0100)
- *           By: tkloczko
- *     Update #: 410
+ * Last-Updated: lun. mars 26 14:06:58 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 443
  */
 
 /* Commentary:
@@ -30,6 +30,7 @@
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeFileOperator.h"
 #include "dtkComposerNodeList.h"
+#include "dtkComposerNodeLogger.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeReal.h"
@@ -371,6 +372,13 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["While"] = "<p>Description not yet filled!</p>";
     d->tags["While"] = QStringList() << "control" << "while";
     d->types["While"] = "while";
+
+    // log nodes
+    d->nodes << "Logger";
+    d->descriptions["Logger"] = "<p>Description not yet filled!</p>";
+    d->tags["Logger"] = QStringList() << "logger" << "debug";
+    d->types["Logger"] = "logger";
+
 }
 
 dtkComposerFactory::~dtkComposerFactory(void)
@@ -577,6 +585,11 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "while")
         return new dtkComposerNodeControlWhile;
+
+    // logger nodes
+
+    if(type == "logger")
+        return new dtkComposerNodeLogger;
 
     return NULL;
 }

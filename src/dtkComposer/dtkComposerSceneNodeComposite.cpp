@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 23 16:32:28 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 484
+ * Last-Updated: Mon Mar 26 10:26:18 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 490
  */
 
 /* Commentary: 
@@ -189,8 +189,6 @@ void dtkComposerSceneNodeComposite::reveal(void)
         this->obfuscate();
 
     this->setFlag(QGraphicsItem::ItemIsMovable, false);
-
-    this->layout();
 }
 
 void dtkComposerSceneNodeComposite::unreveal(void)
@@ -198,12 +196,13 @@ void dtkComposerSceneNodeComposite::unreveal(void)
     if(!d->flattened && !d->entered)
         d->revealed = false;
 
+    if (this->embedded())
+        this->obfuscate();
+
     if(!d->flattened)
         this->setFlag(QGraphicsItem::ItemIsMovable, true);
     else
         this->setFlag(QGraphicsItem::ItemIsMovable, false);
-
-    this->layout();
 }
 
 bool dtkComposerSceneNodeComposite::root(void)
@@ -337,20 +336,17 @@ void dtkComposerSceneNodeComposite::obfuscate(void)
 
     d->obfuscated = false;
 
-    foreach(dtkComposerSceneNode *node, d->nodes)
-        if (!rect.contains(node->sceneBoundingRect()))
-            d->obfuscated = true;
+    if (!d->entered) {
 
-    foreach(dtkComposerSceneNote *note, d->notes)
-        if (!rect.contains(note->sceneBoundingRect()))
-            d->obfuscated = true;
-
-    foreach(dtkComposerSceneEdge *edge, d->edges)
-        if (!rect.contains(edge->sceneBoundingRect()))
-            d->obfuscated = true;
-
-    if (d->entered)
-        d->obfuscated = false;
+        foreach(dtkComposerSceneNode *node, d->nodes)
+            if (!rect.contains(node->sceneBoundingRect()))
+                d->obfuscated = true;
+        
+        foreach(dtkComposerSceneNote *note, d->notes)
+            if (!rect.contains(note->sceneBoundingRect()))
+                d->obfuscated = true;
+        
+    }
 
     foreach(dtkComposerSceneNode *node, d->nodes)
         node->setVisible(!d->obfuscated);

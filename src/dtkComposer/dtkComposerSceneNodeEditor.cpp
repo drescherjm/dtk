@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mars 26 15:45:27 2012 (+0200)
+ * Last-Updated: lun. mars 26 15:55:58 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 774
+ *     Update #: 775
  */
 
 /* Commentary: 
@@ -441,7 +441,7 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
             d->edit_s->blockSignals(false);
             d->edit_s->setVisible(true);
             d->edit_s->setEnabled(true);
-            d->edit_s->insert(s_node->value());
+            d->edit_s->setText(s_node->value());
 
             d->spin_d->blockSignals(true);
             d->spin_d->setVisible(false);

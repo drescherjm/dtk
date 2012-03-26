@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Oct 27 14:10:37 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. mars 23 22:27:53 2012 (+0100)
+ * Last-Updated: lun. mars 26 17:36:20 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 104
+ *     Update #: 115
  */
 
 /* Commentary: 
@@ -43,7 +43,7 @@ int main(int argc, char **argv)
     application.setOrganizationName("inria");
     application.setOrganizationDomain("fr");
 
-    dtkLogger::instance().setLevel(dtkLog::Trace);
+    dtkLogger::instance().setLevel(dtkLog::Info);
     dtkLogger::instance().attachFile(dtkLogPath(&application));
 
     dtkPluginManager::instance()->initialize();
@@ -76,12 +76,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    QObject::connect(evaluator, SIGNAL(evaluationStopped()), &application, SLOT(quit()));
-    QtConcurrent::run(evaluator, &dtkComposerEvaluator::run, false);
-
-    int status = application.exec();
+    evaluator->run();
 
     dtkPluginManager::instance()->uninitialize();
-
-    return status;
 }

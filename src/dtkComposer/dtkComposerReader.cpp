@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 23 22:13:23 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 553
+ * Last-Updated: Mon Mar 26 13:59:31 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 554
  */
 
 /* Commentary: 
@@ -419,10 +419,12 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
                 composite->addInputPort(port);
                 if (ports.at(i).toElement().attribute("kind") == "proxy") {
                     dtkComposerTransmitter *proxy = new dtkComposerTransmitterProxy(composite->wrapee());
+                    proxy->setRequired(false);
                     composite->wrapee()->appendReceiver(proxy);
                 }
                 if (ports.at(i).toElement().attribute("kind") == "variant") {
                     dtkComposerTransmitter *variant = new dtkComposerTransmitterVariant(composite->wrapee());
+                    variant->setRequired(false);
                     composite->wrapee()->appendReceiver(variant);
                 }
                 if (ports.at(i).toElement().hasAttribute("loop"))
@@ -434,10 +436,12 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
                 composite->addOutputPort(port);
                 if (ports.at(i).toElement().attribute("kind") == "proxy") {
                     dtkComposerTransmitter *proxy = new dtkComposerTransmitterProxy(composite->wrapee());
+                    proxy->setRequired(false);
                     composite->wrapee()->appendEmitter(proxy);
                 }
                 if (ports.at(i).toElement().attribute("kind") == "variant") {
                     dtkComposerTransmitter *variant = new dtkComposerTransmitterVariant(composite->wrapee());
+                    variant->setRequired(false);
                     composite->wrapee()->appendEmitter(variant);
                 }
                 if (ports.at(i).toElement().hasAttribute("loop"))

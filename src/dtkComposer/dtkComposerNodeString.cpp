@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:38:46 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 16 14:03:32 2012 (+0100)
- *           By: tkloczko
- *     Update #: 15
+ * Last-Updated: lun. mars 26 15:43:06 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 17
  */
 
 /* Commentary: 
@@ -26,7 +26,7 @@ class dtkComposerNodeStringPrivate
 public:
     dtkComposerTransmitterReceiver<QString> *receiver;
 
-public:    
+public:
     dtkComposerTransmitterEmitter<QString> *emitter;
 };
 
@@ -44,7 +44,7 @@ dtkComposerNodeString::~dtkComposerNodeString(void)
     delete d->receiver;
     delete d->emitter;
     delete d;
-    
+
     d = NULL;
 }
 

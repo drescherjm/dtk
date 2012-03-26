@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:08:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 16 15:18:31 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 30
+ * Last-Updated: lun. mars 26 15:46:06 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -64,6 +64,7 @@ protected slots:
 protected slots:
     void onValueChanged(int);
     void onValueChanged(double);
+    void onValueChanged(const QString&);
 
 private:
     dtkComposerSceneNodeEditorPrivate *d;

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 26 13:35:11 2012 (+0200)
+ * Last-Updated: Mon Mar 26 15:18:01 2012 (+0200)
  *           By: tkloczko
- *     Update #: 300
+ *     Update #: 301
  */
 
 /* Commentary: 
@@ -93,11 +93,15 @@ QVariantList dtkComposerTransmitterVariant::allData(void)
 
     } else {
 
-        foreach(dtkComposerTransmitter *emitter, e->emitters)
-            list << emitter->variant();
+        foreach(dtkComposerTransmitter *emitter, e->emitters) {
+            if (emitter->active())
+                list << emitter->variant();
+        }
 
-        foreach(dtkComposerTransmitterVariant *v, e->variants)
-            list << v->data();
+        foreach(dtkComposerTransmitterVariant *v, e->variants) {
+            if (v->active())
+                list << v->data();
+        }
     }
 
     return list;

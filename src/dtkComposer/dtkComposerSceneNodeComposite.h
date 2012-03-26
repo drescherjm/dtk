@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:32:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 22 11:05:47 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 45
+ * Last-Updated: Mon Mar 26 14:17:07 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 48
  */
 
 /* Commentary: 
@@ -90,6 +90,11 @@ public:
 protected:
     void   reveal(void);
     void unreveal(void);
+
+public:
+    void setUnrevealPos(const QPointF& pos);
+    
+    QPointF unrevealPos(void) const;
 
 private:
     dtkComposerSceneNodeCompositePrivate *d;

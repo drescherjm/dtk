@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 26 10:26:18 2012 (+0200)
+ * Last-Updated: Mon Mar 26 15:30:13 2012 (+0200)
  *           By: tkloczko
- *     Update #: 490
+ *     Update #: 513
  */
 
 /* Commentary: 
@@ -205,6 +205,16 @@ void dtkComposerSceneNodeComposite::unreveal(void)
         this->setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
+void dtkComposerSceneNodeComposite::setUnrevealPos(const QPointF& pos)
+{
+    d->pos = pos;
+}
+
+QPointF dtkComposerSceneNodeComposite::unrevealPos(void) const
+{
+    return d->pos;
+}
+
 bool dtkComposerSceneNodeComposite::root(void)
 {
     return d->root;
@@ -231,9 +241,6 @@ void dtkComposerSceneNodeComposite::layout(void)
     if(!d->revealed) {
 
         d->rect = QRectF(0, 0, 150, 50);
-
-        if(!d->pos.isNull())
-            this->setPos(d->pos);
 
         this->setZValue(0);
 

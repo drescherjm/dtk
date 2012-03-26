@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 23 15:52:21 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 3153
+ * Last-Updated: Mon Mar 26 16:06:28 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 3187
  */
 
 /* Commentary: 
@@ -840,13 +840,19 @@ void dtkComposerStackCommandCreateGroup::setNodes(dtkComposerSceneNodeList nodes
     foreach(dtkComposerSceneNode *node, nodes) {
         if(node->parent() == e->parent) {
             rect |= node->sceneBoundingRect();
+        }
+    }
+
+    foreach(dtkComposerSceneNode *node, nodes) {
+        if(node->parent() == e->parent) {
+            //rect |= node->sceneBoundingRect();
             e->reparent << new dtkComposerStackCommandReparentNode;
             e->reparent.last()->setFactory(d->factory);
             e->reparent.last()->setScene(d->scene);
             e->reparent.last()->setGraph(d->graph);
             e->reparent.last()->setOriginNode(node);
-            e->reparent.last()->setOriginPosition(node->boundingRect().center());
-            e->reparent.last()->setTargetPosition(rect.center());
+            e->reparent.last()->setOriginPosition(node->sceneBoundingRect().topLeft());
+            e->reparent.last()->setTargetPosition(rect.center() - node->sceneBoundingRect().center());
         }
     }
 
@@ -1310,12 +1316,11 @@ void dtkComposerStackCommandEnterGroup::redo(void)
 
     d->scene->removeItem(e->former);
 
-    e->node->enter();
-    e->node->layout();
-    
+    e->node->setUnrevealPos(e->node->pos());
+    e->node->enter();    
+
     d->scene->addItem(e->node);
     d->scene->setCurrent(e->node);
-    d->scene->update();
 }
 
 void dtkComposerStackCommandEnterGroup::undo(void)
@@ -1326,11 +1331,11 @@ void dtkComposerStackCommandEnterGroup::undo(void)
     d->scene->removeItem(e->node);
 
     e->node->leave();
+    e->node->setPos(e->node->unrevealPos());
     e->node->layout();
 
     d->scene->addItem(e->former);
     d->scene->setCurrent(e->former);
-    d->scene->update();
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -1383,11 +1388,11 @@ void dtkComposerStackCommandLeaveGroup::redo(void)
     d->scene->removeItem(e->node);
 
     e->node->leave();
+    e->node->setPos(e->node->unrevealPos());
     e->node->layout();
 
     d->scene->addItem(e->former);
     d->scene->setCurrent(e->former);
-    d->scene->update();
 }
 
 void dtkComposerStackCommandLeaveGroup::undo(void)
@@ -1397,12 +1402,11 @@ void dtkComposerStackCommandLeaveGroup::undo(void)
 
     d->scene->removeItem(e->former);
 
+    e->node->setUnrevealPos(e->node->pos());
     e->node->enter();
-    e->node->layout();
     
     d->scene->addItem(e->node);
     d->scene->setCurrent(e->node);
-    d->scene->update();
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -2269,6 +2273,7 @@ void dtkComposerStackCommandReparentNode::undo(void)
 
         e->origin_parent->addNode(e->origin);
         e->origin->setParent(e->origin_parent);
+
         e->origin->setPos(e->origin_pos);
 
        for(int i = 0; i < e->ports.count(); i++)

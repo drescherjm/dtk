@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 26 13:59:31 2012 (+0200)
- *           By: tkloczko
- *     Update #: 554
+ * Last-Updated: lun. mars 26 15:53:46 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 558
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeReal.h"
+#include "dtkComposerNodeString.h"
 #include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
@@ -512,7 +513,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
             for(int i = 0; i < childNodes.count(); i++) {
                 if(childNodes.at(i).toElement().tagName() == "value") {
                     integer->setValue(childNodes.at(i).childNodes().at(0).toText().data().toLongLong());
-                }       
+                }
             }
         }
 
@@ -521,9 +522,18 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
             for(int i = 0; i < childNodes.count(); i++) {
                 if(childNodes.at(i).toElement().tagName() == "value") {
                     real->setValue(childNodes.at(i).childNodes().at(0).toText().data().toDouble());
-                }       
+                }
             }
-        }        
+        }
+
+        if(dtkComposerNodeString *s = dynamic_cast<dtkComposerNodeString *>(leaf->wrapee())) {
+
+            for(int i = 0; i < childNodes.count(); i++) {
+                if(childNodes.at(i).toElement().tagName() == "value") {
+                    s->setValue(childNodes.at(i).childNodes().at(0).toText().data());
+                }
+            }
+        }
     }
 
     d->node = t;

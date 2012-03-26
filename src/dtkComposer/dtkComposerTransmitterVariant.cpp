@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 09:05:11 2012 (+0100)
+ * Last-Updated: Mon Mar 26 13:26:50 2012 (+0200)
  *           By: tkloczko
- *     Update #: 297
+ *     Update #: 298
  */
 
 /* Commentary: 
@@ -81,6 +81,26 @@ QVariant dtkComposerTransmitterVariant::data(void)
     }
 
     return d->variant;
+}
+
+QVariantList dtkComposerTransmitterVariant::data(void)
+{
+    QVariantList list;
+
+    if (e->twinned) {
+        
+        list << d->variant;
+
+    } else {
+
+        foreach(dtkComposerTransmitter *emitter, e->emitters)
+            list << emitter->variant();
+
+        foreach(dtkComposerTransmitterVariant *v, e->variants) {
+            list << v->data();
+    }
+
+    return list;
 }
 
 void dtkComposerTransmitterVariant::setTwin(dtkComposerTransmitterVariant *twin)

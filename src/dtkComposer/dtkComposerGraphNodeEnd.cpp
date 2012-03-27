@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: ven. mars  2 18:57:59 2012 (+0100)
+ * Last-Updated: mar. mars 27 12:58:47 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 151
+ *     Update #: 157
  */
 
 /* Commentary:
@@ -26,7 +26,7 @@
 class dtkComposerGraphNodeEndPrivate
 {
 public:
-    dtkComposerNodeControl   *composer_node;
+    dtkComposerNodeControl   *control_node;
     dtkComposerNodeComposite     *composite;
 };
 
@@ -36,9 +36,9 @@ dtkComposerGraphNodeEnd::dtkComposerGraphNodeEnd(dtkComposerNode *cnode, const Q
 
     if (!dynamic_cast<dtkComposerNodeControl *>(cnode)) {
         d->composite = dynamic_cast<dtkComposerNodeComposite *>(cnode);
-        d->composer_node = NULL;
+        d->control_node = NULL;
     } else {
-        d->composer_node = dynamic_cast<dtkComposerNodeControl *>(cnode);
+        d->control_node = dynamic_cast<dtkComposerNodeControl *>(cnode);
         d->composite = NULL;
     }
 
@@ -52,19 +52,19 @@ dtkComposerGraphNode::Kind dtkComposerGraphNodeEnd::kind(void)
 
 dtkComposerNode *dtkComposerGraphNodeEnd::wrapee(void)
 {
-    if (!d->composer_node)
+    if (!d->control_node)
         return d->composite;
     else
-        return d->composer_node;
+        return d->control_node;
 }
 
 void dtkComposerGraphNodeEnd::eval(void)
 {
-    if (!d->composer_node) { // composite node end
+    if (!d->control_node) { // composite node end
         this->setStatus(dtkComposerGraphNode::Done);
 
-    } else { //control node end
-        d->composer_node->end();
+    } else {
+        d->control_node->end();
         this->setStatus(dtkComposerGraphNode::Done);
     }
 }

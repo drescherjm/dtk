@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:08:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. mars 20 14:04:32 2012 (+0100)
+ * Last-Updated: mar. mars 27 14:03:06 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 145
+ *     Update #: 148
  */
 
 /* Commentary:
@@ -69,6 +69,9 @@ public:
     Status status(void);
     bool   breakpoint(void);
     bool   endloop(void);
+
+public:
+    virtual void clean(void);
 
 public:
     void  setStatus(Status status);

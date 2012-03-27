@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 26 17:28:30 2012 (+0200)
+ * Last-Updated: Tue Mar 27 17:10:28 2012 (+0200)
  *           By: tkloczko
- *     Update #: 3196
+ *     Update #: 3231
  */
 
 /* Commentary: 
@@ -1313,10 +1313,12 @@ void dtkComposerStackCommandEnterGroup::redo(void)
     if(!e->node)
         return;
 
+    e->node->setUnrevealRect(e->node->sceneBoundingRect());
+    e->node->setUnrevealPos(e->node->scenePos());
+
     d->scene->removeItem(e->former);
 
-    e->node->setUnrevealPos(e->node->pos());
-    e->node->enter();    
+    e->node->enter();
 
     d->scene->addItem(e->node);
     d->scene->setCurrent(e->node);
@@ -1399,9 +1401,11 @@ void dtkComposerStackCommandLeaveGroup::undo(void)
     if(!e->node)
         return;
 
+    e->node->setUnrevealRect(e->node->sceneBoundingRect());
+    e->node->setUnrevealPos(e->node->scenePos());
+
     d->scene->removeItem(e->former);
 
-    e->node->setUnrevealPos(e->node->pos());
     e->node->enter();
     
     d->scene->addItem(e->node);
@@ -1442,13 +1446,16 @@ void dtkComposerStackCommandFlattenGroup::redo(void)
     if(!e->node)
         return;
 
+    e->node->setUnrevealPos(e->node->scenePos());
+
     d->scene->removeItem(e->node);
 
-    e->node->setUnrevealPos(e->node->pos());
     e->node->flatten();
     e->node->layout();
 
     d->scene->addItem(e->node);
+
+
     d->scene->update();
 }
 
@@ -1516,9 +1523,10 @@ void dtkComposerStackCommandUnflattenGroup::undo(void)
     if(!e->node)
         return;
 
+    e->node->setUnrevealPos(e->node->scenePos());
+
     d->scene->removeItem(e->node);
 
-    e->node->setUnrevealPos(e->node->pos());
     e->node->flatten();
     e->node->layout();
 

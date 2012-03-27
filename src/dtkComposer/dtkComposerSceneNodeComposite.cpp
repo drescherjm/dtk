@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 26 17:30:17 2012 (+0200)
+ * Last-Updated: Tue Mar 27 17:42:15 2012 (+0200)
  *           By: tkloczko
- *     Update #: 530
+ *     Update #: 623
  */
 
 /* Commentary: 
@@ -37,8 +37,11 @@ public:
 
 public:
     QPointF offset;
-    QPointF pos;
+    QPointF unreveal_pos;
+
+public:
     QRectF rect;
+    QRectF unreveal_rect;
 
 public:
     bool root;
@@ -53,6 +56,9 @@ public:
 dtkComposerSceneNodeComposite::dtkComposerSceneNodeComposite(void) : dtkComposerSceneNode(), d(new dtkComposerSceneNodeCompositePrivate)
 {
     d->rect = QRectF(0, 0, 150, 50);
+    d->unreveal_rect = QRectF(0, 0, 150, 50);
+    
+    d->offset = QPointF(50, 50);
 
     d->root = false;
 
@@ -185,8 +191,28 @@ void dtkComposerSceneNodeComposite::reveal(void)
 {
     d->revealed = true;
 
-    if (this->embedded())
+    if (this->embedded()) {
+
         this->obfuscate();
+
+    } else {
+
+        QPointF center(0,0);
+        QRectF box(0,0,0,0); 
+
+        if (!d->unreveal_pos.isNull()) {
+            center = d->unreveal_pos + QPointF(0.5 * d->unreveal_rect.width(), 0.5 * d->unreveal_rect.height());
+            foreach(dtkComposerSceneNode *node, d->nodes)
+                box |= node->sceneBoundingRect();
+        }
+     
+        foreach(dtkComposerSceneNode *node, d->nodes)
+            node->setPos(node->scenePos() + (center - box.center()));
+        
+        foreach(dtkComposerSceneNote *note, d->notes)
+            note->setPos(note->scenePos() + (center - box.center()));        
+   
+    }
 
     this->setFlag(QGraphicsItem::ItemIsMovable, false);
 }
@@ -196,8 +222,15 @@ void dtkComposerSceneNodeComposite::unreveal(void)
     if(!d->flattened && !d->entered)
         d->revealed = false;
 
-    if (this->embedded())
+    if (this->embedded()) {
+        foreach(dtkComposerSceneNode *node, d->nodes)
+            node->setPos(d->unreveal_pos + (node->scenePos() - this->scenePos() - d->offset));
+        
+        foreach(dtkComposerSceneNote *note, d->notes)
+            note->setPos(d->unreveal_pos + (note->scenePos() - this->scenePos() - d->offset));
+
         this->obfuscate();
+    }
 
     if(!d->flattened)
         this->setFlag(QGraphicsItem::ItemIsMovable, true);
@@ -207,12 +240,22 @@ void dtkComposerSceneNodeComposite::unreveal(void)
 
 void dtkComposerSceneNodeComposite::setUnrevealPos(const QPointF& pos)
 {
-    d->pos = pos;
+    d->unreveal_pos = pos;
+}
+
+void dtkComposerSceneNodeComposite::setUnrevealRect(const QRectF& rect)
+{
+    d->unreveal_rect = rect;
 }
 
 QPointF dtkComposerSceneNodeComposite::unrevealPos(void) const
 {
-    return d->pos;
+    return d->unreveal_pos;
+}
+
+QRectF dtkComposerSceneNodeComposite::unrevealRect(void) const
+{
+    return d->unreveal_rect;
 }
 
 bool dtkComposerSceneNodeComposite::root(void)
@@ -246,23 +289,20 @@ void dtkComposerSceneNodeComposite::layout(void)
 
     } else {
 
-        qreal w_offset = 100;
-        qreal h_offset = 100;
-
         qreal xmin, xmax;
         qreal ymin, ymax;
 
         this->boundingBox(xmin, xmax, ymin, ymax);
 
-        qreal w = xmax-xmin; w+= w_offset;
-        qreal h = ymax-ymin; h+= h_offset;
+        qreal w = xmax-xmin;
+        qreal h = ymax-ymin;
 
-        w = qMax(w, 150.0);
-        h = qMax(h,  50.0);
+        w = qMax(w, 200.0) + 100;
+        h = qMax(h, 100.0) + 100;
 
         d->rect = QRectF(QPointF(0, 0), QSizeF(w, h));
 
-        this->setPos(xmin - w_offset/2, ymin - h_offset/2);
+        this->setPos(xmin - 50, ymin - 50);
 
         this->setZValue(-INT_MAX);
     }
@@ -369,19 +409,11 @@ void dtkComposerSceneNodeComposite::obfuscate(void)
 
 void dtkComposerSceneNodeComposite::boundingBox(qreal& x_min, qreal& x_max, qreal& y_min, qreal& y_max)
 {
-    if(!d->nodes.count()) {
-        x_min = 0.0;
-        x_max = 0.0;
-        y_min = 0.0;
-        y_max = 0.0;
-        return;
-    }
-
-    qreal xmin =  FLT_MAX;
-    qreal xmax = -FLT_MAX;
+    qreal xmin = d->unreveal_pos.x();
+    qreal xmax = d->unreveal_pos.x() + d->unreveal_rect.width();
     
-    qreal ymin =  FLT_MAX;
-    qreal ymax = -FLT_MAX;
+    qreal ymin = d->unreveal_pos.y();
+    qreal ymax = d->unreveal_pos.y() + d->unreveal_rect.height();
     
     foreach(dtkComposerSceneNode *node, d->nodes) {
         xmin = qMin(xmin, node->scenePos().x());

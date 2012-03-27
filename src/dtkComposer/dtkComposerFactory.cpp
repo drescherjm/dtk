@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: lun. mars 26 14:06:58 2012 (+0200)
+ * Last-Updated: lun. mars 26 17:01:15 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 443
+ *     Update #: 462
  */
 
 /* Commentary:
@@ -27,6 +27,7 @@
 #include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeControlForEach.h"
 #include "dtkComposerNodeControlWhile.h"
+#include "dtkComposerNodeDistributed.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeFileOperator.h"
 #include "dtkComposerNodeList.h"
@@ -379,6 +380,27 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Logger"] = QStringList() << "logger" << "debug";
     d->types["Logger"] = "logger";
 
+    // dtkDistributed nodes
+    d->nodes << "CommunicatorRank";
+    d->tags["CommunicatorRank"] = QStringList() <<  "rank" << "distributed" << "mpi" << "communicator";
+    d->types["CommunicatorRank"] = "communicatorRank";
+
+    d->nodes << "CommunicatorSize";
+    d->tags["CommunicatorSize"] = QStringList() <<  "size" << "distributed" << "mpi" << "communicator";
+    d->types["CommunicatorSize"] = "communicatorSize";
+
+    d->nodes << "CommunicatorInit";
+    d->tags["CommunicatorInit"] = QStringList() <<  "initialization" << "distributed" << "mpi" << "communicator";
+    d->types["CommunicatorInit"] = "communicatorInit";
+
+    d->nodes << "CommunicatorSendInteger";
+    d->tags["CommunicatorSendInteger"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator" << "integer";
+    d->types["CommunicatorSendInteger"] = "communicatorSendInteger";
+
+    d->nodes << "CommunicatorReceiveInteger";
+    d->tags["CommunicatorReceiveInteger"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator" << "integer";;
+    d->types["CommunicatorReceiveInteger"] = "communicatorReceiveInteger";
+
 }
 
 dtkComposerFactory::~dtkComposerFactory(void)
@@ -590,6 +612,23 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "logger")
         return new dtkComposerNodeLogger;
+
+    // communicator nodes
+
+    if(type == "communicatorSize")
+        return new dtkComposerNodeCommunicatorSize;
+
+    if(type == "communicatorRank")
+        return new dtkComposerNodeCommunicatorRank;
+
+    if(type == "communicatorInit")
+        return new dtkComposerNodeCommunicatorInit;
+
+    if(type == "communicatorSendInteger")
+        return new dtkComposerNodeCommunicatorSendInteger;
+
+    if(type == "communicatorReceiveInteger")
+        return new dtkComposerNodeCommunicatorReceiveInteger;
 
     return NULL;
 }

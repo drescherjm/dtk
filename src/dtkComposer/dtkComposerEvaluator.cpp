@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. mars 23 21:55:57 2012 (+0100)
+ * Last-Updated: mar. mars 27 15:31:14 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 414
+ *     Update #: 463
  */
 
 /* Commentary:
@@ -80,6 +80,15 @@ void dtkComposerEvaluator::cont(bool run_concurrent)
     while (this->step(run_concurrent));
 }
 
+void dtkComposerEvaluator::logStack(void)
+{
+    QListIterator<dtkComposerGraphNode *> i(d->stack);
+    dtkDebug() << "stack content:";
+    while (i.hasNext())
+        dtkDebug() << i.next()->title();
+    dtkDebug() << "stack end";
+}
+
 void dtkComposerEvaluator::next(bool run_concurrent)
 {
     if (d->stack.isEmpty())
@@ -109,16 +118,20 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
         return false;
 
     d->current = d->stack.takeFirst();
-//    dtkTrace() << "current node to evaluate is" << d->current->title();
     bool runnable = true;
 
     dtkComposerGraphNodeList preds = d->current->predecessors();
     int   i = 0;
     int max = preds.count();
     while (i < max && runnable) {
-        if (preds.at(i)->status() != dtkComposerGraphNode::Done && (!preds.at(i)->endloop())) {
-            dtkTrace() << "predecessor not ready" << preds.at(i)->title();
-            runnable = false;
+        if (preds.at(i)->status() != dtkComposerGraphNode::Done) {
+            if (preds.at(i)->endloop()) {
+                // predecessor is an end loop, we can continue, but we must unset the endloop flag.
+//                dtkTrace() << "predecessor of "<< d->current->title() << " is an end loop , continue" << preds.at(i)->title();
+                preds.at(i)->setEndLoop(false);
+            } else {
+                runnable = false;
+            }
         }
         i++;
     }
@@ -130,19 +143,21 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
             d->stack << d->current;
             return false;
         }
-        if (run_concurrent && (d->current->kind() != dtkComposerGraphNode::SelectBranch))
+        if (run_concurrent && (d->current->kind() == dtkComposerGraphNode::Leaf))
             QtConcurrent::run(d->current, &dtkComposerGraphNode::eval);
-        else
+        else {
+//            dtkDebug() << "evaluate"<< d->current->title();
             d->current->eval();
+        }
         dtkComposerGraphNodeList s = d->current->successors();
         max = s.count();
         for (int i = 0; i < max; i++)
             if (!d->stack.contains(s.at(i))) {
-                s.at(i)->setStatus(dtkComposerGraphNode::Ready);
+                s.at(i)->clean();
                 d->stack << s.at(i);
             }
     } else {
-        dtkTrace() << " node not runnable, put it at the end of the list ";
+//        dtkTrace() << " node not runnable, put it at the end of the list ";
         d->stack << d->current; // current is not ready, put it at the end
     }
     return !d->stack.isEmpty();

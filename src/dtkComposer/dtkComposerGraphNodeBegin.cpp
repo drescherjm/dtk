@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: ven. mars  2 18:41:52 2012 (+0100)
+ * Last-Updated: mar. mars 27 15:46:38 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 112
+ *     Update #: 220
  */
 
 /* Commentary:
@@ -23,10 +23,12 @@
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeComposite.h"
 
+#include <dtkLog/dtkLog.h>
+
 class dtkComposerGraphNodeBeginPrivate
 {
 public:
-    dtkComposerNodeControl *composer_node;
+    dtkComposerNodeControl *control_node;
     dtkComposerNodeComposite   *composite;
 };
 
@@ -36,9 +38,9 @@ dtkComposerGraphNodeBegin::dtkComposerGraphNodeBegin(dtkComposerNode *cnode, con
 
     if (!dynamic_cast<dtkComposerNodeControl *>(cnode)) {
         d->composite = dynamic_cast<dtkComposerNodeComposite *>(cnode);
-        d->composer_node = NULL;
+        d->control_node = NULL;
     } else {
-        d->composer_node = dynamic_cast<dtkComposerNodeControl *>(cnode);
+        d->control_node = dynamic_cast<dtkComposerNodeControl *>(cnode);
         d->composite = NULL;
     }
 
@@ -52,21 +54,33 @@ dtkComposerGraphNode::Kind dtkComposerGraphNodeBegin::kind(void)
 
 dtkComposerNode *dtkComposerGraphNodeBegin::wrapee(void)
 {
-    if (!d->composer_node)
+    if (!d->control_node)
         return d->composite;
     else
-        return d->composer_node;
+        return d->control_node;
 }
 
 void dtkComposerGraphNodeBegin::eval(void)
 {
-    if (!d->composer_node) {
+
+    if (!d->control_node) {
         this->setStatus(dtkComposerGraphNode::Done);
-        return;
+    } else {
+        d->control_node->begin();
+        this->setStatus(dtkComposerGraphNode::Done);
     }
 
-    d->composer_node->end();
-    this->setStatus(dtkComposerGraphNode::Done);
+    //TODO: build childs list during graph creation
+
+    // need to clean state of all nodes in the composite/group
+    dtkComposerGraphNodeList childs = this->successors();
+    while (!childs.isEmpty()) {
+        dtkComposerGraphNode *current = childs.takeFirst();
+        if (current->status() == dtkComposerGraphNode::Done && !(( current->wrapee() == d->control_node || current->wrapee() == d->composite ) && current->kind() ==  dtkComposerGraphNode::End)) {
+            childs << current->successors();
+        }
+        current->setStatus(dtkComposerGraphNode::Ready);
+    }
 }
 
 

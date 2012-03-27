@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: lun. mars 26 17:01:15 2012 (+0200)
+ * Last-Updated: mar. mars 27 16:09:39 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 462
+ *     Update #: 463
  */
 
 /* Commentary:
@@ -401,6 +401,14 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["CommunicatorReceiveInteger"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator" << "integer";;
     d->types["CommunicatorReceiveInteger"] = "communicatorReceiveInteger";
 
+    d->nodes << "CommunicatorSendReal";
+    d->tags["CommunicatorSendReal"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator" << "real";
+    d->types["CommunicatorSendReal"] = "communicatorSendReal";
+
+    d->nodes << "CommunicatorReceiveReal";
+    d->tags["CommunicatorReceiveReal"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator" << "real";;
+    d->types["CommunicatorReceiveReal"] = "communicatorReceiveReal";
+
 }
 
 dtkComposerFactory::~dtkComposerFactory(void)
@@ -629,6 +637,12 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "communicatorReceiveInteger")
         return new dtkComposerNodeCommunicatorReceiveInteger;
+
+    if(type == "communicatorSendReal")
+        return new dtkComposerNodeCommunicatorSendReal;
+
+    if(type == "communicatorReceiveReal")
+        return new dtkComposerNodeCommunicatorReceiveReal;
 
     return NULL;
 }

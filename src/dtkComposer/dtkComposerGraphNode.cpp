@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. mars 20 14:08:53 2012 (+0100)
+ * Last-Updated: mar. mars 27 14:08:35 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 201
+ *     Update #: 206
  */
 
 /* Commentary:
@@ -169,6 +169,11 @@ void dtkComposerGraphNode::setTitle(const QString& title)
 void dtkComposerGraphNode::eval(void)
 {
     DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+}
+
+void dtkComposerGraphNode::clean(void)
+{
+    this->setStatus(dtkComposerGraphNode::Ready);
 }
 
 // /////////////////////////////////////////////////////////////////

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: mar. mars 20 14:45:34 2012 (+0100)
+ * Last-Updated: mar. mars 27 14:34:06 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 173
+ *     Update #: 200
  */
 
 /* Commentary:
@@ -49,6 +49,8 @@ dtkComposerGraphNodeSelectBranch::dtkComposerGraphNodeSelectBranch(dtkComposerNo
     this->setStatus(dtkComposerGraphNode::Ready);
     d->result =-1;
     d->successors.resize(dtkComposerGraphNodeSelectBranchPrivate::DEFAULT_SIZE);
+    for (int i = 0; i < dtkComposerGraphNodeSelectBranchPrivate::DEFAULT_SIZE; i++)
+        d->successors[i] = NULL;
 }
 
 
@@ -85,10 +87,19 @@ dtkComposerGraphNodeList dtkComposerGraphNodeSelectBranch::successors(void)
     dtkComposerGraphNodeList val;
     if (d->result >= 0  && d->result < d->successors.size())
         val << d->successors[d->result];
-    else
-        dtkError() << "Select branch result is out of bound:" << d->result;
-
+    else {
+        int i = 0;
+        do {
+            val << d->successors[i];
+            i++;
+        } while (d->successors[i] != NULL);
+    }
     return val;
+}
+
+void dtkComposerGraphNodeSelectBranch::clean(void) {
+    d->result = -1;
+    this->setStatus(dtkComposerGraphNode::Ready);
 }
 
 void dtkComposerGraphNodeSelectBranch::eval(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 26 16:06:28 2012 (+0200)
+ * Last-Updated: Mon Mar 26 17:28:30 2012 (+0200)
  *           By: tkloczko
- *     Update #: 3187
+ *     Update #: 3196
  */
 
 /* Commentary: 
@@ -845,14 +845,13 @@ void dtkComposerStackCommandCreateGroup::setNodes(dtkComposerSceneNodeList nodes
 
     foreach(dtkComposerSceneNode *node, nodes) {
         if(node->parent() == e->parent) {
-            //rect |= node->sceneBoundingRect();
             e->reparent << new dtkComposerStackCommandReparentNode;
             e->reparent.last()->setFactory(d->factory);
             e->reparent.last()->setScene(d->scene);
             e->reparent.last()->setGraph(d->graph);
             e->reparent.last()->setOriginNode(node);
             e->reparent.last()->setOriginPosition(node->sceneBoundingRect().topLeft());
-            e->reparent.last()->setTargetPosition(rect.center() - node->sceneBoundingRect().center());
+            e->reparent.last()->setTargetPosition(node->sceneBoundingRect().topLeft());
         }
     }
 
@@ -889,7 +888,7 @@ void dtkComposerStackCommandCreateGroup::redo(void)
     d->graph->layout();
 
     e->node->setPos(e->pos - e->node->boundingRect().center());
-
+    
     foreach(dtkComposerStackCommandReparentNode *cmd, e->reparent) {
         if (e->dirty)
             cmd->setTargetNode(e->node);
@@ -1445,6 +1444,7 @@ void dtkComposerStackCommandFlattenGroup::redo(void)
 
     d->scene->removeItem(e->node);
 
+    e->node->setUnrevealPos(e->node->pos());
     e->node->flatten();
     e->node->layout();
 
@@ -1460,6 +1460,7 @@ void dtkComposerStackCommandFlattenGroup::undo(void)
     d->scene->removeItem(e->node);
 
     e->node->unflatten();
+    e->node->setPos(e->node->unrevealPos());
     e->node->layout();
 
     d->scene->addItem(e->node);
@@ -1503,6 +1504,7 @@ void dtkComposerStackCommandUnflattenGroup::redo(void)
     d->scene->removeItem(e->node);
 
     e->node->unflatten();
+    e->node->setPos(e->node->unrevealPos());
     e->node->layout();
 
     d->scene->addItem(e->node);
@@ -1516,6 +1518,7 @@ void dtkComposerStackCommandUnflattenGroup::undo(void)
 
     d->scene->removeItem(e->node);
 
+    e->node->setUnrevealPos(e->node->pos());
     e->node->flatten();
     e->node->layout();
 

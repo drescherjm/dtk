@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 26 15:30:13 2012 (+0200)
+ * Last-Updated: Mon Mar 26 17:30:17 2012 (+0200)
  *           By: tkloczko
- *     Update #: 513
+ *     Update #: 530
  */
 
 /* Commentary: 
@@ -384,10 +384,10 @@ void dtkComposerSceneNodeComposite::boundingBox(qreal& x_min, qreal& x_max, qrea
     qreal ymax = -FLT_MAX;
     
     foreach(dtkComposerSceneNode *node, d->nodes) {
-        xmin = qMin(xmin, node->pos().x());
-        xmax = qMax(xmax, node->pos().x() + node->boundingRect().width());
-        ymin = qMin(ymin, node->pos().y());
-        ymax = qMax(ymax, node->pos().y() + node->boundingRect().height());
+        xmin = qMin(xmin, node->scenePos().x());
+        xmax = qMax(xmax, node->scenePos().x() + node->boundingRect().width());
+        ymin = qMin(ymin, node->scenePos().y());
+        ymax = qMax(ymax, node->scenePos().y() + node->boundingRect().height());
     }
     
     x_min = xmin;

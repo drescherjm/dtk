@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/26 08:51:28
  * Version: $Id$
- * Last-Updated: mar. mars 27 16:07:27 2012 (+0200)
+ * Last-Updated: mer. mars 28 09:09:46 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 45
+ *     Update #: 49
  */
 
 /* Commentary:
@@ -217,6 +217,51 @@ protected:
     dtkComposerNodeCommunicatorSendRealPrivate *d;
 };
 
+// /////////////////////////////////////////////////////////////////
+// Distributed communicator send dtkAbstractData
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeCommunicatorSendPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeCommunicatorSend : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeCommunicatorSend(void);
+    ~dtkComposerNodeCommunicatorSend(void);
+
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "communicatorSend";
+    }
+
+    inline QString titleHint(void) {
+        return "Communicator Send";
+    }
+
+public:
+    inline QString inputLabelHint(int port) {
+        if (port == 0)
+            return "communicator";
+        else if (port == 1)
+            return "data";
+        else if (port == 2)
+            return "target rank";
+        else
+            return "value";
+    }
+
+public:
+    inline QString outputLabelHint(int) {
+        return "value";
+    }
+
+protected:
+    dtkComposerNodeCommunicatorSendPrivate *d;
+};
+
 
 // /////////////////////////////////////////////////////////////////
 // Distributed communicator receive Integer
@@ -305,6 +350,52 @@ public:
 
 protected:
     dtkComposerNodeCommunicatorReceiveRealPrivate *d;
+};
+
+
+
+// /////////////////////////////////////////////////////////////////
+// Distributed communicator receive 
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeCommunicatorReceivePrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeCommunicatorReceive : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeCommunicatorReceive(void);
+    ~dtkComposerNodeCommunicatorReceive(void);
+
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "communicatorReceive";
+    }
+
+    inline QString titleHint(void) {
+        return "Communicator Receive";
+    }
+
+
+public:
+    inline QString inputLabelHint(int port) {
+        if (port == 0)
+            return "communicator";
+        else if (port == 1)
+            return "source rank";
+        else
+            return "value";
+    }
+
+public:
+    inline QString outputLabelHint(int) {
+        return "value";
+    }
+
+protected:
+    dtkComposerNodeCommunicatorReceivePrivate *d;
 };
 
 

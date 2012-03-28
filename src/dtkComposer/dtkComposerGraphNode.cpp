@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. mars 27 14:08:35 2012 (+0200)
+ * Last-Updated: mer. mars 28 13:30:35 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 206
+ *     Update #: 226
  */
 
 /* Commentary:
@@ -30,12 +30,14 @@ public:
 public:
     QList<dtkComposerGraphNode *> successors;
     QList<dtkComposerGraphNode *> predecessors;
+    QList<dtkComposerGraphNode *> childs;
 
 public:
     dtkComposerGraphNode::Status status;
 
 public:
     bool breakpoint;
+    bool endloop_initial;
     bool endloop;
 };
 
@@ -46,8 +48,9 @@ dtkComposerGraphNode::dtkComposerGraphNode() : QGraphicsItem(),d(new dtkComposer
     this->setZValue(1);
     this->setTitle("Graph node");
     this->setStatus(dtkComposerGraphNode::Ready);
-    d->breakpoint = false;
-    d->endloop    = false;
+    d->breakpoint      = false;
+    d->endloop         = false;
+    d->endloop_initial = false;
 }
 
 dtkComposerGraphNode::~dtkComposerGraphNode(void)
@@ -91,6 +94,8 @@ void dtkComposerGraphNode::setBreakPoint(bool value)
 void dtkComposerGraphNode::setEndLoop(bool value)
 {
     d->endloop = value;
+    if (value) // endloop is set to true, keep this info in endloop_initial (used to rerun node)
+        d->endloop_initial = value;
 }
 
 QRectF dtkComposerGraphNode::boundingRect(void) const
@@ -130,9 +135,19 @@ void dtkComposerGraphNode::addSuccessor(dtkComposerGraphNode *node, int id)
     d->successors << node;
 }
 
+void dtkComposerGraphNode::addChild(dtkComposerGraphNode *node)
+{
+    d->childs << node;
+}
+
 void dtkComposerGraphNode::addPredecessor(dtkComposerGraphNode *node)
 {
     d->predecessors << node;
+}
+
+void dtkComposerGraphNode::removeChild(dtkComposerGraphNode *node)
+{
+    d->childs.removeOne(node);
 }
 
 void dtkComposerGraphNode::removePredecessor(dtkComposerGraphNode *node)
@@ -155,6 +170,11 @@ dtkComposerGraphNodeList dtkComposerGraphNode::predecessors(void)
     return d->predecessors;
 }
 
+dtkComposerGraphNodeList dtkComposerGraphNode::childs(void)
+{
+    return d->childs;
+}
+
 
 const QString& dtkComposerGraphNode::title(void)
 {
@@ -174,6 +194,7 @@ void dtkComposerGraphNode::eval(void)
 void dtkComposerGraphNode::clean(void)
 {
     this->setStatus(dtkComposerGraphNode::Ready);
+    d->endloop = d->endloop_initial;
 }
 
 // /////////////////////////////////////////////////////////////////

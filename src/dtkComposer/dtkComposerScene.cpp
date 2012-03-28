@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Wed Mar 28 13:35:38 2012 (+0200)
+ * Last-Updated: Wed Mar 28 16:34:15 2012 (+0200)
  *           By: tkloczko
- *     Update #: 2155
+ *     Update #: 2158
  */
 
 /* Commentary:
@@ -521,6 +521,9 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             goto adjust_edges;
         }
 
+        
+        qDebug() << __func__ << node->title();
+
         if(dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
 
             d->reparent_target = node;
@@ -769,15 +772,16 @@ dtkComposerSceneNode *dtkComposerScene::nodeAt(const QPointF& point, dtkComposer
     QList<QGraphicsItem *> items = this->items(point.x(), point.y(), 1, 1, Qt::IntersectsItemBoundingRect);
 
     foreach(QGraphicsItem *item, items) {
-        if (dtkComposerSceneNode *n = dynamic_cast<dtkComposerSceneNode *>(item)) {
-            
-            dtkComposerSceneNode *node = n;
+        if (dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>(item)) {
 
-            if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node->parent()))
-                node = control;
+            if (node != d->current_node) {
+
+                if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node->parent()))
+                    node = control;
             
-            if (node != exclude && !(node->parent() == exclude))
-                return node;
+                if (node != exclude && !(node->parent() == exclude))
+                    return node;
+            }
         }
     }
 

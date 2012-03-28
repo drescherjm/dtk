@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 28 16:05:31 2012 (+0200)
+ * Last-Updated: Wed Mar 28 16:22:30 2012 (+0200)
  *           By: tkloczko
- *     Update #: 661
+ *     Update #: 666
  */
 
 /* Commentary: 
@@ -164,12 +164,6 @@ void dtkComposerSceneNodeComposite::enter(void)
 {
     d->entered = true;
 
-    if (this->embedded()) {
-        foreach(dtkComposerSceneNodeComposite *block, dynamic_cast<dtkComposerSceneNodeControl *>(this->parent())->blocks())
-            if (block != this)
-                block->stackBefore(this);
-    }
-
     this->reveal();
 }
 
@@ -289,8 +283,6 @@ void dtkComposerSceneNodeComposite::layout(void)
     if(!d->revealed) {
 
         d->rect = QRectF(0, 0, 150, 50);
-
-        this->setZValue(0);
 
     } else {
 

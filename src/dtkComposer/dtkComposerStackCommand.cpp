@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 28 11:34:30 2012 (+0200)
+ * Last-Updated: Wed Mar 28 13:42:33 2012 (+0200)
  *           By: tkloczko
- *     Update #: 3257
+ *     Update #: 3269
  */
 
 /* Commentary: 
@@ -1341,6 +1341,7 @@ void dtkComposerStackCommandEnterGroup::redo(void)
 
     d->scene->addItem(e->node);
     d->scene->setCurrent(e->node);
+    d->scene->update();
 }
 
 void dtkComposerStackCommandEnterGroup::undo(void)
@@ -1356,6 +1357,7 @@ void dtkComposerStackCommandEnterGroup::undo(void)
 
     d->scene->addItem(e->former);
     d->scene->setCurrent(e->former);
+    d->scene->update();
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -2209,12 +2211,21 @@ void dtkComposerStackCommandReparentNode::redo(void)
         d->scene->removeItem(e->origin);
 
         target->addNode(e->origin);
+        e->origin->setParent(target);            
 
-        if (target->flattened() || target == d->scene->current()) {
+        if (target == d->scene->current()) {
+
             d->scene->addItem(e->origin);
-        }
 
-        e->origin->setParent(target);
+        } else if (target->flattened()) {
+
+            d->scene->addItem(e->origin);
+            if (target->embedded() && !target->entered())
+                target->parent()->stackBefore(e->origin);
+            else
+                target->stackBefore(e->origin);
+            
+        }
         e->origin->setPos(e->target_pos);
 
         for(int i = 0; i < e->input_edges.count(); i++) {
@@ -2255,6 +2266,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
     }
 
     d->scene->modify(true);
+    d->scene->update();
 }
 
 void dtkComposerStackCommandReparentNode::undo(void)
@@ -2324,4 +2336,5 @@ void dtkComposerStackCommandReparentNode::undo(void)
     }
 
     d->scene->modify(true);
+    d->scene->update();
 }

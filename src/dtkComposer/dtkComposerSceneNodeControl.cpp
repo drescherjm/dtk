@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 26 09:36:57 2012 (+0200)
+ * Last-Updated: Wed Mar 28 12:33:23 2012 (+0200)
  *           By: tkloczko
- *     Update #: 501
+ *     Update #: 503
  */
 
 /* Commentary: 
@@ -123,7 +123,6 @@ void dtkComposerSceneNodeControl::setHeader(dtkComposerSceneNodeLeaf *header)
     d->header->setParentItem(this);
     d->header->setFlag(QGraphicsItem::ItemIsMovable, false);
     d->header->setFlag(QGraphicsItem::ItemIsSelectable, false);
-    // d->header->setFlag(QGraphicsItem::ItemStacksBehindParent, true);
     d->header->layout();
 
     this->layout();
@@ -137,7 +136,6 @@ void dtkComposerSceneNodeControl::setFooter(dtkComposerSceneNodeLeaf *footer)
     d->footer->setParentItem(this);
     d->footer->setFlag(QGraphicsItem::ItemIsMovable, false);
     d->footer->setFlag(QGraphicsItem::ItemIsSelectable, false);
-    // d->footer->setFlag(QGraphicsItem::ItemStacksBehindParent, true);
     d->footer->layout();
 
     this->layout();
@@ -153,7 +151,6 @@ void dtkComposerSceneNodeControl::addBlock(dtkComposerSceneNodeComposite *block)
     block->setParentItem(this);
     block->setFlag(QGraphicsItem::ItemIsMovable, false);
     block->setFlag(QGraphicsItem::ItemIsSelectable, false);
-    // block->setFlag(QGraphicsItem::ItemStacksBehindParent, true);
     block->layout();
 
     this->layout();

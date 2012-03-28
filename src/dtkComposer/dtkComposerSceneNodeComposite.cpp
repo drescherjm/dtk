@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 27 17:42:15 2012 (+0200)
+ * Last-Updated: Wed Mar 28 12:29:13 2012 (+0200)
  *           By: tkloczko
- *     Update #: 623
+ *     Update #: 635
  */
 
 /* Commentary: 
@@ -304,7 +304,6 @@ void dtkComposerSceneNodeComposite::layout(void)
 
         this->setPos(xmin - 50, ymin - 50);
 
-        this->setZValue(-INT_MAX);
     }
     
 // /////////////////////////////////////////////////////////////////

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Wed Mar 28 11:38:03 2012 (+0200)
+ * Last-Updated: Wed Mar 28 13:35:38 2012 (+0200)
  *           By: tkloczko
- *     Update #: 2138
+ *     Update #: 2155
  */
 
 /* Commentary:
@@ -147,11 +147,15 @@ void dtkComposerScene::addItem(QGraphicsItem *item)
 
             block->setParentItem(control);
 
-            foreach(dtkComposerSceneNote *note, block->notes())
+            foreach(dtkComposerSceneNote *note, block->notes()) {
                 this->addItem(note);
+                control->stackBefore(note);
+            }
             
-            foreach(dtkComposerSceneNode *node, block->nodes())
+            foreach(dtkComposerSceneNode *node, block->nodes()) {
                 this->addItem(node);
+                control->stackBefore(node);
+            }
             
             foreach(dtkComposerSceneEdge *edge, block->edges()) {
                 this->addItem(edge);

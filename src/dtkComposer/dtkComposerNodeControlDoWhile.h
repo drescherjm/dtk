@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb 24 16:52:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb 25 01:07:47 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 8
+ * Last-Updated: mer. mars 28 13:58:50 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -39,7 +39,6 @@ public:
 
 public:
     void setInputs(void);
-    void setConditions(void);
     void setOutputs(void);
     void setVariables(void);
      int selectBranch(void);

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: lun. mars 26 14:37:41 2012 (+0200)
+## Last-Updated: mer. mars 28 13:57:56 2012 (+0200)
 ##           By: Nicolas Niclausse
-##     Update #: 455
+##     Update #: 456
 ######################################################################
 ##
 ### Commentary:
@@ -38,7 +38,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerGraphNode.h
   dtkComposerGraphNodeLeaf.h
   dtkComposerGraphNodeSelectBranch.h
-  dtkComposerGraphNodeSetConditions.h
   dtkComposerGraphNodeSetInputs.h
   dtkComposerGraphNodeSetOutputs.h
   dtkComposerGraphNodeSetVariables.h
@@ -128,7 +127,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerGraphNodeEnd.cpp
   dtkComposerGraphNodeLeaf.cpp
   dtkComposerGraphNodeSelectBranch.cpp
-  dtkComposerGraphNodeSetConditions.cpp
   dtkComposerGraphNodeSetInputs.cpp
   dtkComposerGraphNodeSetOutputs.cpp
   dtkComposerGraphNodeSetVariables.cpp

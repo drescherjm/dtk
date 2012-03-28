@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mars 28 13:34:16 2012 (+0200)
+ * Last-Updated: mer. mars 28 13:59:50 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 1896
+ *     Update #: 1898
  */
 
 /* Commentary:
@@ -25,7 +25,6 @@
 #include "dtkComposerGraphNodeEnd.h"
 #include "dtkComposerGraphNodeLeaf.h"
 #include "dtkComposerGraphNodeSelectBranch.h"
-#include "dtkComposerGraphNodeSetConditions.h"
 #include "dtkComposerGraphNodeSetInputs.h"
 #include "dtkComposerGraphNodeSetOutputs.h"
 #include "dtkComposerGraphNodeSetVariables.h"
@@ -224,7 +223,6 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
         end       = new dtkComposerGraphNodeEnd(wrapee,"End Control");
         dtkComposerGraphNode *inputs    = new dtkComposerGraphNodeSetInputs(wrapee);
         dtkComposerGraphNode *outputs   = new dtkComposerGraphNodeSetOutputs(wrapee);
-        dtkComposerGraphNode *set_conds = new dtkComposerGraphNodeSetConditions(wrapee);
         dtkComposerGraphNode *select    = new dtkComposerGraphNodeSelectBranch(wrapee);
 
         d->addNode(node,    begin, d->begin(node->parent()));
@@ -232,7 +230,6 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
         d->addNode(node,  outputs, begin);
         d->addNode(node,      end,  d->begin(node->parent()));
         d->addNode(node,   select, begin);
-        d->addNode(node,set_conds, begin);
 
         if (dynamic_cast<dtkComposerNodeControlFor *>(wrapee)) {
             dtkComposerGraphNode *vars = new dtkComposerGraphNodeSetVariables(wrapee);
@@ -245,8 +242,7 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
             int cond = 0; int main = 1; int incr = 2;
             d->addDummyEdge(    begin, inputs, node);
             d->addDummyEdge(   inputs, d->begin(blocks[cond]), node);
-            d->addDummyEdge( d->end(blocks[cond]), set_conds,  node);
-            d->addDummyEdge(set_conds, select,                 node);
+            d->addDummyEdge( d->end(blocks[cond]), select,  node);
             d->addDummyEdge(   select, d->begin(blocks[main]), node);
             d->addDummyEdge(   select, end,                    node, 1);
             d->addDummyEdge(d->end(blocks[main]), outputs,     node);
@@ -265,13 +261,12 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
 
             int body = 0;
             d->addDummyEdge(    begin, inputs, node);
-            d->addDummyEdge(   inputs, set_conds, node);
-            d->addDummyEdge(set_conds, select, node);
+            d->addDummyEdge(   inputs, select, node);
             d->addDummyEdge(   select, d->begin(blocks[body]), node);
             d->addDummyEdge(   select, end, node, 1);
             d->addDummyEdge( d->end(blocks[body]), outputs,  node);
             d->addDummyEdge(outputs, vars, node);
-            d->addDummyEdge(     vars, set_conds, node);
+            d->addDummyEdge(     vars, select, node);
             vars->setEndLoop();
 
         } else if (dynamic_cast<dtkComposerNodeControlWhile *>(wrapee)) {
@@ -282,8 +277,7 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
             int cond_block = 0; int body_block = 1;
             d->addDummyEdge(   begin,       inputs, node);
             d->addDummyEdge(   inputs,  d->begin(blocks[cond_block]), node);
-            d->addDummyEdge( d->end(blocks[cond_block]),   set_conds, node);
-            d->addDummyEdge(set_conds,      select, node);
+            d->addDummyEdge( d->end(blocks[cond_block]),   select, node);
             d->addDummyEdge(   select, d->begin(blocks[body_block]), node);
             d->addDummyEdge(   select,         end, node, 1);
             d->addDummyEdge(d->end(blocks[body_block]),     outputs, node);
@@ -300,8 +294,7 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
             d->addDummyEdge( inputs,  d->begin(blocks[body_block]), node);
             d->addDummyEdge( d->end(blocks[body_block]), outputs, node);
             d->addDummyEdge( outputs, d->begin(blocks[cond_block]), node);
-            d->addDummyEdge( d->end(blocks[cond_block]), set_conds, node);
-            d->addDummyEdge( set_conds, select, node);
+            d->addDummyEdge( d->end(blocks[cond_block]), select, node);
             d->addDummyEdge( select, d->begin(blocks[body_block]), node);
             d->addDummyEdge( select, end, node, 1);
             select->setEndLoop();
@@ -314,8 +307,7 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
                 this->addNode(block);
 
             int then_block = 0; int else_block = 1;
-            d->addDummyEdge(    begin, set_conds, node);
-            d->addDummyEdge(set_conds, select, node);
+            d->addDummyEdge(    begin, select, node);
             d->addDummyEdge(   select, inputs, node);
             d->addDummyEdge(   select, inputs_else, node, 1);
             d->addDummyEdge(   inputs, d->begin(blocks[then_block]), node);

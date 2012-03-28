@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 15:15:50 2012 (+0100)
- *           By: tkloczko
- *     Update #: 46
+ * Last-Updated: mer. mars 28 13:58:59 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -112,13 +112,8 @@ void dtkComposerNodeControlDoWhile::setInputs(void)
     foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
         v->setTwinned(false);
         v->setData(v->data());
-        v->setTwinned(true);        
+        v->setTwinned(true);
     }
-}
-
-void dtkComposerNodeControlDoWhile::setConditions(void)
-{
-
 }
 
 void dtkComposerNodeControlDoWhile::setOutputs(void)

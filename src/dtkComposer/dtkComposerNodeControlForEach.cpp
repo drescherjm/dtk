@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 22 16:30:53 2012 (+0100)
- *           By: tkloczko
- *     Update #: 87
+ * Last-Updated: mer. mars 28 13:59:19 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 88
  */
 
 /* Commentary: 
@@ -93,11 +93,6 @@ dtkComposerNodeComposite *dtkComposerNodeControlForEach::block(int id)
 }
 
 void dtkComposerNodeControlForEach::setInputs(void)
-{
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
-}
-
-void dtkComposerNodeControlForEach::setConditions(void)
 {
     DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
 }

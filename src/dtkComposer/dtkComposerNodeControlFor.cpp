@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 22 16:05:42 2012 (+0100)
- *           By: tkloczko
- *     Update #: 115
+ * Last-Updated: mer. mars 28 13:59:10 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 116
  */
 
 /* Commentary: 
@@ -151,10 +151,6 @@ void dtkComposerNodeControlFor::setInputs(void)
         v->setData(v->data());
         v->setTwinned(true);
     }
-}
-
-void dtkComposerNodeControlFor::setConditions(void)
-{
 }
 
 void dtkComposerNodeControlFor::setOutputs(void)

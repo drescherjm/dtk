@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 15:40:03 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 09:18:51 2012 (+0100)
- *           By: tkloczko
- *     Update #: 41
+ * Last-Updated: mer. mars 28 13:58:44 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 42
  */
 
 /* Commentary: 
@@ -57,7 +57,6 @@ public:
 
 public:
     virtual void setInputs(void);
-    virtual void setConditions(void);
     virtual void setOutputs(void);
     virtual void setVariables(void);
     virtual  int selectBranch(void);

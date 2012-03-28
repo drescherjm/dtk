@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: lun. déc.  5 16:56:23 2011 (+0100)
+ * Last-Updated: mer. mars 28 09:07:20 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 237
+ *     Update #: 238
  */
 
 /* Commentary:
@@ -137,5 +137,6 @@ DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractData& data);
 DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractData *data);
 
 Q_DECLARE_METATYPE(dtkAbstractData)
+Q_DECLARE_METATYPE(dtkAbstractData *)
 
 #endif

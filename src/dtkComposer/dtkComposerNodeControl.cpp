@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 15:40:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 09:20:13 2012 (+0100)
- *           By: tkloczko
- *     Update #: 30
+ * Last-Updated: mer. mars 28 13:58:30 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -82,11 +82,6 @@ QList<dtkComposerTransmitterVariant *> dtkComposerNodeControl::outputTwins(void)
 }
 
 void dtkComposerNodeControl::setInputs(void)
-{
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
-}
-
-void dtkComposerNodeControl::setConditions(void)
 {
     DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
 }

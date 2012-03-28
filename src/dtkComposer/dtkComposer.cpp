@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 23 22:02:14 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 202
+ * Last-Updated: mer. mars 28 13:43:22 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 209
  */
 
 /* Commentary: 
@@ -193,7 +193,8 @@ void dtkComposer::run(void)
 
 void dtkComposer::step(void)
 {
-    QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::step, false);
+    d->evaluator->step();
+    d->evaluator->logStack();
 
     d->graph->update();
 }

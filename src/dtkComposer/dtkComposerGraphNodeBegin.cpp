@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: mar. mars 27 15:46:38 2012 (+0200)
+ * Last-Updated: mer. mars 28 13:47:47 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 220
+ *     Update #: 246
  */
 
 /* Commentary:
@@ -70,16 +70,11 @@ void dtkComposerGraphNodeBegin::eval(void)
         this->setStatus(dtkComposerGraphNode::Done);
     }
 
-    //TODO: build childs list during graph creation
+    dtkComposerGraphNodeList childs = this->childs();
+    int count = childs.count();
 
-    // need to clean state of all nodes in the composite/group
-    dtkComposerGraphNodeList childs = this->successors();
-    while (!childs.isEmpty()) {
-        dtkComposerGraphNode *current = childs.takeFirst();
-        if (current->status() == dtkComposerGraphNode::Done && !(( current->wrapee() == d->control_node || current->wrapee() == d->composite ) && current->kind() ==  dtkComposerGraphNode::End)) {
-            childs << current->successors();
-        }
-        current->setStatus(dtkComposerGraphNode::Ready);
+    for (int i = 0; i < count; i++) {
+        childs.at(i)->clean();
     }
 }
 

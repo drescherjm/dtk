@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/26 09:03:42
  * Version: $Id$
- * Last-Updated: mar. mars 27 16:08:49 2012 (+0200)
+ * Last-Updated: mer. mars 28 09:11:25 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 173
+ *     Update #: 177
  */
 
 /* Commentary:
@@ -225,6 +225,47 @@ void dtkComposerNodeCommunicatorSendReal::run(void)
 
 
 // /////////////////////////////////////////////////////////////////
+// Send dtkAbstractData
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeCommunicatorSendPrivate
+{
+public:
+    dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi *> *receiver_comm;
+    dtkComposerTransmitterReceiver<dtkAbstractData *> *receiver_data;
+    dtkComposerTransmitterReceiver<qlonglong> *receiver_target;
+
+};
+
+dtkComposerNodeCommunicatorSend::dtkComposerNodeCommunicatorSend(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorSendPrivate)
+{
+    d->receiver_comm = new dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi *>(this);
+    this->appendReceiver(d->receiver_comm);
+
+    d->receiver_data = new dtkComposerTransmitterReceiver<dtkAbstractData *>(this);
+    this->appendReceiver(d->receiver_data);
+
+    d->receiver_target = new dtkComposerTransmitterReceiver<qlonglong>(this);
+    this->appendReceiver(d->receiver_target);
+
+}
+
+dtkComposerNodeCommunicatorSend::~dtkComposerNodeCommunicatorSend(void)
+{
+    delete d->receiver_comm;
+    delete d->receiver_data;
+    delete d->receiver_target;
+    delete d;
+
+    d = NULL;
+}
+
+void dtkComposerNodeCommunicatorSend::run(void)
+{
+    d->receiver_comm->data()->send(d->receiver_data->data(), d->receiver_target->data(), 0);
+}
+
+// /////////////////////////////////////////////////////////////////
 // Receive Integer
 // /////////////////////////////////////////////////////////////////
 
@@ -308,6 +349,50 @@ void dtkComposerNodeCommunicatorReceiveReal::run(void)
 {
     double data;
     d->receiver_comm->data()->receive(&data, 1, dtkDistributedCommunicator::dtkDistributedCommunicatorDouble,d->receiver_source->data(),0 );
+    d->emitter->setData(data);
+}
+
+
+// /////////////////////////////////////////////////////////////////
+// Receive 
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeCommunicatorReceivePrivate
+{
+public:
+    dtkComposerTransmitterEmitter<dtkAbstractData *> *emitter;
+
+    dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi *> *receiver_comm;
+    dtkComposerTransmitterReceiver<qlonglong> *receiver_source;
+
+};
+
+dtkComposerNodeCommunicatorReceive::dtkComposerNodeCommunicatorReceive(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorReceivePrivate)
+{
+    d->receiver_comm = new dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi *>(this);
+    this->appendReceiver(d->receiver_comm);
+
+    d->receiver_source = new dtkComposerTransmitterReceiver<qlonglong>(this);
+    this->appendReceiver(d->receiver_source);
+
+    d->emitter = new dtkComposerTransmitterEmitter<dtkAbstractData *>(this);
+    this->appendEmitter(d->emitter);
+}
+
+dtkComposerNodeCommunicatorReceive::~dtkComposerNodeCommunicatorReceive(void)
+{
+    delete d->receiver_comm;
+    delete d->receiver_source;
+    delete d->emitter;
+    delete d;
+
+    d = NULL;
+}
+
+void dtkComposerNodeCommunicatorReceive::run(void)
+{
+    dtkAbstractData *data;
+    d->receiver_comm->data()->receive(data, d->receiver_source->data(), 0);
     d->emitter->setData(data);
 }
 

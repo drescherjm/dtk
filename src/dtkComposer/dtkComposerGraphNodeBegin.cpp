@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: mer. mars 28 13:21:38 2012 (+0200)
+ * Last-Updated: mer. mars 28 13:47:47 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 245
+ *     Update #: 246
  */
 
 /* Commentary:
@@ -72,8 +72,6 @@ void dtkComposerGraphNodeBegin::eval(void)
 
     dtkComposerGraphNodeList childs = this->childs();
     int count = childs.count();
-
-    dtkTrace() << "cleaning state of " << count << "child nodes" << this->title();
 
     for (int i = 0; i < count; i++) {
         childs.at(i)->clean();

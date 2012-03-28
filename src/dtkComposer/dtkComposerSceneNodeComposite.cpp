@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 28 15:50:09 2012 (+0200)
+ * Last-Updated: Wed Mar 28 16:05:31 2012 (+0200)
  *           By: tkloczko
- *     Update #: 659
+ *     Update #: 661
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #include "dtkComposerSceneEdge.h"
 #include "dtkComposerSceneNode.h"
 #include "dtkComposerSceneNodeComposite.h"
+#include "dtkComposerSceneNodeControl.h"
 #include "dtkComposerSceneNote.h"
 #include "dtkComposerScenePort.h"
 
@@ -162,6 +163,12 @@ bool dtkComposerSceneNodeComposite::flattened(void)
 void dtkComposerSceneNodeComposite::enter(void)
 {
     d->entered = true;
+
+    if (this->embedded()) {
+        foreach(dtkComposerSceneNodeComposite *block, dynamic_cast<dtkComposerSceneNodeControl *>(this->parent())->blocks())
+            if (block != this)
+                block->stackBefore(this);
+    }
 
     this->reveal();
 }

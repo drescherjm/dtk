@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 28 13:42:33 2012 (+0200)
+ * Last-Updated: Wed Mar 28 17:09:52 2012 (+0200)
  *           By: tkloczko
- *     Update #: 3269
+ *     Update #: 3288
  */
 
 /* Commentary: 
@@ -1313,24 +1313,22 @@ dtkComposerStackCommandEnterGroup::~dtkComposerStackCommandEnterGroup(void)
     e = NULL;
 }
 
-void dtkComposerStackCommandEnterGroup::setBlock(dtkComposerSceneNodeComposite *block)
-{
-    e->node = block;
-
-    e->former = dynamic_cast<dtkComposerSceneNodeComposite *>(e->node->parent()->parent());
-}
-
 void dtkComposerStackCommandEnterGroup::setNode(dtkComposerSceneNodeComposite *node)
 {
     e->node = node;
+}
 
-    e->former = dynamic_cast<dtkComposerSceneNodeComposite *>(e->node->parent());
+void dtkComposerStackCommandEnterGroup::setFormer(dtkComposerSceneNodeComposite *former)
+{
+    e->former = former;
 }
 
 void dtkComposerStackCommandEnterGroup::redo(void)
 {
     if(!e->node)
         return;
+
+    e->node->setFormer(e->former);
 
     e->node->setUnrevealRect(e->node->sceneBoundingRect());
     e->node->setUnrevealPos(e->node->scenePos());
@@ -1368,15 +1366,11 @@ class dtkComposerStackCommandLeaveGroupPrivate
 {
 public:
     dtkComposerSceneNodeComposite *node;
-
-public:
-    dtkComposerSceneNodeComposite *former;
 };
 
 dtkComposerStackCommandLeaveGroup::dtkComposerStackCommandLeaveGroup(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandLeaveGroupPrivate)
 {
     e->node = NULL;
-    e->former = NULL;
 
     this->setText("Leave group");
 }
@@ -1388,18 +1382,9 @@ dtkComposerStackCommandLeaveGroup::~dtkComposerStackCommandLeaveGroup(void)
     e = NULL;
 }
 
-void dtkComposerStackCommandLeaveGroup::setBlock(dtkComposerSceneNodeComposite *block)
-{
-    e->node = block;
-
-    e->former = dynamic_cast<dtkComposerSceneNodeComposite *>(e->node->parent()->parent());
-}
-
 void dtkComposerStackCommandLeaveGroup::setNode(dtkComposerSceneNodeComposite *node)
 {
     e->node = node;
-
-    e->former = dynamic_cast<dtkComposerSceneNodeComposite *>(e->node->parent());
 }
 
 void dtkComposerStackCommandLeaveGroup::redo(void)
@@ -1413,8 +1398,10 @@ void dtkComposerStackCommandLeaveGroup::redo(void)
     e->node->setPos(e->node->unrevealPos());
     e->node->layout();
 
-    d->scene->addItem(e->former);
-    d->scene->setCurrent(e->former);
+    d->scene->addItem(e->node->former());
+    d->scene->setCurrent(e->node->former());
+
+    d->scene->update();
 }
 
 void dtkComposerStackCommandLeaveGroup::undo(void)
@@ -1425,12 +1412,14 @@ void dtkComposerStackCommandLeaveGroup::undo(void)
     e->node->setUnrevealRect(e->node->sceneBoundingRect());
     e->node->setUnrevealPos(e->node->scenePos());
 
-    d->scene->removeItem(e->former);
+    d->scene->removeItem(e->node->former());
 
     e->node->enter();
     
     d->scene->addItem(e->node);
     d->scene->setCurrent(e->node);
+
+    d->scene->update();
 }
 
 // /////////////////////////////////////////////////////////////////

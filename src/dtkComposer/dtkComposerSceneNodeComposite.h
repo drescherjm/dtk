@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:32:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 27 16:25:27 2012 (+0200)
+ * Last-Updated: Wed Mar 28 17:05:49 2012 (+0200)
  *           By: tkloczko
- *     Update #: 51
+ *     Update #: 52
  */
 
 /* Commentary: 
@@ -37,6 +37,12 @@ public:
 
 public:
     void wrap(dtkComposerNode *wrapee);
+
+public:
+    void setFormer(dtkComposerSceneNodeComposite *former);
+
+public:
+    dtkComposerSceneNodeComposite *former(void);
 
 public:
     void    addNote(dtkComposerSceneNote *note);

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Wed Mar 28 16:37:49 2012 (+0200)
+ * Last-Updated: Wed Mar 28 17:07:07 2012 (+0200)
  *           By: tkloczko
- *     Update #: 2159
+ *     Update #: 2170
  */
 
 /* Commentary:
@@ -714,6 +714,7 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
                     dtkComposerStackCommandEnterGroup *command = new dtkComposerStackCommandEnterGroup;
                     command->setScene(this);
                     command->setNode(composite);
+                    command->setFormer(d->current_node);
                     d->stack->push(command);
                 } else if(!composite->flattened()) {
                     dtkComposerStackCommandLeaveGroup *command = new dtkComposerStackCommandLeaveGroup;
@@ -734,12 +735,13 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
                 if(!composite->entered()) {
                     dtkComposerStackCommandEnterGroup *command = new dtkComposerStackCommandEnterGroup;
                     command->setScene(this);
-                    command->setBlock(composite);
+                    command->setNode(composite);
+                    command->setFormer(d->current_node);
                     d->stack->push(command);
                 } else {
                     dtkComposerStackCommandLeaveGroup *command = new dtkComposerStackCommandLeaveGroup;
                     command->setScene(this);
-                    command->setBlock(composite);
+                    command->setNode(composite);
                     d->stack->push(command);
                 }
             }

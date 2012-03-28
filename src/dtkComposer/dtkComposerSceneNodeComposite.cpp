@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 28 16:22:30 2012 (+0200)
+ * Last-Updated: Wed Mar 28 17:06:44 2012 (+0200)
  *           By: tkloczko
- *     Update #: 666
+ *     Update #: 669
  */
 
 /* Commentary: 
@@ -32,6 +32,9 @@
 class dtkComposerSceneNodeCompositePrivate
 {
 public:
+    dtkComposerSceneNodeComposite *former;
+
+public:
     dtkComposerSceneNoteList notes;
     dtkComposerSceneNodeList nodes;
     dtkComposerSceneEdgeList edges;
@@ -56,6 +59,8 @@ public:
 
 dtkComposerSceneNodeComposite::dtkComposerSceneNodeComposite(void) : dtkComposerSceneNode(), d(new dtkComposerSceneNodeCompositePrivate)
 {
+    d->former = NULL;
+
     d->rect = QRectF(0, 0, 150, 50);
     d->unreveal_rect = QRectF(0, 0, 150, 50);
     
@@ -103,6 +108,16 @@ void dtkComposerSceneNodeComposite::wrap(dtkComposerNode *wrapee)
     }
 
     dtkComposerSceneNode::wrap(wrapee);
+}
+
+void dtkComposerSceneNodeComposite::setFormer(dtkComposerSceneNodeComposite *former)
+{
+    d->former = former;
+}
+
+dtkComposerSceneNodeComposite *dtkComposerSceneNodeComposite::former(void)
+{
+    return d->former;
 }
 
 void dtkComposerSceneNodeComposite::addNote(dtkComposerSceneNote *note)

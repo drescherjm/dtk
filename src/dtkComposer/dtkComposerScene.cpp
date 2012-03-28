@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Wed Mar 28 10:55:14 2012 (+0200)
+ * Last-Updated: Wed Mar 28 11:38:03 2012 (+0200)
  *           By: tkloczko
- *     Update #: 2135
+ *     Update #: 2138
  */
 
 /* Commentary:
@@ -155,10 +155,18 @@ void dtkComposerScene::addItem(QGraphicsItem *item)
             
             foreach(dtkComposerSceneEdge *edge, block->edges()) {
                 this->addItem(edge);
-                if (edge->source()->node() != block)
-                    edge->stackBefore(edge->source()->node());
-                if (edge->destination()->node() != block)
-                    edge->stackBefore(edge->destination()->node());
+                if (edge->source()->node() != block) {
+                    if (edge->source()->owner()->parent() == block)
+                        edge->stackBefore(edge->source()->owner());
+                    else
+                        edge->stackBefore(edge->source()->node());
+                }
+                if (edge->destination()->node() != block) {
+                    if (edge->destination()->owner()->parent() == block)
+                        edge->stackBefore(edge->destination()->owner());
+                    else
+                        edge->stackBefore(edge->destination()->node());
+                }
             }
         }
 
@@ -187,10 +195,18 @@ void dtkComposerScene::addItem(QGraphicsItem *item)
 
         foreach(dtkComposerSceneEdge *edge, composite->edges()) {
             this->addItem(edge);
-            if (edge->source()->node() != composite)
-                edge->stackBefore(edge->source()->node());
-            if (edge->destination()->node() != composite)
-                edge->stackBefore(edge->destination()->node());
+            if (edge->source()->node() != composite) {
+                if (edge->source()->owner()->parent() == composite)
+                    edge->stackBefore(edge->source()->owner());
+                else
+                    edge->stackBefore(edge->source()->node());
+            }
+            if (edge->destination()->node() != composite) {
+                if (edge->destination()->owner()->parent() == composite)
+                    edge->stackBefore(edge->destination()->owner());
+                else
+                    edge->stackBefore(edge->destination()->node());
+            }
         }
 
         composite->layout();

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 28 11:19:42 2012 (+0200)
+ * Last-Updated: Wed Mar 28 11:34:30 2012 (+0200)
  *           By: tkloczko
- *     Update #: 3251
+ *     Update #: 3257
  */
 
 /* Commentary: 
@@ -446,13 +446,23 @@ void dtkComposerStackCommandCreateEdge::redo(void)
 
         d->scene->addItem(e->edge);
 
-        if (d->scene->items().contains(e->source->node()))
-            if (e->source->node() != e->parent)
-                e->edge->stackBefore(e->source->node());
-        if (d->scene->items().contains(e->destination->node()))
-            if (e->destination->node() != e->parent)
-                e->edge->stackBefore(e->destination->node());
+        if (d->scene->items().contains(e->source->node())) {
+            if (e->source->node() != e->parent) {
+                if (e->source->owner()->parent() == e->parent)
+                    e->edge->stackBefore(e->source->owner());
+                else
+                    e->edge->stackBefore(e->source->node());
+            }
+        }
 
+        if (d->scene->items().contains(e->destination->node())) {
+            if (e->destination->node() != e->parent) {
+                if (e->destination->owner()->parent() == e->parent)
+                    e->edge->stackBefore(e->destination->owner());
+                else
+                    e->edge->stackBefore(e->destination->node());
+            }
+        }
     }
 
     d->scene->modify(true);

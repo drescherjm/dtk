@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 23 15:56:05 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 209
+ * Last-Updated: Wed Mar 28 15:55:19 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 214
  */
 
 /* Commentary: 
@@ -77,7 +77,9 @@ void dtkComposerSceneNodeLeaf::layout(void)
     int port_margin_left = 10;
     int port_spacing = 10;
 
-    // Setting up port position
+// /////////////////////////////////////////////////////////////////
+// Setting up port position 
+// /////////////////////////////////////////////////////////////////
 
     for(int i = 0; i < this->inputPorts().count(); i++)
         this->inputPorts().at(i)->setPos(QPointF(port_margin_left, i*this->inputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top + header));
@@ -85,7 +87,9 @@ void dtkComposerSceneNodeLeaf::layout(void)
     for(int i = 0; i < this->outputPorts().count(); i++)
         this->outputPorts().at(i)->setPos(QPointF(d->rect.right() - port_margin_left - this->outputPorts().at(i)->boundingRect().width(), i*this->outputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top + header));
 
-    // Height calculation
+// /////////////////////////////////////////////////////////////////
+// Height calculation
+// /////////////////////////////////////////////////////////////////
 
     if(this->inputPorts().count() || this->outputPorts().count())
         if(this->inputPorts().count() >= this->outputPorts().count())
@@ -96,24 +100,30 @@ void dtkComposerSceneNodeLeaf::layout(void)
     else if(this->embedded())
         d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), port_margin_top + port_margin_bottom + 10));
 
-    // --
+// /////////////////////////////////////////////////////////////////
+// Redraw parent
+// /////////////////////////////////////////////////////////////////
 
-    dtkComposerSceneNode *node = this;
-
-    if (dtkComposerSceneNodeComposite *parent = dynamic_cast<dtkComposerSceneNodeComposite *>(node->parent())) {
-
-        if(!parent->root())
-            node->parent()->layout();
+    if (dtkComposerSceneNodeComposite *parent = dynamic_cast<dtkComposerSceneNodeComposite *>(this->parent())) {
+        if(!parent->root()) {
+            if (parent->entered() || (parent->flattened() && !parent->embedded())) {
+                parent->layout();
+            }
+        }
     }
     
+// /////////////////////////////////////////////////////////////////
+// Update edges geometry
+// /////////////////////////////////////////////////////////////////
+
     QRectF updateRect;
     
-    foreach(dtkComposerSceneEdge *edge, node->inputEdges()) {
+    foreach(dtkComposerSceneEdge *edge, this->inputEdges()) {
         edge->adjust();
         updateRect |= edge->boundingRect();
     }
     
-    foreach(dtkComposerSceneEdge *edge, node->outputEdges()) {
+    foreach(dtkComposerSceneEdge *edge, this->outputEdges()) {
         edge->adjust();
         updateRect |= edge->boundingRect();
     }

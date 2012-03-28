@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 28 12:29:13 2012 (+0200)
+ * Last-Updated: Wed Mar 28 15:50:09 2012 (+0200)
  *           By: tkloczko
- *     Update #: 635
+ *     Update #: 659
  */
 
 /* Commentary: 
@@ -272,8 +272,6 @@ void dtkComposerSceneNodeComposite::setRoot(bool root)
 
 void dtkComposerSceneNodeComposite::layout(void)
 {
-    QRectF updateRect;
-
     if (this->embedded() && !d->entered)
         goto port_location;
     
@@ -326,29 +324,16 @@ port_location:
         this->outputPorts().at(i)->setPos(QPointF(d->rect.right() - port_margin_left - this->outputPorts().at(i)->boundingRect().width(), i*this->outputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top + header));
 
 // /////////////////////////////////////////////////////////////////
-// Update edges geometry
+// Redraw parent
 // /////////////////////////////////////////////////////////////////
-    
-    foreach(dtkComposerSceneEdge *edge, this->inputEdges()) {
-        edge->adjust();
-        updateRect |= edge->boundingRect();
-    }
 
-    foreach(dtkComposerSceneEdge *edge, d->edges) {
-        edge->adjust();
-        updateRect |= edge->boundingRect();
+    if (dtkComposerSceneNodeComposite *parent = dynamic_cast<dtkComposerSceneNodeComposite *>(this->parent())) {
+        if(!parent->root()) {
+            if (parent->entered() || (parent->flattened() && !parent->embedded())) {
+                parent->layout();
+            }
+        }
     }
-    
-    foreach(dtkComposerSceneEdge *edge, this->outputEdges()) {
-        edge->adjust();
-        updateRect |= edge->boundingRect();
-    }
-
-    this->update(updateRect); 
-
-// /////////////////////////////////////////////////////////////////
-// 
-// /////////////////////////////////////////////////////////////////
 
     if(this->embedded())
         goto update;
@@ -368,7 +353,28 @@ port_location:
     }
 
 update:
-    this->update();
+// /////////////////////////////////////////////////////////////////
+// Update edges geometry
+// /////////////////////////////////////////////////////////////////
+    
+    QRectF updateRect;
+
+    foreach(dtkComposerSceneEdge *edge, this->inputEdges()) {
+        edge->adjust();
+        updateRect |= edge->boundingRect();
+    }
+
+    foreach(dtkComposerSceneEdge *edge, d->edges) {
+        edge->adjust();
+        updateRect |= edge->boundingRect();
+    }
+    
+    foreach(dtkComposerSceneEdge *edge, this->outputEdges()) {
+        edge->adjust();
+        updateRect |= edge->boundingRect();
+    }
+
+    this->update(updateRect);
 }
 
 void dtkComposerSceneNodeComposite::resize(qreal width, qreal height)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 28 12:33:23 2012 (+0200)
+ * Last-Updated: Wed Mar 28 15:48:53 2012 (+0200)
  *           By: tkloczko
- *     Update #: 503
+ *     Update #: 506
  */
 
 /* Commentary: 
@@ -200,6 +200,25 @@ void dtkComposerSceneNodeControl::layout(void)
         h = d->footer->boundingRect().adjusted(2, 2, -2, -2).height();
         d->footer->resize(d->rect.size().width(), h);
     }
+
+// /////////////////////////////////////////////////////////////////
+// Redraw parent
+// /////////////////////////////////////////////////////////////////
+
+    dtkComposerSceneNode *node = this;
+
+    if (dtkComposerSceneNodeComposite *parent = dynamic_cast<dtkComposerSceneNodeComposite *>(node->parent())) {
+
+        if(!parent->root()){
+
+            if (parent->entered() || (parent->flattened() && !parent->embedded()))
+                parent->layout();
+        }
+    }
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
 
     this->update();
 }

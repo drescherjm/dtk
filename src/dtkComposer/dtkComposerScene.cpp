@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Wed Mar 28 16:34:15 2012 (+0200)
+ * Last-Updated: Wed Mar 28 16:37:49 2012 (+0200)
  *           By: tkloczko
- *     Update #: 2158
+ *     Update #: 2159
  */
 
 /* Commentary:
@@ -520,9 +520,6 @@ void dtkComposerScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             this->views().at(0)->setCursor(Qt::ArrowCursor);
             goto adjust_edges;
         }
-
-        
-        qDebug() << __func__ << node->title();
 
         if(dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
 

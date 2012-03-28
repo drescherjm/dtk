@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 26 15:18:01 2012 (+0200)
- *           By: tkloczko
- *     Update #: 301
+ * Last-Updated: mer. mars 28 11:23:08 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 325
  */
 
 /* Commentary: 
@@ -68,17 +68,19 @@ QVariant dtkComposerTransmitterVariant::data(void)
     if (e->twinned)
         return d->variant;
 
-    foreach(dtkComposerTransmitter *emitter, e->emitters) {
-         if (emitter->active()) {
-             return emitter->variant();
-        }
-    }
+    int count = e->emitters.count();
 
-    foreach(dtkComposerTransmitterVariant *v, e->variants) {
-         if (v->active()) {
-             return v->data();
+    for(int i = 0; i < count; i++)
+        if (e->emitters.at(i)->active()) {
+            return e->emitters.at(i)->variant();
         }
-    }
+
+    count = e->variants.count();
+
+    for(int i = 0; i < count; i++)
+        if (e->variants.at(i)->active()) {
+             return e->variants.at(i)->data();
+        }
 
     return d->variant;
 }
@@ -88,20 +90,25 @@ QVariantList dtkComposerTransmitterVariant::allData(void)
     QVariantList list;
 
     if (e->twinned) {
-        
+
         list << d->variant;
 
     } else {
 
-        foreach(dtkComposerTransmitter *emitter, e->emitters) {
-            if (emitter->active())
-                list << emitter->variant();
-        }
+        int count = e->emitters.count();
 
-        foreach(dtkComposerTransmitterVariant *v, e->variants) {
-            if (v->active())
-                list << v->data();
-        }
+        for(int i = 0; i < count; i++)
+            if (e->emitters.at(i)->active()) {
+                list << e->emitters.at(i)->variant();
+            }
+
+        count = e->variants.count();
+
+        for(int i = 0; i < count; i++)
+            if (e->variants.at(i)->active()) {
+                list << e->variants.at(i)->data();
+            }
+
     }
 
     return list;
@@ -141,17 +148,20 @@ QVariant::Type dtkComposerTransmitterVariant::type(void) const
     if (e->twinned)
         return d->variant.type();
 
-    foreach(dtkComposerTransmitter *emitter, e->emitters) {
-         if (emitter->active()) {
-             return emitter->variant().type();
-        }
-    }
 
-    foreach(dtkComposerTransmitterVariant *v, e->variants) {
-         if (v->active()) {
-             return v->data().type();
+    int count = e->emitters.count();
+
+    for(int i = 0; i < count; i++)
+        if (e->emitters.at(i)->active()) {
+            return e->emitters.at(i)->variant().type();
         }
-    }
+
+    count = e->variants.count();
+
+    for(int i = 0; i < count; i++)
+        if (e->variants.at(i)->active()) {
+            return e->variants.at(i)->data().type();
+        }
 
     return d->variant.type();
 }
@@ -186,7 +196,7 @@ bool dtkComposerTransmitterVariant::connect(dtkComposerTransmitter *transmitter)
                     e->variants << v;
                     return true;
                 }
-            }            
+            }
         }
     }
 

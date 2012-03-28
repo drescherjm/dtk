@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Fri Mar 23 22:22:48 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 2124
+ * Last-Updated: Wed Mar 28 10:55:14 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 2135
  */
 
 /* Commentary:
@@ -139,7 +139,7 @@ void dtkComposerScene::setCurrent(dtkComposerSceneNodeComposite *current)
 
 void dtkComposerScene::addItem(QGraphicsItem *item)
 {
-    if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(item)) {
+    if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(item)) {
 
         QGraphicsScene::addItem(item);
 
@@ -153,8 +153,13 @@ void dtkComposerScene::addItem(QGraphicsItem *item)
             foreach(dtkComposerSceneNode *node, block->nodes())
                 this->addItem(node);
             
-            foreach(dtkComposerSceneEdge *edge, block->edges())
+            foreach(dtkComposerSceneEdge *edge, block->edges()) {
                 this->addItem(edge);
+                if (edge->source()->node() != block)
+                    edge->stackBefore(edge->source()->node());
+                if (edge->destination()->node() != block)
+                    edge->stackBefore(edge->destination()->node());
+            }
         }
 
         control->layout();
@@ -164,7 +169,7 @@ void dtkComposerScene::addItem(QGraphicsItem *item)
         return;
     }
 
-    if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(item)) {
+    if (dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(item)) {
 
         if(item != d->root_node)
             QGraphicsScene::addItem(item);
@@ -180,8 +185,13 @@ void dtkComposerScene::addItem(QGraphicsItem *item)
         foreach(dtkComposerSceneNode *node, composite->nodes())
             this->addItem(node);
 
-        foreach(dtkComposerSceneEdge *edge, composite->edges())
+        foreach(dtkComposerSceneEdge *edge, composite->edges()) {
             this->addItem(edge);
+            if (edge->source()->node() != composite)
+                edge->stackBefore(edge->source()->node());
+            if (edge->destination()->node() != composite)
+                edge->stackBefore(edge->destination()->node());
+        }
 
         composite->layout();
 

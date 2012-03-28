@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 27 17:10:28 2012 (+0200)
+ * Last-Updated: Wed Mar 28 11:19:42 2012 (+0200)
  *           By: tkloczko
- *     Update #: 3231
+ *     Update #: 3251
  */
 
 /* Commentary: 
@@ -433,18 +433,28 @@ void dtkComposerStackCommandCreateEdge::redo(void)
 
     if(!e->edge) {
         e->edge = new dtkComposerSceneEdge;
+        e->edge->setParent(e->parent);
         e->edge->setSource(e->source);
         e->edge->setDestination(e->destination);
-        e->edge->setParent(e->parent);
     }
 
     e->edge->link();
 
     e->parent->addEdge(e->edge);
 
-    if(e->parent->entered() || e->parent->flattened() || e->parent->root())
+    if(e->parent->entered() || e->parent->flattened() || e->parent->root()) {
+
         d->scene->addItem(e->edge);
-    
+
+        if (d->scene->items().contains(e->source->node()))
+            if (e->source->node() != e->parent)
+                e->edge->stackBefore(e->source->node());
+        if (d->scene->items().contains(e->destination->node()))
+            if (e->destination->node() != e->parent)
+                e->edge->stackBefore(e->destination->node());
+
+    }
+
     d->scene->modify(true);
 
     // Setting up control flow
@@ -470,7 +480,6 @@ void dtkComposerStackCommandCreateEdge::undo(void)
     // Setting up data flow
 
     dtkComposerTransmitterDisconnection(d->scene->root(), e->parent, e->edge);
-
 
     // Setting up scene
 
@@ -2193,7 +2202,6 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
         if (target->flattened() || target == d->scene->current()) {
             d->scene->addItem(e->origin);
-            // target->layout();
         }
 
         e->origin->setParent(target);

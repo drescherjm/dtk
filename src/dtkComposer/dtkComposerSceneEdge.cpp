@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:00:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 20 16:00:49 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 67
+ * Last-Updated: Wed Mar 28 10:53:57 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 98
  */
 
 /* Commentary: 
@@ -49,7 +49,7 @@ dtkComposerSceneEdge::dtkComposerSceneEdge(void) : QGraphicsItem(), d(new dtkCom
     d->valid = false;
     d->flagged = false;
 
-    this->setZValue(-1);
+    this->setZValue(0);
 }
 
 dtkComposerSceneEdge::~dtkComposerSceneEdge(void)

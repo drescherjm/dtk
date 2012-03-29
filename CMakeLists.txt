@@ -42,6 +42,7 @@ option(BUILD_DOCUMENTATION "Build documentation"    true)
 option(BUILD_WRAPPERS      "Build wrappers"         true)
 option(BUILD_REPORTING     "Build reporting"        true)
 option(BUILD_TUTORIALS     "Build tutorials"        true)
+option(DTK_CPACK                "include packaging for dtk"        false)
 
 if(MSVC)
 option(DTK_USE_PRECOMPILED_HEADERS "Use precompiled headers" true)
@@ -49,7 +50,9 @@ endif(MSVC)
 
 include(dtkDependencies)
 include(dtkBuild)
-include(dtkPack)
+if (DTK_CPACK)
+  include(dtkPack)
+endif (DTK_CPACK)
 include(dtkPch)
 
 add_subdirectory(include)

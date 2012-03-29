@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 19 17:28:41 2012 (+0100)
+ * Last-Updated: Thu Mar 29 10:58:31 2012 (+0200)
  *           By: tkloczko
- *     Update #: 61
+ *     Update #: 67
  */
 
 /* Commentary: 
@@ -53,11 +53,18 @@ public:
     bool disconnect(dtkComposerTransmitter *transmitter);
 
 public:
+    void setActiveEmitter(dtkComposerTransmitter *emitter);
+
+public:
     LinkMap rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 
 private:
     QList<dtkComposerTransmitterEmitter<T> *> emitters;
-    QList<dtkComposerTransmitterVariant *> variants;
+    QList<dtkComposerTransmitterVariant *>    variants;
+
+private:
+    dtkComposerTransmitterEmitter<T> *active_emitter;
+    dtkComposerTransmitterVariant    *active_variant;
 
 private:
     T m_data;

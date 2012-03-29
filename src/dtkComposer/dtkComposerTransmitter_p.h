@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Mar 12 11:43:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 12 11:47:11 2012 (+0100)
+ * Last-Updated: Thu Mar 29 10:48:31 2012 (+0200)
  *           By: tkloczko
- *     Update #: 5
+ *     Update #: 6
  */
 
 /* Commentary: 
@@ -41,6 +41,9 @@ public:
 public:
     QList<dtkComposerTransmitter *>     next_list;
     QList<dtkComposerTransmitter *> previous_list;
+
+public:
+    QList<dtkComposerTransmitter *> receivers;
 
 public:
     QVariant variant;

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 19 17:32:11 2012 (+0100)
+ * Last-Updated: Thu Mar 29 11:19:47 2012 (+0200)
  *           By: tkloczko
- *     Update #: 168
+ *     Update #: 181
  */
 
 /* Commentary: 
@@ -35,6 +35,9 @@ template <typename T> dtkComposerTransmitterReceiver<T>::dtkComposerTransmitterR
 {
     T t;
     d->variant = qVariantFromValue(t);
+
+    active_emitter = NULL;
+    active_variant = NULL;
 };
 
 //! Destroys the receiver.
@@ -52,13 +55,19 @@ template <typename T> dtkComposerTransmitterReceiver<T>::~dtkComposerTransmitter
  */
 template <typename T> T dtkComposerTransmitterReceiver<T>::data(void)
 {
-    foreach(dtkComposerTransmitterEmitter<T> *emitter, emitters)
-        if (emitter->active())
-            return emitter->data();
+    // foreach(dtkComposerTransmitterEmitter<T> *emitter, emitters)
+    //     if (emitter->active())
+    //         return emitter->data();
 
-    foreach(dtkComposerTransmitterVariant *v, variants)
-        if (v->active())
-            return qvariant_cast<T>(v->data());
+    // foreach(dtkComposerTransmitterVariant *v, variants)
+    //     if (v->active())
+    //         return qvariant_cast<T>(v->data());
+
+    if (active_emitter)
+        return active_emitter->data();
+
+    if (active_variant)
+        return qvariant_cast<T>(active_variant->data());
 
     return m_data;
 };
@@ -102,6 +111,8 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::connect(dtkCompose
         if (emitter = dynamic_cast<dtkComposerTransmitterEmitter<T> *>(transmitter)) {
             if (!emitters.contains(emitter)) {
                 emitters << emitter;
+                active_emitter = emitter;
+                emitter->appendReceiver(this);
                 return true;
             }
         }
@@ -112,11 +123,15 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::connect(dtkCompose
 
         if(v->types().isEmpty() && !variants.contains(v)) {
             variants << v;
+            active_variant = v;
+            v->appendReceiver(this);
             return true;
         } else {
             foreach(QVariant::Type t, v->types()) {
                 if (t == this->type() && !variants.contains(v)) {
                     variants << v;
+                    active_variant = v;
+                    v->appendReceiver(this);
                     return true;
                 }
             }
@@ -132,6 +147,8 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::connect(dtkCompose
  */
 template <typename T> bool dtkComposerTransmitterReceiver<T>::disconnect(dtkComposerTransmitter *transmitter)
 {
+    transmitter->removeReceiver(this);
+
     dtkComposerTransmitterEmitter<T> *emitter = NULL;
 
     if (emitter = dynamic_cast<dtkComposerTransmitterEmitter<T> *>(transmitter)) {
@@ -144,6 +161,30 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::disconnect(dtkComp
 
     return false;
 };
+
+//! 
+/*! 
+ *  
+ */
+template <typename T> void dtkComposerTransmitterReceiver<T>::setActiveEmitter(dtkComposerTransmitter *emitter)
+{
+    active_emitter = NULL;
+    active_variant = NULL;
+
+    foreach(dtkComposerTransmitterEmitter<T> *e, emitters) {
+        if (emitter == static_cast<dtkComposerTransmitter *>(e)) {
+            active_emitter = e;
+            return;
+        }
+    }
+    
+    foreach(dtkComposerTransmitterVariant *v, variants) {
+        if (emitter == static_cast<dtkComposerTransmitter *>(v)) {
+            active_variant = v;
+            return;
+        }
+    }
+}
 
 //! 
 /*! 

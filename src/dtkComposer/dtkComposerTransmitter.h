@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 11:57:10 2012 (+0100)
+ * Last-Updated: Thu Mar 29 10:51:46 2012 (+0200)
  *           By: tkloczko
- *     Update #: 142
+ *     Update #: 144
  */
 
 /* Commentary: 
@@ -71,6 +71,9 @@ public:
     bool active(void);
 
 public:
+    virtual void setActiveEmitter(dtkComposerTransmitter *emitter);
+
+public:
     void setRequired(bool required);
 
     bool required(void);
@@ -85,6 +88,10 @@ public:
 public:
     virtual bool    connect(dtkComposerTransmitter *transmitter);
     virtual bool disconnect(dtkComposerTransmitter *transmitter);
+
+public:
+    void appendReceiver(dtkComposerTransmitter *receiver);
+    void removeReceiver(dtkComposerTransmitter *receiver);
 
 #pragma mark -
 #pragma mark Link management

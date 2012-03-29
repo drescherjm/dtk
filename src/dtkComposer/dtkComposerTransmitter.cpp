@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 10:00:29 2012 (+0100)
+ * Last-Updated: Thu Mar 29 10:55:51 2012 (+0200)
  *           By: tkloczko
- *     Update #: 179
+ *     Update #: 185
  */
 
 /* Commentary: 
@@ -21,6 +21,8 @@
 #include "dtkComposerTransmitter_p.h"
 #include "dtkComposerTransmitterVariant.h"
 #include "dtkComposerNode.h"
+
+#include <dtkCore/dtkGlobal>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitter implementation
@@ -81,6 +83,9 @@ dtkComposerNode *dtkComposerTransmitter::parentNode(void) const
 void dtkComposerTransmitter::setActive(bool active)
 {
     d->active = active;
+
+    foreach(dtkComposerTransmitter *receiver, d->receivers)
+        receiver->setActiveEmitter(this);
 }
 
 //! Returns true if transmitter is active.
@@ -91,6 +96,16 @@ void dtkComposerTransmitter::setActive(bool active)
 bool dtkComposerTransmitter::active(void)
 {
     return d->active;
+}
+
+//! Returns true if transmitter is active.
+/*! 
+ *  Active flags is typically used to select an emitter among a list
+ *  owned by a control node.
+ */
+void dtkComposerTransmitter::setActiveEmitter(dtkComposerTransmitter *emitter)
+{
+    DTK_UNUSED(emitter);
 }
 
 //! Sets required flag to \a required.
@@ -190,6 +205,24 @@ void dtkComposerTransmitter::removePrevious(dtkComposerTransmitter *transmitter)
 bool dtkComposerTransmitter::connect(dtkComposerTransmitter *transmitter)
 {
     return false;
+}
+
+//! 
+/*! 
+ *  
+ */
+void dtkComposerTransmitter::appendReceiver(dtkComposerTransmitter *receiver)
+{
+    d->receivers << receiver;
+}
+
+//! 
+/*! 
+ *  
+ */
+void dtkComposerTransmitter::removeReceiver(dtkComposerTransmitter *receiver)
+{
+    d->receivers.removeAll(receiver);
 }
 
 //! Returns true when current transmitter and \a transmitter share

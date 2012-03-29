@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 29 11:20:56 2012 (+0200)
+ * Last-Updated: Thu Mar 29 12:20:37 2012 (+0200)
  *           By: tkloczko
- *     Update #: 350
+ *     Update #: 351
  */
 
 /* Commentary: 
@@ -76,20 +76,6 @@ QVariant dtkComposerTransmitterVariant::data(void)
     if (e->active_emitter)
         return e->active_emitter->variant();
 
-    // int count = e->emitters.count();
-
-    // for(int i = 0; i < count; i++)
-    //     if (e->emitters.at(i)->active()) {
-    //         return e->emitters.at(i)->variant();
-    //     }
-
-    // count = e->variants.count();
-
-    // for(int i = 0; i < count; i++)
-    //     if (e->variants.at(i)->active()) {
-    //          return e->variants.at(i)->data();
-    //     }
-
     return d->variant;
 }
 
@@ -156,23 +142,8 @@ QVariant::Type dtkComposerTransmitterVariant::type(void) const
     if (e->twinned)
         return d->variant.type();
 
-
     if (e->active_emitter)
         return e->active_emitter->variant().type();
-
-    // int count = e->emitters.count();
-
-    // for(int i = 0; i < count; i++)
-    //     if (e->emitters.at(i)->active()) {
-    //         return e->emitters.at(i)->variant().type();
-    //     }
-
-    // count = e->variants.count();
-
-    // for(int i = 0; i < count; i++)
-    //     if (e->variants.at(i)->active()) {
-    //         return e->variants.at(i)->data().type();
-    //     }
 
     return d->variant.type();
 }

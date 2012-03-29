@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: mer. mars 28 09:45:49 2012 (+0200)
+ * Last-Updated: jeu. mars 29 13:35:22 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 465
+ *     Update #: 468
  */
 
 /* Commentary:
@@ -34,6 +34,7 @@
 #include "dtkComposerNodeLogger.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeNumberOperator.h"
+#include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
 #include "dtkComposerNodeVector.h"
@@ -380,6 +381,12 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Logger"] = QStringList() << "logger" << "debug";
     d->types["Logger"] = "logger";
 
+    // process nodes
+    d->nodes << "Process";
+    d->descriptions["Process"] = "<p>Description not yet filled!</p>";
+    d->tags["Process"] = QStringList() << "process" ;
+    d->types["Process"] = "process";
+
     // dtkDistributed nodes
     d->nodes << "CommunicatorRank";
     d->tags["CommunicatorRank"] = QStringList() <<  "rank" << "distributed" << "mpi" << "communicator";
@@ -628,6 +635,11 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "logger")
         return new dtkComposerNodeLogger;
+
+    // process nodes
+
+    if(type == "process")
+        return new dtkComposerNodeProcess;
 
     // communicator nodes
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: ven. déc.  9 15:39:55 2011 (+0100)
+ * Last-Updated: jeu. mars 29 17:48:32 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 185
+ *     Update #: 186
  */
 
 /* Commentary: 
@@ -135,7 +135,7 @@ void dtkDistributedCommunicatorTcp::send(dtkAbstractData *data, qint16 target, i
     }
 }
 
-void dtkDistributedCommunicatorTcp::receive(dtkAbstractData *data, qint16 source, int tag)
+void dtkDistributedCommunicatorTcp::receive(dtkAbstractData *&data, qint16 source, int tag)
 {
 
     d->socket->blockSignals(true);

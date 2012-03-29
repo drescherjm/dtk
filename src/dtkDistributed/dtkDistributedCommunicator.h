@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 09:18:40 2010 (+0100)
  * Version: $Id$
- * Last-Updated: lun. déc.  5 14:33:11 2011 (+0100)
+ * Last-Updated: jeu. mars 29 17:47:58 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 104
+ *     Update #: 105
  */
 
 /* Commentary: 
@@ -92,7 +92,7 @@ public:
     virtual void   receive(qint64 *data, qint64 size, qint16 source, int tag);
     virtual void   receive(float  *data, qint64 size, qint16 source, int tag);
     virtual void   receive(double *data, qint64 size, qint16 source, int tag);
-    virtual void   receive(dtkAbstractData *data, qint16 source, int tag) = 0;
+    virtual void   receive(dtkAbstractData *&data, qint16 source, int tag) = 0;
 
     virtual void   barrier(void) = 0;
 

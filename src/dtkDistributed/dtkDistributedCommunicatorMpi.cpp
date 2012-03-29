@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mars 26 14:51:45 2012 (+0200)
+ * Last-Updated: jeu. mars 29 17:57:22 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 337
+ *     Update #: 381
  */
 
 /* Commentary: 
@@ -242,6 +242,7 @@ void dtkDistributedCommunicatorMpi::receive(void *data, qint64 size, DataType da
 
 void dtkDistributedCommunicatorMpi::send(dtkAbstractData *data, qint16 target, int tag)
 {
+
     QString type = data->identifier();
     qint64  typeLength = type.length();
     qint64  s=1;
@@ -252,7 +253,7 @@ void dtkDistributedCommunicatorMpi::send(dtkAbstractData *data, qint16 target, i
 
     QByteArray *array = data->serialize();
     if (!array) {
-        qDebug() << DTK_PRETTY_FUNCTION <<"serialization failed";
+        qDebug() <<"serialization failed";
     } else {
         qint64   arrayLength = array->length();
         dtkDistributedCommunicator::send(&arrayLength,1,target,tag);
@@ -260,7 +261,7 @@ void dtkDistributedCommunicatorMpi::send(dtkAbstractData *data, qint16 target, i
     }
 }
 
-void dtkDistributedCommunicatorMpi::receive(dtkAbstractData *data, qint16 source, int tag)
+void dtkDistributedCommunicatorMpi::receive(dtkAbstractData *&data, qint16 source, int tag)
 {
     qint64   typeLength;
     qint64   arrayLength;
@@ -273,6 +274,7 @@ void dtkDistributedCommunicatorMpi::receive(dtkAbstractData *data, qint16 source
 
     char     rawArray[arrayLength];
     dtkDistributedCommunicator::receive(rawArray, arrayLength, source,tag);
+
 
     if(!data)
         data = dtkAbstractDataFactory::instance()->create(QString(type));

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Dec  9 17:24:23 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 59
+ * Last-Updated: jeu. mars 29 17:48:22 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 60
  */
 
 /* Commentary: 
@@ -57,7 +57,7 @@ public:
     dtkDistributedSocket *socket();
 
     void    send(dtkAbstractData *data, qint16 target, int tag);
-    void receive(dtkAbstractData *data, qint16 source, int tag);
+    void receive(dtkAbstractData *&data, qint16 source, int tag);
 
     void flush();
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mars 26 14:50:54 2012 (+0200)
+ * Last-Updated: jeu. mars 29 17:46:17 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 79
+ *     Update #: 81
  */
 
 /* Commentary: 
@@ -57,7 +57,7 @@ public:
     void    reduce(void *send, void *recv, qint64 size, DataType dataType, OperationType operationType, qint16 target, bool all = false);
 
     void    send(dtkAbstractData *data, qint16 target, int tag);
-    void receive(dtkAbstractData *data, qint16 source, int tag);
+    void receive(dtkAbstractData *&data, qint16 source, int tag);
 
 
 private:

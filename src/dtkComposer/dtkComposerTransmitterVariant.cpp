@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 29 12:20:37 2012 (+0200)
+ * Last-Updated: Fri Mar 30 14:31:57 2012 (+0200)
  *           By: tkloczko
- *     Update #: 351
+ *     Update #: 376
  */
 
 /* Commentary: 
@@ -33,7 +33,8 @@ public:
     QList<dtkComposerTransmitterVariant *> variants;
 
 public:
-    dtkComposerTransmitter *active_emitter;
+    dtkComposerTransmitter        *active_emitter;
+    dtkComposerTransmitterVariant *active_variant;
 
 public:
     QList<QVariant::Type> types;
@@ -51,6 +52,7 @@ public:
 dtkComposerTransmitterVariant::dtkComposerTransmitterVariant(dtkComposerNode *parent) : dtkComposerTransmitter(parent), e(new dtkComposerTransmitterVariantPrivate)
 {
     e->active_emitter = NULL;
+    e->active_variant = NULL;
 
     e->twin = NULL;
     e->twinned = false;
@@ -72,6 +74,9 @@ QVariant dtkComposerTransmitterVariant::data(void)
 {
     if (e->twinned)
         return d->variant;
+
+    if (e->active_variant)
+        return e->active_variant->data();
 
     if (e->active_emitter)
         return e->active_emitter->variant();
@@ -108,6 +113,18 @@ QVariantList dtkComposerTransmitterVariant::allData(void)
     return list;
 }
 
+//! 
+/*! 
+ *  
+ */
+bool dtkComposerTransmitterVariant::isEmpty(void) const
+{
+    if (e->emitters.isEmpty() && e->variants.isEmpty())
+        return true;
+
+    return false;
+};
+
 void dtkComposerTransmitterVariant::setTwin(dtkComposerTransmitterVariant *twin)
 {
     e->twin = twin;
@@ -142,6 +159,9 @@ QVariant::Type dtkComposerTransmitterVariant::type(void) const
     if (e->twinned)
         return d->variant.type();
 
+    if (e->active_variant)
+        return e->active_variant->data().type();
+
     if (e->active_emitter)
         return e->active_emitter->variant().type();
 
@@ -170,7 +190,8 @@ bool dtkComposerTransmitterVariant::connect(dtkComposerTransmitter *transmitter)
         if (e->types.isEmpty() || v->types().isEmpty()) {
             if (!e->variants.contains(v)) {
                 e->variants << v;
-                e->active_emitter = v;
+                e->active_variant = v;
+                e->active_emitter = NULL;
                 v->appendReceiver(this);
                 return true;
             }
@@ -178,7 +199,8 @@ bool dtkComposerTransmitterVariant::connect(dtkComposerTransmitter *transmitter)
             foreach(QVariant::Type t, v->types()) {
                 if (!e->variants.contains(v) && e->types.contains(t)) {
                     e->variants << v;
-                    e->active_emitter = v;
+                    e->active_variant = v;
+                    e->active_emitter = NULL;
                     v->appendReceiver(this);
                     return true;
                 }
@@ -190,6 +212,7 @@ bool dtkComposerTransmitterVariant::connect(dtkComposerTransmitter *transmitter)
         if (!e->emitters.contains(transmitter)) {
             e->emitters << transmitter;
             e->active_emitter = transmitter;
+            e->active_variant = NULL;
             transmitter->appendReceiver(this);
             return true;
         }
@@ -205,8 +228,56 @@ bool dtkComposerTransmitterVariant::connect(dtkComposerTransmitter *transmitter)
 bool dtkComposerTransmitterVariant::disconnect(dtkComposerTransmitter *transmitter)
 {
     transmitter->removeReceiver(this);
+
+    bool ok = false;
+
+    if (transmitter->kind() == Variant) {
+        
+        dtkComposerTransmitterVariant *v = static_cast<dtkComposerTransmitterVariant *>(transmitter);
+        
+        ok = e->variants.removeOne(v);
+
+        if (v == e->active_variant) {
+
+            e->active_variant = NULL;
+
+            foreach(dtkComposerTransmitterVariant *var, e->variants) {
+                if (var->active())
+                    e->active_variant = var;
+            }
+
+            if (!e->active_variant) {
+                foreach(dtkComposerTransmitter *em, e->emitters) {
+                    if (em->active())
+                        e->active_emitter = em;
+                }
+            }
+        }
+
+    } else {
+
+        ok = e->emitters.removeOne(transmitter);
+
+        if (transmitter == e->active_emitter) {
+
+            e->active_emitter = NULL;
+
+            foreach(dtkComposerTransmitter *em, e->emitters) {
+                if (em->active())
+                    e->active_emitter = em;
+            }
+
+            if (!e->active_emitter) {
+                foreach(dtkComposerTransmitterVariant *var, e->variants) {
+                    if (var->active())
+                        e->active_variant = var;
+                }
+            }            
+
+        }
+    }    
     
-    return e->emitters.removeOne(transmitter);
+    return ok ;
 }
 
 //! 
@@ -226,7 +297,7 @@ void dtkComposerTransmitterVariant::setActiveEmitter(dtkComposerTransmitter *emi
     
     foreach(dtkComposerTransmitterVariant *v, e->variants) {
         if (emitter == static_cast<dtkComposerTransmitter *>(v)) {
-            e->active_emitter = emitter;
+            e->active_variant = v;
             return;
         }
     }

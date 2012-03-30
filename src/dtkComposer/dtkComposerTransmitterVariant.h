@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 29 11:09:09 2012 (+0200)
+ * Last-Updated: Fri Mar 30 14:31:04 2012 (+0200)
  *           By: tkloczko
- *     Update #: 67
+ *     Update #: 68
  */
 
 /* Commentary: 
@@ -41,6 +41,9 @@ public:
     QVariant data(void);
 
     QVariantList allData(void);
+
+public:
+    bool isEmpty(void) const;
 
 public:
     void setTwin(dtkComposerTransmitterVariant *twin);

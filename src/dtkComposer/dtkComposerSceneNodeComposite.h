@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:32:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 30 16:02:32 2012 (+0200)
+ * Last-Updated: Fri Mar 30 17:24:17 2012 (+0200)
  *           By: tkloczko
- *     Update #: 53
+ *     Update #: 54
  */
 
 /* Commentary: 
@@ -84,7 +84,7 @@ public:
     void resize(qreal width, qreal height);
 
 public:
-    void obfuscate(bool value = false);
+    void obfuscate(void);
 
 public:
     void boundingBox(qreal& x_min, qreal& x_max, qreal& y_min, qreal& y_max);

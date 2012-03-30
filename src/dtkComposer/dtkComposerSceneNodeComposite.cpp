@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 28 17:06:44 2012 (+0200)
+ * Last-Updated: Fri Mar 30 16:03:00 2012 (+0200)
  *           By: tkloczko
- *     Update #: 669
+ *     Update #: 676
  */
 
 /* Commentary: 
@@ -396,11 +396,11 @@ void dtkComposerSceneNodeComposite::resize(qreal width, qreal height)
     d->rect = QRectF(d->rect.topLeft(), QSizeF(width, height));
 }
 
-void dtkComposerSceneNodeComposite::obfuscate(void)
+void dtkComposerSceneNodeComposite::obfuscate(bool value)
 {
     QRectF rect = this->sceneBoundingRect();
 
-    d->obfuscated = false;
+    d->obfuscated = value;
 
     if (!d->entered) {
 
@@ -414,8 +414,21 @@ void dtkComposerSceneNodeComposite::obfuscate(void)
         
     }
 
-    foreach(dtkComposerSceneNode *node, d->nodes)
+    foreach(dtkComposerSceneNode *node, d->nodes) {
+
         node->setVisible(!d->obfuscated);
+
+        if (dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
+
+            if(composite->flattened())
+                composite->obfuscate(true);
+
+        } else if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
+
+            foreach(dtkComposerSceneNodeComposite *block, control->blocks())
+                block->obfuscate(true);
+        }
+    }
 
     foreach(dtkComposerSceneNote *note, d->notes)
         note->setVisible(!d->obfuscated);

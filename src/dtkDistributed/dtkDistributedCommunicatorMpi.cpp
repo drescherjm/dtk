@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. mars 29 17:57:22 2012 (+0200)
+ * Last-Updated: ven. mars 30 16:13:28 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 381
+ *     Update #: 414
  */
 
 /* Commentary: 
@@ -244,9 +244,10 @@ void dtkDistributedCommunicatorMpi::send(dtkAbstractData *data, qint16 target, i
 {
 
     QString type = data->identifier();
-    qint64  typeLength = type.length();
+    qint64  typeLength = type.length()+1;
     qint64  s=1;
     dtkDistributedCommunicator::send(&typeLength,s,target,tag);
+
     QByteArray typeArray = type.toAscii();
     char *typeChar = typeArray.data();
     dtkDistributedCommunicator::send(typeChar,typeLength,target,tag);
@@ -275,10 +276,13 @@ void dtkDistributedCommunicatorMpi::receive(dtkAbstractData *&data, qint16 sourc
     char     rawArray[arrayLength];
     dtkDistributedCommunicator::receive(rawArray, arrayLength, source,tag);
 
-
-    if(!data)
+    if(!data) {
         data = dtkAbstractDataFactory::instance()->create(QString(type));
-    else
+        if (!data) {
+            qDebug() << "Can't instantiate object of type" << QString(type);
+            return;
+        }
+    } else
         if(data->identifier() != QString(type))
             qDebug() << DTK_PRETTY_FUNCTION << "Warning, type mismatch";
 

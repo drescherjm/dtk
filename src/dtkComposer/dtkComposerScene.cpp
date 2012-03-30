@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Wed Mar 28 17:07:07 2012 (+0200)
+ * Last-Updated: Fri Mar 30 16:53:06 2012 (+0200)
  *           By: tkloczko
- *     Update #: 2170
+ *     Update #: 2184
  */
 
 /* Commentary:
@@ -108,11 +108,20 @@ void dtkComposerScene::setRoot(dtkComposerSceneNodeComposite *root)
     foreach(dtkComposerSceneNote *note, root->notes())
         this->addItem(note);
 
-    foreach(dtkComposerSceneNode *node, root->nodes())
+    dtkComposerSceneNode *first = NULL;
+    dtkComposerSceneNode *node;
+    for(int i = 0; i < root->nodes().count(); ++i) {
+        node = root->nodes()[i];
+        if (i == 0) 
+            first = node;
         this->addItem(node);
+    }
 
-    foreach(dtkComposerSceneEdge *edge, root->edges())
+    foreach(dtkComposerSceneEdge *edge, root->edges()) {
         this->addItem(edge);
+        if (first)
+            edge->stackBefore(first);
+    }
 
     emit modified(true);
 }
@@ -151,26 +160,21 @@ void dtkComposerScene::addItem(QGraphicsItem *item)
                 this->addItem(note);
                 control->stackBefore(note);
             }
-            
-            foreach(dtkComposerSceneNode *node, block->nodes()) {
+
+            dtkComposerSceneNode *first = NULL;
+            dtkComposerSceneNode *node;
+            for(int i = 0; i < block->nodes().count(); ++i) {
+                node = block->nodes()[i];
+                if (i == 0) 
+                    first = node;
                 this->addItem(node);
                 control->stackBefore(node);
             }
             
             foreach(dtkComposerSceneEdge *edge, block->edges()) {
                 this->addItem(edge);
-                if (edge->source()->node() != block) {
-                    if (edge->source()->owner()->parent() == block)
-                        edge->stackBefore(edge->source()->owner());
-                    else
-                        edge->stackBefore(edge->source()->node());
-                }
-                if (edge->destination()->node() != block) {
-                    if (edge->destination()->owner()->parent() == block)
-                        edge->stackBefore(edge->destination()->owner());
-                    else
-                        edge->stackBefore(edge->destination()->node());
-                }
+                if (first)
+                    edge->stackBefore(first);
             }
         }
 
@@ -194,23 +198,19 @@ void dtkComposerScene::addItem(QGraphicsItem *item)
         foreach(dtkComposerSceneNote *note, composite->notes())
             this->addItem(note);
 
-        foreach(dtkComposerSceneNode *node, composite->nodes())
+        dtkComposerSceneNode *first = NULL;
+        dtkComposerSceneNode *node;
+        for(int i = 0; i < composite->nodes().count(); ++i) {
+            node = composite->nodes()[i];
+            if (i == 0) 
+                first = node;
             this->addItem(node);
+        }
 
         foreach(dtkComposerSceneEdge *edge, composite->edges()) {
             this->addItem(edge);
-            if (edge->source()->node() != composite) {
-                if (edge->source()->owner()->parent() == composite)
-                    edge->stackBefore(edge->source()->owner());
-                else
-                    edge->stackBefore(edge->source()->node());
-            }
-            if (edge->destination()->node() != composite) {
-                if (edge->destination()->owner()->parent() == composite)
-                    edge->stackBefore(edge->destination()->owner());
-                else
-                    edge->stackBefore(edge->destination()->node());
-            }
+            if (first)
+                edge->stackBefore(first);
         }
 
         composite->layout();

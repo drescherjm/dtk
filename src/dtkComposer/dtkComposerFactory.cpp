@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: jeu. mars 29 13:35:22 2012 (+0200)
+ * Last-Updated: jeu. mars 29 23:06:48 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 468
+ *     Update #: 470
  */
 
 /* Commentary:
@@ -400,6 +400,10 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["CommunicatorInit"] = QStringList() <<  "initialization" << "distributed" << "mpi" << "communicator";
     d->types["CommunicatorInit"] = "communicatorInit";
 
+    d->nodes << "CommunicatorUninitialize";
+    d->tags["CommunicatorUninitialize"] = QStringList() <<  "finalize" << "distributed" << "mpi" << "communicator";
+    d->types["CommunicatorUninitialize"] = "communicatorUninitialize";
+
     d->nodes << "CommunicatorSendInteger";
     d->tags["CommunicatorSendInteger"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator" << "integer";
     d->types["CommunicatorSendInteger"] = "communicatorSendInteger";
@@ -648,6 +652,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "communicatorRank")
         return new dtkComposerNodeCommunicatorRank;
+
+    if(type == "communicatorUninitialize")
+        return new dtkComposerNodeCommunicatorUninitialize;
 
     if(type == "communicatorInit")
         return new dtkComposerNodeCommunicatorInit;

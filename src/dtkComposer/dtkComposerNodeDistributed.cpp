@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/26 09:03:42
  * Version: $Id$
- * Last-Updated: mer. mars 28 09:11:25 2012 (+0200)
+ * Last-Updated: jeu. mars 29 23:18:58 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 177
+ *     Update #: 203
  */
 
 /* Commentary:
@@ -21,6 +21,7 @@
 
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
+#include "dtkComposerTransmitterVariant.h"
 
 #include <dtkDistributed/dtkDistributedCommunicator>
 #include <dtkDistributed/dtkDistributedCommunicatorMpi>
@@ -61,6 +62,46 @@ void dtkComposerNodeCommunicatorInit::run(void)
     //   if (!d->data())
     d->emitter->setData(new dtkDistributedCommunicatorMpi);
     d->emitter->data()->initialize();
+}
+
+
+// /////////////////////////////////////////////////////////////////
+// Communicator Uninitialize
+// /////////////////////////////////////////////////////////////////
+
+
+class dtkComposerNodeCommunicatorUninitializePrivate
+{
+public:
+    dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi *> *receiver;
+    dtkComposerTransmitterVariant *receiver_fake;
+
+};
+
+dtkComposerNodeCommunicatorUninitialize::dtkComposerNodeCommunicatorUninitialize(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorUninitializePrivate)
+{
+    d->receiver = new dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi*>(this);
+    d->receiver_fake = new dtkComposerTransmitterVariant(this);
+
+    this->appendReceiver(d->receiver);
+    this->appendReceiver(d->receiver_fake);
+}
+
+dtkComposerNodeCommunicatorUninitialize::~dtkComposerNodeCommunicatorUninitialize(void)
+{
+    delete d->receiver;
+    delete d->receiver_fake;
+    delete d;
+
+    d = NULL;
+}
+
+void dtkComposerNodeCommunicatorUninitialize::run(void)
+{
+    if (!d->receiver->data())
+        return;
+
+    d->receiver->data()->uninitialize();
 }
 
 
@@ -391,7 +432,7 @@ dtkComposerNodeCommunicatorReceive::~dtkComposerNodeCommunicatorReceive(void)
 
 void dtkComposerNodeCommunicatorReceive::run(void)
 {
-    dtkAbstractData *data;
+    dtkAbstractData *data = NULL;
     d->receiver_comm->data()->receive(data, d->receiver_source->data(), 0);
     d->emitter->setData(data);
 }

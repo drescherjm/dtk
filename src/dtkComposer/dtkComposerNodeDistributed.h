@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/26 08:51:28
  * Version: $Id$
- * Last-Updated: mer. mars 28 09:09:46 2012 (+0200)
+ * Last-Updated: jeu. mars 29 23:02:08 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 49
+ *     Update #: 50
  */
 
 /* Commentary:
@@ -56,6 +56,40 @@ public:
 protected:
     dtkComposerNodeCommunicatorInitPrivate *d;
 };
+
+// /////////////////////////////////////////////////////////////////
+// Distributed communicator uninitialize
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeCommunicatorUninitializePrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeCommunicatorUninitialize : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeCommunicatorUninitialize(void);
+    ~dtkComposerNodeCommunicatorUninitialize(void);
+
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "communicatorUninitialize";
+    }
+
+    inline QString titleHint(void) {
+        return "Communicator Uninitialize";
+    }
+
+public:
+    inline QString outputLabelHint(int) {
+        return "value";
+    }
+
+protected:
+    dtkComposerNodeCommunicatorUninitializePrivate *d;
+};
+
 
 
 // /////////////////////////////////////////////////////////////////

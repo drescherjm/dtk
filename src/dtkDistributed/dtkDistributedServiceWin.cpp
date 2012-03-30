@@ -813,7 +813,9 @@ bool dtkDistributedServiceBasePrivate::install(const QString &account, const QSt
     }
     return result;
 }
+#define	MAX_PATH	(260)
 
+#define	_MAX_PATH	MAX_PATH
 QString dtkDistributedServiceBasePrivate::filePath(void) const
 {
     wchar_t path[_MAX_PATH];

@@ -24,7 +24,7 @@
     #ifdef dtkCrypto_EXPORTS
         #define DTKCRYPTO_EXPORT __declspec(dllexport) 
     #else
-        #define DTKCRYPTO_EXPORT __declspec(dllimport) 
+        #define DTKCRYPTO_EXPORT __declspec(dllimport)
     #endif
 #else
     #define DTKCRYPTO_EXPORT	

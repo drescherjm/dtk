@@ -24,7 +24,7 @@
     #ifdef dtkDistributed_EXPORTS
         #define DTKDISTRIBUTED_EXPORT __declspec(dllexport) 
     #else
-        #define DTKDISTRIBUTED_EXPORT __declspec(dllimport) 
+        #define DTKDISTRIBUTED_EXPORT __declspec(dllimport)
     #endif
 #else
     #define DTKDISTRIBUTED_EXPORT	

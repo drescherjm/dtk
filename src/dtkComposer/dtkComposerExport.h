@@ -24,7 +24,7 @@
     #ifdef dtkComposer_EXPORTS
         #define DTKCOMPOSER_EXPORT __declspec(dllexport) 
     #else
-        #define DTKCOMPOSER_EXPORT __declspec(dllimport) 
+        #define DTKCOMPOSER_EXPORT __declspec(dllimport)
     #endif
 #else
     #define DTKCOMPOSER_EXPORT	

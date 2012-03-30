@@ -24,7 +24,7 @@
     #ifdef dtkScript_EXPORTS
         #define DTKSCRIPT_EXPORT __declspec(dllexport) 
     #else
-        #define DTKSCRIPT_EXPORT __declspec(dllimport) 
+        #define DTKSCRIPT_EXPORT
     #endif
 #else
     #define DTKSCRIPT_EXPORT	

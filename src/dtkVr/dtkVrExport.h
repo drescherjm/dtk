@@ -24,7 +24,7 @@
     #ifdef dtkVr_EXPORTS
         #define DTKVR_EXPORT __declspec(dllexport) 
     #else
-        #define DTKVR_EXPORT __declspec(dllimport) 
+        #define DTKVR_EXPORT __declspec(dllimport)
     #endif
 #else
     #define DTKVR_EXPORT	

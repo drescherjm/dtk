@@ -34,7 +34,7 @@ mark_as_advanced(${PROJECT_NAME}_VERSION_BUILD)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-option(BUILD_SHARED_LIBS   "Build shared libraries" false)
+option(BUILD_SHARED_LIBS   "Build shared libraries" true)
 option(BUILD_TOOLS         "Build tools"            true)
 option(BUILD_EXAMPLES      "Build examples"         true)
 option(BUILD_TESTING       "Build testing"          true)
@@ -45,10 +45,16 @@ option(BUILD_TUTORIALS     "Build tutorials"        true)
 option(DTK_CPACK                "include packaging for dtk"        false)
 
 message("== Configuring dtk " ${${PKG_NAME}_STATIC})
-if (STATIC AND NOT DEFINED ${PKG_NAME}_STATIC)
-   set (${PKG_NAME}_STATIC ${STATIC})
-   set (BUILD_SHARED_LIBS FALSE)
-endif (STATIC AND NOT DEFINED ${PKG_NAME}_STATIC)
+if(UNIX)
+    if (STATIC AND NOT DEFINED ${PKG_NAME}_STATIC)
+        set (${PKG_NAME}_STATIC ${STATIC})
+        set (BUILD_SHARED_LIBS FALSE)
+    endif (STATIC AND NOT DEFINED ${PKG_NAME}_STATIC)
+endif(UNIX)
+
+if(WIN32)
+set (BUILD_SHARED_LIBS TRUE)
+endif(WIN32)
 
 
 

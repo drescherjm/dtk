@@ -24,7 +24,7 @@
     #ifdef dtkCore_EXPORTS
         #define DTKCORE_EXPORT __declspec(dllexport) 
     #else
-        #define DTKCORE_EXPORT __declspec(dllimport) 
+        #define DTKCORE_EXPORT __declspec(dllimport)
     #endif
 #else
     #define DTKCORE_EXPORT	

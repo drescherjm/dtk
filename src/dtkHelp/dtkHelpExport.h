@@ -21,7 +21,7 @@
     #ifdef dtkHelp_EXPORTS
         #define DTKHELP_EXPORT __declspec(dllexport) 
     #else
-        #define DTKHELP_EXPORT __declspec(dllimport) 
+        #define DTKHELP_EXPORT __declspec(dllimport)
     #endif
 #else
     #define DTKHELP_EXPORT	

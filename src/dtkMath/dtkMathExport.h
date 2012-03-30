@@ -24,7 +24,7 @@
     #ifdef dtkMath_EXPORTS
         #define DTKMATH_EXPORT __declspec(dllexport) 
     #else
-        #define DTKMATH_EXPORT __declspec(dllimport) 
+        #define DTKMATH_EXPORT __declspec(dllimport)
     #endif
 #else
     #define DTKMATH_EXPORT	

@@ -24,7 +24,7 @@
     #ifdef dtkGui_EXPORTS
         #define DTKGUI_EXPORT __declspec(dllexport) 
     #else
-        #define DTKGUI_EXPORT __declspec(dllimport) 
+        #define DTKGUI_EXPORT __declspec(dllimport)
     #endif
 #else
     #define DTKGUI_EXPORT	

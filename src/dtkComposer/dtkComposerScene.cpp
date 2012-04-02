@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Fri Mar 30 16:53:06 2012 (+0200)
+ * Last-Updated: Mon Apr  2 10:00:02 2012 (+0200)
  *           By: tkloczko
- *     Update #: 2184
+ *     Update #: 2186
  */
 
 /* Commentary:
@@ -610,7 +610,7 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
     // Managing of reparenting
 
-    if (d->reparent_target) {
+    if (d->reparent_target && d->reparent_target != d->reparent_origin) {
 
         d->reparent_target_pos = event->scenePos() - event->pos();
 
@@ -628,6 +628,9 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
         this->views().at(0)->setCursor(Qt::ArrowCursor);
     }
+
+    if (d->reparent_target == d->reparent_origin)
+        this->views().at(0)->setCursor(Qt::ArrowCursor);
 
     d->reparent_origin_pos = QPointF();
     d->reparent_target_pos = QPointF();

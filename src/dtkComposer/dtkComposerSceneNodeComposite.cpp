@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr  2 10:43:24 2012 (+0200)
+ * Last-Updated: Mon Apr  2 13:55:01 2012 (+0200)
  *           By: tkloczko
- *     Update #: 710
+ *     Update #: 723
  */
 
 /* Commentary: 
@@ -213,20 +213,7 @@ void dtkComposerSceneNodeComposite::reveal(void)
 
     } else {
 
-        QPointF center(0,0);
-        QRectF box(0,0,0,0); 
-
-        if (!d->unreveal_pos.isNull()) {
-            center = d->unreveal_pos + QPointF(0.5 * d->unreveal_rect.width(), 0.5 * d->unreveal_rect.height());
-            foreach(dtkComposerSceneNode *node, d->nodes)
-                box |= node->sceneBoundingRect();
-        }
-     
-        foreach(dtkComposerSceneNode *node, d->nodes)
-            node->setPos(node->scenePos() + (center - box.center()));
-        
-        foreach(dtkComposerSceneNote *note, d->notes)
-            note->setPos(note->scenePos() + (center - box.center()));        
+        this->resetPos(d->unreveal_pos, d->unreveal_rect);        
    
     }
 
@@ -262,6 +249,29 @@ void dtkComposerSceneNodeComposite::unreveal(void)
         this->setFlag(QGraphicsItem::ItemIsMovable, false);
         this->setFlag(QGraphicsItem::ItemIsSelectable, false);
     }
+}
+
+void dtkComposerSceneNodeComposite::resetPos(const QPointF& pos, const QRectF& rect)
+{
+    QPointF center(0,0);
+    QRectF box(0,0,0,0);
+
+    if (!pos.isNull()) {
+        center = pos + QPointF(0.5 * rect.width(), 0.5 * rect.height());
+        foreach(dtkComposerSceneNode *node, d->nodes)
+            box |= node->sceneBoundingRect();
+    }
+     
+    foreach(dtkComposerSceneNode *node, d->nodes) {
+        node->setPos(node->scenePos() + (center - box.center()));
+        if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node))
+            foreach(dtkComposerSceneNodeComposite *block, control->blocks()) {
+                block->resetPos(block->scenePos(), block->sceneBoundingRect());
+            }        
+    }
+        
+    foreach(dtkComposerSceneNote *note, d->notes)
+        note->setPos(note->scenePos() + (center - box.center())); 
 }
 
 void dtkComposerSceneNodeComposite::setUnrevealPos(const QPointF& pos)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. avril  2 10:39:45 2012 (+0200)
+ * Last-Updated: lun. avril  2 12:51:29 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 1939
+ *     Update #: 1968
  */
 
 /* Commentary:
@@ -106,6 +106,9 @@ bool dtkComposerGraphPrivate::exists(dtkComposerGraphNode *s, dtkComposerGraphNo
 
 dtkComposerGraphNode *dtkComposerGraphPrivate::begin(dtkComposerSceneNode *node)
 {
+    if (!node)
+        return NULL;
+
     if (!dynamic_cast<dtkComposerSceneNodeLeaf *>(node)) {
         foreach(dtkComposerGraphNode *n, this->nodes.values(node)) {
             if (dynamic_cast<dtkComposerGraphNodeBegin *>(n) )
@@ -178,6 +181,7 @@ void dtkComposerGraphPrivate::remNode(dtkComposerSceneNode *node, dtkComposerGra
         parent_g->removeChild(node_g);
     q->removeItem(node_g);
     delete node_g;
+    this->nodes.remove(node,node_g);
 }
 
 

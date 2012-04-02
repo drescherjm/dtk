@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 30 17:28:43 2012 (+0200)
+ * Last-Updated: Mon Apr  2 10:43:24 2012 (+0200)
  *           By: tkloczko
- *     Update #: 698
+ *     Update #: 710
  */
 
 /* Commentary: 
@@ -230,7 +230,14 @@ void dtkComposerSceneNodeComposite::reveal(void)
    
     }
 
-    this->setFlag(QGraphicsItem::ItemIsMovable, false);
+    if (!this->embedded() && !d->entered && d->flattened) {
+        this->setFlag(QGraphicsItem::ItemIsMovable, true);
+        this->setFlag(QGraphicsItem::ItemIsSelectable, true);
+    } else {
+        this->setFlag(QGraphicsItem::ItemIsMovable, false);
+        this->setFlag(QGraphicsItem::ItemIsSelectable, false);
+    }
+
 }
 
 void dtkComposerSceneNodeComposite::unreveal(void)
@@ -248,10 +255,13 @@ void dtkComposerSceneNodeComposite::unreveal(void)
         this->obfuscate();
     }
 
-    if(!d->flattened)
+    if(!d->flattened && !this->embedded() && !d->entered) {
         this->setFlag(QGraphicsItem::ItemIsMovable, true);
-    else
+        this->setFlag(QGraphicsItem::ItemIsSelectable, true);
+    } else {
         this->setFlag(QGraphicsItem::ItemIsMovable, false);
+        this->setFlag(QGraphicsItem::ItemIsSelectable, false);
+    }
 }
 
 void dtkComposerSceneNodeComposite::setUnrevealPos(const QPointF& pos)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 28 17:09:52 2012 (+0200)
+ * Last-Updated: Mon Apr  2 11:27:31 2012 (+0200)
  *           By: tkloczko
- *     Update #: 3288
+ *     Update #: 3294
  */
 
 /* Commentary: 
@@ -259,6 +259,7 @@ void dtkComposerStackCommandDestroyNode::setNode(dtkComposerSceneNode *node)
     e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->node->parent());
 
     if (dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
+
         foreach(dtkComposerSceneNode *subnode, composite->nodes()) {
             dtkComposerStackCommandDestroyNode *cmd = new dtkComposerStackCommandDestroyNode();
             cmd->setScene(d->scene);
@@ -272,6 +273,25 @@ void dtkComposerStackCommandDestroyNode::setNode(dtkComposerSceneNode *node)
             cmd->setNote(subnote);
             e->destroy_nodes << cmd;
         }
+
+    } else if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
+
+        foreach(dtkComposerSceneNodeComposite *block, control->blocks()) {
+            foreach(dtkComposerSceneNode *subnode, block->nodes()) {
+                dtkComposerStackCommandDestroyNode *cmd = new dtkComposerStackCommandDestroyNode();
+                cmd->setScene(d->scene);
+                cmd->setGraph(d->graph);
+                cmd->setNode(subnode);
+                e->destroy_nodes << cmd;
+            }
+            foreach(dtkComposerSceneNote *subnote, block->notes()) {
+                dtkComposerStackCommandDestroyNote *cmd = new dtkComposerStackCommandDestroyNote();
+                cmd->setScene(d->scene);
+                cmd->setNote(subnote);
+                e->destroy_nodes << cmd;
+            }
+        }
+
     }
 
     this->setText(QString("Destroy node %1").arg(e->node->title()));
@@ -308,6 +328,8 @@ void dtkComposerStackCommandDestroyNode::redo(void)
         e->parent->removeEdge(edge);
         d->graph->removeEdge(edge);
     }
+
+    qDebug() << e->node->title();
 
     d->graph->removeNode(e->node);
     d->graph->layout();

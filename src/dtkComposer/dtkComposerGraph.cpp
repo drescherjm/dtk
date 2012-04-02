@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mars 28 13:59:50 2012 (+0200)
+ * Last-Updated: lun. avril  2 10:39:45 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 1898
+ *     Update #: 1939
  */
 
 /* Commentary:
@@ -458,13 +458,13 @@ void dtkComposerGraph::addEdge(dtkComposerSceneEdge *edge)
         scene_src = scene_src->parent();
 
     if (scene_src->parent() == scene_dest) {
-        dtkTrace() << " add edge output edge to end of composite";
-        src = d->end(scene_src);
-        dest = d->end(scene_dest);
+        // edge from parent composite: there is already, at least, a dummy edge: do nothing
+        delete e;
+        return;
     } else if (scene_dest->parent() == scene_src) {
-        dtkTrace() << " add input edge from composite";
-        src = d->begin(scene_src);
-        dest = d->begin(scene_dest);
+        // edge from parent composite: there is already, at least, a dummy edge: do nothing
+        delete e;
+        return;
     } else {
         dtkTrace() << " add regular edge" << scene_src->title() << scene_dest->title();
         src = d->end(scene_src);
@@ -474,7 +474,7 @@ void dtkComposerGraph::addEdge(dtkComposerSceneEdge *edge)
         foreach( dtkComposerGraphEdge *e, d->dummy_edges.values()) {
             if ((e->source() == src ) || (e->destination() == dest)) {
                 // FIXME: is the condition ok for dummy edges in control nodes ?
-                dtkTrace() << " remove dummy edge because of addEdge";
+                dtkTrace() << " remove dummy edge because of addEdge" << e->source()->title() << e->destination()->title() ;
                 d->remDummyEdge(e,d->dummy_edges.key(e));
             }
         }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr  2 11:27:31 2012 (+0200)
+ * Last-Updated: Mon Apr  2 13:56:38 2012 (+0200)
  *           By: tkloczko
- *     Update #: 3294
+ *     Update #: 3295
  */
 
 /* Commentary: 
@@ -328,8 +328,6 @@ void dtkComposerStackCommandDestroyNode::redo(void)
         e->parent->removeEdge(edge);
         d->graph->removeEdge(edge);
     }
-
-    qDebug() << e->node->title();
 
     d->graph->removeNode(e->node);
     d->graph->layout();

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:32:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 30 17:24:17 2012 (+0200)
+ * Last-Updated: Mon Apr  2 13:49:48 2012 (+0200)
  *           By: tkloczko
- *     Update #: 54
+ *     Update #: 56
  */
 
 /* Commentary: 
@@ -96,6 +96,9 @@ public:
 protected:
     void   reveal(void);
     void unreveal(void);
+
+public:
+    void resetPos(const QPointF& pos, const QRectF& rect);
 
 public:
     void  setUnrevealPos(const QPointF& pos);

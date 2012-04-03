@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  1 12:37:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 23 11:50:00 2012 (+0100)
+ * Last-Updated: Tue Apr  3 16:40:12 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 117
+ *     Update #: 130
  */
 
 /* Commentary: 
@@ -30,6 +30,8 @@ class dtkComposerSceneModel;
 class dtkComposerSceneNodeEditor;
 class dtkComposerSceneView;
 class dtkComposerStackView;
+
+class dtkDistributor;
 
 class dtkRecentFilesMenu;
 
@@ -85,6 +87,9 @@ public:
     dtkComposerSceneNodeEditor *editor;
     dtkComposerSceneView *scene;
     dtkComposerStackView *stack;
+
+public:
+    dtkDistributor *distributor;
 
 public:
     dtkLogView *log_view;

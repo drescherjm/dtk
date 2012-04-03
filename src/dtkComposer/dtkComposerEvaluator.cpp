@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mars 28 13:32:39 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 492
+ * Last-Updated: Tue Apr  3 16:07:00 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 493
  */
 
 /* Commentary:
@@ -97,7 +97,7 @@ void dtkComposerEvaluator::next(bool run_concurrent)
     dtkComposerGraphNode *first = d->stack.first();
     if (dynamic_cast<dtkComposerGraphNodeBegin *>(first)) {
         // Begin node, look for the corresponding End node
-        dtkComposerGraphNode *end;
+        dtkComposerGraphNode *end = NULL;
         foreach(dtkComposerGraphNode *n,  d->graph->nodes())
             if ((dynamic_cast<dtkComposerGraphNodeEnd *>(n)) && n->wrapee() == first->wrapee()) {
                 end = n;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 21:03:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 14 21:15:22 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 49
+ * Last-Updated: Tue Apr  3 16:07:26 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -104,6 +104,8 @@ dtkScriptManager::~dtkScriptManager(void)
 
 dtkScriptInterpreter *dtkScriptManager::loadScript(const QString& path)
 {
+    DTK_UNUSED(path);
+
 #if defined(HAVE_SWIG) && defined(HAVE_TCL) && defined(HAVE_PYTHON)
     dtkScriptInterpreter *interpreter;
 
@@ -125,6 +127,8 @@ dtkScriptInterpreter *dtkScriptManager::loadScript(const QString& path)
 
 dtkScriptInterpreter *dtkScriptManager::unloadScript(const QString& path)
 {
+    DTK_UNUSED(path);
+
 #if defined(HAVE_SWIG) && defined(HAVE_TCL) && defined(HAVE_PYTHON)
     dtkScriptInterpreter *interpreter = d->loaders.value(path);
 
@@ -138,6 +142,8 @@ dtkScriptInterpreter *dtkScriptManager::unloadScript(const QString& path)
 
 dtkScriptInterpreter *dtkScriptManager::reloadScript(const QString& path)
 {
+    DTK_UNUSED(path);
+
 #if defined(HAVE_SWIG) && defined(HAVE_TCL) && defined(HAVE_PYTHON)
     this->unloadScript(path);
 

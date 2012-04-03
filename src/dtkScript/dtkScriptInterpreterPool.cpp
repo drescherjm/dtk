@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Jan 26 09:48:03 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Oct 14 21:13:17 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 50
+ * Last-Updated: Tue Apr  3 16:02:23 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -42,6 +42,8 @@ dtkScriptInterpreterPool *dtkScriptInterpreterPool::instance(void)
 
 dtkScriptInterpreter *dtkScriptInterpreterPool::console(QString type)
 {
+    DTK_UNUSED(type);
+
 #if defined(HAVE_SWIG) && defined(HAVE_PYTHON) && defined(HAVE_TCL)
     if(!d->interpreters.contains("console") || !d->interpreters.value("console"))
         if(type == "tcl")

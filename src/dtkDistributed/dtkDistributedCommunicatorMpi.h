@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. mars 29 17:46:17 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 81
+ * Last-Updated: Tue Apr  3 15:50:43 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 88
  */
 
 /* Commentary: 
@@ -34,7 +34,7 @@ public:
     ~dtkDistributedCommunicatorMpi(void);
 
     dtkDistributedCommunicatorMpi(const dtkDistributedCommunicatorMpi & c);
-    dtkDistributedCommunicatorMpi & operator=(const dtkDistributedCommunicatorMpi & c) {;}
+    dtkDistributedCommunicatorMpi & operator=(const dtkDistributedCommunicatorMpi& c) {;}
 
     void   initialize(void);
     void uninitialize(void);

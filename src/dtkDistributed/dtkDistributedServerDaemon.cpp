@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. déc.  6 11:13:56 2011 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 678
+ * Last-Updated: Tue Apr  3 16:05:30 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 682
  */
 
 /* Commentary: 
@@ -27,6 +27,8 @@
 #include "dtkDistributedSocket.h"
 
 #include <dtkCore/dtkGlobal.h>
+
+#include <dtkLog/dtkLog.h>
 
 #define DTK_DEBUG_SERVER_DAEMON 0
 
@@ -114,7 +116,7 @@ QByteArray dtkDistributedServerDaemon::waitForData(int rank)
 
     socket->blockSignals(true);
 
-    dtkDistributedMessage *data;
+    dtkDistributedMessage *data = NULL;
 
     if (socket->waitForReadyRead(30000))
         data = socket->parseRequest();
@@ -123,7 +125,12 @@ QByteArray dtkDistributedServerDaemon::waitForData(int rank)
 
     socket->blockSignals(false);
 
-    return data->content() ;
+    if (data) {
+        return data->content();
+    } else {
+        dtkWarn() << "Message not allocated - return void QByteArray";
+        return QByteArray();
+    }
 }
 
 void dtkDistributedServerDaemon::read(void)

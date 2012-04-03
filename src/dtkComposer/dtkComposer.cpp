@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mars 28 13:43:22 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 209
+ * Last-Updated: Tue Apr  3 16:06:10 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 210
  */
 
 /* Commentary: 
@@ -80,6 +80,8 @@ void dtkComposerPrivate::download(const QUrl& url)
 
 void dtkComposerPrivate::onRequestFinished(int id, bool error)
 {
+    DTK_UNUSED(error);
+
     if(id == this->dwnl_id)
         this->dwnl_ok = 1;
 }

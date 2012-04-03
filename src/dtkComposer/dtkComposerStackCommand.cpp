@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. avril  3 15:52:32 2012 (+0200)
+ * Last-Updated: mar. avril  3 16:52:31 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 3361
+ *     Update #: 3362
  */
 
 /* Commentary: 
@@ -1076,11 +1076,9 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
 
     e->parent->removeNode(e->node);
 
-    if (e->parent->root() || e->parent->flattened() || e->parent->entered())
-        d->scene->removeItem(e->node);
-
-    d->scene->update();
+    d->scene->removeItem(e->node);
     d->scene->modify(true);
+    d->scene->update();
 }
 
 void dtkComposerStackCommandDestroyGroup::undo(void)

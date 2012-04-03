@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: lun. oct. 17 13:20:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: lun. nov. 28 15:09:03 2011 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 18
+ * Last-Updated: Tue Apr  3 15:56:03 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 19
  */
 
 /* Commentary:
@@ -71,6 +71,7 @@ QByteArray *dtkAbstractDataSerializer::serialize(void)
 
 QByteArray *dtkAbstractDataSerializer::serialize(dtkAbstractData *data)
 {
+    DTK_UNUSED(data);
     return NULL;
 }
 

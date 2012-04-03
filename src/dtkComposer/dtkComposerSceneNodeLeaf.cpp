@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 28 15:55:19 2012 (+0200)
+ * Last-Updated: Tue Apr  3 15:42:21 2012 (+0200)
  *           By: tkloczko
- *     Update #: 214
+ *     Update #: 216
  */
 
 /* Commentary: 
@@ -46,7 +46,9 @@ void dtkComposerSceneNodeLeaf::wrap(dtkComposerNode *node)
 {
     dtkComposerSceneNode::wrap(node);
 
-    foreach(dtkComposerTransmitter *receiver, node->receivers()) {
+    //foreach(dtkComposerTransmitter *receiver, node->receivers()) {
+
+    for(int i = 0; i < node->receivers().count(); ++i) {
         
         dtkComposerScenePort *port = new dtkComposerScenePort(dtkComposerScenePort::Input, this);
         this->addInputPort(port);
@@ -54,7 +56,8 @@ void dtkComposerSceneNodeLeaf::wrap(dtkComposerNode *node)
         
     }
 
-    foreach(dtkComposerTransmitter *emitter, node->emitters()) {
+    //foreach(dtkComposerTransmitter *emitter, node->emitters()) {
+    for(int i = 0; i < node->emitters().count(); ++i) {
 
         dtkComposerScenePort *port = new dtkComposerScenePort(dtkComposerScenePort::Output, this);
         this->addOutputPort(port);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Mon Jul 12 15:58:19 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul 12 16:05:19 2010 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 3
+ * Last-Updated: Tue Apr  3 15:33:15 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 12
  */
 
 /* Commentary: 
@@ -333,12 +333,12 @@ template <class T> T dtkDeterminant(const dtkMatrixSquared<T> &matSquared)
     return elemDet;
 }
 
-template <class T> T dtkTrace(const dtkMatrixSquared<T> &matSquared)
+template <class T> T dtkMatrixSquaredTrace(const dtkMatrixSquared<T>& matSquared)
 {
     T elemTmp = dtkZero<T>();
 
-    for (unsigned c = 0; c < matSquared.getCols(); c++)
-	elemTmp += matSquared[c][c];
+    for (uint i = 0; i < matSquared.getCols(); i++)
+	elemTmp += matSquared[i][i];
 
     return elemTmp;
 }

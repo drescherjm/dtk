@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mars 26 15:53:46 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 558
+ * Last-Updated: Tue Apr  3 16:36:47 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 560
  */
 
 /* Commentary: 
@@ -71,6 +71,8 @@ public:
 
 bool dtkComposerReaderPrivate::check(const QDomDocument& document)
 {
+    Q_UNUSED(document);
+
     return true;
 }
 
@@ -500,13 +502,14 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
 
     if(dtkComposerSceneNodeLeaf *leaf = dynamic_cast<dtkComposerSceneNodeLeaf *>(n)) {
 
-        for(int i = 0; i < ports.count(); i++)
-            if (ports.at(i).toElement().hasAttribute("label"))
+        for(int i = 0; i < ports.count(); i++) {
+            if (ports.at(i).toElement().hasAttribute("label")) {
                 if(ports.at(i).toElement().attribute("type") == "input")
                     leaf->inputPorts().at(ports.at(i).toElement().attribute("id").toUInt())->setLabel(ports.at(i).toElement().attribute("label"));
                 else
                     leaf->outputPorts().at(ports.at(i).toElement().attribute("id").toUInt())->setLabel(ports.at(i).toElement().attribute("label"));
-
+            }
+        }
 
         if(dtkComposerNodeInteger *integer = dynamic_cast<dtkComposerNodeInteger *>(leaf->wrapee())) {
 

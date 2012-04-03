@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Sep 26 09:28:44 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 27 10:21:50 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 150
+ * Last-Updated: Tue Apr  3 16:04:07 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 151
  */
 
 /* Commentary: 
@@ -39,7 +39,7 @@ public:
     ~xyzData(void) {;}
         
 public:
-    void setData(void *data) {;}
+    void setData(void *data) {DTK_UNUSED(data);}
 };
 
 // /////////////////////////////////////////////////////////////////

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:44 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 13:08:56 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 30
+ * Last-Updated: Tue Apr  3 16:33:30 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 32
  */
 
 /* Commentary: 
@@ -20,6 +20,8 @@
 #include "dtkComposerSceneNode.h"
 #include "dtkComposerSceneNodeComposite.h"
 #include "dtkComposerSceneNote.h"
+
+#include <dtkCore/dtkGlobal.h>
 
 class dtkComposerSceneNotePrivate
 {
@@ -83,6 +85,8 @@ QRectF dtkComposerSceneNote::boundingRect(void) const
 
 void dtkComposerSceneNote::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    DTK_UNUSED(widget);
+
     painter->fillRect(option->rect, QColor(Qt::yellow).darker());
 
     painter->fillRect(this->mapRectFromItem(d->text, d->text->boundingRect()), QColor(Qt::yellow));

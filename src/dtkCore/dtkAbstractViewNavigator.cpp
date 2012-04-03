@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jan 29 14:38:31 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  5 15:27:30 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 52
+ * Last-Updated: Tue Apr  3 16:00:16 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 53
  */
 
 /* Commentary:
@@ -82,6 +82,7 @@ dtkAbstractData *dtkAbstractViewNavigator::output(void)
 
 dtkAbstractData *dtkAbstractViewNavigator::output(int channel)
 {
+    DTK_UNUSED(channel);
     return 0;
 }
 

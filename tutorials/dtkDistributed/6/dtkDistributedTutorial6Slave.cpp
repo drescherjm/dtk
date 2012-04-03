@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Sep 14 13:26:49 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. déc.  9 15:32:40 2011 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 271
+ * Last-Updated: Tue Apr  3 16:18:53 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 272
  */
 
 /* Commentary:
@@ -152,7 +152,7 @@ int dtkDistributedTutorial6Slave::exec(void)
 
     } else {
 
-        int recv;
+        // int recv;
 
         communicator->receive(s_array, 0, 0);
 

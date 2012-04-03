@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:23:18 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 14:26:23 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 135
+ * Last-Updated: Tue Apr  3 16:07:23 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 136
  */
 
 /* Commentary: 
@@ -582,6 +582,8 @@ void dtkTextEditor::resizeEvent(QResizeEvent *event)
 
 void dtkTextEditor::closeEvent(QCloseEvent *event)
 {
+    DTK_UNUSED(event);
+
     emit closed();
 }
 

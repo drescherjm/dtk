@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 15 15:30:00 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 291
+ * Last-Updated: Tue Apr  3 16:00:03 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 293
  */
 
 /* Commentary:
@@ -56,21 +56,25 @@ dtkAbstractView::~dtkAbstractView(void)
 
 void dtkAbstractView::link(dtkAbstractView *other)
 {
+    DTK_UNUSED(other);
     DTK_DEFAULT_IMPLEMENTATION;
 }
 
 void dtkAbstractView::unlink(dtkAbstractView *other)
 {
+    DTK_UNUSED(other);
     DTK_DEFAULT_IMPLEMENTATION;
 }
 
 void dtkAbstractView::select(dtkAbstractData *data)
 {
+    DTK_UNUSED(data);
     DTK_DEFAULT_IMPLEMENTATION;
 }
 
 void dtkAbstractView::unselect(dtkAbstractData *data)
 {
+    DTK_UNUSED(data);
     DTK_DEFAULT_IMPLEMENTATION;
 }
 
@@ -136,6 +140,7 @@ void *dtkAbstractView::data(void)
 
 void *dtkAbstractView::data(int channel)
 {
+    DTK_UNUSED(channel);
     DTK_DEFAULT_IMPLEMENTATION;
 
     return NULL;

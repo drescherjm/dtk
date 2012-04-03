@@ -1,0 +1,77 @@
+/* dtkDistributor.cpp --- 
+ * 
+ * Author: Julien Wintz
+ * Copyright (C) 2008-2011 - Julien Wintz, Inria.
+ * Created: Tue Apr  3 16:35:49 2012 (+0200)
+ * Version: $Id$
+ * Last-Updated: Tue Apr  3 16:44:39 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 27
+ */
+
+/* Commentary: 
+ * 
+ */
+
+/* Change log:
+ * 
+ */
+
+#include "dtkDistributedController.h"
+#include "dtkDistributedControllerStatusModel.h"
+#include "dtkDistributedControllerStatusView.h"
+#include "dtkDistributor.h"
+
+class dtkDistributorPrivate
+{
+public:
+    dtkDistributedController *controller;
+    dtkDistributedControllerStatusModel *status_model;
+    dtkDistributedControllerStatusView *status_view;
+
+public:
+    QLineEdit *host_address;
+    QPushButton *host_button;
+};
+
+dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistributorPrivate)
+{
+    d->host_address = new QLineEdit("dtk://nef-devel.inria.fr:9999", this);
+    d->host_address->setAttribute(Qt::WA_MacShowFocusRect, false);
+
+    d->host_button = new QPushButton("Connect", this);
+    d->host_button->setAttribute(Qt::WA_MacShowFocusRect, false);
+
+    d->controller = new dtkDistributedController;
+
+    d->status_model = new dtkDistributedControllerStatusModel(this);
+    d->status_model->setController(d->controller);
+
+    d->status_view = new dtkDistributedControllerStatusView(this);
+    d->status_view->setModel(d->status_model);
+
+    QHBoxLayout *t_layout = new QHBoxLayout;
+    t_layout->addWidget(d->host_address);
+    t_layout->addWidget(d->host_button);
+
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    layout->addLayout(t_layout);
+    layout->addWidget(d->status_view);
+
+    connect(d->host_button, SIGNAL(clicked()), this, SLOT(onConnect()));
+}
+
+dtkDistributor::~dtkDistributor(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+void dtkDistributor::onConnect(void)
+{
+    d->controller->deploy(QUrl(d->host_address->text()));
+    d->controller->connect(QUrl(d->host_address->text()));
+}

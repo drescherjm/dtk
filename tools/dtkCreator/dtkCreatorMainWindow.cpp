@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:26:02 2012 (+0200)
+ * Last-Updated: Tue Apr  3 16:41:45 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1458
+ *     Update #: 1464
  */
 
 /* Commentary:
@@ -20,9 +20,7 @@
 #include "dtkCreatorMainWindow.h"
 #include "dtkCreatorMainWindow_p.h"
 
-#include <dtkDistributed/dtkDistributedController.h>
-#include <dtkDistributed/dtkDistributedControllerStatusModel.h>
-#include <dtkDistributed/dtkDistributedControllerStatusView.h>
+#include <dtkDistributed/dtkDistributor.h>
 
 #include <dtkComposer/dtkComposer.h>
 #include <dtkComposer/dtkComposerEvaluator.h>
@@ -132,35 +130,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     // -- to be encupsulated within distributed layer
 
-    d->host_address = new QLineEdit("dtk://nef-devel.inria.fr:9999", this);
-    d->host_address->setAttribute(Qt::WA_MacShowFocusRect, false);
-
-    d->host_button = new QPushButton("Connect", this);
-    d->host_button->setAttribute(Qt::WA_MacShowFocusRect, false);
-
-    d->distributed_controller = new dtkDistributedController;
-
-    d->distributed_status_model = new dtkDistributedControllerStatusModel(this);
-    d->distributed_status_model->setController(d->distributed_controller);
-
-    d->distributed_status_view = new dtkDistributedControllerStatusView(this);
-    d->distributed_status_view->setModel(d->distributed_status_model);
-
-    QHBoxLayout *ds_t_layout = new QHBoxLayout;
-    ds_t_layout->addWidget(d->host_address);
-    ds_t_layout->addWidget(d->host_button);
-
-    QVBoxLayout *ds_layout = new QVBoxLayout;
-    ds_layout->setContentsMargins(0, 0, 0, 0);
-    ds_layout->setSpacing(0);
-    ds_layout->addLayout(ds_t_layout);
-    ds_layout->addWidget(d->distributed_status_view);
-
-    d->distributed_controls = new QFrame(this);
-    d->distributed_controls->setLayout(ds_layout);
-    d->distributed_controls->setVisible(false);
-
-    connect(d->host_button, SIGNAL(clicked()), this, SLOT(onConnect()));
+    d->distributor = new dtkDistributor(this);
 
     // 
 
@@ -311,7 +281,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     dtkSplitter *left = new dtkSplitter(this);
     left->setOrientation(Qt::Vertical);
     left->addWidget(d->nodes);
-    left->addWidget(d->distributed_controls);
+    left->addWidget(d->distributor);
 
     dtkSplitter *right = new dtkSplitter(this);
     right->setOrientation(Qt::Vertical);
@@ -537,7 +507,7 @@ void dtkCreatorMainWindow::switchToCompo(void)
     d->scene->setVisible(true);
     d->editor->setVisible(true);
     d->stack->setVisible(true);
-    d->distributed_controls->setVisible(false);
+    d->distributor->setVisible(false);
 
     d->graph->setVisible(false);
     d->log_view->setVisible(false);
@@ -556,7 +526,7 @@ void dtkCreatorMainWindow::switchToDstrb(void)
     d->scene->setVisible(true);
     d->editor->setVisible(true);
     d->stack->setVisible(true);
-    d->distributed_controls->setVisible(true);
+    d->distributor->setVisible(true);
 
     d->graph->setVisible(false);
     d->log_view->setVisible(false);
@@ -573,7 +543,7 @@ void dtkCreatorMainWindow::switchToDebug(void)
     d->scene->setVisible(false);
     d->editor->setVisible(false);
     d->stack->setVisible(false);
-    d->distributed_controls->setVisible(false);
+    d->distributor->setVisible(false);
 
     d->graph->setVisible(true);
     d->log_view->setVisible(true);
@@ -581,12 +551,6 @@ void dtkCreatorMainWindow::switchToDebug(void)
     int w = this->size().width() - d->wl - d->wr;
 
     d->inner->setSizes(QList<int>() << d->wl << w/2 << w/2 << d->wr);
-}
-
-void dtkCreatorMainWindow::onConnect(void)
-{
-    d->distributed_controller->deploy(QUrl(d->host_address->text()));
-    d->distributed_controller->connect(QUrl(d->host_address->text()));
 }
 
 void dtkCreatorMainWindow::closeEvent(QCloseEvent *event)

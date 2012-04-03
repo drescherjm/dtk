@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  1 12:37:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:04:47 2012 (+0200)
+ * Last-Updated: Tue Apr  3 16:40:12 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 125
+ *     Update #: 130
  */
 
 /* Commentary: 
@@ -23,10 +23,6 @@
 #include <QtCore>
 #include <QtGui>
 
-class dtkDistributedController;
-class dtkDistributedControllerStatusModel;
-class dtkDistributedControllerStatusView;
-
 class dtkComposer;
 class dtkComposerFactoryView;
 class dtkComposerGraphView;
@@ -34,6 +30,8 @@ class dtkComposerSceneModel;
 class dtkComposerSceneNodeEditor;
 class dtkComposerSceneView;
 class dtkComposerStackView;
+
+class dtkDistributor;
 
 class dtkRecentFilesMenu;
 
@@ -82,17 +80,6 @@ public slots:
     void setModified(bool modified);
 
 public:
-    QLineEdit *host_address;
-    QPushButton *host_button;
-
-    QFrame *distributed_controls;
-
-public:
-    dtkDistributedController *distributed_controller;
-    dtkDistributedControllerStatusModel *distributed_status_model;
-    dtkDistributedControllerStatusView *distributed_status_view;
-
-public:
     dtkComposer *composer;
     dtkComposerFactoryView *nodes;
     dtkComposerGraphView *graph;
@@ -100,6 +87,9 @@ public:
     dtkComposerSceneNodeEditor *editor;
     dtkComposerSceneView *scene;
     dtkComposerStackView *stack;
+
+public:
+    dtkDistributor *distributor;
 
 public:
     dtkLogView *log_view;

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: mar. avril  3 17:58:10 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 496
+ * Last-Updated: Wed Apr  4 00:16:45 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 503
  */
 
 /* Commentary:
@@ -16,6 +16,8 @@
 /* Change log:
  *
  */
+
+#include <dtkConfig.h>
 
 #include "dtkComposerFactory.h"
 #include "dtkComposerNode.h"
@@ -27,7 +29,6 @@
 #include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeControlForEach.h"
 #include "dtkComposerNodeControlWhile.h"
-#include "dtkComposerNodeDistributed.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeFileOperator.h"
 #include "dtkComposerNodeList.h"
@@ -36,11 +37,15 @@
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeReal.h"
-#include "dtkComposerNodeRemote.h"
 #include "dtkComposerNodeString.h"
 #include "dtkComposerNodeVector.h"
-#include "dtkComposerNodeWorld.h"
 #include "dtkComposerSceneNodeLeaf.h"
+
+#if defined(DTK_HAVE_MPI)
+#include "dtkComposerNodeDistributed.h"
+#include "dtkComposerNodeRemote.h"
+#include "dtkComposerNodeWorld.h"
+#endif
 
 #include <dtkCore/dtkGlobal.h>
 
@@ -390,6 +395,8 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->types["Process"] = "process";
 
     // dtkDistributed nodes
+
+#if defined(DTK_HAVE_MPI)
     d->nodes << "Remote";
     d->tags["Remote"] = QStringList() <<  "distributed" << "tcp" << "world";
     d->types["Remote"] = "remote";
@@ -437,7 +444,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->nodes << "CommunicatorSend";
     d->tags["CommunicatorSend"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator";;
     d->types["CommunicatorSend"] = "communicatorSend";
-
+#endif
 }
 
 dtkComposerFactory::~dtkComposerFactory(void)

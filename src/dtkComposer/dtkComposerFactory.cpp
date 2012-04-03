@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: jeu. mars 29 23:06:48 2012 (+0200)
+ * Last-Updated: mar. avril  3 15:36:11 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 470
+ *     Update #: 487
  */
 
 /* Commentary:
@@ -38,6 +38,7 @@
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
 #include "dtkComposerNodeVector.h"
+#include "dtkComposerNodeWorld.h"
 #include "dtkComposerSceneNodeLeaf.h"
 
 #include <dtkCore/dtkGlobal.h>
@@ -388,6 +389,14 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->types["Process"] = "process";
 
     // dtkDistributed nodes
+    d->nodes << "World";
+    d->tags["World"] = QStringList() <<  "distributed" ;
+    d->types["World"] = "world";
+
+    d->nodes << "MpiWorld";
+    d->tags["MpiWorld"] = QStringList() <<  "distributed" << "mpi";
+    d->types["MpiWorld"] = "mpiworld";
+
     d->nodes << "CommunicatorRank";
     d->tags["CommunicatorRank"] = QStringList() <<  "rank" << "distributed" << "mpi" << "communicator";
     d->types["CommunicatorRank"] = "communicatorRank";
@@ -646,6 +655,12 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
         return new dtkComposerNodeProcess;
 
     // communicator nodes
+
+    if(type == "world")
+        return new dtkComposerNodeWorld;
+
+    if(type == "mpiworld")
+        return new dtkComposerNodeMpiWorld;
 
     if(type == "communicatorSize")
         return new dtkComposerNodeCommunicatorSize;

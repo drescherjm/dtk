@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 14:47:30 2012 (+0200)
- *           By: tkloczko
- *     Update #: 3357
+ * Last-Updated: mar. avril  3 15:52:32 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 3361
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeLeaf.h"
+#include "dtkComposerNodeWorld.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
 #include "dtkComposerSceneEdge.h"
@@ -158,6 +159,8 @@ void dtkComposerStackCommandCreateNode::redo(void)
 
         if(dynamic_cast<dtkComposerNodeLeaf *>(node))
             e->node = new dtkComposerSceneNodeLeaf;
+        else if(dynamic_cast<dtkComposerNodeWorld *>(node))
+            e->node = new dtkComposerSceneNodeComposite;
         else
             e->node = new dtkComposerSceneNodeControl;
 

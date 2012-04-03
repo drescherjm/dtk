@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 15:31:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 14 21:20:30 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 400
+ * Last-Updated: mer. févr.  1 14:08:42 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 409
  */
 
 /* Commentary: 
@@ -33,10 +33,7 @@
 #include <dtkScript/dtkScriptInterpreterTcl.h>
 #endif
 
-#include <dtkGui/dtkTextEditorSyntaxHighlighterPython.h>
-#include <dtkGui/dtkTextEditorSyntaxHighlighterTcl.h>
 #include <dtkGui/dtkInterpreter.h>
-#include <dtkGui/dtkInterpreterPreferencesWidget.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkInterpreterPrivate
@@ -46,7 +43,6 @@ class dtkInterpreterPrivate
 {
 public:
     dtkScriptInterpreter *interpreter;
-    dtkInterpreterPreferencesWidget *preferences;
     
     QTextCursor cursor;
 
@@ -63,7 +59,6 @@ dtkInterpreter::dtkInterpreter(QWidget *parent) : dtkTextEditor(parent)
 {
     d = new dtkInterpreterPrivate;
     d->interpreter = NULL;
-    d->preferences = NULL;
 
     d->history_index = 0;
     d->history_dirty = false;
@@ -180,29 +175,7 @@ void dtkInterpreter::registerInterpreter(dtkScriptInterpreter *interpreter)
     connect(this, SIGNAL( save(const QString&)),        interpreter,    SLOT(     save(const QString&)));
     connect(this, SIGNAL(stopped(void)),                interpreter,  SIGNAL(  stopped(void)));
 
-    dtkTextEditorSyntaxHighlighter *highlighter = NULL;
-
-#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
-    if(dynamic_cast<dtkScriptInterpreterPython *>(interpreter))
-        highlighter = new dtkTextEditorSyntaxHighlighterPython(this);
-#endif
-
-#if defined(HAVE_SWIG) && defined(HAVE_TCL)
-    if(dynamic_cast<dtkScriptInterpreterTcl *>(interpreter))
-        highlighter = new dtkTextEditorSyntaxHighlighterTcl(this);
-#endif
-
-    Q_UNUSED(highlighter);
-
     this->appendPlainText(filter(d->interpreter->prompt()));
-}
-
-dtkInterpreterPreferencesWidget *dtkInterpreter::preferencesWidget(QWidget *parent)
-{
-    if(!d->preferences)
-        d->preferences = new dtkInterpreterPreferencesWidget(this, parent);
-
-    return d->preferences;
 }
 
 void dtkInterpreter::onKeyUpPressed(void)
@@ -217,7 +190,7 @@ void dtkInterpreter::onKeyUpPressed(void)
         QString line = currentLine();
         if(d->interpreter)
             line.remove(filter(d->interpreter->prompt()));
-        
+ 
         d->history.push_front(line);
         d->history_dirty = true;
     }

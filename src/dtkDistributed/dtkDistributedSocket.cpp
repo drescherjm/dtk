@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: lun. nov. 21 17:09:32 2011 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 655
+ * Last-Updated: Fri Dec  9 18:18:43 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 657
  */
 
 /* Commentary:
@@ -76,7 +76,7 @@ qint64 dtkDistributedSocket::sendRequest( dtkDistributedMessage *msg)
  */
 dtkDistributedMessage *dtkDistributedSocket::parseRequest(void)
 {
-    dtkDistributedMessage * msg = new dtkDistributedMessage ;
+    dtkDistributedMessage *msg = new dtkDistributedMessage;
 
     msg->setMethod(this->readLine());
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 16 09:54:33 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 20 00:22:44 2011 (+0200)
+ * Last-Updated: Tue Feb 14 16:16:44 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 137
+ *     Update #: 140
  */
 
 /* Commentary: 
@@ -82,6 +82,11 @@
     << "for"                                                            \
     << this->metaObject()->className()
 
+#define DTK_DEFAULT_IMPLEMENTATION_NO_MOC                               \
+    qDebug()                                                            \
+    << "Using default implementation of"                                \
+    << DTK_PRETTY_FUNCTION
+
 #define DTK_UNUSED(variable) Q_UNUSED(variable)
 
 #define DTK_DEPRECATED Q_DECL_DEPRECATED
@@ -120,7 +125,7 @@ inline bool dtkIsBinary(const QString& path)
 {
     int c; std::ifstream a(path.toAscii().constData());
 
-    while((c = a.get()) != EOF && c <= 127);
+    while(((c = a.get()) != EOF) && (c <= 127)) { ; }
 
     return (c != EOF);
 }

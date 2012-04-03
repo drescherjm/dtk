@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: mar. oct. 11 10:46:57 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. oct. 11 17:10:20 2011 (+0200)
+ * Last-Updated: mer. déc.  7 11:08:37 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 336
+ *     Update #: 338
  */
 
 /* Commentary:
@@ -18,6 +18,7 @@
  */
 
 #include "dtkDistributedMessage.h"
+#include <dtkCore/dtkGlobal.h>
 
 class dtkDistributedMessagePrivate
 {
@@ -91,7 +92,7 @@ void dtkDistributedMessage::setMethod(QString method)
         d->jobid  = tokens[2];
         d->rank   = tokens[3].toInt();
     } else
-        qDebug() << "Unsupported method " << method;
+        qDebug() << DTK_PRETTY_FUNCTION << "Unsupported method " << method;
 
 }
 

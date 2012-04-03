@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:38:47 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar  2 10:11:39 2010 (+0100)
+ * Last-Updated: Mon Apr  2 20:49:16 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 28
+ *     Update #: 60
  */
 
 /* Commentary: 
@@ -20,13 +20,10 @@
 #ifndef DTKCREATORMAINWINDOW_H
 #define DTKCREATORMAINWINDOW_H
 
-#include <QtGui/QMainWindow>
+#include <dtkComposer/dtkComposerWriter.h>
 
-class dtkAbstractData;
-class dtkAbstractProcess;
-class dtkAbstractView;
-class dtkInterpreter;
-class dtkScriptInterpreter;
+#include <QtGui>
+
 class dtkCreatorMainWindowPrivate;
 
 class dtkCreatorMainWindow : public QMainWindow
@@ -40,30 +37,19 @@ public:
     void readSettings(void);
     void writeSettings(void);
 
-    void interpret(const QString& file);
-
 public slots:
-    bool fileOpen(void);
-    bool fileSave(void);
-    bool fileSaveAs(void);
-
-    void showInspector(void);
-    void showPreferences(void);
-
-    void onTitleChanged(QString title);
-    void onDocumentChanged(void);
-
-    void switchToEditor(void);
-    void switchToComposer(void);
-    void switchToViewer(void);
+    bool compositionOpen(void);
+    bool compositionOpen(const QString& file);
+    bool compositionSave(void);
+    bool compositionSaveAs(void);
+    bool compositionSaveAs(const QString& file, dtkComposerWriter::Type type = dtkComposerWriter::Ascii);
+    bool compositionInsert(void);
+    bool compositionInsert(const QString& file);
 
 protected slots:
-    void run(void);
-    void stop(void);
-
-    void registerData(dtkAbstractData *data, QString type);
-    void registerProcess(dtkAbstractProcess *process, QString type);
-    void registerView(dtkAbstractView *view, QString type);
+    void switchToCompo(void);
+    void switchToDstrb(void);
+    void switchToDebug(void);
 
 protected:
     void closeEvent(QCloseEvent *event);

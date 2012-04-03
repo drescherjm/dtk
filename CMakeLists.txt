@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Oct 28 15:30:27 2011 (+0200)
+## Last-Updated: Tue Apr  3 14:45:30 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 362
+##     Update #: 376
 ######################################################################
 ## 
 ### Commentary: 
@@ -34,39 +34,17 @@ mark_as_advanced(${PROJECT_NAME}_VERSION_BUILD)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-option(BUILD_SHARED_LIBS   "Build shared libraries" true)
-option(BUILD_TOOLS         "Build tools"            true)
-option(BUILD_EXAMPLES      "Build examples"         true)
-option(BUILD_TESTING       "Build testing"          true)
-option(BUILD_DOCUMENTATION "Build documentation"    true)
-option(BUILD_WRAPPERS      "Build wrappers"         true)
-option(BUILD_REPORTING     "Build reporting"        true)
-option(BUILD_TUTORIALS     "Build tutorials"        true)
-option(DTK_CPACK                "include packaging for dtk"        false)
-
-message("== Configuring dtk " ${${PKG_NAME}_STATIC})
-if(UNIX)
-    if (STATIC AND NOT DEFINED ${PKG_NAME}_STATIC)
-        set (${PKG_NAME}_STATIC ${STATIC})
-        set (BUILD_SHARED_LIBS FALSE)
-    endif (STATIC AND NOT DEFINED ${PKG_NAME}_STATIC)
-endif(UNIX)
-
-if(WIN32)
-set (BUILD_SHARED_LIBS TRUE)
-endif(WIN32)
-
-
-
-if (${PKG_NAME}_STATIC)
-  set (${PKG_NAME}_C_FLAGS  "${${PKG_NAME}_C_FLAGS} -fPIC")
-  set (${PKG_NAME}_CXX_FLAGS  "${${PKG_NAME}_CXX_FLAGS} -fPIC")
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${${PKG_NAME}_CXX_FLAGS}")
-  message("== Configuring dtk "${${PKG_NAME}_CXX_FLAGS}})
-endif (${PKG_NAME}_STATIC)
+option(BUILD_SHARED_LIBS       "Build shared libraries" true)
+option(DTK_BUILD_TOOLS         "Build tools"            true)
+option(DTK_BUILD_EXAMPLES      "Build examples"         true)
+option(DTK_BUILD_TESTING       "Build testing"          true)
+option(DTK_BUILD_DOCUMENTATION "Build documentation"    true)
+option(DTK_BUILD_WRAPPERS      "Build wrappers"         true)
+option(DTK_BUILD_REPORTING     "Build reporting"        true)
+option(DTK_BUILD_TUTORIALS     "Build tutorials"        true)
 
 if(MSVC)
-option(DTK_USE_PRECOMPILED_HEADERS "Use precompiled headers" true)
+  option(DTK_USE_PRECOMPILED_HEADERS "Use precompiled headers" true)
 endif(MSVC)
 
 include(dtkDependencies)
@@ -79,26 +57,26 @@ include(dtkPch)
 add_subdirectory(include)
 add_subdirectory(src)
 
-if(BUILD_TOOLS)
+if(DTK_BUILD_TOOLS)
   add_subdirectory(tools)
-endif(BUILD_TOOLS)
+endif(DTK_BUILD_TOOLS)
 
-if(BUILD_EXAMPLES)
+if(DTK_BUILD_EXAMPLES)
   add_subdirectory(examples)
-endif(BUILD_EXAMPLES)
+endif(DTK_BUILD_EXAMPLES)
 
-if(BUILD_REPORTING)
+if(DTK_BUILD_REPORTING)
   include(dtkReporting)
-endif(BUILD_REPORTING)
+endif(DTK_BUILD_REPORTING)
 
-if(BUILD_TESTING)
+if(DTK_BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif(DTK_BUILD_TESTING)
 
-if(BUILD_DOCUMENTATION)
+if(DTK_BUILD_DOCUMENTATION)
   add_subdirectory(doc)
-endif(BUILD_DOCUMENTATION)
+endif(DTK_BUILD_DOCUMENTATION)
 
-if(BUILD_TUTORIALS)
+if(DTK_BUILD_TUTORIALS)
   add_subdirectory(tutorials)
-endif(BUILD_TUTORIALS)
+endif(DTK_BUILD_TUTORIALS)

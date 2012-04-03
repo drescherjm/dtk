@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: lun. oct. 17 13:20:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: lun. nov. 28 15:54:40 2011 (+0100)
+ * Last-Updated: lun. déc.  5 16:56:47 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 11
+ *     Update #: 13
  */
 
 /* Commentary:
@@ -50,7 +50,7 @@ signals:
 
 public slots:
 
-    virtual bool deserialize(QByteArray *array);
+    virtual bool deserialize(const QByteArray& array);
 
     virtual void setProgress(int value);
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: ven. déc.  2 15:55:46 2011 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 395
+ * Last-Updated: Fri Dec  9 18:06:16 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 398
  */
 
 /* Commentary:
@@ -422,7 +422,7 @@ QByteArray *dtkAbstractData::serialize(void)
     return array;
 }
 
-bool dtkAbstractData::deserialize(QByteArray *array)
+bool dtkAbstractData::deserialize(const QByteArray &array)
 {
 
     bool deserialized = false;

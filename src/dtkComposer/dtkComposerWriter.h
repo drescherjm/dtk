@@ -1,12 +1,12 @@
 /* dtkComposerWriter.h --- 
  * 
  * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Mon Aug 16 15:01:36 2010 (+0200)
+ * Copyright (C) 2008-2011 - Julien Wintz, Inria.
+ * Created: Mon Jan 30 23:40:30 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Oct 19 15:04:07 2011 (+0200)
+ * Last-Updated: Sat Feb  4 15:18:06 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 28
+ *     Update #: 39
  */
 
 /* Commentary: 
@@ -22,34 +22,40 @@
 
 #include "dtkComposerExport.h"
 
-#include <QtCore/QObject>
+#include <QtCore>
+#include <QtXml>
 
-#include <QtXml/QDomElement>
-
-class dtkComposerNode;
 class dtkComposerScene;
+class dtkComposerSceneEdge;
+class dtkComposerSceneNode;
+class dtkComposerSceneNote;
 class dtkComposerWriterPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerWriter : public QObject
+class DTKCOMPOSER_EXPORT dtkComposerWriter
 {
-    Q_OBJECT
+public:
+             dtkComposerWriter(void);
+    virtual ~dtkComposerWriter(void);
 
 public:
     enum Type {
-         Ascii,
+        Ascii,
         Binary
     };
 
 public:
-    dtkComposerWriter(dtkComposerScene *scene);
-   ~dtkComposerWriter(void);
+    void setScene(dtkComposerScene *scene);
 
-   void write(const QString& fileName, Type type = Ascii);
+public:
+   void write(const QString& file, Type type = Ascii);
 
 protected:
-   virtual QDomElement writeNode(dtkComposerNode *node, QDomElement& element, QDomDocument& document);
+   virtual QDomElement writeNote(dtkComposerSceneNote *note, QDomElement& element, QDomDocument& document);
+   virtual QDomElement writeNode(dtkComposerSceneNode *node, QDomElement& element, QDomDocument& document);
+   virtual QDomElement writeEdge(dtkComposerSceneEdge *edge, QDomElement& element, QDomDocument& document);
 
-   virtual void extend(dtkComposerNode *node, QDomElement& element, QDomDocument& document);
+protected:
+   virtual void extend(dtkComposerSceneNode *node, QDomElement& element, QDomDocument& document);
 
 private:
     dtkComposerWriterPrivate *d;

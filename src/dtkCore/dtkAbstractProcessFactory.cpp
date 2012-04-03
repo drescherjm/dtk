@@ -60,8 +60,7 @@ dtkAbstractProcess *dtkAbstractProcessFactory::create(const QString& type)
 
 dtkSmartPointer<dtkAbstractProcess> dtkAbstractProcessFactory::createSmartPointer(const QString& type)
 {
-    dtkSmartPointer<dtkAbstractProcess> process;
-    process.takePointer( this->create(type) );
+    dtkSmartPointer<dtkAbstractProcess> process = this->create(type);
     return process;
 }
 

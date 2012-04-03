@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:23:52 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep  5 10:52:10 2011 (+0200)
+ * Last-Updated: Mon Jan 30 14:26:02 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 57
+ *     Update #: 58
  */
 
 /* Commentary: 
@@ -25,7 +25,6 @@
 #include <QtGui/QPlainTextEdit>
 #include <QtGui/QWidget>
 
-class dtkTextEditorPreferencesWidget;
 class dtkTextEditorPrivate;
 
 // /////////////////////////////////////////////////////////////////
@@ -112,8 +111,6 @@ public:
     int  backgroundOpacity(void) const;
     QColor backgroundColor(void) const;
     QColor foregroundColor(void) const;
-
-    dtkTextEditorPreferencesWidget *preferencesWidget(QWidget *parent = 0);
 
     void setShowLineNumbers(bool show);
     void setShowCurrentLine(bool show);

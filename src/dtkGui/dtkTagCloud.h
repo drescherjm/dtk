@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:01 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep  8 23:41:56 2009 (+0200)
+ * Last-Updated: Tue Mar 20 14:19:01 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 78
+ *     Update #: 208
  */
 
 /* Commentary: 
@@ -21,7 +21,6 @@
 #define DTKTAGCLOUD_H
 
 #include <QtGui>
-#include <QtWebKit>
 
 #include "dtkGuiExport.h"
 
@@ -38,6 +37,7 @@ public:
      dtkTag(QString text, int instances);
      dtkTag(QString text, int instances, QStringList items);
      dtkTag(QString text, int instances, QStringList items, QString color);
+     dtkTag(const dtkTag& other);
     ~dtkTag(void);
 
     int count(void) const;
@@ -60,7 +60,7 @@ private:
 
 class dtkTagCloudPrivate;
 
-class DTKGUI_EXPORT dtkTagCloud : public QWebView
+class DTKGUI_EXPORT dtkTagCloud : public QTextBrowser
 {
     Q_OBJECT
 
@@ -89,8 +89,6 @@ public:
     void setSortingType(SortingType type);
     void setSortingOrder(SortingOrder order);
 
-    void setStyleSheet(QString stylesheet);
-
 signals:
     void tagClicked(QString tag);
     void tagClicked(QString tag, QStringList items);
@@ -108,12 +106,50 @@ private:
 };
 
 // /////////////////////////////////////////////////////////////////
+// dtkTagScopeTag
+// /////////////////////////////////////////////////////////////////
+
+class dtkTagScopeTagPrivate;
+
+class dtkTagScopeTag : public QWidget
+{
+    Q_OBJECT
+
+public:
+     dtkTagScopeTag(QWidget *parent = 0);
+    ~dtkTagScopeTag(void);
+
+signals:
+     void clicked(void);
+
+public:
+    QSize sizeHint(void) const;
+
+public:
+    QString text(void);
+
+public slots:
+    void setText(const QString& text);
+    void setCount(int count);
+
+protected:
+    void enterEvent(QEvent *event);
+    void leaveEvent(QEvent *event);
+
+protected:
+    void mouseReleaseEvent(QMouseEvent *);
+
+private:
+    dtkTagScopeTagPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
 // dtkTagScope
 // /////////////////////////////////////////////////////////////////
 
 class dtkTagScopePrivate;
 
-class DTKGUI_EXPORT dtkTagScope : public QWebView
+class DTKGUI_EXPORT dtkTagScope : public QFrame
 {
     Q_OBJECT
 
@@ -123,24 +159,29 @@ public:
 
     QSize sizeHint(void) const;
 
-    void clear(void);
     void render(void);
 
     void addTag(QString tag);
+    void addTag(QString tag, int count);
 
-    void setStyleSheet(QString stylesheet);
+    void setTags(const QStringList& tags);
 
 signals:
     void tagSet(QString tag);
     void tagAdded(QString tag);
     void tagRemoved(QString tag);
     void cleared(void);
+    void unionMode(bool);
+
+public slots:
+    void clear(void);
+
+public slots:
+    void toggle(void);
 
 private slots:
-    void keyPressEvent(QKeyEvent *event);
-
-private slots:
-    void onLinkClicked(const QUrl& item);
+    void onTagAdded(void);
+    void onTagRemoved(void);
 
 private:
     dtkTagScopePrivate *d;
@@ -152,22 +193,109 @@ private:
 
 class dtkItemPrivate;
 
-class DTKGUI_EXPORT dtkItem
+class DTKGUI_EXPORT dtkItem : public QListWidgetItem
 {
 public:
      dtkItem(QString name);
      dtkItem(QString name, QString description);
      dtkItem(QString name, QString description, QStringList tags);
-     dtkItem(QString name, QString description, QStringList tags, QStringList types);
+     dtkItem(QString name, QString description, QStringList tags, QString kind, QString type);
+     dtkItem(const dtkItem& item);
     ~dtkItem(void);
 
     QString name(void) const;
     QString description(void) const;
     QStringList tags(void) const;
-    QStringList types(void) const;
+    QString kind(void) const;
+    QString type(void) const;
 
 private:
     dtkItemPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkItemList
+// /////////////////////////////////////////////////////////////////
+
+class dtkItemListPrivate;
+
+class DTKGUI_EXPORT dtkItemList : public QListWidget
+{
+    Q_OBJECT
+
+public:
+     dtkItemList(QWidget *parent = 0);
+    ~dtkItemList(void);
+
+    void addItem(QString name);
+    void addItem(QString name, QString description);
+    void addItem(QString name, QString description, QStringList tags);
+    void addItem(QString name, QString description, QStringList tags, QString kind, QString type);
+    void addItem(dtkItem item);
+
+    void clear(void);
+
+signals:
+    void itemClicked(const QString& description);
+
+private slots:
+    void onItemClicked(QListWidgetItem *item);
+
+protected:
+     QMimeData *mimeData(const QList<QListWidgetItem *> items) const;
+    QStringList mimeTypes(void) const;
+
+private:
+    dtkItemListPrivate *d;
+
+private:
+    friend class dtkItemListDelegate;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkItemDesc
+// /////////////////////////////////////////////////////////////////
+
+class dtkItemDescPrivate;
+
+class dtkItemDesc : public QFrame
+{
+    Q_OBJECT
+
+public:
+     dtkItemDesc(QWidget *parent = 0);
+    ~dtkItemDesc(void);
+
+signals:
+    void back(void);
+
+public slots:
+    void clear(void);
+
+public slots:
+    void setDescription(const QString& description);
+
+private:
+    dtkItemDescPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkItemListDelegate
+// /////////////////////////////////////////////////////////////////
+
+class dtkItemListDelegate: public QStyledItemDelegate
+{
+public:
+    dtkItemListDelegate(dtkItemList *list);
+
+public:
+    virtual void paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+
+public:
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
+
+protected:
+    dtkItemList *list;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -176,39 +304,51 @@ private:
 
 class dtkItemViewPrivate;
 
-class DTKGUI_EXPORT dtkItemView : public QWebView
+class dtkItemView : public QStackedWidget
 {
     Q_OBJECT
 
 public:
+    enum Direction {
+        Left2Right,
+        Right2Left,
+        Top2Bottom,
+        Bottom2Top,
+        Automatic
+    };
+    
+public:
      dtkItemView(QWidget *parent = 0);
     ~dtkItemView(void);
 
-    void addItem(QString name);
-    void addItem(QString name, QString description);
-    void addItem(QString name, QString description, QStringList tags);
-    void addItem(QString name, QString description, QStringList tags, QStringList types);
-    void addItem(dtkItem item);
+public:
+    dtkItemList *list(void);
+    dtkItemDesc *desc(void);
+    
+protected slots:
+    void onItemClicked(const QString& description);
 
-    void clear(void);
-    void render(void);
+protected slots:
+    void setSpeed(int speed);
+    void setAnimation(QEasingCurve::Type type);
+    void setVerticalMode(bool vertical = true);
+    void setWrap(bool wrap);
 
-    void setStyleSheet(QString stylesheet);
-
+protected slots:
+    void slideInNext(void);
+    void slideInPrev(void);
+    void slideInIdx(int idx, Direction direction = Automatic);
+    
 signals:
-    void tagClicked(QString tag);
-    void tagClicked(QString tag, QStringList items);
+    void animationFinished(void);
 
-    void itemClicked(QString item);
-    void itemClicked(QString item, QStringList tags);
+protected slots:
+    void animationDoneSlot(void);
 
-    void typeClicked(QString type);
-    void typeClicked(QString type, QStringList tags);
+protected:
+    void slideInWgt(QWidget *widget, Direction direction = Automatic);
 
-private slots:
-    void onLinkClicked(const QUrl& item);
-
-private:
+protected:
     dtkItemViewPrivate *d;
 };
 
@@ -233,14 +373,18 @@ public:
     void addItem(QString name);
     void addItem(QString name, QString description);
     void addItem(QString name, QString description, QStringList tags);
-    void addItem(QString name, QString description, QStringList tags, QStringList types);
+    void addItem(QString name, QString description, QStringList tags, QString kind, QString type);
 
     void update(void);
     void render(void);
 
+public slots:
+    void onUnionMode(bool mode);
+
 private slots:
     void addFilter(QString tag);
     void setFilter(QString tag);
+    void remFilter(QString tag);
     void clear(void);
 
 private:

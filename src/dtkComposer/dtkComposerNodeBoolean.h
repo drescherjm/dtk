@@ -1,12 +1,12 @@
 /* dtkComposerNodeBoolean.h --- 
  * 
- * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Fri Feb 25 10:04:24 2011 (+0100)
+ * Author: tkloczko
+ * Copyright (C) 2011 - Thibaud Kloczko, Inria.
+ * Created: Tue Feb 14 16:46:54 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr  8 16:26:28 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 16
+ * Last-Updated: Fri Mar 16 14:06:05 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 17
  */
 
 /* Commentary: 
@@ -21,29 +21,41 @@
 #define DTKCOMPOSERNODEBOOLEAN_H
 
 #include "dtkComposerExport.h"
-#include "dtkComposerNode.h"
+#include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeBooleanPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeBoolean : public dtkComposerNode
+class DTKCOMPOSER_EXPORT dtkComposerNodeBoolean : public dtkComposerNodeLeaf
 {
-    Q_OBJECT
-
 public:
-     dtkComposerNodeBoolean(dtkComposerNode *parent = 0);
+     dtkComposerNodeBoolean(void);
     ~dtkComposerNodeBoolean(void);
 
-    QVariant value(dtkComposerNodeProperty *property);
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "boolean";
+    }
+
+    inline QString titleHint(void) {
+        return "Boolean";
+    }
+
+    inline QString inputLabelHint(int) {
+        return "value";
+    }
+
+    inline QString outputLabelHint(int) {
+        return "value";
+    }
 
 public:
     bool value(void);
 
+public:
     void setValue(bool value);
-
-protected:
-    void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    void  run(void);
-    void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
 
 private:
     dtkComposerNodeBooleanPrivate *d;

@@ -1,12 +1,12 @@
 /* dtkComposerScene_p.h --- 
  * 
  * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Sat Feb 26 18:33:27 2011 (+0100)
+ * Copyright (C) 2008-2011 - Julien Wintz, Inria.
+ * Created: Mon Jan 30 15:32:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 31 14:20:52 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 33
+ * Last-Updated: Wed Mar 21 14:36:59 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 222
  */
 
 /* Commentary: 
@@ -20,57 +20,39 @@
 #ifndef DTKCOMPOSERSCENE_P_H
 #define DTKCOMPOSERSCENE_P_H
 
-class dtkComposerEdge;
-class dtkComposerNode;
-class dtkComposerNodeFactory;
-class dtkComposerNote;
+#include <QtGui>
 
-// /////////////////////////////////////////////////////////////////
-// dtkComposerSceneClipboard
-// /////////////////////////////////////////////////////////////////
-
-class dtkComposerSceneClipboard
-{
-public:
-    QList<dtkComposerNode *> nodes;
-    QList<dtkComposerEdge *> edges;
-};
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerScenePrivate
-// /////////////////////////////////////////////////////////////////
+class dtkComposerFactory;
+class dtkComposerGraph;
+class dtkComposerMachine;
+class dtkComposerSceneEdge;
+class dtkComposerSceneNode;
+class dtkComposerSceneNodeComposite;
+class dtkComposerSceneNodeLeaf;
+class dtkComposerSceneNote;
+class dtkComposerStack;
 
 class dtkComposerScenePrivate
 {
 public:
-    dtkComposerEdge *edge(dtkComposerEdge *edge);
+    dtkComposerMachine *machine;
+    dtkComposerFactory *factory;
+    dtkComposerStack *stack;
+    dtkComposerGraph *graph;
 
 public:
-    bool isChildOf(QGraphicsItem *item, QGraphicsItem *parent);
+    dtkComposerSceneNodeComposite    *root_node;
+    dtkComposerSceneNodeComposite *current_node;
 
 public:
-    QPointF grabber_node_origin;
-    bool    grabber_node_has_edges;
-    qreal   grabber_node_zvalue;
+    dtkComposerSceneEdge *current_edge;
 
 public:
-    dtkComposerNode *grabber_node;
-    dtkComposerNode *current_node; // current_node is NULL for the root, !NULL when inside a composite node.
-    dtkComposerEdge *current_edge;
+    QPointF reparent_origin_pos;
+    QPointF reparent_target_pos;
 
-public:
-    dtkComposerNodeFactory *factory;
-
-public:
-    bool modified;
-
-public:
-    QList<dtkComposerNode *> nodes;
-    QList<dtkComposerEdge *> edges;
-    QList<dtkComposerNote *> notes;
-
-public:
-    dtkComposerSceneClipboard clipboard;
+    dtkComposerSceneNode *reparent_origin;
+    dtkComposerSceneNode *reparent_target;
 };
 
 #endif

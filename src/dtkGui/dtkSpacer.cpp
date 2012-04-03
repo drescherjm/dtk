@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Oct  7 09:25:06 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Mar 18 00:29:14 2011 (+0100)
+ * Last-Updated: Fri Mar 23 13:31:15 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 25
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 
 dtkSpacer::dtkSpacer(QWidget *parent, int width, int height) : QWidget(parent)
 {
+    this->setAttribute(Qt::WA_TransparentForMouseEvents, true);
     this->setMinimumSize(width, height);
 
     if(width && !height)

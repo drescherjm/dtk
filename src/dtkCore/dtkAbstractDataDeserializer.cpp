@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: lun. oct. 17 13:20:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: lun. nov. 28 15:18:25 2011 (+0100)
+ * Last-Updated: jeu. déc.  8 17:25:58 2011 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 7
+ *     Update #: 9
  */
 
 /* Commentary:
@@ -64,7 +64,7 @@ void dtkAbstractDataDeserializer::setData(dtkAbstractData *data)
     d->data = data;
 }
 
-bool dtkAbstractDataDeserializer::deserialize(QByteArray *array)
+bool dtkAbstractDataDeserializer::deserialize(const QByteArray &array)
 {
     return false ;
 }

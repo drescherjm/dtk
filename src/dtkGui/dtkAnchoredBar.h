@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar 16 08:43:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jul  4 13:49:44 2011 (+0200)
+ * Last-Updated: Wed Mar 21 11:02:13 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 8
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -33,8 +33,11 @@ class DTKGUI_EXPORT dtkAnchoredBar : public QToolBar
 public:
     dtkAnchoredBar(QWidget *parent = 0);
 
-    void setDragEnabled(bool enabled);
+public:
     QSize sizeHint(void) const;
+
+public slots:
+    void setDragEnabled(bool enabled);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event);

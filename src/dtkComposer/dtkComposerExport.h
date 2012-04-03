@@ -1,12 +1,12 @@
 /* dtkComposerExport.h --- 
  * 
- * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Mon Sep  7 13:46:14 2009 (+0200)
+ * Author: tkloczko
+ * Copyright (C) 2011 - Thibaud Kloczko, Inria.
+ * Created: Mon Jan 30 10:36:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 15 21:21:59 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 3
+ * Last-Updated: Mon Jan 30 10:37:16 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 1
  */
 
 /* Commentary: 

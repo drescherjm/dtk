@@ -1,12 +1,12 @@
 /* dtkComposer_p.h --- 
  * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Tue Oct 18 13:26:40 2011 (+0200)
+ * Author: tkloczko
+ * Copyright (C) 2011 - Thibaud Kloczko, Inria.
+ * Created: Mon Jan 30 10:35:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Oct 19 02:14:39 2011 (+0200)
+ * Last-Updated: Wed Mar 21 14:37:04 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 19
+ *     Update #: 57
  */
 
 /* Commentary: 
@@ -20,10 +20,15 @@
 #ifndef DTKCOMPOSER_P_H
 #define DTKCOMPOSER_P_H
 
-class dtkComposerScene;
-class dtkComposerView;
-
 #include <QtCore>
+
+class dtkComposerEvaluator;
+class dtkComposerFactory;
+class dtkComposerGraph;
+class dtkComposerMachine;
+class dtkComposerScene;
+class dtkComposerStack;
+class dtkComposerView;
 
 class dtkComposerPrivate : public QObject
 {
@@ -36,9 +41,15 @@ public slots:
     void onRequestFinished(int id, bool error);
 
 public:
+    dtkComposerEvaluator *evaluator;
+    dtkComposerFactory *factory;
+    dtkComposerGraph *graph;
+    dtkComposerMachine *machine;
     dtkComposerScene *scene;
+    dtkComposerStack *stack;
     dtkComposerView *view;
 
+public:
     QString fileName;
     QString tempName;
 

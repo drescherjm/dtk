@@ -1,12 +1,12 @@
-/* dtkDistributedCommunicatorTcp.cpp --- 
+/* dtkDistributedCommunicatorTcp.cpp ---
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: lun. nov. 28 16:45:23 2011 (+0100)
+ * Last-Updated: jeu. mars 29 17:48:32 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 143
+ *     Update #: 186
  */
 
 /* Commentary: 
@@ -121,55 +121,68 @@ void dtkDistributedCommunicatorTcp::flush(void)
     }
 }
 
-void dtkDistributedCommunicatorTcp::send(dtkAbstractData *data, quint16 target, int tag)
+void dtkDistributedCommunicatorTcp::send(dtkAbstractData *data, qint16 target, int tag)
 {
     QByteArray *array;
     QString type = data->identifier();
 
-    qDebug() << "send: need to serialize mesh" ;
     array = data->serialize();
     if (!array->isNull()) {
         d->socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,QString::number(tag),target, array->size(), type));
         d->socket->write(*array);
     } else {
-        qDebug() << "serialization failed";
+        dtkWarning() << "serialization failed";
     }
 }
 
-void dtkDistributedCommunicatorTcp::receive(dtkAbstractData *data, quint16 source, int tag)
+void dtkDistributedCommunicatorTcp::receive(dtkAbstractData *&data, qint16 source, int tag)
 {
-    qDebug() << "warning: receive  abstract data not (yet) implemented for tcp communicator";
+
+    d->socket->blockSignals(true);
+
+    if (!d->socket->waitForReadyRead(300000))
+        qDebug() << "WARN: data not ready in receive for rank " << source;
+    else {
+        dtkDistributedMessage *msg = d->socket->parseRequest();
+        if (msg->size() > 0) {
+            QByteArray array = msg->content();
+            if (!data->deserialize(array))
+                dtkWarning() << "warning: deserialization failed";
+        } else
+            dtkWarning() << "warning: no content in receive";
+    }
+    d->socket->blockSignals(false);
 }
 
 
-void dtkDistributedCommunicatorTcp::send(void *data, qint64 size, DataType dataType, quint16 target, int tag)
+void dtkDistributedCommunicatorTcp::send(void *data, qint64 size, DataType dataType, qint16 target, int tag)
 {
     // TODO: handle target and tag, and check return value of write
     d->socket->write((char *)data,size);
 
 }
 
-void dtkDistributedCommunicatorTcp::receive(void *data, qint64 size, DataType dataType, quint16 source, int tag)
+void dtkDistributedCommunicatorTcp::receive(void *data, qint64 size, DataType dataType, qint16 source, int tag)
 {
 
 }
 
-void dtkDistributedCommunicatorTcp::broadcast(void *data, qint64 size, DataType dataType, quint16 source)
+void dtkDistributedCommunicatorTcp::broadcast(void *data, qint64 size, DataType dataType, qint16 source)
 {
 
 }
 
-void dtkDistributedCommunicatorTcp::gather(void *send, void *recv, qint64 size, DataType dataType, quint16 target, bool all)
-{
-    dtkWarning() << "Collective operations are not supported on sockets";
-}
-
-void dtkDistributedCommunicatorTcp::scatter(void *send, void *recv, qint64 size, DataType dataType, quint16 source)
+void dtkDistributedCommunicatorTcp::gather(void *send, void *recv, qint64 size, DataType dataType, qint16 target, bool all)
 {
     dtkWarning() << "Collective operations are not supported on sockets";
 }
 
-void dtkDistributedCommunicatorTcp::reduce(void *send, void *recv, qint64 size, DataType dataType, OperationType operationType, quint16 target, bool all)
+void dtkDistributedCommunicatorTcp::scatter(void *send, void *recv, qint64 size, DataType dataType, qint16 source)
+{
+    dtkWarning() << "Collective operations are not supported on sockets";
+}
+
+void dtkDistributedCommunicatorTcp::reduce(void *send, void *recv, qint64 size, DataType dataType, OperationType operationType, qint16 target, bool all)
 {
     dtkWarning() << "Collective operations are not supported on sockets";
 }

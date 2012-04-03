@@ -1,20 +1,20 @@
-### CMakeLists.txt --- 
-## 
+### CMakeLists.txt ---
+##
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Oct 18 13:31:33 2011 (+0200)
-##           By: Julien Wintz
-##     Update #: 151
+## Last-Updated: jeu. mars 29 13:30:39 2012 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 459
 ######################################################################
-## 
-### Commentary: 
-## 
+##
+### Commentary:
+##
 ######################################################################
-## 
+##
 ### Change log:
-## 
+##
 ######################################################################
 
 project(dtkComposer)
@@ -25,108 +25,165 @@ project(dtkComposer)
 
 set(${PROJECT_NAME}_HEADERS
   dtkComposer.h
-  dtkComposerEdge.h
+  dtkComposerEvaluator.h
   dtkComposerExport.h
-  dtkComposerExtractor.h
+  dtkComposerFactory.h
+  dtkComposerFactoryView.h
+  dtkComposerGraph.h
+  dtkComposerGraphEdge.h
+  dtkComposerGraphLayouter.h
+  dtkComposerGraphNode.h
+  dtkComposerGraphNodeBegin.h
+  dtkComposerGraphNodeEnd.h
+  dtkComposerGraphNode.h
+  dtkComposerGraphNodeLeaf.h
+  dtkComposerGraphNodeSelectBranch.h
+  dtkComposerGraphNodeSetInputs.h
+  dtkComposerGraphNodeSetOutputs.h
+  dtkComposerGraphNodeSetVariables.h
+  dtkComposerGraphView.h
+  dtkComposerMachine.h
+  dtkComposerMachineState.h
   dtkComposerNode.h
   dtkComposerNodeBoolean.h
   dtkComposerNodeBooleanOperator.h
-  dtkComposerNodeCase.h
-  dtkComposerNodeConditional.h
+  dtkComposerNodeComposite.h
+  dtkComposerNodeConstants.h
   dtkComposerNodeControl.h
-  dtkComposerNodeControlBlock.h
-  dtkComposerNodeData.h
-  dtkComposerNodeFactory.h
+  dtkComposerNodeControlDoWhile.h
+  dtkComposerNodeControlIf.h
+  dtkComposerNodeControlFor.h
+  dtkComposerNodeControlForEach.h
+  dtkComposerNodeControlWhile.h
+  dtkComposerNodeDistributed.h
   dtkComposerNodeFile.h
-  dtkComposerNodeLog.h
-  dtkComposerNodeLoop.h
-  dtkComposerNodeLoopDataComposite.h
-  dtkComposerNodeLoopFor.h
-  dtkComposerNodeLoopWhile.h
-  dtkComposerNodeNumber.h
-  dtkComposerNodeNumberComparator.h
+  dtkComposerNodeFileOperator.h
+  dtkComposerNodeInteger.h
+  dtkComposerNodeLeaf.h
+  dtkComposerNodeList.h
+  dtkComposerNodeListOperator.h
+  dtkComposerNodeLogger.h
   dtkComposerNodeNumberOperator.h
   dtkComposerNodeProcess.h
-  dtkComposerNodeProperty.h
+  dtkComposerNodeProxy.h
+  dtkComposerNodeReal.h
   dtkComposerNodeString.h
-  dtkComposerNodeStringComparator.h
-  dtkComposerNodeStringOperator.h
-  dtkComposerNodeView.h
-  dtkComposerNote.h
-  dtkComposerReader.h
+  dtkComposerNodeVector.h
+  dtkComposerNodeVectorOperator.h
   dtkComposerScene.h
+  dtkComposerSceneEdge.h
+  dtkComposerSceneModel.h
+  dtkComposerSceneNode.h
+  dtkComposerSceneNodeComposite.h
+  dtkComposerSceneNodeControl.h
+  dtkComposerSceneNodeEditor.h
+  dtkComposerSceneNodeLeaf.h
+  dtkComposerSceneNote.h
+  dtkComposerScenePort.h
+  dtkComposerSceneView.h
+  dtkComposerStack.h
+  dtkComposerStackCommand.h
+  dtkComposerStackUtils.h
+  dtkComposerStackView.h
+  dtkComposerTransmitter.h
+  dtkComposerTransmitter_p.h
+  dtkComposerTransmitterEmitter.h
+  dtkComposerTransmitterEmitter.tpp
+  dtkComposerTransmitterProxy.h
+  dtkComposerTransmitterReceiver.h
+  dtkComposerTransmitterReceiver.tpp
+  dtkComposerTransmitterVariant.h
   dtkComposerView.h
+  dtkComposerReader.h
   dtkComposerWriter.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposer.h
   dtkComposer_p.h
-  dtkComposerEdge.h
-  dtkComposerExtractor.h
-  dtkComposerNode.h
-  dtkComposerNodeBoolean.h
-  dtkComposerNodeBooleanOperator.h
-  dtkComposerNodeCase.h
-  dtkComposerNodeConditional.h
-  dtkComposerNodeControl.h
-  dtkComposerNodeControlBlock.h
-  dtkComposerNodeData.h
-  dtkComposerNodeFactory.h
-  dtkComposerNodeFile.h
-  dtkComposerNodeFile_p.h
-  dtkComposerNodeLog.h
-  dtkComposerNodeLoop.h
-  dtkComposerNodeLoopDataComposite.h
-  dtkComposerNodeLoopFor.h
-  dtkComposerNodeLoopWhile.h
-  dtkComposerNodeNumber.h
-  dtkComposerNodeNumberComparator.h
-  dtkComposerNodeNumberOperator.h
-  dtkComposerNodeProcess.h
-  dtkComposerNodeProperty.h
-  dtkComposerNodeString.h
-  dtkComposerNodeStringComparator.h
-  dtkComposerNodeStringOperator.h
-  dtkComposerNodeView.h
-  dtkComposerNote.h
-  dtkComposerReader.h
+  dtkComposerEvaluator.h
+  dtkComposerFactory.h
+  dtkComposerFactoryView.h
+  dtkComposerGraph.h
+  dtkComposerGraphView.h
+  dtkComposerMachine.h
+  dtkComposerMachineState.h
+  dtkComposerSceneModel.h
   dtkComposerScene.h
-  dtkComposerView.h
-  dtkComposerWriter.h)
+  dtkComposerSceneNodeEditor.h
+  dtkComposerSceneNodeEditor_p.h
+  dtkComposerSceneView.h
+  dtkComposerStackView.h
+  dtkComposerView.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkComposer.cpp
-  dtkComposerEdge.cpp
-  dtkComposerExtractor.cpp
+  dtkComposerEvaluator.cpp
+  dtkComposerFactory.cpp
+  dtkComposerFactoryView.cpp
+  dtkComposerGraph.cpp
+  dtkComposerGraphEdge.cpp
+  dtkComposerGraphLayouter.cpp
+  dtkComposerGraphNodeBegin.cpp
+  dtkComposerGraphNode.cpp
+  dtkComposerGraphNodeEnd.cpp
+  dtkComposerGraphNodeLeaf.cpp
+  dtkComposerGraphNodeSelectBranch.cpp
+  dtkComposerGraphNodeSetInputs.cpp
+  dtkComposerGraphNodeSetOutputs.cpp
+  dtkComposerGraphNodeSetVariables.cpp
+  dtkComposerGraphView.cpp
+  dtkComposerMachine.cpp
+  dtkComposerMachineState.cpp
   dtkComposerNode.cpp
   dtkComposerNodeBoolean.cpp
   dtkComposerNodeBooleanOperator.cpp
-  dtkComposerNodeCase.cpp
-  dtkComposerNodeConditional.cpp
+  dtkComposerNodeComposite.cpp
+  dtkComposerNodeConstants.cpp
   dtkComposerNodeControl.cpp
-  dtkComposerNodeControlBlock.cpp
-  dtkComposerNodeData.cpp
-  dtkComposerNodeFactory.cpp
+  dtkComposerNodeControlDoWhile.cpp
+  dtkComposerNodeControlIf.cpp
+  dtkComposerNodeControlFor.cpp
+  dtkComposerNodeControlForEach.cpp
+  dtkComposerNodeControlWhile.cpp
+  dtkComposerNodeDistributed.cpp
   dtkComposerNodeFile.cpp
-  dtkComposerNodeLog.cpp
-  dtkComposerNodeLoop.cpp
-  dtkComposerNodeLoopDataComposite.cpp
-  dtkComposerNodeLoopFor.cpp
-  dtkComposerNodeLoopWhile.cpp
-  dtkComposerNodeNumber.cpp
-  dtkComposerNodeNumberComparator.cpp
+  dtkComposerNodeFileOperator.cpp
+  dtkComposerNodeInteger.cpp
+  dtkComposerNodeLeaf.cpp
+  dtkComposerNodeList.cpp
+  dtkComposerNodeListOperator.cpp
+  dtkComposerNodeLogger.cpp
   dtkComposerNodeNumberOperator.cpp
   dtkComposerNodeProcess.cpp
-  dtkComposerNodeProperty.cpp
+  dtkComposerNodeProxy.cpp
+  dtkComposerNodeReal.cpp
   dtkComposerNodeString.cpp
-  dtkComposerNodeStringComparator.cpp
-  dtkComposerNodeStringOperator.cpp
-  dtkComposerNodeView.cpp
-  dtkComposerNote.cpp
-  dtkComposerReader.cpp
+  dtkComposerNodeVector.cpp
+  dtkComposerNodeVectorOperator.cpp
   dtkComposerScene.cpp
+  dtkComposerSceneEdge.cpp
+  dtkComposerSceneModel.cpp
+  dtkComposerSceneNode.cpp
+  dtkComposerSceneNodeComposite.cpp
+  dtkComposerSceneNodeControl.cpp
+  dtkComposerSceneNodeEditor.cpp
+  dtkComposerSceneNodeLeaf.cpp
+  dtkComposerSceneNote.cpp
+  dtkComposerScenePort.cpp
+  dtkComposerSceneView.cpp
+  dtkComposerStack.cpp
+  dtkComposerStackUtils.cpp
+  dtkComposerStackView.cpp
+  dtkComposerStackCommand.cpp
+  dtkComposerTransmitter.cpp
+  dtkComposerTransmitterProxy.cpp
+  dtkComposerTransmitterVariant.cpp
   dtkComposerView.cpp
+  dtkComposerView.cpp
+  dtkComposerReader.cpp
   dtkComposerWriter.cpp)
+
+set(${PROJECT_NAME}_RESOURCES dtkComposer.qrc)
 
 ## #################################################################
 ## Build rules
@@ -141,6 +198,7 @@ endif(NOT MSVC)
 add_definitions(-DQSTATEMACHINE_DEBUG)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
+qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
 
 if(DTK_USE_PRECOMPILED_HEADERS)
   add_precompiled_header(${PROJECT_NAME}_SOURCES_PCH 
@@ -148,7 +206,7 @@ if(DTK_USE_PRECOMPILED_HEADERS)
     ${${PROJECT_NAME}_SOURCES}
     ${${PROJECT_NAME}_HEADERS}
     ${${PROJECT_NAME}_SOURCES_MOC}
-    ${${PROJECT_NAME}_SOURCES_WRAP})
+    ${${PROJECT_NAME}_SOURCES_QRC})
 endif(DTK_USE_PRECOMPILED_HEADERS)
 
 if(BUILD_SHARED_LIBS)
@@ -158,7 +216,7 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_PCH}
-  ${${PROJECT_NAME}_SOURCES_WRAP})
+  ${${PROJECT_NAME}_SOURCES_QRC})
 
 else(BUILD_SHARED_LIBS)
 
@@ -167,15 +225,17 @@ add_library(${PROJECT_NAME} STATIC
   ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_PCH}
-  ${${PROJECT_NAME}_SOURCES_WRAP})
+  ${${PROJECT_NAME}_SOURCES_QRC})
 
 endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
+  dtkDistributed
   dtkMath
   dtkCore
-  dtkGui)
+  dtkGui
+  dtkLog)
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

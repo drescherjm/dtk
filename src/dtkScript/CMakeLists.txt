@@ -38,7 +38,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkScriptInterpreterPool.cpp
   dtkScriptManager.cpp)
 
-if(BUILD_WRAPPERS)
+if(DTK_BUILD_WRAPPERS)
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkScriptInterpreterPython.h
   dtkScriptInterpreterTcl.h)
@@ -50,7 +50,7 @@ set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkScriptInterpreterPython.cpp
   dtkScriptInterpreterTcl.cpp)
-endif(BUILD_WRAPPERS)
+endif(DTK_BUILD_WRAPPERS)
 
 ## #################################################################
 ## Build rules
@@ -83,11 +83,11 @@ endif(BUILD_SHARED_LIBS)
 target_link_libraries(${PROJECT_NAME}
   dtkCore)
 
-if(BUILD_WRAPPERS)
+if(DTK_BUILD_WRAPPERS)
 target_link_libraries(${PROJECT_NAME}
   ${TCL_LIBRARY}
   ${PYTHON_LIBRARIES})
-endif(BUILD_WRAPPERS)
+endif(DTK_BUILD_WRAPPERS)
 
 if(EDITLINE_FOUND)
   target_link_libraries(${PROJECT_NAME} ${EDITLINE_LIBRARY})

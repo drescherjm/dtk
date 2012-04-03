@@ -55,7 +55,7 @@ mark_as_advanced(QT_QTMOTIF_LIBRARY_RELEASE)
 ## Wrapping
 ## #################################################################
 
-if(BUILD_WRAPPERS)
+if(DTK_BUILD_WRAPPERS)
 
 ## #################################################################
 ## Swig
@@ -155,7 +155,7 @@ endif(EDITLINE_FOUND)
 ## Build wrappers (end)
 ## #################################################################
 
-endif(BUILD_WRAPPERS)
+endif(DTK_BUILD_WRAPPERS)
 
 ## #################################################################
 ## Zlib

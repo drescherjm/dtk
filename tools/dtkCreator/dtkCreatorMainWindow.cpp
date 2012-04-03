@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Mar 23 22:16:39 2012 (+0100)
+ * Last-Updated: Mon Apr  2 20:54:03 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1391
+ *     Update #: 1404
  */
 
 /* Commentary:
@@ -178,12 +178,15 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->redo_action->setShortcut(QKeySequence::Redo);
 
     QAction *switchToCompoAction = new QAction("Switch to composition perspective", this);
+    QAction *switchToDstrbAction = new QAction("Switch to distributed perspective", this);
     QAction *switchToDebugAction = new QAction("Switch to debug perspective", this);
 
     switchToCompoAction->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_1);
-    switchToDebugAction->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_2);
+    switchToDstrbAction->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_2);
+    switchToDebugAction->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_3);
 
     this->addAction(switchToCompoAction);
+    this->addAction(switchToDstrbAction);
     this->addAction(switchToDebugAction);
 
     // -- Toolbar
@@ -231,6 +234,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     QMenu *view_menu = menu_bar->addMenu("View");
     view_menu->addAction(switchToCompoAction);
+    view_menu->addAction(switchToDstrbAction);
     view_menu->addAction(switchToDebugAction);
 
     QMenu *debug_menu = menu_bar->addMenu("Debug");
@@ -247,6 +251,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     connect(stop_action, SIGNAL(triggered()), d->composer, SLOT(stop()));
 
     connect(switchToCompoAction, SIGNAL(triggered()), this, SLOT(switchToCompo()));
+    connect(switchToDstrbAction, SIGNAL(triggered()), this, SLOT(switchToDstrb()));
     connect(switchToDebugAction, SIGNAL(triggered()), this, SLOT(switchToDebug()));
 
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(close()));
@@ -486,6 +491,19 @@ void dtkCreatorMainWindow::switchToCompo(void)
     d->graph->setVisible(false);
     d->log_view->setVisible(false);
     
+    d->inner->setSizes(QList<int>() << d->wl << 0 << this->size().width() - d->wl - d->wr << d->wr);
+}
+
+void dtkCreatorMainWindow::switchToDstrb(void)
+{
+    d->nodes->setVisible(false);
+    d->scene->setVisible(true);
+    d->editor->setVisible(true);
+    d->stack->setVisible(true);
+
+    d->graph->setVisible(false);
+    d->log_view->setVisible(false);
+
     d->inner->setSizes(QList<int>() << d->wl << 0 << this->size().width() - d->wl - d->wr << d->wr);
 }
 

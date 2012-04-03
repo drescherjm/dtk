@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 28 15:48:53 2012 (+0200)
+ * Last-Updated: Tue Apr  3 14:35:23 2012 (+0200)
  *           By: tkloczko
- *     Update #: 506
+ *     Update #: 509
  */
 
 /* Commentary: 
@@ -300,7 +300,9 @@ void dtkComposerSceneNodeControl::paint(QPainter *painter, const QStyleOptionGra
 void dtkComposerSceneNodeControl::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->buttons() && Qt::LeftButton && !d->drag_point.isNull()) {
-        
+
+        QGraphicsItem::prepareGeometryChange();
+
         QPointF delta = QPointF(event->scenePos() - d->drag_point);
 
         d->rect.setBottomRight(d->rect.bottomRight() + delta);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  1 12:37:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 15:54:15 2012 (+0200)
+ * Last-Updated: Tue Apr  3 16:04:47 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 123
+ *     Update #: 125
  */
 
 /* Commentary: 
@@ -80,6 +80,12 @@ public:
 
 public slots:
     void setModified(bool modified);
+
+public:
+    QLineEdit *host_address;
+    QPushButton *host_button;
+
+    QFrame *distributed_controls;
 
 public:
     dtkDistributedController *distributed_controller;

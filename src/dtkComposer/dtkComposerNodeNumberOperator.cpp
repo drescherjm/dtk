@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Mon Feb 27 14:28:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 17:13:34 2012 (+0100)
+ * Last-Updated: Tue Apr  3 15:34:20 2012 (+0200)
  *           By: tkloczko
- *     Update #: 225
+ *     Update #: 232
  */
 
 /* Commentary: 
@@ -21,6 +21,8 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerTransmitterVariant.h"
+
+#include <dtkLog/dtkLog.h>
 
 #include <dtkMath/dtkMath.h>
 
@@ -273,6 +275,9 @@ void dtkComposerNodeNumberOperatorUnaryIncr::run(void)
     case QVariant::Double:
         d->emitter->setData(qVariantValue<double>(d->receiver->data()) + 1);
         break;
+    default:
+        dtkWarn() << "Type" << d->receiver->type() << "is not handled by the node.";
+        break;
     }
 }
 
@@ -292,6 +297,9 @@ void dtkComposerNodeNumberOperatorUnaryDecr::run(void)
     case QVariant::Double:
         d->emitter->setData(qVariantValue<double>(d->receiver->data()) - 1);
         break;
+    default:
+        dtkWarn() << "Type" << d->receiver->type() << "is not handled by the node.";
+        break;
     }   
 }
 
@@ -310,6 +318,9 @@ void dtkComposerNodeNumberOperatorUnarySqrt::run(void)
         break;
     case QVariant::Double:
         d->emitter->setData(sqrt(qVariantValue<double>(d->receiver->data())));
+        break;
+    default:
+        dtkWarn() << "Type" << d->receiver->type() << "is not handled by the node.";
         break;
     }
 }
@@ -334,6 +345,9 @@ void dtkComposerNodeNumberOperatorUnarySquare::run(void)
     case QVariant::Double:
         dd = qVariantValue<double>(d->receiver->data());
         d->emitter->setData(dd*dd);
+        break;
+    default:
+        dtkWarn() << "Type" << d->receiver->type() << "is not handled by the node.";
         break;
     }   
 }
@@ -499,6 +513,9 @@ void dtkComposerNodeNumberOperatorUnaryAbs::run(void)
         break;
     case QVariant::Double:
         d->emitter->setData(abs(qVariantValue<double>(d->receiver->data())));
+        break;
+    default:
+        dtkWarn() << "Type" << d->receiver->type() << "is not handled by the node.";
         break;
     } 
 }

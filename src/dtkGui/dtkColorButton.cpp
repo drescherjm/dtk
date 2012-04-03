@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Mar 18 14:45:33 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Nov 15 10:07:35 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 45
+ * Last-Updated: Tue Apr  3 16:02:45 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -113,6 +113,8 @@ void dtkColorButton::setPickModeRight(const PickMode& mode)
 
 void dtkColorButton::resizeEvent(QResizeEvent *event)
 {
+    DTK_UNUSED(event);
+
     setColor(d->color);
 }
 

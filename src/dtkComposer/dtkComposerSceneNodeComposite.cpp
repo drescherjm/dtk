@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr  2 13:55:01 2012 (+0200)
+ * Last-Updated: Tue Apr  3 15:51:55 2012 (+0200)
  *           By: tkloczko
- *     Update #: 723
+ *     Update #: 726
  */
 
 /* Commentary: 
@@ -91,7 +91,7 @@ void dtkComposerSceneNodeComposite::wrap(dtkComposerNode *wrapee)
     if(!composite)
         return;
 
-    foreach(dtkComposerTransmitter *receiver, composite->receivers()) {
+    for(int i = 0; i < composite->receivers().count(); ++i) {
         
         dtkComposerScenePort *port = new dtkComposerScenePort(dtkComposerScenePort::Input, this);
         this->addInputPort(port);
@@ -99,7 +99,7 @@ void dtkComposerSceneNodeComposite::wrap(dtkComposerNode *wrapee)
         
     }
 
-    foreach(dtkComposerTransmitter *emitter, composite->emitters()) {
+    for(int i = 0; i < composite->emitters().count(); ++i) {
 
         dtkComposerScenePort *port = new dtkComposerScenePort(dtkComposerScenePort::Output, this);
         this->addOutputPort(port);
@@ -378,12 +378,12 @@ port_location:
 
     if(!d->revealed) {
 
-        if(this->inputPorts().count() || this->outputPorts().count())
+        if(this->inputPorts().count() || this->outputPorts().count()) {
             if(this->inputPorts().count() >= this->outputPorts().count())
                 d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->inputPorts().count() * this->inputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->inputPorts().count()-1) * port_spacing + header));
             else
                 d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->outputPorts().count() * this->outputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->outputPorts().count()-1) * port_spacing + header));        
-
+        }
     }
 
 update:

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 30 14:31:57 2012 (+0200)
+ * Last-Updated: Tue Apr  3 16:35:44 2012 (+0200)
  *           By: tkloczko
- *     Update #: 376
+ *     Update #: 377
  */
 
 /* Commentary: 
@@ -309,6 +309,8 @@ void dtkComposerTransmitterVariant::setActiveEmitter(dtkComposerTransmitter *emi
  */
 dtkComposerTransmitter::LinkMap dtkComposerTransmitterVariant::leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
+    DTK_UNUSED(transmitter);
+
     LinkMap link_map;
     foreach(dtkComposerTransmitterLink *l, list)
         link_map.insert(this, l);
@@ -322,6 +324,8 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitterVariant::leftLinks(dtkComp
  */
 dtkComposerTransmitter::LinkMap dtkComposerTransmitterVariant::rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
+    DTK_UNUSED(transmitter);
+
     LinkMap link_map;
     foreach(dtkComposerTransmitterLink *l, list)
         link_map.insert(this, l);

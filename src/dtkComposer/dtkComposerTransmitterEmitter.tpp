@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 29 10:55:33 2012 (+0200)
+ * Last-Updated: Tue Apr  3 16:31:05 2012 (+0200)
  *           By: tkloczko
- *     Update #: 121
+ *     Update #: 123
  */
 
 /* Commentary: 
@@ -22,6 +22,8 @@
 
 #include "dtkComposerTransmitter_p.h"
 #include "dtkComposerTransmitterVariant.h"
+
+#include <dtkCore/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterEmitter implementation
@@ -80,6 +82,8 @@ template <typename T> QString dtkComposerTransmitterEmitter<T>::kindName(void) c
 
 template <typename T> dtkComposerTransmitter::LinkMap dtkComposerTransmitterEmitter<T>::leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
+    DTK_UNUSED(transmitter);
+
     LinkMap link_map;
     foreach(dtkComposerTransmitterLink *l, list)
         link_map.insert(this, l);

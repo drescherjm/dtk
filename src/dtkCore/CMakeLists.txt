@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: mar. oct. 18 10:00:42 2011 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 225
+## Last-Updated: Tue Apr  3 12:32:22 2012 (+0200)
+##           By: Julien Wintz
+##     Update #: 227
 ######################################################################
 ## 
 ### Commentary: 
@@ -111,7 +111,7 @@ set(${PROJECT_NAME}_SOURCES
 
 set(${PROJECT_NAME}_SOURCES_WRAP)
 
-if(BUILD_WRAPPERS AND SWIG_FOUND)
+if(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
 
   set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS})
   
@@ -195,7 +195,7 @@ endif()
 
 set(${PROJECT_NAME}_MODULES)
 
-if(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
+if(DTK_BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   DEPENDS ${PROJECT_SOURCE_DIR}/dtkCore.i

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  1 12:37:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 23 11:50:00 2012 (+0100)
+ * Last-Updated: Tue Apr  3 15:54:15 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 117
+ *     Update #: 123
  */
 
 /* Commentary: 
@@ -22,6 +22,10 @@
 
 #include <QtCore>
 #include <QtGui>
+
+class dtkDistributedController;
+class dtkDistributedControllerStatusModel;
+class dtkDistributedControllerStatusView;
 
 class dtkComposer;
 class dtkComposerFactoryView;
@@ -76,6 +80,11 @@ public:
 
 public slots:
     void setModified(bool modified);
+
+public:
+    dtkDistributedController *distributed_controller;
+    dtkDistributedControllerStatusModel *distributed_status_model;
+    dtkDistributedControllerStatusView *distributed_status_view;
 
 public:
     dtkComposer *composer;

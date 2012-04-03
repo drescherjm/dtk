@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr  2 20:54:03 2012 (+0200)
+ * Last-Updated: Tue Apr  3 16:02:04 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1404
+ *     Update #: 1426
  */
 
 /* Commentary:
@@ -19,6 +19,10 @@
 
 #include "dtkCreatorMainWindow.h"
 #include "dtkCreatorMainWindow_p.h"
+
+#include <dtkDistributed/dtkDistributedController.h>
+#include <dtkDistributed/dtkDistributedControllerStatusModel.h>
+#include <dtkDistributed/dtkDistributedControllerStatusView.h>
 
 #include <dtkComposer/dtkComposer.h>
 #include <dtkComposer/dtkComposerEvaluator.h>
@@ -117,12 +121,23 @@ void dtkCreatorMainWindowPrivate::setModified(bool modified)
 dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent), d(new dtkCreatorMainWindowPrivate)
 {
     d->q = this;
+    d->wl = 0;
+    d->wr = 0;
 
     // --
 
     this->readSettings();
 
     // -- Elements
+
+    d->distributed_controller = new dtkDistributedController;
+
+    d->distributed_status_model = new dtkDistributedControllerStatusModel(this);
+    d->distributed_status_model->setController(d->distributed_controller);
+
+    d->distributed_status_view = new dtkDistributedControllerStatusView(this);
+    d->distributed_status_view->setModel(d->distributed_status_model);
+    d->distributed_status_view->setVisible(false);
 
     d->composer = new dtkComposer;
 
@@ -268,6 +283,11 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     // -- Layout
 
+    dtkSplitter *left = new dtkSplitter(this);
+    left->setOrientation(Qt::Vertical);
+    left->addWidget(d->nodes);
+    left->addWidget(d->distributed_status_view);
+
     dtkSplitter *right = new dtkSplitter(this);
     right->setOrientation(Qt::Vertical);
     right->addWidget(d->scene);
@@ -280,7 +300,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     d->inner = new dtkSplitter(this);
     d->inner->setOrientation(Qt::Horizontal);
-    d->inner->addWidget(d->nodes);
+    d->inner->addWidget(left);
     d->inner->addWidget(d->graph);
     d->inner->addWidget(d->composer);
     d->inner->addWidget(right);
@@ -487,9 +507,15 @@ void dtkCreatorMainWindow::switchToCompo(void)
     d->scene->setVisible(true);
     d->editor->setVisible(true);
     d->stack->setVisible(true);
+    d->distributed_status_view->setVisible(false);
 
     d->graph->setVisible(false);
     d->log_view->setVisible(false);
+
+    if(!d->wl && !d->wr) {
+        d->wl = d->nodes->size().width();
+        d->wr = d->stack->size().width();
+    }
     
     d->inner->setSizes(QList<int>() << d->wl << 0 << this->size().width() - d->wl - d->wr << d->wr);
 }
@@ -500,6 +526,7 @@ void dtkCreatorMainWindow::switchToDstrb(void)
     d->scene->setVisible(true);
     d->editor->setVisible(true);
     d->stack->setVisible(true);
+    d->distributed_status_view->setVisible(true);
 
     d->graph->setVisible(false);
     d->log_view->setVisible(false);
@@ -516,6 +543,7 @@ void dtkCreatorMainWindow::switchToDebug(void)
     d->scene->setVisible(false);
     d->editor->setVisible(false);
     d->stack->setVisible(false);
+    d->distributed_status_view->setVisible(false);
 
     d->graph->setVisible(true);
     d->log_view->setVisible(true);

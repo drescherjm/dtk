@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr  2 22:52:59 2012 (+0200)
+ * Last-Updated: Tue Apr  3 14:55:10 2012 (+0200)
  *           By: tkloczko
- *     Update #: 3329
+ *     Update #: 3359
  */
 
 /* Commentary: 
@@ -851,16 +851,12 @@ public:
 
 public:
     QPointF pos;
-
-public:
-    bool dirty;
 };
 
 dtkComposerStackCommandCreateGroup::dtkComposerStackCommandCreateGroup(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandCreateGroupPrivate)
 {
     e->parent = NULL;
     e->node   = NULL;
-    e->dirty  = true;
 
     this->setText("Create group");
 }
@@ -899,6 +895,7 @@ void dtkComposerStackCommandCreateGroup::setNodes(dtkComposerSceneNodeList nodes
             e->reparent.last()->setOriginNode(node);
             e->reparent.last()->setOriginPosition(node->sceneBoundingRect().topLeft());
             e->reparent.last()->setTargetPosition(node->sceneBoundingRect().topLeft());
+            e->reparent.last()->setTargetNode(e->node);
         }
     }
 
@@ -936,12 +933,8 @@ void dtkComposerStackCommandCreateGroup::redo(void)
 
     e->node->setPos(e->pos - e->node->boundingRect().center());
     
-    foreach(dtkComposerStackCommandReparentNode *cmd, e->reparent) {
-        if (e->dirty)
-            cmd->setTargetNode(e->node);
+    foreach(dtkComposerStackCommandReparentNode *cmd, e->reparent)
         cmd->redo();
-    }
-    e->dirty = false;
 
     foreach(dtkComposerSceneNote *note, e->notes) {
         e->parent->removeNote(note);
@@ -950,11 +943,10 @@ void dtkComposerStackCommandCreateGroup::redo(void)
         note->setParent(e->node);
     }
 
-    if (e->parent->root() || e->parent->flattened() || e->parent->entered())
-        d->scene->addItem(e->node);
-
-    d->scene->update();
+    d->scene->addItem(e->node);
     d->scene->modify(true);
+    d->scene->update();
+
 }
 
 void dtkComposerStackCommandCreateGroup::undo(void)
@@ -1081,11 +1073,9 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
 
     e->parent->removeNode(e->node);
 
-    if (e->parent->root() || e->parent->flattened() || e->parent->entered())
-        d->scene->removeItem(e->node);
-
-    d->scene->update();
+    d->scene->removeItem(e->node);
     d->scene->modify(true);
+    d->scene->update();
 }
 
 void dtkComposerStackCommandDestroyGroup::undo(void)

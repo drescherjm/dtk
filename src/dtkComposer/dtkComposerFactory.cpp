@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: mar. avril  3 15:36:11 2012 (+0200)
+ * Last-Updated: mar. avril  3 17:58:10 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 487
+ *     Update #: 496
  */
 
 /* Commentary:
@@ -36,6 +36,7 @@
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeReal.h"
+#include "dtkComposerNodeRemote.h"
 #include "dtkComposerNodeString.h"
 #include "dtkComposerNodeVector.h"
 #include "dtkComposerNodeWorld.h"
@@ -389,13 +390,13 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->types["Process"] = "process";
 
     // dtkDistributed nodes
-    d->nodes << "World";
-    d->tags["World"] = QStringList() <<  "distributed" ;
-    d->types["World"] = "world";
+    d->nodes << "Remote";
+    d->tags["Remote"] = QStringList() <<  "distributed" << "tcp" << "world";
+    d->types["Remote"] = "remote";
 
-    d->nodes << "MpiWorld";
-    d->tags["MpiWorld"] = QStringList() <<  "distributed" << "mpi";
-    d->types["MpiWorld"] = "mpiworld";
+    d->nodes << "World";
+    d->tags["World"] = QStringList() <<  "distributed" << "mpi" << "tcp" << "world";
+    d->types["World"] = "world";
 
     d->nodes << "CommunicatorRank";
     d->tags["CommunicatorRank"] = QStringList() <<  "rank" << "distributed" << "mpi" << "communicator";
@@ -448,6 +449,9 @@ dtkComposerFactory::~dtkComposerFactory(void)
 
 dtkComposerNode *dtkComposerFactory::create(const QString& type)
 {
+    if(type == "composite")
+        return new dtkComposerNodeComposite;
+
     // constant nodes
 
     if(type == "pi")
@@ -659,8 +663,8 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "world")
         return new dtkComposerNodeWorld;
 
-    if(type == "mpiworld")
-        return new dtkComposerNodeMpiWorld;
+    if(type == "remote")
+        return new dtkComposerNodeRemote;
 
     if(type == "communicatorSize")
         return new dtkComposerNodeCommunicatorSize;

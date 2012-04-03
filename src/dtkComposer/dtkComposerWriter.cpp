@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:36:36 2012 (+0200)
- *           By: tkloczko
- *     Update #: 413
+ * Last-Updated: mar. avril  3 17:59:01 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 414
  */
 
 /* Commentary: 
@@ -164,6 +164,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
             tag.setTagName("block");
 
         tag.setAttribute("title", node->title());
+        tag.setAttribute("type", composite->wrapee()->type());
 
         dtkComposerScenePort *port = NULL;
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 12:58:15
  * Version: $Id$
- * Last-Updated: mar. avril  3 15:55:25 2012 (+0200)
+ * Last-Updated: mar. avril  3 17:28:17 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 14
+ *     Update #: 16
  */
 
 /* Commentary:
@@ -42,39 +42,11 @@ public:
     QString titleHint(void);
 
 public:
-    virtual void begin(void);
-    virtual void end(void);
-
-private:
-    dtkComposerNodeWorldPrivate *d;
-};
-
-
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerNodeMpiWorld declaration
-// /////////////////////////////////////////////////////////////////
-
-class dtkComposerNodeMpiWorldPrivate;
-
-class DTKCOMPOSER_EXPORT dtkComposerNodeMpiWorld : public dtkComposerNodeWorld
-{
-public:
-             dtkComposerNodeMpiWorld(void);
-    virtual ~dtkComposerNodeMpiWorld(void);
-
-public:
-    QString type(void);
-
-public:
-    QString titleHint(void);
-
-public:
     void begin(void);
     void end(void);
 
 private:
-    dtkComposerNodeMpiWorldPrivate *d;
+    dtkComposerNodeWorldPrivate *d;
 };
 
 #endif /* DTKCOMPOSERNODEWORLD_H */

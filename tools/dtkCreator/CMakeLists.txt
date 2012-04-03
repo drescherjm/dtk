@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Aug  3 17:34:51 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Mar 20 11:33:09 2012 (+0100)
+## Last-Updated: Tue Apr  3 15:52:39 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 166
+##     Update #: 167
 ######################################################################
 ## 
 ### Commentary: 
@@ -67,7 +67,8 @@ target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkLog
   dtkCore
-  dtkComposer)
+  dtkComposer
+  dtkDistributed)
 
 if(APPLE)
 target_link_libraries(${PROJECT_NAME}

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:27 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Mar 22 00:06:29 2012 (+0100)
+ * Last-Updated: Tue Apr  3 15:07:03 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1523
+ *     Update #: 1526
  */
 
 /* Commentary: 
@@ -514,6 +514,8 @@ public:
 
 dtkTagScope::dtkTagScope(QWidget *parent) : QFrame(parent)
 {
+    Q_INIT_RESOURCE(dtkGui);
+
     d = new dtkTagScopePrivate;
 
     d->completer_model = new QStringListModel(this);

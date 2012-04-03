@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Tue Nov 16 15:32:20 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Sat Oct 29 12:54:35 2011 (+0200)
+## Last-Updated: Tue Apr  3 11:42:24 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 19
+##     Update #: 20
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,15 +17,15 @@
 ## 
 ######################################################################
 
-set(dtk_INCLUDE_DIR  "@dtk_INCLUDE_DIRS@")
-set(DTK_INCLUDE_DIR  "@dtk_INCLUDE_DIRS@")
-set(dtk_INCLUDE_DIRS "@dtk_INCLUDE_DIRS@")
+set(dtk_INCLUDE_DIR  "@dtk_INCLUDE_DIR@")
+set(DTK_INCLUDE_DIR  "@dtk_INCLUDE_DIR@")
+set(dtk_INCLUDE_DIRS "@dtk_INCLUDE_DIR@")
 
-set(dtk_LIBRARY_DIR  "@dtk_LIBRARY_DIRS@")
-set(DTK_LIBRARY_DIR  "@dtk_LIBRARY_DIRS@")
-set(dtk_LIBRARY_DIRS "@dtk_LIBRARY_DIRS@")
+set(dtk_LIBRARY_DIR  "@dtk_LIBRARY_DIR@")
+set(DTK_LIBRARY_DIR  "@dtk_LIBRARY_DIR@")
+set(dtk_LIBRARY_DIRS "@dtk_LIBRARY_DIR@")
 
-set(dtk_CMAKE_DIRS   "@dtk_CMAKE_DIRS@")
+set(dtk_CMAKE_DIRS   "@dtk_CMAKE_DIR@")
 
 set(dtk_USE_FILE "@dtk_USE_FILE@")
 

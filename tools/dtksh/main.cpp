@@ -89,7 +89,7 @@ int main(int argc, char **argv)
     dtkScriptInterpreter *interpreter = dtkScriptInterpreterPool::instance()->console("python");
 
     if(!interpreter) {
-        qDebug() << "No interpreter available. Is BUILD_WRAPPERS enabled ?";
+        qDebug() << "No interpreter available. Is DTK_BUILD_WRAPPERS enabled ?";
         return 0;
     }
     

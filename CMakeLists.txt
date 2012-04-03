@@ -23,7 +23,7 @@ project(dtk)
 
 set(${PROJECT_NAME}_VERSION_MAJOR 0 CACHE STRING "dtk major version number." FORCE)
 set(${PROJECT_NAME}_VERSION_MINOR 6 CACHE STRING "dtk minor version number." FORCE)
-set(${PROJECT_NAME}_VERSION_BUILD 0 CACHE STRING "dtk build version number." FORCE)
+set(${PROJECT_NAME}_VERSION_BUILD 1 CACHE STRING "dtk build version number." FORCE)
 set(${PROJECT_NAME}_VERSION
   "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD}")
 

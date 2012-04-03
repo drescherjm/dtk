@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 30 14:32:01 2012 (+0200)
+ * Last-Updated: Tue Apr  3 16:31:21 2012 (+0200)
  *           By: tkloczko
- *     Update #: 194
+ *     Update #: 198
  */
 
 /* Commentary: 
@@ -22,6 +22,8 @@
 
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterVariant.h"
+
+#include <dtkCore/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterReceiver implementation
@@ -100,7 +102,7 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::connect(dtkCompose
 
     if (transmitter->kind() == Emitter) {
      
-        if (emitter = dynamic_cast<dtkComposerTransmitterEmitter<T> *>(transmitter)) {
+        if ((emitter = dynamic_cast<dtkComposerTransmitterEmitter<T> *>(transmitter))) {
             if (!emitters.contains(emitter)) {
                 emitters << emitter;
                 active_emitter = emitter;
@@ -173,7 +175,7 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::disconnect(dtkComp
     
         dtkComposerTransmitterEmitter<T> *emitter = NULL;
 
-        if (emitter = dynamic_cast<dtkComposerTransmitterEmitter<T> *>(transmitter)) {
+        if ((emitter = dynamic_cast<dtkComposerTransmitterEmitter<T> *>(transmitter))) {
 
             ok = emitters.removeOne(emitter);
 
@@ -232,6 +234,8 @@ template <typename T> void dtkComposerTransmitterReceiver<T>::setActiveEmitter(d
  */
 template <typename T> dtkComposerTransmitter::LinkMap dtkComposerTransmitterReceiver<T>::rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
+    DTK_UNUSED(transmitter);
+
     LinkMap link_map;
     foreach(dtkComposerTransmitterLink *l, list)
         link_map.insert(this, l);

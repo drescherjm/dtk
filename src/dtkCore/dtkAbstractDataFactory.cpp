@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: lun. nov. 28 15:52:13 2011 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 228
+ * Last-Updated: Tue Apr  3 15:55:32 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 229
  */
 
 /* Commentary:
@@ -343,31 +343,37 @@ bool dtkAbstractDataFactory::registerDataDeserializerType(const QString& type, c
 
 unsigned int dtkAbstractDataFactory::count(const QString& type) const
 {
+    DTK_UNUSED(type);
     return d->creators.keys().count();
 }
 
 unsigned int dtkAbstractDataFactory::countReaders(const QString& type) const
 {
+    DTK_UNUSED(type);
     return d->readers.keys().count();
 }
 
 unsigned int dtkAbstractDataFactory::countWriters(const QString& type) const
 {
+    DTK_UNUSED(type);
     return d->writers.keys().count();
 }
 
 unsigned int dtkAbstractDataFactory::countConverters(const QString& type) const
 {
+    DTK_UNUSED(type);
     return d->converters.keys().count();
 }
 
 unsigned int dtkAbstractDataFactory::countSerializers(const QString& type) const
 {
+    DTK_UNUSED(type);
     return d->serializers.keys().count();
 }
 
 unsigned int dtkAbstractDataFactory::countDeserializers(const QString& type) const
 {
+    DTK_UNUSED(type);
     return d->deserializers.keys().count();
 }
 

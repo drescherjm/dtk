@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 26 16:11:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 17 09:10:38 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 456
+ * Last-Updated: Tue Apr  3 16:01:44 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 459
  */
 
 /* Commentary: 
@@ -121,6 +121,8 @@ void dtkScriptInterpreterConsole::registerPrompt(char *(*prompt)(void))
 
 void dtkScriptInterpreterConsole::registerBindings(QString style)
 {
+    DTK_UNUSED(style);
+
 #ifdef HAVE_EDITLINE
     el_set(d->el_engine, EL_EDITOR, style.toAscii().constData());    
 #endif
@@ -133,6 +135,8 @@ QString dtkScriptInterpreterConsole::prompt(void) const
 
 void dtkScriptInterpreterConsole::start(Priority priority)
 {
+    DTK_UNUSED(priority);
+
 #ifdef HAVE_EDITLINE
     d->el_engine = el_init("dtkScriptInterpreter", stdin, stdout, stderr);
     el_set(d->el_engine, EL_PROMPT, d->prompt);
@@ -360,7 +364,7 @@ void dtkScriptInterpreter::load(const QString& file)
 
 void dtkScriptInterpreter::save(const QString& file)
 {
-
+    DTK_UNUSED(file);
 }
 
 void dtkScriptInterpreter::registerPrompt(char *(*prompt)(void))

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mars 26 15:55:58 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 775
+ * Last-Updated: Tue Apr  3 15:40:36 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 778
  */
 
 /* Commentary: 
@@ -307,7 +307,7 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
 {
     d->node = node;
 
-    if(dtkComposerSceneNodeComposite *c = dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
+    if(dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
 
         d->loop_ports->clear();
         
@@ -358,7 +358,7 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
         d->input_ports->clear();
         d->output_ports->clear();
 
-        if(dtkComposerNodeControlIf *i_node = dynamic_cast<dtkComposerNodeControlIf *>(node->wrapee())) {
+        if(dynamic_cast<dtkComposerNodeControlIf *>(node->wrapee())) {
             d->add_loop_port->setEnabled(false);
             d->rem_loop_port->setEnabled(false);
         } else {
@@ -550,7 +550,7 @@ void dtkComposerSceneNodeEditor::addLoopPort(void)
     command_body_o->setType(dtkComposerScenePort::Output);
     command_body_o->setKind(dtkComposerTransmitter::Variant);
 
-    if(dtkComposerNodeControlForEach *f_node = dynamic_cast<dtkComposerNodeControlForEach *>(d->node->wrapee())) {
+    if(dynamic_cast<dtkComposerNodeControlForEach *>(d->node->wrapee())) {
         command_cond_i = NULL;
     } else {
         command_cond_i = new dtkComposerStackCommandCreatePort;
@@ -560,7 +560,7 @@ void dtkComposerSceneNodeEditor::addLoopPort(void)
         command_cond_i->setKind(dtkComposerTransmitter::Proxy);
     }
 
-    if(dtkComposerNodeControlFor *f_node = dynamic_cast<dtkComposerNodeControlFor *>(d->node->wrapee())) {
+    if(dynamic_cast<dtkComposerNodeControlFor *>(d->node->wrapee())) {
         command_incr_i = new dtkComposerStackCommandCreatePort;
         command_incr_i->setScene(d->scene);
         command_incr_i->setNode(control->block("Increment"));

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: Mon Mar 26 12:40:45 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mars 26 13:28:04 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 18
+ * Last-Updated: Tue Apr  3 16:06:32 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 20
  */
 
 /* Commentary:

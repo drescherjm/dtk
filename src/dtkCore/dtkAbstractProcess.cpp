@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep 12 11:01:28 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 89
+ * Last-Updated: Tue Apr  3 16:08:09 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 91
  */
 
 /* Commentary: 
@@ -24,9 +24,9 @@ dtkAbstractProcess::dtkAbstractProcess(dtkAbstractProcess *parent) : dtkAbstract
 
 }
 
-dtkAbstractProcess::dtkAbstractProcess(const dtkAbstractProcess& process)
+dtkAbstractProcess::dtkAbstractProcess(const dtkAbstractProcess& process) : dtkAbstractObject()
 {
-    DTK_UNUSED(process);
+
 }
 
 dtkAbstractProcess::~dtkAbstractProcess(void)

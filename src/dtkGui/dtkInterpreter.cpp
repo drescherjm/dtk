@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 15:31:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 10:25:27 2012 (+0200)
+ * Last-Updated: Wed Apr  4 13:03:15 2012 (+0200)
  *           By: tkloczko
- *     Update #: 415
+ *     Update #: 419
  */
 
 /* Commentary: 
@@ -73,6 +73,8 @@ dtkInterpreter::dtkInterpreter(QWidget *parent) : dtkTextEditor(parent)
 
 dtkInterpreter::~dtkInterpreter(void)
 {
+    dtkLogger::instance().detachText(this);
+
     delete d;
 }
 

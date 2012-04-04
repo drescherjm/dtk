@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 26 16:11:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:01:44 2012 (+0200)
+ * Last-Updated: Wed Apr  4 14:41:12 2012 (+0200)
  *           By: tkloczko
- *     Update #: 459
+ *     Update #: 467
  */
 
 /* Commentary: 
@@ -24,7 +24,9 @@
 
 #include <iostream>
 
-#ifdef HAVE_EDITLINE
+#include <dtkConfig.h>
+
+#if defined(DTK_HAVE_EDIT)
 #include <histedit.h>
 #endif
 
@@ -91,7 +93,7 @@ class dtkScriptInterpreterConsolePrivate
 public:
     char *(*prompt)(void);
 
-#ifdef HAVE_EDITLINE
+#if defined(DTK_HAVE_EDIT)
     EditLine *el_engine;
     History  *el_history;
     HistEvent el_event;
@@ -123,7 +125,7 @@ void dtkScriptInterpreterConsole::registerBindings(QString style)
 {
     DTK_UNUSED(style);
 
-#ifdef HAVE_EDITLINE
+#if defined(DTK_HAVE_EDIT)
     el_set(d->el_engine, EL_EDITOR, style.toAscii().constData());    
 #endif
 }
@@ -137,7 +139,7 @@ void dtkScriptInterpreterConsole::start(Priority priority)
 {
     DTK_UNUSED(priority);
 
-#ifdef HAVE_EDITLINE
+#if defined(DTK_HAVE_EDIT)
     d->el_engine = el_init("dtkScriptInterpreter", stdin, stdout, stderr);
     el_set(d->el_engine, EL_PROMPT, d->prompt);
     el_set(d->el_engine, EL_EDITOR, "emacs");
@@ -154,7 +156,7 @@ void dtkScriptInterpreterConsole::start(Priority priority)
 
 void dtkScriptInterpreterConsole::stop(void)
 {
-#ifdef HAVE_EDITLINE
+#if defined(DTK_HAVE_EDIT)
     if(this->isRunning()) {
         std::cerr << "bye" << std::endl;
         if (d->el_history) {
@@ -174,7 +176,7 @@ void dtkScriptInterpreterConsole::stop(void)
 
 void dtkScriptInterpreterConsole::run(void)
 {
-#ifdef HAVE_EDITLINE
+#if defined(DTK_HAVE_EDIT)
     int count;
     int stat;
 

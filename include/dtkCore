@@ -17,7 +17,6 @@
 #include "../src/dtkCore/dtkAbstractViewNavigator.h"
 #include "../src/dtkCore/dtkCoreExport.h"
 #include "../src/dtkCore/dtkGlobal.h"
-#include "../src/dtkCore/dtkLog.h"
 #include "../src/dtkCore/dtkPlugin.h"
 #include "../src/dtkCore/dtkPluginManager.h"
 #include "../src/dtkCore/dtkQuat.h"

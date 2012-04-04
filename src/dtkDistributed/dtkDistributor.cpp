@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:44:39 2012 (+0200)
+ * Last-Updated: Wed Apr  4 14:17:28 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 27
+ *     Update #: 39
  */
 
 /* Commentary: 
@@ -18,8 +18,11 @@
  */
 
 #include "dtkDistributedController.h"
+#include "dtkDistributedControllerHeaderView.h"
 #include "dtkDistributedControllerStatusModel.h"
 #include "dtkDistributedControllerStatusView.h"
+#include "dtkDistributedControllerSubmitView.h"
+#include "dtkDistributedControllerTargetView.h"
 #include "dtkDistributor.h"
 
 class dtkDistributorPrivate
@@ -27,7 +30,10 @@ class dtkDistributorPrivate
 public:
     dtkDistributedController *controller;
     dtkDistributedControllerStatusModel *status_model;
+    dtkDistributedControllerHeaderView *header_view;
     dtkDistributedControllerStatusView *status_view;
+    dtkDistributedControllerSubmitView *submit_view;
+    dtkDistributedControllerTargetView *target_view;
 
 public:
     QLineEdit *host_address;
@@ -50,6 +56,12 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     d->status_view = new dtkDistributedControllerStatusView(this);
     d->status_view->setModel(d->status_model);
 
+    d->submit_view = new dtkDistributedControllerSubmitView(this);
+
+    d->header_view = new dtkDistributedControllerHeaderView(this);
+    
+    d->target_view = new dtkDistributedControllerTargetView(this);
+
     QHBoxLayout *t_layout = new QHBoxLayout;
     t_layout->addWidget(d->host_address);
     t_layout->addWidget(d->host_button);
@@ -59,6 +71,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     layout->setSpacing(0);
     layout->addLayout(t_layout);
     layout->addWidget(d->status_view);
+    layout->addWidget(d->submit_view);
 
     connect(d->host_button, SIGNAL(clicked()), this, SLOT(onConnect()));
 }

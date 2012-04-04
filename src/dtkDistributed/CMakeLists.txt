@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue Apr  3 16:55:26 2012 (+0200)
+## Last-Updated: Wed Apr  4 12:27:40 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 207
+##     Update #: 212
 ######################################################################
 ## 
 ### Commentary: 
@@ -28,10 +28,12 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedCommunicatorTcp.h
   dtkDistributedSlave.h
   dtkDistributedController.h
+  dtkDistributedControllerHeaderView.h
   dtkDistributedControllerStatusModel.h
   dtkDistributedControllerStatusModelItem.h
   dtkDistributedControllerStatusView.h
   dtkDistributedControllerSubmitView.h
+  dtkDistributedControllerTargetView.h
   dtkDistributedCore.h
   dtkDistributedCpu.h
   dtkDistributedExport.h
@@ -52,9 +54,11 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkDistributedCommunicatorTcp.h
   dtkDistributedSlave.h
   dtkDistributedController.h
+  dtkDistributedControllerHeaderView.h
   dtkDistributedControllerStatusModel.h
   dtkDistributedControllerStatusView.h
   dtkDistributedControllerSubmitView.h
+  dtkDistributedControllerTargetView.h
   dtkDistributedCore.h
   dtkDistributedCpu.h
   dtkDistributedGpu.h
@@ -73,10 +77,12 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedCommunicatorTcp.cpp
   dtkDistributedSlave.cpp
   dtkDistributedController.cpp
+  dtkDistributedControllerHeaderView.cpp
   dtkDistributedControllerStatusModel.cpp
   dtkDistributedControllerStatusModelItem.cpp
   dtkDistributedControllerStatusView.cpp
   dtkDistributedControllerSubmitView.cpp
+  dtkDistributedControllerTargetView.cpp
   dtkDistributedCore.cpp
   dtkDistributedCpu.cpp
   dtkDistributedGpu.cpp

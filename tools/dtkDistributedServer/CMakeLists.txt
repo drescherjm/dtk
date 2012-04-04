@@ -4,9 +4,9 @@
 ## Copyright (C) 2012 - Nicolas Niclausse, Inria.
 ## Created: mar. avril  3 16:40:15 2012 (+0200)
 ## Version: $Id$
-## Last-Updated: mar. avril  3 16:41:58 2012 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 4
+## Last-Updated: Wed Apr  4 11:21:53 2012 (+0200)
+##           By: tkloczko
+##     Update #: 5
 ######################################################################
 ##
 ### Commentary:
@@ -36,7 +36,8 @@ add_executable(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkCore
-  dtkDistributed)
+  dtkDistributed
+  dtkLog)
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

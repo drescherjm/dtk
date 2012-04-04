@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 21:03:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 08:56:41 2012 (+0200)
+ * Last-Updated: Wed Apr  4 11:20:10 2012 (+0200)
  *           By: tkloczko
- *     Update #: 53
+ *     Update #: 54
  */
 
 /* Commentary: 
@@ -107,7 +107,7 @@ dtkScriptInterpreter *dtkScriptManager::loadScript(const QString& path)
     DTK_UNUSED(path);
 
 #if defined(HAVE_SWIG) && defined(HAVE_TCL) && defined(HAVE_PYTHON)
-    dtkScriptInterpreter *interpreter;
+    dtkScriptInterpreter *interpreter = NULL;
 
     if(path.endsWith("py")) 
         interpreter = new dtkScriptInterpreterPython;
@@ -115,7 +115,12 @@ dtkScriptInterpreter *dtkScriptManager::loadScript(const QString& path)
     if(path.endsWith("tcl")) 
         interpreter = new dtkScriptInterpreterTcl;
 
-    interpreter->load(path);
+    if (interpreter) {
+        interpreter->load(path);
+    } else {
+        dtkError() << "Interpreter has not been found." ;
+        return NULL;
+    }
 
     d->loaders.insert(path, interpreter);
 

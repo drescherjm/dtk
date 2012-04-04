@@ -1,0 +1,7 @@
+#include "../src/dtkLog/dtkLog.h"
+#include "../src/dtkLog/dtkLogDestination.h"
+#include "../src/dtkLog/dtkLogEngine.h"
+#include "../src/dtkLog/dtkLogExport.h"
+#include "../src/dtkLog/dtkLogger.h"
+#include "../src/dtkLog/dtkLogModel.h"
+#include "../src/dtkLog/dtkLogView.h"

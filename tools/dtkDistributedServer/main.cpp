@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 14:41:29
  * Version: $Id$
- * Last-Updated: mar. avril  3 16:41:45 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 2
+ * Last-Updated: Wed Apr  4 11:21:44 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 3
  */
 
 /* Commentary:
@@ -20,6 +20,8 @@
 
 #include <dtkCore>
 #include <dtkDistributed>
+
+#include <dtkLog/dtkLog.h>
 
 #include <QtCore>
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Nov  2 10:48:42 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 12 12:19:49 2012 (+0100)
+ * Last-Updated: Wed Apr  4 11:23:34 2012 (+0200)
  *           By: tkloczko
- *     Update #: 137
+ *     Update #: 139
  */
 
 /* Commentary: 
@@ -25,7 +25,8 @@
 #include <dtkCore/dtkAbstractData>
 #include <dtkCore/dtkAbstractProcess>
 #include <dtkCore/dtkGlobal>
-#include <dtkCore/dtkLog>
+
+#include <dtkLog/dtkLog.h>
 
 #include <dtkMath/dtkMatrixSquared>
 

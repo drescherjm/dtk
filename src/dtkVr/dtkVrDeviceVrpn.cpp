@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 13:44:22 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep  6 11:44:08 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 141
+ * Last-Updated: Wed Apr  4 11:03:05 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 144
  */
 
 /* Commentary: 
@@ -26,7 +26,7 @@
 #include <vrpn_FileConnection.h>
 #include <quat.h>
 
-#include <dtkCore/dtkLog.h>
+#include <dtkLog/dtkLog.h>
 
 // /////////////////////////////////////////////////////////////////
 // vrpn callbacks (Definition at EOF.)
@@ -78,7 +78,7 @@ void dtkVrDeviceVrpnPrivate::run(void)
     this->tracker = new vrpn_Tracker_Remote(url.path().toAscii().constData());
 
     if (!this->analog || !this->button || !this->tracker) {
-        dtkWarning() << "Error connecting to server";
+        dtkError() << "Error connecting to server";
         return;
     }
 

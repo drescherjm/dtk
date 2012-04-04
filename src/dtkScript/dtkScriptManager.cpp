@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 21:03:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:07:26 2012 (+0200)
+ * Last-Updated: Wed Apr  4 08:56:41 2012 (+0200)
  *           By: tkloczko
- *     Update #: 51
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -19,7 +19,7 @@
 
 #include "dtkScriptManager.h"
 
-#include <dtkCore/dtkLog.h>
+#include <dtkLog/dtkLog.h>
 
 #include <dtkScript/dtkScriptInterpreter.h>
 #if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
@@ -65,9 +65,9 @@ void dtkScriptManager::readSettings(void)
     settings.endGroup();
 
     if(d->module_path.isEmpty() && d->script_path.isEmpty()) {
-        dtkWarning() << "Your dtk config does not seem to be set correctly.";
-        dtkWarning() << "Please set scripts.script_path.";
-        dtkWarning() << "Please set scripts.module_path.";
+        dtkWarn() << "Your dtk config does not seem to be set correctly.";
+        dtkWarn() << "Please set scripts.script_path.";
+        dtkWarn() << "Please set scripts.module_path.";
     }
 }
 

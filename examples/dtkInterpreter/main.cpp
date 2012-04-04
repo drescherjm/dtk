@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Apr 11 13:49:30 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 14 21:29:07 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 43
+ * Last-Updated: Wed Apr  4 10:28:40 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -32,17 +32,6 @@
 #endif
 
 #include <dtkGui/dtkInterpreter.h>
-
-// /////////////////////////////////////////////////////////////////
-// log message handler
-// /////////////////////////////////////////////////////////////////
-
-QWidget *log_output;
-
-void tstRedirectLogHandler(dtkLog::Level level, const QString& msg)
-{
-    QCoreApplication::postEvent(log_output, new dtkLogEvent(level, msg));
-}
 
 // /////////////////////////////////////////////////////////////////
 // 
@@ -89,10 +78,7 @@ int main(int argc, char *argv[])
 
         if(!options.getFlag("console") || !options.getFlag('c')) {
 
-            log_output = window.interpreter();
-
             window.interpreter()->registerInterpreter(interpreter);
-            window.interpreter()->registerAsHandler(tstRedirectLogHandler);
             window.show();
         } else {
             interpreter->start();

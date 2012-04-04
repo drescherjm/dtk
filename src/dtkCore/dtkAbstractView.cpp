@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:00:03 2012 (+0200)
+ * Last-Updated: Wed Apr  4 08:50:14 2012 (+0200)
  *           By: tkloczko
- *     Update #: 293
+ *     Update #: 295
  */
 
 /* Commentary:
@@ -22,8 +22,9 @@
 #include <dtkCore/dtkAbstractViewAnimator.h>
 #include <dtkCore/dtkAbstractViewNavigator.h>
 #include <dtkCore/dtkAbstractViewInteractor.h>
-#include <dtkCore/dtkLog.h>
 #include <dtkCore/dtkSmartPointer.h>
+
+#include <dtkLog/dtkLog.h>
 
 class dtkAbstractViewPrivate
 {
@@ -217,7 +218,7 @@ void dtkAbstractView::resize(int width, int height)
 void dtkAbstractView::addAnimator(dtkAbstractViewAnimator *animator)
 {
     if(animator->identifier().isEmpty()) {
-        qDebug() << "No identifier specified for animator. Not add to" << this->identifier();
+        dtkDebug() << "No identifier specified for animator. Not add to" << this->identifier();
         return;
     }
 
@@ -227,7 +228,7 @@ void dtkAbstractView::addAnimator(dtkAbstractViewAnimator *animator)
 void dtkAbstractView::addNavigator(dtkAbstractViewNavigator *navigator)
 {
     if(navigator->identifier().isEmpty()) {
-        qDebug() << "No identifier specified for navigator. Not add to" << this->identifier();
+        dtkDebug() << "No identifier specified for navigator. Not add to" << this->identifier();
         return;
     }
 
@@ -237,7 +238,7 @@ void dtkAbstractView::addNavigator(dtkAbstractViewNavigator *navigator)
 void dtkAbstractView::addInteractor(dtkAbstractViewInteractor *interactor)
 {
     if(interactor->identifier().isEmpty()) {
-        qDebug() << "No identifier specified for interactor. Not add to" << this->identifier();
+        dtkDebug() << "No identifier specified for interactor. Not add to" << this->identifier();
         return;
     }
 

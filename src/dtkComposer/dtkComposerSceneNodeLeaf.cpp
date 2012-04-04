@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 15:42:21 2012 (+0200)
+ * Last-Updated: Tue Apr  3 16:49:32 2012 (+0200)
  *           By: tkloczko
- *     Update #: 216
+ *     Update #: 217
  */
 
 /* Commentary: 
@@ -178,7 +178,6 @@ void dtkComposerSceneNodeLeaf::paint(QPainter *painter, const QStyleOptionGraphi
     QFont font = painter->font();
     QFontMetricsF metrics(font);
     QString title_text = metrics.elidedText(this->title(), Qt::ElideMiddle, this->boundingRect().width()-2-4*margin);
-    QRectF title_rect = metrics.boundingRect(title_text);
 
     QPointF title_pos;
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 17:26:54 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar  5 11:12:53 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 43
+ * Last-Updated: Wed Apr  4 10:03:15 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -24,6 +24,7 @@
 #include "dtkLogDestination.h"
 
 #include <QtCore>
+#include <QtGui>
 
 class dtkLogViewList;
 
@@ -33,9 +34,10 @@ public:
     dtkLog::Level level;
 
 public:
-                         dtkLogDestinationPointer  console;
-    QHash<QString,       dtkLogDestinationPointer> files;
-    QHash<dtkLogModel *, dtkLogDestinationPointer> models;
+                            dtkLogDestinationPointer  console;
+    QHash<QString,          dtkLogDestinationPointer> files;
+    QHash<QPlainTextEdit *, dtkLogDestinationPointer> editors;
+    QHash<dtkLogModel *,    dtkLogDestinationPointer> models;
 
 public:
     QList<dtkLogDestinationPointer> destinations;

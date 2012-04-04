@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Wed Sep 14 13:17:50 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Sep 14 13:22:58 2011 (+0200)
-##           By: Julien Wintz
-##     Update #: 14
+## Last-Updated: Wed Apr  4 10:57:21 2012 (+0200)
+##           By: tkloczko
+##     Update #: 15
 ######################################################################
 ## 
 ### Commentary: 
@@ -49,4 +49,5 @@ target_link_libraries(dtkDistributedTutorial4Slave
 
 target_link_libraries(dtkDistributedTutorial4Server
   dtkCore
-  dtkDistributed)
+  dtkDistributed
+  dtkLog)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 15:55:50 2012 (+0200)
+ * Last-Updated: Wed Apr  4 08:47:38 2012 (+0200)
  *           By: tkloczko
- *     Update #: 399
+ *     Update #: 400
  */
 
 /* Commentary:
@@ -24,7 +24,8 @@
 #include <dtkCore/dtkAbstractDataConverter.h>
 #include <dtkCore/dtkAbstractDataSerializer.h>
 #include <dtkCore/dtkAbstractDataDeserializer.h>
-#include <dtkCore/dtkLog.h>
+
+#include <dtkLog/dtkLog.h>
 
 #include <QtGui>
 

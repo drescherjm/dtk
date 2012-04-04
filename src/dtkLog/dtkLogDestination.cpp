@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 15:15:19 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. mars 20 16:14:45 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 77
+ * Last-Updated: Wed Apr  4 10:00:39 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 85
  */
 
 /* Commentary: 
@@ -82,6 +82,33 @@ void dtkLogDestinationFile::write(const QString& message)
 {
     d->stream << message << endl;
     d->stream.flush();
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkLogDestinationText
+// /////////////////////////////////////////////////////////////////
+
+class dtkLogDestinationTextPrivate
+{
+public:
+    QPlainTextEdit *editor;
+};
+
+dtkLogDestinationText::dtkLogDestinationText(QPlainTextEdit *editor) : d(new dtkLogDestinationTextPrivate)
+{
+    d->editor = editor;
+}
+
+dtkLogDestinationText::~dtkLogDestinationText(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+void dtkLogDestinationText::write(const QString& message)
+{
+    d->editor->setPlainText(d->editor->toPlainText() + "\n" + message);
 }
 
 // /////////////////////////////////////////////////////////////////

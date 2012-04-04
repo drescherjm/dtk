@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:23:18 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:07:23 2012 (+0200)
+ * Last-Updated: Wed Apr  4 10:33:12 2012 (+0200)
  *           By: tkloczko
- *     Update #: 136
+ *     Update #: 138
  */
 
 /* Commentary: 
@@ -20,7 +20,8 @@
 #include <QtGui>
 
 #include <dtkCore/dtkGlobal.h>
-#include <dtkCore/dtkLog.h>
+
+#include <dtkLog/dtkLog.h>
 
 #include <dtkGui/dtkTextEditor.h>
 
@@ -599,19 +600,6 @@ void dtkTextEditor::wheelEvent(QWheelEvent *event)
     }
 
     QPlainTextEdit::wheelEvent(event);
-}
-
-bool dtkTextEditor::eventFilter(QObject *object, QEvent *event)
-{
-    dtkLogEvent *logEvent = dynamic_cast<dtkLogEvent *>(event);
-    dtkTextEditor *editor = dynamic_cast<dtkTextEditor *>(object);
-
-    if (logEvent && editor) {
-        editor->appendPlainText(logEvent->message());
-        return true;
-    } else {
-        return QObject::eventFilter(object, event);
-    }
 }
 
 void dtkTextEditor::zoomIn(int range)

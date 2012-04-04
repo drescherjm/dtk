@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:54:04 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep  5 12:59:00 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 209
+ * Last-Updated: Wed Apr  4 08:49:02 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 210
  */
 
 /* Commentary:
@@ -18,7 +18,8 @@
  */
 
 #include <dtkCore/dtkAbstractObject.h>
-#include <dtkCore/dtkLog.h>
+
+#include <dtkLog/dtkLog.h>
 
 #include <QAtomicInt>
 

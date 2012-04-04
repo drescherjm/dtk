@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 15:29:01 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 14:25:34 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 41
+ * Last-Updated: Wed Apr  4 10:30:59 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -21,8 +21,6 @@
 #define DTKINTERPRETER_H
 
 #include "dtkGuiExport.h"
-
-#include <dtkCore/dtkLog.h>
 
 #include <dtkGui/dtkTextEditor.h>
 
@@ -42,7 +40,6 @@ public:
     void writeSettings(void);
 
     void registerInterpreter(dtkScriptInterpreter *interpreter);
-    void registerAsHandler(dtkLog::Handler handler);
 
     QString filter(QString text);
 
@@ -69,8 +66,6 @@ protected:
     void keyPressEvent(QKeyEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
-
-    bool eventFilter(QObject *object, QEvent *event);
 
 private:
     dtkInterpreterPrivate *d;

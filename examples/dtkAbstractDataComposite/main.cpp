@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Sep 26 09:28:44 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:04:07 2012 (+0200)
+ * Last-Updated: Wed Apr  4 10:27:01 2012 (+0200)
  *           By: tkloczko
- *     Update #: 151
+ *     Update #: 152
  */
 
 /* Commentary: 
@@ -22,7 +22,8 @@
 #include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkAbstractDataComposite.h>
 #include <dtkCore/dtkGlobal.h>
-#include <dtkCore/dtkLog.h>
+
+#include <dtkLog/dtkLog.h>
 
 #include <dtkGui/dtkAboutBox.h>
 

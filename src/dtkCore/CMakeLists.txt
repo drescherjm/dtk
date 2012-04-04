@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Apr  3 12:32:22 2012 (+0200)
-##           By: Julien Wintz
-##     Update #: 227
+## Last-Updated: Tue Apr  3 17:05:27 2012 (+0200)
+##           By: tkloczko
+##     Update #: 229
 ######################################################################
 ## 
 ### Commentary: 
@@ -45,7 +45,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractViewNavigator.h
   dtkCoreExport.h
   dtkGlobal.h
-  dtkLog.h
   dtkPluginManager.h
   dtkQuat.h
   dtkUpdater.h
@@ -96,7 +95,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkAbstractViewInteractor.cpp
   dtkAbstractViewNavigator.cpp
   dtkPlugin.cpp
-  dtkLog.cpp
   dtkPluginManager.cpp
   dtkQuat.cpp
   dtkSignalBlocker.h
@@ -178,6 +176,9 @@ add_library(${PROJECT_NAME} STATIC
   ${${PROJECT_NAME}_SOURCES_WRAP})
 
 endif(BUILD_SHARED_LIBS)
+
+target_link_libraries(${PROJECT_NAME}
+  dtkLog)
   
 target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES})
 

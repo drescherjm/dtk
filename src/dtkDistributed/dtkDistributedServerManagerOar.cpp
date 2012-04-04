@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 10:53:23 2012 (+0200)
+ * Last-Updated: Wed Apr  4 11:20:56 2012 (+0200)
  *           By: tkloczko
- *     Update #: 383
+ *     Update #: 385
  */
 
 /* Commentary:
@@ -153,8 +153,9 @@ QByteArray dtkDistributedServerManagerOar::status(void)
 
     data = stat.readAll();
     json = dtkJson::parse(data,success).toMap();
-    if(!success)
-        dtkDebug() << "Error retrieving JSON output out of oar  "  ;
+    if (!success) {
+        dtkDebug() << "Error retrieving JSON output out of oar";
+    }
     stat.close();
 
     QVariantList jobs;
@@ -238,8 +239,9 @@ QByteArray dtkDistributedServerManagerOar::status(void)
 
     data = stat.readAll();
     json = dtkJson::parse(data,success).toMap();
-    if(!success)
-        dtkDebug() << "Error retrieving JSON output out of oar  "  ;
+    if (!success) {
+        dtkDebug() << "Error retrieving JSON output out of oar";
+    }
     stat.close();
 
     QVariantMap nodes;

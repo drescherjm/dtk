@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 14:17:28 2012 (+0200)
+ * Last-Updated: Wed Apr  4 16:00:48 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 39
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -59,6 +59,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     d->submit_view = new dtkDistributedControllerSubmitView(this);
 
     d->header_view = new dtkDistributedControllerHeaderView(this);
+    d->header_view->setController(d->controller);
     
     d->target_view = new dtkDistributedControllerTargetView(this);
 
@@ -70,6 +71,8 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addLayout(t_layout);
+    layout->addWidget(d->header_view);
+    layout->addWidget(d->target_view);
     layout->addWidget(d->status_view);
     layout->addWidget(d->submit_view);
 

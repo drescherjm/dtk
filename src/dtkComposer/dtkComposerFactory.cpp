@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Wed Apr  4 00:16:45 2012 (+0200)
+ * Last-Updated: Wed Apr  4 14:17:07 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 503
+ *     Update #: 505
  */
 
 /* Commentary:
@@ -24,6 +24,7 @@
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
 #include "dtkComposerNodeConstants.h"
+#include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeControlDoWhile.h"
 #include "dtkComposerNodeControlIf.h"
 #include "dtkComposerNodeControlFor.h"
@@ -665,7 +666,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "process")
         return new dtkComposerNodeProcess;
 
-    // communicator nodes
+    // distributed nodes
+
+#if defined(DTK_HAVE_MPI)
 
     if(type == "world")
         return new dtkComposerNodeWorld;
@@ -702,6 +705,7 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "communicatorReceive")
         return new dtkComposerNodeCommunicatorReceive;
+#endif
 
     return NULL;
 }

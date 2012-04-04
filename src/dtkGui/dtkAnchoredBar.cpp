@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar 16 08:45:44 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jul  4 13:50:55 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 22
+ * Last-Updated: Tue Apr  3 16:07:25 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -75,5 +75,7 @@ void dtkAnchoredBar::mousePressEvent(QMouseEvent *event)
 
 void dtkAnchoredBar::mouseReleaseEvent(QMouseEvent *event)
 {
+    DTK_UNUSED(event);
+
     d->dragPosition = QPoint();
 }

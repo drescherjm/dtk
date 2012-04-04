@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Mar 18 15:07:40 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 18 19:07:16 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 42
+ * Last-Updated: Tue Apr  3 16:09:00 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -18,6 +18,8 @@
  */
 
 #include "dtkColorGrid.h"
+
+#include <dtkCore/dtkGlobal.h>
 
 #include <QtGui>
 
@@ -206,6 +208,8 @@ int dtkColorGrid::index() const
 
 void dtkColorGrid::paintEvent ( QPaintEvent * event )
 {
+    DTK_UNUSED(event);
+
     QPainter p(this);
     p.fillRect(rect(), palette().button());
     p.drawPixmap(0,0, d->pix);
@@ -283,6 +287,8 @@ void dtkColorGrid::mouseReleaseEvent ( QMouseEvent * event )
 
 void dtkColorGrid::leaveEvent ( QEvent * event )
 {
+    DTK_UNUSED(event);
+
     QToolTip::hideText();
 
     if (d->idx != -1) {

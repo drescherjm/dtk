@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mars 26 15:52:20 2012 (+0200)
+ * Last-Updated: mar. avril  3 17:59:01 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 410
+ *     Update #: 414
  */
 
 /* Commentary: 
@@ -106,6 +106,8 @@ void dtkComposerWriter::write(const QString& fileName, Type type)
 
 QDomElement dtkComposerWriter::writeNote(dtkComposerSceneNote *note, QDomElement& element, QDomDocument& document)
 {
+    Q_UNUSED(element);
+
     QDomText text = document.createTextNode(note->text());
     
     QDomElement tag = document.createElement("note");
@@ -122,6 +124,8 @@ QDomElement dtkComposerWriter::writeNote(dtkComposerSceneNote *note, QDomElement
 
 QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement& element, QDomDocument& document)
 {
+    Q_UNUSED(element);
+
     int current_id = d->id++; d->node_ids.insert(current_id, node);
 
     QDomElement tag = document.createElement("node");
@@ -160,10 +164,11 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
             tag.setTagName("block");
 
         tag.setAttribute("title", node->title());
+        tag.setAttribute("type", composite->wrapee()->type());
 
         dtkComposerScenePort *port = NULL;
 
-        for(uint i = 0; i < composite->inputPorts().count(); i++) {
+        for(int i = 0; i < composite->inputPorts().count(); i++) {
             port = composite->inputPorts().at(i);
             QDomElement property = document.createElement("port");
             property.setAttribute("id", i);
@@ -184,7 +189,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
 
         port = NULL;
 
-        for(uint i = 0; i < composite->outputPorts().count(); i++) {
+        for(int i = 0; i < composite->outputPorts().count(); i++) {
             port = composite->outputPorts().at(i);
             QDomElement property = document.createElement("port");
             property.setAttribute("id", i);
@@ -255,7 +260,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
 
         dtkComposerScenePort *port = NULL;
 
-        for(uint i = 0; i < leaf->inputPorts().count(); i++) {
+        for(int i = 0; i < leaf->inputPorts().count(); i++) {
             port = leaf->inputPorts().at(i);
             if(port->label() == leaf->wrapee()->inputLabelHint(i))
                 continue;
@@ -268,7 +273,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
 
         port = NULL;
 
-        for(uint i = 0; i < leaf->outputPorts().count(); i++) {
+        for(int i = 0; i < leaf->outputPorts().count(); i++) {
             port = leaf->outputPorts().at(i);
             if(port->label() == leaf->wrapee()->outputLabelHint(i))
                 continue;
@@ -317,6 +322,8 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
 
 QDomElement dtkComposerWriter::writeEdge(dtkComposerSceneEdge *edge, QDomElement& element, QDomDocument& document)
 {
+    Q_UNUSED(element);
+
     QDomElement source = document.createElement("source");
     source.setAttribute("node", d->node_ids.key(edge->source()->node()));
     if(edge->source()->type() == dtkComposerScenePort::Input) {

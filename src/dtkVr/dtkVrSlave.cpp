@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 10:03:10 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May  9 14:46:21 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 600
+ * Last-Updated: Wed Apr  4 11:04:59 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 602
  */
 
 /* Commentary: 
@@ -22,7 +22,6 @@
 
 #include <dtkCore/dtkAbstractView.h>
 #include <dtkCore/dtkGlobal.h>
-#include <dtkCore/dtkLog.h>
 #include <dtkCore/dtkVec3.h>
 #include <dtkCore/dtkQuat.h>
 

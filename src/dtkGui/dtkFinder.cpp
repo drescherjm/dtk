@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Jun 12 15:47:45 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Feb 28 15:35:11 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 76
+ * Last-Updated: Tue Apr  3 16:07:24 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 77
  */
 
 /* Commentary: 
@@ -500,6 +500,8 @@ void dtkFinderPathBar::mousePressEvent(QMouseEvent *event)
 
 void dtkFinderPathBar::paintEvent(QPaintEvent *event)
 {
+    DTK_UNUSED(event);
+
     QRect rect = this->rect();
 
     int x = 10;
@@ -900,6 +902,8 @@ void dtkFinderTreeView::startDrag(Qt::DropActions supportedActions)
 
 void dtkFinderTreeView::resizeEvent(QResizeEvent *event)
 {
+    DTK_UNUSED(event);
+
     this->setColumnWidth(0, this->width() / 2);
 }
 

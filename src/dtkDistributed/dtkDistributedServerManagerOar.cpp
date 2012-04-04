@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. sept. 20 15:35:21 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 374
+ * Last-Updated: Wed Apr  4 11:20:56 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 385
  */
 
 /* Commentary:
@@ -21,8 +21,14 @@
 #include "dtkDistributedServerManagerOar.h"
 
 #include <dtkCore/dtkGlobal.h>
-#include <dtkCore/dtkLog.h>
+
 #include <dtkJson/dtkJson.h>
+
+#include <dtkLog/dtkLog.h>
+
+// /////////////////////////////////////////////////////////////////
+// dtkDistributedServerManagerOar implementation
+// /////////////////////////////////////////////////////////////////
 
 QString  dtkDistributedServerManagerOar::submit(QString input)
 {
@@ -68,21 +74,21 @@ QString  dtkDistributedServerManagerOar::submit(QString input)
         oarsub += " "+json["options"].toString();
     }
 
-    qDebug() << DTK_PRETTY_FUNCTION << oarsub;
+    dtkDebug() << DTK_PRETTY_FUNCTION << oarsub;
     QProcess stat; stat.start(oarsub);
 
     if (!stat.waitForStarted()) {
-        dtkCritical() << "Unable to launch oarsub command";
+        dtkError() << "Unable to launch oarsub command";
         return QString("error");
     }
 
     if (!stat.waitForFinished()) {
-        dtkCritical() << "Unable to completed oarsub command";
+        dtkError() << "Unable to completed oarsub command";
         return QString("error");
     }
     if (stat.exitCode() > 0) {
         QString error = stat.readAllStandardError();
-        dtkCritical() << "Error running oarsub :" << error;
+        dtkError() << "Error running oarsub :" << error;
         return QString("error");
     } else {
         QString oarsubout = stat.readAll();
@@ -93,7 +99,7 @@ QString  dtkDistributedServerManagerOar::submit(QString input)
 
         Q_UNUSED(pos);
         
-        qDebug() << DTK_PRETTY_FUNCTION << jobid.at(0);
+        dtkDebug() << DTK_PRETTY_FUNCTION << jobid.at(0);
         return jobid.at(0);
     }
 }
@@ -105,21 +111,21 @@ QString dtkDistributedServerManagerOar::deljob(QString jobid)
     QProcess stat; stat.start(oardel);
 
     if (!stat.waitForStarted()) {
-        dtkCritical() << "Unable to launch oardel command";
+        dtkError() << "Unable to launch oardel command";
         return QString("ERROR");
     }
 
     if (!stat.waitForFinished()) {
-        dtkCritical() << "Unable to complete oardel command";
+        dtkError() << "Unable to complete oardel command";
         return QString("ERROR");
     }
     if (stat.exitCode() > 0) {
         QString error = stat.readAllStandardError();
-        dtkCritical() << "Error running oardel :" << error;
+        dtkError() << "Error running oardel :" << error;
         return QString("ERROR");
     } else {
         QString msg = stat.readAll();
-        qDebug() << DTK_PRETTY_FUNCTION << msg;
+        dtkDebug() << DTK_PRETTY_FUNCTION << msg;
         return QString("OK");
     }
 }
@@ -136,19 +142,20 @@ QByteArray dtkDistributedServerManagerOar::status(void)
     stat.start("oarstat -fJ");
 
     if (!stat.waitForStarted()) {
-        dtkCritical() << "Unable to launch oarstat command";
+        dtkError() << "Unable to launch oarstat command";
         return QByteArray();
     }
 
     if (!stat.waitForFinished()) {
-        dtkCritical() << "Unable to completed oarstat command";
+        dtkError() << "Unable to completed oarstat command";
         return QByteArray();
     }
 
     data = stat.readAll();
     json = dtkJson::parse(data,success).toMap();
-    if(!success)
-        dtkDebug() << "Error retrieving JSON output out of oar  "  ;
+    if (!success) {
+        dtkDebug() << "Error retrieving JSON output out of oar";
+    }
     stat.close();
 
     QVariantList jobs;
@@ -196,7 +203,7 @@ QByteArray dtkDistributedServerManagerOar::status(void)
             walltime = resources_list.at(3);
         } else {
             walltime = job["walltime"].toString(); //TODO: convert it to HH:MM:SS
-            qDebug() << DTK_PRETTY_FUNCTION << "can't find walltime from wanted resources! " << walltime;
+            dtkDebug() << DTK_PRETTY_FUNCTION << "can't find walltime from wanted resources! " << walltime;
         }
 
         QVariantMap jresources;
@@ -221,19 +228,20 @@ QByteArray dtkDistributedServerManagerOar::status(void)
     stat.start("oarnodes -J --sql \"host!=''\"");
 
     if (!stat.waitForStarted()) {
-        dtkCritical() << "Unable to launch oarnodes command";
+        dtkError() << "Unable to launch oarnodes command";
         return QByteArray();
     }
 
     if (!stat.waitForFinished()) {
-        dtkCritical() << "Unable to completed oarnodes command";
+        dtkError() << "Unable to completed oarnodes command";
         return QByteArray();
     }
 
     data = stat.readAll();
     json = dtkJson::parse(data,success).toMap();
-    if(!success)
-        dtkDebug() << "Error retrieving JSON output out of oar  "  ;
+    if (!success) {
+        dtkDebug() << "Error retrieving JSON output out of oar";
+    }
     stat.close();
 
     QVariantMap nodes;

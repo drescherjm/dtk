@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. avril  2 12:51:29 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 1968
+ * Last-Updated: Tue Apr  3 15:36:32 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 1969
  */
 
 /* Commentary:
@@ -546,14 +546,14 @@ dtkComposerGraphNodeList dtkComposerGraph::nodes(void)
 void dtkComposerGraph::removeNode(dtkComposerGraphNode *node)
 {
     foreach(dtkComposerGraphNode *n, d->nodes.values())
-        if(n = node)
+        if ((n = node))
             d->nodes.remove(d->nodes.key(n));
 }
 
 void dtkComposerGraph::removeEdge(dtkComposerGraphEdge *edge)
 {
     foreach(dtkComposerGraphEdge *e, d->edges.values())
-        if(e = edge) {
+        if ((e = edge)) {
             d->edges.remove(d->edges.key(e),e);
         }
 }

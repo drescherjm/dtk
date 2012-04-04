@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 15:40:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. févr. 20 16:09:51 2012 (+0100)
+ * Last-Updated: mar. avril  3 15:09:01 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 28
+ *     Update #: 30
  */
 
 /* Commentary:
@@ -50,4 +50,14 @@ dtkComposerNodeComposite::~dtkComposerNodeComposite(void)
 QString dtkComposerNodeComposite::type(void)
 {
     return "composite";
+}
+
+void dtkComposerNodeComposite::begin(void)
+{
+
+}
+
+void dtkComposerNodeComposite::end(void)
+{
+
 }

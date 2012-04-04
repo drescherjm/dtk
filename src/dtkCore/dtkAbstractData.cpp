@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Dec  9 18:06:16 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 398
+ * Last-Updated: Wed Apr  4 08:47:38 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 400
  */
 
 /* Commentary:
@@ -24,7 +24,8 @@
 #include <dtkCore/dtkAbstractDataConverter.h>
 #include <dtkCore/dtkAbstractDataSerializer.h>
 #include <dtkCore/dtkAbstractDataDeserializer.h>
-#include <dtkCore/dtkLog.h>
+
+#include <dtkLog/dtkLog.h>
 
 #include <QtGui>
 
@@ -594,6 +595,7 @@ void dtkAbstractData::setData(void* data, int channel)
 bool dtkAbstractData::casts(const QString& type)
 {
     DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(type);
 
     return false;
 }

@@ -5,6 +5,7 @@
 #include "../src/dtkDistributed/dtkDistributedControllerStatusModel.h"
 #include "../src/dtkDistributed/dtkDistributedControllerStatusModelItem.h"
 #include "../src/dtkDistributed/dtkDistributedControllerStatusView.h"
+#include "../src/dtkDistributed/dtkDistributedControllerSubmitView.h"
 #include "../src/dtkDistributed/dtkDistributedCore.h"
 #include "../src/dtkDistributed/dtkDistributedCpu.h"
 #include "../src/dtkDistributed/dtkDistributedExport.h"
@@ -22,3 +23,4 @@
 #include "../src/dtkDistributed/dtkDistributedSocket.h"
 #include "../src/dtkDistributed/dtkDistributedUnixServerSocket.h"
 #include "../src/dtkDistributed/dtkDistributedUnixSocket.h"
+#include "../src/dtkDistributed/dtkDistributor.h"

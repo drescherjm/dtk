@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Sep  8 14:40:18 2011 (+0200)
-##           By: Julien Wintz
-##     Update #: 294
+## Last-Updated: Wed Apr  4 11:01:16 2012 (+0200)
+##           By: tkloczko
+##     Update #: 295
 ######################################################################
 ## 
 ### Commentary: 
@@ -153,7 +153,8 @@ endif(BUILD_SHARED_LIBS)
 target_link_libraries(${PROJECT_NAME}
   dtkMath
   dtkCore
-  dtkDistributed)
+  dtkDistributed
+  dtkLog)
 
 if(MSVC)
   target_link_libraries(${PROJECT_NAME} wsock32)

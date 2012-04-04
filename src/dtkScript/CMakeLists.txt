@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2009 - Julien Wintz, Inria.
 ## Created: Tue Mar 10 15:12:38 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Sep  8 14:39:59 2011 (+0200)
-##           By: Julien Wintz
-##     Update #: 57
+## Last-Updated: Tue Apr  3 16:57:05 2012 (+0200)
+##           By: tkloczko
+##     Update #: 58
 ######################################################################
 ## 
 ### Commentary: 
@@ -81,7 +81,8 @@ add_library(${PROJECT_NAME} STATIC
 endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
-  dtkCore)
+  dtkCore
+  dtkLog)
 
 if(DTK_BUILD_WRAPPERS)
 target_link_libraries(${PROJECT_NAME}

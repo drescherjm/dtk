@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 15:31:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: mer. févr.  1 14:08:42 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 409
+ * Last-Updated: Wed Apr  4 10:25:27 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 415
  */
 
 /* Commentary: 
@@ -23,7 +23,8 @@
 #include <QtCore>
 #include <QtGui>
 
-#include <dtkCore/dtkLog.h>
+#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLogger.h>
 
 #include <dtkScript/dtkScriptInterpreter.h>
 #if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
@@ -66,6 +67,8 @@ dtkInterpreter::dtkInterpreter(QWidget *parent) : dtkTextEditor(parent)
     this->setShowLineNumbers(false);
     this->setShowCurrentLine(false);
     this->setShowRevisions(false);
+
+    dtkLogger::instance().attachText(this);
 }
 
 dtkInterpreter::~dtkInterpreter(void)
@@ -157,11 +160,6 @@ void dtkInterpreter::writeSettings(void)
     settings.setValue("backgroundcolor", this->backgroundColor());
     settings.setValue("foregroundcolor", this->foregroundColor());
     settings.endGroup();
-}
-
-void dtkInterpreter::registerAsHandler(dtkLog::Handler handler)
-{
-    dtkLog::registerHandler(handler);
 }
 
 void dtkInterpreter::registerInterpreter(dtkScriptInterpreter *interpreter)
@@ -353,17 +351,4 @@ QString dtkInterpreter::filter(QString text)
         .remove(DTK_COLOR_FG_BD)
         .remove(DTK_COLOR_FG_UL)
         .remove(DTK_NO_COLOR);
-}
-
-bool dtkInterpreter::eventFilter(QObject *object, QEvent *event)
-{
-    dtkLogEvent *log = dynamic_cast<dtkLogEvent *>(event);
-    dtkInterpreter *interpreter = dynamic_cast<dtkInterpreter *>(object);
-
-    if (log && interpreter) {
-        int stat; interpreter->output(log->message(), &stat);
-        return true;
-    } else {
-        return QObject::eventFilter(object, event);
-    }
 }

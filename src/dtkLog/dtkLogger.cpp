@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 17:19:52 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar  5 13:04:19 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 91
+ * Last-Updated: Wed Apr  4 10:23:59 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 94
  */
 
 /* Commentary: 
@@ -66,6 +66,26 @@ void dtkLogger::detachFile(const QString& path)
     d->destinations.removeOne(d->files[path]);
 
     d->files.remove(path);
+}
+
+void dtkLogger::attachText(QPlainTextEdit *editor)
+{
+    if(d->editors.contains(editor))
+        return;
+
+    d->editors[editor] = dtkLogDestinationPointer(new dtkLogDestinationText(editor));
+
+    d->destinations << d->editors[editor];
+}
+
+void dtkLogger::detachText(QPlainTextEdit *editor)
+{
+    if(!d->editors.contains(editor))
+        return;
+
+    d->destinations.removeOne(d->editors[editor]);
+
+    d->editors.remove(editor);
 }
 
 void dtkLogger::attachModel(dtkLogModel *model)

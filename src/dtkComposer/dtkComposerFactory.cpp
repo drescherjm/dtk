@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: jeu. mars 29 23:06:48 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 470
+ * Last-Updated: Wed Apr  4 00:16:45 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 503
  */
 
 /* Commentary:
@@ -16,6 +16,8 @@
 /* Change log:
  *
  */
+
+#include <dtkConfig.h>
 
 #include "dtkComposerFactory.h"
 #include "dtkComposerNode.h"
@@ -27,7 +29,6 @@
 #include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeControlForEach.h"
 #include "dtkComposerNodeControlWhile.h"
-#include "dtkComposerNodeDistributed.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeFileOperator.h"
 #include "dtkComposerNodeList.h"
@@ -39,6 +40,12 @@
 #include "dtkComposerNodeString.h"
 #include "dtkComposerNodeVector.h"
 #include "dtkComposerSceneNodeLeaf.h"
+
+#if defined(DTK_HAVE_MPI)
+#include "dtkComposerNodeDistributed.h"
+#include "dtkComposerNodeRemote.h"
+#include "dtkComposerNodeWorld.h"
+#endif
 
 #include <dtkCore/dtkGlobal.h>
 
@@ -388,6 +395,16 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->types["Process"] = "process";
 
     // dtkDistributed nodes
+
+#if defined(DTK_HAVE_MPI)
+    d->nodes << "Remote";
+    d->tags["Remote"] = QStringList() <<  "distributed" << "tcp" << "world";
+    d->types["Remote"] = "remote";
+
+    d->nodes << "World";
+    d->tags["World"] = QStringList() <<  "distributed" << "mpi" << "tcp" << "world";
+    d->types["World"] = "world";
+
     d->nodes << "CommunicatorRank";
     d->tags["CommunicatorRank"] = QStringList() <<  "rank" << "distributed" << "mpi" << "communicator";
     d->types["CommunicatorRank"] = "communicatorRank";
@@ -427,7 +444,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->nodes << "CommunicatorSend";
     d->tags["CommunicatorSend"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator";;
     d->types["CommunicatorSend"] = "communicatorSend";
-
+#endif
 }
 
 dtkComposerFactory::~dtkComposerFactory(void)
@@ -439,6 +456,9 @@ dtkComposerFactory::~dtkComposerFactory(void)
 
 dtkComposerNode *dtkComposerFactory::create(const QString& type)
 {
+    if(type == "composite")
+        return new dtkComposerNodeComposite;
+
     // constant nodes
 
     if(type == "pi")
@@ -646,6 +666,12 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
         return new dtkComposerNodeProcess;
 
     // communicator nodes
+
+    if(type == "world")
+        return new dtkComposerNodeWorld;
+
+    if(type == "remote")
+        return new dtkComposerNodeRemote;
 
     if(type == "communicatorSize")
         return new dtkComposerNodeCommunicatorSize;

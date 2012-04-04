@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 29 10:55:51 2012 (+0200)
+ * Last-Updated: Tue Apr  3 16:35:24 2012 (+0200)
  *           By: tkloczko
- *     Update #: 185
+ *     Update #: 190
  */
 
 /* Commentary: 
@@ -204,6 +204,8 @@ void dtkComposerTransmitter::removePrevious(dtkComposerTransmitter *transmitter)
  */
 bool dtkComposerTransmitter::connect(dtkComposerTransmitter *transmitter)
 {
+    DTK_UNUSED(transmitter);
+
     return false;
 }
 
@@ -235,6 +237,8 @@ void dtkComposerTransmitter::removeReceiver(dtkComposerTransmitter *receiver)
  */
 bool dtkComposerTransmitter::disconnect(dtkComposerTransmitter *transmitter)
 {
+    DTK_UNUSED(transmitter);
+
     return false;
 }
 
@@ -247,6 +251,9 @@ bool dtkComposerTransmitter::disconnect(dtkComposerTransmitter *transmitter)
  */
 dtkComposerTransmitter::LinkMap dtkComposerTransmitter::leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
+    DTK_UNUSED(transmitter);
+    DTK_UNUSED(list);
+
     return LinkMap();
 }
 
@@ -259,6 +266,9 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitter::leftLinks(dtkComposerTra
  */
 dtkComposerTransmitter::LinkMap dtkComposerTransmitter::rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
+    DTK_UNUSED(transmitter);
+    DTK_UNUSED(list);
+
     return LinkMap();
 }
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 21:03:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 14 21:15:22 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 49
+ * Last-Updated: Wed Apr  4 11:20:10 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 54
  */
 
 /* Commentary: 
@@ -19,7 +19,7 @@
 
 #include "dtkScriptManager.h"
 
-#include <dtkCore/dtkLog.h>
+#include <dtkLog/dtkLog.h>
 
 #include <dtkScript/dtkScriptInterpreter.h>
 #if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
@@ -65,9 +65,9 @@ void dtkScriptManager::readSettings(void)
     settings.endGroup();
 
     if(d->module_path.isEmpty() && d->script_path.isEmpty()) {
-        dtkWarning() << "Your dtk config does not seem to be set correctly.";
-        dtkWarning() << "Please set scripts.script_path.";
-        dtkWarning() << "Please set scripts.module_path.";
+        dtkWarn() << "Your dtk config does not seem to be set correctly.";
+        dtkWarn() << "Please set scripts.script_path.";
+        dtkWarn() << "Please set scripts.module_path.";
     }
 }
 
@@ -104,8 +104,10 @@ dtkScriptManager::~dtkScriptManager(void)
 
 dtkScriptInterpreter *dtkScriptManager::loadScript(const QString& path)
 {
+    DTK_UNUSED(path);
+
 #if defined(HAVE_SWIG) && defined(HAVE_TCL) && defined(HAVE_PYTHON)
-    dtkScriptInterpreter *interpreter;
+    dtkScriptInterpreter *interpreter = NULL;
 
     if(path.endsWith("py")) 
         interpreter = new dtkScriptInterpreterPython;
@@ -113,7 +115,12 @@ dtkScriptInterpreter *dtkScriptManager::loadScript(const QString& path)
     if(path.endsWith("tcl")) 
         interpreter = new dtkScriptInterpreterTcl;
 
-    interpreter->load(path);
+    if (interpreter) {
+        interpreter->load(path);
+    } else {
+        dtkError() << "Interpreter has not been found." ;
+        return NULL;
+    }
 
     d->loaders.insert(path, interpreter);
 
@@ -125,6 +132,8 @@ dtkScriptInterpreter *dtkScriptManager::loadScript(const QString& path)
 
 dtkScriptInterpreter *dtkScriptManager::unloadScript(const QString& path)
 {
+    DTK_UNUSED(path);
+
 #if defined(HAVE_SWIG) && defined(HAVE_TCL) && defined(HAVE_PYTHON)
     dtkScriptInterpreter *interpreter = d->loaders.value(path);
 
@@ -138,6 +147,8 @@ dtkScriptInterpreter *dtkScriptManager::unloadScript(const QString& path)
 
 dtkScriptInterpreter *dtkScriptManager::reloadScript(const QString& path)
 {
+    DTK_UNUSED(path);
+
 #if defined(HAVE_SWIG) && defined(HAVE_TCL) && defined(HAVE_PYTHON)
     this->unloadScript(path);
 

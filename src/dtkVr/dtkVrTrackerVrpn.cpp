@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 20:32:08 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 24 18:00:56 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 60
+ * Last-Updated: Wed Apr  4 11:03:42 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 63
  */
 
 /* Commentary: 
@@ -26,7 +26,7 @@
 #include <vrpn_FileConnection.h>
 #include <quat.h>
 
-#include <dtkCore/dtkLog.h>
+#include <dtkLog/dtkLog.h>
 
 // /////////////////////////////////////////////////////////////////
 // vrpn callbacks (Definition at EOF.)
@@ -93,7 +93,7 @@ void dtkVrTrackerVrpnPrivate::run(void)
     this->tracker = new vrpn_Tracker_Remote(url.toString().toAscii().constData());
 
     if (!this->analog || !this->button || !this->tracker) {
-        dtkWarning() << "Error connecting to server";
+        dtkError() << "Error connecting to server";
         return;
     }
 
@@ -140,7 +140,7 @@ void dtkVrTrackerVrpnPrivate::handle_button(const vrpn_BUTTONCB callback)
 void dtkVrTrackerVrpnPrivate::handle_analog(const vrpn_ANALOGCB callback)
 {
     if (callback.num_channel >= 10) {
-        dtkWarning() << "Only 10 analog channels are handled by dtkVrTrackerVrpn. Skipping all axes";
+        dtkWarn() << "Only 10 analog channels are handled by dtkVrTrackerVrpn. Skipping all axes";
         return;
     }
 

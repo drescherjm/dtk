@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. sept. 21 11:43:52 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 932
+ * Last-Updated: Wed Apr  4 10:56:50 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 943
  */
 
 /* Commentary: 
@@ -25,9 +25,10 @@
 #include "dtkDistributedServerManagerTorque.h"
 
 #include <dtkCore/dtkGlobal.h>
-#include <dtkCore/dtkLog.h>
 
 #include <dtkJson/dtkJson.h>
+
+#include <dtkLog/dtkLog.h>
 
 #include <QtCore>
 #include <QtXml>
@@ -39,7 +40,7 @@
 QDomDocument getXML(QString command);
 
 // /////////////////////////////////////////////////////////////////
-// dtkDistributedServerManagerTorque
+// dtkDistributedServerManagerTorque implementation
 // /////////////////////////////////////////////////////////////////
 
 QByteArray  dtkDistributedServerManagerTorque::status(void)
@@ -251,7 +252,7 @@ QString dtkDistributedServerManagerTorque::submit(QString input)
         QFile script(scriptName);
 
         if (!script.open(QFile::WriteOnly|QFile::Truncate)) {
-            qDebug() << "unable to open script for writing";
+            dtkWarn() << "unable to open script for writing";
         } else {
             QTextStream out(&script);
             out << "#!/bin/bash\n";
@@ -266,7 +267,7 @@ QString dtkDistributedServerManagerTorque::submit(QString input)
         qsub += " " + scriptName;
 
     } else {
-        qDebug() << "no script and no application";
+        dtkError() << "no script and no application";
         return QString("ERROR");
     }
 
@@ -280,25 +281,25 @@ QString dtkDistributedServerManagerTorque::submit(QString input)
         qsub += " "+json["options"].toString();
     }
 
-    qDebug() << DTK_PRETTY_FUNCTION << qsub;
+    dtkDebug() << DTK_PRETTY_FUNCTION << qsub;
     QProcess stat; stat.start(qsub);
 
     if (!stat.waitForStarted()) {
-        dtkCritical() << "Unable to launch stat command";
+        dtkError() << "Unable to launch stat command";
         return QString("ERROR");
     }
 
     if (!stat.waitForFinished()) {
-        dtkCritical() << "Unable to completed stat command";
+        dtkError() << "Unable to completed stat command";
         return QString("ERROR");
     }
     if (stat.exitCode() > 0) {
         QString error = stat.readAllStandardError();
-        dtkCritical() << "Error running qsub :" << error;
+        dtkError() << "Error running qsub :" << error;
         return QString("ERROR");
     } else {
         QString jobid = stat.readAll();
-        qDebug() << DTK_PRETTY_FUNCTION << jobid;
+        dtkDebug() << DTK_PRETTY_FUNCTION << jobid;
         return jobid.split(".").at(0);
     }
 }
@@ -309,21 +310,21 @@ QString dtkDistributedServerManagerTorque::deljob(QString jobid)
     QProcess stat; stat.start(qdel);
 
     if (!stat.waitForStarted()) {
-        dtkCritical() << "Unable to launch qdel command";
+        dtkError() << "Unable to launch qdel command";
         return QString("ERROR");
     }
 
     if (!stat.waitForFinished()) {
-        dtkCritical() << "Unable to complete qdel command";
+        dtkError() << "Unable to complete qdel command";
         return QString("ERROR");
     }
     if (stat.exitCode() > 0) {
         QString error = stat.readAllStandardError();
-        dtkCritical() << "Error running qdel :" << error;
+        dtkError() << "Error running qdel :" << error;
         return QString("ERROR");
     } else {
         QString msg = stat.readAll();
-        qDebug() << DTK_PRETTY_FUNCTION << msg;
+        dtkDebug() << DTK_PRETTY_FUNCTION << msg;
         return QString("OK");
     }
 }
@@ -338,19 +339,20 @@ QDomDocument getXML(QString command)
     QProcess stat; stat.start(command);
 
     if (!stat.waitForStarted()) {
-        dtkCritical() << "Unable to launch stat command";
+        dtkError() << "Unable to launch stat command";
         return document;
     }
 
     if (!stat.waitForFinished()) {
-        dtkCritical() << "Unable to completed stat command";
+        dtkError() << "Unable to completed stat command";
         return document;
     }
 
     QString data = stat.readAll();
 
-    if(!document.setContent(data, false, &error))
+    if(!document.setContent(data, false, &error)) {
         dtkDebug() << "Error retrieving xml output out of torque "  << error;
+    }
 
     stat.close();
 

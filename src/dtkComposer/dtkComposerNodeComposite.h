@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: Tue Feb 20 15:40:03 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. févr. 20 16:11:00 2012 (+0100)
+ * Last-Updated: mar. avril  3 14:56:48 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 5
+ *     Update #: 6
  */
 
 /* Commentary:
@@ -37,6 +37,10 @@ public:
 
 public:
     QString type(void);
+
+public:
+    virtual void begin(void);
+    virtual void end(void);
 
 private:
     dtkComposerNodeCompositePrivate *d;

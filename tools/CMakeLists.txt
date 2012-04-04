@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:06:43 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Jan 30 14:27:05 2012 (+0100)
-##           By: Julien Wintz
-##     Update #: 15
+## Last-Updated: mar. avril  3 16:38:42 2012 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 16
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,3 +24,4 @@ add_subdirectory(dtksh)
 add_subdirectory(dtkHeadersBuilder)
 add_subdirectory(dtkHeadersMover)
 add_subdirectory(dtkComposerEvaluator)
+add_subdirectory(dtkDistributedServer)

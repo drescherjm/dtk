@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:23:52 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 14:26:02 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 58
+ * Last-Updated: Wed Apr  4 10:33:23 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 59
  */
 
 /* Commentary: 
@@ -145,7 +145,6 @@ protected:
     void changeEvent(QEvent *event);
     void focusInEvent(QFocusEvent *event);
     void keyPressEvent(QKeyEvent *event);
-    bool eventFilter(QObject *object, QEvent *event);
 #if defined(Q_WS_MAC)
     bool macEvent(EventHandlerCallRef caller, EventRef event);
 #endif

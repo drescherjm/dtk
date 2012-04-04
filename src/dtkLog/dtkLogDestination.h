@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 15:10:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar  5 11:11:34 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 41
+ * Last-Updated: Wed Apr  4 10:00:13 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 49
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include "dtkLogExport.h"
 
 #include <QtCore>
+#include <QtGui>
 
 class dtkLogModel;
 
@@ -66,6 +67,25 @@ public:
 
 private:
     dtkLogDestinationFilePrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkLogDestinationText
+// /////////////////////////////////////////////////////////////////
+
+class dtkLogDestinationTextPrivate;
+
+class DTKLOG_EXPORT dtkLogDestinationText : public dtkLogDestination
+{
+public:
+     dtkLogDestinationText(QPlainTextEdit *editor);
+    ~dtkLogDestinationText(void);
+
+public:
+    void write(const QString& message);
+
+private:
+    dtkLogDestinationTextPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Aug 18 19:42:04 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Aug 18 19:42:06 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 1
+ * Last-Updated: Tue Apr  3 16:52:09 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 2
  */
 
 /* Commentary: 
@@ -20,8 +20,9 @@
 #include "dtkTestSingleton.h"
 
 #include <dtkCore/dtkGlobal.h>
-#include <dtkCore/dtkLog.h>
 #include <dtkCore/dtkSingleton.h>
+
+#include <dtkLog/dtkLog.h>
 
 int dtkTestSingleton::ms_count = 0;
 

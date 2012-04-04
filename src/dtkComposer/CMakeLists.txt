@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: jeu. mars 29 13:30:39 2012 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 459
+## Last-Updated: Wed Apr  4 00:14:13 2012 (+0200)
+##           By: Julien Wintz
+##     Update #: 476
 ######################################################################
 ##
 ### Commentary:
@@ -55,7 +55,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeControlFor.h
   dtkComposerNodeControlForEach.h
   dtkComposerNodeControlWhile.h
-  dtkComposerNodeDistributed.h
   dtkComposerNodeFile.h
   dtkComposerNodeFileOperator.h
   dtkComposerNodeInteger.h
@@ -145,7 +144,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeControlFor.cpp
   dtkComposerNodeControlForEach.cpp
   dtkComposerNodeControlWhile.cpp
-  dtkComposerNodeDistributed.cpp
   dtkComposerNodeFile.cpp
   dtkComposerNodeFileOperator.cpp
   dtkComposerNodeInteger.cpp
@@ -184,6 +182,22 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerWriter.cpp)
 
 set(${PROJECT_NAME}_RESOURCES dtkComposer.qrc)
+
+## #################################################################
+## Mpi sources
+## #################################################################
+
+if(MPI_FOUND)
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkComposerNodeDistributed.h
+  dtkComposerNodeRemote.h
+  dtkComposerNodeWorld.h)
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC})
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkComposerNodeDistributed.cpp
+  dtkComposerNodeRemote.cpp
+  dtkComposerNodeWorld.cpp)
+endif(MPI_FOUND)
 
 ## #################################################################
 ## Build rules
@@ -231,11 +245,14 @@ endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
-  dtkDistributed
   dtkMath
   dtkCore
   dtkGui
   dtkLog)
+
+if(MPI_FOUND)
+target_link_libraries(${PROJECT_NAME} dtkDistributed)
+endif(MPI_FOUND)
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

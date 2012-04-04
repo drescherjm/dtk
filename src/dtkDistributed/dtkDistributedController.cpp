@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. déc.  6 18:23:02 2011 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 1400
+ * Last-Updated: Wed Apr  4 10:45:19 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 1417
  */
 
 /* Commentary: 
@@ -27,11 +27,17 @@
 #include "dtkDistributedSocket.h"
 
 #include <dtkCore/dtkGlobal.h>
-#include <dtkCore/dtkLog.h>
 #include <dtkJson/dtkJson.h>
 #include <dtkJson/dtkJson.h>
+
+#include <dtkLog/dtkLog.h>
+
 #include <QtNetwork>
 #include <QtXml>
+
+// /////////////////////////////////////////////////////////////////
+// dtkDistributedControllerPrivate declaration
+// /////////////////////////////////////////////////////////////////
 
 class dtkDistributedControllerPrivate
 {
@@ -44,6 +50,10 @@ public:
 
     void read_status(QByteArray const &buffer, dtkDistributedSocket *socket);
 };
+
+// /////////////////////////////////////////////////////////////////
+// dtkDistributedController implementation
+// /////////////////////////////////////////////////////////////////
 
 dtkDistributedController::dtkDistributedController(void) : d(new dtkDistributedControllerPrivate)
 {
@@ -83,7 +93,7 @@ bool dtkDistributedController::isDisconnected(const QUrl& server)
 
 void dtkDistributedController::submit(const QUrl& server,  QByteArray& resources)
 {
-    qDebug() << "Want to submit jobs with resources:" << resources;
+    dtkDebug() << "Want to submit jobs with resources:" << resources;
     dtkDistributedMessage *msg  = new dtkDistributedMessage(dtkDistributedMessage::NEWJOB,"",-2,resources.size(),"json",resources);
     d->sockets[server.toString()]->sendRequest(msg);
 }
@@ -152,7 +162,7 @@ void dtkDistributedController::send(dtkAbstractData *data, QString jobid, qint16
     dtkDistributedSocket *socket = d->sockets[server];
     QByteArray *array = data->serialize();
     if (!array) {
-        dtkDebug() << "serialization failed for jobid" << jobid;
+        dtkFatal() << "serialization failed for jobid" << jobid;
         return;
     }
 
@@ -194,7 +204,7 @@ void dtkDistributedController::connect(const QUrl& server)
 
         } else {
 
-            qDebug() << "Unable to connect to" << server.toString();
+            dtkError() << "Unable to connect to" << server.toString();
         }
     }
 }
@@ -331,7 +341,7 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
                 }
 
             nodes[sockets.key(socket)] << node;
-            qDebug() << "Found node" << node->name() << "with" << node->cpus().count() << "cpus";
+            dtkDebug() << "Found node" << node->name() << "with" << node->cpus().count() << "cpus";
     }
     // Then, read jobs status
     dtkDistributedJob *job = new dtkDistributedJob;
@@ -351,7 +361,7 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
         if (coreref.contains(jobid))
             coreref[jobid]->setJob(job);
         jobs[sockets.key(socket)] << job;
-        qDebug() << "Found job " << job->Id() <<"from "<< job->Username() << " in queue " << job->Queue();
+        dtkDebug() << "Found job " << job->Id() <<"from "<< job->Username() << " in queue " << job->Queue();
     }
 }
 
@@ -371,12 +381,12 @@ void dtkDistributedController::read(void)
             emit updated();
             break;
         case dtkDistributedMessage::OKJOB:
-            qDebug() << DTK_PRETTY_FUNCTION << "New job queued: " << msg->jobid();
+            dtkDebug() << DTK_PRETTY_FUNCTION << "New job queued: " << msg->jobid();
             d->jobids[msg->jobid()] = server;
             emit updated();
             break;
         case dtkDistributedMessage::SETRANK:
-            qDebug() << DTK_PRETTY_FUNCTION << "set rank received";
+            dtkDebug() << DTK_PRETTY_FUNCTION << "set rank received";
             if (msg->rank() == 0) {
                 qDebug() << DTK_PRETTY_FUNCTION << "job started";
                 emit jobStarted(msg->jobid());
@@ -384,18 +394,18 @@ void dtkDistributedController::read(void)
             }
             break;
         case dtkDistributedMessage::ENDJOB:
-            qDebug() << "job finished: " << msg->jobid();
+            dtkDebug() << "job finished: " << msg->jobid();
             d->jobids.remove(msg->jobid());
             emit updated();
             break;
         case dtkDistributedMessage::DATA:
             result = msg->content();
-            qDebug() << "Result: " << result;
+            dtkDebug() << "Result: " << result;
             emit dataPosted(result);
             emit updated();
             break;
         default:
-            qDebug() << "unknown response from server ";
+            dtkDebug() << "unknown response from server ";
         };
     if (socket->bytesAvailable() > 0)
         this->read();
@@ -405,7 +415,7 @@ void dtkDistributedController::cleanup()
 {
     foreach (const QString& key, d->servers.keys()) {
         foreach (QProcess* server, d->servers[key]) {
-            qDebug() << "terminating servers started on" << key;
+            dtkDebug() << "terminating servers started on" << key;
             server->terminate();
         }
     }
@@ -413,6 +423,7 @@ void dtkDistributedController::cleanup()
 
 void dtkDistributedController::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus )
 {
+    DTK_UNUSED(exitCode);
     qDebug() << DTK_PRETTY_FUNCTION << "remote server deployment failure" << exitStatus ;
 }
 
@@ -420,64 +431,64 @@ void dtkDistributedController::error(QAbstractSocket::SocketError error)
 {
     switch(error) {
     case QAbstractSocket::ConnectionRefusedError:
-        qDebug() << DTK_PRETTY_FUNCTION << "The connection was refused by the peer (or timed out).";
+        dtkError() << DTK_PRETTY_FUNCTION << "The connection was refused by the peer (or timed out).";
         break;
     case QAbstractSocket::RemoteHostClosedError:
-        qDebug() << DTK_PRETTY_FUNCTION << "The remote host closed the connection. Note that the slave socket (i.e., this socket) will be closed after the remote close notification has been sent.";
+        dtkError() << DTK_PRETTY_FUNCTION << "The remote host closed the connection. Note that the slave socket (i.e., this socket) will be closed after the remote close notification has been sent.";
         break;
     case QAbstractSocket::HostNotFoundError:
-        qDebug() << DTK_PRETTY_FUNCTION << "The host address was not found.";
+        dtkError() << DTK_PRETTY_FUNCTION << "The host address was not found.";
         break;
     case QAbstractSocket::SocketAccessError:
-        qDebug() << DTK_PRETTY_FUNCTION << "The socket operation failed because the application lacked the required privileges.";
+        dtkError() << DTK_PRETTY_FUNCTION << "The socket operation failed because the application lacked the required privileges.";
         break;
     case QAbstractSocket::SocketResourceError:
-        qDebug() << DTK_PRETTY_FUNCTION << "The local system ran out of resources (e.g., too many sockets).";
+        dtkError() << DTK_PRETTY_FUNCTION << "The local system ran out of resources (e.g., too many sockets).";
         break;
     case QAbstractSocket::SocketTimeoutError:
-	qDebug() << DTK_PRETTY_FUNCTION << "The socket operation timed out.";
+	dtkError() << DTK_PRETTY_FUNCTION << "The socket operation timed out.";
         break;
     case QAbstractSocket::DatagramTooLargeError:
-        qDebug() << DTK_PRETTY_FUNCTION << "The datagram was larger than the operating system's limit (which can be as low as 8192 bytes).";
+        dtkError() << DTK_PRETTY_FUNCTION << "The datagram was larger than the operating system's limit (which can be as low as 8192 bytes).";
         break;
     case QAbstractSocket::NetworkError:
-        qDebug() << DTK_PRETTY_FUNCTION << "An error occurred with the network (e.g., the network cable was accidentally plugged out).";
+        dtkError() << DTK_PRETTY_FUNCTION << "An error occurred with the network (e.g., the network cable was accidentally plugged out).";
         break;
     case QAbstractSocket::AddressInUseError:
-        qDebug() << DTK_PRETTY_FUNCTION << "The address specified to QUdpSocket::bind() is already in use and was set to be exclusive.";
+        dtkError() << DTK_PRETTY_FUNCTION << "The address specified to QUdpSocket::bind() is already in use and was set to be exclusive.";
         break;
     case QAbstractSocket::SocketAddressNotAvailableError:
-        qDebug() << DTK_PRETTY_FUNCTION << "The address specified to QUdpSocket::bind() does not belong to the host.";
+        dtkError() << DTK_PRETTY_FUNCTION << "The address specified to QUdpSocket::bind() does not belong to the host.";
         break;
     case QAbstractSocket::UnsupportedSocketOperationError:
-	qDebug() << DTK_PRETTY_FUNCTION << "The requested socket operation is not supported by the local operating system (e.g., lack of IPv6 support).";
+	dtkError() << DTK_PRETTY_FUNCTION << "The requested socket operation is not supported by the local operating system (e.g., lack of IPv6 support).";
         break;
     case QAbstractSocket::ProxyAuthenticationRequiredError:
-	qDebug() << DTK_PRETTY_FUNCTION << "The socket is using a proxy, and the proxy requires authentication.";
+	dtkError() << DTK_PRETTY_FUNCTION << "The socket is using a proxy, and the proxy requires authentication.";
         break;
     case QAbstractSocket::SslHandshakeFailedError:
-	qDebug() << DTK_PRETTY_FUNCTION << "The SSL/TLS handshake failed, so the connection was closed (only used in QSslSocket)";
+	dtkError() << DTK_PRETTY_FUNCTION << "The SSL/TLS handshake failed, so the connection was closed (only used in QSslSocket)";
         break;
     case QAbstractSocket::UnfinishedSocketOperationError:
-	qDebug() << DTK_PRETTY_FUNCTION << "Used by QAbstractSocketEngine only, The last operation attempted has not finished yet (still in progress in the background).";
+	dtkError() << DTK_PRETTY_FUNCTION << "Used by QAbstractSocketEngine only, The last operation attempted has not finished yet (still in progress in the background).";
         break;
     case QAbstractSocket::ProxyConnectionRefusedError:
-        qDebug() << DTK_PRETTY_FUNCTION << "Could not contact the proxy server because the connection to that server was denied";
+        dtkError() << DTK_PRETTY_FUNCTION << "Could not contact the proxy server because the connection to that server was denied";
         break;
     case QAbstractSocket::ProxyConnectionClosedError:
-	qDebug() << DTK_PRETTY_FUNCTION << "The connection to the proxy server was closed unexpectedly (before the connection to the final peer was established)";
+	dtkError() << DTK_PRETTY_FUNCTION << "The connection to the proxy server was closed unexpectedly (before the connection to the final peer was established)";
         break;
     case QAbstractSocket::ProxyConnectionTimeoutError:
-	qDebug() << DTK_PRETTY_FUNCTION << "The connection to the proxy server timed out or the proxy server stopped responding in the authentication phase.";
+	dtkError() << DTK_PRETTY_FUNCTION << "The connection to the proxy server timed out or the proxy server stopped responding in the authentication phase.";
         break;
     case QAbstractSocket::ProxyNotFoundError:
-	qDebug() << DTK_PRETTY_FUNCTION << "The proxy address set with setProxy() (or the application proxy) was not found.";
+	dtkError() << DTK_PRETTY_FUNCTION << "The proxy address set with setProxy() (or the application proxy) was not found.";
         break;
     case QAbstractSocket::ProxyProtocolError:
-	qDebug() << DTK_PRETTY_FUNCTION << "The connection negotiation with the proxy server because the response from the proxy server could not be understood.";
+	dtkError() << DTK_PRETTY_FUNCTION << "The connection negotiation with the proxy server because the response from the proxy server could not be understood.";
         break;
     case QAbstractSocket::UnknownSocketError:
-	qDebug() << DTK_PRETTY_FUNCTION << "An unidentified error occurred.";
+	dtkError() << DTK_PRETTY_FUNCTION << "An unidentified error occurred.";
         break;
     default:
         break;

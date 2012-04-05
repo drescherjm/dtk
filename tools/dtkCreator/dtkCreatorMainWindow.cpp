@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:41:45 2012 (+0200)
+ * Last-Updated: Wed Apr  4 15:09:06 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1464
+ *     Update #: 1465
  */
 
 /* Commentary:
@@ -131,6 +131,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     // -- to be encupsulated within distributed layer
 
     d->distributor = new dtkDistributor(this);
+    d->distributor->setVisible(false);
 
     // 
 

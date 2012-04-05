@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 15:52:46 2012 (+0200)
+ * Last-Updated: Thu Apr  5 11:06:28 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1427
+ *     Update #: 1457
  */
 
 /* Commentary: 
@@ -43,13 +43,17 @@
 class dtkDistributedControllerPrivate
 {
 public:
-    QHash<QString, dtkDistributedSocket *> sockets;
-    QHash<QString, QList<dtkDistributedNode *> > nodes;
-    QHash<QString, QString > jobids;
-    QHash<QString, QList<dtkDistributedJob*> > jobs;// list of all queued and running jobs on each server
-    QHash<QString, QList<QProcess *> > servers;
-
     void read_status(QByteArray const &buffer, dtkDistributedSocket *socket);
+
+public:
+    QHash<QString, dtkDistributedSocket *> sockets;
+
+    QHash<QString, QList<dtkDistributedNode *> > nodes;
+    QHash<QString, QList<dtkDistributedJob *> > jobs;
+
+    QHash<QString, QString > jobids;
+
+    QHash<QString, QList<QProcess *> > servers;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -206,7 +210,6 @@ void dtkDistributedController::connect(const QUrl& server)
 
         settings.endGroup();
 
-
         if(socket->waitForConnected()) {
 
             QObject::connect(socket, SIGNAL(readyRead()), this, SLOT(read()));
@@ -253,6 +256,21 @@ QList<dtkDistributedNode *> dtkDistributedController::nodes(const QString& clust
     return d->nodes.value(cluster);
 }
 
+QList<dtkDistributedJob *> dtkDistributedController::jobs(void)
+{
+    QList<dtkDistributedJob *> j;
+
+    foreach(QList<dtkDistributedJob *> jobset, d->jobs)
+        j << jobset;
+
+    return j;
+}
+
+QList<dtkDistributedJob *> dtkDistributedController::jobs(const QString& cluster)
+{
+    return d->jobs.value(cluster);
+}
+
 void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkDistributedSocket *socket)
 {
     QVariantMap json = dtkJson::parse(buffer).toMap();
@@ -277,92 +295,93 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
         Q_UNUSED(usedcores);
         Q_UNUSED(usedgpus);
 
-            qint64 ncores = cores.count();
-            dtkDistributedNode *node = new dtkDistributedNode;
-            node->setName( jnode["name"].toString());
+        qint64 ncores = cores.count();
+        dtkDistributedNode *node = new dtkDistributedNode;
+        node->setName( jnode["name"].toString());
 
-            if(state == "free")
-                node->setState(dtkDistributedNode::Free);
-            if(state == "busy")
-                node->setState(dtkDistributedNode::Busy);
-            if(state == "down")
-                node->setState(dtkDistributedNode::Down);
+        if(state == "free")
+            node->setState(dtkDistributedNode::Free);
+        if(state == "busy")
+            node->setState(dtkDistributedNode::Busy);
+        if(state == "down")
+            node->setState(dtkDistributedNode::Down);
 
-            if(properties.contains("dell"))
-                node->setBrand(dtkDistributedNode::Dell);
-            if(properties.contains("hp"))
-                node->setBrand(dtkDistributedNode::Hp);
-            if(properties.contains("ibm"))
-                node->setBrand(dtkDistributedNode::Ibm);
+        if(properties.contains("dell"))
+            node->setBrand(dtkDistributedNode::Dell);
+        if(properties.contains("hp"))
+            node->setBrand(dtkDistributedNode::Hp);
+        if(properties.contains("ibm"))
+            node->setBrand(dtkDistributedNode::Ibm);
 
-            if (properties["myrinet"] == "10G") {
-                node->setNetwork(dtkDistributedNode::Myrinet10G);
-            } else if(properties["infiniband"] == "QDR") {
-                node->setNetwork(dtkDistributedNode::Infiniband40G);
-            } else if(properties["infiniband"] == "DDR") {
-                node->setNetwork(dtkDistributedNode::Infiniband20G);
-            } else if(properties["infiniband"] == "SDR") {
-                node->setNetwork(dtkDistributedNode::Infiniband10G);
-            } else if(properties["ethernet"] == "10G") {
-                node->setNetwork(dtkDistributedNode::Ethernet10G);
-            } else {
-                node->setNetwork(dtkDistributedNode::Ethernet1G);
+        if (properties["myrinet"] == "10G") {
+            node->setNetwork(dtkDistributedNode::Myrinet10G);
+        } else if(properties["infiniband"] == "QDR") {
+            node->setNetwork(dtkDistributedNode::Infiniband40G);
+        } else if(properties["infiniband"] == "DDR") {
+            node->setNetwork(dtkDistributedNode::Infiniband20G);
+        } else if(properties["infiniband"] == "SDR") {
+            node->setNetwork(dtkDistributedNode::Infiniband10G);
+        } else if(properties["ethernet"] == "10G") {
+            node->setNetwork(dtkDistributedNode::Ethernet10G);
+        } else {
+            node->setNetwork(dtkDistributedNode::Ethernet1G);
+        }
+        if(ngpus > 0) for(int i = 0; i < ngpus; i++) {
+                dtkDistributedGpu *gpu = new dtkDistributedGpu(node);
+
+                if(properties["gpu_model"] == "T10")
+                    gpu->setModel(dtkDistributedGpu::T10);
+                else if(properties["gpu_model"] == "C2050")
+                    gpu->setModel(dtkDistributedGpu::C2050);
+                else if(properties["gpu_model"] == "C2070")
+                    gpu->setModel(dtkDistributedGpu::C2070);
+
+                if(properties["gpu_arch"] == "nvidia-1.0")
+                    gpu->setArchitecture(dtkDistributedGpu::Nvidia_10);
+                else if(properties["gpu_arch"] == "nvidia-1.3")
+                    gpu->setArchitecture(dtkDistributedGpu::Nvidia_13);
+                else if(properties["gpu_arch"] == "nvidia-2.0")
+                    gpu->setArchitecture(dtkDistributedGpu::Nvidia_20);
+                else if(properties["gpu_arch"].toString().contains("amd"))
+                    gpu->setArchitecture(dtkDistributedGpu::AMD);
+
+                *node << gpu;
             }
-            if(ngpus > 0) for(int i = 0; i < ngpus; i++) {
-                    dtkDistributedGpu *gpu = new dtkDistributedGpu(node);
 
-                    if(properties["gpu_model"] == "T10")
-                        gpu->setModel(dtkDistributedGpu::T10);
-                    else if(properties["gpu_model"] == "C2050")
-                        gpu->setModel(dtkDistributedGpu::C2050);
-                    else if(properties["gpu_model"] == "C2070")
-                        gpu->setModel(dtkDistributedGpu::C2070);
+        for(int i = 0; i < ncpus; i++) {
+            dtkDistributedCpu *cpu = new dtkDistributedCpu(node);
+            int ppn = ncores / ncpus;
+            cpu->setCardinality(ppn);
 
-                    if(properties["gpu_arch"] == "nvidia-1.0")
-                        gpu->setArchitecture(dtkDistributedGpu::Nvidia_10);
-                    else if(properties["gpu_arch"] == "nvidia-1.3")
-                        gpu->setArchitecture(dtkDistributedGpu::Nvidia_13);
-                    else if(properties["gpu_arch"] == "nvidia-2.0")
-                        gpu->setArchitecture(dtkDistributedGpu::Nvidia_20);
-                    else if(properties["gpu_arch"].toString().contains("amd"))
-                        gpu->setArchitecture(dtkDistributedGpu::AMD);
+            if(properties["cpu_arch"] == "x86")
+                cpu->setArchitecture(dtkDistributedCpu::x86);
+            else
+                cpu->setArchitecture(dtkDistributedCpu::x86_64);
 
-                    *node << gpu;
+            if(properties["cpu_model"].toString().contains("opteron")) {
+                cpu->setModel(dtkDistributedCpu::Opteron);
+            } else if(properties["cpu_model"].toString().contains("xeon")) {
+                cpu->setModel(dtkDistributedCpu::Xeon);
+            }
+            foreach (QVariant jcore, cores) {
+                QVariantMap qmap = jcore.toMap();
+                dtkDistributedCore * core = new dtkDistributedCore(cpu, qmap["id"].toInt());
+                *cpu << core;
+                if  (qmap.contains("job")) {
+                    coreref[qmap["job"].toString()] = core;
                 }
+            }
+            *node << cpu;
+        }
 
-            for(int i = 0; i < ncpus; i++) {
-                    dtkDistributedCpu *cpu = new dtkDistributedCpu(node);
-                    int ppn = ncores / ncpus;
-                    cpu->setCardinality(ppn);
-
-                    if(properties["cpu_arch"] == "x86")
-                        cpu->setArchitecture(dtkDistributedCpu::x86);
-                    else
-                        cpu->setArchitecture(dtkDistributedCpu::x86_64);
-
-                    if(properties["cpu_model"].toString().contains("opteron")) {
-                        cpu->setModel(dtkDistributedCpu::Opteron);
-                    } else if(properties["cpu_model"].toString().contains("xeon")) {
-                        cpu->setModel(dtkDistributedCpu::Xeon);
-                    }
-                    foreach (QVariant jcore, cores) {
-                        QVariantMap qmap = jcore.toMap();
-                        dtkDistributedCore * core = new dtkDistributedCore(cpu, qmap["id"].toInt());
-                        *cpu << core;
-                        if  (qmap.contains("job")) {
-                            coreref[qmap["job"].toString()] = core;
-                        }
-                    }
-                    *node << cpu;
-                }
-
-            nodes[sockets.key(socket)] << node;
-            dtkDebug() << "Found node" << node->name() << "with" << node->cpus().count() << "cpus";
+        nodes[sockets.key(socket)] << node;
+        dtkDebug() << "Found node" << node->name() << "with" << node->cpus().count() << "cpus";
     }
-    // Then, read jobs status
-    dtkDistributedJob *job = new dtkDistributedJob;
 
     foreach(QVariant qv, json["jobs"].toList()) {
+
+        dtkDistributedJob *job = new dtkDistributedJob;
+
         QVariantMap jjob=qv.toMap();
         QString jobid = jjob["id"].toString();
         job->setId(jobid);
@@ -391,38 +410,39 @@ void dtkDistributedController::read(void)
 
     dtkDistributedMessage::Method method = msg->method();
     switch (method) {
-        case dtkDistributedMessage::OKSTATUS:
-            result = msg->content();
-            d->read_status(result,socket);
+    case dtkDistributedMessage::OKSTATUS:
+        result = msg->content();
+        d->read_status(result,socket);
+        emit status(QUrl(server));
+        emit updated();
+        break;
+    case dtkDistributedMessage::OKJOB:
+        dtkDebug() << DTK_PRETTY_FUNCTION << "New job queued: " << msg->jobid();
+        d->jobids[msg->jobid()] = server;
+        emit updated();
+        break;
+    case dtkDistributedMessage::SETRANK:
+        dtkDebug() << DTK_PRETTY_FUNCTION << "set rank received";
+        if (msg->rank() == 0) {
+            qDebug() << DTK_PRETTY_FUNCTION << "job started";
+            emit jobStarted(msg->jobid());
             emit updated();
-            break;
-        case dtkDistributedMessage::OKJOB:
-            dtkDebug() << DTK_PRETTY_FUNCTION << "New job queued: " << msg->jobid();
-            d->jobids[msg->jobid()] = server;
-            emit updated();
-            break;
-        case dtkDistributedMessage::SETRANK:
-            dtkDebug() << DTK_PRETTY_FUNCTION << "set rank received";
-            if (msg->rank() == 0) {
-                qDebug() << DTK_PRETTY_FUNCTION << "job started";
-                emit jobStarted(msg->jobid());
-                emit updated();
-            }
-            break;
-        case dtkDistributedMessage::ENDJOB:
-            dtkDebug() << "job finished: " << msg->jobid();
-            d->jobids.remove(msg->jobid());
-            emit updated();
-            break;
-        case dtkDistributedMessage::DATA:
-            result = msg->content();
-            dtkDebug() << "Result: " << result;
-            emit dataPosted(result);
-            emit updated();
-            break;
-        default:
-            dtkDebug() << "unknown response from server ";
-        };
+        }
+        break;
+    case dtkDistributedMessage::ENDJOB:
+        dtkDebug() << "job finished: " << msg->jobid();
+        d->jobids.remove(msg->jobid());
+        emit updated();
+        break;
+    case dtkDistributedMessage::DATA:
+        result = msg->content();
+        dtkDebug() << "Result: " << result;
+        emit dataPosted(result);
+        emit updated();
+        break;
+    default:
+        dtkDebug() << "unknown response from server ";
+    };
     if (socket->bytesAvailable() > 0)
         this->read();
 }

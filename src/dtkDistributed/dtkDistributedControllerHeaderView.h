@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr  4 12:22:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 16:03:37 2012 (+0200)
+ * Last-Updated: Thu Apr  5 10:10:05 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 7
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -39,7 +39,7 @@ public:
     void setController(dtkDistributedController *controller);
 
 public slots:
-    void onConnected(const QUrl& server);
+    void onStatus(const QUrl& server);
 
 private:
     dtkDistributedControllerHeaderViewPrivate *d;

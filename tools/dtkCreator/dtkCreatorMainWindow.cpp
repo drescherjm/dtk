@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 15:09:06 2012 (+0200)
+ * Last-Updated: Thu Apr  5 10:03:56 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1465
+ *     Update #: 1466
  */
 
 /* Commentary:
@@ -213,7 +213,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     QAction *step_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Step_Active.png"), "Step");
     step_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_N);
 
-    QAction *continue_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Continue_Active.png"), "Continue");
+    QAction *continue_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Continue_Active.png"), "Cont");
     continue_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_C);
 
     QAction *stop_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Stop_Active.png"), "Stop");

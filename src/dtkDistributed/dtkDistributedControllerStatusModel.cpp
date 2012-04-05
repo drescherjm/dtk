@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jul  1 13:48:10 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul  5 15:14:15 2011 (+0200)
+ * Last-Updated: Thu Apr  5 12:07:03 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 174
+ *     Update #: 208
  */
 
 /* Commentary: 
@@ -20,7 +20,9 @@
 #include "dtkDistributedController.h"
 #include "dtkDistributedControllerStatusModel.h"
 #include "dtkDistributedControllerStatusModelItem.h"
+#include "dtkDistributedCore.h"
 #include "dtkDistributedCpu.h"
+#include "dtkDistributedJob.h"
 #include "dtkDistributedNode.h"
 
 #include <dtkCore/dtkGlobal.h>
@@ -45,11 +47,27 @@ public:
 void dtkDistributedControllerStatusModelPrivate::update(void)
 {
     foreach(dtkDistributedNode *node, this->controller->nodes()) {
-        dtkDistributedControllerStatusModelItem*nodeItem=new dtkDistributedControllerStatusModelItem(QList<QVariant>() << node->name() << node->cpus().count() << node->gpus().count(), this->rootItem);
-        this->rootItem->appendChild(nodeItem);
+
+        dtkDistributedControllerStatusModelItem *nodeItem = new dtkDistributedControllerStatusModelItem(QList<QVariant>() << node->name(), this->rootItem);
+        nodeItem->kind = dtkDistributedControllerStatusModelItem::Node;
+
         foreach(dtkDistributedCpu *cpu, node->cpus()) {
-            nodeItem->appendChild(new dtkDistributedControllerStatusModelItem(QList<QVariant>() << cpu->cardinality() << "" << "", nodeItem));
+            foreach(dtkDistributedCore *core, cpu->cores()) {
+           
+                QList<QVariant> data;
+
+                if(core->job())
+                    data << core->job()->Id() + " " + core->job()->Username();
+                else
+                    data << "Free";
+     
+                dtkDistributedControllerStatusModelItem *coreItem = new dtkDistributedControllerStatusModelItem(data, nodeItem);
+                coreItem->kind = dtkDistributedControllerStatusModelItem::Core;
+                nodeItem->appendChild(coreItem);
+            }
         }
+
+        this->rootItem->appendChild(nodeItem);
     }
 
     q->reset();
@@ -63,7 +81,7 @@ dtkDistributedControllerStatusModel::dtkDistributedControllerStatusModel(QObject
 {
     d->q = this;
     d->controller = NULL;
-    d->rootItem = new dtkDistributedControllerStatusModelItem(QList<QVariant>() << "Node" << "#CPU" << "#GPU");
+    d->rootItem = new dtkDistributedControllerStatusModelItem(QList<QVariant>() << "Node");
 }
 
 dtkDistributedControllerStatusModel::~dtkDistributedControllerStatusModel(void)
@@ -84,9 +102,7 @@ void dtkDistributedControllerStatusModel::setController(dtkDistributedController
 
 void dtkDistributedControllerStatusModel::update(void)
 {
-    if (d->controller) {
-        d->update();
-    }
+    d->update();
 }
 
 int dtkDistributedControllerStatusModel::columnCount(const QModelIndex& parent) const
@@ -117,10 +133,13 @@ QVariant dtkDistributedControllerStatusModel::data(const QModelIndex& index, int
     if (!index.isValid())
         return QVariant();
     
+    dtkDistributedControllerStatusModelItem *item = static_cast<dtkDistributedControllerStatusModelItem *>(index.internalPointer());
+
+    if (role == Qt::TextColorRole && item->kind == dtkDistributedControllerStatusModelItem::Core)
+        return item->data(0).toString() == "Free" ? Qt::darkGreen : Qt::darkRed;
+
     if (role != Qt::DisplayRole)
         return QVariant();
-    
-    dtkDistributedControllerStatusModelItem *item = static_cast<dtkDistributedControllerStatusModelItem *>(index.internalPointer());
     
     return item->data(index.column());
 }

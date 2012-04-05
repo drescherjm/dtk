@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 10:26:58 2012 (+0200)
+ * Last-Updated: Thu Apr  5 10:14:03 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 68
+ *     Update #: 80
  */
 
 /* Commentary: 
@@ -29,6 +29,7 @@
 #include <QtNetwork>
 
 class dtkDistributedControllerPrivate;
+class dtkDistributedJob;
 class dtkDistributedNode;
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedController : public QObject
@@ -39,6 +40,7 @@ public:
      dtkDistributedController(void);
     ~dtkDistributedController(void);
 
+public:
     bool    isConnected(const QUrl& server);
     bool isDisconnected(const QUrl& server);
 
@@ -52,6 +54,8 @@ signals:
     void dataPosted(const QByteArray& data);
     void jobStarted(QString jobid);
 
+    void status(const QUrl& server);
+
 public slots:
     void    connect(const QUrl& server);
     void     deploy(const QUrl& server);
@@ -64,11 +68,16 @@ public:
     QList<dtkDistributedNode *> nodes(void);
     QList<dtkDistributedNode *> nodes(const QString& cluster);
 
+    QList<dtkDistributedJob *> jobs(void);
+    QList<dtkDistributedJob *> jobs(const QString& cluster);
+
 protected slots:
     void read(void);
     void error(QAbstractSocket::SocketError error);
-    void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus );
     void cleanup(void);
+
+protected slots:
+    void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
 private:
     dtkDistributedControllerPrivate *d;

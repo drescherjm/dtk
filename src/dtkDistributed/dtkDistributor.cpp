@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 16:00:48 2012 (+0200)
+ * Last-Updated: Thu Apr  5 14:30:18 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 45
+ *     Update #: 60
  */
 
 /* Commentary: 
@@ -36,13 +36,17 @@ public:
     dtkDistributedControllerTargetView *target_view;
 
 public:
-    QLineEdit *host_address;
+    QComboBox *host_address;
     QPushButton *host_button;
 };
 
 dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistributorPrivate)
 {
-    d->host_address = new QLineEdit("dtk://nef-devel.inria.fr:9999", this);
+    d->host_address = new QComboBox(this);
+    d->host_address->addItem("dtk://<host>[:port]");
+    d->host_address->addItem("dtk://nef-devel.inria.fr:9999");
+    d->host_address->addItem("dtk://fsophia.sophia.grid5000.fr:9999");
+    d->host_address->setEditable(true);
     d->host_address->setAttribute(Qt::WA_MacShowFocusRect, false);
 
     d->host_button = new QPushButton("Connect", this);
@@ -62,6 +66,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     d->header_view->setController(d->controller);
     
     d->target_view = new dtkDistributedControllerTargetView(this);
+    d->target_view->setController(d->controller);
 
     QHBoxLayout *t_layout = new QHBoxLayout;
     t_layout->addWidget(d->host_address);
@@ -71,8 +76,8 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addLayout(t_layout);
-    layout->addWidget(d->header_view);
     layout->addWidget(d->target_view);
+    layout->addWidget(d->header_view);
     layout->addWidget(d->status_view);
     layout->addWidget(d->submit_view);
 
@@ -88,6 +93,6 @@ dtkDistributor::~dtkDistributor(void)
 
 void dtkDistributor::onConnect(void)
 {
-    d->controller->deploy(QUrl(d->host_address->text()));
-    d->controller->connect(QUrl(d->host_address->text()));
+    d->controller->deploy(QUrl(d->host_address->currentText()));
+    d->controller->connect(QUrl(d->host_address->currentText()));
 }

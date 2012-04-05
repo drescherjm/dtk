@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr  5 11:06:28 2012 (+0200)
+ * Last-Updated: Thu Apr  5 15:52:59 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1457
+ *     Update #: 1479
  */
 
 /* Commentary: 
@@ -135,7 +135,7 @@ void dtkDistributedController::deploy(const QUrl& server)
 
         QString forward = key+"_server_forward";
         if (settings.contains(forward) && settings.value(forward).toString() == "true") {
-            dtkDebug() << "ssh port forwarding is set for server " << server.host();
+            dtkTrace() << "ssh port forwarding is set for server " << server.host();
             args << "-L" << QString::number(server.port())+":localhost:"+QString::number(server.port());
         }
 
@@ -146,9 +146,14 @@ void dtkDistributedController::deploy(const QUrl& server)
 
         settings.endGroup();
         serverProc->start("ssh", args);
+
+        sleep(1);
+
+        dtkDebug() << DTK_PRETTY_FUNCTION << "ssh" << args;
+
         if (!serverProc->waitForStarted(5000))
             dtkDebug() << "server not yet started  " << args;
-        if (!serverProc->waitForReadyRead(3000))
+        if (!serverProc->waitForReadyRead(5000))
             dtkDebug() << "no output from server yet" << args;
 
         QObject::connect(serverProc, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onProcessFinished(int,QProcess::ExitStatus)));
@@ -326,30 +331,35 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
         } else {
             node->setNetwork(dtkDistributedNode::Ethernet1G);
         }
-        if(ngpus > 0) for(int i = 0; i < ngpus; i++) {
-                dtkDistributedGpu *gpu = new dtkDistributedGpu(node);
+        
+        for(int i = 0; i < ngpus; i++) {
+            dtkDistributedGpu *gpu = new dtkDistributedGpu(node);
+            
+            if(properties["gpu_model"] == "T10")
+                gpu->setModel(dtkDistributedGpu::T10);
+            else if(properties["gpu_model"] == "C2050")
+                gpu->setModel(dtkDistributedGpu::C2050);
+            else if(properties["gpu_model"] == "C2070")
+                gpu->setModel(dtkDistributedGpu::C2070);
+            
+            if(properties["gpu_arch"] == "nvidia-1.0")
+                gpu->setArchitecture(dtkDistributedGpu::Nvidia_10);
+            else if(properties["gpu_arch"] == "nvidia-1.3")
+                gpu->setArchitecture(dtkDistributedGpu::Nvidia_13);
+            else if(properties["gpu_arch"] == "nvidia-2.0")
+                gpu->setArchitecture(dtkDistributedGpu::Nvidia_20);
+            else if(properties["gpu_arch"].toString().contains("amd"))
+                gpu->setArchitecture(dtkDistributedGpu::AMD);
+            
+            *node << gpu;
+        }
 
-                if(properties["gpu_model"] == "T10")
-                    gpu->setModel(dtkDistributedGpu::T10);
-                else if(properties["gpu_model"] == "C2050")
-                    gpu->setModel(dtkDistributedGpu::C2050);
-                else if(properties["gpu_model"] == "C2070")
-                    gpu->setModel(dtkDistributedGpu::C2070);
-
-                if(properties["gpu_arch"] == "nvidia-1.0")
-                    gpu->setArchitecture(dtkDistributedGpu::Nvidia_10);
-                else if(properties["gpu_arch"] == "nvidia-1.3")
-                    gpu->setArchitecture(dtkDistributedGpu::Nvidia_13);
-                else if(properties["gpu_arch"] == "nvidia-2.0")
-                    gpu->setArchitecture(dtkDistributedGpu::Nvidia_20);
-                else if(properties["gpu_arch"].toString().contains("amd"))
-                    gpu->setArchitecture(dtkDistributedGpu::AMD);
-
-                *node << gpu;
-            }
+        // feed cpus
 
         for(int i = 0; i < ncpus; i++) {
+
             dtkDistributedCpu *cpu = new dtkDistributedCpu(node);
+
             int ppn = ncores / ncpus;
             cpu->setCardinality(ppn);
 
@@ -363,14 +373,18 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
             } else if(properties["cpu_model"].toString().contains("xeon")) {
                 cpu->setModel(dtkDistributedCpu::Xeon);
             }
-            foreach (QVariant jcore, cores) {
-                QVariantMap qmap = jcore.toMap();
-                dtkDistributedCore * core = new dtkDistributedCore(cpu, qmap["id"].toInt());
+
+            for(int j = i*ppn; j < (i+1)*ppn; j++) {
+
+                QVariantMap qmap = cores.at(j).toMap();
+
+                dtkDistributedCore *core = new dtkDistributedCore(cpu, qmap["id"].toInt());
                 *cpu << core;
-                if  (qmap.contains("job")) {
+
+                if (qmap.contains("job"))
                     coreref[qmap["job"].toString()] = core;
-                }
             }
+
             *node << cpu;
         }
 

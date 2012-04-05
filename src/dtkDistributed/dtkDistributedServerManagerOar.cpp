@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr  5 15:57:13 2012 (+0200)
+ * Last-Updated: Thu Apr  5 16:14:20 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 386
+ *     Update #: 387
  */
 
 /* Commentary:
@@ -276,7 +276,7 @@ QByteArray dtkDistributedServerManagerOar::status(void)
             node.insert("corespercpu",jcore["cpucore"]); // temporary
             core.insert("id",jcore["core"]);
             if (!activecores[core["id"].toString()].isEmpty()) {
-                core.insert("jobs",activecores[core["id"].toString()]);
+                core.insert("job",activecores[core["id"].toString()]);
             }
             cores << core;
             props << prop;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr  4 12:23:14 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr  5 10:28:02 2012 (+0200)
+ * Last-Updated: Thu Apr  5 17:00:30 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 59
+ *     Update #: 77
  */
 
 /* Commentary: 
@@ -25,6 +25,9 @@ class dtkDistributedControllerHeaderViewPrivate
 public:
     QLabel *server;
     QLabel *stats;
+
+public:
+    QString cluster;
 
 public:
     dtkDistributedController *controller;
@@ -63,11 +66,27 @@ void dtkDistributedControllerHeaderView::setController(dtkDistributedController 
     connect(d->controller, SIGNAL(status(const QUrl&)), this, SLOT(onStatus(const QUrl&)));
 }
 
-void dtkDistributedControllerHeaderView::onStatus(const QUrl& server)
+void dtkDistributedControllerHeaderView::setCluster(const QString& cluster)
 {
-    d->server->setText(server.host());
+    d->cluster = cluster;
+
+    this->update();
+}
+
+void dtkDistributedControllerHeaderView::onStatus(const QUrl& cluster)
+{
+    d->cluster = cluster.toString();
+
+    this->update();
+}
+
+void dtkDistributedControllerHeaderView::update(void)
+{
+    d->server->setText(QUrl(d->cluster).host());
     
     d->stats->setText(QString("Nodes: %1\nJobs: %2")
-                      .arg(d->controller->nodes(server.toString()).count())
-                      .arg(d->controller->jobs(server.toString()).count()));
+                      .arg(d->controller->nodes(d->cluster).count())
+                      .arg(d->controller->jobs(d->cluster).count())); 
+
+    QFrame::update();
 }

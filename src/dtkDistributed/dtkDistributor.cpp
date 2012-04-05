@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr  5 16:45:51 2012 (+0200)
+ * Last-Updated: Thu Apr  5 17:07:22 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 66
+ *     Update #: 68
  */
 
 /* Commentary: 
@@ -83,6 +83,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
 
     connect(d->host_button, SIGNAL(clicked()), this, SLOT(onConnect()));
     connect(d->target_view, SIGNAL(selected(const QString&)), d->status_model, SLOT(setCluster(const QString&)));
+    connect(d->target_view, SIGNAL(selected(const QString&)), d->header_view, SLOT(setCluster(const QString&)));
 }
 
 dtkDistributor::~dtkDistributor(void)
@@ -97,5 +98,6 @@ void dtkDistributor::onConnect(void)
     d->controller->deploy(QUrl(d->host_address->currentText()));
     d->controller->connect(QUrl(d->host_address->currentText()));
 
+    d->header_view->setCluster(d->host_address->currentText());
     d->status_model->setCluster(d->host_address->currentText());
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jul  1 13:48:10 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr  5 12:07:03 2012 (+0200)
+ * Last-Updated: Thu Apr  5 16:52:53 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 208
+ *     Update #: 231
  */
 
 /* Commentary: 
@@ -38,6 +38,9 @@ public:
     dtkDistributedControllerStatusModelItem *rootItem;
 
 public:
+    QString cluster;
+
+public:
     void update(void);
 
 public:
@@ -46,7 +49,16 @@ public:
 
 void dtkDistributedControllerStatusModelPrivate::update(void)
 {
-    foreach(dtkDistributedNode *node, this->controller->nodes()) {
+    this->rootItem->clear();
+
+    QList<dtkDistributedNode *> nodes;
+
+    if(cluster.isEmpty())
+        nodes = this->controller->nodes();
+    else
+        nodes = this->controller->nodes(cluster);
+
+    foreach(dtkDistributedNode *node, nodes) {
 
         dtkDistributedControllerStatusModelItem *nodeItem = new dtkDistributedControllerStatusModelItem(QList<QVariant>() << node->name(), this->rootItem);
         nodeItem->kind = dtkDistributedControllerStatusModelItem::Node;
@@ -95,14 +107,24 @@ dtkDistributedControllerStatusModel::~dtkDistributedControllerStatusModel(void)
 void dtkDistributedControllerStatusModel::setController(dtkDistributedController *controller)
 {
     d->controller = controller;
-    d->update();
+
+    this->update();
 
     connect(d->controller, SIGNAL(updated()), this, SLOT(update()));
 }
 
+void dtkDistributedControllerStatusModel::setCluster(const QString& cluster)
+{
+    d->cluster = cluster;
+
+    this->update();
+}
+
 void dtkDistributedControllerStatusModel::update(void)
 {
+    this->beginResetModel();
     d->update();
+    this->endResetModel();
 }
 
 int dtkDistributedControllerStatusModel::columnCount(const QModelIndex& parent) const

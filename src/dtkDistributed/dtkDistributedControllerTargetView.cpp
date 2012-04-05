@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr  4 12:23:14 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr  5 14:31:28 2012 (+0200)
+ * Last-Updated: Thu Apr  5 16:38:55 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 20
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -33,6 +33,8 @@ dtkDistributedControllerTargetView::dtkDistributedControllerTargetView(QWidget *
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setFrameStyle(QFrame::NoFrame);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+    connect(this, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(onItemClicked(QListWidgetItem *)));
 }
 
 dtkDistributedControllerTargetView::~dtkDistributedControllerTargetView(void)
@@ -57,4 +59,9 @@ void dtkDistributedControllerTargetView::setController(dtkDistributedController 
 void dtkDistributedControllerTargetView::onConnected(const QUrl& server)
 {
     this->addItem(server.toString());
+}
+
+void dtkDistributedControllerTargetView::onItemClicked(QListWidgetItem *item)
+{
+    emit selected(item->text());
 }

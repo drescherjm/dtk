@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jul  1 16:46:29 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. juil.  1 17:21:07 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 35
+ * Last-Updated: Thu Apr  5 16:50:50 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -43,6 +43,18 @@ dtkDistributedControllerStatusModelItem::~dtkDistributedControllerStatusModelIte
 void dtkDistributedControllerStatusModelItem::appendChild(dtkDistributedControllerStatusModelItem *item)
 {
     d->childItems.append(item);
+}
+
+void dtkDistributedControllerStatusModelItem::removeChild(dtkDistributedControllerStatusModelItem *item)
+{
+    d->childItems.removeAll(item);
+}
+
+void dtkDistributedControllerStatusModelItem::clear(void)
+{
+    qDeleteAll(d->childItems);
+
+    d->childItems.clear();
 }
 
 dtkDistributedControllerStatusModelItem *dtkDistributedControllerStatusModelItem::child(int row)

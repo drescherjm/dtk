@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Dec 10 14:05:44 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Oct 14 21:26:59 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 19
+ * Last-Updated: Wed Apr  4 13:13:41 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -18,6 +18,8 @@
  */
 
 #include <QtGui>
+
+#include <dtkLog/dtkLogger.h>
 
 #include <dtkCore/dtkPluginManager.h>
 
@@ -41,6 +43,9 @@ int main(int argc, char **argv)
     application.setApplicationVersion("0.0.1");
     application.setOrganizationName("inria");
     application.setOrganizationDomain("fr");
+
+    dtkLogger::instance().setLevel(dtkLog::Trace);
+    dtkLogger::instance().attachConsole();
 
     dtkPluginManager::instance()->initialize();
     dtkScriptManager::instance()->initialize();

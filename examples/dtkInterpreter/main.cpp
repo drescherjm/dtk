@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Apr 11 13:49:30 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 10:28:40 2012 (+0200)
+ * Last-Updated: Wed Apr  4 13:04:10 2012 (+0200)
  *           By: tkloczko
- *     Update #: 46
+ *     Update #: 50
  */
 
 /* Commentary: 
@@ -33,6 +33,8 @@
 
 #include <dtkGui/dtkInterpreter.h>
 
+#include <dtkLog/dtkLog.h>
+
 // /////////////////////////////////////////////////////////////////
 // 
 // /////////////////////////////////////////////////////////////////
@@ -40,6 +42,9 @@
 int main(int argc, char *argv[])
 {
     QApplication application(argc, argv);
+    application.setApplicationName("dtkInterpreter");
+
+    dtkLogger::instance().setLevel(dtkLog::Trace);
 
     AnyOption options;
     options.addUsage("Usage: ./dtkInterpreter [FLAG] ... [OPTION=VALUE] ...");

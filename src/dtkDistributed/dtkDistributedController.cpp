@@ -285,7 +285,7 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
     // First, read nodes status
 
     // store mapping between cores and jobs in this list
-    QHash<QString,dtkDistributedCore *> coreref;
+    QHash<QString, QList<dtkDistributedCore *> > coreref;
 
     foreach(QVariant qv, json["nodes"].toList()) {
 
@@ -384,7 +384,7 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
                 *cpu << core;
 
                 if (qmap.contains("job"))
-                    coreref[qmap["job"].toString()] = core;
+                    coreref[qmap["job"].toString()] << core;
             }
 
             *node << cpu;
@@ -410,7 +410,8 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
         job->setStime(jjob["stime"].toInt());
         job->setResources(jjob["resources"].toString());
         if (coreref.contains(jobid))
-            coreref[jobid]->setJob(job);
+            foreach(dtkDistributedCore *job_core,  coreref[jobid])
+                job_core->setJob(job);
         jobs[sockets.key(socket)] << job;
         dtkDebug() << "Found job " << job->Id() <<"from "<< job->Username() << " in queue " << job->Queue();
     }

@@ -252,7 +252,7 @@ QByteArray dtkDistributedServerManagerOar::status(void)
             QVariantMap node = nodes[jcore["host"].toString()].toMap();
             QVariantList cores = node["cores"].toList();
 
-            core.insert("id",jcore["core"].toString());
+            core.insert("id",jcore["resource_id"].toString());
             if (!activecores[core["id"].toString()].isEmpty()) {
                 core.insert("job",activecores[core["id"].toString()]);
             }
@@ -274,7 +274,7 @@ QByteArray dtkDistributedServerManagerOar::status(void)
             }
             node.insert("name",jcore["host"]);
             node.insert("corespercpu",jcore["cpucore"]); // temporary
-            core.insert("id",jcore["core"]);
+            core.insert("id",jcore["resource_id"]);
             if (!activecores[core["id"].toString()].isEmpty()) {
                 core.insert("job",activecores[core["id"].toString()]);
             }

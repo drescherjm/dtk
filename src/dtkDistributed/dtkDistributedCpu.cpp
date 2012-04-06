@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 16:18:36 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr  6 14:37:47 2012 (+0200)
+ * Last-Updated: Fri Apr  6 14:55:52 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 30
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -27,6 +27,7 @@ public:
 
     dtkDistributedCpu::Architecture architecture;
     dtkDistributedCpu::Model model;
+
     int cardinality;
 
     QList<dtkDistributedCore *> cores;

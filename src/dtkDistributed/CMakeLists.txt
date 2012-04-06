@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Apr  6 10:15:47 2012 (+0200)
+## Last-Updated: Fri Apr  6 15:55:08 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 218
+##     Update #: 224
 ######################################################################
 ## 
 ### Commentary: 
@@ -30,6 +30,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedController.h
   dtkDistributedControllerHeaderView.h
   dtkDistributedControllerStatusModel.h
+  dtkDistributedControllerStatusModelFilter.h
   dtkDistributedControllerStatusModelItem.h
   dtkDistributedControllerStatusView.h
   dtkDistributedControllerSubmitView.h
@@ -57,6 +58,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkDistributedController.h
   dtkDistributedControllerHeaderView.h
   dtkDistributedControllerStatusModel.h
+  dtkDistributedControllerStatusModelFilter.h
   dtkDistributedControllerStatusView.h
   dtkDistributedControllerSubmitView.h
   dtkDistributedControllerTargetView.h
@@ -81,6 +83,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedController.cpp
   dtkDistributedControllerHeaderView.cpp
   dtkDistributedControllerStatusModel.cpp
+  dtkDistributedControllerStatusModelFilter.cpp
   dtkDistributedControllerStatusModelItem.cpp
   dtkDistributedControllerStatusView.cpp
   dtkDistributedControllerSubmitView.cpp

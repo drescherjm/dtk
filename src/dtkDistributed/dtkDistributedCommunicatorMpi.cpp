@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: ven. avril  6 14:08:07 2012 (+0200)
+ * Last-Updated: ven. avril  6 16:06:36 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 421
+ *     Update #: 445
  */
 
 /* Commentary: 
@@ -298,6 +298,30 @@ void dtkDistributedCommunicatorMpi::receive(dtkAbstractData *&data, qint16 sourc
         qDebug() << "Warning: deserialization failed";
 }
 
+/*!
+ *  send a QString
+ */
+
+void dtkDistributedCommunicatorMpi::send(const QString &s, qint16 target, int tag)
+{
+    qint64  length = s.length()+1;
+    qint64  size_l=1;
+    dtkDistributedCommunicator::send(&length,size_l,target,tag);
+
+    QByteArray Array = s.toAscii();
+    char *char_array = Array.data();
+    dtkDistributedCommunicator::send(char_array,length,target,tag);
+}
+
+void dtkDistributedCommunicatorMpi::receive(QString &s, qint16 source, int tag)
+{
+    qint64   length;
+    dtkDistributedCommunicator::receive(&length,1,source,tag);
+    char     s_c[length];
+
+    dtkDistributedCommunicator::receive(s_c, length, source,tag);
+    s = QString(s_c);
+}
 
 //! Barrier.
 /*!

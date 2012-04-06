@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr  6 11:22:03 2012 (+0200)
+ * Last-Updated: Fri Apr  6 14:39:50 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1500
+ *     Update #: 1519
  */
 
 /* Commentary: 
@@ -43,6 +43,9 @@
 class dtkDistributedControllerPrivate
 {
 public:
+    void clear();
+
+public:
     void read_status(QByteArray const &buffer, dtkDistributedSocket *socket);
 
 public:
@@ -54,7 +57,166 @@ public:
     QHash<QString, QString > jobids;
 
     QHash<QString, QList<QProcess *> > servers;
+
+public:
+    bool refreshing;
 };
+
+void dtkDistributedControllerPrivate::clear(void)
+{
+    foreach(QList<dtkDistributedNode *> n, this->nodes.values())
+        qDeleteAll(n);
+
+    foreach(QList<dtkDistributedJob *> j, this->jobs.values())
+        qDeleteAll(j);
+
+    this->nodes.clear();
+    this->jobs.clear();
+}
+
+void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkDistributedSocket *socket)
+{
+    if (this->refreshing) {
+        this->clear();
+        this->refreshing = false;
+    }
+
+    QVariantMap json = dtkJson::parse(buffer).toMap();
+    // TODO: check version
+    // First, read nodes status
+
+    // store mapping between cores and jobs in this list
+    QHash<QString, QList<dtkDistributedCore *> > coreref;
+
+    foreach(QVariant qv, json["nodes"].toList()) {
+
+        QVariantMap jnode = qv.toMap();
+
+        QVariantList cores    = jnode["cores"].toList();
+        int usedcores = jnode["cores_busy"].toInt();
+        int ncpus     = jnode["cpus"].toInt();
+        int ngpus     = jnode["gpus"].toInt();
+        int usedgpus  = jnode["gpus_busy"].toInt();
+        QVariantMap properties = jnode["properties"].toMap();
+        QString state =  jnode["state"].toString();
+
+        Q_UNUSED(usedcores);
+        Q_UNUSED(usedgpus);
+
+        qint64 ncores = cores.count();
+        dtkDistributedNode *node = new dtkDistributedNode;
+        node->setName( jnode["name"].toString());
+
+        if(state == "free")
+            node->setState(dtkDistributedNode::Free);
+        if(state == "busy")
+            node->setState(dtkDistributedNode::Busy);
+        if(state == "down")
+            node->setState(dtkDistributedNode::Down);
+
+        if(properties.contains("dell"))
+            node->setBrand(dtkDistributedNode::Dell);
+        if(properties.contains("hp"))
+            node->setBrand(dtkDistributedNode::Hp);
+        if(properties.contains("ibm"))
+            node->setBrand(dtkDistributedNode::Ibm);
+
+        if (properties["myrinet"] == "10G") {
+            node->setNetwork(dtkDistributedNode::Myrinet10G);
+        } else if(properties["infiniband"] == "QDR") {
+            node->setNetwork(dtkDistributedNode::Infiniband40G);
+        } else if(properties["infiniband"] == "DDR") {
+            node->setNetwork(dtkDistributedNode::Infiniband20G);
+        } else if(properties["infiniband"] == "SDR") {
+            node->setNetwork(dtkDistributedNode::Infiniband10G);
+        } else if(properties["ethernet"] == "10G") {
+            node->setNetwork(dtkDistributedNode::Ethernet10G);
+        } else {
+            node->setNetwork(dtkDistributedNode::Ethernet1G);
+        }
+        
+        for(int i = 0; i < ngpus; i++) {
+            dtkDistributedGpu *gpu = new dtkDistributedGpu(node);
+            
+            if(properties["gpu_model"] == "T10")
+                gpu->setModel(dtkDistributedGpu::T10);
+            else if(properties["gpu_model"] == "C2050")
+                gpu->setModel(dtkDistributedGpu::C2050);
+            else if(properties["gpu_model"] == "C2070")
+                gpu->setModel(dtkDistributedGpu::C2070);
+            
+            if(properties["gpu_arch"] == "nvidia-1.0")
+                gpu->setArchitecture(dtkDistributedGpu::Nvidia_10);
+            else if(properties["gpu_arch"] == "nvidia-1.3")
+                gpu->setArchitecture(dtkDistributedGpu::Nvidia_13);
+            else if(properties["gpu_arch"] == "nvidia-2.0")
+                gpu->setArchitecture(dtkDistributedGpu::Nvidia_20);
+            else if(properties["gpu_arch"].toString().contains("amd"))
+                gpu->setArchitecture(dtkDistributedGpu::AMD);
+            
+            *node << gpu;
+        }
+
+        // feed cpus
+
+        for(int i = 0; i < ncpus; i++) {
+
+            dtkDistributedCpu *cpu = new dtkDistributedCpu(node);
+
+            int ppn = ncores / ncpus;
+            cpu->setCardinality(ppn);
+
+            if(properties["cpu_arch"] == "x86")
+                cpu->setArchitecture(dtkDistributedCpu::x86);
+            else
+                cpu->setArchitecture(dtkDistributedCpu::x86_64);
+
+            if(properties["cpu_model"].toString().contains("opteron")) {
+                cpu->setModel(dtkDistributedCpu::Opteron);
+            } else if(properties["cpu_model"].toString().contains("xeon")) {
+                cpu->setModel(dtkDistributedCpu::Xeon);
+            }
+
+            for(int j = i*ppn; j < (i+1)*ppn; j++) {
+
+                QVariantMap qmap = cores.at(j).toMap();
+
+                dtkDistributedCore *core = new dtkDistributedCore(cpu, qmap["id"].toInt());
+                *cpu << core;
+
+                if (qmap.contains("job"))
+                    coreref[qmap["job"].toString()] << core;
+            }
+
+            *node << cpu;
+        }
+
+        nodes[sockets.key(socket)] << node;
+        dtkDebug() << "Found node" << node->name() << "with" << node->cpus().count() << "cpus";
+    }
+
+    foreach(QVariant qv, json["jobs"].toList()) {
+
+        dtkDistributedJob *job = new dtkDistributedJob;
+
+        QVariantMap jjob=qv.toMap();
+        QString jobid = jjob["id"].toString();
+        job->setId(jobid);
+        job->setState(jjob["state"].toString());
+        job->setUsername(jjob["username"].toString());
+        job->setName(jjob["name"].toString());
+        job->setWalltime(jjob["walltime"].toString());
+        job->setQueue(jjob["queue"].toString());
+        job->setQtime(jjob["qtime"].toInt());
+        job->setStime(jjob["stime"].toInt());
+        job->setResources(jjob["resources"].toString());
+        if (coreref.contains(jobid))
+            foreach(dtkDistributedCore *job_core,  coreref[jobid])
+                job_core->setJob(job);
+        jobs[sockets.key(socket)] << job;
+        dtkDebug() << "Found job " << job->Id() <<"from "<< job->Username() << " in queue " << job->Queue();
+    }
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedController implementation
@@ -62,11 +224,13 @@ public:
 
 dtkDistributedController::dtkDistributedController(void) : d(new dtkDistributedControllerPrivate)
 {
-
+    d->refreshing = false;
 }
 
 dtkDistributedController::~dtkDistributedController(void)
 {
+    d->clear();
+
     delete d;
 
     d = NULL;
@@ -106,6 +270,14 @@ void dtkDistributedController::submit(const QUrl& server,  QByteArray& resources
 void dtkDistributedController::refresh(const QUrl& server)
 {
     dtkDebug() << DTK_PRETTY_FUNCTION << server;
+
+    if(!d->sockets.keys().contains(server.toString()))
+        return;
+    
+    d->refreshing = true;
+
+    dtkDistributedSocket *socket = d->sockets.value(server.toString());
+    socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::STATUS));
 
     emit updated(server);
 }
@@ -281,145 +453,6 @@ QList<dtkDistributedJob *> dtkDistributedController::jobs(void)
 QList<dtkDistributedJob *> dtkDistributedController::jobs(const QString& cluster)
 {
     return d->jobs.value(cluster);
-}
-
-void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkDistributedSocket *socket)
-{
-    QVariantMap json = dtkJson::parse(buffer).toMap();
-    // TODO: check version
-    // First, read nodes status
-
-    // store mapping between cores and jobs in this list
-    QHash<QString, QList<dtkDistributedCore *> > coreref;
-
-    foreach(QVariant qv, json["nodes"].toList()) {
-
-        QVariantMap jnode=qv.toMap();
-
-        QVariantList cores    = jnode["cores"].toList();
-        int usedcores = jnode["cores_busy"].toInt();
-        int ncpus     = jnode["cpus"].toInt();
-        int ngpus     = jnode["gpus"].toInt();
-        int usedgpus  = jnode["gpus_busy"].toInt();
-        QVariantMap properties = jnode["properties"].toMap();
-        QString state =  jnode["state"].toString();
-
-        Q_UNUSED(usedcores);
-        Q_UNUSED(usedgpus);
-
-        qint64 ncores = cores.count();
-        dtkDistributedNode *node = new dtkDistributedNode;
-        node->setName( jnode["name"].toString());
-
-        if(state == "free")
-            node->setState(dtkDistributedNode::Free);
-        if(state == "busy")
-            node->setState(dtkDistributedNode::Busy);
-        if(state == "down")
-            node->setState(dtkDistributedNode::Down);
-
-        if(properties.contains("dell"))
-            node->setBrand(dtkDistributedNode::Dell);
-        if(properties.contains("hp"))
-            node->setBrand(dtkDistributedNode::Hp);
-        if(properties.contains("ibm"))
-            node->setBrand(dtkDistributedNode::Ibm);
-
-        if (properties["myrinet"] == "10G") {
-            node->setNetwork(dtkDistributedNode::Myrinet10G);
-        } else if(properties["infiniband"] == "QDR") {
-            node->setNetwork(dtkDistributedNode::Infiniband40G);
-        } else if(properties["infiniband"] == "DDR") {
-            node->setNetwork(dtkDistributedNode::Infiniband20G);
-        } else if(properties["infiniband"] == "SDR") {
-            node->setNetwork(dtkDistributedNode::Infiniband10G);
-        } else if(properties["ethernet"] == "10G") {
-            node->setNetwork(dtkDistributedNode::Ethernet10G);
-        } else {
-            node->setNetwork(dtkDistributedNode::Ethernet1G);
-        }
-        
-        for(int i = 0; i < ngpus; i++) {
-            dtkDistributedGpu *gpu = new dtkDistributedGpu(node);
-            
-            if(properties["gpu_model"] == "T10")
-                gpu->setModel(dtkDistributedGpu::T10);
-            else if(properties["gpu_model"] == "C2050")
-                gpu->setModel(dtkDistributedGpu::C2050);
-            else if(properties["gpu_model"] == "C2070")
-                gpu->setModel(dtkDistributedGpu::C2070);
-            
-            if(properties["gpu_arch"] == "nvidia-1.0")
-                gpu->setArchitecture(dtkDistributedGpu::Nvidia_10);
-            else if(properties["gpu_arch"] == "nvidia-1.3")
-                gpu->setArchitecture(dtkDistributedGpu::Nvidia_13);
-            else if(properties["gpu_arch"] == "nvidia-2.0")
-                gpu->setArchitecture(dtkDistributedGpu::Nvidia_20);
-            else if(properties["gpu_arch"].toString().contains("amd"))
-                gpu->setArchitecture(dtkDistributedGpu::AMD);
-            
-            *node << gpu;
-        }
-
-        // feed cpus
-
-        for(int i = 0; i < ncpus; i++) {
-
-            dtkDistributedCpu *cpu = new dtkDistributedCpu(node);
-
-            int ppn = ncores / ncpus;
-            cpu->setCardinality(ppn);
-
-            if(properties["cpu_arch"] == "x86")
-                cpu->setArchitecture(dtkDistributedCpu::x86);
-            else
-                cpu->setArchitecture(dtkDistributedCpu::x86_64);
-
-            if(properties["cpu_model"].toString().contains("opteron")) {
-                cpu->setModel(dtkDistributedCpu::Opteron);
-            } else if(properties["cpu_model"].toString().contains("xeon")) {
-                cpu->setModel(dtkDistributedCpu::Xeon);
-            }
-
-            for(int j = i*ppn; j < (i+1)*ppn; j++) {
-
-                QVariantMap qmap = cores.at(j).toMap();
-
-                dtkDistributedCore *core = new dtkDistributedCore(cpu, qmap["id"].toInt());
-                *cpu << core;
-
-                if (qmap.contains("job"))
-                    coreref[qmap["job"].toString()] << core;
-            }
-
-            *node << cpu;
-        }
-
-        nodes[sockets.key(socket)] << node;
-        dtkDebug() << "Found node" << node->name() << "with" << node->cpus().count() << "cpus";
-    }
-
-    foreach(QVariant qv, json["jobs"].toList()) {
-
-        dtkDistributedJob *job = new dtkDistributedJob;
-
-        QVariantMap jjob=qv.toMap();
-        QString jobid = jjob["id"].toString();
-        job->setId(jobid);
-        job->setState(jjob["state"].toString());
-        job->setUsername(jjob["username"].toString());
-        job->setName(jjob["name"].toString());
-        job->setWalltime(jjob["walltime"].toString());
-        job->setQueue(jjob["queue"].toString());
-        job->setQtime(jjob["qtime"].toInt());
-        job->setStime(jjob["stime"].toInt());
-        job->setResources(jjob["resources"].toString());
-        if (coreref.contains(jobid))
-            foreach(dtkDistributedCore *job_core,  coreref[jobid])
-                job_core->setJob(job);
-        jobs[sockets.key(socket)] << job;
-        dtkDebug() << "Found job " << job->Id() <<"from "<< job->Username() << " in queue " << job->Queue();
-    }
 }
 
 void dtkDistributedController::read(void)

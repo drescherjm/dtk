@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 16:23:42 2010 (+0100)
  * Version: $Id$
- * Last-Updated: mar. juin 28 17:44:48 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 14
+ * Last-Updated: Fri Apr  6 14:36:38 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -26,7 +26,6 @@ public:
 
     dtkDistributedGpu::Architecture architecture;
     dtkDistributedGpu::Model model;
-
 };
 
 dtkDistributedGpu::dtkDistributedGpu(dtkDistributedNode *parent) : QObject(), d(new dtkDistributedGpuPrivate)

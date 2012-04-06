@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 16:18:36 2010 (+0100)
  * Version: $Id$
- * Last-Updated: mar. juin 28 17:34:04 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 28
+ * Last-Updated: Fri Apr  6 14:37:47 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 30
  */
 
 /* Commentary: 
@@ -17,6 +17,7 @@
  * 
  */
 
+#include "dtkDistributedCore.h"
 #include "dtkDistributedCpu.h"
 
 class dtkDistributedCpuPrivate
@@ -38,6 +39,8 @@ dtkDistributedCpu::dtkDistributedCpu(dtkDistributedNode *parent) : QObject(), d(
 
 dtkDistributedCpu::~dtkDistributedCpu(void)
 {
+    qDeleteAll(d->cores);
+
     delete d;
 
     d = NULL;

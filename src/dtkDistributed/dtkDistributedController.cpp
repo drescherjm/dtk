@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr  6 10:58:56 2012 (+0200)
+ * Last-Updated: Fri Apr  6 11:22:03 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1499
+ *     Update #: 1500
  */
 
 /* Commentary: 
@@ -106,6 +106,8 @@ void dtkDistributedController::submit(const QUrl& server,  QByteArray& resources
 void dtkDistributedController::refresh(const QUrl& server)
 {
     dtkDebug() << DTK_PRETTY_FUNCTION << server;
+
+    emit updated(server);
 }
 
 // deploy a server instance on remote host (to be executed before connect)

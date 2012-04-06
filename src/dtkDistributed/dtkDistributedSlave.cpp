@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. déc.  7 11:28:53 2011 (+0100)
+ * Last-Updated: ven. avril  6 18:47:16 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 209
+ *     Update #: 217
  */
 
 /* Commentary: 
@@ -80,11 +80,15 @@ int dtkDistributedSlave::exec(void)
 
 bool dtkDistributedSlave::isConnected(void)
 {
+    if (!d->communicator->socket())
+        return false;
     return (d->communicator->socket()->state() == QAbstractSocket::ConnectedState);
 }
 
 bool dtkDistributedSlave::isDisconnected(void)
 {
+    if (!d->communicator->socket())
+        return false;
     return (d->communicator->socket()->state() == QAbstractSocket::UnconnectedState);
 }
 

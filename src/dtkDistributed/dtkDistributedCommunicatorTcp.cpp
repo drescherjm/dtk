@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 10:46:49 2012 (+0200)
- *           By: tkloczko
- *     Update #: 200
+ * Last-Updated: ven. avril  6 14:11:01 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 210
  */
 
 /* Commentary: 
@@ -34,16 +34,22 @@ public:
     dtkDistributedSocket *socket;
 
     QList<dtkDistributedSocket *> sockets;
+
+public:
+    bool initialized;
 };
 
 dtkDistributedCommunicatorTcp::dtkDistributedCommunicatorTcp(void) : dtkDistributedCommunicator(), d(new dtkDistributedCommunicatorTcpPrivate)
 {
     d->server = NULL;
     d->socket = NULL;
+    d->initialized = false;
 }
 
 dtkDistributedCommunicatorTcp::~dtkDistributedCommunicatorTcp(void)
 {
+    delete d->server;
+    delete d->socket;
     delete d;
 
     d = NULL;
@@ -70,7 +76,12 @@ dtkDistributedSocket *dtkDistributedCommunicatorTcp::socket(void)
 
 void dtkDistributedCommunicatorTcp::initialize(void)
 {
+    d->initialized = true;
+}
 
+bool dtkDistributedCommunicatorTcp::initialized(void)
+{
+    return d->initialized;
 }
 
 void dtkDistributedCommunicatorTcp::uninitialize(void)

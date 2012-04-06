@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. mars 29 17:48:22 2012 (+0200)
+ * Last-Updated: ven. avril  6 14:08:41 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 60
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -38,6 +38,7 @@ public:
     ~dtkDistributedCommunicatorTcp(void);
 
     void   initialize(void);
+    bool  initialized(void);
     void uninitialize(void);
 
     int rank(void);

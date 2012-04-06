@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: ven. mars 30 16:13:28 2012 (+0200)
+ * Last-Updated: ven. avril  6 14:08:07 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 414
+ *     Update #: 421
  */
 
 /* Commentary: 
@@ -69,7 +69,7 @@ MPI::Op operation_type(dtkDistributedCommunicator::OperationType type)
 class dtkDistributedCommunicatorMpiPrivate
 {
 public:
-    
+
 };
 
 dtkDistributedCommunicatorMpi::dtkDistributedCommunicatorMpi(void) : dtkDistributedCommunicator(), d(new dtkDistributedCommunicatorMpiPrivate)
@@ -112,6 +112,11 @@ void dtkDistributedCommunicatorMpi::initialize(void)
     char **argv = qApp->argv(); // These methods are obsolete but should be really exist in QCoreApplication
 
     MPI::Init(argc, argv);
+}
+
+bool dtkDistributedCommunicatorMpi::initialized(void)
+{
+    return MPI::Is_initialized();
 }
 
 //! Mpi communicator uninitializer.

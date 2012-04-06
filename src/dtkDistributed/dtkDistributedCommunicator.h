@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 09:18:40 2010 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. mars 29 17:47:58 2012 (+0200)
+ * Last-Updated: ven. avril  6 14:08:28 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 105
+ *     Update #: 106
  */
 
 /* Commentary: 
@@ -69,6 +69,7 @@ public:
     };
 
     virtual void   initialize(void) = 0;
+    virtual bool  initialized(void) = 0;
     virtual void uninitialize(void) = 0;
 
     virtual int rank(void) = 0;

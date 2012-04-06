@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:38:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. févr. 28 10:31:58 2012 (+0100)
+ * Last-Updated: mer. avril  4 13:16:32 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 38
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -46,6 +46,9 @@ public:
 
 public:
    bool read(const QString& file, bool append = false);
+
+public:
+   bool readString(const QString& data, bool append = false);
 
 protected:
    virtual dtkComposerSceneNote *readNote(QDomNode node);

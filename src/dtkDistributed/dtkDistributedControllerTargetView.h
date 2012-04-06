@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr  4 12:25:27 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr  5 16:42:26 2012 (+0200)
+ * Last-Updated: Fri Apr  6 11:08:06 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 13
+ *     Update #: 17
  */
 
 /* Commentary: 
@@ -46,6 +46,8 @@ signals:
 
 protected slots:
     void onConnected(const QUrl& server);
+    void onDisconnected(const QUrl& server);
+
     void onItemClicked(QListWidgetItem *item);
 
 private:

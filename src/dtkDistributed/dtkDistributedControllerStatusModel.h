@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun 29 11:21:32 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr  5 16:47:07 2012 (+0200)
+ * Last-Updated: Fri Apr  6 11:13:54 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 40
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -42,7 +42,8 @@ public slots:
     void setCluster(const QString& server);
 
 public slots:
-    void update(void);
+    void onUpdated(void);
+    void onDisconnected(const QUrl& cluster);
 
 public:
     int columnCount(const QModelIndex & parent = QModelIndex()) const;

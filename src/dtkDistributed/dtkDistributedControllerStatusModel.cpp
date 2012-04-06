@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jul  1 13:48:10 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr  5 16:52:53 2012 (+0200)
+ * Last-Updated: Fri Apr  6 11:15:01 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 231
+ *     Update #: 245
  */
 
 /* Commentary: 
@@ -41,11 +41,17 @@ public:
     QString cluster;
 
 public:
+    void clear(void);
     void update(void);
 
 public:
     dtkDistributedControllerStatusModel *q;
 };
+
+void dtkDistributedControllerStatusModelPrivate::clear(void)
+{
+    this->rootItem->clear();
+}
 
 void dtkDistributedControllerStatusModelPrivate::update(void)
 {
@@ -108,22 +114,31 @@ void dtkDistributedControllerStatusModel::setController(dtkDistributedController
 {
     d->controller = controller;
 
-    this->update();
+    this->onUpdated();
 
-    connect(d->controller, SIGNAL(updated()), this, SLOT(update()));
+    connect(d->controller, SIGNAL(updated()), this, SLOT(onUpdated()));
+    connect(d->controller, SIGNAL(disconnected(const QUrl&)), this, SLOT(onDisconnected(const QUrl&)));
 }
 
 void dtkDistributedControllerStatusModel::setCluster(const QString& cluster)
 {
     d->cluster = cluster;
 
-    this->update();
+    this->onUpdated();
 }
 
-void dtkDistributedControllerStatusModel::update(void)
+void dtkDistributedControllerStatusModel::onUpdated(void)
 {
     this->beginResetModel();
     d->update();
+    this->endResetModel();
+}
+
+void dtkDistributedControllerStatusModel::onDisconnected(const QUrl& server)
+{
+    this->beginResetModel();
+    if(d->cluster == server.toString())
+        d->clear();
     this->endResetModel();
 }
 

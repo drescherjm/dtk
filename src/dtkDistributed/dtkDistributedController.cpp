@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr  5 17:06:30 2012 (+0200)
+ * Last-Updated: Fri Apr  6 10:58:56 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1481
+ *     Update #: 1499
  */
 
 /* Commentary: 
@@ -103,6 +103,11 @@ void dtkDistributedController::submit(const QUrl& server,  QByteArray& resources
     d->sockets[server.toString()]->sendRequest(msg);
 }
 
+void dtkDistributedController::refresh(const QUrl& server)
+{
+    dtkDebug() << DTK_PRETTY_FUNCTION << server;
+}
+
 // deploy a server instance on remote host (to be executed before connect)
 void dtkDistributedController::deploy(const QUrl& server)
 {
@@ -147,9 +152,7 @@ void dtkDistributedController::deploy(const QUrl& server)
         settings.endGroup();
         serverProc->start("ssh", args);
 
-        if (settings.contains(forward) && settings.value(forward).toString() == "true") {
-            sleep(1);
-        }
+        sleep(1);
 
         dtkDebug() << DTK_PRETTY_FUNCTION << "ssh" << args;
 
@@ -237,15 +240,15 @@ void dtkDistributedController::connect(const QUrl& server)
 
 void dtkDistributedController::disconnect(const QUrl& server)
 {
-    if(d->sockets.keys().contains(server.toString())) {
-
-        dtkDistributedSocket *socket = d->sockets.value(server.toString());
-        socket->disconnectFromHost();
-
-        d->sockets.remove(server.toString());
-
-        emit disconnected(server);
-    }
+    if(!d->sockets.keys().contains(server.toString()))
+        return;
+    
+    dtkDistributedSocket *socket = d->sockets.value(server.toString());
+    socket->disconnectFromHost();
+    
+    d->sockets.remove(server.toString());
+    
+    emit disconnected(server);
 }
 
 QList<dtkDistributedNode *> dtkDistributedController::nodes(void)

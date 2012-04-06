@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr  4 12:23:14 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr  5 16:38:55 2012 (+0200)
+ * Last-Updated: Fri Apr  6 11:08:59 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 26
+ *     Update #: 54
  */
 
 /* Commentary: 
@@ -19,20 +19,26 @@
 
 #include "dtkDistributedController.h"
 #include "dtkDistributedControllerTargetView.h"
+#include "dtkDistributedControllerTargetViewDelegate.h"
 
 class dtkDistributedControllerTargetViewPrivate
 {
 public:
     dtkDistributedController *controller;
+
+public:
+    dtkDistributedControllerTargetViewDelegate *delegate;
 };
 
 dtkDistributedControllerTargetView::dtkDistributedControllerTargetView(QWidget *parent) : QListWidget(parent), d(new dtkDistributedControllerTargetViewPrivate)
 {
     d->controller = NULL;
+    d->delegate = new dtkDistributedControllerTargetViewDelegate(this);
 
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setFrameStyle(QFrame::NoFrame);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    this->setItemDelegate(d->delegate);
 
     connect(this, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(onItemClicked(QListWidgetItem *)));
 }
@@ -52,13 +58,29 @@ QSize dtkDistributedControllerTargetView::sizeHint(void) const
 void dtkDistributedControllerTargetView::setController(dtkDistributedController *controller)
 {
     d->controller = controller;
+    d->delegate->setController(d->controller);
 
     connect(d->controller, SIGNAL(connected(const QUrl&)), this, SLOT(onConnected(const QUrl&)));
+    connect(d->controller, SIGNAL(disconnected(const QUrl&)), this, SLOT(onDisconnected(const QUrl&)));
 }
 
 void dtkDistributedControllerTargetView::onConnected(const QUrl& server)
 {
-    this->addItem(server.toString());
+    QListWidgetItem *item = new QListWidgetItem(server.toString(), this);
+    item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable);    
+
+    this->addItem(item);
+    this->openPersistentEditor(item);
+}
+
+void dtkDistributedControllerTargetView::onDisconnected(const QUrl& server)
+{
+    QList<QListWidgetItem *> items = this->findItems(server.toString(), Qt::MatchExactly);
+    
+    foreach(QListWidgetItem *item, items) {
+        this->closePersistentEditor(item);
+        delete this->takeItem(this->row(item));
+    }
 }
 
 void dtkDistributedControllerTargetView::onItemClicked(QListWidgetItem *item)

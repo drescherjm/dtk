@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr  4 12:22:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr  5 16:58:56 2012 (+0200)
+ * Last-Updated: Fri Apr  6 11:05:46 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -43,6 +43,7 @@ public slots:
 
 public slots:
     void onStatus(const QUrl& cluster);
+    void onDisconnected(const QUrl& cluster);
 
 protected:
     void update(void);

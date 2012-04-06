@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr  4 12:23:14 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr  5 17:00:30 2012 (+0200)
+ * Last-Updated: Fri Apr  6 11:09:13 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 77
+ *     Update #: 85
  */
 
 /* Commentary: 
@@ -64,6 +64,7 @@ void dtkDistributedControllerHeaderView::setController(dtkDistributedController 
     d->controller = controller;
 
     connect(d->controller, SIGNAL(status(const QUrl&)), this, SLOT(onStatus(const QUrl&)));
+    connect(d->controller, SIGNAL(disconnected(const QUrl&)), this, SLOT(onDisconnected(const QUrl&)));
 }
 
 void dtkDistributedControllerHeaderView::setCluster(const QString& cluster)
@@ -78,6 +79,14 @@ void dtkDistributedControllerHeaderView::onStatus(const QUrl& cluster)
     d->cluster = cluster.toString();
 
     this->update();
+}
+
+void dtkDistributedControllerHeaderView::onDisconnected(const QUrl& cluster)
+{
+    d->server->clear();
+    d->stats->clear();
+
+    d->cluster = QString();
 }
 
 void dtkDistributedControllerHeaderView::update(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 13:22:24 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jul  1 15:11:04 2011 (+0200)
+ * Last-Updated: Tue Apr 10 15:47:28 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 40
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -23,9 +23,9 @@
 #include <QtCore>
 
 #include "dtkDistributedExport.h"
+#include "dtkDistributedCpu"
+#include "dtkDistributedGpu"
 
-class dtkDistributedCpu;
-class dtkDistributedGpu;
 class dtkDistributedNodePrivate;
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedNode : public QObject
@@ -37,20 +37,24 @@ public:
     ~dtkDistributedNode(void);
 
     enum Network {
-           Ethernet1G = 0x1,
-          Ethernet10G = 0x2,
-            Myrinet2G = 0x4,
-           Myrinet10G = 0x8,
+           Ethernet1G = 0x01,
+          Ethernet10G = 0x02,
+            Myrinet2G = 0x04,
+           Myrinet10G = 0x08,
         Infiniband10G = 0x16,
         Infiniband20G = 0x32,
         Infiniband40G = 0x64
     };
+
+    Q_DECLARE_FLAGS(Networks, Network)
 
     enum State {
         Free = 0x1,
         Busy = 0x2,
         Down = 0x4
     };
+
+    Q_DECLARE_FLAGS(States, State)
 
     enum Brand {
           Hp = 0x1,
@@ -59,8 +63,9 @@ public:
        Carri = 0x8
     };
 
-    QList<Network> networks(void);
+    Q_DECLARE_FLAGS(Brands, Brand)
 
+    QList<Network> networks(void);
     QList<dtkDistributedCpu *> cpus(void);
     QList<dtkDistributedGpu *> gpus(void);
 
@@ -80,5 +85,9 @@ public:
 private:
     dtkDistributedNodePrivate *d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(dtkDistributedNode::Networks)
+Q_DECLARE_OPERATORS_FOR_FLAGS(dtkDistributedNode::States)
+Q_DECLARE_OPERATORS_FOR_FLAGS(dtkDistributedNode::Brands)
 
 #endif

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 10 10:12:41 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 10 15:39:52 2012 (+0200)
+ * Last-Updated: Tue Apr 10 15:41:36 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 174
+ *     Update #: 175
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 class dtkDistributedControllerFilterViewPrivate
 {
 public:
+    
 };
 
 dtkDistributedControllerFilterView::dtkDistributedControllerFilterView(QWidget *parent) : QTreeWidget(parent), d(new dtkDistributedControllerFilterViewPrivate)

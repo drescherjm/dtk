@@ -1,12 +1,12 @@
-/* @(#)dtkComposerRemoteSlave.cpp ---
+/* @(#)dtkComposerEvaluatorSlave.cpp ---
  *
  * Author: Nicolas Niclausse
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:25:39
  * Version: $Id$
- * Last-Updated: ven. avril  6 18:51:53 2012 (+0200)
+ * Last-Updated: mar. avril 10 18:20:28 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 84
+ *     Update #: 85
  */
 
 /* Commentary:
@@ -18,7 +18,7 @@
  */
 
 
-#include "dtkComposerRemoteSlave.h"
+#include "dtkComposerEvaluatorSlave.h"
 
 #include <dtkCore/dtkAbstractDataFactory.h>
 #include <dtkCore/dtkAbstractData.h>
@@ -35,7 +35,7 @@
 
 #include <dtkLog/dtkLog.h>
 
-class dtkComposerRemoteSlavePrivate
+class dtkComposerEvaluatorSlavePrivate
 {
 public:
     dtkDistributedCommunicator *communicator_i;
@@ -45,12 +45,12 @@ public:
     int  count;
 };
 
-dtkComposerRemoteSlave::dtkComposerRemoteSlave(void) : dtkDistributedSlave(), d(new dtkComposerRemoteSlavePrivate)
+dtkComposerEvaluatorSlave::dtkComposerEvaluatorSlave(void) : dtkDistributedSlave(), d(new dtkComposerEvaluatorSlavePrivate)
 {
     d->count = 0;
 }
 
-dtkComposerRemoteSlave::~dtkComposerRemoteSlave(void)
+dtkComposerEvaluatorSlave::~dtkComposerEvaluatorSlave(void)
 {
     delete d->communicator_i;
     delete d;
@@ -58,22 +58,22 @@ dtkComposerRemoteSlave::~dtkComposerRemoteSlave(void)
     d = NULL;
 }
 
-void dtkComposerRemoteSlave::setCount(int count)
+void dtkComposerEvaluatorSlave::setCount(int count)
 {
     d->count = count;
 }
 
-void dtkComposerRemoteSlave::setServer(QUrl server)
+void dtkComposerEvaluatorSlave::setServer(QUrl server)
 {
     d->server = server;
 }
 
-void dtkComposerRemoteSlave::setInternalCommunicator(dtkDistributedCommunicator *communicator)
+void dtkComposerEvaluatorSlave::setInternalCommunicator(dtkDistributedCommunicator *communicator)
 {
     d->communicator_i = communicator;
 }
 
-int dtkComposerRemoteSlave::exec(void)
+int dtkComposerEvaluatorSlave::exec(void)
 {
 
     int rank = d->communicator_i->rank();

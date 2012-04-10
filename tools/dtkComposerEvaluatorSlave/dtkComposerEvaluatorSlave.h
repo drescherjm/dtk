@@ -1,12 +1,12 @@
-/* @(#)dtkComposerRemoteSlave.h ---
+/* @(#)dtkComposerEvaluatorSlave.h ---
  *
  * Author: Nicolas Niclausse
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:23:58
  * Version: $Id$
- * Last-Updated: ven. avril  6 16:50:13 2012 (+0200)
+ * Last-Updated: mar. avril 10 18:20:15 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 19
+ *     Update #: 20
  */
 
 /* Commentary:
@@ -23,13 +23,13 @@
 
 #include <dtkDistributed/dtkDistributedSlave.h>
 
-class dtkComposerRemoteSlavePrivate;
+class dtkComposerEvaluatorSlavePrivate;
 
-class dtkComposerRemoteSlave : public dtkDistributedSlave
+class dtkComposerEvaluatorSlave : public dtkDistributedSlave
 {
 public:
-     dtkComposerRemoteSlave(void);
-    ~dtkComposerRemoteSlave(void);
+     dtkComposerEvaluatorSlave(void);
+    ~dtkComposerEvaluatorSlave(void);
 
 public:
     void setCount(int count);
@@ -40,7 +40,7 @@ public:
     int exec(void);
 
 private:
-    dtkComposerRemoteSlavePrivate *d;
+    dtkComposerEvaluatorSlavePrivate *d;
 };
 
 

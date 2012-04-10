@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Oct 27 14:10:37 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. avril 10 09:40:57 2012 (+0200)
+ * Last-Updated: mar. avril 10 18:18:39 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 252
+ *     Update #: 256
  */
 
 /* Commentary: 
@@ -19,7 +19,7 @@
 
 #include <dtkLog/dtkLog.h>
 
-#include "dtkComposerRemoteSlave.h"
+#include "dtkComposerEvaluatorSlave.h"
 
 #include <dtkCore>
 
@@ -47,7 +47,7 @@ int main(int argc, char **argv)
     bool useGUI = false;
 
     QApplication application(argc, argv, useGUI);
-    application.setApplicationName("dtkComposerRemoteEvaluator");
+    application.setApplicationName("dtkComposerEvaluatorSlave");
     application.setApplicationVersion("0.0.2");
     application.setOrganizationName("inria");
     application.setOrganizationDomain("fr");
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
     dtkDistributedCommunicatorMpi *communicator =  new dtkDistributedCommunicatorMpi;
     communicator->initialize();
 
-    dtkComposerRemoteSlave *slave = new dtkComposerRemoteSlave;
+    dtkComposerEvaluatorSlave *slave = new dtkComposerEvaluatorSlave;
 
     dtkComposerScene *scene;
     dtkComposerStack *stack;

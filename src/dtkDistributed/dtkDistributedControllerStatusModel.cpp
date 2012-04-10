@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jul  1 13:48:10 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr  6 11:23:01 2012 (+0200)
+ * Last-Updated: Tue Apr 10 18:04:27 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 249
+ *     Update #: 268
  */
 
 /* Commentary: 
@@ -26,6 +26,32 @@
 #include "dtkDistributedNode.h"
 
 #include <dtkCore/dtkGlobal.h>
+
+QVariant toString(dtkDistributedNode::Network flag)
+{
+    if(flag == dtkDistributedNode::Ethernet1G)
+        return "Ethernet1G";
+    
+    if(flag == dtkDistributedNode::Ethernet10G)
+        return "Ethernet10G";
+
+    if(flag == dtkDistributedNode::Myrinet2G)
+        return "Myrinet2G";
+
+    if(flag == dtkDistributedNode::Myrinet10G)
+        return "Myrinet10G";
+
+    if(flag == dtkDistributedNode::Infiniband10G)
+        return "Infiniband10G";
+
+    if(flag == dtkDistributedNode::Infiniband20G)
+        return "Infiniband20G";
+
+    if(flag == dtkDistributedNode::Infiniband40G)
+        return "Infiniband40G";
+
+    return QString();
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedControllerStatusModelPrivate
@@ -66,7 +92,7 @@ void dtkDistributedControllerStatusModelPrivate::update(void)
 
     foreach(dtkDistributedNode *node, nodes) {
 
-        dtkDistributedControllerStatusModelItem *nodeItem = new dtkDistributedControllerStatusModelItem(QList<QVariant>() << node->name(), this->rootItem);
+        dtkDistributedControllerStatusModelItem *nodeItem = new dtkDistributedControllerStatusModelItem(QList<QVariant>() << node->name() << toString(node->network()), this->rootItem);
         nodeItem->kind = dtkDistributedControllerStatusModelItem::Node;
 
         foreach(dtkDistributedCpu *cpu, node->cpus()) {
@@ -78,6 +104,8 @@ void dtkDistributedControllerStatusModelPrivate::update(void)
                     data << core->job()->Id() + " " + core->job()->Username();
                 else
                     data << "Free";
+
+                data << ""; // Network
      
                 dtkDistributedControllerStatusModelItem *coreItem = new dtkDistributedControllerStatusModelItem(data, nodeItem);
                 coreItem->kind = dtkDistributedControllerStatusModelItem::Core;
@@ -99,7 +127,7 @@ dtkDistributedControllerStatusModel::dtkDistributedControllerStatusModel(QObject
 {
     d->q = this;
     d->controller = NULL;
-    d->rootItem = new dtkDistributedControllerStatusModelItem(QList<QVariant>() << "Node");
+    d->rootItem = new dtkDistributedControllerStatusModelItem(QList<QVariant>() << "Node" << "Network");
 }
 
 dtkDistributedControllerStatusModel::~dtkDistributedControllerStatusModel(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 10 10:12:41 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 10 15:41:36 2012 (+0200)
+ * Last-Updated: Tue Apr 10 17:59:57 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 175
+ *     Update #: 234
  */
 
 /* Commentary: 
@@ -17,12 +17,17 @@
  * 
  */
 
+#include "dtkDistributedNode.h"
 #include "dtkDistributedControllerFilterView.h"
 
 class dtkDistributedControllerFilterViewPrivate
 {
 public:
-    
+    QFlags<dtkDistributedNode::Network> network_flags;
+    QFlags<dtkDistributedNode::State> state_flags;
+    QFlags<dtkDistributedNode::Brand> brand_flags;
+    QFlags<dtkDistributedCpu::Architecture> arch_flags;
+    QFlags<dtkDistributedCpu::Model> model_flags;
 };
 
 dtkDistributedControllerFilterView::dtkDistributedControllerFilterView(QWidget *parent) : QTreeWidget(parent), d(new dtkDistributedControllerFilterViewPrivate)
@@ -58,13 +63,13 @@ dtkDistributedControllerFilterView::dtkDistributedControllerFilterView(QWidget *
 
     QButtonGroup *network_group = new QButtonGroup(this);
     network_group->setExclusive(false);
-    network_group->addButton(network_1);
-    network_group->addButton(network_2);
-    network_group->addButton(network_3);
-    network_group->addButton(network_4);
-    network_group->addButton(network_5);
-    network_group->addButton(network_6);
-    network_group->addButton(network_7);
+    network_group->addButton(network_1, 1);
+    network_group->addButton(network_2, 2);
+    network_group->addButton(network_3, 3);
+    network_group->addButton(network_4, 4);
+    network_group->addButton(network_5, 5);
+    network_group->addButton(network_6, 6);
+    network_group->addButton(network_7, 7);
 
     QButtonGroup *state_group = new QButtonGroup(this);
     state_group->setExclusive(false);
@@ -155,6 +160,12 @@ dtkDistributedControllerFilterView::dtkDistributedControllerFilterView(QWidget *
     this->setHeaderLabel("Filters");
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setFrameStyle(QFrame::NoFrame);
+
+    connect(network_group, SIGNAL(buttonClicked(int)), this, SLOT(onNetworkButtonClicked(int)));
+    connect(state_group, SIGNAL(buttonClicked(int)), this, SLOT(onStateButtonClicked(int)));
+    connect(brand_group, SIGNAL(buttonClicked(int)), this, SLOT(onBrandButtonClicked(int)));
+    connect(arch_group, SIGNAL(buttonClicked(int)), this, SLOT(onArchButtonClicked(int)));
+    connect(model_group, SIGNAL(buttonClicked(int)), this, SLOT(onModelButtonClicked(int)));
 }
 
 dtkDistributedControllerFilterView::~dtkDistributedControllerFilterView(void)
@@ -162,4 +173,68 @@ dtkDistributedControllerFilterView::~dtkDistributedControllerFilterView(void)
     delete d;
 
     d = NULL;
+}
+
+QFlags<dtkDistributedNode::Network> dtkDistributedControllerFilterView::networkFlags(void)
+{
+    return d->network_flags;
+}
+
+QFlags<dtkDistributedNode::State> dtkDistributedControllerFilterView::stateFlags(void)
+{
+    return d->state_flags;
+}
+
+QFlags<dtkDistributedNode::Brand> dtkDistributedControllerFilterView::brandFlags(void)
+{
+    return d->brand_flags;
+}
+
+QFlags<dtkDistributedCpu::Architecture> dtkDistributedControllerFilterView::archFlags(void)
+{
+    return d->arch_flags;
+}
+
+QFlags<dtkDistributedCpu::Model> dtkDistributedControllerFilterView::modelFlags(void)
+{
+    return d->model_flags;
+}
+
+void dtkDistributedControllerFilterView::onNetworkButtonClicked(int button)
+{
+    qDebug() << __func__ << button;
+
+    switch(button) {
+    case 1: d->network_flags |= dtkDistributedNode::Ethernet1G; break;
+    case 2: d->network_flags |= dtkDistributedNode::Ethernet10G; break;
+    case 3: d->network_flags |= dtkDistributedNode::Myrinet2G; break;
+    case 4: d->network_flags |= dtkDistributedNode::Myrinet10G; break;
+    case 5: d->network_flags |= dtkDistributedNode::Infiniband10G; break;
+    case 6: d->network_flags |= dtkDistributedNode::Infiniband20G; break;
+    case 7: d->network_flags |= dtkDistributedNode::Infiniband40G; break;
+    default:
+        break;
+    }
+
+    emit updated();
+}
+
+void dtkDistributedControllerFilterView::onStateButtonClicked(int button)
+{
+    emit updated();
+}
+
+void dtkDistributedControllerFilterView::onBrandButtonClicked(int button)
+{
+    emit updated();
+}
+
+void dtkDistributedControllerFilterView::onArchButtonClicked(int button)
+{
+    emit updated();
+}
+
+void dtkDistributedControllerFilterView::onModelButtonClicked(int button)
+{
+    emit updated();
 }

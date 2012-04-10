@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 10 10:27:18 2012 (+0200)
+ * Last-Updated: Tue Apr 10 17:54:30 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 73
+ *     Update #: 79
  */
 
 /* Commentary: 
@@ -87,6 +87,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     layout->addWidget(d->submit_view);
 
     connect(d->host_button, SIGNAL(clicked()), this, SLOT(onConnect()));
+    connect(d->filter_view, SIGNAL(updated()), this, SLOT(onFilterUpdated()));
     connect(d->target_view, SIGNAL(selected(const QString&)), d->status_model, SLOT(setCluster(const QString&)));
     connect(d->target_view, SIGNAL(selected(const QString&)), d->header_view, SLOT(setCluster(const QString&)));
 }
@@ -105,4 +106,9 @@ void dtkDistributor::onConnect(void)
 
     d->header_view->setCluster(d->host_address->currentText());
     d->status_model->setCluster(d->host_address->currentText());
+}
+
+void dtkDistributor::onFilterUpdated(void)
+{
+    qDebug() << __func__ << d->filter_view->networkFlags();
 }

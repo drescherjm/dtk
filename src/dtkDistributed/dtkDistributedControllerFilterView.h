@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 10 10:10:19 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 10 15:22:07 2012 (+0200)
+ * Last-Updated: Tue Apr 10 17:52:37 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 9
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -21,6 +21,8 @@
 #define DTKDISTRIBUTEDCONTROLLERFILTERVIEW_H
 
 #include "dtkDistributedExport.h"
+#include "dtkDistributedNode.h"
+#include "dtkDistributedCpu.h"
 
 #include <QtGui>
 
@@ -33,6 +35,23 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedControllerFilterView : public QTreeWid
 public:
      dtkDistributedControllerFilterView(QWidget *parent = 0);
     ~dtkDistributedControllerFilterView(void);
+
+signals:
+    void updated(void);
+
+public:
+    QFlags<dtkDistributedNode::Network> networkFlags(void);
+    QFlags<dtkDistributedNode::State> stateFlags(void);
+    QFlags<dtkDistributedNode::Brand> brandFlags(void);
+    QFlags<dtkDistributedCpu::Architecture> archFlags(void);
+    QFlags<dtkDistributedCpu::Model> modelFlags(void);
+
+private slots:
+    void onNetworkButtonClicked(int);
+    void onStateButtonClicked(int);
+    void onBrandButtonClicked(int);
+    void onArchButtonClicked(int);
+    void onModelButtonClicked(int);
 
 private:
     dtkDistributedControllerFilterViewPrivate *d;

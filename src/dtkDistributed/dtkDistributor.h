@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:33:58 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:43:58 2012 (+0200)
+ * Last-Updated: Tue Apr 10 17:53:04 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 7
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -36,6 +36,7 @@ public:
 
 protected slots:
     void onConnect(void);
+    void onFilterUpdated(void);
 
 private:
     dtkDistributorPrivate *d;

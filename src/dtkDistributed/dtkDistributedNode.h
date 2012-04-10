@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 13:22:24 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 10 15:47:28 2012 (+0200)
+ * Last-Updated: Tue Apr 10 18:33:04 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 61
+ *     Update #: 65
  */
 
 /* Commentary: 
@@ -41,9 +41,9 @@ public:
           Ethernet10G = 0x02,
             Myrinet2G = 0x04,
            Myrinet10G = 0x08,
-        Infiniband10G = 0x16,
-        Infiniband20G = 0x32,
-        Infiniband40G = 0x64
+        Infiniband10G = 0x10,
+        Infiniband20G = 0x20,
+        Infiniband40G = 0x40
     };
 
     Q_DECLARE_FLAGS(Networks, Network)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 10 10:12:41 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 10 17:59:57 2012 (+0200)
+ * Last-Updated: Tue Apr 10 18:58:08 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 234
+ *     Update #: 235
  */
 
 /* Commentary: 
@@ -205,13 +205,13 @@ void dtkDistributedControllerFilterView::onNetworkButtonClicked(int button)
     qDebug() << __func__ << button;
 
     switch(button) {
-    case 1: d->network_flags |= dtkDistributedNode::Ethernet1G; break;
-    case 2: d->network_flags |= dtkDistributedNode::Ethernet10G; break;
-    case 3: d->network_flags |= dtkDistributedNode::Myrinet2G; break;
-    case 4: d->network_flags |= dtkDistributedNode::Myrinet10G; break;
-    case 5: d->network_flags |= dtkDistributedNode::Infiniband10G; break;
-    case 6: d->network_flags |= dtkDistributedNode::Infiniband20G; break;
-    case 7: d->network_flags |= dtkDistributedNode::Infiniband40G; break;
+    case 1: d->network_flags ^= dtkDistributedNode::Ethernet1G; break;
+    case 2: d->network_flags ^= dtkDistributedNode::Ethernet10G; break;
+    case 3: d->network_flags ^= dtkDistributedNode::Myrinet2G; break;
+    case 4: d->network_flags ^= dtkDistributedNode::Myrinet10G; break;
+    case 5: d->network_flags ^= dtkDistributedNode::Infiniband10G; break;
+    case 6: d->network_flags ^= dtkDistributedNode::Infiniband20G; break;
+    case 7: d->network_flags ^= dtkDistributedNode::Infiniband40G; break;
     default:
         break;
     }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 10 10:10:19 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 10 10:15:20 2012 (+0200)
+ * Last-Updated: Tue Apr 10 15:22:07 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 8
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -26,7 +26,7 @@
 
 class dtkDistributedControllerFilterViewPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedControllerFilterView : public QFrame
+class DTKDISTRIBUTED_EXPORT dtkDistributedControllerFilterView : public QTreeWidget
 {
     Q_OBJECT
 

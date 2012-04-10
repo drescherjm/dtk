@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jul  1 13:48:10 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 10 18:04:27 2012 (+0200)
+ * Last-Updated: Tue Apr 10 18:17:30 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 268
+ *     Update #: 299
  */
 
 /* Commentary: 
@@ -53,6 +53,59 @@ QVariant toString(dtkDistributedNode::Network flag)
     return QString();
 }
 
+QVariant toString(dtkDistributedNode::State flag)
+{
+    if(flag == dtkDistributedNode::Free)
+        return "Free";
+    
+    if(flag == dtkDistributedNode::Busy)
+        return "Busy";
+
+    if(flag == dtkDistributedNode::Down)
+        return "Down";
+
+    return QString();
+}
+
+QVariant toString(dtkDistributedNode::Brand flag)
+{
+    if(flag == dtkDistributedNode::Hp)
+        return "Hp";
+
+    if(flag == dtkDistributedNode::Ibm)
+        return "Ibm";
+
+    if(flag == dtkDistributedNode::Dell)
+        return "Dell";
+
+    if(flag == dtkDistributedNode::Carri)
+        return "Carri";
+
+    return QString();
+}
+
+QVariant toString(dtkDistributedCpu::Architecture flag)
+{
+    if(flag == dtkDistributedCpu::x86)
+        return "x86";
+
+    if(flag == dtkDistributedCpu::x86_64)
+        return "x86_64";
+
+    return QString();
+}
+
+QVariant toString(dtkDistributedCpu::Model flag)
+{
+    if(flag == dtkDistributedCpu::Xeon)
+        return "Xeon";
+    
+    if(flag == dtkDistributedCpu::Opteron)
+        return "Opteron";
+
+    return QString();
+}
+
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedControllerStatusModelPrivate
 // /////////////////////////////////////////////////////////////////
@@ -92,7 +145,7 @@ void dtkDistributedControllerStatusModelPrivate::update(void)
 
     foreach(dtkDistributedNode *node, nodes) {
 
-        dtkDistributedControllerStatusModelItem *nodeItem = new dtkDistributedControllerStatusModelItem(QList<QVariant>() << node->name() << toString(node->network()), this->rootItem);
+        dtkDistributedControllerStatusModelItem *nodeItem = new dtkDistributedControllerStatusModelItem(QList<QVariant>() << node->name() << toString(node->network()) << toString(node->state()) << toString(node->brand()) << "" << "", this->rootItem);
         nodeItem->kind = dtkDistributedControllerStatusModelItem::Node;
 
         foreach(dtkDistributedCpu *cpu, node->cpus()) {
@@ -105,7 +158,11 @@ void dtkDistributedControllerStatusModelPrivate::update(void)
                 else
                     data << "Free";
 
-                data << ""; // Network
+                data << ""; // Node Network
+                data << ""; // Node State
+                data << ""; // Node Brand
+                data << toString(cpu->architecture());
+                data << toString(cpu->model());
      
                 dtkDistributedControllerStatusModelItem *coreItem = new dtkDistributedControllerStatusModelItem(data, nodeItem);
                 coreItem->kind = dtkDistributedControllerStatusModelItem::Core;
@@ -127,7 +184,7 @@ dtkDistributedControllerStatusModel::dtkDistributedControllerStatusModel(QObject
 {
     d->q = this;
     d->controller = NULL;
-    d->rootItem = new dtkDistributedControllerStatusModelItem(QList<QVariant>() << "Node" << "Network");
+    d->rootItem = new dtkDistributedControllerStatusModelItem(QList<QVariant>() << "Node" << "Network" << "State" << "Brand" << "Architecture" << "Model");
 }
 
 dtkDistributedControllerStatusModel::~dtkDistributedControllerStatusModel(void)

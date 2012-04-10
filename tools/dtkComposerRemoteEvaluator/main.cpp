@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Oct 27 14:10:37 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. avril  6 18:51:25 2012 (+0200)
+ * Last-Updated: mar. avril 10 09:40:57 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 250
+ *     Update #: 252
  */
 
 /* Commentary: 
@@ -44,8 +44,9 @@ int main(int argc, char **argv)
     }
 
     QUrl url = QUrl(argv[1]);
+    bool useGUI = false;
 
-    QApplication application(argc, argv);
+    QApplication application(argc, argv, useGUI);
     application.setApplicationName("dtkComposerRemoteEvaluator");
     application.setApplicationVersion("0.0.2");
     application.setOrganizationName("inria");

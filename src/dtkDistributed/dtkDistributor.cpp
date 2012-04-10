@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr  5 17:07:22 2012 (+0200)
+ * Last-Updated: Tue Apr 10 10:27:18 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 68
+ *     Update #: 73
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include "dtkDistributedController.h"
+#include "dtkDistributedControllerFilterView.h"
 #include "dtkDistributedControllerHeaderView.h"
 #include "dtkDistributedControllerStatusModel.h"
 #include "dtkDistributedControllerStatusView.h"
@@ -30,6 +31,7 @@ class dtkDistributorPrivate
 public:
     dtkDistributedController *controller;
     dtkDistributedControllerStatusModel *status_model;
+    dtkDistributedControllerFilterView *filter_view;
     dtkDistributedControllerHeaderView *header_view;
     dtkDistributedControllerStatusView *status_view;
     dtkDistributedControllerSubmitView *submit_view;
@@ -60,6 +62,8 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     d->status_view = new dtkDistributedControllerStatusView(this);
     d->status_view->setModel(d->status_model);
 
+    d->filter_view = new dtkDistributedControllerFilterView(this);
+
     d->submit_view = new dtkDistributedControllerSubmitView(this);
 
     d->header_view = new dtkDistributedControllerHeaderView(this);
@@ -79,6 +83,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     layout->addWidget(d->target_view);
     layout->addWidget(d->header_view);
     layout->addWidget(d->status_view);
+    layout->addWidget(d->filter_view);
     layout->addWidget(d->submit_view);
 
     connect(d->host_button, SIGNAL(clicked()), this, SLOT(onConnect()));

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 10 18:34:15 2012 (+0200)
+ * Last-Updated: Tue Apr 10 22:18:39 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 86
+ *     Update #: 91
  */
 
 /* Commentary: 
@@ -116,4 +116,8 @@ void dtkDistributor::onConnect(void)
 void dtkDistributor::onFilterUpdated(void)
 {
     d->filter_model->setNetworkFlags(d->filter_view->networkFlags());
+    d->filter_model->setStateFlags(d->filter_view->stateFlags());
+    d->filter_model->setBrandFlags(d->filter_view->brandFlags());
+    d->filter_model->setArchFlags(d->filter_view->archFlags());
+    d->filter_model->setModelFlags(d->filter_view->modelFlags());
 }

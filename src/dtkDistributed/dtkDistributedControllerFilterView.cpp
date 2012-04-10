@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 10 10:12:41 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 10 18:58:08 2012 (+0200)
+ * Last-Updated: Tue Apr 10 22:08:55 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 235
+ *     Update #: 261
  */
 
 /* Commentary: 
@@ -73,26 +73,26 @@ dtkDistributedControllerFilterView::dtkDistributedControllerFilterView(QWidget *
 
     QButtonGroup *state_group = new QButtonGroup(this);
     state_group->setExclusive(false);
-    state_group->addButton(state_1);
-    state_group->addButton(state_2);
-    state_group->addButton(state_3);
+    state_group->addButton(state_1, 1);
+    state_group->addButton(state_2, 2);
+    state_group->addButton(state_3, 3);
 
     QButtonGroup *brand_group = new QButtonGroup(this);
     brand_group->setExclusive(false);
-    brand_group->addButton(brand_1);
-    brand_group->addButton(brand_2);
-    brand_group->addButton(brand_3);
-    brand_group->addButton(brand_4);
+    brand_group->addButton(brand_1, 1);
+    brand_group->addButton(brand_2, 2);
+    brand_group->addButton(brand_3, 3);
+    brand_group->addButton(brand_4, 4);
 
     QButtonGroup *arch_group = new QButtonGroup(this);
     arch_group->setExclusive(false);
-    arch_group->addButton(arch_1);
-    arch_group->addButton(arch_2);
+    arch_group->addButton(arch_1, 1);
+    arch_group->addButton(arch_2, 2);
 
     QButtonGroup *model_group = new QButtonGroup(this);
     model_group->setExclusive(false);
-    model_group->addButton(model_1);
-    model_group->addButton(model_2);
+    model_group->addButton(model_1, 1);
+    model_group->addButton(model_2, 2);
 
     QVBoxLayout *network_layout = new QVBoxLayout;
     network_layout->setContentsMargins(0, 0, 0, 0);
@@ -202,8 +202,6 @@ QFlags<dtkDistributedCpu::Model> dtkDistributedControllerFilterView::modelFlags(
 
 void dtkDistributedControllerFilterView::onNetworkButtonClicked(int button)
 {
-    qDebug() << __func__ << button;
-
     switch(button) {
     case 1: d->network_flags ^= dtkDistributedNode::Ethernet1G; break;
     case 2: d->network_flags ^= dtkDistributedNode::Ethernet10G; break;
@@ -221,20 +219,51 @@ void dtkDistributedControllerFilterView::onNetworkButtonClicked(int button)
 
 void dtkDistributedControllerFilterView::onStateButtonClicked(int button)
 {
+    switch(button) {
+    case 1: d->state_flags ^= dtkDistributedNode::Free; break;
+    case 2: d->state_flags ^= dtkDistributedNode::Busy; break;
+    case 3: d->state_flags ^= dtkDistributedNode::Down; break;
+    default:
+        break;
+    }
+
     emit updated();
 }
 
 void dtkDistributedControllerFilterView::onBrandButtonClicked(int button)
 {
+    switch(button) {
+    case 1: d->brand_flags ^= dtkDistributedNode::Hp; break;
+    case 2: d->brand_flags ^= dtkDistributedNode::Ibm; break;
+    case 3: d->brand_flags ^= dtkDistributedNode::Dell; break;
+    case 4: d->brand_flags ^= dtkDistributedNode::Carri; break;
+    default:
+        break;
+    }
+
     emit updated();
 }
 
 void dtkDistributedControllerFilterView::onArchButtonClicked(int button)
 {
+    switch(button) {
+    case 1: d->arch_flags ^= dtkDistributedCpu::x86; break;
+    case 2: d->arch_flags ^= dtkDistributedCpu::x86_64; break;
+    default:
+        break;
+    }
+
     emit updated();
 }
 
 void dtkDistributedControllerFilterView::onModelButtonClicked(int button)
 {
+    switch(button) {
+    case 1: d->model_flags ^= dtkDistributedCpu::Xeon; break;
+    case 2: d->model_flags ^= dtkDistributedCpu::Opteron; break;
+    default:
+        break;
+    }
+
     emit updated();
 }

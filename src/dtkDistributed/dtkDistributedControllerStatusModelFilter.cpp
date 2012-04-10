@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr  6 15:53:04 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 10 19:01:58 2012 (+0200)
+ * Last-Updated: Tue Apr 10 22:16:18 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 68
+ *     Update #: 76
  */
 
 /* Commentary: 
@@ -23,6 +23,10 @@ class dtkDistributedControllerStatusModelFilterPrivate
 {
 public:
     QFlags<dtkDistributedNode::Network> network_flags;
+    QFlags<dtkDistributedNode::State> state_flags;
+    QFlags<dtkDistributedNode::Brand> brand_flags;
+    QFlags<dtkDistributedCpu::Architecture> arch_flags;
+    QFlags<dtkDistributedCpu::Model> model_flags;
 };
 
 dtkDistributedControllerStatusModelFilter::dtkDistributedControllerStatusModelFilter(QObject *parent) : QSortFilterProxyModel(parent), d(new dtkDistributedControllerStatusModelFilterPrivate)
@@ -40,6 +44,34 @@ dtkDistributedControllerStatusModelFilter::~dtkDistributedControllerStatusModelF
 void dtkDistributedControllerStatusModelFilter::setNetworkFlags(QFlags<dtkDistributedNode::Network> flags)
 {
     d->network_flags = flags;
+
+    this->invalidateFilter();
+}
+
+void dtkDistributedControllerStatusModelFilter::setStateFlags(QFlags<dtkDistributedNode::State> flags)
+{
+    d->state_flags = flags;
+
+    this->invalidateFilter();
+}
+
+void dtkDistributedControllerStatusModelFilter::setBrandFlags(QFlags<dtkDistributedNode::Brand> flags)
+{
+    d->brand_flags = flags;
+
+    this->invalidateFilter();
+}
+
+void dtkDistributedControllerStatusModelFilter::setArchFlags(QFlags<dtkDistributedCpu::Architecture> flags)
+{
+    d->arch_flags = flags;
+
+    this->invalidateFilter();
+}
+
+void dtkDistributedControllerStatusModelFilter::setModelFlags(QFlags<dtkDistributedCpu::Model> flags)
+{
+    d->model_flags = flags;
 
     this->invalidateFilter();
 }

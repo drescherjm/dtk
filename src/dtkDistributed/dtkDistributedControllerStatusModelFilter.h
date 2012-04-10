@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr  6 15:20:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 10 18:36:11 2012 (+0200)
+ * Last-Updated: Tue Apr 10 22:12:40 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 20
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -37,6 +37,10 @@ public:
 
 public:
     void setNetworkFlags(QFlags<dtkDistributedNode::Network> flags);
+    void setStateFlags(QFlags<dtkDistributedNode::State> flags);
+    void setBrandFlags(QFlags<dtkDistributedNode::Brand> flags);
+    void setArchFlags(QFlags<dtkDistributedCpu::Architecture> flags);
+    void setModelFlags(QFlags<dtkDistributedCpu::Model> flags);
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;

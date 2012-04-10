@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. avril  4 10:35:04 2012 (+0200)
+ * Last-Updated: mar. avril 10 18:04:51 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 443
+ *     Update #: 450
  */
 
 /* Commentary: 
@@ -70,7 +70,7 @@ void dtkComposerWriter::setScene(dtkComposerScene *scene)
     d->scene = scene;
 }
 
-QDomDocument dtkComposerWriter::toXML(dtkComposerSceneNodeComposite *rootNode)
+QDomDocument dtkComposerWriter::toXML(dtkComposerSceneNodeComposite *rootNode, bool addSelf)
 {
     QDomDocument document("dtk");
 
@@ -83,14 +83,19 @@ QDomDocument dtkComposerWriter::toXML(dtkComposerSceneNodeComposite *rootNode)
     QDomElement root = document.createElement("dtk");
     document.appendChild(root);
 
-    foreach(dtkComposerSceneNote *note, rootNode->notes())
-        root.appendChild(this->writeNote(note, root, document));
+    if (addSelf)
+        root.appendChild(this->writeNode(rootNode, root, document));
+    else {
 
-    foreach(dtkComposerSceneNode *node, rootNode->nodes())
-        root.appendChild(this->writeNode(node, root, document));
+        foreach(dtkComposerSceneNote *note, rootNode->notes())
+            root.appendChild(this->writeNote(note, root, document));
 
-    foreach(dtkComposerSceneEdge *edge, rootNode->edges())
-        root.appendChild(this->writeEdge(edge, root, document));
+        foreach(dtkComposerSceneNode *node, rootNode->nodes())
+            root.appendChild(this->writeNode(node, root, document));
+
+        foreach(dtkComposerSceneEdge *edge, rootNode->edges())
+            root.appendChild(this->writeEdge(edge, root, document));
+    }
 
     return document;
 }
@@ -103,7 +108,7 @@ void dtkComposerWriter::write(const QString& fileName, Type type)
     d->node_ids.clear();
     d->id = 0;
 
-    QDomDocument document = this->toXML(d->scene->root());
+    QDomDocument document = this->toXML(d->scene->root(), false);
 
     QFile file(fileName);
 

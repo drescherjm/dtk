@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. avril  4 14:02:41 2012 (+0200)
+ * Last-Updated: mar. avril 10 15:18:01 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 598
+ *     Update #: 603
  */
 
 /* Commentary: 
@@ -277,7 +277,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
     // --
 
     dtkComposerSceneNode *n = NULL;
-
+    QString type_n = node.toElement().attribute("type");
     if(blocks.count()) {
 
         qreal w = node.toElement().attribute("w").toFloat();
@@ -302,10 +302,10 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
 
         n = d->control->footer();
 
-    } else if(notes.count() || nodes.count() || edges.count()) {
+    } else if( type_n == "composite" || type_n == "world" || type_n == "remote") {
 
         n = new dtkComposerSceneNodeComposite;
-        n->wrap(d->factory->create(node.toElement().attribute("type")));
+        n->wrap(d->factory->create(type_n));
         n->setParent(d->node);
         d->node->addNode(n);
         d->graph->addNode(n);

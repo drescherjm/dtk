@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: mar. avril  3 17:27:50 2012 (+0200)
+ * Last-Updated: mar. avril 10 18:06:51 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 11
+ *     Update #: 21
  */
 
 /* Commentary:
@@ -28,7 +28,7 @@
 class dtkComposerNodeRemotePrivate
 {
 public:
-
+    QDomDocument composition;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -54,6 +54,11 @@ QString dtkComposerNodeRemote::type(void)
 QString dtkComposerNodeRemote::titleHint(void)
 {
     return "Remote";
+}
+
+void dtkComposerNodeRemote::setComposition(QDomDocument document)
+{
+    d->composition = document;
 }
 
 void dtkComposerNodeRemote::begin(void)

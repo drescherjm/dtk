@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:25:39
  * Version: $Id$
- * Last-Updated: mer. avril 11 16:59:36 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 101
+ * Last-Updated: Wed Apr 11 17:07:21 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 102
  */
 
 /* Commentary:
@@ -144,7 +144,7 @@ int dtkComposerEvaluatorSlave::exec(void)
         reader->readString(composition);
         if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(scene->root()->nodes().first()->wrapee())) {
             remote->setSlave(this);
-            remote->setJobid(this->jobId());
+            remote->setJob(this->jobId());
             evaluator->run();
         } else {
             dtkFatal() <<  "Can't find remote node in composition, abort";

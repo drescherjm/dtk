@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:32:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr  2 13:49:48 2012 (+0200)
- *           By: tkloczko
- *     Update #: 56
+ * Last-Updated: Wed Apr 11 16:40:49 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 57
  */
 
 /* Commentary: 
@@ -88,6 +88,7 @@ public:
 
 public:
     void boundingBox(qreal& x_min, qreal& x_max, qreal& y_min, qreal& y_max);
+
     QRectF boundingRect(void) const;
 
 public:

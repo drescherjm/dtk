@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:53:43 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 11 16:17:16 2012 (+0200)
+ * Last-Updated: Wed Apr 11 16:27:23 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 77
+ *     Update #: 80
  */
 
 /* Commentary: 
@@ -102,14 +102,14 @@ void dtkDistributedControllerSubmitView::onSubmit(void)
         return;
 
     QVariantMap resources;
-    resources.insert("cores", d->node_spin->text());
-    resources.insert("nodes", d->ppn_spin->text());
+    resources.insert("cores", d->ppn_spin->text());
+    resources.insert("nodes", d->node_spin->text());
 
     QVariantMap job;
     job.insert("resources", resources);
     job.insert("properties", QVariantMap());
     job.insert("walltime", d->time_edit->time().toString("hh:mm:ss"));
-    job.insert("application", QString("dtkComposerEvaluatorSlave --server %1").arg(d->cluster));
+    job.insert("application", QString("dtkComposerEvaluatorSlave %1").arg(d->cluster));
 
     QByteArray data = dtkJson::serialize(job);
 

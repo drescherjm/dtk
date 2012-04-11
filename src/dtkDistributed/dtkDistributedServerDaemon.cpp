@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 10:50:12 2012 (+0200)
- *           By: tkloczko
- *     Update #: 691
+ * Last-Updated: mer. avril 11 17:43:34 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 701
  */
 
 /* Commentary: 
@@ -29,8 +29,6 @@
 #include <dtkCore/dtkGlobal.h>
 
 #include <dtkLog/dtkLog.h>
-
-#define DTK_DEBUG_SERVER_DAEMON 0
 
 class dtkDistributedServerDaemonPrivate
 {
@@ -82,9 +80,7 @@ void dtkDistributedServerDaemon::setManager(dtkDistributedServerManager::Type ty
 
 void dtkDistributedServerDaemon::incomingConnection(int descriptor)
 {
-#if defined(DTK_DEBUG_SERVER_DAEMON)
     dtkDebug() << DTK_PRETTY_FUNCTION << "-- Connection -- " << descriptor ;
-#endif
 
     dtkDistributedSocket *socket = new dtkDistributedSocket(this);
     connect(socket, SIGNAL(readyRead()), this, SLOT(read()));
@@ -153,25 +149,19 @@ void dtkDistributedServerDaemon::read(void)
 
     case dtkDistributedMessage::NEWJOB:
         jobid = d->manager->submit(msg->content());
-#if defined(DTK_DEBUG_SERVER_DAEMON)
         dtkDebug() << DTK_PRETTY_FUNCTION << jobid;
-#endif
         socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::OKJOB, jobid));
         break;
 
     case dtkDistributedMessage::ENDJOB:
-#if defined(DTK_DEBUG_SERVER_DAEMON)
         dtkDebug() << DTK_PRETTY_FUNCTION << "Job ended " << msg->jobid();
-#endif
         //TODO: check if exists
         d->sockets[dtkDistributedMessage::CONTROLLER_RANK]->sendRequest(msg);
         break;
 
     case dtkDistributedMessage::SETRANK:
 
-#if defined(DTK_DEBUG_SERVER_DAEMON)
         dtkDebug() << DTK_PRETTY_FUNCTION << "connected remote is of rank " << msg->rank();
-#endif
         d->sockets.insert(msg->rank(), socket);
         // rank 0 is alive, warn the controller
         if (msg->rank() == 0 && d->sockets.contains(dtkDistributedMessage::CONTROLLER_RANK))
@@ -203,9 +193,7 @@ void dtkDistributedServerDaemon::read(void)
 
 void dtkDistributedServerDaemon::discard(void)
 {
-#if defined(DTK_DEBUG_SERVER_DAEMON)
     dtkDebug() << DTK_PRETTY_FUNCTION << "-- Disconnection --";
-#endif
 
     dtkDistributedSocket *socket = (dtkDistributedSocket *)sender();
     socket->deleteLater();

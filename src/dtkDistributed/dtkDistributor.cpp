@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 11 17:10:42 2012 (+0200)
+ * Last-Updated: Wed Apr 11 17:27:33 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 100
+ *     Update #: 101
  */
 
 /* Commentary: 
@@ -94,6 +94,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     layout->addWidget(d->target_view);
     layout->addWidget(d->header_view);
     layout->addWidget(d->status_view);
+    layout->addWidget(d->queue_view);
     layout->addWidget(d->filter_view);
     layout->addWidget(d->submit_view);
 

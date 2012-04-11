@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr  6 15:53:04 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 10 22:16:18 2012 (+0200)
+ * Last-Updated: Wed Apr 11 12:12:24 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 76
+ *     Update #: 138
  */
 
 /* Commentary: 
@@ -79,6 +79,10 @@ void dtkDistributedControllerStatusModelFilter::setModelFlags(QFlags<dtkDistribu
 bool dtkDistributedControllerStatusModelFilter::filterAcceptsRow(int row, const QModelIndex& parent) const
 {   
     QModelIndex n_index = sourceModel()->index(row, 1, parent);
+    QModelIndex s_index = sourceModel()->index(row, 2, parent);
+    QModelIndex b_index = sourceModel()->index(row, 3, parent);
+    QModelIndex a_index = sourceModel()->index(row, 4, parent);
+    QModelIndex m_index = sourceModel()->index(row, 5, parent);
 
     if((int)(d->network_flags)) {
 
@@ -101,6 +105,51 @@ bool dtkDistributedControllerStatusModelFilter::filterAcceptsRow(int row, const 
             return false;
 
         if(sourceModel()->data(n_index).toString() == "Infiniband40G" && !d->network_flags.testFlag(dtkDistributedNode::Infiniband40G))
+            return false;
+    }
+
+    if((int)(d->state_flags)) {
+
+        if(sourceModel()->data(s_index).toString() == "Free" && !d->state_flags.testFlag(dtkDistributedNode::Free))
+            return false;
+
+        if(sourceModel()->data(s_index).toString() == "Busy" && !d->state_flags.testFlag(dtkDistributedNode::Busy))
+            return false;
+
+        if(sourceModel()->data(s_index).toString() == "Down" && !d->state_flags.testFlag(dtkDistributedNode::Down))
+            return false;
+    }
+
+    if((int)(d->brand_flags)) {
+
+        if(sourceModel()->data(b_index).toString() == "Hp" && !d->brand_flags.testFlag(dtkDistributedNode::Hp))
+            return false;
+
+        if(sourceModel()->data(b_index).toString() == "Ibm" && !d->brand_flags.testFlag(dtkDistributedNode::Ibm))
+            return false;
+
+        if(sourceModel()->data(b_index).toString() == "Dell" && !d->brand_flags.testFlag(dtkDistributedNode::Dell))
+            return false;
+
+        if(sourceModel()->data(b_index).toString() == "Carri" && !d->brand_flags.testFlag(dtkDistributedNode::Carri))
+            return false;
+    }
+
+    if((int)(d->arch_flags)) {
+
+        if(sourceModel()->data(a_index).toString() == "x86" && !d->arch_flags.testFlag(dtkDistributedCpu::x86))
+            return false;
+
+        if(sourceModel()->data(a_index).toString() == "x86_64" && !d->arch_flags.testFlag(dtkDistributedCpu::x86_64))
+            return false;
+    }
+
+    if((int)(d->model_flags)) {
+
+        if(sourceModel()->data(m_index).toString() == "Xeon" && !d->model_flags.testFlag(dtkDistributedCpu::Xeon))
+            return false;
+
+        if(sourceModel()->data(m_index).toString() == "Opteron" && !d->model_flags.testFlag(dtkDistributedCpu::Opteron))
             return false;
     }
 

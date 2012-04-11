@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 11 16:15:09 2012 (+0200)
+ * Last-Updated: Wed Apr 11 17:10:42 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 96
+ *     Update #: 100
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #include "dtkDistributedController.h"
 #include "dtkDistributedControllerFilterView.h"
 #include "dtkDistributedControllerHeaderView.h"
+#include "dtkDistributedControllerQueueView.h"
 #include "dtkDistributedControllerStatusModel.h"
 #include "dtkDistributedControllerStatusModelFilter.h"
 #include "dtkDistributedControllerStatusView.h"
@@ -38,6 +39,7 @@ public:
     dtkDistributedControllerStatusView *status_view;
     dtkDistributedControllerSubmitView *submit_view;
     dtkDistributedControllerTargetView *target_view;
+    dtkDistributedControllerQueueView *queue_view;
 
 public:
     QComboBox *host_address;
@@ -77,6 +79,9 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     
     d->target_view = new dtkDistributedControllerTargetView(this);
     d->target_view->setController(d->controller);
+
+    d->queue_view = new dtkDistributedControllerQueueView(this);
+    d->queue_view->setController(d->controller);
 
     QHBoxLayout *t_layout = new QHBoxLayout;
     t_layout->addWidget(d->host_address);

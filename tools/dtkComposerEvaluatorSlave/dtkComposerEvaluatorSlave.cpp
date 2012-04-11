@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:25:39
  * Version: $Id$
- * Last-Updated: Wed Apr 11 17:07:21 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 102
+ * Last-Updated: mer. avril 11 17:46:58 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 113
  */
 
 /* Commentary:
@@ -127,7 +127,15 @@ int dtkComposerEvaluatorSlave::exec(void)
 
         dtkDebug() << "Wait for composition from controller " ;
 
-        this->communicator()->receive(composition, dtkDistributedMessage::CONTROLLER_RANK, 0);
+//        this->communicator()->parseRequest(composition, dtkDistributedMessage::CONTROLLER_RANK, 0);
+        dtkDistributedMessage *msg = this->communicator()->socket()->parseRequest();
+        if (msg->type() == "xml")
+            composition = QString(msg->content());
+        else {
+            dtkFatal() << "Bad composition type, abort" << msg->type();
+            return 1;
+        }
+
         if (composition.isEmpty()) {
             dtkFatal() << "Empty composition, abort" ;
             return 1;

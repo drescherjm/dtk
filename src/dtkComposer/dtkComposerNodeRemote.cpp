@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: mer. avril 11 16:51:57 2012 (+0200)
+ * Last-Updated: mer. avril 11 17:46:54 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 90
+ *     Update #: 92
  */
 
 /* Commentary:
@@ -95,7 +95,7 @@ void dtkComposerNodeRemote::begin(void)
     if (d->controller) {
         // send sub-composition to rank 0 on remote node
         QByteArray compo = d->composition.toByteArray();
-        d->controller->send(new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid,0,compo.size(), "text", compo ));
+        d->controller->send(new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid,0,compo.size(), "xml", compo ));
         // then send transmitters data
         int max  = this->receivers().count();
         for (int i = 0; i < max; i++) {

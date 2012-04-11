@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 10 22:18:39 2012 (+0200)
+ * Last-Updated: Wed Apr 11 16:15:09 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 91
+ *     Update #: 96
  */
 
 /* Commentary: 
@@ -70,6 +70,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     d->filter_view = new dtkDistributedControllerFilterView(this);
 
     d->submit_view = new dtkDistributedControllerSubmitView(this);
+    d->submit_view->setController(d->controller);
 
     d->header_view = new dtkDistributedControllerHeaderView(this);
     d->header_view->setController(d->controller);
@@ -95,6 +96,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     connect(d->filter_view, SIGNAL(updated()), this, SLOT(onFilterUpdated()));
     connect(d->target_view, SIGNAL(selected(const QString&)), d->status_model, SLOT(setCluster(const QString&)));
     connect(d->target_view, SIGNAL(selected(const QString&)), d->header_view, SLOT(setCluster(const QString&)));
+    connect(d->target_view, SIGNAL(selected(const QString&)), d->submit_view, SLOT(setCluster(const QString&)));
 }
 
 dtkDistributor::~dtkDistributor(void)
@@ -111,6 +113,7 @@ void dtkDistributor::onConnect(void)
 
     d->header_view->setCluster(d->host_address->currentText());
     d->status_model->setCluster(d->host_address->currentText());
+    d->submit_view->setCluster(d->host_address->currentText());
 }
 
 void dtkDistributor::onFilterUpdated(void)

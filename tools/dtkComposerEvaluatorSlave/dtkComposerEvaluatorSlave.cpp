@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:25:39
  * Version: $Id$
- * Last-Updated: mar. avril 10 18:20:28 2012 (+0200)
+ * Last-Updated: mer. avril 11 16:59:36 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 85
+ *     Update #: 101
  */
 
 /* Commentary:
@@ -27,7 +27,13 @@
 #include <dtkCore/dtkGlobal.h>
 
 #include "dtkComposer/dtkComposerEvaluator.h"
+#include "dtkComposer/dtkComposerFactory.h"
+#include "dtkComposer/dtkComposerGraph.h"
 #include "dtkComposer/dtkComposerReader.h"
+#include "dtkComposer/dtkComposerScene.h"
+#include "dtkComposer/dtkComposerSceneNodeComposite.h"
+#include "dtkComposer/dtkComposerStack.h"
+#include "dtkComposer/dtkComposerNodeRemote.h"
 
 #include <dtkDistributed/dtkDistributedCommunicator.h>
 #include <dtkDistributed/dtkDistributedCommunicatorMpi.h>
@@ -81,14 +87,28 @@ int dtkComposerEvaluatorSlave::exec(void)
     dtkDebug() << "communicator size is" << size;
     dtkDebug() << "our rank is" << rank;
 
+    dtkComposerScene *scene;
+    dtkComposerStack *stack;
+    dtkComposerGraph *graph;
+    dtkComposerFactory *factory;
+
+    factory   = new dtkComposerFactory;
+    stack     = new dtkComposerStack;
+    scene     = new dtkComposerScene;
+    graph     = new dtkComposerGraph;
+
+    scene->setFactory(factory);
+    scene->setStack(stack);
+    scene->setGraph(graph);
+
     dtkComposerReader *reader;
     reader = new dtkComposerReader;
     dtkComposerEvaluator *evaluator;
     evaluator = new dtkComposerEvaluator;
 
-    // reader->setFactory(factory);
-    // reader->setScene(scene);
-    // reader->setGraph(graph);
+    reader->setFactory(factory);
+    reader->setScene(scene);
+    reader->setGraph(graph);
 
     if ( rank == 0) {
 
@@ -122,7 +142,13 @@ int dtkComposerEvaluatorSlave::exec(void)
         }
 
         reader->readString(composition);
-        evaluator->run();
+        if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(scene->root()->nodes().first()->wrapee())) {
+            remote->setSlave(this);
+            remote->setJobid(this->jobId());
+            evaluator->run();
+        } else {
+            dtkFatal() <<  "Can't find remote node in composition, abort";
+        }
 
     } else {
         QString composition;

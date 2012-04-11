@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Oct 27 14:10:37 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. avril 10 18:18:39 2012 (+0200)
+ * Last-Updated: mer. avril 11 16:48:30 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 256
+ *     Update #: 257
  */
 
 /* Commentary: 
@@ -22,11 +22,6 @@
 #include "dtkComposerEvaluatorSlave.h"
 
 #include <dtkCore>
-
-#include "dtkComposer/dtkComposerFactory.h"
-#include "dtkComposer/dtkComposerGraph.h"
-#include "dtkComposer/dtkComposerScene.h"
-#include "dtkComposer/dtkComposerStack.h"
 
 #include <dtkDistributed/dtkDistributedCommunicator.h>
 #include <dtkDistributed/dtkDistributedCommunicatorMpi.h>
@@ -62,19 +57,6 @@ int main(int argc, char **argv)
 
     dtkComposerEvaluatorSlave *slave = new dtkComposerEvaluatorSlave;
 
-    dtkComposerScene *scene;
-    dtkComposerStack *stack;
-    dtkComposerGraph *graph;
-    dtkComposerFactory *factory;
-
-    factory   = new dtkComposerFactory;
-    stack     = new dtkComposerStack;
-    scene     = new dtkComposerScene;
-    graph     = new dtkComposerGraph;
-
-    scene->setFactory(factory);
-    scene->setStack(stack);
-    scene->setGraph(graph);
 
 
     slave->setInternalCommunicator(communicator);

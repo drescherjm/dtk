@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 10 10:12:41 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 10 22:08:55 2012 (+0200)
+ * Last-Updated: Wed Apr 11 12:42:01 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 261
+ *     Update #: 267
  */
 
 /* Commentary: 
@@ -160,6 +160,7 @@ dtkDistributedControllerFilterView::dtkDistributedControllerFilterView(QWidget *
     this->setHeaderLabel("Filters");
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setFrameStyle(QFrame::NoFrame);
+    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
     connect(network_group, SIGNAL(buttonClicked(int)), this, SLOT(onNetworkButtonClicked(int)));
     connect(state_group, SIGNAL(buttonClicked(int)), this, SLOT(onStateButtonClicked(int)));
@@ -173,6 +174,11 @@ dtkDistributedControllerFilterView::~dtkDistributedControllerFilterView(void)
     delete d;
 
     d = NULL;
+}
+
+QSize dtkDistributedControllerFilterView::sizeHint(void) const
+{
+    return QSize(100, 200);
 }
 
 QFlags<dtkDistributedNode::Network> dtkDistributedControllerFilterView::networkFlags(void)

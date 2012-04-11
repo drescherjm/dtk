@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:52:03 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 17:14:27 2012 (+0200)
+ * Last-Updated: Wed Apr 11 12:36:15 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 4
+ *     Update #: 5
  */
 
 /* Commentary: 
@@ -33,6 +33,9 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedControllerSubmitView : public QFrame
 public:
      dtkDistributedControllerSubmitView(QWidget *parent = 0);
     ~dtkDistributedControllerSubmitView(void);
+
+protected slots:
+    void onSubmit(void);
 
 private:
     dtkDistributedControllerSubmitViewPrivate *d;

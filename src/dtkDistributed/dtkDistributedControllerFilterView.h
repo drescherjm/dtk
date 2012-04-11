@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 10 10:10:19 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 10 18:15:26 2012 (+0200)
+ * Last-Updated: Wed Apr 11 12:40:05 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 30
+ *     Update #: 32
  */
 
 /* Commentary: 
@@ -35,6 +35,9 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedControllerFilterView : public QTreeWid
 public:
      dtkDistributedControllerFilterView(QWidget *parent = 0);
     ~dtkDistributedControllerFilterView(void);
+
+public:
+    QSize sizeHint(void) const;
 
 signals:
     void updated(void);

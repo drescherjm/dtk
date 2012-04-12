@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. avril 12 10:38:43 2012 (+0200)
+ * Last-Updated: jeu. avril 12 11:08:02 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 1521
+ *     Update #: 1532
  */
 
 /* Commentary: 
@@ -207,8 +207,8 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
         job->setName(jjob["name"].toString());
         job->setWalltime(jjob["walltime"].toString());
         job->setQueue(jjob["queue"].toString());
-        job->setQtime(jjob["qtime"].toInt());
-        job->setStime(jjob["stime"].toInt());
+        job->setQtime(jjob["queue_time"].toLongLong()*1000);
+        job->setStime(jjob["start_time"].toLongLong()*1000);
         job->setResources(jjob["resources"].toString());
         if (coreref.contains(jobid))
             foreach(dtkDistributedCore *job_core,  coreref[jobid])

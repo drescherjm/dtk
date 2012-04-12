@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 10:56:50 2012 (+0200)
- *           By: tkloczko
- *     Update #: 943
+ * Last-Updated: jeu. avril 12 11:13:53 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 946
  */
 
 /* Commentary: 
@@ -170,16 +170,22 @@ QByteArray  dtkDistributedServerManagerTorque::status(void)
         QString state;
         char J= jobs.item(i).firstChildElement("job_state").text().simplified().at(0).toAscii();
         switch (J) {
-        case 'R' :
-            state = "running";   break;
+        case 'R' : {
+            state = "running";
+            stime = jobs.item(i).firstChildElement("start_time").text().simplified();
+            break;
+        }
         case 'Q' :
             state = "queued";    break;
         case 'S' :
             state = "suspended"; break;
         case 'H' :
             state = "blocked";   break;
-        case 'E' :
-            state = "exiting";   break;
+        case 'E' : {
+            state = "exiting";
+            stime = jobs.item(i).firstChildElement("start_time").text().simplified();
+            break;
+        }
         case 'W' :
             state = "scheduled"; break;
         default  :

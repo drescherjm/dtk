@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. avril 10 18:04:54 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 742
+ * Last-Updated: Thu Apr 12 11:51:49 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 809
  */
 
 /* Commentary: 
@@ -18,7 +18,6 @@
  */
 
 #include "dtkComposerNodeComposite.h"
-#include "dtkComposerNodeRemote.h"
 #include "dtkComposerSceneEdge.h"
 #include "dtkComposerSceneNode.h"
 #include "dtkComposerSceneNodeComposite.h"
@@ -26,6 +25,19 @@
 #include "dtkComposerSceneNote.h"
 #include "dtkComposerScenePort.h"
 #include "dtkComposerWriter.h"
+
+#include <dtkLog/dtkLog.h>
+
+#include <dtkConfig.h>
+
+#if defined(DTK_HAVE_MPI)
+#include "dtkComposerNodeRemote.h"
+#endif
+
+#if defined(DTK_HAVE_MPI)
+#include <dtkDistributed/dtkDistributedController.h>
+#include <dtkDistributed/dtkDistributedMimeData.h>
+#endif
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerSceneNodeComposite
@@ -80,6 +92,7 @@ dtkComposerSceneNodeComposite::dtkComposerSceneNodeComposite(void) : dtkComposer
 
     d->writer = dtkComposerWriter();
 
+    this->setAcceptDrops(true);
     this->layout();
     this->setTitle("Composite");
 }
@@ -578,4 +591,65 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
         painter->setFont(oFont);
         painter->drawText(title_pos, title_text);
     }
+}
+
+void dtkComposerSceneNodeComposite::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
+{
+    dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
+
+    if(!remote) {
+        event->ignore();
+        return;
+    }
+
+    if (event->mimeData()->hasText())
+        event->acceptProposedAction();
+    else
+        event->ignore();
+}
+
+void dtkComposerSceneNodeComposite::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
+{
+    event->accept();
+}
+
+void dtkComposerSceneNodeComposite::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
+{
+    dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
+
+    if(!remote) {
+        event->ignore();
+        return;
+    }
+
+    if (event->mimeData()->hasText())
+        event->acceptProposedAction();
+    else
+        event->ignore();
+}
+
+void dtkComposerSceneNodeComposite::dropEvent(QGraphicsSceneDragDropEvent *event)
+{
+    dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
+
+    if(!remote) {
+        event->ignore();
+        return;
+    }
+
+#if defined(DTK_HAVE_MPI)
+    const dtkDistributedMimeData *data = qobject_cast<const dtkDistributedMimeData *>(event->mimeData());
+
+    if(!data)
+        dtkDebug() << "Unable to retrieve distributed mime data";
+
+    QString job = data->text();
+
+    dtkDistributedController *controller = const_cast<dtkDistributedMimeData *>(data)->controller();
+
+    if(controller)
+        qDebug() << "Oh Yeah !!!!";
+
+    event->acceptProposedAction();
+#endif
 }

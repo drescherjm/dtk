@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr 11 16:18:04 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 12 09:41:30 2012 (+0200)
+ * Last-Updated: Thu Apr 12 10:39:01 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 18
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -44,6 +44,10 @@ protected slots:
 
 protected:
     void update(void);
+
+protected:
+    QMimeData  *mimeData(const QList<QTreeWidgetItem *> items) const;
+    QStringList mimeTypes(void) const;
 
 private:
     dtkDistributedControllerJobViewPrivate *d;

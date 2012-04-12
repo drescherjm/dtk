@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr 11 17:02:06 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 12 09:56:51 2012 (+0200)
+ * Last-Updated: Thu Apr 12 11:45:13 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 63
+ *     Update #: 88
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #include "dtkDistributedController.h"
 #include "dtkDistributedControllerJobView.h"
 #include "dtkDistributedJob.h"
+#include "dtkDistributedMimeData.h"
 
 // /////////////////////////////////////////////////////////////////
 // 
@@ -59,6 +60,10 @@ dtkDistributedControllerJobView::dtkDistributedControllerJobView(QWidget *parent
     d->controller = NULL;
 
     this->setHeaderLabels(QStringList() << "Job" << "State" << "User" << "Queue" << "Queued" << "Started" << "Duration" << "Name" << "Script" << "Resources");
+
+    this->setAttribute(Qt::WA_MacShowFocusRect, false);
+    this->setFrameShape(QFrame::NoFrame);
+    this->setDragEnabled(true);
 }
 
 dtkDistributedControllerJobView::~dtkDistributedControllerJobView(void)
@@ -95,9 +100,21 @@ void dtkDistributedControllerJobView::update(void)
     this->clear();
 
     foreach(dtkDistributedJob *job, d->controller->jobs(d->cluster))
-        this->addTopLevelItem(new QTreeWidgetItem(this,
-                                                  QStringList() << job->Id() << toString(job->state()) << job->Username() << job->Queue() << job->Qtime().toString() << job->Stime().toString() << job->Walltime() << job->Name() << job->Script() << job->Resources()
-                                  ));
+        this->addTopLevelItem(new QTreeWidgetItem(this, QStringList() << job->Id() << toString(job->state()) << job->Username() << job->Queue() << job->Qtime().toString() << job->Stime().toString() << job->Walltime() << job->Name() << job->Script() << job->Resources()));
 
     QTreeWidget::update();
+}
+
+QMimeData *dtkDistributedControllerJobView::mimeData(const QList<QTreeWidgetItem *> items) const
+{
+    dtkDistributedMimeData *data = new dtkDistributedMimeData;
+    data->setText(items.first()->text(0));
+    data->setController(d->controller);
+    
+    return data;
+}
+
+QStringList dtkDistributedControllerJobView::mimeTypes(void) const
+{
+    return QStringList() << "text/plain";
 }

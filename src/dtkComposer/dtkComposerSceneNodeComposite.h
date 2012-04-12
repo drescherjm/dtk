@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:32:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr 11 16:40:49 2012 (+0200)
+ * Last-Updated: Thu Apr 12 10:52:56 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 57
+ *     Update #: 59
  */
 
 /* Commentary: 
@@ -107,6 +107,12 @@ public:
     
     QPointF  unrevealPos(void) const;
     QRectF  unrevealRect(void) const;
+
+protected:
+    void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
+    void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
+    void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
+    void dropEvent(QGraphicsSceneDragDropEvent *event);
 
 private:
     dtkComposerSceneNodeCompositePrivate *d;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 11 17:27:33 2012 (+0200)
+ * Last-Updated: Thu Apr 12 09:42:43 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 101
+ *     Update #: 102
  */
 
 /* Commentary: 
@@ -20,7 +20,7 @@
 #include "dtkDistributedController.h"
 #include "dtkDistributedControllerFilterView.h"
 #include "dtkDistributedControllerHeaderView.h"
-#include "dtkDistributedControllerQueueView.h"
+#include "dtkDistributedControllerJobView.h"
 #include "dtkDistributedControllerStatusModel.h"
 #include "dtkDistributedControllerStatusModelFilter.h"
 #include "dtkDistributedControllerStatusView.h"
@@ -39,7 +39,7 @@ public:
     dtkDistributedControllerStatusView *status_view;
     dtkDistributedControllerSubmitView *submit_view;
     dtkDistributedControllerTargetView *target_view;
-    dtkDistributedControllerQueueView *queue_view;
+    dtkDistributedControllerJobView *job_view;
 
 public:
     QComboBox *host_address;
@@ -80,8 +80,8 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     d->target_view = new dtkDistributedControllerTargetView(this);
     d->target_view->setController(d->controller);
 
-    d->queue_view = new dtkDistributedControllerQueueView(this);
-    d->queue_view->setController(d->controller);
+    d->job_view = new dtkDistributedControllerJobView(this);
+    d->job_view->setController(d->controller);
 
     QHBoxLayout *t_layout = new QHBoxLayout;
     t_layout->addWidget(d->host_address);
@@ -94,7 +94,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     layout->addWidget(d->target_view);
     layout->addWidget(d->header_view);
     layout->addWidget(d->status_view);
-    layout->addWidget(d->queue_view);
+    layout->addWidget(d->job_view);
     layout->addWidget(d->filter_view);
     layout->addWidget(d->submit_view);
 

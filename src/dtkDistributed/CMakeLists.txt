@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Wed Apr 11 17:08:18 2012 (+0200)
+## Last-Updated: Thu Apr 12 09:41:50 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 233
+##     Update #: 234
 ######################################################################
 ## 
 ### Commentary: 
@@ -30,7 +30,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedController.h
   dtkDistributedControllerFilterView.h
   dtkDistributedControllerHeaderView.h
-  dtkDistributedControllerQueueView.h
+  dtkDistributedControllerJobView.h
   dtkDistributedControllerStatusModel.h
   dtkDistributedControllerStatusModelFilter.h
   dtkDistributedControllerStatusModelItem.h
@@ -60,7 +60,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkDistributedController.h
   dtkDistributedControllerFilterView.h
   dtkDistributedControllerHeaderView.h
-  dtkDistributedControllerQueueView.h
+  dtkDistributedControllerJobView.h
   dtkDistributedControllerStatusModel.h
   dtkDistributedControllerStatusModelFilter.h
   dtkDistributedControllerStatusView.h
@@ -87,7 +87,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedController.cpp
   dtkDistributedControllerFilterView.cpp
   dtkDistributedControllerHeaderView.cpp
-  dtkDistributedControllerQueueView.cpp
+  dtkDistributedControllerJobView.cpp
   dtkDistributedControllerStatusModel.cpp
   dtkDistributedControllerStatusModelFilter.cpp
   dtkDistributedControllerStatusModelItem.cpp

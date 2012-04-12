@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr  6 14:39:50 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 1519
+ * Last-Updated: jeu. avril 12 10:38:43 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 1521
  */
 
 /* Commentary: 
@@ -264,6 +264,13 @@ void dtkDistributedController::submit(const QUrl& server,  QByteArray& resources
 {
     dtkDebug() << "Want to submit jobs with resources:" << resources;
     dtkDistributedMessage *msg  = new dtkDistributedMessage(dtkDistributedMessage::NEWJOB,"",-2,resources.size(),"json",resources);
+    d->sockets[server.toString()]->sendRequest(msg);
+}
+
+void dtkDistributedController::killjob(const QUrl& server, QString jobid)
+{
+    dtkDebug() << "Want to kill job" << jobid;
+    dtkDistributedMessage *msg  = new dtkDistributedMessage(dtkDistributedMessage::DELJOB,jobid,-2);
     d->sockets[server.toString()]->sendRequest(msg);
 }
 

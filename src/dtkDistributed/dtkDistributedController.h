@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr  6 10:54:08 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 88
+ * Last-Updated: jeu. avril 12 10:36:55 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 91
  */
 
 /* Commentary: 
@@ -62,6 +62,7 @@ public slots:
     void     deploy(const QUrl& server);
     void    refresh(const QUrl& server);
     void     submit(const QUrl& server, QByteArray& resources);
+    void    killjob(const QUrl& server, QString jobid);
     void       send(dtkDistributedMessage *msg);
     void       send(dtkAbstractData *data, QString jobid, qint16 destrank);
 

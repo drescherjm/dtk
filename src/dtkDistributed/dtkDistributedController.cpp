@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. avril 13 13:48:01 2012 (+0200)
+ * Last-Updated: ven. avril 13 18:47:02 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 1535
+ *     Update #: 1558
  */
 
 /* Commentary: 
@@ -378,6 +378,11 @@ void dtkDistributedController::send(dtkAbstractData *data, QString jobid, qint16
     socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,jobid,rank, array->size(), type));
     socket->write(*array);
 
+}
+
+dtkDistributedSocket *dtkDistributedController::socket(const QString& jobid)
+{
+    return d->sockets[d->jobids[jobid]];
 }
 
 void dtkDistributedController::connect(const QUrl& server)

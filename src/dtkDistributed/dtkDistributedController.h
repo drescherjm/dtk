@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. avril 12 10:36:55 2012 (+0200)
+ * Last-Updated: ven. avril 13 18:46:54 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 91
+ *     Update #: 100
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 
 #include "dtkDistributedExport.h"
 #include "dtkDistributedMessage.h"
+#include "dtkDistributedSocket.h"
 
 #include <dtkCore/dtkAbstractData.h>
 
@@ -55,6 +56,9 @@ signals:
     void jobStarted(QString jobid);
 
     void status(const QUrl& server);
+
+public:
+    dtkDistributedSocket *socket(const QString& jobid);
 
 public slots:
     void    connect(const QUrl& server);

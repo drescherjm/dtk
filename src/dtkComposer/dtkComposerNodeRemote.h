@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:15:12
  * Version: $Id$
- * Last-Updated: mer. avril 11 16:13:57 2012 (+0200)
+ * Last-Updated: ven. avril 13 16:07:27 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 14
+ *     Update #: 18
  */
 
 /* Commentary:
@@ -50,6 +50,9 @@ public:
     void setController(dtkDistributedController  *controller);
     void setSlave(dtkDistributedSlave *slave);
     void setJob(QString jobid);
+
+public:
+    bool isSlave(void);
 
 public:
     virtual void begin(void);

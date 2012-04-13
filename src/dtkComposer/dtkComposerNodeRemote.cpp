@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: ven. avril 13 10:18:58 2012 (+0200)
+ * Last-Updated: ven. avril 13 16:11:01 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 203
+ *     Update #: 208
  */
 
 /* Commentary:
@@ -97,6 +97,13 @@ void dtkComposerNodeRemote::setJob(QString jobid)
     d->title = d->title + "(" + jobid + ")";
     dtkDebug() << "our job is now " << jobid;
 
+}
+
+bool dtkComposerNodeRemote::isSlave(void)
+{
+    if (d->slave)
+        return true;
+    return false;
 }
 
 void dtkComposerNodeRemote::begin(void)

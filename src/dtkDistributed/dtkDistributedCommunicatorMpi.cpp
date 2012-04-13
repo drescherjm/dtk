@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: ven. avril  6 16:06:36 2012 (+0200)
+ * Last-Updated: sam. avril 14 00:26:13 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 445
+ *     Update #: 464
  */
 
 /* Commentary: 
@@ -313,6 +313,44 @@ void dtkDistributedCommunicatorMpi::send(const QString &s, qint16 target, int ta
     dtkDistributedCommunicator::send(char_array,length,target,tag);
 }
 
+/*!
+ *  send a QVariant
+ */
+
+void dtkDistributedCommunicatorMpi::send(const QVariant &v, qint16 target, int tag)
+{
+    int  type = (int)v.type();
+    qint64  size=1;
+    dtkDistributedCommunicator::send(&type,1,target,tag);
+
+    switch (v.type()) {
+    case QVariant::Double: {
+        double data = v.toDouble();
+        dtkDistributedCommunicator::send(&data,size,target,tag);
+        break;
+    }
+    case QVariant::LongLong: {
+        qint64 data = v.toLongLong();
+        dtkDistributedCommunicator::send(&data,size,target,tag);
+        break;
+    }
+    case QVariant::String: {
+        QString data = v.toString();
+        this->send(data,target,tag);
+        break;
+    }
+    case QVariant::UserType:
+    case QVariant::UserType+1: {
+        // assume it's a dtkAbstractData
+        dtkAbstractData *data = v.value<dtkAbstractData *>();
+        this->send(data,target,tag);
+        return;
+    }
+    default:
+        break;
+    }
+}
+
 void dtkDistributedCommunicatorMpi::receive(QString &s, qint16 source, int tag)
 {
     qint64   length;
@@ -321,6 +359,44 @@ void dtkDistributedCommunicatorMpi::receive(QString &s, qint16 source, int tag)
 
     dtkDistributedCommunicator::receive(s_c, length, source,tag);
     s = QString(s_c);
+}
+
+void dtkDistributedCommunicatorMpi::receive(QVariant &v, qint16 source, int tag)
+{
+    int   type;
+    dtkDistributedCommunicator::receive(&type,1,source,tag);
+
+    switch (type) {
+    case QVariant::Double: {
+        double data;
+        dtkDistributedCommunicator::receive(&data,1,source,tag);
+        v=QVariant(data);
+        break;
+    }
+    case QVariant::LongLong: {
+        qint64 data;
+        dtkDistributedCommunicator::receive(&data,1,source,tag);
+        v=QVariant(data);
+        break;
+    }
+    case QVariant::String: {
+        QString data ;
+        this->receive(data,source,tag);
+        v=QVariant(data);
+        break;
+    }
+    case QVariant::UserType:
+    case QVariant::UserType+1: {
+        // assume it's a dtkAbstractData
+        dtkAbstractData *data;
+        this->send(data,source,tag);
+//        v.value<dtkAbstractData *>() = data; FIXME
+        return;
+    }
+    default:
+        break;
+    }
+
 }
 
 //! Barrier.

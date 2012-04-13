@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:15:12
  * Version: $Id$
- * Last-Updated: ven. avril 13 16:07:27 2012 (+0200)
+ * Last-Updated: ven. avril 13 21:43:24 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 18
+ *     Update #: 19
  */
 
 /* Commentary:
@@ -30,6 +30,7 @@
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeRemotePrivate;
+class dtkDistributedCommunicator;
 class dtkDistributedController;
 class dtkDistributedSlave;
 
@@ -48,6 +49,7 @@ public:
 public:
     void setComposition(QDomDocument document);
     void setController(dtkDistributedController  *controller);
+    void setCommunicator(dtkDistributedCommunicator  *communicator);
     void setSlave(dtkDistributedSlave *slave);
     void setJob(QString jobid);
 

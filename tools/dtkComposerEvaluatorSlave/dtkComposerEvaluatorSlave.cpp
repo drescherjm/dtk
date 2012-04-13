@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:25:39
  * Version: $Id$
- * Last-Updated: ven. avril 13 17:23:45 2012 (+0200)
+ * Last-Updated: sam. avril 14 00:09:47 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 134
+ *     Update #: 139
  */
 
 /* Commentary:
@@ -162,6 +162,7 @@ int dtkComposerEvaluatorSlave::exec(void)
         if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(scene->root()->nodes().first()->wrapee())) {
             remote->setSlave(this);
             remote->setJob(this->jobId());
+            remote->setCommunicator(d->communicator_i);
             dtkDebug() << "run composition" ;
             evaluator->run();
         } else {
@@ -175,6 +176,7 @@ int dtkComposerEvaluatorSlave::exec(void)
         if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(scene->root()->nodes().first()->wrapee())) {
             remote->setSlave(this);
             remote->setJob(this->jobId());
+            remote->setCommunicator(d->communicator_i);
             dtkDebug() << "run composition" ;
             evaluator->run();
         } else {

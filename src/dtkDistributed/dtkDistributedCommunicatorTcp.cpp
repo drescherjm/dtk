@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: ven. avril  6 16:06:43 2012 (+0200)
+ * Last-Updated: ven. avril 13 23:05:20 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 222
+ *     Update #: 225
  */
 
 /* Commentary: 
@@ -176,6 +176,11 @@ void dtkDistributedCommunicatorTcp::send(const QString &s, qint16 target, int ta
     d->socket->write(s.toUtf8());
 }
 
+void dtkDistributedCommunicatorTcp::send(const QVariant &v, qint16 target, int tag)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
 void dtkDistributedCommunicatorTcp::receive(QString &data, qint16 source, int tag)
 {
     DTK_UNUSED(tag);
@@ -196,6 +201,10 @@ void dtkDistributedCommunicatorTcp::receive(QString &data, qint16 source, int ta
     d->socket->blockSignals(false);
 }
 
+void dtkDistributedCommunicatorTcp::receive(QVariant &data, qint16 source, int tag)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
 
 void dtkDistributedCommunicatorTcp::send(void *data, qint64 size, DataType dataType, qint16 target, int tag)
 {

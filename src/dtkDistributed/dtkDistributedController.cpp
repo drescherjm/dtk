@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. avril 12 11:08:02 2012 (+0200)
+ * Last-Updated: ven. avril 13 13:48:01 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 1532
+ *     Update #: 1535
  */
 
 /* Commentary: 
@@ -333,7 +333,10 @@ void dtkDistributedController::deploy(const QUrl& server)
         settings.endGroup();
         serverProc->start("ssh", args);
 
-        sleep(1);
+
+        // need to wait a bit when ssh port forwarding is used
+        if (settings.contains(forward) && settings.value(forward).toString() == "true")
+            sleep(1);
 
         dtkDebug() << DTK_PRETTY_FUNCTION << "ssh" << args;
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Oct 27 14:10:37 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. avril 11 16:48:30 2012 (+0200)
+ * Last-Updated: ven. avril 13 14:06:26 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 257
+ *     Update #: 258
  */
 
 /* Commentary: 
@@ -28,7 +28,6 @@
 #include <dtkDistributed/dtkDistributedCommunicatorTcp.h>
 
 #include <QtCore>
-#include <QtGui>
 
 int main(int argc, char **argv)
 {

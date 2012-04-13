@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 12 11:51:49 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 809
+ * Last-Updated: ven. avril 13 10:18:24 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 816
  */
 
 /* Commentary: 
@@ -30,14 +30,10 @@
 
 #include <dtkConfig.h>
 
-#if defined(DTK_HAVE_MPI)
 #include "dtkComposerNodeRemote.h"
-#endif
 
-#if defined(DTK_HAVE_MPI)
 #include <dtkDistributed/dtkDistributedController.h>
 #include <dtkDistributed/dtkDistributedMimeData.h>
-#endif
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerSceneNodeComposite
@@ -637,7 +633,6 @@ void dtkComposerSceneNodeComposite::dropEvent(QGraphicsSceneDragDropEvent *event
         return;
     }
 
-#if defined(DTK_HAVE_MPI)
     const dtkDistributedMimeData *data = qobject_cast<const dtkDistributedMimeData *>(event->mimeData());
 
     if(!data)
@@ -647,9 +642,8 @@ void dtkComposerSceneNodeComposite::dropEvent(QGraphicsSceneDragDropEvent *event
 
     dtkDistributedController *controller = const_cast<dtkDistributedMimeData *>(data)->controller();
 
-    if(controller)
-        qDebug() << "Oh Yeah !!!!";
+    remote->setController(controller);
+    remote->setJob(job);
 
     event->acceptProposedAction();
-#endif
 }

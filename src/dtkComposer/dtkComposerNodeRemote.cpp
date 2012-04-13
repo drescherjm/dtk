@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: mer. avril 11 17:46:54 2012 (+0200)
+ * Last-Updated: ven. avril 13 10:18:58 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 92
+ *     Update #: 203
  */
 
 /* Commentary:
@@ -18,10 +18,12 @@
  */
 
 #include "dtkComposerNodeRemote.h"
+#include "dtkComposerTransmitterVariant.h"
+
 #include <dtkDistributed/dtkDistributedController.h>
 #include <dtkDistributed/dtkDistributedSlave.h>
 
-
+#include <dtkLog/dtkLog.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeRemotePrivate definition
@@ -41,6 +43,9 @@ public:
 public:
     QString jobid;
 
+public:
+    QString title;
+
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -51,6 +56,7 @@ dtkComposerNodeRemote::dtkComposerNodeRemote(void) : dtkComposerNodeComposite(),
 {
     d->controller = NULL;
     d->slave = NULL;
+    d->title = "Remote";
 }
 
 dtkComposerNodeRemote::~dtkComposerNodeRemote(void)
@@ -67,7 +73,7 @@ QString dtkComposerNodeRemote::type(void)
 
 QString dtkComposerNodeRemote::titleHint(void)
 {
-    return "Remote";
+    return d->title;
 }
 
 void dtkComposerNodeRemote::setComposition(QDomDocument document)
@@ -88,6 +94,9 @@ void dtkComposerNodeRemote::setSlave(dtkDistributedSlave *slave)
 void dtkComposerNodeRemote::setJob(QString jobid)
 {
     d->jobid = jobid;
+    d->title = d->title + "(" + jobid + ")";
+    dtkDebug() << "our job is now " << jobid;
+
 }
 
 void dtkComposerNodeRemote::begin(void)
@@ -99,13 +108,56 @@ void dtkComposerNodeRemote::begin(void)
         // then send transmitters data
         int max  = this->receivers().count();
         for (int i = 0; i < max; i++) {
-            // todo
+            dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(this->receivers().at(i));
+            // FIXME: use our own transmitter variant list (see control nodes)
+//            dtkComposerTransmitter *t = this->receivers().at(i);
+            QByteArray array;
+            QString  dataType;
+            switch (t->type()) {
+            case QVariant::Double: {
+                double data = t->data().toDouble();
+                dataType = "double";
+                array = QByteArray(reinterpret_cast<const char*>(&data), sizeof(data));
+                break;
+            }
+            case QVariant::LongLong: {
+                qlonglong data = t->data().toLongLong();
+                dataType = "qlonglong";
+                array = QByteArray(reinterpret_cast<const char*>(&data), sizeof(data));
+                break;
+            }
+            case QVariant::String: {
+                dataType = "qstring";
+                array = t->data().toByteArray();
+                break;
+            }
+            case QVariant::Invalid: { // assume it's a dtkAbstractData
+                dtkAbstractData * data;
+                // TODO: get the data from t->data() as a dtkAbstractData
+                d->controller->send(data, d->jobid, 0);
+                continue;
+            }
+            default:
+                continue;
+            }
+            d->controller->send(new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid,0, array.size(), dataType, array));
         }
     } else {
         // running on the slave, receive data and set transmitters
         int max  = this->receivers().count();
         for (int i = 0; i < max; i++) {
-            // todo
+            dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(this->receivers().at(i));
+            dtkDistributedMessage *msg = d->slave->communicator()->socket()->parseRequest();
+            if (msg->type() == "double") {
+                double *data = reinterpret_cast<double*>(msg->content().data());
+                t->setData(*data);
+            } else if (msg->type() == "qlonglong") {
+                qlonglong *data = reinterpret_cast<qlonglong*>(msg->content().data());
+                t->setData(*data);
+            } else if (msg->type() == "qstring") {
+                t->setData(QString(msg->content()));
+            } else { // assume a dtkAbstractData
+            }
         }
 
     }

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:25:39
  * Version: $Id$
- * Last-Updated: mer. avril 11 17:46:58 2012 (+0200)
+ * Last-Updated: ven. avril 13 13:43:46 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 113
+ *     Update #: 128
  */
 
 /* Commentary:
@@ -127,7 +127,12 @@ int dtkComposerEvaluatorSlave::exec(void)
 
         dtkDebug() << "Wait for composition from controller " ;
 
-//        this->communicator()->parseRequest(composition, dtkDistributedMessage::CONTROLLER_RANK, 0);
+        if (!this->communicator()->socket()->waitForData()) {
+            dtkFatal() << "No data received from server after 10mn, abort " ;
+            return 1;
+        } else
+            dtkDebug() << "Ok, data received, parse" ;
+
         dtkDistributedMessage *msg = this->communicator()->socket()->parseRequest();
         if (msg->type() == "xml")
             composition = QString(msg->content());
@@ -144,15 +149,18 @@ int dtkComposerEvaluatorSlave::exec(void)
         dtkDebug() << "got composition from controller:" << composition;
 
         if  (size > 1) {
+            dtkDebug() << "send composition to our slaves";
             for (int i=1; i< size; i++) {
                 d->communicator_i->send(composition,i,0);
             }
         }
 
+        dtkDebug() << "read composition" ;
         reader->readString(composition);
         if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(scene->root()->nodes().first()->wrapee())) {
             remote->setSlave(this);
             remote->setJob(this->jobId());
+            dtkDebug() << "run composition" ;
             evaluator->run();
         } else {
             dtkFatal() <<  "Can't find remote node in composition, abort";

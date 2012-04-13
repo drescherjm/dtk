@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:25:39
  * Version: $Id$
- * Last-Updated: ven. avril 13 16:52:53 2012 (+0200)
+ * Last-Updated: ven. avril 13 17:21:44 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 129
+ *     Update #: 130
  */
 
 /* Commentary:
@@ -172,6 +172,8 @@ int dtkComposerEvaluatorSlave::exec(void)
         QString composition;
         d->communicator_i->receive(composition,0,0);
         reader->readString(composition);
+        remote->setJob(this->jobId());
+        remote->setSlave(this);
         evaluator->run();
     }
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 14:41:29
  * Version: $Id$
- * Last-Updated: Wed Apr  4 11:21:44 2012 (+0200)
- *           By: tkloczko
- *     Update #: 3
+ * Last-Updated: ven. avril 13 09:36:22 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 6
  */
 
 /* Commentary:
@@ -34,6 +34,15 @@ int main(int argc, char **argv)
         dtkDebug() << "Usage:" << argv[0] << " dtk://server:port [--oar || --torque]";
         return DTK_SUCCEED;
     }
+
+    application.setApplicationName("dtkDistributedServer");
+    application.setApplicationVersion("0.0.1");
+    application.setOrganizationName("inria");
+    application.setOrganizationDomain("fr");
+
+
+    dtkLogger::instance().setLevel(dtkLog::Debug);
+    dtkLogger::instance().attachFile(dtkLogPath(&application));
 
     dtkDistributedServer server(argc, argv);
     server.run();

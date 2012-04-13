@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: ven. avril 13 16:11:01 2012 (+0200)
+ * Last-Updated: ven. avril 13 18:05:50 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 208
+ *     Update #: 268
  */
 
 /* Commentary:
@@ -117,7 +117,6 @@ void dtkComposerNodeRemote::begin(void)
         for (int i = 0; i < max; i++) {
             dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(this->receivers().at(i));
             // FIXME: use our own transmitter variant list (see control nodes)
-//            dtkComposerTransmitter *t = this->receivers().at(i);
             QByteArray array;
             QString  dataType;
             switch (t->type()) {
@@ -138,9 +137,10 @@ void dtkComposerNodeRemote::begin(void)
                 array = t->data().toByteArray();
                 break;
             }
-            case QVariant::Invalid: { // assume it's a dtkAbstractData
-                dtkAbstractData * data;
-                // TODO: get the data from t->data() as a dtkAbstractData
+            case QVariant::UserType:
+            case QVariant::UserType+1: {
+                // assume it's a dtkAbstractData
+                dtkAbstractData *data = t->data().value<dtkAbstractData *>();
                 d->controller->send(data, d->jobid, 0);
                 continue;
             }
@@ -154,6 +154,12 @@ void dtkComposerNodeRemote::begin(void)
         int max  = this->receivers().count();
         for (int i = 0; i < max; i++) {
             dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(this->receivers().at(i));
+            if (!(d->slave->communicator()->socket()->waitForData(60000))) {
+                dtkError() << "No data received from server after 1mn, abort " ;
+                return;
+            } else
+                dtkDebug() << "Ok, data received, parse" ;
+
             dtkDistributedMessage *msg = d->slave->communicator()->socket()->parseRequest();
             if (msg->type() == "double") {
                 double *data = reinterpret_cast<double*>(msg->content().data());
@@ -164,9 +170,9 @@ void dtkComposerNodeRemote::begin(void)
             } else if (msg->type() == "qstring") {
                 t->setData(QString(msg->content()));
             } else { // assume a dtkAbstractData
+                //TODO
             }
         }
-
     }
 }
 
@@ -175,13 +181,69 @@ void dtkComposerNodeRemote::end(void)
     if (d->controller) {
         int max  = this->emitters().count();
         for (int i = 0; i < max; i++) {
-            // todo
+            dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(this->emitters().at(i));
+
+            //FIXME:
+            // if (!(d->controller->waitForData(d->jobid,60000))) {
+            //     dtkError() << "No data received from slave after 1mn, abort " ;
+            //     return;
+            // } else
+            //     dtkDebug() << "Ok, data received, parse" ;
+
+            dtkDistributedMessage *msg;
+            // msg = d->controller>parseRequest(d->jobid); FIXME
+            if (msg->type() == "double") {
+                double *data = reinterpret_cast<double*>(msg->content().data());
+                t->setData(*data);
+            } else if (msg->type() == "qlonglong") {
+                qlonglong *data = reinterpret_cast<qlonglong*>(msg->content().data());
+                t->setData(*data);
+            } else if (msg->type() == "qstring") {
+                t->setData(QString(msg->content()));
+            } else { // assume a dtkAbstractData
+                //TODO
+            }
+
         }
     } else {
         // running on the slave, send data and set transmitters
+        dtkDebug() << "running on the slave, send transmitters data to controller" ;
         int max  = this->emitters().count();
         for (int i = 0; i < max; i++) {
-            // todo
+            dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(this->emitters().at(i));
+            // FIXME: use our own transmitter variant list (see control nodes)
+            QByteArray array;
+            QString  dataType;
+            switch (t->type()) {
+            case QVariant::Double: {
+                double data = t->data().toDouble();
+                dataType = "double";
+                array = QByteArray(reinterpret_cast<const char*>(&data), sizeof(data));
+                break;
+            }
+            case QVariant::LongLong: {
+                qlonglong data = t->data().toLongLong();
+                dataType = "qlonglong";
+                array = QByteArray(reinterpret_cast<const char*>(&data), sizeof(data));
+                break;
+            }
+            case QVariant::String: {
+                dataType = "qstring";
+                array = t->data().toByteArray();
+                break;
+            }
+            case QVariant::UserType:
+            case QVariant::UserType+1: {
+                // assume it's a dtkAbstractData
+                dtkAbstractData *data = t->data().value<dtkAbstractData *>();
+//                d->slave->communicator()->socket()->send(data, d->jobid, 0); FIXME
+                continue;
+            }
+            default:
+                continue;
+            }
+            d->slave->communicator()->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid,0, array.size(), dataType, array));
+
         }
 
     }

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 13:04:23
  * Version: $Id$
- * Last-Updated: ven. avril  6 14:33:22 2012 (+0200)
+ * Last-Updated: lun. avril 16 12:23:51 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 95
+ *     Update #: 97
  */
 
 /* Commentary:
@@ -96,5 +96,4 @@ void dtkComposerNodeWorld::begin(void)
 
 void dtkComposerNodeWorld::end(void)
 {
-    d->emitter_communicator->data()->uninitialize();
 }

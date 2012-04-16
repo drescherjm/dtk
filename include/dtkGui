@@ -5,7 +5,6 @@
 #include "../src/dtkGui/dtkColorGrid.h"
 #include "../src/dtkGui/dtkFinder.h"
 #include "../src/dtkGui/dtkFlowLayout.h"
-#include "../src/dtkGui/dtkGuiExport.h"
 #include "../src/dtkGui/dtkInterpreter.h"
 #include "../src/dtkGui/dtkPluginsEditor.h"
 #include "../src/dtkGui/dtkPopup.h"

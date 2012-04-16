@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 14:37:36 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar  5 12:56:25 2012 (+0100)
+ * Last-Updated: Mon Apr 16 12:07:08 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 133
+ *     Update #: 134
  */
 
 /* Commentary: See credits at EOF.
@@ -97,7 +97,7 @@ namespace dtkLog
 // Helper functions
 // /////////////////////////////////////////////////////////////////
 
-QString dtkLogPath(QCoreApplication *application);
+QString DTKLOG_EXPORT dtkLogPath(QCoreApplication *application);
 
 // /////////////////////////////////////////////////////////////////
 

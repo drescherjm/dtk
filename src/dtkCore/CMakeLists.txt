@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Apr  3 17:05:27 2012 (+0200)
-##           By: tkloczko
-##     Update #: 229
+## Last-Updated: Mon Apr 16 12:01:21 2012 (+0200)
+##           By: Julien Wintz
+##     Update #: 276
 ######################################################################
 ## 
 ### Commentary: 
@@ -43,7 +43,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractViewFactory.h
   dtkAbstractViewInteractor.h
   dtkAbstractViewNavigator.h
-  dtkCoreExport.h
   dtkGlobal.h
   dtkPluginManager.h
   dtkQuat.h
@@ -137,7 +136,6 @@ configure_file (
 
 if(NOT MSVC)
 add_definitions(-Wno-write-strings)
-add_definitions(-Wformat=0)
 endif()
 
 add_definitions(${QT_DEFINITIONS})
@@ -178,9 +176,8 @@ add_library(${PROJECT_NAME} STATIC
 endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
+  ${QT_LIBRARIES}
   dtkLog)
-  
-target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES})
 
 if(TCL_FOUND)
   target_link_libraries(${PROJECT_NAME} ${TCL_LIBRARY})
@@ -189,6 +186,24 @@ endif()
 if(PYTHONLIBS_FOUND)
   target_link_libraries(${PROJECT_NAME} ${PYTHON_LIBRARIES})
 endif()
+
+## #################################################################
+## Export header file
+## #################################################################
+
+add_compiler_export_flags()
+
+generate_export_header(${PROJECT_NAME}
+  EXPORT_FILE_NAME "${PROJECT_NAME}Export.h")
+
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy
+  "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h"
+  "${CMAKE_BINARY_DIR}")
+
+set(${PROJECT_NAME}_HEADERS
+  ${${PROJECT_NAME}_HEADERS}
+ "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h")
 
 ## #################################################################
 ## Handling of generated script modules
@@ -200,8 +215,8 @@ if(DTK_BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   DEPENDS ${PROJECT_SOURCE_DIR}/dtkCore.i
-  COMMAND ${CMAKE_COMMAND} ARGS -E  make_directory ${CMAKE_BINARY_DIR}/modules
-  COMMAND ${CMAKE_COMMAND} ARGS -E  copy ${${PROJECT_NAME}_BINARY_DIR}/core.py ${CMAKE_BINARY_DIR}/modules
+  COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${CMAKE_BINARY_DIR}/modules
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy ${${PROJECT_NAME}_BINARY_DIR}/core.py ${CMAKE_BINARY_DIR}/modules
   COMMENT "-- Moving python modules to ${CMAKE_BINARY_DIR}/modules")
 
 set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/core.py)

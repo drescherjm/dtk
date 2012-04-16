@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Aug  3 17:34:51 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Apr  3 15:52:39 2012 (+0200)
+## Last-Updated: Mon Apr 16 12:16:15 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 167
+##     Update #: 169
 ######################################################################
 ## 
 ### Commentary: 
@@ -49,7 +49,6 @@ set(${PROJECT_NAME}_RESOURCES
 
 if(NOT MSVC)
 add_definitions(-Wno-write-strings)
-add_definitions(-Wformat=0)
 endif(NOT MSVC)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})

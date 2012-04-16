@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Sep 21 13:46:31 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 10:29:53 2012 (+0200)
- *           By: tkloczko
- *     Update #: 261
+ * Last-Updated: Mon Apr 16 10:41:51 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 265
  */
 
 /* Commentary: 
@@ -20,9 +20,9 @@
 #ifndef DTKABSTRACTDATACOMPOSITE_H
 #define DTKABSTRACTDATACOMPOSITE_H
 
-#include <dtkCore/dtkAbstractData>
-#include <dtkCore/dtkCoreExport>
-#include <dtkCore/dtkGlobal>
+#include "dtkAbstractData.h"
+#include "dtkCoreExport.h"
+#include "dtkGlobal.h"
 
 #include <dtkLog/dtkLog.h>
 

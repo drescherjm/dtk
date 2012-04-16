@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Apr 12 11:38:11 2012 (+0200)
+## Last-Updated: Mon Apr 16 12:01:51 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 238
+##     Update #: 240
 ######################################################################
 ## 
 ### Commentary: 
@@ -40,7 +40,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedControllerTargetViewDelegate.h
   dtkDistributedCore.h
   dtkDistributedCpu.h
-  dtkDistributedExport.h
   dtkDistributedGpu.h
   dtkDistributedMessage.h
   dtkDistributedMimeData.h
@@ -204,6 +203,24 @@ target_link_libraries(${PROJECT_NAME}
 if(MPI_FOUND)
 target_link_libraries(${PROJECT_NAME} ${MPI_LIBRARIES})
 endif(MPI_FOUND)
+
+## #################################################################
+## Export header file
+## #################################################################
+
+add_compiler_export_flags()
+
+generate_export_header(${PROJECT_NAME}
+  EXPORT_FILE_NAME "${PROJECT_NAME}Export.h")
+
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy
+  "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h"
+  "${CMAKE_BINARY_DIR}")
+
+set(${PROJECT_NAME}_HEADERS
+  ${${PROJECT_NAME}_HEADERS}
+ "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h")
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Apr 12 11:26:14 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 12 11:44:44 2012 (+0200)
+ * Last-Updated: Mon Apr 16 12:15:37 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 15
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -27,7 +27,7 @@
 class dtkDistributedController;
 class dtkDistributedMimeDataPrivate;
 
-class dtkDistributedMimeData : public QMimeData
+class DTKDISTRIBUTED_EXPORT dtkDistributedMimeData : public QMimeData
 {
     Q_OBJECT
 

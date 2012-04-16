@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Nov 29 00:02:24 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Feb 28 12:27:20 2012 (+0100)
+ * Last-Updated: Mon Apr 16 12:08:44 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 10
+ *     Update #: 12
  */
 
 /* Commentary: 
@@ -20,9 +20,11 @@
 #ifndef DTKFLOWLAYOUT_H
 #define DTKFLOWLAYOUT_H
 
+#include "dtkGuiExport.h"
+
 #include <QtGui>
 
-class dtkFlowLayout : public QLayout
+class DTKGUI_EXPORT dtkFlowLayout : public QLayout
 {
 public:
      dtkFlowLayout(QWidget *parent, int margin = -1, int hSpacing = -1, int vSpacing = -1);

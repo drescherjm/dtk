@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:42:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. mars  2 16:01:43 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 83
+ * Last-Updated: Mon Apr 16 12:16:45 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 85
  */
 
 /* Commentary: 
@@ -20,6 +20,8 @@
 #ifndef DTKCOMPOSERGRAPH_H
 #define DTKCOMPOSERGRAPH_H
 
+#include "dtkComposerExport.h"
+
 #include <QtGui>
 
 class dtkComposerGraphEdge;
@@ -30,7 +32,7 @@ class dtkComposerGraphPrivate;
 class dtkComposerSceneEdge;
 class dtkComposerSceneNode;
 
-class dtkComposerGraph : public QGraphicsScene
+class DTKCOMPOSER_EXPORT dtkComposerGraph : public QGraphicsScene
 {
     Q_OBJECT
 

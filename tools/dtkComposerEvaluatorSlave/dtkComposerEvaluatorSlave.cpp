@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:25:39
  * Version: $Id$
- * Last-Updated: sam. avril 14 00:09:47 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 139
+ * Last-Updated: Mon Apr 16 12:19:55 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 140
  */
 
 /* Commentary:
@@ -183,4 +183,6 @@ int dtkComposerEvaluatorSlave::exec(void)
             dtkFatal() <<  "Can't find remote node in composition, abort";
         }
     }
+
+    return 0;
 }

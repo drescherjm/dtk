@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Feb  5 15:23:02 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 14:11:04 2012 (+0100)
+ * Last-Updated: Mon Apr 16 12:18:10 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 31
+ *     Update #: 33
  */
 
 /* Commentary: 
@@ -20,12 +20,14 @@
 #ifndef DTKCOMPOSERSCENEVIEW_H
 #define DTKCOMPOSERSCENEVIEW_H
 
+#include "dtkComposerExport.h"
+
 #include <QtGui>
 
 class dtkComposerScene;
 class dtkComposerSceneViewPrivate;
 
-class dtkComposerSceneView : public QTreeView
+class DTKCOMPOSER_EXPORT dtkComposerSceneView : public QTreeView
 {
     Q_OBJECT
 

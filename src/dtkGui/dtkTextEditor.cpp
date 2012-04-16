@@ -23,7 +23,7 @@
 
 #include <dtkLog/dtkLog.h>
 
-#include <dtkGui/dtkTextEditor.h>
+#include "dtkTextEditor.h"
 
 class dtkTextEditorExtraArea : public QWidget
 {

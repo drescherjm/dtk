@@ -20,7 +20,7 @@
 #ifndef DTKABSTRACTVIEWERFACTORY_H
 #define DTKABSTRACTVIEWERFACTORY_H
 
-#include <dtkCore/dtkAbstractFactory.h>
+#include "dtkAbstractFactory.h"
 
                   class dtkAbstractView;
                   class dtkAbstractViewAnimator;

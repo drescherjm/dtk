@@ -1,5 +1,5 @@
 
-#include <dtkCore/dtkSingletonDeclare.h>
+#include "dtkSingletonDeclare.h"
 
 /* Commentary:
 */
@@ -15,7 +15,7 @@
  * { mySingleton.h }
  *
  * \code
-    #include <dtkCore/dtkSingletoneDeclare.h>
+    #include "dtkSingletoneDeclare.h"
 
     class MySingleton
     {

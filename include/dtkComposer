@@ -1,6 +1,5 @@
 #include "../src/dtkComposer/dtkComposer.h"
 #include "../src/dtkComposer/dtkComposerEvaluator.h"
-#include "../src/dtkComposer/dtkComposerExport.h"
 #include "../src/dtkComposer/dtkComposerFactory.h"
 #include "../src/dtkComposer/dtkComposerFactoryView.h"
 #include "../src/dtkComposer/dtkComposerGraph.h"

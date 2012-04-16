@@ -1,6 +1,5 @@
 #include "../src/dtkVr/dtkVrDevice.h"
 #include "../src/dtkVr/dtkVrDeviceVrpn.h"
-#include "../src/dtkVr/dtkVrExport.h"
 #include "../src/dtkVr/dtkVrFlystickRecognizer.h"
 #include "../src/dtkVr/dtkVrGestureRecognizer.h"
 #include "../src/dtkVr/dtkVrHeadRecognizer.h"

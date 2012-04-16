@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:08:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mars 28 10:50:18 2012 (+0200)
+ * Last-Updated: ven. avril 13 16:43:34 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 151
+ *     Update #: 153
  */
 
 /* Commentary:
@@ -86,7 +86,7 @@ public:
 
 public:
     virtual dtkComposerGraphNodeList successors();
-            dtkComposerGraphNodeList predecessors();
+    virtual dtkComposerGraphNodeList predecessors();
             dtkComposerGraphNodeList childs();
 
 public:

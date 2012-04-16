@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:01 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 20 14:19:01 2012 (+0100)
+ * Last-Updated: Mon Apr 16 12:11:27 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 208
+ *     Update #: 213
  */
 
 /* Commentary: 
@@ -20,9 +20,9 @@
 #ifndef DTKTAGCLOUD_H
 #define DTKTAGCLOUD_H
 
-#include <QtGui>
-
 #include "dtkGuiExport.h"
+
+#include <QtGui>
 
 // /////////////////////////////////////////////////////////////////
 // dtkTag
@@ -283,7 +283,7 @@ private:
 // dtkItemListDelegate
 // /////////////////////////////////////////////////////////////////
 
-class dtkItemListDelegate: public QStyledItemDelegate
+class DTKGUI_EXPORT dtkItemListDelegate: public QStyledItemDelegate
 {
 public:
     dtkItemListDelegate(dtkItemList *list);
@@ -304,7 +304,7 @@ protected:
 
 class dtkItemViewPrivate;
 
-class dtkItemView : public QStackedWidget
+class DTKGUI_EXPORT dtkItemView : public QStackedWidget
 {
     Q_OBJECT
 

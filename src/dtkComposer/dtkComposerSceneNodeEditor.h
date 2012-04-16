@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:08:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mars 26 15:46:06 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 31
+ * Last-Updated: Mon Apr 16 12:17:40 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 33
  */
 
 /* Commentary: 
@@ -20,6 +20,8 @@
 #ifndef DTKCOMPOSERSCENENODEEDITOR_H
 #define DTKCOMPOSERSCENENODEEDITOR_H
 
+#include "dtkComposerExport.h"
+
 #include <QtGui>
 
 class dtkComposerScene;
@@ -28,7 +30,7 @@ class dtkComposerSceneNodeEditorPrivate;
 class dtkComposerStack;
 class dtkComposerGraph;
 
-class dtkComposerSceneNodeEditor : public QWidget
+class DTKCOMPOSER_EXPORT dtkComposerSceneNodeEditor : public QWidget
 {
     Q_OBJECT
 

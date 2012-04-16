@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 11:20:56 2012 (+0200)
- *           By: tkloczko
- *     Update #: 385
+ * Last-Updated: ven. avril 13 15:30:00 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 396
  */
 
 /* Commentary:
@@ -62,8 +62,35 @@ QString  dtkDistributedServerManagerOar::submit(QString input)
         oarsub += ",walltime="+json["walltime"].toString();
     }
 
+
     // script
-    oarsub += " "+json["script"].toString();
+    if (json.contains("script")) {
+        oarsub += " "+json["script"].toString();
+    } else if (json.contains("application")) {
+
+        QString scriptName = qApp->applicationDirPath() + "/dtkDistributedServerScript.sh";
+        QFile script(scriptName);
+
+        if (!script.open(QFile::WriteOnly|QFile::Truncate)) {
+            dtkWarn() << "unable to open script for writing";
+        } else {
+            script.setPermissions(QFile::ExeOwner|QFile::ReadOwner|QFile::WriteOwner);
+            QTextStream out(&script);
+            out << "#!/bin/bash\n";
+            out << "mpirun "
+                + qApp->applicationDirPath()
+                + "/"
+                + json["application"].toString();
+        }
+
+        script.close();
+
+        oarsub += " " + scriptName;
+
+    } else {
+        dtkError() << "no script and no application";
+        return QString("ERROR");
+    }
 
     // queue
     if (json.contains("queue")) {
@@ -98,9 +125,9 @@ QString  dtkDistributedServerManagerOar::submit(QString input)
         QStringList jobid = rx.capturedTexts();
 
         Q_UNUSED(pos);
-        
-        dtkDebug() << DTK_PRETTY_FUNCTION << jobid.at(0);
-        return jobid.at(0);
+
+        dtkDebug() << DTK_PRETTY_FUNCTION << jobid.at(1);
+        return jobid.at(1);
     }
 }
 
@@ -252,9 +279,9 @@ QByteArray dtkDistributedServerManagerOar::status(void)
             QVariantMap node = nodes[jcore["host"].toString()].toMap();
             QVariantList cores = node["cores"].toList();
 
-            core.insert("id",jcore["core"].toString());
+            core.insert("id",jcore["resource_id"].toString());
             if (!activecores[core["id"].toString()].isEmpty()) {
-                core.insert("jobs",activecores[core["id"].toString()]);
+                core.insert("job",activecores[core["id"].toString()]);
             }
             cores.append(core);
             node["cores"] = cores;
@@ -274,9 +301,9 @@ QByteArray dtkDistributedServerManagerOar::status(void)
             }
             node.insert("name",jcore["host"]);
             node.insert("corespercpu",jcore["cpucore"]); // temporary
-            core.insert("id",jcore["core"]);
+            core.insert("id",jcore["resource_id"]);
             if (!activecores[core["id"].toString()].isEmpty()) {
-                core.insert("jobs",activecores[core["id"].toString()]);
+                core.insert("job",activecores[core["id"].toString()]);
             }
             cores << core;
             props << prop;

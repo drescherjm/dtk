@@ -17,7 +17,7 @@
  * 
  */
 
-#include <dtkCore/dtkPlugin.h>
+#include "dtkPlugin.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkPluginPrivate

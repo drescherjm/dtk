@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 15:36:32 2012 (+0200)
- *           By: tkloczko
- *     Update #: 1969
+ * Last-Updated: ven. avril 13 16:28:18 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 1974
  */
 
 /* Commentary:
@@ -219,8 +219,8 @@ dtkComposerGraphNode *dtkComposerGraph::root(void)
 void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
 {
     dtkComposerNode *wrapee = node->wrapee();
-    dtkComposerGraphNode *begin;
-    dtkComposerGraphNode *end;
+    dtkComposerGraphNodeBegin *begin;
+    dtkComposerGraphNodeEnd     *end;
 
     if (dynamic_cast<dtkComposerNodeControl *>(wrapee)) {
         begin     = new dtkComposerGraphNodeBegin(wrapee, "Begin Control");
@@ -341,6 +341,8 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
     } else if (dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
         begin = new dtkComposerGraphNodeBegin(wrapee,"Begin"+node->title());
         end   = new dtkComposerGraphNodeEnd(wrapee,"End"+node->title());
+        begin->setEnd(end);
+        end->setBegin(begin);
         if (!composite->root())
             d->addNode(node, begin, d->begin(node->parent()));
         else

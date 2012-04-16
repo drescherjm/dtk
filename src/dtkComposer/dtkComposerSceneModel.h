@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Feb  5 15:22:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb  6 11:41:37 2012 (+0100)
+ * Last-Updated: Mon Apr 16 12:20:51 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 28
+ *     Update #: 30
  */
 
 /* Commentary: 
@@ -20,13 +20,15 @@
 #ifndef DTKCOMPOSERSCENEMODEL_H
 #define DTKCOMPOSERSCENEMODEL_H
 
+#include "dtkComposerExport.h"
+
 #include <QtCore>
 #include <QtGui>
 
 class dtkComposerScene;
 class dtkComposerSceneModelPrivate;
 
-class dtkComposerSceneModel : public QAbstractItemModel
+class DTKCOMPOSER_EXPORT dtkComposerSceneModel : public QAbstractItemModel
 {
     Q_OBJECT
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. avril  3 17:57:21 2012 (+0200)
+ * Last-Updated: mar. avril 10 15:18:01 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 561
+ *     Update #: 603
  */
 
 /* Commentary: 
@@ -114,35 +114,39 @@ void dtkComposerReader::setGraph(dtkComposerGraph *graph)
 
 bool dtkComposerReader::read(const QString& fileName, bool append)
 {
-    // Setting dom document
 
-    QDomDocument document("dtk");
+    QString content;
 
     QFile file(fileName);
+
+    QByteArray c_bytes;
 
     if (!file.open(QIODevice::ReadOnly))
         return false;
 
-    if (!dtkIsBinary(fileName)) {
 
-        if (!document.setContent(&file)) {
-            file.close();
-            return false;
-        }
+    if (!dtkIsBinary(fileName)) {
+        c_bytes = file.readAll();
+        content = QString::fromUtf8(c_bytes.data());
 
     } else {
-
-        QByteArray c_bytes;
         QDataStream stream(&file); stream >> c_bytes;
         QByteArray u_bytes = QByteArray::fromHex(qUncompress(c_bytes));
-
-        if(!document.setContent(QString::fromUtf8(u_bytes.data(), u_bytes.size()))) {
-            file.close();
-            return false;
-        }
+        content = QString::fromUtf8(u_bytes.data(), u_bytes.size());
     }
 
     file.close();
+    return this->readString(content);
+}
+
+bool dtkComposerReader::readString(const QString& data, bool append)
+{
+    QDomDocument document("dtk");
+
+    if (!document.setContent(data)) {
+        qDebug()<< "reader: no content"<< data.size();
+        return false;
+    }
 
     if(!d->check(document))
         return false;
@@ -273,7 +277,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
     // --
 
     dtkComposerSceneNode *n = NULL;
-
+    QString type_n = node.toElement().attribute("type");
     if(blocks.count()) {
 
         qreal w = node.toElement().attribute("w").toFloat();
@@ -298,10 +302,10 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
 
         n = d->control->footer();
 
-    } else if(notes.count() || nodes.count() || edges.count()) {
+    } else if( type_n == "composite" || type_n == "world" || type_n == "remote") {
 
         n = new dtkComposerSceneNodeComposite;
-        n->wrap(d->factory->create(node.toElement().attribute("type")));
+        n->wrap(d->factory->create(type_n));
         n->setParent(d->node);
         d->node->addNode(n);
         d->graph->addNode(n);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 15:51:55 2012 (+0200)
- *           By: tkloczko
- *     Update #: 726
+ * Last-Updated: ven. avril 13 10:18:24 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 816
  */
 
 /* Commentary: 
@@ -24,6 +24,16 @@
 #include "dtkComposerSceneNodeControl.h"
 #include "dtkComposerSceneNote.h"
 #include "dtkComposerScenePort.h"
+#include "dtkComposerWriter.h"
+
+#include <dtkLog/dtkLog.h>
+
+#include <dtkConfig.h>
+
+#include "dtkComposerNodeRemote.h"
+
+#include <dtkDistributed/dtkDistributedController.h>
+#include <dtkDistributed/dtkDistributedMimeData.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerSceneNodeComposite
@@ -51,6 +61,9 @@ public:
     bool root;
 
 public:
+    dtkComposerWriter writer;
+
+public:
     bool flattened;
     bool entered;
     bool revealed;
@@ -63,7 +76,7 @@ dtkComposerSceneNodeComposite::dtkComposerSceneNodeComposite(void) : dtkComposer
 
     d->rect = QRectF(0, 0, 150, 50);
     d->unreveal_rect = QRectF(0, 0, 150, 50);
-    
+
     d->offset = QPointF(50, 50);
 
     d->root = false;
@@ -73,6 +86,9 @@ dtkComposerSceneNodeComposite::dtkComposerSceneNodeComposite(void) : dtkComposer
     d->revealed = false;
     d->obfuscated = false;
 
+    d->writer = dtkComposerWriter();
+
+    this->setAcceptDrops(true);
     this->layout();
     this->setTitle("Composite");
 }
@@ -133,21 +149,33 @@ void dtkComposerSceneNodeComposite::removeNote(dtkComposerSceneNote *note)
 void dtkComposerSceneNodeComposite::addNode(dtkComposerSceneNode *node)
 {
     d->nodes << node;
+
+    if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee()))
+        remote->setComposition(d->writer.toXML(this));
 }
 
 void dtkComposerSceneNodeComposite::removeNode(dtkComposerSceneNode *node)
 {
     d->nodes.removeAll(node);
+
+    if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee()))
+        remote->setComposition(d->writer.toXML(this));
 }
 
 void dtkComposerSceneNodeComposite::addEdge(dtkComposerSceneEdge *edge)
 {
     d->edges << edge;
+
+    if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee()))
+        remote->setComposition(d->writer.toXML(this));
 }
 
 void dtkComposerSceneNodeComposite::removeEdge(dtkComposerSceneEdge *edge)
 {
     d->edges.removeAll(edge);
+
+    if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee()))
+        remote->setComposition(d->writer.toXML(this));
 }
 
 dtkComposerSceneNoteList dtkComposerSceneNodeComposite::notes(void)
@@ -559,4 +587,63 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
         painter->setFont(oFont);
         painter->drawText(title_pos, title_text);
     }
+}
+
+void dtkComposerSceneNodeComposite::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
+{
+    dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
+
+    if(!remote) {
+        event->ignore();
+        return;
+    }
+
+    if (event->mimeData()->hasText())
+        event->acceptProposedAction();
+    else
+        event->ignore();
+}
+
+void dtkComposerSceneNodeComposite::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
+{
+    event->accept();
+}
+
+void dtkComposerSceneNodeComposite::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
+{
+    dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
+
+    if(!remote) {
+        event->ignore();
+        return;
+    }
+
+    if (event->mimeData()->hasText())
+        event->acceptProposedAction();
+    else
+        event->ignore();
+}
+
+void dtkComposerSceneNodeComposite::dropEvent(QGraphicsSceneDragDropEvent *event)
+{
+    dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
+
+    if(!remote) {
+        event->ignore();
+        return;
+    }
+
+    const dtkDistributedMimeData *data = qobject_cast<const dtkDistributedMimeData *>(event->mimeData());
+
+    if(!data)
+        dtkDebug() << "Unable to retrieve distributed mime data";
+
+    QString job = data->text();
+
+    dtkDistributedController *controller = const_cast<dtkDistributedMimeData *>(data)->controller();
+
+    remote->setController(controller);
+    remote->setJob(job);
+
+    event->acceptProposedAction();
 }

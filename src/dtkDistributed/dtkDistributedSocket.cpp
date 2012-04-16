@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: Fri Dec  9 18:18:43 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 657
+ * Last-Updated: ven. avril 13 13:45:05 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 674
  */
 
 /* Commentary:
@@ -67,6 +67,13 @@ qint64 dtkDistributedSocket::sendRequest( dtkDistributedMessage *msg)
     }
 
     return ret;
+}
+
+bool dtkDistributedSocket::waitForData(int max_wait) {
+    this->blockSignals(true);
+    bool res = this->waitForReadyRead(max_wait);
+    this->blockSignals(false);
+    return res;
 }
 
 /**

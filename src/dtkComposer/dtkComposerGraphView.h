@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:42:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 12:31:56 2012 (+0100)
+ * Last-Updated: Mon Apr 16 12:21:19 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 18
+ *     Update #: 20
  */
 
 /* Commentary: 
@@ -20,11 +20,13 @@
 #ifndef DTKCOMPOSERGRAPHVIEW_H
 #define DTKCOMPOSERGRAPHVIEW_H
 
+#include "dtkComposerExport.h"
+
 #include <QtGui>
 
 class dtkComposerGraphViewPrivate;
 
-class dtkComposerGraphView : public QGraphicsView
+class DTKCOMPOSER_EXPORT dtkComposerGraphView : public QGraphicsView
 {
     Q_OBJECT
 

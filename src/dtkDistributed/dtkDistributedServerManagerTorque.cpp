@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 10:56:50 2012 (+0200)
- *           By: tkloczko
- *     Update #: 943
+ * Last-Updated: ven. avril 13 10:05:42 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 959
  */
 
 /* Commentary: 
@@ -100,7 +100,7 @@ QByteArray  dtkDistributedServerManagerTorque::status(void)
 
         // Each job is coreid/jobid
         QStringList rjobs  = nodes.item(i).firstChildElement("jobs").text().simplified().split(",");
-        QRegExp rx("(\\d+)/(\\d+)\\..*");
+        QRegExp rx("(\\d+)/(\\d+)\\..*"); //FIXME:  handle array jobs
         QVariantList cores;
         qint64 njobs = 0;
         for (int c=0;c<np;c++) {
@@ -112,10 +112,6 @@ QByteArray  dtkDistributedServerManagerTorque::status(void)
         }
         if (rjobs.at(0).count() > 0) { // running jobs ?
             foreach( QString rjob, rjobs ) {
-                int pos = rx.indexIn(rjob);
-                
-                Q_UNUSED(pos);
-                
                 QStringList list = rx.capturedTexts();
                 njobs++;
                 qint64 jobcore = list.at(1).toInt();
@@ -170,16 +166,22 @@ QByteArray  dtkDistributedServerManagerTorque::status(void)
         QString state;
         char J= jobs.item(i).firstChildElement("job_state").text().simplified().at(0).toAscii();
         switch (J) {
-        case 'R' :
-            state = "running";   break;
+        case 'R' : {
+            state = "running";
+            stime = jobs.item(i).firstChildElement("start_time").text().simplified();
+            break;
+        }
         case 'Q' :
             state = "queued";    break;
         case 'S' :
             state = "suspended"; break;
         case 'H' :
             state = "blocked";   break;
-        case 'E' :
-            state = "exiting";   break;
+        case 'E' : {
+            state = "exiting";
+            stime = jobs.item(i).firstChildElement("start_time").text().simplified();
+            break;
+        }
         case 'W' :
             state = "scheduled"; break;
         default  :

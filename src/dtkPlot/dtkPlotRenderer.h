@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jul  4 21:11:19 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul  4 21:28:40 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 16
+ * Last-Updated: Mon Apr 16 12:31:29 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 17
  */
 
 /* Commentary: 
@@ -20,12 +20,14 @@
 #ifndef DTKPLOTRENDERER_H
 #define DTKPLOTRENDERER_H
 
+#include "dtkPlotExport.h"
+
 #include <qwt_plot_renderer.h>
 
 class dtkPlotRendererPrivate;
 class dtkPlotView;
 
-class dtkPlotRenderer
+class DTKPLOT_EXPORT dtkPlotRenderer
 {
 public:
      dtkPlotRenderer(void);

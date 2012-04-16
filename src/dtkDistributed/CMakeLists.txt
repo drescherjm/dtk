@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Wed Apr  4 12:27:40 2012 (+0200)
+## Last-Updated: Mon Apr 16 12:01:51 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 212
+##     Update #: 240
 ######################################################################
 ## 
 ### Commentary: 
@@ -28,17 +28,21 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedCommunicatorTcp.h
   dtkDistributedSlave.h
   dtkDistributedController.h
+  dtkDistributedControllerFilterView.h
   dtkDistributedControllerHeaderView.h
+  dtkDistributedControllerJobView.h
   dtkDistributedControllerStatusModel.h
+  dtkDistributedControllerStatusModelFilter.h
   dtkDistributedControllerStatusModelItem.h
   dtkDistributedControllerStatusView.h
   dtkDistributedControllerSubmitView.h
   dtkDistributedControllerTargetView.h
+  dtkDistributedControllerTargetViewDelegate.h
   dtkDistributedCore.h
   dtkDistributedCpu.h
-  dtkDistributedExport.h
   dtkDistributedGpu.h
   dtkDistributedMessage.h
+  dtkDistributedMimeData.h
   dtkDistributedNode.h
   dtkDistributedServer.h
   dtkDistributedServerDaemon.h
@@ -54,15 +58,20 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkDistributedCommunicatorTcp.h
   dtkDistributedSlave.h
   dtkDistributedController.h
+  dtkDistributedControllerFilterView.h
   dtkDistributedControllerHeaderView.h
+  dtkDistributedControllerJobView.h
   dtkDistributedControllerStatusModel.h
+  dtkDistributedControllerStatusModelFilter.h
   dtkDistributedControllerStatusView.h
   dtkDistributedControllerSubmitView.h
   dtkDistributedControllerTargetView.h
+  dtkDistributedControllerTargetViewDelegate.h
   dtkDistributedCore.h
   dtkDistributedCpu.h
   dtkDistributedGpu.h
   dtkDistributedJob.h
+  dtkDistributedMimeData.h
   dtkDistributedNode.h
   dtkDistributedServerDaemon.h
   dtkDistributedServerManager.h
@@ -77,17 +86,22 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedCommunicatorTcp.cpp
   dtkDistributedSlave.cpp
   dtkDistributedController.cpp
+  dtkDistributedControllerFilterView.cpp
   dtkDistributedControllerHeaderView.cpp
+  dtkDistributedControllerJobView.cpp
   dtkDistributedControllerStatusModel.cpp
+  dtkDistributedControllerStatusModelFilter.cpp
   dtkDistributedControllerStatusModelItem.cpp
   dtkDistributedControllerStatusView.cpp
   dtkDistributedControllerSubmitView.cpp
   dtkDistributedControllerTargetView.cpp
+  dtkDistributedControllerTargetViewDelegate.cpp
   dtkDistributedCore.cpp
   dtkDistributedCpu.cpp
   dtkDistributedGpu.cpp
   dtkDistributedJob.cpp
   dtkDistributedMessage.cpp
+  dtkDistributedMimeData.cpp
   dtkDistributedNode.cpp
   dtkDistributedServer.cpp
   dtkDistributedServerDaemon.cpp
@@ -189,6 +203,24 @@ target_link_libraries(${PROJECT_NAME}
 if(MPI_FOUND)
 target_link_libraries(${PROJECT_NAME} ${MPI_LIBRARIES})
 endif(MPI_FOUND)
+
+## #################################################################
+## Export header file
+## #################################################################
+
+add_compiler_export_flags()
+
+generate_export_header(${PROJECT_NAME}
+  EXPORT_FILE_NAME "${PROJECT_NAME}Export.h")
+
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy
+  "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h"
+  "${CMAKE_BINARY_DIR}")
+
+set(${PROJECT_NAME}_HEADERS
+  ${${PROJECT_NAME}_HEADERS}
+ "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h")
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

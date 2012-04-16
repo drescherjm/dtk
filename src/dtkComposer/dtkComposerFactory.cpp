@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Wed Apr  4 14:17:07 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 505
+ * Last-Updated: mer. avril 11 15:28:11 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 511
  */
 
 /* Commentary:
@@ -41,10 +41,10 @@
 #include "dtkComposerNodeString.h"
 #include "dtkComposerNodeVector.h"
 #include "dtkComposerSceneNodeLeaf.h"
+#include "dtkComposerNodeRemote.h"
 
 #if defined(DTK_HAVE_MPI)
 #include "dtkComposerNodeDistributed.h"
-#include "dtkComposerNodeRemote.h"
 #include "dtkComposerNodeWorld.h"
 #endif
 
@@ -397,10 +397,11 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 
     // dtkDistributed nodes
 
-#if defined(DTK_HAVE_MPI)
     d->nodes << "Remote";
-    d->tags["Remote"] = QStringList() <<  "distributed" << "tcp" << "world";
+    d->tags["Remote"] = QStringList() <<  "distributed" << "tcp" << "remote" << "world";
     d->types["Remote"] = "remote";
+
+#if defined(DTK_HAVE_MPI)
 
     d->nodes << "World";
     d->tags["World"] = QStringList() <<  "distributed" << "mpi" << "tcp" << "world";

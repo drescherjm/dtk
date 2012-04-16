@@ -21,12 +21,12 @@
 
 #include <dtkLog/dtkLog.h>
 
-#include <dtkScript/dtkScriptInterpreter.h>
+#include "dtkScriptInterpreter.h"
 #if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
-#include <dtkScript/dtkScriptInterpreterPython.h>
+#include "dtkScriptInterpreterPython.h"
 #endif
 #if defined(HAVE_SWIG) && defined(HAVE_TCL)
-#include <dtkScript/dtkScriptInterpreterTcl.h>
+#include "dtkScriptInterpreterTcl.h"
 #endif
 
 class dtkScriptManagerPrivate

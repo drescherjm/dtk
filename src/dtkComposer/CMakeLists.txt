@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Apr  5 12:27:49 2012 (+0200)
-##           By: tkloczko
-##     Update #: 477
+## Last-Updated: Mon Apr 16 12:00:50 2012 (+0200)
+##           By: Julien Wintz
+##     Update #: 479
 ######################################################################
 ##
 ### Commentary:
@@ -26,7 +26,6 @@ project(dtkComposer)
 set(${PROJECT_NAME}_HEADERS
   dtkComposer.h
   dtkComposerEvaluator.h
-  dtkComposerExport.h
   dtkComposerFactory.h
   dtkComposerFactoryView.h
   dtkComposerGraph.h
@@ -252,6 +251,24 @@ target_link_libraries(${PROJECT_NAME}
 if(MPI_FOUND)
 target_link_libraries(${PROJECT_NAME} dtkDistributed)
 endif(MPI_FOUND)
+
+## #################################################################
+## Export header file
+## #################################################################
+
+add_compiler_export_flags()
+
+generate_export_header(${PROJECT_NAME}
+  EXPORT_FILE_NAME "${PROJECT_NAME}Export.h")
+
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy
+  "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h"
+  "${CMAKE_BINARY_DIR}")
+
+set(${PROJECT_NAME}_HEADERS
+  ${${PROJECT_NAME}_HEADERS}
+ "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h")
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

@@ -17,10 +17,10 @@
  * 
  */
 
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkAbstractView.h>
-#include <dtkCore/dtkAbstractViewAnimator.h>
-#include <dtkCore/dtkSmartPointer.h>
+#include "dtkAbstractData.h"
+#include "dtkAbstractView.h"
+#include "dtkAbstractViewAnimator.h"
+#include "dtkSmartPointer.h"
 
 class dtkAbstractViewAnimatorPrivate
 {

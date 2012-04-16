@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jul  1 16:44:27 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr  5 12:03:42 2012 (+0200)
+ * Last-Updated: Thu Apr  5 16:49:42 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 21
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -37,7 +37,10 @@ public:
     ~dtkDistributedControllerStatusModelItem(void);
 
     void appendChild(dtkDistributedControllerStatusModelItem *child);
-    
+    void removeChild(dtkDistributedControllerStatusModelItem *child);
+   
+    void clear(void);
+ 
     dtkDistributedControllerStatusModelItem *child(int row);
     dtkDistributedControllerStatusModelItem *parent(void);
     

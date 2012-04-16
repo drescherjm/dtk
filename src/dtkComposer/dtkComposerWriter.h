@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:40:30 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb  4 15:18:06 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 39
+ * Last-Updated: mar. avril 10 18:04:45 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -28,6 +28,7 @@
 class dtkComposerScene;
 class dtkComposerSceneEdge;
 class dtkComposerSceneNode;
+class dtkComposerSceneNodeComposite;
 class dtkComposerSceneNote;
 class dtkComposerWriterPrivate;
 
@@ -48,6 +49,9 @@ public:
 
 public:
    void write(const QString& file, Type type = Ascii);
+
+public:
+   QDomDocument toXML(dtkComposerSceneNodeComposite *rootNode, bool addSelf = true);
 
 protected:
    virtual QDomElement writeNote(dtkComposerSceneNote *note, QDomElement& element, QDomDocument& document);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr  5 14:30:18 2012 (+0200)
+ * Last-Updated: Thu Apr 12 09:42:43 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 60
+ *     Update #: 102
  */
 
 /* Commentary: 
@@ -18,8 +18,11 @@
  */
 
 #include "dtkDistributedController.h"
+#include "dtkDistributedControllerFilterView.h"
 #include "dtkDistributedControllerHeaderView.h"
+#include "dtkDistributedControllerJobView.h"
 #include "dtkDistributedControllerStatusModel.h"
+#include "dtkDistributedControllerStatusModelFilter.h"
 #include "dtkDistributedControllerStatusView.h"
 #include "dtkDistributedControllerSubmitView.h"
 #include "dtkDistributedControllerTargetView.h"
@@ -30,10 +33,13 @@ class dtkDistributorPrivate
 public:
     dtkDistributedController *controller;
     dtkDistributedControllerStatusModel *status_model;
+    dtkDistributedControllerStatusModelFilter *filter_model;
+    dtkDistributedControllerFilterView *filter_view;
     dtkDistributedControllerHeaderView *header_view;
     dtkDistributedControllerStatusView *status_view;
     dtkDistributedControllerSubmitView *submit_view;
     dtkDistributedControllerTargetView *target_view;
+    dtkDistributedControllerJobView *job_view;
 
 public:
     QComboBox *host_address;
@@ -57,16 +63,25 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     d->status_model = new dtkDistributedControllerStatusModel(this);
     d->status_model->setController(d->controller);
 
+    d->filter_model = new dtkDistributedControllerStatusModelFilter(this);
+    d->filter_model->setSourceModel(d->status_model);
+
     d->status_view = new dtkDistributedControllerStatusView(this);
-    d->status_view->setModel(d->status_model);
+    d->status_view->setModel(d->filter_model);
+
+    d->filter_view = new dtkDistributedControllerFilterView(this);
 
     d->submit_view = new dtkDistributedControllerSubmitView(this);
+    d->submit_view->setController(d->controller);
 
     d->header_view = new dtkDistributedControllerHeaderView(this);
     d->header_view->setController(d->controller);
     
     d->target_view = new dtkDistributedControllerTargetView(this);
     d->target_view->setController(d->controller);
+
+    d->job_view = new dtkDistributedControllerJobView(this);
+    d->job_view->setController(d->controller);
 
     QHBoxLayout *t_layout = new QHBoxLayout;
     t_layout->addWidget(d->host_address);
@@ -79,9 +94,15 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     layout->addWidget(d->target_view);
     layout->addWidget(d->header_view);
     layout->addWidget(d->status_view);
+    layout->addWidget(d->job_view);
+    layout->addWidget(d->filter_view);
     layout->addWidget(d->submit_view);
 
     connect(d->host_button, SIGNAL(clicked()), this, SLOT(onConnect()));
+    connect(d->filter_view, SIGNAL(updated()), this, SLOT(onFilterUpdated()));
+    connect(d->target_view, SIGNAL(selected(const QString&)), d->status_model, SLOT(setCluster(const QString&)));
+    connect(d->target_view, SIGNAL(selected(const QString&)), d->header_view, SLOT(setCluster(const QString&)));
+    connect(d->target_view, SIGNAL(selected(const QString&)), d->submit_view, SLOT(setCluster(const QString&)));
 }
 
 dtkDistributor::~dtkDistributor(void)
@@ -95,4 +116,17 @@ void dtkDistributor::onConnect(void)
 {
     d->controller->deploy(QUrl(d->host_address->currentText()));
     d->controller->connect(QUrl(d->host_address->currentText()));
+
+    d->header_view->setCluster(d->host_address->currentText());
+    d->status_model->setCluster(d->host_address->currentText());
+    d->submit_view->setCluster(d->host_address->currentText());
+}
+
+void dtkDistributor::onFilterUpdated(void)
+{
+    d->filter_model->setNetworkFlags(d->filter_view->networkFlags());
+    d->filter_model->setStateFlags(d->filter_view->stateFlags());
+    d->filter_model->setBrandFlags(d->filter_view->brandFlags());
+    d->filter_model->setArchFlags(d->filter_view->archFlags());
+    d->filter_model->setModelFlags(d->filter_view->modelFlags());
 }

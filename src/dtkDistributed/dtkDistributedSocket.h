@@ -4,7 +4,7 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: lun. nov. 21 16:55:58 2011 (+0100)
+ * Last-Updated: ven. avril 13 13:31:07 2012 (+0200)
  *           By: Nicolas Niclausse
  *     Update #:
  */
@@ -36,9 +36,14 @@ public:
              dtkDistributedSocket( QObject *parent = 0);
     virtual ~dtkDistributedSocket(void);
 
+public:
     qint64 sendRequest(dtkDistributedMessage *msg);
 
+public:
     dtkDistributedMessage *parseRequest(void);
+
+public:
+    bool waitForData(int max_wait = 300000);
 
 private:
     dtkDistributedSocketPrivate *d;

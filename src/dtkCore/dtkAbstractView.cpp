@@ -17,12 +17,12 @@
  *
  */
 
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkAbstractView.h>
-#include <dtkCore/dtkAbstractViewAnimator.h>
-#include <dtkCore/dtkAbstractViewNavigator.h>
-#include <dtkCore/dtkAbstractViewInteractor.h>
-#include <dtkCore/dtkSmartPointer.h>
+#include "dtkAbstractData.h"
+#include "dtkAbstractView.h"
+#include "dtkAbstractViewAnimator.h"
+#include "dtkAbstractViewNavigator.h"
+#include "dtkAbstractViewInteractor.h"
+#include "dtkSmartPointer.h"
 
 #include <dtkLog/dtkLog.h>
 

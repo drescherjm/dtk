@@ -17,7 +17,7 @@
  *
  */
 
-#include <dtkCore/dtkAbstractObject.h>
+#include "dtkAbstractObject.h"
 
 #include <dtkLog/dtkLog.h>
 

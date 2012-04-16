@@ -20,7 +20,7 @@
 #ifndef DTKABSTRACTDATA_H
 #define DTKABSTRACTDATA_H
 
-#include <dtkCore/dtkAbstractObject.h>
+#include "dtkAbstractObject.h"
 
 #include <QtGui/QImage>
 

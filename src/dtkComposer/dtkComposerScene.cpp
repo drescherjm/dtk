@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Mon Apr  2 10:00:02 2012 (+0200)
- *           By: tkloczko
- *     Update #: 2186
+ * Last-Updated: Thu Apr 12 11:21:45 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 2196
  */
 
 /* Commentary:
@@ -297,12 +297,15 @@ void dtkComposerScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
     if (event->mimeData()->hasUrls())
         event->acceptProposedAction();
     else
-        event->ignore();
+        QGraphicsScene::dragEnterEvent(event);
 }
 
 void dtkComposerScene::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 {
-    event->accept();
+    if (event->mimeData()->hasUrls())
+        event->acceptProposedAction();
+    else
+        QGraphicsScene::dragLeaveEvent(event);
 }
 
 void dtkComposerScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
@@ -310,47 +313,51 @@ void dtkComposerScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
     if (event->mimeData()->hasUrls())
         event->acceptProposedAction();
     else
-        event->ignore();
+        QGraphicsScene::dragMoveEvent(event);
 }
 
 void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
-    QString name = event->mimeData()->text();
-    QUrl url = event->mimeData()->urls().first();
+    if (event->mimeData()->hasUrls()) {
 
-    if (url.scheme() == "note") {
+        QString name = event->mimeData()->text();
+        QUrl url = event->mimeData()->urls().first();
+        
+        if (url.scheme() == "note") {
+            
+            dtkComposerStackCommandCreateNote *command = new dtkComposerStackCommandCreateNote;
+            command->setScene(this);
+            command->setParent(this->parentAt(event->scenePos()));
+            command->setPosition(event->scenePos());
+            
+            d->stack->push(command);
+            
+            event->acceptProposedAction();
+            
+            return;
+        }
+        
+        if (url.scheme() == "node") {
+            
+            dtkComposerStackCommandCreateNode *command = new dtkComposerStackCommandCreateNode;
+            command->setFactory(d->factory);
+            command->setScene(this);
+            command->setGraph(d->graph);
+            command->setParent(this->parentAt(event->scenePos()));
+            command->setPosition(event->scenePos());
+            command->setType(url.path());
+            command->setName(name);
+            
+            d->stack->push(command);
+            
+            event->acceptProposedAction();
+            
+            return;
+        }
 
-        dtkComposerStackCommandCreateNote *command = new dtkComposerStackCommandCreateNote;
-        command->setScene(this);
-        command->setParent(this->parentAt(event->scenePos()));
-        command->setPosition(event->scenePos());
-
-        d->stack->push(command);
-
-        event->acceptProposedAction();
-
-        return;
     }
 
-    if (url.scheme() == "node") {
-
-        dtkComposerStackCommandCreateNode *command = new dtkComposerStackCommandCreateNode;
-        command->setFactory(d->factory);
-        command->setScene(this);
-        command->setGraph(d->graph);
-        command->setParent(this->parentAt(event->scenePos()));
-        command->setPosition(event->scenePos());
-        command->setType(url.path());
-        command->setName(name);
-
-        d->stack->push(command);
-
-        event->acceptProposedAction();
-
-        return;
-    }
-
-    event->ignore();
+    QGraphicsScene::dropEvent(event);
 }
 
 // /////////////////////////////////////////////////////////////////

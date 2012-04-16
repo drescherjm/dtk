@@ -34,7 +34,7 @@
 #include <dtkScript/dtkScriptInterpreterTcl.h>
 #endif
 
-#include <dtkGui/dtkInterpreter.h>
+#include "dtkInterpreter.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkInterpreterPrivate

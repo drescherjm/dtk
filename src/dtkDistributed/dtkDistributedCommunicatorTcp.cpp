@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 10:46:49 2012 (+0200)
- *           By: tkloczko
- *     Update #: 200
+ * Last-Updated: ven. avril 13 23:05:20 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 225
  */
 
 /* Commentary: 
@@ -34,16 +34,22 @@ public:
     dtkDistributedSocket *socket;
 
     QList<dtkDistributedSocket *> sockets;
+
+public:
+    bool initialized;
 };
 
 dtkDistributedCommunicatorTcp::dtkDistributedCommunicatorTcp(void) : dtkDistributedCommunicator(), d(new dtkDistributedCommunicatorTcpPrivate)
 {
     d->server = NULL;
     d->socket = NULL;
+    d->initialized = false;
 }
 
 dtkDistributedCommunicatorTcp::~dtkDistributedCommunicatorTcp(void)
 {
+    delete d->server;
+    delete d->socket;
     delete d;
 
     d = NULL;
@@ -70,7 +76,12 @@ dtkDistributedSocket *dtkDistributedCommunicatorTcp::socket(void)
 
 void dtkDistributedCommunicatorTcp::initialize(void)
 {
+    d->initialized = true;
+}
 
+bool dtkDistributedCommunicatorTcp::initialized(void)
+{
+    return d->initialized;
 }
 
 void dtkDistributedCommunicatorTcp::uninitialize(void)
@@ -159,6 +170,41 @@ void dtkDistributedCommunicatorTcp::receive(dtkAbstractData *&data, qint16 sourc
     d->socket->blockSignals(false);
 }
 
+void dtkDistributedCommunicatorTcp::send(const QString &s, qint16 target, int tag)
+{
+    d->socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,QString::number(tag),target, s.count(), "text"));
+    d->socket->write(s.toUtf8());
+}
+
+void dtkDistributedCommunicatorTcp::send(const QVariant &v, qint16 target, int tag)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicatorTcp::receive(QString &data, qint16 source, int tag)
+{
+    DTK_UNUSED(tag);
+
+    d->socket->blockSignals(true);
+
+    if (!d->socket->waitForReadyRead(300000))
+        dtkWarn() << "Data not ready in receive for rank " << source;
+    else {
+        dtkDistributedMessage *msg = d->socket->parseRequest();
+        if (msg->size() > 0) {
+            QByteArray array = msg->content();
+            data = QString(array);
+        } else {
+            dtkWarn() << "warning: no content in receive";
+        }
+    }
+    d->socket->blockSignals(false);
+}
+
+void dtkDistributedCommunicatorTcp::receive(QVariant &data, qint16 source, int tag)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
 
 void dtkDistributedCommunicatorTcp::send(void *data, qint64 size, DataType dataType, qint16 target, int tag)
 {
@@ -185,6 +231,8 @@ void dtkDistributedCommunicatorTcp::broadcast(void *data, qint64 size, DataType 
     DTK_UNUSED(size);
     DTK_UNUSED(dataType);
     DTK_UNUSED(source);
+
+    dtkWarn() << "Collective operations are not supported on sockets";
 }
 
 void dtkDistributedCommunicatorTcp::gather(void *send, void *recv, qint64 size, DataType dataType, qint16 target, bool all)

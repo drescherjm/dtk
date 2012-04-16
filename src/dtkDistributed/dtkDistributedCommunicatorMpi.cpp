@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: ven. mars 30 16:13:28 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 414
+ * Last-Updated: Mon Apr 16 12:15:01 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 465
  */
 
 /* Commentary: 
@@ -69,7 +69,7 @@ MPI::Op operation_type(dtkDistributedCommunicator::OperationType type)
 class dtkDistributedCommunicatorMpiPrivate
 {
 public:
-    
+
 };
 
 dtkDistributedCommunicatorMpi::dtkDistributedCommunicatorMpi(void) : dtkDistributedCommunicator(), d(new dtkDistributedCommunicatorMpiPrivate)
@@ -84,10 +84,10 @@ dtkDistributedCommunicatorMpi::~dtkDistributedCommunicatorMpi(void)
     d = NULL;
 }
 
-dtkDistributedCommunicatorMpi::dtkDistributedCommunicatorMpi(const dtkDistributedCommunicatorMpi & c)
+dtkDistributedCommunicatorMpi::dtkDistributedCommunicatorMpi(const dtkDistributedCommunicatorMpi& c)
 {
-}
 
+}
 
 //! Mpi communicator initializer.
 /*! 
@@ -112,6 +112,11 @@ void dtkDistributedCommunicatorMpi::initialize(void)
     char **argv = qApp->argv(); // These methods are obsolete but should be really exist in QCoreApplication
 
     MPI::Init(argc, argv);
+}
+
+bool dtkDistributedCommunicatorMpi::initialized(void)
+{
+    return MPI::Is_initialized();
 }
 
 //! Mpi communicator uninitializer.
@@ -293,6 +298,106 @@ void dtkDistributedCommunicatorMpi::receive(dtkAbstractData *&data, qint16 sourc
         qDebug() << "Warning: deserialization failed";
 }
 
+/*!
+ *  send a QString
+ */
+
+void dtkDistributedCommunicatorMpi::send(const QString &s, qint16 target, int tag)
+{
+    qint64  length = s.length()+1;
+    qint64  size_l=1;
+    dtkDistributedCommunicator::send(&length,size_l,target,tag);
+
+    QByteArray Array = s.toAscii();
+    char *char_array = Array.data();
+    dtkDistributedCommunicator::send(char_array,length,target,tag);
+}
+
+/*!
+ *  send a QVariant
+ */
+
+void dtkDistributedCommunicatorMpi::send(const QVariant &v, qint16 target, int tag)
+{
+    int  type = (int)v.type();
+    qint64  size=1;
+    dtkDistributedCommunicator::send(&type,1,target,tag);
+
+    switch (v.type()) {
+    case QVariant::Double: {
+        double data = v.toDouble();
+        dtkDistributedCommunicator::send(&data,size,target,tag);
+        break;
+    }
+    case QVariant::LongLong: {
+        qint64 data = v.toLongLong();
+        dtkDistributedCommunicator::send(&data,size,target,tag);
+        break;
+    }
+    case QVariant::String: {
+        QString data = v.toString();
+        this->send(data,target,tag);
+        break;
+    }
+    case QVariant::UserType:
+    case QVariant::UserType+1: {
+        // assume it's a dtkAbstractData
+        dtkAbstractData *data = v.value<dtkAbstractData *>();
+        this->send(data,target,tag);
+        return;
+    }
+    default:
+        break;
+    }
+}
+
+void dtkDistributedCommunicatorMpi::receive(QString &s, qint16 source, int tag)
+{
+    qint64   length;
+    dtkDistributedCommunicator::receive(&length,1,source,tag);
+    char     s_c[length];
+
+    dtkDistributedCommunicator::receive(s_c, length, source,tag);
+    s = QString(s_c);
+}
+
+void dtkDistributedCommunicatorMpi::receive(QVariant &v, qint16 source, int tag)
+{
+    int   type;
+    dtkDistributedCommunicator::receive(&type,1,source,tag);
+
+    switch (type) {
+    case QVariant::Double: {
+        double data;
+        dtkDistributedCommunicator::receive(&data,1,source,tag);
+        v=QVariant(data);
+        break;
+    }
+    case QVariant::LongLong: {
+        qint64 data;
+        dtkDistributedCommunicator::receive(&data,1,source,tag);
+        v=QVariant(data);
+        break;
+    }
+    case QVariant::String: {
+        QString data ;
+        this->receive(data,source,tag);
+        v=QVariant(data);
+        break;
+    }
+    case QVariant::UserType:
+    case QVariant::UserType+1: {
+        // assume it's a dtkAbstractData
+        dtkAbstractData *data;
+        this->send(data,source,tag);
+//        v.value<dtkAbstractData *>() = data; FIXME
+        return;
+    }
+    default:
+        break;
+    }
+
+}
 
 //! Barrier.
 /*!

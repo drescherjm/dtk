@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 13:04:23
  * Version: $Id$
- * Last-Updated: mar. avril  3 18:04:04 2012 (+0200)
+ * Last-Updated: lun. avril 16 12:23:51 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 93
+ *     Update #: 97
  */
 
 /* Commentary:
@@ -87,7 +87,8 @@ void dtkComposerNodeWorld::begin(void)
 {
     //FIXME: use a config parameter to choose between tcp and mpi communicator
     d->emitter_communicator->setData(new dtkDistributedCommunicatorMpi);
-    d->emitter_communicator->data()->initialize();
+    if (!d->emitter_communicator->data()->initialized())
+        d->emitter_communicator->data()->initialize();
 
     d->emitter_rank->setData(d->emitter_communicator->data()->rank());
     d->emitter_size->setData(d->emitter_communicator->data()->size());
@@ -95,5 +96,4 @@ void dtkComposerNodeWorld::begin(void)
 
 void dtkComposerNodeWorld::end(void)
 {
-    d->emitter_communicator->data()->uninitialize();
 }

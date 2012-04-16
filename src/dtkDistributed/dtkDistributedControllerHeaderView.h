@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr  4 12:22:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr  5 10:10:05 2012 (+0200)
+ * Last-Updated: Fri Apr  6 11:05:46 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 8
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -39,7 +39,14 @@ public:
     void setController(dtkDistributedController *controller);
 
 public slots:
-    void onStatus(const QUrl& server);
+    void setCluster(const QString& cluster);
+
+public slots:
+    void onStatus(const QUrl& cluster);
+    void onDisconnected(const QUrl& cluster);
+
+protected:
+    void update(void);
 
 private:
     dtkDistributedControllerHeaderViewPrivate *d;

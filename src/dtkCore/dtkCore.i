@@ -28,26 +28,26 @@
 #include <QtDebug>
 #include <QtCore>
 
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkAbstractDataFactory.h>
-#include <dtkCore/dtkAbstractDataReader.h>
-#include <dtkCore/dtkAbstractDataWriter.h>
-#include <dtkCore/dtkAbstractDataConverter.h>
-#include <dtkCore/dtkAbstractDataSerializer.h>
-#include <dtkCore/dtkAbstractDataDeserializer.h>
-#include <dtkCore/dtkAbstractObject.h>
-#include <dtkCore/dtkAbstractProcess.h>
-#include <dtkCore/dtkAbstractProcessFactory.h>
-#include <dtkCore/dtkAbstractView.h>
-#include <dtkCore/dtkAbstractViewAnimator.h>
-#include <dtkCore/dtkAbstractViewFactory.h>
-#include <dtkCore/dtkAbstractViewInteractor.h>
-#include <dtkCore/dtkAbstractViewNavigator.h>
-#include <dtkCore/dtkPlugin.h>
-#include <dtkCore/dtkPluginManager.h>
-#include <dtkCore/dtkSmartPointer.h>
-#include <dtkCore/dtkVec3.h>
-#include <dtkCore/dtkQuat.h>
+#include "dtkAbstractData.h"
+#include "dtkAbstractDataFactory.h"
+#include "dtkAbstractDataReader.h"
+#include "dtkAbstractDataWriter.h"
+#include "dtkAbstractDataConverter.h"
+#include "dtkAbstractDataSerializer.h"
+#include "dtkAbstractDataDeserializer.h"
+#include "dtkAbstractObject.h"
+#include "dtkAbstractProcess.h"
+#include "dtkAbstractProcessFactory.h"
+#include "dtkAbstractView.h"
+#include "dtkAbstractViewAnimator.h"
+#include "dtkAbstractViewFactory.h"
+#include "dtkAbstractViewInteractor.h"
+#include "dtkAbstractViewNavigator.h"
+#include "dtkPlugin.h"
+#include "dtkPluginManager.h"
+#include "dtkSmartPointer.h"
+#include "dtkVec3.h"
+#include "dtkQuat.h"
 %}
 
 // /////////////////////////////////////////////////////////////////
@@ -330,23 +330,23 @@ public:
 // Wrapper input
 // /////////////////////////////////////////////////////////////////
 
-%include <dtkCore/dtkAbstractObject.h>
+%include "dtkAbstractObject.h"
 
-%include <dtkCore/dtkAbstractData.h>
-%include <dtkCore/dtkAbstractDataFactory.h>
-%include <dtkCore/dtkAbstractDataReader.h>
-%include <dtkCore/dtkAbstractDataWriter.h>
-%include <dtkCore/dtkAbstractDataConverter.h>
-%include <dtkCore/dtkAbstractProcess.h>
-%include <dtkCore/dtkAbstractProcessFactory.h>
-%include <dtkCore/dtkAbstractView.h>
-%include <dtkCore/dtkAbstractViewFactory.h>
-%include <dtkCore/dtkAbstractViewAnimator.h>
-%include <dtkCore/dtkAbstractViewInteractor.h>
-%include <dtkCore/dtkAbstractViewNavigator.h>
-%include <dtkCore/dtkPlugin.h>
-%include <dtkCore/dtkPluginManager.h>
-%include <dtkCore/dtkVec3.h>
-%include <dtkCore/dtkQuat.h>
+%include "dtkAbstractData.h"
+%include "dtkAbstractDataFactory.h"
+%include "dtkAbstractDataReader.h"
+%include "dtkAbstractDataWriter.h"
+%include "dtkAbstractDataConverter.h"
+%include "dtkAbstractProcess.h"
+%include "dtkAbstractProcessFactory.h"
+%include "dtkAbstractView.h"
+%include "dtkAbstractViewFactory.h"
+%include "dtkAbstractViewAnimator.h"
+%include "dtkAbstractViewInteractor.h"
+%include "dtkAbstractViewNavigator.h"
+%include "dtkPlugin.h"
+%include "dtkPluginManager.h"
+%include "dtkVec3.h"
+%include "dtkQuat.h"
 
 #endif

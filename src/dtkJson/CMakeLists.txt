@@ -4,9 +4,9 @@
 ## Copyright (C) 2011 - Nicolas Niclausse, Inria.
 ## Created: ven. août  5 09:57:25 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Sep  8 14:38:58 2011 (+0200)
+## Last-Updated: Mon Apr 16 12:02:14 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 22
+##     Update #: 26
 ######################################################################
 ##
 ### Commentary:
@@ -34,9 +34,9 @@ set(${PROJECT_NAME}_SOURCES
 ## #################################################################
 ## Build rules
 ## #################################################################
+
 if(NOT WIN32)
 add_definitions(-Wno-write-strings)
-add_definitions(-Wformat=0)
 endif(NOT WIN32)
 
 add_definitions(${QT_DEFINITIONS})
@@ -68,6 +68,24 @@ target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES})
 
 ## #################################################################
+## Export header file
+## #################################################################
+
+add_compiler_export_flags()
+
+generate_export_header(${PROJECT_NAME}
+  EXPORT_FILE_NAME "${PROJECT_NAME}Export.h")
+
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy
+  "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h"
+  "${CMAKE_BINARY_DIR}")
+
+set(${PROJECT_NAME}_HEADERS
+  ${${PROJECT_NAME}_HEADERS}
+ "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h")
+
+## #################################################################
 ## Source file layout in development environments like Visual Studio
 ## #################################################################
 
@@ -89,6 +107,3 @@ install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib)
-
-
-

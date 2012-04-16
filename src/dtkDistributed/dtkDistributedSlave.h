@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 13 17:19:22 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 79
+ * Last-Updated: mer. avril 11 16:49:46 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 82
  */
 
 /* Commentary: 
@@ -64,6 +64,7 @@ public slots:
 protected:
     virtual int exec(void) = 0;
 
+public:
     dtkDistributedCommunicatorTcp *communicator();
 
 protected slots:

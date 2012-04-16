@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:32:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr  2 13:49:48 2012 (+0200)
- *           By: tkloczko
- *     Update #: 56
+ * Last-Updated: Mon Apr 16 12:20:22 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #ifndef DTKCOMPOSERSCENENODECOMPOSITE_H
 #define DTKCOMPOSERSCENENODECOMPOSITE_H
 
+#include "dtkComposerExport.h"
 #include "dtkComposerSceneNode.h"
 
 class dtkComposerSceneEdge;
@@ -29,7 +30,7 @@ class dtkComposerSceneNodeCompositePrivate;
 class dtkComposerSceneNote;
 class dtkComposerSceneNoteList;
 
-class dtkComposerSceneNodeComposite : public dtkComposerSceneNode
+class DTKCOMPOSER_EXPORT dtkComposerSceneNodeComposite : public dtkComposerSceneNode
 {
 public:
      dtkComposerSceneNodeComposite(void);
@@ -88,6 +89,7 @@ public:
 
 public:
     void boundingBox(qreal& x_min, qreal& x_max, qreal& y_min, qreal& y_max);
+
     QRectF boundingRect(void) const;
 
 public:
@@ -106,6 +108,12 @@ public:
     
     QPointF  unrevealPos(void) const;
     QRectF  unrevealRect(void) const;
+
+protected:
+    void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
+    void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
+    void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
+    void dropEvent(QGraphicsSceneDragDropEvent *event);
 
 private:
     dtkComposerSceneNodeCompositePrivate *d;

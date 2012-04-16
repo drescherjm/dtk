@@ -1,5 +1,4 @@
 #include "../src/dtkMath/dtkMath.h"
-#include "../src/dtkMath/dtkMathExport.h"
 #include "../src/dtkMath/dtkMatrix.h"
 #include "../src/dtkMath/dtkMatrixSquared.h"
 #include "../src/dtkMath/dtkQuaternion.h"

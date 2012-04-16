@@ -22,7 +22,7 @@
 
 #include "dtkGuiExport.h"
 
-#include <dtkGui/dtkTextEditor.h>
+#include "dtkTextEditor.h"
 
 class dtkScriptInterpreter;
 

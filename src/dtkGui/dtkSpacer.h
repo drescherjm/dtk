@@ -22,7 +22,7 @@
 
 #include <QWidget>
 
-#include <dtkGui/dtkGuiExport.h>
+#include "dtkGuiExport.h"
 
 class DTKGUI_EXPORT dtkSpacer : public QWidget
 {

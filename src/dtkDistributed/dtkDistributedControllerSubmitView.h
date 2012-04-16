@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:52:03 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 17:14:27 2012 (+0200)
+ * Last-Updated: Wed Apr 11 13:44:52 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 4
+ *     Update #: 10
  */
 
 /* Commentary: 
@@ -24,6 +24,7 @@
 
 #include <QtGui>
 
+class dtkDistributedController;
 class dtkDistributedControllerSubmitViewPrivate;
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedControllerSubmitView : public QFrame
@@ -33,6 +34,13 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedControllerSubmitView : public QFrame
 public:
      dtkDistributedControllerSubmitView(QWidget *parent = 0);
     ~dtkDistributedControllerSubmitView(void);
+
+public slots:
+    void setController(dtkDistributedController *controller);
+    void setCluster(const QString& cluster);
+
+protected slots:
+    void onSubmit(void);
 
 private:
     dtkDistributedControllerSubmitViewPrivate *d;

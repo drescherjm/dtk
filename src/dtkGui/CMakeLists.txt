@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Mar 21 23:58:37 2012 (+0100)
+## Last-Updated: Mon Apr 16 12:02:04 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 241
+##     Update #: 243
 ######################################################################
 ## 
 ### Commentary: 
@@ -31,7 +31,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkColorGrid.h
   dtkFlowLayout.h
   dtkFinder.h
-  dtkGuiExport.h
   dtkInterpreter.h
   dtkPluginsEditor.h
   dtkPopup.h
@@ -150,6 +149,24 @@ target_link_libraries(${PROJECT_NAME}
 if(APPLE)
 target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
 endif(APPLE)
+
+## #################################################################
+## Export header file
+## #################################################################
+
+add_compiler_export_flags()
+
+generate_export_header(${PROJECT_NAME}
+  EXPORT_FILE_NAME "${PROJECT_NAME}Export.h")
+
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy
+  "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h"
+  "${CMAKE_BINARY_DIR}")
+
+set(${PROJECT_NAME}_HEADERS
+  ${${PROJECT_NAME}_HEADERS}
+ "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h")
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

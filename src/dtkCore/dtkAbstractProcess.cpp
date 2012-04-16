@@ -17,7 +17,7 @@
  * 
  */
 
-#include <dtkCore/dtkAbstractProcess.h>
+#include "dtkAbstractProcess.h"
 
 dtkAbstractProcess::dtkAbstractProcess(dtkAbstractProcess *parent) : dtkAbstractObject(parent)
 {

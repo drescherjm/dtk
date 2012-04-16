@@ -22,14 +22,14 @@
 
 %module vr
 %{
-#include <dtkVr/dtkVrDevice.h>
+#include "dtkVrDevice.h"
 #if defined(DTK_WRAP_VR)
-#include <dtkVr/dtkVrManager.h>
-#include <dtkVr/dtkVrMaster.h>
-#include <dtkVr/dtkVrProcess.h>
-#include <dtkVr/dtkVrSlave.h>
+#include "dtkVrManager.h"
+#include "dtkVrMaster.h"
+#include "dtkVrProcess.h"
+#include "dtkVrSlave.h"
 #endif
-#include <dtkVr/dtkVrTracker.h>
+#include "dtkVrTracker.h"
 
 #include <QtDebug>
 #include <QtCore>
@@ -105,13 +105,13 @@
 // Wrapper input
 // /////////////////////////////////////////////////////////////////
 
-%include <dtkVr/dtkVrDevice.h>
+%include "dtkVrDevice.h"
 #if defined(DTK_WRAP_VR)
-%include <dtkVr/dtkVrManager.h>
-%include <dtkVr/dtkVrMaster.h>
-%include <dtkVr/dtkVrProcess.h>
-%include <dtkVr/dtkVrSlave.h>
+%include "dtkVrManager.h"
+%include "dtkVrMaster.h"
+%include "dtkVrProcess.h"
+%include "dtkVrSlave.h"
 #endif
-%include <dtkVr/dtkVrTracker.h>
+%include "dtkVrTracker.h"
 
 #endif

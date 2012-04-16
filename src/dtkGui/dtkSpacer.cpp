@@ -17,7 +17,7 @@
  * 
  */
 
-#include <dtkGui/dtkSpacer.h>
+#include "dtkSpacer.h"
 
 dtkSpacer::dtkSpacer(QWidget *parent, int width, int height) : QWidget(parent)
 {

@@ -20,7 +20,7 @@
 #ifndef DTKABSTRACTDATACONVERTER_H
 #define DTKABSTRACTDATACONVERTER_H
 
-#include <dtkCore/dtkAbstractObject.h>
+#include "dtkAbstractObject.h"
 
 class dtkAbstractData;
 class dtkAbstractDataConverterPrivate;

@@ -22,8 +22,8 @@
 
 #include <dtkCore/dtkGlobal.h>
 
-#include <dtkScript/dtkScriptInterpreter.h>
-#include <dtkScript/dtkScriptManager.h>
+#include "dtkScriptInterpreter.h"
+#include "dtkScriptManager.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkScriptInterpreterPython

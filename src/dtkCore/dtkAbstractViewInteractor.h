@@ -20,7 +20,7 @@
 #ifndef DTKABSTRACTVIEWINTERACTOR_H
 #define DTKABSTRACTVIEWINTERACTOR_H
 
-#include <dtkCore/dtkAbstractObject.h>
+#include "dtkAbstractObject.h"
 
 class dtkAbstractViewInteractorPrivate;
 

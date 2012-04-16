@@ -20,7 +20,7 @@
 #include "dtkAbstractData.h"
 #include "dtkPluginManager.h"
 
-#include <dtkCore/dtkPlugin.h>
+#include "dtkPlugin.h"
 
 #include <dtkLog/dtkLog.h>
 

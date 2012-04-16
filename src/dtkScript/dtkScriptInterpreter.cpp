@@ -32,7 +32,7 @@
 
 #include <dtkCore/dtkPluginManager.h>
 
-#include <dtkScript/dtkScriptInterpreter.h>
+#include "dtkScriptInterpreter.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkScriptInterpreterSynchronizer

@@ -24,7 +24,7 @@
 
 #include <dtkCore/dtkGlobal.h>
 
-#include <dtkGui/dtkGuiExport.h>
+#include "dtkGuiExport.h"
 
 class dtkSplitterPrivate;
 

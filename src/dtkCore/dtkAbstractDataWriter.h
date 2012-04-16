@@ -20,7 +20,7 @@
 #ifndef DTKABSTRACTDATAWRITER_H
 #define DTKABSTRACTDATAWRITER_H
 
-#include <dtkCore/dtkAbstractObject.h>
+#include "dtkAbstractObject.h"
 
 class dtkAbstractData;
 class dtkAbstractDataWriterPrivate;

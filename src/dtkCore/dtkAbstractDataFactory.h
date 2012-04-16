@@ -20,7 +20,7 @@
 #ifndef DTKABSTRACTDATAFACTORY_H
 #define DTKABSTRACTDATAFACTORY_H
 
-#include <dtkCore/dtkAbstractFactory.h>
+#include "dtkAbstractFactory.h"
 
 class dtkAbstractData;
 class dtkAbstractDataReader;

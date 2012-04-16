@@ -22,7 +22,7 @@
 
 #include <dtkCore/dtkGlobal.h>
 
-#include <dtkScript/dtkScriptExport.h>
+#include "dtkScriptExport.h"
 
 class dtkScriptInterpreter;
 class dtkScriptInterpreterPoolPrivate;

@@ -21,8 +21,8 @@
 #define DTKABSTRACTDATADESERIALIZER_H
 
 
-#include <dtkCore/dtkAbstractObject.h>
-#include <dtkCore/dtkAbstractData.h>
+#include "dtkAbstractObject.h"
+#include "dtkAbstractData.h"
 
 class dtkAbstractDataDeserializerPrivate;
 

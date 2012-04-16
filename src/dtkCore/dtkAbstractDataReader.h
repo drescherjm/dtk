@@ -20,7 +20,7 @@
 #ifndef DTKABSTRACTDATAREADER_H
 #define DTKABSTRACTDATAREADER_H
 
-#include <dtkCore/dtkAbstractObject.h>
+#include "dtkAbstractObject.h"
 
 class dtkAbstractData;
 class dtkAbstractDataReaderPrivate;

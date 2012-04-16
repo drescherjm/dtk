@@ -19,7 +19,7 @@
 
 #include <dtkCore/dtkGlobal.h>
 
-#include <dtkScript/dtkScriptInterpreterPython.h>
+#include "dtkScriptInterpreterPython.h"
 
 #undef _POSIX_C_SOURCE
 #undef _XOPEN_SOURCE

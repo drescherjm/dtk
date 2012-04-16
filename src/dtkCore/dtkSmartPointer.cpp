@@ -13,7 +13,7 @@
  * This file only provides documentation - the implementation of the class 
  * is in the header.
  */
-#include <dtkCore/dtkSmartPointer.h>
+#include "dtkSmartPointer.h"
 
 /* Change log:
  *

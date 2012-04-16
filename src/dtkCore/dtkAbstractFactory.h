@@ -22,8 +22,8 @@
 
 #include <QtCore/QObject>
 
-#include <dtkCore/dtkCoreExport.h>
-#include <dtkCore/dtkGlobal.h>
+#include "dtkCoreExport.h"
+#include "dtkGlobal.h"
 
 class DTKCORE_EXPORT dtkAbstractFactory : public QObject
 {

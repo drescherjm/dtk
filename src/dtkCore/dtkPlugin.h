@@ -20,9 +20,9 @@
 #ifndef DTKABSTRACTPLUGIN_H
 #define DTKABSTRACTPLUGIN_H
 
-#include <dtkCore/dtkAbstractObject.h>
-#include <dtkCore/dtkCoreExport.h>
-#include <dtkCore/dtkGlobal.h>
+#include "dtkAbstractObject.h"
+#include "dtkCoreExport.h"
+#include "dtkGlobal.h"
 
 class dtkPluginPrivate;
 

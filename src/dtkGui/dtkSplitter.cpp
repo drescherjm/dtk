@@ -19,7 +19,7 @@
 
 #include <QtGui>
 
-#include <dtkGui/dtkSplitter.h>
+#include "dtkSplitter.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkSplitterHandle

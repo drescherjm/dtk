@@ -17,13 +17,13 @@
  *
  */
 
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkAbstractDataFactory.h>
-#include <dtkCore/dtkAbstractDataReader.h>
-#include <dtkCore/dtkAbstractDataWriter.h>
-#include <dtkCore/dtkAbstractDataConverter.h>
-#include <dtkCore/dtkAbstractDataSerializer.h>
-#include <dtkCore/dtkAbstractDataDeserializer.h>
+#include "dtkAbstractData.h"
+#include "dtkAbstractDataFactory.h"
+#include "dtkAbstractDataReader.h"
+#include "dtkAbstractDataWriter.h"
+#include "dtkAbstractDataConverter.h"
+#include "dtkAbstractDataSerializer.h"
+#include "dtkAbstractDataDeserializer.h"
 
 #include <dtkLog/dtkLog.h>
 

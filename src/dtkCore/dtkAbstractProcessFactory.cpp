@@ -17,9 +17,9 @@
  * 
  */
 
-#include <dtkCore/dtkAbstractProcess.h>
-#include <dtkCore/dtkAbstractProcessFactory.h>
-#include <dtkCore/dtkSmartPointer.h>
+#include "dtkAbstractProcess.h"
+#include "dtkAbstractProcessFactory.h"
+#include "dtkSmartPointer.h"
 
 #include <dtkLog/dtkLog.h>
 

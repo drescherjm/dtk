@@ -17,8 +17,8 @@
  * 
  */
 
-#include <dtkCore/dtkAbstractDataComposite.h>
-#include <dtkCore/dtkGlobal.h>
+#include "dtkAbstractDataComposite.h"
+#include "dtkGlobal.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractDataCompositePrivate

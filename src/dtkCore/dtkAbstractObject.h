@@ -20,8 +20,8 @@
 #ifndef DTKABSTRACTOBJECT_H
 #define DTKABSTRACTOBJECT_H
 
-#include <dtkCore/dtkCoreExport.h>
-#include <dtkCore/dtkGlobal.h>
+#include "dtkCoreExport.h"
+#include "dtkGlobal.h"
 
 class dtkAbstractObjectPrivate;
 

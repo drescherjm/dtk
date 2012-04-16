@@ -20,9 +20,9 @@
 #ifndef DTKABSTRACTVIEW_H
 #define DTKABSTRACTVIEW_H
 
-#include <dtkCore/dtkAbstractObject.h>
-#include <dtkCore/dtkVec3.h>
-#include <dtkCore/dtkQuat.h>
+#include "dtkAbstractObject.h"
+#include "dtkVec3.h"
+#include "dtkQuat.h"
 
 #include <QtGui/QWidget>
 

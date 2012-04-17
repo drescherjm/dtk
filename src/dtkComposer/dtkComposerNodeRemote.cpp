@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: sam. avril 14 00:55:15 2012 (+0200)
+ * Last-Updated: mar. avril 17 18:38:27 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 343
+ *     Update #: 402
  */
 
 /* Commentary:
@@ -121,7 +121,9 @@ void dtkComposerNodeRemote::begin(void)
     if (d->controller) {
         // send sub-composition to rank 0 on remote node
         QByteArray compo = d->composition.toByteArray();
+        dtkDebug() << "running node remote begin statement on controller, send composition of size " << compo.size();
         d->controller->send(new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid,0,compo.size(), "xml", compo ));
+        dtkDebug() << "composition sent";
         // then send transmitters data
         int max  = this->receivers().count();
         for (int i = 0; i < max; i++) {
@@ -157,6 +159,7 @@ void dtkComposerNodeRemote::begin(void)
             default:
                 continue;
             }
+            dtkDebug() << "sending transmitter" << i << "of size" << array.size();
             d->controller->send(new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid,0, array.size(), dataType, array));
         }
     } else {
@@ -165,12 +168,18 @@ void dtkComposerNodeRemote::begin(void)
         int size = d->communicator->size();
         for (int i = 0; i < max; i++) {
             dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(this->receivers().at(i));
-            if (d->communicator->rank() ==0) {
-                if (!(d->slave->communicator()->socket()->waitForData(60000))) {
-                    dtkError() << "No data received from server after 1mn, abort " ;
-                    return;
-                } else
-                    dtkDebug() << "Ok, data received, parse" ;
+            if (d->communicator->rank() == 0) {
+
+                if (d->slave->communicator()->socket()->bytesAvailable()) {
+                    dtkDebug() << "data already available, parse" ;
+
+                } else {
+                    if (!(d->slave->communicator()->socket()->waitForData(60000))) {
+                        dtkError() << "No data received from server after 1mn, abort " ;
+                        return;
+                    } else
+                        dtkDebug() << "Ok, data received, parse" ;
+                }
                 dtkDistributedMessage *msg = d->slave->communicator()->socket()->parseRequest();
                 if (msg->type() == "double") {
                     double *data = reinterpret_cast<double*>(msg->content().data());
@@ -200,17 +209,21 @@ void dtkComposerNodeRemote::begin(void)
 void dtkComposerNodeRemote::end(void)
 {
     if (d->controller) {
-        int max  = this->emitters().count();
         d->controller->socket(d->jobid)->blockSignals(true);
+        dtkDebug() << "running node remote end statement on controller";
+        int max  = this->emitters().count();
         for (int i = 0; i < max; i++) {
             dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(this->emitters().at(i));
 
-            if (!(d->controller->socket(d->jobid)->waitForReadyRead(60000))) {
-                dtkError() << "No data received from slave after 1mn, abort " ;
-                return;
-            } else
-                dtkDebug() << "Ok, data received, parse" ;
-
+            if (d->controller->socket(d->jobid)->bytesAvailable()) {
+                dtkDebug() << "data already available, parse" ;
+            } else {
+                if (!(d->controller->socket(d->jobid)->waitForReadyRead(60000))) {
+                    dtkError() << "No data received from slave after 1mn, abort " ;
+                    return;
+                } else
+                    dtkDebug() << "Ok, data received, parse" ;
+            }
             dtkDistributedMessage *msg = d->controller->socket(d->jobid)->parseRequest();
             if (msg->type() == "double") {
                 double *data = reinterpret_cast<double*>(msg->content().data());
@@ -227,18 +240,22 @@ void dtkComposerNodeRemote::end(void)
                 t->setData(QString(msg->content()));
                 t->setTwinned(true);
             } else { // assume a dtkAbstractData
+                dtkDebug() << "unknown data received" << msg->type();
+                dtkDebug() << msg->content();
                 //TODO
             }
             d->controller->socket(d->jobid)->blockSignals(false);
         }
     } else {
         // running on the slave, send data and set transmitters
+        dtkDebug() << "running node remote end statement on slave" << d->communicator->rank() ;
         int max  = this->emitters().count();
         int size = d->communicator->size();
         for (int i = 0; i < max; i++) {
             dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(this->emitters().at(i));
             // FIXME: use our own transmitter variant list (see control nodes)
             if (d->communicator->rank() ==0) {
+                dtkDebug() << "end, send transmitter data (we are rank 0)";
                 QByteArray array;
                 QString  dataType;
                 switch (t->type()) {
@@ -274,5 +291,7 @@ void dtkComposerNodeRemote::end(void)
                 //TODO rank >0
             }
         }
+        if (d->communicator->rank() ==0)
+            d->slave->communicator()->socket()->waitForBytesWritten();
     }
 }

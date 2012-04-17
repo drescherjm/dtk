@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr  5 10:03:56 2012 (+0200)
+ * Last-Updated: Tue Apr 17 12:19:06 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1466
+ *     Update #: 1602
  */
 
 /* Commentary:
@@ -219,9 +219,42 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     QAction *stop_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Stop_Active.png"), "Stop");
     stop_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_Period);
 
+    QFrame *buttons = new QFrame(this);
+    buttons->setObjectName("dtkCreatorMainWindowSegmentedButtons");
+
+    QPushButton *compo_button = new QPushButton("Composition", buttons);
+    compo_button->setObjectName("dtkCreatorMainWindowSegmentedButtonLeft");
+    compo_button->setFixedSize(100, 25);
+    compo_button->setCheckable(true);
+    compo_button->setChecked(true);
+
+    QPushButton *distr_button = new QPushButton("Distribution", buttons);
+    distr_button->setObjectName("dtkCreatorMainWindowSegmentedButtonMiddle");
+    distr_button->setFixedSize(100, 25);
+    distr_button->setCheckable(true);
+
+    QPushButton *debug_button = new QPushButton("Debug", buttons);
+    debug_button->setObjectName("dtkCreatorMainWindowSegmentedButtonRight");
+    debug_button->setFixedSize(100, 25);
+    debug_button->setCheckable(true);
+
+    QButtonGroup *button_group = new QButtonGroup(this);
+    button_group->setExclusive(true);
+    button_group->addButton(compo_button);
+    button_group->addButton(distr_button);
+    button_group->addButton(debug_button);
+
+    QHBoxLayout *buttons_layout = new QHBoxLayout(buttons);
+    buttons_layout->setMargin(0);
+    buttons_layout->setSpacing(11);
+    buttons_layout->addWidget(compo_button);
+    buttons_layout->addWidget(distr_button);
+    buttons_layout->addWidget(debug_button);
+
     mainToolBar->addWidget(new dtkSpacer(this));
     mainToolBar->addWidget(new dtkCreatorMainWindowControls(this));
     mainToolBar->addWidget(new dtkSpacer(this));
+    mainToolBar->addWidget(buttons);
 
     // -- Menus
 
@@ -264,6 +297,10 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     connect(switchToCompoAction, SIGNAL(triggered()), this, SLOT(switchToCompo()));
     connect(switchToDstrbAction, SIGNAL(triggered()), this, SLOT(switchToDstrb()));
     connect(switchToDebugAction, SIGNAL(triggered()), this, SLOT(switchToDebug()));
+
+    connect(compo_button, SIGNAL(pressed()), this, SLOT(switchToCompo()));
+    connect(distr_button, SIGNAL(pressed()), this, SLOT(switchToDstrb()));
+    connect(debug_button, SIGNAL(pressed()), this, SLOT(switchToDebug()));
 
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(close()));
 

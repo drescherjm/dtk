@@ -25,12 +25,9 @@ set(dtk_VERSION        "@dtk_VERSION@")
 set(DTK_INCLUDE_DIR "@dtk_INCLUDE_DIR@")
 set(DTK_LIBRARY_DIR "@dtk_LIBRARY_DIR@")
 set(DTK_CMAKE_DIR     "@dtk_CMAKE_DIR@")
-<<<<<<< HEAD
 
 set(DTK_LIBRARIES dtkMath dtkCore dtkGui dtkComposer)
 
 set(QT_QMAKE_EXECUTABLE "@QT_QMAKE_EXECUTABLE@")
-=======
->>>>>>> 2e228f8dd22d0985a181d92538ac612149aaabd3
 
 include(${dtk_USE_FILE})

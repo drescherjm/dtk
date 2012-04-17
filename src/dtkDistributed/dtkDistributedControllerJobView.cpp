@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr 11 17:02:06 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 12 11:45:13 2012 (+0200)
+ * Last-Updated: Tue Apr 17 14:22:07 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 88
+ *     Update #: 89
  */
 
 /* Commentary: 
@@ -77,6 +77,7 @@ void dtkDistributedControllerJobView::setController(dtkDistributedController *co
 {
     d->controller = controller;
 
+    connect(d->controller, SIGNAL(updated(const QUrl&)), this, SLOT(onStatus(const QUrl&)));
     connect(d->controller, SIGNAL(status(const QUrl&)), this, SLOT(onStatus(const QUrl&)));
     connect(d->controller, SIGNAL(disconnected(const QUrl&)), this, SLOT(onDisconnected(const QUrl&)));
 }

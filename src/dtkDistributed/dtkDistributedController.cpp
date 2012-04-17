@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 17 11:39:33 2012 (+0200)
+ * Last-Updated: Tue Apr 17 14:16:35 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1560
+ *     Update #: 1562
  */
 
 /* Commentary: 
@@ -495,9 +495,9 @@ void dtkDistributedController::read(void)
     case dtkDistributedMessage::SETRANK:
         dtkDebug() << DTK_PRETTY_FUNCTION << "set rank received";
         if (msg->rank() == 0) {
-            qDebug() << DTK_PRETTY_FUNCTION << "job started";
+            dtkDebug() << DTK_PRETTY_FUNCTION << "job started";
             emit jobStarted(msg->jobid());
-            emit updated();
+            this->refresh(QUrl(server));
         }
         break;
     case dtkDistributedMessage::ENDJOB:

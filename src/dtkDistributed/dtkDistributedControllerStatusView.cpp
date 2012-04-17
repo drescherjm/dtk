@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon May 30 13:21:43 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul  4 13:58:48 2011 (+0200)
+ * Last-Updated: Tue Apr 10 18:23:18 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 30
+ *     Update #: 34
  */
 
 /* Commentary: 
@@ -23,13 +23,10 @@
 class dtkDistributedControllerStatusViewPrivate
 {
 public:
-    dtkDistributedControllerStatusModel *model;
 };
 
 dtkDistributedControllerStatusView::dtkDistributedControllerStatusView(QWidget *parent) : QTreeView(parent), d(new dtkDistributedControllerStatusViewPrivate)
 {
-    d->model = NULL;
-
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setFrameStyle(QFrame::NoFrame);
 }
@@ -39,11 +36,4 @@ dtkDistributedControllerStatusView::~dtkDistributedControllerStatusView(void)
     delete d;
 
     d = NULL;
-}
-
-void dtkDistributedControllerStatusView::setModel(dtkDistributedControllerStatusModel *model)
-{
-    d->model = model;
-
-    QTreeView::setModel(model);
 }

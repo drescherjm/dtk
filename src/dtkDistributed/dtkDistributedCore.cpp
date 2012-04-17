@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 16:26:17 2010 (+0100)
  * Version: $Id$
- * Last-Updated: mer. août 10 16:47:53 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 59
+ * Last-Updated: Thu Apr  5 10:38:22 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 69
  */
 
 /* Commentary: 
@@ -25,16 +25,14 @@ class dtkDistributedCorePrivate
 {
 public:
     dtkDistributedCpu *cpu;
-
     dtkDistributedJob *job;
-
     qint64 id;
-
 };
 
 dtkDistributedCore::dtkDistributedCore(dtkDistributedCpu *parent, qint64 id) : QObject(), d(new dtkDistributedCorePrivate)
 {
     d->cpu = parent;
+    d->job = NULL;
     d->id = id;
 }
 
@@ -45,8 +43,7 @@ dtkDistributedCore::~dtkDistributedCore(void)
     d = NULL;
 }
 
-
-dtkDistributedJob* dtkDistributedCore::job(void)
+dtkDistributedJob *dtkDistributedCore::job(void)
 {
     return d->job;
 }
@@ -60,4 +57,3 @@ void dtkDistributedCore::delJob(void)
 {
     d->job = NULL;
 }
-

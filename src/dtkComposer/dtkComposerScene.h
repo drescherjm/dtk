@@ -1,20 +1,20 @@
-/* dtkComposerScene.h --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Mon Sep  7 15:05:34 2009 (+0200)
+/* dtkComposerScene.h ---
+ *
+ * Author: Nicolas Niclausse
+ * Copyright (C) 2012 - Nicolas Niclausse, Inria.
+ * Created: 2012/01/30 10:11:39
  * Version: $Id$
- * Last-Updated: Wed May 25 14:48:40 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 162
+ * Last-Updated: Fri Mar 23 14:12:35 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 189
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERSCENE_H
@@ -24,16 +24,16 @@
 
 #include <QtGui>
 
-class dtkAbstractData;
-class dtkAbstractProcess;
-class dtkAbstractView;
-class dtkComposerEdge;
-class dtkComposerNode;
-class dtkComposerNodeControlBlock;
-class dtkComposerNodeFactory;
-class dtkComposerNodeProperty;
-class dtkComposerNote;
+class dtkComposerMachine;
+class dtkComposerFactory;
+class dtkComposerGraph;
+class dtkComposerSceneEdge;
+class dtkComposerSceneNode;
+class dtkComposerSceneNodeComposite;
+class dtkComposerSceneNote;
+class dtkComposerScenePort;
 class dtkComposerScenePrivate;
+class dtkComposerStack;
 
 class DTKCOMPOSER_EXPORT dtkComposerScene : public QGraphicsScene
 {
@@ -43,83 +43,50 @@ public:
              dtkComposerScene(QObject *parent = 0);
     virtual ~dtkComposerScene(void);
 
-    QList<dtkComposerNote *> notes(void);
-    QList<dtkComposerEdge *> edges(void);
-    QList<dtkComposerNode *> nodes(void);
-    QList<dtkComposerNode *> nodes(QString name);
-    QList<dtkComposerNodeProperty *> properties(void);
-    QList<dtkComposerNodeProperty *> properties(QString name);
+// #pragma mark -
+// #pragma mark - Setup
 
-    QList<dtkComposerNode *> startNodes(void);
-    QList<dtkComposerNode *>   endNodes(void);
+public:
+    void setFactory(dtkComposerFactory *factory);
+    void setMachine(dtkComposerMachine *machine);
+    void setStack(dtkComposerStack *stack);
+    void setGraph(dtkComposerGraph *graph);
 
-    void touch(void);
-    void clear(void);
+// #pragma mark -
+// #pragma mark - Composition depth management
 
-    bool  isModified(void);
-    void setModified(bool modified);
+public:
+    dtkComposerSceneNodeComposite *root(void);
+    dtkComposerSceneNodeComposite *current(void);
 
-    void    addEdge(dtkComposerEdge *edge);
-    void    addNode(dtkComposerNode *node);
-    void    addNote(dtkComposerNote *note);
-    void removeEdge(dtkComposerEdge *edge);
-    void removeNode(dtkComposerNode *node);
-    void removeNote(dtkComposerNote *note);
+public:
+    void setRoot(dtkComposerSceneNodeComposite *root);
+    void setCurrent(dtkComposerSceneNode *node);
+    void setCurrent(dtkComposerSceneNodeComposite *current);
 
-    void removeNodes(QList<dtkComposerNode *> nodes);
+// #pragma mark -
+// #pragma mark - Scene management
 
-    void setFactory(dtkComposerNodeFactory *factory);
+public:
+    void    addItem(QGraphicsItem *item);
+    void removeItem(QGraphicsItem *item);
 
-    dtkComposerNode *createGroup(QList<dtkComposerNode *> nodes, QPointF position = QPointF());
-    dtkComposerNode *createNode(QString type, QPointF position = QPointF());
-    dtkComposerNote *createNote(QString text, QPointF position = QPointF(), QSizeF size = QSizeF());
+// #pragma mark -
+// #pragma mark - Sigs
 
-    void explodeGroup(dtkComposerNode *node);
+public slots:
+    void modify(bool modified);
 
 signals:
-    void dataSelected(dtkAbstractData *data);
-    void processSelected(dtkAbstractProcess *process);
-    void viewSelected(dtkAbstractView *view);
+    void modified(bool);
 
-    void nodeAdded(dtkComposerNode *node);
-    void nodeRemoved(dtkComposerNode *node);
-    void nodeSelected(dtkComposerNode *node);
-
-    void compositionChanged(void);
-
-    void centerOn(const QPointF&);
-    void fitInView(const QRectF&);
-    void pathChanged(dtkComposerNode *);
-
+signals:
+    void selectedNode(dtkComposerSceneNode *node);
     void selectionCleared(void);
+    // void selected(QGraphicsItem *item);
 
-signals:
-    void evaluationStarted(void);
-    void evaluationStopped(void);
-
-public slots:
-   void startEvaluation(void);
-   void stopEvaluation(void);
-
-public slots:
-   void copy(void);
-   void paste(void);
-
-protected:
-    dtkComposerNode *nodeAt(const QPointF& point) const;
-    dtkComposerNodeProperty *propertyAt(const QPointF& point) const;
-
-protected:
-    void setCurrentNode(dtkComposerNode *node);
-
-    void hideAllNodes(void);
-    void showAllNodes(void);
-    void hideChildNodes(dtkComposerNode *node);
-    void showChildNodes(dtkComposerNode *node);
-    void updateEdgesVisibility(void);
-
-    QList<dtkComposerNodeControlBlock *> hoveredControlBlocks(dtkComposerNode *node);
-    QList<dtkComposerNodeControlBlock *> hoveredControlBlocks(dtkComposerNode *node, QList<dtkComposerNode *> parents);
+// #pragma mark -
+// #pragma mark - Drag Drop Events
 
 protected:
     void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
@@ -127,23 +94,39 @@ protected:
     void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
     void dropEvent(QGraphicsSceneDragDropEvent *event);
 
+// #pragma mark -
+// #pragma mark - Keyboard Events
+
+protected:
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
 
+// #pragma mark -
+// #pragma mark - Mouse Events
+
+protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent);
 
+// #pragma mark -
+// #pragma mark - Geometric queries
+
+protected:
+    dtkComposerSceneNode *nodeAt(const QPointF& point, dtkComposerSceneNode *exclude) const;
+    dtkComposerSceneNode *nodeAt(const QPointF& point) const;
+    dtkComposerScenePort *portAt(const QPointF& point) const;
+    dtkComposerSceneNodeComposite *parentAt(const QPointF& point) const;
+
+
+// #pragma mark -
+// #pragma mark - Internal sigs handling
+
 protected slots:
     void onSelectionChanged(void);
 
 private:
-    static bool s_evaluate;
-
-private:
-    friend class dtkComposerNode;
-
     dtkComposerScenePrivate *d;
 };
 

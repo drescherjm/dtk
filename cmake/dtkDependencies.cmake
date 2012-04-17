@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Nov  8 17:33:44 2011 (+0100)
-##           By: Julien Wintz
-##     Update #: 75
+## Last-Updated: Wed Apr  4 14:41:19 2012 (+0200)
+##           By: tkloczko
+##     Update #: 81
 ######################################################################
 ## 
 ### Commentary: 
@@ -55,7 +55,7 @@ mark_as_advanced(QT_QTMOTIF_LIBRARY_RELEASE)
 ## Wrapping
 ## #################################################################
 
-if(BUILD_WRAPPERS)
+if(DTK_BUILD_WRAPPERS)
 
 ## #################################################################
 ## Swig
@@ -145,17 +145,14 @@ find_library(EDITLINE_LIBRARY edit
 
 if(EDITLINE_LIBRARY)
   set(EDITLINE_FOUND "YES")
+  set(DTK_HAVE_EDIT "YES")
 endif(EDITLINE_LIBRARY)
-
-if(EDITLINE_FOUND)
-  add_definitions(-DHAVE_EDITLINE)
-endif(EDITLINE_FOUND)
 
 ## #################################################################
 ## Build wrappers (end)
 ## #################################################################
 
-endif(BUILD_WRAPPERS)
+endif(DTK_BUILD_WRAPPERS)
 
 ## #################################################################
 ## Zlib

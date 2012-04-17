@@ -13,7 +13,7 @@
  * This file only provides documentation - the implementation of the class 
  * is in the header.
  */
-#include <dtkCore/dtkSmartPointer.h>
+#include "dtkSmartPointer.h"
 
 /* Change log:
  *
@@ -36,7 +36,7 @@
  * Code example :
  * \code
  *  dtkSmartPointer< dtkAbstractData > myInstance;
- *  myInstance.takePointer( dynamic_cast< dtkAbstractData *>(factory->create( "MyDataTypeName" )) );
+ *  myInstance = factory->createSmartPointer( "MyDataTypeName" );
  * \endcode
  * Here, the dtkSmartPointer takes ownership of the object created by the factory. It will be 
  * deleted when the dtkSmartPointer goes out of scope, unless another object takes it.

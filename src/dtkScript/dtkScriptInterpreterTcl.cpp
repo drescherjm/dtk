@@ -17,7 +17,7 @@
  * 
  */
 
-#include <dtkScript/dtkScriptInterpreterTcl.h>
+#include "dtkScriptInterpreterTcl.h"
 
 #include <tcl.h>
 

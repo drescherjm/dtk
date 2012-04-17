@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 21 19:12:40 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Nov  7 17:33:58 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 690
+ * Last-Updated: Tue Apr  3 16:15:27 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 691
  */
 
 /* Commentary: 
@@ -691,6 +691,8 @@ void dtkVrGestureRecognizer::postCustomEvent(Qt::GestureState state)
 
 void dtkVrGestureRecognizer::postClearEvent(Qt::GestureState state)
 {
+    DTK_UNUSED(state);
+
     if(!d->receiver)
         return;
 

@@ -45,6 +45,7 @@ signals:
     void changed(const QString& path);
     void listView (void);
     void treeView (void);
+    void showHiddenFiles(bool);
 
 public slots:
     void setPath(const QString& path);
@@ -205,6 +206,7 @@ protected:
      void keyPressEvent(QKeyEvent *event);
      void mouseDoubleClickEvent(QMouseEvent *event);
      void startDrag(Qt::DropActions supportedActions);
+     void resizeEvent(QResizeEvent * event);
 
 private:
      dtkFinderTreeViewPrivate *d;
@@ -239,6 +241,7 @@ public slots:
     void setPath(const QString& path);
     void switchToListView(void);
     void switchToTreeView(void);
+    void onShowHiddenFiles(bool);
 
 protected slots:
     void onIndexDoubleClicked(QModelIndex);

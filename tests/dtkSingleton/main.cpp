@@ -4,9 +4,9 @@
  * Copyright (C) 2011 -John Stark, Inria.
  * Created: 
  * Version: $Id$
- * Last-Updated: Tue Jun 28 16:52:15 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 39
+ * Last-Updated: Tue Apr  3 16:54:00 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 40
  */
 
 /* Commentary: 
@@ -26,10 +26,11 @@
 #include "dtkTestSingleton.h"
 
 #include <dtkCore/dtkGlobal.h>
-#include <dtkCore/dtkLog.h>
 #include <dtkCore/dtkSingleton.h>
 
 //#include <dtkCore/dtkSmartPointer.h>
+
+#include <dtkLog/dtkLog.h>
 
 #include <iostream>
 #include <stdexcept>

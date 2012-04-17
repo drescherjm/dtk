@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: Sat Feb  6 14:33:47 2010 (+0100)
  * Version: $Id$
- * Last-Updated: ven. nov. 25 16:02:18 2011 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 187
+ * Last-Updated: Wed Apr  4 15:15:58 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 188
  */
 
 /* Commentary:
@@ -39,7 +39,6 @@ Currently, the server is able to take resources from OAR (see dtkDistributedServ
 The server can be started by the controller (with the deploy method)
 using ssh; setup for a given server can be specified into the dtk.conf file,
 within the distributed group, like this:
-
 
 @code
 [distributed]

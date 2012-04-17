@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Feb 10 21:11:31 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May  9 14:49:56 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 178
+ * Last-Updated: Wed Apr  4 11:04:22 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 180
  */
 
 /* Commentary: 
@@ -19,8 +19,6 @@
 
 #include "dtkVrProcess.h"
 #include "dtkVrSlave.h"
-
-#include <dtkCore/dtkLog.h>
 
 #include <dtkDistributed/dtkDistributedCommunicator.h>
 

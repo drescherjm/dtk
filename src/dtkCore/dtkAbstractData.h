@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: mar. nov. 29 13:57:38 2011 (+0100)
+ * Last-Updated: mer. mars 28 09:07:20 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 235
+ *     Update #: 238
  */
 
 /* Commentary:
@@ -20,7 +20,7 @@
 #ifndef DTKABSTRACTDATA_H
 #define DTKABSTRACTDATA_H
 
-#include <dtkCore/dtkAbstractObject.h>
+#include "dtkAbstractObject.h"
 
 #include <QtGui/QImage>
 
@@ -54,7 +54,7 @@ public slots:
 
     virtual dtkAbstractData *convert(const QString& toType);
     virtual QByteArray    *serialize(void);
-    virtual bool         deserialize(QByteArray *array);
+    virtual bool         deserialize(const QByteArray& array);
 
     virtual void *output(void);
     virtual void *output(int channel);
@@ -137,5 +137,6 @@ DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractData& data);
 DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractData *data);
 
 Q_DECLARE_METATYPE(dtkAbstractData)
+Q_DECLARE_METATYPE(dtkAbstractData *)
 
 #endif

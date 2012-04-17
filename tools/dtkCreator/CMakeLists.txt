@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Aug  3 17:34:51 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Nov 14 13:07:07 2011 (+0100)
+## Last-Updated: Mon Apr 16 12:16:15 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 143
+##     Update #: 169
 ######################################################################
 ## 
 ### Commentary: 
@@ -25,43 +25,23 @@ project(dtkCreator)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkCreatorMainWindow.h
-  dtkCreatorPluginBrowser.h
-  dtkCreatorScriptBrowser.h
-  dtkCreatorViewer.h
-  dtkCreatorWidgetFactory.h)
+  dtkCreatorMainWindow_p.h)
 
 set(${PROJECT_NAME}_HEADERS
-    ${${PROJECT_NAME}_HEADERS_MOC}
-    )
+  ${${PROJECT_NAME}_HEADERS_MOC})
 
 set(${PROJECT_NAME}_SOURCES
-  dtkCreatorController.cpp
   dtkCreatorMainWindow.cpp
-  dtkCreatorPluginBrowser.cpp
-  dtkCreatorScriptBrowser.cpp
-  dtkCreatorViewer.cpp
-  dtkCreatorWidgetFactory.cpp
   main.cpp)
 
-## #################################################################
-## Wrapping
-## #################################################################
+if(APPLE)
+set(${PROJECT_NAME}_SOURCES
+  ${${PROJECT_NAME}_SOURCES}
+  dtkCreatorMainWindow.mm)
+endif(APPLE)
 
-set(${PROJECT_NAME}_SOURCES_WRAP)
-
-if(BUILD_WRAPPERS AND SWIG_FOUND)
-
-  set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS_MOC})
-  
-  if(PYTHONLIBS_FOUND)
-    dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP creator python ${CMAKE_CURRENT_SOURCE_DIR}/dtkCreator.i ${${PROJECT_NAME}_WRAP_DEPENDS})
-  endif(PYTHONLIBS_FOUND)
-
-  if(TCL_FOUND)
-    dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP creator tcl    ${CMAKE_CURRENT_SOURCE_DIR}/dtkCreator.i ${${PROJECT_NAME}_WRAP_DEPENDS})
-  endif(TCL_FOUND)
-
-endif(BUILD_WRAPPERS AND SWIG_FOUND)
+set(${PROJECT_NAME}_RESOURCES
+  dtkCreator.qrc)
 
 ## #################################################################
 ## Build rules
@@ -69,43 +49,30 @@ endif(BUILD_WRAPPERS AND SWIG_FOUND)
 
 if(NOT MSVC)
 add_definitions(-Wno-write-strings)
-add_definitions(-Wformat=0)
 endif(NOT MSVC)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
+qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
+
 add_executable(${PROJECT_NAME} MACOSX_BUNDLE WIN32
   ${${PROJECT_NAME}_SOURCES_WRAP}
   ${${PROJECT_NAME}_SOURCES_MOC}
+  ${${PROJECT_NAME}_SOURCES_QRC}
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS})
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
+  dtkLog
   dtkCore
-  dtkScript
-  dtkGui
   dtkComposer
-  dtkDistributed
-  dtkVr)
+  dtkDistributed)
 
-## #################################################################
-## Handling of generated script modules
-## #################################################################
-
-set(${PROJECT_NAME}_MODULES)
-
-if(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dtkCreator.i
-  COMMAND ${CMAKE_COMMAND} ARGS -E  make_directory ${CMAKE_BINARY_DIR}/modules
-  COMMAND ${CMAKE_COMMAND} ARGS -E  copy ${${PROJECT_NAME}_BINARY_DIR}/creator.py ${CMAKE_BINARY_DIR}/modules
-  COMMENT "-- Moving python modules to ${CMAKE_BINARY_DIR}/modules")
-
-set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/creator.py)
-
-endif(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
+if(APPLE)
+target_link_libraries(${PROJECT_NAME}
+  "-framework Cocoa")
+endif(APPLE)
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

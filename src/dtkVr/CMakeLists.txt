@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Sep  8 14:40:18 2011 (+0200)
+## Last-Updated: Mon Apr 16 12:13:48 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 294
+##     Update #: 299
 ######################################################################
 ## 
 ### Commentary: 
@@ -25,7 +25,6 @@ project(dtkVr)
 
 set(${PROJECT_NAME}_HEADERS
   dtkVrDevice.h
-  dtkVrExport.h
   dtkVrFlystickRecognizer.h
   dtkVrGestureRecognizer.h
   dtkVrHeadRecognizer.h
@@ -90,7 +89,7 @@ endif(QUAT_LIBRARIES AND VRPN_LIBRARIES AND MPI_FOUND)
 
 set(${PROJECT_NAME}_SOURCES_WRAP)
 
-if(BUILD_WRAPPERS AND SWIG_FOUND)
+if(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
 
   set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS})
   
@@ -102,7 +101,7 @@ if(BUILD_WRAPPERS AND SWIG_FOUND)
     dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP vr tcl    ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i ${${PROJECT_NAME}_WRAP_DEPENDS})
   endif(TCL_FOUND)
 
-endif(BUILD_WRAPPERS AND SWIG_FOUND)
+endif(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
 
 ## #################################################################
 ## Build rules
@@ -110,7 +109,6 @@ endif(BUILD_WRAPPERS AND SWIG_FOUND)
 
 if(NOT WIN32)
 add_definitions(-Wno-write-strings)
-add_definitions(-Wformat=0)
 endif(NOT WIN32)
 
 add_definitions(${QT_DEFINITIONS})
@@ -153,7 +151,8 @@ endif(BUILD_SHARED_LIBS)
 target_link_libraries(${PROJECT_NAME}
   dtkMath
   dtkCore
-  dtkDistributed)
+  dtkDistributed
+  dtkLog)
 
 if(MSVC)
   target_link_libraries(${PROJECT_NAME} wsock32)
@@ -170,12 +169,30 @@ if(QUAT_LIBRARY AND VRPN_LIBRARY)
 endif(QUAT_LIBRARY AND VRPN_LIBRARY)
 
 ## #################################################################
+## Export header file
+## #################################################################
+
+add_compiler_export_flags()
+
+generate_export_header(${PROJECT_NAME}
+  EXPORT_FILE_NAME "${PROJECT_NAME}Export.h")
+
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy
+  "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h"
+  "${CMAKE_BINARY_DIR}")
+
+set(${PROJECT_NAME}_HEADERS
+  ${${PROJECT_NAME}_HEADERS}
+ "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h")
+
+## #################################################################
 ## Handling of generated script modules
 ## #################################################################
 
 set(${PROJECT_NAME}_MODULES)
 
-if(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
+if(DTK_BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i
@@ -185,7 +202,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 
 set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/vr.py)
 
-endif(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
+endif(DTK_BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

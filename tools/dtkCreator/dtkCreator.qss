@@ -1,0 +1,99 @@
+/* dtkCreator.qss --- 
+;; 
+;; Author: Julien Wintz
+;; Copyright (C) 2008-2011 - Julien Wintz, Inria.
+;; Created: Thu Mar 15 12:05:17 2012 (+0100)
+;; Version: $Id$
+;; Last-Updated: Tue Apr 17 13:46:22 2012 (+0200)
+;;           By: Julien Wintz
+;;     Update #: 195
+*/
+
+/*Commentary: 
+;; 
+*/
+
+/*Change log:
+;; 
+*/
+
+/* dtkCreatorMainWindowControls ***************/
+
+dtkCreatorMainWindowControls:active {
+    color: black;
+    border-image: url(:dtkCreator/pixmaps/dtkCreatorToolbarControls_Background_Active.png) 5 5 7 5;
+    border-top: 5px transparent;
+    border-right: 5px transparent;
+    border-bottom: 7px transparent;
+    border-left: 5px transparent;
+}
+
+dtkCreatorMainWindowControls:!active {
+    color: black;
+    border-image: url(:dtkCreator/pixmaps/dtkCreatorToolbarControls_Background_Inactive.png) 5 5 7 5;
+    border-top: 5px transparent;
+    border-right: 5px transparent;
+    border-bottom: 7px transparent;
+    border-left: 5px transparent
+}
+
+QFrame#dtkCreatorMainWindowSegmentedButtons QPushButton {
+    font-size: 10px;
+}
+
+QPushButton#dtkCreatorMainWindowSegmentedButtonLeft {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #FCFCFC, stop: 1.0 #a1a1a1);
+    border: 1px solid #424242;
+    border-top-right-radius: 0px;
+    border-top-left-radius: 3px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 3px;
+    min-width: 75px;
+    max-width: 75px;
+    margin: 0px;
+    color: black;
+}
+
+QPushButton#dtkCreatorMainWindowSegmentedButtonLeft:pressed,
+QPushButton#dtkCreatorMainWindowSegmentedButtonLeft:checked {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #686868, stop: 1.0 #939393);
+    color: white;
+}
+
+QPushButton#dtkCreatorMainWindowSegmentedButtonMiddle {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #FCFCFC, stop: 1.0 #a1a1a1);
+    border: 1px solid #424242;
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    min-width: 75px;
+    max-width: 75px;
+    margin: 0px;
+    color: black;
+}
+
+QPushButton#dtkCreatorMainWindowSegmentedButtonMiddle:pressed,
+QPushButton#dtkCreatorMainWindowSegmentedButtonMiddle:checked {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #686868, stop: 1.0 #939393);
+    color: white;
+}
+
+QPushButton#dtkCreatorMainWindowSegmentedButtonRight {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #FCFCFC, stop: 1.0 #a1a1a1);
+    border: 1px solid #424242;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 0px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 0px;
+    min-width: 75px;
+    max-width: 75px;
+    margin: 0px;
+    color: black;
+}
+
+QPushButton#dtkCreatorMainWindowSegmentedButtonRight:pressed,
+QPushButton#dtkCreatorMainWindowSegmentedButtonRight:checked {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #686868, stop: 1.0 #939393);
+    color: white;
+}

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 26 16:11:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 17 09:10:38 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 456
+ * Last-Updated: Wed Apr  4 14:41:12 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 467
  */
 
 /* Commentary: 
@@ -24,13 +24,15 @@
 
 #include <iostream>
 
-#ifdef HAVE_EDITLINE
+#include <dtkConfig.h>
+
+#if defined(DTK_HAVE_EDIT)
 #include <histedit.h>
 #endif
 
 #include <dtkCore/dtkPluginManager.h>
 
-#include <dtkScript/dtkScriptInterpreter.h>
+#include "dtkScriptInterpreter.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkScriptInterpreterSynchronizer
@@ -91,7 +93,7 @@ class dtkScriptInterpreterConsolePrivate
 public:
     char *(*prompt)(void);
 
-#ifdef HAVE_EDITLINE
+#if defined(DTK_HAVE_EDIT)
     EditLine *el_engine;
     History  *el_history;
     HistEvent el_event;
@@ -121,7 +123,9 @@ void dtkScriptInterpreterConsole::registerPrompt(char *(*prompt)(void))
 
 void dtkScriptInterpreterConsole::registerBindings(QString style)
 {
-#ifdef HAVE_EDITLINE
+    DTK_UNUSED(style);
+
+#if defined(DTK_HAVE_EDIT)
     el_set(d->el_engine, EL_EDITOR, style.toAscii().constData());    
 #endif
 }
@@ -133,7 +137,9 @@ QString dtkScriptInterpreterConsole::prompt(void) const
 
 void dtkScriptInterpreterConsole::start(Priority priority)
 {
-#ifdef HAVE_EDITLINE
+    DTK_UNUSED(priority);
+
+#if defined(DTK_HAVE_EDIT)
     d->el_engine = el_init("dtkScriptInterpreter", stdin, stdout, stderr);
     el_set(d->el_engine, EL_PROMPT, d->prompt);
     el_set(d->el_engine, EL_EDITOR, "emacs");
@@ -150,7 +156,7 @@ void dtkScriptInterpreterConsole::start(Priority priority)
 
 void dtkScriptInterpreterConsole::stop(void)
 {
-#ifdef HAVE_EDITLINE
+#if defined(DTK_HAVE_EDIT)
     if(this->isRunning()) {
         std::cerr << "bye" << std::endl;
         if (d->el_history) {
@@ -170,7 +176,7 @@ void dtkScriptInterpreterConsole::stop(void)
 
 void dtkScriptInterpreterConsole::run(void)
 {
-#ifdef HAVE_EDITLINE
+#if defined(DTK_HAVE_EDIT)
     int count;
     int stat;
 
@@ -360,7 +366,7 @@ void dtkScriptInterpreter::load(const QString& file)
 
 void dtkScriptInterpreter::save(const QString& file)
 {
-
+    DTK_UNUSED(file);
 }
 
 void dtkScriptInterpreter::registerPrompt(char *(*prompt)(void))

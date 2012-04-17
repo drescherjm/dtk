@@ -20,7 +20,7 @@
 #ifndef DTKABSTRACTPROCESS_H
 #define DTKABSTRACTPROCESS_H
 
-#include <dtkCore/dtkAbstractObject.h>
+#include "dtkAbstractObject.h"
 
 class dtkAbstractData;
 

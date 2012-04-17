@@ -65,7 +65,7 @@ public:
 template <class T> class dtkZero< dtkVector3D<T> >: public dtkVector3D<T>
 {
 public:
-    dtkZero(void) { fill(dtkZero<T>()); }
+    dtkZero(void) { dtkMatrix<T>::fill(dtkZero<T>()); }
 };
 
 template <class T = double> class dtkReferential : dtkVector3D<dtkVector3D<T> >

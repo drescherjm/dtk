@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 16:05:14 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 22 10:53:44 2010 (+0100)
+ * Last-Updated: Fri Apr  6 14:36:00 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 22
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -39,6 +39,9 @@ dtkDistributedNode::dtkDistributedNode(void) : QObject(), d(new dtkDistributedNo
 
 dtkDistributedNode::~dtkDistributedNode(void)
 {
+    qDeleteAll(d->cpus);
+    qDeleteAll(d->gpus);
+
     delete d;
 
     d = NULL;

@@ -20,7 +20,7 @@
 #ifndef DTKABSTRACTVIEWNAVIGATOR_H
 #define DTKABSTRACTVIEWNAVIGATOR_H
 
-#include <dtkCore/dtkAbstractObject.h>
+#include "dtkAbstractObject.h"
 
 class dtkAbstractViewNavigatorPrivate;
 

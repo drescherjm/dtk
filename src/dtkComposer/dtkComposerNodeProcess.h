@@ -1,49 +1,51 @@
-/* dtkComposerNodeProcess.h --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Thu Jul 15 11:23:26 2010 (+0200)
+/* @(#)dtkComposerNodeProcess.h ---
+ *
+ * Author: Nicolas Niclausse
+ * Copyright (C) 2012 - Nicolas Niclausse, Inria.
+ * Created: 2012/03/29 11:15:49
  * Version: $Id$
- * Last-Updated: Fri Apr  8 16:33:42 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 16
+ * Last-Updated: jeu. mars 29 13:17:02 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 3
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEPROCESS_H
 #define DTKCOMPOSERNODEPROCESS_H
 
 #include "dtkComposerExport.h"
-#include "dtkComposerNode.h"
+#include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeProcessPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeProcess : public dtkComposerNode
+class DTKCOMPOSER_EXPORT dtkComposerNodeProcess : public dtkComposerNodeLeaf
 {
-    Q_OBJECT
+public:
+     dtkComposerNodeProcess(void);
+    ~dtkComposerNodeProcess(void);
 
 public:
-             dtkComposerNodeProcess(dtkComposerNode *parent = 0);
-    virtual ~dtkComposerNodeProcess(void);
+    void run(void);
 
-    QVariant value(dtkComposerNodeProperty *property);
+public:
+    QString type(void);
+    QString titleHint(void);
 
-    virtual QString implementation(void);
-
-protected:
-    virtual void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    virtual void  run(void);
-    virtual void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+public:
+    QString inputLabelHint(int);
+    QString outputLabelHint(int);
 
 private:
     dtkComposerNodeProcessPrivate *d;
 };
 
-#endif
+
+#endif /* DTKCOMPOSERNODEPROCESS_H */
+

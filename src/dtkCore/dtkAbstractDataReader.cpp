@@ -17,10 +17,10 @@
  * 
  */
 
-#include <dtkCore/dtkAbstractDataReader.h>
+#include "dtkAbstractDataReader.h"
 
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkSmartPointer.h>
+#include "dtkAbstractData.h"
+#include "dtkSmartPointer.h"
 
 class dtkAbstractDataReaderPrivate
 {

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: lun. nov. 21 17:09:32 2011 (+0100)
+ * Last-Updated: ven. avril 13 13:45:05 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 655
+ *     Update #: 674
  */
 
 /* Commentary:
@@ -69,6 +69,13 @@ qint64 dtkDistributedSocket::sendRequest( dtkDistributedMessage *msg)
     return ret;
 }
 
+bool dtkDistributedSocket::waitForData(int max_wait) {
+    this->blockSignals(true);
+    bool res = this->waitForReadyRead(max_wait);
+    this->blockSignals(false);
+    return res;
+}
+
 /**
  * read and parse data from socket
  *
@@ -76,7 +83,7 @@ qint64 dtkDistributedSocket::sendRequest( dtkDistributedMessage *msg)
  */
 dtkDistributedMessage *dtkDistributedSocket::parseRequest(void)
 {
-    dtkDistributedMessage * msg = new dtkDistributedMessage ;
+    dtkDistributedMessage *msg = new dtkDistributedMessage;
 
     msg->setMethod(this->readLine());
 

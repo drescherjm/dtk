@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:19:37 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 14 10:31:21 2009 (+0200)
+ * Last-Updated: Mon Jan 30 14:28:59 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 6
+ *     Update #: 7
  */
 
 /* Commentary: 
@@ -35,9 +35,6 @@ public:
     ~tstMainWindow(void);
 
     dtkInterpreter *interpreter(void);
-
-public slots:
-    void showPreferences(void);
 
 protected:
     void closeEvent(QCloseEvent *event);

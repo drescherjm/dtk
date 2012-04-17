@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:19:37 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun  8 14:24:29 2010 (+0200)
+ * Last-Updated: Mon Jan 30 14:29:41 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 4
+ *     Update #: 5
  */
 
 /* Commentary: 
@@ -37,8 +37,6 @@ public slots:
     bool fileOpen  (const QString& file);
     bool fileSave  (void);
     bool fileSaveAs(void);
-
-    void showPreferences(void);
 
     void onTitleChanged(QString title);
     void onDocumentChanged(void);

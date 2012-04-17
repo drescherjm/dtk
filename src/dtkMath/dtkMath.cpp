@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jul  6 16:57:24 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 16 11:17:28 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 170
+ * Last-Updated: Tue Feb 28 15:43:07 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 171
  */
 
 /* Commentary: 
@@ -747,4 +747,3 @@ bool dtkGreaterThanOrAlmostEqualUlps(double A, double B, int64_t maxUlps)
     else
         return true;
 }
-

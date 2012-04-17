@@ -17,9 +17,9 @@
  * 
  */
 
-#include <dtkCore/dtkAbstractDataConverter.h>
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkSmartPointer.h>
+#include "dtkAbstractDataConverter.h"
+#include "dtkAbstractData.h"
+#include "dtkSmartPointer.h"
 
 class dtkAbstractDataConverterPrivate
 {

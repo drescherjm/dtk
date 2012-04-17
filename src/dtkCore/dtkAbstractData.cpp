@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: ven. déc.  2 15:55:46 2011 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 395
+ * Last-Updated: Wed Apr  4 08:47:38 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 400
  */
 
 /* Commentary:
@@ -17,14 +17,15 @@
  *
  */
 
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkAbstractDataFactory.h>
-#include <dtkCore/dtkAbstractDataReader.h>
-#include <dtkCore/dtkAbstractDataWriter.h>
-#include <dtkCore/dtkAbstractDataConverter.h>
-#include <dtkCore/dtkAbstractDataSerializer.h>
-#include <dtkCore/dtkAbstractDataDeserializer.h>
-#include <dtkCore/dtkLog.h>
+#include "dtkAbstractData.h"
+#include "dtkAbstractDataFactory.h"
+#include "dtkAbstractDataReader.h"
+#include "dtkAbstractDataWriter.h"
+#include "dtkAbstractDataConverter.h"
+#include "dtkAbstractDataSerializer.h"
+#include "dtkAbstractDataDeserializer.h"
+
+#include <dtkLog/dtkLog.h>
 
 #include <QtGui>
 
@@ -422,7 +423,7 @@ QByteArray *dtkAbstractData::serialize(void)
     return array;
 }
 
-bool dtkAbstractData::deserialize(QByteArray *array)
+bool dtkAbstractData::deserialize(const QByteArray &array)
 {
 
     bool deserialized = false;
@@ -594,6 +595,7 @@ void dtkAbstractData::setData(void* data, int channel)
 bool dtkAbstractData::casts(const QString& type)
 {
     DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(type);
 
     return false;
 }

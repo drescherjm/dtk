@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: lun. nov. 28 17:53:03 2011 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 255
+ * Last-Updated: Mon Apr 16 12:15:01 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 465
  */
 
 /* Commentary: 
@@ -16,6 +16,8 @@
 /* Change log:
  * 
  */
+
+#include <dtkCore/dtkAbstractDataFactory.h>
 
 #include "dtkDistributedCommunicatorMpi.h"
 
@@ -67,7 +69,7 @@ MPI::Op operation_type(dtkDistributedCommunicator::OperationType type)
 class dtkDistributedCommunicatorMpiPrivate
 {
 public:
-    
+
 };
 
 dtkDistributedCommunicatorMpi::dtkDistributedCommunicatorMpi(void) : dtkDistributedCommunicator(), d(new dtkDistributedCommunicatorMpiPrivate)
@@ -80,6 +82,11 @@ dtkDistributedCommunicatorMpi::~dtkDistributedCommunicatorMpi(void)
     delete d;
 
     d = NULL;
+}
+
+dtkDistributedCommunicatorMpi::dtkDistributedCommunicatorMpi(const dtkDistributedCommunicatorMpi& c)
+{
+
 }
 
 //! Mpi communicator initializer.
@@ -105,6 +112,11 @@ void dtkDistributedCommunicatorMpi::initialize(void)
     char **argv = qApp->argv(); // These methods are obsolete but should be really exist in QCoreApplication
 
     MPI::Init(argc, argv);
+}
+
+bool dtkDistributedCommunicatorMpi::initialized(void)
+{
+    return MPI::Is_initialized();
 }
 
 //! Mpi communicator uninitializer.
@@ -204,7 +216,7 @@ QString dtkDistributedCommunicatorMpi::name(void) const
  *  application buffer in the sending task is free for reuse.
  */
 
-void dtkDistributedCommunicatorMpi::send(void *data, qint64 size, DataType dataType, quint16 target, int tag)
+void dtkDistributedCommunicatorMpi::send(void *data, qint64 size, DataType dataType, qint16 target, int tag)
 {
     MPI::COMM_WORLD.Send(data, size, data_type(dataType), target, tag);
 }
@@ -215,12 +227,12 @@ void dtkDistributedCommunicatorMpi::send(void *data, qint64 size, DataType dataT
  *  in the application buffer in the receiving task.
  */
 
-void dtkDistributedCommunicatorMpi::receive(void *data, qint64 size, DataType dataType, quint16 source, int tag)
+void dtkDistributedCommunicatorMpi::receive(void *data, qint64 size, DataType dataType, qint16 source, int tag)
 {
     MPI::COMM_WORLD.Recv(data, size, data_type(dataType), source, tag);
 }
 
-void dtkDistributedCommunicatorMpi::receive(void *data, qint64 size, DataType dataType, quint16 source, int tag, int& from)
+void dtkDistributedCommunicatorMpi::receive(void *data, qint64 size, DataType dataType, qint16 source, int tag, int& from)
 {
     MPI::Status status;
     MPI::COMM_WORLD.Recv(data, size, data_type(dataType), source, tag, status);
@@ -233,41 +245,159 @@ void dtkDistributedCommunicatorMpi::receive(void *data, qint64 size, DataType da
  *  size type) and then serialize the object.
  */
 
-void dtkDistributedCommunicatorMpi::send(dtkAbstractData *data, quint16 target, int tag)
+void dtkDistributedCommunicatorMpi::send(dtkAbstractData *data, qint16 target, int tag)
 {
+
     QString type = data->identifier();
-    qint64  typeLength = type.length();
+    qint64  typeLength = type.length()+1;
     qint64  s=1;
     dtkDistributedCommunicator::send(&typeLength,s,target,tag);
-    char typeChar = type.data()->toAscii();
-    dtkDistributedCommunicator::send(&typeChar,typeLength,target,tag);
-    QByteArray *array    = data->serialize();
-    if (!array->isNull()) {
+
+    QByteArray typeArray = type.toAscii();
+    char *typeChar = typeArray.data();
+    dtkDistributedCommunicator::send(typeChar,typeLength,target,tag);
+
+    QByteArray *array = data->serialize();
+    if (!array) {
+        qDebug() <<"serialization failed";
+    } else {
         qint64   arrayLength = array->length();
         dtkDistributedCommunicator::send(&arrayLength,1,target,tag);
         dtkDistributedCommunicator::send(array->data(),arrayLength,target,tag);
-    } else {
-        qDebug() << "serialization failed";
     }
 }
 
-void dtkDistributedCommunicatorMpi::receive(dtkAbstractData *data, quint16 source, int tag)
+void dtkDistributedCommunicatorMpi::receive(dtkAbstractData *&data, qint16 source, int tag)
 {
-    char *type;
     qint64   typeLength;
     qint64   arrayLength;
-    char *rawArray;
 
     dtkDistributedCommunicator::receive(&typeLength,1,source,tag);
+    char     type[typeLength];
+
     dtkDistributedCommunicator::receive(type, typeLength, source,tag);
     dtkDistributedCommunicator::receive(&arrayLength,1,source,tag);
+
+    char     rawArray[arrayLength];
     dtkDistributedCommunicator::receive(rawArray, arrayLength, source,tag);
-    QByteArray array = QByteArray::fromRawData(rawArray, sizeof(rawArray));
+
+    if(!data) {
+        data = dtkAbstractDataFactory::instance()->create(QString(type));
+        if (!data) {
+            qDebug() << "Can't instantiate object of type" << QString(type);
+            return;
+        }
+    } else
+        if(data->identifier() != QString(type))
+            qDebug() << DTK_PRETTY_FUNCTION << "Warning, type mismatch";
+
+    QByteArray array = QByteArray::fromRawData(rawArray, arrayLength);
     // FIXME: array is not null-terminated, does it matter ??
-    if (!data->deserialize(&array))
+
+    if (data && !data->deserialize(array))
         qDebug() << "Warning: deserialization failed";
 }
 
+/*!
+ *  send a QString
+ */
+
+void dtkDistributedCommunicatorMpi::send(const QString &s, qint16 target, int tag)
+{
+    qint64  length = s.length()+1;
+    qint64  size_l=1;
+    dtkDistributedCommunicator::send(&length,size_l,target,tag);
+
+    QByteArray Array = s.toAscii();
+    char *char_array = Array.data();
+    dtkDistributedCommunicator::send(char_array,length,target,tag);
+}
+
+/*!
+ *  send a QVariant
+ */
+
+void dtkDistributedCommunicatorMpi::send(const QVariant &v, qint16 target, int tag)
+{
+    int  type = (int)v.type();
+    qint64  size=1;
+    dtkDistributedCommunicator::send(&type,1,target,tag);
+
+    switch (v.type()) {
+    case QVariant::Double: {
+        double data = v.toDouble();
+        dtkDistributedCommunicator::send(&data,size,target,tag);
+        break;
+    }
+    case QVariant::LongLong: {
+        qint64 data = v.toLongLong();
+        dtkDistributedCommunicator::send(&data,size,target,tag);
+        break;
+    }
+    case QVariant::String: {
+        QString data = v.toString();
+        this->send(data,target,tag);
+        break;
+    }
+    case QVariant::UserType:
+    case QVariant::UserType+1: {
+        // assume it's a dtkAbstractData
+        dtkAbstractData *data = v.value<dtkAbstractData *>();
+        this->send(data,target,tag);
+        return;
+    }
+    default:
+        break;
+    }
+}
+
+void dtkDistributedCommunicatorMpi::receive(QString &s, qint16 source, int tag)
+{
+    qint64   length;
+    dtkDistributedCommunicator::receive(&length,1,source,tag);
+    char     s_c[length];
+
+    dtkDistributedCommunicator::receive(s_c, length, source,tag);
+    s = QString(s_c);
+}
+
+void dtkDistributedCommunicatorMpi::receive(QVariant &v, qint16 source, int tag)
+{
+    int   type;
+    dtkDistributedCommunicator::receive(&type,1,source,tag);
+
+    switch (type) {
+    case QVariant::Double: {
+        double data;
+        dtkDistributedCommunicator::receive(&data,1,source,tag);
+        v=QVariant(data);
+        break;
+    }
+    case QVariant::LongLong: {
+        qint64 data;
+        dtkDistributedCommunicator::receive(&data,1,source,tag);
+        v=QVariant(data);
+        break;
+    }
+    case QVariant::String: {
+        QString data ;
+        this->receive(data,source,tag);
+        v=QVariant(data);
+        break;
+    }
+    case QVariant::UserType:
+    case QVariant::UserType+1: {
+        // assume it's a dtkAbstractData
+        dtkAbstractData *data;
+        this->send(data,source,tag);
+//        v.value<dtkAbstractData *>() = data; FIXME
+        return;
+    }
+    default:
+        break;
+    }
+
+}
 
 //! Barrier.
 /*!
@@ -287,7 +417,7 @@ void dtkDistributedCommunicatorMpi::barrier(void)
  *  to all other processes in the group.
  */
 
-void dtkDistributedCommunicatorMpi::broadcast(void *data, qint64 size, DataType dataType, quint16 source)
+void dtkDistributedCommunicatorMpi::broadcast(void *data, qint64 size, DataType dataType, qint16 source)
 {
     MPI::COMM_WORLD.Bcast(data, size, data_type(dataType), source); 
 }
@@ -301,7 +431,7 @@ void dtkDistributedCommunicatorMpi::broadcast(void *data, qint64 size, DataType 
  *  \sa scatter.
  */
 
-void dtkDistributedCommunicatorMpi::gather(void *send, void *recv, qint64 size, DataType dataType, quint16 target, bool all)
+void dtkDistributedCommunicatorMpi::gather(void *send, void *recv, qint64 size, DataType dataType, qint16 target, bool all)
 {
     if(all)
         MPI::COMM_WORLD.Allgather(send, size, data_type(dataType), recv, size, data_type(dataType));
@@ -317,7 +447,7 @@ void dtkDistributedCommunicatorMpi::gather(void *send, void *recv, qint64 size, 
  *  \sa gather.
  */
 
-void dtkDistributedCommunicatorMpi::scatter(void *send, void *recv, qint64 size, DataType dataType, quint16 source)
+void dtkDistributedCommunicatorMpi::scatter(void *send, void *recv, qint64 size, DataType dataType, qint16 source)
 {
     MPI::COMM_WORLD.Scatter(send, size, data_type(dataType), recv, size, data_type(dataType), source);
 }
@@ -331,7 +461,7 @@ void dtkDistributedCommunicatorMpi::scatter(void *send, void *recv, qint64 size,
  *  \sa dtkDistributedCommunicator::OperationType.
  */
 
-void dtkDistributedCommunicatorMpi::reduce(void *send, void *recv, qint64 size, DataType dataType, OperationType operationType, quint16 target, bool all)
+void dtkDistributedCommunicatorMpi::reduce(void *send, void *recv, qint64 size, DataType dataType, OperationType operationType, qint16 target, bool all)
 {
     if(all)
         MPI::COMM_WORLD.Allreduce(send, recv, size, data_type(dataType), operation_type(operationType));

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:23:52 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep  5 10:52:10 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 57
+ * Last-Updated: Wed Apr  4 10:33:23 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 59
  */
 
 /* Commentary: 
@@ -25,7 +25,6 @@
 #include <QtGui/QPlainTextEdit>
 #include <QtGui/QWidget>
 
-class dtkTextEditorPreferencesWidget;
 class dtkTextEditorPrivate;
 
 // /////////////////////////////////////////////////////////////////
@@ -113,8 +112,6 @@ public:
     QColor backgroundColor(void) const;
     QColor foregroundColor(void) const;
 
-    dtkTextEditorPreferencesWidget *preferencesWidget(QWidget *parent = 0);
-
     void setShowLineNumbers(bool show);
     void setShowCurrentLine(bool show);
     void setShowRevisions(bool show);
@@ -148,7 +145,6 @@ protected:
     void changeEvent(QEvent *event);
     void focusInEvent(QFocusEvent *event);
     void keyPressEvent(QKeyEvent *event);
-    bool eventFilter(QObject *object, QEvent *event);
 #if defined(Q_WS_MAC)
     bool macEvent(EventHandlerCallRef caller, EventRef event);
 #endif

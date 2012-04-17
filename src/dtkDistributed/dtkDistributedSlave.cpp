@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: lun. nov. 21 16:56:32 2011 (+0100)
+ * Last-Updated: ven. avril  6 18:47:16 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 206
+ *     Update #: 217
  */
 
 /* Commentary: 
@@ -80,11 +80,15 @@ int dtkDistributedSlave::exec(void)
 
 bool dtkDistributedSlave::isConnected(void)
 {
+    if (!d->communicator->socket())
+        return false;
     return (d->communicator->socket()->state() == QAbstractSocket::ConnectedState);
 }
 
 bool dtkDistributedSlave::isDisconnected(void)
 {
+    if (!d->communicator->socket())
+        return false;
     return (d->communicator->socket()->state() == QAbstractSocket::UnconnectedState);
 }
 
@@ -95,7 +99,7 @@ void dtkDistributedSlave::read(void)
     dtkDistributedMessage *request = socket->parseRequest();
 
     if( request->method() == dtkDistributedMessage::DATA) {
-        // TODO
+        qDebug() << DTK_PRETTY_FUNCTION << "DATA received in slave, unimplemented";
     } else {
         qDebug() << DTK_PRETTY_FUNCTION << "WARNING: Unknown data";
     }

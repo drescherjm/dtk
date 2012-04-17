@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: lun. nov. 28 15:52:13 2011 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 228
+ * Last-Updated: Tue Apr  3 15:55:32 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 229
  */
 
 /* Commentary:
@@ -17,14 +17,14 @@
  *
  */
 
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkAbstractDataFactory.h>
-#include <dtkCore/dtkAbstractDataReader.h>
-#include <dtkCore/dtkAbstractDataWriter.h>
-#include <dtkCore/dtkAbstractDataConverter.h>
-#include <dtkCore/dtkAbstractDataSerializer.h>
-#include <dtkCore/dtkAbstractDataDeserializer.h>
-#include <dtkCore/dtkSmartPointer.h>
+#include "dtkAbstractData.h"
+#include "dtkAbstractDataFactory.h"
+#include "dtkAbstractDataReader.h"
+#include "dtkAbstractDataWriter.h"
+#include "dtkAbstractDataConverter.h"
+#include "dtkAbstractDataSerializer.h"
+#include "dtkAbstractDataDeserializer.h"
+#include "dtkSmartPointer.h"
 
 // /////////////////////////////////////////////////////////////////
 // Anonymous namespace declarations
@@ -166,8 +166,7 @@ dtkAbstractData *dtkAbstractDataFactory::create(const QString& type)
 
 dtkSmartPointer<dtkAbstractData> dtkAbstractDataFactory::createSmartPointer(const QString& type)
 {
-    dtkSmartPointer<dtkAbstractData> data;
-    data.takePointer( this->create(type) );
+    dtkSmartPointer<dtkAbstractData> data = this->create(type);
     return data;
 }
 
@@ -183,8 +182,7 @@ dtkAbstractDataReader *dtkAbstractDataFactory::reader(const QString& type)
 
 dtkSmartPointer<dtkAbstractDataReader> dtkAbstractDataFactory::readerSmartPointer(const QString& type)
 {
-    dtkSmartPointer<dtkAbstractDataReader> reader;
-    reader.takePointer( this->reader(type) );
+    dtkSmartPointer<dtkAbstractDataReader> reader = this->reader(type);
     return reader;
 }
 
@@ -200,8 +198,7 @@ dtkAbstractDataWriter *dtkAbstractDataFactory::writer(const QString& type)
 
 dtkSmartPointer<dtkAbstractDataWriter> dtkAbstractDataFactory::writerSmartPointer(const QString& type)
 {
-    dtkSmartPointer<dtkAbstractDataWriter> writer;
-    writer.takePointer( this->writer(type) );
+    dtkSmartPointer<dtkAbstractDataWriter> writer = this->writer(type);
     return writer;
 }
 
@@ -217,8 +214,7 @@ dtkAbstractDataConverter *dtkAbstractDataFactory::converter(const QString& type)
 
 dtkSmartPointer<dtkAbstractDataConverter> dtkAbstractDataFactory::converterSmartPointer(const QString& type)
 {
-    dtkSmartPointer<dtkAbstractDataConverter> converter;
-    converter.takePointer( this->converter(type) );
+    dtkSmartPointer<dtkAbstractDataConverter> converter = this->converter(type);
     return converter;
 }
 
@@ -347,31 +343,37 @@ bool dtkAbstractDataFactory::registerDataDeserializerType(const QString& type, c
 
 unsigned int dtkAbstractDataFactory::count(const QString& type) const
 {
+    DTK_UNUSED(type);
     return d->creators.keys().count();
 }
 
 unsigned int dtkAbstractDataFactory::countReaders(const QString& type) const
 {
+    DTK_UNUSED(type);
     return d->readers.keys().count();
 }
 
 unsigned int dtkAbstractDataFactory::countWriters(const QString& type) const
 {
+    DTK_UNUSED(type);
     return d->writers.keys().count();
 }
 
 unsigned int dtkAbstractDataFactory::countConverters(const QString& type) const
 {
+    DTK_UNUSED(type);
     return d->converters.keys().count();
 }
 
 unsigned int dtkAbstractDataFactory::countSerializers(const QString& type) const
 {
+    DTK_UNUSED(type);
     return d->serializers.keys().count();
 }
 
 unsigned int dtkAbstractDataFactory::countDeserializers(const QString& type) const
 {
+    DTK_UNUSED(type);
     return d->deserializers.keys().count();
 }
 

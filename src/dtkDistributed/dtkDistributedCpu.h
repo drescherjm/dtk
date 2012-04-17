@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 13:23:49 2010 (+0100)
  * Version: $Id$
- * Last-Updated: mar. juin 28 17:33:12 2011 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 33
+ * Last-Updated: Tue Apr 10 15:50:31 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -42,30 +42,34 @@ public:
         x86_64 = 0x2
     };
 
-    Architecture architecture(void);
-
-    void setArchitecture(Architecture arch);
+    Q_DECLARE_FLAGS(Architectures, Architecture)
 
     enum Model {
            Xeon = 0x1,
         Opteron = 0x2
     };
 
+    Q_DECLARE_FLAGS(Models, Model)
+
+    Architecture architecture(void);
     Model model(void);
-
-    void setModel(Model model);
-
     int cardinality(void);
 
+    void setArchitecture(Architecture arch);
+    void setModel(Model model);
     void setCardinality(int cardinality);
 
 public:
     QList<dtkDistributedCore *> cores(void);
 
+public:
     void operator << (dtkDistributedCore *core);
 
 private:
     dtkDistributedCpuPrivate *d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(dtkDistributedCpu::Architectures)
+Q_DECLARE_OPERATORS_FOR_FLAGS(dtkDistributedCpu::Models)
 
 #endif

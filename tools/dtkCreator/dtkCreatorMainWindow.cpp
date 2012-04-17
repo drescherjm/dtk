@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 17 12:19:06 2012 (+0200)
+ * Last-Updated: Tue Apr 17 13:50:46 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1602
+ *     Update #: 1613
  */
 
 /* Commentary:
@@ -216,6 +216,9 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     QAction *continue_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Continue_Active.png"), "Cont");
     continue_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_C);
 
+    QAction *next_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Continue_Active.png"), "Next");
+    next_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_T);
+
     QAction *stop_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Stop_Active.png"), "Stop");
     stop_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_Period);
 
@@ -224,18 +227,18 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     QPushButton *compo_button = new QPushButton("Composition", buttons);
     compo_button->setObjectName("dtkCreatorMainWindowSegmentedButtonLeft");
-    compo_button->setFixedSize(100, 25);
+    compo_button->setFixedSize(75, 25);
     compo_button->setCheckable(true);
     compo_button->setChecked(true);
 
     QPushButton *distr_button = new QPushButton("Distribution", buttons);
     distr_button->setObjectName("dtkCreatorMainWindowSegmentedButtonMiddle");
-    distr_button->setFixedSize(100, 25);
+    distr_button->setFixedSize(75, 25);
     distr_button->setCheckable(true);
 
     QPushButton *debug_button = new QPushButton("Debug", buttons);
     debug_button->setObjectName("dtkCreatorMainWindowSegmentedButtonRight");
-    debug_button->setFixedSize(100, 25);
+    debug_button->setFixedSize(75, 25);
     debug_button->setCheckable(true);
 
     QButtonGroup *button_group = new QButtonGroup(this);
@@ -285,6 +288,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     debug_menu->addAction(run_action);
     debug_menu->addAction(step_action);
     debug_menu->addAction(continue_action);
+    debug_menu->addAction(next_action);
     debug_menu->addAction(stop_action);
 
     // -- Connections
@@ -292,6 +296,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     connect(run_action, SIGNAL(triggered()), d->composer, SLOT(run()));
     connect(step_action, SIGNAL(triggered()), d->composer, SLOT(step()));
     connect(continue_action, SIGNAL(triggered()), d->composer, SLOT(cont()));
+    connect(next_action, SIGNAL(triggered()), d->composer, SLOT(next()));
     connect(stop_action, SIGNAL(triggered()), d->composer, SLOT(stop()));
 
     connect(switchToCompoAction, SIGNAL(triggered()), this, SLOT(switchToCompo()));

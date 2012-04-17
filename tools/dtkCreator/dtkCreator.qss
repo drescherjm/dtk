@@ -4,9 +4,9 @@
 ;; Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ;; Created: Thu Mar 15 12:05:17 2012 (+0100)
 ;; Version: $Id$
-;; Last-Updated: Tue Apr 17 12:17:20 2012 (+0200)
+;; Last-Updated: Tue Apr 17 13:46:22 2012 (+0200)
 ;;           By: Julien Wintz
-;;     Update #: 194
+;;     Update #: 195
 */
 
 /*Commentary: 
@@ -48,8 +48,8 @@ QPushButton#dtkCreatorMainWindowSegmentedButtonLeft {
     border-top-left-radius: 3px;
     border-bottom-right-radius: 0px;
     border-bottom-left-radius: 3px;
-    min-width: 100px;
-    max-width: 100px;
+    min-width: 75px;
+    max-width: 75px;
     margin: 0px;
     color: black;
 }
@@ -67,8 +67,8 @@ QPushButton#dtkCreatorMainWindowSegmentedButtonMiddle {
     border-top-left-radius: 0px;
     border-bottom-right-radius: 0px;
     border-bottom-left-radius: 0px;
-    min-width: 100px;
-    max-width: 100px;
+    min-width: 75px;
+    max-width: 75px;
     margin: 0px;
     color: black;
 }
@@ -86,8 +86,8 @@ QPushButton#dtkCreatorMainWindowSegmentedButtonRight {
     border-top-left-radius: 0px;
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 0px;
-    min-width: 100px;
-    max-width: 100px;
+    min-width: 75px;
+    max-width: 75px;
     margin: 0px;
     color: black;
 }

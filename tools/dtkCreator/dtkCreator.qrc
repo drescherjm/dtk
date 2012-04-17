@@ -2,6 +2,10 @@
   <qresource prefix="dtkCreator">  
     <file>dtkCreator.qss</file>
 
+    <file>pixmaps/dtkTagScopeWell.png</file>
+    <file>pixmaps/dtkTagScope-sweep.png</file>
+    <file>pixmaps/dtkTagScope-sweep-pressed.png</file>
+
     <file>pixmaps/dtkCreatorToolbarButton-big-Active.tif</file>
     <file>pixmaps/dtkCreatorToolbarButton-big-Inactive.tif</file>
     <file>pixmaps/dtkCreatorToolbarButton-big-Pressed.tif</file>

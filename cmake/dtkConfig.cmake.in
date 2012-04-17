@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:51:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Apr  3 11:40:50 2012 (+0200)
+## Last-Updated: Tue Apr  3 14:48:49 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 33
+##     Update #: 36
 ######################################################################
 ## 
 ### Commentary: 
@@ -25,12 +25,12 @@ set(dtk_VERSION        "@dtk_VERSION@")
 set(DTK_INCLUDE_DIR "@dtk_INCLUDE_DIR@")
 set(DTK_LIBRARY_DIR "@dtk_LIBRARY_DIR@")
 set(DTK_CMAKE_DIR     "@dtk_CMAKE_DIR@")
+<<<<<<< HEAD
 
 set(DTK_LIBRARIES dtkMath dtkCore dtkGui dtkComposer)
 
 set(QT_QMAKE_EXECUTABLE "@QT_QMAKE_EXECUTABLE@")
+=======
+>>>>>>> 2e228f8dd22d0985a181d92538ac612149aaabd3
 
 include(${dtk_USE_FILE})
-
-set(DTK_FOUND TRUE)
-

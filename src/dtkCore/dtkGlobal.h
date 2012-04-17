@@ -20,7 +20,7 @@
 #ifndef DTKGLOBAL_H
 #define DTKGLOBAL_H
 
-#include <QtCore>
+#include <QtCore> 
 #include <QtGui>
 #include <QtDebug>
 

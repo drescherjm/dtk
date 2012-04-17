@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. avril 10 18:04:51 2012 (+0200)
+ * Last-Updated: mar. avril 17 11:42:13 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 450
+ *     Update #: 480
  */
 
 /* Commentary: 
@@ -55,6 +55,7 @@ public:
 
 dtkComposerWriter::dtkComposerWriter(void) : d(new dtkComposerWriterPrivate)
 {
+    d->id    = 0;
     d->scene = NULL;
 }
 
@@ -77,8 +78,10 @@ QDomDocument dtkComposerWriter::toXML(dtkComposerSceneNodeComposite *rootNode, b
     if(!rootNode)
         return document;
 
-    d->node_ids.clear();
-    d->id = 0;
+    if (d->id > 0) {
+        d->node_ids.clear();
+        d->id = 0;
+    }
 
     QDomElement root = document.createElement("dtk");
     document.appendChild(root);
@@ -104,9 +107,6 @@ void dtkComposerWriter::write(const QString& fileName, Type type)
 {
     if(!d->scene)
         return;
-
-    d->node_ids.clear();
-    d->id = 0;
 
     QDomDocument document = this->toXML(d->scene->root(), false);
 

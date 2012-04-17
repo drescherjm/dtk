@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. avril 13 10:18:24 2012 (+0200)
+ * Last-Updated: mar. avril 17 11:40:43 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 816
+ *     Update #: 827
  */
 
 /* Commentary: 
@@ -85,8 +85,6 @@ dtkComposerSceneNodeComposite::dtkComposerSceneNodeComposite(void) : dtkComposer
     d->entered = false;
     d->revealed = false;
     d->obfuscated = false;
-
-    d->writer = dtkComposerWriter();
 
     this->setAcceptDrops(true);
     this->layout();

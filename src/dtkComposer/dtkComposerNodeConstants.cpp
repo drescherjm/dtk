@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:58:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 29 10:14:06 2012 (+0100)
- *           By: tkloczko
- *     Update #: 19
+ * Last-Updated: Tue Apr 17 11:38:30 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 20
  */
 
 /* Commentary: 
@@ -23,6 +23,10 @@
 #include "dtkComposerTransmitterReceiver.h"
 
 #include <math.h>
+
+#if defined(Q_OS_WIN)
+#define M_E 2.718281
+#endif
 
 // /////////////////////////////////////////////////////////////////
 // PI

@@ -6,6 +6,8 @@
     <file>pixmaps/dtkTagScope-sweep.png</file>
     <file>pixmaps/dtkTagScope-sweep-pressed.png</file>
 
+    <file>pixmaps/dtkComposerScene-bg.png</file>
+
     <file>pixmaps/dtkCreatorToolbarButton-big-Active.tif</file>
     <file>pixmaps/dtkCreatorToolbarButton-big-Inactive.tif</file>
     <file>pixmaps/dtkCreatorToolbarButton-big-Pressed.tif</file>

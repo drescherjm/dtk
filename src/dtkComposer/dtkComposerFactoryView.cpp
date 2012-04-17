@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 13:24:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 20 14:18:30 2012 (+0100)
+ * Last-Updated: Tue Apr 17 14:08:25 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 144
+ *     Update #: 146
  */
 
 /* Commentary: 
@@ -47,7 +47,7 @@ dtkComposerFactoryView::dtkComposerFactoryView(QWidget *parent) : QWidget(parent
     d->cloud = new dtkTagCloud(this);
     d->cloud->setSortingType(dtkTagCloud::Alpha);
     d->cloud->setSortingOrder(dtkTagCloud::Asc);
-    d->cloud->setFontSize(18);
+    d->cloud->setFontSize(14);
     d->cloud->setFontRange(10);
 
     d->view = new dtkItemView(this);

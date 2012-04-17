@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:27 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 16 12:09:27 2012 (+0200)
+ * Last-Updated: Tue Apr 17 14:53:49 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1528
+ *     Update #: 1551
  */
 
 /* Commentary: 
@@ -524,23 +524,23 @@ dtkTagScope::dtkTagScope(QWidget *parent) : QFrame(parent)
     d->completer->setModel(d->completer_model);
     d->completer->setModelSorting(QCompleter::CaseSensitivelySortedModel);
 
-    d->edit = new QLineEdit;
+    d->edit = new QLineEdit(this);
     d->edit->setFixedHeight(21);
     d->edit->setAttribute(Qt::WA_MacShowFocusRect, false);
     d->edit->setCompleter(d->completer);
 
-    d->clear = new QToolButton;
+    d->clear = new QToolButton(this);
     d->clear->setFixedHeight(21);
     d->clear->setAttribute(Qt::WA_MacShowFocusRect, false);
 
-    d->switsh = new dtkSwitch;
+    d->switsh = new dtkSwitch(this);
     d->switsh->setFixedHeight(21);
     d->switsh->setFixedWidth(39);
     d->switsh->setAttribute(Qt::WA_MacShowFocusRect, false);
 
     QHBoxLayout *t_layout = new QHBoxLayout;
-    t_layout->setContentsMargins(0, 0, 0, 0);
-    t_layout->setSpacing(0);
+    t_layout->setContentsMargins(5, 5, 5, 5);
+    // t_layout->setSpacing(0);
     t_layout->addWidget(d->edit);
     t_layout->addWidget(d->clear);
     t_layout->addWidget(d->switsh);
@@ -549,11 +549,20 @@ dtkTagScope::dtkTagScope(QWidget *parent) : QFrame(parent)
     d->layout->setContentsMargins(5, 5, 5, 5);
     d->layout->setSpacing(0);
 
+    QFrame *header = new QFrame(this);
+    header->setObjectName("dtkTagScopeHeader");
+    header->setLayout(t_layout);
+
+    QFrame *well = new QFrame(this);
+    well->setObjectName("dtkTagScopeWell");
+    well->setLayout(d->layout);
+    well->setMinimumHeight(50);
+
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    layout->addLayout(t_layout);
-    layout->addLayout(d->layout);
+    layout->addWidget(header);
+    layout->addWidget(well);
 
     this->setFrameShape(QFrame::NoFrame);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);

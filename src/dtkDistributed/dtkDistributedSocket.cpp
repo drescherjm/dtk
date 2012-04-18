@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: ven. avril 13 13:45:05 2012 (+0200)
+ * Last-Updated: mar. avril 17 18:41:55 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 674
+ *     Update #: 687
  */
 
 /* Commentary:
@@ -18,6 +18,8 @@
  */
 
 #include <dtkCore/dtkGlobal.h>
+
+#include <dtkLog/dtkLog.h>
 
 #include "dtkDistributedSocket.h"
 
@@ -63,7 +65,6 @@ qint64 dtkDistributedSocket::sendRequest( dtkDistributedMessage *msg)
     } else {
         ret = this->write(buffer.toAscii());
         ret += this->write(msg->content());
-        this->flush();
     }
 
     return ret;
@@ -108,7 +109,7 @@ dtkDistributedMessage *dtkDistributedSocket::parseRequest(void)
             if (this->waitForReadyRead()) {
                 buffer.append(this->read(msg->size()-buffer.size()));
             } else {
-                qDebug() << "not enough data received, only  " << buffer.size() << "out of " << msg->size() ;
+                dtkWarn() << "not enough data received, only  " << buffer.size() << "out of " << msg->size() ;
                 msg->setContent(buffer);
                 msg->addHeader("missing_data",QString::number(msg->size()-buffer.size()));
                 break;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. avril 11 15:23:35 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 786
+ * Last-Updated: Tue Apr 17 23:16:51 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 837
  */
 
 /* Commentary: 
@@ -245,32 +245,57 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     d->selector->blockSignals(true);
 
     QHBoxLayout *l_layout = new QHBoxLayout;
+    l_layout->setContentsMargins(0, 0, 0, 0);
     l_layout->addWidget(d->add_loop_port);
     l_layout->addWidget(d->rem_loop_port);
 
+    QFrame *l_frame = new QFrame(this);
+    l_frame->setLayout(l_layout);
+    l_frame->setObjectName("dtkComposerSceneNodeEditorButtons");
+    l_frame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+
     QHBoxLayout *i_layout = new QHBoxLayout;
+    i_layout->setContentsMargins(0, 0, 0, 0);
     i_layout->addWidget(d->add_input_port);
     i_layout->addWidget(d->rem_input_port);
 
+    QFrame *i_frame = new QFrame(this);
+    i_frame->setLayout(i_layout);
+    i_frame->setObjectName("dtkComposerSceneNodeEditorButtons");
+    i_frame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+
     QHBoxLayout *t_layout = new QHBoxLayout;
-    t_layout->addWidget(new QLabel("Node:", this));
+    t_layout->setContentsMargins(0, 0, 0, 0);
+    t_layout->setSpacing(5);
+    t_layout->addWidget(new QLabel("Node", this));
     t_layout->addWidget(d->edit);
+    t_layout->addWidget(d->selector);
+
+    QFrame *top = new QFrame(this);
+    top->setObjectName("dtkComposerSceneNodeEditorTitle");
+    top->setLayout(t_layout);
+    top->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
 
     QHBoxLayout *o_layout = new QHBoxLayout;
+    o_layout->setContentsMargins(0, 0, 0, 0);
     o_layout->addWidget(d->add_output_port);
     o_layout->addWidget(d->rem_output_port);
+
+    QFrame *o_frame = new QFrame(this);
+    o_frame->setLayout(o_layout);
+    o_frame->setObjectName("dtkComposerSceneNodeEditorButtons");
+    o_frame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    layout->addLayout(t_layout);
+    layout->addWidget(top);
     layout->addWidget(d->loop_ports);
-    layout->addLayout(l_layout);
-    layout->addWidget(d->selector);
+    layout->addWidget(l_frame);
     layout->addWidget(d->input_ports);
-    layout->addLayout(i_layout);
+    layout->addWidget(i_frame);
     layout->addWidget(d->output_ports);
-    layout->addLayout(o_layout);
+    layout->addWidget(o_frame);
     layout->addWidget(d->spin_d);
     layout->addWidget(d->spin_f);
     layout->addWidget(d->edit_s);

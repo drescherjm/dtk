@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. avril 11 17:43:34 2012 (+0200)
+ * Last-Updated: mar. avril 17 18:40:57 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 701
+ *     Update #: 724
  */
 
 /* Commentary: 
@@ -138,6 +138,8 @@ void dtkDistributedServerDaemon::read(void)
     QByteArray r;
     QString jobid;
 
+    dtkDebug() << DTK_PRETTY_FUNCTION << "read message of type" << msg->method();
+
     switch (msg->method()) {
     case dtkDistributedMessage::STATUS:
         r = d->manager->status();
@@ -179,6 +181,7 @@ void dtkDistributedServerDaemon::read(void)
 
     case dtkDistributedMessage::DATA:
         msg->addHeader("x-forwarded-for", QString::number(d->sockets.key(socket)));
+        dtkDebug() << DTK_PRETTY_FUNCTION << "forwarding data of type" << msg->type() << "and size" << msg->content().size();
         (d->sockets[msg->rank()])->sendRequest(msg);
         break;
 

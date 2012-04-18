@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:06:10 2012 (+0200)
- *           By: tkloczko
- *     Update #: 210
+ * Last-Updated: Wed Apr 18 18:16:39 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 299
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include "dtkComposer.h"
 #include "dtkComposer_p.h"
+#include "dtkComposerCompass.h"
 #include "dtkComposerEvaluator.h"
 #include "dtkComposerFactory.h"
 #include "dtkComposerGraph.h"
@@ -104,7 +105,7 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
     d->scene->setStack(d->stack);
     d->scene->setGraph(d->graph);
 
-    d->view = new dtkComposerView;
+    d->view = new dtkComposerView(this);
     d->view->setScene(d->scene);
 
     d->evaluator->setGraph(d->graph);
@@ -115,13 +116,23 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
     layout->addWidget(d->view);
 
     connect(d->scene, SIGNAL(modified(bool)), this, SIGNAL(modified(bool)));
+
+    // -- Experimental: towards composer compass
+
+    d->compass = new dtkComposerCompass(this);
+    d->compass->setScene(d->scene);
+    d->compass->setView(d->view);
+
+    layout->addWidget(d->compass);
 }
 
 dtkComposer::~dtkComposer(void)
 {
     delete d->machine;
     delete d->factory;
+    delete d->graph;
     delete d->stack;
+    delete d->evaluator;
     delete d;
     
     d = NULL;

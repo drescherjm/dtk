@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:02:53
  * Version: $Id$
- * Last-Updated: Wed Mar 21 11:25:00 2012 (+0100)
+ * Last-Updated: Wed Apr 18 17:56:47 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 42
+ *     Update #: 47
  */
 
 /* Commentary:
@@ -40,3 +40,4 @@ dtkComposerView::~dtkComposerView(void)
 {
 
 }
+

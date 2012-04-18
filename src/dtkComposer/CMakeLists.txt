@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Apr 16 12:00:50 2012 (+0200)
+## Last-Updated: Wed Apr 18 15:25:58 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 479
+##     Update #: 499
 ######################################################################
 ##
 ### Commentary:
@@ -25,6 +25,7 @@ project(dtkComposer)
 
 set(${PROJECT_NAME}_HEADERS
   dtkComposer.h
+  dtkComposerCompass.h
   dtkComposerEvaluator.h
   dtkComposerFactory.h
   dtkComposerFactoryView.h
@@ -97,6 +98,7 @@ set(${PROJECT_NAME}_HEADERS
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposer.h
   dtkComposer_p.h
+  dtkComposerCompass.h
   dtkComposerEvaluator.h
   dtkComposerFactory.h
   dtkComposerFactoryView.h
@@ -114,6 +116,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
 
 set(${PROJECT_NAME}_SOURCES
   dtkComposer.cpp
+  dtkComposerCompass.cpp
   dtkComposerEvaluator.cpp
   dtkComposerFactory.cpp
   dtkComposerFactoryView.cpp

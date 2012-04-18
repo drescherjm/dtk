@@ -165,7 +165,6 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES_WRAP})
 
 else(BUILD_SHARED_LIBS)
-message("== Configuring dtk 2 " ${${PKG_NAME}_STATIC})
 
 add_library(${PROJECT_NAME} STATIC
   ${${PROJECT_NAME}_SOURCES}

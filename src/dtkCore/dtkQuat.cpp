@@ -23,9 +23,6 @@
 #define _USE_MATH_DEFINES
 #endif
 
-#define M_PI		3.14159265358979323846
-
-
 #include <math.h>
 
 double dtkQuat::Deg2Rad(double v)

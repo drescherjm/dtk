@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr 18 09:35:33 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 18 17:57:23 2012 (+0200)
+ * Last-Updated: Wed Apr 18 23:18:14 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 36
+ *     Update #: 42
  */
 
 /* Commentary: 
@@ -40,6 +40,11 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event);
+
+protected:
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
 
 private:
     dtkComposerCompassPrivate *d;

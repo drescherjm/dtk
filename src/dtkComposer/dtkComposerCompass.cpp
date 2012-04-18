@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr 18 09:37:07 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 18 18:21:48 2012 (+0200)
+ * Last-Updated: Wed Apr 18 22:34:19 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 137
+ *     Update #: 170
  */
 
 /* Commentary: 
@@ -24,6 +24,10 @@ class dtkComposerCompassPrivate
 {
 public:
     dtkComposerView *view;
+
+public:
+    QRect s_rect;
+    QRect t_rect;
 };
 
 dtkComposerCompass::dtkComposerCompass(QWidget *parent) : QGraphicsView(parent), d(new dtkComposerCompassPrivate)
@@ -32,7 +36,9 @@ dtkComposerCompass::dtkComposerCompass(QWidget *parent) : QGraphicsView(parent),
 
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setFrameStyle(QFrame::NoFrame);
-    this->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
+    this->setInteractive(false);
+    this->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
+    this->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 }
 
 dtkComposerCompass::~dtkComposerCompass(void)
@@ -49,14 +55,26 @@ void dtkComposerCompass::setView(dtkComposerView *view)
 
 void dtkComposerCompass::paintEvent(QPaintEvent *event)
 {
-    if (d->view
-        && event->rect().width() > 20
-        && event->rect().height() > 20
-        && ( d->view->sceneRect().toRect().width() > event->rect().width()
-          || d->view->sceneRect().toRect().height() > event->rect().height())) {
+    if(!d->view)
+        return;
 
-        this->fitInView(this->scene()->sceneRect(), Qt::KeepAspectRatio);
+    if(event->rect().width() < 20 || event->rect().height() < 20)
+        return;
+
+    bool fit = false;
+
+    if (d->s_rect != d->view->sceneRect().toRect()) {
+        d->s_rect  = d->view->sceneRect().toRect();
+        fit = true;
     }
+
+    if (d->t_rect != event->rect()) {
+        d->t_rect  = event->rect();
+        fit = true;
+    }
+
+    if(fit && (d->s_rect.width() > d->t_rect.width() || d->s_rect.height() > d->t_rect.height()))
+        this->fitInView(this->scene()->sceneRect(), Qt::KeepAspectRatio);
 
     QGraphicsView::paintEvent(event);
 }

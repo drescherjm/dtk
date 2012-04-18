@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 17 22:55:42 2012 (+0200)
+ * Last-Updated: Wed Apr 18 21:38:08 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1616
+ *     Update #: 1617
  */
 
 /* Commentary:
@@ -137,6 +137,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     d->composer = new dtkComposer;
     d->composer->view()->setBackgroundBrush(QBrush(QPixmap(":dtkCreator/pixmaps/dtkComposerScene-bg.png")));
+    d->composer->view()->setCacheMode(QGraphicsView::CacheBackground);
 
     d->editor = new dtkComposerSceneNodeEditor(this);
     d->editor->setScene(d->composer->scene());

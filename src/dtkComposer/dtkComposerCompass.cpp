@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr 18 09:37:07 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 19 12:39:37 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 335
+ * Last-Updated: Thu Apr 19 13:16:55 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 344
  */
 
 /* Commentary: 
@@ -88,6 +88,13 @@ void dtkComposerCompass::setView(dtkComposerView *view)
     d->view = view;
 
     connect(d->view, SIGNAL(scrolled()), this, SLOT(update()));
+}
+
+void dtkComposerCompass::update(void)
+{
+    this->scene()->update();
+    
+    QGraphicsView::update();
 }
 
 #define CROP_BORDER_LINE 10

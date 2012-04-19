@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:02:53
  * Version: $Id$
- * Last-Updated: Wed Apr 18 17:56:47 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 47
+ * Last-Updated: Thu Apr 19 13:16:23 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 83
  */
 
 /* Commentary:
@@ -41,3 +41,14 @@ dtkComposerView::~dtkComposerView(void)
 
 }
 
+void dtkComposerView::scroll(int dx, int dy)
+{
+    this->centerOn(this->mapToScene(this->viewport()->rect().center()) + QPointF(dx, dy));
+}
+
+void dtkComposerView::scrollContentsBy(int dx, int dy)
+{
+    QGraphicsView::scrollContentsBy(dx, dy);
+
+    emit scrolled();
+}

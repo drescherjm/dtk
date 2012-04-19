@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr 18 09:35:33 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 18 23:18:14 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 42
+ * Last-Updated: Thu Apr 19 13:16:43 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -37,6 +37,9 @@ public:
 
 public:
     void setView(dtkComposerView *view);
+
+public slots:
+    void update(void);
 
 protected:
     void paintEvent(QPaintEvent *event);

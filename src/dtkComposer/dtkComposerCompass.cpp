@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr 18 09:37:07 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 19 00:02:50 2012 (+0200)
+ * Last-Updated: Thu Apr 19 12:39:37 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 264
+ *     Update #: 335
  */
 
 /* Commentary: 
@@ -20,6 +20,27 @@
 #include "dtkComposerCompass.h"
 #include "dtkComposerView.h"
 
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+QRect toRect(QPolygon polygon)
+{
+    if(polygon.size() != 4)
+        return QRect();
+
+    return QRect(polygon.first(), polygon.at(2));
+}
+
+QRect toRect(QPolygonF polygon)
+{
+    return toRect(polygon.toPolygon());
+}
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
 class dtkComposerCompassPrivate
 {
 public:
@@ -32,7 +53,14 @@ public:
 
 public:
     QPoint pos;
+
+public:
+    bool moving;
 };
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
 
 dtkComposerCompass::dtkComposerCompass(QWidget *parent) : QGraphicsView(parent), d(new dtkComposerCompassPrivate)
 {
@@ -44,6 +72,8 @@ dtkComposerCompass::dtkComposerCompass(QWidget *parent) : QGraphicsView(parent),
     this->setInteractive(false);
     this->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
     this->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+
+    d->moving = false;
 }
 
 dtkComposerCompass::~dtkComposerCompass(void)
@@ -56,6 +86,8 @@ dtkComposerCompass::~dtkComposerCompass(void)
 void dtkComposerCompass::setView(dtkComposerView *view)
 {
     d->view = view;
+
+    connect(d->view, SIGNAL(scrolled()), this, SLOT(update()));
 }
 
 #define CROP_BORDER_LINE 10
@@ -84,12 +116,19 @@ void dtkComposerCompass::paintEvent(QPaintEvent *event)
     if(fit && (d->s_rect.width() > d->t_rect.width() || d->s_rect.height() > d->t_rect.height()))
         this->fitInView(this->scene()->sceneRect(), Qt::KeepAspectRatio);
 
+    // --
+
     QGraphicsView::paintEvent(event);
     
-    // -- Drawing grid
+    // -- Map source view to target view through scene 
 
-    if (d->c_rect.isNull())
-        d->c_rect = QRect(20, 20, 100, 70);
+    d->c_rect = toRect(d->view->mapToScene(d->view->rect()));
+    d->c_rect = toRect(this->mapFromScene(d->c_rect));
+
+    // --
+
+    if(d->c_rect.contains(d->t_rect))
+        return;
 
     // --
 
@@ -171,19 +210,19 @@ void dtkComposerCompass::paintEvent(QPaintEvent *event)
 
 void dtkComposerCompass::mousePressEvent(QMouseEvent *event)
 {
-    Q_UNUSED(event);
+    if (d->c_rect.contains(event->pos()))
+        d->moving = true;
 }
 
 void dtkComposerCompass::mouseMoveEvent(QMouseEvent *event)
 {
-    if (event->buttons() & Qt::LeftButton) {
+    if (d->moving) {
 
-        QPoint delta = event->pos() - d->pos;
-        
-        if(!d->s_rect.isNull())
-            d->c_rect.translate(delta);
+        QPoint c = this->mapToScene(event->pos()).toPoint();
+        QPoint p = this->mapToScene(d->pos).toPoint();
+        QPoint delta = c - p;
 
-        this->update();
+        d->view->scroll(delta.x(), delta.y());
     }
 
     d->pos = event->pos();
@@ -192,4 +231,6 @@ void dtkComposerCompass::mouseMoveEvent(QMouseEvent *event)
 void dtkComposerCompass::mouseReleaseEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);
+
+    d->moving = false;
 }

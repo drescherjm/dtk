@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr  4 12:23:14 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr  6 11:09:13 2012 (+0200)
+ * Last-Updated: Thu Apr 19 15:17:39 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 85
+ *     Update #: 87
  */
 
 /* Commentary: 
@@ -46,10 +46,6 @@ dtkDistributedControllerHeaderView::dtkDistributedControllerHeaderView(QWidget *
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(d->server);
     layout->addWidget(d->stats);
-
-    this->setStyleSheet(
-        "dtkDistributedControllerHeaderView { background: qlineargradient(x1: 0, y1: 1, stop: 0 #bcc3d7, stop: 1 #a2abc7); border-top: 1px solid #6a6a6a; border-bottom: 1px solid #b6b6b6; }"
-        "QLabel { color: white; }");
 }
 
 dtkDistributedControllerHeaderView::~dtkDistributedControllerHeaderView(void)

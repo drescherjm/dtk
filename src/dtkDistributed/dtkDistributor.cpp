@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 12 09:42:43 2012 (+0200)
+ * Last-Updated: Thu Apr 19 15:35:18 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 102
+ *     Update #: 105
  */
 
 /* Commentary: 
@@ -84,13 +84,18 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     d->job_view->setController(d->controller);
 
     QHBoxLayout *t_layout = new QHBoxLayout;
+    t_layout->setContentsMargins(5, 5, 5, 5);
     t_layout->addWidget(d->host_address);
     t_layout->addWidget(d->host_button);
+
+    QFrame *top = new QFrame(this);
+    top->setObjectName("dtkDistributorHeader");
+    top->setLayout(t_layout);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    layout->addLayout(t_layout);
+    layout->addWidget(top);
     layout->addWidget(d->target_view);
     layout->addWidget(d->header_view);
     layout->addWidget(d->status_view);

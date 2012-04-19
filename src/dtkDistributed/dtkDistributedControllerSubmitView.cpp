@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:53:43 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 11 16:27:23 2012 (+0200)
+ * Last-Updated: Thu Apr 19 15:53:16 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 80
+ *     Update #: 95
  */
 
 /* Commentary: 
@@ -62,12 +62,27 @@ dtkDistributedControllerSubmitView::dtkDistributedControllerSubmitView(QWidget *
 
     d->submit_button = new QPushButton("Submit", this);
     
-    QFormLayout *layout = new QFormLayout(this);
-    layout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
-    layout->addRow("Nodes", d->node_spin);
-    layout->addRow("Process per node", d->ppn_spin);
-    layout->addRow("Duration", d->time_edit);
-    layout->addRow(d->submit_button);
+    QFormLayout *f_layout = new QFormLayout;
+    f_layout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
+    f_layout->addRow("Nodes", d->node_spin);
+    f_layout->addRow("Process per node", d->ppn_spin);
+    f_layout->addRow("Duration", d->time_edit);
+    f_layout->addRow(d->submit_button);
+
+    QLabel *header = new QLabel("Submission", this);
+    header->setObjectName("dtkDistributedControllerSubmitViewHeader");
+
+    QHBoxLayout *t_layout = new QHBoxLayout;
+    t_layout->addWidget(header);
+
+    QWidget *bottom = new QWidget(this);
+    bottom->setLayout(f_layout);
+
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    layout->addWidget(header);
+    layout->addWidget(bottom);
     
     connect(d->submit_button, SIGNAL(clicked()), this, SLOT(onSubmit()));
 

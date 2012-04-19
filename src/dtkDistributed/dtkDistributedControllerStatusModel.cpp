@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jul  1 13:48:10 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 11 12:22:11 2012 (+0200)
+ * Last-Updated: Thu Apr 19 15:25:22 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 306
+ *     Update #: 313
  */
 
 /* Commentary: 
@@ -269,11 +269,14 @@ QVariant dtkDistributedControllerStatusModel::data(const QModelIndex& index, int
     if (role == Qt::TextColorRole && item->kind == dtkDistributedControllerStatusModelItem::Core)
         return item->data(0).toString() == "Free" ? Qt::darkGreen : Qt::darkRed;
 
-    if (role == Qt::BackgroundRole && item->kind == dtkDistributedControllerStatusModelItem::Node)
-        return item->data(2).toString() == "Down" ? Qt::red : Qt::white;
+    if (role == Qt::TextColorRole && item->kind == dtkDistributedControllerStatusModelItem::Node)
+        return item->data(2).toString() == "Down" ? Qt::red : Qt::black;
 
-    if (role == Qt::BackgroundRole && item->kind == dtkDistributedControllerStatusModelItem::Node)
-        return item->data(2).toString() == "Busy" ? QColor("#FF7722") : Qt::white;
+    if (role == Qt::TextColorRole && item->kind == dtkDistributedControllerStatusModelItem::Node)
+        return item->data(2).toString() == "Busy" ? QColor("#FF7722") : Qt::black;
+
+    if (role == Qt::TextColorRole && item->kind == dtkDistributedControllerStatusModelItem::Node)
+        return item->data(2).toString() == "Free" ? Qt::darkGreen : Qt::black;
 
     if (role != Qt::DisplayRole)
         return QVariant();

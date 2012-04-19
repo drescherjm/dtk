@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 16 12:15:01 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 465
+ * Last-Updated: jeu. avril 19 13:30:57 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 469
  */
 
 /* Commentary: 
@@ -389,8 +389,8 @@ void dtkDistributedCommunicatorMpi::receive(QVariant &v, qint16 source, int tag)
     case QVariant::UserType+1: {
         // assume it's a dtkAbstractData
         dtkAbstractData *data;
-        this->send(data,source,tag);
-//        v.value<dtkAbstractData *>() = data; FIXME
+        this->receive(data,source,tag);
+        v = qVariantFromValue(data);
         return;
     }
     default:

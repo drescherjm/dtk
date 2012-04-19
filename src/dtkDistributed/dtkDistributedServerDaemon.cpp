@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. avril 17 18:40:57 2012 (+0200)
+ * Last-Updated: jeu. avril 19 13:12:07 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 724
+ *     Update #: 726
  */
 
 /* Commentary: 
@@ -143,7 +143,7 @@ void dtkDistributedServerDaemon::read(void)
     switch (msg->method()) {
     case dtkDistributedMessage::STATUS:
         r = d->manager->status();
-        socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::OKSTATUS,"",-2,r.size(),"json",r));
+        socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::OKSTATUS,"",dtkDistributedMessage::SERVER_RANK,r.size(),"json",r));
         // GET status is from the controller, store the socket in sockets using rank=-1
         if (!d->sockets.contains(dtkDistributedMessage::CONTROLLER_RANK))
             d->sockets.insert(dtkDistributedMessage::CONTROLLER_RANK, socket);

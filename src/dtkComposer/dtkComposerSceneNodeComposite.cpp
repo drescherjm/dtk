@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. avril 17 11:40:43 2012 (+0200)
+ * Last-Updated: jeu. avril 19 13:19:14 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 827
+ *     Update #: 828
  */
 
 /* Commentary: 
@@ -640,8 +640,8 @@ void dtkComposerSceneNodeComposite::dropEvent(QGraphicsSceneDragDropEvent *event
 
     dtkDistributedController *controller = const_cast<dtkDistributedMimeData *>(data)->controller();
 
-    remote->setController(controller);
     remote->setJob(job);
+    remote->setController(controller);
 
     event->acceptProposedAction();
 }

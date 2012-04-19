@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 17 14:16:35 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 1562
+ * Last-Updated: jeu. avril 19 13:07:05 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 1563
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@
 #include "dtkDistributedGpu.h"
 #include "dtkDistributedSocket.h"
 
+#include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkGlobal.h>
 
 #include <dtkJson/dtkJson.h>

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: mar. avril 17 18:41:55 2012 (+0200)
+ * Last-Updated: jeu. avril 19 13:08:31 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 687
+ *     Update #: 698
  */
 
 /* Commentary:
@@ -17,6 +17,7 @@
  *
  */
 
+#include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkGlobal.h>
 
 #include <dtkLog/dtkLog.h>
@@ -36,6 +37,21 @@ dtkDistributedSocket::~dtkDistributedSocket(void)
     delete d;
     d = NULL;
 }
+
+void dtkDistributedSocket::send(dtkAbstractData *data, QString jobid, qint16 target)
+{
+    QByteArray *array;
+    QString type = data->identifier();
+
+    array = data->serialize();
+    if (!array->isNull()) {
+        this->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,jobid, target, array->size(), type));
+        this->write(*array);
+    } else {
+        dtkError() << "serialization failed";
+    }
+}
+
 
 qint64 dtkDistributedSocket::sendRequest( dtkDistributedMessage *msg)
 {

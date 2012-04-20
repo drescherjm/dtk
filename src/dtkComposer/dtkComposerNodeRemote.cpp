@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: jeu. avril 19 13:26:53 2012 (+0200)
+ * Last-Updated: ven. avril 20 16:23:05 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 488
+ *     Update #: 493
  */
 
 /* Commentary:
@@ -97,8 +97,10 @@ void dtkComposerNodeRemote::setController(dtkDistributedController *controller)
     if (d->jobid.isEmpty())
         dtkWarn() <<  "No job id while setting controller !";
     d->controller = controller;
-    d->server = new dtkDistributedCommunicatorTcp;
-    d->server->connectToHost(controller->socket(d->jobid)->peerAddress().toString(),controller->socket(d->jobid)->peerPort());
+    if (!d->server) {
+        d->server = new dtkDistributedCommunicatorTcp;
+        d->server->connectToHost(controller->socket(d->jobid)->peerAddress().toString(),controller->socket(d->jobid)->peerPort());
+    }
 }
 
 void dtkComposerNodeRemote::setSlave(dtkDistributedSlave *slave)
@@ -114,8 +116,6 @@ void dtkComposerNodeRemote::setCommunicator(dtkDistributedCommunicator *c)
 void dtkComposerNodeRemote::setJob(QString jobid)
 {
     d->jobid = jobid;
-    d->title = d->title + "(" + jobid + ")";
-    dtkDebug() << "our job is now " << jobid;
 }
 
 bool dtkComposerNodeRemote::isSlave(void)

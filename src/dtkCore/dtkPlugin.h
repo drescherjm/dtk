@@ -24,6 +24,10 @@
 #include "dtkCoreExport.h"
 #include "dtkGlobal.h"
 
+class dtkAbstractDataFactory;
+class dtkAbstractProcessFactory;
+class dtkAbstractViewFactory;
+
 class dtkPluginPrivate;
 
 class DTKCORE_EXPORT dtkPlugin : public dtkAbstractObject
@@ -47,6 +51,15 @@ public:
     virtual QStringList dependencies(void) const;
     virtual QStringList tags(void) const = 0;
     virtual QStringList types(void) const = 0;
+
+    void setViewFactorySingleton(dtkAbstractViewFactory *viewSingletonFactory);
+    dtkAbstractViewFactory *viewFactorySingleton(void);
+
+    void setDataFactorySingleton(dtkAbstractDataFactory *dataSingletonFactory);
+    dtkAbstractDataFactory *dataFactorySingleton(void);
+
+    void setProcessFactorySingleton(dtkAbstractProcessFactory *processSingletonFactory);
+    dtkAbstractProcessFactory *processFactorySingleton(void);
 
 private:
     dtkPluginPrivate *d;

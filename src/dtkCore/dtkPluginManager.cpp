@@ -18,6 +18,9 @@
  */
 
 #include "dtkAbstractData.h"
+#include "dtkAbstractDataFactory.h"
+#include "dtkAbstractProcessFactory.h"
+#include "dtkAbstractViewFactory.h"
 #include "dtkPluginManager.h"
 
 #include "dtkPlugin.h"
@@ -294,6 +297,10 @@ void dtkPluginManager::loadPlugin(const QString& path)
     }
 
     dtkPlugin *plugin = qobject_cast<dtkPlugin *>(loader->instance());
+    plugin->setDataFactorySingleton(dtkAbstractDataFactory::instance());
+    plugin->setProcessFactorySingleton(dtkAbstractProcessFactory::instance());
+    plugin->setViewFactorySingleton(dtkAbstractViewFactory::instance());
+
 
     if(!plugin) {
         QString error = "Unable to retrieve ";

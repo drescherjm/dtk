@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep  5 12:43:44 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 283
+ * Last-Updated: Mon Apr 23 16:55:00 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 285
  */
 
 /* Commentary:
@@ -38,9 +38,13 @@ class DTKCORE_EXPORT dtkAbstractView : public dtkAbstractObject
 
 public:
              dtkAbstractView(      dtkAbstractView *parent = 0);
-	     dtkAbstractView(const dtkAbstractView& view);
+	     dtkAbstractView(const dtkAbstractView& other);
     virtual ~dtkAbstractView(void);
 
+public:
+    dtkAbstractView& operator = (const dtkAbstractView& other);
+
+public:
     friend DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractView& viewer);
     friend DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractView *viewer);
 
@@ -128,7 +132,7 @@ public slots:
     virtual double cameraZoom(void) const;
 
 private:
-    dtkAbstractViewPrivate *d;
+    DTK_DECLARE_PRIVATE(dtkAbstractView);
 };
 
 DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractView& viewer);

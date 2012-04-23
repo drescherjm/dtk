@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 08:47:38 2012 (+0200)
+ * Last-Updated: Mon Apr 23 16:25:42 2012 (+0200)
  *           By: tkloczko
- *     Update #: 400
+ *     Update #: 413
  */
 
 /* Commentary:
@@ -18,6 +18,7 @@
  */
 
 #include "dtkAbstractData.h"
+#include "dtkAbstractData_p.h"
 #include "dtkAbstractDataFactory.h"
 #include "dtkAbstractDataReader.h"
 #include "dtkAbstractDataWriter.h"
@@ -29,73 +30,86 @@
 
 #include <QtGui>
 
-class dtkAbstractDataPrivate
+// /////////////////////////////////////////////////////////////////
+// dtkAbstractData implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkAbstractData::dtkAbstractData(dtkAbstractData *parent) : dtkAbstractObject(*new dtkAbstractDataPrivate, parent)
 {
-public:
-    QMap<QString, bool> readers;
-    QMap<QString, bool> writers;
-    QMap<QString, bool> converters;
-    QMap<QString, bool> serializers;
-    QMap<QString, bool> deserializers;
+    DTK_D(dtkAbstractData);
 
-    QString     path;
-    QStringList paths;
-
-    int numberOfChannels;
-
-    QList<QImage> thumbnails;
-};
-
-dtkAbstractData::dtkAbstractData(dtkAbstractData *parent) : dtkAbstractObject(parent), d(new dtkAbstractDataPrivate)
-{
     d->numberOfChannels = 0;
 }
 
-dtkAbstractData::dtkAbstractData(const dtkAbstractData& data) : dtkAbstractObject(), d(new dtkAbstractDataPrivate)
+dtkAbstractData::dtkAbstractData(const dtkAbstractData& other) : dtkAbstractObject(*new dtkAbstractDataPrivate(*other.d_func()), other)
 {
-    this->setParent(data.parent());
 
-    d->readers    = data.d->readers;
-    d->writers    = data.d->writers;
-    d->converters = data.d->converters;
-    d->serializers = data.d->serializers;
-    d->deserializers = data.d->deserializers;
 }
 
 dtkAbstractData::~dtkAbstractData(void)
 {
-    delete d;
 
-    d = NULL;
+}
+
+dtkAbstractData& dtkAbstractData::operator=(const dtkAbstractData& other)
+{
+    dtkAbstractObject::operator=(other);
+
+    DTK_D(dtkAbstractData);
+
+    d->readers       = other.d_func()->readers;
+    d->writers       = other.d_func()->writers;
+    d->converters    = other.d_func()->converters;
+    d->serializers   = other.d_func()->serializers;
+    d->deserializers = other.d_func()->deserializers;
+
+    d->path  = other.d_func()->path;
+    d->paths = other.d_func()->paths;
+    
+    d->numberOfChannels = other.d_func()->numberOfChannels;
+
+    d->thumbnails = other.d_func()->thumbnails;
 }
 
 void dtkAbstractData::addReader(const QString& reader)
 {
+    DTK_D(dtkAbstractData);
+
     d->readers.insert(reader, false);
 }
 
 void dtkAbstractData::addWriter(const QString& writer)
 {
+    DTK_D(dtkAbstractData);
+
     d->writers.insert(writer, false);
 }
 
 void dtkAbstractData::addConverter(const QString& converter)
 {
+    DTK_D(dtkAbstractData);
+
     d->converters.insert(converter, false);
 }
 
 void dtkAbstractData::addSerializer(const QString& serializer)
 {
+    DTK_D(dtkAbstractData);
+
     d->serializers.insert(serializer, false);
 }
 
 void dtkAbstractData::addDeserializer(const QString& deserializer)
 {
+    DTK_D(dtkAbstractData);
+
     d->deserializers.insert(deserializer, false);
 }
 
 void dtkAbstractData::enableReader(const QString& reader)
 {
+    DTK_D(dtkAbstractData);
+
     QMap<QString, bool>::iterator it(d->readers.find(reader));
 
     if (it != d->readers.end())
@@ -106,6 +120,8 @@ void dtkAbstractData::enableReader(const QString& reader)
 
 void dtkAbstractData::disableReader(const QString& reader)
 {
+    DTK_D(dtkAbstractData);
+
     QMap<QString, bool>::iterator it(d->readers.find(reader));
 
     if (it != d->readers.end())
@@ -114,6 +130,8 @@ void dtkAbstractData::disableReader(const QString& reader)
 
 void dtkAbstractData::enableWriter(const QString& writer)
 {
+    DTK_D(dtkAbstractData);
+
     QMap<QString, bool>::iterator it(d->writers.find(writer));
 
     if (it != d->writers.end())
@@ -124,6 +142,8 @@ void dtkAbstractData::enableWriter(const QString& writer)
 
 void dtkAbstractData::disableWriter(const QString& writer)
 {
+    DTK_D(dtkAbstractData);
+
     QMap<QString, bool>::iterator it(d->writers.find(writer));
 
     if (it != d->writers.end())
@@ -132,6 +152,8 @@ void dtkAbstractData::disableWriter(const QString& writer)
 
 void dtkAbstractData::enableConverter(const QString& converter)
 {
+    DTK_D(dtkAbstractData);
+
     QMap<QString, bool>::iterator it(d->converters.find(converter));
 
     if (it != d->converters.end())
@@ -142,6 +164,8 @@ void dtkAbstractData::enableConverter(const QString& converter)
 
 void dtkAbstractData::disableConverter(const QString& converter)
 {
+    DTK_D(dtkAbstractData);
+
     QMap<QString, bool>::iterator it(d->converters.find(converter));
 
     if (it != d->converters.end())
@@ -150,6 +174,8 @@ void dtkAbstractData::disableConverter(const QString& converter)
 
 void dtkAbstractData::enableSerializer(const QString& serializer)
 {
+    DTK_D(dtkAbstractData);
+
     QMap<QString, bool>::iterator it(d->serializers.find(serializer));
 
     if (it != d->serializers.end())
@@ -160,6 +186,8 @@ void dtkAbstractData::enableSerializer(const QString& serializer)
 
 void dtkAbstractData::disableSerializer(const QString& serializer)
 {
+    DTK_D(dtkAbstractData);
+
     QMap<QString, bool>::iterator it(d->serializers.find(serializer));
 
     if (it != d->serializers.end())
@@ -168,6 +196,8 @@ void dtkAbstractData::disableSerializer(const QString& serializer)
 
 void dtkAbstractData::enableDeserializer(const QString& deserializer)
 {
+    DTK_D(dtkAbstractData);
+
     QMap<QString, bool>::iterator it(d->deserializers.find(deserializer));
 
     if (it != d->deserializers.end())
@@ -178,6 +208,8 @@ void dtkAbstractData::enableDeserializer(const QString& deserializer)
 
 void dtkAbstractData::disableDeserializer(const QString& deserializer)
 {
+    DTK_D(dtkAbstractData);
+
     QMap<QString, bool>::iterator it(d->deserializers.find(deserializer));
 
     if (it != d->deserializers.end())
@@ -186,6 +218,8 @@ void dtkAbstractData::disableDeserializer(const QString& deserializer)
 
 dtkAbstractDataReader *dtkAbstractData::reader(const QString& type)
 {
+    DTK_D(dtkAbstractData);
+
     QMap<QString, bool>::const_iterator it(d->readers.find(type));
 
     if (it != d->readers.end() && (it.value() == true))
@@ -196,6 +230,8 @@ dtkAbstractDataReader *dtkAbstractData::reader(const QString& type)
 
 dtkAbstractDataWriter *dtkAbstractData::writer(const QString& type)
 {
+    DTK_D(dtkAbstractData);
+
     QMap<QString, bool>::const_iterator it(d->writers.find(type));
 
     if (it != d->writers.end() && (it.value() == true))
@@ -206,6 +242,8 @@ dtkAbstractDataWriter *dtkAbstractData::writer(const QString& type)
 
 dtkAbstractDataConverter *dtkAbstractData::converter(const QString& type)
 {
+    DTK_D(dtkAbstractData);
+
     QMap<QString, bool>::const_iterator it(d->converters.find(type));
 
     if (it != d->converters.end() && (it.value() == true))
@@ -216,6 +254,8 @@ dtkAbstractDataConverter *dtkAbstractData::converter(const QString& type)
 
 dtkAbstractDataSerializer *dtkAbstractData::serializer(const QString& type)
 {
+    DTK_D(dtkAbstractData);
+
     QMap<QString, bool>::const_iterator it(d->serializers.find(type));
 
     if (it != d->serializers.end() && (it.value() == true))
@@ -226,6 +266,8 @@ dtkAbstractDataSerializer *dtkAbstractData::serializer(const QString& type)
 
 dtkAbstractDataDeserializer *dtkAbstractData::deserializer(const QString& type)
 {
+    DTK_D(dtkAbstractData);
+
     QMap<QString, bool>::const_iterator it(d->deserializers.find(type));
 
     if (it != d->deserializers.end() && (it.value() == true))
@@ -237,11 +279,15 @@ dtkAbstractDataDeserializer *dtkAbstractData::deserializer(const QString& type)
 
 int dtkAbstractData::numberOfChannels(void)
 {
+    DTK_D(dtkAbstractData);
+
     return d->numberOfChannels;
 }
 
 void dtkAbstractData::setNumberOfChannels(int number)
 {
+    DTK_D(dtkAbstractData);
+
     d->numberOfChannels = number;
 }
 
@@ -252,6 +298,8 @@ void dtkAbstractData::update(void)
 
 bool dtkAbstractData::read(const QString& file)
 {
+    DTK_D(dtkAbstractData);
+
     bool read = false;
 
     dtkAbstractDataFactory *factoryInstance = dtkAbstractDataFactory::instance();
@@ -285,6 +333,8 @@ bool dtkAbstractData::read(const QString& file)
 
 bool dtkAbstractData::read(const QStringList& files)
 {
+    DTK_D(dtkAbstractData);
+
     bool read = false;
 
     dtkAbstractDataFactory *factoryInstance = dtkAbstractDataFactory::instance();
@@ -319,6 +369,8 @@ bool dtkAbstractData::read(const QStringList& files)
 
 bool dtkAbstractData::write(const QString& file)
 {
+    DTK_D(dtkAbstractData);
+
     bool written = false;
 
     dtkAbstractDataFactory *factoryInstance = dtkAbstractDataFactory::instance();
@@ -346,6 +398,8 @@ bool dtkAbstractData::write(const QString& file)
 
 bool dtkAbstractData::write(const QStringList& files)
 {
+    DTK_D(dtkAbstractData);
+
     bool written = false;
 
     dtkAbstractDataFactory *factoryInstance = dtkAbstractDataFactory::instance();
@@ -374,6 +428,8 @@ bool dtkAbstractData::write(const QStringList& files)
 
 dtkAbstractData *dtkAbstractData::convert(const QString& toType)
 {
+    DTK_D(dtkAbstractData);
+
     dtkAbstractData *conversion = NULL;
 
     for (QMap<QString, bool>::const_iterator it(d->converters.begin()); it!= d->converters.end() && !conversion ; ++it) {
@@ -403,6 +459,8 @@ dtkAbstractData *dtkAbstractData::convert(const QString& toType)
 
 QByteArray *dtkAbstractData::serialize(void)
 {
+    DTK_D(dtkAbstractData);
+
     QByteArray *array = NULL;
 
     for (QMap<QString, bool>::const_iterator it(d->serializers.begin()); it!= d->serializers.end() && array == NULL ; ++it) {
@@ -425,6 +483,7 @@ QByteArray *dtkAbstractData::serialize(void)
 
 bool dtkAbstractData::deserialize(const QByteArray &array)
 {
+    DTK_D(dtkAbstractData);
 
     bool deserialized = false;
 
@@ -449,16 +508,22 @@ bool dtkAbstractData::deserialize(const QByteArray &array)
 
 QString dtkAbstractData::path(void)
 {
+    DTK_D(dtkAbstractData);
+
     return d->path;
 }
 
 QStringList dtkAbstractData::paths(void)
 {
+    DTK_D(dtkAbstractData);
+
     return d->paths;
 }
 
-QImage& dtkAbstractData::thumbnail(void) const
+QImage& dtkAbstractData::thumbnail(void)
 {
+    DTK_D(dtkAbstractData);
+
     QImage *image = new QImage(128, 128, QImage::Format_RGB32);
     
     QPainter painter(image);
@@ -471,8 +536,10 @@ QImage& dtkAbstractData::thumbnail(void) const
     return (*image);
 }
 
-QList<QImage>& dtkAbstractData::thumbnails(void) const
+QList<QImage>& dtkAbstractData::thumbnails(void)
 {
+    DTK_D(dtkAbstractData);
+
     return d->thumbnails;
 }
 

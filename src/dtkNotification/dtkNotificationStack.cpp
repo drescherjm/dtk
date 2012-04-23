@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Apr 22 15:13:24 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Apr 22 22:28:46 2012 (+0200)
+ * Last-Updated: Mon Apr 23 16:28:50 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 42
+ *     Update #: 110
  */
 
 /* Commentary: 
@@ -17,6 +17,8 @@
  * 
  */
 
+#include "dtkNotifiable.h"
+#include "dtkNotification.h"
 #include "dtkNotificationEvent.h"
 #include "dtkNotificationStack.h"
 
@@ -27,11 +29,27 @@ class dtkNotificationStackPrivate
 public:
     QStack<dtkNotificationEvent>     persistent;
     QStack<dtkNotificationEvent> non_persistent;
+
+public:
+    QList<dtkNotifiable *> notifiables;
+
+public:
+    QTimer timer;
 };
+
+dtkNotificationStack *dtkNotificationStack::instance(void)
+{
+    if(!s_instance)
+        s_instance = new dtkNotificationStack;
+
+    return s_instance;
+}
 
 dtkNotificationStack::dtkNotificationStack(QObject *parent) : QObject(parent), d(new dtkNotificationStackPrivate)
 {
-    
+    d->timer.setSingleShot(true);
+
+    connect(&(d->timer), SIGNAL(timeout()), this, SLOT(idle()));
 }
 
 dtkNotificationStack::~dtkNotificationStack(void)
@@ -44,17 +62,29 @@ dtkNotificationStack::~dtkNotificationStack(void)
     d = NULL;
 }
 
+void dtkNotificationStack::registerNotifiable(dtkNotifiable *notifiable)
+{
+    d->notifiables << notifiable;
+}
+
+void dtkNotificationStack::dismiss(void)
+{
+    d->timer.stop();
+
+    this->idle();
+}
+
 void dtkNotificationStack::push(dtkNotificationEvent *event)
 {
     dtkNotificationEvent e = (*event);
 
     switch(event->type()) {
     case dtkNotificationEvent::Persistent:
-        d->persistent.push(dtkNotificationEvent(e));
+        d->persistent.push_front(dtkNotificationEvent(e));
         this->idle();
         break;
     case dtkNotificationEvent::NonPersistent:
-        d->non_persistent.push(dtkNotificationEvent(e));
+        d->non_persistent.push_front(dtkNotificationEvent(e));
         this->idle();
         break;
     }
@@ -62,15 +92,30 @@ void dtkNotificationStack::push(dtkNotificationEvent *event)
 
 void dtkNotificationStack::idle(void)
 {
-    // this->clear();
+   foreach(dtkNotifiable *notifiable, d->notifiables) {
+       notifiable->setPersistentCount(d->persistent.count());
+       notifiable->setNonPersistentCount(d->non_persistent.count());
+   }
+
+    if(d->timer.isActive())
+        return;
+    
+    foreach(dtkNotifiable *notifiable, d->notifiables) {
+        notifiable->clear();
+        notifiable->dismissible(false);
+    }
 
     if(!d->non_persistent.isEmpty()) {
 
         dtkNotificationEvent event = d->non_persistent.pop();
         
-        // this->setText(event->message);
-        
-        QTimer::singleShot(event.duration(), this, SLOT(idle()));
+        foreach(dtkNotifiable *notifiable, d->notifiables) {
+
+            notifiable->display(event.message());
+            notifiable->dismissible(true);
+        }
+
+        d->timer.start(event.duration());
 
         return;
     }
@@ -79,7 +124,8 @@ void dtkNotificationStack::idle(void)
 
         dtkNotificationEvent event = d->persistent.pop();
         
-        // this->setText(event->message);
+        foreach(dtkNotifiable *notifiable, d->notifiables)
+            notifiable->display(event.message());
 
         d->persistent.push_front(event);
 
@@ -88,3 +134,15 @@ void dtkNotificationStack::idle(void)
         return;
     }
 }
+
+bool dtkNotificationStack::event(QEvent *event)
+{
+    if(event->type() != dtkNotificationEventType)
+        return QObject::event(event);
+
+    this->push(static_cast<dtkNotificationEvent *>(event));
+
+    return true;
+}
+
+dtkNotificationStack *dtkNotificationStack::s_instance = NULL;

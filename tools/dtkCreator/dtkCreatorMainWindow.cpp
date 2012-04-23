@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Apr 21 19:19:25 2012 (+0200)
+ * Last-Updated: Mon Apr 23 15:23:23 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1621
+ *     Update #: 1622
  */
 
 /* Commentary:
@@ -186,8 +186,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     // -- Toolbar
 
-    QToolBar *mainToolBar;
-    mainToolBar = this->addToolBar(tr("Main"));
+    QToolBar *mainToolBar = this->addToolBar(tr("Main"));
     mainToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     mainToolBar->setIconSize(QSize(32, 32));
     

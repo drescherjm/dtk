@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Apr 19 21:48:39 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 19 22:36:26 2012 (+0200)
+ * Last-Updated: Mon Apr 23 16:30:15 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 17
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -18,9 +18,9 @@
  */
 
 #include "dtkNotification.h"
+#include "dtkNotificationStack.h"
 
 #include <QtGui>
-
 
 void dtkNotify(const QString& message)
 {
@@ -43,6 +43,8 @@ void dtkNotify(const QString& message, int duration)
 
 void dtkNotify(dtkNotificationEvent *event)
 {
-    foreach (QWidget *widget, QApplication::topLevelWidgets())
-        QApplication::postEvent(widget, event);
+    // foreach (QWidget *widget, QApplication::topLevelWidgets())
+    // QApplication::postEvent(widget, event);
+
+    QApplication::postEvent(dtkNotificationStack::instance(), event);
 }

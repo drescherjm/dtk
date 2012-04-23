@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mars 28 09:07:20 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 238
+ * Last-Updated: Mon Apr 23 16:26:16 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 243
  */
 
 /* Commentary:
@@ -31,15 +31,23 @@ class dtkAbstractDataSerializer;
 class dtkAbstractDataDeserializer;
 class dtkAbstractDataPrivate;
 
+// /////////////////////////////////////////////////////////////////
+// dtkAbstractData interface
+// /////////////////////////////////////////////////////////////////
+
 class DTKCORE_EXPORT dtkAbstractData : public dtkAbstractObject
 {
     Q_OBJECT
 
 public:
              dtkAbstractData(      dtkAbstractData *parent = 0);
-             dtkAbstractData(const dtkAbstractData& data);
+             dtkAbstractData(const dtkAbstractData& other);
     virtual ~dtkAbstractData(void);
 
+public:
+    dtkAbstractData& operator = (const dtkAbstractData& other);
+
+public:
     friend DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractData& data);
     friend DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractData *data);
 
@@ -118,8 +126,8 @@ public slots:
     QString     path(void);
     QStringList paths(void);
 
-    virtual       QImage & thumbnail(void)  const;
-    virtual QList<QImage>& thumbnails(void) const;
+    virtual       QImage & thumbnail(void) ;
+    virtual QList<QImage>& thumbnails(void);
 
 public:
     virtual bool casts(const QString& type);
@@ -130,7 +138,7 @@ public:
     virtual operator double (void);
 
 private:
-    dtkAbstractDataPrivate *d;
+    DTK_DECLARE_PRIVATE(dtkAbstractData);
 };
 
 DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractData& data);

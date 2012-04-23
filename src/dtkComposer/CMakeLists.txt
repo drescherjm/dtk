@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Apr 18 15:25:58 2012 (+0200)
-##           By: Julien Wintz
-##     Update #: 499
+## Last-Updated: lun. avril 23 11:29:11 2012 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 501
 ######################################################################
 ##
 ### Commentary:
@@ -67,6 +67,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeProxy.h
   dtkComposerNodeReal.h
   dtkComposerNodeString.h
+  dtkComposerNodeStringOperator.h
   dtkComposerNodeVector.h
   dtkComposerNodeVectorOperator.h
   dtkComposerScene.h
@@ -157,6 +158,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeProxy.cpp
   dtkComposerNodeReal.cpp
   dtkComposerNodeString.cpp
+  dtkComposerNodeStringOperator.cpp
   dtkComposerNodeVector.cpp
   dtkComposerNodeVectorOperator.cpp
   dtkComposerScene.cpp

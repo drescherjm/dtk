@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr 20 21:06:30 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 12:04:51 2012 (+0200)
+ * Last-Updated: Mon Apr 23 14:46:47 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 18
+ *     Update #: 36
  */
 
 /* Commentary: 
@@ -35,11 +35,13 @@ public:
      dtkNotificationDisplay(QWidget *parent = 0);
     ~dtkNotificationDisplay(void);
 
-public:
+public slots:
     void clear(void);
-
-public:
+    void dismiss(void);
+    void dismissible(bool dismissible);
     void display(const QString& message);
+    void setPersistentCount(int count);
+    void setNonPersistentCount(int count);
 
 public:
     QSize sizeHint(void) const;

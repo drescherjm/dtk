@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr 20 21:18:43 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Apr 21 20:11:46 2012 (+0200)
+ * Last-Updated: Mon Apr 23 15:30:00 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 23
+ *     Update #: 57
  */
 
 /* Commentary: 
@@ -19,6 +19,8 @@
 
 #include <QtCore>
 #include <QtGui>
+
+#include <dtkGui>
 
 #include <dtkNotification/dtkNotification.h>
 #include <dtkNotification/dtkNotificationDisplay.h>
@@ -36,8 +38,8 @@ public:
 
     void run(void) {
         while(this->count) {
-            dtkNotify(QString::number(this->count++), 500);
-            msleep(1000);
+            dtkNotify(QString::number(this->count++), 10000);
+            msleep(2000);
         }
     }
 
@@ -53,15 +55,47 @@ private:
 // 
 // /////////////////////////////////////////////////////////////////
 
+class tstMainWindow : public QMainWindow
+{
+public:
+     tstMainWindow(QWidget *parent = 0);
+    ~tstMainWindow(void);
+
+private:
+    dtkNotificationDisplay *display;
+};
+
+tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
+{
+    this->display = new dtkNotificationDisplay(this);
+
+    QToolBar *mainToolBar = this->addToolBar(tr("Main"));
+    mainToolBar->addWidget(new dtkSpacer(this));
+    mainToolBar->addWidget(this->display);
+    mainToolBar->addWidget(new dtkSpacer(this));
+
+    this->setUnifiedTitleAndToolBarOnMac(true);
+    this->setWindowTitle("dtk notification example");
+}
+
+tstMainWindow::~tstMainWindow(void)
+{
+    
+}
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
 int main(int argc, char **argv)
 {
     QApplication application(argc, argv);
 
-    dtkNotificationDisplay *display = new dtkNotificationDisplay;
-    display->setAutoFillBackground(false);
-    display->setWindowFlags(Qt::FramelessWindowHint);
-    display->show();
-    display->raise();
+    dtkNotificationDisplay *window = new dtkNotificationDisplay;
+
+    // tstMainWindow *window = new tstMainWindow;
+    window->show();
+    window->raise();
 
     NotificationProducer producer;
     producer.start();
@@ -71,7 +105,7 @@ int main(int argc, char **argv)
     producer.stop();
     producer.wait();
 
-    delete display;
+    delete window;
 
     return status;
 }

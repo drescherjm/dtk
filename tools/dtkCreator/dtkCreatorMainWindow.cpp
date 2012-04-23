@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 18 21:38:08 2012 (+0200)
+ * Last-Updated: Mon Apr 23 15:23:23 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1617
+ *     Update #: 1622
  */
 
 /* Commentary:
@@ -44,29 +44,11 @@
 #include <dtkLog/dtkLog.h>
 #include <dtkLog/dtkLogView.h>
 
+#include <dtkNotification/dtkNotification.h>
+#include <dtkNotification/dtkNotificationDisplay.h>
+
 #include <QtCore>
 #include <QtGui>
-
-// /////////////////////////////////////////////////////////////////
-// dtkCreatorMainWindowControls
-// /////////////////////////////////////////////////////////////////
-
-dtkCreatorMainWindowControls::dtkCreatorMainWindowControls(QWidget *parent) : QFrame(parent)
-{
-    this->setFixedHeight(46);
-
-    this->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-}
-
-dtkCreatorMainWindowControls::~dtkCreatorMainWindowControls(void)
-{
-
-}
-
-QSize dtkCreatorMainWindowControls::sizeHint(void) const
-{
-    return QSize(350, 46);
-}
 
 // /////////////////////////////////////////////////////////////////
 // dtkCreatorMainWindowPrivate
@@ -204,8 +186,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     // -- Toolbar
 
-    QToolBar *mainToolBar;
-    mainToolBar = this->addToolBar(tr("Main"));
+    QToolBar *mainToolBar = this->addToolBar(tr("Main"));
     mainToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     mainToolBar->setIconSize(QSize(32, 32));
     
@@ -257,7 +238,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     buttons_layout->addWidget(debug_button);
 
     mainToolBar->addWidget(new dtkSpacer(this));
-    mainToolBar->addWidget(new dtkCreatorMainWindowControls(this));
+    mainToolBar->addWidget(new dtkNotificationDisplay(this));
     mainToolBar->addWidget(new dtkSpacer(this));
     mainToolBar->addWidget(buttons);
 

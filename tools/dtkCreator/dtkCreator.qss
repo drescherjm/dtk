@@ -4,9 +4,9 @@
 ;; Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ;; Created: Thu Mar 15 12:05:17 2012 (+0100)
 ;; Version: $Id$
-;; Last-Updated: Thu Apr 19 16:07:33 2012 (+0200)
+;; Last-Updated: Sat Apr 21 18:35:42 2012 (+0200)
 ;;           By: Julien Wintz
-;;     Update #: 401
+;;     Update #: 403
 */
 
 /*Commentary: 
@@ -16,26 +16,6 @@
 /*Change log:
 ;; 
 */
-
-/* dtkCreatorMainWindowControls ***************/
-
-dtkCreatorMainWindowControls:active {
-    color: black;
-    border-image: url(:dtkCreator/pixmaps/dtkCreatorToolbarControls_Background_Active.png) 5 5 7 5;
-    border-top: 5px transparent;
-    border-right: 5px transparent;
-    border-bottom: 7px transparent;
-    border-left: 5px transparent;
-}
-
-dtkCreatorMainWindowControls:!active {
-    color: black;
-    border-image: url(:dtkCreator/pixmaps/dtkCreatorToolbarControls_Background_Inactive.png) 5 5 7 5;
-    border-top: 5px transparent;
-    border-right: 5px transparent;
-    border-bottom: 7px transparent;
-    border-left: 5px transparent
-}
 
 QFrame#dtkCreatorMainWindowSegmentedButtons QPushButton {
     font-size: 10px;

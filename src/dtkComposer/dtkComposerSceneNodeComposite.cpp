@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. avril 19 13:19:14 2012 (+0200)
+ * Last-Updated: ven. avril 20 16:19:50 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 828
+ *     Update #: 836
  */
 
 /* Commentary: 
@@ -642,6 +642,8 @@ void dtkComposerSceneNodeComposite::dropEvent(QGraphicsSceneDragDropEvent *event
 
     remote->setJob(job);
     remote->setController(controller);
+    this->setTitle("Remote on "+ job);
 
     event->acceptProposedAction();
+    this->update();
 }

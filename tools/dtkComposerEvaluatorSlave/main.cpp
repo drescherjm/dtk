@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Oct 27 14:10:37 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. avril 13 14:06:26 2012 (+0200)
+ * Last-Updated: ven. avril 20 09:56:52 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 258
+ *     Update #: 262
  */
 
 /* Commentary: 
@@ -60,7 +60,9 @@ int main(int argc, char **argv)
 
     slave->setInternalCommunicator(communicator);
     slave->setServer(url);
-    int value = slave->exec();
+
+    int value;
+    do value = slave->exec(); while (value  == 0);
 
     dtkPluginManager::instance()->uninitialize();
 

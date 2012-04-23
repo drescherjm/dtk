@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 16 09:54:33 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 16 12:04:55 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 144
+ * Last-Updated: Mon Apr 23 10:47:27 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 148
  */
 
 /* Commentary: 
@@ -112,6 +112,43 @@
 #endif
 
 #define dtkxarch_ptr quintptr
+
+////////////////////////////////////////////////////
+// Macro declaring private class in public class
+////////////////////////////////////////////////////
+
+#define DTK_DECLARE_PRIVATE(Class) \
+    protected: \
+    Class(Class##Private& dd, Class *parent); \
+    Class(Class##Private& dd, const Class& other); \
+    inline Class##Private* d_func(void) { return reinterpret_cast<Class##Private *>(dtkAbstractObject::d_func()); } \
+    inline const Class##Private* d_func(void) const { return reinterpret_cast<const Class##Private *>(dtkAbstractObject::d_func()); } \
+    private: \
+    friend class Class##Private;
+
+////////////////////////////////////////////////////
+// Macro implementing inline constructor of public class
+////////////////////////////////////////////////////
+
+#define DTK_IMPLEMENT_PRIVATE(Class, Parent) \
+    inline Class::Class(Class##Private& dd, Class *p) : Parent(dd, p) { }  \
+    inline Class::Class(Class##Private& dd, const Class& o) : Parent(dd, o) { }
+
+////////////////////////////////////////////////////
+// Macro declaring public class in private one
+////////////////////////////////////////////////////
+
+#define DTK_DECLARE_PUBLIC(Class)                                  \
+    inline Class* q_func() { return reinterpret_cast<Class *>(q_ptr); } \
+    inline const Class* q_func() const { return reinterpret_cast<const Class *>(q_ptr); } \
+    friend class Class;
+
+// /////////////////////////////////////////////////////////////////
+// Macros retieving either d-pointer or q-pointer in the right type
+// /////////////////////////////////////////////////////////////////
+
+#define DTK_D(Class) Class##Private *const d = d_func()
+#define DTK_Q(Class) Class *const q = q_func()
 
 // /////////////////////////////////////////////////////////////////
 // Helper functions

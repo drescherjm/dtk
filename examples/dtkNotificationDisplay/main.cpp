@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr 20 21:18:43 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 15:30:00 2012 (+0200)
+ * Last-Updated: Mon Apr 23 16:29:09 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 57
+ *     Update #: 58
  */
 
 /* Commentary: 
@@ -91,9 +91,7 @@ int main(int argc, char **argv)
 {
     QApplication application(argc, argv);
 
-    dtkNotificationDisplay *window = new dtkNotificationDisplay;
-
-    // tstMainWindow *window = new tstMainWindow;
+    tstMainWindow *window = new tstMainWindow;
     window->show();
     window->raise();
 

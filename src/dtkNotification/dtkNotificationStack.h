@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Apr 22 15:11:20 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 14:07:01 2012 (+0200)
+ * Last-Updated: Mon Apr 23 16:26:44 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 17
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -33,6 +33,9 @@ class DTKNOTIFICATION_EXPORT dtkNotificationStack : public QObject
     Q_OBJECT
 
 public:
+    static dtkNotificationStack *instance(void);
+
+private:
      dtkNotificationStack(QObject *parent = 0);
     ~dtkNotificationStack(void);
 
@@ -48,8 +51,14 @@ public:
 protected slots:
     void idle(void);
 
+public:
+    bool event(QEvent *event);
+
 private:
     dtkNotificationStackPrivate *d;
+
+private:
+    static dtkNotificationStack *s_instance;
 };
 
 #endif

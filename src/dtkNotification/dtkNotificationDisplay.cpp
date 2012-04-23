@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr 20 21:07:54 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 15:15:24 2012 (+0200)
+ * Last-Updated: Mon Apr 23 16:35:03 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 140
+ *     Update #: 146
  */
 
 /* Commentary: 
@@ -30,9 +30,6 @@ class dtkNotificationDisplayPrivate
 {
 public:
     QString read(const QString& path);
-
-public:
-    dtkNotificationStack *stack;
 
 public:
     QLabel *message;
@@ -65,8 +62,7 @@ QString dtkNotificationDisplayPrivate::read(const QString& path)
 
 dtkNotificationDisplay::dtkNotificationDisplay(QWidget *parent) : QFrame(parent), d(new dtkNotificationDisplayPrivate)
 {
-    d->stack = new dtkNotificationStack(this);
-    d->stack->registerNotifiable(this);
+    dtkNotificationStack::instance()->registerNotifiable(this);
 
     d->message = new QLabel(this);
 
@@ -130,7 +126,7 @@ void dtkNotificationDisplay::clear(void)
 
 void dtkNotificationDisplay::dismiss(void)
 {
-    d->stack->dismiss();
+    dtkNotificationStack::instance()->dismiss();
 }
 
 void dtkNotificationDisplay::dismissible(bool dismissible)
@@ -160,14 +156,4 @@ void dtkNotificationDisplay::setNonPersistentCount(int count)
 QSize dtkNotificationDisplay::sizeHint(void) const
 {
     return QSize(350, 46);
-}
-
-bool dtkNotificationDisplay::event(QEvent *event)
-{
-    if(event->type() != dtkNotificationEventType)
-        return QFrame::event(event);
-
-    d->stack->push(static_cast<dtkNotificationEvent *>(event));
-
-    return true;
 }

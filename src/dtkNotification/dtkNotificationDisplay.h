@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr 20 21:06:30 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 14:46:47 2012 (+0200)
+ * Last-Updated: Mon Apr 23 16:11:44 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 36
+ *     Update #: 37
  */
 
 /* Commentary: 
@@ -45,9 +45,6 @@ public slots:
 
 public:
     QSize sizeHint(void) const;
-
-public:
-    bool event(QEvent *event);
 
 private:
     dtkNotificationDisplayPrivate *d;

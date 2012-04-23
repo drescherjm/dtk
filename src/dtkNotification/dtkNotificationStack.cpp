@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Apr 22 15:13:24 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 15:18:23 2012 (+0200)
+ * Last-Updated: Mon Apr 23 16:28:50 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 97
+ *     Update #: 110
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include "dtkNotifiable.h"
+#include "dtkNotification.h"
 #include "dtkNotificationEvent.h"
 #include "dtkNotificationStack.h"
 
@@ -35,6 +36,14 @@ public:
 public:
     QTimer timer;
 };
+
+dtkNotificationStack *dtkNotificationStack::instance(void)
+{
+    if(!s_instance)
+        s_instance = new dtkNotificationStack;
+
+    return s_instance;
+}
 
 dtkNotificationStack::dtkNotificationStack(QObject *parent) : QObject(parent), d(new dtkNotificationStackPrivate)
 {
@@ -125,3 +134,15 @@ void dtkNotificationStack::idle(void)
         return;
     }
 }
+
+bool dtkNotificationStack::event(QEvent *event)
+{
+    if(event->type() != dtkNotificationEventType)
+        return QObject::event(event);
+
+    this->push(static_cast<dtkNotificationEvent *>(event));
+
+    return true;
+}
+
+dtkNotificationStack *dtkNotificationStack::s_instance = NULL;

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Thu Apr 19 16:22:28 2012 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Apr 19 22:04:32 2012 (+0200)
+## Last-Updated: Sun Apr 22 16:06:38 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 15
+##     Update #: 29
 ######################################################################
 ## 
 ### Commentary: 
@@ -25,13 +25,22 @@ project(dtkNotification)
 
 set(${PROJECT_NAME}_HEADERS
   dtkNotification.h
-  dtkNotificationEvent.h)
+  dtkNotificationDisplay.h
+  dtkNotificationEvent.h
+  dtkNotificationStack.h)
 
-set(${PROJECT_NAME}_HEADERS_MOC)
+set(${PROJECT_NAME}_HEADERS_MOC
+  dtkNotificationDisplay.h
+  dtkNotificationStack.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkNotification.cpp
-  dtkNotificationEvent.cpp)
+  dtkNotificationDisplay.cpp
+  dtkNotificationEvent.cpp
+  dtkNotificationStack.cpp)
+
+set(${PROJECT_NAME}_RESOURCES
+  dtkNotification.qrc)
 
 ## #################################################################
 ## Build rules
@@ -50,11 +59,14 @@ endif(NOT WIN32)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
+qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
+
 if(BUILD_SHARED_LIBS)
 
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
+  ${${PROJECT_NAME}_SOURCES_QRC}
   ${${PROJECT_NAME}_SOURCES_MOC})
 
 else(BUILD_SHARED_LIBS)
@@ -62,6 +74,7 @@ else(BUILD_SHARED_LIBS)
 add_library(${PROJECT_NAME} STATIC
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
+  ${${PROJECT_NAME}_SOURCES_QRC}
   ${${PROJECT_NAME}_SOURCES_MOC})
 
 endif(BUILD_SHARED_LIBS)

@@ -27,8 +27,5 @@
     <file>pixmaps/dtkCreatorToolbarButton_Stop_Inactive.png</file>
     <file>pixmaps/dtkCreatorToolbarButton_Stop_Pressed.png</file>
     <file>pixmaps/dtkCreatorToolbarButton_Continue_Active.png</file>
-
-    <file>pixmaps/dtkCreatorToolbarControls_Background_Active.png</file>
-    <file>pixmaps/dtkCreatorToolbarControls_Background_Inactive.png</file>
   </qresource>
 </RCC>

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr 20 21:07:54 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 16:35:03 2012 (+0200)
+ * Last-Updated: Mon Apr 23 22:23:07 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 146
+ *     Update #: 147
  */
 
 /* Commentary: 
@@ -103,7 +103,7 @@ dtkNotificationDisplay::dtkNotificationDisplay(QWidget *parent) : QFrame(parent)
     this->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     this->setStyleSheet(d->read(":dtkNotification/dtkNotificationDisplay.qss"));
 
-    connect(d->clse, SIGNAL(pressed()), this, SLOT(dismiss()));
+    connect(d->clse, SIGNAL(released()), this, SLOT(dismiss()));
 }
 
 dtkNotificationDisplay::~dtkNotificationDisplay(void)

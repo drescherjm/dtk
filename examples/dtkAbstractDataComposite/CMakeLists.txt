@@ -4,9 +4,9 @@
 ## Copyright (C) 2011 - Thibaud Kloczko, Inria.
 ## Created: Mon Sep 26 09:27:41 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Apr  4 10:27:10 2012 (+0200)
-##           By: tkloczko
-##     Update #: 23
+## Last-Updated: Mon Apr 23 21:38:53 2012 (+0200)
+##           By: Julien Wintz
+##     Update #: 24
 ######################################################################
 ## 
 ### Commentary: 
@@ -36,4 +36,3 @@ target_link_libraries(${PROJECT_NAME}
   dtkCore
   dtkGui
   dtkLog)
-  

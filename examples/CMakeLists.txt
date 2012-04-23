@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:06:43 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Mar  2 15:20:31 2012 (+0100)
+## Last-Updated: Fri Apr 20 21:18:25 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 81
+##     Update #: 82
 ######################################################################
 ## 
 ### Commentary: 
@@ -23,6 +23,12 @@
 
 add_subdirectory(dtkLogger)
 add_subdirectory(dtkLogView)
+
+## #################################################################
+## dtkNotification examples
+## #################################################################
+
+add_subdirectory(dtkNotificationDisplay)
 
 ## #################################################################
 ## dtkCrypto examples

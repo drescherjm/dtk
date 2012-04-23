@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: mer. avril 11 15:28:11 2012 (+0200)
+ * Last-Updated: lun. avril 23 11:44:13 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 511
+ *     Update #: 516
  */
 
 /* Commentary:
@@ -39,6 +39,7 @@
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
+#include "dtkComposerNodeStringOperator.h"
 #include "dtkComposerNodeVector.h"
 #include "dtkComposerSceneNodeLeaf.h"
 #include "dtkComposerNodeRemote.h"
@@ -123,6 +124,11 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["Acos"] = "<p>Description not yet filled!</p>";
     d->tags["Acos"] = QStringList() << "number" << "operator" << "unary" << "acos";
     d->types["Acos"] = "acos";
+
+    d->nodes << "Append";
+    d->descriptions["Append"] = "<p>Description not yet filled!</p>";
+    d->tags["Append"] = QStringList() << "concatenate" << "operator" << "append" << "string";
+    d->types["Append"] = "append";
 
     d->nodes << "Asin";
     d->descriptions["Asin"] = "<p>Description not yet filled!</p>";
@@ -534,6 +540,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "atan")
         return new dtkComposerNodeNumberOperatorUnaryAtan;
+
+    if (type == "append")
+        return new dtkComposerNodeStringOperatorBinaryAppend;
 
     if (type =="ceil")
         return new dtkComposerNodeNumberOperatorUnaryCeil;

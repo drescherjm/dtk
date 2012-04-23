@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. avril 19 13:07:05 2012 (+0200)
+ * Last-Updated: lun. avril 23 14:25:38 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 1563
+ *     Update #: 1564
  */
 
 /* Commentary: 
@@ -510,7 +510,6 @@ void dtkDistributedController::read(void)
         result = msg->content();
         dtkDebug() << "Result: " << result;
         emit dataPosted(result);
-        emit updated();
         break;
     default:
         dtkDebug() << "unknown response from server ";

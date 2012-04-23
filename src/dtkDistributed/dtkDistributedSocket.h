@@ -4,7 +4,7 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. avril 19 13:07:34 2012 (+0200)
+ * Last-Updated: lun. avril 23 17:29:05 2012 (+0200)
  *           By: Nicolas Niclausse
  *     Update #:
  */
@@ -46,9 +46,6 @@ public:
 
 public:
     dtkDistributedMessage *parseRequest(void);
-
-public:
-    bool waitForData(int max_wait = 300000);
 
 private:
     dtkDistributedSocketPrivate *d;

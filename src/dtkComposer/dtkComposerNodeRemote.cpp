@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: ven. avril 20 16:23:05 2012 (+0200)
+ * Last-Updated: lun. avril 23 17:26:10 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 493
+ *     Update #: 521
  */
 
 /* Commentary:
@@ -66,7 +66,7 @@ dtkComposerNodeRemote::dtkComposerNodeRemote(void) : dtkComposerNodeComposite(),
     d->controller = NULL;
     d->slave      = NULL;
     d->server     = NULL;
-    d->title = "Remote";
+    d->title      = "Remote";
 }
 
 dtkComposerNodeRemote::~dtkComposerNodeRemote(void)
@@ -97,10 +97,6 @@ void dtkComposerNodeRemote::setController(dtkDistributedController *controller)
     if (d->jobid.isEmpty())
         dtkWarn() <<  "No job id while setting controller !";
     d->controller = controller;
-    if (!d->server) {
-        d->server = new dtkDistributedCommunicatorTcp;
-        d->server->connectToHost(controller->socket(d->jobid)->peerAddress().toString(),controller->socket(d->jobid)->peerPort());
-    }
 }
 
 void dtkComposerNodeRemote::setSlave(dtkDistributedSlave *slave)
@@ -128,7 +124,18 @@ bool dtkComposerNodeRemote::isSlave(void)
 void dtkComposerNodeRemote::begin(void)
 {
     if (d->controller) {
-        // send sub-composition to rank 0 on remote node
+        if (!d->server) {
+            d->server = new dtkDistributedCommunicatorTcp;
+            d->server->connectToHost(d->controller->socket(d->jobid)->peerAddress().toString(),d->controller->socket(d->jobid)->peerPort());
+            if (d->server->socket()->waitForConnected()) {
+                dtkDebug() << "Connected to server";
+            } else {
+                dtkError() << "Can't connect to server";
+                return;
+            }
+        }
+
+       // send sub-composition to rank 0 on remote node
         QByteArray compo = d->composition.toByteArray();
         dtkDebug() << "running node remote begin statement on controller, send composition of size " << compo.size();
         d->server->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::SETRANK,d->jobid,dtkDistributedMessage::CONTROLLER_RUN_RANK ));
@@ -173,6 +180,7 @@ void dtkComposerNodeRemote::begin(void)
             dtkDebug() << "sending transmitter" << i << "of size" << array.size();
             d->server->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid,0, array.size(), dataType, array));
         }
+        d->server->socket()->waitForBytesWritten();
     } else {
         // running on the slave, receive data and set transmitters
         int max  = this->receivers().count();
@@ -185,7 +193,7 @@ void dtkComposerNodeRemote::begin(void)
                     dtkDebug() << "data already available, parse" ;
 
                 } else {
-                    if (!(d->slave->communicator()->socket()->waitForData(60000))) {
+                    if (!(d->slave->communicator()->socket()->waitForReadyRead(60000))) {
                         dtkError() << "No data received from server after 1mn, abort " ;
                         return;
                     } else
@@ -237,7 +245,6 @@ void dtkComposerNodeRemote::begin(void)
 void dtkComposerNodeRemote::end(void)
 {
     if (d->controller) {
-//        d->controller->socket(d->jobid)->blockSignals(true);
         dtkDebug() << "running node remote end statement on controller";
         int max  = this->emitters().count();
         for (int i = 0; i < max; i++) {
@@ -284,7 +291,6 @@ void dtkComposerNodeRemote::end(void)
                     dtkWarn() << "warning: no content in dtkAbstractData transmitter";
             }
         }
-//        d->server->socket()->blockSignals(false);
     } else {
         // running on the slave, send data and set transmitters
         dtkDebug() << "running node remote end statement on slave" << d->communicator->rank() ;
@@ -293,7 +299,7 @@ void dtkComposerNodeRemote::end(void)
         for (int i = 0; i < max; i++) {
             dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(this->emitters().at(i));
             // FIXME: use our own transmitter variant list (see control nodes)
-            if (d->communicator->rank() ==0) {
+            if (d->communicator->rank() == 0) {
                 dtkDebug() << "end, send transmitter data (we are rank 0)";
                 QByteArray array;
                 QString  dataType;
@@ -337,7 +343,7 @@ void dtkComposerNodeRemote::end(void)
                 //TODO rank >0
             }
         }
-        if (d->communicator->rank() ==0)
+        if (d->communicator->rank() == 0)
             d->slave->communicator()->socket()->waitForBytesWritten();
     }
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr 20 21:07:54 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 22:23:07 2012 (+0200)
+ * Last-Updated: Tue Apr 24 00:45:53 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 147
+ *     Update #: 165
  */
 
 /* Commentary: 
@@ -20,7 +20,7 @@
 #include "dtkNotification.h"
 #include "dtkNotificationDisplay.h"
 #include "dtkNotificationEvent.h"
-#include "dtkNotificationStack.h"
+#include "dtkNotificationQueue.h"
 
 // /////////////////////////////////////////////////////////////////
 // 
@@ -62,16 +62,17 @@ QString dtkNotificationDisplayPrivate::read(const QString& path)
 
 dtkNotificationDisplay::dtkNotificationDisplay(QWidget *parent) : QFrame(parent), d(new dtkNotificationDisplayPrivate)
 {
-    dtkNotificationStack::instance()->registerNotifiable(this);
+    dtkNotificationQueue::instance()->registerNotifiable(this);
 
     d->message = new QLabel(this);
+    d->message->setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
 
     d->persistent_count = new QLabel(QString::number(0), this);
-    d->persistent_count->setObjectName("dtkNotificationDisplayCount");
+    d->persistent_count->setObjectName("dtkNotificationDisplayPersistentCount");
     d->persistent_count->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
     d->non_persistent_count = new QLabel(QString::number(0), this);
-    d->non_persistent_count->setObjectName("dtkNotificationDisplayCount");
+    d->non_persistent_count->setObjectName("dtkNotificationDisplayNonPersistentCount");
     d->non_persistent_count->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
     d->next = new QToolButton(this);
@@ -84,25 +85,32 @@ dtkNotificationDisplay::dtkNotificationDisplay(QWidget *parent) : QFrame(parent)
     d->clse->setObjectName("dtkNotifiable-clse");
     d->clse->setVisible(false);
     
-    QVBoxLayout *v_layout = new QVBoxLayout;
-    v_layout->setContentsMargins(0, 0, 0, 0);
-    v_layout->setSpacing(0);
-    v_layout->addWidget(d->next);
-    v_layout->addWidget(d->prev);
+    QVBoxLayout *l_layout = new QVBoxLayout;
+    l_layout->setContentsMargins(0, 0, 0, 0);
+    l_layout->setSpacing(0);
+    l_layout->addWidget(d->next);
+    l_layout->addWidget(d->prev);
+
+    QVBoxLayout *r_layout = new QVBoxLayout;
+    r_layout->setContentsMargins(0, 0, 0, 0);
+    r_layout->setSpacing(0);
+    r_layout->addWidget(d->persistent_count);
+    r_layout->addWidget(d->non_persistent_count);
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(10);
-    layout->addWidget(d->persistent_count);
-    layout->addLayout(v_layout);
+    layout->addLayout(l_layout);
     layout->addWidget(d->message);
     layout->addWidget(d->clse);
-    layout->addWidget(d->non_persistent_count);
+    layout->addLayout(r_layout);
 
     this->setFixedHeight(46);
     this->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     this->setStyleSheet(d->read(":dtkNotification/dtkNotificationDisplay.qss"));
 
+    connect(d->next, SIGNAL(released()), this, SLOT(next()));
+    connect(d->prev, SIGNAL(released()), this, SLOT(previous()));
     connect(d->clse, SIGNAL(released()), this, SLOT(dismiss()));
 }
 
@@ -115,18 +123,22 @@ dtkNotificationDisplay::~dtkNotificationDisplay(void)
 
 void dtkNotificationDisplay::clear(void)
 {
-    // QPropertyAnimation *animation = new QPropertyAnimation(d->message, "windowOpacity");
-    // animation->setDuration(250);
-    // animation->setStartValue(1.0);
-    // animation->setEndValue(0.0);
-    // animation->start(QAbstractAnimation::DeleteWhenStopped);
-
     d->message->clear();
+}
+
+void dtkNotificationDisplay::next(void)
+{
+    dtkNotificationQueue::instance()->next();
+}
+
+void dtkNotificationDisplay::previous(void)
+{
+    dtkNotificationQueue::instance()->previous();
 }
 
 void dtkNotificationDisplay::dismiss(void)
 {
-    dtkNotificationStack::instance()->dismiss();
+    dtkNotificationQueue::instance()->dismiss();
 }
 
 void dtkNotificationDisplay::dismissible(bool dismissible)

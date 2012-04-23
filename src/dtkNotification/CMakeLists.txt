@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Thu Apr 19 16:22:28 2012 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Apr 23 11:52:11 2012 (+0200)
+## Last-Updated: Tue Apr 24 00:42:32 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 30
+##     Update #: 31
 ######################################################################
 ## 
 ### Commentary: 
@@ -28,17 +28,17 @@ set(${PROJECT_NAME}_HEADERS
   dtkNotification.h
   dtkNotificationDisplay.h
   dtkNotificationEvent.h
-  dtkNotificationStack.h)
+  dtkNotificationQueue.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkNotificationDisplay.h
-  dtkNotificationStack.h)
+  dtkNotificationQueue.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkNotification.cpp
   dtkNotificationDisplay.cpp
   dtkNotificationEvent.cpp
-  dtkNotificationStack.cpp)
+  dtkNotificationQueue.cpp)
 
 set(${PROJECT_NAME}_RESOURCES
   dtkNotification.qrc)

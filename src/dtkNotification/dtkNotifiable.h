@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Apr 23 11:49:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 14:54:09 2012 (+0200)
+ * Last-Updated: Tue Apr 24 00:00:23 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 14
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -28,6 +28,10 @@ class DTKNOTIFICATION_EXPORT dtkNotifiable
 {
 public:
     virtual void clear(void) = 0;
+
+public:
+    virtual void next(void) = 0;
+    virtual void previous(void) = 0;
 
 public:
     virtual void dismiss(void) = 0;

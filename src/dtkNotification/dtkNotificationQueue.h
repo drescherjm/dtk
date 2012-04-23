@@ -1,12 +1,12 @@
-/* dtkNotificationStack.h --- 
+/* dtkNotificationQueue.h --- 
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Apr 22 15:11:20 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 16:26:44 2012 (+0200)
+ * Last-Updated: Tue Apr 24 00:41:41 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 25
+ *     Update #: 34
  */
 
 /* Commentary: 
@@ -17,8 +17,8 @@
  * 
  */
 
-#ifndef DTKNOTIFICATIONSTACK_H
-#define DTKNOTIFICATIONSTACK_H
+#ifndef DTKNOTIFICATIONQUEUE_H
+#define DTKNOTIFICATIONQUEUE_H
 
 #include "dtkNotificationExport.h"
 
@@ -26,21 +26,21 @@
 
 class dtkNotifiable;
 class dtkNotificationEvent;
-class dtkNotificationStackPrivate;
+class dtkNotificationQueuePrivate;
 
-class DTKNOTIFICATION_EXPORT dtkNotificationStack : public QObject
+class DTKNOTIFICATION_EXPORT dtkNotificationQueue : public QObject
 {
     Q_OBJECT
 
 public:
-    static dtkNotificationStack *instance(void);
-
-private:
-     dtkNotificationStack(QObject *parent = 0);
-    ~dtkNotificationStack(void);
+    static dtkNotificationQueue *instance(void);
 
 public:
     void registerNotifiable(dtkNotifiable *notifiable);
+
+public:
+    void next(void);
+    void previous(void);
 
 public:
     void dismiss(void);
@@ -55,10 +55,14 @@ public:
     bool event(QEvent *event);
 
 private:
-    dtkNotificationStackPrivate *d;
+    static dtkNotificationQueue *s_instance;
 
 private:
-    static dtkNotificationStack *s_instance;
+     dtkNotificationQueue(QObject *parent = 0);
+    ~dtkNotificationQueue(void);
+
+private:
+    dtkNotificationQueuePrivate *d;
 };
 
 #endif

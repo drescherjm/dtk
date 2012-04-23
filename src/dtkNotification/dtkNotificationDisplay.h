@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr 20 21:06:30 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Apr 21 19:27:50 2012 (+0200)
+ * Last-Updated: Mon Apr 23 11:54:12 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -20,19 +20,26 @@
 #ifndef DTKNOTIFICATIONDISPLAY_H
 #define DTKNOTIFICATIONDISPLAY_H
 
+#include "dtkNotifiable.h"
 #include "dtkNotificationExport.h"
 
 #include <QtGui>
 
 class dtkNotificationDisplayPrivate;
 
-class DTKNOTIFICATION_EXPORT dtkNotificationDisplay : public QLabel
+class DTKNOTIFICATION_EXPORT dtkNotificationDisplay : public QLabel, public dtkNotifiable
 {
     Q_OBJECT
 
 public:
      dtkNotificationDisplay(QWidget *parent = 0);
     ~dtkNotificationDisplay(void);
+
+public:
+    void clear(void);
+
+public:
+    void display(const QString& message);
 
 public:
     QSize sizeHint(void) const;

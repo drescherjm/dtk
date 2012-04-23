@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Thu Apr 19 16:22:28 2012 (+0200)
 ## Version: $Id$
-## Last-Updated: Sun Apr 22 16:06:38 2012 (+0200)
+## Last-Updated: Mon Apr 23 11:52:11 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 29
+##     Update #: 30
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,6 +24,7 @@ project(dtkNotification)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkNotifiable.h
   dtkNotification.h
   dtkNotificationDisplay.h
   dtkNotificationEvent.h

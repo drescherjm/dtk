@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr 20 21:07:54 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Apr 22 16:15:33 2012 (+0200)
+ * Last-Updated: Mon Apr 23 12:01:27 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 51
+ *     Update #: 58
  */
 
 /* Commentary: 
@@ -56,12 +56,11 @@ QString dtkNotificationDisplayPrivate::read(const QString& path)
 dtkNotificationDisplay::dtkNotificationDisplay(QWidget *parent) : QLabel(parent), d(new dtkNotificationDisplayPrivate)
 {
     d->stack = new dtkNotificationStack(this);
+    d->stack->registerNotifiable(this);
 
     this->setFixedHeight(46);
     this->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     this->setStyleSheet(d->read(":dtkNotification/dtkNotificationDisplay.qss"));
-
-    this->setText("Prout");
 }
 
 dtkNotificationDisplay::~dtkNotificationDisplay(void)
@@ -69,6 +68,16 @@ dtkNotificationDisplay::~dtkNotificationDisplay(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkNotificationDisplay::clear(void)
+{
+    QLabel::clear();
+}
+
+void dtkNotificationDisplay::display(const QString& message)
+{
+    QLabel::setText(message);
 }
 
 QSize dtkNotificationDisplay::sizeHint(void) const

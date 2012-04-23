@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Apr 22 15:13:24 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Apr 22 22:28:46 2012 (+0200)
+ * Last-Updated: Mon Apr 23 11:59:23 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 42
+ *     Update #: 58
  */
 
 /* Commentary: 
@@ -17,6 +17,7 @@
  * 
  */
 
+#include "dtkNotifiable.h"
 #include "dtkNotificationEvent.h"
 #include "dtkNotificationStack.h"
 
@@ -27,6 +28,9 @@ class dtkNotificationStackPrivate
 public:
     QStack<dtkNotificationEvent>     persistent;
     QStack<dtkNotificationEvent> non_persistent;
+
+public:
+    QList<dtkNotifiable *> notifiables;
 };
 
 dtkNotificationStack::dtkNotificationStack(QObject *parent) : QObject(parent), d(new dtkNotificationStackPrivate)
@@ -42,6 +46,11 @@ dtkNotificationStack::~dtkNotificationStack(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkNotificationStack::registerNotifiable(dtkNotifiable *notifiable)
+{
+    d->notifiables << notifiable;
 }
 
 void dtkNotificationStack::push(dtkNotificationEvent *event)
@@ -62,13 +71,15 @@ void dtkNotificationStack::push(dtkNotificationEvent *event)
 
 void dtkNotificationStack::idle(void)
 {
-    // this->clear();
+    foreach(dtkNotifiable *notifiable, d->notifiables)
+        notifiable->clear();
 
     if(!d->non_persistent.isEmpty()) {
 
         dtkNotificationEvent event = d->non_persistent.pop();
         
-        // this->setText(event->message);
+        foreach(dtkNotifiable *notifiable, d->notifiables)
+            notifiable->display(event.message());
         
         QTimer::singleShot(event.duration(), this, SLOT(idle()));
 
@@ -79,7 +90,8 @@ void dtkNotificationStack::idle(void)
 
         dtkNotificationEvent event = d->persistent.pop();
         
-        // this->setText(event->message);
+        foreach(dtkNotifiable *notifiable, d->notifiables)
+            notifiable->display(event.message());
 
         d->persistent.push_front(event);
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr 20 21:18:43 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 22:19:12 2012 (+0200)
+ * Last-Updated: Tue Apr 24 01:10:31 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 87
+ *     Update #: 101
  */
 
 /* Commentary: 
@@ -23,35 +23,10 @@
 #include <dtkNotification/dtkNotification.h>
 #include <dtkNotification/dtkNotificationDisplay.h>
 #include <dtkNotification/dtkNotificationEvent.h>
+#include <dtkNotification/dtkNotificationQueue.h>
 
 // /////////////////////////////////////////////////////////////////
-// Notification producer
-// /////////////////////////////////////////////////////////////////
-
-class NotificationProducer : public QThread
-{
-public:
-    NotificationProducer(void) {
-        this->count = 1;
-    }
-
-    void run(void) {
-        while(this->count) {
-            dtkNotify(QString::number(this->count++), 10000);
-            msleep(2000);
-        }
-    }
-
-    void stop(void) {
-        this->count = 0;
-    }
-
-private:
-    int count;
-};
-
-// /////////////////////////////////////////////////////////////////
-// 
+// tstMainWindow
 // /////////////////////////////////////////////////////////////////
 
 class tstMainWindow : public QMainWindow
@@ -63,6 +38,7 @@ public:
     ~tstMainWindow(void);
 
 protected slots:
+    void onClear(void);
     void onPersistentNotification(void);
     void onNonPersistentNotification(void);
 
@@ -74,6 +50,7 @@ private:
     QSpinBox *spin;
     QPushButton *p_button;
     QPushButton *n_button;
+    QPushButton *c_button;
 };
 
 tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
@@ -92,12 +69,14 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
     this->spin->setValue(1000);
     this->spin->setSingleStep(250);
 
-    this->p_button = new QPushButton("Persistent");
-    this->n_button = new QPushButton("Non Persistent");
+    this->p_button = new QPushButton("Persistent", this);
+    this->n_button = new QPushButton("Non Persistent", this);
+    this->c_button = new QPushButton("Clear", this);
 
     QHBoxLayout *b_layout = new QHBoxLayout;
     b_layout->addWidget(this->p_button);
     b_layout->addWidget(this->n_button);
+    b_layout->addWidget(this->c_button);
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(this->edit);
@@ -113,11 +92,17 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
 
     connect(this->p_button, SIGNAL(clicked()), this, SLOT(onPersistentNotification()));
     connect(this->n_button, SIGNAL(clicked()), this, SLOT(onNonPersistentNotification()));
+    connect(this->c_button, SIGNAL(clicked()), this, SLOT(onClear()));
 }
 
 tstMainWindow::~tstMainWindow(void)
 {
     
+}
+
+void tstMainWindow::onClear(void)
+{
+    dtkNotificationQueue::instance()->clear();
 }
 
 void tstMainWindow::onPersistentNotification(void)
@@ -146,13 +131,7 @@ int main(int argc, char **argv)
     window->show();
     window->raise();
 
-    // NotificationProducer producer;
-    // producer.start();
-
     int status = application.exec();
-
-    // producer.stop();
-    // producer.wait();
 
     delete window;
 

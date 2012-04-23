@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Apr 22 15:13:24 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 00:41:31 2012 (+0200)
+ * Last-Updated: Tue Apr 24 01:11:35 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 175
+ *     Update #: 181
  */
 
 /* Commentary: 
@@ -49,6 +49,15 @@ dtkNotificationQueue *dtkNotificationQueue::instance(void)
 void dtkNotificationQueue::registerNotifiable(dtkNotifiable *notifiable)
 {
     d->notifiables << notifiable;
+}
+
+void dtkNotificationQueue::clear(void)
+{
+    d->persistent.clear();
+
+    d->persistent_timer.stop();
+
+    this->idle();
 }
 
 void dtkNotificationQueue::next(void)
@@ -142,6 +151,16 @@ void dtkNotificationQueue::idle(void)
         d->persistent.enqueue(event);
 
         d->persistent_timer.start(DTK_NOTIFICATION_PERSISTENT_DURATION);
+
+        return;
+    }
+
+    if(d->persistent.isEmpty() && d->non_persistent.isEmpty()) {
+
+        foreach(dtkNotifiable *notifiable, d->notifiables) {
+            notifiable->clear();
+            notifiable->dismissible(false);
+        }
 
         return;
     }

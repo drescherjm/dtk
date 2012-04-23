@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Apr 22 15:11:20 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 00:41:41 2012 (+0200)
+ * Last-Updated: Tue Apr 24 01:07:22 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 34
+ *     Update #: 36
  */
 
 /* Commentary: 
@@ -37,6 +37,9 @@ public:
 
 public:
     void registerNotifiable(dtkNotifiable *notifiable);
+
+public:
+    void clear(void);
 
 public:
     void next(void);

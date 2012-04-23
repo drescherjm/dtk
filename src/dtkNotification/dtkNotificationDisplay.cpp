@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr 20 21:07:54 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 00:45:53 2012 (+0200)
+ * Last-Updated: Tue Apr 24 00:54:22 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 165
+ *     Update #: 183
  */
 
 /* Commentary: 
@@ -70,16 +70,20 @@ dtkNotificationDisplay::dtkNotificationDisplay(QWidget *parent) : QFrame(parent)
     d->persistent_count = new QLabel(QString::number(0), this);
     d->persistent_count->setObjectName("dtkNotificationDisplayPersistentCount");
     d->persistent_count->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+    d->persistent_count->setVisible(false);
 
     d->non_persistent_count = new QLabel(QString::number(0), this);
     d->non_persistent_count->setObjectName("dtkNotificationDisplayNonPersistentCount");
     d->non_persistent_count->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+    d->non_persistent_count->setVisible(false);
 
     d->next = new QToolButton(this);
     d->next->setObjectName("dtkNotifiable-next");
+    d->next->setVisible(false);
 
     d->prev = new QToolButton(this);
     d->prev->setObjectName("dtkNotifiable-prev");
+    d->prev->setVisible(false);
 
     d->clse = new QToolButton(this);
     d->clse->setObjectName("dtkNotifiable-clse");
@@ -154,6 +158,10 @@ void dtkNotificationDisplay::display(const QString& message)
 void dtkNotificationDisplay::setPersistentCount(int count)
 {
     d->persistent_count->setText(QString::number(count));
+    d->persistent_count->setVisible(count > 1);
+
+    d->prev->setVisible(count > 1);
+    d->next->setVisible(count > 1);
 
     this->update();
 }
@@ -161,6 +169,7 @@ void dtkNotificationDisplay::setPersistentCount(int count)
 void dtkNotificationDisplay::setNonPersistentCount(int count)
 {
     d->non_persistent_count->setText(QString::number(count));
+    d->non_persistent_count->setVisible(count);
 
     this->update();
 }

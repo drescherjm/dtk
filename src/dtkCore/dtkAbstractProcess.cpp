@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:08:09 2012 (+0200)
+ * Last-Updated: Mon Apr 23 16:39:06 2012 (+0200)
  *           By: tkloczko
- *     Update #: 91
+ *     Update #: 97
  */
 
 /* Commentary: 
@@ -18,13 +18,14 @@
  */
 
 #include "dtkAbstractProcess.h"
+#include "dtkAbstractProcess_p.h"
 
-dtkAbstractProcess::dtkAbstractProcess(dtkAbstractProcess *parent) : dtkAbstractObject(parent)
+dtkAbstractProcess::dtkAbstractProcess(dtkAbstractProcess *parent) : dtkAbstractObject(*new dtkAbstractProcessPrivate, parent)
 {
 
 }
 
-dtkAbstractProcess::dtkAbstractProcess(const dtkAbstractProcess& process) : dtkAbstractObject()
+dtkAbstractProcess::dtkAbstractProcess(const dtkAbstractProcess& other) : dtkAbstractObject(*new dtkAbstractProcessPrivate(*other.d_func()), other)
 {
 
 }
@@ -32,6 +33,11 @@ dtkAbstractProcess::dtkAbstractProcess(const dtkAbstractProcess& process) : dtkA
 dtkAbstractProcess::~dtkAbstractProcess(void)
 {
 
+}
+
+dtkAbstractProcess& dtkAbstractProcess::operator=(const dtkAbstractProcess& other)
+{
+    dtkAbstractObject::operator=(other);
 }
 
 QDebug operator<<(QDebug debug, const dtkAbstractProcess& process)

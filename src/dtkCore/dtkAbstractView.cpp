@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 08:50:14 2012 (+0200)
+ * Last-Updated: Mon Apr 23 16:59:12 2012 (+0200)
  *           By: tkloczko
- *     Update #: 295
+ *     Update #: 309
  */
 
 /* Commentary:
@@ -19,40 +19,41 @@
 
 #include "dtkAbstractData.h"
 #include "dtkAbstractView.h"
-#include "dtkAbstractViewAnimator.h"
-#include "dtkAbstractViewNavigator.h"
-#include "dtkAbstractViewInteractor.h"
+#include "dtkAbstractView_p.h"
 #include "dtkSmartPointer.h"
 
 #include <dtkLog/dtkLog.h>
 
-class dtkAbstractViewPrivate
+// /////////////////////////////////////////////////////////////////
+// dtkAbstractView implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkAbstractView::dtkAbstractView(dtkAbstractView *parent) : dtkAbstractObject(*new dtkAbstractViewPrivate, parent)
 {
-public:
-    bool stereo;
+    DTK_D(dtkAbstractView);
 
-    QMap<QString, dtkSmartPointer<dtkAbstractViewAnimator> >   animators;
-    QMap<QString, dtkSmartPointer<dtkAbstractViewNavigator> >  navigators;
-    QMap<QString, dtkSmartPointer<dtkAbstractViewInteractor> > interactors;
-};
+    d->stereo = false;
+}
 
-dtkAbstractView::dtkAbstractView(dtkAbstractView *parent) : dtkAbstractObject(parent), d(new dtkAbstractViewPrivate)
+dtkAbstractView::dtkAbstractView(const dtkAbstractView& other) : dtkAbstractObject(*new dtkAbstractViewPrivate(*other.d_func()), other)
 {
 
 }
 
-dtkAbstractView::dtkAbstractView(const dtkAbstractView& view) : dtkAbstractObject(), d(new dtkAbstractViewPrivate)
+dtkAbstractView& dtkAbstractView::operator=(const dtkAbstractView& other)
 {
-    d->animators   = view.d->animators;
-    d->navigators  = view.d->navigators;
-    d->interactors = view.d->interactors;
+    dtkAbstractObject::operator=(other);
+
+    DTK_D(dtkAbstractView);
+
+    d->animators   = other.d_func()->animators;
+    d->navigators  = other.d_func()->navigators;
+    d->interactors = other.d_func()->interactors;
 }
 
 dtkAbstractView::~dtkAbstractView(void)
 {
-    delete d;
-    
-    d = NULL;
+
 }
 
 void dtkAbstractView::link(dtkAbstractView *other)
@@ -81,6 +82,8 @@ void dtkAbstractView::unselect(dtkAbstractData *data)
 
 void dtkAbstractView::setStereo(bool on)
 {
+    DTK_D(dtkAbstractView);
+
     d->stereo = on;
 }
 
@@ -92,6 +95,8 @@ void dtkAbstractView::setView(void *)
 void dtkAbstractView::setData(dtkAbstractData *data)
 {
     DTK_DEFAULT_IMPLEMENTATION;
+
+    DTK_D(dtkAbstractView);
 
     foreach(dtkAbstractViewAnimator *animator, d->animators)
         if (animator->enabled())
@@ -149,6 +154,8 @@ void *dtkAbstractView::data(int channel)
 
 bool dtkAbstractView::stereo(void)
 {
+    DTK_D(dtkAbstractView);
+
     return d->stereo;
 }
 
@@ -222,6 +229,8 @@ void dtkAbstractView::addAnimator(dtkAbstractViewAnimator *animator)
         return;
     }
 
+    DTK_D(dtkAbstractView);
+
     d->animators.insert(animator->identifier(), animator);
 }
 
@@ -231,6 +240,8 @@ void dtkAbstractView::addNavigator(dtkAbstractViewNavigator *navigator)
         dtkDebug() << "No identifier specified for navigator. Not add to" << this->identifier();
         return;
     }
+
+    DTK_D(dtkAbstractView);
 
     d->navigators.insert(navigator->identifier(), navigator);
 }
@@ -242,12 +253,17 @@ void dtkAbstractView::addInteractor(dtkAbstractViewInteractor *interactor)
         return;
     }
 
-    if(interactor)
+    if(interactor) {        
+        DTK_D(dtkAbstractView);
+
         d->interactors.insert(interactor->identifier(), interactor);
+    }
 }
 
 void dtkAbstractView::enableAnimator(const QString& animator)
 {
+    DTK_D(dtkAbstractView);
+
     if (d->animators.contains(animator)) {
         d->animators.value(animator)->setView(this);
         d->animators.value(animator)->enable();
@@ -257,12 +273,16 @@ void dtkAbstractView::enableAnimator(const QString& animator)
 
 void dtkAbstractView::disableAnimator(const QString& animator)
 {
+    DTK_D(dtkAbstractView);
+
     if (d->animators.contains(animator))
         d->animators.value(animator)->disable();
 }
 
 void dtkAbstractView::enableNavigator(const QString& navigator)
 {
+    DTK_D(dtkAbstractView);
+
     if (d->navigators.contains(navigator)) {
 //      d->navigators.value(navigator)->setView(this);
         d->navigators.value(navigator)->enable();
@@ -272,12 +292,16 @@ void dtkAbstractView::enableNavigator(const QString& navigator)
 
 void dtkAbstractView::disableNavigator(const QString& navigator)
 {
+    DTK_D(dtkAbstractView);
+
     if (d->navigators.contains(navigator))
         d->navigators.value(navigator)->disable();
 }
 
 void dtkAbstractView::enableInteractor(const QString& interactor)
 {
+    DTK_D(dtkAbstractView);
+
     if (d->interactors.contains(interactor)) {
         d->interactors.value(interactor)->setView(this);
         d->interactors.value(interactor)->enable();
@@ -287,12 +311,16 @@ void dtkAbstractView::enableInteractor(const QString& interactor)
 
 void dtkAbstractView::disableInteractor(const QString& interactor)
 {
+    DTK_D(dtkAbstractView);
+
     if (d->interactors.contains(interactor))
         d->interactors.value(interactor)->disable();
 }
 
 dtkAbstractViewAnimator *dtkAbstractView::animator(const QString& type)
 {
+    DTK_D(dtkAbstractView);
+
     if (d->animators.contains(type))
         return d->animators.value(type);
 
@@ -301,6 +329,8 @@ dtkAbstractViewAnimator *dtkAbstractView::animator(const QString& type)
 
 dtkAbstractViewNavigator *dtkAbstractView::navigator(const QString& type)
 {
+    DTK_D(dtkAbstractView);
+
     if (d->navigators.contains(type))
         return d->navigators.value(type);
 
@@ -309,6 +339,8 @@ dtkAbstractViewNavigator *dtkAbstractView::navigator(const QString& type)
 
 dtkAbstractViewInteractor *dtkAbstractView::interactor(const QString& type)
 {
+    DTK_D(dtkAbstractView);
+
     if (d->interactors.contains(type))
         return d->interactors.value(type);
 
@@ -317,6 +349,8 @@ dtkAbstractViewInteractor *dtkAbstractView::interactor(const QString& type)
 
 QList<dtkAbstractViewAnimator *> dtkAbstractView::animators(void) const
 {
+    DTK_D(const dtkAbstractView);
+
     QList<dtkAbstractViewAnimator *> ret;
 #if QT_VERSION > 0x0406FF
     ret.reserve(d->animators.size());
@@ -328,6 +362,8 @@ QList<dtkAbstractViewAnimator *> dtkAbstractView::animators(void) const
 
 QList<dtkAbstractViewNavigator *> dtkAbstractView::navigators(void) const
 {
+    DTK_D(const dtkAbstractView);
+
     QList<dtkAbstractViewNavigator *> ret;
 #if QT_VERSION > 0x0406FF
     ret.reserve(d->navigators.size());
@@ -339,6 +375,8 @@ QList<dtkAbstractViewNavigator *> dtkAbstractView::navigators(void) const
 
 QList<dtkAbstractViewInteractor *> dtkAbstractView::interactors(void) const
 {
+    DTK_D(const dtkAbstractView);
+
     QList<dtkAbstractViewInteractor *> ret;
 #if QT_VERSION > 0x0406FF
     ret.reserve(d->interactors.size());

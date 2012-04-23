@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep  5 12:43:50 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 136
+ * Last-Updated: Mon Apr 23 16:42:28 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 142
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include "dtkAbstractObject.h"
 
 class dtkAbstractData;
+class dtkAbstractProcessPrivate;
 
 class DTKCORE_EXPORT dtkAbstractProcess : public dtkAbstractObject
 {
@@ -30,9 +31,13 @@ class DTKCORE_EXPORT dtkAbstractProcess : public dtkAbstractObject
 
 public:
              dtkAbstractProcess(      dtkAbstractProcess *parent = 0);
-             dtkAbstractProcess(const dtkAbstractProcess& process);
+             dtkAbstractProcess(const dtkAbstractProcess& other);
     virtual ~dtkAbstractProcess(void);
 
+public:
+    dtkAbstractProcess& operator = (const dtkAbstractProcess& other);
+
+public:
     friend DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractProcess& process);
     friend DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractProcess *process);
     
@@ -96,6 +101,9 @@ public slots:
     virtual void *data (void);
     virtual void *data (int channel);
     virtual void *data (int channel, int frame);
+
+private:
+    DTK_DECLARE_PRIVATE(dtkAbstractProcess);
 };
 
 DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractProcess& process);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr 20 21:06:30 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 11:54:12 2012 (+0200)
+ * Last-Updated: Mon Apr 23 12:04:51 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 14
+ *     Update #: 18
  */
 
 /* Commentary: 
@@ -27,9 +27,9 @@
 
 class dtkNotificationDisplayPrivate;
 
-class DTKNOTIFICATION_EXPORT dtkNotificationDisplay : public QLabel, public dtkNotifiable
+class DTKNOTIFICATION_EXPORT dtkNotificationDisplay : public QFrame, public dtkNotifiable
 {
-    Q_OBJECT
+    Q_OBJECT    
 
 public:
      dtkNotificationDisplay(QWidget *parent = 0);

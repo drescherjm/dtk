@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. avril 24 10:55:12 2012 (+0200)
+ * Last-Updated: mar. avril 24 15:06:41 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 1578
+ *     Update #: 1582
  */
 
 /* Commentary: 
@@ -197,7 +197,7 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
         }
 
         nodes[sockets.key(socket)] << node;
-        dtkDebug() << "Found node" << node->name() << "with" << node->cpus().count() << "cpus";
+        dtkTrace() << "Found node" << node->name() << "with" << node->cpus().count() << "cpus";
     }
 
     foreach(QVariant qv, json["jobs"].toList()) {
@@ -219,7 +219,7 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
             foreach(dtkDistributedCore *job_core,  coreref[jobid])
                 job_core->setJob(job);
         jobs[sockets.key(socket)] << job;
-        dtkDebug() << "Found job " << job->Id() <<"from "<< job->Username() << " in queue " << job->Queue();
+        dtkTrace() << "Found job " << job->Id() <<"from "<< job->Username() << " in queue " << job->Queue();
     }
 }
 
@@ -516,7 +516,7 @@ void dtkDistributedController::read(void)
         emit dataPosted(result);
         break;
     default:
-        dtkDebug() << "unknown response from server ";
+        dtkWarn() << "unknown response from server ";
     };
     if (socket->bytesAvailable() > 0)
         this->read();

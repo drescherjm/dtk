@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: mar. avril 24 13:33:48 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 101
+ * Last-Updated: Tue Apr 24 14:47:00 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 103
  */
 
 /* Commentary: 
@@ -20,7 +20,11 @@
 #include "dtkAbstractProcess.h"
 #include "dtkAbstractProcess_p.h"
 
-dtkAbstractProcess::dtkAbstractProcess(dtkAbstractProcess *parent) : dtkAbstractObject(*new dtkAbstractProcessPrivate, parent)
+// /////////////////////////////////////////////////////////////////
+// dtkAbstractProcess implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkAbstractProcess::dtkAbstractProcess(dtkAbstractProcess *parent) : dtkAbstractObject(*new dtkAbstractProcessPrivate(this), parent)
 {
 
 }

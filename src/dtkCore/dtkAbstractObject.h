@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:43:14 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 11:05:47 2012 (+0200)
+ * Last-Updated: Tue Apr 24 15:02:08 2012 (+0200)
  *           By: tkloczko
- *     Update #: 120
+ *     Update #: 121
  */
 
 /* Commentary:
@@ -76,7 +76,7 @@ public slots:
    virtual void onMetaDataSet(const QString& key, const QString& value);
 
 protected:
-   dtkAbstractObject(dtkAbstractObjectPrivate& dd, dtkAbstractObject *parent);
+   dtkAbstractObject(dtkAbstractObjectPrivate& dd, QObject *parent);
    dtkAbstractObject(dtkAbstractObjectPrivate& dd, const dtkAbstractObject& other);
 
 protected:

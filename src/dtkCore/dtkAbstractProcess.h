@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: mar. avril 24 13:32:41 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 143
+ * Last-Updated: Tue Apr 24 14:48:53 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 144
  */
 
 /* Commentary: 
@@ -24,6 +24,10 @@
 
 class dtkAbstractData;
 class dtkAbstractProcessPrivate;
+
+// /////////////////////////////////////////////////////////////////
+// dtkAbstractProcess interface
+// /////////////////////////////////////////////////////////////////
 
 class DTKCORE_EXPORT dtkAbstractProcess : public dtkAbstractObject
 {

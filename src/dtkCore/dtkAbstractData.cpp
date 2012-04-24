@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 11:22:49 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 414
+ * Last-Updated: Tue Apr 24 11:26:23 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 415
  */
 
 /* Commentary:
@@ -34,7 +34,7 @@
 // dtkAbstractData implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkAbstractData::dtkAbstractData(dtkAbstractData *parent) : dtkAbstractObject(*new dtkAbstractDataPrivate, parent)
+dtkAbstractData::dtkAbstractData(dtkAbstractData *parent) : dtkAbstractObject(*new dtkAbstractDataPrivate(this), parent)
 {
     DTK_D(dtkAbstractData);
 

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: lun. avril 23 11:29:11 2012 (+0200)
+## Last-Updated: mar. avril 24 14:18:47 2012 (+0200)
 ##           By: Nicolas Niclausse
-##     Update #: 501
+##     Update #: 502
 ######################################################################
 ##
 ### Commentary:
@@ -251,7 +251,8 @@ target_link_libraries(${PROJECT_NAME}
   dtkMath
   dtkCore
   dtkGui
-  dtkLog)
+  dtkLog
+  dtkNotification)
 
 if(MPI_FOUND)
 target_link_libraries(${PROJECT_NAME} dtkDistributed)

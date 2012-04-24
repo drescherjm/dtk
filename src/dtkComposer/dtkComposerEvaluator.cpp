@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:07:00 2012 (+0200)
- *           By: tkloczko
- *     Update #: 493
+ * Last-Updated: mar. avril 24 14:29:44 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 523
  */
 
 /* Commentary:
@@ -26,6 +26,7 @@
 #include "dtkComposerGraphNodeEnd.h"
 
 #include <dtkLog/dtkLog.h>
+#include <dtkNotification/dtkNotification.h>
 
 #include <QtCore>
 
@@ -71,7 +72,9 @@ void dtkComposerEvaluator::run(bool run_concurrent)
 
     emit evaluationStarted();
     while (this->step(run_concurrent));
-    dtkInfo() << "elapsed time:"<< time.elapsed() << "ms";
+    QString msg = QString("Evaluation finished in %1 ms").arg(time.elapsed());
+    dtkInfo() << msg;
+    dtkNotify(msg,30000);
     emit evaluationStopped();
 }
 

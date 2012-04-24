@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 11:26:23 2012 (+0200)
- *           By: tkloczko
- *     Update #: 415
+ * Last-Updated: mar. avril 24 13:31:39 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 417
  */
 
 /* Commentary:
@@ -596,6 +596,19 @@ void dtkAbstractData::setParameter(int parameter, int channel)
     DTK_UNUSED(channel);
 }
 
+void dtkAbstractData::setParameter(qlonglong parameter)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(parameter);
+}
+
+void dtkAbstractData::setParameter(qlonglong parameter, int channel)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(parameter);
+    DTK_UNUSED(channel);
+}
+
 void dtkAbstractData::setParameter(float parameter)
 {
     DTK_DEFAULT_IMPLEMENTATION;
@@ -677,6 +690,13 @@ dtkAbstractData::operator bool (void)
 }
 
 dtkAbstractData::operator int (void)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+
+    return 0;
+}
+
+dtkAbstractData::operator qlonglong (void)
 {
     DTK_DEFAULT_IMPLEMENTATION;
 

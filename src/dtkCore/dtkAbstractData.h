@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 16:26:16 2012 (+0200)
- *           By: tkloczko
- *     Update #: 243
+ * Last-Updated: mar. avril 24 13:30:58 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 246
  */
 
 /* Commentary:
@@ -77,6 +77,9 @@ public slots:
     virtual void setParameter(int parameter);
     virtual void setParameter(int parameter, int channel);
 
+    virtual void setParameter(qlonglong parameter);
+    virtual void setParameter(qlonglong parameter, int channel);
+
     virtual void setParameter(float parameter);
     virtual void setParameter(float parameter, int channel);
 
@@ -132,10 +135,11 @@ public slots:
 public:
     virtual bool casts(const QString& type);
 
-    virtual operator bool   (void);
-    virtual operator int    (void);
-    virtual operator float  (void);
-    virtual operator double (void);
+    virtual operator bool      (void);
+    virtual operator int       (void);
+    virtual operator qlonglong (void);
+    virtual operator float     (void);
+    virtual operator double    (void);
 
 private:
     DTK_DECLARE_PRIVATE(dtkAbstractData);

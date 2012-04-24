@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 11:46:29 2012 (+0200)
- *           By: tkloczko
- *     Update #: 100
+ * Last-Updated: mar. avril 24 13:33:48 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 101
  */
 
 /* Commentary: 
@@ -153,6 +153,48 @@ void dtkAbstractProcess::setParameter(int* data, int channel)
 }
 
 void dtkAbstractProcess::setParameter(int* data, int channel, int frame)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+    DTK_UNUSED(channel);
+    DTK_UNUSED(frame);
+}
+
+void dtkAbstractProcess::setParameter(qlonglong data)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+}
+
+void dtkAbstractProcess::setParameter(qlonglong data, int channel)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+    DTK_UNUSED(channel);
+}
+
+void dtkAbstractProcess::setParameter(qlonglong data, int channel, int frame)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+    DTK_UNUSED(channel);
+    DTK_UNUSED(frame);
+}
+
+void dtkAbstractProcess::setParameter(qlonglong* data)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+}
+
+void dtkAbstractProcess::setParameter(qlonglong* data, int channel)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+    DTK_UNUSED(channel);
+}
+
+void dtkAbstractProcess::setParameter(qlonglong* data, int channel, int frame)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(data);

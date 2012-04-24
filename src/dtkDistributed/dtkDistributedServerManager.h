@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:00:53 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. sept. 20 15:08:29 2011 (+0200)
+ * Last-Updated: mar. avril 24 18:30:15 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 34
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -40,7 +40,8 @@ public:
 
     enum Type {
         Oar,
-        Torque
+        Torque,
+        Ssh
     };
 
     static QString protocol(void) { return "1.0"; };

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Apr 16 12:01:51 2012 (+0200)
-##           By: Julien Wintz
-##     Update #: 240
+## Last-Updated: mar. avril 24 18:17:54 2012 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 242
 ######################################################################
 ## 
 ### Commentary: 
@@ -48,6 +48,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedServerDaemon.h
   dtkDistributedServerManager.h
   dtkDistributedServerManagerOar.h
+  dtkDistributedServerManagerSsh.h
   dtkDistributedServerManagerTorque.h
   dtkDistributedService.h
   dtkDistributedSocket.h
@@ -76,6 +77,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkDistributedServerDaemon.h
   dtkDistributedServerManager.h
   dtkDistributedServerManagerOar.h
+  dtkDistributedServerManagerSsh.h
   dtkDistributedServerManagerTorque.h
   dtkDistributedService_p.h
   dtkDistributedSocket.h
@@ -107,6 +109,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedServerDaemon.cpp
   dtkDistributedServerManager.cpp
   dtkDistributedServerManagerOar.cpp
+  dtkDistributedServerManagerSsh.cpp
   dtkDistributedServerManagerTorque.cpp
   dtkDistributedService.cpp
   dtkDistributedSocket.cpp

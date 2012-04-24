@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 19 10:38:54 2011 (+0200)
- *           By: jwintz
- *     Update #: 213
+ * Last-Updated: mar. avril 24 18:28:38 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 214
  */
 
 /* Commentary: 
@@ -76,6 +76,9 @@ void dtkDistributedServer::start(void)
 
     if(dtkApplicationArgumentsContain(app, "--torque"))
         d->daemon->setManager(dtkDistributedServerManager::Torque);
+
+    if(dtkApplicationArgumentsContain(app, "--ssh"))
+        d->daemon->setManager(dtkDistributedServerManager::Ssh);
 
     if (!d->daemon->isListening()) {
         logMessage(QString("Failed to bind port %1").arg(d->daemon->serverPort()), dtkDistributedServiceBase::Error);

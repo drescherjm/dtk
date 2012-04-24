@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 14:41:29
  * Version: $Id$
- * Last-Updated: mar. avril 24 15:10:10 2012 (+0200)
+ * Last-Updated: mar. avril 24 18:35:03 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 7
+ *     Update #: 10
  */
 
 /* Commentary:
@@ -30,8 +30,9 @@ int main(int argc, char **argv)
     QCoreApplication application(argc, argv);
 
     if(!dtkApplicationArgumentsContain(&application, "--torque")
-    && !dtkApplicationArgumentsContain(&application, "--oar")) {
-        dtkDebug() << "Usage:" << argv[0] << " dtk://server:port [--oar || --torque]";
+       && !dtkApplicationArgumentsContain(&application, "--oar")
+       && !dtkApplicationArgumentsContain(&application, "--ssh")) {
+        qDebug() << "Usage:" << argv[0] << " dtk://server:port [--oar || --torque || --ssh]";
         return DTK_SUCCEED;
     }
 

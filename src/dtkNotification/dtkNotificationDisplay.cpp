@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr 20 21:07:54 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 00:54:22 2012 (+0200)
+ * Last-Updated: Tue Apr 24 12:52:42 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 183
+ *     Update #: 184
  */
 
 /* Commentary: 
@@ -65,6 +65,7 @@ dtkNotificationDisplay::dtkNotificationDisplay(QWidget *parent) : QFrame(parent)
     dtkNotificationQueue::instance()->registerNotifiable(this);
 
     d->message = new QLabel(this);
+    d->message->setObjectName("dtkNotificationDisplayMessage");
     d->message->setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
 
     d->persistent_count = new QLabel(QString::number(0), this);

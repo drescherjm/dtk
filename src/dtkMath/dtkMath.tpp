@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Mar  9 11:05:40 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 20:19:17 2012 (+0200)
+ * Last-Updated: Tue Apr 24 21:10:02 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 88
+ *     Update #: 89
  */
 
 /* Commentary: 
@@ -115,7 +115,7 @@ template <class T> dtkVector3D<T> dtkAxisFromQuaternion(const dtkQuaternion<T> &
 */
 template <class T> dtkQuaternion<T> dtkQuaternionFromMatSquared(const dtkMatrixSquared<T> &mat)
 {
-    T sclrTmp = dtkTrace(mat);
+    T sclrTmp = dtkMatrixSquaredTrace(mat);
 
     dtkQuaternion<T> qtn;
 

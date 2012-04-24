@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Apr 19 21:48:39 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 00:42:54 2012 (+0200)
+ * Last-Updated: Tue Apr 24 12:35:49 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 26
+ *     Update #: 27
  */
 
 /* Commentary: 
@@ -44,4 +44,9 @@ void dtkNotify(const QString& message, int duration)
 void dtkNotify(dtkNotificationEvent *event)
 {
     QApplication::postEvent(dtkNotificationQueue::instance(), event);
+}
+
+void dtkClearNotifications(void)
+{
+    dtkNotificationQueue::instance()->clear();
 }

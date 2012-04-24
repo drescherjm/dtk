@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 12:32:44 2012 (+0200)
+ * Last-Updated: Tue Apr 24 12:50:28 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1635
+ *     Update #: 1666
  */
 
 /* Commentary:
@@ -40,6 +40,7 @@
 #include <dtkGui/dtkSplitter.h>
 
 #include <dtkCore/dtkGlobal.h>
+#include <dtkCore/dtkPluginManager.h>
 
 #include <dtkLog/dtkLog.h>
 #include <dtkLog/dtkLogView.h>
@@ -353,6 +354,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 #endif
 
     d->setCurrentFile("");
+
+    dtkNotify(QString("Discovered %1 plugins").arg(dtkPluginManager::instance()->plugins().count()), 5000);
 }
 
 dtkCreatorMainWindow::~dtkCreatorMainWindow(void)
@@ -415,6 +418,9 @@ bool dtkCreatorMainWindow::compositionOpen(const QString& file)
     settings.setValue("last_open_dir", info.absolutePath());
     settings.endGroup();    
 
+    if(status)
+        dtkNotify(QString("<div style=\"color: #006600\">Opened %1</div>").arg(info.baseName()), 3000);
+
     return status;
 }
 
@@ -429,6 +435,9 @@ bool dtkCreatorMainWindow::compositionSave(void)
 
     if(status)
         this->setWindowModified(false);
+
+    if(status)
+        dtkNotify(QString("<div style=\"color: #006600\">Saved %1</div>").arg(d->current_composition), 3000);
 
     return status;
 }
@@ -486,6 +495,9 @@ bool dtkCreatorMainWindow::compositionSaveAs(const QString& file, dtkComposerWri
     settings.setValue("last_open_dir", info.absolutePath());
     settings.endGroup();
 
+    if(status)
+        dtkNotify(QString("<div style=\"color: #006600\">Saved as %1</div>").arg(info.baseName()), 3000);
+
     return status;
 }
 
@@ -524,6 +536,8 @@ bool dtkCreatorMainWindow::compositionInsert(const QString& file)
 
 void dtkCreatorMainWindow::switchToCompo(void)
 {
+    dtkNotify("Composition workspace", 2000);
+
     d->compo_button->blockSignals(true);
     d->compo_button->setChecked(true);
     d->compo_button->blockSignals(false);
@@ -547,6 +561,8 @@ void dtkCreatorMainWindow::switchToCompo(void)
 
 void dtkCreatorMainWindow::switchToDstrb(void)
 {
+    dtkNotify("Distribution workspace", 2000);
+
     d->distr_button->blockSignals(true);
     d->distr_button->setChecked(true);
     d->distr_button->blockSignals(false);
@@ -570,6 +586,8 @@ void dtkCreatorMainWindow::switchToDstrb(void)
 
 void dtkCreatorMainWindow::switchToDebug(void)
 {
+    dtkNotify("Debug workspace", 2000);
+
     d->debug_button->blockSignals(true);
     d->debug_button->setChecked(true);
     d->debug_button->blockSignals(false);

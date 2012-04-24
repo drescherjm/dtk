@@ -4,9 +4,9 @@
 ;; Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ;; Created: Thu Mar 15 12:05:17 2012 (+0100)
 ;; Version: $Id$
-;; Last-Updated: Tue Apr 24 12:28:23 2012 (+0200)
+;; Last-Updated: Tue Apr 24 12:53:48 2012 (+0200)
 ;;           By: Julien Wintz
-;;     Update #: 413
+;;     Update #: 415
 */
 
 /*Commentary: 
@@ -381,4 +381,13 @@ dtkLogViewTree:!active {
 
 dtkLogViewList {
     alternate-background-color: #f3f6fa;
+}
+
+/* **************************************************************
+ * dtkNotificationDisplay
+ * ************************************************************** */
+
+dtkNotificationDisplay QLabel#dtkNotificationDisplayMessage
+{
+    font-size: 11px;
 }

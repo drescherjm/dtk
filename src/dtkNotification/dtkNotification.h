@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Apr 19 21:39:44 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 20 16:37:36 2012 (+0200)
+ * Last-Updated: Tue Apr 24 12:35:33 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 19
+ *     Update #: 21
  */
 
 /* Commentary: 
@@ -36,5 +36,6 @@ static const int dtkNotificationEventType = QEvent::User + 1003;
 DTKNOTIFICATION_EXPORT void dtkNotify(const QString& message);
 DTKNOTIFICATION_EXPORT void dtkNotify(const QString& message, int duration);
 DTKNOTIFICATION_EXPORT void dtkNotify(dtkNotificationEvent *event);
+DTKNOTIFICATION_EXPORT void dtkClearNotifications(void);
 
 #endif

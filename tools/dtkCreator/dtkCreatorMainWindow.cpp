@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 15:23:23 2012 (+0200)
+ * Last-Updated: Tue Apr 24 12:32:44 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1622
+ *     Update #: 1635
  */
 
 /* Commentary:
@@ -208,34 +208,34 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     QFrame *buttons = new QFrame(this);
     buttons->setObjectName("dtkCreatorMainWindowSegmentedButtons");
 
-    QPushButton *compo_button = new QPushButton("Composition", buttons);
-    compo_button->setObjectName("dtkCreatorMainWindowSegmentedButtonLeft");
-    compo_button->setFixedSize(75, 25);
-    compo_button->setCheckable(true);
-    compo_button->setChecked(true);
+    d->compo_button = new QPushButton("Composition", buttons);
+    d->compo_button->setObjectName("dtkCreatorMainWindowSegmentedButtonLeft");
+    d->compo_button->setFixedSize(75, 25);
+    d->compo_button->setCheckable(true);
+    d->compo_button->setChecked(true);
 
-    QPushButton *distr_button = new QPushButton("Distribution", buttons);
-    distr_button->setObjectName("dtkCreatorMainWindowSegmentedButtonMiddle");
-    distr_button->setFixedSize(75, 25);
-    distr_button->setCheckable(true);
+    d->distr_button = new QPushButton("Distribution", buttons);
+    d->distr_button->setObjectName("dtkCreatorMainWindowSegmentedButtonMiddle");
+    d->distr_button->setFixedSize(75, 25);
+    d->distr_button->setCheckable(true);
 
-    QPushButton *debug_button = new QPushButton("Debug", buttons);
-    debug_button->setObjectName("dtkCreatorMainWindowSegmentedButtonRight");
-    debug_button->setFixedSize(75, 25);
-    debug_button->setCheckable(true);
+    d->debug_button = new QPushButton("Debug", buttons);
+    d->debug_button->setObjectName("dtkCreatorMainWindowSegmentedButtonRight");
+    d->debug_button->setFixedSize(75, 25);
+    d->debug_button->setCheckable(true);
 
     QButtonGroup *button_group = new QButtonGroup(this);
     button_group->setExclusive(true);
-    button_group->addButton(compo_button);
-    button_group->addButton(distr_button);
-    button_group->addButton(debug_button);
+    button_group->addButton(d->compo_button);
+    button_group->addButton(d->distr_button);
+    button_group->addButton(d->debug_button);
 
     QHBoxLayout *buttons_layout = new QHBoxLayout(buttons);
     buttons_layout->setMargin(0);
     buttons_layout->setSpacing(11);
-    buttons_layout->addWidget(compo_button);
-    buttons_layout->addWidget(distr_button);
-    buttons_layout->addWidget(debug_button);
+    buttons_layout->addWidget(d->compo_button);
+    buttons_layout->addWidget(d->distr_button);
+    buttons_layout->addWidget(d->debug_button);
 
     mainToolBar->addWidget(new dtkSpacer(this));
     mainToolBar->addWidget(new dtkNotificationDisplay(this));
@@ -286,9 +286,9 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     connect(switchToDstrbAction, SIGNAL(triggered()), this, SLOT(switchToDstrb()));
     connect(switchToDebugAction, SIGNAL(triggered()), this, SLOT(switchToDebug()));
 
-    connect(compo_button, SIGNAL(pressed()), this, SLOT(switchToCompo()));
-    connect(distr_button, SIGNAL(pressed()), this, SLOT(switchToDstrb()));
-    connect(debug_button, SIGNAL(pressed()), this, SLOT(switchToDebug()));
+    connect(d->compo_button, SIGNAL(pressed()), this, SLOT(switchToCompo()));
+    connect(d->distr_button, SIGNAL(pressed()), this, SLOT(switchToDstrb()));
+    connect(d->debug_button, SIGNAL(pressed()), this, SLOT(switchToDebug()));
 
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(close()));
 
@@ -524,6 +524,10 @@ bool dtkCreatorMainWindow::compositionInsert(const QString& file)
 
 void dtkCreatorMainWindow::switchToCompo(void)
 {
+    d->compo_button->blockSignals(true);
+    d->compo_button->setChecked(true);
+    d->compo_button->blockSignals(false);
+
     if(!d->wl && !d->wr) {
         d->wl = d->nodes->size().width();
         d->wr = d->stack->size().width();
@@ -543,6 +547,10 @@ void dtkCreatorMainWindow::switchToCompo(void)
 
 void dtkCreatorMainWindow::switchToDstrb(void)
 {
+    d->distr_button->blockSignals(true);
+    d->distr_button->setChecked(true);
+    d->distr_button->blockSignals(false);
+
     if(!d->wl && !d->wr) {
         d->wl = d->nodes->size().width();
         d->wr = d->stack->size().width();
@@ -562,6 +570,10 @@ void dtkCreatorMainWindow::switchToDstrb(void)
 
 void dtkCreatorMainWindow::switchToDebug(void)
 {
+    d->debug_button->blockSignals(true);
+    d->debug_button->setChecked(true);
+    d->debug_button->blockSignals(false);
+
     d->wl = d->nodes->size().width();
     d->wr = d->stack->size().width();
 

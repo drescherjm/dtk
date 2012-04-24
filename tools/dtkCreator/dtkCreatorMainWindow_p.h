@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  1 12:37:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Apr 21 18:33:42 2012 (+0200)
+ * Last-Updated: Tue Apr 24 12:30:36 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 132
+ *     Update #: 133
  */
 
 /* Commentary: 
@@ -90,6 +90,11 @@ public:
     QAction *redo_action;
 
     dtkRecentFilesMenu *recent_compositions_menu;
+
+public:
+    QPushButton *compo_button;
+    QPushButton *distr_button;
+    QPushButton *debug_button;
 
 public:
     bool closing;

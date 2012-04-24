@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Mar  2 15:13:52 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar  6 11:04:24 2012 (+0100)
+ * Last-Updated: Tue Apr 24 12:29:06 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 361
+ *     Update #: 362
  */
 
 /* Commentary: 
@@ -119,6 +119,7 @@ dtkLogViewList::dtkLogViewList(QWidget *parent) : QListView(parent)
 
     this->setModel(this->proxy);
 
+    this->setAlternatingRowColors(true);
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setFrameShape(QFrame::NoFrame);
     this->setRuntime();

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 16:55:00 2012 (+0200)
- *           By: tkloczko
- *     Update #: 285
+ * Last-Updated: Tue Apr 24 19:16:24 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 286
  */
 
 /* Commentary:
@@ -21,8 +21,6 @@
 #define DTKABSTRACTVIEW_H
 
 #include "dtkAbstractObject.h"
-#include "dtkVec3.h"
-#include "dtkQuat.h"
 
 #include <QtGui/QWidget>
 

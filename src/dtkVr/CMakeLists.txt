@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Apr 16 12:13:48 2012 (+0200)
+## Last-Updated: Tue Apr 24 19:13:27 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 299
+##     Update #: 300
 ######################################################################
 ## 
 ### Commentary: 
@@ -220,6 +220,7 @@ string(REGEX REPLACE ".h" ""
   "${${PROJECT_NAME}_HEADERS}")
 
 install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
+
 ## #################################################################
 ## Installation
 ## #################################################################

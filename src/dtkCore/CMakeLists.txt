@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Apr 17 21:55:36 2012 (+0200)
+## Last-Updated: Tue Apr 24 19:18:58 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 277
+##     Update #: 280
 ######################################################################
 ## 
 ### Commentary: 
@@ -45,13 +45,11 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractViewNavigator.h
   dtkGlobal.h
   dtkPluginManager.h
-  dtkQuat.h
   dtkUpdater.h
   dtkSignalBlocker.h
   dtkSingleton.h
   dtkSingletonDeclare.h
-  dtkSmartPointer.h
-  dtkVec3.h)
+  dtkSmartPointer.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractData.h
@@ -95,7 +93,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkAbstractViewNavigator.cpp
   dtkPlugin.cpp
   dtkPluginManager.cpp
-  dtkQuat.cpp
   dtkSignalBlocker.h
   dtkSingleton.cpp
   dtkSingletonDeclare.cpp

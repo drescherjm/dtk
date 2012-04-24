@@ -1,12 +1,12 @@
-/* @(#)dtkComposerNodeProcess.cpp ---
+/* dtkComposerNodeProcess.cpp ---
  *
  * Author: Nicolas Niclausse
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:17:21
  * Version: $Id$
- * Last-Updated: jeu. mars 29 18:01:46 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 218
+ * Last-Updated: Tue Apr 24 19:34:35 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 224
  */
 
 /* Commentary:
@@ -17,14 +17,13 @@
  *
  */
 
-#include <dtkLog/dtkLog.h>
-
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
-#include <dtkCore>
+#include <dtkLog/dtkLog.h>
 
+#include <dtkCore>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeProcessPrivate declaration
@@ -70,8 +69,6 @@ dtkComposerNodeProcess::dtkComposerNodeProcess(void) : dtkComposerNodeLeaf(), d(
     d->receiver_data = new dtkComposerTransmitterReceiver<dtkAbstractData *>(this);
     this->appendReceiver(d->receiver_data);
 
-
-
     d->emitter_integer = new dtkComposerTransmitterEmitter<qlonglong>(this);
     this->appendEmitter(d->emitter_integer);
 
@@ -80,9 +77,6 @@ dtkComposerNodeProcess::dtkComposerNodeProcess(void) : dtkComposerNodeLeaf(), d(
 
     d->emitter_data = new dtkComposerTransmitterEmitter<dtkAbstractData *>(this);
     this->appendEmitter(d->emitter_data);
-
-
-
 }
 
 dtkComposerNodeProcess::~dtkComposerNodeProcess(void)
@@ -104,7 +98,6 @@ dtkComposerNodeProcess::~dtkComposerNodeProcess(void)
 
 void dtkComposerNodeProcess::run(void)
 {
-
     if (d->receiver_type->isEmpty()) {
         dtkWarn() << "no type speficied in process node! " ;
         return;
@@ -138,7 +131,6 @@ void dtkComposerNodeProcess::run(void)
         d->emitter_real->setData(*static_cast<double *>(d->process->data(0)));
 
     d->emitter_data->setData(d->process->output());
-
 }
 
 QString dtkComposerNodeProcess::type(void)

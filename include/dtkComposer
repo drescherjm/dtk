@@ -1,4 +1,5 @@
 #include "../src/dtkComposer/dtkComposer.h"
+#include "../src/dtkComposer/dtkComposerCompass.h"
 #include "../src/dtkComposer/dtkComposerEvaluator.h"
 #include "../src/dtkComposer/dtkComposerFactory.h"
 #include "../src/dtkComposer/dtkComposerFactoryView.h"
@@ -41,6 +42,7 @@
 #include "../src/dtkComposer/dtkComposerNodeReal.h"
 #include "../src/dtkComposer/dtkComposerNodeRemote.h"
 #include "../src/dtkComposer/dtkComposerNodeString.h"
+#include "../src/dtkComposer/dtkComposerNodeStringOperator.h"
 #include "../src/dtkComposer/dtkComposerNodeVector.h"
 #include "../src/dtkComposer/dtkComposerNodeVectorOperator.h"
 #include "../src/dtkComposer/dtkComposerNodeWorld.h"

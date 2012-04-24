@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 16:21:41 2012 (+0200)
- *           By: tkloczko
- *     Update #: 349
+ * Last-Updated: Tue Apr 24 19:20:05 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 351
  */
 
 /* Commentary:
@@ -46,15 +46,13 @@
 #include "dtkPlugin.h"
 #include "dtkPluginManager.h"
 #include "dtkSmartPointer.h"
-#include "dtkVec3.h"
-#include "dtkQuat.h"
 %}
 
 // /////////////////////////////////////////////////////////////////
 // Preprocessing setup
 // /////////////////////////////////////////////////////////////////
 
-#pragma SWIG nowarn=389, 401, 509, 801, 472, 362
+#pragma SWIG nowarn=389, 401, 509, 801, 472, 362, 503
 
 // /////////////////////////////////////////////////////////////////
 // Macro undefinition
@@ -346,7 +344,5 @@ public:
 %include "dtkAbstractViewNavigator.h"
 %include "dtkPlugin.h"
 %include "dtkPluginManager.h"
-%include "dtkVec3.h"
-%include "dtkQuat.h"
 
 #endif

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:15:49
  * Version: $Id$
- * Last-Updated: jeu. mars 29 13:17:02 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 3
+ * Last-Updated: Tue Apr 24 21:18:03 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 5
  */
 
 /* Commentary:
@@ -46,6 +46,4 @@ private:
     dtkComposerNodeProcessPrivate *d;
 };
 
-
-#endif /* DTKCOMPOSERNODEPROCESS_H */
-
+#endif

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr 18 17:09:01 2012 (+0200)
+ * Last-Updated: Tue Apr 24 23:52:02 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 55
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -34,6 +34,7 @@ class dtkComposerPrivate;
 class dtkComposerScene;
 class dtkComposerStack;
 class dtkComposerView;
+class dtkComposerCompass;
 
 class DTKCOMPOSER_EXPORT dtkComposer : public QWidget
 {
@@ -61,9 +62,10 @@ signals:
 
 public:
     dtkComposerEvaluator *evaluator(void);
+    dtkComposerCompass *compass(void);
     dtkComposerFactory *factory(void);
-    dtkComposerGraph *graph(void);
     dtkComposerMachine *machine(void);
+    dtkComposerGraph *graph(void);
     dtkComposerScene *scene(void);
     dtkComposerStack *stack(void);
     dtkComposerView *view(void);

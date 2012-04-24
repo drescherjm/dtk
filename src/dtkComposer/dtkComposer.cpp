@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr 18 18:16:39 2012 (+0200)
+ * Last-Updated: Tue Apr 24 23:51:18 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 299
+ *     Update #: 308
  */
 
 /* Commentary: 
@@ -108,6 +108,10 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
     d->view = new dtkComposerView(this);
     d->view->setScene(d->scene);
 
+    d->compass = new dtkComposerCompass;
+    d->compass->setScene(d->scene);
+    d->compass->setView(d->view);
+
     d->evaluator->setGraph(d->graph);
 
     QHBoxLayout *layout = new QHBoxLayout(this);
@@ -116,14 +120,6 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
     layout->addWidget(d->view);
 
     connect(d->scene, SIGNAL(modified(bool)), this, SIGNAL(modified(bool)));
-
-    // -- Experimental: towards composer compass
-
-    d->compass = new dtkComposerCompass(this);
-    d->compass->setScene(d->scene);
-    d->compass->setView(d->view);
-
-    layout->addWidget(d->compass);
 }
 
 dtkComposer::~dtkComposer(void)
@@ -264,4 +260,9 @@ dtkComposerStack *dtkComposer::stack(void)
 dtkComposerView *dtkComposer::view(void)
 {
     return d->view;
+}
+
+dtkComposerCompass *dtkComposer::compass(void)
+{
+    return d->compass;
 }

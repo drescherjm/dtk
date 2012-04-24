@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: lun. avril 23 11:44:13 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 516
+ * Last-Updated: Tue Apr 24 23:37:16 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 522
  */
 
 /* Commentary:
@@ -41,8 +41,9 @@
 #include "dtkComposerNodeString.h"
 #include "dtkComposerNodeStringOperator.h"
 #include "dtkComposerNodeVector.h"
-#include "dtkComposerSceneNodeLeaf.h"
+#include "dtkComposerNodeView.h"
 #include "dtkComposerNodeRemote.h"
+#include "dtkComposerSceneNodeLeaf.h"
 
 #if defined(DTK_HAVE_MPI)
 #include "dtkComposerNodeDistributed.h"
@@ -390,16 +391,25 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->types["While"] = "while";
 
     // log nodes
+
     d->nodes << "Logger";
     d->descriptions["Logger"] = "<p>Description not yet filled!</p>";
     d->tags["Logger"] = QStringList() << "logger" << "debug";
     d->types["Logger"] = "logger";
 
     // process nodes
+
     d->nodes << "Process";
     d->descriptions["Process"] = "<p>Description not yet filled!</p>";
     d->tags["Process"] = QStringList() << "process" ;
     d->types["Process"] = "process";
+
+    // process nodes
+
+    d->nodes << "View";
+    d->descriptions["View"] = "<p>Description not yet filled!</p>";
+    d->tags["View"] = QStringList() << "view" ;
+    d->types["View"] = "view";
 
     // dtkDistributed nodes
 
@@ -675,6 +685,11 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "process")
         return new dtkComposerNodeProcess;
+
+    // view nodes
+
+    if(type == "view")
+        return new dtkComposerNodeView;
 
     // distributed nodes
 

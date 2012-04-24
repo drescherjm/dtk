@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:17:21
  * Version: $Id$
- * Last-Updated: Tue Apr 24 19:34:35 2012 (+0200)
+ * Last-Updated: Tue Apr 24 23:42:11 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 224
+ *     Update #: 231
  */
 
 /* Commentary:
@@ -45,7 +45,6 @@ public:
 
 public:
     dtkAbstractProcess *process;
-
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -77,6 +76,8 @@ dtkComposerNodeProcess::dtkComposerNodeProcess(void) : dtkComposerNodeLeaf(), d(
 
     d->emitter_data = new dtkComposerTransmitterEmitter<dtkAbstractData *>(this);
     this->appendEmitter(d->emitter_data);
+
+    d->process = NULL;
 }
 
 dtkComposerNodeProcess::~dtkComposerNodeProcess(void)
@@ -91,6 +92,9 @@ dtkComposerNodeProcess::~dtkComposerNodeProcess(void)
     delete d->emitter_integer;
     delete d->emitter_real;
 
+    if (d->process)
+        delete d->process;
+
     delete d;
 
     d = NULL;
@@ -99,11 +103,12 @@ dtkComposerNodeProcess::~dtkComposerNodeProcess(void)
 void dtkComposerNodeProcess::run(void)
 {
     if (d->receiver_type->isEmpty()) {
-        dtkWarn() << "no type speficied in process node! " ;
+        dtkWarn() << "no type speficied in process node!";
         return;
     }
 
-    d->process = dtkAbstractProcessFactory::instance()->create(d->receiver_type->data());
+    if(!d->process)
+        d->process = dtkAbstractProcessFactory::instance()->create(d->receiver_type->data());
 
     if (!d->process) {
         dtkWarn() << "no process, abort "<<  d->receiver_type->data();
@@ -160,7 +165,7 @@ QString dtkComposerNodeProcess::inputLabelHint(int port)
     if(port == 4)
         return "data";
 
-    return dtkComposerNode::inputLabelHint(port);
+    return dtkComposerNodeLeaf::inputLabelHint(port);
 }
 
 QString dtkComposerNodeProcess::outputLabelHint(int port)
@@ -174,5 +179,5 @@ QString dtkComposerNodeProcess::outputLabelHint(int port)
     if(port == 2)
         return "data";
 
-    return dtkComposerNode::outputLabelHint(port);
+    return dtkComposerNodeLeaf::outputLabelHint(port);
 }

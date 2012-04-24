@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 14:29:48 2012 (+0200)
+ * Last-Updated: Wed Apr 25 00:02:31 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1667
+ *     Update #: 1670
  */
 
 /* Commentary:
@@ -23,6 +23,7 @@
 #include <dtkDistributed/dtkDistributor.h>
 
 #include <dtkComposer/dtkComposer.h>
+#include <dtkComposer/dtkComposerCompass.h>
 #include <dtkComposer/dtkComposerEvaluator.h>
 #include <dtkComposer/dtkComposerFactoryView.h>
 #include <dtkComposer/dtkComposerGraph.h>
@@ -316,10 +317,12 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     right->addWidget(d->scene);
     right->addWidget(d->editor);
     right->addWidget(d->stack);
+    right->addWidget(d->composer->compass());
     right->setSizes(QList<int>()
-                    << this->size().height()/3
-                    << this->size().height()/3
-                    << this->size().height()/3);
+                    << this->size().height()/4
+                    << this->size().height()/4
+                    << this->size().height()/4
+                    << this->size().height()/4);
 
     d->inner = new dtkSplitter(this);
     d->inner->setOrientation(Qt::Horizontal);

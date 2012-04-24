@@ -1,25 +1,27 @@
-/* dtkCommunicatorMpi.cpp --- 
- * 
+/* dtkCommunicatorMpi.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. avril 19 13:30:57 2012 (+0200)
+ * Last-Updated: mar. avril 24 10:49:27 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 469
+ *     Update #: 482
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
-#include <dtkCore/dtkAbstractDataFactory.h>
 
 #include "dtkDistributedCommunicatorMpi.h"
+
+#include <dtkCore/dtkAbstractDataFactory.h>
+#include <dtkLog/dtkLog.h>
 
 #include <mpi.h>
 
@@ -38,7 +40,7 @@ MPI::Datatype data_type(dtkDistributedCommunicator::DataType type)
     case dtkDistributedCommunicator::dtkDistributedCommunicatorFloat:  return MPI::FLOAT;
     case dtkDistributedCommunicator::dtkDistributedCommunicatorDouble: return MPI::DOUBLE;
     default:
-        qDebug() << "dtkCommunicatorMpi: data type not handled.";
+        dtkInfo() << "dtkCommunicatorMpi: data type not handled.";
         return MPI::BYTE;
     }
 }
@@ -57,7 +59,7 @@ MPI::Op operation_type(dtkDistributedCommunicator::OperationType type)
     case dtkDistributedCommunicator::dtkDistributedCommunicatorLogicalOr:  return MPI::LOR;
     case dtkDistributedCommunicator::dtkDistributedCommunicatorLogicalXor: return MPI::LXOR;
     default:
-        qDebug() << "dtkCommunicatorMpi: operation type not handled.";
+        dtkInfo() << "dtkCommunicatorMpi: operation type not handled.";
         return MPI::MIN;
     }
 }
@@ -259,7 +261,7 @@ void dtkDistributedCommunicatorMpi::send(dtkAbstractData *data, qint16 target, i
 
     QByteArray *array = data->serialize();
     if (!array) {
-        qDebug() <<"serialization failed";
+        dtkError() <<"serialization failed";
     } else {
         qint64   arrayLength = array->length();
         dtkDistributedCommunicator::send(&arrayLength,1,target,tag);
@@ -284,18 +286,18 @@ void dtkDistributedCommunicatorMpi::receive(dtkAbstractData *&data, qint16 sourc
     if(!data) {
         data = dtkAbstractDataFactory::instance()->create(QString(type));
         if (!data) {
-            qDebug() << "Can't instantiate object of type" << QString(type);
+            dtkWarn() << "Can't instantiate object of type" << QString(type);
             return;
         }
     } else
         if(data->identifier() != QString(type))
-            qDebug() << DTK_PRETTY_FUNCTION << "Warning, type mismatch";
+            dtkWarn() << DTK_PRETTY_FUNCTION << "Warning, type mismatch";
 
     QByteArray array = QByteArray::fromRawData(rawArray, arrayLength);
     // FIXME: array is not null-terminated, does it matter ??
 
     if (data && !data->deserialize(array))
-        qDebug() << "Warning: deserialization failed";
+        dtkError() << "Warning: deserialization failed";
 }
 
 /*!

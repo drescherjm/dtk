@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: lun. avril 23 14:25:38 2012 (+0200)
+ * Last-Updated: mar. avril 24 10:55:12 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 1564
+ *     Update #: 1578
  */
 
 /* Commentary: 
@@ -114,6 +114,10 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
             node->setState(dtkDistributedNode::Busy);
         if(state == "down")
             node->setState(dtkDistributedNode::Down);
+        if(state == "standby")
+            node->setState(dtkDistributedNode::StandBy);
+        if(state == "absent")
+            node->setState(dtkDistributedNode::Absent);
 
         if(properties.contains("dell"))
             node->setBrand(dtkDistributedNode::Dell);
@@ -531,7 +535,7 @@ void dtkDistributedController::cleanup()
 void dtkDistributedController::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus )
 {
     DTK_UNUSED(exitCode);
-    qDebug() << DTK_PRETTY_FUNCTION << "remote server deployment failure" << exitStatus ;
+    dtkInfo() << DTK_PRETTY_FUNCTION << "remote server deployment failure" << exitStatus ;
 }
 
 void dtkDistributedController::error(QAbstractSocket::SocketError error)

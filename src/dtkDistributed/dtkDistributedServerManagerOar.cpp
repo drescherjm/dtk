@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. avril 13 15:30:00 2012 (+0200)
+ * Last-Updated: mar. avril 24 10:07:15 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 396
+ *     Update #: 419
  */
 
 /* Commentary:
@@ -300,6 +300,22 @@ QByteArray dtkDistributedServerManagerOar::status(void)
                 prop.insert("cpu_arch","x86_64");
             }
             node.insert("name",jcore["host"]);
+            QString state;
+            if (jcore["state"].toString() == "Absent")
+                if (jcore["available_upto"].toLongLong() > 0)
+                    state = "standby";
+                else
+                    state = "absent";
+            else if (jcore["state"].toString() == "Dead")
+                state = "down";
+            else if (jcore["state"].toString() == "Suspected")
+                state = "absent";
+            else if (jcore["state"].toString() == "Alive")
+                if (jcore["jobs"].toString().isEmpty())
+                    state = "free";
+                else
+                    state = "busy";
+            node.insert("state", state);
             node.insert("corespercpu",jcore["cpucore"]); // temporary
             core.insert("id",jcore["resource_id"]);
             if (!activecores[core["id"].toString()].isEmpty()) {

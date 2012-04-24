@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 13:22:24 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 10 18:33:04 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 65
+ * Last-Updated: mar. avril 24 10:10:53 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 69
  */
 
 /* Commentary: 
@@ -49,9 +49,11 @@ public:
     Q_DECLARE_FLAGS(Networks, Network)
 
     enum State {
-        Free = 0x1,
-        Busy = 0x2,
-        Down = 0x4
+        Free    = 0x1,
+        Busy    = 0x2,
+        Down    = 0x4,
+        StandBy = 0x8,
+        Absent  = 0x16
     };
 
     Q_DECLARE_FLAGS(States, State)

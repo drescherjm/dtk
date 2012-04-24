@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 19:16:24 2012 (+0200)
+ * Last-Updated: Tue Apr 24 20:03:12 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 286
+ *     Update #: 298
  */
 
 /* Commentary:
@@ -53,81 +53,92 @@ public slots:
     virtual void   link(dtkAbstractView *other);
     virtual void unlink(dtkAbstractView *other);
 
+public slots:
     virtual void   select(dtkAbstractData *data);
     virtual void unselect(dtkAbstractData *data);
 
+public slots:
     virtual void setStereo(bool on);
 
+public slots:
     virtual void setView(void *view);
 
+public slots:
     virtual void setData(dtkAbstractData *data);
     virtual void setData(dtkAbstractData *data, int inputId);
 
+public slots:
     virtual void setBackgroundColor(int red, int green, int blue);
     virtual void setBackgroundColor(double red, double green, double blue);
 
+public slots:
     virtual void *view(void);
     virtual void *data(void);
     virtual void *data(int channel);
 
+public slots:
     virtual bool stereo(void);
 
+public slots:
     virtual void  clear(void);
     virtual void  reset(void);
     virtual void update(void);
 
+public slots:
     virtual QWidget *widget(void);
     
+public slots:
     virtual void close(void);
 
+public slots:
     void showFullScreen(void);
     void showMinimized(void);
     void showMaximized(void);
     void showNormal(void);
     void show(void);
 
+public slots:
     void resize(int width, int height);
 
+public slots:
     void addAnimator  (dtkAbstractViewAnimator   *animator);
     void addNavigator (dtkAbstractViewNavigator  *navigator);
     void addInteractor(dtkAbstractViewInteractor *interactor);
 
-    void  enableAnimator(const QString& animator);
-    void disableAnimator(const QString& animator);
-
-    void  enableNavigator(const QString& navigator);
-    void disableNavigator(const QString& navigator);
-
+public slots:
+    void    enableAnimator(const QString& animator);
+    void   disableAnimator(const QString& animator);
+    void   enableNavigator(const QString& navigator);
+    void  disableNavigator(const QString& navigator);
     void  enableInteractor(const QString& interactor);
     void disableInteractor(const QString& interactor);
 
+public slots:
     dtkAbstractViewAnimator   *animator  (const QString& type);
     dtkAbstractViewNavigator  *navigator (const QString& type);
     dtkAbstractViewInteractor *interactor(const QString& type);
 
+public slots:
     QList<dtkAbstractViewAnimator   *> animators(void) const;
     QList<dtkAbstractViewNavigator  *> navigators(void) const;
     QList<dtkAbstractViewInteractor *> interactors(void) const;
 
+public slots:
     virtual void   initialize(void);
     virtual void uninitialize(void);
 
-    virtual void  enableInteraction(void);
-    virtual void disableInteraction(void);
-
-    virtual void bounds(float& xmin, float& xmax, float& ymin, float& ymax, float &zmin, float& zmax);
-
-    virtual void cameraUp(double *coordinates) const;
-    virtual void cameraPosition(double *coordinates) const;
-    virtual void cameraFocalPoint(double *coordinates) const;
-
-    virtual void setCameraPosition(double x, double y, double z);
-
-    virtual void setCameraClippingRange(double near, double far);
-
-    virtual QString cameraProjectionMode(void) const;
-    virtual double cameraViewAngle(void) const;
-    virtual double cameraZoom(void) const;
+public /* DEPRECATED */ slots:
+    virtual DTK_DEPRECATED void  enableInteraction(void);
+    virtual DTK_DEPRECATED void disableInteraction(void);
+    virtual DTK_DEPRECATED void bounds(float& xmin, float& xmax, float& ymin, float& ymax, float &zmin, float& zmax);
+    virtual DTK_DEPRECATED void cameraUp(double *coordinates) const;
+    virtual DTK_DEPRECATED void cameraPosition(double *coordinates) const;
+    virtual DTK_DEPRECATED void cameraFocalPoint(double *coordinates) const;
+    virtual DTK_DEPRECATED void setCameraPosition(double x, double y, double z);
+    virtual DTK_DEPRECATED void setCameraClippingRange(double near, double far);
+    virtual DTK_DEPRECATED QString cameraProjectionMode(void) const;
+    virtual DTK_DEPRECATED double cameraViewAngle(void) const;
+    virtual DTK_DEPRECATED double cameraZoom(void) const;
 
 private:
     DTK_DECLARE_PRIVATE(dtkAbstractView);

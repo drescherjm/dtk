@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Oct 27 14:10:37 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. avril 13 13:59:36 2012 (+0200)
+ * Last-Updated: mar. avril 24 15:11:54 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 116
+ *     Update #: 118
  */
 
 /* Commentary: 
@@ -43,7 +43,14 @@ int main(int argc, char **argv)
     application.setOrganizationName("inria");
     application.setOrganizationDomain("fr");
 
-    dtkLogger::instance().setLevel(dtkLog::Info);
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("evaluator");
+
+    if (settings.contains("log_level"))
+        dtkLogger::instance().setLevel(settings.value("log_level").toString());
+    else
+        dtkLogger::instance().setLevel(dtkLog::Debug);
+
     dtkLogger::instance().attachFile(dtkLogPath(&application));
 
     dtkPluginManager::instance()->initialize();

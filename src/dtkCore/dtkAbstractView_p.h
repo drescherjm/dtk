@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Apr 23 16:46:48 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 13:29:46 2012 (+0200)
- *           By: tkloczko
- *     Update #: 6
+ * Last-Updated: Tue Apr 24 19:47:57 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 7
  */
 
 /* Commentary: 
@@ -36,7 +36,7 @@ class dtkAbstractViewInteractor;
 class DTKCORE_EXPORT dtkAbstractViewPrivate : public dtkAbstractObjectPrivate
 {
 public:
-    dtkAbstractViewPrivate(void) : dtkAbstractObjectPrivate() {}
+    dtkAbstractViewPrivate(dtkAbstractView *q = 0) : dtkAbstractObjectPrivate(q) {}
     dtkAbstractViewPrivate(const dtkAbstractViewPrivate& other) : dtkAbstractObjectPrivate(other),
                                                                   stereo(other.stereo),
                                                                   animators(other.animators),

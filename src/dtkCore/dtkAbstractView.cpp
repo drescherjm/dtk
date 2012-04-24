@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 11:23:22 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 310
+ * Last-Updated: Tue Apr 24 13:29:52 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 311
  */
 
 /* Commentary:
@@ -20,7 +20,9 @@
 #include "dtkAbstractData.h"
 #include "dtkAbstractView.h"
 #include "dtkAbstractView_p.h"
-#include "dtkSmartPointer.h"
+#include "dtkAbstractViewAnimator.h"
+#include "dtkAbstractViewNavigator.h"
+#include "dtkAbstractViewInteractor.h"
 
 #include <dtkLog/dtkLog.h>
 

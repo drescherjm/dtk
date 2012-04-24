@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 16:25:42 2012 (+0200)
- *           By: tkloczko
- *     Update #: 413
+ * Last-Updated: Tue Apr 24 11:22:49 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 414
  */
 
 /* Commentary:
@@ -69,6 +69,8 @@ dtkAbstractData& dtkAbstractData::operator=(const dtkAbstractData& other)
     d->numberOfChannels = other.d_func()->numberOfChannels;
 
     d->thumbnails = other.d_func()->thumbnails;
+
+    return (*this);
 }
 
 void dtkAbstractData::addReader(const QString& reader)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 16:59:12 2012 (+0200)
- *           By: tkloczko
- *     Update #: 309
+ * Last-Updated: Tue Apr 24 11:23:22 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 310
  */
 
 /* Commentary:
@@ -49,6 +49,8 @@ dtkAbstractView& dtkAbstractView::operator=(const dtkAbstractView& other)
     d->animators   = other.d_func()->animators;
     d->navigators  = other.d_func()->navigators;
     d->interactors = other.d_func()->interactors;
+
+    return (*this);
 }
 
 dtkAbstractView::~dtkAbstractView(void)

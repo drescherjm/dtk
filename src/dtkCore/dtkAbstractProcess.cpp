@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 16:39:06 2012 (+0200)
- *           By: tkloczko
- *     Update #: 97
+ * Last-Updated: Tue Apr 24 11:23:11 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 98
  */
 
 /* Commentary: 
@@ -37,7 +37,7 @@ dtkAbstractProcess::~dtkAbstractProcess(void)
 
 dtkAbstractProcess& dtkAbstractProcess::operator=(const dtkAbstractProcess& other)
 {
-    dtkAbstractObject::operator=(other);
+    return dtkAbstractObject::operator=(other);
 }
 
 QDebug operator<<(QDebug debug, const dtkAbstractProcess& process)

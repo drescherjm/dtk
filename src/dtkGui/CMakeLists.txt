@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Apr 16 12:02:04 2012 (+0200)
-##           By: Julien Wintz
-##     Update #: 243
+## Last-Updated: mar. avril 24 15:45:45 2012 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 247
 ######################################################################
 ## 
 ### Commentary: 
@@ -32,6 +32,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkFlowLayout.h
   dtkFinder.h
   dtkInterpreter.h
+  dtkPieChart.h
   dtkPluginsEditor.h
   dtkPopup.h
   dtkProgressIndicator.h
@@ -52,6 +53,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkColorGrid.h
   dtkFinder.h
   dtkInterpreter.h
+  dtkPieChart.h
   dtkPluginsEditor.h
   dtkPopup.h
   dtkProgressIndicator.h
@@ -73,6 +75,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkFlowLayout.cpp
   dtkFinder.cpp
   dtkInterpreter.cpp
+  dtkPieChart.cpp
   dtkPluginsEditor.cpp
   dtkPopup.cpp
   dtkProgressIndicator.cpp

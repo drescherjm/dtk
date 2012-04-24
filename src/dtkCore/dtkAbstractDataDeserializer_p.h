@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Apr 24 11:13:02 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 11:27:39 2012 (+0200)
+ * Last-Updated: Tue Apr 24 16:55:49 2012 (+0200)
  *           By: tkloczko
- *     Update #: 3
+ *     Update #: 4
  */
 
 /* Commentary: 
@@ -22,8 +22,8 @@
 
 #include "dtkCoreExport.h"
 #include "dtkAbstractObject_p.h"
+#include "dtkAbstractDataDeserializer.h"
 
-class dtkAbstractDataDeserializer;
 class dtkAbstractData;
 
 ////////////////////////////////////////////////////

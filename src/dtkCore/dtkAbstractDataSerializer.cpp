@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: lun. oct. 17 13:20:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 11:28:04 2012 (+0200)
+ * Last-Updated: Tue Apr 24 16:35:49 2012 (+0200)
  *           By: tkloczko
- *     Update #: 27
+ *     Update #: 29
  */
 
 /* Commentary:
@@ -66,14 +66,14 @@ QByteArray *dtkAbstractDataSerializer::data(void) const
 {
     DTK_D(const dtkAbstractDataSerializer);
 
-    return d->binary;
+    return d->array;
 }
 
 void dtkAbstractDataSerializer::setData(QByteArray *array)
 {
     DTK_D(dtkAbstractDataSerializer);
 
-    d->binary = array;
+    d->array = array;
 }
 
 QByteArray *dtkAbstractDataSerializer::serialize(void)

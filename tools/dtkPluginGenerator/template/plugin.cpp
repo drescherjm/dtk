@@ -5,14 +5,23 @@
 #include "%1.h"
 #include "%1Plugin.h"
 
-#include <dtkCore/dtkLog.h>
+#include <dtkCore/dtkPlugin_p.h>
+
+#include <dtkLog/dtkLog.h>
 
 // /////////////////////////////////////////////////////////////////
 // %1PluginPrivate
 // /////////////////////////////////////////////////////////////////
 
-class %1PluginPrivate 
+class %1PluginPrivate : public dtkPluginPrivate
 {
+public:
+    %1PluginPrivate(%1Plugin *q = 0) : dtkPluginPrivate(q) {}
+    %1PluginPrivate(const %1PluginPrivate& other) : dtkPluginPrivate(other) {} // Complete copy ctror with your local members.
+
+public:
+    ~%1PluginPrivate(void) {}
+    
 public:
     // Class variables go here.
 };
@@ -21,22 +30,25 @@ public:
 // %1Plugin
 // /////////////////////////////////////////////////////////////////
 
-%1Plugin::%1Plugin(QObject *parent) : dtkPlugin(parent), d(new %1PluginPrivate)
+%1Plugin::%1Plugin(QObject *parent) : dtkPlugin(*new %1PluginPrivate, parent)
 {
 
 }
 
+%1Plugin::%1Plugin(const %1Plugin& other) : dtkPlugin(*new %1PluginPrivate(*other.d_func()), other)
+{
+    
+}
+
 %1Plugin::~%1Plugin(void)
 {
-    delete d;
 
-    d = NULL;
 }
 
 bool %1Plugin::initialize(void)
 {
     if(!%1::registered())
-	dtkWarning() << "Unable to register %1 type";
+	dtkWarn() << "Unable to register %1 type";
 
     return true;
 }

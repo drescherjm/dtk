@@ -11,6 +11,10 @@
 
 class %2PLUGIN_EXPORT %1PluginPrivate;
 
+// /////////////////////////////////////////////////////////////////
+// %1Plugin interface
+// /////////////////////////////////////////////////////////////////
+
 class %2PLUGIN_EXPORT %1Plugin : public dtkPlugin
 {
     Q_OBJECT
@@ -18,8 +22,10 @@ class %2PLUGIN_EXPORT %1Plugin : public dtkPlugin
 
 public:
      %1Plugin(QObject *parent = 0);
+     %1Plugin(const %1Plugin& other);
     ~%1Plugin(void);
 
+public:
     virtual bool initialize(void);
     virtual bool uninitialize(void);
 
@@ -30,7 +36,7 @@ public:
     virtual QStringList types(void) const;
 
 private:
-     %1PluginPrivate *d;
+    DTK_DECLARE_PRIVATE(%1Plugin);
 };
 
 #endif

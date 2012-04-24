@@ -11,21 +11,30 @@
 
 class %1Private;
 
+// /////////////////////////////////////////////////////////////////
+// %1 interface
+// /////////////////////////////////////////////////////////////////
+
 class %2PLUGIN_EXPORT %1 : public dtkAbstract%3
 {
     Q_OBJECT
 
 public:
              %1(void);
+             %1(const %1& other);
     virtual ~%1(void);
 
+public:
+    %1& operator = (const %1& other);
+
+public:
     virtual QString description(void) const;
     virtual QString identifier(void) const;
 
     static bool registered(void);
 
 private:
-    %1Private *d;
+    DTK_DECLARE_PRIVATE(%1);
 };
 
 dtkAbstract%3 *create%4(void);

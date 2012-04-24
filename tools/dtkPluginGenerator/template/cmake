@@ -67,7 +67,8 @@ add_library(${PROJECT_NAME} ${DTK_PLUGINS_BUILD_TYPE}
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
-  dtkCore)
+  dtkCore
+  dtkLog)
 
 dtk_build_doc(%1Plugin)
 

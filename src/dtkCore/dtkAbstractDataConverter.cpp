@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 22:03:03 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  5 15:16:11 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 38
+ * Last-Updated: Tue Apr 24 11:38:50 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -18,51 +18,62 @@
  */
 
 #include "dtkAbstractDataConverter.h"
+#include "dtkAbstractDataConverter_p.h"
 #include "dtkAbstractData.h"
-#include "dtkSmartPointer.h"
 
-class dtkAbstractDataConverterPrivate
+// /////////////////////////////////////////////////////////////////
+// dtkAbstractDataConverter implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkAbstractDataConverter::dtkAbstractDataConverter(void) : dtkAbstractObject(*new dtkAbstractDataConverterPrivate(this), 0)
 {
-public:
-    bool enabled;
+    DTK_D(dtkAbstractDataConverter);
 
-    dtkSmartPointer<dtkAbstractData> data;
-};
-
-dtkAbstractDataConverter::dtkAbstractDataConverter(void) : dtkAbstractObject(), d(new dtkAbstractDataConverterPrivate)
-{
     d->enabled = false;
+}
+
+dtkAbstractDataConverter::dtkAbstractDataConverter(const dtkAbstractDataConverter& other) : dtkAbstractObject(*new dtkAbstractDataConverterPrivate(*other.d_func()), other)
+{
+
 }
 
 dtkAbstractDataConverter::~dtkAbstractDataConverter(void)
 {
-    delete d;
 
-    d = NULL;
 }
 
 bool dtkAbstractDataConverter::enabled(void) const
 {
+    DTK_D(const dtkAbstractDataConverter);
+
     return d->enabled;
 }
 
 void dtkAbstractDataConverter::enable(void)
 {
+    DTK_D(dtkAbstractDataConverter);
+
     d->enabled = true;
 }
 
 void dtkAbstractDataConverter::disable(void)
 {
+    DTK_D(dtkAbstractDataConverter);
+
     d->enabled = false;
 }
 
-dtkAbstractData *dtkAbstractDataConverter::data(void)
+dtkAbstractData *dtkAbstractDataConverter::data(void) const
 {
+    DTK_D(const dtkAbstractDataConverter);
+
     return d->data;
 }
 
 void dtkAbstractDataConverter::setData(dtkAbstractData *data)
 {
+    DTK_D(dtkAbstractDataConverter);
+
     d->data = data;
 }
 

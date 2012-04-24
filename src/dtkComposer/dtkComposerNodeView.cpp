@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 24 23:29:24 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 23:41:53 2012 (+0200)
+ * Last-Updated: Wed Apr 25 01:18:51 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 23
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -63,7 +63,8 @@ void dtkComposerNodeView::run(void)
 
     if(!d->view) {
         d->view = dtkAbstractViewFactory::instance()->create(d->receiver_type->data());
-        d->view->widget()->show();
+        // d->view->resize(200, 100);
+        // d->view->show();
     }
 
     if (!d->view) {

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr  6 15:53:04 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 11 12:12:24 2012 (+0200)
+ * Last-Updated: Tue Apr 24 11:37:09 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 138
+ *     Update #: 142
  */
 
 /* Commentary: 
@@ -117,6 +117,12 @@ bool dtkDistributedControllerStatusModelFilter::filterAcceptsRow(int row, const 
             return false;
 
         if(sourceModel()->data(s_index).toString() == "Down" && !d->state_flags.testFlag(dtkDistributedNode::Down))
+            return false;
+
+        if(sourceModel()->data(s_index).toString() == "StandBy" && !d->state_flags.testFlag(dtkDistributedNode::StandBy))
+            return false;
+
+        if(sourceModel()->data(s_index).toString() == "Absent" && !d->state_flags.testFlag(dtkDistributedNode::Absent))
             return false;
     }
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Apr 23 16:46:48 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 19:47:57 2012 (+0200)
+ * Last-Updated: Tue Apr 24 19:52:54 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 7
+ *     Update #: 10
  */
 
 /* Commentary: 
@@ -20,14 +20,14 @@
 #ifndef DTKABSTRACTVIEW_P_H
 #define DTKABSTRACTVIEW_P_H
 
-#include "dtkCoreExport.h"
 #include "dtkAbstractObject_p.h"
+#include "dtkAbstractViewAnimator.h"
+#include "dtkAbstractViewNavigator.h"
+#include "dtkAbstractViewInteractor.h"
+#include "dtkCoreExport.h"
 #include "dtkSmartPointer.h"
 
 class dtkAbstractView;
-class dtkAbstractViewAnimator;
-class dtkAbstractViewNavigator;
-class dtkAbstractViewInteractor;
 
 ////////////////////////////////////////////////////
 // dtkAbstractViewPrivate interface

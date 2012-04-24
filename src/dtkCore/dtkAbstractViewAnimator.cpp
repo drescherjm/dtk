@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Jan 30 16:14:03 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  5 15:27:15 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 19
+ * Last-Updated: Tue Apr 24 14:28:25 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -17,66 +17,77 @@
  * 
  */
 
-#include "dtkAbstractData.h"
-#include "dtkAbstractView.h"
 #include "dtkAbstractViewAnimator.h"
-#include "dtkSmartPointer.h"
+#include "dtkAbstractViewAnimator_p.h"
 
-class dtkAbstractViewAnimatorPrivate
+// /////////////////////////////////////////////////////////////////
+// dtkAbstractViewAnimator implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkAbstractViewAnimator::dtkAbstractViewAnimator(void) : dtkAbstractObject(*new dtkAbstractViewAnimatorPrivate(this), 0)
 {
-public:
-    bool enabled;
+    DTK_D(dtkAbstractViewAnimator);
 
-    dtkSmartPointer<dtkAbstractData> data;
-
-    dtkAbstractView *view;
-};
-
-dtkAbstractViewAnimator::dtkAbstractViewAnimator(void) : dtkAbstractObject(), d(new dtkAbstractViewAnimatorPrivate)
-{
     d->enabled = false;
     d->view = NULL;
 }
 
-dtkAbstractViewAnimator::~dtkAbstractViewAnimator(void)
+dtkAbstractViewAnimator::dtkAbstractViewAnimator(const dtkAbstractViewAnimator& other) : dtkAbstractObject(*new dtkAbstractViewAnimatorPrivate(*other.d_func()), other)
 {
-    delete d;
 
-    d = NULL;
 }
 
-dtkAbstractData *dtkAbstractViewAnimator::data(void)
+dtkAbstractViewAnimator::~dtkAbstractViewAnimator(void)
 {
+
+}
+
+dtkAbstractData *dtkAbstractViewAnimator::data(void) const
+{
+    DTK_D(const dtkAbstractViewAnimator);
+
     return d->data;
 }
 
-dtkAbstractView *dtkAbstractViewAnimator::view(void)
+dtkAbstractView *dtkAbstractViewAnimator::view(void) const
 {
+    DTK_D(const dtkAbstractViewAnimator);
+
     return d->view;
 }
 
 void dtkAbstractViewAnimator::setData(dtkAbstractData *data)
 {
+    DTK_D(dtkAbstractViewAnimator);
+
     d->data = data;
 }
 
 void dtkAbstractViewAnimator::setView(dtkAbstractView *view)
 {
+    DTK_D(dtkAbstractViewAnimator);
+
     d->view = view;
 }
 
 bool dtkAbstractViewAnimator::enabled(void) const
 {
+    DTK_D(const dtkAbstractViewAnimator);
+
     return d->enabled;
 }
 
 void dtkAbstractViewAnimator::enable(void)
 {
+    DTK_D(dtkAbstractViewAnimator);
+
     d->enabled = true;
 }
 
 void dtkAbstractViewAnimator::disable(void)
 {
+    DTK_D(dtkAbstractViewAnimator);
+
     d->enabled = false;
 }
 

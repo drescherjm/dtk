@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 13:41:47 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 106
+ * Last-Updated: mar. avril 24 18:24:47 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 111
  */
 
 /* Commentary: 
@@ -52,6 +52,8 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     d->host_address->addItem("dtk://<host>[:port]");
     d->host_address->addItem("dtk://nef-devel.inria.fr:9999");
     d->host_address->addItem("dtk://fsophia.sophia.grid5000.fr:9999");
+    d->host_address->addItem("dtk://is-master.inria.fr:9999");
+    d->host_address->addItem("dtk://localhost:9998");
     d->host_address->setEditable(true);
     d->host_address->setAttribute(Qt::WA_MacShowFocusRect, false);
 

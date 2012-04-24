@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. avril 19 13:12:07 2012 (+0200)
+ * Last-Updated: mar. avril 24 18:29:50 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 726
+ *     Update #: 729
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 #include "dtkDistributedServerDaemon.h"
 #include "dtkDistributedServerManager.h"
 #include "dtkDistributedServerManagerOar.h"
+#include "dtkDistributedServerManagerSsh.h"
 #include "dtkDistributedServerManagerTorque.h"
 #include "dtkDistributedService.h"
 #include "dtkDistributedSocket.h"
@@ -72,6 +73,9 @@ void dtkDistributedServerDaemon::setManager(dtkDistributedServerManager::Type ty
         break;
     case dtkDistributedServerManager::Torque:
         d->manager = new dtkDistributedServerManagerTorque;
+        break;
+    case dtkDistributedServerManager::Ssh:
+        d->manager = new dtkDistributedServerManagerSsh;
         break;
     default:
         break;

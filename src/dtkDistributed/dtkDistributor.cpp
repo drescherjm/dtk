@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 19 15:35:18 2012 (+0200)
+ * Last-Updated: Tue Apr 24 13:41:47 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 105
+ *     Update #: 106
  */
 
 /* Commentary: 
@@ -107,6 +107,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     connect(d->filter_view, SIGNAL(updated()), this, SLOT(onFilterUpdated()));
     connect(d->target_view, SIGNAL(selected(const QString&)), d->status_model, SLOT(setCluster(const QString&)));
     connect(d->target_view, SIGNAL(selected(const QString&)), d->header_view, SLOT(setCluster(const QString&)));
+    connect(d->target_view, SIGNAL(selected(const QString&)), d->job_view, SLOT(setCluster(const QString&)));
     connect(d->target_view, SIGNAL(selected(const QString&)), d->submit_view, SLOT(setCluster(const QString&)));
 }
 

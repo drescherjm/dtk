@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr 11 17:02:06 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 17 14:22:07 2012 (+0200)
+ * Last-Updated: Tue Apr 24 13:43:28 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 89
+ *     Update #: 91
  */
 
 /* Commentary: 
@@ -80,6 +80,13 @@ void dtkDistributedControllerJobView::setController(dtkDistributedController *co
     connect(d->controller, SIGNAL(updated(const QUrl&)), this, SLOT(onStatus(const QUrl&)));
     connect(d->controller, SIGNAL(status(const QUrl&)), this, SLOT(onStatus(const QUrl&)));
     connect(d->controller, SIGNAL(disconnected(const QUrl&)), this, SLOT(onDisconnected(const QUrl&)));
+}
+
+void dtkDistributedControllerJobView::setCluster(const QString& cluster)
+{
+    d->cluster = cluster;
+
+    this->update();
 }
 
 void dtkDistributedControllerJobView::onStatus(const QUrl& cluster)

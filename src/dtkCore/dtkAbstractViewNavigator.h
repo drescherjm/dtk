@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jan 29 14:36:41 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep  5 12:57:00 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 82
+ * Last-Updated: Tue Apr 24 14:35:43 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 84
  */
 
 /* Commentary:
@@ -27,14 +27,20 @@ class dtkAbstractViewNavigatorPrivate;
 class dtkAbstractData;
 class dtkAbstractView;
 
+// /////////////////////////////////////////////////////////////////
+// dtkAbstractViewNavigator interface
+// /////////////////////////////////////////////////////////////////
+
 class DTKCORE_EXPORT dtkAbstractViewNavigator : public dtkAbstractObject
 {
     Q_OBJECT
 
 public:
              dtkAbstractViewNavigator(void);
+             dtkAbstractViewNavigator(const dtkAbstractViewNavigator& other);
     virtual ~dtkAbstractViewNavigator(void);
 
+public:
     virtual QString description(void) const = 0;
     virtual QStringList handled(void) const = 0;
 
@@ -60,7 +66,7 @@ signals:
     void updated(void);
 
 private:
-    dtkAbstractViewNavigatorPrivate *d;
+    DTK_DECLARE_PRIVATE(dtkAbstractViewNavigator);
 };
 
 #endif

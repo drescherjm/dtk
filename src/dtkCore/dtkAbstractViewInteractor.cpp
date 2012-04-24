@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jan 29 14:38:31 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 13:22:24 2012 (+0200)
+ * Last-Updated: Tue Apr 24 14:31:54 2012 (+0200)
  *           By: tkloczko
- *     Update #: 65
+ *     Update #: 66
  */
 
 /* Commentary:
@@ -19,8 +19,6 @@
 
 #include "dtkAbstractViewInteractor.h"
 #include "dtkAbstractViewInteractor_p.h"
-#include "dtkAbstractData.h"
-#include "dtkAbstractView.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractViewInteractor implementation

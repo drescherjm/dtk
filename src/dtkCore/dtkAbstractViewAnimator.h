@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Jan 30 16:13:08 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep  5 12:56:40 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 28
+ * Last-Updated: Tue Apr 24 14:21:55 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -26,19 +26,25 @@ class dtkAbstractData;
 class dtkAbstractView;
 class dtkAbstractViewAnimatorPrivate;
 
+// /////////////////////////////////////////////////////////////////
+// dtkAbstractViewAnimator interface
+// /////////////////////////////////////////////////////////////////
+
 class DTKCORE_EXPORT dtkAbstractViewAnimator : public dtkAbstractObject
 {
     Q_OBJECT
 
 public:
-    dtkAbstractViewAnimator(void);
-   ~dtkAbstractViewAnimator(void);
+            dtkAbstractViewAnimator(void);
+            dtkAbstractViewAnimator(const dtkAbstractViewAnimator& other);
+   virtual ~dtkAbstractViewAnimator(void);
 
+public:
    virtual QString description(void) const = 0;
    virtual QStringList handled(void) const = 0;
    
-   dtkAbstractData *data(void);
-   dtkAbstractView *view(void);
+   dtkAbstractData *data(void) const;
+   dtkAbstractView *view(void) const;
 
    virtual void setData(dtkAbstractData *data);
    virtual void setView(dtkAbstractView *view);
@@ -52,7 +58,7 @@ public slots:
    virtual void  stop(void);
 
 private:
-   dtkAbstractViewAnimatorPrivate *d;
+   DTK_DECLARE_PRIVATE(dtkAbstractViewAnimator);
 };
 
 #endif

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Apr 24 12:55:27 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 13:28:07 2012 (+0200)
+ * Last-Updated: Tue Apr 24 14:27:38 2012 (+0200)
  *           By: tkloczko
- *     Update #: 7
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -23,10 +23,12 @@
 #include "dtkCoreExport.h"
 
 #include "dtkAbstractObject_p.h"
+
+#include "dtkAbstractData.h"
+#include "dtkAbstractView.h"
 #include "dtkSmartPointer.h"
 
 class dtkAbstractViewInteractor;
-class dtkAbstractView;
 
 ////////////////////////////////////////////////////
 // dtkAbstractViewPrivate interface

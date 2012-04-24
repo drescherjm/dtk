@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Apr 23 10:50:52 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 11:33:11 2012 (+0200)
+ * Last-Updated: Tue Apr 24 15:02:26 2012 (+0200)
  *           By: tkloczko
- *     Update #: 9
+ *     Update #: 10
  */
 
 /* Commentary: 
@@ -66,7 +66,7 @@ public:
 // dtkAbstractObject inline methods
 ////////////////////////////////////////////////////
 
-inline dtkAbstractObject::dtkAbstractObject(dtkAbstractObjectPrivate& dd, dtkAbstractObject *parent) : QObject(parent), d_ptr(&dd)
+inline dtkAbstractObject::dtkAbstractObject(dtkAbstractObjectPrivate& dd, QObject *parent) : QObject(parent), d_ptr(&dd)
 {
 
 }

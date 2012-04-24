@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Apr 23 16:39:35 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 16:40:40 2012 (+0200)
+ * Last-Updated: Tue Apr 24 14:46:03 2012 (+0200)
  *           By: tkloczko
- *     Update #: 3
+ *     Update #: 4
  */
 
 /* Commentary: 
@@ -23,6 +23,8 @@
 #include "dtkCoreExport.h"
 #include "dtkAbstractObject_p.h"
 
+class dtkAbstractProcess;
+
 ////////////////////////////////////////////////////
 // dtkAbstractProcessPrivate interface
 ////////////////////////////////////////////////////
@@ -30,7 +32,7 @@
 class DTKCORE_EXPORT dtkAbstractProcessPrivate : public dtkAbstractObjectPrivate
 {
 public:
-    dtkAbstractProcessPrivate(void) : dtkAbstractObjectPrivate() {}
+    dtkAbstractProcessPrivate(dtkAbstractProcess *q = 0) : dtkAbstractObjectPrivate(q) {}
     dtkAbstractProcessPrivate(const dtkAbstractProcessPrivate& other) : dtkAbstractObjectPrivate(other) {}
 
 public:

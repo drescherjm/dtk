@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 16 09:54:33 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 10:47:27 2012 (+0200)
+ * Last-Updated: Tue Apr 24 15:01:50 2012 (+0200)
  *           By: tkloczko
- *     Update #: 148
+ *     Update #: 150
  */
 
 /* Commentary: 
@@ -119,7 +119,7 @@
 
 #define DTK_DECLARE_PRIVATE(Class) \
     protected: \
-    Class(Class##Private& dd, Class *parent); \
+    Class(Class##Private& dd, QObject *parent); \
     Class(Class##Private& dd, const Class& other); \
     inline Class##Private* d_func(void) { return reinterpret_cast<Class##Private *>(dtkAbstractObject::d_func()); } \
     inline const Class##Private* d_func(void) const { return reinterpret_cast<const Class##Private *>(dtkAbstractObject::d_func()); } \
@@ -131,7 +131,7 @@
 ////////////////////////////////////////////////////
 
 #define DTK_IMPLEMENT_PRIVATE(Class, Parent) \
-    inline Class::Class(Class##Private& dd, Class *p) : Parent(dd, p) { }  \
+    inline Class::Class(Class##Private& dd, QObject *p) : Parent(dd, p) { }  \
     inline Class::Class(Class##Private& dd, const Class& o) : Parent(dd, o) { }
 
 ////////////////////////////////////////////////////

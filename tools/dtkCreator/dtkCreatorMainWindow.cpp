@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 12:50:28 2012 (+0200)
+ * Last-Updated: Tue Apr 24 14:29:48 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1666
+ *     Update #: 1667
  */
 
 /* Commentary:
@@ -144,6 +144,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->graph->setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
     d->graph->setScene(d->composer->graph());
     d->graph->setVisible(false);
+    d->graph->setBackgroundBrush(QBrush(QPixmap(":dtkCreator/pixmaps/dtkComposerGraphView-bg.png")));
 
     d->log_view = new dtkLogView(this);
     d->log_view->setVisible(false);

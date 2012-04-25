@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. avril 24 15:06:41 2012 (+0200)
+ * Last-Updated: mer. avril 25 16:39:33 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 1582
+ *     Update #: 1585
  */
 
 /* Commentary: 
@@ -429,6 +429,8 @@ void dtkDistributedController::connect(const QUrl& server)
         } else {
 
             dtkError() << "Unable to connect to" << server.toString();
+            d->sockets.remove(server.toString());
+
         }
     }
 }
@@ -437,12 +439,12 @@ void dtkDistributedController::disconnect(const QUrl& server)
 {
     if(!d->sockets.keys().contains(server.toString()))
         return;
-    
+
     dtkDistributedSocket *socket = d->sockets.value(server.toString());
     socket->disconnectFromHost();
-    
+
     d->sockets.remove(server.toString());
-    
+
     emit disconnected(server);
 }
 

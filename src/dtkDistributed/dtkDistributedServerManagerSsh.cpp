@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. avril 25 12:23:57 2012 (+0200)
+ * Last-Updated: mer. avril 25 16:16:06 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 110
+ *     Update #: 147
  */
 
 /* Commentary:
@@ -25,6 +25,7 @@
 #include "dtkDistributedServerManagerSsh.h"
 
 #include <dtkCore/dtkGlobal.h>
+#include <dtkCore/dtkCpuid.h>
 
 #include <dtkJson/dtkJson.h>
 
@@ -63,6 +64,8 @@ QByteArray  dtkDistributedServerManagerSsh::status(void)
 
     QVariantMap node;
     QVariantMap props;
+    QVariantList cores;
+
     QString name = "localhost";
     QString state = "free";
     node.insert("name", name);
@@ -71,12 +74,28 @@ QByteArray  dtkDistributedServerManagerSsh::status(void)
     QString njobs  = "0";
     QString ngpus   = "0";
 
-    node.insert("cores",  QThread::idealThreadCount() );
+    for (int c=0;c< QThread::idealThreadCount();c++) {
+        QVariantMap core;
+        core.insert("id",c);
+        cores << core;
+    }
+
+    node.insert("cores", cores );
     node.insert("cpus", ncpus);
     node.insert("cores_busy", njobs);
     node.insert("gpus", ngpus);
     node.insert("gpus_busy", 0);
-    node.insert("properties", props);
+
+    dtkCpuid cpuID;
+    QString vendor = cpuID.vendor();
+    if  (vendor == "GenuineIntel") {
+        props.insert("cpu_model", "xeon");
+        props.insert("cpu_arch", "x86_64");
+    } else if (vendor == "AuthenticAMD") {
+        props.insert("cpu_model", "opteron");
+        props.insert("cpu_arch", "x86_64");
+    }
+    props.insert("ethernet", "1G");
 
     foreach(QString id, d->slaves) {
         QVariantMap job;
@@ -92,8 +111,11 @@ QByteArray  dtkDistributedServerManagerSsh::status(void)
 
     result.insert("jobs", jjobs);
     node.insert("state", state);
+    node.insert("properties", props);
     jnodes << node;
     result.insert("nodes", jnodes);
+
+
     return dtkJson::serialize(result);
 }
 

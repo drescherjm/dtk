@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 14:41:29
  * Version: $Id$
- * Last-Updated: mar. avril 24 18:35:03 2012 (+0200)
+ * Last-Updated: mer. avril 25 13:08:30 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 10
+ *     Update #: 13
  */
 
 /* Commentary:
@@ -52,6 +52,7 @@ int main(int argc, char **argv)
     dtkLogger::instance().attachFile(dtkLogPath(&application));
 
     dtkDistributedServer server(argc, argv);
+    qDebug() << "server started";
     server.run();
 
     int status = application.exec();

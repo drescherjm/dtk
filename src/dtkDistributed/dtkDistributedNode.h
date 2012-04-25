@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 13:22:24 2010 (+0100)
  * Version: $Id$
- * Last-Updated: mar. avril 24 10:10:53 2012 (+0200)
+ * Last-Updated: mer. avril 25 16:18:30 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 69
+ *     Update #: 75
  */
 
 /* Commentary: 
@@ -62,7 +62,9 @@ public:
           Hp = 0x1,
          Ibm = 0x2,
         Dell = 0x4,
-       Carri = 0x8
+       Carri = 0x8,
+         Sun = 0x16,
+       Apple = 0x32
     };
 
     Q_DECLARE_FLAGS(Brands, Brand)

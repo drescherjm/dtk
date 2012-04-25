@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue Apr 24 19:13:27 2012 (+0200)
+## Last-Updated: Wed Apr 25 17:32:53 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 300
+##     Update #: 319
 ######################################################################
 ## 
 ### Commentary: 
@@ -82,6 +82,31 @@ set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkVrTrackerVrpn.cpp)
 
 endif(QUAT_LIBRARIES AND VRPN_LIBRARIES AND MPI_FOUND)
+
+## #################################################################
+## Kinect sources
+## #################################################################
+
+if(DTK_HAVE_NITE)
+
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkVrTrackerKinect.h)
+
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
+  dtkVrTrackerKinect.h
+  dtkVrTrackerKinect_p.h)
+
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkVrTrackerKinect.cpp
+  dtkVrTrackerKinect_p.cpp)
+
+set(DTKVRTRACKERKINECT_XML_PATH "${PROJECT_SOURCE_DIR}/dtkVrTrackerKinectConfig.xml")
+
+configure_file(
+  "${PROJECT_SOURCE_DIR}/dtkVrTrackerKinectConfig.h.in"
+  "${CMAKE_BINARY_DIR}/dtkVrTrackerKinectConfig.h")
+
+endif(DTK_HAVE_NITE)
 
 ## #################################################################
 ## Wrapping
@@ -167,6 +192,13 @@ if(QUAT_LIBRARY AND VRPN_LIBRARY)
     ${QUAT_LIBRARY}
     ${VRPN_LIBRARY})
 endif(QUAT_LIBRARY AND VRPN_LIBRARY)
+
+if(DTK_HAVE_NITE)
+  target_link_libraries(${PROJECT_NAME}
+  OpenNI
+  XnVNite
+  XnVCNite)
+endif(DTK_HAVE_NITE)
 
 ## #################################################################
 ## Export header file

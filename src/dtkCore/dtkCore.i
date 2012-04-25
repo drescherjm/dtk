@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 19:20:05 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 351
+ * Last-Updated: Wed Apr 25 10:28:19 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 352
  */
 
 /* Commentary:
@@ -77,6 +77,9 @@
 
 #undef  DTKCORE_EXPORT
 #define DTKCORE_EXPORT
+
+#undef  DTK_DEPRECATED
+#define DTK_DEPRECATED
 
 // /////////////////////////////////////////////////////////////////
 // Ignore rules for operators

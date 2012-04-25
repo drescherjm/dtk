@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. avril 24 18:28:38 2012 (+0200)
+ * Last-Updated: mer. avril 25 10:23:32 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 214
+ *     Update #: 229
  */
 
 /* Commentary: 
@@ -73,12 +73,14 @@ void dtkDistributedServer::start(void)
 
     if(dtkApplicationArgumentsContain(app, "--oar"))
         d->daemon->setManager(dtkDistributedServerManager::Oar);
-
-    if(dtkApplicationArgumentsContain(app, "--torque"))
+    else if(dtkApplicationArgumentsContain(app, "--torque"))
         d->daemon->setManager(dtkDistributedServerManager::Torque);
-
-    if(dtkApplicationArgumentsContain(app, "--ssh"))
+    else if(dtkApplicationArgumentsContain(app, "--ssh"))
         d->daemon->setManager(dtkDistributedServerManager::Ssh);
+    else {
+        logMessage(QString("No manager set !"));
+        app->quit();
+    }
 
     if (!d->daemon->isListening()) {
         logMessage(QString("Failed to bind port %1").arg(d->daemon->serverPort()), dtkDistributedServiceBase::Error);
@@ -102,9 +104,14 @@ void dtkDistributedServer::run(void)
 
     if(dtkApplicationArgumentsContain(qApp, "--oar"))
         d->daemon->setManager(dtkDistributedServerManager::Oar);
-
-    if(dtkApplicationArgumentsContain(qApp, "--torque"))
+    else if(dtkApplicationArgumentsContain(qApp, "--torque"))
         d->daemon->setManager(dtkDistributedServerManager::Torque);
+    else if(dtkApplicationArgumentsContain(qApp, "--ssh"))
+        d->daemon->setManager(dtkDistributedServerManager::Ssh);
+    else {
+        qDebug()<< "No manager set!";
+        return;
+    }
 
     if (!d->daemon->isListening()) {
         logMessage(QString("Failed to bind port %1").arg(d->daemon->serverPort()), dtkDistributedServiceBase::Error);

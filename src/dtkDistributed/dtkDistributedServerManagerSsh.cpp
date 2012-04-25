@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. avril 25 12:23:57 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 110
+ * Last-Updated: Wed Apr 25 16:48:14 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 118
  */
 
 /* Commentary:
@@ -117,6 +117,7 @@ QString dtkDistributedServerManagerSsh::submit(QString input)
     } else if (json.contains("application")) {
 
         QString scriptName = qApp->applicationDirPath() + "/dtkDistributedServerScript.sh";
+
         QFile script(scriptName);
 
         if (!script.open(QFile::WriteOnly|QFile::Truncate)) {

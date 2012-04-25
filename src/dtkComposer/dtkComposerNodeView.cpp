@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 24 23:29:24 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 25 01:18:51 2012 (+0200)
+ * Last-Updated: Wed Apr 25 16:46:02 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 29
+ *     Update #: 89
  */
 
 /* Commentary: 
@@ -34,12 +34,15 @@ public:
     dtkAbstractView *view;
 };
 
-dtkComposerNodeView::dtkComposerNodeView(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeViewPrivate)
+dtkComposerNodeView::dtkComposerNodeView(void) : QObject(), dtkComposerNodeLeaf(), d(new dtkComposerNodeViewPrivate)
 {
     d->receiver_type = new dtkComposerTransmitterReceiver<QString>(this);
+
     d->view = NULL;
 
     this->appendReceiver(d->receiver_type);
+
+    connect(this, SIGNAL(runned()), this, SLOT(onRun()));
 }
 
 dtkComposerNodeView::~dtkComposerNodeView(void)
@@ -56,21 +59,7 @@ dtkComposerNodeView::~dtkComposerNodeView(void)
 
 void dtkComposerNodeView::run(void)
 {
-    if (d->receiver_type->isEmpty()) {
-        dtkWarn() << "no type speficied in view node!";
-        return;
-    }
-
-    if(!d->view) {
-        d->view = dtkAbstractViewFactory::instance()->create(d->receiver_type->data());
-        // d->view->resize(200, 100);
-        // d->view->show();
-    }
-
-    if (!d->view) {
-        dtkWarn() << "no view, abort" <<  d->receiver_type->data();
-        return;
-    }
+    emit runned();
 }
 
 QString dtkComposerNodeView::type(void)
@@ -94,4 +83,23 @@ QString dtkComposerNodeView::inputLabelHint(int port)
 QString dtkComposerNodeView::outputLabelHint(int port)
 {
     return dtkComposerNodeLeaf::outputLabelHint(port);
+}
+
+void dtkComposerNodeView::onRun(void)
+{
+    if (d->receiver_type->isEmpty()) {
+        dtkWarn() << "no type speficied in view node!";
+        return;
+    }
+
+    if(!d->view) {
+        d->view = dtkAbstractViewFactory::instance()->create(d->receiver_type->data());
+        d->view->widget()->resize(800, 400);
+        d->view->widget()->show();
+    }
+
+    if (!d->view) {
+        dtkWarn() << "no view, abort" <<  d->receiver_type->data();
+        return;
+    }
 }

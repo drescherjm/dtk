@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr 25 01:18:36 2012 (+0200)
+ * Last-Updated: Wed Apr 25 15:44:38 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 310
+ *     Update #: 317
  */
 
 /* Commentary: 
@@ -196,8 +196,6 @@ bool dtkComposer::insert(QString file)
 void dtkComposer::run(void)
 {
     QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::run, false);
-
-    // d->evaluator->run();
 
     d->graph->update();
 }

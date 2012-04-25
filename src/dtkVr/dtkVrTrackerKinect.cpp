@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr 25 16:59:15 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 25 17:12:47 2012 (+0200)
+ * Last-Updated: Wed Apr 25 17:35:11 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -34,25 +34,25 @@ dtkVrTrackerKinect::~dtkVrTrackerKinect(void)
 
 void dtkVrTrackerKinect::initialize(void)
 {
-    // d->initialize();
+    d->initialize();
 }
 
 void dtkVrTrackerKinect::uninitialize(void)
 {
-    // d->controller->uninitialize();
+    d->uninitialize();
 }
 
 dtkVector3D<double> dtkVrTrackerKinect::headPosition(void)
 {
-    // return d->controller->position();
+    return d->position();
 }
 
 dtkVector3D<double> dtkVrTrackerKinect::handPosition(void)
 {
-    // return d->controller->hand();
+    return d->hand();
 }
 
 dtkQuaternion<double> dtkVrTrackerKinect::headOrientation(void)
 {
-    // return d->controller->orientation();
+    return d->orientation();
 }

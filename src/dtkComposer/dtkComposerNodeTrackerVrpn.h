@@ -1,12 +1,12 @@
-/* dtkComposerNodeTrackerKinect.h --- 
+/* dtkComposerNodeTrackerVrpn.h --- 
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Thu Apr 26 10:25:11 2012 (+0200)
+ * Created: Thu Apr 26 16:50:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 13:22:04 2012 (+0200)
+ * Last-Updated: Thu Apr 26 16:51:39 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 18
+ *     Update #: 2
  */
 
 /* Commentary: 
@@ -17,30 +17,30 @@
  * 
  */
 
-#ifndef DTKCOMPOSERNODETRACKERKINECT_H
-#define DTKCOMPOSERNODETRACKERKINECT_H
+#ifndef DTKCOMPOSERNODETRACKERVRPN_H
+#define DTKCOMPOSERNODETRACKERVRPN_H
 
 #include "dtkComposerExport.h"
 #include "dtkComposerNodeLeaf.h"
 
-class dtkComposerNodeTrackerKinectPrivate;
+class dtkComposerNodeTrackerVrpnPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeTrackerKinect : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeTrackerVrpn : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeTrackerKinect(void);
-    ~dtkComposerNodeTrackerKinect(void);
+     dtkComposerNodeTrackerVrpn(void);
+    ~dtkComposerNodeTrackerVrpn(void);
 
 public:
     void run(void);
 
 public:
     inline QString type(void) {
-        return "kinectTracker";
+        return "vrpnTracker";
     }
 
     inline QString titleHint(void) {
-        return "KinectTracker";
+        return "VrpnTracker";
     }
 
     inline QString outputLabelHint(int port) {
@@ -54,7 +54,7 @@ public:
     }
 
 private:
-    dtkComposerNodeTrackerKinectPrivate *d;
+    dtkComposerNodeTrackerVrpnPrivate *d;
 };
 
 #endif

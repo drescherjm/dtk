@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 23:52:02 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 61
+ * Last-Updated: jeu. avril 26 14:28:16 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 62
  */
 
 /* Commentary: 
@@ -32,6 +32,7 @@ class dtkComposerGraph;
 class dtkComposerMachine;
 class dtkComposerPrivate;
 class dtkComposerScene;
+class dtkComposerSceneNodeComposite;
 class dtkComposerStack;
 class dtkComposerView;
 class dtkComposerCompass;
@@ -69,6 +70,9 @@ public:
     dtkComposerScene *scene(void);
     dtkComposerStack *stack(void);
     dtkComposerView *view(void);
+
+public:
+    void updateRemotes(dtkComposerSceneNodeComposite * composite);
 
 private:
     dtkComposerPrivate *d;

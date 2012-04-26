@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Thu Apr 26 17:29:54 2012 (+0200)
+## Last-Updated: Thu Apr 26 17:43:14 2012 (+0200)
 ##           By: tkloczko
-##     Update #: 525
+##     Update #: 526
 ######################################################################
 ##
 ### Commentary:
@@ -225,6 +225,18 @@ set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkComposerNodeTrackerKinect.cpp)
 endif(DTK_HAVE_NITE)
+
+## #################################################################
+## Vrpn sources
+## #################################################################
+
+if(DTK_HAVE_VRPN AND DTK_HAVE_MPI)
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkComposerNodeTrackerVrpn.h)
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC})
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkComposerNodeTrackerVrpn.cpp)
+endif(DTK_HAVE_VRPN AND DTK_HAVE_MPI)
 
 ## #################################################################
 ## Build rules

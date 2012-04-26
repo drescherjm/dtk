@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. avril 10 15:18:01 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 603
+ * Last-Updated: Thu Apr 26 15:14:15 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 607
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include "dtkComposerFactory.h"
 #include "dtkComposerGraph.h"
+#include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeInteger.h"
@@ -512,6 +513,15 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
                     leaf->inputPorts().at(ports.at(i).toElement().attribute("id").toUInt())->setLabel(ports.at(i).toElement().attribute("label"));
                 else
                     leaf->outputPorts().at(ports.at(i).toElement().attribute("id").toUInt())->setLabel(ports.at(i).toElement().attribute("label"));
+            }
+        }
+
+        if(dtkComposerNodeBoolean *boolean = dynamic_cast<dtkComposerNodeBoolean *>(leaf->wrapee())) {
+
+            for(int i = 0; i < childNodes.count(); i++) {
+                if(childNodes.at(i).toElement().tagName() == "value") {
+                    boolean->setValue(childNodes.at(i).childNodes().at(0).toText().data() == "true");
+                }
             }
         }
 

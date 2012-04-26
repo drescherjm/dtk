@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: lun. avril 23 17:26:10 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 521
+ * Last-Updated: Thu Apr 26 15:05:12 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 522
  */
 
 /* Commentary:
@@ -162,7 +162,7 @@ void dtkComposerNodeRemote::begin(void)
                 break;
             }
             case QVariant::String: {
-                dataType = "qstring";
+                dataType = "text";
                 array = t->data().toByteArray();
                 break;
             }

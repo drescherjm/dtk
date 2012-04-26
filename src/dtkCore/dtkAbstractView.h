@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 20:03:12 2012 (+0200)
+ * Last-Updated: Thu Apr 26 13:09:32 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 298
+ *     Update #: 321
  */
 
 /* Commentary:
@@ -29,6 +29,9 @@ class dtkAbstractViewAnimator;
 class dtkAbstractViewNavigator;
 class dtkAbstractViewInteractor;
 class dtkAbstractData;
+
+template<class T> class dtkVector3D;
+template<class T> class dtkQuaternion;
 
 class DTKCORE_EXPORT dtkAbstractView : public dtkAbstractObject
 {
@@ -127,6 +130,10 @@ public slots:
     virtual void   initialize(void);
     virtual void uninitialize(void);
 
+// /////////////////////////////////////////////////////////////////
+// Deprecated VR API
+// /////////////////////////////////////////////////////////////////
+
 public /* DEPRECATED */ slots:
     virtual DTK_DEPRECATED void  enableInteraction(void);
     virtual DTK_DEPRECATED void disableInteraction(void);
@@ -139,6 +146,14 @@ public /* DEPRECATED */ slots:
     virtual DTK_DEPRECATED QString cameraProjectionMode(void) const;
     virtual DTK_DEPRECATED double cameraViewAngle(void) const;
     virtual DTK_DEPRECATED double cameraZoom(void) const;
+
+// /////////////////////////////////////////////////////////////////
+// New VR API
+// /////////////////////////////////////////////////////////////////
+
+public:
+    virtual void setHeadPosition(dtkVector3D<double> position);
+    virtual void setHeadOrientation(dtkQuaternion<double> orientation);
 
 private:
     DTK_DECLARE_PRIVATE(dtkAbstractView);

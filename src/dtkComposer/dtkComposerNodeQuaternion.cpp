@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 13:06:02 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 13:17:21 2012 (+0200)
- *           By: tkloczko
- *     Update #: 12
+ * Last-Updated: Thu Apr 26 15:12:02 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -98,6 +98,8 @@ QString dtkComposerNodeQuaternion::inputLabelHint(int port)
     default:
         break;
     }
+
+    return dtkComposerNodeLeaf::inputLabelHint(port);
 }
 
 QString dtkComposerNodeQuaternion::outputLabelHint(int port)
@@ -121,6 +123,8 @@ QString dtkComposerNodeQuaternion::outputLabelHint(int port)
     default:
         break;
     }
+
+    return dtkComposerNodeLeaf::inputLabelHint(port);
 }
 
 void dtkComposerNodeQuaternion::run(void)

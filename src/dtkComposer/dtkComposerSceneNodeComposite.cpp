@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. avril 20 16:19:50 2012 (+0200)
+ * Last-Updated: jeu. avril 26 13:34:42 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 836
+ *     Update #: 837
  */
 
 /* Commentary: 
@@ -147,33 +147,21 @@ void dtkComposerSceneNodeComposite::removeNote(dtkComposerSceneNote *note)
 void dtkComposerSceneNodeComposite::addNode(dtkComposerSceneNode *node)
 {
     d->nodes << node;
-
-    if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee()))
-        remote->setComposition(d->writer.toXML(this));
 }
 
 void dtkComposerSceneNodeComposite::removeNode(dtkComposerSceneNode *node)
 {
     d->nodes.removeAll(node);
-
-    if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee()))
-        remote->setComposition(d->writer.toXML(this));
 }
 
 void dtkComposerSceneNodeComposite::addEdge(dtkComposerSceneEdge *edge)
 {
     d->edges << edge;
-
-    if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee()))
-        remote->setComposition(d->writer.toXML(this));
 }
 
 void dtkComposerSceneNodeComposite::removeEdge(dtkComposerSceneEdge *edge)
 {
     d->edges.removeAll(edge);
-
-    if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee()))
-        remote->setComposition(d->writer.toXML(this));
 }
 
 dtkComposerSceneNoteList dtkComposerSceneNodeComposite::notes(void)

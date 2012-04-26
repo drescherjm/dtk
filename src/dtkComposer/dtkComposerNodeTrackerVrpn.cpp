@@ -1,12 +1,12 @@
-/* dtkComposerNodeTrackerKinect.cpp --- 
+/* dtkComposerNodeTrackerVrpn.cpp --- 
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Thu Apr 26 10:27:53 2012 (+0200)
+ * Created: Thu Apr 26 16:51:45 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 15:23:13 2012 (+0200)
+ * Last-Updated: Thu Apr 26 16:52:29 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 51
+ *     Update #: 3
  */
 
 /* Commentary: 
@@ -17,7 +17,7 @@
  * 
  */
 
-#include "dtkComposerNodeTrackerKinect.h"
+#include "dtkComposerNodeTrackerVrpn.h"
 #include "dtkComposerNodeVector3D.h"
 #include "dtkComposerNodeQuaternion.h"
 #include "dtkComposerTransmitterEmitter.h"
@@ -26,19 +26,19 @@
 #include <dtkMath/dtkVector3D.h>
 #include <dtkMath/dtkQuaternion.h>
 
-#include <dtkVr/dtkVrTrackerKinect.h>
+#include <dtkVr/dtkVrTrackerVrpn.h>
 
-class dtkComposerNodeTrackerKinectPrivate
+class dtkComposerNodeTrackerVrpnPrivate
 {
 public:
     dtkComposerTransmitterEmitter<dtkVector3DReal> head_position;
     dtkComposerTransmitterEmitter<dtkQuaternionReal> head_orientation;
 
 public:
-    dtkVrTrackerKinect *tracker;
+    dtkVrTrackerVrpn *tracker;
 };
 
-dtkComposerNodeTrackerKinect::dtkComposerNodeTrackerKinect(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeTrackerKinectPrivate)
+dtkComposerNodeTrackerVrpn::dtkComposerNodeTrackerVrpn(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeTrackerVrpnPrivate)
 {
     this->appendEmitter(&(d->head_position));
     this->appendEmitter(&(d->head_orientation));
@@ -46,7 +46,7 @@ dtkComposerNodeTrackerKinect::dtkComposerNodeTrackerKinect(void) : dtkComposerNo
     d->tracker = NULL;
 }
 
-dtkComposerNodeTrackerKinect::~dtkComposerNodeTrackerKinect(void)
+dtkComposerNodeTrackerVrpn::~dtkComposerNodeTrackerVrpn(void)
 {
     d->tracker->uninitialize();
 
@@ -56,10 +56,10 @@ dtkComposerNodeTrackerKinect::~dtkComposerNodeTrackerKinect(void)
     d = NULL;
 }
 
-void dtkComposerNodeTrackerKinect::run(void)
+void dtkComposerNodeTrackerVrpn::run(void)
 {
     if(!d->tracker) {
-        d->tracker = new dtkVrTrackerKinect;
+        d->tracker = new dtkVrTrackerVrpn;
         d->tracker->initialize();
     }
 

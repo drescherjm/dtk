@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Tue Apr 24 23:37:16 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 522
+ * Last-Updated: Thu Apr 26 11:37:07 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 525
  */
 
 /* Commentary:
@@ -41,6 +41,7 @@
 #include "dtkComposerNodeString.h"
 #include "dtkComposerNodeStringOperator.h"
 #include "dtkComposerNodeVector.h"
+#include "dtkComposerNodeVector3D.h"
 #include "dtkComposerNodeView.h"
 #include "dtkComposerNodeRemote.h"
 #include "dtkComposerSceneNodeLeaf.h"
@@ -113,6 +114,13 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["Vector"] = "<p>Description not yet filled!</p>";
     d->tags["Vector"] = QStringList() << "container" << "vector";
     d->types["Vector"] = "vector";
+    
+    // Algebraic nodes
+
+    d->nodes << "Vector3D";
+    d->descriptions["Vector3D"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D"] = QStringList() << "vector3D" << "algebraic";
+    d->types["Vector3D"] = "vector3D";
 
     // operators
 
@@ -509,6 +517,11 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "vector")
         return new dtkComposerNodeVector;
+
+    // algebraic nodes
+
+    if(type == "vector3D")
+        return new dtkComposerNodeVector3D;
 
     // operator nodes
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 29 10:51:46 2012 (+0200)
+ * Last-Updated: Thu Apr 26 15:17:39 2012 (+0200)
  *           By: tkloczko
- *     Update #: 144
+ *     Update #: 145
  */
 
 /* Commentary: 
@@ -63,6 +63,8 @@ public:
     QString typeName(void) const;
 
 public:
+    void setParentNode(dtkComposerNode *parent);
+
     dtkComposerNode *parentNode(void) const;
 
 public:

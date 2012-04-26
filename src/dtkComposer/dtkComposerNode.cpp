@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:25:11 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 19 12:38:25 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 64
+ * Last-Updated: Thu Apr 26 15:25:43 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 67
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include "dtkComposerNode.h"
+#include "dtkComposerTransmitter.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodePrivate definition
@@ -55,8 +56,10 @@ dtkComposerNode::~dtkComposerNode(void)
 
 void dtkComposerNode::appendEmitter(dtkComposerTransmitter *emitter)
 {
-    if (!d->emitters.contains(emitter))
+    if (!d->emitters.contains(emitter)) {
         d->emitters << emitter;
+        emitter->setParentNode(this);
+    }
 }
 
 void dtkComposerNode::removeEmitter(dtkComposerTransmitter *emitter)
@@ -71,8 +74,10 @@ dtkComposerTransmitter *dtkComposerNode::removeEmitter(int index)
 
 void dtkComposerNode::appendReceiver(dtkComposerTransmitter *receiver)
 { 
-    if (!d->receivers.contains(receiver))
+    if (!d->receivers.contains(receiver)) {
         d->receivers << receiver;
+        receiver->setParentNode(this);
+    }
 }
 
 void dtkComposerNode::removeReceiver(dtkComposerTransmitter *receiver)

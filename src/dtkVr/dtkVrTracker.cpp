@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 20:32:08 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr 25 16:57:30 2012 (+0200)
+ * Last-Updated: Thu Apr 26 17:49:32 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 10
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -43,15 +43,15 @@ void dtkVrTracker::initialize(void)
     DTK_DEFAULT_IMPLEMENTATION;
 }
 
-void dtkVrTracker::initialize(const QUrl& server)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    Q_UNUSED(server);
-}
-
 void dtkVrTracker::uninitialize(void)
 {
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkVrTracker::setUrl(const QUrl& url)
+{
+    DTK_UNUSED(url);
+
     DTK_DEFAULT_IMPLEMENTATION;
 }
 

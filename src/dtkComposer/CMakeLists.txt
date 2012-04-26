@@ -2,11 +2,10 @@
 ##
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
-## Created: Fri Sep  4 10:11:02 2009 (+0200)
-## Version: $Id$
-## Last-Updated: Thu Apr 26 10:33:20 2012 (+0200)
+## Created: Fri Se
+## Last-Updated: Thu Apr 26 11:44:56 2012 (+0200)
 ##           By: tkloczko
-##     Update #: 509
+##     Update #: 516
 ######################################################################
 ##
 ### Commentary:
@@ -195,7 +194,7 @@ set(${PROJECT_NAME}_RESOURCES dtkComposer.qrc)
 ## Mpi sources
 ## #################################################################
 
-if(MPI_FOUND)
+if(DTK_HAVE_MPI)
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkComposerNodeDistributed.h
   dtkComposerNodeRemote.h
@@ -205,7 +204,19 @@ set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkComposerNodeDistributed.cpp
   dtkComposerNodeRemote.cpp
   dtkComposerNodeWorld.cpp)
-endif(MPI_FOUND)
+endif(DTK_HAVE_MPI)
+
+## #################################################################
+## Kinect sources
+## #################################################################
+
+if(DTK_HAVE_NITE)
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkComposerNodeTrackerKinect.h)
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC})
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkComposerNodeTrackerKinect.cpp)
+endif(DTK_HAVE_NITE)
 
 ## #################################################################
 ## Build rules
@@ -259,9 +270,13 @@ target_link_libraries(${PROJECT_NAME}
   dtkLog
   dtkNotification)
 
-if(MPI_FOUND)
+if(DTK_HAVE_MPI)
 target_link_libraries(${PROJECT_NAME} dtkDistributed)
-endif(MPI_FOUND)
+endif(DTK_HAVE_MPI)
+
+if(DTK_HAVE_NITE)
+target_link_libraries(${PROJECT_NAME} dtkVr)
+endif(DTK_HAVE_NITE)
 
 ## #################################################################
 ## Export header file

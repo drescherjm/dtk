@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Thu Apr 26 11:37:07 2012 (+0200)
+ * Last-Updated: Thu Apr 26 11:45:16 2012 (+0200)
  *           By: tkloczko
- *     Update #: 525
+ *     Update #: 532
  */
 
 /* Commentary:
@@ -49,6 +49,10 @@
 #if defined(DTK_HAVE_MPI)
 #include "dtkComposerNodeDistributed.h"
 #include "dtkComposerNodeWorld.h"
+#endif
+
+#if defined(DTK_HAVE_NITE)
+#include "dtkComposerNodeTrackerKinect.h"
 #endif
 
 #include <dtkCore/dtkGlobal.h>
@@ -425,8 +429,22 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Remote"] = QStringList() <<  "distributed" << "tcp" << "remote" << "world";
     d->types["Remote"] = "remote";
 
-#if defined(DTK_HAVE_MPI)
 
+// /////////////////////////////////////////////////////////////////
+// NITE nodes
+// /////////////////////////////////////////////////////////////////
+
+#if defined(DTK_HAVE_NITE)
+    d->nodes << "KinectTracker";
+    d->tags["KinectTracker"] = QStringList() <<  "kinect" << "vr" << "ar" << "tracker";
+    d->types["KinectTracker"] = "kinectTracker";
+#endif
+
+// /////////////////////////////////////////////////////////////////
+// MPI nodes
+// /////////////////////////////////////////////////////////////////
+
+#if defined(DTK_HAVE_MPI)
     d->nodes << "World";
     d->tags["World"] = QStringList() <<  "distributed" << "mpi" << "tcp" << "world";
     d->types["World"] = "world";
@@ -704,10 +722,20 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "view")
         return new dtkComposerNodeView;
 
-    // distributed nodes
+// /////////////////////////////////////////////////////////////////
+// NITE nodes
+// /////////////////////////////////////////////////////////////////
+
+#if defined(DTK_HAVE_NITE)
+    if(type == "kinectTracker")
+        return new dtkComposerNodeTrackerKinect;
+#endif
+
+// /////////////////////////////////////////////////////////////////
+// MPI nodes
+// /////////////////////////////////////////////////////////////////
 
 #if defined(DTK_HAVE_MPI)
-
     if(type == "world")
         return new dtkComposerNodeWorld;
 

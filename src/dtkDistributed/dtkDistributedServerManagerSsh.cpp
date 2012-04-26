@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. avril 25 17:16:24 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 181
+ * Last-Updated: Wed Apr 25 17:39:48 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 182
  */
 
 /* Commentary:
@@ -148,7 +148,7 @@ QString dtkDistributedServerManagerSsh::submit(QString input)
             dtkDebug() << "found specific command for this server:" << settings.value(server +"_server_mpirun").toString();
             qsub = settings.value(server +"_server_mpirun").toString();
         } else
-            qsub = "mpirun ";
+            qsub = "mpirun";
 
         QVariantMap res = json["resources"].toMap();
         if (res["nodes"].toInt() == 0) {

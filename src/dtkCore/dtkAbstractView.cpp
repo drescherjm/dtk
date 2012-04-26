@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 13:29:52 2012 (+0200)
- *           By: tkloczko
- *     Update #: 311
+ * Last-Updated: Thu Apr 26 13:10:40 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 318
  */
 
 /* Commentary:
@@ -23,6 +23,9 @@
 #include "dtkAbstractViewAnimator.h"
 #include "dtkAbstractViewNavigator.h"
 #include "dtkAbstractViewInteractor.h"
+
+#include <dtkMath/dtkVector3D.h>
+#include <dtkMath/dtkQuaternion.h>
 
 #include <dtkLog/dtkLog.h>
 
@@ -483,6 +486,24 @@ double dtkAbstractView::cameraZoom(void) const
     DTK_DEFAULT_IMPLEMENTATION;
 
     return 1.0;
+}
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
+void dtkAbstractView::setHeadPosition(dtkVector3D<double> position)
+{
+    DTK_UNUSED(position);
+
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::setHeadOrientation(dtkQuaternion<double> orientation)
+{
+    DTK_UNUSED(orientation);
+
+    DTK_DEFAULT_IMPLEMENTATION;
 }
 
 // /////////////////////////////////////////////////////////////////

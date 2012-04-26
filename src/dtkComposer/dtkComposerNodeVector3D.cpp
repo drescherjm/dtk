@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 10:19:40 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 11:38:24 2012 (+0200)
- *           By: tkloczko
- *     Update #: 45
+ * Last-Updated: Thu Apr 26 13:11:29 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -100,6 +100,8 @@ QString dtkComposerNodeVector3D::inputLabelHint(int port)
     default:
         break;
     }
+
+    return "port";
 }
 
 QString dtkComposerNodeVector3D::outputLabelHint(int port)
@@ -120,6 +122,8 @@ QString dtkComposerNodeVector3D::outputLabelHint(int port)
     default:
         break;
     }
+
+    return "port";
 }
 
 void dtkComposerNodeVector3D::run(void)

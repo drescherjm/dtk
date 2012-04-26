@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 16:49:25 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 11:45:43 2012 (+0200)
- *           By: tkloczko
- *     Update #: 18
+ * Last-Updated: Thu Apr 26 13:13:55 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -66,6 +66,3 @@ void dtkComposerNodeBoolean::setValue(bool value)
 {
     d->emitter.setData(value);
 }
-
-
-

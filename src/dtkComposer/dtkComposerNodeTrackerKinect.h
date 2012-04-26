@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Apr 26 10:25:11 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 10:39:06 2012 (+0200)
+ * Last-Updated: Thu Apr 26 13:22:04 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 16
+ *     Update #: 18
  */
 
 /* Commentary: 
@@ -50,7 +50,7 @@ public:
         if(port == 1)
             return "head orientation";
 
-        return "port";
+        return dtkComposerNodeLeaf::outputLabelHint(port);
     }
 
 private:

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Thu Apr 26 11:45:16 2012 (+0200)
+ * Last-Updated: Thu Apr 26 13:21:28 2012 (+0200)
  *           By: tkloczko
- *     Update #: 532
+ *     Update #: 534
  */
 
 /* Commentary:
@@ -37,6 +37,7 @@
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeProcess.h"
+#include "dtkComposerNodeQuaternion.h"
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
 #include "dtkComposerNodeStringOperator.h"
@@ -125,6 +126,11 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["Vector3D"] = "<p>Description not yet filled!</p>";
     d->tags["Vector3D"] = QStringList() << "vector3D" << "algebraic";
     d->types["Vector3D"] = "vector3D";
+
+    d->nodes << "Quaternion";
+    d->descriptions["Quaternion"] = "<p>Description not yet filled!</p>";
+    d->tags["Quaternion"] = QStringList() << "quaternion" << "algebraic";
+    d->types["Quaternion"] = "quaternion";
 
     // operators
 
@@ -540,6 +546,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "vector3D")
         return new dtkComposerNodeVector3D;
+
+    if(type == "quaternion")
+        return new dtkComposerNodeQuaternion;
 
     // operator nodes
 

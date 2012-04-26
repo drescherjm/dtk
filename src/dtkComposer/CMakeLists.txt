@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Thu Apr 26 11:44:56 2012 (+0200)
+## Last-Updated: Thu Apr 26 13:20:08 2012 (+0200)
 ##           By: tkloczko
-##     Update #: 516
+##     Update #: 518
 ######################################################################
 ##
 ### Commentary:
@@ -64,6 +64,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeNumberOperator.h
   dtkComposerNodeProcess.h
   dtkComposerNodeProxy.h
+  dtkComposerNodeQuaternion.h
   dtkComposerNodeReal.h
   dtkComposerNodeString.h
   dtkComposerNodeStringOperator.h
@@ -158,6 +159,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeNumberOperator.cpp
   dtkComposerNodeProcess.cpp
   dtkComposerNodeProxy.cpp
+  dtkComposerNodeQuaternion.cpp
   dtkComposerNodeReal.cpp
   dtkComposerNodeString.cpp
   dtkComposerNodeStringOperator.cpp

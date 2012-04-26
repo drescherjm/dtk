@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 10:19:40 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 13:11:29 2012 (+0200)
+ * Last-Updated: Thu Apr 26 15:09:08 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 47
+ *     Update #: 48
  */
 
 /* Commentary: 
@@ -28,21 +28,18 @@
 class dtkComposerNodeVector3DPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<dtkVector3DReal *> receiver_vec;
+    dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_vec;
 
     dtkComposerTransmitterReceiver<qreal> receiver_x;
     dtkComposerTransmitterReceiver<qreal> receiver_y;
     dtkComposerTransmitterReceiver<qreal> receiver_z;
 
 public:
-    dtkComposerTransmitterEmitter<dtkVector3DReal *> emitter_vec;
+    dtkComposerTransmitterEmitter<dtkVector3DReal> emitter_vec;
 
     dtkComposerTransmitterEmitter<qreal> emitter_x;
     dtkComposerTransmitterEmitter<qreal> emitter_y;
     dtkComposerTransmitterEmitter<qreal> emitter_z;
-
-public:
-    dtkVector3DReal *vec;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -58,7 +55,7 @@ dtkComposerNodeVector3D::dtkComposerNodeVector3D(void) : dtkComposerNodeLeaf(), 
     this->appendReceiver(&d->receiver_z);
 
     this->appendEmitter(&d->emitter_vec);
-    d->emitter_vec.setData(NULL);
+    d->emitter_vec.setData(dtkVector3DReal(0, 0, 0));
 
     this->appendEmitter(&d->emitter_x);
     d->emitter_x.setData(0);
@@ -66,17 +63,10 @@ dtkComposerNodeVector3D::dtkComposerNodeVector3D(void) : dtkComposerNodeLeaf(), 
     d->emitter_y.setData(0);
     this->appendEmitter(&d->emitter_z);
     d->emitter_z.setData(0);
-
-    d->vec = NULL;
 }
 
 dtkComposerNodeVector3D::~dtkComposerNodeVector3D(void)
 {
-    if (d->vec)
-        delete d->vec;
-
-    d->vec = NULL;
-
     delete d;
     
     d = NULL;
@@ -128,15 +118,23 @@ QString dtkComposerNodeVector3D::outputLabelHint(int port)
 
 void dtkComposerNodeVector3D::run(void)
 {
-    if (!d->receiver_vec.isEmpty())
-        d->vec = d->receiver_vec.data();
-    else
-        d->vec = new dtkVector3DReal(d->receiver_x.data(), d->receiver_y.data(), d->receiver_z.data());
-    
-    if (d->vec) {
-        d->emitter_vec.setData(d->vec);
-        d->emitter_x.setData((*d->vec)[0]);
-        d->emitter_y.setData((*d->vec)[1]);
-        d->emitter_z.setData((*d->vec)[2]);
+    if (!d->receiver_vec.isEmpty()) {
+
+        dtkVector3DReal vec(d->receiver_vec.data());
+
+        d->emitter_vec.setData(vec);
+        d->emitter_x.setData(vec[0]);
+        d->emitter_y.setData(vec[1]);
+        d->emitter_z.setData(vec[2]);
+
+    } else {
+
+        dtkVector3DReal vec(d->receiver_x.data(), d->receiver_y.data(), d->receiver_z.data());
+
+        d->emitter_vec.setData(vec);
+        d->emitter_x.setData(vec[0]);
+        d->emitter_y.setData(vec[1]);
+        d->emitter_z.setData(vec[2]);
+
     }
 }

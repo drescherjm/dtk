@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 25 17:39:48 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 182
+ * Last-Updated: jeu. avril 26 11:38:15 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 211
  */
 
 /* Commentary:
@@ -37,7 +37,7 @@
 class dtkDistributedServerManagerSshPrivate
 {
 public:
-    QList<QString> slaves;
+    QHash<QString,QProcess *> slaves;
 };
 
 
@@ -97,7 +97,7 @@ QByteArray  dtkDistributedServerManagerSsh::status(void)
     }
     props.insert("ethernet", "1G");
 
-    foreach(QString id, d->slaves) {
+    foreach(QString id, d->slaves.keys()) {
         QVariantMap job;
         job.insert("id", id);
         job.insert("username", "me");
@@ -169,44 +169,30 @@ QString dtkDistributedServerManagerSsh::submit(QString input)
         return QString("ERROR");
     }
 
-    QProcess stat;
-    qint64 pid;
+    QProcess *stat = new QProcess;
     QStringList rargs= args.split(" ");
-    QString wd =  qApp->applicationDirPath();
     dtkDebug() << DTK_PRETTY_FUNCTION << qsub << rargs;
-    if (stat.startDetached(qsub,rargs,wd,&pid))
+    stat->start(qsub,rargs);
+    if (stat->waitForStarted(5000))
         dtkDebug() << DTK_PRETTY_FUNCTION << "process started";
     else
         return QString("ERROR");
 
-    QString jobid = QString::number(pid);
-    d->slaves << jobid;
+    QString jobid = QString::number(stat->pid());
+    d->slaves.insert(jobid,stat);
     dtkDebug() << DTK_PRETTY_FUNCTION << jobid;
     return jobid;
 }
 
 QString dtkDistributedServerManagerSsh::deljob(QString jobid)
 {
-    QString qdel = "kill " + jobid;
-    QProcess stat; stat.start(qdel);
-    d->slaves.removeOne(jobid);
-
-    if (!stat.waitForStarted()) {
-        dtkError() << "Unable to launch qdel command";
+    if (!d->slaves.contains(jobid)) {
+        dtkError() << "Unknown job to delete" << jobid;
         return QString("ERROR");
     }
 
-    if (!stat.waitForFinished()) {
-        dtkError() << "Unable to complete qdel command";
-        return QString("ERROR");
-    }
-    if (stat.exitCode() > 0) {
-        QString error = stat.readAllStandardError();
-        dtkError() << "Error running qdel :" << error;
-        return QString("ERROR");
-    } else {
-        QString msg = stat.readAll();
-        dtkDebug() << DTK_PRETTY_FUNCTION << msg;
-        return QString("OK");
-    }
+    d->slaves[jobid]->close();
+    d->slaves.remove(jobid);
+
+    return QString("OK");
 }

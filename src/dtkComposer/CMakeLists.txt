@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Sep  4 10:11:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Apr 25 12:54:36 2012 (+0200)
+## Last-Updated: Thu Apr 26 10:35:12 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 506
+##     Update #: 512
 ######################################################################
 ##
 ### Commentary:
@@ -204,6 +204,18 @@ set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkComposerNodeRemote.cpp
   dtkComposerNodeWorld.cpp)
 endif(MPI_FOUND)
+
+## #################################################################
+## Kinect sources
+## #################################################################
+
+if(DTK_HAVE_NITE)
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkComposerNodeTrackerKinect.h)
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC})
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkComposerNodeTrackerKinect.cpp)
+endif(DTK_HAVE_NITE)
 
 ## #################################################################
 ## Build rules

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb  7 10:04:45 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 30 13:33:14 2011 (+0200)
+ * Last-Updated: Thu Apr 26 17:21:47 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 34
+ *     Update #: 39
  */
 
 /* Commentary: 
@@ -27,13 +27,24 @@
 
 #include <dtkCore/dtkGlobal.h>
 
+#include <dtkConfig.h>
+
 #include <QtGui>
+
+#if defined(DTK_HAVE_VRPN)
+#include <vrpn_Shared.h>
+#include <vrpn_Button.h>
+#include <vrpn_Analog.h>
+#include <vrpn_Tracker.h>
+#include <vrpn_FileConnection.h>
+#include <quat.h>
+#endif
 
 // /////////////////////////////////////////////////////////////////
 // vrpn callbacks (Definition at EOF.)
 // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_WRAP_VRPN)
+#if defined(DTK_HAVE_VRPN)
 void VRPN_CALLBACK vrpn_flystick_recognizer_handle_button(void *data, const vrpn_BUTTONCB callback);
 void VRPN_CALLBACK vrpn_flystick_recognizer_handle_analog(void *data, const vrpn_ANALOGCB callback);
 void VRPN_CALLBACK vrpn_flystick_recognizer_handle_tracker(void *data, const vrpn_TRACKERCB callback);
@@ -45,7 +56,7 @@ void VRPN_CALLBACK vrpn_flystick_recognizer_handle_tracker(void *data, const vrp
 
 void dtkVrFlystickRecognizerPrivate::run(void)
 {
-#if defined(DTK_WRAP_VRPN)
+#if defined(DTK_HAVE_VRPN)
     vrpn_FILE_CONNECTIONS_SHOULD_PRELOAD = false;
     vrpn_FILE_CONNECTIONS_SHOULD_ACCUMULATE = false;
 
@@ -80,7 +91,7 @@ void dtkVrFlystickRecognizerPrivate::stop(void)
     this->running = false;
 }
 
-#if defined(DTK_WRAP_VRPN)
+#if defined(DTK_HAVE_VRPN)
 
 void dtkVrFlystickRecognizerPrivate::handle_button(const vrpn_BUTTONCB callback)
 {
@@ -191,7 +202,7 @@ void dtkVrFlystickRecognizer::onButtonReleased(int button)
 // vrpn callbacks
 // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_WRAP_VRPN)
+#if defined(DTK_HAVE_VRPN)
 
 void VRPN_CALLBACK vrpn_flystick_recognizer_handle_button(void *data, const vrpn_BUTTONCB callback)
 {

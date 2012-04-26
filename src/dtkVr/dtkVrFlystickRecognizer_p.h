@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb  7 10:09:35 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 30 13:28:47 2011 (+0200)
+ * Last-Updated: Thu Apr 26 17:25:35 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 10
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -17,7 +17,14 @@
  * 
  */
 
-#if defined(DTK_WRAP_VRPN)
+#include <QtCore>
+
+#include <dtkConfig.h>
+
+#include <dtkMath/dtkQuaternion.h>
+#include <dtkMath/dtkVector3D.h>
+
+#if defined(DTK_HAVE_VRPN)
 #include <vrpn_Shared.h>
 #include <vrpn_Button.h>
 #include <vrpn_Analog.h>
@@ -25,11 +32,6 @@
 #include <vrpn_FileConnection.h>
 #include <quat.h>
 #endif
-
-#include <QtCore>
-
-#include <dtkMath/dtkQuaternion.h>
-#include <dtkMath/dtkVector3D.h>
 
 class dtkAbstractView;
 class dtkVrFlystickRecognizer;
@@ -42,7 +44,7 @@ public:
     void run(void);
     void stop(void);
 
-#if defined(DTK_WRAP_VRPN)
+#if defined(DTK_HAVE_VRPN)
     void handle_button(const vrpn_BUTTONCB callback);
     void handle_analog(const vrpn_ANALOGCB callback);
     void handle_tracker(const vrpn_TRACKERCB callback);
@@ -59,7 +61,7 @@ public:
 public:
     bool running;
 
-#if defined(DTK_WRAP_VRPN)
+#if defined(DTK_HAVE_VRPN)
     vrpn_Button_Remote *button;
     vrpn_Analog_Remote *analog;
     vrpn_Tracker_Remote *tracker;

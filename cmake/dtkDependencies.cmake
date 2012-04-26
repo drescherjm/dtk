@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Apr 25 17:06:06 2012 (+0200)
+## Last-Updated: Thu Apr 26 16:53:42 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 99
+##     Update #: 100
 ######################################################################
 ## 
 ### Commentary: 
@@ -203,6 +203,7 @@ find_library(VRPN_LIBRARY NAMES vrpn PATHS /usr/lib /usr/local/lib)
 
 if(QUAT_LIBRARY AND VRPN_LIBRARY)
   add_definitions(-DHAVE_VRPN)
+  set(DTK_HAVE_VRPN "YES")
 endif(QUAT_LIBRARY AND VRPN_LIBRARY)
 
 mark_as_advanced(QUAT_LIBRARY)

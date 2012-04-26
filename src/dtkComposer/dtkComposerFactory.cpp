@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Thu Apr 26 13:21:28 2012 (+0200)
- *           By: tkloczko
- *     Update #: 534
+ * Last-Updated: Thu Apr 26 16:59:08 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 549
  */
 
 /* Commentary:
@@ -54,6 +54,10 @@
 
 #if defined(DTK_HAVE_NITE)
 #include "dtkComposerNodeTrackerKinect.h"
+#endif
+
+#if defined(DTK_HAVE_VRPN)
+#include "dtkComposerNodeTrackerVrpn.h"
 #endif
 
 #include <dtkCore/dtkGlobal.h>
@@ -447,6 +451,16 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 #endif
 
 // /////////////////////////////////////////////////////////////////
+// VRPN nodes
+// /////////////////////////////////////////////////////////////////
+
+#if defined(DTK_HAVE_VRPN)
+    d->nodes << "VrpnTracker";
+    d->tags["VrpnTracker"] = QStringList() <<  "vrpn" << "vr" << "ar" << "tracker";
+    d->types["VrpnTracker"] = "vrpnTracker";
+#endif
+
+// /////////////////////////////////////////////////////////////////
 // MPI nodes
 // /////////////////////////////////////////////////////////////////
 
@@ -738,6 +752,15 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 #if defined(DTK_HAVE_NITE)
     if(type == "kinectTracker")
         return new dtkComposerNodeTrackerKinect;
+#endif
+
+// /////////////////////////////////////////////////////////////////
+// VRPN nodes
+// /////////////////////////////////////////////////////////////////
+
+#if defined(DTK_HAVE_VRPN)
+    if(type == "vrpnTracker")
+        return new dtkComposerNodeTrackerVrpn;
 #endif
 
 // /////////////////////////////////////////////////////////////////

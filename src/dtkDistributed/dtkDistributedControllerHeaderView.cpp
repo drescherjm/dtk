@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr  4 12:23:14 2012 (+0200)
  * Version: $Id$
- * Last-Updated: mar. avril 24 17:15:05 2012 (+0200)
+ * Last-Updated: jeu. avril 26 11:12:12 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 178
+ *     Update #: 248
  */
 
 /* Commentary: 
@@ -19,6 +19,8 @@
 
 #include "dtkDistributedController.h"
 #include "dtkDistributedControllerHeaderView.h"
+#include "dtkDistributedCore.h"
+#include "dtkDistributedCpu.h"
 #include "dtkDistributedNode.h"
 
 #include <dtkGui/dtkPieChart.h>
@@ -28,7 +30,8 @@ class dtkDistributedControllerHeaderViewPrivate
 public:
     QLabel *server;
     QLabel *stats;
-    dtkPieChart *pie;
+    dtkPieChart *pie_jobs;
+    dtkPieChart *pie_cores;
 
 public:
     QString cluster;
@@ -47,12 +50,18 @@ dtkDistributedControllerHeaderView::dtkDistributedControllerHeaderView(QWidget *
     d->stats = new QLabel(this);
     d->stats->setStyleSheet("font-size: 10px;");
 
-    d->pie = new dtkPieChart(this);
+    d->pie_jobs  = new dtkPieChart(this);
+    d->pie_cores = new dtkPieChart(this);
+    d->pie_jobs->setStyleSheet("font-size: 9px;");
+    d->pie_cores->setStyleSheet("font-size: 9px;");
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(d->server);
-    layout->addWidget(d->stats);
-    layout->addWidget(d->pie);
+    QHBoxLayout *layout_pies = new QHBoxLayout;
+    layout_pies->addWidget(d->stats);
+    layout_pies->addWidget(d->pie_jobs);
+    layout_pies->addWidget(d->pie_cores);
+    layout->addLayout(layout_pies);
 }
 
 dtkDistributedControllerHeaderView::~dtkDistributedControllerHeaderView(void)
@@ -88,7 +97,8 @@ void dtkDistributedControllerHeaderView::onDisconnected(const QUrl& cluster)
 {
     d->server->clear();
     d->stats->clear();
-    d->pie->clear();
+    d->pie_jobs->clear();
+    d->pie_cores->clear();
 
     d->cluster = QString();
 }
@@ -102,30 +112,49 @@ void dtkDistributedControllerHeaderView::update(void)
     int nstandby=0;
     int nabsent =0;
     int total   =0;
-    foreach (dtkDistributedNode * node, d->controller->nodes(d->cluster)) {
+    int cores_free =0;
+    int cores_busy =0;
+    int cores_down =0;
+    foreach (dtkDistributedNode *node, d->controller->nodes(d->cluster)) {
+        foreach (dtkDistributedCpu *cpu, node->cpus()) {
+            foreach (dtkDistributedCore *core, cpu->cores()) {
+                if (node->state() == dtkDistributedNode::Down ||node->state() == dtkDistributedNode::Absent)
+                    cores_down += 1;
+                else if(core->job())
+                    cores_busy += 1;
+                else
+                    cores_free += 1;
+            }
+        }
         total++;
         if (node->state() == dtkDistributedNode::Free)
             nfree++;
         else if (node->state() == dtkDistributedNode::Busy)
             nbusy++;
-        else if (node->state() == dtkDistributedNode::Down)
-            ndown++;
         else if (node->state() == dtkDistributedNode::StandBy)
             nstandby++;
+        else if (node->state() == dtkDistributedNode::Down)
+            ndown++;
         else if (node->state() == dtkDistributedNode::Absent)
             nabsent++;
     }
-    d->stats->setText(QString("Nodes: %1\nJobs: %2")
+    int ncores = cores_free+cores_busy+cores_down;
+    d->stats->setText(QString("Nodes: %1\nCores: %2\nJobs: %3")
                       .arg(total)
+                      .arg(ncores)
                       .arg(d->controller->jobs(d->cluster).count()));
 
     if (total > 0) {
-        d->pie->clear();
-        d->pie->addPiece("free: "   +QString::number(nfree),   100*nfree/total,   Qt::darkGreen);
-        d->pie->addPiece("dead: "   +QString::number(ndown),   100*ndown/total,   Qt::red);
-        d->pie->addPiece("standby: "+QString::number(nstandby),100*nstandby/total,Qt::blue);
-        d->pie->addPiece("busy: "   +QString::number(nbusy),   100*nbusy/total,   QColor("#FF7722"));
-        d->pie->addPiece("absent: " +QString::number(nabsent), 100*nabsent/total, Qt::black);
+        d->pie_jobs->clear();
+        d->pie_cores->clear();
+        d->pie_jobs->addPiece(QString::number(nfree),   100*nfree/total,   Qt::darkGreen);
+        d->pie_jobs->addPiece(QString::number(ndown),   100*ndown/total,   Qt::red);
+        d->pie_jobs->addPiece(QString::number(nstandby),100*nstandby/total,Qt::blue);
+        d->pie_jobs->addPiece(QString::number(nbusy),   100*nbusy/total,   QColor("#FF7722"));
+        d->pie_jobs->addPiece(QString::number(nabsent), 100*nabsent/total, Qt::black);
+        d->pie_cores->addPiece(QString::number(cores_free), 100*cores_free/ncores, Qt::darkGreen);
+        d->pie_cores->addPiece(QString::number(cores_busy), 100*cores_busy/ncores, QColor("#FF7722"));
+        d->pie_cores->addPiece(QString::number(cores_down), 100*cores_down/ncores, Qt::red);
     }
     QFrame::update();
 }

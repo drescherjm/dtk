@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: mar. avril 24 15:42:10 2012 (+0200)
  * Version: $Id$
- * Last-Updated: mar. avril 24 16:52:24 2012 (+0200)
+ * Last-Updated: jeu. avril 26 11:11:25 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 46
+ *     Update #: 74
  */
 
 /* Commentary:
@@ -38,7 +38,7 @@ dtkPieChart::dtkPieChart(QWidget *parent, int width, int height) : QWidget(paren
     else if(!width && height)
         this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     else
-        this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 }
 
 dtkPieChart::~dtkPieChart(void)
@@ -48,9 +48,8 @@ dtkPieChart::~dtkPieChart(void)
 
 QSize dtkPieChart::sizeHint(void) const
 {
-    QSize size = QWidget::sizeHint();
-    if (size.width()  < 1) size.setWidth(1);
-    if (size.height() < 1) size.setHeight(1);
+    QSize size = QSize(320,80);
+
     return(size);
 }
 
@@ -95,8 +94,7 @@ void dtkPieChart::paintEvent(QPaintEvent *ev)
         QString text = it.key();
         int angle = (int)(16*360*(value/(double)total));
 
-        QRadialGradient rg(pieRect.center(), pieRect.width()/2,
-                           pieRect.topLeft());
+        QRadialGradient rg(pieRect.center(), pieRect.width()/2, pieRect.topLeft());
         rg.setColorAt(0, Qt::white);
         rg.setColorAt(1, d->colors[text]);
         p.setBrush(rg);
@@ -107,7 +105,7 @@ void dtkPieChart::paintEvent(QPaintEvent *ev)
         lastAngleOffset += angle;
 
         int fh = fontMetrics().height();
-        QRect legendEntryRect(0,(fh*2)*currentPos,fh,fh);
+        QRect legendEntryRect(0,(fh*1.5)*currentPos,fh,fh);
         currentPos++;
         legendEntryRect.translate(legendRect.topLeft());
 

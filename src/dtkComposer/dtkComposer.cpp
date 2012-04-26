@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr 25 15:44:38 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 317
+ * Last-Updated: jeu. avril 26 14:26:58 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 329
  */
 
 /* Commentary: 
@@ -24,8 +24,10 @@
 #include "dtkComposerFactory.h"
 #include "dtkComposerGraph.h"
 #include "dtkComposerMachine.h"
+#include "dtkComposerNodeRemote.h"
 #include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
+#include "dtkComposerSceneNodeComposite.h"
 #include "dtkComposerStack.h"
 #include "dtkComposerView.h"
 #include "dtkComposerWriter.h"
@@ -193,8 +195,25 @@ bool dtkComposer::insert(QString file)
     return true;
 }
 
+void dtkComposer::updateRemotes(dtkComposerSceneNodeComposite *composite)
+{
+    dtkComposerWriter writer;
+    writer.setScene(d->scene);
+
+    foreach( dtkComposerSceneNode *node, composite->nodes()) {
+        if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(node->wrapee()))
+            remote->setComposition(writer.toXML(dynamic_cast<dtkComposerSceneNodeComposite *>(node)));
+        else if (dtkComposerSceneNodeComposite *sub = dynamic_cast<dtkComposerSceneNodeComposite *>(node))
+            this->updateRemotes(sub);
+    }
+
+}
+
+
 void dtkComposer::run(void)
 {
+    this->updateRemotes(d->scene->root());
+
     QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::run, false);
 
     d->graph->update();

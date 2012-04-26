@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 24 23:29:24 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 14:31:41 2012 (+0200)
+ * Last-Updated: Thu Apr 26 15:25:17 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 108
+ *     Update #: 122
  */
 
 /* Commentary: 
@@ -18,6 +18,7 @@
  */
 
 #include "dtkComposerNodeVector3D.h"
+#include "dtkComposerNodeQuaternion.h"
 #include "dtkComposerNodeView.h"
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
@@ -31,6 +32,7 @@ class dtkComposerNodeViewPrivate
 public:
     dtkComposerTransmitterReceiver<QString> receiver_type;
     dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_head_position;
+    dtkComposerTransmitterReceiver<dtkQuaternionReal> receiver_head_orientation;
 
 public:
     dtkAbstractView *view;
@@ -42,6 +44,7 @@ dtkComposerNodeView::dtkComposerNodeView(void) : QObject(), dtkComposerNodeLeaf(
 
     this->appendReceiver(&(d->receiver_type));
     this->appendReceiver(&(d->receiver_head_position));
+    this->appendReceiver(&(d->receiver_head_orientation));
 
     connect(this, SIGNAL(runned()), this, SLOT(onRun()));
 }
@@ -79,6 +82,9 @@ QString dtkComposerNodeView::inputLabelHint(int port)
     if(port == 1)
         return "head position";
 
+    if(port == 2)
+        return "head orientation";
+
     return dtkComposerNodeLeaf::inputLabelHint(port);
 }
 
@@ -105,7 +111,9 @@ void dtkComposerNodeView::onRun(void)
         return;
     }
 
-    if(!d->receiver_head_position.isEmpty()) {
+    if(!d->receiver_head_position.isEmpty())
         d->view->setHeadPosition(d->receiver_head_position.data());
-    }
+
+    if(!d->receiver_head_orientation.isEmpty())
+        d->view->setHeadOrientation(d->receiver_head_orientation.data());
 }

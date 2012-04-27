@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 16:58:34 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 17:30:24 2012 (+0200)
+ * Last-Updated: Fri Apr 27 14:49:34 2012 (+0200)
  *           By: tkloczko
- *     Update #: 8
+ *     Update #: 10
  */
 
 /* Commentary: 
@@ -23,6 +23,8 @@
 #include "dtkComposerTransmitterReceiver.h"
 
 #include <dtkLog/dtkLog>
+
+#include <dtkMath/dtkMath.tpp>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeVector3DOperatorTernary 
@@ -99,5 +101,5 @@ void dtkComposerNodeVector3DOperatorTernaryTripleProd::run(void)
 
 void dtkComposerNodeVector3DOperatorTernaryScalarMixedProd::run(void)
 {
-    d->emitter_val.setData(d->receiver_0.data() * (d->receiver_1.data() % d->receiver_2.data()));
+    d->emitter_val.setData(dtkMixedProduct(d->receiver_0.data(), d->receiver_1.data(), d->receiver_2.data()));
 }

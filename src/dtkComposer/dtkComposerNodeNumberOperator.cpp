@@ -313,9 +313,9 @@ void dtkComposerNodeNumberOperatorUnarySqrt::run(void)
     case QVariant::Int:
     case QVariant::UInt:
     case QVariant::LongLong:
-    case QVariant::ULongLong:
-        d->emitter->setData(sqrt(qVariantValue<qlonglong>(d->receiver->data())));
-        break;
+//    case QVariant::ULongLong:
+//        d->emitter->setData(sqrtl(qVariantValue<qlonglong>(d->receiver->data())));
+//        break;
     case QVariant::Double:
         d->emitter->setData(sqrt(qVariantValue<double>(d->receiver->data())));
         break;
@@ -495,7 +495,7 @@ void dtkComposerNodeNumberOperatorUnaryFloor::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryRound::run(void)
 {
-    d->emitter->setData(round(qVariantValue<double>(d->receiver->data())));
+//    d->emitter->setData(round(qVariantValue<double>(d->receiver->data())));
 }
 
 // /////////////////////////////////////////////////////////////////

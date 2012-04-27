@@ -40,7 +40,7 @@ public:
     dtkAbstractViewInteractorCreatorHash interactors;
 };
 
-dtkAbstractViewFactory *dtkAbstractViewFactory::instance(void)
+DTKCORE_EXPORT dtkAbstractViewFactory *dtkAbstractViewFactory::instance(void)
 {
     if(!s_instance)
         s_instance = new dtkAbstractViewFactory;
@@ -129,10 +129,13 @@ dtkSmartPointer<dtkAbstractViewInteractor> dtkAbstractViewFactory::interactorSma
 
 bool dtkAbstractViewFactory::registerViewType(const QString& type, dtkAbstractViewCreator func)
 {
+    qDebug()<<"dtkAbstractViewFactory::registerViewType ";
     if(!d->creators.contains(type)) {
         d->creators.insert(type, func);
         return true;
     }
+
+    qDebug()<<"dtkAbstractViewFactory::registerViewType 2 ";
 
     return false;
 }
@@ -204,4 +207,4 @@ dtkAbstractViewFactory::~dtkAbstractViewFactory(void)
     d = NULL;
 }
 
-dtkAbstractViewFactory *dtkAbstractViewFactory::s_instance = NULL;
+DTKCORE_EXPORT dtkAbstractViewFactory *dtkAbstractViewFactory::s_instance = NULL;

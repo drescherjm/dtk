@@ -19,6 +19,9 @@
 
 #include "dtkQuat.h"
 
+#define M_PI		3.14159265358979323846
+
+
 #ifdef WIN32
 #define _USE_MATH_DEFINES
 #endif

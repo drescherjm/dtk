@@ -562,7 +562,7 @@ void dtkComposerStackCommandCreateEdge::setParent(void)
     else if(e->source->node()->parent()->parent() == e->destination->node()->parent()->parent())
         e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->destination->node()->parent()->parent());
     else
-        qDebug() << __func__ << "Unhandled case" ;
+        qDebug() << "dtkComposerStackCommandCreateEdge::setParent" << "Unhandled case" ;
 }
 
 // /////////////////////////////////////////////////////////////////

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Oct 27 14:10:37 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. avril 27 09:56:42 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 287
+ * Last-Updated: Fri Apr 27 16:39:27 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 290
  */
 
 /* Commentary: 
@@ -57,8 +57,6 @@ int main(int argc, char **argv)
     application.setOrganizationName("inria");
     application.setOrganizationDomain("fr");
 
-
-
     dtkLogger::instance().attachFile(dtkLogPath(&application));
 
     dtkPluginManager::instance()->initialize();
@@ -67,9 +65,6 @@ int main(int argc, char **argv)
     communicator->initialize();
 
     dtkComposerEvaluatorSlave *slave = new dtkComposerEvaluatorSlave;
-
-
-
     slave->setInternalCommunicator(communicator);
     slave->setServer(url);
 
@@ -80,5 +75,6 @@ int main(int argc, char **argv)
 
     if (communicator->initialized())
         communicator->uninitialize();
+
     return value;
 }

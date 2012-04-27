@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:25:39
  * Version: $Id$
- * Last-Updated: lun. avril 23 17:30:55 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 158
+ * Last-Updated: Fri Apr 27 16:41:43 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 159
  */
 
 /* Commentary:
@@ -122,7 +122,6 @@ int dtkComposerEvaluatorSlave::exec(void)
         QString composition;
 
         dtkDebug() << "Wait for composition from controller " ;
-
 
         if (this->communicator()->socket()->bytesAvailable() > 10) {
             dtkInfo() << "data already available, try to parse composition " << this->communicator()->socket()->bytesAvailable();

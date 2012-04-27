@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. avril 24 14:29:44 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 523
+ * Last-Updated: Fri Apr 27 16:43:25 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 525
  */
 
 /* Commentary:
@@ -165,5 +165,8 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
 //        dtkTrace() << " node not runnable, put it at the end of the list ";
         d->stack << d->current; // current is not ready, put it at the end
     }
+
+    // qApp->processEvents();
+
     return !d->stack.isEmpty();
 }

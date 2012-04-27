@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 13:09:32 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 321
+ * Last-Updated: Fri Apr 27 14:08:04 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 324
  */
 
 /* Commentary:
@@ -30,8 +30,8 @@ class dtkAbstractViewNavigator;
 class dtkAbstractViewInteractor;
 class dtkAbstractData;
 
-template<class T> class dtkVector3D;
-template<class T> class dtkQuaternion;
+#include <dtkMath/dtkVector3D.h>
+#include <dtkMath/dtkQuaternion.h>
 
 class DTKCORE_EXPORT dtkAbstractView : public dtkAbstractObject
 {

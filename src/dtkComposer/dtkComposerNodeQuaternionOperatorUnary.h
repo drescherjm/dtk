@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 14:19:43 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 14:34:21 2012 (+0200)
+ * Last-Updated: Fri Apr 27 14:53:27 2012 (+0200)
  *           By: tkloczko
- *     Update #: 8
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -82,7 +82,7 @@ public:
 
 public:
     inline QString type(void) {
-        return "quaternion_unit";
+        return "quat_unit";
     }
 
     inline QString titleHint(void) {
@@ -101,7 +101,7 @@ public:
 
 public:
     inline QString type(void) {
-        return "quaternion_norm";
+        return "quat_norm";
     }
 
     inline QString titleHint(void) {

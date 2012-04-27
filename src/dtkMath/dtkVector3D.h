@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:41:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 17:54:34 2012 (+0200)
+ * Last-Updated: Fri Apr 27 21:25:43 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 57
+ *     Update #: 58
  */
 
 /* Commentary: 
@@ -102,7 +102,6 @@ typedef dtkVector3D<qreal> dtkVector3DReal;
 
 Q_DECLARE_METATYPE(dtkVector3DReal);
 Q_DECLARE_METATYPE(dtkVector3DReal *);
-
 
 #endif
 

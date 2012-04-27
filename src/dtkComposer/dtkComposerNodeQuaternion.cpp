@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 13:06:02 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 15:12:02 2012 (+0200)
+ * Last-Updated: Fri Apr 27 17:57:10 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 14
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -20,6 +20,8 @@
 #include "dtkComposerNodeQuaternion.h"
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
+
+#include <dtkMath>
 
 // /////////////////////////////////////////////////////////////////
 // 

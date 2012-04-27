@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 13:03:34 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 13:05:26 2012 (+0200)
- *           By: tkloczko
- *     Update #: 2
+ * Last-Updated: Fri Apr 27 17:54:48 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 3
  */
 
 /* Commentary: 
@@ -50,16 +50,5 @@ public:
 private:
     dtkComposerNodeQuaternionPrivate *d;
 };
-
-// /////////////////////////////////////////////////////////////////
-// 
-// /////////////////////////////////////////////////////////////////
-
-#include <dtkMath/dtkQuaternion>
-
-typedef dtkQuaternion<qreal> dtkQuaternionReal;
-
-Q_DECLARE_METATYPE(dtkQuaternionReal);
-Q_DECLARE_METATYPE(dtkQuaternionReal *);
 
 #endif

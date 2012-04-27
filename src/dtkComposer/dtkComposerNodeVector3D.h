@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 10:10:43 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 11:34:18 2012 (+0200)
- *           By: tkloczko
- *     Update #: 8
+ * Last-Updated: Fri Apr 27 17:54:19 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -50,16 +50,5 @@ public:
 private:
     dtkComposerNodeVector3DPrivate *d;
 };
-
-// /////////////////////////////////////////////////////////////////
-// 
-// /////////////////////////////////////////////////////////////////
-
-#include <dtkMath/dtkVector3D>
-
-typedef dtkVector3D<qreal> dtkVector3DReal;
-
-Q_DECLARE_METATYPE(dtkVector3DReal);
-Q_DECLARE_METATYPE(dtkVector3DReal *);
 
 #endif

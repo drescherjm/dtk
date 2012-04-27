@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: Fri Apr 27 16:51:41 2012 (+0200)
+ * Last-Updated: Fri Apr 27 18:47:49 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 523
+ *     Update #: 575
  */
 
 /* Commentary:
@@ -20,13 +20,15 @@
 #include "dtkComposerNodeRemote.h"
 #include "dtkComposerTransmitterVariant.h"
 
-#include <dtkCore/dtkAbstractDataFactory.h>
-
 #include <dtkDistributed/dtkDistributedController.h>
 #include <dtkDistributed/dtkDistributedCommunicator.h>
 #include <dtkDistributed/dtkDistributedCommunicatorMpi.h>
 #include <dtkDistributed/dtkDistributedCommunicatorTcp.h>
 #include <dtkDistributed/dtkDistributedSlave.h>
+
+#include <dtkCore/dtkAbstractDataFactory.h>
+
+#include <dtkMath>
 
 #include <dtkLog/dtkLog.h>
 
@@ -166,12 +168,20 @@ void dtkComposerNodeRemote::begin(void)
                 array = t->data().toByteArray();
                 break;
             }
-            case QVariant::UserType:
-            case QVariant::UserType+1: {
-                // assume it's a dtkAbstractData
-                dtkAbstractData *data = t->data().value<dtkAbstractData *>();
-                dtkDebug() << "sending dtkAbstractData in transmitter" << i;
-                d->server->socket()->send(data, d->jobid, 0);
+            case QVariant::UserType: {
+
+                if(QString(t->data().typeName()) == "dtkAbstractData") {
+
+                    dtkAbstractData *data = t->data().value<dtkAbstractData *>();
+                    dtkDebug() << "sending dtkAbstractData in transmitter" << i;
+                    d->server->socket()->send(data, d->jobid, 0);
+
+                } else {
+
+                    dtkDebug() << QString("sending QVariant (%1) in transmitter").arg(t->data().typeName()) << i;
+                    d->server->socket()->send(t->data(), d->jobid, 0);
+                }
+
                 continue;
             }
             default:
@@ -212,6 +222,45 @@ void dtkComposerNodeRemote::begin(void)
                     QString data = QString(msg->content());
                     dtkDebug() << "received string, set data in transmitter";
                     t->setData(data);
+                } else if (msg->type() == "dtkVector3DReal") {
+
+                    if (msg->size() > 0) {
+                        QByteArray array = msg->content();
+                        dtkVector3DReal v;
+
+                        QDataStream stream(&array, QIODevice::ReadOnly);
+                        stream >> v[0];
+                        stream >> v[1];
+                        stream >> v[2];
+                       
+                        t->setData(qVariantFromValue(v));
+
+                        dtkDebug() << "received dtkVector3DReal, set data in transmitter" << v[0] << v[1] << v[2];
+ 
+                    } else
+                        dtkWarn() << "warning: no content in dtkVector3DReal transmitter";
+                    
+
+                } else if (msg->type() == "dtkQuaternionReal") {
+
+
+                    if (msg->size() > 0) {
+                        QByteArray array = msg->content();
+                        dtkQuaternionReal q;
+
+                        QDataStream stream(&array, QIODevice::ReadOnly);
+                        stream >> q[0];
+                        stream >> q[1];
+                        stream >> q[2];
+                        stream >> q[3];
+                       
+                        t->setData(qVariantFromValue(q));
+
+                        dtkDebug() << "received dtkQuaternionReal, set data in transmitter" << q[0] << q[1] << q[2] << q[3];
+ 
+                    } else
+                        dtkWarn() << "warning: no content in dtkQuaternionReal transmitter";
+
                 } else { // assume a dtkAbstractData
                     dtkDebug() << "received dtkAbstractData, deserialize";
                     if (msg->size() > 0) {
@@ -321,8 +370,7 @@ void dtkComposerNodeRemote::end(void)
                     array = t->data().toByteArray();
                     break;
                 }
-                case QVariant::UserType:
-                case QVariant::UserType+1: {
+                case QVariant::UserType: {
                     // assume it's a dtkAbstractData
                     dtkAbstractData *data = t->data().value<dtkAbstractData *>();
                     QString type = data->identifier();

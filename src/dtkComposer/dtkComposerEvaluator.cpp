@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 16:43:25 2012 (+0200)
+ * Last-Updated: Fri Apr 27 19:05:49 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 525
+ *     Update #: 526
  */
 
 /* Commentary:
@@ -166,7 +166,7 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
         d->stack << d->current; // current is not ready, put it at the end
     }
 
-    // qApp->processEvents();
+    qApp->processEvents();
 
     return !d->stack.isEmpty();
 }

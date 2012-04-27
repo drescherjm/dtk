@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 08:55:43 2012 (+0200)
- *           By: tkloczko
- *     Update #: 225
+ * Last-Updated: Fri Apr 27 18:10:45 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 247
  */
 
 /* Commentary:
@@ -17,10 +17,8 @@
  *
  */
 
-#include "dtkAbstractData.h"
-#include "dtkPluginManager.h"
-
 #include "dtkPlugin.h"
+#include "dtkPluginManager.h"
 
 #include <dtkLog/dtkLog.h>
 
@@ -69,12 +67,19 @@ public:
     QHash<QString, QPluginLoader *> loaders;
 };
 
+#include "dtkAbstractData.h"
+
+#include <dtkMath/dtkVector3D.h>
+#include <dtkMath/dtkQuaternion.h>
+
 dtkPluginManager *dtkPluginManager::instance(void)
 {
     if(!s_instance) {
         s_instance = new dtkPluginManager;
 
-        qRegisterMetaType<dtkAbstractData>("dtkAbstractData");
+        dtkTrace() << "dtkAbstractData has meta user type" << qRegisterMetaType<dtkAbstractData>("dtkAbstractData");
+        dtkTrace() << "dtkVector3DReal has meta user type" << qRegisterMetaType<dtkVector3DReal>("dtkVector3DReal");
+        dtkTrace() << "dtkQuaternionReal has meta user type" << qRegisterMetaType<dtkQuaternionReal>("dtkQuaternionReal");
     }
 
     return s_instance;

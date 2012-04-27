@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: lun. avril 23 17:28:44 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 699
+ * Last-Updated: Fri Apr 27 18:26:19 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 717
  */
 
 /* Commentary:
@@ -19,6 +19,8 @@
 
 #include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkGlobal.h>
+
+#include <dtkMath>
 
 #include <dtkLog/dtkLog.h>
 
@@ -52,6 +54,33 @@ void dtkDistributedSocket::send(dtkAbstractData *data, QString jobid, qint16 tar
     }
 }
 
+void dtkDistributedSocket::send(QVariant data, QString jobid, qint16 target)
+{
+    QByteArray *array;
+
+    QString type = data.typeName();
+
+    if(type == "dtkVector3DReal") {
+        dtkVector3DReal v = data.value<dtkVector3DReal>();
+        array = new QByteArray;
+        QDataStream stream(array, QIODevice::WriteOnly);
+        stream << v[0] << v[1] << v[2];
+    }
+
+    else if(type == "dtkQuaternionReal") {
+        dtkQuaternionReal v = data.value<dtkQuaternionReal>();
+        array = new QByteArray;
+        QDataStream stream(array, QIODevice::WriteOnly);
+        stream << v[0] << v[1] << v[2] << v[3];
+    }
+
+    if (!array->isNull()) {
+        this->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,jobid, target, array->size(), type));
+        this->write(*array);
+    } else {
+        dtkError() << "serialization failed";
+    }
+}
 
 qint64 dtkDistributedSocket::sendRequest( dtkDistributedMessage *msg)
 {

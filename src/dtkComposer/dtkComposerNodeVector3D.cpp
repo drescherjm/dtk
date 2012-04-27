@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 10:19:40 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 17:44:04 2012 (+0200)
- *           By: tkloczko
- *     Update #: 49
+ * Last-Updated: Fri Apr 27 17:57:25 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 50
  */
 
 /* Commentary: 
@@ -20,6 +20,8 @@
 #include "dtkComposerNodeVector3D.h"
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
+
+#include <dtkMath>
 
 // /////////////////////////////////////////////////////////////////
 // 

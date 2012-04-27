@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. avril 26 14:26:58 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 329
+ * Last-Updated: Fri Apr 27 18:43:18 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 334
  */
 
 /* Commentary: 
@@ -28,6 +28,7 @@
 #include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerSceneNodeComposite.h"
+#include "dtkComposerSceneNodeControl.h"
 #include "dtkComposerStack.h"
 #include "dtkComposerView.h"
 #include "dtkComposerWriter.h"
@@ -200,13 +201,15 @@ void dtkComposer::updateRemotes(dtkComposerSceneNodeComposite *composite)
     dtkComposerWriter writer;
     writer.setScene(d->scene);
 
-    foreach( dtkComposerSceneNode *node, composite->nodes()) {
+    foreach(dtkComposerSceneNode *node, composite->nodes()) {
         if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(node->wrapee()))
             remote->setComposition(writer.toXML(dynamic_cast<dtkComposerSceneNodeComposite *>(node)));
         else if (dtkComposerSceneNodeComposite *sub = dynamic_cast<dtkComposerSceneNodeComposite *>(node))
             this->updateRemotes(sub);
+        else if (dtkComposerSceneNodeControl *ctrl = dynamic_cast<dtkComposerSceneNodeControl *>(node))
+            foreach(dtkComposerSceneNodeComposite *block, ctrl->blocks())
+                this->updateRemotes(block);
     }
-
 }
 
 

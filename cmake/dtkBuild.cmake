@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Apr 17 21:55:44 2012 (+0200)
+## Last-Updated: Fri Apr 27 20:46:14 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 203
+##     Update #: 206
 ######################################################################
 ## 
 ### Commentary: 
@@ -48,13 +48,8 @@ mark_as_advanced(BUILD_TESTING)
 ## #################################################################
 
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-  if(WIN32)
-    string(REPLACE "\\" "/" ProgramFiles "$ENV{ProgramFiles}")
-    set(CMAKE_INSTALL_PREFIX "${ProgramFiles}/Inria/${PROJECT_NAME}" CACHE PATH "${PROJECT_NAME} install prefix" FORCE)
-  else()
-    set(CMAKE_INSTALL_PREFIX "/usr/local/inria/${PROJECT_NAME}" CACHE PATH "${PROJECT_NAME} install prefix" FORCE)
-  endif()
-endif()
+  set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install" CACHE PATH "${PROJECT_NAME} install prefix" FORCE)
+endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
 ## #################################################################
 ## Configure arch

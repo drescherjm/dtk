@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 17:02:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 17:35:37 2012 (+0200)
- *           By: tkloczko
- *     Update #: 45
+ * Last-Updated: Fri Apr 27 21:16:45 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 54
  */
 
 /* Commentary: 
@@ -24,27 +24,27 @@
 // dtkContainerVector implementation
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> inline dtkContainerVector<T>::dtkContainerVector(dtkAbstractObject *parent) : dtkAbstractContainer(parent)
+template <typename T> dtkContainerVector<T>::dtkContainerVector(dtkAbstractData *parent) : dtkAbstractContainer(parent)
 {
 
 };
 
-template <typename T> inline dtkContainerVector<T>::dtkContainerVector(QVector<T> vector, dtkAbstractObject *parent) : dtkAbstractContainer(parent), m_vector(vector)
+template <typename T> dtkContainerVector<T>::dtkContainerVector(const QVector<T>& vector, dtkAbstractData *parent) : dtkAbstractContainer(parent), m_vector(vector)
 {
 
 };
 
-template <typename T> inline dtkContainerVector<T>::dtkContainerVector(const dtkContainerVector& other) : dtkAbstractContainer(other), m_vector(other.m_vector)
+template <typename T> dtkContainerVector<T>::dtkContainerVector(const dtkContainerVector& other) : dtkAbstractContainer(other), m_vector(other.m_vector)
 {
 
 };
 
-template <typename T> inline dtkContainerVector<T>::~dtkContainerVector(void)
+template <typename T> dtkContainerVector<T>::~dtkContainerVector(void)
 {
 
 };
 
-template <typename T> dtkContainerVector& dtkContainerVector<T>::operator = (const dtkContainerVector<T>& other)
+template <typename T> dtkContainerVector<T>& dtkContainerVector<T>::operator = (const dtkContainerVector<T>& other)
 {
     dtkAbstractContainer::operator=(other);
 
@@ -123,7 +123,7 @@ template <typename T> inline dtkxarch_int dtkContainerVector<T>::count(void) con
     return m_vector.count();
 };
 
-template <typename T> inline dtkxarch_int dtkContainerVector<T>::indexOf(const QVariant& data, dtkxarch_int from = 0) const
+template <typename T> inline dtkxarch_int dtkContainerVector<T>::indexOf(const QVariant& data, dtkxarch_int from) const
 {
     return m_vector.indexOf(qvariant_cast<T>(data), from);
 };
@@ -145,12 +145,12 @@ template <typename T> inline QVariant dtkContainerVector<T>::last(void) const
 
 template <typename T> inline bool dtkContainerVector<T>::operator != (const dtkAbstractContainer& other) const
 {
-    return m_vector != other.m_vector;
+    return true;
 };
 
 template <typename T> inline bool dtkContainerVector<T>::operator == (const dtkAbstractContainer& other) const
 {
-    return m_vector == other.m_vector;
+    return false;
 };
 
 template <typename T> inline QVariant dtkContainerVector<T>::operator[] (dtkxarch_int index) const

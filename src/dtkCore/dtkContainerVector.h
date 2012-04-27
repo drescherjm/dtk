@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 16:38:14 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 17:36:52 2012 (+0200)
- *           By: tkloczko
- *     Update #: 35
+ * Last-Updated: Fri Apr 27 21:13:12 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -20,8 +20,11 @@
 #ifndef DTKCONTAINERVECTOR_H
 #define DTKCONTAINERVECTOR_H
 
-#include "dtkCoreExport.h"
 #include "dtkAbstractContainer.h"
+#include "dtkCoreExport.h"
+#include "dtkGlobal.h"
+
+#include <QtCore>
 
 // /////////////////////////////////////////////////////////////////
 // dtkContainerVector interface
@@ -30,8 +33,8 @@
 template <typename T> class DTKCORE_EXPORT dtkContainerVector : public dtkAbstractContainer
 {
 public:
-     dtkContainerVector(dtkAbstractObject *parent = 0);
-     dtkContainerVector(const QVector<T>& vector, dtkAbstractObject *parent = 0);
+     dtkContainerVector(dtkAbstractData *parent = 0);
+     dtkContainerVector(const QVector<T>& vector, dtkAbstractData *parent = 0);
      dtkContainerVector(const dtkContainerVector<T>& other);
     ~dtkContainerVector(void);
 
@@ -54,8 +57,8 @@ public:
     void prepend(const QVariant& data);
     void  remove(const QVariant& data);
 
-    void  insert(const QVariant data&, dtkxarch_int from, dtkxarch_int length);
-    void replace(const QVariant data&, dtkxarch_int index);
+    void  insert(const QVariant& data, dtkxarch_int from, dtkxarch_int length);
+    void replace(const QVariant& data, dtkxarch_int index);
 
     void resize(dtkxarch_int size);
 

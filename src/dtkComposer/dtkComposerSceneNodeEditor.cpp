@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 13:48:58 2012 (+0200)
+ * Last-Updated: Thu Apr 26 21:24:53 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 879
+ *     Update #: 942
  */
 
 /* Commentary: 
@@ -243,12 +243,29 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     d->edit_s->setEnabled(false);
     d->edit_s->setVisible(false);
 
-    d->combo_b = new QComboBox(this);
-    d->combo_b->addItem("true");
-    d->combo_b->addItem("false");
-    d->combo_b->setEnabled(false);
-    d->combo_b->setVisible(false);
-    d->combo_b->blockSignals(true);
+    // --
+
+    d->bool_widget = new QWidget(this);
+
+    d->f_b = new QRadioButton("false", d->bool_widget);
+    d->t_b = new QRadioButton("true", d->bool_widget);
+    d->t_b->blockSignals(true);
+
+    d->g_b = new QButtonGroup(this);
+    d->g_b->setExclusive(true);
+    d->g_b->addButton(d->t_b);
+    d->g_b->addButton(d->f_b);
+
+    QHBoxLayout *bool_layout = new QHBoxLayout;
+    bool_layout->setContentsMargins(0, 0, 0, 0);
+    bool_layout->addWidget(d->t_b);
+    bool_layout->addWidget(d->f_b);
+
+    d->bool_widget->setLayout(bool_layout);
+    d->bool_widget->setEnabled(false);
+    d->bool_widget->setVisible(false);
+
+    // --
 
     d->selector = new QComboBox(this);
     d->selector->setEnabled(false);
@@ -310,7 +327,7 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     layout->addWidget(d->spin_d);
     layout->addWidget(d->spin_f);
     layout->addWidget(d->edit_s);
-    layout->addWidget(d->combo_b);
+    layout->addWidget(d->bool_widget);
 
     connect(d->add_loop_port, SIGNAL(clicked()), this, SLOT(addLoopPort()));
     connect(d->rem_loop_port, SIGNAL(clicked()), this, SLOT(removeLoopPort()));
@@ -325,10 +342,11 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
 
     connect(d->selector, SIGNAL(currentIndexChanged(int)), this, SLOT(onBlockChanged(int)));
 
-    connect(d->combo_b, SIGNAL(currentIndexChanged(int)), this, SLOT(onValueChanged(int)));
     connect(d->spin_d, SIGNAL(valueChanged(int)), this, SLOT(onValueChanged(int)));
     connect(d->spin_f, SIGNAL(valueChanged(double)), this, SLOT(onValueChanged(double)));
     connect(d->edit_s, SIGNAL(textChanged(const QString&)), this, SLOT(onValueChanged(const QString &)));
+
+    connect(d->t_b, SIGNAL(toggled(bool)), this, SLOT(onValueChanged(bool)));
 }
 
 dtkComposerSceneNodeEditor::~dtkComposerSceneNodeEditor(void)
@@ -455,13 +473,17 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
             d->edit_s->setVisible(false);
             d->edit_s->setEnabled(false);
 
-            d->combo_b->setVisible(true);
-            d->combo_b->setEnabled(true);
-            if(b_node->value())
-                d->combo_b->setCurrentIndex(0);
-            else
-                d->combo_b->setCurrentIndex(1);
-            d->combo_b->blockSignals(false);
+            if(b_node->value()) {
+                d->t_b->setChecked(true);
+                d->f_b->setChecked(false);
+            } else {
+                d->t_b->setChecked(false);
+                d->f_b->setChecked(true);
+            }
+
+            d->t_b->blockSignals(false);
+            d->bool_widget->setVisible(true);
+            d->bool_widget->setEnabled(true);
 
         } else if(dtkComposerNodeInteger *i_node = dynamic_cast<dtkComposerNodeInteger *>(node->wrapee())) {
 
@@ -478,9 +500,9 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
             d->edit_s->setVisible(false);
             d->edit_s->setEnabled(false);
 
-            d->combo_b->blockSignals(true);
-            d->combo_b->setVisible(false);
-            d->combo_b->setEnabled(false);
+            d->t_b->blockSignals(true);
+            d->bool_widget->setVisible(false);
+            d->bool_widget->setEnabled(false);
 
         } else if(dtkComposerNodeReal *r_node = dynamic_cast<dtkComposerNodeReal *>(node->wrapee())) {
 
@@ -497,9 +519,9 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
             d->edit_s->setVisible(false);
             d->edit_s->setEnabled(false);
 
-            d->combo_b->blockSignals(true);
-            d->combo_b->setVisible(false);
-            d->combo_b->setEnabled(false);
+            d->t_b->blockSignals(true);
+            d->bool_widget->setVisible(false);
+            d->bool_widget->setEnabled(false);
 
         } else if(dtkComposerNodeString *s_node = dynamic_cast<dtkComposerNodeString *>(node->wrapee())) {
 
@@ -516,9 +538,9 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
             d->spin_f->setVisible(false);
             d->spin_f->setEnabled(false);
 
-            d->combo_b->blockSignals(true);
-            d->combo_b->setVisible(false);
-            d->combo_b->setEnabled(false);
+            d->t_b->blockSignals(true);
+            d->bool_widget->setVisible(false);
+            d->bool_widget->setEnabled(false);
 
         } else {
 
@@ -534,9 +556,9 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
             d->edit_s->setVisible(false);
             d->edit_s->setEnabled(false);
 
-            d->combo_b->blockSignals(true);
-            d->combo_b->setVisible(false);
-            d->combo_b->setEnabled(false);
+            d->t_b->blockSignals(true);
+            d->bool_widget->setVisible(false);
+            d->bool_widget->setEnabled(false);
         }
     }
 
@@ -586,9 +608,9 @@ void dtkComposerSceneNodeEditor::clear(void)
     d->selector->setEnabled(false);
     d->selector->setVisible(false);
 
-    d->combo_b->blockSignals(true);
-    d->combo_b->setVisible(false);
-    d->combo_b->setEnabled(false);
+    d->t_b->blockSignals(true);
+    d->bool_widget->setVisible(false);
+    d->bool_widget->setEnabled(false);
 
     d->spin_d->blockSignals(true);
     d->spin_d->setVisible(false);
@@ -940,15 +962,16 @@ void dtkComposerSceneNodeEditor::onTitleChanged(const QString& text)
     }
 }
 
+void dtkComposerSceneNodeEditor::onValueChanged(bool value)
+{
+    if(dtkComposerNodeBoolean *b_node = dynamic_cast<dtkComposerNodeBoolean *>(d->node->wrapee()))
+        b_node->setValue(value);
+}
+
 void dtkComposerSceneNodeEditor::onValueChanged(int value)
 {
-    if(sender() == d->combo_b)
-        if(dtkComposerNodeBoolean *b_node = dynamic_cast<dtkComposerNodeBoolean *>(d->node->wrapee()))
-            b_node->setValue(!((bool)value));
-
-    if(sender() == d->spin_d)
-        if(dtkComposerNodeInteger *i_node = dynamic_cast<dtkComposerNodeInteger *>(d->node->wrapee()))
-            i_node->setValue(value);
+    if(dtkComposerNodeInteger *i_node = dynamic_cast<dtkComposerNodeInteger *>(d->node->wrapee()))
+        i_node->setValue(value);
 }
 
 void dtkComposerSceneNodeEditor::onValueChanged(double value)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Apr 26 16:50:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 16:51:39 2012 (+0200)
+ * Last-Updated: Thu Apr 26 17:55:21 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 2
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -41,6 +41,13 @@ public:
 
     inline QString titleHint(void) {
         return "VrpnTracker";
+    }
+
+    inline QString inputLabelHint(int port) {
+        if(port == 0)
+            return "url";
+
+        return dtkComposerNodeLeaf::outputLabelHint(port);
     }
 
     inline QString outputLabelHint(int port) {

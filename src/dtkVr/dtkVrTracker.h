@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 20:30:26 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr 25 16:56:26 2012 (+0200)
+ * Last-Updated: Thu Apr 26 17:49:20 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 5
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -40,8 +40,10 @@ public:
 
 public:
     virtual void   initialize(void);
-    virtual void   initialize(const QUrl& server);
     virtual void uninitialize(void);
+
+public:
+    virtual void setUrl(const QUrl& url);
 
 public:
     virtual dtkVector3D<double> headPosition(void);

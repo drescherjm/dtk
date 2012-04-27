@@ -23,6 +23,7 @@
 #include "../src/dtkDistributed/dtkDistributedServerDaemon.h"
 #include "../src/dtkDistributed/dtkDistributedServerManager.h"
 #include "../src/dtkDistributed/dtkDistributedServerManagerOar.h"
+#include "../src/dtkDistributed/dtkDistributedServerManagerSsh.h"
 #include "../src/dtkDistributed/dtkDistributedServerManagerTorque.h"
 #include "../src/dtkDistributed/dtkDistributedService.h"
 #include "../src/dtkDistributed/dtkDistributedSlave.h"

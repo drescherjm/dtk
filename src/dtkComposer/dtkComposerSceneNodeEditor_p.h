@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:28:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 13:37:48 2012 (+0200)
+ * Last-Updated: Thu Apr 26 21:18:06 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 57
+ *     Update #: 63
  */
 
 /* Commentary: 
@@ -109,7 +109,10 @@ public:
     QLineEdit *edit_s;
 
 public:
-    QComboBox *combo_b;
+    QRadioButton *t_b;
+    QRadioButton *f_b;
+    QButtonGroup *g_b;
+    QWidget *bool_widget;
 
 public:
     QComboBox *selector;

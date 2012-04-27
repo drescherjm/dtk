@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Oct 27 14:10:37 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 25 17:58:46 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 266
+ * Last-Updated: ven. avril 27 09:56:42 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 287
  */
 
 /* Commentary: 
@@ -40,12 +40,6 @@ int main(int argc, char **argv)
     QUrl url = QUrl(argv[1]);
     bool useGUI = false;
 
-    QApplication application(argc, argv, useGUI);
-    application.setApplicationName("dtkComposerEvaluatorSlave");
-    application.setApplicationVersion("0.0.2");
-    application.setOrganizationName("inria");
-    application.setOrganizationDomain("fr");
-
     QSettings settings("inria", "dtk");
     settings.beginGroup("slave");
 
@@ -53,6 +47,17 @@ int main(int argc, char **argv)
         dtkLogger::instance().setLevel(settings.value("log_level").toString());
     else
         dtkLogger::instance().setLevel(dtkLog::Trace);
+
+    if (settings.contains("use_gui") && settings.value("use_gui").toString() == "true")
+        useGUI =true;
+
+    QApplication application(argc, argv, useGUI);
+    application.setApplicationName("dtkComposerEvaluatorSlave");
+    application.setApplicationVersion("0.0.2");
+    application.setOrganizationName("inria");
+    application.setOrganizationDomain("fr");
+
+
 
     dtkLogger::instance().attachFile(dtkLogPath(&application));
 
@@ -69,7 +74,7 @@ int main(int argc, char **argv)
     slave->setServer(url);
 
     int value;
-    do value = slave->exec(); while (value  == 0);
+    do  { value = slave->exec(); } while (value  == 0);
 
     dtkPluginManager::instance()->uninitialize();
 

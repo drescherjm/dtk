@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:35:24 2012 (+0200)
+ * Last-Updated: Thu Apr 26 15:18:36 2012 (+0200)
  *           By: tkloczko
- *     Update #: 190
+ *     Update #: 191
  */
 
 /* Commentary: 
@@ -64,6 +64,15 @@ QVariant::Type dtkComposerTransmitter::type(void) const
 QString dtkComposerTransmitter::typeName(void) const
 {
     return QVariant::typeToName(d->variant.type());
+}
+
+//! 
+/*!  
+ *  
+ */
+void dtkComposerTransmitter::setParentNode(dtkComposerNode *parent)
+{
+    d->parent = parent;
 }
 
 //! Returns pointer to parent node.

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Thu Apr 26 16:59:08 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 549
+ * Last-Updated: Thu Apr 26 17:45:03 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 550
  */
 
 /* Commentary:
@@ -43,6 +43,8 @@
 #include "dtkComposerNodeStringOperator.h"
 #include "dtkComposerNodeVector.h"
 #include "dtkComposerNodeVector3D.h"
+#include "dtkComposerNodeVector3DOperatorUnary.h"
+#include "dtkComposerNodeVector3DOperatorBinary.h"
 #include "dtkComposerNodeView.h"
 #include "dtkComposerNodeRemote.h"
 #include "dtkComposerSceneNodeLeaf.h"
@@ -135,6 +137,46 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["Quaternion"] = "<p>Description not yet filled!</p>";
     d->tags["Quaternion"] = QStringList() << "quaternion" << "algebraic";
     d->types["Quaternion"] = "quaternion";
+
+    d->nodes << "Vector3D Unit";
+    d->descriptions["Vector3D Unit"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Unit"] = QStringList() << "vector3D" << "algebraic" << "unit";
+    d->types["Vector3D Unit"] = "vector3D_unit";
+
+    d->nodes << "Vector3D Norm";
+    d->descriptions["Vector3D Norm"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Norm"] = QStringList() << "vector3D" << "algebraic" << "norm";
+    d->types["Vector3D Norm"] = "vector3D_norm";
+
+    d->nodes << "Vector3D Sum";
+    d->descriptions["Vector3D Sum"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Sum"] = QStringList() << "vector3D" << "algebraic" << "sum";
+    d->types["Vector3D Sum"] = "vector3D_sum";
+
+    d->nodes << "Vector3D Substract";
+    d->descriptions["Vector3D Substract"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Substract"] = QStringList() << "vector3D" << "algebraic" << "substraction";
+    d->types["Vector3D Substract"] = "vector3D_substract";
+
+    d->nodes << "Vector3D Cross Prod";
+    d->descriptions["Vector3D Cross Prod"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Cross Prod"] = QStringList() << "vector3D" << "algebraic" << "cross product";
+    d->types["Vector3D Cross Prod"] = "vector3D_cross_prod";
+
+    d->nodes << "Vector3D Dot Prod";
+    d->descriptions["Vector3D Dot Prod"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Dot Prod"] = QStringList() << "vector3D" << "algebraic" << "dot product";
+    d->types["Vector3D Dot Prod"] = "vector3D_dot_prod";
+
+    d->nodes << "Vector3D Scal Mult";
+    d->descriptions["Vector3D Scal Mult"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Scal Mult"] = QStringList() << "vector3D" << "algebraic" << "scalar multiplication";
+    d->types["Vector3D Scal Mult"] = "vector3D_scal_mult";
+
+    d->nodes << "Vector3D Scal Division";
+    d->descriptions["Vector3D Scal Division"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Scal Division"] = QStringList() << "vector3D" << "algebraic" << "scalar division";
+    d->types["Vector3D Scal Division"] = "vector3D_scal_divide";
 
     // operators
 
@@ -563,6 +605,30 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "quaternion")
         return new dtkComposerNodeQuaternion;
+
+    if(type == "vector3D_unit")
+        return new dtkComposerNodeVector3DOperatorUnaryUnitary;
+
+    if(type == "vector3D_norm")
+        return new dtkComposerNodeVector3DOperatorUnaryScalarNorm;
+
+    if(type == "vector3D_sum")
+        return new dtkComposerNodeVector3DOperatorBinarySum;
+
+    if(type == "vector3D_substract")
+        return new dtkComposerNodeVector3DOperatorBinarySubstract;
+
+    if(type == "vector3D_cross_prod")
+        return new dtkComposerNodeVector3DOperatorBinaryCrossProd;
+
+    if(type == "vector3D_dot_prod")
+        return new dtkComposerNodeVector3DOperatorBinaryScalarDotProd;
+
+    if(type == "vector3D_scal_mult")
+        return new dtkComposerNodeVector3DOperatorHomotheticMult;
+
+    if(type == "vector3D_scal_divide")
+        return new dtkComposerNodeVector3DOperatorHomotheticDivision;
 
     // operator nodes
 

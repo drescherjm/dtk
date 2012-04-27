@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 21:24:53 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 942
+ * Last-Updated: Fri Apr 27 14:59:17 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 946
  */
 
 /* Commentary: 
@@ -234,6 +234,7 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     d->spin_f = new QDoubleSpinBox(this);
     d->spin_f->setMinimum(-999999);
     d->spin_f->setMaximum(+999999);
+    d->spin_f->setDecimals(15);
     d->spin_f->setSingleStep(1.0);
     d->spin_f->setEnabled(false);
     d->spin_f->setVisible(false);

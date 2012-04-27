@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: Fri Apr 27 18:47:49 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 575
+ * Last-Updated: sam. avril 28 00:56:37 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 579
  */
 
 /* Commentary:
@@ -170,7 +170,7 @@ void dtkComposerNodeRemote::begin(void)
             }
             case QVariant::UserType: {
 
-                if(QString(t->data().typeName()) == "dtkAbstractData") {
+                if(QString(t->data().typeName()) == "dtkAbstractData*") {
 
                     dtkAbstractData *data = t->data().value<dtkAbstractData *>();
                     dtkDebug() << "sending dtkAbstractData in transmitter" << i;
@@ -232,14 +232,14 @@ void dtkComposerNodeRemote::begin(void)
                         stream >> v[0];
                         stream >> v[1];
                         stream >> v[2];
-                       
+
                         t->setData(qVariantFromValue(v));
 
                         dtkDebug() << "received dtkVector3DReal, set data in transmitter" << v[0] << v[1] << v[2];
- 
+
                     } else
                         dtkWarn() << "warning: no content in dtkVector3DReal transmitter";
-                    
+
 
                 } else if (msg->type() == "dtkQuaternionReal") {
 
@@ -253,11 +253,11 @@ void dtkComposerNodeRemote::begin(void)
                         stream >> q[1];
                         stream >> q[2];
                         stream >> q[3];
-                       
+
                         t->setData(qVariantFromValue(q));
 
                         dtkDebug() << "received dtkQuaternionReal, set data in transmitter" << q[0] << q[1] << q[2] << q[3];
- 
+
                     } else
                         dtkWarn() << "warning: no content in dtkQuaternionReal transmitter";
 

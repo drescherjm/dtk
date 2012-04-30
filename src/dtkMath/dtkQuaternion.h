@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 15:00:12 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 17:55:02 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 48
+ * Last-Updated: Mon Apr 30 16:59:07 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 49
  */
 
 /* Commentary: 
@@ -98,6 +98,8 @@ public:
 // /////////////////////////////////////////////////////////////////
 // 
 // /////////////////////////////////////////////////////////////////
+
+#include <QtCore>
 
 typedef dtkQuaternion<qreal> dtkQuaternionReal;
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:41:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 21:25:43 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 58
+ * Last-Updated: Mon Apr 30 16:58:48 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 60
  */
 
 /* Commentary: 
@@ -97,6 +97,8 @@ public:
 // /////////////////////////////////////////////////////////////////
 // 
 // /////////////////////////////////////////////////////////////////
+
+#include <QtCore>
 
 typedef dtkVector3D<qreal> dtkVector3DReal;
 

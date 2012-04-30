@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: mar. avril 24 10:49:27 2012 (+0200)
+ * Last-Updated: lun. avril 30 23:57:21 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 482
+ *     Update #: 504
  */
 
 /* Commentary:
@@ -341,8 +341,7 @@ void dtkDistributedCommunicatorMpi::send(const QVariant &v, qint16 target, int t
         this->send(data,target,tag);
         break;
     }
-    case QVariant::UserType:
-    case QVariant::UserType+1: {
+    case QVariant::UserType: {
         // assume it's a dtkAbstractData
         dtkAbstractData *data = v.value<dtkAbstractData *>();
         this->send(data,target,tag);
@@ -387,10 +386,9 @@ void dtkDistributedCommunicatorMpi::receive(QVariant &v, qint16 source, int tag)
         v=QVariant(data);
         break;
     }
-    case QVariant::UserType:
-    case QVariant::UserType+1: {
+    case QVariant::UserType: {
         // assume it's a dtkAbstractData
-        dtkAbstractData *data;
+        dtkAbstractData *data = NULL;
         this->receive(data,source,tag);
         v = qVariantFromValue(data);
         return;

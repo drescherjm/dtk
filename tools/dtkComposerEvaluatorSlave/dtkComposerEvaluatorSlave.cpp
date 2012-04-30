@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:25:39
  * Version: $Id$
- * Last-Updated: Fri Apr 27 16:41:43 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 159
+ * Last-Updated: mar. mai  1 00:01:21 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 198
  */
 
 /* Commentary:
@@ -47,18 +47,51 @@ public:
     dtkDistributedCommunicator *communicator_i;
 
 public:
+    dtkComposerScene     *scene;
+    dtkComposerStack     *stack;
+    dtkComposerGraph     *graph;
+    dtkComposerFactory   *factory;
+    dtkComposerReader    *reader;
+    dtkComposerEvaluator *evaluator;
+
+public:
+    QByteArray md5;
+
+public:
     QUrl server;
     int  count;
 };
 
 dtkComposerEvaluatorSlave::dtkComposerEvaluatorSlave(void) : dtkDistributedSlave(), d(new dtkComposerEvaluatorSlavePrivate)
 {
+    d->scene     = new dtkComposerScene;
+    d->factory   = new dtkComposerFactory;
+    d->stack     = new dtkComposerStack;
+    d->evaluator = new dtkComposerEvaluator;
+    d->reader    = new dtkComposerReader;
+    d->graph     = new dtkComposerGraph;
+
+    d->scene->setFactory(d->factory);
+    d->scene->setStack(d->stack);
+    d->scene->setGraph(d->graph);
+
+    d->evaluator->setGraph(d->graph);
+
+    d->reader->setFactory(d->factory);
+    d->reader->setScene(d->scene);
+    d->reader->setGraph(d->graph);
     d->count = 0;
 }
 
 dtkComposerEvaluatorSlave::~dtkComposerEvaluatorSlave(void)
 {
     delete d->communicator_i;
+    delete d->scene;
+    delete d->stack;
+    delete d->graph;
+    delete d->factory;
+    delete d->reader;
+    delete d->evaluator;
     delete d;
 
     d = NULL;
@@ -86,24 +119,6 @@ int dtkComposerEvaluatorSlave::exec(void)
     int size = d->communicator_i->size();
     dtkDebug() << "communicator size is" << size;
     dtkDebug() << "our rank is" << rank;
-
-    dtkComposerScene scene;
-    dtkComposerStack stack;
-    dtkComposerGraph graph;
-    dtkComposerFactory factory;
-
-    scene.setFactory(&factory);
-    scene.setStack(&stack);
-    scene.setGraph(&graph);
-
-    dtkComposerReader reader;
-    dtkComposerEvaluator evaluator;
-
-    evaluator.setGraph(&graph);
-
-    reader.setFactory(&factory);
-    reader.setScene(&scene);
-    reader.setGraph(&graph);
 
     if ( rank == 0) {
 
@@ -145,22 +160,30 @@ int dtkComposerEvaluatorSlave::exec(void)
         }
 
         dtkDebug() << "got composition from controller:" << composition;
-
-        if  (size > 1) {
-            dtkDebug() << "send composition to our slaves";
-            for (int i=1; i< size; i++) {
-                d->communicator_i->send(composition,i,0);
+        QByteArray md5 = QCryptographicHash::hash(composition.toUtf8(),QCryptographicHash::Md5);
+        if (md5 != d->md5) {
+            dtkDebug() << "new composition";
+            if  (size > 1) {
+                dtkDebug() << "send composition to our slaves";
+                for (int i=1; i< size; i++) {
+                    d->communicator_i->send(composition,i,0);
+                }
             }
+            dtkDebug() << "read composition" ;
+            d->reader->readString(composition);
+            d->md5 = md5;
+        } else {
+            dtkInfo() << "composition hasn't changed";
+            for (int i=1; i< size; i++)
+                d->communicator_i->send(QString("rerun"),i,0);
         }
 
-        dtkDebug() << "read composition" ;
-        reader.readString(composition);
-        if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(scene.root()->nodes().first()->wrapee())) {
+        if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(d->scene->root()->nodes().first()->wrapee())) {
             remote->setSlave(this);
             remote->setJob(this->jobId());
             remote->setCommunicator(d->communicator_i);
             dtkDebug() << "run composition" ;
-            evaluator.run();
+            d->evaluator->run();
         } else {
             dtkFatal() <<  "Can't find remote node in composition, abort";
             return 1;
@@ -169,13 +192,19 @@ int dtkComposerEvaluatorSlave::exec(void)
     } else {
         QString composition;
         d->communicator_i->receive(composition,0,0);
-        reader.readString(composition);
-        if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(scene.root()->nodes().first()->wrapee())) {
+
+        if (composition != "rerun") {
+            dtkDebug() << "new/changed composition, read" ;
+            d->reader->readString(composition);
+        } else
+            dtkDebug() << "reuse composition" ;
+
+        if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(d->scene->root()->nodes().first()->wrapee())) {
             remote->setSlave(this);
             remote->setJob(this->jobId());
             remote->setCommunicator(d->communicator_i);
             dtkDebug() << "run composition" ;
-            evaluator.run();
+            d->evaluator->run();
         } else {
             dtkFatal() <<  "Can't find remote node in composition, abort";
             return 1;

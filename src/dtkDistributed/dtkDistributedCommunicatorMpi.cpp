@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: lun. avril 30 23:57:21 2012 (+0200)
+ * Last-Updated: jeu. mai  3 11:41:06 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 504
+ *     Update #: 577
  */
 
 /* Commentary:
@@ -22,6 +22,8 @@
 
 #include <dtkCore/dtkAbstractDataFactory.h>
 #include <dtkLog/dtkLog.h>
+
+#include <dtkMath>
 
 #include <mpi.h>
 
@@ -321,8 +323,8 @@ void dtkDistributedCommunicatorMpi::send(const QString &s, qint16 target, int ta
 
 void dtkDistributedCommunicatorMpi::send(const QVariant &v, qint16 target, int tag)
 {
-    int  type = (int)v.type();
-    qint64  size=1;
+    int     type = (int)v.type();
+    qint64  size = 1;
     dtkDistributedCommunicator::send(&type,1,target,tag);
 
     switch (v.type()) {
@@ -342,9 +344,26 @@ void dtkDistributedCommunicatorMpi::send(const QVariant &v, qint16 target, int t
         break;
     }
     case QVariant::UserType: {
-        // assume it's a dtkAbstractData
-        dtkAbstractData *data = v.value<dtkAbstractData *>();
-        this->send(data,target,tag);
+        int typeId = QMetaType::type(v.typeName());
+        dtkDistributedCommunicator::send(&typeId,size,target,tag);
+        if (QString(v.typeName()) == "dtkAbstractData*") {
+            dtkAbstractData *data = v.value<dtkAbstractData *>();
+            this->send(data,target,tag);
+        } else if (QString(v.typeName()) == "dtkVector3DReal") {
+            dtkVector3DReal vector = v.value<dtkVector3DReal>();
+            double array[3];
+            for (int i=0; i<3; i++)
+                array[i]= vector[i];
+            dtkDistributedCommunicator::send(array,3,target,tag);
+        } else if (QString(v.typeName()) == "dtkQuaternionReal") {
+            dtkQuaternionReal q = v .value<dtkQuaternionReal>();
+            double array[4];
+            for (int i=0; i<4; i++)
+                array[i]= q[i];
+            dtkDistributedCommunicator::send(array,4,target,tag);
+        } else {
+            dtkError() << "unimplemendted type in send" << v.typeName();
+        }
         return;
     }
     default:
@@ -387,10 +406,29 @@ void dtkDistributedCommunicatorMpi::receive(QVariant &v, qint16 source, int tag)
         break;
     }
     case QVariant::UserType: {
-        // assume it's a dtkAbstractData
-        dtkAbstractData *data = NULL;
-        this->receive(data,source,tag);
-        v = qVariantFromValue(data);
+        int   typeId;
+        dtkDistributedCommunicator::receive(&typeId,1,source,tag);
+        if ( QString(QMetaType::typeName(typeId)) == "dtkVector3DReal") {
+            double   values[3];
+            dtkDistributedCommunicator::receive(values,3,source,tag);
+            dtkVector3DReal vector;
+            for (int i=0; i<3; i++)
+                vector[i]= values[i];
+            v = qVariantFromValue(vector);
+        } else if (QString(QMetaType::typeName(typeId)) == "dtkQuaternionReal") {
+            double   values[4];
+            dtkDistributedCommunicator::receive(values,4,source,tag);
+            dtkQuaternionReal quaternion;
+            for (int i=0; i<4; i++)
+                quaternion[i]= values[i];
+            v = qVariantFromValue(quaternion);
+        } else if (QString(QMetaType::typeName(typeId)) == "dtkAbstractData*") {
+            dtkAbstractData *data = NULL;
+            this->receive(data,source,tag);
+            v = qVariantFromValue(data);
+        } else {
+            dtkError() << "unimplemendted type in receive" <<QMetaType::typeName(typeId);
+        }
         return;
     }
     default:

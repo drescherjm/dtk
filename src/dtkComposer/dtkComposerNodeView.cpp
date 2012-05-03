@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 24 23:29:24 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 15:25:17 2012 (+0200)
+ * Last-Updated: Thu May  3 11:09:59 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 122
+ *     Update #: 145
  */
 
 /* Commentary: 
@@ -31,8 +31,20 @@ class dtkComposerNodeViewPrivate
 {
 public:
     dtkComposerTransmitterReceiver<QString> receiver_type;
+
+public:
+    dtkComposerTransmitterReceiver<bool> receiver_fullscreen;
+
+public:
     dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_head_position;
+
+public:
     dtkComposerTransmitterReceiver<dtkQuaternionReal> receiver_head_orientation;
+
+public:
+    dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_screen_upper_left;
+    dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_screen_lower_left;
+    dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_screen_lower_right;
 
 public:
     dtkAbstractView *view;
@@ -43,8 +55,12 @@ dtkComposerNodeView::dtkComposerNodeView(void) : QObject(), dtkComposerNodeLeaf(
     d->view = NULL;
 
     this->appendReceiver(&(d->receiver_type));
+    this->appendReceiver(&(d->receiver_fullscreen));
     this->appendReceiver(&(d->receiver_head_position));
     this->appendReceiver(&(d->receiver_head_orientation));
+    this->appendReceiver(&(d->receiver_screen_upper_left));
+    this->appendReceiver(&(d->receiver_screen_lower_left));
+    this->appendReceiver(&(d->receiver_screen_lower_right));
 
     connect(this, SIGNAL(runned()), this, SLOT(onRun()));
 }
@@ -80,10 +96,22 @@ QString dtkComposerNodeView::inputLabelHint(int port)
         return "type";
 
     if(port == 1)
-        return "head position";
+        return "fullscreen";
 
     if(port == 2)
+        return "head position";
+
+    if(port == 3)
         return "head orientation";
+
+    if(port == 4)
+        return "screen upper left";
+
+    if(port == 5)
+        return "screen lower left";
+
+    if(port == 6)
+        return "screen lower right";
 
     return dtkComposerNodeLeaf::inputLabelHint(port);
 }
@@ -102,8 +130,11 @@ void dtkComposerNodeView::onRun(void)
 
     if(!d->view) {
         d->view = dtkAbstractViewFactory::instance()->create(d->receiver_type.data());
-        d->view->widget()->resize(800, 800);
-        d->view->widget()->show();
+
+        if(!d->receiver_fullscreen.isEmpty() && d->receiver_fullscreen.data())
+            d->view->widget()->showFullScreen();
+        else
+            d->view->widget()->show();
     }
 
     if (!d->view) {
@@ -116,4 +147,13 @@ void dtkComposerNodeView::onRun(void)
 
     if(!d->receiver_head_orientation.isEmpty())
         d->view->setHeadOrientation(d->receiver_head_orientation.data());
+
+    if(!d->receiver_screen_upper_left.isEmpty())
+        d->view->setUpperLeft(d->receiver_screen_upper_left.data());
+
+    if(!d->receiver_screen_lower_left.isEmpty())
+        d->view->setLowerLeft(d->receiver_screen_lower_left.data());
+
+    if(!d->receiver_screen_lower_right.isEmpty())
+        d->view->setLowerRight(d->receiver_screen_lower_right.data());
 }

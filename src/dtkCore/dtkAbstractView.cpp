@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 13:10:40 2012 (+0200)
+ * Last-Updated: Thu May  3 10:39:55 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 318
+ *     Update #: 325
  */
 
 /* Commentary:
@@ -394,7 +394,7 @@ QList<dtkAbstractViewInteractor *> dtkAbstractView::interactors(void) const
 }
 
 // /////////////////////////////////////////////////////////////////
-// vr compatibility api
+// Deprecated VR API
 // /////////////////////////////////////////////////////////////////
 
 void dtkAbstractView::initialize(void)
@@ -489,7 +489,7 @@ double dtkAbstractView::cameraZoom(void) const
 }
 
 // /////////////////////////////////////////////////////////////////
-// 
+// New VR API
 // /////////////////////////////////////////////////////////////////
 
 void dtkAbstractView::setHeadPosition(dtkVector3D<double> position)
@@ -502,6 +502,27 @@ void dtkAbstractView::setHeadPosition(dtkVector3D<double> position)
 void dtkAbstractView::setHeadOrientation(dtkQuaternion<double> orientation)
 {
     DTK_UNUSED(orientation);
+
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::setUpperLeft(dtkVector3D<double> position)
+{
+    DTK_UNUSED(position);
+
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::setLowerLeft(dtkVector3D<double> position)
+{
+    DTK_UNUSED(position);
+
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkAbstractView::setLowerRight(dtkVector3D<double> position)
+{
+    DTK_UNUSED(position);
 
     DTK_DEFAULT_IMPLEMENTATION;
 }

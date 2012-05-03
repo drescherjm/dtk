@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 10:19:40 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 17:57:25 2012 (+0200)
+ * Last-Updated: Thu May  3 13:22:50 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 50
+ *     Update #: 60
  */
 
 /* Commentary: 
@@ -57,6 +57,7 @@ dtkComposerNodeVector3D::dtkComposerNodeVector3D(void) : dtkComposerNodeLeaf(), 
     this->appendReceiver(&d->receiver_z);
 
     this->appendEmitter(&d->emitter_vec);
+
     d->emitter_vec.setData(dtkVector3DReal(0, 0, 0));
 
     this->appendEmitter(&d->emitter_x);
@@ -137,6 +138,5 @@ void dtkComposerNodeVector3D::run(void)
         d->emitter_x.setData(vec[0]);
         d->emitter_y.setData(vec[1]);
         d->emitter_z.setData(vec[2]);
-
     }
 }

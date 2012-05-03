@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 15:18:36 2012 (+0200)
- *           By: tkloczko
- *     Update #: 191
+ * Last-Updated: Thu May  3 13:16:20 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 192
  */
 
 /* Commentary: 
@@ -92,6 +92,9 @@ dtkComposerNode *dtkComposerTransmitter::parentNode(void) const
 void dtkComposerTransmitter::setActive(bool active)
 {
     d->active = active;
+
+    if(!active)
+        return;
 
     foreach(dtkComposerTransmitter *receiver, d->receivers)
         receiver->setActiveEmitter(this);

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: sam. avril 28 00:56:37 2012 (+0200)
+ * Last-Updated: jeu. mai  3 12:28:36 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 579
+ *     Update #: 588
  */
 
 /* Commentary:
@@ -240,9 +240,7 @@ void dtkComposerNodeRemote::begin(void)
                     } else
                         dtkWarn() << "warning: no content in dtkVector3DReal transmitter";
 
-
                 } else if (msg->type() == "dtkQuaternionReal") {
-
 
                     if (msg->size() > 0) {
                         QByteArray array = msg->content();
@@ -323,8 +321,49 @@ void dtkComposerNodeRemote::end(void)
                 t->setTwinned(false);
                 t->setData(QString(msg->content()));
                 t->setTwinned(true);
+            } else if (msg->type() == "dtkVector3DReal") {
+
+                if (msg->size() > 0) {
+                    QByteArray array = msg->content();
+                    dtkVector3DReal v;
+
+                    QDataStream stream(&array, QIODevice::ReadOnly);
+                    stream >> v[0];
+                    stream >> v[1];
+                    stream >> v[2];
+
+                    t->setTwinned(false);
+                    t->setData(qVariantFromValue(v));
+                    t->setTwinned(true);
+
+                    dtkDebug() << "received dtkVector3DReal, set data in transmitter" << v[0] << v[1] << v[2];
+
+                } else
+                    dtkWarn() << "warning: no content in dtkVector3DReal transmitter";
+
+            } else if (msg->type() == "dtkQuaternionReal") {
+
+                if (msg->size() > 0) {
+                    QByteArray array = msg->content();
+                    dtkQuaternionReal q;
+
+                    QDataStream stream(&array, QIODevice::ReadOnly);
+                    stream >> q[0];
+                    stream >> q[1];
+                    stream >> q[2];
+                    stream >> q[3];
+
+                    t->setTwinned(false);
+                    t->setData(qVariantFromValue(q));
+                    t->setTwinned(true);
+
+                    dtkDebug() << "received dtkQuaternionReal, set data in transmitter" << q[0] << q[1] << q[2] << q[3];
+
+                } else
+                    dtkWarn() << "warning: no content in dtkQuaternionReal transmitter";
+
             } else { // assume a dtkAbstractData
-                dtkDebug() << "data received" << msg->type();
+                dtkDebug() << "received dtkAbstractData, deserialize";
                 if (msg->size() > 0) {
                     QByteArray array = msg->content();
                     dtkAbstractData *data;
@@ -371,16 +410,25 @@ void dtkComposerNodeRemote::end(void)
                     break;
                 }
                 case QVariant::UserType: {
-                    // assume it's a dtkAbstractData
-                    dtkAbstractData *data = t->data().value<dtkAbstractData *>();
-                    QString type = data->identifier();
-                    QByteArray *array = data->serialize();
-                    if (!array->isNull()) {
-                        d->slave->communicator()->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid, dtkDistributedMessage::CONTROLLER_RUN_RANK, array->size(), type));
-                        d->slave->communicator()->socket()->write(*array);
+
+                    if(QString(t->data().typeName()) == "dtkAbstractData*") {
+
+                        dtkAbstractData *data = t->data().value<dtkAbstractData *>();
+                        QString type = data->identifier();
+                        QByteArray *array = data->serialize();
+                        if (!array->isNull()) {
+                            d->slave->communicator()->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid, dtkDistributedMessage::CONTROLLER_RUN_RANK, array->size(), type));
+                            d->slave->communicator()->socket()->write(*array);
+                        } else {
+                            dtkError() << "serialization failed in transmitter";
+                        }
+
                     } else {
-                        dtkError() << "serialization failed in transmitter";
+
+                        dtkDebug() << QString("sending QVariant (%1) in transmitter").arg(t->data().typeName()) << i;
+                        d->slave->communicator()->socket()->send(t->data(), d->jobid, dtkDistributedMessage::CONTROLLER_RUN_RANK);
                     }
+
                     continue;
                 }
                 default:

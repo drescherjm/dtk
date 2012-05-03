@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May  3 11:01:55 2012 (+0200)
+ * Last-Updated: Thu May  3 14:10:25 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 248
+ *     Update #: 249
  */
 
 /* Commentary:
@@ -77,9 +77,9 @@ dtkPluginManager *dtkPluginManager::instance(void)
     if(!s_instance) {
         s_instance = new dtkPluginManager;
 
-        dtkTrace() << "dtkAbstractData has meta user type" << qRegisterMetaType<dtkAbstractData>("dtkAbstractData");
-        dtkTrace() << "dtkVector3DReal has meta user type" << qRegisterMetaType<dtkVector3DReal>("dtkVector3DReal");
-        dtkTrace() << "dtkQuaternionReal has meta user type" << qRegisterMetaType<dtkQuaternionReal>("dtkQuaternionReal");
+        qRegisterMetaType<dtkAbstractData>("dtkAbstractData");
+        qRegisterMetaType<dtkVector3DReal>("dtkVector3DReal");
+        qRegisterMetaType<dtkQuaternionReal>("dtkQuaternionReal");
     }
 
     return s_instance;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 18:10:45 2012 (+0200)
+ * Last-Updated: Thu May  3 11:01:55 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 247
+ *     Update #: 248
  */
 
 /* Commentary:
@@ -215,10 +215,10 @@ void dtkPluginManager::readSettings(void)
 
 void dtkPluginManager::writeSettings(void)
 {
-    QSettings settings("inria", "dtk");
-    settings.beginGroup("plugins");
-    settings.setValue("path", d->path);
-    settings.endGroup();
+    // QSettings settings("inria", "dtk");
+    // settings.beginGroup("plugins");
+    // settings.setValue("path", d->path);
+    // settings.endGroup();
 }
 
 void dtkPluginManager::printPlugins(void)

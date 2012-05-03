@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 24 23:29:24 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 15:25:17 2012 (+0200)
+ * Last-Updated: Thu May  3 10:52:47 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 122
+ *     Update #: 139
  */
 
 /* Commentary: 
@@ -31,8 +31,17 @@ class dtkComposerNodeViewPrivate
 {
 public:
     dtkComposerTransmitterReceiver<QString> receiver_type;
+
+public:
     dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_head_position;
+
+public:
     dtkComposerTransmitterReceiver<dtkQuaternionReal> receiver_head_orientation;
+
+public:
+    dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_screen_upper_left;
+    dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_screen_lower_left;
+    dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_screen_lower_right;
 
 public:
     dtkAbstractView *view;
@@ -45,6 +54,9 @@ dtkComposerNodeView::dtkComposerNodeView(void) : QObject(), dtkComposerNodeLeaf(
     this->appendReceiver(&(d->receiver_type));
     this->appendReceiver(&(d->receiver_head_position));
     this->appendReceiver(&(d->receiver_head_orientation));
+    this->appendReceiver(&(d->receiver_screen_upper_left));
+    this->appendReceiver(&(d->receiver_screen_lower_left));
+    this->appendReceiver(&(d->receiver_screen_lower_right));
 
     connect(this, SIGNAL(runned()), this, SLOT(onRun()));
 }
@@ -85,6 +97,15 @@ QString dtkComposerNodeView::inputLabelHint(int port)
     if(port == 2)
         return "head orientation";
 
+    if(port == 3)
+        return "screen upper left";
+
+    if(port == 4)
+        return "screen lower left";
+
+    if(port == 5)
+        return "screen lower right";
+
     return dtkComposerNodeLeaf::inputLabelHint(port);
 }
 
@@ -116,4 +137,13 @@ void dtkComposerNodeView::onRun(void)
 
     if(!d->receiver_head_orientation.isEmpty())
         d->view->setHeadOrientation(d->receiver_head_orientation.data());
+
+    if(!d->receiver_screen_upper_left.isEmpty())
+        d->view->setUpperLeft(d->receiver_screen_upper_left.data());
+
+    if(!d->receiver_screen_lower_left.isEmpty())
+        d->view->setLowerLeft(d->receiver_screen_lower_left.data());
+
+    if(!d->receiver_screen_lower_right.isEmpty())
+        d->view->setLowerRight(d->receiver_screen_lower_right.data());
 }

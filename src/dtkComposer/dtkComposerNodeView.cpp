@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 24 23:29:24 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May  3 10:52:47 2012 (+0200)
+ * Last-Updated: Thu May  3 11:09:59 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 139
+ *     Update #: 145
  */
 
 /* Commentary: 
@@ -33,6 +33,9 @@ public:
     dtkComposerTransmitterReceiver<QString> receiver_type;
 
 public:
+    dtkComposerTransmitterReceiver<bool> receiver_fullscreen;
+
+public:
     dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_head_position;
 
 public:
@@ -52,6 +55,7 @@ dtkComposerNodeView::dtkComposerNodeView(void) : QObject(), dtkComposerNodeLeaf(
     d->view = NULL;
 
     this->appendReceiver(&(d->receiver_type));
+    this->appendReceiver(&(d->receiver_fullscreen));
     this->appendReceiver(&(d->receiver_head_position));
     this->appendReceiver(&(d->receiver_head_orientation));
     this->appendReceiver(&(d->receiver_screen_upper_left));
@@ -92,18 +96,21 @@ QString dtkComposerNodeView::inputLabelHint(int port)
         return "type";
 
     if(port == 1)
-        return "head position";
+        return "fullscreen";
 
     if(port == 2)
-        return "head orientation";
+        return "head position";
 
     if(port == 3)
-        return "screen upper left";
+        return "head orientation";
 
     if(port == 4)
-        return "screen lower left";
+        return "screen upper left";
 
     if(port == 5)
+        return "screen lower left";
+
+    if(port == 6)
         return "screen lower right";
 
     return dtkComposerNodeLeaf::inputLabelHint(port);
@@ -123,8 +130,11 @@ void dtkComposerNodeView::onRun(void)
 
     if(!d->view) {
         d->view = dtkAbstractViewFactory::instance()->create(d->receiver_type.data());
-        d->view->widget()->resize(800, 800);
-        d->view->widget()->show();
+
+        if(!d->receiver_fullscreen.isEmpty() && d->receiver_fullscreen.data())
+            d->view->widget()->showFullScreen();
+        else
+            d->view->widget()->show();
     }
 
     if (!d->view) {

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 14:59:17 2012 (+0200)
- *           By: tkloczko
- *     Update #: 946
+ * Last-Updated: ven. mai  4 18:29:06 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 960
  */
 
 /* Commentary: 
@@ -224,16 +224,16 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     d->edit->setEnabled(false);
 
     d->spin_d = new QSpinBox(this);
-    d->spin_d->setMinimum(-999999);
-    d->spin_d->setMaximum(+999999);
+    d->spin_d->setMinimum(-9999999);
+    d->spin_d->setMaximum(+9999999);
     d->spin_d->setSingleStep(1);
     d->spin_d->setEnabled(false);
     d->spin_d->setVisible(false);
     d->spin_d->blockSignals(true);
 
     d->spin_f = new QDoubleSpinBox(this);
-    d->spin_f->setMinimum(-999999);
-    d->spin_f->setMaximum(+999999);
+    d->spin_f->setMinimum(-9999999);
+    d->spin_f->setMaximum(+9999999);
     d->spin_f->setDecimals(15);
     d->spin_f->setSingleStep(1.0);
     d->spin_f->setEnabled(false);
@@ -273,7 +273,7 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     d->selector->setVisible(false);
     d->selector->blockSignals(true);
 
-    QHBoxLayout *l_layout = new QHBoxLayout;
+    QVBoxLayout *l_layout = new QVBoxLayout;
     l_layout->setContentsMargins(0, 0, 0, 0);
     l_layout->addWidget(d->add_loop_port);
     l_layout->addWidget(d->rem_loop_port);
@@ -283,7 +283,7 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     l_frame->setObjectName("dtkComposerSceneNodeEditorButtons");
     l_frame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
 
-    QHBoxLayout *i_layout = new QHBoxLayout;
+    QVBoxLayout *i_layout = new QVBoxLayout;
     i_layout->setContentsMargins(0, 0, 0, 0);
     i_layout->addWidget(d->add_input_port);
     i_layout->addWidget(d->rem_input_port);
@@ -305,7 +305,7 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     top->setLayout(t_layout);
     top->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
 
-    QHBoxLayout *o_layout = new QHBoxLayout;
+    QVBoxLayout *o_layout = new QVBoxLayout;
     o_layout->setContentsMargins(0, 0, 0, 0);
     o_layout->addWidget(d->add_output_port);
     o_layout->addWidget(d->rem_output_port);
@@ -315,16 +315,25 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     o_frame->setObjectName("dtkComposerSceneNodeEditorButtons");
     o_frame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
 
+    QVBoxLayout *ip_layout = new QVBoxLayout;
+    ip_layout->addWidget(d->input_ports);
+    ip_layout->addWidget(i_frame);
+
+    QVBoxLayout *op_layout = new QVBoxLayout;
+    op_layout->addWidget(d->output_ports);
+    op_layout->addWidget(o_frame);
+
+    QHBoxLayout *p_layout = new QHBoxLayout;
+    p_layout->addLayout(ip_layout);
+    p_layout->addLayout(op_layout);
+
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(top);
     layout->addWidget(d->loop_ports);
     layout->addWidget(l_frame);
-    layout->addWidget(d->input_ports);
-    layout->addWidget(i_frame);
-    layout->addWidget(d->output_ports);
-    layout->addWidget(o_frame);
+    layout->addLayout(p_layout);
     layout->addWidget(d->spin_d);
     layout->addWidget(d->spin_f);
     layout->addWidget(d->edit_s);

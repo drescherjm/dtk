@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Apr 26 16:53:42 2012 (+0200)
+## Last-Updated: Thu May  3 15:05:28 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 100
+##     Update #: 103
 ######################################################################
 ## 
 ### Commentary: 
@@ -251,6 +251,12 @@ endif(OPENNI_LIBRARY AND NITE_LIBRARY)
 if(OPENNI_INCLUDES AND NITE_INCLUDES)
 set(DTK_HAVE_NITE "YES")
 endif(OPENNI_INCLUDES AND NITE_INCLUDES)
+
+mark_as_advanced(OPENNI_INCLUDES)
+mark_as_advanced(NITE_INCLUDES)
+
+mark_as_advanced(OPENNI_LIBRARY)
+mark_as_advanced(NITE_LIBRARY)
 
 ## #################################################################
 ## 

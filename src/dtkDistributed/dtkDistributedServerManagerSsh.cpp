@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. avril 26 11:38:15 2012 (+0200)
+ * Last-Updated: jeu. mai  3 16:56:17 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 211
+ *     Update #: 224
  */
 
 /* Commentary:
@@ -144,9 +144,9 @@ QString dtkDistributedServerManagerSsh::submit(QString input)
 #if defined(Q_WS_MAC)
         server.replace(".", "_");
 #endif
-        if (settings.contains(server +"_server_mpirun")) {
+        if (settings.contains(server +"_server_mpirun_path")) {
             dtkDebug() << "found specific command for this server:" << settings.value(server +"_server_mpirun").toString();
-            qsub = settings.value(server +"_server_mpirun").toString();
+            qsub = settings.value(server +"_server_mpirun_path").toString();
         } else
             qsub = "mpirun";
 
@@ -161,6 +161,8 @@ QString dtkDistributedServerManagerSsh::submit(QString input)
                 args += "-np "+ QString::number(procs) + " ";
         }
 
+        if (settings.contains(server +"_server_mpirun_args"))
+            args += settings.value(server +"_server_mpirun_args").toString();
         args += qApp->applicationDirPath()
             + "/"
             + json["application"].toString();
@@ -172,6 +174,8 @@ QString dtkDistributedServerManagerSsh::submit(QString input)
     QProcess *stat = new QProcess;
     QStringList rargs= args.split(" ");
     dtkDebug() << DTK_PRETTY_FUNCTION << qsub << rargs;
+    // stat->setStandardErrorFile("/tmp/slave-err.log");
+    // stat->setStandardOutputFile("/tmp/slave-out.log");
     stat->start(qsub,rargs);
     if (stat->waitForStarted(5000))
         dtkDebug() << DTK_PRETTY_FUNCTION << "process started";

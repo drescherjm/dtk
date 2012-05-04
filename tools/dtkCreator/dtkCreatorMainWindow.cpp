@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 25 00:02:31 2012 (+0200)
+ * Last-Updated: Fri May  4 16:13:25 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1670
+ *     Update #: 1671
  */
 
 /* Commentary:
@@ -408,6 +408,9 @@ bool dtkCreatorMainWindow::compositionOpen(void)
 
 bool dtkCreatorMainWindow::compositionOpen(const QString& file)
 {
+    if(sender() == d->recent_compositions_menu && !d->maySave())
+        return true;
+
     bool status = d->composer->open(file);
 
     if(status) {

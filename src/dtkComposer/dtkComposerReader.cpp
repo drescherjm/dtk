@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 15:14:15 2012 (+0200)
+ * Last-Updated: Fri May  4 16:02:35 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 607
+ *     Update #: 608
  */
 
 /* Commentary: 
@@ -172,7 +172,7 @@ bool dtkComposerReader::readString(const QString& data, bool append)
         d->node = new dtkComposerSceneNodeComposite;
         d->node->wrap(new dtkComposerNodeComposite);
         d->node->setParent(d->scene->current());
-        d->root->addNode(d->node);
+        d->scene->current()->addNode(d->node);
         d->graph->addNode(d->node);
     }
 

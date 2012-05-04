@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Thu Apr 12 11:21:45 2012 (+0200)
+ * Last-Updated: Fri May  4 16:10:25 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 2196
+ *     Update #: 2209
  */
 
 /* Commentary:
@@ -59,6 +59,35 @@ dtkComposerScene::~dtkComposerScene(void)
     delete d;
 
     d = NULL;
+}
+
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerScene::clear(void)
+{
+    foreach(dtkComposerSceneNode *node, d->root_node->nodes()) {
+
+        dtkComposerStackCommandDestroyNode *command = new dtkComposerStackCommandDestroyNode;
+        command->setGraph(d->graph);
+        command->setScene(this);
+        command->setFactory(d->factory);
+        command->setNode(node);
+        command->redo();
+
+        delete command;
+    }
+
+    foreach(dtkComposerSceneNote *note, d->root_node->notes()) {
+
+        dtkComposerStackCommandDestroyNote *command = new dtkComposerStackCommandDestroyNote;
+        command->setGraph(d->graph);
+        command->setScene(this);
+        command->setFactory(d->factory);
+        command->setNote(note);
+        command->redo();
+
+        delete command;
+    }
 }
 
 // /////////////////////////////////////////////////////////////////

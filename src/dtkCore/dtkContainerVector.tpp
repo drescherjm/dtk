@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 17:02:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 21:16:45 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 54
+ * Last-Updated: Sun May  6 16:23:40 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 63
  */
 
 /* Commentary: 
@@ -93,9 +93,9 @@ template <typename T> void dtkContainerVector<T>::remove(const QVariant& data)
     }
 };
 
-template <typename T> inline void dtkContainerVector<T>::insert(const QVariant& data, dtkxarch_int from, dtkxarch_int length)
+template <typename T> inline void dtkContainerVector<T>::insert(const QVariant& data, dtkxarch_int index)
 {
-    m_vector.insert(from, length, qvariant_cast<T>(data));
+    m_vector.insert(index, qvariant_cast<T>(data));
 };
 
 template <typename T> inline void dtkContainerVector<T>::replace(const QVariant& data, dtkxarch_int index)
@@ -145,11 +145,23 @@ template <typename T> inline QVariant dtkContainerVector<T>::last(void) const
 
 template <typename T> inline bool dtkContainerVector<T>::operator != (const dtkAbstractContainer& other) const
 {
+    if (other.type() == Vector) {
+        if (dtkContainerVector<T> other_v = dynamic_cast<dtkContainerVector<T> >(other)) { 
+            return (m_vector != other_v.m_vector);
+        }
+    }
+
     return true;
 };
 
 template <typename T> inline bool dtkContainerVector<T>::operator == (const dtkAbstractContainer& other) const
 {
+    if (other.type() == Vector) {
+        if (dtkContainerVector<T> other_v = dynamic_cast<dtkContainerVector<T> >(other)) { 
+            return (m_vector == other_v.m_vector);
+        }
+    }
+
     return false;
 };
 

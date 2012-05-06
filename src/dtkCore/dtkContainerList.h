@@ -1,12 +1,12 @@
-/* dtkContainerVector.h --- 
+/* dtkContainerList.h --- 
  * 
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
- * Created: Fri Apr 27 16:38:14 2012 (+0200)
+ * Created: Sun May  6 15:55:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sun May  6 16:16:57 2012 (+0200)
+ * Last-Updated: Sun May  6 16:17:20 2012 (+0200)
  *           By: tkloczko
- *     Update #: 45
+ *     Update #: 3
  */
 
 /* Commentary: 
@@ -17,8 +17,8 @@
  * 
  */
 
-#ifndef DTKCONTAINERVECTOR_H
-#define DTKCONTAINERVECTOR_H
+#ifndef DTKCONTAINERLIST_H
+#define DTKCONTAINERLIST_H
 
 #include "dtkAbstractContainer.h"
 #include "dtkCoreExport.h"
@@ -27,25 +27,25 @@
 #include <QtCore>
 
 // /////////////////////////////////////////////////////////////////
-// dtkContainerVector interface
+// dtkContainerList interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class DTKCORE_EXPORT dtkContainerVector : public dtkAbstractContainer
+template <typename T> class DTKCORE_EXPORT dtkContainerList : public dtkAbstractContainer
 {
 public:
-     dtkContainerVector(dtkAbstractData *parent = 0);
-     dtkContainerVector(const QVector<T>& vector, dtkAbstractData *parent = 0);
-     dtkContainerVector(const dtkContainerVector<T>& other);
-    ~dtkContainerVector(void);
+     dtkContainerList(dtkAbstractData *parent = 0);
+     dtkContainerList(const QList<T>& list, dtkAbstractData *parent = 0);
+     dtkContainerList(const dtkContainerList<T>& other);
+    ~dtkContainerList(void);
 
 public:
-    dtkContainerVector& operator = (const dtkContainerVector<T>& other);
+    dtkContainerList& operator = (const dtkContainerList<T>& other);
 
 public:
-    inline void setVector(const QVector<T>& vector);
+    inline void setList(const QList<T>& list);
 
 public:
-    inline QVector<T>& vector(void);
+    inline QList<T>& list(void);
 
 public:
     Type type(void) const;
@@ -80,13 +80,13 @@ public:
     QVariant operator[] (dtkxarch_int index) const;
 
 private:
-    QVector<T> m_vector;
+    QList<T> m_list;
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkContainerVector implementation
+// dtkContainerList implementation
 // /////////////////////////////////////////////////////////////////
 
-#include "dtkContainerVector.tpp"
+#include "dtkContainerList.tpp"
 
 #endif

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sun May  6 15:56:38 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sun May  6 16:23:37 2012 (+0200)
+ * Last-Updated: Sun May  6 19:15:02 2012 (+0200)
  *           By: tkloczko
- *     Update #: 7
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -125,44 +125,44 @@ template <typename T> inline dtkxarch_int dtkContainerList<T>::indexOf(const QVa
 
 template <typename T> inline QVariant dtkContainerList<T>::at(dtkxarch_int index) const
 {
-    return qvariantFromValue(m_list.at(index));
+    return qVariantFromValue(m_list.at(index));
 };
 
 template <typename T> inline QVariant dtkContainerList<T>::first(void) const
 {
-    return qvariantFromValue(m_list.first(index));
+    return qVariantFromValue(m_list.first());
 };
 
 template <typename T> inline QVariant dtkContainerList<T>::last(void) const
 {
-    return qvariantFromValue(m_list.last(index));
+    return qVariantFromValue(m_list.last());
 };
 
 template <typename T> inline bool dtkContainerList<T>::operator != (const dtkAbstractContainer& other) const
 {
-    if (other.type() == List) {
-        if (dtkContainerList<T> other_v = dynamic_cast<dtkContainerList<T> >(other)) { 
-            return (m_list != other_v.m_list);
-        }
-    }
+    // if (other.type() == List) {
+    //     if (dtkContainerList<T> other_v = dynamic_cast<dtkContainerList<T> >(other)) { 
+    //         return (m_list != other_v.m_list);
+    //     }
+    // }
 
     return true;
 };
 
 template <typename T> inline bool dtkContainerList<T>::operator == (const dtkAbstractContainer& other) const
 {
-    if (other.type() == List) {
-        if (dtkContainerList<T> other_v = dynamic_cast<dtkContainerList<T> >(other)) { 
-            return (m_list == other_v.m_list);
-        }
-    }
+    // if (other.type() == List) {
+    //     if (dtkContainerList<T> other_v = dynamic_cast<dtkContainerList<T> >(other)) { 
+    //         return (m_list == other_v.m_list);
+    //     }
+    // }
 
     return false;
 };
 
 template <typename T> inline QVariant dtkContainerList<T>::operator[] (dtkxarch_int index) const
 {
-    return qvariantFromValue(m_list[index]);
+    return qVariantFromValue(m_list[index]);
 };
 
 #endif

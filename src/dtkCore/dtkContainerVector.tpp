@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 17:02:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sun May  6 16:23:40 2012 (+0200)
+ * Last-Updated: Sun May  6 19:01:53 2012 (+0200)
  *           By: tkloczko
- *     Update #: 63
+ *     Update #: 66
  */
 
 /* Commentary: 
@@ -130,44 +130,44 @@ template <typename T> inline dtkxarch_int dtkContainerVector<T>::indexOf(const Q
 
 template <typename T> inline QVariant dtkContainerVector<T>::at(dtkxarch_int index) const
 {
-    return qvariantFromValue(m_vector.at(index));
+    return qVariantFromValue(m_vector.at(index));
 };
 
 template <typename T> inline QVariant dtkContainerVector<T>::first(void) const
 {
-    return qvariantFromValue(m_vector.first(index));
+    return qVariantFromValue(m_vector.first());
 };
 
 template <typename T> inline QVariant dtkContainerVector<T>::last(void) const
 {
-    return qvariantFromValue(m_vector.last(index));
+    return qVariantFromValue(m_vector.last());
 };
 
 template <typename T> inline bool dtkContainerVector<T>::operator != (const dtkAbstractContainer& other) const
 {
-    if (other.type() == Vector) {
-        if (dtkContainerVector<T> other_v = dynamic_cast<dtkContainerVector<T> >(other)) { 
-            return (m_vector != other_v.m_vector);
-        }
-    }
+    // if (other.type() == Vector) {
+    //     if (dtkContainerVector<T> other_v = dynamic_cast<dtkContainerVector<T> >(other)) { 
+    //         return (m_vector != other_v.m_vector);
+    //     }
+    // }
 
     return true;
 };
 
 template <typename T> inline bool dtkContainerVector<T>::operator == (const dtkAbstractContainer& other) const
 {
-    if (other.type() == Vector) {
-        if (dtkContainerVector<T> other_v = dynamic_cast<dtkContainerVector<T> >(other)) { 
-            return (m_vector == other_v.m_vector);
-        }
-    }
+    // if (other.type() == Vector) {
+    //     if (dtkContainerVector<T> other_v = dynamic_cast<dtkContainerVector<T> >(other)) { 
+    //         return (m_vector == other_v.m_vector);
+    //     }
+    // }
 
     return false;
 };
 
 template <typename T> inline QVariant dtkContainerVector<T>::operator[] (dtkxarch_int index) const
 {
-    return qvariantFromValue(m_vector[index]);
+    return qVariantFromValue(m_vector[index]);
 };
 
 #endif

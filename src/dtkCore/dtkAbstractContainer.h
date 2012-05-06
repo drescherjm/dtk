@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 15:25:17 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sun May  6 16:17:09 2012 (+0200)
+ * Last-Updated: Sun May  6 19:03:08 2012 (+0200)
  *           By: tkloczko
- *     Update #: 46
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -55,8 +55,8 @@ public:
     virtual void prepend(const QVariant& data) = 0;
     virtual void  remove(const QVariant& data) = 0;
 
-    virtual void  insert(QVariant data, dtkxarch_int index) = 0;
-    virtual void replace(QVariant data, dtkxarch_int index) = 0;
+    virtual void  insert(const QVariant& data, dtkxarch_int index) = 0;
+    virtual void replace(const QVariant& data, dtkxarch_int index) = 0;
 
     virtual void resize(dtkxarch_int size) = 0;
 

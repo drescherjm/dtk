@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. mai  4 18:29:06 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 960
+ * Last-Updated: Mon May  7 09:34:50 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 965
  */
 
 /* Commentary: 
@@ -273,7 +273,7 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     d->selector->setVisible(false);
     d->selector->blockSignals(true);
 
-    QVBoxLayout *l_layout = new QVBoxLayout;
+    QHBoxLayout *l_layout = new QHBoxLayout;
     l_layout->setContentsMargins(0, 0, 0, 0);
     l_layout->addWidget(d->add_loop_port);
     l_layout->addWidget(d->rem_loop_port);
@@ -283,7 +283,7 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     l_frame->setObjectName("dtkComposerSceneNodeEditorButtons");
     l_frame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
 
-    QVBoxLayout *i_layout = new QVBoxLayout;
+    QHBoxLayout *i_layout = new QHBoxLayout;
     i_layout->setContentsMargins(0, 0, 0, 0);
     i_layout->addWidget(d->add_input_port);
     i_layout->addWidget(d->rem_input_port);
@@ -305,7 +305,7 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     top->setLayout(t_layout);
     top->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
 
-    QVBoxLayout *o_layout = new QVBoxLayout;
+    QHBoxLayout *o_layout = new QHBoxLayout;
     o_layout->setContentsMargins(0, 0, 0, 0);
     o_layout->addWidget(d->add_output_port);
     o_layout->addWidget(d->rem_output_port);
@@ -884,9 +884,9 @@ void dtkComposerSceneNodeEditor::addOutputPort(void)
         command->setScene(d->scene);
         command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(d->node));
         command->setType(dtkComposerScenePort::Output);
+
         if (dynamic_cast<dtkComposerNodeRemote *>(d->node->wrapee()))
             command->setKind(dtkComposerTransmitter::Variant);
-
     }
 
     d->stack->push(command);

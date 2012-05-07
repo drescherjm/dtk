@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:35:44 2012 (+0200)
+ * Last-Updated: Mon May  7 16:57:55 2012 (+0200)
  *           By: tkloczko
- *     Update #: 377
+ *     Update #: 393
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #include "dtkComposerTransmitter_p.h"
 #include "dtkComposerTransmitterVariant.h"
 
+#include <dtkCore/dtkAbstractContainer.h>
 #include <dtkCore/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
@@ -68,6 +69,15 @@ dtkComposerTransmitterVariant::~dtkComposerTransmitterVariant(void)
 void dtkComposerTransmitterVariant::setData(const QVariant& data)
 {
     d->variant = data;
+    d->container.reset();
+}
+
+void dtkComposerTransmitterVariant::setData(const dtkAbstractContainer& data)
+{
+    if (d->container != data) {
+        d->container = data;
+        d->variant = qVariantFromValue(data);
+    }
 }
 
 QVariant dtkComposerTransmitterVariant::data(void)
@@ -111,6 +121,14 @@ QVariantList dtkComposerTransmitterVariant::allData(void)
     }
 
     return list;
+}
+
+const dtkAbstractContainer& dtkComposerTransmitterVariant::container(void) const
+{
+    if (d->container.type() == dtkAbstractContainer::None)
+        d->container = qvariant_cast<dtkAbstractContainer>(d->variant);
+
+    return d->container;
 }
 
 //! 

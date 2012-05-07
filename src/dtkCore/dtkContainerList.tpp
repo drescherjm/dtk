@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sun May  6 15:56:38 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sun May  6 19:15:02 2012 (+0200)
+ * Last-Updated: Mon May  7 16:21:39 2012 (+0200)
  *           By: tkloczko
- *     Update #: 9
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -34,9 +34,10 @@ template <typename T> dtkContainerList<T>::dtkContainerList(const QList<T>& list
 
 };
 
-template <typename T> dtkContainerList<T>::dtkContainerList(const dtkContainerList& other) : dtkAbstractContainer(other), m_list(other.m_list)
+template <typename T> dtkContainerList<T>::dtkContainerList(const dtkContainerList& other) : dtkAbstractContainer(), m_list(other.m_list)
 {
-
+    dtkAbstractData::operator=(other);
+    this->init();
 };
 
 template <typename T> dtkContainerList<T>::~dtkContainerList(void)
@@ -51,6 +52,11 @@ template <typename T> dtkContainerList<T>& dtkContainerList<T>::operator = (cons
     m_list = other.m_list;
     
     return *this;
+};
+
+template <typename T> dtkContainerList<T> *dtkContainerList<T>::clone(void) const
+{
+    return new dtkContainerList<T>(*this);
 };
 
 template <typename T> inline void dtkContainerList<T>::setList(const QList<T>& list)
@@ -138,24 +144,23 @@ template <typename T> inline QVariant dtkContainerList<T>::last(void) const
     return qVariantFromValue(m_list.last());
 };
 
-template <typename T> inline bool dtkContainerList<T>::operator != (const dtkAbstractContainer& other) const
+template <typename T> inline bool dtkContainerList<T>::operator != (const dtkContainerList<T>& other) const
 {
-    // if (other.type() == List) {
-    //     if (dtkContainerList<T> other_v = dynamic_cast<dtkContainerList<T> >(other)) { 
-    //         return (m_list != other_v.m_list);
-    //     }
-    // }
-
-    return true;
+    return (m_list != other.m_list);
 };
 
-template <typename T> inline bool dtkContainerList<T>::operator == (const dtkAbstractContainer& other) const
+template <typename T> inline bool dtkContainerList<T>::operator == (const dtkContainerList<T>& other) const
 {
-    // if (other.type() == List) {
-    //     if (dtkContainerList<T> other_v = dynamic_cast<dtkContainerList<T> >(other)) { 
-    //         return (m_list == other_v.m_list);
-    //     }
-    // }
+    return (m_list == other.m_list);
+};
+
+template <typename T> inline bool dtkContainerList<T>::isEqual(const dtkAbstractContainer& other) const
+{
+    if (other.type() == List) {
+        if (const dtkContainerList<T> *other_v = dynamic_cast<const dtkContainerList<T> *>(&other)) {
+            return (m_list == other_v->m_list);
+        }
+    }
 
     return false;
 };

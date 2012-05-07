@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sun May  6 15:55:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sun May  6 16:17:20 2012 (+0200)
+ * Last-Updated: Mon May  7 16:24:10 2012 (+0200)
  *           By: tkloczko
- *     Update #: 3
+ *     Update #: 7
  */
 
 /* Commentary: 
@@ -39,7 +39,10 @@ public:
     ~dtkContainerList(void);
 
 public:
-    dtkContainerList& operator = (const dtkContainerList<T>& other);
+    dtkContainerList<T>& operator = (const dtkContainerList<T>& other);
+
+public:
+    dtkContainerList<T> *clone(void) const;
 
 public:
     inline void setList(const QList<T>& list);
@@ -74,9 +77,13 @@ public:
     QVariant  last(void) const;
 
 public:
-    bool operator != (const dtkAbstractContainer& other) const;
-    bool operator == (const dtkAbstractContainer& other) const;
+    bool operator != (const dtkContainerList<T>& other) const;
+    bool operator == (const dtkContainerList<T>& other) const;
 
+public:
+    bool isEqual(const dtkAbstractContainer& other) const;
+
+public:
     QVariant operator[] (dtkxarch_int index) const;
 
 private:

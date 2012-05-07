@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:31:21 2012 (+0200)
+ * Last-Updated: Mon May  7 16:02:30 2012 (+0200)
  *           By: tkloczko
- *     Update #: 198
+ *     Update #: 208
  */
 
 /* Commentary: 
@@ -64,6 +64,51 @@ template <typename T> T dtkComposerTransmitterReceiver<T>::data(void)
         return qvariant_cast<T>(active_variant->data());
 
     return m_data;
+};
+
+//! 
+/*! 
+ *  
+ */
+template <typename T> const dtkAbstractContainer& dtkComposerTransmitterReceiver<T>::container(void) const
+{
+    if (active_emitter)
+        return active_emitter->container();
+
+    if (active_variant)
+        return active_variant->container();
+
+    return d->container;
+};
+
+//! 
+/*! 
+ *  
+ */
+template <typename T> const dtkContainerVector<T>& dtkComposerTransmitterReceiver<T>::vector(void) const
+{
+    if (active_emitter)
+        return active_emitter->vector();
+
+    if (active_variant) 
+        return *reinterpret_cast<const dtkContainerVector<T> *>(&(active_variant->container()));
+
+    return m_vector;
+};
+
+//! 
+/*! 
+ *  
+ */
+template <typename T> const dtkContainerList<T>& dtkComposerTransmitterReceiver<T>::list(void) const
+{
+    if (active_emitter)
+        return active_emitter->list();
+
+    if (active_variant) 
+        return *reinterpret_cast<const dtkContainerList<T> *>(&(active_variant->container()));
+
+    return m_list;
 };
 
 //! Returns.

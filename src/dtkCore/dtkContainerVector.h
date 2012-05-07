@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 16:38:14 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sun May  6 16:16:57 2012 (+0200)
+ * Last-Updated: Mon May  7 16:14:08 2012 (+0200)
  *           By: tkloczko
- *     Update #: 45
+ *     Update #: 59
  */
 
 /* Commentary: 
@@ -39,7 +39,10 @@ public:
     ~dtkContainerVector(void);
 
 public:
-    dtkContainerVector& operator = (const dtkContainerVector<T>& other);
+    dtkContainerVector<T>& operator = (const dtkContainerVector<T>& other);
+
+public:
+    dtkContainerVector<T> *clone(void) const;
 
 public:
     inline void setVector(const QVector<T>& vector);
@@ -74,9 +77,13 @@ public:
     QVariant  last(void) const;
 
 public:
-    bool operator != (const dtkAbstractContainer& other) const;
-    bool operator == (const dtkAbstractContainer& other) const;
+    bool operator != (const dtkContainerVector<T>& other) const;
+    bool operator == (const dtkContainerVector<T>& other) const;
 
+public:
+    bool isEqual(const dtkAbstractContainer& other) const;
+
+public:
     QVariant operator[] (dtkxarch_int index) const;
 
 private:

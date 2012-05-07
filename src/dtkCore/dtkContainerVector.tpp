@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 17:02:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sun May  6 19:01:53 2012 (+0200)
+ * Last-Updated: Mon May  7 16:13:58 2012 (+0200)
  *           By: tkloczko
- *     Update #: 66
+ *     Update #: 97
  */
 
 /* Commentary: 
@@ -34,9 +34,10 @@ template <typename T> dtkContainerVector<T>::dtkContainerVector(const QVector<T>
 
 };
 
-template <typename T> dtkContainerVector<T>::dtkContainerVector(const dtkContainerVector& other) : dtkAbstractContainer(other), m_vector(other.m_vector)
+template <typename T> dtkContainerVector<T>::dtkContainerVector(const dtkContainerVector& other) : dtkAbstractContainer(), m_vector(other.m_vector)
 {
-
+    dtkAbstractData::operator=(other);
+    this->init();
 };
 
 template <typename T> dtkContainerVector<T>::~dtkContainerVector(void)
@@ -46,11 +47,16 @@ template <typename T> dtkContainerVector<T>::~dtkContainerVector(void)
 
 template <typename T> dtkContainerVector<T>& dtkContainerVector<T>::operator = (const dtkContainerVector<T>& other)
 {
-    dtkAbstractContainer::operator=(other);
+    dtkAbstractData::operator=(other);
 
     m_vector = other.m_vector;
     
     return *this;
+};
+
+template <typename T> dtkContainerVector<T> *dtkContainerVector<T>::clone(void) const
+{
+    return new dtkContainerVector<T>(*this);
 };
 
 template <typename T> inline void dtkContainerVector<T>::setVector(const QVector<T>& vector)
@@ -143,24 +149,23 @@ template <typename T> inline QVariant dtkContainerVector<T>::last(void) const
     return qVariantFromValue(m_vector.last());
 };
 
-template <typename T> inline bool dtkContainerVector<T>::operator != (const dtkAbstractContainer& other) const
+template <typename T> inline bool dtkContainerVector<T>::operator != (const dtkContainerVector<T>& other) const
 {
-    // if (other.type() == Vector) {
-    //     if (dtkContainerVector<T> other_v = dynamic_cast<dtkContainerVector<T> >(other)) { 
-    //         return (m_vector != other_v.m_vector);
-    //     }
-    // }
-
-    return true;
+    return (m_vector != other.m_vector);
 };
 
-template <typename T> inline bool dtkContainerVector<T>::operator == (const dtkAbstractContainer& other) const
+template <typename T> inline bool dtkContainerVector<T>::operator == (const dtkContainerVector<T>& other) const
 {
-    // if (other.type() == Vector) {
-    //     if (dtkContainerVector<T> other_v = dynamic_cast<dtkContainerVector<T> >(other)) { 
-    //         return (m_vector == other_v.m_vector);
-    //     }
-    // }
+    return (m_vector == other.m_vector);
+};
+
+template <typename T> inline bool dtkContainerVector<T>::isEqual(const dtkAbstractContainer& other) const
+{
+    if (other.type() == Vector) {
+        if (const dtkContainerVector<T> *other_v = dynamic_cast<const dtkContainerVector<T> *>(&other)) {
+            return (m_vector == other_v->m_vector);
+        }
+    }
 
     return false;
 };

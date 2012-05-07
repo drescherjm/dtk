@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:31:05 2012 (+0200)
+ * Last-Updated: Mon May  7 16:57:01 2012 (+0200)
  *           By: tkloczko
- *     Update #: 123
+ *     Update #: 155
  */
 
 /* Commentary: 
@@ -64,6 +64,50 @@ template <typename T> inline void dtkComposerTransmitterEmitter<T>::setData(cons
 template <typename T> inline T dtkComposerTransmitterEmitter<T>::data(void)
 {
     return m_data;
+};
+
+//! 
+/*! 
+ *  
+ */
+template <typename T> inline void dtkComposerTransmitterEmitter<T>::setVector(const dtkContainerVector<T>& vector)
+{
+    if (m_vector != vector) {
+        m_vector = vector;
+        d->container = m_vector;
+        d->variant = qVariantFromValue(d->container);
+    }
+};
+
+//! 
+/*! 
+ *  
+ */
+template <typename T> inline const dtkContainerVector<T>& dtkComposerTransmitterEmitter<T>::vector(void) const
+{
+    return m_vector;
+};
+
+//! 
+/*! 
+ *  
+ */
+template <typename T> inline void dtkComposerTransmitterEmitter<T>::setList(const dtkContainerList<T>& list)
+{
+    if (m_list != list) {
+        m_list = list;
+        d->container = m_list;
+        d->variant = qVariantFromValue(d->container);
+    }
+};
+
+//! 
+/*! 
+ *  
+ */
+template <typename T> inline const dtkContainerList<T>& dtkComposerTransmitterEmitter<T>::list(void) const
+{
+    return m_list;
 };
 
 //! Returns.

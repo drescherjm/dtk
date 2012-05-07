@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 15:17:39 2012 (+0200)
+ * Last-Updated: Mon May  7 15:30:24 2012 (+0200)
  *           By: tkloczko
- *     Update #: 145
+ *     Update #: 154
  */
 
 /* Commentary: 
@@ -24,6 +24,7 @@
 
 #include <QtCore>
 
+class dtkAbstractContainer;
 class dtkComposerNode;
 
 // /////////////////////////////////////////////////////////////////
@@ -55,6 +56,9 @@ public:
 
 public:
     QVariant variant(void) const;
+
+public:
+    virtual const dtkAbstractContainer& container(void) const;
 
 public:
     virtual QVariant::Type type(void) const;

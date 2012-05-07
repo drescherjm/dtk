@@ -4,9 +4,9 @@
 ## Copyright (C) 2011 - Thibaud Kloczko, Inria.
 ## Created: Mon Sep 26 09:27:41 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Sun May  6 18:45:45 2012 (+0200)
+## Last-Updated: Mon May  7 11:07:44 2012 (+0200)
 ##           By: tkloczko
-##     Update #: 25
+##     Update #: 26
 ######################################################################
 ## 
 ### Commentary: 
@@ -34,5 +34,6 @@ add_executable(${PROJECT_NAME} MACOSX_BUNDLE
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkCore
+  dtkComposer
   dtkGui
   dtkLog)

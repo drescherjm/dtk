@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:33:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 29 10:53:59 2012 (+0200)
+ * Last-Updated: Mon May  7 15:58:23 2012 (+0200)
  *           By: tkloczko
- *     Update #: 57
+ *     Update #: 69
  */
 
 /* Commentary: 
@@ -21,6 +21,9 @@
 #define DTKCOMPOSERTRANSMITTEREMITTER_H
 
 #include "dtkComposerTransmitter.h"
+
+#include <dtkCore/dtkContainerVector.h>
+#include <dtkCore/dtkContainerList.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterEmitter declaration
@@ -38,6 +41,16 @@ public:
     inline T data(void);
 
 public:
+    inline void setVector(const dtkContainerVector<T>& vector);
+
+    inline const dtkContainerVector<T>& vector(void) const;
+
+public:
+    inline void setList(const dtkContainerList<T>& list);
+
+    inline const dtkContainerList<T>& list(void) const;
+
+public:
     Kind kind(void) const;
 
     QString kindName(void) const;
@@ -47,6 +60,9 @@ public:
 
 private:
     T m_data;
+    
+    dtkContainerVector<T> m_vector;
+    dtkContainerList<T>   m_list;
 };
 
 // /////////////////////////////////////////////////////////////////

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 15:25:17 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sun May  6 19:03:08 2012 (+0200)
+ * Last-Updated: Mon May  7 16:52:10 2012 (+0200)
  *           By: tkloczko
- *     Update #: 47
+ *     Update #: 71
  */
 
 /* Commentary: 
@@ -33,6 +33,7 @@ class DTKCORE_EXPORT dtkAbstractContainer : public dtkAbstractData
 
 public:
     enum Type {
+        None,
         Vector,
         List
     };
@@ -42,42 +43,61 @@ public:
              dtkAbstractContainer(const dtkAbstractContainer& other);
     virtual ~dtkAbstractContainer(void);
 
+protected:
+    void init(void);
+
+public:
+    void reset(void);
+
 public:
     dtkAbstractContainer& operator = (const dtkAbstractContainer& other);
 
 public:
-    virtual Type type(void) const = 0;
+    virtual dtkAbstractContainer *clone(void) const;
 
 public:
-    virtual void clear(void) = 0;
-
-    virtual void  append(const QVariant& data) = 0;
-    virtual void prepend(const QVariant& data) = 0;
-    virtual void  remove(const QVariant& data) = 0;
-
-    virtual void  insert(const QVariant& data, dtkxarch_int index) = 0;
-    virtual void replace(const QVariant& data, dtkxarch_int index) = 0;
-
-    virtual void resize(dtkxarch_int size) = 0;
+    virtual Type type(void) const;
 
 public:
-    virtual bool  isEmpty(void) const = 0;
+    virtual void clear(void);
 
-    virtual bool contains(const QVariant& data) const = 0;
+    virtual void  append(const QVariant& data);
+    virtual void prepend(const QVariant& data);
+    virtual void  remove(const QVariant& data);
 
-    virtual dtkxarch_int count(void) const = 0;
+    virtual void  insert(const QVariant& data, dtkxarch_int index);
+    virtual void replace(const QVariant& data, dtkxarch_int index);
 
-    virtual dtkxarch_int indexOf(const QVariant& data, dtkxarch_int from = 0) const = 0;
+    virtual void resize(dtkxarch_int size);
+
+public:
+    virtual bool  isEmpty(void) const;
+
+    virtual bool contains(const QVariant& data) const;
+
+    virtual dtkxarch_int count(void) const;
+
+    virtual dtkxarch_int indexOf(const QVariant& data, dtkxarch_int from = 0) const;
      
-    virtual QVariant    at(dtkxarch_int index) const = 0; 
-    virtual QVariant first(void) const = 0;
-    virtual QVariant  last(void) const = 0;
+    virtual QVariant    at(dtkxarch_int index) const;
+    virtual QVariant first(void) const;
+    virtual QVariant  last(void) const;
 
 public:
-    virtual bool operator != (const dtkAbstractContainer& other) const = 0;
-    virtual bool operator == (const dtkAbstractContainer& other) const = 0;
+    bool operator != (const dtkAbstractContainer& other) const;
+    bool operator == (const dtkAbstractContainer& other) const;
 
-    virtual QVariant operator[] (dtkxarch_int index) const = 0;
+public:
+    virtual bool isEqual(const dtkAbstractContainer& other) const;
+
+public:
+    virtual QVariant operator[] (dtkxarch_int index) const;
+
+private:
+    dtkAbstractContainer *m_container;
 };
+
+Q_DECLARE_METATYPE(dtkAbstractContainer);
+Q_DECLARE_METATYPE(dtkAbstractContainer *);
 
 #endif

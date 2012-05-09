@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/23 09:24:08
  * Version: $Id$
- * Last-Updated: lun. avril 23 11:28:43 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 6
+ * Last-Updated: Wed May  9 10:11:20 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 10
  */
 
 /* Commentary:
@@ -33,10 +33,10 @@
 class dtkComposerNodeStringOperatorUnaryPrivate
 {
 public:
-    dtkComposerTransmitterVariant *receiver;
+    dtkComposerTransmitterVariant receiver;
 
 public:
-    dtkComposerTransmitterVariant *emitter;
+    dtkComposerTransmitterVariant emitter;
 };
 
 dtkComposerNodeStringOperatorUnary::dtkComposerNodeStringOperatorUnary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeStringOperatorUnaryPrivate)
@@ -44,19 +44,15 @@ dtkComposerNodeStringOperatorUnary::dtkComposerNodeStringOperatorUnary(void) : d
     QList<QVariant::Type> variant_list;
     variant_list << QVariant::String;
 
-    d->receiver = new dtkComposerTransmitterVariant(this);
-    d->receiver->setTypes(variant_list);
-    this->appendReceiver(d->receiver);
+    d->receiver.setTypes(variant_list);
+    this->appendReceiver(&(d->receiver));
 
-    d->emitter = new dtkComposerTransmitterVariant(this);
-    d->emitter->setTypes(variant_list);
-    this->appendEmitter(d->emitter);
+    d->emitter.setTypes(variant_list);
+    this->appendEmitter(&(d->emitter));
 }
 
 dtkComposerNodeStringOperatorUnary::~dtkComposerNodeStringOperatorUnary(void)
 {
-    delete d->receiver;
-    delete d->emitter;
     delete d;
 
     d = NULL;
@@ -69,11 +65,11 @@ dtkComposerNodeStringOperatorUnary::~dtkComposerNodeStringOperatorUnary(void)
 class dtkComposerNodeStringOperatorBinaryPrivate
 {
 public:
-    dtkComposerTransmitterVariant *receiver_lhs;
-    dtkComposerTransmitterVariant *receiver_rhs;
+    dtkComposerTransmitterVariant receiver_lhs;
+    dtkComposerTransmitterVariant receiver_rhs;
 
 public:
-    dtkComposerTransmitterVariant *emitter;
+    dtkComposerTransmitterVariant emitter;
 };
 
 dtkComposerNodeStringOperatorBinary::dtkComposerNodeStringOperatorBinary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeStringOperatorBinaryPrivate)
@@ -81,24 +77,18 @@ dtkComposerNodeStringOperatorBinary::dtkComposerNodeStringOperatorBinary(void) :
     QList<QVariant::Type> variant_list;
     variant_list << QVariant::String;
 
-    d->receiver_lhs = new dtkComposerTransmitterVariant(this);
-    d->receiver_lhs->setTypes(variant_list);
-    this->appendReceiver(d->receiver_lhs);
+    d->receiver_lhs.setTypes(variant_list);
+    this->appendReceiver(&(d->receiver_lhs));
 
-    d->receiver_rhs = new dtkComposerTransmitterVariant(this);
-    d->receiver_rhs->setTypes(variant_list);
-    this->appendReceiver(d->receiver_rhs);
+    d->receiver_rhs.setTypes(variant_list);
+    this->appendReceiver(&(d->receiver_rhs));
 
-    d->emitter = new dtkComposerTransmitterVariant(this);
-    d->emitter->setTypes(variant_list);
-    this->appendEmitter(d->emitter);
+    d->emitter.setTypes(variant_list);
+    this->appendEmitter(&(d->emitter));
 }
 
 dtkComposerNodeStringOperatorBinary::~dtkComposerNodeStringOperatorBinary(void)
 {
-    delete d->receiver_lhs;
-    delete d->receiver_rhs;
-    delete d->emitter;
     delete d;
 
     d = NULL;
@@ -111,9 +101,9 @@ dtkComposerNodeStringOperatorBinary::~dtkComposerNodeStringOperatorBinary(void)
 
 void dtkComposerNodeStringOperatorBinaryAppend::run(void)
 {
-    QString a = d->receiver_lhs->data().toString();
-    QString b = d->receiver_rhs->data().toString();
-    d->emitter->setData(a + b);
+    QString a = d->receiver_lhs.data().toString();
+    QString b = d->receiver_rhs.data().toString();
+    d->emitter.setData(a + b);
 }
 
 

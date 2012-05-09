@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:17:21
  * Version: $Id$
- * Last-Updated: Tue Apr 24 23:42:11 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 231
+ * Last-Updated: Wed May  9 10:08:20 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 234
  */
 
 /* Commentary:
@@ -32,16 +32,16 @@
 class dtkComposerNodeProcessPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<qlonglong> *receiver_integer_0;
-    dtkComposerTransmitterReceiver<qlonglong> *receiver_integer_1;
-    dtkComposerTransmitterReceiver<double> *receiver_real;
-    dtkComposerTransmitterReceiver<dtkAbstractData *> *receiver_data;
-    dtkComposerTransmitterReceiver<QString> *receiver_type;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_integer_0;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_integer_1;
+    dtkComposerTransmitterReceiver<double> receiver_real;
+    dtkComposerTransmitterReceiver<dtkAbstractData *> receiver_data;
+    dtkComposerTransmitterReceiver<QString> receiver_type;
 
 public:
-    dtkComposerTransmitterEmitter<qlonglong> *emitter_integer;
-    dtkComposerTransmitterEmitter<double> *emitter_real;
-    dtkComposerTransmitterEmitter<dtkAbstractData *>   *emitter_data;
+    dtkComposerTransmitterEmitter<qlonglong> emitter_integer;
+    dtkComposerTransmitterEmitter<double> emitter_real;
+    dtkComposerTransmitterEmitter<dtkAbstractData *> emitter_data;
 
 public:
     dtkAbstractProcess *process;
@@ -53,45 +53,26 @@ public:
 
 dtkComposerNodeProcess::dtkComposerNodeProcess(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeProcessPrivate)
 {
-    d->receiver_type = new dtkComposerTransmitterReceiver<QString>(this);
-    this->appendReceiver(d->receiver_type);
+    this->appendReceiver(&(d->receiver_type));
 
-    d->receiver_integer_0 = new dtkComposerTransmitterReceiver<qlonglong>(this);
-    this->appendReceiver(d->receiver_integer_0);
+    this->appendReceiver(&(d->receiver_integer_0));
+    this->appendReceiver(&(d->receiver_integer_1));
 
-    d->receiver_integer_1 = new dtkComposerTransmitterReceiver<qlonglong>(this);
-    this->appendReceiver(d->receiver_integer_1);
+    this->appendReceiver(&(d->receiver_real));
 
-    d->receiver_real = new dtkComposerTransmitterReceiver<double>(this);
-    this->appendReceiver(d->receiver_real);
+    this->appendReceiver(&(d->receiver_data));
 
-    d->receiver_data = new dtkComposerTransmitterReceiver<dtkAbstractData *>(this);
-    this->appendReceiver(d->receiver_data);
+    this->appendEmitter(&(d->emitter_integer));
 
-    d->emitter_integer = new dtkComposerTransmitterEmitter<qlonglong>(this);
-    this->appendEmitter(d->emitter_integer);
+    this->appendEmitter(&(d->emitter_real));
 
-    d->emitter_real = new dtkComposerTransmitterEmitter<double>(this);
-    this->appendEmitter(d->emitter_real);
-
-    d->emitter_data = new dtkComposerTransmitterEmitter<dtkAbstractData *>(this);
-    this->appendEmitter(d->emitter_data);
+    this->appendEmitter(&(d->emitter_data));
 
     d->process = NULL;
 }
 
 dtkComposerNodeProcess::~dtkComposerNodeProcess(void)
 {
-    delete d->receiver_type;
-    delete d->receiver_integer_0;
-    delete d->receiver_integer_1;
-    delete d->receiver_real;
-    delete d->receiver_data;
-
-    delete d->emitter_data;
-    delete d->emitter_integer;
-    delete d->emitter_real;
-
     if (d->process)
         delete d->process;
 
@@ -102,40 +83,40 @@ dtkComposerNodeProcess::~dtkComposerNodeProcess(void)
 
 void dtkComposerNodeProcess::run(void)
 {
-    if (d->receiver_type->isEmpty()) {
+    if (d->receiver_type.isEmpty()) {
         dtkWarn() << "no type speficied in process node!";
         return;
     }
 
     if(!d->process)
-        d->process = dtkAbstractProcessFactory::instance()->create(d->receiver_type->data());
+        d->process = dtkAbstractProcessFactory::instance()->create(d->receiver_type.data());
 
     if (!d->process) {
-        dtkWarn() << "no process, abort "<<  d->receiver_type->data();
+        dtkWarn() << "no process, abort "<<  d->receiver_type.data();
         return;
     }
 
-    if (!d->receiver_integer_0->isEmpty())
-        d->process->setParameter((int)d->receiver_integer_0->data(), 0);
+    if (!d->receiver_integer_0.isEmpty())
+        d->process->setParameter((int)d->receiver_integer_0.data(), 0);
 
-    if (!d->receiver_integer_1->isEmpty())
-        d->process->setParameter((int)d->receiver_integer_1->data(), 1);
+    if (!d->receiver_integer_1.isEmpty())
+        d->process->setParameter((int)d->receiver_integer_1.data(), 1);
 
-    if (!d->receiver_real->isEmpty())
-        d->process->setParameter(d->receiver_real->data());
+    if (!d->receiver_real.isEmpty())
+        d->process->setParameter(d->receiver_real.data());
 
-    if (!d->receiver_data->isEmpty()) {
-        d->process->setInput(d->receiver_data->data());
+    if (!d->receiver_data.isEmpty()) {
+        d->process->setInput(d->receiver_data.data());
     }
 
     int i = d->process->run();
 
-    d->emitter_integer->setData(i);
+    d->emitter_integer.setData(i);
 
     if (d->process->data(0))
-        d->emitter_real->setData(*static_cast<double *>(d->process->data(0)));
+        d->emitter_real.setData(*static_cast<double *>(d->process->data(0)));
 
-    d->emitter_data->setData(d->process->output());
+    d->emitter_data.setData(d->process->output());
 }
 
 QString dtkComposerNodeProcess::type(void)

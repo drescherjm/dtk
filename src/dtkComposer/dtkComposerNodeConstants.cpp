@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:58:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 17 11:38:30 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 20
+ * Last-Updated: Wed May  9 09:44:30 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 22
  */
 
 /* Commentary: 
@@ -35,18 +35,16 @@
 class dtkComposerNodePiPrivate
 {
 public:    
-    dtkComposerTransmitterEmitter<qreal> *emitter;
+    dtkComposerTransmitterEmitter<qreal> emitter;
 };
 
 dtkComposerNodePi::dtkComposerNodePi(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodePiPrivate)
 {
-    d->emitter = new dtkComposerTransmitterEmitter<qreal>;
-    this->appendEmitter(d->emitter);
+    this->appendEmitter(&(d->emitter));
 }
 
 dtkComposerNodePi::~dtkComposerNodePi(void)
 {
-    delete d->emitter;
     delete d;
     
     d = NULL;
@@ -54,7 +52,7 @@ dtkComposerNodePi::~dtkComposerNodePi(void)
 
 void dtkComposerNodePi::run(void)
 {
-    d->emitter->setData(M_PI);
+    d->emitter.setData(M_PI);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -64,18 +62,16 @@ void dtkComposerNodePi::run(void)
 class dtkComposerNodeEPrivate
 {
 public:    
-    dtkComposerTransmitterEmitter<qreal> *emitter;
+    dtkComposerTransmitterEmitter<qreal> emitter;
 };
 
 dtkComposerNodeE::dtkComposerNodeE(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeEPrivate)
 {
-    d->emitter = new dtkComposerTransmitterEmitter<qreal>;
-    this->appendEmitter(d->emitter);
+    this->appendEmitter(&(d->emitter));
 }
 
 dtkComposerNodeE::~dtkComposerNodeE(void)
 {
-    delete d->emitter;
     delete d;
     
     d = NULL;
@@ -83,5 +79,5 @@ dtkComposerNodeE::~dtkComposerNodeE(void)
 
 void dtkComposerNodeE::run(void)
 {
-    d->emitter->setData(M_E);
+    d->emitter.setData(M_E);
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May  3 09:38:56 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 59
+ * Last-Updated: Wed May  9 09:08:04 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 62
  */
 
 /* Commentary: 
@@ -35,11 +35,11 @@
 class dtkComposerNodeControlWhilePrivate
 {
 public:
-    dtkComposerNodeProxy *header;
-    dtkComposerNodeProxy *footer;
+    dtkComposerNodeProxy header;
+    dtkComposerNodeProxy footer;
 
-    dtkComposerNodeComposite *cond_block;
-    dtkComposerNodeComposite *body_block;
+    dtkComposerNodeComposite cond_block;
+    dtkComposerNodeComposite body_block;
 
 public:
     dtkComposerTransmitterReceiver<bool> cond;
@@ -51,31 +51,23 @@ public:
 
 dtkComposerNodeControlWhile::dtkComposerNodeControlWhile(void) : dtkComposerNodeControl(), d(new dtkComposerNodeControlWhilePrivate)
 {
-    d->header = new dtkComposerNodeProxy;
-    delete d->header->removeEmitter(0);
-    delete d->header->removeReceiver(0);
-    d->header->setAsHeader(true);
+    d->header.removeEmitter(0);
+    d->header.removeReceiver(0);
+    d->header.setAsHeader(true);
 
-    d->footer = new dtkComposerNodeProxy;
-    delete d->footer->removeEmitter(0);
-    delete d->footer->removeReceiver(0);
-    d->footer->setAsFooter(true);
+    d->footer.removeEmitter(0);
+    d->footer.removeReceiver(0);
+    d->footer.setAsFooter(true);
 
-    d->cond_block = new dtkComposerNodeComposite;
-    d->cond_block->setTitleHint("Conditional");
-    d->cond_block->appendEmitter(&(d->cond));
-    d->cond_block->setOutputLabelHint("cond", 0);
+    d->cond_block.setTitleHint("Conditional");
+    d->cond_block.appendEmitter(&(d->cond));
+    d->cond_block.setOutputLabelHint("cond", 0);
 
-    d->body_block = new dtkComposerNodeComposite;
-    d->body_block->setTitleHint("Body");
+    d->body_block.setTitleHint("Body");
 }
 
 dtkComposerNodeControlWhile::~dtkComposerNodeControlWhile(void)
 {
-    delete d->header;
-    delete d->footer;
-    delete d->cond_block;
-    delete d->body_block;
     delete d;
 
     d = NULL;
@@ -88,21 +80,21 @@ int dtkComposerNodeControlWhile::blockCount(void)
 
 dtkComposerNodeLeaf *dtkComposerNodeControlWhile::header(void)
 {
-    return d->header;
+    return &(d->header);
 }
 
 dtkComposerNodeLeaf *dtkComposerNodeControlWhile::footer(void)
 {
-    return d->footer;
+    return &(d->footer);
 }
 
 dtkComposerNodeComposite *dtkComposerNodeControlWhile::block(int id)
 {
     if(id == 0)
-        return d->cond_block;
+        return &(d->cond_block);
 
     if(id == 1)
-        return d->body_block;
+        return &(d->body_block);
 
     return NULL;
 }

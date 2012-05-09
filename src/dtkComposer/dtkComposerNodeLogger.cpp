@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 -Nicolas Niclausse , Inria.
  * Created: Mon Feb 27 12:38:46 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mars 26 14:11:03 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 44
+ * Last-Updated: Wed May  9 09:58:42 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 45
  */
 
 /* Commentary:
@@ -25,19 +25,17 @@
 class dtkComposerNodeLoggerPrivate
 {
 public:
-    dtkComposerTransmitterVariant *receiver;
+    dtkComposerTransmitterVariant receiver;
 
 };
 
 dtkComposerNodeLogger::dtkComposerNodeLogger(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeLoggerPrivate)
 {
-    d->receiver = new dtkComposerTransmitterVariant(this);
-    this->appendReceiver(d->receiver);
+    this->appendReceiver(&(d->receiver));
 }
 
 dtkComposerNodeLogger::~dtkComposerNodeLogger(void)
 {
-    delete d->receiver;
     delete d;
 
     d = NULL;
@@ -45,7 +43,7 @@ dtkComposerNodeLogger::~dtkComposerNodeLogger(void)
 
 void dtkComposerNodeLogger::run(void)
 {
-    foreach(QVariant q,  d->receiver->allData())
+    foreach(QVariant q,  d->receiver.allData())
         if (q.canConvert(QVariant::String))
             dtkInfo() << q.toString();
         else

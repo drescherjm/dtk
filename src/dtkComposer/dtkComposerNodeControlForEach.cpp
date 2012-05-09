@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mars 28 13:59:19 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 88
+ * Last-Updated: Wed May  9 09:00:25 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 90
  */
 
 /* Commentary: 
@@ -33,10 +33,10 @@
 class dtkComposerNodeControlForEachPrivate
 {
 public:    
-    dtkComposerNodeProxy *header;
-    dtkComposerNodeProxy *footer;
+    dtkComposerNodeProxy header;
+    dtkComposerNodeProxy footer;
 
-    dtkComposerNodeComposite *body_block;
+    dtkComposerNodeComposite body_block;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -45,25 +45,19 @@ public:
 
 dtkComposerNodeControlForEach::dtkComposerNodeControlForEach(void) : dtkComposerNodeControl(), d(new dtkComposerNodeControlForEachPrivate)
 {
-    d->header = new dtkComposerNodeProxy;
-    delete d->header->removeEmitter(0);
-    d->header->setInputLabelHint("container", 0); 
-    d->header->setAsHeader(true);
+    d->header.removeEmitter(0);
+    d->header.setInputLabelHint("container", 0); 
+    d->header.setAsHeader(true);
 
-    d->footer = new dtkComposerNodeProxy;
-    delete d->footer->removeReceiver(0);
-    delete d->footer->removeEmitter(0);
-    d->footer->setAsFooter(true);
+    d->footer.removeReceiver(0);
+    d->footer.removeEmitter(0);
+    d->footer.setAsFooter(true);
 
-    d->body_block = new dtkComposerNodeComposite;
-    d->body_block->setTitleHint("Body");
+    d->body_block.setTitleHint("Body");
 }
 
 dtkComposerNodeControlForEach::~dtkComposerNodeControlForEach(void)
 {
-    delete d->header;
-    delete d->footer;
-    delete d->body_block;
     delete d;
 
     d = NULL;
@@ -76,18 +70,18 @@ int dtkComposerNodeControlForEach::blockCount(void)
 
 dtkComposerNodeLeaf *dtkComposerNodeControlForEach::header(void)
 {
-    return d->header;
+    return &(d->header);
 }
 
 dtkComposerNodeLeaf *dtkComposerNodeControlForEach::footer(void)
 {
-    return d->footer;
+    return &(d->footer);
 }
 
 dtkComposerNodeComposite *dtkComposerNodeControlForEach::block(int id)
 {
     if(id == 0)
-        return d->body_block;
+        return &(d->body_block);
 
     return NULL;
 }

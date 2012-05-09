@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  9 16:34:11 2012 (+0200)
+ * Last-Updated: Wed May  9 18:24:02 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 3624
+ *     Update #: 3635
  */
 
 /* Commentary: 
@@ -1739,8 +1739,9 @@ public:
 public:
     enum Direction {
         None,
+        Decomposition,
         Down,
-          Up
+        Up
     };
 
 public:
@@ -1850,6 +1851,8 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
     } else if(e->direction == dtkComposerStackCommandReparentNodePrivate::None) {
         
+        e->direction = dtkComposerStackCommandReparentNodePrivate::Decomposition;
+
         qDebug() << "Decomposing";
 
         dtkComposerSceneNode *origin = e->origin;
@@ -1898,8 +1901,24 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
             qDebug() << "1 DOWN more";
         }
+
+        // Done if we are composite
+
+        return;
     }
 
+    // Handle redo
+
+    if(e->direction == dtkComposerStackCommandReparentNodePrivate::Decomposition) {
+
+    foreach(dtkComposerStackCommandReparentNode *command, e->up)
+        command->redo();
+
+    foreach(dtkComposerStackCommandReparentNode *command, e->down)
+        command->redo();
+
+    }
+    
     // Stop if command is composite
 
     if(e->up.count() || e->down.count())

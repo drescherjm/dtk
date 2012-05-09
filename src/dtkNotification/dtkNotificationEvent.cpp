@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Apr 19 20:37:16 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 19 22:37:19 2012 (+0200)
+ * Last-Updated: Wed May  9 11:37:38 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 36
+ *     Update #: 38
  */
 
 /* Commentary: 
@@ -52,6 +52,8 @@ dtkNotificationEvent& dtkNotificationEvent::operator=(const dtkNotificationEvent
     d->type = other.d->type;
     d->message = other.d->message;
     d->duration = other.d->duration;
+
+    return (*this);
 }
 
 dtkNotificationEvent::Type dtkNotificationEvent::type(void)

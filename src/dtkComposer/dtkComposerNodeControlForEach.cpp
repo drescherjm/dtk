@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  9 09:00:25 2012 (+0200)
+ * Last-Updated: Wed May  9 10:57:46 2012 (+0200)
  *           By: tkloczko
- *     Update #: 90
+ *     Update #: 115
  */
 
 /* Commentary: 
@@ -23,7 +23,9 @@
 #include "dtkComposerNodeProxy.h"
 
 #include "dtkComposerTransmitter.h"
+#include "dtkComposerTransmitterVariant.h"
 
+#include <dtkCore/dtkAbstractContainer.h>
 #include <dtkCore/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
@@ -37,6 +39,17 @@ public:
     dtkComposerNodeProxy footer;
 
     dtkComposerNodeComposite body_block;
+
+public:
+    dtkComposerTransmitterVariant header_rcv;
+
+    dtkComposerTransmitterVariant block_var;
+
+public:
+    qlonglong counter;
+    qlonglong end;
+
+    dtkAbstractContainer container;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -46,6 +59,8 @@ public:
 dtkComposerNodeControlForEach::dtkComposerNodeControlForEach(void) : dtkComposerNodeControl(), d(new dtkComposerNodeControlForEachPrivate)
 {
     d->header.removeEmitter(0);
+    d->header.removeReceiver(0);
+    d->header.appendReceiver(&(d->header_rcv));
     d->header.setInputLabelHint("container", 0); 
     d->header.setAsHeader(true);
 
@@ -54,6 +69,11 @@ dtkComposerNodeControlForEach::dtkComposerNodeControlForEach(void) : dtkComposer
     d->footer.setAsFooter(true);
 
     d->body_block.setTitleHint("Body");
+    d->body_block.setInputLabelHint("item", 0); 
+    d->body_block.appendReceiver(&(d->block_var));
+
+    d->counter = 0;
+    d->end = -1;
 }
 
 dtkComposerNodeControlForEach::~dtkComposerNodeControlForEach(void)
@@ -88,32 +108,42 @@ dtkComposerNodeComposite *dtkComposerNodeControlForEach::block(int id)
 
 void dtkComposerNodeControlForEach::setInputs(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+    d->container = d->header_rcv.container();
+    d->counter = 0;
+    d->end = d->container.count();
+
+    foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
+        v->setTwinned(false);
+        v->setData(v->data());
+        v->setTwinned(true);        
+    }
 }
 
 void dtkComposerNodeControlForEach::setOutputs(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+    foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
+        v->twin()->setData(v->data());  
+    }
 }
 
 void dtkComposerNodeControlForEach::setVariables(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+    d->counter++;
 }
 
 int dtkComposerNodeControlForEach::selectBranch(void)
 {
-    return -1;
+    return (int)(d->counter < d->end);
 }
 
 void dtkComposerNodeControlForEach::begin(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+    d->block_var.setData(d->container.at(d->counter));
 }
 
 void dtkComposerNodeControlForEach::end(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+
 }
 
 QString dtkComposerNodeControlForEach::type(void)

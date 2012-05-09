@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  9 15:55:48 2012 (+0200)
+ * Last-Updated: Wed May  9 16:06:20 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 3587
+ *     Update #: 3596
  */
 
 /* Commentary: 
@@ -1947,6 +1947,33 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
 void dtkComposerStackCommandReparentNode::undo(void)
 {
+    // Undo down commands 
+
+    {
+
+    QListIterator<dtkComposerStackCommandReparentNode *> command(e->down);
+    command.toBack();
+    while (command.hasPrevious())
+        command.previous()->undo();
+
+    }
+
+    // Undo up commands 
+
+    {
+
+    QListIterator<dtkComposerStackCommandReparentNode *> command(e->up);
+    command.toBack();
+    while (command.hasPrevious())
+        command.previous()->undo();
+
+    }
+
+    // Stop if command is composite
+
+    if(e->up.count() || e->down.count())
+        return;
+
     // Switch target and source ...
 
     dtkComposerSceneNodeComposite *temp = e->source;

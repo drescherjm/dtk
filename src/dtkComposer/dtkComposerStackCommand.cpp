@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  9 15:41:36 2012 (+0200)
+ * Last-Updated: Wed May  9 15:52:02 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 3565
+ *     Update #: 3584
  */
 
 /* Commentary: 
@@ -1763,7 +1763,10 @@ public:
 
 dtkComposerSceneNodeComposite *dtkComposerStackCommandReparentNodePrivate::ancestor(dtkComposerSceneNodeComposite *from, dtkComposerSceneNodeComposite *to)
 {
-    return NULL;
+    if(from == to->parent())
+        return to;
+    else
+        return this->ancestor(from, dynamic_cast<dtkComposerSceneNodeComposite *>(to->parent()));
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -1828,19 +1831,19 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
     if(e->source == e->target->parent()) {
 
-    // Choose the direction - Are we going up ?
-
         e->direction = dtkComposerStackCommandReparentNodePrivate::Down;
 
         qDebug() << "Going down";
 
-    } else if(e->source->parent() == e->target) {
+    // Choose the direction - Are we going up ?
 
-    // Choose the direction - How to decompose ?
+    } else if(e->source->parent() == e->target) {
 
         e->direction = dtkComposerStackCommandReparentNodePrivate::Up;
 
         qDebug() << "Going up";
+
+    // Choose the direction - How to decompose ?
 
     } else {
         
@@ -1867,6 +1870,8 @@ void dtkComposerStackCommandReparentNode::redo(void)
             command->setTargetPosition(origin->sceneBoundingRect().topLeft());
 
             e->up << command;
+
+            qDebug() << "1 UP more";
         }
 
         // Move origin down to target
@@ -1885,6 +1890,8 @@ void dtkComposerStackCommandReparentNode::redo(void)
             command->setTargetPosition(origin->sceneBoundingRect().topLeft());
 
             e->down << command;
+
+            qDebug() << "1 DOWN more";
         }
     }
 

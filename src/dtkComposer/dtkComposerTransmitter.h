@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May  7 15:30:24 2012 (+0200)
+ * Last-Updated: Wed May  9 14:28:51 2012 (+0200)
  *           By: tkloczko
- *     Update #: 154
+ *     Update #: 155
  */
 
 /* Commentary: 
@@ -58,7 +58,7 @@ public:
     QVariant variant(void) const;
 
 public:
-    virtual const dtkAbstractContainer& container(void) const;
+    virtual const dtkAbstractContainer& container(void);
 
 public:
     virtual QVariant::Type type(void) const;

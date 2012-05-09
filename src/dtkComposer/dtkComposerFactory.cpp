@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Fri Apr 27 14:44:08 2012 (+0200)
+ * Last-Updated: Wed May  9 14:10:58 2012 (+0200)
  *           By: tkloczko
- *     Update #: 562
+ *     Update #: 565
  */
 
 /* Commentary:
@@ -24,6 +24,7 @@
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
 #include "dtkComposerNodeConstants.h"
+#include "dtkComposerNodeContainerData.h"
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeControlDoWhile.h"
 #include "dtkComposerNodeControlIf.h"
@@ -127,6 +128,11 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["Vector"] = "<p>Description not yet filled!</p>";
     d->tags["Vector"] = QStringList() << "container" << "vector";
     d->types["Vector"] = "vector";
+
+    d->nodes << "Data Container";
+    d->descriptions["Data Container"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Container"] = QStringList() << "container" << "data";
+    d->types["Data Container"] = "data_container";
     
     // Algebraic nodes
 
@@ -639,6 +645,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "vector")
         return new dtkComposerNodeVector;
+
+    if(type == "data_container")
+        return new dtkComposerNodeContainerData;
 
     // algebraic nodes
 

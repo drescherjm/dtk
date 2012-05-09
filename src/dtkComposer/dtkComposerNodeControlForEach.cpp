@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  9 10:57:46 2012 (+0200)
+ * Last-Updated: Wed May  9 17:00:57 2012 (+0200)
  *           By: tkloczko
- *     Update #: 115
+ *     Update #: 140
  */
 
 /* Commentary: 
@@ -25,6 +25,7 @@
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitterVariant.h"
 
+#include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkAbstractContainer.h>
 #include <dtkCore/dtkGlobal.h>
 
@@ -122,23 +123,25 @@ void dtkComposerNodeControlForEach::setInputs(void)
 void dtkComposerNodeControlForEach::setOutputs(void)
 {
     foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
-        v->twin()->setData(v->data());  
+        v->twin()->setData(v->data());
     }
+
+    d->counter++;
 }
 
 void dtkComposerNodeControlForEach::setVariables(void)
 {
-    d->counter++;
+    d->block_var.setData(d->container.at(d->counter));
 }
 
 int dtkComposerNodeControlForEach::selectBranch(void)
 {
-    return (int)(d->counter < d->end);
+    return (int)(!((d->counter) < d->end));
 }
 
 void dtkComposerNodeControlForEach::begin(void)
 {
-    d->block_var.setData(d->container.at(d->counter));
+
 }
 
 void dtkComposerNodeControlForEach::end(void)

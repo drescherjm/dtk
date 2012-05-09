@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 15:25:17 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May  7 16:52:10 2012 (+0200)
+ * Last-Updated: Wed May  9 14:32:50 2012 (+0200)
  *           By: tkloczko
- *     Update #: 71
+ *     Update #: 72
  */
 
 /* Commentary: 
@@ -54,6 +54,9 @@ public:
 
 public:
     virtual dtkAbstractContainer *clone(void) const;
+
+public:
+    QString identifier(void) const;
 
 public:
     virtual Type type(void) const;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  9 15:52:02 2012 (+0200)
+ * Last-Updated: Wed May  9 15:55:48 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 3584
+ *     Update #: 3587
  */
 
 /* Commentary: 
@@ -1894,6 +1894,21 @@ void dtkComposerStackCommandReparentNode::redo(void)
             qDebug() << "1 DOWN more";
         }
     }
+
+    // Execute up commands
+
+    foreach(dtkComposerStackCommandReparentNode *command, e->up)
+        command->redo();
+
+    // Execute down commands
+
+    foreach(dtkComposerStackCommandReparentNode *command, e->down)
+        command->redo();
+
+    // Stop if command is composite
+
+    if(e->up.count() || e->down.count())
+        return;
 
     // Notify source about reparenting
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  9 16:06:20 2012 (+0200)
+ * Last-Updated: Wed May  9 16:21:19 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 3596
+ *     Update #: 3618
  */
 
 /* Commentary: 
@@ -1738,8 +1738,9 @@ public:
 
 public:
     enum Direction {
-        Up,
-        Down
+        None,
+        Down,
+          Up
     };
 
 public:
@@ -1777,6 +1778,8 @@ dtkComposerStackCommandReparentNode::dtkComposerStackCommandReparentNode(dtkComp
 {
     e->origin = NULL;
     e->target = NULL;
+
+    e->direction = dtkComposerStackCommandReparentNodePrivate::None;
 
     this->setText("Reparent node");
 }
@@ -1829,7 +1832,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
     // Choose the direction - Are we going down ?
 
-    if(e->source == e->target->parent()) {
+    if(e->direction == dtkComposerStackCommandReparentNodePrivate::None && e->source == e->target->parent()) {
 
         e->direction = dtkComposerStackCommandReparentNodePrivate::Down;
 
@@ -1837,7 +1840,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
     // Choose the direction - Are we going up ?
 
-    } else if(e->source->parent() == e->target) {
+    } else if(e->direction == dtkComposerStackCommandReparentNodePrivate::None && e->source->parent() == e->target) {
 
         e->direction = dtkComposerStackCommandReparentNodePrivate::Up;
 
@@ -1845,7 +1848,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
     // Choose the direction - How to decompose ?
 
-    } else {
+    } else if(e->direction == dtkComposerStackCommandReparentNodePrivate::None) {
         
         qDebug() << "Decomposing";
 
@@ -1947,23 +1950,19 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
 void dtkComposerStackCommandReparentNode::undo(void)
 {
-    // Undo down commands 
+    { // Undo down commands 
 
-    {
+    QListIterator<dtkComposerStackCommandReparentNode *> command(e->down); command.toBack();
 
-    QListIterator<dtkComposerStackCommandReparentNode *> command(e->down);
-    command.toBack();
     while (command.hasPrevious())
         command.previous()->undo();
 
     }
 
-    // Undo up commands 
+    { // Undo up commands 
 
-    {
+    QListIterator<dtkComposerStackCommandReparentNode *> command(e->up); command.toBack();
 
-    QListIterator<dtkComposerStackCommandReparentNode *> command(e->up);
-    command.toBack();
     while (command.hasPrevious())
         command.previous()->undo();
 

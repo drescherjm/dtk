@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  9 14:58:06 2012 (+0200)
+ * Last-Updated: Wed May  9 15:41:36 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 3516
+ *     Update #: 3565
  */
 
 /* Commentary: 
@@ -1734,6 +1734,9 @@ void dtkComposerStackCommandDestroyPort::undo(void)
 class dtkComposerStackCommandReparentNodePrivate
 {
 public:
+    dtkComposerSceneNodeComposite *ancestor(dtkComposerSceneNodeComposite *from, dtkComposerSceneNodeComposite *to);
+
+public:
     enum Direction {
         Up,
         Down
@@ -1752,7 +1755,20 @@ public:
 
 public:
     Direction direction;
+
+public:
+    QList<dtkComposerStackCommandReparentNode *> up;
+    QList<dtkComposerStackCommandReparentNode *> down;
 };
+
+dtkComposerSceneNodeComposite *dtkComposerStackCommandReparentNodePrivate::ancestor(dtkComposerSceneNodeComposite *from, dtkComposerSceneNodeComposite *to)
+{
+    return NULL;
+}
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
 
 dtkComposerStackCommandReparentNode::dtkComposerStackCommandReparentNode(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandReparentNodePrivate)
 {
@@ -1829,7 +1845,47 @@ void dtkComposerStackCommandReparentNode::redo(void)
     } else {
         
         qDebug() << "Decomposing";
-        
+
+        dtkComposerSceneNode *origin = e->origin;
+        dtkComposerSceneNodeComposite *root = d->scene->root();
+        dtkComposerSceneNodeComposite *source = e->source;
+        dtkComposerSceneNodeComposite *target = e->target;
+
+        // Move origin up to root
+
+        while(source != root) {
+
+            source = dynamic_cast<dtkComposerSceneNodeComposite *>(source->parent());
+
+            dtkComposerStackCommandReparentNode *command = new dtkComposerStackCommandReparentNode;
+            command->e->direction = dtkComposerStackCommandReparentNodePrivate::Up;
+            command->setScene(d->scene);
+            command->setGraph(d->graph);
+            command->setOriginNode(origin);
+            command->setTargetNode(source);
+            command->setOriginPosition(origin->sceneBoundingRect().topLeft());
+            command->setTargetPosition(origin->sceneBoundingRect().topLeft());
+
+            e->up << command;
+        }
+
+        // Move origin down to target
+
+        while(source != target) {
+
+            source = e->ancestor(source, target);
+
+            dtkComposerStackCommandReparentNode *command = new dtkComposerStackCommandReparentNode;
+            command->e->direction = dtkComposerStackCommandReparentNodePrivate::Down;
+            command->setScene(d->scene);
+            command->setGraph(d->graph);
+            command->setOriginNode(origin);
+            command->setTargetNode(source);
+            command->setOriginPosition(origin->sceneBoundingRect().topLeft());
+            command->setTargetPosition(origin->sceneBoundingRect().topLeft());
+
+            e->down << command;
+        }
     }
 
     // Notify source about reparenting
@@ -1869,11 +1925,13 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
 void dtkComposerStackCommandReparentNode::undo(void)
 {
-    // Switch target and source
+    // Switch target and source ...
 
     dtkComposerSceneNodeComposite *temp = e->source;
     e->source = e->target;
     e->target = temp;
+
+    // ... and go ...
 
     this->redo();
 }

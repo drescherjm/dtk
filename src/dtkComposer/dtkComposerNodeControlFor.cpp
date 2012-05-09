@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mars 28 13:59:10 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 116
+ * Last-Updated: Wed May  9 09:35:49 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 126
  */
 
 /* Commentary: 
@@ -36,15 +36,21 @@
 class dtkComposerNodeControlForPrivate
 {
 public:    
-    dtkComposerNodeProxy *header;
-    dtkComposerNodeProxy *footer;
+    dtkComposerNodeProxy header;
+    dtkComposerNodeProxy footer;
 
-    dtkComposerNodeComposite *cond_block;
-    dtkComposerNodeComposite *body_block;
-    dtkComposerNodeComposite *incr_block;
+    dtkComposerNodeComposite cond_block;
+    dtkComposerNodeComposite body_block;
+    dtkComposerNodeComposite incr_block;
 
 public:
     dtkComposerTransmitterReceiver<bool> cond;
+    dtkComposerTransmitterProxy          cond_prx;
+
+    dtkComposerTransmitterVariant block_rcv;
+
+    dtkComposerTransmitterProxy   incr_rcv;
+    dtkComposerTransmitterVariant incr_emt;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -53,63 +59,53 @@ public:
 
 dtkComposerNodeControlFor::dtkComposerNodeControlFor(void) : dtkComposerNodeControl(), d(new dtkComposerNodeControlForPrivate)
 {
-    d->header = new dtkComposerNodeProxy;
-    delete d->header->removeEmitter(0);
-    d->header->setInputLabelHint("i_begin", 0); 
-    d->header->setAsHeader(true);
+    d->header.removeEmitter(0);
+    d->header.setInputLabelHint("i_begin", 0); 
+    d->header.setAsHeader(true);
 
-    d->footer = new dtkComposerNodeProxy;
-    delete d->footer->removeReceiver(0);
-    d->footer->setOutputLabelHint("i_end", 0);
-    d->footer->setAsFooter(true);
+    d->footer.removeReceiver(0);
+    d->footer.setOutputLabelHint("i_end", 0);
+    d->footer.setAsFooter(true);
 
-    d->cond_block = new dtkComposerNodeComposite;
-    d->cond_block->setTitleHint("Conditional");
-    d->cond_block->appendEmitter(&(d->cond));
-    d->cond_block->setOutputLabelHint("cond", 0);
+    d->cond_block.setTitleHint("Conditional");
+    d->cond_block.appendEmitter(&(d->cond));
+    d->cond_block.setOutputLabelHint("cond", 0);
 
-    d->body_block = new dtkComposerNodeComposite;
-    d->body_block->setTitleHint("Body");
+    d->body_block.setTitleHint("Body");
 
-    d->incr_block = new dtkComposerNodeComposite;
-    d->incr_block->setTitleHint("Increment");
+    d->incr_block.setTitleHint("Increment");
 
-    d->cond_block->appendReceiver(new dtkComposerTransmitterProxy(d->cond_block));
-    d->cond_block->setInputLabelHint("i", 0);
+    d->cond_block.appendReceiver(&(d->cond_prx));
+    d->cond_block.setInputLabelHint("i", 0);
     
-    d->body_block->appendReceiver(new dtkComposerTransmitterVariant(d->body_block));
-    d->body_block->setInputLabelHint("i", 0);
-    this->appendInputTwin(dynamic_cast<dtkComposerTransmitterVariant *>(d->body_block->receivers().first()));  
+    d->body_block.appendReceiver(&(d->block_rcv));
+    d->body_block.setInputLabelHint("i", 0);
+    this->appendInputTwin(dynamic_cast<dtkComposerTransmitterVariant *>(d->body_block.receivers().first()));  
 
-    d->incr_block->appendReceiver(new dtkComposerTransmitterProxy(d->incr_block));
-    d->incr_block->setInputLabelHint("i", 0);
+    d->incr_block.appendReceiver(&(d->incr_rcv));
+    d->incr_block.setInputLabelHint("i", 0);
 
-    d->incr_block->appendEmitter(new dtkComposerTransmitterVariant(d->incr_block));
-    d->incr_block->setOutputLabelHint("i_next", 0);
-    this->appendOutputTwin(dynamic_cast<dtkComposerTransmitterVariant *>(d->incr_block->emitters().first()));
+    d->incr_block.appendEmitter(&(d->incr_emt));
+    d->incr_block.setOutputLabelHint("i_next", 0);
+    this->appendOutputTwin(dynamic_cast<dtkComposerTransmitterVariant *>(d->incr_block.emitters().first()));
 
-    d->body_block->receivers().first()->appendPrevious(d->header->receivers().first());
-    d->header->receivers().first()->appendNext(d->body_block->receivers().first());
+    d->body_block.receivers().first()->appendPrevious(d->header.receivers().first());
+    d->header.receivers().first()->appendNext(d->body_block.receivers().first());
 
-    d->cond_block->receivers().first()->appendPrevious(d->body_block->receivers().first());
-    d->body_block->receivers().first()->appendNext(d->cond_block->receivers().first());
+    d->cond_block.receivers().first()->appendPrevious(d->body_block.receivers().first());
+    d->body_block.receivers().first()->appendNext(d->cond_block.receivers().first());
 
-    d->incr_block->receivers().first()->appendPrevious(d->body_block->receivers().first());
-    d->body_block->receivers().first()->appendNext(d->incr_block->receivers().first());
+    d->incr_block.receivers().first()->appendPrevious(d->body_block.receivers().first());
+    d->body_block.receivers().first()->appendNext(d->incr_block.receivers().first());
 
-    d->incr_block->emitters().first()->appendNext(d->footer->emitters().first());
-    d->footer->emitters().first()->appendPrevious(d->incr_block->emitters().first());
+    d->incr_block.emitters().first()->appendNext(d->footer.emitters().first());
+    d->footer.emitters().first()->appendPrevious(d->incr_block.emitters().first());
 
     this->outputTwins().first()->setTwin(this->inputTwins().first());
 }
 
 dtkComposerNodeControlFor::~dtkComposerNodeControlFor(void)
 {
-    delete d->header;
-    delete d->footer;
-    delete d->cond_block;
-    delete d->body_block;
-    delete d->incr_block;
     delete d;
 
     d = NULL;
@@ -122,24 +118,24 @@ int dtkComposerNodeControlFor::blockCount(void)
 
 dtkComposerNodeLeaf *dtkComposerNodeControlFor::header(void)
 {
-    return d->header;
+    return &(d->header);
 }
 
 dtkComposerNodeLeaf *dtkComposerNodeControlFor::footer(void)
 {
-    return d->footer;
+    return &(d->footer);
 }
 
 dtkComposerNodeComposite *dtkComposerNodeControlFor::block(int id)
 {
     if(id == 0)
-        return d->cond_block;
+        return &(d->cond_block);
 
     if(id == 1)
-        return d->body_block;
+        return &(d->body_block);
 
     if(id == 2)
-        return d->incr_block;
+        return &(d->incr_block);
 
     return NULL;
 }

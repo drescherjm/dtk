@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 22 16:29:40 2012 (+0100)
+ * Last-Updated: Wed May  9 09:39:08 2012 (+0200)
  *           By: tkloczko
- *     Update #: 39
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -34,11 +34,11 @@
 class dtkComposerNodeControlIfPrivate
 {
 public:    
-    dtkComposerNodeProxy *header;
-    dtkComposerNodeProxy *footer;
+    dtkComposerNodeProxy header;
+    dtkComposerNodeProxy footer;
 
-    dtkComposerNodeComposite *then_block;
-    dtkComposerNodeComposite *else_block;
+    dtkComposerNodeComposite then_block;
+    dtkComposerNodeComposite else_block;
 
 public:
     dtkComposerTransmitterVariant cond;
@@ -54,35 +54,27 @@ dtkComposerNodeControlIf::dtkComposerNodeControlIf(void) : dtkComposerNodeContro
     variants << QVariant::Bool;
     d->cond.setTypes(variants);
 
-    d->header = new dtkComposerNodeProxy;
-    delete d->header->removeEmitter(0);
-    d->header->setInputLabelHint("cond", 0); 
-    d->header->setAsHeader(true);
+    d->header.removeEmitter(0);
+    d->header.setInputLabelHint("cond", 0); 
+    d->header.setAsHeader(true);
 
-    d->cond.appendPrevious(d->header->receivers().first());
-    d->header->receivers().first()->appendNext(&(d->cond));
+    d->cond.appendPrevious(d->header.receivers().first());
+    d->header.receivers().first()->appendNext(&(d->cond));
 
-    d->footer = new dtkComposerNodeProxy;
-    delete d->footer->removeReceiver(0);
-    d->footer->setOutputLabelHint("cond", 0);
-    d->footer->setAsFooter(true);
+    d->footer.removeReceiver(0);
+    d->footer.setOutputLabelHint("cond", 0);
+    d->footer.setAsFooter(true);
 
-    d->cond.appendNext(d->footer->emitters().first());
-    d->footer->emitters().first()->appendPrevious(&(d->cond));
+    d->cond.appendNext(d->footer.emitters().first());
+    d->footer.emitters().first()->appendPrevious(&(d->cond));
 
-    d->then_block = new dtkComposerNodeComposite;
-    d->then_block->setTitleHint("Then");
+    d->then_block.setTitleHint("Then");
 
-    d->else_block = new dtkComposerNodeComposite;
-    d->else_block->setTitleHint("Else");
+    d->else_block.setTitleHint("Else");
 }
 
 dtkComposerNodeControlIf::~dtkComposerNodeControlIf(void)
 {
-    delete d->header;
-    delete d->footer;
-    delete d->then_block;
-    delete d->else_block;
     delete d;
 
     d = NULL;
@@ -95,21 +87,21 @@ int dtkComposerNodeControlIf::blockCount(void)
 
 dtkComposerNodeLeaf *dtkComposerNodeControlIf::header(void)
 {
-    return d->header;
+    return &(d->header);
 }
 
 dtkComposerNodeLeaf *dtkComposerNodeControlIf::footer(void)
 {
-    return d->footer;
+    return &(d->footer);
 }
 
 dtkComposerNodeComposite *dtkComposerNodeControlIf::block(int id)
 {
     if(id == 0)
-        return d->then_block;
+        return &(d->then_block);
 
     if(id == 1)
-        return d->else_block;
+        return &(d->else_block);
 
     return NULL;
 }
@@ -138,10 +130,10 @@ int dtkComposerNodeControlIf::selectBranch(void)
 {
     bool value = d->cond.data().toBool();
     
-    foreach(dtkComposerTransmitter *t, d->then_block->emitters())
+    foreach(dtkComposerTransmitter *t, d->then_block.emitters())
         t->setActive(value);
 
-    foreach(dtkComposerTransmitter *t, d->else_block->emitters())
+    foreach(dtkComposerTransmitter *t, d->else_block.emitters())
         t->setActive(!value);
         
     return (!value);

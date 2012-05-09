@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:38:46 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 16 14:16:34 2012 (+0100)
+ * Last-Updated: Wed May  9 09:57:37 2012 (+0200)
  *           By: tkloczko
- *     Update #: 45
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -24,26 +24,22 @@
 class dtkComposerNodeRealPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<qreal> *receiver;
+    dtkComposerTransmitterReceiver<qreal> receiver;
 
 public:
-    dtkComposerTransmitterEmitter<qreal> *emitter;
+    dtkComposerTransmitterEmitter<qreal> emitter;
 };
 
 dtkComposerNodeReal::dtkComposerNodeReal(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeRealPrivate)
 {
-    d->receiver = new dtkComposerTransmitterReceiver<qreal>;
-    this->appendReceiver(d->receiver);
+    this->appendReceiver(&(d->receiver));
 
-    d->emitter = new dtkComposerTransmitterEmitter<qreal>;
-    d->emitter->setData(0);
-    this->appendEmitter(d->emitter);
+    d->emitter.setData(0);
+    this->appendEmitter(&(d->emitter));
 }
 
 dtkComposerNodeReal::~dtkComposerNodeReal(void)
 {
-    delete d->receiver;
-    delete d->emitter;
     delete d;
 
     d = NULL;
@@ -51,16 +47,16 @@ dtkComposerNodeReal::~dtkComposerNodeReal(void)
 
 void dtkComposerNodeReal::run(void)
 {
-    if (!d->receiver->isEmpty())
-        d->emitter->setData(d->receiver->data());
+    if (!d->receiver.isEmpty())
+        d->emitter.setData(d->receiver.data());
 }
 
 double dtkComposerNodeReal::value(void)
 {
-    return d->emitter->data();
+    return d->emitter.data();
 }
 
 void dtkComposerNodeReal::setValue(double value)
 {
-    d->emitter->setData(value);
+    d->emitter.setData(value);
 }

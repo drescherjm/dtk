@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:25:39
  * Version: $Id$
- * Last-Updated: mar. mai  1 00:01:21 2012 (+0200)
+ * Last-Updated: jeu. mai  3 15:21:29 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 198
+ *     Update #: 201
  */
 
 /* Commentary:
@@ -127,7 +127,9 @@ int dtkComposerEvaluatorSlave::exec(void)
             this->connect(d->server);
             if (this->isConnected()) {
                 dtkDebug() << "connected, send our jobid to server" << this->jobId();
-                this->communicator()->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::SETRANK,this->jobId(),rank));
+                dtkDistributedMessage *msg = new dtkDistributedMessage(dtkDistributedMessage::SETRANK,this->jobId(),rank);
+                this->communicator()->socket()->sendRequest(msg);
+                delete msg;
             } else  {
                 dtkFatal() << "Can't connect to server" << d->server;
                 return 1;

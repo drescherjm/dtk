@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: Fri Apr 27 18:26:19 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 717
+ * Last-Updated: jeu. mai  3 15:03:46 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 728
  */
 
 /* Commentary:
@@ -47,7 +47,8 @@ void dtkDistributedSocket::send(dtkAbstractData *data, QString jobid, qint16 tar
 
     array = data->serialize();
     if (!array->isNull()) {
-        this->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,jobid, target, array->size(), type));
+        dtkDistributedMessage msg = dtkDistributedMessage(dtkDistributedMessage::DATA,jobid, target, array->size(), type);
+        this->sendRequest(&msg);
         this->write(*array);
     } else {
         dtkError() << "serialization failed";
@@ -75,7 +76,8 @@ void dtkDistributedSocket::send(QVariant data, QString jobid, qint16 target)
     }
 
     if (!array->isNull()) {
-        this->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,jobid, target, array->size(), type));
+        dtkDistributedMessage msg = dtkDistributedMessage(dtkDistributedMessage::DATA,jobid, target, array->size(), type);
+        this->sendRequest(&msg);
         this->write(*array);
     } else {
         dtkError() << "serialization failed";

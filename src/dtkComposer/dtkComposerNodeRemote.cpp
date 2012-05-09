@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: jeu. mai  3 12:28:36 2012 (+0200)
+ * Last-Updated: jeu. mai  3 15:16:55 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 588
+ *     Update #: 622
  */
 
 /* Commentary:
@@ -139,9 +139,13 @@ void dtkComposerNodeRemote::begin(void)
 
        // send sub-composition to rank 0 on remote node
         QByteArray compo = d->composition.toByteArray();
+        dtkDistributedMessage *msg = new dtkDistributedMessage(dtkDistributedMessage::SETRANK,d->jobid,dtkDistributedMessage::CONTROLLER_RUN_RANK );
         dtkDebug() << "running node remote begin statement on controller, send composition of size " << compo.size();
-        d->server->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::SETRANK,d->jobid,dtkDistributedMessage::CONTROLLER_RUN_RANK ));
-        d->server->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid,0,compo.size(), "xml", compo ));
+        d->server->socket()->sendRequest(msg);
+        delete msg;
+        msg = new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid,0,compo.size(), "xml", compo );
+        d->server->socket()->sendRequest(msg);
+        delete msg;
         dtkDebug() << "composition sent";
         // then send transmitters data
         int max  = this->receivers().count();
@@ -188,7 +192,9 @@ void dtkComposerNodeRemote::begin(void)
                 continue;
             }
             dtkDebug() << "sending transmitter" << i << "of size" << array.size();
-            d->server->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid,0, array.size(), dataType, array));
+            msg = new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid,0,array.size(), dataType, array );
+            d->server->socket()->sendRequest(msg);
+            delete msg;
         }
         d->server->socket()->waitForBytesWritten();
     } else {
@@ -417,8 +423,10 @@ void dtkComposerNodeRemote::end(void)
                         QString type = data->identifier();
                         QByteArray *array = data->serialize();
                         if (!array->isNull()) {
-                            d->slave->communicator()->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid, dtkDistributedMessage::CONTROLLER_RUN_RANK, array->size(), type));
+                            dtkDistributedMessage *req = new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid, dtkDistributedMessage::CONTROLLER_RUN_RANK, array->size(), type);
+                            d->slave->communicator()->socket()->sendRequest(req);
                             d->slave->communicator()->socket()->write(*array);
+                            delete req;
                         } else {
                             dtkError() << "serialization failed in transmitter";
                         }
@@ -434,7 +442,9 @@ void dtkComposerNodeRemote::end(void)
                 default:
                     continue;
                 }
-                d->slave->communicator()->socket()->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid,dtkDistributedMessage::CONTROLLER_RUN_RANK, array.size(), dataType, array));
+                dtkDistributedMessage *req = new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid,dtkDistributedMessage::CONTROLLER_RUN_RANK, array.size(), dataType, array);
+                d->slave->communicator()->socket()->sendRequest(req);
+                delete req;
             } else {
                 //TODO rank >0
             }

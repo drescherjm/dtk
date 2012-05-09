@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  9 16:21:19 2012 (+0200)
+ * Last-Updated: Wed May  9 16:34:11 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 3618
+ *     Update #: 3624
  */
 
 /* Commentary: 
@@ -1871,6 +1871,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
             command->setTargetNode(source);
             command->setOriginPosition(origin->sceneBoundingRect().topLeft());
             command->setTargetPosition(origin->sceneBoundingRect().topLeft());
+            command->redo();
 
             e->up << command;
 
@@ -1891,22 +1892,13 @@ void dtkComposerStackCommandReparentNode::redo(void)
             command->setTargetNode(source);
             command->setOriginPosition(origin->sceneBoundingRect().topLeft());
             command->setTargetPosition(origin->sceneBoundingRect().topLeft());
+            command->redo();
 
             e->down << command;
 
             qDebug() << "1 DOWN more";
         }
     }
-
-    // Execute up commands
-
-    foreach(dtkComposerStackCommandReparentNode *command, e->up)
-        command->redo();
-
-    // Execute down commands
-
-    foreach(dtkComposerStackCommandReparentNode *command, e->down)
-        command->redo();
 
     // Stop if command is composite
 
@@ -1975,13 +1967,21 @@ void dtkComposerStackCommandReparentNode::undo(void)
 
     // Switch target and source ...
 
-    dtkComposerSceneNodeComposite *temp = e->source;
+    dtkComposerSceneNodeComposite *temp;
+
+    temp = e->source;
     e->source = e->target;
     e->target = temp;
 
     // ... and go ...
 
     this->redo();
+
+    // ... and switch back ...
+
+    temp = e->source;
+    e->source = e->target;
+    e->target = temp;
 }
 
 // // /////////////////////////////////////////////////////////////////

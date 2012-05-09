@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. avril 26 13:34:42 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 837
+ * Last-Updated: Wed May  9 14:39:13 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 838
  */
 
 /* Commentary: 
@@ -186,7 +186,7 @@ bool dtkComposerSceneNodeComposite::entered(void)
 
 bool dtkComposerSceneNodeComposite::flattened(void)
 {
-    return d->flattened;
+    return d->flattened || d->root;
 }
 
 void dtkComposerSceneNodeComposite::enter(void)

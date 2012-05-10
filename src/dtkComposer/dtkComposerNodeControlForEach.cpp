@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  9 17:00:57 2012 (+0200)
+ * Last-Updated: Thu May 10 10:20:10 2012 (+0200)
  *           By: tkloczko
- *     Update #: 140
+ *     Update #: 157
  */
 
 /* Commentary: 
@@ -23,6 +23,8 @@
 #include "dtkComposerNodeProxy.h"
 
 #include "dtkComposerTransmitter.h"
+#include "dtkComposerTransmitterEmitter.h"
+#include "dtkComposerTransmitterProxy.h"
 #include "dtkComposerTransmitterVariant.h"
 
 #include <dtkCore/dtkAbstractData.h>
@@ -44,11 +46,14 @@ public:
 public:
     dtkComposerTransmitterVariant header_rcv;
 
-    dtkComposerTransmitterVariant block_var;
+    dtkComposerTransmitterProxy              block_container;
+    dtkComposerTransmitterEmitter<qlonglong> block_size;
+    dtkComposerTransmitterEmitter<qlonglong> block_index;
+    dtkComposerTransmitterVariant            block_item;
 
 public:
     qlonglong counter;
-    qlonglong end;
+    qlonglong size;
 
     dtkAbstractContainer container;
 };
@@ -70,11 +75,20 @@ dtkComposerNodeControlForEach::dtkComposerNodeControlForEach(void) : dtkComposer
     d->footer.setAsFooter(true);
 
     d->body_block.setTitleHint("Body");
-    d->body_block.setInputLabelHint("item", 0); 
-    d->body_block.appendReceiver(&(d->block_var));
+    d->body_block.setInputLabelHint("container", 0); 
+    d->body_block.appendReceiver(&(d->block_container));
+    d->body_block.setInputLabelHint("size", 1); 
+    d->body_block.appendReceiver(&(d->block_size));
+    d->body_block.setInputLabelHint("index", 2); 
+    d->body_block.appendReceiver(&(d->block_index));
+    d->body_block.setInputLabelHint("item", 3); 
+    d->body_block.appendReceiver(&(d->block_item));
+
+    d->block_container.appendPrevious(&d->header_rcv);
+    d->header_rcv.appendNext(&d->block_container);
 
     d->counter = 0;
-    d->end = -1;
+    d->size = -1;
 }
 
 dtkComposerNodeControlForEach::~dtkComposerNodeControlForEach(void)
@@ -111,7 +125,9 @@ void dtkComposerNodeControlForEach::setInputs(void)
 {
     d->container = d->header_rcv.container();
     d->counter = 0;
-    d->end = d->container.count();
+    d->size = d->container.count();
+
+    d->block_size.setData(d->size);
 
     foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
         v->setTwinned(false);
@@ -131,12 +147,13 @@ void dtkComposerNodeControlForEach::setOutputs(void)
 
 void dtkComposerNodeControlForEach::setVariables(void)
 {
-    d->block_var.setData(d->container.at(d->counter));
+    d->block_index.setData(d->counter);
+    d->block_item.setData(d->container.at(d->counter));
 }
 
 int dtkComposerNodeControlForEach::selectBranch(void)
 {
-    return (int)(!((d->counter) < d->end));
+    return (int)(!((d->counter) < d->size));
 }
 
 void dtkComposerNodeControlForEach::begin(void)

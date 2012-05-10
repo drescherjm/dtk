@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 17:02:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 10 10:16:56 2012 (+0200)
+ * Last-Updated: Thu May 10 10:22:17 2012 (+0200)
  *           By: tkloczko
- *     Update #: 104
+ *     Update #: 105
  */
 
 /* Commentary: 
@@ -38,8 +38,6 @@ template <typename T> dtkContainerVector<T>::dtkContainerVector(const dtkContain
 {
     dtkAbstractData::operator=(other);
     this->init();
-
-    qDebug() << __func__ << m_vector.count() << other.m_vector.count();
 };
 
 template <typename T> dtkContainerVector<T>::~dtkContainerVector(void)
@@ -58,9 +56,6 @@ template <typename T> dtkContainerVector<T>& dtkContainerVector<T>::operator = (
 
 template <typename T> dtkContainerVector<T> *dtkContainerVector<T>::clone(void) const
 {
-
-    qDebug() << __func__ << m_vector.count();
-
     return new dtkContainerVector<T>(*this);
 };
 
@@ -131,8 +126,6 @@ template <typename T> inline bool dtkContainerVector<T>::contains(const QVariant
 
 template <typename T> inline dtkxarch_int dtkContainerVector<T>::count(void) const
 {
-    qDebug() << __func__ << m_vector.count();
-
     return m_vector.count();
 };
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. avril 13 16:28:18 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 1974
+ * Last-Updated: Wed May  9 16:56:35 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 1976
  */
 
 /* Commentary:
@@ -266,12 +266,12 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
             int body = 0;
             d->addDummyEdge(    begin, inputs, node);
             d->addDummyEdge(   inputs, select, node);
-            d->addDummyEdge(   select, d->begin(blocks[body]), node);
+            d->addDummyEdge(   select, vars, node);
+            d->addDummyEdge(   vars, d->begin(blocks[body]), node);
             d->addDummyEdge(   select, end, node, 1);
             d->addDummyEdge( d->end(blocks[body]), outputs,  node);
-            d->addDummyEdge(outputs, vars, node);
-            d->addDummyEdge(     vars, select, node);
-            vars->setEndLoop();
+            d->addDummyEdge(outputs, select, node);
+            outputs->setEndLoop();
 
         } else if (dynamic_cast<dtkComposerNodeControlWhile *>(wrapee)) {
             QList<dtkComposerSceneNodeComposite *> blocks  = dynamic_cast<dtkComposerSceneNodeControl *>(node)->blocks();

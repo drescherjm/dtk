@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 16:15:20 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May  7 16:54:32 2012 (+0200)
+ * Last-Updated: Wed May  9 14:33:21 2012 (+0200)
  *           By: tkloczko
- *     Update #: 84
+ *     Update #: 85
  */
 
 /* Commentary: 
@@ -71,6 +71,11 @@ dtkAbstractContainer *dtkAbstractContainer::clone(void) const
         return m_container->clone();
 
     return NULL;
+}
+
+QString dtkAbstractContainer::identifier(void) const
+{
+    return "dtkAbstractContainer";
 }
 
 dtkAbstractContainer::Type dtkAbstractContainer::type(void) const

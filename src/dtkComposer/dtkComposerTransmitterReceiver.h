@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May  7 16:02:14 2012 (+0200)
+ * Last-Updated: Thu May 10 10:45:47 2012 (+0200)
  *           By: tkloczko
- *     Update #: 73
+ *     Update #: 74
  */
 
 /* Commentary: 
@@ -41,7 +41,7 @@ public:
     ~dtkComposerTransmitterReceiver(void);
 
 public:
-    T data(void);
+    const T& data(void);
 
 public:
     const dtkAbstractContainer& container(void) const;

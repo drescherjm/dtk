@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May  7 16:02:30 2012 (+0200)
+ * Last-Updated: Thu May 10 10:50:16 2012 (+0200)
  *           By: tkloczko
- *     Update #: 208
+ *     Update #: 212
  */
 
 /* Commentary: 
@@ -55,13 +55,13 @@ template <typename T> dtkComposerTransmitterReceiver<T>::~dtkComposerTransmitter
 /*! 
  *  
  */
-template <typename T> T dtkComposerTransmitterReceiver<T>::data(void)
+template <typename T> const T& dtkComposerTransmitterReceiver<T>::data(void)
 {
     if (active_emitter)
         return active_emitter->data();
 
     if (active_variant)
-        return qvariant_cast<T>(active_variant->data());
+        m_data = qvariant_cast<T>(active_variant->data());
 
     return m_data;
 };

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:33:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May  7 15:58:23 2012 (+0200)
+ * Last-Updated: Thu May 10 10:43:52 2012 (+0200)
  *           By: tkloczko
- *     Update #: 69
+ *     Update #: 70
  */
 
 /* Commentary: 
@@ -38,7 +38,7 @@ public:
 public:
     inline void setData(const T& data);
 
-    inline T data(void);
+    inline const T& data(void);
 
 public:
     inline void setVector(const dtkContainerVector<T>& vector);

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 17:02:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May  7 16:13:58 2012 (+0200)
+ * Last-Updated: Thu May 10 10:22:17 2012 (+0200)
  *           By: tkloczko
- *     Update #: 97
+ *     Update #: 105
  */
 
 /* Commentary: 
@@ -111,7 +111,7 @@ template <typename T> inline void dtkContainerVector<T>::replace(const QVariant&
 
 template <typename T> inline void dtkContainerVector<T>::resize(dtkxarch_int size)
 {
-    m_vector.resize(size);
+    m_vector.reserve(size);
 };
 
 template <typename T> inline bool dtkContainerVector<T>::isEmpty(void) const

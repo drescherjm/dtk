@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May  9 12:14:10 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May  9 14:31:24 2012 (+0200)
+ * Last-Updated: Thu May 10 11:39:47 2012 (+0200)
  *           By: tkloczko
- *     Update #: 44
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -18,8 +18,8 @@
  */
 
 #include "dtkComposerNodeContainerData.h"
-#include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
+#include "dtkComposerTransmitterVariant.h"
 
 #include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkContainerList.h>
@@ -36,7 +36,7 @@ public:
     dtkComposerTransmitterReceiver<qlonglong> receiver_int;
 
 public:    
-    dtkComposerTransmitterEmitter<dtkAbstractContainer> emitter;
+    dtkComposerTransmitterVariant emitter;
 
 public:
     dtkAbstractContainer *container;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 28 17:10:13 2012 (+0200)
- *           By: tkloczko
- *     Update #: 176
+ * Last-Updated: Thu May 10 10:34:59 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 177
  */
 
 /* Commentary: 
@@ -126,6 +126,7 @@ public:
 
 public:
     void setParent(void);
+    void setParent(dtkComposerSceneNodeComposite *parent);
 
 private:
     dtkComposerStackCommandCreateEdgePrivate *e;

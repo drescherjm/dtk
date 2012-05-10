@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May  7 16:57:01 2012 (+0200)
+ * Last-Updated: Thu May 10 10:44:00 2012 (+0200)
  *           By: tkloczko
- *     Update #: 155
+ *     Update #: 156
  */
 
 /* Commentary: 
@@ -61,7 +61,7 @@ template <typename T> inline void dtkComposerTransmitterEmitter<T>::setData(cons
 /*! 
  *  
  */
-template <typename T> inline T dtkComposerTransmitterEmitter<T>::data(void)
+template <typename T> inline const T& dtkComposerTransmitterEmitter<T>::data(void)
 {
     return m_data;
 };

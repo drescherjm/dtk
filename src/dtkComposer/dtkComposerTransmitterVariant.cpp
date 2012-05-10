@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  9 14:28:36 2012 (+0200)
+ * Last-Updated: Thu May 10 11:02:08 2012 (+0200)
  *           By: tkloczko
- *     Update #: 396
+ *     Update #: 401
  */
 
 /* Commentary: 
@@ -80,7 +80,7 @@ void dtkComposerTransmitterVariant::setData(const dtkAbstractContainer& data)
     }
 }
 
-QVariant dtkComposerTransmitterVariant::data(void)
+const QVariant& dtkComposerTransmitterVariant::data(void)
 {
     if (e->twinned)
         return d->variant;

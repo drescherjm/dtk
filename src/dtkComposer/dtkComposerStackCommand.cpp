@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 10 11:23:39 2012 (+0200)
+ * Last-Updated: Thu May 10 12:16:04 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 3745
+ *     Update #: 3766
  */
 
 /* Commentary: 
@@ -1931,7 +1931,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
     if(e->up.count() || e->down.count())
         return;
 
-// /////////////////////////////////////////////////////////////////
+    { // /////////////////////////////////////////////////////////////////
 
     // Deal with edges
 
@@ -1952,17 +1952,15 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
                 if(e->destination() == proxy) {
 
-                    { // Create edge
-
-                        dtkComposerStackCommandCreateEdge *command = new dtkComposerStackCommandCreateEdge;
+                    { // Destroy edge
+                        
+                        dtkComposerStackCommandDestroyEdge *command = new dtkComposerStackCommandDestroyEdge;
                         command->setFactory(d->factory);
                         command->setScene(d->scene);
                         command->setGraph(d->graph);
-                        command->setSource(e->source());
-                        command->setDestination(edge->destination());
-                        command->setParent(target);
+                        command->setEdge(edge);
                         command->redo();
-
+                        
                     }
 
                     { // Destroy edge
@@ -1976,10 +1974,46 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
                     }
 
+                    { // Create edge
+
+                        dtkComposerStackCommandCreateEdge *command = new dtkComposerStackCommandCreateEdge;
+                        command->setFactory(d->factory);
+                        command->setScene(d->scene);
+                        command->setGraph(d->graph);
+                        command->setSource(e->source());
+                        command->setDestination(edge->destination());
+                        command->setParent(target);
+                        command->redo();
+
+                    }
+
+                    qDebug() << __func__ << "input" << target->inputDegree(proxy) + target->outputDegree(proxy);
+
+                    if(target->inputDegree(proxy) + target->outputDegree(proxy) == 0) {
+
+                        dtkComposerStackCommandDestroyPort *command = new dtkComposerStackCommandDestroyPort;
+                        command->setFactory(d->factory);
+                        command->setScene(d->scene);
+                        command->setGraph(d->graph);
+                        command->setNode(target);
+                        command->setPort(proxy);
+                        command->redo();
+                    }
                 }
             }
 
         } else if(edge->source()->node()->parent() == source) {
+
+            { // Destroy edge
+                
+                dtkComposerStackCommandDestroyEdge *command = new dtkComposerStackCommandDestroyEdge;
+                command->setFactory(d->factory);
+                command->setScene(d->scene);
+                command->setGraph(d->graph);
+                command->setEdge(edge);
+                command->redo();
+                
+            }
 
             { // Create port
 
@@ -2031,17 +2065,6 @@ void dtkComposerStackCommandReparentNode::redo(void)
         } else {
 
             qDebug() << __func__ << "Unhandled case";
-        }
-
-        { // Destroy edge
-
-        dtkComposerStackCommandDestroyEdge *command = new dtkComposerStackCommandDestroyEdge;
-        command->setFactory(d->factory);
-        command->setScene(d->scene);
-        command->setGraph(d->graph);
-        command->setEdge(edge);
-        command->redo();
-
         }
     }
 
@@ -2057,17 +2080,15 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
                 if(e->source() == proxy) {
 
-                    { // Create edge
-
-                        dtkComposerStackCommandCreateEdge *command = new dtkComposerStackCommandCreateEdge;
+                    { // Destroy edge
+                        
+                        dtkComposerStackCommandDestroyEdge *command = new dtkComposerStackCommandDestroyEdge;
                         command->setFactory(d->factory);
                         command->setScene(d->scene);
                         command->setGraph(d->graph);
-                        command->setSource(edge->source());
-                        command->setDestination(e->destination());
-                        command->setParent(target);
+                        command->setEdge(edge);
                         command->redo();
-
+                        
                     }
 
                     { // Destroy edge
@@ -2081,29 +2102,65 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
                     }
 
+                    { // Create edge
+
+                        dtkComposerStackCommandCreateEdge *command = new dtkComposerStackCommandCreateEdge;
+                        command->setFactory(d->factory);
+                        command->setScene(d->scene);
+                        command->setGraph(d->graph);
+                        command->setSource(edge->source());
+                        command->setDestination(e->destination());
+                        command->setParent(target);
+                        command->redo();
+
+                    }
+
+                    qDebug() << __func__ << "output" << target->inputDegree(proxy) + target->outputDegree(proxy);
+
+                    if(target->inputDegree(proxy) + target->outputDegree(proxy) == 0) {
+
+                        dtkComposerStackCommandDestroyPort *command = new dtkComposerStackCommandDestroyPort;
+                        command->setFactory(d->factory);
+                        command->setScene(d->scene);
+                        command->setGraph(d->graph);
+                        command->setNode(target);
+                        command->setPort(proxy);
+                        command->redo();
+                    }
                 }
             }
 
         } else if(edge->destination()->node()->parent() == source) {
 
+            { // Destroy edge
+                
+                dtkComposerStackCommandDestroyEdge *command = new dtkComposerStackCommandDestroyEdge;
+                command->setFactory(d->factory);
+                command->setScene(d->scene);
+                command->setGraph(d->graph);
+                command->setEdge(edge);
+                command->redo();
+                
+            }
+
             { // Create port
 
-            dtkComposerStackCommandCreatePort *command = new dtkComposerStackCommandCreatePort;
-            command->setFactory(d->factory);
-            command->setScene(d->scene);
-            command->setGraph(d->graph);
-            command->setKind(dtkComposerTransmitter::Proxy);
-            if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down)
-                command->setNode(target);
-            if(e->direction == dtkComposerStackCommandReparentNodePrivate::Up)
-                command->setNode(source);
-            if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down)
-                command->setType(dtkComposerScenePort::Output);
-            if(e->direction == dtkComposerStackCommandReparentNodePrivate::Up)
-                command->setType(dtkComposerScenePort::Input);
-            command->redo();
-            
-            proxy = command->port();
+                dtkComposerStackCommandCreatePort *command = new dtkComposerStackCommandCreatePort;
+                command->setFactory(d->factory);
+                command->setScene(d->scene);
+                command->setGraph(d->graph);
+                command->setKind(dtkComposerTransmitter::Proxy);
+                if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down)
+                    command->setNode(target);
+                if(e->direction == dtkComposerStackCommandReparentNodePrivate::Up)
+                    command->setNode(source);
+                if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down)
+                    command->setType(dtkComposerScenePort::Output);
+                if(e->direction == dtkComposerStackCommandReparentNodePrivate::Up)
+                    command->setType(dtkComposerScenePort::Input);
+                command->redo();
+                
+                proxy = command->port();
 
             }
 
@@ -2137,20 +2194,9 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
             qDebug() << __func__ << "Unhandled case";
         }
-
-        { // Destroy edge
-
-        dtkComposerStackCommandDestroyEdge *command = new dtkComposerStackCommandDestroyEdge;
-        command->setFactory(d->factory);
-        command->setScene(d->scene);
-        command->setGraph(d->graph);
-        command->setEdge(edge);
-        command->redo();
-
-        }
     }
 
-// /////////////////////////////////////////////////////////////////
+    } // /////////////////////////////////////////////////////////////////
 
     // Notify source about reparenting
 

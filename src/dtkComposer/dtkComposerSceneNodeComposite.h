@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:32:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 16 12:20:22 2012 (+0200)
+ * Last-Updated: Thu May 10 12:07:57 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 61
+ *     Update #: 63
  */
 
 /* Commentary: 
@@ -59,6 +59,10 @@ public:
     dtkComposerSceneNoteList notes(void);
     dtkComposerSceneNodeList nodes(void);
     dtkComposerSceneEdgeList edges(void);
+
+public:
+    int  inputDegree(dtkComposerScenePort *port);
+    int outputDegree(dtkComposerScenePort *port);
 
 public:
     bool entered(void);

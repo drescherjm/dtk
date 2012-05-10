@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  9 14:39:13 2012 (+0200)
+ * Last-Updated: Thu May 10 12:16:35 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 838
+ *     Update #: 846
  */
 
 /* Commentary: 
@@ -177,6 +177,28 @@ dtkComposerSceneNodeList dtkComposerSceneNodeComposite::nodes(void)
 dtkComposerSceneEdgeList dtkComposerSceneNodeComposite::edges(void)
 {
     return d->edges;
+}
+
+int dtkComposerSceneNodeComposite::inputDegree(dtkComposerScenePort *port)
+{
+    int degree = 0;
+
+    foreach(dtkComposerSceneEdge *edge, d->edges)
+        if(edge->destination() == port)
+            degree++;
+
+    return degree;
+}
+
+int dtkComposerSceneNodeComposite::outputDegree(dtkComposerScenePort *port)
+{
+    int degree = 0;
+
+    foreach(dtkComposerSceneEdge *edge, d->edges)
+        if(edge->source() == port)
+            degree++;
+
+    return degree;
 }
 
 bool dtkComposerSceneNodeComposite::entered(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 24 23:29:24 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May  3 11:09:59 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 145
+ * Last-Updated: ven. mai 11 16:18:49 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 149
  */
 
 /* Commentary: 
@@ -78,6 +78,7 @@ dtkComposerNodeView::~dtkComposerNodeView(void)
 void dtkComposerNodeView::run(void)
 {
     emit runned();
+    qApp->processEvents();
 }
 
 QString dtkComposerNodeView::type(void)

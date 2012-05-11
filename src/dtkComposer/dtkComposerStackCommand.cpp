@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. mai 11 09:11:33 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 3870
+ * Last-Updated: Fri May 11 17:39:42 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 3907
  */
 
 /* Commentary: 
@@ -1851,11 +1851,15 @@ void dtkComposerStackCommandReparentNode::setOriginNode(dtkComposerSceneNode *no
 {
     e->origin = node;
     e->source = dynamic_cast<dtkComposerSceneNodeComposite *>(node->parent());
+
+    qDebug() << e->source->title();
 }
 
 void dtkComposerStackCommandReparentNode::setTargetNode(dtkComposerSceneNode *node)
 {
     e->target = dynamic_cast<dtkComposerSceneNodeComposite *>(node);
+
+    qDebug() << e->target->title();
 }
 
 void dtkComposerStackCommandReparentNode::setOriginPosition(QPointF position)
@@ -1886,9 +1890,22 @@ void dtkComposerStackCommandReparentNode::redo(void)
     // qDebug() << "target:" << e->target->title();
     // qDebug() << "origin:" << e->origin->title();
 
+    dtkComposerSceneNodeComposite *source_parent = NULL;
+    dtkComposerSceneNodeComposite *target_parent = NULL;
+
+    if (e->source->embedded())
+        source_parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->source->parent()->parent());
+    else
+        source_parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->source->parent());
+
+    if (e->target->embedded())
+        target_parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->target->parent()->parent());
+    else
+        target_parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->target->parent());
+    
     // Choose the direction - Are we going down ?
 
-    if(e->direction == dtkComposerStackCommandReparentNodePrivate::None && e->source == e->target->parent()) {
+    if (e->direction == dtkComposerStackCommandReparentNodePrivate::None && e->source == target_parent) {
 
         e->direction = dtkComposerStackCommandReparentNodePrivate::Down;
 
@@ -1896,7 +1913,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
         // Choose the direction - Are we going up ?
 
-    } else if(e->direction == dtkComposerStackCommandReparentNodePrivate::None && e->source->parent() == e->target) {
+    } else if(e->direction == dtkComposerStackCommandReparentNodePrivate::None && source_parent == e->target) {
 
         e->direction = dtkComposerStackCommandReparentNodePrivate::Up;
 
@@ -1919,7 +1936,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
         while(source != root) {
 
-            source = dynamic_cast<dtkComposerSceneNodeComposite *>(source->parent());
+            source = dynamic_cast<dtkComposerSceneNodeComposite *>(source_parent);
 
             dtkComposerStackCommandReparentNode *command = new dtkComposerStackCommandReparentNode;
             command->e->direction = dtkComposerStackCommandReparentNodePrivate::Up;
@@ -1993,16 +2010,24 @@ void dtkComposerStackCommandReparentNode::redo(void)
         dtkComposerSceneEdgeList inputEdges  = origin->inputEdges();
         dtkComposerSceneEdgeList targetEdges = target->edges();
 
+        dtkComposerSceneNode *s_parent = NULL;
+        dtkComposerSceneNode *t_parent = NULL;
+
         // Deal with input edges
 
         foreach(dtkComposerSceneEdge *edge, inputEdges) {
 
+            if (edge->source()->node()->parent()->embedded())
+                s_parent = dynamic_cast<dtkComposerSceneNodeComposite *>(edge->source()->node()->parent()->parent());
+            else
+                s_parent = dynamic_cast<dtkComposerSceneNodeComposite *>(edge->source()->node()->parent());
+            
             if(edge->source()->node() == target) {
-
+                
                 proxy = edge->source();
-
+                
                 { // Destroy edge
-
+                    
                     dtkComposerStackCommandDestroyEdge *command = new dtkComposerStackCommandDestroyEdge;
                     command->setFactory(d->factory);
                     command->setScene(d->scene);
@@ -2049,7 +2074,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
                     e->dps << command;
                 }
 
-            } else if(edge->source()->node()->parent() == source) {
+            } else if(s_parent == source) {
 
                 { // Destroy edge
 
@@ -2073,6 +2098,11 @@ void dtkComposerStackCommandReparentNode::redo(void)
         // Deal with output edges
 
         foreach(dtkComposerSceneEdge *edge, outputEdges) {
+            
+            if (edge->destination()->node()->parent()->embedded())
+                t_parent = dynamic_cast<dtkComposerSceneNodeComposite *>(edge->destination()->node()->parent()->parent());
+            else
+                t_parent = dynamic_cast<dtkComposerSceneNodeComposite *>(edge->destination()->node()->parent());
 
             if(edge->destination()->node() == target) {
 
@@ -2125,7 +2155,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
                     e->dps << command;
                 }
 
-            } else if(edge->destination()->node()->parent() == source) {
+            } else if(t_parent == source) {
 
                 { // Destroy edge
 
@@ -2152,14 +2182,37 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
         e->source->removeNode(e->origin);
 
-        // Notify origin about reparenting
+        // Remove node from the scene if source is not flattened 
 
-        e->origin->setParent(e->target);
-        e->origin->setPos(e->target_pos);
+        if (e->source->flattened() || e->source == d->scene->current()) {
+            d->scene->removeItem(e->origin);
+        }
 
         // Notify target about reparenting
 
         e->target->addNode(e->origin);
+
+        // Notify origin about reparenting
+
+        e->origin->setParent(e->target);
+
+        // Add node in the scene at its right z-value.
+        
+        if (e->target == d->scene->current()) {
+            d->scene->addItem(e->origin);
+
+        } else if (e->target->flattened()) {
+            d->scene->addItem(e->origin);
+            if (e->target->embedded() && !e->target->entered())
+                e->target->parent()->stackBefore(e->origin);
+            else
+                e->target->stackBefore(e->origin);
+            
+        }
+
+        // Set node position 
+
+        e->origin->setPos(e->target_pos);
 
         // Deal with input edges
 
@@ -2346,7 +2399,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
         e->dirty = false;
 
-    } else if(!e->back) {
+    } else if(!e->back) { // redo
 
         foreach(dtkComposerStackCommand *command, e->des)
             command->redo();
@@ -2360,14 +2413,39 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
         e->source->removeNode(e->origin);
 
-        // Notify origin about reparenting
+        // Remove node from the scene if source is not flattened 
 
-        e->origin->setParent(e->target);
-        e->origin->setPos(e->target_pos);
+        if (e->source->flattened() || e->source == d->scene->current()) {
+            d->scene->removeItem(e->origin);
+        }
 
         // Notify target about reparenting
 
         e->target->addNode(e->origin);
+
+        // Notify origin about reparenting
+
+        e->origin->setParent(e->target);
+
+        // Add node in the scene at its right z-value.
+        
+        if (e->target == d->scene->current()) {
+            d->scene->addItem(e->origin);
+
+        } else if (e->target->flattened()) {
+            d->scene->addItem(e->origin);
+            if (e->target->embedded() && !e->target->entered())
+                e->target->parent()->stackBefore(e->origin);
+            else
+                e->target->stackBefore(e->origin);
+            
+        }
+
+        // Set node position 
+
+        e->origin->setPos(e->target_pos);
+
+        // 
 
         foreach(dtkComposerStackCommand *command, e->cps)
             command->redo();
@@ -2384,10 +2462,22 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
         e->source->removeNode(e->origin);
 
+        if (e->source->flattened()) {
+            e->source->layout();
+            d->scene->removeItem(e->origin);
+        } else if (e->source == d->scene->current()) {
+            d->scene->removeItem(e->origin);
+        }
+
         // Notify origin about reparenting
 
+        e->target->addNode(e->origin);
         e->origin->setParent(e->target);
-        e->origin->setPos(e->target_pos);
+        e->origin->setPos(e->origin_pos);
+
+
+        if (e->target->flattened() || e->target->entered() || e->target->root())
+            d->scene->addItem(e->origin);
 
     }
 
@@ -2395,21 +2485,21 @@ void dtkComposerStackCommandReparentNode::redo(void)
     e->source->layout();
     e->target->layout();
 
-    // Notify the scene
+    // // Notify the scene
 
-    if(e->source->flattened() || e->source == d->scene->current()) {
+    // if(e->source->flattened() || e->source == d->scene->current()) {
 
-        // qDebug() << "Removing origin from scene";
+    //     // qDebug() << "Removing origin from scene";
 
-        d->scene->removeItem(e->origin);
-    }
+    //     d->scene->removeItem(e->origin);
+    // }
 
-    if(e->target->flattened() || e->target == d->scene->current()) {
+    // if(e->target->flattened() || e->target == d->scene->current()) {
 
-        // qDebug() << "Adding origin to scene";
+    //     // qDebug() << "Adding origin to scene";
 
-        d->scene->addItem(e->origin);
-    }
+    //     d->scene->addItem(e->origin);
+    // }
     d->graph->layout();
     d->scene->modify(true);
     d->scene->update();

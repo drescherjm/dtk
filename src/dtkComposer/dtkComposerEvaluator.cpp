@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 10 13:58:18 2012 (+0200)
- *           By: tkloczko
- *     Update #: 529
+ * Last-Updated: ven. mai 11 16:05:25 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 530
  */
 
 /* Commentary:
@@ -162,8 +162,6 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
                 d->stack << node;
         }
     }
-
-    qApp->processEvents();
 
     return !d->stack.isEmpty();
 }

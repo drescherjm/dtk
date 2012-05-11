@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. avril 25 16:39:33 2012 (+0200)
+ * Last-Updated: ven. mai 11 15:23:06 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 1585
+ *     Update #: 1586
  */
 
 /* Commentary: 
@@ -304,6 +304,7 @@ void dtkDistributedController::deploy(const QUrl& server)
                       // and the server will stop when the ssh process
                       // is killed
         args << "-t"; // do it twice to force tty allocation
+        args << "-x"; // disable X11 forwarding 
         args << server.host();
 
         serverProc->setProcessChannelMode(QProcess::MergedChannels);

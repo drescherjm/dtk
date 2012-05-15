@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:39:36 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. mars 16 17:23:54 2012 (+0100)
+ * Last-Updated: mar. mai 15 14:20:46 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 17
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -30,6 +30,9 @@ public:
     dtkComposerGraph *graph;
     dtkComposerGraphNodeList stack;
     dtkComposerGraphNode *current;
+
+public:
+    bool should_stop;
 };
 
 #endif

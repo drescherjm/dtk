@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:30:36 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. mars 27 10:08:35 2012 (+0200)
+ * Last-Updated: mar. mai 15 14:20:01 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 20
+ *     Update #: 22
  */
 
 /* Commentary: 
@@ -47,6 +47,7 @@ public:
     void cont(bool run_concurrent = false);
     bool step(bool run_concurrent = false);
     void next(bool run_concurrent = false);
+    void stop();
 
 public:
     void  logStack(void);

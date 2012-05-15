@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Wed May  9 14:10:58 2012 (+0200)
+ * Last-Updated: Tue May 15 12:23:16 2012 (+0200)
  *           By: tkloczko
- *     Update #: 565
+ *     Update #: 568
  */
 
 /* Commentary:
@@ -21,6 +21,7 @@
 
 #include "dtkComposerFactory.h"
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeArrayScalar.h"
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
 #include "dtkComposerNodeConstants.h"
@@ -133,6 +134,13 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["Data Container"] = "<p>Description not yet filled!</p>";
     d->tags["Data Container"] = QStringList() << "container" << "data";
     d->types["Data Container"] = "data_container";
+
+    // Array
+
+    d->nodes << "Scalar Array";
+    d->descriptions["Scalar Array"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array"] = QStringList() << "container" << "array" << "scalar" ;
+    d->types["Scalar Array"] = "array_scalar";
     
     // Algebraic nodes
 
@@ -648,6 +656,11 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "data_container")
         return new dtkComposerNodeContainerData;
+
+    // Array nodes
+
+    if(type == "array_scalar")
+        return new dtkComposerNodeArrayScalar;
 
     // algebraic nodes
 

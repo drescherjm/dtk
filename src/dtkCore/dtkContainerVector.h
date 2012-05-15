@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 16:38:14 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May  7 16:14:08 2012 (+0200)
+ * Last-Updated: Tue May 15 12:18:15 2012 (+0200)
  *           By: tkloczko
- *     Update #: 59
+ *     Update #: 64
  */
 
 /* Commentary: 
@@ -95,5 +95,16 @@ private:
 // /////////////////////////////////////////////////////////////////
 
 #include "dtkContainerVector.tpp"
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
+#include <QtCore>
+
+typedef dtkContainerVector<qreal> dtkContainerVectorReal;
+
+Q_DECLARE_METATYPE(dtkContainerVectorReal  );
+Q_DECLARE_METATYPE(dtkContainerVectorReal *);
 
 #endif

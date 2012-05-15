@@ -1,0 +1,80 @@
+/* dtkComposerNodeArrayScalarOperatorModifier.h ---
+ *
+ * Author: sblekout
+ * Copyright (C) 2011 - babette lekouta, Inria.
+ * Created: Thu Apr 26 16:14:44 2012 (+0200)
+ * Version: $Id$
+ * Last-Updated: Thu Apr 26 17:34:34 2012 (+0200)
+ *           By: sblekout
+ *     Update #: 38
+ */
+
+/* Commentary:
+ *
+ */
+
+/* Change log:
+ *
+ */
+
+
+#ifndef DTKCOMPOSERNODEARRAYSCALAROPERATORMODIFIER_H
+#define DTKCOMPOSERNODEARRAYSCALAROPERATORMODIFIER_H
+
+#include "dtkComposerExport.h"
+#include "dtkComposerNodeLeaf.h"
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeArrayScalarOperatorModifier interface
+// /////////////////////////////////////////////////////////////////
+
+
+class dtkComposerNodeArrayScalarOperatorModifierPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorModifier : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeArrayScalarOperatorModifier(void);
+    ~dtkComposerNodeArrayScalarOperatorModifier(void);
+
+public:
+    inline QString inputLabelHint(int port) {
+        if (port == 0)
+            return "array";
+        else if (port == 1)
+            return "index";
+        else
+            return "value";
+    }
+
+    inline QString outputLabelHint(int) {
+        return "array";
+    }
+
+protected:
+    dtkComposerNodeArrayScalarOperatorModifierPrivate *d;
+};
+
+
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeArrayScalarOperator - insert
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorInsert : public dtkComposerNodeArrayScalarOperatorModifier
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "array_scalar_insert";
+    }
+
+    inline QString titleHint(void) {
+        return "Scalar array insert";
+    }
+};
+
+
+#endif

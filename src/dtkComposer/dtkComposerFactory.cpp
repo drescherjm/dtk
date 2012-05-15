@@ -22,6 +22,7 @@
 #include "dtkComposerFactory.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeArrayScalar.h"
+#include "dtkComposerNodeArrayScalarOperatorModifier.h"
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
 #include "dtkComposerNodeConstants.h"
@@ -141,6 +142,11 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["Scalar Array"] = "<p>Description not yet filled!</p>";
     d->tags["Scalar Array"] = QStringList() << "container" << "array" << "scalar" ;
     d->types["Scalar Array"] = "array_scalar";
+
+    d->nodes << "Scalar Array Insert";
+    d->descriptions["Scalar Array Insert"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Insert"] = QStringList() << "container" << "array" << "scalar"  << "insert" ;
+    d->types["Scalar Array Insert"] = "array_scalar_insert";
     
     // Algebraic nodes
 
@@ -436,7 +442,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Notalmosteq"] = QStringList() << "number" << "operator" << "binary" << "notalmosteq";
     d->types["Notalmosteq"] = "notalmosteq";
 
-// /////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
 
     d->nodes << "Not";
     d->descriptions["Not"] = "<p>Description not yet filled!</p>";
@@ -538,9 +544,9 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->types["Remote"] = "remote";
 
 
-// /////////////////////////////////////////////////////////////////
-// NITE nodes
-// /////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
+    // NITE nodes
+    // /////////////////////////////////////////////////////////////////
 
 #if defined(DTK_HAVE_NITE)
     d->nodes << "KinectTracker";
@@ -548,9 +554,9 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->types["KinectTracker"] = "kinectTracker";
 #endif
 
-// /////////////////////////////////////////////////////////////////
-// VRPN nodes
-// /////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
+    // VRPN nodes
+    // /////////////////////////////////////////////////////////////////
 
 #if defined(DTK_HAVE_VRPN)
     d->nodes << "VrpnTracker";
@@ -558,9 +564,9 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->types["VrpnTracker"] = "vrpnTracker";
 #endif
 
-// /////////////////////////////////////////////////////////////////
-// MPI nodes
-// /////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
+    // MPI nodes
+    // /////////////////////////////////////////////////////////////////
 
 #if defined(DTK_HAVE_MPI)
     d->nodes << "World";
@@ -661,6 +667,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "array_scalar")
         return new dtkComposerNodeArrayScalar;
+
+    if(type == "array_scalar_insert")
+        return new dtkComposerNodeArrayScalarOperatorInsert;
 
     // algebraic nodes
 
@@ -893,27 +902,27 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "view")
         return new dtkComposerNodeView;
 
-// /////////////////////////////////////////////////////////////////
-// NITE nodes
-// /////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
+    // NITE nodes
+    // /////////////////////////////////////////////////////////////////
 
 #if defined(DTK_HAVE_NITE)
     if(type == "kinectTracker")
         return new dtkComposerNodeTrackerKinect;
 #endif
 
-// /////////////////////////////////////////////////////////////////
-// VRPN nodes
-// /////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
+    // VRPN nodes
+    // /////////////////////////////////////////////////////////////////
 
 #if defined(DTK_HAVE_VRPN)
     if(type == "vrpnTracker")
         return new dtkComposerNodeTrackerVrpn;
 #endif
 
-// /////////////////////////////////////////////////////////////////
-// MPI nodes
-// /////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
+    // MPI nodes
+    // /////////////////////////////////////////////////////////////////
 
 #if defined(DTK_HAVE_MPI)
     if(type == "world")

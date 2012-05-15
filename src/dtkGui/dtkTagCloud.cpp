@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:27 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 17 14:53:49 2012 (+0200)
+ * Last-Updated: Tue May 15 14:13:33 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1551
+ *     Update #: 1562
  */
 
 /* Commentary: 
@@ -419,6 +419,16 @@ dtkTagScopeTag::~dtkTagScopeTag(void)
     d = NULL;
 }
 
+void dtkTagScopeTag::setDark(void)
+{
+    d->fg->setStyleSheet(
+        "border-image: url(:dtkGui/pixmaps/dtk-tag_fg_dark.png) 3 10 3 10;"
+        "border-top: 3px transparent;"
+        "border-bottom: 3px transparent;"
+        "border-right: 10px transparent;"
+        "border-left: 10px transparent;");
+}
+
 QSize dtkTagScopeTag::sizeHint(void) const
 {
     return QSize(d->width + d->offset_max, d->height);
@@ -510,6 +520,9 @@ public:
 
 public:
     dtkFlowLayout *layout;
+
+public:
+    bool light;
 };
 
 dtkTagScope::dtkTagScope(QWidget *parent) : QFrame(parent)
@@ -517,6 +530,8 @@ dtkTagScope::dtkTagScope(QWidget *parent) : QFrame(parent)
     Q_INIT_RESOURCE(dtkGui);
 
     d = new dtkTagScopePrivate;
+
+    d->light = true;
 
     d->completer_model = new QStringListModel(this);
 
@@ -591,6 +606,10 @@ void dtkTagScope::clear(void)
     d->edit->clear();
 }
 
+void dtkTagScope::setDark(void)
+{
+    d->light = false;
+}
 
 void dtkTagScope::toggle(void)
 {
@@ -608,6 +627,8 @@ void dtkTagScope::render(void)
 
     foreach(QString filter, d->filters) {
         dtkTagScopeTag *tag = new dtkTagScopeTag;
+        if(!d->light)
+            tag->setDark();
         tag->setText(filter);
         if(d->counts.contains(filter))
             tag->setCount(d->counts[filter]);

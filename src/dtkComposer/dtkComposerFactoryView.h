@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 13:22:54 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 16 12:19:00 2012 (+0200)
+ * Last-Updated: Tue May 15 14:14:46 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 17
+ *     Update #: 18
  */
 
 /* Commentary: 
@@ -38,6 +38,9 @@ public:
 
 public:
     void setFactory(dtkComposerFactory *factory);
+
+public:
+    void setDark(void);
 
 private:
     dtkComposerFactoryViewPrivate *d;

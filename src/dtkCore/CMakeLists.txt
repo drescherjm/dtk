@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Sun May  6 16:03:35 2012 (+0200)
-##           By: tkloczko
-##     Update #: 286
+## Last-Updated: Tue May 15 13:35:15 2012 (+0200)
+##           By: Julien Wintz
+##     Update #: 291
 ######################################################################
 ## 
 ### Commentary: 
@@ -36,7 +36,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractDataConverter.h
   dtkAbstractFactory.h
   dtkAbstractObject.h
-  dtkPlugin.h
   dtkAbstractProcess.h
   dtkAbstractProcessFactory.h
   dtkAbstractView.h
@@ -50,6 +49,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkContainerVector.tpp
   dtkCpuid.h
   dtkGlobal.h
+  dtkPlugin.h
   dtkPluginManager.h
   dtkUpdater.h
   dtkSignalBlocker.h
@@ -69,7 +69,6 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractDataConverter.h
   dtkAbstractFactory.h
   dtkAbstractObject.h
-  dtkPlugin.h
   dtkAbstractProcess.h
   dtkAbstractProcessFactory.h
   dtkAbstractView.h
@@ -77,6 +76,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractViewFactory.h
   dtkAbstractViewInteractor.h
   dtkAbstractViewNavigator.h
+  dtkPlugin.h
   dtkPluginManager.h
   dtkUpdater_p.h)
 

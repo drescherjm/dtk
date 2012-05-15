@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:01 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 16 12:11:27 2012 (+0200)
+ * Last-Updated: Tue May 15 14:12:19 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 213
+ *     Update #: 216
  */
 
 /* Commentary: 
@@ -128,6 +128,9 @@ public:
 public:
     QString text(void);
 
+public:
+    void setDark(void);
+
 public slots:
     void setText(const QString& text);
     void setCount(int count);
@@ -165,6 +168,8 @@ public:
     void addTag(QString tag, int count);
 
     void setTags(const QStringList& tags);
+
+    void setDark(void);
 
 signals:
     void tagSet(QString tag);

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Tue May 15 12:23:16 2012 (+0200)
- *           By: tkloczko
- *     Update #: 568
+ * Last-Updated: mar. mai 15 17:25:46 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 572
  */
 
 /* Commentary:
@@ -27,6 +27,7 @@
 #include "dtkComposerNodeConstants.h"
 #include "dtkComposerNodeContainerData.h"
 #include "dtkComposerNodeComposite.h"
+#include "dtkComposerNodeControlCase.h"
 #include "dtkComposerNodeControlDoWhile.h"
 #include "dtkComposerNodeControlIf.h"
 #include "dtkComposerNodeControlFor.h"
@@ -485,6 +486,11 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 
     // control nodes
 
+    d->nodes << "Case";
+    d->descriptions["Case"] = dtkReadFile(":dtkComposer/dtkComposerNodeControlCase.html");
+    d->tags["Case"] = QStringList() << "control" << "case";
+    d->types["Case"] = "case";
+
     d->nodes << "Do While";
     d->descriptions["Do While"] = "<p>Description not yet filled!</p>";
     d->tags["Do While"] = QStringList() << "control" << "do" << "while";
@@ -862,6 +868,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
         return new dtkComposerNodeNumberNotalmosteq;
 
     // control nodes
+
+    if(type == "case")
+        return new dtkComposerNodeControlCase;
 
     if(type == "do while")
         return new dtkComposerNodeControlDoWhile;

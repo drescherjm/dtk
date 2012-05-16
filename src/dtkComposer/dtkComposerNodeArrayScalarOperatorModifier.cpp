@@ -17,13 +17,11 @@
  *
  */
 
-#include "dtkComposerNodeArrayScalarOperatorModifier.h"
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
+#include "dtkComposerNodeArrayScalarOperatorModifier.h"
 
 #include <dtkCore/dtkContainerVector.h>
-
-
 
 // /////////////////////////////////////////////////////////////////
 //  dtkComposerNodearrayScalarOperatorBinary
@@ -57,10 +55,10 @@ dtkComposerNodeArrayScalarOperatorModifier::~dtkComposerNodeArrayScalarOperatorM
     d = NULL;
 }
 
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeArrayScalarOperator - INSERT
+// /////////////////////////////////////////////////////////////////
 
-// /////////////////////////////////////////////////////////////////
-// dtkComposerNodeArrayScalarOperator - Insert
-// /////////////////////////////////////////////////////////////////
 void dtkComposerNodeArrayScalarOperatorInsert::run(void)
 {
     dtkContainerVectorReal array;
@@ -70,7 +68,90 @@ void dtkComposerNodeArrayScalarOperatorInsert::run(void)
         array.vector().insert(d->receiver_index.data(), d->receiver_value.data());
 
     }
+
     d->emitter_array.setVector(array);
-   // dtkContainerVectorReal temp = d->emitter_array.vector();
-    //qDebug() << temp.vector();
 }
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeArrayScalarOperator - SUM
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeArrayScalarOperatorSum::run(void)
+{
+    dtkContainerVectorReal array;
+
+    if (!d->receiver_array.isEmpty()) {
+        array = d->receiver_array.vector();
+        array.vector()[d->receiver_index.data()] += d->receiver_value.data();
+
+    }
+
+    d->emitter_array.setVector(array);
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeArrayScalarOperator - Substract
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeArrayScalarOperatorSubstract::run(void)
+{
+    dtkContainerVectorReal array;
+
+    if (!d->receiver_array.isEmpty()) {
+        array = d->receiver_array.vector();
+        array.vector()[d->receiver_index.data()] -= d->receiver_value.data();
+
+    }
+
+    d->emitter_array.setVector(array);
+
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeArrayScalarOperator - Mult
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeArrayScalarOperatorMult::run(void)
+{
+    dtkContainerVectorReal array;
+
+    if (!d->receiver_array.isEmpty()) {
+        array = d->receiver_array.vector();
+        array.vector()[d->receiver_index.data()] *= d->receiver_value.data();
+
+    }
+
+    d->emitter_array.setVector(array);
+
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeArrayScalarOperator - Divide
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeArrayScalarOperatorDivide::run(void)
+{
+    dtkContainerVectorReal array;
+
+    if (!d->receiver_array.isEmpty()) {
+        array = d->receiver_array.vector();
+        array.vector()[d->receiver_index.data()] /= d->receiver_value.data();
+
+    }
+
+    d->emitter_array.setVector(array);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -147,7 +147,27 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["Scalar Array Insert"] = "<p>Description not yet filled!</p>";
     d->tags["Scalar Array Insert"] = QStringList() << "container" << "array" << "scalar"  << "insert" ;
     d->types["Scalar Array Insert"] = "array_scalar_insert";
-    
+
+    d->nodes << "Scalar Array Sum";
+    d->descriptions["Scalar Array Sum"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Sum"] = QStringList() << "container" << "array" << "scalar"  << "sum" ;
+    d->types["Scalar Array Sum"] = "array_scalar_sum";
+
+    d->nodes << "Scalar Array Substract";
+    d->descriptions["Scalar Array Substract"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Substract"] = QStringList() << "container" << "array" << "scalar"  << "substract" ;
+    d->types["Scalar Array Substract"] = "array_scalar_substract";
+
+    d->nodes << "Scalar Array Mult";
+    d->descriptions["Scalar Array Mult"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Mult"] = QStringList() << "container" << "array" << "scalar"  << "mult" ;
+    d->types["Scalar Array Mult"] = "array_scalar_mult" ;
+
+    d->nodes << "Scalar Array Divide";
+    d->descriptions["Scalar Array Divide"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Divide"] = QStringList() << "container" << "array" << "scalar"  << "divide" ;
+    d->types["Scalar Array Divide"] = "array_scalar_divide" ;
+
     // Algebraic nodes
 
     d->nodes << "Vector3D";
@@ -670,6 +690,18 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "array_scalar_insert")
         return new dtkComposerNodeArrayScalarOperatorInsert;
+
+    if(type == "array_scalar_sum")
+        return new dtkComposerNodeArrayScalarOperatorSum;
+
+    if(type == "array_scalar_substract")
+        return new dtkComposerNodeArrayScalarOperatorSubstract;
+
+    if(type == "array_scalar_mult")
+        return new dtkComposerNodeArrayScalarOperatorMult;
+
+    if(type == "array_scalar_divide")
+        return new dtkComposerNodeArrayScalarOperatorDivide;
 
     // algebraic nodes
 

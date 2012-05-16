@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Nov  2 10:48:42 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 14:19:13 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 141
+ * Last-Updated: Wed May 16 13:40:43 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 149
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 
 #include <dtkComposer/dtkComposerTransmitter.h>
 #include <dtkComposer/dtkComposerTransmitterEmitter.h>
+#include <dtkComposer/dtkComposerTransmitterReceiver.h>
 
 #include <dtkCore/dtkAbstractData>
 #include <dtkCore/dtkAbstractProcess>
@@ -41,6 +42,9 @@ class dummyData : public dtkAbstractData
 public:
      dummyData(void) : dtkAbstractData() {;}
     ~dummyData(void) {;}
+
+public:
+    bool operator == (const dummyData& other) { return false;}
         
 public:
     QString identifier(void) const {return QString("Dummy data");}
@@ -189,10 +193,12 @@ int dummyModifier::update(void)
 
 // /////////////////////////////////////////////////////////////////
 
-typedef dtkComposerTransmitterEmitter<dummyData *> dummyDataTransmitter;
+typedef dtkComposerTransmitterEmitter<dummyData> dummyDataTransmitter;
 typedef dtkComposerTransmitterEmitter<otherData *> otherDataTransmitter;
 typedef dtkComposerTransmitterEmitter<double> doubleTransmitter;
 typedef dtkComposerTransmitterEmitter<dtkMatrixSquared<int> *> matrixTransmitter;
+
+typedef dtkComposerTransmitterReceiver<dummyData> dummyDataReceiver;
 
 Q_DECLARE_METATYPE(dtkMatrixSquared<int> *);
 
@@ -206,9 +212,9 @@ void run(void)
     
     // tranmitter
     
-    qRegisterMetaType<dummyData *>();
+    qRegisterMetaType<dummyData>();
     dummyDataTransmitter ddt;
-    ddt.setData(gen->dummy());
+    ddt.setData(*gen->dummy());
 
     qRegisterMetaType<otherData *>();
     otherDataTransmitter odt;
@@ -221,6 +227,13 @@ void run(void)
     matrixTransmitter mxt;
     mxt.setData(&(gen->matrix()));
 
+    // receiver
+
+    dummyDataReceiver receiver;
+    receiver.connect(&ddt);
+
+    qDebug() << receiver.data();
+
     // modifier
     
     dummyModifier *mod = new dummyModifier();
@@ -231,7 +244,7 @@ void run(void)
     // mod->setMatrix(&(gen->matrix()));
 
     mod->setValue(dbt.data());
-    mod->setDummyData(ddt.data());
+    mod->setDummyData(&ddt.data());
     mod->setOtherData(odt.data());
     mod->setMatrix(mxt.data());
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri May 11 17:39:42 2012 (+0200)
- *           By: tkloczko
- *     Update #: 3907
+ * Last-Updated: Wed May 16 12:01:06 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 3911
  */
 
 /* Commentary: 
@@ -1851,15 +1851,11 @@ void dtkComposerStackCommandReparentNode::setOriginNode(dtkComposerSceneNode *no
 {
     e->origin = node;
     e->source = dynamic_cast<dtkComposerSceneNodeComposite *>(node->parent());
-
-    qDebug() << e->source->title();
 }
 
 void dtkComposerStackCommandReparentNode::setTargetNode(dtkComposerSceneNode *node)
 {
     e->target = dynamic_cast<dtkComposerSceneNodeComposite *>(node);
-
-    qDebug() << e->target->title();
 }
 
 void dtkComposerStackCommandReparentNode::setOriginPosition(QPointF position)

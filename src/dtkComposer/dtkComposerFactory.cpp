@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Tue May 15 12:23:16 2012 (+0200)
- *           By: tkloczko
- *     Update #: 568
+ * Last-Updated: Wed May 16 12:15:49 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 571
  */
 
 /* Commentary:
@@ -545,17 +545,17 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 
     // process nodes
 
-    d->nodes << "Process";
-    d->descriptions["Process"] = "<p>Description not yet filled!</p>";
-    d->tags["Process"] = QStringList() << "process" ;
-    d->types["Process"] = "process";
+    d->nodes << "Generic Process";
+    d->descriptions["Generic Process"] = "<p>Description not yet filled!</p>";
+    d->tags["Generic Process"] = QStringList() << "process" ;
+    d->types["Generic Process"] = "process";
 
-    // process nodes
+    // view nodes
 
-    d->nodes << "View";
-    d->descriptions["View"] = "<p>Description not yet filled!</p>";
-    d->tags["View"] = QStringList() << "view" ;
-    d->types["View"] = "view";
+    d->nodes << "Generic View";
+    d->descriptions["Generic View"] = "<p>Description not yet filled!</p>";
+    d->tags["Generic View"] = QStringList() << "view" ;
+    d->types["Generic View"] = "view";
 
     // dtkDistributed nodes
 

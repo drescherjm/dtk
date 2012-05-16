@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mai 16 12:55:45 2012 (+0200)
+ * Last-Updated: mer. mai 16 16:14:20 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 4039
+ *     Update #: 4081
  */
 
 /* Commentary: 
@@ -2616,7 +2616,6 @@ dtkComposerStackCommandCreateBlock::dtkComposerStackCommandCreateBlock(dtkCompos
 
 dtkComposerStackCommandCreateBlock::~dtkComposerStackCommandCreateBlock(void)
 {
-    delete e->node;
     delete e;
 
     e = NULL;
@@ -2662,6 +2661,8 @@ void dtkComposerStackCommandCreateBlock::undo(void)
     control->removeBlock(e->id);
     e->node->removeBlock(e->block);
 
+    d->scene->removeItem(e->block);
+
     d->scene->modify(true);
 }
 
@@ -2675,7 +2676,8 @@ public:
     QPointF position;
 
 public:
-    dtkComposerSceneNodeComposite *node;
+    dtkComposerSceneNodeComposite *block;
+    dtkComposerSceneNodeControl    *node;
 
 public:
     int id;
@@ -2684,7 +2686,8 @@ public:
 
 dtkComposerStackCommandDestroyBlock::dtkComposerStackCommandDestroyBlock(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandDestroyBlockPrivate)
 {
-    e->node = NULL;
+    e->block = NULL;
+    e->node  = NULL;
     e->id   = -1;
     this->setText("Destroy block");
 }
@@ -2696,9 +2699,10 @@ dtkComposerStackCommandDestroyBlock::~dtkComposerStackCommandDestroyBlock(void)
     e = NULL;
 }
 
-void dtkComposerStackCommandDestroyBlock::setNode(dtkComposerSceneNodeComposite *node)
+void dtkComposerStackCommandDestroyBlock::setNode(dtkComposerSceneNodeComposite *block)
 {
-    e->node = node;
+    e->block = block;
+    e->node = dynamic_cast<dtkComposerSceneNodeControl *>(e->block->parent());
 }
 
 void dtkComposerStackCommandDestroyBlock::setId(int id)
@@ -2711,14 +2715,16 @@ void dtkComposerStackCommandDestroyBlock::redo(void)
     if(!d->scene)
         return;
 
-    if(!e->node)
+    if(!e->block)
         return;
 
-    dtkComposerNodeControlCase *control = dynamic_cast<dtkComposerNodeControlCase *>(e->node->parent()->wrapee());
+    dtkComposerNodeControlCase *control = dynamic_cast<dtkComposerNodeControlCase *>(e->block->parent()->wrapee());
 
-//    d->graph->removeBlock(e->node);
-    dynamic_cast<dtkComposerSceneNodeControl *>(e->node->parent())->removeBlock(e->node);
+    d->graph->removeBlock(e->block);
+    e->node->removeBlock(e->block);
     control->removeBlock(e->id);
+
+    d->scene->removeItem(e->block);
 
     d->scene->modify(true);
 }
@@ -2728,10 +2734,17 @@ void dtkComposerStackCommandDestroyBlock::undo(void)
     if(!d->scene)
         return;
 
-    if(!e->node)
+    if(!e->block)
         return;
 
-    //TODO
+    dtkComposerNodeControlCase *control = dynamic_cast<dtkComposerNodeControlCase *>(e->block->parent()->wrapee());
+
+    control->addBlock();
+    e->block->wrap(control->block(e->id));
+    e->node->addBlock(e->block);
+
+    d->graph->addBlock(e->block);
+
 
     d->scene->modify(true);
 }

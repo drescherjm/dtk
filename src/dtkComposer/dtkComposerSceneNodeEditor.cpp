@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mai 16 12:06:47 2012 (+0200)
+ * Last-Updated: mer. mai 16 16:16:00 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 1017
+ *     Update #: 1029
  */
 
 /* Commentary: 
@@ -703,6 +703,9 @@ void dtkComposerSceneNodeEditor::removeBlock(void)
 
     int i = d->selector->currentIndex();
 
+    if (i < 1)
+        return;
+
     dtkComposerStackCommandDestroyBlock *command;
     command = new dtkComposerStackCommandDestroyBlock;
     command->setScene(d->scene);
@@ -712,8 +715,9 @@ void dtkComposerSceneNodeEditor::removeBlock(void)
 
     d->stack->push(command);
 
-    d->selector->clear();
     this->setNode(d->node);
+
+    d->selector->setCurrentIndex(i-1);
 }
 
 void dtkComposerSceneNodeEditor::addLoopPort(void)

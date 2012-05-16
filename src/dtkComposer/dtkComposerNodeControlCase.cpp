@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: mar. mai 15 17:05:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: mer. mai 16 12:11:29 2012 (+0200)
+ * Last-Updated: mer. mai 16 16:17:52 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 151
+ *     Update #: 158
  */
 
 /* Commentary:
@@ -68,6 +68,10 @@ dtkComposerNodeControlCase::dtkComposerNodeControlCase(void) : dtkComposerNodeCo
     d->cond.appendNext(d->footer.emitters().first());
     d->footer.emitters().first()->appendPrevious(&(d->cond));
 
+    dtkComposerNodeComposite *def = new dtkComposerNodeComposite;
+    def->setTitleHint("Case#default");
+    d->blocks << def;
+
 }
 
 dtkComposerNodeControlCase::~dtkComposerNodeControlCase(void)
@@ -106,13 +110,15 @@ dtkComposerNodeComposite *dtkComposerNodeControlCase::block(int id)
 void dtkComposerNodeControlCase::addBlock(void)
 {
     dtkComposerNodeComposite *c = new dtkComposerNodeComposite;
-    QString id = QString::number(d->blocks.count()+1);
+    QString id = QString::number(d->blocks.count());
     c->setTitleHint("Case#"+id);
     d->blocks << c;
 }
 
 void dtkComposerNodeControlCase::removeBlock(int id)
 {
+    if (id = 0) // can't remove default block
+        return;
 
     for (int i=0; i< d->blocks.count(); i++)
         if (id == i) {
@@ -121,7 +127,7 @@ void dtkComposerNodeControlCase::removeBlock(int id)
         }
 
     for (int i=0; i< d->blocks.count(); i++)
-            d->blocks.at(i)->setTitleHint("Case#"+QString::number(i+1));
+            d->blocks.at(i)->setTitleHint("Case#"+QString::number(i));
 }
 
 void dtkComposerNodeControlCase::setInputs(void)

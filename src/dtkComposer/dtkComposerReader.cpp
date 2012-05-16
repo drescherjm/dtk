@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mai 16 13:49:10 2012 (+0200)
+ * Last-Updated: mer. mai 16 15:21:20 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 644
+ *     Update #: 653
  */
 
 /* Commentary: 
@@ -295,13 +295,14 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
     } else if(node.toElement().tagName() == "block") {
 
         if (dtkComposerNodeControlCase *control = dynamic_cast<dtkComposerNodeControlCase *>(d->control->wrapee())) {
+            if(node.toElement().attribute("title") != "Case#default") {
                 dtkComposerSceneNodeComposite *b = new dtkComposerSceneNodeComposite;
                 control->addBlock();
                 b->wrap(control->block( control->blockCount()-1));
                 d->control->addBlock(b);
                 d->graph->addBlock(d->control);
-                n = d->control->blocks().last();
-
+            }
+            n = d->control->blocks().last();
         } else {
             n = d->control->blocks().at(node.toElement().attribute("blockid").toInt());
         }

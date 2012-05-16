@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: mar. avril 24 13:30:58 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 246
+ * Last-Updated: Wed May 16 12:11:05 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 247
  */
 
 /* Commentary:
@@ -46,6 +46,11 @@ public:
 
 public:
     dtkAbstractData& operator = (const dtkAbstractData& other);
+
+public:
+    bool operator == (const dtkAbstractData& other) {
+        return false;
+    }
 
 public:
     friend DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractData& data);

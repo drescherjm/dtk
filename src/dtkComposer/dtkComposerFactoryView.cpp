@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 13:24:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue May 15 14:15:24 2012 (+0200)
+ * Last-Updated: Wed May 16 10:40:38 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 150
+ *     Update #: 151
  */
 
 /* Commentary: 
@@ -92,4 +92,5 @@ void dtkComposerFactoryView::setFactory(dtkComposerFactory *factory)
 void dtkComposerFactoryView::setDark(void)
 {
     d->scope->setDark();
+    d->view->setDark();
 }

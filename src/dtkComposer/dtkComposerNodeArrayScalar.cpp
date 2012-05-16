@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 15 13:58:18 2012 (+0200)
+ * Last-Updated: Tue May 15 15:28:57 2012 (+0200)
  *           By: tkloczko
- *     Update #: 33
+ *     Update #: 40
  */
 
 /* Commentary: 
@@ -30,13 +30,13 @@
 class dtkComposerNodeArrayScalarPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<dtkContainerVectorReal> receiver_array;
-    dtkComposerTransmitterReceiver<qlonglong>              receiver_size;
-    dtkComposerTransmitterReceiver<qreal>                  receiver_value;
+    dtkComposerTransmitterReceiver<qreal>     receiver_array;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_size;
+    dtkComposerTransmitterReceiver<qreal>     receiver_value;
 
 public:
-    dtkComposerTransmitterEmitter<dtkContainerVectorReal> emitter_array;
-    dtkComposerTransmitterEmitter<qlonglong>              emitter_size;
+    dtkComposerTransmitterEmitter<qreal>     emitter_array;
+    dtkComposerTransmitterEmitter<qlonglong> emitter_size;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -99,9 +99,9 @@ void dtkComposerNodeArrayScalar::run(void)
 {
     if (!d->receiver_array.isEmpty()) {
 
-        dtkContainerVectorReal array(d->receiver_array.data());
+        dtkContainerVectorReal array(d->receiver_array.vector());
 
-        d->emitter_array.setData(array);
+        d->emitter_array.setVector(array);
         d->emitter_size.setData(array.count());
 
     } else {
@@ -117,7 +117,7 @@ void dtkComposerNodeArrayScalar::run(void)
 
         QVector<qreal> array(size, value);
 
-        d->emitter_array.setData(dtkContainerVectorReal(array));
+        d->emitter_array.setVector(dtkContainerVectorReal(array));
         d->emitter_size.setData(size);
     }
 }

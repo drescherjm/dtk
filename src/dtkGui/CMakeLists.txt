@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Apr 27 20:56:07 2012 (+0200)
+## Last-Updated: Wed May 16 09:36:54 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 248
+##     Update #: 251
 ######################################################################
 ## 
 ### Commentary: 
@@ -43,7 +43,11 @@ set(${PROJECT_NAME}_HEADERS
   dtkSplitter.h
   dtkSwitch.h
   dtkTagCloud.h
-  dtkTextEditor.h)
+  dtkTextEditor.h
+  dtkViewManager.h
+  dtkViewLayout.h
+  dtkViewLayoutItem.h
+  dtkViewList.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkAboutBox.h
@@ -64,7 +68,11 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkSplitter.h
   dtkTagCloud.h
   dtkSwitch.h
-  dtkTextEditor.h)
+  dtkTextEditor.h
+  dtkViewManager.h
+  dtkViewLayout.h
+  dtkViewLayoutItem.h
+  dtkViewList.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkAboutBox.cpp
@@ -85,7 +93,11 @@ set(${PROJECT_NAME}_SOURCES
   dtkSplitter.cpp
   dtkSwitch.cpp
   dtkTagCloud.cpp
-  dtkTextEditor.cpp)
+  dtkTextEditor.cpp
+  dtkViewManager.cpp
+  dtkViewLayout.cpp
+  dtkViewLayoutItem.cpp
+  dtkViewList.cpp)
 
 if(APPLE)
 set(${PROJECT_NAME}_SOURCES

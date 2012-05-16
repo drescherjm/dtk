@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: mar. mai 15 17:25:46 2012 (+0200)
+ * Last-Updated: mer. mai 16 12:55:22 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 572
+ *     Update #: 573
  */
 
 /* Commentary:
@@ -22,6 +22,7 @@
 #include "dtkComposerFactory.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeArrayScalar.h"
+#include "dtkComposerNodeArrayScalarOperatorModifier.h"
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
 #include "dtkComposerNodeConstants.h"
@@ -142,7 +143,32 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["Scalar Array"] = "<p>Description not yet filled!</p>";
     d->tags["Scalar Array"] = QStringList() << "container" << "array" << "scalar" ;
     d->types["Scalar Array"] = "array_scalar";
-    
+
+    d->nodes << "Scalar Array Insert";
+    d->descriptions["Scalar Array Insert"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Insert"] = QStringList() << "container" << "array" << "scalar"  << "insert" ;
+    d->types["Scalar Array Insert"] = "array_scalar_insert";
+
+    d->nodes << "Scalar Array Sum";
+    d->descriptions["Scalar Array Sum"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Sum"] = QStringList() << "container" << "array" << "scalar"  << "sum" ;
+    d->types["Scalar Array Sum"] = "array_scalar_sum";
+
+    d->nodes << "Scalar Array Substract";
+    d->descriptions["Scalar Array Substract"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Substract"] = QStringList() << "container" << "array" << "scalar"  << "substract" ;
+    d->types["Scalar Array Substract"] = "array_scalar_substract";
+
+    d->nodes << "Scalar Array Mult";
+    d->descriptions["Scalar Array Mult"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Mult"] = QStringList() << "container" << "array" << "scalar"  << "mult" ;
+    d->types["Scalar Array Mult"] = "array_scalar_mult" ;
+
+    d->nodes << "Scalar Array Divide";
+    d->descriptions["Scalar Array Divide"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Divide"] = QStringList() << "container" << "array" << "scalar"  << "divide" ;
+    d->types["Scalar Array Divide"] = "array_scalar_divide" ;
+
     // Algebraic nodes
 
     d->nodes << "Vector3D";
@@ -437,7 +463,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Notalmosteq"] = QStringList() << "number" << "operator" << "binary" << "notalmosteq";
     d->types["Notalmosteq"] = "notalmosteq";
 
-// /////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
 
     d->nodes << "Not";
     d->descriptions["Not"] = "<p>Description not yet filled!</p>";
@@ -525,17 +551,17 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 
     // process nodes
 
-    d->nodes << "Process";
-    d->descriptions["Process"] = "<p>Description not yet filled!</p>";
-    d->tags["Process"] = QStringList() << "process" ;
-    d->types["Process"] = "process";
+    d->nodes << "Generic Process";
+    d->descriptions["Generic Process"] = "<p>Description not yet filled!</p>";
+    d->tags["Generic Process"] = QStringList() << "process" ;
+    d->types["Generic Process"] = "process";
 
-    // process nodes
+    // view nodes
 
-    d->nodes << "View";
-    d->descriptions["View"] = "<p>Description not yet filled!</p>";
-    d->tags["View"] = QStringList() << "view" ;
-    d->types["View"] = "view";
+    d->nodes << "Generic View";
+    d->descriptions["Generic View"] = "<p>Description not yet filled!</p>";
+    d->tags["Generic View"] = QStringList() << "view" ;
+    d->types["Generic View"] = "view";
 
     // dtkDistributed nodes
 
@@ -544,9 +570,9 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->types["Remote"] = "remote";
 
 
-// /////////////////////////////////////////////////////////////////
-// NITE nodes
-// /////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
+    // NITE nodes
+    // /////////////////////////////////////////////////////////////////
 
 #if defined(DTK_HAVE_NITE)
     d->nodes << "KinectTracker";
@@ -554,9 +580,9 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->types["KinectTracker"] = "kinectTracker";
 #endif
 
-// /////////////////////////////////////////////////////////////////
-// VRPN nodes
-// /////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
+    // VRPN nodes
+    // /////////////////////////////////////////////////////////////////
 
 #if defined(DTK_HAVE_VRPN)
     d->nodes << "VrpnTracker";
@@ -564,9 +590,9 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->types["VrpnTracker"] = "vrpnTracker";
 #endif
 
-// /////////////////////////////////////////////////////////////////
-// MPI nodes
-// /////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
+    // MPI nodes
+    // /////////////////////////////////////////////////////////////////
 
 #if defined(DTK_HAVE_MPI)
     d->nodes << "World";
@@ -667,6 +693,21 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "array_scalar")
         return new dtkComposerNodeArrayScalar;
+
+    if(type == "array_scalar_insert")
+        return new dtkComposerNodeArrayScalarOperatorInsert;
+
+    if(type == "array_scalar_sum")
+        return new dtkComposerNodeArrayScalarOperatorSum;
+
+    if(type == "array_scalar_substract")
+        return new dtkComposerNodeArrayScalarOperatorSubstract;
+
+    if(type == "array_scalar_mult")
+        return new dtkComposerNodeArrayScalarOperatorMult;
+
+    if(type == "array_scalar_divide")
+        return new dtkComposerNodeArrayScalarOperatorDivide;
 
     // algebraic nodes
 
@@ -902,27 +943,27 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "view")
         return new dtkComposerNodeView;
 
-// /////////////////////////////////////////////////////////////////
-// NITE nodes
-// /////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
+    // NITE nodes
+    // /////////////////////////////////////////////////////////////////
 
 #if defined(DTK_HAVE_NITE)
     if(type == "kinectTracker")
         return new dtkComposerNodeTrackerKinect;
 #endif
 
-// /////////////////////////////////////////////////////////////////
-// VRPN nodes
-// /////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
+    // VRPN nodes
+    // /////////////////////////////////////////////////////////////////
 
 #if defined(DTK_HAVE_VRPN)
     if(type == "vrpnTracker")
         return new dtkComposerNodeTrackerVrpn;
 #endif
 
-// /////////////////////////////////////////////////////////////////
-// MPI nodes
-// /////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
+    // MPI nodes
+    // /////////////////////////////////////////////////////////////////
 
 #if defined(DTK_HAVE_MPI)
     if(type == "world")

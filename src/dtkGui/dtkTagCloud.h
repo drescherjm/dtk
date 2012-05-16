@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:01 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 15 14:12:19 2012 (+0200)
+ * Last-Updated: Wed May 16 10:46:26 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 216
+ *     Update #: 223
  */
 
 /* Commentary: 
@@ -240,6 +240,9 @@ public:
 
     void clear(void);
 
+public:
+    void setDark(void);
+
 signals:
     void itemClicked(const QString& description);
 
@@ -255,6 +258,7 @@ private:
 
 private:
     friend class dtkItemListDelegate;
+    friend class dtkItemDarkDelegate;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -304,6 +308,25 @@ protected:
 };
 
 // /////////////////////////////////////////////////////////////////
+// dtkItemDarkDelegate
+// /////////////////////////////////////////////////////////////////
+
+class DTKGUI_EXPORT dtkItemDarkDelegate: public QStyledItemDelegate
+{
+public:
+    dtkItemDarkDelegate(dtkItemList *list);
+
+public:
+    virtual void paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+
+public:
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
+
+protected:
+    dtkItemList *list;
+};
+
+// /////////////////////////////////////////////////////////////////
 // dtkItemView
 // /////////////////////////////////////////////////////////////////
 
@@ -329,6 +352,9 @@ public:
 public:
     dtkItemList *list(void);
     dtkItemDesc *desc(void);
+
+public:
+    void setDark(void);
     
 protected slots:
     void onItemClicked(const QString& description);

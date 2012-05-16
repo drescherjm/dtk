@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 10 11:02:30 2012 (+0200)
+ * Last-Updated: Wed May 16 11:55:39 2012 (+0200)
  *           By: tkloczko
- *     Update #: 203
+ *     Update #: 206
  */
 
 /* Commentary: 
@@ -52,12 +52,22 @@ dtkComposerTransmitter::~dtkComposerTransmitter(void)
     d = NULL;
 }
 
+QVariant& dtkComposerTransmitter::variant(void)
+{
+    return d->variant;
+}
+
 const QVariant& dtkComposerTransmitter::variant(void) const
 {
     return d->variant;
 }
 
-const dtkAbstractContainer& dtkComposerTransmitter::container(void)
+dtkAbstractContainer& dtkComposerTransmitter::container(void)
+{
+    return d->container;
+}
+
+const dtkAbstractContainer& dtkComposerTransmitter::container(void) const
 {
     return d->container;
 }

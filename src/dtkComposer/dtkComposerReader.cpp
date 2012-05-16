@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri May  4 16:02:35 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 608
+ * Last-Updated: mer. mai 16 12:30:44 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 643
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeControl.h"
+#include "dtkComposerNodeControlCase.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
@@ -293,7 +294,17 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
 
     } else if(node.toElement().tagName() == "block") {
 
-        n = d->control->blocks().at(node.toElement().attribute("blockid").toInt());
+        if (dtkComposerNodeControlCase *control = dynamic_cast<dtkComposerNodeControlCase *>(d->control->wrapee())) {
+                dtkComposerSceneNodeComposite *b = new dtkComposerSceneNodeComposite;
+                control->addBlock();
+                b->wrap(control->block( control->blockCount()-1));
+                d->control->addBlock(b);
+                d->graph->addNode(d->control);
+                n = d->control->blocks().last();
+
+        } else {
+            n = d->control->blocks().at(node.toElement().attribute("blockid").toInt());
+        }
 
     } else if(node.toElement().tagName() == "header") {
 

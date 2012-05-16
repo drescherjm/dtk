@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri May 11 17:39:42 2012 (+0200)
- *           By: tkloczko
- *     Update #: 3907
+ * Last-Updated: mer. mai 16 12:08:20 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 4038
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 #include "dtkComposerGraphNode.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeComposite.h"
+#include "dtkComposerNodeControlCase.h"
 #include "dtkComposerNodeLeaf.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
@@ -2589,6 +2590,154 @@ void dtkComposerStackCommandReparentNode::undo(void)
 
     }
 
+}
+
+
+// /////////////////////////////////////////////////////////////////
+// Create Block Command
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandCreateBlockPrivate
+{
+public:
+    QPointF position;
+
+public:
+    dtkComposerSceneNodeControl *node;
+    dtkComposerSceneNodeComposite *block;
+
+public:
+    int id;
+};
+
+dtkComposerStackCommandCreateBlock::dtkComposerStackCommandCreateBlock(dtkComposerStackCommand *parent) : dtkComposerStackCommand(), e(new dtkComposerStackCommandCreateBlockPrivate)
+{
+    e->node  = NULL;
+    e->block = NULL;
+
+    this->setText("Create block");
+}
+
+dtkComposerStackCommandCreateBlock::~dtkComposerStackCommandCreateBlock(void)
+{
+    delete e->node;
+    delete e;
+
+    e = NULL;
+}
+
+void dtkComposerStackCommandCreateBlock::setNode(dtkComposerSceneNodeControl *node)
+{
+    e->node = node;
+}
+
+void dtkComposerStackCommandCreateBlock::redo(void)
+{
+    if(!d->scene)
+        return;
+
+    if(!d->graph)
+        return;
+
+    if(!e->node)
+        return;
+
+    e->block = new dtkComposerSceneNodeComposite;
+    dtkComposerNodeControlCase *control = dynamic_cast<dtkComposerNodeControlCase *>(e->node->wrapee());
+
+    control->addBlock();
+    e->id = control->blockCount()-1;
+    e->block->wrap(control->block(e->id));
+    e->node->addBlock(e->block);
+
+    d->graph->addBlock(e->node);
+
+    d->scene->modify(true);
+}
+
+void dtkComposerStackCommandCreateBlock::undo(void)
+{
+    if(!e->node)
+        return;
+
+    dtkComposerNodeControlCase *control = dynamic_cast<dtkComposerNodeControlCase *>(e->node->wrapee());
+
+    d->graph->removeBlock(e->block);
+    control->removeBlock(e->id);
+    e->node->removeBlock(e->block);
+
+    d->scene->modify(true);
+}
+
+// /////////////////////////////////////////////////////////////////
+// Destroy Block Command
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandDestroyBlockPrivate
+{
+public:
+    QPointF position;
+
+public:
+    dtkComposerSceneNodeComposite *node;
+
+public:
+    int id;
+
+};
+
+dtkComposerStackCommandDestroyBlock::dtkComposerStackCommandDestroyBlock(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandDestroyBlockPrivate)
+{
+    e->node = NULL;
+    e->id   = -1;
+    this->setText("Destroy block");
+}
+
+dtkComposerStackCommandDestroyBlock::~dtkComposerStackCommandDestroyBlock(void)
+{
+    delete e;
+
+    e = NULL;
+}
+
+void dtkComposerStackCommandDestroyBlock::setNode(dtkComposerSceneNodeComposite *node)
+{
+    e->node = node;
+}
+
+void dtkComposerStackCommandDestroyBlock::setId(int id)
+{
+    e->id = id;
+}
+
+void dtkComposerStackCommandDestroyBlock::redo(void)
+{
+    if(!d->scene)
+        return;
+
+    if(!e->node)
+        return;
+
+    dtkComposerNodeControlCase *control = dynamic_cast<dtkComposerNodeControlCase *>(e->node->parent()->wrapee());
+
+//    d->graph->removeBlock(e->node);
+    dynamic_cast<dtkComposerSceneNodeControl *>(e->node->parent())->removeBlock(e->node);
+    control->removeBlock(e->id);
+
+    d->scene->modify(true);
+}
+
+void dtkComposerStackCommandDestroyBlock::undo(void)
+{
+    if(!d->scene)
+        return;
+
+    if(!e->node)
+        return;
+
+    //TODO
+
+    d->scene->modify(true);
 }
 
 // // /////////////////////////////////////////////////////////////////

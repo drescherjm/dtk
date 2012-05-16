@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:28:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 21:18:06 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 63
+ * Last-Updated: mer. mai 16 09:30:23 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 65
  */
 
 /* Commentary: 
@@ -80,6 +80,7 @@ public:
     dtkComposerSceneNodeEditorList *loop_ports;
     dtkComposerSceneNodeEditorList *input_ports;
     dtkComposerSceneNodeEditorList *output_ports;
+    dtkComposerSceneNodeEditorList *blocks;
 
 public:
     dtkComposerScene *scene;
@@ -90,6 +91,9 @@ public:
 public:
     QPushButton *add_loop_port;
     QPushButton *rem_loop_port;
+
+    QPushButton *add_block;
+    QPushButton *rem_block;
 
     QPushButton *add_input_port;
     QPushButton *rem_input_port;

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: mar. mai 15 17:05:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: mar. mai 15 17:33:13 2012 (+0200)
+ * Last-Updated: mer. mai 16 12:11:29 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 72
+ *     Update #: 151
  */
 
 /* Commentary:
@@ -26,6 +26,7 @@
 #include "dtkComposerTransmitterVariant.h"
 
 #include <dtkCore/dtkGlobal.h>
+#include <dtkLog/dtkLog.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlCasePrivate definition
@@ -50,29 +51,22 @@ public:
 dtkComposerNodeControlCase::dtkComposerNodeControlCase(void) : dtkComposerNodeControl(), d(new dtkComposerNodeControlCasePrivate)
 {
     QList<QVariant::Type> variants;
-    variants << QVariant::Bool;
+    variants << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong;;
     d->cond.setTypes(variants);
 
     d->header.removeEmitter(0);
-    d->header.setInputLabelHint("cond", 0);
+    d->header.setInputLabelHint("switch", 0);
     d->header.setAsHeader(true);
 
     d->cond.appendPrevious(d->header.receivers().first());
     d->header.receivers().first()->appendNext(&(d->cond));
 
     d->footer.removeReceiver(0);
-    d->footer.setOutputLabelHint("cond", 0);
+    d->footer.setOutputLabelHint("switch", 0);
     d->footer.setAsFooter(true);
 
     d->cond.appendNext(d->footer.emitters().first());
     d->footer.emitters().first()->appendPrevious(&(d->cond));
-
-    dtkComposerNodeComposite *case1 = new dtkComposerNodeComposite;
-    case1->setTitleHint("Case#1");
-    d->blocks << case1;
-    dtkComposerNodeComposite *case2 = new dtkComposerNodeComposite;
-    case2->setTitleHint("Case#2");
-    d->blocks << case2;
 
 }
 
@@ -102,11 +96,32 @@ dtkComposerNodeLeaf *dtkComposerNodeControlCase::footer(void)
 
 dtkComposerNodeComposite *dtkComposerNodeControlCase::block(int id)
 {
-    if(id < d->blocks.count() && id >= 0) {
-        qDebug() << "return id " << id << d->blocks.count();
+    if(id < d->blocks.count() && id >= 0)
         return d->blocks[id];
-    }
+
     return NULL;
+}
+
+
+void dtkComposerNodeControlCase::addBlock(void)
+{
+    dtkComposerNodeComposite *c = new dtkComposerNodeComposite;
+    QString id = QString::number(d->blocks.count()+1);
+    c->setTitleHint("Case#"+id);
+    d->blocks << c;
+}
+
+void dtkComposerNodeControlCase::removeBlock(int id)
+{
+
+    for (int i=0; i< d->blocks.count(); i++)
+        if (id == i) {
+            dtkComposerNodeComposite *b = d->blocks.takeAt(id);
+            delete b;
+        }
+
+    for (int i=0; i< d->blocks.count(); i++)
+            d->blocks.at(i)->setTitleHint("Case#"+QString::number(i+1));
 }
 
 void dtkComposerNodeControlCase::setInputs(void)
@@ -133,14 +148,17 @@ int dtkComposerNodeControlCase::selectBranch(void)
 {
     int value = d->cond.data().toInt();
 
-    for (int i=0; i++ ;i < d->blocks.count())
+    for (int i = 0; i < d->blocks.count(); i++)
         foreach(dtkComposerTransmitter *t, d->blocks[i]->emitters())
             if (i == value)
-                t->setActive(value);
+                t->setActive(true);
             else
-                t->setActive(!value);
+                t->setActive(false);
 
-    return value;
+    if(value < d->blocks.count() && value >= 0)
+        return value;
+
+    return 0;
 }
 
 void dtkComposerNodeControlCase::begin(void)

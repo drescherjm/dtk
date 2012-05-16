@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. mai 15 17:32:57 2012 (+0200)
+ * Last-Updated: mer. mai 16 11:57:52 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 2021
+ *     Update #: 2030
  */
 
 /* Commentary:
@@ -304,7 +304,7 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
             d->addDummyEdge( select, end, node, 1);
             select->setEndLoop();
 
-        } else if (dynamic_cast<dtkComposerNodeControlIf *>(wrapee) ||dynamic_cast<dtkComposerNodeControlCase *>(wrapee) ) {
+        } else if (dynamic_cast<dtkComposerNodeControlIf *>(wrapee)) {
             dtkComposerGraphNode *inputs_else = new dtkComposerGraphNodeSetInputs(wrapee);
             d->addNode(node, inputs_else, begin);
             QList<dtkComposerSceneNodeComposite *> blocks  = dynamic_cast<dtkComposerSceneNodeControl *>(node)->blocks();
@@ -322,6 +322,10 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
             d->addDummyEdge(  outputs, end, node);
             d->end(blocks[then_block])->setEndLoop();
             d->end(blocks[else_block])->setEndLoop();
+        } else if (dynamic_cast<dtkComposerNodeControlCase *>(wrapee) ) {
+            d->addDummyEdge(    begin, select, node);
+            d->addDummyEdge(   select, inputs, node);
+            d->addDummyEdge(  outputs, end, node);
         }
 
         d->removeDummyEdge(  d->begin(node->parent()), d->end(node->parent()), node->parent());
@@ -423,8 +427,9 @@ void dtkComposerGraph::addBlock(dtkComposerSceneNode *node)
                 outputs = n;
         }
         d->addDummyEdge(   select, inputs_block, node, blocks.count()-1);
-        d->addDummyEdge(   inputs_block, d->begin(blocks.last()), node, blocks.count()-1);
+        d->addDummyEdge(   inputs_block, d->begin(blocks.last()), node);
         d->addDummyEdge(d->end(blocks.last()), outputs, node);
+        d->end(blocks.last())->setEndLoop();
     } else  {
         dtkWarn() << "addGroup called on unsupported node" << node->title();
         return;
@@ -433,8 +438,7 @@ void dtkComposerGraph::addBlock(dtkComposerSceneNode *node)
 
 void dtkComposerGraph::removeBlock(dtkComposerSceneNode *node)
 {
-    QList<dtkComposerSceneNodeComposite *> blocks  = dynamic_cast<dtkComposerSceneNodeControl *>(node)->blocks();
-    this->removeNode(blocks.last());
+    this->removeNode(node);
     //FIXME: remote dummy edges with select and outputs
 }
 

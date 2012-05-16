@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May  7 09:34:50 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 965
+ * Last-Updated: mer. mai 16 12:06:47 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 1017
  */
 
 /* Commentary: 
@@ -29,6 +29,7 @@
 #include "dtkComposerStackCommand.h"
 
 #include "dtkComposerNodeBoolean.h"
+#include "dtkComposerNodeControlCase.h"
 #include "dtkComposerNodeControlIf.h"
 #include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeControlForEach.h"
@@ -201,12 +202,19 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     d->loop_ports = new dtkComposerSceneNodeEditorList(this);
     d->input_ports = new dtkComposerSceneNodeEditorList(this);
     d->output_ports = new dtkComposerSceneNodeEditorList(this);
+    d->blocks = new dtkComposerSceneNodeEditorList(this);
 
     d->add_loop_port = new QPushButton("+", this);
     d->add_loop_port->setEnabled(false);
 
     d->rem_loop_port = new QPushButton("-", this);
     d->rem_loop_port->setEnabled(false);
+
+    d->add_block = new QPushButton("+", this);
+    d->add_block->setEnabled(false);
+
+    d->rem_block = new QPushButton("-", this);
+    d->rem_block->setEnabled(false);
 
     d->add_input_port = new QPushButton("+", this);
     d->add_input_port->setEnabled(false);
@@ -278,20 +286,20 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     l_layout->addWidget(d->add_loop_port);
     l_layout->addWidget(d->rem_loop_port);
 
+    QHBoxLayout *b_layout = new QHBoxLayout;
+    b_layout->setContentsMargins(0, 0, 0, 0);
+    b_layout->addWidget(d->add_block);
+    b_layout->addWidget(d->rem_block);
+
     QFrame *l_frame = new QFrame(this);
     l_frame->setLayout(l_layout);
     l_frame->setObjectName("dtkComposerSceneNodeEditorButtons");
     l_frame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
 
-    QHBoxLayout *i_layout = new QHBoxLayout;
-    i_layout->setContentsMargins(0, 0, 0, 0);
-    i_layout->addWidget(d->add_input_port);
-    i_layout->addWidget(d->rem_input_port);
-
-    QFrame *i_frame = new QFrame(this);
-    i_frame->setLayout(i_layout);
-    i_frame->setObjectName("dtkComposerSceneNodeEditorButtons");
-    i_frame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+    QFrame *b_frame = new QFrame(this);
+    b_frame->setLayout(b_layout);
+    b_frame->setObjectName("dtkComposerSceneNodeEditorButtons");
+    b_frame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
 
     QHBoxLayout *t_layout = new QHBoxLayout;
     t_layout->setContentsMargins(0, 0, 0, 0);
@@ -305,10 +313,20 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     top->setLayout(t_layout);
     top->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
 
+    QHBoxLayout *i_layout = new QHBoxLayout;
+    i_layout->setContentsMargins(0, 0, 0, 0);
+    i_layout->addWidget(d->add_input_port);
+    i_layout->addWidget(d->rem_input_port);
+
     QHBoxLayout *o_layout = new QHBoxLayout;
     o_layout->setContentsMargins(0, 0, 0, 0);
     o_layout->addWidget(d->add_output_port);
     o_layout->addWidget(d->rem_output_port);
+
+    QFrame *i_frame = new QFrame(this);
+    i_frame->setLayout(i_layout);
+    i_frame->setObjectName("dtkComposerSceneNodeEditorButtons");
+    i_frame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
 
     QFrame *o_frame = new QFrame(this);
     o_frame->setLayout(o_layout);
@@ -323,16 +341,28 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     op_layout->addWidget(d->output_ports);
     op_layout->addWidget(o_frame);
 
+    QVBoxLayout *lv_layout = new QVBoxLayout;
+    lv_layout->addWidget(d->loop_ports);
+    lv_layout->addWidget(l_frame);
+
+    QVBoxLayout *bv_layout = new QVBoxLayout;
+    bv_layout->addWidget(d->blocks);
+    bv_layout->addWidget(b_frame);
+
+    //
     QHBoxLayout *p_layout = new QHBoxLayout;
     p_layout->addLayout(ip_layout);
     p_layout->addLayout(op_layout);
+
+    QHBoxLayout *lb_layout = new QHBoxLayout;
+    lb_layout->addLayout(lv_layout);
+    lb_layout->addLayout(bv_layout);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(top);
-    layout->addWidget(d->loop_ports);
-    layout->addWidget(l_frame);
+    layout->addLayout(lb_layout);
     layout->addLayout(p_layout);
     layout->addWidget(d->spin_d);
     layout->addWidget(d->spin_f);
@@ -341,6 +371,9 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
 
     connect(d->add_loop_port, SIGNAL(clicked()), this, SLOT(addLoopPort()));
     connect(d->rem_loop_port, SIGNAL(clicked()), this, SLOT(removeLoopPort()));
+
+    connect(d->add_block, SIGNAL(clicked()), this, SLOT(addBlock()));
+    connect(d->rem_block, SIGNAL(clicked()), this, SLOT(removeBlock()));
 
     connect(d->add_input_port, SIGNAL(clicked()), this, SLOT(addInputPort()));
     connect(d->rem_input_port, SIGNAL(clicked()), this, SLOT(removeInputPort()));
@@ -421,12 +454,20 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
         d->input_ports->clear();
         d->output_ports->clear();
 
-        if(dynamic_cast<dtkComposerNodeControlIf *>(node->wrapee())) {
+        if(dynamic_cast<dtkComposerNodeControlIf *>(node->wrapee()) || dynamic_cast<dtkComposerNodeControlCase *>(node->wrapee())) {
             d->add_loop_port->setEnabled(false);
             d->rem_loop_port->setEnabled(false);
         } else {
             d->add_loop_port->setEnabled(true);
             d->rem_loop_port->setEnabled(true);
+        }
+
+        if(dynamic_cast<dtkComposerNodeControlCase *>(node->wrapee())) {
+            d->add_block->setEnabled(true);
+            d->rem_block->setEnabled(true);
+        } else {
+            d->add_block->setEnabled(false);
+            d->rem_block->setEnabled(false);
         }
 
         d->add_input_port->setEnabled(true);
@@ -633,6 +674,46 @@ void dtkComposerSceneNodeEditor::clear(void)
     d->edit_s->blockSignals(true);
     d->edit_s->setVisible(false);
     d->edit_s->setEnabled(false);
+}
+
+void dtkComposerSceneNodeEditor::addBlock(void)
+{
+    dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(d->node);
+
+    if(!control)
+        return;
+
+    dtkComposerStackCommandCreateBlock *command;
+    command = new dtkComposerStackCommandCreateBlock;
+    command->setScene(d->scene);
+    command->setGraph(d->graph);
+    command->setNode(control);
+
+    d->stack->push(command);
+
+    this->setNode(d->node);
+}
+
+void dtkComposerSceneNodeEditor::removeBlock(void)
+{
+    dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(d->node);
+
+    if(!control)
+        return;
+
+    int i = d->selector->currentIndex();
+
+    dtkComposerStackCommandDestroyBlock *command;
+    command = new dtkComposerStackCommandDestroyBlock;
+    command->setScene(d->scene);
+    command->setGraph(d->graph);
+    command->setNode(control->blocks().at(i));
+    command->setId(i);
+
+    d->stack->push(command);
+
+    d->selector->clear();
+    this->setNode(d->node);
 }
 
 void dtkComposerSceneNodeEditor::addLoopPort(void)

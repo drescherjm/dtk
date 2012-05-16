@@ -2,6 +2,7 @@
   <qresource prefix="dtkComposer">
     <file>dtkComposerNodePi.html</file>
     <file>dtkComposerNodeE.html</file>
+    <file>dtkComposerNodeControlCase.html</file>
     <file>dtkComposerNodeControlIf.html</file>
   </qresource>
 </RCC>

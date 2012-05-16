@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:37:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 16 09:37:36 2012 (+0200)
+ * Last-Updated: Wed May 16 09:45:54 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 2
+ *     Update #: 7
  */
 
 /* Commentary: 
@@ -20,11 +20,13 @@
 #ifndef DTKVIEWMANAGER_H
 #define DTKVIEWMANAGER_H
 
-#include <QFrame>
+#include "dtkGuiExport.h"
+
+#include <QtGui/QFrame>
 
 class dtkViewManagerPrivate;
 
-class dtkViewManager : public QFrame
+class DTKGUI_EXPORT dtkViewManager : public QFrame
 {
     Q_OBJECT
 

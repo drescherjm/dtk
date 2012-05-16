@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 16 09:38:58 2012 (+0200)
+ * Last-Updated: Wed May 16 09:46:15 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 2
+ *     Update #: 4
  */
 
 /* Commentary: 
@@ -20,11 +20,13 @@
 #ifndef DTKVIEWLIST_H
 #define DTKVIEWLIST_H
 
+#include "dtkGuiExport.h"
+
 #include <QtGui>
 
 class dtkViewListPrivate;
 
-class dtkViewList : public QListWidget
+class DTKGUI_EXPORT dtkViewList : public QListWidget
 {
     Q_OBJECT
 

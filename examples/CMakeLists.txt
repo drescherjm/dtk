@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:06:43 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Sun May  6 18:58:31 2012 (+0200)
-##           By: tkloczko
-##     Update #: 83
+## Last-Updated: Wed May 16 09:44:16 2012 (+0200)
+##           By: Julien Wintz
+##     Update #: 84
 ######################################################################
 ## 
 ### Commentary: 
@@ -56,6 +56,7 @@ add_subdirectory(dtkSettingsEditor)
 add_subdirectory(dtkFinder)
 add_subdirectory(dtkAboutPlugin)
 add_subdirectory(dtkFlowLayout)
+add_subdirectory(dtkViewManager)
 
 ## #################################################################
 ## dtkVr examples

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:08 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 16 09:38:11 2012 (+0200)
+ * Last-Updated: Wed May 16 09:46:37 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 2
+ *     Update #: 4
  */
 
 /* Commentary: 
@@ -19,6 +19,8 @@
 
 #ifndef DTKVIEWLAYOUT_H
 #define DTKVIEWLAYOUT_H
+
+#include "dtkGuiExport.h"
 
 #include <QtGui>
 
@@ -36,4 +38,4 @@ private:
     dtkViewLayoutPrivate *d;
 };
 
-#endif // DTKVIEWLAYOUT_H
+#endif

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:54:04 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 23 11:11:24 2012 (+0200)
+ * Last-Updated: Wed May 16 13:51:21 2012 (+0200)
  *           By: tkloczko
- *     Update #: 222
+ *     Update #: 224
  */
 
 /* Commentary:
@@ -87,6 +87,20 @@ dtkAbstractObject& dtkAbstractObject::operator = (const dtkAbstractObject& other
     d_ptr->isDeferredDeletionEnabled = true;
 
     return *this;
+}
+
+//! Comparison operator.
+/*!
+ *  
+ */
+bool dtkAbstractObject::operator == (const dtkAbstractObject& other)
+{
+    if (d_ptr->values != other.d_ptr->values         ||
+        d_ptr->properties != other.d_ptr->properties ||
+        d_ptr->metadatas != other.d_ptr->metadatas)
+        return false;
+
+    return true;
 }
 
 QString dtkAbstractObject::description(void) const

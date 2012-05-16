@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: mar. mai 15 17:05:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: mer. mai 16 16:59:07 2012 (+0200)
+ * Last-Updated: mer. mai 16 18:07:02 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 229
+ *     Update #: 256
  */
 
 /* Commentary:
@@ -160,16 +160,23 @@ void dtkComposerNodeControlCase::setVariables(void)
 int dtkComposerNodeControlCase::selectBranch(void)
 {
     int value = 0;
+    bool is_case = false;
 
-    for (int i = 1; i < d->blocks.count(); i++)
+    for (int i = 1; i < d->blocks.count(); i++) {
+        dtkComposerTransmitterVariant *v =  dynamic_cast < dtkComposerTransmitterVariant * > ( d->blocks_input[i-1]) ;
+        if (value > 0) //already found the good block, no need to check again.
+            is_case = false;
+        else
+            is_case = d->cond.data() ==  v->data();
+
         foreach(dtkComposerTransmitter *t, d->blocks[i]->emitters()) {
-            dtkComposerTransmitterVariant *v =  dynamic_cast<dtkComposerTransmitterVariant *>(d->blocks_input[i-1]);
-            if (d->cond.data() ==  v->data() ) {
+            if (is_case) {
                 t->setActive(true);
                 value = i;
             } else
                 t->setActive(false);
         }
+    }
 
     foreach(dtkComposerTransmitter *t, d->blocks[0]->emitters())
         if (value == 0)

@@ -17,15 +17,13 @@
  *
  */
 
-<<<<<<< HEAD
+
 #include "dtkAbstractData.h"
 #include "dtkAbstractDataFactory.h"
 #include "dtkAbstractProcessFactory.h"
 #include "dtkAbstractViewFactory.h"
 #include "dtkPluginManager.h"
 
-=======
->>>>>>> cdf41cfcdde4be758fe34ac384f60a3eea379c85
 #include "dtkPlugin.h"
 #include "dtkPluginManager.h"
 

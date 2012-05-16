@@ -281,15 +281,9 @@ void dtkComposerNodeNumberOperatorUnarySqrt::run(void)
     case QVariant::Int:
     case QVariant::UInt:
     case QVariant::LongLong:
-<<<<<<< HEAD
-//    case QVariant::ULongLong:
-//        d->emitter->setData(sqrtl(qVariantValue<qlonglong>(d->receiver->data())));
-//        break;
-=======
     case QVariant::ULongLong:
         d->emitter.setData(sqrt(qVariantValue<qlonglong>(d->receiver.data())));
         break;
->>>>>>> cdf41cfcdde4be758fe34ac384f60a3eea379c85
     case QVariant::Double:
         d->emitter.setData(sqrt(qVariantValue<double>(d->receiver.data())));
         break;

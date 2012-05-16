@@ -166,7 +166,7 @@ add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
   COMMAND ${CMAKE_COMMAND} ARGS -E copy "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}"
   COMMAND ${CMAKE_COMMAND} ARGS -E copy "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export")
 
-<<<<<<< HEAD
+
 ## #################################################################
 ## Handling of generated script modules
 ## #################################################################
@@ -184,11 +184,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/vr.py)
 
 endif(DTK_BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
-=======
-set(${PROJECT_NAME}_HEADERS
-  ${${PROJECT_NAME}_HEADERS}
- "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export.h")
->>>>>>> cdf41cfcdde4be758fe34ac384f60a3eea379c85
+
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

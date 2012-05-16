@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mai 16 12:30:44 2012 (+0200)
+ * Last-Updated: mer. mai 16 13:49:10 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 643
+ *     Update #: 644
  */
 
 /* Commentary: 
@@ -299,7 +299,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
                 control->addBlock();
                 b->wrap(control->block( control->blockCount()-1));
                 d->control->addBlock(b);
-                d->graph->addNode(d->control);
+                d->graph->addBlock(d->control);
                 n = d->control->blocks().last();
 
         } else {

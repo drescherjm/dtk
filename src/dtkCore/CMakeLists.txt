@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Apr 17 21:55:36 2012 (+0200)
+## Last-Updated: Tue May 15 13:35:15 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 277
+##     Update #: 291
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,6 +24,7 @@ project(dtkCore)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkAbstractContainer.h
   dtkAbstractData.h
   dtkAbstractDataFactory.h
   dtkAbstractDataReader.h
@@ -35,7 +36,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractDataConverter.h
   dtkAbstractFactory.h
   dtkAbstractObject.h
-  dtkPlugin.h
   dtkAbstractProcess.h
   dtkAbstractProcessFactory.h
   dtkAbstractView.h
@@ -43,17 +43,22 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractViewFactory.h
   dtkAbstractViewInteractor.h
   dtkAbstractViewNavigator.h
+  dtkContainerList.h
+  dtkContainerList.tpp
+  dtkContainerVector.h
+  dtkContainerVector.tpp
+  dtkCpuid.h
   dtkGlobal.h
+  dtkPlugin.h
   dtkPluginManager.h
-  dtkQuat.h
   dtkUpdater.h
   dtkSignalBlocker.h
   dtkSingleton.h
   dtkSingletonDeclare.h
-  dtkSmartPointer.h
-  dtkVec3.h)
+  dtkSmartPointer.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
+  dtkAbstractContainer.h
   dtkAbstractData.h
   dtkAbstractDataFactory.h
   dtkAbstractDataReader.h
@@ -64,7 +69,6 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractDataConverter.h
   dtkAbstractFactory.h
   dtkAbstractObject.h
-  dtkPlugin.h
   dtkAbstractProcess.h
   dtkAbstractProcessFactory.h
   dtkAbstractView.h
@@ -72,10 +76,12 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractViewFactory.h
   dtkAbstractViewInteractor.h
   dtkAbstractViewNavigator.h
+  dtkPlugin.h
   dtkPluginManager.h
   dtkUpdater_p.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkAbstractContainer.cpp
   dtkAbstractDataFactory.cpp
   dtkAbstractData.cpp
   dtkAbstractDataReader.cpp
@@ -93,9 +99,9 @@ set(${PROJECT_NAME}_SOURCES
   dtkAbstractViewAnimator.cpp
   dtkAbstractViewInteractor.cpp
   dtkAbstractViewNavigator.cpp
+  dtkCpuid.cpp
   dtkPlugin.cpp
   dtkPluginManager.cpp
-  dtkQuat.cpp
   dtkSignalBlocker.h
   dtkSingleton.cpp
   dtkSingletonDeclare.cpp
@@ -197,10 +203,15 @@ generate_export_header(${PROJECT_NAME}
   EXPORT_FILE_NAME "${PROJECT_NAME}Export.h")
 
 add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
-  COMMAND ${CMAKE_COMMAND} ARGS -E copy
-  "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h"
-  "${CMAKE_BINARY_DIR}")
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}"
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export")
 
+<<<<<<< HEAD
+=======
+set(${PROJECT_NAME}_HEADERS
+  ${${PROJECT_NAME}_HEADERS}
+ "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export.h")
+>>>>>>> cdf41cfcdde4be758fe34ac384f60a3eea379c85
 
 ## #################################################################
 ## Handling of generated script modules

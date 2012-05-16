@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: lun. nov. 28 15:46:10 2011 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 348
+ * Last-Updated: Wed May  9 11:37:17 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 357
  */
 
 /* Commentary:
@@ -46,15 +46,13 @@
 #include "dtkPlugin.h"
 #include "dtkPluginManager.h"
 #include "dtkSmartPointer.h"
-#include "dtkVec3.h"
-#include "dtkQuat.h"
 %}
 
 // /////////////////////////////////////////////////////////////////
 // Preprocessing setup
 // /////////////////////////////////////////////////////////////////
 
-#pragma SWIG nowarn=389, 401, 509, 801, 472
+#pragma SWIG nowarn=389, 401, 509, 801, 472, 362, 503
 
 // /////////////////////////////////////////////////////////////////
 // Macro undefinition
@@ -79,6 +77,9 @@
 
 #undef  DTKCORE_EXPORT
 #define DTKCORE_EXPORT
+
+#undef  DTK_DEPRECATED
+#define DTK_DEPRECATED
 
 // /////////////////////////////////////////////////////////////////
 // Ignore rules for operators
@@ -123,10 +124,21 @@
 %ignore canceled();
 
 // /////////////////////////////////////////////////////////////////
-// Ignore rules for dtkAbstractView signals
+// Ignore rules for dtkAbstractView signals and deprecated
 // /////////////////////////////////////////////////////////////////
 
 %ignore closed();
+%ignore enableInteraction(void);
+%ignore disableInteraction(void);
+%ignore bounds(float& xmin, float& xmax, float& ymin, float& ymax, float &zmin, float& zmax);
+%ignore cameraUp(double *coordinates) const;
+%ignore cameraPosition(double *coordinates) const;
+%ignore cameraFocalPoint(double *coordinates) const;
+%ignore setCameraPosition(double x, double y, double z);
+%ignore setCameraClippingRange(double near, double far);
+%ignore cameraProjectionMode(void) const;
+%ignore cameraViewAngle(void) const;
+%ignore cameraZoom(void) const;
 
 // /////////////////////////////////////////////////////////////////
 // Ignore rules for dtkAbstractViewInteractor signals
@@ -346,7 +358,5 @@ public:
 %include "dtkAbstractViewNavigator.h"
 %include "dtkPlugin.h"
 %include "dtkPluginManager.h"
-%include "dtkVec3.h"
-%include "dtkQuat.h"
 
 #endif

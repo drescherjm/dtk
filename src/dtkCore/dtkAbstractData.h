@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mars 28 09:07:20 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 238
+ * Last-Updated: Wed May 16 13:51:50 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 248
  */
 
 /* Commentary:
@@ -31,15 +31,26 @@ class dtkAbstractDataSerializer;
 class dtkAbstractDataDeserializer;
 class dtkAbstractDataPrivate;
 
+// /////////////////////////////////////////////////////////////////
+// dtkAbstractData interface
+// /////////////////////////////////////////////////////////////////
+
 class DTKCORE_EXPORT dtkAbstractData : public dtkAbstractObject
 {
     Q_OBJECT
 
 public:
              dtkAbstractData(      dtkAbstractData *parent = 0);
-             dtkAbstractData(const dtkAbstractData& data);
+             dtkAbstractData(const dtkAbstractData& other);
     virtual ~dtkAbstractData(void);
 
+public:
+    dtkAbstractData& operator = (const dtkAbstractData& other);
+
+public:
+    bool operator == (const dtkAbstractData& other);
+
+public:
     friend DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractData& data);
     friend DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractData *data);
 
@@ -68,6 +79,9 @@ public slots:
 
     virtual void setParameter(int parameter);
     virtual void setParameter(int parameter, int channel);
+
+    virtual void setParameter(qlonglong parameter);
+    virtual void setParameter(qlonglong parameter, int channel);
 
     virtual void setParameter(float parameter);
     virtual void setParameter(float parameter, int channel);
@@ -118,19 +132,20 @@ public slots:
     QString     path(void);
     QStringList paths(void);
 
-    virtual       QImage & thumbnail(void)  const;
-    virtual QList<QImage>& thumbnails(void) const;
+    virtual       QImage & thumbnail(void) ;
+    virtual QList<QImage>& thumbnails(void);
 
 public:
     virtual bool casts(const QString& type);
 
-    virtual operator bool   (void);
-    virtual operator int    (void);
-    virtual operator float  (void);
-    virtual operator double (void);
+    virtual operator bool      (void);
+    virtual operator int       (void);
+    virtual operator qlonglong (void);
+    virtual operator float     (void);
+    virtual operator double    (void);
 
 private:
-    dtkAbstractDataPrivate *d;
+    DTK_DECLARE_PRIVATE(dtkAbstractData);
 };
 
 DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractData& data);

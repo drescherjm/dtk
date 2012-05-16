@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 22:03:03 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Dec 14 10:24:41 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 33
+ * Last-Updated: Tue Apr 24 11:38:11 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 38
  */
 
 /* Commentary: 
@@ -18,47 +18,55 @@
  */
 
 #include "dtkAbstractDataWriter.h"
-
+#include "dtkAbstractDataWriter_p.h"
 #include "dtkAbstractData.h"
-#include "dtkSmartPointer.h"
 
-class dtkAbstractDataWriterPrivate
+// /////////////////////////////////////////////////////////////////
+// dtkAbstractDataWriter implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkAbstractDataWriter::dtkAbstractDataWriter(void) : dtkAbstractObject(*new dtkAbstractDataWriterPrivate(this), 0)
 {
-public:
-    bool enabled;
+    DTK_D(dtkAbstractDataWriter);
 
-    dtkSmartPointer<dtkAbstractData> data;
-};
-
-dtkAbstractDataWriter::dtkAbstractDataWriter(void) : dtkAbstractObject(), d(new dtkAbstractDataWriterPrivate)
-{
     d->enabled = false;
+}
+
+dtkAbstractDataWriter::dtkAbstractDataWriter(const dtkAbstractDataWriter& other) : dtkAbstractObject(*new dtkAbstractDataWriterPrivate(*other.d_func()), other)
+{
+
 }
 
 dtkAbstractDataWriter::~dtkAbstractDataWriter(void)
 {
-    delete d;
 
-    d = NULL;
 }
 
 bool dtkAbstractDataWriter::enabled(void) const
 {
+    DTK_D(const dtkAbstractDataWriter);
+
     return d->enabled;
 }
 
 void dtkAbstractDataWriter::enable(void)
 {
+    DTK_D(dtkAbstractDataWriter);
+
     d->enabled = true;
 }
 
 void dtkAbstractDataWriter::disable(void)
 {
+    DTK_D(dtkAbstractDataWriter);
+
     d->enabled = false;
 }
 
-dtkAbstractData *dtkAbstractDataWriter::data(void)
+dtkAbstractData *dtkAbstractDataWriter::data(void) const
 {
+    DTK_D(const dtkAbstractDataWriter);
+
     return d->data;
 }
 
@@ -68,6 +76,8 @@ dtkAbstractData *dtkAbstractDataWriter::data(void)
  */
 void dtkAbstractDataWriter::setData(dtkAbstractData *data)
 {
+    DTK_D(dtkAbstractDataWriter);
+
     d->data = data;
 }
 

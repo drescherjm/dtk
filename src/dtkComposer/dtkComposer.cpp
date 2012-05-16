@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:06:10 2012 (+0200)
- *           By: tkloczko
- *     Update #: 210
+ * Last-Updated: Fri Apr 27 18:43:18 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 334
  */
 
 /* Commentary: 
@@ -19,12 +19,16 @@
 
 #include "dtkComposer.h"
 #include "dtkComposer_p.h"
+#include "dtkComposerCompass.h"
 #include "dtkComposerEvaluator.h"
 #include "dtkComposerFactory.h"
 #include "dtkComposerGraph.h"
 #include "dtkComposerMachine.h"
+#include "dtkComposerNodeRemote.h"
 #include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
+#include "dtkComposerSceneNodeComposite.h"
+#include "dtkComposerSceneNodeControl.h"
 #include "dtkComposerStack.h"
 #include "dtkComposerView.h"
 #include "dtkComposerWriter.h"
@@ -104,8 +108,12 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
     d->scene->setStack(d->stack);
     d->scene->setGraph(d->graph);
 
-    d->view = new dtkComposerView;
+    d->view = new dtkComposerView(this);
     d->view->setScene(d->scene);
+
+    d->compass = new dtkComposerCompass;
+    d->compass->setScene(d->scene);
+    d->compass->setView(d->view);
 
     d->evaluator->setGraph(d->graph);
 
@@ -121,7 +129,9 @@ dtkComposer::~dtkComposer(void)
 {
     delete d->machine;
     delete d->factory;
+    delete d->graph;
     delete d->stack;
+    delete d->evaluator;
     delete d;
     
     d = NULL;
@@ -186,8 +196,27 @@ bool dtkComposer::insert(QString file)
     return true;
 }
 
+void dtkComposer::updateRemotes(dtkComposerSceneNodeComposite *composite)
+{
+    dtkComposerWriter writer;
+    writer.setScene(d->scene);
+
+    foreach(dtkComposerSceneNode *node, composite->nodes()) {
+        if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(node->wrapee()))
+            remote->setComposition(writer.toXML(dynamic_cast<dtkComposerSceneNodeComposite *>(node)));
+        else if (dtkComposerSceneNodeComposite *sub = dynamic_cast<dtkComposerSceneNodeComposite *>(node))
+            this->updateRemotes(sub);
+        else if (dtkComposerSceneNodeControl *ctrl = dynamic_cast<dtkComposerSceneNodeControl *>(node))
+            foreach(dtkComposerSceneNodeComposite *block, ctrl->blocks())
+                this->updateRemotes(block);
+    }
+}
+
+
 void dtkComposer::run(void)
 {
+    this->updateRemotes(d->scene->root());
+
     QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::run, false);
 
     d->graph->update();
@@ -253,4 +282,9 @@ dtkComposerStack *dtkComposer::stack(void)
 dtkComposerView *dtkComposer::view(void)
 {
     return d->view;
+}
+
+dtkComposerCompass *dtkComposer::compass(void)
+{
+    return d->compass;
 }

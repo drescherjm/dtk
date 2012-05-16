@@ -1,0 +1,20 @@
+/* dtkVrTrackerKinectConfig.h.in --- 
+ * 
+ * Author: Julien Wintz
+ * Copyright (C) 2008-2011 - Julien Wintz, Inria.
+ * Created: Wed Apr 25 17:30:28 2012 (+0200)
+ * Version: $Id$
+ * Last-Updated: Wed Apr 25 17:30:49 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 3
+ */
+
+/* Commentary: 
+ * 
+ */
+
+/* Change log:
+ * 
+ */
+
+#define DTKVRTRACKERKINECT_XML_PATH "@DTKVRTRACKERKINECT_XML_PATH@"

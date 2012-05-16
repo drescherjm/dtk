@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Oct 31 13:49:50 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 16 10:41:10 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 65
+ * Last-Updated: Tue Apr 24 14:43:47 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 69
  */
 
 /* Commentary: 
@@ -30,14 +30,20 @@ class dtkAbstractViewFactory;
 
 class dtkPluginPrivate;
 
+// /////////////////////////////////////////////////////////////////
+// dtkPlugin interface
+// /////////////////////////////////////////////////////////////////
+
 class DTKCORE_EXPORT dtkPlugin : public dtkAbstractObject
 {
     Q_OBJECT
 
 public:
-     dtkPlugin(QObject *parent = 0);
-    ~dtkPlugin(void);
+             dtkPlugin(QObject *parent = 0);
+             dtkPlugin(const dtkPlugin& other);
+    virtual ~dtkPlugin(void);
     
+public:
     virtual bool initialize(void) = 0;
     virtual bool uninitialize(void) = 0;
     
@@ -62,7 +68,7 @@ public:
     dtkAbstractProcessFactory *processFactorySingleton(void);
 
 private:
-    dtkPluginPrivate *d;
+    DTK_DECLARE_PRIVATE(dtkPlugin);
 };
 
 Q_DECLARE_INTERFACE(dtkPlugin, "fr.inria.dtk/0.1.0")

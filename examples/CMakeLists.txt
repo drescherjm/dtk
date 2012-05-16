@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:06:43 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Mar  2 15:20:31 2012 (+0100)
+## Last-Updated: Wed May 16 09:44:16 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 81
+##     Update #: 84
 ######################################################################
 ## 
 ### Commentary: 
@@ -25,6 +25,12 @@ add_subdirectory(dtkLogger)
 add_subdirectory(dtkLogView)
 
 ## #################################################################
+## dtkNotification examples
+## #################################################################
+
+add_subdirectory(dtkNotificationDisplay)
+
+## #################################################################
 ## dtkCrypto examples
 ## #################################################################
 
@@ -35,6 +41,7 @@ add_subdirectory(dtkLicenseManager)
 ## #################################################################
 
 add_subdirectory(dtkAbstractDataComposite)
+add_subdirectory(dtkContainer)
 add_subdirectory(dtkReferenceCounting)
 add_subdirectory(dtkUpdater)
 
@@ -49,6 +56,7 @@ add_subdirectory(dtkSettingsEditor)
 add_subdirectory(dtkFinder)
 add_subdirectory(dtkAboutPlugin)
 add_subdirectory(dtkFlowLayout)
+add_subdirectory(dtkViewManager)
 
 ## #################################################################
 ## dtkVr examples

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Thu Sep  9 11:30:33 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Apr 16 12:22:40 2012 (+0200)
+## Last-Updated: Fri Apr 27 20:54:55 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 53
+##     Update #: 57
 ######################################################################
 ## 
 ### Commentary: 
@@ -86,10 +86,16 @@ generate_export_header(${PROJECT_NAME}
   EXPORT_FILE_NAME "${PROJECT_NAME}Export.h")
 
 add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
-  COMMAND ${CMAKE_COMMAND} ARGS -E copy
-  "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h"
-  "${CMAKE_BINARY_DIR}")
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}"
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export")
 
+<<<<<<< HEAD
+=======
+set(${PROJECT_NAME}_HEADERS
+  ${${PROJECT_NAME}_HEADERS}
+ "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export.h")
+
+>>>>>>> cdf41cfcdde4be758fe34ac384f60a3eea379c85
 ## #################################################################
 ## Source file layout in development environments like Visual Studio
 ## #################################################################

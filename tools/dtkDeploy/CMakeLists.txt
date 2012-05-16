@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Thu Feb 10 11:57:22 2011 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Feb 10 12:04:08 2011 (+0100)
+## Last-Updated: Fri Apr 27 21:32:54 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 9
+##     Update #: 10
 ######################################################################
 ## 
 ### Commentary: 
@@ -53,7 +53,3 @@ SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
 install(TARGETS ${PROJECT_NAME}
    BUNDLE DESTINATION bin
   RUNTIME DESTINATION bin)
-
-if(APPLE)
-  install(CODE "execute_process(COMMAND macdeployqt \${CMAKE_INSTALL_PREFIX}/bin/${PROJECT_NAME}.app)")
-endif(APPLE)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Oct 26 12:39:24 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 28 15:54:08 2010 (+0200)
+ * Last-Updated: Thu Apr 26 17:24:43 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 19
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -17,7 +17,13 @@
  * 
  */
 
-#if defined(DTK_WRAP_VRPN)
+#include <QtCore>
+
+#include <dtkMath/dtkVector3D.h>
+
+#include <dtkConfig.h>
+
+#if defined(DTK_HAVE_VRPN)
 #include <vrpn_Shared.h>
 #include <vrpn_Button.h>
 #include <vrpn_Analog.h>
@@ -25,10 +31,6 @@
 #include <vrpn_FileConnection.h>
 #include <quat.h>
 #endif
-
-#include <QtCore>
-
-#include <dtkMath/dtkVector3D.h>
 
 class dtkAbstractView;
 class dtkVrHeadRecognizer;
@@ -41,7 +43,7 @@ public:
     void run(void);
     void stop(void);
 
-#if defined(DTK_WRAP_VRPN)
+#if defined(DTK_HAVE_VRPN)
     void handle_button(const vrpn_BUTTONCB callback);
     void handle_analog(const vrpn_ANALOGCB callback);
     void handle_tracker(const vrpn_TRACKERCB callback);
@@ -56,7 +58,7 @@ public:
 public:
     bool running;
 
-#if defined(DTK_WRAP_VRPN)
+#if defined(DTK_HAVE_VRPN)
     vrpn_Button_Remote *button;
     vrpn_Analog_Remote *analog;
     vrpn_Tracker_Remote *tracker;

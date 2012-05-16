@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. avril 13 10:05:42 2012 (+0200)
+ * Last-Updated: ven. avril 20 16:13:05 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 959
+ *     Update #: 971
  */
 
 /* Commentary: 
@@ -100,7 +100,7 @@ QByteArray  dtkDistributedServerManagerTorque::status(void)
 
         // Each job is coreid/jobid
         QStringList rjobs  = nodes.item(i).firstChildElement("jobs").text().simplified().split(",");
-        QRegExp rx("(\\d+)/(\\d+)\\..*"); //FIXME:  handle array jobs
+        QRegExp rx("(\\d+)/(\\d+)\\[?(\\d*)\\]?\\..*");
         QVariantList cores;
         qint64 njobs = 0;
         for (int c=0;c<np;c++) {
@@ -112,11 +112,15 @@ QByteArray  dtkDistributedServerManagerTorque::status(void)
         }
         if (rjobs.at(0).count() > 0) { // running jobs ?
             foreach( QString rjob, rjobs ) {
+                rx.indexIn(rjob);
                 QStringList list = rx.capturedTexts();
                 njobs++;
                 qint64 jobcore = list.at(1).toInt();
                 QVariantMap q = cores[jobcore].toMap();
-                q.insert("job",list.at(2)); // can we insert without creating a copy ?
+                if (list.at(3).isEmpty())
+                    q.insert("job",list.at(2));
+                else
+                    q.insert("job",list.at(2)+"[]"); // array job
                 cores[jobcore] = q;
             }
         }

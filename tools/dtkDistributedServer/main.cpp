@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 14:41:29
  * Version: $Id$
- * Last-Updated: ven. avril 13 09:36:22 2012 (+0200)
+ * Last-Updated: mer. avril 25 13:08:30 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 6
+ *     Update #: 13
  */
 
 /* Commentary:
@@ -30,8 +30,9 @@ int main(int argc, char **argv)
     QCoreApplication application(argc, argv);
 
     if(!dtkApplicationArgumentsContain(&application, "--torque")
-    && !dtkApplicationArgumentsContain(&application, "--oar")) {
-        dtkDebug() << "Usage:" << argv[0] << " dtk://server:port [--oar || --torque]";
+       && !dtkApplicationArgumentsContain(&application, "--oar")
+       && !dtkApplicationArgumentsContain(&application, "--ssh")) {
+        qDebug() << "Usage:" << argv[0] << " dtk://server:port [--oar || --torque || --ssh]";
         return DTK_SUCCEED;
     }
 
@@ -40,11 +41,18 @@ int main(int argc, char **argv)
     application.setOrganizationName("inria");
     application.setOrganizationDomain("fr");
 
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("server");
 
-    dtkLogger::instance().setLevel(dtkLog::Debug);
+    if (settings.contains("log_level"))
+        dtkLogger::instance().setLevel(settings.value("log_level").toString());
+    else
+        dtkLogger::instance().setLevel(dtkLog::Debug);
+
     dtkLogger::instance().attachFile(dtkLogPath(&application));
 
     dtkDistributedServer server(argc, argv);
+    qDebug() << "server started";
     server.run();
 
     int status = application.exec();

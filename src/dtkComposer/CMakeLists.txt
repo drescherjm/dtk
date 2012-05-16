@@ -2,11 +2,10 @@
 ##
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
-## Created: Fri Sep  4 10:11:02 2009 (+0200)
-## Version: $Id$
-## Last-Updated: Mon Apr 16 12:00:50 2012 (+0200)
-##           By: Julien Wintz
-##     Update #: 479
+## Created: Fri Se
+## Last-Updated: Tue May 15 12:14:34 2012 (+0200)
+##           By: tkloczko
+##     Update #: 534
 ######################################################################
 ##
 ### Commentary:
@@ -25,6 +24,7 @@ project(dtkComposer)
 
 set(${PROJECT_NAME}_HEADERS
   dtkComposer.h
+  dtkComposerCompass.h
   dtkComposerEvaluator.h
   dtkComposerFactory.h
   dtkComposerFactoryView.h
@@ -44,10 +44,13 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerMachine.h
   dtkComposerMachineState.h
   dtkComposerNode.h
+  dtkComposerNodeArrayScalar.h
+dtkComposerNodeArrayScalarOperatorModifier.h
   dtkComposerNodeBoolean.h
   dtkComposerNodeBooleanOperator.h
   dtkComposerNodeComposite.h
   dtkComposerNodeConstants.h
+  dtkComposerNodeContainerData.h
   dtkComposerNodeControl.h
   dtkComposerNodeControlDoWhile.h
   dtkComposerNodeControlIf.h
@@ -64,10 +67,19 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeNumberOperator.h
   dtkComposerNodeProcess.h
   dtkComposerNodeProxy.h
+  dtkComposerNodeQuaternion.h
+  dtkComposerNodeQuaternionOperatorUnary.h
+  dtkComposerNodeQuaternionOperatorBinary.h
   dtkComposerNodeReal.h
   dtkComposerNodeString.h
+  dtkComposerNodeStringOperator.h
   dtkComposerNodeVector.h
   dtkComposerNodeVectorOperator.h
+  dtkComposerNodeVector3D.h
+  dtkComposerNodeVector3DOperatorUnary.h
+  dtkComposerNodeVector3DOperatorBinary.h
+  dtkComposerNodeVector3DOperatorTernary.h
+  dtkComposerNodeView.h
   dtkComposerScene.h
   dtkComposerSceneEdge.h
   dtkComposerSceneModel.h
@@ -97,6 +109,7 @@ set(${PROJECT_NAME}_HEADERS
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposer.h
   dtkComposer_p.h
+  dtkComposerCompass.h
   dtkComposerEvaluator.h
   dtkComposerFactory.h
   dtkComposerFactoryView.h
@@ -104,6 +117,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerGraphView.h
   dtkComposerMachine.h
   dtkComposerMachineState.h
+  dtkComposerNodeView.h
   dtkComposerSceneModel.h
   dtkComposerScene.h
   dtkComposerSceneNodeEditor.h
@@ -114,6 +128,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
 
 set(${PROJECT_NAME}_SOURCES
   dtkComposer.cpp
+  dtkComposerCompass.cpp
   dtkComposerEvaluator.cpp
   dtkComposerFactory.cpp
   dtkComposerFactoryView.cpp
@@ -132,10 +147,13 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerMachine.cpp
   dtkComposerMachineState.cpp
   dtkComposerNode.cpp
+  dtkComposerNodeArrayScalar.cpp
+dtkComposerNodeArrayScalarOperatorModifier.cpp
   dtkComposerNodeBoolean.cpp
   dtkComposerNodeBooleanOperator.cpp
   dtkComposerNodeComposite.cpp
   dtkComposerNodeConstants.cpp
+  dtkComposerNodeContainerData.cpp
   dtkComposerNodeControl.cpp
   dtkComposerNodeControlDoWhile.cpp
   dtkComposerNodeControlIf.cpp
@@ -152,10 +170,19 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeNumberOperator.cpp
   dtkComposerNodeProcess.cpp
   dtkComposerNodeProxy.cpp
+  dtkComposerNodeQuaternion.cpp
+  dtkComposerNodeQuaternionOperatorUnary.cpp
+  dtkComposerNodeQuaternionOperatorBinary.cpp
   dtkComposerNodeReal.cpp
   dtkComposerNodeString.cpp
+  dtkComposerNodeStringOperator.cpp
   dtkComposerNodeVector.cpp
   dtkComposerNodeVectorOperator.cpp
+  dtkComposerNodeVector3D.cpp
+  dtkComposerNodeVector3DOperatorUnary.cpp
+  dtkComposerNodeVector3DOperatorBinary.cpp
+  dtkComposerNodeVector3DOperatorTernary.cpp
+  dtkComposerNodeView.cpp
   dtkComposerScene.cpp
   dtkComposerSceneEdge.cpp
   dtkComposerSceneModel.cpp
@@ -185,7 +212,7 @@ set(${PROJECT_NAME}_RESOURCES dtkComposer.qrc)
 ## Mpi sources
 ## #################################################################
 
-if(MPI_FOUND)
+if(DTK_HAVE_MPI)
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkComposerNodeDistributed.h
   dtkComposerNodeRemote.h
@@ -195,7 +222,31 @@ set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkComposerNodeDistributed.cpp
   dtkComposerNodeRemote.cpp
   dtkComposerNodeWorld.cpp)
-endif(MPI_FOUND)
+endif(DTK_HAVE_MPI)
+
+## #################################################################
+## Kinect sources
+## #################################################################
+
+if(DTK_HAVE_NITE)
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkComposerNodeTrackerKinect.h)
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC})
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkComposerNodeTrackerKinect.cpp)
+endif(DTK_HAVE_NITE)
+
+## #################################################################
+## Vrpn sources
+## #################################################################
+
+if(DTK_HAVE_VRPN AND DTK_HAVE_MPI)
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkComposerNodeTrackerVrpn.h)
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC})
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkComposerNodeTrackerVrpn.cpp)
+endif(DTK_HAVE_VRPN AND DTK_HAVE_MPI)
 
 ## #################################################################
 ## Build rules
@@ -246,11 +297,16 @@ target_link_libraries(${PROJECT_NAME}
   dtkMath
   dtkCore
   dtkGui
-  dtkLog)
+  dtkLog
+  dtkNotification)
 
-if(MPI_FOUND)
+if(DTK_HAVE_MPI)
 target_link_libraries(${PROJECT_NAME} dtkDistributed)
-endif(MPI_FOUND)
+endif(DTK_HAVE_MPI)
+
+if(DTK_HAVE_NITE)
+target_link_libraries(${PROJECT_NAME} dtkVr)
+endif(DTK_HAVE_NITE)
 
 ## #################################################################
 ## Export header file
@@ -262,10 +318,16 @@ generate_export_header(${PROJECT_NAME}
   EXPORT_FILE_NAME "${PROJECT_NAME}Export.h")
 
 add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
-  COMMAND ${CMAKE_COMMAND} ARGS -E copy
-  "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h"
-  "${CMAKE_BINARY_DIR}")
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}"
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export")
 
+<<<<<<< HEAD
+=======
+set(${PROJECT_NAME}_HEADERS
+  ${${PROJECT_NAME}_HEADERS}
+ "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export.h")
+
+>>>>>>> cdf41cfcdde4be758fe34ac384f60a3eea379c85
 ## #################################################################
 ## Source file layout in development environments like Visual Studio
 ## #################################################################

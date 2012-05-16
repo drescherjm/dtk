@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 17 22:55:42 2012 (+0200)
+ * Last-Updated: Fri May  4 16:13:25 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 1616
+ *     Update #: 1671
  */
 
 /* Commentary:
@@ -23,6 +23,7 @@
 #include <dtkDistributed/dtkDistributor.h>
 
 #include <dtkComposer/dtkComposer.h>
+#include <dtkComposer/dtkComposerCompass.h>
 #include <dtkComposer/dtkComposerEvaluator.h>
 #include <dtkComposer/dtkComposerFactoryView.h>
 #include <dtkComposer/dtkComposerGraph.h>
@@ -40,33 +41,16 @@
 #include <dtkGui/dtkSplitter.h>
 
 #include <dtkCore/dtkGlobal.h>
+#include <dtkCore/dtkPluginManager.h>
 
 #include <dtkLog/dtkLog.h>
 #include <dtkLog/dtkLogView.h>
 
+#include <dtkNotification/dtkNotification.h>
+#include <dtkNotification/dtkNotificationDisplay.h>
+
 #include <QtCore>
 #include <QtGui>
-
-// /////////////////////////////////////////////////////////////////
-// dtkCreatorMainWindowControls
-// /////////////////////////////////////////////////////////////////
-
-dtkCreatorMainWindowControls::dtkCreatorMainWindowControls(QWidget *parent) : QFrame(parent)
-{
-    this->setFixedHeight(46);
-
-    this->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-}
-
-dtkCreatorMainWindowControls::~dtkCreatorMainWindowControls(void)
-{
-
-}
-
-QSize dtkCreatorMainWindowControls::sizeHint(void) const
-{
-    return QSize(350, 46);
-}
 
 // /////////////////////////////////////////////////////////////////
 // dtkCreatorMainWindowPrivate
@@ -137,6 +121,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     d->composer = new dtkComposer;
     d->composer->view()->setBackgroundBrush(QBrush(QPixmap(":dtkCreator/pixmaps/dtkComposerScene-bg.png")));
+    d->composer->view()->setCacheMode(QGraphicsView::CacheBackground);
 
     d->editor = new dtkComposerSceneNodeEditor(this);
     d->editor->setScene(d->composer->scene());
@@ -160,6 +145,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->graph->setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
     d->graph->setScene(d->composer->graph());
     d->graph->setVisible(false);
+    d->graph->setBackgroundBrush(QBrush(QPixmap(":dtkCreator/pixmaps/dtkComposerGraphView-bg.png")));
 
     d->log_view = new dtkLogView(this);
     d->log_view->setVisible(false);
@@ -203,8 +189,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     // -- Toolbar
 
-    QToolBar *mainToolBar;
-    mainToolBar = this->addToolBar(tr("Main"));
+    QToolBar *mainToolBar = this->addToolBar(tr("Main"));
     mainToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     mainToolBar->setIconSize(QSize(32, 32));
     
@@ -226,37 +211,37 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     QFrame *buttons = new QFrame(this);
     buttons->setObjectName("dtkCreatorMainWindowSegmentedButtons");
 
-    QPushButton *compo_button = new QPushButton("Composition", buttons);
-    compo_button->setObjectName("dtkCreatorMainWindowSegmentedButtonLeft");
-    compo_button->setFixedSize(75, 25);
-    compo_button->setCheckable(true);
-    compo_button->setChecked(true);
+    d->compo_button = new QPushButton("Composition", buttons);
+    d->compo_button->setObjectName("dtkCreatorMainWindowSegmentedButtonLeft");
+    d->compo_button->setFixedSize(75, 25);
+    d->compo_button->setCheckable(true);
+    d->compo_button->setChecked(true);
 
-    QPushButton *distr_button = new QPushButton("Distribution", buttons);
-    distr_button->setObjectName("dtkCreatorMainWindowSegmentedButtonMiddle");
-    distr_button->setFixedSize(75, 25);
-    distr_button->setCheckable(true);
+    d->distr_button = new QPushButton("Distribution", buttons);
+    d->distr_button->setObjectName("dtkCreatorMainWindowSegmentedButtonMiddle");
+    d->distr_button->setFixedSize(75, 25);
+    d->distr_button->setCheckable(true);
 
-    QPushButton *debug_button = new QPushButton("Debug", buttons);
-    debug_button->setObjectName("dtkCreatorMainWindowSegmentedButtonRight");
-    debug_button->setFixedSize(75, 25);
-    debug_button->setCheckable(true);
+    d->debug_button = new QPushButton("Debug", buttons);
+    d->debug_button->setObjectName("dtkCreatorMainWindowSegmentedButtonRight");
+    d->debug_button->setFixedSize(75, 25);
+    d->debug_button->setCheckable(true);
 
     QButtonGroup *button_group = new QButtonGroup(this);
     button_group->setExclusive(true);
-    button_group->addButton(compo_button);
-    button_group->addButton(distr_button);
-    button_group->addButton(debug_button);
+    button_group->addButton(d->compo_button);
+    button_group->addButton(d->distr_button);
+    button_group->addButton(d->debug_button);
 
     QHBoxLayout *buttons_layout = new QHBoxLayout(buttons);
     buttons_layout->setMargin(0);
     buttons_layout->setSpacing(11);
-    buttons_layout->addWidget(compo_button);
-    buttons_layout->addWidget(distr_button);
-    buttons_layout->addWidget(debug_button);
+    buttons_layout->addWidget(d->compo_button);
+    buttons_layout->addWidget(d->distr_button);
+    buttons_layout->addWidget(d->debug_button);
 
     mainToolBar->addWidget(new dtkSpacer(this));
-    mainToolBar->addWidget(new dtkCreatorMainWindowControls(this));
+    mainToolBar->addWidget(new dtkNotificationDisplay(this));
     mainToolBar->addWidget(new dtkSpacer(this));
     mainToolBar->addWidget(buttons);
 
@@ -304,9 +289,9 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     connect(switchToDstrbAction, SIGNAL(triggered()), this, SLOT(switchToDstrb()));
     connect(switchToDebugAction, SIGNAL(triggered()), this, SLOT(switchToDebug()));
 
-    connect(compo_button, SIGNAL(pressed()), this, SLOT(switchToCompo()));
-    connect(distr_button, SIGNAL(pressed()), this, SLOT(switchToDstrb()));
-    connect(debug_button, SIGNAL(pressed()), this, SLOT(switchToDebug()));
+    connect(d->compo_button, SIGNAL(pressed()), this, SLOT(switchToCompo()));
+    connect(d->distr_button, SIGNAL(pressed()), this, SLOT(switchToDstrb()));
+    connect(d->debug_button, SIGNAL(pressed()), this, SLOT(switchToDebug()));
 
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(close()));
 
@@ -332,10 +317,12 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     right->addWidget(d->scene);
     right->addWidget(d->editor);
     right->addWidget(d->stack);
+    right->addWidget(d->composer->compass());
     right->setSizes(QList<int>()
-                    << this->size().height()/3
-                    << this->size().height()/3
-                    << this->size().height()/3);
+                    << this->size().height()/4
+                    << this->size().height()/4
+                    << this->size().height()/4
+                    << this->size().height()/4);
 
     d->inner = new dtkSplitter(this);
     d->inner->setOrientation(Qt::Horizontal);
@@ -371,6 +358,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 #endif
 
     d->setCurrentFile("");
+
+    dtkNotify(QString("Discovered %1 plugins").arg(dtkPluginManager::instance()->plugins().count()), 5000);
 }
 
 dtkCreatorMainWindow::~dtkCreatorMainWindow(void)
@@ -419,6 +408,9 @@ bool dtkCreatorMainWindow::compositionOpen(void)
 
 bool dtkCreatorMainWindow::compositionOpen(const QString& file)
 {
+    if(sender() == d->recent_compositions_menu && !d->maySave())
+        return true;
+
     bool status = d->composer->open(file);
 
     if(status) {
@@ -432,6 +424,9 @@ bool dtkCreatorMainWindow::compositionOpen(const QString& file)
     settings.beginGroup("creator");
     settings.setValue("last_open_dir", info.absolutePath());
     settings.endGroup();    
+
+    if(status)
+        dtkNotify(QString("<div style=\"color: #006600\">Opened %1</div>").arg(info.baseName()), 3000);
 
     return status;
 }
@@ -447,6 +442,9 @@ bool dtkCreatorMainWindow::compositionSave(void)
 
     if(status)
         this->setWindowModified(false);
+
+    if(status)
+        dtkNotify(QString("<div style=\"color: #006600\">Saved %1</div>").arg(d->current_composition), 3000);
 
     return status;
 }
@@ -504,6 +502,9 @@ bool dtkCreatorMainWindow::compositionSaveAs(const QString& file, dtkComposerWri
     settings.setValue("last_open_dir", info.absolutePath());
     settings.endGroup();
 
+    if(status)
+        dtkNotify(QString("<div style=\"color: #006600\">Saved as %1</div>").arg(info.baseName()), 3000);
+
     return status;
 }
 
@@ -542,6 +543,12 @@ bool dtkCreatorMainWindow::compositionInsert(const QString& file)
 
 void dtkCreatorMainWindow::switchToCompo(void)
 {
+    dtkNotify("Composition workspace", 2000);
+
+    d->compo_button->blockSignals(true);
+    d->compo_button->setChecked(true);
+    d->compo_button->blockSignals(false);
+
     if(!d->wl && !d->wr) {
         d->wl = d->nodes->size().width();
         d->wr = d->stack->size().width();
@@ -561,6 +568,12 @@ void dtkCreatorMainWindow::switchToCompo(void)
 
 void dtkCreatorMainWindow::switchToDstrb(void)
 {
+    dtkNotify("Distribution workspace", 2000);
+
+    d->distr_button->blockSignals(true);
+    d->distr_button->setChecked(true);
+    d->distr_button->blockSignals(false);
+
     if(!d->wl && !d->wr) {
         d->wl = d->nodes->size().width();
         d->wr = d->stack->size().width();
@@ -580,6 +593,12 @@ void dtkCreatorMainWindow::switchToDstrb(void)
 
 void dtkCreatorMainWindow::switchToDebug(void)
 {
+    dtkNotify("Debug workspace", 2000);
+
+    d->debug_button->blockSignals(true);
+    d->debug_button->setChecked(true);
+    d->debug_button->blockSignals(false);
+
     d->wl = d->nodes->size().width();
     d->wr = d->stack->size().width();
 

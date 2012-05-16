@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 14:37:36 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 16 12:07:08 2012 (+0200)
+ * Last-Updated: Mon Apr 30 15:08:46 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 134
+ *     Update #: 135
  */
 
 /* Commentary: See credits at EOF.
@@ -57,7 +57,7 @@ namespace dtkLog
         dtkLogEngine(dtkLog::Debug).stream()
 
 // /////////////////////////////////////////////////////////////////
-// 
+// Info level stream
 // /////////////////////////////////////////////////////////////////
 
 #define dtkInfo()                                                       \
@@ -67,7 +67,7 @@ namespace dtkLog
         dtkLogEngine(dtkLog::Info).stream()
 
 // /////////////////////////////////////////////////////////////////
-// 
+// Warn level stream
 // /////////////////////////////////////////////////////////////////
 
 #define dtkWarn()                                                       \
@@ -77,7 +77,7 @@ namespace dtkLog
         dtkLogEngine(dtkLog::Warn).stream()
 
 // /////////////////////////////////////////////////////////////////
-// 
+// Error level stream
 // /////////////////////////////////////////////////////////////////
 
 #define dtkError()                                                      \
@@ -87,7 +87,7 @@ namespace dtkLog
         dtkLogEngine(dtkLog::Error).stream()
 
 // /////////////////////////////////////////////////////////////////
-// 
+// Fatal level stream
 // /////////////////////////////////////////////////////////////////
 
 #define dtkFatal()                                                      \

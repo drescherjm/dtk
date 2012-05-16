@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  1 12:37:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:40:12 2012 (+0200)
+ * Last-Updated: Tue Apr 24 12:30:36 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 130
+ *     Update #: 133
  */
 
 /* Commentary: 
@@ -40,26 +40,6 @@ class dtkLogView;
 class dtkSplitter;
 
 class dtkCreatorMainWindow;
-
-// /////////////////////////////////////////////////////////////////
-// dtkCreatorMainWindowControls
-// /////////////////////////////////////////////////////////////////
-
-class dtkCreatorMainWindowControls : public QFrame
-{
-    Q_OBJECT
-
-public:
-     dtkCreatorMainWindowControls(QWidget *parent = 0);
-    ~dtkCreatorMainWindowControls(void);
-
-public:
-    QSize sizeHint(void) const;
-};
-
-// /////////////////////////////////////////////////////////////////
-// dtkCreatorMainWindowPrivate
-// /////////////////////////////////////////////////////////////////
 
 class dtkCreatorMainWindowPrivate : public QObject
 {
@@ -110,6 +90,11 @@ public:
     QAction *redo_action;
 
     dtkRecentFilesMenu *recent_compositions_menu;
+
+public:
+    QPushButton *compo_button;
+    QPushButton *distr_button;
+    QPushButton *debug_button;
 
 public:
     bool closing;

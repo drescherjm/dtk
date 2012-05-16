@@ -4,8 +4,8 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. avril 13 13:31:07 2012 (+0200)
- *           By: Nicolas Niclausse
+ * Last-Updated: Fri Apr 27 18:19:39 2012 (+0200)
+ *           By: Julien Wintz
  *     Update #:
  */
 
@@ -23,9 +23,11 @@
 #include <QObject>
 #include <QtCore>
 #include <QTcpSocket>
+
 #include "dtkDistributedExport.h"
 #include "dtkDistributedMessage.h"
 
+class dtkAbstractData;
 class dtkDistributedSocketPrivate;
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedSocket : public QTcpSocket
@@ -40,10 +42,11 @@ public:
     qint64 sendRequest(dtkDistributedMessage *msg);
 
 public:
-    dtkDistributedMessage *parseRequest(void);
+    void send(dtkAbstractData *data, QString jobid, qint16 target);
+    void send(QVariant data, QString jobid, qint16 target);
 
 public:
-    bool waitForData(int max_wait = 300000);
+    dtkDistributedMessage *parseRequest(void);
 
 private:
     dtkDistributedSocketPrivate *d;

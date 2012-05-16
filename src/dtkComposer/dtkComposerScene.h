@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:11:39
  * Version: $Id$
- * Last-Updated: Fri Mar 23 14:12:35 2012 (+0100)
+ * Last-Updated: Fri May  4 16:04:55 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 189
+ *     Update #: 190
  */
 
 /* Commentary:
@@ -70,6 +70,9 @@ public:
 public:
     void    addItem(QGraphicsItem *item);
     void removeItem(QGraphicsItem *item);
+
+public slots:
+    void clear(void);
 
 // #pragma mark -
 // #pragma mark - Sigs

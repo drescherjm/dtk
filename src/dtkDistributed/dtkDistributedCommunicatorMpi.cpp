@@ -1,25 +1,29 @@
-/* dtkCommunicatorMpi.cpp --- 
- * 
+/* dtkCommunicatorMpi.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 16 12:15:01 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 465
+ * Last-Updated: jeu. mai  3 11:41:06 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 577
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
-#include <dtkCore/dtkAbstractDataFactory.h>
 
 #include "dtkDistributedCommunicatorMpi.h"
+
+#include <dtkCore/dtkAbstractDataFactory.h>
+#include <dtkLog/dtkLog.h>
+
+#include <dtkMath>
 
 #include <mpi.h>
 
@@ -38,7 +42,7 @@ MPI::Datatype data_type(dtkDistributedCommunicator::DataType type)
     case dtkDistributedCommunicator::dtkDistributedCommunicatorFloat:  return MPI::FLOAT;
     case dtkDistributedCommunicator::dtkDistributedCommunicatorDouble: return MPI::DOUBLE;
     default:
-        qDebug() << "dtkCommunicatorMpi: data type not handled.";
+        dtkInfo() << "dtkCommunicatorMpi: data type not handled.";
         return MPI::BYTE;
     }
 }
@@ -57,7 +61,7 @@ MPI::Op operation_type(dtkDistributedCommunicator::OperationType type)
     case dtkDistributedCommunicator::dtkDistributedCommunicatorLogicalOr:  return MPI::LOR;
     case dtkDistributedCommunicator::dtkDistributedCommunicatorLogicalXor: return MPI::LXOR;
     default:
-        qDebug() << "dtkCommunicatorMpi: operation type not handled.";
+        dtkInfo() << "dtkCommunicatorMpi: operation type not handled.";
         return MPI::MIN;
     }
 }
@@ -259,7 +263,7 @@ void dtkDistributedCommunicatorMpi::send(dtkAbstractData *data, qint16 target, i
 
     QByteArray *array = data->serialize();
     if (!array) {
-        qDebug() <<"serialization failed";
+        dtkError() <<"serialization failed";
     } else {
         qint64   arrayLength = array->length();
         dtkDistributedCommunicator::send(&arrayLength,1,target,tag);
@@ -284,18 +288,18 @@ void dtkDistributedCommunicatorMpi::receive(dtkAbstractData *&data, qint16 sourc
     if(!data) {
         data = dtkAbstractDataFactory::instance()->create(QString(type));
         if (!data) {
-            qDebug() << "Can't instantiate object of type" << QString(type);
+            dtkWarn() << "Can't instantiate object of type" << QString(type);
             return;
         }
     } else
         if(data->identifier() != QString(type))
-            qDebug() << DTK_PRETTY_FUNCTION << "Warning, type mismatch";
+            dtkWarn() << DTK_PRETTY_FUNCTION << "Warning, type mismatch";
 
     QByteArray array = QByteArray::fromRawData(rawArray, arrayLength);
     // FIXME: array is not null-terminated, does it matter ??
 
     if (data && !data->deserialize(array))
-        qDebug() << "Warning: deserialization failed";
+        dtkError() << "Warning: deserialization failed";
 }
 
 /*!
@@ -319,8 +323,8 @@ void dtkDistributedCommunicatorMpi::send(const QString &s, qint16 target, int ta
 
 void dtkDistributedCommunicatorMpi::send(const QVariant &v, qint16 target, int tag)
 {
-    int  type = (int)v.type();
-    qint64  size=1;
+    int     type = (int)v.type();
+    qint64  size = 1;
     dtkDistributedCommunicator::send(&type,1,target,tag);
 
     switch (v.type()) {
@@ -339,11 +343,27 @@ void dtkDistributedCommunicatorMpi::send(const QVariant &v, qint16 target, int t
         this->send(data,target,tag);
         break;
     }
-    case QVariant::UserType:
-    case QVariant::UserType+1: {
-        // assume it's a dtkAbstractData
-        dtkAbstractData *data = v.value<dtkAbstractData *>();
-        this->send(data,target,tag);
+    case QVariant::UserType: {
+        int typeId = QMetaType::type(v.typeName());
+        dtkDistributedCommunicator::send(&typeId,size,target,tag);
+        if (QString(v.typeName()) == "dtkAbstractData*") {
+            dtkAbstractData *data = v.value<dtkAbstractData *>();
+            this->send(data,target,tag);
+        } else if (QString(v.typeName()) == "dtkVector3DReal") {
+            dtkVector3DReal vector = v.value<dtkVector3DReal>();
+            double array[3];
+            for (int i=0; i<3; i++)
+                array[i]= vector[i];
+            dtkDistributedCommunicator::send(array,3,target,tag);
+        } else if (QString(v.typeName()) == "dtkQuaternionReal") {
+            dtkQuaternionReal q = v .value<dtkQuaternionReal>();
+            double array[4];
+            for (int i=0; i<4; i++)
+                array[i]= q[i];
+            dtkDistributedCommunicator::send(array,4,target,tag);
+        } else {
+            dtkError() << "unimplemendted type in send" << v.typeName();
+        }
         return;
     }
     default:
@@ -385,12 +405,30 @@ void dtkDistributedCommunicatorMpi::receive(QVariant &v, qint16 source, int tag)
         v=QVariant(data);
         break;
     }
-    case QVariant::UserType:
-    case QVariant::UserType+1: {
-        // assume it's a dtkAbstractData
-        dtkAbstractData *data;
-        this->send(data,source,tag);
-//        v.value<dtkAbstractData *>() = data; FIXME
+    case QVariant::UserType: {
+        int   typeId;
+        dtkDistributedCommunicator::receive(&typeId,1,source,tag);
+        if ( QString(QMetaType::typeName(typeId)) == "dtkVector3DReal") {
+            double   values[3];
+            dtkDistributedCommunicator::receive(values,3,source,tag);
+            dtkVector3DReal vector;
+            for (int i=0; i<3; i++)
+                vector[i]= values[i];
+            v = qVariantFromValue(vector);
+        } else if (QString(QMetaType::typeName(typeId)) == "dtkQuaternionReal") {
+            double   values[4];
+            dtkDistributedCommunicator::receive(values,4,source,tag);
+            dtkQuaternionReal quaternion;
+            for (int i=0; i<4; i++)
+                quaternion[i]= values[i];
+            v = qVariantFromValue(quaternion);
+        } else if (QString(QMetaType::typeName(typeId)) == "dtkAbstractData*") {
+            dtkAbstractData *data = NULL;
+            this->receive(data,source,tag);
+            v = qVariantFromValue(data);
+        } else {
+            dtkError() << "unimplemendted type in receive" <<QMetaType::typeName(typeId);
+        }
         return;
     }
     default:

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:37:15 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 20 13:02:30 2012 (+0100)
+ * Last-Updated: Tue Apr 24 23:39:39 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 63
+ *     Update #: 75
  */
 
 /* Commentary: 
@@ -31,9 +31,16 @@ int main(int argc, char **argv)
     application.setApplicationName("dtkCreator");
     application.setOrganizationName("inria");
     application.setOrganizationDomain("fr");
-    application.setApplicationVersion("0.2.0");
+    application.setApplicationVersion("0.9.9");
 
-    dtkLogger::instance().setLevel(dtkLog::Trace);
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("creator");
+
+    if (settings.contains("log_level"))
+        dtkLogger::instance().setLevel(settings.value("log_level").toString());
+    else
+        dtkLogger::instance().setLevel(dtkLog::Trace);
+
     dtkLogger::instance().attachFile(dtkLogPath(&application));
 
     dtkPluginManager::instance()->initialize();

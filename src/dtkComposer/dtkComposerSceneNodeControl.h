@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:43:44 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 11:06:39 2012 (+0100)
- *           By: tkloczko
- *     Update #: 56
+ * Last-Updated: Mon May 14 14:28:52 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 58
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #ifndef DTKCOMPOSERSCENENODECONTROL_H
 #define DTKCOMPOSERSCENENODECONTROL_H
 
+#include "dtkComposerExport.h"
 #include "dtkComposerSceneNode.h"
 
 class dtkComposerNodeControl;
@@ -28,7 +29,7 @@ class dtkComposerSceneNodeComposite;
 class dtkComposerSceneNodeControlPrivate;
 class dtkComposerSceneNodeLeaf;
 
-class dtkComposerSceneNodeControl : public dtkComposerSceneNode
+class DTKCOMPOSER_EXPORT dtkComposerSceneNodeControl : public dtkComposerSceneNode
 {
 public:
      dtkComposerSceneNodeControl(void);

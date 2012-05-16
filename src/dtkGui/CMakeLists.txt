@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Apr 16 12:02:04 2012 (+0200)
+## Last-Updated: Wed May 16 09:36:54 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 243
+##     Update #: 251
 ######################################################################
 ## 
 ### Commentary: 
@@ -32,6 +32,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkFlowLayout.h
   dtkFinder.h
   dtkInterpreter.h
+  dtkPieChart.h
   dtkPluginsEditor.h
   dtkPopup.h
   dtkProgressIndicator.h
@@ -42,7 +43,11 @@ set(${PROJECT_NAME}_HEADERS
   dtkSplitter.h
   dtkSwitch.h
   dtkTagCloud.h
-  dtkTextEditor.h)
+  dtkTextEditor.h
+  dtkViewManager.h
+  dtkViewLayout.h
+  dtkViewLayoutItem.h
+  dtkViewList.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkAboutBox.h
@@ -52,6 +57,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkColorGrid.h
   dtkFinder.h
   dtkInterpreter.h
+  dtkPieChart.h
   dtkPluginsEditor.h
   dtkPopup.h
   dtkProgressIndicator.h
@@ -62,7 +68,11 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkSplitter.h
   dtkTagCloud.h
   dtkSwitch.h
-  dtkTextEditor.h)
+  dtkTextEditor.h
+  dtkViewManager.h
+  dtkViewLayout.h
+  dtkViewLayoutItem.h
+  dtkViewList.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkAboutBox.cpp
@@ -73,6 +83,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkFlowLayout.cpp
   dtkFinder.cpp
   dtkInterpreter.cpp
+  dtkPieChart.cpp
   dtkPluginsEditor.cpp
   dtkPopup.cpp
   dtkProgressIndicator.cpp
@@ -82,7 +93,11 @@ set(${PROJECT_NAME}_SOURCES
   dtkSplitter.cpp
   dtkSwitch.cpp
   dtkTagCloud.cpp
-  dtkTextEditor.cpp)
+  dtkTextEditor.cpp
+  dtkViewManager.cpp
+  dtkViewLayout.cpp
+  dtkViewLayoutItem.cpp
+  dtkViewList.cpp)
 
 if(APPLE)
 set(${PROJECT_NAME}_SOURCES
@@ -160,10 +175,16 @@ generate_export_header(${PROJECT_NAME}
   EXPORT_FILE_NAME "${PROJECT_NAME}Export.h")
 
 add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
-  COMMAND ${CMAKE_COMMAND} ARGS -E copy
-  "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h"
-  "${CMAKE_BINARY_DIR}")
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}"
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export")
 
+<<<<<<< HEAD
+=======
+set(${PROJECT_NAME}_HEADERS
+  ${${PROJECT_NAME}_HEADERS}
+ "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export.h")
+
+>>>>>>> cdf41cfcdde4be758fe34ac384f60a3eea379c85
 ## #################################################################
 ## Source file layout in development environments like Visual Studio
 ## #################################################################

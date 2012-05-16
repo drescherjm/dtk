@@ -1,0 +1,5 @@
+#include "../src/dtkNotification/dtkNotifiable.h"
+#include "../src/dtkNotification/dtkNotification.h"
+#include "../src/dtkNotification/dtkNotificationDisplay.h"
+#include "../src/dtkNotification/dtkNotificationEvent.h"
+#include "../src/dtkNotification/dtkNotificationQueue.h"

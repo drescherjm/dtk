@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: mar. avril 17 18:41:55 2012 (+0200)
+ * Last-Updated: jeu. mai  3 15:03:46 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 687
+ *     Update #: 728
  */
 
 /* Commentary:
@@ -17,7 +17,10 @@
  *
  */
 
+#include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkGlobal.h>
+
+#include <dtkMath>
 
 #include <dtkLog/dtkLog.h>
 
@@ -35,6 +38,50 @@ dtkDistributedSocket::~dtkDistributedSocket(void)
 {
     delete d;
     d = NULL;
+}
+
+void dtkDistributedSocket::send(dtkAbstractData *data, QString jobid, qint16 target)
+{
+    QByteArray *array;
+    QString type = data->identifier();
+
+    array = data->serialize();
+    if (!array->isNull()) {
+        dtkDistributedMessage msg = dtkDistributedMessage(dtkDistributedMessage::DATA,jobid, target, array->size(), type);
+        this->sendRequest(&msg);
+        this->write(*array);
+    } else {
+        dtkError() << "serialization failed";
+    }
+}
+
+void dtkDistributedSocket::send(QVariant data, QString jobid, qint16 target)
+{
+    QByteArray *array;
+
+    QString type = data.typeName();
+
+    if(type == "dtkVector3DReal") {
+        dtkVector3DReal v = data.value<dtkVector3DReal>();
+        array = new QByteArray;
+        QDataStream stream(array, QIODevice::WriteOnly);
+        stream << v[0] << v[1] << v[2];
+    }
+
+    else if(type == "dtkQuaternionReal") {
+        dtkQuaternionReal v = data.value<dtkQuaternionReal>();
+        array = new QByteArray;
+        QDataStream stream(array, QIODevice::WriteOnly);
+        stream << v[0] << v[1] << v[2] << v[3];
+    }
+
+    if (!array->isNull()) {
+        dtkDistributedMessage msg = dtkDistributedMessage(dtkDistributedMessage::DATA,jobid, target, array->size(), type);
+        this->sendRequest(&msg);
+        this->write(*array);
+    } else {
+        dtkError() << "serialization failed";
+    }
 }
 
 qint64 dtkDistributedSocket::sendRequest( dtkDistributedMessage *msg)
@@ -68,13 +115,6 @@ qint64 dtkDistributedSocket::sendRequest( dtkDistributedMessage *msg)
     }
 
     return ret;
-}
-
-bool dtkDistributedSocket::waitForData(int max_wait) {
-    this->blockSignals(true);
-    bool res = this->waitForReadyRead(max_wait);
-    this->blockSignals(false);
-    return res;
 }
 
 /**

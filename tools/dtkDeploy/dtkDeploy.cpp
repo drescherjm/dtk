@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 10 12:01:02 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 11 14:42:57 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 62
+ * Last-Updated: Tue Apr 24 17:18:40 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 63
  */
 
 /* Commentary:
@@ -26,7 +26,6 @@
 #if defined ( WIN32 )
 #define __func__ __FUNCTION__
 #endif
-
 
 bool runStripEnabled = true;
 

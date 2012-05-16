@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Mar 21 10:28:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 10:43:09 2012 (+0100)
+ * Last-Updated: Wed May  9 09:57:54 2012 (+0200)
  *           By: tkloczko
- *     Update #: 6
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -29,8 +29,8 @@
 class dtkComposerNodeProxyPrivate
 {
 public:
-    dtkComposerTransmitterProxy *receiver;
-    dtkComposerTransmitterProxy *emitter;    
+    dtkComposerTransmitterProxy receiver;
+    dtkComposerTransmitterProxy emitter;    
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -39,19 +39,13 @@ public:
 
 dtkComposerNodeProxy::dtkComposerNodeProxy(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeProxyPrivate)
 {
-    d->receiver = new dtkComposerTransmitterProxy(this);
-    this->appendReceiver(d->receiver);
-
-    d->emitter = new dtkComposerTransmitterProxy(this);
-    this->appendEmitter(d->emitter);    
+    this->appendReceiver(&(d->receiver));
+    this->appendEmitter(&(d->emitter));    
 }
 
 dtkComposerNodeProxy::~dtkComposerNodeProxy(void)
 {
-    delete d->receiver;
-    delete d->emitter;
     delete d;
-
     d = NULL;
 }
 

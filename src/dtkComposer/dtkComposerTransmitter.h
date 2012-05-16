@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 29 10:51:46 2012 (+0200)
+ * Last-Updated: Wed May 16 11:55:17 2012 (+0200)
  *           By: tkloczko
- *     Update #: 144
+ *     Update #: 161
  */
 
 /* Commentary: 
@@ -24,6 +24,7 @@
 
 #include <QtCore>
 
+class dtkAbstractContainer;
 class dtkComposerNode;
 
 // /////////////////////////////////////////////////////////////////
@@ -54,7 +55,12 @@ public:
     virtual QString kindName(void) const = 0;
 
 public:
-    QVariant variant(void) const;
+          QVariant& variant(void);
+    const QVariant& variant(void) const;
+
+public:
+    virtual       dtkAbstractContainer& container(void);
+    virtual const dtkAbstractContainer& container(void) const;
 
 public:
     virtual QVariant::Type type(void) const;
@@ -63,6 +69,8 @@ public:
     QString typeName(void) const;
 
 public:
+    void setParentNode(dtkComposerNode *parent);
+
     dtkComposerNode *parentNode(void) const;
 
 public:

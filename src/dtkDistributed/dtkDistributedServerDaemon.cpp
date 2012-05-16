@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. avril 17 18:40:57 2012 (+0200)
+ * Last-Updated: mar. avril 24 18:29:50 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 724
+ *     Update #: 729
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 #include "dtkDistributedServerDaemon.h"
 #include "dtkDistributedServerManager.h"
 #include "dtkDistributedServerManagerOar.h"
+#include "dtkDistributedServerManagerSsh.h"
 #include "dtkDistributedServerManagerTorque.h"
 #include "dtkDistributedService.h"
 #include "dtkDistributedSocket.h"
@@ -72,6 +73,9 @@ void dtkDistributedServerDaemon::setManager(dtkDistributedServerManager::Type ty
         break;
     case dtkDistributedServerManager::Torque:
         d->manager = new dtkDistributedServerManagerTorque;
+        break;
+    case dtkDistributedServerManager::Ssh:
+        d->manager = new dtkDistributedServerManagerSsh;
         break;
     default:
         break;
@@ -143,7 +147,7 @@ void dtkDistributedServerDaemon::read(void)
     switch (msg->method()) {
     case dtkDistributedMessage::STATUS:
         r = d->manager->status();
-        socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::OKSTATUS,"",-2,r.size(),"json",r));
+        socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::OKSTATUS,"",dtkDistributedMessage::SERVER_RANK,r.size(),"json",r));
         // GET status is from the controller, store the socket in sockets using rank=-1
         if (!d->sockets.contains(dtkDistributedMessage::CONTROLLER_RANK))
             d->sockets.insert(dtkDistributedMessage::CONTROLLER_RANK, socket);

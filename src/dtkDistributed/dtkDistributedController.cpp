@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 17 14:16:35 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 1562
+ * Last-Updated: ven. mai 11 15:23:06 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 1586
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@
 #include "dtkDistributedGpu.h"
 #include "dtkDistributedSocket.h"
 
+#include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkGlobal.h>
 
 #include <dtkJson/dtkJson.h>
@@ -113,6 +114,10 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
             node->setState(dtkDistributedNode::Busy);
         if(state == "down")
             node->setState(dtkDistributedNode::Down);
+        if(state == "standby")
+            node->setState(dtkDistributedNode::StandBy);
+        if(state == "absent")
+            node->setState(dtkDistributedNode::Absent);
 
         if(properties.contains("dell"))
             node->setBrand(dtkDistributedNode::Dell);
@@ -192,7 +197,7 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
         }
 
         nodes[sockets.key(socket)] << node;
-        dtkDebug() << "Found node" << node->name() << "with" << node->cpus().count() << "cpus";
+        dtkTrace() << "Found node" << node->name() << "with" << node->cpus().count() << "cpus";
     }
 
     foreach(QVariant qv, json["jobs"].toList()) {
@@ -214,7 +219,7 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
             foreach(dtkDistributedCore *job_core,  coreref[jobid])
                 job_core->setJob(job);
         jobs[sockets.key(socket)] << job;
-        dtkDebug() << "Found job " << job->Id() <<"from "<< job->Username() << " in queue " << job->Queue();
+        dtkTrace() << "Found job " << job->Id() <<"from "<< job->Username() << " in queue " << job->Queue();
     }
 }
 
@@ -299,6 +304,7 @@ void dtkDistributedController::deploy(const QUrl& server)
                       // and the server will stop when the ssh process
                       // is killed
         args << "-t"; // do it twice to force tty allocation
+        args << "-x"; // disable X11 forwarding 
         args << server.host();
 
         serverProc->setProcessChannelMode(QProcess::MergedChannels);
@@ -424,6 +430,8 @@ void dtkDistributedController::connect(const QUrl& server)
         } else {
 
             dtkError() << "Unable to connect to" << server.toString();
+            d->sockets.remove(server.toString());
+
         }
     }
 }
@@ -432,12 +440,12 @@ void dtkDistributedController::disconnect(const QUrl& server)
 {
     if(!d->sockets.keys().contains(server.toString()))
         return;
-    
+
     dtkDistributedSocket *socket = d->sockets.value(server.toString());
     socket->disconnectFromHost();
-    
+
     d->sockets.remove(server.toString());
-    
+
     emit disconnected(server);
 }
 
@@ -509,10 +517,9 @@ void dtkDistributedController::read(void)
         result = msg->content();
         dtkDebug() << "Result: " << result;
         emit dataPosted(result);
-        emit updated();
         break;
     default:
-        dtkDebug() << "unknown response from server ";
+        dtkWarn() << "unknown response from server ";
     };
     if (socket->bytesAvailable() > 0)
         this->read();
@@ -531,7 +538,7 @@ void dtkDistributedController::cleanup()
 void dtkDistributedController::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus )
 {
     DTK_UNUSED(exitCode);
-    qDebug() << DTK_PRETTY_FUNCTION << "remote server deployment failure" << exitStatus ;
+    dtkInfo() << DTK_PRETTY_FUNCTION << "remote server deployment failure" << exitStatus ;
 }
 
 void dtkDistributedController::error(QAbstractSocket::SocketError error)

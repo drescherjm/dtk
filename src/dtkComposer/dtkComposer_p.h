@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:35:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 14:37:04 2012 (+0100)
+ * Last-Updated: Wed Apr 18 15:26:46 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 57
+ *     Update #: 59
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 
 #include <QtCore>
 
+class dtkComposerCompass;
 class dtkComposerEvaluator;
 class dtkComposerFactory;
 class dtkComposerGraph;
@@ -41,6 +42,7 @@ public slots:
     void onRequestFinished(int id, bool error);
 
 public:
+    dtkComposerCompass *compass;
     dtkComposerEvaluator *evaluator;
     dtkComposerFactory *factory;
     dtkComposerGraph *graph;

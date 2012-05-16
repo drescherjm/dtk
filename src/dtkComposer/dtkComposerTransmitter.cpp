@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:35:24 2012 (+0200)
+ * Last-Updated: Wed May 16 11:55:39 2012 (+0200)
  *           By: tkloczko
- *     Update #: 190
+ *     Update #: 206
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 #include "dtkComposerTransmitterVariant.h"
 #include "dtkComposerNode.h"
 
+#include <dtkCore/dtkAbstractContainer.h>
 #include <dtkCore/dtkGlobal>
 
 // /////////////////////////////////////////////////////////////////
@@ -51,9 +52,24 @@ dtkComposerTransmitter::~dtkComposerTransmitter(void)
     d = NULL;
 }
 
-QVariant dtkComposerTransmitter::variant(void) const
+QVariant& dtkComposerTransmitter::variant(void)
 {
     return d->variant;
+}
+
+const QVariant& dtkComposerTransmitter::variant(void) const
+{
+    return d->variant;
+}
+
+dtkAbstractContainer& dtkComposerTransmitter::container(void)
+{
+    return d->container;
+}
+
+const dtkAbstractContainer& dtkComposerTransmitter::container(void) const
+{
+    return d->container;
 }
 
 QVariant::Type dtkComposerTransmitter::type(void) const
@@ -64,6 +80,15 @@ QVariant::Type dtkComposerTransmitter::type(void) const
 QString dtkComposerTransmitter::typeName(void) const
 {
     return QVariant::typeToName(d->variant.type());
+}
+
+//! 
+/*!  
+ *  
+ */
+void dtkComposerTransmitter::setParentNode(dtkComposerNode *parent)
+{
+    d->parent = parent;
 }
 
 //! Returns pointer to parent node.
@@ -83,6 +108,9 @@ dtkComposerNode *dtkComposerTransmitter::parentNode(void) const
 void dtkComposerTransmitter::setActive(bool active)
 {
     d->active = active;
+
+    if(!active)
+        return;
 
     foreach(dtkComposerTransmitter *receiver, d->receivers)
         receiver->setActiveEmitter(this);

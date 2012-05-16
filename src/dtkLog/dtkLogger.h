@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 17:18:31 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 10:03:36 2012 (+0200)
- *           By: tkloczko
- *     Update #: 32
+ * Last-Updated: mar. avril 24 15:02:52 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 33
  */
 
 /* Commentary: 
@@ -40,6 +40,7 @@ public:
 
 public:
     void setLevel(dtkLog::Level level);
+    void setLevel(QString level);
 
 public:
     void attachConsole(void);

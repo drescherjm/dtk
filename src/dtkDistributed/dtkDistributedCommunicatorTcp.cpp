@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: ven. avril 13 23:05:20 2012 (+0200)
+ * Last-Updated: jeu. avril 19 13:06:46 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 225
+ *     Update #: 230
  */
 
 /* Commentary: 
@@ -136,17 +136,9 @@ void dtkDistributedCommunicatorTcp::flush(void)
 
 void dtkDistributedCommunicatorTcp::send(dtkAbstractData *data, qint16 target, int tag)
 {
-    QByteArray *array;
-    QString type = data->identifier();
-
-    array = data->serialize();
-    if (!array->isNull()) {
-        d->socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,QString::number(tag),target, array->size(), type));
-        d->socket->write(*array);
-    } else {
-        dtkError() << "serialization failed";
-    }
+    DTK_DEFAULT_IMPLEMENTATION;
 }
+
 
 void dtkDistributedCommunicatorTcp::receive(dtkAbstractData *&data, qint16 source, int tag)
 {

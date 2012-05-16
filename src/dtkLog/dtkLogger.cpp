@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 17:19:52 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 10:23:59 2012 (+0200)
- *           By: tkloczko
- *     Update #: 94
+ * Last-Updated: mar. avril 24 15:04:50 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 101
  */
 
 /* Commentary: 
@@ -36,6 +36,23 @@ dtkLog::Level dtkLogger::level(void) const
 void dtkLogger::setLevel(dtkLog::Level level)
 {
     d->level = level;
+}
+
+void dtkLogger::setLevel(QString level)
+{
+
+    if (level == "trace")
+        d->level = dtkLog::Trace;
+    else if (level == "debug")
+        d->level = dtkLog::Debug;
+    else if (level == "info")
+        d->level = dtkLog::Info;
+    else if (level == "warn")
+        d->level = dtkLog::Warn;
+    else if (level == "error")
+        d->level = dtkLog::Error;
+    else if (level == "fatal")
+        d->level = dtkLog::Fatal;
 }
 
 void dtkLogger::attachConsole(void)

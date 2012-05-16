@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 08:55:43 2012 (+0200)
- *           By: tkloczko
- *     Update #: 225
+ * Last-Updated: Thu May  3 14:10:25 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 249
  */
 
 /* Commentary:
@@ -17,13 +17,17 @@
  *
  */
 
+<<<<<<< HEAD
 #include "dtkAbstractData.h"
 #include "dtkAbstractDataFactory.h"
 #include "dtkAbstractProcessFactory.h"
 #include "dtkAbstractViewFactory.h"
 #include "dtkPluginManager.h"
 
+=======
+>>>>>>> cdf41cfcdde4be758fe34ac384f60a3eea379c85
 #include "dtkPlugin.h"
+#include "dtkPluginManager.h"
 
 #include <dtkLog/dtkLog.h>
 
@@ -72,12 +76,19 @@ public:
     QHash<QString, QPluginLoader *> loaders;
 };
 
+#include "dtkAbstractData.h"
+
+#include <dtkMath/dtkVector3D.h>
+#include <dtkMath/dtkQuaternion.h>
+
 dtkPluginManager *dtkPluginManager::instance(void)
 {
     if(!s_instance) {
         s_instance = new dtkPluginManager;
 
         qRegisterMetaType<dtkAbstractData>("dtkAbstractData");
+        qRegisterMetaType<dtkVector3DReal>("dtkVector3DReal");
+        qRegisterMetaType<dtkQuaternionReal>("dtkQuaternionReal");
     }
 
     return s_instance;
@@ -213,10 +224,10 @@ void dtkPluginManager::readSettings(void)
 
 void dtkPluginManager::writeSettings(void)
 {
-    QSettings settings("inria", "dtk");
-    settings.beginGroup("plugins");
-    settings.setValue("path", d->path);
-    settings.endGroup();
+    // QSettings settings("inria", "dtk");
+    // settings.beginGroup("plugins");
+    // settings.setValue("path", d->path);
+    // settings.endGroup();
 }
 
 void dtkPluginManager::printPlugins(void)

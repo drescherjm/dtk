@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. avril 17 18:25:45 2012 (+0200)
+ * Last-Updated: mer. avril 25 10:50:55 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 226
+ *     Update #: 232
  */
 
 /* Commentary: 
@@ -58,7 +58,7 @@ QString dtkDistributedSlave::jobId(void)
     if(!(QString(getenv("OAR_JOBID")).isEmpty()))
         return QString(getenv("OAR_JOBID"));
 
-    return QString();
+    return QString::number(QCoreApplication::applicationPid());
 }
 
 int dtkDistributedSlave::run(void)

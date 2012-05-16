@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Oct 27 14:10:37 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. avril 13 14:06:26 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 258
+ * Last-Updated: Fri Apr 27 17:53:02 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 291
  */
 
 /* Commentary: 
@@ -40,13 +40,23 @@ int main(int argc, char **argv)
     QUrl url = QUrl(argv[1]);
     bool useGUI = false;
 
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("slave");
+
+    if (settings.contains("log_level"))
+        dtkLogger::instance().setLevel(settings.value("log_level").toString());
+    else
+        dtkLogger::instance().setLevel(dtkLog::Trace);
+
+    if (settings.contains("use_gui") && settings.value("use_gui").toString() == "true")
+        useGUI = true;
+
     QApplication application(argc, argv, useGUI);
     application.setApplicationName("dtkComposerEvaluatorSlave");
     application.setApplicationVersion("0.0.2");
     application.setOrganizationName("inria");
     application.setOrganizationDomain("fr");
 
-    dtkLogger::instance().setLevel(dtkLog::Trace);
     dtkLogger::instance().attachFile(dtkLogPath(&application));
 
     dtkPluginManager::instance()->initialize();
@@ -55,16 +65,16 @@ int main(int argc, char **argv)
     communicator->initialize();
 
     dtkComposerEvaluatorSlave *slave = new dtkComposerEvaluatorSlave;
-
-
-
     slave->setInternalCommunicator(communicator);
     slave->setServer(url);
-    int value = slave->exec();
+
+    int value;
+    do  { value = slave->exec(); } while (value  == 0);
 
     dtkPluginManager::instance()->uninitialize();
 
     if (communicator->initialized())
         communicator->uninitialize();
+
     return value;
 }

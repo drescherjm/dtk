@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 10 10:12:41 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 11 12:42:01 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 267
+ * Last-Updated: mar. avril 24 10:37:10 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 271
  */
 
 /* Commentary: 
@@ -49,6 +49,8 @@ dtkDistributedControllerFilterView::dtkDistributedControllerFilterView(QWidget *
     QRadioButton *state_1 = new QRadioButton("Free", state_box);
     QRadioButton *state_2 = new QRadioButton("Busy", state_box);
     QRadioButton *state_3 = new QRadioButton("Down", state_box);
+    QRadioButton *state_4 = new QRadioButton("StandBy", state_box);
+    QRadioButton *state_5 = new QRadioButton("Absent", state_box);
 
     QRadioButton *brand_1 = new QRadioButton("Hp", brand_box);
     QRadioButton *brand_2 = new QRadioButton("Ibm", brand_box);
@@ -76,6 +78,8 @@ dtkDistributedControllerFilterView::dtkDistributedControllerFilterView(QWidget *
     state_group->addButton(state_1, 1);
     state_group->addButton(state_2, 2);
     state_group->addButton(state_3, 3);
+    state_group->addButton(state_4, 4);
+    state_group->addButton(state_5, 5);
 
     QButtonGroup *brand_group = new QButtonGroup(this);
     brand_group->setExclusive(false);
@@ -109,6 +113,8 @@ dtkDistributedControllerFilterView::dtkDistributedControllerFilterView(QWidget *
     state_layout->addWidget(state_1);
     state_layout->addWidget(state_2);
     state_layout->addWidget(state_3);
+    state_layout->addWidget(state_4);
+    state_layout->addWidget(state_5);
 
     QVBoxLayout *brand_layout = new QVBoxLayout;
     brand_layout->setContentsMargins(0, 0, 0, 0);
@@ -229,6 +235,8 @@ void dtkDistributedControllerFilterView::onStateButtonClicked(int button)
     case 1: d->state_flags ^= dtkDistributedNode::Free; break;
     case 2: d->state_flags ^= dtkDistributedNode::Busy; break;
     case 3: d->state_flags ^= dtkDistributedNode::Down; break;
+    case 4: d->state_flags ^= dtkDistributedNode::StandBy; break;
+    case 5: d->state_flags ^= dtkDistributedNode::Absent; break;
     default:
         break;
     }

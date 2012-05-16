@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 20:35:23 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb 24 13:34:06 2010 (+0100)
+ * Last-Updated: Thu Apr 26 17:47:35 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 26
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -35,6 +35,21 @@ public:
      dtkVrTrackerVrpn(void);
     ~dtkVrTrackerVrpn(void);
 
+public:
+    void   initialize(void);
+    void uninitialize(void);
+
+public:
+    void setUrl(const QUrl& url);
+
+public:
+    dtkVector3D<double>   headPosition(void);
+    dtkVector3D<double> devicePosition(void);
+
+    dtkQuaternion<double>   headOrientation(void);
+    dtkQuaternion<double> deviceOrientation(void);
+
+public:
     typedef void (*dtkVrTrackerVrpnAxesHandler)(int, float);
 
     void registerAxesHandler1(dtkVrTrackerVrpn::dtkVrTrackerVrpnAxesHandler handler);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jul  1 13:48:10 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 11 12:22:11 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 306
+ * Last-Updated: mar. avril 24 10:25:04 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 327
  */
 
 /* Commentary: 
@@ -31,7 +31,7 @@ QVariant toString(dtkDistributedNode::Network flag)
 {
     if(flag == dtkDistributedNode::Ethernet1G)
         return "Ethernet1G";
-    
+
     if(flag == dtkDistributedNode::Ethernet10G)
         return "Ethernet10G";
 
@@ -57,12 +57,18 @@ QVariant toString(dtkDistributedNode::State flag)
 {
     if(flag == dtkDistributedNode::Free)
         return "Free";
-    
+
     if(flag == dtkDistributedNode::Busy)
         return "Busy";
 
     if(flag == dtkDistributedNode::Down)
         return "Down";
+
+    if(flag == dtkDistributedNode::StandBy)
+        return "StandBy";
+
+    if(flag == dtkDistributedNode::Absent)
+        return "Absent";
 
     return QString();
 }
@@ -99,7 +105,7 @@ QVariant toString(dtkDistributedCpu::Model flag)
 {
     if(flag == dtkDistributedCpu::Xeon)
         return "Xeon";
-    
+
     if(flag == dtkDistributedCpu::Opteron)
         return "Opteron";
 
@@ -150,7 +156,7 @@ void dtkDistributedControllerStatusModelPrivate::update(void)
 
         foreach(dtkDistributedCpu *cpu, node->cpus()) {
             foreach(dtkDistributedCore *core, cpu->cores()) {
-           
+
                 QList<QVariant> data;
 
                 if(core->job())
@@ -163,7 +169,7 @@ void dtkDistributedControllerStatusModelPrivate::update(void)
                 data << ""; // Node Brand
                 data << toString(cpu->architecture());
                 data << toString(cpu->model());
-     
+
                 dtkDistributedControllerStatusModelItem *coreItem = new dtkDistributedControllerStatusModelItem(data, nodeItem);
                 coreItem->kind = dtkDistributedControllerStatusModelItem::Core;
                 nodeItem->appendChild(coreItem);
@@ -250,12 +256,12 @@ int dtkDistributedControllerStatusModel::rowCount(const QModelIndex& parent) con
 
     if (parent.column() > 0)
         return 0;
-    
+
     if (!parent.isValid())
         parentItem = d->rootItem;
     else
         parentItem = static_cast<dtkDistributedControllerStatusModelItem *>(parent.internalPointer());
-    
+
     return parentItem->childCount();
 }
 
@@ -263,21 +269,30 @@ QVariant dtkDistributedControllerStatusModel::data(const QModelIndex& index, int
 {
     if (!index.isValid())
         return QVariant();
-    
+
     dtkDistributedControllerStatusModelItem *item = static_cast<dtkDistributedControllerStatusModelItem *>(index.internalPointer());
 
     if (role == Qt::TextColorRole && item->kind == dtkDistributedControllerStatusModelItem::Core)
         return item->data(0).toString() == "Free" ? Qt::darkGreen : Qt::darkRed;
 
-    if (role == Qt::BackgroundRole && item->kind == dtkDistributedControllerStatusModelItem::Node)
-        return item->data(2).toString() == "Down" ? Qt::red : Qt::white;
+    if (role == Qt::TextColorRole && item->kind == dtkDistributedControllerStatusModelItem::Node && item->data(2).toString() == "Down")
+        return Qt::red;
 
-    if (role == Qt::BackgroundRole && item->kind == dtkDistributedControllerStatusModelItem::Node)
-        return item->data(2).toString() == "Busy" ? QColor("#FF7722") : Qt::white;
+    if (role == Qt::TextColorRole && item->kind == dtkDistributedControllerStatusModelItem::Node && item->data(2).toString() == "Busy")
+        return  QColor("#FF7722");
+
+    if (role == Qt::TextColorRole && item->kind == dtkDistributedControllerStatusModelItem::Node && item->data(2).toString() == "StandBy")
+        return  Qt::blue;
+
+    if (role == Qt::TextColorRole && item->kind == dtkDistributedControllerStatusModelItem::Node && item->data(2).toString() == "Free")
+        return  Qt::darkGreen;
+
+    if (role == Qt::TextColorRole && item->kind == dtkDistributedControllerStatusModelItem::Node)
+        return  Qt::black;
 
     if (role != Qt::DisplayRole)
         return QVariant();
-    
+
     return item->data(index.column());
 }
 
@@ -285,14 +300,14 @@ QModelIndex dtkDistributedControllerStatusModel::index(int row, int column, cons
 {
     if (!hasIndex(row, column, parent))
         return QModelIndex();
-    
+
     dtkDistributedControllerStatusModelItem *parentItem;
-    
+
     if (!parent.isValid())
         parentItem = d->rootItem;
     else
         parentItem = static_cast<dtkDistributedControllerStatusModelItem *>(parent.internalPointer());
-    
+
     dtkDistributedControllerStatusModelItem *childItem = parentItem->child(row);
 
     if (childItem)
@@ -305,13 +320,13 @@ QModelIndex dtkDistributedControllerStatusModel::parent(const QModelIndex& index
 {
     if (!index.isValid())
         return QModelIndex();
-    
+
     dtkDistributedControllerStatusModelItem *childItem = static_cast<dtkDistributedControllerStatusModelItem *>(index.internalPointer());
     dtkDistributedControllerStatusModelItem *parentItem = childItem->parent();
-    
+
     if (parentItem == d->rootItem)
         return QModelIndex();
-    
+
     return createIndex(parentItem->row(), 0, parentItem);
 }
 
@@ -319,7 +334,7 @@ Qt::ItemFlags dtkDistributedControllerStatusModel::flags(const QModelIndex &inde
 {
     if (!index.isValid())
         return 0;
-    
+
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
@@ -327,6 +342,6 @@ QVariant dtkDistributedControllerStatusModel::headerData(int section, Qt::Orient
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
         return d->rootItem->data(section);
-    
+
     return QVariant();
 }

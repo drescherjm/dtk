@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Mon Sep  5 13:18:52 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Sep  5 13:35:03 2011 (+0200)
+## Last-Updated: Fri Apr 27 21:36:19 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 7
+##     Update #: 8
 ######################################################################
 ## 
 ### Commentary: 
@@ -48,7 +48,3 @@ target_link_libraries(${PROJECT_NAME}
 install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
    BUNDLE DESTINATION bin)
-
-if(APPLE)
-  install(CODE "execute_process(COMMAND macdeployqt \${CMAKE_INSTALL_PREFIX}/bin/${PROJECT_NAME}.app)")
-endif(APPLE)

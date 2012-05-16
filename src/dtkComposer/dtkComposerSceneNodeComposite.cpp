@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. avril 17 11:40:43 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 827
+ * Last-Updated: Wed May 16 15:21:12 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 855
  */
 
 /* Commentary: 
@@ -17,6 +17,8 @@
  * 
  */
 
+#include <dtkConfig.h>
+
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerSceneEdge.h"
 #include "dtkComposerSceneNode.h"
@@ -26,11 +28,13 @@
 #include "dtkComposerScenePort.h"
 #include "dtkComposerWriter.h"
 
+#if defined(DTK_HAVE_MPI)
+#include "dtkComposerNodeRemote.h"
+#endif
+
 #include <dtkLog/dtkLog.h>
 
 #include <dtkConfig.h>
-
-#include "dtkComposerNodeRemote.h"
 
 #include <dtkDistributed/dtkDistributedController.h>
 #include <dtkDistributed/dtkDistributedMimeData.h>
@@ -147,33 +151,21 @@ void dtkComposerSceneNodeComposite::removeNote(dtkComposerSceneNote *note)
 void dtkComposerSceneNodeComposite::addNode(dtkComposerSceneNode *node)
 {
     d->nodes << node;
-
-    if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee()))
-        remote->setComposition(d->writer.toXML(this));
 }
 
 void dtkComposerSceneNodeComposite::removeNode(dtkComposerSceneNode *node)
 {
     d->nodes.removeAll(node);
-
-    if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee()))
-        remote->setComposition(d->writer.toXML(this));
 }
 
 void dtkComposerSceneNodeComposite::addEdge(dtkComposerSceneEdge *edge)
 {
     d->edges << edge;
-
-    if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee()))
-        remote->setComposition(d->writer.toXML(this));
 }
 
 void dtkComposerSceneNodeComposite::removeEdge(dtkComposerSceneEdge *edge)
 {
     d->edges.removeAll(edge);
-
-    if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee()))
-        remote->setComposition(d->writer.toXML(this));
 }
 
 dtkComposerSceneNoteList dtkComposerSceneNodeComposite::notes(void)
@@ -191,6 +183,28 @@ dtkComposerSceneEdgeList dtkComposerSceneNodeComposite::edges(void)
     return d->edges;
 }
 
+int dtkComposerSceneNodeComposite::inputDegree(dtkComposerScenePort *port)
+{
+    int degree = 0;
+
+    foreach(dtkComposerSceneEdge *edge, d->edges)
+        if(edge->destination() == port)
+            degree++;
+
+    return degree;
+}
+
+int dtkComposerSceneNodeComposite::outputDegree(dtkComposerScenePort *port)
+{
+    int degree = 0;
+
+    foreach(dtkComposerSceneEdge *edge, d->edges)
+        if(edge->source() == port)
+            degree++;
+
+    return degree;
+}
+
 bool dtkComposerSceneNodeComposite::entered(void)
 {
     return d->entered;
@@ -198,7 +212,7 @@ bool dtkComposerSceneNodeComposite::entered(void)
 
 bool dtkComposerSceneNodeComposite::flattened(void)
 {
-    return d->flattened;
+    return d->flattened || d->root;
 }
 
 void dtkComposerSceneNodeComposite::enter(void)
@@ -589,12 +603,14 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
 
 void dtkComposerSceneNodeComposite::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
+#if defined(DTK_HAVE_MPI)
     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
     if(!remote) {
         event->ignore();
         return;
     }
+#endif
 
     if (event->mimeData()->hasText())
         event->acceptProposedAction();
@@ -609,12 +625,14 @@ void dtkComposerSceneNodeComposite::dragLeaveEvent(QGraphicsSceneDragDropEvent *
 
 void dtkComposerSceneNodeComposite::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
+#if defined(DTK_HAVE_MPI)
     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
     if(!remote) {
         event->ignore();
         return;
     }
+#endif
 
     if (event->mimeData()->hasText())
         event->acceptProposedAction();
@@ -624,12 +642,14 @@ void dtkComposerSceneNodeComposite::dragMoveEvent(QGraphicsSceneDragDropEvent *e
 
 void dtkComposerSceneNodeComposite::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
+#if defined(DTK_HAVE_MPI)
     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
     if(!remote) {
         event->ignore();
         return;
     }
+#endif
 
     const dtkDistributedMimeData *data = qobject_cast<const dtkDistributedMimeData *>(event->mimeData());
 
@@ -640,8 +660,10 @@ void dtkComposerSceneNodeComposite::dropEvent(QGraphicsSceneDragDropEvent *event
 
     dtkDistributedController *controller = const_cast<dtkDistributedMimeData *>(data)->controller();
 
-    remote->setController(controller);
     remote->setJob(job);
+    remote->setController(controller);
+    this->setTitle("Remote on "+ job);
 
     event->acceptProposedAction();
+    this->update();
 }

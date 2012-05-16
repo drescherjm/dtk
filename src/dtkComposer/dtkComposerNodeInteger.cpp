@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:38:46 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 16 14:15:32 2012 (+0100)
+ * Last-Updated: Wed May  9 09:56:28 2012 (+0200)
  *           By: tkloczko
- *     Update #: 34
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -24,26 +24,22 @@
 class dtkComposerNodeIntegerPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<qlonglong> *receiver;
+    dtkComposerTransmitterReceiver<qlonglong> receiver;
 
 public:
-    dtkComposerTransmitterEmitter<qlonglong> *emitter;
+    dtkComposerTransmitterEmitter<qlonglong> emitter;
 };
 
 dtkComposerNodeInteger::dtkComposerNodeInteger(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeIntegerPrivate)
 {
-    d->receiver = new dtkComposerTransmitterReceiver<qlonglong>;
-    this->appendReceiver(d->receiver);
+    this->appendReceiver(&(d->receiver));
 
-    d->emitter = new dtkComposerTransmitterEmitter<qlonglong>;
-    d->emitter->setData(0);
-    this->appendEmitter(d->emitter);
+    d->emitter.setData(0);
+    this->appendEmitter(&(d->emitter));
 }
 
 dtkComposerNodeInteger::~dtkComposerNodeInteger(void)
 {
-    delete d->receiver;
-    delete d->emitter;
     delete d;
 
     d = NULL;
@@ -51,16 +47,16 @@ dtkComposerNodeInteger::~dtkComposerNodeInteger(void)
 
 void dtkComposerNodeInteger::run(void)
 {
-    if (!d->receiver->isEmpty())
-        d->emitter->setData(d->receiver->data());
+    if (!d->receiver.isEmpty())
+        d->emitter.setData(d->receiver.data());
 }
 
 qlonglong dtkComposerNodeInteger::value(void)
 {
-    return d->emitter->data();
+    return d->emitter.data();
 }
 
 void dtkComposerNodeInteger::setValue(qlonglong value)
 {
-    d->emitter->setData(value);
+    d->emitter.setData(value);
 }

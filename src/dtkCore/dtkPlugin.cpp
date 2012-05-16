@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Oct 31 14:14:48 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:00:58 2012 (+0200)
+ * Last-Updated: Tue Apr 24 15:02:37 2012 (+0200)
  *           By: tkloczko
- *     Update #: 83
+ *     Update #: 90
  */
 
 /* Commentary: 
@@ -18,17 +18,19 @@
  */
 
 #include "dtkPlugin.h"
+#include "dtkPlugin_p.h"
 
 #include "dtkAbstractDataFactory.h"
 #include "dtkAbstractProcessFactory.h"
 #include "dtkAbstractViewFactory.h"
 
 // /////////////////////////////////////////////////////////////////
-// dtkPluginPrivate
+// dtkPlugin implementation
 // /////////////////////////////////////////////////////////////////
 
-class dtkPluginPrivate
+dtkPlugin::dtkPlugin(QObject *parent) : dtkAbstractObject(*new dtkPluginPrivate(this), parent)
 {
+<<<<<<< HEAD
 public:
     dtkAbstractViewFactory *viewSingletonFactory;
     dtkAbstractDataFactory *dataSingletonFactory;
@@ -39,13 +41,20 @@ public:
 // /////////////////////////////////////////////////////////////////
 // dtkPlugin
 // /////////////////////////////////////////////////////////////////
+=======
+    
+}
+>>>>>>> cdf41cfcdde4be758fe34ac384f60a3eea379c85
 
-dtkPlugin::dtkPlugin(QObject *parent) : dtkAbstractObject(), d(new dtkPluginPrivate)
+dtkPlugin::dtkPlugin(const dtkPlugin& other) : dtkAbstractObject(*new dtkPluginPrivate(*other.d_func()), other)
 {
+<<<<<<< HEAD
     DTK_UNUSED(parent);
     d->viewSingletonFactory = dtkAbstractViewFactory::instance();
     d->dataSingletonFactory = dtkAbstractDataFactory::instance();
     d->processSingletonFactory = dtkAbstractProcessFactory::instance();
+=======
+>>>>>>> cdf41cfcdde4be758fe34ac384f60a3eea379c85
 
 }
 

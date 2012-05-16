@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Oct 27 14:10:37 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. avril 13 13:59:36 2012 (+0200)
+ * Last-Updated: ven. avril 27 09:57:54 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 116
+ *     Update #: 149
  */
 
 /* Commentary: 
@@ -37,13 +37,25 @@ int main(int argc, char **argv)
         return 0;
     }
 
-    QApplication application(argc, argv, false);
+    bool useGUI = false;
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("evaluator");
+
+    if (settings.contains("log_level"))
+        dtkLogger::instance().setLevel(settings.value("log_level").toString());
+    else
+        dtkLogger::instance().setLevel(dtkLog::Debug);
+
+    if (settings.contains("use_gui") && settings.value("use_gui").toString() == "true")
+        useGUI =true;
+
+    QApplication application(argc, argv, useGUI);
     application.setApplicationName("dtkComposerEvaluator");
     application.setApplicationVersion("0.0.2");
     application.setOrganizationName("inria");
     application.setOrganizationDomain("fr");
 
-    dtkLogger::instance().setLevel(dtkLog::Info);
+
     dtkLogger::instance().attachFile(dtkLogPath(&application));
 
     dtkPluginManager::instance()->initialize();
@@ -75,8 +87,8 @@ int main(int argc, char **argv)
         dtkError() << "read failure for " << argv[1];
         return 1;
     }
-
-    evaluator->run();
-
+    QObject::connect(evaluator,SIGNAL(evaluationStopped()),&application, SLOT(quit()));
+    QtConcurrent::run(evaluator, &dtkComposerEvaluator::run, false);
+    application.exec();
     dtkPluginManager::instance()->uninitialize();
 }

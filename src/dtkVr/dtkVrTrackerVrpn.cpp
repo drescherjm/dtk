@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 20:32:08 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 11:03:42 2012 (+0200)
- *           By: tkloczko
- *     Update #: 63
+ * Last-Updated: Thu Apr 26 17:47:05 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 64
  */
 
 /* Commentary: 
@@ -25,8 +25,6 @@
 #include <vrpn_Tracker.h>
 #include <vrpn_FileConnection.h>
 #include <quat.h>
-
-#include <dtkLog/dtkLog.h>
 
 // /////////////////////////////////////////////////////////////////
 // vrpn callbacks (Definition at EOF.)
@@ -80,6 +78,16 @@ public:
 
     QUrl url;
 
+// /////////////////////////////////////////////////////////////////
+
+    dtkVector3D<double>   head_position;
+    dtkVector3D<double> device_position;
+
+    dtkQuaternion<double>   head_orientation;
+    dtkQuaternion<double> device_orientation;
+
+// /////////////////////////////////////////////////////////////////
+
     dtkVrTrackerVrpn *q;
 };
 
@@ -93,7 +101,7 @@ void dtkVrTrackerVrpnPrivate::run(void)
     this->tracker = new vrpn_Tracker_Remote(url.toString().toAscii().constData());
 
     if (!this->analog || !this->button || !this->tracker) {
-        dtkError() << "Error connecting to server";
+        qDebug() << "Error connecting to server";
         return;
     }
 
@@ -140,7 +148,7 @@ void dtkVrTrackerVrpnPrivate::handle_button(const vrpn_BUTTONCB callback)
 void dtkVrTrackerVrpnPrivate::handle_analog(const vrpn_ANALOGCB callback)
 {
     if (callback.num_channel >= 10) {
-        dtkWarn() << "Only 10 analog channels are handled by dtkVrTrackerVrpn. Skipping all axes";
+        qDebug() << "Only 10 analog channels are handled by dtkVrTrackerVrpn. Skipping all axes";
         return;
     }
 
@@ -178,6 +186,10 @@ void dtkVrTrackerVrpnPrivate::handle_tracker(const vrpn_TRACKERCB callback)
     case 0:
         q->runPositionHandlers1(callback.pos[0], callback.pos[1], callback.pos[2]);
         q->runOrientationHandlers1(callback.quat[0], callback.quat[1], callback.quat[2], callback.quat[3]);
+
+        this->head_position = dtkVector3D<double>(callback.pos[0], callback.pos[2], -callback.pos[1])*100;
+        this->head_orientation = dtkQuaternion<double>(callback.quat[0], callback.quat[1], callback.quat[2], callback.quat[3]);
+
         break;
     case 1:
         q->runPositionHandlers2(callback.pos[0], callback.pos[1], callback.pos[2]);
@@ -194,6 +206,10 @@ void dtkVrTrackerVrpnPrivate::handle_tracker(const vrpn_TRACKERCB callback)
     case 4:
         q->runPositionHandlers5(callback.pos[0], callback.pos[1], callback.pos[2]);
         q->runOrientationHandlers5(callback.quat[0], callback.quat[1], callback.quat[2], callback.quat[3]);
+
+        this->device_position = dtkVector3D<double>(callback.pos[0], callback.pos[2], -callback.pos[1])*100;
+        this->device_orientation = dtkQuaternion<double>(callback.quat[0], callback.quat[1], callback.quat[2], callback.quat[3]);
+
         break;
     case 5:
         q->runPositionHandlers6(callback.pos[0], callback.pos[1], callback.pos[2]);
@@ -217,6 +233,41 @@ dtkVrTrackerVrpn::~dtkVrTrackerVrpn(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkVrTrackerVrpn::initialize(void)
+{
+    this->startConnection(d->url);
+}
+
+void dtkVrTrackerVrpn::uninitialize(void)
+{
+    this->stopConnection();
+}
+
+void dtkVrTrackerVrpn::setUrl(const QUrl& url)
+{
+    d->url = url;
+}
+
+dtkVector3D<double> dtkVrTrackerVrpn::headPosition(void)
+{
+    return d->head_position;
+}
+
+dtkVector3D<double> dtkVrTrackerVrpn::devicePosition(void)
+{
+    return d->device_position;
+}
+
+dtkQuaternion<double> dtkVrTrackerVrpn::headOrientation(void)
+{
+    return d->head_orientation;
+}
+
+dtkQuaternion<double> dtkVrTrackerVrpn::deviceOrientation(void)
+{
+    return d->device_orientation;
 }
 
 void dtkVrTrackerVrpn::registerAxesHandler1(dtkVrTrackerVrpn::dtkVrTrackerVrpnAxesHandler handler)

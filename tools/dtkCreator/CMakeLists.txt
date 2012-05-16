@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Aug  3 17:34:51 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Apr 16 12:16:15 2012 (+0200)
+## Last-Updated: Fri Apr 27 21:31:54 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 169
+##     Update #: 171
 ######################################################################
 ## 
 ### Commentary: 
@@ -67,7 +67,8 @@ target_link_libraries(${PROJECT_NAME}
   dtkLog
   dtkCore
   dtkComposer
-  dtkDistributed)
+  dtkDistributed
+  dtkNotification)
 
 if(APPLE)
 target_link_libraries(${PROJECT_NAME}
@@ -104,7 +105,3 @@ install(FILES ${${PROJECT_NAME}_MODULES} DESTINATION modules)
 install(TARGETS ${PROJECT_NAME}
    BUNDLE DESTINATION bin
   RUNTIME DESTINATION bin)
-
-if(APPLE)
-  install(CODE "execute_process(COMMAND macdeployqt \${CMAKE_INSTALL_PREFIX}/bin/${PROJECT_NAME}.app)")
-endif(APPLE)

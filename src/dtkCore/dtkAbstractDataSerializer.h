@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: lun. oct. 17 13:20:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: lun. nov. 28 15:26:02 2011 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 37
+ * Last-Updated: Tue Apr 24 11:11:02 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 43
  */
 
 /* Commentary:
@@ -22,10 +22,13 @@
 
 
 #include "dtkAbstractObject.h"
-#include "dtkAbstractData.h"
 
 class dtkAbstractData;
 class dtkAbstractDataSerializerPrivate;
+
+// /////////////////////////////////////////////////////////////////
+// dtkAbstractDataSerializer interface
+// /////////////////////////////////////////////////////////////////
 
 class DTKCORE_EXPORT dtkAbstractDataSerializer : public dtkAbstractObject
 {
@@ -33,15 +36,17 @@ class DTKCORE_EXPORT dtkAbstractDataSerializer : public dtkAbstractObject
 
 public:
              dtkAbstractDataSerializer(void);
+             dtkAbstractDataSerializer(const dtkAbstractDataSerializer& other);
     virtual ~dtkAbstractDataSerializer(void);
 
+public:
     virtual QStringList handled(void) const = 0;
 
     bool enabled(void) const;
     void enable(void);
     void disable(void);
 
-    QByteArray *data(void);
+    QByteArray *data(void) const;
 
 signals:
     void started(const QString& message);
@@ -49,9 +54,8 @@ signals:
     void finished(void);
 
 public slots:
-
-    virtual QByteArray *serialize(  void );
-    virtual QByteArray *serialize(  dtkAbstractData *data);
+    virtual QByteArray *serialize(void);
+    virtual QByteArray *serialize(dtkAbstractData *data);
 
     virtual void setProgress(int value);
 
@@ -60,7 +64,7 @@ protected:
 
 
 private:
-    dtkAbstractDataSerializerPrivate *d;
+    DTK_DECLARE_PRIVATE(dtkAbstractDataSerializer);
 };
 
 #endif

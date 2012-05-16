@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 13:22:24 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 10 18:33:04 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 65
+ * Last-Updated: mer. avril 25 16:18:30 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 75
  */
 
 /* Commentary: 
@@ -49,9 +49,11 @@ public:
     Q_DECLARE_FLAGS(Networks, Network)
 
     enum State {
-        Free = 0x1,
-        Busy = 0x2,
-        Down = 0x4
+        Free    = 0x1,
+        Busy    = 0x2,
+        Down    = 0x4,
+        StandBy = 0x8,
+        Absent  = 0x16
     };
 
     Q_DECLARE_FLAGS(States, State)
@@ -60,7 +62,9 @@ public:
           Hp = 0x1,
          Ibm = 0x2,
         Dell = 0x4,
-       Carri = 0x8
+       Carri = 0x8,
+         Sun = 0x16,
+       Apple = 0x32
     };
 
     Q_DECLARE_FLAGS(Brands, Brand)

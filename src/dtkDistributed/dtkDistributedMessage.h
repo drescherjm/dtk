@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: mar. oct. 11 10:46:57 2011 (+0200)
  * Version: $Id$
- * Last-Updated: lun. déc.  5 16:54:18 2011 (+0100)
+ * Last-Updated: jeu. avril 19 13:11:46 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 151
+ *     Update #: 155
  */
 
 /* Commentary:
@@ -34,6 +34,7 @@ public:
 
     static const qint16 CONTROLLER_RANK = -1 ;
     static const qint16 SERVER_RANK     = -2 ;
+    static const qint16 CONTROLLER_RUN_RANK = -3 ;
 
     enum Method {
         STATUS  ,

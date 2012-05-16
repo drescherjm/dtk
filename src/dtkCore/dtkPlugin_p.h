@@ -23,6 +23,12 @@
 #include "dtkCoreExport.h"
 #include "dtkAbstractObject_p.h"
 
+
+#include "dtkAbstractDataFactory.h"
+#include "dtkAbstractProcessFactory.h"
+#include "dtkAbstractViewFactory.h"
+
+
 class dtkPlugin;
 
 ////////////////////////////////////////////////////
@@ -34,6 +40,11 @@ class DTKCORE_EXPORT dtkPluginPrivate : public dtkAbstractObjectPrivate
 public:
     dtkPluginPrivate(dtkPlugin *q = 0) : dtkAbstractObjectPrivate(q) {}
     dtkPluginPrivate(const dtkPluginPrivate& other) : dtkAbstractObjectPrivate(other) {}
+
+public:
+    dtkAbstractViewFactory *viewSingletonFactory;
+    dtkAbstractDataFactory *dataSingletonFactory;
+    dtkAbstractProcessFactory *processSingletonFactory;
 
 public:
     virtual ~dtkPluginPrivate(void) {}

@@ -30,23 +30,21 @@
 
 dtkPlugin::dtkPlugin(QObject *parent) : dtkAbstractObject(*new dtkPluginPrivate(this), parent)
 {
-public:
-    dtkAbstractViewFactory *viewSingletonFactory;
-    dtkAbstractDataFactory *dataSingletonFactory;
-    dtkAbstractProcessFactory *processSingletonFactory;
+    DTK_D(dtkPlugin);
+    d->viewSingletonFactory = dtkAbstractViewFactory::instance();
+    d->dataSingletonFactory = dtkAbstractDataFactory::instance();
+    d->processSingletonFactory = dtkAbstractProcessFactory::instance();
 
-};
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkPlugin
 // /////////////////////////////////////////////////////////////////
     
-}
-
 dtkPlugin::dtkPlugin(const dtkPlugin& other) : dtkAbstractObject(*new dtkPluginPrivate(*other.d_func()), other)
 {
+    DTK_D(dtkPlugin);
 
-    DTK_UNUSED(parent);
     d->viewSingletonFactory = dtkAbstractViewFactory::instance();
     d->dataSingletonFactory = dtkAbstractDataFactory::instance();
     d->processSingletonFactory = dtkAbstractProcessFactory::instance();
@@ -85,30 +83,42 @@ QStringList dtkPlugin::dependencies(void) const
 
 dtkAbstractViewFactory *dtkPlugin::viewFactorySingleton(void)
 {
+    DTK_D(dtkPlugin);
+
     return d->viewSingletonFactory;
 }
 
 void dtkPlugin::setViewFactorySingleton(dtkAbstractViewFactory *viewSingletonFactory)
 {
+    DTK_D(dtkPlugin);
+
     d->viewSingletonFactory = viewSingletonFactory;
 }
 
 dtkAbstractDataFactory *dtkPlugin::dataFactorySingleton(void)
 {
+    DTK_D(dtkPlugin);
+
     return d->dataSingletonFactory;
 }
 
 void dtkPlugin::setDataFactorySingleton(dtkAbstractDataFactory *dataSingletonFactory)
 {
+    DTK_D(dtkPlugin);
+
     d->dataSingletonFactory = dataSingletonFactory;
 }
 
 dtkAbstractProcessFactory *dtkPlugin::processFactorySingleton(void)
 {
+    DTK_D(dtkPlugin);
+
     return d->processSingletonFactory;
 }
 
 void dtkPlugin::setProcessFactorySingleton(dtkAbstractProcessFactory *processSingletonFactory)
 {
+    DTK_D(dtkPlugin);
+
     d->processSingletonFactory = processSingletonFactory;
 }

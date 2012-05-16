@@ -463,11 +463,7 @@ void dtkComposerNodeNumberOperatorUnaryFloor::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryRound::run(void)
 {
-<<<<<<< HEAD
-//    d->emitter->setData(round(qVariantValue<double>(d->receiver->data())));
-=======
     d->emitter.setData(round(qVariantValue<double>(d->receiver.data())));
->>>>>>> cdf41cfcdde4be758fe34ac384f60a3eea379c85
 }
 
 // /////////////////////////////////////////////////////////////////

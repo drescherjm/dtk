@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 10 12:16:35 2012 (+0200)
+ * Last-Updated: Wed May 16 15:21:12 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 846
+ *     Update #: 855
  */
 
 /* Commentary: 
@@ -17,6 +17,8 @@
  * 
  */
 
+#include <dtkConfig.h>
+
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerSceneEdge.h"
 #include "dtkComposerSceneNode.h"
@@ -26,11 +28,13 @@
 #include "dtkComposerScenePort.h"
 #include "dtkComposerWriter.h"
 
+#if defined(DTK_HAVE_MPI)
+#include "dtkComposerNodeRemote.h"
+#endif
+
 #include <dtkLog/dtkLog.h>
 
 #include <dtkConfig.h>
-
-#include "dtkComposerNodeRemote.h"
 
 #include <dtkDistributed/dtkDistributedController.h>
 #include <dtkDistributed/dtkDistributedMimeData.h>
@@ -599,12 +603,14 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
 
 void dtkComposerSceneNodeComposite::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
+#if defined(DTK_HAVE_MPI)
     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
     if(!remote) {
         event->ignore();
         return;
     }
+#endif
 
     if (event->mimeData()->hasText())
         event->acceptProposedAction();
@@ -619,12 +625,14 @@ void dtkComposerSceneNodeComposite::dragLeaveEvent(QGraphicsSceneDragDropEvent *
 
 void dtkComposerSceneNodeComposite::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
+#if defined(DTK_HAVE_MPI)
     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
     if(!remote) {
         event->ignore();
         return;
     }
+#endif
 
     if (event->mimeData()->hasText())
         event->acceptProposedAction();
@@ -634,12 +642,14 @@ void dtkComposerSceneNodeComposite::dragMoveEvent(QGraphicsSceneDragDropEvent *e
 
 void dtkComposerSceneNodeComposite::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
+#if defined(DTK_HAVE_MPI)
     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
     if(!remote) {
         event->ignore();
         return;
     }
+#endif
 
     const dtkDistributedMimeData *data = qobject_cast<const dtkDistributedMimeData *>(event->mimeData());
 

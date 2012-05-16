@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 16 12:04:05 2012 (+0200)
- *           By: tkloczko
- *     Update #: 220
+ * Last-Updated: Wed May 16 14:20:43 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 226
  */
 
 /* Commentary: 
@@ -24,6 +24,8 @@
 #include "dtkComposerTransmitterVariant.h"
 
 #include <dtkCore/dtkGlobal.h>
+
+#include <QtCore>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterReceiver implementation
@@ -208,7 +210,9 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::connect(dtkCompose
     if (transmitter->kind() == Emitter) {
      
         if ((emitter = dynamic_cast<dtkComposerTransmitterEmitter<T> *>(transmitter))) {
+
             if (!emitters.contains(emitter)) {
+
                 emitters << emitter;
                 active_emitter = emitter;
                 active_variant = NULL;

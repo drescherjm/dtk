@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: ven. avril 13 16:25:15 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 321
+ * Last-Updated: Wed May 16 15:18:53 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 327
  */
 
 /* Commentary:
@@ -17,13 +17,17 @@
  *
  */
 
+#include <dtkConfig.h>
 
 #include "dtkComposerGraphNodeBegin.h"
 #include "dtkComposerGraphNode.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeComposite.h"
+
+#if defined(DTK_HAVE_MPI)
 #include "dtkComposerNodeRemote.h"
+#endif
 
 #include <dtkLog/dtkLog.h>
 
@@ -35,7 +39,9 @@ public:
 
 public:
     bool is_remote;
+#if defined(DTK_HAVE_MPI)
     dtkComposerNodeRemote   *remote;
+#endif
 
 public:
     dtkComposerGraphNode *end;
@@ -46,11 +52,13 @@ dtkComposerGraphNodeBegin::dtkComposerGraphNodeBegin(dtkComposerNode *cnode, con
 {
     d->is_remote = false;
     if (!dynamic_cast<dtkComposerNodeControl *>(cnode)) {
+#if defined(DTK_HAVE_MPI)
         if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(cnode)) {
             d->is_remote = true;
             d->remote = remote ;
             //We can't call isSlave() now
         }
+#endif
         d->composite = dynamic_cast<dtkComposerNodeComposite *>(cnode);
         d->control_node = NULL;
     } else {
@@ -101,6 +109,7 @@ void dtkComposerGraphNodeBegin::setEnd(dtkComposerGraphNode *end)
 
 dtkComposerGraphNodeList dtkComposerGraphNodeBegin::successors(void)
 {
+#if defined(DTK_HAVE_MPI)
     if (d->is_remote && !d->remote->isSlave()) {
         dtkDebug() << "we are running the begin statement of a remote node on a controller, successor is only the end statement";
         dtkComposerGraphNodeList list;
@@ -109,6 +118,9 @@ dtkComposerGraphNodeList dtkComposerGraphNodeBegin::successors(void)
     } else {
         return dtkComposerGraphNode::successors();
     }
+#else
+    return dtkComposerGraphNode::successors();
+#endif
 }
 
 

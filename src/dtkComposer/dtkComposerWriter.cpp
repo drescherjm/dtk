@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 15:11:21 2012 (+0200)
+ * Last-Updated: Wed May 16 12:50:21 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 484
+ *     Update #: 486
  */
 
 /* Commentary: 
@@ -51,8 +51,6 @@ public:
 public:
     int id;
 };
-
-
 
 dtkComposerWriter::dtkComposerWriter(void) : d(new dtkComposerWriterPrivate)
 {
@@ -378,8 +376,6 @@ QDomElement dtkComposerWriter::writeEdge(dtkComposerSceneEdge *edge, QDomElement
     QDomElement tag = document.createElement("edge");
     tag.appendChild(source);
     tag.appendChild(destin);
-
-    // element.appendChild(tag);
 
     return tag;
 }

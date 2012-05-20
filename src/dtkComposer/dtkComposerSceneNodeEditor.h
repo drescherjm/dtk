@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:08:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 21:16:25 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 43
+ * Last-Updated: mer. mai 16 09:47:30 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -50,6 +50,10 @@ public slots:
 protected slots:
     void addLoopPort(void);
     void removeLoopPort(void);
+
+protected slots:
+    void addBlock(void);
+    void removeBlock(void);
 
 protected slots:
     void addInputPort(void);

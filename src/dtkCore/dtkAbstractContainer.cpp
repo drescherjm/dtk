@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 16:15:20 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May  9 14:33:21 2012 (+0200)
+ * Last-Updated: Wed May 16 11:26:35 2012 (+0200)
  *           By: tkloczko
- *     Update #: 85
+ *     Update #: 87
  */
 
 /* Commentary: 
@@ -76,6 +76,16 @@ dtkAbstractContainer *dtkAbstractContainer::clone(void) const
 QString dtkAbstractContainer::identifier(void) const
 {
     return "dtkAbstractContainer";
+}
+
+void dtkAbstractContainer::setName(const QString& name)
+{
+    this->setObjectName(name);
+}
+
+QString dtkAbstractContainer::name(void) const
+{
+    return this->objectName();
 }
 
 dtkAbstractContainer::Type dtkAbstractContainer::type(void) const

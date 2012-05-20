@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: mar. avril 24 15:40:38 2012 (+0200)
  * Version: $Id$
- * Last-Updated: mar. avril 24 16:51:50 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 43
+ * Last-Updated: Fri May 18 15:47:40 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 47
  */
 
 /* Commentary:
@@ -20,10 +20,9 @@
 #ifndef DTKPIECHART_H
 #define DTKPIECHART_H
 
-#include <QtGui/QWidget>
-
 #include "dtkGuiExport.h"
 
+#include <QtGui/QWidget>
 
 class dtkPieChartPrivate;
 

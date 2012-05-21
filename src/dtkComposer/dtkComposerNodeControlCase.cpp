@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: mar. mai 15 17:05:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: lun. mai 21 11:08:45 2012 (+0200)
+ * Last-Updated: lun. mai 21 11:24:58 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 280
+ *     Update #: 283
  */
 
 /* Commentary:
@@ -76,7 +76,6 @@ dtkComposerNodeControlCase::dtkComposerNodeControlCase(void) : dtkComposerNodeCo
 dtkComposerNodeControlCase::~dtkComposerNodeControlCase(void)
 {
 
-    //FIXME: delete blocks
     delete d;
 
     d = NULL;
@@ -129,8 +128,8 @@ void dtkComposerNodeControlCase::removeBlock(int id)
     if (id == 0) // can't remove default block
         return;
 
-    d->blocks.takeAt(id);
-    d->blocks_input.takeAt(id-1);
+    d->blocks.removeAt(id);
+    d->blocks_input.removeAt(id-1);
 
     for (int i=1; i< d->blocks.count(); i++)
         d->blocks.at(i)->setTitleHint("Case#"+QString::number(i));

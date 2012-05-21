@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:45 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 21 18:52:40 2012 (+0200)
+ * Last-Updated: Mon May 21 19:35:11 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 308
+ *     Update #: 347
  */
 
 /* Commentary: 
@@ -55,9 +55,6 @@ dtkViewLayoutItemProxy::dtkViewLayoutItemProxy(QWidget *parent) : QFrame(parent)
 
 dtkViewLayoutItemProxy::~dtkViewLayoutItemProxy(void)
 {
-    if (d->view)
-        d->view->setParent(0);
-
     delete d;
 
     d = NULL;
@@ -73,8 +70,11 @@ void dtkViewLayoutItemProxy::setView(dtkAbstractView *view)
     if(!view)
         return;
 
-    if(!d->view)
-        d->layout->takeAt(0);
+    if(!view->widget())
+        return;
+
+    if (d->layout->count())
+        d->layout->takeAt(0)->widget()->setParent(0);
 
     d->view = view;
 
@@ -348,7 +348,7 @@ void dtkViewLayoutItem::unsplit(void)
             d->proxy = new dtkViewLayoutItemProxy(this);
 
             connect(d->proxy, SIGNAL(focusedIn()), this, SLOT(onFocusedIn()));
-            connect(d->proxy, SIGNAL(focusedOut()), this, SLOT(onFocusedOut()));      
+            connect(d->proxy, SIGNAL(focusedOut()), this, SLOT(onFocusedOut()));
 
             d->splitter->addWidget(d->proxy);
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mai 21 16:52:48 2012 (+0200)
+ * Last-Updated: lun. mai 21 18:55:23 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 4151
+ *     Update #: 4251
  */
 
 /* Commentary: 
@@ -227,12 +227,15 @@ public:
     dtkComposerSceneNode *node;
 
 public:
+    bool dirty;
+public:
     dtkComposerSceneNodeComposite *parent;
 
 public:
     QList<dtkComposerSceneEdge *>       input_edges;
     QList<dtkComposerSceneEdge *>      output_edges;
     QList<dtkComposerStackCommand *>  destroy_nodes;
+    QList<dtkComposerStackCommandDestroyEdge *>  destroy_edges;
 
 };
 
@@ -240,6 +243,7 @@ dtkComposerStackCommandDestroyNode::dtkComposerStackCommandDestroyNode(dtkCompos
 {
     e->node = NULL;
     e->parent = NULL;
+    e->dirty = true;
 }
 
 dtkComposerStackCommandDestroyNode::~dtkComposerStackCommandDestroyNode(void)
@@ -252,12 +256,6 @@ dtkComposerStackCommandDestroyNode::~dtkComposerStackCommandDestroyNode(void)
 void dtkComposerStackCommandDestroyNode::setNode(dtkComposerSceneNode *node)
 {
     e->node = node;
-
-    foreach(dtkComposerSceneEdge *edge, e->node->inputEdges())
-        e->input_edges << edge;
-
-    foreach(dtkComposerSceneEdge *edge, e->node->outputEdges())
-        e->output_edges << edge;
 
     e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->node->parent());
 
@@ -280,10 +278,6 @@ void dtkComposerStackCommandDestroyNode::setNode(dtkComposerSceneNode *node)
     } else if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
 
         foreach(dtkComposerSceneNodeComposite *block, control->blocks()) {
-            foreach(dtkComposerSceneEdge *edge, block->inputEdges())
-                e->input_edges << edge;
-            foreach(dtkComposerSceneEdge *edge, block->outputEdges())
-                e->output_edges << edge;
             foreach(dtkComposerSceneNode *subnode, block->nodes()) {
                 dtkComposerStackCommandDestroyNode *cmd = new dtkComposerStackCommandDestroyNode();
                 cmd->setScene(d->scene);
@@ -298,10 +292,6 @@ void dtkComposerStackCommandDestroyNode::setNode(dtkComposerSceneNode *node)
                 e->destroy_nodes << cmd;
             }
         }
-        if (control->header())
-            e->input_edges << control->header()->inputEdges();
-        if (control->footer())
-            e->output_edges << control->footer()->outputEdges();
 
     }
 
@@ -322,23 +312,77 @@ void dtkComposerStackCommandDestroyNode::redo(void)
     if(!e->node)
         return;
 
-    // destroy internal nodes of composite first
+    if(e->dirty) {
+
+        foreach(dtkComposerSceneEdge *edge, e->node->inputEdges()){
+            e->destroy_edges << new dtkComposerStackCommandDestroyEdge;
+            e->destroy_edges.last()->setFactory(d->factory);
+            e->destroy_edges.last()->setScene(d->scene);
+            e->destroy_edges.last()->setGraph(d->graph);
+            e->destroy_edges.last()->setEdge(edge);
+            e->destroy_edges.last()->redo();
+            // if (d->scene->items().contains(edge))
+            //     d->scene->removeItem(edge);
+            // d->graph->removeEdge(edge);
+            // e->parent->removeEdge(edge);
+            // e->input_edges << edge;
+            // edge->unlink();
+        }
+
+        foreach(dtkComposerSceneEdge *edge, e->node->outputEdges()){
+            e->destroy_edges << new dtkComposerStackCommandDestroyEdge;
+            e->destroy_edges.last()->setFactory(d->factory);
+            e->destroy_edges.last()->setScene(d->scene);
+            e->destroy_edges.last()->setGraph(d->graph);
+            e->destroy_edges.last()->setEdge(edge);
+            e->destroy_edges.last()->redo();
+        }
+
+        if (dtkComposerSceneNodeControl *control = dynamic_cast< dtkComposerSceneNodeControl * >(e->node)) {
+
+            foreach(dtkComposerSceneNodeComposite *block, control->blocks()) {
+                foreach(dtkComposerSceneEdge *edge, block->inputEdges()) {
+                    e->destroy_edges << new dtkComposerStackCommandDestroyEdge;
+                    e->destroy_edges.last()->setFactory(d->factory);
+                    e->destroy_edges.last()->setScene(d->scene);
+                    e->destroy_edges.last()->setGraph(d->graph);
+                    e->destroy_edges.last()->setEdge(edge);
+                    e->destroy_edges.last()->redo();
+                }
+                foreach(dtkComposerSceneEdge *edge, block->outputEdges()) {
+                    e->destroy_edges << new dtkComposerStackCommandDestroyEdge;
+                    e->destroy_edges.last()->setFactory(d->factory);
+                    e->destroy_edges.last()->setScene(d->scene);
+                    e->destroy_edges.last()->setGraph(d->graph);
+                    e->destroy_edges.last()->setEdge(edge);
+                    e->destroy_edges.last()->redo();
+                }
+            }
+            foreach(dtkComposerSceneEdge *edge, control->header()->inputEdges()){
+                e->destroy_edges << new dtkComposerStackCommandDestroyEdge;
+                e->destroy_edges.last()->setFactory(d->factory);
+                e->destroy_edges.last()->setScene(d->scene);
+                e->destroy_edges.last()->setGraph(d->graph);
+                e->destroy_edges.last()->setEdge(edge);
+                e->destroy_edges.last()->redo();
+            }
+            foreach(dtkComposerSceneEdge *edge, control->footer()->outputEdges()){
+                e->destroy_edges << new dtkComposerStackCommandDestroyEdge;
+                e->destroy_edges.last()->setFactory(d->factory);
+                e->destroy_edges.last()->setScene(d->scene);
+                e->destroy_edges.last()->setGraph(d->graph);
+                e->destroy_edges.last()->setEdge(edge);
+                e->destroy_edges.last()->redo();
+            }
+        }
+        e->dirty = false;
+    } else {
+        foreach(dtkComposerStackCommand *destroy_edge, e->destroy_edges)
+            destroy_edge->redo();
+    }
+
     foreach(dtkComposerStackCommand *cmd, e->destroy_nodes)
         cmd->redo();
-
-    foreach(dtkComposerSceneEdge *edge, e->input_edges) {
-        if (d->scene->items().contains(edge))
-            d->scene->removeItem(edge);
-        d->graph->removeEdge(edge);
-        e->parent->removeEdge(edge);
-    }
-
-    foreach(dtkComposerSceneEdge *edge, e->output_edges) {
-        if (d->scene->items().contains(edge))
-            d->scene->removeItem(edge);
-        d->graph->removeEdge(edge);
-        e->parent->removeEdge(edge);
-    }
 
     d->graph->removeNode(e->node);
     d->graph->layout();
@@ -374,19 +418,8 @@ void dtkComposerStackCommandDestroyNode::undo(void)
 
     e->parent->layout();
 
-    foreach(dtkComposerSceneEdge *edge, e->input_edges) {
-        if(!d->scene->items().contains(edge))
-            d->scene->addItem(edge);
-        e->parent->addEdge(edge);
-        d->graph->addEdge(edge);
-    }
-
-    foreach(dtkComposerSceneEdge *edge, e->output_edges) {
-        if(!d->scene->items().contains(edge))
-            d->scene->addItem(edge);
-        e->parent->addEdge(edge);
-        d->graph->addEdge(edge);
-    }
+    foreach(dtkComposerStackCommand *cmd, e->destroy_edges)
+        cmd->undo();
 
     d->graph->layout();
 
@@ -625,13 +658,13 @@ void dtkComposerStackCommandDestroyEdge::redo(void)
         return;
     }
 
-    // Setting up data flow
-
-    dtkComposerTransmitterDisconnection(d->scene->root(), e->parent, e->edge);
-
     // Setting up control flow
 
     d->graph->removeEdge(e->edge);
+
+    // Setting up data flow
+
+    dtkComposerTransmitterDisconnection(d->scene->root(), e->parent, e->edge);
 
     // Setting up scene
 
@@ -639,7 +672,8 @@ void dtkComposerStackCommandDestroyEdge::redo(void)
 
     e->parent->removeEdge(e->edge);
 
-    if(e->parent->entered() || e->parent->flattened() || e->parent->root())
+
+    if(e->parent->entered() || e->parent->visible() || e->parent->root())
         d->scene->removeItem(e->edge);
 
     d->scene->modify(true);
@@ -666,7 +700,7 @@ void dtkComposerStackCommandDestroyEdge::undo(void)
 
     e->parent->addEdge(e->edge);
 
-    if(e->parent->entered() || e->parent->flattened() || e->parent->root())
+    if(e->parent->entered() || e->parent->visible() || e->parent->root())
         d->scene->addItem(e->edge);
 
     e->edge->adjust();

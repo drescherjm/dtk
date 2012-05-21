@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:45 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 21 18:03:01 2012 (+0200)
+ * Last-Updated: Mon May 21 18:46:38 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 210
+ *     Update #: 305
  */
 
 /* Commentary: 
@@ -26,19 +26,59 @@
 #include <QtGui>
 
 // /////////////////////////////////////////////////////////////////
+// dtkViewLayoutItemProxyPrivate
+// /////////////////////////////////////////////////////////////////
+
+class dtkViewLayoutItemProxyPrivate
+{
+public:
+    QVBoxLayout *layout;
+
+public:
+    dtkAbstractView *view;
+};
+
+// /////////////////////////////////////////////////////////////////
 // dtkViewLayoutItemProxy
 // /////////////////////////////////////////////////////////////////
 
-dtkViewLayoutItemProxy::dtkViewLayoutItemProxy(QWidget *parent) : QFrame(parent)
+dtkViewLayoutItemProxy::dtkViewLayoutItemProxy(QWidget *parent) : QFrame(parent), d(new dtkViewLayoutItemProxyPrivate)
 {
+    d->layout = new QVBoxLayout(this);
+    d->layout->setContentsMargins(0, 0, 0, 0);
+
+    d->view = NULL;
+
     this->setFocusPolicy(Qt::StrongFocus);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    this->setStyleSheet("background: #aaaaaa; color: #dddddd;");
 }
 
 dtkViewLayoutItemProxy::~dtkViewLayoutItemProxy(void)
 {
+    if (d->view)
+        d->view->setParent(0);
 
+    delete d;
+
+    d = NULL;
+}
+
+dtkAbstractView *dtkViewLayoutItemProxy::view(void)
+{
+    return d->view;
+}
+
+void dtkViewLayoutItemProxy::setView(dtkAbstractView *view)
+{
+    if(!view)
+        return;
+
+    if(!d->view)
+        d->layout->takeAt(0);
+
+    d->view = view;
+
+    d->layout->addWidget(d->view->widget());
 }
 
 void dtkViewLayoutItemProxy::focusInEvent(QFocusEvent *event)
@@ -151,7 +191,6 @@ dtkViewLayoutItem::dtkViewLayoutItem(dtkViewLayoutItem *parent) : QFrame(parent)
     layout->addWidget(d->footer);
 
     this->setAcceptDrops(true);
-    this->setFocusPolicy(Qt::StrongFocus);
 
     connect(d->close, SIGNAL(clicked()), this, SLOT(close()));
     connect(d->horzt, SIGNAL(clicked()), this, SLOT(horzt()));
@@ -159,6 +198,8 @@ dtkViewLayoutItem::dtkViewLayoutItem(dtkViewLayoutItem *parent) : QFrame(parent)
 
     connect(d->proxy, SIGNAL(focusedIn()), this, SLOT(onFocusedIn()));
     connect(d->proxy, SIGNAL(focusedOut()), this, SLOT(onFocusedOut()));
+
+    d->proxy->setFocus(Qt::OtherFocusReason);
 }
 
 dtkViewLayoutItem::~dtkViewLayoutItem(void)
@@ -193,10 +234,11 @@ void dtkViewLayoutItem::split(void)
     d->a = new dtkViewLayoutItem(this);
     d->b = new dtkViewLayoutItem(this);
 
-    d->a->setFocus(Qt::OtherFocusReason);
-
     d->splitter->addWidget(d->a);
     d->splitter->addWidget(d->b);
+
+    d->a->d->proxy->setFocus(Qt::OtherFocusReason);
+    d->a->d->proxy->setView(d->proxy->view());
 
     disconnect(d->proxy, SIGNAL(focusedIn()), this, SLOT(onFocusedIn()));
     disconnect(d->proxy, SIGNAL(focusedOut()), this, SLOT(onFocusedOut()));
@@ -256,6 +298,7 @@ void dtkViewLayoutItem::unsplit(void)
 
             d->splitter->addWidget(d->proxy);
 
+            d->proxy->setView(d->b->d->proxy->view());
             d->proxy->setFocus(Qt::OtherFocusReason);
 
             delete d->b;
@@ -309,6 +352,7 @@ void dtkViewLayoutItem::unsplit(void)
 
             d->splitter->addWidget(d->proxy);
 
+            d->proxy->setView(d->a->d->proxy->view());
             d->proxy->setFocus(Qt::OtherFocusReason);
 
             delete d->a;
@@ -328,11 +372,15 @@ void dtkViewLayoutItem::unsplit(void)
 void dtkViewLayoutItem::onFocusedIn(void)
 {
     d->layout->setCurrent(this);
+
+    d->footer->setStyleSheet("background: #94a5cc;");
+    d->footer->update();
 }
 
 void dtkViewLayoutItem::onFocusedOut(void)
 {
-
+    d->footer->setStyleSheet("background: #aaaaaa;");
+    d->footer->update();
 }
 
 void dtkViewLayoutItem::close(void)
@@ -383,17 +431,5 @@ void dtkViewLayoutItem::dropEvent(QDropEvent *event)
     if(d->a && d->b)
         return;
 
-    // d->proxy->hide();
-
-    // // --
-
-    // d->view = dtkAbstractViewFactory::instance()->view(event->mimeData()->text())->widget();
-
-    // // --
-
-    // d->splitter->addWidget(d->view);
-
-    // d->close->setEnabled(true);
-    // d->horzt->setEnabled(false);
-    // d->vertc->setEnabled(false);
+    d->proxy->setView(dtkAbstractViewFactory::instance()->view(event->mimeData()->text()));
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:35 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 21 16:27:26 2012 (+0200)
+ * Last-Updated: Mon May 21 18:44:56 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 43
+ *     Update #: 50
  */
 
 /* Commentary: 
@@ -24,12 +24,16 @@
 
 #include <QtGui/QFrame>
 
+class dtkAbstractView;
+
 class dtkViewLayout;
 class dtkViewLayoutItemPrivate;
 
 // /////////////////////////////////////////////////////////////////
 // dtkViewLayoutItemProxy
 // /////////////////////////////////////////////////////////////////
+
+class dtkViewLayoutItemProxyPrivate;
 
 class DTKGUI_EXPORT dtkViewLayoutItemProxy : public QFrame
 {
@@ -39,6 +43,12 @@ public:
      dtkViewLayoutItemProxy(QWidget *parent = 0);
     ~dtkViewLayoutItemProxy(void);
 
+public:
+    dtkAbstractView *view(void);
+
+public:
+    void setView(dtkAbstractView *view);
+
 signals:
     void focusedIn(void);
     void focusedOut(void);
@@ -46,6 +56,9 @@ signals:
 protected:
     void focusInEvent(QFocusEvent *event);
     void focusOutEvent(QFocusEvent *event);
+
+private:
+    dtkViewLayoutItemProxyPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////

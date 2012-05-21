@@ -45,7 +45,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerMachineState.h
   dtkComposerNode.h
   dtkComposerNodeArrayScalar.h
-dtkComposerNodeArrayScalarOperatorModifier.h
+  dtkComposerNodeArrayScalarOperatorModifier.h
   dtkComposerNodeBoolean.h
   dtkComposerNodeBooleanOperator.h
   dtkComposerNodeComposite.h
@@ -79,6 +79,8 @@ dtkComposerNodeArrayScalarOperatorModifier.h
   dtkComposerNodeVector3DOperatorUnary.h
   dtkComposerNodeVector3DOperatorBinary.h
   dtkComposerNodeVector3DOperatorTernary.h
+  dtkComposerNodeVectorReal.h
+  dtkComposerNodeVectorRealOperatorModifier.h
   dtkComposerNodeView.h
   dtkComposerScene.h
   dtkComposerSceneEdge.h
@@ -148,7 +150,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerMachineState.cpp
   dtkComposerNode.cpp
   dtkComposerNodeArrayScalar.cpp
-dtkComposerNodeArrayScalarOperatorModifier.cpp
+  dtkComposerNodeArrayScalarOperatorModifier.cpp
   dtkComposerNodeBoolean.cpp
   dtkComposerNodeBooleanOperator.cpp
   dtkComposerNodeComposite.cpp
@@ -182,6 +184,8 @@ dtkComposerNodeArrayScalarOperatorModifier.cpp
   dtkComposerNodeVector3DOperatorUnary.cpp
   dtkComposerNodeVector3DOperatorBinary.cpp
   dtkComposerNodeVector3DOperatorTernary.cpp
+  dtkComposerNodeVectorReal.cpp
+  dtkComposerNodeVectorRealOperatorModifier.cpp
   dtkComposerNodeView.cpp
   dtkComposerScene.cpp
   dtkComposerSceneEdge.cpp

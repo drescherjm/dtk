@@ -50,6 +50,8 @@
 #include "dtkComposerNodeVector3D.h"
 #include "dtkComposerNodeVector3DOperatorUnary.h"
 #include "dtkComposerNodeVector3DOperatorBinary.h"
+#include "dtkComposerNodeVectorReal.h"
+#include "dtkComposerNodeVectorRealOperatorModifier.h"
 #include "dtkComposerNodeView.h"
 #include "dtkComposerNodeRemote.h"
 #include "dtkComposerSceneNodeLeaf.h"
@@ -130,6 +132,36 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["Vector"] = "<p>Description not yet filled!</p>";
     d->tags["Vector"] = QStringList() << "container" << "vector";
     d->types["Vector"] = "vector";
+
+    d->nodes << "Vector Real";
+    d->descriptions["Vector Real"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real"] = QStringList() << "vector" << "real" << "algebraic";
+    d->types["Vector Real"] = "vector_real";
+
+    d->nodes << "Vector Real Set";
+    d->descriptions["Vector Real Set"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Set"] = QStringList() << "vector" << "real" << "set";
+    d->types["Vector Real Set"] = "vector_real_set";
+
+    d->nodes << "Vector Real Sum";
+    d->descriptions["Vector Real Sum"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Sum"] = QStringList() << "vector" << "real" << "sum";
+    d->types["Vector Real Sum"] = "vector_real_sum";
+
+    d->nodes << "Vector Real Substract";
+    d->descriptions["Vector Real Substract"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Substract"] = QStringList() << "vector" << "real" << "substract";
+    d->types["Vector Real Substract"] = "vector_real_substract";
+
+    d->nodes << "Vector Real Mult";
+    d->descriptions["Vector Real Mult"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Mult"] = QStringList() << "vector" << "real" << "mult";
+    d->types["Vector Real Mult"] = "vector_real_mult";
+
+    d->nodes << "Vector Real Divide";
+    d->descriptions["Vector Real Divide"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Divide"] = QStringList() << "vector" << "real" << "divide";
+    d->types["Vector Real Divide"] = "vector_real_divide";
 
     d->nodes << "Data Container";
     d->descriptions["Data Container"] = "<p>Description not yet filled!</p>";
@@ -679,6 +711,24 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "vector")
         return new dtkComposerNodeVector;
+
+    if(type == "vector_real")
+        return new dtkComposerNodeVectorReal;
+
+    if(type == "vector_real_set")
+        return new dtkComposerNodeVectorRealOperatorModifierSet;
+
+    if(type == "vector_real_sum")
+        return new dtkComposerNodeVectorRealOperatorModifierSum;
+
+    if(type == "vector_real_substract")
+        return new dtkComposerNodeVectorRealOperatorModifierSubstract;
+
+    if(type == "vector_real_mult")
+        return new dtkComposerNodeVectorRealOperatorModifierMult;
+
+    if(type == "vector_real_divide")
+        return new dtkComposerNodeVectorRealOperatorModifierDivide;
 
     if(type == "data_container")
         return new dtkComposerNodeContainerData;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May 21 10:56:51 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 857
+ * Last-Updated: lun. mai 21 15:07:44 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 897
  */
 
 /* Commentary: 
@@ -210,6 +210,20 @@ bool dtkComposerSceneNodeComposite::entered(void)
 bool dtkComposerSceneNodeComposite::flattened(void)
 {
     return d->flattened || d->root;
+}
+
+// return true if node is visible, ie, it is flatenned and all it's parent are.
+// (we ignore 'entered' value on purpose)
+bool dtkComposerSceneNodeComposite::visible(void)
+{
+
+    if (d->root)
+        return true;
+
+    if (dynamic_cast<dtkComposerSceneNodeControl *>(this->parent()))
+        return dynamic_cast<dtkComposerSceneNodeComposite *>(this->parent()->parent())->visible();
+
+    return (d->flattened &&  (dynamic_cast<dtkComposerSceneNodeComposite *>(this->parent()))->visible()) ;
 }
 
 void dtkComposerSceneNodeComposite::enter(void)

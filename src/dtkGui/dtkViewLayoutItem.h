@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:35 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 21 01:41:38 2012 (+0200)
+ * Last-Updated: Mon May 21 18:44:56 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 4
+ *     Update #: 50
  */
 
 /* Commentary: 
@@ -24,31 +24,79 @@
 
 #include <QtGui/QFrame>
 
+class dtkAbstractView;
+
 class dtkViewLayout;
 class dtkViewLayoutItemPrivate;
 
-class dtkViewLayoutItem : public QFrame
+// /////////////////////////////////////////////////////////////////
+// dtkViewLayoutItemProxy
+// /////////////////////////////////////////////////////////////////
+
+class dtkViewLayoutItemProxyPrivate;
+
+class DTKGUI_EXPORT dtkViewLayoutItemProxy : public QFrame
+{
+    Q_OBJECT
+
+public:
+     dtkViewLayoutItemProxy(QWidget *parent = 0);
+    ~dtkViewLayoutItemProxy(void);
+
+public:
+    dtkAbstractView *view(void);
+
+public:
+    void setView(dtkAbstractView *view);
+
+signals:
+    void focusedIn(void);
+    void focusedOut(void);
+
+protected:
+    void focusInEvent(QFocusEvent *event);
+    void focusOutEvent(QFocusEvent *event);
+
+private:
+    dtkViewLayoutItemProxyPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkViewLayoutItem
+// /////////////////////////////////////////////////////////////////
+
+class DTKGUI_EXPORT dtkViewLayoutItem : public QFrame
 {
     Q_OBJECT
 
 public:
      dtkViewLayoutItem(dtkViewLayoutItem *parent = 0);
     ~dtkViewLayoutItem(void);
-    
+
 public:
-     void setCurrent(dtkViewLayoutItem *item);
+    dtkViewLayoutItem *parent(void);
+
+public:
+    dtkViewLayout *layout(void);
+
+public:
+    dtkViewLayoutItemProxy *proxy(void);
+
+public:
+    void setLayout(dtkViewLayout *layout);
+
+public slots:
+    void   split(void);
+    void unsplit(void);
 
 protected slots:
-     void close(void);
-     void horzt(void);
-     void vertc(void);
+    void close(void);
+    void horzt(void);
+    void vertc(void);
 
-protected:
-     void remove(dtkViewLayoutItem *item);
-
-protected:
-     void focusInEvent(QFocusEvent *);
-     void focusOutEvent(QFocusEvent *);
+protected slots:
+    void onFocusedIn(void);
+    void onFocusedOut(void);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *);
@@ -57,10 +105,10 @@ protected:
     void dropEvent(QDropEvent *);
 
 private:
-     friend class dtkViewLayoutItemPrivate;
+     dtkViewLayoutItemPrivate *d;
 
 private:
-     dtkViewLayoutItemPrivate *d;
+     friend class dtkViewLayoutItemPrivate;
 };
 
 #endif

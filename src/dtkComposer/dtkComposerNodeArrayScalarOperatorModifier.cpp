@@ -1,4 +1,4 @@
-/* dtkComposerNodeArrayScalarOperatorModifierOperatorModifier.cpp ---
+/* dtkComposerNodeArrayScalarOperatorModifier.cpp ---
  *
  * Author: sblekout
  * Copyright (C) 2011 - babette lekouta, Inria.
@@ -30,9 +30,9 @@
 class dtkComposerNodeArrayScalarOperatorModifierPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<qreal> receiver_array;
-    dtkComposerTransmitterReceiver<qlonglong>              receiver_index;
-    dtkComposerTransmitterReceiver<qreal>                  receiver_value;
+    dtkComposerTransmitterReceiver<qreal>      receiver_array;
+    dtkComposerTransmitterReceiver<qlonglong>  receiver_index;
+    dtkComposerTransmitterReceiver<qreal>      receiver_value;
 
 public:
     dtkComposerTransmitterEmitter<qreal> emitter_array;

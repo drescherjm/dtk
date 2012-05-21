@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:45 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 21 19:35:11 2012 (+0200)
+ * Last-Updated: Tue May 22 00:39:02 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 347
+ *     Update #: 399
  */
 
 /* Commentary: 
@@ -55,6 +55,9 @@ dtkViewLayoutItemProxy::dtkViewLayoutItemProxy(QWidget *parent) : QFrame(parent)
 
 dtkViewLayoutItemProxy::~dtkViewLayoutItemProxy(void)
 {
+    if (d->view)
+        d->layout->removeWidget(d->view->widget());
+
     delete d;
 
     d = NULL;
@@ -73,12 +76,18 @@ void dtkViewLayoutItemProxy::setView(dtkAbstractView *view)
     if(!view->widget())
         return;
 
-    if (d->layout->count())
-        d->layout->takeAt(0)->widget()->setParent(0);
+    if(dtkViewLayoutItemProxy *proxy = dynamic_cast<dtkViewLayoutItemProxy *>(view->widget()->parentWidget())) {
+        proxy->d->layout->removeWidget(view->widget());
+        proxy->d->view = NULL;
+    }
+
+    if (d->view)
+        d->layout->removeWidget(d->view->widget());
 
     d->view = view;
-
     d->layout->addWidget(d->view->widget());
+
+    // qDebug() << __func__ << d->view->widget()->parentWidget()->metaObject()->className();
 }
 
 void dtkViewLayoutItemProxy::focusInEvent(QFocusEvent *event)

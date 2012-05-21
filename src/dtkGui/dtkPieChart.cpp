@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: mar. avril 24 15:42:10 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri May 18 15:47:34 2012 (+0200)
+ * Last-Updated: Mon May 21 22:37:06 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 78
+ *     Update #: 79
  */
 
 /* Commentary:
@@ -125,5 +125,3 @@ void dtkPieChart::paintEvent(QPaintEvent *ev)
         p.drawText(textEntryRect, Qt::AlignVCenter, text);
     }
 }
-
-

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: mar. oct. 11 10:46:57 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. avril 24 10:46:48 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 345
+ * Last-Updated: Mon May 21 23:49:09 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 346
  */
 
 /* Commentary:
@@ -20,6 +20,7 @@
 #include "dtkDistributedMessage.h"
 
 #include <dtkCore/dtkGlobal.h>
+
 #include <dtkLog/dtkLog.h>
 
 class dtkDistributedMessagePrivate

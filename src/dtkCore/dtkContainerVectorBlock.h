@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 15:54:37 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sun May 20 19:10:15 2012 (+0200)
- *           By: tkloczko
- *     Update #: 70
+ * Last-Updated: Mon May 21 11:07:52 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 71
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #define DTKCONTAINERVECTORBLOCK_H
 
 #include "dtkAbstractContainer.h"
+#include "dtkContainerVector.h"
 #include "dtkCoreExport.h"
 #include "dtkGlobal.h"
 

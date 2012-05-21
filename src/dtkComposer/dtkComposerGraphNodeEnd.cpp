@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: ven. avril 13 16:29:45 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 175
+ * Last-Updated: Wed May 16 15:18:29 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 183
  */
 
 /* Commentary:
@@ -17,6 +17,7 @@
  *
  */
 
+#include <dtkConfig.h>
 
 #include "dtkComposerGraphNode.h"
 #include "dtkComposerGraphNodeEnd.h"
@@ -30,12 +31,14 @@
 class dtkComposerGraphNodeEndPrivate
 {
 public:
-    dtkComposerNodeControl   *control_node;
-    dtkComposerNodeComposite     *composite;
+    dtkComposerNodeControl *control_node;
+    dtkComposerNodeComposite *composite;
 
 public:
     bool is_remote;
-    dtkComposerNodeRemote   *remote;
+
+public:
+    dtkComposerNodeRemote *remote;
 
 public:
     dtkComposerGraphNode *begin;

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Tue May 15 12:23:16 2012 (+0200)
- *           By: tkloczko
- *     Update #: 568
+ * Last-Updated: mer. mai 16 12:55:22 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 573
  */
 
 /* Commentary:
@@ -28,6 +28,7 @@
 #include "dtkComposerNodeConstants.h"
 #include "dtkComposerNodeContainerData.h"
 #include "dtkComposerNodeComposite.h"
+#include "dtkComposerNodeControlCase.h"
 #include "dtkComposerNodeControlDoWhile.h"
 #include "dtkComposerNodeControlIf.h"
 #include "dtkComposerNodeControlFor.h"
@@ -543,6 +544,11 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 
     // control nodes
 
+    d->nodes << "Case";
+    d->descriptions["Case"] = dtkReadFile(":dtkComposer/dtkComposerNodeControlCase.html");
+    d->tags["Case"] = QStringList() << "control" << "case";
+    d->types["Case"] = "case";
+
     d->nodes << "Do While";
     d->descriptions["Do While"] = "<p>Description not yet filled!</p>";
     d->tags["Do While"] = QStringList() << "control" << "do" << "while";
@@ -577,17 +583,17 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 
     // process nodes
 
-    d->nodes << "Process";
-    d->descriptions["Process"] = "<p>Description not yet filled!</p>";
-    d->tags["Process"] = QStringList() << "process" ;
-    d->types["Process"] = "process";
+    d->nodes << "Generic Process";
+    d->descriptions["Generic Process"] = "<p>Description not yet filled!</p>";
+    d->tags["Generic Process"] = QStringList() << "process" ;
+    d->types["Generic Process"] = "process";
 
-    // process nodes
+    // view nodes
 
-    d->nodes << "View";
-    d->descriptions["View"] = "<p>Description not yet filled!</p>";
-    d->tags["View"] = QStringList() << "view" ;
-    d->types["View"] = "view";
+    d->nodes << "Generic View";
+    d->descriptions["Generic View"] = "<p>Description not yet filled!</p>";
+    d->tags["Generic View"] = QStringList() << "view" ;
+    d->types["Generic View"] = "view";
 
     // dtkDistributed nodes
 
@@ -954,6 +960,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     // control nodes
 
+    if(type == "case")
+        return new dtkComposerNodeControlCase;
+
     if(type == "do while")
         return new dtkComposerNodeControlDoWhile;
 
@@ -984,6 +993,11 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "view")
         return new dtkComposerNodeView;
 
+    // distributed nodes
+
+    if(type == "remote")
+        return new dtkComposerNodeRemote;
+
     // /////////////////////////////////////////////////////////////////
     // NITE nodes
     // /////////////////////////////////////////////////////////////////
@@ -1009,9 +1023,6 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 #if defined(DTK_HAVE_MPI)
     if(type == "world")
         return new dtkComposerNodeWorld;
-
-    if(type == "remote")
-        return new dtkComposerNodeRemote;
 
     if(type == "communicatorSize")
         return new dtkComposerNodeCommunicatorSize;

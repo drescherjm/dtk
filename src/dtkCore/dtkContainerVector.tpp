@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 17:02:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 10 10:22:17 2012 (+0200)
+ * Last-Updated: Sun May 20 18:54:31 2012 (+0200)
  *           By: tkloczko
- *     Update #: 105
+ *     Update #: 106
  */
 
 /* Commentary: 
@@ -65,6 +65,11 @@ template <typename T> inline void dtkContainerVector<T>::setVector(const QVector
 };
 
 template <typename T> inline QVector<T>& dtkContainerVector<T>::vector(void)
+{
+    return m_vector;
+};
+
+template <typename T> inline const QVector<T>& dtkContainerVector<T>::vector(void) const
 {
     return m_vector;
 };

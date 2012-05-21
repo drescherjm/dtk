@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: mar. avril 24 15:42:10 2012 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. avril 26 11:11:25 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 74
+ * Last-Updated: Fri May 18 15:47:34 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 78
  */
 
 /* Commentary:
@@ -17,9 +17,9 @@
  *
  */
 
-#include <dtkCore/dtkGlobal.h>
 #include "dtkPieChart.h"
 
+#include <dtkCore/dtkGlobal.h>
 
 class dtkPieChartPrivate
 {

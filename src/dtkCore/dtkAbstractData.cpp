@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: mar. avril 24 13:31:39 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 417
+ * Last-Updated: Wed May 16 14:29:28 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 421
  */
 
 /* Commentary:
@@ -71,6 +71,30 @@ dtkAbstractData& dtkAbstractData::operator=(const dtkAbstractData& other)
     d->thumbnails = other.d_func()->thumbnails;
 
     return (*this);
+}
+
+//! Comparison operator.
+/*!
+ *  
+ */
+bool dtkAbstractData::operator == (const dtkAbstractData& other)
+{
+    if (!dtkAbstractObject::operator==(other))
+        return false;
+
+    DTK_D(dtkAbstractData);
+    if (d->readers          != other.d_func()->readers          ||
+        d->writers          != other.d_func()->writers          ||
+        d->converters       != other.d_func()->converters       ||
+        d->serializers      != other.d_func()->serializers      ||
+        d->deserializers    != other.d_func()->deserializers    ||
+        d->path             != other.d_func()->path             ||
+        d->paths            != other.d_func()->paths            ||
+        d->numberOfChannels != other.d_func()->numberOfChannels ||
+        d->thumbnails       != other.d_func()->thumbnails)
+        return false;
+
+    return true;
 }
 
 void dtkAbstractData::addReader(const QString& reader)

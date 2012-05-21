@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 10 12:16:35 2012 (+0200)
+ * Last-Updated: Mon May 21 10:56:51 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 846
+ *     Update #: 857
  */
 
 /* Commentary: 
@@ -17,6 +17,8 @@
  * 
  */
 
+#include <dtkConfig.h>
+
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerSceneEdge.h"
 #include "dtkComposerSceneNode.h"
@@ -25,12 +27,11 @@
 #include "dtkComposerSceneNote.h"
 #include "dtkComposerScenePort.h"
 #include "dtkComposerWriter.h"
+#include "dtkComposerNodeRemote.h"
 
 #include <dtkLog/dtkLog.h>
 
 #include <dtkConfig.h>
-
-#include "dtkComposerNodeRemote.h"
 
 #include <dtkDistributed/dtkDistributedController.h>
 #include <dtkDistributed/dtkDistributedMimeData.h>

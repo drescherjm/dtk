@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 10 10:50:16 2012 (+0200)
- *           By: tkloczko
- *     Update #: 212
+ * Last-Updated: Wed May 16 14:20:43 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 226
  */
 
 /* Commentary: 
@@ -24,6 +24,8 @@
 #include "dtkComposerTransmitterVariant.h"
 
 #include <dtkCore/dtkGlobal.h>
+
+#include <QtCore>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterReceiver implementation
@@ -55,7 +57,7 @@ template <typename T> dtkComposerTransmitterReceiver<T>::~dtkComposerTransmitter
 /*! 
  *  
  */
-template <typename T> const T& dtkComposerTransmitterReceiver<T>::data(void)
+template <typename T> T& dtkComposerTransmitterReceiver<T>::data(void)
 {
     if (active_emitter)
         return active_emitter->data();
@@ -64,6 +66,36 @@ template <typename T> const T& dtkComposerTransmitterReceiver<T>::data(void)
         m_data = qvariant_cast<T>(active_variant->data());
 
     return m_data;
+};
+
+//! Returns the data as a modifiable reference.
+/*! 
+ *  
+ */
+template <typename T> const T& dtkComposerTransmitterReceiver<T>::data(void) const
+{
+    if (active_emitter)
+        return active_emitter->data();
+
+    if (active_variant)
+        m_data = qvariant_cast<const T>(active_variant->data());
+
+    return m_data;
+};
+
+//! 
+/*! 
+ *  
+ */
+template <typename T> dtkAbstractContainer& dtkComposerTransmitterReceiver<T>::container(void)
+{
+    if (active_emitter)
+        return active_emitter->container();
+
+    if (active_variant)
+        return active_variant->container();
+
+    return d->container;
 };
 
 //! 
@@ -85,6 +117,21 @@ template <typename T> const dtkAbstractContainer& dtkComposerTransmitterReceiver
 /*! 
  *  
  */
+template <typename T> dtkContainerVector<T>& dtkComposerTransmitterReceiver<T>::vector(void)
+{
+    if (active_emitter)
+        return active_emitter->vector();
+
+    if (active_variant) 
+        return *reinterpret_cast<dtkContainerVector<T> *>(&(active_variant->container()));
+
+    return m_vector;
+};
+
+//! 
+/*! 
+ *  
+ */
 template <typename T> const dtkContainerVector<T>& dtkComposerTransmitterReceiver<T>::vector(void) const
 {
     if (active_emitter)
@@ -94,6 +141,21 @@ template <typename T> const dtkContainerVector<T>& dtkComposerTransmitterReceive
         return *reinterpret_cast<const dtkContainerVector<T> *>(&(active_variant->container()));
 
     return m_vector;
+};
+
+//! 
+/*! 
+ *  
+ */
+template <typename T> dtkContainerList<T>& dtkComposerTransmitterReceiver<T>::list(void)
+{
+    if (active_emitter)
+        return active_emitter->list();
+
+    if (active_variant) 
+        return *reinterpret_cast<dtkContainerList<T> *>(&(active_variant->container()));
+
+    return m_list;
 };
 
 //! 
@@ -148,7 +210,9 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::connect(dtkCompose
     if (transmitter->kind() == Emitter) {
      
         if ((emitter = dynamic_cast<dtkComposerTransmitterEmitter<T> *>(transmitter))) {
+
             if (!emitters.contains(emitter)) {
+
                 emitters << emitter;
                 active_emitter = emitter;
                 active_variant = NULL;

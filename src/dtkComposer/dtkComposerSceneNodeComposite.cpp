@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 16 15:21:12 2012 (+0200)
+ * Last-Updated: Mon May 21 10:56:51 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 855
+ *     Update #: 857
  */
 
 /* Commentary: 
@@ -660,9 +660,11 @@ void dtkComposerSceneNodeComposite::dropEvent(QGraphicsSceneDragDropEvent *event
 
     dtkDistributedController *controller = const_cast<dtkDistributedMimeData *>(data)->controller();
 
+#if defined(DTK_HAVE_MPI)
     remote->setJob(job);
     remote->setController(controller);
     this->setTitle("Remote on "+ job);
+#endif
 
     event->acceptProposedAction();
     this->update();

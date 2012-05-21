@@ -18,7 +18,6 @@
 #include "../src/dtkCore/dtkAbstractViewNavigator.h"
 #include "../src/dtkCore/dtkContainerList.h"
 #include "../src/dtkCore/dtkContainerVector.h"
-#include "../src/dtkCore/dtkContainerVectorBlock.h"
 #include "../src/dtkCore/dtkCpuid.h"
 #include "../src/dtkCore/dtkGlobal.h"
 #include "../src/dtkCore/dtkPlugin.h"

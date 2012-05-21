@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 18:06:48 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sun May 20 19:10:33 2012 (+0200)
- *           By: tkloczko
- *     Update #: 118
+ * Last-Updated: Mon May 21 11:06:19 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 119
  */
 
 /* Commentary: 
@@ -30,7 +30,7 @@ template <typename T> dtkContainerVectorBlock<T>::dtkContainerVectorBlock(dtkAbs
     m_block_size = 0;
 };
      
-template <typename T> dtkContainerVectorBlock<T>::dtkContainerVectorBlock(dtkxarch_int block_number, dtkxarch_int block_size, dtkAbstractData *parent = 0) : dtkContainerVector<T>(parent), m_block_number(block_number), m_block_size(block_size)
+template <typename T> dtkContainerVectorBlock<T>::dtkContainerVectorBlock(dtkxarch_int block_number, dtkxarch_int block_size, dtkAbstractData *parent) : dtkContainerVector<T>(parent), m_block_number(block_number), m_block_size(block_size)
 {
     m_vector = QVector<T>(m_block_size * m_block_number);
     m_component_names = QStringList(m_block_size);

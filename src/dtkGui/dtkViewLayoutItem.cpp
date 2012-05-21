@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:45 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri May 18 16:06:08 2012 (+0200)
+ * Last-Updated: Mon May 21 18:03:01 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 12
+ *     Update #: 210
  */
 
 /* Commentary: 
@@ -25,12 +25,44 @@
 
 #include <QtGui>
 
-typedef QList<dtkViewLayoutItem *> dtkViewLayoutItemList;
+// /////////////////////////////////////////////////////////////////
+// dtkViewLayoutItemProxy
+// /////////////////////////////////////////////////////////////////
+
+dtkViewLayoutItemProxy::dtkViewLayoutItemProxy(QWidget *parent) : QFrame(parent)
+{
+    this->setFocusPolicy(Qt::StrongFocus);
+    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    this->setStyleSheet("background: #aaaaaa; color: #dddddd;");
+}
+
+dtkViewLayoutItemProxy::~dtkViewLayoutItemProxy(void)
+{
+
+}
+
+void dtkViewLayoutItemProxy::focusInEvent(QFocusEvent *event)
+{
+    QFrame::focusInEvent(event);
+
+    emit focusedIn();
+}
+
+void dtkViewLayoutItemProxy::focusOutEvent(QFocusEvent *event)
+{
+    QFrame::focusOutEvent(event);
+
+    emit focusedOut();
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkViewLayoutItemPrivate
+// /////////////////////////////////////////////////////////////////
 
 class dtkViewLayoutItemPrivate
 {
 public:
-    void split(void);
+    static dtkViewLayoutItemProxy *firstViewChild(dtkViewLayoutItem *item);
 
 public:
     dtkViewLayoutItem *root;
@@ -41,8 +73,10 @@ public:
     dtkViewLayoutItem *b;
 
 public:
-    QLabel *proxy;
-    QWidget *view;
+    dtkViewLayout *layout;
+
+public:
+    dtkViewLayoutItemProxy *proxy;
 
 public:
     QSplitter *splitter;
@@ -59,44 +93,40 @@ public:
     dtkViewLayoutItem *q;
 };
 
-void dtkViewLayoutItemPrivate::split(void)
+dtkViewLayoutItemProxy *dtkViewLayoutItemPrivate::firstViewChild(dtkViewLayoutItem *item)
 {
-    if(this->a && this->b)
-        return;
+    if(item->d->proxy)
+        return item->d->proxy;
 
-    this->proxy->hide();
+    if(item->d->a)
+        return firstViewChild(item->d->a);
 
-    if(!this->a)
-        this->a = new dtkViewLayoutItem(q);
+    if(item->d->b)
+        return firstViewChild(item->d->b);
 
-    if(!this->b)
-        this->b = new dtkViewLayoutItem(q);
-
-    this->splitter->addWidget(a);
-    this->splitter->addWidget(b);
-
-    q->setCurrent(NULL);
+    return NULL;
 }
+
+// /////////////////////////////////////////////////////////////////
+// dtkViewLayoutItem
+// /////////////////////////////////////////////////////////////////
 
 dtkViewLayoutItem::dtkViewLayoutItem(dtkViewLayoutItem *parent) : QFrame(parent), d(new dtkViewLayoutItemPrivate)
 {
-    d->parent = parent;
-
-    if(!d->parent)
-        d->root = this;
-    else
-        d->root = d->parent->d->root;
-
     d->a = NULL;
     d->b = NULL;
     d->q = this;
 
-    d->view = NULL;
+    d->layout = NULL;
 
-    d->proxy = new QLabel("Drop a view here", this);
-    d->proxy->setAlignment(Qt::AlignCenter);
-    d->proxy->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    d->proxy->setStyleSheet("background: #aaaaaa; color: #dddddd;");
+    if((d->parent = parent)) {
+        d->root = d->parent->d->root;
+        d->layout = d->parent->d->layout;
+    } else {
+        d->root = this;
+    }
+
+    d->proxy = new dtkViewLayoutItemProxy(this);
 
     d->splitter = new QSplitter(this);
     d->splitter->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -105,7 +135,6 @@ dtkViewLayoutItem::dtkViewLayoutItem(dtkViewLayoutItem *parent) : QFrame(parent)
     d->horzt = new QPushButton("Horzt", this);
     d->vertc = new QPushButton("Vertc", this);
     d->close = new QPushButton("Close", this);
-    d->close->setEnabled(d->root != this);
 
     QHBoxLayout *footer_layout = new QHBoxLayout;
     footer_layout->addWidget(d->close);
@@ -127,62 +156,209 @@ dtkViewLayoutItem::dtkViewLayoutItem(dtkViewLayoutItem *parent) : QFrame(parent)
     connect(d->close, SIGNAL(clicked()), this, SLOT(close()));
     connect(d->horzt, SIGNAL(clicked()), this, SLOT(horzt()));
     connect(d->vertc, SIGNAL(clicked()), this, SLOT(vertc()));
+
+    connect(d->proxy, SIGNAL(focusedIn()), this, SLOT(onFocusedIn()));
+    connect(d->proxy, SIGNAL(focusedOut()), this, SLOT(onFocusedOut()));
 }
 
 dtkViewLayoutItem::~dtkViewLayoutItem(void)
 {
-    qDebug() << __func__;
-
     delete d;
 
     d = NULL;
 }
 
-void dtkViewLayoutItem::setCurrent(dtkViewLayoutItem *item)
+dtkViewLayoutItem *dtkViewLayoutItem::parent(void)
 {
-    if(item == this)
-        d->footer->setStyleSheet(".QFrame { background: blue; }");
-    else
-        d->footer->setStyleSheet(".QFrame { background: none; }");
-
-    if (d->a)
-        d->a->setCurrent(item);
-
-    if (d->b)
-        d->b->setCurrent(item);
-
-    this->update();
+    return d->parent;
 }
 
-void dtkViewLayoutItem::remove(dtkViewLayoutItem *item)
+dtkViewLayout *dtkViewLayoutItem::layout(void)
 {
-    if(item == d->a) {
-        delete d->a;
-        d->a = NULL;
-    }
+    return d->layout;
+}
 
-    if(item == d->b) {
-        delete d->b;
-        d->b = NULL;
-    }
+dtkViewLayoutItemProxy *dtkViewLayoutItem::proxy(void)
+{
+    return d->proxy;
+}
 
+void dtkViewLayoutItem::setLayout(dtkViewLayout *layout)
+{
+    d->layout = layout;
+}
+
+void dtkViewLayoutItem::split(void)
+{
+    d->a = new dtkViewLayoutItem(this);
+    d->b = new dtkViewLayoutItem(this);
+
+    d->a->setFocus(Qt::OtherFocusReason);
+
+    d->splitter->addWidget(d->a);
+    d->splitter->addWidget(d->b);
+
+    disconnect(d->proxy, SIGNAL(focusedIn()), this, SLOT(onFocusedIn()));
+    disconnect(d->proxy, SIGNAL(focusedOut()), this, SLOT(onFocusedOut()));
+
+    delete d->proxy;
+
+    d->proxy = NULL;
+
+    d->footer->hide();
+}
+
+void dtkViewLayoutItem::unsplit(void)
+{
     if(!d->a && !d->b)
-        d->proxy->show();
-
-    d->close->setEnabled(d->root != this);
-}
-
-void dtkViewLayoutItem::focusInEvent(QFocusEvent *)
-{
-    if(d->a || d->b)
         return;
 
-    d->root->setCurrent(this);
+    if(d->layout->current() == d->a) {
+
+        delete d->a;
+
+        d->a = NULL;
+
+        if(d->b->d->a && d->b->d->b) {
+
+            dtkViewLayoutItem *a = d->b->d->a; a->d->parent = this;
+            dtkViewLayoutItem *b = d->b->d->b; b->d->parent = this;
+
+            a->setParent(this);
+            b->setParent(this);
+
+            d->splitter->setOrientation(d->b->d->splitter->orientation());
+
+            delete d->b;
+
+            d->b = NULL;
+
+            d->a = a;
+            d->b = b;
+
+            d->splitter->addWidget(d->a);
+            d->splitter->addWidget(d->b);
+
+            dtkViewLayoutItemProxy *child = NULL;
+
+            if(!(child = dtkViewLayoutItemPrivate::firstViewChild(d->a)))
+                 child = dtkViewLayoutItemPrivate::firstViewChild(d->b);
+
+            if (child)
+                child->setFocus(Qt::OtherFocusReason);
+
+        } else {
+
+            d->proxy = new dtkViewLayoutItemProxy(this);
+
+            connect(d->proxy, SIGNAL(focusedIn()), this, SLOT(onFocusedIn()));
+            connect(d->proxy, SIGNAL(focusedOut()), this, SLOT(onFocusedOut()));      
+
+            d->splitter->addWidget(d->proxy);
+
+            d->proxy->setFocus(Qt::OtherFocusReason);
+
+            delete d->b;
+
+            d->b = NULL;
+
+            d->footer->show();
+        }
+    }
+
+    else if(d->layout->current() == d->b) {
+
+        delete d->b;
+
+        d->b = NULL;
+
+        if(d->a->d->a && d->a->d->b) {
+
+            dtkViewLayoutItem *a = d->a->d->a; a->d->parent = this;
+            dtkViewLayoutItem *b = d->a->d->b; b->d->parent = this;
+
+            a->setParent(this);
+            b->setParent(this);
+
+            d->splitter->setOrientation(d->a->d->splitter->orientation());
+
+            delete d->a;
+
+            d->a = NULL;
+
+            d->a = a;
+            d->b = b;
+
+            d->splitter->addWidget(d->a);
+            d->splitter->addWidget(d->b);
+
+            dtkViewLayoutItemProxy *child = NULL;
+
+            if(!(child = dtkViewLayoutItemPrivate::firstViewChild(d->a)))
+                 child = dtkViewLayoutItemPrivate::firstViewChild(d->b);
+
+            if (child)
+                child->setFocus(Qt::OtherFocusReason);
+
+        } else {
+
+            d->proxy = new dtkViewLayoutItemProxy(this);
+
+            connect(d->proxy, SIGNAL(focusedIn()), this, SLOT(onFocusedIn()));
+            connect(d->proxy, SIGNAL(focusedOut()), this, SLOT(onFocusedOut()));      
+
+            d->splitter->addWidget(d->proxy);
+
+            d->proxy->setFocus(Qt::OtherFocusReason);
+
+            delete d->a;
+
+            d->a = NULL;
+
+            d->footer->show();
+        }
+
+    } else {
+
+        qDebug() << __func__ << "Unhandled case.";
+
+    }
 }
 
-void dtkViewLayoutItem::focusOutEvent(QFocusEvent *)
+void dtkViewLayoutItem::onFocusedIn(void)
+{
+    d->layout->setCurrent(this);
+}
+
+void dtkViewLayoutItem::onFocusedOut(void)
 {
 
+}
+
+void dtkViewLayoutItem::close(void)
+{
+    this->onFocusedIn();
+
+    if (d->parent)
+        d->parent->unsplit();
+}
+
+void dtkViewLayoutItem::horzt(void)
+{
+    this->onFocusedIn();
+
+    d->splitter->setOrientation(Qt::Horizontal);
+
+    this->split();
+}
+
+void dtkViewLayoutItem::vertc(void)
+{
+    this->onFocusedIn();
+
+    d->splitter->setOrientation(Qt::Vertical);
+
+    this->split();
 }
 
 void dtkViewLayoutItem::dragEnterEvent(QDragEnterEvent *event)
@@ -207,48 +383,17 @@ void dtkViewLayoutItem::dropEvent(QDropEvent *event)
     if(d->a && d->b)
         return;
 
-    d->proxy->hide();
+    // d->proxy->hide();
 
-    // --
+    // // --
 
-    d->view = dtkAbstractViewFactory::instance()->view(event->mimeData()->text())->widget();
+    // d->view = dtkAbstractViewFactory::instance()->view(event->mimeData()->text())->widget();
 
-    // --
+    // // --
 
-    d->splitter->addWidget(d->view);
+    // d->splitter->addWidget(d->view);
 
-    d->close->setEnabled(true);
-    d->horzt->setEnabled(false);
-    d->vertc->setEnabled(false);
-}
-
-void dtkViewLayoutItem::close(void)
-{
-    if (d->view) {
-        d->view->hide();
-        d->view = NULL;
-        d->proxy->show();
-        d->horzt->setEnabled(true);
-        d->vertc->setEnabled(true);
-        return;
-    }
-
-    if(!d->parent)
-        return;
-
-    d->parent->remove(this);
-}
-
-void dtkViewLayoutItem::horzt(void)
-{
-    d->splitter->setOrientation(Qt::Horizontal);
-
-    d->split();
-}
-
-void dtkViewLayoutItem::vertc(void)
-{
-    d->splitter->setOrientation(Qt::Vertical);
-
-    d->split();
+    // d->close->setEnabled(true);
+    // d->horzt->setEnabled(false);
+    // d->vertc->setEnabled(false);
 }

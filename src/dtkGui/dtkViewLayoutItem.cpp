@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:45 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 21 18:46:38 2012 (+0200)
+ * Last-Updated: Mon May 21 18:52:40 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 305
+ *     Update #: 308
  */
 
 /* Commentary: 
@@ -373,13 +373,13 @@ void dtkViewLayoutItem::onFocusedIn(void)
 {
     d->layout->setCurrent(this);
 
-    d->footer->setStyleSheet("background: #94a5cc;");
+    d->footer->setStyleSheet(".QFrame { background: #94a5cc; }");
     d->footer->update();
 }
 
 void dtkViewLayoutItem::onFocusedOut(void)
 {
-    d->footer->setStyleSheet("background: #aaaaaa;");
+    d->footer->setStyleSheet(".QFrame { background: #aaaaaa; }");
     d->footer->update();
 }
 

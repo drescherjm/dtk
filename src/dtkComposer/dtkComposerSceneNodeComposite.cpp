@@ -27,10 +27,7 @@
 #include "dtkComposerSceneNote.h"
 #include "dtkComposerScenePort.h"
 #include "dtkComposerWriter.h"
-
-#if defined(DTK_HAVE_MPI)
 #include "dtkComposerNodeRemote.h"
-#endif
 
 #include <dtkLog/dtkLog.h>
 
@@ -603,14 +600,12 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
 
 void dtkComposerSceneNodeComposite::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
-#if defined(DTK_HAVE_MPI)
     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
     if(!remote) {
         event->ignore();
         return;
     }
-#endif
 
     if (event->mimeData()->hasText())
         event->acceptProposedAction();
@@ -625,14 +620,12 @@ void dtkComposerSceneNodeComposite::dragLeaveEvent(QGraphicsSceneDragDropEvent *
 
 void dtkComposerSceneNodeComposite::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
-#if defined(DTK_HAVE_MPI)
     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
     if(!remote) {
         event->ignore();
         return;
     }
-#endif
 
     if (event->mimeData()->hasText())
         event->acceptProposedAction();
@@ -642,14 +635,12 @@ void dtkComposerSceneNodeComposite::dragMoveEvent(QGraphicsSceneDragDropEvent *e
 
 void dtkComposerSceneNodeComposite::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
-#if defined(DTK_HAVE_MPI)
     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
     if(!remote) {
         event->ignore();
         return;
     }
-#endif
 
     const dtkDistributedMimeData *data = qobject_cast<const dtkDistributedMimeData *>(event->mimeData());
 
@@ -660,11 +651,14 @@ void dtkComposerSceneNodeComposite::dropEvent(QGraphicsSceneDragDropEvent *event
 
     dtkDistributedController *controller = const_cast<dtkDistributedMimeData *>(data)->controller();
 
-#if defined(DTK_HAVE_MPI)
     remote->setJob(job);
     remote->setController(controller);
     this->setTitle("Remote on "+ job);
+<<<<<<< HEAD
 #endif
+=======
+
+>>>>>>> 1fe3033eb307a16f10c71646f221e91c6ab6dbc2
     event->acceptProposedAction();
     this->update();
 }

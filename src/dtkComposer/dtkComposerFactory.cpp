@@ -943,6 +943,11 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "view")
         return new dtkComposerNodeView;
 
+    // distributed nodes
+
+    if(type == "remote")
+        return new dtkComposerNodeRemote;
+
     // /////////////////////////////////////////////////////////////////
     // NITE nodes
     // /////////////////////////////////////////////////////////////////
@@ -968,9 +973,6 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 #if defined(DTK_HAVE_MPI)
     if(type == "world")
         return new dtkComposerNodeWorld;
-
-    if(type == "remote")
-        return new dtkComposerNodeRemote;
 
     if(type == "communicatorSize")
         return new dtkComposerNodeCommunicatorSize;

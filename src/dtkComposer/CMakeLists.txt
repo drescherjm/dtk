@@ -72,6 +72,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeQuaternionOperatorUnary.h
   dtkComposerNodeQuaternionOperatorBinary.h
   dtkComposerNodeReal.h
+  dtkComposerNodeRemote.h
   dtkComposerNodeString.h
   dtkComposerNodeStringOperator.h
   dtkComposerNodeVector.h
@@ -176,6 +177,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeQuaternionOperatorUnary.cpp
   dtkComposerNodeQuaternionOperatorBinary.cpp
   dtkComposerNodeReal.cpp
+  dtkComposerNodeRemote.cpp
   dtkComposerNodeString.cpp
   dtkComposerNodeStringOperator.cpp
   dtkComposerNodeVector.cpp
@@ -217,12 +219,10 @@ set(${PROJECT_NAME}_RESOURCES dtkComposer.qrc)
 if(DTK_HAVE_MPI)
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkComposerNodeDistributed.h
-  dtkComposerNodeRemote.h
   dtkComposerNodeWorld.h)
 set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkComposerNodeDistributed.cpp
-  dtkComposerNodeRemote.cpp
   dtkComposerNodeWorld.cpp)
 endif(DTK_HAVE_MPI)
 
@@ -300,11 +300,8 @@ target_link_libraries(${PROJECT_NAME}
   dtkCore
   dtkGui
   dtkLog
-  dtkNotification)
-
-if(DTK_HAVE_MPI)
-target_link_libraries(${PROJECT_NAME} dtkDistributed)
-endif(DTK_HAVE_MPI)
+  dtkNotification
+  dtkDistributed)
 
 if(DTK_HAVE_NITE)
 target_link_libraries(${PROJECT_NAME} dtkVr)

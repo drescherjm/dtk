@@ -64,6 +64,4 @@ private:
     dtkComposerNodeRemotePrivate *d;
 };
 
-
 #endif /* DTKCOMPOSERNODEREMOTE_H */
-

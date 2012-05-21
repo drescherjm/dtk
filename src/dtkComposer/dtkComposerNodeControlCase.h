@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: mar. mai 15 17:01:00 2012 (+0200)
  * Version: $Id$
- * Last-Updated: mar. mai 15 17:04:31 2012 (+0200)
+ * Last-Updated: lun. mai 21 11:00:14 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 10
+ *     Update #: 11
  */
 
 /* Commentary:
@@ -48,6 +48,7 @@ public:
 
 public:
     void addBlock(void);
+    void addBlock(dtkComposerNodeComposite *c);
     void removeBlock(int id);
 
 public:

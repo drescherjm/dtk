@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mai 16 16:14:20 2012 (+0200)
+ * Last-Updated: lun. mai 21 11:10:22 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 4081
+ *     Update #: 4102
  */
 
 /* Commentary: 
@@ -2642,6 +2642,7 @@ void dtkComposerStackCommandCreateBlock::redo(void)
 
     control->addBlock();
     e->id = control->blockCount()-1;
+
     e->block->wrap(control->block(e->id));
     e->node->addBlock(e->block);
 
@@ -2652,6 +2653,12 @@ void dtkComposerStackCommandCreateBlock::redo(void)
 
 void dtkComposerStackCommandCreateBlock::undo(void)
 {
+    if(!d->scene)
+        return;
+
+    if(!d->graph)
+        return;
+
     if(!e->node)
         return;
 
@@ -2715,7 +2722,13 @@ void dtkComposerStackCommandDestroyBlock::redo(void)
     if(!d->scene)
         return;
 
+    if(!d->graph)
+        return;
+
     if(!e->block)
+        return;
+
+    if(e->id < 1)
         return;
 
     dtkComposerNodeControlCase *control = dynamic_cast<dtkComposerNodeControlCase *>(e->block->parent()->wrapee());
@@ -2734,13 +2747,18 @@ void dtkComposerStackCommandDestroyBlock::undo(void)
     if(!d->scene)
         return;
 
+    if(!d->graph)
+        return;
+
     if(!e->block)
+        return;
+
+    if(e->id < 1)
         return;
 
     dtkComposerNodeControlCase *control = dynamic_cast<dtkComposerNodeControlCase *>(e->block->parent()->wrapee());
 
-    control->addBlock();
-    e->block->wrap(control->block(e->id));
+    control->addBlock(dynamic_cast<dtkComposerNodeComposite *>(e->block->wrapee()));
     e->node->addBlock(e->block);
 
     d->graph->addBlock(e->block);

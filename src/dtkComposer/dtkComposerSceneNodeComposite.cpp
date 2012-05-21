@@ -665,9 +665,6 @@ void dtkComposerSceneNodeComposite::dropEvent(QGraphicsSceneDragDropEvent *event
     remote->setController(controller);
     this->setTitle("Remote on "+ job);
 #endif
-
-#endif
-
     event->acceptProposedAction();
     this->update();
 }

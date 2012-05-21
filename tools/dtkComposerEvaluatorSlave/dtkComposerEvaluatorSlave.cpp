@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:25:39
  * Version: $Id$
- * Last-Updated: jeu. mai  3 15:21:29 2012 (+0200)
+ * Last-Updated: lun. mai 21 09:08:22 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 201
+ *     Update #: 223
  */
 
 /* Commentary:
@@ -53,9 +53,6 @@ public:
     dtkComposerFactory   *factory;
     dtkComposerReader    *reader;
     dtkComposerEvaluator *evaluator;
-
-public:
-    QByteArray md5;
 
 public:
     QUrl server;
@@ -119,6 +116,7 @@ int dtkComposerEvaluatorSlave::exec(void)
     int size = d->communicator_i->size();
     dtkDebug() << "communicator size is" << size;
     dtkDebug() << "our rank is" << rank;
+    bool new_composition;
 
     if ( rank == 0) {
 
@@ -149,21 +147,23 @@ int dtkComposerEvaluatorSlave::exec(void)
             dtkDebug() << "Ok, data received, parse" ;
 
         dtkDistributedMessage *msg = this->communicator()->socket()->parseRequest();
-        if (msg->type() == "xml")
+        if (msg->type() == "xml") {
+            new_composition = true;
             composition = QString(msg->content());
-        else {
+        } else if (msg->type() == "not-modified") { // reuse the old composition
+            new_composition = false;
+        } else {
             dtkFatal() << "Bad composition type, abort" << msg->type() << msg->content();
             return 1;
         }
 
-        if (composition.isEmpty()) {
+        if (new_composition && composition.isEmpty()) {
             dtkFatal() << "Empty composition, abort" ;
             return 1;
         }
 
         dtkDebug() << "got composition from controller:" << composition;
-        QByteArray md5 = QCryptographicHash::hash(composition.toUtf8(),QCryptographicHash::Md5);
-        if (md5 != d->md5) {
+        if (new_composition) {
             dtkDebug() << "new composition";
             if  (size > 1) {
                 dtkDebug() << "send composition to our slaves";
@@ -171,25 +171,24 @@ int dtkComposerEvaluatorSlave::exec(void)
                     d->communicator_i->send(composition,i,0);
                 }
             }
-            dtkDebug() << "read composition" ;
+            dtkDebug() << "parse composition" ;
             d->reader->readString(composition);
-            d->md5 = md5;
         } else {
             dtkInfo() << "composition hasn't changed";
             for (int i=1; i< size; i++)
                 d->communicator_i->send(QString("rerun"),i,0);
         }
-
-        if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(d->scene->root()->nodes().first()->wrapee())) {
-            remote->setSlave(this);
-            remote->setJob(this->jobId());
-            remote->setCommunicator(d->communicator_i);
-            dtkDebug() << "run composition" ;
-            d->evaluator->run();
-        } else {
-            dtkFatal() <<  "Can't find remote node in composition, abort";
-            return 1;
-        }
+        if (new_composition)
+            if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(d->scene->root()->nodes().first()->wrapee())) {
+                remote->setSlave(this);
+                remote->setJob(this->jobId());
+                remote->setCommunicator(d->communicator_i);
+            } else {
+                dtkFatal() <<  "Can't find remote node in composition, abort";
+                return 1;
+            }
+        dtkDebug() << "run composition" ;
+        d->evaluator->run();
 
     } else {
         QString composition;

@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Tue May 15 12:14:34 2012 (+0200)
-##           By: tkloczko
-##     Update #: 534
+## Last-Updated: Mon May 21 10:58:18 2012 (+0200)
+##           By: Julien Wintz
+##     Update #: 538
 ######################################################################
 ##
 ### Commentary:
@@ -45,13 +45,14 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerMachineState.h
   dtkComposerNode.h
   dtkComposerNodeArrayScalar.h
-dtkComposerNodeArrayScalarOperatorModifier.h
+  dtkComposerNodeArrayScalarOperatorModifier.h
   dtkComposerNodeBoolean.h
   dtkComposerNodeBooleanOperator.h
   dtkComposerNodeComposite.h
   dtkComposerNodeConstants.h
   dtkComposerNodeContainerData.h
   dtkComposerNodeControl.h
+  dtkComposerNodeControlCase.h
   dtkComposerNodeControlDoWhile.h
   dtkComposerNodeControlIf.h
   dtkComposerNodeControlFor.h
@@ -148,13 +149,14 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerMachineState.cpp
   dtkComposerNode.cpp
   dtkComposerNodeArrayScalar.cpp
-dtkComposerNodeArrayScalarOperatorModifier.cpp
+  dtkComposerNodeArrayScalarOperatorModifier.cpp
   dtkComposerNodeBoolean.cpp
   dtkComposerNodeBooleanOperator.cpp
   dtkComposerNodeComposite.cpp
   dtkComposerNodeConstants.cpp
   dtkComposerNodeContainerData.cpp
   dtkComposerNodeControl.cpp
+  dtkComposerNodeControlCase.cpp
   dtkComposerNodeControlDoWhile.cpp
   dtkComposerNodeControlIf.cpp
   dtkComposerNodeControlFor.cpp

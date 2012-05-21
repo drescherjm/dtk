@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 10 10:34:59 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 177
+ * Last-Updated: mer. mai 16 11:51:24 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 191
  */
 
 /* Commentary: 
@@ -30,6 +30,7 @@ class dtkComposerSceneEdge;
 class dtkComposerSceneEdgeList;
 class dtkComposerSceneNode;
 class dtkComposerSceneNodeComposite;
+class dtkComposerSceneNodeControl;
 class dtkComposerSceneNodeList;
 class dtkComposerSceneNote;
 class dtkComposerSceneNoteList;
@@ -421,6 +422,53 @@ public:
 
 private:
     dtkComposerStackCommandReparentNodePrivate *e;
+};
+
+// /////////////////////////////////////////////////////////////////
+// Create Group Command
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandCreateBlockPrivate;
+
+class dtkComposerStackCommandCreateBlock: public dtkComposerStackCommand
+{
+public:
+     dtkComposerStackCommandCreateBlock(dtkComposerStackCommand *parent = 0);
+    ~dtkComposerStackCommandCreateBlock(void);
+
+public:
+    void setNode(dtkComposerSceneNodeControl *node);
+
+public:
+    void redo(void);
+    void undo(void);
+
+private:
+    dtkComposerStackCommandCreateBlockPrivate *e;
+};
+
+// /////////////////////////////////////////////////////////////////
+// Delete Group Command
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandDestroyBlockPrivate;
+
+class dtkComposerStackCommandDestroyBlock: public dtkComposerStackCommand
+{
+public:
+     dtkComposerStackCommandDestroyBlock(dtkComposerStackCommand *parent = 0);
+    ~dtkComposerStackCommandDestroyBlock(void);
+
+public:
+    void setNode(dtkComposerSceneNodeComposite *node);
+    void setId(int i);
+
+public:
+    void redo(void);
+    void undo(void);
+
+private:
+    dtkComposerStackCommandDestroyBlockPrivate *e;
 };
 
 #endif

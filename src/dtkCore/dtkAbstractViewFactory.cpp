@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  5 15:25:47 2011 (+0200)
+ * Last-Updated: Fri May 18 16:03:48 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 136
+ *     Update #: 147
  */
 
 /* Commentary:
@@ -32,8 +32,11 @@ public:
     typedef QHash<QPair<QString, QStringList>, dtkAbstractViewFactory::dtkAbstractViewNavigatorCreator>  dtkAbstractViewNavigatorCreatorHash;
     typedef QHash<QPair<QString, QStringList>, dtkAbstractViewFactory::dtkAbstractViewInteractorCreator> dtkAbstractViewInteractorCreatorHash;
 
+public:
     QHash<QString, unsigned int> viewCount;
+    QHash<QString, dtkAbstractView *> views;
 
+public:
     dtkAbstractViewCreatorHash           creators;
     dtkAbstractViewAnimatorCreatorHash   animators;
     dtkAbstractViewNavigatorCreatorHash  navigators;
@@ -70,6 +73,7 @@ dtkAbstractView *dtkAbstractViewFactory::create(const QString& type)
     view->setObjectName(QString("%1%2").arg(view->metaObject()->className()).arg(d->viewCount[type]));
 
     d->viewCount[type]++;
+    d->views[view->objectName()] = view;
 
     emit created(view, type);
 
@@ -173,6 +177,21 @@ bool dtkAbstractViewFactory::registerViewInteractorType(const QString& type, con
 unsigned int dtkAbstractViewFactory::size(const QString& type) const
 {
     return d->viewCount[type];
+}
+
+QStringList dtkAbstractViewFactory::viewNames(void) const
+{
+    return d->views.keys();
+}
+
+QList<dtkAbstractView *> dtkAbstractViewFactory::views(void)
+{
+    return d->views.values();
+}
+
+dtkAbstractView *dtkAbstractViewFactory::view(const QString& name)
+{
+    return d->views.value(name);
 }
 
 QList<QString> dtkAbstractViewFactory::creators(void) const

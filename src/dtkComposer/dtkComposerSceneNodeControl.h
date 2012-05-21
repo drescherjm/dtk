@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:43:44 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May 14 14:28:52 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 58
+ * Last-Updated: mer. mai 16 10:32:11 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 60
  */
 
 /* Commentary: 
@@ -51,8 +51,8 @@ public:
 protected:
     void   setHeader(dtkComposerSceneNodeLeaf *header);
     void   setFooter(dtkComposerSceneNodeLeaf *footer);
-    
-protected:
+
+public:
     void    addBlock(dtkComposerSceneNodeComposite *block);
     void removeBlock(dtkComposerSceneNodeComposite *block);
 

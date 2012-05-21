@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: jeu. mai  3 15:16:55 2012 (+0200)
+ * Last-Updated: lun. mai 21 09:10:57 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 622
+ *     Update #: 640
  */
 
 /* Commentary:
@@ -40,6 +40,8 @@ class dtkComposerNodeRemotePrivate
 {
 public:
     QDomDocument composition;
+    QByteArray current_hash;
+    QByteArray last_sent_hash;
 
 public:
     dtkDistributedController *controller;
@@ -53,6 +55,7 @@ public:
 
 public:
     QString jobid;
+    QString last_rank;
 
 public:
     QString title;
@@ -91,7 +94,8 @@ QString dtkComposerNodeRemote::titleHint(void)
 
 void dtkComposerNodeRemote::setComposition(QDomDocument document)
 {
-    d->composition = document;
+    d->composition  = document;
+    d->current_hash = QCryptographicHash::hash(d->composition.toByteArray(),QCryptographicHash::Md5);
 }
 
 void dtkComposerNodeRemote::setController(dtkDistributedController *controller)
@@ -136,14 +140,23 @@ void dtkComposerNodeRemote::begin(void)
                 return;
             }
         }
-
-       // send sub-composition to rank 0 on remote node
-        QByteArray compo = d->composition.toByteArray();
-        dtkDistributedMessage *msg = new dtkDistributedMessage(dtkDistributedMessage::SETRANK,d->jobid,dtkDistributedMessage::CONTROLLER_RUN_RANK );
-        dtkDebug() << "running node remote begin statement on controller, send composition of size " << compo.size();
-        d->server->socket()->sendRequest(msg);
-        delete msg;
-        msg = new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid,0,compo.size(), "xml", compo );
+        dtkDistributedMessage *msg;
+        if (d->last_rank != d->jobid) {
+            msg = new dtkDistributedMessage(dtkDistributedMessage::SETRANK,d->jobid,dtkDistributedMessage::CONTROLLER_RUN_RANK );
+            d->server->socket()->sendRequest(msg);
+            delete msg;
+            d->last_rank=d->jobid;
+        }
+        if (d->current_hash != d->last_sent_hash){
+            // send sub-composition to rank 0 on remote node
+            QByteArray compo = d->composition.toByteArray();
+            dtkDebug() << "running node remote begin statement on controller, send composition of size " << compo.size();
+            msg = new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid,0,compo.size(), "xml", compo );
+            d->last_sent_hash=d->current_hash;
+        } else {
+            dtkDebug() << "composition hash hasn't changed, send 'not-modified' to slave";
+            msg = new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid,0,d->current_hash.size(), "not-modified", d->current_hash );
+        }
         d->server->socket()->sendRequest(msg);
         delete msg;
         dtkDebug() << "composition sent";

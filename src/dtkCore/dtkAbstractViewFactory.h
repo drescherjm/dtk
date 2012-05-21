@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:48:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  5 15:24:54 2011 (+0200)
+ * Last-Updated: Fri May 18 16:03:08 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 107
+ *     Update #: 113
  */
 
 /* Commentary:
@@ -50,6 +50,12 @@ public:
     bool registerViewInteractorType(const QString& type, const QStringList& handled, dtkAbstractViewInteractorCreator func);
 
     unsigned int size(const QString& type) const;
+
+    QStringList viewNames(void) const;
+
+    QList<dtkAbstractView *> views(void);
+
+    dtkAbstractView *view(const QString& name);
 
     QList<QString>                    creators(void) const;
     QList<dtkAbstractViewTypeHandler> animators(void) const;

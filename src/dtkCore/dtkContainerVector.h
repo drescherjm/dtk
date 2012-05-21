@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 16:38:14 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 15 12:18:15 2012 (+0200)
+ * Last-Updated: Sun May 20 18:53:53 2012 (+0200)
  *           By: tkloczko
- *     Update #: 64
+ *     Update #: 67
  */
 
 /* Commentary: 
@@ -45,10 +45,11 @@ public:
     dtkContainerVector<T> *clone(void) const;
 
 public:
-    inline void setVector(const QVector<T>& vector);
+    virtual void setVector(const QVector<T>& vector);
 
 public:
-    inline QVector<T>& vector(void);
+          QVector<T>& vector(void);
+    const QVector<T>& vector(void) const;
 
 public:
     Type type(void) const;
@@ -86,7 +87,7 @@ public:
 public:
     QVariant operator[] (dtkxarch_int index) const;
 
-private:
+protected:
     QVector<T> m_vector;
 };
 

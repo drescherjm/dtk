@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 15:25:17 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May  9 14:32:50 2012 (+0200)
+ * Last-Updated: Wed May 16 11:24:25 2012 (+0200)
  *           By: tkloczko
- *     Update #: 72
+ *     Update #: 75
  */
 
 /* Commentary: 
@@ -35,7 +35,8 @@ public:
     enum Type {
         None,
         Vector,
-        List
+        List,
+        VectorBlock
     };
 
 public:
@@ -57,6 +58,11 @@ public:
 
 public:
     QString identifier(void) const;
+
+public:
+    void setName(const QString& name);
+
+    QString name(void) const;
 
 public:
     virtual Type type(void) const;

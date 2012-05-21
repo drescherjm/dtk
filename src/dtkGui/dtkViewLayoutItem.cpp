@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:45 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 16 09:38:48 2012 (+0200)
+ * Last-Updated: Fri May 18 16:06:08 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 2
+ *     Update #: 12
  */
 
 /* Commentary: 
@@ -19,6 +19,9 @@
 
 #include "dtkViewLayout.h"
 #include "dtkViewLayoutItem.h"
+
+#include <dtkCore/dtkAbstractView.h>
+#include <dtkCore/dtkAbstractViewFactory.h>
 
 #include <QtGui>
 
@@ -206,10 +209,9 @@ void dtkViewLayoutItem::dropEvent(QDropEvent *event)
 
     d->proxy->hide();
 
-    // dtkAbstractViewFactory::instance()->create();
+    // --
 
-    d->view = new QFrame(this);
-    d->view->setStyleSheet("background: black;");
+    d->view = dtkAbstractViewFactory::instance()->view(event->mimeData()->text())->widget();
 
     // --
 

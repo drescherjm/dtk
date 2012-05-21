@@ -24,24 +24,21 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeComposite.h"
-
-#if defined(DTK_HAVE_MPI)
 #include "dtkComposerNodeRemote.h"
-#endif
 
 #include <dtkLog/dtkLog.h>
 
 class dtkComposerGraphNodeEndPrivate
 {
 public:
-    dtkComposerNodeControl   *control_node;
-    dtkComposerNodeComposite     *composite;
+    dtkComposerNodeControl *control_node;
+    dtkComposerNodeComposite *composite;
 
 public:
     bool is_remote;
-#if defined(DTK_HAVE_MPI)
-    dtkComposerNodeRemote   *remote;
-#endif
+
+public:
+    dtkComposerNodeRemote *remote;
 
 public:
     dtkComposerGraphNode *begin;
@@ -52,13 +49,11 @@ dtkComposerGraphNodeEnd::dtkComposerGraphNodeEnd(dtkComposerNode *cnode, const Q
 {
     d->is_remote = false;
     if (!dynamic_cast<dtkComposerNodeControl *>(cnode)) {
-#if defined(DTK_HAVE_MPI)
         if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(cnode)) {
             d->is_remote = true;
             d->remote = remote ;
             //We can't call isSlave() now
         }
-#endif
         d->composite = dynamic_cast<dtkComposerNodeComposite *>(cnode);
         d->control_node = NULL;
     } else {
@@ -102,7 +97,6 @@ void dtkComposerGraphNodeEnd::setBegin(dtkComposerGraphNode *begin)
 
 dtkComposerGraphNodeList dtkComposerGraphNodeEnd::predecessors(void)
 {
-#if defined(DTK_HAVE_MPI)
     if (d->is_remote && !d->remote->isSlave()) {
         dtkDebug() << "we are running the end statement of a remote node on a controller, predecessor is only the begin statement";
         dtkComposerGraphNodeList list;
@@ -111,9 +105,6 @@ dtkComposerGraphNodeList dtkComposerGraphNodeEnd::predecessors(void)
     } else {
         return dtkComposerGraphNode::predecessors();
     }
-#else
-    return dtkComposerGraphNode::predecessors();
-#endif
 }
 
 

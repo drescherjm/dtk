@@ -22,7 +22,6 @@
 
 #include <dtkDistributed/dtkDistributedController.h>
 #include <dtkDistributed/dtkDistributedCommunicator.h>
-#include <dtkDistributed/dtkDistributedCommunicatorMpi.h>
 #include <dtkDistributed/dtkDistributedCommunicatorTcp.h>
 #include <dtkDistributed/dtkDistributedSlave.h>
 

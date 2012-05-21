@@ -17,6 +17,8 @@
  * 
  */
 
+#include <dtkConfig.h>
+
 #include "dtkComposer.h"
 #include "dtkComposer_p.h"
 #include "dtkComposerCompass.h"

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: mar. mai 15 17:05:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: mer. mai 16 18:07:02 2012 (+0200)
+ * Last-Updated: lun. mai 21 11:08:45 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 256
+ *     Update #: 280
  */
 
 /* Commentary:
@@ -105,7 +105,6 @@ dtkComposerNodeComposite *dtkComposerNodeControlCase::block(int id)
     return NULL;
 }
 
-
 void dtkComposerNodeControlCase::addBlock(void)
 {
     dtkComposerNodeComposite *c = new dtkComposerNodeComposite;
@@ -116,25 +115,25 @@ void dtkComposerNodeControlCase::addBlock(void)
     dtkComposerTransmitterVariant *v = new dtkComposerTransmitterVariant;
     d->blocks_input << v;
     c->appendReceiver(v);
-    c->setInputLabelHint("case",0);
+    c->setInputLabelHint("case#"+id,0);
 }
 
+void dtkComposerNodeControlCase::addBlock(dtkComposerNodeComposite *c)
+{
+    d->blocks << c;
+    d->blocks_input << dynamic_cast<dtkComposerTransmitterVariant*>(c->receivers().at(0));
+}
 
 void dtkComposerNodeControlCase::removeBlock(int id)
 {
-    if (id = 0) // can't remove default block
+    if (id == 0) // can't remove default block
         return;
 
-    for (int i=0; i< d->blocks.count(); i++)
-        if (id == i) {
-            dtkComposerNodeComposite *b = d->blocks.takeAt(id);
-            dtkComposerTransmitterVariant *t = d->blocks_input.takeAt(id-1);
-            delete t;
-            delete b;
-        }
+    d->blocks.takeAt(id);
+    d->blocks_input.takeAt(id-1);
 
-    for (int i=0; i< d->blocks.count(); i++)
-            d->blocks.at(i)->setTitleHint("Case#"+QString::number(i));
+    for (int i=1; i< d->blocks.count(); i++)
+        d->blocks.at(i)->setTitleHint("Case#"+QString::number(i));
 }
 
 void dtkComposerNodeControlCase::setInputs(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sun May  6 15:55:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May  7 16:24:10 2012 (+0200)
+ * Last-Updated: Mon May 21 15:44:47 2012 (+0200)
  *           By: tkloczko
- *     Update #: 7
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -82,9 +82,6 @@ public:
 
 public:
     bool isEqual(const dtkAbstractContainer& other) const;
-
-public:
-    QVariant operator[] (dtkxarch_int index) const;
 
 private:
     QList<T> m_list;

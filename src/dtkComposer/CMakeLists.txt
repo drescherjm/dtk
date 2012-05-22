@@ -83,6 +83,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeVector3DOperatorTernary.h
   dtkComposerNodeVectorReal.h
   dtkComposerNodeVectorRealOperatorModifier.h
+  dtkComposerNodeVectorRealOperatorUnary.h
   dtkComposerNodeView.h
   dtkComposerScene.h
   dtkComposerSceneEdge.h
@@ -190,6 +191,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeVector3DOperatorTernary.cpp
   dtkComposerNodeVectorReal.cpp
   dtkComposerNodeVectorRealOperatorModifier.cpp
+  dtkComposerNodeVectorRealOperatorUnary.cpp
   dtkComposerNodeView.cpp
   dtkComposerScene.cpp
   dtkComposerSceneEdge.cpp

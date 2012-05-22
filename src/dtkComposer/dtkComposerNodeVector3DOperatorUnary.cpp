@@ -1,5 +1,5 @@
-/* dtkComposerNodeVector3DOperatorUnary.cpp --- 
- * 
+/* dtkComposerNodeVector3DOperatorUnary.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 15:58:22 2012 (+0200)
@@ -10,11 +10,11 @@
  */
 
 /* Commentary: 
- * 
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeVector3D.h"
@@ -94,4 +94,5 @@ void dtkComposerNodeVector3DOperatorUnaryUnitary::run(void)
 void dtkComposerNodeVector3DOperatorUnaryScalarNorm::run(void)
 {
     d->emitter_val.setData(d->receiver_vec.data().norm());
+
 }

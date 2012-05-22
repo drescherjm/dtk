@@ -53,6 +53,7 @@
 #include "dtkComposerNodeVector3DOperatorBinary.h"
 #include "dtkComposerNodeVectorReal.h"
 #include "dtkComposerNodeVectorRealOperatorModifier.h"
+#include "dtkComposerNodeVectorRealOperatorUnary.h"
 #include "dtkComposerNodeView.h"
 #include "dtkComposerNodeRemote.h"
 #include "dtkComposerSceneNodeLeaf.h"
@@ -129,10 +130,17 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["List"] = QStringList() << "container" << "list";
     d->types["List"] = "list";
 
+    d->nodes << "Data Container";
+    d->descriptions["Data Container"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Container"] = QStringList() << "container" << "data";
+    d->types["Data Container"] = "data_container";
+
     d->nodes << "Vector";
     d->descriptions["Vector"] = "<p>Description not yet filled!</p>";
     d->tags["Vector"] = QStringList() << "container" << "vector";
     d->types["Vector"] = "vector";
+
+    // Vector Real
 
     d->nodes << "Vector Real";
     d->descriptions["Vector Real"] = "<p>Description not yet filled!</p>";
@@ -164,10 +172,15 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Vector Real Divide"] = QStringList() << "vector" << "real" << "divide";
     d->types["Vector Real Divide"] = "vector_real_divide";
 
-    d->nodes << "Data Container";
-    d->descriptions["Data Container"] = "<p>Description not yet filled!</p>";
-    d->tags["Data Container"] = QStringList() << "container" << "data";
-    d->types["Data Container"] = "data_container";
+    d->nodes << "VectorReal Unit";
+    d->descriptions["VectorReal Unit"] = "<p>Description not yet filled!</p>";
+    d->tags["VectorReal Unit"] = QStringList() << "vectorReal" << "algebraic" << "unit";
+    d->types["VectorReal Unit"] = "vectorReal_unit";
+
+    d->nodes << "VectorReal Norm";
+    d->descriptions["VectorReal Norm"] = "<p>Description not yet filled!</p>";
+    d->tags["VectorReal Norm"] = QStringList() << "vectorReal" << "algebraic" << "norm";
+    d->types["VectorReal Norm"] = "vectorReal_norm";
 
     // Array
 
@@ -715,8 +728,13 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "list")
         return new dtkComposerNodeList;
 
+    if(type == "data_container")
+        return new dtkComposerNodeContainerData;
+
     if(type == "vector")
         return new dtkComposerNodeVector;
+
+    // Vector Real nodes
 
     if(type == "vector_real")
         return new dtkComposerNodeVectorReal;
@@ -736,8 +754,11 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "vector_real_divide")
         return new dtkComposerNodeVectorRealOperatorModifierDivide;
 
-    if(type == "data_container")
-        return new dtkComposerNodeContainerData;
+    if(type == "vectorReal_unit")
+        return new dtkComposerNodeVectorRealOperatorUnaryUnitary;
+
+    if(type == "vectorReal_norm")
+        return new dtkComposerNodeVectorRealOperatorUnaryScalarNorm;
 
     // Array nodes
 

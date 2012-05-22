@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/26 09:03:42
  * Version: $Id$
- * Last-Updated: Wed May  9 09:53:27 2012 (+0200)
- *           By: tkloczko
- *     Update #: 223
+ * Last-Updated: Mon May 21 22:55:06 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 225
  */
 
 /* Commentary:
@@ -18,7 +18,6 @@
  */
 
 #include "dtkComposerNodeDistributed.h"
-
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerTransmitterVariant.h"
@@ -31,7 +30,6 @@
 // /////////////////////////////////////////////////////////////////
 // Communicator Init
 // /////////////////////////////////////////////////////////////////
-
 
 class dtkComposerNodeCommunicatorInitPrivate
 {

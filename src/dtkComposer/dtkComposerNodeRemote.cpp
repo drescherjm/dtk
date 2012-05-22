@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: lun. mai 21 09:10:57 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 640
+ * Last-Updated: Mon May 21 22:53:26 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 641
  */
 
 /* Commentary:
@@ -27,7 +27,7 @@
 
 #include <dtkCore/dtkAbstractDataFactory.h>
 
-#include <dtkMath>
+#include <dtkMath/dtkMath.h>
 
 #include <dtkLog/dtkLog.h>
 

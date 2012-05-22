@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 16:15:20 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 16 11:26:35 2012 (+0200)
+ * Last-Updated: Mon May 21 15:44:34 2012 (+0200)
  *           By: tkloczko
- *     Update #: 87
+ *     Update #: 88
  */
 
 /* Commentary: 
@@ -216,13 +216,5 @@ bool dtkAbstractContainer::isEqual(const dtkAbstractContainer& other) const
         return m_container->isEqual(other);
 
     return false;
-}
-
-QVariant dtkAbstractContainer::operator[] (dtkxarch_int index) const
-{
-    if (m_container)
-        return (*m_container)[index];
-
-    return QVariant();
 }
 

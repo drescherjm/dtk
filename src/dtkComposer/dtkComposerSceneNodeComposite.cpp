@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mai 21 15:07:44 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 897
+ * Last-Updated: Mon May 21 22:54:39 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 898
  */
 
 /* Commentary: 
@@ -16,8 +16,6 @@
 /* Change log:
  * 
  */
-
-#include <dtkConfig.h>
 
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerSceneEdge.h"

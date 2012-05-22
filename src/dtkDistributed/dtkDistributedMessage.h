@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: mar. oct. 11 10:46:57 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. avril 19 13:11:46 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 155
+ * Last-Updated: Mon May 21 23:49:04 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 160
  */
 
 /* Commentary:
@@ -20,17 +20,16 @@
 #ifndef DTKDISTRIBUTEDMESSAGE_H
 #define DTKDISTRIBUTEDMESSAGE_H
 
-#include <QtCore>
 #include "dtkDistributedExport.h"
+
+#include <QtCore>
 
 class dtkDistributedMessagePrivate;
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedMessage
 {
-
 public:
     typedef QHash<QString, QString> dtkDistributedHeaders;
-
 
     static const qint16 CONTROLLER_RANK = -1 ;
     static const qint16 SERVER_RANK     = -2 ;

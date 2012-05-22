@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:45 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 22 20:10:44 2012 (+0200)
+ * Last-Updated: Wed May 23 01:48:02 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 595
+ *     Update #: 610
  */
 
 /* Commentary: 
@@ -440,6 +440,33 @@ void dtkViewLayoutItem::unsplit(void)
         qDebug() << __func__ << "Unhandled case.";
 
     }
+
+    d->root->setUpdatesEnabled(true);
+}
+
+void dtkViewLayoutItem::maximize(void)
+{
+    if(d->a && d->b)
+        return;
+
+    if(this == d->root)
+        return;
+
+    d->root->setUpdatesEnabled(false);
+
+    d->root->d->proxy = new dtkViewLayoutItemProxy(d->root);
+
+    d->root->connect(d->root->d->proxy, SIGNAL(focusedIn()), d->root, SLOT(onFocusedIn()));
+    d->root->connect(d->root->d->proxy, SIGNAL(focusedOut()), d->root, SLOT(onFocusedOut()));
+
+    d->root->d->proxy->setView(d->proxy->view());
+    d->root->d->proxy->setFocus(Qt::OtherFocusReason);
+
+    d->root->d->a->deleteLater();
+    d->root->d->b->deleteLater();
+
+    d->root->d->a = NULL;
+    d->root->d->b = NULL;
 
     d->root->setUpdatesEnabled(true);
 }

@@ -17,7 +17,7 @@
  *
  */
 
-#include "dtkComposerNodeVectorReal.h"
+
 #include "dtkComposerNodeVectorRealOperatorUnary.h"
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"

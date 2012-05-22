@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:45 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 22 00:39:02 2012 (+0200)
+ * Last-Updated: Tue May 22 20:10:44 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 399
+ *     Update #: 595
  */
 
 /* Commentary: 
@@ -32,9 +32,6 @@
 class dtkViewLayoutItemProxyPrivate
 {
 public:
-    QVBoxLayout *layout;
-
-public:
     dtkAbstractView *view;
 };
 
@@ -44,10 +41,10 @@ public:
 
 dtkViewLayoutItemProxy::dtkViewLayoutItemProxy(QWidget *parent) : QFrame(parent), d(new dtkViewLayoutItemProxyPrivate)
 {
-    d->layout = new QVBoxLayout(this);
-    d->layout->setContentsMargins(0, 0, 0, 0);
-
     d->view = NULL;
+
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     this->setFocusPolicy(Qt::StrongFocus);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -55,8 +52,34 @@ dtkViewLayoutItemProxy::dtkViewLayoutItemProxy(QWidget *parent) : QFrame(parent)
 
 dtkViewLayoutItemProxy::~dtkViewLayoutItemProxy(void)
 {
-    if (d->view)
-        d->layout->removeWidget(d->view->widget());
+    qDebug() << __func__ << 1;
+
+    if(d->view && d->view->widget()) {
+
+        qDebug() << __func__ << 2;
+
+        if(dtkViewLayoutItemProxy *proxy = dynamic_cast<dtkViewLayoutItemProxy *>(d->view->widget()->parentWidget())) {
+
+            qDebug() << __func__ << 3;
+
+            if(proxy == this) {
+
+                qDebug() << __func__ << 4;
+
+                proxy->layout()->removeWidget(d->view->widget());
+
+                qDebug() << __func__ << 5;
+
+                d->view->widget()->setParent(0);
+
+                qDebug() << __func__ << 6;
+
+                proxy->d->view = 0;
+            }
+        }
+    }
+
+    qDebug() << __func__ << 7;
 
     delete d;
 
@@ -70,6 +93,8 @@ dtkAbstractView *dtkViewLayoutItemProxy::view(void)
 
 void dtkViewLayoutItemProxy::setView(dtkAbstractView *view)
 {
+    qDebug() << __func__ << 1;
+
     if(!view)
         return;
 
@@ -77,17 +102,15 @@ void dtkViewLayoutItemProxy::setView(dtkAbstractView *view)
         return;
 
     if(dtkViewLayoutItemProxy *proxy = dynamic_cast<dtkViewLayoutItemProxy *>(view->widget()->parentWidget())) {
-        proxy->d->layout->removeWidget(view->widget());
-        proxy->d->view = NULL;
+        proxy->layout()->removeWidget(view->widget());
+        proxy->d->view = 0;
     }
 
-    if (d->view)
-        d->layout->removeWidget(d->view->widget());
+    this->layout()->addWidget(view->widget());
 
     d->view = view;
-    d->layout->addWidget(d->view->widget());
 
-    // qDebug() << __func__ << d->view->widget()->parentWidget()->metaObject()->className();
+    qDebug() << __func__ << 2;
 }
 
 void dtkViewLayoutItemProxy::focusInEvent(QFocusEvent *event)
@@ -264,13 +287,19 @@ void dtkViewLayoutItem::unsplit(void)
     if(!d->a && !d->b)
         return;
 
+    d->root->setUpdatesEnabled(false);
+
     if(d->layout->current() == d->a) {
 
-        delete d->a;
+        qDebug() << __func__ << "Current item is a";
+
+        d->a->deleteLater();
 
         d->a = NULL;
 
         if(d->b->d->a && d->b->d->b) {
+
+            qDebug() << __func__ << "Current item is a, b has children, reparenting";
 
             dtkViewLayoutItem *a = d->b->d->a; a->d->parent = this;
             dtkViewLayoutItem *b = d->b->d->b; b->d->parent = this;
@@ -280,7 +309,7 @@ void dtkViewLayoutItem::unsplit(void)
 
             d->splitter->setOrientation(d->b->d->splitter->orientation());
 
-            delete d->b;
+            d->b->deleteLater();
 
             d->b = NULL;
 
@@ -300,31 +329,64 @@ void dtkViewLayoutItem::unsplit(void)
 
         } else {
 
+            qDebug() << __func__ << "Current item is a, b has no children, creating a proxy.";
+
             d->proxy = new dtkViewLayoutItemProxy(this);
+
+            qDebug() << __func__ << "Current item is a, b has no children, proxy created.";
 
             connect(d->proxy, SIGNAL(focusedIn()), this, SLOT(onFocusedIn()));
             connect(d->proxy, SIGNAL(focusedOut()), this, SLOT(onFocusedOut()));      
 
+            qDebug() << __func__ << "Current item is a, b has no children, proxy connected.";
+
             d->splitter->addWidget(d->proxy);
 
+            qDebug() << __func__ << "Current item is a, b has no children, proxy layout out.";
+
+            if(!d->b->d->proxy->view())
+                qDebug() << "VIEW IS NULL";
+
+            else if(!d->b->d->proxy->view()->widget())
+                qDebug() << "VIEW'S WIDGET IS NULL";
+
             d->proxy->setView(d->b->d->proxy->view());
+
+            qDebug() << __func__ << "Current item is a, b has no children, proxy set up.";
+
             d->proxy->setFocus(Qt::OtherFocusReason);
 
-            delete d->b;
+            qDebug() << __func__ << "Current item is a, b has no children, proxy focused.";
+
+            d->b->deleteLater();
 
             d->b = NULL;
 
+            if(!d->proxy->view())
+                qDebug() << "VIEW IS NULL";
+
+            else if(!d->proxy->view()->widget())
+                qDebug() << "VIEW'S WIDGET IS NULL";
+
+            qDebug() << __func__ << "Current item is a, b has no children, b deleted.";
+
             d->footer->show();
+
+            qDebug() << __func__ << "Current item is a, b has no children, done.";
         }
     }
 
     else if(d->layout->current() == d->b) {
 
-        delete d->b;
+        qDebug() << __func__ << "Current item is b";
+
+        d->b->deleteLater();
 
         d->b = NULL;
 
         if(d->a->d->a && d->a->d->b) {
+
+            qDebug() << __func__ << "Current item is b, a has children, reparenting";
 
             dtkViewLayoutItem *a = d->a->d->a; a->d->parent = this;
             dtkViewLayoutItem *b = d->a->d->b; b->d->parent = this;
@@ -334,7 +396,7 @@ void dtkViewLayoutItem::unsplit(void)
 
             d->splitter->setOrientation(d->a->d->splitter->orientation());
 
-            delete d->a;
+            d->a->deleteLater();
 
             d->a = NULL;
 
@@ -353,6 +415,8 @@ void dtkViewLayoutItem::unsplit(void)
                 child->setFocus(Qt::OtherFocusReason);
 
         } else {
+
+            qDebug() << __func__ << "Current item is b, a has no children, creating a proxy.";
 
             d->proxy = new dtkViewLayoutItemProxy(this);
 
@@ -364,7 +428,7 @@ void dtkViewLayoutItem::unsplit(void)
             d->proxy->setView(d->a->d->proxy->view());
             d->proxy->setFocus(Qt::OtherFocusReason);
 
-            delete d->a;
+            d->a->deleteLater();
 
             d->a = NULL;
 
@@ -376,6 +440,8 @@ void dtkViewLayoutItem::unsplit(void)
         qDebug() << __func__ << "Unhandled case.";
 
     }
+
+    d->root->setUpdatesEnabled(true);
 }
 
 void dtkViewLayoutItem::onFocusedIn(void)
@@ -438,6 +504,9 @@ void dtkViewLayoutItem::dropEvent(QDropEvent *event)
     Q_UNUSED(event);
 
     if(d->a && d->b)
+        return;
+
+    if(d->proxy->view())
         return;
 
     d->proxy->setView(dtkAbstractViewFactory::instance()->view(event->mimeData()->text()));

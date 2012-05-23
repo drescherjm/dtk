@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 16:38:14 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 22 12:49:55 2012 (+0200)
+ * Last-Updated: Wed May 23 09:03:28 2012 (+0200)
  *           By: tkloczko
- *     Update #: 128
+ *     Update #: 129
  */
 
 /* Commentary: 
@@ -96,9 +96,9 @@ public:
 /*     dtkContainerVector<T>& operator << (const T& value); */
 /*     dtkContainerVector<T>& operator << (const dtkContainerVector<T>& other); */
 
-/* public: */
-/*           T& operator[] (dtkxarch_int index); */
-/*     const T& operator[] (dtkxarch_int index) const; */
+public:
+          T& operator[] (dtkxarch_int index);
+    const T& operator[] (dtkxarch_int index) const;
 
 /* public: */
 /*     void     setNumberOfTuples(dtkxarch_int tuple_number); */

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 17:02:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 22 12:49:42 2012 (+0200)
+ * Last-Updated: Wed May 23 09:04:58 2012 (+0200)
  *           By: tkloczko
- *     Update #: 111
+ *     Update #: 113
  */
 
 /* Commentary: 
@@ -173,6 +173,16 @@ template <typename T> inline bool dtkContainerVector<T>::isEqual(const dtkAbstra
     }
 
     return false;
+};
+
+template <typename T> inline T& dtkContainerVector<T>::operator[] (dtkxarch_int index)
+{
+    return m_vector[index];
+};
+
+template <typename T> inline const T& dtkContainerVector<T>::operator[] (dtkxarch_int index) const
+{
+    return m_vector[index];
 };
 
 #endif

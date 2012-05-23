@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep 12 11:01:28 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 89
+ * Last-Updated: Tue Apr 24 14:47:00 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 103
  */
 
 /* Commentary: 
@@ -17,21 +17,33 @@
  * 
  */
 
-#include <dtkCore/dtkAbstractProcess.h>
+#include "dtkAbstractProcess.h"
+#include "dtkAbstractProcess_p.h"
 
-dtkAbstractProcess::dtkAbstractProcess(dtkAbstractProcess *parent) : dtkAbstractObject(parent)
+// /////////////////////////////////////////////////////////////////
+// dtkAbstractProcess implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkAbstractProcess::dtkAbstractProcess(dtkAbstractProcess *parent) : dtkAbstractObject(*new dtkAbstractProcessPrivate(this), parent)
 {
 
 }
 
-dtkAbstractProcess::dtkAbstractProcess(const dtkAbstractProcess& process)
+dtkAbstractProcess::dtkAbstractProcess(const dtkAbstractProcess& other) : dtkAbstractObject(*new dtkAbstractProcessPrivate(*other.d_func()), other)
 {
-    DTK_UNUSED(process);
+
 }
 
 dtkAbstractProcess::~dtkAbstractProcess(void)
 {
 
+}
+
+dtkAbstractProcess& dtkAbstractProcess::operator=(const dtkAbstractProcess& other)
+{
+    dtkAbstractObject::operator=(other);
+
+    return *this;
 }
 
 QDebug operator<<(QDebug debug, const dtkAbstractProcess& process)
@@ -145,6 +157,48 @@ void dtkAbstractProcess::setParameter(int* data, int channel)
 }
 
 void dtkAbstractProcess::setParameter(int* data, int channel, int frame)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+    DTK_UNUSED(channel);
+    DTK_UNUSED(frame);
+}
+
+void dtkAbstractProcess::setParameter(qlonglong data)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+}
+
+void dtkAbstractProcess::setParameter(qlonglong data, int channel)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+    DTK_UNUSED(channel);
+}
+
+void dtkAbstractProcess::setParameter(qlonglong data, int channel, int frame)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+    DTK_UNUSED(channel);
+    DTK_UNUSED(frame);
+}
+
+void dtkAbstractProcess::setParameter(qlonglong* data)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+}
+
+void dtkAbstractProcess::setParameter(qlonglong* data, int channel)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+    DTK_UNUSED(channel);
+}
+
+void dtkAbstractProcess::setParameter(qlonglong* data, int channel, int frame)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(data);

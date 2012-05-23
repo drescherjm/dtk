@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2009 - Julien Wintz, Inria.
 ## Created: Tue Mar 10 15:12:38 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Sep  8 14:39:59 2011 (+0200)
+## Last-Updated: Fri Apr 27 20:59:23 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 57
+##     Update #: 64
 ######################################################################
 ## 
 ### Commentary: 
@@ -38,7 +38,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkScriptInterpreterPool.cpp
   dtkScriptManager.cpp)
 
-if(BUILD_WRAPPERS)
+if(DTK_BUILD_WRAPPERS)
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkScriptInterpreterPython.h
   dtkScriptInterpreterTcl.h)
@@ -50,7 +50,7 @@ set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkScriptInterpreterPython.cpp
   dtkScriptInterpreterTcl.cpp)
-endif(BUILD_WRAPPERS)
+endif(DTK_BUILD_WRAPPERS)
 
 ## #################################################################
 ## Build rules
@@ -81,17 +81,35 @@ add_library(${PROJECT_NAME} STATIC
 endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
-  dtkCore)
+  dtkCore
+  dtkLog)
 
-if(BUILD_WRAPPERS)
+if(DTK_BUILD_WRAPPERS)
 target_link_libraries(${PROJECT_NAME}
   ${TCL_LIBRARY}
   ${PYTHON_LIBRARIES})
-endif(BUILD_WRAPPERS)
+endif(DTK_BUILD_WRAPPERS)
 
 if(EDITLINE_FOUND)
   target_link_libraries(${PROJECT_NAME} ${EDITLINE_LIBRARY})
 endif(EDITLINE_FOUND)
+
+## #################################################################
+## Export header file
+## #################################################################
+
+add_compiler_export_flags()
+
+generate_export_header(${PROJECT_NAME}
+  EXPORT_FILE_NAME "${PROJECT_NAME}Export.h")
+
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}"
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export")
+
+set(${PROJECT_NAME}_HEADERS
+  ${${PROJECT_NAME}_HEADERS}
+ "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export.h")
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

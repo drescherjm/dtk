@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jan 29 14:36:41 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep  5 12:56:50 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 86
+ * Last-Updated: Tue Apr 24 12:50:05 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 89
  */
 
 /* Commentary:
@@ -20,12 +20,16 @@
 #ifndef DTKABSTRACTVIEWINTERACTOR_H
 #define DTKABSTRACTVIEWINTERACTOR_H
 
-#include <dtkCore/dtkAbstractObject.h>
+#include "dtkAbstractObject.h"
 
 class dtkAbstractViewInteractorPrivate;
 
 class dtkAbstractData;
 class dtkAbstractView;
+
+// /////////////////////////////////////////////////////////////////
+// dtkAbstractViewInteractor interface
+// /////////////////////////////////////////////////////////////////
 
 class DTKCORE_EXPORT dtkAbstractViewInteractor : public dtkAbstractObject
 {
@@ -33,8 +37,10 @@ class DTKCORE_EXPORT dtkAbstractViewInteractor : public dtkAbstractObject
 
 public:
              dtkAbstractViewInteractor(void);
+             dtkAbstractViewInteractor(const dtkAbstractViewInteractor& other);
     virtual ~dtkAbstractViewInteractor(void);
 
+public:
     virtual QString description(void) const = 0;
     virtual QStringList handled(void) const = 0;
 
@@ -62,7 +68,7 @@ signals:
     void updated(void);
 
 private:
-    dtkAbstractViewInteractorPrivate *d;
+    DTK_DECLARE_PRIVATE(dtkAbstractViewInteractor);
 };
 
 #endif

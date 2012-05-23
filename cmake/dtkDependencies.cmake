@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Nov  8 17:33:44 2011 (+0100)
+## Last-Updated: Thu May  3 15:05:28 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 75
+##     Update #: 103
 ######################################################################
 ## 
 ### Commentary: 
@@ -49,7 +49,7 @@ mark_as_advanced(QT_QTMOTIF_LIBRARY_RELEASE)
 ## Wrapping
 ## #################################################################
 
-if(BUILD_WRAPPERS)
+if(DTK_BUILD_WRAPPERS)
 
 ## #################################################################
 ## Swig
@@ -139,17 +139,14 @@ find_library(EDITLINE_LIBRARY edit
 
 if(EDITLINE_LIBRARY)
   set(EDITLINE_FOUND "YES")
+  set(DTK_HAVE_EDIT "YES")
 endif(EDITLINE_LIBRARY)
-
-if(EDITLINE_FOUND)
-  add_definitions(-DHAVE_EDITLINE)
-endif(EDITLINE_FOUND)
 
 ## #################################################################
 ## Build wrappers (end)
 ## #################################################################
 
-endif(BUILD_WRAPPERS)
+endif(DTK_BUILD_WRAPPERS)
 
 ## #################################################################
 ## Zlib
@@ -206,6 +203,7 @@ find_library(VRPN_LIBRARY NAMES vrpn PATHS /usr/lib /usr/local/lib)
 
 if(QUAT_LIBRARY AND VRPN_LIBRARY)
   add_definitions(-DHAVE_VRPN)
+  set(DTK_HAVE_VRPN "YES")
 endif(QUAT_LIBRARY AND VRPN_LIBRARY)
 
 mark_as_advanced(QUAT_LIBRARY)
@@ -230,6 +228,35 @@ if(QWT_FOUND)
   set(DTK_HAVE_PLOT "YES")
   include_directories(${QWT_INCLUDE_DIR})
 endif(QWT_FOUND)
+
+## #################################################################
+## OpenNI / Nite
+## #################################################################
+
+find_path(OPENNI_INCLUDES XnOpenNI.h /usr/include/ni)
+find_path(  NITE_INCLUDES XnVNite.h  /usr/include/nite)
+
+if(OPENNI_INCLUDES AND NITE_INCLUDES)
+include_directories(/usr/include/ni)
+include_directories(/usr/include/nite)
+endif(OPENNI_INCLUDES AND NITE_INCLUDES)
+
+find_library(OPENNI_LIBRARY NAMES OpenNI  PATHS /usr/lib)
+find_library(  NITE_LIBRARY NAMES XnVNite PATHS /usr/lib)
+
+if(OPENNI_LIBRARY AND NITE_LIBRARY)
+link_directories(/usr/lib)
+endif(OPENNI_LIBRARY AND NITE_LIBRARY)
+
+if(OPENNI_INCLUDES AND NITE_INCLUDES)
+set(DTK_HAVE_NITE "YES")
+endif(OPENNI_INCLUDES AND NITE_INCLUDES)
+
+mark_as_advanced(OPENNI_INCLUDES)
+mark_as_advanced(NITE_INCLUDES)
+
+mark_as_advanced(OPENNI_LIBRARY)
+mark_as_advanced(NITE_LIBRARY)
 
 ## #################################################################
 ## 

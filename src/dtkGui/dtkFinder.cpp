@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Jun 12 15:47:45 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 15 15:14:27 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 75
+ * Last-Updated: Tue Apr  3 16:07:24 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 77
  */
 
 /* Commentary: 
@@ -38,7 +38,9 @@ public:
     QToolButton *nextButton;
     QToolButton *listViewButton;
     QToolButton *treeViewButton;
-    QLinkedList<QString>           pathList;
+    QToolButton *showHiddenFilesButton;
+
+    QLinkedList<QString> pathList;
     QLinkedList<QString>::iterator iterator;
 };
 
@@ -64,6 +66,16 @@ dtkFinderToolBar::dtkFinderToolBar(QWidget *parent) : QToolBar(parent), d(new dt
     d->treeViewButton->setCheckable(true);
     d->treeViewButton->setIcon(QIcon(":dtkGui/pixmaps/dtk-view-tree.png"));    
     d->treeViewButton->setIconSize(QSize(16, 16));
+
+    d->showHiddenFilesButton = new QToolButton (this);
+    d->showHiddenFilesButton->setCheckable(true);
+    d->showHiddenFilesButton->setIcon(QIcon(":dtkGui/pixmaps/dtk-anchored-bar-action.png"));
+    d->showHiddenFilesButton->setIconSize(QSize(16, 16));
+    d->showHiddenFilesButton->setToolTip(tr("Show/Hide hidden files"));
+    //By default the showHiddenFilesButton is enabled in MacOS
+#ifdef Q_WS_MAC
+    d->showHiddenFilesButton->setChecked(Qt::Checked);
+#endif
     
     QButtonGroup *viewButtonGroup = new QButtonGroup (this);
     viewButtonGroup->setExclusive (true);
@@ -74,12 +86,15 @@ dtkFinderToolBar::dtkFinderToolBar(QWidget *parent) : QToolBar(parent), d(new dt
     this->addWidget (d->nextButton);
     this->addWidget (d->treeViewButton);
     this->addWidget (d->listViewButton);
+    this->addWidget (d->showHiddenFilesButton);
     
     connect (d->prevButton, SIGNAL (clicked()), this, SLOT (onPrev()));
     connect (d->nextButton, SIGNAL (clicked()), this, SLOT (onNext()));
     
     connect (d->listViewButton, SIGNAL (clicked()), this, SIGNAL (listView()));
     connect (d->treeViewButton, SIGNAL (clicked()), this, SIGNAL (treeView()));
+
+    connect (d->showHiddenFilesButton, SIGNAL(toggled(bool)), this, SIGNAL(showHiddenFiles(bool)));
 }
 
 dtkFinderToolBar::~dtkFinderToolBar(void)
@@ -485,6 +500,8 @@ void dtkFinderPathBar::mousePressEvent(QMouseEvent *event)
 
 void dtkFinderPathBar::paintEvent(QPaintEvent *event)
 {
+    DTK_UNUSED(event);
+
     QRect rect = this->rect();
 
     int x = 10;
@@ -883,6 +900,13 @@ void dtkFinderTreeView::startDrag(Qt::DropActions supportedActions)
     }
 }
 
+void dtkFinderTreeView::resizeEvent(QResizeEvent *event)
+{
+    DTK_UNUSED(event);
+
+    this->setColumnWidth(0, this->width() / 2);
+}
+
 // /////////////////////////////////////////////////////////////////
 // dtkFinder
 // /////////////////////////////////////////////////////////////////
@@ -901,7 +925,11 @@ public:
 dtkFinder::dtkFinder(QWidget *parent) : QWidget(parent), d(new dtkFinderPrivate)
 {
     d->model = new QFileSystemModel(this);
-    d->model->setFilter(QDir::Hidden | QDir::AllEntries | QDir::NoDotAndDotDot);
+    d->model->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
+    //By default the showHiddenFilesButton is enabled in MacOS
+#ifdef Q_WS_MAC
+    d->model->setFilter(QDir::AllEntries | QDir::Hidden | QDir::NoDotAndDotDot);
+#endif
     d->model->setRootPath(QDir::rootPath());
 
     d->list = new dtkFinderListView(this);
@@ -999,6 +1027,14 @@ void dtkFinder::switchToListView(void)
 void dtkFinder::switchToTreeView(void)
 {
     d->stack->setCurrentIndex(1);
+}
+
+void dtkFinder::onShowHiddenFiles(bool show)
+{
+    if (show)
+        d->model->setFilter(QDir::Hidden | QDir::AllEntries | QDir::NoDotAndDotDot);
+    else
+        d->model->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
 }
 
 void dtkFinder::onIndexDoubleClicked(QModelIndex index)

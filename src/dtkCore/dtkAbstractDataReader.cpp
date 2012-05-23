@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 22:03:03 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 21 12:52:26 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 44
+ * Last-Updated: Tue Apr 24 11:36:27 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 59
  */
 
 /* Commentary: 
@@ -17,51 +17,56 @@
  * 
  */
 
-#include <dtkCore/dtkAbstractDataReader.h>
+#include "dtkAbstractDataReader.h"
+#include "dtkAbstractDataReader_p.h"
+#include "dtkAbstractData.h"
 
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkSmartPointer.h>
+// /////////////////////////////////////////////////////////////////
+// dtkAbstractDataReader implementation
+// /////////////////////////////////////////////////////////////////
 
-class dtkAbstractDataReaderPrivate
+dtkAbstractDataReader::dtkAbstractDataReader(void) : dtkAbstractObject(*new dtkAbstractDataReaderPrivate(this), 0)
 {
-public:
-    bool enabled;
+    DTK_D(dtkAbstractDataReader);
 
-    dtkSmartPointer<dtkAbstractData> data;
-
-    QString file;
-    QStringList files;
-};
-
-dtkAbstractDataReader::dtkAbstractDataReader(void) : dtkAbstractObject(), d(new dtkAbstractDataReaderPrivate)
-{
     d->enabled = false;
+}
+
+dtkAbstractDataReader::dtkAbstractDataReader(const dtkAbstractDataReader& other) : dtkAbstractObject(*new dtkAbstractDataReaderPrivate(*other.d_func()), other)
+{
+
 }
 
 dtkAbstractDataReader::~dtkAbstractDataReader(void)
 {
-    delete d;
 
-    d = NULL;
 }
 
 bool dtkAbstractDataReader::enabled(void) const
 {
+    DTK_D(const dtkAbstractDataReader);
+
     return d->enabled;
 }
 
 void dtkAbstractDataReader::enable(void)
 {
+    DTK_D(dtkAbstractDataReader);
+
     d->enabled = true;
 }
 
 void dtkAbstractDataReader::disable(void)
 {
+    DTK_D(dtkAbstractDataReader);
+
     d->enabled = false;
 }
 
-dtkAbstractData *dtkAbstractDataReader::data(void)
+dtkAbstractData *dtkAbstractDataReader::data(void) const
 {
+    DTK_D(const dtkAbstractDataReader);
+
     return d->data;
 }
 
@@ -71,6 +76,8 @@ dtkAbstractData *dtkAbstractDataReader::data(void)
  */
 void dtkAbstractDataReader::setData(dtkAbstractData *data)
 {
+    DTK_D(dtkAbstractDataReader);
+
     d->data = data;
 }
 
@@ -93,6 +100,8 @@ bool dtkAbstractDataReader::canRead(const QStringList& files)
 
 bool dtkAbstractDataReader::read(const QString& file)
 {
+    DTK_D(dtkAbstractDataReader);
+
     d->file = file;
 
     return false;
@@ -100,6 +109,8 @@ bool dtkAbstractDataReader::read(const QString& file)
 
 bool dtkAbstractDataReader::read(const QStringList& files)
 {
+    DTK_D(dtkAbstractDataReader);
+
     d->files = files;
 
     //  Provide a sensible default for the case the list contains only one file.
@@ -126,12 +137,16 @@ void dtkAbstractDataReader::setProgress(int value)
     emit progressed (value);
 }
 
-const QString& dtkAbstractDataReader::file(void)
+const QString& dtkAbstractDataReader::file(void) const
 {
+    DTK_D(const dtkAbstractDataReader);
+
     return d->file;
 }
 
-const QStringList& dtkAbstractDataReader::files(void)
+const QStringList& dtkAbstractDataReader::files(void) const
 {
+    DTK_D(const dtkAbstractDataReader);
+
     return d->files;
 }

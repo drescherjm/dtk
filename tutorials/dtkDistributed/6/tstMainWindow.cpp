@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Sep 20 11:31:26 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. déc.  9 15:37:01 2011 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 169
+ * Last-Updated: Fri Dec  9 17:55:47 2011 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 170
  */
 
 /* Commentary: 
@@ -142,7 +142,7 @@ void tstMainWindow::onSubmit(void)
     QVariantMap job;
     QVariantMap resources;
     QVariantMap properties;
-    properties.insert("cpu_model","xeon");
+    // properties.insert("cpu_model","xeon");
     resources.insert("cores", d->submit_cores->text());
     resources.insert("nodes", d->submit_nodes->text());
     job.insert("resources", resources);

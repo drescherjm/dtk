@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: lun. déc.  5 14:23:28 2011 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 51
+ * Last-Updated: Mon Apr 16 12:14:45 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 99
  */
 
 /* Commentary: 
@@ -33,7 +33,11 @@ public:
      dtkDistributedCommunicatorMpi(void);
     ~dtkDistributedCommunicatorMpi(void);
 
+    dtkDistributedCommunicatorMpi(const dtkDistributedCommunicatorMpi & c);
+    dtkDistributedCommunicatorMpi& operator=(const dtkDistributedCommunicatorMpi& c);
+
     void   initialize(void);
+    bool  initialized(void);
     void uninitialize(void);
 
     double time(void);
@@ -54,11 +58,19 @@ public:
     void    reduce(void *send, void *recv, qint64 size, DataType dataType, OperationType operationType, qint16 target, bool all = false);
 
     void    send(dtkAbstractData *data, qint16 target, int tag);
-    void receive(dtkAbstractData *data, qint16 source, int tag);
+    void receive(dtkAbstractData *&data, qint16 source, int tag);
 
+    void      send(const QString& s, qint16 target, int tag) ;
+    void      send(const QVariant& v, qint16 target, int tag) ;
+    void   receive(QString &s, qint16 source, int tag) ;
+    void   receive(QVariant &v, qint16 source, int tag) ;
 
 private:
     dtkDistributedCommunicatorMpiPrivate *d;
 };
+
+Q_DECLARE_METATYPE(dtkDistributedCommunicatorMpi);
+Q_DECLARE_METATYPE(dtkDistributedCommunicatorMpi *);
+
 
 #endif

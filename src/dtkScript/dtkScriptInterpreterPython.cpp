@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 26 16:29:02 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 11 14:11:07 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 261
+ * Last-Updated: Wed Apr  4 13:43:17 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 278
  */
 
 /* Commentary: 
@@ -17,7 +17,9 @@
  * 
  */
 
-#include <dtkScript/dtkScriptInterpreterPython.h>
+#include <dtkCore/dtkGlobal.h>
+
+#include "dtkScriptInterpreterPython.h"
 
 #undef _POSIX_C_SOURCE
 #undef _XOPEN_SOURCE
@@ -38,6 +40,8 @@ static PyObject* redirector_init(PyObject *, PyObject *)
     return Py_None;
 }
 
+static QString redirected = QString();
+
 static PyObject* redirector_write(PyObject *, PyObject *args)
 {
     char* output;
@@ -50,6 +54,11 @@ static PyObject* redirector_write(PyObject *, PyObject *args)
 
     if(!text.simplified().isEmpty())
         std::cout << text.toAscii().constData() << std::flush << std::endl;
+
+    if(!redirection_occured)
+        redirected = text;
+    else
+        redirected = "";
 
     redirection_occured = true;
 
@@ -144,27 +153,35 @@ dtkScriptInterpreterPython::~dtkScriptInterpreterPython(void)
 
 void dtkScriptInterpreterPython::registerVariable(bool &var, QString name, QString description) 
 {
-
+    DTK_UNUSED(var);
+    DTK_UNUSED(name);
+    DTK_UNUSED(description);
 }
 
 void dtkScriptInterpreterPython::registerVariable(int &var, QString name, QString description) 
 {
-
+    DTK_UNUSED(var);
+    DTK_UNUSED(name);
+    DTK_UNUSED(description);
 }
 
 void dtkScriptInterpreterPython::registerVariable(double &var, QString name, QString description) 
 {
-
+    DTK_UNUSED(var);
+    DTK_UNUSED(name);
+    DTK_UNUSED(description);
 }
 
 void dtkScriptInterpreterPython::registerVariable(char * &var, QString name, QString description) 
 {
-
+    DTK_UNUSED(var);
+    DTK_UNUSED(name);
+    DTK_UNUSED(description);
 }
 
 void dtkScriptInterpreterPython::unregisterVariable(QString name)
 {
-
+    DTK_UNUSED(name);
 }
 
 void dtkScriptInterpreterPython::allowThreads(void)
@@ -195,8 +212,7 @@ QString dtkScriptInterpreterPython::interpret(const QString& command, int *stat)
     default: break;
     }
 
-    if(!redirection_occured)
-        emit interpreted("", stat);
+    emit interpreted(redirected, stat);
 
     dtkScriptInterpreterSynchronizer::instance()->wake();
 
@@ -207,6 +223,9 @@ QString dtkScriptInterpreterPython::interpret(const QString& command, int *stat)
 
 QString dtkScriptInterpreterPython::interpret(const QString& command, const QStringList& args, int *stat)
 {
+    DTK_UNUSED(args);
+    DTK_UNUSED(stat);
+
     QString result = "";
 
     blockThreads();

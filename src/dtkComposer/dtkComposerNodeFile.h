@@ -1,12 +1,12 @@
 /* dtkComposerNodeFile.h --- 
  * 
  * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Thu Jul  8 13:26:20 2010 (+0200)
+ * Copyright (C) 2008-2011 - Julien Wintz, Inria.
+ * Created: Thu Mar  1 11:44:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Oct 12 23:38:50 2011 (+0200)
+ * Last-Updated: Thu Mar  1 11:48:51 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 28
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -21,31 +21,26 @@
 #define DTKCOMPOSERNODEFILE_H
 
 #include "dtkComposerExport.h"
-#include "dtkComposerNode.h"
+#include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeFilePrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeFile : public dtkComposerNode
+class DTKCOMPOSER_EXPORT dtkComposerNodeFile : public dtkComposerNodeLeaf
 {
-    Q_OBJECT
-
 public:
-     dtkComposerNodeFile(dtkComposerNode *parent = 0);
+     dtkComposerNodeFile(void);
     ~dtkComposerNodeFile(void);
 
-    QVariant value(dtkComposerNodeProperty *property);
+public:
+    void run(void);
 
-public slots:
-    void editFile(void);
-    void getFileName(void);
-    void setFileName(const QString& file);
-    void getUrl(void);
-    void setUrl(const QString& url);
+public:
+    QString type(void);
+    QString titleHint(void);
 
-protected:
-    void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    void  run(void);
-    void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+public:
+    QString inputLabelHint(int);
+    QString outputLabelHint(int);
 
 private:
     dtkComposerNodeFilePrivate *d;

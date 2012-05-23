@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 21:58:48 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 21 12:53:26 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 47
+ * Last-Updated: Tue Apr 24 10:41:29 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 55
  */
 
 /* Commentary: 
@@ -20,10 +20,14 @@
 #ifndef DTKABSTRACTDATAREADER_H
 #define DTKABSTRACTDATAREADER_H
 
-#include <dtkCore/dtkAbstractObject.h>
+#include "dtkAbstractObject.h"
 
 class dtkAbstractData;
 class dtkAbstractDataReaderPrivate;
+
+// /////////////////////////////////////////////////////////////////
+// dtkAbstractDataReader interface
+// /////////////////////////////////////////////////////////////////
 
 class DTKCORE_EXPORT dtkAbstractDataReader : public dtkAbstractObject
 {
@@ -31,8 +35,10 @@ class DTKCORE_EXPORT dtkAbstractDataReader : public dtkAbstractObject
 
 public:
              dtkAbstractDataReader(void);
+             dtkAbstractDataReader(const dtkAbstractDataReader& other);
     virtual ~dtkAbstractDataReader(void);
     
+public:
     virtual QString description(void) const = 0;
     virtual QStringList handled(void) const = 0;
     
@@ -40,7 +46,7 @@ public:
     void enable(void);
     void disable(void);
     
-    dtkAbstractData *data(void);
+    dtkAbstractData *data(void) const;
     
     virtual void setData(dtkAbstractData *data);
 
@@ -62,11 +68,11 @@ public slots:
     virtual void setProgress(int value);
 
 protected:
-    const QString&     file(void);
-    const QStringList& files(void);
+    const QString&     file(void)  const;
+    const QStringList& files(void) const;
     
 private:
-    dtkAbstractDataReaderPrivate *d;
+    DTK_DECLARE_PRIVATE(dtkAbstractDataReader);
 };
 
 #endif

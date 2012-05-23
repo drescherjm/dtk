@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Nov 17 10:16:46 2011 (+0100)
+## Last-Updated: Tue May 22 01:13:05 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 206
+##     Update #: 259
 ######################################################################
 ## 
 ### Commentary: 
@@ -26,130 +26,88 @@ project(dtkGui)
 set(${PROJECT_NAME}_HEADERS
   dtkAboutBox.h
   dtkAboutPlugin.h
-  dtkAddressBar.h
   dtkAnchoredBar.h
   dtkColorButton.h
   dtkColorGrid.h
+  dtkFlowLayout.h
   dtkFinder.h
-  dtkGuiExport.h
-  dtkInsetMenu.h
-  dtkInspector.h
-  dtkInspectorBox.h
-  dtkInspectorButton.h
-  dtkInspectorTitleBar.h
-  dtkInspectorToolBar.h
-  dtkInspectorSwitch.h
   dtkInterpreter.h
-  dtkInterpreterPreferencesWidget.h
-  dtkNavigationBar.h
+  dtkPieChart.h
   dtkPluginsEditor.h
   dtkPopup.h
-  dtkPreferencesWidget.h
   dtkProgressIndicator.h
   dtkRecentFilesMenu.h
-  dtkRegistrationBar.h
-  dtkSearchBar.h
+  dtkSearchField.h
   dtkSettingsEditor.h
-  dtkSettingsEditorPreferencesWidget.h
   dtkSpacer.h
   dtkSplitter.h
+  dtkSwitch.h
+  dtkTagCloud.h
   dtkTextEditor.h
-  dtkTextEditorPreferencesWidget.h
-  dtkTextEditorSyntaxHighlighter.h
-  dtkTextEditorSyntaxHighlighterCpp.h
-  dtkTextEditorSyntaxHighlighterPython.h
-  dtkTextEditorSyntaxHighlighterTcl.h)
-
-if(QT_QTWEBKIT_FOUND)
-set(${PROJECT_NAME}_HEADERS
-  ${${PROJECT_NAME}_HEADERS}
-  dtkTagCloud.h)
-endif(QT_QTWEBKIT_FOUND)
+  dtkViewManager.h
+  dtkViewLayout.h
+  dtkViewLayoutItem.h
+  dtkViewList.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkAboutBox.h
   dtkAboutPlugin.h
-  dtkAddressBar.h
   dtkAnchoredBar.h
   dtkColorButton.h
   dtkColorGrid.h
   dtkFinder.h
-  dtkInsetMenu.h
-  dtkInspector.h
-  dtkInspectorBox.h
-  dtkInspectorButton.h
-  dtkInspectorTitleBar.h
-  dtkInspectorToolBar.h
-  dtkInspectorSwitch.h
   dtkInterpreter.h
-  dtkInterpreterPreferencesWidget.h
-  dtkNavigationBar.h
+  dtkPieChart.h
   dtkPluginsEditor.h
   dtkPopup.h
-  dtkPreferencesWidget.h
   dtkProgressIndicator.h
   dtkRecentFilesMenu.h
-  dtkRegistrationBar.h
-  dtkSearchBar.h
+  dtkSearchField.h
   dtkSettingsEditor.h
-  dtkSettingsEditorPreferencesWidget.h
   dtkSpacer.h
   dtkSplitter.h
+  dtkTagCloud.h
+  dtkSwitch.h
   dtkTextEditor.h
-  dtkTextEditorPreferencesWidget.h
-  dtkTextEditorSyntaxHighlighter.h)
-
-if(QT_QTWEBKIT_FOUND)
-set(${PROJECT_NAME}_HEADERS_MOC
-  ${${PROJECT_NAME}_HEADERS_MOC}
-  dtkTagCloud.h)
-endif(QT_QTWEBKIT_FOUND)
+  dtkViewManager.h
+  dtkViewLayout.h
+  dtkViewLayoutItem.h
+  dtkViewList.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkAboutBox.cpp
   dtkAboutPlugin.cpp
-  dtkAddressBar.cpp
   dtkAnchoredBar.cpp
   dtkColorButton.cpp
   dtkColorGrid.cpp
+  dtkFlowLayout.cpp
   dtkFinder.cpp
-  dtkInsetMenu.cpp
-  dtkInspector.cpp
-  dtkInspectorBox.cpp
-  dtkInspectorButton.cpp
-  dtkInspectorTitleBar.cpp
-  dtkInspectorToolBar.cpp
-  dtkInspectorSwitch.cpp
   dtkInterpreter.cpp
-  dtkInterpreterPreferencesWidget.cpp
-  dtkNavigationBar.cpp
+  dtkPieChart.cpp
   dtkPluginsEditor.cpp
   dtkPopup.cpp
-  dtkPreferencesWidget.cpp
   dtkProgressIndicator.cpp
   dtkRecentFilesMenu.cpp
-  dtkRegistrationBar.cpp
-  dtkSearchBar.cpp
   dtkSettingsEditor.cpp
-  dtkSettingsEditorPreferencesWidget.cpp
   dtkSpacer.cpp
   dtkSplitter.cpp
+  dtkSwitch.cpp
+  dtkTagCloud.cpp
   dtkTextEditor.cpp
-  dtkTextEditorPreferencesWidget.cpp
-  dtkTextEditorSyntaxHighlighter.cpp
-  dtkTextEditorSyntaxHighlighterCpp.cpp
-  dtkTextEditorSyntaxHighlighterPython.cpp
-  dtkTextEditorSyntaxHighlighterTcl.cpp)
+  dtkViewManager.cpp
+  dtkViewLayout.cpp
+  dtkViewLayoutItem.cpp
+  dtkViewList.cpp)
 
-if(QT_QTWEBKIT_FOUND)
+if(APPLE)
 set(${PROJECT_NAME}_SOURCES
   ${${PROJECT_NAME}_SOURCES}
-  dtkTagCloud.cpp)
-endif(QT_QTWEBKIT_FOUND)
-
-set(${PROJECT_NAME}_FORMS
-  dtkInterpreterPreferencesWidget.ui
-  dtkTextEditorPreferencesWidget.ui)
+    dtkSearchField.mm)
+else(APPLE)
+set(${PROJECT_NAME}_SOURCES
+  ${${PROJECT_NAME}_SOURCES}
+    dtkSearchField.cpp)
+endif(APPLE)
 
 set(${PROJECT_NAME}_RESOURCES dtkGui.qrc)
 
@@ -201,8 +159,28 @@ endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
-  dtkCore
   dtkScript)
+
+if(APPLE)
+target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
+endif(APPLE)
+
+## #################################################################
+## Export header file
+## #################################################################
+
+add_compiler_export_flags()
+
+generate_export_header(${PROJECT_NAME}
+  EXPORT_FILE_NAME "${PROJECT_NAME}Export.h")
+
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}"
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export")
+
+set(${PROJECT_NAME}_HEADERS
+  ${${PROJECT_NAME}_HEADERS}
+ "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export.h")
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

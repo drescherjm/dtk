@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 21:58:48 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Dec 14 10:22:05 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 36
+ * Last-Updated: Tue Apr 24 10:47:09 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 40
  */
 
 /* Commentary: 
@@ -20,10 +20,14 @@
 #ifndef DTKABSTRACTDATAWRITER_H
 #define DTKABSTRACTDATAWRITER_H
 
-#include <dtkCore/dtkAbstractObject.h>
+#include "dtkAbstractObject.h"
 
 class dtkAbstractData;
 class dtkAbstractDataWriterPrivate;
+
+// /////////////////////////////////////////////////////////////////
+// dtkAbstractDataWriter interface
+// /////////////////////////////////////////////////////////////////
 
 class DTKCORE_EXPORT dtkAbstractDataWriter : public dtkAbstractObject
 {
@@ -31,8 +35,10 @@ class DTKCORE_EXPORT dtkAbstractDataWriter : public dtkAbstractObject
 
 public:
              dtkAbstractDataWriter(void);
+             dtkAbstractDataWriter(const dtkAbstractDataWriter& other);
     virtual ~dtkAbstractDataWriter(void);
 
+public:
     virtual QString description(void) const = 0;
     virtual QStringList handled(void) const = 0;
     
@@ -40,7 +46,7 @@ public:
     void  enable(void);
     void disable(void);
     
-    dtkAbstractData *data(void);
+    dtkAbstractData *data(void) const;
     
     virtual void setData(dtkAbstractData *data);
     
@@ -61,7 +67,7 @@ public slots:
     virtual void setProgress(int value);
 
 private:
-    dtkAbstractDataWriterPrivate *d;
+    DTK_DECLARE_PRIVATE(dtkAbstractDataWriter);
 };
 
 #endif

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. sept. 20 15:35:21 2011 (+0200)
+ * Last-Updated: mar. avril 24 10:07:15 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 374
+ *     Update #: 419
  */
 
 /* Commentary:
@@ -21,8 +21,14 @@
 #include "dtkDistributedServerManagerOar.h"
 
 #include <dtkCore/dtkGlobal.h>
-#include <dtkCore/dtkLog.h>
+
 #include <dtkJson/dtkJson.h>
+
+#include <dtkLog/dtkLog.h>
+
+// /////////////////////////////////////////////////////////////////
+// dtkDistributedServerManagerOar implementation
+// /////////////////////////////////////////////////////////////////
 
 QString  dtkDistributedServerManagerOar::submit(QString input)
 {
@@ -56,8 +62,35 @@ QString  dtkDistributedServerManagerOar::submit(QString input)
         oarsub += ",walltime="+json["walltime"].toString();
     }
 
+
     // script
-    oarsub += " "+json["script"].toString();
+    if (json.contains("script")) {
+        oarsub += " "+json["script"].toString();
+    } else if (json.contains("application")) {
+
+        QString scriptName = qApp->applicationDirPath() + "/dtkDistributedServerScript.sh";
+        QFile script(scriptName);
+
+        if (!script.open(QFile::WriteOnly|QFile::Truncate)) {
+            dtkWarn() << "unable to open script for writing";
+        } else {
+            script.setPermissions(QFile::ExeOwner|QFile::ReadOwner|QFile::WriteOwner);
+            QTextStream out(&script);
+            out << "#!/bin/bash\n";
+            out << "mpirun "
+                + qApp->applicationDirPath()
+                + "/"
+                + json["application"].toString();
+        }
+
+        script.close();
+
+        oarsub += " " + scriptName;
+
+    } else {
+        dtkError() << "no script and no application";
+        return QString("ERROR");
+    }
 
     // queue
     if (json.contains("queue")) {
@@ -68,21 +101,21 @@ QString  dtkDistributedServerManagerOar::submit(QString input)
         oarsub += " "+json["options"].toString();
     }
 
-    qDebug() << DTK_PRETTY_FUNCTION << oarsub;
+    dtkDebug() << DTK_PRETTY_FUNCTION << oarsub;
     QProcess stat; stat.start(oarsub);
 
     if (!stat.waitForStarted()) {
-        dtkCritical() << "Unable to launch oarsub command";
+        dtkError() << "Unable to launch oarsub command";
         return QString("error");
     }
 
     if (!stat.waitForFinished()) {
-        dtkCritical() << "Unable to completed oarsub command";
+        dtkError() << "Unable to completed oarsub command";
         return QString("error");
     }
     if (stat.exitCode() > 0) {
         QString error = stat.readAllStandardError();
-        dtkCritical() << "Error running oarsub :" << error;
+        dtkError() << "Error running oarsub :" << error;
         return QString("error");
     } else {
         QString oarsubout = stat.readAll();
@@ -92,9 +125,9 @@ QString  dtkDistributedServerManagerOar::submit(QString input)
         QStringList jobid = rx.capturedTexts();
 
         Q_UNUSED(pos);
-        
-        qDebug() << DTK_PRETTY_FUNCTION << jobid.at(0);
-        return jobid.at(0);
+
+        dtkDebug() << DTK_PRETTY_FUNCTION << jobid.at(1);
+        return jobid.at(1);
     }
 }
 
@@ -105,21 +138,21 @@ QString dtkDistributedServerManagerOar::deljob(QString jobid)
     QProcess stat; stat.start(oardel);
 
     if (!stat.waitForStarted()) {
-        dtkCritical() << "Unable to launch oardel command";
+        dtkError() << "Unable to launch oardel command";
         return QString("ERROR");
     }
 
     if (!stat.waitForFinished()) {
-        dtkCritical() << "Unable to complete oardel command";
+        dtkError() << "Unable to complete oardel command";
         return QString("ERROR");
     }
     if (stat.exitCode() > 0) {
         QString error = stat.readAllStandardError();
-        dtkCritical() << "Error running oardel :" << error;
+        dtkError() << "Error running oardel :" << error;
         return QString("ERROR");
     } else {
         QString msg = stat.readAll();
-        qDebug() << DTK_PRETTY_FUNCTION << msg;
+        dtkDebug() << DTK_PRETTY_FUNCTION << msg;
         return QString("OK");
     }
 }
@@ -136,19 +169,20 @@ QByteArray dtkDistributedServerManagerOar::status(void)
     stat.start("oarstat -fJ");
 
     if (!stat.waitForStarted()) {
-        dtkCritical() << "Unable to launch oarstat command";
+        dtkError() << "Unable to launch oarstat command";
         return QByteArray();
     }
 
     if (!stat.waitForFinished()) {
-        dtkCritical() << "Unable to completed oarstat command";
+        dtkError() << "Unable to completed oarstat command";
         return QByteArray();
     }
 
     data = stat.readAll();
     json = dtkJson::parse(data,success).toMap();
-    if(!success)
-        dtkDebug() << "Error retrieving JSON output out of oar  "  ;
+    if (!success) {
+        dtkDebug() << "Error retrieving JSON output out of oar";
+    }
     stat.close();
 
     QVariantList jobs;
@@ -196,7 +230,7 @@ QByteArray dtkDistributedServerManagerOar::status(void)
             walltime = resources_list.at(3);
         } else {
             walltime = job["walltime"].toString(); //TODO: convert it to HH:MM:SS
-            qDebug() << DTK_PRETTY_FUNCTION << "can't find walltime from wanted resources! " << walltime;
+            dtkDebug() << DTK_PRETTY_FUNCTION << "can't find walltime from wanted resources! " << walltime;
         }
 
         QVariantMap jresources;
@@ -221,19 +255,20 @@ QByteArray dtkDistributedServerManagerOar::status(void)
     stat.start("oarnodes -J --sql \"host!=''\"");
 
     if (!stat.waitForStarted()) {
-        dtkCritical() << "Unable to launch oarnodes command";
+        dtkError() << "Unable to launch oarnodes command";
         return QByteArray();
     }
 
     if (!stat.waitForFinished()) {
-        dtkCritical() << "Unable to completed oarnodes command";
+        dtkError() << "Unable to completed oarnodes command";
         return QByteArray();
     }
 
     data = stat.readAll();
     json = dtkJson::parse(data,success).toMap();
-    if(!success)
-        dtkDebug() << "Error retrieving JSON output out of oar  "  ;
+    if (!success) {
+        dtkDebug() << "Error retrieving JSON output out of oar";
+    }
     stat.close();
 
     QVariantMap nodes;
@@ -244,9 +279,9 @@ QByteArray dtkDistributedServerManagerOar::status(void)
             QVariantMap node = nodes[jcore["host"].toString()].toMap();
             QVariantList cores = node["cores"].toList();
 
-            core.insert("id",jcore["core"].toString());
+            core.insert("id",jcore["resource_id"].toString());
             if (!activecores[core["id"].toString()].isEmpty()) {
-                core.insert("jobs",activecores[core["id"].toString()]);
+                core.insert("job",activecores[core["id"].toString()]);
             }
             cores.append(core);
             node["cores"] = cores;
@@ -265,10 +300,26 @@ QByteArray dtkDistributedServerManagerOar::status(void)
                 prop.insert("cpu_arch","x86_64");
             }
             node.insert("name",jcore["host"]);
+            QString state;
+            if (jcore["state"].toString() == "Absent")
+                if (jcore["available_upto"].toLongLong() > 0)
+                    state = "standby";
+                else
+                    state = "absent";
+            else if (jcore["state"].toString() == "Dead")
+                state = "down";
+            else if (jcore["state"].toString() == "Suspected")
+                state = "absent";
+            else if (jcore["state"].toString() == "Alive")
+                if (jcore["jobs"].toString().isEmpty())
+                    state = "free";
+                else
+                    state = "busy";
+            node.insert("state", state);
             node.insert("corespercpu",jcore["cpucore"]); // temporary
-            core.insert("id",jcore["core"]);
+            core.insert("id",jcore["resource_id"]);
             if (!activecores[core["id"].toString()].isEmpty()) {
-                core.insert("jobs",activecores[core["id"].toString()]);
+                core.insert("job",activecores[core["id"].toString()]);
             }
             cores << core;
             props << prop;

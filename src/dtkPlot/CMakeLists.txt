@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Nov 22 10:20:27 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Sep  8 14:39:45 2011 (+0200)
+## Last-Updated: Fri Apr 27 21:05:10 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 77
+##     Update #: 80
 ######################################################################
 ## 
 ### Commentary: 
@@ -31,7 +31,6 @@ project(dtkPlot)
 
 set(${PROJECT_NAME}_HEADERS
   dtkPlotCurve.h
-  dtkPlotExport.h
   dtkPlotRenderer.h
   dtkPlotView.h)
 
@@ -81,6 +80,23 @@ endif(BUILD_SHARED_LIBS)
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   ${QWT_LIBRARY})
+
+## #################################################################
+## Export header file
+## #################################################################
+
+add_compiler_export_flags()
+
+generate_export_header(${PROJECT_NAME}
+  EXPORT_FILE_NAME "${PROJECT_NAME}Export.h")
+
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}"
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export")
+
+set(${PROJECT_NAME}_HEADERS
+  ${${PROJECT_NAME}_HEADERS}
+ "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export.h")
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

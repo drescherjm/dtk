@@ -1,12 +1,12 @@
 /* dtkComposer.cpp --- 
  * 
- * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Fri Sep  4 10:14:39 2009 (+0200)
+ * Author: tkloczko
+ * Copyright (C) 2011 - Thibaud Kloczko, Inria.
+ * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Oct 19 02:21:59 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 521
+ * Last-Updated: mer. mai 23 14:29:30 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 336
  */
 
 /* Commentary: 
@@ -17,18 +17,25 @@
  * 
  */
 
+#include <dtkConfig.h>
+
 #include "dtkComposer.h"
 #include "dtkComposer_p.h"
-#include "dtkComposerNode.h"
-#include "dtkComposerNodeFactory.h"
+#include "dtkComposerCompass.h"
+#include "dtkComposerEvaluator.h"
+#include "dtkComposerFactory.h"
+#include "dtkComposerGraph.h"
+#include "dtkComposerMachine.h"
+#include "dtkComposerNodeRemote.h"
 #include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
+#include "dtkComposerSceneNodeComposite.h"
+#include "dtkComposerSceneNodeControl.h"
+#include "dtkComposerStack.h"
 #include "dtkComposerView.h"
 #include "dtkComposerWriter.h"
 
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkAbstractProcess.h>
-#include <dtkCore/dtkAbstractView.h>
+#include <dtkCore/dtkGlobal.h>
 
 #include <QtCore>
 #include <QtGui>
@@ -79,6 +86,8 @@ void dtkComposerPrivate::download(const QUrl& url)
 
 void dtkComposerPrivate::onRequestFinished(int id, bool error)
 {
+    DTK_UNUSED(error);
+
     if(id == this->dwnl_id)
         this->dwnl_ok = 1;
 }
@@ -89,84 +98,49 @@ void dtkComposerPrivate::onRequestFinished(int id, bool error)
 
 dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPrivate)
 {
+    d->machine = new dtkComposerMachine;
+    d->factory = new dtkComposerFactory;
+    d->graph = new dtkComposerGraph;
+    d->stack = new dtkComposerStack;
     d->scene = new dtkComposerScene;
+    d->evaluator = new dtkComposerEvaluator;
+
+    d->scene->setFactory(d->factory);
+    d->scene->setMachine(d->machine);
+    d->scene->setStack(d->stack);
+    d->scene->setGraph(d->graph);
+
     d->view = new dtkComposerView(this);
     d->view->setScene(d->scene);
 
-    d->fileName = "untitled";
+    d->compass = new dtkComposerCompass;
+    d->compass->setScene(d->scene);
+    d->compass->setView(d->view);
 
-    connect(d->scene, SIGNAL(dataSelected(dtkAbstractData *)), this, SIGNAL(dataSelected(dtkAbstractData *)));
-    connect(d->scene, SIGNAL(processSelected(dtkAbstractProcess *)), this, SIGNAL(processSelected(dtkAbstractProcess *)));
-    connect(d->scene, SIGNAL(viewSelected(dtkAbstractView *)), this, SIGNAL(viewSelected(dtkAbstractView *)));
+    d->evaluator->setGraph(d->graph);
 
-    connect(d->scene, SIGNAL(nodeAdded(dtkComposerNode *)), this, SIGNAL(nodeAdded(dtkComposerNode *)));
-    connect(d->scene, SIGNAL(nodeRemoved(dtkComposerNode *)), this, SIGNAL(nodeRemoved(dtkComposerNode *)));
-    connect(d->scene, SIGNAL(nodeSelected(dtkComposerNode *)), this, SIGNAL(nodeSelected(dtkComposerNode *)));
-    connect(d->scene, SIGNAL(selectionCleared()), this, SIGNAL(selectionCleared()));
-    connect(d->scene, SIGNAL(pathChanged(dtkComposerNode *)), this, SIGNAL(pathChanged(dtkComposerNode *)));
-
-    connect(d->scene, SIGNAL(evaluationStarted()), this, SIGNAL(evaluationStarted()));
-    connect(d->scene, SIGNAL(evaluationStopped()), this, SIGNAL(evaluationStopped()));
-
-    connect(d->scene, SIGNAL(compositionChanged()), this, SIGNAL(compositionChanged()));
-
-    connect(d->scene, SIGNAL(centerOn(const QPointF&)), d->view, SLOT(onCenterOn(const QPointF&)));
-    connect(d->scene, SIGNAL(fitInView(const QRectF&)), d->view, SLOT(onFitInView(const QRectF&)));
-
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(d->view);
 
-    emit titleChanged(d->fileName);
+    connect(d->scene, SIGNAL(modified(bool)), this, SIGNAL(modified(bool)));
 }
 
 dtkComposer::~dtkComposer(void)
 {
+    delete d->machine;
+    delete d->factory;
+    delete d->graph;
+    delete d->stack;
+    delete d->evaluator;
     delete d;
     
     d = NULL;
 }
 
-void dtkComposer::setBackgroundColor(const QColor &color)
-{
-    d->view->setBackgroundBrush(color);
-}
-
-void dtkComposer::setFactory(dtkComposerNodeFactory *factory)
-{
-    d->scene->setFactory(factory);
-}
-
-void dtkComposer::setFileName(const QString& fileName)
-{
-    d->fileName = fileName;
-}
-
-bool dtkComposer::isModified(void)
-{
-    return d->scene->isModified();
-}
-
-QString dtkComposer::fileName(void)
-{
-    return d->fileName;
-}
-
-dtkComposerScene *dtkComposer::scene(void)
-{
-    return d->scene;
-}
-
-dtkComposerView *dtkComposer::view(void)
-{
-    return d->view;
-}
-
 bool dtkComposer::open(const QUrl& url)
 {
-    QString path;
-
     d->download(url);
 
     bool status = false;
@@ -174,120 +148,145 @@ bool dtkComposer::open(const QUrl& url)
     if(!d->tempName.isEmpty())
         status = this->open(d->tempName);
 
-    qDebug() << d->tempName;
-
-    // if(!d->tempName.isEmpty())
-    //     QFile::remove(d->tempName);
-
     return status;
 }
 
-bool dtkComposer::open(QString fileName)
+bool dtkComposer::open(QString file)
 {
-    if (!fileName.isEmpty()) {
-        
-        dtkComposerReader reader(d->scene);
-        reader.read(fileName);
+    if (!file.isEmpty()) {
 
-        d->scene->setModified(false);
+        dtkComposerReader reader;
+        reader.setFactory(d->factory);
+        reader.setScene(d->scene);
+        reader.setGraph(d->graph);
+        reader.read(file);
 
-        d->view->update();
-
-        QFileInfo info(fileName);
-
-        emit titleChanged(info.baseName());
-
-        d->fileName = fileName;
+        d->fileName = file;
     }
 
     return true;
 }
 
-bool dtkComposer::save(QString fileName)
+bool dtkComposer::save(QString file, dtkComposerWriter::Type type)
 {
     QString fName = d->fileName;
 
-    if(!fileName.isEmpty())
-        fName = fileName;
+    if(!file.isEmpty())
+        fName = file;
 
-    dtkComposerWriter writer(d->scene);
-    writer.write(fName);
+    dtkComposerWriter writer;
+    writer.setScene(d->scene);
+    writer.write(fName, type);
 
     const QFileInfo fi(fName);
     d->fileName = fi.absoluteFilePath();
 
-    d->scene->setModified(false);
-
-    emit titleChanged(fi.fileName());
-
     return true;
 }
 
-bool dtkComposer::insert(QString fileName)
+bool dtkComposer::insert(QString file)
 {
-    if (!fileName.isEmpty()) {
-        
-        dtkComposerReader reader(d->scene);
-        reader.read(fileName, true);
+    if (!file.isEmpty()) {
 
-        d->scene->setModified(true);
-
-        d->view->update();
+        dtkComposerReader reader;
+        reader.setFactory(d->factory);
+        reader.setScene(d->scene);
+        reader.setGraph(d->graph);
+        reader.read(file, true);
     }
 
     return true;
 }
 
-void dtkComposer::group(QList<dtkComposerNode *> nodes)
+void dtkComposer::updateRemotes(dtkComposerSceneNodeComposite *composite)
 {
-    d->scene->createGroup(nodes);
+    dtkComposerWriter writer;
+    writer.setScene(d->scene);
+
+    foreach(dtkComposerSceneNode *node, composite->nodes()) {
+        if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(node->wrapee()))
+            remote->setComposition(writer.toXML(dynamic_cast<dtkComposerSceneNodeComposite *>(node)));
+        else if (dtkComposerSceneNodeComposite *sub = dynamic_cast<dtkComposerSceneNodeComposite *>(node))
+            this->updateRemotes(sub);
+        else if (dtkComposerSceneNodeControl *ctrl = dynamic_cast<dtkComposerSceneNodeControl *>(node))
+            foreach(dtkComposerSceneNodeComposite *block, ctrl->blocks())
+                this->updateRemotes(block);
+    }
 }
 
-void dtkComposer::ungroup(dtkComposerNode *node)
+
+void dtkComposer::run(void)
 {
-    d->scene->explodeGroup(node);
+    this->updateRemotes(d->scene->root());
+
+    QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::run, false);
+
+    d->graph->update();
 }
 
-void dtkComposer::onDataSelected(dtkAbstractData *data)
+void dtkComposer::step(void)
 {
-    d->scene->clearSelection();
+    d->evaluator->step();
+    d->evaluator->logStack();
 
-    // if(dtkComposerNode *node = data->node())
-    //     node->setSelected(true);
+    d->graph->update();
 }
 
-void dtkComposer::onProcessSelected(dtkAbstractProcess *process)
+void dtkComposer::cont(void)
 {
-    d->scene->clearSelection();
+    QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::cont, false);
 
-    // if(dtkComposerNode *node = process->node())
-    //     node->setSelected(true);
+    d->graph->update();
 }
 
-void dtkComposer::onViewSelected(dtkAbstractView *view)
+void dtkComposer::next(void)
 {
-    d->scene->clearSelection();
+    QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::next, false);
 
-    // if(dtkComposerNode *node = view->node())
-    //     node->setSelected(true);
+    d->graph->update();
 }
 
-void dtkComposer::startEvaluation(void)
+void dtkComposer::stop(void)
 {
-    d->scene->startEvaluation();
+    d->evaluator->stop();
 }
 
-void dtkComposer::stopEvaluation(void)
+dtkComposerEvaluator *dtkComposer::evaluator(void)
 {
-    d->scene->stopEvaluation();
+    return d->evaluator;
 }
 
-void dtkComposer::copy(void)
+dtkComposerMachine *dtkComposer::machine(void)
 {
-    d->scene->copy();
+    return d->machine;
 }
 
-void dtkComposer::paste(void)
+dtkComposerFactory *dtkComposer::factory(void)
 {
-    d->scene->paste();
+    return d->factory;
+}
+
+dtkComposerGraph *dtkComposer::graph(void)
+{
+    return d->graph;
+}
+
+dtkComposerScene *dtkComposer::scene(void)
+{
+    return d->scene;
+}
+
+dtkComposerStack *dtkComposer::stack(void)
+{
+    return d->stack;
+}
+
+dtkComposerView *dtkComposer::view(void)
+{
+    return d->view;
+}
+
+dtkComposerCompass *dtkComposer::compass(void)
+{
+    return d->compass;
 }

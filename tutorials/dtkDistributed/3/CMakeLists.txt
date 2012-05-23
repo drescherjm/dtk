@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Mon Sep 12 09:57:47 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Sep 12 09:57:58 2011 (+0200)
-##           By: Julien Wintz
-##     Update #: 3
+## Last-Updated: Wed Apr  4 10:58:05 2012 (+0200)
+##           By: tkloczko
+##     Update #: 4
 ######################################################################
 ## 
 ### Commentary: 
@@ -38,4 +38,5 @@ add_executable(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
   dtkCore
-  dtkDistributed)
+  dtkDistributed
+  dtkLog)

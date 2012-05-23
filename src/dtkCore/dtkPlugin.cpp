@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Oct 31 14:14:48 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep  5 13:16:34 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 80
+ * Last-Updated: Tue Apr 24 15:02:37 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 90
  */
 
 /* Commentary: 
@@ -17,22 +17,19 @@
  * 
  */
 
-#include <dtkCore/dtkPlugin.h>
+#include "dtkPlugin.h"
+#include "dtkPlugin_p.h"
 
 // /////////////////////////////////////////////////////////////////
-// dtkPluginPrivate
+// dtkPlugin implementation
 // /////////////////////////////////////////////////////////////////
 
-class dtkPluginPrivate
+dtkPlugin::dtkPlugin(QObject *parent) : dtkAbstractObject(*new dtkPluginPrivate(this), parent)
 {
-public:
-};
+    
+}
 
-// /////////////////////////////////////////////////////////////////
-// dtkPlugin
-// /////////////////////////////////////////////////////////////////
-
-dtkPlugin::dtkPlugin(QObject *parent) : dtkAbstractObject(), d(new dtkPluginPrivate)
+dtkPlugin::dtkPlugin(const dtkPlugin& other) : dtkAbstractObject(*new dtkPluginPrivate(*other.d_func()), other)
 {
 
 }

@@ -1,12 +1,12 @@
 /* dtkComposer.h --- 
  * 
- * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Fri Sep  4 10:12:32 2009 (+0200)
+ * Author: tkloczko
+ * Copyright (C) 2011 - Thibaud Kloczko, Inria.
+ * Created: Mon Jan 30 10:34:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Oct 19 02:31:45 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 95
+ * Last-Updated: jeu. avril 26 14:28:16 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 62
  */
 
 /* Commentary: 
@@ -21,20 +21,21 @@
 #define DTKCOMPOSER_H
 
 #include "dtkComposerExport.h"
+#include "dtkComposerWriter.h"
 
-#include <QtCore/QUrl>
+#include <QtCore>
+#include <QtGui>
 
-#include <QtGui/QWidget>
-
-class dtkAbstractData;
-class dtkAbstractProcess;
-class dtkAbstractView;
-
-class dtkComposerNode;
-class dtkComposerNodeFactory;
+class dtkComposerEvaluator;
+class dtkComposerFactory;
+class dtkComposerGraph;
+class dtkComposerMachine;
 class dtkComposerPrivate;
 class dtkComposerScene;
+class dtkComposerSceneNodeComposite;
+class dtkComposerStack;
 class dtkComposerView;
+class dtkComposerCompass;
 
 class DTKCOMPOSER_EXPORT dtkComposer : public QWidget
 {
@@ -44,61 +45,34 @@ public:
              dtkComposer(QWidget *parent = 0);
     virtual ~dtkComposer(void);
 
-    void setBackgroundColor(const QColor& color);
-    void setFactory(dtkComposerNodeFactory *factory);
-    void setFileName(const QString& fileName);
-
-    bool isModified(void);
-
-    QString fileName(void);
-
 public slots:
     virtual bool   open(const QUrl& url);
-    virtual bool   open(QString fileName);
-    virtual bool   save(QString fileName = QString());
-    virtual bool insert(QString fileName);
+    virtual bool   open(QString file);
+    virtual bool   save(QString file = QString(), dtkComposerWriter::Type type = dtkComposerWriter::Ascii);
+    virtual bool insert(QString file);
+
+public slots:
+    void run(void);
+    void step(void);
+    void cont(void);
+    void next(void);
+    void stop(void);
 
 signals:
-    void compositionChanged(void);
-    void titleChanged(QString title);
+    void modified(bool);
 
-signals:
-    void dataSelected(dtkAbstractData *data);
-    void processSelected(dtkAbstractProcess *process);
-    void viewSelected(dtkAbstractView *view);
-    
-    void nodeAdded(dtkComposerNode *node);
-    void nodeRemoved(dtkComposerNode *node);
-    void nodeSelected(dtkComposerNode *node);
-   
-    void selectionCleared(void);
+public:
+    dtkComposerEvaluator *evaluator(void);
+    dtkComposerCompass *compass(void);
+    dtkComposerFactory *factory(void);
+    dtkComposerMachine *machine(void);
+    dtkComposerGraph *graph(void);
+    dtkComposerScene *scene(void);
+    dtkComposerStack *stack(void);
+    dtkComposerView *view(void);
 
-    void pathChanged(dtkComposerNode *);
-
-signals:
-    void evaluationStarted(void);
-    void evaluationStopped(void);
-
-public slots:
-    void   group(QList<dtkComposerNode *> nodes);
-    void ungroup(dtkComposerNode *node);
-
-public slots:
-   void onDataSelected(dtkAbstractData *data);
-   void onProcessSelected(dtkAbstractProcess *process);
-   void onViewSelected(dtkAbstractView *view);
-
-public slots:
-   void startEvaluation(void);
-   void stopEvaluation(void);
-
-public slots:
-   void copy(void);
-   void paste(void);
-
-protected:
-   dtkComposerScene *scene(void);
-   dtkComposerView *view(void);
+public:
+    void updateRemotes(dtkComposerSceneNodeComposite * composite);
 
 private:
     dtkComposerPrivate *d;

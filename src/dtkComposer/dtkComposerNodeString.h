@@ -1,12 +1,12 @@
 /* dtkComposerNodeString.h --- 
  * 
  * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Sun Feb 27 15:08:06 2011 (+0100)
+ * Copyright (C) 2008-2011 - Julien Wintz, Inria.
+ * Created: Mon Feb 27 12:50:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 18 14:41:54 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 13
+ * Last-Updated: Fri Mar 16 14:03:08 2012 (+0100)
+ *           By: tkloczko
+ *     Update #: 7
  */
 
 /* Commentary: 
@@ -21,38 +21,40 @@
 #define DTKCOMPOSERNODESTRING_H
 
 #include "dtkComposerExport.h"
-#include "dtkComposerNode.h"
+#include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeStringPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeString : public dtkComposerNode
+class DTKCOMPOSER_EXPORT dtkComposerNodeString : public dtkComposerNodeLeaf
 {
-    Q_OBJECT
-
 public:
-     dtkComposerNodeString(dtkComposerNode *parent = 0);
+     dtkComposerNodeString(void);
     ~dtkComposerNodeString(void);
 
-    QVariant value(dtkComposerNodeProperty *property);
+public:
+    void run(void);
 
+public:
+    inline QString type(void) {
+        return "string";
+    }
+
+    inline QString titleHint(void) {
+        return "String";
+    }
+
+    inline QString inputLabelHint(int) {
+        return "value";
+    }
+
+    inline QString outputLabelHint(int) {
+        return "value";
+    }
 public:
     QString value(void);
-    void setValue(QString value);
 
 public:
-    void expand(void);
-    void collapse(void);
-
-public slots:
-    void touch(void);
-
-protected slots:
-    void onCollapseFinised(void);
-
-protected:
-    void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    void  run(void);
-    void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
+    void setValue(QString value);
 
 private:
     dtkComposerNodeStringPrivate *d;

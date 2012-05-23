@@ -1,406 +1,369 @@
 /* dtkCreatorMainWindow.cpp ---
- * 
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Mar 14 15:08:29 2011 (+0100)
+ * Last-Updated: Fri May  4 16:13:25 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 494
+ *     Update #: 1671
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
-#include "dtkCreatorController.h"
 #include "dtkCreatorMainWindow.h"
-#include "dtkCreatorPluginBrowser.h"
-#include "dtkCreatorScriptBrowser.h"
-#include "dtkCreatorViewer.h"
-#include "dtkCreatorWidgetFactory.h"
+#include "dtkCreatorMainWindow_p.h"
 
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkAbstractDataFactory.h>
-#include <dtkCore/dtkAbstractProcess.h>
-#include <dtkCore/dtkAbstractProcessFactory.h>
-#include <dtkCore/dtkAbstractView.h>
-#include <dtkCore/dtkAbstractViewFactory.h>
-#include <dtkCore/dtkLog.h>
-
-#include <dtkScript/dtkScriptInterpreter.h>
-#include <dtkScript/dtkScriptInterpreterPool.h>
-#include <dtkScript/dtkScriptInterpreterPython.h>
-#include <dtkScript/dtkScriptInterpreterTcl.h>
-
-#include <dtkGui/dtkInspector.h>
-#include <dtkGui/dtkInterpreter.h>
-#include <dtkGui/dtkInterpreterPreferencesWidget.h>
-#include <dtkGui/dtkPreferencesWidget.h>
-#include <dtkGui/dtkSettingsEditorPreferencesWidget.h>
-#include <dtkGui/dtkSpacer.h>
-#include <dtkGui/dtkSplitter.h>
-#include <dtkGui/dtkTextEditor.h>
-#include <dtkGui/dtkTextEditorPreferencesWidget.h>
-#include <dtkGui/dtkTextEditorSyntaxHighlighterCpp.h>
-#include <dtkGui/dtkTextEditorSyntaxHighlighterPython.h>
-#include <dtkGui/dtkTextEditorSyntaxHighlighterTcl.h>
+#include <dtkDistributed/dtkDistributor.h>
 
 #include <dtkComposer/dtkComposer.h>
+#include <dtkComposer/dtkComposerCompass.h>
+#include <dtkComposer/dtkComposerEvaluator.h>
+#include <dtkComposer/dtkComposerFactoryView.h>
+#include <dtkComposer/dtkComposerGraph.h>
+#include <dtkComposer/dtkComposerGraphView.h>
+#include <dtkComposer/dtkComposerScene.h>
+#include <dtkComposer/dtkComposerSceneModel.h>
+#include <dtkComposer/dtkComposerSceneNodeEditor.h>
+#include <dtkComposer/dtkComposerSceneView.h>
+#include <dtkComposer/dtkComposerStack.h>
+#include <dtkComposer/dtkComposerStackView.h>
+#include <dtkComposer/dtkComposerView.h>
 
-// /////////////////////////////////////////////////////////////////
-// log message handler
-// /////////////////////////////////////////////////////////////////
+#include <dtkGui/dtkRecentFilesMenu.h>
+#include <dtkGui/dtkSpacer.h>
+#include <dtkGui/dtkSplitter.h>
 
-QWidget *log_output;
+#include <dtkCore/dtkGlobal.h>
+#include <dtkCore/dtkPluginManager.h>
 
-void dtkCreatorRedirectLogHandler(dtkLog::Level level, const QString& msg)
-{
-    QCoreApplication::postEvent(log_output, new dtkLogEvent(level, msg));
-}
+#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLogView.h>
+
+#include <dtkNotification/dtkNotification.h>
+#include <dtkNotification/dtkNotificationDisplay.h>
+
+#include <QtCore>
+#include <QtGui>
 
 // /////////////////////////////////////////////////////////////////
 // dtkCreatorMainWindowPrivate
 // /////////////////////////////////////////////////////////////////
 
-class dtkCreatorMainWindowPrivate
-{
-public:
-    bool maySave(void);
-
-public:
-    QMenu *fileMenu;
-    QAction *fileOpenAction;
-    QAction *fileSaveAction;
-    QAction *fileSaveAsAction;
-    QAction *fileQuitAction;
-    QAction *preferencesAction;
-
-    QAction *toolEditorAction;
-    QAction *toolComposerAction;
-    QAction *toolViewerAction;
-    QAction *toolRunAction;
-    QAction *toolStopAction;
-    QAction *toolInspectorAction;
-
-    QToolBar *toolBar;
-
-    QStackedWidget *stack;
-
-    dtkInspector *inspector;
-    dtkPreferencesWidget *preferences;
-    dtkCreatorScriptBrowser *script_browser;
-    dtkCreatorPluginBrowser *plugin_browser;
-    dtkTextEditor *editor;
-    dtkTextEditorSyntaxHighlighter *highlighter;
-    dtkComposer *composer;
-    dtkCreatorViewer *viewer;
-    dtkInterpreter *interpreter;
-    dtkSettingsEditorPreferencesWidget *settings_preferences;
-
-public:
-    dtkCreatorMainWindow *q;
-};
-
 bool dtkCreatorMainWindowPrivate::maySave(void)
 {
-    if (editor->isModified()) {
-        QMessageBox::StandardButton ret = QMessageBox::warning(q,
-            q->tr("dtkCreator"),
-            q->tr("The document has been modified.\n"
-                  "Do you want to save your changes?"),
-            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel
-        );
+    if(this->closing)
+        return true;
 
-         if (ret == QMessageBox::Save)
-             return q->fileSave();
-         else if (ret == QMessageBox::Cancel)
-             return false;
-     }
-     return true;
+    if (q->isWindowModified()) {
+        QMessageBox::StandardButton ret = QMessageBox::warning(q,
+            q->tr("Creator"),
+            q->tr("The composition has been modified.\n Do you want to save your changes?"),
+            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
+            QMessageBox::Save);
+
+        if (ret == QMessageBox::Save)
+            return q->compositionSave();
+        else
+            if(ret == QMessageBox::Cancel)
+                return false;
+    }
+
+    return true;
 }
 
-#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
-extern "C" int init_core(void);                  // -- Initialization core layer python wrapped functions
-extern "C" int init_vr(void);                    // -- Initialization vr layer python wrapped functions
-extern "C" int init_creator(void);               // -- Initialization creator layer python wrapped functions
-#endif
-
-#if defined(HAVE_SWIG) && defined(HAVE_TCL)
-extern "C" int Core_Init(Tcl_Interp *interp);    // -- Initialization core layer tcl wrapped functions
-extern "C" int Vr_Init(Tcl_Interp *interp);      // -- Initialization vr layer tcl wrapped functions
-extern "C" int Creator_Init(Tcl_Interp *interp); // -- Initialization creator layer tcl wrapped functions
-#endif
-
-dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent)
+void dtkCreatorMainWindowPrivate::setCurrentFile(const QString &file)
 {
-    d = new dtkCreatorMainWindowPrivate;
+     this->current_composition = file;
 
-    d->fileOpenAction = new QAction("Open", this);
-    d->fileOpenAction->setShortcut(Qt::ControlModifier + Qt::Key_O);
-    connect(d->fileOpenAction, SIGNAL(triggered()), this, SLOT(fileOpen()));
+     q->setWindowModified(false);
 
-    d->fileSaveAction = new QAction("Save", this);
-    d->fileSaveAction->setShortcut(Qt::ControlModifier + Qt::Key_S);
-    connect(d->fileSaveAction, SIGNAL(triggered()), this, SLOT(fileSave()));
+     QString shownName = this->current_composition;
+     if (shownName.isEmpty())
+         shownName = "untitled.dtk";
 
-    d->fileSaveAsAction = new QAction("Save as...", this);
-    d->fileSaveAsAction->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_S);
-    connect(d->fileSaveAsAction, SIGNAL(triggered()), this, SLOT(fileSaveAs()));
+     q->setWindowFilePath(shownName);
+}
 
-    d->fileQuitAction = new QAction("Quit", this);
-    d->fileQuitAction->setShortcut(Qt::ControlModifier + Qt::Key_Q);
-    connect(d->fileQuitAction, SIGNAL(triggered()), this, SLOT(close()));
+void dtkCreatorMainWindowPrivate::setModified(bool modified)
+{
+    q->setWindowModified(modified);
+}
 
-    d->preferencesAction = new QAction("Preferences", this);
-    d->preferencesAction->setShortcut(Qt::ControlModifier + Qt::Key_Comma);
-    connect(d->preferencesAction, SIGNAL(triggered()), this, SLOT(showPreferences()));
+// /////////////////////////////////////////////////////////////////
+// dtkCreatorMainWindow
+// /////////////////////////////////////////////////////////////////
 
-    d->fileMenu = this->menuBar()->addMenu("File");
-    d->fileMenu->addAction(d->fileOpenAction);
-    d->fileMenu->addAction(d->fileSaveAction);
-    d->fileMenu->addAction(d->fileSaveAsAction);
-    d->fileMenu->addAction(d->preferencesAction);
-
-    d->toolEditorAction = new QAction("Editor", this);
-#if defined(Q_WS_MAC)
-    d->toolEditorAction->setShortcut(Qt::MetaModifier+Qt::Key_1);
-#else
-    d->toolEditorAction->setShortcut(Qt::ControlModifier+Qt::Key_1);
-#endif
-    d->toolEditorAction->setToolTip("Switch to the textual editor (Ctrl+1)");
-    d->toolEditorAction->setIcon(QIcon(":dtkGui/pixmaps/dtk-widget.png"));
-    connect(d->toolEditorAction, SIGNAL(triggered()), this, SLOT(switchToEditor()));
-    d->toolEditorAction->setEnabled(false);
-
-    d->toolComposerAction = new QAction("Composer", this);
-#if defined(Q_WS_MAC)
-    d->toolComposerAction->setShortcut(Qt::MetaModifier+Qt::Key_2);
-#else
-    d->toolComposerAction->setShortcut(Qt::ControlModifier+Qt::Key_2);
-#endif
-    d->toolComposerAction->setToolTip("Switch to the visual editor (Ctrl+2)");
-    d->toolComposerAction->setIcon(QIcon(":dtkGui/pixmaps/dtk-widget.png"));
-    connect(d->toolComposerAction, SIGNAL(triggered()), this, SLOT(switchToComposer()));
-    d->toolComposerAction->setEnabled(true);
-
-    d->toolViewerAction = new QAction("Viewer", this);
-#if defined(Q_WS_MAC)
-    d->toolViewerAction->setShortcut(Qt::MetaModifier+Qt::Key_3);
-#else
-    d->toolViewerAction->setShortcut(Qt::ControlModifier+Qt::Key_3);
-#endif
-    d->toolViewerAction->setToolTip("Switch to the viewer (Ctrl+3)");
-    d->toolViewerAction->setIcon(QIcon(":dtkGui/pixmaps/dtk-widget.png"));
-    connect(d->toolViewerAction, SIGNAL(triggered()), this, SLOT(switchToViewer()));
-    d->toolViewerAction->setEnabled(true);
-
-    d->toolRunAction = new QAction("Run", this);
-    d->toolRunAction->setShortcut(Qt::ControlModifier+Qt::Key_R);
-    d->toolRunAction->setToolTip("Runs the current composition (Ctrl+R)");
-    d->toolRunAction->setIcon(QIcon(":dtkGui/pixmaps/dtk-composer-run.png"));
-    connect(d->toolRunAction, SIGNAL(triggered()), this, SLOT(run()));
-    
-    d->toolStopAction = new QAction("Stop", this);
-    d->toolStopAction->setShortcut(Qt::ControlModifier+Qt::Key_Period);
-    d->toolStopAction->setToolTip("Stops the current composition (Ctrl+.)");
-    d->toolStopAction->setIcon(QIcon(":dtkGui/pixmaps/dtk-composer-stop.png"));
-    d->toolStopAction->setEnabled(false);
-    connect(d->toolStopAction, SIGNAL(triggered()), this, SLOT(stop()));
-
-    d->toolInspectorAction = new QAction("Inspector", this);
-    d->toolInspectorAction->setShortcut(Qt::ControlModifier+Qt::Key_I);
-    d->toolInspectorAction->setToolTip("Show/hide inspector");
-    d->toolInspectorAction->setIcon(QIcon(":dtkGui/pixmaps/dtk-inspector.png"));
-    connect(d->toolInspectorAction, SIGNAL(triggered()), this, SLOT(showInspector()));
-
-    d->toolBar = addToolBar("Editors");
-    d->toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-    d->toolBar->setIconSize(QSize(32, 32));
-    d->toolBar->addAction(d->toolEditorAction);
-    d->toolBar->addAction(d->toolComposerAction);
-    d->toolBar->addAction(d->toolViewerAction);
-    d->toolBar->addWidget(new dtkSpacer(d->toolBar));
-    d->toolBar->addAction(d->toolRunAction);
-    d->toolBar->addAction(d->toolStopAction);
-    d->toolBar->addWidget(new dtkSpacer(d->toolBar));
-    d->toolBar->addAction(d->toolInspectorAction);
-
+dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent), d(new dtkCreatorMainWindowPrivate)
+{
     d->q = this;
+    d->wl = 0;
+    d->wr = 0;
 
-    d->stack = new QStackedWidget(this);
-
-    d->editor = new dtkTextEditor(d->stack);
-    d->editor->setFrameStyle(QFrame::NoFrame);
-    d->editor->setAttribute(Qt::WA_MacShowFocusRect, false);
-
-    d->highlighter = new dtkTextEditorSyntaxHighlighterCpp(d->editor);
-    Q_UNUSED(d->highlighter);
-
-    connect(d->editor, SIGNAL(titleChanged(QString)), this, SLOT(onTitleChanged(QString)));
-    connect(d->editor, SIGNAL(documentChanged()), this, SLOT(onDocumentChanged()));
-
-    d->stack->addWidget(d->editor);
-
-    d->composer = new dtkComposer(d->stack);
-    connect( d->toolRunAction, SIGNAL(triggered()),      d->composer, SLOT(startEvaluation()) );
-    connect( d->composer,      SIGNAL(evaluationStopped()), this, SLOT(stop()) );
-
-    d->stack->addWidget(d->composer);
-
-    d->viewer = new dtkCreatorViewer(this);
-    d->viewer->setAttribute(Qt::WA_MacShowFocusRect, false);
-
-    d->stack->addWidget(d->viewer);
-
-    d->interpreter = new dtkInterpreter(this);
-    d->interpreter->setFrameStyle(QFrame::NoFrame);
-    d->interpreter->setAttribute(Qt::WA_MacShowFocusRect, false);
-    d->interpreter->setMaximumHeight(200);
-    log_output = d->interpreter;
-
-    dtkSplitter *inner_splitter = new dtkSplitter(this, true);
-    inner_splitter->setOrientation(Qt::Vertical);
-    inner_splitter->addWidget(d->stack);
-    inner_splitter->addWidget(d->interpreter);
-
-    d->script_browser = new dtkCreatorScriptBrowser(this);
-    d->plugin_browser = new dtkCreatorPluginBrowser(this);
-
-    connect(d->script_browser, SIGNAL(scriptClicked(const QString&)), d->editor, SLOT(open(const QString&)));
-
-    d->inspector = new dtkInspector(this);
-
-    connect(dtkAbstractDataFactory::instance(), SIGNAL(created(dtkAbstractData *, QString)), this, SLOT(registerData(dtkAbstractData *, QString)));
-    connect(dtkAbstractProcessFactory::instance(), SIGNAL(created(dtkAbstractProcess *, QString)), this, SLOT(registerProcess(dtkAbstractProcess *, QString)));
-    connect(dtkAbstractViewFactory::instance(), SIGNAL(created(dtkAbstractView *, QString)), this, SLOT(registerView(dtkAbstractView *, QString)));
-    
-    connect(d->composer, SIGNAL(dataSelected(dtkAbstractData *)), d->plugin_browser, SLOT(onDataSelected(dtkAbstractData *)));
-    connect(d->composer, SIGNAL(processSelected(dtkAbstractProcess *)), d->plugin_browser, SLOT(onProcessSelected(dtkAbstractProcess *)));
-    connect(d->composer, SIGNAL(viewSelected(dtkAbstractView *)), d->plugin_browser, SLOT(onViewSelected(dtkAbstractView *)));
-
-    dtkSplitter *outer_splitter = new dtkSplitter(this);
-    outer_splitter->setOrientation(Qt::Horizontal);
-    outer_splitter->addWidget(d->script_browser);
-    outer_splitter->addWidget(inner_splitter);
-    outer_splitter->addWidget(d->plugin_browser);
-    outer_splitter->setStretchFactor(0, 1);
-    outer_splitter->setStretchFactor(1, 2);
-    outer_splitter->setStretchFactor(2, 1);
-
-    d->preferences = NULL;
-    d->settings_preferences = NULL;
-
-    this->onTitleChanged(d->editor->fileName());
-    this->setUnifiedTitleAndToolBarOnMac(true);
-    this->setCentralWidget(outer_splitter);
+    // --
 
     this->readSettings();
 
-    dtkCreatorController::instance()->attach(d->plugin_browser);
-    dtkCreatorController::instance()->attach(d->script_browser);
-    dtkCreatorController::instance()->attach(d->viewer);
+    // -- Elements
 
-#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
-    // Setting up core python module
+    // -- to be encupsulated within distributed layer
 
-    dtkScriptInterpreterPythonModuleManager::instance()->registerInitializer(&init_core);
-    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
-        "import core"
-    );
-    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
-        "dataFactory    = core.dtkAbstractDataFactory.instance()"
-    );
-    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
-        "processFactory = core.dtkAbstractProcessFactory.instance()"
-    );
-    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
-        "viewFactory    = core.dtkAbstractViewFactory.instance()"
-    );
-    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
-        "pluginManager  = core.dtkPluginManager.instance()"
-    );
+    d->distributor = new dtkDistributor(this);
+    d->distributor->setVisible(false);
 
-    // Setting up vr python module
+    // 
 
-    dtkScriptInterpreterPythonModuleManager::instance()->registerInitializer(&init_vr);
-    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
-        "import vr"
-    );
+    d->composer = new dtkComposer;
+    d->composer->view()->setBackgroundBrush(QBrush(QPixmap(":dtkCreator/pixmaps/dtkComposerScene-bg.png")));
+    d->composer->view()->setCacheMode(QGraphicsView::CacheBackground);
 
-    // Setting up creator python module
+    d->editor = new dtkComposerSceneNodeEditor(this);
+    d->editor->setScene(d->composer->scene());
+    d->editor->setStack(d->composer->stack());
+    d->editor->setGraph(d->composer->graph());
 
-    dtkScriptInterpreterPythonModuleManager::instance()->registerInitializer(&init_creator);
-    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
-        "import creator"
-    );
-    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
-        "viewer = creator.dtkCreatorController.instance().viewer()"
-    );
-    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
-        "holder = creator.dtkCreatorController.instance().scriptBrowser().widget()"
-    );
-    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
-        "widgetFactory = creator.dtkCreatorWidgetFactory.instance()"
-    );
+    d->model = new dtkComposerSceneModel(this);
+    d->model->setScene(d->composer->scene());
 
-    d->interpreter->registerInterpreter(dtkScriptInterpreterPool::instance()->python());
-    d->interpreter->registerAsHandler(dtkCreatorRedirectLogHandler);
+    d->scene = new dtkComposerSceneView(this);
+    d->scene->setScene(d->composer->scene());
+    d->scene->setModel(d->model);
+
+    d->stack = new dtkComposerStackView(this);
+    d->stack->setStack(d->composer->stack());
+
+    d->nodes = new dtkComposerFactoryView(this);
+    d->nodes->setFactory(d->composer->factory());
+
+    d->graph = new dtkComposerGraphView(this);
+    d->graph->setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
+    d->graph->setScene(d->composer->graph());
+    d->graph->setVisible(false);
+    d->graph->setBackgroundBrush(QBrush(QPixmap(":dtkCreator/pixmaps/dtkComposerGraphView-bg.png")));
+
+    d->log_view = new dtkLogView(this);
+    d->log_view->setVisible(false);
+
+    d->closing = false;
+
+    // -- Actions
+
+    d->composition_open_action = new QAction("Open", this);
+    d->composition_open_action->setShortcut(QKeySequence::Open);
+
+    d->composition_save_action = new QAction("Save", this);
+    d->composition_save_action->setShortcut(QKeySequence::Save);
+
+    d->composition_saveas_action = new QAction("Save As...", this);
+    d->composition_saveas_action->setShortcut(QKeySequence::SaveAs);
+
+    d->composition_insert_action = new QAction("Insert", this);
+    d->composition_insert_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_I);
+
+    d->composition_quit_action = new QAction("Quit", this);
+    d->composition_quit_action->setShortcut(QKeySequence::Quit);
+
+    d->undo_action = d->composer->stack()->createUndoAction(this);
+    d->undo_action->setShortcut(QKeySequence::Undo);
+
+    d->redo_action = d->composer->stack()->createRedoAction(this);
+    d->redo_action->setShortcut(QKeySequence::Redo);
+
+    QAction *switchToCompoAction = new QAction("Switch to composition perspective", this);
+    QAction *switchToDstrbAction = new QAction("Switch to distributed perspective", this);
+    QAction *switchToDebugAction = new QAction("Switch to debug perspective", this);
+
+    switchToCompoAction->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_1);
+    switchToDstrbAction->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_2);
+    switchToDebugAction->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_3);
+
+    this->addAction(switchToCompoAction);
+    this->addAction(switchToDstrbAction);
+    this->addAction(switchToDebugAction);
+
+    // -- Toolbar
+
+    QToolBar *mainToolBar = this->addToolBar(tr("Main"));
+    mainToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    mainToolBar->setIconSize(QSize(32, 32));
+    
+    QAction *run_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Run_Active.png"), "Run");
+    run_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_R);
+
+    QAction *step_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Step_Active.png"), "Step");
+    step_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_N);
+
+    QAction *continue_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Continue_Active.png"), "Cont");
+    continue_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_C);
+
+    QAction *next_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Continue_Active.png"), "Next");
+    next_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_T);
+
+    QAction *stop_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Stop_Active.png"), "Stop");
+    stop_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_Period);
+
+    QFrame *buttons = new QFrame(this);
+    buttons->setObjectName("dtkCreatorMainWindowSegmentedButtons");
+
+    d->compo_button = new QPushButton("Composition", buttons);
+    d->compo_button->setObjectName("dtkCreatorMainWindowSegmentedButtonLeft");
+    d->compo_button->setFixedSize(75, 25);
+    d->compo_button->setCheckable(true);
+    d->compo_button->setChecked(true);
+
+    d->distr_button = new QPushButton("Distribution", buttons);
+    d->distr_button->setObjectName("dtkCreatorMainWindowSegmentedButtonMiddle");
+    d->distr_button->setFixedSize(75, 25);
+    d->distr_button->setCheckable(true);
+
+    d->debug_button = new QPushButton("Debug", buttons);
+    d->debug_button->setObjectName("dtkCreatorMainWindowSegmentedButtonRight");
+    d->debug_button->setFixedSize(75, 25);
+    d->debug_button->setCheckable(true);
+
+    QButtonGroup *button_group = new QButtonGroup(this);
+    button_group->setExclusive(true);
+    button_group->addButton(d->compo_button);
+    button_group->addButton(d->distr_button);
+    button_group->addButton(d->debug_button);
+
+    QHBoxLayout *buttons_layout = new QHBoxLayout(buttons);
+    buttons_layout->setMargin(0);
+    buttons_layout->setSpacing(11);
+    buttons_layout->addWidget(d->compo_button);
+    buttons_layout->addWidget(d->distr_button);
+    buttons_layout->addWidget(d->debug_button);
+
+    mainToolBar->addWidget(new dtkSpacer(this));
+    mainToolBar->addWidget(new dtkNotificationDisplay(this));
+    mainToolBar->addWidget(new dtkSpacer(this));
+    mainToolBar->addWidget(buttons);
+
+    // -- Menus
+
+    QMenuBar *menu_bar = this->menuBar();
+
+    d->recent_compositions_menu = new dtkRecentFilesMenu("Open recent...", this);
+
+    d->composition_menu = menu_bar->addMenu("Composition");
+    d->composition_menu->addAction(d->composition_open_action);
+    d->composition_menu->addMenu(d->recent_compositions_menu);
+    d->composition_menu->addAction(d->composition_save_action);
+    d->composition_menu->addAction(d->composition_saveas_action);
+    d->composition_menu->addSeparator();
+    d->composition_menu->addAction(d->composition_insert_action);
+    d->composition_menu->addSeparator();
+    d->composition_menu->addAction(d->composition_quit_action);
+
+    d->edit_menu = menu_bar->addMenu("Edit");
+    d->edit_menu->addAction(d->undo_action);
+    d->edit_menu->addAction(d->redo_action);
+
+    QMenu *view_menu = menu_bar->addMenu("View");
+    view_menu->addAction(switchToCompoAction);
+    view_menu->addAction(switchToDstrbAction);
+    view_menu->addAction(switchToDebugAction);
+
+    QMenu *debug_menu = menu_bar->addMenu("Debug");
+    debug_menu->addAction(run_action);
+    debug_menu->addAction(step_action);
+    debug_menu->addAction(continue_action);
+    debug_menu->addAction(next_action);
+    debug_menu->addAction(stop_action);
+
+    // -- Connections
+
+    connect(run_action, SIGNAL(triggered()), d->composer, SLOT(run()));
+    connect(step_action, SIGNAL(triggered()), d->composer, SLOT(step()));
+    connect(continue_action, SIGNAL(triggered()), d->composer, SLOT(cont()));
+    connect(next_action, SIGNAL(triggered()), d->composer, SLOT(next()));
+    connect(stop_action, SIGNAL(triggered()), d->composer, SLOT(stop()));
+
+    connect(switchToCompoAction, SIGNAL(triggered()), this, SLOT(switchToCompo()));
+    connect(switchToDstrbAction, SIGNAL(triggered()), this, SLOT(switchToDstrb()));
+    connect(switchToDebugAction, SIGNAL(triggered()), this, SLOT(switchToDebug()));
+
+    connect(d->compo_button, SIGNAL(pressed()), this, SLOT(switchToCompo()));
+    connect(d->distr_button, SIGNAL(pressed()), this, SLOT(switchToDstrb()));
+    connect(d->debug_button, SIGNAL(pressed()), this, SLOT(switchToDebug()));
+
+    connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(close()));
+
+    connect(d->composer, SIGNAL(modified(bool)), d, SLOT(setModified(bool)));
+
+    connect(d->composition_open_action, SIGNAL(triggered()), this, SLOT(compositionOpen()));
+    connect(d->composition_save_action, SIGNAL(triggered()), this, SLOT(compositionSave()));
+    connect(d->composition_saveas_action, SIGNAL(triggered()), this, SLOT(compositionSaveAs()));
+    connect(d->composition_insert_action, SIGNAL(triggered()), this, SLOT(compositionInsert()));
+    connect(d->composition_quit_action, SIGNAL(triggered()), qApp, SLOT(quit()));
+
+    connect(d->recent_compositions_menu, SIGNAL(recentFileTriggered(const QString&)), this, SLOT(compositionOpen(const QString&)));
+
+    // -- Layout
+
+    dtkSplitter *left = new dtkSplitter(this);
+    left->setOrientation(Qt::Vertical);
+    left->addWidget(d->nodes);
+    left->addWidget(d->distributor);
+
+    dtkSplitter *right = new dtkSplitter(this);
+    right->setOrientation(Qt::Vertical);
+    right->addWidget(d->scene);
+    right->addWidget(d->editor);
+    right->addWidget(d->stack);
+    right->addWidget(d->composer->compass());
+    right->setSizes(QList<int>()
+                    << this->size().height()/4
+                    << this->size().height()/4
+                    << this->size().height()/4
+                    << this->size().height()/4);
+
+    d->inner = new dtkSplitter(this);
+    d->inner->setOrientation(Qt::Horizontal);
+    d->inner->addWidget(left);
+    d->inner->addWidget(d->graph);
+    d->inner->addWidget(d->composer);
+    d->inner->addWidget(right);
+    d->inner->setSizes(QList<int>()
+                    << 300
+                    << 0
+                    << this->size().width()-300-300
+                    << 300);
+
+    QHBoxLayout *b_layout = new QHBoxLayout;
+    b_layout->setContentsMargins(0, 0, 0, 0);
+    b_layout->setSpacing(0);
+    b_layout->addWidget(d->log_view);
+
+    QWidget *bottom = new QWidget(this);
+    bottom->setLayout(b_layout);
+
+    dtkSplitter *central = new dtkSplitter(this);
+    central->setOrientation(Qt::Vertical);
+    central->addWidget(d->inner);
+    central->addWidget(bottom);
+
+    this->setCentralWidget(central);
+    this->setStyleSheet(dtkReadFile(":dtkCreator/dtkCreator.qss"));
+    this->setUnifiedTitleAndToolBarOnMac(true);
+
+#if defined(Q_WS_MAC) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
+    d->enableFullScreenSupport();
 #endif
 
-#if defined(HAVE_SWIG) && defined(HAVE_TCL)
-    // Setting up core tcl module
+    d->setCurrentFile("");
 
-    dtkScriptInterpreterTclModuleManager::instance()->registerInitializer(&Core_Init);
-    dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
-        "set dataFactory    [dtkAbstractDataFactory_instance]"
-    );
-    dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
-        "set processFactory [dtkAbstractProcessFactory_instance]"
-    );
-    dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
-        "set viewFactory    [dtkAbstractViewFactory_instance]"
-    );
-    dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
-        "set pluginManager  [dtkPluginManager_instance]"
-    );
-
-    // Setting up vr tcl module
-
-    dtkScriptInterpreterTclModuleManager::instance()->registerInitializer(&Vr_Init);
-
-    // Setting up creator tcl module
-
-    dtkScriptInterpreterTclModuleManager::instance()->registerInitializer(&Creator_Init);
-    dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
-        "set controller [dtkCreatorController_instance]"
-    );
-    dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
-        "set viewer [$controller viewer]"
-    );
-    dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
-        "set holder [[[$controller workspace] scriptBrowser] widget]"
-    );
-    dtkScriptInterpreterTclModuleManager::instance()->registerCommand(
-	"set widgetFactory [dtkCreatorWidgetFactory_instance]"
-    );
-
-#if !defined(HAVE_PYTHON)
-    d->interpreter->registerInterpreter(dtkScriptInterpreterPool::instance()->tcl());
-#endif
-    d->interpreter->registerAsHandler(dtkCreatorRedirectLogHandler);
-#endif
+    dtkNotify(QString("Discovered %1 plugins").arg(dtkPluginManager::instance()->plugins().count()), 5000);
 }
 
 dtkCreatorMainWindow::~dtkCreatorMainWindow(void)
 {
-    delete d->interpreter;
-    delete d->editor;
-    delete d->highlighter;
     delete d;
 }
 
@@ -413,9 +376,6 @@ void dtkCreatorMainWindow::readSettings(void)
     move(pos);
     resize(size);
     settings.endGroup();
-
-    d->editor->readSettings();
-    d->interpreter->readSettings();
 }
 
 void dtkCreatorMainWindow::writeSettings(void)
@@ -425,181 +385,244 @@ void dtkCreatorMainWindow::writeSettings(void)
     settings.setValue("pos", pos());
     settings.setValue("size", size());
     settings.endGroup();
-
-    d->editor->writeSettings();
-    d->interpreter->writeSettings();
 }
 
-void dtkCreatorMainWindow::interpret(const QString& file)
+bool dtkCreatorMainWindow::compositionOpen(void)
 {
-    d->interpreter->interpreter()->load(file);
+    if(!d->maySave())
+        return true;
+
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("creator");
+    QString path = settings.value("last_open_dir", QDir::homePath()).toString();
+    settings.endGroup();
+
+    QFileDialog *dialog = new QFileDialog(this, tr("Open composition"), path, QString("dtk composition (*.dtk)"));
+    dialog->setStyleSheet("background-color: none ; color: none;");
+    dialog->setAcceptMode(QFileDialog::AcceptOpen);
+    dialog->setFileMode(QFileDialog::AnyFile);
+    dialog->open(this, SLOT(compositionOpen(const QString&)));
+
+    return true;
 }
 
-bool dtkCreatorMainWindow::fileOpen(void)
+bool dtkCreatorMainWindow::compositionOpen(const QString& file)
 {
-    if(d->maySave()) {
-        QString fileName = QFileDialog::getOpenFileName(this, tr("Open file"), QDir::homePath());
+    if(sender() == d->recent_compositions_menu && !d->maySave())
+        return true;
 
-        return d->editor->open(fileName);
+    bool status = d->composer->open(file);
+
+    if(status) {
+        d->recent_compositions_menu->addRecentFile(file);
+        d->setCurrentFile(file);
     }
 
-    return false;
+    QFileInfo info(file);
+    
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("creator");
+    settings.setValue("last_open_dir", info.absolutePath());
+    settings.endGroup();    
+
+    if(status)
+        dtkNotify(QString("<div style=\"color: #006600\">Opened %1</div>").arg(info.baseName()), 3000);
+
+    return status;
 }
 
-bool dtkCreatorMainWindow::fileSave(void)
+bool dtkCreatorMainWindow::compositionSave(void)
 {
-    if(d->editor->fileName() == "untitled")
-        return fileSaveAs();
+    bool status;
+
+    if(d->current_composition.isEmpty() || d->current_composition == "untitled.dtk")
+        status = this->compositionSaveAs();
     else
-        return d->editor->save();
+        status = d->composer->save();
+
+    if(status)
+        this->setWindowModified(false);
+
+    if(status)
+        dtkNotify(QString("<div style=\"color: #006600\">Saved %1</div>").arg(d->current_composition), 3000);
+
+    return status;
 }
 
-bool dtkCreatorMainWindow::fileSaveAs(void)
+bool dtkCreatorMainWindow::compositionSaveAs(void)
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save file"), QDir::homePath());
+    bool status = false;
 
-    if(!fileName.isEmpty())
-        return d->editor->save(fileName);
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("creator");
+    QString path = settings.value("last_open_dir", QDir::homePath()).toString();
+    settings.endGroup();
 
-    return false;
-}
+    QStringList nameFilters;
+    nameFilters <<  "Ascii composition (*.dtk)";
+    nameFilters << "Binary composition (*.dtk)";
 
-void dtkCreatorMainWindow::showInspector(void)
-{
-    QPoint pos = d->inspector->pos();
+    QFileDialog dialog(this, "Save composition as ...", path, QString("dtk composition (*.dtk)"));
+    dialog.setStyleSheet("background-color: none ; color: none;");
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setConfirmOverwrite(true);
+    dialog.setFileMode(QFileDialog::AnyFile);
+    dialog.setNameFilters(nameFilters);
+    dialog.setDefaultSuffix("dtk");
 
-    d->inspector->setVisible(!d->inspector->isVisible());
-    d->inspector->move(pos);
-}
+    if(dialog.exec()) {
 
-void dtkCreatorMainWindow::showPreferences(void)
-{
-    if(!d->preferences) {
-        d->preferences = new dtkPreferencesWidget(this);
-        d->preferences->addPage("Editor", d->editor->preferencesWidget(this));
-        d->preferences->addPage("Interpreter", d->interpreter->preferencesWidget(this));
-
-        d->settings_preferences = new dtkSettingsEditorPreferencesWidget(d->preferences);
-        d->preferences->addPage("Settings", d->settings_preferences);
+        if(dialog.selectedNameFilter() == nameFilters.at(0))
+            status = this->compositionSaveAs(dialog.selectedFiles().first(), dtkComposerWriter::Ascii);
+        else
+            status = this->compositionSaveAs(dialog.selectedFiles().first(), dtkComposerWriter::Binary);
     }
 
-    d->preferences->show();
+    return status;
 }
 
-void dtkCreatorMainWindow::switchToEditor(void)
+bool dtkCreatorMainWindow::compositionSaveAs(const QString& file, dtkComposerWriter::Type type)
 {
-    d->stack->setCurrentIndex(0);
+    bool status = false;
 
-    d->toolEditorAction->setEnabled(false);
-    d->toolComposerAction->setEnabled(true);
-    d->toolViewerAction->setEnabled(true);
+    if(file.isEmpty())
+        return status;
+
+    status = d->composer->save(file, type);
+
+    if(status) {
+        d->setCurrentFile(file);
+        this->setWindowModified(false);
+    }
+
+    QFileInfo info(file);
+    
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("creator");
+    settings.setValue("last_open_dir", info.absolutePath());
+    settings.endGroup();
+
+    if(status)
+        dtkNotify(QString("<div style=\"color: #006600\">Saved as %1</div>").arg(info.baseName()), 3000);
+
+    return status;
 }
 
-void dtkCreatorMainWindow::switchToComposer(void)
+bool dtkCreatorMainWindow::compositionInsert(void)
 {
-    d->stack->setCurrentIndex(1);
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("creator");
+    QString path = settings.value("last_open_dir", QDir::homePath()).toString();
+    settings.endGroup();
 
-    d->toolEditorAction->setEnabled(true);
-    d->toolComposerAction->setEnabled(false);
-    d->toolViewerAction->setEnabled(true);
+    QFileDialog *dialog = new QFileDialog(this, tr("Insert composition"), path, QString("dtk composition (*.dtk)"));
+    dialog->setStyleSheet("background-color: none ; color: none;");
+    dialog->setAcceptMode(QFileDialog::AcceptOpen);
+    dialog->setFileMode(QFileDialog::AnyFile);
+    dialog->open(this, SLOT(compositionInsert(const QString&)));
+
+    return true;
 }
 
-void dtkCreatorMainWindow::switchToViewer(void)
+bool dtkCreatorMainWindow::compositionInsert(const QString& file)
 {
-    d->stack->setCurrentIndex(2);
+    bool status = d->composer->insert(file);
 
-    d->toolEditorAction->setEnabled(true);
-    d->toolComposerAction->setEnabled(true);
-    d->toolViewerAction->setEnabled(false);
+    if(status)
+        this->setWindowModified(true);
+
+    QFileInfo info(file);
+    
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("creator");
+    settings.setValue("last_open_dir", info.absolutePath());
+    settings.endGroup();    
+
+    return status;
+}
+
+void dtkCreatorMainWindow::switchToCompo(void)
+{
+    dtkNotify("Composition workspace", 2000);
+
+    d->compo_button->blockSignals(true);
+    d->compo_button->setChecked(true);
+    d->compo_button->blockSignals(false);
+
+    if(!d->wl && !d->wr) {
+        d->wl = d->nodes->size().width();
+        d->wr = d->stack->size().width();
+    }
+
+    d->nodes->setVisible(true);
+    d->scene->setVisible(true);
+    d->editor->setVisible(true);
+    d->stack->setVisible(true);
+    d->distributor->setVisible(false);
+
+    d->graph->setVisible(false);
+    d->log_view->setVisible(false);
+    
+    d->inner->setSizes(QList<int>() << d->wl << 0 << this->size().width() - d->wl - d->wr << d->wr);
+}
+
+void dtkCreatorMainWindow::switchToDstrb(void)
+{
+    dtkNotify("Distribution workspace", 2000);
+
+    d->distr_button->blockSignals(true);
+    d->distr_button->setChecked(true);
+    d->distr_button->blockSignals(false);
+
+    if(!d->wl && !d->wr) {
+        d->wl = d->nodes->size().width();
+        d->wr = d->stack->size().width();
+    }
+
+    d->nodes->setVisible(false);
+    d->scene->setVisible(true);
+    d->editor->setVisible(true);
+    d->stack->setVisible(true);
+    d->distributor->setVisible(true);
+
+    d->graph->setVisible(false);
+    d->log_view->setVisible(false);
+
+    d->inner->setSizes(QList<int>() << d->wl << 0 << this->size().width() - d->wl - d->wr << d->wr);
+}
+
+void dtkCreatorMainWindow::switchToDebug(void)
+{
+    dtkNotify("Debug workspace", 2000);
+
+    d->debug_button->blockSignals(true);
+    d->debug_button->setChecked(true);
+    d->debug_button->blockSignals(false);
+
+    d->wl = d->nodes->size().width();
+    d->wr = d->stack->size().width();
+
+    d->nodes->setVisible(false);
+    d->scene->setVisible(false);
+    d->editor->setVisible(false);
+    d->stack->setVisible(false);
+    d->distributor->setVisible(false);
+
+    d->graph->setVisible(true);
+    d->log_view->setVisible(true);
+
+    int w = this->size().width() - d->wl - d->wr;
+
+    d->inner->setSizes(QList<int>() << d->wl << w/2 << w/2 << d->wr);
 }
 
 void dtkCreatorMainWindow::closeEvent(QCloseEvent *event)
 {
     if (d->maySave()) {
-        this->writeSettings();
-        event->accept();
-    } else {
-        event->ignore();
-    }
-}
-
-void dtkCreatorMainWindow::onTitleChanged(QString title)
-{
-    this->setWindowTitle("dtkCreator - " + title);
-}
-
-void dtkCreatorMainWindow::onDocumentChanged(void)
-{
-    if(!this->windowTitle().endsWith("*"))
-        this->setWindowTitle(this->windowTitle() + "*");
-}
-
-void dtkCreatorMainWindow::run(void)
-{
-    d->toolRunAction->setEnabled(false);
-    d->toolStopAction->setEnabled(true);
-}
-
-void dtkCreatorMainWindow::stop(void)
-{
-    d->toolRunAction->setEnabled(true);
-    d->toolStopAction->setEnabled(false);
-}
-
-void dtkCreatorMainWindow::registerData(dtkAbstractData *data, QString type)
-{
-
-    d->interpreter->interpreter()->blockSignals(true);
-
-#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
-    int statPython;
-    if(dtkScriptInterpreterPython *interpreter = dynamic_cast<dtkScriptInterpreterPython *>(d->interpreter->interpreter()))
-        interpreter->interpret(QString("%1 = dataFactory.get(\"%2\", \"%1\")").arg(data->name()).arg(type), &statPython);
-#endif
-
-#if defined(HAVE_SWIG) && defined(HAVE_TCL)
-    int statTcl;
-    if(dtkScriptInterpreterTcl *interpreter = dynamic_cast<dtkScriptInterpreterTcl *>(d->interpreter->interpreter()))
-        interpreter->interpret(QString("set $1 [$dataFactory get \"2\" \"1\"]").arg(data->name()).arg(type), &statTcl);
-#endif
-
-    d->interpreter->interpreter()->blockSignals(false);
-}
-
-void dtkCreatorMainWindow::registerProcess(dtkAbstractProcess *process, QString type)
-{
-    d->interpreter->interpreter()->blockSignals(true);
-
-#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
-    int statPython;
-    if(dtkScriptInterpreterPython *interpreter = dynamic_cast<dtkScriptInterpreterPython *>(d->interpreter->interpreter()))
-        interpreter->interpret(QString("%1 = processFactory.get(\"%2\", \"%1\")").arg(process->name()).arg(type), &statPython);
-#endif
-
-#if defined(HAVE_SWIG) && defined(HAVE_TCL)
-    int statTcl;
-    if(dtkScriptInterpreterTcl *interpreter = dynamic_cast<dtkScriptInterpreterTcl *>(d->interpreter->interpreter()))
-        interpreter->interpret(QString("set $1 [$processFactory get \"2\" \"1\"]").arg(process->name()).arg(type), &statTcl);
-#endif
-
-    d->interpreter->interpreter()->blockSignals(false);
-}
-
-void dtkCreatorMainWindow::registerView(dtkAbstractView *view, QString type)
-{
-    d->interpreter->interpreter()->blockSignals(true);
-
-#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
-    int statPython;
-    if(dtkScriptInterpreterPython *interpreter = dynamic_cast<dtkScriptInterpreterPython *>(d->interpreter->interpreter()))
-        interpreter->interpret(QString("%1 = viewFactory.get(\"%2\", \"%1\")").arg(view->name()).arg(type), &statPython);
-#endif
-
-#if defined(HAVE_SWIG) && defined(HAVE_TCL)
-    int statTcl;
-    if(dtkScriptInterpreterTcl *interpreter = dynamic_cast<dtkScriptInterpreterTcl *>(d->interpreter->interpreter()))
-        interpreter->interpret(QString("set $1 [$viewFactory get \"2\" \"1\"]").arg(view->name()).arg(type), &statTcl);
-#endif
-
-    d->interpreter->interpreter()->blockSignals(false);
+         writeSettings();
+         d->closing = true;
+         event->accept();
+     } else {
+         event->ignore();
+     }
 }

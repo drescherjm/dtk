@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Oct 31 13:49:50 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep  5 13:13:16 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 64
+ * Last-Updated: Tue Apr 24 14:43:47 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 69
  */
 
 /* Commentary: 
@@ -20,20 +20,26 @@
 #ifndef DTKABSTRACTPLUGIN_H
 #define DTKABSTRACTPLUGIN_H
 
-#include <dtkCore/dtkAbstractObject.h>
-#include <dtkCore/dtkCoreExport.h>
-#include <dtkCore/dtkGlobal.h>
+#include "dtkAbstractObject.h"
+#include "dtkCoreExport.h"
+#include "dtkGlobal.h"
 
 class dtkPluginPrivate;
+
+// /////////////////////////////////////////////////////////////////
+// dtkPlugin interface
+// /////////////////////////////////////////////////////////////////
 
 class DTKCORE_EXPORT dtkPlugin : public dtkAbstractObject
 {
     Q_OBJECT
 
 public:
-     dtkPlugin(QObject *parent = 0);
-    ~dtkPlugin(void);
+             dtkPlugin(QObject *parent = 0);
+             dtkPlugin(const dtkPlugin& other);
+    virtual ~dtkPlugin(void);
     
+public:
     virtual bool initialize(void) = 0;
     virtual bool uninitialize(void) = 0;
     
@@ -49,7 +55,7 @@ public:
     virtual QStringList types(void) const = 0;
 
 private:
-    dtkPluginPrivate *d;
+    DTK_DECLARE_PRIVATE(dtkPlugin);
 };
 
 Q_DECLARE_INTERFACE(dtkPlugin, "fr.inria.dtk/0.1.0")

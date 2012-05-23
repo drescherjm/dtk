@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 10 11:57:45 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 10 16:15:14 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 46
+ * Last-Updated: Tue Apr  3 15:35:29 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -87,8 +87,9 @@ int main(int argc, char **argv)
 
             QString directory = argument.mid(index+1);
             directory = directory.split(" ").first();
-            if (directory.isNull())
+            if (directory.isNull()) {
                 LogError() << "Could not parse injection directory";
+            }
 
             injection << directory;
 

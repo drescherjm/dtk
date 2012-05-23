@@ -22,7 +22,7 @@
 
 #include <QtCore>
 
-#include <dtkCore/dtkAbstractFactory.h>
+#include "dtkAbstractFactory.h"
 
                   class dtkAbstractProcess;
                   class dtkAbstractProcessFactoryPrivate;

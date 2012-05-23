@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Sep 14 13:20:15 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov 23 09:52:33 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 313
+ * Last-Updated: Wed Apr  4 10:57:09 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 314
  */
 
 /* Commentary: 
@@ -22,10 +22,11 @@
 #include <QtDebug>
 #include <QtCore>
 
-#include <dtkCore/dtkLog.h>
 #include <dtkCore/dtkGlobal.h>
 
 #include <dtkJson/dtkJson.h>
+
+#include <dtkLog/dtkLog.h>
 
 #include <dtkDistributed/dtkDistributedServer.h>
 #include <dtkDistributed/dtkDistributedServerManager.h>

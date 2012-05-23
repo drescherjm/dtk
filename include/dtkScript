@@ -1,4 +1,3 @@
-#include "../src/dtkScript/dtkScriptExport.h"
 #include "../src/dtkScript/dtkScriptInterpreter.h"
 #include "../src/dtkScript/dtkScriptInterpreterPool.h"
 #include "../src/dtkScript/dtkScriptInterpreterPython.h"

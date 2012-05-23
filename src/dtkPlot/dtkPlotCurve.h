@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:05:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul  5 14:20:18 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 21
+ * Last-Updated: Mon Apr 16 12:30:25 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 22
  */
 
 /* Commentary: 
@@ -20,11 +20,13 @@
 #ifndef DTKPLOTCURVE_H
 #define DTKPLOTCURVE_H
 
+#include "dtkPlotExport.h"
+
 #include <QtCore>
 
 class dtkPlotCurvePrivate;
 
-class dtkPlotCurve : public QObject
+class DTKPLOT_EXPORT dtkPlotCurve : public QObject
 {
     Q_OBJECT
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:43:14 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep  5 12:58:36 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 112
+ * Last-Updated: Wed May 16 13:48:11 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 122
  */
 
 /* Commentary:
@@ -20,8 +20,8 @@
 #ifndef DTKABSTRACTOBJECT_H
 #define DTKABSTRACTOBJECT_H
 
-#include <dtkCore/dtkCoreExport.h>
-#include <dtkCore/dtkGlobal.h>
+#include "dtkCoreExport.h"
+#include "dtkGlobal.h"
 
 class dtkAbstractObjectPrivate;
 
@@ -31,8 +31,16 @@ class DTKCORE_EXPORT dtkAbstractObject : public QObject
 
 public:
             dtkAbstractObject(dtkAbstractObject *parent = 0);
+            dtkAbstractObject(const dtkAbstractObject& other);
    virtual ~dtkAbstractObject(void);
 
+public:
+   dtkAbstractObject& operator = (const dtkAbstractObject& other);
+
+public:
+   bool operator == (const dtkAbstractObject& other);
+
+public:
    virtual QString description(void) const;
    virtual QString identifier(void) const;
    virtual QString name(void) const;
@@ -70,8 +78,19 @@ public slots:
    virtual void onPropertySet(const QString& key, const QString& value);
    virtual void onMetaDataSet(const QString& key, const QString& value);
 
+protected:
+   dtkAbstractObject(dtkAbstractObjectPrivate& dd, QObject *parent);
+   dtkAbstractObject(dtkAbstractObjectPrivate& dd, const dtkAbstractObject& other);
+
+protected:
+         dtkAbstractObjectPrivate *d_func(void)       { return d_ptr; }
+   const dtkAbstractObjectPrivate *d_func(void) const { return d_ptr; }
+
 private:
-   dtkAbstractObjectPrivate *d;
+   dtkAbstractObjectPrivate *d_ptr;
+
+private:
+   friend class dtkAbstractObjectPrivate;
 };
 
 #endif

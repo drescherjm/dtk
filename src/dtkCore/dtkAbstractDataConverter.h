@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 21:58:48 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Oct 31 19:45:27 2010 (+0100)
- *           By: Julien Wintz
- *     Update #: 45
+ * Last-Updated: Tue Apr 24 10:52:26 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 49
  */
 
 /* Commentary: 
@@ -20,10 +20,14 @@
 #ifndef DTKABSTRACTDATACONVERTER_H
 #define DTKABSTRACTDATACONVERTER_H
 
-#include <dtkCore/dtkAbstractObject.h>
+#include "dtkAbstractObject.h"
 
 class dtkAbstractData;
 class dtkAbstractDataConverterPrivate;
+
+// /////////////////////////////////////////////////////////////////
+// dtkAbstractDataConverter interface
+// /////////////////////////////////////////////////////////////////
 
 class DTKCORE_EXPORT dtkAbstractDataConverter : public dtkAbstractObject
 {
@@ -31,8 +35,10 @@ class DTKCORE_EXPORT dtkAbstractDataConverter : public dtkAbstractObject
 
 public:
              dtkAbstractDataConverter(void);
+             dtkAbstractDataConverter(const dtkAbstractDataConverter& other);
     virtual ~dtkAbstractDataConverter(void);
     
+public:
     virtual QString  description (void) const = 0;
     virtual QStringList fromTypes(void) const = 0;
     virtual QString       toType (void) const = 0;
@@ -41,7 +47,7 @@ public:
     void  enable(void);
     void disable(void);
     
-    dtkAbstractData *data(void);
+    dtkAbstractData *data(void) const;
     
     virtual void setData(dtkAbstractData *data);
 
@@ -58,7 +64,7 @@ public slots:
     virtual void setProgress(int value);
     
 private:
-    dtkAbstractDataConverterPrivate *d;
+    DTK_DECLARE_PRIVATE(dtkAbstractDataConverter);
 };
 
 #endif

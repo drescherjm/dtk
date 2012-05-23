@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. déc.  6 14:26:30 2011 (+0100)
+ * Last-Updated: ven. avril 13 18:46:54 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 67
+ *     Update #: 100
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 
 #include "dtkDistributedExport.h"
 #include "dtkDistributedMessage.h"
+#include "dtkDistributedSocket.h"
 
 #include <dtkCore/dtkAbstractData.h>
 
@@ -29,6 +30,7 @@
 #include <QtNetwork>
 
 class dtkDistributedControllerPrivate;
+class dtkDistributedJob;
 class dtkDistributedNode;
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedController : public QObject
@@ -39,6 +41,7 @@ public:
      dtkDistributedController(void);
     ~dtkDistributedController(void);
 
+public:
     bool    isConnected(const QUrl& server);
     bool isDisconnected(const QUrl& server);
 
@@ -52,11 +55,18 @@ signals:
     void dataPosted(const QByteArray& data);
     void jobStarted(QString jobid);
 
+    void status(const QUrl& server);
+
+public:
+    dtkDistributedSocket *socket(const QString& jobid);
+
 public slots:
     void    connect(const QUrl& server);
-    void     deploy(const QUrl& server);
     void disconnect(const QUrl& server);
+    void     deploy(const QUrl& server);
+    void    refresh(const QUrl& server);
     void     submit(const QUrl& server, QByteArray& resources);
+    void    killjob(const QUrl& server, QString jobid);
     void       send(dtkDistributedMessage *msg);
     void       send(dtkAbstractData *data, QString jobid, qint16 destrank);
 
@@ -64,11 +74,16 @@ public:
     QList<dtkDistributedNode *> nodes(void);
     QList<dtkDistributedNode *> nodes(const QString& cluster);
 
+    QList<dtkDistributedJob *> jobs(void);
+    QList<dtkDistributedJob *> jobs(const QString& cluster);
+
 protected slots:
     void read(void);
     void error(QAbstractSocket::SocketError error);
-    void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus );
     void cleanup(void);
+
+protected slots:
+    void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
 private:
     dtkDistributedControllerPrivate *d;

@@ -4,30 +4,35 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Thu Sep  1 17:18:46 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Sep  1 17:20:08 2011 (+0200)
+## Last-Updated: Mon Apr 16 10:27:31 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 13
+##     Update #: 19
 ######################################################################
 ## 
 ### Commentary: 
 ##
-## Adds precompiled header (pch) support to suitable files.
-## Currently only implemented for MSVC. For platforms the macro does nothing. 
+## Adds precompiled header (pch) support to suitable files.  Currently
+## only implemented for MSVC. For otherplatforms the macro does
+## nothing.
 ##
 ## Usage : 
 ## add_precompiled_header(AddedPrecompiledSource PchIncludeFilename PchSourceFilename CandidateSourceFile [CandidateSourceFile1...])
+##
 ## Arguments:
+##
 ## Output :
-##   AddedPrecompiledSource  : variable name that will contain source files 
-##       that need to be added to your target.
-## Input : 
+##   AddedPrecompiledSource : variable name that will contain
+##   source files that need to be added to your target.
+##
+## Input :
 ##   PchIncludeFilename : name of the header file
 ##   PchSourceFilename : name of the source file used to generate the pch
-##   CandidateSourceFiles : source file names to which pch support may be added.
+##   CandidateSourceFiles : source file names to which pch support may be
+##   added.
 ##
-## Note : Adding a PCH to a file has the considerable side effect
-## of implicity forcing #include <pchfile.h> at the start of the file. This may
-## have undesired consequences.
+## Note : Adding a PCH to a file has the considerable side effect of
+##   implicity forcing #include <pchfile.h> at the start of the
+##   file. This may have undesired consequences.
 ##
 ######################################################################
 ## 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 16 09:27:23 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 19 13:30:24 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 245
+ * Last-Updated: Wed Apr  4 08:57:10 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 246
  */
 
 /* Commentary: 
@@ -21,7 +21,8 @@
 
 #include <dtkCore/dtkAbstractObject.h>
 #include <dtkCore/dtkGlobal.h>
-#include <dtkCore/dtkLog.h>
+
+#include <dtkLog/dtkLog.h>
 
 #include <dtkGui/dtkAboutBox.h>
 

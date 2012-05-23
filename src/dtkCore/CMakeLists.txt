@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: mar. oct. 18 10:00:42 2011 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 225
+## Last-Updated: Tue May 22 12:47:54 2012 (+0200)
+##           By: tkloczko
+##     Update #: 294
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,6 +24,7 @@ project(dtkCore)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkAbstractContainer.h
   dtkAbstractData.h
   dtkAbstractDataFactory.h
   dtkAbstractDataReader.h
@@ -35,7 +36,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractDataConverter.h
   dtkAbstractFactory.h
   dtkAbstractObject.h
-  dtkPlugin.h
   dtkAbstractProcess.h
   dtkAbstractProcessFactory.h
   dtkAbstractView.h
@@ -43,19 +43,22 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractViewFactory.h
   dtkAbstractViewInteractor.h
   dtkAbstractViewNavigator.h
-  dtkCoreExport.h
+  dtkContainerList.h
+  dtkContainerList.tpp
+  dtkContainerVector.h
+  dtkContainerVector.tpp
+  dtkCpuid.h
   dtkGlobal.h
-  dtkLog.h
+  dtkPlugin.h
   dtkPluginManager.h
-  dtkQuat.h
   dtkUpdater.h
   dtkSignalBlocker.h
   dtkSingleton.h
   dtkSingletonDeclare.h
-  dtkSmartPointer.h
-  dtkVec3.h)
+  dtkSmartPointer.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
+  dtkAbstractContainer.h
   dtkAbstractData.h
   dtkAbstractDataFactory.h
   dtkAbstractDataReader.h
@@ -66,7 +69,6 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractDataConverter.h
   dtkAbstractFactory.h
   dtkAbstractObject.h
-  dtkPlugin.h
   dtkAbstractProcess.h
   dtkAbstractProcessFactory.h
   dtkAbstractView.h
@@ -74,10 +76,12 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractViewFactory.h
   dtkAbstractViewInteractor.h
   dtkAbstractViewNavigator.h
+  dtkPlugin.h
   dtkPluginManager.h
   dtkUpdater_p.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkAbstractContainer.cpp
   dtkAbstractDataFactory.cpp
   dtkAbstractData.cpp
   dtkAbstractDataReader.cpp
@@ -95,10 +99,9 @@ set(${PROJECT_NAME}_SOURCES
   dtkAbstractViewAnimator.cpp
   dtkAbstractViewInteractor.cpp
   dtkAbstractViewNavigator.cpp
+  dtkCpuid.cpp
   dtkPlugin.cpp
-  dtkLog.cpp
   dtkPluginManager.cpp
-  dtkQuat.cpp
   dtkSignalBlocker.h
   dtkSingleton.cpp
   dtkSingletonDeclare.cpp
@@ -111,7 +114,7 @@ set(${PROJECT_NAME}_SOURCES
 
 set(${PROJECT_NAME}_SOURCES_WRAP)
 
-if(BUILD_WRAPPERS AND SWIG_FOUND)
+if(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
 
   set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS})
   
@@ -139,7 +142,6 @@ configure_file (
 
 if(NOT MSVC)
 add_definitions(-Wno-write-strings)
-add_definitions(-Wformat=0)
 endif()
 
 add_definitions(${QT_DEFINITIONS})
@@ -178,8 +180,10 @@ add_library(${PROJECT_NAME} STATIC
   ${${PROJECT_NAME}_SOURCES_WRAP})
 
 endif(BUILD_SHARED_LIBS)
-  
-target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES})
+
+target_link_libraries(${PROJECT_NAME}
+  ${QT_LIBRARIES}
+  dtkLog)
 
 if(TCL_FOUND)
   target_link_libraries(${PROJECT_NAME} ${TCL_LIBRARY})
@@ -190,17 +194,34 @@ if(PYTHONLIBS_FOUND)
 endif()
 
 ## #################################################################
+## Export header file
+## #################################################################
+
+add_compiler_export_flags()
+
+generate_export_header(${PROJECT_NAME}
+  EXPORT_FILE_NAME "${PROJECT_NAME}Export.h")
+
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}"
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export")
+
+set(${PROJECT_NAME}_HEADERS
+  ${${PROJECT_NAME}_HEADERS}
+ "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export.h")
+
+## #################################################################
 ## Handling of generated script modules
 ## #################################################################
 
 set(${PROJECT_NAME}_MODULES)
 
-if(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
+if(DTK_BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   DEPENDS ${PROJECT_SOURCE_DIR}/dtkCore.i
-  COMMAND ${CMAKE_COMMAND} ARGS -E  make_directory ${CMAKE_BINARY_DIR}/modules
-  COMMAND ${CMAKE_COMMAND} ARGS -E  copy ${${PROJECT_NAME}_BINARY_DIR}/core.py ${CMAKE_BINARY_DIR}/modules
+  COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${CMAKE_BINARY_DIR}/modules
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different ${${PROJECT_NAME}_BINARY_DIR}/core.py ${CMAKE_BINARY_DIR}/modules
   COMMENT "-- Moving python modules to ${CMAKE_BINARY_DIR}/modules")
 
 set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/core.py)

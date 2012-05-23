@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 21 19:12:40 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Nov  7 17:33:58 2010 (+0100)
+ * Last-Updated: Thu Apr 26 17:22:05 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 690
+ *     Update #: 696
  */
 
 /* Commentary: 
@@ -27,13 +27,24 @@
 
 #include <dtkCore/dtkAbstractView.h>
 
+#include <dtkConfig.h>
+
 #include <QtGui>
+
+#if defined(DTK_HAVE_VRPN)
+#include <vrpn_Shared.h>
+#include <vrpn_Button.h>
+#include <vrpn_Analog.h>
+#include <vrpn_Tracker.h>
+#include <vrpn_FileConnection.h>
+#include <quat.h>
+#endif
 
 // /////////////////////////////////////////////////////////////////
 // vrpn callbacks (Definition at EOF.)
 // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_WRAP_VRPN)
+#if defined(DTK_HAVE_VRPN)
 void VRPN_CALLBACK vrpn_gesture_recognizer_handle_button(void *data, const vrpn_BUTTONCB callback);
 void VRPN_CALLBACK vrpn_gesture_recognizer_handle_analog(void *data, const vrpn_ANALOGCB callback);
 void VRPN_CALLBACK vrpn_gesture_recognizer_handle_tracker(void *data, const vrpn_TRACKERCB callback);
@@ -45,7 +56,7 @@ void VRPN_CALLBACK vrpn_gesture_recognizer_handle_tracker(void *data, const vrpn
 
 void dtkVrGestureRecognizerPrivate::run(void)
 {
-#if defined(DTK_WRAP_VRPN)
+#if defined(DTK_HAVE_VRPN)
     vrpn_FILE_CONNECTIONS_SHOULD_PRELOAD = false;
     vrpn_FILE_CONNECTIONS_SHOULD_ACCUMULATE = false;
 
@@ -80,7 +91,7 @@ void dtkVrGestureRecognizerPrivate::stop(void)
     this->running = false;
 }
 
-#if defined(DTK_WRAP_VRPN)
+#if defined(DTK_HAVE_VRPN)
 
 void dtkVrGestureRecognizerPrivate::handle_button(const vrpn_BUTTONCB callback)
 {
@@ -691,6 +702,8 @@ void dtkVrGestureRecognizer::postCustomEvent(Qt::GestureState state)
 
 void dtkVrGestureRecognizer::postClearEvent(Qt::GestureState state)
 {
+    DTK_UNUSED(state);
+
     if(!d->receiver)
         return;
 
@@ -703,7 +716,7 @@ void dtkVrGestureRecognizer::postClearEvent(Qt::GestureState state)
 // vrpn callbacks
 // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_WRAP_VRPN)
+#if defined(DTK_HAVE_VRPN)
 
 void VRPN_CALLBACK vrpn_gesture_recognizer_handle_button(void *data, const vrpn_BUTTONCB callback)
 {

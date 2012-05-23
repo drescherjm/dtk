@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sun May  6 15:56:38 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May  7 16:21:39 2012 (+0200)
+ * Last-Updated: Mon May 21 15:44:53 2012 (+0200)
  *           By: tkloczko
- *     Update #: 15
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -163,11 +163,6 @@ template <typename T> inline bool dtkContainerList<T>::isEqual(const dtkAbstract
     }
 
     return false;
-};
-
-template <typename T> inline QVariant dtkContainerList<T>::operator[] (dtkxarch_int index) const
-{
-    return qVariantFromValue(m_list[index]);
 };
 
 #endif

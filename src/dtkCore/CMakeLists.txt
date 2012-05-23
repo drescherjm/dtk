@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon May 21 11:09:02 2012 (+0200)
-##           By: Julien Wintz
-##     Update #: 293
+## Last-Updated: Tue May 22 12:47:54 2012 (+0200)
+##           By: tkloczko
+##     Update #: 294
 ######################################################################
 ## 
 ### Commentary: 
@@ -47,8 +47,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkContainerList.tpp
   dtkContainerVector.h
   dtkContainerVector.tpp
-#  dtkContainerVectorBlock.h
-#  dtkContainerVectorBlock.tpp
   dtkCpuid.h
   dtkGlobal.h
   dtkPlugin.h

@@ -39,6 +39,7 @@
 #include "dtkComposerNodeList.h"
 #include "dtkComposerNodeLogger.h"
 #include "dtkComposerNodeInteger.h"
+#include "dtkComposerNodeMatrixSquareReal.h"
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeQuaternion.h"
@@ -53,6 +54,8 @@
 #include "dtkComposerNodeVector3DOperatorBinary.h"
 #include "dtkComposerNodeVectorReal.h"
 #include "dtkComposerNodeVectorRealOperatorModifier.h"
+#include "dtkComposerNodeVectorRealOperatorUnary.h"
+#include "dtkComposerNodeVectorRealOperatorBinary.h"
 #include "dtkComposerNodeView.h"
 #include "dtkComposerNodeRemote.h"
 #include "dtkComposerSceneNodeLeaf.h"
@@ -129,10 +132,26 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["List"] = QStringList() << "container" << "list";
     d->types["List"] = "list";
 
+    d->nodes << "Data Container";
+    d->descriptions["Data Container"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Container"] = QStringList() << "container" << "data";
+    d->types["Data Container"] = "data_container";
+
     d->nodes << "Vector";
     d->descriptions["Vector"] = "<p>Description not yet filled!</p>";
     d->tags["Vector"] = QStringList() << "container" << "vector";
     d->types["Vector"] = "vector";
+
+    // Matrix Square
+
+    d->nodes << "Matrix Square Real";
+    d->descriptions["Matrix Square Real "] = "<p>Description not yet filled!</p>";
+    d->tags["Matrix Square Real"] = QStringList() << "matrix" << "square" << "real"<< "algebraic";
+    d->types["Matrix Square Real"] = "matrix_square_real";
+
+
+
+    // Vector Real
 
     d->nodes << "Vector Real";
     d->descriptions["Vector Real"] = "<p>Description not yet filled!</p>";
@@ -164,10 +183,40 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Vector Real Divide"] = QStringList() << "vector" << "real" << "divide";
     d->types["Vector Real Divide"] = "vector_real_divide";
 
-    d->nodes << "Data Container";
-    d->descriptions["Data Container"] = "<p>Description not yet filled!</p>";
-    d->tags["Data Container"] = QStringList() << "container" << "data";
-    d->types["Data Container"] = "data_container";
+    d->nodes << "VectorReal Unit";
+    d->descriptions["VectorReal Unit"] = "<p>Description not yet filled!</p>";
+    d->tags["VectorReal Unit"] = QStringList() << "vectorReal" << "algebraic" << "unit";
+    d->types["VectorReal Unit"] = "vectorReal_unit";
+
+    d->nodes << "VectorReal Norm";
+    d->descriptions["VectorReal Norm"] = "<p>Description not yet filled!</p>";
+    d->tags["VectorReal Norm"] = QStringList() << "vectorReal" << "algebraic" << "norm";
+    d->types["VectorReal Norm"] = "vectorReal_norm";
+
+    d->nodes << "VectorReal Sum";
+    d->descriptions["VectorReal Sum"] = "<p>Description not yet filled!</p>";
+    d->tags["VectorReal Sum"] = QStringList() << "vectorReal" << "algebraic" << "sum";
+    d->types["VectorReal Sum"] = "vectorReal_sum";
+
+    d->nodes << "VectorReal Substract";
+    d->descriptions["VectorReal Substract"] = "<p>Description not yet filled!</p>";
+    d->tags["VectorReal Substract"] = QStringList() << "vectorReal" << "algebraic" << "substraction";
+    d->types["VectorReal Substract"] = "vectorReal_substract";
+
+    d->nodes << "VectorReal Dot Prod";
+    d->descriptions["VectorReal Dot Prod"] = "<p>Description not yet filled!</p>";
+    d->tags["VectorReal Dot Prod"] = QStringList() << "vectorReal" << "algebraic" << "dot product";
+    d->types["VectorReal Dot Prod"] = "vectorReal_dot_prod";
+
+    d->nodes << "VectorReal Scal Mult";
+    d->descriptions["VectorReal Scal Mult"] = "<p>Description not yet filled!</p>";
+    d->tags["VectorReal Scal Mult"] = QStringList() << "vectorReal" << "algebraic" << "scalar multiplication";
+    d->types["VectorReal Scal Mult"] = "vectorReal_scal_mult";
+
+    d->nodes << "VectorReal Scal Division";
+    d->descriptions["VectorReal Scal Division"] = "<p>Description not yet filled!</p>";
+    d->tags["VectorReal Scal Division"] = QStringList() << "vectorReal" << "algebraic" << "scalar division";
+    d->types["VectorReal Scal Division"] = "vectorReal_scal_divide";
 
     // Array
 
@@ -715,8 +764,18 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "list")
         return new dtkComposerNodeList;
 
+    if(type == "data_container")
+        return new dtkComposerNodeContainerData;
+
     if(type == "vector")
         return new dtkComposerNodeVector;
+
+    // Matrix Square Nodes
+
+    if(type == "matrix_square_real")
+        return new dtkComposerNodeMatrixSquareReal;
+
+    // Vector Real nodes
 
     if(type == "vector_real")
         return new dtkComposerNodeVectorReal;
@@ -736,8 +795,27 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "vector_real_divide")
         return new dtkComposerNodeVectorRealOperatorModifierDivide;
 
-    if(type == "data_container")
-        return new dtkComposerNodeContainerData;
+    if(type == "vectorReal_unit")
+        return new dtkComposerNodeVectorRealOperatorUnaryUnitary;
+
+    if(type == "vectorReal_norm")
+        return new dtkComposerNodeVectorRealOperatorUnaryScalarNorm;
+
+    if(type == "vectorReal_sum")
+        return new dtkComposerNodeVectorRealOperatorBinarySum;
+
+    if(type == "vectorReal_substract")
+        return new dtkComposerNodeVectorRealOperatorBinarySubstract;
+
+    if(type == "vectorReal_dot_prod")
+        return new dtkComposerNodeVectorRealOperatorBinaryScalarDotProd;
+
+    if(type == "vectorReal_scal_mult")
+        return new dtkComposerNodeVectorRealOperatorHomotheticMult;
+
+    if(type == "vectorReal_scal_divide")
+        return new dtkComposerNodeVectorRealOperatorHomotheticDivision;
+
 
     // Array nodes
 

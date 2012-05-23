@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 15:40:03 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 11:01:45 2012 (+0100)
- *           By: tkloczko
- *     Update #: 25
+ * Last-Updated: Tue May 22 16:52:37 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -43,6 +43,7 @@ public:
     void setAsHeader(bool header);
     void setAsFooter(bool footer);
 
+public:
     bool isHeader(void);
     bool isFooter(void);
 

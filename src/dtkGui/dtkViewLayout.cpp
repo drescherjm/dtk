@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 21 15:53:58 2012 (+0200)
+ * Last-Updated: Wed May 23 17:55:16 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 13
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -39,6 +39,8 @@ dtkViewLayout::dtkViewLayout(QWidget *parent) : QFrame(parent), d(new dtkViewLay
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(d->root);
+
+    connect(d->root, SIGNAL(focused(dtkAbstractView *)), this, SIGNAL(focused(dtkAbstractView *)));
 }
 
 dtkViewLayout::~dtkViewLayout(void)

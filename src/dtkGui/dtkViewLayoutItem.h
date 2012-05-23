@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:35 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 23 01:49:37 2012 (+0200)
+ * Last-Updated: Wed May 23 17:58:57 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 53
+ *     Update #: 59
  */
 
 /* Commentary: 
@@ -90,6 +90,9 @@ public slots:
     void unsplit(void);
     void maximize(void);
 
+signals:
+    void focused(dtkAbstractView *view);
+
 protected slots:
     void close(void);
     void horzt(void);
@@ -105,6 +108,9 @@ protected:
     void dragMoveEvent(QDragMoveEvent *);
     void dragLeaveEvent(QDragLeaveEvent *);
     void dropEvent(QDropEvent *);
+
+private:
+    void notify(dtkAbstractView *view);
 
 private:
      dtkViewLayoutItemPrivate *d;

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 22 13:07:11 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 22 16:16:23 2012 (+0200)
+ * Last-Updated: Wed May 23 14:03:18 2012 (+0200)
  *           By: tkloczko
- *     Update #: 60
+ *     Update #: 64
  */
 
 /* Commentary: 
@@ -21,6 +21,8 @@
 #define DTKABSTRACTCONTAINER_H
 
 #include "dtkContainerExport.h"
+
+#include <dtkCore/dtkGlobal>
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractContainer interface
@@ -46,10 +48,6 @@ public:
 
     virtual Type type(void) const = 0;
 
-    void setName(const QString& name) = 0;
-    
-    QString name(void) const = 0;
-
 public:
     virtual void clear(void) = 0;
 
@@ -67,12 +65,12 @@ public:
 
     virtual dtkxarch_int count(void) const = 0;
 
-    virtual T* toArray(dtkxarch_int& count) = 0;
+    virtual T *toArray(dtkxarch_int& count) = 0;
 
 public:
     dtkAbstractContainer& operator = (const dtkAbstractContainer<T>& other);
 
-    virtual dtkContainerVector<T> *clone(void) const = 0;
+    virtual dtkAbstractContainer<T> *clone(void) const = 0;
 
 public:
     dtkAbstractContainer& operator << (const T& value);

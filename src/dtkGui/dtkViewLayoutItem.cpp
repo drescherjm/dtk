@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:45 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 23 19:19:28 2012 (+0200)
+ * Last-Updated: Wed May 23 20:09:27 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 696
+ *     Update #: 771
  */
 
 /* Commentary: 
@@ -33,6 +33,48 @@ class dtkViewLayoutItemProxyPrivate
 {
 public:
     dtkAbstractView *view;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkViewLayoutItemPrivate
+// /////////////////////////////////////////////////////////////////
+
+class dtkViewLayoutItemPrivate
+{
+public:
+    static dtkViewLayoutItemProxy *firstViewChild(dtkViewLayoutItem *item);
+
+public:
+    dtkViewLayoutItem *root;
+    dtkViewLayoutItem *parent;
+
+public:
+    dtkViewLayoutItem *a;
+    dtkViewLayoutItem *b;
+
+public:
+    dtkViewLayout *layout;
+
+public:
+    dtkViewLayoutItemProxy *proxy;
+
+public:
+    QSplitter *splitter;
+
+public:
+    QPushButton *close;
+    QPushButton *horzt;
+    QPushButton *vertc;
+    QPushButton *maxmz;
+
+public:
+    QLineEdit *label;
+
+public:
+    QFrame *footer;
+
+public:
+    dtkViewLayoutItem *q;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -76,7 +118,7 @@ dtkViewLayoutItemProxy::~dtkViewLayoutItemProxy(void)
 
                 disconnect(d->view, SIGNAL(focused()), proxy, SIGNAL(focusedIn()));
 
-                // 
+                // -
 
                 proxy->d->view = 0;
             }
@@ -109,6 +151,11 @@ void dtkViewLayoutItemProxy::setView(dtkAbstractView *view)
         proxy->layout()->removeWidget(view->widget());
         proxy->d->view = 0;
 
+        if(dtkViewLayoutItem *item = dynamic_cast<dtkViewLayoutItem *>(proxy->parentWidget()->parentWidget())) {
+            // qDebug() << "Got parent ! - clearing name";
+            item->d->label->clear();
+        }
+
         disconnect(view, SIGNAL(focused()), proxy, SIGNAL(focusedIn()));
     }
 
@@ -118,7 +165,14 @@ void dtkViewLayoutItemProxy::setView(dtkAbstractView *view)
 
     connect(view, SIGNAL(focused()), this, SIGNAL(focusedIn()));
 
-    // qDebug() << __func__ << 2;
+    if(dtkViewLayoutItem *item = dynamic_cast<dtkViewLayoutItem *>(this->parentWidget()->parentWidget())) {
+
+        // qDebug() << "Got parent ! - setting name";
+
+        item->d->label->setText(d->view->objectName());
+    }
+
+    // qDebug() << __func__ << 2 << this->parentWidget()->objectName() << this->parentWidget()->metaObject()->className();
 }
 
 void dtkViewLayoutItemProxy::focusInEvent(QFocusEvent *event)
@@ -138,41 +192,6 @@ void dtkViewLayoutItemProxy::focusOutEvent(QFocusEvent *event)
 // /////////////////////////////////////////////////////////////////
 // dtkViewLayoutItemPrivate
 // /////////////////////////////////////////////////////////////////
-
-class dtkViewLayoutItemPrivate
-{
-public:
-    static dtkViewLayoutItemProxy *firstViewChild(dtkViewLayoutItem *item);
-
-public:
-    dtkViewLayoutItem *root;
-    dtkViewLayoutItem *parent;
-
-public:
-    dtkViewLayoutItem *a;
-    dtkViewLayoutItem *b;
-
-public:
-    dtkViewLayout *layout;
-
-public:
-    dtkViewLayoutItemProxy *proxy;
-
-public:
-    QSplitter *splitter;
-
-public:
-    QPushButton *close;
-    QPushButton *horzt;
-    QPushButton *vertc;
-    QPushButton *maxmz;
-
-public:
-    QFrame *footer;
-
-public:
-    dtkViewLayoutItem *q;
-};
 
 dtkViewLayoutItemProxy *dtkViewLayoutItemPrivate::firstViewChild(dtkViewLayoutItem *item)
 {
@@ -217,12 +236,15 @@ dtkViewLayoutItem::dtkViewLayoutItem(dtkViewLayoutItem *parent) : QFrame(parent)
     d->vertc = new QPushButton("Vertc", this);
     d->close = new QPushButton("Close", this);
     d->maxmz = new QPushButton("Maxmz", this);
+    
+    d->label = new QLineEdit(this);
 
     QHBoxLayout *footer_layout = new QHBoxLayout;
-    footer_layout->addWidget(d->close);
+    footer_layout->addWidget(d->label);
     footer_layout->addWidget(d->horzt);
     footer_layout->addWidget(d->vertc);
     footer_layout->addWidget(d->maxmz);
+    footer_layout->addWidget(d->close);
 
     d->footer = new QFrame(this);
     d->footer->setLayout(footer_layout);
@@ -565,7 +587,9 @@ void dtkViewLayoutItem::dropEvent(QDropEvent *event)
     if(d->proxy->view())
         return;
 
-    d->proxy->setView(dtkAbstractViewFactory::instance()->view(event->mimeData()->text()));
+    dtkAbstractView *view = dtkAbstractViewFactory::instance()->view(event->mimeData()->text());
+
+    d->proxy->setView(view);
 }
 
 void dtkViewLayoutItem::notify(dtkAbstractView *view)

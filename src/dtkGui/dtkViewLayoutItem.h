@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:35 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 23 17:58:57 2012 (+0200)
+ * Last-Updated: Wed May 23 19:51:34 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 59
+ *     Update #: 60
  */
 
 /* Commentary: 
@@ -117,6 +117,7 @@ private:
 
 private:
      friend class dtkViewLayoutItemPrivate;
+     friend class dtkViewLayoutItemProxy;
 };
 
 #endif

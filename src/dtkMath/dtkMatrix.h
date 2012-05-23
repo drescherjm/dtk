@@ -1,5 +1,5 @@
 /* dtkMatrix.h --- 
- * 
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jun  8 13:10:13 2010 (+0200)
@@ -10,11 +10,11 @@
  */
 
 /* Commentary: 
- * 
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKMATRIX_H
@@ -158,6 +158,17 @@ public:
 // /////////////////////////////////////////////////////////////////
 
 #include "dtkMatrix.tpp"
+
+// /////////////////////////////////////////////////////////////////
+//
+// /////////////////////////////////////////////////////////////////
+
+#include <QtCore>
+
+typedef dtkMatrix<qreal> dtkMatrixSquareReal;
+
+Q_DECLARE_METATYPE(dtkMatrixSquareReal);
+Q_DECLARE_METATYPE(dtkMatrixSquareReal *);
 
 #endif
 

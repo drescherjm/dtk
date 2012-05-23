@@ -39,6 +39,7 @@
 #include "dtkComposerNodeList.h"
 #include "dtkComposerNodeLogger.h"
 #include "dtkComposerNodeInteger.h"
+#include "dtkComposerNodeMatrixSquareReal.h"
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeQuaternion.h"
@@ -140,6 +141,15 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["Vector"] = "<p>Description not yet filled!</p>";
     d->tags["Vector"] = QStringList() << "container" << "vector";
     d->types["Vector"] = "vector";
+
+    // Matrix Square
+
+    d->nodes << "Matrix Square Real";
+    d->descriptions["Matrix Square Real "] = "<p>Description not yet filled!</p>";
+    d->tags["Matrix Square Real"] = QStringList() << "matrix" << "square" << "real"<< "algebraic";
+    d->types["Matrix Square Real"] = "matrix_square_real";
+
+
 
     // Vector Real
 
@@ -759,6 +769,11 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "vector")
         return new dtkComposerNodeVector;
+
+    // Matrix Square Nodes
+
+    if(type == "matrix_square_real")
+        return new dtkComposerNodeMatrixSquareReal;
 
     // Vector Real nodes
 

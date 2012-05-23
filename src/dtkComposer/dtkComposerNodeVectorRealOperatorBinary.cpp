@@ -116,10 +116,7 @@ dtkComposerNodeVectorRealOperatorHomothetic::~dtkComposerNodeVectorRealOperatorH
 
 void dtkComposerNodeVectorRealOperatorBinarySum::run(void)
 {
-    dtkVectorReal vec1 = d->receiver_lhs.data();
-    dtkVectorReal vec2 = d->receiver_rhs.data();
-
-    int size = qMin(vec1.getRows(), vec2.getRows());
+    int size = qMin(d->receiver_lhs.data().getRows(), d->receiver_rhs.data().getRows());
 
     for(int i = 0 ; i < size; i++)
         d->emitter_vec.setData(d->receiver_lhs.data() + d->receiver_rhs.data());
@@ -132,10 +129,7 @@ void dtkComposerNodeVectorRealOperatorBinarySum::run(void)
 
 void dtkComposerNodeVectorRealOperatorBinarySubstract::run(void)
 {
-    dtkVectorReal vec1 = d->receiver_lhs.data();
-    dtkVectorReal vec2 = d->receiver_rhs.data();
-
-    int size = qMin(vec1.getRows(), vec2.getRows());
+    int size = qMin(d->receiver_lhs.data().getRows(), d->receiver_rhs.data().getRows());
 
     for(int i = 0 ; i < size; i++)
         d->emitter_vec.setData(d->receiver_lhs.data() - d->receiver_rhs.data());
@@ -144,10 +138,7 @@ void dtkComposerNodeVectorRealOperatorBinarySubstract::run(void)
 
 void dtkComposerNodeVectorRealOperatorBinaryScalarDotProd::run(void)
 {
-    dtkVectorReal vec1 = d->receiver_lhs.data();
-    dtkVectorReal vec2 = d->receiver_rhs.data();
-
-    int size = qMin(vec1.getRows(), vec2.getRows());
+    int size = qMin(d->receiver_lhs.data().getRows(), d->receiver_rhs.data().getRows());
 
     for(int i = 0 ; i < size; i++)
         d->emitter_val.setData(d->receiver_lhs.data() * d->receiver_rhs.data());

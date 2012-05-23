@@ -36,11 +36,11 @@ public:
 
 public:
     inline QString type(void) {
-        return "Matrix_square_real";
+        return "matrix_square_real";
     }
 
     inline QString titleHint(void) {
-        return "Vector Square Real";
+        return "Matrix Square Real";
     }
 
 public:

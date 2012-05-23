@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:35 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 23 01:45:33 2012 (+0200)
+ * Last-Updated: Wed May 23 01:49:37 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 51
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -94,6 +94,7 @@ protected slots:
     void close(void);
     void horzt(void);
     void vertc(void);
+    void maxmz(void);
 
 protected slots:
     void onFocusedIn(void);

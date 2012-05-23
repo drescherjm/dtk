@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:45 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 23 01:48:02 2012 (+0200)
+ * Last-Updated: Wed May 23 02:20:32 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 610
+ *     Update #: 645
  */
 
 /* Commentary: 
@@ -157,6 +157,7 @@ public:
     QPushButton *close;
     QPushButton *horzt;
     QPushButton *vertc;
+    QPushButton *maxmz;
 
 public:
     QFrame *footer;
@@ -207,11 +208,13 @@ dtkViewLayoutItem::dtkViewLayoutItem(dtkViewLayoutItem *parent) : QFrame(parent)
     d->horzt = new QPushButton("Horzt", this);
     d->vertc = new QPushButton("Vertc", this);
     d->close = new QPushButton("Close", this);
+    d->maxmz = new QPushButton("Maxmz", this);
 
     QHBoxLayout *footer_layout = new QHBoxLayout;
     footer_layout->addWidget(d->close);
     footer_layout->addWidget(d->horzt);
     footer_layout->addWidget(d->vertc);
+    footer_layout->addWidget(d->maxmz);
 
     d->footer = new QFrame(this);
     d->footer->setLayout(footer_layout);
@@ -227,6 +230,7 @@ dtkViewLayoutItem::dtkViewLayoutItem(dtkViewLayoutItem *parent) : QFrame(parent)
     connect(d->close, SIGNAL(clicked()), this, SLOT(close()));
     connect(d->horzt, SIGNAL(clicked()), this, SLOT(horzt()));
     connect(d->vertc, SIGNAL(clicked()), this, SLOT(vertc()));
+    connect(d->maxmz, SIGNAL(clicked()), this, SLOT(maxmz()));
 
     connect(d->proxy, SIGNAL(focusedIn()), this, SLOT(onFocusedIn()));
     connect(d->proxy, SIGNAL(focusedOut()), this, SLOT(onFocusedOut()));
@@ -451,7 +455,7 @@ void dtkViewLayoutItem::maximize(void)
 
     if(this == d->root)
         return;
-
+    
     d->root->setUpdatesEnabled(false);
 
     d->root->d->proxy = new dtkViewLayoutItemProxy(d->root);
@@ -459,16 +463,20 @@ void dtkViewLayoutItem::maximize(void)
     d->root->connect(d->root->d->proxy, SIGNAL(focusedIn()), d->root, SLOT(onFocusedIn()));
     d->root->connect(d->root->d->proxy, SIGNAL(focusedOut()), d->root, SLOT(onFocusedOut()));
 
+    d->root->d->splitter->addWidget(d->root->d->proxy);
+
     d->root->d->proxy->setView(d->proxy->view());
     d->root->d->proxy->setFocus(Qt::OtherFocusReason);
+
+    d->root->d->footer->show();
+
+    d->root->setUpdatesEnabled(true);
 
     d->root->d->a->deleteLater();
     d->root->d->b->deleteLater();
 
     d->root->d->a = NULL;
     d->root->d->b = NULL;
-
-    d->root->setUpdatesEnabled(true);
 }
 
 void dtkViewLayoutItem::onFocusedIn(void)
@@ -509,6 +517,13 @@ void dtkViewLayoutItem::vertc(void)
     d->splitter->setOrientation(Qt::Vertical);
 
     this->split();
+}
+
+void dtkViewLayoutItem::maxmz(void)
+{
+    this->onFocusedIn();
+
+    this->maximize();
 }
 
 void dtkViewLayoutItem::dragEnterEvent(QDragEnterEvent *event)

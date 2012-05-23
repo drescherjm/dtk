@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 22 14:57:44 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 22 16:07:06 2012 (+0200)
+ * Last-Updated: Wed May 23 14:07:13 2012 (+0200)
  *           By: tkloczko
- *     Update #: 39
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -48,14 +48,14 @@ public:
     virtual void prepend(const dtkAbstractContainer<T>& values) = 0;
     
     virtual void insert(dtkxarch_int index, const T& value) = 0;
-    virtual void insert(dtkxarch_int index, const dtkAbstractContainer<T>& values) = 0;
-    virtual void insert(dtkxarch_int index, dtkxarch_int step, const dtkAbstractContainer<T>& values) = 0;
-    virtual void insert(dtkxarch_int* indices, const dtkAbstractContainer<T>& values) = 0;
+    virtual void insert(dtkxarch_int from, const dtkAbstractContainer<T>& values) = 0;
+    virtual void insert(dtkxarch_int from, dtkxarch_int step, const dtkAbstractContainer<T>& values) = 0;
+    virtual void insert(dtkxarch_int *indices, const dtkAbstractContainer<T>& values) = 0;
     
     virtual void replace(dtkxarch_int index, const T& value) = 0;
-    virtual void replace(dtkxarch_int index, const dtkAbstractContainer<T>& values) = 0;
-    virtual void replace(dtkxarch_int index, dtkxarch_int step, const dtkAbstractContainer<T>& values) = 0;
-    virtual void replace(dtkxarch_int* indices, const dtkAbstractContainer<T>& values) = 0;
+    virtual void replace(dtkxarch_int from, const dtkAbstractContainer<T>& values) = 0;
+    virtual void replace(dtkxarch_int from, dtkxarch_int step, const dtkAbstractContainer<T>& values) = 0;
+    virtual void replace(dtkxarch_int *indices, const dtkAbstractContainer<T>& values) = 0;
 
     virtual void removeAt(dtkxarch_int index) = 0;
     virtual void removeAt(dtkxarch_int from, dtkxarch_int to, dtkxarch_int step = 1) = 0;
@@ -68,8 +68,8 @@ public:
 
     virtual const T& at(dtkxarch_int index) const = 0;
 
-    virtual dtkAbstractContainer<T> subContainer(const dtkAbstractContainer<dtkxarch_int>& indices) const = 0;
-    virtual dtkAbstractContainer<T> subContainer(dtkxarch_int from, dtkxarch_int to, dtkxarch_int step = 1) const = 0;
+    virtual dtkAbstractContainerOrdered<T> subContainer(const dtkAbstractContainerOrdered<dtkxarch_int>& indices)  const = 0;
+    virtual dtkAbstractContainerOrdered<T> subContainer(dtkxarch_int from, dtkxarch_int to, dtkxarch_int step = 1) const = 0;
 
 public:
     virtual const T& operator [] (dtkxarch_int index) const = 0;

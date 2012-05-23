@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 18:43:18 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 334
+ * Last-Updated: mer. mai 23 14:29:30 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 336
  */
 
 /* Commentary: 
@@ -248,7 +248,7 @@ void dtkComposer::next(void)
 
 void dtkComposer::stop(void)
 {
-
+    d->evaluator->stop();
 }
 
 dtkComposerEvaluator *dtkComposer::evaluator(void)

@@ -84,7 +84,7 @@ dtkComposerNodeMatrixSquareRealOperatorUnaryScalar::~dtkComposerNodeMatrixSquare
 
 void dtkComposerNodeMatrixSquareRealOperatorUnaryTranspose::run(void)
 {
-    d->emitter_matrix.setData(dtkTranspose(d->receiver_matrix.data());
+    d->emitter_matrix.setData(dtkTranspose(d->receiver_matrix.data()));
 
 }
 
@@ -94,7 +94,7 @@ void dtkComposerNodeMatrixSquareRealOperatorUnaryTranspose::run(void)
 
 void dtkComposerNodeMatrixSquareRealOperatorUnaryInverse::run(void)
 {
-    d->emitter_matrix.setData(dtkInverse(d->receiver_matrix.data());
+    d->emitter_matrix.setData(dtkInverse(d->receiver_matrix.data()));
 
 }
 
@@ -104,7 +104,7 @@ void dtkComposerNodeMatrixSquareRealOperatorUnaryInverse::run(void)
 
 void dtkComposerNodeMatrixSquareRealOperatorUnaryScalarDeterminant::run(void)
 {
-    d->emitter_val.setData(dtkDeterminant(d->receiver_matrix.data());
+    d->emitter_val.setData(dtkDeterminant(d->receiver_matrix.data()));
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -113,6 +113,6 @@ void dtkComposerNodeMatrixSquareRealOperatorUnaryScalarDeterminant::run(void)
 
 void dtkComposerNodeMatrixSquareRealOperatorUnaryScalarTrace::run(void)
 {
-    d->emitter_val.setData(dtkMatrixSquaredTrace(d->receiver_matrix.data());
+    d->emitter_val.setData(dtkMatrixSquaredTrace(d->receiver_matrix.data()));
 }
 

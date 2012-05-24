@@ -40,6 +40,7 @@
 #include "dtkComposerNodeLogger.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeMatrixSquareReal.h"
+#include "dtkComposerNodeMatrixSquareRealOperatorUnary.h"
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeQuaternion.h"
@@ -149,6 +150,25 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Matrix Square Real"] = QStringList() << "matrix" << "square" << "real"<< "algebraic";
     d->types["Matrix Square Real"] = "matrix_square_real";
 
+    d->nodes << "MatrixSquare Real Transpose";
+    d->descriptions["MatrixSquare Real Transpose "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Transpose"] = QStringList() << "matrix" << "square" << "real"<< "transpose";
+    d->types["MatrixSquare Real Transpose"] = "matrixSquare_real_transpose";
+
+    d->nodes << "MatrixSquare Real Inverse";
+    d->descriptions["MatrixSquare Real Inverse "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Inverse"] = QStringList() << "matrix" << "square" << "real"<< "inverse";
+    d->types["MatrixSquare Real Inverse"] = "matrixSquare_real_inverse";
+
+    d->nodes << "MatrixSquare Real Determinant";
+    d->descriptions["MatrixSquare Real Determinant "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Determinant"] = QStringList() << "matrix" << "square" << "real"<< "Determinant";
+    d->types["MatrixSquare Real Determinant"] = "matrixSquare_real_determinant";
+
+    d->nodes << "MatrixSquare Real Trace";
+    d->descriptions["MatrixSquare Real Trace "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Trace"] = QStringList() << "matrix" << "square" << "real"<< "algebraic";
+    d->types["MatrixSquare Real Trace"] = "matrixSquare_real_trace";
 
 
     // Vector Real
@@ -774,6 +794,18 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "matrix_square_real")
         return new dtkComposerNodeMatrixSquareReal;
+
+    if(type == "matrixSquare_real_transpose")
+        return new dtkComposerNodeMatrixSquareRealOperatorUnaryTranspose;
+
+    if(type == "matrixSquare_real_inverse")
+        return new dtkComposerNodeMatrixSquareRealOperatorUnaryInverse;
+
+    if(type == "matrixSquare_real_trace")
+        return new dtkComposerNodeMatrixSquareRealOperatorUnaryScalarTrace;
+
+    if(type == "matrixSquare_real_determinant")
+        return new dtkComposerNodeMatrixSquareRealOperatorUnaryScalarDeterminant;
 
     // Vector Real nodes
 

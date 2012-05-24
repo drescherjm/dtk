@@ -107,11 +107,13 @@ void dtkComposerNodeMatrixSquareReal::run(void)
     } else {
 
         unsigned int t =  d->receiver_size.data();
-        dtkMatrixSquareReal matrix(t,t);
+        dtkMatrixSquareReal matrix(t);
 
         for(int i = 0 ; i < matrix.getRows(); i++){
-            for(int j = 0 ; j < matrix.getCols(); j++)
+            for(int j = 0 ; j < matrix.getCols(); j++){
                 matrix[i][j] = d->receiver_value.data();
+
+            }
 
         }
 

@@ -165,10 +165,10 @@ public:
 
 #include <QtCore>
 
-typedef dtkMatrix<qreal> dtkMatrixSquareReal;
+typedef dtkMatrix<qreal> dtkMatrixReal;
 
-Q_DECLARE_METATYPE(dtkMatrixSquareReal);
-Q_DECLARE_METATYPE(dtkMatrixSquareReal *);
+Q_DECLARE_METATYPE(dtkMatrixReal);
+Q_DECLARE_METATYPE(dtkMatrixReal *);
 
 #endif
 

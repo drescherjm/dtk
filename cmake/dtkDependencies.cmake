@@ -96,6 +96,8 @@ endif(SWIG_FOUND)
 ## Tcl
 ## #################################################################
 
+if(NOT WINDOWS)
+
 find_package(TCL QUIET)
 
 if(TCL_FOUND)
@@ -105,6 +107,8 @@ endif(TCL_FOUND)
 if(TCL_FOUND)
   add_definitions(-DHAVE_TCL)
 endif(TCL_FOUND)
+
+endif(NOT WINDOWS)
 
 ## #################################################################
 ## Python

@@ -21,10 +21,11 @@
 
 #include "dtkCpuid.h"
 
-#ifdef _WIN32
+#if defined(Q_OS_WIN)
 #include <limits.h>
+#if defined(MSVC)
 typedef unsigned __int32  uint32_t;
-
+#endif
 #else
 #include <stdint.h>
 #endif
@@ -53,9 +54,8 @@ dtkCpuid::~dtkCpuid(void)
 /*   const uint32_t &EDX() const {return regs[3];}; */
 
 void dtkCpuid::load(unsigned i) {
-#ifdef _WIN32
+#if defined(Q_OS_WIN) && defined(MSVC)
     __cpuid((int *)d->regs, (int)i);
-
 #else
     asm volatile
       ("cpuid" : "=a" (d->regs[0]), "=b" (d->regs[1]), "=c" (d->regs[2]), "=d" (d->regs[3])

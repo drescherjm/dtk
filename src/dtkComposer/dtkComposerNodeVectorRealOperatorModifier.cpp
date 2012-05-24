@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette lekouta, Inria.
  * Created: Thu Apr 26 16:14:44 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 17:34:34 2012 (+0200)
- *           By: sblekout
- *     Update #: 38
+ * Last-Updated: Thu May 24 18:34:41 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 51
  */
 /* dtkComposerNodeVectorRealOperatorModifier.cpp ---
  *
@@ -70,16 +70,16 @@ dtkComposerNodeVectorRealOperatorModifier::~dtkComposerNodeVectorRealOperatorMod
 
 void dtkComposerNodeVectorRealOperatorModifierSet::run(void)
 {
+    if(d->receiver_vector.isEmpty())
+        return;
+
     dtkVectorReal vec(d->receiver_vector.data());
 
-    if (!d->receiver_vector.isEmpty()) {
+    if (!d->receiver_index.isEmpty() && d->receiver_index.data() < vec.getRows())
         vec[d->receiver_index.data()] = d->receiver_value.data();
-
-    }
 
     d->emitter_vector.setData(vec);
 }
-
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeVectorRealOperatorModifier - Sum
@@ -150,17 +150,3 @@ void dtkComposerNodeVectorRealOperatorModifierDivide::run(void)
     d->emitter_vector.setData(vec);
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

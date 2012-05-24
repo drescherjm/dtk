@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Mon May 21 10:58:18 2012 (+0200)
-##           By: Julien Wintz
-##     Update #: 538
+## Last-Updated: Wed May 23 18:07:31 2012 (+0200)
+##           By: tkloczko
+##     Update #: 539
 ######################################################################
 ##
 ### Commentary:
@@ -309,6 +309,7 @@ endif(BUILD_SHARED_LIBS)
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkMath
+  dtkContainer
   dtkCore
   dtkGui
   dtkLog

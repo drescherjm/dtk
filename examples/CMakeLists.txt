@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:06:43 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Wed May 16 09:44:16 2012 (+0200)
-##           By: Julien Wintz
-##     Update #: 84
+## Last-Updated: Wed May 23 16:52:27 2012 (+0200)
+##           By: tkloczko
+##     Update #: 85
 ######################################################################
 ## 
 ### Commentary: 
@@ -41,7 +41,7 @@ add_subdirectory(dtkLicenseManager)
 ## #################################################################
 
 add_subdirectory(dtkAbstractDataComposite)
-add_subdirectory(dtkContainer)
+## add_subdirectory(dtkContainer)
 add_subdirectory(dtkReferenceCounting)
 add_subdirectory(dtkUpdater)
 

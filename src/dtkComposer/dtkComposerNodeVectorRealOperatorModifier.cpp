@@ -1,22 +1,12 @@
-/* dtkComposerNodeVectorRealOperatorModifier.h ---
- *
- * Author: sblekout
- * Copyright (C) 2011 - babette lekouta, Inria.
- * Created: Thu Apr 26 16:14:44 2012 (+0200)
- * Version: $Id$
- * Last-Updated: Thu May 24 18:34:41 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 51
- */
 /* dtkComposerNodeVectorRealOperatorModifier.cpp ---
  *
  * Author: sblekout
  * Copyright (C) 2011 - babette lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 15 13:58:18 2012 (+0200)
- *           By: sblekout
- *     Update #: 33
+ * Last-Updated: Thu May 24 22:33:00 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 34
  */
 
 /* Commentary:

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue May 22 12:47:54 2012 (+0200)
+## Last-Updated: Thu May 24 12:19:08 2012 (+0200)
 ##           By: tkloczko
-##     Update #: 294
+##     Update #: 300
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,7 +24,6 @@ project(dtkCore)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkAbstractContainer.h
   dtkAbstractData.h
   dtkAbstractDataFactory.h
   dtkAbstractDataReader.h
@@ -43,10 +42,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractViewFactory.h
   dtkAbstractViewInteractor.h
   dtkAbstractViewNavigator.h
-  dtkContainerList.h
-  dtkContainerList.tpp
-  dtkContainerVector.h
-  dtkContainerVector.tpp
   dtkCpuid.h
   dtkGlobal.h
   dtkPlugin.h
@@ -58,7 +53,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkSmartPointer.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
-  dtkAbstractContainer.h
   dtkAbstractData.h
   dtkAbstractDataFactory.h
   dtkAbstractDataReader.h
@@ -81,7 +75,6 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkUpdater_p.h)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkAbstractContainer.cpp
   dtkAbstractDataFactory.cpp
   dtkAbstractData.cpp
   dtkAbstractDataReader.cpp

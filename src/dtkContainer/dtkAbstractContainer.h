@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 22 13:07:11 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 23 14:03:18 2012 (+0200)
+ * Last-Updated: Thu May 24 12:35:16 2012 (+0200)
  *           By: tkloczko
- *     Update #: 64
+ *     Update #: 76
  */
 
 /* Commentary: 
@@ -24,20 +24,21 @@
 
 #include <dtkCore/dtkGlobal>
 
+#include <typeinfo>
+
+enum dtkContainerType {
+        dtkContainerTypeNone,
+        dtkContainerTypeOrdered,
+        dtkContainerTypeUnordered,
+        dtkContainerTypeAssociated
+    };
+
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractContainer interface
 // /////////////////////////////////////////////////////////////////
 
 template <typename T> class DTKCONTAINER_EXPORT dtkAbstractContainer
 {
-public:
-    enum Type {
-        None,
-        Ordered,
-        Unordered,
-        Associated
-    };
-
 public:
      dtkAbstractContainer(void);
      dtkAbstractContainer(const dtkAbstractContainer<T>& other);
@@ -46,7 +47,7 @@ public:
 public:
     virtual QString identifier(void) const = 0;
 
-    virtual Type type(void) const = 0;
+    virtual dtkContainerType type(void) const = 0;
 
 public:
     virtual void clear(void) = 0;
@@ -65,7 +66,8 @@ public:
 
     virtual dtkxarch_int count(void) const = 0;
 
-    virtual T *toArray(dtkxarch_int& count) = 0;
+    virtual       T *toArray(dtkxarch_int& count) = 0;
+    virtual const T *toArray(dtkxarch_int& count) const = 0;
 
 public:
     dtkAbstractContainer& operator = (const dtkAbstractContainer<T>& other);
@@ -83,7 +85,7 @@ public:
     virtual bool isEqual(const dtkAbstractContainer& other) const = 0;
 
 public:
-    dtkAbstractContainer<T>  operator +  (const dtkAbstractContainer<T>& other);
+    dtkAbstractContainer<T>  operator +  (const dtkAbstractContainer<T>& other) const;
 
     dtkAbstractContainer<T>& operator += (const dtkAbstractContainer<T>& other);
     dtkAbstractContainer<T>& operator += (const T& value);

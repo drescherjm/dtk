@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 16 14:20:43 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 226
+ * Last-Updated: Wed May 23 18:13:38 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 228
  */
 
 /* Commentary: 
@@ -87,7 +87,7 @@ template <typename T> const T& dtkComposerTransmitterReceiver<T>::data(void) con
 /*! 
  *  
  */
-template <typename T> dtkAbstractContainer& dtkComposerTransmitterReceiver<T>::container(void)
+template <typename T> dtkAbstractContainerWrapper& dtkComposerTransmitterReceiver<T>::container(void)
 {
     if (active_emitter)
         return active_emitter->container();
@@ -102,7 +102,7 @@ template <typename T> dtkAbstractContainer& dtkComposerTransmitterReceiver<T>::c
 /*! 
  *  
  */
-template <typename T> const dtkAbstractContainer& dtkComposerTransmitterReceiver<T>::container(void) const
+template <typename T> const dtkAbstractContainerWrapper& dtkComposerTransmitterReceiver<T>::container(void) const
 {
     if (active_emitter)
         return active_emitter->container();
@@ -143,35 +143,35 @@ template <typename T> const dtkContainerVector<T>& dtkComposerTransmitterReceive
     return m_vector;
 };
 
-//! 
-/*! 
- *  
- */
-template <typename T> dtkContainerList<T>& dtkComposerTransmitterReceiver<T>::list(void)
-{
-    if (active_emitter)
-        return active_emitter->list();
+// //! 
+// /*! 
+//  *  
+//  */
+// template <typename T> dtkContainerList<T>& dtkComposerTransmitterReceiver<T>::list(void)
+// {
+//     if (active_emitter)
+//         return active_emitter->list();
 
-    if (active_variant) 
-        return *reinterpret_cast<dtkContainerList<T> *>(&(active_variant->container()));
+//     if (active_variant) 
+//         return *reinterpret_cast<dtkContainerList<T> *>(&(active_variant->container()));
 
-    return m_list;
-};
+//     return m_list;
+// };
 
-//! 
-/*! 
- *  
- */
-template <typename T> const dtkContainerList<T>& dtkComposerTransmitterReceiver<T>::list(void) const
-{
-    if (active_emitter)
-        return active_emitter->list();
+// //! 
+// /*! 
+//  *  
+//  */
+// template <typename T> const dtkContainerList<T>& dtkComposerTransmitterReceiver<T>::list(void) const
+// {
+//     if (active_emitter)
+//         return active_emitter->list();
 
-    if (active_variant) 
-        return *reinterpret_cast<const dtkContainerList<T> *>(&(active_variant->container()));
+//     if (active_variant) 
+//         return *reinterpret_cast<const dtkContainerList<T> *>(&(active_variant->container()));
 
-    return m_list;
-};
+//     return m_list;
+// };
 
 //! Returns.
 /*! 

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 24 21:21:55 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 208
+ * Last-Updated: Thu May 24 22:31:20 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 209
  */
 
 /* Commentary: 
@@ -22,7 +22,7 @@
 #include "dtkComposerTransmitterVariant.h"
 #include "dtkComposerNode.h"
 
-#include <dtkCore/dtkAbstractContainer.h>
+#include <dtkContainer/dtkAbstractContainerWrapper.h>
 #include <dtkCore/dtkGlobal>
 
 // /////////////////////////////////////////////////////////////////
@@ -62,12 +62,12 @@ const QVariant& dtkComposerTransmitter::variant(void) const
     return d->variant;
 }
 
-dtkAbstractContainer& dtkComposerTransmitter::container(void)
+dtkAbstractContainerWrapper& dtkComposerTransmitter::container(void)
 {
     return d->container;
 }
 
-const dtkAbstractContainer& dtkComposerTransmitter::container(void) const
+const dtkAbstractContainerWrapper& dtkComposerTransmitter::container(void) const
 {
     return d->container;
 }

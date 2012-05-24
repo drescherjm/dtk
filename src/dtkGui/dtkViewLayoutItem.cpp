@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:45 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 23 20:09:27 2012 (+0200)
+ * Last-Updated: Thu May 24 13:54:00 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 771
+ *     Update #: 789
  */
 
 /* Commentary: 
@@ -238,6 +238,7 @@ dtkViewLayoutItem::dtkViewLayoutItem(dtkViewLayoutItem *parent) : QFrame(parent)
     d->maxmz = new QPushButton("Maxmz", this);
     
     d->label = new QLineEdit(this);
+    d->label->setReadOnly(true);
 
     QHBoxLayout *footer_layout = new QHBoxLayout;
     footer_layout->addWidget(d->label);
@@ -248,6 +249,7 @@ dtkViewLayoutItem::dtkViewLayoutItem(dtkViewLayoutItem *parent) : QFrame(parent)
 
     d->footer = new QFrame(this);
     d->footer->setLayout(footer_layout);
+    d->footer->setObjectName("dtkViewLayoutItemFooterUnfocused");
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -516,7 +518,9 @@ void dtkViewLayoutItem::onFocusedIn(void)
 
     d->layout->setCurrent(this);
 
-    d->footer->setStyleSheet(".QFrame { background: #94a5cc; }");
+    d->footer->setObjectName("dtkViewLayoutItemFooterFocused");
+    d->footer->style()->unpolish(d->footer);
+    d->footer->style()->polish(d->footer);
     d->footer->update();
 
     if(d->proxy->view())
@@ -525,7 +529,9 @@ void dtkViewLayoutItem::onFocusedIn(void)
 
 void dtkViewLayoutItem::onFocusedOut(void)
 {
-    d->footer->setStyleSheet(".QFrame { background: #aaaaaa; }");
+    d->footer->setObjectName("dtkViewLayoutItemFooterUnfocused");
+    d->footer->style()->unpolish(d->footer);
+    d->footer->style()->polish(d->footer);
     d->footer->update();
 }
 

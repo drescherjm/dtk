@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 16 14:29:28 2012 (+0200)
- *           By: tkloczko
- *     Update #: 421
+ * Last-Updated: Fri May 25 22:13:27 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 423
  */
 
 /* Commentary:
@@ -696,49 +696,6 @@ void dtkAbstractData::setData(void* data, int channel)
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(data);
     DTK_UNUSED(channel);
-}
-
-bool dtkAbstractData::casts(const QString& type)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(type);
-
-    return false;
-}
-
-dtkAbstractData::operator bool (void)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return false;
-}
-
-dtkAbstractData::operator int (void)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return 0;
-}
-
-dtkAbstractData::operator qlonglong (void)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return 0;
-}
-
-dtkAbstractData::operator float (void)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return 0.0;
-}
-
-dtkAbstractData::operator double (void)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return 0.0;
 }
 
 QDebug operator<<(QDebug debug, const dtkAbstractData& data)

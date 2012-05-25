@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 16 14:20:43 2012 (+0200)
+ * Last-Updated: Fri May 25 22:18:41 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 226
+ *     Update #: 259
  */
 
 /* Commentary: 
@@ -208,11 +208,13 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::connect(dtkCompose
     dtkComposerTransmitterEmitter<T> *emitter = NULL;
 
     if (transmitter->kind() == Emitter) {
-     
+
+#if defined(Q_WS_MAC)     
+        if ((emitter = static_cast<dtkComposerTransmitterEmitter<T> *>(transmitter)) && this->typeName() == emitter->typeName()) {
+#else
         if ((emitter = dynamic_cast<dtkComposerTransmitterEmitter<T> *>(transmitter))) {
-
+#endif
             if (!emitters.contains(emitter)) {
-
                 emitters << emitter;
                 active_emitter = emitter;
                 active_variant = NULL;

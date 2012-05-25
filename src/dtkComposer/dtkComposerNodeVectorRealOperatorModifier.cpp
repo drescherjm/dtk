@@ -1,22 +1,12 @@
-/* dtkComposerNodeVectorRealOperatorModifier.h ---
- *
- * Author: sblekout
- * Copyright (C) 2011 - babette lekouta, Inria.
- * Created: Thu Apr 26 16:14:44 2012 (+0200)
- * Version: $Id$
- * Last-Updated: Thu Apr 26 17:34:34 2012 (+0200)
- *           By: sblekout
- *     Update #: 38
- */
 /* dtkComposerNodeVectorRealOperatorModifier.cpp ---
  *
  * Author: sblekout
  * Copyright (C) 2011 - babette lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 15 13:58:18 2012 (+0200)
- *           By: sblekout
- *     Update #: 33
+ * Last-Updated: Thu May 24 22:33:00 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 34
  */
 
 /* Commentary:
@@ -72,9 +62,12 @@ dtkComposerNodeVectorRealOperatorModifier::~dtkComposerNodeVectorRealOperatorMod
 
 void dtkComposerNodeVectorRealOperatorModifierSet::run(void)
 {
+    if(d->receiver_vector.isEmpty())
+        return;
+
     dtkVectorReal vec(d->receiver_vector.data());
 
-    if (!d->receiver_vector.isEmpty() &&  d->receiver_index.data() < d->receiver_vector.data().getRows())
+    if (!d->receiver_vector.isEmpty() &&  d->receiver_index.data() < vec.getRows())
         vec[d->receiver_index.data()] = d->receiver_value.data();
     else
         dtkWarn() << "index > size of the vector" ;
@@ -82,20 +75,19 @@ void dtkComposerNodeVectorRealOperatorModifierSet::run(void)
     d->emitter_vector.setData(vec);
 }
 
-
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeVectorRealOperatorModifier - Sum
 // /////////////////////////////////////////////////////////////////
 
 void dtkComposerNodeVectorRealOperatorModifierSum::run(void)
 {
-    dtkVectorReal vec;
+    if(d->receiver_vector.isEmpty())
+        return;
 
-    if (!d->receiver_vector.isEmpty() &&  d->receiver_index.data() < d->receiver_vector.data().getRows()){
-        vec = d->receiver_vector.data();
+    dtkVectorReal vec(d->receiver_vector.data());
+
+    if (!d->receiver_vector.isEmpty() &&  d->receiver_index.data() < vec.getRows())
         vec[d->receiver_index.data()] += d->receiver_value.data();
-
-    }
     else
         dtkWarn() << "index > size of the vector" ;
 
@@ -108,14 +100,13 @@ void dtkComposerNodeVectorRealOperatorModifierSum::run(void)
 
 void dtkComposerNodeVectorRealOperatorModifierSubstract::run(void)
 {
-    dtkVectorReal vec;
+    if(d->receiver_vector.isEmpty())
+        return;
 
-    if (!d->receiver_vector.isEmpty() &&  d->receiver_index.data() < d->receiver_vector.data().getRows()){
-        vec = d->receiver_vector.data();
+    dtkVectorReal vec(d->receiver_vector.data());
+
+    if (!d->receiver_vector.isEmpty() &&  d->receiver_index.data() < vec.getRows())
         vec[d->receiver_index.data()] -= d->receiver_value.data();
-
-    }
-
     else
         dtkWarn() << "index > size of the vector" ;
 
@@ -129,14 +120,13 @@ void dtkComposerNodeVectorRealOperatorModifierSubstract::run(void)
 
 void dtkComposerNodeVectorRealOperatorModifierMult::run(void)
 {
-    dtkVectorReal vec;
+    if(d->receiver_vector.isEmpty())
+        return;
 
-    if (!d->receiver_vector.isEmpty() &&  d->receiver_index.data() < d->receiver_vector.data().getRows()){
-        vec = d->receiver_vector.data();
+    dtkVectorReal vec(d->receiver_vector.data());
+
+    if (!d->receiver_vector.isEmpty() &&  d->receiver_index.data() < vec.getRows())
         vec[d->receiver_index.data()] *= d->receiver_value.data();
-
-    }
-
     else
         dtkWarn() << "index > size of the vector" ;
 
@@ -150,14 +140,13 @@ void dtkComposerNodeVectorRealOperatorModifierMult::run(void)
 
 void dtkComposerNodeVectorRealOperatorModifierDivide::run(void)
 {
-    dtkVectorReal vec;
+    if(d->receiver_vector.isEmpty())
+        return;
 
-    if (!d->receiver_vector.isEmpty() &&  d->receiver_index.data() < d->receiver_vector.data().getRows()){
-        vec = d->receiver_vector.data();
+    dtkVectorReal vec(d->receiver_vector.data());
+
+    if (!d->receiver_vector.isEmpty() &&  d->receiver_index.data() < vec.getRows())
         vec[d->receiver_index.data()] /= d->receiver_value.data();
-
-    }
-
     else
         dtkWarn() << "index > size of the vector" ;
 

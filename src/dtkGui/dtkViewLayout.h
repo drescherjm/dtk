@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:08 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 21 15:54:05 2012 (+0200)
+ * Last-Updated: Wed May 23 17:54:35 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 12
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -23,6 +23,8 @@
 #include "dtkGuiExport.h"
 
 #include <QtGui>
+
+class dtkAbstractView;
 
 class dtkViewLayoutItem;
 class dtkViewLayoutPrivate;
@@ -41,6 +43,9 @@ public:
 
 public:
     void setCurrent(dtkViewLayoutItem *item);
+
+signals:
+    void focused(dtkAbstractView *view);
 
 private:
     dtkViewLayoutPrivate *d;

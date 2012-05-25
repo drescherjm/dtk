@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 16 13:43:32 2012 (+0200)
+ * Last-Updated: Wed May 23 18:39:17 2012 (+0200)
  *           By: tkloczko
- *     Update #: 77
+ *     Update #: 81
  */
 
 /* Commentary: 
@@ -22,8 +22,7 @@
 
 #include "dtkComposerTransmitter.h"
 
-#include <dtkCore/dtkContainerVector.h>
-#include <dtkCore/dtkContainerList.h>
+#include <dtkContainer/dtkContainerVector.h>
 
 #include <QtCore>
 
@@ -46,14 +45,14 @@ public:
     const T& data(void) const;
 
 public:
-          dtkAbstractContainer& container(void);
-    const dtkAbstractContainer& container(void) const;
+          dtkAbstractContainerWrapper& container(void);
+    const dtkAbstractContainerWrapper& container(void) const;
 
           dtkContainerVector<T>& vector(void);
     const dtkContainerVector<T>& vector(void) const;
 
-          dtkContainerList<T>& list(void);
-    const dtkContainerList<T>& list(void) const;
+    /*       dtkContainerList<T>& list(void); */
+    /* const dtkContainerList<T>& list(void) const; */
 
 public:
     bool isEmpty(void) const;
@@ -85,7 +84,6 @@ private:
     T m_data;
 
     dtkContainerVector<T> m_vector;
-    dtkContainerList<T>   m_list;
 };
 
 // /////////////////////////////////////////////////////////////////

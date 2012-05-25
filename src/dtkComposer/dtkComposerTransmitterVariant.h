@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 16 11:58:14 2012 (+0200)
+ * Last-Updated: Wed May 23 18:40:15 2012 (+0200)
  *           By: tkloczko
- *     Update #: 76
+ *     Update #: 78
  */
 
 /* Commentary: 
@@ -37,7 +37,7 @@ public:
 
 public:
     void setData(const QVariant& data);
-    void setData(const dtkAbstractContainer& data);
+    void setData(const dtkAbstractContainerWrapper& data);
 
           QVariant& data(void);
     const QVariant& data(void) const;
@@ -45,8 +45,8 @@ public:
     QVariantList allData(void);
 
 public:
-          dtkAbstractContainer& container(void);
-    const dtkAbstractContainer& container(void) const;
+          dtkAbstractContainerWrapper& container(void);
+    const dtkAbstractContainerWrapper& container(void) const;
 
 public:
     bool isEmpty(void) const;

@@ -1,12 +1,12 @@
-/* dtkComposerNodeVectorRealr.cpp ---
+/* dtkComposerNodeVectorReal.cpp ---
  *
  * Author: sblekout
  * Copyright (C) 2011 - babette Lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 15 15:28:57 2012 (+0200)
- *           By: sblekout
- *     Update #: 40
+ * Last-Updated: Thu May 24 18:32:17 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 58
  */
 
 /* Commentary:

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 15 13:58:18 2012 (+0200)
- *           By: sblekout
- *     Update #: 33
+ * Last-Updated: Thu May 24 12:02:24 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 35
  */
 
 /* Commentary:
@@ -65,7 +65,7 @@ void dtkComposerNodeArrayScalarOperatorInsert::run(void)
 
     if (!d->receiver_array.isEmpty()) {
         array = d->receiver_array.vector();
-        array.vector().insert(d->receiver_index.data(), d->receiver_value.data());
+        array.insert(d->receiver_index.data(), d->receiver_value.data());
 
     }
 
@@ -82,7 +82,7 @@ void dtkComposerNodeArrayScalarOperatorSum::run(void)
 
     if (!d->receiver_array.isEmpty()) {
         array = d->receiver_array.vector();
-        array.vector()[d->receiver_index.data()] += d->receiver_value.data();
+        array[d->receiver_index.data()] += d->receiver_value.data();
 
     }
 
@@ -99,7 +99,7 @@ void dtkComposerNodeArrayScalarOperatorSubstract::run(void)
 
     if (!d->receiver_array.isEmpty()) {
         array = d->receiver_array.vector();
-        array.vector()[d->receiver_index.data()] -= d->receiver_value.data();
+        array[d->receiver_index.data()] -= d->receiver_value.data();
 
     }
 
@@ -117,7 +117,7 @@ void dtkComposerNodeArrayScalarOperatorMult::run(void)
 
     if (!d->receiver_array.isEmpty()) {
         array = d->receiver_array.vector();
-        array.vector()[d->receiver_index.data()] *= d->receiver_value.data();
+        array[d->receiver_index.data()] *= d->receiver_value.data();
 
     }
 
@@ -135,7 +135,7 @@ void dtkComposerNodeArrayScalarOperatorDivide::run(void)
 
     if (!d->receiver_array.isEmpty()) {
         array = d->receiver_array.vector();
-        array.vector()[d->receiver_index.data()] /= d->receiver_value.data();
+        array[d->receiver_index.data()] /= d->receiver_value.data();
 
     }
 

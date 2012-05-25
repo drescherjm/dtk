@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 15 15:28:57 2012 (+0200)
+ * Last-Updated: Thu May 24 12:15:54 2012 (+0200)
  *           By: tkloczko
- *     Update #: 40
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -117,7 +117,7 @@ void dtkComposerNodeArrayScalar::run(void)
 
         QVector<qreal> array(size, value);
 
-        d->emitter_array.setVector(dtkContainerVectorReal(array));
+        //d->emitter_array.setVector(dtkContainerVectorReal(array));
         d->emitter_size.setData(size);
     }
 }

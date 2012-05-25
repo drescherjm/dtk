@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 22 16:20:45 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 22 16:24:27 2012 (+0200)
+ * Last-Updated: Thu May 24 11:38:10 2012 (+0200)
  *           By: tkloczko
- *     Update #: 7
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -17,39 +17,39 @@
  * 
  */
 
-#ifndef DTKABSTRACTCONTAINERORDERED_H
-#define DTKABSTRACTCONTAINERORDERED_H
+#ifndef DTKABSTRACTCONTAINERORDERED_TPP
+#define DTKABSTRACTCONTAINERORDERED_TPP
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractContainerOrdered implementation
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> inline dtkAbstractContainerOrdered::dtkAbstractContainerOrdered(void) : dtkAbstractContainer()
+template <typename T> inline dtkAbstractContainerOrdered<T>::dtkAbstractContainerOrdered(void) : dtkAbstractContainer<T>()
 {
 
 }
 
-template <typename T> inline dtkAbstractContainerOrdered::dtkAbstractContainerOrdered(const dtkAbstractContainer<T>& other) : dtkAbstractContainer(other)
+template <typename T> inline dtkAbstractContainerOrdered<T>::dtkAbstractContainerOrdered(const dtkAbstractContainerOrdered<T>& other) : dtkAbstractContainer<T>(other)
 {
 
 }
 
-template <typename T> inline dtkAbstractContainerOrdered::~dtkAbstractContainerOrdered(void)
+template <typename T> inline dtkAbstractContainerOrdered<T>::~dtkAbstractContainerOrdered(void)
 {
 
 }
 
-template <typename T> inline dtkAbstractContainer::Type dtkAbstractContainerOrdered::type(void) const
+template <typename T> inline dtkContainerType dtkAbstractContainerOrdered<T>::type(void) const
 {
-    return dtkAbstractContainer::Ordered;
+    return dtkContainerTypeOrdered;
 }
 
-template <typename T> inline void dtkAbstractContainerOrdered::add(const T& value)
+template <typename T> inline void dtkAbstractContainerOrdered<T>::add(const T& value)
 {
     this->append(value);
 }
 
-template <typename T> inline void dtkAbstractContainerOrdered::add(const dtkAbstractContainer<T>& values)
+template <typename T> inline void dtkAbstractContainerOrdered<T>::add(const dtkAbstractContainer<T>& values)
 {
     this->append(values);
 }

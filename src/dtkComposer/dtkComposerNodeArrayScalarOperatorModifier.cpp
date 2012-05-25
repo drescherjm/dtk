@@ -23,6 +23,8 @@
 
 #include <dtkCore/dtkContainerVector.h>
 
+#include <dtkLog/dtkLog>
+
 // /////////////////////////////////////////////////////////////////
 //  dtkComposerNodearrayScalarOperatorBinary
 // /////////////////////////////////////////////////////////////////
@@ -61,15 +63,24 @@ dtkComposerNodeArrayScalarOperatorModifier::~dtkComposerNodeArrayScalarOperatorM
 
 void dtkComposerNodeArrayScalarOperatorInsert::run(void)
 {
-    dtkContainerVectorReal array;
-
     if (!d->receiver_array.isEmpty()) {
-        array = d->receiver_array.vector();
-        array.insert(d->receiver_index.data(), d->receiver_value.data());
 
+        dtkContainerVectorReal array(d->receiver_array.vector());
+
+        if (d->receiver_index.isEmpty() || d->receiver_value.isEmpty()) {
+
+            dtkWarn() << "Inputs not specified. Nothing is done";
+
+	} else {
+
+	    if (d->receiver_index.data() < array.count())
+                array.insert(d->receiver_index.data(), d->receiver_value.data());
+	    else
+	        dtkWarn() << "index > size of the vector. Nothing is done" ;
+	}
+
+        d->emitter_array.setVector(array);
     }
-
-    d->emitter_array.setVector(array);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -78,15 +89,26 @@ void dtkComposerNodeArrayScalarOperatorInsert::run(void)
 
 void dtkComposerNodeArrayScalarOperatorSum::run(void)
 {
-    dtkContainerVectorReal array;
 
     if (!d->receiver_array.isEmpty()) {
-        array = d->receiver_array.vector();
-        array[d->receiver_index.data()] += d->receiver_value.data();
 
+        dtkContainerVectorReal array(d->receiver_array.vector());
+
+        if (d->receiver_index.isEmpty() || d->receiver_value.isEmpty()) {
+
+            dtkWarn() << "Inputs not specified. Nothing is done";
+
+	} else {
+
+	    if (d->receiver_index.data() < array.count())
+                array[d->receiver_index.data()] += d->receiver_value.data();
+	    else
+                dtkWarn() << "index > size of the vector. Nothing is done" ;
+
+	}
+
+        d->emitter_array.setVector(array);
     }
-
-    d->emitter_array.setVector(array);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -95,16 +117,18 @@ void dtkComposerNodeArrayScalarOperatorSum::run(void)
 
 void dtkComposerNodeArrayScalarOperatorSubstract::run(void)
 {
-    dtkContainerVectorReal array;
-
     if (!d->receiver_array.isEmpty()) {
-        array = d->receiver_array.vector();
-        array[d->receiver_index.data()] -= d->receiver_value.data();
 
+        dtkContainerVectorReal array(d->receiver_array.vector());
+
+        if (!d->receiver_index.isEmpty() &&  d->receiver_index.data() < array.count())
+            array[d->receiver_index.data()] -= d->receiver_value.data();
+
+        else
+            dtkWarn() << "index > size of the vector" ;
+
+        d->emitter_array.setVector(array);
     }
-
-    d->emitter_array.setVector(array);
-
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -113,16 +137,25 @@ void dtkComposerNodeArrayScalarOperatorSubstract::run(void)
 
 void dtkComposerNodeArrayScalarOperatorMult::run(void)
 {
-    dtkContainerVectorReal array;
-
     if (!d->receiver_array.isEmpty()) {
-        array = d->receiver_array.vector();
-        array[d->receiver_index.data()] *= d->receiver_value.data();
 
+        dtkContainerVectorReal array(d->receiver_array.vector());
+
+        if (d->receiver_index.isEmpty() || d->receiver_value.isEmpty()) {
+
+            dtkWarn() << "Inputs not specified. Nothing is done";
+
+	} else {
+
+	    if (d->receiver_index.data() < array.count())
+                array[d->receiver_index.data()] *= d->receiver_value.data();
+	    else
+                dtkWarn() << "index > size of the vector. Nothing is done" ;
+
+	}
+
+        d->emitter_array.setVector(array);
     }
-
-    d->emitter_array.setVector(array);
-
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -131,27 +164,25 @@ void dtkComposerNodeArrayScalarOperatorMult::run(void)
 
 void dtkComposerNodeArrayScalarOperatorDivide::run(void)
 {
-    dtkContainerVectorReal array;
-
     if (!d->receiver_array.isEmpty()) {
-        array = d->receiver_array.vector();
-        array[d->receiver_index.data()] /= d->receiver_value.data();
 
+        dtkContainerVectorReal array(d->receiver_array.vector());
+
+        if (d->receiver_index.isEmpty() || d->receiver_value.isEmpty()) {
+
+            dtkWarn() << "Inputs not specified. Nothing is done";
+
+	} else {
+
+	    if (d->receiver_value.data() == 0)
+	        dtkWarn() << "Value is zero. Nothing is done" ;
+	    else if (d->receiver_index.data() < array.count())
+                array[d->receiver_index.data()] /= d->receiver_value.data();
+	    else
+                dtkWarn() << "index > size of the vector. Nothing is done" ;
+
+	}
+
+        d->emitter_array.setVector(array);
     }
-
-    d->emitter_array.setVector(array);
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

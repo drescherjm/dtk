@@ -62,17 +62,24 @@ dtkComposerNodeVectorRealOperatorModifier::~dtkComposerNodeVectorRealOperatorMod
 
 void dtkComposerNodeVectorRealOperatorModifierSet::run(void)
 {
-    if(d->receiver_vector.isEmpty())
-        return;
+    if (!d->receiver_vector.isEmpty()) {
 
-    dtkVectorReal vec(d->receiver_vector.data());
+        dtkVectorReal vec(d->receiver_vector.data());
 
-    if (!d->receiver_vector.isEmpty() &&  d->receiver_index.data() < vec.getRows())
-        vec[d->receiver_index.data()] = d->receiver_value.data();
-    else
-        dtkWarn() << "index > size of the vector" ;
+        if (d->receiver_index.isEmpty() || d->receiver_value.isEmpty()) {
 
-    d->emitter_vector.setData(vec);
+            dtkWarn() << "Inputs not specified. Nothing is done";
+
+	} else {
+
+	    if (d->receiver_index.data() < vec.getRows())
+	        vec[d->receiver_index.data()] = d->receiver_value.data();
+	    else
+                dtkWarn() << "index > size of the vector. Nothing is done" ;
+	}
+
+	d->emitter_vector.setData(vec);
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -81,17 +88,24 @@ void dtkComposerNodeVectorRealOperatorModifierSet::run(void)
 
 void dtkComposerNodeVectorRealOperatorModifierSum::run(void)
 {
-    if(d->receiver_vector.isEmpty())
-        return;
+    if (!d->receiver_vector.isEmpty()) {
 
-    dtkVectorReal vec(d->receiver_vector.data());
+        dtkVectorReal vec(d->receiver_vector.data());
 
-    if (!d->receiver_vector.isEmpty() &&  d->receiver_index.data() < vec.getRows())
-        vec[d->receiver_index.data()] += d->receiver_value.data();
-    else
-        dtkWarn() << "index > size of the vector" ;
+        if (d->receiver_index.isEmpty() || d->receiver_value.isEmpty()) {
 
-    d->emitter_vector.setData(vec);
+            dtkWarn() << "Inputs not specified. Nothing is done";
+
+	} else {
+
+	    if (d->receiver_index.data() < vec.getRows())
+	        vec[d->receiver_index.data()] += d->receiver_value.data();
+	    else
+                dtkWarn() << "index > size of the vector. Nothing is done" ;
+	}
+
+	d->emitter_vector.setData(vec);
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -100,18 +114,24 @@ void dtkComposerNodeVectorRealOperatorModifierSum::run(void)
 
 void dtkComposerNodeVectorRealOperatorModifierSubstract::run(void)
 {
-    if(d->receiver_vector.isEmpty())
-        return;
+    if (!d->receiver_vector.isEmpty()) {
 
-    dtkVectorReal vec(d->receiver_vector.data());
+        dtkVectorReal vec(d->receiver_vector.data());
 
-    if (!d->receiver_vector.isEmpty() &&  d->receiver_index.data() < vec.getRows())
-        vec[d->receiver_index.data()] -= d->receiver_value.data();
-    else
-        dtkWarn() << "index > size of the vector" ;
+        if (d->receiver_index.isEmpty() || d->receiver_value.isEmpty()) {
 
-    d->emitter_vector.setData(vec);
+            dtkWarn() << "Inputs not specified. Nothing is done";
 
+	} else {
+
+	    if (d->receiver_index.data() < vec.getRows())
+	        vec[d->receiver_index.data()] -= d->receiver_value.data();
+	    else
+                dtkWarn() << "index > size of the vector. Nothing is done" ;
+	}
+
+	d->emitter_vector.setData(vec);
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -120,18 +140,24 @@ void dtkComposerNodeVectorRealOperatorModifierSubstract::run(void)
 
 void dtkComposerNodeVectorRealOperatorModifierMult::run(void)
 {
-    if(d->receiver_vector.isEmpty())
-        return;
+    if (!d->receiver_vector.isEmpty()) {
 
-    dtkVectorReal vec(d->receiver_vector.data());
+        dtkVectorReal vec(d->receiver_vector.data());
 
-    if (!d->receiver_vector.isEmpty() &&  d->receiver_index.data() < vec.getRows())
-        vec[d->receiver_index.data()] *= d->receiver_value.data();
-    else
-        dtkWarn() << "index > size of the vector" ;
+        if (d->receiver_index.isEmpty() || d->receiver_value.isEmpty()) {
 
-    d->emitter_vector.setData(vec);
+            dtkWarn() << "Inputs not specified. Nothing is done";
 
+	} else {
+
+	    if (d->receiver_index.data() < vec.getRows())
+	        vec[d->receiver_index.data()] *= d->receiver_value.data();
+	    else
+                dtkWarn() << "index > size of the vector. Nothing is done" ;
+	}
+
+	d->emitter_vector.setData(vec);
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -140,16 +166,24 @@ void dtkComposerNodeVectorRealOperatorModifierMult::run(void)
 
 void dtkComposerNodeVectorRealOperatorModifierDivide::run(void)
 {
-    if(d->receiver_vector.isEmpty())
-        return;
+    if (!d->receiver_vector.isEmpty()) {
 
-    dtkVectorReal vec(d->receiver_vector.data());
+        dtkVectorReal vec(d->receiver_vector.data());
 
-    if (!d->receiver_vector.isEmpty() &&  d->receiver_index.data() < vec.getRows())
-        vec[d->receiver_index.data()] /= d->receiver_value.data();
-    else
-        dtkWarn() << "index > size of the vector" ;
+        if (d->receiver_index.isEmpty() || d->receiver_value.isEmpty()) {
 
-    d->emitter_vector.setData(vec);
+            dtkWarn() << "Inputs not specified. Nothing is done";
 
+	} else {
+
+	    if (d->receiver_value.data() == 0)
+	        dtkWarn() << "Value is zero. Nothing is done" ;
+	    else if (d->receiver_index.data() < vec.getRows())
+	        vec[d->receiver_index.data()] /= d->receiver_value.data();
+	    else
+                dtkWarn() << "index > size of the vector. Nothing is done" ;
+	}
+
+	d->emitter_vector.setData(vec);
+    }
 }

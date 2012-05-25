@@ -108,22 +108,29 @@ void dtkComposerNodeVectorReal::run(void)
 
     } else {
 
-        if (!d->receiver_size.isEmpty()) {
+        unsigned int size = 0;
+	qreal value = 0;
+	dtkVectorReal vec;
 
-            unsigned int t =  d->receiver_size.data();
-            dtkVectorReal vec(t);
+        if (!d->receiver_size.isEmpty())
+	    size = d->receiver_size.data();
 
-            if (t==0)
-                dtkWarn() << "The size of the vector is null " ;
+	if (size == 0) {
+            dtkWarn() << "The size of the vector is zero." ;
 
-            else {
-                for(int i = 0 ; i < vec.getRows(); i++)
-                    vec[i] = d->receiver_value.data();
+	} else {
 
-                d->emitter_size.setData(vec.getRows());
-                d->emitter_vector.setData(vec);
-            }
-        }
+	    vec.allocate(size);
+
+	    if (!d->receiver_value.isEmpty())
+	        value = d->receiver_value.data();
+
+	    for(int i = 0 ; i < vec.getRows(); i++)
+	        vec[i] = d->receiver_value.data();
+
+	}
+
+	d->emitter_size.setData(size);
+	d->emitter_vector.setData(vec);
     }
-
 }

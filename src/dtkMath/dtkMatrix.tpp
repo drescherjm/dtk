@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Mon Jul 12 15:42:21 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri May 25 10:11:31 2012 (+0200)
+ * Last-Updated: Fri May 25 10:13:49 2012 (+0200)
  *           By: tkloczko
- *     Update #: 9
+ *     Update #: 10
  */
 
 /* Commentary: 
@@ -88,6 +88,8 @@ template <class T> void dtkMatrix<T>::allocate(unsigned crowInit, unsigned ccolI
 
     if ((m_crow * m_ccol) == 0) {
         m_nMatStatus = N_NOTALLOCATED;
+        m_crow = 0;
+        m_ccol = 0;
         return;
     }
         

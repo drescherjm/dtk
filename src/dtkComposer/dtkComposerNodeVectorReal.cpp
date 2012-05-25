@@ -23,6 +23,8 @@
 
 #include <dtkMath>
 
+#include <dtkLog/dtkLog>
+
 // /////////////////////////////////////////////////////////////////
 //
 // /////////////////////////////////////////////////////////////////
@@ -106,13 +108,22 @@ void dtkComposerNodeVectorReal::run(void)
 
     } else {
 
-        unsigned int t =  d->receiver_size.data();
-        dtkVectorReal vec(t);
+        if (!d->receiver_size.isEmpty()) {
 
-        for(int i = 0 ; i < vec.getRows(); i++)
-            vec[i] = d->receiver_value.data();
+            unsigned int t =  d->receiver_size.data();
+            dtkVectorReal vec(t);
 
-        d->emitter_size.setData(vec.getRows());
-        d->emitter_vector.setData(vec);
+            if (t==0)
+                dtkWarn() << "The size of the vector is null " ;
+
+            else {
+                for(int i = 0 ; i < vec.getRows(); i++)
+                    vec[i] = d->receiver_value.data();
+
+                d->emitter_size.setData(vec.getRows());
+                d->emitter_vector.setData(vec);
+            }
+        }
     }
+
 }

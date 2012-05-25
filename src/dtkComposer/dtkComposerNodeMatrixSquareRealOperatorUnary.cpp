@@ -84,7 +84,14 @@ dtkComposerNodeMatrixSquareRealOperatorUnaryScalar::~dtkComposerNodeMatrixSquare
 
 void dtkComposerNodeMatrixSquareRealOperatorUnaryTranspose::run(void)
 {
-    d->emitter_matrix.setData(dtkTranspose(d->receiver_matrix.data()));
+    bool isSquare = d->receiver_matrix.data().getRows()== d->receiver_matrix.data().getCols();
+
+    if ( isSquare )
+
+        d->emitter_matrix.setData(dtkTranspose(d->receiver_matrix.data()));
+
+    else
+        dtkWarn()<< "Matrix is not square" ;
 
 }
 
@@ -94,7 +101,14 @@ void dtkComposerNodeMatrixSquareRealOperatorUnaryTranspose::run(void)
 
 void dtkComposerNodeMatrixSquareRealOperatorUnaryInverse::run(void)
 {
-    d->emitter_matrix.setData(dtkInverse(d->receiver_matrix.data()));
+    bool isSquare = d->receiver_matrix.data().getRows()== d->receiver_matrix.data().getCols();
+
+    if ( isSquare )
+
+        d->emitter_matrix.setData(dtkInverse(d->receiver_matrix.data()));
+
+    else
+        dtkWarn()<< "Matrix is not square" ;
 
 }
 
@@ -104,7 +118,15 @@ void dtkComposerNodeMatrixSquareRealOperatorUnaryInverse::run(void)
 
 void dtkComposerNodeMatrixSquareRealOperatorUnaryScalarDeterminant::run(void)
 {
-    d->emitter_val.setData(dtkDeterminant(d->receiver_matrix.data()));
+    bool isSquare = d->receiver_matrix.data().getRows()== d->receiver_matrix.data().getCols();
+
+    if ( isSquare )
+
+        d->emitter_val.setData(dtkDeterminant(d->receiver_matrix.data()));
+
+    else
+        dtkWarn()<< "Matrix is not square" ;
+
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -113,6 +135,15 @@ void dtkComposerNodeMatrixSquareRealOperatorUnaryScalarDeterminant::run(void)
 
 void dtkComposerNodeMatrixSquareRealOperatorUnaryScalarTrace::run(void)
 {
-    d->emitter_val.setData(dtkMatrixSquaredTrace(d->receiver_matrix.data()));
+
+    bool isSquare = d->receiver_matrix.data().getRows()== d->receiver_matrix.data().getCols();
+
+    if ( isSquare )
+
+        d->emitter_val.setData(dtkMatrixSquaredTrace(d->receiver_matrix.data()));
+
+    else
+        dtkWarn()<< "Matrix is not square" ;
+
 }
 

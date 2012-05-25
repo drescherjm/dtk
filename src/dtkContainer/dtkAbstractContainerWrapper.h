@@ -28,7 +28,7 @@
 // dtkAbstractContainerWrapper interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkAbstractContainerWrapper : public dtkAbstractData
+class DTKCONTAINER_EXPORT dtkAbstractContainerWrapper : public dtkAbstractData
 {
     Q_OBJECT
 

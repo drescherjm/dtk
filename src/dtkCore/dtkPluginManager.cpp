@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May  3 14:10:25 2012 (+0200)
+ * Last-Updated: Thu May 24 21:24:25 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 249
+ *     Update #: 254
  */
 
 /* Commentary:
@@ -69,6 +69,7 @@ public:
 
 #include "dtkAbstractData.h"
 
+#include <dtkMath/dtkVector.h>
 #include <dtkMath/dtkVector3D.h>
 #include <dtkMath/dtkQuaternion.h>
 
@@ -78,6 +79,7 @@ dtkPluginManager *dtkPluginManager::instance(void)
         s_instance = new dtkPluginManager;
 
         qRegisterMetaType<dtkAbstractData>("dtkAbstractData");
+        qRegisterMetaType<dtkVectorReal>("dtkVectorReal");
         qRegisterMetaType<dtkVector3DReal>("dtkVector3DReal");
         qRegisterMetaType<dtkQuaternionReal>("dtkQuaternionReal");
     }

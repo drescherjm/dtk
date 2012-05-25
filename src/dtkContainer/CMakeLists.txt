@@ -27,11 +27,9 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractContainer.h
   dtkAbstractContainer.tpp)
 
-set(${PROJECT_NAME}_HEADERS_MOC
-  )
+set(${PROJECT_NAME}_HEADERS_MOC)
 
-set(${PROJECT_NAME}_SOURCES
-  )
+set(${PROJECT_NAME}_SOURCES)
 
 ## #################################################################
 ## Build rules

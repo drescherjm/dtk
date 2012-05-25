@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri May 25 15:27:37 2012 (+0200)
+ * Last-Updated: Fri May 25 17:45:42 2012 (+0200)
  *           By: tkloczko
- *     Update #: 96
+ *     Update #: 102
  */
 
 /* Commentary: 
@@ -78,7 +78,7 @@ private:
     QList<dtkComposerTransmitterEmitter<T> *> emitters;
     QList<dtkComposerTransmitterVariant *>    variants;
 
-protected:
+private:
     dtkComposerTransmitterEmitter<T> *active_emitter;
     dtkComposerTransmitterVariant    *active_variant;
 
@@ -91,6 +91,10 @@ private:
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterReceiverVector interface
 // /////////////////////////////////////////////////////////////////
+
+template <typename T> class dtkComposerTransmitterEmitterVector;
+
+class dtkComposerTransmitterVariantContainer;
 
 template <typename T> class DTKCOMPOSER_EXPORT dtkComposerTransmitterReceiverVector : public dtkComposerTransmitterReceiver<T>
 {
@@ -110,13 +114,15 @@ public:
     bool disconnect(dtkComposerTransmitter *transmitter);
 
 private:
-    dtkContainerVector<T> m_vector;
+    QList<dtkComposerTransmitterEmitterVector<T> *> emitters;
+    QList<dtkComposerTransmitterVariantContainer *> variants;
 
-    using dtkComposerTransmitterReceiver<T>::emitters;
-    using dtkComposerTransmitterReceiver<T>::variants;
-    
-    using dtkComposerTransmitterReceiver<T>::active_emitter;
-    using dtkComposerTransmitterReceiver<T>::active_variant;
+private:
+    dtkComposerTransmitterEmitterVector<T> *active_emitter;
+    dtkComposerTransmitterVariantContainer *active_variant;
+
+private:
+    dtkContainerVector<T> m_vector;
 
     using dtkComposerTransmitterReceiver<T>::d;
 };

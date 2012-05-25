@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri May 25 16:25:16 2012 (+0200)
+ * Last-Updated: Fri May 25 17:46:15 2012 (+0200)
  *           By: tkloczko
- *     Update #: 260
+ *     Update #: 262
  */
 
 /* Commentary: 
@@ -486,13 +486,13 @@ template <typename T> bool dtkComposerTransmitterReceiverVector<T>::disconnect(d
 
             active_variant = NULL;
 
-            foreach(dtkComposerTransmitterVariant *var, variants) {
+            foreach(dtkComposerTransmitterVariantContainer *var, variants) {
                 if (var->active())
                     active_variant = var;
             }
 
             if (!active_variant) {
-                foreach(dtkComposerTransmitterEmitter<T> *em, emitters) {
+                foreach(dtkComposerTransmitterEmitterVector<T> *em, emitters) {
                     if (em->active())
                         active_emitter = em;
                 }
@@ -511,13 +511,13 @@ template <typename T> bool dtkComposerTransmitterReceiverVector<T>::disconnect(d
 
                 active_emitter = NULL;
 
-                foreach(dtkComposerTransmitterEmitter<T> *em, emitters) {
+                foreach(dtkComposerTransmitterEmitterVector<T> *em, emitters) {
                     if (em->active())
                         active_emitter = em;
                 }
 
                 if (!active_emitter) {
-                    foreach(dtkComposerTransmitterVariant *var, variants) {
+                    foreach(dtkComposerTransmitterVariantContainer *var, variants) {
                         if (var->active())
                             active_variant = var;
                     }

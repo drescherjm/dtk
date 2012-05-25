@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:46:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 23 18:17:48 2012 (+0200)
+ * Last-Updated: Fri May 25 09:56:29 2012 (+0200)
  *           By: tkloczko
- *     Update #: 16
+ *     Update #: 20
  */
 
 /* Commentary: 
@@ -35,9 +35,7 @@ class DTKCORE_EXPORT dtkAbstractContainerWrapper : public dtkAbstractData
 public:
     enum Type {
         None,
-        Ordered,
-        Unordered,
-        Associated
+        Vector
     };
 
 public:

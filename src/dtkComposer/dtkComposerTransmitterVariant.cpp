@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 24 12:15:12 2012 (+0200)
+ * Last-Updated: Fri May 25 16:22:46 2012 (+0200)
  *           By: tkloczko
- *     Update #: 416
+ *     Update #: 430
  */
 
 /* Commentary: 
@@ -303,7 +303,7 @@ bool dtkComposerTransmitterVariant::disconnect(dtkComposerTransmitter *transmitt
                 if (var->active())
                     e->active_variant = var;
             }
-
+            
             if (!e->active_variant) {
                 foreach(dtkComposerTransmitter *em, e->emitters) {
                     if (em->active())
@@ -311,7 +311,7 @@ bool dtkComposerTransmitterVariant::disconnect(dtkComposerTransmitter *transmitt
                 }
             }
         }
-
+            
     } else {
 
         ok = e->emitters.removeOne(transmitter);
@@ -389,4 +389,172 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitterVariant::rightLinks(dtkCom
         link_map.insert(this, l);
 
     return link_map;
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerTransmitterVariantContainer implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerTransmitterVariantContainer::dtkComposerTransmitterVariantContainer(dtkComposerNode *parent) : dtkComposerTransmitterVariant(parent)
+{
+
+}
+
+dtkComposerTransmitterVariantContainer::~dtkComposerTransmitterVariantContainer(void)
+{
+
+}
+
+dtkComposerTransmitter::Kind dtkComposerTransmitterVariantContainer::kind(void) const
+{
+    return dtkComposerTransmitter::VariantContainer;
+}
+
+QString dtkComposerTransmitterVariantContainer::kindName(void) const
+{
+    return "VariantContainer";
+}
+
+void dtkComposerTransmitterVariantContainer::setData(const dtkAbstractContainerWrapper& data)
+{
+    if (d->container != data) {
+        d->container = data;
+        d->variant = qVariantFromValue(data);
+    }
+}
+
+const dtkAbstractContainerWrapper& dtkComposerTransmitterVariantContainer::container(void) const
+{
+    if (d->container.type() == dtkAbstractContainerWrapper::None) {
+
+        if (e->active_variant)
+            d->container = e->active_variant->container();
+
+        else if (e->active_emitter)
+            d->container = qvariant_cast<dtkAbstractContainerWrapper>(e->active_emitter->variant());
+
+        else
+            d->container = qvariant_cast<dtkAbstractContainerWrapper>(d->variant);
+    }      
+
+    return d->container;
+}
+
+dtkAbstractContainerWrapper& dtkComposerTransmitterVariantContainer::container(void)
+{
+    if (d->container.type() == dtkAbstractContainerWrapper::None) {
+
+        if (e->active_variant)
+            d->container = e->active_variant->container();
+
+        else if (e->active_emitter)
+            d->container = qvariant_cast<dtkAbstractContainerWrapper>(e->active_emitter->variant());
+
+        else
+            d->container = qvariant_cast<dtkAbstractContainerWrapper>(d->variant);
+    }      
+
+    return d->container;    
+}
+
+//! 
+/*! 
+ *  
+ */
+bool dtkComposerTransmitterVariantContainer::connect(dtkComposerTransmitter *transmitter)
+{
+    if (transmitter->kind() == VariantContainer) {
+        dtkComposerTransmitterVariantContainer *v = dynamic_cast<dtkComposerTransmitterVariantContainer *>(transmitter);
+
+        if (e->types.isEmpty() || v->types().isEmpty()) {
+            if (!e->variants.contains(v)) {
+                e->variants << v;
+                e->active_variant = v;
+                e->active_emitter = NULL;
+                v->appendReceiver(this);
+                return true;
+            }
+        } else {
+            foreach(QVariant::Type t, v->types()) {
+                if (!e->variants.contains(v) && e->types.contains(t)) {
+                    e->variants << v;
+                    e->active_variant = v;
+                    e->active_emitter = NULL;
+                    v->appendReceiver(this);
+                    return true;
+                }
+            }
+        }
+    }
+
+    if (e->types.isEmpty() || e->types.contains(transmitter->type())) {
+        if (!e->emitters.contains(transmitter)) {
+            e->emitters << transmitter;
+            e->active_emitter = transmitter;
+            e->active_variant = NULL;
+            transmitter->appendReceiver(this);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+//! 
+/*! 
+ *  
+ */
+bool dtkComposerTransmitterVariantContainer::disconnect(dtkComposerTransmitter *transmitter)
+{
+    transmitter->removeReceiver(this);
+
+    bool ok = false;
+
+    if (transmitter->kind() == VariantContainer) {
+        
+        dtkComposerTransmitterVariantContainer *v = static_cast<dtkComposerTransmitterVariantContainer *>(transmitter);
+        
+        ok = e->variants.removeOne(v);
+
+        if (v == e->active_variant) {
+
+            e->active_variant = NULL;
+
+            foreach(dtkComposerTransmitterVariant *var, e->variants) {
+                if (var->active())
+                    e->active_variant = var;
+            }
+
+            if (!e->active_variant) {
+                foreach(dtkComposerTransmitter *em, e->emitters) {
+                    if (em->active())
+                        e->active_emitter = em;
+                }
+            }
+        }
+
+    } else {
+
+        ok = e->emitters.removeOne(transmitter);
+
+        if (transmitter == e->active_emitter) {
+
+            e->active_emitter = NULL;
+
+            foreach(dtkComposerTransmitter *em, e->emitters) {
+                if (em->active())
+                    e->active_emitter = em;
+            }
+
+            if (!e->active_emitter) {
+                foreach(dtkComposerTransmitterVariant *var, e->variants) {
+                    if (var->active())
+                        e->active_variant = var;
+                }
+            }            
+
+        }
+    }    
+    
+    return ok ;
 }

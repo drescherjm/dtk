@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 22 13:07:11 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 24 12:35:16 2012 (+0200)
+ * Last-Updated: Fri May 25 10:00:38 2012 (+0200)
  *           By: tkloczko
- *     Update #: 76
+ *     Update #: 77
  */
 
 /* Commentary: 
@@ -61,8 +61,8 @@ public:
 public:
     virtual bool  isEmpty(void) const = 0;
 
-    virtual bool contains(const T& value) = 0;
-    virtual bool contains(const dtkAbstractContainer<T>& values) = 0;
+    virtual bool contains(const T& value) const = 0;
+    virtual bool contains(const dtkAbstractContainer<T>& values) const = 0;
 
     virtual dtkxarch_int count(void) const = 0;
 

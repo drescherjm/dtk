@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Fri May 25 22:13:27 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 423
+ * Last-Updated: mar. mai 29 16:29:00 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 447
  */
 
 /* Commentary:
@@ -507,11 +507,11 @@ QByteArray *dtkAbstractData::serialize(void)
     return array;
 }
 
-bool dtkAbstractData::deserialize(const QByteArray &array)
+dtkAbstractData *dtkAbstractData::deserialize(const QByteArray &array)
 {
     DTK_D(dtkAbstractData);
 
-    bool deserialized = false;
+    dtkAbstractData *deserialized = NULL;
 
     for (QMap<QString, bool>::const_iterator it(d->deserializers.begin()); it!= d->deserializers.end() && !deserialized ; ++it) {
 
@@ -523,9 +523,10 @@ bool dtkAbstractData::deserialize(const QByteArray &array)
                 deserializer->setData(this);
 
                 deserialized = deserializer->deserialize(array);
-                if(deserialized) {
+                if(!deserialized)
+                    dtkDebug() << "deserializer failed, try another one ...";
+                else
                     break;
-                }
             }
         }
     }
@@ -696,6 +697,22 @@ void dtkAbstractData::setData(void* data, int channel)
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(data);
     DTK_UNUSED(channel);
+}
+
+QVariant dtkAbstractData::toVariant(dtkAbstractData *data)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(data);
+
+    return qVariantFromValue(*data);
+}
+
+dtkAbstractData *dtkAbstractData::fromVariant(const QVariant& v)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(v);
+
+    return NULL;
 }
 
 QDebug operator<<(QDebug debug, const dtkAbstractData& data)

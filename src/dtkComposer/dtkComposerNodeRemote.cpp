@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: Mon May 21 22:53:26 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 641
+ * Last-Updated: mar. mai 29 14:51:44 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 683
  */
 
 /* Commentary:
@@ -278,16 +278,30 @@ void dtkComposerNodeRemote::begin(void)
                         dtkWarn() << "warning: no content in dtkQuaternionReal transmitter";
 
                 } else { // assume a dtkAbstractData
-                    dtkDebug() << "received dtkAbstractData, deserialize";
+                    dtkDebug() << "received" <<  msg->type() << ", deserialize";
+                    QString type ;
+                    QString transmitter_type;
+                    if (msg->type().section('/',1,1).isEmpty()) {
+                        type = msg->type();
+                        transmitter_type = type;
+                    } else {
+                        transmitter_type = msg->type().section('/',0,0);
+                        type = msg->type().section('/',1,1);
+                    }
+
                     if (msg->size() > 0) {
                         QByteArray array = msg->content();
                         dtkAbstractData *data;
-                        data = dtkAbstractDataFactory::instance()->create(msg->type());
-                        if (!data->deserialize(array)) {
+                        data = dtkAbstractDataFactory::instance()->create(type)->deserialize(array);
+                        if (!data) {
                             dtkError() << "Deserialization failed";
                         } else {
-                            dtkDebug() << "set dtkAbstractData in transmitter" << msg->size();
-                            t->setData(qVariantFromValue(data));
+                            dtkDebug() << "set dtkAbstractData in transmitter, size is" << msg->size();
+                            if (transmitter_type == "dtkAbstractData") {
+                                t->setData(qVariantFromValue(data));
+                            } else {
+                                t->setData(data->toVariant(data));
+                            }
                         }
                     } else
                         dtkWarn() << "warning: no content in dtkAbstractData transmitter";
@@ -385,8 +399,8 @@ void dtkComposerNodeRemote::end(void)
                 if (msg->size() > 0) {
                     QByteArray array = msg->content();
                     dtkAbstractData *data;
-                    data = dtkAbstractDataFactory::instance()->create(msg->type());
-                    if (!data->deserialize(array)) {
+                    data = dtkAbstractDataFactory::instance()->create(msg->type())->deserialize(array);
+                    if (!data) {
                         dtkError() << "Deserialization failed";
                     } else {
                         t->setTwinned(false);

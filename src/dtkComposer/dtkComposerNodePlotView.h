@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:32:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 14:49:17 2012 (+0200)
+ * Last-Updated: Tue May 29 15:07:54 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 23
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -48,12 +48,8 @@ public:
     inline QString inputLabelHint(int port) {
         switch(port) {
         default:
-            return "port";
+            return "curve";
         }
-    }
-
-    inline QString outputLabelHint(int) {
-        return "port";
     }
 
 public:

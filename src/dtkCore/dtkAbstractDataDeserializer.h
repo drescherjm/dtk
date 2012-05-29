@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: lun. oct. 17 13:20:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 11:10:31 2012 (+0200)
- *           By: tkloczko
- *     Update #: 20
+ * Last-Updated: mar. mai 29 09:10:28 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 23
  */
 
 /* Commentary:
@@ -55,7 +55,7 @@ signals:
     void finished(void);
 
 public slots:
-    virtual bool deserialize(const QByteArray& array);
+    virtual dtkAbstractData *deserialize(const QByteArray& array);
 
     virtual void setProgress(int value);
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: Mon May 21 23:50:40 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 729
+ * Last-Updated: mar. mai 29 14:50:35 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 774
  */
 
 /* Commentary:
@@ -17,14 +17,15 @@
  *
  */
 
+#include "dtkDistributedSocket.h"
+
 #include <dtkCore/dtkAbstractData.h>
+#include <dtkCore/dtkAbstractDataFactory.h>
 #include <dtkCore/dtkGlobal.h>
 
 #include <dtkMath/dtkMath.h>
 
 #include <dtkLog/dtkLog.h>
-
-#include "dtkDistributedSocket.h"
 
 class dtkDistributedSocketPrivate
 {
@@ -43,7 +44,7 @@ dtkDistributedSocket::~dtkDistributedSocket(void)
 void dtkDistributedSocket::send(dtkAbstractData *data, QString jobid, qint16 target)
 {
     QByteArray *array;
-    QString type = data->identifier();
+    QString type = "dtkAbstractData/"+data->identifier();
 
     array = data->serialize();
     if (!array->isNull()) {
@@ -55,30 +56,38 @@ void dtkDistributedSocket::send(dtkAbstractData *data, QString jobid, qint16 tar
     }
 }
 
-void dtkDistributedSocket::send(QVariant data, QString jobid, qint16 target)
+void dtkDistributedSocket::send(QVariant variant, QString jobid, qint16 target)
 {
     QByteArray *array;
 
-    QString type = data.typeName();
+    QString type = variant.typeName();
 
     if(type == "dtkVector3DReal") {
-        dtkVector3DReal v = data.value<dtkVector3DReal>();
+        dtkVector3DReal v = variant.value<dtkVector3DReal>();
         array = new QByteArray;
         QDataStream stream(array, QIODevice::WriteOnly);
         stream << v[0] << v[1] << v[2];
-    }
 
-    else if(type == "dtkQuaternionReal") {
-        dtkQuaternionReal v = data.value<dtkQuaternionReal>();
+    } else if(type == "dtkQuaternionReal") {
+        dtkQuaternionReal v = variant.value<dtkQuaternionReal>();
         array = new QByteArray;
         QDataStream stream(array, QIODevice::WriteOnly);
         stream << v[0] << v[1] << v[2] << v[3];
+
+    } else {
+        if (type != "dtkAbstractData")
+            dtkInfo() << "type is unknown ("<< type<<  "), assume it inherit from dtkAbstractData";
+        dtkAbstractData *data = dtkAbstractDataFactory::instance()->create(type)->fromVariant(variant);
+        qDebug() << __func__ << data->identifier();
+        array = data->serialize();
     }
 
     if (!array->isNull()) {
+        dtkTrace() << "Array size is"<< array->size();
         dtkDistributedMessage msg = dtkDistributedMessage(dtkDistributedMessage::DATA,jobid, target, array->size(), type);
         this->sendRequest(&msg);
         this->write(*array);
+        this->flush();
     } else {
         dtkError() << "serialization failed";
     }

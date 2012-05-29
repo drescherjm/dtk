@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 16 13:51:50 2012 (+0200)
- *           By: tkloczko
- *     Update #: 248
+ * Last-Updated: mar. mai 29 09:02:40 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 273
  */
 
 /* Commentary:
@@ -65,7 +65,7 @@ public slots:
 
     virtual dtkAbstractData *convert(const QString& toType);
     virtual QByteArray    *serialize(void);
-    virtual bool         deserialize(const QByteArray& array);
+    virtual dtkAbstractData *deserialize(const QByteArray& array);
 
     virtual void *output(void);
     virtual void *output(int channel);
@@ -143,6 +143,10 @@ public:
     virtual operator qlonglong (void);
     virtual operator float     (void);
     virtual operator double    (void);
+
+public:
+    virtual QVariant toVariant(dtkAbstractData *data);
+    virtual dtkAbstractData *fromVariant(const QVariant& v);
 
 private:
     DTK_DECLARE_PRIVATE(dtkAbstractData);

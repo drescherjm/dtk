@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. mai  3 11:41:06 2012 (+0200)
+ * Last-Updated: mar. mai 29 09:47:06 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 577
+ *     Update #: 578
  */
 
 /* Commentary:
@@ -298,7 +298,8 @@ void dtkDistributedCommunicatorMpi::receive(dtkAbstractData *&data, qint16 sourc
     QByteArray array = QByteArray::fromRawData(rawArray, arrayLength);
     // FIXME: array is not null-terminated, does it matter ??
 
-    if (data && !data->deserialize(array))
+    data = data->deserialize(array);
+    if (!data)
         dtkError() << "Warning: deserialization failed";
 }
 

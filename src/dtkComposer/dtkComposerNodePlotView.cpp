@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:40:41 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 14:46:31 2012 (+0200)
+ * Last-Updated: Tue May 29 15:51:46 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 29
+ *     Update #: 42
  */
 
 /* Commentary: 
@@ -21,13 +21,13 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
+#include <dtkPlot/dtkPlotCurve.h>
 #include <dtkPlot/dtkPlotView.h>
 
 class dtkComposerNodePlotViewPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<double> receiver_x;
-    dtkComposerTransmitterReceiver<double> receiver_y;
+    dtkComposerTransmitterReceiver<dtkPlotCurve *> receiver_curve;
 
 public:
     dtkPlotView *view;
@@ -37,8 +37,7 @@ dtkComposerNodePlotView::dtkComposerNodePlotView(void) : QObject(), dtkComposerN
 {
     d->view = NULL;
 
-    this->appendReceiver(&(d->receiver_x));
-    this->appendReceiver(&(d->receiver_y));
+    this->appendReceiver(&(d->receiver_curve));
 
     connect(this, SIGNAL(runned()), this, SLOT(onRun()));
 }
@@ -59,14 +58,15 @@ void dtkComposerNodePlotView::run(void)
 
 void dtkComposerNodePlotView::onRun(void)
 {
-    if(d->receiver_x.isEmpty())
-        return;
-
-    if(d->receiver_y.isEmpty())
+    if(d->receiver_curve.isEmpty())
         return;
 
     if(!d->view) {
         d->view = new dtkPlotView;
         d->view->show();
     }
+
+    (*(d->view)) << d->receiver_curve.data();
+    
+    d->view->update();
 }

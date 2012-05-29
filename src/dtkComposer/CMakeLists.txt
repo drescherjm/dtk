@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Tue May 29 14:49:50 2012 (+0200)
+## Last-Updated: Tue May 29 15:07:30 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 548
+##     Update #: 551
 ######################################################################
 ##
 ### Commentary:
@@ -258,10 +258,13 @@ endif(DTK_HAVE_NITE)
 
 if(DTK_HAVE_PLOT)
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkComposerNodePlotCurve.h
   dtkComposerNodePlotView.h)
 set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
+  dtkComposerNodePlotCurve.h
   dtkComposerNodePlotView.h)
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkComposerNodePlotCurve.cpp
   dtkComposerNodePlotView.cpp)
 endif(DTK_HAVE_PLOT)
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 14:30:16 2012 (+0200)
+ * Last-Updated: Tue May 29 15:49:45 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 63
+ *     Update #: 75
  */
 
 /* Commentary: 
@@ -32,7 +32,11 @@ public:
 
 dtkPlotView::dtkPlotView(void) : dtkAbstractView(), d(new dtkPlotViewPrivate())
 {
+    d->setAxisAutoScale(0, true);
+    d->setAxisAutoScale(1, true);
+
     d->canvas()->setFrameStyle(QFrame::NoFrame);
+
     d->setCanvasBackground(Qt::white);
 }
 
@@ -93,7 +97,10 @@ void dtkPlotView::setStyleSheet(const QString& sheet)
 
 dtkPlotView& dtkPlotView::operator<<(dtkPlotCurve *curve)
 {
-    ((QwtPlotCurve *)(curve->d))->attach((QwtPlot *)d);
+    QwtPlotCurve *c = ((QwtPlotCurve *)(curve->d));
+
+    if (c->plot() != d)
+        c->attach((QwtPlot *)d);
 
     return *(this);
 }

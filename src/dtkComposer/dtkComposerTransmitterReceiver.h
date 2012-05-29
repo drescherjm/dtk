@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue May 29 08:59:19 2012 (+0200)
+ * Last-Updated: Tue May 29 15:43:57 2012 (+0200)
  *           By: tkloczko
- *     Update #: 103
+ *     Update #: 105
  */
 
 /* Commentary: 
@@ -48,13 +48,6 @@ public:
     const T& data(void) const;
 
 public:
-    DTK_DEPRECATED       dtkAbstractContainerWrapper& container(void);
-    DTK_DEPRECATED const dtkAbstractContainerWrapper& container(void) const;
-
-    DTK_DEPRECATED       dtkContainerVector<T>& vector(void);
-    DTK_DEPRECATED const dtkContainerVector<T>& vector(void) const;
-
-public:
     bool isEmpty(void) const;
 
 public:
@@ -82,8 +75,6 @@ private:
 
 private:
     T m_data;
-
-    dtkContainerVector<T> m_vector;
 };
 
 // /////////////////////////////////////////////////////////////////

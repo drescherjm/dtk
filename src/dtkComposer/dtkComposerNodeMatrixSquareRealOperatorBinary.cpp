@@ -148,7 +148,7 @@ class dtkComposerNodeMatrixSquareRealOperatorBinaryAddVecortToMatrixPrivate
 public:
     dtkComposerTransmitterReceiver<dtkMatrixSquareReal> receiver_matrix;
     dtkComposerTransmitterReceiver<dtkVectorReal>       receiver_vector;
-    dtkComposerTransmitterReceiver<qreal>              receiver_index;
+    dtkComposerTransmitterReceiver<qreal>               receiver_index;
 
 public:
     dtkComposerTransmitterEmitter<dtkMatrixSquareReal> emitter_matrix;
@@ -232,48 +232,33 @@ void dtkComposerNodeMatrixSquareRealOperatorBinaryScalarProduct::run(void)
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-//// a revoir demain  car rien me marche
-
-
-
 // ///////////////////////////////////////////////////////////////////////////////////
 // dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProductMV - Product Vector Matrix
 // //////////////////////////////////////////////////////////////////////////////////
 
 void dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProductMV::run(void)
 {
-//    bool isSquare = d->receiver_matrix.data().getRows()== d->receiver_matrix.data().getCols();
-//    dtkVectorReal vec =d->receiver_vector.data();
-//    dtkMatrixSquareReal matrix = d->receiver_matrix.data();
+    bool isSquare = d->receiver_matrix.data().getRows()== d->receiver_matrix.data().getCols();
 
-//    if ( isSquare && (d->receiver_matrix.data().getRows()== d->receiver_vector.data().getCols())) {
+    dtkVectorReal vec =d->receiver_vector.data();
+    dtkMatrixSquareReal matrix = d->receiver_matrix.data();
 
-//        // d->emitter_vector.setData(d->receiver_matrix.data() * d->receiver_vector.data());
+    if ( isSquare && (d->receiver_matrix.data().getRows()== d->receiver_vector.data().getCols())) {
 
-//        for(int i = 0 ; i < d->receiver_matrix.data().getRows(); i++){
+        d->emitter_vector.setData(d->receiver_matrix.data() * d->receiver_vector.data());
 
-//            for(int j = 0 ; j < d->receiver_vector.data().getRows(); i++){
+        for(int i = 0 ; i < d->receiver_matrix.data().getRows(); i++){
+
+            for(int j = 0 ; j < d->receiver_vector.data().getRows(); i++){
 
 
-//                vec[i] = matrix [i][j]*vec[i];
+                vec[i] = matrix [i][j]*vec[i];
 
-//                qDebug()<< i<< vec[i];
+                qDebug()<< i<< vec[i];
 
-//            }
-//        }
-//    }
+            }
+        }
+    }
 
 }
 // /////////////////////////////////////////////////////////////////////////////////////

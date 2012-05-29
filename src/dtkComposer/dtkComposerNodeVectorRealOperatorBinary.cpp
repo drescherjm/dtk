@@ -93,7 +93,7 @@ public:
     dtkComposerTransmitterVariant                 receiver_val;
 
 public:
-    dtkComposerTransmitterEmitter<dtkVectorReal> emitter_vec;
+    dtkComposerTransmitterEmitter<dtkVectorReal>  emitter_vec;
 };
 
 dtkComposerNodeVectorRealOperatorHomothetic::dtkComposerNodeVectorRealOperatorHomothetic(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVectorRealOperatorHomotheticPrivate)
@@ -116,32 +116,60 @@ dtkComposerNodeVectorRealOperatorHomothetic::~dtkComposerNodeVectorRealOperatorH
 
 void dtkComposerNodeVectorRealOperatorBinarySum::run(void)
 {
-    int size = qMin(d->receiver_lhs.data().getRows(), d->receiver_rhs.data().getRows());
+    if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()) {
 
-    for(int i = 0 ; i < size; i++)
-        d->emitter_vec.setData(d->receiver_lhs.data() + d->receiver_rhs.data());
+        dtkWarn() << "Inputs not specified. Nothing is done";
 
+    } else {
+
+        int size = qMin(d->receiver_lhs.data().getRows(), d->receiver_rhs.data().getRows());
+
+        for(int i = 0 ; i < size; i++) {
+            dtkVectorReal vecteur = d->receiver_lhs.data() + d->receiver_rhs.data();
+            d->emitter_vec.setData(vecteur);
+            dtkDebug()<< vecteur[i] ; }
+
+    }
 }
-
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeVectorRealOperatorBinary - SUBSTRACT
 // /////////////////////////////////////////////////////////////////
 
 void dtkComposerNodeVectorRealOperatorBinarySubstract::run(void)
 {
-    int size = qMin(d->receiver_lhs.data().getRows(), d->receiver_rhs.data().getRows());
+    if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()) {
 
-    for(int i = 0 ; i < size; i++)
-        d->emitter_vec.setData(d->receiver_lhs.data() - d->receiver_rhs.data());
+        dtkWarn() << "Inputs not specified. Nothing is done";
+
+    } else {
+
+        int size = qMin(d->receiver_lhs.data().getRows(), d->receiver_rhs.data().getRows());
+
+        for(int i = 0 ; i < size; i++)
+            d->emitter_vec.setData(d->receiver_lhs.data() - d->receiver_rhs.data());
+
+    }
 
 }
 
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeVectorRealOperatorBinaryScalar - DOT PRODUCT
+// /////////////////////////////////////////////////////////////////
+
 void dtkComposerNodeVectorRealOperatorBinaryScalarDotProd::run(void)
 {
-    int size = qMin(d->receiver_lhs.data().getRows(), d->receiver_rhs.data().getRows());
+    if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()) {
 
-    for(int i = 0 ; i < size; i++)
-        d->emitter_val.setData(d->receiver_lhs.data() * d->receiver_rhs.data());
+        dtkWarn() << "Inputs not specified. Nothing is done";
+
+    } else {
+
+        int size = qMin(d->receiver_lhs.data().getRows(), d->receiver_rhs.data().getRows());
+
+        for(int i = 0 ; i < size; i++)
+            d->emitter_val.setData(d->receiver_lhs.data() * d->receiver_rhs.data());
+
+    }
 
 }
 
@@ -151,7 +179,12 @@ void dtkComposerNodeVectorRealOperatorBinaryScalarDotProd::run(void)
 
 void dtkComposerNodeVectorRealOperatorHomotheticMult::run(void)
 {
-    d->emitter_vec.setData(d->receiver_vec.data() * d->receiver_val.data().toReal());
+    if (d->receiver_vec.isEmpty() || d->receiver_val.isEmpty())
+        dtkWarn() << "Inputs not specified. Nothing is done";
+
+    else
+        d->emitter_vec.setData(d->receiver_vec.data() * d->receiver_val.data().toReal());
+
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -160,5 +193,16 @@ void dtkComposerNodeVectorRealOperatorHomotheticMult::run(void)
 
 void dtkComposerNodeVectorRealOperatorHomotheticDivision::run(void)
 {
-    d->emitter_vec.setData(d->receiver_vec.data() / d->receiver_val.data().toReal());
+    if (d->receiver_vec.isEmpty() || d->receiver_val.isEmpty()) {
+        dtkWarn() << "Inputs not specified. Nothing is done";
+
+    } else {
+        if (d->receiver_val.data()!=0)
+            d->emitter_vec.setData(d->receiver_vec.data() / d->receiver_val.data().toReal());
+
+        else
+            dtkWarn() << "You divide by zero. Nothing is done" ;
+
+    }
+
 }

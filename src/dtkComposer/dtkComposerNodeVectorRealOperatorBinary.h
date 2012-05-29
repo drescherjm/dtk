@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Babette Lekouta, Inria.
  * Created: Thu Apr 26 16:14:44 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 17:34:34 2012 (+0200)
- *           By: sblekout
- *     Update #: 38
+ * Last-Updated: Tue May 29 15:16:03 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 39
  */
 
 /* Commentary:
@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef dtkComposerNodeVectorRealOperatorBinary_H
-#define dtkComposerNodeVectorRealOperatorBinary_H
+#ifndef DTKCOMPOSERNODEVECTORREALOPERATORBINARY_H
+#define DTKCOMPOSERNODEVECTORREALOPERATORBINARY_H
 
 #include "dtkComposerExport.h"
 #include "dtkComposerNodeLeaf.h"

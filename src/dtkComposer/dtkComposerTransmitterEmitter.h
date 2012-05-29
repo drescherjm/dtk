@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:33:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue May 29 08:58:58 2012 (+0200)
+ * Last-Updated: Tue May 29 15:43:21 2012 (+0200)
  *           By: tkloczko
- *     Update #: 101
+ *     Update #: 104
  */
 
 /* Commentary: 
@@ -44,12 +44,6 @@ public:
     inline const T& data(void) const;
 
 public:
-    DTK_DEPRECATED inline void setVector(const dtkContainerVector<T>& vector);
-
-    DTK_DEPRECATED inline       dtkContainerVector<T>& vector(void);
-    DTK_DEPRECATED inline const dtkContainerVector<T>& vector(void) const;
-
-public:
     virtual Kind kind(void) const;
 
     virtual QString kindName(void) const;
@@ -59,8 +53,6 @@ public:
 
 private:
     T m_data;
-    
-    dtkContainerVector<T> m_vector;
 };
 
 // /////////////////////////////////////////////////////////////////

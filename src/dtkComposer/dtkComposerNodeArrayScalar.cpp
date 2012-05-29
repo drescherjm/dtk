@@ -109,22 +109,22 @@ void dtkComposerNodeArrayScalar::run(void)
     } else {
 
         qlonglong size = 0;
-	qreal value = 0;
+        qreal value = 0;
 
-	dtkContainerVector<qreal> array;
+        dtkContainerVector<qreal> array;
 
         if (!d->receiver_size.isEmpty())
-	    size = d->receiver_size.data();
+            size = d->receiver_size.data();
 
-	if (size == 0) {
+        if (size == 0) {
             dtkWarn() << "The size of the array is zero." ;
 
-	} else {
+        } else {
 
-	    array.reserve(size);
+            array.reserve(size);
 
-	    if (!d->receiver_value.isEmpty())
-	        value = d->receiver_value.data();
+            if (!d->receiver_value.isEmpty())
+                value = d->receiver_value.data();
 
 	    for(int i = 0 ; i < size; i++)
 	        array << value;
@@ -132,5 +132,6 @@ void dtkComposerNodeArrayScalar::run(void)
 
 	d->emitter_array.setData(array);
 	d->emitter_size.setData(size);
+
     }
 }

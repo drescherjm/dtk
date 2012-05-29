@@ -84,8 +84,11 @@ dtkComposerNodeVector3DOperatorUnaryScalar::~dtkComposerNodeVector3DOperatorUnar
 
 void dtkComposerNodeVector3DOperatorUnaryUnitary::run(void)
 {
-    d->emitter_vec.setData(d->receiver_vec.data().unit());
-}
+    if (d->receiver_vec.isEmpty())
+        dtkWarn() << "Input not specified. Nothing is done";
+
+    else
+        d->emitter_vec.setData(d->receiver_vec.data().unit());}
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeVector3DOperatorUnaryScalar - NORM
@@ -93,6 +96,9 @@ void dtkComposerNodeVector3DOperatorUnaryUnitary::run(void)
 
 void dtkComposerNodeVector3DOperatorUnaryScalarNorm::run(void)
 {
-    d->emitter_val.setData(d->receiver_vec.data().norm());
+    if (d->receiver_vec.isEmpty())
+        dtkWarn() << "Input not specified. Nothing is done";
 
+    else
+        d->emitter_val.setData(d->receiver_vec.data().norm());
 }

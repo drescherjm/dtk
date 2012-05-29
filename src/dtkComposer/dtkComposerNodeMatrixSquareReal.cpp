@@ -23,6 +23,8 @@
 
 #include <dtkMath>
 
+#include <dtkLog/dtkLog>
+
 // /////////////////////////////////////////////////////////////////
 //
 // /////////////////////////////////////////////////////////////////
@@ -106,16 +108,31 @@ void dtkComposerNodeMatrixSquareReal::run(void)
 
     } else {
 
-        unsigned int t =  d->receiver_size.data();
-        dtkMatrixSquareReal matrix(t,t);
+        unsigned int size = 0;
+	qreal value = 0;
+	dtkMatrixSquareReal matrix;
 
-        for(int i = 0 ; i < matrix.getRows(); i++){
-            for(int j = 0 ; j < matrix.getCols(); j++)
-                matrix[i][j] = d->receiver_value.data();
+        if (!d->receiver_size.isEmpty())
+	    size = d->receiver_size.data();
 
-        }
+	if (size == 0) {
+            dtkWarn() << "The size of the matrix is zero." ;
 
-        d->emitter_size.setData(matrix.getRows());
-        d->emitter_matrix.setData(matrix);
+	} else {
+
+	    matrix.allocate(size);
+
+	    if (!d->receiver_value.isEmpty())
+	        value = d->receiver_value.data();
+
+	    for(int i = 0 ; i < matrix.getRows(); i++) {
+  	        for(int j = 0 ; j < matrix.getCols(); j++)
+		    matrix[i][j] = d->receiver_value.data();
+	    }
+
+	}
+
+	d->emitter_size.setData(size);
+	d->emitter_matrix.setData(matrix);
     }
 }

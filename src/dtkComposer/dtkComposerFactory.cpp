@@ -40,6 +40,8 @@
 #include "dtkComposerNodeLogger.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeMatrixSquareReal.h"
+#include "dtkComposerNodeMatrixSquareRealOperatorUnary.h"
+#include "dtkComposerNodeMatrixSquareRealOperatorBinary.h"
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeQuaternion.h"
@@ -148,6 +150,69 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["Matrix Square Real "] = "<p>Description not yet filled!</p>";
     d->tags["Matrix Square Real"] = QStringList() << "matrix" << "square" << "real"<< "algebraic";
     d->types["Matrix Square Real"] = "matrix_square_real";
+
+    d->nodes << "MatrixSquare Real Transpose";
+    d->descriptions["MatrixSquare Real Transpose "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Transpose"] = QStringList() << "matrix" << "square" << "real"<< "transpose";
+    d->types["MatrixSquare Real Transpose"] = "matrixSquare_real_transpose";
+
+    d->nodes << "MatrixSquare Real Inverse";
+    d->descriptions["MatrixSquare Real Inverse "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Inverse"] = QStringList() << "matrix" << "square" << "real"<< "inverse";
+    d->types["MatrixSquare Real Inverse"] = "matrixSquare_real_inverse";
+
+    d->nodes << "MatrixSquare Real Determinant";
+    d->descriptions["MatrixSquare Real Determinant "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Determinant"] = QStringList() << "matrix" << "square" << "real"<< "determinant";
+    d->types["MatrixSquare Real Determinant"] = "matrixSquare_real_determinant";
+
+    d->nodes << "MatrixSquare Real Trace";
+    d->descriptions["MatrixSquare Real Trace "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Trace"] = QStringList() << "matrix" << "square" << "real"<< "trace";
+    d->types["MatrixSquare Real Trace"] = "matrixSquare_real_trace";
+
+    d->nodes << "MatrixSquare Real Sum";
+    d->descriptions["MatrixSquare Real Sum "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Sum"] = QStringList() << "matrix" << "square" << "real"<< "sum";
+    d->types["MatrixSquare Real Sum"] = "matrixSquare_real_sum";
+
+    d->nodes << "MatrixSquare Real Substract";
+    d->descriptions["MatrixSquare Real Substract "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Substract"] = QStringList() << "matrix" << "square" << "real"<< "substract";
+    d->types["MatrixSquare Real Substract"] = "matrixSquare_real_substract";
+
+    d->nodes << "MatrixSquare Real Mult";
+    d->descriptions["MatrixSquare Real Mult "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Mult"] = QStringList() << "matrix" << "square" << "real"<< "mult";
+    d->types["MatrixSquare Real Mult"] = "matrixSquare_real_mult";
+
+    d->nodes << "MatrixSquare Real Product";
+    d->descriptions["MatrixSquare Real Product "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Product"] = QStringList() << "matrix" << "square" << "real"<< "product";
+    d->types["MatrixSquare Real Product"] = "matrixSquare_real_product";
+
+    d->nodes << "MatrixSquare Real ProductMatrixVector";
+    d->descriptions["MatrixSquare Real ProductMatrixVector "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real ProductMatrixVector"] = QStringList() << "matrix" << "square" << "real"<< "Product"<< "Matrix" << "Vector";
+    d->types["MatrixSquare Real ProductMatrixVector"] = "matrixSquare_real_ProductMatrixVector";
+
+    d->nodes << "MatrixSquare Real ProductVectorMatrix";
+    d->descriptions["MatrixSquare Real ProductVectorMatrix "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real ProductVectorMatrix"] = QStringList() << "matrix" << "square" << "real"<< "Product"<< "Matrix" << "Vector";
+    d->types["MatrixSquare Real ProductVectorMatrix"] = "matrixSquare_real_ProductVectorMatrix";
+
+    d->nodes << "MatrixSquare Real AddRowVectorToMatrix";
+    d->descriptions["MatrixSquare Real AddRowVectorToMatrix "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real AddRowVectorToMatrix"] = QStringList() << "matrix" << "square" << "real"<< "Add"<< "Row"<< "Matrix" << "Vector";
+    d->types["MatrixSquare Real AddRowVectorToMatrix"] = "matrixSquare_real_AddRowVectorToMatrix";
+
+    d->nodes << "MatrixSquare Real AddColVectorToMatrix";
+    d->descriptions["MatrixSquare Real AddColVectorToMatrix "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real AddColVectorToMatrix"] = QStringList() << "matrix" << "square" << "real"<< "Add"<< "Col"<< "Matrix" << "Vector";
+    d->types["MatrixSquare Real AddColVectorToMatrix"] = "matrixSquare_real_AddColVectorToMatrix";
+
+
+
 
 
 
@@ -774,6 +839,39 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "matrix_square_real")
         return new dtkComposerNodeMatrixSquareReal;
+
+    if(type == "matrixSquare_real_transpose")
+        return new dtkComposerNodeMatrixSquareRealOperatorUnaryTranspose;
+
+    if(type == "matrixSquare_real_inverse")
+        return new dtkComposerNodeMatrixSquareRealOperatorUnaryInverse;
+
+    if(type == "matrixSquare_real_trace")
+        return new dtkComposerNodeMatrixSquareRealOperatorUnaryScalarTrace;
+
+    if(type == "matrixSquare_real_sum")
+        return new dtkComposerNodeMatrixSquareRealOperatorBinarySum;
+
+    if(type == "matrixSquare_real_substract")
+        return new dtkComposerNodeMatrixSquareRealOperatorBinarySubstract;
+
+    if(type == "matrixSquare_real_mult")
+        return new dtkComposerNodeMatrixSquareRealOperatorBinaryMult;
+
+    if(type == "matrixSquare_real_product")
+        return new dtkComposerNodeMatrixSquareRealOperatorBinaryScalarProduct;
+
+    if(type == "matrixSquare_real_ProductMatrixVector")
+        return new dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProductMV;
+
+    if(type == "matrixSquare_real_ProductVectorMatrix")
+        return new dtkComposerNodeMatrixSquareRealOperatorBinaryRightProductVM;
+
+    if(type == "matrixSquare_real_AddRowVectorToMatrix")
+        return new dtkComposerNodeMatrixSquareRealOperatorBinaryAddRowVectorMatrix;
+
+    if(type == "matrixSquare_real_AddColVectorToMatrix")
+        return new dtkComposerNodeMatrixSquareRealOperatorBinaryAddRowVectorMatrix;
 
     // Vector Real nodes
 

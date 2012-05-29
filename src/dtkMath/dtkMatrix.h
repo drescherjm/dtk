@@ -165,15 +165,17 @@ public:
 
 #include <QtCore>
 
-typedef dtkMatrix<qreal> dtkMatrixSquareReal;
+typedef dtkMatrix<qreal> dtkMatrixReal;
 
-Q_DECLARE_METATYPE(dtkMatrixSquareReal);
-Q_DECLARE_METATYPE(dtkMatrixSquareReal *);
+Q_DECLARE_METATYPE(dtkMatrixReal);
+Q_DECLARE_METATYPE(dtkMatrixReal *);
 
 #endif
 
 // /////////////////////////////////////////////////////////////////
 // Credits
+
+
 // /////////////////////////////////////////////////////////////////
 
 // $Id: matrix.h 184 2008-05-10 19:43:17Z hkuiper $

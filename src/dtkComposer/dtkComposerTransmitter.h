@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 16 11:55:17 2012 (+0200)
+ * Last-Updated: Tue May 29 10:13:12 2012 (+0200)
  *           By: tkloczko
- *     Update #: 161
+ *     Update #: 164
  */
 
 /* Commentary: 
@@ -24,7 +24,7 @@
 
 #include <QtCore>
 
-class dtkAbstractContainer;
+class dtkAbstractContainerWrapper;
 class dtkComposerNode;
 
 // /////////////////////////////////////////////////////////////////
@@ -42,7 +42,10 @@ public:
         Emitter,
         Receiver,
         Proxy,
-        Variant
+        Variant,
+        VariantContainer,
+        EmitterVector,
+        ReceiverVector
     };
 
 public:
@@ -59,8 +62,8 @@ public:
     const QVariant& variant(void) const;
 
 public:
-    virtual       dtkAbstractContainer& container(void);
-    virtual const dtkAbstractContainer& container(void) const;
+    virtual       dtkAbstractContainerWrapper& container(void);
+    virtual const dtkAbstractContainerWrapper& container(void) const;
 
 public:
     virtual QVariant::Type type(void) const;

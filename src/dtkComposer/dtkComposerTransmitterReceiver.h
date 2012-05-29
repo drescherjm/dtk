@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri May 25 21:52:50 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 78
+ * Last-Updated: Tue May 29 08:59:19 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 103
  */
 
 /* Commentary: 
@@ -23,8 +23,9 @@
 #include "dtkComposerExport.h"
 #include "dtkComposerTransmitter.h"
 
-#include <dtkCore/dtkContainerVector.h>
-#include <dtkCore/dtkContainerList.h>
+#include <dtkCore/dtkGlobal>
+
+#include <dtkContainer/dtkContainerVector.h>
 
 #include <QtCore>
 
@@ -33,7 +34,7 @@ template <typename T> class dtkComposerTransmitterEmitter;
 class dtkComposerTransmitterVariant;
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterReceiver declaration
+// dtkComposerTransmitterReceiver interface
 // /////////////////////////////////////////////////////////////////
 
 template <typename T> class DTKCOMPOSER_EXPORT dtkComposerTransmitterReceiver : public dtkComposerTransmitter
@@ -47,14 +48,11 @@ public:
     const T& data(void) const;
 
 public:
-          dtkAbstractContainer& container(void);
-    const dtkAbstractContainer& container(void) const;
+    DTK_DEPRECATED       dtkAbstractContainerWrapper& container(void);
+    DTK_DEPRECATED const dtkAbstractContainerWrapper& container(void) const;
 
-          dtkContainerVector<T>& vector(void);
-    const dtkContainerVector<T>& vector(void) const;
-
-          dtkContainerList<T>& list(void);
-    const dtkContainerList<T>& list(void) const;
+    DTK_DEPRECATED       dtkContainerVector<T>& vector(void);
+    DTK_DEPRECATED const dtkContainerVector<T>& vector(void) const;
 
 public:
     bool isEmpty(void) const;
@@ -86,7 +84,45 @@ private:
     T m_data;
 
     dtkContainerVector<T> m_vector;
-    dtkContainerList<T>   m_list;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerTransmitterReceiverVector interface
+// /////////////////////////////////////////////////////////////////
+
+template <typename T> class dtkComposerTransmitterEmitterVector;
+
+class dtkComposerTransmitterVariantContainer;
+
+template <typename T> class DTKCOMPOSER_EXPORT dtkComposerTransmitterReceiverVector : public dtkComposerTransmitterReceiver<T>
+{
+public:
+     dtkComposerTransmitterReceiverVector(dtkComposerNode *parent = 0);
+    ~dtkComposerTransmitterReceiverVector(void);
+
+public:
+          dtkAbstractContainerWrapper& container(void);
+    const dtkAbstractContainerWrapper& container(void) const;
+
+          dtkContainerVector<T>& data(void);
+    const dtkContainerVector<T>& data(void) const;
+
+public:
+    bool    connect(dtkComposerTransmitter *transmitter);
+    bool disconnect(dtkComposerTransmitter *transmitter);
+
+private:
+    QList<dtkComposerTransmitterEmitterVector<T> *> emitters;
+    QList<dtkComposerTransmitterVariantContainer *> variants;
+
+private:
+    dtkComposerTransmitterEmitterVector<T> *active_emitter;
+    dtkComposerTransmitterVariantContainer *active_variant;
+
+private:
+    dtkContainerVector<T> m_vector;
+
+    using dtkComposerTransmitterReceiver<T>::d;
 };
 
 // /////////////////////////////////////////////////////////////////

@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Mon May 21 10:58:18 2012 (+0200)
-##           By: Julien Wintz
-##     Update #: 538
+## Last-Updated: Wed May 23 18:07:31 2012 (+0200)
+##           By: tkloczko
+##     Update #: 539
 ######################################################################
 ##
 ### Commentary:
@@ -86,6 +86,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeVectorRealOperatorUnary.h
   dtkComposerNodeVectorRealOperatorBinary.h
   dtkComposerNodeMatrixSquareReal.h
+  dtkComposerNodeMatrixSquareRealOperatorUnary.h
+  dtkComposerNodeMatrixSquareRealOperatorBinary.h
   dtkComposerNodeView.h
   dtkComposerScene.h
   dtkComposerSceneEdge.h
@@ -196,6 +198,8 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeVectorRealOperatorUnary.cpp
   dtkComposerNodeVectorRealOperatorBinary.cpp
   dtkComposerNodeMatrixSquareReal.cpp
+  dtkComposerNodeMatrixSquareRealOperatorUnary.cpp
+  dtkComposerNodeMatrixSquareRealOperatorBinary.cpp
   dtkComposerNodeView.cpp
   dtkComposerScene.cpp
   dtkComposerSceneEdge.cpp
@@ -307,6 +311,7 @@ endif(BUILD_SHARED_LIBS)
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkMath
+  dtkContainer
   dtkCore
   dtkGui
   dtkLog

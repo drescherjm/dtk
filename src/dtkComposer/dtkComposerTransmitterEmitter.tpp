@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri May 25 16:23:57 2012 (+0200)
+ * Last-Updated: Tue May 29 10:14:26 2012 (+0200)
  *           By: tkloczko
- *     Update #: 184
+ *     Update #: 187
  */
 
 /* Commentary: 
@@ -38,6 +38,7 @@
 template <typename T> inline dtkComposerTransmitterEmitter<T>::dtkComposerTransmitterEmitter(dtkComposerNode *parent) : dtkComposerTransmitter(parent)
 {
     d->variant = qVariantFromValue(m_data);
+    d->type = d->variant.type();
 };
 
 //! Destroys the emitter.
@@ -180,7 +181,7 @@ template <typename T> inline dtkComposerTransmitterEmitterVector<T>::~dtkCompose
 
 template <typename T> inline dtkComposerTransmitter::Kind dtkComposerTransmitterEmitterVector<T>::kind(void) const
 {
-    return dtkComposerTransmitter::EmitterContainer;
+    return dtkComposerTransmitter::EmitterVector;
 };
 
 template <typename T> inline QString dtkComposerTransmitterEmitterVector<T>::kindName(void) const

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri May 25 17:37:09 2012 (+0200)
+ * Last-Updated: Tue May 29 10:54:36 2012 (+0200)
  *           By: tkloczko
- *     Update #: 36
+ *     Update #: 37
  */
 
 /* Commentary:
@@ -32,9 +32,9 @@
 class dtkComposerNodeArrayScalarOperatorModifierPrivate
 {
 public:
-    dtkComposerTransmitterReceiverVector<qreal>      receiver_array;
-    dtkComposerTransmitterReceiver<qlonglong>  receiver_index;
-    dtkComposerTransmitterReceiver<qreal>      receiver_value;
+    dtkComposerTransmitterReceiverVector<qreal> receiver_array;
+    dtkComposerTransmitterReceiver<qlonglong>   receiver_index;
+    dtkComposerTransmitterReceiver<qreal>       receiver_value;
 
 public:
     dtkComposerTransmitterEmitterVector<qreal> emitter_array;

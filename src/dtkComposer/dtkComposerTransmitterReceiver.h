@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri May 25 17:45:42 2012 (+0200)
+ * Last-Updated: Tue May 29 08:59:19 2012 (+0200)
  *           By: tkloczko
- *     Update #: 102
+ *     Update #: 103
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #ifndef DTKCOMPOSERTRANSMITTERRECEIVER_H
 #define DTKCOMPOSERTRANSMITTERRECEIVER_H
 
+#include "dtkComposerExport.h"
 #include "dtkComposerTransmitter.h"
 
 #include <dtkCore/dtkGlobal>
@@ -52,9 +53,6 @@ public:
 
     DTK_DEPRECATED       dtkContainerVector<T>& vector(void);
     DTK_DEPRECATED const dtkContainerVector<T>& vector(void) const;
-
-    /*       dtkContainerList<T>& list(void); */
-    /* const dtkContainerList<T>& list(void) const; */
 
 public:
     bool isEmpty(void) const;

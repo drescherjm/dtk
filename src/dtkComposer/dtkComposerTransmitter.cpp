@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 24 22:31:20 2012 (+0200)
+ * Last-Updated: Tue May 29 10:10:42 2012 (+0200)
  *           By: tkloczko
- *     Update #: 209
+ *     Update #: 210
  */
 
 /* Commentary: 
@@ -74,12 +74,12 @@ const dtkAbstractContainerWrapper& dtkComposerTransmitter::container(void) const
 
 QVariant::Type dtkComposerTransmitter::type(void) const
 {
-    return d->variant.type();
+    return d->type;
 }
 
 QString dtkComposerTransmitter::typeName(void) const
 {
-    return QVariant::typeToName(d->variant.type());
+    return QVariant::typeToName(d->type);
 }
 
 //! 

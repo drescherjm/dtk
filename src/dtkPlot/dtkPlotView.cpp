@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jul  6 17:23:08 2011 (+0200)
+ * Last-Updated: Tue May 29 14:30:16 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 56
+ *     Update #: 63
  */
 
 /* Commentary: 
@@ -30,15 +30,10 @@ class dtkPlotViewPrivate : public QwtPlot
 public:
 };
 
-dtkPlotView::dtkPlotView(QWidget *parent) : QWidget(parent), d(new dtkPlotViewPrivate)
+dtkPlotView::dtkPlotView(void) : dtkAbstractView(), d(new dtkPlotViewPrivate())
 {
     d->canvas()->setFrameStyle(QFrame::NoFrame);
     d->setCanvasBackground(Qt::white);
-
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(0);
-    layout->addWidget(d);
 }
 
 dtkPlotView::~dtkPlotView(void)
@@ -106,4 +101,9 @@ dtkPlotView& dtkPlotView::operator<<(dtkPlotCurve *curve)
 void dtkPlotView::update(void)
 {
     d->replot();
+}
+
+QWidget *dtkPlotView::widget(void)
+{
+    return d;
 }

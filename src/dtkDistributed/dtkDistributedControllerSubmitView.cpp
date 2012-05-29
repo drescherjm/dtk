@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:53:43 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 19 15:53:16 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 95
+ * Last-Updated: mar. mai 29 09:55:10 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 106
  */
 
 /* Commentary: 
@@ -29,17 +29,20 @@ public:
 
 public:
     QString cluster;
+    QString application;
 
 public:
     QSpinBox *node_spin;
     QSpinBox *ppn_spin;
     QDateTimeEdit *time_edit;
-    QPushButton *submit_button;    
+    QPushButton *submit_button;
 };
 
 dtkDistributedControllerSubmitView::dtkDistributedControllerSubmitView(QWidget *parent) : QFrame(parent), d(new dtkDistributedControllerSubmitViewPrivate)
 {
     d->controller = NULL;
+
+    d->application = "dtkComposerEvaluatorSlave";
 
     d->node_spin = new QSpinBox(this);
     d->node_spin->setMinimum(1);
@@ -108,6 +111,11 @@ void dtkDistributedControllerSubmitView::setCluster(const QString& cluster)
     this->setEnabled(true);
 }
 
+void dtkDistributedControllerSubmitView::setApplication(const QString& application)
+{
+    d->application = application;
+}
+
 void dtkDistributedControllerSubmitView::onSubmit(void)
 {
     if(!d->controller)
@@ -124,7 +132,7 @@ void dtkDistributedControllerSubmitView::onSubmit(void)
     job.insert("resources", resources);
     job.insert("properties", QVariantMap());
     job.insert("walltime", d->time_edit->time().toString("hh:mm:ss"));
-    job.insert("application", QString("dtkComposerEvaluatorSlave %1").arg(d->cluster));
+    job.insert("application", d->application +" "+d->cluster);
 
     QByteArray data = dtkJson::serialize(job);
 

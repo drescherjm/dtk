@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:52:03 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 11 13:44:52 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 10
+ * Last-Updated: mer. mai 23 17:46:37 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -38,6 +38,9 @@ public:
 public slots:
     void setController(dtkDistributedController *controller);
     void setCluster(const QString& cluster);
+
+public:
+    void setApplication(const QString& application);
 
 protected slots:
     void onSubmit(void);

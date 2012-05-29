@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Babette Lekouta, Inria.
  * Created: Thu Apr 26 15:57:47 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 16:44:41 2012 (+0200)
- *           By: sblekout
- *     Update #: 12
+ * Last-Updated: Tue May 29 15:17:06 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 13
  */
 
 /* Commentary:
@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef dtkComposerNodeMatrixSquareRealOperatorUnary_H
-#define dtkComposerNodeMatrixSquareRealOperatorUnary_H
+#ifndef DTKCOMPOSERNODEMATRIXSQUAREREALOPERATORUNARY_H
+#define DTKCOMPOSERNODEMATRIXSQUAREREALOPERATORUNARY_H
 
 #include "dtkComposerExport.h"
 #include "dtkComposerNodeLeaf.h"

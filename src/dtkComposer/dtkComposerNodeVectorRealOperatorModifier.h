@@ -7,9 +7,8 @@
  *
  */
 
-
-#ifndef dtkComposerNodeVectorRealOperatorModifier_H
-#define dtkComposerNodeVectorRealOperatorModifier_H
+#ifndef DTKCOMPOSERNODEVECTORREALOPERATORMODIFIER_H
+#define DTKCOMPOSERNODEVECTORREALOPERATORMODIFIER_H
 
 #include "dtkComposerExport.h"
 #include "dtkComposerNodeLeaf.h"

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Tue May 29 15:07:12 2012 (+0200)
+ * Last-Updated: Tue May 29 22:52:34 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 600
+ *     Update #: 607
  */
 
 /* Commentary:
@@ -80,6 +80,12 @@
 #include "dtkComposerNodePlotView.h"
 #endif
 
+#if defined(DTK_HAVE_PLOT)
+#include <dtkPlot/dtkPlotView.h>
+#endif
+
+#include <dtkCore/dtkAbstractView.h>
+#include <dtkCore/dtkAbstractViewFactory.h>
 #include <dtkCore/dtkGlobal.h>
 
 class dtkComposerFactoryPrivate
@@ -723,6 +729,8 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->nodes << "Plot Curve";
     d->tags["Plot Curve"] = QStringList() <<  "curve" << "plot";
     d->types["Plot Curve"] = "dtkPlotCurve";
+
+    dtkAbstractViewFactory::instance()->registerViewType("dtkPlotView", createPlotView);
 
     d->nodes << "Plot View";
     d->tags["Plot View"] = QStringList() <<  "view" << "plot";

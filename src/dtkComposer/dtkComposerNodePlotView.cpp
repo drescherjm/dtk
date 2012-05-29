@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:40:41 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 15:51:46 2012 (+0200)
+ * Last-Updated: Tue May 29 22:59:10 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 42
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -23,6 +23,9 @@
 
 #include <dtkPlot/dtkPlotCurve.h>
 #include <dtkPlot/dtkPlotView.h>
+
+#include <dtkCore/dtkAbstractView.h>
+#include <dtkCore/dtkAbstractViewFactory.h>
 
 class dtkComposerNodePlotViewPrivate
 {
@@ -61,10 +64,11 @@ void dtkComposerNodePlotView::onRun(void)
     if(d->receiver_curve.isEmpty())
         return;
 
-    if(!d->view) {
-        d->view = new dtkPlotView;
-        d->view->show();
-    }
+    if(!d->view)
+        d->view = dynamic_cast<dtkPlotView *>(dtkAbstractViewFactory::instance()->create("dtkPlotView"));
+
+    if(!d->view)
+        return;
 
     (*(d->view)) << d->receiver_curve.data();
     

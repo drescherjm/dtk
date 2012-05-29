@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 12:30:17 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri May 25 10:01:11 2012 (+0200)
- *           By: tkloczko
- *     Update #: 246
+ * Last-Updated: Tue May 29 14:37:09 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 249
  */
 
 /* Commentary: 
@@ -406,11 +406,15 @@ template <typename T> inline dtkContainerVector<T> *dtkContainerVector<T>::clone
 template <typename T> inline dtkContainerVector<T>& dtkContainerVector<T>::operator << (const T& value)
 {
     m_vector << value;
+
+    return (*this);
 };
 
 template <typename T> inline dtkContainerVector<T>& dtkContainerVector<T>::operator << (const dtkContainerVector<T>& values)
 {
     m_vector << values.m_vector;
+
+    return (*this);
 };
 
 template <typename T> inline bool dtkContainerVector<T>::operator == (const dtkContainerVector<T>& other) const

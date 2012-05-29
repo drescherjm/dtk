@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Wed May 23 18:07:31 2012 (+0200)
-##           By: tkloczko
-##     Update #: 539
+## Last-Updated: Tue May 29 14:49:50 2012 (+0200)
+##           By: Julien Wintz
+##     Update #: 548
 ######################################################################
 ##
 ### Commentary:
@@ -253,6 +253,19 @@ set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
 endif(DTK_HAVE_NITE)
 
 ## #################################################################
+## Plot sources
+## #################################################################
+
+if(DTK_HAVE_PLOT)
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkComposerNodePlotView.h)
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
+  dtkComposerNodePlotView.h)
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkComposerNodePlotView.cpp)
+endif(DTK_HAVE_PLOT)
+
+## #################################################################
 ## Vrpn sources
 ## #################################################################
 
@@ -321,6 +334,10 @@ target_link_libraries(${PROJECT_NAME}
 if(DTK_HAVE_NITE)
 target_link_libraries(${PROJECT_NAME} dtkVr)
 endif(DTK_HAVE_NITE)
+
+if(DTK_HAVE_PLOT)
+target_link_libraries(${PROJECT_NAME} dtkPlot)
+endif(DTK_HAVE_PLOT)
 
 ## #################################################################
 ## Export header file

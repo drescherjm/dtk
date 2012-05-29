@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: mer. mai 16 12:55:22 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 573
+ * Last-Updated: Tue May 29 14:53:31 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 588
  */
 
 /* Commentary:
@@ -73,6 +73,10 @@
 
 #if defined(DTK_HAVE_VRPN)
 #include "dtkComposerNodeTrackerVrpn.h"
+#endif
+
+#if defined(DTK_HAVE_PLOT)
+#include "dtkComposerNodePlotView.h"
 #endif
 
 #include <dtkCore/dtkGlobal.h>
@@ -210,11 +214,6 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["MatrixSquare Real AddColVectorToMatrix "] = "<p>Description not yet filled!</p>";
     d->tags["MatrixSquare Real AddColVectorToMatrix"] = QStringList() << "matrix" << "square" << "real"<< "Add"<< "Col"<< "Matrix" << "Vector";
     d->types["MatrixSquare Real AddColVectorToMatrix"] = "matrixSquare_real_AddColVectorToMatrix";
-
-
-
-
-
 
     // Vector Real
 
@@ -715,6 +714,15 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Remote"] = QStringList() <<  "distributed" << "tcp" << "remote" << "world";
     d->types["Remote"] = "remote";
 
+    // /////////////////////////////////////////////////////////////////
+    // Plot nodes
+    // /////////////////////////////////////////////////////////////////
+
+#if defined(DTK_HAVE_PLOT)
+    d->nodes << "Plot View";
+    d->tags["Plot View"] = QStringList() <<  "view" << "plot";
+    d->types["Plot View"] = "dtkPlotView";
+#endif
 
     // /////////////////////////////////////////////////////////////////
     // NITE nodes
@@ -1190,6 +1198,15 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 #if defined(DTK_HAVE_VRPN)
     if(type == "vrpnTracker")
         return new dtkComposerNodeTrackerVrpn;
+#endif
+
+    // /////////////////////////////////////////////////////////////////
+    // Plot nodes
+    // /////////////////////////////////////////////////////////////////
+
+#if defined(DTK_HAVE_PLOT)
+    if(type == "dtkPlotView")
+        return new dtkComposerNodePlotView;
 #endif
 
     // /////////////////////////////////////////////////////////////////

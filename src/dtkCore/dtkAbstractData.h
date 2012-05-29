@@ -6,7 +6,7 @@
  * Version: $Id$
 <<<<<<< HEAD
  *           By: Nicolas Niclausse
- *     Update #: 274
+ *     Update #: 275
  */
 
 /* Commentary:
@@ -134,15 +134,6 @@ public slots:
 
     virtual       QImage & thumbnail(void) ;
     virtual QList<QImage>& thumbnails(void);
-
-public:
-    virtual bool casts(const QString& type);
-
-    virtual operator bool      (void);
-    virtual operator int       (void);
-    virtual operator qlonglong (void);
-    virtual operator float     (void);
-    virtual operator double    (void);
 
 public:
     virtual QVariant toVariant(dtkAbstractData *data);

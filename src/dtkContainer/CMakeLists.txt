@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed May 23 17:55:46 2012 (+0200)
+## Last-Updated: Tue May 29 10:17:09 2012 (+0200)
 ##           By: tkloczko
-##     Update #: 318
+##     Update #: 320
 ######################################################################
 ## 
 ### Commentary: 
@@ -30,7 +30,9 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractContainerOrdered.tpp
   dtkAbstractContainerWrapper.h
   dtkContainerVector.h
-  dtkContainerVector.tpp)
+  dtkContainerVector.tpp
+  dtkContainerVectorWrapper.h
+  dtkContainerVectorWrapper.tpp)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractContainerWrapper.h)

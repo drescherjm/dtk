@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 11:19:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 24 12:35:21 2012 (+0200)
+ * Last-Updated: Fri May 25 10:00:24 2012 (+0200)
  *           By: tkloczko
- *     Update #: 65
+ *     Update #: 66
  */
 
 /* Commentary: 
@@ -83,9 +83,9 @@ public:
 public:
     bool  isEmpty(void) const;
 
-    bool contains(const T& value);
-    bool contains(const dtkAbstractContainer<T>& values);
-    bool contains(const   dtkContainerVector<T>& values);
+    bool contains(const T& value) const; 
+    bool contains(const dtkAbstractContainer<T>& values) const;
+    bool contains(const   dtkContainerVector<T>& values) const;
 
     dtkxarch_int capacity(void) const;
     dtkxarch_int    count(void) const;

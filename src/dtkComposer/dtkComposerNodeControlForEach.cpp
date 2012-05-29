@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 24 12:11:12 2012 (+0200)
+ * Last-Updated: Fri May 25 16:33:48 2012 (+0200)
  *           By: tkloczko
- *     Update #: 158
+ *     Update #: 162
  */
 
 /* Commentary: 
@@ -45,7 +45,7 @@ public:
     dtkComposerNodeComposite body_block;
 
 public:
-    dtkComposerTransmitterVariant header_rcv;
+    dtkComposerTransmitterVariantContainer header_rcv;
 
     dtkComposerTransmitterProxy              block_container;
     dtkComposerTransmitterEmitter<qlonglong> block_size;
@@ -127,6 +127,8 @@ void dtkComposerNodeControlForEach::setInputs(void)
     d->container = d->header_rcv.container();
     d->counter = 0;
     d->size = d->container.count();
+
+    qDebug() << __func__ << d->size;
 
     d->block_size.setData(d->size);
 

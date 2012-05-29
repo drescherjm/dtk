@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 23 18:40:15 2012 (+0200)
+ * Last-Updated: Fri May 25 16:21:37 2012 (+0200)
  *           By: tkloczko
- *     Update #: 78
+ *     Update #: 87
  */
 
 /* Commentary: 
@@ -23,6 +23,8 @@
 #include "dtkComposerExport.h"
 #include "dtkComposerTransmitter.h"
 
+#include <dtkCore/dtkGlobal>
+
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterVariant declaration
 // /////////////////////////////////////////////////////////////////
@@ -37,7 +39,8 @@ public:
 
 public:
     void setData(const QVariant& data);
-    void setData(const dtkAbstractContainerWrapper& data);
+
+    DTK_DEPRECATED void setData(const dtkAbstractContainerWrapper& data);
 
           QVariant& data(void);
     const QVariant& data(void) const;
@@ -45,8 +48,8 @@ public:
     QVariantList allData(void);
 
 public:
-          dtkAbstractContainerWrapper& container(void);
-    const dtkAbstractContainerWrapper& container(void) const;
+    DTK_DEPRECATED       dtkAbstractContainerWrapper& container(void);
+    DTK_DEPRECATED const dtkAbstractContainerWrapper& container(void) const;
 
 public:
     bool isEmpty(void) const;
@@ -59,9 +62,9 @@ public:
     void setTwinned(bool twinned);
 
 public:
-    Kind kind(void) const;
+    virtual Kind kind(void) const;
 
-    QString kindName(void) const;
+    virtual QString kindName(void) const;
 
 public:
     QVariant::Type type(void) const;
@@ -82,8 +85,34 @@ public:
     LinkMap  leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
     LinkMap rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 
-private:
+protected:
     dtkComposerTransmitterVariantPrivate *e;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerTransmitterVariantContainer declaration
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerTransmitterVariantContainer : public dtkComposerTransmitterVariant
+{
+public:
+     dtkComposerTransmitterVariantContainer(dtkComposerNode *parent = 0);
+    ~dtkComposerTransmitterVariantContainer(void);
+
+public:
+    Kind kind(void) const;
+
+    QString kindName(void) const;
+
+public:
+    void setData(const dtkAbstractContainerWrapper& data);
+
+          dtkAbstractContainerWrapper& container(void);
+    const dtkAbstractContainerWrapper& container(void) const;
+
+public:
+    bool    connect(dtkComposerTransmitter *transmitter);
+    bool disconnect(dtkComposerTransmitter *transmitter);
 };
 
 #endif

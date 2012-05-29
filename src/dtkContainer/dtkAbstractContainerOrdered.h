@@ -20,8 +20,8 @@
 #ifndef DTKABSTRACTCONTAINERORDERED_H
 #define DTKABSTRACTCONTAINERORDERED_H
 
-#include "dtkContainerExport.h"
 #include "dtkAbstractContainer.h"
+#include "dtkContainerExport.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractContainer interface

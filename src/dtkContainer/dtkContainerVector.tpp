@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 12:30:17 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 24 12:35:08 2012 (+0200)
+ * Last-Updated: Fri May 25 10:01:11 2012 (+0200)
  *           By: tkloczko
- *     Update #: 244
+ *     Update #: 246
  */
 
 /* Commentary: 
@@ -258,12 +258,12 @@ template <typename T> inline bool dtkContainerVector<T>::isEmpty(void) const
     return m_vector.isEmpty();
 };
 
-template <typename T> inline bool dtkContainerVector<T>::contains(const T& value)
+template <typename T> inline bool dtkContainerVector<T>::contains(const T& value) const
 {
     return m_vector.contains(value);
 };
 
-template <typename T> bool dtkContainerVector<T>::contains(const dtkAbstractContainer<T>& values)
+template <typename T> bool dtkContainerVector<T>::contains(const dtkAbstractContainer<T>& values) const
 {
     bool result = true;
     dtkxarch_int size;
@@ -276,7 +276,7 @@ template <typename T> bool dtkContainerVector<T>::contains(const dtkAbstractCont
     return result;
 };
 
-template <typename T> inline bool dtkContainerVector<T>::contains(const dtkContainerVector<T>& values)
+template <typename T> inline bool dtkContainerVector<T>::contains(const dtkContainerVector<T>& values) const
 {
     bool result = true;
     dtkxarch_int size = values.count();

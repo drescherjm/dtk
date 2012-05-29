@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 16 13:51:50 2012 (+0200)
- *           By: tkloczko
- *     Update #: 248
+ * Last-Updated: Fri May 25 22:11:26 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 249
  */
 
 /* Commentary:
@@ -134,15 +134,6 @@ public slots:
 
     virtual       QImage & thumbnail(void) ;
     virtual QList<QImage>& thumbnails(void);
-
-public:
-    virtual bool casts(const QString& type);
-
-    virtual operator bool      (void);
-    virtual operator int       (void);
-    virtual operator qlonglong (void);
-    virtual operator float     (void);
-    virtual operator double    (void);
 
 private:
     DTK_DECLARE_PRIVATE(dtkAbstractData);

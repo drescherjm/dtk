@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 24 12:02:24 2012 (+0200)
+ * Last-Updated: Tue May 29 10:54:36 2012 (+0200)
  *           By: tkloczko
- *     Update #: 35
+ *     Update #: 37
  */
 
 /* Commentary:
@@ -32,12 +32,12 @@
 class dtkComposerNodeArrayScalarOperatorModifierPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<qreal>      receiver_array;
-    dtkComposerTransmitterReceiver<qlonglong>  receiver_index;
-    dtkComposerTransmitterReceiver<qreal>      receiver_value;
+    dtkComposerTransmitterReceiverVector<qreal> receiver_array;
+    dtkComposerTransmitterReceiver<qlonglong>   receiver_index;
+    dtkComposerTransmitterReceiver<qreal>       receiver_value;
 
 public:
-    dtkComposerTransmitterEmitter<qreal> emitter_array;
+    dtkComposerTransmitterEmitterVector<qreal> emitter_array;
 };
 
 
@@ -65,7 +65,7 @@ void dtkComposerNodeArrayScalarOperatorInsert::run(void)
 {
     if (!d->receiver_array.isEmpty()) {
 
-        dtkContainerVectorReal array(d->receiver_array.vector());
+        dtkContainerVectorReal array(d->receiver_array.data());
 
         if (d->receiver_index.isEmpty() || d->receiver_value.isEmpty()) {
 
@@ -79,7 +79,7 @@ void dtkComposerNodeArrayScalarOperatorInsert::run(void)
 	        dtkWarn() << "index > size of the vector. Nothing is done" ;
 	}
 
-        d->emitter_array.setVector(array);
+        d->emitter_array.setData(array);
     }
 }
 
@@ -92,7 +92,7 @@ void dtkComposerNodeArrayScalarOperatorSum::run(void)
 
     if (!d->receiver_array.isEmpty()) {
 
-        dtkContainerVectorReal array(d->receiver_array.vector());
+        dtkContainerVectorReal array(d->receiver_array.data());
 
         if (d->receiver_index.isEmpty() || d->receiver_value.isEmpty()) {
 
@@ -107,7 +107,7 @@ void dtkComposerNodeArrayScalarOperatorSum::run(void)
 
 	}
 
-        d->emitter_array.setVector(array);
+        d->emitter_array.setData(array);
     }
 }
 
@@ -119,7 +119,7 @@ void dtkComposerNodeArrayScalarOperatorSubstract::run(void)
 {
     if (!d->receiver_array.isEmpty()) {
 
-        dtkContainerVectorReal array(d->receiver_array.vector());
+        dtkContainerVectorReal array(d->receiver_array.data());
 
         if (!d->receiver_index.isEmpty() &&  d->receiver_index.data() < array.count())
             array[d->receiver_index.data()] -= d->receiver_value.data();
@@ -127,7 +127,7 @@ void dtkComposerNodeArrayScalarOperatorSubstract::run(void)
         else
             dtkWarn() << "index > size of the vector" ;
 
-        d->emitter_array.setVector(array);
+        d->emitter_array.setData(array);
     }
 }
 
@@ -139,7 +139,7 @@ void dtkComposerNodeArrayScalarOperatorMult::run(void)
 {
     if (!d->receiver_array.isEmpty()) {
 
-        dtkContainerVectorReal array(d->receiver_array.vector());
+        dtkContainerVectorReal array(d->receiver_array.data());
 
         if (d->receiver_index.isEmpty() || d->receiver_value.isEmpty()) {
 
@@ -154,7 +154,7 @@ void dtkComposerNodeArrayScalarOperatorMult::run(void)
 
 	}
 
-        d->emitter_array.setVector(array);
+        d->emitter_array.setData(array);
     }
 }
 
@@ -166,7 +166,7 @@ void dtkComposerNodeArrayScalarOperatorDivide::run(void)
 {
     if (!d->receiver_array.isEmpty()) {
 
-        dtkContainerVectorReal array(d->receiver_array.vector());
+        dtkContainerVectorReal array(d->receiver_array.data());
 
         if (d->receiver_index.isEmpty() || d->receiver_value.isEmpty()) {
 
@@ -183,6 +183,6 @@ void dtkComposerNodeArrayScalarOperatorDivide::run(void)
 
 	}
 
-        d->emitter_array.setVector(array);
+        d->emitter_array.setData(array);
     }
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 24 12:15:54 2012 (+0200)
+ * Last-Updated: Fri May 25 17:33:38 2012 (+0200)
  *           By: tkloczko
- *     Update #: 41
+ *     Update #: 54
  */
 
 /* Commentary: 
@@ -21,7 +21,7 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
-#include <dtkCore/dtkContainerVector.h>
+#include <dtkContainer/dtkContainerVector.h>
 
 #include <dtkLog/dtkLog>
 
@@ -37,8 +37,8 @@ public:
     dtkComposerTransmitterReceiver<qreal>     receiver_value;
 
 public:
-    dtkComposerTransmitterEmitter<qreal>     emitter_array;
-    dtkComposerTransmitterEmitter<qlonglong> emitter_size;
+    dtkComposerTransmitterEmitterVector<qreal> emitter_array;
+    dtkComposerTransmitterEmitter<qlonglong>   emitter_size;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -101,9 +101,9 @@ void dtkComposerNodeArrayScalar::run(void)
 {
     if (!d->receiver_array.isEmpty()) {
 
-        dtkContainerVectorReal array(d->receiver_array.vector());
+        dtkContainerVectorReal array(d->receiver_array.data());
 
-        d->emitter_array.setVector(array);
+        d->emitter_array.setData(array);
         d->emitter_size.setData(array.count());
 
     } else {
@@ -126,12 +126,12 @@ void dtkComposerNodeArrayScalar::run(void)
             if (!d->receiver_value.isEmpty())
                 value = d->receiver_value.data();
 
-            for(int i = 0 ; i < size; i++)
-                array << value;
+	    for(int i = 0 ; i < size; i++)
+	        array << value;
+	}
 
-        }
+	d->emitter_array.setData(array);
+	d->emitter_size.setData(size);
 
-        d->emitter_array.setVector(array);
-        d->emitter_size.setData(size);
     }
 }

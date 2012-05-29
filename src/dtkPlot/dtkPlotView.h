@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:02:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jul  6 17:22:51 2011 (+0200)
+ * Last-Updated: Tue May 29 14:30:00 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 40
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -22,18 +22,20 @@
 
 #include "dtkPlotExport.h"
 
+#include <dtkCore/dtkAbstractView.h>
+
 #include <QtCore>
 #include <QtGui>
 
 class dtkPlotCurve;
 class dtkPlotViewPrivate;
 
-class DTKPLOT_EXPORT dtkPlotView : public QWidget
+class DTKPLOT_EXPORT dtkPlotView : public dtkAbstractView
 {
     Q_OBJECT
 
 public:
-     dtkPlotView(QWidget *parent = 0);
+     dtkPlotView(void);
     ~dtkPlotView(void);
 
     enum Scale {
@@ -58,6 +60,9 @@ public:
 
 public slots:
     void update(void);
+
+public slots:
+    QWidget *widget(void);
 
 private:
     friend class dtkPlotCurve;

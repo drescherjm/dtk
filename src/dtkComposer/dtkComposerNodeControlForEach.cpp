@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 10 10:20:10 2012 (+0200)
+ * Last-Updated: Fri May 25 16:33:48 2012 (+0200)
  *           By: tkloczko
- *     Update #: 157
+ *     Update #: 162
  */
 
 /* Commentary: 
@@ -28,8 +28,9 @@
 #include "dtkComposerTransmitterVariant.h"
 
 #include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkAbstractContainer.h>
 #include <dtkCore/dtkGlobal.h>
+
+#include <dtkContainer/dtkAbstractContainerWrapper.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlForEachPrivate definition
@@ -44,7 +45,7 @@ public:
     dtkComposerNodeComposite body_block;
 
 public:
-    dtkComposerTransmitterVariant header_rcv;
+    dtkComposerTransmitterVariantContainer header_rcv;
 
     dtkComposerTransmitterProxy              block_container;
     dtkComposerTransmitterEmitter<qlonglong> block_size;
@@ -55,7 +56,7 @@ public:
     qlonglong counter;
     qlonglong size;
 
-    dtkAbstractContainer container;
+    dtkAbstractContainerWrapper container;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -126,6 +127,8 @@ void dtkComposerNodeControlForEach::setInputs(void)
     d->container = d->header_rcv.container();
     d->counter = 0;
     d->size = d->container.count();
+
+    qDebug() << __func__ << d->size;
 
     d->block_size.setData(d->size);
 

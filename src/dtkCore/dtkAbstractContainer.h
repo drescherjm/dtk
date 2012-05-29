@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 15:25:17 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 16 11:24:25 2012 (+0200)
+ * Last-Updated: Mon May 21 15:44:28 2012 (+0200)
  *           By: tkloczko
- *     Update #: 75
+ *     Update #: 77
  */
 
 /* Commentary: 
@@ -35,8 +35,7 @@ public:
     enum Type {
         None,
         Vector,
-        List,
-        VectorBlock
+        List
     };
 
 public:
@@ -98,9 +97,6 @@ public:
 
 public:
     virtual bool isEqual(const dtkAbstractContainer& other) const;
-
-public:
-    virtual QVariant operator[] (dtkxarch_int index) const;
 
 private:
     dtkAbstractContainer *m_container;

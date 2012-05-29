@@ -1,27 +1,29 @@
 /* dtkComposerNodeArrayScalar.cpp --- 
- * 
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 15 15:28:57 2012 (+0200)
+ * Last-Updated: Fri May 25 17:33:38 2012 (+0200)
  *           By: tkloczko
- *     Update #: 40
+ *     Update #: 54
  */
 
 /* Commentary: 
- * 
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeArrayScalar.h"
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
-#include <dtkCore/dtkContainerVector.h>
+#include <dtkContainer/dtkContainerVector.h>
+
+#include <dtkLog/dtkLog>
 
 // /////////////////////////////////////////////////////////////////
 // 
@@ -35,8 +37,8 @@ public:
     dtkComposerTransmitterReceiver<qreal>     receiver_value;
 
 public:
-    dtkComposerTransmitterEmitter<qreal>     emitter_array;
-    dtkComposerTransmitterEmitter<qlonglong> emitter_size;
+    dtkComposerTransmitterEmitterVector<qreal> emitter_array;
+    dtkComposerTransmitterEmitter<qlonglong>   emitter_size;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -99,25 +101,36 @@ void dtkComposerNodeArrayScalar::run(void)
 {
     if (!d->receiver_array.isEmpty()) {
 
-        dtkContainerVectorReal array(d->receiver_array.vector());
+        dtkContainerVectorReal array(d->receiver_array.data());
 
-        d->emitter_array.setVector(array);
+        d->emitter_array.setData(array);
         d->emitter_size.setData(array.count());
 
     } else {
 
         qlonglong size = 0;
-        qreal value = 0;        
+	qreal value = 0;
 
-        if (!d->receiver_size.isEmpty()) {            
-            size = d->receiver_size.data();
-            if (!d->receiver_value.isEmpty())
-                value = d->receiver_value.data();
-        }
+	dtkContainerVector<qreal> array;
 
-        QVector<qreal> array(size, value);
+        if (!d->receiver_size.isEmpty())
+	    size = d->receiver_size.data();
 
-        d->emitter_array.setVector(dtkContainerVectorReal(array));
-        d->emitter_size.setData(size);
+	if (size == 0) {
+            dtkWarn() << "The size of the array is zero." ;
+
+	} else {
+
+	    array.reserve(size);
+
+	    if (!d->receiver_value.isEmpty())
+	        value = d->receiver_value.data();
+
+	    for(int i = 0 ; i < size; i++)
+	        array << value;
+	}
+
+	d->emitter_array.setData(array);
+	d->emitter_size.setData(size);
     }
 }

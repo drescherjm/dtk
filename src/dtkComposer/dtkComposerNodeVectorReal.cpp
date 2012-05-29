@@ -1,12 +1,12 @@
-/* dtkComposerNodeVectorRealr.cpp ---
+/* dtkComposerNodeVectorReal.cpp ---
  *
  * Author: sblekout
  * Copyright (C) 2011 - babette Lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 15 15:28:57 2012 (+0200)
- *           By: sblekout
- *     Update #: 40
+ * Last-Updated: Thu May 24 18:32:17 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 58
  */
 
 /* Commentary:
@@ -22,6 +22,8 @@
 #include "dtkComposerTransmitterReceiver.h"
 
 #include <dtkMath>
+
+#include <dtkLog/dtkLog>
 
 // /////////////////////////////////////////////////////////////////
 //
@@ -106,13 +108,29 @@ void dtkComposerNodeVectorReal::run(void)
 
     } else {
 
-        unsigned int t =  d->receiver_size.data();
-        dtkVectorReal vec(t);
+        unsigned int size = 0;
+	qreal value = 0;
+	dtkVectorReal vec;
 
-        for(int i = 0 ; i < vec.getRows(); i++)
-            vec[i] = d->receiver_value.data();
+        if (!d->receiver_size.isEmpty())
+	    size = d->receiver_size.data();
 
-        d->emitter_size.setData(vec.getRows());
-        d->emitter_vector.setData(vec);
+	if (size == 0) {
+            dtkWarn() << "The size of the vector is zero." ;
+
+	} else {
+
+	    vec.allocate(size);
+
+	    if (!d->receiver_value.isEmpty())
+	        value = d->receiver_value.data();
+
+	    for(int i = 0 ; i < vec.getRows(); i++)
+	        vec[i] = d->receiver_value.data();
+
+	}
+
+	d->emitter_size.setData(size);
+	d->emitter_vector.setData(vec);
     }
 }

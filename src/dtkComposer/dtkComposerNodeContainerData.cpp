@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May  9 12:14:10 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 10 11:39:47 2012 (+0200)
+ * Last-Updated: Tue May 29 10:48:01 2012 (+0200)
  *           By: tkloczko
- *     Update #: 47
+ *     Update #: 59
  */
 
 /* Commentary: 
@@ -22,8 +22,9 @@
 #include "dtkComposerTransmitterVariant.h"
 
 #include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkContainerList.h>
-#include <dtkCore/dtkContainerVector.h>
+
+#include <dtkContainer/dtkAbstractContainerWrapper.h>
+#include <dtkContainer/dtkContainerVectorWrapper.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeContainerDataPrivate declaration
@@ -36,10 +37,10 @@ public:
     dtkComposerTransmitterReceiver<qlonglong> receiver_int;
 
 public:    
-    dtkComposerTransmitterVariant emitter;
+    dtkComposerTransmitterVariantContainer emitter;
 
 public:
-    dtkAbstractContainer *container;
+    dtkAbstractContainerWrapper *container;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -108,10 +109,10 @@ void dtkComposerNodeContainerData::run(void)
     if (!d->receiver_int.isEmpty())
         size = d->receiver_int.data();
 
-    if (type == "list")
-        d->container = new dtkContainerList<dtkAbstractData *>();
-    else
-        d->container = new dtkContainerVector<dtkAbstractData *>();
+    // if (type == "list")
+    //     d->container = new dtkContainerListWrapper<dtkAbstractData *>(); // Not implemented yet
+    // else
+    d->container = new dtkContainerVectorWrapper<dtkAbstractData *>();
 
     d->container->resize(size);
 

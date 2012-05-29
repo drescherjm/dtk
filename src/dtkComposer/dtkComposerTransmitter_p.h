@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Mar 12 11:43:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May  7 15:23:45 2012 (+0200)
+ * Last-Updated: Tue May 29 10:10:49 2012 (+0200)
  *           By: tkloczko
- *     Update #: 18
+ *     Update #: 21
  */
 
 /* Commentary: 
@@ -22,7 +22,7 @@
 
 #include <QtCore>
 
-#include <dtkCore/dtkAbstractContainer.h>
+#include <dtkContainer/dtkAbstractContainerWrapper.h>
 
 class dtkComposerNode;
 class dtkComposerTransmitter;
@@ -50,8 +50,10 @@ public:
 public:
     QVariant variant;
 
+    QVariant::Type type;
+
 public:
-    dtkAbstractContainer container;
+    dtkAbstractContainerWrapper container;
 };
 
 #endif

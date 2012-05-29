@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  9 11:37:17 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 357
+ * Last-Updated: Thu May 24 15:11:57 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 358
  */
 
 /* Commentary:
@@ -128,6 +128,7 @@
 // /////////////////////////////////////////////////////////////////
 
 %ignore closed();
+%ignore focused();
 %ignore enableInteraction(void);
 %ignore disableInteraction(void);
 %ignore bounds(float& xmin, float& xmax, float& ymin, float& ymax, float &zmin, float& zmax);

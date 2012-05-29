@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Nov 22 10:20:27 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Apr 27 21:05:10 2012 (+0200)
+## Last-Updated: Tue May 29 14:11:42 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 80
+##     Update #: 81
 ######################################################################
 ## 
 ### Commentary: 
@@ -79,7 +79,8 @@ endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
-  ${QWT_LIBRARY})
+  ${QWT_LIBRARY}
+  dtkCore)
 
 ## #################################################################
 ## Export header file

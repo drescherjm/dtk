@@ -111,7 +111,6 @@ typedef dtkVector<qreal> dtkVectorReal;
 Q_DECLARE_METATYPE(dtkVectorReal);
 Q_DECLARE_METATYPE(dtkVectorReal *);
 
-
 #endif
 
 // /////////////////////////////////////////////////////////////////

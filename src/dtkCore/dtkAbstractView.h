@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May  3 10:40:03 2012 (+0200)
+ * Last-Updated: Wed May 23 18:56:31 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 328
+ *     Update #: 329
  */
 
 /* Commentary:
@@ -51,6 +51,7 @@ public:
 
 signals:
     void closed(void);
+    void focused(void);
 
 public slots:
     virtual void   link(dtkAbstractView *other);

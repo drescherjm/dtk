@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue May 29 10:36:37 2012 (+0200)
+ * Last-Updated: Tue May 29 15:44:14 2012 (+0200)
  *           By: tkloczko
- *     Update #: 278
+ *     Update #: 280
  */
 
 /* Commentary: 
@@ -83,96 +83,6 @@ template <typename T> const T& dtkComposerTransmitterReceiver<T>::data(void) con
 
     return m_data;
 };
-
-//! 
-/*! 
- *  
- */
-template <typename T> dtkAbstractContainerWrapper& dtkComposerTransmitterReceiver<T>::container(void)
-{
-    if (active_emitter)
-        return active_emitter->container();
-
-    if (active_variant)
-        return active_variant->container();
-
-    return d->container;
-};
-
-//! 
-/*! 
- *  
- */
-template <typename T> const dtkAbstractContainerWrapper& dtkComposerTransmitterReceiver<T>::container(void) const
-{
-    if (active_emitter)
-        return active_emitter->container();
-
-    if (active_variant)
-        return active_variant->container();
-
-    return d->container;
-};
-
-//! 
-/*! 
- *  
- */
-template <typename T> dtkContainerVector<T>& dtkComposerTransmitterReceiver<T>::vector(void)
-{
-    if (active_emitter)
-        return active_emitter->vector();
-
-    if (active_variant) 
-        return *reinterpret_cast<dtkContainerVector<T> *>(&(active_variant->container()));
-
-    return m_vector;
-};
-
-//! 
-/*! 
- *  
- */
-template <typename T> const dtkContainerVector<T>& dtkComposerTransmitterReceiver<T>::vector(void) const
-{
-    if (active_emitter)
-        return active_emitter->vector();
-
-    if (active_variant) 
-        return *reinterpret_cast<const dtkContainerVector<T> *>(&(active_variant->container()));
-
-    return m_vector;
-};
-
-// //! 
-// /*! 
-//  *  
-//  */
-// template <typename T> dtkContainerList<T>& dtkComposerTransmitterReceiver<T>::list(void)
-// {
-//     if (active_emitter)
-//         return active_emitter->list();
-
-//     if (active_variant) 
-//         return *reinterpret_cast<dtkContainerList<T> *>(&(active_variant->container()));
-
-//     return m_list;
-// };
-
-// //! 
-// /*! 
-//  *  
-//  */
-// template <typename T> const dtkContainerList<T>& dtkComposerTransmitterReceiver<T>::list(void) const
-// {
-//     if (active_emitter)
-//         return active_emitter->list();
-
-//     if (active_variant) 
-//         return *reinterpret_cast<const dtkContainerList<T> *>(&(active_variant->container()));
-
-//     return m_list;
-// };
 
 //! Returns.
 /*! 

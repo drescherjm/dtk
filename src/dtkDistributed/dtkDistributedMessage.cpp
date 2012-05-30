@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: mar. oct. 11 10:46:57 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. mai 30 12:56:16 2012 (+0200)
+ * Last-Updated: mer. mai 30 15:38:51 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 358
+ *     Update #: 364
  */
 
 /* Commentary:
@@ -19,14 +19,9 @@
 
 #include "dtkDistributedMessage.h"
 
-#include <dtkComposer/dtkComposerTransmitterVariant.h>
 #include <dtkCore/dtkGlobal.h>
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkAbstractDataFactory.h>
 
 #include <dtkLog/dtkLog.h>
-
-#include <dtkMath/dtkMath.h>
 
 class dtkDistributedMessagePrivate
 {
@@ -224,98 +219,3 @@ QByteArray &dtkDistributedMessage::content(void)
     return d->content;
 }
 
-void dtkDistributedMessage::setTransmitterVariant(dtkComposerTransmitterVariant *t)
-{
-
-    if (d->type == "double") {
-        double *data = reinterpret_cast<double*>(d->content.data());
-        t->setTwinned(false);
-        t->setData(*data);
-        t->setTwinned(true);
-    } else if (d->type == "qlonglong") {
-        qlonglong *data = reinterpret_cast<qlonglong*>(d->content.data());
-        t->setTwinned(false);
-        t->setData(*data);
-        t->setTwinned(true);
-    } else if (d->type == "qstring") {
-        t->setTwinned(false);
-        t->setData(QString(d->content));
-        t->setTwinned(true);
-    } else if (d->type == "dtkVectorReal") {
-
-        if (d->size > 0) {
-            QByteArray array = d->content;
-            int size;
-            QDataStream stream(&array, QIODevice::ReadOnly);
-            stream >> size;
-            dtkVectorReal v(size);
-
-            for (int i=0; i< size; i++)
-                stream >> v[i];
-
-            t->setTwinned(false);
-            t->setData(qVariantFromValue(v));
-            t->setTwinned(true);
-
-
-            dtkDebug() << "received dtkVectorReal, set data in transmitter" << size;
-
-        } else
-            dtkWarn() << "warning: no content in dtkVectorReal transmitter";
-
-
-    } else if (d->type == "dtkVector3DReal") {
-
-        if (d->size > 0) {
-            dtkVector3DReal v;
-
-            QDataStream stream(&(d->content), QIODevice::ReadOnly);
-            stream >> v[0];
-            stream >> v[1];
-            stream >> v[2];
-
-            t->setTwinned(false);
-            t->setData(qVariantFromValue(v));
-            t->setTwinned(true);
-
-            dtkDebug() << "received dtkVector3DReal, set data in transmitter" << v[0] << v[1] << v[2];
-
-        } else
-            dtkWarn() << "warning: no content in dtkVector3DReal transmitter";
-
-    } else if (d->type == "dtkQuaternionReal") {
-
-        if (d->size > 0) {
-            dtkQuaternionReal q;
-
-            QDataStream stream(&(d->content), QIODevice::ReadOnly);
-            stream >> q[0];
-            stream >> q[1];
-            stream >> q[2];
-            stream >> q[3];
-
-            t->setTwinned(false);
-            t->setData(qVariantFromValue(q));
-            t->setTwinned(true);
-
-            dtkDebug() << "received dtkQuaternionReal, set data in transmitter" << q[0] << q[1] << q[2] << q[3];
-
-        } else
-            dtkWarn() << "warning: no content in dtkQuaternionReal transmitter";
-
-    } else { // assume a dtkAbstractData
-        dtkDebug() << "received dtkAbstractData, deserialize";
-        if (d->size > 0) {
-            dtkAbstractData *data;
-            data = dtkAbstractDataFactory::instance()->create(d->type)->deserialize(d->content);
-            if (!data) {
-                dtkError() << "Deserialization failed";
-            } else {
-                t->setTwinned(false);
-                t->setData(qVariantFromValue(data));
-                t->setTwinned(true);
-            }
-        } else
-            dtkWarn() << "warning: no content in dtkAbstractData transmitter";
-    }
-}

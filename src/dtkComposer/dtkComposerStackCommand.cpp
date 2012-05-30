@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mai 21 18:55:23 2012 (+0200)
+ * Last-Updated: mer. mai 30 10:54:53 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 4251
+ *     Update #: 4255
  */
 
 /* Commentary: 
@@ -24,6 +24,7 @@
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeControlCase.h"
 #include "dtkComposerNodeLeaf.h"
+#include "dtkComposerNodeRemote.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
 #include "dtkComposerSceneEdge.h"
@@ -2304,10 +2305,16 @@ void dtkComposerStackCommandReparentNode::redo(void)
                     command->setScene(d->scene);
                     command->setGraph(d->graph);
                     command->setKind(dtkComposerTransmitter::Proxy);
-                    if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down)
+                    if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down) {
+                        if (dynamic_cast<dtkComposerNodeRemote *>(target->wrapee()))
+                            command->setKind(dtkComposerTransmitter::Variant);
                         command->setNode(target);
-                    if(e->direction == dtkComposerStackCommandReparentNodePrivate::Up)
+                    }
+                    if(e->direction == dtkComposerStackCommandReparentNodePrivate::Up) {
+                        if (dynamic_cast<dtkComposerNodeRemote *>(source->wrapee()))
+                            command->setKind(dtkComposerTransmitter::Variant);
                         command->setNode(source);
+                    }
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down)
                         command->setType(dtkComposerScenePort::Input);
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Up)
@@ -2400,10 +2407,16 @@ void dtkComposerStackCommandReparentNode::redo(void)
                     command->setScene(d->scene);
                     command->setGraph(d->graph);
                     command->setKind(dtkComposerTransmitter::Proxy);
-                    if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down)
+                    if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down) {
+                        if (dynamic_cast<dtkComposerNodeRemote *>(target->wrapee()))
+                            command->setKind(dtkComposerTransmitter::Variant);
                         command->setNode(target);
-                    if(e->direction == dtkComposerStackCommandReparentNodePrivate::Up)
+                    }
+                    if(e->direction == dtkComposerStackCommandReparentNodePrivate::Up) {
+                        if (dynamic_cast<dtkComposerNodeRemote *>(source->wrapee()))
+                            command->setKind(dtkComposerTransmitter::Variant);
                         command->setNode(source);
+                    }
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down)
                         command->setType(dtkComposerScenePort::Output);
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Up)

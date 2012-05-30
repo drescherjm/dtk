@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: mar. mai 29 16:29:00 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 447
+ * Last-Updated: Thu May 31 00:35:58 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 453
  */
 
 /* Commentary:
@@ -680,6 +680,19 @@ void dtkAbstractData::setParameter(dtkAbstractData *parameter)
 }
 
 void dtkAbstractData::setParameter(dtkAbstractData *parameter, int channel)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(parameter);
+    DTK_UNUSED(channel);
+}
+
+void dtkAbstractData::setParameter(dtkVectorReal parameter)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+    DTK_UNUSED(parameter);
+}
+
+void dtkAbstractData::setParameter(dtkVectorReal parameter, int channel)
 {
     DTK_DEFAULT_IMPLEMENTATION;
     DTK_UNUSED(parameter);

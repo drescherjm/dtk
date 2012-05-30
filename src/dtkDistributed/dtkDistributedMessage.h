@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: mar. oct. 11 10:46:57 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 21 23:49:04 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 160
+ * Last-Updated: mer. mai 30 12:53:28 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 162
  */
 
 /* Commentary:
@@ -25,6 +25,7 @@
 #include <QtCore>
 
 class dtkDistributedMessagePrivate;
+class dtkComposerTransmitterVariant;
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedMessage
 {
@@ -73,6 +74,9 @@ public:
     QString type(void);
     qint64 size(void);
     QByteArray &content(void);
+
+public:
+    void setTransmitterVariant(dtkComposerTransmitterVariant *t);
 
 private:
     dtkDistributedMessagePrivate *d;

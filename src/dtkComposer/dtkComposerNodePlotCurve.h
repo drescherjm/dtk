@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:32:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 15:37:36 2012 (+0200)
+ * Last-Updated: Tue May 29 22:55:26 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 26
+ *     Update #: 27
  */
 
 /* Commentary: 
@@ -57,7 +57,7 @@ public:
     }
 
     inline QString outputLabelHint(int) {
-        return "port";
+        return "curve";
     }
 
 public:

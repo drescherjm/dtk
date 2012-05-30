@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 15:49:45 2012 (+0200)
+ * Last-Updated: Tue May 29 22:49:31 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 75
+ *     Update #: 78
  */
 
 /* Commentary: 
@@ -113,4 +113,13 @@ void dtkPlotView::update(void)
 QWidget *dtkPlotView::widget(void)
 {
     return d;
+}
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
+dtkAbstractView *createPlotView(void)
+{
+    return new dtkPlotView;
 }

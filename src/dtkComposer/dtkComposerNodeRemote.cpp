@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: mar. mai 29 14:51:44 2012 (+0200)
+ * Last-Updated: mer. mai 30 12:36:17 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 683
+ *     Update #: 693
  */
 
 /* Commentary:
@@ -258,6 +258,25 @@ void dtkComposerNodeRemote::begin(void)
                     } else
                         dtkWarn() << "warning: no content in dtkVector3DReal transmitter";
 
+                } else if (msg->type() == "dtkVectorReal") {
+
+                    if (msg->size() > 0) {
+                        QByteArray array = msg->content();
+                        int size;
+                        QDataStream stream(&array, QIODevice::ReadOnly);
+                        stream >> size;
+                        dtkVectorReal v(size);
+
+                        for (int i=0; i< size; i++)
+                            stream >> v[i];
+
+                        t->setData(qVariantFromValue(v));
+
+                        dtkDebug() << "received dtkVectorReal, set data in transmitter" << size;
+
+                    } else
+                        dtkWarn() << "warning: no content in dtkVectorReal transmitter";
+
                 } else if (msg->type() == "dtkQuaternionReal") {
 
                     if (msg->size() > 0) {
@@ -289,6 +308,8 @@ void dtkComposerNodeRemote::begin(void)
                         type = msg->type().section('/',1,1);
                     }
 
+                    dtkDebug() << "type:" << type;
+                    dtkDebug() << "transmitter_type:" << transmitter_type;
                     if (msg->size() > 0) {
                         QByteArray array = msg->content();
                         dtkAbstractData *data;
@@ -353,6 +374,30 @@ void dtkComposerNodeRemote::end(void)
                 t->setTwinned(false);
                 t->setData(QString(msg->content()));
                 t->setTwinned(true);
+            } else if (msg->type() == "dtkVectorReal") {
+
+
+                    if (msg->size() > 0) {
+                        QByteArray array = msg->content();
+                        int size;
+                        QDataStream stream(&array, QIODevice::ReadOnly);
+                        stream >> size;
+                        dtkVectorReal v(size);
+
+                        for (int i=0; i< size; i++)
+                            stream >> v[i];
+
+                        t->setTwinned(false);
+                        t->setData(qVariantFromValue(v));
+                        t->setTwinned(true);
+
+
+                        dtkDebug() << "received dtkVectorReal, set data in transmitter" << size;
+
+                    } else
+                        dtkWarn() << "warning: no content in dtkVectorReal transmitter";
+
+
             } else if (msg->type() == "dtkVector3DReal") {
 
                 if (msg->size() > 0) {

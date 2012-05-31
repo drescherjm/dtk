@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 24 23:29:24 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 14:44:54 2012 (+0200)
+ * Last-Updated: Thu May 31 01:21:25 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 151
+ *     Update #: 156
  */
 
 /* Commentary: 
@@ -47,6 +47,9 @@ public:
     dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_screen_lower_right;
 
 public:
+    dtkComposerTransmitterReceiver<dtkAbstractData *> receiver_data;
+
+public:
     dtkAbstractView *view;
 };
 
@@ -61,6 +64,7 @@ dtkComposerNodeView::dtkComposerNodeView(void) : QObject(), dtkComposerNodeLeaf(
     this->appendReceiver(&(d->receiver_screen_upper_left));
     this->appendReceiver(&(d->receiver_screen_lower_left));
     this->appendReceiver(&(d->receiver_screen_lower_right));
+    this->appendReceiver(&(d->receiver_data));
 
     connect(this, SIGNAL(runned()), this, SLOT(onRun()));
 }
@@ -115,6 +119,9 @@ QString dtkComposerNodeView::inputLabelHint(int port)
     if(port == 6)
         return "screen lower right";
 
+    if(port == 7)
+        return "data";
+
     return dtkComposerNodeLeaf::inputLabelHint(port);
 }
 
@@ -158,4 +165,7 @@ void dtkComposerNodeView::onRun(void)
 
     if(!d->receiver_screen_lower_right.isEmpty())
         d->view->setLowerRight(d->receiver_screen_lower_right.data());
+
+    if(!d->receiver_data.isEmpty())
+        d->view->setData(d->receiver_data.data());
 }

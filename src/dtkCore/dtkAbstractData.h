@@ -5,8 +5,8 @@
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
 <<<<<<< HEAD
- *           By: Nicolas Niclausse
- *     Update #: 275
+ *           By: tkloczko
+ *     Update #: 276
  */
 
 /* Commentary:
@@ -48,7 +48,7 @@ public:
     dtkAbstractData& operator = (const dtkAbstractData& other);
 
 public:
-    bool operator == (const dtkAbstractData& other);
+    bool operator == (const dtkAbstractData& other) const;
 
 public:
     friend DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractData& data);

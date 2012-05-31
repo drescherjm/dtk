@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: mar. mai 29 16:29:00 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 447
+ * Last-Updated: Wed May 30 13:02:48 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 449
  */
 
 /* Commentary:
@@ -77,12 +77,12 @@ dtkAbstractData& dtkAbstractData::operator=(const dtkAbstractData& other)
 /*!
  *  
  */
-bool dtkAbstractData::operator == (const dtkAbstractData& other)
+bool dtkAbstractData::operator == (const dtkAbstractData& other) const
 {
     if (!dtkAbstractObject::operator==(other))
         return false;
 
-    DTK_D(dtkAbstractData);
+    DTK_D(const dtkAbstractData);
     if (d->readers          != other.d_func()->readers          ||
         d->writers          != other.d_func()->writers          ||
         d->converters       != other.d_func()->converters       ||

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 12:30:17 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 14:37:09 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 249
+ * Last-Updated: Wed May 30 15:41:32 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 250
  */
 
 /* Commentary: 
@@ -248,7 +248,7 @@ template <typename T> inline void dtkContainerVector<T>::resize(dtkxarch_int siz
     m_vector.resize(size);
 };
 
-template <typename T> inline void dtkContainerVector<T>::sqeeze(void)
+template <typename T> inline void dtkContainerVector<T>::squeeze(void)
 {
     m_vector.squeeze();
 };

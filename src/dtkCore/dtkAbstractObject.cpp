@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:54:04 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 16 13:51:21 2012 (+0200)
+ * Last-Updated: Wed May 30 13:00:58 2012 (+0200)
  *           By: tkloczko
- *     Update #: 224
+ *     Update #: 225
  */
 
 /* Commentary:
@@ -93,7 +93,7 @@ dtkAbstractObject& dtkAbstractObject::operator = (const dtkAbstractObject& other
 /*!
  *  
  */
-bool dtkAbstractObject::operator == (const dtkAbstractObject& other)
+bool dtkAbstractObject::operator == (const dtkAbstractObject& other) const
 {
     if (d_ptr->values != other.d_ptr->values         ||
         d_ptr->properties != other.d_ptr->properties ||

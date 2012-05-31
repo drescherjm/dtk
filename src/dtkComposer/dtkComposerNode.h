@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:24:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 19 12:36:23 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 51
+ * Last-Updated: Thu May 31 15:51:04 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -51,6 +51,9 @@ public:
 
     QList<dtkComposerTransmitter *> emitters(void);
     QList<dtkComposerTransmitter *> receivers(void);
+
+public:
+    void releaseReceivers(void);
 
 public:
     virtual QString type(void) = 0;

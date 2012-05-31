@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue May 29 10:10:42 2012 (+0200)
+ * Last-Updated: Thu May 31 15:03:48 2012 (+0200)
  *           By: tkloczko
- *     Update #: 210
+ *     Update #: 215
  */
 
 /* Commentary: 
@@ -39,6 +39,8 @@ dtkComposerTransmitter::dtkComposerTransmitter(dtkComposerNode *parent) : d(new 
     d->active = true;
     d->required = true;
     d->parent = parent;
+
+    d->count = 0;
 }
 
 //! Destroys dtkComposerTransmitter.
@@ -253,6 +255,15 @@ void dtkComposerTransmitter::appendReceiver(dtkComposerTransmitter *receiver)
 void dtkComposerTransmitter::removeReceiver(dtkComposerTransmitter *receiver)
 {
     d->receivers.removeAll(receiver);
+}
+
+//! 
+/*! 
+ *  
+ */
+void dtkComposerTransmitter::clear(void)
+{
+    
 }
 
 //! Returns true when current transmitter and \a transmitter share

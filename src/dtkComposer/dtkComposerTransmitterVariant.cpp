@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mai 30 15:56:20 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 444
+ * Last-Updated: Thu May 31 15:19:00 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 448
  */
 
 /* Commentary: 
@@ -78,6 +78,8 @@ void dtkComposerTransmitterVariant::setData(const QVariant& data)
 {
     d->variant = data;
     d->container.reset();
+
+    d->count = d->receivers.count();
 }
 
 QVariant& dtkComposerTransmitterVariant::data(void)
@@ -308,6 +310,18 @@ bool dtkComposerTransmitterVariant::disconnect(dtkComposerTransmitter *transmitt
 /*! 
  *  
  */
+void dtkComposerTransmitterVariant::clear(void)
+{
+    if (d->count.fetchAndAddOrdered(-1)-1) {
+        d->variant.clear();
+        d->container.clear();
+    }
+}
+
+//! 
+/*! 
+ *  
+ */
 void dtkComposerTransmitterVariant::setActiveEmitter(dtkComposerTransmitter *emitter)
 {
     e->active_emitter = NULL;
@@ -383,10 +397,10 @@ QString dtkComposerTransmitterVariantContainer::kindName(void) const
 
 void dtkComposerTransmitterVariantContainer::setData(const dtkAbstractContainerWrapper& data)
 {
-    if (d->container != data) {
-        d->container = data;
-        d->variant = qVariantFromValue(data);
-    }
+    d->container = data;
+    d->variant = qVariantFromValue(data);
+
+    d->count = d->receivers.count();
 }
 
 const dtkAbstractContainerWrapper& dtkComposerTransmitterVariantContainer::container(void) const

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:33:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue May 29 15:43:21 2012 (+0200)
+ * Last-Updated: Thu May 31 15:04:40 2012 (+0200)
  *           By: tkloczko
- *     Update #: 104
+ *     Update #: 106
  */
 
 /* Commentary: 
@@ -49,6 +49,9 @@ public:
     virtual QString kindName(void) const;
 
 public:
+    virtual void clear(void);
+
+public:
     LinkMap leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 
 private:
@@ -69,6 +72,9 @@ public:
     dtkComposerTransmitter::Kind kind(void) const;
 
     QString kindName(void) const;
+
+public:
+    void clear(void);
 
 public:
     inline void setData(const dtkContainerVector<T>& vector);

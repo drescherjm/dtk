@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue May 29 15:43:39 2012 (+0200)
+ * Last-Updated: Thu May 31 15:14:27 2012 (+0200)
  *           By: tkloczko
- *     Update #: 190
+ *     Update #: 202
  */
 
 /* Commentary: 
@@ -58,6 +58,8 @@ template <typename T> inline void dtkComposerTransmitterEmitter<T>::setData(cons
 {
     m_data = data; 
     d->variant = qVariantFromValue(m_data);
+
+    d->count = d->receivers.count();
 };
 
 //! Returns the data as a modifiable reference.
@@ -91,6 +93,15 @@ template <typename T> inline QString dtkComposerTransmitterEmitter<T>::kindName(
 {
     return "Emitter";
 };
+
+template <typename T> inline void dtkComposerTransmitterEmitter<T>::clear(void)
+{
+    if (d->count.fetchAndAddOrdered(-1)-1) {
+        m_data = T();
+        d->variant.clear();
+        d->container.clear();
+    }
+}
 
 template <typename T> dtkComposerTransmitter::LinkMap dtkComposerTransmitterEmitter<T>::leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
@@ -127,13 +138,22 @@ template <typename T> inline QString dtkComposerTransmitterEmitterVector<T>::kin
     return "EmitterContainer";
 };
 
+template <typename T> inline void dtkComposerTransmitterEmitterVector<T>::clear(void)
+{
+    if (d->count.fetchAndAddOrdered(-1)-1) {
+        m_vector = dtkContainerVector<T>();
+        d->container.clear();
+        d->variant.clear();
+    }
+}
+
 template <typename T> inline void dtkComposerTransmitterEmitterVector<T>::setData(const dtkContainerVector<T>& vector)
 {
-    if (m_vector != vector) {
-        m_vector = vector;
-        d->container = dtkContainerVectorWrapper<T>(m_vector);
-        d->variant = qVariantFromValue(d->container);
-    }
+    m_vector = vector;
+    d->container = dtkContainerVectorWrapper<T>(m_vector);
+    d->variant = qVariantFromValue(d->container);
+    
+    d->count = d->receivers.count();
 };
 
 template <typename T> inline dtkContainerVector<T>& dtkComposerTransmitterEmitterVector<T>::data(void)

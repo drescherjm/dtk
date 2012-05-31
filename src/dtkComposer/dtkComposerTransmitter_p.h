@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Mar 12 11:43:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue May 29 10:10:49 2012 (+0200)
+ * Last-Updated: Thu May 31 14:27:36 2012 (+0200)
  *           By: tkloczko
- *     Update #: 21
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -54,6 +54,9 @@ public:
 
 public:
     dtkAbstractContainerWrapper container;
+
+public:
+    QAtomicInt count;
 };
 
 #endif

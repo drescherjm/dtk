@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue May 29 10:13:12 2012 (+0200)
+ * Last-Updated: Thu May 31 14:43:32 2012 (+0200)
  *           By: tkloczko
- *     Update #: 164
+ *     Update #: 165
  */
 
 /* Commentary: 
@@ -103,6 +103,9 @@ public:
 public:
     void appendReceiver(dtkComposerTransmitter *receiver);
     void removeReceiver(dtkComposerTransmitter *receiver);
+
+public:
+    virtual void clear(void);
 
 #pragma mark -
 #pragma mark Link management

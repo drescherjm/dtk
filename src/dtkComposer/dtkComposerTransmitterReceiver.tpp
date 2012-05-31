@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue May 29 15:44:14 2012 (+0200)
+ * Last-Updated: Thu May 31 15:25:51 2012 (+0200)
  *           By: tkloczko
- *     Update #: 280
+ *     Update #: 285
  */
 
 /* Commentary: 
@@ -218,6 +218,19 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::disconnect(dtkComp
     }
 
     return ok;
+};
+    
+//! 
+/*! 
+ *  
+ */
+template <typename T> void dtkComposerTransmitterReceiver<T>::clear(void)
+{
+    if (active_emitter)
+        active_emitter->clear();
+
+    if (active_variant)
+        active_variant->clear();
 };
 
 //! 
@@ -438,5 +451,42 @@ template <typename T> bool dtkComposerTransmitterReceiverVector<T>::disconnect(d
 
     return ok;
 };
+    
+//! 
+/*! 
+ *  
+ */
+template <typename T> void dtkComposerTransmitterReceiverVector<T>::clear(void)
+{
+    if (active_emitter)
+        active_emitter->clear();
+
+    if (active_variant)
+        active_variant->clear();
+};
+
+//! 
+/*! 
+ *  
+ */
+template <typename T> void dtkComposerTransmitterReceiverVector<T>::setActiveEmitter(dtkComposerTransmitter *emitter)
+{
+    active_emitter = NULL;
+    active_variant = NULL;
+
+    foreach(dtkComposerTransmitterEmitterVector<T> *e, emitters) {
+        if (emitter == static_cast<dtkComposerTransmitter *>(e)) {
+            active_emitter = e;
+            return;
+        }
+    }
+    
+    foreach(dtkComposerTransmitterVariantContainer *v, variants) {
+        if (emitter == static_cast<dtkComposerTransmitter *>(v)) {
+            active_variant = v;
+            return;
+        }
+    }
+}
 
 #endif

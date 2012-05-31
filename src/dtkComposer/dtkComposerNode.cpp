@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:25:11 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 15:25:43 2012 (+0200)
+ * Last-Updated: Thu May 31 15:55:21 2012 (+0200)
  *           By: tkloczko
- *     Update #: 67
+ *     Update #: 72
  */
 
 /* Commentary: 
@@ -98,6 +98,12 @@ QList<dtkComposerTransmitter *> dtkComposerNode::emitters(void)
 QList<dtkComposerTransmitter *> dtkComposerNode::receivers(void)
 {
     return d->receivers;
+}
+
+void dtkComposerNode::releaseReceivers(void)
+{
+    for(int i = 0; i < d->receivers.count(); ++i)
+        d->receivers.at(i)->clear();
 }
 
 QString dtkComposerNode::titleHint(void)

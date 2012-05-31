@@ -84,18 +84,12 @@ dtkComposerNodeMatrixSquareRealOperatorUnaryScalar::~dtkComposerNodeMatrixSquare
 
 void dtkComposerNodeMatrixSquareRealOperatorUnaryTranspose::run(void)
 {
-    if (d->receiver_matrix.isEmpty()) {
-        dtkWarn() << "Input not specified. Nothing is done";
+    if (!d->receiver_matrix.isEmpty()) {
+        d->emitter_matrix.setData(dtkTranspose(d->receiver_matrix.data()));
 
     } else {
-
-        bool isSquare = d->receiver_matrix.data().getRows()== d->receiver_matrix.data().getCols();
-
-        if ( isSquare )
-            d->emitter_matrix.setData(dtkTranspose(d->receiver_matrix.data()));
-
-        else
-            dtkWarn()<< "Matrix is not square" ;
+        dtkWarn() << "Input not specified. Nothing is done";
+        d->emitter_matrix.setData(dtkMatrixSquareReal());
     }
 
 }
@@ -106,19 +100,14 @@ void dtkComposerNodeMatrixSquareRealOperatorUnaryTranspose::run(void)
 
 void dtkComposerNodeMatrixSquareRealOperatorUnaryInverse::run(void)
 {
-    if (d->receiver_matrix.isEmpty()) {
-        dtkWarn() << "Input not specified. Nothing is done";
+    if (!d->receiver_matrix.isEmpty()) {
+        d->emitter_matrix.setData(dtkInverse(d->receiver_matrix.data()));
 
     } else {
-
-        bool isSquare = d->receiver_matrix.data().getRows()== d->receiver_matrix.data().getCols();
-
-        if ( isSquare )
-            d->emitter_matrix.setData(dtkInverse(d->receiver_matrix.data()));
-
-        else
-            dtkWarn()<< "Matrix is not square" ;
+        dtkWarn() << "Input not specified. Nothing is done";
+        d->emitter_matrix.setData(dtkMatrixSquareReal());
     }
+
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -127,22 +116,13 @@ void dtkComposerNodeMatrixSquareRealOperatorUnaryInverse::run(void)
 
 void dtkComposerNodeMatrixSquareRealOperatorUnaryScalarDeterminant::run(void)
 {
+    if (!d->receiver_matrix.isEmpty())
+        d->emitter_val.setData(dtkDeterminant(d->receiver_matrix.data()));
 
-    if (d->receiver_matrix.isEmpty()) {
+    else
         dtkWarn() << "Input not specified. Nothing is done";
 
-    } else {
-
-        bool isSquare = d->receiver_matrix.data().getRows()== d->receiver_matrix.data().getCols();
-
-        if ( isSquare )
-            d->emitter_val.setData(dtkDeterminant(d->receiver_matrix.data()));
-
-        else
-            dtkWarn()<< "Matrix is not square" ;
-    }
 }
-
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeMatrixSquareRealOperatorUnaryScalar - Trace
@@ -150,17 +130,10 @@ void dtkComposerNodeMatrixSquareRealOperatorUnaryScalarDeterminant::run(void)
 
 void dtkComposerNodeMatrixSquareRealOperatorUnaryScalarTrace::run(void)
 {
-    if (d->receiver_matrix.isEmpty()) {
+    if (!d->receiver_matrix.isEmpty())
+        d->emitter_val.setData(dtkMatrixSquaredTrace(d->receiver_matrix.data()));
+
+    else
         dtkWarn() << "Input not specified. Nothing is done";
 
-    } else {
-
-        bool isSquare = d->receiver_matrix.data().getRows()== d->receiver_matrix.data().getCols();
-
-        if ( isSquare )
-            d->emitter_val.setData(dtkMatrixSquaredTrace(d->receiver_matrix.data()));
-
-        else
-            dtkWarn()<< "Matrix is not square" ;
-    }
 }

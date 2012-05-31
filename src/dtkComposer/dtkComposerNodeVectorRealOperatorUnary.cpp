@@ -84,10 +84,11 @@ dtkComposerNodeVectorRealOperatorUnaryScalar::~dtkComposerNodeVectorRealOperator
 
 void dtkComposerNodeVectorRealOperatorUnaryUnitary::run(void)
 {
-    if (d->receiver_vec.isEmpty())
+    if (d->receiver_vec.isEmpty()){
         dtkWarn() << "Input not specified. Nothing is done";
+        d->emitter_vec.setData(dtkVectorReal());
 
-    else
+    } else
         d->emitter_vec.setData(d->receiver_vec.data().unit());
 
 }

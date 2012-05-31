@@ -92,10 +92,12 @@ dtkComposerNodeVector3DOperatorTernaryScalar::~dtkComposerNodeVector3DOperatorTe
 
 void dtkComposerNodeVector3DOperatorTernaryTripleProd::run(void)
 {
-    if (d->receiver_0.isEmpty() || d->receiver_1.isEmpty() || d->receiver_2.isEmpty())
+    if (d->receiver_0.isEmpty() || d->receiver_1.isEmpty() || d->receiver_2.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_vec.setData(dtkVector3DReal());
 
-    else
+
+    } else
         d->emitter_vec.setData(d->receiver_0.data() % (d->receiver_1.data() % d->receiver_2.data()));
 }
 

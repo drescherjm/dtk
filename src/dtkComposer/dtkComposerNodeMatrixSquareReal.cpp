@@ -109,30 +109,30 @@ void dtkComposerNodeMatrixSquareReal::run(void)
     } else {
 
         unsigned int size = 0;
-	qreal value = 0;
-	dtkMatrixSquareReal matrix;
+        qreal value = 0;
+        dtkMatrixSquareReal matrix;
 
         if (!d->receiver_size.isEmpty())
-	    size = d->receiver_size.data();
+            size = d->receiver_size.data();
 
-	if (size == 0) {
+        if (size == 0) {
             dtkWarn() << "The size of the matrix is zero." ;
 
-	} else {
+        } else {
 
-	    matrix.allocate(size);
+            matrix.allocate(size);
 
-	    if (!d->receiver_value.isEmpty())
-	        value = d->receiver_value.data();
+            if (!d->receiver_value.isEmpty())
+                value = d->receiver_value.data();
 
-	    for(int i = 0 ; i < matrix.getRows(); i++) {
-  	        for(int j = 0 ; j < matrix.getCols(); j++)
-		    matrix[i][j] = d->receiver_value.data();
-	    }
+            for(int i = 0 ; i < matrix.getRows(); i++) {
+                for(int j = 0 ; j < matrix.getCols(); j++)
+                    matrix[i][j] = d->receiver_value.data();
+            }
 
-	}
+        }
 
-	d->emitter_size.setData(size);
-	d->emitter_matrix.setData(matrix);
+        d->emitter_size.setData(size);
+        d->emitter_matrix.setData(matrix);
     }
 }

@@ -198,11 +198,6 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["MatrixSquare Real Mult"] = QStringList() << "matrix" << "square" << "real"<< "mult";
     d->types["MatrixSquare Real Mult"] = "matrixSquare_real_mult";
 
-    d->nodes << "MatrixSquare Real Product";
-    d->descriptions["MatrixSquare Real Product "] = "<p>Description not yet filled!</p>";
-    d->tags["MatrixSquare Real Product"] = QStringList() << "matrix" << "square" << "real"<< "product";
-    d->types["MatrixSquare Real Product"] = "matrixSquare_real_product";
-
     d->nodes << "MatrixSquare Real ProductMatrixVector";
     d->descriptions["MatrixSquare Real ProductMatrixVector "] = "<p>Description not yet filled!</p>";
     d->tags["MatrixSquare Real ProductMatrixVector"] = QStringList() << "matrix" << "square" << "real"<< "Product"<< "Matrix" << "Vector";
@@ -213,15 +208,15 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["MatrixSquare Real ProductVectorMatrix"] = QStringList() << "matrix" << "square" << "real"<< "Product"<< "Matrix" << "Vector";
     d->types["MatrixSquare Real ProductVectorMatrix"] = "matrixSquare_real_ProductVectorMatrix";
 
-    d->nodes << "MatrixSquare Real AddRowVectorToMatrix";
-    d->descriptions["MatrixSquare Real AddRowVectorToMatrix "] = "<p>Description not yet filled!</p>";
-    d->tags["MatrixSquare Real AddRowVectorToMatrix"] = QStringList() << "matrix" << "square" << "real"<< "Add"<< "Row"<< "Matrix" << "Vector";
-    d->types["MatrixSquare Real AddRowVectorToMatrix"] = "matrixSquare_real_AddRowVectorToMatrix";
+    d->nodes << "MatrixSquare Real ReplaceRowMatrixByVector";
+    d->descriptions["MatrixSquare Real ReplaceRowMatrixByVector "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real ReplaceRowMatrixByVector"] = QStringList() << "matrix" << "square" << "real"<< "Replace"<< "Row"<< "Matrix" << "Vector";
+    d->types["MatrixSquare Real ReplaceRowMatrixByVector"] = "matrixSquare_real_ReplaceRowMatrixByVector";
 
-    d->nodes << "MatrixSquare Real AddColVectorToMatrix";
-    d->descriptions["MatrixSquare Real AddColVectorToMatrix "] = "<p>Description not yet filled!</p>";
-    d->tags["MatrixSquare Real AddColVectorToMatrix"] = QStringList() << "matrix" << "square" << "real"<< "Add"<< "Col"<< "Matrix" << "Vector";
-    d->types["MatrixSquare Real AddColVectorToMatrix"] = "matrixSquare_real_AddColVectorToMatrix";
+    d->nodes << "MatrixSquare Real ReplaceColMatrixByVector";
+    d->descriptions["MatrixSquare Real ReplaceColMatrixByVector "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real ReplaceColMatrixByVector"] = QStringList() << "matrix" << "square" << "real"<< "Replace"<< "Col"<< "Matrix" << "Vector";
+    d->types["MatrixSquare Real ReplaceColMatrixByVector"] = "matrixSquare_real_ReplaceColMatrixByVector";
 
     // Vector Real
 
@@ -883,20 +878,17 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "matrixSquare_real_mult")
         return new dtkComposerNodeMatrixSquareRealOperatorBinaryMult;
 
-    if(type == "matrixSquare_real_product")
-        return new dtkComposerNodeMatrixSquareRealOperatorBinaryScalarProduct;
-
     if(type == "matrixSquare_real_ProductMatrixVector")
-        return new dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProductMV;
+        return new dtkComposerNodeMatrixSquareRealOperatorBinaryRightProductMV;
 
     if(type == "matrixSquare_real_ProductVectorMatrix")
-        return new dtkComposerNodeMatrixSquareRealOperatorBinaryRightProductVM;
+        return new dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProductVM;
 
-    if(type == "matrixSquare_real_AddRowVectorToMatrix")
-        return new dtkComposerNodeMatrixSquareRealOperatorBinaryAddRowVectorMatrix;
+    if(type == "matrixSquare_real_ReplaceRowMatrixByVector")
+        return new dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceRowMatrixByVector;
 
-    if(type == "matrixSquare_real_AddColVectorToMatrix")
-        return new dtkComposerNodeMatrixSquareRealOperatorBinaryAddRowVectorMatrix;
+    if(type == "matrixSquare_real_ReplaceColMatrixByVector")
+        return new dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColMatrixByVector;
 
     // Vector Real nodes
 

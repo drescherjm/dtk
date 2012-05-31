@@ -33,10 +33,9 @@ class dtkComposerNodeArrayScalarPrivate
 {
 public:
     dtkComposerTransmitterReceiverVector<qreal> receiver_array;
-    // dtkComposerTransmitterReceiver<qlonglong>   receiver_size;
-    // dtkComposerTransmitterReceiver<qreal>       receiver_value;
     dtkComposerTransmitterVariant receiver_size;
     dtkComposerTransmitterVariant receiver_value;
+
 
 public:
     dtkComposerTransmitterEmitterVector<qreal> emitter_array;

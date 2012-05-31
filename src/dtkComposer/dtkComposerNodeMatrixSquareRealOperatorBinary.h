@@ -32,129 +32,78 @@ class dtkComposerNodeMatrixSquareRealOperatorBinaryPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinary : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMatrixSquareRealOperatorBinary(void);
+    dtkComposerNodeMatrixSquareRealOperatorBinary(void);
     ~dtkComposerNodeMatrixSquareRealOperatorBinary(void);
 
-     inline QString inputLabelHint(int port) {
-         if (port == 0)
-             return "matrix_lhs";
-         else
-             return "matrix_rhs";
-     }
+    inline QString inputLabelHint(int port) {
+        if (port == 0)
+            return "matrix_lhs";
+        else
+            return "matrix_rhs";
+    }
 
-     inline QString outputLabelHint(int) {
-         return "matrix";
-     }
+    inline QString outputLabelHint(int) {
+        return "matrix";
+    }
 
 protected:
     dtkComposerNodeMatrixSquareRealOperatorBinaryPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeMatrixSquareRealOperatorBinaryScalar interface
-// /////////////////////////////////////////////////////////////////
-
-class dtkComposerNodeMatrixSquareRealOperatorBinaryScalarPrivate;
-
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryScalar : public dtkComposerNodeLeaf
-{
-public:
-     dtkComposerNodeMatrixSquareRealOperatorBinaryScalar(void);
-    ~dtkComposerNodeMatrixSquareRealOperatorBinaryScalar(void);
-
-    inline QString inputLabelHint(int port) {
-        return "matrix";
-    }
-
-    inline QString outputLabelHint(int) {
-        return "scalar";
-    }
-
-protected:
-    dtkComposerNodeMatrixSquareRealOperatorBinaryScalarPrivate *d;
-};
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerNodeMatrixSquareRealOperatorBinaryRightProduct interface
-// /////////////////////////////////////////////////////////////////
-
-class dtkComposerNodeMatrixSquareRealOperatorBinaryRightProductPrivate;
-
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryRightProduct : public dtkComposerNodeLeaf
-{
-public:
-     dtkComposerNodeMatrixSquareRealOperatorBinaryRightProduct (void);
-    ~dtkComposerNodeMatrixSquareRealOperatorBinaryRightProduct(void);
-
-     inline QString inputLabelHint(int port) {
-         if (port == 0)
-             return "matrix";
-         else
-             return "vector_transpose";
-     }
-
-     inline QString outputLabelHint(int) {
-         return "matrix";
-     }
-
-protected:
-    dtkComposerNodeMatrixSquareRealOperatorBinaryRightProductPrivate *d;
-};
-
-// /////////////////////////////////////////////////////////////////
 // dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProduct interface
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProductPrivate;
+class dtkComposerNodeMatrixSquareRealOperatorBinaryProductMVPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProduct  : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryProductMV  : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProduct(void);
-    ~dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProduct (void);
+    dtkComposerNodeMatrixSquareRealOperatorBinaryProductMV(void);
+    ~dtkComposerNodeMatrixSquareRealOperatorBinaryProductMV (void);
 
-     inline QString inputLabelHint(int port) {
-         if (port == 0)
-             return "matrix";
-         else
-             return "vector";
-     }
+    inline QString inputLabelHint(int port) {
+        if (port == 0)
+            return "matrix";
+        else
+            return "vector";
+    }
 
-     inline QString outputLabelHint(int) {
-         return "vector";
-     }
+    inline QString outputLabelHint(int) {
+        return "vector";
+    }
 
 protected:
-    dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProductPrivate *d;
+    dtkComposerNodeMatrixSquareRealOperatorBinaryProductMVPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeMatrixSquareRealOperatorBinaryAddVecortToMatrix interface
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNodeMatrixSquareRealOperatorBinaryAddVecortToMatrixPrivate;
+class dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVectorPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryAddVecortToMatrix : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVector : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMatrixSquareRealOperatorBinaryAddVecortToMatrix(void);
-    ~dtkComposerNodeMatrixSquareRealOperatorBinaryAddVecortToMatrix(void);
+    dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVector(void);
+    ~dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVector(void);
 
-     inline QString inputLabelHint(int port) {
-         if (port == 0)
-             return "matrix";
-         else if (port == 1)
-             return "vector";
-         else
-             return "index_value";
-     }
+    inline QString inputLabelHint(int port) {
+        if (port == 0)
+            return "matrix";
+        else if (port == 1)
+            return "vector";
+        else
+            return "index_value";
+    }
 
-     inline QString outputLabelHint(int) {
-         return "matrix ";
-     }
+    inline QString outputLabelHint(int) {
+        return "matrix ";
+    }
 
 protected:
-    dtkComposerNodeMatrixSquareRealOperatorBinaryAddVecortToMatrixPrivate *d;
+    dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVectorPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -216,29 +165,10 @@ public:
 };
 
 // //////////////////////////////////////////////////////////////////////////
-// dtkComposerNodeMatrixSquareRealOperatorBinaryScalarProduct  interface
-// /////////////////////////////////////////////////////////////////////////    // Revoir bien le nom
-
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryScalarProduct : public dtkComposerNodeMatrixSquareRealOperatorBinaryScalar
-{
-public:
-    void run(void);
-
-public:
-    inline QString type(void) {
-        return "matrixSquare_real_product";
-    }
-
-    inline QString titleHint(void) {
-        return "MatrixSquare Real Product";
-    }
-};
-
-// //////////////////////////////////////////////////////////////////////////
 // dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProductMV  interface
 // /////////////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProductMV : public dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProduct
+class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryRightProductMV : public dtkComposerNodeMatrixSquareRealOperatorBinaryProductMV
 {
 public:
     void run(void);
@@ -258,7 +188,7 @@ public:
 // dtkComposerNodeMatrixSquareRealOperatorBinaryProductMV  interface
 // /////////////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryRightProductVM : public dtkComposerNodeMatrixSquareRealOperatorBinaryRightProduct
+class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProductVM : public dtkComposerNodeMatrixSquareRealOperatorBinaryProductMV
 {
 public:
     void run(void);
@@ -274,40 +204,40 @@ public:
 };
 
 // //////////////////////////////////////////////////////////////////////////
-// dtkComposerNodeMatrixSquareRealOperatorBinaryAddRowVM  interface
+// dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceRowMatrixByVector  interface
 // /////////////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryAddRowVectorMatrix: public dtkComposerNodeMatrixSquareRealOperatorBinaryAddVecortToMatrix
+class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceRowMatrixByVector: public dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVector
 {
 public:
     void run(void);
 
 public:
     inline QString type(void) {
-        return "matrixSquare_real_AddRowVectorToMatrix";
+        return "matrixSquare_real_ReplaceRowMatrixByVector";
     }
 
     inline QString titleHint(void) {
-        return "MatrixSquare Real AddRowVectorToMatrix";
+        return "MatrixSquare Real ReplaceRowMatrixByVector";
     }
 };
 
 // //////////////////////////////////////////////////////////////////////////
-// dtkComposerNodeMatrixSquareRealOperatorBinaryAddColVM  interface
+// dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColMatrixByVector  interface
 // /////////////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryAddColVectorMatrix : public dtkComposerNodeMatrixSquareRealOperatorBinaryAddVecortToMatrix
+class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColMatrixByVector : public dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVector
 {
 public:
     void run(void);
 
 public:
     inline QString type(void) {
-        return "matrixSquare_real_AddColVectorToMatrix";
+        return "matrixSquare_real_ReplaceColMatrixByVector";
     }
 
     inline QString titleHint(void) {
-        return "MatrixSquare Real AddColVectorToMatrix";
+        return "MatrixSquare Real ReplaceColMatrixByVector";
     }
 };
 

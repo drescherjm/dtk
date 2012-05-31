@@ -56,65 +56,10 @@ dtkComposerNodeMatrixSquareRealOperatorBinary::~dtkComposerNodeMatrixSquareRealO
 }
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeMatrixSquareRealOperatorBinaryScalar
+// dtkComposerNodeMatrixSquareRealOperatorBinaryProductMV
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNodeMatrixSquareRealOperatorBinaryScalarPrivate
-{
-public:
-    dtkComposerTransmitterReceiver<dtkMatrixSquareReal> receiver_matrix;
-
-public:
-    dtkComposerTransmitterEmitter<qreal> emitter_val;
-};
-
-dtkComposerNodeMatrixSquareRealOperatorBinaryScalar::dtkComposerNodeMatrixSquareRealOperatorBinaryScalar(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMatrixSquareRealOperatorBinaryScalarPrivate)
-{
-    this->appendReceiver(&d->receiver_matrix);
-    this->appendEmitter(&d->emitter_val);
-}
-
-dtkComposerNodeMatrixSquareRealOperatorBinaryScalar::~dtkComposerNodeMatrixSquareRealOperatorBinaryScalar(void)
-{
-    delete d;
-
-    d = NULL;
-}
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerNodeMatrixSquareRealOperatorBinaryRightProduct
-// /////////////////////////////////////////////////////////////////
-
-class dtkComposerNodeMatrixSquareRealOperatorBinaryRightProductPrivate
-{
-public:
-    dtkComposerTransmitterReceiver<dtkMatrixSquareReal> receiver_matrix;
-    dtkComposerTransmitterReceiver<dtkVectorReal>       receiver_vector;
-
-
-public:
-    dtkComposerTransmitterEmitter<dtkMatrixSquareReal> emitter_matrix;
-};
-
-dtkComposerNodeMatrixSquareRealOperatorBinaryRightProduct::dtkComposerNodeMatrixSquareRealOperatorBinaryRightProduct(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMatrixSquareRealOperatorBinaryRightProductPrivate)
-{
-    this->appendReceiver(&d->receiver_matrix);
-    this->appendReceiver(&d->receiver_vector);
-    this->appendEmitter(&d->emitter_matrix);
-}
-
-dtkComposerNodeMatrixSquareRealOperatorBinaryRightProduct::~dtkComposerNodeMatrixSquareRealOperatorBinaryRightProduct(void)
-{
-    delete d;
-
-    d = NULL;
-}
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProduct
-// /////////////////////////////////////////////////////////////////
-
-class dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProductPrivate
+class dtkComposerNodeMatrixSquareRealOperatorBinaryProductMVPrivate
 {
 public:
     dtkComposerTransmitterReceiver<dtkMatrixSquareReal> receiver_matrix;
@@ -125,36 +70,36 @@ public:
     dtkComposerTransmitterEmitter<dtkVectorReal>        emitter_vector;
 };
 
-dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProduct::dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProduct(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProductPrivate)
+dtkComposerNodeMatrixSquareRealOperatorBinaryProductMV::dtkComposerNodeMatrixSquareRealOperatorBinaryProductMV(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMatrixSquareRealOperatorBinaryProductMVPrivate)
 {
     this->appendReceiver(&d->receiver_matrix);
     this->appendReceiver(&d->receiver_vector);
     this->appendEmitter(&d->emitter_vector);
 }
 
-dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProduct::~dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProduct(void)
+dtkComposerNodeMatrixSquareRealOperatorBinaryProductMV::~dtkComposerNodeMatrixSquareRealOperatorBinaryProductMV(void)
 {
     delete d;
 
     d = NULL;
 }
 
-// /////////////////////////////////////////////////////////////////
-// dtkComposerNodeMatrixSquareRealOperatorBinaryAddVecortToMatrix
-// /////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////////
+// dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVector
+// /////////////////////////////////////////////////////////////////////////////
 
-class dtkComposerNodeMatrixSquareRealOperatorBinaryAddVecortToMatrixPrivate
+class dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVectorPrivate
 {
 public:
     dtkComposerTransmitterReceiver<dtkMatrixSquareReal> receiver_matrix;
     dtkComposerTransmitterReceiver<dtkVectorReal>       receiver_vector;
-    dtkComposerTransmitterReceiver<qreal>               receiver_index;
+    dtkComposerTransmitterReceiver<qlonglong>               receiver_index;
 
 public:
-    dtkComposerTransmitterEmitter<dtkMatrixSquareReal> emitter_matrix;
+    dtkComposerTransmitterEmitter<dtkMatrixSquareReal>   emitter_matrix;
 };
 
-dtkComposerNodeMatrixSquareRealOperatorBinaryAddVecortToMatrix::dtkComposerNodeMatrixSquareRealOperatorBinaryAddVecortToMatrix(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMatrixSquareRealOperatorBinaryAddVecortToMatrixPrivate)
+dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVector::dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVector(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVectorPrivate)
 {
     this->appendReceiver(&d->receiver_matrix);
     this->appendReceiver(&d->receiver_vector);
@@ -162,13 +107,12 @@ dtkComposerNodeMatrixSquareRealOperatorBinaryAddVecortToMatrix::dtkComposerNodeM
     this->appendEmitter(&d->emitter_matrix);
 }
 
-dtkComposerNodeMatrixSquareRealOperatorBinaryAddVecortToMatrix::~dtkComposerNodeMatrixSquareRealOperatorBinaryAddVecortToMatrix(void)
+dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVector::~dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVector(void)
 {
     delete d;
 
     d = NULL;
 }
-
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeMatrixSquareRealOperatorBinary - Sum
@@ -176,15 +120,22 @@ dtkComposerNodeMatrixSquareRealOperatorBinaryAddVecortToMatrix::~dtkComposerNode
 
 void dtkComposerNodeMatrixSquareRealOperatorBinarySum::run(void)
 {
-    bool isSquare = d->receiver_lhs.data().getRows()== d->receiver_lhs.data().getCols() && d->receiver_rhs.data().getRows()== d->receiver_rhs.data().getCols();
+    if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()) {
 
-    if ( isSquare && (d->receiver_lhs.data().getRows()== d->receiver_rhs.data().getRows()))
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_matrix.setData(dtkMatrixSquareReal());
 
-        d->emitter_matrix.setData(d->receiver_lhs.data() + d->receiver_rhs.data());
+    } else {
 
-    else
-        dtkWarn()<< "Matrices do not have the same size" ;
+        if ( d->receiver_lhs.data().getRows() == d->receiver_rhs.data().getRows())
+            d->emitter_matrix.setData(d->receiver_lhs.data() + d->receiver_rhs.data());
 
+        else {
+            dtkWarn()<< "Matrices do not have the same size" ;
+            d->emitter_matrix.setData(dtkMatrixSquareReal());
+
+        }
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -193,15 +144,22 @@ void dtkComposerNodeMatrixSquareRealOperatorBinarySum::run(void)
 
 void dtkComposerNodeMatrixSquareRealOperatorBinarySubstract::run(void)
 {
-    bool isSquare = d->receiver_lhs.data().getRows()== d->receiver_lhs.data().getCols() && d->receiver_rhs.data().getRows()== d->receiver_rhs.data().getCols();
+    if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()) {
 
-    if ( isSquare && (d->receiver_lhs.data().getRows()== d->receiver_rhs.data().getRows()))
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_matrix.setData(dtkMatrixSquareReal());
 
-        d->emitter_matrix.setData(d->receiver_lhs.data() - d->receiver_rhs.data());
+    } else {
 
-    else
-        dtkWarn()<< "Matrices do not have the same size" ;
+        if ( d->receiver_lhs.data().getRows() == d->receiver_rhs.data().getRows())
+            d->emitter_matrix.setData(d->receiver_lhs.data() - d->receiver_rhs.data());
 
+        else {
+            dtkWarn()<< "Matrices do not have the same size" ;
+            d->emitter_matrix.setData(dtkMatrixSquareReal());
+
+        }
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -210,81 +168,147 @@ void dtkComposerNodeMatrixSquareRealOperatorBinarySubstract::run(void)
 
 void dtkComposerNodeMatrixSquareRealOperatorBinaryMult::run(void)
 {
-    bool isSquare = d->receiver_lhs.data().getRows()== d->receiver_lhs.data().getCols() && d->receiver_rhs.data().getRows()== d->receiver_rhs.data().getCols();
+    if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()) {
 
-    if ( isSquare && (d->receiver_lhs.data().getRows()== d->receiver_rhs.data().getRows()))
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_matrix.setData(dtkMatrixSquareReal());
 
-        d->emitter_matrix.setData(d->receiver_lhs.data() * d->receiver_rhs.data());
+    } else {
 
-    else
-        dtkWarn()<< "Matrices do not have the same size" ;
+        if ( d->receiver_lhs.data().getRows() == d->receiver_rhs.data().getRows())
+            d->emitter_matrix.setData(d->receiver_lhs.data() * d->receiver_rhs.data());
 
-}
+        else {
+            dtkWarn()<< "Matrices do not have the same size" ;
+            d->emitter_matrix.setData(dtkMatrixSquareReal());
 
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerNodeMatrixSquareRealOperatorBinaryScalar - Product
-// /////////////////////////////////////////////////////////////////
-
-void dtkComposerNodeMatrixSquareRealOperatorBinaryScalarProduct::run(void)
-{
-    // a faire plus tard
-}
-
-
-// ///////////////////////////////////////////////////////////////////////////////////
-// dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProductMV - Product Vector Matrix
-// //////////////////////////////////////////////////////////////////////////////////
-
-void dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProductMV::run(void)
-{
-    bool isSquare = d->receiver_matrix.data().getRows()== d->receiver_matrix.data().getCols();
-
-    dtkVectorReal vec =d->receiver_vector.data();
-    dtkMatrixSquareReal matrix = d->receiver_matrix.data();
-
-    if ( isSquare && (d->receiver_matrix.data().getRows()== d->receiver_vector.data().getCols())) {
-
-        d->emitter_vector.setData(d->receiver_matrix.data() * d->receiver_vector.data());
-
-        for(int i = 0 ; i < d->receiver_matrix.data().getRows(); i++){
-
-            for(int j = 0 ; j < d->receiver_vector.data().getRows(); i++){
-
-
-                vec[i] = matrix [i][j]*vec[i];
-
-                qDebug()<< i<< vec[i];
-
-            }
         }
     }
-
 }
+
+// ///////////////////////////////////////////////////////////////////////////////////
+// dtkComposerNodeMatrixSquareRealOperatorBinaryProductMV - Product Matrix Vector
+// //////////////////////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeMatrixSquareRealOperatorBinaryRightProductMV::run(void)
+{
+    if (d->receiver_matrix.isEmpty() || d->receiver_vector.isEmpty()) {
+
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_vector.setData(dtkVectorReal());
+
+    } else {
+
+        if ( d->receiver_matrix.data().getCols() == d->receiver_vector.data().getRows() )
+            d->emitter_vector.setData(d->receiver_matrix.data() * d->receiver_vector.data());
+
+        else {
+            dtkWarn() << "Matrix's row and vector's column are different size. Nothing is done";
+            d->emitter_vector.setData(dtkVectorReal());
+
+        }
+    }
+}
+
 // /////////////////////////////////////////////////////////////////////////////////////
-// dtkComposerNodeMatrixSquareRealOperatorBinaryRightProductVM - Product Matrix Vector
+// dtkComposerNodeMatrixSquareRealOperatorBinaryProductMV - Product Vector Matrix
 // ////////////////////////////////////////////////////////////////////////////////////
 
-void dtkComposerNodeMatrixSquareRealOperatorBinaryRightProductVM::run(void)
+void dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProductVM::run(void)
 {
-    // d->emitter_matrix.setData(dtkInverse(d->receiver_matrix.data()));
+    if (d->receiver_matrix.isEmpty() || d->receiver_vector.isEmpty()) {
 
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_vector.setData(dtkVectorReal());
+
+    } else {
+
+        if (d->receiver_matrix.data().getCols() == d->receiver_vector.data().getRows()){
+
+            dtkVectorReal vec(d->receiver_vector.data().getRows());
+
+            for( int i = 0; i< d->receiver_matrix.data().getCols();++i ){
+                for( int j = 0; j< d->receiver_matrix.data().getRows();++j )
+                    vec[i] += d->receiver_vector.data()[j] * d->receiver_matrix.data()[j][i] ;
+
+            }
+
+            d->emitter_vector.setData(vec);
+
+        }
+
+        else {
+            dtkWarn() << "Matrix's row and vector's column are different size. Nothing is done";
+            d->emitter_vector.setData(dtkVectorReal());
+
+        }
+    }
 }
 
-// //////////////////////////////////////////////////////////////////////////
-// dtkComposerNodeMatrixSquareRealOperatorBinaryAddRowVM - Add row to Matrix
-// //////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////////////////////////
+// dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceRowAndColMatrixByVector  Replace Row to Matrix
+// ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-void dtkComposerNodeMatrixSquareRealOperatorBinaryAddRowVectorMatrix::run(void)
+void dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceRowMatrixByVector::run(void)
 {
-    //  d->emitter_val.setData(dtkDeterminant(d->receiver_matrix.data()));
+    if (d->receiver_matrix.isEmpty() || d->receiver_vector.isEmpty()) {
+
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_matrix.setData(dtkMatrixSquareReal());
+
+    } else {
+
+        if (d->receiver_index.data() < d->receiver_matrix.data().getRows()){
+
+            dtkMatrixSquareReal matrix (d->receiver_matrix.data());
+            qlonglong value (d->receiver_index.data());
+            dtkVectorReal vec(d->receiver_vector.data());
+
+
+            for( int j = 0; j < matrix.getCols(); ++j)
+                matrix[value][j]= vec[j] ;
+
+
+
+            d->emitter_matrix.setData(matrix);
+
+        } else {
+            dtkWarn() << "index > row of the marix. Nothing is done" ;
+            d->emitter_matrix.setData(dtkMatrixSquareReal());
+
+        }
+    }
 }
 
-// ///////////////////////////////////////////////////////////////////////////
-// dtkComposerNodeMatrixSquareRealOperatorBinaryAddColVM - Add col to Matrix
-// //////////////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////////////////////////////
+// dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceRowAndColMatrixByVector - Replace Col to Matrix
+// ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void dtkComposerNodeMatrixSquareRealOperatorBinaryAddColVectorMatrix::run(void)
+void dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColMatrixByVector::run(void)
 {
-    //  d->emitter_val.setData(dtkMatrixSquaredTrace(d->receiver_matrix.data()));
+    if (d->receiver_matrix.isEmpty() || d->receiver_vector.isEmpty()) {
+
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_matrix.setData(dtkMatrixSquareReal());
+
+
+    } else {
+
+        if (d->receiver_index.data() < d->receiver_matrix.data().getRows()){
+
+            dtkMatrixSquareReal matrix (d->receiver_matrix.data());
+            int value (d->receiver_index.data());
+            dtkVectorReal vec(d->receiver_vector.data());
+
+            for ( int i = 0; i < matrix.getRows(); ++i)
+                matrix[i][value]= vec[i] ;
+
+            d->emitter_matrix.setData(matrix);
+
+        } else {
+            dtkWarn() << "index > row of the marix. Nothing is done" ;
+            d->emitter_matrix.setData(dtkMatrixSquareReal());
+
+        }
+    }
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:34:45 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 14:47:09 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 10
+ * Last-Updated: Thu May 31 09:48:31 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -20,12 +20,14 @@
 #ifndef DTKCOMPOSERSCENENODELEAF_H
 #define DTKCOMPOSERSCENENODELEAF_H
 
+#include "dtkComposerExport.h"
+
 #include "dtkComposerSceneNode.h"
 
 class dtkComposerNode;
 class dtkComposerSceneNodeLeafPrivate;
 
-class dtkComposerSceneNodeLeaf : public dtkComposerSceneNode
+class DTKCOMPOSER_EXPORT dtkComposerSceneNodeLeaf : public dtkComposerSceneNode
 {
 public:
      dtkComposerSceneNodeLeaf(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:17:21
  * Version: $Id$
- * Last-Updated: Thu May 31 04:25:03 2012 (+0200)
+ * Last-Updated: Thu May 31 04:31:30 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 250
+ *     Update #: 252
  */
 
 /* Commentary:
@@ -117,8 +117,8 @@ void dtkComposerNodeProcess::run(void)
 
     d->emitter_integer.setData(i);
 
-    if (d->process->data())
-        d->emitter_real.setData(*static_cast<double *>(d->process->data()));
+    // if (d->process->output())
+    //     d->emitter_real.setData(*static_cast<double *>(d->process->data(0)));
 
     d->emitter_data.setData(d->process->output());
 }

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Thu Sep  8 10:31:43 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Apr  4 10:57:49 2012 (+0200)
-##           By: tkloczko
-##     Update #: 11
+## Last-Updated: mer. mai 30 12:59:38 2012 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 12
 ######################################################################
 ## 
 ### Commentary: 
@@ -37,5 +37,6 @@ add_executable(${PROJECT_NAME}
   ${${PROJECT_NAME}_SOURCES})
 
 target_link_libraries(${PROJECT_NAME}
+  dtkComposer
   dtkDistributed
   dtkLog)

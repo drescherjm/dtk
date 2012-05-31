@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Tue May 29 22:52:34 2012 (+0200)
+ * Last-Updated: Thu May 31 00:22:09 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 607
+ *     Update #: 626
  */
 
 /* Commentary:
@@ -34,6 +34,7 @@
 #include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeControlForEach.h"
 #include "dtkComposerNodeControlWhile.h"
+#include "dtkComposerNodeData.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeFileOperator.h"
 #include "dtkComposerNodeList.h"
@@ -701,18 +702,21 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Logger"] = QStringList() << "logger" << "debug";
     d->types["Logger"] = "logger";
 
-    // process nodes
+    // generic nodes
+
+    d->nodes << "Generic Data";
+    d->descriptions["Generic Data"] = "<p>Description not yet filled!</p>";
+    d->tags["Generic Data"] = QStringList() << "data";
+    d->types["Generic Data"] = "data";
 
     d->nodes << "Generic Process";
     d->descriptions["Generic Process"] = "<p>Description not yet filled!</p>";
-    d->tags["Generic Process"] = QStringList() << "process" ;
+    d->tags["Generic Process"] = QStringList() << "process";
     d->types["Generic Process"] = "process";
-
-    // view nodes
 
     d->nodes << "Generic View";
     d->descriptions["Generic View"] = "<p>Description not yet filled!</p>";
-    d->tags["Generic View"] = QStringList() << "view" ;
+    d->tags["Generic View"] = QStringList() << "view";
     d->types["Generic View"] = "view";
 
     // dtkDistributed nodes
@@ -1180,12 +1184,13 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "logger")
         return new dtkComposerNodeLogger;
 
-    // process nodes
+    // generic nodes
+
+    if(type == "data")
+        return new dtkComposerNodeData;
 
     if(type == "process")
         return new dtkComposerNodeProcess;
-
-    // view nodes
 
     if(type == "view")
         return new dtkComposerNodeView;

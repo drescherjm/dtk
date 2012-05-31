@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:17:21
  * Version: $Id$
- * Last-Updated: Wed May  9 10:08:20 2012 (+0200)
- *           By: tkloczko
- *     Update #: 234
+ * Last-Updated: Thu May 31 04:31:30 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 252
  */
 
 /* Commentary:
@@ -37,6 +37,8 @@ public:
     dtkComposerTransmitterReceiver<double> receiver_real;
     dtkComposerTransmitterReceiver<dtkAbstractData *> receiver_data;
     dtkComposerTransmitterReceiver<QString> receiver_type;
+    dtkComposerTransmitterReceiver<dtkAbstractData *> receiver_lhs;
+    dtkComposerTransmitterReceiver<dtkAbstractData *> receiver_rhs;
 
 public:
     dtkComposerTransmitterEmitter<qlonglong> emitter_integer;
@@ -54,18 +56,15 @@ public:
 dtkComposerNodeProcess::dtkComposerNodeProcess(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeProcessPrivate)
 {
     this->appendReceiver(&(d->receiver_type));
-
     this->appendReceiver(&(d->receiver_integer_0));
     this->appendReceiver(&(d->receiver_integer_1));
-
     this->appendReceiver(&(d->receiver_real));
-
     this->appendReceiver(&(d->receiver_data));
+    this->appendReceiver(&(d->receiver_lhs));
+    this->appendReceiver(&(d->receiver_rhs));
 
     this->appendEmitter(&(d->emitter_integer));
-
     this->appendEmitter(&(d->emitter_real));
-
     this->appendEmitter(&(d->emitter_data));
 
     d->process = NULL;
@@ -105,16 +104,21 @@ void dtkComposerNodeProcess::run(void)
     if (!d->receiver_real.isEmpty())
         d->process->setParameter(d->receiver_real.data());
 
-    if (!d->receiver_data.isEmpty()) {
+    if (!d->receiver_data.isEmpty())
         d->process->setInput(d->receiver_data.data());
-    }
+
+    if (!d->receiver_lhs.isEmpty())
+        d->process->setInput(d->receiver_lhs.data(), 0);
+
+    if (!d->receiver_rhs.isEmpty())
+        d->process->setInput(d->receiver_rhs.data(), 1);
 
     int i = d->process->run();
 
     d->emitter_integer.setData(i);
 
-    if (d->process->data(0))
-        d->emitter_real.setData(*static_cast<double *>(d->process->data(0)));
+    // if (d->process->output())
+    //     d->emitter_real.setData(*static_cast<double *>(d->process->data(0)));
 
     d->emitter_data.setData(d->process->output());
 }
@@ -145,6 +149,12 @@ QString dtkComposerNodeProcess::inputLabelHint(int port)
 
     if(port == 4)
         return "data";
+
+    if(port == 5)
+        return "lhs";
+
+    if(port == 6)
+        return "rhs";
 
     return dtkComposerNodeLeaf::inputLabelHint(port);
 }

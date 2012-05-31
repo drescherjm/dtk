@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue May 29 15:44:31 2012 (+0200)
- *           By: tkloczko
- *     Update #: 89
+ * Last-Updated: mer. mai 30 15:44:02 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 95
  */
 
 /* Commentary: 
@@ -30,6 +30,7 @@
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerTransmitterVariantPrivate;
+class dtkDistributedMessage;
 
 class DTKCOMPOSER_EXPORT dtkComposerTransmitterVariant : public dtkComposerTransmitter
 {
@@ -39,6 +40,7 @@ public:
 
 public:
     void setData(const QVariant& data);
+    void setDataFromMsg(dtkDistributedMessage *msg);
 
           QVariant& data(void);
     const QVariant& data(void) const;

@@ -93,7 +93,7 @@ class dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVecto
 public:
     dtkComposerTransmitterReceiver<dtkMatrixSquareReal> receiver_matrix;
     dtkComposerTransmitterReceiver<dtkVectorReal>       receiver_vector;
-    dtkComposerTransmitterReceiver<qlonglong>               receiver_index;
+    dtkComposerTransmitterVariant                       receiver_index;
 
 public:
     dtkComposerTransmitterEmitter<dtkMatrixSquareReal>   emitter_matrix;
@@ -103,7 +103,13 @@ dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVector::dtk
 {
     this->appendReceiver(&d->receiver_matrix);
     this->appendReceiver(&d->receiver_vector);
+
+    QList<QVariant::Type> variant_list;
+
+    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong;
+    d->receiver_index.setTypes(variant_list);
     this->appendReceiver(&d->receiver_index);
+
     this->appendEmitter(&d->emitter_matrix);
 }
 
@@ -258,10 +264,10 @@ void dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceRowMatrixByVector::run(
 
     } else {
 
-        if (d->receiver_index.data() < d->receiver_matrix.data().getRows()){
+        if (qvariant_cast<qlonglong>(d->receiver_index.data()) < d->receiver_matrix.data().getRows()){
 
             dtkMatrixSquareReal matrix (d->receiver_matrix.data());
-            qlonglong value (d->receiver_index.data());
+            qlonglong value =  qvariant_cast<qlonglong>(d->receiver_index.data());
             dtkVectorReal vec(d->receiver_vector.data());
 
 
@@ -294,10 +300,10 @@ void dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColMatrixByVector::run(
 
     } else {
 
-        if (d->receiver_index.data() < d->receiver_matrix.data().getRows()){
+        if (qvariant_cast<qlonglong>(d->receiver_index.data())< d->receiver_matrix.data().getRows()){
 
             dtkMatrixSquareReal matrix (d->receiver_matrix.data());
-            int value (d->receiver_index.data());
+            qlonglong value =  qvariant_cast<qlonglong>(d->receiver_index.data());
             dtkVectorReal vec(d->receiver_vector.data());
 
             for ( int i = 0; i < matrix.getRows(); ++i)

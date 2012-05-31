@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 12:30:17 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri May 25 10:01:11 2012 (+0200)
+ * Last-Updated: Wed May 30 15:41:32 2012 (+0200)
  *           By: tkloczko
- *     Update #: 246
+ *     Update #: 250
  */
 
 /* Commentary: 
@@ -248,7 +248,7 @@ template <typename T> inline void dtkContainerVector<T>::resize(dtkxarch_int siz
     m_vector.resize(size);
 };
 
-template <typename T> inline void dtkContainerVector<T>::sqeeze(void)
+template <typename T> inline void dtkContainerVector<T>::squeeze(void)
 {
     m_vector.squeeze();
 };
@@ -406,11 +406,15 @@ template <typename T> inline dtkContainerVector<T> *dtkContainerVector<T>::clone
 template <typename T> inline dtkContainerVector<T>& dtkContainerVector<T>::operator << (const T& value)
 {
     m_vector << value;
+
+    return (*this);
 };
 
 template <typename T> inline dtkContainerVector<T>& dtkContainerVector<T>::operator << (const dtkContainerVector<T>& values)
 {
     m_vector << values.m_vector;
+
+    return (*this);
 };
 
 template <typename T> inline bool dtkContainerVector<T>::operator == (const dtkContainerVector<T>& other) const

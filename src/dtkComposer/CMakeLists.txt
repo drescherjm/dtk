@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Wed May 23 18:07:31 2012 (+0200)
-##           By: tkloczko
-##     Update #: 539
+## Last-Updated: Thu May 31 00:19:19 2012 (+0200)
+##           By: Julien Wintz
+##     Update #: 554
 ######################################################################
 ##
 ### Commentary:
@@ -58,6 +58,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeControlFor.h
   dtkComposerNodeControlForEach.h
   dtkComposerNodeControlWhile.h
+  dtkComposerNodeData.h
   dtkComposerNodeFile.h
   dtkComposerNodeFileOperator.h
   dtkComposerNodeInteger.h
@@ -170,6 +171,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeControlFor.cpp
   dtkComposerNodeControlForEach.cpp
   dtkComposerNodeControlWhile.cpp
+  dtkComposerNodeData.cpp
   dtkComposerNodeFile.cpp
   dtkComposerNodeFileOperator.cpp
   dtkComposerNodeInteger.cpp
@@ -253,6 +255,22 @@ set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
 endif(DTK_HAVE_NITE)
 
 ## #################################################################
+## Plot sources
+## #################################################################
+
+if(DTK_HAVE_PLOT)
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkComposerNodePlotCurve.h
+  dtkComposerNodePlotView.h)
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
+  dtkComposerNodePlotCurve.h
+  dtkComposerNodePlotView.h)
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkComposerNodePlotCurve.cpp
+  dtkComposerNodePlotView.cpp)
+endif(DTK_HAVE_PLOT)
+
+## #################################################################
 ## Vrpn sources
 ## #################################################################
 
@@ -321,6 +339,10 @@ target_link_libraries(${PROJECT_NAME}
 if(DTK_HAVE_NITE)
 target_link_libraries(${PROJECT_NAME} dtkVr)
 endif(DTK_HAVE_NITE)
+
+if(DTK_HAVE_PLOT)
+target_link_libraries(${PROJECT_NAME} dtkPlot)
+endif(DTK_HAVE_PLOT)
 
 ## #################################################################
 ## Export header file

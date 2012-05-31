@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu May 24 12:19:08 2012 (+0200)
-##           By: tkloczko
-##     Update #: 300
+## Last-Updated: Thu May 31 00:37:35 2012 (+0200)
+##           By: Julien Wintz
+##     Update #: 301
 ######################################################################
 ## 
 ### Commentary: 
@@ -176,7 +176,8 @@ endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
-  dtkLog)
+  dtkLog
+  dtkMath)
 
 if(TCL_FOUND)
   target_link_libraries(${PROJECT_NAME} ${TCL_LIBRARY})

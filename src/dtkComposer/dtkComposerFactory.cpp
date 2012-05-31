@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: mer. mai 16 12:55:22 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 573
+ * Last-Updated: Thu May 31 00:22:09 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 626
  */
 
 /* Commentary:
@@ -34,6 +34,7 @@
 #include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeControlForEach.h"
 #include "dtkComposerNodeControlWhile.h"
+#include "dtkComposerNodeData.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeFileOperator.h"
 #include "dtkComposerNodeList.h"
@@ -75,6 +76,17 @@
 #include "dtkComposerNodeTrackerVrpn.h"
 #endif
 
+#if defined(DTK_HAVE_PLOT)
+#include "dtkComposerNodePlotCurve.h"
+#include "dtkComposerNodePlotView.h"
+#endif
+
+#if defined(DTK_HAVE_PLOT)
+#include <dtkPlot/dtkPlotView.h>
+#endif
+
+#include <dtkCore/dtkAbstractView.h>
+#include <dtkCore/dtkAbstractViewFactory.h>
 #include <dtkCore/dtkGlobal.h>
 
 class dtkComposerFactoryPrivate
@@ -210,11 +222,6 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["MatrixSquare Real AddColVectorToMatrix "] = "<p>Description not yet filled!</p>";
     d->tags["MatrixSquare Real AddColVectorToMatrix"] = QStringList() << "matrix" << "square" << "real"<< "Add"<< "Col"<< "Matrix" << "Vector";
     d->types["MatrixSquare Real AddColVectorToMatrix"] = "matrixSquare_real_AddColVectorToMatrix";
-
-
-
-
-
 
     // Vector Real
 
@@ -695,18 +702,21 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Logger"] = QStringList() << "logger" << "debug";
     d->types["Logger"] = "logger";
 
-    // process nodes
+    // generic nodes
+
+    d->nodes << "Generic Data";
+    d->descriptions["Generic Data"] = "<p>Description not yet filled!</p>";
+    d->tags["Generic Data"] = QStringList() << "data";
+    d->types["Generic Data"] = "data";
 
     d->nodes << "Generic Process";
     d->descriptions["Generic Process"] = "<p>Description not yet filled!</p>";
-    d->tags["Generic Process"] = QStringList() << "process" ;
+    d->tags["Generic Process"] = QStringList() << "process";
     d->types["Generic Process"] = "process";
-
-    // view nodes
 
     d->nodes << "Generic View";
     d->descriptions["Generic View"] = "<p>Description not yet filled!</p>";
-    d->tags["Generic View"] = QStringList() << "view" ;
+    d->tags["Generic View"] = QStringList() << "view";
     d->types["Generic View"] = "view";
 
     // dtkDistributed nodes
@@ -715,6 +725,21 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Remote"] = QStringList() <<  "distributed" << "tcp" << "remote" << "world";
     d->types["Remote"] = "remote";
 
+    // /////////////////////////////////////////////////////////////////
+    // Plot nodes
+    // /////////////////////////////////////////////////////////////////
+
+#if defined(DTK_HAVE_PLOT)
+    d->nodes << "Plot Curve";
+    d->tags["Plot Curve"] = QStringList() <<  "curve" << "plot";
+    d->types["Plot Curve"] = "dtkPlotCurve";
+
+    dtkAbstractViewFactory::instance()->registerViewType("dtkPlotView", createPlotView);
+
+    d->nodes << "Plot View";
+    d->tags["Plot View"] = QStringList() <<  "view" << "plot";
+    d->types["Plot View"] = "dtkPlotView";
+#endif
 
     // /////////////////////////////////////////////////////////////////
     // NITE nodes
@@ -1159,12 +1184,13 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "logger")
         return new dtkComposerNodeLogger;
 
-    // process nodes
+    // generic nodes
+
+    if(type == "data")
+        return new dtkComposerNodeData;
 
     if(type == "process")
         return new dtkComposerNodeProcess;
-
-    // view nodes
 
     if(type == "view")
         return new dtkComposerNodeView;
@@ -1190,6 +1216,18 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 #if defined(DTK_HAVE_VRPN)
     if(type == "vrpnTracker")
         return new dtkComposerNodeTrackerVrpn;
+#endif
+
+    // /////////////////////////////////////////////////////////////////
+    // Plot nodes
+    // /////////////////////////////////////////////////////////////////
+
+#if defined(DTK_HAVE_PLOT)
+    if(type == "dtkPlotCurve")
+        return new dtkComposerNodePlotCurve;
+
+    if(type == "dtkPlotView")
+        return new dtkComposerNodePlotView;
 #endif
 
     // /////////////////////////////////////////////////////////////////

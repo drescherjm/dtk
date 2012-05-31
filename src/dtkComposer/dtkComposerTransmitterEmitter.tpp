@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue May 29 10:14:26 2012 (+0200)
+ * Last-Updated: Tue May 29 15:43:39 2012 (+0200)
  *           By: tkloczko
- *     Update #: 187
+ *     Update #: 190
  */
 
 /* Commentary: 
@@ -77,68 +77,6 @@ template <typename T> inline const T& dtkComposerTransmitterEmitter<T>::data(voi
 {
     return m_data;
 };
-
-//! 
-/*! 
- *  
- */
-template <typename T> inline void dtkComposerTransmitterEmitter<T>::setVector(const dtkContainerVector<T>& vector)
-{
-    if (m_vector != vector) {
-        m_vector = vector;
-        d->container = dtkContainerVectorWrapper<T>(m_vector);
-        d->variant = qVariantFromValue(d->container);
-    }
-};
-
-//! 
-/*! 
- *  
- */
-template <typename T> inline dtkContainerVector<T>& dtkComposerTransmitterEmitter<T>::vector(void)
-{
-    return m_vector;
-};
-
-//! 
-/*! 
- *  
- */
-template <typename T> inline const dtkContainerVector<T>& dtkComposerTransmitterEmitter<T>::vector(void) const
-{
-    return m_vector;
-};
-
-// //! 
-// /*! 
-//  *  
-//  */
-// template <typename T> inline void dtkComposerTransmitterEmitter<T>::setList(const dtkContainerList<T>& list)
-// {
-//     if (m_list != list) {
-//         m_list = list;
-//         d->container = m_list;
-//         d->variant = qVariantFromValue(d->container);
-//     }
-// };
-
-// //! 
-// /*! 
-//  *  
-//  */
-// template <typename T> inline dtkContainerList<T>& dtkComposerTransmitterEmitter<T>::list(void)
-// {
-//     return m_list;
-// };
-
-// //! 
-// /*! 
-//  *  
-//  */
-// template <typename T> inline const dtkContainerList<T>& dtkComposerTransmitterEmitter<T>::list(void) const
-// {
-//     return m_list;
-// };
 
 //! Returns.
 /*! 

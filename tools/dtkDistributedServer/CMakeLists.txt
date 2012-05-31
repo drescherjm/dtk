@@ -4,9 +4,9 @@
 ## Copyright (C) 2012 - Nicolas Niclausse, Inria.
 ## Created: mar. avril  3 16:40:15 2012 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Apr  4 11:21:53 2012 (+0200)
-##           By: tkloczko
-##     Update #: 5
+## Last-Updated: mer. mai 30 12:57:20 2012 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 7
 ######################################################################
 ##
 ### Commentary:
@@ -35,8 +35,10 @@ add_executable(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
+  dtkComposer
   dtkCore
   dtkDistributed
+  dtkMath
   dtkLog)
 
 ## #################################################################

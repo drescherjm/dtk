@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 11:19:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri May 25 10:00:24 2012 (+0200)
+ * Last-Updated: Wed May 30 15:41:02 2012 (+0200)
  *           By: tkloczko
- *     Update #: 66
+ *     Update #: 68
  */
 
 /* Commentary: 
@@ -78,7 +78,7 @@ public:
     void reserve(dtkxarch_int value);
     void  resize(dtkxarch_int size);
 
-    void  sqeeze(void);
+    void  squeeze(void);
 
 public:
     bool  isEmpty(void) const;
@@ -145,8 +145,8 @@ private:
 // // Helper functions
 // // /////////////////////////////////////////////////////////////////
 
-// template <typename T> DTKCONTAINER_EXPORT dtkContainerVector<T> dtkContainerVectorFromQVector(const QVector<T>& vector);
-// template <typename T> DTKCONTAINER_EXPORT QVector<T> dtkContainerVectorToQVector(const dtkContainerVector<T>& vector);
+template <typename T> DTKCONTAINER_EXPORT dtkContainerVector<T> dtkContainerVectorFromQVector(const QVector<T>& vector);
+template <typename T> DTKCONTAINER_EXPORT QVector<T> dtkContainerVectorToQVector(const dtkContainerVector<T>& vector);
 
 // /////////////////////////////////////////////////////////////////
 // dtkContainerVector implementation

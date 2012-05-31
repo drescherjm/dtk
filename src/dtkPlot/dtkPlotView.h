@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:02:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 14:30:00 2012 (+0200)
+ * Last-Updated: Tue May 29 22:53:37 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 45
+ *     Update #: 50
  */
 
 /* Commentary: 
@@ -71,5 +71,11 @@ private:
 private:
     dtkPlotViewPrivate *d;
 };
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
+DTKCORE_EXPORT dtkAbstractView *createPlotView(void);
 
 #endif

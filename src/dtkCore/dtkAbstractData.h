@@ -4,9 +4,8 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Fri May 25 22:11:26 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 249
+ *           By: tkloczko
+ *     Update #: 287
  */
 
 /* Commentary:
@@ -21,6 +20,8 @@
 #define DTKABSTRACTDATA_H
 
 #include "dtkAbstractObject.h"
+
+#include <dtkMath/dtkVector.h>
 
 #include <QtGui/QImage>
 
@@ -48,7 +49,7 @@ public:
     dtkAbstractData& operator = (const dtkAbstractData& other);
 
 public:
-    bool operator == (const dtkAbstractData& other);
+    bool operator == (const dtkAbstractData& other) const;
 
 public:
     friend DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractData& data);
@@ -65,7 +66,7 @@ public slots:
 
     virtual dtkAbstractData *convert(const QString& toType);
     virtual QByteArray    *serialize(void);
-    virtual bool         deserialize(const QByteArray& array);
+    virtual dtkAbstractData *deserialize(const QByteArray& array);
 
     virtual void *output(void);
     virtual void *output(int channel);
@@ -95,8 +96,11 @@ public slots:
     virtual void setParameter(dtkAbstractData *parameter);
     virtual void setParameter(dtkAbstractData *parameter, int channel);
 
-    virtual void setData(void* data);
-    virtual void setData(void* data, int channel);
+    virtual void setParameter(dtkVectorReal parameter);
+    virtual void setParameter(dtkVectorReal parameter, int channel);
+
+    virtual void setData(void *data);
+    virtual void setData(void *data, int channel);
 
     virtual void setNumberOfChannels(int number);
 
@@ -134,6 +138,10 @@ public slots:
 
     virtual       QImage & thumbnail(void) ;
     virtual QList<QImage>& thumbnails(void);
+
+public:
+    virtual QVariant toVariant(dtkAbstractData *data);
+    virtual dtkAbstractData *fromVariant(const QVariant& v);
 
 private:
     DTK_DECLARE_PRIVATE(dtkAbstractData);

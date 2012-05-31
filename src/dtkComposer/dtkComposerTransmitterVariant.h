@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri May 25 16:21:37 2012 (+0200)
- *           By: tkloczko
- *     Update #: 87
+ * Last-Updated: mer. mai 30 15:44:02 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 95
  */
 
 /* Commentary: 
@@ -30,6 +30,7 @@
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerTransmitterVariantPrivate;
+class dtkDistributedMessage;
 
 class DTKCOMPOSER_EXPORT dtkComposerTransmitterVariant : public dtkComposerTransmitter
 {
@@ -39,17 +40,12 @@ public:
 
 public:
     void setData(const QVariant& data);
-
-    DTK_DEPRECATED void setData(const dtkAbstractContainerWrapper& data);
+    void setDataFromMsg(dtkDistributedMessage *msg);
 
           QVariant& data(void);
     const QVariant& data(void) const;
 
     QVariantList allData(void);
-
-public:
-    DTK_DEPRECATED       dtkAbstractContainerWrapper& container(void);
-    DTK_DEPRECATED const dtkAbstractContainerWrapper& container(void) const;
 
 public:
     bool isEmpty(void) const;

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Nov 22 10:20:27 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue May 29 14:11:42 2012 (+0200)
+## Last-Updated: Fri Jun  1 11:39:27 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 81
+##     Update #: 83
 ######################################################################
 ## 
 ### Commentary: 
@@ -49,7 +49,6 @@ set(${PROJECT_NAME}_SOURCES
 
 if(NOT WIN32)
 add_definitions(-Wno-write-strings)
-add_definitions(-Wformat=0)
 endif(NOT WIN32)
 
 add_definitions(${QT_DEFINITIONS})

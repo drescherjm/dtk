@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:32:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 15:07:54 2012 (+0200)
+ * Last-Updated: Fri Jun  1 11:57:31 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 25
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -47,8 +47,14 @@ public:
 public:
     inline QString inputLabelHint(int port) {
         switch(port) {
-        default:
+        case 0:
             return "curve";
+        case 1:
+            return "x-axis label";
+        case 2:
+            return "y-axis label";
+        default:
+            return dtkComposerNodeLeaf::inputLabelHint(port);
         }
     }
 

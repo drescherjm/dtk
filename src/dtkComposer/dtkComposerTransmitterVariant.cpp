@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jun  1 13:33:57 2012 (+0200)
+ * Last-Updated: Fri Jun  1 13:38:00 2012 (+0200)
  *           By: tkloczko
- *     Update #: 454
+ *     Update #: 458
  */
 
 /* Commentary: 
@@ -417,7 +417,7 @@ const dtkAbstractContainerWrapper& dtkComposerTransmitterVariantContainer::conta
         d->container = qvariant_cast<dtkAbstractContainerWrapper>(e->active_emitter->variant());
 
     else
-        d->container = qvariant_cast<dtkAbstractContainerWrapper>(d->variant);   
+        d->container = qvariant_cast<dtkAbstractContainerWrapper>(d->variant);
 
     return d->container;
 }

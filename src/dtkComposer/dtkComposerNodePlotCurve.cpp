@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:40:41 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 15:08:44 2012 (+0200)
+ * Last-Updated: Fri Jun  1 11:37:10 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 41
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -38,7 +38,7 @@ public:
 
 dtkComposerNodePlotCurve::dtkComposerNodePlotCurve(void) : QObject(), dtkComposerNodeLeaf(), d(new dtkComposerNodePlotCurvePrivate)
 {
-    d->curve = NULL;
+    d->curve = new dtkPlotCurve;
 
     this->appendReceiver(&(d->receiver_x));
     this->appendReceiver(&(d->receiver_y));
@@ -53,6 +53,11 @@ dtkComposerNodePlotCurve::~dtkComposerNodePlotCurve(void)
     delete d;
 
     d = NULL;
+}
+
+dtkPlotCurve *dtkComposerNodePlotCurve::curve(void)
+{
+    return d->curve;
 }
 
 void dtkComposerNodePlotCurve::run(void)
@@ -70,9 +75,6 @@ void dtkComposerNodePlotCurve::onRun(void)
     if(d->receiver_y.isEmpty())
         return;
 
-    if(!d->curve)
-        d->curve = new dtkPlotCurve;
-    
     d->curve->append(QPointF(d->receiver_x.data(), d->receiver_y.data()));
 
     d->emitter_curve.setData(d->curve);

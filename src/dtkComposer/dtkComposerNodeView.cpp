@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 24 23:29:24 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 31 01:21:25 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 156
+ * Last-Updated: ven. juin  1 16:20:13 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 159
  */
 
 /* Commentary: 
@@ -167,5 +167,6 @@ void dtkComposerNodeView::onRun(void)
         d->view->setLowerRight(d->receiver_screen_lower_right.data());
 
     if(!d->receiver_data.isEmpty())
-        d->view->setData(d->receiver_data.data());
+        foreach (dtkAbstractData *data, d->receiver_data.allData())
+            d->view->setData(data);
 }

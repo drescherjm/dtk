@@ -610,6 +610,44 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberOperatorBinary - Min
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryMin: public dtkComposerNodeNumberOperatorBinary
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "min";
+    }
+
+    inline QString titleHint(void) {
+        return "Min";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberOperatorBinary - Max
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryMax : public dtkComposerNodeNumberOperatorBinary
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "max";
+    }
+
+    inline QString titleHint(void) {
+        return "Max";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
 // dtkComposerNodeNumberOperatorBinary - LOGN
 // /////////////////////////////////////////////////////////////////
 

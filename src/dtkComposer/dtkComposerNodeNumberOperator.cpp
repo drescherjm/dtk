@@ -1,5 +1,5 @@
-/* dtkComposerNodeNumberOperator.cpp --- 
- * 
+/* dtkComposerNodeNumberOperator.cpp ---
+ *
  * Author: David Rey
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Mon Feb 27 14:28:20 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 245
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeNumberOperator.h"
@@ -56,7 +56,7 @@ dtkComposerNodeNumberOperatorUnary::dtkComposerNodeNumberOperatorUnary(void) : d
 dtkComposerNodeNumberOperatorUnary::~dtkComposerNodeNumberOperatorUnary(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 
@@ -70,7 +70,7 @@ public:
     dtkComposerTransmitterVariant receiver_lhs;
     dtkComposerTransmitterVariant receiver_rhs;
 
-public:    
+public:
     dtkComposerTransmitterVariant emitter;
 };
 
@@ -92,7 +92,7 @@ dtkComposerNodeNumberOperatorBinary::dtkComposerNodeNumberOperatorBinary(void) :
 dtkComposerNodeNumberOperatorBinary::~dtkComposerNodeNumberOperatorBinary(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 
@@ -106,7 +106,7 @@ public:
     dtkComposerTransmitterVariant receiver_lhs;
     dtkComposerTransmitterVariant receiver_rhs;
 
-public:    
+public:
     dtkComposerTransmitterEmitter<bool> emitter;
 };
 
@@ -127,7 +127,7 @@ dtkComposerNodeNumberComparator::dtkComposerNodeNumberComparator(void) : dtkComp
 dtkComposerNodeNumberComparator::~dtkComposerNodeNumberComparator(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 
@@ -142,7 +142,7 @@ public:
     dtkComposerTransmitterVariant receiver_rhs;
     dtkComposerTransmitterVariant receiver_eps;
 
-public:    
+public:
     dtkComposerTransmitterEmitter<bool> emitter;
 };
 
@@ -166,7 +166,7 @@ dtkComposerNodeNumberAlmosteq::dtkComposerNodeNumberAlmosteq(void) : dtkComposer
 dtkComposerNodeNumberAlmosteq::~dtkComposerNodeNumberAlmosteq(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 
@@ -190,7 +190,7 @@ public:
     dtkComposerTransmitterVariant receiver_rhs;
     dtkComposerTransmitterVariant receiver_eps;
 
-public:    
+public:
     dtkComposerTransmitterEmitter<bool> emitter;
 };
 
@@ -214,7 +214,7 @@ dtkComposerNodeNumberNotalmosteq::dtkComposerNodeNumberNotalmosteq(void) : dtkCo
 dtkComposerNodeNumberNotalmosteq::~dtkComposerNodeNumberNotalmosteq(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 
@@ -268,7 +268,7 @@ void dtkComposerNodeNumberOperatorUnaryDecr::run(void)
     default:
         dtkWarn() << "Type" << d->receiver.type() << "is not handled by the node.";
         break;
-    }   
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -317,7 +317,7 @@ void dtkComposerNodeNumberOperatorUnarySquare::run(void)
     default:
         dtkWarn() << "Type" << d->receiver.type() << "is not handled by the node.";
         break;
-    }   
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -485,7 +485,7 @@ void dtkComposerNodeNumberOperatorUnaryAbs::run(void)
     default:
         dtkWarn() << "Type" << d->receiver.type() << "is not handled by the node.";
         break;
-    } 
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -519,6 +519,29 @@ void dtkComposerNodeNumberOperatorBinaryMinus::run(void)
     qreal a = d->receiver_lhs.data().toReal();
     qreal b = d->receiver_rhs.data().toReal();
     d->emitter.setData(a-b);
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberOperatorBinary - MIN
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeNumberOperatorBinaryMin::run(void)
+{
+    qreal a = d->receiver_lhs.data().toReal();
+    qreal b = d->receiver_rhs.data().toReal();
+    d->emitter.setData(qMin(a,b));
+
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberOperatorBinary - MAX
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeNumberOperatorBinaryMax::run(void)
+{
+    qreal a = d->receiver_lhs.data().toReal();
+    qreal b = d->receiver_rhs.data().toReal();
+    d->emitter.setData(qMax(a,b));
 }
 
 // /////////////////////////////////////////////////////////////////

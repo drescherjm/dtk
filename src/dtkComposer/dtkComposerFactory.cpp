@@ -536,10 +536,20 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Logn"] = QStringList() << "number" << "operator" << "binary" << "logn";
     d->types["Logn"] = "logn";
 
+    d->nodes << "Max";
+    d->descriptions["Max"] = "<p>Description not yet filled!</p>";
+    d->tags["Max"] = QStringList() << "number" << "operator" << "binary" << "max";
+    d->types["Max"] = "max";
+
     d->nodes << "Minus";
     d->descriptions["Minus"] = "<p>Description not yet filled!</p>";
     d->tags["Minus"] = QStringList() << "number" << "operator" << "binary" << "minus";
     d->types["Minus"] = "minus";
+
+    d->nodes << "Min";
+    d->descriptions["Min"] = "<p>Description not yet filled!</p>";
+    d->tags["Min"] = QStringList() << "number" << "operator" << "binary" << "min";
+    d->types["Min"] = "min";
 
     d->nodes << "Modulo";
     d->descriptions["Modulo"] = "<p>Description not yet filled!</p>";
@@ -1105,6 +1115,12 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if (type =="logn")
         return new dtkComposerNodeNumberOperatorBinaryLogn;
+
+    if (type =="max")
+        return new dtkComposerNodeNumberOperatorBinaryMax;
+
+    if (type =="min")
+        return new dtkComposerNodeNumberOperatorBinaryMin;
 
     if (type =="minus")
         return new dtkComposerNodeNumberOperatorBinaryMinus;

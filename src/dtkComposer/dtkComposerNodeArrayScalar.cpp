@@ -121,7 +121,6 @@ void dtkComposerNodeArrayScalar::run(void)
 
         qlonglong size = 0;
         qreal value = 0;
-
         dtkContainerVector<qreal> array;
 
         if (!d->receiver_size.isEmpty())
@@ -140,12 +139,12 @@ void dtkComposerNodeArrayScalar::run(void)
 
             this->releaseReceivers();
 
-	    for(int i = 0 ; i < size; i++)
-	        array << value;
-	}
+            for(int i = 0 ; i < size; i++)
+                array << value;
+        }
 
-	d->emitter_array.setData(array);
-	d->emitter_size.setData(size);
+        d->emitter_array.setData(array);
+        d->emitter_size.setData(size);
 
     }
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mai 30 15:56:20 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 444
+ * Last-Updated: Fri Jun  1 11:13:24 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 446
  */
 
 /* Commentary: 
@@ -391,7 +391,7 @@ void dtkComposerTransmitterVariantContainer::setData(const dtkAbstractContainerW
 
 const dtkAbstractContainerWrapper& dtkComposerTransmitterVariantContainer::container(void) const
 {
-    if (d->container.type() == dtkAbstractContainerWrapper::None) {
+    // if (d->container.type() == dtkAbstractContainerWrapper::None) {
 
         if (e->active_variant)
             d->container = e->active_variant->container();
@@ -401,14 +401,14 @@ const dtkAbstractContainerWrapper& dtkComposerTransmitterVariantContainer::conta
 
         else
             d->container = qvariant_cast<dtkAbstractContainerWrapper>(d->variant);
-    }      
+        // }      
 
     return d->container;
 }
 
 dtkAbstractContainerWrapper& dtkComposerTransmitterVariantContainer::container(void)
 {
-    if (d->container.type() == dtkAbstractContainerWrapper::None) {
+    // if (d->container.type() == dtkAbstractContainerWrapper::None) {
 
         if (e->active_variant)
             d->container = e->active_variant->container();
@@ -418,7 +418,7 @@ dtkAbstractContainerWrapper& dtkComposerTransmitterVariantContainer::container(v
 
         else
             d->container = qvariant_cast<dtkAbstractContainerWrapper>(d->variant);
-    }      
+        // }      
 
     return d->container;    
 }

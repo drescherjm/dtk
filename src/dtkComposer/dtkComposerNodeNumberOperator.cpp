@@ -530,7 +530,6 @@ void dtkComposerNodeNumberOperatorBinaryMin::run(void)
     qreal a = d->receiver_lhs.data().toReal();
     qreal b = d->receiver_rhs.data().toReal();
     d->emitter.setData(qMin(a,b));
-
 }
 
 // /////////////////////////////////////////////////////////////////

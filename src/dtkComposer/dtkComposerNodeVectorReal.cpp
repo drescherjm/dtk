@@ -109,7 +109,7 @@ void dtkComposerNodeVectorReal::run(void)
 {
     if (!d->receiver_vector.isEmpty()) {
 
-        dtkVectorReal vec(d->receiver_vector.data());
+        dtkVectorReal& vec(d->receiver_vector.data());
 
         this->releaseReceivers();
 

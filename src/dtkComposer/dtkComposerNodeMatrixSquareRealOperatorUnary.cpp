@@ -85,13 +85,14 @@ dtkComposerNodeMatrixSquareRealOperatorUnaryScalar::~dtkComposerNodeMatrixSquare
 void dtkComposerNodeMatrixSquareRealOperatorUnaryTranspose::run(void)
 {
     if (!d->receiver_matrix.isEmpty()) {
+        this->releaseReceivers();
         d->emitter_matrix.setData(dtkTranspose(d->receiver_matrix.data()));
 
     } else {
         dtkWarn() << "Input not specified. Nothing is done";
+        this->releaseReceivers();
         d->emitter_matrix.setData(dtkMatrixSquareReal());
     }
-
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -101,13 +102,14 @@ void dtkComposerNodeMatrixSquareRealOperatorUnaryTranspose::run(void)
 void dtkComposerNodeMatrixSquareRealOperatorUnaryInverse::run(void)
 {
     if (!d->receiver_matrix.isEmpty()) {
+        this->releaseReceivers();
         d->emitter_matrix.setData(dtkInverse(d->receiver_matrix.data()));
 
     } else {
         dtkWarn() << "Input not specified. Nothing is done";
+        this->releaseReceivers();
         d->emitter_matrix.setData(dtkMatrixSquareReal());
     }
-
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -116,24 +118,29 @@ void dtkComposerNodeMatrixSquareRealOperatorUnaryInverse::run(void)
 
 void dtkComposerNodeMatrixSquareRealOperatorUnaryScalarDeterminant::run(void)
 {
-    if (!d->receiver_matrix.isEmpty())
+    if (!d->receiver_matrix.isEmpty()){
+        this->releaseReceivers();
         d->emitter_val.setData(dtkDeterminant(d->receiver_matrix.data()));
 
-    else
+    }else {
         dtkWarn() << "Input not specified. Nothing is done";
-
+        this->releaseReceivers();
+        d->emitter_val.setData(qreal());
+    }
 }
-
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeMatrixSquareRealOperatorUnaryScalar - Trace
 // /////////////////////////////////////////////////////////////////
 
 void dtkComposerNodeMatrixSquareRealOperatorUnaryScalarTrace::run(void)
 {
-    if (!d->receiver_matrix.isEmpty())
+    if (!d->receiver_matrix.isEmpty()){
+        this->releaseReceivers();
         d->emitter_val.setData(dtkMatrixSquaredTrace(d->receiver_matrix.data()));
 
-    else
+    } else {
         dtkWarn() << "Input not specified. Nothing is done";
-
+        this->releaseReceivers();
+        d->emitter_val.setData(qreal());
+    }
 }

@@ -110,7 +110,7 @@ void dtkComposerNodeArrayScalar::run(void)
 {
     if (!d->receiver_array.isEmpty()) {
 
-        dtkContainerVectorReal array(d->receiver_array.data());
+        dtkContainerVectorReal &array(d->receiver_array.data());
 
         this->releaseReceivers();
 

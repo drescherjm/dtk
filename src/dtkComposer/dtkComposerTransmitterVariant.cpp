@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jun  1 13:38:00 2012 (+0200)
- *           By: tkloczko
- *     Update #: 458
+ * Last-Updated: ven. juin  1 13:50:49 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 460
  */
 
 /* Commentary: 
@@ -92,10 +92,8 @@ QVariant& dtkComposerTransmitterVariant::data(void)
 
     if (e->active_emitter) {
 
-        qDebug() << __func__ << e->active_emitter->variant();
-
         return e->active_emitter->variant();
-        
+
     }
 
     return d->variant;

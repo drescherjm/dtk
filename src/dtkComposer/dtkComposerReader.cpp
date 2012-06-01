@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mai 16 15:21:20 2012 (+0200)
+ * Last-Updated: ven. juin  1 16:59:28 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 653
+ *     Update #: 654
  */
 
 /* Commentary: 
@@ -138,7 +138,7 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
     }
 
     file.close();
-    return this->readString(content);
+    return this->readString(content,append);
 }
 
 bool dtkComposerReader::readString(const QString& data, bool append)

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jun  1 15:14:21 2012 (+0200)
+ * Last-Updated: Fri Jun  1 15:19:20 2012 (+0200)
  *           By: tkloczko
- *     Update #: 294
+ *     Update #: 296
  */
 
 /* Commentary: 
@@ -88,7 +88,7 @@ template <typename T> const T& dtkComposerTransmitterReceiver<T>::data(void) con
 /*! 
  *  
  */
-template <typename T> QVector<T> dtkComposerTransmitterReceiver<T>::allData(void) const
+template <typename T> QVector<T> dtkComposerTransmitterReceiver<T>::allData(void)
 {
     QVector<T> list;
 
@@ -102,7 +102,7 @@ template <typename T> QVector<T> dtkComposerTransmitterReceiver<T>::allData(void
     count = this->variants.count();
 
     for(int i = 0; i < count; i++) {
-        if (e->variants.at(i)->active()) {
+        if (this->variants.at(i)->active()) {
             list << qvariant_cast<T>(this->variants.at(i)->data());
         }
     }

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri May 25 16:33:48 2012 (+0200)
- *           By: tkloczko
- *     Update #: 162
+ * Last-Updated: Fri Jun  1 11:50:06 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 164
  */
 
 /* Commentary: 
@@ -127,8 +127,6 @@ void dtkComposerNodeControlForEach::setInputs(void)
     d->container = d->header_rcv.container();
     d->counter = 0;
     d->size = d->container.count();
-
-    qDebug() << __func__ << d->size;
 
     d->block_size.setData(d->size);
 

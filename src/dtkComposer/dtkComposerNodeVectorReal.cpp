@@ -33,8 +33,8 @@ class dtkComposerNodeVectorRealPrivate
 {
 public:
     dtkComposerTransmitterReceiver<dtkVectorReal>  receiver_vector;
-    dtkComposerTransmitterReceiver<qlonglong>      receiver_size;
-    dtkComposerTransmitterReceiver<qreal>          receiver_value;
+    dtkComposerTransmitterVariant receiver_size;
+    dtkComposerTransmitterVariant receiver_value;
 
 public:
     dtkComposerTransmitterEmitter<dtkVectorReal>   emitter_vector;
@@ -48,7 +48,15 @@ public:
 dtkComposerNodeVectorReal::dtkComposerNodeVectorReal(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVectorRealPrivate)
 {
     this->appendReceiver(&d->receiver_vector);
+
+    QList<QVariant::Type> variant_list;
+
+    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong;
+    d->receiver_size.setTypes(variant_list);
     this->appendReceiver(&d->receiver_size);
+
+    variant_list << QVariant::Double;
+    d->receiver_value.setTypes(variant_list);
     this->appendReceiver(&d->receiver_value);
 
     this->appendEmitter(&d->emitter_vector);
@@ -103,34 +111,39 @@ void dtkComposerNodeVectorReal::run(void)
 
         dtkVectorReal vec(d->receiver_vector.data());
 
+        this->releaseReceivers();
+
         d->emitter_vector.setData(vec);
         d->emitter_size.setData(vec.getRows());
 
     } else {
 
-        unsigned int size = 0;
-	qreal value = 0;
-	dtkVectorReal vec;
+        qlonglong size = 0;
+        qreal value = 0;
+        dtkVectorReal vec;
 
         if (!d->receiver_size.isEmpty())
-	    size = d->receiver_size.data();
+            size = qvariant_cast<qlonglong>(d->receiver_size.data());
 
-	if (size == 0) {
+        if (size == 0) {
             dtkWarn() << "The size of the vector is zero." ;
+            this->releaseReceivers();
 
-	} else {
+        } else {
 
-	    vec.allocate(size);
+            vec.allocate(size);
 
-	    if (!d->receiver_value.isEmpty())
-	        value = d->receiver_value.data();
+            if (!d->receiver_value.isEmpty())
+                value = qvariant_cast<qreal>(d->receiver_value.data());
 
-	    for(int i = 0 ; i < vec.getRows(); i++)
-	        vec[i] = d->receiver_value.data();
+            this->releaseReceivers();
 
-	}
+            for(int i = 0 ; i < vec.getRows(); i++)
+                vec[i] = value;
 
-	d->emitter_size.setData(size);
-	d->emitter_vector.setData(vec);
+        }
+
+        d->emitter_size.setData(size);
+        d->emitter_vector.setData(vec);
     }
 }

@@ -33,8 +33,8 @@ class dtkComposerNodeVectorRealOperatorModifierPrivate
 {
 public:
     dtkComposerTransmitterReceiver<dtkVectorReal> receiver_vector;
-    dtkComposerTransmitterReceiver<qlonglong>     receiver_index;
-    dtkComposerTransmitterReceiver<qreal>         receiver_value;
+    dtkComposerTransmitterVariant receiver_value;
+    dtkComposerTransmitterVariant receiver_index;
 
 public:
     dtkComposerTransmitterEmitter<dtkVectorReal>  emitter_vector;
@@ -43,7 +43,15 @@ public:
 dtkComposerNodeVectorRealOperatorModifier::dtkComposerNodeVectorRealOperatorModifier(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVectorRealOperatorModifierPrivate)
 {
     this->appendReceiver(&d->receiver_vector);
+
+    QList<QVariant::Type> variant_list;
+
+    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong;
+    d->receiver_index.setTypes(variant_list);
     this->appendReceiver(&d->receiver_index);
+
+    variant_list << QVariant::Double;
+    d->receiver_value.setTypes(variant_list);
     this->appendReceiver(&d->receiver_value);
 
     this->appendEmitter(&d->emitter_vector);
@@ -72,8 +80,8 @@ void dtkComposerNodeVectorRealOperatorModifierSet::run(void)
 
         } else {
 
-            if (d->receiver_index.data() < vec.getRows())
-                vec[d->receiver_index.data()] = d->receiver_value.data();
+            if (qvariant_cast<qlonglong>(d->receiver_index.data()) < vec.getRows())
+                vec[qvariant_cast<qlonglong>(d->receiver_index.data())] = qvariant_cast<qreal>(d->receiver_value.data());
 
             else
                 dtkWarn() << "index > size of the vector. Nothing is done" ;
@@ -99,8 +107,8 @@ void dtkComposerNodeVectorRealOperatorModifierSum::run(void)
 
         } else {
 
-            if (d->receiver_index.data() < vec.getRows())
-                vec[d->receiver_index.data()] += d->receiver_value.data();
+            if (qvariant_cast<qlonglong>(d->receiver_index.data()) < vec.getRows())
+                vec[qvariant_cast<qlonglong>(d->receiver_index.data())] += qvariant_cast<qreal>(d->receiver_value.data());
 
             else
                 dtkWarn() << "index > size of the vector. Nothing is done" ;
@@ -126,8 +134,8 @@ void dtkComposerNodeVectorRealOperatorModifierSubstract::run(void)
 
         } else {
 
-            if (d->receiver_index.data() < vec.getRows())
-                vec[d->receiver_index.data()] -= d->receiver_value.data();
+            if (qvariant_cast<qlonglong>(d->receiver_index.data()) < vec.getRows())
+                vec[qvariant_cast<qlonglong>(d->receiver_index.data())] -= qvariant_cast<qreal>(d->receiver_value.data());
 
             else
                 dtkWarn() << "index > size of the vector. Nothing is done" ;
@@ -153,8 +161,8 @@ void dtkComposerNodeVectorRealOperatorModifierMult::run(void)
 
         } else {
 
-            if (d->receiver_index.data() < vec.getRows())
-                vec[d->receiver_index.data()] *= d->receiver_value.data();
+            if (qvariant_cast<qlonglong>(d->receiver_index.data()) < vec.getRows())
+                vec[qvariant_cast<qlonglong>(d->receiver_index.data())] *= qvariant_cast<qreal>(d->receiver_value.data());
 
             else
                 dtkWarn() << "index > size of the vector. Nothing is done" ;
@@ -180,11 +188,11 @@ void dtkComposerNodeVectorRealOperatorModifierDivide::run(void)
 
         } else {
 
-            if (d->receiver_value.data() == 0)
+            if (qvariant_cast<qreal>(d->receiver_value.data()) == 0)
                 dtkWarn() << "Value is zero. Nothing is done" ;
 
-            else if (d->receiver_index.data() < vec.getRows())
-                vec[d->receiver_index.data()] /= d->receiver_value.data();
+            if (qvariant_cast<qlonglong>(d->receiver_index.data()) < vec.getRows())
+                vec[qvariant_cast<qlonglong>(d->receiver_index.data())] /= qvariant_cast<qreal>(d->receiver_value.data());
 
             else
                 dtkWarn() << "index > size of the vector. Nothing is done" ;

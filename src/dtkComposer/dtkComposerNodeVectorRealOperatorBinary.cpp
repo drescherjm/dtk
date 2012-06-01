@@ -187,7 +187,6 @@ void dtkComposerNodeVectorRealOperatorHomotheticMult::run(void)
 
     }  else
         d->emitter_vec.setData(d->receiver_vec.data() * d->receiver_val.data().toReal());
-
 }
 
 // /////////////////////////////////////////////////////////////////

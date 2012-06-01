@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:32:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 22:55:26 2012 (+0200)
+ * Last-Updated: Fri Jun  1 11:36:24 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 27
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -22,6 +22,8 @@
 
 #include "dtkComposerExport.h"
 #include "dtkComposerNodeLeaf.h"
+
+#include <dtkPlot/dtkPlotCurve.h>
 
 #include <QtCore>
 
@@ -59,6 +61,9 @@ public:
     inline QString outputLabelHint(int) {
         return "curve";
     }
+
+public:
+    dtkPlotCurve *curve(void);
 
 public:
     void run(void);

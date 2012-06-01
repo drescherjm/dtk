@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mai 16 15:54:30 2012 (+0200)
+ * Last-Updated: jeu. mai 31 17:22:56 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 2079
+ *     Update #: 2086
  */
 
 /* Commentary:
@@ -509,14 +509,15 @@ void dtkComposerGraph::addEdge(dtkComposerSceneEdge *edge)
     // if the destination is a control node port, then we must use the control node parent begin/end
     if (dynamic_cast<dtkComposerSceneNodeControl *>(scene_dest->parent()) && (scene_dest != scene_src->parent()))
         scene_dest = scene_dest->parent();
+
     if (dynamic_cast<dtkComposerSceneNodeControl *>(scene_src->parent()) && (scene_src != scene_dest->parent()) )
         scene_src = scene_src->parent();
 
-    if (scene_src->parent() == scene_dest) {
-        // edge from parent composite: there is already, at least, a dummy edge: do nothing
+    if (scene_src->parent() == edge->destination()->node()) {
+        // edge to parent composite: there is already, at least, a dummy edge: do nothing
         delete e;
         return;
-    } else if (scene_dest->parent() == scene_src) {
+    } else if (scene_dest->parent() == edge->source()->node()) {
         // edge from parent composite: there is already, at least, a dummy edge: do nothing
         delete e;
         return;

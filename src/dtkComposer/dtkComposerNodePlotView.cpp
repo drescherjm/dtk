@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:40:41 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 22:59:10 2012 (+0200)
+ * Last-Updated: Fri Jun  1 12:00:08 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 51
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -31,6 +31,8 @@ class dtkComposerNodePlotViewPrivate
 {
 public:
     dtkComposerTransmitterReceiver<dtkPlotCurve *> receiver_curve;
+    dtkComposerTransmitterReceiver<QString> receiver_x_axis_label;
+    dtkComposerTransmitterReceiver<QString> receiver_y_axis_label;
 
 public:
     dtkPlotView *view;
@@ -41,6 +43,8 @@ dtkComposerNodePlotView::dtkComposerNodePlotView(void) : QObject(), dtkComposerN
     d->view = NULL;
 
     this->appendReceiver(&(d->receiver_curve));
+    this->appendReceiver(&(d->receiver_x_axis_label));
+    this->appendReceiver(&(d->receiver_y_axis_label));
 
     connect(this, SIGNAL(runned()), this, SLOT(onRun()));
 }
@@ -69,6 +73,12 @@ void dtkComposerNodePlotView::onRun(void)
 
     if(!d->view)
         return;
+
+    if(!d->receiver_x_axis_label.isEmpty())
+        d->view->setAxisTitleX(d->receiver_x_axis_label.data());
+
+    if(!d->receiver_y_axis_label.isEmpty())
+        d->view->setAxisTitleY(d->receiver_y_axis_label.data());
 
     (*(d->view)) << d->receiver_curve.data();
     

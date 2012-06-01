@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 31 15:19:00 2012 (+0200)
+ * Last-Updated: Fri Jun  1 13:33:57 2012 (+0200)
  *           By: tkloczko
- *     Update #: 448
+ *     Update #: 454
  */
 
 /* Commentary: 
@@ -90,8 +90,13 @@ QVariant& dtkComposerTransmitterVariant::data(void)
     if (e->active_variant)
         return e->active_variant->data();
 
-    if (e->active_emitter)
+    if (e->active_emitter) {
+
+        qDebug() << __func__ << e->active_emitter->variant();
+
         return e->active_emitter->variant();
+        
+    }
 
     return d->variant;
 }
@@ -405,34 +410,28 @@ void dtkComposerTransmitterVariantContainer::setData(const dtkAbstractContainerW
 
 const dtkAbstractContainerWrapper& dtkComposerTransmitterVariantContainer::container(void) const
 {
-    if (d->container.type() == dtkAbstractContainerWrapper::None) {
+    if (e->active_variant)
+        d->container = e->active_variant->container();
 
-        if (e->active_variant)
-            d->container = e->active_variant->container();
+    else if (e->active_emitter)
+        d->container = qvariant_cast<dtkAbstractContainerWrapper>(e->active_emitter->variant());
 
-        else if (e->active_emitter)
-            d->container = qvariant_cast<dtkAbstractContainerWrapper>(e->active_emitter->variant());
-
-        else
-            d->container = qvariant_cast<dtkAbstractContainerWrapper>(d->variant);
-    }      
+    else
+        d->container = qvariant_cast<dtkAbstractContainerWrapper>(d->variant);   
 
     return d->container;
 }
 
 dtkAbstractContainerWrapper& dtkComposerTransmitterVariantContainer::container(void)
 {
-    if (d->container.type() == dtkAbstractContainerWrapper::None) {
-
-        if (e->active_variant)
-            d->container = e->active_variant->container();
-
-        else if (e->active_emitter)
-            d->container = qvariant_cast<dtkAbstractContainerWrapper>(e->active_emitter->variant());
-
-        else
-            d->container = qvariant_cast<dtkAbstractContainerWrapper>(d->variant);
-    }      
+    if (e->active_variant)
+        d->container = e->active_variant->container();
+    
+    else if (e->active_emitter)
+        d->container = qvariant_cast<dtkAbstractContainerWrapper>(e->active_emitter->variant());
+    
+    else
+        d->container = qvariant_cast<dtkAbstractContainerWrapper>(d->variant);
 
     return d->container;    
 }

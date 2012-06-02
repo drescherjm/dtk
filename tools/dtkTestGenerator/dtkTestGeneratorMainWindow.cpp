@@ -98,7 +98,7 @@ void dtkTestGeneratorMainWindow::generate(void)
     QDir outputParentDirectory(d->output);
 
     if(d->output.isNull() || !outputParentDirectory.exists()) {
-        QMessageBox::warning(this, "Plugin generation", "Specify a valid output directory.");
+        QMessageBox::warning(this, "Test generation", "Specify a valid output directory.");
         return;
     }
 
@@ -109,5 +109,5 @@ void dtkTestGeneratorMainWindow::generate(void)
     if(generator.run())
         statusBar()->showMessage("Generation succeeded", 2000);
     else
-        QMessageBox::warning(this, "Plugin generation", "Generation failed.");
+        QMessageBox::warning(this, "Test generation", "Generation failed.");
 }

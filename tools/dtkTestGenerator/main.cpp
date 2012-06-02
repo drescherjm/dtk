@@ -75,7 +75,7 @@ int main(int argc, char** argv)
             if(resultGenerator)
                 qDebug() << "Generation succeeded.";
             else
-                qDebug() << "Plugin generation: Generation failed.";
+                qDebug() << "Test generation: Generation failed.";
         }
 
     } else {

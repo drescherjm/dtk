@@ -225,7 +225,7 @@ endif(MPI_FOUND AND QUAT_LIBRARY AND VRPN_LIBRARY)
 ## Qwt
 ## #################################################################
 
-find_package(Qwt QUIET)
+find_package(Qwt 6 QUIET)
 
 if(QWT_FOUND)
   add_definitions(-DHAVE_PLOT)

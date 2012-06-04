@@ -39,7 +39,7 @@ if(QT4_FOUND)
     NAMES ${QWT_NAMES}
     PATHS /usr/local/qwt/lib /usr/local/lib /usr/lib)
 
-  if(QWT_LIBRARY)
+  if(QWT_INCLUDE_DIR AND QWT_LIBRARY)
     set(QWT_LIBRARIES ${QWT_LIBRARY})
     set(QWT_FOUND "YES")
     
@@ -49,7 +49,7 @@ if(QT4_FOUND)
       endif(NOT BUILD_SHARED_LIBS)
     endif(CYGWIN)
     
-  endif(QWT_LIBRARY)
+  endif(QWT_INCLUDE_DIR AND QWT_LIBRARY)
 endif(QT4_FOUND)
 
 mark_as_advanced(QWT_INCLUDE_DIR QWT_LIBRARY QWT_DIR)

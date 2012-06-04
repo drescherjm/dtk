@@ -145,7 +145,6 @@ void dtkComposerNodeMatrixSquareRealOperatorBinarySum::run(void)
             dtkWarn()<< "Vectors do not have the same size";
             d->emitter_matrix.setData(dtkMatrixSquareReal());
         }
-
     }
 }
 
@@ -267,7 +266,6 @@ void dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProductVM::run(void)
         else {
             dtkWarn() << "Matrix's row and vector's column are different size. Nothing is done";
             d->emitter_vector.setData(dtkVectorReal());
-
         }
     }
 }
@@ -303,7 +301,6 @@ void dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceRowMatrixByVector::run(
         } else {
             dtkWarn() << "index > row of the marix. Nothing is done" ;
             d->emitter_matrix.setData(dtkMatrixSquareReal());
-
         }
     }
 }
@@ -320,7 +317,6 @@ void dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColMatrixByVector::run(
         this->releaseReceivers();
 
         d->emitter_matrix.setData(dtkMatrixSquareReal());
-
 
     } else {
 

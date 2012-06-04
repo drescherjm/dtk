@@ -90,8 +90,10 @@ void dtkComposerNodeVectorRealOperatorUnaryUnitary::run(void)
         d->emitter_vec.setData(dtkVectorReal());
 
     } else {
+        dtkVectorReal vector = d->receiver_vec.data() ;
         this->releaseReceivers();
-        d->emitter_vec.setData(d->receiver_vec.data().unit());
+        dtkDebug()<< vector.unit();
+        d->emitter_vec.setData(vector.unit());
     }
 }
 // /////////////////////////////////////////////////////////////////
@@ -106,8 +108,10 @@ void dtkComposerNodeVectorRealOperatorUnaryScalarNorm::run(void)
         d->emitter_val.setData(qreal());
 
     } else {
+        dtkVectorReal vector = d->receiver_vec.data() ;
         this->releaseReceivers();
-        d->emitter_val.setData(d->receiver_vec.data().norm());
+        dtkDebug()<< vector.norm();
+        d->emitter_val.setData(vector.norm());
     }
 
 }

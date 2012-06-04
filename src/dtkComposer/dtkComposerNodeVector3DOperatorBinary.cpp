@@ -119,11 +119,14 @@ void dtkComposerNodeVector3DOperatorBinarySum::run(void)
 {
     if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
+        this->releaseReceivers();
         d->emitter_vec.setData(dtkVector3DReal());
 
-    } else
+    } else {
+        this->releaseReceivers();
         d->emitter_vec.setData(d->receiver_lhs.data() + d->receiver_rhs.data());
 
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -134,11 +137,14 @@ void dtkComposerNodeVector3DOperatorBinarySubstract::run(void)
 {
     if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
+        this->releaseReceivers();
         d->emitter_vec.setData(dtkVector3DReal());
 
-
-    } else
+    } else {
+        this->releaseReceivers();
         d->emitter_vec.setData(d->receiver_lhs.data() - d->receiver_rhs.data());
+
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -149,11 +155,14 @@ void dtkComposerNodeVector3DOperatorBinaryCrossProd::run(void)
 {
     if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
+        this->releaseReceivers();
         d->emitter_vec.setData(dtkVector3DReal());
 
-
-    } else
+    } else {
+        this->releaseReceivers();
         d->emitter_vec.setData(d->receiver_lhs.data() % d->receiver_rhs.data());
+
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -162,11 +171,16 @@ void dtkComposerNodeVector3DOperatorBinaryCrossProd::run(void)
 
 void dtkComposerNodeVector3DOperatorBinaryScalarDotProd::run(void)
 {
-    if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty())
+    if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
+        this->releaseReceivers();
+        d->emitter_val.setData(qreal());
 
-    else
+    } else {
+        this->releaseReceivers();
         d->emitter_val.setData(d->receiver_lhs.data() * d->receiver_rhs.data());
+
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -177,11 +191,15 @@ void dtkComposerNodeVector3DOperatorHomotheticMult::run(void)
 {
     if (d->receiver_vec.isEmpty() || d->receiver_val.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
+        this->releaseReceivers();
         d->emitter_vec.setData(dtkVector3DReal());
 
 
-    } else
-        d->emitter_vec.setData(d->receiver_vec.data() * d->receiver_val.data().toReal());}
+    } else {
+        this->releaseReceivers();
+        d->emitter_vec.setData(d->receiver_vec.data() * d->receiver_val.data().toReal());
+    }
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeVector3DOperatorHomothetic - DIVISION
@@ -191,14 +209,16 @@ void dtkComposerNodeVector3DOperatorHomotheticDivision::run(void)
 {
     if (d->receiver_vec.isEmpty() || d->receiver_val.isEmpty()) {
         dtkWarn() << "Inputs not specified. Nothing is done";
+        this->releaseReceivers();
         d->emitter_vec.setData(dtkVector3DReal());
 
 
     } else {
-        if (d->receiver_val.data()!=0)
+        if (d->receiver_val.data()!=0) {
+            this->releaseReceivers();
             d->emitter_vec.setData(d->receiver_vec.data() / d->receiver_val.data().toReal());
 
-        else
+        }  else
             dtkWarn() << "You divide by zero. Nothing is done" ;
 
     }

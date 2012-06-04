@@ -94,22 +94,28 @@ void dtkComposerNodeVector3DOperatorTernaryTripleProd::run(void)
 {
     if (d->receiver_0.isEmpty() || d->receiver_1.isEmpty() || d->receiver_2.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
+        this->releaseReceivers();
         d->emitter_vec.setData(dtkVector3DReal());
 
 
-    } else
+    } else {
+        this->releaseReceivers();
         d->emitter_vec.setData(d->receiver_0.data() % (d->receiver_1.data() % d->receiver_2.data()));
+    }
 }
-
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeVector3DOperatorTernaryScalar - Mixed Prod
 // /////////////////////////////////////////////////////////////////
 
 void dtkComposerNodeVector3DOperatorTernaryScalarMixedProd::run(void)
 {
-    if (d->receiver_0.isEmpty() || d->receiver_1.isEmpty() || d->receiver_2.isEmpty())
+    if (d->receiver_0.isEmpty() || d->receiver_1.isEmpty() || d->receiver_2.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
+        this->releaseReceivers();
+        d->emitter_val.setData(qreal());
 
-    else
+    }   else {
+        this->releaseReceivers();
         d->emitter_val.setData(dtkMixedProduct(d->receiver_0.data(), d->receiver_1.data(), d->receiver_2.data()));
+    }
 }

@@ -220,12 +220,12 @@ void dtkComposerNodeVectorRealOperatorHomotheticMult::run(void)
         d->emitter_vec.setData(dtkVectorReal());
 
     } else {
-        dtkVectorReal& vector1(d->receiver_vec.data());
+        dtkVectorReal& vector(d->receiver_vec.data());
         qreal value = qvariant_cast<qreal>(d->receiver_val.data());
 
         this->releaseReceivers();
 
-        d->emitter_vec.setData(vector1 * value);
+        d->emitter_vec.setData(vector * value);
 
     }
 
@@ -245,13 +245,13 @@ void dtkComposerNodeVectorRealOperatorHomotheticDivision::run(void)
         d->emitter_vec.setData(dtkVectorReal());
 
     } else {
-        dtkVectorReal& vector1(d->receiver_vec.data());
+        dtkVectorReal& vector(d->receiver_vec.data());
         qreal value = qvariant_cast<qreal>(d->receiver_val.data());
 
         this->releaseReceivers();
 
         if (value!=0)
-            d->emitter_vec.setData(vector1 * value);
+            d->emitter_vec.setData(vector * value);
 
     }
 

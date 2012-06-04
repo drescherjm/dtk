@@ -92,7 +92,6 @@ void dtkComposerNodeVectorRealOperatorUnaryUnitary::run(void)
     } else {
         dtkVectorReal vector = d->receiver_vec.data() ;
         this->releaseReceivers();
-        dtkDebug()<< vector.unit();
         d->emitter_vec.setData(vector.unit());
     }
 }
@@ -110,7 +109,6 @@ void dtkComposerNodeVectorRealOperatorUnaryScalarNorm::run(void)
     } else {
         dtkVectorReal vector = d->receiver_vec.data() ;
         this->releaseReceivers();
-        dtkDebug()<< vector.norm();
         d->emitter_val.setData(vector.norm());
     }
 

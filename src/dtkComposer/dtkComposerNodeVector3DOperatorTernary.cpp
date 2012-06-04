@@ -99,8 +99,12 @@ void dtkComposerNodeVector3DOperatorTernaryTripleProd::run(void)
 
 
     } else {
+        dtkVector3DReal& vector1 = d->receiver_0.data();
+        dtkVector3DReal& vector2 = d->receiver_1.data();
+        dtkVector3DReal& vector3 = d->receiver_2.data();
+
         this->releaseReceivers();
-        d->emitter_vec.setData(d->receiver_0.data() % (d->receiver_1.data() % d->receiver_2.data()));
+        d->emitter_vec.setData(vector1 % (vector2 % vector3));
     }
 }
 // /////////////////////////////////////////////////////////////////
@@ -115,7 +119,11 @@ void dtkComposerNodeVector3DOperatorTernaryScalarMixedProd::run(void)
         d->emitter_val.setData(qreal());
 
     }   else {
+        dtkVector3DReal& vector1 = d->receiver_0.data();
+        dtkVector3DReal& vector2 = d->receiver_1.data();
+        dtkVector3DReal& vector3 = d->receiver_2.data();
+
         this->releaseReceivers();
-        d->emitter_val.setData(dtkMixedProduct(d->receiver_0.data(), d->receiver_1.data(), d->receiver_2.data()));
+        d->emitter_val.setData(dtkMixedProduct(vector1, vector2, vector3));
     }
 }

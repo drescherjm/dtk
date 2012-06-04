@@ -130,9 +130,8 @@ void dtkComposerNodeVector3D::run(void)
 {
     if (!d->receiver_vec.isEmpty()) {
 
-        this->releaseReceivers();
-
         dtkVector3DReal vec(d->receiver_vec.data());
+        this->releaseReceivers();
 
         d->emitter_vec.setData(vec);
         d->emitter_x.setData(vec[0]);
@@ -141,9 +140,8 @@ void dtkComposerNodeVector3D::run(void)
 
     } else {
 
-        this->releaseReceivers();
-
         dtkVector3DReal vec(qvariant_cast<qreal>(d->receiver_x.data()), qvariant_cast<qreal>(d->receiver_y.data()),qvariant_cast<qreal>(d->receiver_z.data()));
+        this->releaseReceivers();
 
         d->emitter_vec.setData(vec);
         d->emitter_x.setData(vec[0]);

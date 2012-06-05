@@ -142,7 +142,6 @@ void dtkComposerNodeMatrixSquareReal::run(void)
                 for(int j = 0 ; j < matrix.getCols(); j++)
                     matrix[i][j] = value;
             }
-
         }
 
         d->emitter_size.setData(size);

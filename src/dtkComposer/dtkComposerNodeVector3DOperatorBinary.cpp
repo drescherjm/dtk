@@ -94,7 +94,7 @@ public:
     dtkComposerTransmitterVariant                   receiver_val;
 
 public:
-    dtkComposerTransmitterEmitter<dtkVector3DReal> emitter_vec;
+    dtkComposerTransmitterEmitter<dtkVector3DReal>  emitter_vec;
 };
 
 dtkComposerNodeVector3DOperatorHomothetic::dtkComposerNodeVector3DOperatorHomothetic(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVector3DOperatorHomotheticPrivate)

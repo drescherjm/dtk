@@ -130,8 +130,8 @@ void dtkComposerNodeVectorRealOperatorBinarySum::run(void)
         d->emitter_vec.setData(dtkVectorReal());
 
     } else {
-        dtkVectorReal& vector1(d->receiver_rhs.data());
-        dtkVectorReal& vector2(d->receiver_lhs.data());
+        dtkVectorReal& vector1(d->receiver_lhs.data());
+        dtkVectorReal& vector2(d->receiver_rhs.data());
 
         this->releaseReceivers();
 
@@ -160,13 +160,17 @@ void dtkComposerNodeVectorRealOperatorBinarySubstract::run(void)
         d->emitter_vec.setData(dtkVectorReal());
 
     } else {
-        dtkVectorReal& vector1(d->receiver_rhs.data());
-        dtkVectorReal& vector2(d->receiver_lhs.data());
+
+
+
+        dtkVectorReal& vector1(d->receiver_lhs.data());
+        dtkVectorReal& vector2(d->receiver_rhs.data());
 
         this->releaseReceivers();
 
         if ( vector1.getRows() == vector2.getRows())
             d->emitter_vec.setData(vector1 - vector2 );
+
 
         else {
             dtkWarn()<< "Vectors do not have the same size";
@@ -190,8 +194,8 @@ void dtkComposerNodeVectorRealOperatorBinaryScalarDotProd::run(void)
         d->emitter_val.setData(qreal());
 
     } else {
-        dtkVectorReal& vector1(d->receiver_rhs.data());
-        dtkVectorReal& vector2(d->receiver_lhs.data());
+        dtkVectorReal& vector1(d->receiver_lhs.data());
+        dtkVectorReal& vector2(d->receiver_rhs.data());
 
         this->releaseReceivers();
 

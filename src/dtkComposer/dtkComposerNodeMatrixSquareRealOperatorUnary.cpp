@@ -85,8 +85,9 @@ dtkComposerNodeMatrixSquareRealOperatorUnaryScalar::~dtkComposerNodeMatrixSquare
 void dtkComposerNodeMatrixSquareRealOperatorUnaryTranspose::run(void)
 {
     if (!d->receiver_matrix.isEmpty()) {
+        dtkMatrixSquareReal& matrix = d->receiver_matrix.data();
         this->releaseReceivers();
-        d->emitter_matrix.setData(dtkTranspose(d->receiver_matrix.data()));
+        d->emitter_matrix.setData(dtkTranspose(matrix));
 
     } else {
         dtkWarn() << "Input not specified. Nothing is done";
@@ -102,8 +103,9 @@ void dtkComposerNodeMatrixSquareRealOperatorUnaryTranspose::run(void)
 void dtkComposerNodeMatrixSquareRealOperatorUnaryInverse::run(void)
 {
     if (!d->receiver_matrix.isEmpty()) {
+        dtkMatrixSquareReal& matrix = d->receiver_matrix.data();
         this->releaseReceivers();
-        d->emitter_matrix.setData(dtkInverse(d->receiver_matrix.data()));
+        d->emitter_matrix.setData(dtkInverse(matrix));
 
     } else {
         dtkWarn() << "Input not specified. Nothing is done";
@@ -119,8 +121,9 @@ void dtkComposerNodeMatrixSquareRealOperatorUnaryInverse::run(void)
 void dtkComposerNodeMatrixSquareRealOperatorUnaryScalarDeterminant::run(void)
 {
     if (!d->receiver_matrix.isEmpty()){
+        dtkMatrixSquareReal& matrix = d->receiver_matrix.data();
         this->releaseReceivers();
-        d->emitter_val.setData(dtkDeterminant(d->receiver_matrix.data()));
+        d->emitter_val.setData(dtkDeterminant(matrix));
 
     }else {
         dtkWarn() << "Input not specified. Nothing is done";
@@ -135,8 +138,9 @@ void dtkComposerNodeMatrixSquareRealOperatorUnaryScalarDeterminant::run(void)
 void dtkComposerNodeMatrixSquareRealOperatorUnaryScalarTrace::run(void)
 {
     if (!d->receiver_matrix.isEmpty()){
+        dtkMatrixSquareReal& matrix = d->receiver_matrix.data();
         this->releaseReceivers();
-        d->emitter_val.setData(dtkMatrixSquaredTrace(d->receiver_matrix.data()));
+        d->emitter_val.setData(dtkMatrixSquaredTrace(matrix));
 
     } else {
         dtkWarn() << "Input not specified. Nothing is done";

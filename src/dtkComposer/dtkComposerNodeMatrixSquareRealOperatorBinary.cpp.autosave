@@ -327,10 +327,11 @@ void dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColMatrixByVector::run(
 
             this->releaseReceivers();
 
-            for ( int i = 0; i < matrix.getRows(); ++i)
+            for ( int i = 0; i < matrix.getRows(); ++i) {
+                for ( int j = 0; j < matrix.getRows(); ++j)
                 matrix[i][value]= vec[i] ;
             dtkDebug()<< matrix ;
-            d->emitter_matrix.setData(matrix);
+            d->emitter_matrix.setData(matrix); }
 
         } else {
             dtkWarn() << "index > row of the marix. Nothing is done" ;

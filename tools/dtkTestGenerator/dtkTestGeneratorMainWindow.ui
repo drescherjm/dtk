@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>468</width>
-    <height>128</height>
+    <height>146</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Test generator</string>
+   <string>Plugin generator</string>
   </property>
   <property name="unifiedTitleAndToolBarOnMac">
    <bool>false</bool>
@@ -96,14 +96,14 @@
       </item>
      </layout>
     </item>
-    <item row="2" column="0">
+    <item row="3" column="0">
      <widget class="QLabel" name="outputTestLabel">
       <property name="text">
        <string>Test name:</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
+    <item row="3" column="1">
      <widget class="QLabel" name="outputNameLabel">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -134,6 +134,13 @@
       </property>
      </widget>
     </item>
+    <item row="2" column="0">
+     <widget class="QCheckBox" name="useGuiCheckBox">
+      <property name="text">
+       <string>Use GUI</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -142,7 +149,7 @@
      <x>0</x>
      <y>0</y>
      <width>468</width>
-     <height>25</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

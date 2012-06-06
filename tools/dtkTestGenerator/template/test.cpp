@@ -44,4 +44,4 @@ void %1Object::testFoo()
    a window manager (such as X on linux). If you need one, change
    it to DTKTEST_MAIN().
  **/
-DTKTEST_NOGUI_MAIN(%1,%1Object)
+DTKTEST%2_MAIN(%1,%1Object)

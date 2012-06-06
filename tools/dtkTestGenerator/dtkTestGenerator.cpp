@@ -40,6 +40,14 @@ void dtkTestGenerator::setClassName(const QString& className)
     d->className = className;
 }
 
+void dtkTestGenerator::setUseGui(bool useGui)
+{
+    if (!useGui)
+        d->useGui = "_NOGUI";
+    else
+        d->useGui = "";
+}
+
 bool dtkTestGenerator::run(void)
 {
     d->parent = QDir(d->output);
@@ -160,7 +168,7 @@ bool dtkTestGenerator::generateTestSourceFile(void)
     QTextStream stream(&targetFile);
     
     stream << QString(templateFile.readAll())
-              .arg(QString(d->classTestName));
+              .arg(QString(d->classTestName), d->useGui);
     
     targetFile.close();
     

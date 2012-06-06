@@ -28,6 +28,7 @@ public:
 
     QString output;
     QString className;
+    QString useGui;
 };
 
 dtkTestGeneratorMainWindow::dtkTestGeneratorMainWindow(QWidget *parent) : QMainWindow(parent)
@@ -103,6 +104,7 @@ void dtkTestGeneratorMainWindow::generate(void)
     }
 
     dtkTestGenerator generator;
+    generator.setUseGui(d->ui.useGuiCheckBox->isChecked());
     generator.setOutputDirectory(d->output);
     generator.setClassName(d->className);
 

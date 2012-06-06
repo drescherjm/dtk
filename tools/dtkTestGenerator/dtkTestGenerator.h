@@ -28,6 +28,7 @@ public:
     QString classTestName;
     QString className;
     QString output;
+    QString useGui;
 
     QDir parent;
     QDir target;
@@ -41,7 +42,8 @@ public:
 
    void setOutputDirectory(const QString& directory);
    void setClassName(const QString& prefix);
-
+   void setUseGui(bool useGui);
+   
    bool run(void);
 
 protected:

@@ -44,8 +44,6 @@ void dtkTestGenerator::setUseGui(bool useGui)
 {
     if (!useGui)
         d->useGui = "_NOGUI";
-    else
-        d->useGui = "";
 }
 
 bool dtkTestGenerator::run(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mai 23 14:29:30 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 336
+ * Last-Updated: Sat Jun  2 01:40:49 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 338
  */
 
 /* Commentary: 
@@ -137,6 +137,15 @@ dtkComposer::~dtkComposer(void)
     delete d;
     
     d = NULL;
+}
+
+void dtkComposer::setFactory(dtkComposerFactory *factory)
+{
+    delete d->factory;
+
+    d->factory = factory;
+
+    d->scene->setFactory(d->factory);
 }
 
 bool dtkComposer::open(const QUrl& url)

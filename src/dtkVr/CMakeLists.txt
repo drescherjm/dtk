@@ -180,13 +180,13 @@ SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 ## #################################################################
 ## Installation
 ## #################################################################
-
-string(REGEX REPLACE ".h" ""
-     ${PROJECT_NAME}_HEADERS_QTS
-  "${${PROJECT_NAME}_HEADERS}")
-
-install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
-
+# 
+# string(REGEX REPLACE ".h" ""
+#      ${PROJECT_NAME}_HEADERS_QTS
+#   "${${PROJECT_NAME}_HEADERS}")
+# 
+# install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
+# 
 ## #################################################################
 ## Installation
 ## #################################################################

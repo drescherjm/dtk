@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 31 14:43:32 2012 (+0200)
- *           By: tkloczko
- *     Update #: 165
+ * Last-Updated: Fri Jun  1 14:09:35 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 168
  */
 
 /* Commentary: 
@@ -103,6 +103,9 @@ public:
 public:
     void appendReceiver(dtkComposerTransmitter *receiver);
     void removeReceiver(dtkComposerTransmitter *receiver);
+
+public:
+    int receiverCount(void);
 
 public:
     virtual void clear(void);

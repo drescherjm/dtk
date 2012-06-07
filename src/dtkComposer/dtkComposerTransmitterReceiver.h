@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 31 15:25:57 2012 (+0200)
+ * Last-Updated: Fri Jun  1 13:45:44 2012 (+0200)
  *           By: tkloczko
- *     Update #: 108
+ *     Update #: 109
  */
 
 /* Commentary: 
@@ -46,6 +46,8 @@ public:
 public:
           T& data(void);
     const T& data(void) const;
+
+    QVector<T> allData(void);
 
 public:
     bool isEmpty(void) const;

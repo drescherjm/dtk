@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 31 15:03:48 2012 (+0200)
- *           By: tkloczko
- *     Update #: 215
+ * Last-Updated: Fri Jun  1 14:10:12 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 218
  */
 
 /* Commentary: 
@@ -255,6 +255,15 @@ void dtkComposerTransmitter::appendReceiver(dtkComposerTransmitter *receiver)
 void dtkComposerTransmitter::removeReceiver(dtkComposerTransmitter *receiver)
 {
     d->receivers.removeAll(receiver);
+}
+
+//! 
+/*! 
+ *  
+ */
+int dtkComposerTransmitter::receiverCount(void)
+{
+    return d->receivers.count();
 }
 
 //! 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 24 23:29:24 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 31 01:21:25 2012 (+0200)
+ * Last-Updated: Sat Jun  2 00:07:12 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 156
+ *     Update #: 160
  */
 
 /* Commentary: 
@@ -140,10 +140,12 @@ void dtkComposerNodeView::onRun(void)
     if(!d->view) {
         d->view = dtkAbstractViewFactory::instance()->create(d->receiver_type.data());
 
-        if(!d->receiver_fullscreen.isEmpty() && d->receiver_fullscreen.data())
+        if(!d->receiver_fullscreen.isEmpty() && d->receiver_fullscreen.data()) {
             d->view->widget()->showFullScreen();
-        else
+        } else {
+            d->view->widget()->resize(1024, 1024);
             d->view->widget()->show();
+        }
     }
 
     if (!d->view) {
@@ -167,5 +169,6 @@ void dtkComposerNodeView::onRun(void)
         d->view->setLowerRight(d->receiver_screen_lower_right.data());
 
     if(!d->receiver_data.isEmpty())
-        d->view->setData(d->receiver_data.data());
+        foreach (dtkAbstractData *data, d->receiver_data.allData())
+            d->view->setData(data);
 }

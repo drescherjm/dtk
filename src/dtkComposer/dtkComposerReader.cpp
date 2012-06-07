@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mai 16 15:21:20 2012 (+0200)
+ * Last-Updated: mer. juin  6 15:34:41 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 653
+ *     Update #: 657
  */
 
 /* Commentary: 
@@ -138,10 +138,10 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
     }
 
     file.close();
-    return this->readString(content);
+    return this->readString(content,append);
 }
 
-bool dtkComposerReader::readString(const QString& data, bool append)
+bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
 {
     QDomDocument document("dtk");
 
@@ -169,6 +169,8 @@ bool dtkComposerReader::readString(const QString& data, bool append)
     if(!append) {
         d->node = d->root;
         d->graph->addNode(d->root);
+    } else if(paste) {
+        d->node = d->root;
     } else {
         d->node = new dtkComposerSceneNodeComposite;
         d->node->wrap(new dtkComposerNodeComposite);

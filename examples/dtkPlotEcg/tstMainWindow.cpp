@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 15:31:59 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 14:29:08 2012 (+0200)
+ * Last-Updated: Fri Jun  8 18:01:37 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 211
+ *     Update #: 216
  */
 
 /* Commentary: 
@@ -96,6 +96,9 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent), d(new tstMa
     connect(pane, SIGNAL(foregroundColorChanged(const QColor&)), this, SLOT(onForegroundColorChanged(const QColor&)));
 
     connect(pane, SIGNAL(curveRenderModeChanged(int)), this, SLOT(onCurveRenderModeChanged(int)));
+
+    connect(pane, SIGNAL(activatePanning(bool)), this, SLOT(onActivatePanning(bool)));
+    connect(pane, SIGNAL(activateZooming(bool)), this, SLOT(onActivateZooming(bool)));
 }
 
 tstMainWindow::~tstMainWindow(void)
@@ -181,4 +184,20 @@ void tstMainWindow::onExport(const QString& file)
     renderer.setPath(file);
     renderer.setSize(QSize(300, 200));
     renderer.render();
+}
+
+void tstMainWindow::onActivatePanning(bool activate)
+{
+    if(activate)
+        d->view->activatePanning();
+    else
+        d->view->deactivatePanning();
+}
+
+void tstMainWindow::onActivateZooming(bool activate)
+{
+    if(activate)
+        d->view->activateZooming();
+    else
+        d->view->deactivateZooming();
 }

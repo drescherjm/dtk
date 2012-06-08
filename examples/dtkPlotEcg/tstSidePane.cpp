@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  8 09:43:47 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun  8 12:20:46 2011 (+0200)
+ * Last-Updated: Fri Jun  8 15:08:32 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 52
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -54,15 +54,23 @@ tstSidePane::tstSidePane(QWidget *parent) : QFrame(parent), d(new tstSidePanePri
     QGroupBox *curve_group = new QGroupBox("Curve", this);
     curve_group->setLayout(curve_layout);
     
+    QRadioButton *plot_panner = new QRadioButton("Enable panning", this);
+    QRadioButton *plot_zoomer = new QRadioButton("Enable zooming", this);
+
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(canvas_group);
     layout->addWidget(curve_group);
+    layout->addWidget(plot_panner);
+    layout->addWidget(plot_zoomer);
     layout->addStretch(1);
 
     connect(bg_color_button, SIGNAL(colorChanged(const QColor&)), this, SIGNAL(backgroundColorChanged(const QColor&)));
     connect(fg_color_button, SIGNAL(colorChanged(const QColor&)), this, SIGNAL(foregroundColorChanged(const QColor&)));
 
     connect(curve_render_combo, SIGNAL(currentIndexChanged(int)), this, SIGNAL(curveRenderModeChanged(int)));
+
+    connect(plot_panner, SIGNAL(toggled(bool)), this, SIGNAL(activatePanning(bool)));
+    connect(plot_zoomer, SIGNAL(toggled(bool)), this, SIGNAL(activateZooming(bool)));
 }
 
 tstSidePane::~tstSidePane(void)

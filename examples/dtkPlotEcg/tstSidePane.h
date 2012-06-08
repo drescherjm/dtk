@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  8 09:38:45 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun  8 12:17:03 2011 (+0200)
+ * Last-Updated: Fri Jun  8 13:56:21 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 13
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -35,7 +35,13 @@ public:
 signals:
     void backgroundColorChanged(const QColor& color);
     void foregroundColorChanged(const QColor& color);
+
+signals:
     void curveRenderModeChanged(int);
+
+signals:
+    void activatePanning(bool);
+    void activateZooming(bool);
 
 private:
     tstSidePanePrivate *d;

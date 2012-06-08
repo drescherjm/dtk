@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun  8 13:11:39 2012 (+0200)
+ * Last-Updated: Fri Jun  8 13:43:19 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 28
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -58,10 +58,10 @@ dtkPlotViewZoomer::~dtkPlotViewZoomer(void)
 
 void dtkPlotViewZoomer::activate(void)
 {
-
+    d->setEnabled(true);
 }
 
 void dtkPlotViewZoomer::deactivate(void)
 {
-
+    d->setEnabled(false);
 }

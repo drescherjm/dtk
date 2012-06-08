@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:02:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun  1 11:34:50 2012 (+0200)
+ * Last-Updated: Fri Jun  8 13:47:17 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 53
+ *     Update #: 67
  */
 
 /* Commentary: 
@@ -35,14 +35,24 @@ class DTKPLOT_EXPORT dtkPlotView : public dtkAbstractView
     Q_OBJECT
 
 public:
-     dtkPlotView(void);
-    ~dtkPlotView(void);
-
     enum Scale {
         Linear,
         Logarithmic
     };
 
+
+public:
+     dtkPlotView(void);
+    ~dtkPlotView(void);
+
+public:
+    void   activatePanning(void);
+    void deactivatePanning(void);
+
+    void   activateZooming(void);
+    void deactivateZooming(void);
+
+public:
     void setAxisTitleX(const QString& title);
     void setAxisTitleY(const QString& title);
     
@@ -55,7 +65,8 @@ public:
     void setBackgroundColor(const QColor& color);
 
     void setStyleSheet(const QString& sheet);
-
+    
+public:
     dtkPlotView& operator<<(dtkPlotCurve *curve);
 
 public slots:

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun  8 13:10:05 2012 (+0200)
+ * Last-Updated: Fri Jun  8 13:44:00 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 27
+ *     Update #: 28
  */
 
 /* Commentary: 
@@ -58,10 +58,10 @@ dtkPlotViewPanner::~dtkPlotViewPanner(void)
 
 void dtkPlotViewPanner::activate(void)
 {
-
+    d->setEnabled(true);
 }
 
 void dtkPlotViewPanner::deactivate(void)
 {
-
+    d->setEnabled(false);
 }

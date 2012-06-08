@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. juin  8 15:33:32 2012 (+0200)
+ * Last-Updated: ven. juin  8 17:03:25 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 4256
+ *     Update #: 4319
  */
 
 /* Commentary: 
@@ -25,6 +25,7 @@
 #include "dtkComposerNodeControlCase.h"
 #include "dtkComposerNodeLeaf.h"
 #include "dtkComposerNodeRemote.h"
+#include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
 #include "dtkComposerSceneEdge.h"
@@ -39,6 +40,7 @@
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitterProxy.h"
 #include "dtkComposerTransmitterVariant.h"
+#include "dtkComposerWriter.h"
 
 #include <dtkLog/dtkLog.h>
 
@@ -2835,6 +2837,107 @@ void dtkComposerStackCommandDestroyBlock::undo(void)
 
     d->graph->addBlock(e->block);
 
+
+    d->scene->modify(true);
+}
+
+
+
+
+/////////////////////////////////////////////////////////////////
+// Copy Nodes Command
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandCopyNodesPrivate
+{
+public:
+    dtkComposerSceneNodeList nodes;
+    dtkComposerSceneNodeList old_nodes;
+
+public:
+    QString data;
+};
+
+dtkComposerStackCommandCopyNodes::dtkComposerStackCommandCopyNodes(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandCopyNodesPrivate)
+{
+    this->setText("Copy nodes");
+}
+
+dtkComposerStackCommandCopyNodes::~dtkComposerStackCommandCopyNodes(void)
+{
+    delete e;
+
+    e = NULL;
+}
+
+void dtkComposerStackCommandCopyNodes::setNodes(dtkComposerSceneNodeList nodes)
+{
+    e->nodes = nodes;
+    e->data.clear();
+}
+
+void dtkComposerStackCommandCopyNodes::redo(void)
+{
+    if(!d->scene)
+        return;
+
+    if(!d->factory)
+        return;
+
+    if(!d->graph)
+        return;
+
+    if(e->nodes.isEmpty())
+        return;
+
+    if (e->data.isEmpty()) {
+        e->old_nodes = d->scene->root()->nodes();
+
+        foreach(dtkComposerSceneNode *n, e->nodes) {
+            if (dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(n)) {
+                dtkComposerWriter writer;
+                writer.setScene(d->scene);
+                QString old = composite->title();
+                composite->setTitle(old +" copy ");
+                e->data = writer.toXML(composite).toString();
+                composite->setTitle(old);
+
+            }
+        }
+    }
+    dtkComposerReader reader;
+    reader.setFactory(d->factory);
+    reader.setScene(d->scene);
+    reader.setGraph(d->graph);
+    reader.readString(e->data, true, true);
+
+    d->scene->modify(true);
+}
+
+void dtkComposerStackCommandCopyNodes::undo(void)
+{
+    if(!d->scene)
+        return;
+
+    if(!d->factory)
+        return;
+
+    if(!d->graph)
+        return;
+
+    foreach(dtkComposerSceneNode *node, d->scene->root()->nodes()) {
+        if (!e->old_nodes.contains(node)) {
+
+            dtkComposerStackCommandDestroyNode *command = new dtkComposerStackCommandDestroyNode;
+            command->setGraph(d->graph);
+            command->setScene(d->scene);
+            command->setFactory(d->factory);
+            command->setNode(node);
+            command->redo();
+
+            delete command;
+        }
+    }
 
     d->scene->modify(true);
 }

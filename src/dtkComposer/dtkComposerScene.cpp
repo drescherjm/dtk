@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: mer. juin  6 15:37:07 2012 (+0200)
+ * Last-Updated: ven. juin  8 16:38:24 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 2224
+ *     Update #: 2240
  */
 
 /* Commentary:
@@ -497,24 +497,25 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
 
     } else if ((event->key() == Qt::Key_C) && (event->modifiers() & Qt::ControlModifier) && (this->selectedItems().count() == 1)) {
         //copy
-        if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(this->selectedItems().first())) {
-            d->copy_node = composite;
-        } else
-            d->copy_node = NULL;
+
+        foreach(QGraphicsItem *item, this->selectedItems()) {
+            if (dtkComposerSceneNode *snode = dynamic_cast<dtkComposerSceneNode *>(item))
+                d->copy_nodes << snode;
+        }
 
     } else if ((event->key() == Qt::Key_V) && (event->modifiers() & Qt::ControlModifier) ) {
         // paste
-        if (!d->copy_node)
+        if (d->copy_nodes.isEmpty())
             return;
-        dtkComposerWriter writer;
-        writer.setScene(this);
-        QString data = writer.toXML(d->copy_node).toString();
 
-        dtkComposerReader reader;
-        reader.setFactory(d->factory);
-        reader.setScene(this);
-        reader.setGraph(d->graph);
-        reader.readString(data, true, true);
+        dtkComposerStackCommandCopyNodes *command = new dtkComposerStackCommandCopyNodes;
+        command->setScene(this);
+        command->setGraph(d->graph);
+        command->setFactory(d->factory);
+        command->setNodes(d->copy_nodes);
+
+        d->stack->push(command);
+
 
 
     } else if ((event->key() == Qt::Key_U) && (event->modifiers() & Qt::ControlModifier) && (this->selectedItems().count() == 1)) {

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:02:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun  8 13:47:17 2012 (+0200)
+ * Last-Updated: Sun Jun 10 00:40:33 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 67
+ *     Update #: 74
  */
 
 /* Commentary: 
@@ -53,6 +53,10 @@ public:
     void deactivateZooming(void);
 
 public:
+    void zoomForward(void);
+    void zoomBackward(void);
+
+public:
     void setAxisTitleX(const QString& title);
     void setAxisTitleY(const QString& title);
     
@@ -74,6 +78,10 @@ public slots:
 
 public slots:
     QWidget *widget(void);
+
+signals:
+    void zoomForwardEnabled(bool);
+    void zoomBackwardEnabled(bool);
 
 private:
     friend class dtkPlotCurve;

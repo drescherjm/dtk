@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 15:30:39 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun  8 18:01:55 2012 (+0200)
+ * Last-Updated: Sun Jun 10 00:26:35 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 18
+ *     Update #: 22
  */
 
 /* Commentary: 
@@ -41,6 +41,8 @@ protected slots:
     void onExport(const QString& file);
     void onActivatePanning(bool);
     void onActivateZooming(bool);
+    void onZoomForward(void);
+    void onZoomBackground(void);
 
 private:
     tstMainWindowPrivate *d;

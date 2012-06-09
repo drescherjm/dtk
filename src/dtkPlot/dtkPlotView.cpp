@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun  8 13:50:25 2012 (+0200)
+ * Last-Updated: Sun Jun 10 00:27:57 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 98
+ *     Update #: 112
  */
 
 /* Commentary: 
@@ -84,6 +84,19 @@ void dtkPlotView::deactivateZooming(void)
         d->zoomer = new dtkPlotViewZoomer(this);
 
     d->zoomer->deactivate();
+}
+
+void dtkPlotView::zoomForward(void)
+{
+    if(!d->zoomer)
+        d->zoomer = new dtkPlotViewZoomer(this);
+
+    d->zoomer->zoomForward();
+}
+
+void dtkPlotView::zoomBackward(void)
+{
+    d->zoomer->zoomBackward();
 }
 
 void dtkPlotView::setAxisTitleX(const QString& title)

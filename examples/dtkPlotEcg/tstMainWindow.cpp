@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 15:31:59 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun  8 18:01:37 2012 (+0200)
+ * Last-Updated: Sun Jun 10 00:40:02 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 216
+ *     Update #: 238
  */
 
 /* Commentary: 
@@ -99,6 +99,12 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent), d(new tstMa
 
     connect(pane, SIGNAL(activatePanning(bool)), this, SLOT(onActivatePanning(bool)));
     connect(pane, SIGNAL(activateZooming(bool)), this, SLOT(onActivateZooming(bool)));
+
+    connect(pane, SIGNAL(zoomForward()), this, SLOT(onZoomForward()));
+    connect(pane, SIGNAL(zoomBackward()), this, SLOT(onZoomBackground()));
+
+    connect(d->view, SIGNAL(zoomForwardEnabled(bool)), pane, SLOT(setZoomForwardEnabled(bool)));
+    connect(d->view, SIGNAL(zoomBackwardEnabled(bool)), pane, SLOT(setZoomBackwardEnabled(bool)));
 }
 
 tstMainWindow::~tstMainWindow(void)
@@ -200,4 +206,14 @@ void tstMainWindow::onActivateZooming(bool activate)
         d->view->activateZooming();
     else
         d->view->deactivateZooming();
+}
+
+void tstMainWindow::onZoomForward(void)
+{
+    d->view->zoomForward();
+}
+
+void tstMainWindow::onZoomBackground(void)
+{
+    d->view->zoomBackward();
 }

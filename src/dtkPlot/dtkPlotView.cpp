@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Jun 10 00:27:57 2012 (+0200)
+ * Last-Updated: Sun Jun 10 01:20:50 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 112
+ *     Update #: 128
  */
 
 /* Commentary: 
@@ -20,6 +20,7 @@
 #include "dtkPlotCurve.h"
 #include "dtkPlotView.h"
 #include "dtkPlotViewPanner.h"
+#include "dtkPlotViewPicker.h"
 #include "dtkPlotViewZoomer.h"
 
 #include <qwt_plot.h>
@@ -31,12 +32,14 @@ class dtkPlotViewPrivate : public QwtPlot
 {
 public:
     dtkPlotViewPanner *panner;
+    dtkPlotViewPicker *picker;
     dtkPlotViewZoomer *zoomer;
 };
 
 dtkPlotView::dtkPlotView(void) : dtkAbstractView(), d(new dtkPlotViewPrivate())
 {
     d->panner = NULL;
+    d->picker = NULL;
     d->zoomer = NULL;
 
     d->setAxisAutoScale(0, true);
@@ -68,6 +71,22 @@ void dtkPlotView::deactivatePanning(void)
         d->panner = new dtkPlotViewPanner(this);
 
     d->panner->deactivate();
+}
+
+void dtkPlotView::activatePicking(void)
+{
+    if(!d->picker)
+        d->picker = new dtkPlotViewPicker(this);
+
+    d->picker->activate();
+}
+
+void dtkPlotView::deactivatePicking(void)
+{
+    if(!d->picker)
+        d->picker = new dtkPlotViewPicker(this);
+
+    d->picker->deactivate();
 }
 
 void dtkPlotView::activateZooming(void)

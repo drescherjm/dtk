@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  8 09:43:47 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Jun 10 00:55:42 2012 (+0200)
+ * Last-Updated: Sun Jun 10 01:15:47 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 135
+ *     Update #: 142
  */
 
 /* Commentary: 
@@ -63,6 +63,13 @@ tstSidePane::tstSidePane(QWidget *parent) : QFrame(parent), d(new tstSidePanePri
     panning_group->setChecked(false);
     panning_group->setLayout(panning_layout);
 
+    QFormLayout *picking_layout = new QFormLayout;
+
+    QGroupBox *picking_group = new QGroupBox("Picking", this);
+    picking_group->setCheckable(true);
+    picking_group->setChecked(false);
+    picking_group->setLayout(picking_layout);
+
     d->zooming_back = new QPushButton("Zoom backward", this);
     d->zooming_back->setEnabled(false);
 
@@ -82,6 +89,7 @@ tstSidePane::tstSidePane(QWidget *parent) : QFrame(parent), d(new tstSidePanePri
     layout->addWidget(canvas_group);
     layout->addWidget(curve_group);
     layout->addWidget(panning_group);
+    layout->addWidget(picking_group);
     layout->addWidget(zooming_group);
     layout->addStretch(1);
 
@@ -91,6 +99,7 @@ tstSidePane::tstSidePane(QWidget *parent) : QFrame(parent), d(new tstSidePanePri
     connect(curve_render_combo, SIGNAL(currentIndexChanged(int)), this, SIGNAL(curveRenderModeChanged(int)));
 
     connect(panning_group, SIGNAL(toggled(bool)), this, SIGNAL(activatePanning(bool)));
+    connect(picking_group, SIGNAL(toggled(bool)), this, SIGNAL(activatePicking(bool)));
     connect(zooming_group, SIGNAL(toggled(bool)), this, SIGNAL(activateZooming(bool)));
 
     connect(d->zooming_forw, SIGNAL(clicked()), this, SIGNAL(zoomForward()));

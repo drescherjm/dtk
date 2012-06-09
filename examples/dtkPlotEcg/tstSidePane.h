@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  8 09:38:45 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Jun 10 00:38:47 2012 (+0200)
+ * Last-Updated: Sun Jun 10 01:15:56 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 20
+ *     Update #: 22
  */
 
 /* Commentary: 
@@ -41,6 +41,7 @@ signals:
 
 signals:
     void activatePanning(bool);
+    void activatePicking(bool);
     void activateZooming(bool);
 
 signals:

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 15:31:59 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Jun 10 00:40:02 2012 (+0200)
+ * Last-Updated: Sun Jun 10 01:18:05 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 238
+ *     Update #: 244
  */
 
 /* Commentary: 
@@ -98,6 +98,7 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent), d(new tstMa
     connect(pane, SIGNAL(curveRenderModeChanged(int)), this, SLOT(onCurveRenderModeChanged(int)));
 
     connect(pane, SIGNAL(activatePanning(bool)), this, SLOT(onActivatePanning(bool)));
+    connect(pane, SIGNAL(activatePicking(bool)), this, SLOT(onActivatePicking(bool)));
     connect(pane, SIGNAL(activateZooming(bool)), this, SLOT(onActivateZooming(bool)));
 
     connect(pane, SIGNAL(zoomForward()), this, SLOT(onZoomForward()));
@@ -198,6 +199,14 @@ void tstMainWindow::onActivatePanning(bool activate)
         d->view->activatePanning();
     else
         d->view->deactivatePanning();
+}
+
+void tstMainWindow::onActivatePicking(bool activate)
+{
+    if(activate)
+        d->view->activatePicking();
+    else
+        d->view->deactivatePicking();
 }
 
 void tstMainWindow::onActivateZooming(bool activate)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun  8 13:08:07 2012 (+0200)
+ * Last-Updated: Sun Jun 10 01:03:52 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 20
+ *     Update #: 34
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include "dtkPlotExport.h"
 
 #include <QtCore/QObject>
+#include <QtCore/QRectF>
 
 class dtkPlotView;
 class dtkPlotViewZoomerPrivate;
@@ -38,6 +39,17 @@ public:
 public:
     void   activate(void);
     void deactivate(void);
+
+public:
+    void zoomForward(void);
+    void zoomBackward(void);
+
+signals:
+    void zoomForwardEnabled(bool);
+    void zoomBackwardEnabled(bool);
+
+protected slots:
+    void onZoomed(const QRectF&);
 
 private:
     dtkPlotViewZoomerPrivate *d;

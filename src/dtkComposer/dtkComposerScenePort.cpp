@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 13:59:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri May  4 09:42:27 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 131
+ * Last-Updated: mer. juin  6 16:53:47 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 140
  */
 
 /* Commentary: 
@@ -122,6 +122,8 @@ QString dtkComposerScenePort::label(void)
 void dtkComposerScenePort::setLoop(int loop)
 {
     d->loop = loop;
+    if (loop > 0)
+        d->ellipse->setBrush(Qt::white);
 }
 
 void dtkComposerScenePort::setLabel(const QString& label)

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Nov  2 10:48:42 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 16 13:40:43 2012 (+0200)
+ * Last-Updated: Thu May 24 12:35:03 2012 (+0200)
  *           By: tkloczko
- *     Update #: 149
+ *     Update #: 150
  */
 
 /* Commentary: 
@@ -44,7 +44,7 @@ public:
     ~dummyData(void) {;}
 
 public:
-    bool operator == (const dummyData& other) { return false;}
+    bool operator == (const dummyData& other) const { return false;}
         
 public:
     QString identifier(void) const {return QString("Dummy data");}

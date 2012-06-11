@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 24 23:29:24 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 16 11:23:11 2012 (+0200)
+ * Last-Updated: Sat Jun  2 00:07:12 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 150
+ *     Update #: 160
  */
 
 /* Commentary: 
@@ -47,6 +47,9 @@ public:
     dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_screen_lower_right;
 
 public:
+    dtkComposerTransmitterReceiver<dtkAbstractData *> receiver_data;
+
+public:
     dtkAbstractView *view;
 };
 
@@ -61,6 +64,7 @@ dtkComposerNodeView::dtkComposerNodeView(void) : QObject(), dtkComposerNodeLeaf(
     this->appendReceiver(&(d->receiver_screen_upper_left));
     this->appendReceiver(&(d->receiver_screen_lower_left));
     this->appendReceiver(&(d->receiver_screen_lower_right));
+    this->appendReceiver(&(d->receiver_data));
 
     connect(this, SIGNAL(runned()), this, SLOT(onRun()));
 }
@@ -115,6 +119,9 @@ QString dtkComposerNodeView::inputLabelHint(int port)
     if(port == 6)
         return "screen lower right";
 
+    if(port == 7)
+        return "data";
+
     return dtkComposerNodeLeaf::inputLabelHint(port);
 }
 
@@ -133,10 +140,12 @@ void dtkComposerNodeView::onRun(void)
     if(!d->view) {
         d->view = dtkAbstractViewFactory::instance()->create(d->receiver_type.data());
 
-        if(!d->receiver_fullscreen.isEmpty() && d->receiver_fullscreen.data())
+        if(!d->receiver_fullscreen.isEmpty() && d->receiver_fullscreen.data()) {
             d->view->widget()->showFullScreen();
-        else
+        } else {
+            d->view->widget()->resize(1024, 1024);
             d->view->widget()->show();
+        }
     }
 
     if (!d->view) {
@@ -158,4 +167,8 @@ void dtkComposerNodeView::onRun(void)
 
     if(!d->receiver_screen_lower_right.isEmpty())
         d->view->setLowerRight(d->receiver_screen_lower_right.data());
+
+    if(!d->receiver_data.isEmpty())
+        foreach (dtkAbstractData *data, d->receiver_data.allData())
+            d->view->setData(data);
 }

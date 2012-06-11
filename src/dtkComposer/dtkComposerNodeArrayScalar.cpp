@@ -1,27 +1,29 @@
 /* dtkComposerNodeArrayScalar.cpp --- 
- * 
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 15 15:28:57 2012 (+0200)
+ * Last-Updated: Mon Jun 11 16:28:53 2012 (+0200)
  *           By: tkloczko
- *     Update #: 40
+ *     Update #: 65
  */
 
 /* Commentary: 
- * 
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeArrayScalar.h"
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
-#include <dtkCore/dtkContainerVector.h>
+#include <dtkContainer/dtkContainerVector.h>
+
+#include <dtkLog/dtkLog>
 
 // /////////////////////////////////////////////////////////////////
 // 
@@ -30,13 +32,14 @@
 class dtkComposerNodeArrayScalarPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<qreal>     receiver_array;
-    dtkComposerTransmitterReceiver<qlonglong> receiver_size;
-    dtkComposerTransmitterReceiver<qreal>     receiver_value;
+    dtkComposerTransmitterReceiverVector<qreal> receiver_array;
+    dtkComposerTransmitterVariant receiver_size;
+    dtkComposerTransmitterVariant receiver_value;
+
 
 public:
-    dtkComposerTransmitterEmitter<qreal>     emitter_array;
-    dtkComposerTransmitterEmitter<qlonglong> emitter_size;
+    dtkComposerTransmitterEmitterVector<qreal> emitter_array;
+    dtkComposerTransmitterEmitter<qlonglong>   emitter_size;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -46,7 +49,15 @@ public:
 dtkComposerNodeArrayScalar::dtkComposerNodeArrayScalar(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeArrayScalarPrivate)
 {
     this->appendReceiver(&d->receiver_array);
+
+    QList<QVariant::Type> variant_list;
+
+    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong;
+    d->receiver_size.setTypes(variant_list);
     this->appendReceiver(&d->receiver_size);
+
+    variant_list << QVariant::Double;
+    d->receiver_value.setTypes(variant_list);
     this->appendReceiver(&d->receiver_value);
 
     this->appendEmitter(&d->emitter_array);
@@ -99,25 +110,41 @@ void dtkComposerNodeArrayScalar::run(void)
 {
     if (!d->receiver_array.isEmpty()) {
 
-        dtkContainerVectorReal array(d->receiver_array.vector());
+        dtkContainerVectorReal array(d->receiver_array.data());
 
-        d->emitter_array.setVector(array);
+        //this->releaseReceivers();
+
+        d->emitter_array.setData(array);
         d->emitter_size.setData(array.count());
 
     } else {
 
         qlonglong size = 0;
-        qreal value = 0;        
+        qreal value = 0;
+        dtkContainerVector<qreal> array;
 
-        if (!d->receiver_size.isEmpty()) {            
-            size = d->receiver_size.data();
+        if (!d->receiver_size.isEmpty())
+            size = qvariant_cast<qlonglong>(d->receiver_size.data());
+
+        if (size == 0) {
+            dtkWarn() << "The size of the array is zero." ;
+            //this->releaseReceivers();
+
+        } else {
+
+            array.reserve(size);
+
             if (!d->receiver_value.isEmpty())
-                value = d->receiver_value.data();
+                value = qvariant_cast<qreal>(d->receiver_value.data());
+
+            //this->releaseReceivers();
+
+            for(int i = 0 ; i < size; i++)
+                array << value;
         }
 
-        QVector<qreal> array(size, value);
-
-        d->emitter_array.setVector(dtkContainerVectorReal(array));
+        d->emitter_array.setData(array);
         d->emitter_size.setData(size);
+
     }
 }

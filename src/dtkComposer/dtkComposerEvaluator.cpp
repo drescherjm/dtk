@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. mai 15 14:23:28 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 545
+ * Last-Updated: Tue May 29 15:58:18 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 553
  */
 
 /* Commentary:
@@ -65,12 +65,12 @@ void dtkComposerEvaluator::setGraph(dtkComposerGraph *graph)
 
 void dtkComposerEvaluator::run(bool run_concurrent)
 {
-    QTime time;
-    time.start();
+    QTime time; time.start();
 
     d->stack << d->graph->root();
 
     emit evaluationStarted();
+
     while (this->step(run_concurrent) && !d->should_stop);
     if (!d->should_stop) {
         QString msg = QString("Evaluation finished in %1 ms").arg(time.elapsed());
@@ -80,9 +80,11 @@ void dtkComposerEvaluator::run(bool run_concurrent)
         QString msg = QString("Evaluation stopped after %1 ms").arg(time.elapsed());
         dtkInfo() << msg;
         dtkNotify(msg,30000);
+        d->stack.clear();
     }
 
     d->should_stop = false;
+
     emit evaluationStopped();
 }
 

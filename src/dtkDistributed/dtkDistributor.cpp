@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: mar. avril 24 18:24:47 2012 (+0200)
+ * Last-Updated: mer. mai 23 17:44:32 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 111
+ *     Update #: 114
  */
 
 /* Commentary: 
@@ -120,6 +120,10 @@ dtkDistributor::~dtkDistributor(void)
     d = NULL;
 }
 
+void dtkDistributor::setApplication(const QString& application)
+{
+    d->submit_view->setApplication(application);
+}
 void dtkDistributor::onConnect(void)
 {
     d->controller->deploy(QUrl(d->host_address->currentText()));

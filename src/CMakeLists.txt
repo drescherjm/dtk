@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 19:22:37 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Apr 19 20:38:13 2012 (+0200)
-##           By: Julien Wintz
-##     Update #: 44
+## Last-Updated: Wed May 23 16:51:31 2012 (+0200)
+##           By: tkloczko
+##     Update #: 45
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,6 +17,7 @@
 ## 
 ######################################################################
 
+add_subdirectory(dtkContainer)
 add_subdirectory(dtkLog)
 add_subdirectory(dtkMath)
 add_subdirectory(dtkZip)

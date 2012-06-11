@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: mer. mai 16 12:55:22 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 573
+ * Last-Updated: Thu May 31 00:22:09 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 626
  */
 
 /* Commentary:
@@ -34,12 +34,15 @@
 #include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeControlForEach.h"
 #include "dtkComposerNodeControlWhile.h"
+#include "dtkComposerNodeData.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeFileOperator.h"
 #include "dtkComposerNodeList.h"
 #include "dtkComposerNodeLogger.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeMatrixSquareReal.h"
+#include "dtkComposerNodeMatrixSquareRealOperatorUnary.h"
+#include "dtkComposerNodeMatrixSquareRealOperatorBinary.h"
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeQuaternion.h"
@@ -73,6 +76,17 @@
 #include "dtkComposerNodeTrackerVrpn.h"
 #endif
 
+#if defined(DTK_HAVE_PLOT)
+#include "dtkComposerNodePlotCurve.h"
+#include "dtkComposerNodePlotView.h"
+#endif
+
+#if defined(DTK_HAVE_PLOT)
+#include <dtkPlot/dtkPlotView.h>
+#endif
+
+#include <dtkCore/dtkAbstractView.h>
+#include <dtkCore/dtkAbstractViewFactory.h>
 #include <dtkCore/dtkGlobal.h>
 
 class dtkComposerFactoryPrivate
@@ -149,7 +163,60 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Matrix Square Real"] = QStringList() << "matrix" << "square" << "real"<< "algebraic";
     d->types["Matrix Square Real"] = "matrix_square_real";
 
+    d->nodes << "MatrixSquare Real Transpose";
+    d->descriptions["MatrixSquare Real Transpose "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Transpose"] = QStringList() << "matrix" << "square" << "real"<< "transpose";
+    d->types["MatrixSquare Real Transpose"] = "matrixSquare_real_transpose";
 
+    d->nodes << "MatrixSquare Real Inverse";
+    d->descriptions["MatrixSquare Real Inverse "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Inverse"] = QStringList() << "matrix" << "square" << "real"<< "inverse";
+    d->types["MatrixSquare Real Inverse"] = "matrixSquare_real_inverse";
+
+    d->nodes << "MatrixSquare Real Determinant";
+    d->descriptions["MatrixSquare Real Determinant "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Determinant"] = QStringList() << "matrix" << "square" << "real"<< "determinant";
+    d->types["MatrixSquare Real Determinant"] = "matrixSquare_real_determinant";
+
+    d->nodes << "MatrixSquare Real Trace";
+    d->descriptions["MatrixSquare Real Trace "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Trace"] = QStringList() << "matrix" << "square" << "real"<< "trace";
+    d->types["MatrixSquare Real Trace"] = "matrixSquare_real_trace";
+
+    d->nodes << "MatrixSquare Real Sum";
+    d->descriptions["MatrixSquare Real Sum "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Sum"] = QStringList() << "matrix" << "square" << "real"<< "sum";
+    d->types["MatrixSquare Real Sum"] = "matrixSquare_real_sum";
+
+    d->nodes << "MatrixSquare Real Substract";
+    d->descriptions["MatrixSquare Real Substract "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Substract"] = QStringList() << "matrix" << "square" << "real"<< "substract";
+    d->types["MatrixSquare Real Substract"] = "matrixSquare_real_substract";
+
+    d->nodes << "MatrixSquare Real Mult";
+    d->descriptions["MatrixSquare Real Mult "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Mult"] = QStringList() << "matrix" << "square" << "real"<< "mult";
+    d->types["MatrixSquare Real Mult"] = "matrixSquare_real_mult";
+
+    d->nodes << "MatrixSquare Real ProductMatrixVector";
+    d->descriptions["MatrixSquare Real ProductMatrixVector "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real ProductMatrixVector"] = QStringList() << "matrix" << "square" << "real"<< "Product"<< "Matrix" << "Vector";
+    d->types["MatrixSquare Real ProductMatrixVector"] = "matrixSquare_real_ProductMatrixVector";
+
+    d->nodes << "MatrixSquare Real ProductVectorMatrix";
+    d->descriptions["MatrixSquare Real ProductVectorMatrix "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real ProductVectorMatrix"] = QStringList() << "matrix" << "square" << "real"<< "Product"<< "Matrix" << "Vector";
+    d->types["MatrixSquare Real ProductVectorMatrix"] = "matrixSquare_real_ProductVectorMatrix";
+
+    d->nodes << "MatrixSquare Real ReplaceRowMatrixByVector";
+    d->descriptions["MatrixSquare Real ReplaceRowMatrixByVector "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real ReplaceRowMatrixByVector"] = QStringList() << "matrix" << "square" << "real"<< "Replace"<< "Row"<< "Matrix" << "Vector";
+    d->types["MatrixSquare Real ReplaceRowMatrixByVector"] = "matrixSquare_real_ReplaceRowMatrixByVector";
+
+    d->nodes << "MatrixSquare Real ReplaceColMatrixByVector";
+    d->descriptions["MatrixSquare Real ReplaceColMatrixByVector "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real ReplaceColMatrixByVector"] = QStringList() << "matrix" << "square" << "real"<< "Replace"<< "Col"<< "Matrix" << "Vector";
+    d->types["MatrixSquare Real ReplaceColMatrixByVector"] = "matrixSquare_real_ReplaceColMatrixByVector";
 
     // Vector Real
 
@@ -469,10 +536,20 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Logn"] = QStringList() << "number" << "operator" << "binary" << "logn";
     d->types["Logn"] = "logn";
 
+    d->nodes << "Max";
+    d->descriptions["Max"] = "<p>Description not yet filled!</p>";
+    d->tags["Max"] = QStringList() << "number" << "operator" << "binary" << "max";
+    d->types["Max"] = "max";
+
     d->nodes << "Minus";
     d->descriptions["Minus"] = "<p>Description not yet filled!</p>";
     d->tags["Minus"] = QStringList() << "number" << "operator" << "binary" << "minus";
     d->types["Minus"] = "minus";
+
+    d->nodes << "Min";
+    d->descriptions["Min"] = "<p>Description not yet filled!</p>";
+    d->tags["Min"] = QStringList() << "number" << "operator" << "binary" << "min";
+    d->types["Min"] = "min";
 
     d->nodes << "Modulo";
     d->descriptions["Modulo"] = "<p>Description not yet filled!</p>";
@@ -630,18 +707,21 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Logger"] = QStringList() << "logger" << "debug";
     d->types["Logger"] = "logger";
 
-    // process nodes
+    // generic nodes
+
+    d->nodes << "Generic Data";
+    d->descriptions["Generic Data"] = "<p>Description not yet filled!</p>";
+    d->tags["Generic Data"] = QStringList() << "data";
+    d->types["Generic Data"] = "data";
 
     d->nodes << "Generic Process";
     d->descriptions["Generic Process"] = "<p>Description not yet filled!</p>";
-    d->tags["Generic Process"] = QStringList() << "process" ;
+    d->tags["Generic Process"] = QStringList() << "process";
     d->types["Generic Process"] = "process";
-
-    // view nodes
 
     d->nodes << "Generic View";
     d->descriptions["Generic View"] = "<p>Description not yet filled!</p>";
-    d->tags["Generic View"] = QStringList() << "view" ;
+    d->tags["Generic View"] = QStringList() << "view";
     d->types["Generic View"] = "view";
 
     // dtkDistributed nodes
@@ -650,6 +730,21 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Remote"] = QStringList() <<  "distributed" << "tcp" << "remote" << "world";
     d->types["Remote"] = "remote";
 
+    // /////////////////////////////////////////////////////////////////
+    // Plot nodes
+    // /////////////////////////////////////////////////////////////////
+
+#if defined(DTK_HAVE_PLOT)
+    d->nodes << "Plot Curve";
+    d->tags["Plot Curve"] = QStringList() <<  "curve" << "plot";
+    d->types["Plot Curve"] = "dtkPlotCurve";
+
+    dtkAbstractViewFactory::instance()->registerViewType("dtkPlotView", createPlotView);
+
+    d->nodes << "Plot View";
+    d->tags["Plot View"] = QStringList() <<  "view" << "plot";
+    d->types["Plot View"] = "dtkPlotView";
+#endif
 
     // /////////////////////////////////////////////////////////////////
     // NITE nodes
@@ -774,6 +869,36 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "matrix_square_real")
         return new dtkComposerNodeMatrixSquareReal;
+
+    if(type == "matrixSquare_real_transpose")
+        return new dtkComposerNodeMatrixSquareRealOperatorUnaryTranspose;
+
+    if(type == "matrixSquare_real_inverse")
+        return new dtkComposerNodeMatrixSquareRealOperatorUnaryInverse;
+
+    if(type == "matrixSquare_real_trace")
+        return new dtkComposerNodeMatrixSquareRealOperatorUnaryScalarTrace;
+
+    if(type == "matrixSquare_real_sum")
+        return new dtkComposerNodeMatrixSquareRealOperatorBinarySum;
+
+    if(type == "matrixSquare_real_substract")
+        return new dtkComposerNodeMatrixSquareRealOperatorBinarySubstract;
+
+    if(type == "matrixSquare_real_mult")
+        return new dtkComposerNodeMatrixSquareRealOperatorBinaryMult;
+
+    if(type == "matrixSquare_real_ProductMatrixVector")
+        return new dtkComposerNodeMatrixSquareRealOperatorBinaryRightProductMV;
+
+    if(type == "matrixSquare_real_ProductVectorMatrix")
+        return new dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProductVM;
+
+    if(type == "matrixSquare_real_ReplaceRowMatrixByVector")
+        return new dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceRowMatrixByVector;
+
+    if(type == "matrixSquare_real_ReplaceColMatrixByVector")
+        return new dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColMatrixByVector;
 
     // Vector Real nodes
 
@@ -991,6 +1116,12 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if (type =="logn")
         return new dtkComposerNodeNumberOperatorBinaryLogn;
 
+    if (type =="max")
+        return new dtkComposerNodeNumberOperatorBinaryMax;
+
+    if (type =="min")
+        return new dtkComposerNodeNumberOperatorBinaryMin;
+
     if (type =="minus")
         return new dtkComposerNodeNumberOperatorBinaryMinus;
 
@@ -1061,12 +1192,13 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "logger")
         return new dtkComposerNodeLogger;
 
-    // process nodes
+    // generic nodes
+
+    if(type == "data")
+        return new dtkComposerNodeData;
 
     if(type == "process")
         return new dtkComposerNodeProcess;
-
-    // view nodes
 
     if(type == "view")
         return new dtkComposerNodeView;
@@ -1092,6 +1224,18 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 #if defined(DTK_HAVE_VRPN)
     if(type == "vrpnTracker")
         return new dtkComposerNodeTrackerVrpn;
+#endif
+
+    // /////////////////////////////////////////////////////////////////
+    // Plot nodes
+    // /////////////////////////////////////////////////////////////////
+
+#if defined(DTK_HAVE_PLOT)
+    if(type == "dtkPlotCurve")
+        return new dtkComposerNodePlotCurve;
+
+    if(type == "dtkPlotView")
+        return new dtkComposerNodePlotView;
 #endif
 
     // /////////////////////////////////////////////////////////////////

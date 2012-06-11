@@ -1,4 +1,4 @@
-/* dtkComposerNodeVectorRealr.cpp ---
+/* dtkComposerNodeVectorReal.cpp ---
  *
  * Author: sblekout
  * Copyright (C) 2011 - babette Lekouta, Inria.
@@ -23,6 +23,8 @@
 
 #include <dtkMath>
 
+#include <dtkLog/dtkLog>
+
 // /////////////////////////////////////////////////////////////////
 //
 // /////////////////////////////////////////////////////////////////
@@ -31,8 +33,8 @@ class dtkComposerNodeVectorRealPrivate
 {
 public:
     dtkComposerTransmitterReceiver<dtkVectorReal>  receiver_vector;
-    dtkComposerTransmitterReceiver<qlonglong>      receiver_size;
-    dtkComposerTransmitterReceiver<qreal>          receiver_value;
+    dtkComposerTransmitterVariant receiver_size;
+    dtkComposerTransmitterVariant receiver_value;
 
 public:
     dtkComposerTransmitterEmitter<dtkVectorReal>   emitter_vector;
@@ -46,7 +48,15 @@ public:
 dtkComposerNodeVectorReal::dtkComposerNodeVectorReal(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVectorRealPrivate)
 {
     this->appendReceiver(&d->receiver_vector);
+
+    QList<QVariant::Type> variant_list;
+
+    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong;
+    d->receiver_size.setTypes(variant_list);
     this->appendReceiver(&d->receiver_size);
+
+    variant_list << QVariant::Double;
+    d->receiver_value.setTypes(variant_list);
     this->appendReceiver(&d->receiver_value);
 
     this->appendEmitter(&d->emitter_vector);
@@ -101,19 +111,39 @@ void dtkComposerNodeVectorReal::run(void)
 
         dtkVectorReal vec(d->receiver_vector.data());
 
+        this->releaseReceivers();
+
         d->emitter_vector.setData(vec);
         d->emitter_size.setData(vec.getRows());
 
     } else {
 
-        unsigned int t =  d->receiver_size.data();
+        qlonglong size = 0;
+        qreal value = 0;
+        dtkVectorReal vec;
 
-        dtkVectorReal vec(t);
+        if (!d->receiver_size.isEmpty())
+            size = qvariant_cast<qlonglong>(d->receiver_size.data());
 
-        for(int i = 0 ; i < vec.getRows(); i++)
-            vec[i] = d->receiver_value.data();
+        if (size == 0) {
+            dtkWarn() << "The size of the vector is zero." ;
+            this->releaseReceivers();
 
-        d->emitter_size.setData(vec.getRows());
+        } else {
+
+            vec.allocate(size);
+
+            if (!d->receiver_value.isEmpty())
+                value = qvariant_cast<qreal>(d->receiver_value.data());
+
+            this->releaseReceivers();
+
+            for(int i = 0 ; i < vec.getRows(); i++)
+                vec[i] = value;
+
+        }
+
+        d->emitter_size.setData(size);
         d->emitter_vector.setData(vec);
     }
 }

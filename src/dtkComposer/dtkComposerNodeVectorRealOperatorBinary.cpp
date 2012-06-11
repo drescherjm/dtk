@@ -93,7 +93,7 @@ public:
     dtkComposerTransmitterVariant                 receiver_val;
 
 public:
-    dtkComposerTransmitterEmitter<dtkVectorReal> emitter_vec;
+    dtkComposerTransmitterEmitter<dtkVectorReal>  emitter_vec;
 };
 
 dtkComposerNodeVectorRealOperatorHomothetic::dtkComposerNodeVectorRealOperatorHomothetic(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVectorRealOperatorHomotheticPrivate)
@@ -116,14 +116,21 @@ dtkComposerNodeVectorRealOperatorHomothetic::~dtkComposerNodeVectorRealOperatorH
 
 void dtkComposerNodeVectorRealOperatorBinarySum::run(void)
 {
-    dtkVectorReal vec1 = d->receiver_lhs.data();
-    dtkVectorReal vec2 = d->receiver_rhs.data();
+    if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()) {
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_vec.setData(dtkVectorReal());
 
-    int size = qMin(vec1.getRows(), vec2.getRows());
+    } else {
 
-    for(int i = 0 ; i < size; i++)
-        d->emitter_vec.setData(d->receiver_lhs.data() + d->receiver_rhs.data());
+        if ( d->receiver_lhs.data().getRows() == d->receiver_rhs.data().getRows())
+            d->emitter_vec.setData(d->receiver_lhs.data() + d->receiver_rhs.data());
 
+        else {
+            dtkWarn()<< "Vectors do not have the same size";
+            d->emitter_vec.setData(dtkVectorReal());
+        }
+
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -132,26 +139,40 @@ void dtkComposerNodeVectorRealOperatorBinarySum::run(void)
 
 void dtkComposerNodeVectorRealOperatorBinarySubstract::run(void)
 {
-    dtkVectorReal vec1 = d->receiver_lhs.data();
-    dtkVectorReal vec2 = d->receiver_rhs.data();
+    if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()) {
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_vec.setData(dtkVectorReal());
 
-    int size = qMin(vec1.getRows(), vec2.getRows());
+    } else {
 
-    for(int i = 0 ; i < size; i++)
-        d->emitter_vec.setData(d->receiver_lhs.data() - d->receiver_rhs.data());
+        if ( d->receiver_lhs.data().getRows() == d->receiver_rhs.data().getRows())
+            d->emitter_vec.setData(d->receiver_lhs.data() - d->receiver_rhs.data());
 
+        else {
+            dtkWarn()<< "Vectors do not have the same size";
+            d->emitter_vec.setData(dtkVectorReal());
+        }
+
+    }
 }
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeVectorRealOperatorBinaryScalar - DOT PRODUCT
+// /////////////////////////////////////////////////////////////////
 
 void dtkComposerNodeVectorRealOperatorBinaryScalarDotProd::run(void)
 {
-    dtkVectorReal vec1 = d->receiver_lhs.data();
-    dtkVectorReal vec2 = d->receiver_rhs.data();
+    if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty())
+        dtkWarn() << "Inputs not specified. Nothing is done";
 
-    int size = qMin(vec1.getRows(), vec2.getRows());
+    else {
 
-    for(int i = 0 ; i < size; i++)
-        d->emitter_val.setData(d->receiver_lhs.data() * d->receiver_rhs.data());
+        if ( d->receiver_lhs.data().getRows() == d->receiver_rhs.data().getRows())
+            d->emitter_val.setData(d->receiver_lhs.data() * d->receiver_rhs.data());
 
+        else
+            dtkWarn()<< "Vectors do not have the same size";
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -160,7 +181,12 @@ void dtkComposerNodeVectorRealOperatorBinaryScalarDotProd::run(void)
 
 void dtkComposerNodeVectorRealOperatorHomotheticMult::run(void)
 {
-    d->emitter_vec.setData(d->receiver_vec.data() * d->receiver_val.data().toReal());
+    if (d->receiver_vec.isEmpty() || d->receiver_val.isEmpty()){
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_vec.setData(dtkVectorReal());
+
+    }  else
+        d->emitter_vec.setData(d->receiver_vec.data() * d->receiver_val.data().toReal());
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -169,5 +195,19 @@ void dtkComposerNodeVectorRealOperatorHomotheticMult::run(void)
 
 void dtkComposerNodeVectorRealOperatorHomotheticDivision::run(void)
 {
-    d->emitter_vec.setData(d->receiver_vec.data() / d->receiver_val.data().toReal());
+    if (d->receiver_vec.isEmpty() || d->receiver_val.isEmpty()) {
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_vec.setData(dtkVectorReal());
+
+    } else {
+        if (d->receiver_val.data()!=0)
+            d->emitter_vec.setData(d->receiver_vec.data() / d->receiver_val.data().toReal());
+
+        else {
+            dtkWarn() << "You divide by zero. Nothing is done" ;
+            d->emitter_vec.setData(dtkVectorReal());
+        }
+
+    }
+
 }

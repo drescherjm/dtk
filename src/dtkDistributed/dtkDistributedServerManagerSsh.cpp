@@ -182,7 +182,7 @@ QString dtkDistributedServerManagerSsh::submit(QString input)
     else
         return QString("ERROR");
 
-    QString jobid = QString::number(stat->pid());
+    QString jobid = QString::number((int)stat->pid());
     d->slaves.insert(jobid,stat);
     dtkDebug() << DTK_PRETTY_FUNCTION << jobid;
     return jobid;

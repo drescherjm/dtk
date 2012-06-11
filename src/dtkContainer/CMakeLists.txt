@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue May 22 14:53:53 2012 (+0200)
+## Last-Updated: Tue May 29 10:17:09 2012 (+0200)
 ##           By: tkloczko
-##     Update #: 296
+##     Update #: 320
 ######################################################################
 ## 
 ### Commentary: 
@@ -25,13 +25,20 @@ project(dtkContainer)
 
 set(${PROJECT_NAME}_HEADERS
   dtkAbstractContainer.h
-  dtkAbstractContainer.tpp)
+  dtkAbstractContainer.tpp
+  dtkAbstractContainerOrdered.h
+  dtkAbstractContainerOrdered.tpp
+  dtkAbstractContainerWrapper.h
+  dtkContainerVector.h
+  dtkContainerVector.tpp
+  dtkContainerVectorWrapper.h
+  dtkContainerVectorWrapper.tpp)
 
 set(${PROJECT_NAME}_HEADERS_MOC
-  )
+  dtkAbstractContainerWrapper.h)
 
 set(${PROJECT_NAME}_SOURCES
-  )
+  dtkAbstractContainerWrapper.cpp)
 
 ## #################################################################
 ## Build rules
@@ -44,15 +51,13 @@ if(NOT MSVC)
 endif()
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
-qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
 
 if(DTK_USE_PRECOMPILED_HEADERS)
   add_precompiled_header(${PROJECT_NAME}_SOURCES_PCH 
     "dtkPch/dtkPch.h" "../dtkPch/dtkPch.cpp" 
     ${${PROJECT_NAME}_SOURCES}
     ${${PROJECT_NAME}_HEADERS}
-    ${${PROJECT_NAME}_SOURCES_MOC}
-    ${${PROJECT_NAME}_SOURCES_WRAP})
+    ${${PROJECT_NAME}_SOURCES_MOC})
 endif(DTK_USE_PRECOMPILED_HEADERS)
 
 if(BUILD_SHARED_LIBS)
@@ -61,8 +66,7 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES_PCH}
-  ${${PROJECT_NAME}_SOURCES_WRAP})
+  ${${PROJECT_NAME}_SOURCES_PCH})
 
 else(BUILD_SHARED_LIBS)
 
@@ -70,13 +74,13 @@ add_library(${PROJECT_NAME} STATIC
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES_PCH}
-  ${${PROJECT_NAME}_SOURCES_WRAP})
+  ${${PROJECT_NAME}_SOURCES_PCH}})
 
 endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
+  dtkCore
   dtkLog)
 
 ## #################################################################

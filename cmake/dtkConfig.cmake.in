@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:51:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Apr  3 11:40:50 2012 (+0200)
+## Last-Updated: Fri Jun  1 11:45:23 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 33
+##     Update #: 40
 ######################################################################
 ## 
 ### Commentary: 
@@ -27,3 +27,8 @@ set(dtk_LIBRARY_DIRS "@dtk_LIBRARY_DIR@")
 set(dtk_CMAKE_DIRS     "@dtk_CMAKE_DIR@")
 
 set(dtk_USE_FILE "@dtk_USE_FILE@")
+
+set(DTK_HAVE_MPI  "@DTK_HAVE_MPI@")
+set(DTK_HAVE_PLOT "@DTK_HAVE_PLOT@")
+set(DTK_HAVE_VRPN "@DTK_HAVE_VRPN@")
+set(DTK_HAVE_NITE "@DTK_HAVE_NITE@")

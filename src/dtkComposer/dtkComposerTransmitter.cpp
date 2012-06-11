@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 24 21:21:55 2012 (+0200)
+ * Last-Updated: Fri Jun  8 15:16:41 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 208
+ *     Update #: 221
  */
 
 /* Commentary: 
@@ -22,7 +22,7 @@
 #include "dtkComposerTransmitterVariant.h"
 #include "dtkComposerNode.h"
 
-#include <dtkCore/dtkAbstractContainer.h>
+#include <dtkContainer/dtkAbstractContainerWrapper.h>
 #include <dtkCore/dtkGlobal>
 
 // /////////////////////////////////////////////////////////////////
@@ -39,6 +39,8 @@ dtkComposerTransmitter::dtkComposerTransmitter(dtkComposerNode *parent) : d(new 
     d->active = true;
     d->required = true;
     d->parent = parent;
+
+    d->count = 0;
 }
 
 //! Destroys dtkComposerTransmitter.
@@ -62,12 +64,12 @@ const QVariant& dtkComposerTransmitter::variant(void) const
     return d->variant;
 }
 
-dtkAbstractContainer& dtkComposerTransmitter::container(void)
+dtkAbstractContainerWrapper& dtkComposerTransmitter::container(void)
 {
     return d->container;
 }
 
-const dtkAbstractContainer& dtkComposerTransmitter::container(void) const
+const dtkAbstractContainerWrapper& dtkComposerTransmitter::container(void) const
 {
     return d->container;
 }
@@ -79,7 +81,7 @@ QVariant::Type dtkComposerTransmitter::type(void) const
 
 QString dtkComposerTransmitter::typeName(void) const
 {
-    return QVariant::typeToName(d->variant.type());
+    return d->variant.typeName();
 }
 
 //! 
@@ -253,6 +255,24 @@ void dtkComposerTransmitter::appendReceiver(dtkComposerTransmitter *receiver)
 void dtkComposerTransmitter::removeReceiver(dtkComposerTransmitter *receiver)
 {
     d->receivers.removeAll(receiver);
+}
+
+//! 
+/*! 
+ *  
+ */
+int dtkComposerTransmitter::receiverCount(void)
+{
+    return d->receivers.count();
+}
+
+//! 
+/*! 
+ *  
+ */
+void dtkComposerTransmitter::clear(void)
+{
+    
 }
 
 //! Returns true when current transmitter and \a transmitter share

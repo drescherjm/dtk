@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. juin  6 15:34:41 2012 (+0200)
+ * Last-Updated: ven. juin  8 14:38:15 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 657
+ *     Update #: 686
  */
 
 /* Commentary: 
@@ -170,7 +170,7 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
         d->node = d->root;
         d->graph->addNode(d->root);
     } else if(paste) {
-        d->node = d->root;
+        d->node = d->scene->current();
     } else {
         d->node = new dtkComposerSceneNodeComposite;
         d->node->wrap(new dtkComposerNodeComposite);
@@ -180,10 +180,10 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
     }
 
     // Feeding scene with notes
-    
+
     QDomNodeList notes = document.firstChild().childNodes();
 
-    for(int i = 0; i < notes.count(); i++)    
+    for(int i = 0; i < notes.count(); i++)
         if(notes.at(i).toElement().tagName() == "note")
             this->readNote(notes.at(i));
 
@@ -193,7 +193,7 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
 
     for(int i = 0; i < nodes.count(); i++)
         if(nodes.at(i).toElement().tagName() == "node")
-            this->readNode(nodes.at(i));
+            this->readNode(nodes.at(i),paste);
 
     // Feeding scene with edges
 
@@ -204,17 +204,16 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
             this->readEdge(edges.at(i));
 
     // --
-    
-    if(!append) {
+
+    if(!append)
         d->scene->setRoot(d->root);
-    } else {
+    else if(!paste)
         d->scene->addItem(d->node);
-    }
 
     d->graph->layout();
 
     // --
-    
+
     return true;
 }
 
@@ -224,12 +223,12 @@ dtkComposerSceneNote *dtkComposerReader::readNote(QDomNode node)
     qreal y = node.toElement().attribute("y").toFloat();
     qreal w = node.toElement().attribute("w").toFloat();
     qreal h = node.toElement().attribute("h").toFloat();
-    
+
     dtkComposerSceneNote *note = new dtkComposerSceneNote;
     note->setPos(QPointF(x, y));
     note->setSize(QSizeF(w, h));
     note->setText(node.childNodes().at(0).toText().data());
-    
+
     d->node->addNote(note);
 
     note->setParent(d->node);
@@ -237,7 +236,7 @@ dtkComposerSceneNote *dtkComposerReader::readNote(QDomNode node)
     return note;
 }
 
-dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
+dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
 {
     QDomNodeList childNodes = node.childNodes();
 
@@ -324,6 +323,8 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
         n->setParent(d->node);
         d->node->addNode(n);
         d->graph->addNode(n);
+        if (paste)
+            d->scene->addItem(n);
 
     } else {
 
@@ -336,14 +337,17 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
     }
 
     QPointF position;
-    
+
     if(node.toElement().hasAttribute("x"))
         position.setX(node.toElement().attribute("x").toFloat());
-    
+
     if(node.toElement().hasAttribute("y"))
         position.setY(node.toElement().attribute("y").toFloat());
 
-    n->setPos(position);
+    if (paste)
+        n->setPos(position+QPointF(100,100));
+    else
+        n->setPos(position);
 
     if(node.toElement().hasAttribute("title"))
         n->setTitle(node.toElement().attribute("title"));

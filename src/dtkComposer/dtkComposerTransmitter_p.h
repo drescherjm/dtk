@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Mar 12 11:43:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 31 14:27:36 2012 (+0200)
- *           By: tkloczko
- *     Update #: 24
+ * Last-Updated: Fri Jun  8 15:15:09 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -49,8 +49,6 @@ public:
 
 public:
     QVariant variant;
-
-    QVariant::Type type;
 
 public:
     dtkAbstractContainerWrapper container;

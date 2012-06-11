@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun  1 11:34:46 2012 (+0200)
+ * Last-Updated: Sun Jun 10 01:20:50 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 83
+ *     Update #: 128
  */
 
 /* Commentary: 
@@ -19,6 +19,9 @@
 
 #include "dtkPlotCurve.h"
 #include "dtkPlotView.h"
+#include "dtkPlotViewPanner.h"
+#include "dtkPlotViewPicker.h"
+#include "dtkPlotViewZoomer.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_canvas.h>
@@ -28,10 +31,17 @@
 class dtkPlotViewPrivate : public QwtPlot
 {
 public:
+    dtkPlotViewPanner *panner;
+    dtkPlotViewPicker *picker;
+    dtkPlotViewZoomer *zoomer;
 };
 
 dtkPlotView::dtkPlotView(void) : dtkAbstractView(), d(new dtkPlotViewPrivate())
 {
+    d->panner = NULL;
+    d->picker = NULL;
+    d->zoomer = NULL;
+
     d->setAxisAutoScale(0, true);
     d->setAxisAutoScale(1, true);
 
@@ -45,6 +55,67 @@ dtkPlotView::~dtkPlotView(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkPlotView::activatePanning(void)
+{
+    if(!d->panner)
+        d->panner = new dtkPlotViewPanner(this);
+
+    d->panner->activate();
+}
+
+void dtkPlotView::deactivatePanning(void)
+{
+    if(!d->panner)
+        d->panner = new dtkPlotViewPanner(this);
+
+    d->panner->deactivate();
+}
+
+void dtkPlotView::activatePicking(void)
+{
+    if(!d->picker)
+        d->picker = new dtkPlotViewPicker(this);
+
+    d->picker->activate();
+}
+
+void dtkPlotView::deactivatePicking(void)
+{
+    if(!d->picker)
+        d->picker = new dtkPlotViewPicker(this);
+
+    d->picker->deactivate();
+}
+
+void dtkPlotView::activateZooming(void)
+{
+    if(!d->zoomer)
+        d->zoomer = new dtkPlotViewZoomer(this);
+
+    d->zoomer->activate();
+}
+
+void dtkPlotView::deactivateZooming(void)
+{
+    if(!d->zoomer)
+        d->zoomer = new dtkPlotViewZoomer(this);
+
+    d->zoomer->deactivate();
+}
+
+void dtkPlotView::zoomForward(void)
+{
+    if(!d->zoomer)
+        d->zoomer = new dtkPlotViewZoomer(this);
+
+    d->zoomer->zoomForward();
+}
+
+void dtkPlotView::zoomBackward(void)
+{
+    d->zoomer->zoomBackward();
 }
 
 void dtkPlotView::setAxisTitleX(const QString& title)

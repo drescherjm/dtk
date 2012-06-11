@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:38:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. juin  6 15:35:08 2012 (+0200)
+ * Last-Updated: jeu. juin  7 11:17:18 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 43
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -52,7 +52,7 @@ public:
 
 protected:
    virtual dtkComposerSceneNote *readNote(QDomNode node);
-   virtual dtkComposerSceneNode *readNode(QDomNode node);
+   virtual dtkComposerSceneNode *readNode(QDomNode node, bool paste = false);
    virtual dtkComposerSceneEdge *readEdge(QDomNode node);
 
 private:

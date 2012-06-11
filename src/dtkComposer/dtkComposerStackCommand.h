@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mai 16 11:51:24 2012 (+0200)
+ * Last-Updated: ven. juin  8 16:28:38 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 191
+ *     Update #: 195
  */
 
 /* Commentary: 
@@ -469,6 +469,31 @@ public:
 
 private:
     dtkComposerStackCommandDestroyBlockPrivate *e;
+};
+
+
+
+// /////////////////////////////////////////////////////////////////
+// Copy Nodes Command
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerStackCommandCopyNodesPrivate;
+
+class dtkComposerStackCommandCopyNodes: public dtkComposerStackCommand
+{
+public:
+     dtkComposerStackCommandCopyNodes(dtkComposerStackCommand *parent = 0);
+    ~dtkComposerStackCommandCopyNodes(void);
+
+public:
+    void setNodes(dtkComposerSceneNodeList nodes);
+
+public:
+    void redo(void);
+    void undo(void);
+
+private:
+    dtkComposerStackCommandCopyNodesPrivate *e;
 };
 
 #endif

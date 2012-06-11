@@ -110,8 +110,7 @@ void dtkComposerNodeVectorReal::run(void)
     if (!d->receiver_vector.isEmpty()) {
 
         dtkVectorReal& vec(d->receiver_vector.data());
-
-        this->releaseReceivers();
+        // this->releaseReceivers();
 
         d->emitter_vector.setData(vec);
         d->emitter_size.setData(vec.getRows());
@@ -127,7 +126,7 @@ void dtkComposerNodeVectorReal::run(void)
 
         if (size == 0) {
             dtkWarn() << "The size of the vector is zero." ;
-            this->releaseReceivers();
+            // this->releaseReceivers();
 
         } else {
 
@@ -136,7 +135,7 @@ void dtkComposerNodeVectorReal::run(void)
             if (!d->receiver_value.isEmpty())
                 value = qvariant_cast<qreal>(d->receiver_value.data());
 
-            this->releaseReceivers();
+            // this->releaseReceivers();
 
             for(int i = 0 ; i < vec.getRows(); i++)
                 vec[i] = value;

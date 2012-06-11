@@ -111,7 +111,7 @@ void dtkComposerNodeMatrixSquareReal::run(void)
 
         dtkMatrixSquareReal matrix (d->receiver_matrix.data());
 
-        this->releaseReceivers();
+        // this->releaseReceivers();
 
         d->emitter_matrix.setData(matrix);
         d->emitter_size.setData(matrix.getRows());
@@ -127,7 +127,7 @@ void dtkComposerNodeMatrixSquareReal::run(void)
 
         if (size == 0) {
             dtkWarn() << "The size of the matrix is zero." ;
-            this->releaseReceivers();
+            //this->releaseReceivers();
 
         } else {
 
@@ -136,7 +136,7 @@ void dtkComposerNodeMatrixSquareReal::run(void)
             if (!d->receiver_value.isEmpty())
                 value = qvariant_cast<qreal>(d->receiver_value.data());
 
-            this->releaseReceivers();
+            //this->releaseReceivers();
 
             for(int i = 0 ; i < matrix.getRows(); i++) {
                 for(int j = 0 ; j < matrix.getCols(); j++)

@@ -21,11 +21,11 @@ if(NOT DTK_USE_FILE_INCLUDED)
 
    set(DTK_USE_FILE_INCLUDED 1)
 
-   include_directories(${DTK_INCLUDE_DIR})
+   include_directories(${dtk_INCLUDE_DIRS})
 
-   link_directories(${DTK_LIBRARY_DIR})
+   link_directories(${dtk_LIBRARY_DIRS})
 
-   set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${DTK_CMAKE_DIR})
+   set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${dtk_CMAKE_DIRS})
    
    include(dtkDependencies)
    include(dtkBuild)

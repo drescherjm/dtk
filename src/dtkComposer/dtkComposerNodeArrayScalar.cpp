@@ -111,9 +111,6 @@ void dtkComposerNodeArrayScalar::run(void)
     if (!d->receiver_array.isEmpty()) {
 
         dtkContainerVectorReal &array(d->receiver_array.data());
-
-        //this->releaseReceivers();
-
         d->emitter_array.setData(array);
         d->emitter_size.setData(array.count());
 
@@ -128,7 +125,6 @@ void dtkComposerNodeArrayScalar::run(void)
 
         if (size == 0) {
             dtkWarn() << "The size of the array is zero." ;
-           // this->releaseReceivers();
 
         } else {
 
@@ -136,8 +132,6 @@ void dtkComposerNodeArrayScalar::run(void)
 
             if (!d->receiver_value.isEmpty())
                 value = qvariant_cast<qreal>(d->receiver_value.data());
-
-           // this->releaseReceivers();
 
             for(int i = 0 ; i < size; i++)
                 array << value;

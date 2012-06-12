@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 12:30:17 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 30 15:41:32 2012 (+0200)
+ * Last-Updated: Mon Jun 11 11:13:49 2012 (+0200)
  *           By: tkloczko
- *     Update #: 250
+ *     Update #: 251
  */
 
 /* Commentary: 
@@ -442,7 +442,8 @@ template <typename T> inline bool dtkContainerVector<T>::isEqual(const dtkAbstra
         bool is_equal = true;
         dtkxarch_int count = 0;
         while(is_equal && (count < m_vector.count())) {
-            is_equal = (m_vector.at(count) == (*other_o)[count++]);
+            is_equal = (m_vector.at(count) == (*other_o)[count]);
+            count++;
         }
         return is_equal;
 

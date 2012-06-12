@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 31 16:41:54 2012 (+0200)
+ * Last-Updated: Mon Jun 11 16:28:53 2012 (+0200)
  *           By: tkloczko
- *     Update #: 64
+ *     Update #: 65
  */
 
 /* Commentary: 
@@ -112,7 +112,7 @@ void dtkComposerNodeArrayScalar::run(void)
 
         dtkContainerVectorReal array(d->receiver_array.data());
 
-        this->releaseReceivers();
+        //this->releaseReceivers();
 
         d->emitter_array.setData(array);
         d->emitter_size.setData(array.count());
@@ -128,7 +128,7 @@ void dtkComposerNodeArrayScalar::run(void)
 
         if (size == 0) {
             dtkWarn() << "The size of the array is zero." ;
-            this->releaseReceivers();
+            //this->releaseReceivers();
 
         } else {
 
@@ -137,7 +137,7 @@ void dtkComposerNodeArrayScalar::run(void)
             if (!d->receiver_value.isEmpty())
                 value = qvariant_cast<qreal>(d->receiver_value.data());
 
-            this->releaseReceivers();
+            //this->releaseReceivers();
 
             for(int i = 0 ; i < size; i++)
                 array << value;

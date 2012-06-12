@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Nov 22 10:20:27 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Jun  1 11:39:27 2012 (+0200)
+## Last-Updated: Sun Jun 10 01:14:37 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 83
+##     Update #: 99
 ######################################################################
 ## 
 ### Commentary: 
@@ -32,16 +32,25 @@ project(dtkPlot)
 set(${PROJECT_NAME}_HEADERS
   dtkPlotCurve.h
   dtkPlotRenderer.h
-  dtkPlotView.h)
+  dtkPlotView.h
+  dtkPlotViewPanner.h
+  dtkPlotViewPicker.h
+  dtkPlotViewZoomer.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkPlotCurve.h
-  dtkPlotView.h)
+  dtkPlotView.h
+  dtkPlotViewPanner.h
+  dtkPlotViewPicker.h
+  dtkPlotViewZoomer.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkPlotCurve.cpp
   dtkPlotRenderer.cpp
-  dtkPlotView.cpp)
+  dtkPlotView.cpp
+  dtkPlotViewPanner.cpp
+  dtkPlotViewPicker.cpp
+  dtkPlotViewZoomer.cpp)
 
 ## #################################################################
 ## Build rules

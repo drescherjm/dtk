@@ -3,7 +3,7 @@
 
     <file>dtkFinder.qss</file>
     <file>dtkAnchoredBar.qss</file>
-
+    <file>pixmaps/star.svg</file>
 	<file>pixmaps/hidden-folder.png</file>
     <file>pixmaps/dtk-anchored-bar-action.png</file>
     <file>pixmaps/dtk-anchored-bar-add.png</file>

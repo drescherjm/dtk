@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. avril 13 18:46:54 2012 (+0200)
+ * Last-Updated: mer. juin 13 12:34:35 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 100
+ *     Update #: 106
  */
 
 /* Commentary: 
@@ -42,6 +42,9 @@ public:
     ~dtkDistributedController(void);
 
 public:
+    static dtkDistributedController *instance(void);
+
+public:
     bool    isConnected(const QUrl& server);
     bool isDisconnected(const QUrl& server);
 
@@ -65,10 +68,12 @@ public slots:
     void disconnect(const QUrl& server);
     void     deploy(const QUrl& server);
     void    refresh(const QUrl& server);
-    void     submit(const QUrl& server, QByteArray& resources);
     void    killjob(const QUrl& server, QString jobid);
     void       send(dtkDistributedMessage *msg);
     void       send(dtkAbstractData *data, QString jobid, qint16 destrank);
+
+public slots:
+    bool     submit(const QUrl& server, QByteArray& resources);
 
 public:
     QList<dtkDistributedNode *> nodes(void);
@@ -84,6 +89,9 @@ protected slots:
 
 protected slots:
     void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+
+private:
+    static dtkDistributedController *s_instance;
 
 private:
     dtkDistributedControllerPrivate *d;

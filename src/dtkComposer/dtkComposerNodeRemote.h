@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:15:12
  * Version: $Id$
- * Last-Updated: ven. avril 13 21:43:24 2012 (+0200)
+ * Last-Updated: mer. juin 13 10:49:51 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 19
+ *     Update #: 23
  */
 
 /* Commentary:
@@ -22,6 +22,7 @@
 
 #include "dtkComposerExport.h"
 #include "dtkComposerNodeComposite.h"
+#include "dtkComposerNodeLeaf.h"
 
 #include <QDomDocument>
 
@@ -63,5 +64,63 @@ public:
 private:
     dtkComposerNodeRemotePrivate *d;
 };
+
+
+
+
+
+// /////////////////////////////////////////////////////////////////
+// Distributed submit
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeRemoteSubmitPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeRemoteSubmit : public QObject, public dtkComposerNodeLeaf
+{
+    Q_OBJECT
+
+public:
+     dtkComposerNodeRemoteSubmit(void);
+    ~dtkComposerNodeRemoteSubmit(void);
+
+public:
+    void run(void);
+
+public slots:
+    void onJobStarted(QString id);
+
+public:
+    inline QString type(void) {
+        return "remoteSubmit";
+    }
+
+    inline QString titleHint(void) {
+        return "Remote Submit";
+    }
+
+
+public:
+    inline QString inputLabelHint(int port) {
+        if (port == 0)
+            return "cluster";
+        else if (port == 1)
+            return "nodes";
+        else if (port == 2)
+            return "cores";
+        else if (port == 3)
+            return "walltime";
+        else
+            return "value";
+    }
+
+public:
+    inline QString outputLabelHint(int) {
+        return "id";
+    }
+
+protected:
+    dtkComposerNodeRemoteSubmitPrivate *d;
+};
+
 
 #endif /* DTKCOMPOSERNODEREMOTE_H */

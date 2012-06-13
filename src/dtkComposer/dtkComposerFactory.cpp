@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Thu May 31 00:22:09 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 626
+ * Last-Updated: mer. juin 13 10:52:01 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 634
  */
 
 /* Commentary:
@@ -730,6 +730,10 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Remote"] = QStringList() <<  "distributed" << "tcp" << "remote" << "world";
     d->types["Remote"] = "remote";
 
+    d->nodes << "Remote Submit";
+    d->tags["Remote Submit"] = QStringList() <<  "distributed" << "tcp" << "remote" << "submit" << "job";
+    d->types["Remote Submit"] = "remoteSubmit";
+
     // /////////////////////////////////////////////////////////////////
     // Plot nodes
     // /////////////////////////////////////////////////////////////////
@@ -1207,6 +1211,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "remote")
         return new dtkComposerNodeRemote;
+
+    if(type == "remoteSubmit")
+        return new dtkComposerNodeRemoteSubmit;
 
     // /////////////////////////////////////////////////////////////////
     // NITE nodes

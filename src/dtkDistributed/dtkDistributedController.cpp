@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. mai 11 15:23:06 2012 (+0200)
+ * Last-Updated: mer. juin 13 12:32:57 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 1586
+ *     Update #: 1607
  */
 
 /* Commentary: 
@@ -245,6 +245,14 @@ dtkDistributedController::~dtkDistributedController(void)
     d = NULL;
 }
 
+DTKDISTRIBUTED_EXPORT dtkDistributedController *dtkDistributedController::instance(void)
+{
+    if(!s_instance)
+        s_instance = new dtkDistributedController;
+
+    return s_instance;
+}
+
 bool dtkDistributedController::isConnected(const QUrl& server)
 {
     if(d->sockets.keys().contains(server.toString())) {
@@ -269,17 +277,23 @@ bool dtkDistributedController::isDisconnected(const QUrl& server)
     return true;
 }
 
-void dtkDistributedController::submit(const QUrl& server,  QByteArray& resources)
+bool dtkDistributedController::submit(const QUrl& server,  QByteArray& resources)
 {
     dtkDebug() << "Want to submit jobs with resources:" << resources;
-    dtkDistributedMessage *msg  = new dtkDistributedMessage(dtkDistributedMessage::NEWJOB,"",-2,resources.size(),"json",resources);
-    d->sockets[server.toString()]->sendRequest(msg);
+    dtkDistributedMessage *msg  = new dtkDistributedMessage(dtkDistributedMessage::NEWJOB,"",dtkDistributedMessage::SERVER_RANK,resources.size(),"json",resources);
+    if (d->sockets.contains(server.toString())) {
+        d->sockets[server.toString()]->sendRequest(msg);
+        return true;
+    } else
+        dtkDebug() << "Can't submit job: unknown server " << server.toString();
+
+    return false;
 }
 
 void dtkDistributedController::killjob(const QUrl& server, QString jobid)
 {
     dtkDebug() << "Want to kill job" << jobid;
-    dtkDistributedMessage *msg  = new dtkDistributedMessage(dtkDistributedMessage::DELJOB,jobid,-2);
+    dtkDistributedMessage *msg  = new dtkDistributedMessage(dtkDistributedMessage::DELJOB,jobid,dtkDistributedMessage::SERVER_RANK);
     d->sockets[server.toString()]->sendRequest(msg);
 }
 
@@ -612,3 +626,6 @@ void dtkDistributedController::error(QAbstractSocket::SocketError error)
         break;
     }
 }
+
+dtkDistributedController *dtkDistributedController::s_instance = NULL;
+

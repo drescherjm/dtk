@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:48:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 16 10:38:47 2012 (+0200)
+ * Last-Updated: Wed Jun 13 16:51:41 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 123
+ *     Update #: 142
  */
 
 /* Commentary:
@@ -44,6 +44,11 @@ public:
     typedef dtkAbstractDataDeserializer *(*dtkAbstractDataDeserializerCreator)(void);
 
 public:
+    typedef QMap<int, QString> dtkAbstractDataFactoryReaderPriorityMap;
+    typedef QMap<int, QString> dtkAbstractDataFactoryWriterPriorityMap;
+    typedef QMap<int, QString> dtkAbstractDataFactoryConverterPriorityMap;
+
+public:
     static dtkAbstractDataFactory *instance(void);
 
     bool registerDataType         (const QString& type,                             dtkAbstractDataCreator          func);
@@ -74,6 +79,16 @@ public:
     dtkSmartPointer<dtkAbstractDataConverter> converterSmartPointer(const QString& type);
     dtkSmartPointer<dtkAbstractDataSerializer> serializerSmartPointer(const QString& type);
     dtkSmartPointer<dtkAbstractDataDeserializer> deserializerSmartPointer(const QString& type);
+
+public:
+    void setReaderPriorities(const dtkAbstractDataFactoryReaderPriorityMap& priorities);
+    void setWriterPriorities(const dtkAbstractDataFactoryWriterPriorityMap& priorities);
+    void setConverterPriorities(const dtkAbstractDataFactoryConverterPriorityMap& priorities);
+
+protected:
+    const dtkAbstractDataFactoryReaderPriorityMap& readerPriorities(void) const;
+    const dtkAbstractDataFactoryWriterPriorityMap& writerPriorities(void) const;
+    const dtkAbstractDataFactoryConverterPriorityMap& converterPriorities(void) const;
 
 public:
     QStringList implementations(const QString& interface);

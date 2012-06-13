@@ -172,16 +172,20 @@ endif(OPENSSL_FOUND)
 ## Mpi
 ## #################################################################
 
-mark_as_advanced(MPI_EXTRA_LIBRARY)
-mark_as_advanced(MPI_LIBRARY)
+OPTION(USE_MPI "Use the MPI library for distributed computing" OFF)
 
-find_package(MPI QUIET)
+if(USE_MPI)
+  mark_as_advanced(MPI_EXTRA_LIBRARY)
+  mark_as_advanced(MPI_LIBRARY)
 
-if(MPI_FOUND)
-include_directories(${MPI_INCLUDE_PATH})
-set(COMPILE_FLAGS ${COMPILE_FLAGS} ${MPI_COMPILE_FLAGS})
-set(DTK_HAVE_MPI "YES")
-endif(MPI_FOUND)
+  find_package(MPI QUIET)
+
+  if(MPI_FOUND)
+    include_directories(${MPI_INCLUDE_PATH})
+    set(COMPILE_FLAGS ${COMPILE_FLAGS} ${MPI_COMPILE_FLAGS})
+    set(DTK_HAVE_MPI "YES")
+  endif(MPI_FOUND)
+endif(USE_MPI)
 
 ## #################################################################
 ## Vrpn
@@ -213,9 +217,9 @@ mark_as_advanced(VRPN_LIBRARY)
 ## 
 ## #################################################################
 
-if(MPI_FOUND AND QUAT_LIBRARY AND VRPN_LIBRARY)
+if(USE_MPI AND MPI_FOUND AND QUAT_LIBRARY AND VRPN_LIBRARY)
   add_definitions(-DDTK_WRAP_VRPN)
-endif(MPI_FOUND AND QUAT_LIBRARY AND VRPN_LIBRARY)
+endif(USE_MPI AND MPI_FOUND AND QUAT_LIBRARY AND VRPN_LIBRARY)
 
 ## #################################################################
 ## Qwt

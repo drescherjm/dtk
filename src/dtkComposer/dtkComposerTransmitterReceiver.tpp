@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jun  8 15:14:56 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 298
+ * Last-Updated: Wed Jun 13 15:07:57 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 300
  */
 
 /* Commentary: 
@@ -478,6 +478,18 @@ template <typename T> bool dtkComposerTransmitterReceiverVector<T>::disconnect(d
     }
 
     return ok;
+};
+    
+//! 
+/*! 
+ *  
+ */
+template <typename T> bool dtkComposerTransmitterReceiverVector<T>::isEmpty(void)
+{
+    if (emitters.isEmpty() && variants.isEmpty())
+        return true;
+
+    return false;
 };
     
 //! 

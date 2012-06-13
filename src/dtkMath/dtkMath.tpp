@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Mar  9 11:05:40 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar  9 11:06:27 2011 (+0100)
+ * Last-Updated: Tue Apr 24 21:10:02 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 2
+ *     Update #: 89
  */
 
 /* Commentary: 
@@ -24,6 +24,22 @@
 #include "dtkQuaternion.h"
 #include "dtkVector3D.h"
 
+static double dtkDeg2Rad(double v)
+{
+    return v*M_PI/180.0;
+}
+
+static double dtkRad2Deg(double v)
+{
+    return v*180.0/M_PI;
+}
+
+template <class T> dtkVector3D<T> dtkRotate(const dtkQuaternion<T>& quaternion, const dtkVector3D<T>& vector)
+{
+    dtkQuaternion<T> q(quaternion*dtkQuaternion<T>(vector[0], vector[1], vector[2], 0)*dtkInverse<T>(quaternion));
+    return dtkVector3D<T>(q[0], q[1], q[2]);
+}
+
 //! dtkMixedProduct(const dtkVector3D &v0, const dtkVector3D &v1, const dtkVector3D &v2)
 /*! 
  * This function calculates the mixed product (also called triple scalar product)
@@ -38,133 +54,46 @@ template <class T>  T dtkMixedProduct(const dtkVector3D<T> &v0,
     return (v0*v);
 }
 
-//! dtkMatSquaredFromEuler321(rotateAbout3, rotateAbout2, rotateAbout1)
-/*!
- * This function returns a transformation matrix which transforms coordinates from
- * the reference axis system to coordinates in an axis system with
- * Euler angles: rotateAbout3, rotateAbout2, rotateAbout1 relative to that
- * reference axis system.
- *
- * rotation about axis 3 (yaw angle), axis 2 (pitch angle) axis 1
- * (roll angle)
-*/
-template <class T> dtkMatrixSquared<T> dtkMatSquaredFromEuler321Angles(T rotateAbout3,
-                                                                   T rotateAbout2,
-                                                                   T rotateAbout1)
-{
-    dtkMatrixSquared<T> mat(3U);
-
-    T sin3 = sin(rotateAbout3);
-    T sin2 = sin(rotateAbout2);
-    T sin1 = sin(rotateAbout1);
-
-    T cos3 = cos(rotateAbout3);
-    T cos2 = cos(rotateAbout2);
-    T cos1 = cos(rotateAbout1);
-
-    mat[0][0] =  cos3*cos2;
-    mat[0][1] =  sin3*cos2;
-    mat[0][2] = -sin2;
-
-    mat[1][0] = -sin3*cos1 + cos3*sin2*sin1;
-    mat[1][1] =  cos3*cos1 + sin3*sin2*sin1;
-    mat[1][2] =  cos2*sin1;
-
-    mat[2][0] =  sin3*sin1 + cos3*sin2*cos1;
-    mat[2][1] = -cos3*sin1 + sin3*sin2*cos1;
-    mat[2][2] =  cos2*cos1;
-
-    return mat;
-}
-
-//! dtkEuler321Angle3FromMatSquared(const dtkMatrixSquared<T> &mat)
-/* 
- * Computation of the Euler yaw angle (rotation about Z-axis) from a transformation matrix.
- * WARNING!!! This function suffers from the ubiquitos singularities at 0, pi, 2*pi, etc.
- */
-template <class T> T dtkEuler321Angle3FromMatSquared(const dtkMatrixSquared<T> &mat)
-{
-    return atan2(mat[0][1], mat[0][0]);
-}
-
-//! dtkEuler321Angle2FromMatSquared(const dtkMatrixSquared<T> &mat)
-/* 
- * Computation of the Euler pitch angle (rotation angle about Y-axis) from a transformation matrix.
- * WARNING!!! This function suffers from the ubiquitos singularities at 0, pi, 2*pi, etc.
- */
-template <class T> T dtkEuler321Angle2FromMatSquared(const dtkMatrixSquared<T> &mat)
-{
-    return asin(-mat[0][2]);
-}
-
-//! dtkEuler321Angle1FromMatSquared(const dtkMatrixSquared<T> &mat)
-/* 
- * Computation of the Euler roll angle (rotation angle about X-axis) from a transformation matrix.
- * WARNING!!! This function suffers from the ubiquitos singularities at 0, pi, 2*pi, etc.
- */
-template <class T> T dtkEuler321Angle1FromMatSquared(const dtkMatrixSquared<T> &mat)
-{
-    return atan2(mat[1][2], mat[2][2]);
-}
-
-//! dtkEuler321Angle3FromQuaternion(const dtkQuaternion<T> &qtn)
-/* 
- * Computation of the Euler yaw angle (rotation angle about Z-axis) from a quaternion
- * that represents a rigid body's attitude.
- * WARNING!!! This function suffers from the ubiquitos singularities at 0, pi, 2*pi, etc.
- */
-template <class T> T dtkEuler321Angle3FromQuaternion(const dtkQuaternion<T> &qtn)
-{
-    T qtn0 = qtn[0];
-    T qtn1 = qtn[1];
-    T qtn2 = qtn[2];
-    T qtn3 = qtn[3];
-
-    // NOTE: Speed tip from Jeffrey T Duncan: use the identity: 1 =
-    // q0^2 + q1^2 + q2^2 + q3^2 which simplifies: q0^2 - q1^2 -
-    // q2^2 + q3^2 down to: 2*(q0^2 + q3^2) - 1
-    return atan2(2*(qtn0*qtn1 + qtn2*qtn3),
-		 2*(qtn0*qtn0 + qtn3*qtn3) - 1);
-}
-
-//! dtkEuler321Angle2FromQuaternion(const dtkQuaternion<T> &qtn)
-/* 
- * Computation of the Euler pitch angle (rotation angle about Y-axis) from a quaternion
- * that represents a rigid body's attitude.
- * WARNING!!! This function suffers from the ubiquitos singularities at 0, pi, 2*pi, etc.
- */
-template <class T> T dtkEuler321Angle2FromQuaternion(const dtkQuaternion<T> &qtn)
-{
-    return asin(-2*(qtn[0]*qtn[2] - qtn[1]*qtn[3]));
-}
-
-//! dtkEuler321Angle1FromQuaternion(const dtkQuaternion<T> &qtn)
-/* 
- * Computation of the Euler roll angle (rotation angle about X-axis) from a quaternion
- * that represents a rigid body's attitude.
- * WARNING!!! This function suffers from the ubiquitos singularities at 0, pi, 2*pi, etc.
- */
-template <class T> T dtkEuler321Angle1FromQuaternion(const dtkQuaternion<T> &qtn)
-{
-    T qtn0 = qtn[0];
-    T qtn1 = qtn[1];
-    T qtn2 = qtn[2];
-    T qtn3 = qtn[3];
-
-    return atan2(2*(qtn1*qtn2 + qtn0*qtn3),
-		 2*(qtn2*qtn2 + qtn3*qtn3) - 1);
-}
-
 //! dtkQuaternionFromEulerAxisAndAngle(const dtkVector3D<T> &dtkVecEulerAxis, const T &rotateEulerAngle)
 /*! 
  * This function returns a quaternion representing a rigid body's 
  * attitude from its Euler axis and angle. 
  * NOTE: Argument vector dtkVecEulerAxis MUST be a unit vector.
  */
-template <class T> dtkQuaternion<T> dtkQuaternionFromEulerAxisAndAngle(const dtkVector3D<T> &dtkVecEulerAxis,
-                                                                       const T &rotateEulerAngle)
+template <class T> dtkQuaternion<T> dtkQuaternionFromAxisAngle(const dtkVector3D<T> &axis, const T &angle)
 {
-    return dtkQuaternion<T>(1, dtkVecEulerAxis, 0.5*rotateEulerAngle);
+    dtkVector3D<T> v = axis.unit();
+
+    return dtkQuaternion<T>(1.0, dtkVector3D<T>(axis[0], axis[1], axis[2]), dtkDeg2Rad(angle/(T)2));
+}
+
+template <class T> dtkQuaternion<T> dtkQuaternionFromHPR(T h, T p, T r)
+{
+    T  cosH, sinH, cosP, sinP, cosR, sinR;
+    T  half_r, half_p, half_h;
+
+   /* put angles into radians and divide by two, since all angles in formula
+    *  are (angle/2)
+    */
+
+   half_h = dtkDeg2Rad(h / 2.0);
+   half_p = dtkDeg2Rad(p / 2.0);
+   half_r = dtkDeg2Rad(r / 2.0);
+
+   cosH = cos(half_h);
+   sinH = sin(half_h);
+
+   cosP = cos(half_p);
+   sinP = sin(half_p);
+
+   cosR = cos(half_r);
+   sinR = sin(half_r);
+
+   return dtkQuaternion<T>(
+        sinR * cosP * cosH - cosR * sinP * sinH,
+        cosR * sinP * cosH + sinR * cosP * sinH,
+        cosR * cosP * sinH - sinR * sinP * cosH,
+        cosR * cosP * cosH + sinR * sinP * sinH);
 }
 
 //! dtkEulerAxisFromQuaternion(const dtkQuaternion<T> &qtn)
@@ -172,70 +101,11 @@ template <class T> dtkQuaternion<T> dtkQuaternionFromEulerAxisAndAngle(const dtk
  * This function returns Euler axis from a quaternion representing a rigid body's
  * attitude.
  */
-template <class T> dtkVector3D<T> dtkEulerAxisFromQuaternion(const dtkQuaternion<T> &qtn)
+template <class T> dtkVector3D<T> dtkAxisFromQuaternion(const dtkQuaternion<T> &qtn)
 {
-    T sclrTmp = sqrt(1 - qtn[3]*qtn[3]);
+    dtkVector3D<T> axis(qtn[0], qtn[1], qtn[2]);
 
-    return dtkVector3D<T>(qtn[0]/sclrTmp,
-			     qtn[1]/sclrTmp,
-			     qtn[2]/sclrTmp);
-}
-
-//! dtkEulerAngleFromQuaternion(const dtkQuaternion<T> &qtn)
-/*!
- * This function returns Euler angle from a quaternion representing a rigid body's
- * attitude.
- */
-template <class T> T dtkEulerAngleFromQuaternion(const dtkQuaternion<T> &qtn)
-{
-    return 2*acos(qtn[3]);
-}
-
-//! dtkQuaternionFromEuler321Angles(T rotateAbout3, T rotateAbout2, T rotateAbout1)
-/*! 
- * This function returns a quaternion representing a
- * rigid body's attitude. The quaternion elements correspond to the
- * Euler symmetric parameters of the body. The body's attitude must
- * be entered in Euler angle representation with rotation order
- * 3-2-1, i.e. first about Z-axis next about Y-axis and finally
- * about X-axis.
- */
-template <class T> dtkQuaternion<T> dtkQuaternionFromEuler321Angles(T rotateAbout3,
-                                                                    T rotateAbout2,
-                                                                    T rotateAbout1)
-{
-    return dtkQuaternion<T>(1, dtkVector3D<T>(0, 0, 1), 0.5*rotateAbout3)
-        * dtkQuaternion<T>(1, dtkVector3D<T>(0, 1, 0), 0.5*rotateAbout2)
-        * dtkQuaternion<T>(1, dtkVector3D<T>(1, 0, 0), 0.5*rotateAbout1);
-}
-
-//! dtkMatSquaredFromQuaternion(const dtkQuaternion<T> &qtn)
-/*! 
- * This function returns the transformation matrix corresponding to a
- * quaternion.
-*/
-template <class T> dtkMatrixSquared<T> dtkMatSquaredFromQuaternion(const dtkQuaternion<T> &qtn)
-{
-    dtkMatrixSquared<T> mat(3U);
-
-    T qtn0 = qtn[0];
-    T qtn1 = qtn[1];
-    T qtn2 = qtn[2];
-    T qtn3 = qtn[3];
-
-    mat[0][0] = 1 - 2*(qtn1*qtn1 + qtn2*qtn2);
-    mat[0][1] = 2*(qtn0*qtn1 + qtn2*qtn3);
-    mat[0][2] = 2*(qtn0*qtn2 - qtn1*qtn3);
-
-    mat[1][0] = 2*(qtn0*qtn1 - qtn2*qtn3);
-    mat[1][1] = 1 - 2*(qtn0*qtn0 + qtn2*qtn2);
-    mat[1][2] = 2*(qtn1*qtn2 + qtn0*qtn3);
-
-    mat[2][0] = 2*(qtn0*qtn2 + qtn1*qtn3);
-    mat[2][1] = 2*(qtn1*qtn2 - qtn0*qtn3);
-    mat[2][2] = 1 - 2*(qtn0*qtn0 + qtn1*qtn1);
-
-    return mat;
+    return axis.unit();
 }
 
 //! dtkQuaternionFromMatSquared(const dtkMatrixSquared<T> &mat)
@@ -245,7 +115,7 @@ template <class T> dtkMatrixSquared<T> dtkMatSquaredFromQuaternion(const dtkQuat
 */
 template <class T> dtkQuaternion<T> dtkQuaternionFromMatSquared(const dtkMatrixSquared<T> &mat)
 {
-    T sclrTmp = dtkTrace(mat);
+    T sclrTmp = dtkMatrixSquaredTrace(mat);
 
     dtkQuaternion<T> qtn;
 
@@ -295,25 +165,14 @@ template <class T> dtkQuaternion<T> dtkQuaternionFromMatSquared(const dtkMatrixS
     return qtn;
 }
 
-//! dtkAxisAngleFromQuaternion( const dtkQuaternion<T> &qtn )
-/*! 
- * This function duplicates dtkEulerAxisFromQuaternion(qtn) it only has
- * a different return type.
-*/
-template <class T> dtkVector<T> dtkAxisAngleFromQuaternion(const dtkQuaternion<T>& qtn)
+//! dtkEulerAngleFromQuaternion(const dtkQuaternion<T> &qtn)
+/*!
+ * This function returns Euler angle from a quaternion representing a rigid body's
+ * attitude.
+ */
+template <class T> T dtkAngleFromQuaternion(const dtkQuaternion<T> &qtn)
 {
-    return dtkEulerAxisFromQuaternion(qtn);
-}
-
-//! dtkQuaternionFromAxisAngle( const dtkVector<T> &axis, const T angle )
-/*! 
-* This function duplicates dtkQuaternionFromEulerAxisAndAngle(..) it
-* only has a different function profile.
-*/
-template <class T> dtkQuaternion<T> dtkQuaternionFromAxisAngle( const dtkVector<T> &axis,
-                                                                const T angle )
-{
-    return dtkQuaternionFromEulerAxisAndAngle(dtkVector3D<T>(axis), angle);
+    return 2*dtkRad2Deg(acos(qtn[3]));
 }
 
 //! dtkChangeOfBasis(dtkVector3D< dtkVector3D<T> >&from, dtkVector3D< dtkVector3D<T> >&to)

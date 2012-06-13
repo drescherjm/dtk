@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: mer. oct. 12 14:08:11 2011 (+0200)
+ * Last-Updated: mer. mai 30 15:05:06 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 633
+ *     Update #: 794
  */
 
 /* Commentary:
@@ -17,9 +17,15 @@
  *
  */
 
+#include "dtkDistributedSocket.h"
+
+#include <dtkCore/dtkAbstractData.h>
+#include <dtkCore/dtkAbstractDataFactory.h>
 #include <dtkCore/dtkGlobal.h>
 
-#include "dtkDistributedSocket.h"
+#include <dtkMath/dtkMath.h>
+
+#include <dtkLog/dtkLog.h>
 
 class dtkDistributedSocketPrivate
 {
@@ -33,6 +39,73 @@ dtkDistributedSocket::~dtkDistributedSocket(void)
 {
     delete d;
     d = NULL;
+}
+
+void dtkDistributedSocket::send(dtkAbstractData *data, QString jobid, qint16 target)
+{
+    QByteArray *array;
+    QString type = "dtkAbstractData/"+data->identifier();
+
+    array = data->serialize();
+    if (!array->isNull()) {
+        dtkDistributedMessage msg = dtkDistributedMessage(dtkDistributedMessage::DATA,jobid, target, array->size(), type);
+        this->sendRequest(&msg);
+        this->write(*array);
+    } else {
+        dtkError() << "serialization failed";
+    }
+}
+
+void dtkDistributedSocket::send(QVariant variant, QString jobid, qint16 target)
+{
+    QByteArray *array;
+
+    QString type = variant.typeName();
+
+    if(type == "dtkVector3DReal") {
+        dtkVector3DReal v = variant.value<dtkVector3DReal>();
+        array = new QByteArray;
+        QDataStream stream(array, QIODevice::WriteOnly);
+        stream << v[0] << v[1] << v[2];
+
+    } else if(type == "dtkVectorReal") {
+        dtkVectorReal v = variant.value<dtkVectorReal>();
+        int size = v.getRows();
+        array = new QByteArray;
+        QDataStream stream(array, QIODevice::WriteOnly);
+        stream << size ;
+        for  (int i =0; i < size ; i++)
+            stream << v[i] ;
+
+    } else if(type == "dtkQuaternionReal") {
+        dtkQuaternionReal v = variant.value<dtkQuaternionReal>();
+        array = new QByteArray;
+        QDataStream stream(array, QIODevice::WriteOnly);
+        stream << v[0] << v[1] << v[2] << v[3];
+
+    } else {
+        bool is_pointer =false;
+        if (type != "dtkAbstractData")
+            dtkInfo() << "type is unknown ("<< type<<  "), assume it inherit from dtkAbstractData";
+        if (type.endsWith("*")) { // pointer, remote the * character
+            type.chop(1);
+            is_pointer = true;
+            dtkDebug() << "pointer type, remove *"<< type;
+        }
+        dtkAbstractData *data = dtkAbstractDataFactory::instance()->create(type)->fromVariant(variant);
+        qDebug() << __func__ << data->identifier();
+        array = data->serialize();
+    }
+
+    if (!array->isNull()) {
+        dtkTrace() << "Array size is"<< array->size();
+        dtkDistributedMessage msg = dtkDistributedMessage(dtkDistributedMessage::DATA,jobid, target, array->size(), type);
+        this->sendRequest(&msg);
+        this->write(*array);
+        this->flush();
+    } else {
+        dtkError() << "serialization failed";
+    }
 }
 
 qint64 dtkDistributedSocket::sendRequest( dtkDistributedMessage *msg)
@@ -63,7 +136,6 @@ qint64 dtkDistributedSocket::sendRequest( dtkDistributedMessage *msg)
     } else {
         ret = this->write(buffer.toAscii());
         ret += this->write(msg->content());
-        this->flush();
     }
 
     return ret;
@@ -72,41 +144,42 @@ qint64 dtkDistributedSocket::sendRequest( dtkDistributedMessage *msg)
 /**
  * read and parse data from socket
  *
- * @return QVariantMap
+ * @return dtkDistributedMessage
  */
-dtkDistributedMessage dtkDistributedSocket::parseRequest(void)
+dtkDistributedMessage *dtkDistributedSocket::parseRequest(void)
 {
-    dtkDistributedMessage msg ;
-    msg.setMethod(this->readLine());
+    dtkDistributedMessage *msg = new dtkDistributedMessage;
+
+    msg->setMethod(this->readLine());
 
     // read content-size
-    msg.setSize(this->readLine());
+    msg->setSize(this->readLine());
 
-    if (msg.size() > 0) {
+    if (msg->size() > 0) {
         //read content-type
-        msg.setType(this->readLine());
+        msg->setType(this->readLine());
 
         // read optional headers
         QByteArray line = this->readLine();
         while (!QString(line).trimmed().isEmpty()) {// empty line after last header
-            msg.setHeader(QString(line));
+            msg->setHeader(QString(line));
             line=this->readLine();
         }
 
         // read content
         QByteArray buffer;
-        buffer.append(this->read(msg.size()));
-        while (buffer.size() < msg.size() ) {
+        buffer.append(this->read(msg->size()));
+        while (buffer.size() < msg->size() ) {
             if (this->waitForReadyRead()) {
-                buffer.append(this->read(msg.size()-buffer.size()));
+                buffer.append(this->read(msg->size()-buffer.size()));
             } else {
-                qDebug() << "not enough data received, only  " << buffer.size() << "out of " << msg.size() ;
-                msg.setContent(buffer);
-                msg.addHeader("missing_data",QString::number(msg.size()-buffer.size()));
+                dtkWarn() << "not enough data received, only  " << buffer.size() << "out of " << msg->size() ;
+                msg->setContent(buffer);
+                msg->addHeader("missing_data",QString::number(msg->size()-buffer.size()));
                 break;
             }
         }
-        msg.setContent(buffer);
+        msg->setContent(buffer);
     } else
         // end of request == empty line
         this->readLine();

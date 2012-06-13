@@ -16,7 +16,7 @@
  * \sa    DTK_DECLARE_SINGLETON
  */
 
-#include <dtkCore/dtkSingleton.h>
+#include "dtkSingleton.h"
 
 /** \file  dtkSingleton.h
     \brief Declare dtkSingleton and helpers.

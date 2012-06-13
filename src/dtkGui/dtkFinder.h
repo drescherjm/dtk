@@ -156,13 +156,10 @@ public:
 
     void addDefaultContextMenuAction(QAction *action);
 
-    /** Returns the currently selected path, or the first one if more than one item is selected. */
     QString selectedPath() const;
 
-    /** Returns the currently selected paths. */
     QStringList selectedPaths() const;
 
-    /** Set whether it is allowed to bookmark files. */
     void allowFileBookmarking(bool isAllowed);
 
 signals:
@@ -204,13 +201,10 @@ public:
 
     void addDefaultContextMenuAction(QAction *action);
 
-    /** Returns the currently selected path, or the first one if more than one item is selected. */
     QString selectedPath() const;
 
-    /** Returns the currently selected paths. */
     QStringList selectedPaths() const;
 
-    /** Set whether it is allowed to bookmark files. */
     void allowFileBookmarking(bool isAllowed);
 
 signals:
@@ -249,16 +243,12 @@ public:
 
     void addContextMenuAction(QAction *action);
 
-    /** Returns the currently selected path, or the first one if more than one item is selected. */
     QString selectedPath() const;
 
-    /** Returns the currently selected paths. */
     QStringList selectedPaths() const;
 
-    /** Set whether it is allowed to bookmark files. */
     void allowFileBookmarking(bool isAllowed);
 
-    /** Set whether multiple files can be selected at the same time. */
     void allowMultipleSelection(bool isAllowed);
 
 signals:
@@ -279,7 +269,6 @@ public slots:
     void onShowHiddenFiles(bool);
     void switchShowHiddenFiles();
 
-    /** Bookmarks the currently selected item(s). */
     void onBookmarkSelectedItemsRequested(void);
 
 protected slots:

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Dec 23 09:56:30 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Dec 23 10:28:47 2009 (+0100)
+ * Last-Updated: Tue May 15 13:43:35 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 24
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -520,6 +520,7 @@ public:
 dtkSettingsEditor::dtkSettingsEditor(QWidget *parent) : QWidget(parent), d(new dtkSettingsEditorPrivate)
 {
     d->tree = new dtkSettingsEditorTree(this);
+    d->tree->setAttribute(Qt::WA_MacShowFocusRect, false);
     
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);

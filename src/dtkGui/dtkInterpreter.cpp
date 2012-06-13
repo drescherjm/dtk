@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 15:31:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 14 21:20:30 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 400
+ * Last-Updated: Wed Apr  4 13:03:15 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 419
  */
 
 /* Commentary: 
@@ -23,7 +23,8 @@
 #include <QtCore>
 #include <QtGui>
 
-#include <dtkCore/dtkLog.h>
+#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLogger.h>
 
 #include <dtkScript/dtkScriptInterpreter.h>
 #if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
@@ -33,10 +34,7 @@
 #include <dtkScript/dtkScriptInterpreterTcl.h>
 #endif
 
-#include <dtkGui/dtkTextEditorSyntaxHighlighterPython.h>
-#include <dtkGui/dtkTextEditorSyntaxHighlighterTcl.h>
-#include <dtkGui/dtkInterpreter.h>
-#include <dtkGui/dtkInterpreterPreferencesWidget.h>
+#include "dtkInterpreter.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkInterpreterPrivate
@@ -46,7 +44,6 @@ class dtkInterpreterPrivate
 {
 public:
     dtkScriptInterpreter *interpreter;
-    dtkInterpreterPreferencesWidget *preferences;
     
     QTextCursor cursor;
 
@@ -63,7 +60,6 @@ dtkInterpreter::dtkInterpreter(QWidget *parent) : dtkTextEditor(parent)
 {
     d = new dtkInterpreterPrivate;
     d->interpreter = NULL;
-    d->preferences = NULL;
 
     d->history_index = 0;
     d->history_dirty = false;
@@ -71,10 +67,14 @@ dtkInterpreter::dtkInterpreter(QWidget *parent) : dtkTextEditor(parent)
     this->setShowLineNumbers(false);
     this->setShowCurrentLine(false);
     this->setShowRevisions(false);
+
+    dtkLogger::instance().attachText(this);
 }
 
 dtkInterpreter::~dtkInterpreter(void)
 {
+    dtkLogger::instance().detachText(this);
+
     delete d;
 }
 
@@ -164,11 +164,6 @@ void dtkInterpreter::writeSettings(void)
     settings.endGroup();
 }
 
-void dtkInterpreter::registerAsHandler(dtkLog::Handler handler)
-{
-    dtkLog::registerHandler(handler);
-}
-
 void dtkInterpreter::registerInterpreter(dtkScriptInterpreter *interpreter)
 {
     d->interpreter = interpreter;
@@ -180,29 +175,7 @@ void dtkInterpreter::registerInterpreter(dtkScriptInterpreter *interpreter)
     connect(this, SIGNAL( save(const QString&)),        interpreter,    SLOT(     save(const QString&)));
     connect(this, SIGNAL(stopped(void)),                interpreter,  SIGNAL(  stopped(void)));
 
-    dtkTextEditorSyntaxHighlighter *highlighter = NULL;
-
-#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
-    if(dynamic_cast<dtkScriptInterpreterPython *>(interpreter))
-        highlighter = new dtkTextEditorSyntaxHighlighterPython(this);
-#endif
-
-#if defined(HAVE_SWIG) && defined(HAVE_TCL)
-    if(dynamic_cast<dtkScriptInterpreterTcl *>(interpreter))
-        highlighter = new dtkTextEditorSyntaxHighlighterTcl(this);
-#endif
-
-    Q_UNUSED(highlighter);
-
     this->appendPlainText(filter(d->interpreter->prompt()));
-}
-
-dtkInterpreterPreferencesWidget *dtkInterpreter::preferencesWidget(QWidget *parent)
-{
-    if(!d->preferences)
-        d->preferences = new dtkInterpreterPreferencesWidget(this, parent);
-
-    return d->preferences;
 }
 
 void dtkInterpreter::onKeyUpPressed(void)
@@ -217,7 +190,7 @@ void dtkInterpreter::onKeyUpPressed(void)
         QString line = currentLine();
         if(d->interpreter)
             line.remove(filter(d->interpreter->prompt()));
-        
+ 
         d->history.push_front(line);
         d->history_dirty = true;
     }
@@ -380,17 +353,4 @@ QString dtkInterpreter::filter(QString text)
         .remove(DTK_COLOR_FG_BD)
         .remove(DTK_COLOR_FG_UL)
         .remove(DTK_NO_COLOR);
-}
-
-bool dtkInterpreter::eventFilter(QObject *object, QEvent *event)
-{
-    dtkLogEvent *log = dynamic_cast<dtkLogEvent *>(event);
-    dtkInterpreter *interpreter = dynamic_cast<dtkInterpreter *>(object);
-
-    if (log && interpreter) {
-        int stat; interpreter->output(log->message(), &stat);
-        return true;
-    } else {
-        return QObject::eventFilter(object, event);
-    }
 }

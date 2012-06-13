@@ -4,9 +4,9 @@
 ## Copyright (C) 2011 - Thibaud Kloczko, Inria.
 ## Created: Wed May 25 16:00:00 2011 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Jun 20 18:17:39 2011 (+0200)
-##           By: Julien Wintz
-##     Update #: 2
+## Last-Updated: Tue Apr  3 16:53:39 2012 (+0200)
+##           By: tkloczko
+##     Update #: 4
 ######################################################################
 ## 
 ### Commentary: 
@@ -27,4 +27,5 @@ add_executable(${PROJECT_NAME}
   main.cpp)
 
 target_link_libraries(${PROJECT_NAME}
-  dtkCore)
+  dtkCore
+  dtkLog)

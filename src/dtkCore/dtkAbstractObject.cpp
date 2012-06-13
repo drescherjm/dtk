@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:54:04 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep  5 12:59:00 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 209
+ * Last-Updated: Wed May 30 13:00:58 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 225
  */
 
 /* Commentary:
@@ -17,30 +17,13 @@
  *
  */
 
-#include <dtkCore/dtkAbstractObject.h>
-#include <dtkCore/dtkLog.h>
+#include "dtkAbstractObject.h"
+#include "dtkAbstractObject_p.h"
 
-#include <QAtomicInt>
-
-// /////////////////////////////////////////////////////////////////
-// dtkAbstractObjectPrivate
-// /////////////////////////////////////////////////////////////////
-
-class dtkAbstractObjectPrivate
-{
-public:
-    QAtomicInt count;
-
-    QHash<QString, QStringList> values;
-    QHash<QString, QString> properties;
-
-    QHash<QString, QStringList> metadatas;
-
-    bool isDeferredDeletionEnabled;
-};
+#include <dtkLog/dtkLog.h>
 
 // /////////////////////////////////////////////////////////////////
-// dtkAbstractObject
+// dtkAbstractObject implementation
 // /////////////////////////////////////////////////////////////////
 
 //! Constructs an object with parent \a parent
@@ -48,14 +31,25 @@ public:
  *  The parent of an object may be viewed as the object's owner. The
  *  destructor of a parent object destroys all child objects. Setting
  *  parent to 0 constructs an object with no parent.
- *  The initial reference count is set to 1, and DeferredDeletion is enabled.
+ *  The initial reference count is set to 0, and DeferredDeletion is enabled.
  */
 
-dtkAbstractObject::dtkAbstractObject(dtkAbstractObject *parent) : QObject(parent), d(new dtkAbstractObjectPrivate)
+dtkAbstractObject::dtkAbstractObject(dtkAbstractObject *parent) : QObject(parent), d_ptr(new dtkAbstractObjectPrivate(this))
 {
-    d->count = 1;
+    d_ptr->count = 0;
 
-    d->isDeferredDeletionEnabled = true;
+    d_ptr->isDeferredDeletionEnabled = true;
+}
+
+//! Copy constructor.
+/*!
+ *  
+ */
+dtkAbstractObject::dtkAbstractObject(const dtkAbstractObject& other) : QObject(other.parent()), d_ptr(new dtkAbstractObjectPrivate(*this, *other.d_ptr))
+{
+    d_ptr->count = 0;
+
+    d_ptr->isDeferredDeletionEnabled = true;
 }
 
 //! Destroys the object, deleting all its child objects.
@@ -68,13 +62,45 @@ dtkAbstractObject::dtkAbstractObject(dtkAbstractObject *parent) : QObject(parent
 
 dtkAbstractObject::~dtkAbstractObject(void)
 {
-    if ( (d->count != 0) && (d->count != 1) ){
+    if ( d_ptr->count != 0 ){
         dtkDebug() << "Warning : deleting object of type " << this->metaObject()->className() << " with non-zero reference count";
     }
 
-    delete d;
+    delete d_ptr;
 
-    d = NULL;
+    d_ptr = NULL;
+}
+
+//! Assignement operator.
+/*!
+ *  
+ */
+dtkAbstractObject& dtkAbstractObject::operator = (const dtkAbstractObject& other)
+{
+    this->setParent(other.parent());
+
+    d_ptr->values = other.d_ptr->values;
+    d_ptr->properties = other.d_ptr->properties;
+    d_ptr->metadatas = other.d_ptr->metadatas;
+
+    d_ptr->count = 0;
+    d_ptr->isDeferredDeletionEnabled = true;
+
+    return *this;
+}
+
+//! Comparison operator.
+/*!
+ *  
+ */
+bool dtkAbstractObject::operator == (const dtkAbstractObject& other) const
+{
+    if (d_ptr->values != other.d_ptr->values         ||
+        d_ptr->properties != other.d_ptr->properties ||
+        d_ptr->metadatas != other.d_ptr->metadatas)
+        return false;
+
+    return true;
 }
 
 QString dtkAbstractObject::description(void) const
@@ -103,7 +129,7 @@ QString dtkAbstractObject::name(void) const
 
 int dtkAbstractObject::count(void) const
 {
-    return d->count;
+    return d_ptr->count;
 }
 
 //! Retain reference count.
@@ -113,7 +139,7 @@ int dtkAbstractObject::count(void) const
 
 int dtkAbstractObject::retain(void) const
 {
-    return d->count.fetchAndAddOrdered(1)+1;
+    return d_ptr->count.fetchAndAddOrdered(1)+1;
 }
 
 //! Release reference count.
@@ -128,11 +154,11 @@ int dtkAbstractObject::retain(void) const
 
 int dtkAbstractObject::release(void) const
 {
-    int newCount = d->count.fetchAndAddOrdered(-1)-1;
+    int newCount = d_ptr->count.fetchAndAddOrdered(-1)-1;
 
     if(!(newCount)) {
 
-        if (d->isDeferredDeletionEnabled)
+        if (d_ptr->isDeferredDeletionEnabled)
             const_cast<dtkAbstractObject *>(this)->deleteLater();
         else
             delete this;
@@ -151,37 +177,37 @@ int dtkAbstractObject::release(void) const
  */
 void dtkAbstractObject::enableDeferredDeletion(bool value)
 {
-    d->isDeferredDeletionEnabled = value;
+    d_ptr->isDeferredDeletionEnabled = value;
 }
 
 bool dtkAbstractObject::isDeferredDeletionEnabled(void) const
 {
-    return d->isDeferredDeletionEnabled;
+    return d_ptr->isDeferredDeletionEnabled;
 }
 
 void dtkAbstractObject::addProperty(const QString& key, const QStringList& values)
 {
-    d->values.insert(key, values);
+    d_ptr->values.insert(key, values);
 }
 
 void dtkAbstractObject::addProperty(const QString& key, const QString& value)
 {
-    d->values.insert(key, QStringList() << value);
+    d_ptr->values.insert(key, QStringList() << value);
 }
 
 void dtkAbstractObject::setProperty(const QString& key, const QString& value)
 {
-    if(!d->values.contains(key)) {
+    if(!d_ptr->values.contains(key)) {
     	dtkDebug() << this->metaObject()->className() << " has no such property:" << key;
     	return;
     }
 
-    if(!d->values.value(key).contains(value)) {
+    if(!d_ptr->values.value(key).contains(value)) {
     	dtkDebug() << this->metaObject()->className() << " has no such value:" << value << " for key: " << key;
     	return;
     }
 
-    d->properties.insert(key, value);
+    d_ptr->properties.insert(key, value);
 
     onPropertySet(key, value);
 
@@ -190,37 +216,37 @@ void dtkAbstractObject::setProperty(const QString& key, const QString& value)
 
 QStringList dtkAbstractObject::propertyList(void) const
 {
-    return d->values.keys();
+    return d_ptr->properties.keys();
 }
 
 QStringList dtkAbstractObject::propertyValues(const QString& key) const
 {
-    if(d->values.contains(key))
-	return d->values[key];
+    if(d_ptr->values.contains(key))
+	return d_ptr->values[key];
 
     return QStringList();
 }
 
 bool dtkAbstractObject::hasProperty(const QString& key) const
 {
-    return d->values.contains(key);
+    return d_ptr->values.contains(key);
 }
 
 QString dtkAbstractObject::property(const QString& key) const
 {
-    if(!d->values.contains(key)) {
+    if(!d_ptr->values.contains(key)) {
 	dtkDebug() << this->metaObject()->className() << "has no such property:" << key;
 	return QString();
     }
 
-    return d->properties.value(key);
+    return d_ptr->properties.value(key);
 }
 
 void dtkAbstractObject::addMetaData(const QString& key, const QStringList& values)
 {
-    QStringList currentValues = d->metadatas.value(key);
+    QStringList currentValues = d_ptr->metadatas.value(key);
 
-    d->metadatas.insert(key, currentValues + values);
+    d_ptr->metadatas.insert(key, currentValues + values);
 
     foreach(QString value, values)
         onMetaDataSet(key, value);
@@ -231,9 +257,9 @@ void dtkAbstractObject::addMetaData(const QString& key, const QStringList& value
 
 void dtkAbstractObject::addMetaData(const QString& key, const QString& value)
 {
-    QStringList currentValues = d->metadatas.value(key);
+    QStringList currentValues = d_ptr->metadatas.value(key);
 
-    d->metadatas.insert(key, currentValues << value);
+    d_ptr->metadatas.insert(key, currentValues << value);
 
     onMetaDataSet(key, value);
 
@@ -242,7 +268,7 @@ void dtkAbstractObject::addMetaData(const QString& key, const QString& value)
 
 void dtkAbstractObject::setMetaData(const QString& key, const QStringList& values)
 {
-    d->metadatas.insert(key, values);
+    d_ptr->metadatas.insert(key, values);
 
     foreach(QString value, values)
         onMetaDataSet(key, value);
@@ -253,7 +279,7 @@ void dtkAbstractObject::setMetaData(const QString& key, const QStringList& value
 
 void dtkAbstractObject::setMetaData(const QString& key, const QString& value)
 {
-    d->metadatas.insert(key, QStringList() << value);
+    d_ptr->metadatas.insert(key, QStringList() << value);
 
     onMetaDataSet(key, value);
 
@@ -262,20 +288,20 @@ void dtkAbstractObject::setMetaData(const QString& key, const QString& value)
 
 QStringList dtkAbstractObject::metaDataList(void) const
 {
-    return d->metadatas.keys();
+    return d_ptr->metadatas.keys();
 }
 
 QStringList dtkAbstractObject::metaDataValues(const QString& key) const
 {
-    if(d->metadatas.contains(key))
-	return d->metadatas[key];
+    if(d_ptr->metadatas.contains(key))
+	return d_ptr->metadatas[key];
 
     return QStringList();
 }
 
 bool dtkAbstractObject::hasMetaData(const QString& key) const
 {
-    return d->metadatas.contains(key);
+    return d_ptr->metadatas.contains(key);
 }
 
 void dtkAbstractObject::onPropertySet(const QString& key, const QString& value)
@@ -292,22 +318,22 @@ void dtkAbstractObject::onMetaDataSet(const QString& key, const QString& value)
 
 QString dtkAbstractObject::metadata(const QString& key) const
 {
-    if(!d->metadatas.contains(key)) {
+    if(!d_ptr->metadatas.contains(key)) {
 	dtkDebug() << this->metaObject()->className() << "has no such property:" << key;
 	return QString();
     }
 
-    return d->metadatas.value(key).first();
+    return d_ptr->metadatas.value(key).first();
 }
 
 QStringList dtkAbstractObject::metadatas(const QString& key) const
 {
-    if(!d->metadatas.contains(key)) {
+    if(!d_ptr->metadatas.contains(key)) {
 	dtkDebug() << this->metaObject()->className() << "has no such property:" << key;
 	return QStringList();
     }
 
-    return d->metadatas.value(key);
+    return d_ptr->metadatas.value(key);
 }
 
 void dtkAbstractObject::copyMetaDataFrom(const dtkAbstractObject *obj)

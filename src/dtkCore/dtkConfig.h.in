@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar 15 17:04:44 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep  9 13:16:53 2011 (+0200)
- *           By: jwintz
- *     Update #: 8
+ * Last-Updated: Tue May 29 14:52:10 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -28,5 +28,9 @@
 #cmakedefine DTK_PLATFORM_64
 
 #cmakedefine DTK_HAVE_MPI
+#cmakedefine DTK_HAVE_EDIT
+#cmakedefine DTK_HAVE_NITE
+#cmakedefine DTK_HAVE_VRPN
+#cmakedefine DTK_HAVE_PLOT
 
 #endif

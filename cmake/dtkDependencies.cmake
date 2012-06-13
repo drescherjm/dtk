@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Oct  5 23:19:29 2011 (+0200)
+## Last-Updated: Thu May  3 15:05:28 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 67
+##     Update #: 103
 ######################################################################
 ## 
 ### Commentary: 
@@ -49,11 +49,15 @@ mark_as_advanced(QT_QTMOTIF_LIBRARY_RELEASE)
 ## Wrapping
 ## #################################################################
 
-if(BUILD_WRAPPERS)
+if(DTK_BUILD_WRAPPERS)
 
 ## #################################################################
 ## Swig
 ## #################################################################
+
+mark_as_advanced(SWIG_DIR)
+mark_as_advanced(SWIG_EXECUTABLE)
+mark_as_advanced(SWIG_VERSION)
 
 find_package(SWIG QUIET)
 
@@ -82,10 +86,6 @@ if(SWIG_FOUND)
     set(${target} ${${target}} ${wrap_output})
     
   endmacro(dtk_wrap)
-  
-  mark_as_advanced(SWIG_DIR)
-  mark_as_advanced(SWIG_EXECUTABLE)
-  mark_as_advanced(SWIG_VERSION)
 endif(SWIG_FOUND)
 
 if(SWIG_FOUND)
@@ -96,6 +96,8 @@ endif(SWIG_FOUND)
 ## Tcl
 ## #################################################################
 
+if(NOT WINDOWS)
+
 find_package(TCL QUIET)
 
 if(TCL_FOUND)
@@ -105,6 +107,8 @@ endif(TCL_FOUND)
 if(TCL_FOUND)
   add_definitions(-DHAVE_TCL)
 endif(TCL_FOUND)
+
+endif(NOT WINDOWS)
 
 ## #################################################################
 ## Python
@@ -139,17 +143,14 @@ find_library(EDITLINE_LIBRARY edit
 
 if(EDITLINE_LIBRARY)
   set(EDITLINE_FOUND "YES")
+  set(DTK_HAVE_EDIT "YES")
 endif(EDITLINE_LIBRARY)
-
-if(EDITLINE_FOUND)
-  add_definitions(-DHAVE_EDITLINE)
-endif(EDITLINE_FOUND)
 
 ## #################################################################
 ## Build wrappers (end)
 ## #################################################################
 
-endif(BUILD_WRAPPERS)
+endif(DTK_BUILD_WRAPPERS)
 
 ## #################################################################
 ## Zlib
@@ -175,9 +176,8 @@ endif(OPENSSL_FOUND)
 ## Mpi
 ## #################################################################
 
-OPTION(USE_MPI "Use the MPI library for distributed computing" OFF)
-
-if (USE_MPI)
+mark_as_advanced(MPI_EXTRA_LIBRARY)
+mark_as_advanced(MPI_LIBRARY)
 
 find_package(MPI QUIET)
 
@@ -186,8 +186,6 @@ include_directories(${MPI_INCLUDE_PATH})
 set(COMPILE_FLAGS ${COMPILE_FLAGS} ${MPI_COMPILE_FLAGS})
 set(DTK_HAVE_MPI "YES")
 endif(MPI_FOUND)
-
-endif(USE_MPI)
 
 ## #################################################################
 ## Vrpn
@@ -209,6 +207,7 @@ find_library(VRPN_LIBRARY NAMES vrpn PATHS /usr/lib /usr/local/lib)
 
 if(QUAT_LIBRARY AND VRPN_LIBRARY)
   add_definitions(-DHAVE_VRPN)
+  set(DTK_HAVE_VRPN "YES")
 endif(QUAT_LIBRARY AND VRPN_LIBRARY)
 
 mark_as_advanced(QUAT_LIBRARY)
@@ -218,9 +217,9 @@ mark_as_advanced(VRPN_LIBRARY)
 ## 
 ## #################################################################
 
-if(USE_MPI AND MPI_FOUND AND QUAT_LIBRARY AND VRPN_LIBRARY)
+if(MPI_FOUND AND QUAT_LIBRARY AND VRPN_LIBRARY)
   add_definitions(-DDTK_WRAP_VRPN)
-endif(USE_MPI AND MPI_FOUND AND QUAT_LIBRARY AND VRPN_LIBRARY)
+endif(MPI_FOUND AND QUAT_LIBRARY AND VRPN_LIBRARY)
 
 ## #################################################################
 ## Qwt
@@ -233,3 +232,38 @@ if(QWT_FOUND)
   set(DTK_HAVE_PLOT "YES")
   include_directories(${QWT_INCLUDE_DIR})
 endif(QWT_FOUND)
+
+## #################################################################
+## OpenNI / Nite
+## #################################################################
+
+find_path(OPENNI_INCLUDES XnOpenNI.h /usr/include/ni)
+find_path(  NITE_INCLUDES XnVNite.h  /usr/include/nite)
+
+if(OPENNI_INCLUDES AND NITE_INCLUDES)
+include_directories(/usr/include/ni)
+include_directories(/usr/include/nite)
+endif(OPENNI_INCLUDES AND NITE_INCLUDES)
+
+find_library(OPENNI_LIBRARY NAMES OpenNI  PATHS /usr/lib)
+find_library(  NITE_LIBRARY NAMES XnVNite PATHS /usr/lib)
+
+if(OPENNI_LIBRARY AND NITE_LIBRARY)
+link_directories(/usr/lib)
+endif(OPENNI_LIBRARY AND NITE_LIBRARY)
+
+if(OPENNI_INCLUDES AND NITE_INCLUDES)
+set(DTK_HAVE_NITE "YES")
+endif(OPENNI_INCLUDES AND NITE_INCLUDES)
+
+mark_as_advanced(OPENNI_INCLUDES)
+mark_as_advanced(NITE_INCLUDES)
+
+mark_as_advanced(OPENNI_LIBRARY)
+mark_as_advanced(NITE_LIBRARY)
+
+## #################################################################
+## 
+## #################################################################
+
+mark_as_advanced(file_cmd)

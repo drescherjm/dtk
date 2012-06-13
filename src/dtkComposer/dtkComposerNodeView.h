@@ -1,12 +1,12 @@
 /* dtkComposerNodeView.h --- 
  * 
  * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Thu Jul 15 11:24:46 2010 (+0200)
+ * Copyright (C) 2008-2011 - Julien Wintz, Inria.
+ * Created: Tue Apr 24 23:27:14 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr  8 16:37:05 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 9
+ * Last-Updated: Wed Apr 25 16:46:10 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 12
  */
 
 /* Commentary: 
@@ -21,21 +21,36 @@
 #define DTKCOMPOSERNODEVIEW_H
 
 #include "dtkComposerExport.h"
-#include "dtkComposerNode.h"
+#include "dtkComposerNodeLeaf.h"
+
+#include <QtCore>
 
 class dtkComposerNodeViewPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeView : public dtkComposerNode
+class DTKCOMPOSER_EXPORT dtkComposerNodeView : public QObject, public dtkComposerNodeLeaf
 {
     Q_OBJECT
 
 public:
-     dtkComposerNodeView(dtkComposerNode *parent = 0);
+     dtkComposerNodeView(void);
     ~dtkComposerNodeView(void);
 
-protected:
-    virtual void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    virtual void  run(void);
+public:
+    void run(void);
+
+public:
+    QString type(void);
+    QString titleHint(void);
+
+public:
+    QString inputLabelHint(int);
+    QString outputLabelHint(int);
+
+signals:
+    void runned(void);
+
+protected slots:
+    void onRun(void);
 
 private:
     dtkComposerNodeViewPrivate *d;

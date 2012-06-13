@@ -1,85 +1,174 @@
-/* dtkComposerNodeProcess.cpp --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Thu Jul 15 11:23:54 2010 (+0200)
+/* dtkComposerNodeProcess.cpp ---
+ *
+ * Author: Nicolas Niclausse
+ * Copyright (C) 2012 - Nicolas Niclausse, Inria.
+ * Created: 2012/03/29 11:17:21
  * Version: $Id$
- * Last-Updated: Tue May  3 17:14:56 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 117
+ * Last-Updated: Thu May 31 04:31:30 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 252
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
-#include "dtkComposerEdge.h"
 #include "dtkComposerNodeProcess.h"
-#include "dtkComposerNodeProperty.h"
+#include "dtkComposerTransmitterEmitter.h"
+#include "dtkComposerTransmitterReceiver.h"
 
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkAbstractProcess.h>
-#include <dtkCore/dtkGlobal.h>
+#include <dtkLog/dtkLog.h>
+
+#include <dtkCore>
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeProcessPrivate declaration
+// /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeProcessPrivate
 {
 public:
+    dtkComposerTransmitterReceiver<qlonglong> receiver_integer_0;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_integer_1;
+    dtkComposerTransmitterReceiver<double> receiver_real;
+    dtkComposerTransmitterReceiver<dtkAbstractData *> receiver_data;
+    dtkComposerTransmitterReceiver<QString> receiver_type;
+    dtkComposerTransmitterReceiver<dtkAbstractData *> receiver_lhs;
+    dtkComposerTransmitterReceiver<dtkAbstractData *> receiver_rhs;
+
+public:
+    dtkComposerTransmitterEmitter<qlonglong> emitter_integer;
+    dtkComposerTransmitterEmitter<double> emitter_real;
+    dtkComposerTransmitterEmitter<dtkAbstractData *> emitter_data;
+
+public:
+    dtkAbstractProcess *process;
 };
 
-dtkComposerNodeProcess::dtkComposerNodeProcess(dtkComposerNode *parent) : dtkComposerNode(parent), d(new dtkComposerNodeProcessPrivate)
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeProcess implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerNodeProcess::dtkComposerNodeProcess(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeProcessPrivate)
 {
-    this->setKind(dtkComposerNode::Process);
+    this->appendReceiver(&(d->receiver_type));
+    this->appendReceiver(&(d->receiver_integer_0));
+    this->appendReceiver(&(d->receiver_integer_1));
+    this->appendReceiver(&(d->receiver_real));
+    this->appendReceiver(&(d->receiver_data));
+    this->appendReceiver(&(d->receiver_lhs));
+    this->appendReceiver(&(d->receiver_rhs));
+
+    this->appendEmitter(&(d->emitter_integer));
+    this->appendEmitter(&(d->emitter_real));
+    this->appendEmitter(&(d->emitter_data));
+
+    d->process = NULL;
 }
 
 dtkComposerNodeProcess::~dtkComposerNodeProcess(void)
 {
-    if(this->object()) {
-        delete this->object();
-        this->setObject(NULL);
-    }
+    if (d->process)
+        delete d->process;
 
     delete d;
 
     d = NULL;
 }
 
-QVariant dtkComposerNodeProcess::value(dtkComposerNodeProperty *property)
-{
-    Q_UNUSED(property);
-
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return QVariant();
-}
-
-QString dtkComposerNodeProcess::implementation(void)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return QString();
-}
-
-void dtkComposerNodeProcess::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
-{
-    Q_UNUSED(edge);
-    Q_UNUSED(property);
-
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
 void dtkComposerNodeProcess::run(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    if (d->receiver_type.isEmpty()) {
+        dtkWarn() << "no type speficied in process node!";
+        return;
+    }
+
+    if(!d->process)
+        d->process = dtkAbstractProcessFactory::instance()->create(d->receiver_type.data());
+
+    if (!d->process) {
+        dtkWarn() << "no process, abort "<<  d->receiver_type.data();
+        return;
+    }
+
+    if (!d->receiver_integer_0.isEmpty())
+        d->process->setParameter((int)d->receiver_integer_0.data(), 0);
+
+    if (!d->receiver_integer_1.isEmpty())
+        d->process->setParameter((int)d->receiver_integer_1.data(), 1);
+
+    if (!d->receiver_real.isEmpty())
+        d->process->setParameter(d->receiver_real.data());
+
+    if (!d->receiver_data.isEmpty())
+        d->process->setInput(d->receiver_data.data());
+
+    if (!d->receiver_lhs.isEmpty())
+        d->process->setInput(d->receiver_lhs.data(), 0);
+
+    if (!d->receiver_rhs.isEmpty())
+        d->process->setInput(d->receiver_rhs.data(), 1);
+
+    int i = d->process->run();
+
+    d->emitter_integer.setData(i);
+
+    // if (d->process->output())
+    //     d->emitter_real.setData(*static_cast<double *>(d->process->data(0)));
+
+    d->emitter_data.setData(d->process->output());
 }
 
-void dtkComposerNodeProcess::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+QString dtkComposerNodeProcess::type(void)
 {
-    Q_UNUSED(edge);
-    Q_UNUSED(property);
+    return "process";
+}
 
-    DTK_DEFAULT_IMPLEMENTATION;
+QString dtkComposerNodeProcess::titleHint(void)
+{
+    return "Process";
+}
+
+QString dtkComposerNodeProcess::inputLabelHint(int port)
+{
+    if(port == 0)
+        return "type";
+
+    if(port == 1)
+        return "integer";
+
+    if(port == 2)
+        return "integer";
+
+    if(port == 3)
+        return "real";
+
+    if(port == 4)
+        return "data";
+
+    if(port == 5)
+        return "lhs";
+
+    if(port == 6)
+        return "rhs";
+
+    return dtkComposerNodeLeaf::inputLabelHint(port);
+}
+
+QString dtkComposerNodeProcess::outputLabelHint(int port)
+{
+    if(port == 0)
+        return "integer";
+
+    if(port == 1)
+        return "real";
+
+    if(port == 2)
+        return "data";
+
+    return dtkComposerNodeLeaf::outputLabelHint(port);
 }

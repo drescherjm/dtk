@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:41:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep  9 20:30:33 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 56
+ * Last-Updated: Mon Apr 30 16:58:48 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 60
  */
 
 /* Commentary: 
@@ -65,7 +65,7 @@ public:
 template <class T> class dtkZero< dtkVector3D<T> >: public dtkVector3D<T>
 {
 public:
-    dtkZero(void) { fill(dtkZero<T>()); }
+    dtkZero(void) { dtkMatrix<T>::fill(dtkZero<T>()); }
 };
 
 template <class T = double> class dtkReferential : dtkVector3D<dtkVector3D<T> >
@@ -93,6 +93,17 @@ public:
 // /////////////////////////////////////////////////////////////////
 
 #include "dtkVector3D.tpp"
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
+#include <QtCore>
+
+typedef dtkVector3D<qreal> dtkVector3DReal;
+
+Q_DECLARE_METATYPE(dtkVector3DReal);
+Q_DECLARE_METATYPE(dtkVector3DReal *);
 
 #endif
 

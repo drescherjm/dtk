@@ -19,7 +19,7 @@
 
 #include <QtCore/QtGlobal>
 
-#include <dtkCore/dtkAbstractFactory.h>
+#include "dtkAbstractFactory.h"
 
 dtkAbstractFactory::dtkAbstractFactory(void)
 {

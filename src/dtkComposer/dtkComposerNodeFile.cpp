@@ -1,12 +1,12 @@
 /* dtkComposerNodeFile.cpp --- 
  * 
  * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Thu Jul  8 13:28:18 2010 (+0200)
+ * Copyright (C) 2008-2011 - Julien Wintz, Inria.
+ * Created: Thu Mar  1 11:45:03 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Oct 19 01:36:18 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 215
+ * Last-Updated: Wed May  9 09:55:18 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -18,168 +18,70 @@
  */
 
 #include "dtkComposerNodeFile.h"
-#include "dtkComposerNodeFile_p.h"
-#include "dtkComposerNodeProperty.h"
-
-#include <dtkCore/dtkGlobal.h>
-#include <dtkCore/dtkLog.h>
-
-#include <dtkGui/dtkTextEditor.h>
+#include "dtkComposerTransmitterEmitter.h"
+#include "dtkComposerTransmitterReceiver.h"
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeFilePrivate
+// dtkComposerNodeFilePrivate declaration
 // /////////////////////////////////////////////////////////////////
 
-void dtkComposerNodeFilePrivate::onRequestFinished(int id, bool error)
+class dtkComposerNodeFilePrivate
 {
-    if(id == this->dwnl_id)
-        this->dwnl_ok = 1;
-}
+public:
+    dtkComposerTransmitterReceiver<QString> receiver;
+
+public:    
+    dtkComposerTransmitterEmitter<QString> emitter_name;
+};
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeFile
+// dtkComposerNodeFile implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNodeFile::dtkComposerNodeFile(dtkComposerNode *parent) : dtkComposerNode(parent), d(new dtkComposerNodeFilePrivate)
+dtkComposerNodeFile::dtkComposerNodeFile(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeFilePrivate)
 {
-    d->property_output_file_name = new dtkComposerNodeProperty("name", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, this);
-    d->property_output_file_text = new dtkComposerNodeProperty("text", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, this);
-    d->property_output_file_url = new dtkComposerNodeProperty("url", dtkComposerNodeProperty::Output, dtkComposerNodeProperty::Multiple, this);
-    d->property_output_file_url->hide();
+    this->appendReceiver(&(d->receiver));
 
-    this->setTitle("File");
-    this->setKind(dtkComposerNode::Atomic);
-    this->setType("dtkComposerFile");
-
-    this->addOutputProperty(d->property_output_file_name);
-    this->addOutputProperty(d->property_output_file_text);
-    this->addOutputProperty(d->property_output_file_url);
-    
-    this->addAction("Choose file", this, SLOT(getFileName()));
-    this->addAction("Setup url", this, SLOT(getUrl()));
-    this->addAction("Edit file", this, SLOT(editFile()));
-
-    d->dwnl_id = -1;
-    d->dwnl_ok =  0;
+    this->appendEmitter(&(d->emitter_name));
 }
 
 dtkComposerNodeFile::~dtkComposerNodeFile(void)
 {
     delete d;
-
+    
     d = NULL;
-}
-
-QVariant dtkComposerNodeFile::value(dtkComposerNodeProperty *property)
-{
-    if(property == d->property_output_file_name) {
-        return QVariant(d->file);
-    }
-
-    if(property == d->property_output_file_text) {
-        return QVariant(dtkReadFile(d->file));
-    }
-
-    if(property == d->property_output_file_url) {
-        return QVariant(d->url);
-    }
-
-    return QVariant();
-}
-
-void dtkComposerNodeFile::editFile(void)
-{
-    dtkTextEditor *editor = new dtkTextEditor;
-    editor->open(d->file);
-    editor->show();
-
-    connect(editor, SIGNAL(closed()), editor, SLOT(deleteLater()));
-}
-
-void dtkComposerNodeFile::getFileName(void)
-{
-    QFileDialog dialog(0, tr("Choose file"));
-    dialog.setStyleSheet("background-color: none ; color: none;");
-    dialog.setFileMode(QFileDialog::ExistingFile);
-    if (dialog.exec())
-        d->file = dialog.selectedFiles().first();
-}
-
-void dtkComposerNodeFile::setFileName(const QString& file)
-{
-    d->file = file;
-}
-
-void dtkComposerNodeFile::getUrl(void)
-{
-    QInputDialog dialog(0);
-    dialog.setStyleSheet("background-color: none ; color: none;");
-    dialog.setLabelText("Url:");
-    dialog.setTextValue(d->url.toString());
-    if (dialog.exec())
-        d->url = QUrl(dialog.textValue());
-}
-
-void dtkComposerNodeFile::setUrl(const QString& url)
-{
-    d->url = url;
-}
-
-void dtkComposerNodeFile::pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
-{
-    Q_UNUSED(edge);
-    Q_UNUSED(property);    
 }
 
 void dtkComposerNodeFile::run(void)
 {
-    if (!d->url.isEmpty()) {
-
-        QTemporaryFile file; file.setAutoRemove(false);
-        
-        if (!file.open()) {
-            qDebug() << DTK_PRETTY_FUNCTION << "Unable to file for saving";
-            return;
-        }
-        
-        d->dwnl_ok = 0;
-
-        QHttp http;
-        
-        connect(&http, SIGNAL(requestFinished(int, bool)), d, SLOT(onRequestFinished(int, bool)));
-
-        http.setHost(d->url.host(), d->url.scheme().toLower() == "https" ? QHttp::ConnectionModeHttps : QHttp::ConnectionModeHttp, d->url.port() == -1 ? 0 : d->url.port());
-        
-        if (!d->url.userName().isEmpty())
-            http.setUser(d->url.userName(), d->url.password());
-        
-        QByteArray path = QUrl::toPercentEncoding(d->url.path(), "!$&'()*+,;=:@/");
-        
-        if (path.isEmpty()) {
-            qDebug() << DTK_PRETTY_FUNCTION << "Invalid path" << d->url.path();
-            return;
-        }
-        
-        d->dwnl_id = http.get(path, &file);
-
-        while(!d->dwnl_ok)
-            qApp->processEvents();
-
-        file.close();
-
-        QFileInfo info(file);
-        
-        d->file = info.absoluteFilePath();
-    }
-    
-    if (d->file.isEmpty())
-        dtkDebug() << "File has not been initialized.";
-    
-    return;
+    qDebug() << "Not yet implemented";
 }
 
-void dtkComposerNodeFile::push(dtkComposerEdge *edge, dtkComposerNodeProperty *property)
+QString dtkComposerNodeFile::type(void)
 {
-    Q_UNUSED(edge);
-    Q_UNUSED(property); 
+    return "file";
+}
+
+QString dtkComposerNodeFile::titleHint(void)
+{
+    return "File";
+}
+
+QString dtkComposerNodeFile::inputLabelHint(int port)
+{
+    if(port == 0)
+        return "name";
+
+    return dtkComposerNode::inputLabelHint(port);
+}
+
+QString dtkComposerNodeFile::outputLabelHint(int port)
+{
+    if(port == 0)
+        return "name";
+
+    if(port == 1)
+        return "file";
+
+    return dtkComposerNode::outputLabelHint(port);
 }

@@ -1,58 +1,101 @@
-/* dtkComposerNodeStringOperator.h --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Sun Feb 27 17:59:17 2011 (+0100)
+/* @(#)dtkComposerNodeStringOperator.h ---
+ *
+ * Author: Nicolas Niclausse
+ * Copyright (C) 2012 - Nicolas Niclausse, Inria.
+ * Created: 2012/04/20 14:34:00
  * Version: $Id$
- * Last-Updated: Fri Apr  8 16:34:43 2011 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 12
+ * Last-Updated: lun. avril 23 09:26:09 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 6
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODESTRINGOPERATOR_H
 #define DTKCOMPOSERNODESTRINGOPERATOR_H
 
 #include "dtkComposerExport.h"
-#include "dtkComposerNode.h"
+#include "dtkComposerNodeLeaf.h"
 
-class dtkComposerNodeStringOperatorPrivate;
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeStringOperatorUnary
+// /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperator : public dtkComposerNode
+class dtkComposerNodeStringOperatorUnaryPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperatorUnary : public dtkComposerNodeLeaf
 {
-    Q_OBJECT
-
 public:
-    enum Operation {
-        Append,
-        Prepend
-    };
+     dtkComposerNodeStringOperatorUnary(void);
+    ~dtkComposerNodeStringOperatorUnary(void);
 
-public:
-     dtkComposerNodeStringOperator(dtkComposerNode *parent = 0);
-    ~dtkComposerNodeStringOperator(void);
+    inline QString inputLabelHint(int) {
+        return "value";
+    }
 
-    QVariant value(dtkComposerNodeProperty *property);
-
-public:
-    Operation operation(void);
-
-    void setOperation(Operation operation);
+    inline QString outputLabelHint(int) {
+        return "value";
+    }
 
 protected:
-    void pull(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-    void  run(void);
-    void push(dtkComposerEdge *edge, dtkComposerNodeProperty *property);
-
-private:
-    dtkComposerNodeStringOperatorPrivate *d;
+    dtkComposerNodeStringOperatorUnaryPrivate *d;
 };
 
-#endif
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeStringOperatorBinary
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeStringOperatorBinaryPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperatorBinary : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeStringOperatorBinary(void);
+    ~dtkComposerNodeStringOperatorBinary(void);
+
+    inline QString inputLabelHint(int port) {
+        if (port == 0)
+            return "lhs";
+        else if (port == 1)
+            return "rhs";
+        else
+            return "value";
+    }
+
+    inline QString outputLabelHint(int) {
+        return "value";
+    }
+
+protected:
+    dtkComposerNodeStringOperatorBinaryPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeStringOperatorBinary - Append
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperatorBinaryAppend : public dtkComposerNodeStringOperatorBinary
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "append";
+    }
+
+    inline QString titleHint(void) {
+        return "Append";
+    }
+};
+
+
+
+#endif /* DTKCOMPOSERNODESTRINGOPERATOR_H */
+

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Mon Jul 12 15:42:21 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep  9 11:35:58 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 8
+ * Last-Updated: Fri May 25 10:13:49 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 10
  */
 
 /* Commentary: 
@@ -85,6 +85,14 @@ template <class T> void dtkMatrix<T>::allocate(unsigned crowInit, unsigned ccolI
 
     m_crow = crowInit;
     m_ccol = ccolInit;
+
+    if ((m_crow * m_ccol) == 0) {
+        m_nMatStatus = N_NOTALLOCATED;
+        m_crow = 0;
+        m_ccol = 0;
+        return;
+    }
+        
 
     m_rgrow = new T*[m_crow];
     T *ptTmp = new T[m_crow*m_ccol];

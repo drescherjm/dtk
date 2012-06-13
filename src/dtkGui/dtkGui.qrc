@@ -2,29 +2,17 @@
   <qresource prefix="dtkGui">
 
     <file>dtkFinder.qss</file>
-    <file>dtkInsetMenu.qss</file>
-    <file>dtkInsetMenu-green.qss</file>
-    <file>dtkInsetMenu-orange.qss</file>
-    <file>dtkInspector.qss</file>
-    <file>dtkInspectorBox.qss</file>
     <file>dtkAnchoredBar.qss</file>
 
 	<file>pixmaps/hidden-folder.png</file>
-    <file>pixmaps/star.svg</file>
-    <file>pixmaps/dtk-gui-inset-menu-item.png</file>
-    <file>pixmaps/dtk-gui-inset-menu-scroller-both.png</file>
-    <file>pixmaps/dtk-gui-inset-menu-scroller-left.png</file>
-    <file>pixmaps/dtk-gui-inset-menu-scroller-right.png</file>
-    <file>pixmaps/dtk-gui-inset-menu-scroller-none.png</file>
     <file>pixmaps/dtk-anchored-bar-action.png</file>
     <file>pixmaps/dtk-anchored-bar-add.png</file>
     <file>pixmaps/dtk-anchored-bar-handle.png</file>
-    <file>pixmaps/dtk-composer-run.png</file>
-    <file>pixmaps/dtk-composer-stop.png</file>
-    <file>pixmaps/dtk-inspector.png</file>
-    <file>pixmaps/dtk-interpreter.png</file>
-    <file>pixmaps/dtk-widget.png</file>
-    <file>pixmaps/dtk-inset.png</file>
+    <file>pixmaps/dtk-item-list-delegate-arrow.png</file>
+    <file>pixmaps/dtk-item-list-delegate-tags.png</file>
+    <file>pixmaps/dtk-tag_bg.png</file>
+    <file>pixmaps/dtk-tag_fg.png</file>
+    <file>pixmaps/dtk-tag_fg_dark.png</file>
     <file>pixmaps/dtk-view-tree.png</file>
     <file>pixmaps/dtk-view-list.png</file>
     <file>pixmaps/dtk.png</file>
@@ -34,30 +22,7 @@
     <file>pixmaps/dtkLedPurple.png</file>
     <file>pixmaps/dtkLedRed.png</file>
     <file>pixmaps/dtkLedYellow.png</file>
-
-    <file>pixmaps/dtkInspector-spin-up.png</file>
-    <file>pixmaps/dtkInspector-spin-dw.png</file>
-    <file>pixmaps/dtkInspectorTitleBar-bg.png</file>
-    <file>pixmaps/dtkInspectorToolBar-bg.png</file>
-    <file>pixmaps/dtkInspectorSwitch-on.png</file>
-    <file>pixmaps/dtkInspectorSwitch-off.png</file>
-    <file>pixmaps/dtkInspector-branch-closed.png</file>
-    <file>pixmaps/dtkInspector-branch-opened.png</file>
-    <file>pixmaps/dtkInspector-drop-down.png</file>
-    <file>pixmaps/dtkInspectorButton-close-pressed.png</file>
-    <file>pixmaps/dtkInspectorButton-close-hover.png</file>
-    <file>pixmaps/dtkInspectorButton-close.png</file>
-    <file>pixmaps/dtkInspector-checkbox-checked.png</file>
-    <file>pixmaps/dtkInspector-checkbox-unchecked.png</file>
-    <file>pixmaps/dtkInspector-radio-checked.png</file>
-    <file>pixmaps/dtkInspector-radio-unchecked.png</file>
-    <file>pixmaps/dtkInspector-scrollbar-horizontal-add.png</file>
-    <file>pixmaps/dtkInspector-scrollbar-horizontal-handle.png</file>
-    <file>pixmaps/dtkInspector-scrollbar-horizontal-sub.png</file>
-    <file>pixmaps/dtkInspector-scrollbar-horizontal.png</file>
-    <file>pixmaps/dtkInspector-scrollbar-vertical-add.png</file>
-    <file>pixmaps/dtkInspector-scrollbar-vertical-handle.png</file>
-    <file>pixmaps/dtkInspector-scrollbar-vertical-sub.png</file>
-    <file>pixmaps/dtkInspector-scrollbar-vertical.png</file>
+    <file>pixmaps/dtkSwitch-groove.png</file>
+    <file>pixmaps/dtkSwitch-knob.png</file>
   </qresource>
 </RCC>

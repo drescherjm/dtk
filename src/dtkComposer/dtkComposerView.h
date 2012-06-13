@@ -1,20 +1,20 @@
-/* dtkComposerView.h --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Mon Sep  7 15:06:52 2009 (+0200)
+/* dtkComposerView.h ---
+ *
+ * Author: Nicolas Niclausse
+ * Copyright (C) 2012 - Nicolas Niclausse, Inria.
+ * Created: 2012/01/30 10:00:30
  * Version: $Id$
- * Last-Updated: Tue Jul 12 18:43:33 2011 (+0200)
+ * Last-Updated: Thu Apr 19 11:11:43 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 39
+ *     Update #: 25
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERVIEW_H
@@ -22,8 +22,9 @@
 
 #include "dtkComposerExport.h"
 
-#include <QtCore>
 #include <QtGui>
+
+class dtkComposerViewPrivate;
 
 class DTKCOMPOSER_EXPORT dtkComposerView : public QGraphicsView
 {
@@ -33,20 +34,20 @@ public:
              dtkComposerView(QWidget *parent = 0);
     virtual ~dtkComposerView(void);
 
-    void setBackgroundColor(const QColor &color);
-    
-public slots:
-    void onCenterOn(const QPointF& point);
-    void onFitInView(const QRectF& rect);
+public:
+    void scroll(int dx, int dy);
+
+signals:
+    void scrolled(void);
 
 protected:
     void scrollContentsBy(int dx, int dy);
 
-protected:
-    void mouseMoveEvent(QMouseEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void wheelEvent(QWheelEvent *event);
+private:
+    dtkComposerViewPrivate *d;
+
+private:
+    QPointF CurrentCenterPoint;
 };
 
 #endif

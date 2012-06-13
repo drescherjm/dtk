@@ -22,7 +22,7 @@
 
 #include <dtkCore/dtkGlobal.h>
 
-#include <dtkScript/dtkScriptInterpreter.h>
+#include "dtkScriptInterpreter.h"
 
 struct Tcl_Interp;
 

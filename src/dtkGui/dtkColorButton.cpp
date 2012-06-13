@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Mar 18 14:45:33 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun  8 10:56:58 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 38
+ * Last-Updated: Tue Apr  3 16:02:45 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -20,6 +20,8 @@
 #include "dtkColorButton.h"
 #include "dtkColorGrid.h"
 #include "dtkPopup.h"
+
+#include <dtkCore/dtkGlobal.h>
 
 #include <QtGui>
 
@@ -36,14 +38,15 @@ public:
     dtkColorList *colors;
 };
 
-dtkColorButton::dtkColorButton(QWidget *parent) : QToolButton(parent), d(new dtkColorButtonPrivate)
+dtkColorButton::dtkColorButton(QWidget *parent) : QPushButton(parent), d(new dtkColorButtonPrivate)
 {
     d->modeLeft = PM_COLORGRID;
     d->modeRight = PM_NONE;
     d->cellSize = 12;
     d->colors = 0;
 
-    setColor(Qt::white);
+    this->setColor(Qt::white);
+    this->setFocusPolicy(Qt::NoFocus);
 }
 
 dtkColorButton::~dtkColorButton(void)
@@ -108,14 +111,16 @@ void dtkColorButton::setPickModeRight(const PickMode& mode)
     d->modeRight = mode;
 }
 
-void dtkColorButton::resizeEvent ( QResizeEvent * event )
+void dtkColorButton::resizeEvent(QResizeEvent *event)
 {
+    DTK_UNUSED(event);
+
     setColor(d->color);
 }
 
-void dtkColorButton::mousePressEvent ( QMouseEvent * event )
+void dtkColorButton::mousePressEvent(QMouseEvent *event)
 {
-    QToolButton::mousePressEvent(event);
+    QPushButton::mousePressEvent(event);
 
     event->accept();
     setDown(false);

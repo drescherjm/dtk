@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Sep  8 14:40:18 2011 (+0200)
+## Last-Updated: Fri Apr 27 20:56:47 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 294
+##     Update #: 333
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,8 +24,6 @@ project(dtkVr)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkVrDevice.h
-  dtkVrExport.h
   dtkVrFlystickRecognizer.h
   dtkVrGestureRecognizer.h
   dtkVrHeadRecognizer.h
@@ -33,7 +31,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkVrTracker.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
-  dtkVrDevice.h
   dtkVrFlystickRecognizer.h
   dtkVrFlystickRecognizer_p.h
   dtkVrGestureRecognizer.h
@@ -43,7 +40,6 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkVrTracker.h)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkVrDevice.cpp
   dtkVrFlystickRecognizer.cpp
   dtkVrGestureRecognizer.cpp
   dtkVrHeadRecognizer.cpp
@@ -54,55 +50,43 @@ set(${PROJECT_NAME}_SOURCES
 ## Vrpn sources
 ## #################################################################
 
-if(QUAT_LIBRARIES AND VRPN_LIBRARIES AND USE_MPI AND MPI_FOUND)
-
-add_definitions(-DDTK_WRAP_VR)
+if(DTK_HAVE_VRPN)
 
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
-  dtkVrDeviceVrpn.h
-  dtkVrManager.h
-  dtkVrMaster.h
-  dtkVrProcess.h
-  dtkVrSlave.h
   dtkVrTrackerVrpn.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
-  dtkVrDeviceVrpn.h
-  dtkVrManager.h
-  dtkVrMaster.h
-  dtkVrProcess.h
-  dtkVrSlave.h
   dtkVrTrackerVrpn.h)
 
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
-  dtkVrDeviceVrpn.cpp
-  dtkVrManager.cpp
-  dtkVrMaster.cpp
-  dtkVrProcess.cpp
-  dtkVrSlave.cpp
   dtkVrTrackerVrpn.cpp)
 
-endif(QUAT_LIBRARIES AND VRPN_LIBRARIES AND USE_MPI AND MPI_FOUND)
+endif(DTK_HAVE_VRPN)
 
 ## #################################################################
-## Wrapping
+## Kinect sources
 ## #################################################################
 
-set(${PROJECT_NAME}_SOURCES_WRAP)
+if(DTK_HAVE_NITE)
 
-if(BUILD_WRAPPERS AND SWIG_FOUND)
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkVrTrackerKinect.h)
 
-  set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS})
-  
-  if(PYTHONLIBS_FOUND)
-    dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP vr python ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i ${${PROJECT_NAME}_WRAP_DEPENDS})
-  endif(PYTHONLIBS_FOUND)
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
+  dtkVrTrackerKinect.h
+  dtkVrTrackerKinect_p.h)
 
-  if(TCL_FOUND)
-    dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP vr tcl    ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i ${${PROJECT_NAME}_WRAP_DEPENDS})
-  endif(TCL_FOUND)
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkVrTrackerKinect.cpp
+  dtkVrTrackerKinect_p.cpp)
 
-endif(BUILD_WRAPPERS AND SWIG_FOUND)
+set(DTKVRTRACKERKINECT_XML_PATH "${PROJECT_SOURCE_DIR}/dtkVrTrackerKinectConfig.xml")
+
+configure_file(
+  "${PROJECT_SOURCE_DIR}/dtkVrTrackerKinectConfig.h.in"
+  "${CMAKE_BINARY_DIR}/dtkVrTrackerKinectConfig.h")
+
+endif(DTK_HAVE_NITE)
 
 ## #################################################################
 ## Build rules
@@ -110,7 +94,6 @@ endif(BUILD_WRAPPERS AND SWIG_FOUND)
 
 if(NOT WIN32)
 add_definitions(-Wno-write-strings)
-add_definitions(-Wformat=0)
 endif(NOT WIN32)
 
 add_definitions(${QT_DEFINITIONS})
@@ -126,8 +109,7 @@ if(DTK_USE_PRECOMPILED_HEADERS)
     "dtkPch/dtkPch.h" "../dtkPch/dtkPch.cpp" 
     ${${PROJECT_NAME}_SOURCES}
     ${${PROJECT_NAME}_HEADERS}
-    ${${PROJECT_NAME}_SOURCES_MOC}
-    ${${PROJECT_NAME}_SOURCES_WRAP})
+    ${${PROJECT_NAME}_SOURCES_MOC})
 endif(DTK_USE_PRECOMPILED_HEADERS)
 
 if(BUILD_SHARED_LIBS)
@@ -136,8 +118,7 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES_PCH}
-  ${${PROJECT_NAME}_SOURCES_WRAP})
+  ${${PROJECT_NAME}_SOURCES_PCH})
 
 else(BUILD_SHARED_LIBS)
 
@@ -145,23 +126,19 @@ add_library(${PROJECT_NAME} STATIC
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES_PCH}
-  ${${PROJECT_NAME}_SOURCES_WRAP})
+  ${${PROJECT_NAME}_SOURCES_PCH})
 
 endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
   dtkMath
   dtkCore
-  dtkDistributed)
+  dtkDistributed
+  dtkLog)
 
 if(MSVC)
   target_link_libraries(${PROJECT_NAME} wsock32)
 endif()
-
-if(USE_MPI AND MPI_FOUND)
-  target_link_libraries(${PROJECT_NAME} ${MPI_LIBRARIES})
-endif(USE_MPI AND MPI_FOUND)
 
 if(QUAT_LIBRARY AND VRPN_LIBRARY)
   target_link_libraries(${PROJECT_NAME}
@@ -169,23 +146,29 @@ if(QUAT_LIBRARY AND VRPN_LIBRARY)
     ${VRPN_LIBRARY})
 endif(QUAT_LIBRARY AND VRPN_LIBRARY)
 
+if(DTK_HAVE_NITE)
+  target_link_libraries(${PROJECT_NAME}
+  OpenNI
+  XnVNite
+  XnVCNite)
+endif(DTK_HAVE_NITE)
+
 ## #################################################################
-## Handling of generated script modules
+## Export header file
 ## #################################################################
 
-set(${PROJECT_NAME}_MODULES)
+add_compiler_export_flags()
 
-if(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
+generate_export_header(${PROJECT_NAME}
+  EXPORT_FILE_NAME "${PROJECT_NAME}Export.h")
 
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dtkVr.i
-  COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${CMAKE_BINARY_DIR}/modules
-  COMMAND ${CMAKE_COMMAND} ARGS -E copy ${${PROJECT_NAME}_BINARY_DIR}/vr.py ${CMAKE_BINARY_DIR}/modules
-  COMMENT "-- Moving python modules to ${CMAKE_BINARY_DIR}/modules")
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}"
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export")
 
-set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/vr.py)
-
-endif(BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
+set(${PROJECT_NAME}_HEADERS
+  ${${PROJECT_NAME}_HEADERS}
+ "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export.h")
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio
@@ -203,6 +186,7 @@ string(REGEX REPLACE ".h" ""
   "${${PROJECT_NAME}_HEADERS}")
 
 install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
+
 ## #################################################################
 ## Installation
 ## #################################################################
@@ -214,7 +198,6 @@ endforeach(header)
 
 install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
 install(FILES ${${PROJECT_NAME}_HEADERS_QTS} DESTINATION include/${PROJECT_NAME})
-install(FILES ${${PROJECT_NAME}_MODULES} DESTINATION modules)
 install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib

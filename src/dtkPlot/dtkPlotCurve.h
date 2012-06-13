@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:05:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul  5 14:20:18 2011 (+0200)
+ * Last-Updated: Tue May 29 15:11:30 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 21
+ *     Update #: 30
  */
 
 /* Commentary: 
@@ -20,18 +20,25 @@
 #ifndef DTKPLOTCURVE_H
 #define DTKPLOTCURVE_H
 
+#include "dtkPlotExport.h"
+
 #include <QtCore>
 
 class dtkPlotCurvePrivate;
 
-class dtkPlotCurve : public QObject
+class DTKPLOT_EXPORT dtkPlotCurve : public QObject
 {
     Q_OBJECT
 
 public:
      dtkPlotCurve(const QString& title = QString());
+     dtkPlotCurve(const dtkPlotCurve& other);
     ~dtkPlotCurve(void);
 
+public:
+    void append(const QPointF& data);
+
+public:
     void setAntialiased(bool antiliased);
     void setColor(const QColor& color);
     void setData(const QVector<QPointF>& data);
@@ -45,5 +52,8 @@ private:
 private:
     dtkPlotCurvePrivate *d;
 };
+
+Q_DECLARE_METATYPE(dtkPlotCurve)
+Q_DECLARE_METATYPE(dtkPlotCurve *)
 
 #endif

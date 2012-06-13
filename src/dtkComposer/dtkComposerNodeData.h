@@ -1,40 +1,46 @@
-/* dtkComposerNodeData.h --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Thu Jul 15 11:21:24 2010 (+0200)
+/* @(#)dtkComposerNodeData.h ---
+ *
+ * Author: Nicolas Niclausse
+ * Copyright (C) 2012 - Nicolas Niclausse, Inria.
+ * Created: 2012/03/29 11:15:49
  * Version: $Id$
- * Last-Updated: Thu Feb 24 15:09:27 2011 (+0100)
+ * Last-Updated: Thu May 31 00:16:27 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 5
+ *     Update #: 6
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEDATA_H
 #define DTKCOMPOSERNODEDATA_H
 
 #include "dtkComposerExport.h"
-#include "dtkComposerNode.h"
+#include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeDataPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeData : public dtkComposerNode
+class DTKCOMPOSER_EXPORT dtkComposerNodeData : public dtkComposerNodeLeaf
 {
-    Q_OBJECT
+public:
+     dtkComposerNodeData(void);
+    ~dtkComposerNodeData(void);
 
 public:
-             dtkComposerNodeData(dtkComposerNode *parent = 0);
-    virtual ~dtkComposerNodeData(void);
+    void run(void);
 
-protected:
-    virtual void run(void);
+public:
+    QString type(void);
+    QString titleHint(void);
+
+public:
+    QString inputLabelHint(int);
+    QString outputLabelHint(int);
 
 private:
     dtkComposerNodeDataPrivate *d;

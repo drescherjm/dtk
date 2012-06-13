@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Sep  8 16:34:26 2011 (+0200)
+## Last-Updated: Fri Apr 27 20:46:14 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 197
+##     Update #: 206
 ######################################################################
 ## 
 ### Commentary: 
@@ -16,6 +16,12 @@
 ### Change log:
 ## 
 ######################################################################
+
+## #################################################################
+## 
+## #################################################################
+
+include (GenerateExportHeader)
 
 ## #################################################################
 ## Configure cmake variables
@@ -35,19 +41,15 @@ if(APPLE)
   mark_as_advanced(CMAKE_OSX_DEPLOYMENT_TARGET)
   mark_as_advanced(CMAKE_OSX_SYSROOT)
 endif()
+mark_as_advanced(BUILD_TESTING)
 
 ## #################################################################
 ## Install prefix
 ## #################################################################
 
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-  if(WIN32)
-    string(REPLACE "\\" "/" ProgramFiles "$ENV{ProgramFiles}")
-    set(CMAKE_INSTALL_PREFIX "${ProgramFiles}/Inria/${PROJECT_NAME}" CACHE PATH "${PROJECT_NAME} install prefix" FORCE)
-  else()
-    set(CMAKE_INSTALL_PREFIX "/usr/local/inria/${PROJECT_NAME}" CACHE PATH "${PROJECT_NAME} install prefix" FORCE)
-  endif()
-endif()
+  set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install" CACHE PATH "${PROJECT_NAME} install prefix" FORCE)
+endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
 ## #################################################################
 ## Configure arch
@@ -63,6 +65,7 @@ endif()
 ## Configure path
 ## #################################################################
 
+include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(${PROJECT_BINARY_DIR})
 
@@ -80,16 +83,16 @@ set(ARCHIVE_INSTALL_OUTPUT_PATH ${CMAKE_INSTALL_PREFIX}/${${PROJECT_NAME}_ARCHIV
 set(RUNTIME_INSTALL_OUTPUT_PATH ${CMAKE_INSTALL_PREFIX}/${${PROJECT_NAME}_RUNTIME_OUTPUT_DIRECTORY})
 set(EXECUTABLE_INSTALL_OUTPUT_PATH ${CMAKE_INSTALL_PREFIX}/${${PROJECT_NAME}_RUNTIME_OUTPUT_DIRECTORY})
 
-set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/include ${PROJECT_BINARY_DIR}) 
-set(${PROJECT_NAME}_LIBRARY_DIRS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-set(${PROJECT_NAME}_RUNTIME_DIRS ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-set(${PROJECT_NAME}_CMAKE_DIRS ${PROJECT_SOURCE_DIR}/cmake)
+set(${PROJECT_NAME}_INCLUDE_DIR ${${PROJECT_NAME}_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/include ${PROJECT_BINARY_DIR}) 
+set(${PROJECT_NAME}_LIBRARY_DIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+set(${PROJECT_NAME}_RUNTIME_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+set(${PROJECT_NAME}_CMAKE_DIR ${PROJECT_SOURCE_DIR}/cmake)
 set(${PROJECT_NAME}_USE_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Use.cmake)
 
-set(${PROJECT_NAME}_INSTALL_INCLUDE_DIRS ${${PROJECT_NAME}_INSTALL_INCLUDE_DIRS} ${CMAKE_INSTALL_PREFIX}/include ${CMAKE_INSTALL_PREFIX}/includes)
-set(${PROJECT_NAME}_INSTALL_LIBRARY_DIRS ${LIBRARY_INSTALL_OUTPUT_PATH})
-set(${PROJECT_NAME}_INSTALL_RUNTIME_DIRS ${RUNTIME_INSTALL_OUTPUT_PATH})
-set(${PROJECT_NAME}_INSTALL_CMAKE_DIRS ${CMAKE_INSTALL_PREFIX}/cmake)
+set(${PROJECT_NAME}_INSTALL_INCLUDE_DIR ${${PROJECT_NAME}_INSTALL_INCLUDE_DIR} ${CMAKE_INSTALL_PREFIX}/include ${CMAKE_INSTALL_PREFIX}/includes)
+set(${PROJECT_NAME}_INSTALL_LIBRARY_DIR ${LIBRARY_INSTALL_OUTPUT_PATH})
+set(${PROJECT_NAME}_INSTALL_RUNTIME_DIR ${RUNTIME_INSTALL_OUTPUT_PATH})
+set(${PROJECT_NAME}_INSTALL_CMAKE_DIR ${CMAKE_INSTALL_PREFIX}/cmake)
 set(${PROJECT_NAME}_INSTALL_USE_FILE ${CMAKE_INSTALL_PREFIX}/cmake/${PROJECT_NAME}Use.cmake)
 
 ## #################################################################

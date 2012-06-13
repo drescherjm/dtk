@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:23:18 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep  6 09:19:07 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 129
+ * Last-Updated: Wed Apr  4 10:33:12 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 138
  */
 
 /* Commentary: 
@@ -20,13 +20,10 @@
 #include <QtGui>
 
 #include <dtkCore/dtkGlobal.h>
-#include <dtkCore/dtkLog.h>
 
-#include <dtkGui/dtkTextEditor.h>
-#include <dtkGui/dtkTextEditorSyntaxHighlighterCpp.h>
-#include <dtkGui/dtkTextEditorSyntaxHighlighterPython.h>
-#include <dtkGui/dtkTextEditorSyntaxHighlighterTcl.h>
-#include <dtkGui/dtkTextEditorPreferencesWidget.h>
+#include <dtkLog/dtkLog.h>
+
+#include "dtkTextEditor.h"
 
 class dtkTextEditorExtraArea : public QWidget
 {
@@ -290,7 +287,6 @@ public:
     dtkTextEditorDocument *document;
 
     dtkTextEditorExtraArea *extraArea;
-    dtkTextEditorPreferencesWidget *preferences;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -305,7 +301,6 @@ dtkTextEditor::dtkTextEditor(QWidget *parent) : QPlainTextEdit(parent)
     d->showRevisions = true;
 
     d->extraArea = new dtkTextEditorExtraArea(this);
-    d->preferences = NULL;
 
     d->document = new dtkTextEditorDocument;
     // begin setting up document
@@ -379,14 +374,14 @@ bool dtkTextEditor::open(const QString& fileName)
         moveCursor(QTextCursor::Start);
         setReadOnly(d->document->hasDecodingError());
 
-        if(fileName.endsWith(".cpp") || fileName.endsWith(".cxx") || fileName.endsWith(".c") || fileName.endsWith(".h"))
-            new dtkTextEditorSyntaxHighlighterCpp(this);
+        // if(fileName.endsWith(".cpp") || fileName.endsWith(".cxx") || fileName.endsWith(".c") || fileName.endsWith(".h"))
+        //     new dtkTextEditorSyntaxHighlighterCpp(this);
 
-        if(fileName.endsWith(".py"))
-            new dtkTextEditorSyntaxHighlighterPython(this);
+        // if(fileName.endsWith(".py"))
+        //     new dtkTextEditorSyntaxHighlighterPython(this);
 
-        if(fileName.endsWith(".tcl"))
-            new dtkTextEditorSyntaxHighlighterTcl(this);
+        // if(fileName.endsWith(".tcl"))
+        //     new dtkTextEditorSyntaxHighlighterTcl(this);
 
         return true;
     }
@@ -460,14 +455,6 @@ QColor dtkTextEditor::foregroundColor(void) const
 {
     QPalette p(palette());
     return p.color(QPalette::Text);
-}
-
-dtkTextEditorPreferencesWidget *dtkTextEditor::preferencesWidget(QWidget *parent)
-{
-    if(!d->preferences)
-        d->preferences = new dtkTextEditorPreferencesWidget(this, parent);
-
-    return d->preferences;
 }
 
 void dtkTextEditor::setShowLineNumbers(bool show)
@@ -596,6 +583,8 @@ void dtkTextEditor::resizeEvent(QResizeEvent *event)
 
 void dtkTextEditor::closeEvent(QCloseEvent *event)
 {
+    DTK_UNUSED(event);
+
     emit closed();
 }
 
@@ -611,19 +600,6 @@ void dtkTextEditor::wheelEvent(QWheelEvent *event)
     }
 
     QPlainTextEdit::wheelEvent(event);
-}
-
-bool dtkTextEditor::eventFilter(QObject *object, QEvent *event)
-{
-    dtkLogEvent *logEvent = dynamic_cast<dtkLogEvent *>(event);
-    dtkTextEditor *editor = dynamic_cast<dtkTextEditor *>(object);
-
-    if (logEvent && editor) {
-        editor->appendPlainText(logEvent->message());
-        return true;
-    } else {
-        return QObject::eventFilter(object, event);
-    }
 }
 
 void dtkTextEditor::zoomIn(int range)

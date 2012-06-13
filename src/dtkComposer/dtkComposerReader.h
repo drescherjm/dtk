@@ -1,12 +1,12 @@
 /* dtkComposerReader.h --- 
  * 
  * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Mon Aug 16 15:01:36 2010 (+0200)
+ * Copyright (C) 2008-2011 - Julien Wintz, Inria.
+ * Created: Mon Jan 30 23:38:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Oct 16 19:12:08 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 20
+ * Last-Updated: jeu. juin  7 11:17:18 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -22,26 +22,38 @@
 
 #include "dtkComposerExport.h"
 
-#include <QtCore/QObject>
+#include <QtCore>
+#include <QtXml>
 
-#include <QtXml/QDomNode>
-
-class dtkComposerNode;
-class dtkComposerScene;
+class dtkComposerFactory;
+class dtkComposerGraph;
 class dtkComposerReaderPrivate;
+class dtkComposerScene;
+class dtkComposerSceneEdge;
+class dtkComposerSceneNode;
+class dtkComposerSceneNote;
 
-class DTKCOMPOSER_EXPORT dtkComposerReader : public QObject
+class DTKCOMPOSER_EXPORT dtkComposerReader
 {
-    Q_OBJECT
+public:
+             dtkComposerReader(void);
+    virtual ~dtkComposerReader(void);
 
 public:
-    dtkComposerReader(dtkComposerScene *scene);
-   ~dtkComposerReader(void);
+    void setFactory(dtkComposerFactory *factory);
+    void setScene(dtkComposerScene *scene);
+    void setGraph(dtkComposerGraph *graph);
 
-   bool read(const QString& fileName, bool append = false);
+public:
+   bool read(const QString& file, bool append = false);
+
+public:
+   bool readString(const QString& data, bool append = false, bool paste = false);
 
 protected:
-   virtual dtkComposerNode *readNode(QDomNode node);
+   virtual dtkComposerSceneNote *readNote(QDomNode node);
+   virtual dtkComposerSceneNode *readNode(QDomNode node, bool paste = false);
+   virtual dtkComposerSceneEdge *readEdge(QDomNode node);
 
 private:
     dtkComposerReaderPrivate *d;

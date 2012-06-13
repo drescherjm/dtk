@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 16 14:56:47 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 115
+ * Last-Updated: Wed Apr  4 08:46:39 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 116
  */
 
 /* Commentary: 
@@ -17,10 +17,11 @@
  * 
  */
 
-#include <dtkCore/dtkAbstractProcess.h>
-#include <dtkCore/dtkAbstractProcessFactory.h>
-#include <dtkCore/dtkLog.h>
-#include <dtkCore/dtkSmartPointer.h>
+#include "dtkAbstractProcess.h"
+#include "dtkAbstractProcessFactory.h"
+#include "dtkSmartPointer.h"
+
+#include <dtkLog/dtkLog.h>
 
 class dtkAbstractProcessFactoryPrivate
 {
@@ -60,8 +61,7 @@ dtkAbstractProcess *dtkAbstractProcessFactory::create(const QString& type)
 
 dtkSmartPointer<dtkAbstractProcess> dtkAbstractProcessFactory::createSmartPointer(const QString& type)
 {
-    dtkSmartPointer<dtkAbstractProcess> process;
-    process.takePointer( this->create(type) );
+    dtkSmartPointer<dtkAbstractProcess> process = this->create(type);
     return process;
 }
 
@@ -111,7 +111,7 @@ QStringList dtkAbstractProcessFactory::implementations(const QString& interface)
     if(d->interfaces.keys().contains(interface))
         implementations << d->interfaces.values(interface);
     else
-        dtkWarning() << "There is no available implementation of " << interface ;
+        dtkWarn() << "There is no available implementation of " << interface ;
 
     return implementations;
 }

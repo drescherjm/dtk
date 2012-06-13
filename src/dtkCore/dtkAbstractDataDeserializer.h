@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: lun. oct. 17 13:20:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. oct. 19 12:46:59 2011 (+0200)
+ * Last-Updated: mar. mai 29 09:10:28 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 4
+ *     Update #: 23
  */
 
 /* Commentary:
@@ -21,10 +21,14 @@
 #define DTKABSTRACTDATADESERIALIZER_H
 
 
-#include <dtkCore/dtkAbstractObject.h>
-#include <dtkCore/dtkAbstractData.h>
+#include "dtkAbstractObject.h"
 
+class dtkAbstractData;
 class dtkAbstractDataDeserializerPrivate;
+
+// /////////////////////////////////////////////////////////////////
+// dtkAbstractDataDeserializer interface
+// /////////////////////////////////////////////////////////////////
 
 class DTKCORE_EXPORT dtkAbstractDataDeserializer : public dtkAbstractObject
 {
@@ -32,15 +36,18 @@ class DTKCORE_EXPORT dtkAbstractDataDeserializer : public dtkAbstractObject
 
 public:
              dtkAbstractDataDeserializer(void);
+             dtkAbstractDataDeserializer(const dtkAbstractDataDeserializer& other);
     virtual ~dtkAbstractDataDeserializer(void);
 
+public:
     virtual QStringList handled(void) const = 0;
 
     bool enabled(void) const;
     void enable(void);
     void disable(void);
 
-    dtkAbstractData *data(void);
+    dtkAbstractData *data(void) const;
+    virtual void setData(dtkAbstractData *data);
 
 signals:
     void started(const QString& message);
@@ -48,17 +55,12 @@ signals:
     void finished(void);
 
 public slots:
-    virtual bool canDeserialize(const QByteArray& binary);
-
-    virtual bool deserialize(const QByteArray& binary);
+    virtual dtkAbstractData *deserialize(const QByteArray& array);
 
     virtual void setProgress(int value);
 
-protected:
-    virtual void setData(dtkAbstractData *data);
-
 private:
-    dtkAbstractDataDeserializerPrivate *d;
+    DTK_DECLARE_PRIVATE(dtkAbstractDataDeserializer);
 };
 
 #endif

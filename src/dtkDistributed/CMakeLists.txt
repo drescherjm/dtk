@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: mar. oct. 11 13:38:34 2011 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 198
+## Last-Updated: Fri Apr 27 21:05:09 2012 (+0200)
+##           By: Julien Wintz
+##     Update #: 243
 ######################################################################
 ## 
 ### Commentary: 
@@ -28,63 +28,92 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedCommunicatorTcp.h
   dtkDistributedSlave.h
   dtkDistributedController.h
+  dtkDistributedControllerFilterView.h
+  dtkDistributedControllerHeaderView.h
+  dtkDistributedControllerJobView.h
   dtkDistributedControllerStatusModel.h
+  dtkDistributedControllerStatusModelFilter.h
   dtkDistributedControllerStatusModelItem.h
   dtkDistributedControllerStatusView.h
+  dtkDistributedControllerSubmitView.h
+  dtkDistributedControllerTargetView.h
+  dtkDistributedControllerTargetViewDelegate.h
   dtkDistributedCore.h
   dtkDistributedCpu.h
-  dtkDistributedExport.h
   dtkDistributedGpu.h
   dtkDistributedMessage.h
+  dtkDistributedMimeData.h
   dtkDistributedNode.h
   dtkDistributedServer.h
   dtkDistributedServerDaemon.h
   dtkDistributedServerManager.h
   dtkDistributedServerManagerOar.h
+  dtkDistributedServerManagerSsh.h
   dtkDistributedServerManagerTorque.h
   dtkDistributedService.h
-  dtkDistributedSocket.h)
+  dtkDistributedSocket.h
+  dtkDistributor.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkDistributedCommunicator.h
   dtkDistributedCommunicatorTcp.h
   dtkDistributedSlave.h
   dtkDistributedController.h
+  dtkDistributedControllerFilterView.h
+  dtkDistributedControllerHeaderView.h
+  dtkDistributedControllerJobView.h
   dtkDistributedControllerStatusModel.h
+  dtkDistributedControllerStatusModelFilter.h
   dtkDistributedControllerStatusView.h
+  dtkDistributedControllerSubmitView.h
+  dtkDistributedControllerTargetView.h
+  dtkDistributedControllerTargetViewDelegate.h
   dtkDistributedCore.h
   dtkDistributedCpu.h
   dtkDistributedGpu.h
   dtkDistributedJob.h
+  dtkDistributedMimeData.h
   dtkDistributedNode.h
   dtkDistributedServerDaemon.h
   dtkDistributedServerManager.h
   dtkDistributedServerManagerOar.h
+  dtkDistributedServerManagerSsh.h
   dtkDistributedServerManagerTorque.h
   dtkDistributedService_p.h
-  dtkDistributedSocket.h)
+  dtkDistributedSocket.h
+  dtkDistributor.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkDistributedCommunicator.cpp
   dtkDistributedCommunicatorTcp.cpp
   dtkDistributedSlave.cpp
   dtkDistributedController.cpp
+  dtkDistributedControllerFilterView.cpp
+  dtkDistributedControllerHeaderView.cpp
+  dtkDistributedControllerJobView.cpp
   dtkDistributedControllerStatusModel.cpp
+  dtkDistributedControllerStatusModelFilter.cpp
   dtkDistributedControllerStatusModelItem.cpp
   dtkDistributedControllerStatusView.cpp
+  dtkDistributedControllerSubmitView.cpp
+  dtkDistributedControllerTargetView.cpp
+  dtkDistributedControllerTargetViewDelegate.cpp
   dtkDistributedCore.cpp
   dtkDistributedCpu.cpp
   dtkDistributedGpu.cpp
   dtkDistributedJob.cpp
   dtkDistributedMessage.cpp
+  dtkDistributedMimeData.cpp
   dtkDistributedNode.cpp
   dtkDistributedServer.cpp
   dtkDistributedServerDaemon.cpp
   dtkDistributedServerManager.cpp
   dtkDistributedServerManagerOar.cpp
+  dtkDistributedServerManagerSsh.cpp
   dtkDistributedServerManagerTorque.cpp
   dtkDistributedService.cpp
-  dtkDistributedSocket.cpp)
+  dtkDistributedSocket.cpp
+  dtkDistributor.cpp)
 
 ## #################################################################
 ## Platform specific sources
@@ -171,11 +200,29 @@ target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkCore
   dtkJson
-  dtkGui)
+  dtkGui
+  dtkLog)
 
 if(USE_MPI AND MPI_FOUND)
 target_link_libraries(${PROJECT_NAME} ${MPI_LIBRARIES})
 endif(USE_MPI AND MPI_FOUND)
+
+## #################################################################
+## Export header file
+## #################################################################
+
+add_compiler_export_flags()
+
+generate_export_header(${PROJECT_NAME}
+  EXPORT_FILE_NAME "${PROJECT_NAME}Export.h")
+
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}"
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export")
+
+set(${PROJECT_NAME}_HEADERS
+  ${${PROJECT_NAME}_HEADERS}
+ "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export.h")
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

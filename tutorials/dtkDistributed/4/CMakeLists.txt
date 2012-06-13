@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Wed Sep 14 13:17:50 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Sep 14 13:22:58 2011 (+0200)
-##           By: Julien Wintz
-##     Update #: 14
+## Last-Updated: mer. mai 30 12:58:43 2012 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 17
 ######################################################################
 ## 
 ### Commentary: 
@@ -44,9 +44,12 @@ add_executable(dtkDistributedTutorial4Server
   server_main.cpp)
 
 target_link_libraries(dtkDistributedTutorial4Slave
+  dtkComposer
   dtkCore
   dtkDistributed)
 
 target_link_libraries(dtkDistributedTutorial4Server
+  dtkComposer
   dtkCore
-  dtkDistributed)
+  dtkDistributed
+  dtkLog)

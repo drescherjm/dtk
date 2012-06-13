@@ -1,20 +1,20 @@
-/* dtkFinder.cpp ---
- *
+/* dtkFinder.cpp --- 
+ * 
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Jun 12 15:47:45 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 15 15:14:27 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 75
+ * Last-Updated: Tue Apr  3 16:07:24 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 77
  */
 
-/* Commentary:
- *
+/* Commentary: 
+ * 
  */
 
 /* Change log:
- *
+ * 
  */
 
 #include "dtkFinder.h"
@@ -39,7 +39,8 @@ public:
     QToolButton *listViewButton;
     QToolButton *treeViewButton;
     QToolButton *showHiddenFilesButton;
-    QLinkedList<QString>           pathList;
+
+    QLinkedList<QString> pathList;
     QLinkedList<QString>::iterator iterator;
 };
 
@@ -69,7 +70,6 @@ dtkFinderToolBar::dtkFinderToolBar(QWidget *parent) : QToolBar(parent), d(new dt
     d->treeViewButton->setIcon(QIcon(":dtkGui/pixmaps/dtk-view-tree.png"));
     d->treeViewButton->setIconSize(QSize(16, 16));
     d->treeViewButton->setToolTip(tr("List view"));
-
 
     d->showHiddenFilesButton = new QToolButton (this);
     d->showHiddenFilesButton->setCheckable(true);
@@ -521,6 +521,8 @@ void dtkFinderPathBar::mousePressEvent(QMouseEvent *event)
 
 void dtkFinderPathBar::paintEvent(QPaintEvent *event)
 {
+    DTK_UNUSED(event);
+
     QRect rect = this->rect();
 
     int x = 10;
@@ -601,6 +603,8 @@ void dtkFinderListView::addDefaultContextMenuAction(QAction *action)
     d->defaultActions.append(action);
 }
 
+/** Returns the currently selected path, or the first one if more than one item is selected. */
+
 QString dtkFinderListView::selectedPath() const
 {
     if(!selectedIndexes().count())
@@ -608,6 +612,8 @@ QString dtkFinderListView::selectedPath() const
 
     return this->selectedPaths()[0];
 }
+
+/** Returns the currently selected paths. */
 
 QStringList dtkFinderListView::selectedPaths() const
 {
@@ -626,6 +632,11 @@ QStringList dtkFinderListView::selectedPaths() const
     else
         return QStringList();
 }
+
+/**
+ * Set the allowance of file bookmarking.
+ * @param isAllowed - whether is allowed to bookmark files
+ **/
 
 void dtkFinderListView::allowFileBookmarking(bool isAllowed)
 {
@@ -818,6 +829,8 @@ void dtkFinderTreeView::addDefaultContextMenuAction(QAction *action)
     d->defaultActions.append(action);
 }
 
+/** Returns the currently selected path, or the first one if more than one item is selected. */
+
 QString dtkFinderTreeView::selectedPath() const
 {
     if(!selectedIndexes().count())
@@ -825,6 +838,8 @@ QString dtkFinderTreeView::selectedPath() const
 
     return this->selectedPaths()[0];
 }
+
+/** Returns the currently selected paths. */
 
 QStringList dtkFinderTreeView::selectedPaths() const
 {
@@ -855,6 +870,11 @@ QStringList dtkFinderTreeView::selectedPaths() const
     else
         return QStringList();
 }
+
+/**
+ * Set the allowance of file bookmarking.
+ * @param isAllowed - whether is allowed to bookmark files
+ **/
 
 void dtkFinderTreeView::allowFileBookmarking(bool isAllowed)
 {
@@ -988,6 +1008,8 @@ void dtkFinderTreeView::startDrag(Qt::DropActions supportedActions)
 
 void dtkFinderTreeView::resizeEvent(QResizeEvent *event)
 {
+    DTK_UNUSED(event);
+
     this->setColumnWidth(0, this->width() / 2);
 }
 
@@ -1113,6 +1135,8 @@ void dtkFinder::addContextMenuAction(QAction *action)
     d->tree->addContextMenuAction(action);
 }
 
+/** Returns the currently selected path, or the first one if more than one item is selected. */
+
 QString dtkFinder::selectedPath(void) const
 {
     if(d->stack->currentIndex() == 0)
@@ -1124,6 +1148,8 @@ QString dtkFinder::selectedPath(void) const
     return QString();
 }
 
+/** Returns the currently selected paths. */
+
 QStringList dtkFinder::selectedPaths() const
 {
     if(d->stack->currentIndex() == 0)
@@ -1134,12 +1160,18 @@ QStringList dtkFinder::selectedPaths() const
 
     return QStringList();
 }
+/**
+ * Set the allowance of file bookmarking.
+ * @param isAllowed - whether is allowed to bookmark files
+ **/
 
 void dtkFinder::allowFileBookmarking(bool isAllowed)
 {
     d->list->allowFileBookmarking(isAllowed);
     d->tree->allowFileBookmarking(isAllowed);
 }
+
+/** Set whether multiple files can be selected at the same time. */
 
 void dtkFinder::allowMultipleSelection(bool isAllowed)
 {
@@ -1223,6 +1255,8 @@ void dtkFinder::onIndexDoubleClicked(QModelIndex index)
 
     emit nothingSelected();
 }
+
+/** Bookmarks the currently selected item(s). */
 
 void dtkFinder::onBookmarkSelectedItemsRequested(void)
 {

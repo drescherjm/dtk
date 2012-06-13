@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 15:31:59 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jul  6 16:38:37 2011 (+0200)
+ * Last-Updated: Sun Jun 10 01:18:05 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 205
+ *     Update #: 244
  */
 
 /* Commentary: 
@@ -40,7 +40,7 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent), d(new tstMa
 {
     d->curve = NULL;
 
-    d->view = new dtkPlotView(this);
+    d->view = new dtkPlotView;
 
     d->view->setAxisTitleX("X axis title");
     d->view->setAxisTitleY("Y axis title");
@@ -80,7 +80,7 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent), d(new tstMa
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(side);
-    layout->addWidget(d->view);
+    layout->addWidget(d->view->widget());
 
     QWidget *main = new QWidget(this);
     main->setLayout(layout);
@@ -96,10 +96,21 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent), d(new tstMa
     connect(pane, SIGNAL(foregroundColorChanged(const QColor&)), this, SLOT(onForegroundColorChanged(const QColor&)));
 
     connect(pane, SIGNAL(curveRenderModeChanged(int)), this, SLOT(onCurveRenderModeChanged(int)));
+
+    connect(pane, SIGNAL(activatePanning(bool)), this, SLOT(onActivatePanning(bool)));
+    connect(pane, SIGNAL(activatePicking(bool)), this, SLOT(onActivatePicking(bool)));
+    connect(pane, SIGNAL(activateZooming(bool)), this, SLOT(onActivateZooming(bool)));
+
+    connect(pane, SIGNAL(zoomForward()), this, SLOT(onZoomForward()));
+    connect(pane, SIGNAL(zoomBackward()), this, SLOT(onZoomBackground()));
+
+    connect(d->view, SIGNAL(zoomForwardEnabled(bool)), pane, SLOT(setZoomForwardEnabled(bool)));
+    connect(d->view, SIGNAL(zoomBackwardEnabled(bool)), pane, SLOT(setZoomBackwardEnabled(bool)));
 }
 
 tstMainWindow::~tstMainWindow(void)
 {
+    delete d->view;
     delete d;
 
     d = NULL;
@@ -180,4 +191,38 @@ void tstMainWindow::onExport(const QString& file)
     renderer.setPath(file);
     renderer.setSize(QSize(300, 200));
     renderer.render();
+}
+
+void tstMainWindow::onActivatePanning(bool activate)
+{
+    if(activate)
+        d->view->activatePanning();
+    else
+        d->view->deactivatePanning();
+}
+
+void tstMainWindow::onActivatePicking(bool activate)
+{
+    if(activate)
+        d->view->activatePicking();
+    else
+        d->view->deactivatePicking();
+}
+
+void tstMainWindow::onActivateZooming(bool activate)
+{
+    if(activate)
+        d->view->activateZooming();
+    else
+        d->view->deactivateZooming();
+}
+
+void tstMainWindow::onZoomForward(void)
+{
+    d->view->zoomForward();
+}
+
+void tstMainWindow::onZoomBackground(void)
+{
+    d->view->zoomBackward();
 }

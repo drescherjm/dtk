@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: Sat Feb  6 14:33:47 2010 (+0100)
  * Version: $Id$
- * Last-Updated: lun. oct. 10 17:02:21 2011 (+0200)
+ * Last-Updated: ven. mai 11 17:22:31 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 179
+ *     Update #: 202
  */
 
 /* Commentary:
@@ -25,20 +25,50 @@
 \section intro Introduction
 
 There are 3 components in dtkDistributed architecture:
- - 1 controller: dtkDistributedController (runs on the workstations/laptop)
- - 1 server dtkDistributedServer (runs on the cluster frontend)
- - N slaves dtkDistributedSlave (runs on the cluster nodes)
+ - 1 controller: dtkDistributedController (typically runs on the workstations/laptop)
+ - 1 server dtkDistributedServer (typically runs on the cluster frontend)
+ - N slaves dtkDistributedSlave (typically runs on the cluster nodes)
 
-The slaves can communicate with each others through MPI, but the
+The slaves can communicate with each others through MPI (using
+dtkDistributedCommunicatorMpi) or TCP (using dtkDistributedCommunicatorTcp), but the
 communications between the controller/slaves and the server is based on
 TCP (using a dtkDistributedSocket object). There's no direct
 communication between the controller and the slaves.
 
-Currently, the server is able to take resources from OAR (see dtkDistributedServerManagerOar) and Torque (see dtkDistributedServerManagerTorque)
+Currently, the server is able to take resources from OAR (see
+dtkDistributedServerManagerOar),  Torque (see
+dtkDistributedServerManagerTorque) or any remote host available
+through SSH (it will detect the number of cores of the host automatically).
+
+The server can be started by the controller (with the deploy method)
+using ssh; setup for a given server can be specified into the dtk.conf file,
+within the [distributed] group, like this:
+
+@code
+[distributed]
+nef-devel.inria.fr_server_path=/home/nniclaus/git/dtk/build/bin/dtkDistributedTutorial5Server
+nef-devel.inria.fr_server_type=torque
+nef-devel.inria.fr_server_forward=false
+@endcode
+
+If forward is set to true, then a ssh tunnel will be used for
+communications between the controller and the server (useful to bypass
+firewalls).
+
+To be able to run a slave with MPI, you can configure the mpirun
+parameters in the [distributed] group:
+
+@code
+[distributed]
+nef-devel.inria.fr_mpirun_path==/opt/openmpi-gcc/current/bin/mpirun
+nef-devel.inria.fr_mpirun_args=" -x DISPLAY=:0.0 "
+@endcode
+
 
 \section protocol dtkDistributed protocol
 
-dtkDistributed protocol is loosely based on HTTP.
+dtkDistributed protocol is loosely based on HTTP. This is encapsulated
+into the dtkDistributedMessage class.
 
 \subsection status get the status of a cluster
 
@@ -119,6 +149,11 @@ STARTED /job/<jobid>
 content-size: 0
 @endcode
 
+The controller has a default rank value of -1 (dtkDistributedMessage::CONTROLLER_RANK), the server -2
+(dtkDistributedMessage::SERVER_RANK), and when the controller needs to
+separate commands from data communications (the dtkComposerNodeRemote
+is using this), it should use -3 (dtkDistributedMessage::CONTROLLER_RUN_RANK).
+
 \subsection data send data
 
 the slave or the controller sends:
@@ -170,7 +205,7 @@ output format is :
                                               "ethernet" : "<1G|10G>",
                                               "properties": {{"key": "value"}, ...},
                                               },
-                              "state" : "free|busy|down" }
+                              "state" : "free|busy|down|standby|absent" }
                           , ... ],
               }
 @endcode

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Oct 26 12:40:19 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 28 16:00:56 2010 (+0200)
+ * Last-Updated: Thu Apr 26 17:21:54 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 194
+ *     Update #: 198
  */
 
 /* Commentary: 
@@ -27,13 +27,24 @@
 
 #include <dtkCore/dtkAbstractView.h>
 
+#include <dtkConfig.h>
+
 #include <QtGui>
+
+#if defined(DTK_HAVE_VRPN)
+#include <vrpn_Shared.h>
+#include <vrpn_Button.h>
+#include <vrpn_Analog.h>
+#include <vrpn_Tracker.h>
+#include <vrpn_FileConnection.h>
+#include <quat.h>
+#endif
 
 // /////////////////////////////////////////////////////////////////
 // vrpn callbacks (Definition at EOF.)
 // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_WRAP_VRPN)
+#if defined(DTK_HAVE_VRPN)
 void VRPN_CALLBACK vrpn_head_recognizer_handle_button(void *data, const vrpn_BUTTONCB callback);
 void VRPN_CALLBACK vrpn_head_recognizer_handle_analog(void *data, const vrpn_ANALOGCB callback);
 void VRPN_CALLBACK vrpn_head_recognizer_handle_tracker(void *data, const vrpn_TRACKERCB callback);
@@ -45,7 +56,7 @@ void VRPN_CALLBACK vrpn_head_recognizer_handle_tracker(void *data, const vrpn_TR
 
 void dtkVrHeadRecognizerPrivate::run(void)
 {
-#if defined(DTK_WRAP_VRPN)
+#if defined(DTK_HAVE_VRPN)
     vrpn_FILE_CONNECTIONS_SHOULD_PRELOAD = false;
     vrpn_FILE_CONNECTIONS_SHOULD_ACCUMULATE = false;
 
@@ -80,7 +91,7 @@ void dtkVrHeadRecognizerPrivate::stop(void)
     this->running = false;
 }
 
-#if defined(DTK_WRAP_VRPN)
+#if defined(DTK_HAVE_VRPN)
 
 void dtkVrHeadRecognizerPrivate::handle_button(const vrpn_BUTTONCB callback)
 {
@@ -229,7 +240,7 @@ void dtkVrHeadRecognizer::onButtonReleased(int)
 // vrpn callbacks
 // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_WRAP_VRPN)
+#if defined(DTK_HAVE_VRPN)
 
 void VRPN_CALLBACK vrpn_head_recognizer_handle_button(void *data, const vrpn_BUTTONCB callback)
 {

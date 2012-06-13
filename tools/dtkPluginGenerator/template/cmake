@@ -60,14 +60,15 @@ set(${PROJECT_NAME}_SOURCES
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
-add_library(${PROJECT_NAME} SHARED
+add_library(${PROJECT_NAME} ${DTK_PLUGINS_BUILD_TYPE}
   ${${PROJECT_NAME}_SOURCES_MOC} 
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS})
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
-  dtkCore)
+  dtkCore
+  dtkLog)
 
 dtk_build_doc(%1Plugin)
 

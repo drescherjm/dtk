@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Mon Jul 12 16:04:26 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul 12 16:05:03 2010 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 1
+ * Last-Updated: Tue May 29 15:38:59 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 3
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include <cmath>
 
 #include "dtkMatrix.h"
+#include "dtkMatrixSquared.h"
 
 // /////////////////////////////////////////////////////////////////
 // Implementation of the template class dtkVector's methods
@@ -136,6 +137,13 @@ template <class T> inline dtkVector<T> operator *(const T& value, const dtkVecto
 }
 
 template <class T> dtkVector<T> operator *(const dtkMatrix<T>& mat, const dtkVector<T>& vec)
+{
+    dtkVector<T> vecResult(mat.getRows());
+    vecResult.storeProduct(mat, vec);
+    return vecResult;
+}
+
+template <class T> dtkVector<T> operator *(const dtkMatrixSquared<T>& mat, const dtkVector<T>& vec)
 {
     dtkVector<T> vecResult(mat.getRows());
     vecResult.storeProduct(mat, vec);

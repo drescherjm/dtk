@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: Tue Feb 16 16:26:17 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 15 15:44:16 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 123
+ * Last-Updated: jeu. avril 12 11:05:16 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 126
  */
 
 /* Commentary:
@@ -114,6 +114,8 @@ QDateTime dtkDistributedJob::Stime(void) {
 #include <time.h>
 
 void dtkDistributedJob::setStime(qint64 stime) {
+    if (stime == 0)
+        return;
 #if QT_VERSION > 0x0406FF
     d->stime = QDateTime::fromMSecsSinceEpoch(stime);
 #else
@@ -129,6 +131,8 @@ QDateTime dtkDistributedJob::Qtime(void) {
 }
 
 void dtkDistributedJob::setQtime(qint64 qtime) {
+    if (qtime == 0)
+        return;
 #if QT_VERSION > 0x0406FF
     d->qtime = QDateTime::fromMSecsSinceEpoch(qtime);
 #else

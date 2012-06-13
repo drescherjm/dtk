@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  5 15:17:19 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 346
+ * Last-Updated: Thu May 24 15:11:57 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 358
  */
 
 /* Commentary:
@@ -28,31 +28,31 @@
 #include <QtDebug>
 #include <QtCore>
 
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkAbstractDataFactory.h>
-#include <dtkCore/dtkAbstractDataReader.h>
-#include <dtkCore/dtkAbstractDataWriter.h>
-#include <dtkCore/dtkAbstractDataConverter.h>
-#include <dtkCore/dtkAbstractObject.h>
-#include <dtkCore/dtkAbstractProcess.h>
-#include <dtkCore/dtkAbstractProcessFactory.h>
-#include <dtkCore/dtkAbstractView.h>
-#include <dtkCore/dtkAbstractViewAnimator.h>
-#include <dtkCore/dtkAbstractViewFactory.h>
-#include <dtkCore/dtkAbstractViewInteractor.h>
-#include <dtkCore/dtkAbstractViewNavigator.h>
-#include <dtkCore/dtkPlugin.h>
-#include <dtkCore/dtkPluginManager.h>
-#include <dtkCore/dtkSmartPointer.h>
-#include <dtkCore/dtkVec3.h>
-#include <dtkCore/dtkQuat.h>
+#include "dtkAbstractData.h"
+#include "dtkAbstractDataFactory.h"
+#include "dtkAbstractDataReader.h"
+#include "dtkAbstractDataWriter.h"
+#include "dtkAbstractDataConverter.h"
+#include "dtkAbstractDataSerializer.h"
+#include "dtkAbstractDataDeserializer.h"
+#include "dtkAbstractObject.h"
+#include "dtkAbstractProcess.h"
+#include "dtkAbstractProcessFactory.h"
+#include "dtkAbstractView.h"
+#include "dtkAbstractViewAnimator.h"
+#include "dtkAbstractViewFactory.h"
+#include "dtkAbstractViewInteractor.h"
+#include "dtkAbstractViewNavigator.h"
+#include "dtkPlugin.h"
+#include "dtkPluginManager.h"
+#include "dtkSmartPointer.h"
 %}
 
 // /////////////////////////////////////////////////////////////////
 // Preprocessing setup
 // /////////////////////////////////////////////////////////////////
 
-#pragma SWIG nowarn=389, 401, 509, 801, 472
+#pragma SWIG nowarn=389, 401, 509, 801, 472, 362, 503
 
 // /////////////////////////////////////////////////////////////////
 // Macro undefinition
@@ -77,6 +77,9 @@
 
 #undef  DTKCORE_EXPORT
 #define DTKCORE_EXPORT
+
+#undef  DTK_DEPRECATED
+#define DTK_DEPRECATED
 
 // /////////////////////////////////////////////////////////////////
 // Ignore rules for operators
@@ -121,10 +124,22 @@
 %ignore canceled();
 
 // /////////////////////////////////////////////////////////////////
-// Ignore rules for dtkAbstractView signals
+// Ignore rules for dtkAbstractView signals and deprecated
 // /////////////////////////////////////////////////////////////////
 
 %ignore closed();
+%ignore focused();
+%ignore enableInteraction(void);
+%ignore disableInteraction(void);
+%ignore bounds(float& xmin, float& xmax, float& ymin, float& ymax, float &zmin, float& zmax);
+%ignore cameraUp(double *coordinates) const;
+%ignore cameraPosition(double *coordinates) const;
+%ignore cameraFocalPoint(double *coordinates) const;
+%ignore setCameraPosition(double x, double y, double z);
+%ignore setCameraClippingRange(double near, double far);
+%ignore cameraProjectionMode(void) const;
+%ignore cameraViewAngle(void) const;
+%ignore cameraZoom(void) const;
 
 // /////////////////////////////////////////////////////////////////
 // Ignore rules for dtkAbstractViewInteractor signals
@@ -328,23 +343,21 @@ public:
 // Wrapper input
 // /////////////////////////////////////////////////////////////////
 
-%include <dtkCore/dtkAbstractObject.h>
+%include "dtkAbstractObject.h"
 
-%include <dtkCore/dtkAbstractData.h>
-%include <dtkCore/dtkAbstractDataFactory.h>
-%include <dtkCore/dtkAbstractDataReader.h>
-%include <dtkCore/dtkAbstractDataWriter.h>
-%include <dtkCore/dtkAbstractDataConverter.h>
-%include <dtkCore/dtkAbstractProcess.h>
-%include <dtkCore/dtkAbstractProcessFactory.h>
-%include <dtkCore/dtkAbstractView.h>
-%include <dtkCore/dtkAbstractViewFactory.h>
-%include <dtkCore/dtkAbstractViewAnimator.h>
-%include <dtkCore/dtkAbstractViewInteractor.h>
-%include <dtkCore/dtkAbstractViewNavigator.h>
-%include <dtkCore/dtkPlugin.h>
-%include <dtkCore/dtkPluginManager.h>
-%include <dtkCore/dtkVec3.h>
-%include <dtkCore/dtkQuat.h>
+%include "dtkAbstractData.h"
+%include "dtkAbstractDataFactory.h"
+%include "dtkAbstractDataReader.h"
+%include "dtkAbstractDataWriter.h"
+%include "dtkAbstractDataConverter.h"
+%include "dtkAbstractProcess.h"
+%include "dtkAbstractProcessFactory.h"
+%include "dtkAbstractView.h"
+%include "dtkAbstractViewFactory.h"
+%include "dtkAbstractViewAnimator.h"
+%include "dtkAbstractViewInteractor.h"
+%include "dtkAbstractViewNavigator.h"
+%include "dtkPlugin.h"
+%include "dtkPluginManager.h"
 
 #endif

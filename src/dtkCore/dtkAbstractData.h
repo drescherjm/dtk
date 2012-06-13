@@ -4,9 +4,8 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 15 15:09:33 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 202
+ *           By: tkloczko
+ *     Update #: 287
  */
 
 /* Commentary:
@@ -20,14 +19,22 @@
 #ifndef DTKABSTRACTDATA_H
 #define DTKABSTRACTDATA_H
 
-#include <dtkCore/dtkAbstractObject.h>
+#include "dtkAbstractObject.h"
+
+#include <dtkMath/dtkVector.h>
 
 #include <QtGui/QImage>
 
 class dtkAbstractDataReader;
 class dtkAbstractDataWriter;
 class dtkAbstractDataConverter;
+class dtkAbstractDataSerializer;
+class dtkAbstractDataDeserializer;
 class dtkAbstractDataPrivate;
+
+// /////////////////////////////////////////////////////////////////
+// dtkAbstractData interface
+// /////////////////////////////////////////////////////////////////
 
 class DTKCORE_EXPORT dtkAbstractData : public dtkAbstractObject
 {
@@ -35,9 +42,16 @@ class DTKCORE_EXPORT dtkAbstractData : public dtkAbstractObject
 
 public:
              dtkAbstractData(      dtkAbstractData *parent = 0);
-             dtkAbstractData(const dtkAbstractData& data);
+             dtkAbstractData(const dtkAbstractData& other);
     virtual ~dtkAbstractData(void);
 
+public:
+    dtkAbstractData& operator = (const dtkAbstractData& other);
+
+public:
+    bool operator == (const dtkAbstractData& other) const;
+
+public:
     friend DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractData& data);
     friend DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractData *data);
 
@@ -51,6 +65,8 @@ public slots:
     virtual bool write(const QStringList& files);
 
     virtual dtkAbstractData *convert(const QString& toType);
+    virtual QByteArray    *serialize(void);
+    virtual dtkAbstractData *deserialize(const QByteArray& array);
 
     virtual void *output(void);
     virtual void *output(int channel);
@@ -65,6 +81,9 @@ public slots:
     virtual void setParameter(int parameter);
     virtual void setParameter(int parameter, int channel);
 
+    virtual void setParameter(qlonglong parameter);
+    virtual void setParameter(qlonglong parameter, int channel);
+
     virtual void setParameter(float parameter);
     virtual void setParameter(float parameter, int channel);
 
@@ -77,16 +96,21 @@ public slots:
     virtual void setParameter(dtkAbstractData *parameter);
     virtual void setParameter(dtkAbstractData *parameter, int channel);
 
-    virtual void setData(void* data);
-    virtual void setData(void* data, int channel);
+    virtual void setParameter(dtkVectorReal parameter);
+    virtual void setParameter(dtkVectorReal parameter, int channel);
+
+    virtual void setData(void *data);
+    virtual void setData(void *data, int channel);
 
     virtual void setNumberOfChannels(int number);
-    
+
     virtual void update(void);
 
-    void addReader   (const QString& reader);
-    void addWriter   (const QString& writer);
-    void addConverter(const QString& converter);
+    void addReader      (const QString& reader);
+    void addWriter      (const QString& writer);
+    void addConverter   (const QString& converter);
+    void addSerializer  (const QString& serializer);
+    void addDeserializer(const QString& deserializer);
 
     void  enableReader(const QString& reader);
     void disableReader(const QString& reader);
@@ -97,31 +121,36 @@ public slots:
     void  enableConverter(const QString& converter);
     void disableConverter(const QString& converter);
 
-    dtkAbstractDataReader    *reader   (const QString& type);
-    dtkAbstractDataWriter    *writer   (const QString& type);
-    dtkAbstractDataConverter *converter(const QString& type);
+    void  enableSerializer(const QString& serializer);
+    void disableSerializer(const QString& serializer);
+
+    void  enableDeserializer(const QString& deserializer);
+    void disableDeserializer(const QString& deserializer);
+
+    dtkAbstractDataReader       *reader   (const QString& type);
+    dtkAbstractDataWriter       *writer   (const QString& type);
+    dtkAbstractDataConverter    *converter(const QString& type);
+    dtkAbstractDataSerializer   *serializer(const QString& type);
+    dtkAbstractDataDeserializer *deserializer(const QString& type);
 
     QString     path(void);
     QStringList paths(void);
 
-    virtual       QImage & thumbnail(void)  const;
-    virtual QList<QImage>& thumbnails(void) const;
+    virtual       QImage & thumbnail(void) ;
+    virtual QList<QImage>& thumbnails(void);
 
 public:
-    virtual bool casts(const QString& type);
-
-    virtual operator bool   (void);
-    virtual operator int    (void);
-    virtual operator float  (void);
-    virtual operator double (void);
+    virtual QVariant toVariant(dtkAbstractData *data);
+    virtual dtkAbstractData *fromVariant(const QVariant& v);
 
 private:
-    dtkAbstractDataPrivate *d;
+    DTK_DECLARE_PRIVATE(dtkAbstractData);
 };
 
 DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractData& data);
 DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractData *data);
 
 Q_DECLARE_METATYPE(dtkAbstractData)
+Q_DECLARE_METATYPE(dtkAbstractData *)
 
 #endif

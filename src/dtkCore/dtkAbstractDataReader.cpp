@@ -1,5 +1,5 @@
-/* dtkAbstractDataReader.cpp --- 
- * 
+/* dtkAbstractDataReader.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 22:03:03 2009 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 59
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkAbstractDataReader.h"
@@ -121,15 +121,17 @@ bool dtkAbstractDataReader::read(const QStringList& files)
     return false;
 }
 
-void dtkAbstractDataReader::readInformation(const QString& path)
+bool dtkAbstractDataReader::readInformation(const QString& path)
 {
     DTK_UNUSED(path);
+    return false;
 }
 
-void dtkAbstractDataReader::readInformation(const QStringList& paths)
+bool dtkAbstractDataReader::readInformation(const QStringList& paths)
 {
     if (paths.size()==1)
         return readInformation(paths[0]);
+    return false;
 }
 
 void dtkAbstractDataReader::setProgress(int value)

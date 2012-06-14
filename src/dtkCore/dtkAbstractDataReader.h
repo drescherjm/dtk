@@ -1,5 +1,5 @@
-/* dtkAbstractDataReader.h --- 
- * 
+/* dtkAbstractDataReader.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 21:58:48 2009 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 55
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABSTRACTDATAREADER_H
@@ -37,40 +37,40 @@ public:
              dtkAbstractDataReader(void);
              dtkAbstractDataReader(const dtkAbstractDataReader& other);
     virtual ~dtkAbstractDataReader(void);
-    
+
 public:
     virtual QString description(void) const = 0;
     virtual QStringList handled(void) const = 0;
-    
+
     bool enabled(void) const;
     void enable(void);
     void disable(void);
-    
+
     dtkAbstractData *data(void) const;
-    
+
     virtual void setData(dtkAbstractData *data);
 
 signals:
     void started(const QString& message);
     void progressed(int step);
     void finished(void);
-    
+
 public slots:
     virtual bool canRead(const QString& file);
     virtual bool canRead(const QStringList& files);
-    
+
     virtual bool read(const QString& file);
     virtual bool read(const QStringList& files);
-    
-    virtual void readInformation(const QString& path);
-    virtual void readInformation(const QStringList& paths);
-    
+
+    virtual bool readInformation(const QString& path);
+    virtual bool readInformation(const QStringList& paths);
+
     virtual void setProgress(int value);
 
 protected:
     const QString&     file(void)  const;
     const QStringList& files(void) const;
-    
+
 private:
     DTK_DECLARE_PRIVATE(dtkAbstractDataReader);
 };

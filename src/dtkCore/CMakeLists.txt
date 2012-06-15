@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu May 31 00:37:35 2012 (+0200)
+## Last-Updated: Tue Jun 12 11:18:50 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 301
+##     Update #: 302
 ######################################################################
 ## 
 ### Commentary: 
@@ -45,6 +45,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkCpuid.h
   dtkGlobal.h
   dtkPlugin.h
+  dtkPlugin_p.h
   dtkPluginManager.h
   dtkUpdater.h
   dtkSignalBlocker.h

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu May  3 15:05:28 2012 (+0200)
+## Last-Updated: Wed Jun 13 14:04:54 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 103
+##     Update #: 106
 ######################################################################
 ## 
 ### Commentary: 
@@ -96,8 +96,6 @@ endif(SWIG_FOUND)
 ## Tcl
 ## #################################################################
 
-if(NOT WINDOWS)
-
 find_package(TCL QUIET)
 
 if(TCL_FOUND)
@@ -107,8 +105,6 @@ endif(TCL_FOUND)
 if(TCL_FOUND)
   add_definitions(-DHAVE_TCL)
 endif(TCL_FOUND)
-
-endif(NOT WINDOWS)
 
 ## #################################################################
 ## Python

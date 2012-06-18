@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: mer. juin 13 13:43:10 2012 (+0200)
+ * Last-Updated: lun. juin 18 14:55:41 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 849
+ *     Update #: 940
  */
 
 /* Commentary:
@@ -62,7 +62,7 @@ public:
 
 public:
     QString jobid;
-    QString last_rank;
+    QString last_jobid;
 
 public:
     QString title;
@@ -138,6 +138,15 @@ bool dtkComposerNodeRemote::isSlave(void)
     return false;
 }
 
+void dtkComposerNodeRemote::onJobStarted(QString jobid)
+{
+    if (jobid == d->jobid) {
+        QObject::disconnect( dtkDistributedController::instance(), SIGNAL(jobStarted(QString)), this, SLOT(onJobStarted(QString)));
+    } else {
+        dtkDebug() << "A job has started, but it's not ours, keep waiting " << d->jobid << jobid ;
+    }
+}
+
 void dtkComposerNodeRemote::begin(void)
 {
     if (!d->slave && !d->jobid_receiver.isEmpty()) {
@@ -146,6 +155,15 @@ void dtkComposerNodeRemote::begin(void)
         // controller instance
         d->jobid = d->jobid_receiver.data();
         d->controller = dtkDistributedController::instance();
+        if (!d->controller->is_running(d->jobid)) {
+            dtkDebug() << " Wait for job to start, jobid is " << d->jobid;
+            QEventLoop loop;
+            this->connect(d->controller, SIGNAL(jobStarted(QString)), this, SLOT(onJobStarted(QString)),Qt::DirectConnection);
+            loop.connect(d->controller, SIGNAL(jobStarted(QString)), &loop, SLOT(quit()));
+            loop.exec();
+            dtkTrace() << "waiting event loop ended, job has started" << d->jobid;
+        } else
+            dtkDebug() << " Job already running, go " << d->jobid;
     }
 
     if (d->controller) {
@@ -160,11 +178,13 @@ void dtkComposerNodeRemote::begin(void)
             }
         }
         dtkDistributedMessage *msg;
-        if (d->last_rank != d->jobid) {
+        if (d->last_jobid != d->jobid) {
             msg = new dtkDistributedMessage(dtkDistributedMessage::SETRANK,d->jobid,dtkDistributedMessage::CONTROLLER_RUN_RANK );
             d->server->socket()->sendRequest(msg);
             delete msg;
-            d->last_rank=d->jobid;
+            d->last_jobid=d->jobid;
+            // the job has changed, so we must send the composition even if it has not changed
+            d->last_sent_hash.clear();
         }
         if (d->current_hash != d->last_sent_hash){
             // send sub-composition to rank 0 on remote node
@@ -180,9 +200,9 @@ void dtkComposerNodeRemote::begin(void)
         delete msg;
         dtkDebug() << "composition sent";
         // then send transmitters data
-        int max  = this->receivers().count();
+        int max  = dtkComposerNodeComposite::receivers().count();
         for (int i = 1; i < max; i++) {
-            dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(this->receivers().at(i));
+            dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(dtkComposerNodeComposite::receivers().at(i));
             // FIXME: use our own transmitter variant list (see control nodes)
             QByteArray array;
             QString  dataType;
@@ -231,10 +251,10 @@ void dtkComposerNodeRemote::begin(void)
         d->server->socket()->waitForBytesWritten();
     } else {
         // running on the slave, receive data and set transmitters
-        int max  = this->receivers().count();
+        int max  = dtkComposerNodeComposite::receivers().count();
         int size = d->communicator->size();
         for (int i = 1; i < max; i++) {
-            dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(this->receivers().at(i));
+            dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(dtkComposerNodeComposite::receivers().at(i));
             if (d->communicator->rank() == 0) {
 
                 if (d->slave->communicator()->socket()->bytesAvailable()) {
@@ -427,22 +447,22 @@ void dtkComposerNodeRemoteSubmit::run(void)
 
    QByteArray job_data = dtkJson::serialize(job);
 
-    dtkTrace() << __func__ << " submit job with parameters: "<< job_data;
+    dtkTrace() << " submit job with parameters: "<< job_data;
 
     dtkDistributedController *controller = dtkDistributedController::instance();
     if (controller->submit(QUrl(d->cluster.data()), job_data)) {
-        QObject::connect(controller, SIGNAL(jobStarted(QString)), this, SLOT(onJobStarted(QString)),Qt::DirectConnection);
-        d->mutex.lock();
-        d->mutex.unlock();
+        QEventLoop loop;
+        this->connect(controller, SIGNAL(jobQueued(QString)), this, SLOT(onJobQueued(QString)),Qt::DirectConnection);
+        loop.connect(controller, SIGNAL(jobQueued(QString)), &loop, SLOT(quit()));
+        loop.exec();
+        dtkTrace() <<  "event loop ended, job is queued";
 
     } else
         dtkWarn() <<  "failed to submit ";
 }
 
-void dtkComposerNodeRemoteSubmit::onJobStarted(QString jobid)
+void dtkComposerNodeRemoteSubmit::onJobQueued(QString jobid)
 {
-    dtkTrace() << __func__ << " jobid is " << jobid;
     d->id.setData(jobid);
-    QObject::disconnect( dtkDistributedController::instance(), SIGNAL(jobStarted(QString)), this, SLOT(onJobStarted(QString)));
-    d->mutex.unlock();
+    QObject::disconnect( dtkDistributedController::instance(), SIGNAL(jobQueued(QString)), this, SLOT(onJobQueued(QString)));
 }

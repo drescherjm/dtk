@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:15:12
  * Version: $Id$
- * Last-Updated: mer. juin 13 10:49:51 2012 (+0200)
+ * Last-Updated: mer. juin 13 16:35:55 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 23
+ *     Update #: 32
  */
 
 /* Commentary:
@@ -35,8 +35,10 @@ class dtkDistributedCommunicator;
 class dtkDistributedController;
 class dtkDistributedSlave;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeRemote : public dtkComposerNodeComposite
+class DTKCOMPOSER_EXPORT dtkComposerNodeRemote : public QObject, public dtkComposerNodeComposite
 {
+    Q_OBJECT
+
 public:
              dtkComposerNodeRemote(void);
     virtual ~dtkComposerNodeRemote(void);
@@ -46,6 +48,9 @@ public:
 
 public:
     QString titleHint(void);
+
+public slots:
+    void onJobStarted(QString id);
 
 public:
     void setComposition(QDomDocument document);
@@ -87,7 +92,7 @@ public:
     void run(void);
 
 public slots:
-    void onJobStarted(QString id);
+    void onJobQueued(QString id);
 
 public:
     inline QString type(void) {
@@ -115,7 +120,7 @@ public:
 
 public:
     inline QString outputLabelHint(int) {
-        return "id";
+        return "jobid";
     }
 
 protected:

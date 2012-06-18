@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. juin 13 12:34:35 2012 (+0200)
+ * Last-Updated: mer. juin 13 17:08:25 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 106
+ *     Update #: 108
  */
 
 /* Commentary: 
@@ -57,6 +57,7 @@ signals:
 
     void dataPosted(const QByteArray& data);
     void jobStarted(QString jobid);
+    void jobQueued(QString jobid);
 
     void status(const QUrl& server);
 
@@ -81,6 +82,9 @@ public:
 
     QList<dtkDistributedJob *> jobs(void);
     QList<dtkDistributedJob *> jobs(const QString& cluster);
+
+public:
+    bool is_running(const QString& jobid);
 
 protected slots:
     void read(void);

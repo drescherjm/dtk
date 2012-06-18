@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 15:37:50 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Mar 16 10:47:05 2011 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 187
+ * Last-Updated: Thu Jun 14 14:32:09 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 193
  */
 
 /* Commentary: 
@@ -36,6 +36,8 @@
 // /////////////////////////////////////////////////////////////////
 
 DTKMATH_EXPORT void dtkBubbleSort(unsigned int indices[], int size);
+DTKMATH_EXPORT void dtkBubbleSort(qint32 *indices, qint32 size);
+DTKMATH_EXPORT void dtkBubbleSort(qint64 *indices, qint64 size);
 
 // /////////////////////////////////////////////////////////////////
 // Some bit constants 

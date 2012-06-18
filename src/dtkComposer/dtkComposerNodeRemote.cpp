@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: lun. juin 18 14:55:41 2012 (+0200)
+ * Last-Updated: lun. juin 18 15:08:36 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 940
+ *     Update #: 947
  */
 
 /* Commentary:
@@ -160,6 +160,7 @@ void dtkComposerNodeRemote::begin(void)
             QEventLoop loop;
             this->connect(d->controller, SIGNAL(jobStarted(QString)), this, SLOT(onJobStarted(QString)),Qt::DirectConnection);
             loop.connect(d->controller, SIGNAL(jobStarted(QString)), &loop, SLOT(quit()));
+            loop.connect(qApp, SIGNAL(aboutToQuit()), &loop, SLOT(quit()));
             loop.exec();
             dtkTrace() << "waiting event loop ended, job has started" << d->jobid;
         } else
@@ -454,6 +455,8 @@ void dtkComposerNodeRemoteSubmit::run(void)
         QEventLoop loop;
         this->connect(controller, SIGNAL(jobQueued(QString)), this, SLOT(onJobQueued(QString)),Qt::DirectConnection);
         loop.connect(controller, SIGNAL(jobQueued(QString)), &loop, SLOT(quit()));
+        loop.connect(qApp, SIGNAL(aboutToQuit()), &loop, SLOT(quit()));
+
         loop.exec();
         dtkTrace() <<  "event loop ended, job is queued";
 

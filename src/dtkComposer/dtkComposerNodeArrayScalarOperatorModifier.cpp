@@ -192,8 +192,6 @@ void dtkComposerNodeArrayScalarOperatorPrepend::run(void)
         qreal value = qvariant_cast<qreal>(d->receiver_value.data());
 
         array.prepend(value) ;
-        for (int i = 0; i< array.count();i++)
-            dtkDebug()<< array[i] ;
         d->emitter_array.setData( array);
 
     } else {

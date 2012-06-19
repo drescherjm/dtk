@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jul  6 16:57:24 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Feb 28 15:43:07 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 171
+ * Last-Updated: Thu Jun 14 14:47:52 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 190
  */
 
 /* Commentary: 
@@ -43,9 +43,53 @@ void dtkBubbleSort(unsigned int indices[], int size)
     int j = 0;
     while ( (j<size-1) && (!ordered) ) {
         ordered = true;
-        for (int k = 0; k<(size-1-j); k++) {
+        for (int k = 0; k < (size-1-j); k++) {
             if (indices[k] > indices[k+1]) {
                 unsigned int temp = indices[k];
+                indices[k] = indices[k+1];
+                indices[k+1] = temp;
+                ordered = false;
+            }
+        }
+        j++;
+    }
+}
+
+//! Sorts the integer of an array by growing values.
+/*! 
+ * 
+ */
+void dtkBubbleSort(qint32 *indices, qint32 size)
+{
+    bool ordered = false;
+    qint32 j = 0;
+    while ( (j<size-1) && (!ordered) ) {
+        ordered = true;
+        for (qint32 k = 0; k < (size-1-j); k++) {
+            if (indices[k] > indices[k+1]) {
+                qint32 temp = indices[k];
+                indices[k] = indices[k+1];
+                indices[k+1] = temp;
+                ordered = false;
+            }
+        }
+        j++;
+    }
+}
+
+//! Sorts the integer of an array by growing values.
+/*! 
+ * 
+ */
+void dtkBubbleSort(qint64 *indices, qint64 size)
+{
+    bool ordered = false;
+    qint64 j = 0;
+    while ( (j<size-1) && (!ordered) ) {
+        ordered = true;
+        for (qint64 k = 0; k<(size-1-j); k++) {
+            if (indices[k] > indices[k+1]) {
+                qint64 temp = indices[k];
                 indices[k] = indices[k+1];
                 indices[k+1] = temp;
                 ordered = false;

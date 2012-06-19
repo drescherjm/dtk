@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed May 30 22:08:31 2012 (+0200)
+## Last-Updated: Tue Jun 19 15:27:19 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 384
+##     Update #: 389
 ######################################################################
 ## 
 ### Commentary: 
@@ -41,6 +41,7 @@ option(DTK_BUILD_DOCUMENTATION "Build documentation"    false)
 option(DTK_BUILD_WRAPPERS      "Build wrappers"         false)
 option(DTK_BUILD_REPORTING     "Build reporting"        false)
 option(DTK_BUILD_TUTORIALS     "Build tutorials"        false)
+option(DTK_BUILD_MPI           "Build mpi related code" false)
 
 if(MSVC)
   option(DTK_USE_PRECOMPILED_HEADERS "Use precompiled headers" true)

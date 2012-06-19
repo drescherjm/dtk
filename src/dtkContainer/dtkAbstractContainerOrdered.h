@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 22 14:57:44 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 24 11:43:38 2012 (+0200)
+ * Last-Updated: Wed Jun 13 16:51:49 2012 (+0200)
  *           By: tkloczko
- *     Update #: 49
+ *     Update #: 50
  */
 
 /* Commentary: 
@@ -67,6 +67,9 @@ public:
     virtual dtkxarch_int *indicesOf(const T& value, dtkxarch_int from = 0) const = 0;
 
     virtual const T& at(dtkxarch_int index) const = 0;
+
+    virtual const T& first(void) const = 0;
+    virtual const T&  last(void) const = 0;
 
     virtual dtkAbstractContainerOrdered<T> *subContainer(const dtkAbstractContainerOrdered<dtkxarch_int>& indices)  const = 0;
     virtual dtkAbstractContainerOrdered<T> *subContainer(dtkxarch_int from, dtkxarch_int to, dtkxarch_int step = 1) const = 0;

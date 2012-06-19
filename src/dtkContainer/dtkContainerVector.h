@@ -76,7 +76,7 @@ public:
     void removeAt(dtkxarch_int from, dtkxarch_int to, dtkxarch_int step = 1);
 
     void reserve(dtkxarch_int value);
-    void  resize(dtkxarch_int size);
+    void resize(dtkxarch_int size);
 
     void  squeeze(void);
 

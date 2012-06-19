@@ -297,6 +297,21 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Scalar Array Insert"] = QStringList() << "container" << "array" << "scalar"  << "insert" ;
     d->types["Scalar Array Insert"] = "array_scalar_insert";
 
+    d->nodes << "Scalar Array Replace";
+    d->descriptions["Scalar Array Replace"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Replace"] = QStringList() << "container" << "array" << "scalar"  << "replace" ;
+    d->types["Scalar Array Replace"] = "array_scalar_replace";
+
+    d->nodes << "Scalar Array Append";
+    d->descriptions["Scalar Array Append"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Append"] = QStringList() << "container" << "array" << "scalar"  << "append" ;
+    d->types["Scalar Array Append"] = "array_scalar_append";
+
+    d->nodes << "Scalar Array Prepend";
+    d->descriptions["Scalar Array Prepend"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Prepend"] = QStringList() << "container" << "array" << "scalar"  << "prepend" ;
+    d->types["Scalar Array Prepend"] = "array_scalar_prepend";
+
     d->nodes << "Scalar Array Sum";
     d->descriptions["Scalar Array Sum"] = "<p>Description not yet filled!</p>";
     d->tags["Scalar Array Sum"] = QStringList() << "container" << "array" << "scalar"  << "sum" ;
@@ -949,6 +964,15 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "array_scalar_insert")
         return new dtkComposerNodeArrayScalarOperatorInsert;
+
+    if(type == "array_scalar_replace")
+        return new dtkComposerNodeArrayScalarOperatorReplace;
+
+    if(type == "array_scalar_append")
+        return new dtkComposerNodeArrayScalarOperatorAppend;
+
+    if(type == "array_scalar_prepend")
+        return new dtkComposerNodeArrayScalarOperatorPrepend;
 
     if(type == "array_scalar_sum")
         return new dtkComposerNodeArrayScalarOperatorSum;

@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: mer. juin 13 10:38:56 2012 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 555
+## Last-Updated: Tue Jun 19 15:24:50 2012 (+0200)
+##           By: Julien Wintz
+##     Update #: 558
 ######################################################################
 ##
 ### Commentary:
@@ -337,9 +337,9 @@ target_link_libraries(${PROJECT_NAME}
   dtkNotification
   dtkDistributed)
 
-if(DTK_HAVE_NITE)
+if(DTK_HAVE_NITE OR DTK_HAVE_VRPN)
 target_link_libraries(${PROJECT_NAME} dtkVr)
-endif(DTK_HAVE_NITE)
+endif(DTK_HAVE_NITE OR DTK_HAVE_VRPN)
 
 if(DTK_HAVE_PLOT)
 target_link_libraries(${PROJECT_NAME} dtkPlot)

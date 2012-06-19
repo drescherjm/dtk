@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: mer. juin 13 10:52:01 2012 (+0200)
+ * Last-Updated: mar. juin 19 14:10:02 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 634
+ *     Update #: 640
  */
 
 /* Commentary:
@@ -33,6 +33,7 @@
 #include "dtkComposerNodeControlIf.h"
 #include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeControlForEach.h"
+#include "dtkComposerNodeControlMap.h"
 #include "dtkComposerNodeControlWhile.h"
 #include "dtkComposerNodeData.h"
 #include "dtkComposerNodeFile.h"
@@ -695,6 +696,11 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Foreach"] = QStringList() << "control" << "foreach";
     d->types["Foreach"] = "foreach";
 
+    d->nodes << "Map";
+    d->descriptions["Map"] = "<p>High order function: takes a container and applies a set of functions to each of its element to generate a new container</p>";
+    d->tags["Map"] = QStringList() << "control" << "map" << "container";
+    d->types["Map"] = "map";
+
     d->nodes << "While";
     d->descriptions["While"] = "<p>Description not yet filled!</p>";
     d->tags["While"] = QStringList() << "control" << "while";
@@ -1187,6 +1193,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "foreach")
         return new dtkComposerNodeControlForEach;
+
+    if(type == "map")
+        return new dtkComposerNodeControlMap;
 
     if(type == "while")
         return new dtkComposerNodeControlWhile;

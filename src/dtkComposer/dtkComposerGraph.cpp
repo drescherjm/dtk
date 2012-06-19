@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. mai 31 17:22:56 2012 (+0200)
+ * Last-Updated: lun. juin 18 17:29:11 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 2086
+ *     Update #: 2088
  */
 
 /* Commentary:
@@ -35,6 +35,7 @@
 #include "dtkComposerNodeControlDoWhile.h"
 #include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeControlForEach.h"
+#include "dtkComposerNodeControlMap.h"
 #include "dtkComposerNodeControlIf.h"
 #include "dtkComposerNodeControlWhile.h"
 #include "dtkComposerNodeLeaf.h"
@@ -256,7 +257,7 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
             d->addDummyEdge(     vars, d->begin(blocks[cond]), node);
             vars->setEndLoop();
 
-        } else if (dynamic_cast<dtkComposerNodeControlForEach *>(wrapee)) {
+        } else if (dynamic_cast<dtkComposerNodeControlForEach *>(wrapee) || dynamic_cast<dtkComposerNodeControlMap *>(wrapee)) {
             dtkComposerGraphNode *vars = new dtkComposerGraphNodeSetVariables(wrapee);
             d->addNode(node, vars, begin);
             dtkComposerGraphNode *inputs    = new dtkComposerGraphNodeSetInputs(wrapee);

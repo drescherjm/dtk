@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Jun 13 14:04:54 2012 (+0200)
+## Last-Updated: Tue Jun 19 15:29:26 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 106
+##     Update #: 109
 ######################################################################
 ## 
 ### Commentary: 
@@ -172,16 +172,18 @@ endif(OPENSSL_FOUND)
 ## Mpi
 ## #################################################################
 
-mark_as_advanced(MPI_EXTRA_LIBRARY)
-mark_as_advanced(MPI_LIBRARY)
+if(DTK_BUILD_MPI)
+  mark_as_advanced(MPI_EXTRA_LIBRARY)
+  mark_as_advanced(MPI_LIBRARY)
 
-find_package(MPI QUIET)
+  find_package(MPI QUIET)
 
-if(MPI_FOUND)
-include_directories(${MPI_INCLUDE_PATH})
-set(COMPILE_FLAGS ${COMPILE_FLAGS} ${MPI_COMPILE_FLAGS})
-set(DTK_HAVE_MPI "YES")
-endif(MPI_FOUND)
+  if(MPI_FOUND)
+    include_directories(${MPI_INCLUDE_PATH})
+    set(COMPILE_FLAGS ${COMPILE_FLAGS} ${MPI_COMPILE_FLAGS})
+    set(DTK_HAVE_MPI "YES")
+  endif(MPI_FOUND)
+endif(DTK_BUILD_MPI)
 
 ## #################################################################
 ## Vrpn
@@ -213,9 +215,9 @@ mark_as_advanced(VRPN_LIBRARY)
 ## 
 ## #################################################################
 
-if(MPI_FOUND AND QUAT_LIBRARY AND VRPN_LIBRARY)
+if(DTK_BUILD_MPI AND MPI_FOUND AND QUAT_LIBRARY AND VRPN_LIBRARY)
   add_definitions(-DDTK_WRAP_VRPN)
-endif(MPI_FOUND AND QUAT_LIBRARY AND VRPN_LIBRARY)
+endif(DTK_BUILD_MPI AND MPI_FOUND AND QUAT_LIBRARY AND VRPN_LIBRARY)
 
 ## #################################################################
 ## Qwt

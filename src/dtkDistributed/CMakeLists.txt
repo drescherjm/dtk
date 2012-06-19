@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Apr 27 21:05:09 2012 (+0200)
+## Last-Updated: Tue Jun 19 15:26:24 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 243
+##     Update #: 247
 ######################################################################
 ## 
 ### Commentary: 
@@ -149,14 +149,14 @@ endif(WIN32)
 ## Mpi sources
 ## #################################################################
 
-if(MPI_FOUND)
+if(DTK_HAVE_MPI)
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkDistributedCommunicatorMpi.h)
 set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
   dtkDistributedCommunicatorMpi.h)
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkDistributedCommunicatorMpi.cpp)
-endif(MPI_FOUND)
+endif(DTK_HAVE_MPI)
 
 ## #################################################################
 ## Build rules
@@ -203,9 +203,9 @@ target_link_libraries(${PROJECT_NAME}
   dtkGui
   dtkLog)
 
-if(MPI_FOUND)
+if(DTK_HAVE_MPI)
 target_link_libraries(${PROJECT_NAME} ${MPI_LIBRARIES})
-endif(MPI_FOUND)
+endif(DTK_HAVE_MPI)
 
 ## #################################################################
 ## Export header file

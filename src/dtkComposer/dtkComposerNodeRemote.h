@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:15:12
  * Version: $Id$
- * Last-Updated: mer. juin 13 16:35:55 2012 (+0200)
+ * Last-Updated: mar. juin 19 14:39:46 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 32
+ *     Update #: 33
  */
 
 /* Commentary:
@@ -114,6 +114,8 @@ public:
             return "cores";
         else if (port == 3)
             return "walltime";
+        else if (port == 4)
+            return "queuename";
         else
             return "value";
     }

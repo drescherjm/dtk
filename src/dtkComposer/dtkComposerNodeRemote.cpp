@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: lun. juin 18 15:08:36 2012 (+0200)
+ * Last-Updated: mar. juin 19 14:44:23 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 947
+ *     Update #: 952
  */
 
 /* Commentary:
@@ -391,6 +391,7 @@ public:
     dtkComposerTransmitterReceiver<qlonglong> nodes;
     dtkComposerTransmitterReceiver<qlonglong> cores;
     dtkComposerTransmitterReceiver<QString> walltime;
+    dtkComposerTransmitterReceiver<QString> queuename;
     dtkComposerTransmitterReceiver<QString> application;
 
     QMutex mutex;
@@ -402,6 +403,7 @@ dtkComposerNodeRemoteSubmit::dtkComposerNodeRemoteSubmit(void) : dtkComposerNode
     this->appendReceiver(&(d->nodes));
     this->appendReceiver(&(d->cores));
     this->appendReceiver(&(d->walltime));
+    this->appendReceiver(&(d->queuename));
 
     this->appendEmitter(&(d->id));
 
@@ -442,6 +444,9 @@ void dtkComposerNodeRemoteSubmit::run(void)
         job.insert("walltime", "00:15:00");
     else
         job.insert("walltime", d->walltime.data());
+
+    if (!d->queuename.isEmpty())
+        job.insert("queue", d->queuename.data());
 
     job.insert("properties", QVariantMap());
     job.insert("application", "dtkComposerEvaluatorSlave "+d->cluster.data());

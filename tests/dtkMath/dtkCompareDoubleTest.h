@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun 20 13:12:08 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun 20 13:20:53 2012 (+0200)
+ * Last-Updated: Wed Jun 20 14:07:15 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 6
+ *     Update #: 7
  */
 
 /* Commentary: 
@@ -40,6 +40,8 @@ private slots:
 
 private slots:
     void testCompareAll(void);
+    void testCompare2sComplement(void);
+    void testCompareFinal(void);
 
 private:
     dtkCompareDoubleTestObjectPrivate *d;

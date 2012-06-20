@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun 20 13:12:23 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun 20 13:24:13 2012 (+0200)
+ * Last-Updated: Wed Jun 20 14:09:48 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 53
+ *     Update #: 112
  */
 
 /* Commentary: 
@@ -20,6 +20,20 @@
 #include "dtkCompareDoubleTest.h"
 
 #include <dtkMath/dtkMath.h>
+
+#include <float.h>
+
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+bool TestCompare2sComplement(double A, double B, long long int maxUlps = 10);
+bool TestCompareFinal(double A, double B, long long int maxUlps = 10);
+bool TestCompareAll(double A, double B, long long int maxUlps = 10);
+
+// /////////////////////////////////////////////////////////////////
+// dtkCompareDoubleTestObjectPrivate
+// /////////////////////////////////////////////////////////////////
 
 class dtkCompareDoubleTestObjectPrivate
 {
@@ -38,6 +52,10 @@ public:
 
     double smallestDenormal;
 };
+
+// /////////////////////////////////////////////////////////////////
+// dtkCompareDoubleTestObject
+// /////////////////////////////////////////////////////////////////
 
 dtkCompareDoubleTestObject::dtkCompareDoubleTestObject(void) : d(new dtkCompareDoubleTestObjectPrivate)
 {
@@ -87,7 +105,48 @@ void dtkCompareDoubleTestObject::cleanupTestCase(void)
 
 void dtkCompareDoubleTestObject::testCompareAll(void)
 {
-    QVERIFY(dtkAlmostEqual2sComplement(d->zero1, d->negativeZero, (long long int)10) == true);
+    QVERIFY(TestCompareAll(d->zero1, d->negativeZero) == true);
+    QVERIFY(TestCompareAll(2.0, 1.999999999999999) == true);
+    QVERIFY(TestCompareAll(2.0, 1.9999999999999995) == true);
+    QVERIFY(TestCompareAll(1.9999999999999995, 2.0) == true);
+    QVERIFY(TestCompareAll(2.0, 1.9999999999999995) == true);
 }
 
-DTKTEST_NOGUI_MAIN(dtkCompareDoubleTest,dtkCompareDoubleTestObject)
+void dtkCompareDoubleTestObject::testCompare2sComplement(void)
+{
+    QVERIFY(TestCompare2sComplement(d->inf0, -d->inf0, 16 * 1024 * 1024) == false);
+    QVERIFY(TestCompare2sComplement(DBL_MAX, d->inf0) == true);
+    QVERIFY(TestCompare2sComplement(d->nan2, d->nan2) == true);
+    QVERIFY(TestCompare2sComplement(d->nan2, d->nan3) == true);
+    QVERIFY(TestCompare2sComplement(d->smallestDenormal, -d->smallestDenormal) == true);
+ }
+
+void dtkCompareDoubleTestObject::testCompareFinal(void)
+{
+    QVERIFY(TestCompareFinal(d->inf0, -d->inf0, 16 * 1024 * 1024) == false);
+    QVERIFY(TestCompareFinal(DBL_MAX, d->inf0) == false);
+    QVERIFY(TestCompareFinal(d->nan2, d->nan2) == false);
+    QVERIFY(TestCompareFinal(d->nan2, d->nan3) == false);
+    QVERIFY(TestCompareFinal(d->smallestDenormal, -d->smallestDenormal) ==  false);
+}
+
+DTKTEST_NOGUI_MAIN(dtkCompareDoubleTest, dtkCompareDoubleTestObject)
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
+bool TestCompare2sComplement(double A, double B, long long int maxUlps)
+{
+    return dtkAlmostEqual2sComplement(A, B, maxUlps);
+}
+
+bool TestCompareFinal(double A, double B, long long int maxUlps)
+{
+    return dtkAlmostEqualUlps(A, B, maxUlps);
+}
+
+bool TestCompareAll(double A, double B, long long int maxUlps)
+{
+    return (TestCompare2sComplement(A, B, maxUlps) || TestCompareFinal(A, B, maxUlps));
+}

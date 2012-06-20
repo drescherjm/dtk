@@ -21,8 +21,6 @@
 #include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerNodeArrayScalarOperatorModifier.h"
 
-#include <dtkCore/dtkContainerVector.h>
-
 #include <dtkLog/dtkLog>
 
 // /////////////////////////////////////////////////////////////////
@@ -39,7 +37,6 @@ public:
 public:
     dtkComposerTransmitterEmitterVector<qreal> emitter_array;
 };
-
 
 dtkComposerNodeArrayScalarOperatorModifier::dtkComposerNodeArrayScalarOperatorModifier(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeArrayScalarOperatorModifierPrivate)
 {

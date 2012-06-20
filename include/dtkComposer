@@ -31,6 +31,7 @@
 #include "../src/dtkComposer/dtkComposerNodeControlFor.h"
 #include "../src/dtkComposer/dtkComposerNodeControlForEach.h"
 #include "../src/dtkComposer/dtkComposerNodeControlIf.h"
+#include "../src/dtkComposer/dtkComposerNodeControlMap.h"
 #include "../src/dtkComposer/dtkComposerNodeControlWhile.h"
 #include "../src/dtkComposer/dtkComposerNodeData.h"
 #include "../src/dtkComposer/dtkComposerNodeDistributed.h"

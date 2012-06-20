@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. mai 11 15:23:06 2012 (+0200)
+ * Last-Updated: mer. juin 13 17:09:05 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 1586
+ *     Update #: 1661
  */
 
 /* Commentary: 
@@ -57,9 +57,10 @@ public:
     QHash<QString, dtkDistributedSocket *> sockets;
 
     QHash<QString, QList<dtkDistributedNode *> > nodes;
-    QHash<QString, QList<dtkDistributedJob *> > jobs;
+    QHash<QString, QList<dtkDistributedJob *> > jobs; // all queued jobs on a cluster
 
-    QHash<QString, QString > jobids;
+    QHash<QString, QString > running_jobs; // all jobs started by the controller and running
+    QHash<QString, QString > queued_jobs; // all jobs submitted by the controller (running or not)
 
     QHash<QString, QList<QProcess *> > servers;
 
@@ -245,6 +246,14 @@ dtkDistributedController::~dtkDistributedController(void)
     d = NULL;
 }
 
+DTKDISTRIBUTED_EXPORT dtkDistributedController *dtkDistributedController::instance(void)
+{
+    if(!s_instance)
+        s_instance = new dtkDistributedController;
+
+    return s_instance;
+}
+
 bool dtkDistributedController::isConnected(const QUrl& server)
 {
     if(d->sockets.keys().contains(server.toString())) {
@@ -269,17 +278,23 @@ bool dtkDistributedController::isDisconnected(const QUrl& server)
     return true;
 }
 
-void dtkDistributedController::submit(const QUrl& server,  QByteArray& resources)
+bool dtkDistributedController::submit(const QUrl& server,  QByteArray& resources)
 {
     dtkDebug() << "Want to submit jobs with resources:" << resources;
-    dtkDistributedMessage *msg  = new dtkDistributedMessage(dtkDistributedMessage::NEWJOB,"",-2,resources.size(),"json",resources);
-    d->sockets[server.toString()]->sendRequest(msg);
+    dtkDistributedMessage *msg  = new dtkDistributedMessage(dtkDistributedMessage::NEWJOB,"",dtkDistributedMessage::SERVER_RANK,resources.size(),"json",resources);
+    if (d->sockets.contains(server.toString())) {
+        d->sockets[server.toString()]->sendRequest(msg);
+        return true;
+    } else
+        dtkDebug() << "Can't submit job: unknown server " << server.toString();
+
+    return false;
 }
 
 void dtkDistributedController::killjob(const QUrl& server, QString jobid)
 {
     dtkDebug() << "Want to kill job" << jobid;
-    dtkDistributedMessage *msg  = new dtkDistributedMessage(dtkDistributedMessage::DELJOB,jobid,-2);
+    dtkDistributedMessage *msg  = new dtkDistributedMessage(dtkDistributedMessage::DELJOB,jobid,dtkDistributedMessage::SERVER_RANK);
     d->sockets[server.toString()]->sendRequest(msg);
 }
 
@@ -368,32 +383,42 @@ void dtkDistributedController::deploy(const QUrl& server)
 
 void dtkDistributedController::send(dtkDistributedMessage *msg)
 {
-    QString server = d->jobids[msg->jobid()];
-    dtkDistributedSocket *socket = d->sockets[server];
+    if (d->queued_jobs.contains(msg->jobid())) {
+        QString server = d->queued_jobs[msg->jobid()];
+        dtkDistributedSocket *socket = d->sockets[server];
 
-    socket->sendRequest(msg);
+        socket->sendRequest(msg);
+    } else
+        dtkWarn() << "unknown job, can't send message" << msg->jobid();
+
 }
 
 void dtkDistributedController::send(dtkAbstractData *data, QString jobid, qint16 rank)
 {
-    QString server = d->jobids[jobid];
-    dtkDistributedSocket *socket = d->sockets[server];
-    QByteArray *array = data->serialize();
-    if (!array) {
-        dtkFatal() << "serialization failed for jobid" << jobid;
-        return;
-    }
+    if (d->queued_jobs.contains(jobid)) {
+        QString server = d->queued_jobs[jobid];
+        dtkDistributedSocket *socket = d->sockets[server];
+        QByteArray *array = data->serialize();
+        if (!array) {
+            dtkFatal() << "serialization failed for jobid" << jobid;
+            return;
+        }
 
-    QString type = data->identifier();
+        QString type = data->identifier();
 
-    socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,jobid,rank, array->size(), type));
-    socket->write(*array);
-
+        socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,jobid,rank, array->size(), type));
+        socket->write(*array);
+    } else
+        dtkWarn() << "unknown job, can't send message" << jobid;
 }
 
 dtkDistributedSocket *dtkDistributedController::socket(const QString& jobid)
 {
-    return d->sockets[d->jobids[jobid]];
+    if (d->queued_jobs.contains(jobid))
+        if (d->sockets.contains(d->queued_jobs[jobid]))
+            return d->sockets[d->queued_jobs[jobid]];
+
+    return NULL;
 }
 
 void dtkDistributedController::connect(const QUrl& server)
@@ -483,6 +508,11 @@ QList<dtkDistributedJob *> dtkDistributedController::jobs(const QString& cluster
     return d->jobs.value(cluster);
 }
 
+bool dtkDistributedController::is_running(const QString& jobid)
+{
+    return d->running_jobs.contains(jobid);
+}
+
 void dtkDistributedController::read(void)
 {
     dtkDistributedSocket *socket = (dtkDistributedSocket *)sender();
@@ -501,20 +531,22 @@ void dtkDistributedController::read(void)
         break;
     case dtkDistributedMessage::OKJOB:
         dtkDebug() << DTK_PRETTY_FUNCTION << "New job queued: " << msg->jobid();
-        d->jobids[msg->jobid()] = server;
-        emit updated();
+        d->queued_jobs[msg->jobid()] = server;
+        emit jobQueued(msg->jobid());
         break;
     case dtkDistributedMessage::SETRANK:
         dtkDebug() << DTK_PRETTY_FUNCTION << "set rank received";
         if (msg->rank() == 0) {
             dtkDebug() << DTK_PRETTY_FUNCTION << "job started";
+            d->running_jobs[msg->jobid()] = server;
             emit jobStarted(msg->jobid());
             this->refresh(QUrl(server));
         }
         break;
     case dtkDistributedMessage::ENDJOB:
         dtkDebug() << "job finished: " << msg->jobid();
-        d->jobids.remove(msg->jobid());
+        d->queued_jobs.remove(msg->jobid());
+        d->running_jobs.remove(msg->jobid());
         emit updated();
         break;
     case dtkDistributedMessage::DATA:
@@ -612,3 +644,6 @@ void dtkDistributedController::error(QAbstractSocket::SocketError error)
         break;
     }
 }
+
+dtkDistributedController *dtkDistributedController::s_instance = NULL;
+

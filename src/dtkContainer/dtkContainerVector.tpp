@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 12:30:17 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jun 11 11:13:49 2012 (+0200)
+ * Last-Updated: Wed Jun 13 16:53:05 2012 (+0200)
  *           By: tkloczko
- *     Update #: 251
+ *     Update #: 253
  */
 
 /* Commentary: 
@@ -324,6 +324,17 @@ template <typename T> inline dtkxarch_int *dtkContainerVector<T>::indicesOf(cons
 template <typename T> inline const T& dtkContainerVector<T>::at(dtkxarch_int index) const
 {
     return m_vector.at(index);
+};
+
+template <typename T> inline const T& dtkContainerVector<T>::first(void) const
+{
+    return m_vector.first();
+};
+
+
+template <typename T> inline const T& dtkContainerVector<T>::last(void) const
+{
+    return m_vector.last();
 };
 
 template <typename T> inline dtkContainerVector<T> *dtkContainerVector<T>::subContainer(const dtkAbstractContainerOrdered<dtkxarch_int>& indices) const

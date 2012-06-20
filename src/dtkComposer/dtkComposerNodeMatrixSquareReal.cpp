@@ -32,13 +32,13 @@
 class dtkComposerNodeMatrixSquareRealPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<dtkMatrixSquareReal>  receiver_matrix;
+    dtkComposerTransmitterReceiver<dtkMatrixSquareReal> receiver_matrix;
     dtkComposerTransmitterVariant receiver_size;
     dtkComposerTransmitterVariant receiver_value;
 
 public:
-    dtkComposerTransmitterEmitter<dtkMatrixSquareReal>   emitter_matrix;
-    dtkComposerTransmitterEmitter<qlonglong>             emitter_size;
+    dtkComposerTransmitterEmitter<dtkMatrixSquareReal> emitter_matrix;
+    dtkComposerTransmitterEmitter<qlonglong> emitter_size;
 };
 
 // /////////////////////////////////////////////////////////////////

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: mar. juin 19 14:10:02 2012 (+0200)
+ * Last-Updated: mer. juin 20 17:18:06 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 640
+ *     Update #: 643
  */
 
 /* Commentary:
@@ -39,7 +39,6 @@
 #include "dtkComposerNodeData.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeFileOperator.h"
-#include "dtkComposerNodeList.h"
 #include "dtkComposerNodeLogger.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeMatrixSquareReal.h"
@@ -54,7 +53,6 @@
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
 #include "dtkComposerNodeStringOperator.h"
-#include "dtkComposerNodeVector.h"
 #include "dtkComposerNodeVector3D.h"
 #include "dtkComposerNodeVector3DOperatorUnary.h"
 #include "dtkComposerNodeVector3DOperatorBinary.h"
@@ -142,23 +140,13 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["File"] = "<p>Description not yet filled!</p>";
     d->tags["File"] = QStringList() << "primitive" << "file";
     d->types["File"] = "file";
-    
-    // container nodes
 
-    d->nodes << "List";
-    d->descriptions["List"] = "<p>Description not yet filled!</p>";
-    d->tags["List"] = QStringList() << "container" << "list";
-    d->types["List"] = "list";
+    // container nodes
 
     d->nodes << "Data Container";
     d->descriptions["Data Container"] = "<p>Description not yet filled!</p>";
     d->tags["Data Container"] = QStringList() << "container" << "data";
     d->types["Data Container"] = "data_container";
-
-    d->nodes << "Vector";
-    d->descriptions["Vector"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector"] = QStringList() << "container" << "vector";
-    d->types["Vector"] = "vector";
 
     // Matrix Square
 
@@ -899,14 +887,8 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     // container nodes
 
-    if(type == "list")
-        return new dtkComposerNodeList;
-
     if(type == "data_container")
         return new dtkComposerNodeContainerData;
-
-    if(type == "vector")
-        return new dtkComposerNodeVector;
 
     // Matrix Square Nodes
 

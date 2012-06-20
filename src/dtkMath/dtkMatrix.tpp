@@ -54,7 +54,7 @@ template <class T> inline dtkMatrix<T>::dtkMatrix(const dtkMatrix<T> &mat)
     if (mat.m_nMatStatus == N_NOTALLOCATED)
 	return;
     else
-	(*this) = mat;
+    (*this) = mat ;
 }
 
 //! Mapped matrix constructor.

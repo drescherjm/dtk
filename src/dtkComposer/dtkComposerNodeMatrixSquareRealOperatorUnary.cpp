@@ -85,13 +85,13 @@ dtkComposerNodeMatrixSquareRealOperatorUnaryScalar::~dtkComposerNodeMatrixSquare
 void dtkComposerNodeMatrixSquareRealOperatorUnaryTranspose::run(void)
 {
     if (!d->receiver_matrix.isEmpty()) {
-        d->emitter_matrix.setData(dtkTranspose(d->receiver_matrix.data()));
+        dtkMatrixSquareReal& matrix = d->receiver_matrix.data();
+        d->emitter_matrix.setData(dtkTranspose(matrix));
 
     } else {
         dtkWarn() << "Input not specified. Nothing is done";
         d->emitter_matrix.setData(dtkMatrixSquareReal());
     }
-
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -101,13 +101,13 @@ void dtkComposerNodeMatrixSquareRealOperatorUnaryTranspose::run(void)
 void dtkComposerNodeMatrixSquareRealOperatorUnaryInverse::run(void)
 {
     if (!d->receiver_matrix.isEmpty()) {
-        d->emitter_matrix.setData(dtkInverse(d->receiver_matrix.data()));
+        dtkMatrixSquareReal& matrix = d->receiver_matrix.data();
+        d->emitter_matrix.setData(dtkInverse(matrix));
 
     } else {
         dtkWarn() << "Input not specified. Nothing is done";
         d->emitter_matrix.setData(dtkMatrixSquareReal());
     }
-
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -116,24 +116,27 @@ void dtkComposerNodeMatrixSquareRealOperatorUnaryInverse::run(void)
 
 void dtkComposerNodeMatrixSquareRealOperatorUnaryScalarDeterminant::run(void)
 {
-    if (!d->receiver_matrix.isEmpty())
-        d->emitter_val.setData(dtkDeterminant(d->receiver_matrix.data()));
+    if (!d->receiver_matrix.isEmpty()){
+        dtkMatrixSquareReal& matrix = d->receiver_matrix.data();
+        d->emitter_val.setData(dtkDeterminant(matrix));
 
-    else
+    }else {
         dtkWarn() << "Input not specified. Nothing is done";
-
+        d->emitter_val.setData(qreal());
+    }
 }
-
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeMatrixSquareRealOperatorUnaryScalar - Trace
 // /////////////////////////////////////////////////////////////////
 
 void dtkComposerNodeMatrixSquareRealOperatorUnaryScalarTrace::run(void)
 {
-    if (!d->receiver_matrix.isEmpty())
-        d->emitter_val.setData(dtkMatrixSquaredTrace(d->receiver_matrix.data()));
+    if (!d->receiver_matrix.isEmpty()){
+        dtkMatrixSquareReal& matrix = d->receiver_matrix.data();
+        d->emitter_val.setData(dtkMatrixSquaredTrace(matrix));
 
-    else
+    } else {
         dtkWarn() << "Input not specified. Nothing is done";
-
+        d->emitter_val.setData(qreal());
+    }
 }

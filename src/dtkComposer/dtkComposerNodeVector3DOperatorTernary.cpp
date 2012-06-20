@@ -97,19 +97,29 @@ void dtkComposerNodeVector3DOperatorTernaryTripleProd::run(void)
         d->emitter_vec.setData(dtkVector3DReal());
 
 
-    } else
-        d->emitter_vec.setData(d->receiver_0.data() % (d->receiver_1.data() % d->receiver_2.data()));
-}
+    } else {
+        dtkVector3DReal& vector1 = d->receiver_0.data();
+        dtkVector3DReal& vector2 = d->receiver_1.data();
+        dtkVector3DReal& vector3 = d->receiver_2.data();
 
+        d->emitter_vec.setData(vector1 % (vector2 % vector3));
+    }
+}
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeVector3DOperatorTernaryScalar - Mixed Prod
 // /////////////////////////////////////////////////////////////////
 
 void dtkComposerNodeVector3DOperatorTernaryScalarMixedProd::run(void)
 {
-    if (d->receiver_0.isEmpty() || d->receiver_1.isEmpty() || d->receiver_2.isEmpty())
+    if (d->receiver_0.isEmpty() || d->receiver_1.isEmpty() || d->receiver_2.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_val.setData(qreal());
 
-    else
-        d->emitter_val.setData(dtkMixedProduct(d->receiver_0.data(), d->receiver_1.data(), d->receiver_2.data()));
+    }   else {
+        dtkVector3DReal& vector1 = d->receiver_0.data();
+        dtkVector3DReal& vector2 = d->receiver_1.data();
+        dtkVector3DReal& vector3 = d->receiver_2.data();
+
+        d->emitter_val.setData(dtkMixedProduct(vector1, vector2, vector3));
+    }
 }

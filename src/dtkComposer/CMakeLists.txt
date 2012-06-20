@@ -45,6 +45,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerMachineState.h
   dtkComposerNode.h
   dtkComposerNodeArrayScalar.h
+  dtkComposerNodeArrayScalarOperatorExtractor.h
   dtkComposerNodeArrayScalarOperatorModifier.h
   dtkComposerNodeBoolean.h
   dtkComposerNodeBooleanOperator.h
@@ -84,10 +85,12 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeVector3DOperatorBinary.h
   dtkComposerNodeVector3DOperatorTernary.h
   dtkComposerNodeVectorReal.h
+  dtkComposerNodeVectorRealOperatorExtractor.h
   dtkComposerNodeVectorRealOperatorModifier.h
   dtkComposerNodeVectorRealOperatorUnary.h
   dtkComposerNodeVectorRealOperatorBinary.h
   dtkComposerNodeMatrixSquareReal.h
+  dtkComposerNodeMatrixSquareRealOperatorExtractor.h
   dtkComposerNodeMatrixSquareRealOperatorUnary.h
   dtkComposerNodeMatrixSquareRealOperatorBinary.h
   dtkComposerNodeView.h
@@ -160,6 +163,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerMachineState.cpp
   dtkComposerNode.cpp
   dtkComposerNodeArrayScalar.cpp
+  dtkComposerNodeArrayScalarOperatorExtractor.cpp
   dtkComposerNodeArrayScalarOperatorModifier.cpp
   dtkComposerNodeBoolean.cpp
   dtkComposerNodeBooleanOperator.cpp
@@ -199,10 +203,12 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeVector3DOperatorBinary.cpp
   dtkComposerNodeVector3DOperatorTernary.cpp
   dtkComposerNodeVectorReal.cpp
+  dtkComposerNodeVectorRealOperatorExtractor.cpp
   dtkComposerNodeVectorRealOperatorModifier.cpp
   dtkComposerNodeVectorRealOperatorUnary.cpp
   dtkComposerNodeVectorRealOperatorBinary.cpp
   dtkComposerNodeMatrixSquareReal.cpp
+  dtkComposerNodeMatrixSquareRealOperatorExtractor.cpp
   dtkComposerNodeMatrixSquareRealOperatorUnary.cpp
   dtkComposerNodeMatrixSquareRealOperatorBinary.cpp
   dtkComposerNodeView.cpp

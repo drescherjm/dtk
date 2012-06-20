@@ -1,3 +1,6 @@
 #include "../src/dtkPlot/dtkPlotCurve.h"
 #include "../src/dtkPlot/dtkPlotRenderer.h"
 #include "../src/dtkPlot/dtkPlotView.h"
+#include "../src/dtkPlot/dtkPlotViewPanner.h"
+#include "../src/dtkPlot/dtkPlotViewPicker.h"
+#include "../src/dtkPlot/dtkPlotViewZoomer.h"

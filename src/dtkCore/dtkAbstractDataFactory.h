@@ -21,6 +21,13 @@
 #define DTKABSTRACTDATAFACTORY_H
 
 #include "dtkAbstractFactory.h"
+#include <dtkCore/dtkSmartPointer>
+#include <dtkCore/dtkAbstractData>
+#include <dtkCore/dtkAbstractDataConverter>
+#include <dtkCore/dtkAbstractDataReader>
+#include <dtkCore/dtkAbstractDataWriter>
+#include <dtkCore/dtkAbstractDataSerializer>
+#include <dtkCore/dtkAbstractDataDeserializer>
 
 class dtkAbstractData;
 class dtkAbstractDataReader;
@@ -73,19 +80,13 @@ public:
     QList<QString> serializers(void) const;
     QList<QString> deserializers(void) const;
 
-    dtkSmartPointer<dtkAbstractData>          createSmartPointer   (const QString& type);
-    dtkSmartPointer<dtkAbstractDataReader>    readerSmartPointer   (const QString& type);
-    dtkSmartPointer<dtkAbstractDataWriter>    writerSmartPointer   (const QString& type);
-    dtkSmartPointer<dtkAbstractDataConverter> converterSmartPointer(const QString& type);
-    dtkSmartPointer<dtkAbstractDataSerializer> serializerSmartPointer(const QString& type);
-    dtkSmartPointer<dtkAbstractDataDeserializer> deserializerSmartPointer(const QString& type);
+
 
 public:
     void setReaderPriorities(const dtkAbstractDataFactoryReaderPriorityMap& priorities);
     void setWriterPriorities(const dtkAbstractDataFactoryWriterPriorityMap& priorities);
     void setConverterPriorities(const dtkAbstractDataFactoryConverterPriorityMap& priorities);
 
-protected:
     const dtkAbstractDataFactoryReaderPriorityMap& readerPriorities(void) const;
     const dtkAbstractDataFactoryWriterPriorityMap& writerPriorities(void) const;
     const dtkAbstractDataFactoryConverterPriorityMap& converterPriorities(void) const;
@@ -104,6 +105,13 @@ public slots:
     dtkAbstractDataConverter   *converter(const QString& type);
     dtkAbstractDataSerializer  *serializer(const QString& type);
     dtkAbstractDataDeserializer *deserializer(const QString& type);
+
+    dtkSmartPointer<dtkAbstractData>          createSmartPointer   (const QString& type);
+    dtkSmartPointer<dtkAbstractDataReader>    readerSmartPointer   (const QString& type);
+    dtkSmartPointer<dtkAbstractDataWriter>    writerSmartPointer   (const QString& type);
+    dtkSmartPointer<dtkAbstractDataConverter> converterSmartPointer(const QString& type);
+    dtkSmartPointer<dtkAbstractDataSerializer> serializerSmartPointer(const QString& type);
+    dtkSmartPointer<dtkAbstractDataDeserializer> deserializerSmartPointer(const QString& type);
 
 protected:
      dtkAbstractDataFactory(void);

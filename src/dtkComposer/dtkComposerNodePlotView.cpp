@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:40:41 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun  1 12:00:08 2012 (+0200)
+ * Last-Updated: Mon Jun 18 10:36:24 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 61
+ *     Update #: 63
  */
 
 /* Commentary: 
@@ -80,7 +80,8 @@ void dtkComposerNodePlotView::onRun(void)
     if(!d->receiver_y_axis_label.isEmpty())
         d->view->setAxisTitleY(d->receiver_y_axis_label.data());
 
-    (*(d->view)) << d->receiver_curve.data();
+    foreach(dtkPlotCurve *curve, d->receiver_curve.allData())
+        (*(d->view)) << curve;
     
     d->view->update();
 }

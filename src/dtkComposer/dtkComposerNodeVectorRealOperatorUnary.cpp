@@ -88,21 +88,24 @@ void dtkComposerNodeVectorRealOperatorUnaryUnitary::run(void)
         dtkWarn() << "Input not specified. Nothing is done";
         d->emitter_vec.setData(dtkVectorReal());
 
-    } else
-        d->emitter_vec.setData(d->receiver_vec.data().unit());
-
+    } else {
+        dtkVectorReal& vector = d->receiver_vec.data() ;
+        d->emitter_vec.setData(vector.unit());
+    }
 }
-
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeVectorRealOperatorUnaryScalar - NORM
 // /////////////////////////////////////////////////////////////////
 
 void dtkComposerNodeVectorRealOperatorUnaryScalarNorm::run(void)
 {
-    if (d->receiver_vec.isEmpty())
+    if (d->receiver_vec.isEmpty()){
         dtkWarn() << "Input not specified. Nothing is done";
+        d->emitter_val.setData(qreal());
 
-    else
-        d->emitter_val.setData(d->receiver_vec.data().norm());
+    } else {
+        dtkVectorReal& vector = d->receiver_vec.data() ;
+        d->emitter_val.setData(vector.norm());
+    }
 
 }

@@ -94,7 +94,7 @@ public:
     dtkComposerTransmitterVariant                   receiver_val;
 
 public:
-    dtkComposerTransmitterEmitter<dtkVector3DReal> emitter_vec;
+    dtkComposerTransmitterEmitter<dtkVector3DReal>  emitter_vec;
 };
 
 dtkComposerNodeVector3DOperatorHomothetic::dtkComposerNodeVector3DOperatorHomothetic(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVector3DOperatorHomotheticPrivate)
@@ -119,11 +119,16 @@ void dtkComposerNodeVector3DOperatorBinarySum::run(void)
 {
     if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
+        //this->releaseReceivers();
         d->emitter_vec.setData(dtkVector3DReal());
 
-    } else
-        d->emitter_vec.setData(d->receiver_lhs.data() + d->receiver_rhs.data());
+    } else {
+        dtkVector3DReal& vector1 = d->receiver_lhs.data();
+        dtkVector3DReal& vector2 = d->receiver_rhs.data();
+        // this->releaseReceivers();
+        d->emitter_vec.setData(vector1 + vector2);
 
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -136,11 +141,13 @@ void dtkComposerNodeVector3DOperatorBinarySubstract::run(void)
         dtkWarn() << "Inputs not specified. Nothing is done";
         d->emitter_vec.setData(dtkVector3DReal());
 
+    } else {
+        dtkVector3DReal& vector1 = d->receiver_lhs.data();
+        dtkVector3DReal& vector2 = d->receiver_rhs.data();
+        d->emitter_vec.setData(vector1 - vector2);
 
-    } else
-        d->emitter_vec.setData(d->receiver_lhs.data() - d->receiver_rhs.data());
+    }
 }
-
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeVector3DOperatorBinary - CROSS PROD
 // /////////////////////////////////////////////////////////////////
@@ -151,9 +158,12 @@ void dtkComposerNodeVector3DOperatorBinaryCrossProd::run(void)
         dtkWarn() << "Inputs not specified. Nothing is done";
         d->emitter_vec.setData(dtkVector3DReal());
 
+    } else {
+        dtkVector3DReal& vector1 = d->receiver_lhs.data();
+        dtkVector3DReal& vector2 = d->receiver_rhs.data();
+        d->emitter_vec.setData(vector1 % vector2);
 
-    } else
-        d->emitter_vec.setData(d->receiver_lhs.data() % d->receiver_rhs.data());
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -162,11 +172,16 @@ void dtkComposerNodeVector3DOperatorBinaryCrossProd::run(void)
 
 void dtkComposerNodeVector3DOperatorBinaryScalarDotProd::run(void)
 {
-    if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty())
+    if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_val.setData(qreal());
 
-    else
-        d->emitter_val.setData(d->receiver_lhs.data() * d->receiver_rhs.data());
+    } else {
+        dtkVector3DReal& vector1 = d->receiver_lhs.data();
+        dtkVector3DReal& vector2 = d->receiver_rhs.data();
+        d->emitter_val.setData(vector1 * vector2);
+
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -180,8 +195,12 @@ void dtkComposerNodeVector3DOperatorHomotheticMult::run(void)
         d->emitter_vec.setData(dtkVector3DReal());
 
 
-    } else
-        d->emitter_vec.setData(d->receiver_vec.data() * d->receiver_val.data().toReal());}
+    } else {
+        dtkVectorReal& vector(d->receiver_vec.data());
+        qreal value = qvariant_cast<qreal>(d->receiver_val.data());
+        d->emitter_vec.setData(vector * value);
+    }
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeVector3DOperatorHomothetic - DIVISION
@@ -195,8 +214,11 @@ void dtkComposerNodeVector3DOperatorHomotheticDivision::run(void)
 
 
     } else {
+        dtkVectorReal& vector(d->receiver_vec.data());
+        qreal value = qvariant_cast<qreal>(d->receiver_val.data());
+
         if (d->receiver_val.data()!=0)
-            d->emitter_vec.setData(d->receiver_vec.data() / d->receiver_val.data().toReal());
+            d->emitter_vec.setData(vector / value);
 
         else
             dtkWarn() << "You divide by zero. Nothing is done" ;

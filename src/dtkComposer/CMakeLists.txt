@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Thu May 31 00:19:19 2012 (+0200)
-##           By: Julien Wintz
-##     Update #: 554
+## Last-Updated: mar. juin 19 15:41:51 2012 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 559
 ######################################################################
 ##
 ### Commentary:
@@ -45,6 +45,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerMachineState.h
   dtkComposerNode.h
   dtkComposerNodeArrayScalar.h
+  dtkComposerNodeArrayScalarOperatorExtractor.h
   dtkComposerNodeArrayScalarOperatorModifier.h
   dtkComposerNodeBoolean.h
   dtkComposerNodeBooleanOperator.h
@@ -57,6 +58,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeControlIf.h
   dtkComposerNodeControlFor.h
   dtkComposerNodeControlForEach.h
+  dtkComposerNodeControlMap.h
   dtkComposerNodeControlWhile.h
   dtkComposerNodeData.h
   dtkComposerNodeFile.h
@@ -83,10 +85,12 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeVector3DOperatorBinary.h
   dtkComposerNodeVector3DOperatorTernary.h
   dtkComposerNodeVectorReal.h
+  dtkComposerNodeVectorRealOperatorExtractor.h
   dtkComposerNodeVectorRealOperatorModifier.h
   dtkComposerNodeVectorRealOperatorUnary.h
   dtkComposerNodeVectorRealOperatorBinary.h
   dtkComposerNodeMatrixSquareReal.h
+  dtkComposerNodeMatrixSquareRealOperatorExtractor.h
   dtkComposerNodeMatrixSquareRealOperatorUnary.h
   dtkComposerNodeMatrixSquareRealOperatorBinary.h
   dtkComposerNodeView.h
@@ -127,6 +131,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerGraphView.h
   dtkComposerMachine.h
   dtkComposerMachineState.h
+  dtkComposerNodeRemote.h
   dtkComposerNodeView.h
   dtkComposerSceneModel.h
   dtkComposerScene.h
@@ -158,6 +163,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerMachineState.cpp
   dtkComposerNode.cpp
   dtkComposerNodeArrayScalar.cpp
+  dtkComposerNodeArrayScalarOperatorExtractor.cpp
   dtkComposerNodeArrayScalarOperatorModifier.cpp
   dtkComposerNodeBoolean.cpp
   dtkComposerNodeBooleanOperator.cpp
@@ -170,6 +176,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeControlIf.cpp
   dtkComposerNodeControlFor.cpp
   dtkComposerNodeControlForEach.cpp
+  dtkComposerNodeControlMap.cpp
   dtkComposerNodeControlWhile.cpp
   dtkComposerNodeData.cpp
   dtkComposerNodeFile.cpp
@@ -196,10 +203,12 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeVector3DOperatorBinary.cpp
   dtkComposerNodeVector3DOperatorTernary.cpp
   dtkComposerNodeVectorReal.cpp
+  dtkComposerNodeVectorRealOperatorExtractor.cpp
   dtkComposerNodeVectorRealOperatorModifier.cpp
   dtkComposerNodeVectorRealOperatorUnary.cpp
   dtkComposerNodeVectorRealOperatorBinary.cpp
   dtkComposerNodeMatrixSquareReal.cpp
+  dtkComposerNodeMatrixSquareRealOperatorExtractor.cpp
   dtkComposerNodeMatrixSquareRealOperatorUnary.cpp
   dtkComposerNodeMatrixSquareRealOperatorBinary.cpp
   dtkComposerNodeView.cpp
@@ -274,13 +283,13 @@ endif(DTK_HAVE_PLOT)
 ## Vrpn sources
 ## #################################################################
 
-if(DTK_HAVE_VRPN AND DTK_HAVE_MPI)
+if(DTK_HAVE_VRPN)
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkComposerNodeTrackerVrpn.h)
 set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkComposerNodeTrackerVrpn.cpp)
-endif(DTK_HAVE_VRPN AND DTK_HAVE_MPI)
+endif()
 
 ## #################################################################
 ## Build rules
@@ -336,9 +345,9 @@ target_link_libraries(${PROJECT_NAME}
   dtkNotification
   dtkDistributed)
 
-if(DTK_HAVE_NITE)
+if(DTK_HAVE_NITE OR DTK_HAVE_VRPN)
 target_link_libraries(${PROJECT_NAME} dtkVr)
-endif(DTK_HAVE_NITE)
+endif(DTK_HAVE_NITE OR DTK_HAVE_VRPN)
 
 if(DTK_HAVE_PLOT)
 target_link_libraries(${PROJECT_NAME} dtkPlot)

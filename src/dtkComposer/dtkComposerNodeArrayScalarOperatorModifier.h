@@ -54,6 +54,33 @@ protected:
 };
 
 // /////////////////////////////////////////////////////////////////
+// dtkComposerNodeArrayScalarOperatorModifierPend interface
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeArrayScalarOperatorModifierPendPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorModifierPend  : public dtkComposerNodeLeaf
+{
+public:
+    dtkComposerNodeArrayScalarOperatorModifierPend(void);
+    ~dtkComposerNodeArrayScalarOperatorModifierPend (void);
+
+    inline QString inputLabelHint(int port) {
+        if (port == 0)
+            return "array";
+        else
+            return "value";
+    }
+
+    inline QString outputLabelHint(int) {
+        return "array";
+    }
+
+protected:
+    dtkComposerNodeArrayScalarOperatorModifierPendPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
 // dtkComposerNodeArrayScalarOperator - INSERT
 // /////////////////////////////////////////////////////////////////
 
@@ -69,6 +96,64 @@ public:
 
     inline QString titleHint(void) {
         return "Scalar array insert";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeArrayScalarOperator - Replace
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorReplace : public dtkComposerNodeArrayScalarOperatorModifier
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "array_scalar_replace";
+    }
+
+    inline QString titleHint(void) {
+        return "Scalar array replace";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeArrayScalarOperator - APPEND
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorAppend : public dtkComposerNodeArrayScalarOperatorModifierPend
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "array_scalar_append";
+    }
+
+    inline QString titleHint(void) {
+        return "Scalar array append";
+    }
+};
+
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeArrayScalarOperator - PREPEND
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorPrepend : public dtkComposerNodeArrayScalarOperatorModifierPend
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "array_scalar_prenpend";
+    }
+
+    inline QString titleHint(void) {
+        return "Scalar array prenpend";
     }
 };
 

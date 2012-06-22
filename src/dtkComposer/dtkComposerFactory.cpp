@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Thu May 31 00:22:09 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 626
+ * Last-Updated: mer. juin 20 17:18:06 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 643
  */
 
 /* Commentary:
@@ -22,6 +22,7 @@
 #include "dtkComposerFactory.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeArrayScalar.h"
+#include "dtkComposerNodeArrayScalarOperatorExtractor.h"
 #include "dtkComposerNodeArrayScalarOperatorModifier.h"
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
@@ -33,14 +34,15 @@
 #include "dtkComposerNodeControlIf.h"
 #include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeControlForEach.h"
+#include "dtkComposerNodeControlMap.h"
 #include "dtkComposerNodeControlWhile.h"
 #include "dtkComposerNodeData.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeFileOperator.h"
-#include "dtkComposerNodeList.h"
 #include "dtkComposerNodeLogger.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeMatrixSquareReal.h"
+#include "dtkComposerNodeMatrixSquareRealOperatorExtractor.h"
 #include "dtkComposerNodeMatrixSquareRealOperatorUnary.h"
 #include "dtkComposerNodeMatrixSquareRealOperatorBinary.h"
 #include "dtkComposerNodeNumberOperator.h"
@@ -51,11 +53,11 @@
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
 #include "dtkComposerNodeStringOperator.h"
-#include "dtkComposerNodeVector.h"
 #include "dtkComposerNodeVector3D.h"
 #include "dtkComposerNodeVector3DOperatorUnary.h"
 #include "dtkComposerNodeVector3DOperatorBinary.h"
 #include "dtkComposerNodeVectorReal.h"
+#include "dtkComposerNodeVectorRealOperatorExtractor.h"
 #include "dtkComposerNodeVectorRealOperatorModifier.h"
 #include "dtkComposerNodeVectorRealOperatorUnary.h"
 #include "dtkComposerNodeVectorRealOperatorBinary.h"
@@ -138,23 +140,13 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["File"] = "<p>Description not yet filled!</p>";
     d->tags["File"] = QStringList() << "primitive" << "file";
     d->types["File"] = "file";
-    
-    // container nodes
 
-    d->nodes << "List";
-    d->descriptions["List"] = "<p>Description not yet filled!</p>";
-    d->tags["List"] = QStringList() << "container" << "list";
-    d->types["List"] = "list";
+    // container nodes
 
     d->nodes << "Data Container";
     d->descriptions["Data Container"] = "<p>Description not yet filled!</p>";
     d->tags["Data Container"] = QStringList() << "container" << "data";
     d->types["Data Container"] = "data_container";
-
-    d->nodes << "Vector";
-    d->descriptions["Vector"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector"] = QStringList() << "container" << "vector";
-    d->types["Vector"] = "vector";
 
     // Matrix Square
 
@@ -162,6 +154,11 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["Matrix Square Real "] = "<p>Description not yet filled!</p>";
     d->tags["Matrix Square Real"] = QStringList() << "matrix" << "square" << "real"<< "algebraic";
     d->types["Matrix Square Real"] = "matrix_square_real";
+
+    d->nodes << "MatrixSquare Real Extractor";
+    d->descriptions["MatrixSquare Real Extractor "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Extractor"] = QStringList() << "matrix" << "square" << "real"<< "extractor";
+    d->types["MatrixSquare Real Extractor"] = "matrixSquare_real_extractor";
 
     d->nodes << "MatrixSquare Real Transpose";
     d->descriptions["MatrixSquare Real Transpose "] = "<p>Description not yet filled!</p>";
@@ -224,6 +221,11 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["Vector Real"] = "<p>Description not yet filled!</p>";
     d->tags["Vector Real"] = QStringList() << "vector" << "real" << "algebraic";
     d->types["Vector Real"] = "vector_real";
+
+    d->nodes << "Vector Real Extractor";
+    d->descriptions["Vector Real Extractor"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Extractor"] = QStringList() << "vector" << "real" << "extractor";
+    d->types["Vector Real Extractor"] = "vector_real_extractor";
 
     d->nodes << "Vector Real Set";
     d->descriptions["Vector Real Set"] = "<p>Description not yet filled!</p>";
@@ -292,10 +294,30 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Scalar Array"] = QStringList() << "container" << "array" << "scalar" ;
     d->types["Scalar Array"] = "array_scalar";
 
+    d->nodes << "Scalar Array Extractor";
+    d->descriptions["Scalar Array Extractor"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Extractor"] = QStringList() << "container" << "array" << "scalar"<< "extractor" ;
+    d->types["Scalar Array Extractor"] = "array_scalar_extractor";
+
     d->nodes << "Scalar Array Insert";
     d->descriptions["Scalar Array Insert"] = "<p>Description not yet filled!</p>";
     d->tags["Scalar Array Insert"] = QStringList() << "container" << "array" << "scalar"  << "insert" ;
     d->types["Scalar Array Insert"] = "array_scalar_insert";
+
+    d->nodes << "Scalar Array Replace";
+    d->descriptions["Scalar Array Replace"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Replace"] = QStringList() << "container" << "array" << "scalar"  << "replace" ;
+    d->types["Scalar Array Replace"] = "array_scalar_replace";
+
+    d->nodes << "Scalar Array Append";
+    d->descriptions["Scalar Array Append"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Append"] = QStringList() << "container" << "array" << "scalar"  << "append" ;
+    d->types["Scalar Array Append"] = "array_scalar_append";
+
+    d->nodes << "Scalar Array Prepend";
+    d->descriptions["Scalar Array Prepend"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Prepend"] = QStringList() << "container" << "array" << "scalar"  << "prepend" ;
+    d->types["Scalar Array Prepend"] = "array_scalar_prepend";
 
     d->nodes << "Scalar Array Sum";
     d->descriptions["Scalar Array Sum"] = "<p>Description not yet filled!</p>";
@@ -327,7 +349,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->nodes << "Vector3D Unit";
     d->descriptions["Vector3D Unit"] = "<p>Description not yet filled!</p>";
     d->tags["Vector3D Unit"] = QStringList() << "vector3D" << "algebraic" << "unit";
-    d->types["Vector3D Unit"] = "vector3D_unit";
+    d->types["Vector3D Unit"] = "vector3D_extractor";
 
     d->nodes << "Vector3D Norm";
     d->descriptions["Vector3D Norm"] = "<p>Description not yet filled!</p>";
@@ -695,6 +717,11 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Foreach"] = QStringList() << "control" << "foreach";
     d->types["Foreach"] = "foreach";
 
+    d->nodes << "Map";
+    d->descriptions["Map"] = "<p>High order function: takes a container and applies a set of functions to each of its element to generate a new container</p>";
+    d->tags["Map"] = QStringList() << "control" << "map" << "container";
+    d->types["Map"] = "map";
+
     d->nodes << "While";
     d->descriptions["While"] = "<p>Description not yet filled!</p>";
     d->tags["While"] = QStringList() << "control" << "while";
@@ -729,6 +756,10 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->nodes << "Remote";
     d->tags["Remote"] = QStringList() <<  "distributed" << "tcp" << "remote" << "world";
     d->types["Remote"] = "remote";
+
+    d->nodes << "Remote Submit";
+    d->tags["Remote Submit"] = QStringList() <<  "distributed" << "tcp" << "remote" << "submit" << "job";
+    d->types["Remote Submit"] = "remoteSubmit";
 
     // /////////////////////////////////////////////////////////////////
     // Plot nodes
@@ -856,19 +887,16 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     // container nodes
 
-    if(type == "list")
-        return new dtkComposerNodeList;
-
     if(type == "data_container")
         return new dtkComposerNodeContainerData;
-
-    if(type == "vector")
-        return new dtkComposerNodeVector;
 
     // Matrix Square Nodes
 
     if(type == "matrix_square_real")
         return new dtkComposerNodeMatrixSquareReal;
+
+    if(type == "matrixSquare_real_extractor")
+        return new dtkComposerNodeMatrixSquareRealOperatorExtractor;
 
     if(type == "matrixSquare_real_transpose")
         return new dtkComposerNodeMatrixSquareRealOperatorUnaryTranspose;
@@ -947,8 +975,20 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "array_scalar")
         return new dtkComposerNodeArrayScalar;
 
+    if(type == "array_scalar_extractor")
+        return new dtkComposerNodeArrayScalarOperatorExtractor;
+
     if(type == "array_scalar_insert")
         return new dtkComposerNodeArrayScalarOperatorInsert;
+
+    if(type == "array_scalar_replace")
+        return new dtkComposerNodeArrayScalarOperatorReplace;
+
+    if(type == "array_scalar_append")
+        return new dtkComposerNodeArrayScalarOperatorAppend;
+
+    if(type == "array_scalar_prepend")
+        return new dtkComposerNodeArrayScalarOperatorPrepend;
 
     if(type == "array_scalar_sum")
         return new dtkComposerNodeArrayScalarOperatorSum;
@@ -1184,6 +1224,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "foreach")
         return new dtkComposerNodeControlForEach;
 
+    if(type == "map")
+        return new dtkComposerNodeControlMap;
+
     if(type == "while")
         return new dtkComposerNodeControlWhile;
 
@@ -1207,6 +1250,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "remote")
         return new dtkComposerNodeRemote;
+
+    if(type == "remoteSubmit")
+        return new dtkComposerNodeRemoteSubmit;
 
     // /////////////////////////////////////////////////////////////////
     // NITE nodes

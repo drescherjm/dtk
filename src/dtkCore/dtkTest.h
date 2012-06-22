@@ -34,5 +34,4 @@ int TestMain(int argc, char *argv[]) \
     return QTest::qExec(&tc, argc, argv); \
 }
 
-
 #endif // DTKTEST_H

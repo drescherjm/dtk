@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Jun 12 11:18:50 2012 (+0200)
+## Last-Updated: Tue Jun 19 16:32:12 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 302
+##     Update #: 303
 ######################################################################
 ## 
 ### Commentary: 
@@ -51,7 +51,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkSignalBlocker.h
   dtkSingleton.h
   dtkSingletonDeclare.h
-  dtkSmartPointer.h)
+  dtkSmartPointer.h
+  dtkTest.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractData.h

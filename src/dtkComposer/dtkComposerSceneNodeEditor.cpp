@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mai 16 16:16:00 2012 (+0200)
+ * Last-Updated: lun. juin 18 17:44:11 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 1029
+ *     Update #: 1031
  */
 
 /* Commentary: 
@@ -33,6 +33,7 @@
 #include "dtkComposerNodeControlIf.h"
 #include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeControlForEach.h"
+#include "dtkComposerNodeControlMap.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
@@ -744,7 +745,7 @@ void dtkComposerSceneNodeEditor::addLoopPort(void)
     command_body_o->setType(dtkComposerScenePort::Output);
     command_body_o->setKind(dtkComposerTransmitter::Variant);
 
-    if(dynamic_cast<dtkComposerNodeControlForEach *>(d->node->wrapee())) {
+    if(dynamic_cast<dtkComposerNodeControlForEach *>(d->node->wrapee()) ||dynamic_cast<dtkComposerNodeControlMap *>(d->node->wrapee())  ) {
         command_cond_i = NULL;
     } else {
         command_cond_i = new dtkComposerStackCommandCreatePort;

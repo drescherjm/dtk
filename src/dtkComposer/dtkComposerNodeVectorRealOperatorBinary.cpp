@@ -131,10 +131,10 @@ void dtkComposerNodeVectorRealOperatorBinarySum::run(void)
         dtkVectorReal& vector1(d->receiver_lhs.data());
         dtkVectorReal& vector2(d->receiver_rhs.data());
 
-        if ( vector1.getRows() == vector2.getRows())
-            d->emitter_vec.setData(vector1 + vector2 );
+        if ( vector1.getRows() == vector2.getRows()) {
+            d->emitter_vec.setData(vector1 + vector2);
 
-        else {
+        } else {
             dtkWarn()<< "Vectors do not have the same size";
             d->emitter_vec.setData(dtkVectorReal());
         }

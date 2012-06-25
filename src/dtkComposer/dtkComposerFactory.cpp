@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: mer. juin 20 17:18:06 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 643
+ * Last-Updated: Mon Jun 25 12:24:38 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 650
  */
 
 /* Commentary:
@@ -22,7 +22,7 @@
 #include "dtkComposerFactory.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeArrayScalar.h"
-#include "dtkComposerNodeArrayScalarOperatorExtractor.h"
+#include "dtkComposerNodeArrayScalarExtractor.h"
 #include "dtkComposerNodeArrayScalarOperatorModifier.h"
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
@@ -42,7 +42,7 @@
 #include "dtkComposerNodeLogger.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeMatrixSquareReal.h"
-#include "dtkComposerNodeMatrixSquareRealOperatorExtractor.h"
+#include "dtkComposerNodeMatrixSquareRealExtractor.h"
 #include "dtkComposerNodeMatrixSquareRealOperatorUnary.h"
 #include "dtkComposerNodeMatrixSquareRealOperatorBinary.h"
 #include "dtkComposerNodeNumberOperator.h"
@@ -57,7 +57,7 @@
 #include "dtkComposerNodeVector3DOperatorUnary.h"
 #include "dtkComposerNodeVector3DOperatorBinary.h"
 #include "dtkComposerNodeVectorReal.h"
-#include "dtkComposerNodeVectorRealOperatorExtractor.h"
+#include "dtkComposerNodeVectorRealExtractor.h"
 #include "dtkComposerNodeVectorRealOperatorModifier.h"
 #include "dtkComposerNodeVectorRealOperatorUnary.h"
 #include "dtkComposerNodeVectorRealOperatorBinary.h"
@@ -369,7 +369,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->nodes << "Vector3D Unit";
     d->descriptions["Vector3D Unit"] = "<p>Description not yet filled!</p>";
     d->tags["Vector3D Unit"] = QStringList() << "vector3D" << "algebraic" << "unit";
-    d->types["Vector3D Unit"] = "vector3D_extractor";
+    d->types["Vector3D Unit"] = "vector3D_unit";
 
     d->nodes << "Vector3D Norm";
     d->descriptions["Vector3D Norm"] = "<p>Description not yet filled!</p>";
@@ -916,7 +916,7 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
         return new dtkComposerNodeMatrixSquareReal;
 
     if(type == "matrixSquare_real_extractor")
-        return new dtkComposerNodeMatrixSquareRealOperatorExtractor;
+        return new dtkComposerNodeMatrixSquareRealExtractor;
 
     if(type == "matrixSquare_real_transpose")
         return new dtkComposerNodeMatrixSquareRealOperatorUnaryTranspose;
@@ -952,6 +952,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "vector_real")
         return new dtkComposerNodeVectorReal;
+
+    if(type == "vector_real_extractor")
+        return new dtkComposerNodeVectorRealExtractor;
 
     if(type == "vector_real_set")
         return new dtkComposerNodeVectorRealOperatorModifierSet;
@@ -996,7 +999,7 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
         return new dtkComposerNodeArrayScalar;
 
     if(type == "array_scalar_extractor")
-        return new dtkComposerNodeArrayScalarOperatorExtractor;
+        return new dtkComposerNodeArrayScalarExtractor;
 
     if(type == "array_scalar_insert")
         return new dtkComposerNodeArrayScalarOperatorInsert;

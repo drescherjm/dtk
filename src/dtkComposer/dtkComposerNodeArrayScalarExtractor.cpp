@@ -1,12 +1,12 @@
-/* dtkComposerNodeVectorRealOperatorExtractor.cpp ---
+/* dtkComposerNodeArrayScalarExtractor.cpp ---
  *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun 15 09:51:39 2012 (+0200)
- *           By: sblekout
- *     Update #: 66
+ * Last-Updated: Mon Jun 25 11:49:12 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 68
  */
 
 /* Commentary:
@@ -17,11 +17,11 @@
  *
  */
 
-#include "dtkComposerNodeVectorRealOperatorExtractor.h"
+#include "dtkComposerNodeArrayScalarExtractor.h"
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
-#include <dtkMath>
+#include <dtkContainer/dtkContainerVector.h>
 
 #include <dtkLog/dtkLog>
 
@@ -29,10 +29,10 @@
 //
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNodeVectorRealOperatorExtractorPrivate
+class dtkComposerNodeArrayScalarExtractorPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<dtkVectorReal> receiver_vector;
+    dtkComposerTransmitterReceiverVector<qreal> receiver_array;
     dtkComposerTransmitterVariant receiver_index;
 
 public:
@@ -43,9 +43,9 @@ public:
 //
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNodeVectorRealOperatorExtractor::dtkComposerNodeVectorRealOperatorExtractor(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVectorRealOperatorExtractorPrivate)
+dtkComposerNodeArrayScalarExtractor::dtkComposerNodeArrayScalarExtractor(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeArrayScalarExtractorPrivate)
 {
-    this->appendReceiver(&d->receiver_vector);
+    this->appendReceiver(&d->receiver_array);
 
     QList<QVariant::Type> variant_list;
 
@@ -56,18 +56,18 @@ dtkComposerNodeVectorRealOperatorExtractor::dtkComposerNodeVectorRealOperatorExt
     this->appendEmitter(&d->emitter_value);
 }
 
-dtkComposerNodeVectorRealOperatorExtractor::~dtkComposerNodeVectorRealOperatorExtractor(void)
+dtkComposerNodeArrayScalarExtractor::~dtkComposerNodeArrayScalarExtractor(void)
 {
     delete d;
 
     d = NULL;
 }
 
-QString dtkComposerNodeVectorRealOperatorExtractor::inputLabelHint(int port)
+QString dtkComposerNodeArrayScalarExtractor::inputLabelHint(int port)
 {
     switch(port) {
     case 0:
-        return "vector";
+        return "array";
         break;
     case 1:
         return "index";
@@ -79,7 +79,7 @@ QString dtkComposerNodeVectorRealOperatorExtractor::inputLabelHint(int port)
     return "port";
 }
 
-QString dtkComposerNodeVectorRealOperatorExtractor::outputLabelHint(int port)
+QString dtkComposerNodeArrayScalarExtractor::outputLabelHint(int port)
 {
     switch(port) {
     case 0:
@@ -92,16 +92,20 @@ QString dtkComposerNodeVectorRealOperatorExtractor::outputLabelHint(int port)
     return "port";
 }
 
-void dtkComposerNodeVectorRealOperatorExtractor::run(void)
+void dtkComposerNodeArrayScalarExtractor::run(void)
 {
-    if(d->receiver_vector.isEmpty())
+    if(d->receiver_array.isEmpty())
         return;
 
     if(d->receiver_index.isEmpty())
         return;
 
-    dtkVectorReal& vector(d->receiver_vector.data());
+    dtkContainerVectorReal& array(d->receiver_array.data());
     qlonglong index = qvariant_cast<qreal>(d->receiver_index.data());
 
-    d->emitter_value.setData(vector[index]);
+    if (index < array.count())
+        d->emitter_value.setData(array.at(index));
+
+    else
+        dtkWarn() << "index is larger than size of the array:" << index << ">=" << array.count();
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Babette Lekouta, Inria.
  * Created: Thu Apr 26 15:57:47 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 15:17:24 2012 (+0200)
+ * Last-Updated: Mon Jun 25 12:48:34 2012 (+0200)
  *           By: tkloczko
- *     Update #: 13
+ *     Update #: 14
  */
 
 /* Commentary:
@@ -95,7 +95,7 @@ public:
         else if (port == 1)
             return "vector";
         else
-            return "index_value";
+            return "index";
     }
 
     inline QString outputLabelHint(int) {

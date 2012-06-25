@@ -1,4 +1,4 @@
-/* dtkCompareSingletonTest.h ---
+/* dtkSingletonTest.h ---
  *
  * Author: Babette Lekouta
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
@@ -17,20 +17,20 @@
  *
  */
 
-#ifndef DTKCOMPARESINGLETONTEST_H
-#define DTKCOMPARESINGLETONTEST_H
+#ifndef DTKSINGLETONTEST_H
+#define DTKSINGLETONTEST_H
 
 #include <dtkCore/dtkTest.h>
 
-class dtkCompareSingletonTestObjectPrivate;
+class dtkSingletonTestObjectPrivate;
 
-class dtkCompareSingletonTestObject : public QObject
+class dtkSingletonTestObject : public QObject
 {
     Q_OBJECT
 
 public:
-             dtkCompareSingletonTestObject(void);
-    virtual ~dtkCompareSingletonTestObject(void);
+             dtkSingletonTestObject(void);
+    virtual ~dtkSingletonTestObject(void);
 
 
 private slots:
@@ -43,7 +43,7 @@ private slots:
     void testSingleton(void);
 
 private:
-    dtkCompareSingletonTestObjectPrivate *d;
+    dtkSingletonTestObjectPrivate *d;
 };
 
 #endif

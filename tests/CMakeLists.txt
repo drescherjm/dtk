@@ -5,7 +5,7 @@
 ## Created: Tue Jun 19 18:23:41 2012 (+0200)
 ## Version: $Id$
 ## Last-Updated: Wed Jun 20 13:09:22 2012 (+0200)
-##           By: Julien Wintz
+##           By: Babette Lekouta
 ##     Update #: 2
 ######################################################################
 ## 
@@ -18,3 +18,5 @@
 ######################################################################
 
 add_subdirectory(dtkMath)
+add_subdirectory(dtkCore)
+

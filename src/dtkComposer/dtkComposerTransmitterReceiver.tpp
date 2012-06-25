@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 13 15:10:02 2012 (+0200)
+ * Last-Updated: Mon Jun 25 13:59:00 2012 (+0200)
  *           By: tkloczko
- *     Update #: 301
+ *     Update #: 302
  */
 
 /* Commentary: 
@@ -142,8 +142,6 @@ template <typename T> QString dtkComposerTransmitterReceiver<T>::kindName(void) 
  */
 template <typename T> bool dtkComposerTransmitterReceiver<T>::connect(dtkComposerTransmitter *transmitter)
 {
-    qDebug() << this->typeName() << transmitter->typeName();
-
     if (transmitter->kind() == Emitter) {
 
         if (this->typeName() == transmitter->typeName()) {

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Mon Jun 25 12:24:38 2012 (+0200)
+ * Last-Updated: Mon Jun 25 14:46:25 2012 (+0200)
  *           By: tkloczko
- *     Update #: 650
+ *     Update #: 653
  */
 
 /* Commentary:
@@ -296,8 +296,13 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 
     d->nodes << "Scalar Array Extractor";
     d->descriptions["Scalar Array Extractor"] = "<p>Description not yet filled!</p>";
-    d->tags["Scalar Array Extractor"] = QStringList() << "container" << "array" << "scalar"<< "extractor" ;
+    d->tags["Scalar Array Extractor"] = QStringList() << "container" << "array" << "scalar" << "extractor" ;
     d->types["Scalar Array Extractor"] = "array_scalar_extractor";
+
+    d->nodes << "Scalar Array SubArray";
+    d->descriptions["Scalar Array SubArray"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array SubArray"] = QStringList() << "container" << "scalar array" << "subarray"<< "extractor" ;
+    d->types["Scalar Array SubArray"] = "array_scalar_extractor_subarray";
 
     d->nodes << "Scalar Array Insert";
     d->descriptions["Scalar Array Insert"] = "<p>Description not yet filled!</p>";
@@ -1000,6 +1005,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "array_scalar_extractor")
         return new dtkComposerNodeArrayScalarExtractor;
+
+    if(type == "array_scalar_extractor_subarray")
+        return new dtkComposerNodeArrayScalarExtractorSubArray;
 
     if(type == "array_scalar_insert")
         return new dtkComposerNodeArrayScalarOperatorInsert;

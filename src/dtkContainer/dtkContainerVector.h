@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 11:19:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun 13 16:52:25 2012 (+0200)
+ * Last-Updated: Mon Jun 25 14:42:07 2012 (+0200)
  *           By: tkloczko
- *     Update #: 70
+ *     Update #: 71
  */
 
 /* Commentary: 
@@ -165,5 +165,10 @@ typedef dtkContainerVector<qreal> dtkContainerVectorReal;
 
 Q_DECLARE_METATYPE(dtkContainerVectorReal  );
 Q_DECLARE_METATYPE(dtkContainerVectorReal *);
+
+typedef dtkContainerVector<dtkxarch_int> dtkContainerVectorInteger;
+
+Q_DECLARE_METATYPE(dtkContainerVectorInteger  );
+Q_DECLARE_METATYPE(dtkContainerVectorInteger *);
 
 #endif

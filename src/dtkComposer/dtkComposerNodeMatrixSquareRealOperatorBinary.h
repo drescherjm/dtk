@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Babette Lekouta, Inria.
  * Created: Thu Apr 26 15:57:47 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jun 25 12:48:34 2012 (+0200)
+ * Last-Updated: Mon Jun 25 14:17:38 2012 (+0200)
  *           By: tkloczko
- *     Update #: 14
+ *     Update #: 24
  */
 
 /* Commentary:
@@ -121,7 +121,7 @@ public:
     }
 
     inline QString titleHint(void) {
-        return "MatrixSquare Real Sum";
+        return "Squared real matrix : Mat + Mat";
     }
 };
 
@@ -141,7 +141,7 @@ public:
     }
 
     inline QString titleHint(void) {
-        return "MatrixSquare Real Substract";
+        return "Squared real matrix : Mat - Mat";
     }
 };
 
@@ -160,7 +160,7 @@ public:
     }
 
     inline QString titleHint(void) {
-        return "MatrixSquare Real Mult";
+        return "Squared real matrix : Mat * Mat";
     }
 };
 
@@ -179,7 +179,7 @@ public:
     }
 
     inline QString titleHint(void) {
-        return "MatrixSquare Real ProductMatrixVector";
+        return "Squared real matrix : Mat * Vec";
     }
 };
 
@@ -199,7 +199,7 @@ public:
     }
 
     inline QString titleHint(void) {
-        return "MatrixSquare Real ProductVectorMatrix";
+        return "Squared real matrix : Vec * Mat";
     }
 };
 
@@ -218,7 +218,7 @@ public:
     }
 
     inline QString titleHint(void) {
-        return "MatrixSquare Real ReplaceRowMatrixByVector";
+        return "Squared real matrix : replace row by vector";
     }
 };
 
@@ -237,7 +237,7 @@ public:
     }
 
     inline QString titleHint(void) {
-        return "MatrixSquare Real ReplaceColMatrixByVector";
+        return "Squared real matrix : replace column by vector";
     }
 };
 

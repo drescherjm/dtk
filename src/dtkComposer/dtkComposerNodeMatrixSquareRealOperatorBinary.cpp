@@ -268,10 +268,10 @@ void dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceRowMatrixByVector::run(
 
     } else {
 
-        if (qvariant_cast<qlonglong>(d->receiver_index.data()) < d->receiver_matrix.data().getRows()){
+        if (qvariant_cast<dtkxarch_int>(d->receiver_index.data()) < d->receiver_matrix.data().getRows()){
 
             dtkMatrixSquareReal& matrix (d->receiver_matrix.data());
-            qlonglong value =  qvariant_cast<qlonglong>(d->receiver_index.data());
+            dtkxarch_int value =  qvariant_cast<dtkxarch_int>(d->receiver_index.data());
             dtkVectorReal vec(d->receiver_vector.data());
 
             for( int j = 0; j < matrix.getCols(); ++j)
@@ -299,10 +299,10 @@ void dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColMatrixByVector::run(
 
     } else {
 
-        if (qvariant_cast<qlonglong>(d->receiver_index.data())< d->receiver_matrix.data().getRows()){
+        if (qvariant_cast<dtkxarch_int>(d->receiver_index.data())< d->receiver_matrix.data().getRows()){
 
             dtkMatrixSquareReal& matrix (d->receiver_matrix.data());
-            qlonglong value =  qvariant_cast<qlonglong>(d->receiver_index.data());
+            dtkxarch_int value =  qvariant_cast<dtkxarch_int>(d->receiver_index.data());
             dtkVectorReal vec(d->receiver_vector.data());
 
             for ( int i = 0; i < matrix.getRows(); ++i) {

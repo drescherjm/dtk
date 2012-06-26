@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: mar. juin 19 14:44:23 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 952
+ * Last-Updated: Tue Jun 26 16:21:23 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 956
  */
 
 /* Commentary:
@@ -28,6 +28,7 @@
 #include <dtkDistributed/dtkDistributedSlave.h>
 
 #include <dtkCore/dtkAbstractDataFactory.h>
+#include <dtkCore/dtkGlobal.h>
 
 #include <dtkJson>
 
@@ -36,7 +37,7 @@
 #include <dtkLog/dtkLog.h>
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeRemotePrivate definition
+// dtkComposerNodeRemotePrivate interface
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeRemotePrivate
@@ -215,8 +216,8 @@ void dtkComposerNodeRemote::begin(void)
                 break;
             }
             case QVariant::LongLong: {
-                qlonglong data = t->data().toLongLong();
-                dataType = "qlonglong";
+                dtkxarch_int data = t->data().toLongLong();
+                dataType = "dtkxarch_int";
                 array = QByteArray(reinterpret_cast<const char*>(&data), sizeof(data));
                 break;
             }
@@ -328,8 +329,8 @@ void dtkComposerNodeRemote::end(void)
                     break;
                 }
                 case QVariant::LongLong: {
-                    qlonglong data = t->data().toLongLong();
-                    dataType = "qlonglong";
+                    dtkxarch_int data = t->data().toLongLong();
+                    dataType = "dtkxarch_int";
                     array = QByteArray(reinterpret_cast<const char*>(&data), sizeof(data));
                     break;
                 }
@@ -388,8 +389,8 @@ public:
     dtkComposerTransmitterEmitter<QString> id;
 
     dtkComposerTransmitterReceiver<QString> cluster;
-    dtkComposerTransmitterReceiver<qlonglong> nodes;
-    dtkComposerTransmitterReceiver<qlonglong> cores;
+    dtkComposerTransmitterReceiver<dtkxarch_int> nodes;
+    dtkComposerTransmitterReceiver<dtkxarch_int> cores;
     dtkComposerTransmitterReceiver<QString> walltime;
     dtkComposerTransmitterReceiver<QString> queuename;
     dtkComposerTransmitterReceiver<QString> application;

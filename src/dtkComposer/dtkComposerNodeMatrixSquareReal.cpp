@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette Lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 15 15:28:57 2012 (+0200)
- *           By: sblekout
- *     Update #: 40
+ * Last-Updated: Tue Jun 26 16:23:47 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 42
  */
 
 /* Commentary:
@@ -26,7 +26,7 @@
 #include <dtkLog/dtkLog>
 
 // /////////////////////////////////////////////////////////////////
-//
+// dtkComposerNodeMatrixSquareRealPrivate interface
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeMatrixSquareRealPrivate
@@ -38,11 +38,11 @@ public:
 
 public:
     dtkComposerTransmitterEmitter<dtkMatrixSquareReal> emitter_matrix;
-    dtkComposerTransmitterEmitter<qlonglong> emitter_size;
+    dtkComposerTransmitterEmitter<dtkxarch_int> emitter_size;
 };
 
 // /////////////////////////////////////////////////////////////////
-//
+// dtkComposerNodeMatrixSquareReal implementation
 // /////////////////////////////////////////////////////////////////
 
 dtkComposerNodeMatrixSquareReal::dtkComposerNodeMatrixSquareReal(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMatrixSquareRealPrivate)
@@ -116,12 +116,12 @@ void dtkComposerNodeMatrixSquareReal::run(void)
 
     } else {
 
-        qlonglong size = 0;
+        dtkxarch_int size = 0;
         qreal value = 0;
         dtkMatrixSquareReal matrix;
 
         if (!d->receiver_size.isEmpty())
-            size = qvariant_cast<qlonglong>(d->receiver_size.data());
+            size = qvariant_cast<dtkxarch_int>(d->receiver_size.data());
 
         if (size == 0) {
             dtkWarn() << "The size of the matrix is zero." ;

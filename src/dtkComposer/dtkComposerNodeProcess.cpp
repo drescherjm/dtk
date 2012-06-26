@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:17:21
  * Version: $Id$
- * Last-Updated: Thu May 31 04:31:30 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 252
+ * Last-Updated: Tue Jun 26 16:22:48 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 254
  */
 
 /* Commentary:
@@ -26,14 +26,14 @@
 #include <dtkCore>
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeProcessPrivate declaration
+// dtkComposerNodeProcessPrivate interface
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeProcessPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<qlonglong> receiver_integer_0;
-    dtkComposerTransmitterReceiver<qlonglong> receiver_integer_1;
+    dtkComposerTransmitterReceiver<dtkxarch_int> receiver_integer_0;
+    dtkComposerTransmitterReceiver<dtkxarch_int> receiver_integer_1;
     dtkComposerTransmitterReceiver<double> receiver_real;
     dtkComposerTransmitterReceiver<dtkAbstractData *> receiver_data;
     dtkComposerTransmitterReceiver<QString> receiver_type;
@@ -41,7 +41,7 @@ public:
     dtkComposerTransmitterReceiver<dtkAbstractData *> receiver_rhs;
 
 public:
-    dtkComposerTransmitterEmitter<qlonglong> emitter_integer;
+    dtkComposerTransmitterEmitter<dtkxarch_int> emitter_integer;
     dtkComposerTransmitterEmitter<double> emitter_real;
     dtkComposerTransmitterEmitter<dtkAbstractData *> emitter_data;
 

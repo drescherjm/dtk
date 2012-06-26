@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May  9 12:14:10 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 10:48:01 2012 (+0200)
+ * Last-Updated: Tue Jun 26 16:07:37 2012 (+0200)
  *           By: tkloczko
- *     Update #: 59
+ *     Update #: 60
  */
 
 /* Commentary: 
@@ -34,7 +34,7 @@ class dtkComposerNodeContainerDataPrivate
 {
 public:
     dtkComposerTransmitterReceiver<QString>   receiver_str;
-    dtkComposerTransmitterReceiver<qlonglong> receiver_int;
+    dtkComposerTransmitterReceiver<dtkxarch_int> receiver_int;
 
 public:    
     dtkComposerTransmitterVariantContainer emitter;
@@ -101,7 +101,7 @@ QString dtkComposerNodeContainerData::outputLabelHint(int port)
 void dtkComposerNodeContainerData::run(void)
 {
     QString type;
-    qlonglong size = 0;
+    dtkxarch_int size = 0;
 
     if (!d->receiver_str.isEmpty())
         type = d->receiver_str.data();

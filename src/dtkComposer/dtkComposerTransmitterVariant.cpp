@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. juin  1 13:50:49 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 460
+ * Last-Updated: Tue Jun 26 16:29:14 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 461
  */
 
 /* Commentary: 
@@ -544,8 +544,8 @@ void dtkComposerTransmitterVariant::setDataFromMsg(dtkDistributedMessage *msg)
         this->setTwinned(false);
         this->setData(*data);
         this->setTwinned(true);
-    } else if (msg->type() == "qlonglong") {
-        qlonglong *data = reinterpret_cast<qlonglong*>(msg->content().data());
+    } else if (msg->type() == "dtkxarch_int") {
+        dtkxarch_int *data = reinterpret_cast<dtkxarch_int*>(msg->content().data());
         this->setTwinned(false);
         this->setData(*data);
         this->setTwinned(true);

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jun  1 11:50:06 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 164
+ * Last-Updated: Tue Jun 26 16:21:46 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 166
  */
 
 /* Commentary: 
@@ -33,7 +33,7 @@
 #include <dtkContainer/dtkAbstractContainerWrapper.h>
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeControlForEachPrivate definition
+// dtkComposerNodeControlForEachPrivate interface
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeControlForEachPrivate
@@ -48,13 +48,13 @@ public:
     dtkComposerTransmitterVariantContainer header_rcv;
 
     dtkComposerTransmitterProxy              block_container;
-    dtkComposerTransmitterEmitter<qlonglong> block_size;
-    dtkComposerTransmitterEmitter<qlonglong> block_index;
+    dtkComposerTransmitterEmitter<dtkxarch_int> block_size;
+    dtkComposerTransmitterEmitter<dtkxarch_int> block_index;
     dtkComposerTransmitterVariant            block_item;
 
 public:
-    qlonglong counter;
-    qlonglong size;
+    dtkxarch_int counter;
+    dtkxarch_int size;
 
     dtkAbstractContainerWrapper container;
 };

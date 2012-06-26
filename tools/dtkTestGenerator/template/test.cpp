@@ -14,7 +14,7 @@
 
 }
 
-void %1Object::initTestCase()
+void %1Object::initTestCase(void)
 {
 
 }

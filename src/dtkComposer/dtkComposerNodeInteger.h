@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:38:21 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 15 18:12:00 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 12
+ * Last-Updated: Tue Jun 26 16:17:16 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -23,7 +23,13 @@
 #include "dtkComposerExport.h"
 #include "dtkComposerNodeLeaf.h"
 
+#include <dtkCore/dtkGlobal.h>
+
 class dtkComposerNodeIntegerPrivate;
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeInteger interface
+// /////////////////////////////////////////////////////////////////
 
 class DTKCOMPOSER_EXPORT dtkComposerNodeInteger : public dtkComposerNodeLeaf
 {
@@ -52,10 +58,10 @@ public:
     }
 
 public:
-    qlonglong value(void);
+    dtkxarch_int value(void);
 
 public:
-    void setValue(qlonglong value);
+    void setValue(dtkxarch_int value);
 
 private:
     dtkComposerNodeIntegerPrivate *d;

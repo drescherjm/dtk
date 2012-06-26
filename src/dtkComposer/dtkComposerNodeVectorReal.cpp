@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette Lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 24 18:32:17 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 58
+ * Last-Updated: Tue Jun 26 16:19:28 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 60
  */
 
 /* Commentary:
@@ -26,7 +26,7 @@
 #include <dtkLog/dtkLog>
 
 // /////////////////////////////////////////////////////////////////
-//
+// dtkComposerNodeVectorRealPrivate interface
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeVectorRealPrivate
@@ -38,11 +38,11 @@ public:
 
 public:
     dtkComposerTransmitterEmitter<dtkVectorReal>   emitter_vector;
-    dtkComposerTransmitterEmitter<qlonglong>       emitter_size;
+    dtkComposerTransmitterEmitter<dtkxarch_int>       emitter_size;
 };
 
 // /////////////////////////////////////////////////////////////////
-//
+// dtkComposerNodeVectorReal implementation
 // /////////////////////////////////////////////////////////////////
 
 dtkComposerNodeVectorReal::dtkComposerNodeVectorReal(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVectorRealPrivate)
@@ -116,12 +116,12 @@ void dtkComposerNodeVectorReal::run(void)
 
     } else {
 
-        qlonglong size = 0;
+        dtkxarch_int size = 0;
         qreal value = 0;
         dtkVectorReal vec;
 
         if (!d->receiver_size.isEmpty())
-            size = qvariant_cast<qlonglong>(d->receiver_size.data());
+            size = qvariant_cast<dtkxarch_int>(d->receiver_size.data());
 
         if (size == 0) {
             dtkWarn() << "The size of the vector is zero." ;

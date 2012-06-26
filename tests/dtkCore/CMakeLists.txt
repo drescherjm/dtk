@@ -24,13 +24,15 @@ project(dtkCoreTest)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS_MOC
-  dtkCompareSingletonTest.h)
+  dtkSingletonTest.h
+  dtkSmartPointerTest.h)
 
 set(${PROJECT_NAME}_HEADERS
   ${${PROJECT_NAME}_HEADERS_MOC})
 
 set(${PROJECT_NAME}_SOURCES
-  dtkCompareSingletonTest.cpp)
+  dtkSingletonTest.cpp
+  dtkSmartPointerTest.cpp)
 
 ## #################################################################
 ## Build rules
@@ -39,7 +41,8 @@ set(${PROJECT_NAME}_SOURCES
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
 set(${PROJECT_NAME}_MAIN_SOURCES
-dtkCompareSingletonTest.cpp)
+  dtkSingletonTest.cpp
+  dtkSmartPointerTest.cpp)
 
 create_test_sourcelist(${PROJECT_NAME}_SOURCES_TEST ${PROJECT_NAME}.cxx
   ${${PROJECT_NAME}_MAIN_SOURCES})

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jun 25 12:09:32 2012 (+0200)
+ * Last-Updated: Tue Jun 26 16:25:45 2012 (+0200)
  *           By: tkloczko
- *     Update #: 73
+ *     Update #: 76
  */
 
 /* Commentary:
@@ -26,7 +26,7 @@
 #include <dtkLog/dtkLog>
 
 // /////////////////////////////////////////////////////////////////
-//
+// dtkComposerNodeMatrixSquareRealExtractorPrivate interface
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeMatrixSquareRealExtractorPrivate
@@ -41,7 +41,7 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-//
+// dtkComposerNodeMatrixSquareRealExtractor implementation
 // /////////////////////////////////////////////////////////////////
 
 dtkComposerNodeMatrixSquareRealExtractor::dtkComposerNodeMatrixSquareRealExtractor(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMatrixSquareRealExtractorPrivate)
@@ -50,7 +50,7 @@ dtkComposerNodeMatrixSquareRealExtractor::dtkComposerNodeMatrixSquareRealExtract
 
     QList<QVariant::Type> variant_list;
 
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double ;
+    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double;
     d->receiver_row.setTypes(variant_list);
     this->appendReceiver(&d->receiver_row);
 
@@ -111,8 +111,8 @@ void dtkComposerNodeMatrixSquareRealExtractor::run(void)
         return;
 
     dtkMatrixSquareReal& matrix(d->receiver_matrix.data());
-    qlonglong row = qvariant_cast<qreal>(d->receiver_row.data());
-    qlonglong col = qvariant_cast<qreal>(d->receiver_col.data());
+    dtkxarch_int row = qvariant_cast<dtkxarch_int>(d->receiver_row.data());
+    dtkxarch_int col = qvariant_cast<dtkxarch_int>(d->receiver_col.data());
 
     if (row < matrix.getRows() && col < matrix.getCols())
         d->emitter_value.setData(matrix[row][col]);

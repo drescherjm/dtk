@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun 15 09:51:39 2012 (+0200)
+ * Last-Updated: Tue Jun 26 16:06:58 2012 (+0200)
  *           By: tkloczko
- *     Update #: 66
+ *     Update #: 68
  */
 
 /* Commentary: 
@@ -26,7 +26,7 @@
 #include <dtkLog/dtkLog>
 
 // /////////////////////////////////////////////////////////////////
-// 
+// dtkComposerNodeArrayScalarPrivate interface
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeArrayScalarPrivate
@@ -39,11 +39,11 @@ public:
 
 public:
     dtkComposerTransmitterEmitterVector<qreal> emitter_array;
-    dtkComposerTransmitterEmitter<qlonglong>   emitter_size;
+    dtkComposerTransmitterEmitter<dtkxarch_int>   emitter_size;
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+// dtkComposerNodeArrayScalar implementation
 // /////////////////////////////////////////////////////////////////
 
 dtkComposerNodeArrayScalar::dtkComposerNodeArrayScalar(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeArrayScalarPrivate)
@@ -117,12 +117,12 @@ void dtkComposerNodeArrayScalar::run(void)
 
     } else {
 
-        qlonglong size = 0;
+        dtkxarch_int size = 0;
         qreal value = 0;
         dtkContainerVector<qreal> array;
 
         if (!d->receiver_size.isEmpty())
-            size = qvariant_cast<qlonglong>(d->receiver_size.data());
+            size = qvariant_cast<dtkxarch_int>(d->receiver_size.data());
 
         if (size == 0) {
             dtkWarn() << "The size of the array is zero." ;

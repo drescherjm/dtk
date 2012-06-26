@@ -23,7 +23,7 @@ private slots:
     void cleanupTestCase(void);
 
 private slots:
-    void testFoo();
+    void testFoo(void);
 };
 
 #endif

@@ -319,6 +319,26 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Scalar Array Prepend"] = QStringList() << "container" << "array" << "scalar"  << "prepend" ;
     d->types["Scalar Array Prepend"] = "array_scalar_prepend";
 
+    d->nodes << "Scalar Array All Add";
+    d->descriptions["Scalar Array All Add"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array All Add"] = QStringList() << "container" << "array" << "scalar"  << "all"<< "add" ;
+    d->types["Scalar Array All Add"] = "array_scalar_all_add";
+
+    d->nodes << "Scalar Array All Substract";
+    d->descriptions["Scalar Array All Substract"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array All Substract"] = QStringList() << "container" << "array" << "scalar"  << "all"<< "substract" ;
+    d->types["Scalar Array All Substract"] = "array_scalar_all_substract";
+
+    d->nodes << "Scalar Array All Mult";
+    d->descriptions["Scalar Array All Mult"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array All Mult"] = QStringList() << "container" << "array" << "scalar"  << "all"<< "mult";
+    d->types["Scalar Array All Mult"] = "array_scalar_all_mult";
+
+    d->nodes << "Scalar Array All Divide";
+    d->descriptions["Scalar Array All Divide"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array All Divide"] = QStringList() << "container" << "array" << "scalar"  << "all"<< "divide" ;
+    d->types["Scalar Array All Divide"] = "array_scalar_all_divide";
+
     d->nodes << "Scalar Array Sum";
     d->descriptions["Scalar Array Sum"] = "<p>Description not yet filled!</p>";
     d->tags["Scalar Array Sum"] = QStringList() << "container" << "array" << "scalar"  << "sum" ;
@@ -989,6 +1009,18 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "array_scalar_prepend")
         return new dtkComposerNodeArrayScalarOperatorPrepend;
+
+    if(type == "array_scalar_all_add")
+        return new dtkComposerNodeArrayScalarOperatorModifierAllAdd;
+
+    if(type == "array_scalar_all_substract")
+        return new dtkComposerNodeArrayScalarOperatorModifierAllSubstract;
+
+    if(type == "array_scalar_all_mult")
+        return new dtkComposerNodeArrayScalarOperatorModifierAllMult;
+
+    if(type == "array_scalar_all_divide")
+        return new dtkComposerNodeArrayScalarOperatorModifierAllDivide;
 
     if(type == "array_scalar_sum")
         return new dtkComposerNodeArrayScalarOperatorSum;

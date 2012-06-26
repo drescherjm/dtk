@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 26 16:08:33 2012 (+0200)
+ * Last-Updated: Tue Jun 26 16:32:03 2012 (+0200)
  *           By: tkloczko
- *     Update #: 142
+ *     Update #: 144
  */
 
 /* Commentary:
@@ -49,7 +49,7 @@ dtkComposerNodeArrayScalarExtractor::dtkComposerNodeArrayScalarExtractor(void) :
 
     QList<QVariant::Type> variant_list;
 
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double ;
+    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double;
     d->receiver_index.setTypes(variant_list);
     this->appendReceiver(&d->receiver_index);
 
@@ -298,7 +298,6 @@ void dtkComposerNodeArrayScalarExtractorArrayPart::run(void)
     dtkxarch_int to = qMin((from + length), array.count());
     
     dtkContainerVectorReal *subarray = array.subContainer(from, to);
-
     d->emitter_subarray.setData(*subarray);
     delete subarray;
 }

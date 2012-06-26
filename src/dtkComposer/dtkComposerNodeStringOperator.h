@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/20 14:34:00
  * Version: $Id$
- * Last-Updated: lun. avril 23 09:26:09 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 6
+ * Last-Updated: Tue Jun 26 17:31:44 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 12
  */
 
 /* Commentary:
@@ -77,6 +77,35 @@ protected:
 };
 
 // /////////////////////////////////////////////////////////////////
+// dtkComposerNodeStringOperatorBinaryLogic
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeStringOperatorBinaryLogicPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperatorBinaryLogic : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeStringOperatorBinaryLogic(void);
+    ~dtkComposerNodeStringOperatorBinaryLogic(void);
+
+    inline QString inputLabelHint(int port) {
+        if (port == 0)
+            return "lhs";
+        else if (port == 1)
+            return "rhs";
+        else
+            return "port";
+    }
+
+    inline QString outputLabelHint(int) {
+        return "boolean";
+    }
+
+protected:
+    dtkComposerNodeStringOperatorBinaryLogicPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
 // dtkComposerNodeStringOperatorBinary - Append
 // /////////////////////////////////////////////////////////////////
 
@@ -92,6 +121,25 @@ public:
 
     inline QString titleHint(void) {
         return "Append";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeStringOperatorBinaryLogic - Equality
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperatorBinaryLogicEquality : public dtkComposerNodeStringOperatorBinaryLogic
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "string_equality";
+    }
+
+    inline QString titleHint(void) {
+        return "String equality";
     }
 };
 

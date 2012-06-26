@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Tue Jun 26 14:14:12 2012 (+0200)
+ * Last-Updated: Tue Jun 26 17:37:39 2012 (+0200)
  *           By: tkloczko
- *     Update #: 658
+ *     Update #: 660
  */
 
 /* Commentary:
@@ -477,6 +477,11 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["Append"] = "<p>Description not yet filled!</p>";
     d->tags["Append"] = QStringList() << "concatenate" << "operator" << "append" << "string";
     d->types["Append"] = "append";
+
+    d->nodes << "String Equality";
+    d->descriptions["String Equality"] = "<p>Description not yet filled!</p>";
+    d->tags["String Equality"] = QStringList() << "string" << "comparison" << "equality";
+    d->types["String Equality"] = "string_equality";
 
     d->nodes << "Asin";
     d->descriptions["Asin"] = "<p>Description not yet filled!</p>";
@@ -1146,6 +1151,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if (type == "append")
         return new dtkComposerNodeStringOperatorBinaryAppend;
+
+    if (type == "string_equality")
+        return new dtkComposerNodeStringOperatorBinaryLogicEquality;
 
     if (type =="ceil")
         return new dtkComposerNodeNumberOperatorUnaryCeil;

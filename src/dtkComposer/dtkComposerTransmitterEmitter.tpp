@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jun  8 15:15:27 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 203
+ * Last-Updated: Wed Jun 27 12:27:10 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 204
  */
 
 /* Commentary: 
@@ -57,6 +57,7 @@ template <typename T> inline void dtkComposerTransmitterEmitter<T>::setData(cons
 {
     m_data = data; 
     d->variant = qVariantFromValue(m_data);
+    d->container.reset();
 
     d->count = d->receivers.count();
 };

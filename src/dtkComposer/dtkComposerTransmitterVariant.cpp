@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 10:24:16 2012 (+0200)
+ * Last-Updated: Wed Jun 27 15:14:54 2012 (+0200)
  *           By: tkloczko
- *     Update #: 466
+ *     Update #: 473
  */
 
 /* Commentary: 
@@ -214,11 +214,8 @@ QVariant& dtkComposerTransmitterVariant::data(void)
     if (e->active_variant)
         return e->active_variant->data();
 
-    if (e->active_emitter) {
-
+    if (e->active_emitter)
         return e->active_emitter->variant();
-
-    }
 
     return d->variant;
 }
@@ -239,28 +236,28 @@ const QVariant& dtkComposerTransmitterVariant::data(void) const
 
 const dtkAbstractContainerWrapper& dtkComposerTransmitterVariant::container(void) const
 {
+    if (e->twinned)
+        return d->container;
+
     if (e->active_variant)
-        d->container = e->active_variant->container();
-
+        return e->active_variant->container();
+    
     else if (e->active_emitter)
-        d->container = qvariant_cast<dtkAbstractContainerWrapper>(e->active_emitter->variant());
-
-    else
-        d->container = qvariant_cast<dtkAbstractContainerWrapper>(d->variant);
+        return e->active_emitter->container();
 
     return d->container;
 }
 
 dtkAbstractContainerWrapper& dtkComposerTransmitterVariant::container(void)
 {
+    if (e->twinned)
+        return d->container;
+
     if (e->active_variant)
-        d->container = e->active_variant->container();
+        return e->active_variant->container();
     
     else if (e->active_emitter)
-        d->container = qvariant_cast<dtkAbstractContainerWrapper>(e->active_emitter->variant());
-    
-    else
-        d->container = qvariant_cast<dtkAbstractContainerWrapper>(d->variant);
+        return e->active_emitter->container();
 
     return d->container;    
 }

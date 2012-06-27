@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:46:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri May 25 09:56:29 2012 (+0200)
+ * Last-Updated: Wed Jun 27 13:00:14 2012 (+0200)
  *           By: tkloczko
- *     Update #: 20
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -44,16 +44,21 @@ public:
     virtual ~dtkAbstractContainerWrapper(void);
 
 protected:
-    void init(void);
+    void init(dtkAbstractContainerWrapper *wrapper = 0);
 
 public:
     void reset(void);
+
+    bool isReset(void);
 
 public:
     dtkAbstractContainerWrapper& operator = (const dtkAbstractContainerWrapper& other);
 
 public:
     virtual dtkAbstractContainerWrapper *clone(void) const;
+
+public:
+    dtkAbstractContainerWrapper *container(void);
 
 public:
     QString identifier(void) const;

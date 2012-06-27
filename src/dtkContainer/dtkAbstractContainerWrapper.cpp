@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:51:33 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri May 25 09:29:13 2012 (+0200)
+ * Last-Updated: Wed Jun 27 13:00:38 2012 (+0200)
  *           By: tkloczko
- *     Update #: 11
+ *     Update #: 27
  */
 
 /* Commentary: 
@@ -35,29 +35,41 @@ dtkAbstractContainerWrapper::dtkAbstractContainerWrapper(const dtkAbstractContai
 
 dtkAbstractContainerWrapper::~dtkAbstractContainerWrapper(void)
 {
-    delete m_container;
+    if (this != m_container)
+        delete m_container;
 
     m_container = NULL;
 }
 
-void dtkAbstractContainerWrapper::init(void)
+void dtkAbstractContainerWrapper::init(dtkAbstractContainerWrapper *wrapper)
 {
-    m_container = NULL;
+    m_container = wrapper;
 }
 
 void dtkAbstractContainerWrapper::reset(void)
 {
-    if (m_container) {
+    if (m_container && (this != m_container))
         delete m_container;
-        m_container = NULL;
-    }
+
+    m_container = NULL;
+}
+
+bool dtkAbstractContainerWrapper::isReset(void)
+{
+    if (!m_container)
+        return true;
+
+    return false;
 }
 
 dtkAbstractContainerWrapper& dtkAbstractContainerWrapper::operator=(const dtkAbstractContainerWrapper& other)
 {
+    if (this == &other)
+        return *this;
+
     dtkAbstractData::operator=(other);
 
-    if (m_container)
+    if (m_container && (m_container != this))
         delete m_container;
 
     m_container = other.clone();
@@ -71,6 +83,11 @@ dtkAbstractContainerWrapper *dtkAbstractContainerWrapper::clone(void) const
         return m_container->clone();
 
     return NULL;
+}
+
+dtkAbstractContainerWrapper *dtkAbstractContainerWrapper::container(void)
+{
+    return m_container;
 }
 
 QString dtkAbstractContainerWrapper::identifier(void) const

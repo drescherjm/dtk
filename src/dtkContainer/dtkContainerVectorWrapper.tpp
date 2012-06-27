@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri May 25 09:47:39 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri May 25 09:55:48 2012 (+0200)
+ * Last-Updated: Wed Jun 27 15:12:09 2012 (+0200)
  *           By: tkloczko
- *     Update #: 8
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -26,18 +26,18 @@
 
 template <typename T> dtkContainerVectorWrapper<T>::dtkContainerVectorWrapper(dtkAbstractData *parent) : dtkAbstractContainerWrapper(parent)
 {
-
+    this->init(this);
 };
 
 template <typename T> dtkContainerVectorWrapper<T>::dtkContainerVectorWrapper(const dtkContainerVector<T>& vector, dtkAbstractData *parent) : dtkAbstractContainerWrapper(parent), m_vector(vector)
 {
-
+    this->init(this);
 };
 
 template <typename T> dtkContainerVectorWrapper<T>::dtkContainerVectorWrapper(const dtkContainerVectorWrapper& other) : dtkAbstractContainerWrapper(), m_vector(other.m_vector)
 {
     dtkAbstractData::operator=(other);
-    this->init();
+    this->init(this);
 };
 
 template <typename T> dtkContainerVectorWrapper<T>::~dtkContainerVectorWrapper(void)
@@ -57,6 +57,11 @@ template <typename T> dtkContainerVectorWrapper<T>& dtkContainerVectorWrapper<T>
 template <typename T> dtkContainerVectorWrapper<T> *dtkContainerVectorWrapper<T>::clone(void) const
 {
     return new dtkContainerVectorWrapper<T>(*this);
+};
+
+template <typename T> QString dtkContainerVectorWrapper<T>::identifier(void) const
+{
+    return "dtkContainerVectorWrapper";
 };
 
 template <typename T> inline void dtkContainerVectorWrapper<T>::setVector(const dtkContainerVector<T>& vector)

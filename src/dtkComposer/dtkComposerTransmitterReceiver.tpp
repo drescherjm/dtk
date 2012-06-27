@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 10:45:12 2012 (+0200)
+ * Last-Updated: Wed Jun 27 13:02:40 2012 (+0200)
  *           By: tkloczko
- *     Update #: 314
+ *     Update #: 324
  */
 
 /* Commentary: 
@@ -305,6 +305,8 @@ template <typename T> dtkComposerTransmitter::LinkMap dtkComposerTransmitterRece
 // dtkComposerTransmitterReceiverVector implementation
 // /////////////////////////////////////////////////////////////////
 
+#include <dtkContainer/dtkContainerVectorWrapper.h>
+
 template <typename T> inline dtkComposerTransmitterReceiverVector<T>::dtkComposerTransmitterReceiverVector(dtkComposerNode *parent) : dtkComposerTransmitterReceiver<T>(parent)
 {
 
@@ -320,8 +322,8 @@ template <typename T> inline dtkContainerVector<T>& dtkComposerTransmitterReceiv
     if (active_emitter)
         return active_emitter->data();
     
-    if (active_variant) 
-        return *reinterpret_cast<dtkContainerVector<T> *>(&(active_variant->container()));
+    if (active_variant)
+        return (reinterpret_cast<dtkContainerVectorWrapper<T> *>(active_variant->container().container()))->vector();
     
     return m_vector;
 };
@@ -332,7 +334,7 @@ template <typename T> inline const dtkContainerVector<T>& dtkComposerTransmitter
         return active_emitter->data();
 
     if (active_variant) 
-        return *reinterpret_cast<const dtkContainerVector<T> *>(&(active_variant->container()));
+        return (reinterpret_cast<const dtkContainerVectorWrapper<T> *>(active_variant->container().container()))->vector();
 
     return m_vector;
 };

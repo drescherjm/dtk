@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 26 16:32:03 2012 (+0200)
+ * Last-Updated: Wed Jun 27 10:30:48 2012 (+0200)
  *           By: tkloczko
- *     Update #: 144
+ *     Update #: 146
  */
 
 /* Commentary:
@@ -118,7 +118,7 @@ class dtkComposerNodeArrayScalarExtractorSubArrayPrivate
 {
 public:
     dtkComposerTransmitterReceiverVector<qreal> receiver_array;
-    dtkComposerTransmitterVariantContainer      receiver_indices;
+    dtkComposerTransmitterVariant               receiver_indices;
 
 public:
     dtkComposerTransmitterEmitterVector<qreal> emitter_subarray;

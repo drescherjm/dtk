@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 31 15:14:46 2012 (+0200)
+ * Last-Updated: Wed Jun 27 10:20:32 2012 (+0200)
  *           By: tkloczko
- *     Update #: 98
+ *     Update #: 100
  */
 
 /* Commentary: 
@@ -40,10 +40,14 @@ public:
 
 public:
     void setData(const QVariant& data);
+    void setData(const dtkAbstractContainerWrapper& data);
     void setDataFromMsg(dtkDistributedMessage *msg);
 
           QVariant& data(void);
     const QVariant& data(void) const;
+
+          dtkAbstractContainerWrapper& container(void);
+    const dtkAbstractContainerWrapper& container(void) const;
 
     QVariantList allData(void);
 
@@ -86,32 +90,6 @@ public:
 
 protected:
     dtkComposerTransmitterVariantPrivate *e;
-};
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterVariantContainer declaration
-// /////////////////////////////////////////////////////////////////
-
-class DTKCOMPOSER_EXPORT dtkComposerTransmitterVariantContainer : public dtkComposerTransmitterVariant
-{
-public:
-     dtkComposerTransmitterVariantContainer(dtkComposerNode *parent = 0);
-    ~dtkComposerTransmitterVariantContainer(void);
-
-public:
-    Kind kind(void) const;
-
-    QString kindName(void) const;
-
-public:
-    void setData(const dtkAbstractContainerWrapper& data);
-
-          dtkAbstractContainerWrapper& container(void);
-    const dtkAbstractContainerWrapper& container(void) const;
-
-public:
-    bool    connect(dtkComposerTransmitter *transmitter);
-    bool disconnect(dtkComposerTransmitter *transmitter);
 };
 
 #endif

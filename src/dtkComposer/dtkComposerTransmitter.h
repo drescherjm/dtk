@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jun  1 14:09:35 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 168
+ * Last-Updated: Wed Jun 27 10:24:28 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 169
  */
 
 /* Commentary: 
@@ -43,7 +43,6 @@ public:
         Receiver,
         Proxy,
         Variant,
-        VariantContainer,
         EmitterVector,
         ReceiverVector
     };

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: lun. juin 18 16:08:06 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jun 26 16:28:34 2012 (+0200)
+ * Last-Updated: Wed Jun 27 10:31:26 2012 (+0200)
  *           By: tkloczko
- *     Update #: 79
+ *     Update #: 80
  */
 
 /* Commentary:
@@ -45,14 +45,14 @@ public:
     dtkComposerNodeComposite body_block;
 
 public:
-    dtkComposerTransmitterVariantContainer header_rcv;
-    dtkComposerTransmitterVariantContainer footer_emit;
+    dtkComposerTransmitterVariant header_rcv;
+    dtkComposerTransmitterVariant footer_emit;
 
-    dtkComposerTransmitterProxy              block_container;
+    dtkComposerTransmitterProxy                 block_container;
     dtkComposerTransmitterEmitter<dtkxarch_int> block_size;
     dtkComposerTransmitterEmitter<dtkxarch_int> block_index;
-    dtkComposerTransmitterVariant            block_item;
-    dtkComposerTransmitterVariant            block_newitem;
+    dtkComposerTransmitterVariant               block_item;
+    dtkComposerTransmitterVariant               block_newitem;
 
 public:
     dtkxarch_int counter;

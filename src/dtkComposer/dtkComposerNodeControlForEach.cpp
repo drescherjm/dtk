@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jun 26 16:21:46 2012 (+0200)
+ * Last-Updated: Wed Jun 27 10:32:00 2012 (+0200)
  *           By: tkloczko
- *     Update #: 166
+ *     Update #: 167
  */
 
 /* Commentary: 
@@ -45,7 +45,7 @@ public:
     dtkComposerNodeComposite body_block;
 
 public:
-    dtkComposerTransmitterVariantContainer header_rcv;
+    dtkComposerTransmitterVariant header_rcv;
 
     dtkComposerTransmitterProxy              block_container;
     dtkComposerTransmitterEmitter<dtkxarch_int> block_size;

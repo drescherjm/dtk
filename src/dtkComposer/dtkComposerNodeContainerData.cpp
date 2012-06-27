@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May  9 12:14:10 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 26 16:07:37 2012 (+0200)
+ * Last-Updated: Wed Jun 27 10:29:41 2012 (+0200)
  *           By: tkloczko
- *     Update #: 60
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -37,7 +37,7 @@ public:
     dtkComposerTransmitterReceiver<dtkxarch_int> receiver_int;
 
 public:    
-    dtkComposerTransmitterVariantContainer emitter;
+    dtkComposerTransmitterVariant emitter;
 
 public:
     dtkAbstractContainerWrapper *container;

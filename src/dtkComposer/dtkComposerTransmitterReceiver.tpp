@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 13:02:40 2012 (+0200)
+ * Last-Updated: Wed Jun 27 15:59:11 2012 (+0200)
  *           By: tkloczko
- *     Update #: 324
+ *     Update #: 325
  */
 
 /* Commentary: 
@@ -245,19 +245,6 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::disconnect(dtkComp
 
     return ok;
 };
-    
-//! 
-/*! 
- *  
- */
-template <typename T> void dtkComposerTransmitterReceiver<T>::clear(void)
-{
-    if (active_emitter)
-        active_emitter->clear();
-
-    if (active_variant)
-        active_variant->clear();
-};
 
 //! 
 /*! 
@@ -490,19 +477,6 @@ template <typename T> bool dtkComposerTransmitterReceiverVector<T>::isEmpty(void
         return true;
 
     return false;
-};
-    
-//! 
-/*! 
- *  
- */
-template <typename T> void dtkComposerTransmitterReceiverVector<T>::clear(void)
-{
-    if (active_emitter)
-        active_emitter->clear();
-
-    if (active_variant)
-        active_variant->clear();
 };
 
 //! 

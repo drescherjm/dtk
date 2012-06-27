@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 15:14:54 2012 (+0200)
+ * Last-Updated: Wed Jun 27 15:57:15 2012 (+0200)
  *           By: tkloczko
- *     Update #: 473
+ *     Update #: 474
  */
 
 /* Commentary: 
@@ -456,18 +456,6 @@ bool dtkComposerTransmitterVariant::disconnect(dtkComposerTransmitter *transmitt
     }    
     
     return ok ;
-}
-
-//! 
-/*! 
- *  
- */
-void dtkComposerTransmitterVariant::clear(void)
-{
-    if (d->count.fetchAndAddOrdered(-1)-1) {
-        d->variant.clear();
-        d->container.clear();
-    }
 }
 
 //! 

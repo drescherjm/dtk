@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 12:27:10 2012 (+0200)
+ * Last-Updated: Wed Jun 27 15:57:58 2012 (+0200)
  *           By: tkloczko
- *     Update #: 204
+ *     Update #: 205
  */
 
 /* Commentary: 
@@ -94,15 +94,6 @@ template <typename T> inline QString dtkComposerTransmitterEmitter<T>::kindName(
     return "Emitter";
 };
 
-template <typename T> inline void dtkComposerTransmitterEmitter<T>::clear(void)
-{
-    if (d->count.fetchAndAddOrdered(-1)-1) {
-        m_data = T();
-        d->variant.clear();
-        d->container.clear();
-    }
-}
-
 template <typename T> dtkComposerTransmitter::LinkMap dtkComposerTransmitterEmitter<T>::leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
     DTK_UNUSED(transmitter);
@@ -137,15 +128,6 @@ template <typename T> inline QString dtkComposerTransmitterEmitterVector<T>::kin
 {
     return "EmitterContainer";
 };
-
-template <typename T> inline void dtkComposerTransmitterEmitterVector<T>::clear(void)
-{
-    if (d->count.fetchAndAddOrdered(-1)-1) {
-        m_vector = dtkContainerVector<T>();
-        d->container.clear();
-        d->variant.clear();
-    }
-}
 
 template <typename T> inline void dtkComposerTransmitterEmitterVector<T>::setData(const dtkContainerVector<T>& vector)
 {

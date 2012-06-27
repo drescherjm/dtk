@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 10:25:10 2012 (+0200)
+ * Last-Updated: Wed Jun 27 16:00:41 2012 (+0200)
  *           By: tkloczko
- *     Update #: 111
+ *     Update #: 113
  */
 
 /* Commentary: 
@@ -62,9 +62,6 @@ public:
     bool disconnect(dtkComposerTransmitter *transmitter);
 
 public:
-    void clear(void);
-
-public:
     void setActiveEmitter(dtkComposerTransmitter *emitter);
 
 public:
@@ -109,9 +106,6 @@ public:
 
 public:
     bool isEmpty(void) const;
-
-public:
-    void clear(void);
 
 public:
     void setActiveEmitter(dtkComposerTransmitter *emitter);

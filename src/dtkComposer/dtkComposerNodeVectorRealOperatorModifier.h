@@ -44,6 +44,33 @@ protected:
 };
 
 // /////////////////////////////////////////////////////////////////
+// dtkComposerNodeVectorRealOperatorModifierAll interface
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeVectorRealOperatorModifierAllPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeVectorRealOperatorModifierAll  : public dtkComposerNodeLeaf
+{
+public:
+    dtkComposerNodeVectorRealOperatorModifierAll(void);
+    ~dtkComposerNodeVectorRealOperatorModifierAll (void);
+
+    inline QString inputLabelHint(int port) {
+        if (port == 0)
+            return "vector";
+        else
+            return "value";
+    }
+
+    inline QString outputLabelHint(int) {
+        return "vector";
+    }
+
+protected:
+    dtkComposerNodeVectorRealOperatorModifierAllPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
 // dtkComposerNodeVectorRealOperatorModifier - SET
 // /////////////////////////////////////////////////////////////////
 
@@ -135,6 +162,82 @@ public:
 
     inline QString titleHint(void) {
         return "Vector Real Divide";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeVectorRealOperatorModifierAll - Add
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeVectorRealOperatorModifierAllAdd : public dtkComposerNodeVectorRealOperatorModifierAll
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "vector_real_add_all";
+    }
+
+    inline QString titleHint(void) {
+        return "Vector Real Add All";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeVectorRealOperatorModifierAll - Substract
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeVectorRealOperatorModifierAllSubstract : public dtkComposerNodeVectorRealOperatorModifierAll
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "vector_real_substract_all";
+    }
+
+    inline QString titleHint(void) {
+        return "Vector Real Substract All";
+    }
+};
+
+///////////////////////////////////////////////////////////////////
+// dtkComposerNodeVectorRealOperatorModifierAll - Mult
+///////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeVectorRealOperatorModifierAllMult : public dtkComposerNodeVectorRealOperatorModifierAll
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "vector_real_mult_all";
+    }
+
+    inline QString titleHint(void) {
+        return "Vector Real Mult All";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeVectorRealOperatorModifierAll - Divide
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeVectorRealOperatorModifierAllDivide: public dtkComposerNodeVectorRealOperatorModifierAll
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "vector_real_divide_all";
+    }
+
+    inline QString titleHint(void) {
+        return "Vector Real Divide All";
     }
 };
 

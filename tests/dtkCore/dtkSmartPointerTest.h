@@ -45,7 +45,6 @@ private slots:
     void testSmartPointerHash(void);
     void testSmartPointerVector(void);
 
-
 private:
     dtkSmartPointerTestObjectPrivate *d;
 };

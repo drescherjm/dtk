@@ -66,7 +66,7 @@ dtkComposerNodeArrayScalarOperatorModifier::~dtkComposerNodeArrayScalarOperatorM
 }
 
 // /////////////////////////////////////////////////////////////////
-//  dtkComposerNodeArrayScalarOperatorModifierPend
+//  dtkComposerNodeArrayScalarOperatorModifierAll
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeArrayScalarOperatorModifierAllPrivate

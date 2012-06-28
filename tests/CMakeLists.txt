@@ -19,4 +19,5 @@
 
 add_subdirectory(dtkMath)
 add_subdirectory(dtkCore)
+add_subdirectory(dtkZip)
 

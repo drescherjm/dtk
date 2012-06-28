@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette Lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 26 16:23:47 2012 (+0200)
+ * Last-Updated: Thu Jun 28 17:04:43 2012 (+0200)
  *           By: tkloczko
- *     Update #: 42
+ *     Update #: 43
  */
 
 /* Commentary:
@@ -109,7 +109,7 @@ void dtkComposerNodeMatrixSquareReal::run(void)
 {
     if (!d->receiver_matrix.isEmpty()) {
 
-        dtkMatrixSquareReal matrix (d->receiver_matrix.data());
+        const dtkMatrixSquareReal& matrix (d->receiver_matrix.data());
 
         d->emitter_matrix.setData(matrix);
         d->emitter_size.setData(matrix.getRows());

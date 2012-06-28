@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 26 16:25:45 2012 (+0200)
+ * Last-Updated: Thu Jun 28 17:04:58 2012 (+0200)
  *           By: tkloczko
- *     Update #: 76
+ *     Update #: 77
  */
 
 /* Commentary:
@@ -110,7 +110,7 @@ void dtkComposerNodeMatrixSquareRealExtractor::run(void)
     if(d->receiver_col.isEmpty())
         return;
 
-    dtkMatrixSquareReal& matrix(d->receiver_matrix.data());
+    const dtkMatrixSquareReal& matrix(d->receiver_matrix.data());
     qlonglong row = qvariant_cast<qlonglong>(d->receiver_row.data());
     qlonglong col = qvariant_cast<qlonglong>(d->receiver_col.data());
 

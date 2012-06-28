@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 10:30:48 2012 (+0200)
+ * Last-Updated: Thu Jun 28 16:56:28 2012 (+0200)
  *           By: tkloczko
- *     Update #: 146
+ *     Update #: 153
  */
 
 /* Commentary:
@@ -100,7 +100,7 @@ void dtkComposerNodeArrayScalarExtractor::run(void)
     if (d->receiver_index.isEmpty())
         return;
 
-    dtkContainerVectorReal& array(d->receiver_array.data());
+    const dtkContainerVectorReal& array(d->receiver_array.data());
     qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
 
     if (index < array.count())
@@ -184,8 +184,8 @@ void dtkComposerNodeArrayScalarExtractorSubArray::run(void)
     if (d->receiver_indices.isEmpty())
         return;
 
-    dtkContainerVectorReal&        array = d->receiver_array.data();
-    dtkAbstractContainerWrapper& indices = d->receiver_indices.container();
+    const dtkContainerVectorReal& array(d->receiver_array.data());
+    const dtkAbstractContainerWrapper& indices(d->receiver_indices.container());
 
     dtkContainerVectorReal subarray;
     subarray.reserve(indices.count());
@@ -278,7 +278,7 @@ void dtkComposerNodeArrayScalarExtractorArrayPart::run(void)
     if (d->receiver_from.isEmpty())
         return;
 
-    dtkContainerVectorReal& array = d->receiver_array.data();
+    const dtkContainerVectorReal& array(d->receiver_array.data());
 
     qlonglong from = qvariant_cast<qlonglong>(d->receiver_from.data());
     if (from >= array.count()) {

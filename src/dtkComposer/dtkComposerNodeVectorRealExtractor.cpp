@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 26 16:10:51 2012 (+0200)
+ * Last-Updated: Thu Jun 28 16:38:38 2012 (+0200)
  *           By: tkloczko
- *     Update #: 70
+ *     Update #: 72
  */
 
 /* Commentary:
@@ -100,7 +100,7 @@ void dtkComposerNodeVectorRealExtractor::run(void)
     if(d->receiver_index.isEmpty())
         return;
 
-    dtkVectorReal& vector(d->receiver_vector.data());
+    const dtkVectorReal& vector(d->receiver_vector.data());
     qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
 
     if (index < vector.getRows())

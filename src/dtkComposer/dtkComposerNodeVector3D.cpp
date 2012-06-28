@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 10:19:40 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May  3 13:22:50 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 60
+ * Last-Updated: Thu Jun 28 17:00:17 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -130,7 +130,7 @@ void dtkComposerNodeVector3D::run(void)
 {
     if (!d->receiver_vec.isEmpty()) {
 
-        dtkVector3DReal vec(d->receiver_vec.data());
+        const dtkVector3DReal& vec(d->receiver_vec.data());
 
         d->emitter_vec.setData(vec);
         d->emitter_x.setData(vec[0]);

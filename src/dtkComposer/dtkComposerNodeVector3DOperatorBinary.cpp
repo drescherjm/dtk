@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 16:15:40 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 17:57:39 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 25
+ * Last-Updated: Thu Jun 28 17:18:23 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 43
  */
 
 /* Commentary:
@@ -119,14 +119,10 @@ void dtkComposerNodeVector3DOperatorBinarySum::run(void)
 {
     if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
-        //this->releaseReceivers();
         d->emitter_vec.setData(dtkVector3DReal());
 
     } else {
-        dtkVector3DReal& vector1 = d->receiver_lhs.data();
-        dtkVector3DReal& vector2 = d->receiver_rhs.data();
-        // this->releaseReceivers();
-        d->emitter_vec.setData(vector1 + vector2);
+        d->emitter_vec.setData(d->receiver_lhs.data() + d->receiver_rhs.data());
 
     }
 }
@@ -142,9 +138,7 @@ void dtkComposerNodeVector3DOperatorBinarySubstract::run(void)
         d->emitter_vec.setData(dtkVector3DReal());
 
     } else {
-        dtkVector3DReal& vector1 = d->receiver_lhs.data();
-        dtkVector3DReal& vector2 = d->receiver_rhs.data();
-        d->emitter_vec.setData(vector1 - vector2);
+        d->emitter_vec.setData(d->receiver_lhs.data() - d->receiver_rhs.data());
 
     }
 }
@@ -159,9 +153,7 @@ void dtkComposerNodeVector3DOperatorBinaryCrossProd::run(void)
         d->emitter_vec.setData(dtkVector3DReal());
 
     } else {
-        dtkVector3DReal& vector1 = d->receiver_lhs.data();
-        dtkVector3DReal& vector2 = d->receiver_rhs.data();
-        d->emitter_vec.setData(vector1 % vector2);
+        d->emitter_vec.setData(d->receiver_lhs.data() % d->receiver_rhs.data());
 
     }
 }
@@ -177,9 +169,7 @@ void dtkComposerNodeVector3DOperatorBinaryScalarDotProd::run(void)
         d->emitter_val.setData(qreal());
 
     } else {
-        dtkVector3DReal& vector1 = d->receiver_lhs.data();
-        dtkVector3DReal& vector2 = d->receiver_rhs.data();
-        d->emitter_val.setData(vector1 * vector2);
+        d->emitter_val.setData(d->receiver_lhs.data() * d->receiver_rhs.data());
 
     }
 }
@@ -196,9 +186,8 @@ void dtkComposerNodeVector3DOperatorHomotheticMult::run(void)
 
 
     } else {
-        dtkVectorReal& vector(d->receiver_vec.data());
-        qreal value = qvariant_cast<qreal>(d->receiver_val.data());
-        d->emitter_vec.setData(vector * value);
+        d->emitter_vec.setData(d->receiver_vec.data() * qvariant_cast<qreal>(d->receiver_val.data()));
+
     }
 }
 
@@ -214,14 +203,15 @@ void dtkComposerNodeVector3DOperatorHomotheticDivision::run(void)
 
 
     } else {
-        dtkVectorReal& vector(d->receiver_vec.data());
         qreal value = qvariant_cast<qreal>(d->receiver_val.data());
 
-        if (d->receiver_val.data()!=0)
-            d->emitter_vec.setData(vector / value);
+        if (value != 0 ) {
+            d->emitter_vec.setData(d->receiver_vec.data() / value);
 
-        else
+        } else {
             dtkWarn() << "You divide by zero. Nothing is done" ;
+            d->emitter_vec.setData(d->receiver_vec.data());
 
+        }
     }
 }

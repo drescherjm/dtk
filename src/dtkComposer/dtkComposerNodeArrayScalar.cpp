@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 26 16:06:58 2012 (+0200)
+ * Last-Updated: Thu Jun 28 16:58:04 2012 (+0200)
  *           By: tkloczko
- *     Update #: 68
+ *     Update #: 70
  */
 
 /* Commentary: 
@@ -110,7 +110,7 @@ void dtkComposerNodeArrayScalar::run(void)
 {
     if (!d->receiver_array.isEmpty()) {
 
-        dtkContainerVectorReal &array(d->receiver_array.data());
+        const dtkContainerVectorReal& array(d->receiver_array.data());
 
         d->emitter_array.setData(array);
         d->emitter_size.setData(array.count());

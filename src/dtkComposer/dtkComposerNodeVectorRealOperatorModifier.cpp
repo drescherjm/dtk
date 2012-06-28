@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 26 16:10:16 2012 (+0200)
+ * Last-Updated: Thu Jun 28 16:33:12 2012 (+0200)
  *           By: tkloczko
- *     Update #: 35
+ *     Update #: 40
  */
 
 /* Commentary:
@@ -108,7 +108,7 @@ void dtkComposerNodeVectorRealOperatorModifierSet::run(void)
 {
     if (!d->receiver_vector.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkVectorReal& vector(d->receiver_vector.data());
+        dtkVectorReal vector(d->receiver_vector.data());
         qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
         qreal value = qvariant_cast<qreal>(d->receiver_value.data());
 
@@ -135,7 +135,7 @@ void dtkComposerNodeVectorRealOperatorModifierSum::run(void)
 {
     if (!d->receiver_vector.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkVectorReal& vector(d->receiver_vector.data());
+        dtkVectorReal vector(d->receiver_vector.data());
         qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
         qreal value = qvariant_cast<qreal>(d->receiver_value.data());
 
@@ -161,7 +161,7 @@ void dtkComposerNodeVectorRealOperatorModifierSubstract::run(void)
 {
     if (!d->receiver_vector.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkVectorReal& vector(d->receiver_vector.data());
+        dtkVectorReal vector(d->receiver_vector.data());
         qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
         qreal value = qvariant_cast<qreal>(d->receiver_value.data());
 
@@ -188,7 +188,7 @@ void dtkComposerNodeVectorRealOperatorModifierMult::run(void)
 {
     if (!d->receiver_vector.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkVectorReal& vector(d->receiver_vector.data());
+        dtkVectorReal vector(d->receiver_vector.data());
         qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
         qreal value = qvariant_cast<qreal>(d->receiver_value.data());
 
@@ -215,7 +215,7 @@ void dtkComposerNodeVectorRealOperatorModifierDivide::run(void)
 {
     if (!d->receiver_vector.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkVectorReal& vector(d->receiver_vector.data());
+        dtkVectorReal vector(d->receiver_vector.data());
         qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
         qreal value = qvariant_cast<qreal>(d->receiver_value.data());
 
@@ -249,7 +249,8 @@ void dtkComposerNodeVectorRealOperatorModifierDivide::run(void)
 void dtkComposerNodeVectorRealOperatorModifierAllAdd::run(void)
 {
     if (!d->receiver_vector.isEmpty() && !d->receiver_value.isEmpty() ) {
-        dtkVectorReal& vector(d->receiver_vector.data());
+
+        dtkVectorReal vector(d->receiver_vector.data());
         qreal value = qvariant_cast<qreal>(d->receiver_value.data());
 
         for (int i = 0 ; i< vector.getRows(); ++i)
@@ -273,7 +274,8 @@ void dtkComposerNodeVectorRealOperatorModifierAllAdd::run(void)
 void dtkComposerNodeVectorRealOperatorModifierAllSubstract::run(void)
 {
     if (!d->receiver_vector.isEmpty() && !d->receiver_value.isEmpty() ) {
-        dtkVectorReal& vector(d->receiver_vector.data());
+
+        dtkVectorReal vector(d->receiver_vector.data());
         qreal value = qvariant_cast<qreal>(d->receiver_value.data());
 
         for (int i = 0 ; i< vector.getRows(); ++i)
@@ -297,7 +299,8 @@ void dtkComposerNodeVectorRealOperatorModifierAllSubstract::run(void)
 void dtkComposerNodeVectorRealOperatorModifierAllMult::run(void)
 {
     if (!d->receiver_vector.isEmpty() && !d->receiver_value.isEmpty() ) {
-        dtkVectorReal& vector(d->receiver_vector.data());
+
+        dtkVectorReal vector(d->receiver_vector.data());
         qreal value = qvariant_cast<qreal>(d->receiver_value.data());
 
         for (int i = 0 ; i< vector.getRows(); ++i)
@@ -322,7 +325,7 @@ void dtkComposerNodeVectorRealOperatorModifierAllDivide::run(void)
 {
     if (!d->receiver_vector.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkVectorReal& vector(d->receiver_vector.data());
+        dtkVectorReal vector(d->receiver_vector.data());
         qreal value = qvariant_cast<qreal>(d->receiver_value.data());
 
         if (value == 0)

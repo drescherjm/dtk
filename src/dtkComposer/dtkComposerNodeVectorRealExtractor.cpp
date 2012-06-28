@@ -101,7 +101,7 @@ void dtkComposerNodeVectorRealExtractor::run(void)
         return;
 
     dtkVectorReal& vector(d->receiver_vector.data());
-    dtkxarch_int index = qvariant_cast<dtkxarch_int>(d->receiver_index.data());
+    qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
 
     if (index < vector.getRows())
         d->emitter_value.setData(vector[index]);

@@ -101,7 +101,7 @@ void dtkComposerNodeArrayScalarExtractor::run(void)
         return;
 
     dtkContainerVectorReal& array(d->receiver_array.data());
-    dtkxarch_int index = qvariant_cast<dtkxarch_int>(d->receiver_index.data());
+    qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
 
     if (index < array.count())
         d->emitter_value.setData(array.at(index));
@@ -190,8 +190,8 @@ void dtkComposerNodeArrayScalarExtractorSubArray::run(void)
     dtkContainerVectorReal subarray;
     subarray.reserve(indices.count());
 
-    for(dtkxarch_int i = 0; i < indices.count(); ++i) {
-        subarray.append(array.at(qvariant_cast<dtkxarch_int>(indices.at(i))));
+    for(qlonglong i = 0; i < indices.count(); ++i) {
+        subarray.append(array.at(qvariant_cast<qlonglong>(indices.at(i))));
     }
 
     d->emitter_subarray.setData(subarray);
@@ -280,22 +280,22 @@ void dtkComposerNodeArrayScalarExtractorArrayPart::run(void)
 
     dtkContainerVectorReal& array = d->receiver_array.data();
 
-    dtkxarch_int from = qvariant_cast<dtkxarch_int>(d->receiver_from.data());
+    qlonglong from = qvariant_cast<qlonglong>(d->receiver_from.data());
     if (from >= array.count()) {
         dtkWarn() << "Starting value from is greater than array size:" << from << ">=" << array.count();
         return;
     }
 
-    dtkxarch_int length;
+    qlonglong length;
     if (!d->receiver_length.isEmpty())
-        length = qvariant_cast<dtkxarch_int>(d->receiver_length.data());
+        length = qvariant_cast<qlonglong>(d->receiver_length.data());
 
     if (length < 0) {
         dtkWarn() << "Length value is negative:" << length << "<" << 0;
         return;
     }
 
-    dtkxarch_int to = qMin((from + length), array.count());
+    qlonglong to = qMin((from + length), array.count());
     
     dtkContainerVectorReal *subarray = array.subContainer(from, to);
     d->emitter_subarray.setData(*subarray);

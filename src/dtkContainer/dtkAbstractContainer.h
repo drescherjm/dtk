@@ -64,10 +64,10 @@ public:
     virtual bool contains(const T& value) const = 0;
     virtual bool contains(const dtkAbstractContainer<T>& values) const = 0;
 
-    virtual dtkxarch_int count(void) const = 0;
+    virtual qlonglong count(void) const = 0;
 
-    virtual       T *toArray(dtkxarch_int& count) = 0;
-    virtual const T *toArray(dtkxarch_int& count) const = 0;
+    virtual       T *toArray(qlonglong& count) = 0;
+    virtual const T *toArray(qlonglong& count) const = 0;
 
 public:
     dtkAbstractContainer& operator = (const dtkAbstractContainer<T>& other);

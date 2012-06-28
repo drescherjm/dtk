@@ -58,10 +58,10 @@ public:
     }
 
 public:
-    dtkxarch_int value(void);
+    qlonglong value(void);
 
 public:
-    void setValue(dtkxarch_int value);
+    void setValue(qlonglong value);
 
 private:
     dtkComposerNodeIntegerPrivate *d;

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 15:57:15 2012 (+0200)
+ * Last-Updated: Wed Jun 27 16:38:12 2012 (+0200)
  *           By: tkloczko
- *     Update #: 474
+ *     Update #: 478
  */
 
 /* Commentary: 
@@ -74,20 +74,26 @@ dtkComposerTransmitterVariant::~dtkComposerTransmitterVariant(void)
     e = NULL;
 }
 
+//! Puts \a data into the variant transmitter which then plays the
+//! role of an emitter.
+/*! 
+ *  This methods resets the container of the transmiter. This is quite
+ *  important because it enables to test whether the variant
+ *  transmitter contains a container or not using isReset() method
+ *  from the dtkAbstractContainerWrapper class.
+ *  
+ *  
+ */
 void dtkComposerTransmitterVariant::setData(const QVariant& data)
 {
     d->variant = data;
     d->container.reset();
-
-    d->count = d->receivers.count();
 }
 
 void dtkComposerTransmitterVariant::setData(const dtkAbstractContainerWrapper& data)
 {
     d->container = data;
     d->variant = qVariantFromValue(data);
-
-    d->count = d->receivers.count();
 }
 
 void dtkComposerTransmitterVariant::setDataFromMsg(dtkDistributedMessage *msg)
@@ -99,9 +105,9 @@ void dtkComposerTransmitterVariant::setDataFromMsg(dtkDistributedMessage *msg)
         this->setData(*data);
         this->setTwinned(true);
 
-    } else if (msg->type() == "dtkxarch_int") {
+    } else if (msg->type() == "qlonglong") {
 
-        dtkxarch_int *data = reinterpret_cast<dtkxarch_int*>(msg->content().data());
+        qlonglong *data = reinterpret_cast<qlonglong*>(msg->content().data());
         this->setTwinned(false);
         this->setData(*data);
         this->setTwinned(true);

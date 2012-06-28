@@ -104,17 +104,17 @@ template <typename T> void dtkContainerVectorWrapper<T>::remove(const QVariant& 
     m_vector.remove(qvariant_cast<T>(data));
 };
 
-template <typename T> inline void dtkContainerVectorWrapper<T>::insert(const QVariant& data, dtkxarch_int index)
+template <typename T> inline void dtkContainerVectorWrapper<T>::insert(const QVariant& data, qlonglong index)
 {
     m_vector.insert(index, qvariant_cast<T>(data));
 };
 
-template <typename T> inline void dtkContainerVectorWrapper<T>::replace(const QVariant& data, dtkxarch_int index)
+template <typename T> inline void dtkContainerVectorWrapper<T>::replace(const QVariant& data, qlonglong index)
 {
     m_vector.replace(index, qvariant_cast<T>(data));
 };
 
-template <typename T> inline void dtkContainerVectorWrapper<T>::resize(dtkxarch_int size)
+template <typename T> inline void dtkContainerVectorWrapper<T>::resize(qlonglong size)
 {
     m_vector.reserve(size);
 };
@@ -129,17 +129,17 @@ template <typename T> inline bool dtkContainerVectorWrapper<T>::contains(const Q
     return m_vector.contains(qvariant_cast<T>(data));
 };
 
-template <typename T> inline dtkxarch_int dtkContainerVectorWrapper<T>::count(void) const
+template <typename T> inline qlonglong dtkContainerVectorWrapper<T>::count(void) const
 {
     return m_vector.count();
 };
 
-template <typename T> inline dtkxarch_int dtkContainerVectorWrapper<T>::indexOf(const QVariant& data, dtkxarch_int from) const
+template <typename T> inline qlonglong dtkContainerVectorWrapper<T>::indexOf(const QVariant& data, qlonglong from) const
 {
     return m_vector.indexOf(qvariant_cast<T>(data), from);
 };
 
-template <typename T> inline QVariant dtkContainerVectorWrapper<T>::at(dtkxarch_int index) const
+template <typename T> inline QVariant dtkContainerVectorWrapper<T>::at(qlonglong index) const
 {
     return qVariantFromValue(m_vector.at(index));
 };

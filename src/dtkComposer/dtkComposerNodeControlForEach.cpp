@@ -48,13 +48,13 @@ public:
     dtkComposerTransmitterVariant header_rcv;
 
     dtkComposerTransmitterProxy              block_container;
-    dtkComposerTransmitterEmitter<dtkxarch_int> block_size;
-    dtkComposerTransmitterEmitter<dtkxarch_int> block_index;
+    dtkComposerTransmitterEmitter<qlonglong> block_size;
+    dtkComposerTransmitterEmitter<qlonglong> block_index;
     dtkComposerTransmitterVariant            block_item;
 
 public:
-    dtkxarch_int counter;
-    dtkxarch_int size;
+    qlonglong counter;
+    qlonglong size;
 
     dtkAbstractContainerWrapper container;
 };

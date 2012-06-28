@@ -31,7 +31,7 @@ public:
     dtkComposerTransmitterVariant receiver;
 
 public:
-    dtkComposerTransmitterEmitter<dtkxarch_int> emitter;
+    dtkComposerTransmitterEmitter<qlonglong> emitter;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -60,15 +60,15 @@ dtkComposerNodeInteger::~dtkComposerNodeInteger(void)
 void dtkComposerNodeInteger::run(void)
 {
     if (!d->receiver.isEmpty())
-        d->emitter.setData(qvariant_cast<dtkxarch_int>(d->receiver.data()));
+        d->emitter.setData(qvariant_cast<qlonglong>(d->receiver.data()));
 }
 
-dtkxarch_int dtkComposerNodeInteger::value(void)
+qlonglong dtkComposerNodeInteger::value(void)
 {
     return d->emitter.data();
 }
 
-void dtkComposerNodeInteger::setValue(dtkxarch_int value)
+void dtkComposerNodeInteger::setValue(qlonglong value)
 {
     d->emitter.setData(value);
 }

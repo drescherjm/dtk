@@ -34,8 +34,8 @@
 class dtkComposerNodeWorldPrivate
 {
 public:
-    dtkComposerTransmitterEmitter<dtkxarch_int> emitter_rank;
-    dtkComposerTransmitterEmitter<dtkxarch_int> emitter_size;
+    dtkComposerTransmitterEmitter<qlonglong> emitter_rank;
+    dtkComposerTransmitterEmitter<qlonglong> emitter_size;
     dtkComposerTransmitterEmitter<dtkDistributedCommunicatorMpi *> emitter_communicator;
 
 };

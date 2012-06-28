@@ -216,8 +216,8 @@ void dtkComposerNodeRemote::begin(void)
                 break;
             }
             case QVariant::LongLong: {
-                dtkxarch_int data = t->data().toLongLong();
-                dataType = "dtkxarch_int";
+                qlonglong data = t->data().toLongLong();
+                dataType = "qlonglong";
                 array = QByteArray(reinterpret_cast<const char*>(&data), sizeof(data));
                 break;
             }
@@ -329,8 +329,8 @@ void dtkComposerNodeRemote::end(void)
                     break;
                 }
                 case QVariant::LongLong: {
-                    dtkxarch_int data = t->data().toLongLong();
-                    dataType = "dtkxarch_int";
+                    qlonglong data = t->data().toLongLong();
+                    dataType = "qlonglong";
                     array = QByteArray(reinterpret_cast<const char*>(&data), sizeof(data));
                     break;
                 }
@@ -389,8 +389,8 @@ public:
     dtkComposerTransmitterEmitter<QString> id;
 
     dtkComposerTransmitterReceiver<QString> cluster;
-    dtkComposerTransmitterReceiver<dtkxarch_int> nodes;
-    dtkComposerTransmitterReceiver<dtkxarch_int> cores;
+    dtkComposerTransmitterReceiver<qlonglong> nodes;
+    dtkComposerTransmitterReceiver<qlonglong> cores;
     dtkComposerTransmitterReceiver<QString> walltime;
     dtkComposerTransmitterReceiver<QString> queuename;
     dtkComposerTransmitterReceiver<QString> application;

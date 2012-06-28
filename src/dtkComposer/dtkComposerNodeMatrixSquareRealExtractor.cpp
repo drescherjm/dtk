@@ -111,8 +111,8 @@ void dtkComposerNodeMatrixSquareRealExtractor::run(void)
         return;
 
     dtkMatrixSquareReal& matrix(d->receiver_matrix.data());
-    dtkxarch_int row = qvariant_cast<dtkxarch_int>(d->receiver_row.data());
-    dtkxarch_int col = qvariant_cast<dtkxarch_int>(d->receiver_col.data());
+    qlonglong row = qvariant_cast<qlonglong>(d->receiver_row.data());
+    qlonglong col = qvariant_cast<qlonglong>(d->receiver_col.data());
 
     if (row < matrix.getRows() && col < matrix.getCols())
         d->emitter_value.setData(matrix[row][col]);

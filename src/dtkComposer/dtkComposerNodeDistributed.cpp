@@ -101,7 +101,7 @@ void dtkComposerNodeCommunicatorUninitialize::run(void)
 class dtkComposerNodeCommunicatorRankPrivate
 {
 public:
-    dtkComposerTransmitterEmitter<dtkxarch_int> emitter;
+    dtkComposerTransmitterEmitter<qlonglong> emitter;
     dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi *> receiver;
 };
 
@@ -133,7 +133,7 @@ void dtkComposerNodeCommunicatorRank::run(void)
 class dtkComposerNodeCommunicatorSizePrivate
 {
 public:
-    dtkComposerTransmitterEmitter<dtkxarch_int> emitter;
+    dtkComposerTransmitterEmitter<qlonglong> emitter;
     dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi *> receiver;
 
 };
@@ -164,10 +164,10 @@ void dtkComposerNodeCommunicatorSize::run(void)
 class dtkComposerNodeCommunicatorSendIntegerPrivate
 {
 public:
-    // dtkComposerTransmitterEmitter<dtkxarch_int> emitter;
+    // dtkComposerTransmitterEmitter<qlonglong> emitter;
     dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi *> receiver_comm;
-    dtkComposerTransmitterReceiver<dtkxarch_int> receiver_data;
-    dtkComposerTransmitterReceiver<dtkxarch_int> receiver_target;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_data;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_target;
 
 };
 
@@ -177,7 +177,7 @@ dtkComposerNodeCommunicatorSendInteger::dtkComposerNodeCommunicatorSendInteger(v
     this->appendReceiver(&(d->receiver_data));
     this->appendReceiver(&(d->receiver_target));
 
-    // d->emitter = new dtkComposerTransmitterEmitter<dtkxarch_int>(this);
+    // d->emitter = new dtkComposerTransmitterEmitter<qlonglong>(this);
     // this->appendEmitter(d->emitter);
 }
 
@@ -190,7 +190,7 @@ dtkComposerNodeCommunicatorSendInteger::~dtkComposerNodeCommunicatorSendInteger(
 
 void dtkComposerNodeCommunicatorSendInteger::run(void)
 {
-    dtkxarch_int i = d->receiver_data.data();
+    qlonglong i = d->receiver_data.data();
     d->receiver_comm.data()->send(&i, 1, dtkDistributedCommunicator::dtkDistributedCommunicatorInt64,d->receiver_target.data(),0 );
 }
 
@@ -203,7 +203,7 @@ class dtkComposerNodeCommunicatorSendRealPrivate
 public:
     dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi *> receiver_comm;
     dtkComposerTransmitterReceiver<double> receiver_data;
-    dtkComposerTransmitterReceiver<dtkxarch_int> receiver_target;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_target;
 
 };
 
@@ -239,7 +239,7 @@ class dtkComposerNodeCommunicatorSendPrivate
 public:
     dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi *> receiver_comm;
     dtkComposerTransmitterReceiver<dtkAbstractData *> receiver_data;
-    dtkComposerTransmitterReceiver<dtkxarch_int> receiver_target;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_target;
 
 };
 
@@ -271,10 +271,10 @@ void dtkComposerNodeCommunicatorSend::run(void)
 class dtkComposerNodeCommunicatorReceiveIntegerPrivate
 {
 public:
-    dtkComposerTransmitterEmitter<dtkxarch_int> emitter;
+    dtkComposerTransmitterEmitter<qlonglong> emitter;
 
     dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi *> receiver_comm;
-    dtkComposerTransmitterReceiver<dtkxarch_int> receiver_source;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_source;
 
 };
 
@@ -295,7 +295,7 @@ dtkComposerNodeCommunicatorReceiveInteger::~dtkComposerNodeCommunicatorReceiveIn
 
 void dtkComposerNodeCommunicatorReceiveInteger::run(void)
 {
-    dtkxarch_int i;
+    qlonglong i;
     d->receiver_comm.data()->receive(&i, 1, dtkDistributedCommunicator::dtkDistributedCommunicatorInt64,d->receiver_source.data(),0 );
     d->emitter.setData(i);
 }
@@ -311,7 +311,7 @@ public:
     dtkComposerTransmitterEmitter<double> emitter;
 
     dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi *> receiver_comm;
-    dtkComposerTransmitterReceiver<dtkxarch_int> receiver_source;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_source;
 
 };
 
@@ -348,7 +348,7 @@ public:
     dtkComposerTransmitterEmitter<dtkAbstractData *> emitter;
 
     dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi *> receiver_comm;
-    dtkComposerTransmitterReceiver<dtkxarch_int> receiver_source;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_source;
 
 };
 

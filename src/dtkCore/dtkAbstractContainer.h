@@ -73,21 +73,21 @@ public:
     virtual void prepend(const QVariant& data);
     virtual void  remove(const QVariant& data);
 
-    virtual void  insert(const QVariant& data, dtkxarch_int index);
-    virtual void replace(const QVariant& data, dtkxarch_int index);
+    virtual void  insert(const QVariant& data, qlonglong index);
+    virtual void replace(const QVariant& data, qlonglong index);
 
-    virtual void resize(dtkxarch_int size);
+    virtual void resize(qlonglong size);
 
 public:
     virtual bool  isEmpty(void) const;
 
     virtual bool contains(const QVariant& data) const;
 
-    virtual dtkxarch_int count(void) const;
+    virtual qlonglong count(void) const;
 
-    virtual dtkxarch_int indexOf(const QVariant& data, dtkxarch_int from = 0) const;
+    virtual qlonglong indexOf(const QVariant& data, qlonglong from = 0) const;
      
-    virtual QVariant    at(dtkxarch_int index) const;
+    virtual QVariant    at(qlonglong index) const;
     virtual QVariant first(void) const;
     virtual QVariant  last(void) const;
 

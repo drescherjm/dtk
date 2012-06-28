@@ -38,7 +38,7 @@ public:
 
 public:
     dtkComposerTransmitterEmitter<dtkMatrixSquareReal> emitter_matrix;
-    dtkComposerTransmitterEmitter<dtkxarch_int> emitter_size;
+    dtkComposerTransmitterEmitter<qlonglong> emitter_size;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -116,12 +116,12 @@ void dtkComposerNodeMatrixSquareReal::run(void)
 
     } else {
 
-        dtkxarch_int size = 0;
+        qlonglong size = 0;
         qreal value = 0;
         dtkMatrixSquareReal matrix;
 
         if (!d->receiver_size.isEmpty())
-            size = qvariant_cast<dtkxarch_int>(d->receiver_size.data());
+            size = qvariant_cast<qlonglong>(d->receiver_size.data());
 
         if (size == 0) {
             dtkWarn() << "The size of the matrix is zero." ;

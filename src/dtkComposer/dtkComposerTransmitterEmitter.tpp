@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 15:57:58 2012 (+0200)
+ * Last-Updated: Wed Jun 27 16:08:26 2012 (+0200)
  *           By: tkloczko
- *     Update #: 205
+ *     Update #: 208
  */
 
 /* Commentary: 
@@ -58,8 +58,6 @@ template <typename T> inline void dtkComposerTransmitterEmitter<T>::setData(cons
     m_data = data; 
     d->variant = qVariantFromValue(m_data);
     d->container.reset();
-
-    d->count = d->receivers.count();
 };
 
 //! Returns the data as a modifiable reference.
@@ -134,8 +132,6 @@ template <typename T> inline void dtkComposerTransmitterEmitterVector<T>::setDat
     m_vector = vector;
     d->container = dtkContainerVectorWrapper<T>(m_vector);
     d->variant = qVariantFromValue(d->container);
-    
-    d->count = d->receivers.count();
 };
 
 template <typename T> inline dtkContainerVector<T>& dtkComposerTransmitterEmitterVector<T>::data(void)

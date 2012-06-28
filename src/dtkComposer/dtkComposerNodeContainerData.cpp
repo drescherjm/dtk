@@ -34,7 +34,7 @@ class dtkComposerNodeContainerDataPrivate
 {
 public:
     dtkComposerTransmitterReceiver<QString>   receiver_str;
-    dtkComposerTransmitterReceiver<dtkxarch_int> receiver_int;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_int;
 
 public:    
     dtkComposerTransmitterVariant emitter;
@@ -101,7 +101,7 @@ QString dtkComposerNodeContainerData::outputLabelHint(int port)
 void dtkComposerNodeContainerData::run(void)
 {
     QString type;
-    dtkxarch_int size = 0;
+    qlonglong size = 0;
 
     if (!d->receiver_str.isEmpty())
         type = d->receiver_str.data();

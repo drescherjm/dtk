@@ -39,7 +39,7 @@ public:
 
 public:
     dtkComposerTransmitterEmitterVector<qreal> emitter_array;
-    dtkComposerTransmitterEmitter<dtkxarch_int>   emitter_size;
+    dtkComposerTransmitterEmitter<qlonglong>   emitter_size;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -117,12 +117,12 @@ void dtkComposerNodeArrayScalar::run(void)
 
     } else {
 
-        dtkxarch_int size = 0;
+        qlonglong size = 0;
         qreal value = 0;
         dtkContainerVector<qreal> array;
 
         if (!d->receiver_size.isEmpty())
-            size = qvariant_cast<dtkxarch_int>(d->receiver_size.data());
+            size = qvariant_cast<qlonglong>(d->receiver_size.data());
 
         if (size == 0) {
             dtkWarn() << "The size of the array is zero." ;

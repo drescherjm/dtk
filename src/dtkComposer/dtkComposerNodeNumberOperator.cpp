@@ -238,7 +238,7 @@ void dtkComposerNodeNumberOperatorUnaryIncr::run(void)
     case QVariant::UInt:
     case QVariant::LongLong:
     case QVariant::ULongLong:
-        d->emitter.setData(qVariantValue<dtkxarch_int>(d->receiver.data()) + 1);
+        d->emitter.setData(qVariantValue<qlonglong>(d->receiver.data()) + 1);
         break;
     case QVariant::Double:
         d->emitter.setData(qVariantValue<double>(d->receiver.data()) + 1);
@@ -260,7 +260,7 @@ void dtkComposerNodeNumberOperatorUnaryDecr::run(void)
     case QVariant::UInt:
     case QVariant::LongLong:
     case QVariant::ULongLong:
-        d->emitter.setData(qVariantValue<dtkxarch_int>(d->receiver.data()) - 1);
+        d->emitter.setData(qVariantValue<qlonglong>(d->receiver.data()) - 1);
         break;
     case QVariant::Double:
         d->emitter.setData(qVariantValue<double>(d->receiver.data()) - 1);
@@ -282,7 +282,7 @@ void dtkComposerNodeNumberOperatorUnarySqrt::run(void)
     case QVariant::UInt:
     case QVariant::LongLong:
     case QVariant::ULongLong:
-        d->emitter.setData(sqrt(qVariantValue<dtkxarch_int>(d->receiver.data())));
+        d->emitter.setData(sqrt(qVariantValue<qlonglong>(d->receiver.data())));
         break;
     case QVariant::Double:
         d->emitter.setData(sqrt(qVariantValue<double>(d->receiver.data())));
@@ -299,7 +299,7 @@ void dtkComposerNodeNumberOperatorUnarySqrt::run(void)
 
 void dtkComposerNodeNumberOperatorUnarySquare::run(void)
 {
-    dtkxarch_int ll;
+    qlonglong ll;
     double dd;
 
     switch(d->receiver.type()) {
@@ -307,7 +307,7 @@ void dtkComposerNodeNumberOperatorUnarySquare::run(void)
     case QVariant::UInt:
     case QVariant::LongLong:
     case QVariant::ULongLong:
-        ll = qVariantValue<dtkxarch_int>(d->receiver.data());
+        ll = qVariantValue<qlonglong>(d->receiver.data());
         d->emitter.setData(ll*ll);
         break;
     case QVariant::Double:
@@ -477,7 +477,7 @@ void dtkComposerNodeNumberOperatorUnaryAbs::run(void)
     case QVariant::UInt:
     case QVariant::LongLong:
     case QVariant::ULongLong:
-        d->emitter.setData(abs(qVariantValue<dtkxarch_int>(d->receiver.data())));
+        d->emitter.setData(abs(qVariantValue<qlonglong>(d->receiver.data())));
         break;
     case QVariant::Double:
         d->emitter.setData(abs(qVariantValue<double>(d->receiver.data())));
@@ -494,8 +494,8 @@ void dtkComposerNodeNumberOperatorUnaryAbs::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryEucldiv::run(void)
 {
-    dtkxarch_int a = d->receiver_lhs.data().toLongLong();
-    dtkxarch_int b = d->receiver_rhs.data().toLongLong();
+    qlonglong a = d->receiver_lhs.data().toLongLong();
+    qlonglong b = d->receiver_rhs.data().toLongLong();
     d->emitter.setData(a / b);
 }
 
@@ -549,8 +549,8 @@ void dtkComposerNodeNumberOperatorBinaryMax::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryModulo::run(void)
 {
-    dtkxarch_int a = d->receiver_lhs.data().toLongLong();
-    dtkxarch_int b = d->receiver_rhs.data().toLongLong();
+    qlonglong a = d->receiver_lhs.data().toLongLong();
+    qlonglong b = d->receiver_rhs.data().toLongLong();
     d->emitter.setData(a % b);
 }
 

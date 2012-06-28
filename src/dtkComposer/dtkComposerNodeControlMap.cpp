@@ -49,14 +49,14 @@ public:
     dtkComposerTransmitterVariant footer_emit;
 
     dtkComposerTransmitterProxy                 block_container;
-    dtkComposerTransmitterEmitter<dtkxarch_int> block_size;
-    dtkComposerTransmitterEmitter<dtkxarch_int> block_index;
+    dtkComposerTransmitterEmitter<qlonglong> block_size;
+    dtkComposerTransmitterEmitter<qlonglong> block_index;
     dtkComposerTransmitterVariant               block_item;
     dtkComposerTransmitterVariant               block_newitem;
 
 public:
-    dtkxarch_int counter;
-    dtkxarch_int size;
+    qlonglong counter;
+    qlonglong size;
 
     dtkAbstractContainerWrapper container;
     dtkAbstractContainerWrapper *out_container;

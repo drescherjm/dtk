@@ -32,8 +32,8 @@
 class dtkComposerNodeProcessPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<dtkxarch_int> receiver_integer_0;
-    dtkComposerTransmitterReceiver<dtkxarch_int> receiver_integer_1;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_integer_0;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_integer_1;
     dtkComposerTransmitterReceiver<double> receiver_real;
     dtkComposerTransmitterReceiver<dtkAbstractData *> receiver_data;
     dtkComposerTransmitterReceiver<QString> receiver_type;
@@ -41,7 +41,7 @@ public:
     dtkComposerTransmitterReceiver<dtkAbstractData *> receiver_rhs;
 
 public:
-    dtkComposerTransmitterEmitter<dtkxarch_int> emitter_integer;
+    dtkComposerTransmitterEmitter<qlonglong> emitter_integer;
     dtkComposerTransmitterEmitter<double> emitter_real;
     dtkComposerTransmitterEmitter<dtkAbstractData *> emitter_data;
 

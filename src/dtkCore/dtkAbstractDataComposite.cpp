@@ -180,7 +180,7 @@ void dtkAbstractDataComposite::append(dtkAbstractData *data)
  */
 void dtkAbstractDataComposite::remove(dtkAbstractData *data)
 {
-    dtkxarch_int index;
+    qlonglong index;
 
     switch(d->type){
     case dtkAbstractDataComposite::Vector:
@@ -239,9 +239,9 @@ bool dtkAbstractDataComposite::has(dtkAbstractData *data) const
 /*! 
  *  
  */
-dtkxarch_int dtkAbstractDataComposite::count(void)
+qlonglong dtkAbstractDataComposite::count(void)
 {
-    dtkxarch_int count = 0;
+    qlonglong count = 0;
 
     switch(d->type){
     case dtkAbstractDataComposite::Vector:
@@ -270,9 +270,9 @@ dtkxarch_int dtkAbstractDataComposite::count(void)
 /*! 
  *  
  */
-dtkxarch_int dtkAbstractDataComposite::indexOf(dtkAbstractData *data, dtkxarch_int from)
+qlonglong dtkAbstractDataComposite::indexOf(dtkAbstractData *data, qlonglong from)
 {
-    dtkxarch_int index = -1;
+    qlonglong index = -1;
 
     switch(d->type){
     case dtkAbstractDataComposite::Vector:
@@ -308,7 +308,7 @@ dtkAbstractDataComposite::Type dtkAbstractDataComposite::type(void)
 /*! 
  *   \a index must be a valid index position in the composite (i.e., 0 <= i < size).
  */
-const dtkAbstractData *dtkAbstractDataComposite::at(dtkxarch_int index) const 
+const dtkAbstractData *dtkAbstractDataComposite::at(qlonglong index) const 
 {
     dtkAbstractData *data = NULL;
 
@@ -337,7 +337,7 @@ const dtkAbstractData *dtkAbstractDataComposite::at(dtkxarch_int index) const
 /*! 
  *   \a index must be a valid index position in the composite (i.e., 0 <= i < size).
  */
-dtkAbstractData *dtkAbstractDataComposite::at(dtkxarch_int index)
+dtkAbstractData *dtkAbstractDataComposite::at(qlonglong index)
 {
     dtkAbstractData *data = NULL;
 

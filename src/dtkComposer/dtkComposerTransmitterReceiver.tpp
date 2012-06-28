@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 13 15:10:02 2012 (+0200)
+ * Last-Updated: Wed Jun 27 15:59:11 2012 (+0200)
  *           By: tkloczko
- *     Update #: 301
+ *     Update #: 325
  */
 
 /* Commentary: 
@@ -142,8 +142,6 @@ template <typename T> QString dtkComposerTransmitterReceiver<T>::kindName(void) 
  */
 template <typename T> bool dtkComposerTransmitterReceiver<T>::connect(dtkComposerTransmitter *transmitter)
 {
-    qDebug() << this->typeName() << transmitter->typeName();
-
     if (transmitter->kind() == Emitter) {
 
         if (this->typeName() == transmitter->typeName()) {
@@ -247,19 +245,6 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::disconnect(dtkComp
 
     return ok;
 };
-    
-//! 
-/*! 
- *  
- */
-template <typename T> void dtkComposerTransmitterReceiver<T>::clear(void)
-{
-    if (active_emitter)
-        active_emitter->clear();
-
-    if (active_variant)
-        active_variant->clear();
-};
 
 //! 
 /*! 
@@ -307,6 +292,8 @@ template <typename T> dtkComposerTransmitter::LinkMap dtkComposerTransmitterRece
 // dtkComposerTransmitterReceiverVector implementation
 // /////////////////////////////////////////////////////////////////
 
+#include <dtkContainer/dtkContainerVectorWrapper.h>
+
 template <typename T> inline dtkComposerTransmitterReceiverVector<T>::dtkComposerTransmitterReceiverVector(dtkComposerNode *parent) : dtkComposerTransmitterReceiver<T>(parent)
 {
 
@@ -322,8 +309,8 @@ template <typename T> inline dtkContainerVector<T>& dtkComposerTransmitterReceiv
     if (active_emitter)
         return active_emitter->data();
     
-    if (active_variant) 
-        return *reinterpret_cast<dtkContainerVector<T> *>(&(active_variant->container()));
+    if (active_variant)
+        return (reinterpret_cast<dtkContainerVectorWrapper<T> *>(active_variant->container().container()))->vector();
     
     return m_vector;
 };
@@ -334,7 +321,7 @@ template <typename T> inline const dtkContainerVector<T>& dtkComposerTransmitter
         return active_emitter->data();
 
     if (active_variant) 
-        return *reinterpret_cast<const dtkContainerVector<T> *>(&(active_variant->container()));
+        return (reinterpret_cast<const dtkContainerVectorWrapper<T> *>(active_variant->container().container()))->vector();
 
     return m_vector;
 };
@@ -391,9 +378,9 @@ template <typename T> bool dtkComposerTransmitterReceiverVector<T>::connect(dtkC
             }
         }
 
-    } else if (transmitter->kind() == dtkComposerTransmitter::VariantContainer) {
+    } else if (transmitter->kind() == dtkComposerTransmitter::Variant) {
 
-        dtkComposerTransmitterVariantContainer *v = dynamic_cast<dtkComposerTransmitterVariantContainer *>(transmitter);
+        dtkComposerTransmitterVariant *v = dynamic_cast<dtkComposerTransmitterVariant *>(transmitter);
 
         if(v->types().isEmpty() && !variants.contains(v)) {
             variants << v;
@@ -427,21 +414,21 @@ template <typename T> bool dtkComposerTransmitterReceiverVector<T>::disconnect(d
 
     bool ok = false;
 
-    if (transmitter->kind() == dtkComposerTransmitter::VariantContainer) {
+    if (transmitter->kind() == dtkComposerTransmitter::Variant) {
 
-        dtkComposerTransmitterVariantContainer *v = static_cast<dtkComposerTransmitterVariantContainer *>(transmitter);
-
+        dtkComposerTransmitterVariant *v = static_cast<dtkComposerTransmitterVariant *>(transmitter);
+        
         ok = variants.removeOne(v);
-
+        
         if (v == active_variant) {
-
+            
             active_variant = NULL;
-
-            foreach(dtkComposerTransmitterVariantContainer *var, variants) {
+            
+            foreach(dtkComposerTransmitterVariant *var, variants) {
                 if (var->active())
                     active_variant = var;
             }
-
+            
             if (!active_variant) {
                 foreach(dtkComposerTransmitterEmitterVector<T> *em, emitters) {
                     if (em->active())
@@ -449,7 +436,7 @@ template <typename T> bool dtkComposerTransmitterReceiverVector<T>::disconnect(d
                 }
             }
         }
-
+            
     } else {
 
         if (this->typeName() == transmitter->typeName()) {
@@ -468,7 +455,7 @@ template <typename T> bool dtkComposerTransmitterReceiverVector<T>::disconnect(d
                 }
 
                 if (!active_emitter) {
-                    foreach(dtkComposerTransmitterVariantContainer *var, variants) {
+                    foreach(dtkComposerTransmitterVariant *var, variants) {
                         if (var->active())
                             active_variant = var;
                     }
@@ -491,19 +478,6 @@ template <typename T> bool dtkComposerTransmitterReceiverVector<T>::isEmpty(void
 
     return false;
 };
-    
-//! 
-/*! 
- *  
- */
-template <typename T> void dtkComposerTransmitterReceiverVector<T>::clear(void)
-{
-    if (active_emitter)
-        active_emitter->clear();
-
-    if (active_variant)
-        active_variant->clear();
-};
 
 //! 
 /*! 
@@ -521,7 +495,7 @@ template <typename T> void dtkComposerTransmitterReceiverVector<T>::setActiveEmi
         }
     }
     
-    foreach(dtkComposerTransmitterVariantContainer *v, variants) {
+    foreach(dtkComposerTransmitterVariant *v, variants) {
         if (emitter == static_cast<dtkComposerTransmitter *>(v)) {
             active_variant = v;
             return;

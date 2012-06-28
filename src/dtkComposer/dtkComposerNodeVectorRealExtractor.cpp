@@ -1,12 +1,12 @@
-/* dtkComposerNodeVectorRealOperatorExtractor.cpp ---
+/* dtkComposerNodeVectorRealExtractor.cpp ---
  *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun 15 09:51:39 2012 (+0200)
- *           By: sblekout
- *     Update #: 66
+ * Last-Updated: Tue Jun 26 16:10:51 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 70
  */
 
 /* Commentary:
@@ -17,7 +17,7 @@
  *
  */
 
-#include "dtkComposerNodeVectorRealOperatorExtractor.h"
+#include "dtkComposerNodeVectorRealExtractor.h"
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
@@ -29,7 +29,7 @@
 //
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNodeVectorRealOperatorExtractorPrivate
+class dtkComposerNodeVectorRealExtractorPrivate
 {
 public:
     dtkComposerTransmitterReceiver<dtkVectorReal> receiver_vector;
@@ -43,7 +43,7 @@ public:
 //
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNodeVectorRealOperatorExtractor::dtkComposerNodeVectorRealOperatorExtractor(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVectorRealOperatorExtractorPrivate)
+dtkComposerNodeVectorRealExtractor::dtkComposerNodeVectorRealExtractor(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVectorRealExtractorPrivate)
 {
     this->appendReceiver(&d->receiver_vector);
 
@@ -56,14 +56,14 @@ dtkComposerNodeVectorRealOperatorExtractor::dtkComposerNodeVectorRealOperatorExt
     this->appendEmitter(&d->emitter_value);
 }
 
-dtkComposerNodeVectorRealOperatorExtractor::~dtkComposerNodeVectorRealOperatorExtractor(void)
+dtkComposerNodeVectorRealExtractor::~dtkComposerNodeVectorRealExtractor(void)
 {
     delete d;
 
     d = NULL;
 }
 
-QString dtkComposerNodeVectorRealOperatorExtractor::inputLabelHint(int port)
+QString dtkComposerNodeVectorRealExtractor::inputLabelHint(int port)
 {
     switch(port) {
     case 0:
@@ -79,7 +79,7 @@ QString dtkComposerNodeVectorRealOperatorExtractor::inputLabelHint(int port)
     return "port";
 }
 
-QString dtkComposerNodeVectorRealOperatorExtractor::outputLabelHint(int port)
+QString dtkComposerNodeVectorRealExtractor::outputLabelHint(int port)
 {
     switch(port) {
     case 0:
@@ -92,7 +92,7 @@ QString dtkComposerNodeVectorRealOperatorExtractor::outputLabelHint(int port)
     return "port";
 }
 
-void dtkComposerNodeVectorRealOperatorExtractor::run(void)
+void dtkComposerNodeVectorRealExtractor::run(void)
 {
     if(d->receiver_vector.isEmpty())
         return;
@@ -101,7 +101,11 @@ void dtkComposerNodeVectorRealOperatorExtractor::run(void)
         return;
 
     dtkVectorReal& vector(d->receiver_vector.data());
-    qlonglong index = qvariant_cast<qreal>(d->receiver_index.data());
+    qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
 
-    d->emitter_value.setData(vector[index]);
+    if (index < vector.getRows())
+        d->emitter_value.setData(vector[index]);
+    else
+        dtkWarn() << "index is larger than size of the vector:" << index << ">=" << vector.getRows();
+        
 }

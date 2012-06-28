@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 13 14:59:38 2012 (+0200)
+ * Last-Updated: Wed Jun 27 16:00:41 2012 (+0200)
  *           By: tkloczko
- *     Update #: 110
+ *     Update #: 113
  */
 
 /* Commentary: 
@@ -62,9 +62,6 @@ public:
     bool disconnect(dtkComposerTransmitter *transmitter);
 
 public:
-    void clear(void);
-
-public:
     void setActiveEmitter(dtkComposerTransmitter *emitter);
 
 public:
@@ -111,18 +108,15 @@ public:
     bool isEmpty(void) const;
 
 public:
-    void clear(void);
-
-public:
     void setActiveEmitter(dtkComposerTransmitter *emitter);
 
 private:
     QList<dtkComposerTransmitterEmitterVector<T> *> emitters;
-    QList<dtkComposerTransmitterVariantContainer *> variants;
+    QList<dtkComposerTransmitterVariant *>          variants;
 
 private:
     dtkComposerTransmitterEmitterVector<T> *active_emitter;
-    dtkComposerTransmitterVariantContainer *active_variant;
+    dtkComposerTransmitterVariant          *active_variant;
 
 private:
     dtkContainerVector<T> m_vector;

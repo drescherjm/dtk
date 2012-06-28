@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: lun. juin 18 16:08:06 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. juin 19 14:10:16 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 78
+ * Last-Updated: Wed Jun 27 15:20:56 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 81
  */
 
 /* Commentary:
@@ -45,14 +45,14 @@ public:
     dtkComposerNodeComposite body_block;
 
 public:
-    dtkComposerTransmitterVariantContainer header_rcv;
-    dtkComposerTransmitterVariantContainer footer_emit;
+    dtkComposerTransmitterVariant header_rcv;
+    dtkComposerTransmitterVariant footer_emit;
 
-    dtkComposerTransmitterProxy              block_container;
+    dtkComposerTransmitterProxy                 block_container;
     dtkComposerTransmitterEmitter<qlonglong> block_size;
     dtkComposerTransmitterEmitter<qlonglong> block_index;
-    dtkComposerTransmitterVariant            block_item;
-    dtkComposerTransmitterVariant            block_newitem;
+    dtkComposerTransmitterVariant               block_item;
+    dtkComposerTransmitterVariant               block_newitem;
 
 public:
     qlonglong counter;
@@ -151,7 +151,11 @@ void dtkComposerNodeControlMap::setInputs(void)
 
     foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
         v->setTwinned(false);
-        v->setData(v->data());
+        if (v->container().isReset()) {
+            v->setData(v->data());
+        } else {
+            v->setData(v->container());
+        }
         v->setTwinned(true);
     }
 }
@@ -160,7 +164,11 @@ void dtkComposerNodeControlMap::setInputs(void)
 void dtkComposerNodeControlMap::setOutputs(void)
 {
     foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
-        v->twin()->setData(v->data());
+        if (v->container().isReset()) {
+            v->twin()->setData(v->data());
+        } else {
+            v->twin()->setData(v->container());
+        }
     }
 
     d->out_container->append(d->block_newitem.data());

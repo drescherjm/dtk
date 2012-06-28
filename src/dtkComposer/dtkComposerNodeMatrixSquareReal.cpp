@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette Lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 15 15:28:57 2012 (+0200)
- *           By: sblekout
- *     Update #: 40
+ * Last-Updated: Tue Jun 26 16:23:47 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 42
  */
 
 /* Commentary:
@@ -26,7 +26,7 @@
 #include <dtkLog/dtkLog>
 
 // /////////////////////////////////////////////////////////////////
-//
+// dtkComposerNodeMatrixSquareRealPrivate interface
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeMatrixSquareRealPrivate
@@ -42,7 +42,7 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-//
+// dtkComposerNodeMatrixSquareReal implementation
 // /////////////////////////////////////////////////////////////////
 
 dtkComposerNodeMatrixSquareReal::dtkComposerNodeMatrixSquareReal(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMatrixSquareRealPrivate)

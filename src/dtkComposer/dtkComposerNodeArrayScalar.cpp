@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun 15 09:51:39 2012 (+0200)
+ * Last-Updated: Tue Jun 26 16:06:58 2012 (+0200)
  *           By: tkloczko
- *     Update #: 66
+ *     Update #: 68
  */
 
 /* Commentary: 
@@ -26,7 +26,7 @@
 #include <dtkLog/dtkLog>
 
 // /////////////////////////////////////////////////////////////////
-// 
+// dtkComposerNodeArrayScalarPrivate interface
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeArrayScalarPrivate
@@ -43,7 +43,7 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+// dtkComposerNodeArrayScalar implementation
 // /////////////////////////////////////////////////////////////////
 
 dtkComposerNodeArrayScalar::dtkComposerNodeArrayScalar(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeArrayScalarPrivate)

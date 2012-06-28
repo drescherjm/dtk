@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 11:19:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun 13 16:52:25 2012 (+0200)
+ * Last-Updated: Mon Jun 25 14:42:07 2012 (+0200)
  *           By: tkloczko
- *     Update #: 70
+ *     Update #: 71
  */
 
 /* Commentary: 
@@ -33,8 +33,8 @@ template <typename T> class DTKCONTAINER_EXPORT dtkContainerVector : public dtkA
 {
 public:
      dtkContainerVector(void);
-     dtkContainerVector(dtkxarch_int size);
-     dtkContainerVector(dtkxarch_int size, const T& value);
+     dtkContainerVector(qlonglong size);
+     dtkContainerVector(qlonglong size, const T& value);
      dtkContainerVector(const dtkContainerVector<T>& other);
     ~dtkContainerVector(void);
 
@@ -56,27 +56,27 @@ public:
     void remove(const dtkAbstractContainer<T>& values);
     void remove(const   dtkContainerVector<T>& values);
     
-    void insert(dtkxarch_int index, const T& value);
-    void insert(dtkxarch_int from, const dtkAbstractContainer<T>& values);
-    void insert(dtkxarch_int from, dtkxarch_int step, const dtkAbstractContainer<T>& values);
-    void insert(dtkxarch_int *indices, const dtkAbstractContainer<T>& values);
-    void insert(dtkxarch_int from, const dtkContainerVector<T>& values);
-    void insert(dtkxarch_int from, dtkxarch_int step, const dtkContainerVector<T>& values);
-    void insert(dtkxarch_int *indices, const dtkContainerVector<T>& values);
+    void insert(qlonglong index, const T& value);
+    void insert(qlonglong from, const dtkAbstractContainer<T>& values);
+    void insert(qlonglong from, qlonglong step, const dtkAbstractContainer<T>& values);
+    void insert(qlonglong *indices, const dtkAbstractContainer<T>& values);
+    void insert(qlonglong from, const dtkContainerVector<T>& values);
+    void insert(qlonglong from, qlonglong step, const dtkContainerVector<T>& values);
+    void insert(qlonglong *indices, const dtkContainerVector<T>& values);
     
-    void replace(dtkxarch_int index, const T& value);
-    void replace(dtkxarch_int from, const dtkAbstractContainer<T>& values);
-    void replace(dtkxarch_int from, dtkxarch_int step, const dtkAbstractContainer<T>& values);
-    void replace(dtkxarch_int *indices, const dtkAbstractContainer<T>& values);
-    void replace(dtkxarch_int from, const dtkContainerVector<T>& values);
-    void replace(dtkxarch_int from, dtkxarch_int step, const dtkContainerVector<T>& values);
-    void replace(dtkxarch_int *indices, const dtkContainerVector<T>& values);
+    void replace(qlonglong index, const T& value);
+    void replace(qlonglong from, const dtkAbstractContainer<T>& values);
+    void replace(qlonglong from, qlonglong step, const dtkAbstractContainer<T>& values);
+    void replace(qlonglong *indices, const dtkAbstractContainer<T>& values);
+    void replace(qlonglong from, const dtkContainerVector<T>& values);
+    void replace(qlonglong from, qlonglong step, const dtkContainerVector<T>& values);
+    void replace(qlonglong *indices, const dtkContainerVector<T>& values);
     
-    void removeAt(dtkxarch_int index);
-    void removeAt(dtkxarch_int from, dtkxarch_int to, dtkxarch_int step = 1);
+    void removeAt(qlonglong index);
+    void removeAt(qlonglong from, qlonglong to, qlonglong step = 1);
 
-    void reserve(dtkxarch_int value);
-    void resize(dtkxarch_int size);
+    void reserve(qlonglong value);
+    void resize(qlonglong size);
 
     void  squeeze(void);
 
@@ -87,24 +87,24 @@ public:
     bool contains(const dtkAbstractContainer<T>& values) const;
     bool contains(const   dtkContainerVector<T>& values) const;
 
-    dtkxarch_int capacity(void) const;
-    dtkxarch_int    count(void) const;
+    qlonglong capacity(void) const;
+    qlonglong    count(void) const;
 
-    dtkxarch_int     indexOf(const T& value, dtkxarch_int from = 0)  const;
-    dtkxarch_int lastIndexOf(const T& value, dtkxarch_int from = -1) const;
+    qlonglong     indexOf(const T& value, qlonglong from = 0)  const;
+    qlonglong lastIndexOf(const T& value, qlonglong from = -1) const;
 
-    dtkxarch_int *indicesOf(const T& value, dtkxarch_int from = 0) const;
+    qlonglong *indicesOf(const T& value, qlonglong from = 0) const;
 
-    const T& at(dtkxarch_int index) const;
+    const T& at(qlonglong index) const;
 
     const T& first(void) const;
     const T&  last(void) const;
 
-    dtkContainerVector<T> *subContainer(const dtkAbstractContainerOrdered<dtkxarch_int>& indices)  const;
-    dtkContainerVector<T> *subContainer(dtkxarch_int from, dtkxarch_int to, dtkxarch_int step = 1) const;
+    dtkContainerVector<T> *subContainer(const dtkAbstractContainerOrdered<qlonglong>& indices)  const;
+    dtkContainerVector<T> *subContainer(qlonglong from, qlonglong to, qlonglong step = 1) const;
 
-          T *toArray(dtkxarch_int& count);
-    const T *toArray(dtkxarch_int& count) const;
+          T *toArray(qlonglong& count);
+    const T *toArray(qlonglong& count) const;
 
           T *array(void);
     const T *array(void) const;
@@ -112,8 +112,8 @@ public:
     const T *constArray(void) const;
 
 public:
-    const T& operator [] (dtkxarch_int index) const;
-          T& operator [] (dtkxarch_int index)      ;
+    const T& operator [] (qlonglong index) const;
+          T& operator [] (qlonglong index)      ;
 
 public:
     dtkContainerVector& operator = (const dtkContainerVector<T>& other);
@@ -165,5 +165,10 @@ typedef dtkContainerVector<qreal> dtkContainerVectorReal;
 
 Q_DECLARE_METATYPE(dtkContainerVectorReal  );
 Q_DECLARE_METATYPE(dtkContainerVectorReal *);
+
+typedef dtkContainerVector<qlonglong> dtkContainerVectorInteger;
+
+Q_DECLARE_METATYPE(dtkContainerVectorInteger  );
+Q_DECLARE_METATYPE(dtkContainerVectorInteger *);
 
 #endif

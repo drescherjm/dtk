@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:17:21
  * Version: $Id$
- * Last-Updated: Thu May 31 04:31:30 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 252
+ * Last-Updated: Tue Jun 26 16:22:48 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 254
  */
 
 /* Commentary:
@@ -26,7 +26,7 @@
 #include <dtkCore>
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeProcessPrivate declaration
+// dtkComposerNodeProcessPrivate interface
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeProcessPrivate

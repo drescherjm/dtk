@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri May 25 09:47:39 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri May 25 09:55:48 2012 (+0200)
+ * Last-Updated: Wed Jun 27 15:12:09 2012 (+0200)
  *           By: tkloczko
- *     Update #: 8
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -26,18 +26,18 @@
 
 template <typename T> dtkContainerVectorWrapper<T>::dtkContainerVectorWrapper(dtkAbstractData *parent) : dtkAbstractContainerWrapper(parent)
 {
-
+    this->init(this);
 };
 
 template <typename T> dtkContainerVectorWrapper<T>::dtkContainerVectorWrapper(const dtkContainerVector<T>& vector, dtkAbstractData *parent) : dtkAbstractContainerWrapper(parent), m_vector(vector)
 {
-
+    this->init(this);
 };
 
 template <typename T> dtkContainerVectorWrapper<T>::dtkContainerVectorWrapper(const dtkContainerVectorWrapper& other) : dtkAbstractContainerWrapper(), m_vector(other.m_vector)
 {
     dtkAbstractData::operator=(other);
-    this->init();
+    this->init(this);
 };
 
 template <typename T> dtkContainerVectorWrapper<T>::~dtkContainerVectorWrapper(void)
@@ -57,6 +57,11 @@ template <typename T> dtkContainerVectorWrapper<T>& dtkContainerVectorWrapper<T>
 template <typename T> dtkContainerVectorWrapper<T> *dtkContainerVectorWrapper<T>::clone(void) const
 {
     return new dtkContainerVectorWrapper<T>(*this);
+};
+
+template <typename T> QString dtkContainerVectorWrapper<T>::identifier(void) const
+{
+    return "dtkContainerVectorWrapper";
 };
 
 template <typename T> inline void dtkContainerVectorWrapper<T>::setVector(const dtkContainerVector<T>& vector)
@@ -99,17 +104,17 @@ template <typename T> void dtkContainerVectorWrapper<T>::remove(const QVariant& 
     m_vector.remove(qvariant_cast<T>(data));
 };
 
-template <typename T> inline void dtkContainerVectorWrapper<T>::insert(const QVariant& data, dtkxarch_int index)
+template <typename T> inline void dtkContainerVectorWrapper<T>::insert(const QVariant& data, qlonglong index)
 {
     m_vector.insert(index, qvariant_cast<T>(data));
 };
 
-template <typename T> inline void dtkContainerVectorWrapper<T>::replace(const QVariant& data, dtkxarch_int index)
+template <typename T> inline void dtkContainerVectorWrapper<T>::replace(const QVariant& data, qlonglong index)
 {
     m_vector.replace(index, qvariant_cast<T>(data));
 };
 
-template <typename T> inline void dtkContainerVectorWrapper<T>::resize(dtkxarch_int size)
+template <typename T> inline void dtkContainerVectorWrapper<T>::resize(qlonglong size)
 {
     m_vector.reserve(size);
 };
@@ -124,17 +129,17 @@ template <typename T> inline bool dtkContainerVectorWrapper<T>::contains(const Q
     return m_vector.contains(qvariant_cast<T>(data));
 };
 
-template <typename T> inline dtkxarch_int dtkContainerVectorWrapper<T>::count(void) const
+template <typename T> inline qlonglong dtkContainerVectorWrapper<T>::count(void) const
 {
     return m_vector.count();
 };
 
-template <typename T> inline dtkxarch_int dtkContainerVectorWrapper<T>::indexOf(const QVariant& data, dtkxarch_int from) const
+template <typename T> inline qlonglong dtkContainerVectorWrapper<T>::indexOf(const QVariant& data, qlonglong from) const
 {
     return m_vector.indexOf(qvariant_cast<T>(data), from);
 };
 
-template <typename T> inline QVariant dtkContainerVectorWrapper<T>::at(dtkxarch_int index) const
+template <typename T> inline QVariant dtkContainerVectorWrapper<T>::at(qlonglong index) const
 {
     return qVariantFromValue(m_vector.at(index));
 };

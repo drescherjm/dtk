@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette lekouta, Inria.
  * Created: Thu Apr 26 10:10:43 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 15:15:05 2012 (+0200)
+ * Last-Updated: Tue Jun 26 16:24:01 2012 (+0200)
  *           By: tkloczko
- *     Update #: 10
+ *     Update #: 11
  */
 
 /* Commentary:
@@ -24,6 +24,10 @@
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeMatrixSquareRealPrivate;
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeMatrixSquareReal interface
+// /////////////////////////////////////////////////////////////////
 
 class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareReal : public dtkComposerNodeLeaf
 {

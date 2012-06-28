@@ -120,19 +120,19 @@ void dtkAbstractContainer::remove(const QVariant& data)
         m_container->remove(data);
 }
 
-void dtkAbstractContainer::insert(const QVariant& data, dtkxarch_int index)
+void dtkAbstractContainer::insert(const QVariant& data, qlonglong index)
 {
     if (m_container)
         m_container->insert(data, index);
 }
 
-void dtkAbstractContainer::replace(const QVariant& data, dtkxarch_int index)
+void dtkAbstractContainer::replace(const QVariant& data, qlonglong index)
 {
     if (m_container)
         m_container->replace(data, index);
 }
 
-void dtkAbstractContainer::resize(dtkxarch_int size)
+void dtkAbstractContainer::resize(qlonglong size)
 {
     if (m_container)
         m_container->resize(size);
@@ -154,7 +154,7 @@ bool dtkAbstractContainer::contains(const QVariant& data) const
     return false;
 }
 
-dtkxarch_int dtkAbstractContainer::count(void) const
+qlonglong dtkAbstractContainer::count(void) const
 {
     if (m_container)
         return m_container->count();
@@ -162,7 +162,7 @@ dtkxarch_int dtkAbstractContainer::count(void) const
     return -1;
 }
 
-dtkxarch_int dtkAbstractContainer::indexOf(const QVariant& data, dtkxarch_int from) const
+qlonglong dtkAbstractContainer::indexOf(const QVariant& data, qlonglong from) const
 {
     if (m_container)
         return m_container->indexOf(data, from);
@@ -170,7 +170,7 @@ dtkxarch_int dtkAbstractContainer::indexOf(const QVariant& data, dtkxarch_int fr
     return -1;
 }
 
-QVariant dtkAbstractContainer::at(dtkxarch_int index) const
+QVariant dtkAbstractContainer::at(qlonglong index) const
 {
     if (m_container)
         return m_container->at(index);

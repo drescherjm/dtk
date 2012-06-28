@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: mar. juin 19 15:41:51 2012 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 559
+## Last-Updated: Mon Jun 25 12:10:18 2012 (+0200)
+##           By: tkloczko
+##     Update #: 566
 ######################################################################
 ##
 ### Commentary:
@@ -45,7 +45,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerMachineState.h
   dtkComposerNode.h
   dtkComposerNodeArrayScalar.h
-  dtkComposerNodeArrayScalarOperatorExtractor.h
+  dtkComposerNodeArrayScalarExtractor.h
   dtkComposerNodeArrayScalarOperatorModifier.h
   dtkComposerNodeBoolean.h
   dtkComposerNodeBooleanOperator.h
@@ -68,6 +68,10 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeList.h
   dtkComposerNodeListOperator.h
   dtkComposerNodeLogger.h
+  dtkComposerNodeMatrixSquareReal.h
+  dtkComposerNodeMatrixSquareRealExtractor.h
+  dtkComposerNodeMatrixSquareRealOperatorUnary.h
+  dtkComposerNodeMatrixSquareRealOperatorBinary.h
   dtkComposerNodeNumberOperator.h
   dtkComposerNodeProcess.h
   dtkComposerNodeProxy.h
@@ -85,14 +89,10 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeVector3DOperatorBinary.h
   dtkComposerNodeVector3DOperatorTernary.h
   dtkComposerNodeVectorReal.h
-  dtkComposerNodeVectorRealOperatorExtractor.h
+  dtkComposerNodeVectorRealExtractor.h
   dtkComposerNodeVectorRealOperatorModifier.h
   dtkComposerNodeVectorRealOperatorUnary.h
   dtkComposerNodeVectorRealOperatorBinary.h
-  dtkComposerNodeMatrixSquareReal.h
-  dtkComposerNodeMatrixSquareRealOperatorExtractor.h
-  dtkComposerNodeMatrixSquareRealOperatorUnary.h
-  dtkComposerNodeMatrixSquareRealOperatorBinary.h
   dtkComposerNodeView.h
   dtkComposerScene.h
   dtkComposerSceneEdge.h
@@ -163,7 +163,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerMachineState.cpp
   dtkComposerNode.cpp
   dtkComposerNodeArrayScalar.cpp
-  dtkComposerNodeArrayScalarOperatorExtractor.cpp
+  dtkComposerNodeArrayScalarExtractor.cpp
   dtkComposerNodeArrayScalarOperatorModifier.cpp
   dtkComposerNodeBoolean.cpp
   dtkComposerNodeBooleanOperator.cpp
@@ -186,6 +186,10 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeList.cpp
   dtkComposerNodeListOperator.cpp
   dtkComposerNodeLogger.cpp
+  dtkComposerNodeMatrixSquareReal.cpp
+  dtkComposerNodeMatrixSquareRealExtractor.cpp
+  dtkComposerNodeMatrixSquareRealOperatorUnary.cpp
+  dtkComposerNodeMatrixSquareRealOperatorBinary.cpp
   dtkComposerNodeNumberOperator.cpp
   dtkComposerNodeProcess.cpp
   dtkComposerNodeProxy.cpp
@@ -203,14 +207,10 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeVector3DOperatorBinary.cpp
   dtkComposerNodeVector3DOperatorTernary.cpp
   dtkComposerNodeVectorReal.cpp
-  dtkComposerNodeVectorRealOperatorExtractor.cpp
+  dtkComposerNodeVectorRealExtractor.cpp
   dtkComposerNodeVectorRealOperatorModifier.cpp
   dtkComposerNodeVectorRealOperatorUnary.cpp
   dtkComposerNodeVectorRealOperatorBinary.cpp
-  dtkComposerNodeMatrixSquareReal.cpp
-  dtkComposerNodeMatrixSquareRealOperatorExtractor.cpp
-  dtkComposerNodeMatrixSquareRealOperatorUnary.cpp
-  dtkComposerNodeMatrixSquareRealOperatorBinary.cpp
   dtkComposerNodeView.cpp
   dtkComposerScene.cpp
   dtkComposerSceneEdge.cpp

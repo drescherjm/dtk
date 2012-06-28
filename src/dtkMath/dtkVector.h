@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:26:31 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep  9 20:12:46 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 29
+ * Last-Updated: Mon Jun 25 12:20:31 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 30
  */
 
 /* Commentary: 
@@ -75,9 +75,9 @@ public:
 
     T norm(void) const;
 
-    dtkVector unit(void) const { return (*this)/norm(); }
+    dtkVector unit(void) const { return (*this)/this->norm(); }
 
-    void makeUnit(void) { (*this) /= norm(); }
+    void makeUnit(void) { (*this) /= this->norm(); }
 };
 
 template <class T, unsigned crow> class dtkVec: public T

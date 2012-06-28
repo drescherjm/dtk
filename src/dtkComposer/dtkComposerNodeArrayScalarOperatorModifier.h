@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette lekouta, Inria.
  * Created: Thu Apr 26 16:14:44 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 15:17:53 2012 (+0200)
+ * Last-Updated: Tue Jun 26 14:14:51 2012 (+0200)
  *           By: tkloczko
- *     Update #: 39
+ *     Update #: 40
  */
 
 /* Commentary:
@@ -137,9 +137,8 @@ public:
     }
 };
 
-
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeArrayScalarOperator - PREPEND
+// dtkComposerNodeArrayScalarOperatorModifierALL - PREPEND
 // /////////////////////////////////////////////////////////////////
 
 class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorPrepend : public dtkComposerNodeArrayScalarOperatorModifierAll
@@ -195,9 +194,9 @@ public:
     }
 };
 
-///////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////
 // dtkComposerNodeArrayScalarOperatorModifierALL - Mult
-///////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////
 
 class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorModifierAllMult : public dtkComposerNodeArrayScalarOperatorModifierAll
 {

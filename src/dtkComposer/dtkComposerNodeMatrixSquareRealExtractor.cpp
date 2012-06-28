@@ -1,12 +1,12 @@
-/* dtkComposerNodeMatrixSquareRealOperatorExtractor.cpp ---
+/* dtkComposerNodeMatrixSquareRealExtractor.cpp ---
  *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun 15 09:51:39 2012 (+0200)
- *           By: sblekout
- *     Update #: 66
+ * Last-Updated: Tue Jun 26 16:25:45 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 76
  */
 
 /* Commentary:
@@ -17,7 +17,7 @@
  *
  */
 
-#include "dtkComposerNodeMatrixSquareRealOperatorExtractor.h"
+#include "dtkComposerNodeMatrixSquareRealExtractor.h"
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
@@ -26,10 +26,10 @@
 #include <dtkLog/dtkLog>
 
 // /////////////////////////////////////////////////////////////////
-//
+// dtkComposerNodeMatrixSquareRealExtractorPrivate interface
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNodeMatrixSquareRealOperatorExtractorPrivate
+class dtkComposerNodeMatrixSquareRealExtractorPrivate
 {
 public:
     dtkComposerTransmitterReceiver<dtkMatrixSquareReal> receiver_matrix;
@@ -41,16 +41,16 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-//
+// dtkComposerNodeMatrixSquareRealExtractor implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNodeMatrixSquareRealOperatorExtractor::dtkComposerNodeMatrixSquareRealOperatorExtractor(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMatrixSquareRealOperatorExtractorPrivate)
+dtkComposerNodeMatrixSquareRealExtractor::dtkComposerNodeMatrixSquareRealExtractor(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMatrixSquareRealExtractorPrivate)
 {
     this->appendReceiver(&d->receiver_matrix);
 
     QList<QVariant::Type> variant_list;
 
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double ;
+    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double;
     d->receiver_row.setTypes(variant_list);
     this->appendReceiver(&d->receiver_row);
 
@@ -60,24 +60,24 @@ dtkComposerNodeMatrixSquareRealOperatorExtractor::dtkComposerNodeMatrixSquareRea
     this->appendEmitter(&d->emitter_value);
 }
 
-dtkComposerNodeMatrixSquareRealOperatorExtractor::~dtkComposerNodeMatrixSquareRealOperatorExtractor(void)
+dtkComposerNodeMatrixSquareRealExtractor::~dtkComposerNodeMatrixSquareRealExtractor(void)
 {
     delete d;
 
     d = NULL;
 }
 
-QString dtkComposerNodeMatrixSquareRealOperatorExtractor::inputLabelHint(int port)
+QString dtkComposerNodeMatrixSquareRealExtractor::inputLabelHint(int port)
 {
     switch(port) {
     case 0:
         return "matrix";
         break;
     case 1:
-        return "row";
+        return "row index";
         break;
     case 2:
-        return "col";
+        return "col index";
         break;
     default:
         break;
@@ -86,7 +86,7 @@ QString dtkComposerNodeMatrixSquareRealOperatorExtractor::inputLabelHint(int por
     return "port";
 }
 
-QString dtkComposerNodeMatrixSquareRealOperatorExtractor::outputLabelHint(int port)
+QString dtkComposerNodeMatrixSquareRealExtractor::outputLabelHint(int port)
 {
     switch(port) {
     case 0:
@@ -99,7 +99,7 @@ QString dtkComposerNodeMatrixSquareRealOperatorExtractor::outputLabelHint(int po
     return "port";
 }
 
-void dtkComposerNodeMatrixSquareRealOperatorExtractor::run(void)
+void dtkComposerNodeMatrixSquareRealExtractor::run(void)
 {
     if(d->receiver_matrix.isEmpty())
         return;
@@ -111,8 +111,11 @@ void dtkComposerNodeMatrixSquareRealOperatorExtractor::run(void)
         return;
 
     dtkMatrixSquareReal& matrix(d->receiver_matrix.data());
-    qlonglong row = qvariant_cast<qreal>(d->receiver_row.data());
-    qlonglong col = qvariant_cast<qreal>(d->receiver_col.data());
+    qlonglong row = qvariant_cast<qlonglong>(d->receiver_row.data());
+    qlonglong col = qvariant_cast<qlonglong>(d->receiver_col.data());
 
-    d->emitter_value.setData(matrix[row][col]);
+    if (row < matrix.getRows() && col < matrix.getCols())
+        d->emitter_value.setData(matrix[row][col]);
+    else
+        dtkWarn() << "Row or col index is larger than matrix rank:" << row << "or" << col << ">=" << matrix.size();
 }

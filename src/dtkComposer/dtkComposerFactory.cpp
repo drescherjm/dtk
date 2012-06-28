@@ -252,6 +252,26 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Vector Real Divide"] = QStringList() << "vector" << "real" << "divide";
     d->types["Vector Real Divide"] = "vector_real_divide";
 
+    d->nodes << "Vector Real Add All";
+    d->descriptions["Vector Real Add All"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Add All"] = QStringList() << "vector" << "real" << "add"<< "all";
+    d->types["Vector Real Add All"] = "vector_real_add_all";
+
+    d->nodes << "Vector Real Substract All";
+    d->descriptions["Vector Real Substract All"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Substract All"] = QStringList() << "vector" << "real" << "substract"<< "all";
+    d->types["Vector Real Substract All"] = "vector_real_substract_all";
+
+    d->nodes << "Vector Real Mult All";
+    d->descriptions["Vector Real Mult All"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Mult All"] = QStringList() << "vector" << "real" << "mult"<< "all";
+    d->types["Vector Real Mult All"] = "vector_real_mult_all";
+
+    d->nodes << "Vector Real Divide All";
+    d->descriptions["Vector Real Divide All"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Divide All"] = QStringList() << "vector" << "real" << "divide"<< "all";
+    d->types["Vector Real Divide All"] = "vector_real_divide_all";
+
     d->nodes << "VectorReal Unit";
     d->descriptions["VectorReal Unit"] = "<p>Description not yet filled!</p>";
     d->tags["VectorReal Unit"] = QStringList() << "vectorReal" << "algebraic" << "unit";
@@ -985,6 +1005,18 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "vector_real_divide")
         return new dtkComposerNodeVectorRealOperatorModifierDivide;
+
+    if(type == "vector_real_add_all")
+        return new dtkComposerNodeVectorRealOperatorModifierAllAdd;
+
+    if(type == "vector_real_substract_all")
+        return new dtkComposerNodeVectorRealOperatorModifierAllSubstract;
+
+    if(type == "vector_real_mult_all")
+        return new dtkComposerNodeVectorRealOperatorModifierAllMult;
+
+    if(type == "vector_real_divide_all")
+        return new dtkComposerNodeVectorRealOperatorModifierAllDivide;
 
     if(type == "vectorReal_unit")
         return new dtkComposerNodeVectorRealOperatorUnaryUnitary;

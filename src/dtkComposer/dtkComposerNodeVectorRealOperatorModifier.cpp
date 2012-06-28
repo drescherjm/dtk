@@ -64,6 +64,42 @@ dtkComposerNodeVectorRealOperatorModifier::~dtkComposerNodeVectorRealOperatorMod
     d = NULL;
 }
 
+
+// /////////////////////////////////////////////////////////////////
+//  dtkComposerNodeVectorRealOperatorModifierAll
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeVectorRealOperatorModifierAllPrivate
+{
+public:
+    dtkComposerTransmitterReceiver<dtkVectorReal> receiver_vector;
+    dtkComposerTransmitterVariant               receiver_value;
+
+public:
+    dtkComposerTransmitterEmitter<dtkVectorReal> emitter_vector;
+};
+
+
+dtkComposerNodeVectorRealOperatorModifierAll::dtkComposerNodeVectorRealOperatorModifierAll(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVectorRealOperatorModifierAllPrivate)
+{
+    this->appendReceiver(&d->receiver_vector);
+
+    QList<QVariant::Type> variant_list;
+
+    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double;
+    d->receiver_value.setTypes(variant_list);
+    this->appendReceiver(&d->receiver_value);
+
+    this->appendEmitter(&d->emitter_vector);
+}
+
+dtkComposerNodeVectorRealOperatorModifierAll::~dtkComposerNodeVectorRealOperatorModifierAll(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeVectorRealOperatorModifier - SET
 // /////////////////////////////////////////////////////////////////
@@ -204,4 +240,105 @@ void dtkComposerNodeVectorRealOperatorModifierDivide::run(void)
         d->emitter_vector.setData(vec);
     }
 
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeVectorRealOperatorModifierAll - Add
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeVectorRealOperatorModifierAllAdd::run(void)
+{
+    if (!d->receiver_vector.isEmpty() && !d->receiver_value.isEmpty() ) {
+        dtkVectorReal& vector(d->receiver_vector.data());
+        qreal value = qvariant_cast<qreal>(d->receiver_value.data());
+
+        for (int i = 0 ; i< vector.getRows(); ++i)
+            vector[i] += value ;
+
+        d->emitter_vector.setData( vector);
+
+    } else {
+
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        dtkVectorReal vec;
+        d->emitter_vector.setData(vec);
+
+    }
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeVectorRealOperatorModifierAll - Substract
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeVectorRealOperatorModifierAllSubstract::run(void)
+{
+    if (!d->receiver_vector.isEmpty() && !d->receiver_value.isEmpty() ) {
+        dtkVectorReal& vector(d->receiver_vector.data());
+        qreal value = qvariant_cast<qreal>(d->receiver_value.data());
+
+        for (int i = 0 ; i< vector.getRows(); ++i)
+            vector[i] -= value ;
+
+        d->emitter_vector.setData( vector);
+
+    } else {
+
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        dtkVectorReal vec;
+        d->emitter_vector.setData(vec);
+
+    }
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeVectorRealOperatorModifierAll - Mult
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeVectorRealOperatorModifierAllMult::run(void)
+{
+    if (!d->receiver_vector.isEmpty() && !d->receiver_value.isEmpty() ) {
+        dtkVectorReal& vector(d->receiver_vector.data());
+        qreal value = qvariant_cast<qreal>(d->receiver_value.data());
+
+        for (int i = 0 ; i< vector.getRows(); ++i)
+            vector[i] *= value ;
+
+        d->emitter_vector.setData( vector);
+
+    } else {
+
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        dtkVectorReal vec;
+        d->emitter_vector.setData(vec);
+
+    }
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeVectorRealOperatorModifierAll - Divide
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeVectorRealOperatorModifierAllDivide::run(void)
+{
+    if (!d->receiver_vector.isEmpty() && !d->receiver_value.isEmpty() ) {
+
+        dtkVectorReal& vector(d->receiver_vector.data());
+        qreal value = qvariant_cast<qreal>(d->receiver_value.data());
+
+        if (value == 0)
+            dtkWarn() << "Value is zero. Nothing is done" ;
+
+        else {
+            for (int i = 0 ; i< vector.getRows(); ++i)
+                vector[i] /= value ;
+
+            d->emitter_vector.setData(vector);
+        }
+
+    } else {
+
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        dtkVectorReal vec;
+        d->emitter_vector.setData(vec);
+    }
 }

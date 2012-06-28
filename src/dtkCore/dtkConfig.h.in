@@ -33,4 +33,6 @@
 #cmakedefine DTK_HAVE_VRPN
 #cmakedefine DTK_HAVE_PLOT
 
+#define DTK_SOURCE_PATH "@CMAKE_SOURCE_DIR@"
+
 #endif

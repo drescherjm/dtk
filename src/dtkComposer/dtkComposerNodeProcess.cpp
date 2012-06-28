@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:17:21
  * Version: $Id$
- * Last-Updated: Tue Jun 26 16:22:48 2012 (+0200)
+ * Last-Updated: Thu Jun 28 14:14:44 2012 (+0200)
  *           By: tkloczko
- *     Update #: 254
+ *     Update #: 255
  */
 
 /* Commentary:
@@ -53,7 +53,7 @@ public:
 // dtkComposerNodeProcess implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNodeProcess::dtkComposerNodeProcess(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeProcessPrivate)
+dtkComposerNodeProcess::dtkComposerNodeProcess(void) : dtkComposerNodeLeafProcess(), d(new dtkComposerNodeProcessPrivate)
 {
     this->appendReceiver(&(d->receiver_type));
     this->appendReceiver(&(d->receiver_integer_0));

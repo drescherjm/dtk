@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. juin  8 14:38:15 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 686
+ * Last-Updated: Thu Jun 28 14:50:16 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 694
  */
 
 /* Commentary: 
@@ -24,6 +24,9 @@
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeControlCase.h"
 #include "dtkComposerNodeInteger.h"
+#include "dtkComposerNodeLeafData.h"
+#include "dtkComposerNodeLeafProcess.h"
+#include "dtkComposerNodeLeafView.h"
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
 #include "dtkComposerReader.h"
@@ -566,6 +569,33 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
             for(int i = 0; i < childNodes.count(); i++) {
                 if(childNodes.at(i).toElement().tagName() == "value") {
                     s->setValue(childNodes.at(i).childNodes().at(0).toText().data());
+                }
+            }
+        }
+
+        if(dtkComposerNodeLeafData *data_node = dynamic_cast<dtkComposerNodeLeafData *>(leaf->wrapee())) {
+
+            for(int i = 0; i < childNodes.count(); i++) {
+                if(childNodes.at(i).toElement().tagName() == "implementation") {
+                    data_node->createData(childNodes.at(i).childNodes().at(0).toText().data());
+                }
+            }
+        }
+
+        if(dtkComposerNodeLeafProcess *process_node = dynamic_cast<dtkComposerNodeLeafProcess *>(leaf->wrapee())) {
+
+            for(int i = 0; i < childNodes.count(); i++) {
+                if(childNodes.at(i).toElement().tagName() == "implementation") {
+                    process_node->createProcess(childNodes.at(i).childNodes().at(0).toText().data());
+                }
+            }
+        }
+
+        if(dtkComposerNodeLeafView *view_node = dynamic_cast<dtkComposerNodeLeafView *>(leaf->wrapee())) {
+
+            for(int i = 0; i < childNodes.count(); i++) {
+                if(childNodes.at(i).toElement().tagName() == "implementation") {
+                    view_node->createView(childNodes.at(i).childNodes().at(0).toText().data());
                 }
             }
         }

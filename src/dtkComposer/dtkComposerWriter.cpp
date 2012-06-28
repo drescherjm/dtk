@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 16 12:50:21 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 486
+ * Last-Updated: Thu Jun 28 14:49:41 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 501
  */
 
 /* Commentary: 
@@ -20,6 +20,9 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeInteger.h"
+#include "dtkComposerNodeLeafData.h"
+#include "dtkComposerNodeLeafProcess.h"
+#include "dtkComposerNodeLeafView.h"
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
 #include "dtkComposerScene.h"
@@ -303,7 +306,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
             tag.appendChild(property);
         }
 
-        if(dtkComposerNodeBoolean *boolean = dynamic_cast<dtkComposerNodeBoolean *>(node->wrapee())) {
+        if (dtkComposerNodeBoolean *boolean = dynamic_cast<dtkComposerNodeBoolean *>(node->wrapee())) {
 
             QDomText text = document.createTextNode(boolean->value() ? "true" : "false");
 
@@ -313,7 +316,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
             tag.appendChild(value);
         }
 
-        if(dtkComposerNodeInteger *integer = dynamic_cast<dtkComposerNodeInteger *>(node->wrapee())) {
+        if (dtkComposerNodeInteger *integer = dynamic_cast<dtkComposerNodeInteger *>(node->wrapee())) {
 
             QDomText text = document.createTextNode(QString::number(integer->value()));
 
@@ -323,7 +326,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
             tag.appendChild(value);
         }
 
-        if(dtkComposerNodeReal *real = dynamic_cast<dtkComposerNodeReal *>(node->wrapee())) {
+        if (dtkComposerNodeReal *real = dynamic_cast<dtkComposerNodeReal *>(node->wrapee())) {
 
             QDomText text = document.createTextNode(QString::number(real->value()));
 
@@ -333,7 +336,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
             tag.appendChild(value);
         }
 
-        if(dtkComposerNodeString *s = dynamic_cast<dtkComposerNodeString *>(node->wrapee())) {
+        if (dtkComposerNodeString *s = dynamic_cast<dtkComposerNodeString *>(node->wrapee())) {
 
             QDomText text = document.createTextNode(s->value());
 
@@ -341,6 +344,45 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
             value.appendChild(text);
 
             tag.appendChild(value);
+        }
+        
+        if (dtkComposerNodeLeafData *data_node = dynamic_cast<dtkComposerNodeLeafData *>(node->wrapee())) {
+
+            if (data_node->isAbstractData()) {
+
+                QDomText text = document.createTextNode(data_node->currentImplementation());
+
+                QDomElement implementation = document.createElement("implementation");
+                implementation.appendChild(text);
+
+                tag.appendChild(implementation);
+            }
+        }
+        
+        if (dtkComposerNodeLeafProcess *process_node = dynamic_cast<dtkComposerNodeLeafProcess *>(node->wrapee())) {
+
+            if (process_node->isAbstractProcess()) {
+
+                QDomText text = document.createTextNode(process_node->currentImplementation());
+
+                QDomElement implementation = document.createElement("implementation");
+                implementation.appendChild(text);
+
+                tag.appendChild(implementation);
+            }
+        }
+        
+        if (dtkComposerNodeLeafView *view_node = dynamic_cast<dtkComposerNodeLeafView *>(node->wrapee())) {
+
+            if (view_node->isAbstractView()) {
+
+                QDomText text = document.createTextNode(view_node->currentImplementation());
+
+                QDomElement implementation = document.createElement("implementation");
+                implementation.appendChild(text);
+
+                tag.appendChild(implementation);
+            }
         }
 
         this->extend(node, tag, document);

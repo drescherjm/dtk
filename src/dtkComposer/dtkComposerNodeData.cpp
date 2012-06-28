@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:17:21
  * Version: $Id$
- * Last-Updated: Thu May 31 01:16:54 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 276
+ * Last-Updated: Thu Jun 28 11:20:46 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 277
  */
 
 /* Commentary:
@@ -49,7 +49,7 @@ public:
 // dtkComposerNodeData implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNodeData::dtkComposerNodeData(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeDataPrivate)
+dtkComposerNodeData::dtkComposerNodeData(void) : dtkComposerNodeLeafData(), d(new dtkComposerNodeDataPrivate)
 {
     this->appendReceiver(&(d->receiver_type));
     this->appendReceiver(&(d->receiver_data));

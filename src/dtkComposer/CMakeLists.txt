@@ -107,6 +107,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerStackUtils.h
   dtkComposerStackView.h
   dtkComposerTransmitter.h
+  dtkComposerTransmitter_p.h
   dtkComposerTransmitterEmitter.h
   dtkComposerTransmitterEmitter.tpp
   dtkComposerTransmitterProxy.h

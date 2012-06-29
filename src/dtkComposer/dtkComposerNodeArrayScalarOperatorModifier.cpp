@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 16:28:32 2012 (+0200)
- *           By: tkloczko
- *     Update #: 55
+ * Last-Updated: Sat Jun 30 01:37:47 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 56
  */
 
 /* Commentary:
@@ -39,7 +39,6 @@ public:
 public:
     dtkComposerTransmitterEmitterVector<qreal> emitter_array;
 };
-
 
 dtkComposerNodeArrayScalarOperatorModifier::dtkComposerNodeArrayScalarOperatorModifier(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeArrayScalarOperatorModifierPrivate)
 {

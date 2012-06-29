@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Aug 18 19:42:04 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:52:09 2012 (+0200)
- *           By: Babette Lekouta
- *     Update #: 2
+ * Last-Updated: Sat Jun 30 01:31:02 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 4
  */
 
 /* Commentary:
@@ -23,14 +23,13 @@
 
 #include <float.h>
 
-
 // /////////////////////////////////////////////////////////////////
 // Helper functions
 // /////////////////////////////////////////////////////////////////
 
-bool TestCompare2sComplement(float A, float B, long long int maxUlps = 10);
-bool TestCompareFinal(float A, float B, long long int maxUlps = 10);
-bool TestCompareAll(float A, float B, long long int maxUlps = 10);
+bool TestCompare2sComplement(float A, float B, int32_t maxUlps = 10);
+bool TestCompareFinal(float A, float B, int32_t maxUlps = 10);
+bool TestCompareAll(float A, float B, int32_t maxUlps = 10);
 
 // /////////////////////////////////////////////////////////////////
 // dtkCompareFloatTestObjectPrivate
@@ -133,17 +132,17 @@ DTKTEST_NOGUI_MAIN(dtkCompareFloatTest, dtkCompareFloatTestObject)
 //
 // /////////////////////////////////////////////////////////////////
 
-bool TestCompare2sComplement(float A, float B, long long int maxUlps)
+bool TestCompare2sComplement(float A, float B, int32_t maxUlps)
 {
     return dtkAlmostEqual2sComplement(A, B, maxUlps);
 }
 
-bool TestCompareFinal(float A, float B, long long int maxUlps)
+bool TestCompareFinal(float A, float B, int32_t maxUlps)
 {
     return dtkAlmostEqualUlps(A, B, maxUlps);
 }
 
-bool TestCompareAll(float A, float B, long long int maxUlps)
+bool TestCompareAll(float A, float B, int32_t maxUlps)
 {
     return (TestCompare2sComplement(A, B, maxUlps) || TestCompareFinal(A, B, maxUlps));
 }

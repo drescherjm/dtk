@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun 20 13:12:23 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun 20 14:09:48 2012 (+0200)
+ * Last-Updated: Sat Jun 30 01:32:03 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 112
+ *     Update #: 113
  */
 
 /* Commentary: 
@@ -27,9 +27,9 @@
 // Helper functions
 // /////////////////////////////////////////////////////////////////
 
-bool TestCompare2sComplement(double A, double B, long long int maxUlps = 10);
-bool TestCompareFinal(double A, double B, long long int maxUlps = 10);
-bool TestCompareAll(double A, double B, long long int maxUlps = 10);
+bool TestCompare2sComplement(double A, double B, int64_t maxUlps = 10);
+bool TestCompareFinal(double A, double B, int64_t maxUlps = 10);
+bool TestCompareAll(double A, double B, int64_t maxUlps = 10);
 
 // /////////////////////////////////////////////////////////////////
 // dtkCompareDoubleTestObjectPrivate
@@ -136,17 +136,17 @@ DTKTEST_NOGUI_MAIN(dtkCompareDoubleTest, dtkCompareDoubleTestObject)
 // 
 // /////////////////////////////////////////////////////////////////
 
-bool TestCompare2sComplement(double A, double B, long long int maxUlps)
+bool TestCompare2sComplement(double A, double B, int64_t maxUlps)
 {
     return dtkAlmostEqual2sComplement(A, B, maxUlps);
 }
 
-bool TestCompareFinal(double A, double B, long long int maxUlps)
+bool TestCompareFinal(double A, double B, int64_t maxUlps)
 {
     return dtkAlmostEqualUlps(A, B, maxUlps);
 }
 
-bool TestCompareAll(double A, double B, long long int maxUlps)
+bool TestCompareAll(double A, double B, int64_t maxUlps)
 {
     return (TestCompare2sComplement(A, B, maxUlps) || TestCompareFinal(A, B, maxUlps));
 }

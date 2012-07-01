@@ -25,6 +25,7 @@ project(dtkCore)
 
 set(${PROJECT_NAME}_HEADERS
   dtkAbstractData.h
+  dtkAbstractData_p.h
   dtkAbstractDataFactory.h
   dtkAbstractDataReader.h
   dtkAbstractDataDeserializer.h
@@ -35,9 +36,12 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractDataConverter.h
   dtkAbstractFactory.h
   dtkAbstractObject.h
+  dtkAbstractObject_p.h
   dtkAbstractProcess.h
+  dtkAbstractProcess_p.h
   dtkAbstractProcessFactory.h
   dtkAbstractView.h
+  dtkAbstractView_p.h
   dtkAbstractViewAnimator.h
   dtkAbstractViewFactory.h
   dtkAbstractViewInteractor.h

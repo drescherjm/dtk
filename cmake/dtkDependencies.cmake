@@ -27,6 +27,7 @@ set(QT_USE_QTSQL         TRUE)
 set(QT_USE_QTHELP        TRUE)
 set(QT_USE_QTNETWORK     TRUE)
 set(QT_USE_QTWEBKIT      TRUE)
+set(QT_USE_QTTEST        TRUE)
 
 if(WIN32)
   set(QT_USE_QTMAIN TRUE)

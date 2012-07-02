@@ -34,6 +34,9 @@ public:
 
 public:
     dtkPlotCurve *curve;
+
+public:
+  bool dirty;
 };
 
 dtkComposerNodePlotCurve::dtkComposerNodePlotCurve(void) : QObject(), dtkComposerNodeLeaf(), d(new dtkComposerNodePlotCurvePrivate)
@@ -62,9 +65,12 @@ dtkPlotCurve *dtkComposerNodePlotCurve::curve(void)
 
 void dtkComposerNodePlotCurve::run(void)
 {
+  d->dirty = true;
+
     emit runned();
 
-    qApp->processEvents();
+    while(d->dirty)
+      qApp->processEvents();
 }
 
 void dtkComposerNodePlotCurve::onRun(void)
@@ -78,4 +84,6 @@ void dtkComposerNodePlotCurve::onRun(void)
     d->curve->append(QPointF(d->receiver_x.data(), d->receiver_y.data()));
 
     d->emitter_curve.setData(d->curve);
+
+    d->dirty = false;
 }

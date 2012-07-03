@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 14:08:54 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 14:09:35 2012 (+0200)
+ * Last-Updated: Tue Jul  3 12:29:13 2012 (+0200)
  *           By: tkloczko
- *     Update #: 2
+ *     Update #: 4
  */
 
 /* Commentary: 
@@ -64,9 +64,10 @@ QString dtkComposerNodeLeafProcess::currentImplementation(void)
 QStringList dtkComposerNodeLeafProcess::implementations(void)
 {
     QStringList implementations;
+    QStringList all_implementations = dtkAbstractProcessFactory::instance()->implementations(this->abstractProcessType());
 
-    foreach(QString implementation, dtkAbstractProcessFactory::instance()->implementations(this->abstractProcessType()))
-        implementations << implementation;
+    for (int i = 0; i < all_implementations.count(); ++i)
+        implementations << all_implementations.at(i);
 
     return implementations;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 14:49:11 2012 (+0200)
+ * Last-Updated: Tue Jul  3 12:31:35 2012 (+0200)
  *           By: tkloczko
- *     Update #: 1081
+ *     Update #: 1083
  */
 
 /* Commentary: 
@@ -1189,4 +1189,10 @@ void dtkComposerSceneNodeEditor::onImplementationChanged(const QString& implemen
 {
     if (dtkComposerNodeLeafData *data_node = dynamic_cast<dtkComposerNodeLeafData *>(d->node->wrapee()))
         data_node->createData(implementation);
+
+    else if (dtkComposerNodeLeafProcess *process_node = dynamic_cast<dtkComposerNodeLeafProcess *>(d->node->wrapee()))
+        process_node->createProcess(implementation);
+
+    else if (dtkComposerNodeLeafView *view_node = dynamic_cast<dtkComposerNodeLeafView *>(d->node->wrapee()))
+        view_node->createView(implementation);
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 10:13:10 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 12:33:22 2012 (+0200)
+ * Last-Updated: Tue Jul  3 12:36:01 2012 (+0200)
  *           By: tkloczko
- *     Update #: 58
+ *     Update #: 59
  */
 
 /* Commentary: 
@@ -64,9 +64,10 @@ QString dtkComposerNodeLeafData::currentImplementation(void)
 QStringList dtkComposerNodeLeafData::implementations(void)
 {
     QStringList implementations;
+    QStringList all_implementations = dtkAbstractDataFactory::instance()->implementations(this->abstractDataType());
 
-    foreach(QString implementation, dtkAbstractDataFactory::instance()->implementations(this->abstractDataType()))
-        implementations << implementation;
+    for (int i = 0; i < all_implementations.count(); ++i)
+        implementations << all_implementations.at(i);
 
     return implementations;
 }

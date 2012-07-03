@@ -20,6 +20,9 @@
 #include "dtkPlotView.h"
 #include "dtkPlotRenderer.h"
 
+#include <qwt_plot_renderer.h>
+
+
 class dtkPlotRendererPrivate : public QwtPlotRenderer
 {
 public:

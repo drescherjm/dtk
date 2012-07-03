@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 09:56:37 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 11:59:53 2012 (+0200)
+ * Last-Updated: Tue Jul  3 13:58:54 2012 (+0200)
  *           By: tkloczko
- *     Update #: 39
+ *     Update #: 40
  */
 
 /* Commentary: 
@@ -44,6 +44,8 @@ public:
     virtual QString abstractDataType(void) const = 0;
 
 public:
+    bool implementationHasChanged(void) const;
+
     QString currentImplementation(void);
 
     QStringList implementations(void);

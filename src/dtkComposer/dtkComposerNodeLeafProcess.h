@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 14:08:02 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 14:13:55 2012 (+0200)
+ * Last-Updated: Tue Jul  3 13:55:00 2012 (+0200)
  *           By: tkloczko
- *     Update #: 3
+ *     Update #: 5
  */
 
 /* Commentary: 
@@ -44,7 +44,9 @@ public:
     virtual QString abstractProcessType(void) const = 0;
 
 public:
-    QString currentImplementation(void);
+    bool implementationHasChanged(void) const;
+
+    QString currentImplementation(void) const;
 
     QStringList implementations(void);
 

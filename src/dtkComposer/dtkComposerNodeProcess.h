@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:15:49
  * Version: $Id$
- * Last-Updated: Thu Jun 28 14:16:59 2012 (+0200)
+ * Last-Updated: Tue Jul  3 12:10:21 2012 (+0200)
  *           By: tkloczko
- *     Update #: 9
+ *     Update #: 10
  */
 
 /* Commentary:
@@ -36,9 +36,9 @@ public:
     ~dtkComposerNodeProcess(void);
 
 public:
-    bool isAbstractProcess(void) const { return true; }
+    bool isAbstractProcess(void) const;
 
-    QString abstractProcessType(void) const { return "dtkAbstractProcess"; };
+    QString abstractProcessType(void) const;
 
 public:
     void run(void);

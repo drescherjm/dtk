@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 14:38:07 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 14:38:30 2012 (+0200)
+ * Last-Updated: Tue Jul  3 13:59:27 2012 (+0200)
  *           By: tkloczko
- *     Update #: 1
+ *     Update #: 2
  */
 
 /* Commentary: 
@@ -44,6 +44,8 @@ public:
     virtual QString abstractViewType(void) const = 0;
 
 public:
+    bool implementationHasChanged(void) const;
+
     QString currentImplementation(void);
 
     QStringList implementations(void);

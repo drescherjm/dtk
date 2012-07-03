@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 10:13:10 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul  3 12:36:01 2012 (+0200)
+ * Last-Updated: Tue Jul  3 13:58:45 2012 (+0200)
  *           By: tkloczko
- *     Update #: 59
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -30,6 +30,8 @@ class dtkComposerNodeLeafDataPrivate
 {
 public:
     dtkAbstractData *data;
+
+    bool implementation_has_changed;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -39,6 +41,7 @@ public:
 dtkComposerNodeLeafData::dtkComposerNodeLeafData(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeLeafDataPrivate)
 {
     d->data = NULL;
+    d->implementation_has_changed = false;
 }
 
 dtkComposerNodeLeafData::~dtkComposerNodeLeafData(void)
@@ -51,6 +54,11 @@ dtkComposerNodeLeafData::~dtkComposerNodeLeafData(void)
     delete d;
 
     d = NULL;
+}
+
+bool dtkComposerNodeLeafData::implementationHasChanged(void) const
+{
+    return d->implementation_has_changed;
 }
 
 QString dtkComposerNodeLeafData::currentImplementation(void)
@@ -74,6 +82,8 @@ QStringList dtkComposerNodeLeafData::implementations(void)
 
 dtkAbstractData *dtkComposerNodeLeafData::createData(const QString& implementation)
 {
+    d->implementation_has_changed = false;
+
     if (implementation.isEmpty() || implementation == "Choose implementation")
         return NULL;
     
@@ -81,11 +91,15 @@ dtkAbstractData *dtkComposerNodeLeafData::createData(const QString& implementati
 
         d->data = dtkAbstractDataFactory::instance()->create(implementation);
 
+        d->implementation_has_changed = true;
+
     } else if (d->data->identifier() != implementation) {
 
         delete d->data;
 
         d->data = dtkAbstractDataFactory::instance()->create(implementation);
+
+        d->implementation_has_changed = true;
 
     }        
 

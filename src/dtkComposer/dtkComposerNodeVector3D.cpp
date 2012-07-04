@@ -1,20 +1,20 @@
-/* dtkComposerNodeVector3D.cpp --- 
- * 
+/* dtkComposerNodeVector3D.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 10:19:40 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May  3 13:22:50 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 60
+ * Last-Updated: Thu Jun 28 17:00:17 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 61
  */
 
 /* Commentary: 
- * 
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeVector3D.h"
@@ -32,9 +32,9 @@ class dtkComposerNodeVector3DPrivate
 public:
     dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_vec;
 
-    dtkComposerTransmitterReceiver<qreal> receiver_x;
-    dtkComposerTransmitterReceiver<qreal> receiver_y;
-    dtkComposerTransmitterReceiver<qreal> receiver_z;
+    dtkComposerTransmitterVariant receiver_x;
+    dtkComposerTransmitterVariant receiver_y;
+    dtkComposerTransmitterVariant  receiver_z;
 
 public:
     dtkComposerTransmitterEmitter<dtkVector3DReal> emitter_vec;
@@ -51,6 +51,13 @@ public:
 dtkComposerNodeVector3D::dtkComposerNodeVector3D(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVector3DPrivate)
 {
     this->appendReceiver(&d->receiver_vec);
+
+    QList<QVariant::Type> variant_list;
+
+    variant_list << QVariant::Double << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong;
+    d->receiver_x.setTypes(variant_list);
+    d->receiver_y.setTypes(variant_list);
+    d->receiver_z.setTypes(variant_list);
 
     this->appendReceiver(&d->receiver_x);
     this->appendReceiver(&d->receiver_y);
@@ -123,7 +130,7 @@ void dtkComposerNodeVector3D::run(void)
 {
     if (!d->receiver_vec.isEmpty()) {
 
-        dtkVector3DReal vec(d->receiver_vec.data());
+        const dtkVector3DReal& vec(d->receiver_vec.data());
 
         d->emitter_vec.setData(vec);
         d->emitter_x.setData(vec[0]);
@@ -132,7 +139,7 @@ void dtkComposerNodeVector3D::run(void)
 
     } else {
 
-        dtkVector3DReal vec(d->receiver_x.data(), d->receiver_y.data(), d->receiver_z.data());
+        dtkVector3DReal vec(qvariant_cast<qreal>(d->receiver_x.data()), qvariant_cast<qreal>(d->receiver_y.data()),qvariant_cast<qreal>(d->receiver_z.data()));
 
         d->emitter_vec.setData(vec);
         d->emitter_x.setData(vec[0]);

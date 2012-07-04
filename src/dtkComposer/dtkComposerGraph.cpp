@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mai 16 15:54:30 2012 (+0200)
+ * Last-Updated: lun. juin 18 17:29:11 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 2079
+ *     Update #: 2088
  */
 
 /* Commentary:
@@ -35,6 +35,7 @@
 #include "dtkComposerNodeControlDoWhile.h"
 #include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeControlForEach.h"
+#include "dtkComposerNodeControlMap.h"
 #include "dtkComposerNodeControlIf.h"
 #include "dtkComposerNodeControlWhile.h"
 #include "dtkComposerNodeLeaf.h"
@@ -256,7 +257,7 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
             d->addDummyEdge(     vars, d->begin(blocks[cond]), node);
             vars->setEndLoop();
 
-        } else if (dynamic_cast<dtkComposerNodeControlForEach *>(wrapee)) {
+        } else if (dynamic_cast<dtkComposerNodeControlForEach *>(wrapee) || dynamic_cast<dtkComposerNodeControlMap *>(wrapee)) {
             dtkComposerGraphNode *vars = new dtkComposerGraphNodeSetVariables(wrapee);
             d->addNode(node, vars, begin);
             dtkComposerGraphNode *inputs    = new dtkComposerGraphNodeSetInputs(wrapee);
@@ -509,14 +510,15 @@ void dtkComposerGraph::addEdge(dtkComposerSceneEdge *edge)
     // if the destination is a control node port, then we must use the control node parent begin/end
     if (dynamic_cast<dtkComposerSceneNodeControl *>(scene_dest->parent()) && (scene_dest != scene_src->parent()))
         scene_dest = scene_dest->parent();
+
     if (dynamic_cast<dtkComposerSceneNodeControl *>(scene_src->parent()) && (scene_src != scene_dest->parent()) )
         scene_src = scene_src->parent();
 
-    if (scene_src->parent() == scene_dest) {
-        // edge from parent composite: there is already, at least, a dummy edge: do nothing
+    if (scene_src->parent() == edge->destination()->node()) {
+        // edge to parent composite: there is already, at least, a dummy edge: do nothing
         delete e;
         return;
-    } else if (scene_dest->parent() == scene_src) {
+    } else if (scene_dest->parent() == edge->source()->node()) {
         // edge from parent composite: there is already, at least, a dummy edge: do nothing
         delete e;
         return;

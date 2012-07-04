@@ -52,7 +52,14 @@ int main(int argc, char **argv)
 
         foreach(QString s_header, dir.entryList(QDir::Files|QDir::NoSymLinks)) {
 
-            if(!s_header.endsWith(".h") || s_header.endsWith("_p.h"))
+	  if(!s_header.endsWith(".h") /*|| s_header.endsWith("_p.h")*/) // private
+									// implementations
+									// have
+									// to
+									// be
+									// installed
+									// as
+									// well
                 continue;
 
             s_headers << s_header;

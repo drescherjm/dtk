@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Wed Sep 14 13:17:50 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Apr  4 10:59:06 2012 (+0200)
-##           By: tkloczko
-##     Update #: 26
+## Last-Updated: mer. mai 30 13:00:03 2012 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 27
 ######################################################################
 ## 
 ### Commentary: 
@@ -51,11 +51,13 @@ add_executable(dtkDistributedTutorial6Controller
 
 
 target_link_libraries(dtkDistributedTutorial6Slave
+  dtkComposer
   dtkCore
   dtkDistributed
   dtkLog)
 
 target_link_libraries(dtkDistributedTutorial6Controller
+  dtkComposer
   dtkCore
   dtkGui
   dtkDistributed

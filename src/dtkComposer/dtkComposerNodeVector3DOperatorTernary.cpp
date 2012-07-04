@@ -1,20 +1,20 @@
 /* dtkComposerNodeVector3DOperatorTernary.cpp --- 
- * 
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 16:58:34 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 14:49:34 2012 (+0200)
+ * Last-Updated: Thu Jun 28 17:03:36 2012 (+0200)
  *           By: tkloczko
- *     Update #: 10
+ *     Update #: 12
  */
 
 /* Commentary: 
- * 
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeVector3D.h"
@@ -92,14 +92,34 @@ dtkComposerNodeVector3DOperatorTernaryScalar::~dtkComposerNodeVector3DOperatorTe
 
 void dtkComposerNodeVector3DOperatorTernaryTripleProd::run(void)
 {
-    d->emitter_vec.setData(d->receiver_0.data() % (d->receiver_1.data() % d->receiver_2.data()));
-}
+    if (d->receiver_0.isEmpty() || d->receiver_1.isEmpty() || d->receiver_2.isEmpty()){
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_vec.setData(dtkVector3DReal());
 
+
+    } else {
+        const dtkVector3DReal& vector1 = d->receiver_0.data();
+        const dtkVector3DReal& vector2 = d->receiver_1.data();
+        const dtkVector3DReal& vector3 = d->receiver_2.data();
+
+        d->emitter_vec.setData(vector1 % (vector2 % vector3));
+    }
+}
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeVector3DOperatorTernaryScalar - Mixed Prod
 // /////////////////////////////////////////////////////////////////
 
 void dtkComposerNodeVector3DOperatorTernaryScalarMixedProd::run(void)
 {
-    d->emitter_val.setData(dtkMixedProduct(d->receiver_0.data(), d->receiver_1.data(), d->receiver_2.data()));
+    if (d->receiver_0.isEmpty() || d->receiver_1.isEmpty() || d->receiver_2.isEmpty()){
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_val.setData(qreal());
+
+    }   else {
+        const dtkVector3DReal& vector1 = d->receiver_0.data();
+        const dtkVector3DReal& vector2 = d->receiver_1.data();
+        const dtkVector3DReal& vector3 = d->receiver_2.data();
+
+        d->emitter_val.setData(dtkMixedProduct(vector1, vector2, vector3));
+    }
 }

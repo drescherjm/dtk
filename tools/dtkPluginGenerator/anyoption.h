@@ -20,10 +20,10 @@
 #define UNKNOWN_TYPE 		5
 
 #define DEFAULT_MAXOPTS 	10
-#define MAX_LONG_PREFIX_LENGTH 	2
+#define MAX_LONG_PREFIX_LENGTH 	5
 
-#define DEFAULT_MAXUSAGE	3
-#define DEFAULT_MAXHELP         10	
+#define DEFAULT_MAXUSAGE	10
+#define DEFAULT_MAXHELP         10
 
 #define TRUE_FLAG "true" 
 

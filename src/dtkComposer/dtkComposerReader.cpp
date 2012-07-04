@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mai 16 15:21:20 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 653
+ * Last-Updated: Thu Jun 28 14:50:16 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 694
  */
 
 /* Commentary: 
@@ -24,6 +24,9 @@
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeControlCase.h"
 #include "dtkComposerNodeInteger.h"
+#include "dtkComposerNodeLeafData.h"
+#include "dtkComposerNodeLeafProcess.h"
+#include "dtkComposerNodeLeafView.h"
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
 #include "dtkComposerReader.h"
@@ -138,10 +141,10 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
     }
 
     file.close();
-    return this->readString(content);
+    return this->readString(content,append);
 }
 
-bool dtkComposerReader::readString(const QString& data, bool append)
+bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
 {
     QDomDocument document("dtk");
 
@@ -169,6 +172,8 @@ bool dtkComposerReader::readString(const QString& data, bool append)
     if(!append) {
         d->node = d->root;
         d->graph->addNode(d->root);
+    } else if(paste) {
+        d->node = d->scene->current();
     } else {
         d->node = new dtkComposerSceneNodeComposite;
         d->node->wrap(new dtkComposerNodeComposite);
@@ -178,10 +183,10 @@ bool dtkComposerReader::readString(const QString& data, bool append)
     }
 
     // Feeding scene with notes
-    
+
     QDomNodeList notes = document.firstChild().childNodes();
 
-    for(int i = 0; i < notes.count(); i++)    
+    for(int i = 0; i < notes.count(); i++)
         if(notes.at(i).toElement().tagName() == "note")
             this->readNote(notes.at(i));
 
@@ -191,7 +196,7 @@ bool dtkComposerReader::readString(const QString& data, bool append)
 
     for(int i = 0; i < nodes.count(); i++)
         if(nodes.at(i).toElement().tagName() == "node")
-            this->readNode(nodes.at(i));
+            this->readNode(nodes.at(i),paste);
 
     // Feeding scene with edges
 
@@ -202,17 +207,16 @@ bool dtkComposerReader::readString(const QString& data, bool append)
             this->readEdge(edges.at(i));
 
     // --
-    
-    if(!append) {
+
+    if(!append)
         d->scene->setRoot(d->root);
-    } else {
+    else if(!paste)
         d->scene->addItem(d->node);
-    }
 
     d->graph->layout();
 
     // --
-    
+
     return true;
 }
 
@@ -222,12 +226,12 @@ dtkComposerSceneNote *dtkComposerReader::readNote(QDomNode node)
     qreal y = node.toElement().attribute("y").toFloat();
     qreal w = node.toElement().attribute("w").toFloat();
     qreal h = node.toElement().attribute("h").toFloat();
-    
+
     dtkComposerSceneNote *note = new dtkComposerSceneNote;
     note->setPos(QPointF(x, y));
     note->setSize(QSizeF(w, h));
     note->setText(node.childNodes().at(0).toText().data());
-    
+
     d->node->addNote(note);
 
     note->setParent(d->node);
@@ -235,7 +239,7 @@ dtkComposerSceneNote *dtkComposerReader::readNote(QDomNode node)
     return note;
 }
 
-dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
+dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
 {
     QDomNodeList childNodes = node.childNodes();
 
@@ -322,6 +326,8 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
         n->setParent(d->node);
         d->node->addNode(n);
         d->graph->addNode(n);
+        if (paste)
+            d->scene->addItem(n);
 
     } else {
 
@@ -334,14 +340,17 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
     }
 
     QPointF position;
-    
+
     if(node.toElement().hasAttribute("x"))
         position.setX(node.toElement().attribute("x").toFloat());
-    
+
     if(node.toElement().hasAttribute("y"))
         position.setY(node.toElement().attribute("y").toFloat());
 
-    n->setPos(position);
+    if (paste)
+        n->setPos(position+QPointF(100,100));
+    else
+        n->setPos(position);
 
     if(node.toElement().hasAttribute("title"))
         n->setTitle(node.toElement().attribute("title"));
@@ -560,6 +569,33 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node)
             for(int i = 0; i < childNodes.count(); i++) {
                 if(childNodes.at(i).toElement().tagName() == "value") {
                     s->setValue(childNodes.at(i).childNodes().at(0).toText().data());
+                }
+            }
+        }
+
+        if(dtkComposerNodeLeafData *data_node = dynamic_cast<dtkComposerNodeLeafData *>(leaf->wrapee())) {
+
+            for(int i = 0; i < childNodes.count(); i++) {
+                if(childNodes.at(i).toElement().tagName() == "implementation") {
+                    data_node->createData(childNodes.at(i).childNodes().at(0).toText().data());
+                }
+            }
+        }
+
+        if(dtkComposerNodeLeafProcess *process_node = dynamic_cast<dtkComposerNodeLeafProcess *>(leaf->wrapee())) {
+
+            for(int i = 0; i < childNodes.count(); i++) {
+                if(childNodes.at(i).toElement().tagName() == "implementation") {
+                    process_node->createProcess(childNodes.at(i).childNodes().at(0).toText().data());
+                }
+            }
+        }
+
+        if(dtkComposerNodeLeafView *view_node = dynamic_cast<dtkComposerNodeLeafView *>(leaf->wrapee())) {
+
+            for(int i = 0; i < childNodes.count(); i++) {
+                if(childNodes.at(i).toElement().tagName() == "implementation") {
+                    view_node->createView(childNodes.at(i).childNodes().at(0).toText().data());
                 }
             }
         }

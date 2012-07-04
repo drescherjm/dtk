@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: mar. avril 24 18:24:47 2012 (+0200)
+ * Last-Updated: mer. juin 13 09:45:39 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 111
+ *     Update #: 116
  */
 
 /* Commentary: 
@@ -60,7 +60,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     d->host_button = new QPushButton("Connect", this);
     d->host_button->setAttribute(Qt::WA_MacShowFocusRect, false);
 
-    d->controller = new dtkDistributedController;
+    d->controller = dtkDistributedController::instance();
 
     d->status_model = new dtkDistributedControllerStatusModel(this);
     d->status_model->setController(d->controller);
@@ -120,6 +120,10 @@ dtkDistributor::~dtkDistributor(void)
     d = NULL;
 }
 
+void dtkDistributor::setApplication(const QString& application)
+{
+    d->submit_view->setApplication(application);
+}
 void dtkDistributor::onConnect(void)
 {
     d->controller->deploy(QUrl(d->host_address->currentText()));

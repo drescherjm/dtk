@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 10 10:20:10 2012 (+0200)
+ * Last-Updated: Wed Jun 27 15:08:56 2012 (+0200)
  *           By: tkloczko
- *     Update #: 157
+ *     Update #: 175
  */
 
 /* Commentary: 
@@ -28,11 +28,12 @@
 #include "dtkComposerTransmitterVariant.h"
 
 #include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkAbstractContainer.h>
 #include <dtkCore/dtkGlobal.h>
 
+#include <dtkContainer/dtkAbstractContainerWrapper.h>
+
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeControlForEachPrivate definition
+// dtkComposerNodeControlForEachPrivate interface
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeControlForEachPrivate
@@ -55,7 +56,7 @@ public:
     qlonglong counter;
     qlonglong size;
 
-    dtkAbstractContainer container;
+    dtkAbstractContainerWrapper container;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -131,7 +132,11 @@ void dtkComposerNodeControlForEach::setInputs(void)
 
     foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
         v->setTwinned(false);
-        v->setData(v->data());
+        if (v->container().isReset()) {
+            v->setData(v->data());
+        } else {
+            v->setData(v->container());
+        }
         v->setTwinned(true);        
     }
 }
@@ -139,7 +144,11 @@ void dtkComposerNodeControlForEach::setInputs(void)
 void dtkComposerNodeControlForEach::setOutputs(void)
 {
     foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
-        v->twin()->setData(v->data());
+        if (v->container().isReset()) {
+            v->twin()->setData(v->data());
+        } else {
+            v->twin()->setData(v->container());
+        }
     }
 
     d->counter++;

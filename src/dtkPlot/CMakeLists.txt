@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Nov 22 10:20:27 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Apr 27 21:05:10 2012 (+0200)
+## Last-Updated: Sun Jun 10 01:14:37 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 80
+##     Update #: 99
 ######################################################################
 ## 
 ### Commentary: 
@@ -32,16 +32,25 @@ project(dtkPlot)
 set(${PROJECT_NAME}_HEADERS
   dtkPlotCurve.h
   dtkPlotRenderer.h
-  dtkPlotView.h)
+  dtkPlotView.h
+  dtkPlotViewPanner.h
+  dtkPlotViewPicker.h
+  dtkPlotViewZoomer.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkPlotCurve.h
-  dtkPlotView.h)
+  dtkPlotView.h
+  dtkPlotViewPanner.h
+  dtkPlotViewPicker.h
+  dtkPlotViewZoomer.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkPlotCurve.cpp
   dtkPlotRenderer.cpp
-  dtkPlotView.cpp)
+  dtkPlotView.cpp
+  dtkPlotViewPanner.cpp
+  dtkPlotViewPicker.cpp
+  dtkPlotViewZoomer.cpp)
 
 ## #################################################################
 ## Build rules
@@ -49,7 +58,6 @@ set(${PROJECT_NAME}_SOURCES
 
 if(NOT WIN32)
 add_definitions(-Wno-write-strings)
-add_definitions(-Wformat=0)
 endif(NOT WIN32)
 
 add_definitions(${QT_DEFINITIONS})
@@ -79,7 +87,8 @@ endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
-  ${QWT_LIBRARY})
+  ${QWT_LIBRARY}
+  dtkCore)
 
 ## #################################################################
 ## Export header file
@@ -91,8 +100,8 @@ generate_export_header(${PROJECT_NAME}
   EXPORT_FILE_NAME "${PROJECT_NAME}Export.h")
 
 add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
-  COMMAND ${CMAKE_COMMAND} ARGS -E copy "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}"
-  COMMAND ${CMAKE_COMMAND} ARGS -E copy "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export")
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}"
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export")
 
 set(${PROJECT_NAME}_HEADERS
   ${${PROJECT_NAME}_HEADERS}

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Fri May  4 16:10:25 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 2209
+ * Last-Updated: ven. juin  8 16:38:24 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 2240
  */
 
 /* Commentary:
@@ -21,6 +21,7 @@
 #include "dtkComposerGraph.h"
 #include "dtkComposerMachine.h"
 #include "dtkComposerMachineState.h"
+#include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
 #include "dtkComposerSceneEdge.h"
@@ -33,6 +34,7 @@
 #include "dtkComposerStack.h"
 #include "dtkComposerStackCommand.h"
 #include "dtkComposerStackUtils.h"
+#include "dtkComposerWriter.h"
 
 dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(new dtkComposerScenePrivate)
 {
@@ -491,6 +493,30 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
             else
                 delete command;
         }
+
+
+    } else if ((event->key() == Qt::Key_C) && (event->modifiers() & Qt::ControlModifier) && (this->selectedItems().count() == 1)) {
+        //copy
+
+        foreach(QGraphicsItem *item, this->selectedItems()) {
+            if (dtkComposerSceneNode *snode = dynamic_cast<dtkComposerSceneNode *>(item))
+                d->copy_nodes << snode;
+        }
+
+    } else if ((event->key() == Qt::Key_V) && (event->modifiers() & Qt::ControlModifier) ) {
+        // paste
+        if (d->copy_nodes.isEmpty())
+            return;
+
+        dtkComposerStackCommandCopyNodes *command = new dtkComposerStackCommandCopyNodes;
+        command->setScene(this);
+        command->setGraph(d->graph);
+        command->setFactory(d->factory);
+        command->setNodes(d->copy_nodes);
+
+        d->stack->push(command);
+
+
 
     } else if ((event->key() == Qt::Key_U) && (event->modifiers() & Qt::ControlModifier) && (this->selectedItems().count() == 1)) {
 

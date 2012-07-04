@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:43:14 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 16 13:48:11 2012 (+0200)
+ * Last-Updated: Wed May 30 13:00:52 2012 (+0200)
  *           By: tkloczko
- *     Update #: 122
+ *     Update #: 123
  */
 
 /* Commentary:
@@ -38,7 +38,7 @@ public:
    dtkAbstractObject& operator = (const dtkAbstractObject& other);
 
 public:
-   bool operator == (const dtkAbstractObject& other);
+   bool operator == (const dtkAbstractObject& other) const;
 
 public:
    virtual QString description(void) const;

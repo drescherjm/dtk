@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar 15 17:04:44 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 17:15:22 2012 (+0200)
+ * Last-Updated: Tue May 29 14:52:10 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 13
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -31,5 +31,8 @@
 #cmakedefine DTK_HAVE_EDIT
 #cmakedefine DTK_HAVE_NITE
 #cmakedefine DTK_HAVE_VRPN
+#cmakedefine DTK_HAVE_PLOT
+
+#define DTK_SOURCE_PATH "@CMAKE_SOURCE_DIR@"
 
 #endif

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 15:55:32 2012 (+0200)
- *           By: tkloczko
- *     Update #: 229
+ * Last-Updated: Wed Jun 13 16:52:24 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 290
  */
 
 /* Commentary:
@@ -100,6 +100,10 @@ public:
     dtkAbstractDataSerializerCreatorHash   serializers;
     dtkAbstractDataDeserializerCreatorHash deserializers;
     dtkAbstractDataInterfacesHash       interfaces;
+
+    dtkAbstractDataFactory::dtkAbstractDataFactoryReaderPriorityMap reader_priorities;
+    dtkAbstractDataFactory::dtkAbstractDataFactoryWriterPriorityMap writer_priorities;
+    dtkAbstractDataFactory::dtkAbstractDataFactoryConverterPriorityMap converter_priorities;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -252,6 +256,36 @@ dtkSmartPointer<dtkAbstractDataDeserializer> dtkAbstractDataFactory::deserialize
     return deserializer;
 }
 
+void dtkAbstractDataFactory::setReaderPriorities(const dtkAbstractDataFactoryReaderPriorityMap& priorities)
+{
+    d->reader_priorities = priorities;
+}
+
+void dtkAbstractDataFactory::setWriterPriorities(const dtkAbstractDataFactoryWriterPriorityMap& priorities)
+{
+    d->writer_priorities = priorities;
+}
+
+void dtkAbstractDataFactory::setConverterPriorities(const dtkAbstractDataFactoryConverterPriorityMap& priorities)
+{
+    d->converter_priorities = priorities;
+}
+
+const dtkAbstractDataFactory::dtkAbstractDataFactoryReaderPriorityMap& dtkAbstractDataFactory::readerPriorities(void) const
+{
+    return d->reader_priorities;
+}
+
+const dtkAbstractDataFactory::dtkAbstractDataFactoryWriterPriorityMap& dtkAbstractDataFactory::writerPriorities(void) const
+{
+    return d->writer_priorities;
+}
+
+const dtkAbstractDataFactory::dtkAbstractDataFactoryConverterPriorityMap& dtkAbstractDataFactory::converterPriorities(void) const
+{
+    return d->converter_priorities;
+}
+
 QStringList dtkAbstractDataFactory::implementations(const QString& interface)
 {
     QStringList implementations;
@@ -384,17 +418,50 @@ QList<QString> dtkAbstractDataFactory::creators(void) const
 
 QList<QString> dtkAbstractDataFactory::readers(void) const
 {
-    return d->readers.keys();
+    if(d->reader_priorities.isEmpty())
+        return d->readers.keys();
+    
+    const QStringList priorities = d->reader_priorities.values();
+
+    QMap<int, QString> readers;
+
+    foreach(QString reader, d->readers.keys())
+        if(priorities.contains(reader))
+            readers.insert(d->reader_priorities.key(reader), reader);
+
+    return readers.values();
 }
 
 QList<QString> dtkAbstractDataFactory::writers(void) const
 {
-    return d->writers.keys();
+    if(d->writer_priorities.isEmpty())
+        return d->writers.keys();
+    
+    const QStringList priorities = d->writer_priorities.values();
+
+    QMap<int, QString> writers;
+
+    foreach(QString writer, d->writers.keys())
+        if(priorities.contains(writer))
+            writers.insert(d->writer_priorities.key(writer), writer);
+
+    return writers.values();
 }
 
 QList<QString> dtkAbstractDataFactory::converters(void) const
 {
-    return d->converters.keys();
+    if(d->converter_priorities.isEmpty())
+        return d->converters.keys();
+    
+    const QStringList priorities = d->converter_priorities.values();
+
+    QMap<int, QString> converters;
+
+    foreach(QString converter, d->converters.keys())
+        if(priorities.contains(converter))
+            converters.insert(d->converter_priorities.key(converter), converter);
+
+    return converters.values();
 }
 
 QList<QString> dtkAbstractDataFactory::serializers(void) const

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 16 11:57:46 2012 (+0200)
+ * Last-Updated: Wed Jun 27 16:38:12 2012 (+0200)
  *           By: tkloczko
- *     Update #: 409
+ *     Update #: 478
  */
 
 /* Commentary: 
@@ -20,8 +20,16 @@
 #include "dtkComposerTransmitter_p.h"
 #include "dtkComposerTransmitterVariant.h"
 
-#include <dtkCore/dtkAbstractContainer.h>
+#include <dtkContainer/dtkAbstractContainer.h>
 #include <dtkCore/dtkGlobal.h>
+#include <dtkCore/dtkAbstractData.h>
+#include <dtkCore/dtkAbstractDataFactory.h>
+
+#include <dtkDistributed/dtkDistributedMessage.h>
+
+#include <dtkLog/dtkLog.h>
+
+#include <dtkMath/dtkMath.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterVariantPrivate declaration
@@ -66,17 +74,141 @@ dtkComposerTransmitterVariant::~dtkComposerTransmitterVariant(void)
     e = NULL;
 }
 
+//! Puts \a data into the variant transmitter which then plays the
+//! role of an emitter.
+/*! 
+ *  This methods resets the container of the transmiter. This is quite
+ *  important because it enables to test whether the variant
+ *  transmitter contains a container or not using isReset() method
+ *  from the dtkAbstractContainerWrapper class.
+ *  
+ *  
+ */
 void dtkComposerTransmitterVariant::setData(const QVariant& data)
 {
     d->variant = data;
     d->container.reset();
 }
 
-void dtkComposerTransmitterVariant::setData(const dtkAbstractContainer& data)
+void dtkComposerTransmitterVariant::setData(const dtkAbstractContainerWrapper& data)
 {
-    if (d->container != data) {
-        d->container = data;
-        d->variant = qVariantFromValue(data);
+    d->container = data;
+    d->variant = qVariantFromValue(data);
+}
+
+void dtkComposerTransmitterVariant::setDataFromMsg(dtkDistributedMessage *msg)
+{
+    if (msg->type() == "double") {
+
+        double *data = reinterpret_cast<double*>(msg->content().data());
+        this->setTwinned(false);
+        this->setData(*data);
+        this->setTwinned(true);
+
+    } else if (msg->type() == "qlonglong") {
+
+        qlonglong *data = reinterpret_cast<qlonglong*>(msg->content().data());
+        this->setTwinned(false);
+        this->setData(*data);
+        this->setTwinned(true);
+
+    } else if (msg->type() == "qstring") {
+
+        this->setTwinned(false);
+        this->setData(QString(msg->content()));
+        this->setTwinned(true);
+
+    } else if (msg->type() == "dtkVectorReal") {
+
+        if (msg->size() > 0) {
+            QByteArray array = msg->content();
+            int size;
+            QDataStream stream(&array, QIODevice::ReadOnly);
+            stream >> size;
+            dtkVectorReal v(size);
+
+            for (int i=0; i< size; i++)
+                stream >> v[i];
+
+            this->setTwinned(false);
+            this->setData(qVariantFromValue(v));
+            this->setTwinned(true);
+
+
+            dtkDebug() << "received dtkVectorReal, set data in transmitter; size is " << size;
+
+        } else
+            dtkWarn() << "warning: no content in dtkVectorReal transmitter";
+
+    } else if (msg->type() == "dtkVector3DReal") {
+
+        if (msg->size() > 0) {
+            dtkVector3DReal v;
+
+            QDataStream stream(&(msg->content()), QIODevice::ReadOnly);
+            stream >> v[0];
+            stream >> v[1];
+            stream >> v[2];
+
+            this->setTwinned(false);
+            this->setData(qVariantFromValue(v));
+            this->setTwinned(true);
+
+            dtkDebug() << "received dtkVector3DReal, set data in transmitter" << v[0] << v[1] << v[2];
+
+        } else
+            dtkWarn() << "warning: no content in dtkVector3DReal transmitter";
+
+    } else if (msg->type() == "dtkQuaternionReal") {
+
+        if (msg->size() > 0) {
+            dtkQuaternionReal q;
+
+            QDataStream stream(&(msg->content()), QIODevice::ReadOnly);
+            stream >> q[0];
+            stream >> q[1];
+            stream >> q[2];
+            stream >> q[3];
+
+            this->setTwinned(false);
+            this->setData(qVariantFromValue(q));
+            this->setTwinned(true);
+
+            dtkDebug() << "received dtkQuaternionReal, set data in transmitter" << q[0] << q[1] << q[2] << q[3];
+
+        } else
+            dtkWarn() << "warning: no content in dtkQuaternionReal transmitter";
+
+    } else { // assume a dtkAbstractData
+
+        dtkDebug() << "received" <<  msg->type() << ", deserialize";
+        QString type ;
+        QString transmitter_type;
+        if (msg->type().section('/',1,1).isEmpty()) {
+            type = msg->type();
+            transmitter_type = type;
+        } else {
+            transmitter_type = msg->type().section('/',0,0);
+            type = msg->type().section('/',1,1);
+        }
+
+        dtkDebug() << "type:" << type;
+        dtkDebug() << "transmitter_type:" << transmitter_type;
+        if (msg->size() > 0) {
+            dtkAbstractData *data;
+            data = dtkAbstractDataFactory::instance()->create(type)->deserialize(msg->content());
+            if (!data) {
+                dtkError() << "Deserialization failed";
+            } else {
+                dtkDebug() << "set dtkAbstractData in transmitter, size is" << msg->size();
+                if (transmitter_type == "dtkAbstractData") {
+                    this->setData(qVariantFromValue(data));
+                } else {
+                    this->setData(data->toVariant(data));
+                }
+            }
+        } else
+            dtkWarn() << "warning: no content in dtkAbstractData transmitter";
     }
 }
 
@@ -108,6 +240,34 @@ const QVariant& dtkComposerTransmitterVariant::data(void) const
     return d->variant;
 }
 
+const dtkAbstractContainerWrapper& dtkComposerTransmitterVariant::container(void) const
+{
+    if (e->twinned)
+        return d->container;
+
+    if (e->active_variant)
+        return e->active_variant->container();
+    
+    else if (e->active_emitter)
+        return e->active_emitter->container();
+
+    return d->container;
+}
+
+dtkAbstractContainerWrapper& dtkComposerTransmitterVariant::container(void)
+{
+    if (e->twinned)
+        return d->container;
+
+    if (e->active_variant)
+        return e->active_variant->container();
+    
+    else if (e->active_emitter)
+        return e->active_emitter->container();
+
+    return d->container;    
+}
+
 QVariantList dtkComposerTransmitterVariant::allData(void)
 {
     QVariantList list;
@@ -135,40 +295,6 @@ QVariantList dtkComposerTransmitterVariant::allData(void)
     }
 
     return list;
-}
-
-const dtkAbstractContainer& dtkComposerTransmitterVariant::container(void) const
-{
-    if (d->container.type() == dtkAbstractContainer::None) {
-
-        if (e->active_variant)
-            d->container = e->active_variant->container();
-
-        else if (e->active_emitter)
-            d->container = qvariant_cast<dtkAbstractContainer>(e->active_emitter->variant());
-
-        else
-            d->container = qvariant_cast<dtkAbstractContainer>(d->variant);
-    }      
-
-    return d->container;
-}
-
-dtkAbstractContainer& dtkComposerTransmitterVariant::container(void)
-{
-    if (d->container.type() == dtkAbstractContainer::None) {
-
-        if (e->active_variant)
-            d->container = e->active_variant->container();
-
-        else if (e->active_emitter)
-            d->container = qvariant_cast<dtkAbstractContainer>(e->active_emitter->variant());
-
-        else
-            d->container = qvariant_cast<dtkAbstractContainer>(d->variant);
-    }      
-
-    return d->container;    
 }
 
 //! 
@@ -303,7 +429,7 @@ bool dtkComposerTransmitterVariant::disconnect(dtkComposerTransmitter *transmitt
                 if (var->active())
                     e->active_variant = var;
             }
-
+            
             if (!e->active_variant) {
                 foreach(dtkComposerTransmitter *em, e->emitters) {
                     if (em->active())
@@ -311,7 +437,7 @@ bool dtkComposerTransmitterVariant::disconnect(dtkComposerTransmitter *transmitt
                 }
             }
         }
-
+            
     } else {
 
         ok = e->emitters.removeOne(transmitter);

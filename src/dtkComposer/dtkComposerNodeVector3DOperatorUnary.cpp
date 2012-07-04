@@ -1,20 +1,20 @@
-/* dtkComposerNodeVector3DOperatorUnary.cpp --- 
- * 
+/* dtkComposerNodeVector3DOperatorUnary.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 15:58:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 17:57:57 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 14
+ * Last-Updated: Thu Jun 28 17:01:06 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 15
  */
 
 /* Commentary: 
- * 
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeVector3D.h"
@@ -84,7 +84,14 @@ dtkComposerNodeVector3DOperatorUnaryScalar::~dtkComposerNodeVector3DOperatorUnar
 
 void dtkComposerNodeVector3DOperatorUnaryUnitary::run(void)
 {
-    d->emitter_vec.setData(d->receiver_vec.data().unit());
+    if (d->receiver_vec.isEmpty()) {
+        dtkWarn() << "Input not specified. Nothing is done";
+        d->emitter_vec.setData(dtkVector3DReal());
+
+    }  else {
+        const dtkVector3DReal& vector = d->receiver_vec.data();
+        d->emitter_vec.setData(vector.unit());
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -93,5 +100,14 @@ void dtkComposerNodeVector3DOperatorUnaryUnitary::run(void)
 
 void dtkComposerNodeVector3DOperatorUnaryScalarNorm::run(void)
 {
-    d->emitter_val.setData(d->receiver_vec.data().norm());
+
+    if (d->receiver_vec.isEmpty()) {
+        dtkWarn() << "Input not specified. Nothing is done";
+        d->emitter_val.setData(qreal());
+
+    }  else {
+        const dtkVector3DReal& vector = d->receiver_vec.data();
+        d->emitter_val.setData(vector.norm());
+    }
 }
+

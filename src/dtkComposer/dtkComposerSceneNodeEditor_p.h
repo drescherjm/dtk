@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:28:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mai 16 09:30:23 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 65
+ * Last-Updated: Thu Jun 28 11:13:12 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 68
  */
 
 /* Commentary: 
@@ -117,6 +117,9 @@ public:
     QRadioButton *f_b;
     QButtonGroup *g_b;
     QWidget *bool_widget;
+
+public:
+    QComboBox *select_implementation;
 
 public:
     QComboBox *selector;

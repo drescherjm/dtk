@@ -54,14 +54,14 @@ public:
      
     bool has(dtkAbstractData *data) const;
 
-    dtkxarch_int count(void);
+    qlonglong count(void);
     
-    dtkxarch_int indexOf(dtkAbstractData *data, dtkxarch_int from = 0);
+    qlonglong indexOf(dtkAbstractData *data, qlonglong from = 0);
 
     Type type(void);
      
-    const dtkAbstractData *at(dtkxarch_int index) const;
-          dtkAbstractData *at(dtkxarch_int index);
+    const dtkAbstractData *at(qlonglong index) const;
+          dtkAbstractData *at(qlonglong index);
      
     const QVector<dtkAbstractData *>& vector(void) const;  
           QVector<dtkAbstractData *>& vector(void);

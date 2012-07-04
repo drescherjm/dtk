@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/template">
+        <file>cmake</file>
+        <file>test.cpp</file>
+        <file>test.h</file>
+    </qresource>
+</RCC>

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:41:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 30 16:58:48 2012 (+0200)
+ * Last-Updated: Mon Jun 25 12:15:12 2012 (+0200)
  *           By: tkloczko
- *     Update #: 60
+ *     Update #: 62
  */
 
 /* Commentary: 
@@ -58,6 +58,8 @@ public:
     dtkVector3D& operator /=(const T& value);
 
     void storeOuterProduct(const dtkVector3D&, const dtkVector3D&);
+
+    T norm(void) const { return sqrt( (*this)[0]*(*this)[0] + (*this)[1]*(*this)[1] + (*this)[2]*(*this)[2]); };
 
     dtkVector3D unit(void) const { return (*this)/(this->norm()); }
 };

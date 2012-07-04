@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: mar. oct. 11 10:46:57 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. avril 24 10:46:48 2012 (+0200)
+ * Last-Updated: mer. mai 30 15:38:51 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 345
+ *     Update #: 364
  */
 
 /* Commentary:
@@ -20,6 +20,7 @@
 #include "dtkDistributedMessage.h"
 
 #include <dtkCore/dtkGlobal.h>
+
 #include <dtkLog/dtkLog.h>
 
 class dtkDistributedMessagePrivate
@@ -217,3 +218,4 @@ QByteArray &dtkDistributedMessage::content(void)
 {
     return d->content;
 }
+

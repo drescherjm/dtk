@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:08:32 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul 12 16:01:18 2010 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 40
+ * Last-Updated: Mon Jun 25 12:09:36 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 42
  */
 
 /* Commentary: 
@@ -39,6 +39,8 @@ public:
     }
 
     void mapInto(const dtkMatrixSquared &, unsigned, unsigned, unsigned);
+
+    unsigned size(void) const { this->getRows(); };
 
     dtkMatrixSquared operator +(const dtkMatrixSquared &) const;
     dtkMatrixSquared operator -(const dtkMatrixSquared &) const;
@@ -93,6 +95,17 @@ public:
 // /////////////////////////////////////////////////////////////////
 
 #include "dtkMatrixSquared.tpp"
+
+// /////////////////////////////////////////////////////////////////
+//
+// /////////////////////////////////////////////////////////////////
+
+#include <QtCore>
+
+typedef dtkMatrixSquared<qreal> dtkMatrixSquareReal;
+
+Q_DECLARE_METATYPE(dtkMatrixSquareReal);
+Q_DECLARE_METATYPE(dtkMatrixSquareReal *);
 
 #endif
 

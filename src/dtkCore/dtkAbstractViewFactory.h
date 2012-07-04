@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:48:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Fri May 18 16:03:08 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 113
+ * Last-Updated: Thu Jun 28 14:46:37 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 115
  */
 
 /* Commentary:
@@ -45,6 +45,7 @@ public:
     static dtkAbstractViewFactory *instance(void);
 
     bool registerViewType          (const QString& type,                             dtkAbstractViewCreator           func);
+    bool registerViewType          (const QString& type,                             dtkAbstractViewCreator           func, const QString& interface);
     bool registerViewAnimatorType  (const QString& type, const QStringList& handled, dtkAbstractViewAnimatorCreator   func);
     bool registerViewNavigatorType (const QString& type, const QStringList& handled, dtkAbstractViewNavigatorCreator  func);
     bool registerViewInteractorType(const QString& type, const QStringList& handled, dtkAbstractViewInteractorCreator func);
@@ -66,6 +67,10 @@ public:
     dtkSmartPointer<dtkAbstractViewAnimator>     animatorSmartPointer(const QString& type);
     dtkSmartPointer<dtkAbstractViewNavigator>   navigatorSmartPointer(const QString& type);
     dtkSmartPointer<dtkAbstractViewInteractor> interactorSmartPointer(const QString& type);
+
+public:
+    QStringList implementations(const QString& interface);
+    QStringList interfaces(void);
 
 signals:
     void created(dtkAbstractView *view, const QString& type);

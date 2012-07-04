@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. mai  3 11:41:06 2012 (+0200)
+ * Last-Updated: mer. mai 30 12:41:13 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 577
+ *     Update #: 587
  */
 
 /* Commentary:
@@ -298,7 +298,8 @@ void dtkDistributedCommunicatorMpi::receive(dtkAbstractData *&data, qint16 sourc
     QByteArray array = QByteArray::fromRawData(rawArray, arrayLength);
     // FIXME: array is not null-terminated, does it matter ??
 
-    if (data && !data->deserialize(array))
+    data = data->deserialize(array);
+    if (!data)
         dtkError() << "Warning: deserialization failed";
 }
 
@@ -355,6 +356,14 @@ void dtkDistributedCommunicatorMpi::send(const QVariant &v, qint16 target, int t
             for (int i=0; i<3; i++)
                 array[i]= vector[i];
             dtkDistributedCommunicator::send(array,3,target,tag);
+        } else if (QString(v.typeName()) == "dtkVectorReal") {
+            dtkVectorReal vector = v.value<dtkVectorReal>();
+            int vsize = vector.getRows();
+            dtkDistributedCommunicator::send(&vsize,1,target,tag);
+            double array[vsize];
+            for (int i=0; i<vsize; i++)
+                array[i]= vector[i];
+            dtkDistributedCommunicator::send(array,vsize,target,tag);
         } else if (QString(v.typeName()) == "dtkQuaternionReal") {
             dtkQuaternionReal q = v .value<dtkQuaternionReal>();
             double array[4];
@@ -413,6 +422,16 @@ void dtkDistributedCommunicatorMpi::receive(QVariant &v, qint16 source, int tag)
             dtkDistributedCommunicator::receive(values,3,source,tag);
             dtkVector3DReal vector;
             for (int i=0; i<3; i++)
+                vector[i]= values[i];
+            v = qVariantFromValue(vector);
+        } else if ( QString(QMetaType::typeName(typeId)) == "dtkVectorReal") {
+            int size;
+            dtkDistributedCommunicator::receive(&size,1,source,tag);
+
+            double   values[size];
+            dtkDistributedCommunicator::receive(values,size,source,tag);
+            dtkVectorReal vector(size);
+            for (int i=0; i<size; i++)
                 vector[i]= values[i];
             v = qVariantFromValue(vector);
         } else if (QString(QMetaType::typeName(typeId)) == "dtkQuaternionReal") {

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:08 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri May 18 15:31:25 2012 (+0200)
+ * Last-Updated: Wed May 23 17:54:35 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 6
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -24,6 +24,9 @@
 
 #include <QtGui>
 
+class dtkAbstractView;
+
+class dtkViewLayoutItem;
 class dtkViewLayoutPrivate;
 
 class DTKGUI_EXPORT dtkViewLayout : public QFrame
@@ -33,6 +36,16 @@ class DTKGUI_EXPORT dtkViewLayout : public QFrame
 public:
      dtkViewLayout(QWidget *parent = 0);
     ~dtkViewLayout(void);
+
+public:
+    dtkViewLayoutItem *root(void);
+    dtkViewLayoutItem *current(void);
+
+public:
+    void setCurrent(dtkViewLayoutItem *item);
+
+signals:
+    void focused(dtkAbstractView *view);
 
 private:
     dtkViewLayoutPrivate *d;

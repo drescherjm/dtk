@@ -224,12 +224,7 @@ mark_as_advanced(VRPN_LIBRARY)
 
 if(DTK_BUILD_MPI AND MPI_FOUND AND QUAT_LIBRARY AND VRPN_LIBRARY)
   add_definitions(-DDTK_WRAP_VRPN)
-<<<<<<< HEAD
-
-endif(MPI_FOUND AND QUAT_LIBRARY AND VRPN_LIBRARY)
-=======
 endif(DTK_BUILD_MPI AND MPI_FOUND AND QUAT_LIBRARY AND VRPN_LIBRARY)
->>>>>>> 7a11d794c64fe81fe4ec09bf48577340fc25f69a
 
 ## #################################################################
 ## Qwt

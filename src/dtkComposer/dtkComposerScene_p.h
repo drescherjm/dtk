@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 15:32:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 14:36:59 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 222
+ * Last-Updated: ven. juin  8 16:31:47 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 242
  */
 
 /* Commentary: 
@@ -19,6 +19,8 @@
 
 #ifndef DTKCOMPOSERSCENE_P_H
 #define DTKCOMPOSERSCENE_P_H
+
+#include "dtkComposerSceneNode.h"
 
 #include <QtGui>
 
@@ -43,6 +45,9 @@ public:
 public:
     dtkComposerSceneNodeComposite    *root_node;
     dtkComposerSceneNodeComposite *current_node;
+
+public:
+    dtkComposerSceneNodeList copy_nodes;
 
 public:
     dtkComposerSceneEdge *current_edge;

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. avril 26 14:28:16 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 62
+ * Last-Updated: Sat Jun  2 01:39:50 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 64
  */
 
 /* Commentary: 
@@ -44,6 +44,9 @@ class DTKCOMPOSER_EXPORT dtkComposer : public QWidget
 public:
              dtkComposer(QWidget *parent = 0);
     virtual ~dtkComposer(void);
+
+public:
+    void setFactory(dtkComposerFactory *factory);
 
 public slots:
     virtual bool   open(const QUrl& url);

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:17:21
  * Version: $Id$
- * Last-Updated: Wed May  9 10:08:20 2012 (+0200)
+ * Last-Updated: Tue Jul  3 13:55:08 2012 (+0200)
  *           By: tkloczko
- *     Update #: 234
+ *     Update #: 264
  */
 
 /* Commentary:
@@ -26,7 +26,7 @@
 #include <dtkCore>
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeProcessPrivate declaration
+// dtkComposerNodeProcessPrivate interface
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeProcessPrivate
@@ -36,7 +36,9 @@ public:
     dtkComposerTransmitterReceiver<qlonglong> receiver_integer_1;
     dtkComposerTransmitterReceiver<double> receiver_real;
     dtkComposerTransmitterReceiver<dtkAbstractData *> receiver_data;
-    dtkComposerTransmitterReceiver<QString> receiver_type;
+    dtkComposerTransmitterReceiver<QString> receiver_string;
+    dtkComposerTransmitterReceiver<dtkAbstractData *> receiver_lhs;
+    dtkComposerTransmitterReceiver<dtkAbstractData *> receiver_rhs;
 
 public:
     dtkComposerTransmitterEmitter<qlonglong> emitter_integer;
@@ -51,21 +53,18 @@ public:
 // dtkComposerNodeProcess implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNodeProcess::dtkComposerNodeProcess(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeProcessPrivate)
+dtkComposerNodeProcess::dtkComposerNodeProcess(void) : dtkComposerNodeLeafProcess(), d(new dtkComposerNodeProcessPrivate)
 {
-    this->appendReceiver(&(d->receiver_type));
-
+    this->appendReceiver(&(d->receiver_string));
     this->appendReceiver(&(d->receiver_integer_0));
     this->appendReceiver(&(d->receiver_integer_1));
-
     this->appendReceiver(&(d->receiver_real));
-
     this->appendReceiver(&(d->receiver_data));
+    this->appendReceiver(&(d->receiver_lhs));
+    this->appendReceiver(&(d->receiver_rhs));
 
     this->appendEmitter(&(d->emitter_integer));
-
     this->appendEmitter(&(d->emitter_real));
-
     this->appendEmitter(&(d->emitter_data));
 
     d->process = NULL;
@@ -81,20 +80,29 @@ dtkComposerNodeProcess::~dtkComposerNodeProcess(void)
     d = NULL;
 }
 
+bool dtkComposerNodeProcess::isAbstractProcess(void) const
+{
+    return true;
+}
+
+QString dtkComposerNodeProcess::abstractProcessType(void) const 
+{
+    return "dtkAbstractProcess";
+}
+
 void dtkComposerNodeProcess::run(void)
 {
-    if (d->receiver_type.isEmpty()) {
-        dtkWarn() << "no type speficied in process node!";
-        return;
-    }
 
-    if(!d->process)
-        d->process = dtkAbstractProcessFactory::instance()->create(d->receiver_type.data());
+    if (this->process())
+        d->process = this->process();
 
     if (!d->process) {
-        dtkWarn() << "no process, abort "<<  d->receiver_type.data();
+        dtkWarn() << "no process, abort "<<  this->currentImplementation();
         return;
     }
+
+    if (!d->receiver_string.isEmpty())
+        d->process->read(d->receiver_string.data());
 
     if (!d->receiver_integer_0.isEmpty())
         d->process->setParameter((int)d->receiver_integer_0.data(), 0);
@@ -105,16 +113,21 @@ void dtkComposerNodeProcess::run(void)
     if (!d->receiver_real.isEmpty())
         d->process->setParameter(d->receiver_real.data());
 
-    if (!d->receiver_data.isEmpty()) {
+    if (!d->receiver_data.isEmpty())
         d->process->setInput(d->receiver_data.data());
-    }
+
+    if (!d->receiver_lhs.isEmpty())
+        d->process->setInput(d->receiver_lhs.data(), 0);
+
+    if (!d->receiver_rhs.isEmpty())
+        d->process->setInput(d->receiver_rhs.data(), 1);
 
     int i = d->process->run();
 
     d->emitter_integer.setData(i);
 
-    if (d->process->data(0))
-        d->emitter_real.setData(*static_cast<double *>(d->process->data(0)));
+    // if (d->process->output())
+    //     d->emitter_real.setData(*static_cast<double *>(d->process->data(0)));
 
     d->emitter_data.setData(d->process->output());
 }
@@ -132,7 +145,7 @@ QString dtkComposerNodeProcess::titleHint(void)
 QString dtkComposerNodeProcess::inputLabelHint(int port)
 {
     if(port == 0)
-        return "type";
+        return "string";
 
     if(port == 1)
         return "integer";
@@ -145,6 +158,12 @@ QString dtkComposerNodeProcess::inputLabelHint(int port)
 
     if(port == 4)
         return "data";
+
+    if(port == 5)
+        return "lhs";
+
+    if(port == 6)
+        return "rhs";
 
     return dtkComposerNodeLeaf::inputLabelHint(port);
 }

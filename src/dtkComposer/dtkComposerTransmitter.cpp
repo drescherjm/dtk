@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 16 11:55:39 2012 (+0200)
+ * Last-Updated: Wed Jun 27 16:44:02 2012 (+0200)
  *           By: tkloczko
- *     Update #: 206
+ *     Update #: 241
  */
 
 /* Commentary: 
@@ -22,7 +22,7 @@
 #include "dtkComposerTransmitterVariant.h"
 #include "dtkComposerNode.h"
 
-#include <dtkCore/dtkAbstractContainer.h>
+#include <dtkContainer/dtkAbstractContainerWrapper.h>
 #include <dtkCore/dtkGlobal>
 
 // /////////////////////////////////////////////////////////////////
@@ -52,37 +52,99 @@ dtkComposerTransmitter::~dtkComposerTransmitter(void)
     d = NULL;
 }
 
+//! Several cases can occur when calling this method.
+/*!  
+ *  A transmitter can be either an emitter, a receiver or a
+ *  variant. The case of the proxy is forgotten since this method must
+ *  not be called in this case.
+ *
+ *  - Emitter case: the returned variant contains the data that has
+ *    been passed to the emitter.
+ *
+ *  - Receiver case: a receiver is connected to only one active
+ *    transmitter which can be either an emitter or a variant playing
+ *    the role of an emitter. The returned variant comes from this
+ *    active transmitter.
+ *
+ *  - Variant case: the variant transmitter can play the role of the
+ *    emitter or the receiver. When acting as an emitter, the returned
+ *    variant is the one that has been passed to this variant
+ *    transmitter. Conversely, when acting as a receiver, the varaint
+ *    transmitter is connected to only one active transmitter that is
+ *    either an emitter or a variant. The returned variant then comes
+ *    from this active transmitter.
+ */
 QVariant& dtkComposerTransmitter::variant(void)
 {
     return d->variant;
 }
 
+//! Several cases can occur when calling this method.
+/*!  
+ *  A transmitter can be either an emitter, a receiver or a
+ *  variant. The case of the proxy is forgotten since this method must
+ *  not be called in this case.
+ *
+ *  - Emitter case: the returned variant contains the data that has
+ *    been passed to the emitter.
+ *
+ *  - Receiver case: a receiver is connected to only one active
+ *    transmitter which can be either an emitter or a variant playing
+ *    the role of an emitter. The returned variant comes from this
+ *    active transmitter.
+ *
+ *  - Variant case: the variant transmitter can play the role of the
+ *    emitter or the receiver. When acting as an emitter, the returned
+ *    variant is the one that has been passed to this variant
+ *    transmitter. Conversely, when acting as a receiver, the varaint
+ *    transmitter is connected to only one active transmitter that is
+ *    either an emitter or a variant. The returned variant then comes
+ *    from this active transmitter.
+ */
 const QVariant& dtkComposerTransmitter::variant(void) const
 {
     return d->variant;
 }
 
-dtkAbstractContainer& dtkComposerTransmitter::container(void)
+//! A transmitter can contain a container. In this case, the
+//! transmitter is either a vector emitter, a vector receiver or a
+//! variant.
+/*!  
+ *  
+ */
+dtkAbstractContainerWrapper& dtkComposerTransmitter::container(void)
 {
     return d->container;
 }
 
-const dtkAbstractContainer& dtkComposerTransmitter::container(void) const
+//! 
+/*!  
+ *  
+ */
+const dtkAbstractContainerWrapper& dtkComposerTransmitter::container(void) const
 {
     return d->container;
 }
 
+//! Returns the type of the data contained by the transmitter.
+/*!  
+ *  This data is always stored as a variant.
+ */
 QVariant::Type dtkComposerTransmitter::type(void) const
 {
     return d->variant.type();
 }
 
+//! Returns the type name of the data contained by the transmitter.
+/*!  
+ *  This data is always stored as a variant.
+ */
 QString dtkComposerTransmitter::typeName(void) const
 {
-    return QVariant::typeToName(d->variant.type());
+    return d->variant.typeName();
 }
 
-//! 
+//! Sets the node to which the current transmitter is parented.
 /*!  
  *  
  */
@@ -202,26 +264,6 @@ void dtkComposerTransmitter::removePrevious(dtkComposerTransmitter *transmitter)
     d->previous_list.removeOne(transmitter);
 }
 
-// //! Returns a shared copy of the list of the transmitters that follow
-// //! the current one.
-// /*! 
-//  *  
-//  */
-// QList<dtkComposerTransmitter *> dtkComposerTransmitter::nextList(void)
-// {
-//     return d->next_list;
-// }
-
-// //! Returns a shared copy of the list of the transmitters that precede
-// //! the current one.
-// /*! 
-//  *  
-//  */
-// QList<dtkComposerTransmitter *> dtkComposerTransmitter::previousList(void)
-// {
-//     return d->previous_list;
-// }
-
 //! Returns true when current transmitter and \a transmitter share
 //! data of same type.
 /*! 
@@ -237,7 +279,8 @@ bool dtkComposerTransmitter::connect(dtkComposerTransmitter *transmitter)
     return false;
 }
 
-//! 
+//! Adds \a receiver to the list of the receivers to which the current
+//! transmitter is connected.
 /*! 
  *  
  */
@@ -246,13 +289,24 @@ void dtkComposerTransmitter::appendReceiver(dtkComposerTransmitter *receiver)
     d->receivers << receiver;
 }
 
-//! 
+//! Remove \a receiver from the list of the receivers to which the current
+//! transmitter is connected.
 /*! 
  *  
  */
 void dtkComposerTransmitter::removeReceiver(dtkComposerTransmitter *receiver)
 {
     d->receivers.removeAll(receiver);
+}
+
+//! Returns the number of receiver transmitters to which the current
+//! transmitter is connected.
+/*! 
+ *  
+ */
+int dtkComposerTransmitter::receiverCount(void)
+{
+    return d->receivers.count();
 }
 
 //! Returns true when current transmitter and \a transmitter share

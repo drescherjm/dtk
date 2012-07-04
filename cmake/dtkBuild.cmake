@@ -146,11 +146,11 @@ endif()
 ## #################################################################
 
 if (APPLE)
-  set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
+  set(CMAKE_INSTALL_NAME_DIR "${LIBRARY_INSTALL_OUTPUT_PATH}")
 endif ()
 
 if (UNIX AND NOT APPLE)
-  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+  set(CMAKE_INSTALL_RPATH "${LIBRARY_INSTALL_OUTPUT_PATH}")
 endif ()
 
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)

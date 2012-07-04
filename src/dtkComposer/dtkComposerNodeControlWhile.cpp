@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  9 09:08:04 2012 (+0200)
+ * Last-Updated: Wed Jun 27 15:16:06 2012 (+0200)
  *           By: tkloczko
- *     Update #: 62
+ *     Update #: 63
  */
 
 /* Commentary: 
@@ -103,7 +103,11 @@ void dtkComposerNodeControlWhile::setInputs(void)
 {
     foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
         v->setTwinned(false);
-        v->setData(v->data());
+        if (v->container().isReset()) {
+            v->setData(v->data());
+        } else {
+            v->setData(v->container());
+        }
         v->setTwinned(true);        
     }
 }
@@ -115,7 +119,11 @@ void dtkComposerNodeControlWhile::setConditions(void)
 void dtkComposerNodeControlWhile::setOutputs(void)
 {
     foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
-        v->twin()->setData(v->data());  
+        if (v->container().isReset()) {
+            v->twin()->setData(v->data());
+        } else {
+            v->twin()->setData(v->container());
+        }
     }    
 }
 

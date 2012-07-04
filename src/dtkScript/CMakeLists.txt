@@ -38,7 +38,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkScriptInterpreterPool.cpp
   dtkScriptManager.cpp)
 
-if(DTK_BUILD_WRAPPERS)
+if(DTK_BUILD_WRAPPERS AND TCL_FOUND AND PYTHONLIBS_FOUND)
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkScriptInterpreterPython.h
   dtkScriptInterpreterTcl.h)
@@ -50,7 +50,7 @@ set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkScriptInterpreterPython.cpp
   dtkScriptInterpreterTcl.cpp)
-endif(DTK_BUILD_WRAPPERS)
+endif(DTK_BUILD_WRAPPERS AND TCL_FOUND AND PYTHONLIBS_FOUND)
 
 ## #################################################################
 ## Build rules
@@ -84,11 +84,11 @@ target_link_libraries(${PROJECT_NAME}
   dtkCore
   dtkLog)
 
-if(DTK_BUILD_WRAPPERS)
+if(DTK_BUILD_WRAPPERS AND TCL_FOUND AND PYTHONLIBS_FOUND)
 target_link_libraries(${PROJECT_NAME}
   ${TCL_LIBRARY}
   ${PYTHON_LIBRARIES})
-endif(DTK_BUILD_WRAPPERS)
+endif(DTK_BUILD_WRAPPERS AND TCL_FOUND AND PYTHONLIBS_FOUND)
 
 if(EDITLINE_FOUND)
   target_link_libraries(${PROJECT_NAME} ${EDITLINE_LIBRARY})
@@ -104,8 +104,8 @@ generate_export_header(${PROJECT_NAME}
   EXPORT_FILE_NAME "${PROJECT_NAME}Export.h")
 
 add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
-  COMMAND ${CMAKE_COMMAND} ARGS -E copy "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}"
-  COMMAND ${CMAKE_COMMAND} ARGS -E copy "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export")
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}"
+  COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export")
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

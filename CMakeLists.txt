@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Apr 27 20:25:11 2012 (+0200)
+## Last-Updated: Tue Jun 19 15:27:19 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 379
+##     Update #: 389
 ######################################################################
 ## 
 ### Commentary: 
@@ -36,12 +36,13 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 option(BUILD_SHARED_LIBS       "Build shared libraries" true)
 option(DTK_BUILD_TOOLS         "Build tools"            true)
-option(DTK_BUILD_EXAMPLES      "Build examples"         true)
-option(DTK_BUILD_TESTING       "Build testing"          true)
-option(DTK_BUILD_DOCUMENTATION "Build documentation"    true)
-option(DTK_BUILD_WRAPPERS      "Build wrappers"         true)
-option(DTK_BUILD_REPORTING     "Build reporting"        true)
-option(DTK_BUILD_TUTORIALS     "Build tutorials"        true)
+option(DTK_BUILD_EXAMPLES      "Build examples"         false)
+option(DTK_BUILD_TESTING       "Build testing"          false)
+option(DTK_BUILD_DOCUMENTATION "Build documentation"    false)
+option(DTK_BUILD_WRAPPERS      "Build wrappers"         false)
+option(DTK_BUILD_REPORTING     "Build reporting"        false)
+option(DTK_BUILD_TUTORIALS     "Build tutorials"        false)
+option(DTK_BUILD_MPI           "Build mpi related code" false)
 
 message ("Configuration of dtk:")
 message ("  DTK_BUILD_TOOLS ${DTK_BUILD_TOOLS}")

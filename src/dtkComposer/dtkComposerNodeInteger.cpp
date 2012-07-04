@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:38:46 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  9 09:56:28 2012 (+0200)
+ * Last-Updated: Tue Jun 26 16:36:48 2012 (+0200)
  *           By: tkloczko
- *     Update #: 35
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -21,17 +21,29 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeIntegerPrivate interface
+// /////////////////////////////////////////////////////////////////
+
 class dtkComposerNodeIntegerPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<qlonglong> receiver;
+    dtkComposerTransmitterVariant receiver;
 
 public:
     dtkComposerTransmitterEmitter<qlonglong> emitter;
 };
 
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeInteger implementation
+// /////////////////////////////////////////////////////////////////
+
 dtkComposerNodeInteger::dtkComposerNodeInteger(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeIntegerPrivate)
 {
+    QList<QVariant::Type> variant_list;
+    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double;
+
+    d->receiver.setTypes(variant_list);
     this->appendReceiver(&(d->receiver));
 
     d->emitter.setData(0);
@@ -48,7 +60,7 @@ dtkComposerNodeInteger::~dtkComposerNodeInteger(void)
 void dtkComposerNodeInteger::run(void)
 {
     if (!d->receiver.isEmpty())
-        d->emitter.setData(d->receiver.data());
+        d->emitter.setData(qvariant_cast<qlonglong>(d->receiver.data()));
 }
 
 qlonglong dtkComposerNodeInteger::value(void)

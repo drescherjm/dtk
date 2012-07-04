@@ -1,20 +1,20 @@
-/* dtkComposerNodeVector3DOperatorBinary.cpp --- 
- * 
+/* dtkComposerNodeVector3DOperatorBinary.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 16:15:40 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 17:57:39 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 25
+ * Last-Updated: Thu Jun 28 17:18:23 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 43
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeVector3D.h"
@@ -28,7 +28,7 @@
 #include <dtkLog/dtkLog>
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeVector3DOperatorBinary 
+// dtkComposerNodeVector3DOperatorBinary
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeVector3DOperatorBinaryPrivate
@@ -51,7 +51,7 @@ dtkComposerNodeVector3DOperatorBinary::dtkComposerNodeVector3DOperatorBinary(voi
 dtkComposerNodeVector3DOperatorBinary::~dtkComposerNodeVector3DOperatorBinary(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 
@@ -79,7 +79,7 @@ dtkComposerNodeVector3DOperatorBinaryScalar::dtkComposerNodeVector3DOperatorBina
 dtkComposerNodeVector3DOperatorBinaryScalar::~dtkComposerNodeVector3DOperatorBinaryScalar(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 
@@ -94,7 +94,7 @@ public:
     dtkComposerTransmitterVariant                   receiver_val;
 
 public:
-    dtkComposerTransmitterEmitter<dtkVector3DReal> emitter_vec;
+    dtkComposerTransmitterEmitter<dtkVector3DReal>  emitter_vec;
 };
 
 dtkComposerNodeVector3DOperatorHomothetic::dtkComposerNodeVector3DOperatorHomothetic(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVector3DOperatorHomotheticPrivate)
@@ -107,17 +107,24 @@ dtkComposerNodeVector3DOperatorHomothetic::dtkComposerNodeVector3DOperatorHomoth
 dtkComposerNodeVector3DOperatorHomothetic::~dtkComposerNodeVector3DOperatorHomothetic(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeVector3DOperatorBinary - SUM 
+// dtkComposerNodeVector3DOperatorBinary - SUM
 // /////////////////////////////////////////////////////////////////
 
 void dtkComposerNodeVector3DOperatorBinarySum::run(void)
 {
-    d->emitter_vec.setData(d->receiver_lhs.data() + d->receiver_rhs.data());
+    if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()){
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_vec.setData(dtkVector3DReal());
+
+    } else {
+        d->emitter_vec.setData(d->receiver_lhs.data() + d->receiver_rhs.data());
+
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -126,16 +133,29 @@ void dtkComposerNodeVector3DOperatorBinarySum::run(void)
 
 void dtkComposerNodeVector3DOperatorBinarySubstract::run(void)
 {
-    d->emitter_vec.setData(d->receiver_lhs.data() - d->receiver_rhs.data());
-}
+    if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()){
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_vec.setData(dtkVector3DReal());
 
+    } else {
+        d->emitter_vec.setData(d->receiver_lhs.data() - d->receiver_rhs.data());
+
+    }
+}
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeVector3DOperatorBinary - CROSS PROD
 // /////////////////////////////////////////////////////////////////
 
 void dtkComposerNodeVector3DOperatorBinaryCrossProd::run(void)
 {
-    d->emitter_vec.setData(d->receiver_lhs.data() % d->receiver_rhs.data());
+    if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()){
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_vec.setData(dtkVector3DReal());
+
+    } else {
+        d->emitter_vec.setData(d->receiver_lhs.data() % d->receiver_rhs.data());
+
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -144,7 +164,14 @@ void dtkComposerNodeVector3DOperatorBinaryCrossProd::run(void)
 
 void dtkComposerNodeVector3DOperatorBinaryScalarDotProd::run(void)
 {
-    d->emitter_val.setData(d->receiver_lhs.data() * d->receiver_rhs.data());
+    if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()){
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_val.setData(qreal());
+
+    } else {
+        d->emitter_val.setData(d->receiver_lhs.data() * d->receiver_rhs.data());
+
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -153,7 +180,15 @@ void dtkComposerNodeVector3DOperatorBinaryScalarDotProd::run(void)
 
 void dtkComposerNodeVector3DOperatorHomotheticMult::run(void)
 {
-    d->emitter_vec.setData(d->receiver_vec.data() * d->receiver_val.data().toReal());
+    if (d->receiver_vec.isEmpty() || d->receiver_val.isEmpty()){
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_vec.setData(dtkVector3DReal());
+
+
+    } else {
+        d->emitter_vec.setData(d->receiver_vec.data() * qvariant_cast<qreal>(d->receiver_val.data()));
+
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -162,5 +197,21 @@ void dtkComposerNodeVector3DOperatorHomotheticMult::run(void)
 
 void dtkComposerNodeVector3DOperatorHomotheticDivision::run(void)
 {
-    d->emitter_vec.setData(d->receiver_vec.data() / d->receiver_val.data().toReal());
+    if (d->receiver_vec.isEmpty() || d->receiver_val.isEmpty()) {
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_vec.setData(dtkVector3DReal());
+
+
+    } else {
+        qreal value = qvariant_cast<qreal>(d->receiver_val.data());
+
+        if (value != 0 ) {
+            d->emitter_vec.setData(d->receiver_vec.data() / value);
+
+        } else {
+            dtkWarn() << "You divide by zero. Nothing is done" ;
+            d->emitter_vec.setData(d->receiver_vec.data());
+
+        }
+    }
 }

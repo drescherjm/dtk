@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:33:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 16 12:01:11 2012 (+0200)
+ * Last-Updated: Wed Jun 27 15:57:31 2012 (+0200)
  *           By: tkloczko
- *     Update #: 76
+ *     Update #: 107
  */
 
 /* Commentary: 
@@ -20,13 +20,15 @@
 #ifndef DTKCOMPOSERTRANSMITTEREMITTER_H
 #define DTKCOMPOSERTRANSMITTEREMITTER_H
 
+#include "dtkComposerExport.h"
 #include "dtkComposerTransmitter.h"
 
-#include <dtkCore/dtkContainerVector.h>
-#include <dtkCore/dtkContainerList.h>
+#include <dtkCore/dtkGlobal>
+
+#include <dtkContainer/dtkContainerVector.h>
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterEmitter declaration
+// dtkComposerTransmitterEmitter interface
 // /////////////////////////////////////////////////////////////////
 
 template <typename T> class DTKCOMPOSER_EXPORT dtkComposerTransmitterEmitter : public dtkComposerTransmitter
@@ -42,30 +44,42 @@ public:
     inline const T& data(void) const;
 
 public:
-    inline void setVector(const dtkContainerVector<T>& vector);
+    virtual Kind kind(void) const;
 
-    inline       dtkContainerVector<T>& vector(void);
-    inline const dtkContainerVector<T>& vector(void) const;
-
-public:
-    inline void setList(const dtkContainerList<T>& list);
-
-    inline       dtkContainerList<T>& list(void);
-    inline const dtkContainerList<T>& list(void) const;
-
-public:
-    Kind kind(void) const;
-
-    QString kindName(void) const;
+    virtual QString kindName(void) const;
 
 public:
     LinkMap leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 
 private:
     T m_data;
-    
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerTransmitterEmitterVector interface
+// /////////////////////////////////////////////////////////////////
+
+template <typename T> class DTKCOMPOSER_EXPORT dtkComposerTransmitterEmitterVector : public dtkComposerTransmitterEmitter<T>
+{
+public:
+     dtkComposerTransmitterEmitterVector(dtkComposerNode *parent = 0);
+    ~dtkComposerTransmitterEmitterVector(void);
+
+public:
+    dtkComposerTransmitter::Kind kind(void) const;
+
+    QString kindName(void) const;
+
+public:
+    inline void setData(const dtkContainerVector<T>& vector);
+
+    inline       dtkContainerVector<T>& data(void);
+    inline const dtkContainerVector<T>& data(void) const;
+
+private:
     dtkContainerVector<T> m_vector;
-    dtkContainerList<T>   m_list;
+
+    using dtkComposerTransmitterEmitter<T>::d;
 };
 
 // /////////////////////////////////////////////////////////////////

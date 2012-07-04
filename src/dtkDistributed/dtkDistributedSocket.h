@@ -4,7 +4,7 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 18:19:39 2012 (+0200)
+ * Last-Updated: Mon May 21 23:50:26 2012 (+0200)
  *           By: Julien Wintz
  *     Update #:
  */
@@ -20,14 +20,14 @@
 #ifndef DTKDISTRIBUTEDSOCKET_H
 #define DTKDISTRIBUTEDSOCKET_H
 
-#include <QObject>
-#include <QtCore>
-#include <QTcpSocket>
-
 #include "dtkDistributedExport.h"
 #include "dtkDistributedMessage.h"
 
+#include <QtCore>
+#include <QtNetwork>
+
 class dtkAbstractData;
+
 class dtkDistributedSocketPrivate;
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedSocket : public QTcpSocket

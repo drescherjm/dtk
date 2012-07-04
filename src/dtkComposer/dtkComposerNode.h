@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:24:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 19 12:36:23 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 51
+ * Last-Updated: Wed Jun 27 16:12:18 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 54
  */
 
 /* Commentary: 

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:15:12
  * Version: $Id$
- * Last-Updated: ven. avril 13 21:43:24 2012 (+0200)
+ * Last-Updated: mar. juin 19 14:39:46 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 19
+ *     Update #: 33
  */
 
 /* Commentary:
@@ -22,6 +22,7 @@
 
 #include "dtkComposerExport.h"
 #include "dtkComposerNodeComposite.h"
+#include "dtkComposerNodeLeaf.h"
 
 #include <QDomDocument>
 
@@ -34,8 +35,10 @@ class dtkDistributedCommunicator;
 class dtkDistributedController;
 class dtkDistributedSlave;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeRemote : public dtkComposerNodeComposite
+class DTKCOMPOSER_EXPORT dtkComposerNodeRemote : public QObject, public dtkComposerNodeComposite
 {
+    Q_OBJECT
+
 public:
              dtkComposerNodeRemote(void);
     virtual ~dtkComposerNodeRemote(void);
@@ -45,6 +48,9 @@ public:
 
 public:
     QString titleHint(void);
+
+public slots:
+    void onJobStarted(QString id);
 
 public:
     void setComposition(QDomDocument document);
@@ -63,5 +69,65 @@ public:
 private:
     dtkComposerNodeRemotePrivate *d;
 };
+
+
+
+
+
+// /////////////////////////////////////////////////////////////////
+// Distributed submit
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeRemoteSubmitPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeRemoteSubmit : public QObject, public dtkComposerNodeLeaf
+{
+    Q_OBJECT
+
+public:
+     dtkComposerNodeRemoteSubmit(void);
+    ~dtkComposerNodeRemoteSubmit(void);
+
+public:
+    void run(void);
+
+public slots:
+    void onJobQueued(QString id);
+
+public:
+    inline QString type(void) {
+        return "remoteSubmit";
+    }
+
+    inline QString titleHint(void) {
+        return "Remote Submit";
+    }
+
+
+public:
+    inline QString inputLabelHint(int port) {
+        if (port == 0)
+            return "cluster";
+        else if (port == 1)
+            return "nodes";
+        else if (port == 2)
+            return "cores";
+        else if (port == 3)
+            return "walltime";
+        else if (port == 4)
+            return "queuename";
+        else
+            return "value";
+    }
+
+public:
+    inline QString outputLabelHint(int) {
+        return "jobid";
+    }
+
+protected:
+    dtkComposerNodeRemoteSubmitPrivate *d;
+};
+
 
 #endif /* DTKCOMPOSERNODEREMOTE_H */

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Mon Jul 12 15:58:19 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 15:33:15 2012 (+0200)
- *           By: tkloczko
- *     Update #: 12
+ * Last-Updated: Tue May 29 14:39:11 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -245,14 +245,14 @@ template <class T> void dtkMatrixSquared<T>::makeInverse(void)
         T tTmp = dtkUnity<T>();
         tTmp /= elemTmp;
 	matSquaredCopy.multiplyRow(irow, tTmp);
-	multiplyRow(irow, tTmp);
+	this->multiplyRow(irow, tTmp);
 
 	for (unsigned irowToAddTo = 0; irowToAddTo < crowCopy; ++irowToAddTo) {
 	    if (irowToAddTo != irow) {
 		elemTmp = -matSquaredCopy[irowToAddTo][irow];
 		matSquaredCopy.addRowToRow(irow, irowToAddTo, elemTmp);
 		// repeat action on this
-		addRowToRow(irow, irowToAddTo, elemTmp);
+		this->addRowToRow(irow, irowToAddTo, elemTmp);
             };
         };
     };

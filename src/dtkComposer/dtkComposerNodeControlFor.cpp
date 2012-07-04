@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  9 09:35:49 2012 (+0200)
+ * Last-Updated: Wed Jun 27 15:19:19 2012 (+0200)
  *           By: tkloczko
- *     Update #: 126
+ *     Update #: 130
  */
 
 /* Commentary: 
@@ -144,20 +144,33 @@ void dtkComposerNodeControlFor::setInputs(void)
 {
     foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
         v->setTwinned(false);
-        v->setData(v->data());
+        if (v->container().isReset()) {
+            v->setData(v->data());
+        } else {
+            v->setData(v->container());
+        }
         v->setTwinned(true);
     }
 }
 
 void dtkComposerNodeControlFor::setOutputs(void)
 {
-    for (int i = 1; i < this->outputTwins().count(); i++)
-        this->outputTwins().at(i)->twin()->setData(this->outputTwins().at(i)->data());
+    for (int i = 1; i < this->outputTwins().count(); i++) {
+        if (this->outputTwins().at(i)->container().isReset()) {
+            this->outputTwins().at(i)->twin()->setData(this->outputTwins().at(i)->data());
+        } else {
+            this->outputTwins().at(i)->twin()->setData(this->outputTwins().at(i)->container());
+        }
+    }
 }
 
 void dtkComposerNodeControlFor::setVariables(void)
 {
-    this->outputTwins().first()->twin()->setData(this->outputTwins().first()->data());
+    if (this->outputTwins().first()->container().isReset()) {
+        this->outputTwins().first()->twin()->setData(this->outputTwins().first()->data());
+    } else {
+        this->outputTwins().first()->twin()->setData(this->outputTwins().first()->container());
+    }
 }
 
 int dtkComposerNodeControlFor::selectBranch(void)

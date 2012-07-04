@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Fri May 18 16:03:48 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 147
+ * Last-Updated: Thu Jun 28 14:47:12 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 149
  */
 
 /* Commentary:
@@ -31,6 +31,7 @@ public:
     typedef QHash<QPair<QString, QStringList>, dtkAbstractViewFactory::dtkAbstractViewAnimatorCreator>   dtkAbstractViewAnimatorCreatorHash;
     typedef QHash<QPair<QString, QStringList>, dtkAbstractViewFactory::dtkAbstractViewNavigatorCreator>  dtkAbstractViewNavigatorCreatorHash;
     typedef QHash<QPair<QString, QStringList>, dtkAbstractViewFactory::dtkAbstractViewInteractorCreator> dtkAbstractViewInteractorCreatorHash;
+    typedef QHash<QString,                     QString>                                                  dtkAbstractViewInterfacesHash;
 
 public:
     QHash<QString, unsigned int> viewCount;
@@ -41,6 +42,7 @@ public:
     dtkAbstractViewAnimatorCreatorHash   animators;
     dtkAbstractViewNavigatorCreatorHash  navigators;
     dtkAbstractViewInteractorCreatorHash interactors;
+    dtkAbstractViewInterfacesHash       interfaces;
 };
 
 DTKCORE_EXPORT dtkAbstractViewFactory *dtkAbstractViewFactory::instance(void)
@@ -78,6 +80,23 @@ dtkAbstractView *dtkAbstractViewFactory::create(const QString& type)
     emit created(view, type);
 
     return view;
+}
+
+QStringList dtkAbstractViewFactory::implementations(const QString& interface)
+{
+    QStringList implementations;
+
+    if(d->interfaces.keys().contains(interface))
+        implementations << d->interfaces.values(interface);
+    else
+        qDebug() << "There is no available implementation of " << interface ;
+
+    return implementations;
+}
+
+QStringList dtkAbstractViewFactory::interfaces(void)
+{
+    return d->interfaces.keys();
 }
 
 dtkSmartPointer<dtkAbstractView> dtkAbstractViewFactory::createSmartPointer(const QString& type)
@@ -140,6 +159,17 @@ bool dtkAbstractViewFactory::registerViewType(const QString& type, dtkAbstractVi
     }
 
     qDebug()<<"dtkAbstractViewFactory::registerViewType 2 ";
+
+    return false;
+}
+
+bool dtkAbstractViewFactory::registerViewType(const QString& type, dtkAbstractViewCreator func, const QString& interface)
+{
+    if(!d->creators.contains(type)) {
+        d->creators.insert(type, func);
+        d->interfaces.insertMulti(interface, type);
+        return true;
+    }
 
     return false;
 }

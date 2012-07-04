@@ -106,7 +106,6 @@ void dtkPluginManager::initialize(void)
     const QString appDir = qApp->applicationDirPath();
 
     foreach(QString path, pathList) {
-
         QDir dir(appDir);
 
         if (dir.cd(path)) {

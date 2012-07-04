@@ -22,7 +22,6 @@
 
 #include "dtkPlotExport.h"
 
-#include <qwt_plot_renderer.h>
 
 class dtkPlotRendererPrivate;
 class dtkPlotView;

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 14:08:54 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 14:09:35 2012 (+0200)
+ * Last-Updated: Tue Jul  3 13:55:04 2012 (+0200)
  *           By: tkloczko
- *     Update #: 2
+ *     Update #: 7
  */
 
 /* Commentary: 
@@ -30,6 +30,8 @@ class dtkComposerNodeLeafProcessPrivate
 {
 public:
     dtkAbstractProcess *process;
+
+    bool implementation_has_changed;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -39,6 +41,7 @@ public:
 dtkComposerNodeLeafProcess::dtkComposerNodeLeafProcess(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeLeafProcessPrivate)
 {
     d->process = NULL;
+    d->implementation_has_changed = false;
 }
 
 dtkComposerNodeLeafProcess::~dtkComposerNodeLeafProcess(void)
@@ -53,7 +56,12 @@ dtkComposerNodeLeafProcess::~dtkComposerNodeLeafProcess(void)
     d = NULL;
 }
 
-QString dtkComposerNodeLeafProcess::currentImplementation(void)
+bool dtkComposerNodeLeafProcess::implementationHasChanged(void) const
+{
+    return d->implementation_has_changed;
+}
+
+QString dtkComposerNodeLeafProcess::currentImplementation(void) const
 {
     if (d->process)
         return d->process->identifier();
@@ -64,15 +72,18 @@ QString dtkComposerNodeLeafProcess::currentImplementation(void)
 QStringList dtkComposerNodeLeafProcess::implementations(void)
 {
     QStringList implementations;
+    QStringList all_implementations = dtkAbstractProcessFactory::instance()->implementations(this->abstractProcessType());
 
-    foreach(QString implementation, dtkAbstractProcessFactory::instance()->implementations(this->abstractProcessType()))
-        implementations << implementation;
+    for (int i = 0; i < all_implementations.count(); ++i)
+        implementations << all_implementations.at(i);
 
     return implementations;
 }
 
 dtkAbstractProcess *dtkComposerNodeLeafProcess::createProcess(const QString& implementation)
 {
+    d->implementation_has_changed = false;
+
     if (implementation.isEmpty() || implementation == "Choose implementation")
         return NULL;
     
@@ -80,11 +91,15 @@ dtkAbstractProcess *dtkComposerNodeLeafProcess::createProcess(const QString& imp
 
         d->process = dtkAbstractProcessFactory::instance()->create(implementation);
 
+        d->implementation_has_changed = true;
+
     } else if (d->process->identifier() != implementation) {
 
         delete d->process;
 
         d->process = dtkAbstractProcessFactory::instance()->create(implementation);
+
+        d->implementation_has_changed = true;
 
     }        
 

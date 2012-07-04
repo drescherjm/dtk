@@ -18,10 +18,10 @@
  */
 
 #include "tstSidePane.h"
-
 #include <dtkGui/dtkColorButton.h>
 
 #include <QtGui>
+
 
 class tstSidePanePrivate
 {

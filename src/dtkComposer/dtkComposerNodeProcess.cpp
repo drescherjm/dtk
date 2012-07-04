@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:17:21
  * Version: $Id$
- * Last-Updated: Thu Jun 28 14:14:44 2012 (+0200)
+ * Last-Updated: Tue Jul  3 13:55:08 2012 (+0200)
  *           By: tkloczko
- *     Update #: 255
+ *     Update #: 264
  */
 
 /* Commentary:
@@ -36,7 +36,7 @@ public:
     dtkComposerTransmitterReceiver<qlonglong> receiver_integer_1;
     dtkComposerTransmitterReceiver<double> receiver_real;
     dtkComposerTransmitterReceiver<dtkAbstractData *> receiver_data;
-    dtkComposerTransmitterReceiver<QString> receiver_type;
+    dtkComposerTransmitterReceiver<QString> receiver_string;
     dtkComposerTransmitterReceiver<dtkAbstractData *> receiver_lhs;
     dtkComposerTransmitterReceiver<dtkAbstractData *> receiver_rhs;
 
@@ -55,7 +55,7 @@ public:
 
 dtkComposerNodeProcess::dtkComposerNodeProcess(void) : dtkComposerNodeLeafProcess(), d(new dtkComposerNodeProcessPrivate)
 {
-    this->appendReceiver(&(d->receiver_type));
+    this->appendReceiver(&(d->receiver_string));
     this->appendReceiver(&(d->receiver_integer_0));
     this->appendReceiver(&(d->receiver_integer_1));
     this->appendReceiver(&(d->receiver_real));
@@ -80,20 +80,29 @@ dtkComposerNodeProcess::~dtkComposerNodeProcess(void)
     d = NULL;
 }
 
+bool dtkComposerNodeProcess::isAbstractProcess(void) const
+{
+    return true;
+}
+
+QString dtkComposerNodeProcess::abstractProcessType(void) const 
+{
+    return "dtkAbstractProcess";
+}
+
 void dtkComposerNodeProcess::run(void)
 {
-    if (d->receiver_type.isEmpty()) {
-        dtkWarn() << "no type speficied in process node!";
-        return;
-    }
 
-    if(!d->process)
-        d->process = dtkAbstractProcessFactory::instance()->create(d->receiver_type.data());
+    if (this->process())
+        d->process = this->process();
 
     if (!d->process) {
-        dtkWarn() << "no process, abort "<<  d->receiver_type.data();
+        dtkWarn() << "no process, abort "<<  this->currentImplementation();
         return;
     }
+
+    if (!d->receiver_string.isEmpty())
+        d->process->read(d->receiver_string.data());
 
     if (!d->receiver_integer_0.isEmpty())
         d->process->setParameter((int)d->receiver_integer_0.data(), 0);
@@ -136,7 +145,7 @@ QString dtkComposerNodeProcess::titleHint(void)
 QString dtkComposerNodeProcess::inputLabelHint(int port)
 {
     if(port == 0)
-        return "type";
+        return "string";
 
     if(port == 1)
         return "integer";

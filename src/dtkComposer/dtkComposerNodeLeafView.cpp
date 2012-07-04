@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 14:38:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 14:39:21 2012 (+0200)
+ * Last-Updated: Tue Jul  3 14:01:57 2012 (+0200)
  *           By: tkloczko
- *     Update #: 1
+ *     Update #: 4
  */
 
 /* Commentary: 
@@ -30,6 +30,8 @@ class dtkComposerNodeLeafViewPrivate
 {
 public:
     dtkAbstractView *view;
+
+    bool implementation_has_changed;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -39,6 +41,7 @@ public:
 dtkComposerNodeLeafView::dtkComposerNodeLeafView(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeLeafViewPrivate)
 {
     d->view = NULL;
+    d->implementation_has_changed = false;
 }
 
 dtkComposerNodeLeafView::~dtkComposerNodeLeafView(void)
@@ -53,6 +56,11 @@ dtkComposerNodeLeafView::~dtkComposerNodeLeafView(void)
     d = NULL;
 }
 
+bool dtkComposerNodeLeafView::implementationHasChanged(void) const
+{
+    return d->implementation_has_changed;
+}
+
 QString dtkComposerNodeLeafView::currentImplementation(void)
 {
     if (d->view)
@@ -64,15 +72,18 @@ QString dtkComposerNodeLeafView::currentImplementation(void)
 QStringList dtkComposerNodeLeafView::implementations(void)
 {
     QStringList implementations;
+    QStringList all_implementations = dtkAbstractViewFactory::instance()->implementations(this->abstractViewType());
 
-    foreach(QString implementation, dtkAbstractViewFactory::instance()->implementations(this->abstractViewType()))
-        implementations << implementation;
+   for (int i = 0; i < all_implementations.count(); ++i)
+        implementations << all_implementations.at(i);
 
     return implementations;
 }
 
 dtkAbstractView *dtkComposerNodeLeafView::createView(const QString& implementation)
 {
+    d->implementation_has_changed = false;
+
     if (implementation.isEmpty() || implementation == "Choose implementation")
         return NULL;
     
@@ -80,11 +91,15 @@ dtkAbstractView *dtkComposerNodeLeafView::createView(const QString& implementati
 
         d->view = dtkAbstractViewFactory::instance()->create(implementation);
 
+        d->implementation_has_changed = true;
+
     } else if (d->view->identifier() != implementation) {
 
         delete d->view;
 
         d->view = dtkAbstractViewFactory::instance()->create(implementation);
+
+        d->implementation_has_changed = true;
 
     }        
 

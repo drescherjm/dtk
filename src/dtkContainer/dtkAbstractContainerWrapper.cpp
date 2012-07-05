@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:51:33 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 13:00:38 2012 (+0200)
+ * Last-Updated: Wed Jul  4 12:23:04 2012 (+0200)
  *           By: tkloczko
- *     Update #: 27
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -54,7 +54,7 @@ void dtkAbstractContainerWrapper::reset(void)
     m_container = NULL;
 }
 
-bool dtkAbstractContainerWrapper::isReset(void)
+bool dtkAbstractContainerWrapper::isReset(void) const
 {
     if (!m_container)
         return true;
@@ -81,6 +81,14 @@ dtkAbstractContainerWrapper *dtkAbstractContainerWrapper::clone(void) const
 {
     if (m_container)
         return m_container->clone();
+
+    return NULL;
+}
+
+dtkAbstractContainerWrapper *dtkAbstractContainerWrapper::voidClone(void) const
+{
+    if (m_container)
+        return m_container->voidClone();
 
     return NULL;
 }

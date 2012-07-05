@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 24 23:29:24 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Jun  2 00:07:12 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 160
+ * Last-Updated: mar. juil.  3 18:59:53 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 161
  */
 
 /* Commentary: 
@@ -53,7 +53,7 @@ public:
     dtkAbstractView *view;
 };
 
-dtkComposerNodeView::dtkComposerNodeView(void) : QObject(), dtkComposerNodeLeaf(), d(new dtkComposerNodeViewPrivate)
+dtkComposerNodeView::dtkComposerNodeView(void) : QObject(), dtkComposerNodeLeafView(), d(new dtkComposerNodeViewPrivate)
 {
     d->view = NULL;
 

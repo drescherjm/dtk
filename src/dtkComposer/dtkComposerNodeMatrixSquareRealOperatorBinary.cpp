@@ -65,7 +65,6 @@ public:
     dtkComposerTransmitterReceiver<dtkMatrixSquareReal> receiver_matrix;
     dtkComposerTransmitterReceiver<dtkVectorReal>       receiver_vector;
 
-
 public:
     dtkComposerTransmitterEmitter<dtkVectorReal>        emitter_vector;
 };
@@ -132,11 +131,11 @@ void dtkComposerNodeMatrixSquareRealOperatorBinarySum::run(void)
         d->emitter_matrix.setData(dtkMatrixSquareReal());
 
     } else {
-        dtkMatrixSquareReal& matrix1(d->receiver_lhs.data());
-        dtkMatrixSquareReal& matrix2(d->receiver_rhs.data());
+        const dtkMatrixSquareReal& m_lhs(d->receiver_lhs.data());
+        const dtkMatrixSquareReal& m_rhs(d->receiver_rhs.data());
 
-        if ( matrix1.getRows() == matrix2.getRows())
-            d->emitter_matrix.setData(matrix1 + matrix2 );
+        if ( m_lhs.getRows() == m_rhs.getRows())
+            d->emitter_matrix.setData(m_lhs + m_rhs);
 
         else {
             dtkWarn()<< "Matrices do not have the same size";
@@ -157,11 +156,11 @@ void dtkComposerNodeMatrixSquareRealOperatorBinarySubstract::run(void)
         d->emitter_matrix.setData(dtkMatrixSquareReal());
 
     } else {
-        dtkMatrixSquareReal& matrix1(d->receiver_lhs.data());
-        dtkMatrixSquareReal& matrix2(d->receiver_rhs.data());
+        const dtkMatrixSquareReal& m_lhs(d->receiver_lhs.data());
+        const dtkMatrixSquareReal& m_rhs(d->receiver_rhs.data());
 
-        if ( matrix1.getRows() == matrix2.getRows())
-            d->emitter_matrix.setData(matrix1 - matrix2 );
+        if ( m_lhs.getRows() == m_rhs.getRows())
+            d->emitter_matrix.setData(m_lhs - m_rhs);
 
         else {
             dtkWarn()<< "Matrices do not have the same size";
@@ -183,11 +182,11 @@ void dtkComposerNodeMatrixSquareRealOperatorBinaryMult::run(void)
         d->emitter_matrix.setData(dtkMatrixSquareReal());
 
     } else {
-        dtkMatrixSquareReal& matrix1(d->receiver_lhs.data());
-        dtkMatrixSquareReal& matrix2(d->receiver_rhs.data());
+        const dtkMatrixSquareReal& m_lhs(d->receiver_lhs.data());
+        const dtkMatrixSquareReal& m_rhs(d->receiver_rhs.data());
 
-        if ( matrix1.getRows() == matrix2.getRows())
-            d->emitter_matrix.setData(matrix1 * matrix2 );
+        if ( m_lhs.getRows() == m_rhs.getRows())
+            d->emitter_matrix.setData(m_lhs * m_rhs);
 
         else {
             dtkWarn()<< "Matrices do not have the same size";
@@ -208,11 +207,11 @@ void dtkComposerNodeMatrixSquareRealOperatorBinaryRightProductMV::run(void)
         d->emitter_vector.setData(dtkVectorReal());
 
     } else {
-        dtkMatrixSquareReal& matrix(d->receiver_matrix.data());
-        dtkVectorReal& vector(d->receiver_vector.data());
+        const dtkMatrixSquareReal& matrix(d->receiver_matrix.data());
+        const dtkVectorReal& vector(d->receiver_vector.data());
 
         if ( matrix.getCols() == vector.getRows() )
-            d->emitter_vector.setData(matrix * vector );
+            d->emitter_vector.setData(matrix * vector);
 
         else {
             dtkWarn() << "Matrix's row and vector's column are different size. Nothing is done";
@@ -234,14 +233,14 @@ void dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProductVM::run(void)
         d->emitter_vector.setData(dtkVectorReal());
 
     } else {
-        dtkMatrixSquareReal& matrix(d->receiver_matrix.data());
-        dtkVectorReal vec(d->receiver_vector.data());
+        const dtkMatrixSquareReal& matrix(d->receiver_matrix.data());
+        const dtkVectorReal& vec(d->receiver_vector.data());
         dtkVectorReal result = dtkVectorReal(vec.getRows()) ;
 
         if (matrix.getCols() == vec.getRows()){
 
-            for( int i = 0; i< matrix.getCols();++i ){
-                for( int j = 0; j< vec.getRows();++j )
+            for(qlonglong i = 0; i< matrix.getCols();++i ){
+                for(qlonglong j = 0; j< vec.getRows();++j )
                     result[i] += vec[j] * matrix[j][i] ;
             }
 
@@ -270,12 +269,12 @@ void dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceRowMatrixByVector::run(
 
         if (qvariant_cast<qlonglong>(d->receiver_index.data()) < d->receiver_matrix.data().getRows()){
 
-            dtkMatrixSquareReal& matrix (d->receiver_matrix.data());
-            qlonglong value =  qvariant_cast<qlonglong>(d->receiver_index.data());
-            dtkVectorReal vec(d->receiver_vector.data());
+            dtkMatrixSquareReal matrix (d->receiver_matrix.data());
+            qlonglong row =  qvariant_cast<qlonglong>(d->receiver_index.data());
+            const dtkVectorReal& vec(d->receiver_vector.data());
 
-            for( int j = 0; j < matrix.getCols(); ++j)
-                matrix[value][j]= vec[j] ;
+            for(qlonglong j = 0; j < matrix.getCols(); ++j)
+                matrix[row][j]= vec[j] ;
 
             d->emitter_matrix.setData(matrix);
 
@@ -301,15 +300,14 @@ void dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColMatrixByVector::run(
 
         if (qvariant_cast<qlonglong>(d->receiver_index.data())< d->receiver_matrix.data().getRows()){
 
-            dtkMatrixSquareReal& matrix (d->receiver_matrix.data());
-            qlonglong value =  qvariant_cast<qlonglong>(d->receiver_index.data());
-            dtkVectorReal vec(d->receiver_vector.data());
+            dtkMatrixSquareReal matrix (d->receiver_matrix.data());
+            qlonglong col =  qvariant_cast<qlonglong>(d->receiver_index.data());
+            const dtkVectorReal& vec(d->receiver_vector.data());
 
-            for ( int i = 0; i < matrix.getRows(); ++i) {
-                for ( int j = 0; j < matrix.getRows(); ++j)
-                    matrix[i][value]= vec[i] ;
-                dtkDebug()<< matrix ;
-                d->emitter_matrix.setData(matrix); }
+            for (qlonglong i = 0; i < matrix.getRows(); ++i)
+                matrix[i][col]= vec[i] ;
+
+            d->emitter_matrix.setData(matrix); 
 
         } else {
             dtkWarn() << "index > row of the marix. Nothing is done" ;

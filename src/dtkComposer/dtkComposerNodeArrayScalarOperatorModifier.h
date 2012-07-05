@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette lekouta, Inria.
  * Created: Thu Apr 26 16:14:44 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 15:17:53 2012 (+0200)
+ * Last-Updated: Thu Jul  5 12:18:51 2012 (+0200)
  *           By: tkloczko
- *     Update #: 39
+ *     Update #: 41
  */
 
 /* Commentary:
@@ -54,16 +54,16 @@ protected:
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeArrayScalarOperatorModifierPend interface
+// dtkComposerNodeArrayScalarOperatorModifierAll interface
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNodeArrayScalarOperatorModifierPendPrivate;
+class dtkComposerNodeArrayScalarOperatorModifierAllPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorModifierPend  : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorModifierAll  : public dtkComposerNodeLeaf
 {
 public:
-    dtkComposerNodeArrayScalarOperatorModifierPend(void);
-    ~dtkComposerNodeArrayScalarOperatorModifierPend (void);
+    dtkComposerNodeArrayScalarOperatorModifierAll(void);
+    ~dtkComposerNodeArrayScalarOperatorModifierAll (void);
 
     inline QString inputLabelHint(int port) {
         if (port == 0)
@@ -77,7 +77,7 @@ public:
     }
 
 protected:
-    dtkComposerNodeArrayScalarOperatorModifierPendPrivate *d;
+    dtkComposerNodeArrayScalarOperatorModifierAllPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -122,7 +122,7 @@ public:
 // dtkComposerNodeArrayScalarOperator - APPEND
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorAppend : public dtkComposerNodeArrayScalarOperatorModifierPend
+class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorAppend : public dtkComposerNodeArrayScalarOperatorModifierAll
 {
 public:
     void run(void);
@@ -137,23 +137,98 @@ public:
     }
 };
 
-
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeArrayScalarOperator - PREPEND
+// dtkComposerNodeArrayScalarOperatorModifierALL - PREPEND
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorPrepend : public dtkComposerNodeArrayScalarOperatorModifierPend
+class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorPrepend : public dtkComposerNodeArrayScalarOperatorModifierAll
 {
 public:
     void run(void);
 
 public:
     inline QString type(void) {
-        return "array_scalar_prenpend";
+        return "array_scalar_prepend";
     }
 
     inline QString titleHint(void) {
-        return "Scalar array prenpend";
+        return "Scalar array prepend";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeArrayScalarOperatorModifierALL - Add
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorModifierAllAdd : public dtkComposerNodeArrayScalarOperatorModifierAll
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "array_scalar_all_add";
+    }
+
+    inline QString titleHint(void) {
+        return "Scalar array all add";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeArrayScalarOperatorModifierALL - Substract
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorModifierAllSubstract : public dtkComposerNodeArrayScalarOperatorModifierAll
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "array_scalar_all_substract";
+    }
+
+    inline QString titleHint(void) {
+        return "Scalar array all substract";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeArrayScalarOperatorModifierALL - Mult
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorModifierAllMult : public dtkComposerNodeArrayScalarOperatorModifierAll
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "array_scalar_all_mult";
+    }
+
+    inline QString titleHint(void) {
+        return "Scalar array all mult";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeArrayScalarOperatorModifierALL - Divide
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorModifierAllDivide: public dtkComposerNodeArrayScalarOperatorModifierAll
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "array_scalar_all_divide";
+    }
+
+    inline QString titleHint(void) {
+        return "Scalar array all divide";
     }
 };
 

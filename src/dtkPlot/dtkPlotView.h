@@ -46,6 +46,9 @@ public:
     ~dtkPlotView(void);
 
 public:
+     QList<dtkPlotCurve *> curves(void);
+
+public:
     void   activatePanning(void);
     void deactivatePanning(void);
 

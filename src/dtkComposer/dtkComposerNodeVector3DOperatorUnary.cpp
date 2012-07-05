@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 15:58:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 17:57:57 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 14
+ * Last-Updated: Thu Jun 28 17:01:06 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -89,7 +89,7 @@ void dtkComposerNodeVector3DOperatorUnaryUnitary::run(void)
         d->emitter_vec.setData(dtkVector3DReal());
 
     }  else {
-        dtkVector3DReal& vector = d->receiver_vec.data();
+        const dtkVector3DReal& vector = d->receiver_vec.data();
         d->emitter_vec.setData(vector.unit());
     }
 }
@@ -106,7 +106,7 @@ void dtkComposerNodeVector3DOperatorUnaryScalarNorm::run(void)
         d->emitter_val.setData(qreal());
 
     }  else {
-        dtkVector3DReal& vector = d->receiver_vec.data();
+        const dtkVector3DReal& vector = d->receiver_vec.data();
         d->emitter_val.setData(vector.norm());
     }
 }

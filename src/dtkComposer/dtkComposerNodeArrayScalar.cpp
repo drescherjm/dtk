@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun 15 09:51:39 2012 (+0200)
+ * Last-Updated: Thu Jun 28 16:58:04 2012 (+0200)
  *           By: tkloczko
- *     Update #: 66
+ *     Update #: 70
  */
 
 /* Commentary: 
@@ -26,7 +26,7 @@
 #include <dtkLog/dtkLog>
 
 // /////////////////////////////////////////////////////////////////
-// 
+// dtkComposerNodeArrayScalarPrivate interface
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeArrayScalarPrivate
@@ -43,7 +43,7 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+// dtkComposerNodeArrayScalar implementation
 // /////////////////////////////////////////////////////////////////
 
 dtkComposerNodeArrayScalar::dtkComposerNodeArrayScalar(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeArrayScalarPrivate)
@@ -110,7 +110,7 @@ void dtkComposerNodeArrayScalar::run(void)
 {
     if (!d->receiver_array.isEmpty()) {
 
-        dtkContainerVectorReal &array(d->receiver_array.data());
+        const dtkContainerVectorReal& array(d->receiver_array.data());
 
         d->emitter_array.setData(array);
         d->emitter_size.setData(array.count());

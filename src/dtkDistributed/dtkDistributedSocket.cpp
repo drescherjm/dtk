@@ -93,7 +93,7 @@ void dtkDistributedSocket::send(QVariant variant, QString jobid, qint16 target)
             dtkDebug() << "pointer type, remove *"<< type;
         }
         dtkAbstractData *data = dtkAbstractDataFactory::instance()->create(type)->fromVariant(variant);
-        qDebug() << __func__ << data->identifier();
+        qDebug() << DTK_PRETTY_FUNCTION << data->identifier();
         array = data->serialize();
     }
 

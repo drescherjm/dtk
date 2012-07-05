@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Mon Feb 27 14:28:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  9 10:05:18 2012 (+0200)
+ * Last-Updated: Tue Jun 26 16:03:58 2012 (+0200)
  *           By: tkloczko
- *     Update #: 245
+ *     Update #: 246
  */
 
 /* Commentary:
@@ -25,7 +25,7 @@
 #include <dtkLog/dtkLog.h>
 
 #include <dtkMath/dtkMath.h>
-
+#include <QtCore/qmath.h>
 #include <math.h>
 
 // /////////////////////////////////////////////////////////////////
@@ -282,10 +282,10 @@ void dtkComposerNodeNumberOperatorUnarySqrt::run(void)
     case QVariant::UInt:
     case QVariant::LongLong:
     case QVariant::ULongLong:
-        d->emitter.setData(sqrt(qVariantValue<qlonglong>(d->receiver.data())));
+        d->emitter.setData(qSqrt(qVariantValue<qlonglong>(d->receiver.data())));
         break;
     case QVariant::Double:
-        d->emitter.setData(sqrt(qVariantValue<double>(d->receiver.data())));
+        d->emitter.setData(qSqrt(qVariantValue<double>(d->receiver.data())));
         break;
     default:
         dtkWarn() << "Type" << d->receiver.type() << "is not handled by the node.";
@@ -463,7 +463,7 @@ void dtkComposerNodeNumberOperatorUnaryFloor::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryRound::run(void)
 {
-    d->emitter.setData(round(qVariantValue<double>(d->receiver.data())));
+    d->emitter.setData(qRound(qVariantValue<double>(d->receiver.data())));
 }
 
 // /////////////////////////////////////////////////////////////////

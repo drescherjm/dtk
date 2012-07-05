@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 13:06:02 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 17:57:10 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 15
+ * Last-Updated: Thu Jun 28 17:11:55 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -133,7 +133,7 @@ void dtkComposerNodeQuaternion::run(void)
 {
     if (!d->receiver_quat.isEmpty()) {
 
-        dtkQuaternionReal quat(d->receiver_quat.data());
+        const dtkQuaternionReal& quat(d->receiver_quat.data());
         
         d->emitter_quat.setData(quat);
         d->emitter_q0.setData(quat[0]);

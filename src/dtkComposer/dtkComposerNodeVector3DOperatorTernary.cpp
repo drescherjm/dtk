@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 16:58:34 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 14:49:34 2012 (+0200)
+ * Last-Updated: Thu Jun 28 17:03:36 2012 (+0200)
  *           By: tkloczko
- *     Update #: 10
+ *     Update #: 12
  */
 
 /* Commentary: 
@@ -98,9 +98,9 @@ void dtkComposerNodeVector3DOperatorTernaryTripleProd::run(void)
 
 
     } else {
-        dtkVector3DReal& vector1 = d->receiver_0.data();
-        dtkVector3DReal& vector2 = d->receiver_1.data();
-        dtkVector3DReal& vector3 = d->receiver_2.data();
+        const dtkVector3DReal& vector1 = d->receiver_0.data();
+        const dtkVector3DReal& vector2 = d->receiver_1.data();
+        const dtkVector3DReal& vector3 = d->receiver_2.data();
 
         d->emitter_vec.setData(vector1 % (vector2 % vector3));
     }
@@ -116,9 +116,9 @@ void dtkComposerNodeVector3DOperatorTernaryScalarMixedProd::run(void)
         d->emitter_val.setData(qreal());
 
     }   else {
-        dtkVector3DReal& vector1 = d->receiver_0.data();
-        dtkVector3DReal& vector2 = d->receiver_1.data();
-        dtkVector3DReal& vector3 = d->receiver_2.data();
+        const dtkVector3DReal& vector1 = d->receiver_0.data();
+        const dtkVector3DReal& vector2 = d->receiver_1.data();
+        const dtkVector3DReal& vector3 = d->receiver_2.data();
 
         d->emitter_val.setData(dtkMixedProduct(vector1, vector2, vector3));
     }

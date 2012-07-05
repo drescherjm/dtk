@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 14:36:04 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 17:56:34 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 6
+ * Last-Updated: Thu Jun 28 17:22:28 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -89,7 +89,14 @@ dtkComposerNodeQuaternionOperatorHomothetic::~dtkComposerNodeQuaternionOperatorH
 
 void dtkComposerNodeQuaternionOperatorBinarySum::run(void)
 {
-    d->emitter_quat.setData(d->receiver_lhs.data() + d->receiver_rhs.data());
+    if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()){
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_quat.setData(dtkQuaternionReal());
+
+    } else {
+        d->emitter_quat.setData(d->receiver_lhs.data() + d->receiver_rhs.data());
+
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -98,7 +105,14 @@ void dtkComposerNodeQuaternionOperatorBinarySum::run(void)
 
 void dtkComposerNodeQuaternionOperatorBinarySubstract::run(void)
 {
-    d->emitter_quat.setData(d->receiver_lhs.data() - d->receiver_rhs.data());
+    if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()){
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_quat.setData(dtkQuaternionReal());
+
+    } else {
+        d->emitter_quat.setData(d->receiver_lhs.data() - d->receiver_rhs.data());
+
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -107,7 +121,14 @@ void dtkComposerNodeQuaternionOperatorBinarySubstract::run(void)
 
 void dtkComposerNodeQuaternionOperatorBinaryMult::run(void)
 {
-    d->emitter_quat.setData(d->receiver_lhs.data() * d->receiver_rhs.data());
+    if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()){
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_quat.setData(dtkQuaternionReal());
+
+    } else {
+        d->emitter_quat.setData(d->receiver_lhs.data() * d->receiver_rhs.data());
+
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -116,7 +137,14 @@ void dtkComposerNodeQuaternionOperatorBinaryMult::run(void)
 
 void dtkComposerNodeQuaternionOperatorHomotheticMult::run(void)
 {
-    d->emitter_quat.setData(d->receiver_quat.data() * d->receiver_val.data().toReal());
+    if (d->receiver_quat.isEmpty() || d->receiver_val.isEmpty()){
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_quat.setData(dtkQuaternionReal());
+
+    } else {
+        d->emitter_quat.setData(d->receiver_quat.data() * d->receiver_val.data().toReal());
+
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -125,5 +153,21 @@ void dtkComposerNodeQuaternionOperatorHomotheticMult::run(void)
 
 void dtkComposerNodeQuaternionOperatorHomotheticDivision::run(void)
 {
-    d->emitter_quat.setData(d->receiver_quat.data() / d->receiver_val.data().toReal());
+    if (d->receiver_quat.isEmpty() || d->receiver_val.isEmpty()){
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_quat.setData(dtkQuaternionReal());
+
+    } else {
+
+        qreal value = d->receiver_val.data().toReal();
+
+        if ( value != 0) {
+            d->emitter_quat.setData(d->receiver_quat.data() / value);
+
+        } else {
+            dtkWarn() << "You divide by zero. Nothing is done" ;
+            d->emitter_quat.setData(d->receiver_quat.data());
+
+        }
+    }
 }

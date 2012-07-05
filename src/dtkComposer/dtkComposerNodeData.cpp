@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:17:21
  * Version: $Id$
- * Last-Updated: Thu May 31 01:16:54 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 276
+ * Last-Updated: Tue Jul  3 12:41:41 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 281
  */
 
 /* Commentary:
@@ -35,7 +35,7 @@ class dtkComposerNodeDataPrivate
 {
 public:
     dtkComposerTransmitterEmitter<dtkAbstractData *> receiver_data;
-    dtkComposerTransmitterReceiver<QString> receiver_type;
+    dtkComposerTransmitterReceiver<QString> receiver_string;
     dtkComposerTransmitterReceiver<dtkVectorReal> receiver_vector;
 
 public:
@@ -49,9 +49,9 @@ public:
 // dtkComposerNodeData implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNodeData::dtkComposerNodeData(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeDataPrivate)
+dtkComposerNodeData::dtkComposerNodeData(void) : dtkComposerNodeLeafData(), d(new dtkComposerNodeDataPrivate)
 {
-    this->appendReceiver(&(d->receiver_type));
+    this->appendReceiver(&(d->receiver_string));
     this->appendReceiver(&(d->receiver_data));
     this->appendReceiver(&(d->receiver_vector));
 
@@ -69,21 +69,30 @@ dtkComposerNodeData::~dtkComposerNodeData(void)
 
     d = NULL;
 }
+   
+bool dtkComposerNodeData::isAbstractData(void) const 
+{
+    return true; 
+}
+
+QString dtkComposerNodeData::abstractDataType(void) const 
+{ 
+    return "dtkAbstractData"; 
+}
 
 void dtkComposerNodeData::run(void)
 {
-    if (d->receiver_type.isEmpty()) {
-        dtkWarn() << "no type speficied in data node!";
-        return;
-    }
 
-    if(!d->data)
-        d->data = dtkAbstractDataFactory::instance()->create(d->receiver_type.data());
+    if (this->data())
+        d->data = this->data();
 
     if (!d->data) {
-        dtkWarn() << "no data, abort "<<  d->receiver_type.data();
+        dtkWarn() << "no data, abort "<<  this->currentImplementation();
         return;
     }
+
+    if (!d->receiver_string.isEmpty())
+        d->data->setParameter(d->receiver_string.data());
 
     if(!d->receiver_vector.isEmpty())
         d->data->setParameter(d->receiver_vector.data());
@@ -107,7 +116,7 @@ QString dtkComposerNodeData::inputLabelHint(int port)
 {
     switch (port) {
     case 0:
-        return "type";
+        return "string";
     case 1:
         return "data";
     case 2:

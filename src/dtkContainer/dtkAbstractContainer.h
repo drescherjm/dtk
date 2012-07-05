@@ -37,7 +37,7 @@ enum dtkContainerType {
 // dtkAbstractContainer interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class DTKCONTAINER_EXPORT dtkAbstractContainer
+template <typename T> class dtkAbstractContainer
 {
 public:
      dtkAbstractContainer(void);
@@ -64,10 +64,10 @@ public:
     virtual bool contains(const T& value) const = 0;
     virtual bool contains(const dtkAbstractContainer<T>& values) const = 0;
 
-    virtual dtkxarch_int count(void) const = 0;
+    virtual qlonglong count(void) const = 0;
 
-    virtual       T *toArray(dtkxarch_int& count) = 0;
-    virtual const T *toArray(dtkxarch_int& count) const = 0;
+    virtual       T *toArray(qlonglong& count) = 0;
+    virtual const T *toArray(qlonglong& count) const = 0;
 
 public:
     dtkAbstractContainer& operator = (const dtkAbstractContainer<T>& other);
@@ -85,7 +85,7 @@ public:
     virtual bool isEqual(const dtkAbstractContainer& other) const = 0;
 
 public:
-    dtkAbstractContainer<T>  operator +  (const dtkAbstractContainer<T>& other) const;
+    dtkAbstractContainer<T>& operator +  (const dtkAbstractContainer<T>& other) const;
 
     dtkAbstractContainer<T>& operator += (const dtkAbstractContainer<T>& other);
     dtkAbstractContainer<T>& operator += (const T& value);
@@ -95,8 +95,8 @@ public:
 // Debug operators
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> DTKCONTAINER_EXPORT QDebug operator << (QDebug& dbg, const dtkAbstractContainer<T>& container);
-template <typename T> DTKCONTAINER_EXPORT QDebug operator << (QDebug& dbg,       dtkAbstractContainer<T> *container);
+template <typename T> QDebug operator << (QDebug& dbg, const dtkAbstractContainer<T>& container);
+template <typename T> QDebug operator << (QDebug& dbg,       dtkAbstractContainer<T> *container);
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractContainer implementation

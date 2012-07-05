@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 10:54:36 2012 (+0200)
- *           By: tkloczko
- *     Update #: 37
+ * Last-Updated: Sun Jul  1 17:04:46 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 57
  */
 
 /* Commentary:
@@ -21,7 +21,7 @@
 #include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerNodeArrayScalarOperatorModifier.h"
 
-#include <dtkCore/dtkContainerVector.h>
+#include <dtkContainer/dtkContainerVector.h>
 
 #include <dtkLog/dtkLog>
 
@@ -33,13 +33,12 @@ class dtkComposerNodeArrayScalarOperatorModifierPrivate
 {
 public:
     dtkComposerTransmitterReceiverVector<qreal> receiver_array;
-    dtkComposerTransmitterVariant               receiver_index;
-    dtkComposerTransmitterVariant               receiver_value;
+    dtkComposerTransmitterVariant receiver_index;
+    dtkComposerTransmitterVariant receiver_value;
 
 public:
     dtkComposerTransmitterEmitterVector<qreal> emitter_array;
 };
-
 
 dtkComposerNodeArrayScalarOperatorModifier::dtkComposerNodeArrayScalarOperatorModifier(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeArrayScalarOperatorModifierPrivate)
 {
@@ -66,21 +65,21 @@ dtkComposerNodeArrayScalarOperatorModifier::~dtkComposerNodeArrayScalarOperatorM
 }
 
 // /////////////////////////////////////////////////////////////////
-//  dtkComposerNodeArrayScalarOperatorModifierPend
+//  dtkComposerNodeArrayScalarOperatorModifierAll
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNodeArrayScalarOperatorModifierPendPrivate
+class dtkComposerNodeArrayScalarOperatorModifierAllPrivate
 {
 public:
     dtkComposerTransmitterReceiverVector<qreal> receiver_array;
-    dtkComposerTransmitterVariant               receiver_value;
+    dtkComposerTransmitterVariant receiver_value;
 
 public:
     dtkComposerTransmitterEmitterVector<qreal> emitter_array;
 };
 
 
-dtkComposerNodeArrayScalarOperatorModifierPend::dtkComposerNodeArrayScalarOperatorModifierPend(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeArrayScalarOperatorModifierPendPrivate)
+dtkComposerNodeArrayScalarOperatorModifierAll::dtkComposerNodeArrayScalarOperatorModifierAll(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeArrayScalarOperatorModifierAllPrivate)
 {
     this->appendReceiver(&d->receiver_array);
 
@@ -93,7 +92,7 @@ dtkComposerNodeArrayScalarOperatorModifierPend::dtkComposerNodeArrayScalarOperat
     this->appendEmitter(&d->emitter_array);
 }
 
-dtkComposerNodeArrayScalarOperatorModifierPend::~dtkComposerNodeArrayScalarOperatorModifierPend(void)
+dtkComposerNodeArrayScalarOperatorModifierAll::~dtkComposerNodeArrayScalarOperatorModifierAll(void)
 {
     delete d;
 
@@ -108,7 +107,7 @@ void dtkComposerNodeArrayScalarOperatorInsert::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkContainerVectorReal& array(d->receiver_array.data());
+        dtkContainerVectorReal array(d->receiver_array.data());
         qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
         qreal value = qvariant_cast<qreal>(d->receiver_value.data());
 
@@ -138,7 +137,7 @@ void dtkComposerNodeArrayScalarOperatorReplace::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkContainerVectorReal& array(d->receiver_array.data());
+        dtkContainerVectorReal array(d->receiver_array.data());
         qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
         qreal value = qvariant_cast<qreal>(d->receiver_value.data());
 
@@ -167,7 +166,7 @@ void dtkComposerNodeArrayScalarOperatorAppend::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkContainerVectorReal& array(d->receiver_array.data());
+        dtkContainerVectorReal array(d->receiver_array.data());
         qreal value = qvariant_cast<qreal>(d->receiver_value.data());
 
         array.append(value);
@@ -188,7 +187,7 @@ void dtkComposerNodeArrayScalarOperatorPrepend::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkContainerVectorReal& array(d->receiver_array.data());
+        dtkContainerVectorReal array(d->receiver_array.data());
         qreal value = qvariant_cast<qreal>(d->receiver_value.data());
 
         array.prepend(value) ;
@@ -202,15 +201,123 @@ void dtkComposerNodeArrayScalarOperatorPrepend::run(void)
 }
 
 // /////////////////////////////////////////////////////////////////
+// dtkComposerNodeArrayScalarOperatorModifierAll - Add
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeArrayScalarOperatorModifierAllAdd::run(void)
+{
+    if (!d->receiver_array.isEmpty() && !d->receiver_value.isEmpty()) {
+
+        dtkContainerVectorReal array(d->receiver_array.data());
+        qreal value = qvariant_cast<qreal>(d->receiver_value.data());
+
+        for (qlonglong i = 0 ; i < array.count(); ++i)
+            array[i] += value ;
+
+        d->emitter_array.setData(array);
+
+    } else {
+
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        dtkContainerVectorReal vec;
+        d->emitter_array.setData(vec);
+
+    }
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeArrayScalarOperatorModifierAll - Substract
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeArrayScalarOperatorModifierAllSubstract::run(void)
+{
+    if (!d->receiver_array.isEmpty() && !d->receiver_value.isEmpty() ) {
+
+        dtkContainerVectorReal array(d->receiver_array.data());
+        qreal value = qvariant_cast<qreal>(d->receiver_value.data());
+
+        for (qlonglong i = 0 ; i< array.count(); ++i)
+            array[i] -= value ;
+
+        d->emitter_array.setData( array);
+
+    } else {
+
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        dtkContainerVectorReal vec;
+        d->emitter_array.setData(vec);
+
+    }
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeArrayScalarOperatorModifierAll - Mult
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeArrayScalarOperatorModifierAllMult::run(void)
+{
+    if (!d->receiver_array.isEmpty() && !d->receiver_value.isEmpty() ) {
+
+        dtkContainerVectorReal array(d->receiver_array.data());
+        qreal value = qvariant_cast<qreal>(d->receiver_value.data());
+
+        for (qlonglong i = 0 ; i< array.count(); ++i)
+            array[i] *= value ;
+
+        d->emitter_array.setData( array);
+
+    } else {
+
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        dtkContainerVectorReal vec;
+        d->emitter_array.setData(vec);
+
+    }
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeArrayScalarOperatorModifierAll - Divide
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeArrayScalarOperatorModifierAllDivide::run(void)
+{
+    if (!d->receiver_array.isEmpty() && !d->receiver_value.isEmpty() ) {
+
+        dtkContainerVectorReal array(d->receiver_array.data());
+        qreal value = qvariant_cast<qreal>(d->receiver_value.data());
+
+        if (value == 0) {
+
+            dtkWarn() << "Value is zero. Same array is returned." ;
+            d->emitter_array.setData(array);
+
+        } else {
+
+            for (qlonglong i = 0 ; i< array.count(); ++i)
+                array[i] /= value ;
+
+            d->emitter_array.setData(array);
+
+        }
+
+    } else {
+
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        dtkContainerVectorReal vec;
+        d->emitter_array.setData(vec);
+
+    }
+}
+
+// /////////////////////////////////////////////////////////////////
 // dtkComposerNodeArrayScalarOperator - SUM
 // /////////////////////////////////////////////////////////////////
 
 void dtkComposerNodeArrayScalarOperatorSum::run(void)
 {
-
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkContainerVectorReal& array(d->receiver_array.data());
+        dtkContainerVectorReal array(d->receiver_array.data());
         qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
         qreal value = qvariant_cast<qreal>(d->receiver_value.data());
 
@@ -239,7 +346,7 @@ void dtkComposerNodeArrayScalarOperatorSubstract::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkContainerVectorReal& array(d->receiver_array.data());
+        dtkContainerVectorReal array(d->receiver_array.data());
         qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
         qreal value = qvariant_cast<qreal>(d->receiver_value.data());
 
@@ -268,7 +375,7 @@ void dtkComposerNodeArrayScalarOperatorMult::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkContainerVectorReal& array(d->receiver_array.data());
+        dtkContainerVectorReal array(d->receiver_array.data());
         qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
         qreal value = qvariant_cast<qreal>(d->receiver_value.data());
 
@@ -297,7 +404,7 @@ void dtkComposerNodeArrayScalarOperatorDivide::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkContainerVectorReal& array(d->receiver_array.data());
+        dtkContainerVectorReal array(d->receiver_array.data());
         qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
         qreal value = qvariant_cast<qreal>(d->receiver_value.data());
 

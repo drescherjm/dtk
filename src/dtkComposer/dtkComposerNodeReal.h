@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:40:45 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 15 18:11:04 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 7
+ * Last-Updated: Tue Jun 26 16:14:37 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -52,10 +52,10 @@ public:
     }
 
 public:
-    double value(void);
+    qreal value(void);
 
 public:
-    void setValue(double value);
+    void setValue(qreal value);
 
 private:
     dtkComposerNodeRealPrivate *d;

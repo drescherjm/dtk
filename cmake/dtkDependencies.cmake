@@ -26,6 +26,7 @@ set(QT_USE_QTXML         TRUE)
 set(QT_USE_QTSQL         TRUE)
 set(QT_USE_QTHELP        TRUE)
 set(QT_USE_QTNETWORK     TRUE)
+set(QT_USE_QTTEST        TRUE)
 set(QT_USE_QTWEBKIT      TRUE)
 
 if(WIN32)
@@ -223,7 +224,7 @@ endif(DTK_BUILD_MPI AND MPI_FOUND AND QUAT_LIBRARY AND VRPN_LIBRARY)
 ## Qwt
 ## #################################################################
 
-find_package(Qwt QUIET)
+find_package(Qwt 6 QUIET)
 
 if(QWT_FOUND)
   add_definitions(-DHAVE_PLOT)

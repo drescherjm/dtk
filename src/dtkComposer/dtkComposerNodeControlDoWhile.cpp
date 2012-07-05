@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  9 09:00:48 2012 (+0200)
+ * Last-Updated: Wed Jun 27 11:28:14 2012 (+0200)
  *           By: tkloczko
- *     Update #: 49
+ *     Update #: 50
  */
 
 /* Commentary: 
@@ -103,15 +103,22 @@ void dtkComposerNodeControlDoWhile::setInputs(void)
 {
     foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
         v->setTwinned(false);
-        v->setData(v->data());
+        if (v->container().isReset())
+            v->setData(v->data());
+        else
+            v->setData(v->container());
         v->setTwinned(true);
     }
 }
 
 void dtkComposerNodeControlDoWhile::setOutputs(void)
 {
-    foreach(dtkComposerTransmitterVariant *v, this->outputTwins())
-        v->twin()->setData(v->data());
+    foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
+        if (v->container().isReset())
+            v->twin()->setData(v->data());
+        else
+            v->twin()->setData(v->container());
+    }
 }
 
 void dtkComposerNodeControlDoWhile::setVariables(void)

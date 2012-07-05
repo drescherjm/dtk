@@ -65,7 +65,7 @@ DTK_IMPLEMENT_PRIVATE(%1, dtkAbstract%2);
 
 bool %1::registered(void)
 {
-    return dtkAbstract%2Factory::instance()->register%2Type("%1", create%3);
+    return dtkAbstract%2Factory::instance()->register%2Type("%1", create%3, "dtkAbstract%2");
 }
 
 QString %1::description(void) const

@@ -34,6 +34,9 @@ public:
     dtkPlotViewPanner *panner;
     dtkPlotViewPicker *picker;
     dtkPlotViewZoomer *zoomer;
+
+public:
+    QList<dtkPlotCurve *> curves;
 };
 
 dtkPlotView::dtkPlotView(void) : dtkAbstractView(), d(new dtkPlotViewPrivate())
@@ -55,6 +58,11 @@ dtkPlotView::~dtkPlotView(void)
     delete d;
 
     d = NULL;
+}
+
+QList<dtkPlotCurve *> dtkPlotView::curves(void)
+{
+    return d->curves;
 }
 
 void dtkPlotView::activatePanning(void)
@@ -169,6 +177,9 @@ void dtkPlotView::setStyleSheet(const QString& sheet)
 dtkPlotView& dtkPlotView::operator<<(dtkPlotCurve *curve)
 {
     QwtPlotCurve *c = ((QwtPlotCurve *)(curve->d));
+
+    if (c->plot() != d)
+        d->curves << curve;
 
     if (c->plot() != d)
         c->attach((QwtPlot *)d);

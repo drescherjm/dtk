@@ -6,42 +6,42 @@
 
 %1Object::%1Object(void)
 {
+
 }
 
 %1Object::~%1Object(void)
 {
+
 }
 
-void %1Object::initTestCase()
+void %1Object::initTestCase(void)
 {
+
 }
 
-void %1Object::init()
+void %1Object::init(void)
 {
+
 }
 
-void %1Object::cleanup()
+void %1Object::cleanup(void)
 {
+
 }
 
-void %1Object::cleanupTestCase()
+void %1Object::cleanupTestCase(void)
 {
+
 }
 
-/*
-void %1Object::testFoo_data()
-{
-}
-*/
+//void %1Object::testFoo_data(void)
+//{
+//
+//}
 
-void %1Object::testFoo()
+void %1Object::testFoo(void)
 {
     QVERIFY(true==false);
 }
 
-/**
-   DTKTEST_NOGUI_MAIN will create the entry point without running
-   a window manager (such as X on linux). If you need one, change
-   it to DTKTEST_MAIN().
- **/
 DTKTEST%2_MAIN(%1,%1Object)

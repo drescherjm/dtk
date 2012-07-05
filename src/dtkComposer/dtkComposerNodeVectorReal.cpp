@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette Lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 24 18:32:17 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 58
+ * Last-Updated: Thu Jun 28 16:39:24 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 62
  */
 
 /* Commentary:
@@ -26,7 +26,7 @@
 #include <dtkLog/dtkLog>
 
 // /////////////////////////////////////////////////////////////////
-//
+// dtkComposerNodeVectorRealPrivate interface
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeVectorRealPrivate
@@ -42,7 +42,7 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-//
+// dtkComposerNodeVectorReal implementation
 // /////////////////////////////////////////////////////////////////
 
 dtkComposerNodeVectorReal::dtkComposerNodeVectorReal(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVectorRealPrivate)
@@ -109,7 +109,7 @@ void dtkComposerNodeVectorReal::run(void)
 {
     if (!d->receiver_vector.isEmpty()) {
 
-        dtkVectorReal& vec(d->receiver_vector.data());
+        const dtkVectorReal& vec(d->receiver_vector.data());
 
         d->emitter_vector.setData(vec);
         d->emitter_size.setData(vec.getRows());

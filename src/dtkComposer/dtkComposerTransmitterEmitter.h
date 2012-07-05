@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:33:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 31 15:04:40 2012 (+0200)
+ * Last-Updated: Wed Jun 27 15:57:31 2012 (+0200)
  *           By: tkloczko
- *     Update #: 106
+ *     Update #: 107
  */
 
 /* Commentary: 
@@ -31,7 +31,7 @@
 // dtkComposerTransmitterEmitter interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class DTKCOMPOSER_EXPORT dtkComposerTransmitterEmitter : public dtkComposerTransmitter
+template <typename T> class dtkComposerTransmitterEmitter : public dtkComposerTransmitter
 {
 public:
      dtkComposerTransmitterEmitter(dtkComposerNode *parent = 0);
@@ -49,9 +49,6 @@ public:
     virtual QString kindName(void) const;
 
 public:
-    virtual void clear(void);
-
-public:
     LinkMap leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 
 private:
@@ -62,7 +59,7 @@ private:
 // dtkComposerTransmitterEmitterVector interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class DTKCOMPOSER_EXPORT dtkComposerTransmitterEmitterVector : public dtkComposerTransmitterEmitter<T>
+template <typename T> class dtkComposerTransmitterEmitterVector : public dtkComposerTransmitterEmitter<T>
 {
 public:
      dtkComposerTransmitterEmitterVector(dtkComposerNode *parent = 0);
@@ -72,9 +69,6 @@ public:
     dtkComposerTransmitter::Kind kind(void) const;
 
     QString kindName(void) const;
-
-public:
-    void clear(void);
 
 public:
     inline void setData(const dtkContainerVector<T>& vector);

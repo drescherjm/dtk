@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri May 25 09:29:47 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri May 25 09:59:27 2012 (+0200)
+ * Last-Updated: Wed Jul  4 12:21:12 2012 (+0200)
  *           By: tkloczko
- *     Update #: 10
+ *     Update #: 12
  */
 
 /* Commentary: 
@@ -33,7 +33,7 @@
 // dtkContainerVectorWrapper interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class DTKCORE_EXPORT dtkContainerVectorWrapper : public dtkAbstractContainerWrapper
+template <typename T> class dtkContainerVectorWrapper : public dtkAbstractContainerWrapper
 {
 public:
      dtkContainerVectorWrapper(dtkAbstractData *parent = 0);
@@ -46,6 +46,11 @@ public:
 
 public:
     dtkContainerVectorWrapper<T> *clone(void) const;
+
+    dtkContainerVectorWrapper<T> *voidClone(void) const;
+
+public:
+    QString identifier(void) const;
 
 public:
     void setVector(const dtkContainerVector<T>& vector);
@@ -64,19 +69,19 @@ public:
     void prepend(const QVariant& data);
     void  remove(const QVariant& data);
 
-    void  insert(const QVariant& data, dtkxarch_int index);
-    void replace(const QVariant& data, dtkxarch_int index);
+    void  insert(const QVariant& data, qlonglong index);
+    void replace(const QVariant& data, qlonglong index);
 
-    void resize(dtkxarch_int size);
+    void resize(qlonglong size);
 
 public:
     bool  isEmpty(void) const;
     bool contains(const QVariant& data) const;
 
-    dtkxarch_int   count(void) const;
-    dtkxarch_int indexOf(const QVariant& data, dtkxarch_int from = 0) const;
+    qlonglong   count(void) const;
+    qlonglong indexOf(const QVariant& data, qlonglong from = 0) const;
      
-    QVariant    at(dtkxarch_int index) const; 
+    QVariant    at(qlonglong index) const; 
 
 public:
     bool operator != (const dtkContainerVectorWrapper<T>& other) const;

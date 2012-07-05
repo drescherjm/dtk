@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:46:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri May 25 09:56:29 2012 (+0200)
+ * Last-Updated: Wed Jul  4 12:22:57 2012 (+0200)
  *           By: tkloczko
- *     Update #: 20
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -44,16 +44,23 @@ public:
     virtual ~dtkAbstractContainerWrapper(void);
 
 protected:
-    void init(void);
+    void init(dtkAbstractContainerWrapper *wrapper = 0);
 
 public:
     void reset(void);
+
+    bool isReset(void) const;
 
 public:
     dtkAbstractContainerWrapper& operator = (const dtkAbstractContainerWrapper& other);
 
 public:
     virtual dtkAbstractContainerWrapper *clone(void) const;
+
+    virtual dtkAbstractContainerWrapper *voidClone(void) const;
+
+public:
+    dtkAbstractContainerWrapper *container(void);
 
 public:
     QString identifier(void) const;
@@ -73,21 +80,21 @@ public:
     virtual void prepend(const QVariant& data);
     virtual void  remove(const QVariant& data);
 
-    virtual void  insert(const QVariant& data, dtkxarch_int index);
-    virtual void replace(const QVariant& data, dtkxarch_int index);
+    virtual void  insert(const QVariant& data, qlonglong index);
+    virtual void replace(const QVariant& data, qlonglong index);
 
-    virtual void resize(dtkxarch_int size);
+    virtual void resize(qlonglong size);
 
 public:
     virtual bool isEmpty(void) const;
 
     virtual bool contains(const QVariant& data) const;
 
-    virtual dtkxarch_int count(void) const;
+    virtual qlonglong count(void) const;
 
-    virtual dtkxarch_int indexOf(const QVariant& data, dtkxarch_int from = 0) const;
+    virtual qlonglong indexOf(const QVariant& data, qlonglong from = 0) const;
      
-    virtual QVariant at(dtkxarch_int index) const;
+    virtual QVariant at(qlonglong index) const;
 
 public:
     bool operator != (const dtkAbstractContainerWrapper& other) const;

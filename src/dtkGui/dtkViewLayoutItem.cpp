@@ -473,7 +473,7 @@ void dtkViewLayoutItem::unsplit(void)
 
     } else {
 
-        qDebug() << __func__ << "Unhandled case.";
+        qDebug() << DTK_PRETTY_FUNCTION << "Unhandled case.";
 
     }
 

@@ -33,7 +33,7 @@
 // dtkContainerVectorWrapper interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class DTKCORE_EXPORT dtkContainerVectorWrapper : public dtkAbstractContainerWrapper
+template <typename T> class dtkContainerVectorWrapper : public dtkAbstractContainerWrapper
 {
 public:
      dtkContainerVectorWrapper(dtkAbstractData *parent = 0);

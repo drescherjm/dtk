@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Jun 19 15:29:26 2012 (+0200)
+## Last-Updated: Tue Jul 10 12:23:24 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 109
+##     Update #: 110
 ######################################################################
 ## 
 ### Commentary: 
@@ -236,30 +236,30 @@ endif(QWT_FOUND)
 ## OpenNI / Nite
 ## #################################################################
 
-find_path(OPENNI_INCLUDES XnOpenNI.h /usr/include/ni)
-find_path(  NITE_INCLUDES XnVNite.h  /usr/include/nite)
+# find_path(OPENNI_INCLUDES XnOpenNI.h /usr/include/ni)
+# find_path(  NITE_INCLUDES XnVNite.h  /usr/include/nite)
 
-if(OPENNI_INCLUDES AND NITE_INCLUDES)
-include_directories(/usr/include/ni)
-include_directories(/usr/include/nite)
-endif(OPENNI_INCLUDES AND NITE_INCLUDES)
+# if(OPENNI_INCLUDES AND NITE_INCLUDES)
+# include_directories(/usr/include/ni)
+# include_directories(/usr/include/nite)
+# endif(OPENNI_INCLUDES AND NITE_INCLUDES)
 
-find_library(OPENNI_LIBRARY NAMES OpenNI  PATHS /usr/lib)
-find_library(  NITE_LIBRARY NAMES XnVNite PATHS /usr/lib)
+# find_library(OPENNI_LIBRARY NAMES OpenNI  PATHS /usr/lib)
+# find_library(  NITE_LIBRARY NAMES XnVNite PATHS /usr/lib)
 
-if(OPENNI_LIBRARY AND NITE_LIBRARY)
-link_directories(/usr/lib)
-endif(OPENNI_LIBRARY AND NITE_LIBRARY)
+# if(OPENNI_LIBRARY AND NITE_LIBRARY)
+# link_directories(/usr/lib)
+# endif(OPENNI_LIBRARY AND NITE_LIBRARY)
 
-if(OPENNI_INCLUDES AND NITE_INCLUDES)
-set(DTK_HAVE_NITE "YES")
-endif(OPENNI_INCLUDES AND NITE_INCLUDES)
+# if(OPENNI_INCLUDES AND NITE_INCLUDES)
+# set(DTK_HAVE_NITE "YES")
+# endif(OPENNI_INCLUDES AND NITE_INCLUDES)
 
-mark_as_advanced(OPENNI_INCLUDES)
-mark_as_advanced(NITE_INCLUDES)
+# mark_as_advanced(OPENNI_INCLUDES)
+# mark_as_advanced(NITE_INCLUDES)
 
-mark_as_advanced(OPENNI_LIBRARY)
-mark_as_advanced(NITE_LIBRARY)
+# mark_as_advanced(OPENNI_LIBRARY)
+# mark_as_advanced(NITE_LIBRARY)
 
 ## #################################################################
 ## 

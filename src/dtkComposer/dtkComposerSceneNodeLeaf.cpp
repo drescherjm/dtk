@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul 10 12:19:59 2012 (+0200)
- *           By: tkloczko
- *     Update #: 277
+ * Last-Updated: Tue Jul 10 12:45:27 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 299
  */
 
 /* Commentary: 
@@ -176,24 +176,22 @@ void dtkComposerSceneNodeLeaf::paint(QPainter *painter, const QStyleOptionGraphi
     qreal stripe = 0.15 * (d->min_height) / height;
 
     if (dynamic_cast<dtkComposerNodeLeafProcess*>(this->wrapee())) {
-        gradiant.setColorAt(0.0, QColor(Qt::white));
-        gradiant.setColorAt(stripe, QColor(225, 0, 0));
-        gradiant.setColorAt(1.0, QColor(Qt::red).darker());
+        gradiant.setColorAt(0.0, QColor(Qt::red).lighter());
+        gradiant.setColorAt(stripe, QColor(Qt::darkRed));
+        gradiant.setColorAt(1.0, QColor(Qt::darkRed).darker());
     } else if (dynamic_cast<dtkComposerNodeLeafData*>(this->wrapee())) {
-        gradiant.setColorAt(0.0, QColor(Qt::white));
-        gradiant.setColorAt(stripe, QColor(10, 10, 255));
-        gradiant.setColorAt(1.0, QColor(Qt::blue).darker());
+        gradiant.setColorAt(0.0, QColor(Qt::blue).lighter());
+        gradiant.setColorAt(stripe, QColor(Qt::darkBlue));
+        gradiant.setColorAt(1.0, QColor(Qt::darkBlue).darker());
     } else if (dynamic_cast<dtkComposerNodeLeafView*>(this->wrapee())) {
-        gradiant.setColorAt(0.0, QColor(Qt::white));
-        gradiant.setColorAt(stripe, QColor(0, 220, 0));
-        gradiant.setColorAt(1.0, QColor(Qt::green).darker());
+        gradiant.setColorAt(0.0, QColor(Qt::green).lighter());
+        gradiant.setColorAt(stripe, QColor(Qt::darkGreen));
+        gradiant.setColorAt(1.0, QColor(Qt::darkGreen).darker());
     } else {
-        gradiant.setColorAt(0.0, QColor(Qt::white));
-        gradiant.setColorAt(stripe, QColor(Qt::gray));
-        gradiant.setColorAt(1.0, QColor(Qt::gray).darker());
+        gradiant.setColorAt(0.0, QColor(Qt::gray).lighter());
+        gradiant.setColorAt(stripe, QColor(Qt::darkGray));
+        gradiant.setColorAt(1.0, QColor(Qt::darkGray).darker());
     }
-
-    qDebug() << stripe * height;
 
     painter->setBrush(gradiant);
 
@@ -214,9 +212,9 @@ void dtkComposerSceneNodeLeaf::paint(QPainter *painter, const QStyleOptionGraphi
     else
         title_pos = QPointF(d->rect.right() - 2*margin - metrics.width(title_text), 2*margin + metrics.xHeight());
 
-    painter->setPen(QPen(QColor(Qt::gray).darker()));
+    painter->setPen(QPen(QColor(Qt::gray).darker().darker()));
     painter->drawText(title_pos + QPointF(0, -1), title_text);
-    painter->setPen(QPen(QColor(Qt::gray)));
+    painter->setPen(QPen(QColor(Qt::gray).darker()));
     painter->drawText(title_pos + QPointF(0, 1), title_text);
     painter->setPen(QPen(QColor(Qt::white)));
     painter->drawText(title_pos, title_text);

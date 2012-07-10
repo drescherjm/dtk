@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:32:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun  1 11:57:31 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 29
+ * Last-Updated: mar. juil.  3 18:59:09 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 39
  */
 
 /* Commentary: 
@@ -21,13 +21,13 @@
 #define DTKCOMPOSERNODEPLOTVIEW_H
 
 #include "dtkComposerExport.h"
-#include "dtkComposerNodeLeaf.h"
+#include "dtkComposerNodeLeafView.h"
 
 #include <QtCore>
 
 class dtkComposerNodePlotViewPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodePlotView : public QObject, public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodePlotView : public QObject, public dtkComposerNodeLeafView
 {
     Q_OBJECT
 
@@ -43,6 +43,11 @@ public:
     inline QString titleHint(void) {
         return "Plot view";
     }
+
+public:
+    inline bool isAbstractView(void) const {return false;} ;
+
+    inline QString abstractViewType(void) const {return "";};
 
 public:
     inline QString inputLabelHint(int port) {

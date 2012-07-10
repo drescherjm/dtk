@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Sep  8 10:56:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep  8 16:51:39 2011 (+0200)
+ * Last-Updated: Thu Jul  5 15:51:51 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 113
+ *     Update #: 118
  */
 
 /* Commentary: 
@@ -28,13 +28,18 @@ int main(int argc, char **argv)
 
     QDir dir(argv[1]);
 
-    if(!dir.exists() && !dir.exists("includes")) {
+    if(!dir.exists() && !dir.exists("include")) {
         qDebug() << "The path to dtk's install tree does not appear to be valid.";
         return 0;
     }
 
-    if(!dir.cd("includes")) {
+    if(!dir.cd("include")) {
         qDebug() << "Unable to change directory for /includes.";
+        return 0;
+    }
+
+    if(!dir.cd("dtk")) {
+        qDebug() << "Unable to change directory for /include/dtk.";
         return 0;
     }
 
@@ -50,7 +55,7 @@ int main(int argc, char **argv)
         QTextStream in(&file);
 
         QString contents = in.readAll();
-        contents.replace("../src", "../include");
+        contents.replace("../src", "..");
         
         file.close();
         

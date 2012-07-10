@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri May 25 09:29:47 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 12:09:19 2012 (+0200)
+ * Last-Updated: Wed Jul  4 12:21:12 2012 (+0200)
  *           By: tkloczko
- *     Update #: 11
+ *     Update #: 12
  */
 
 /* Commentary: 
@@ -46,6 +46,8 @@ public:
 
 public:
     dtkContainerVectorWrapper<T> *clone(void) const;
+
+    dtkContainerVectorWrapper<T> *voidClone(void) const;
 
 public:
     QString identifier(void) const;

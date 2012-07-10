@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:49:32 2012 (+0200)
+ * Last-Updated: Mon Jul  9 13:58:46 2012 (+0200)
  *           By: tkloczko
- *     Update #: 217
+ *     Update #: 248
  */
 
 /* Commentary: 
@@ -18,6 +18,9 @@
  */
 
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeLeafData.h"
+#include "dtkComposerNodeLeafProcess.h"
+#include "dtkComposerNodeLeafView.h"
 #include "dtkComposerSceneNode.h"
 #include "dtkComposerSceneNode_p.h"
 #include "dtkComposerSceneNodeLeaf.h"
@@ -28,10 +31,15 @@ class dtkComposerSceneNodeLeafPrivate
 {
 public:
     QRectF rect;
+
+public:
+    qreal min_height;
 };
 
 dtkComposerSceneNodeLeaf::dtkComposerSceneNodeLeaf(void) : dtkComposerSceneNode(), d(new dtkComposerSceneNodeLeafPrivate)
 {
+    d->min_height = 50;
+
     d->rect = QRectF(0, 0, 150, 50);
 }
 
@@ -163,9 +171,28 @@ void dtkComposerSceneNodeLeaf::paint(QPainter *painter, const QStyleOptionGraphi
         painter->setPen(QPen(Qt::black, 1, Qt::SolidLine));
 
     QLinearGradient gradiant(d->rect.left(), d->rect.top(), d->rect.left(), d->rect.bottom());
-    gradiant.setColorAt(0.0, QColor(Qt::white));
-    gradiant.setColorAt(0.3, QColor(Qt::gray));
-    gradiant.setColorAt(1.0, QColor(Qt::gray).darker());
+    
+    qreal height = qAbs(d->rect.top() - d->rect.bottom());
+
+    qreal stripe = 0.2 * (d->min_height) / height;
+
+    if (dynamic_cast<dtkComposerNodeLeafProcess*>(this->wrapee())) {
+        gradiant.setColorAt(0.0, QColor(Qt::white));
+        gradiant.setColorAt(stripe, QColor(Qt::red));
+        gradiant.setColorAt(1.0, QColor(Qt::red).darker());
+    } else if (dynamic_cast<dtkComposerNodeLeafData*>(this->wrapee())) {
+        gradiant.setColorAt(0.0, QColor(Qt::white));
+        gradiant.setColorAt(stripe, QColor(Qt::blue));
+        gradiant.setColorAt(1.0, QColor(Qt::blue).darker());
+    } else if (dynamic_cast<dtkComposerNodeLeafView*>(this->wrapee())) {
+        gradiant.setColorAt(0.0, QColor(Qt::white));
+        gradiant.setColorAt(stripe, QColor(Qt::green));
+        gradiant.setColorAt(1.0, QColor(Qt::green).darker());
+    } else {
+        gradiant.setColorAt(0.0, QColor(Qt::white));
+        gradiant.setColorAt(stripe, QColor(Qt::gray));
+        gradiant.setColorAt(1.0, QColor(Qt::gray).darker());
+    }
 
     painter->setBrush(gradiant);
 

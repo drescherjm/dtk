@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jul  9 13:58:46 2012 (+0200)
+ * Last-Updated: Tue Jul 10 12:19:59 2012 (+0200)
  *           By: tkloczko
- *     Update #: 248
+ *     Update #: 277
  */
 
 /* Commentary: 
@@ -173,26 +173,27 @@ void dtkComposerSceneNodeLeaf::paint(QPainter *painter, const QStyleOptionGraphi
     QLinearGradient gradiant(d->rect.left(), d->rect.top(), d->rect.left(), d->rect.bottom());
     
     qreal height = qAbs(d->rect.top() - d->rect.bottom());
-
-    qreal stripe = 0.2 * (d->min_height) / height;
+    qreal stripe = 0.15 * (d->min_height) / height;
 
     if (dynamic_cast<dtkComposerNodeLeafProcess*>(this->wrapee())) {
         gradiant.setColorAt(0.0, QColor(Qt::white));
-        gradiant.setColorAt(stripe, QColor(Qt::red));
+        gradiant.setColorAt(stripe, QColor(225, 0, 0));
         gradiant.setColorAt(1.0, QColor(Qt::red).darker());
     } else if (dynamic_cast<dtkComposerNodeLeafData*>(this->wrapee())) {
         gradiant.setColorAt(0.0, QColor(Qt::white));
-        gradiant.setColorAt(stripe, QColor(Qt::blue));
+        gradiant.setColorAt(stripe, QColor(10, 10, 255));
         gradiant.setColorAt(1.0, QColor(Qt::blue).darker());
     } else if (dynamic_cast<dtkComposerNodeLeafView*>(this->wrapee())) {
         gradiant.setColorAt(0.0, QColor(Qt::white));
-        gradiant.setColorAt(stripe, QColor(Qt::green));
+        gradiant.setColorAt(stripe, QColor(0, 220, 0));
         gradiant.setColorAt(1.0, QColor(Qt::green).darker());
     } else {
         gradiant.setColorAt(0.0, QColor(Qt::white));
         gradiant.setColorAt(stripe, QColor(Qt::gray));
         gradiant.setColorAt(1.0, QColor(Qt::gray).darker());
     }
+
+    qDebug() << stripe * height;
 
     painter->setBrush(gradiant);
 

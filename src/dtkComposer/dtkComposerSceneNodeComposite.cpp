@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May 21 22:54:39 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 898
+ * Last-Updated: Tue Jul 10 14:34:11 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 909
  */
 
 /* Commentary: 
@@ -543,21 +543,21 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
     qreal radius = this->embedded() ? 0.0 : 5.0;
 
     if (this->isSelected()) {
-        painter->setPen(QPen(Qt::magenta, 2, Qt::SolidLine));
+        painter->setPen(QPen(Qt::magenta, 3, Qt::SolidLine));
         painter->setBrush(Qt::NoBrush);
-        painter->drawRoundedRect(d->rect.adjusted(-2, -2, 2, 2), radius, radius);
+        painter->drawRoundedRect(d->rect.adjusted(-1, -1, 1, 1), radius, radius);
     }
 
     if(d->revealed) {
-        painter->setPen(QPen(Qt::black, 1, Qt::DashLine));
+        painter->setPen(QPen(Qt::darkGray, 1, Qt::DashLine));
         painter->setBrush(QColor(10, 10, 10, 120));
     } else {
         QLinearGradient gradiant(d->rect.left(), d->rect.top(), d->rect.left(), d->rect.bottom());
         gradiant.setColorAt(0.0, QColor(Qt::darkGray));
-        gradiant.setColorAt(0.3, QColor(Qt::darkGray).darker().darker());
+        gradiant.setColorAt(10 / d->rect.height(), QColor(Qt::darkGray).darker().darker());
         gradiant.setColorAt(1.0, QColor(Qt::darkGray).darker().darker().darker());
 
-        painter->setPen(QPen(Qt::black, 1, Qt::SolidLine));
+        painter->setPen(QPen(QColor(Qt::darkGray).darker().darker(), 1, Qt::SolidLine));
         painter->setBrush(gradiant);
     }
 

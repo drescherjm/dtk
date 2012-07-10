@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: Tue Jun 26 16:21:23 2012 (+0200)
+ * Last-Updated: Tue Jul 10 15:03:03 2012 (+0200)
  *           By: tkloczko
- *     Update #: 956
+ *     Update #: 957
  */
 
 /* Commentary:
@@ -74,7 +74,7 @@ public:
 // dtkComposerNodeRemote implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNodeRemote::dtkComposerNodeRemote(void) : dtkComposerNodeComposite(), d(new dtkComposerNodeRemotePrivate)
+dtkComposerNodeRemote::dtkComposerNodeRemote(void) : QObject(), dtkComposerNodeComposite(), d(new dtkComposerNodeRemotePrivate)
 {
 
     this->appendReceiver(&(d->jobid_receiver));

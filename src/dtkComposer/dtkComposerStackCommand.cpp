@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. juin 12 16:36:46 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 4334
+ * Last-Updated: Tue Jul 10 15:10:59 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 4337
  */
 
 /* Commentary: 
@@ -180,8 +180,10 @@ void dtkComposerStackCommandCreateNode::redo(void)
     d->graph->layout();
 
 // -- ??
-    if (e->parent->root() || e->parent->flattened() || e->parent->entered())
+    if (e->parent->root() || e->parent->flattened() || e->parent->entered()) {
         d->scene->addItem(e->node);
+        e->node->layout();
+    }
 
     d->scene->modify(true);
 // --

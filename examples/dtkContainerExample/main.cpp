@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sun May  6 18:46:00 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul 16 09:58:02 2012 (+0200)
+ * Last-Updated: Mon Jul 16 10:01:51 2012 (+0200)
  *           By: tkloczko
- *     Update #: 180
+ *     Update #: 181
  */
 
 /* Commentary: 
@@ -58,7 +58,7 @@ void run(void)
 
     meta_vector_0 << vector_0;
 
-    // --- Copy of the meta vector and fill the copy with the second vector
+    // --- Copy of the meta vector and fill the copy with the next vector
 
     dtkContainerVector< dtkContainerVector<qreal> > meta_vector_1;
     meta_vector_1 = meta_vector_0;

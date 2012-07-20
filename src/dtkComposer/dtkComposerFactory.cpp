@@ -176,10 +176,10 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Data Array Insert"] = QStringList() << "container" << "array" << "data"  << "insert" ;
     d->types["Data Array Insert"] = "array_data_insert";
 
-    d->nodes << "Data Array Replace";
-    d->descriptions["Data Array Replace"] = "<p>Description not yet filled!</p>";
-    d->tags["Data Array Replace"] = QStringList() << "container" << "array" << "data"  << "replace";
-    d->types["Data Array Replace"] = "array_data_replace";
+    d->nodes << "Data Array Set";
+    d->descriptions["Data Array Set"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array Set"] = QStringList() << "container" << "array" << "data"  << "set";
+    d->types["Data Array Set"] = "array_data_set";
 
     d->nodes << "Data Array Append";
     d->descriptions["Data Array Append"] = "<p>Description not yet filled!</p>";
@@ -315,40 +315,40 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Vector Real Divide All"] = QStringList() << "vector" << "real" << "divide"<< "all";
     d->types["Vector Real Divide All"] = "vector_real_divide_all";
 
-    d->nodes << "VectorReal Unit";
-    d->descriptions["VectorReal Unit"] = "<p>Description not yet filled!</p>";
-    d->tags["VectorReal Unit"] = QStringList() << "vectorReal" << "algebraic" << "unit";
-    d->types["VectorReal Unit"] = "vectorReal_unit";
+    d->nodes << "Vector Real Unit";
+    d->descriptions["Vector Real Unit"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Unit"] = QStringList() << "vector"<<"real" << "algebraic" << "unit";
+    d->types["Vector Real Unit"] = "vectorReal_unit";
 
-    d->nodes << "VectorReal Norm";
-    d->descriptions["VectorReal Norm"] = "<p>Description not yet filled!</p>";
-    d->tags["VectorReal Norm"] = QStringList() << "vectorReal" << "algebraic" << "norm";
-    d->types["VectorReal Norm"] = "vectorReal_norm";
+    d->nodes << "Vector Real Norm";
+    d->descriptions["Vector Real Norm"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Norm"] = QStringList() << "vector"<<"real" << "algebraic" << "norm";
+    d->types["Vector Real Norm"] = "vectorReal_norm";
 
-    d->nodes << "VectorReal Sum";
-    d->descriptions["VectorReal Sum"] = "<p>Description not yet filled!</p>";
-    d->tags["VectorReal Sum"] = QStringList() << "vectorReal" << "algebraic" << "sum";
-    d->types["VectorReal Sum"] = "vectorReal_sum";
+    d->nodes << "Vector Real Sum";
+    d->descriptions["Vector Real Sum"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Sum"] = QStringList() << "vector"<< "real" << "algebraic" << "sum";
+    d->types["Vector Real Sum"] = "vectorReal_sum";
 
-    d->nodes << "VectorReal Substract";
-    d->descriptions["VectorReal Substract"] = "<p>Description not yet filled!</p>";
-    d->tags["VectorReal Substract"] = QStringList() << "vectorReal" << "algebraic" << "substraction";
-    d->types["VectorReal Substract"] = "vectorReal_substract";
+    d->nodes << "Vector Real Substract";
+    d->descriptions["Vector Real Substract"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Substract"] = QStringList() << "vector"<<"real" << "algebraic" << "substraction";
+    d->types["Vector Real Substract"] = "vectorReal_substract";
 
-    d->nodes << "VectorReal Dot Prod";
-    d->descriptions["VectorReal Dot Prod"] = "<p>Description not yet filled!</p>";
-    d->tags["VectorReal Dot Prod"] = QStringList() << "vectorReal" << "algebraic" << "dot product";
-    d->types["VectorReal Dot Prod"] = "vectorReal_dot_prod";
+    d->nodes << "Vector Real Dot Prod";
+    d->descriptions["Vector Real Dot Prod"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Dot Prod"] = QStringList() << "vector"<<"real" << "algebraic" << "dot product";
+    d->types["Vector Real Dot Prod"] = "vectorReal_dot_prod";
 
-    d->nodes << "VectorReal Scal Mult";
-    d->descriptions["VectorReal Scal Mult"] = "<p>Description not yet filled!</p>";
-    d->tags["VectorReal Scal Mult"] = QStringList() << "vectorReal" << "algebraic" << "scalar multiplication";
-    d->types["VectorReal Scal Mult"] = "vectorReal_scal_mult";
+    d->nodes << "Vector Real Scal Mult";
+    d->descriptions["Vector Real Scal Mult"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Scal Mult"] = QStringList() << "vector"<<"real" << "algebraic" << "scalar multiplication";
+    d->types["Vector Real Scal Mult"] = "vectorReal_scal_mult";
 
-    d->nodes << "VectorReal Scal Division";
-    d->descriptions["VectorReal Scal Division"] = "<p>Description not yet filled!</p>";
-    d->tags["VectorReal Scal Division"] = QStringList() << "vectorReal" << "algebraic" << "scalar division";
-    d->types["VectorReal Scal Division"] = "vectorReal_scal_divide";
+    d->nodes << "Vector Real Scal Division";
+    d->descriptions["Vector Real Scal Division"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Scal Division"] = QStringList() << "vector"<<"real" << "algebraic" << "scalar division";
+    d->types["Vector Real Scal Division"] = "vectorReal_scal_divide";
 
     // Array
 
@@ -377,10 +377,10 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Scalar Array Insert"] = QStringList() << "container" << "array" << "scalar"  << "insert" ;
     d->types["Scalar Array Insert"] = "array_scalar_insert";
 
-    d->nodes << "Scalar Array Replace";
-    d->descriptions["Scalar Array Replace"] = "<p>Description not yet filled!</p>";
-    d->tags["Scalar Array Replace"] = QStringList() << "container" << "array" << "scalar"  << "replace" ;
-    d->types["Scalar Array Replace"] = "array_scalar_replace";
+    d->nodes << "Scalar Array Set";
+    d->descriptions["Scalar Array Set"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Set"] = QStringList() << "container" << "array" << "scalar"  << "set" ;
+    d->types["Scalar Array Set"] = "array_scalar_set";
 
     d->nodes << "Scalar Array Append";
     d->descriptions["Scalar Array Append"] = "<p>Description not yet filled!</p>";
@@ -1003,8 +1003,8 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "array_data_insert")
         return new dtkComposerNodeArrayDataOperatorInsert;
 
-    if(type == "array_data_replace")
-        return new dtkComposerNodeArrayDataOperatorReplace;
+    if(type == "array_data_set")
+        return new dtkComposerNodeArrayDataOperatorSet;
 
     if(type == "array_data_append")
         return new dtkComposerNodeArrayDataOperatorAppend;
@@ -1106,7 +1106,6 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "vectorReal_scal_divide")
         return new dtkComposerNodeVectorRealOperatorHomotheticDivision;
 
-
     // Array nodes
 
     if(type == "array_scalar")
@@ -1124,8 +1123,8 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "array_scalar_insert")
         return new dtkComposerNodeArrayScalarOperatorInsert;
 
-    if(type == "array_scalar_replace")
-        return new dtkComposerNodeArrayScalarOperatorReplace;
+    if(type == "array_scalar_set")
+        return new dtkComposerNodeArrayScalarOperatorSet;
 
     if(type == "array_scalar_append")
         return new dtkComposerNodeArrayScalarOperatorAppend;

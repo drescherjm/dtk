@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 14:50:16 2012 (+0200)
- *           By: tkloczko
- *     Update #: 694
+ * Last-Updated: Mon Jul 23 10:37:20 2012 (+0200)
+ *           By: sprinter
+ *     Update #: 696
  */
 
 /* Commentary: 
@@ -241,6 +241,8 @@ dtkComposerSceneNote *dtkComposerReader::readNote(QDomNode node)
 
 dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
 {
+    // qDebug() << Q_FUNC_INFO << "reading node" << node.toElement().attribute("type");
+
     QDomNodeList childNodes = node.childNodes();
 
     QList<QDomNode> ports;

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Thu Jul  5 10:25:26 2012 (+0200)
- *           By: tkloczko
- *     Update #: 664
+ * Last-Updated: Mon Jul 23 10:36:34 2012 (+0200)
+ *           By: sprinter
+ *     Update #: 666
  */
 
 /* Commentary:
@@ -1123,7 +1123,7 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "array_scalar_insert")
         return new dtkComposerNodeArrayScalarOperatorInsert;
 
-    if(type == "array_scalar_set")
+    if(type == "array_scalar_set" || type == "array_scalar_replace")
         return new dtkComposerNodeArrayScalarOperatorSet;
 
     if(type == "array_scalar_append")

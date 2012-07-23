@@ -1003,7 +1003,7 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "array_data_insert")
         return new dtkComposerNodeArrayDataOperatorInsert;
 
-    if(type == "array_data_set")
+    if(type == "array_data_set" || type == "array_data_replace")
         return new dtkComposerNodeArrayDataOperatorSet;
 
     if(type == "array_data_append")

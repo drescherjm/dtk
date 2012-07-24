@@ -1052,7 +1052,7 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     // Vector Real nodes
 
-    if(type == "vector_real")
+    if(type == "vector_real" || type == "vectorReal")
         return new dtkComposerNodeVectorReal;
 
     if(type == "vector_real_extractor")

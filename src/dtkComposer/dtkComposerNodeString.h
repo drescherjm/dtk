@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:50:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 16 14:03:08 2012 (+0100)
- *           By: tkloczko
- *     Update #: 7
+ * Last-Updated: Wed Jul 25 16:41:04 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -43,8 +43,14 @@ public:
         return "String";
     }
 
-    inline QString inputLabelHint(int) {
-        return "value";
+    inline QString inputLabelHint(int port) {
+        if(port == 0)
+            return "string";
+
+        if(port == 1)
+            return "real";
+
+        return dtkComposerNodeLeaf::inputLabelHint(port);
     }
 
     inline QString outputLabelHint(int) {

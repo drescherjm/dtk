@@ -656,8 +656,9 @@ void dtkComposerSceneNodeComposite::dropEvent(QGraphicsSceneDragDropEvent *event
 
     const dtkDistributedMimeData *data = qobject_cast<const dtkDistributedMimeData *>(event->mimeData());
 
-    if(!data)
+    if(!data) {
         dtkDebug() << "Unable to retrieve distributed mime data";
+    }
 
     QString job = data->text();
 

@@ -88,6 +88,16 @@ public:
     virtual void      send(const QVariant& variant,  qint16 target, int tag) = 0;
 
     virtual void   receive(void   *data, qint64 size, DataType dataType, qint16 source, int tag) = 0;
+    virtual void   receive(void   *data, qint64 size, DataType dataType, qint16 source, int tag, int& from) {
+        DTK_UNUSED(data);
+        DTK_UNUSED(size);
+        DTK_UNUSED(dataType);
+        DTK_UNUSED(source);
+        DTK_UNUSED(tag);
+        DTK_UNUSED(from);
+        
+        DTK_DEFAULT_IMPLEMENTATION;
+    }
     virtual void   receive(bool   *data, qint64 size, qint16 source, int tag);
     virtual void   receive(char   *data, qint64 size, qint16 source, int tag);
     virtual void   receive(int    *data, qint64 size, qint16 source, int tag);

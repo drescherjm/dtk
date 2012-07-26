@@ -28,18 +28,18 @@ class dtkComposerSceneNode;
 class dtkComposerScenePort : public QGraphicsItem
 {
 public:
-    enum Type {
+    enum Kind {
         Input,
         Output
     };
 
 public:
-     dtkComposerScenePort(Type type, dtkComposerSceneNode *parent);
-     dtkComposerScenePort(Type type, const QString& label, dtkComposerSceneNode *parent);
+     dtkComposerScenePort(Kind kind, dtkComposerSceneNode *parent);
+     dtkComposerScenePort(Kind kind, const QString& label, dtkComposerSceneNode *parent);
     ~dtkComposerScenePort(void);
 
 public:
-    Type type(void);
+    dtkComposerScenePort::Kind kind(void);
 
 public:
     dtkComposerSceneNode *node(void);

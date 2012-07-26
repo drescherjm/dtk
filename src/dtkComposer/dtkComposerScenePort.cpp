@@ -24,7 +24,7 @@
 class dtkComposerScenePortPrivate
 {
 public:
-    dtkComposerScenePort::Type type;
+    dtkComposerScenePort::Kind kind;
 
 public:
     dtkComposerSceneNode *node;
@@ -40,9 +40,9 @@ public:
     QString unelided;
 };
 
-dtkComposerScenePort::dtkComposerScenePort(Type type, dtkComposerSceneNode *parent) : QGraphicsItem(parent), d(new dtkComposerScenePortPrivate)
+dtkComposerScenePort::dtkComposerScenePort(Kind kind, dtkComposerSceneNode *parent) : QGraphicsItem(parent), d(new dtkComposerScenePortPrivate)
 {
-    d->type = type;
+    d->kind = kind;
     d->node = parent;
     d->loop = 0;
 
@@ -63,9 +63,9 @@ dtkComposerScenePort::dtkComposerScenePort(Type type, dtkComposerSceneNode *pare
     this->setZValue(1);
 }
 
-dtkComposerScenePort::dtkComposerScenePort(Type type, const QString& label, dtkComposerSceneNode *parent) : QGraphicsItem(parent), d(new dtkComposerScenePortPrivate)
+dtkComposerScenePort::dtkComposerScenePort(Kind kind, const QString& label, dtkComposerSceneNode *parent) : QGraphicsItem(parent), d(new dtkComposerScenePortPrivate)
 {
-    d->type = type;
+    d->kind = kind;
     d->node = parent;
     d->loop = 0;
 
@@ -94,9 +94,9 @@ dtkComposerScenePort::~dtkComposerScenePort(void)
     d = NULL;
 }
 
-dtkComposerScenePort::Type dtkComposerScenePort::type(void)
+dtkComposerScenePort::Kind dtkComposerScenePort::kind(void)
 {
-    return d->type;
+    return d->kind;
 }
 
 dtkComposerSceneNode *dtkComposerScenePort::node(void)
@@ -136,12 +136,12 @@ void dtkComposerScenePort::setLabel(const QString& label)
 
     QFontMetricsF fm(d->label->font());
 
-    if(d->type == Input)
+    if(d->kind == Input)
         d->label->setPlainText(fm.elidedText(d->unelided, Qt::ElideRight, 50));
     else
         d->label->setPlainText(fm.elidedText(d->unelided, Qt::ElideLeft, 50));
 
-    if(d->type == Input)
+    if(d->kind == Input)
         d->label->setPos(d->ellipse->pos() + QPointF(d->ellipse->boundingRect().width(), 0) - QPointF(0, fm.height()/2.0));
     else
         d->label->setPos(d->ellipse->pos() - QPointF(7, 0) - QPointF(fm.width(d->label->toPlainText()), fm.height()/2.0));

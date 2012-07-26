@@ -85,8 +85,11 @@ void dtkDistributedSocket::send(QVariant variant, QString jobid, qint16 target)
 
     } else {
         bool is_pointer =false;
-        if (type != "dtkAbstractData")
+        
+        if (type != "dtkAbstractData") {
             dtkInfo() << "type is unknown ("<< type<<  "), assume it inherit from dtkAbstractData";
+        }
+        
         if (type.endsWith("*")) { // pointer, remote the * character
             type.chop(1);
             is_pointer = true;

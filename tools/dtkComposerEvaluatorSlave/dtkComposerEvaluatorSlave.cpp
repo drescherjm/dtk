@@ -178,7 +178,7 @@ int dtkComposerEvaluatorSlave::exec(void)
             for (int i=1; i< size; i++)
                 d->communicator_i->send(QString("rerun"),i,0);
         }
-        if (new_composition)
+        if (new_composition) {
             if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(d->scene->root()->nodes().first()->wrapee())) {
                 remote->setSlave(this);
                 remote->setJob(this->jobId());
@@ -187,6 +187,7 @@ int dtkComposerEvaluatorSlave::exec(void)
                 dtkFatal() <<  "Can't find remote node in composition, abort";
                 return 1;
             }
+        }
         dtkDebug() << "run composition" ;
         d->evaluator->run();
 

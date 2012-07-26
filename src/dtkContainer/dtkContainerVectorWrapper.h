@@ -22,10 +22,9 @@
 
 #include "dtkAbstractContainerWrapper.h"
 #include "dtkContainerExport.h"
+#include "dtkContainerVector.h"
 
 #include <dtkCore/dtkGlobal>
-
-#include <dtkContainer/dtkContainerVector.h>
 
 #include <QtCore>
 
@@ -33,7 +32,7 @@
 // dtkContainerVectorWrapper interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class DTKCORE_EXPORT dtkContainerVectorWrapper : public dtkAbstractContainerWrapper
+template <typename T> class DTKCONTAINER_EXPORT dtkContainerVectorWrapper : public dtkAbstractContainerWrapper
 {
 public:
      dtkContainerVectorWrapper(dtkAbstractData *parent = 0);

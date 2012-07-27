@@ -20,7 +20,7 @@ public:
             mutex.unlock();
         }
 
-        return s_instance;
+        return (*s_instance);
     }
 
 private:

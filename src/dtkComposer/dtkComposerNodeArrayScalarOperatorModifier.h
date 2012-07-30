@@ -100,21 +100,21 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeArrayScalarOperator - Replace
+// dtkComposerNodeArrayScalarOperator - Set
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorReplace : public dtkComposerNodeArrayScalarOperatorModifier
+class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorSet : public dtkComposerNodeArrayScalarOperatorModifier
 {
 public:
     void run(void);
 
 public:
     inline QString type(void) {
-        return "array_scalar_replace";
+        return "array_scalar_set";
     }
 
     inline QString titleHint(void) {
-        return "Scalar array replace";
+        return "Scalar array set";
     }
 };
 

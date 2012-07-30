@@ -310,11 +310,12 @@ QByteArray dtkDistributedServerManagerOar::status(void)
                 state = "down";
             else if (jcore["state"].toString() == "Suspected")
                 state = "absent";
-            else if (jcore["state"].toString() == "Alive")
+            else if (jcore["state"].toString() == "Alive") {
                 if (jcore["jobs"].toString().isEmpty())
                     state = "free";
                 else
                     state = "busy";
+            }
             node.insert("state", state);
             node.insert("corespercpu",jcore["cpucore"]); // temporary
             core.insert("id",jcore["resource_id"]);

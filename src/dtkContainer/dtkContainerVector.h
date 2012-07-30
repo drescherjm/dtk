@@ -32,11 +32,11 @@
 template <typename T> class DTKCONTAINER_EXPORT dtkContainerVector : public dtkAbstractContainerOrdered<T>
 {
 public:
-     dtkContainerVector(void);
-     dtkContainerVector(qlonglong size);
-     dtkContainerVector(qlonglong size, const T& value);
-     dtkContainerVector(const dtkContainerVector<T>& other);
-    ~dtkContainerVector(void);
+             dtkContainerVector(void);
+             dtkContainerVector(qlonglong size);
+             dtkContainerVector(qlonglong size, const T& value);
+             dtkContainerVector(const dtkContainerVector<T>& other);
+    virtual ~dtkContainerVector(void);
 
 public:
     QString identifier(void) const;

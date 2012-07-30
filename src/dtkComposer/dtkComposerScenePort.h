@@ -39,7 +39,7 @@ public:
     ~dtkComposerScenePort(void);
 
 public:
-    Type type(void);
+    dtkComposerScenePort::Type type(void);
 
 public:
     dtkComposerSceneNode *node(void);

@@ -36,7 +36,7 @@ public:
 
 public:
     inline QString type(void) {
-        return "vector_real";
+        return "vectorReal";
     }
 
     inline QString titleHint(void) {

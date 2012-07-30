@@ -636,7 +636,7 @@ adjust_edges: // Adjusting edges of selected nodes
 
     this->update();
 
-adjust_current: // Adjusting current edge
+// adjust_current: // Adjusting current edge
 
     if (d->current_edge)
         d->current_edge->adjust(d->current_edge->source()->mapToScene(d->current_edge->source()->boundingRect().center()), event->scenePos());

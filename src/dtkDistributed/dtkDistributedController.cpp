@@ -366,10 +366,13 @@ void dtkDistributedController::deploy(const QUrl& server)
 
         dtkDebug() << DTK_PRETTY_FUNCTION << "ssh" << args;
 
-        if (!serverProc->waitForStarted(5000))
+        if (!serverProc->waitForStarted(5000)) {
             dtkDebug() << "server not yet started  " << args;
-        if (!serverProc->waitForReadyRead(5000))
+        }
+        
+        if (!serverProc->waitForReadyRead(5000)) {
             dtkDebug() << "no output from server yet" << args;
+        }
 
         QObject::connect(serverProc, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onProcessFinished(int,QProcess::ExitStatus)));
 

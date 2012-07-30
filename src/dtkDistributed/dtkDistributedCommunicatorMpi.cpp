@@ -291,16 +291,20 @@ void dtkDistributedCommunicatorMpi::receive(dtkAbstractData *&data, qint16 sourc
             dtkWarn() << "Can't instantiate object of type" << QString(type);
             return;
         }
-    } else
-        if(data->identifier() != QString(type))
+    } else {
+        if(data->identifier() != QString(type)) {
             dtkWarn() << DTK_PRETTY_FUNCTION << "Warning, type mismatch";
+        }
+    }
 
     QByteArray array = QByteArray::fromRawData(rawArray, arrayLength);
     // FIXME: array is not null-terminated, does it matter ??
 
     data = data->deserialize(array);
-    if (!data)
+    
+    if (!data) {
         dtkError() << "Warning: deserialization failed";
+    }
 }
 
 /*!

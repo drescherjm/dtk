@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 24 15:11:57 2012 (+0200)
+ * Last-Updated: Mon Jul 30 15:46:31 2012 (+0200)
  *           By: tkloczko
- *     Update #: 358
+ *     Update #: 361
  */
 
 /* Commentary:
@@ -129,17 +129,6 @@
 
 %ignore closed();
 %ignore focused();
-%ignore enableInteraction(void);
-%ignore disableInteraction(void);
-%ignore bounds(float& xmin, float& xmax, float& ymin, float& ymax, float &zmin, float& zmax);
-%ignore cameraUp(double *coordinates) const;
-%ignore cameraPosition(double *coordinates) const;
-%ignore cameraFocalPoint(double *coordinates) const;
-%ignore setCameraPosition(double x, double y, double z);
-%ignore setCameraClippingRange(double near, double far);
-%ignore cameraProjectionMode(void) const;
-%ignore cameraViewAngle(void) const;
-%ignore cameraZoom(void) const;
 
 // /////////////////////////////////////////////////////////////////
 // Ignore rules for dtkAbstractViewInteractor signals

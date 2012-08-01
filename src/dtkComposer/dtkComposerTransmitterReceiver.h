@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 16:00:41 2012 (+0200)
+ * Last-Updated: Wed Aug  1 12:44:09 2012 (+0200)
  *           By: tkloczko
- *     Update #: 113
+ *     Update #: 124
  */
 
 /* Commentary: 
@@ -44,10 +44,16 @@ public:
     ~dtkComposerTransmitterReceiver(void);
 
 public:
-          T& data(void);
-    const T& data(void) const;
-
+    T& data(void);
+          
     QVector<T> allData(void);
+
+public:
+    void activateEmitter(dtkComposerTransmitter        *emitter);
+    void activateEmitter(dtkComposerTransmitterVariant *emitter);
+
+public:
+    bool copyOnWrite(void);
 
 public:
     bool isEmpty(void) const;
@@ -60,9 +66,6 @@ public:
 public:
     bool    connect(dtkComposerTransmitter *transmitter);
     bool disconnect(dtkComposerTransmitter *transmitter);
-
-public:
-    void setActiveEmitter(dtkComposerTransmitter *emitter);
 
 public:
     LinkMap rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
@@ -85,8 +88,6 @@ private:
 
 template <typename T> class dtkComposerTransmitterEmitterVector;
 
-class dtkComposerTransmitterVariantContainer;
-
 template <typename T> class DTKCOMPOSER_EXPORT dtkComposerTransmitterReceiverVector : public dtkComposerTransmitterReceiver<T>
 {
 public:
@@ -94,21 +95,23 @@ public:
     ~dtkComposerTransmitterReceiverVector(void);
 
 public:
-          dtkAbstractContainerWrapper& container(void);
-    const dtkAbstractContainerWrapper& container(void) const;
+    dtkAbstractContainerWrapper& container(void);
 
-          dtkContainerVector<T>& data(void);
-    const dtkContainerVector<T>& data(void) const;
+    dtkContainerVector<T>& data(void);
 
 public:
-    bool    connect(dtkComposerTransmitter *transmitter);
-    bool disconnect(dtkComposerTransmitter *transmitter);
+    void activateEmitter(dtkComposerTransmitter        *emitter);
+    void activateEmitter(dtkComposerTransmitterVariant *emitter);
+
+public:
+    bool copyOnWrite(void);
 
 public:
     bool isEmpty(void) const;
 
 public:
-    void setActiveEmitter(dtkComposerTransmitter *emitter);
+    bool    connect(dtkComposerTransmitter *transmitter);
+    bool disconnect(dtkComposerTransmitter *transmitter);
 
 private:
     QList<dtkComposerTransmitterEmitterVector<T> *> emitters;

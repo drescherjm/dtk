@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 16:08:26 2012 (+0200)
+ * Last-Updated: Wed Aug  1 12:43:37 2012 (+0200)
  *           By: tkloczko
- *     Update #: 208
+ *     Update #: 221
  */
 
 /* Commentary: 
@@ -69,15 +69,6 @@ template <typename T> inline T& dtkComposerTransmitterEmitter<T>::data(void)
     return m_data;
 };
 
-//! Returns the data as a modifiable reference.
-/*! 
- *  
- */
-template <typename T> inline const T& dtkComposerTransmitterEmitter<T>::data(void) const
-{
-    return m_data;
-};
-
 //! Returns.
 /*! 
  *  
@@ -135,11 +126,6 @@ template <typename T> inline void dtkComposerTransmitterEmitterVector<T>::setDat
 };
 
 template <typename T> inline dtkContainerVector<T>& dtkComposerTransmitterEmitterVector<T>::data(void)
-{
-    return m_vector;
-};
-
-template <typename T> inline const dtkContainerVector<T>& dtkComposerTransmitterEmitterVector<T>::data(void) const
 {
     return m_vector;
 };

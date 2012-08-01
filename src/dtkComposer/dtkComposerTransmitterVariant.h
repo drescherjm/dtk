@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 15:57:07 2012 (+0200)
+ * Last-Updated: Wed Aug  1 12:46:33 2012 (+0200)
  *           By: tkloczko
- *     Update #: 101
+ *     Update #: 106
  */
 
 /* Commentary: 
@@ -43,13 +43,19 @@ public:
     void setData(const dtkAbstractContainerWrapper& data);
     void setDataFromMsg(dtkDistributedMessage *msg);
 
-          QVariant& data(void);
-    const QVariant& data(void) const;
+public:
+    QVariant& data(void);
 
-          dtkAbstractContainerWrapper& container(void);
-    const dtkAbstractContainerWrapper& container(void) const;
+    dtkAbstractContainerWrapper& container(void);
 
     QVariantList allData(void);
+
+public:
+    void activateEmitter(dtkComposerTransmitter        *emitter);
+    void activateEmitter(dtkComposerTransmitterVariant *emitter);
+
+public:
+    bool copyOnWrite(void);
 
 public:
     bool isEmpty(void) const;
@@ -77,9 +83,6 @@ public:
 public:
     bool    connect(dtkComposerTransmitter *transmitter);
     bool disconnect(dtkComposerTransmitter *transmitter);
-
-public:
-    void setActiveEmitter(dtkComposerTransmitter *emitter);
 
 public:
     LinkMap  leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);

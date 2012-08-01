@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:33:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 15:57:31 2012 (+0200)
+ * Last-Updated: Wed Aug  1 12:43:30 2012 (+0200)
  *           By: tkloczko
- *     Update #: 107
+ *     Update #: 112
  */
 
 /* Commentary: 
@@ -40,8 +40,7 @@ public:
 public:
     inline void setData(const T& data);
 
-    inline       T& data(void);
-    inline const T& data(void) const;
+    inline T& data(void);
 
 public:
     virtual Kind kind(void) const;
@@ -73,8 +72,7 @@ public:
 public:
     inline void setData(const dtkContainerVector<T>& vector);
 
-    inline       dtkContainerVector<T>& data(void);
-    inline const dtkContainerVector<T>& data(void) const;
+    inline dtkContainerVector<T>& data(void);
 
 private:
     dtkContainerVector<T> m_vector;

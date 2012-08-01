@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 16:38:27 2012 (+0200)
+ * Last-Updated: Wed Aug  1 12:45:46 2012 (+0200)
  *           By: tkloczko
- *     Update #: 172
+ *     Update #: 196
  */
 
 /* Commentary: 
@@ -34,6 +34,7 @@ class dtkComposerNode;
 class dtkComposerTransmitterPrivate;
 class dtkComposerTransmitterLink;
 class dtkComposerTransmitterLinkList;
+class dtkComposerTransmitterVariant;
 
 class DTKCOMPOSER_EXPORT dtkComposerTransmitter
 {
@@ -48,6 +49,13 @@ public:
     };
 
 public:
+    enum DataTransmission { 
+        Copy,
+        CopyOnWrite,
+        Reference
+    };
+
+public:
              dtkComposerTransmitter(dtkComposerNode *parent = 0);
     virtual ~dtkComposerTransmitter(void);
 
@@ -57,18 +65,14 @@ public:
     virtual QString kindName(void) const = 0;
 
 public:
-          QVariant& variant(void);
-    const QVariant& variant(void) const;
+    QVariant& variant(void);
 
 public:
-    virtual       dtkAbstractContainerWrapper& container(void);
-    virtual const dtkAbstractContainerWrapper& container(void) const;
+    virtual dtkAbstractContainerWrapper& container(void);
 
 public:
-    virtual QVariant::Type type(void) const;
-
-public:
-    QString typeName(void) const;
+    virtual QVariant::Type     type(void) const;
+            QString        typeName(void) const;
 
 public:
     void setParentNode(dtkComposerNode *parent);
@@ -81,7 +85,15 @@ public:
     bool active(void);
 
 public:
-    virtual void setActiveEmitter(dtkComposerTransmitter *emitter);
+    virtual void activateEmitter(dtkComposerTransmitter        *emitter);
+    virtual void activateEmitter(dtkComposerTransmitterVariant *emitter);
+
+public:
+    void setDataTransmission(DataTransmission value);
+    
+    DataTransmission dataTransmission(void) const;
+
+    virtual bool copyOnWrite(void);
 
 public:
     void setRequired(bool required);

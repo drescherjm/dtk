@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri May 25 09:29:47 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jul  4 12:21:12 2012 (+0200)
+ * Last-Updated: Thu Aug  2 14:24:39 2012 (+0200)
  *           By: tkloczko
- *     Update #: 12
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -35,8 +35,8 @@
 template <typename T> class DTKCONTAINER_EXPORT dtkContainerVectorWrapper : public dtkAbstractContainerWrapper
 {
 public:
-     dtkContainerVectorWrapper(dtkAbstractData *parent = 0);
-     dtkContainerVectorWrapper(const dtkContainerVector<T>& vector, dtkAbstractData *parent = 0);
+     dtkContainerVectorWrapper(void);
+     dtkContainerVectorWrapper(QSharedPointer<dtkContainerVector<T> > vector);
      dtkContainerVectorWrapper(const dtkContainerVectorWrapper<T>& other);
     ~dtkContainerVectorWrapper(void);
 
@@ -52,11 +52,10 @@ public:
     QString identifier(void) const;
 
 public:
-    void setVector(const dtkContainerVector<T>& vector);
+    void setVector(QSharedPointer<dtkContainerVector<T> > vector);
 
 public:
-          dtkContainerVector<T>& vector(void);
-    const dtkContainerVector<T>& vector(void) const;
+    QSharedPointer<dtkContainerVector<T> > vector(void);
 
 public:
     Type type(void) const;
@@ -90,7 +89,7 @@ public:
     bool isEqual(const dtkAbstractContainerWrapper& other) const;    
 
 private:
-    dtkContainerVector<T> m_vector;
+    QSharedPointer<dtkContainerVector<T> > m_vector;
 };
 
 // /////////////////////////////////////////////////////////////////

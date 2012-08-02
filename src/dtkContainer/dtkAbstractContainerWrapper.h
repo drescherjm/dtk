@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:46:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jul  4 12:22:57 2012 (+0200)
+ * Last-Updated: Thu Aug  2 15:18:05 2012 (+0200)
  *           By: tkloczko
- *     Update #: 25
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -22,7 +22,11 @@
 
 #include "dtkAbstractContainer.h"
 #include "dtkContainerExport.h"
+#include "dtkContainerVector.h"
+
 #include <dtkCore/dtkAbstractData>
+
+#include <QSharedPointer>
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractContainerWrapper interface
@@ -39,7 +43,7 @@ public:
     };
 
 public:
-             dtkAbstractContainerWrapper(dtkAbstractData *parent = 0);
+             dtkAbstractContainerWrapper(void);
              dtkAbstractContainerWrapper(const dtkAbstractContainerWrapper& other);
     virtual ~dtkAbstractContainerWrapper(void);
 
@@ -61,6 +65,9 @@ public:
 
 public:
     dtkAbstractContainerWrapper *container(void);
+
+public:
+    template <typename T> QSharedPointer<dtkContainerVector<T> > vector(void);
 
 public:
     QString identifier(void) const;

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:51:33 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jul  4 12:23:04 2012 (+0200)
+ * Last-Updated: Thu Aug  2 15:18:52 2012 (+0200)
  *           By: tkloczko
- *     Update #: 29
+ *     Update #: 37
  */
 
 /* Commentary: 
@@ -18,12 +18,13 @@
  */
 
 #include "dtkAbstractContainerWrapper.h"
+#include "dtkContainerVectorWrapper.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractContainerWrapper implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkAbstractContainerWrapper::dtkAbstractContainerWrapper(dtkAbstractData *parent) : dtkAbstractData(parent)
+dtkAbstractContainerWrapper::dtkAbstractContainerWrapper(void) : dtkAbstractData()
 {
     m_container = NULL;
 }
@@ -96,6 +97,16 @@ dtkAbstractContainerWrapper *dtkAbstractContainerWrapper::voidClone(void) const
 dtkAbstractContainerWrapper *dtkAbstractContainerWrapper::container(void)
 {
     return m_container;
+}
+
+template <typename T> QSharedPointer<dtkContainerVector<T> > dtkAbstractContainerWrapper::vector(void)
+{
+    if (this->type() != Vector)
+        return QSharedPointer<dtkContainerVector<T> >();
+
+    dtkContainerVectorWrapper<T> *wrapper = reinterpret_cast<dtkContainerVectorWrapper<T> *>(m_container);
+
+    return wrapper->vector();
 }
 
 QString dtkAbstractContainerWrapper::identifier(void) const

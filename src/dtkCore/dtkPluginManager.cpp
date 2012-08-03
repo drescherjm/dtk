@@ -5,9 +5,9 @@
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
 <<<<<<< HEAD
- * Last-Updated: mar. mai 29 16:12:27 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 253
+ * Last-Updated: Sat Aug  4 00:20:44 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 265
 =======
  * Last-Updated: Thu May 24 21:24:25 2012 (+0200)
  *           By: Julien Wintz

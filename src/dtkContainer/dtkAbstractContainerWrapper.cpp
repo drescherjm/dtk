@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:51:33 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Aug  2 15:18:52 2012 (+0200)
+ * Last-Updated: Fri Aug  3 23:55:00 2012 (+0200)
  *           By: tkloczko
- *     Update #: 37
+ *     Update #: 40
  */
 
 /* Commentary: 
@@ -49,10 +49,10 @@ void dtkAbstractContainerWrapper::init(dtkAbstractContainerWrapper *wrapper)
 
 void dtkAbstractContainerWrapper::reset(void)
 {
-    if (m_container && (this != m_container))
-        delete m_container;
+    // if (m_container && (this != m_container))
+    //     delete m_container;
 
-    m_container = NULL;
+    // m_container = NULL;
 }
 
 bool dtkAbstractContainerWrapper::isReset(void) const
@@ -99,10 +99,10 @@ dtkAbstractContainerWrapper *dtkAbstractContainerWrapper::container(void)
     return m_container;
 }
 
-template <typename T> QSharedPointer<dtkContainerVector<T> > dtkAbstractContainerWrapper::vector(void)
+template <typename T> dtkContainerVector<T> *dtkAbstractContainerWrapper::vector(void)
 {
     if (this->type() != Vector)
-        return QSharedPointer<dtkContainerVector<T> >();
+        return NULL;
 
     dtkContainerVectorWrapper<T> *wrapper = reinterpret_cast<dtkContainerVectorWrapper<T> *>(m_container);
 

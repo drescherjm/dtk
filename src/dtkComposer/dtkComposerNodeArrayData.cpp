@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Jul  4 11:47:12 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jul  5 10:26:42 2012 (+0200)
+ * Last-Updated: Thu Aug  2 16:07:38 2012 (+0200)
  *           By: tkloczko
- *     Update #: 20
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include "dtkComposerNodeArrayData.h"
 #include "dtkComposerTransmitterEmitter.h"
+#include "dtkComposerTransmitterUtils.h"
 #include "dtkComposerTransmitterVariant.h"
 
 #include <dtkContainer/dtkAbstractContainerWrapper.h>
@@ -109,7 +110,7 @@ void dtkComposerNodeArrayData::run(void)
 {
     if (!d->receiver_array.isEmpty()) {
 
-        const dtkAbstractContainerWrapper& array = d->receiver_array.container();
+        dtkAbstractContainerWrapper* array = dtkComposerTransmitterContainer(d->receiver_array);
 
         if (array.isReset()) {
             dtkWarn() << "Input array is not valid. Nothing is done.";
@@ -125,7 +126,7 @@ void dtkComposerNodeArrayData::run(void)
         dtkContainerVector<QVariant> array;
 
         if (!d->receiver_size.isEmpty())
-            size = qvariant_cast<qlonglong>(d->receiver_size.data());
+            size = *dtkComposerTransmitterData<qlonglong>(d->receiver_size);
 
         if (size == 0) {
             dtkWarn() << "The size of the array is zero." ;

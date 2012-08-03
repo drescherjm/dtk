@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Aug  1 12:50:10 2012 (+0200)
+ * Last-Updated: Fri Aug  3 23:46:39 2012 (+0200)
  *           By: tkloczko
- *     Update #: 343
+ *     Update #: 388
  */
 
 /* Commentary: 
@@ -38,8 +38,7 @@
 template <typename T> dtkComposerTransmitterReceiver<T>::dtkComposerTransmitterReceiver(dtkComposerNode *parent) : dtkComposerTransmitter(parent)
 {
     T t;
-
-    d->variant = qVariantFromValue(t);
+    d->type.setValue(t);
 
     active_emitter = NULL;
     active_variant = NULL;
@@ -58,37 +57,56 @@ template <typename T> dtkComposerTransmitterReceiver<T>::~dtkComposerTransmitter
 /*! 
  *  
  */
-template <typename T> T& dtkComposerTransmitterReceiver<T>::data(void)
+template <typename T> T *dtkComposerTransmitterReceiver<T>::data(void)
 {
     if (active_emitter)
         return active_emitter->data();
 
-    if (active_variant)
-        m_data = qvariant_cast<T>(active_variant->data());
+    else if (active_variant)
+        return active_variant->data<T>();
 
     return m_data;
+};
+
+//! Returns the data as a modifiable reference.
+/*! 
+ *  
+ */
+template <typename T> QVariant& dtkComposerTransmitterReceiver<T>::variant(void)
+{
+    if (active_emitter)
+        return active_emitter->variant();
+
+    else if (active_variant)
+        return active_variant->variant();
+
+    return d->variant;
 };
 
 //! 
 /*! 
  *  
  */
-template <typename T> QVector<T> dtkComposerTransmitterReceiver<T>::allData(void)
+template <typename T> QVector<T*> dtkComposerTransmitterReceiver<T>::allData(void)
 {
-    QVector<T> list;
+    QVector<T*> list;
 
+    int i;
     int count = this->emitters.count();
 
-    for(int i = 0; i < count; i++)
+    for(i = 0; i < count; ++i)
         if (this->emitters.at(i)->active()) {
             list << this->emitters.at(i)->data();
         }
 
     count = this->variants.count();
 
-    for(int i = 0; i < count; i++) {
-        if (this->variants.at(i)->active()) {
-            list << qvariant_cast<T>(this->variants.at(i)->data());
+    dtkComposerTransmitterVariant *var = NULL;
+
+    for(i = 0; i < count; ++i) {
+        var = this->variants.at(i);
+        if (var->active()) {
+            list << var->data<T>();
         }
     }
 
@@ -304,7 +322,11 @@ template <typename T> dtkComposerTransmitter::LinkMap dtkComposerTransmitterRece
 
 template <typename T> inline dtkComposerTransmitterReceiverVector<T>::dtkComposerTransmitterReceiverVector(dtkComposerNode *parent) : dtkComposerTransmitterReceiver<T>(parent)
 {
+    dtkAbstractContainerWrapper w;
+    d->type.setValue(w);
 
+    active_emitter = NULL;
+    active_variant = NULL;
 };
 
 template <typename T> inline dtkComposerTransmitterReceiverVector<T>::~dtkComposerTransmitterReceiverVector(void)
@@ -312,13 +334,13 @@ template <typename T> inline dtkComposerTransmitterReceiverVector<T>::~dtkCompos
 
 };
 
-template <typename T> inline dtkContainerVector<T>& dtkComposerTransmitterReceiverVector<T>::data(void)
+template <typename T> inline dtkContainerVector<T> *dtkComposerTransmitterReceiverVector<T>::data(void)
 {    
     if (active_emitter)
         return active_emitter->data();
     
     if (active_variant)
-        return (reinterpret_cast<dtkContainerVectorWrapper<T> *>(active_variant->container().container()))->vector();
+        return active_variant->container()->vector<T>();
     
     return m_vector;
 };
@@ -327,7 +349,22 @@ template <typename T> inline dtkContainerVector<T>& dtkComposerTransmitterReceiv
 /*! 
  *  
  */
-template <typename T> dtkAbstractContainerWrapper& dtkComposerTransmitterReceiverVector<T>::container(void)
+template <typename T> QVariant& dtkComposerTransmitterReceiverVector<T>::variant(void)
+{
+    if (active_emitter)
+        return active_emitter->variant();
+
+    else if (active_variant)
+        return active_variant->variant();
+
+    return d->variant;
+};
+
+//! 
+/*! 
+ *  
+ */
+template <typename T> inline dtkAbstractContainerWrapper *dtkComposerTransmitterReceiverVector<T>::container(void)
 {
     if (active_emitter)
         return active_emitter->container();

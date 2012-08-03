@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:46:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Aug  2 15:18:05 2012 (+0200)
+ * Last-Updated: Fri Aug  3 23:53:31 2012 (+0200)
  *           By: tkloczko
- *     Update #: 31
+ *     Update #: 34
  */
 
 /* Commentary: 
@@ -67,7 +67,7 @@ public:
     dtkAbstractContainerWrapper *container(void);
 
 public:
-    template <typename T> QSharedPointer<dtkContainerVector<T> > vector(void);
+    template <typename T> dtkContainerVector<T> *vector(void);
 
 public:
     QString identifier(void) const;
@@ -113,6 +113,10 @@ public:
 private:
     dtkAbstractContainerWrapper *m_container;
 };
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
 
 Q_DECLARE_METATYPE(dtkAbstractContainerWrapper);
 Q_DECLARE_METATYPE(dtkAbstractContainerWrapper *);

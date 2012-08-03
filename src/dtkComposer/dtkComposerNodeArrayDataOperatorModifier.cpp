@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jul  5 09:37:40 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jul  5 10:19:05 2012 (+0200)
+ * Last-Updated: Thu Aug  2 14:44:05 2012 (+0200)
  *           By: tkloczko
- *     Update #: 35
+ *     Update #: 36
  */
 
 /* Commentary: 
@@ -130,19 +130,19 @@ void dtkComposerNodeArrayDataOperatorInsert::run(void)
 void dtkComposerNodeArrayDataOperatorSet::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_item.isEmpty() ) {
-
+        
         dtkAbstractContainerWrapper array = d->receiver_array.container();
         qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
-    
+        
         if (array.isReset()) {
             dtkWarn() << "Input array is not valid. Nothing is done.";
             return;
         }
-
+        
         if (index < array.count()) {
             array.replace(d->receiver_item.data(), index);
             d->emitter_array.setData(array);
-
+            
         } else {
             dtkWarn() << "index > size of the vector. Nothing is done" ;
             dtkAbstractContainerWrapper array;

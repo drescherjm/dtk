@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: mar. mai 15 17:05:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: lun. mai 21 11:24:58 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 283
+ * Last-Updated: Fri Aug  3 14:27:25 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 284
  */
 
 /* Commentary:
@@ -158,29 +158,29 @@ void dtkComposerNodeControlCase::setVariables(void)
 int dtkComposerNodeControlCase::selectBranch(void)
 {
     int value = 0;
-    bool is_case = false;
+    // bool is_case = false;
 
-    for (int i = 1; i < d->blocks.count(); i++) {
-        dtkComposerTransmitterVariant *v =  dynamic_cast < dtkComposerTransmitterVariant * > ( d->blocks_input[i-1]) ;
-        if (value > 0) //already found the good block, no need to check again.
-            is_case = false;
-        else
-            is_case = d->cond.data() ==  v->data();
+    // for (int i = 1; i < d->blocks.count(); i++) {
+    //     dtkComposerTransmitterVariant *v =  dynamic_cast < dtkComposerTransmitterVariant * > ( d->blocks_input[i-1]) ;
+    //     if (value > 0) //already found the good block, no need to check again.
+    //         is_case = false;
+    //     else
+    //         is_case = d->cond.data() ==  v->data();
 
-        foreach(dtkComposerTransmitter *t, d->blocks[i]->emitters()) {
-            if (is_case) {
-                t->setActive(true);
-                value = i;
-            } else
-                t->setActive(false);
-        }
-    }
+    //     foreach(dtkComposerTransmitter *t, d->blocks[i]->emitters()) {
+    //         if (is_case) {
+    //             t->setActive(true);
+    //             value = i;
+    //         } else
+    //             t->setActive(false);
+    //     }
+    // }
 
-    foreach(dtkComposerTransmitter *t, d->blocks[0]->emitters())
-        if (value == 0)
-            t->setActive(true);
-        else
-            t->setActive(false);
+    // foreach(dtkComposerTransmitter *t, d->blocks[0]->emitters())
+    //     if (value == 0)
+    //         t->setActive(true);
+    //     else
+    //         t->setActive(false);
 
     return value;
 }

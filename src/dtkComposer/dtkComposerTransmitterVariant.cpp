@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Aug  1 12:47:05 2012 (+0200)
+ * Last-Updated: Sat Aug  4 01:23:48 2012 (+0200)
  *           By: tkloczko
- *     Update #: 496
+ *     Update #: 553
  */
 
 /* Commentary: 
@@ -19,8 +19,10 @@
 
 #include "dtkComposerTransmitter_p.h"
 #include "dtkComposerTransmitterVariant.h"
+#include "dtkComposerTransmitterVariant_p.h"
 
-#include <dtkContainer/dtkAbstractContainer.h>
+#include <dtkContainer>
+
 #include <dtkCore/dtkGlobal.h>
 #include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkAbstractDataFactory.h>
@@ -30,29 +32,6 @@
 #include <dtkLog/dtkLog.h>
 
 #include <dtkMath/dtkMath.h>
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterVariantPrivate declaration
-// /////////////////////////////////////////////////////////////////
-
-class dtkComposerTransmitterVariantPrivate
-{
-public:
-    QList<dtkComposerTransmitter *> emitters;
-    QList<dtkComposerTransmitterVariant *> variants;
-
-public:
-    dtkComposerTransmitter        *active_emitter;
-    dtkComposerTransmitterVariant *active_variant;
-
-public:
-    QList<QVariant::Type> types;
-
-public:
-    dtkComposerTransmitterVariant *twin;
-
-    bool twinned;
-};
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterVariant implementation
@@ -84,141 +63,145 @@ dtkComposerTransmitterVariant::~dtkComposerTransmitterVariant(void)
  *  
  *  
  */
+
 void dtkComposerTransmitterVariant::setData(const QVariant& data)
 {
+    d->type = data;
     d->variant = data;
-    d->container.reset();
+    d->container->reset();
 }
 
-void dtkComposerTransmitterVariant::setData(const dtkAbstractContainerWrapper& data)
+void dtkComposerTransmitterVariant::setData(dtkAbstractContainerWrapper *data)
 {
+    dtkAbstractContainerWrapper w;
+    d->type.setValue(w);
     d->container = data;
-    d->variant = qVariantFromValue(data);
+    d->variant.setValue(d->container);
 }
 
 void dtkComposerTransmitterVariant::setDataFromMsg(dtkDistributedMessage *msg)
 {
-    if (msg->type() == "double") {
+    // if (msg->type() == "double") {
 
-        double *data = reinterpret_cast<double*>(msg->content().data());
-        this->setTwinned(false);
-        this->setData(*data);
-        this->setTwinned(true);
+    //     double *data = reinterpret_cast<double*>(msg->content().data());
+    //     this->setTwinned(false);
+    //     this->setData(data);
+    //     this->setTwinned(true);
 
-    } else if (msg->type() == "qlonglong") {
+    // } else if (msg->type() == "qlonglong") {
 
-        qlonglong *data = reinterpret_cast<qlonglong*>(msg->content().data());
-        this->setTwinned(false);
-        this->setData(*data);
-        this->setTwinned(true);
+    //     qlonglong *data = reinterpret_cast<qlonglong*>(msg->content().data());
+    //     this->setTwinned(false);
+    //     this->setData(data);
+    //     this->setTwinned(true);
 
-    } else if (msg->type() == "qstring") {
+    // } else if (msg->type() == "qstring") {
 
-        this->setTwinned(false);
-        this->setData(QString(msg->content()));
-        this->setTwinned(true);
+    //     this->setTwinned(false);
+    //     this->setData(new QString(msg->content()));
+    //     this->setTwinned(true);
 
-    } else if (msg->type() == "dtkVectorReal") {
+    // } else if (msg->type() == "dtkVectorReal") {
 
-        if (msg->size() > 0) {
-            QByteArray array = msg->content();
-            int size;
-            QDataStream stream(&array, QIODevice::ReadOnly);
-            stream >> size;
-            dtkVectorReal v(size);
+    //     if (msg->size() > 0) {
+    //         QByteArray array = msg->content();
+    //         int size;
+    //         QDataStream stream(&array, QIODevice::ReadOnly);
+    //         stream >> size;
+    //         dtkVectorReal *v = new dtkVectorReal(size);
 
-            for (int i=0; i< size; i++)
-                stream >> v[i];
+    //         for (int i=0; i< size; i++)
+    //             stream >> *(v[i]);
 
-            this->setTwinned(false);
-            this->setData(qVariantFromValue(v));
-            this->setTwinned(true);
+    //         this->setTwinned(false);
+    //         this->setData(v);
+    //         this->setTwinned(true);
 
 
-            dtkDebug() << "received dtkVectorReal, set data in transmitter; size is " << size;
+    //         dtkDebug() << "received dtkVectorReal, set data in transmitter; size is " << size;
 
-        } else
-            dtkWarn() << "warning: no content in dtkVectorReal transmitter";
+    //     } else
+    //         dtkWarn() << "warning: no content in dtkVectorReal transmitter";
 
-    } else if (msg->type() == "dtkVector3DReal") {
+    // } else if (msg->type() == "dtkVector3DReal") {
 
-        if (msg->size() > 0) {
-            dtkVector3DReal v;
+    //     if (msg->size() > 0) {
+    //         dtkVector3DReal *v = new dtkVector3D<qreal>();
 
-            QDataStream stream(&(msg->content()), QIODevice::ReadOnly);
-            stream >> v[0];
-            stream >> v[1];
-            stream >> v[2];
+    //         QDataStream stream(&(msg->content()), QIODevice::ReadOnly);
+    //         stream >> *v[0];
+    //         stream >> *v[1];
+    //         stream >> *v[2];
 
-            this->setTwinned(false);
-            this->setData(qVariantFromValue(v));
-            this->setTwinned(true);
+    //         this->setTwinned(false);
+    //         this->setData(v);
+    //         this->setTwinned(true);
 
-            dtkDebug() << "received dtkVector3DReal, set data in transmitter" << v[0] << v[1] << v[2];
+    //         dtkDebug() << "received dtkVector3DReal, set data in transmitter" << *v[0] << *v[1] << *v[2];
 
-        } else
-            dtkWarn() << "warning: no content in dtkVector3DReal transmitter";
+    //     } else
+    //         dtkWarn() << "warning: no content in dtkVector3DReal transmitter";
 
-    } else if (msg->type() == "dtkQuaternionReal") {
+    // } else if (msg->type() == "dtkQuaternionReal") {
 
-        if (msg->size() > 0) {
-            dtkQuaternionReal q;
+    //     if (msg->size() > 0) {
+    //         dtkQuaternionReal q = new dtkQuaternion<qreal>();
 
-            QDataStream stream(&(msg->content()), QIODevice::ReadOnly);
-            stream >> q[0];
-            stream >> q[1];
-            stream >> q[2];
-            stream >> q[3];
+    //         QDataStream stream(&(msg->content()), QIODevice::ReadOnly);
+    //         stream >> *q[0];
+    //         stream >> *q[1];
+    //         stream >> *q[2];
+    //         stream >> *q[3];
 
-            this->setTwinned(false);
-            this->setData(qVariantFromValue(q));
-            this->setTwinned(true);
+    //         this->setTwinned(false);
+    //         this->setData(q);
+    //         this->setTwinned(true);
 
-            dtkDebug() << "received dtkQuaternionReal, set data in transmitter" << q[0] << q[1] << q[2] << q[3];
+    //         dtkDebug() << "received dtkQuaternionReal, set data in transmitter" << *q[0] << *q[1] << *q[2] << *q[3];
 
-        } else
-            dtkWarn() << "warning: no content in dtkQuaternionReal transmitter";
+    //     } else
+    //         dtkWarn() << "warning: no content in dtkQuaternionReal transmitter";
 
-    } else { // assume a dtkAbstractData
+    // } else { // assume a dtkAbstractData
 
-        dtkDebug() << "received" <<  msg->type() << ", deserialize";
-        QString type ;
-        QString transmitter_type;
-        if (msg->type().section('/',1,1).isEmpty()) {
-            type = msg->type();
-            transmitter_type = type;
-        } else {
-            transmitter_type = msg->type().section('/',0,0);
-            type = msg->type().section('/',1,1);
-        }
+    //     dtkDebug() << "received" <<  msg->type() << ", deserialize";
+    //     QString type ;
+    //     QString transmitter_type;
+    //     if (msg->type().section('/',1,1).isEmpty()) {
+    //         type = msg->type();
+    //         transmitter_type = type;
+    //     } else {
+    //         transmitter_type = msg->type().section('/',0,0);
+    //         type = msg->type().section('/',1,1);
+    //     }
 
-        dtkDebug() << "type:" << type;
-        dtkDebug() << "transmitter_type:" << transmitter_type;
-        if (msg->size() > 0) {
-            dtkAbstractData *data;
-            data = dtkAbstractDataFactory::instance()->create(type)->deserialize(msg->content());
-            if (!data) {
-                dtkError() << "Deserialization failed";
-            } else {
-                dtkDebug() << "set dtkAbstractData in transmitter, size is" << msg->size();
-                if (transmitter_type == "dtkAbstractData") {
-                    this->setData(qVariantFromValue(data));
-                } else {
-                    this->setData(data->toVariant(data));
-                }
-            }
-        } else
-            dtkWarn() << "warning: no content in dtkAbstractData transmitter";
-    }
+    //     dtkDebug() << "type:" << type;
+    //     dtkDebug() << "transmitter_type:" << transmitter_type;
+    //     if (msg->size() > 0) {
+    //         dtkAbstractData *data;
+    //         data = dtkAbstractDataFactory::instance()->create(type)->deserialize(msg->content());
+    //         if (!data) {
+    //             dtkError() << "Deserialization failed";
+    //         } else {
+    //             dtkDebug() << "set dtkAbstractData in transmitter, size is" << msg->size();
+    //             if (transmitter_type == "dtkAbstractData") {
+    //                 this->setData(data);
+    //             } else {
+    //                 // this->setData(data->toVariant(data));
+    //             }
+    //         }
+    //     } else
+    //         dtkWarn() << "warning: no content in dtkAbstractData transmitter";
+    // }
 }
 
-QVariant& dtkComposerTransmitterVariant::data(void)
+QVariant& dtkComposerTransmitterVariant::variant(void)
 {
     if (e->twinned)
         return d->variant;
 
     if (e->active_variant)
-        return e->active_variant->data();
+        return e->active_variant->variant();
 
     if (e->active_emitter)
         return e->active_emitter->variant();
@@ -226,7 +209,7 @@ QVariant& dtkComposerTransmitterVariant::data(void)
     return d->variant;
 }
 
-dtkAbstractContainerWrapper& dtkComposerTransmitterVariant::container(void)
+dtkAbstractContainerWrapper *dtkComposerTransmitterVariant::container(void)
 {
     if (e->twinned)
         return d->container;
@@ -234,7 +217,7 @@ dtkAbstractContainerWrapper& dtkComposerTransmitterVariant::container(void)
     if (e->active_variant)
         return e->active_variant->container();
     
-    else if (e->active_emitter)
+    if (e->active_emitter)
         return e->active_emitter->container();
 
     return d->container;    
@@ -261,7 +244,7 @@ QVariantList dtkComposerTransmitterVariant::allData(void)
 
         for(int i = 0; i < count; i++)
             if (e->variants.at(i)->active()) {
-                list << e->variants.at(i)->data();
+                list << e->variants.at(i)->variant();
             }
 
     }
@@ -363,15 +346,29 @@ QString dtkComposerTransmitterVariant::kindName(void) const
 QVariant::Type dtkComposerTransmitterVariant::type(void) const
 {
     if (e->twinned)
-        return d->variant.type();
+        return d->type.type();
 
     if (e->active_variant)
-        return e->active_variant->data().type();
-
+        return e->active_variant->type();
+    
     if (e->active_emitter)
-        return e->active_emitter->variant().type();
+        return e->active_emitter->type();
 
-    return d->variant.type();
+    return d->type.type();
+}
+
+QString dtkComposerTransmitterVariant::typeName(void) const
+{
+    if (e->twinned)
+        return d->type.typeName();
+
+    if (e->active_variant)
+        return e->active_variant->typeName();
+    
+    if (e->active_emitter)
+        return e->active_emitter->typeName();
+
+    return d->type.typeName();
 }
 
 void dtkComposerTransmitterVariant::setTypes(QList<QVariant::Type> types)

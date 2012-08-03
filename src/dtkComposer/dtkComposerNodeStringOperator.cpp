@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/23 09:24:08
  * Version: $Id$
- * Last-Updated: Tue Jun 26 17:31:25 2012 (+0200)
+ * Last-Updated: Sat Aug  4 00:36:10 2012 (+0200)
  *           By: tkloczko
- *     Update #: 19
+ *     Update #: 37
  */
 
 /* Commentary:
@@ -17,14 +17,15 @@
  *
  */
 
+#include "dtkComposerMetatype.h"
 
 #include "dtkComposerNodeStringOperator.h"
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
+#include "dtkComposerTransmitterUtils.h"
 #include "dtkComposerTransmitterVariant.h"
 
 #include <dtkLog/dtkLog.h>
-
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeStringOperatorUnary
@@ -37,16 +38,20 @@ public:
 
 public:
     dtkComposerTransmitterEmitter<QString> emitter;
+
+public:
+    QString value;
 };
 
 dtkComposerNodeStringOperatorUnary::dtkComposerNodeStringOperatorUnary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeStringOperatorUnaryPrivate)
 {
     QList<QVariant::Type> variant_list;
-    variant_list << QVariant::String;
+    variant_list << QVariant::Bool << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double << QVariant::String << QVariant::ByteArray;
 
     d->receiver.setTypes(variant_list);
     this->appendReceiver(&(d->receiver));
 
+    d->emitter.setData(&d->value);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -69,12 +74,15 @@ public:
 
 public:
     dtkComposerTransmitterEmitter<QString> emitter;
+
+public:
+    QString value;
 };
 
 dtkComposerNodeStringOperatorBinary::dtkComposerNodeStringOperatorBinary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeStringOperatorBinaryPrivate)
 {
     QList<QVariant::Type> variant_list;
-    variant_list << QVariant::String;
+    variant_list << QVariant::Bool << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double << QVariant::String << QVariant::ByteArray;
 
     d->receiver_lhs.setTypes(variant_list);
     this->appendReceiver(&(d->receiver_lhs));
@@ -82,6 +90,7 @@ dtkComposerNodeStringOperatorBinary::dtkComposerNodeStringOperatorBinary(void) :
     d->receiver_rhs.setTypes(variant_list);
     this->appendReceiver(&(d->receiver_rhs));
 
+    d->emitter.setData(&d->value);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -104,12 +113,15 @@ public:
 
 public:
     dtkComposerTransmitterEmitter<bool> emitter;
+
+public:
+    bool value;
 };
 
 dtkComposerNodeStringOperatorBinaryLogic::dtkComposerNodeStringOperatorBinaryLogic(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeStringOperatorBinaryLogicPrivate)
 {
     QList<QVariant::Type> variant_list;
-    variant_list << QVariant::String;
+    variant_list << QVariant::Bool << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double << QVariant::String << QVariant::ByteArray;
 
     d->receiver_lhs.setTypes(variant_list);
     this->appendReceiver(&(d->receiver_lhs));
@@ -117,6 +129,7 @@ dtkComposerNodeStringOperatorBinaryLogic::dtkComposerNodeStringOperatorBinaryLog
     d->receiver_rhs.setTypes(variant_list);
     this->appendReceiver(&(d->receiver_rhs));
 
+    d->emitter.setData(&d->value);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -133,9 +146,10 @@ dtkComposerNodeStringOperatorBinaryLogic::~dtkComposerNodeStringOperatorBinaryLo
 
 void dtkComposerNodeStringOperatorBinaryAppend::run(void)
 {
-    QString a = d->receiver_lhs.data().toString();
-    QString b = d->receiver_rhs.data().toString();
-    d->emitter.setData(a + b);
+    QString a = *dtkComposerTransmitterData<QString>(d->receiver_lhs);
+    QString b = *dtkComposerTransmitterData<QString>(d->receiver_rhs);
+
+    d->value = (a + b);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -144,9 +158,10 @@ void dtkComposerNodeStringOperatorBinaryAppend::run(void)
 
 void dtkComposerNodeStringOperatorBinaryLogicEquality::run(void)
 {
-    QString a = d->receiver_lhs.data().toString();
-    QString b = d->receiver_rhs.data().toString();
-    d->emitter.setData((a == b));
+    QString a = *dtkComposerTransmitterData<QString>(d->receiver_lhs);
+    QString b = *dtkComposerTransmitterData<QString>(d->receiver_rhs);
+
+    d->value = (a == b);
 }
 
 

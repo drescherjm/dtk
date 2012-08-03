@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri May 25 09:47:39 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Aug  2 14:44:03 2012 (+0200)
+ * Last-Updated: Fri Aug  3 23:56:02 2012 (+0200)
  *           By: tkloczko
- *     Update #: 43
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -29,7 +29,7 @@ template <typename T> dtkContainerVectorWrapper<T>::dtkContainerVectorWrapper(vo
     this->init(this);
 };
 
-template <typename T> dtkContainerVectorWrapper<T>::dtkContainerVectorWrapper(QSharedPointer<dtkContainerVector<T> > vector) : dtkAbstractContainerWrapper(), m_vector(vector)
+template <typename T> dtkContainerVectorWrapper<T>::dtkContainerVectorWrapper(dtkContainerVector<T> *vector) : dtkAbstractContainerWrapper(), m_vector(vector)
 {
     this->init(this);
 };
@@ -69,12 +69,12 @@ template <typename T> QString dtkContainerVectorWrapper<T>::identifier(void) con
     return "dtkContainerVectorWrapper";
 };
 
-template <typename T> inline void dtkContainerVectorWrapper<T>::setVector(QSharedPointer<dtkContainerVector<T> > vector)
+template <typename T> inline void dtkContainerVectorWrapper<T>::setVector(dtkContainerVector<T> *vector)
 {
     m_vector = vector;
 };
 
-template <typename T> inline QSharedPointer<dtkContainerVector<T> > dtkContainerVectorWrapper<T>::vector(void)
+template <typename T> inline dtkContainerVector<T> *dtkContainerVectorWrapper<T>::vector(void)
 {
     return m_vector;
 };

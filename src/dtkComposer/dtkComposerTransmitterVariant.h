@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Aug  1 12:46:33 2012 (+0200)
+ * Last-Updated: Fri Aug  3 23:47:17 2012 (+0200)
  *           By: tkloczko
- *     Update #: 106
+ *     Update #: 125
  */
 
 /* Commentary: 
@@ -25,6 +25,8 @@
 
 #include <dtkCore/dtkGlobal>
 
+template <typename T> class dtkContainerVector;
+
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterVariant declaration
 // /////////////////////////////////////////////////////////////////
@@ -39,14 +41,18 @@ public:
     ~dtkComposerTransmitterVariant(void);
 
 public:
-    void setData(const QVariant& data);
-    void setData(const dtkAbstractContainerWrapper& data);
-    void setDataFromMsg(dtkDistributedMessage *msg);
+    template <typename T> inline void setData(T *data);
+    template <typename T> inline void setData(dtkContainerVector<T> *data);
+                                 void setData(const QVariant& data);
+                                 void setData(dtkAbstractContainerWrapper *data);
+                                 void setDataFromMsg(dtkDistributedMessage *msg);
 
 public:
-    QVariant& data(void);
+    template <typename T> inline T *data(void);
 
-    dtkAbstractContainerWrapper& container(void);
+    QVariant& variant(void);
+
+    dtkAbstractContainerWrapper *container(void);
 
     QVariantList allData(void);
 
@@ -68,12 +74,13 @@ public:
     void setTwinned(bool twinned);
 
 public:
-    virtual Kind kind(void) const;
+    Kind kind(void) const;
 
-    virtual QString kindName(void) const;
+    QString kindName(void) const;
 
 public:
-    QVariant::Type type(void) const;
+    QVariant::Type     type(void) const;
+    QString        typeName(void) const;
 
 public:
     void setTypes(QList<QVariant::Type> types);
@@ -91,5 +98,7 @@ public:
 protected:
     dtkComposerTransmitterVariantPrivate *e;
 };
+
+#include "dtkComposerTransmitterVariant.tpp"
 
 #endif

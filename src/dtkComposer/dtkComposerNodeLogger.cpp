@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 -Nicolas Niclausse , Inria.
  * Created: Mon Feb 27 12:38:46 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  9 09:58:42 2012 (+0200)
+ * Last-Updated: Sat Aug  4 00:45:13 2012 (+0200)
  *           By: tkloczko
- *     Update #: 45
+ *     Update #: 46
  */
 
 /* Commentary:
@@ -16,6 +16,7 @@
 /* Change log:
  *
  */
+#include "dtkComposerMetatype.h"
 
 #include "dtkComposerNodeLogger.h"
 #include "dtkComposerTransmitterVariant.h"

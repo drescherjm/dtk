@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:38:46 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jul 25 16:37:22 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 30
+ * Last-Updated: Sat Aug  4 01:20:24 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -17,9 +17,12 @@
  * 
  */
 
+#include "dtkComposerMetatype.h"
+
 #include "dtkComposerNodeString.h"
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
+#include "dtkComposerTransmitterUtils.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeStringPrivate interface
@@ -28,11 +31,13 @@
 class dtkComposerNodeStringPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<QString> receiver;
-    dtkComposerTransmitterReceiver<qreal>   receiver_real;
+    dtkComposerTransmitterVariant receiver;
 
 public:
     dtkComposerTransmitterEmitter<QString> emitter;
+
+public:
+    QString value;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -41,9 +46,13 @@ public:
 
 dtkComposerNodeString::dtkComposerNodeString(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeStringPrivate)
 {
-    this->appendReceiver(&(d->receiver));
-    this->appendReceiver(&(d->receiver_real));
+    QList<QVariant::Type> variant_list;
+    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double << QVariant::String;
 
+    d->receiver.setTypes(variant_list);
+    this->appendReceiver(&(d->receiver));
+
+    d->emitter.setData(&d->value);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -56,19 +65,23 @@ dtkComposerNodeString::~dtkComposerNodeString(void)
 
 void dtkComposerNodeString::run(void)
 {
-    if (!d->receiver.isEmpty())
-        d->emitter.setData(d->receiver.data());
-
-    else if (!d->receiver_real.isEmpty())
-        d->emitter.setData(QString::number(d->receiver_real.data()));
+    if (!d->receiver.isEmpty()) {
+        if (d->receiver.type() == QVariant::String) {
+            d->value = *dtkComposerTransmitterData<QString>(d->receiver);
+        } else if (d->receiver.type() == QVariant::Double) {
+            d->value.setNum(*dtkComposerTransmitterData<double>(d->receiver));
+        } else {
+            d->value.setNum(*dtkComposerTransmitterData<qlonglong>(d->receiver));
+        }
+    }
 }
 
 QString dtkComposerNodeString::value(void)
 {
-    return d->emitter.data();
+    return d->value;
 }
    
 void dtkComposerNodeString::setValue(QString value)
 {
-    d->emitter.setData(value);
+    d->value = value;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Aug  1 12:45:46 2012 (+0200)
+ * Last-Updated: Fri Aug  3 23:37:39 2012 (+0200)
  *           By: tkloczko
- *     Update #: 196
+ *     Update #: 206
  */
 
 /* Commentary: 
@@ -50,8 +50,8 @@ public:
 
 public:
     enum DataTransmission { 
-        Copy,
         CopyOnWrite,
+        Copy,
         Reference
     };
 
@@ -65,14 +65,14 @@ public:
     virtual QString kindName(void) const = 0;
 
 public:
-    QVariant& variant(void);
+    virtual QVariant& variant(void);
 
 public:
-    virtual dtkAbstractContainerWrapper& container(void);
+    virtual dtkAbstractContainerWrapper *container(void);
 
 public:
     virtual QVariant::Type     type(void) const;
-            QString        typeName(void) const;
+    virtual QString        typeName(void) const;
 
 public:
     void setParentNode(dtkComposerNode *parent);

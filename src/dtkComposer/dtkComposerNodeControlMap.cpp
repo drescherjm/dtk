@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: lun. juin 18 16:08:06 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 15:20:56 2012 (+0200)
+ * Last-Updated: Sat Aug  4 00:33:37 2012 (+0200)
  *           By: tkloczko
- *     Update #: 81
+ *     Update #: 84
  */
 
 /* Commentary:
@@ -17,8 +17,8 @@
  *
  */
 
+#include "dtkComposerMetatype.h"
 #include "dtkComposerNodeControlMap.h"
-
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeProxy.h"
 
@@ -139,51 +139,51 @@ dtkComposerNodeComposite *dtkComposerNodeControlMap::block(int id)
 
 void dtkComposerNodeControlMap::setInputs(void)
 {
-    d->container     = d->header_rcv.container();
-    d->out_container = d->container.clone();
+    // d->container     = d->header_rcv.container();
+    // d->out_container = d->container.clone();
 
-    d->counter = 0;
-    d->size = d->container.count();
+    // d->counter = 0;
+    // d->size = d->container.count();
 
-    d->out_container->clear();
+    // d->out_container->clear();
 
-    d->block_size.setData(d->size);
+    // d->block_size.setData(d->size);
 
-    foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
-        v->setTwinned(false);
-        if (v->container().isReset()) {
-            v->setData(v->data());
-        } else {
-            v->setData(v->container());
-        }
-        v->setTwinned(true);
-    }
+    // foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
+    //     v->setTwinned(false);
+    //     if (v->container().isReset()) {
+    //         v->setData(v->data());
+    //     } else {
+    //         v->setData(v->container());
+    //     }
+    //     v->setTwinned(true);
+    // }
 }
 
 
 void dtkComposerNodeControlMap::setOutputs(void)
 {
-    foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
-        if (v->container().isReset()) {
-            v->twin()->setData(v->data());
-        } else {
-            v->twin()->setData(v->container());
-        }
-    }
+    // foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
+    //     if (v->container().isReset()) {
+    //         v->twin()->setData(v->data());
+    //     } else {
+    //         v->twin()->setData(v->container());
+    //     }
+    // }
 
-    d->out_container->append(d->block_newitem.data());
+    // d->out_container->append(d->block_newitem.data());
 
-    d->counter++;
+    // d->counter++;
 
-    if (d->counter == d->size) { // last step
-        d->footer_emit.setData(*(d->out_container));
-    }
+    // if (d->counter == d->size) { // last step
+    //     d->footer_emit.setData(*(d->out_container));
+    // }
 }
 
 void dtkComposerNodeControlMap::setVariables(void)
 {
-    d->block_index.setData(d->counter);
-    d->block_item.setData(d->container.at(d->counter));
+    // d->block_index.setData(d->counter);
+    // d->block_item.setData(d->container.at(d->counter));
 }
 
 int dtkComposerNodeControlMap::selectBranch(void)

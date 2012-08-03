@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Aug  1 12:44:09 2012 (+0200)
+ * Last-Updated: Fri Aug  3 23:44:56 2012 (+0200)
  *           By: tkloczko
- *     Update #: 124
+ *     Update #: 137
  */
 
 /* Commentary: 
@@ -44,9 +44,11 @@ public:
     ~dtkComposerTransmitterReceiver(void);
 
 public:
-    T& data(void);
+    T *data(void);
+
+    QVariant& variant(void);
           
-    QVector<T> allData(void);
+    QVector<T*> allData(void);
 
 public:
     void activateEmitter(dtkComposerTransmitter        *emitter);
@@ -79,7 +81,7 @@ private:
     dtkComposerTransmitterVariant    *active_variant;
 
 private:
-    T m_data;
+    T *m_data;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -95,9 +97,11 @@ public:
     ~dtkComposerTransmitterReceiverVector(void);
 
 public:
-    dtkAbstractContainerWrapper& container(void);
+    dtkAbstractContainerWrapper *container(void);
 
-    dtkContainerVector<T>& data(void);
+    dtkContainerVector<T> *data(void);
+
+    QVariant& variant(void);
 
 public:
     void activateEmitter(dtkComposerTransmitter        *emitter);
@@ -122,7 +126,7 @@ private:
     dtkComposerTransmitterVariant          *active_variant;
 
 private:
-    dtkContainerVector<T> m_vector;
+    dtkContainerVector<T> *m_vector;
 
     using dtkComposerTransmitterReceiver<T>::d;
 };

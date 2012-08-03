@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:52:45 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  9 09:43:16 2012 (+0200)
+ * Last-Updated: Sat Aug  4 00:32:42 2012 (+0200)
  *           By: tkloczko
- *     Update #: 114
+ *     Update #: 146
  */
 
 /* Commentary: 
@@ -17,9 +17,12 @@
  * 
  */
 
+#include "dtkComposerMetatype.h"
+
 #include "dtkComposerNodeBooleanOperator.h"
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
+#include "dtkComposerTransmitterUtils.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeBooleanOperatorUnary
@@ -32,12 +35,17 @@ public:
 
 public:    
     dtkComposerTransmitterEmitter<bool> emitter;
+
+public:
+    bool value;
 };
 
 dtkComposerNodeBooleanOperatorUnary::dtkComposerNodeBooleanOperatorUnary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeBooleanOperatorUnaryPrivate)
 {
     this->appendReceiver(&(d->receiver));
 
+    d->value = false;
+    d->emitter.setData(&d->value);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -60,6 +68,9 @@ public:
 
 public:    
     dtkComposerTransmitterEmitter<bool> emitter;
+
+public:
+    bool value;
 };
 
 dtkComposerNodeBooleanOperatorBinary::dtkComposerNodeBooleanOperatorBinary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeBooleanOperatorBinaryPrivate)
@@ -67,6 +78,8 @@ dtkComposerNodeBooleanOperatorBinary::dtkComposerNodeBooleanOperatorBinary(void)
     this->appendReceiver(&(d->receiver_lhs));
     this->appendReceiver(&(d->receiver_rhs));
 
+    d->value = false;
+    d->emitter.setData(&d->value);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -83,9 +96,7 @@ dtkComposerNodeBooleanOperatorBinary::~dtkComposerNodeBooleanOperatorBinary(void
 
 void dtkComposerNodeBooleanOperatorUnaryNot::run(void)
 {
-    bool a = d->receiver.data();
-
-    d->emitter.setData(!a);
+    d->value = !(*dtkComposerTransmitterData<bool>(d->receiver));
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -94,10 +105,10 @@ void dtkComposerNodeBooleanOperatorUnaryNot::run(void)
 
 void dtkComposerNodeBooleanOperatorBinaryAnd::run(void)
 {
-    bool a = d->receiver_lhs.data();
-    bool b = d->receiver_rhs.data();
+    bool a = *dtkComposerTransmitterData<bool>(d->receiver_lhs);
+    bool b = *dtkComposerTransmitterData<bool>(d->receiver_rhs);
 
-    d->emitter.setData(a && b);
+    d->value = (a && b);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -106,10 +117,10 @@ void dtkComposerNodeBooleanOperatorBinaryAnd::run(void)
 
 void dtkComposerNodeBooleanOperatorBinaryOr::run(void)
 {
-    bool a = d->receiver_lhs.data();
-    bool b = d->receiver_rhs.data();
+    bool a = *dtkComposerTransmitterData<bool>(d->receiver_lhs);
+    bool b = *dtkComposerTransmitterData<bool>(d->receiver_rhs);
 
-    d->emitter.setData(a || b);
+    d->value = (a || b);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -118,10 +129,10 @@ void dtkComposerNodeBooleanOperatorBinaryOr::run(void)
 
 void dtkComposerNodeBooleanOperatorBinaryXor::run(void)
 {
-    bool a = d->receiver_lhs.data();
-    bool b = d->receiver_rhs.data();
+    bool a = *dtkComposerTransmitterData<bool>(d->receiver_lhs);
+    bool b = *dtkComposerTransmitterData<bool>(d->receiver_rhs);
 
-    d->emitter.setData((a && !b) || (!a && b));
+    d->value = ((a && !b) || (!a && b));
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -130,10 +141,10 @@ void dtkComposerNodeBooleanOperatorBinaryXor::run(void)
 
 void dtkComposerNodeBooleanOperatorBinaryNand::run(void)
 {
-    bool a = d->receiver_lhs.data();
-    bool b = d->receiver_rhs.data();
+    bool a = *dtkComposerTransmitterData<bool>(d->receiver_lhs);
+    bool b = *dtkComposerTransmitterData<bool>(d->receiver_rhs);
 
-    d->emitter.setData(!(a && b));
+    d->value = !(a && b);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -142,10 +153,10 @@ void dtkComposerNodeBooleanOperatorBinaryNand::run(void)
 
 void dtkComposerNodeBooleanOperatorBinaryNor::run(void)
 {
-    bool a = d->receiver_lhs.data();
-    bool b = d->receiver_rhs.data();
+    bool a = *dtkComposerTransmitterData<bool>(d->receiver_lhs);
+    bool b = *dtkComposerTransmitterData<bool>(d->receiver_rhs);
 
-    d->emitter.setData(!(a || b));
+    d->value = !(a || b);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -154,10 +165,10 @@ void dtkComposerNodeBooleanOperatorBinaryNor::run(void)
 
 void dtkComposerNodeBooleanOperatorBinaryXnor::run(void)
 {
-    bool a = d->receiver_lhs.data();
-    bool b = d->receiver_rhs.data();
+    bool a = *dtkComposerTransmitterData<bool>(d->receiver_lhs);
+    bool b = *dtkComposerTransmitterData<bool>(d->receiver_rhs);
 
-    d->emitter.setData((a && b) || (!a && !b));
+    d->value = ((a && b) || (!a && !b));
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -166,10 +177,10 @@ void dtkComposerNodeBooleanOperatorBinaryXnor::run(void)
 
 void dtkComposerNodeBooleanOperatorBinaryImp::run(void)
 {
-    bool a = d->receiver_lhs.data();
-    bool b = d->receiver_rhs.data();
+    bool a = *dtkComposerTransmitterData<bool>(d->receiver_lhs);
+    bool b = *dtkComposerTransmitterData<bool>(d->receiver_rhs);
 
-    d->emitter.setData((!a || b));
+    d->value = (!a || b);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -178,8 +189,8 @@ void dtkComposerNodeBooleanOperatorBinaryImp::run(void)
 
 void dtkComposerNodeBooleanOperatorBinaryNimp::run(void)
 {
-    bool a = d->receiver_lhs.data();
-    bool b = d->receiver_rhs.data();
+    bool a = *dtkComposerTransmitterData<bool>(d->receiver_lhs);
+    bool b = *dtkComposerTransmitterData<bool>(d->receiver_rhs);
 
-    d->emitter.setData((a && !b));
+    d->value = (a && !b);
 }

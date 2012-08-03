@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 15:16:06 2012 (+0200)
+ * Last-Updated: Fri Aug  3 14:26:43 2012 (+0200)
  *           By: tkloczko
- *     Update #: 63
+ *     Update #: 65
  */
 
 /* Commentary: 
@@ -17,6 +17,7 @@
  * 
  */
 
+#include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeControlWhile.h"
 
 #include "dtkComposerNodeComposite.h"
@@ -101,15 +102,15 @@ dtkComposerNodeComposite *dtkComposerNodeControlWhile::block(int id)
 
 void dtkComposerNodeControlWhile::setInputs(void)
 {
-    foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
-        v->setTwinned(false);
-        if (v->container().isReset()) {
-            v->setData(v->data());
-        } else {
-            v->setData(v->container());
-        }
-        v->setTwinned(true);        
-    }
+    // foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
+    //     v->setTwinned(false);
+    //     if (v->container().isReset()) {
+    //         v->setData(v->data());
+    //     } else {
+    //         v->setData(v->container());
+    //     }
+    //     v->setTwinned(true);        
+    // }
 }
 
 void dtkComposerNodeControlWhile::setConditions(void)
@@ -118,13 +119,13 @@ void dtkComposerNodeControlWhile::setConditions(void)
 
 void dtkComposerNodeControlWhile::setOutputs(void)
 {
-    foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
-        if (v->container().isReset()) {
-            v->twin()->setData(v->data());
-        } else {
-            v->twin()->setData(v->container());
-        }
-    }    
+    // foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
+    //     if (v->container().isReset()) {
+    //         v->twin()->setData(v->data());
+    //     } else {
+    //         v->twin()->setData(v->container());
+    //     }
+    // }    
 }
 
 void dtkComposerNodeControlWhile::setVariables(void)
@@ -133,7 +134,8 @@ void dtkComposerNodeControlWhile::setVariables(void)
 
 int dtkComposerNodeControlWhile::selectBranch(void)
 {
-    return (int)(!d->cond.data());
+    // return (int)(!d->cond.data());
+    return 0;
 }
 
 void dtkComposerNodeControlWhile::begin(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri May 25 09:29:47 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Aug  2 14:24:39 2012 (+0200)
+ * Last-Updated: Fri Aug  3 23:55:40 2012 (+0200)
  *           By: tkloczko
- *     Update #: 15
+ *     Update #: 18
  */
 
 /* Commentary: 
@@ -36,7 +36,7 @@ template <typename T> class DTKCONTAINER_EXPORT dtkContainerVectorWrapper : publ
 {
 public:
      dtkContainerVectorWrapper(void);
-     dtkContainerVectorWrapper(QSharedPointer<dtkContainerVector<T> > vector);
+     dtkContainerVectorWrapper(dtkContainerVector<T> *vector);
      dtkContainerVectorWrapper(const dtkContainerVectorWrapper<T>& other);
     ~dtkContainerVectorWrapper(void);
 
@@ -52,10 +52,10 @@ public:
     QString identifier(void) const;
 
 public:
-    void setVector(QSharedPointer<dtkContainerVector<T> > vector);
+    void setVector(dtkContainerVector<T> *vector);
 
 public:
-    QSharedPointer<dtkContainerVector<T> > vector(void);
+    dtkContainerVector<T> *vector(void);
 
 public:
     Type type(void) const;
@@ -89,7 +89,7 @@ public:
     bool isEqual(const dtkAbstractContainerWrapper& other) const;    
 
 private:
-    QSharedPointer<dtkContainerVector<T> > m_vector;
+    dtkContainerVector<T> *m_vector;
 };
 
 // /////////////////////////////////////////////////////////////////

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:33:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Aug  1 12:43:30 2012 (+0200)
+ * Last-Updated: Fri Aug  3 23:41:04 2012 (+0200)
  *           By: tkloczko
- *     Update #: 112
+ *     Update #: 127
  */
 
 /* Commentary: 
@@ -27,6 +27,8 @@
 
 #include <dtkContainer/dtkContainerVector.h>
 
+#include <QSharedPointer>
+
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterEmitter interface
 // /////////////////////////////////////////////////////////////////
@@ -38,9 +40,9 @@ public:
     ~dtkComposerTransmitterEmitter(void);
 
 public:
-    inline void setData(const T& data);
+    inline void setData(T *data);
 
-    inline T& data(void);
+    inline T *data(void);
 
 public:
     virtual Kind kind(void) const;
@@ -51,7 +53,7 @@ public:
     LinkMap leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 
 private:
-    T m_data;
+    T *m_data;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -70,12 +72,12 @@ public:
     QString kindName(void) const;
 
 public:
-    inline void setData(const dtkContainerVector<T>& vector);
+    inline void setData(dtkContainerVector<T> *vector);
 
-    inline dtkContainerVector<T>& data(void);
+    inline dtkContainerVector<T> *data(void);
 
 private:
-    dtkContainerVector<T> m_vector;
+    dtkContainerVector<T> *m_vector;
 
     using dtkComposerTransmitterEmitter<T>::d;
 };

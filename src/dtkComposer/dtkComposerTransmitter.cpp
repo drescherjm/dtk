@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Aug  1 12:45:28 2012 (+0200)
+ * Last-Updated: Fri Aug  3 23:39:09 2012 (+0200)
  *           By: tkloczko
- *     Update #: 251
+ *     Update #: 264
  */
 
 /* Commentary: 
@@ -40,6 +40,7 @@ dtkComposerTransmitter::dtkComposerTransmitter(dtkComposerNode *parent) : d(new 
     d->required = true;
     d->parent = parent;
 
+    d->container = NULL;
     d->data_transmission = CopyOnWrite;
 }
 
@@ -87,7 +88,7 @@ QVariant& dtkComposerTransmitter::variant(void)
 /*!  
  *  
  */
-dtkAbstractContainerWrapper& dtkComposerTransmitter::container(void)
+dtkAbstractContainerWrapper *dtkComposerTransmitter::container(void)
 {
     return d->container;
 }
@@ -98,7 +99,7 @@ dtkAbstractContainerWrapper& dtkComposerTransmitter::container(void)
  */
 QVariant::Type dtkComposerTransmitter::type(void) const
 {
-    return d->variant.type();
+    return d->type.type();
 }
 
 //! Returns the type name of the data contained by the transmitter.
@@ -107,7 +108,7 @@ QVariant::Type dtkComposerTransmitter::type(void) const
  */
 QString dtkComposerTransmitter::typeName(void) const
 {
-    return d->variant.typeName();
+    return d->type.typeName();
 }
 
 //! Sets the node to which the current transmitter is parented.

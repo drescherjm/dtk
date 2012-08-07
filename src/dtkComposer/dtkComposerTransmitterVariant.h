@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Aug  3 23:47:17 2012 (+0200)
+ * Last-Updated: Tue Aug  7 16:08:13 2012 (+0200)
  *           By: tkloczko
- *     Update #: 125
+ *     Update #: 137
  */
 
 /* Commentary: 
@@ -43,13 +43,18 @@ public:
 public:
     template <typename T> inline void setData(T *data);
     template <typename T> inline void setData(dtkContainerVector<T> *data);
-                                 void setData(const QVariant& data);
-                                 void setData(dtkAbstractContainerWrapper *data);
-                                 void setDataFromMsg(dtkDistributedMessage *msg);
 
 public:
+    void setData(const QVariant& data);
+    void setData(dtkAbstractContainerWrapper *data);
+    void setDataFromMsg(dtkDistributedMessage *msg);
+
+public:
+    template <typename T> inline T *dataFromEmitter(void);
     template <typename T> inline T *data(void);
 
+public:    
+    QVariant& variantFromEmitter(void);
     QVariant& variant(void);
 
     dtkAbstractContainerWrapper *container(void);
@@ -61,7 +66,9 @@ public:
     void activateEmitter(dtkComposerTransmitterVariant *emitter);
 
 public:
-    bool copyOnWrite(void);
+    bool enableCopy(void);
+
+    void reset(void);
 
 public:
     bool isEmpty(void) const;

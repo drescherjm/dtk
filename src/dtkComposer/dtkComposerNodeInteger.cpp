@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:38:46 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Aug  4 00:42:25 2012 (+0200)
+ * Last-Updated: Tue Aug  7 16:22:32 2012 (+0200)
  *           By: tkloczko
- *     Update #: 56
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -47,7 +47,7 @@ public:
 dtkComposerNodeInteger::dtkComposerNodeInteger(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeIntegerPrivate)
 {
     QList<QVariant::Type> variant_list;
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double;
+    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double << QVariant::Bool << QVariant::String;
 
     d->receiver.setTypes(variant_list);
     this->appendReceiver(&(d->receiver));
@@ -67,7 +67,7 @@ dtkComposerNodeInteger::~dtkComposerNodeInteger(void)
 void dtkComposerNodeInteger::run(void)
 {
     if (!d->receiver.isEmpty())
-        d->value = *dtkComposerTransmitterData<qlonglong>(d->receiver);
+        d->value = *(d->receiver.data<qlonglong>());
 }
 
 qlonglong dtkComposerNodeInteger::value(void)

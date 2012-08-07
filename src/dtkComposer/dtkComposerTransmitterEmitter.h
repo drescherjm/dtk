@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:33:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Aug  3 23:41:04 2012 (+0200)
+ * Last-Updated: Tue Aug  7 15:29:58 2012 (+0200)
  *           By: tkloczko
- *     Update #: 127
+ *     Update #: 132
  */
 
 /* Commentary: 
@@ -45,6 +45,9 @@ public:
     inline T *data(void);
 
 public:
+    virtual bool enableCopy(void);
+
+public:
     virtual Kind kind(void) const;
 
     virtual QString kindName(void) const;
@@ -67,14 +70,17 @@ public:
     ~dtkComposerTransmitterEmitterVector(void);
 
 public:
-    dtkComposerTransmitter::Kind kind(void) const;
-
-    QString kindName(void) const;
-
-public:
     inline void setData(dtkContainerVector<T> *vector);
 
     inline dtkContainerVector<T> *data(void);
+
+public:
+    bool enableCopy(void);
+
+public:
+    dtkComposerTransmitter::Kind kind(void) const;
+
+    QString kindName(void) const;
 
 private:
     dtkContainerVector<T> *m_vector;

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Aug  1 09:42:27 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Aug  3 23:58:24 2012 (+0200)
+ * Last-Updated: Tue Aug  7 16:12:21 2012 (+0200)
  *           By: tkloczko
- *     Update #: 42
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -28,11 +28,11 @@
 
 template <typename T> T *dtkComposerTransmitterData(dtkComposerTransmitterReceiver<T>& receiver)
 {
-    T *value = receiver.data();
+    T *value = receiver.dataFromEmitter();
 
     switch(receiver.dataTransmission()) {
     case dtkComposerTransmitter::CopyOnWrite:
-        if (receiver.copyOnWrite())
+        if (receiver.enableCopy())
             return new T(*value);
         else
             return value;
@@ -52,11 +52,11 @@ template <typename T> T *dtkComposerTransmitterData(dtkComposerTransmitterReceiv
 
 template <typename T> T *dtkComposerTransmitterData(dtkComposerTransmitterVariant& receiver)
 {
-    T *value = receiver.data<T>();
+    T *value = receiver.dataFromEmitter<T>();
 
     switch(receiver.dataTransmission()) {
     case dtkComposerTransmitter::CopyOnWrite:
-        if (receiver.copyOnWrite())
+        if (receiver.enableCopy())
             return new T(*value);
         else
             return value;

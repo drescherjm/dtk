@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Aug  4 01:23:48 2012 (+0200)
+ * Last-Updated: Tue Aug  7 16:13:11 2012 (+0200)
  *           By: tkloczko
- *     Update #: 553
+ *     Update #: 567
  */
 
 /* Commentary: 
@@ -44,6 +44,7 @@ dtkComposerTransmitterVariant::dtkComposerTransmitterVariant(dtkComposerNode *pa
 
     e->twin = NULL;
     e->twinned = false;
+    e->already_ask = false;
 }
 
 dtkComposerTransmitterVariant::~dtkComposerTransmitterVariant(void)
@@ -195,7 +196,7 @@ void dtkComposerTransmitterVariant::setDataFromMsg(dtkDistributedMessage *msg)
     // }
 }
 
-QVariant& dtkComposerTransmitterVariant::variant(void)
+QVariant& dtkComposerTransmitterVariant::variantFromEmitter(void)
 {
     if (e->twinned)
         return d->variant;
@@ -207,6 +208,11 @@ QVariant& dtkComposerTransmitterVariant::variant(void)
         return e->active_emitter->variant();
 
     return d->variant;
+}
+
+QVariant& dtkComposerTransmitterVariant::variant(void)
+{
+    return this->variantFromEmitter();
 }
 
 dtkAbstractContainerWrapper *dtkComposerTransmitterVariant::container(void)
@@ -290,16 +296,30 @@ void dtkComposerTransmitterVariant::activateEmitter(dtkComposerTransmitterVarian
 /*! 
  *  
  */
-bool dtkComposerTransmitterVariant::copyOnWrite(void)
+bool dtkComposerTransmitterVariant::enableCopy(void)
 {
-    if (e->twinned)
-        return false;
+    if (e->twinned) {
+        if (e->already_ask)/// ATENTION A TEST\ER
+            return false;
+        else {
+            e->already_ask = true;
+            if (d->receivers.count() > 1)
+                return true;
+        }
+    }
 
     if (e->active_variant)
-        return (e->active_variant->receiverCount() > 1);
+        return e->active_variant->enableCopy();
 
     if (e->active_emitter)
-        return (e->active_emitter->receiverCount() > 1);
+        return e->active_emitter->enableCopy();
+
+    return (d->receivers.count() > 1);
+}
+
+void dtkComposerTransmitterVariant::reset(void)
+{
+    e->already_ask = false;
 }
 
 //! 

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/23 09:24:08
  * Version: $Id$
- * Last-Updated: Sat Aug  4 00:36:10 2012 (+0200)
+ * Last-Updated: Tue Aug  7 17:04:36 2012 (+0200)
  *           By: tkloczko
- *     Update #: 37
+ *     Update #: 46
  */
 
 /* Commentary:
@@ -34,7 +34,7 @@
 class dtkComposerNodeStringOperatorUnaryPrivate
 {
 public:
-    dtkComposerTransmitterVariant receiver;
+    dtkComposerTransmitterReceiver<QString> receiver;
 
 public:
     dtkComposerTransmitterEmitter<QString> emitter;
@@ -45,10 +45,6 @@ public:
 
 dtkComposerNodeStringOperatorUnary::dtkComposerNodeStringOperatorUnary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeStringOperatorUnaryPrivate)
 {
-    QList<QVariant::Type> variant_list;
-    variant_list << QVariant::Bool << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double << QVariant::String << QVariant::ByteArray;
-
-    d->receiver.setTypes(variant_list);
     this->appendReceiver(&(d->receiver));
 
     d->emitter.setData(&d->value);
@@ -69,8 +65,8 @@ dtkComposerNodeStringOperatorUnary::~dtkComposerNodeStringOperatorUnary(void)
 class dtkComposerNodeStringOperatorBinaryPrivate
 {
 public:
-    dtkComposerTransmitterVariant receiver_lhs;
-    dtkComposerTransmitterVariant receiver_rhs;
+    dtkComposerTransmitterReceiver<QString> receiver_lhs;
+    dtkComposerTransmitterReceiver<QString> receiver_rhs;
 
 public:
     dtkComposerTransmitterEmitter<QString> emitter;
@@ -81,13 +77,7 @@ public:
 
 dtkComposerNodeStringOperatorBinary::dtkComposerNodeStringOperatorBinary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeStringOperatorBinaryPrivate)
 {
-    QList<QVariant::Type> variant_list;
-    variant_list << QVariant::Bool << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double << QVariant::String << QVariant::ByteArray;
-
-    d->receiver_lhs.setTypes(variant_list);
     this->appendReceiver(&(d->receiver_lhs));
-
-    d->receiver_rhs.setTypes(variant_list);
     this->appendReceiver(&(d->receiver_rhs));
 
     d->emitter.setData(&d->value);
@@ -108,8 +98,8 @@ dtkComposerNodeStringOperatorBinary::~dtkComposerNodeStringOperatorBinary(void)
 class dtkComposerNodeStringOperatorBinaryLogicPrivate
 {
 public:
-    dtkComposerTransmitterVariant receiver_lhs;
-    dtkComposerTransmitterVariant receiver_rhs;
+    dtkComposerTransmitterReceiver<QString> receiver_lhs;
+    dtkComposerTransmitterReceiver<QString> receiver_rhs;
 
 public:
     dtkComposerTransmitterEmitter<bool> emitter;
@@ -120,13 +110,7 @@ public:
 
 dtkComposerNodeStringOperatorBinaryLogic::dtkComposerNodeStringOperatorBinaryLogic(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeStringOperatorBinaryLogicPrivate)
 {
-    QList<QVariant::Type> variant_list;
-    variant_list << QVariant::Bool << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double << QVariant::String << QVariant::ByteArray;
-
-    d->receiver_lhs.setTypes(variant_list);
     this->appendReceiver(&(d->receiver_lhs));
-
-    d->receiver_rhs.setTypes(variant_list);
     this->appendReceiver(&(d->receiver_rhs));
 
     d->emitter.setData(&d->value);
@@ -146,10 +130,7 @@ dtkComposerNodeStringOperatorBinaryLogic::~dtkComposerNodeStringOperatorBinaryLo
 
 void dtkComposerNodeStringOperatorBinaryAppend::run(void)
 {
-    QString a = *dtkComposerTransmitterData<QString>(d->receiver_lhs);
-    QString b = *dtkComposerTransmitterData<QString>(d->receiver_rhs);
-
-    d->value = (a + b);
+    d->value = *(d->receiver_lhs.data()) + *(d->receiver_rhs.data());
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -158,10 +139,7 @@ void dtkComposerNodeStringOperatorBinaryAppend::run(void)
 
 void dtkComposerNodeStringOperatorBinaryLogicEquality::run(void)
 {
-    QString a = *dtkComposerTransmitterData<QString>(d->receiver_lhs);
-    QString b = *dtkComposerTransmitterData<QString>(d->receiver_rhs);
-
-    d->value = (a == b);
+    d->value = (*(d->receiver_lhs.data()) == *(d->receiver_rhs.data()));
 }
 
 

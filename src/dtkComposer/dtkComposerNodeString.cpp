@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:38:46 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Aug  4 01:20:24 2012 (+0200)
+ * Last-Updated: Tue Aug  7 16:23:45 2012 (+0200)
  *           By: tkloczko
- *     Update #: 53
+ *     Update #: 56
  */
 
 /* Commentary: 
@@ -47,7 +47,7 @@ public:
 dtkComposerNodeString::dtkComposerNodeString(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeStringPrivate)
 {
     QList<QVariant::Type> variant_list;
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double << QVariant::String;
+    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double << QVariant::String << QVariant::Bool;
 
     d->receiver.setTypes(variant_list);
     this->appendReceiver(&(d->receiver));
@@ -65,15 +65,8 @@ dtkComposerNodeString::~dtkComposerNodeString(void)
 
 void dtkComposerNodeString::run(void)
 {
-    if (!d->receiver.isEmpty()) {
-        if (d->receiver.type() == QVariant::String) {
-            d->value = *dtkComposerTransmitterData<QString>(d->receiver);
-        } else if (d->receiver.type() == QVariant::Double) {
-            d->value.setNum(*dtkComposerTransmitterData<double>(d->receiver));
-        } else {
-            d->value.setNum(*dtkComposerTransmitterData<qlonglong>(d->receiver));
-        }
-    }
+    if (!d->receiver.isEmpty())
+        d->value = *(d->receiver.data<QString>());
 }
 
 QString dtkComposerNodeString::value(void)

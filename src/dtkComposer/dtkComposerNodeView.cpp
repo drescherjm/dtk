@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 24 23:29:24 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Aug  3 14:21:00 2012 (+0200)
+ * Last-Updated: Tue Aug  7 09:43:24 2012 (+0200)
  *           By: tkloczko
- *     Update #: 162
+ *     Update #: 164
  */
 
 /* Commentary: 
@@ -16,6 +16,8 @@
 /* Change log:
  * 
  */
+
+#include "dtkComposerMetatype.h"
 
 #include "dtkComposerNodeVector3D.h"
 #include "dtkComposerNodeQuaternion.h"
@@ -47,7 +49,7 @@ public:
     dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_screen_lower_right;
 
 public:
-    dtkComposerTransmitterReceiver<dtkAbstractData *> receiver_data;
+    dtkComposerTransmitterReceiver<dtkAbstractData> receiver_data;
 
 public:
     dtkAbstractView *view;

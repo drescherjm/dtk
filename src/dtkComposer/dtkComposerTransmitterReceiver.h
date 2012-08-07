@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Aug  3 23:44:56 2012 (+0200)
+ * Last-Updated: Tue Aug  7 15:30:35 2012 (+0200)
  *           By: tkloczko
- *     Update #: 137
+ *     Update #: 143
  */
 
 /* Commentary: 
@@ -44,6 +44,11 @@ public:
     ~dtkComposerTransmitterReceiver(void);
 
 public:
+    T *dataFromEmitter(void);
+
+    QVariant& variantFromEmitter(void);
+
+public:
     T *data(void);
 
     QVariant& variant(void);
@@ -55,7 +60,7 @@ public:
     void activateEmitter(dtkComposerTransmitterVariant *emitter);
 
 public:
-    bool copyOnWrite(void);
+    bool enableCopy(void);
 
 public:
     bool isEmpty(void) const;
@@ -108,7 +113,7 @@ public:
     void activateEmitter(dtkComposerTransmitterVariant *emitter);
 
 public:
-    bool copyOnWrite(void);
+    bool enableCopy(void);
 
 public:
     bool isEmpty(void) const;

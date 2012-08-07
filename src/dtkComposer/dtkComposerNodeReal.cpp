@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:38:46 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Aug  4 01:05:15 2012 (+0200)
+ * Last-Updated: Tue Aug  7 16:17:15 2012 (+0200)
  *           By: tkloczko
- *     Update #: 80
+ *     Update #: 85
  */
 
 /* Commentary: 
@@ -49,7 +49,7 @@ public:
 dtkComposerNodeReal::dtkComposerNodeReal(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeRealPrivate)
 {
     QList<QVariant::Type> variant_list;
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double ;
+    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double << QVariant::String << QVariant::Bool;
 
     d->receiver.setTypes(variant_list);
     this->appendReceiver(&(d->receiver));
@@ -68,13 +68,8 @@ dtkComposerNodeReal::~dtkComposerNodeReal(void)
 
 void dtkComposerNodeReal::run(void)
 {
-    if (!d->receiver.isEmpty()) {
-        if (d->receiver.type() == QVariant::Double) {
-            d->value = *dtkComposerTransmitterData<qreal>(d->receiver);
-        } else {
-            d->value = static_cast<qreal>(*dtkComposerTransmitterData<qlonglong>(d->receiver));
-        }
-    }
+    if (!d->receiver.isEmpty())
+        d->value = *(d->receiver.data<qreal>());
 }
 
 qreal dtkComposerNodeReal::value(void)

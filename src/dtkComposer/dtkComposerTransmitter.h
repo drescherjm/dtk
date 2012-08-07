@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Aug  3 23:37:39 2012 (+0200)
+ * Last-Updated: Tue Aug  7 15:27:19 2012 (+0200)
  *           By: tkloczko
- *     Update #: 206
+ *     Update #: 209
  */
 
 /* Commentary: 
@@ -93,7 +93,7 @@ public:
     
     DataTransmission dataTransmission(void) const;
 
-    virtual bool copyOnWrite(void);
+    virtual bool enableCopy(void);
 
 public:
     void setRequired(bool required);

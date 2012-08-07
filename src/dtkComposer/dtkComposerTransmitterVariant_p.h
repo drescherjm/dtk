@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Aug  3 14:36:46 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Aug  3 14:38:07 2012 (+0200)
+ * Last-Updated: Tue Aug  7 16:12:52 2012 (+0200)
  *           By: tkloczko
- *     Update #: 4
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -46,6 +46,14 @@ public:
     dtkComposerTransmitterVariant *twin;
 
     bool twinned;
+
+    bool already_ask;
+    
+public:
+    bool      value_b;
+    qlonglong value_i;
+    qreal     value_r;
+    QString   value_s;
 };
 
 #endif

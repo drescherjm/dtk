@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Aug  3 23:46:39 2012 (+0200)
+ * Last-Updated: Tue Aug  7 16:11:51 2012 (+0200)
  *           By: tkloczko
- *     Update #: 388
+ *     Update #: 413
  */
 
 /* Commentary: 
@@ -57,7 +57,7 @@ template <typename T> dtkComposerTransmitterReceiver<T>::~dtkComposerTransmitter
 /*! 
  *  
  */
-template <typename T> T *dtkComposerTransmitterReceiver<T>::data(void)
+template <typename T> T *dtkComposerTransmitterReceiver<T>::dataFromEmitter(void)
 {
     if (active_emitter)
         return active_emitter->data();
@@ -72,7 +72,7 @@ template <typename T> T *dtkComposerTransmitterReceiver<T>::data(void)
 /*! 
  *  
  */
-template <typename T> QVariant& dtkComposerTransmitterReceiver<T>::variant(void)
+template <typename T> QVariant& dtkComposerTransmitterReceiver<T>::variantFromEmitter(void)
 {
     if (active_emitter)
         return active_emitter->variant();
@@ -80,6 +80,66 @@ template <typename T> QVariant& dtkComposerTransmitterReceiver<T>::variant(void)
     else if (active_variant)
         return active_variant->variant();
 
+    return d->variant;
+};
+
+//! Returns the data as a modifiable reference.
+/*! 
+ *  
+ */
+template <typename T> T *dtkComposerTransmitterReceiver<T>::data(void)
+{
+    T *data = this->dataFromEmitter();
+
+    switch(this->dataTransmission()) {
+    case dtkComposerTransmitter::CopyOnWrite:
+        if (this->enableCopy())
+            return new T(*data);
+        else
+            return data;
+        break;
+    case dtkComposerTransmitter::Copy:
+        return new T(*data);
+        break;
+    case dtkComposerTransmitter::Reference:
+        return data;
+        break;
+    default:
+        break;
+    };
+
+    return new T();
+};
+
+//! Returns the data as a modifiable reference.
+/*! 
+ *  
+ */
+template <typename T> QVariant& dtkComposerTransmitterReceiver<T>::variant(void)
+{
+    QVariant& variant = this->variantFromEmitter();
+    
+    switch(this->dataTransmission()) {
+    case dtkComposerTransmitter::CopyOnWrite:
+        if (this->enableCopy()) {
+            d->variant.setValue(new T(*(variant.value<T*>())));
+            return d->variant;
+        } else {
+            return variant;
+        }
+        break;
+    case dtkComposerTransmitter::Copy:
+        d->variant.setValue(new T(*(variant.value<T*>())));
+        return d->variant;
+        break;
+    case dtkComposerTransmitter::Reference:
+        return variant;
+        break;
+    default:
+        break;
+    };
+
+    d->variant.setValue(new T());
     return d->variant;
 };
 
@@ -151,13 +211,13 @@ template <typename T> void dtkComposerTransmitterReceiver<T>::activateEmitter(dt
 /*! 
  *  
  */
-template <typename T> bool dtkComposerTransmitterReceiver<T>::copyOnWrite(void)
+template <typename T> bool dtkComposerTransmitterReceiver<T>::enableCopy(void)
 {
     if (active_emitter)
-        return (active_emitter->receiverCount() > 1);
+        return active_emitter->enableCopy();;
 
     if (active_variant)
-        return (active_variant->receiverCount() > 1);
+        return active_variant->enableCopy();
 }
 
 //! Returns.
@@ -413,13 +473,13 @@ template <typename T> void dtkComposerTransmitterReceiverVector<T>::activateEmit
 /*! 
  *  
  */
-template <typename T> bool dtkComposerTransmitterReceiverVector<T>::copyOnWrite(void)
+template <typename T> bool dtkComposerTransmitterReceiverVector<T>::enableCopy(void)
 {
     if (active_emitter)
-        return (active_emitter->receiverCount() > 1);
+        return active_emitter->enableCopy();;
 
     if (active_variant)
-        return (active_variant->receiverCount() > 1);
+        return active_variant->enableCopy();
 }
     
 //! 

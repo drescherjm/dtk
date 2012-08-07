@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Aug  3 14:26:43 2012 (+0200)
+ * Last-Updated: Tue Aug  7 09:41:53 2012 (+0200)
  *           By: tkloczko
- *     Update #: 65
+ *     Update #: 68
  */
 
 /* Commentary: 
@@ -17,7 +17,7 @@
  * 
  */
 
-#include "dtkComposerNodeBoolean.h"
+#include "dtkComposerMetatype.h"
 #include "dtkComposerNodeControlWhile.h"
 
 #include "dtkComposerNodeComposite.h"

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Aug  3 23:39:09 2012 (+0200)
+ * Last-Updated: Tue Aug  7 15:27:36 2012 (+0200)
  *           By: tkloczko
- *     Update #: 264
+ *     Update #: 266
  */
 
 /* Commentary: 
@@ -197,9 +197,9 @@ dtkComposerTransmitter::DataTransmission dtkComposerTransmitter::dataTransmissio
 /*! 
  *  
  */
-bool dtkComposerTransmitter::copyOnWrite(void)
+bool dtkComposerTransmitter::enableCopy(void)
 {
-    return false;
+    return true;
 }
 
 //! Sets required flag to \a required.

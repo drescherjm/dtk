@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:46:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Aug  3 23:53:31 2012 (+0200)
+ * Last-Updated: Thu Aug  9 15:46:31 2012 (+0200)
  *           By: tkloczko
- *     Update #: 34
+ *     Update #: 36
  */
 
 /* Commentary: 
@@ -67,6 +67,7 @@ public:
     dtkAbstractContainerWrapper *container(void);
 
 public:
+    template <typename T> void setVector(dtkContainerVector<T> *vector);
     template <typename T> dtkContainerVector<T> *vector(void);
 
 public:
@@ -113,6 +114,12 @@ public:
 private:
     dtkAbstractContainerWrapper *m_container;
 };
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
+#include "dtkAbstractContainerWrapper.tpp"
 
 // /////////////////////////////////////////////////////////////////
 // 

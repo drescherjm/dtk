@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Aug  3 14:36:46 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Aug  7 16:12:52 2012 (+0200)
+ * Last-Updated: Thu Aug  9 16:01:36 2012 (+0200)
  *           By: tkloczko
- *     Update #: 8
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -54,6 +54,9 @@ public:
     qlonglong value_i;
     qreal     value_r;
     QString   value_s;
+
+public:
+    QVariant m_variant;
 };
 
 #endif

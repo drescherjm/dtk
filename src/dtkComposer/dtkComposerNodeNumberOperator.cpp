@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Mon Feb 27 14:28:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Aug  7 16:54:15 2012 (+0200)
+ * Last-Updated: Thu Aug  9 11:19:23 2012 (+0200)
  *           By: tkloczko
- *     Update #: 405
+ *     Update #: 406
  */
 
 /* Commentary:
@@ -22,7 +22,6 @@
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
-#include "dtkComposerTransmitterUtils.h"
 #include "dtkComposerTransmitterVariant.h"
 
 #include <dtkLog/dtkLog.h>

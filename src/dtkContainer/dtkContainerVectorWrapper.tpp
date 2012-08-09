@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri May 25 09:47:39 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Aug  3 23:56:02 2012 (+0200)
+ * Last-Updated: Thu Aug  9 10:10:56 2012 (+0200)
  *           By: tkloczko
- *     Update #: 44
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -42,7 +42,7 @@ template <typename T> dtkContainerVectorWrapper<T>::dtkContainerVectorWrapper(co
 
 template <typename T> dtkContainerVectorWrapper<T>::~dtkContainerVectorWrapper(void)
 {
-
+    m_vector = NULL;
 };
 
 template <typename T> dtkContainerVectorWrapper<T>& dtkContainerVectorWrapper<T>::operator = (const dtkContainerVectorWrapper<T>& other)

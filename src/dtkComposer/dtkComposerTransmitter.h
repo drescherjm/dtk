@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Aug  7 15:27:19 2012 (+0200)
+ * Last-Updated: Thu Aug  9 09:39:26 2012 (+0200)
  *           By: tkloczko
- *     Update #: 209
+ *     Update #: 210
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #define DTKCOMPOSERTRANSMITTER_H
 
 #include "dtkComposerExport.h"
+#include "dtkComposerMetatype.h"
 
 #include <QtCore>
 

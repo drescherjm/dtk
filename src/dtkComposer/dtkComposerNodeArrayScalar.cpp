@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 16:58:04 2012 (+0200)
+ * Last-Updated: Thu Aug  9 16:28:40 2012 (+0200)
  *           By: tkloczko
- *     Update #: 70
+ *     Update #: 104
  */
 
 /* Commentary: 
@@ -40,6 +40,10 @@ public:
 public:
     dtkComposerTransmitterEmitterVector<qreal> emitter_array;
     dtkComposerTransmitterEmitter<qlonglong>   emitter_size;
+
+public:
+    dtkContainerVectorReal *array;
+    qlonglong size;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -48,6 +52,9 @@ public:
 
 dtkComposerNodeArrayScalar::dtkComposerNodeArrayScalar(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeArrayScalarPrivate)
 {
+    d->array = NULL;
+    d->size = 0;
+
     this->appendReceiver(&d->receiver_array);
 
     QList<QVariant::Type> variant_list;
@@ -60,7 +67,10 @@ dtkComposerNodeArrayScalar::dtkComposerNodeArrayScalar(void) : dtkComposerNodeLe
     d->receiver_value.setTypes(variant_list);
     this->appendReceiver(&d->receiver_value);
 
+    d->emitter_array.setData(d->array);
     this->appendEmitter(&d->emitter_array);
+
+    d->emitter_size.setData(&d->size);
     this->appendEmitter(&d->emitter_size);
 }
 
@@ -110,37 +120,36 @@ void dtkComposerNodeArrayScalar::run(void)
 {
     if (!d->receiver_array.isEmpty()) {
 
-        const dtkContainerVectorReal& array(d->receiver_array.data());
-
-        d->emitter_array.setData(array);
-        d->emitter_size.setData(array.count());
+        d->array = d->receiver_array.data();
+        d->size = d->array->count();
 
     } else {
 
-        qlonglong size = 0;
-        qreal value = 0;
-        dtkContainerVector<qreal> array;
-
+        if (d->array)
+            d->array->clear();
+        else
+            d->array = new dtkContainerVectorReal();  
+        
         if (!d->receiver_size.isEmpty())
-            size = qvariant_cast<qlonglong>(d->receiver_size.data());
+            d->size = *d->receiver_size.data<qlonglong>();
 
-        if (size == 0) {
+        if (d->size == 0) {
             dtkWarn() << "The size of the array is zero." ;
 
-        } else {
+        } else {          
 
-            array.reserve(size);
+            d->array->reserve(d->size);
+        
+            qreal value;
 
             if (!d->receiver_value.isEmpty())
-                value = qvariant_cast<qreal>(d->receiver_value.data());
+                value = *d->receiver_value.data<qreal>();
 
-            for(int i = 0 ; i < size; i++)
-                array << value;
+        for(int i = 0 ; i < d->size; i++)
+            *(d->array) << value;
 
         }
-
-        d->emitter_array.setData(array);
-        d->emitter_size.setData(size);
-
     }
+
+    d->emitter_array.setData(d->array);
 }

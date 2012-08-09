@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:51:33 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Aug  3 23:55:00 2012 (+0200)
+ * Last-Updated: Thu Aug  9 14:50:29 2012 (+0200)
  *           By: tkloczko
- *     Update #: 40
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -97,16 +97,6 @@ dtkAbstractContainerWrapper *dtkAbstractContainerWrapper::voidClone(void) const
 dtkAbstractContainerWrapper *dtkAbstractContainerWrapper::container(void)
 {
     return m_container;
-}
-
-template <typename T> dtkContainerVector<T> *dtkAbstractContainerWrapper::vector(void)
-{
-    if (this->type() != Vector)
-        return NULL;
-
-    dtkContainerVectorWrapper<T> *wrapper = reinterpret_cast<dtkContainerVectorWrapper<T> *>(m_container);
-
-    return wrapper->vector();
 }
 
 QString dtkAbstractContainerWrapper::identifier(void) const

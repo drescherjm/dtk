@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Aug  4 00:26:47 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Aug  4 00:30:42 2012 (+0200)
+ * Last-Updated: Thu Aug  9 11:14:33 2012 (+0200)
  *           By: tkloczko
- *     Update #: 6
+ *     Update #: 7
  */
 
 /* Commentary: 
@@ -36,6 +36,6 @@ Q_DECLARE_METATYPE(qulonglong *);
 
 Q_DECLARE_METATYPE(qreal *);
 
-Q_DECLARE_METATYPE(QString *)
+Q_DECLARE_METATYPE(QString *);
 
 #endif

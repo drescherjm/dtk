@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Aug  7 16:08:13 2012 (+0200)
+ * Last-Updated: Thu Aug  9 11:34:15 2012 (+0200)
  *           By: tkloczko
- *     Update #: 137
+ *     Update #: 141
  */
 
 /* Commentary: 
@@ -50,13 +50,12 @@ public:
     void setDataFromMsg(dtkDistributedMessage *msg);
 
 public:
-    template <typename T> inline T *dataFromEmitter(void);
-    template <typename T> inline T *data(void);
+    template <typename T> T *data(void);
 
-public:    
-    QVariant& variantFromEmitter(void);
+public:
     QVariant& variant(void);
 
+    dtkAbstractContainerWrapper *containerFromEmitter(void);
     dtkAbstractContainerWrapper *container(void);
 
     QVariantList allData(void);

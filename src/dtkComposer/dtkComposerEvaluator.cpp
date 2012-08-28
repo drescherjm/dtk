@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Aug 23 16:49:07 2012 (+0200)
- *           By: sprinter
- *     Update #: 555
+ * Last-Updated: mar. août 28 16:32:39 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 566
  */
 
 /* Commentary:
@@ -67,6 +67,7 @@ void dtkComposerEvaluator::run(bool run_concurrent)
 {
     QTime time; time.start();
 
+    d->stack.clear();
     d->stack << d->graph->root();
 
     emit evaluationStarted();
@@ -80,7 +81,6 @@ void dtkComposerEvaluator::run(bool run_concurrent)
         QString msg = QString("Evaluation stopped after %1 ms").arg(time.elapsed());
         dtkInfo() << msg;
         dtkNotify(msg,30000);
-        d->stack.clear();
     }
 
     d->should_stop = false;
@@ -93,9 +93,35 @@ void dtkComposerEvaluator::stop(void)
     d->should_stop = true;
 }
 
+void dtkComposerEvaluator::reset(void)
+{
+    d->stack.clear();
+    d->should_stop   = false;
+}
+
 void dtkComposerEvaluator::cont(bool run_concurrent)
 {
-    while (this->step(run_concurrent));
+
+    if (d->stack.isEmpty()) {
+        this->run(run_concurrent);
+        return;
+    }
+
+
+    while (this->step(run_concurrent) && !d->should_stop);
+    if (!d->should_stop) {
+        QString msg = QString("Evaluation resumed and finished");
+        dtkInfo() << msg;
+        dtkNotify(msg,30000);
+    } else {
+        QString msg = QString("Evaluation stopped ");
+        dtkInfo() << msg;
+        dtkNotify(msg,30000);
+    }
+
+    d->should_stop = false;
+
+    emit evaluationStopped();
 }
 
 void dtkComposerEvaluator::logStack(void)

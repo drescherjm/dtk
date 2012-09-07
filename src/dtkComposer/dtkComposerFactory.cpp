@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Thu Aug  9 16:25:11 2012 (+0200)
+ * Last-Updated: Fri Sep  7 15:38:45 2012 (+0200)
  *           By: tkloczko
- *     Update #: 673
+ *     Update #: 675
  */
 
 /* Commentary:
@@ -372,65 +372,65 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     // d->tags["Scalar Array Part"] = QStringList() << "container" << "scalar" << "array" << "part" << "subarray" << "extractor" ;
     // d->types["Scalar Array Part"] = "array_scalar_extractor_array_part";
 
-    // d->nodes << "Scalar Array Insert";
-    // d->descriptions["Scalar Array Insert"] = "<p>Description not yet filled!</p>";
-    // d->tags["Scalar Array Insert"] = QStringList() << "container" << "array" << "scalar"  << "insert" ;
-    // d->types["Scalar Array Insert"] = "array_scalar_insert";
+    d->nodes << "Scalar Array Insert";
+    d->descriptions["Scalar Array Insert"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Insert"] = QStringList() << "container" << "array" << "scalar"  << "insert" ;
+    d->types["Scalar Array Insert"] = "array_scalar_insert";
 
-    // d->nodes << "Scalar Array Set";
-    // d->descriptions["Scalar Array Set"] = "<p>Description not yet filled!</p>";
-    // d->tags["Scalar Array Set"] = QStringList() << "container" << "array" << "scalar"  << "set" ;
-    // d->types["Scalar Array Set"] = "array_scalar_set";
+    d->nodes << "Scalar Array Set";
+    d->descriptions["Scalar Array Set"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Set"] = QStringList() << "container" << "array" << "scalar"  << "set" ;
+    d->types["Scalar Array Set"] = "array_scalar_set";
 
     d->nodes << "Scalar Array Append";
     d->descriptions["Scalar Array Append"] = "<p>Description not yet filled!</p>";
     d->tags["Scalar Array Append"] = QStringList() << "container" << "array" << "scalar"  << "append" ;
     d->types["Scalar Array Append"] = "array_scalar_append";
 
-    // d->nodes << "Scalar Array Prepend";
-    // d->descriptions["Scalar Array Prepend"] = "<p>Description not yet filled!</p>";
-    // d->tags["Scalar Array Prepend"] = QStringList() << "container" << "array" << "scalar"  << "prepend" ;
-    // d->types["Scalar Array Prepend"] = "array_scalar_prepend";
+    d->nodes << "Scalar Array Prepend";
+    d->descriptions["Scalar Array Prepend"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Prepend"] = QStringList() << "container" << "array" << "scalar"  << "prepend" ;
+    d->types["Scalar Array Prepend"] = "array_scalar_prepend";
 
-    // d->nodes << "Scalar Array All Add";
-    // d->descriptions["Scalar Array All Add"] = "<p>Description not yet filled!</p>";
-    // d->tags["Scalar Array All Add"] = QStringList() << "container" << "array" << "scalar"  << "all"<< "add" ;
-    // d->types["Scalar Array All Add"] = "array_scalar_all_add";
+    d->nodes << "Scalar Array All Add";
+    d->descriptions["Scalar Array All Add"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array All Add"] = QStringList() << "container" << "array" << "scalar"  << "all"<< "add" ;
+    d->types["Scalar Array All Add"] = "array_scalar_all_add";
 
-    // d->nodes << "Scalar Array All Substract";
-    // d->descriptions["Scalar Array All Substract"] = "<p>Description not yet filled!</p>";
-    // d->tags["Scalar Array All Substract"] = QStringList() << "container" << "array" << "scalar"  << "all"<< "substract" ;
-    // d->types["Scalar Array All Substract"] = "array_scalar_all_substract";
+    d->nodes << "Scalar Array All Substract";
+    d->descriptions["Scalar Array All Substract"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array All Substract"] = QStringList() << "container" << "array" << "scalar"  << "all"<< "substract" ;
+    d->types["Scalar Array All Substract"] = "array_scalar_all_substract";
 
-    // d->nodes << "Scalar Array All Mult";
-    // d->descriptions["Scalar Array All Mult"] = "<p>Description not yet filled!</p>";
-    // d->tags["Scalar Array All Mult"] = QStringList() << "container" << "array" << "scalar"  << "all"<< "mult" ;
-    // d->types["Scalar Array All Mult"] = "array_scalar_all_mult";
+    d->nodes << "Scalar Array All Mult";
+    d->descriptions["Scalar Array All Mult"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array All Mult"] = QStringList() << "container" << "array" << "scalar"  << "all"<< "mult" ;
+    d->types["Scalar Array All Mult"] = "array_scalar_all_mult";
 
-    // d->nodes << "Scalar Array All Divide";
-    // d->descriptions["Scalar Array All Divide"] = "<p>Description not yet filled!</p>";
-    // d->tags["Scalar Array All Divide"] = QStringList() << "container" << "array" << "scalar"  << "all"<< "divide" ;
-    // d->types["Scalar Array All Divide"] = "array_scalar_all_divide";
+    d->nodes << "Scalar Array All Divide";
+    d->descriptions["Scalar Array All Divide"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array All Divide"] = QStringList() << "container" << "array" << "scalar"  << "all"<< "divide" ;
+    d->types["Scalar Array All Divide"] = "array_scalar_all_divide";
 
-    // d->nodes << "Scalar Array Sum";
-    // d->descriptions["Scalar Array Sum"] = "<p>Description not yet filled!</p>";
-    // d->tags["Scalar Array Sum"] = QStringList() << "container" << "array" << "scalar"  << "sum" ;
-    // d->types["Scalar Array Sum"] = "array_scalar_sum";
+    d->nodes << "Scalar Array Sum";
+    d->descriptions["Scalar Array Sum"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Sum"] = QStringList() << "container" << "array" << "scalar"  << "sum" ;
+    d->types["Scalar Array Sum"] = "array_scalar_sum";
 
-    // d->nodes << "Scalar Array Substract";
-    // d->descriptions["Scalar Array Substract"] = "<p>Description not yet filled!</p>";
-    // d->tags["Scalar Array Substract"] = QStringList() << "container" << "array" << "scalar"  << "substract" ;
-    // d->types["Scalar Array Substract"] = "array_scalar_substract";
+    d->nodes << "Scalar Array Substract";
+    d->descriptions["Scalar Array Substract"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Substract"] = QStringList() << "container" << "array" << "scalar"  << "substract" ;
+    d->types["Scalar Array Substract"] = "array_scalar_substract";
 
-    // d->nodes << "Scalar Array Mult";
-    // d->descriptions["Scalar Array Mult"] = "<p>Description not yet filled!</p>";
-    // d->tags["Scalar Array Mult"] = QStringList() << "container" << "array" << "scalar"  << "mult" ;
-    // d->types["Scalar Array Mult"] = "array_scalar_mult" ;
+    d->nodes << "Scalar Array Mult";
+    d->descriptions["Scalar Array Mult"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Mult"] = QStringList() << "container" << "array" << "scalar"  << "mult" ;
+    d->types["Scalar Array Mult"] = "array_scalar_mult" ;
 
-    // d->nodes << "Scalar Array Divide";
-    // d->descriptions["Scalar Array Divide"] = "<p>Description not yet filled!</p>";
-    // d->tags["Scalar Array Divide"] = QStringList() << "container" << "array" << "scalar"  << "divide" ;
-    // d->types["Scalar Array Divide"] = "array_scalar_divide" ;
+    d->nodes << "Scalar Array Divide";
+    d->descriptions["Scalar Array Divide"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Divide"] = QStringList() << "container" << "array" << "scalar"  << "divide" ;
+    d->types["Scalar Array Divide"] = "array_scalar_divide" ;
 
     // Algebraic nodes
 
@@ -1120,41 +1120,41 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     // if(type == "array_scalar_extractor_array_part")
     //     return new dtkComposerNodeArrayScalarExtractorArrayPart;
 
-    // if(type == "array_scalar_insert")
-    //     return new dtkComposerNodeArrayScalarOperatorInsert;
+    if(type == "array_scalar_insert")
+        return new dtkComposerNodeArrayScalarOperatorInsert;
 
-    // if(type == "array_scalar_set" || type == "array_scalar_replace")
-    //     return new dtkComposerNodeArrayScalarOperatorSet;
+    if(type == "array_scalar_set" || type == "array_scalar_replace")
+        return new dtkComposerNodeArrayScalarOperatorSet;
 
     if(type == "array_scalar_append")
         return new dtkComposerNodeArrayScalarOperatorAppend;
 
-    // if(type == "array_scalar_prepend")
-    //     return new dtkComposerNodeArrayScalarOperatorPrepend;
+    if(type == "array_scalar_prepend")
+        return new dtkComposerNodeArrayScalarOperatorPrepend;
 
-    // if(type == "array_scalar_all_add")
-    //     return new dtkComposerNodeArrayScalarOperatorModifierAllAdd;
+    if(type == "array_scalar_all_add")
+        return new dtkComposerNodeArrayScalarOperatorModifierAllAdd;
 
-    // if(type == "array_scalar_all_substract")
-    //     return new dtkComposerNodeArrayScalarOperatorModifierAllSubstract;
+    if(type == "array_scalar_all_substract")
+        return new dtkComposerNodeArrayScalarOperatorModifierAllSubstract;
 
-    // if(type == "array_scalar_all_mult")
-    //     return new dtkComposerNodeArrayScalarOperatorModifierAllMult;
+    if(type == "array_scalar_all_mult")
+        return new dtkComposerNodeArrayScalarOperatorModifierAllMult;
 
-    // if(type == "array_scalar_all_divide")
-    //     return new dtkComposerNodeArrayScalarOperatorModifierAllDivide;
+    if(type == "array_scalar_all_divide")
+        return new dtkComposerNodeArrayScalarOperatorModifierAllDivide;
 
-    // if(type == "array_scalar_sum")
-    //     return new dtkComposerNodeArrayScalarOperatorSum;
+    if(type == "array_scalar_sum")
+        return new dtkComposerNodeArrayScalarOperatorSum;
 
-    // if(type == "array_scalar_substract")
-    //     return new dtkComposerNodeArrayScalarOperatorSubstract;
+    if(type == "array_scalar_substract")
+        return new dtkComposerNodeArrayScalarOperatorSubstract;
 
-    // if(type == "array_scalar_mult")
-    //     return new dtkComposerNodeArrayScalarOperatorMult;
+    if(type == "array_scalar_mult")
+        return new dtkComposerNodeArrayScalarOperatorMult;
 
-    // if(type == "array_scalar_divide")
-    //     return new dtkComposerNodeArrayScalarOperatorDivide;
+    if(type == "array_scalar_divide")
+        return new dtkComposerNodeArrayScalarOperatorDivide;
 
     // // algebraic nodes
 

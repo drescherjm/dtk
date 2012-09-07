@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Jun  2 01:40:49 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 338
+ * Last-Updated: mar. août 28 18:01:02 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 361
  */
 
 /* Commentary: 
@@ -36,6 +36,7 @@
 #include "dtkComposerWriter.h"
 
 #include <dtkCore/dtkGlobal.h>
+#include <dtkLog/dtkLog.h>
 
 #include <QtCore>
 #include <QtGui>
@@ -243,6 +244,8 @@ void dtkComposer::step(void)
 
 void dtkComposer::cont(void)
 {
+    this->updateRemotes(d->scene->root());
+
     QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::cont, false);
 
     d->graph->update();
@@ -258,6 +261,24 @@ void dtkComposer::next(void)
 void dtkComposer::stop(void)
 {
     d->evaluator->stop();
+}
+
+void dtkComposer::reset(void)
+{
+    dtkTrace() << "Resetting composition ";
+
+    dtkComposerWriter writer;
+    writer.setScene(d->scene);
+    QString data = writer.toXML(d->scene->root(), false).toString();
+
+    dtkComposerReader reader;
+    reader.setFactory(d->factory);
+    reader.setScene(d->scene);
+    reader.setGraph(d->graph);
+    reader.readString(data);
+
+    d->evaluator->reset();
+
 }
 
 dtkComposerEvaluator *dtkComposer::evaluator(void)

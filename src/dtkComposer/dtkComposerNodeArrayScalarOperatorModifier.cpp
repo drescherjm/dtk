@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep  7 15:36:38 2012 (+0200)
+ * Last-Updated: Fri Sep  7 15:49:42 2012 (+0200)
  *           By: tkloczko
- *     Update #: 93
+ *     Update #: 94
  */
 
 /* Commentary:
@@ -89,6 +89,8 @@ public:
 
 dtkComposerNodeArrayScalarOperatorModifierAll::dtkComposerNodeArrayScalarOperatorModifierAll(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeArrayScalarOperatorModifierAllPrivate)
 {
+    d->array = NULL;
+
     this->appendReceiver(&d->receiver_array);
 
     QList<QVariant::Type> variant_list;

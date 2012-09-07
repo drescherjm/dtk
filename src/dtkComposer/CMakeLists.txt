@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Thu Aug  9 16:23:13 2012 (+0200)
+## Last-Updated: Fri Sep  7 15:54:01 2012 (+0200)
 ##           By: tkloczko
-##     Update #: 585
+##     Update #: 586
 ######################################################################
 ##
 ### Commentary:
@@ -173,7 +173,7 @@ set(${PROJECT_NAME}_SOURCES
   # dtkComposerNodeArrayDataExtractor.cpp
   # dtkComposerNodeArrayDataOperatorModifier.cpp
   dtkComposerNodeArrayScalar.cpp
-  # dtkComposerNodeArrayScalarExtractor.cpp
+  dtkComposerNodeArrayScalarExtractor.cpp
   dtkComposerNodeArrayScalarOperatorModifier.cpp
   dtkComposerNodeBoolean.cpp
   dtkComposerNodeBooleanOperator.cpp

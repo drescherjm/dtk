@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Aug  7 16:11:09 2012 (+0200)
+ * Last-Updated: Fri Sep  7 14:34:06 2012 (+0200)
  *           By: tkloczko
- *     Update #: 276
+ *     Update #: 282
  */
 
 /* Commentary: 
@@ -60,7 +60,6 @@ template <typename T> inline void dtkComposerTransmitterEmitter<T>::setData(T *d
 {
     m_data = data;
     d->variant.setValue(m_data);
-    d->container->reset();
 };
 
 //! Returns the data as a modifiable reference.
@@ -136,7 +135,10 @@ template <typename T> inline QString dtkComposerTransmitterEmitterVector<T>::kin
 template <typename T> inline void dtkComposerTransmitterEmitterVector<T>::setData(dtkContainerVector<T> *vector)
 {
     m_vector = vector;
-    d->container = new dtkContainerVectorWrapper<T>(m_vector);
+    if (!d->container)
+        d->container = new dtkContainerVectorWrapper<T>(m_vector);
+    else
+        d->container->setVector(m_vector);
     d->variant.setValue(d->container);
 };
 
@@ -145,9 +147,17 @@ template <typename T> inline dtkContainerVector<T> *dtkComposerTransmitterEmitte
     return m_vector;
 };
 
-//! Returns the 
+//! Returns true when the emitter is connected to more than one
+//! receiver.
 /*! 
- *  
+ *  When several receivers are connected to the emitter, some nodes
+ *  receiving the data can modify it while others only read
+ *  it. According to the order of such operations, the data can be
+ *  modified before it is read leading to unexpected behaviors.
+ *
+ *  To circumvent this issue, the emitter informs the receivers that
+ *  they must copy the data if they modify it ensuring that the
+ *  original data is not corrupted for the other nodes.
  */
 template <typename T> inline bool dtkComposerTransmitterEmitterVector<T>::enableCopy(void)
 {

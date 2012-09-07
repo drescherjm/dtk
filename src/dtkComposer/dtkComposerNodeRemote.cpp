@@ -112,8 +112,10 @@ void dtkComposerNodeRemote::setComposition(QDomDocument document)
 
 void dtkComposerNodeRemote::setController(dtkDistributedController *controller)
 {
-    if (d->jobid.isEmpty())
+    if (d->jobid.isEmpty()) {
         dtkWarn() <<  "No job id while setting controller !";
+    }
+    
     d->controller = controller;
 }
 
@@ -312,8 +314,11 @@ void dtkComposerNodeRemote::end(void)
     } else {
         // running on the slave, send data and set transmitters
         dtkDebug() << "running node remote end statement on slave" << d->communicator->rank() ;
+        
         int max  = this->emitters().count();
         int size = d->communicator->size();
+        Q_UNUSED(size);
+        
         for (int i = 0; i < max; i++) {
             dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(this->emitters().at(i));
             // FIXME: use our own transmitter variant list (see control nodes)

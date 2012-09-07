@@ -132,23 +132,6 @@ public slots:
     virtual void uninitialize(void);
 
 // /////////////////////////////////////////////////////////////////
-// Deprecated VR API
-// /////////////////////////////////////////////////////////////////
-
-public /* DEPRECATED */ slots:
-    virtual DTK_DEPRECATED void  enableInteraction(void);
-    virtual DTK_DEPRECATED void disableInteraction(void);
-    virtual DTK_DEPRECATED void bounds(float& xmin, float& xmax, float& ymin, float& ymax, float &zmin, float& zmax);
-    virtual DTK_DEPRECATED void cameraUp(double *coordinates) const;
-    virtual DTK_DEPRECATED void cameraPosition(double *coordinates) const;
-    virtual DTK_DEPRECATED void cameraFocalPoint(double *coordinates) const;
-    virtual DTK_DEPRECATED void setCameraPosition(double x, double y, double z);
-    virtual DTK_DEPRECATED void setCameraClippingRange(double near, double far);
-    virtual DTK_DEPRECATED QString cameraProjectionMode(void) const;
-    virtual DTK_DEPRECATED double cameraViewAngle(void) const;
-    virtual DTK_DEPRECATED double cameraZoom(void) const;
-
-// /////////////////////////////////////////////////////////////////
 // New VR API
 // /////////////////////////////////////////////////////////////////
 

@@ -124,10 +124,10 @@ void dtkComposerNodeArrayDataOperatorInsert::run(void)
 }
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeArrayDataOperator - REPLACE
+// dtkComposerNodeArrayDataOperator - Set
 // /////////////////////////////////////////////////////////////////
 
-void dtkComposerNodeArrayDataOperatorReplace::run(void)
+void dtkComposerNodeArrayDataOperatorSet::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_item.isEmpty() ) {
 

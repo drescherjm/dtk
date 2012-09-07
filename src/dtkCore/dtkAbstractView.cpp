@@ -63,6 +63,16 @@ dtkAbstractView::~dtkAbstractView(void)
 
 }
 
+void dtkAbstractView::initialize(void)
+{
+
+}
+
+void dtkAbstractView::uninitialize(void)
+{
+
+}
+
 void dtkAbstractView::link(dtkAbstractView *other)
 {
     DTK_UNUSED(other);
@@ -392,105 +402,6 @@ QList<dtkAbstractViewInteractor *> dtkAbstractView::interactors(void) const
         ret.push_back(value.data());
     return ret;
 }
-
-// /////////////////////////////////////////////////////////////////
-// Deprecated VR API
-// /////////////////////////////////////////////////////////////////
-
-void dtkAbstractView::initialize(void)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-void dtkAbstractView::uninitialize(void)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-void dtkAbstractView::enableInteraction(void)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-void dtkAbstractView::disableInteraction(void)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-void dtkAbstractView::bounds(float& xmin, float& xmax, float& ymin, float& ymax, float &zmin, float& zmax)
-{
-    DTK_UNUSED(xmin);
-    DTK_UNUSED(xmax);
-    DTK_UNUSED(ymin);
-    DTK_UNUSED(ymax);
-    DTK_UNUSED(zmin);
-    DTK_UNUSED(zmax);
-
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-void dtkAbstractView::cameraUp(double *coordinates) const
-{
-    DTK_UNUSED(coordinates);
-
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-void dtkAbstractView::cameraPosition(double *coordinates) const
-{
-    DTK_UNUSED(coordinates);
-
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-void dtkAbstractView::cameraFocalPoint(double *coordinates) const
-{
-    DTK_UNUSED(coordinates);
-
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-void dtkAbstractView::setCameraPosition(double x, double y, double z)
-{
-    DTK_UNUSED(x);
-    DTK_UNUSED(y);
-    DTK_UNUSED(z);
-
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-void dtkAbstractView::setCameraClippingRange(double near, double far)
-{
-    DTK_UNUSED(near);
-    DTK_UNUSED(far);
-
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-QString dtkAbstractView::cameraProjectionMode(void) const
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return "None";
-}
-
-double dtkAbstractView::cameraViewAngle(void) const
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return 0.0;
-}
-
-double dtkAbstractView::cameraZoom(void) const
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return 1.0;
-}
-
-// /////////////////////////////////////////////////////////////////
-// New VR API
-// /////////////////////////////////////////////////////////////////
 
 void dtkAbstractView::setHeadPosition(dtkVector3D<double> position)
 {

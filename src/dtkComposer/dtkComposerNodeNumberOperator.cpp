@@ -480,7 +480,7 @@ void dtkComposerNodeNumberOperatorUnaryAbs::run(void)
         d->emitter.setData(abs(qVariantValue<qlonglong>(d->receiver.data())));
         break;
     case QVariant::Double:
-        d->emitter.setData(abs(qVariantValue<double>(d->receiver.data())));
+        d->emitter.setData(qAbs(qVariantValue<double>(d->receiver.data())));
         break;
     default:
         dtkWarn() << "Type" << d->receiver.type() << "is not handled by the node.";

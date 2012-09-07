@@ -100,21 +100,21 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeArrayDataOperator - Replace
+// dtkComposerNodeArrayDataOperator - Set
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayDataOperatorReplace : public dtkComposerNodeArrayDataOperatorModifier
+class DTKCOMPOSER_EXPORT dtkComposerNodeArrayDataOperatorSet : public dtkComposerNodeArrayDataOperatorModifier
 {
 public:
     void run(void);
 
 public:
     inline QString type(void) {
-        return "array_data_replace";
+        return "array_data_set";
     }
 
     inline QString titleHint(void) {
-        return "Data array replace";
+        return "Data array set";
     }
 };
 

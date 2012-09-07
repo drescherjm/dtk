@@ -24,16 +24,6 @@
 #include "dtkQuaternion.h"
 #include "dtkVector3D.h"
 
-static double dtkDeg2Rad(double v)
-{
-    return v*M_PI/180.0;
-}
-
-static double dtkRad2Deg(double v)
-{
-    return v*180.0/M_PI;
-}
-
 template <class T> dtkVector3D<T> dtkRotate(const dtkQuaternion<T>& quaternion, const dtkVector3D<T>& vector)
 {
     dtkQuaternion<T> q(quaternion*dtkQuaternion<T>(vector[0], vector[1], vector[2], 0)*dtkInverse<T>(quaternion));

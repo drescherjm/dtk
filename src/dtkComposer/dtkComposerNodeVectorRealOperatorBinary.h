@@ -119,7 +119,7 @@ public:
     }
 
     inline QString titleHint(void) {
-        return "VectorReal Sum";
+        return "Vector Real Sum";
     }
 };
 
@@ -138,7 +138,7 @@ public:
     }
 
     inline QString titleHint(void) {
-        return "VectorReal Substract";
+        return "Vector Real Substract";
     }
 };
 
@@ -157,7 +157,7 @@ public:
     }
 
     inline QString titleHint(void) {
-        return "VectorReal Dot Prod";
+        return "Vector Real Dot Prod";
     }
 };
 
@@ -176,7 +176,7 @@ public:
     }
 
     inline QString titleHint(void) {
-        return "VectorReal: scal * vec";
+        return "Vector Real: scal * vec";
     }
 };
 
@@ -195,7 +195,7 @@ public:
     }
 
     inline QString titleHint(void) {
-        return "VectorReal: vec / scal";
+        return "Vector Real: vec / scal";
     }
 };
 

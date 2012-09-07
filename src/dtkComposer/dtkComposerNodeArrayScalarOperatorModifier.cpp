@@ -130,10 +130,10 @@ void dtkComposerNodeArrayScalarOperatorInsert::run(void)
 
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeArrayScalarOperator - REPLACE
+// dtkComposerNodeArrayScalarOperator - Set
 // /////////////////////////////////////////////////////////////////
 
-void dtkComposerNodeArrayScalarOperatorReplace::run(void)
+void dtkComposerNodeArrayScalarOperatorSet::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: mar. mars 27 14:34:06 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 200
+ * Last-Updated: Tue Jul 17 15:38:32 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 202
  */
 
 /* Commentary:
@@ -97,9 +97,10 @@ dtkComposerGraphNodeList dtkComposerGraphNodeSelectBranch::successors(void)
     return val;
 }
 
-void dtkComposerGraphNodeSelectBranch::clean(void) {
+void dtkComposerGraphNodeSelectBranch::clean(void) 
+{
     d->result = -1;
-    this->setStatus(dtkComposerGraphNode::Ready);
+    dtkComposerGraphNode::clean();
 }
 
 void dtkComposerGraphNodeSelectBranch::eval(void)

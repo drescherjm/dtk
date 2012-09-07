@@ -27,11 +27,11 @@
 #include <typeinfo>
 
 enum dtkContainerType {
-        dtkContainerTypeNone,
-        dtkContainerTypeOrdered,
-        dtkContainerTypeUnordered,
-        dtkContainerTypeAssociated
-    };
+    dtkContainerTypeNone,
+    dtkContainerTypeOrdered,
+    dtkContainerTypeUnordered,
+    dtkContainerTypeAssociated
+};
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractContainer interface

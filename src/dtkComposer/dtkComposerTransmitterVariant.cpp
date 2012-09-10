@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Aug  9 16:09:26 2012 (+0200)
+ * Last-Updated: Mon Sep 10 11:57:45 2012 (+0200)
  *           By: tkloczko
- *     Update #: 576
+ *     Update #: 600
  */
 
 /* Commentary: 
@@ -71,7 +71,10 @@ void dtkComposerTransmitterVariant::setData(const QVariant& data)
 {
     d->type = data;
     d->variant = data;
-    d->container->reset();
+    if (d->container) {
+        delete d->container;
+        d->container = NULL;
+    }
 }
 
 void dtkComposerTransmitterVariant::setData(dtkAbstractContainerWrapper *data)
@@ -229,6 +232,9 @@ dtkAbstractContainerWrapper *dtkComposerTransmitterVariant::containerFromEmitter
 dtkAbstractContainerWrapper *dtkComposerTransmitterVariant::container(void)
 {
     dtkAbstractContainerWrapper *container = this->containerFromEmitter();
+
+    if (!container)
+        return NULL;
 
     switch(this->dataTransmission()) {
     case dtkComposerTransmitter::CopyOnWrite:
@@ -563,28 +569,51 @@ template <> bool *dtkComposerTransmitterVariant::data(void)
     QVariant::Type emitter_type = this->type();
 
     QVariant& emitter_variant = this->variant();
+    
+    bool is_pointer = (emitter_type != emitter_variant.type());
 
     switch (emitter_type) {
     case QVariant::Bool:
-        e->value_b = *(emitter_variant.value<bool*>());
+        if (is_pointer)
+            e->value_b = *(emitter_variant.value<bool*>());
+        else
+            e->value_b = emitter_variant.value<bool>();
         break;
     case QVariant::Double:
-        e->value_b = static_cast<bool>(*(emitter_variant.value<qreal*>()));
+        if (is_pointer)
+            e->value_b = static_cast<bool>(*(emitter_variant.value<qreal*>()));
+        else
+            e->value_b = static_cast<bool>(emitter_variant.value<qreal>());
         break;
     case QVariant::LongLong:
-        e->value_b = static_cast<bool>(*(emitter_variant.value<qlonglong*>()));
+        if (is_pointer)
+            e->value_b = static_cast<bool>(*(emitter_variant.value<qlonglong*>()));
+        else
+            e->value_b = static_cast<bool>(emitter_variant.value<qlonglong>());
         break;
     case QVariant::Int:
-        e->value_b = static_cast<bool>(*(emitter_variant.value<int*>()));
+        if (is_pointer)
+            e->value_b = static_cast<bool>(*(emitter_variant.value<int*>()));
+        else
+            e->value_b = static_cast<bool>(emitter_variant.value<int>());
         break;
     case QVariant::UInt:
-        e->value_b = static_cast<bool>(*(emitter_variant.value<uint*>()));
+        if (is_pointer)
+            e->value_b = static_cast<bool>(*(emitter_variant.value<uint*>()));
+        else
+            e->value_b = static_cast<bool>(emitter_variant.value<uint>());
         break;
     case QVariant::ULongLong:
-        e->value_b = static_cast<bool>(*(emitter_variant.value<qulonglong*>()));
+        if (is_pointer)
+            e->value_b = static_cast<bool>(*(emitter_variant.value<qulonglong*>()));
+        else
+            e->value_b = static_cast<bool>(emitter_variant.value<qulonglong>());
         break;
     case QVariant::String:
-        e->value_b = static_cast<bool>((emitter_variant.value<QString*>())->toLongLong());
+        if (is_pointer)
+            e->value_b = static_cast<bool>((emitter_variant.value<QString*>())->toLongLong());
+        else
+            e->value_b = static_cast<bool>(emitter_variant.value<QString>().toLongLong());
         break;
     default:
         e->value_b = false;
@@ -599,28 +628,51 @@ template <> qlonglong *dtkComposerTransmitterVariant::data(void)
     QVariant::Type emitter_type = this->type();
 
     QVariant& emitter_variant = this->variant();
+    
+    bool is_pointer = (emitter_type != emitter_variant.type());
 
     switch (emitter_type) {
     case QVariant::LongLong:
-        e->value_i = *(emitter_variant.value<qlonglong*>());
+        if (is_pointer)
+            e->value_i = *(emitter_variant.value<qlonglong*>());
+        else
+            e->value_i = emitter_variant.value<qlonglong>();
         break;
     case QVariant::Double:
-        e->value_i = static_cast<qlonglong>(*(emitter_variant.value<qreal*>()));
+        if (is_pointer)
+            e->value_i = static_cast<qlonglong>(*(emitter_variant.value<qreal*>()));
+        else
+            e->value_i = static_cast<qlonglong>(emitter_variant.value<qreal>());
         break;
     case QVariant::Int:
-        e->value_i = static_cast<qlonglong>(*(emitter_variant.value<int*>()));
+        if (is_pointer)
+            e->value_i = static_cast<qlonglong>(*(emitter_variant.value<int*>()));
+        else
+            e->value_i = static_cast<qlonglong>(emitter_variant.value<int>());
         break;
     case QVariant::UInt:
-        e->value_i = static_cast<qlonglong>(*(emitter_variant.value<uint*>()));
+        if (is_pointer)
+            e->value_i = static_cast<qlonglong>(*(emitter_variant.value<uint*>()));
+        else
+            e->value_i = static_cast<qlonglong>(emitter_variant.value<uint>());
         break;
     case QVariant::ULongLong:
-        e->value_i = static_cast<qlonglong>(*(emitter_variant.value<qulonglong*>()));
+        if (is_pointer)
+            e->value_i = static_cast<qlonglong>(*(emitter_variant.value<qulonglong*>()));
+        else
+            e->value_i = static_cast<qlonglong>(emitter_variant.value<qulonglong>());
         break;
     case QVariant::String:
-        e->value_i = (emitter_variant.value<QString*>())->toLongLong();
+        if (is_pointer)
+            e->value_i = (emitter_variant.value<QString*>())->toLongLong();
+        else
+            e->value_i = (emitter_variant.value<QString>()).toLongLong();
         break;
     case QVariant::Bool:
-        e->value_i = static_cast<qlonglong>(*(emitter_variant.value<bool*>()));
+        if (is_pointer)
+            e->value_i = static_cast<qlonglong>(*(emitter_variant.value<bool*>()));
+        else
+            e->value_i = static_cast<qlonglong>(emitter_variant.value<bool>());
         break;
     default:
         e->value_i = 0;
@@ -635,28 +687,52 @@ template <> qreal *dtkComposerTransmitterVariant::data(void)
     QVariant::Type emitter_type = this->type();
 
     QVariant& emitter_variant = this->variant();
+    
+    bool is_pointer = (emitter_type != emitter_variant.type());
 
     switch (emitter_type) {
     case QVariant::Double:
-        e->value_r = *(emitter_variant.value<qreal*>());
+        if (is_pointer)
+            e->value_r = *(emitter_variant.value<qreal*>());
+        else
+            e->value_r = emitter_variant.value<qreal>();
         break;
     case QVariant::LongLong:
-        e->value_r = static_cast<qreal>(*(emitter_variant.value<qlonglong*>()));
+        if (is_pointer)
+            e->value_r = static_cast<qreal>(*(emitter_variant.value<qlonglong*>()));
+        else
+            e->value_r = static_cast<qreal>(emitter_variant.value<qlonglong>());
         break;
     case QVariant::Int:
-        e->value_r = static_cast<qreal>(*(emitter_variant.value<int*>()));
+        if (is_pointer)
+            e->value_r = static_cast<qreal>(*(emitter_variant.value<int*>()));
+        else
+            e->value_r = static_cast<qreal>(emitter_variant.value<int>());
         break;
     case QVariant::UInt:
-        e->value_r = static_cast<qreal>(*(emitter_variant.value<uint*>()));
+        if (is_pointer)
+            e->value_r = static_cast<qreal>(*(emitter_variant.value<uint*>()));
+        else
+            e->value_r = static_cast<qreal>(emitter_variant.value<uint>());
         break;
     case QVariant::ULongLong:
-        e->value_r = static_cast<qreal>(*(emitter_variant.value<qulonglong*>()));
+        if (is_pointer)
+            e->value_r = static_cast<qreal>(*(emitter_variant.value<qulonglong*>()));
+        else
+            e->value_r = static_cast<qreal>(emitter_variant.value<qulonglong>());
         break;
     case QVariant::String:
-        e->value_r = (emitter_variant.value<QString*>())->toDouble();
+        if (is_pointer)
+            e->value_r = (emitter_variant.value<QString*>())->toDouble();
+        else
+            e->value_r = (emitter_variant.value<QString>()).toDouble();
+        
         break;
     case QVariant::Bool:
-        e->value_r = static_cast<qreal>(*(emitter_variant.value<bool*>()));
+        if (is_pointer)
+            e->value_r = static_cast<qreal>(*(emitter_variant.value<bool*>()));
+        else
+            e->value_r = static_cast<qreal>(emitter_variant.value<bool>());
         break;
     default:
         e->value_r = 0.0;
@@ -671,28 +747,52 @@ template <> QString *dtkComposerTransmitterVariant::data(void)
     QVariant::Type emitter_type = this->type();
 
     QVariant& emitter_variant = this->variant();
+    
+    bool is_pointer = (emitter_type != emitter_variant.type());
 
     switch (emitter_type) {
     case QVariant::String:
-        e->value_s = *(emitter_variant.value<QString*>());
+        if (is_pointer)
+            e->value_s = *(emitter_variant.value<QString*>());
+        else
+            e->value_s = emitter_variant.value<QString>();
         break;
     case QVariant::Double:
-        e->value_s = QString::number(*(emitter_variant.value<qreal*>()));
+        if (is_pointer)
+            e->value_s = QString::number(*(emitter_variant.value<qreal*>()));
+        else
+            e->value_s = QString::number(emitter_variant.value<qreal>());
+            
         break;
     case QVariant::LongLong:
-        e->value_s = QString::number(*(emitter_variant.value<qlonglong*>()));
+        if (is_pointer)
+            e->value_s = QString::number(*(emitter_variant.value<qlonglong*>()));
+        else
+            e->value_s = QString::number(emitter_variant.value<qlonglong>());
         break;
     case QVariant::Int:
-        e->value_s = QString::number(*(emitter_variant.value<int*>()));
+        if (is_pointer)
+            e->value_s = QString::number(*(emitter_variant.value<int*>()));
+        else
+            e->value_s = QString::number(emitter_variant.value<int>());
         break;
     case QVariant::UInt:
-        e->value_s = QString::number(*(emitter_variant.value<uint*>()));
+        if (is_pointer)
+            e->value_s = QString::number(*(emitter_variant.value<uint*>()));
+        else
+            e->value_s = QString::number(emitter_variant.value<uint>());
         break;
     case QVariant::ULongLong:
-        e->value_s = QString::number(*(emitter_variant.value<qulonglong*>()));
+        if (is_pointer)
+            e->value_s = QString::number(*(emitter_variant.value<qulonglong*>()));
+        else
+            e->value_s = QString::number(emitter_variant.value<qulonglong>());
         break;
     case QVariant::Bool:
-        e->value_s = QString::number(static_cast<qreal>(*(emitter_variant.value<bool*>())));
+        if (is_pointer)
+            e->value_s = QString::number(static_cast<qreal>(*(emitter_variant.value<bool*>())));
+        else
+            e->value_s = QString::number(static_cast<qreal>(emitter_variant.value<bool>()));
         break;
     default:
         e->value_s = "";

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Mon Sep 10 10:02:36 2012 (+0200)
+ * Last-Updated: Mon Sep 10 11:18:26 2012 (+0200)
  *           By: tkloczko
- *     Update #: 678
+ *     Update #: 680
  */
 
 /* Commentary:
@@ -36,7 +36,7 @@
 // #include "dtkComposerNodeControlDoWhile.h"
 // #include "dtkComposerNodeControlIf.h"
 // #include "dtkComposerNodeControlFor.h"
-// #include "dtkComposerNodeControlForEach.h"
+#include "dtkComposerNodeControlForEach.h"
 // #include "dtkComposerNodeControlMap.h"
 // #include "dtkComposerNodeControlWhile.h"
 // #include "dtkComposerNodeData.h"
@@ -810,10 +810,10 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     // d->tags["For"] = QStringList() << "control" << "for";
     // d->types["For"] = "for";
 
-    // d->nodes << "Foreach";
-    // d->descriptions["Foreach"] = "<p>Description not yet filled!</p>";
-    // d->tags["Foreach"] = QStringList() << "control" << "foreach";
-    // d->types["Foreach"] = "foreach";
+    d->nodes << "Foreach";
+    d->descriptions["Foreach"] = "<p>Description not yet filled!</p>";
+    d->tags["Foreach"] = QStringList() << "control" << "foreach";
+    d->types["Foreach"] = "foreach";
 
     // d->nodes << "Map";
     // d->descriptions["Map"] = "<p>High order function: takes a container and applies a set of functions to each of its element to generate a new container</p>";
@@ -1378,8 +1378,8 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     // if(type == "for")
     //     return new dtkComposerNodeControlFor;
 
-    // if(type == "foreach")
-    //     return new dtkComposerNodeControlForEach;
+    if(type == "foreach")
+        return new dtkComposerNodeControlForEach;
 
     // if(type == "map")
     //     return new dtkComposerNodeControlMap;

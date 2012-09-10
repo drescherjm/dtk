@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Aug  4 00:34:40 2012 (+0200)
+ * Last-Updated: Mon Sep 10 11:22:47 2012 (+0200)
  *           By: tkloczko
- *     Update #: 177
+ *     Update #: 188
  */
 
 /* Commentary: 
@@ -58,7 +58,7 @@ public:
     qlonglong counter;
     qlonglong size;
 
-    dtkAbstractContainerWrapper container;
+    dtkAbstractContainerWrapper *container;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -91,7 +91,12 @@ dtkComposerNodeControlForEach::dtkComposerNodeControlForEach(void) : dtkComposer
     d->header_rcv.appendNext(&d->block_container);
 
     d->counter = 0;
+    d->block_index.setData(&d->counter);
+
     d->size = -1;
+    d->block_size.setData(&d->size);
+
+    d->container = NULL;
 }
 
 dtkComposerNodeControlForEach::~dtkComposerNodeControlForEach(void)
@@ -126,40 +131,37 @@ dtkComposerNodeComposite *dtkComposerNodeControlForEach::block(int id)
 
 void dtkComposerNodeControlForEach::setInputs(void)
 {
-    // d->container = d->header_rcv.container();
-    // d->counter = 0;
-    // d->size = d->container.count();
+    d->container = d->header_rcv.container();
+    d->counter = 0;
+    d->size = d->container->count();
 
-    // d->block_size.setData(d->size);
-
-    // foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
-    //     v->setTwinned(false);
-    //     if (v->container().isReset()) {
-    //         v->setData(v->data());
-    //     } else {
-    //         v->setData(v->container());
-    //     }
-    //     v->setTwinned(true);        
-    // }
+    foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
+        v->setTwinned(false);
+        if (!v->container()) {
+            v->setData(v->variant());
+        } else {
+            v->setData(v->container());
+        }
+        v->setTwinned(true);        
+    }
 }
 
 void dtkComposerNodeControlForEach::setOutputs(void)
 {
-    // foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
-    //     if (v->container().isReset()) {
-    //         v->twin()->setData(v->data());
-    //     } else {
-    //         v->twin()->setData(v->container());
-    //     }
-    // }
+    foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
+        if (!v->container()) {
+            v->twin()->setData(v->variant());
+        } else {
+            v->twin()->setData(v->container());
+        }
+    }
 
-    // d->counter++;
+    ++(d->counter);
 }
 
 void dtkComposerNodeControlForEach::setVariables(void)
 {
-    // d->block_index.setData(d->counter);
-    // d->block_item.setData(d->container.at(d->counter));
+    d->block_item.setData(d->container->at(d->counter));
 }
 
 int dtkComposerNodeControlForEach::selectBranch(void)

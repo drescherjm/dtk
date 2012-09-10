@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Fri Sep  7 15:38:45 2012 (+0200)
+ * Last-Updated: Mon Sep 10 10:02:36 2012 (+0200)
  *           By: tkloczko
- *     Update #: 675
+ *     Update #: 678
  */
 
 /* Commentary:
@@ -25,7 +25,7 @@
 // #include "dtkComposerNodeArrayDataExtractor.h"
 // #include "dtkComposerNodeArrayDataOperatorModifier.h"
 #include "dtkComposerNodeArrayScalar.h"
-// #include "dtkComposerNodeArrayScalarExtractor.h"
+#include "dtkComposerNodeArrayScalarExtractor.h"
 #include "dtkComposerNodeArrayScalarOperatorModifier.h"
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
@@ -357,20 +357,20 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Scalar Array"] = QStringList() << "container" << "array" << "scalar" ;
     d->types["Scalar Array"] = "array_scalar";
 
-    // d->nodes << "Scalar Array Extractor";
-    // d->descriptions["Scalar Array Extractor"] = "<p>Description not yet filled!</p>";
-    // d->tags["Scalar Array Extractor"] = QStringList() << "container" << "array" << "scalar" << "extractor" ;
-    // d->types["Scalar Array Extractor"] = "array_scalar_extractor";
+    d->nodes << "Scalar Array Extractor";
+    d->descriptions["Scalar Array Extractor"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Extractor"] = QStringList() << "container" << "array" << "scalar" << "extractor" ;
+    d->types["Scalar Array Extractor"] = "array_scalar_extractor";
 
-    // d->nodes << "Scalar Array SubArray";
-    // d->descriptions["Scalar Array SubArray"] = "<p>Description not yet filled!</p>";
-    // d->tags["Scalar Array SubArray"] = QStringList() << "container" << "scalar" << "array" << "subarray"<< "extractor" ;
-    // d->types["Scalar Array SubArray"] = "array_scalar_extractor_subarray";
+    d->nodes << "Scalar Array SubArray";
+    d->descriptions["Scalar Array SubArray"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array SubArray"] = QStringList() << "container" << "scalar" << "array" << "subarray"<< "extractor" ;
+    d->types["Scalar Array SubArray"] = "array_scalar_extractor_subarray";
 
-    // d->nodes << "Scalar Array Part";
-    // d->descriptions["Scalar Array Part"] = "<p>Description not yet filled!</p>";
-    // d->tags["Scalar Array Part"] = QStringList() << "container" << "scalar" << "array" << "part" << "subarray" << "extractor" ;
-    // d->types["Scalar Array Part"] = "array_scalar_extractor_array_part";
+    d->nodes << "Scalar Array Part";
+    d->descriptions["Scalar Array Part"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Part"] = QStringList() << "container" << "scalar" << "array" << "part" << "subarray" << "extractor" ;
+    d->types["Scalar Array Part"] = "array_scalar_extractor_array_part";
 
     d->nodes << "Scalar Array Insert";
     d->descriptions["Scalar Array Insert"] = "<p>Description not yet filled!</p>";
@@ -1111,14 +1111,14 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "array_scalar")
         return new dtkComposerNodeArrayScalar;
 
-    // if(type == "array_scalar_extractor")
-    //     return new dtkComposerNodeArrayScalarExtractor;
+    if(type == "array_scalar_extractor")
+        return new dtkComposerNodeArrayScalarExtractor;
 
-    // if(type == "array_scalar_extractor_subarray")
-    //     return new dtkComposerNodeArrayScalarExtractorSubArray;
+    if(type == "array_scalar_extractor_subarray")
+        return new dtkComposerNodeArrayScalarExtractorSubArray;
 
-    // if(type == "array_scalar_extractor_array_part")
-    //     return new dtkComposerNodeArrayScalarExtractorArrayPart;
+    if(type == "array_scalar_extractor_array_part")
+        return new dtkComposerNodeArrayScalarExtractorArrayPart;
 
     if(type == "array_scalar_insert")
         return new dtkComposerNodeArrayScalarOperatorInsert;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 14:47:12 2012 (+0200)
- *           By: tkloczko
- *     Update #: 149
+ * Last-Updated: lun. sept. 10 17:12:51 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 150
  */
 
 /* Commentary:
@@ -243,6 +243,7 @@ QList<dtkAbstractViewFactory::dtkAbstractViewTypeHandler> dtkAbstractViewFactory
 
 void dtkAbstractViewFactory::clear(void)
 {
+    qDeleteAll(d->views.values());
     d->views.clear();
     d->viewCount.clear();
 }

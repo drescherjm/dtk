@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 22 13:07:11 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri May 25 10:00:38 2012 (+0200)
+ * Last-Updated: Mon Sep 10 13:47:25 2012 (+0200)
  *           By: tkloczko
- *     Update #: 77
+ *     Update #: 78
  */
 
 /* Commentary: 
@@ -70,7 +70,7 @@ public:
     virtual const T *toArray(qlonglong& count) const = 0;
 
 public:
-    dtkAbstractContainer& operator = (const dtkAbstractContainer<T>& other);
+    dtkAbstractContainer& operator = (const dtkAbstractContainer<T>& other); // TO RE-IMPLEMENT !!!! SOURCE OF MEMORY LEAK !!!
 
     virtual dtkAbstractContainer<T> *clone(void) const = 0;
 

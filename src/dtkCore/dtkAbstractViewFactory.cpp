@@ -241,6 +241,12 @@ QList<dtkAbstractViewFactory::dtkAbstractViewTypeHandler> dtkAbstractViewFactory
     return d->navigators.keys();
 }
 
+void dtkAbstractViewFactory::clear(void)
+{
+    d->views.clear();
+    d->viewCount.clear();
+}
+
 dtkAbstractViewFactory::dtkAbstractViewFactory(void) : dtkAbstractFactory(), d(new dtkAbstractViewFactoryPrivate)
 {
 

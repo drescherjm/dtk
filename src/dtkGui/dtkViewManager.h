@@ -34,6 +34,9 @@ public:
      dtkViewManager(QWidget *parent = 0);
     ~dtkViewManager(void);
     
+public slots:
+    void clear(void);
+    
 private:
     dtkViewManagerPrivate *d;
 };

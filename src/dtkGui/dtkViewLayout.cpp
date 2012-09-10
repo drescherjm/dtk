@@ -64,3 +64,17 @@ void dtkViewLayout::setCurrent(dtkViewLayoutItem *item)
 {
     d->current = item;
 }
+
+void dtkViewLayout::clear(void)
+{
+    while(this->layout()->count())
+        Q_UNUSED(this->layout()->takeAt(0));
+    
+    delete d->root;
+    
+    d->root = new dtkViewLayoutItem(0);
+    d->root->setParent(this);
+    d->root->setLayout(this);
+    
+    d->current = d->root;
+}

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Aug  9 11:34:15 2012 (+0200)
+ * Last-Updated: Tue Sep 11 14:24:46 2012 (+0200)
  *           By: tkloczko
- *     Update #: 141
+ *     Update #: 144
  */
 
 /* Commentary: 
@@ -47,6 +47,9 @@ public:
 public:
     void setData(const QVariant& data);
     void setData(dtkAbstractContainerWrapper *data);
+
+public:
+    void setDataFrom(dtkComposerTransmitterVariant *source);
     void setDataFromMsg(dtkDistributedMessage *msg);
 
 public:

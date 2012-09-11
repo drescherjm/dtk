@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep 10 11:57:45 2012 (+0200)
+ * Last-Updated: Tue Sep 11 14:25:48 2012 (+0200)
  *           By: tkloczko
- *     Update #: 600
+ *     Update #: 606
  */
 
 /* Commentary: 
@@ -83,6 +83,16 @@ void dtkComposerTransmitterVariant::setData(dtkAbstractContainerWrapper *data)
     d->type.setValue(w);
     d->container = data;
     d->variant.setValue(d->container);
+}
+
+void dtkComposerTransmitterVariant::setDataFrom(dtkComposerTransmitterVariant *source)
+{
+    d->type = source->type();
+    d->variant = source->variant();
+    if (d->container) {
+        delete d->container;
+    }
+    d->container = source->container();
 }
 
 void dtkComposerTransmitterVariant::setDataFromMsg(dtkDistributedMessage *msg)
@@ -226,7 +236,7 @@ dtkAbstractContainerWrapper *dtkComposerTransmitterVariant::containerFromEmitter
     if (e->active_emitter)
         return e->active_emitter->container();
 
-    return d->container;    
+    return d->container;
 }
 
 dtkAbstractContainerWrapper *dtkComposerTransmitterVariant::container(void)

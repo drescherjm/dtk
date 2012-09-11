@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Mon Sep 10 11:18:26 2012 (+0200)
+ * Last-Updated: Tue Sep 11 13:42:13 2012 (+0200)
  *           By: tkloczko
- *     Update #: 680
+ *     Update #: 687
  */
 
 /* Commentary:
@@ -30,15 +30,15 @@
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
 #include "dtkComposerNodeConstants.h"
-// #include "dtkComposerNodeContainerData.h"
+#include "dtkComposerNodeContainerData.h"
 #include "dtkComposerNodeComposite.h"
-// #include "dtkComposerNodeControlCase.h"
-// #include "dtkComposerNodeControlDoWhile.h"
-// #include "dtkComposerNodeControlIf.h"
-// #include "dtkComposerNodeControlFor.h"
+#include "dtkComposerNodeControlCase.h"
+#include "dtkComposerNodeControlDoWhile.h"
+#include "dtkComposerNodeControlIf.h"
+#include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeControlForEach.h"
-// #include "dtkComposerNodeControlMap.h"
-// #include "dtkComposerNodeControlWhile.h"
+#include "dtkComposerNodeControlMap.h"
+#include "dtkComposerNodeControlWhile.h"
 // #include "dtkComposerNodeData.h"
 // #include "dtkComposerNodeFile.h"
 // #include "dtkComposerNodeFileOperator.h"
@@ -790,40 +790,40 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 
     // // control nodes
 
-    // d->nodes << "Case";
-    // d->descriptions["Case"] = dtkReadFile(":dtkComposer/dtkComposerNodeControlCase.html");
-    // d->tags["Case"] = QStringList() << "control" << "case";
-    // d->types["Case"] = "case";
+    d->nodes << "Case";
+    d->descriptions["Case"] = dtkReadFile(":dtkComposer/dtkComposerNodeControlCase.html");
+    d->tags["Case"] = QStringList() << "control" << "case";
+    d->types["Case"] = "case";
 
-    // d->nodes << "Do While";
-    // d->descriptions["Do While"] = "<p>Description not yet filled!</p>";
-    // d->tags["Do While"] = QStringList() << "control" << "do" << "while";
-    // d->types["Do While"] = "do while";
+    d->nodes << "Do While";
+    d->descriptions["Do While"] = "<p>Description not yet filled!</p>";
+    d->tags["Do While"] = QStringList() << "control" << "do" << "while";
+    d->types["Do While"] = "do while";
 
-    // d->nodes << "If";
-    // d->descriptions["If"] = dtkReadFile(":dtkComposer/dtkComposerNodeControlIf.html");
-    // d->tags["If"] = QStringList() << "control" << "if";
-    // d->types["If"] = "if";
+    d->nodes << "If";
+    d->descriptions["If"] = dtkReadFile(":dtkComposer/dtkComposerNodeControlIf.html");
+    d->tags["If"] = QStringList() << "control" << "if";
+    d->types["If"] = "if";
 
-    // d->nodes << "For";
-    // d->descriptions["For"] = "<p>Description not yet filled!</p>";
-    // d->tags["For"] = QStringList() << "control" << "for";
-    // d->types["For"] = "for";
+    d->nodes << "For";
+    d->descriptions["For"] = "<p>Description not yet filled!</p>";
+    d->tags["For"] = QStringList() << "control" << "for";
+    d->types["For"] = "for";
 
     d->nodes << "Foreach";
     d->descriptions["Foreach"] = "<p>Description not yet filled!</p>";
     d->tags["Foreach"] = QStringList() << "control" << "foreach";
     d->types["Foreach"] = "foreach";
 
-    // d->nodes << "Map";
-    // d->descriptions["Map"] = "<p>High order function: takes a container and applies a set of functions to each of its element to generate a new container</p>";
-    // d->tags["Map"] = QStringList() << "control" << "map" << "container";
-    // d->types["Map"] = "map";
+    d->nodes << "Map";
+    d->descriptions["Map"] = "<p>High order function: takes a container and applies a set of functions to each of its element to generate a new container</p>";
+    d->tags["Map"] = QStringList() << "control" << "map" << "container";
+    d->types["Map"] = "map";
 
-    // d->nodes << "While";
-    // d->descriptions["While"] = "<p>Description not yet filled!</p>";
-    // d->tags["While"] = QStringList() << "control" << "while";
-    // d->types["While"] = "while";
+    d->nodes << "While";
+    d->descriptions["While"] = "<p>Description not yet filled!</p>";
+    d->tags["While"] = QStringList() << "control" << "while";
+    d->types["While"] = "while";
 
     // log nodes
 
@@ -1366,26 +1366,26 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     // control nodes
 
-    // if(type == "case")
-    //     return new dtkComposerNodeControlCase;
+    if(type == "case")
+        return new dtkComposerNodeControlCase;
 
-    // if(type == "do while")
-    //     return new dtkComposerNodeControlDoWhile;
+    if(type == "do while")
+        return new dtkComposerNodeControlDoWhile;
 
-    // if(type == "if")
-    //     return new dtkComposerNodeControlIf;
+    if(type == "if")
+        return new dtkComposerNodeControlIf;
 
-    // if(type == "for")
-    //     return new dtkComposerNodeControlFor;
+    if(type == "for")
+        return new dtkComposerNodeControlFor;
 
     if(type == "foreach")
         return new dtkComposerNodeControlForEach;
 
-    // if(type == "map")
-    //     return new dtkComposerNodeControlMap;
+    if(type == "map")
+        return new dtkComposerNodeControlMap;
 
-    // if(type == "while")
-    //     return new dtkComposerNodeControlWhile;
+    if(type == "while")
+        return new dtkComposerNodeControlWhile;
 
     // logger nodes
 

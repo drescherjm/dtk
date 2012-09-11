@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Aug  4 00:35:56 2012 (+0200)
+ * Last-Updated: Tue Sep 11 14:43:53 2012 (+0200)
  *           By: tkloczko
- *     Update #: 52
+ *     Update #: 57
  */
 
 /* Commentary: 
@@ -103,24 +103,18 @@ dtkComposerNodeComposite *dtkComposerNodeControlDoWhile::block(int id)
 
 void dtkComposerNodeControlDoWhile::setInputs(void)
 {
-    // foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
-    //     v->setTwinned(false);
-    //     if (v->container().isReset())
-    //         v->setData(v->data());
-    //     else
-    //         v->setData(v->container());
-    //     v->setTwinned(true);
-    // }
+    foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
+        v->setTwinned(false);
+        v->setDataFrom(v);
+        v->setTwinned(true);
+    }
 }
 
 void dtkComposerNodeControlDoWhile::setOutputs(void)
 {
-    // foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
-    //     if (v->container().isReset())
-    //         v->twin()->setData(v->data());
-    //     else
-    //         v->twin()->setData(v->container());
-    // }
+    foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
+        v->twin()->setDataFrom(v);
+    }
 }
 
 void dtkComposerNodeControlDoWhile::setVariables(void)
@@ -130,7 +124,7 @@ void dtkComposerNodeControlDoWhile::setVariables(void)
 
 int dtkComposerNodeControlDoWhile::selectBranch(void)
 {
-    return (int)(!*d->cond.data());
+    return static_cast<int>(!(*d->cond.data()));
 }
 
 void dtkComposerNodeControlDoWhile::begin(void)

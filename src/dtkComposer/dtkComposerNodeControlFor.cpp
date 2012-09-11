@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Aug  4 00:34:52 2012 (+0200)
+ * Last-Updated: Tue Sep 11 14:34:54 2012 (+0200)
  *           By: tkloczko
- *     Update #: 133
+ *     Update #: 139
  */
 
 /* Commentary: 
@@ -144,40 +144,28 @@ dtkComposerNodeComposite *dtkComposerNodeControlFor::block(int id)
 
 void dtkComposerNodeControlFor::setInputs(void)
 {
-    // foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
-    //     v->setTwinned(false);
-    //     if (v->container().isReset()) {
-    //         v->setData(v->data());
-    //     } else {
-    //         v->setData(v->container());
-    //     }
-    //     v->setTwinned(true);
-    // }
+    foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
+        v->setTwinned(false);
+        v->setDataFrom(v);
+        v->setTwinned(true);
+    }
 }
 
 void dtkComposerNodeControlFor::setOutputs(void)
 {
-    // for (int i = 1; i < this->outputTwins().count(); i++) {
-    //     if (this->outputTwins().at(i)->container().isReset()) {
-    //         this->outputTwins().at(i)->twin()->setData(this->outputTwins().at(i)->data());
-    //     } else {
-    //         this->outputTwins().at(i)->twin()->setData(this->outputTwins().at(i)->container());
-    //     }
-    // }
+    for (int i = 1; i < this->outputTwins().count(); i++) {
+        this->outputTwins().at(i)->twin()->setDataFrom(this->outputTwins().at(i));
+    }
 }
 
 void dtkComposerNodeControlFor::setVariables(void)
 {
-    // if (this->outputTwins().first()->container().isReset()) {
-    //     this->outputTwins().first()->twin()->setData(this->outputTwins().first()->data());
-    // } else {
-    //     this->outputTwins().first()->twin()->setData(this->outputTwins().first()->container());
-    // }
+    this->outputTwins().first()->twin()->setDataFrom(this->outputTwins().first());
 }
 
 int dtkComposerNodeControlFor::selectBranch(void)
 {
-    return (int)(!*d->cond.data());
+    return static_cast<int>(!(*d->cond.data()));
 }
 
 void dtkComposerNodeControlFor::begin(void)

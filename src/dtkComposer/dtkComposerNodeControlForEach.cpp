@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep 10 11:22:47 2012 (+0200)
+ * Last-Updated: Tue Sep 11 14:45:49 2012 (+0200)
  *           By: tkloczko
- *     Update #: 188
+ *     Update #: 191
  */
 
 /* Commentary: 
@@ -137,23 +137,15 @@ void dtkComposerNodeControlForEach::setInputs(void)
 
     foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
         v->setTwinned(false);
-        if (!v->container()) {
-            v->setData(v->variant());
-        } else {
-            v->setData(v->container());
-        }
-        v->setTwinned(true);        
+        v->setDataFrom(v);
+        v->setTwinned(true);
     }
 }
 
 void dtkComposerNodeControlForEach::setOutputs(void)
 {
     foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
-        if (!v->container()) {
-            v->twin()->setData(v->variant());
-        } else {
-            v->twin()->setData(v->container());
-        }
+        v->twin()->setDataFrom(v);
     }
 
     ++(d->counter);
@@ -166,7 +158,7 @@ void dtkComposerNodeControlForEach::setVariables(void)
 
 int dtkComposerNodeControlForEach::selectBranch(void)
 {
-    return (int)(!((d->counter) < d->size));
+    return static_cast<int>(!((d->counter) < d->size));
 }
 
 void dtkComposerNodeControlForEach::begin(void)

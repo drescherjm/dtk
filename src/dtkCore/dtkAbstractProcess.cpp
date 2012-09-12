@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 14:47:00 2012 (+0200)
+ * Last-Updated: Wed Sep 12 15:38:17 2012 (+0200)
  *           By: tkloczko
- *     Update #: 103
+ *     Update #: 104
  */
 
 /* Commentary: 
@@ -37,6 +37,32 @@ dtkAbstractProcess::dtkAbstractProcess(const dtkAbstractProcess& other) : dtkAbs
 dtkAbstractProcess::~dtkAbstractProcess(void)
 {
 
+}
+
+//! Returns a new dtkAbstractProcess that is a copy of this.
+/*!
+ *  This method can be overloaded through the hierarchy enabling a
+ *  deep copy of this. Note that, using covariance of returned type,
+ *  the returned argument can be of the more derived type.
+ *
+ *  Example:
+ *  \code
+ *  class xyzProcess : public dtkAbstractProcess
+ *  {
+ *    ...
+ *    xyzProcess *clone(void); // Covariant returned argument
+ *    ...
+ *  };
+ *
+ *  xyzProcess *xyzProcess::clone(void)
+ *  {
+ *     return new xyzProcess(*this);
+ *  }
+ *  \endcode
+ */
+dtkAbstractProcess *dtkAbstractProcess::clone(void)
+{
+    return new dtkAbstractProcess(*this);
 }
 
 dtkAbstractProcess& dtkAbstractProcess::operator=(const dtkAbstractProcess& other)

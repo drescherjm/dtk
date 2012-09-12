@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 23 18:56:31 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 329
+ * Last-Updated: Wed Sep 12 15:39:14 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 330
  */
 
 /* Commentary:
@@ -41,6 +41,9 @@ public:
              dtkAbstractView(      dtkAbstractView *parent = 0);
 	     dtkAbstractView(const dtkAbstractView& other);
     virtual ~dtkAbstractView(void);
+
+public:
+    virtual dtkAbstractView *clone(void);
 
 public:
     dtkAbstractView& operator = (const dtkAbstractView& other);

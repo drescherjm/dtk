@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May  3 10:39:55 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 325
+ * Last-Updated: Wed Sep 12 15:40:21 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 326
  */
 
 /* Commentary:
@@ -45,6 +45,38 @@ dtkAbstractView::dtkAbstractView(const dtkAbstractView& other) : dtkAbstractObje
 
 }
 
+dtkAbstractView::~dtkAbstractView(void)
+{
+
+}
+
+//! Returns a new dtkAbstractView that is a copy of this.
+/*!
+ *  This method can be overloaded through the hierarchy enabling a
+ *  deep copy of this. Note that, using covariance of returned type,
+ *  the returned argument can be of the more derived type.
+ *
+ *  Example:
+ *  \code
+ *  class xyzView : public dtkAbstractView
+ *  {
+ *    ...
+ *    xyzView *clone(void); // Covariant returned argument
+ *    ...
+ *  };
+ *
+ *  xyzView *xyzView::clone(void)
+ *  {
+ *     return new xyzView(*this);
+ *  }
+ *  \endcode
+ */
+dtkAbstractView *dtkAbstractView::clone(void)
+{
+    return new dtkAbstractView(*this);
+}
+
+
 dtkAbstractView& dtkAbstractView::operator=(const dtkAbstractView& other)
 {
     dtkAbstractObject::operator=(other);
@@ -56,11 +88,6 @@ dtkAbstractView& dtkAbstractView::operator=(const dtkAbstractView& other)
     d->interactors = other.d_func()->interactors;
 
     return (*this);
-}
-
-dtkAbstractView::~dtkAbstractView(void)
-{
-
 }
 
 void dtkAbstractView::initialize(void)

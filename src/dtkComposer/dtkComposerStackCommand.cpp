@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul 10 15:10:59 2012 (+0200)
- *           By: tkloczko
- *     Update #: 4337
+ * Last-Updated: mar. sept. 11 14:41:24 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 4452
  */
 
 /* Commentary: 
@@ -2997,23 +2997,73 @@ void dtkComposerStackCommandCopyNodes::redo(void)
     if (e->data.isEmpty()) {
         e->old_nodes = d->scene->root()->nodes();
 
-        foreach(dtkComposerSceneNode *n, e->nodes) {
-            if (dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(n)) {
-                dtkComposerWriter writer;
-                writer.setScene(d->scene);
-                QString old = composite->title();
-                composite->setTitle(old +" copy ");
-                e->data = writer.toXML(composite).toString();
-                composite->setTitle(old);
+        if ((dynamic_cast<dtkComposerSceneNodeComposite *>(e->nodes.at(0))) && e->nodes.count() == 1)  {
 
+            dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(e->nodes.at(0));
+            dtkComposerWriter writer;
+            writer.setScene(d->scene);
+            QString old = composite->title();
+            composite->setTitle(old +" copy");
+            e->data = writer.toXML(composite).toString();
+            composite->setTitle(old);
+
+        } else if (areBrothers(e->nodes)) {
+
+            // first create a temporary composite
+            dtkComposerStackCommandCreateGroup *group = new dtkComposerStackCommandCreateGroup;
+            group->setScene(d->scene);
+            group->setGraph(d->graph);
+            group->setNodes(e->nodes);
+            group->redo();
+
+            dtkComposerSceneNodeList dummylist ;
+
+            // get the composite pointer by calling parent on one of the nodes
+            dtkComposerSceneNode *dummy_composite = e->nodes.at(0)->parent();
+            dummy_composite->setTitle("dummy composite");
+            dummylist << dummy_composite;
+
+            // then copy this composite
+            dtkComposerStackCommandCopyNodes *copy = new dtkComposerStackCommandCopyNodes;
+            copy->setScene(d->scene);
+            copy->setGraph(d->graph);
+            copy->setFactory(d->factory);
+            copy->setNodes(dummylist);
+            copy->redo();
+            delete copy;
+
+            // then undo the temporary composite
+            group->undo();
+            delete group;
+
+            // look for the duplicated composite
+            foreach(dtkComposerSceneNode *node, d->scene->current()->nodes()) {
+                if (node->title() == "dummy composite copy")
+                    dummy_composite = node;
+            }
+
+            // then ungroup the duplicate composite
+            dtkComposerSceneNodeList copies = (dynamic_cast<dtkComposerSceneNodeComposite *>(dummy_composite))->nodes();
+            dtkComposerStackCommandDestroyGroup *ungroup = new dtkComposerStackCommandDestroyGroup;
+            ungroup->setScene(d->scene);
+            ungroup->setGraph(d->graph);
+            ungroup->setNode( dynamic_cast<dtkComposerSceneNodeComposite *>(dummy_composite));
+            ungroup->redo();
+            delete ungroup;
+            foreach (dtkComposerSceneNode *n,copies) {
+                n->setPos(n->pos()+QPointF(100,100));
+                n->layout();
             }
         }
     }
-    dtkComposerReader reader;
-    reader.setFactory(d->factory);
-    reader.setScene(d->scene);
-    reader.setGraph(d->graph);
-    reader.readString(e->data, true, true);
+
+    if (!e->data.isEmpty()) {
+        dtkComposerReader reader;
+        reader.setFactory(d->factory);
+        reader.setScene(d->scene);
+        reader.setGraph(d->graph);
+        reader.readString(e->data, true, true);
+    }
 
     d->scene->modify(true);
 }

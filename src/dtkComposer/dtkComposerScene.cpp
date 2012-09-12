@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: ven. juin  8 16:38:24 2012 (+0200)
+ * Last-Updated: mar. sept. 11 14:09:43 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 2240
+ *     Update #: 2249
  */
 
 /* Commentary:
@@ -495,8 +495,10 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
         }
 
 
-    } else if ((event->key() == Qt::Key_C) && (event->modifiers() & Qt::ControlModifier) && (this->selectedItems().count() == 1)) {
+    } else if ((event->key() == Qt::Key_C) && (event->modifiers() & Qt::ControlModifier)) {
         //copy
+
+        d->copy_nodes.clear();
 
         foreach(QGraphicsItem *item, this->selectedItems()) {
             if (dtkComposerSceneNode *snode = dynamic_cast<dtkComposerSceneNode *>(item))
@@ -505,7 +507,7 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
 
     } else if ((event->key() == Qt::Key_V) && (event->modifiers() & Qt::ControlModifier) ) {
         // paste
-        if (d->copy_nodes.isEmpty())
+        if (d->copy_nodes.isEmpty() || !areBrothers(d->copy_nodes))
             return;
 
         dtkComposerStackCommandCopyNodes *command = new dtkComposerStackCommandCopyNodes;

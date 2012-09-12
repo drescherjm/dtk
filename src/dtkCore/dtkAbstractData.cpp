@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 12 12:28:20 2012 (+0200)
+ * Last-Updated: Wed Sep 12 15:36:00 2012 (+0200)
  *           By: tkloczko
- *     Update #: 471
+ *     Update #: 473
  */
 
 /* Commentary:
@@ -51,7 +51,33 @@ dtkAbstractData::~dtkAbstractData(void)
 
 }
 
-dtkAbstractData& dtkAbstractData::operator=(const dtkAbstractData& other)
+//! Returns a new dtkAbstractData that is a copy of this.
+/*!
+ *  This method can be overloaded through the hierarchy enabling a
+ *  deep copy of this. Note that, using covariance of returned type,
+ *  the returned argument can be of the more derived type.
+ *
+ *  Example:
+ *  \code
+ *  class xyzData : public dtkAbstractData
+ *  {
+ *    ...
+ *    xyzData *clone(void); // Covariant returned argument
+ *    ...
+ *  };
+ *
+ *  xyzData *xyzData::clone(void)
+ *  {
+ *     return new xyzData(*this);
+ *  }
+ *  \endcode
+ */
+dtkAbstractData *dtkAbstractData::clone(void)
+{
+    return new dtkAbstractData(*this);
+}
+
+dtkAbstractData& dtkAbstractData::operator = (const dtkAbstractData& other)
 {
     this->copy(other);
 

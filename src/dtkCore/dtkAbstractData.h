@@ -5,7 +5,7 @@
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
  *           By: tkloczko
- *     Update #: 289
+ *     Update #: 290
  */
 
 /* Commentary:
@@ -44,6 +44,9 @@ public:
              dtkAbstractData(      dtkAbstractData *parent = 0);
              dtkAbstractData(const dtkAbstractData& other);
     virtual ~dtkAbstractData(void);
+
+public:
+    virtual dtkAbstractData *clone(void);
 
 public:
     dtkAbstractData& operator = (const dtkAbstractData& other);

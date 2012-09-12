@@ -67,16 +67,5 @@ void dtkViewLayout::setCurrent(dtkViewLayoutItem *item)
 
 void dtkViewLayout::clear(void)
 {
-    while(this->layout()->count())
-        delete this->layout()->takeAt(0);
-
-    delete d->root;
-
-    d->root = new dtkViewLayoutItem(0);
-    d->root->setParent(this);
-    d->root->setLayout(this);
-
-    d->current = d->root;
-
-    this->layout()->addWidget(d->root);
+    d->root->clear();
 }

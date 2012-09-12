@@ -243,7 +243,11 @@ QList<dtkAbstractViewFactory::dtkAbstractViewTypeHandler> dtkAbstractViewFactory
 
 void dtkAbstractViewFactory::clear(void)
 {
-    qDeleteAll(d->views.values());
+    foreach(dtkAbstractView *view, d->views.values()) {
+        view->deleteLater();
+        view = NULL;
+    }
+    
     d->views.clear();
     d->viewCount.clear();
 }

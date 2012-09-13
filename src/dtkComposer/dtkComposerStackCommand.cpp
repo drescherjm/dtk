@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. sept. 11 14:41:24 2012 (+0200)
+ * Last-Updated: jeu. sept. 13 15:55:06 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 4452
+ *     Update #: 4480
  */
 
 /* Commentary: 
@@ -180,7 +180,7 @@ void dtkComposerStackCommandCreateNode::redo(void)
     d->graph->layout();
 
 // -- ??
-    if (e->parent->root() || e->parent->flattened() || e->parent->entered()) {
+    if (e->parent->visible()) {
         d->scene->addItem(e->node);
         e->node->layout();
     }
@@ -215,7 +215,7 @@ void dtkComposerStackCommandCreateNode::undo(void)
     e->parent->removeNode(e->node);
     e->parent->layout();
 // -- ??
-    if (e->parent->root() || e->parent->flattened() || e->parent->entered())
+    if (e->parent->visible())
         d->scene->removeItem(e->node);
 
     d->scene->modify(true);
@@ -395,7 +395,7 @@ void dtkComposerStackCommandDestroyNode::redo(void)
     e->parent->removeNode(e->node);
     e->parent->layout();
 
-    if (e->parent->root() || e->parent->visible() || e->parent->entered())
+    if (e->parent->visible())
         d->scene->removeItem(e->node);
 
     d->scene->modify(true);
@@ -428,7 +428,7 @@ void dtkComposerStackCommandDestroyNode::undo(void)
 
     d->graph->layout();
 
-    if (e->parent->root() || e->parent->visible() || e->parent->entered())
+    if (e->parent->visible())
         d->scene->addItem(e->node);
 
     d->scene->modify(true);
@@ -510,7 +510,7 @@ void dtkComposerStackCommandCreateEdge::redo(void)
 
     e->parent->addEdge(e->edge);
 
-    if(e->parent->entered() || e->parent->flattened() || e->parent->root()) {
+    if(e->parent->visible()) {
 
         d->scene->addItem(e->edge);
 
@@ -569,7 +569,7 @@ void dtkComposerStackCommandCreateEdge::undo(void)
 
     d->graph->removeEdge(e->edge);
 
-    if(e->parent->entered() || e->parent->flattened() || e->parent->root())
+    if(e->parent->visible())
         d->scene->removeItem(e->edge);
 
     d->scene->modify(true);
@@ -678,7 +678,7 @@ void dtkComposerStackCommandDestroyEdge::redo(void)
     e->parent->removeEdge(e->edge);
 
 
-    if(e->parent->entered() || e->parent->visible() || e->parent->root())
+    if(e->parent->visible())
         d->scene->removeItem(e->edge);
 
     d->scene->modify(true);
@@ -705,7 +705,7 @@ void dtkComposerStackCommandDestroyEdge::undo(void)
 
     e->parent->addEdge(e->edge);
 
-    if(e->parent->entered() || e->parent->visible() || e->parent->root())
+    if(e->parent->visible())
         d->scene->addItem(e->edge);
 
     e->edge->adjust();
@@ -779,7 +779,7 @@ void dtkComposerStackCommandCreateNote::redo(void)
 
     e->parent->addNote(e->note);
 
-    if (e->parent->root() || e->parent->flattened() || e->parent->entered())
+    if (e->parent->visible())
         d->scene->addItem(e->note);
     d->scene->modify(true);
 }
@@ -796,8 +796,9 @@ void dtkComposerStackCommandCreateNote::undo(void)
 
     e->parent->removeNote(e->note);
 
-    if (e->parent->root() || e->parent->flattened() || e->parent->entered())
+    if (e->parent->visible())
         d->scene->removeItem(e->note);
+
     d->scene->modify(true);
 }
 
@@ -854,7 +855,7 @@ void dtkComposerStackCommandDestroyNote::redo(void)
 
     e->parent->removeNote(e->note);
 
-    if (e->parent->root() || e->parent->flattened() || e->parent->entered())
+    if (e->parent->visible())
         d->scene->removeItem(e->note);
 
     d->scene->modify(true);
@@ -875,7 +876,7 @@ void dtkComposerStackCommandDestroyNote::undo(void)
 
     e->note->setPos(e->position);
 
-    if (e->parent->root() || e->parent->flattened() || e->parent->entered())
+    if (e->parent->visible())
         d->scene->addItem(e->note);
 
     d->scene->modify(true);
@@ -1052,7 +1053,7 @@ void dtkComposerStackCommandCreateGroup::undo(void)
 
     e->parent->removeNode(e->node);
 
-    if (e->parent->root() || e->parent->flattened() || e->parent->entered())
+    if (e->parent->visible())
         d->scene->removeItem(e->node);
 
     d->scene->update();
@@ -1207,7 +1208,7 @@ void dtkComposerStackCommandDestroyGroup::undo(void)
         note->setParent(e->node);
     }
 
-    if (e->parent->root() || e->parent->flattened() || e->parent->entered())
+    if (e->parent->visible())
         d->scene->addItem(e->node);
 
     d->scene->update();
@@ -2651,7 +2652,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
         e->origin->setPos(e->origin_pos);
 
 
-        if (e->target->flattened() || e->target->entered() || e->target->root())
+        if (e->target->visible())
             d->scene->addItem(e->origin);
 
     }

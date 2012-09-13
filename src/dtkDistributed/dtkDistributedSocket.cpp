@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: mer. mai 30 15:05:06 2012 (+0200)
+ * Last-Updated: jeu. sept. 13 14:39:30 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 794
+ *     Update #: 799
  */
 
 /* Commentary:
@@ -85,18 +85,18 @@ void dtkDistributedSocket::send(QVariant variant, QString jobid, qint16 target)
 
     } else {
         bool is_pointer =false;
-        
+
         if (type != "dtkAbstractData") {
             dtkInfo() << "type is unknown ("<< type<<  "), assume it inherit from dtkAbstractData";
         }
-        
-        if (type.endsWith("*")) { // pointer, remote the * character
+
+        if (type.endsWith("*")) { // pointer, remove the * character
             type.chop(1);
             is_pointer = true;
             dtkDebug() << "pointer type, remove *"<< type;
         }
         dtkAbstractData *data = dtkAbstractDataFactory::instance()->create(type)->fromVariant(variant);
-        qDebug() << __func__ << data->identifier();
+        dtkDebug() << "serializing " << data->identifier();
         array = data->serialize();
     }
 

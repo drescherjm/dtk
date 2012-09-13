@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 13:06:02 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 17:11:55 2012 (+0200)
+ * Last-Updated: Thu Sep 13 14:33:56 2012 (+0200)
  *           By: tkloczko
- *     Update #: 16
+ *     Update #: 35
  */
 
 /* Commentary: 
@@ -44,6 +44,13 @@ public:
     dtkComposerTransmitterEmitter<qreal> emitter_q1;
     dtkComposerTransmitterEmitter<qreal> emitter_q2;
     dtkComposerTransmitterEmitter<qreal> emitter_q3;
+
+public:
+    dtkQuaternionReal *quat;
+    qreal q0;
+    qreal q1;
+    qreal q2;
+    qreal q3;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -52,6 +59,12 @@ public:
 
 dtkComposerNodeQuaternion::dtkComposerNodeQuaternion(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeQuaternionPrivate)
 {
+    d->quat = NULL;
+    d->q0 = 0.;
+    d->q1 = 0.;
+    d->q2 = 0.;
+    d->q3 = 0.;
+
     this->appendReceiver(&d->receiver_quat);
 
     this->appendReceiver(&d->receiver_q0);
@@ -60,16 +73,15 @@ dtkComposerNodeQuaternion::dtkComposerNodeQuaternion(void) : dtkComposerNodeLeaf
     this->appendReceiver(&d->receiver_q3);
 
     this->appendEmitter(&d->emitter_quat);
-    d->emitter_quat.setData(dtkQuaternionReal(0, 0, 0, 0));
 
+    d->emitter_q0.setData(&d->q0);
     this->appendEmitter(&d->emitter_q0);
-    d->emitter_q0.setData(0);
+    d->emitter_q1.setData(&d->q1);
     this->appendEmitter(&d->emitter_q1);
-    d->emitter_q1.setData(0);
+    d->emitter_q2.setData(&d->q2);
     this->appendEmitter(&d->emitter_q2);
-    d->emitter_q2.setData(0);
+    d->emitter_q3.setData(&d->q3);
     this->appendEmitter(&d->emitter_q3);
-    d->emitter_q3.setData(0);
 }
 
 dtkComposerNodeQuaternion::~dtkComposerNodeQuaternion(void)
@@ -133,23 +145,34 @@ void dtkComposerNodeQuaternion::run(void)
 {
     if (!d->receiver_quat.isEmpty()) {
 
-        const dtkQuaternionReal& quat(d->receiver_quat.data());
-        
-        d->emitter_quat.setData(quat);
-        d->emitter_q0.setData(quat[0]);
-        d->emitter_q1.setData(quat[1]);
-        d->emitter_q2.setData(quat[2]);
-        d->emitter_q3.setData(quat[3]);
+        d->quat = d->receiver_quat.data();
+        d->q0 = (*d->quat)[0];
+        d->q1 = (*d->quat)[1];
+        d->q2 = (*d->quat)[2];
+        d->q3 = (*d->quat)[3];
 
     } else {
 
-        dtkQuaternionReal quat(d->receiver_q0.data(), d->receiver_q1.data(), d->receiver_q2.data(), d->receiver_q3.data());
+        if (!d->quat)
+            d->quat = new dtkQuaternionReal();  
 
-        d->emitter_quat.setData(quat);
-        d->emitter_q0.setData(quat[0]);
-        d->emitter_q1.setData(quat[1]);
-        d->emitter_q2.setData(quat[2]);
-        d->emitter_q3.setData(quat[3]);
+        if (!d->receiver_q0.isEmpty())
+            d->q0 = *d->receiver_q0.data();
 
+        if (!d->receiver_q1.isEmpty())
+            d->q1 = *d->receiver_q1.data();
+
+        if (!d->receiver_q2.isEmpty())
+            d->q2 = *d->receiver_q2.data();
+
+        if (!d->receiver_q3.isEmpty())
+            d->q3 = *d->receiver_q3.data();
+        
+        (*d->quat)[0] = d->q0;
+        (*d->quat)[1] = d->q1;
+        (*d->quat)[2] = d->q2;
+        (*d->quat)[3] = d->q3;
     }
+
+    d->emitter_quat.setData(d->quat);
 }

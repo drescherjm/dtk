@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:17
  * Version: $Id$
- * Last-Updated: Thu Sep 13 11:32:19 2012 (+0200)
+ * Last-Updated: Thu Sep 13 14:06:14 2012 (+0200)
  *           By: tkloczko
- *     Update #: 61
+ *     Update #: 63
  */
 
 /* Commentary:
@@ -42,8 +42,9 @@ public:
 
     void initNodeVectorReal(void);
     void initNodeMatrixSquareReal(void);
-    void initNodeVector3DReal(void);
-    void initNodeQuaternionReal(void);
+
+    void initNodeVector3D(void);
+    void initNodeQuaternion(void);
 
     void initNodeArrayScalar(void);
 

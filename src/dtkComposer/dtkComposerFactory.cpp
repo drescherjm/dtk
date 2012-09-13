@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Thu Sep 13 11:31:45 2012 (+0200)
+ * Last-Updated: Thu Sep 13 16:04:16 2012 (+0200)
  *           By: tkloczko
- *     Update #: 724
+ *     Update #: 739
  */
 
 /* Commentary:
@@ -50,15 +50,16 @@
 // #include "dtkComposerNodeMatrixSquareRealOperatorBinary.h"
 #include "dtkComposerNodeNumberOperator.h"
 // #include "dtkComposerNodeProcess.h"
-// #include "dtkComposerNodeQuaternion.h"
+#include "dtkComposerNodeQuaternion.h"
 // #include "dtkComposerNodeQuaternionOperatorUnary.h"
 // #include "dtkComposerNodeQuaternionOperatorBinary.h"
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
 #include "dtkComposerNodeStringOperator.h"
-// #include "dtkComposerNodeVector3D.h"
-// #include "dtkComposerNodeVector3DOperatorUnary.h"
-// #include "dtkComposerNodeVector3DOperatorBinary.h"
+#include "dtkComposerNodeVector3D.h"
+#include "dtkComposerNodeVector3DOperatorUnary.h"
+#include "dtkComposerNodeVector3DOperatorBinary.h"
+#include "dtkComposerNodeVector3DOperatorTernary.h"
 // #include "dtkComposerNodeVectorReal.h"
 // #include "dtkComposerNodeVectorRealExtractor.h"
 // #include "dtkComposerNodeVectorRealOperatorModifier.h"
@@ -168,8 +169,9 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 
     this->initNodeVectorReal();
     this->initNodeMatrixSquareReal();
-    this->initNodeVector3DReal();
-    this->initNodeQuaternionReal();
+
+    this->initNodeVector3D();
+    this->initNodeQuaternion();
 
     // Data Container nodes
 
@@ -726,60 +728,70 @@ void dtkComposerFactory::initNodeMatrixSquareReal(void)
     // d->types["MatrixSquare Real ReplaceColMatrixByVector"] = "matrixSquare_real_ReplaceColMatrixByVector";
 }
 
-void dtkComposerFactory::initNodeVector3DReal(void)
+void dtkComposerFactory::initNodeVector3D(void)
 {
-    // d->nodes << "Vector3D";
-    // d->descriptions["Vector3D"] = "<p>Description not yet filled!</p>";
-    // d->tags["Vector3D"] = QStringList() << "vector3D" << "algebraic";
-    // d->types["Vector3D"] = "vector3D";
+    d->nodes << "Vector3D";
+    d->descriptions["Vector3D"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D"] = QStringList() << "vector3D" << "algebraic";
+    d->types["Vector3D"] = "vector3D";
 
-    // d->nodes << "Vector3D Unit";
-    // d->descriptions["Vector3D Unit"] = "<p>Description not yet filled!</p>";
-    // d->tags["Vector3D Unit"] = QStringList() << "vector3D" << "algebraic" << "unit";
-    // d->types["Vector3D Unit"] = "vector3D_unit";
+    d->nodes << "Vector3D Unit";
+    d->descriptions["Vector3D Unit"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Unit"] = QStringList() << "vector3D" << "algebraic" << "unit";
+    d->types["Vector3D Unit"] = "vector3D_unit";
 
-    // d->nodes << "Vector3D Norm";
-    // d->descriptions["Vector3D Norm"] = "<p>Description not yet filled!</p>";
-    // d->tags["Vector3D Norm"] = QStringList() << "vector3D" << "algebraic" << "norm";
-    // d->types["Vector3D Norm"] = "vector3D_norm";
+    d->nodes << "Vector3D Norm";
+    d->descriptions["Vector3D Norm"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Norm"] = QStringList() << "vector3D" << "algebraic" << "norm";
+    d->types["Vector3D Norm"] = "vector3D_norm";
 
-    // d->nodes << "Vector3D Sum";
-    // d->descriptions["Vector3D Sum"] = "<p>Description not yet filled!</p>";
-    // d->tags["Vector3D Sum"] = QStringList() << "vector3D" << "algebraic" << "sum";
-    // d->types["Vector3D Sum"] = "vector3D_sum";
+    d->nodes << "Vector3D Sum";
+    d->descriptions["Vector3D Sum"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Sum"] = QStringList() << "vector3D" << "algebraic" << "sum";
+    d->types["Vector3D Sum"] = "vector3D_sum";
 
-    // d->nodes << "Vector3D Substract";
-    // d->descriptions["Vector3D Substract"] = "<p>Description not yet filled!</p>";
-    // d->tags["Vector3D Substract"] = QStringList() << "vector3D" << "algebraic" << "substraction";
-    // d->types["Vector3D Substract"] = "vector3D_substract";
+    d->nodes << "Vector3D Substract";
+    d->descriptions["Vector3D Substract"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Substract"] = QStringList() << "vector3D" << "algebraic" << "substraction";
+    d->types["Vector3D Substract"] = "vector3D_substract";
 
-    // d->nodes << "Vector3D Cross Prod";
-    // d->descriptions["Vector3D Cross Prod"] = "<p>Description not yet filled!</p>";
-    // d->tags["Vector3D Cross Prod"] = QStringList() << "vector3D" << "algebraic" << "cross product";
-    // d->types["Vector3D Cross Prod"] = "vector3D_cross_prod";
+    d->nodes << "Vector3D Cross Prod";
+    d->descriptions["Vector3D Cross Prod"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Cross Prod"] = QStringList() << "vector3D" << "algebraic" << "cross product";
+    d->types["Vector3D Cross Prod"] = "vector3D_cross_prod";
 
-    // d->nodes << "Vector3D Dot Prod";
-    // d->descriptions["Vector3D Dot Prod"] = "<p>Description not yet filled!</p>";
-    // d->tags["Vector3D Dot Prod"] = QStringList() << "vector3D" << "algebraic" << "dot product";
-    // d->types["Vector3D Dot Prod"] = "vector3D_dot_prod";
+    d->nodes << "Vector3D Dot Prod";
+    d->descriptions["Vector3D Dot Prod"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Dot Prod"] = QStringList() << "vector3D" << "algebraic" << "dot product";
+    d->types["Vector3D Dot Prod"] = "vector3D_dot_prod";
 
-    // d->nodes << "Vector3D Scal Mult";
-    // d->descriptions["Vector3D Scal Mult"] = "<p>Description not yet filled!</p>";
-    // d->tags["Vector3D Scal Mult"] = QStringList() << "vector3D" << "algebraic" << "scalar multiplication";
-    // d->types["Vector3D Scal Mult"] = "vector3D_scal_mult";
+    d->nodes << "Vector3D Scal Mult";
+    d->descriptions["Vector3D Scal Mult"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Scal Mult"] = QStringList() << "vector3D" << "algebraic" << "scalar multiplication";
+    d->types["Vector3D Scal Mult"] = "vector3D_scal_mult";
 
-    // d->nodes << "Vector3D Scal Division";
-    // d->descriptions["Vector3D Scal Division"] = "<p>Description not yet filled!</p>";
-    // d->tags["Vector3D Scal Division"] = QStringList() << "vector3D" << "algebraic" << "scalar division";
-    // d->types["Vector3D Scal Division"] = "vector3D_scal_divide";
+    d->nodes << "Vector3D Scal Division";
+    d->descriptions["Vector3D Scal Division"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Scal Division"] = QStringList() << "vector3D" << "algebraic" << "scalar division";
+    d->types["Vector3D Scal Division"] = "vector3D_scal_divide";
+
+    d->nodes << "Vector3D Triple Prod";
+    d->descriptions["Vector3D Triple Prod"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Triple Prod"] = QStringList() << "vector3D" << "algebraic" << "triple product";
+    d->types["Vector3D Triple Prod"] = "vector3D_triple_prod";
+
+    d->nodes << "Vector3D Mixed Prod";
+    d->descriptions["Vector3D Mixed Prod"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Mixed Prod"] = QStringList() << "vector3D" << "algebraic" << "mixed product";
+    d->types["Vector3D Mixed Prod"] = "vector3D_mixed_prod";
 }
 
-void dtkComposerFactory::initNodeQuaternionReal(void)
+void dtkComposerFactory::initNodeQuaternion(void)
 {
-    // d->nodes << "Quaternion";
-    // d->descriptions["Quaternion"] = "<p>Description not yet filled!</p>";
-    // d->tags["Quaternion"] = QStringList() << "quaternion" << "algebraic";
-    // d->types["Quaternion"] = "quaternion";
+    d->nodes << "Quaternion";
+    d->descriptions["Quaternion"] = "<p>Description not yet filled!</p>";
+    d->tags["Quaternion"] = QStringList() << "quaternion" << "algebraic";
+    d->types["Quaternion"] = "quaternion";
 
     // d->nodes << "Quaternion Unit";
     // d->descriptions["Quaternion Unit"] = "<p>Description not yet filled!</p>";
@@ -1201,37 +1213,43 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "array_scalar_divide")
         return new dtkComposerNodeArrayScalarOperatorDivide;
 
-    // // algebraic nodes
+    // algebraic nodes
 
-    // if(type == "vector3D")
-    //     return new dtkComposerNodeVector3D;
+    if(type == "vector3D")
+        return new dtkComposerNodeVector3D;
 
-    // if(type == "vector3D_unit")
-    //     return new dtkComposerNodeVector3DOperatorUnaryUnitary;
+    if(type == "vector3D_unit")
+        return new dtkComposerNodeVector3DOperatorUnaryUnitary;
 
-    // if(type == "vector3D_norm")
-    //     return new dtkComposerNodeVector3DOperatorUnaryScalarNorm;
+    if(type == "vector3D_norm")
+        return new dtkComposerNodeVector3DOperatorUnaryScalarNorm;
 
-    // if(type == "vector3D_sum")
-    //     return new dtkComposerNodeVector3DOperatorBinarySum;
+    if(type == "vector3D_sum")
+        return new dtkComposerNodeVector3DOperatorBinarySum;
 
-    // if(type == "vector3D_substract")
-    //     return new dtkComposerNodeVector3DOperatorBinarySubstract;
+    if(type == "vector3D_substract")
+        return new dtkComposerNodeVector3DOperatorBinarySubstract;
 
-    // if(type == "vector3D_cross_prod")
-    //     return new dtkComposerNodeVector3DOperatorBinaryCrossProd;
+    if(type == "vector3D_cross_prod")
+        return new dtkComposerNodeVector3DOperatorBinaryCrossProd;
 
-    // if(type == "vector3D_dot_prod")
-    //     return new dtkComposerNodeVector3DOperatorBinaryScalarDotProd;
+    if(type == "vector3D_dot_prod")
+        return new dtkComposerNodeVector3DOperatorBinaryScalarDotProd;
 
-    // if(type == "vector3D_scal_mult")
-    //     return new dtkComposerNodeVector3DOperatorHomotheticMult;
+    if(type == "vector3D_scal_mult")
+        return new dtkComposerNodeVector3DOperatorHomotheticMult;
 
-    // if(type == "vector3D_scal_divide")
-    //     return new dtkComposerNodeVector3DOperatorHomotheticDivision;
+    if(type == "vector3D_scal_divide")
+        return new dtkComposerNodeVector3DOperatorHomotheticDivision;
 
-    // if(type == "quaternion")
-    //     return new dtkComposerNodeQuaternion;
+    if(type == "vector3D_triple_prod")
+        return new dtkComposerNodeVector3DOperatorTernaryTripleProd;
+
+    if(type == "vector3D_mixed_prod")
+        return new dtkComposerNodeVector3DOperatorTernaryScalarMixedProd;
+
+    if(type == "quaternion")
+        return new dtkComposerNodeQuaternion;
 
     // if(type == "quat_unit")
     //     return new dtkComposerNodeQuaternionOperatorUnaryUnitary;

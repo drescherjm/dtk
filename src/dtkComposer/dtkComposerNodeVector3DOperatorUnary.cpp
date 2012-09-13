@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 15:58:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 17:01:06 2012 (+0200)
+ * Last-Updated: Thu Sep 13 15:22:25 2012 (+0200)
  *           By: tkloczko
- *     Update #: 15
+ *     Update #: 37
  */
 
 /* Commentary: 
@@ -63,11 +63,17 @@ public:
 
 public:
     dtkComposerTransmitterEmitter<qreal> emitter_val;
+
+public:
+    qreal norm;
 };
 
 dtkComposerNodeVector3DOperatorUnaryScalar::dtkComposerNodeVector3DOperatorUnaryScalar(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVector3DOperatorUnaryScalarPrivate)
 {
-    this->appendReceiver(&d->receiver_vec);
+    this->appendReceiver(&d->receiver_vec);    
+
+    d->norm = -1.;
+    d->emitter_val.setData(&d->norm);
     this->appendEmitter(&d->emitter_val);
 }
 
@@ -85,12 +91,15 @@ dtkComposerNodeVector3DOperatorUnaryScalar::~dtkComposerNodeVector3DOperatorUnar
 void dtkComposerNodeVector3DOperatorUnaryUnitary::run(void)
 {
     if (d->receiver_vec.isEmpty()) {
+        
         dtkWarn() << "Input not specified. Nothing is done";
-        d->emitter_vec.setData(dtkVector3DReal());
 
     }  else {
-        const dtkVector3DReal& vector = d->receiver_vec.data();
-        d->emitter_vec.setData(vector.unit());
+
+        dtkVector3DReal *vector = d->receiver_vec.data();
+        vector->makeUnit();
+
+        d->emitter_vec.setData(vector);
     }
 }
 
@@ -102,12 +111,13 @@ void dtkComposerNodeVector3DOperatorUnaryScalarNorm::run(void)
 {
 
     if (d->receiver_vec.isEmpty()) {
+
         dtkWarn() << "Input not specified. Nothing is done";
-        d->emitter_val.setData(qreal());
 
     }  else {
-        const dtkVector3DReal& vector = d->receiver_vec.data();
-        d->emitter_val.setData(vector.norm());
+        
+        d->norm = d->receiver_vec.data()->norm();
+
     }
 }
 

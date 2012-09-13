@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Fri Sep  7 15:54:01 2012 (+0200)
+## Last-Updated: Thu Sep 13 15:58:36 2012 (+0200)
 ##           By: tkloczko
-##     Update #: 586
+##     Update #: 591
 ######################################################################
 ##
 ### Commentary:
@@ -206,7 +206,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeNumberOperator.cpp
   # dtkComposerNodeProcess.cpp
   dtkComposerNodeProxy.cpp
-  # dtkComposerNodeQuaternion.cpp
+  dtkComposerNodeQuaternion.cpp
   # dtkComposerNodeQuaternionOperatorUnary.cpp
   # dtkComposerNodeQuaternionOperatorBinary.cpp
   dtkComposerNodeReal.cpp
@@ -215,10 +215,10 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeStringOperator.cpp
   # dtkComposerNodeVector.cpp
   # dtkComposerNodeVectorOperator.cpp
-  # dtkComposerNodeVector3D.cpp
-  # dtkComposerNodeVector3DOperatorUnary.cpp
-  # dtkComposerNodeVector3DOperatorBinary.cpp
-  # dtkComposerNodeVector3DOperatorTernary.cpp
+  dtkComposerNodeVector3D.cpp
+  dtkComposerNodeVector3DOperatorUnary.cpp
+  dtkComposerNodeVector3DOperatorBinary.cpp
+  dtkComposerNodeVector3DOperatorTernary.cpp
   # dtkComposerNodeVectorReal.cpp
   # dtkComposerNodeVectorRealExtractor.cpp
   # dtkComposerNodeVectorRealOperatorModifier.cpp

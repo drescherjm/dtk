@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 10:19:40 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 17:00:17 2012 (+0200)
+ * Last-Updated: Thu Sep 13 14:34:23 2012 (+0200)
  *           By: tkloczko
- *     Update #: 61
+ *     Update #: 75
  */
 
 /* Commentary: 
@@ -34,7 +34,7 @@ public:
 
     dtkComposerTransmitterVariant receiver_x;
     dtkComposerTransmitterVariant receiver_y;
-    dtkComposerTransmitterVariant  receiver_z;
+    dtkComposerTransmitterVariant receiver_z;
 
 public:
     dtkComposerTransmitterEmitter<dtkVector3DReal> emitter_vec;
@@ -42,6 +42,12 @@ public:
     dtkComposerTransmitterEmitter<qreal> emitter_x;
     dtkComposerTransmitterEmitter<qreal> emitter_y;
     dtkComposerTransmitterEmitter<qreal> emitter_z;
+
+public:
+    dtkVector3DReal *vector;
+    qreal x;
+    qreal y;
+    qreal z;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -50,11 +56,15 @@ public:
 
 dtkComposerNodeVector3D::dtkComposerNodeVector3D(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVector3DPrivate)
 {
+    d->vector = NULL;
+    d->x = 0.;
+    d->y = 0.;
+    d->z = 0.;
+
     this->appendReceiver(&d->receiver_vec);
 
     QList<QVariant::Type> variant_list;
-
-    variant_list << QVariant::Double << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong;
+    variant_list << QVariant::Double << QVariant::LongLong;
     d->receiver_x.setTypes(variant_list);
     d->receiver_y.setTypes(variant_list);
     d->receiver_z.setTypes(variant_list);
@@ -65,14 +75,12 @@ dtkComposerNodeVector3D::dtkComposerNodeVector3D(void) : dtkComposerNodeLeaf(), 
 
     this->appendEmitter(&d->emitter_vec);
 
-    d->emitter_vec.setData(dtkVector3DReal(0, 0, 0));
-
+    d->emitter_x.setData(&d->x);
     this->appendEmitter(&d->emitter_x);
-    d->emitter_x.setData(0);
+    d->emitter_y.setData(&d->y);
     this->appendEmitter(&d->emitter_y);
-    d->emitter_y.setData(0);
+    d->emitter_z.setData(&d->z);
     this->appendEmitter(&d->emitter_z);
-    d->emitter_z.setData(0);
 }
 
 dtkComposerNodeVector3D::~dtkComposerNodeVector3D(void)
@@ -130,20 +138,29 @@ void dtkComposerNodeVector3D::run(void)
 {
     if (!d->receiver_vec.isEmpty()) {
 
-        const dtkVector3DReal& vec(d->receiver_vec.data());
-
-        d->emitter_vec.setData(vec);
-        d->emitter_x.setData(vec[0]);
-        d->emitter_y.setData(vec[1]);
-        d->emitter_z.setData(vec[2]);
+        d->vector = d->receiver_vec.data();
+        d->x = (*d->vector)[0];
+        d->y = (*d->vector)[1];
+        d->z = (*d->vector)[2];
 
     } else {
 
-        dtkVector3DReal vec(qvariant_cast<qreal>(d->receiver_x.data()), qvariant_cast<qreal>(d->receiver_y.data()),qvariant_cast<qreal>(d->receiver_z.data()));
+        if (!d->vector)
+            d->vector = new dtkVector3DReal();  
 
-        d->emitter_vec.setData(vec);
-        d->emitter_x.setData(vec[0]);
-        d->emitter_y.setData(vec[1]);
-        d->emitter_z.setData(vec[2]);
+        if (!d->receiver_x.isEmpty())
+            d->x = *d->receiver_x.data<qreal>();
+
+        if (!d->receiver_y.isEmpty())
+            d->y = *d->receiver_y.data<qreal>();
+
+        if (!d->receiver_z.isEmpty())
+            d->z = *d->receiver_z.data<qreal>();
+        
+        (*d->vector)[0] = d->x;
+        (*d->vector)[1] = d->y;
+        (*d->vector)[2] = d->z;
     }
+
+    d->emitter_vec.setData(d->vector);
 }

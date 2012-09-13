@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:17
  * Version: $Id$
- * Last-Updated: Tue May 15 16:48:41 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 53
+ * Last-Updated: Thu Sep 13 11:32:19 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 61
  */
 
 /* Commentary:
@@ -34,6 +34,22 @@ class DTKCOMPOSER_EXPORT dtkComposerFactory : public QObject
 public:
              dtkComposerFactory(void);
     virtual ~dtkComposerFactory(void);
+
+public:
+    void initNodeNumberOperatorUnary(void);
+    void initNodeNumberOperatorBinary(void);
+    void initNodeBooleanOperators(void);
+
+    void initNodeVectorReal(void);
+    void initNodeMatrixSquareReal(void);
+    void initNodeVector3DReal(void);
+    void initNodeQuaternionReal(void);
+
+    void initNodeArrayScalar(void);
+
+    void initNodeContainerData(void);
+
+    void initNodeControl(void);
 
 public slots:
     virtual dtkComposerNode *create(const QString& type);

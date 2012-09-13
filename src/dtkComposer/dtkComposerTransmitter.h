@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Aug  9 09:39:26 2012 (+0200)
+ * Last-Updated: Wed Sep 12 20:57:58 2012 (+0200)
  *           By: tkloczko
- *     Update #: 210
+ *     Update #: 211
  */
 
 /* Commentary: 
@@ -27,15 +27,14 @@
 
 class dtkAbstractContainerWrapper;
 class dtkComposerNode;
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitter declaration
-// /////////////////////////////////////////////////////////////////
-
 class dtkComposerTransmitterPrivate;
 class dtkComposerTransmitterLink;
 class dtkComposerTransmitterLinkList;
 class dtkComposerTransmitterVariant;
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerTransmitter interface
+// /////////////////////////////////////////////////////////////////
 
 class DTKCOMPOSER_EXPORT dtkComposerTransmitter
 {

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 12 15:36:00 2012 (+0200)
+ * Last-Updated: Thu Sep 13 11:37:46 2012 (+0200)
  *           By: tkloczko
- *     Update #: 473
+ *     Update #: 475
  */
 
 /* Commentary:
@@ -92,6 +92,9 @@ dtkAbstractData& dtkAbstractData::operator = (const dtkAbstractData& other)
  *  class of dtkAbstractData, one must called first the copy method
  *  of the parent to ensure that all the attributes are really copied.
  *
+ *  Nevertheless, some caution must be taken to avoid slicing problem
+ *  as shown in the following example.
+ *
  *  Example:
  *  \code
  *  class xyzData : public dtkAbstractData
@@ -107,7 +110,11 @@ dtkAbstractData& dtkAbstractData::operator = (const dtkAbstractData& other)
  *     dtkAbstractData::copy(other);
  *
  *     // copy of the xyzData attributes
- *     ...
+ *     if (typeid(other) == typeid(*this)) {
+ *        // do the copy
+ *     } else {
+ *        dtkWarn() << "other is not of same type than this, slicing is occuring.";
+ *     }
  *  }
  *  \endcode
  */

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Thu Sep 13 16:04:16 2012 (+0200)
+ * Last-Updated: Thu Sep 13 16:41:21 2012 (+0200)
  *           By: tkloczko
- *     Update #: 739
+ *     Update #: 742
  */
 
 /* Commentary:
@@ -51,8 +51,8 @@
 #include "dtkComposerNodeNumberOperator.h"
 // #include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeQuaternion.h"
-// #include "dtkComposerNodeQuaternionOperatorUnary.h"
-// #include "dtkComposerNodeQuaternionOperatorBinary.h"
+#include "dtkComposerNodeQuaternionOperatorUnary.h"
+#include "dtkComposerNodeQuaternionOperatorBinary.h"
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
 #include "dtkComposerNodeStringOperator.h"
@@ -793,45 +793,45 @@ void dtkComposerFactory::initNodeQuaternion(void)
     d->tags["Quaternion"] = QStringList() << "quaternion" << "algebraic";
     d->types["Quaternion"] = "quaternion";
 
-    // d->nodes << "Quaternion Unit";
-    // d->descriptions["Quaternion Unit"] = "<p>Description not yet filled!</p>";
-    // d->tags["Quaternion Unit"] = QStringList() << "quaternion" << "algebraic" << "unit";
-    // d->types["Quaternion Unit"] = "quat_unit";
+    d->nodes << "Quaternion Unit";
+    d->descriptions["Quaternion Unit"] = "<p>Description not yet filled!</p>";
+    d->tags["Quaternion Unit"] = QStringList() << "quaternion" << "algebraic" << "unit";
+    d->types["Quaternion Unit"] = "quat_unit";
 
-    // d->nodes << "Quaternion Norm";
-    // d->descriptions["Quaternion Norm"] = "<p>Description not yet filled!</p>";
-    // d->tags["Quaternion Norm"] = QStringList() << "quaternion" << "algebraic" << "norm";
-    // d->types["Quaternion Norm"] = "quat_norm";
+    d->nodes << "Quaternion Norm";
+    d->descriptions["Quaternion Norm"] = "<p>Description not yet filled!</p>";
+    d->tags["Quaternion Norm"] = QStringList() << "quaternion" << "algebraic" << "norm";
+    d->types["Quaternion Norm"] = "quat_norm";
 
-    // d->nodes << "Quaternion Sum";
-    // d->descriptions["Quaternion Sum"] = "<p>Description not yet filled!</p>";
-    // d->tags["Quaternion Sum"] = QStringList() << "quaternion" << "algebraic" << "sum";
-    // d->types["Quaternion Sum"] = "quat_sum";
+    d->nodes << "Quaternion Sum";
+    d->descriptions["Quaternion Sum"] = "<p>Description not yet filled!</p>";
+    d->tags["Quaternion Sum"] = QStringList() << "quaternion" << "algebraic" << "sum";
+    d->types["Quaternion Sum"] = "quat_sum";
 
-    // d->nodes << "Quaternion Substract";
-    // d->descriptions["Quaternion Substract"] = "<p>Description not yet filled!</p>";
-    // d->tags["Quaternion Substract"] = QStringList() << "quaternion" << "algebraic" << "substract";
-    // d->types["Quaternion Substract"] = "quat_substract";
+    d->nodes << "Quaternion Substract";
+    d->descriptions["Quaternion Substract"] = "<p>Description not yet filled!</p>";
+    d->tags["Quaternion Substract"] = QStringList() << "quaternion" << "algebraic" << "substract";
+    d->types["Quaternion Substract"] = "quat_substract";
 
-    // d->nodes << "Quaternion Mult";
-    // d->descriptions["Quaternion Mult"] = "<p>Description not yet filled!</p>";
-    // d->tags["Quaternion Mult"] = QStringList() << "quaternion" << "algebraic" << "multiplication";
-    // d->types["Quaternion Mult"] = "quat_mult";
+    d->nodes << "Quaternion Mult";
+    d->descriptions["Quaternion Mult"] = "<p>Description not yet filled!</p>";
+    d->tags["Quaternion Mult"] = QStringList() << "quaternion" << "algebraic" << "multiplication";
+    d->types["Quaternion Mult"] = "quat_mult";
 
-    // d->nodes << "Quaternion Division";
-    // d->descriptions["Quaternion Division"] = "<p>Description not yet filled!</p>";
-    // d->tags["Quaternion Division"] = QStringList() << "quaternion" << "algebraic" << "division";
-    // d->types["Quaternion Division"] = "quat_divide";
+    d->nodes << "Quaternion Division";
+    d->descriptions["Quaternion Division"] = "<p>Description not yet filled!</p>";
+    d->tags["Quaternion Division"] = QStringList() << "quaternion" << "algebraic" << "division";
+    d->types["Quaternion Division"] = "quat_divide";
 
-    // d->nodes << "Quaternion Scal Mult";
-    // d->descriptions["Quaternion Scal Mult"] = "<p>Description not yet filled!</p>";
-    // d->tags["Quaternion Scal Mult"] = QStringList() << "quaternion" << "algebraic" << "scalar multiplication";
-    // d->types["Quaternion Scal Mult"] = "quat_scal_mult";
+    d->nodes << "Quaternion Scal Mult";
+    d->descriptions["Quaternion Scal Mult"] = "<p>Description not yet filled!</p>";
+    d->tags["Quaternion Scal Mult"] = QStringList() << "quaternion" << "algebraic" << "scalar multiplication";
+    d->types["Quaternion Scal Mult"] = "quat_scal_mult";
 
-    // d->nodes << "Quaternion Scal Division";
-    // d->descriptions["Quaternion Scal Division"] = "<p>Description not yet filled!</p>";
-    // d->tags["Quaternion Scal Division"] = QStringList() << "quaternion" << "algebraic" << "scalar division";
-    // d->types["Quaternion Scal Division"] = "quat_scal_divide";
+    d->nodes << "Quaternion Scal Division";
+    d->descriptions["Quaternion Scal Division"] = "<p>Description not yet filled!</p>";
+    d->tags["Quaternion Scal Division"] = QStringList() << "quaternion" << "algebraic" << "scalar division";
+    d->types["Quaternion Scal Division"] = "quat_scal_divide";
 }
 
 void dtkComposerFactory::initNodeArrayScalar(void)
@@ -1251,23 +1251,23 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "quaternion")
         return new dtkComposerNodeQuaternion;
 
-    // if(type == "quat_unit")
-    //     return new dtkComposerNodeQuaternionOperatorUnaryUnitary;
+    if(type == "quat_unit")
+        return new dtkComposerNodeQuaternionOperatorUnaryUnitary;
 
-    // if(type == "quat_norm")
-    //     return new dtkComposerNodeQuaternionOperatorUnaryScalarNorm;
+    if(type == "quat_norm")
+        return new dtkComposerNodeQuaternionOperatorUnaryScalarNorm;
 
-    // if(type == "quat_sum")
-    //     return new dtkComposerNodeQuaternionOperatorBinarySum;
+    if(type == "quat_sum")
+        return new dtkComposerNodeQuaternionOperatorBinarySum;
 
-    // if(type == "quat_substract")
-    //     return new dtkComposerNodeQuaternionOperatorBinarySubstract;
+    if(type == "quat_substract")
+        return new dtkComposerNodeQuaternionOperatorBinarySubstract;
 
-    // if(type == "quat_scal_mult")
-    //     return new dtkComposerNodeQuaternionOperatorHomotheticMult;
+    if(type == "quat_scal_mult")
+        return new dtkComposerNodeQuaternionOperatorHomotheticMult;
 
-    // if(type == "quat_scal_divide")
-    //     return new dtkComposerNodeQuaternionOperatorHomotheticDivision;
+    if(type == "quat_scal_divide")
+        return new dtkComposerNodeQuaternionOperatorHomotheticDivision;
 
     // operator nodes
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 15:58:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 13 15:22:25 2012 (+0200)
+ * Last-Updated: Thu Sep 13 16:32:56 2012 (+0200)
  *           By: tkloczko
- *     Update #: 37
+ *     Update #: 40
  */
 
 /* Commentary: 
@@ -65,15 +65,15 @@ public:
     dtkComposerTransmitterEmitter<qreal> emitter_val;
 
 public:
-    qreal norm;
+    qreal value;
 };
 
 dtkComposerNodeVector3DOperatorUnaryScalar::dtkComposerNodeVector3DOperatorUnaryScalar(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVector3DOperatorUnaryScalarPrivate)
 {
     this->appendReceiver(&d->receiver_vec);    
 
-    d->norm = -1.;
-    d->emitter_val.setData(&d->norm);
+    d->value = 0.;
+    d->emitter_val.setData(&d->value);
     this->appendEmitter(&d->emitter_val);
 }
 
@@ -109,14 +109,13 @@ void dtkComposerNodeVector3DOperatorUnaryUnitary::run(void)
 
 void dtkComposerNodeVector3DOperatorUnaryScalarNorm::run(void)
 {
-
     if (d->receiver_vec.isEmpty()) {
 
         dtkWarn() << "Input not specified. Nothing is done";
 
     }  else {
         
-        d->norm = d->receiver_vec.data()->norm();
+        d->value = d->receiver_vec.data()->norm();
 
     }
 }

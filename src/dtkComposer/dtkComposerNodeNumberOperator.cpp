@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Mon Feb 27 14:28:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep  7 12:08:20 2012 (+0200)
+ * Last-Updated: Thu Sep 13 16:28:00 2012 (+0200)
  *           By: tkloczko
- *     Update #: 407
+ *     Update #: 409
  */
 
 /* Commentary:
@@ -440,7 +440,7 @@ void dtkComposerNodeNumberOperatorUnaryAtan::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryDeg2Rad::run(void)
 {
-    d->value_r = M_PI * (*(d->receiver.data<qreal>()) / 180.);
+    d->value_r = dtkDeg2Rad(*d->receiver.data<qreal>());
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -449,7 +449,7 @@ void dtkComposerNodeNumberOperatorUnaryDeg2Rad::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryRad2Deg::run(void)
 {
-    d->value_r = 180. * (*(d->receiver.data<qreal>()) / M_PI);
+    d->value_r = dtkRad2Deg(*d->receiver.data<qreal>());
 }
 
 // /////////////////////////////////////////////////////////////////

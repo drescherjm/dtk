@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Thu Sep 13 16:41:21 2012 (+0200)
+ * Last-Updated: Thu Sep 13 23:22:57 2012 (+0200)
  *           By: tkloczko
- *     Update #: 742
+ *     Update #: 745
  */
 
 /* Commentary:
@@ -39,7 +39,7 @@
 #include "dtkComposerNodeControlForEach.h"
 #include "dtkComposerNodeControlMap.h"
 #include "dtkComposerNodeControlWhile.h"
-// #include "dtkComposerNodeData.h"
+#include "dtkComposerNodeData.h"
 // #include "dtkComposerNodeFile.h"
 // #include "dtkComposerNodeFileOperator.h"
 #include "dtkComposerNodeLogger.h"
@@ -190,10 +190,10 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 
     // generic nodes
 
-//     d->nodes << "Generic Data";
-//     d->descriptions["Generic Data"] = "<p>Description not yet filled!</p>";
-//     d->tags["Generic Data"] = QStringList() << "data";
-//     d->types["Generic Data"] = "data";
+    d->nodes << "Generic Data";
+    d->descriptions["Generic Data"] = "<p>Description not yet filled!</p>";
+    d->tags["Generic Data"] = QStringList() << "data";
+    d->types["Generic Data"] = "data";
 
 //     d->nodes << "Generic Process";
 //     d->descriptions["Generic Process"] = "<p>Description not yet filled!</p>";
@@ -1457,8 +1457,8 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
 //     // generic nodes
 
-//     if(type == "data")
-//         return new dtkComposerNodeData;
+    if(type == "data")
+         return new dtkComposerNodeData;
 
 //     if(type == "process")
 //         return new dtkComposerNodeProcess;

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:17:21
  * Version: $Id$
- * Last-Updated: Tue Jul  3 12:41:41 2012 (+0200)
+ * Last-Updated: Thu Sep 13 23:29:42 2012 (+0200)
  *           By: tkloczko
- *     Update #: 281
+ *     Update #: 291
  */
 
 /* Commentary:
@@ -27,6 +27,18 @@
 
 #include <dtkMath/dtkVector.h>
 
+class xyzData : public dtkAbstractData
+{
+public:
+    xyzData(void) : dtkAbstractData() {}
+
+public:
+    QString identifier(void) const {return "xyzData";}
+};
+
+Q_DECLARE_METATYPE(xyzData);
+Q_DECLARE_METATYPE(xyzData*);
+
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeDataPrivate declaration
 // /////////////////////////////////////////////////////////////////
@@ -34,15 +46,16 @@
 class dtkComposerNodeDataPrivate
 {
 public:
-    dtkComposerTransmitterEmitter<dtkAbstractData *> receiver_data;
+    dtkComposerTransmitterEmitter<dtkAbstractData> receiver_data;
     dtkComposerTransmitterReceiver<QString> receiver_string;
     dtkComposerTransmitterReceiver<dtkVectorReal> receiver_vector;
 
 public:
-    dtkComposerTransmitterEmitter<dtkAbstractData *> emitter_data;
+    dtkComposerTransmitterEmitter<xyzData> emitter_data;
 
 public:
     dtkAbstractData *data;
+    xyzData *xyz;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -72,7 +85,7 @@ dtkComposerNodeData::~dtkComposerNodeData(void)
    
 bool dtkComposerNodeData::isAbstractData(void) const 
 {
-    return true; 
+    return false; 
 }
 
 QString dtkComposerNodeData::abstractDataType(void) const 
@@ -83,23 +96,27 @@ QString dtkComposerNodeData::abstractDataType(void) const
 void dtkComposerNodeData::run(void)
 {
 
-    if (this->data())
-        d->data = this->data();
+    // if (this->data())
+    //     d->data = this->data();
 
-    if (!d->data) {
-        dtkWarn() << "no data, abort "<<  this->currentImplementation();
-        return;
-    }
+    // if (!d->data) {
+    //     dtkWarn() << "no data, abort "<<  this->currentImplementation();
+    //     return;
+    // }
 
-    if (!d->receiver_string.isEmpty())
-        d->data->setParameter(d->receiver_string.data());
+    // if (!d->receiver_string.isEmpty())
+    //     d->data->setParameter(d->receiver_string.data());
 
-    if(!d->receiver_vector.isEmpty())
-        d->data->setParameter(d->receiver_vector.data());
+    // if(!d->receiver_vector.isEmpty())
+    //     d->data->setParameter(d->receiver_vector.data());
 
-    d->data->update();
+    // d->data->update();
 
-    d->emitter_data.setData(d->data);
+    // d->emitter_data.setData(d->data);
+
+    d->xyz = new xyzData();
+
+    d->emitter_data.setData(d->xyz);
 }
 
 QString dtkComposerNodeData::type(void)

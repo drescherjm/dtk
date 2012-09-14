@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 12 20:57:58 2012 (+0200)
+ * Last-Updated: Fri Sep 14 10:09:39 2012 (+0200)
  *           By: tkloczko
- *     Update #: 211
+ *     Update #: 212
  */
 
 /* Commentary: 
@@ -73,6 +73,10 @@ public:
 public:
     virtual QVariant::Type     type(void) const;
     virtual QString        typeName(void) const;
+
+public:
+    virtual QString dataIdentifier(void);
+    QString dataIdentifier(void *data);
 
 public:
     void setParentNode(dtkComposerNode *parent);

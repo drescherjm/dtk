@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Aug  7 15:27:36 2012 (+0200)
+ * Last-Updated: Fri Sep 14 10:11:30 2012 (+0200)
  *           By: tkloczko
- *     Update #: 266
+ *     Update #: 269
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include "dtkComposerNode.h"
 
 #include <dtkContainer/dtkAbstractContainerWrapper.h>
+#include <dtkCore/dtkAbstractObject>
 #include <dtkCore/dtkGlobal>
 
 // /////////////////////////////////////////////////////////////////
@@ -109,6 +110,16 @@ QVariant::Type dtkComposerTransmitter::type(void) const
 QString dtkComposerTransmitter::typeName(void) const
 {
     return d->type.typeName();
+}
+
+QString dtkComposerTransmitter::dataIdentifier(void)
+{
+    return QString();
+}
+
+QString dtkComposerTransmitter::dataIdentifier(void *data)
+{
+    return static_cast<dtkAbstractObject *>(data)->identifier();
 }
 
 //! Sets the node to which the current transmitter is parented.

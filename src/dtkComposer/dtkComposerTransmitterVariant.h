@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 11 14:24:46 2012 (+0200)
+ * Last-Updated: Thu Sep 13 16:55:55 2012 (+0200)
  *           By: tkloczko
- *     Update #: 144
+ *     Update #: 145
  */
 
 /* Commentary: 
@@ -54,6 +54,9 @@ public:
 
 public:
     template <typename T> T *data(void);
+
+public:
+    QString dataDescription(void);
 
 public:
     QVariant& variant(void);

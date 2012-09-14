@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep  7 14:34:06 2012 (+0200)
+ * Last-Updated: Fri Sep 14 00:33:38 2012 (+0200)
  *           By: tkloczko
- *     Update #: 282
+ *     Update #: 317
  */
 
 /* Commentary: 
@@ -69,6 +69,17 @@ template <typename T> inline void dtkComposerTransmitterEmitter<T>::setData(T *d
 template <typename T> inline T *dtkComposerTransmitterEmitter<T>::data(void)
 {
     return m_data;
+};
+
+#include <dtkCore/dtkAbstractData.h>
+#include <typeinfo>
+
+template <typename T> QString dtkComposerTransmitterEmitter<T>::dataIdentifier(void)
+{
+    if (typeid(dtkAbstractData*).before(typeid(m_data)))
+        return this->dtkAbstractDataIdentifier(static_cast<void *>(m_data));
+
+    return typeid(*m_data).name();
 };
 
 //! Returns the data as a modifiable reference.
@@ -145,6 +156,13 @@ template <typename T> inline void dtkComposerTransmitterEmitterVector<T>::setDat
 template <typename T> inline dtkContainerVector<T> *dtkComposerTransmitterEmitterVector<T>::data(void)
 {
     return m_vector;
+};
+
+#include <dtkCore/dtkAbstractObject>
+
+template <typename T> QString dtkComposerTransmitterEmitterVector<T>::dataIdentifier(void)
+{
+    return m_vector->identifier();
 };
 
 //! Returns true when the emitter is connected to more than one

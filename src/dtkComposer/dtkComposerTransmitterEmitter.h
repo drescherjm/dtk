@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:33:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Aug  7 15:29:58 2012 (+0200)
+ * Last-Updated: Thu Sep 13 23:04:06 2012 (+0200)
  *           By: tkloczko
- *     Update #: 132
+ *     Update #: 136
  */
 
 /* Commentary: 
@@ -45,6 +45,9 @@ public:
     inline T *data(void);
 
 public:
+    virtual QString dataIdentifier(void);
+
+public:
     virtual bool enableCopy(void);
 
 public:
@@ -73,6 +76,9 @@ public:
     inline void setData(dtkContainerVector<T> *vector);
 
     inline dtkContainerVector<T> *data(void);
+
+public:
+    QString dataIdentifier(void);
 
 public:
     bool enableCopy(void);

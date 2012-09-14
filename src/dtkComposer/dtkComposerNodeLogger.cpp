@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 -Nicolas Niclausse , Inria.
  * Created: Mon Feb 27 12:38:46 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Aug  4 00:45:13 2012 (+0200)
+ * Last-Updated: Thu Sep 13 16:58:58 2012 (+0200)
  *           By: tkloczko
- *     Update #: 46
+ *     Update #: 48
  */
 
 /* Commentary:
@@ -44,10 +44,13 @@ dtkComposerNodeLogger::~dtkComposerNodeLogger(void)
 
 void dtkComposerNodeLogger::run(void)
 {
-    foreach(QVariant q,  d->receiver.allData())
-        if (q.canConvert(QVariant::String))
-            dtkInfo() << q.toString();
-        else
-            dtkInfo() << q;
+    // foreach(QVariant q,  d->receiver.allData())
+    //     if (q.canConvert(QVariant::String))
+    //         dtkInfo() << q.toString();
+    //     else
+    //         dtkInfo() << q;
+
+
+    dtkDebug() << d->receiver.dataDescription();
 }
 

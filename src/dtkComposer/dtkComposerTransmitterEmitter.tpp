@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep 14 00:33:38 2012 (+0200)
+ * Last-Updated: Fri Sep 14 10:05:54 2012 (+0200)
  *           By: tkloczko
- *     Update #: 317
+ *     Update #: 318
  */
 
 /* Commentary: 
@@ -77,7 +77,7 @@ template <typename T> inline T *dtkComposerTransmitterEmitter<T>::data(void)
 template <typename T> QString dtkComposerTransmitterEmitter<T>::dataIdentifier(void)
 {
     if (typeid(dtkAbstractData*).before(typeid(m_data)))
-        return this->dtkAbstractDataIdentifier(static_cast<void *>(m_data));
+        return (static_cast<void *>(m_data))->identifier();
 
     return typeid(*m_data).name();
 };

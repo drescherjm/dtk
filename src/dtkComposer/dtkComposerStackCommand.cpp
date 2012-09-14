@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. sept. 13 15:55:06 2012 (+0200)
+ * Last-Updated: ven. sept. 14 10:17:01 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 4480
+ *     Update #: 4486
  */
 
 /* Commentary: 
@@ -1982,7 +1982,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
             command->setGraph(d->graph);
             command->setOriginNode(origin);
             command->setTargetNode(source);
-            command->setOriginPosition(origin->sceneBoundingRect().topLeft());
+            command->setOriginPosition(e->origin_pos );
             command->setTargetPosition(origin->sceneBoundingRect().topLeft());
             command->redo();
 

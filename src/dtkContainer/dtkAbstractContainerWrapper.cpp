@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:51:33 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Aug  9 14:50:29 2012 (+0200)
+ * Last-Updated: Thu Sep 13 16:50:58 2012 (+0200)
  *           By: tkloczko
- *     Update #: 41
+ *     Update #: 42
  */
 
 /* Commentary: 
@@ -101,6 +101,9 @@ dtkAbstractContainerWrapper *dtkAbstractContainerWrapper::container(void)
 
 QString dtkAbstractContainerWrapper::identifier(void) const
 {
+    if (m_container)
+        return m_container->identifier();
+
     return "dtkAbstractContainerWrapper";
 }
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. août 28 18:01:02 2012 (+0200)
+ * Last-Updated: ven. sept. 14 15:59:33 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 361
+ *     Update #: 373
  */
 
 /* Commentary: 
@@ -179,6 +179,11 @@ bool dtkComposer::open(QString file)
 
 bool dtkComposer::save(QString file, dtkComposerWriter::Type type)
 {
+    saveNode(d->scene->root(), file, type);
+}
+
+bool dtkComposer::saveNode(dtkComposerSceneNodeComposite *node, QString file, dtkComposerWriter::Type type)
+{
     QString fName = d->fileName;
 
     if(!file.isEmpty())
@@ -186,7 +191,7 @@ bool dtkComposer::save(QString file, dtkComposerWriter::Type type)
 
     dtkComposerWriter writer;
     writer.setScene(d->scene);
-    writer.write(fName, type);
+    writer.writeNode(node, fName, type);
 
     const QFileInfo fi(fName);
     d->fileName = fi.absoluteFilePath();

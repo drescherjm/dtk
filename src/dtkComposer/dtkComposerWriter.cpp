@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 14:49:41 2012 (+0200)
- *           By: tkloczko
- *     Update #: 501
+ * Last-Updated: ven. sept. 14 15:56:55 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 507
  */
 
 /* Commentary: 
@@ -110,7 +110,15 @@ void dtkComposerWriter::write(const QString& fileName, Type type)
     if(!d->scene)
         return;
 
-    QDomDocument document = this->toXML(d->scene->root(), false);
+    writeNode(d->scene->root(), fileName, type);
+}
+
+void dtkComposerWriter::writeNode(dtkComposerSceneNodeComposite *node, const QString& fileName, Type type)
+{
+    if(!d->scene)
+        return;
+
+    QDomDocument document = this->toXML(node, false);
 
     QFile file(fileName);
 

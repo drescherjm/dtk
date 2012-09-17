@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: mar. sept. 11 14:09:43 2012 (+0200)
+ * Last-Updated: lun. sept. 17 12:56:20 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 2249
+ *     Update #: 2275
  */
 
 /* Commentary:
@@ -402,6 +402,7 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
 
         QList<dtkComposerSceneNode *> selected_nodes;
         QList<dtkComposerSceneNote *> selected_notes;
+        QList<dtkComposerSceneEdge *> selected_edges;
 
         // retrieve items to be deleted
 
@@ -410,14 +411,16 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
                 selected_nodes << snode;
             if (dtkComposerSceneNote *snote = dynamic_cast<dtkComposerSceneNote *>(item))
                 selected_notes << snote;
+            if (dtkComposerSceneEdge *sedge = dynamic_cast<dtkComposerSceneEdge *>(item))
+                selected_edges << sedge;
         }
 
         // multiple node deletion
 
-        if(selected_nodes.count() > 1) {
+        if(selected_nodes.count() + selected_edges.count() > 1 ) {
 
             dtkComposerStackCommand *group = new dtkComposerStackCommand;
-            group->setText("Destroy a set of nodes");
+            group->setText("Destroy a set of nodes/edges");
 
             foreach(dtkComposerSceneNode *node, selected_nodes) {
 
@@ -425,6 +428,23 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
                 command->setScene(this);
                 command->setGraph(d->graph);
                 command->setNode(node);
+            }
+
+            foreach(dtkComposerSceneEdge *edge, selected_edges) {
+
+                // ne need to destroy edge if the src or dest node will be destroyed
+                bool skip = false;
+                foreach(dtkComposerSceneNode *node, selected_nodes)
+                    if (edge->source()->node() == node || edge->destination()->node() == node) {
+                        skip = true;
+                    }
+
+                if (!skip) {
+                    dtkComposerStackCommandDestroyEdge *command = new dtkComposerStackCommandDestroyEdge(group);
+                    command->setScene(this);
+                    command->setGraph(d->graph);
+                    command->setEdge(edge);
+                }
             }
 
             d->stack->push(group);
@@ -439,7 +459,19 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
             command->setNode(selected_nodes.first());
 
             d->stack->push(command);
+
+        // single edge deletion
+
+        } else if(selected_edges.count() == 1) {
+
+            dtkComposerStackCommandDestroyEdge *command = new dtkComposerStackCommandDestroyEdge;
+            command->setScene(this);
+            command->setGraph(d->graph);
+            command->setEdge(selected_edges.first());
+
+            d->stack->push(command);
         }
+
 
         // multiple note deletion
 

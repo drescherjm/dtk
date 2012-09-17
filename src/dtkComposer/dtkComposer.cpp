@@ -179,7 +179,7 @@ bool dtkComposer::open(QString file)
 
 bool dtkComposer::save(QString file, dtkComposerWriter::Type type)
 {
-    saveNode(d->scene->root(), file, type);
+    return saveNode(d->scene->root(), file, type);
 }
 
 bool dtkComposer::saveNode(dtkComposerSceneNodeComposite *node, QString file, dtkComposerWriter::Type type)

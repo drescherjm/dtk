@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. sept. 14 15:56:55 2012 (+0200)
+ * Last-Updated: lun. sept. 17 10:27:55 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 507
+ *     Update #: 515
  */
 
 /* Commentary: 
@@ -99,7 +99,8 @@ QDomDocument dtkComposerWriter::toXML(dtkComposerSceneNodeComposite *rootNode, b
             root.appendChild(this->writeNode(node, root, document));
 
         foreach(dtkComposerSceneEdge *edge, rootNode->edges())
-            root.appendChild(this->writeEdge(edge, root, document));
+            if (addSelf || (edge->source()->node() != rootNode && edge->destination()->node() != rootNode))
+                root.appendChild(this->writeEdge(edge, root, document));
     }
 
     return document;

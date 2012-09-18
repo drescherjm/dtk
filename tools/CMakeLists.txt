@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:06:43 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue Jun 19 16:27:54 2012 (+0200)
+## Last-Updated: Tue Sep 18 10:47:22 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 20
+##     Update #: 29
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,15 +17,28 @@
 ## 
 ######################################################################
 
-add_subdirectory(dtkCreator)
 add_subdirectory(dtkDeploy)
 add_subdirectory(dtkTestGenerator)
 add_subdirectory(dtkPluginGenerator)
-add_subdirectory(dtksh)
 add_subdirectory(dtkHeadersBuilder)
 add_subdirectory(dtkHeadersMover)
-add_subdirectory(dtkComposerEvaluator)
-if(MPI_FOUND)
-add_subdirectory(dtkComposerEvaluatorSlave)
-endif(MPI_FOUND)
-add_subdirectory(dtkDistributedServer)
+
+if(DTK_BUILD_SCRIPT)
+  add_subdirectory(dtksh)
+endif(DTK_BUILD_SCRIPT)
+
+if(DTK_BUILD_COMPOSER)
+  add_subdirectory(dtkComposerEvaluator)
+endif(DTK_BUILD_COMPOSER)
+
+if(MPI_FOUND AND DTK_BUILD_DISTRIBUTED AND DTK_BUILD_COMPOSER)
+  add_subdirectory(dtkComposerEvaluatorSlave)
+endif(MPI_FOUND AND DTK_BUILD_DISTRIBUTED AND DTK_BUILD_COMPOSER)
+
+if(DTK_BUILD_DISTRIBUTED AND DTK_BUILD_COMPOSER)
+  add_subdirectory(dtkDistributedServer)
+endif(DTK_BUILD_DISTRIBUTED AND DTK_BUILD_COMPOSER)
+
+if(DTK_BUILD_COMPOSER AND DTK_BUILD_DISTRIBUTED)
+  add_subdirectory(dtkCreator)
+endif(DTK_BUILD_COMPOSER AND DTK_BUILD_DISTRIBUTED)

@@ -29,14 +29,14 @@
 // dtkContainerVector interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class DTKCONTAINER_EXPORT dtkContainerVector : public dtkAbstractContainerOrdered<T>
+template <typename T> class dtkContainerVector : public dtkAbstractContainerOrdered<T>
 {
 public:
-     dtkContainerVector(void);
-     dtkContainerVector(qlonglong size);
-     dtkContainerVector(qlonglong size, const T& value);
-     dtkContainerVector(const dtkContainerVector<T>& other);
-    ~dtkContainerVector(void);
+             dtkContainerVector(void);
+             dtkContainerVector(qlonglong size);
+             dtkContainerVector(qlonglong size, const T& value);
+             dtkContainerVector(const dtkContainerVector<T>& other);
+    virtual ~dtkContainerVector(void);
 
 public:
     QString identifier(void) const;
@@ -148,8 +148,8 @@ private:
 // // Helper functions
 // // /////////////////////////////////////////////////////////////////
 
-template <typename T> DTKCONTAINER_EXPORT dtkContainerVector<T> dtkContainerVectorFromQVector(const QVector<T>& vector);
-template <typename T> DTKCONTAINER_EXPORT QVector<T> dtkContainerVectorToQVector(const dtkContainerVector<T>& vector);
+template <typename T> dtkContainerVector<T> dtkContainerVectorFromQVector(const QVector<T>& vector);
+template <typename T> QVector<T> dtkContainerVectorToQVector(const dtkContainerVector<T>& vector);
 
 // /////////////////////////////////////////////////////////////////
 // dtkContainerVector implementation

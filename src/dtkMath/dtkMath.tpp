@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Mar  9 11:05:40 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 21:10:02 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 89
+ * Last-Updated: Thu Sep 13 16:25:21 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 94
  */
 
 /* Commentary: 
@@ -24,14 +24,16 @@
 #include "dtkQuaternion.h"
 #include "dtkVector3D.h"
 
-static double dtkDeg2Rad(double v)
+#include <math.h>
+
+template<class T> T dtkDeg2Rad(const T& value)
 {
-    return v*M_PI/180.0;
+    return M_PI * value / 180.;    
 }
 
-static double dtkRad2Deg(double v)
+template<class T> T dtkRad2Deg(const T& value)
 {
-    return v*180.0/M_PI;
+    return 180. * value / M_PI;    
 }
 
 template <class T> dtkVector3D<T> dtkRotate(const dtkQuaternion<T>& quaternion, const dtkVector3D<T>& vector)

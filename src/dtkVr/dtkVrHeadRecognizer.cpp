@@ -186,9 +186,9 @@ void dtkVrHeadRecognizer::onMoved(void)
     double camera_position[3];
     double camera_focalpnt[3];
     
-    d->view->cameraUp(camera_up);
-    d->view->cameraPosition(camera_position);
-    d->view->cameraFocalPoint(camera_focalpnt);
+//    d->view->cameraUp(camera_up);
+//    d->view->cameraPosition(camera_position);
+//    d->view->cameraFocalPoint(camera_focalpnt);
 
     dtkVector3D<double> u_xtk = dtkVector3D<double>(camera_up[0], camera_up[1], camera_up[2]);
     dtkVector3D<double> p_xtk = dtkVector3D<double>(camera_position[0], camera_position[1], camera_position[2]);
@@ -210,7 +210,7 @@ void dtkVrHeadRecognizer::onMoved(void)
     dtkVector3D<double> d_xtk = cam_to_xtk*d_art;
     dtkVector3D<double> c_xtk = ((p_xtk - f_xtk).norm() / (z_art - f_art).norm()) * d_xtk + p_xtk;
     
-    d->view->setCameraPosition(c_xtk[0], c_xtk[1], c_xtk[2]);
+//    d->view->setCameraPosition(c_xtk[0], c_xtk[1], c_xtk[2]);
     d->view->update();
 
     d->last = p_art;

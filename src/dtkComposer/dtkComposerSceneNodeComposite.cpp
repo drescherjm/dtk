@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May 21 22:54:39 2012 (+0200)
+ * Last-Updated: Tue Sep 18 11:16:35 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 898
+ *     Update #: 924
  */
 
 /* Commentary: 
@@ -17,6 +17,8 @@
  *
  */
 
+#include <dtkConfig.h>
+
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerSceneEdge.h"
 #include "dtkComposerSceneNode.h"
@@ -25,14 +27,16 @@
 #include "dtkComposerSceneNote.h"
 #include "dtkComposerScenePort.h"
 #include "dtkComposerWriter.h"
+#if defined(DTK_BUILD_DISTRIBUTED)
 #include "dtkComposerNodeRemote.h"
+#endif
 
 #include <dtkLog/dtkLog.h>
 
-#include <dtkConfig.h>
-
+#if defined(DTK_BUILD_DISTRIBUTED)
 #include <dtkDistributed/dtkDistributedController.h>
 #include <dtkDistributed/dtkDistributedMimeData.h>
+#endif
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerSceneNodeComposite
@@ -210,8 +214,7 @@ bool dtkComposerSceneNodeComposite::flattened(void)
     return d->flattened || d->root;
 }
 
-// return true if node is visible, ie, it is flatenned and all it's parent are.
-// (we ignore 'entered' value on purpose)
+// return true if node is visible, ie, it is flatenned and all it's parent are ( or entered )
 bool dtkComposerSceneNodeComposite::visible(void)
 {
 
@@ -221,7 +224,7 @@ bool dtkComposerSceneNodeComposite::visible(void)
     if (dynamic_cast<dtkComposerSceneNodeControl *>(this->parent()))
         return dynamic_cast<dtkComposerSceneNodeComposite *>(this->parent()->parent())->visible();
 
-    return (d->flattened &&  (dynamic_cast<dtkComposerSceneNodeComposite *>(this->parent()))->visible()) ;
+    return (d->entered || ( d->flattened &&  (dynamic_cast<dtkComposerSceneNodeComposite *>(this->parent()))->visible())) ;
 }
 
 void dtkComposerSceneNodeComposite::enter(void)
@@ -543,21 +546,21 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
     qreal radius = this->embedded() ? 0.0 : 5.0;
 
     if (this->isSelected()) {
-        painter->setPen(QPen(Qt::magenta, 2, Qt::SolidLine));
+        painter->setPen(QPen(Qt::magenta, 3, Qt::SolidLine));
         painter->setBrush(Qt::NoBrush);
-        painter->drawRoundedRect(d->rect.adjusted(-2, -2, 2, 2), radius, radius);
+        painter->drawRoundedRect(d->rect.adjusted(-1, -1, 1, 1), radius, radius);
     }
 
     if(d->revealed) {
-        painter->setPen(QPen(Qt::black, 1, Qt::DashLine));
+        painter->setPen(QPen(Qt::darkGray, 1, Qt::DashLine));
         painter->setBrush(QColor(10, 10, 10, 120));
     } else {
         QLinearGradient gradiant(d->rect.left(), d->rect.top(), d->rect.left(), d->rect.bottom());
         gradiant.setColorAt(0.0, QColor(Qt::darkGray));
-        gradiant.setColorAt(0.3, QColor(Qt::darkGray).darker().darker());
+        gradiant.setColorAt(10 / d->rect.height(), QColor(Qt::darkGray).darker().darker());
         gradiant.setColorAt(1.0, QColor(Qt::darkGray).darker().darker().darker());
 
-        painter->setPen(QPen(Qt::black, 1, Qt::SolidLine));
+        painter->setPen(QPen(QColor(Qt::darkGray).darker().darker(), 1, Qt::SolidLine));
         painter->setBrush(gradiant);
     }
 
@@ -612,12 +615,14 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
 
 void dtkComposerSceneNodeComposite::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
+#if defined(DTK_BUILD_DISTRIBUTED)
     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
     if(!remote) {
         event->ignore();
         return;
     }
+#endif
 
     if (event->mimeData()->hasText())
         event->acceptProposedAction();
@@ -632,12 +637,14 @@ void dtkComposerSceneNodeComposite::dragLeaveEvent(QGraphicsSceneDragDropEvent *
 
 void dtkComposerSceneNodeComposite::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
+#if defined(DTK_BUILD_DISTRIBUTED)
     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
     if(!remote) {
         event->ignore();
         return;
     }
+#endif
 
     if (event->mimeData()->hasText())
         event->acceptProposedAction();
@@ -647,6 +654,7 @@ void dtkComposerSceneNodeComposite::dragMoveEvent(QGraphicsSceneDragDropEvent *e
 
 void dtkComposerSceneNodeComposite::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
+#if defined(DTK_BUILD_DISTRIBUTED)
     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
     if(!remote) {
@@ -656,8 +664,9 @@ void dtkComposerSceneNodeComposite::dropEvent(QGraphicsSceneDragDropEvent *event
 
     const dtkDistributedMimeData *data = qobject_cast<const dtkDistributedMimeData *>(event->mimeData());
 
-    if(!data)
+    if(!data) {
         dtkDebug() << "Unable to retrieve distributed mime data";
+    }
 
     QString job = data->text();
 
@@ -669,4 +678,7 @@ void dtkComposerSceneNodeComposite::dropEvent(QGraphicsSceneDragDropEvent *event
 
     event->acceptProposedAction();
     this->update();
+#else
+    Q_UNUSED(event);
+#endif
 }

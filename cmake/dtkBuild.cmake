@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Apr 27 20:46:14 2012 (+0200)
+## Last-Updated: Thu Jul  5 15:50:42 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 206
+##     Update #: 207
 ######################################################################
 ## 
 ### Commentary: 
@@ -89,7 +89,7 @@ set(${PROJECT_NAME}_RUNTIME_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 set(${PROJECT_NAME}_CMAKE_DIR ${PROJECT_SOURCE_DIR}/cmake)
 set(${PROJECT_NAME}_USE_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Use.cmake)
 
-set(${PROJECT_NAME}_INSTALL_INCLUDE_DIR ${${PROJECT_NAME}_INSTALL_INCLUDE_DIR} ${CMAKE_INSTALL_PREFIX}/include ${CMAKE_INSTALL_PREFIX}/includes)
+set(${PROJECT_NAME}_INSTALL_INCLUDE_DIR ${${PROJECT_NAME}_INSTALL_INCLUDE_DIR} ${CMAKE_INSTALL_PREFIX}/include ${CMAKE_INSTALL_PREFIX}/include/dtk)
 set(${PROJECT_NAME}_INSTALL_LIBRARY_DIR ${LIBRARY_INSTALL_OUTPUT_PATH})
 set(${PROJECT_NAME}_INSTALL_RUNTIME_DIR ${RUNTIME_INSTALL_OUTPUT_PATH})
 set(${PROJECT_NAME}_INSTALL_CMAKE_DIR ${CMAKE_INSTALL_PREFIX}/cmake)

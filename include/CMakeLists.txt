@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Thu Sep  8 16:00:59 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Sep  9 13:14:15 2011 (+0200)
-##           By: jwintz
-##     Update #: 25
+## Last-Updated: Thu Jul  5 15:48:35 2012 (+0200)
+##           By: Julien Wintz
+##     Update #: 27
 ######################################################################
 ## 
 ### Commentary: 
@@ -21,9 +21,9 @@
 ## Installation
 ## #################################################################
 
-file(GLOB dtk_HEADERS_LAYERS "*")
+file(GLOB dtk_HEADERS_LAYERS "dtk*")
 
 list(REMOVE_AT dtk_HEADERS_LAYERS 0)
 
-install(FILES ${dtk_HEADERS_LAYERS} DESTINATION includes)
+install(FILES ${dtk_HEADERS_LAYERS} DESTINATION include/dtk)
 install(CODE "execute_process(COMMAND \${CMAKE_BINARY_DIR}/bin/dtkHeadersMover \${CMAKE_INSTALL_PREFIX})")

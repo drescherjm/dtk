@@ -40,7 +40,7 @@ public:
 
     void mapInto(const dtkMatrixSquared &, unsigned, unsigned, unsigned);
 
-    unsigned size(void) const { this->getRows(); };
+    unsigned size(void) const { return this->getRows(); };
 
     dtkMatrixSquared operator +(const dtkMatrixSquared &) const;
     dtkMatrixSquared operator -(const dtkMatrixSquared &) const;

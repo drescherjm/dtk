@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 14:55:32 2012 (+0200)
- *           By: tkloczko
- *     Update #: 510
+ * Last-Updated: jeu. sept. 13 17:33:12 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 513
  */
 
 /* Commentary: 
@@ -271,7 +271,7 @@ void dtkComposerSceneNodeControl::paint(QPainter *painter, const QStyleOptionGra
         painter->drawLine(left, right);
     }
 
-    painter->setPen(QPen(Qt::black, 1, Qt::DashLine));
+    painter->setPen(QPen(Qt::white, 1, Qt::DashLine));
 
     for(int i = 0; i < d->blocks.count()-1; i++) {
 

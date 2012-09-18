@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette lekouta, Inria.
  * Created: Thu Apr 26 16:14:44 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 26 14:14:51 2012 (+0200)
+ * Last-Updated: Thu Jul  5 12:18:51 2012 (+0200)
  *           By: tkloczko
- *     Update #: 40
+ *     Update #: 41
  */
 
 /* Commentary:
@@ -100,21 +100,21 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeArrayScalarOperator - Replace
+// dtkComposerNodeArrayScalarOperator - Set
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorReplace : public dtkComposerNodeArrayScalarOperatorModifier
+class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorSet : public dtkComposerNodeArrayScalarOperatorModifier
 {
 public:
     void run(void);
 
 public:
     inline QString type(void) {
-        return "array_scalar_replace";
+        return "array_scalar_set";
     }
 
     inline QString titleHint(void) {
-        return "Scalar array replace";
+        return "Scalar array set";
     }
 };
 
@@ -148,11 +148,11 @@ public:
 
 public:
     inline QString type(void) {
-        return "array_scalar_prenpend";
+        return "array_scalar_prepend";
     }
 
     inline QString titleHint(void) {
-        return "Scalar array prenpend";
+        return "Scalar array prepend";
     }
 };
 

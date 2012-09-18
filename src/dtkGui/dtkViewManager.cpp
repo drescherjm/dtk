@@ -48,3 +48,9 @@ dtkViewManager::~dtkViewManager(void)
 
     d = NULL;
 }
+
+void dtkViewManager::clear(void)
+{
+    d->list->clear();
+    d->layout->clear();
+}

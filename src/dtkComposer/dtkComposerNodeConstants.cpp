@@ -24,7 +24,7 @@
 
 #include <math.h>
 
-#if defined(Q_OS_WIN) && defined(MSVC)
+#if defined(Q_OS_WIN) && defined(Q_CC_MSVC)
 #define M_E 2.718281
 #endif
 

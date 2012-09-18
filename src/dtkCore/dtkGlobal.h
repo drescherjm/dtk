@@ -22,7 +22,8 @@
 
 #include <QtCore> 
 #include <QtGui>
-#include <QtDebug>
+
+#include <dtkLog/dtkLog.h>
 
 #include "dtkConfig.h"
 
@@ -74,14 +75,14 @@
 #endif
 
 #define DTK_DEFAULT_IMPLEMENTATION                                      \
-    qDebug()                                                            \
+    dtkDebug()                                                          \
     << "Using default implementation of"                                \
     << DTK_PRETTY_FUNCTION                                              \
     << "for"                                                            \
     << this->metaObject()->className()
 
 #define DTK_DEFAULT_IMPLEMENTATION_NO_MOC                               \
-    qDebug()                                                            \
+    dtkDebug()                                                          \
     << "Using default implementation of"                                \
     << DTK_PRETTY_FUNCTION
 

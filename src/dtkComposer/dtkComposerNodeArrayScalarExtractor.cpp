@@ -108,6 +108,7 @@ void dtkComposerNodeArrayScalarExtractor::run(void)
 
     else
         dtkWarn() << "index is larger than size of the array:" << index << ">=" << array.count();
+
 }
 
 // /////////////////////////////////////////////////////////////////

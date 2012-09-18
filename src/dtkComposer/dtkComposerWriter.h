@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:40:30 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. avril 10 18:04:45 2012 (+0200)
+ * Last-Updated: ven. sept. 14 15:56:25 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 46
+ *     Update #: 50
  */
 
 /* Commentary: 
@@ -49,6 +49,7 @@ public:
 
 public:
    void write(const QString& file, Type type = Ascii);
+   void writeNode(dtkComposerSceneNodeComposite *node, const QString& file, Type type = Ascii);
 
 public:
    QDomDocument toXML(dtkComposerSceneNodeComposite *rootNode, bool addSelf = true);

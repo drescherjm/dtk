@@ -152,13 +152,13 @@ dtkSmartPointer<dtkAbstractViewInteractor> dtkAbstractViewFactory::interactorSma
 
 bool dtkAbstractViewFactory::registerViewType(const QString& type, dtkAbstractViewCreator func)
 {
-    qDebug()<<"dtkAbstractViewFactory::registerViewType ";
+ //   qDebug()<<"dtkAbstractViewFactory::registerViewType ";
     if(!d->creators.contains(type)) {
         d->creators.insert(type, func);
         return true;
     }
 
-    qDebug()<<"dtkAbstractViewFactory::registerViewType 2 ";
+  //  qDebug()<<"dtkAbstractViewFactory::registerViewType 2 ";
 
     return false;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri May 25 09:29:47 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jul  4 12:21:12 2012 (+0200)
- *           By: tkloczko
- *     Update #: 12
+ * Last-Updated: Tue Sep 18 11:33:30 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -32,7 +32,7 @@
 // dtkContainerVectorWrapper interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class DTKCONTAINER_EXPORT dtkContainerVectorWrapper : public dtkAbstractContainerWrapper
+template <typename T> class dtkContainerVectorWrapper : public dtkAbstractContainerWrapper
 {
 public:
      dtkContainerVectorWrapper(dtkAbstractData *parent = 0);

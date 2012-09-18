@@ -35,6 +35,7 @@
 #include "dtkComposerStackCommand.h"
 #include "dtkComposerStackUtils.h"
 #include "dtkComposerWriter.h"
+#include "dtkCore/dtkGlobal.h"
 
 dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(new dtkComposerScenePrivate)
 {
@@ -164,7 +165,7 @@ void dtkComposerScene::setCurrent(dtkComposerSceneNode *node)
     else if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node))
         d->current_node = composite;
     else
-        qDebug() << __func__ << "Node should be a composite one";
+        qDebug() << DTK_PRETTY_FUNCTION << "Node should be a composite one";
 }
 
 void dtkComposerScene::setCurrent(dtkComposerSceneNodeComposite *current)

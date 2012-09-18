@@ -31,7 +31,7 @@
 // dtkComposerTransmitterEmitter interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class DTKCOMPOSER_EXPORT dtkComposerTransmitterEmitter : public dtkComposerTransmitter
+template <typename T> class dtkComposerTransmitterEmitter : public dtkComposerTransmitter
 {
 public:
      dtkComposerTransmitterEmitter(dtkComposerNode *parent = 0);
@@ -59,7 +59,7 @@ private:
 // dtkComposerTransmitterEmitterVector interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class DTKCOMPOSER_EXPORT dtkComposerTransmitterEmitterVector : public dtkComposerTransmitterEmitter<T>
+template <typename T> class dtkComposerTransmitterEmitterVector : public dtkComposerTransmitterEmitter<T>
 {
 public:
      dtkComposerTransmitterEmitterVector(dtkComposerNode *parent = 0);

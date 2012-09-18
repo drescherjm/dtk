@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: jeu. sept. 13 14:39:30 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 799
+ * Last-Updated: Tue Sep 18 11:34:30 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 800
  */
 
 /* Commentary:
@@ -96,7 +96,7 @@ void dtkDistributedSocket::send(QVariant variant, QString jobid, qint16 target)
             dtkDebug() << "pointer type, remove *"<< type;
         }
         dtkAbstractData *data = dtkAbstractDataFactory::instance()->create(type)->fromVariant(variant);
-        dtkDebug() << "serializing " << data->identifier();
+        dtkDebug() << DTK_PRETTY_FUNCTION << data->identifier();
         array = data->serialize();
     }
 

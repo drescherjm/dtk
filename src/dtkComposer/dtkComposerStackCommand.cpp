@@ -607,7 +607,7 @@ void dtkComposerStackCommandCreateEdge::setParent(void)
     else if(e->source->node()->parent()->parent() == e->destination->node()->parent()->parent())
         e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->destination->node()->parent()->parent());
     else
-        qDebug() << __func__ << "Unhandled case" ;
+        qDebug() << DTK_PRETTY_FUNCTION << "Unhandled case" ;
 }
 
 void dtkComposerStackCommandCreateEdge::setParent(dtkComposerSceneNodeComposite *parent)
@@ -2115,7 +2115,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
                 }
 
 
-                // qDebug() << __func__ << "input" << target->inputDegree(proxy) + target->outputDegree(proxy);
+                // qDebug() << DTK_PRETTY_FUNCTION << "input" << target->inputDegree(proxy) + target->outputDegree(proxy);
 
                 if(target->inputDegree(proxy) + target->outputDegree(proxy) == 0) {
 
@@ -2166,7 +2166,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
                 }
 
 
-                // qDebug() << __func__ << "input" << target->inputDegree(proxy) + target->outputDegree(proxy);
+                // qDebug() << DTK_PRETTY_FUNCTION << "input" << target->inputDegree(proxy) + target->outputDegree(proxy);
 
                 if(source->inputDegree(proxy) + source->outputDegree(proxy) == 0) {
 
@@ -2198,7 +2198,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
             } else {
 
-                qDebug() << __func__ << "Unhandled case (input)";
+                qDebug() << DTK_PRETTY_FUNCTION << "Unhandled case (input)";
             }
         }
 
@@ -2247,7 +2247,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
                     }
                 }
 
-                // qDebug() << __func__ << "output" << target->inputDegree(proxy) + target->outputDegree(proxy);
+                // qDebug() << DTK_PRETTY_FUNCTION << "output" << target->inputDegree(proxy) + target->outputDegree(proxy);
 
                 if(target->inputDegree(proxy) + target->outputDegree(proxy) == 0) {
 
@@ -2298,7 +2298,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
                     }
                 }
 
-                // qDebug() << __func__ << "output" << target->inputDegree(proxy) + target->outputDegree(proxy);
+                // qDebug() << DTK_PRETTY_FUNCTION << "output" << target->inputDegree(proxy) + target->outputDegree(proxy);
 
                 if(source->inputDegree(proxy) + source->outputDegree(proxy) == 0) {
 
@@ -2330,7 +2330,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
             } else {
 
-                qDebug() << __func__ << "Unhandled case (output)";
+                qDebug() << DTK_PRETTY_FUNCTION << "Unhandled case (output)";
             }
         }
 
@@ -2474,7 +2474,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
             } else {
 
-                qDebug() << __func__ << "Unhandled case (input create)";
+                qDebug() << DTK_PRETTY_FUNCTION << "Unhandled case (input create)";
             }
         }
 
@@ -2580,7 +2580,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
             } else {
 
-                qDebug() << __func__ << "Unhandled case (output create)";
+                qDebug() << DTK_PRETTY_FUNCTION << "Unhandled case (output create)";
             }
         }
 

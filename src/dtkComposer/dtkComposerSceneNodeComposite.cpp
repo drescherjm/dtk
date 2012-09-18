@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 11:16:35 2012 (+0200)
+ * Last-Updated: Tue Sep 18 14:52:06 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 924
+ *     Update #: 927
  */
 
 /* Commentary: 
@@ -461,6 +461,11 @@ update:
     }
 
     this->update(updateRect);
+}
+
+void dtkComposerSceneNodeComposite::resize(const QSizeF& size)
+{
+    d->rect = QRectF(d->rect.topLeft(), size);
 }
 
 void dtkComposerSceneNodeComposite::resize(qreal width, qreal height)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:32:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. mai 21 14:54:57 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 64
+ * Last-Updated: Tue Sep 18 14:52:12 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 65
  */
 
 /* Commentary: 
@@ -87,6 +87,7 @@ public:
     void layout(void);
 
 public:
+    void resize(const QSizeF& size);
     void resize(qreal width, qreal height);
 
 public:

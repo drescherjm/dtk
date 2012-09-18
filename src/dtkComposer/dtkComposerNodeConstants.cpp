@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:58:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Aug  4 00:34:12 2012 (+0200)
+ * Last-Updated: Tue Sep 18 13:54:10 2012 (+0200)
  *           By: tkloczko
- *     Update #: 30
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -16,8 +16,6 @@
 /* Change log:
  * 
  */
-
-#include "dtkComposerMetatype.h"
 
 #include "dtkComposerNodeConstants.h"
 #include "dtkComposerTransmitterEmitter.h"

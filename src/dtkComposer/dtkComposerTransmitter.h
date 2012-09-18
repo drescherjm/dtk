@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 09:14:54 2012 (+0200)
+ * Last-Updated: Tue Sep 18 16:26:48 2012 (+0200)
  *           By: tkloczko
- *     Update #: 223
+ *     Update #: 227
  */
 
 /* Commentary: 
@@ -71,9 +71,10 @@ public:
     virtual dtkAbstractContainerWrapper *container(void);
 
 public:
-    virtual int            dataType(void);
-    virtual QString  dataIdentifier(void);
-    virtual QString dataDescription(void);
+    virtual int dataType(void) = 0;
+
+    virtual QString  dataIdentifier(void) = 0;
+    virtual QString dataDescription(void) = 0;
 
 public:
     void setParentNode(dtkComposerNode *parent);

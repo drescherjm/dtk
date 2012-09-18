@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:43:14 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 12 15:28:16 2012 (+0200)
+ * Last-Updated: Tue Sep 18 13:59:38 2012 (+0200)
  *           By: tkloczko
- *     Update #: 125
+ *     Update #: 126
  */
 
 /* Commentary:
@@ -95,5 +95,8 @@ private:
 private:
    friend class dtkAbstractObjectPrivate;
 };
+
+Q_DECLARE_METATYPE(dtkAbstractObject);
+Q_DECLARE_METATYPE(dtkAbstractObject*);
 
 #endif

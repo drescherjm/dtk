@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 10:05:36 2012 (+0200)
+ * Last-Updated: Tue Sep 18 16:26:19 2012 (+0200)
  *           By: tkloczko
- *     Update #: 155
+ *     Update #: 159
  */
 
 /* Commentary: 
@@ -54,7 +54,10 @@ public:
     QVector<T*> allData(void);
 
 public:
-    int dataType(void);
+    virtual int dataType(void);
+
+    virtual QString  dataIdentifier(void);
+    virtual QString dataDescription(void);
 
 public:
     void activateEmitter(dtkComposerTransmitter        *emitter);
@@ -114,6 +117,9 @@ public:
 
 public:
     int dataType(void);
+
+    QString  dataIdentifier(void);
+    QString dataDescription(void);
 
 public:
     void activateEmitter(dtkComposerTransmitter        *emitter);

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 13:10:12 2012 (+0200)
+ * Last-Updated: Tue Sep 18 16:04:47 2012 (+0200)
  *           By: tkloczko
- *     Update #: 154
+ *     Update #: 160
  */
 
 /* Commentary: 
@@ -58,7 +58,14 @@ public:
 public:
     int dataType(void);
 
+    QString  dataIdentifier(void);
     QString dataDescription(void);
+
+public:
+    QList<int> allDataType(void);
+
+    QStringList  allDataIdentifier(void);
+    QStringList allDataDescription(void);
 
 public:
     QVariant& variant(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 16:49:25 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 13:16:27 2012 (+0200)
+ * Last-Updated: Tue Sep 18 13:52:24 2012 (+0200)
  *           By: tkloczko
- *     Update #: 41
+ *     Update #: 42
  */
 
 /* Commentary: 
@@ -16,8 +16,6 @@
 /* Change log:
  * 
  */
-
-#include "dtkComposerMetatype.h"
 
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerTransmitterEmitter.h"

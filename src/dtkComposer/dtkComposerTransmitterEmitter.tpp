@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 09:17:42 2012 (+0200)
+ * Last-Updated: Tue Sep 18 16:41:39 2012 (+0200)
  *           By: tkloczko
- *     Update #: 391
+ *     Update #: 397
  */
 
 /* Commentary: 
@@ -71,18 +71,25 @@ template <typename T> inline T *dtkComposerTransmitterEmitter<T>::data(void)
     return m_data;
 };
 
+template <typename T> int dtkComposerTransmitterEmitter<T>::dataType(void)
+{
+    return d->data_type;
+};
+
 template <typename T> QString dtkComposerTransmitterEmitter<T>::dataIdentifier(void)
 {
     if (dtkTypeInfo<T*>::dtkAbstractObjectPointer)
         return reinterpret_cast<dtkAbstractObject*>(m_data)->identifier();
 
-    return dtkComposerTransmitter::dataIdentifier();
+    return QString(QMetaType::typeName(d->data_type));
 };
 
 template <typename T> QString dtkComposerTransmitterEmitter<T>::dataDescription(void)
 {
-    if (dtkTypeInfo<T*>::dtkAbstractObjectPointer)
+    if (dtkTypeInfo<T*>::dtkAbstractObjectPointer) {
+        qDebug() << reinterpret_cast<dtkAbstractObject*>(m_data)->identifier();
         return reinterpret_cast<dtkAbstractObject*>(m_data)->description();
+    }
 
     QString address;
     QTextStream addressStream (&address);
@@ -166,7 +173,10 @@ template <typename T> inline dtkContainerVector<T> *dtkComposerTransmitterEmitte
     return m_vector;
 };
 
-#include <dtkCore/dtkAbstractObject>
+template <typename T> int dtkComposerTransmitterEmitterVector<T>::dataType(void)
+{
+    return d->data_type;
+};
 
 template <typename T> QString dtkComposerTransmitterEmitterVector<T>::dataIdentifier(void)
 {

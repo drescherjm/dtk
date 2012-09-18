@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 13:23:19 2012 (+0200)
+ * Last-Updated: Tue Sep 18 16:38:45 2012 (+0200)
  *           By: tkloczko
- *     Update #: 683
+ *     Update #: 701
  */
 
 /* Commentary: 
@@ -381,27 +381,6 @@ void dtkComposerTransmitterVariant::setDataFrom(dtkDistributedMessage *msg)
     // }
 }
 
-QString dtkComposerTransmitterVariant::dataDescription(void)
-{
-    // dtkAbstractContainerWrapper *container = this->containerFromEmitter();
-    // if (container)
-    //     return container->identifier();
-
-    // QString *string = this->data<QString>();
-
-    // if (string)
-    //     return *string;
-
-    QString description;
-
-    if (e->active_emitter) {
-        description = QString("%1: %2").arg(e->active_emitter->dataIdentifier())
-            .arg(e->active_emitter->dataDescription());
-    }
-
-    return description;
-}
-
 QVariant& dtkComposerTransmitterVariant::variant(void)
 {
     if (e->twinned)
@@ -498,6 +477,90 @@ int dtkComposerTransmitterVariant::dataType(void)
         return e->active_emitter->dataType();
 
     return d->data_type;
+}
+
+QString dtkComposerTransmitterVariant::dataIdentifier(void)
+{
+    if (dtkAbstractObject *o = d->variant.value<dtkAbstractObject*>())
+        return o->identifier();
+
+    return QString(QMetaType::typeName(this->dataType()));
+}
+
+QString dtkComposerTransmitterVariant::dataDescription(void)
+{
+    if (dtkAbstractObject *o = d->variant.value<dtkAbstractObject*>())
+        return o->description();
+
+    QString address;
+    QTextStream addressStream (&address);
+    addressStream << (d->variant.value<void*>());
+
+    return address;
+}
+
+QStringList dtkComposerTransmitterVariant::allDataIdentifier(void)
+{
+    QStringList list;
+
+    if (e->twinned) {
+
+        list << QString(QMetaType::typeName(d->data_type));
+
+    } else {
+
+        int count = e->emitters.count();
+
+        for(int i = 0; i < count; ++i) {
+            if (e->emitters.at(i)->active()) {
+                list << e->emitters.at(i)->dataIdentifier();
+            }
+        }
+
+        count = e->variants.count();
+
+        for(int i = 0; i < count; ++i) {
+            if (e->variants.at(i)->active()) {
+                list << e->variants.at(i)->dataIdentifier();
+            }
+        }
+    }
+
+    return list;
+}
+
+QStringList dtkComposerTransmitterVariant::allDataDescription(void)
+{
+    QStringList list;
+
+    if (e->twinned) {
+
+        QString address;
+        QTextStream addressStream (&address);
+        addressStream << (d->variant.value<void*>());
+
+        list << address;
+
+    } else {
+
+        int count = e->emitters.count();
+
+        for(int i = 0; i < count; ++i) {
+            if (e->emitters.at(i)->active()) {
+                list << e->emitters.at(i)->dataDescription();
+            }
+        }
+
+        count = e->variants.count();
+
+        for(int i = 0; i < count; ++i) {
+            if (e->variants.at(i)->active()) {
+                list << e->variants.at(i)->dataDescription();
+            }
+        }
+    }
+
+    return list;
 }
 
 //! 

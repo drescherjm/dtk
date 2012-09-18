@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 09:43:55 2012 (+0200)
+ * Last-Updated: Tue Sep 18 16:31:26 2012 (+0200)
  *           By: tkloczko
- *     Update #: 295
+ *     Update #: 296
  */
 
 /* Commentary: 
@@ -100,19 +100,19 @@ dtkAbstractContainerWrapper *dtkComposerTransmitter::container(void)
  *  This index results from the registering to the QMetaType system of
  *  Qt.
  */
-int dtkComposerTransmitter::dataType(void)
-{
-    return d->data_type;
-}
+// int dtkComposerTransmitter::dataType(void)
+// {
+//     return d->data_type;
+// }
 
 //! Returns the type name of the data transmitted by the transmitter.
 /*!  
  *  
  */
-QString dtkComposerTransmitter::dataIdentifier(void)
-{
-    return QString(QMetaType::typeName(this->dataType()));
-}
+// QString dtkComposerTransmitter::dataIdentifier(void)
+// {
+//     return QString(QMetaType::typeName(this->dataType()));
+// }
 
 //! Returns a description of the data.
 /*!  
@@ -124,10 +124,10 @@ QString dtkComposerTransmitter::dataIdentifier(void)
  *
  *  Otherwise, the address of the data is returned.
  */
-QString dtkComposerTransmitter::dataDescription(void)
-{
-    return QString();
-}
+// QString dtkComposerTransmitter::dataDescription(void)
+// {
+//     return QString();
+// }
 
 //! Sets the node to which the current transmitter is parented.
 /*!  

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 16 09:54:33 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 10:14:56 2012 (+0200)
+ * Last-Updated: Tue Sep 18 15:44:31 2012 (+0200)
  *           By: tkloczko
- *     Update #: 157
+ *     Update #: 159
  */
 
 /* Commentary: 
@@ -160,6 +160,13 @@ template <typename T> class dtkTypeInfo
 { 
 public:
     enum { dtkAbstractObjectPointer = false };
+};	
+
+// Specialize to avoid sizeof(void) warning
+
+template<> class dtkTypeInfo<void*>
+{
+    enum { isQObjectPointer = false };
 };
 
 // Partial Specialization

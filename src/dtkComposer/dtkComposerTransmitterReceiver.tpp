@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 13:13:25 2012 (+0200)
+ * Last-Updated: Tue Sep 18 16:19:18 2012 (+0200)
  *           By: tkloczko
- *     Update #: 486
+ *     Update #: 494
  */
 
 /* Commentary: 
@@ -163,6 +163,24 @@ template <typename T> int dtkComposerTransmitterReceiver<T>::dataType(void)
         return active_variant->dataType();
 
     return 0;
+};
+
+//! 
+/*! 
+ *  
+ */
+template <typename T> QString dtkComposerTransmitterReceiver<T>::dataIdentifier(void)
+{
+    return QString(QMetaType::typeName(this->dataType()));
+};
+
+//! 
+/*! 
+ *  
+ */
+template <typename T> QString dtkComposerTransmitterReceiver<T>::dataDescription(void)
+{
+    return QString(QMetaType::typeName(this->dataType()));
 };
 
 //! 
@@ -476,6 +494,24 @@ template <typename T> int dtkComposerTransmitterReceiverVector<T>::dataType(void
         return active_variant->dataType();
 
     return 0;
+};
+
+//! 
+/*! 
+ *  
+ */
+template <typename T> QString dtkComposerTransmitterReceiverVector<T>::dataIdentifier(void)
+{
+    return QString(QMetaType::typeName(this->dataType()));
+};
+
+//! 
+/*! 
+ *  
+ */
+template <typename T> QString dtkComposerTransmitterReceiverVector<T>::dataDescription(void)
+{
+    return QString(QMetaType::typeName(this->dataType()));
 };
 
 //! 

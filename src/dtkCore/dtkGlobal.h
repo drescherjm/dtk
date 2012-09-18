@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 16 09:54:33 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 15:01:50 2012 (+0200)
+ * Last-Updated: Tue Sep 18 10:14:56 2012 (+0200)
  *           By: tkloczko
- *     Update #: 150
+ *     Update #: 157
  */
 
 /* Commentary: 
@@ -149,6 +149,34 @@
 
 #define DTK_D(Class) Class##Private *const d = d_func()
 #define DTK_Q(Class) Class *const q = q_func()
+
+// /////////////////////////////////////////////////////////////////
+// dtkTypeInfo
+// /////////////////////////////////////////////////////////////////
+
+class dtkAbstractObject;
+
+template <typename T> class dtkTypeInfo
+{ 
+public:
+    enum { dtkAbstractObjectPointer = false };
+};
+
+// Partial Specialization
+
+template <typename T> class dtkTypeInfo<T*>
+{
+public:
+    typedef int  yes_type;
+    typedef char  no_type;
+
+public:
+    static yes_type check(dtkAbstractObject*);
+    static no_type  check(...);
+
+public:
+    enum { dtkAbstractObjectPointer = (sizeof(check(static_cast<T*>(0))) == sizeof(yes_type)) };
+};
 
 // /////////////////////////////////////////////////////////////////
 // Helper functions

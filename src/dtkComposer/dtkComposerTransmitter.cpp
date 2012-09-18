@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep 14 10:11:30 2012 (+0200)
+ * Last-Updated: Tue Sep 18 09:43:55 2012 (+0200)
  *           By: tkloczko
- *     Update #: 269
+ *     Update #: 295
  */
 
 /* Commentary: 
@@ -94,32 +94,39 @@ dtkAbstractContainerWrapper *dtkComposerTransmitter::container(void)
     return d->container;
 }
 
-//! Returns the type of the data contained by the transmitter.
+//! Returns the identifier index of the data transmitted by the
+//! transmitter.
 /*!  
- *  This data is always stored as a variant.
+ *  This index results from the registering to the QMetaType system of
+ *  Qt.
  */
-QVariant::Type dtkComposerTransmitter::type(void) const
+int dtkComposerTransmitter::dataType(void)
 {
-    return d->type.type();
+    return d->data_type;
 }
 
-//! Returns the type name of the data contained by the transmitter.
+//! Returns the type name of the data transmitted by the transmitter.
 /*!  
- *  This data is always stored as a variant.
+ *  
  */
-QString dtkComposerTransmitter::typeName(void) const
-{
-    return d->type.typeName();
-}
-
 QString dtkComposerTransmitter::dataIdentifier(void)
 {
-    return QString();
+    return QString(QMetaType::typeName(this->dataType()));
 }
 
-QString dtkComposerTransmitter::dataIdentifier(void *data)
+//! Returns a description of the data.
+/*!  
+ *  For atomic types, such as boolean, integer, double and QString,
+ *  the data value is returned.
+ *
+ *  For objects deriving from dtkAbstractObject, this method wraps the
+ *  description() method.
+ *
+ *  Otherwise, the address of the data is returned.
+ */
+QString dtkComposerTransmitter::dataDescription(void)
 {
-    return static_cast<dtkAbstractObject *>(data)->identifier();
+    return QString();
 }
 
 //! Sets the node to which the current transmitter is parented.
@@ -186,16 +193,30 @@ void dtkComposerTransmitter::activateEmitter(dtkComposerTransmitterVariant *emit
     DTK_UNUSED(emitter);
 }
 
-//! 
+//! Sets the type of data transmission.
 /*! 
- *  
+ *  The transmission type can be either CopyOnWrite, Copy, or
+ *  Reference. By default, the transmission type is CopyOnWrite.
+ *
+ *  When CopyOnWrite is on, the receiver checks if it is the only one
+ *  that receives the data. For that, it calls enableCopy() method. If
+ *  false is returned, it means that it is the only receiver for this
+ *  data and no copy is performed. Otherwise, in order to ensure that
+ *  the received data has not be modified, a copy is carried out.
+ *
+ *  When Copy is on, the copy is enforced whatever the number of
+ *  receivers for the same data.
+ *
+ *  When reference is on, no copy is carried out, the data is likely
+ *  not the same that the one expected if another node has modified it
+ *  before.
  */
 void dtkComposerTransmitter::setDataTransmission(DataTransmission value)
 {
     d->data_transmission = value;
 }
 
-//! 
+//! Returns the type of the data transmission.
 /*! 
  *  
  */
@@ -204,9 +225,10 @@ dtkComposerTransmitter::DataTransmission dtkComposerTransmitter::dataTransmissio
     return d->data_transmission;
 }
 
-//! 
+//! Returns true if more than one receiver is connected to one
+//! emitter. Returns false otherwise.
 /*! 
- *  
+ *  Returns trgue by default.
  */
 bool dtkComposerTransmitter::enableCopy(void)
 {
@@ -474,7 +496,7 @@ bool dtkComposerTransmitter::onTransmittersDisconnected(dtkComposerTransmitter *
  */
 QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter)
 {
-    debug.nospace() << "dtkComposerTransmitter:" << transmitter.kindName() << transmitter.typeName();
+    debug.nospace() << "dtkComposerTransmitter:" << transmitter.kindName() << const_cast<dtkComposerTransmitter&>(transmitter).dataIdentifier();
     
     return debug.space();
 }
@@ -485,7 +507,7 @@ QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter)
  */
 QDebug operator<<(QDebug debug, dtkComposerTransmitter *transmitter)
 {
-    debug.nospace() << "dtkComposerTransmitter:" << transmitter->kindName() << transmitter->typeName();
+    debug.nospace() << "dtkComposerTransmitter:" << transmitter->kindName() << transmitter->dataIdentifier();
     
     return debug.space();
 }

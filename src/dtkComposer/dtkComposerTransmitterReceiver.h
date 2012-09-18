@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Aug  9 15:49:18 2012 (+0200)
+ * Last-Updated: Tue Sep 18 10:05:36 2012 (+0200)
  *           By: tkloczko
- *     Update #: 151
+ *     Update #: 155
  */
 
 /* Commentary: 
@@ -52,6 +52,9 @@ public:
     QVariant& variant(void);
           
     QVector<T*> allData(void);
+
+public:
+    int dataType(void);
 
 public:
     void activateEmitter(dtkComposerTransmitter        *emitter);
@@ -108,6 +111,9 @@ public:
     dtkAbstractContainerWrapper *container(void);
 
     QVariant& variant(void);
+
+public:
+    int dataType(void);
 
 public:
     void activateEmitter(dtkComposerTransmitter        *emitter);

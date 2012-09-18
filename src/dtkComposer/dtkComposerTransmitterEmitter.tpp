@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep 14 10:12:55 2012 (+0200)
+ * Last-Updated: Tue Sep 18 09:17:42 2012 (+0200)
  *           By: tkloczko
- *     Update #: 321
+ *     Update #: 391
  */
 
 /* Commentary: 
@@ -37,9 +37,9 @@
  */
 template <typename T> inline dtkComposerTransmitterEmitter<T>::dtkComposerTransmitterEmitter(dtkComposerNode *parent) : dtkComposerTransmitter(parent)
 {
-    T t;
-    d->type.setValue(t);
+    d->data_type = qMetaTypeId<T>(reinterpret_cast<T*>(0));
 
+    m_data = NULL;
     d->variant.setValue(m_data);
 };
 
@@ -71,15 +71,24 @@ template <typename T> inline T *dtkComposerTransmitterEmitter<T>::data(void)
     return m_data;
 };
 
-#include <dtkCore/dtkAbstractData.h>
-#include <typeinfo>
-
 template <typename T> QString dtkComposerTransmitterEmitter<T>::dataIdentifier(void)
 {
-    if (typeid(dtkAbstractData*).before(typeid(m_data)))
-        return this->dtkComposerTransmitter::dataIdentifier(static_cast<void *>(m_data));
+    if (dtkTypeInfo<T*>::dtkAbstractObjectPointer)
+        return reinterpret_cast<dtkAbstractObject*>(m_data)->identifier();
 
-    return typeid(*m_data).name();
+    return dtkComposerTransmitter::dataIdentifier();
+};
+
+template <typename T> QString dtkComposerTransmitterEmitter<T>::dataDescription(void)
+{
+    if (dtkTypeInfo<T*>::dtkAbstractObjectPointer)
+        return reinterpret_cast<dtkAbstractObject*>(m_data)->description();
+
+    QString address;
+    QTextStream addressStream (&address);
+    addressStream << (static_cast<const void*>(m_data));
+
+    return address;
 };
 
 //! Returns the data as a modifiable reference.
@@ -122,8 +131,7 @@ template <typename T> dtkComposerTransmitter::LinkMap dtkComposerTransmitterEmit
 
 template <typename T> inline dtkComposerTransmitterEmitterVector<T>::dtkComposerTransmitterEmitterVector(dtkComposerNode *parent) : dtkComposerTransmitterEmitter<T>(parent)
 {
-    dtkAbstractContainerWrapper w;
-    d->type.setValue(w);
+    d->data_type = qMetaTypeId<dtkAbstractContainerWrapper>(reinterpret_cast<dtkAbstractContainerWrapper*>(0));
 
     d->variant.setValue(d->container);
 };
@@ -163,6 +171,15 @@ template <typename T> inline dtkContainerVector<T> *dtkComposerTransmitterEmitte
 template <typename T> QString dtkComposerTransmitterEmitterVector<T>::dataIdentifier(void)
 {
     return m_vector->identifier();
+};
+
+template <typename T> QString dtkComposerTransmitterEmitterVector<T>::dataDescription(void)
+{
+    QString address;
+    QTextStream addressStream (&address);
+    addressStream << (static_cast<const void*>(m_vector));
+
+    return address;
 };
 
 //! Returns true when the emitter is connected to more than one

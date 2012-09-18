@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Mon Feb 27 14:28:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 13 16:28:00 2012 (+0200)
+ * Last-Updated: Mon Sep 17 16:54:10 2012 (+0200)
  *           By: tkloczko
- *     Update #: 409
+ *     Update #: 410
  */
 
 /* Commentary:
@@ -194,7 +194,7 @@ dtkComposerNodeNumberAlmosteq::~dtkComposerNodeNumberAlmosteq(void)
 
 void dtkComposerNodeNumberAlmosteq::run(void)
 {
-    if (d->receiver_lhs.type() == QVariant::LongLong && d->receiver_rhs.type() == QVariant::LongLong) {
+    if (d->receiver_lhs.dataType() == QVariant::LongLong && d->receiver_rhs.dataType() == QVariant::LongLong) {
 
         d->value = (*(d->receiver_lhs.data<qlonglong>()) == *(d->receiver_rhs.data<qlonglong>()));
         
@@ -254,7 +254,7 @@ dtkComposerNodeNumberNotalmosteq::~dtkComposerNodeNumberNotalmosteq(void)
 
 void dtkComposerNodeNumberNotalmosteq::run(void)
 {
-    if (d->receiver_lhs.type() == QVariant::LongLong && d->receiver_rhs.type() == QVariant::LongLong) {
+    if (d->receiver_lhs.dataType() == QVariant::LongLong && d->receiver_rhs.dataType() == QVariant::LongLong) {
 
         d->value = (*(d->receiver_lhs.data<qlonglong>()) != *(d->receiver_rhs.data<qlonglong>()));
         
@@ -274,7 +274,7 @@ void dtkComposerNodeNumberNotalmosteq::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryIncr::run(void)
 {
-    switch(d->receiver.type()) {
+    switch(d->receiver.dataType()) {
     case QVariant::LongLong:
         d->value_i = *(d->receiver.data<qlonglong>()) + 1;
         d->emitter.setData<qlonglong>(&d->value_i);
@@ -284,7 +284,7 @@ void dtkComposerNodeNumberOperatorUnaryIncr::run(void)
         d->emitter.setData<double>(&d->value_r);
         break;
     default:
-        dtkWarn() << "Type" << d->receiver.type() << "is not handled by the node.";
+        dtkWarn() << "Type" << d->receiver.dataType() << "is not handled by the node.";
         break;
     }
 }
@@ -295,7 +295,7 @@ void dtkComposerNodeNumberOperatorUnaryIncr::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryDecr::run(void)
 {
-    switch(d->receiver.type()) {
+    switch(d->receiver.dataType()) {
     case QVariant::LongLong:
         d->value_i = *(d->receiver.data<qlonglong>()) - 1;
         d->emitter.setData<qlonglong>(&d->value_i);
@@ -305,7 +305,7 @@ void dtkComposerNodeNumberOperatorUnaryDecr::run(void)
         d->emitter.setData<double>(&d->value_r);
         break;
     default:
-        dtkWarn() << "Type" << d->receiver.type() << "is not handled by the node.";
+        dtkWarn() << "Type" << d->receiver.dataType() << "is not handled by the node.";
         break;
     }
 }
@@ -316,7 +316,7 @@ void dtkComposerNodeNumberOperatorUnaryDecr::run(void)
 
 void dtkComposerNodeNumberOperatorUnarySqrt::run(void)
 {
-    switch(d->receiver.type()) {
+    switch(d->receiver.dataType()) {
     case QVariant::LongLong:
         d->value_r = qSqrt(*(d->receiver.data<qlonglong>()));
         break;
@@ -324,7 +324,7 @@ void dtkComposerNodeNumberOperatorUnarySqrt::run(void)
         d->value_r = qSqrt(*(d->receiver.data<qreal>()));
         break;
     default:
-        dtkWarn() << "Type" << d->receiver.type() << "is not handled by the node.";
+        dtkWarn() << "Type" << d->receiver.dataType() << "is not handled by the node.";
         break;
     }
 }
@@ -335,7 +335,7 @@ void dtkComposerNodeNumberOperatorUnarySqrt::run(void)
 
 void dtkComposerNodeNumberOperatorUnarySquare::run(void)
 {
-    switch(d->receiver.type()) {
+    switch(d->receiver.dataType()) {
     case QVariant::LongLong:
         d->value_i = *(d->receiver.data<qlonglong>());
         d->value_i *= d->value_i;
@@ -347,7 +347,7 @@ void dtkComposerNodeNumberOperatorUnarySquare::run(void)
         d->emitter.setData<double>(&d->value_r);
         break;
     default:
-        dtkWarn() << "Type" << d->receiver.type() << "is not handled by the node.";
+        dtkWarn() << "Type" << d->receiver.dataType() << "is not handled by the node.";
         break;
     }
 }
@@ -476,7 +476,7 @@ void dtkComposerNodeNumberOperatorUnaryOpp::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryCeil::run(void)
 {
-    if (d->receiver.type() == QVariant::Double)
+    if (d->receiver.dataType() == QVariant::Double)
         d->value_i = qCeil(*(d->receiver.data<qreal>()));
     else
         d->value_i = *d->receiver.data<qlonglong>();
@@ -490,7 +490,7 @@ void dtkComposerNodeNumberOperatorUnaryCeil::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryFloor::run(void)
 {
-    if (d->receiver.type() == QVariant::Double)
+    if (d->receiver.dataType() == QVariant::Double)
         d->value_i = qFloor(*(d->receiver.data<qreal>()));
     else
         d->value_i = *d->receiver.data<qlonglong>();
@@ -504,7 +504,7 @@ void dtkComposerNodeNumberOperatorUnaryFloor::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryRound::run(void)
 {
-    if (d->receiver.type() == QVariant::Double)
+    if (d->receiver.dataType() == QVariant::Double)
         d->value_i = qRound(*(d->receiver.data<qreal>()));
     else
         d->value_i = *d->receiver.data<qlonglong>();
@@ -518,7 +518,7 @@ void dtkComposerNodeNumberOperatorUnaryRound::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryAbs::run(void)
 {
-    switch(d->receiver.type()) {
+    switch(d->receiver.dataType()) {
     case QVariant::LongLong:
         d->value_i = qAbs(*(d->receiver.data<qlonglong>()));
         d->emitter.setData<qlonglong>(&d->value_i);
@@ -528,7 +528,7 @@ void dtkComposerNodeNumberOperatorUnaryAbs::run(void)
         d->emitter.setData<qreal>(&d->value_r);
         break;
     default:
-        dtkWarn() << "Type" << d->receiver.type() << "is not handled by the node.";
+        dtkWarn() << "Type" << d->receiver.dataType() << "is not handled by the node.";
         break;
     }
 }

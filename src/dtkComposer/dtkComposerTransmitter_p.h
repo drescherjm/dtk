@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Mar 12 11:43:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Aug  3 23:38:13 2012 (+0200)
+ * Last-Updated: Tue Sep 18 09:15:19 2012 (+0200)
  *           By: tkloczko
- *     Update #: 41
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -49,8 +49,10 @@ public:
     QList<dtkComposerTransmitter *> receivers;
 
 public:
+    int data_type;
+
+public:
     QVariant variant;
-    QVariant type;
 
 public:
     dtkAbstractContainerWrapper *container;

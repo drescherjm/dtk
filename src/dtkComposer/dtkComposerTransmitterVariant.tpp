@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Aug  3 14:31:25 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 10 11:09:15 2012 (+0200)
+ * Last-Updated: Tue Sep 18 10:17:10 2012 (+0200)
  *           By: tkloczko
- *     Update #: 78
+ *     Update #: 83
  */
 
 /* Commentary: 
@@ -33,8 +33,8 @@
 
 template <typename T> inline void dtkComposerTransmitterVariant::setData(T *data)
 {
-    T t;
-    d->type.setValue(t);
+    d->data_type = qMetaTypeId<T>(reinterpret_cast<T*>(0));
+
     d->variant.setValue(data);
     if (d->container) {
         delete d->container;
@@ -44,8 +44,7 @@ template <typename T> inline void dtkComposerTransmitterVariant::setData(T *data
 
 template <typename T> inline void dtkComposerTransmitterVariant::setData(dtkContainerVector<T> *data)
 {
-    dtkAbstractContainerWrapper w;
-    d->type.setValue(w);
+    d->data_type = qMetaTypeId<dtkAbstractContainerWrapper>(reinterpret_cast<dtkAbstractContainerWrapper*>(0));
 
     if (!d->container)
         d->container = new dtkContainerVectorWrapper<T>(data);

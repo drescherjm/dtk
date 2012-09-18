@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 13 16:55:55 2012 (+0200)
+ * Last-Updated: Tue Sep 18 10:28:18 2012 (+0200)
  *           By: tkloczko
- *     Update #: 145
+ *     Update #: 151
  */
 
 /* Commentary: 
@@ -50,12 +50,14 @@ public:
 
 public:
     void setDataFrom(dtkComposerTransmitterVariant *source);
-    void setDataFromMsg(dtkDistributedMessage *msg);
+    void setDataFrom(dtkDistributedMessage *msg);
 
 public:
     template <typename T> T *data(void);
 
 public:
+    int dataType(void);
+
     QString dataDescription(void);
 
 public:
@@ -89,10 +91,6 @@ public:
     Kind kind(void) const;
 
     QString kindName(void) const;
-
-public:
-    QVariant::Type     type(void) const;
-    QString        typeName(void) const;
 
 public:
     void setTypes(QList<QVariant::Type> types);

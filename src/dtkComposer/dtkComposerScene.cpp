@@ -165,11 +165,7 @@ void dtkComposerScene::setCurrent(dtkComposerSceneNode *node)
     else if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node))
         d->current_node = composite;
     else
-<<<<<<< HEAD
-        qDebug() << "dtkComposerScene::setCurrent" << "Node should be a composite one";
-=======
         qDebug() << DTK_PRETTY_FUNCTION << "Node should be a composite one";
->>>>>>> c78500e7a250ff3ce02866c59ceb211acc9aa3ef
 }
 
 void dtkComposerScene::setCurrent(dtkComposerSceneNodeComposite *current)

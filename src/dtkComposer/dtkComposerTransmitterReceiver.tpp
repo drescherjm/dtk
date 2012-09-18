@@ -206,10 +206,12 @@ template <typename T> void dtkComposerTransmitterReceiver<T>::activateEmitter(dt
 template <typename T> bool dtkComposerTransmitterReceiver<T>::enableCopy(void)
 {
     if (active_emitter)
-        return active_emitter->enableCopy();;
+        return active_emitter->enableCopy();
 
     if (active_variant)
         return active_variant->enableCopy();
+
+    return false;
 }
 
 //! Returns.
@@ -517,10 +519,12 @@ template <typename T> void dtkComposerTransmitterReceiverVector<T>::activateEmit
 template <typename T> bool dtkComposerTransmitterReceiverVector<T>::enableCopy(void)
 {
     if (active_emitter)
-        return active_emitter->enableCopy();;
+        return active_emitter->enableCopy();
 
     if (active_variant)
         return active_variant->enableCopy();
+    
+    return false;
 }
     
 //! 

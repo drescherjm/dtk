@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 14:48:53 2012 (+0200)
+ * Last-Updated: Wed Sep 12 15:37:20 2012 (+0200)
  *           By: tkloczko
- *     Update #: 144
+ *     Update #: 145
  */
 
 /* Commentary: 
@@ -37,6 +37,9 @@ public:
              dtkAbstractProcess(      dtkAbstractProcess *parent = 0);
              dtkAbstractProcess(const dtkAbstractProcess& other);
     virtual ~dtkAbstractProcess(void);
+
+public:
+   virtual dtkAbstractProcess *clone(void);
 
 public:
     dtkAbstractProcess& operator = (const dtkAbstractProcess& other);

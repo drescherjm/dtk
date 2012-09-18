@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 23 17:55:16 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 14
+ * Last-Updated: lun. sept. 10 17:08:21 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 16
  */
 
 /* Commentary: 
@@ -63,4 +63,9 @@ dtkViewLayoutItem *dtkViewLayout::current(void)
 void dtkViewLayout::setCurrent(dtkViewLayoutItem *item)
 {
     d->current = item;
+}
+
+void dtkViewLayout::clear(void)
+{
+    d->root->clear();
 }

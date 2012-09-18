@@ -27,17 +27,17 @@
 #include <typeinfo>
 
 enum dtkContainerType {
-        dtkContainerTypeNone,
-        dtkContainerTypeOrdered,
-        dtkContainerTypeUnordered,
-        dtkContainerTypeAssociated
-    };
+    dtkContainerTypeNone,
+    dtkContainerTypeOrdered,
+    dtkContainerTypeUnordered,
+    dtkContainerTypeAssociated
+};
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractContainer interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class DTKCONTAINER_EXPORT dtkAbstractContainer
+template <typename T> class dtkAbstractContainer
 {
 public:
      dtkAbstractContainer(void);
@@ -85,7 +85,7 @@ public:
     virtual bool isEqual(const dtkAbstractContainer& other) const = 0;
 
 public:
-    dtkAbstractContainer<T>  operator +  (const dtkAbstractContainer<T>& other) const;
+    dtkAbstractContainer<T>& operator +  (const dtkAbstractContainer<T>& other) const;
 
     dtkAbstractContainer<T>& operator += (const dtkAbstractContainer<T>& other);
     dtkAbstractContainer<T>& operator += (const T& value);
@@ -95,8 +95,8 @@ public:
 // Debug operators
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> DTKCONTAINER_EXPORT QDebug operator << (QDebug& dbg, const dtkAbstractContainer<T>& container);
-template <typename T> DTKCONTAINER_EXPORT QDebug operator << (QDebug& dbg,       dtkAbstractContainer<T> *container);
+template <typename T> QDebug operator << (QDebug& dbg, const dtkAbstractContainer<T>& container);
+template <typename T> QDebug operator << (QDebug& dbg,       dtkAbstractContainer<T> *container);
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractContainer implementation

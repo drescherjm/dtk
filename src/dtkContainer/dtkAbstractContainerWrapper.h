@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:46:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 13:00:14 2012 (+0200)
+ * Last-Updated: Wed Jul  4 12:22:57 2012 (+0200)
  *           By: tkloczko
- *     Update #: 23
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -49,13 +49,15 @@ protected:
 public:
     void reset(void);
 
-    bool isReset(void);
+    bool isReset(void) const;
 
 public:
     dtkAbstractContainerWrapper& operator = (const dtkAbstractContainerWrapper& other);
 
 public:
     virtual dtkAbstractContainerWrapper *clone(void) const;
+
+    virtual dtkAbstractContainerWrapper *voidClone(void) const;
 
 public:
     dtkAbstractContainerWrapper *container(void);

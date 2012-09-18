@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May  3 10:39:55 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 325
+ * Last-Updated: Wed Sep 12 15:40:21 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 326
  */
 
 /* Commentary:
@@ -45,6 +45,38 @@ dtkAbstractView::dtkAbstractView(const dtkAbstractView& other) : dtkAbstractObje
 
 }
 
+dtkAbstractView::~dtkAbstractView(void)
+{
+
+}
+
+//! Returns a new dtkAbstractView that is a copy of this.
+/*!
+ *  This method can be overloaded through the hierarchy enabling a
+ *  deep copy of this. Note that, using covariance of returned type,
+ *  the returned argument can be of the more derived type.
+ *
+ *  Example:
+ *  \code
+ *  class xyzView : public dtkAbstractView
+ *  {
+ *    ...
+ *    xyzView *clone(void); // Covariant returned argument
+ *    ...
+ *  };
+ *
+ *  xyzView *xyzView::clone(void)
+ *  {
+ *     return new xyzView(*this);
+ *  }
+ *  \endcode
+ */
+dtkAbstractView *dtkAbstractView::clone(void)
+{
+    return new dtkAbstractView(*this);
+}
+
+
 dtkAbstractView& dtkAbstractView::operator=(const dtkAbstractView& other)
 {
     dtkAbstractObject::operator=(other);
@@ -58,7 +90,12 @@ dtkAbstractView& dtkAbstractView::operator=(const dtkAbstractView& other)
     return (*this);
 }
 
-dtkAbstractView::~dtkAbstractView(void)
+void dtkAbstractView::initialize(void)
+{
+
+}
+
+void dtkAbstractView::uninitialize(void)
 {
 
 }
@@ -392,105 +429,6 @@ QList<dtkAbstractViewInteractor *> dtkAbstractView::interactors(void) const
         ret.push_back(value.data());
     return ret;
 }
-
-// /////////////////////////////////////////////////////////////////
-// Deprecated VR API
-// /////////////////////////////////////////////////////////////////
-
-void dtkAbstractView::initialize(void)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-void dtkAbstractView::uninitialize(void)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-void dtkAbstractView::enableInteraction(void)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-void dtkAbstractView::disableInteraction(void)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-void dtkAbstractView::bounds(float& xmin, float& xmax, float& ymin, float& ymax, float &zmin, float& zmax)
-{
-    DTK_UNUSED(xmin);
-    DTK_UNUSED(xmax);
-    DTK_UNUSED(ymin);
-    DTK_UNUSED(ymax);
-    DTK_UNUSED(zmin);
-    DTK_UNUSED(zmax);
-
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-void dtkAbstractView::cameraUp(double *coordinates) const
-{
-    DTK_UNUSED(coordinates);
-
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-void dtkAbstractView::cameraPosition(double *coordinates) const
-{
-    DTK_UNUSED(coordinates);
-
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-void dtkAbstractView::cameraFocalPoint(double *coordinates) const
-{
-    DTK_UNUSED(coordinates);
-
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-void dtkAbstractView::setCameraPosition(double x, double y, double z)
-{
-    DTK_UNUSED(x);
-    DTK_UNUSED(y);
-    DTK_UNUSED(z);
-
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-void dtkAbstractView::setCameraClippingRange(double near, double far)
-{
-    DTK_UNUSED(near);
-    DTK_UNUSED(far);
-
-    DTK_DEFAULT_IMPLEMENTATION;
-}
-
-QString dtkAbstractView::cameraProjectionMode(void) const
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return "None";
-}
-
-double dtkAbstractView::cameraViewAngle(void) const
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return 0.0;
-}
-
-double dtkAbstractView::cameraZoom(void) const
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-
-    return 1.0;
-}
-
-// /////////////////////////////////////////////////////////////////
-// New VR API
-// /////////////////////////////////////////////////////////////////
 
 void dtkAbstractView::setHeadPosition(dtkVector3D<double> position)
 {

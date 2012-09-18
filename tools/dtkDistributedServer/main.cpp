@@ -57,6 +57,6 @@ int main(int argc, char **argv)
 
     int status = application.exec();
 
-    return DTK_SUCCEED;
+    return status;
 }
 

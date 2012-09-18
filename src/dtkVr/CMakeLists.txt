@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Apr 27 20:56:47 2012 (+0200)
+## Last-Updated: Tue Sep 18 09:22:25 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 333
+##     Update #: 334
 ######################################################################
 ## 
 ### Commentary: 
@@ -138,7 +138,7 @@ target_link_libraries(${PROJECT_NAME}
 
 if(MSVC)
   target_link_libraries(${PROJECT_NAME} wsock32)
-endif()
+endif(MSVC)
 
 if(QUAT_LIBRARY AND VRPN_LIBRARY)
   target_link_libraries(${PROJECT_NAME}

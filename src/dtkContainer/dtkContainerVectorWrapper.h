@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri May 25 09:29:47 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 12:09:19 2012 (+0200)
- *           By: tkloczko
- *     Update #: 11
+ * Last-Updated: Tue Sep 18 11:33:30 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -22,10 +22,9 @@
 
 #include "dtkAbstractContainerWrapper.h"
 #include "dtkContainerExport.h"
+#include "dtkContainerVector.h"
 
 #include <dtkCore/dtkGlobal>
-
-#include <dtkContainer/dtkContainerVector.h>
 
 #include <QtCore>
 
@@ -33,7 +32,7 @@
 // dtkContainerVectorWrapper interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class DTKCORE_EXPORT dtkContainerVectorWrapper : public dtkAbstractContainerWrapper
+template <typename T> class dtkContainerVectorWrapper : public dtkAbstractContainerWrapper
 {
 public:
      dtkContainerVectorWrapper(dtkAbstractData *parent = 0);
@@ -46,6 +45,8 @@ public:
 
 public:
     dtkContainerVectorWrapper<T> *clone(void) const;
+
+    dtkContainerVectorWrapper<T> *voidClone(void) const;
 
 public:
     QString identifier(void) const;

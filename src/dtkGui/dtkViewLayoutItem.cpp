@@ -94,39 +94,45 @@ dtkViewLayoutItemProxy::dtkViewLayoutItemProxy(QWidget *parent) : QFrame(parent)
 
 dtkViewLayoutItemProxy::~dtkViewLayoutItemProxy(void)
 {
-    // qDebug() << __func__ << 1;
+//    qDebug() << __func__ << 1;
 
-    if(d->view && d->view->widget()) {
+    if(!d->view)
+        goto finalize;
 
-        // qDebug() << __func__ << 2;
+    if(!d->view->widget())
+        goto finalize;
+    
+    if(!d->view->widget()->parentWidget())
+        goto finalize;
 
-        if(dtkViewLayoutItemProxy *proxy = dynamic_cast<dtkViewLayoutItemProxy *>(d->view->widget()->parentWidget())) {
+//    qDebug() << __func__ << 2;
 
-            // qDebug() << __func__ << 3;
+    if(dtkViewLayoutItemProxy *proxy = dynamic_cast<dtkViewLayoutItemProxy *>(d->view->widget()->parentWidget())) {
 
-            if(proxy == this) {
+//        qDebug() << __func__ << 3;
 
-                // qDebug() << __func__ << 4;
+        if(proxy == this) {
 
-                proxy->layout()->removeWidget(d->view->widget());
+//            qDebug() << __func__ << 4;
 
-                // qDebug() << __func__ << 5;
+            layout()->removeWidget(d->view->widget());
 
-                d->view->widget()->setParent(0);
+//            qDebug() << __func__ << 5;
 
-                // qDebug() << __func__ << 6;
+            d->view->widget()->setParent(0);
 
-                disconnect(d->view, SIGNAL(focused()), proxy, SIGNAL(focusedIn()));
+//            qDebug() << __func__ << 6;
 
-                // -
+            disconnect(d->view, SIGNAL(focused()), proxy, SIGNAL(focusedIn()));
 
-                proxy->d->view = 0;
-            }
+            d->view = NULL;
         }
     }
 
-    // qDebug() << __func__ << 7;
+//    qDebug() << __func__ << 7;
 
+finalize:
+    
     delete d;
 
     d = NULL;
@@ -149,7 +155,7 @@ void dtkViewLayoutItemProxy::setView(dtkAbstractView *view)
 
     if(dtkViewLayoutItemProxy *proxy = dynamic_cast<dtkViewLayoutItemProxy *>(view->widget()->parentWidget())) {
         proxy->layout()->removeWidget(view->widget());
-        proxy->d->view = 0;
+        proxy->d->view = NULL;
 
         if(dtkViewLayoutItem *item = dynamic_cast<dtkViewLayoutItem *>(proxy->parentWidget()->parentWidget())) {
             // qDebug() << "Got parent ! - clearing name";
@@ -297,8 +303,41 @@ void dtkViewLayoutItem::setLayout(dtkViewLayout *layout)
     d->layout = layout;
 }
 
+void dtkViewLayoutItem::clear(void)
+{
+    if (d->proxy && d->proxy->view())
+        d->proxy->view()->widget()->hide();
+    
+    delete d->proxy;
+    
+    d->proxy = new dtkViewLayoutItemProxy(d->root);
+    
+    connect(d->proxy, SIGNAL(focusedIn()), this, SLOT(onFocusedIn()));
+    connect(d->proxy, SIGNAL(focusedOut()), this, SLOT(onFocusedOut()));
+    
+    d->splitter->addWidget(d->proxy);
+    
+    d->proxy->setFocus(Qt::OtherFocusReason);
+    
+    d->footer->show();
+    
+    this->setUpdatesEnabled(true);
+    
+    if (d->a)
+        d->a->deleteLater();
+    
+    if (d->b)
+        d->b->deleteLater();
+    
+    d->a = NULL;
+    d->b = NULL;
+}
+
 void dtkViewLayoutItem::split(void)
 {
+    if(!d->proxy->view())
+        return;
+    
     d->a = new dtkViewLayoutItem(this);
     d->b = new dtkViewLayoutItem(this);
 
@@ -310,9 +349,8 @@ void dtkViewLayoutItem::split(void)
 
     disconnect(d->proxy, SIGNAL(focusedIn()), this, SLOT(onFocusedIn()));
     disconnect(d->proxy, SIGNAL(focusedOut()), this, SLOT(onFocusedOut()));
-
-    delete d->proxy;
-
+    
+    d->proxy->deleteLater();
     d->proxy = NULL;
 
     d->footer->hide();
@@ -473,7 +511,7 @@ void dtkViewLayoutItem::unsplit(void)
 
     } else {
 
-        qDebug() << __func__ << "Unhandled case.";
+        qDebug() << DTK_PRETTY_FUNCTION << "Unhandled case.";
 
     }
 

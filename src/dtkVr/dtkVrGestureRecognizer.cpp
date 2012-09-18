@@ -358,23 +358,23 @@ void dtkVrGestureRecognizer::postPanEvent(Qt::GestureState state)
 
     dtkVector3D<double> offset = position-lastPosition;
 
-    float xmin, xmax;
-    float ymin, ymax;
-    float zmin, zmax;
+    float xmin = 0, xmax = 0;
+    float ymin = 0, ymax = 0;
+    float zmin = 0, zmax = 0;
 
     double camera_up[3];
     double camera_position[3];
     double camera_focalpnt[3];
 
-    d->view->bounds(xmin, xmax, ymin, ymax, zmin, zmax);
-    d->view->cameraUp(camera_up);
-    d->view->cameraPosition(camera_position);
-    d->view->cameraFocalPoint(camera_focalpnt);
+//    d->view->bounds(xmin, xmax, ymin, ymax, zmin, zmax);
+//    d->view->cameraUp(camera_up);
+//    d->view->cameraPosition(camera_position);
+//    d->view->cameraFocalPoint(camera_focalpnt);
 
     dtkVector3D<double> a = dtkVector3D<double>(xmin, ymin, zmin);
     dtkVector3D<double> b = dtkVector3D<double>(xmax, ymax, zmax);
 
-    double dg = (b-a).norm();
+    double dg = (b-a).norm(); Q_UNUSED(dg);
 
     dtkVector3D<double> u_xtk = dtkVector3D<double>(camera_up[0], camera_up[1], camera_up[2]);
     dtkVector3D<double> p_xtk = dtkVector3D<double>(camera_position[0], camera_position[1], camera_position[2]);
@@ -402,16 +402,16 @@ void dtkVrGestureRecognizer::postPanEvent(Qt::GestureState state)
 
     dtkVector3D<double> o_xtk = cam_to_xtk*offset;
 
-    if(d->view->cameraProjectionMode() == "Parallel") {
-        
-        o_xtk *= dg/d->view->cameraZoom();
-        o_xtk *= -1;
-
-    } else {
-
-        o_xtk *= (d->view->cameraViewAngle()/180.0*3.14159)*k.norm();
-        o_xtk *= -1;
-    }
+//    if(d->view->cameraProjectionMode() == "Parallel") {
+//        
+//        o_xtk *= dg/d->view->cameraZoom();
+//        o_xtk *= -1;
+//
+//    } else {
+//
+//        o_xtk *= (d->view->cameraViewAngle()/180.0*3.14159)*k.norm();
+//        o_xtk *= -1;
+//    }
 
     QPanGesture *gesture = new QPanGesture(this);
     if(state == Qt::GestureStarted)

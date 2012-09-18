@@ -20,7 +20,6 @@
 #ifndef DTKABSTRACTDATASERIALIZER_H
 #define DTKABSTRACTDATASERIALIZER_H
 
-
 #include "dtkAbstractObject.h"
 
 class dtkAbstractData;
@@ -57,6 +56,7 @@ public slots:
     virtual QByteArray *serialize(void);
     virtual QByteArray *serialize(dtkAbstractData *data);
 
+public slots:
     virtual void setProgress(int value);
 
 protected:

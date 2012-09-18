@@ -80,8 +80,6 @@ public:
     QList<QString> serializers(void) const;
     QList<QString> deserializers(void) const;
 
-
-
 public:
     void setReaderPriorities(const dtkAbstractDataFactoryReaderPriorityMap& priorities);
     void setWriterPriorities(const dtkAbstractDataFactoryWriterPriorityMap& priorities);

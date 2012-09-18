@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Jun  2 01:39:50 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 64
+ * Last-Updated: ven. sept. 14 15:57:24 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 70
  */
 
 /* Commentary: 
@@ -52,6 +52,7 @@ public slots:
     virtual bool   open(const QUrl& url);
     virtual bool   open(QString file);
     virtual bool   save(QString file = QString(), dtkComposerWriter::Type type = dtkComposerWriter::Ascii);
+    virtual bool   saveNode(dtkComposerSceneNodeComposite *node, QString file = QString(), dtkComposerWriter::Type type = dtkComposerWriter::Ascii);
     virtual bool insert(QString file);
 
 public slots:
@@ -60,6 +61,7 @@ public slots:
     void cont(void);
     void next(void);
     void stop(void);
+    void reset(void);
 
 signals:
     void modified(bool);

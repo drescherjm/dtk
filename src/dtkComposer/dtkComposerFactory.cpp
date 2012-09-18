@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Tue Jun 26 17:37:39 2012 (+0200)
- *           By: tkloczko
- *     Update #: 660
+ * Last-Updated: Tue Sep 18 09:39:27 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 685
  */
 
 /* Commentary:
@@ -21,6 +21,9 @@
 
 #include "dtkComposerFactory.h"
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeArrayData.h"
+#include "dtkComposerNodeArrayDataExtractor.h"
+#include "dtkComposerNodeArrayDataOperatorModifier.h"
 #include "dtkComposerNodeArrayScalar.h"
 #include "dtkComposerNodeArrayScalarExtractor.h"
 #include "dtkComposerNodeArrayScalarOperatorModifier.h"
@@ -62,28 +65,31 @@
 #include "dtkComposerNodeVectorRealOperatorUnary.h"
 #include "dtkComposerNodeVectorRealOperatorBinary.h"
 #include "dtkComposerNodeView.h"
-#include "dtkComposerNodeRemote.h"
 #include "dtkComposerSceneNodeLeaf.h"
 
-#if defined(DTK_HAVE_MPI)
+#if defined(DTK_BUILD_DISTRIBUTED)
+#include "dtkComposerNodeRemote.h"
+#endif
+
+#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
 #include "dtkComposerNodeDistributed.h"
 #include "dtkComposerNodeWorld.h"
 #endif
 
-#if defined(DTK_HAVE_NITE)
+#if defined(DTK_BUILD_VR) && defined(DTK_HAVE_NITE)
 #include "dtkComposerNodeTrackerKinect.h"
 #endif
 
-#if defined(DTK_HAVE_VRPN)
+#if defined(DTK_BUILD_VR) &&defined(DTK_HAVE_VRPN)
 #include "dtkComposerNodeTrackerVrpn.h"
 #endif
 
-#if defined(DTK_HAVE_PLOT)
+#if defined(DTK_BUILD_PLOT) &&defined(DTK_HAVE_PLOT)
 #include "dtkComposerNodePlotCurve.h"
 #include "dtkComposerNodePlotView.h"
 #endif
 
-#if defined(DTK_HAVE_PLOT)
+#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
 #include <dtkPlot/dtkPlotView.h>
 #endif
 
@@ -147,6 +153,46 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["Data Container"] = "<p>Description not yet filled!</p>";
     d->tags["Data Container"] = QStringList() << "container" << "data";
     d->types["Data Container"] = "data_container";
+
+    d->nodes << "Data Array";
+    d->descriptions["Data Array"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array"] = QStringList() << "container" << "array" << "data" ;
+    d->types["Data Array"] = "array_data";
+
+    d->nodes << "Data Array Extractor";
+    d->descriptions["Data Array Extractor"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array Extractor"] = QStringList() << "container" << "array" << "data" << "extractor";
+    d->types["Data Array Extractor"] = "array_data_extractor";
+
+    d->nodes << "Data Array SubArray";
+    d->descriptions["Data Array SubArray"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array SubArray"] = QStringList() << "container" << "data" << "array" << "subarray"<< "extractor";
+    d->types["Data Array SubArray"] = "array_data_extractor_subarray";
+
+    d->nodes << "Data Array Part";
+    d->descriptions["Data Array Part"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array Part"] = QStringList() << "container" << "data" << "array" << "part" << "subarray" << "extractor";
+    d->types["Data Array Part"] = "array_data_extractor_array_part";
+
+    d->nodes << "Data Array Insert";
+    d->descriptions["Data Array Insert"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array Insert"] = QStringList() << "container" << "array" << "data"  << "insert" ;
+    d->types["Data Array Insert"] = "array_data_insert";
+
+    d->nodes << "Data Array Set";
+    d->descriptions["Data Array Set"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array Set"] = QStringList() << "container" << "array" << "data"  << "set";
+    d->types["Data Array Set"] = "array_data_set";
+
+    d->nodes << "Data Array Append";
+    d->descriptions["Data Array Append"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array Append"] = QStringList() << "container" << "array" << "data"  << "append";
+    d->types["Data Array Append"] = "array_data_append";
+
+    d->nodes << "Data Array Prepend";
+    d->descriptions["Data Array Prepend"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array Prepend"] = QStringList() << "container" << "array" << "data"  << "prepend";
+    d->types["Data Array Prepend"] = "array_data_prepend";
 
     // Matrix Square
 
@@ -272,40 +318,40 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Vector Real Divide All"] = QStringList() << "vector" << "real" << "divide"<< "all";
     d->types["Vector Real Divide All"] = "vector_real_divide_all";
 
-    d->nodes << "VectorReal Unit";
-    d->descriptions["VectorReal Unit"] = "<p>Description not yet filled!</p>";
-    d->tags["VectorReal Unit"] = QStringList() << "vectorReal" << "algebraic" << "unit";
-    d->types["VectorReal Unit"] = "vectorReal_unit";
+    d->nodes << "Vector Real Unit";
+    d->descriptions["Vector Real Unit"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Unit"] = QStringList() << "vector"<<"real" << "algebraic" << "unit";
+    d->types["Vector Real Unit"] = "vectorReal_unit";
 
-    d->nodes << "VectorReal Norm";
-    d->descriptions["VectorReal Norm"] = "<p>Description not yet filled!</p>";
-    d->tags["VectorReal Norm"] = QStringList() << "vectorReal" << "algebraic" << "norm";
-    d->types["VectorReal Norm"] = "vectorReal_norm";
+    d->nodes << "Vector Real Norm";
+    d->descriptions["Vector Real Norm"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Norm"] = QStringList() << "vector"<<"real" << "algebraic" << "norm";
+    d->types["Vector Real Norm"] = "vectorReal_norm";
 
-    d->nodes << "VectorReal Sum";
-    d->descriptions["VectorReal Sum"] = "<p>Description not yet filled!</p>";
-    d->tags["VectorReal Sum"] = QStringList() << "vectorReal" << "algebraic" << "sum";
-    d->types["VectorReal Sum"] = "vectorReal_sum";
+    d->nodes << "Vector Real Sum";
+    d->descriptions["Vector Real Sum"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Sum"] = QStringList() << "vector"<< "real" << "algebraic" << "sum";
+    d->types["Vector Real Sum"] = "vectorReal_sum";
 
-    d->nodes << "VectorReal Substract";
-    d->descriptions["VectorReal Substract"] = "<p>Description not yet filled!</p>";
-    d->tags["VectorReal Substract"] = QStringList() << "vectorReal" << "algebraic" << "substraction";
-    d->types["VectorReal Substract"] = "vectorReal_substract";
+    d->nodes << "Vector Real Substract";
+    d->descriptions["Vector Real Substract"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Substract"] = QStringList() << "vector"<<"real" << "algebraic" << "substraction";
+    d->types["Vector Real Substract"] = "vectorReal_substract";
 
-    d->nodes << "VectorReal Dot Prod";
-    d->descriptions["VectorReal Dot Prod"] = "<p>Description not yet filled!</p>";
-    d->tags["VectorReal Dot Prod"] = QStringList() << "vectorReal" << "algebraic" << "dot product";
-    d->types["VectorReal Dot Prod"] = "vectorReal_dot_prod";
+    d->nodes << "Vector Real Dot Prod";
+    d->descriptions["Vector Real Dot Prod"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Dot Prod"] = QStringList() << "vector"<<"real" << "algebraic" << "dot product";
+    d->types["Vector Real Dot Prod"] = "vectorReal_dot_prod";
 
-    d->nodes << "VectorReal Scal Mult";
-    d->descriptions["VectorReal Scal Mult"] = "<p>Description not yet filled!</p>";
-    d->tags["VectorReal Scal Mult"] = QStringList() << "vectorReal" << "algebraic" << "scalar multiplication";
-    d->types["VectorReal Scal Mult"] = "vectorReal_scal_mult";
+    d->nodes << "Vector Real Scal Mult";
+    d->descriptions["Vector Real Scal Mult"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Scal Mult"] = QStringList() << "vector"<<"real" << "algebraic" << "scalar multiplication";
+    d->types["Vector Real Scal Mult"] = "vectorReal_scal_mult";
 
-    d->nodes << "VectorReal Scal Division";
-    d->descriptions["VectorReal Scal Division"] = "<p>Description not yet filled!</p>";
-    d->tags["VectorReal Scal Division"] = QStringList() << "vectorReal" << "algebraic" << "scalar division";
-    d->types["VectorReal Scal Division"] = "vectorReal_scal_divide";
+    d->nodes << "Vector Real Scal Division";
+    d->descriptions["Vector Real Scal Division"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Scal Division"] = QStringList() << "vector"<<"real" << "algebraic" << "scalar division";
+    d->types["Vector Real Scal Division"] = "vectorReal_scal_divide";
 
     // Array
 
@@ -334,10 +380,10 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Scalar Array Insert"] = QStringList() << "container" << "array" << "scalar"  << "insert" ;
     d->types["Scalar Array Insert"] = "array_scalar_insert";
 
-    d->nodes << "Scalar Array Replace";
-    d->descriptions["Scalar Array Replace"] = "<p>Description not yet filled!</p>";
-    d->tags["Scalar Array Replace"] = QStringList() << "container" << "array" << "scalar"  << "replace" ;
-    d->types["Scalar Array Replace"] = "array_scalar_replace";
+    d->nodes << "Scalar Array Set";
+    d->descriptions["Scalar Array Set"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Set"] = QStringList() << "container" << "array" << "scalar"  << "set" ;
+    d->types["Scalar Array Set"] = "array_scalar_set";
 
     d->nodes << "Scalar Array Append";
     d->descriptions["Scalar Array Append"] = "<p>Description not yet filled!</p>";
@@ -806,8 +852,11 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Generic View"] = QStringList() << "view";
     d->types["Generic View"] = "view";
 
-    // dtkDistributed nodes
+// /////////////////////////////////////////////////////////////////
+// Distributed nodes
+// /////////////////////////////////////////////////////////////////
 
+#if defined(DTK_BUILD_DISTRIBUTED)
     d->nodes << "Remote";
     d->tags["Remote"] = QStringList() <<  "distributed" << "tcp" << "remote" << "world";
     d->types["Remote"] = "remote";
@@ -815,12 +864,13 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->nodes << "Remote Submit";
     d->tags["Remote Submit"] = QStringList() <<  "distributed" << "tcp" << "remote" << "submit" << "job";
     d->types["Remote Submit"] = "remoteSubmit";
+#endif
 
     // /////////////////////////////////////////////////////////////////
     // Plot nodes
     // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_HAVE_PLOT)
+#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
     d->nodes << "Plot Curve";
     d->tags["Plot Curve"] = QStringList() <<  "curve" << "plot";
     d->types["Plot Curve"] = "dtkPlotCurve";
@@ -836,7 +886,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     // NITE nodes
     // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_HAVE_NITE)
+#if defined(DTK_BUILD_VR) && defined(DTK_HAVE_NITE)
     d->nodes << "KinectTracker";
     d->tags["KinectTracker"] = QStringList() <<  "kinect" << "vr" << "ar" << "tracker";
     d->types["KinectTracker"] = "kinectTracker";
@@ -846,7 +896,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     // VRPN nodes
     // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_HAVE_VRPN)
+#if defined(DTK_BUILD_VR) && defined(DTK_HAVE_VRPN)
     d->nodes << "VrpnTracker";
     d->tags["VrpnTracker"] = QStringList() <<  "vrpn" << "vr" << "ar" << "tracker";
     d->types["VrpnTracker"] = "vrpnTracker";
@@ -856,7 +906,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     // MPI nodes
     // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_HAVE_MPI)
+#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
     d->nodes << "World";
     d->tags["World"] = QStringList() <<  "distributed" << "mpi" << "tcp" << "world";
     d->types["World"] = "world";
@@ -945,6 +995,30 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "data_container")
         return new dtkComposerNodeContainerData;
 
+    if(type == "array_data")
+        return new dtkComposerNodeArrayData;
+
+    if(type == "array_data_extractor")
+        return new dtkComposerNodeArrayDataExtractor;
+
+    if(type == "array_data_extractor_subarray")
+        return new dtkComposerNodeArrayDataExtractorSubArray;
+
+    if(type == "array_data_extractor_array_part")
+        return new dtkComposerNodeArrayDataExtractorArrayPart;
+
+    if(type == "array_data_insert")
+        return new dtkComposerNodeArrayDataOperatorInsert;
+
+    if(type == "array_data_set" || type == "array_data_replace")
+        return new dtkComposerNodeArrayDataOperatorSet;
+
+    if(type == "array_data_append")
+        return new dtkComposerNodeArrayDataOperatorAppend;
+
+    if(type == "array_data_prepend")
+        return new dtkComposerNodeArrayDataOperatorPrepend;
+
     // Matrix Square Nodes
 
     if(type == "matrix_square_real")
@@ -985,7 +1059,7 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     // Vector Real nodes
 
-    if(type == "vector_real")
+    if(type == "vector_real" || type == "vectorReal")
         return new dtkComposerNodeVectorReal;
 
     if(type == "vector_real_extractor")
@@ -1039,7 +1113,6 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "vectorReal_scal_divide")
         return new dtkComposerNodeVectorRealOperatorHomotheticDivision;
 
-
     // Array nodes
 
     if(type == "array_scalar")
@@ -1057,8 +1130,8 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "array_scalar_insert")
         return new dtkComposerNodeArrayScalarOperatorInsert;
 
-    if(type == "array_scalar_replace")
-        return new dtkComposerNodeArrayScalarOperatorReplace;
+    if(type == "array_scalar_set" || type == "array_scalar_replace")
+        return new dtkComposerNodeArrayScalarOperatorSet;
 
     if(type == "array_scalar_append")
         return new dtkComposerNodeArrayScalarOperatorAppend;
@@ -1337,19 +1410,23 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "view")
         return new dtkComposerNodeView;
 
-    // distributed nodes
+// /////////////////////////////////////////////////////////////////
+// Distributed nodes
+// /////////////////////////////////////////////////////////////////
 
+#if defined(DTK_BUILD_DISTRIBUTED)
     if(type == "remote")
         return new dtkComposerNodeRemote;
 
     if(type == "remoteSubmit")
         return new dtkComposerNodeRemoteSubmit;
+#endif
 
     // /////////////////////////////////////////////////////////////////
     // NITE nodes
     // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_HAVE_NITE)
+#if defined(DTK_BUILD_VR) && defined(DTK_HAVE_NITE)
     if(type == "kinectTracker")
         return new dtkComposerNodeTrackerKinect;
 #endif
@@ -1358,7 +1435,7 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     // VRPN nodes
     // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_HAVE_VRPN)
+#if defined(DTK_BUILD_VR) && defined(DTK_HAVE_VRPN)
     if(type == "vrpnTracker")
         return new dtkComposerNodeTrackerVrpn;
 #endif
@@ -1367,7 +1444,7 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     // Plot nodes
     // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_HAVE_PLOT)
+#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
     if(type == "dtkPlotCurve")
         return new dtkComposerNodePlotCurve;
 
@@ -1379,7 +1456,7 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     // MPI nodes
     // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_HAVE_MPI)
+#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
     if(type == "world")
         return new dtkComposerNodeWorld;
 

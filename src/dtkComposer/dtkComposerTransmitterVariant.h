@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 15:57:07 2012 (+0200)
- *           By: tkloczko
- *     Update #: 101
+ * Last-Updated: Tue Sep 18 10:29:43 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 106
  */
 
 /* Commentary: 
@@ -19,6 +19,8 @@
 
 #ifndef DTKCOMPOSERTRANSMITTERVARIANT_H
 #define DTKCOMPOSERTRANSMITTERVARIANT_H
+
+#include <dtkConfig.h>
 
 #include "dtkComposerExport.h"
 #include "dtkComposerTransmitter.h"
@@ -41,7 +43,9 @@ public:
 public:
     void setData(const QVariant& data);
     void setData(const dtkAbstractContainerWrapper& data);
+#if defined(DTK_BUILD_DISTRIBUTED)
     void setDataFromMsg(dtkDistributedMessage *msg);
+#endif
 
           QVariant& data(void);
     const QVariant& data(void) const;

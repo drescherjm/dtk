@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 12:59:35 2012 (+0200)
+ * Last-Updated: Tue Sep 18 13:13:25 2012 (+0200)
  *           By: tkloczko
- *     Update #: 483
+ *     Update #: 486
  */
 
 /* Commentary: 
@@ -265,15 +265,15 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::connect(dtkCompose
 
         dtkComposerTransmitterVariant *v = dynamic_cast<dtkComposerTransmitterVariant *>(transmitter);
 
-        if (v->types().isEmpty() && !variants.contains(v)) {
+        if (v->dataTypes().isEmpty() && !variants.contains(v)) {
             variants << v;
             active_variant = v;
             active_emitter = NULL;
             v->appendReceiver(this);
             return true;
         } else {
-            foreach(QVariant::Type t, v->types()) {
-                if ((int)t == this->dataType() && !variants.contains(v)) {
+            foreach(int t, v->dataTypes()) {
+                if (t == this->dataType() && !variants.contains(v)) {
                     variants << v;
                     active_variant = v;
                     active_emitter = NULL;
@@ -565,15 +565,15 @@ template <typename T> bool dtkComposerTransmitterReceiverVector<T>::connect(dtkC
 
         dtkComposerTransmitterVariant *v = dynamic_cast<dtkComposerTransmitterVariant *>(transmitter);
 
-        if(v->types().isEmpty() && !variants.contains(v)) {
+        if(v->dataTypes().isEmpty() && !variants.contains(v)) {
             variants << v;
             active_variant = v;
             active_emitter = NULL;
             v->appendReceiver(this);
             return true;
         } else {
-            foreach(QVariant::Type t, v->types()) {
-                if ((int)t == this->dataType() && !variants.contains(v)) {
+            foreach(int t, v->dataTypes()) {
+                if (t == this->dataType() && !variants.contains(v)) {
                     variants << v;
                     active_variant = v;
                     active_emitter = NULL;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Mon Feb 27 14:28:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep 17 16:54:10 2012 (+0200)
+ * Last-Updated: Tue Sep 18 13:22:17 2012 (+0200)
  *           By: tkloczko
- *     Update #: 410
+ *     Update #: 417
  */
 
 /* Commentary:
@@ -49,14 +49,14 @@ public:
 
 dtkComposerNodeNumberOperatorUnary::dtkComposerNodeNumberOperatorUnary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberOperatorUnaryPrivate)
 {
-    QList<QVariant::Type> variant_list;
-    variant_list << QVariant::LongLong << QVariant::Double;
+    QList<int> variant_list;
+    variant_list << QMetaType::LongLong << QMetaType::Double;
 
-    d->receiver.setTypes(variant_list);
+    d->receiver.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver));
 
     d->emitter.setData<double>(&d->value_r);
-    d->emitter.setTypes(variant_list);
+    d->emitter.setDataTypes(variant_list);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -87,17 +87,17 @@ public:
 
 dtkComposerNodeNumberOperatorBinary::dtkComposerNodeNumberOperatorBinary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberOperatorBinaryPrivate)
 {
-    QList<QVariant::Type> variant_list;
-    variant_list << QVariant::LongLong << QVariant::Double;
+    QList<int> variant_list;
+    variant_list << QMetaType::LongLong << QMetaType::Double;
 
-    d->receiver_lhs.setTypes(variant_list);
+    d->receiver_lhs.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver_lhs));
 
-    d->receiver_rhs.setTypes(variant_list);
+    d->receiver_rhs.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver_rhs));
 
     d->emitter.setData<double>(&d->value_r);
-    d->emitter.setTypes(variant_list);
+    d->emitter.setDataTypes(variant_list);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -127,13 +127,13 @@ public:
 
 dtkComposerNodeNumberComparator::dtkComposerNodeNumberComparator(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberComparatorPrivate)
 {
-    QList<QVariant::Type> variant_list;
-    variant_list << QVariant::LongLong << QVariant::Double;
+    QList<int> variant_list;
+    variant_list << QMetaType::LongLong << QMetaType::Double;
 
-    d->receiver_lhs.setTypes(variant_list);
+    d->receiver_lhs.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver_lhs));
 
-    d->receiver_rhs.setTypes(variant_list);
+    d->receiver_rhs.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver_rhs));
 
     d->value = false;
@@ -168,16 +168,16 @@ public:
 
 dtkComposerNodeNumberAlmosteq::dtkComposerNodeNumberAlmosteq(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberAlmosteqPrivate)
 {
-    QList<QVariant::Type> variant_list;
-    variant_list << QVariant::LongLong << QVariant::Double;
+    QList<int> variant_list;
+    variant_list << QMetaType::LongLong << QMetaType::Double;
 
-    d->receiver_lhs.setTypes(variant_list);
+    d->receiver_lhs.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver_lhs));
 
-    d->receiver_rhs.setTypes(variant_list);
+    d->receiver_rhs.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver_rhs));
 
-    d->receiver_eps.setTypes(variant_list);
+    d->receiver_eps.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver_eps));
 
     d->value = false;
@@ -194,7 +194,7 @@ dtkComposerNodeNumberAlmosteq::~dtkComposerNodeNumberAlmosteq(void)
 
 void dtkComposerNodeNumberAlmosteq::run(void)
 {
-    if (d->receiver_lhs.dataType() == QVariant::LongLong && d->receiver_rhs.dataType() == QVariant::LongLong) {
+    if (d->receiver_lhs.dataType() == QMetaType::LongLong && d->receiver_rhs.dataType() == QMetaType::LongLong) {
 
         d->value = (*(d->receiver_lhs.data<qlonglong>()) == *(d->receiver_rhs.data<qlonglong>()));
         
@@ -228,16 +228,16 @@ public:
 
 dtkComposerNodeNumberNotalmosteq::dtkComposerNodeNumberNotalmosteq(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberNotalmosteqPrivate)
 {
-    QList<QVariant::Type> variant_list;
-    variant_list << QVariant::LongLong << QVariant::Double;
+    QList<int> variant_list;
+    variant_list << QMetaType::LongLong << QMetaType::Double;
 
-    d->receiver_lhs.setTypes(variant_list);
+    d->receiver_lhs.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver_lhs));
 
-    d->receiver_rhs.setTypes(variant_list);
+    d->receiver_rhs.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver_rhs));
 
-    d->receiver_eps.setTypes(variant_list);
+    d->receiver_eps.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver_eps));
 
     d->value = false;
@@ -254,7 +254,7 @@ dtkComposerNodeNumberNotalmosteq::~dtkComposerNodeNumberNotalmosteq(void)
 
 void dtkComposerNodeNumberNotalmosteq::run(void)
 {
-    if (d->receiver_lhs.dataType() == QVariant::LongLong && d->receiver_rhs.dataType() == QVariant::LongLong) {
+    if (d->receiver_lhs.dataType() == QMetaType::LongLong && d->receiver_rhs.dataType() == QMetaType::LongLong) {
 
         d->value = (*(d->receiver_lhs.data<qlonglong>()) != *(d->receiver_rhs.data<qlonglong>()));
         
@@ -275,11 +275,11 @@ void dtkComposerNodeNumberNotalmosteq::run(void)
 void dtkComposerNodeNumberOperatorUnaryIncr::run(void)
 {
     switch(d->receiver.dataType()) {
-    case QVariant::LongLong:
+    case QMetaType::LongLong:
         d->value_i = *(d->receiver.data<qlonglong>()) + 1;
         d->emitter.setData<qlonglong>(&d->value_i);
         break;
-    case QVariant::Double:
+    case QMetaType::Double:
         d->value_r = *(d->receiver.data<qreal>()) + 1;
         d->emitter.setData<double>(&d->value_r);
         break;
@@ -296,11 +296,11 @@ void dtkComposerNodeNumberOperatorUnaryIncr::run(void)
 void dtkComposerNodeNumberOperatorUnaryDecr::run(void)
 {
     switch(d->receiver.dataType()) {
-    case QVariant::LongLong:
+    case QMetaType::LongLong:
         d->value_i = *(d->receiver.data<qlonglong>()) - 1;
         d->emitter.setData<qlonglong>(&d->value_i);
         break;
-    case QVariant::Double:
+    case QMetaType::Double:
         d->value_r = *(d->receiver.data<qreal>()) - 1;
         d->emitter.setData<double>(&d->value_r);
         break;
@@ -317,10 +317,10 @@ void dtkComposerNodeNumberOperatorUnaryDecr::run(void)
 void dtkComposerNodeNumberOperatorUnarySqrt::run(void)
 {
     switch(d->receiver.dataType()) {
-    case QVariant::LongLong:
+    case QMetaType::LongLong:
         d->value_r = qSqrt(*(d->receiver.data<qlonglong>()));
         break;
-    case QVariant::Double:
+    case QMetaType::Double:
         d->value_r = qSqrt(*(d->receiver.data<qreal>()));
         break;
     default:
@@ -336,12 +336,12 @@ void dtkComposerNodeNumberOperatorUnarySqrt::run(void)
 void dtkComposerNodeNumberOperatorUnarySquare::run(void)
 {
     switch(d->receiver.dataType()) {
-    case QVariant::LongLong:
+    case QMetaType::LongLong:
         d->value_i = *(d->receiver.data<qlonglong>());
         d->value_i *= d->value_i;
         d->emitter.setData<qlonglong>(&d->value_i);
         break;
-    case QVariant::Double:
+    case QMetaType::Double:
         d->value_r = *(d->receiver.data<qreal>());
         d->value_r *= d->value_r;
         d->emitter.setData<double>(&d->value_r);
@@ -476,7 +476,7 @@ void dtkComposerNodeNumberOperatorUnaryOpp::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryCeil::run(void)
 {
-    if (d->receiver.dataType() == QVariant::Double)
+    if (d->receiver.dataType() == QMetaType::Double)
         d->value_i = qCeil(*(d->receiver.data<qreal>()));
     else
         d->value_i = *d->receiver.data<qlonglong>();
@@ -490,7 +490,7 @@ void dtkComposerNodeNumberOperatorUnaryCeil::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryFloor::run(void)
 {
-    if (d->receiver.dataType() == QVariant::Double)
+    if (d->receiver.dataType() == QMetaType::Double)
         d->value_i = qFloor(*(d->receiver.data<qreal>()));
     else
         d->value_i = *d->receiver.data<qlonglong>();
@@ -504,7 +504,7 @@ void dtkComposerNodeNumberOperatorUnaryFloor::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryRound::run(void)
 {
-    if (d->receiver.dataType() == QVariant::Double)
+    if (d->receiver.dataType() == QMetaType::Double)
         d->value_i = qRound(*(d->receiver.data<qreal>()));
     else
         d->value_i = *d->receiver.data<qlonglong>();
@@ -519,11 +519,11 @@ void dtkComposerNodeNumberOperatorUnaryRound::run(void)
 void dtkComposerNodeNumberOperatorUnaryAbs::run(void)
 {
     switch(d->receiver.dataType()) {
-    case QVariant::LongLong:
+    case QMetaType::LongLong:
         d->value_i = qAbs(*(d->receiver.data<qlonglong>()));
         d->emitter.setData<qlonglong>(&d->value_i);
         break;
-    case QVariant::Double:
+    case QMetaType::Double:
         d->value_r = qAbs(*(d->receiver.data<qreal>()));
         d->emitter.setData<qreal>(&d->value_r);
         break;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 11 12:33:41 2012 (+0200)
+ * Last-Updated: Tue Sep 18 13:15:57 2012 (+0200)
  *           By: tkloczko
- *     Update #: 47
+ *     Update #: 50
  */
 
 /* Commentary: 
@@ -50,9 +50,9 @@ public:
 
 dtkComposerNodeControlIf::dtkComposerNodeControlIf(void) : dtkComposerNodeControl(), d(new dtkComposerNodeControlIfPrivate)
 {
-    QList<QVariant::Type> variants;
-    variants << QVariant::Bool;
-    d->cond.setTypes(variants);
+    QList<int> variants;
+    variants << QMetaType::Bool;
+    d->cond.setDataTypes(variants);
 
     d->header.removeEmitter(0);
     d->header.setInputLabelHint("cond", 0); 

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Aug  3 14:36:46 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Aug  9 16:01:36 2012 (+0200)
+ * Last-Updated: Tue Sep 18 13:09:12 2012 (+0200)
  *           By: tkloczko
- *     Update #: 9
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -40,7 +40,7 @@ public:
     dtkComposerTransmitterVariant *active_variant;
 
 public:
-    QList<QVariant::Type> types;
+    QList<int> data_types;
 
 public:
     dtkComposerTransmitterVariant *twin;

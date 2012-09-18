@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 10:28:43 2012 (+0200)
+ * Last-Updated: Tue Sep 18 13:23:19 2012 (+0200)
  *           By: tkloczko
- *     Update #: 672
+ *     Update #: 683
  */
 
 /* Commentary: 
@@ -605,14 +605,14 @@ QString dtkComposerTransmitterVariant::kindName(void) const
     return "Variant";
 }
 
-void dtkComposerTransmitterVariant::setTypes(QList<QVariant::Type> types)
+void dtkComposerTransmitterVariant::setDataTypes(const QList<int>& data_types)
 {
-    e->types = types;
+    e->data_types = data_types;
 }
 
-QList<QVariant::Type> dtkComposerTransmitterVariant::types(void)
+QList<int> dtkComposerTransmitterVariant::dataTypes(void)
 {
-    return e->types;
+    return e->data_types;
 }
 
 //! 
@@ -624,7 +624,7 @@ bool dtkComposerTransmitterVariant::connect(dtkComposerTransmitter *transmitter)
     if (transmitter->kind() == Variant) {
         dtkComposerTransmitterVariant *v = dynamic_cast<dtkComposerTransmitterVariant *>(transmitter);
 
-        if (e->types.isEmpty() || v->types().isEmpty()) {
+        if (e->data_types.isEmpty() || v->dataTypes().isEmpty()) {
             if (!e->variants.contains(v)) {
                 e->variants << v;
                 e->active_variant = v;
@@ -633,8 +633,8 @@ bool dtkComposerTransmitterVariant::connect(dtkComposerTransmitter *transmitter)
                 return true;
             }
         } else {
-            foreach(QVariant::Type t, v->types()) {
-                if (!e->variants.contains(v) && e->types.contains(t)) {
+            foreach(int t, v->dataTypes()) {
+                if (!e->variants.contains(v) && e->data_types.contains(t)) {
                     e->variants << v;
                     e->active_variant = v;
                     e->active_emitter = NULL;
@@ -645,7 +645,7 @@ bool dtkComposerTransmitterVariant::connect(dtkComposerTransmitter *transmitter)
         }
     }
 
-    if (e->types.isEmpty() || e->types.contains(QVariant::Type(transmitter->dataType()))) {
+    if (e->data_types.isEmpty() || e->data_types.contains(transmitter->dataType())) {
         if (!e->emitters.contains(transmitter)) {
             e->emitters << transmitter;
             e->active_emitter = transmitter;

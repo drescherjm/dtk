@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 10:19:40 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 13 14:34:23 2012 (+0200)
+ * Last-Updated: Tue Sep 18 13:17:01 2012 (+0200)
  *           By: tkloczko
- *     Update #: 75
+ *     Update #: 76
  */
 
 /* Commentary: 
@@ -63,11 +63,11 @@ dtkComposerNodeVector3D::dtkComposerNodeVector3D(void) : dtkComposerNodeLeaf(), 
 
     this->appendReceiver(&d->receiver_vec);
 
-    QList<QVariant::Type> variant_list;
-    variant_list << QVariant::Double << QVariant::LongLong;
-    d->receiver_x.setTypes(variant_list);
-    d->receiver_y.setTypes(variant_list);
-    d->receiver_z.setTypes(variant_list);
+    QList<int> variant_list;
+    variant_list << QMetaType::Double << QMetaType::LongLong;
+    d->receiver_x.setDataTypes(variant_list);
+    d->receiver_y.setDataTypes(variant_list);
+    d->receiver_z.setDataTypes(variant_list);
 
     this->appendReceiver(&d->receiver_x);
     this->appendReceiver(&d->receiver_y);

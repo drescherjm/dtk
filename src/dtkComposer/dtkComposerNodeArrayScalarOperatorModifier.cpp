@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 10 09:56:25 2012 (+0200)
+ * Last-Updated: Tue Sep 18 13:18:10 2012 (+0200)
  *           By: tkloczko
- *     Update #: 108
+ *     Update #: 112
  */
 
 /* Commentary:
@@ -44,14 +44,14 @@ dtkComposerNodeArrayScalarOperatorModifier::dtkComposerNodeArrayScalarOperatorMo
 {
     this->appendReceiver(&d->receiver_array);
 
-    QList<QVariant::Type> variant_list;
+    QList<int> variant_list;
 
-    variant_list << QVariant::LongLong;
-    d->receiver_index.setTypes(variant_list);
+    variant_list << QMetaType::LongLong;
+    d->receiver_index.setDataTypes(variant_list);
     this->appendReceiver(&d->receiver_index);
 
-    variant_list << QVariant::Double;
-    d->receiver_value.setTypes(variant_list);
+    variant_list << QMetaType::Double;
+    d->receiver_value.setDataTypes(variant_list);
     this->appendReceiver(&d->receiver_value);
 
     this->appendEmitter(&d->emitter_array);
@@ -83,10 +83,10 @@ dtkComposerNodeArrayScalarOperatorModifierAll::dtkComposerNodeArrayScalarOperato
 {
     this->appendReceiver(&d->receiver_array);
 
-    QList<QVariant::Type> variant_list;
+    QList<int> variant_list;
 
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double;
-    d->receiver_value.setTypes(variant_list);
+    variant_list << QMetaType::Int << QMetaType::UInt << QMetaType::LongLong << QMetaType::ULongLong << QMetaType::Double;
+    d->receiver_value.setDataTypes(variant_list);
     this->appendReceiver(&d->receiver_value);
 
     this->appendEmitter(&d->emitter_array);

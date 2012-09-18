@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Aug  9 16:28:40 2012 (+0200)
+ * Last-Updated: Tue Sep 18 13:15:36 2012 (+0200)
  *           By: tkloczko
- *     Update #: 104
+ *     Update #: 107
  */
 
 /* Commentary: 
@@ -57,14 +57,14 @@ dtkComposerNodeArrayScalar::dtkComposerNodeArrayScalar(void) : dtkComposerNodeLe
 
     this->appendReceiver(&d->receiver_array);
 
-    QList<QVariant::Type> variant_list;
+    QList<int> variant_list;
 
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong;
-    d->receiver_size.setTypes(variant_list);
+    variant_list << QMetaType::Int << QMetaType::UInt << QMetaType::LongLong << QMetaType::ULongLong;
+    d->receiver_size.setDataTypes(variant_list);
     this->appendReceiver(&d->receiver_size);
 
-    variant_list << QVariant::Double;
-    d->receiver_value.setTypes(variant_list);
+    variant_list << QMetaType::Double;
+    d->receiver_value.setDataTypes(variant_list);
     this->appendReceiver(&d->receiver_value);
 
     d->emitter_array.setData(d->array);

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 10:28:18 2012 (+0200)
+ * Last-Updated: Tue Sep 18 13:10:12 2012 (+0200)
  *           By: tkloczko
- *     Update #: 151
+ *     Update #: 154
  */
 
 /* Commentary: 
@@ -93,9 +93,9 @@ public:
     QString kindName(void) const;
 
 public:
-    void setTypes(QList<QVariant::Type> types);
+    void setDataTypes(const QList<int>& data_types);
 
-    QList<QVariant::Type> types(void);
+    QList<int> dataTypes(void);
 
 public:
     bool    connect(dtkComposerTransmitter *transmitter);

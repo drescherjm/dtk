@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. sept. 14 10:17:01 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 4486
+ * Last-Updated: Tue Sep 18 10:41:36 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 4493
  */
 
 /* Commentary: 
@@ -17,6 +17,8 @@
  * 
  */
 
+#include <dtkConfig.h>
+
 #include "dtkComposerFactory.h"
 #include "dtkComposerGraph.h"
 #include "dtkComposerGraphNode.h"
@@ -24,7 +26,9 @@
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeControlCase.h"
 #include "dtkComposerNodeLeaf.h"
+#if defined(DTK_BUILD_DISTRIBUTED)
 #include "dtkComposerNodeRemote.h"
+#endif
 #include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
@@ -2413,13 +2417,17 @@ void dtkComposerStackCommandReparentNode::redo(void)
                     command->setGraph(d->graph);
                     command->setKind(dtkComposerTransmitter::Proxy);
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down) {
+#if defined(DTK_BUILD_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(target->wrapee()))
                             command->setKind(dtkComposerTransmitter::Variant);
+#endif
                         command->setNode(target);
                     }
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Up) {
+#if defined(DTK_BUILD_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(source->wrapee()))
                             command->setKind(dtkComposerTransmitter::Variant);
+#endif
                         command->setNode(source);
                     }
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down)
@@ -2515,13 +2523,17 @@ void dtkComposerStackCommandReparentNode::redo(void)
                     command->setGraph(d->graph);
                     command->setKind(dtkComposerTransmitter::Proxy);
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down) {
+#if defined(DTK_BUILD_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(target->wrapee()))
                             command->setKind(dtkComposerTransmitter::Variant);
+#endif
                         command->setNode(target);
                     }
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Up) {
+#if defined(DTK_BUILD_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(source->wrapee()))
                             command->setKind(dtkComposerTransmitter::Variant);
+#endif
                         command->setNode(source);
                     }
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. sept. 13 15:56:37 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 914
+ * Last-Updated: Tue Sep 18 11:16:35 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 924
  */
 
 /* Commentary: 
@@ -17,6 +17,8 @@
  * 
  */
 
+#include <dtkConfig.h>
+
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerSceneEdge.h"
 #include "dtkComposerSceneNode.h"
@@ -25,14 +27,16 @@
 #include "dtkComposerSceneNote.h"
 #include "dtkComposerScenePort.h"
 #include "dtkComposerWriter.h"
+#if defined(DTK_BUILD_DISTRIBUTED)
 #include "dtkComposerNodeRemote.h"
+#endif
 
 #include <dtkLog/dtkLog.h>
 
-#include <dtkConfig.h>
-
+#if defined(DTK_BUILD_DISTRIBUTED)
 #include <dtkDistributed/dtkDistributedController.h>
 #include <dtkDistributed/dtkDistributedMimeData.h>
+#endif
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerSceneNodeComposite
@@ -611,12 +615,14 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
 
 void dtkComposerSceneNodeComposite::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
+#if defined(DTK_BUILD_DISTRIBUTED)
     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
     if(!remote) {
         event->ignore();
         return;
     }
+#endif
 
     if (event->mimeData()->hasText())
         event->acceptProposedAction();
@@ -631,12 +637,14 @@ void dtkComposerSceneNodeComposite::dragLeaveEvent(QGraphicsSceneDragDropEvent *
 
 void dtkComposerSceneNodeComposite::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
+#if defined(DTK_BUILD_DISTRIBUTED)
     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
     if(!remote) {
         event->ignore();
         return;
     }
+#endif
 
     if (event->mimeData()->hasText())
         event->acceptProposedAction();
@@ -646,6 +654,7 @@ void dtkComposerSceneNodeComposite::dragMoveEvent(QGraphicsSceneDragDropEvent *e
 
 void dtkComposerSceneNodeComposite::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
+#if defined(DTK_BUILD_DISTRIBUTED)
     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
     if(!remote) {
@@ -669,4 +678,7 @@ void dtkComposerSceneNodeComposite::dropEvent(QGraphicsSceneDragDropEvent *event
 
     event->acceptProposedAction();
     this->update();
+#else
+    Q_UNUSED(event);
+#endif
 }

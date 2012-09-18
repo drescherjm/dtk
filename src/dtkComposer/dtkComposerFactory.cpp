@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Mon Jul 23 10:36:34 2012 (+0200)
- *           By: sprinter
- *     Update #: 666
+ * Last-Updated: Tue Sep 18 09:39:27 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 685
  */
 
 /* Commentary:
@@ -65,28 +65,31 @@
 #include "dtkComposerNodeVectorRealOperatorUnary.h"
 #include "dtkComposerNodeVectorRealOperatorBinary.h"
 #include "dtkComposerNodeView.h"
-#include "dtkComposerNodeRemote.h"
 #include "dtkComposerSceneNodeLeaf.h"
 
-#if defined(DTK_HAVE_MPI)
+#if defined(DTK_BUILD_DISTRIBUTED)
+#include "dtkComposerNodeRemote.h"
+#endif
+
+#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
 #include "dtkComposerNodeDistributed.h"
 #include "dtkComposerNodeWorld.h"
 #endif
 
-#if defined(DTK_HAVE_NITE)
+#if defined(DTK_BUILD_VR) && defined(DTK_HAVE_NITE)
 #include "dtkComposerNodeTrackerKinect.h"
 #endif
 
-#if defined(DTK_HAVE_VRPN)
+#if defined(DTK_BUILD_VR) &&defined(DTK_HAVE_VRPN)
 #include "dtkComposerNodeTrackerVrpn.h"
 #endif
 
-#if defined(DTK_HAVE_PLOT)
+#if defined(DTK_BUILD_PLOT) &&defined(DTK_HAVE_PLOT)
 #include "dtkComposerNodePlotCurve.h"
 #include "dtkComposerNodePlotView.h"
 #endif
 
-#if defined(DTK_HAVE_PLOT)
+#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
 #include <dtkPlot/dtkPlotView.h>
 #endif
 
@@ -849,8 +852,11 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Generic View"] = QStringList() << "view";
     d->types["Generic View"] = "view";
 
-    // dtkDistributed nodes
+// /////////////////////////////////////////////////////////////////
+// Distributed nodes
+// /////////////////////////////////////////////////////////////////
 
+#if defined(DTK_BUILD_DISTRIBUTED)
     d->nodes << "Remote";
     d->tags["Remote"] = QStringList() <<  "distributed" << "tcp" << "remote" << "world";
     d->types["Remote"] = "remote";
@@ -858,12 +864,13 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->nodes << "Remote Submit";
     d->tags["Remote Submit"] = QStringList() <<  "distributed" << "tcp" << "remote" << "submit" << "job";
     d->types["Remote Submit"] = "remoteSubmit";
+#endif
 
     // /////////////////////////////////////////////////////////////////
     // Plot nodes
     // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_HAVE_PLOT)
+#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
     d->nodes << "Plot Curve";
     d->tags["Plot Curve"] = QStringList() <<  "curve" << "plot";
     d->types["Plot Curve"] = "dtkPlotCurve";
@@ -879,7 +886,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     // NITE nodes
     // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_HAVE_NITE)
+#if defined(DTK_BUILD_VR) && defined(DTK_HAVE_NITE)
     d->nodes << "KinectTracker";
     d->tags["KinectTracker"] = QStringList() <<  "kinect" << "vr" << "ar" << "tracker";
     d->types["KinectTracker"] = "kinectTracker";
@@ -889,7 +896,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     // VRPN nodes
     // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_HAVE_VRPN)
+#if defined(DTK_BUILD_VR) && defined(DTK_HAVE_VRPN)
     d->nodes << "VrpnTracker";
     d->tags["VrpnTracker"] = QStringList() <<  "vrpn" << "vr" << "ar" << "tracker";
     d->types["VrpnTracker"] = "vrpnTracker";
@@ -899,7 +906,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     // MPI nodes
     // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_HAVE_MPI)
+#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
     d->nodes << "World";
     d->tags["World"] = QStringList() <<  "distributed" << "mpi" << "tcp" << "world";
     d->types["World"] = "world";
@@ -1403,19 +1410,23 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "view")
         return new dtkComposerNodeView;
 
-    // distributed nodes
+// /////////////////////////////////////////////////////////////////
+// Distributed nodes
+// /////////////////////////////////////////////////////////////////
 
+#if defined(DTK_BUILD_DISTRIBUTED)
     if(type == "remote")
         return new dtkComposerNodeRemote;
 
     if(type == "remoteSubmit")
         return new dtkComposerNodeRemoteSubmit;
+#endif
 
     // /////////////////////////////////////////////////////////////////
     // NITE nodes
     // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_HAVE_NITE)
+#if defined(DTK_BUILD_VR) && defined(DTK_HAVE_NITE)
     if(type == "kinectTracker")
         return new dtkComposerNodeTrackerKinect;
 #endif
@@ -1424,7 +1435,7 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     // VRPN nodes
     // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_HAVE_VRPN)
+#if defined(DTK_BUILD_VR) && defined(DTK_HAVE_VRPN)
     if(type == "vrpnTracker")
         return new dtkComposerNodeTrackerVrpn;
 #endif
@@ -1433,7 +1444,7 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     // Plot nodes
     // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_HAVE_PLOT)
+#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
     if(type == "dtkPlotCurve")
         return new dtkComposerNodePlotCurve;
 
@@ -1445,7 +1456,7 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     // MPI nodes
     // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_HAVE_MPI)
+#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
     if(type == "world")
         return new dtkComposerNodeWorld;
 

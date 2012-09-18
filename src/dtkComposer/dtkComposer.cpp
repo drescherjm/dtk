@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. sept. 17 09:39:10 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 374
+ * Last-Updated: Tue Sep 18 10:27:22 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 376
  */
 
 /* Commentary: 
@@ -215,6 +215,7 @@ bool dtkComposer::insert(QString file)
 
 void dtkComposer::updateRemotes(dtkComposerSceneNodeComposite *composite)
 {
+#if defined(DTK_BUILD_DISTRIBUTED)
     dtkComposerWriter writer;
     writer.setScene(d->scene);
 
@@ -227,6 +228,9 @@ void dtkComposer::updateRemotes(dtkComposerSceneNodeComposite *composite)
             foreach(dtkComposerSceneNodeComposite *block, ctrl->blocks())
                 this->updateRemotes(block);
     }
+#else
+    Q_UNUSED(composite);
+#endif
 }
 
 

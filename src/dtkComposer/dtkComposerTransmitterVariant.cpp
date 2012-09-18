@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 16:38:12 2012 (+0200)
- *           By: tkloczko
- *     Update #: 478
+ * Last-Updated: Tue Sep 18 11:17:06 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 483
  */
 
 /* Commentary: 
@@ -17,15 +17,20 @@
  * 
  */
 
+#include <dtkConfig.h>
+
 #include "dtkComposerTransmitter_p.h"
 #include "dtkComposerTransmitterVariant.h"
 
 #include <dtkContainer/dtkAbstractContainer.h>
+
 #include <dtkCore/dtkGlobal.h>
 #include <dtkCore/dtkAbstractData.h>
 #include <dtkCore/dtkAbstractDataFactory.h>
 
+#if defined(DTK_BUILD_DISTRIBUTED)
 #include <dtkDistributed/dtkDistributedMessage.h>
+#endif
 
 #include <dtkLog/dtkLog.h>
 
@@ -96,6 +101,7 @@ void dtkComposerTransmitterVariant::setData(const dtkAbstractContainerWrapper& d
     d->variant = qVariantFromValue(data);
 }
 
+#if defined(DTK_BUILD_DISTRIBUTED)
 void dtkComposerTransmitterVariant::setDataFromMsg(dtkDistributedMessage *msg)
 {
     if (msg->type() == "double") {
@@ -211,6 +217,7 @@ void dtkComposerTransmitterVariant::setDataFromMsg(dtkDistributedMessage *msg)
             dtkWarn() << "warning: no content in dtkAbstractData transmitter";
     }
 }
+#endif
 
 QVariant& dtkComposerTransmitterVariant::data(void)
 {

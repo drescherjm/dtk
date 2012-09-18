@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue May 22 01:13:05 2012 (+0200)
+## Last-Updated: Tue Sep 18 11:10:29 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 259
+##     Update #: 265
 ######################################################################
 ## 
 ### Commentary: 
@@ -31,7 +31,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkColorGrid.h
   dtkFlowLayout.h
   dtkFinder.h
-  dtkInterpreter.h
   dtkPieChart.h
   dtkPluginsEditor.h
   dtkPopup.h
@@ -56,7 +55,6 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkColorButton.h
   dtkColorGrid.h
   dtkFinder.h
-  dtkInterpreter.h
   dtkPieChart.h
   dtkPluginsEditor.h
   dtkPopup.h
@@ -82,7 +80,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkColorGrid.cpp
   dtkFlowLayout.cpp
   dtkFinder.cpp
-  dtkInterpreter.cpp
   dtkPieChart.cpp
   dtkPluginsEditor.cpp
   dtkPopup.cpp
@@ -98,6 +95,12 @@ set(${PROJECT_NAME}_SOURCES
   dtkViewLayout.cpp
   dtkViewLayoutItem.cpp
   dtkViewList.cpp)
+
+if(DTK_BUILD_SCRIPT)
+set(${PROJECT_NAME}_HEADERS     ${${PROJECT_NAME}_HEADERS}     dtkInterpreter.h)
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC} dtkInterpreter.h)
+set(${PROJECT_NAME}_SOURCES     ${${PROJECT_NAME}_SOURCES}     dtkInterpreter.cpp)
+endif(DTK_BUILD_SCRIPT)
 
 if(APPLE)
 set(${PROJECT_NAME}_SOURCES
@@ -159,7 +162,11 @@ endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
-  dtkScript)
+  dtkCore)
+
+if(DTK_BUILD_SCRIPT)
+target_link_libraries(${PROJECT_NAME} dtkScript)
+endif(DTK_BUILD_SCRIPT)
 
 if(APPLE)
 target_link_libraries(${PROJECT_NAME} "-framework Cocoa")

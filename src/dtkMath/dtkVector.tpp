@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Mon Jul 12 16:04:26 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 15:38:59 2012 (+0200)
+ * Last-Updated: Wed Sep 19 09:59:59 2012 (+0200)
  *           By: tkloczko
- *     Update #: 3
+ *     Update #: 4
  */
 
 /* Commentary: 
@@ -40,6 +40,11 @@ template <class T> inline dtkVector<T>::dtkVector(const dtkMatrix<T>& mat,
                                                   unsigned icolStart,
                                                   unsigned irowEnd) : dtkMatrix<T>(mat, irowStart, icolStart, irowEnd, icolStart)
 {
+}
+
+template <typename T> QString dtkVector<T>::identifier(void) const
+{
+    return QString("dtkVector<%1>").arg(typeid(T).name());
 }
 
 template <class T> inline void dtkVector<T>::mapInto(const dtkMatrix<T>& mat,

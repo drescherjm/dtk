@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:41:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jun 25 12:15:12 2012 (+0200)
+ * Last-Updated: Wed Sep 19 10:01:15 2012 (+0200)
  *           By: tkloczko
- *     Update #: 62
+ *     Update #: 63
  */
 
 /* Commentary: 
@@ -35,6 +35,10 @@ public:
      dtkVector3D(const dtkVector<T>& vec, unsigned irowStart): dtkVector<T>(vec, irowStart, irowStart + 2) {};
     ~dtkVector3D(void) {};
 
+public:
+    QString identifier(void) const;
+
+public:
     void allocate(void) { dtkVector<T>::allocate(3); };
 
     void mapInto(const dtkMatrix<T>& mat, unsigned irowStart, unsigned icolStart);

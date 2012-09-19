@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:08:32 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jun 25 12:09:36 2012 (+0200)
+ * Last-Updated: Wed Sep 19 09:58:51 2012 (+0200)
  *           By: tkloczko
- *     Update #: 42
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -22,10 +22,9 @@
 
 #include "dtkMatrix.h"
 
-template <class T = double> class dtkMatrixSquared : public dtkMatrix<T>
+template <typename T = double> class dtkMatrixSquared : public dtkMatrix<T>
 {
 public:
-
      dtkMatrixSquared(void): dtkMatrix<T>() {};
      dtkMatrixSquared(unsigned crowInit): dtkMatrix<T>( crowInit, crowInit) {};
      dtkMatrixSquared(const dtkMatrix<T> &mat): dtkMatrix<T>(mat) {};
@@ -34,6 +33,10 @@ public:
      dtkMatrixSquared(const dtkMatrixSquared<T> &, unsigned, unsigned, unsigned);
     ~dtkMatrixSquared(void) {};
 
+public:
+    QString identifier(void) const;
+
+public:
     void allocate(unsigned crowInit) {
             dtkMatrix<T>::allocate(crowInit, crowInit);
     }
@@ -70,7 +73,7 @@ public:
     void makeUnity(void);
 };
 
-template <class T, unsigned crow> class dtkMatSquared: public T
+template <typename T, unsigned crow> class dtkMatSquared: public T
 {
 public:
     dtkMatSquared(void): T(crow) {}
@@ -78,13 +81,13 @@ public:
     T & operator =(const T &smtx) { return T::operator=(smtx); }
 };
 
-template <class T, unsigned crow> class dtkUnity< dtkMatSquared<dtkMatrixSquared<T>, crow> >: public dtkMatSquared<dtkMatrixSquared<T>, crow>
+template <typename T, unsigned crow> class dtkUnity< dtkMatSquared<dtkMatrixSquared<T>, crow> >: public dtkMatSquared<dtkMatrixSquared<T>, crow>
 {
 public:
     dtkUnity(void) { this->makeUnity(); }
 };
 
-template <class T, unsigned crow> class dtkZero< dtkMatSquared<dtkMatrixSquared<T>, crow> >: public dtkMatSquared<dtkMatrixSquared<T>, crow>
+template <typename T, unsigned crow> class dtkZero< dtkMatSquared<dtkMatrixSquared<T>, crow> >: public dtkMatSquared<dtkMatrixSquared<T>, crow>
 {
 public:
     dtkZero(void) { fill(dtkZero<T>()); }

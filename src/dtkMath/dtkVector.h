@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:26:31 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jun 25 12:20:31 2012 (+0200)
+ * Last-Updated: Wed Sep 19 10:00:26 2012 (+0200)
  *           By: tkloczko
- *     Update #: 30
+ *     Update #: 32
  */
 
 /* Commentary: 
@@ -35,6 +35,10 @@ public:
      dtkVector(const dtkVector&, unsigned, unsigned);
     ~dtkVector(void) {};
 
+public:
+    QString identifier(void) const;
+
+public:
     void mapInto(const dtkMatrix<T>&, unsigned, unsigned, unsigned);
     void mapInto(const dtkVector&, unsigned, unsigned);
 

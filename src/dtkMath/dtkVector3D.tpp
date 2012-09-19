@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Mon Jul 12 16:15:10 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul 12 16:15:47 2010 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 1
+ * Last-Updated: Wed Sep 19 10:01:25 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 2
  */
 
 /* Commentary: 
@@ -40,6 +40,11 @@ template <class T> inline dtkVector3D<T>::dtkVector3D(const T& elem1,
     (*this)[0] = elem1;
     (*this)[1] = elem2;
     (*this)[2] = elem3;
+}
+
+template <typename T> QString dtkVector3D<T>::identifier(void) const
+{
+    return QString("dtkVector3D<%1>").arg(typeid(T).name());
 }
 
 template <class T> inline void dtkVector3D<T>::mapInto(const dtkMatrix<T>& mat,

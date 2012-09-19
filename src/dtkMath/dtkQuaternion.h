@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 15:00:12 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 30 16:59:07 2012 (+0200)
+ * Last-Updated: Wed Sep 19 10:02:10 2012 (+0200)
  *           By: tkloczko
- *     Update #: 49
+ *     Update #: 50
  */
 
 /* Commentary: 
@@ -38,6 +38,10 @@ public:
      dtkQuaternion(const T& r, const dtkVector3D<T>& vec, const T& angle);
     ~dtkQuaternion(void) {};
 
+public:
+    QString identifier(void) const;
+
+public:
     void allocate(void) { dtkVector<T>::allocate(4); };
 
     void mapInto(const dtkMatrix<T>& mat,

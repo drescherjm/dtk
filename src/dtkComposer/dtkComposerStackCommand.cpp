@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 10:41:36 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 4493
+ * Last-Updated: mer. sept. 19 15:21:05 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 4500
  */
 
 /* Commentary: 
@@ -422,6 +422,9 @@ void dtkComposerStackCommandDestroyNode::undo(void)
     e->parent->addNode(e->node);
     d->graph->addNode(e->node);
 
+    if (e->parent->visible())
+        d->scene->addItem(e->node);
+
     foreach(dtkComposerStackCommand *destroy_node, e->destroy_nodes)
         destroy_node->undo();
 
@@ -432,8 +435,6 @@ void dtkComposerStackCommandDestroyNode::undo(void)
 
     d->graph->layout();
 
-    if (e->parent->visible())
-        d->scene->addItem(e->node);
 
     d->scene->modify(true);
 }

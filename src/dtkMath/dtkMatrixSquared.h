@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:08:32 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jun 25 12:09:36 2012 (+0200)
- *           By: tkloczko
- *     Update #: 42
+ * Last-Updated: Wed Sep 19 15:02:44 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -25,7 +25,6 @@
 template <class T = double> class dtkMatrixSquared : public dtkMatrix<T>
 {
 public:
-
      dtkMatrixSquared(void): dtkMatrix<T>() {};
      dtkMatrixSquared(unsigned crowInit): dtkMatrix<T>( crowInit, crowInit) {};
      dtkMatrixSquared(const dtkMatrix<T> &mat): dtkMatrix<T>(mat) {};
@@ -35,7 +34,7 @@ public:
     ~dtkMatrixSquared(void) {};
 
     void allocate(unsigned crowInit) {
-            dtkMatrix<T>::allocate(crowInit, crowInit);
+        dtkMatrix<T>::allocate(crowInit, crowInit);
     }
 
     void mapInto(const dtkMatrixSquared &, unsigned, unsigned, unsigned);

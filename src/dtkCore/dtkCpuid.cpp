@@ -23,7 +23,7 @@
 
 #include "dtkCpuid.h"
 
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WIN) && !__MINGW32__
 #include <limits.h>
 #if defined(MSVC)
 typedef unsigned __int32  uint32_t;

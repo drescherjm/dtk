@@ -29,7 +29,7 @@
 // dtkContainerVector interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class DTKCONTAINER_EXPORT dtkContainerVector : public dtkAbstractContainerOrdered<T>
+template <typename T> class  dtkContainerVector : public dtkAbstractContainerOrdered<T>
 {
 public:
      dtkContainerVector(void);

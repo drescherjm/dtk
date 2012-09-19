@@ -37,7 +37,7 @@ enum dtkContainerType {
 // dtkAbstractContainer interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class DTKCONTAINER_EXPORT dtkAbstractContainer
+template <typename T> class dtkAbstractContainer
 {
 public:
      dtkAbstractContainer(void);

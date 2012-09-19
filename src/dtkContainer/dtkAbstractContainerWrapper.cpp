@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:51:33 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 13 16:50:58 2012 (+0200)
+ * Last-Updated: Wed Sep 19 10:26:11 2012 (+0200)
  *           By: tkloczko
- *     Update #: 42
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -105,6 +105,14 @@ QString dtkAbstractContainerWrapper::identifier(void) const
         return m_container->identifier();
 
     return "dtkAbstractContainerWrapper";
+}
+
+QString dtkAbstractContainerWrapper::description(void) const
+{
+    if (m_container)
+        return m_container->description();
+
+    return "dtkAbstractContainerWrapper is void! It might not be what you expect.";
 }
 
 void dtkAbstractContainerWrapper::setName(const QString& name)

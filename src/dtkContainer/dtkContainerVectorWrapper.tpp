@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri May 25 09:47:39 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 13 16:54:53 2012 (+0200)
+ * Last-Updated: Wed Sep 19 10:28:19 2012 (+0200)
  *           By: tkloczko
- *     Update #: 51
+ *     Update #: 54
  */
 
 /* Commentary: 
@@ -67,6 +67,14 @@ template <typename T> dtkContainerVectorWrapper<T> *dtkContainerVectorWrapper<T>
 template <typename T> QString dtkContainerVectorWrapper<T>::identifier(void) const
 {
     return QString("dtkContainerVectorWrapper<%1>").arg(typeid(T).name());
+};
+
+template <typename T> QString dtkContainerVectorWrapper<T>::description(void) const
+{
+    if (m_vector)
+        return m_vector->description();
+
+    return QString("dtkContainerVectorWrapper<%1> is void! It might not be what you expect.").arg(typeid(T).name());
 };
 
 template <typename T> inline void dtkContainerVectorWrapper<T>::setVector(dtkContainerVector<T> *vector)

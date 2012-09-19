@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 22 13:07:11 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 10 13:47:25 2012 (+0200)
+ * Last-Updated: Wed Sep 19 10:11:11 2012 (+0200)
  *           By: tkloczko
- *     Update #: 78
+ *     Update #: 79
  */
 
 /* Commentary: 
@@ -45,7 +45,8 @@ public:
     ~dtkAbstractContainer(void);
 
 public:
-    virtual QString identifier(void) const = 0;
+    virtual QString  identifier(void) const = 0;
+    virtual QString description(void) const = 0;
 
     virtual dtkContainerType type(void) const = 0;
 

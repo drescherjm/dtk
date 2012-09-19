@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Aug  9 14:48:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Aug  9 15:47:47 2012 (+0200)
+ * Last-Updated: Wed Sep 19 11:35:08 2012 (+0200)
  *           By: tkloczko
- *     Update #: 7
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -20,8 +20,8 @@
 #ifndef DTKABSTRACTCONTAINERWRAPPER_TPP
 #define DTKABSTRACTCONTAINERWRAPPER_TPP
 
-#include "dtkAbstractContainerWrapper.h"
-#include "dtkContainerVectorWrapper.h"
+class dtkAbstractContainerWrapper;
+template <typename T> class dtkContainerVectorWrapper;
 
 // /////////////////////////////////////////////////////////////////
 // 

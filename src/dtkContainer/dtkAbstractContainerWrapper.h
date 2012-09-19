@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:46:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 13 16:51:04 2012 (+0200)
+ * Last-Updated: Wed Sep 19 10:15:57 2012 (+0200)
  *           By: tkloczko
- *     Update #: 39
+ *     Update #: 40
  */
 
 /* Commentary: 
@@ -71,7 +71,8 @@ public:
     template <typename T> dtkContainerVector<T> *vector(void);
 
 public:
-    virtual QString identifier(void) const;
+    virtual QString  identifier(void) const;
+    virtual QString description(void) const;
 
 public:
     void setName(const QString& name);

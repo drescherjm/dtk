@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:58:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  9 09:44:30 2012 (+0200)
- *           By: tkloczko
- *     Update #: 22
+ * Last-Updated: Wed Sep 19 15:00:37 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -24,7 +24,7 @@
 
 #include <math.h>
 
-#if defined(Q_OS_WIN) && defined(Q_CC_MSVC)
+#if defined(Q_OS_WIN) && (defined(Q_CC_MSVC) || defined(__MINGW32__))
 #define M_E 2.718281
 #endif
 

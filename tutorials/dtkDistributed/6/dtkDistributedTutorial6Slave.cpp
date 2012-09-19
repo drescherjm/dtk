@@ -165,7 +165,6 @@ int dtkDistributedTutorial6Slave::exec(void)
         communicator->send(&partial_sum, 1, dtkDistributedCommunicator::dtkDistributedCommunicatorLong, 0, dtkDistributedCommunicator::dtkDistributedCommunicatorReceive);
     }
 
-finalize:
     delete s_array;
 
     delete summer;

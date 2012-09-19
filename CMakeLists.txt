@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Jun 19 15:27:19 2012 (+0200)
+## Last-Updated: Tue Sep 18 09:13:11 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 389
+##     Update #: 391
 ######################################################################
 ## 
 ### Commentary: 
@@ -34,15 +34,21 @@ mark_as_advanced(${PROJECT_NAME}_VERSION_BUILD)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-option(BUILD_SHARED_LIBS       "Build shared libraries" true)
-option(DTK_BUILD_TOOLS         "Build tools"            true)
-option(DTK_BUILD_EXAMPLES      "Build examples"         false)
-option(DTK_BUILD_TESTING       "Build testing"          false)
-option(DTK_BUILD_DOCUMENTATION "Build documentation"    false)
-option(DTK_BUILD_WRAPPERS      "Build wrappers"         false)
-option(DTK_BUILD_REPORTING     "Build reporting"        false)
-option(DTK_BUILD_TUTORIALS     "Build tutorials"        false)
-option(DTK_BUILD_MPI           "Build mpi related code" false)
+option(BUILD_SHARED_LIBS       "Build shared libraries"  true)
+option(DTK_BUILD_TOOLS         "Build tools"             true)
+option(DTK_BUILD_EXAMPLES      "Build examples"          false)
+option(DTK_BUILD_TESTING       "Build testing"           false)
+option(DTK_BUILD_DOCUMENTATION "Build documentation"     false)
+option(DTK_BUILD_WRAPPERS      "Build wrappers"          false)
+option(DTK_BUILD_REPORTING     "Build reporting"         false)
+option(DTK_BUILD_TUTORIALS     "Build tutorials"         false)
+option(DTK_BUILD_MPI           "Build mpi related code"  false)
+
+option(DTK_BUILD_DISTRIBUTED   "Build distributed layer" true)
+option(DTK_BUILD_COMPOSER      "Build composer layer"    true)
+option(DTK_BUILD_VR            "Build vr layer"          true)
+option(DTK_BUILD_PLOT          "Build plotting layer"    true)
+option(DTK_BUILD_SCRIPT        "Build scripting layer"   true)
 
 message ("Configuration of dtk:")
 message ("  DTK_BUILD_TOOLS ${DTK_BUILD_TOOLS}")

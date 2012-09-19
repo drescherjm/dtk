@@ -36,7 +36,7 @@ public:
     dtkDistributedCommunicatorMpi(const dtkDistributedCommunicatorMpi & c);
     dtkDistributedCommunicatorMpi& operator=(const dtkDistributedCommunicatorMpi& c);
 
-    void   initialize(void);
+    void  initialize(void);
     bool  initialized(void);
     void uninitialize(void);
 

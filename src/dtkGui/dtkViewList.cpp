@@ -54,6 +54,11 @@ void dtkViewList::update(void)
         this->addItem(view);
 }
 
+void dtkViewList::clear(void)
+{
+    QListWidget::clear();
+}
+
 QMimeData *dtkViewList::mimeData(const QList<QListWidgetItem *> items) const
 {
     QMimeData *mimeData = new QMimeData;

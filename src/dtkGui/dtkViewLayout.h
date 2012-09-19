@@ -46,6 +46,9 @@ public:
 
 signals:
     void focused(dtkAbstractView *view);
+    
+public slots:
+    void clear(void);
 
 private:
     dtkViewLayoutPrivate *d;

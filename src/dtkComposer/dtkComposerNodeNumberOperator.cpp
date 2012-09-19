@@ -25,7 +25,7 @@
 #include <dtkLog/dtkLog.h>
 
 #include <dtkMath/dtkMath.h>
-
+#include <QtCore/qmath.h>
 #include <math.h>
 
 // /////////////////////////////////////////////////////////////////
@@ -282,10 +282,10 @@ void dtkComposerNodeNumberOperatorUnarySqrt::run(void)
     case QVariant::UInt:
     case QVariant::LongLong:
     case QVariant::ULongLong:
-        d->emitter.setData(sqrt(qVariantValue<qlonglong>(d->receiver.data())));
+        d->emitter.setData(qSqrt(qVariantValue<qlonglong>(d->receiver.data())));
         break;
     case QVariant::Double:
-        d->emitter.setData(sqrt(qVariantValue<double>(d->receiver.data())));
+        d->emitter.setData(qSqrt(qVariantValue<double>(d->receiver.data())));
         break;
     default:
         dtkWarn() << "Type" << d->receiver.type() << "is not handled by the node.";
@@ -463,7 +463,7 @@ void dtkComposerNodeNumberOperatorUnaryFloor::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryRound::run(void)
 {
-    d->emitter.setData(round(qVariantValue<double>(d->receiver.data())));
+    d->emitter.setData(qRound(qVariantValue<double>(d->receiver.data())));
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -480,7 +480,7 @@ void dtkComposerNodeNumberOperatorUnaryAbs::run(void)
         d->emitter.setData(abs(qVariantValue<qlonglong>(d->receiver.data())));
         break;
     case QVariant::Double:
-        d->emitter.setData(abs(qVariantValue<double>(d->receiver.data())));
+        d->emitter.setData(qAbs(qVariantValue<double>(d->receiver.data())));
         break;
     default:
         dtkWarn() << "Type" << d->receiver.type() << "is not handled by the node.";

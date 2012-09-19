@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:49:32 2012 (+0200)
- *           By: tkloczko
- *     Update #: 217
+ * Last-Updated: Thu Jul 12 10:43:54 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 318
  */
 
 /* Commentary: 
@@ -18,21 +18,39 @@
  */
 
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeLeafData.h"
+#include "dtkComposerNodeLeafProcess.h"
+#include "dtkComposerNodeLeafView.h"
 #include "dtkComposerSceneNode.h"
 #include "dtkComposerSceneNode_p.h"
 #include "dtkComposerSceneNodeLeaf.h"
 #include "dtkComposerScenePort.h"
 #include "dtkComposerTransmitter.h"
 
+// /////////////////////////////////////////////////////////////////
+// dtkComposerSceneNodeLeafPrivate interface
+// /////////////////////////////////////////////////////////////////
+
 class dtkComposerSceneNodeLeafPrivate
 {
 public:
     QRectF rect;
+
+public:
+    QLinearGradient gradiant;
+    
+    bool gradiant_defined;
 };
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerSceneNodeLeaf implementation
+// /////////////////////////////////////////////////////////////////
 
 dtkComposerSceneNodeLeaf::dtkComposerSceneNodeLeaf(void) : dtkComposerSceneNode(), d(new dtkComposerSceneNodeLeafPrivate)
 {
     d->rect = QRectF(0, 0, 150, 50);
+
+    d->gradiant_defined = false;
 }
 
 dtkComposerSceneNodeLeaf::~dtkComposerSceneNodeLeaf(void)
@@ -45,6 +63,8 @@ dtkComposerSceneNodeLeaf::~dtkComposerSceneNodeLeaf(void)
 void dtkComposerSceneNodeLeaf::wrap(dtkComposerNode *node)
 {
     dtkComposerSceneNode::wrap(node);
+
+    this->setToolTip(node->type());
 
     //foreach(dtkComposerTransmitter *receiver, node->receivers()) {
 
@@ -132,6 +152,38 @@ void dtkComposerSceneNodeLeaf::layout(void)
     }
     
     this->update(updateRect);
+
+// /////////////////////////////////////////////////////////////////
+// Beautifying nodes
+// /////////////////////////////////////////////////////////////////
+
+    if (!d->gradiant_defined) {
+        
+        d->gradiant = QLinearGradient(d->rect.left(), d->rect.top(), d->rect.left(), d->rect.bottom());
+        
+        qreal stripe = 10. / d->rect.height();
+        
+        if (dynamic_cast<dtkComposerNodeLeafProcess*>(this->wrapee())) {
+            d->gradiant.setColorAt(0.0, QColor(Qt::red).lighter());
+            d->gradiant.setColorAt(stripe, QColor(Qt::darkRed));
+            d->gradiant.setColorAt(1.0, QColor(Qt::darkRed).darker());
+        } else if (dynamic_cast<dtkComposerNodeLeafData*>(this->wrapee())) {
+            d->gradiant.setColorAt(0.0, QColor(Qt::blue).lighter());
+            d->gradiant.setColorAt(stripe, QColor(Qt::darkBlue));
+            d->gradiant.setColorAt(1.0, QColor(Qt::darkBlue).darker());
+        } else if (dynamic_cast<dtkComposerNodeLeafView*>(this->wrapee())) {
+            d->gradiant.setColorAt(0.0, QColor(Qt::green).lighter());
+            d->gradiant.setColorAt(stripe, QColor(Qt::darkGreen));
+            d->gradiant.setColorAt(1.0, QColor(Qt::darkGreen).darker());
+        } else {
+            d->gradiant.setColorAt(0.0, QColor(Qt::gray).lighter());
+            d->gradiant.setColorAt(stripe, QColor(Qt::darkGray));
+            d->gradiant.setColorAt(1.0, QColor(Qt::darkGray).darker());
+        }
+        
+        d->gradiant_defined = true;
+
+    }
 }
 
 void dtkComposerSceneNodeLeaf::resize(qreal width, qreal height)
@@ -152,23 +204,17 @@ void dtkComposerSceneNodeLeaf::paint(QPainter *painter, const QStyleOptionGraphi
     qreal radius = this->embedded() ? 0.0 : 5.0;
 
     if (this->isSelected()) {
-        painter->setPen(QPen(Qt::magenta, 2, Qt::SolidLine));
+        painter->setPen(QPen(Qt::magenta, 3, Qt::SolidLine));
         painter->setBrush(Qt::NoBrush);
-        painter->drawRoundedRect(d->rect.adjusted(-2, -2, 2, 2), radius, radius);
+        painter->drawRoundedRect(d->rect.adjusted(-1, -1, 1, 1), radius, radius);
     }
 
-    if(this->embedded())
+    if (this->embedded())
         painter->setPen(Qt::NoPen);
     else
         painter->setPen(QPen(Qt::black, 1, Qt::SolidLine));
 
-    QLinearGradient gradiant(d->rect.left(), d->rect.top(), d->rect.left(), d->rect.bottom());
-    gradiant.setColorAt(0.0, QColor(Qt::white));
-    gradiant.setColorAt(0.3, QColor(Qt::gray));
-    gradiant.setColorAt(1.0, QColor(Qt::gray).darker());
-
-    painter->setBrush(gradiant);
-
+    painter->setBrush(d->gradiant);
     painter->drawRoundedRect(d->rect, radius, radius);
 
     // Drawing node's title
@@ -186,9 +232,9 @@ void dtkComposerSceneNodeLeaf::paint(QPainter *painter, const QStyleOptionGraphi
     else
         title_pos = QPointF(d->rect.right() - 2*margin - metrics.width(title_text), 2*margin + metrics.xHeight());
 
-    painter->setPen(QPen(QColor(Qt::gray).darker()));
+    painter->setPen(QPen(QColor(Qt::gray).darker().darker()));
     painter->drawText(title_pos + QPointF(0, -1), title_text);
-    painter->setPen(QPen(QColor(Qt::gray)));
+    painter->setPen(QPen(QColor(Qt::gray).darker()));
     painter->drawText(title_pos + QPointF(0, 1), title_text);
     painter->setPen(QPen(QColor(Qt::white)));
     painter->drawText(title_pos, title_text);

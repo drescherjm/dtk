@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri May 25 09:47:39 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 15:12:09 2012 (+0200)
+ * Last-Updated: Wed Jul  4 12:21:44 2012 (+0200)
  *           By: tkloczko
- *     Update #: 35
+ *     Update #: 37
  */
 
 /* Commentary: 
@@ -57,6 +57,11 @@ template <typename T> dtkContainerVectorWrapper<T>& dtkContainerVectorWrapper<T>
 template <typename T> dtkContainerVectorWrapper<T> *dtkContainerVectorWrapper<T>::clone(void) const
 {
     return new dtkContainerVectorWrapper<T>(*this);
+};
+
+template <typename T> dtkContainerVectorWrapper<T> *dtkContainerVectorWrapper<T>::voidClone(void) const
+{
+    return new dtkContainerVectorWrapper<T>();
 };
 
 template <typename T> QString dtkContainerVectorWrapper<T>::identifier(void) const

@@ -27,7 +27,7 @@
 // dtkAbstractContainer interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class DTKCONTAINER_EXPORT dtkAbstractContainerOrdered : public dtkAbstractContainer<T>
+template <typename T> class dtkAbstractContainerOrdered : public dtkAbstractContainer<T>
 {
 public:
      dtkAbstractContainerOrdered(void);

@@ -20,10 +20,11 @@
 #ifndef DTKQUATERNION_H
 #define DTKQUATERNION_H
 
+#include "dtkMathExport.h"
 #include "dtkVector.h"
 #include "dtkVector3D.h"
 
-template <class T = double> class dtkQuaternion : public dtkVector<T>
+template <class T = double> class DTKMATH_EXPORT dtkQuaternion : public dtkVector<T>
 {
 public:	
      dtkQuaternion(void): dtkVector<T>(4U) {};

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Apr 23 10:50:52 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 15:02:26 2012 (+0200)
+ * Last-Updated: Tue Jul 24 16:40:42 2012 (+0200)
  *           By: tkloczko
- *     Update #: 10
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -21,10 +21,9 @@
 #define DTKABSTRACTOBJECT_P_H
 
 #include "dtkCoreExport.h"
+#include "dtkAbstractObject.h"
 
 #include <QtCore>
-
-class dtkAbstractObject;
 
 ////////////////////////////////////////////////////
 // dtkAbstractObjectPrivate interface

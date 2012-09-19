@@ -80,6 +80,9 @@ public slots:
     dtkAbstractViewAnimator   *animator(const QString& type);
     dtkAbstractViewNavigator  *navigator(const QString& type);
     dtkAbstractViewInteractor *interactor(const QString& type);
+    
+public slots:
+    void clear(void);
 
 protected:
      dtkAbstractViewFactory(void);

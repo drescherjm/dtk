@@ -34,6 +34,9 @@ public:
      dtkViewList(QWidget *parent = 0);
     ~dtkViewList(void);
 
+public slots:
+    void clear(void);
+    
 protected slots:
     void update(void);
     

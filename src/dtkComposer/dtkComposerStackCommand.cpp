@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. juin 12 16:36:46 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 4334
+ * Last-Updated: Tue Sep 18 10:41:36 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 4493
  */
 
 /* Commentary: 
@@ -17,6 +17,8 @@
  * 
  */
 
+#include <dtkConfig.h>
+
 #include "dtkComposerFactory.h"
 #include "dtkComposerGraph.h"
 #include "dtkComposerGraphNode.h"
@@ -24,7 +26,9 @@
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeControlCase.h"
 #include "dtkComposerNodeLeaf.h"
+#if defined(DTK_BUILD_DISTRIBUTED)
 #include "dtkComposerNodeRemote.h"
+#endif
 #include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
@@ -180,8 +184,10 @@ void dtkComposerStackCommandCreateNode::redo(void)
     d->graph->layout();
 
 // -- ??
-    if (e->parent->root() || e->parent->flattened() || e->parent->entered())
+    if (e->parent->visible()) {
         d->scene->addItem(e->node);
+        e->node->layout();
+    }
 
     d->scene->modify(true);
 // --
@@ -213,7 +219,7 @@ void dtkComposerStackCommandCreateNode::undo(void)
     e->parent->removeNode(e->node);
     e->parent->layout();
 // -- ??
-    if (e->parent->root() || e->parent->flattened() || e->parent->entered())
+    if (e->parent->visible())
         d->scene->removeItem(e->node);
 
     d->scene->modify(true);
@@ -393,7 +399,7 @@ void dtkComposerStackCommandDestroyNode::redo(void)
     e->parent->removeNode(e->node);
     e->parent->layout();
 
-    if (e->parent->root() || e->parent->visible() || e->parent->entered())
+    if (e->parent->visible())
         d->scene->removeItem(e->node);
 
     d->scene->modify(true);
@@ -426,7 +432,7 @@ void dtkComposerStackCommandDestroyNode::undo(void)
 
     d->graph->layout();
 
-    if (e->parent->root() || e->parent->visible() || e->parent->entered())
+    if (e->parent->visible())
         d->scene->addItem(e->node);
 
     d->scene->modify(true);
@@ -508,7 +514,7 @@ void dtkComposerStackCommandCreateEdge::redo(void)
 
     e->parent->addEdge(e->edge);
 
-    if(e->parent->entered() || e->parent->flattened() || e->parent->root()) {
+    if(e->parent->visible()) {
 
         d->scene->addItem(e->edge);
 
@@ -567,7 +573,7 @@ void dtkComposerStackCommandCreateEdge::undo(void)
 
     d->graph->removeEdge(e->edge);
 
-    if(e->parent->entered() || e->parent->flattened() || e->parent->root())
+    if(e->parent->visible())
         d->scene->removeItem(e->edge);
 
     d->scene->modify(true);
@@ -601,7 +607,7 @@ void dtkComposerStackCommandCreateEdge::setParent(void)
     else if(e->source->node()->parent()->parent() == e->destination->node()->parent()->parent())
         e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->destination->node()->parent()->parent());
     else
-        qDebug() << "dtkComposerStackCommandCreateEdge::setParent" << "Unhandled case" ;
+        qDebug() << DTK_PRETTY_FUNCTION << "Unhandled case" ;
 }
 
 void dtkComposerStackCommandCreateEdge::setParent(dtkComposerSceneNodeComposite *parent)
@@ -676,7 +682,7 @@ void dtkComposerStackCommandDestroyEdge::redo(void)
     e->parent->removeEdge(e->edge);
 
 
-    if(e->parent->entered() || e->parent->visible() || e->parent->root())
+    if(e->parent->visible())
         d->scene->removeItem(e->edge);
 
     d->scene->modify(true);
@@ -703,7 +709,7 @@ void dtkComposerStackCommandDestroyEdge::undo(void)
 
     e->parent->addEdge(e->edge);
 
-    if(e->parent->entered() || e->parent->visible() || e->parent->root())
+    if(e->parent->visible())
         d->scene->addItem(e->edge);
 
     e->edge->adjust();
@@ -777,7 +783,7 @@ void dtkComposerStackCommandCreateNote::redo(void)
 
     e->parent->addNote(e->note);
 
-    if (e->parent->root() || e->parent->flattened() || e->parent->entered())
+    if (e->parent->visible())
         d->scene->addItem(e->note);
     d->scene->modify(true);
 }
@@ -794,8 +800,9 @@ void dtkComposerStackCommandCreateNote::undo(void)
 
     e->parent->removeNote(e->note);
 
-    if (e->parent->root() || e->parent->flattened() || e->parent->entered())
+    if (e->parent->visible())
         d->scene->removeItem(e->note);
+
     d->scene->modify(true);
 }
 
@@ -852,7 +859,7 @@ void dtkComposerStackCommandDestroyNote::redo(void)
 
     e->parent->removeNote(e->note);
 
-    if (e->parent->root() || e->parent->flattened() || e->parent->entered())
+    if (e->parent->visible())
         d->scene->removeItem(e->note);
 
     d->scene->modify(true);
@@ -873,7 +880,7 @@ void dtkComposerStackCommandDestroyNote::undo(void)
 
     e->note->setPos(e->position);
 
-    if (e->parent->root() || e->parent->flattened() || e->parent->entered())
+    if (e->parent->visible())
         d->scene->addItem(e->note);
 
     d->scene->modify(true);
@@ -1050,7 +1057,7 @@ void dtkComposerStackCommandCreateGroup::undo(void)
 
     e->parent->removeNode(e->node);
 
-    if (e->parent->root() || e->parent->flattened() || e->parent->entered())
+    if (e->parent->visible())
         d->scene->removeItem(e->node);
 
     d->scene->update();
@@ -1205,7 +1212,7 @@ void dtkComposerStackCommandDestroyGroup::undo(void)
         note->setParent(e->node);
     }
 
-    if (e->parent->root() || e->parent->flattened() || e->parent->entered())
+    if (e->parent->visible())
         d->scene->addItem(e->node);
 
     d->scene->update();
@@ -1979,7 +1986,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
             command->setGraph(d->graph);
             command->setOriginNode(origin);
             command->setTargetNode(source);
-            command->setOriginPosition(origin->sceneBoundingRect().topLeft());
+            command->setOriginPosition(e->origin_pos );
             command->setTargetPosition(origin->sceneBoundingRect().topLeft());
             command->redo();
 
@@ -2108,7 +2115,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
                 }
 
 
-                // qDebug() << __func__ << "input" << target->inputDegree(proxy) + target->outputDegree(proxy);
+                // qDebug() << DTK_PRETTY_FUNCTION << "input" << target->inputDegree(proxy) + target->outputDegree(proxy);
 
                 if(target->inputDegree(proxy) + target->outputDegree(proxy) == 0) {
 
@@ -2159,7 +2166,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
                 }
 
 
-                // qDebug() << __func__ << "input" << target->inputDegree(proxy) + target->outputDegree(proxy);
+                // qDebug() << DTK_PRETTY_FUNCTION << "input" << target->inputDegree(proxy) + target->outputDegree(proxy);
 
                 if(source->inputDegree(proxy) + source->outputDegree(proxy) == 0) {
 
@@ -2191,7 +2198,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
             } else {
 
-                qDebug() << __func__ << "Unhandled case (input)";
+                qDebug() << DTK_PRETTY_FUNCTION << "Unhandled case (input)";
             }
         }
 
@@ -2240,7 +2247,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
                     }
                 }
 
-                // qDebug() << __func__ << "output" << target->inputDegree(proxy) + target->outputDegree(proxy);
+                // qDebug() << DTK_PRETTY_FUNCTION << "output" << target->inputDegree(proxy) + target->outputDegree(proxy);
 
                 if(target->inputDegree(proxy) + target->outputDegree(proxy) == 0) {
 
@@ -2291,7 +2298,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
                     }
                 }
 
-                // qDebug() << __func__ << "output" << target->inputDegree(proxy) + target->outputDegree(proxy);
+                // qDebug() << DTK_PRETTY_FUNCTION << "output" << target->inputDegree(proxy) + target->outputDegree(proxy);
 
                 if(source->inputDegree(proxy) + source->outputDegree(proxy) == 0) {
 
@@ -2323,7 +2330,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
             } else {
 
-                qDebug() << __func__ << "Unhandled case (output)";
+                qDebug() << DTK_PRETTY_FUNCTION << "Unhandled case (output)";
             }
         }
 
@@ -2410,13 +2417,17 @@ void dtkComposerStackCommandReparentNode::redo(void)
                     command->setGraph(d->graph);
                     command->setKind(dtkComposerTransmitter::Proxy);
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down) {
+#if defined(DTK_BUILD_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(target->wrapee()))
                             command->setKind(dtkComposerTransmitter::Variant);
+#endif
                         command->setNode(target);
                     }
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Up) {
+#if defined(DTK_BUILD_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(source->wrapee()))
                             command->setKind(dtkComposerTransmitter::Variant);
+#endif
                         command->setNode(source);
                     }
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down)
@@ -2463,7 +2474,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
             } else {
 
-                qDebug() << __func__ << "Unhandled case (input create)";
+                qDebug() << DTK_PRETTY_FUNCTION << "Unhandled case (input create)";
             }
         }
 
@@ -2512,13 +2523,17 @@ void dtkComposerStackCommandReparentNode::redo(void)
                     command->setGraph(d->graph);
                     command->setKind(dtkComposerTransmitter::Proxy);
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down) {
+#if defined(DTK_BUILD_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(target->wrapee()))
                             command->setKind(dtkComposerTransmitter::Variant);
+#endif
                         command->setNode(target);
                     }
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Up) {
+#if defined(DTK_BUILD_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(source->wrapee()))
                             command->setKind(dtkComposerTransmitter::Variant);
+#endif
                         command->setNode(source);
                     }
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down)
@@ -2565,7 +2580,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
             } else {
 
-                qDebug() << __func__ << "Unhandled case (output create)";
+                qDebug() << DTK_PRETTY_FUNCTION << "Unhandled case (output create)";
             }
         }
 
@@ -2649,7 +2664,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
         e->origin->setPos(e->origin_pos);
 
 
-        if (e->target->flattened() || e->target->entered() || e->target->root())
+        if (e->target->visible())
             d->scene->addItem(e->origin);
 
     }
@@ -2995,23 +3010,73 @@ void dtkComposerStackCommandCopyNodes::redo(void)
     if (e->data.isEmpty()) {
         e->old_nodes = d->scene->root()->nodes();
 
-        foreach(dtkComposerSceneNode *n, e->nodes) {
-            if (dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(n)) {
-                dtkComposerWriter writer;
-                writer.setScene(d->scene);
-                QString old = composite->title();
-                composite->setTitle(old +" copy ");
-                e->data = writer.toXML(composite).toString();
-                composite->setTitle(old);
+        if ((dynamic_cast<dtkComposerSceneNodeComposite *>(e->nodes.at(0))) && e->nodes.count() == 1)  {
 
+            dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(e->nodes.at(0));
+            dtkComposerWriter writer;
+            writer.setScene(d->scene);
+            QString old = composite->title();
+            composite->setTitle(old +" copy");
+            e->data = writer.toXML(composite).toString();
+            composite->setTitle(old);
+
+        } else if (areBrothers(e->nodes)) {
+
+            // first create a temporary composite
+            dtkComposerStackCommandCreateGroup *group = new dtkComposerStackCommandCreateGroup;
+            group->setScene(d->scene);
+            group->setGraph(d->graph);
+            group->setNodes(e->nodes);
+            group->redo();
+
+            dtkComposerSceneNodeList dummylist ;
+
+            // get the composite pointer by calling parent on one of the nodes
+            dtkComposerSceneNode *dummy_composite = e->nodes.at(0)->parent();
+            dummy_composite->setTitle("dummy composite");
+            dummylist << dummy_composite;
+
+            // then copy this composite
+            dtkComposerStackCommandCopyNodes *copy = new dtkComposerStackCommandCopyNodes;
+            copy->setScene(d->scene);
+            copy->setGraph(d->graph);
+            copy->setFactory(d->factory);
+            copy->setNodes(dummylist);
+            copy->redo();
+            delete copy;
+
+            // then undo the temporary composite
+            group->undo();
+            delete group;
+
+            // look for the duplicated composite
+            foreach(dtkComposerSceneNode *node, d->scene->current()->nodes()) {
+                if (node->title() == "dummy composite copy")
+                    dummy_composite = node;
+            }
+
+            // then ungroup the duplicate composite
+            dtkComposerSceneNodeList copies = (dynamic_cast<dtkComposerSceneNodeComposite *>(dummy_composite))->nodes();
+            dtkComposerStackCommandDestroyGroup *ungroup = new dtkComposerStackCommandDestroyGroup;
+            ungroup->setScene(d->scene);
+            ungroup->setGraph(d->graph);
+            ungroup->setNode( dynamic_cast<dtkComposerSceneNodeComposite *>(dummy_composite));
+            ungroup->redo();
+            delete ungroup;
+            foreach (dtkComposerSceneNode *n,copies) {
+                n->setPos(n->pos()+QPointF(100,100));
+                n->layout();
             }
         }
     }
-    dtkComposerReader reader;
-    reader.setFactory(d->factory);
-    reader.setScene(d->scene);
-    reader.setGraph(d->graph);
-    reader.readString(e->data, true, true);
+
+    if (!e->data.isEmpty()) {
+        dtkComposerReader reader;
+        reader.setFactory(d->factory);
+        reader.setScene(d->scene);
+        reader.setGraph(d->graph);
+        reader.readString(e->data, true, true);
+    }
 
     d->scene->modify(true);
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:54:04 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 30 13:00:58 2012 (+0200)
+ * Last-Updated: Wed Sep 12 15:33:58 2012 (+0200)
  *           By: tkloczko
- *     Update #: 225
+ *     Update #: 230
  */
 
 /* Commentary:
@@ -33,7 +33,6 @@
  *  parent to 0 constructs an object with no parent.
  *  The initial reference count is set to 0, and DeferredDeletion is enabled.
  */
-
 dtkAbstractObject::dtkAbstractObject(dtkAbstractObject *parent) : QObject(parent), d_ptr(new dtkAbstractObjectPrivate(this))
 {
     d_ptr->count = 0;
@@ -54,12 +53,11 @@ dtkAbstractObject::dtkAbstractObject(const dtkAbstractObject& other) : QObject(o
 
 //! Destroys the object, deleting all its child objects.
 /*!
- * The reference count is checked, and a warning message is output if the reference count is not valid.
- * There are two valid reference count values at destruction time :<br>
+ *  The reference count is checked, and a warning message is output if the reference count is not valid.
+ *  There are two valid reference count values at destruction time :<br>
  *  0 : The object used reference counting, and is no longer referred by any object.<br>
  *  1 : This occurs if the object was never reference counted, and delete(Later) was manually called.<br>
  */
-
 dtkAbstractObject::~dtkAbstractObject(void)
 {
     if ( d_ptr->count != 0 ){
@@ -69,6 +67,32 @@ dtkAbstractObject::~dtkAbstractObject(void)
     delete d_ptr;
 
     d_ptr = NULL;
+}
+
+//! Returns a new dtkAbstractObject that is a copy of this.
+/*!
+ *  This method can be overloaded through the hierarchy enabling a
+ *  deep copy of this. Note that, using covariance of returned type,
+ *  the returned argument can be of the more derived type.
+ *
+ *  Example:
+ *  \code
+ *  class xyzObject : public dtkAbstractObject
+ *  {
+ *    ...
+ *    xyzObject *clone(void); // Covariant returned argument
+ *    ...
+ *  };
+ *
+ *  xyzObject *xyzObject::clone(void)
+ *  {
+ *     return new xyzObject(*this);
+ *  }
+ *  \endcode
+ */
+dtkAbstractObject *dtkAbstractObject::clone(void)
+{
+    return new dtkAbstractObject(*this);
 }
 
 //! Assignement operator.

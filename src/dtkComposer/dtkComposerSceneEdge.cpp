@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:00:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 28 10:53:57 2012 (+0200)
- *           By: tkloczko
- *     Update #: 98
+ * Last-Updated: lun. sept. 17 12:59:09 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 114
  */
 
 /* Commentary: 
@@ -46,9 +46,10 @@ dtkComposerSceneEdge::dtkComposerSceneEdge(void) : QGraphicsItem(), d(new dtkCom
 
     d->parent = NULL;
 
-    d->valid = false;
+    d->valid   = false;
     d->flagged = false;
 
+    this->setFlags(QGraphicsItem::ItemIsSelectable);
     this->setZValue(0);
 }
 
@@ -81,9 +82,19 @@ void dtkComposerSceneEdge::paint(QPainter *painter, const QStyleOptionGraphicsIt
         else
             painter->setBrush(Qt::red);
 
+    if (this->isSelected())
+        painter->setBrush(Qt::magenta);
+
     painter->drawPath(d->path);
 
     painter->restore();
+}
+
+QPainterPath dtkComposerSceneEdge::shape(void) const
+{
+    QPainterPathStroker stroker;
+    stroker.setWidth(10);
+    return stroker.createStroke(d->path);
 }
 
 dtkComposerScenePort *dtkComposerSceneEdge::source(void)
@@ -130,7 +141,7 @@ void dtkComposerSceneEdge::adjust(void)
 void dtkComposerSceneEdge::adjust(const QPointF& start, const QPointF& end)
 {
     this->prepareGeometryChange();
-    
+
     QPointF midPoint = (start + end) / 2;
 
     qreal halfMid = (midPoint.x() - start.x())/2;
@@ -150,7 +161,7 @@ void dtkComposerSceneEdge::adjust(const QPointF& start, const QPointF& end)
 bool dtkComposerSceneEdge::link(bool anyway)
 {
     Q_UNUSED(anyway);
-    
+
     if(!d->source || !d->destination)
         return false;
 

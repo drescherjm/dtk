@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Jun  2 01:40:49 2012 (+0200)
+ * Last-Updated: Tue Sep 18 10:27:22 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 338
+ *     Update #: 376
  */
 
 /* Commentary: 
@@ -36,6 +36,7 @@
 #include "dtkComposerWriter.h"
 
 #include <dtkCore/dtkGlobal.h>
+#include <dtkLog/dtkLog.h>
 
 #include <QtCore>
 #include <QtGui>
@@ -178,6 +179,11 @@ bool dtkComposer::open(QString file)
 
 bool dtkComposer::save(QString file, dtkComposerWriter::Type type)
 {
+    return saveNode(d->scene->root(), file, type);
+}
+
+bool dtkComposer::saveNode(dtkComposerSceneNodeComposite *node, QString file, dtkComposerWriter::Type type)
+{
     QString fName = d->fileName;
 
     if(!file.isEmpty())
@@ -185,7 +191,7 @@ bool dtkComposer::save(QString file, dtkComposerWriter::Type type)
 
     dtkComposerWriter writer;
     writer.setScene(d->scene);
-    writer.write(fName, type);
+    writer.writeNode(node, fName, type);
 
     const QFileInfo fi(fName);
     d->fileName = fi.absoluteFilePath();
@@ -209,6 +215,7 @@ bool dtkComposer::insert(QString file)
 
 void dtkComposer::updateRemotes(dtkComposerSceneNodeComposite *composite)
 {
+#if defined(DTK_BUILD_DISTRIBUTED)
     dtkComposerWriter writer;
     writer.setScene(d->scene);
 
@@ -221,6 +228,9 @@ void dtkComposer::updateRemotes(dtkComposerSceneNodeComposite *composite)
             foreach(dtkComposerSceneNodeComposite *block, ctrl->blocks())
                 this->updateRemotes(block);
     }
+#else
+    Q_UNUSED(composite);
+#endif
 }
 
 
@@ -228,7 +238,9 @@ void dtkComposer::run(void)
 {
     this->updateRemotes(d->scene->root());
 
-    QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::run, false);
+    // temporary
+    d->evaluator->run();
+//    QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::run, false);
 
     d->graph->update();
 }
@@ -243,6 +255,8 @@ void dtkComposer::step(void)
 
 void dtkComposer::cont(void)
 {
+    this->updateRemotes(d->scene->root());
+
     QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::cont, false);
 
     d->graph->update();
@@ -258,6 +272,24 @@ void dtkComposer::next(void)
 void dtkComposer::stop(void)
 {
     d->evaluator->stop();
+}
+
+void dtkComposer::reset(void)
+{
+    dtkTrace() << "Resetting composition ";
+
+    dtkComposerWriter writer;
+    writer.setScene(d->scene);
+    QString data = writer.toXML(d->scene->root(), false).toString();
+
+    dtkComposerReader reader;
+    reader.setFactory(d->factory);
+    reader.setScene(d->scene);
+    reader.setGraph(d->graph);
+    reader.readString(data);
+
+    d->evaluator->reset();
+
 }
 
 dtkComposerEvaluator *dtkComposer::evaluator(void)

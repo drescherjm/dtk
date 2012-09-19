@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 31 09:51:05 2012 (+0200)
+ * Last-Updated: Thu Sep 13 11:37:46 2012 (+0200)
  *           By: tkloczko
- *     Update #: 454
+ *     Update #: 475
  */
 
 /* Commentary:
@@ -51,8 +51,78 @@ dtkAbstractData::~dtkAbstractData(void)
 
 }
 
-dtkAbstractData& dtkAbstractData::operator=(const dtkAbstractData& other)
+//! Returns a new dtkAbstractData that is a copy of this.
+/*!
+ *  This method can be overloaded through the hierarchy enabling a
+ *  deep copy of this. Note that, using covariance of returned type,
+ *  the returned argument can be of the more derived type.
+ *
+ *  Example:
+ *  \code
+ *  class xyzData : public dtkAbstractData
+ *  {
+ *    ...
+ *    xyzData *clone(void); // Covariant returned argument
+ *    ...
+ *  };
+ *
+ *  xyzData *xyzData::clone(void)
+ *  {
+ *     return new xyzData(*this);
+ *  }
+ *  \endcode
+ */
+dtkAbstractData *dtkAbstractData::clone(void)
 {
+    return new dtkAbstractData(*this);
+}
+
+dtkAbstractData& dtkAbstractData::operator = (const dtkAbstractData& other)
+{
+    this->copy(other);
+
+    return (*this);
+}
+
+//! Enables to make a deep copy of the attributes through the class
+//! hierarchy.
+/*!
+ *  This method is called by the assignement operator which delegates
+ *  the copy process. When re-implementing this method into a derived
+ *  class of dtkAbstractData, one must called first the copy method
+ *  of the parent to ensure that all the attributes are really copied.
+ *
+ *  Nevertheless, some caution must be taken to avoid slicing problem
+ *  as shown in the following example.
+ *
+ *  Example:
+ *  \code
+ *  class xyzData : public dtkAbstractData
+ *  {
+ *    ...
+ *    void copy(const dtkAbstractData& other);
+ *    ...
+ *  };
+ *
+ *  void xyzData::copy(const dtkAbstractData& other)
+ *  {
+ *     // copy of the parent attributes
+ *     dtkAbstractData::copy(other);
+ *
+ *     // copy of the xyzData attributes
+ *     if (typeid(other) == typeid(*this)) {
+ *        // do the copy
+ *     } else {
+ *        dtkWarn() << "other is not of same type than this, slicing is occuring.";
+ *     }
+ *  }
+ *  \endcode
+ */
+void dtkAbstractData::copy(const dtkAbstractData& other)
+{
+    if (this == &other)
+        return;
+
     dtkAbstractObject::operator=(other);
 
     DTK_D(dtkAbstractData);
@@ -69,8 +139,6 @@ dtkAbstractData& dtkAbstractData::operator=(const dtkAbstractData& other)
     d->numberOfChannels = other.d_func()->numberOfChannels;
 
     d->thumbnails = other.d_func()->thumbnails;
-
-    return (*this);
 }
 
 //! Comparison operator.
@@ -79,10 +147,45 @@ dtkAbstractData& dtkAbstractData::operator=(const dtkAbstractData& other)
  */
 bool dtkAbstractData::operator == (const dtkAbstractData& other) const
 {
-    if (!dtkAbstractObject::operator==(other))
-        return false;
+    return this->isEqual(other);
+}
+
+//! Enables to make a deep comparison between all the attributes through the class
+//! hierarchy.
+/*!
+ *  This method is called by the comparator operator == which
+ *  delegates the comparison. When re-implementing this method into a
+ *  derived class of dtkAbstractData, one must called the isEqual
+ *  method of the parent to ensure the comparison through all the
+ *  attributes.
+ *
+ *  Example:
+ *  \code
+ *  class xyzData : public dtkAbstractData
+ *  {
+ *    ...
+ *    bool isEqual(const dtkAbstractData& other);
+ *    ...
+ *  };
+ *
+ *  bool xyzData::isEqual(const dtkAbstractData& other)
+ *  {
+ *     // comparison of the parent attributes
+ *     if (!dtkAbstractData::isEqual(other))
+ *        return false;
+ *
+ *     // comparison of the xyzData attributes
+ *     ...
+ *  }
+ *  \endcode
+ */
+bool dtkAbstractData::isEqual(const dtkAbstractData& other) const
+{
+    if (this == &other)
+        return true;
 
     DTK_D(const dtkAbstractData);
+
     if (d->readers          != other.d_func()->readers          ||
         d->writers          != other.d_func()->writers          ||
         d->converters       != other.d_func()->converters       ||
@@ -94,7 +197,10 @@ bool dtkAbstractData::operator == (const dtkAbstractData& other) const
         d->thumbnails       != other.d_func()->thumbnails)
         return false;
 
-    return true;
+    if (!dtkAbstractObject::operator==(other))
+        return false;
+
+    return true;  
 }
 
 void dtkAbstractData::addReader(const QString& reader)
@@ -114,7 +220,6 @@ void dtkAbstractData::addWriter(const QString& writer)
 void dtkAbstractData::addConverter(const QString& converter)
 {
     DTK_D(dtkAbstractData);
-
     d->converters.insert(converter, false);
 }
 

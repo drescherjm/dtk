@@ -64,7 +64,7 @@ template <typename T> inline bool dtkAbstractContainer<T>::operator != (const dt
     return !(this->isEqual(other));
 }
 
-template <typename T> dtkAbstractContainer<T> dtkAbstractContainer<T>::operator + (const dtkAbstractContainer<T>& other) const
+template <typename T> dtkAbstractContainer<T>& dtkAbstractContainer<T>::operator + (const dtkAbstractContainer<T>& other) const
 {
     dtkAbstractContainer<T> *result = this->clone(this);
     *(result) += other;

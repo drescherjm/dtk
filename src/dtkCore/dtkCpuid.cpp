@@ -25,7 +25,7 @@
 
 #if defined(Q_OS_WIN) && !__MINGW32__
 #include <limits.h>
-#if defined(MSVC)
+#if defined(Q_CC_MSVC)
 typedef unsigned __int32  uint32_t;
 #endif
 #else
@@ -50,7 +50,7 @@ dtkCpuid::~dtkCpuid(void)
 }
 
 void dtkCpuid::load(unsigned i) {
-#if defined(Q_OS_WIN) && defined(MSVC)
+#if defined(Q_OS_WIN) && defined(Q_CC_MSVC)
     __cpuid((int *)d->regs, (int)i);
 #elif defined(DTK_PLATFORM_64)
     asm volatile

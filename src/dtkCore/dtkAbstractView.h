@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 23 18:56:31 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 329
+ * Last-Updated: Wed Sep 12 15:39:14 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 330
  */
 
 /* Commentary:
@@ -41,6 +41,9 @@ public:
              dtkAbstractView(      dtkAbstractView *parent = 0);
 	     dtkAbstractView(const dtkAbstractView& other);
     virtual ~dtkAbstractView(void);
+
+public:
+    virtual dtkAbstractView *clone(void);
 
 public:
     dtkAbstractView& operator = (const dtkAbstractView& other);
@@ -130,23 +133,6 @@ public slots:
 public slots:
     virtual void   initialize(void);
     virtual void uninitialize(void);
-
-// /////////////////////////////////////////////////////////////////
-// Deprecated VR API
-// /////////////////////////////////////////////////////////////////
-
-public /* DEPRECATED */ slots:
-    virtual DTK_DEPRECATED void  enableInteraction(void);
-    virtual DTK_DEPRECATED void disableInteraction(void);
-    virtual DTK_DEPRECATED void bounds(float& xmin, float& xmax, float& ymin, float& ymax, float &zmin, float& zmax);
-    virtual DTK_DEPRECATED void cameraUp(double *coordinates) const;
-    virtual DTK_DEPRECATED void cameraPosition(double *coordinates) const;
-    virtual DTK_DEPRECATED void cameraFocalPoint(double *coordinates) const;
-    virtual DTK_DEPRECATED void setCameraPosition(double x, double y, double z);
-    virtual DTK_DEPRECATED void setCameraClippingRange(double near, double far);
-    virtual DTK_DEPRECATED QString cameraProjectionMode(void) const;
-    virtual DTK_DEPRECATED double cameraViewAngle(void) const;
-    virtual DTK_DEPRECATED double cameraZoom(void) const;
 
 // /////////////////////////////////////////////////////////////////
 // New VR API

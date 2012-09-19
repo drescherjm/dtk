@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Feb  5 15:30:18 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sun Feb 19 18:25:26 2012 (+0100)
+ * Last-Updated: Thu Jul 12 10:46:56 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 911
+ *     Update #: 915
  */
 
 /* Commentary: 
@@ -17,6 +17,7 @@
  * 
  */
 
+#include "dtkComposerNode.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerSceneEdge.h"
 #include "dtkComposerSceneNote.h"
@@ -97,7 +98,7 @@ QVariant dtkComposerSceneModel::data(const QModelIndex& index, int role) const
         if (c_notes && index.row() < c_notes)
             return QString("Note");
         else if (c_nodes && index.row() < c_notes + c_nodes)
-            return QString("Node (%1)").arg(dynamic_cast<dtkComposerSceneNode *>((QGraphicsItem *)(index.internalPointer()))->title());
+            return QString("Node (%1 | %2)").arg(dynamic_cast<dtkComposerSceneNode *>((QGraphicsItem *)(index.internalPointer()))->title()).arg(dynamic_cast<dtkComposerSceneNode *>((QGraphicsItem *)(index.internalPointer()))->wrapee()->type());
         else if (c_edges && index.row() < c_notes + c_nodes + c_edges)
             return QString("Edge (%1 -> %2)").arg(dynamic_cast<dtkComposerSceneEdge *>((QGraphicsItem *)(index.internalPointer()))->source()->node()->title()).arg(dynamic_cast<dtkComposerSceneEdge *>((QGraphicsItem *)(index.internalPointer()))->destination()->node()->title());
     }

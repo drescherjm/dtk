@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:43:44 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mai 16 10:32:11 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 60
+ * Last-Updated: Tue Sep 18 17:01:34 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 63
  */
 
 /* Commentary: 
@@ -58,6 +58,11 @@ public:
 
 public:
     void layout(void);
+
+public:
+    void setBlockSize(dtkComposerSceneNodeComposite *block, qreal x, qreal y, qreal w, qreal h);
+    void resizeBlock(dtkComposerSceneNodeComposite *block, qreal dx, qreal dy);
+    void moveBlock(dtkComposerSceneNodeComposite *block, qreal dx, qreal dy);
 
 public:
     void resize(qreal width, qreal height);

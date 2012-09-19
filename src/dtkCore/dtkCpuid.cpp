@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/25 13:18:27
  * Version: $Id$
- * Last-Updated: Fri Jun  8 12:28:51 2012 (+0200)
+ * Last-Updated: Wed Sep 19 15:02:21 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 52
+ *     Update #: 53
  */
 
 /* Commentary:
@@ -23,7 +23,7 @@
 
 #include "dtkCpuid.h"
 
-#if defined(Q_OS_WIN) && !__MINGW32__
+#if defined(Q_OS_WIN) && !defined(__MINGW32__)
 #include <limits.h>
 #if defined(Q_CC_MSVC)
 typedef unsigned __int32  uint32_t;

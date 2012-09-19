@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. sept. 17 10:27:55 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 515
+ * Last-Updated: Tue Sep 18 17:06:18 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 518
  */
 
 /* Commentary: 
@@ -182,6 +182,8 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
         foreach(dtkComposerSceneNodeComposite *block, control->blocks()) {
             child = this->writeNode(block, tag, document);
             child.setAttribute("blockid", i++);
+            child.setAttribute("w", block->boundingRect().width());
+            child.setAttribute("h", block->boundingRect().height());
             tag.appendChild(child);
         }
 

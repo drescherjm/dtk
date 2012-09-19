@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 16:19:18 2012 (+0200)
+ * Last-Updated: Wed Sep 19 13:58:53 2012 (+0200)
  *           By: tkloczko
- *     Update #: 494
+ *     Update #: 540
  */
 
 /* Commentary: 
@@ -84,28 +84,45 @@ template <typename T> T *dtkComposerTransmitterReceiver<T>::data(void)
     switch(this->dataTransmission()) {
     case dtkComposerTransmitter::CopyOnWrite:
         if (this->enableCopy()) {
-            if (!m_data)
+            if (!m_data) {
                 m_data = new T(*data);
-            else 
+            } else {
                 *m_data = *data;
+            }
             return m_data;
         } else {
             return data;
         }
         break;
     case dtkComposerTransmitter::Copy:
-        if (!m_data)
+        if (!m_data) {
             m_data = new T(*data);
-        else 
+        } else {
             *m_data = *data;
+        }
         return m_data;
         break;
     case dtkComposerTransmitter::Reference:
         return data;
         break;
     default:
+        return NULL;
         break;
     };
+
+    return NULL;;
+};
+
+//! Returns the data as a modifiable reference.
+/*! 
+ *  
+ */
+template <typename T> dtkAbstractObject *dtkComposerTransmitterReceiver<T>::object(void)
+{
+    T* data = this->data();
+    
+    if (data && dtkTypeInfo<T*>::dtkAbstractObjectPointer)
+        return reinterpret_cast<dtkAbstractObject*>(data);
 
     return NULL;
 };
@@ -452,6 +469,15 @@ template <typename T> dtkContainerVector<T> *dtkComposerTransmitterReceiverVecto
     return NULL;
 };
 
+//! Returns the data as a modifiable reference.
+/*! 
+ *  
+ */
+template <typename T> dtkAbstractObject *dtkComposerTransmitterReceiverVector<T>::object(void)
+{
+    return this->container();
+};
+
 //! 
 /*! 
  *  
@@ -468,7 +494,7 @@ template <typename T> dtkAbstractContainerWrapper *dtkComposerTransmitterReceive
     else
         d->container->setVector(vector);
 
-    return d->container;    
+    return d->container;
 };
 
 //! 

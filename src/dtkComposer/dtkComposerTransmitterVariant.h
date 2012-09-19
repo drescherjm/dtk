@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 16:04:47 2012 (+0200)
+ * Last-Updated: Wed Sep 19 14:19:52 2012 (+0200)
  *           By: tkloczko
- *     Update #: 160
+ *     Update #: 166
  */
 
 /* Commentary: 
@@ -56,6 +56,15 @@ public:
     template <typename T> T *data(void);
 
 public:
+    QVariant& variant(void);
+
+    dtkAbstractContainerWrapper *containerFromEmitter(void);
+    dtkAbstractContainerWrapper *container(void);
+
+public:
+    dtkAbstractObject *object(void);
+
+public:
     int dataType(void);
 
     QString  dataIdentifier(void);
@@ -66,14 +75,6 @@ public:
 
     QStringList  allDataIdentifier(void);
     QStringList allDataDescription(void);
-
-public:
-    QVariant& variant(void);
-
-    dtkAbstractContainerWrapper *containerFromEmitter(void);
-    dtkAbstractContainerWrapper *container(void);
-
-    QVariantList allData(void);
 
 public:
     void activateEmitter(dtkComposerTransmitter        *emitter);

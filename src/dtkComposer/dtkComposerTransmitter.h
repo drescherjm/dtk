@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 16:26:48 2012 (+0200)
+ * Last-Updated: Wed Sep 19 14:20:03 2012 (+0200)
  *           By: tkloczko
- *     Update #: 227
+ *     Update #: 231
  */
 
 /* Commentary: 
@@ -25,6 +25,7 @@
 
 #include <QtCore>
 
+class dtkAbstractObject;
 class dtkAbstractContainerWrapper;
 class dtkComposerNode;
 class dtkComposerTransmitterPrivate;
@@ -66,6 +67,9 @@ public:
 
 public:
     virtual QVariant& variant(void);
+
+public:
+    virtual dtkAbstractObject *object(void);
 
 public:
     virtual dtkAbstractContainerWrapper *container(void);

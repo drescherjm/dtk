@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:33:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 16:37:07 2012 (+0200)
+ * Last-Updated: Wed Sep 19 14:19:35 2012 (+0200)
  *           By: tkloczko
- *     Update #: 141
+ *     Update #: 145
  */
 
 /* Commentary: 
@@ -45,6 +45,9 @@ public:
     inline T *data(void);
 
 public:
+    dtkAbstractObject *object(void);
+
+public:
     virtual int dataType(void);
 
     virtual QString  dataIdentifier(void);
@@ -79,6 +82,9 @@ public:
     inline void setData(dtkContainerVector<T> *vector);
 
     inline dtkContainerVector<T> *data(void);
+
+public:
+    dtkAbstractObject *object(void);
 
 public:
     int dataType(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 16:26:19 2012 (+0200)
+ * Last-Updated: Wed Sep 19 14:19:45 2012 (+0200)
  *           By: tkloczko
- *     Update #: 159
+ *     Update #: 170
  */
 
 /* Commentary: 
@@ -48,6 +48,9 @@ public:
 
 public:
     T *data(void);
+
+public:
+    dtkAbstractObject *object(void);
 
     QVariant& variant(void);
           
@@ -110,6 +113,9 @@ public:
 
 public:
     dtkContainerVector<T> *data(void);
+
+public:
+    dtkAbstractObject *object(void);
 
     dtkAbstractContainerWrapper *container(void);
 

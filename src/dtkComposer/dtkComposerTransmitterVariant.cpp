@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 16:38:45 2012 (+0200)
+ * Last-Updated: Wed Sep 19 14:38:31 2012 (+0200)
  *           By: tkloczko
- *     Update #: 701
+ *     Update #: 734
  */
 
 /* Commentary: 
@@ -254,16 +254,21 @@ void dtkComposerTransmitterVariant::setData(dtkAbstractContainerWrapper *data)
     d->data_type = qMetaTypeId<dtkAbstractContainerWrapper>(reinterpret_cast<dtkAbstractContainerWrapper*>(0));
     d->container = data;
     d->variant.setValue(d->container);
+    d->object = data;
 }
 
 void dtkComposerTransmitterVariant::setDataFrom(dtkComposerTransmitterVariant *source)
 {
     d->data_type = source->dataType();
     d->variant = source->variant();
-    if (d->container) {
+
+    dtkAbstractContainerWrapper *container = source->container();
+    if (d->container != container) {
         delete d->container;
+        d->container = container;
     }
-    d->container = source->container();
+
+    d->object = source->object();
 }
 
 void dtkComposerTransmitterVariant::setDataFrom(dtkDistributedMessage *msg)
@@ -271,22 +276,16 @@ void dtkComposerTransmitterVariant::setDataFrom(dtkDistributedMessage *msg)
     // if (msg->type() == "double") {
 
     //     double *data = reinterpret_cast<double*>(msg->content().data());
-    //     this->setTwinned(false);
     //     this->setData(data);
-    //     this->setTwinned(true);
 
     // } else if (msg->type() == "qlonglong") {
 
     //     qlonglong *data = reinterpret_cast<qlonglong*>(msg->content().data());
-    //     this->setTwinned(false);
     //     this->setData(data);
-    //     this->setTwinned(true);
 
     // } else if (msg->type() == "qstring") {
 
-    //     this->setTwinned(false);
     //     this->setData(new QString(msg->content()));
-    //     this->setTwinned(true);
 
     // } else if (msg->type() == "dtkVectorReal") {
 
@@ -300,9 +299,7 @@ void dtkComposerTransmitterVariant::setDataFrom(dtkDistributedMessage *msg)
     //         for (int i=0; i< size; i++)
     //             stream >> *(v[i]);
 
-    //         this->setTwinned(false);
     //         this->setData(v);
-    //         this->setTwinned(true);
 
     //         dtkDebug() << "received dtkVectorReal, set data in transmitter; size is " << size;
 
@@ -319,9 +316,7 @@ void dtkComposerTransmitterVariant::setDataFrom(dtkDistributedMessage *msg)
     //         stream >> *v[1];
     //         stream >> *v[2];
 
-    //         this->setTwinned(false);
     //         this->setData(v);
-    //         this->setTwinned(true);
 
     //         dtkDebug() << "received dtkVector3DReal, set data in transmitter" << *v[0] << *v[1] << *v[2];
 
@@ -339,9 +334,7 @@ void dtkComposerTransmitterVariant::setDataFrom(dtkDistributedMessage *msg)
     //         stream >> *q[2];
     //         stream >> *q[3];
 
-    //         this->setTwinned(false);
     //         this->setData(q);
-    //         this->setTwinned(true);
 
     //         dtkDebug() << "received dtkQuaternionReal, set data in transmitter" << *q[0] << *q[1] << *q[2] << *q[3];
 
@@ -397,7 +390,7 @@ QVariant& dtkComposerTransmitterVariant::variant(void)
 
 dtkAbstractContainerWrapper *dtkComposerTransmitterVariant::containerFromEmitter(void)
 {
-    if (e->twinned)
+    if (e->twinned)        
         return d->container;
 
     if (e->active_variant)
@@ -418,10 +411,15 @@ dtkAbstractContainerWrapper *dtkComposerTransmitterVariant::container(void)
 
     switch(this->dataTransmission()) {
     case dtkComposerTransmitter::CopyOnWrite:
-        if (this->enableCopy())
-            return container->clone();
-        else
+        if (this->enableCopy()) {
+            if (!d->container)
+                d->container = container->clone();
+            else
+                *(d->container) = *container;
+            return d->container;
+        } else {
             return container;
+        }
         break;
     case dtkComposerTransmitter::Copy:
         return container->clone();
@@ -433,36 +431,21 @@ dtkAbstractContainerWrapper *dtkComposerTransmitterVariant::container(void)
         break;
     };
 
-    return NULL;   
+    return NULL;
 }
 
-QVariantList dtkComposerTransmitterVariant::allData(void)
+dtkAbstractObject *dtkComposerTransmitterVariant::object(void)
 {
-    QVariantList list;
+    if (e->twinned)
+        return d->object;
 
-    if (e->twinned) {
+    if (e->active_variant)
+        return e->active_variant->object();
 
-        list << d->variant;
+    if (e->active_emitter)
+        return e->active_emitter->object();
 
-    } else {
-
-        int count = e->emitters.count();
-
-        for(int i = 0; i < count; i++)
-            if (e->emitters.at(i)->active()) {
-                list << e->emitters.at(i)->variant();
-            }
-
-        count = e->variants.count();
-
-        for(int i = 0; i < count; i++)
-            if (e->variants.at(i)->active()) {
-                list << e->variants.at(i)->variant();
-            }
-
-    }
-
-    return list;
+    return d->object;
 }
 
 int dtkComposerTransmitterVariant::dataType(void)
@@ -481,7 +464,7 @@ int dtkComposerTransmitterVariant::dataType(void)
 
 QString dtkComposerTransmitterVariant::dataIdentifier(void)
 {
-    if (dtkAbstractObject *o = d->variant.value<dtkAbstractObject*>())
+    if (dtkAbstractObject *o = this->object())
         return o->identifier();
 
     return QString(QMetaType::typeName(this->dataType()));
@@ -489,7 +472,7 @@ QString dtkComposerTransmitterVariant::dataIdentifier(void)
 
 QString dtkComposerTransmitterVariant::dataDescription(void)
 {
-    if (dtkAbstractObject *o = d->variant.value<dtkAbstractObject*>())
+    if (dtkAbstractObject *o = this->object())
         return o->description();
 
     QString address;
@@ -604,7 +587,7 @@ void dtkComposerTransmitterVariant::activateEmitter(dtkComposerTransmitterVarian
 bool dtkComposerTransmitterVariant::enableCopy(void)
 {
     if (e->twinned) {
-        if (e->already_ask)/// ATENTION A TEST\ER
+        if (e->already_ask)
             return false;
         else {
             e->already_ask = true;

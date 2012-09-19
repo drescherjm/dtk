@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 16:31:26 2012 (+0200)
+ * Last-Updated: Wed Sep 19 13:32:45 2012 (+0200)
  *           By: tkloczko
- *     Update #: 296
+ *     Update #: 304
  */
 
 /* Commentary: 
@@ -41,6 +41,7 @@ dtkComposerTransmitter::dtkComposerTransmitter(dtkComposerNode *parent) : d(new 
     d->required = true;
     d->parent = parent;
 
+    d->object = NULL;
     d->container = NULL;
     d->data_transmission = CopyOnWrite;
 }
@@ -81,6 +82,17 @@ dtkComposerTransmitter::~dtkComposerTransmitter(void)
 QVariant& dtkComposerTransmitter::variant(void)
 {
     return d->variant;
+}
+
+//! A transmitter can contain a container. In this case, the
+//! transmitter is either a vector emitter, a vector receiver or a
+//! variant.
+/*!  
+ *  
+ */
+dtkAbstractObject *dtkComposerTransmitter::object(void)
+{
+    return d->object;
 }
 
 //! A transmitter can contain a container. In this case, the

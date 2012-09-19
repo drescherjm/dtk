@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Aug  3 14:31:25 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 10:17:10 2012 (+0200)
+ * Last-Updated: Wed Sep 19 10:59:22 2012 (+0200)
  *           By: tkloczko
- *     Update #: 83
+ *     Update #: 89
  */
 
 /* Commentary: 
@@ -40,6 +40,11 @@ template <typename T> inline void dtkComposerTransmitterVariant::setData(T *data
         delete d->container;
         d->container = NULL;
     }
+
+    if (dtkTypeInfo<T*>::dtkAbstractObjectPointer)
+        d->object = reinterpret_cast<dtkAbstractObject*>(data);
+    else
+        d->object = NULL;
 }
 
 template <typename T> inline void dtkComposerTransmitterVariant::setData(dtkContainerVector<T> *data)
@@ -52,6 +57,8 @@ template <typename T> inline void dtkComposerTransmitterVariant::setData(dtkCont
         d->container->setVector(data);
 
     d->variant.setValue(d->container);
+    
+    d->object = d->container;
 }
 
 template <typename T> T *dtkComposerTransmitterVariant::data(void)

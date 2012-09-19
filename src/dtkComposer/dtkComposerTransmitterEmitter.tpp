@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 10:02:53 2012 (+0200)
+ * Last-Updated: Wed Sep 19 13:00:10 2012 (+0200)
  *           By: tkloczko
- *     Update #: 400
+ *     Update #: 410
  */
 
 /* Commentary: 
@@ -37,9 +37,8 @@
  */
 template <typename T> inline dtkComposerTransmitterEmitter<T>::dtkComposerTransmitterEmitter(dtkComposerNode *parent) : dtkComposerTransmitter(parent)
 {
-    d->data_type = qMetaTypeId<T>(reinterpret_cast<T*>(0));
-
     m_data = NULL;
+    d->data_type = qMetaTypeId<T>(m_data);
     d->variant.setValue(m_data);
 };
 
@@ -69,6 +68,14 @@ template <typename T> inline void dtkComposerTransmitterEmitter<T>::setData(T *d
 template <typename T> inline T *dtkComposerTransmitterEmitter<T>::data(void)
 {
     return m_data;
+};
+
+template <typename T> dtkAbstractObject *dtkComposerTransmitterEmitter<T>::object(void)
+{
+    if (dtkTypeInfo<T*>::dtkAbstractObjectPointer)
+        return reinterpret_cast<dtkAbstractObject*>(m_data);
+    
+    return NULL;
 };
 
 template <typename T> int dtkComposerTransmitterEmitter<T>::dataType(void)
@@ -170,11 +177,18 @@ template <typename T> inline void dtkComposerTransmitterEmitterVector<T>::setDat
     else
         d->container->setVector(m_vector);
     d->variant.setValue(d->container);
+
+    d->object = d->container;
 };
 
 template <typename T> inline dtkContainerVector<T> *dtkComposerTransmitterEmitterVector<T>::data(void)
 {
     return m_vector;
+};
+
+template <typename T> dtkAbstractObject *dtkComposerTransmitterEmitterVector<T>::object(void)
+{
+    return d->container;
 };
 
 template <typename T> int dtkComposerTransmitterEmitterVector<T>::dataType(void)
@@ -189,11 +203,7 @@ template <typename T> QString dtkComposerTransmitterEmitterVector<T>::dataIdenti
 
 template <typename T> QString dtkComposerTransmitterEmitterVector<T>::dataDescription(void)
 {
-    QString address;
-    QTextStream addressStream (&address);
-    addressStream << (static_cast<const void*>(m_vector));
-
-    return address;
+    return m_vector->description();
 };
 
 //! Returns true when the emitter is connected to more than one

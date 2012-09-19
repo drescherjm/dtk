@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 14:49:41 2012 (+0200)
- *           By: tkloczko
- *     Update #: 501
+ * Last-Updated: Tue Sep 18 17:06:18 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 518
  */
 
 /* Commentary: 
@@ -99,7 +99,8 @@ QDomDocument dtkComposerWriter::toXML(dtkComposerSceneNodeComposite *rootNode, b
             root.appendChild(this->writeNode(node, root, document));
 
         foreach(dtkComposerSceneEdge *edge, rootNode->edges())
-            root.appendChild(this->writeEdge(edge, root, document));
+            if (addSelf || (edge->source()->node() != rootNode && edge->destination()->node() != rootNode))
+                root.appendChild(this->writeEdge(edge, root, document));
     }
 
     return document;
@@ -110,7 +111,15 @@ void dtkComposerWriter::write(const QString& fileName, Type type)
     if(!d->scene)
         return;
 
-    QDomDocument document = this->toXML(d->scene->root(), false);
+    writeNode(d->scene->root(), fileName, type);
+}
+
+void dtkComposerWriter::writeNode(dtkComposerSceneNodeComposite *node, const QString& fileName, Type type)
+{
+    if(!d->scene)
+        return;
+
+    QDomDocument document = this->toXML(node, false);
 
     QFile file(fileName);
 
@@ -173,6 +182,8 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
         foreach(dtkComposerSceneNodeComposite *block, control->blocks()) {
             child = this->writeNode(block, tag, document);
             child.setAttribute("blockid", i++);
+            child.setAttribute("w", block->boundingRect().width());
+            child.setAttribute("h", block->boundingRect().height());
             tag.appendChild(child);
         }
 

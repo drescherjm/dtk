@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 11 13:47:27 2012 (+0200)
+ * Last-Updated: Wed Sep 19 14:57:29 2012 (+0200)
  *           By: tkloczko
- *     Update #: 1108
+ *     Update #: 1110
  */
 
 /* Commentary: 
@@ -40,7 +40,10 @@
 #include "dtkComposerNodeLeafView.h"
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
-// #include "dtkComposerNodeRemote.h"
+
+#if defined(DTK_BUILD_DISTRIBUTED)
+#include "dtkComposerNodeRemote.h"
+#endif
 
 #include "dtkComposerTransmitterVariant.h"
 
@@ -1000,9 +1003,11 @@ void dtkComposerSceneNodeEditor::addInputPort(void)
         command->setScene(d->scene);
         command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(d->node));
         command->setType(dtkComposerScenePort::Input);
-        // if (dynamic_cast<dtkComposerNodeRemote *>(d->node->wrapee()))
-        //     command->setKind(dtkComposerTransmitter::Variant);
 
+#if defined(DTK_BUILD_DISTRIBUTED)
+        if (dynamic_cast<dtkComposerNodeRemote *>(d->node->wrapee()))
+            command->setKind(dtkComposerTransmitter::Variant);
+#endif
     }
 
     d->stack->push(command);
@@ -1075,8 +1080,10 @@ void dtkComposerSceneNodeEditor::addOutputPort(void)
         command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(d->node));
         command->setType(dtkComposerScenePort::Output);
 
-        // if (dynamic_cast<dtkComposerNodeRemote *>(d->node->wrapee()))
-        //     command->setKind(dtkComposerTransmitter::Variant);
+#if defined(DTK_BUILD_DISTRIBUTED)
+        if (dynamic_cast<dtkComposerNodeRemote *>(d->node->wrapee()))
+            command->setKind(dtkComposerTransmitter::Variant);
+#endif
     }
 
     d->stack->push(command);

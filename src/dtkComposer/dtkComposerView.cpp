@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:02:53
  * Version: $Id$
- * Last-Updated: jeu. sept. 13 18:17:28 2012 (+0200)
+ * Last-Updated: ven. sept. 14 14:35:32 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 103
+ *     Update #: 115
  */
 
 /* Commentary:
@@ -43,16 +43,19 @@ dtkComposerView::~dtkComposerView(void)
 
 void dtkComposerView::wheelEvent( QWheelEvent * event )
 {
-    qreal scaleFactor = pow((double)2, event->delta() / 500.0);
+    if (event->modifiers().testFlag(Qt::ControlModifier)){ //zoom only when CTRL key pressed
+        qreal scaleFactor = pow((double)2, event->delta() / 500.0);
 
-    qreal factor = this->matrix().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();
+        qreal factor = this->matrix().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();
 
-    if (factor < 0.1 || factor > 1.0)
-        return;
+        if (factor < 0.1 || factor > 1.0)
+            return;
 
-    this->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
-    this->scale(scaleFactor, scaleFactor);
-
+        this->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+        this->scale(scaleFactor, scaleFactor);
+    } else {
+        QGraphicsView::wheelEvent(event);
+    }
 }
 
 void dtkComposerView::scroll(int dx, int dy)

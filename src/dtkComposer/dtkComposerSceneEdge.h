@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:29:21 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Feb 20 16:02:44 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 27
+ * Last-Updated: lun. sept. 17 12:29:36 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -41,6 +41,9 @@ public:
 
 public:
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
+public:
+    virtual QPainterPath shape(void) const;
 
 public:
     dtkComposerScenePort *source(void);

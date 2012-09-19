@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. août 28 18:01:02 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 361
+ * Last-Updated: Tue Sep 18 10:27:22 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 376
  */
 
 /* Commentary: 
@@ -179,6 +179,11 @@ bool dtkComposer::open(QString file)
 
 bool dtkComposer::save(QString file, dtkComposerWriter::Type type)
 {
+    return saveNode(d->scene->root(), file, type);
+}
+
+bool dtkComposer::saveNode(dtkComposerSceneNodeComposite *node, QString file, dtkComposerWriter::Type type)
+{
     QString fName = d->fileName;
 
     if(!file.isEmpty())
@@ -186,7 +191,7 @@ bool dtkComposer::save(QString file, dtkComposerWriter::Type type)
 
     dtkComposerWriter writer;
     writer.setScene(d->scene);
-    writer.write(fName, type);
+    writer.writeNode(node, fName, type);
 
     const QFileInfo fi(fName);
     d->fileName = fi.absoluteFilePath();
@@ -210,6 +215,7 @@ bool dtkComposer::insert(QString file)
 
 void dtkComposer::updateRemotes(dtkComposerSceneNodeComposite *composite)
 {
+#if defined(DTK_BUILD_DISTRIBUTED)
     dtkComposerWriter writer;
     writer.setScene(d->scene);
 
@@ -222,6 +228,9 @@ void dtkComposer::updateRemotes(dtkComposerSceneNodeComposite *composite)
             foreach(dtkComposerSceneNodeComposite *block, ctrl->blocks())
                 this->updateRemotes(block);
     }
+#else
+    Q_UNUSED(composite);
+#endif
 }
 
 
@@ -229,7 +238,9 @@ void dtkComposer::run(void)
 {
     this->updateRemotes(d->scene->root());
 
-    QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::run, false);
+    // temporary
+    d->evaluator->run();
+//    QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::run, false);
 
     d->graph->update();
 }

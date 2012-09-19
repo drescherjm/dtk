@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Mon Feb 27 14:28:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 13:22:17 2012 (+0200)
+ * Last-Updated: Wed Sep 19 14:51:31 2012 (+0200)
  *           By: tkloczko
- *     Update #: 417
+ *     Update #: 419
  */
 
 /* Commentary:
@@ -27,7 +27,7 @@
 #include <dtkLog/dtkLog.h>
 
 #include <dtkMath/dtkMath.h>
-
+#include <QtCore/qmath.h>
 #include <math.h>
 
 // /////////////////////////////////////////////////////////////////

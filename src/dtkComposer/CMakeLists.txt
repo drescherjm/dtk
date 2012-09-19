@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Thu Sep 13 23:21:26 2012 (+0200)
+## Last-Updated: Wed Sep 19 15:05:06 2012 (+0200)
 ##           By: tkloczko
-##     Update #: 595
+##     Update #: 599
 ######################################################################
 ##
 ### Commentary:
@@ -85,7 +85,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeQuaternionOperatorUnary.h
   dtkComposerNodeQuaternionOperatorBinary.h
   dtkComposerNodeReal.h
-  dtkComposerNodeRemote.h
   dtkComposerNodeString.h
   dtkComposerNodeStringOperator.h
   dtkComposerNodeVector.h
@@ -106,6 +105,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerSceneNode.h
   dtkComposerSceneNodeComposite.h
   dtkComposerSceneNodeControl.h
+  dtkComposerSceneNodeHandle.h
   dtkComposerSceneNodeEditor.h
   dtkComposerSceneNodeLeaf.h
   dtkComposerSceneNote.h
@@ -138,7 +138,6 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerGraphView.h
   dtkComposerMachine.h
   dtkComposerMachineState.h
-  dtkComposerNodeRemote.h
   dtkComposerNodeView.h
   dtkComposerSceneModel.h
   dtkComposerScene.h
@@ -210,7 +209,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeQuaternionOperatorUnary.cpp
   dtkComposerNodeQuaternionOperatorBinary.cpp
   dtkComposerNodeReal.cpp
-  dtkComposerNodeRemote.cpp
   dtkComposerNodeString.cpp
   dtkComposerNodeStringOperator.cpp
   # dtkComposerNodeVector.cpp
@@ -231,6 +229,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerSceneNode.cpp
   dtkComposerSceneNodeComposite.cpp
   dtkComposerSceneNodeControl.cpp
+  dtkComposerSceneNodeHandle.cpp
   dtkComposerSceneNodeEditor.cpp
   dtkComposerSceneNodeLeaf.cpp
   dtkComposerSceneNote.cpp
@@ -241,7 +240,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerStackView.cpp
   dtkComposerStackCommand.cpp
   dtkComposerTransmitter.cpp
-  dtkComposerTransmitterEmitter.cpp
   dtkComposerTransmitterProxy.cpp
   dtkComposerTransmitterVariant.cpp
   dtkComposerView.cpp
@@ -251,59 +249,69 @@ set(${PROJECT_NAME}_SOURCES
 
 set(${PROJECT_NAME}_RESOURCES dtkComposer.qrc)
 
-# ## #################################################################
-# ## Mpi sources
-# ## #################################################################
+## #################################################################
+## 
+## #################################################################
 
-# if(DTK_HAVE_MPI)
-# set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
-#   dtkComposerNodeDistributed.h
-#   dtkComposerNodeWorld.h)
-# set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC})
-# set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
-#   dtkComposerNodeDistributed.cpp
-#   dtkComposerNodeWorld.cpp)
-# endif(DTK_HAVE_MPI)
+if(DTK_BUILD_DISTRIBUTED)
+  set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS} dtkComposerNodeRemote.h)
+  set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC} dtkComposerNodeRemote.h)
+  set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES} dtkComposerNodeRemote.cpp)
+endif(DTK_BUILD_DISTRIBUTED)
 
-# ## #################################################################
-# ## Kinect sources
-# ## #################################################################
+## #################################################################
+## Mpi sources
+## #################################################################
 
-# if(DTK_HAVE_NITE)
-# set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
-#   dtkComposerNodeTrackerKinect.h)
-# set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC})
-# set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
-#   dtkComposerNodeTrackerKinect.cpp)
-# endif(DTK_HAVE_NITE)
+if(DTK_HAVE_MPI AND DTK_BUILD_DISTRIBUTED)
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkComposerNodeDistributed.h
+  dtkComposerNodeWorld.h)
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC})
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkComposerNodeDistributed.cpp
+  dtkComposerNodeWorld.cpp)
+endif(DTK_HAVE_MPI AND DTK_BUILD_DISTRIBUTED)
 
-# ## #################################################################
-# ## Plot sources
-# ## #################################################################
+## #################################################################
+## Kinect sources
+## #################################################################
 
-# if(DTK_HAVE_PLOT)
-# set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
-#   dtkComposerNodePlotCurve.h
-#   dtkComposerNodePlotView.h)
-# set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
-#   dtkComposerNodePlotCurve.h
-#   dtkComposerNodePlotView.h)
-# set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
-#   dtkComposerNodePlotCurve.cpp
-#   dtkComposerNodePlotView.cpp)
-# endif(DTK_HAVE_PLOT)
+if(DTK_HAVE_NITE AND DTK_BUILD_VR)
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkComposerNodeTrackerKinect.h)
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC})
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkComposerNodeTrackerKinect.cpp)
+endif(DTK_HAVE_NITE AND DTK_BUILD_VR)
 
-# ## #################################################################
-# ## Vrpn sources
-# ## #################################################################
+## #################################################################
+## Plot sources
+## #################################################################
 
-# if(DTK_HAVE_VRPN)
-# set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
-#   dtkComposerNodeTrackerVrpn.h)
-# set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC})
-# set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
-#   dtkComposerNodeTrackerVrpn.cpp)
-# endif()
+if(DTK_HAVE_PLOT AND DTK_BUILD_PLOT)
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkComposerNodePlotCurve.h
+  dtkComposerNodePlotView.h)
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
+  dtkComposerNodePlotCurve.h
+  dtkComposerNodePlotView.h)
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkComposerNodePlotCurve.cpp
+  dtkComposerNodePlotView.cpp)
+endif(DTK_HAVE_PLOT AND DTK_BUILD_PLOT)
+
+## #################################################################
+## Vrpn sources
+## #################################################################
+
+if(DTK_HAVE_VRPN AND DTK_BUILD_VR)
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkComposerNodeTrackerVrpn.h)
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC})
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkComposerNodeTrackerVrpn.cpp)
+endif(DTK_HAVE_VRPN AND DTK_BUILD_VR)
 
 ## #################################################################
 ## Build rules
@@ -356,16 +364,19 @@ target_link_libraries(${PROJECT_NAME}
   dtkCore
   dtkGui
   dtkLog
-  dtkNotification
-  dtkDistributed)
+  dtkNotification)
 
-if(DTK_HAVE_NITE OR DTK_HAVE_VRPN)
-target_link_libraries(${PROJECT_NAME} dtkVr)
-endif(DTK_HAVE_NITE OR DTK_HAVE_VRPN)
+if(DTK_BUILD_DISTRIBUTED)
+  target_link_libraries(${PROJECT_NAME} dtkDistributed)
+endif(DTK_BUILD_DISTRIBUTED)
 
-if(DTK_HAVE_PLOT)
-target_link_libraries(${PROJECT_NAME} dtkPlot)
-endif(DTK_HAVE_PLOT)
+if(DTK_HAVE_NITE OR DTK_HAVE_VRPN AND DTK_BUILD_VR)
+  target_link_libraries(${PROJECT_NAME} dtkVr)
+endif(DTK_HAVE_NITE OR DTK_HAVE_VRPN AND DTK_BUILD_VR)
+
+if(DTK_HAVE_PLOT AND DTK_BUILD_PLOT)
+  target_link_libraries(${PROJECT_NAME} dtkPlot)
+endif(DTK_HAVE_PLOT AND DTK_BUILD_PLOT)
 
 ## #################################################################
 ## Export header file

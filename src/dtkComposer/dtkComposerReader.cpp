@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jul 25 16:44:58 2012 (+0200)
+ * Last-Updated: Tue Sep 18 17:18:29 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 698
+ *     Update #: 706
  */
 
 /* Commentary: 
@@ -288,8 +288,8 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
     QString type_n = node.toElement().attribute("type");
     if(blocks.count()) {
 
-        qreal w = node.toElement().attribute("w").toFloat();
-        qreal h = node.toElement().attribute("h").toFloat();
+        qreal w = node.toElement().attribute("w").toFloat()-4.0;
+        qreal h = node.toElement().attribute("h").toFloat()-4.0;
 
         n = new dtkComposerSceneNodeControl;
         n->wrap(d->factory->create(node.toElement().attribute("type")));
@@ -304,13 +304,20 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
             if(node.toElement().attribute("title") != "Case#default") {
                 dtkComposerSceneNodeComposite *b = new dtkComposerSceneNodeComposite;
                 control->addBlock();
-                b->wrap(control->block( control->blockCount()-1));
+                b->wrap(control->block(control->blockCount()-1));
                 d->control->addBlock(b);
                 d->graph->addBlock(d->control);
             }
             n = d->control->blocks().last();
         } else {
             n = d->control->blocks().at(node.toElement().attribute("blockid").toInt());
+            
+            qreal x = node.toElement().attribute("x").toFloat();
+            qreal y = node.toElement().attribute("y").toFloat();
+            qreal w = node.toElement().attribute("w").toFloat()-4;
+            qreal h = node.toElement().attribute("h").toFloat()-4;
+
+            d->control->setBlockSize(dynamic_cast<dtkComposerSceneNodeComposite *>(n), x, y, w, h);
         }
 
     } else if(node.toElement().tagName() == "header") {
@@ -370,6 +377,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
         control->layout();
 
         d->control = control;
+
         this->readNode(header);
 
         for(int i = 0; i < blocks.count(); i++) {

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. sept. 13 15:55:06 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 4480
+ * Last-Updated: Tue Sep 18 10:41:36 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 4493
  */
 
 /* Commentary: 
@@ -17,6 +17,8 @@
  * 
  */
 
+#include <dtkConfig.h>
+
 #include "dtkComposerFactory.h"
 #include "dtkComposerGraph.h"
 #include "dtkComposerGraphNode.h"
@@ -24,7 +26,9 @@
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeControlCase.h"
 #include "dtkComposerNodeLeaf.h"
+#if defined(DTK_BUILD_DISTRIBUTED)
 #include "dtkComposerNodeRemote.h"
+#endif
 #include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
@@ -603,7 +607,7 @@ void dtkComposerStackCommandCreateEdge::setParent(void)
     else if(e->source->node()->parent()->parent() == e->destination->node()->parent()->parent())
         e->parent = dynamic_cast<dtkComposerSceneNodeComposite *>(e->destination->node()->parent()->parent());
     else
-        qDebug() << __func__ << "Unhandled case" ;
+        qDebug() << DTK_PRETTY_FUNCTION << "Unhandled case" ;
 }
 
 void dtkComposerStackCommandCreateEdge::setParent(dtkComposerSceneNodeComposite *parent)
@@ -1982,7 +1986,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
             command->setGraph(d->graph);
             command->setOriginNode(origin);
             command->setTargetNode(source);
-            command->setOriginPosition(origin->sceneBoundingRect().topLeft());
+            command->setOriginPosition(e->origin_pos );
             command->setTargetPosition(origin->sceneBoundingRect().topLeft());
             command->redo();
 
@@ -2111,7 +2115,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
                 }
 
 
-                // qDebug() << __func__ << "input" << target->inputDegree(proxy) + target->outputDegree(proxy);
+                // qDebug() << DTK_PRETTY_FUNCTION << "input" << target->inputDegree(proxy) + target->outputDegree(proxy);
 
                 if(target->inputDegree(proxy) + target->outputDegree(proxy) == 0) {
 
@@ -2162,7 +2166,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
                 }
 
 
-                // qDebug() << __func__ << "input" << target->inputDegree(proxy) + target->outputDegree(proxy);
+                // qDebug() << DTK_PRETTY_FUNCTION << "input" << target->inputDegree(proxy) + target->outputDegree(proxy);
 
                 if(source->inputDegree(proxy) + source->outputDegree(proxy) == 0) {
 
@@ -2194,7 +2198,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
             } else {
 
-                qDebug() << __func__ << "Unhandled case (input)";
+                qDebug() << DTK_PRETTY_FUNCTION << "Unhandled case (input)";
             }
         }
 
@@ -2243,7 +2247,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
                     }
                 }
 
-                // qDebug() << __func__ << "output" << target->inputDegree(proxy) + target->outputDegree(proxy);
+                // qDebug() << DTK_PRETTY_FUNCTION << "output" << target->inputDegree(proxy) + target->outputDegree(proxy);
 
                 if(target->inputDegree(proxy) + target->outputDegree(proxy) == 0) {
 
@@ -2294,7 +2298,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
                     }
                 }
 
-                // qDebug() << __func__ << "output" << target->inputDegree(proxy) + target->outputDegree(proxy);
+                // qDebug() << DTK_PRETTY_FUNCTION << "output" << target->inputDegree(proxy) + target->outputDegree(proxy);
 
                 if(source->inputDegree(proxy) + source->outputDegree(proxy) == 0) {
 
@@ -2326,7 +2330,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
             } else {
 
-                qDebug() << __func__ << "Unhandled case (output)";
+                qDebug() << DTK_PRETTY_FUNCTION << "Unhandled case (output)";
             }
         }
 
@@ -2413,13 +2417,17 @@ void dtkComposerStackCommandReparentNode::redo(void)
                     command->setGraph(d->graph);
                     command->setKind(dtkComposerTransmitter::Proxy);
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down) {
+#if defined(DTK_BUILD_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(target->wrapee()))
                             command->setKind(dtkComposerTransmitter::Variant);
+#endif
                         command->setNode(target);
                     }
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Up) {
+#if defined(DTK_BUILD_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(source->wrapee()))
                             command->setKind(dtkComposerTransmitter::Variant);
+#endif
                         command->setNode(source);
                     }
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down)
@@ -2466,7 +2474,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
             } else {
 
-                qDebug() << __func__ << "Unhandled case (input create)";
+                qDebug() << DTK_PRETTY_FUNCTION << "Unhandled case (input create)";
             }
         }
 
@@ -2515,13 +2523,17 @@ void dtkComposerStackCommandReparentNode::redo(void)
                     command->setGraph(d->graph);
                     command->setKind(dtkComposerTransmitter::Proxy);
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down) {
+#if defined(DTK_BUILD_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(target->wrapee()))
                             command->setKind(dtkComposerTransmitter::Variant);
+#endif
                         command->setNode(target);
                     }
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Up) {
+#if defined(DTK_BUILD_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(source->wrapee()))
                             command->setKind(dtkComposerTransmitter::Variant);
+#endif
                         command->setNode(source);
                     }
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down)
@@ -2568,7 +2580,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
             } else {
 
-                qDebug() << __func__ << "Unhandled case (output create)";
+                qDebug() << DTK_PRETTY_FUNCTION << "Unhandled case (output create)";
             }
         }
 

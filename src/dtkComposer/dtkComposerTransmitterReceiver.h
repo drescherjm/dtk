@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 14:19:45 2012 (+0200)
+ * Last-Updated: Wed Sep 19 14:58:45 2012 (+0200)
  *           By: tkloczko
- *     Update #: 170
+ *     Update #: 171
  */
 
 /* Commentary: 
@@ -37,7 +37,7 @@ class dtkComposerTransmitterVariant;
 // dtkComposerTransmitterReceiver interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class DTKCOMPOSER_EXPORT dtkComposerTransmitterReceiver : public dtkComposerTransmitter
+template <typename T> class dtkComposerTransmitterReceiver : public dtkComposerTransmitter
 {
 public:
      dtkComposerTransmitterReceiver(dtkComposerNode *parent = 0);
@@ -102,7 +102,7 @@ private:
 
 template <typename T> class dtkComposerTransmitterEmitterVector;
 
-template <typename T> class DTKCOMPOSER_EXPORT dtkComposerTransmitterReceiverVector : public dtkComposerTransmitterReceiver<T>
+template <typename T> class dtkComposerTransmitterReceiverVector : public dtkComposerTransmitterReceiver<T>
 {
 public:
      dtkComposerTransmitterReceiverVector(dtkComposerNode *parent = 0);

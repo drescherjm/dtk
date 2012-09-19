@@ -71,9 +71,10 @@ public:
     void setAxisScaleX(Scale scale);
     void setAxisScaleY(Scale scale);
 
-    void setBackgroundColor(const QColor& color);
-
     void setStyleSheet(const QString& sheet);
+    
+public:
+    virtual void setBackgroundColor(const QColor& color);
     
 public:
     dtkPlotView& operator<<(dtkPlotCurve *curve);

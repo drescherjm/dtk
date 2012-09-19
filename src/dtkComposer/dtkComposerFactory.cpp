@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Thu Sep 13 23:22:57 2012 (+0200)
+ * Last-Updated: Wed Sep 19 14:56:32 2012 (+0200)
  *           By: tkloczko
- *     Update #: 745
+ *     Update #: 752
  */
 
 /* Commentary:
@@ -69,27 +69,31 @@
 // #include "dtkComposerNodeRemote.h"
 #include "dtkComposerSceneNodeLeaf.h"
 
-// #if defined(DTK_HAVE_MPI)
-// #include "dtkComposerNodeDistributed.h"
-// #include "dtkComposerNodeWorld.h"
-// #endif
+#if defined(DTK_BUILD_DISTRIBUTED)
+#include "dtkComposerNodeRemote.h"
+#endif
 
-// #if defined(DTK_HAVE_NITE)
-// #include "dtkComposerNodeTrackerKinect.h"
-// #endif
+#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
+#include "dtkComposerNodeDistributed.h"
+#include "dtkComposerNodeWorld.h"
+#endif
 
-// #if defined(DTK_HAVE_VRPN)
-// #include "dtkComposerNodeTrackerVrpn.h"
-// #endif
+#if defined(DTK_BUILD_VR) && defined(DTK_HAVE_NITE)
+#include "dtkComposerNodeTrackerKinect.h"
+#endif
 
-// #if defined(DTK_HAVE_PLOT)
-// #include "dtkComposerNodePlotCurve.h"
-// #include "dtkComposerNodePlotView.h"
-// #endif
+#if defined(DTK_BUILD_VR) &&defined(DTK_HAVE_VRPN)
+#include "dtkComposerNodeTrackerVrpn.h"
+#endif
 
-// #if defined(DTK_HAVE_PLOT)
-// #include <dtkPlot/dtkPlotView.h>
-// #endif
+#if defined(DTK_BUILD_PLOT) &&defined(DTK_HAVE_PLOT)
+#include "dtkComposerNodePlotCurve.h"
+#include "dtkComposerNodePlotView.h"
+#endif
+
+#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
+#include <dtkPlot/dtkPlotView.h>
+#endif
 
 #include <dtkCore/dtkAbstractView.h>
 #include <dtkCore/dtkAbstractViewFactory.h>
@@ -195,111 +199,115 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Generic Data"] = QStringList() << "data";
     d->types["Generic Data"] = "data";
 
-//     d->nodes << "Generic Process";
-//     d->descriptions["Generic Process"] = "<p>Description not yet filled!</p>";
-//     d->tags["Generic Process"] = QStringList() << "process";
-//     d->types["Generic Process"] = "process";
+    // d->nodes << "Generic Process";
+    // d->descriptions["Generic Process"] = "<p>Description not yet filled!</p>";
+    // d->tags["Generic Process"] = QStringList() << "process";
+    // d->types["Generic Process"] = "process";
 
-//     d->nodes << "Generic View";
-//     d->descriptions["Generic View"] = "<p>Description not yet filled!</p>";
-//     d->tags["Generic View"] = QStringList() << "view";
-//     d->types["Generic View"] = "view";
+    // d->nodes << "Generic View";
+    // d->descriptions["Generic View"] = "<p>Description not yet filled!</p>";
+    // d->tags["Generic View"] = QStringList() << "view";
+    // d->types["Generic View"] = "view";
 
-//     // dtkDistributed nodes
+// /////////////////////////////////////////////////////////////////
+// Distributed nodes
+// /////////////////////////////////////////////////////////////////
 
-//     d->nodes << "Remote";
-//     d->tags["Remote"] = QStringList() <<  "distributed" << "tcp" << "remote" << "world";
-//     d->types["Remote"] = "remote";
+#if defined(DTK_BUILD_DISTRIBUTED)
+    d->nodes << "Remote";
+    d->tags["Remote"] = QStringList() <<  "distributed" << "tcp" << "remote" << "world";
+    d->types["Remote"] = "remote";
 
-//     d->nodes << "Remote Submit";
-//     d->tags["Remote Submit"] = QStringList() <<  "distributed" << "tcp" << "remote" << "submit" << "job";
-//     d->types["Remote Submit"] = "remoteSubmit";
+    d->nodes << "Remote Submit";
+    d->tags["Remote Submit"] = QStringList() <<  "distributed" << "tcp" << "remote" << "submit" << "job";
+    d->types["Remote Submit"] = "remoteSubmit";
+#endif
 
-//     // /////////////////////////////////////////////////////////////////
-//     // Plot nodes
-//     // /////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
+    // Plot nodes
+    // /////////////////////////////////////////////////////////////////
 
-// #if defined(DTK_HAVE_PLOT)
-//     d->nodes << "Plot Curve";
-//     d->tags["Plot Curve"] = QStringList() <<  "curve" << "plot";
-//     d->types["Plot Curve"] = "dtkPlotCurve";
+#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
+    d->nodes << "Plot Curve";
+    d->tags["Plot Curve"] = QStringList() <<  "curve" << "plot";
+    d->types["Plot Curve"] = "dtkPlotCurve";
 
-//     dtkAbstractViewFactory::instance()->registerViewType("dtkPlotView", createPlotView);
+    dtkAbstractViewFactory::instance()->registerViewType("dtkPlotView", createPlotView);
 
-//     d->nodes << "Plot View";
-//     d->tags["Plot View"] = QStringList() <<  "view" << "plot";
-//     d->types["Plot View"] = "dtkPlotView";
-// #endif
+    d->nodes << "Plot View";
+    d->tags["Plot View"] = QStringList() <<  "view" << "plot";
+    d->types["Plot View"] = "dtkPlotView";
+#endif
 
-//     // /////////////////////////////////////////////////////////////////
-//     // NITE nodes
-//     // /////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
+    // NITE nodes
+    // /////////////////////////////////////////////////////////////////
 
-// #if defined(DTK_HAVE_NITE)
-//     d->nodes << "KinectTracker";
-//     d->tags["KinectTracker"] = QStringList() <<  "kinect" << "vr" << "ar" << "tracker";
-//     d->types["KinectTracker"] = "kinectTracker";
-// #endif
+#if defined(DTK_BUILD_VR) && defined(DTK_HAVE_NITE)
+    d->nodes << "KinectTracker";
+    d->tags["KinectTracker"] = QStringList() <<  "kinect" << "vr" << "ar" << "tracker";
+    d->types["KinectTracker"] = "kinectTracker";
+#endif
 
-//     // /////////////////////////////////////////////////////////////////
-//     // VRPN nodes
-//     // /////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
+    // VRPN nodes
+    // /////////////////////////////////////////////////////////////////
 
-// #if defined(DTK_HAVE_VRPN)
-//     d->nodes << "VrpnTracker";
-//     d->tags["VrpnTracker"] = QStringList() <<  "vrpn" << "vr" << "ar" << "tracker";
-//     d->types["VrpnTracker"] = "vrpnTracker";
-// #endif
+#if defined(DTK_BUILD_VR) && defined(DTK_HAVE_VRPN)
+    d->nodes << "VrpnTracker";
+    d->tags["VrpnTracker"] = QStringList() <<  "vrpn" << "vr" << "ar" << "tracker";
+    d->types["VrpnTracker"] = "vrpnTracker";
+#endif
 
-//     // /////////////////////////////////////////////////////////////////
-//     // MPI nodes
-//     // /////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
+    // MPI nodes
+    // /////////////////////////////////////////////////////////////////
 
-// #if defined(DTK_HAVE_MPI)
-//     d->nodes << "World";
-//     d->tags["World"] = QStringList() <<  "distributed" << "mpi" << "tcp" << "world";
-//     d->types["World"] = "world";
+#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
+    d->nodes << "World";
+    d->tags["World"] = QStringList() <<  "distributed" << "mpi" << "tcp" << "world";
+    d->types["World"] = "world";
 
-//     d->nodes << "CommunicatorRank";
-//     d->tags["CommunicatorRank"] = QStringList() <<  "rank" << "distributed" << "mpi" << "communicator";
-//     d->types["CommunicatorRank"] = "communicatorRank";
+    d->nodes << "CommunicatorRank";
+    d->tags["CommunicatorRank"] = QStringList() <<  "rank" << "distributed" << "mpi" << "communicator";
+    d->types["CommunicatorRank"] = "communicatorRank";
 
-//     d->nodes << "CommunicatorSize";
-//     d->tags["CommunicatorSize"] = QStringList() <<  "size" << "distributed" << "mpi" << "communicator";
-//     d->types["CommunicatorSize"] = "communicatorSize";
+    d->nodes << "CommunicatorSize";
+    d->tags["CommunicatorSize"] = QStringList() <<  "size" << "distributed" << "mpi" << "communicator";
+    d->types["CommunicatorSize"] = "communicatorSize";
 
-//     d->nodes << "CommunicatorInit";
-//     d->tags["CommunicatorInit"] = QStringList() <<  "initialization" << "distributed" << "mpi" << "communicator";
-//     d->types["CommunicatorInit"] = "communicatorInit";
+    d->nodes << "CommunicatorInit";
+    d->tags["CommunicatorInit"] = QStringList() <<  "initialization" << "distributed" << "mpi" << "communicator";
+    d->types["CommunicatorInit"] = "communicatorInit";
 
-//     d->nodes << "CommunicatorUninitialize";
-//     d->tags["CommunicatorUninitialize"] = QStringList() <<  "finalize" << "distributed" << "mpi" << "communicator";
-//     d->types["CommunicatorUninitialize"] = "communicatorUninitialize";
+    d->nodes << "CommunicatorUninitialize";
+    d->tags["CommunicatorUninitialize"] = QStringList() <<  "finalize" << "distributed" << "mpi" << "communicator";
+    d->types["CommunicatorUninitialize"] = "communicatorUninitialize";
 
-//     d->nodes << "CommunicatorSendInteger";
-//     d->tags["CommunicatorSendInteger"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator" << "integer";
-//     d->types["CommunicatorSendInteger"] = "communicatorSendInteger";
+    d->nodes << "CommunicatorSendInteger";
+    d->tags["CommunicatorSendInteger"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator" << "integer";
+    d->types["CommunicatorSendInteger"] = "communicatorSendInteger";
 
-//     d->nodes << "CommunicatorReceiveInteger";
-//     d->tags["CommunicatorReceiveInteger"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator" << "integer";;
-//     d->types["CommunicatorReceiveInteger"] = "communicatorReceiveInteger";
+    d->nodes << "CommunicatorReceiveInteger";
+    d->tags["CommunicatorReceiveInteger"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator" << "integer";;
+    d->types["CommunicatorReceiveInteger"] = "communicatorReceiveInteger";
 
-//     d->nodes << "CommunicatorSendReal";
-//     d->tags["CommunicatorSendReal"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator" << "real";
-//     d->types["CommunicatorSendReal"] = "communicatorSendReal";
+    d->nodes << "CommunicatorSendReal";
+    d->tags["CommunicatorSendReal"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator" << "real";
+    d->types["CommunicatorSendReal"] = "communicatorSendReal";
 
-//     d->nodes << "CommunicatorReceiveReal";
-//     d->tags["CommunicatorReceiveReal"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator" << "real";;
-//     d->types["CommunicatorReceiveReal"] = "communicatorReceiveReal";
+    d->nodes << "CommunicatorReceiveReal";
+    d->tags["CommunicatorReceiveReal"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator" << "real";;
+    d->types["CommunicatorReceiveReal"] = "communicatorReceiveReal";
 
-//     d->nodes << "CommunicatorReceive";
-//     d->tags["CommunicatorReceive"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator";;
-//     d->types["CommunicatorReceive"] = "communicatorReceive";
+    d->nodes << "CommunicatorReceive";
+    d->tags["CommunicatorReceive"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator";;
+    d->types["CommunicatorReceive"] = "communicatorReceive";
 
-//     d->nodes << "CommunicatorSend";
-//     d->tags["CommunicatorSend"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator";;
-//     d->types["CommunicatorSend"] = "communicatorSend";
-// #endif
+    d->nodes << "CommunicatorSend";
+    d->tags["CommunicatorSend"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator";;
+    d->types["CommunicatorSend"] = "communicatorSend";
+#endif
 }
 
 void dtkComposerFactory::initNodeNumberOperatorUnary()
@@ -1466,82 +1474,84 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 //     if(type == "view")
 //         return new dtkComposerNodeView;
 
-//     // distributed nodes
+// /////////////////////////////////////////////////////////////////
+// Distributed nodes
+// /////////////////////////////////////////////////////////////////
 
-//     if(type == "remote")
-//         return new dtkComposerNodeRemote;
+#if defined(DTK_BUILD_DISTRIBUTED)
+    if(type == "remote")
+        return new dtkComposerNodeRemote;
 
-//     if(type == "remoteSubmit")
-//         return new dtkComposerNodeRemoteSubmit;
+    if(type == "remoteSubmit")
+        return new dtkComposerNodeRemoteSubmit;
+#endif
 
-//     // /////////////////////////////////////////////////////////////////
-//     // NITE nodes
-//     // /////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////
+// NITE nodes
+// /////////////////////////////////////////////////////////////////
 
-// #if defined(DTK_HAVE_NITE)
-//     if(type == "kinectTracker")
-//         return new dtkComposerNodeTrackerKinect;
-// #endif
+#if defined(DTK_BUILD_VR) && defined(DTK_HAVE_NITE)
+    if(type == "kinectTracker")
+        return new dtkComposerNodeTrackerKinect;
+#endif
 
-//     // /////////////////////////////////////////////////////////////////
-//     // VRPN nodes
-//     // /////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////
+// VRPN nodes
+// /////////////////////////////////////////////////////////////////
 
-// #if defined(DTK_HAVE_VRPN)
-//     if(type == "vrpnTracker")
-//         return new dtkComposerNodeTrackerVrpn;
-// #endif
+#if defined(DTK_BUILD_VR) && defined(DTK_HAVE_VRPN)
+    if(type == "vrpnTracker")
+        return new dtkComposerNodeTrackerVrpn;
+#endif
 
-//     // /////////////////////////////////////////////////////////////////
-//     // Plot nodes
-//     // /////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////
+// Plot nodes
+// /////////////////////////////////////////////////////////////////
 
-// #if defined(DTK_HAVE_PLOT)
-//     if(type == "dtkPlotCurve")
-//         return new dtkComposerNodePlotCurve;
+#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
+    if(type == "dtkPlotCurve")
+        return new dtkComposerNodePlotCurve;
+#endif
 
-//     if(type == "dtkPlotView")
-//         return new dtkComposerNodePlotView;
-// #endif
+// /////////////////////////////////////////////////////////////////
+// MPI nodes
+// /////////////////////////////////////////////////////////////////
 
-//     // /////////////////////////////////////////////////////////////////
-//     // MPI nodes
-//     // /////////////////////////////////////////////////////////////////
+#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
+    if(type == "world")
+        return new dtkComposerNodeWorld;
 
-// #if defined(DTK_HAVE_MPI)
-//     if(type == "world")
-//         return new dtkComposerNodeWorld;
 
-//     if(type == "communicatorSize")
-//         return new dtkComposerNodeCommunicatorSize;
+    if(type == "communicatorSize")
+        return new dtkComposerNodeCommunicatorSize;
 
-//     if(type == "communicatorRank")
-//         return new dtkComposerNodeCommunicatorRank;
+    if(type == "communicatorRank")
+        return new dtkComposerNodeCommunicatorRank;
 
-//     if(type == "communicatorUninitialize")
-//         return new dtkComposerNodeCommunicatorUninitialize;
+    if(type == "communicatorUninitialize")
+        return new dtkComposerNodeCommunicatorUninitialize;
 
-//     if(type == "communicatorInit")
-//         return new dtkComposerNodeCommunicatorInit;
+    if(type == "communicatorInit")
+        return new dtkComposerNodeCommunicatorInit;
 
-//     if(type == "communicatorSendInteger")
-//         return new dtkComposerNodeCommunicatorSendInteger;
+    if(type == "communicatorSendInteger")
+        return new dtkComposerNodeCommunicatorSendInteger;
 
-//     if(type == "communicatorReceiveInteger")
-//         return new dtkComposerNodeCommunicatorReceiveInteger;
+    if(type == "communicatorReceiveInteger")
+        return new dtkComposerNodeCommunicatorReceiveInteger;
 
-//     if(type == "communicatorSendReal")
-//         return new dtkComposerNodeCommunicatorSendReal;
+    if(type == "communicatorSendReal")
+        return new dtkComposerNodeCommunicatorSendReal;
 
-//     if(type == "communicatorReceiveReal")
-//         return new dtkComposerNodeCommunicatorReceiveReal;
+    if(type == "communicatorReceiveReal")
+        return new dtkComposerNodeCommunicatorReceiveReal;
 
-//     if(type == "communicatorSend")
-//         return new dtkComposerNodeCommunicatorSend;
+    if(type == "communicatorSend")
+        return new dtkComposerNodeCommunicatorSend;
 
-//     if(type == "communicatorReceive")
-//         return new dtkComposerNodeCommunicatorReceive;
-// #endif
+    if(type == "communicatorReceive")
+        return new dtkComposerNodeCommunicatorReceive;
+#endif
 
     return NULL;
 }

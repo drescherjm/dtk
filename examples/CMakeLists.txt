@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:06:43 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Mon Jul 16 09:59:05 2012 (+0200)
-##           By: tkloczko
-##     Update #: 88
+## Last-Updated: Tue Sep 18 11:03:45 2012 (+0200)
+##           By: Julien Wintz
+##     Update #: 94
 ######################################################################
 ## 
 ### Commentary: 
@@ -48,13 +48,18 @@ add_subdirectory(dtkUpdater)
 ## dtkContainer examples
 ## #################################################################
 
-add_subdirectory(dtkContainerExample)
+if(DTK_BUILD_COMPOSER)
+  add_subdirectory(dtkContainerExample)
+endif(DTK_BUILD_COMPOSER)
 
 ## #################################################################
 ## dtkGui examples
 ## #################################################################
 
+if(DTK_BUILD_SCRIPT)
 add_subdirectory(dtkInterpreter)
+endif(DTK_BUILD_SCRIPT)
+
 add_subdirectory(dtkTagCloud)
 add_subdirectory(dtkTextEditor)
 add_subdirectory(dtkSettingsEditor)
@@ -67,16 +72,22 @@ add_subdirectory(dtkViewManager)
 ## dtkVr examples
 ## #################################################################
 
-add_subdirectory(dtkVrGestureRecognizer)
+if(DTK_BUILD_VR)
+  add_subdirectory(dtkVrGestureRecognizer)
+endif(DTK_BUILD_VR)
 
 ## #################################################################
 ## dtkPlot examples
 ## #################################################################
 
-add_subdirectory(dtkPlotEcg)
+if(DTK_BUILD_PLOT)
+  add_subdirectory(dtkPlotEcg)
+endif(DTK_BUILD_PLOT)
 
 ## #################################################################
 ## dtkComposer examples
 ## #################################################################
 
-add_subdirectory(dtkComposerTransmitter)
+if(DTK_BUILD_COMPOSER)
+  add_subdirectory(dtkComposerTransmitter)
+endif(DTK_BUILD_COMPOSER)

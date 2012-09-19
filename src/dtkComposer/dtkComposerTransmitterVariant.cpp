@@ -4,15 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
-<<<<<<< HEAD
- * Last-Updated: Wed Sep 19 15:00:44 2012 (+0200)
+ * Last-Updated: Wed Sep 19 16:55:37 2012 (+0200)
  *           By: tkloczko
- *     Update #: 736
-=======
- * Last-Updated: Tue Sep 18 11:17:06 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 483
->>>>>>> master
+ *     Update #: 742
  */
 
 /* Commentary: 
@@ -486,6 +480,9 @@ QString dtkComposerTransmitterVariant::dataDescription(void)
 {
     if (dtkAbstractObject *o = this->object())
         return o->description();
+
+    if(QString *s = this->data<QString>())
+        return *s;
 
     QString address;
     QTextStream addressStream (&address);

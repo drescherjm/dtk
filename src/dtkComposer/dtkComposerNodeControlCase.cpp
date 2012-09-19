@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: mar. mai 15 17:05:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 11 12:44:25 2012 (+0200)
+ * Last-Updated: Wed Sep 19 15:25:47 2012 (+0200)
  *           By: tkloczko
- *     Update #: 293
+ *     Update #: 298
  */
 
 /* Commentary:
@@ -164,8 +164,25 @@ int dtkComposerNodeControlCase::selectBranch(void)
         dtkComposerTransmitterVariant *v =  d->blocks_input[i-1] ;
         if (value > 0) //already found the good block, no need to check again.
             is_case = false;
-        else
-            is_case = (d->cond.variant() ==  v->variant());
+        else {
+
+            QString *s_cond = d->cond.data<QString>();
+            QString *s_v    = v->data<QString>();
+
+            if (s_cond && s_v) {
+                is_case = (*s_cond == *s_v);
+
+            } else {
+
+                dtkAbstractObject *o_cond = d->cond.object();
+                dtkAbstractObject *o_v    = v->object();
+
+                if (o_cond && o_v)
+                    is_case = (*o_cond == *o_v);
+                else
+                    is_case = false;
+            }
+        }
 
         if (is_case) {
 

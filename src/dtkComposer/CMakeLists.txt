@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Wed Sep 19 15:05:06 2012 (+0200)
+## Last-Updated: Wed Sep 19 17:03:31 2012 (+0200)
 ##           By: tkloczko
-##     Update #: 599
+##     Update #: 600
 ######################################################################
 ##
 ### Commentary:
@@ -240,6 +240,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerStackView.cpp
   dtkComposerStackCommand.cpp
   dtkComposerTransmitter.cpp
+  dtkComposerTransmitterEmitter.cpp
   dtkComposerTransmitterProxy.cpp
   dtkComposerTransmitterVariant.cpp
   dtkComposerView.cpp

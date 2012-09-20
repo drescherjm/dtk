@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Wed Sep 19 17:03:31 2012 (+0200)
+## Last-Updated: Thu Sep 20 10:25:54 2012 (+0200)
 ##           By: tkloczko
-##     Update #: 600
+##     Update #: 601
 ######################################################################
 ##
 ### Commentary:
@@ -198,7 +198,7 @@ set(${PROJECT_NAME}_SOURCES
   # dtkComposerNodeList.cpp
   # dtkComposerNodeListOperator.cpp
   dtkComposerNodeLogger.cpp
-  # dtkComposerNodeMatrixSquareReal.cpp
+  dtkComposerNodeMatrixSquareReal.cpp
   # dtkComposerNodeMatrixSquareRealExtractor.cpp
   # dtkComposerNodeMatrixSquareRealOperatorUnary.cpp
   # dtkComposerNodeMatrixSquareRealOperatorBinary.cpp

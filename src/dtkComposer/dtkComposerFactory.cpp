@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Wed Sep 19 15:12:28 2012 (+0200)
+ * Last-Updated: Thu Sep 20 10:44:04 2012 (+0200)
  *           By: tkloczko
- *     Update #: 756
+ *     Update #: 759
  */
 
 /* Commentary:
@@ -44,7 +44,7 @@
 // #include "dtkComposerNodeFileOperator.h"
 #include "dtkComposerNodeLogger.h"
 #include "dtkComposerNodeInteger.h"
-// #include "dtkComposerNodeMatrixSquareReal.h"
+#include "dtkComposerNodeMatrixSquareReal.h"
 // #include "dtkComposerNodeMatrixSquareRealExtractor.h"
 // #include "dtkComposerNodeMatrixSquareRealOperatorUnary.h"
 // #include "dtkComposerNodeMatrixSquareRealOperatorBinary.h"
@@ -670,10 +670,10 @@ void dtkComposerFactory::initNodeVectorReal(void)
 
 void dtkComposerFactory::initNodeMatrixSquareReal(void)
 {
-    // d->nodes << "Matrix Square Real";
-    // d->descriptions["Matrix Square Real "] = "<p>Description not yet filled!</p>";
-    // d->tags["Matrix Square Real"] = QStringList() << "matrix" << "square" << "real"<< "algebraic";
-    // d->types["Matrix Square Real"] = "matrix_square_real";
+    d->nodes << "Matrix Square Real";
+    d->descriptions["Matrix Square Real "] = "<p>Description not yet filled!</p>";
+    d->tags["Matrix Square Real"] = QStringList() << "matrix" << "square" << "real"<< "algebraic";
+    d->types["Matrix Square Real"] = "matrix_square_real";
 
     // d->nodes << "MatrixSquare Real Extractor";
     // d->descriptions["MatrixSquare Real Extractor "] = "<p>Description not yet filled!</p>";
@@ -1077,10 +1077,10 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     // if(type == "array_data_prepend")
     //     return new dtkComposerNodeArrayDataOperatorPrepend;
 
-    // // Matrix Square Nodes
+    // Matrix Square Nodes
 
-    // if(type == "matrix_square_real")
-    //     return new dtkComposerNodeMatrixSquareReal;
+    if(type == "matrix_square_real")
+        return new dtkComposerNodeMatrixSquareReal;
 
     // if(type == "matrixSquare_real_extractor")
     //     return new dtkComposerNodeMatrixSquareRealExtractor;

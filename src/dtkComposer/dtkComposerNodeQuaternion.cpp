@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 13:06:02 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 13 14:33:56 2012 (+0200)
+ * Last-Updated: Thu Sep 20 10:42:05 2012 (+0200)
  *           By: tkloczko
- *     Update #: 35
+ *     Update #: 40
  */
 
 /* Commentary: 
@@ -145,11 +145,13 @@ void dtkComposerNodeQuaternion::run(void)
 {
     if (!d->receiver_quat.isEmpty()) {
 
-        d->quat = d->receiver_quat.data();
-        d->q0 = (*d->quat)[0];
-        d->q1 = (*d->quat)[1];
-        d->q2 = (*d->quat)[2];
-        d->q3 = (*d->quat)[3];
+        dtkQuaternionReal *quat = d->receiver_quat.data();
+        d->q0 = (*quat)[0];
+        d->q1 = (*quat)[1];
+        d->q2 = (*quat)[2];
+        d->q3 = (*quat)[3];
+
+        d->emitter_quat.setData(quat);
 
     } else {
 
@@ -158,21 +160,29 @@ void dtkComposerNodeQuaternion::run(void)
 
         if (!d->receiver_q0.isEmpty())
             d->q0 = *d->receiver_q0.data();
+        else
+            d->q0 = 0.;
 
         if (!d->receiver_q1.isEmpty())
             d->q1 = *d->receiver_q1.data();
+        else
+            d->q1 = 0.;
 
         if (!d->receiver_q2.isEmpty())
             d->q2 = *d->receiver_q2.data();
+        else
+            d->q2 = 0.;
 
         if (!d->receiver_q3.isEmpty())
             d->q3 = *d->receiver_q3.data();
+        else
+            d->q3 = 0.;
         
         (*d->quat)[0] = d->q0;
         (*d->quat)[1] = d->q1;
         (*d->quat)[2] = d->q2;
         (*d->quat)[3] = d->q3;
-    }
 
-    d->emitter_quat.setData(d->quat);
+        d->emitter_quat.setData(d->quat);
+    }
 }

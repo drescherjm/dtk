@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 13:15:36 2012 (+0200)
+ * Last-Updated: Thu Sep 20 10:40:10 2012 (+0200)
  *           By: tkloczko
- *     Update #: 107
+ *     Update #: 117
  */
 
 /* Commentary: 
@@ -35,7 +35,6 @@ public:
     dtkComposerTransmitterReceiverVector<qreal> receiver_array;
     dtkComposerTransmitterVariant receiver_size;
     dtkComposerTransmitterVariant receiver_value;
-
 
 public:
     dtkComposerTransmitterEmitterVector<qreal> emitter_array;
@@ -120,36 +119,39 @@ void dtkComposerNodeArrayScalar::run(void)
 {
     if (!d->receiver_array.isEmpty()) {
 
-        d->array = d->receiver_array.data();
-        d->size = d->array->count();
+        dtkContainerVectorReal *array = d->receiver_array.data();
+        d->size = array->count();
+
+        d->emitter_array.setData(array);        
 
     } else {
 
-        if (d->array)
-            d->array->clear();
-        else
+        if (!d->array)
             d->array = new dtkContainerVectorReal();  
         
         if (!d->receiver_size.isEmpty())
             d->size = *d->receiver_size.data<qlonglong>();
 
         if (d->size == 0) {
-            dtkWarn() << "The size of the array is zero." ;
+
+            d->array->clear();
+            
+            dtkWarn() << "The size of the array is zero.";
 
         } else {          
 
-            d->array->reserve(d->size);
+            d->array->resize(d->size);
         
-            qreal value;
+            qreal value = 0.;
 
             if (!d->receiver_value.isEmpty())
                 value = *d->receiver_value.data<qreal>();
 
-        for(int i = 0 ; i < d->size; i++)
-            *(d->array) << value;
+            for(qlonglong i = 0 ; i < d->size; ++i)
+                *(d->array) << value;
 
         }
-    }
 
-    d->emitter_array.setData(d->array);
+        d->emitter_array.setData(d->array);
+    }
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette Lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 17:04:43 2012 (+0200)
+ * Last-Updated: Thu Sep 20 10:33:42 2012 (+0200)
  *           By: tkloczko
- *     Update #: 43
+ *     Update #: 75
  */
 
 /* Commentary:
@@ -39,6 +39,10 @@ public:
 public:
     dtkComposerTransmitterEmitter<dtkMatrixSquareReal> emitter_matrix;
     dtkComposerTransmitterEmitter<qlonglong> emitter_size;
+
+public:
+    dtkMatrixSquareReal *matrix;
+    qlonglong size;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -47,19 +51,24 @@ public:
 
 dtkComposerNodeMatrixSquareReal::dtkComposerNodeMatrixSquareReal(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMatrixSquareRealPrivate)
 {
+    d->matrix = NULL;
+    d->size = 0;
+
     this->appendReceiver(&d->receiver_matrix);
 
-    QList<QVariant::Type> variant_list;
+    QList<int> variant_list;
 
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong;
-    d->receiver_size.setTypes(variant_list);
+    variant_list << QMetaType::LongLong;
+    d->receiver_size.setDataTypes(variant_list);
     this->appendReceiver(&d->receiver_size);
 
-    variant_list << QVariant::Double;
-    d->receiver_value.setTypes(variant_list);
+    variant_list << QMetaType::Double;
+    d->receiver_value.setDataTypes(variant_list);
     this->appendReceiver(&d->receiver_value);
 
     this->appendEmitter(&d->emitter_matrix);
+    
+    d->emitter_size.setData(&d->size);
     this->appendEmitter(&d->emitter_size);
 }
 
@@ -109,37 +118,40 @@ void dtkComposerNodeMatrixSquareReal::run(void)
 {
     if (!d->receiver_matrix.isEmpty()) {
 
-        const dtkMatrixSquareReal& matrix (d->receiver_matrix.data());
+        dtkMatrixSquareReal *matrix = d->receiver_matrix.data();
+        d->size = matrix->size();
 
         d->emitter_matrix.setData(matrix);
-        d->emitter_size.setData(matrix.getRows());
 
     } else {
 
-        qlonglong size = 0;
-        qreal value = 0;
-        dtkMatrixSquareReal matrix;
+        if (!d->matrix)
+            d->matrix = new dtkMatrixSquareReal();
 
         if (!d->receiver_size.isEmpty())
-            size = qvariant_cast<qlonglong>(d->receiver_size.data());
+            d->size = *d->receiver_size.data<qlonglong>();
+        else
+            d->size = 0;
 
-        if (size == 0) {
-            dtkWarn() << "The size of the matrix is zero." ;
+        if (d->size == 0) {
+
+            d->matrix->allocate(0);
+
+            dtkWarn() << "The size of the matrix is zero.";
 
         } else {
 
-            matrix.allocate(size);
+            if (d->size != d->matrix->size())
+                d->matrix->allocate(d->size);
+
+            qreal value = 0.;
 
             if (!d->receiver_value.isEmpty())
-                value = qvariant_cast<qreal>(d->receiver_value.data());
+                value = *d->receiver_value.data<qreal>();
 
-            for(int i = 0 ; i < matrix.getRows(); i++) {
-                for(int j = 0 ; j < matrix.getCols(); j++)
-                    matrix[i][j] = value;
-            }
+            d->matrix->fill(value);
         }
 
-        d->emitter_size.setData(size);
-        d->emitter_matrix.setData(matrix);
+        d->emitter_matrix.setData(d->matrix);
     }
 }

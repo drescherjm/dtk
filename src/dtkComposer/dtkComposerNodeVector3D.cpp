@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 10:19:40 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 13:17:01 2012 (+0200)
+ * Last-Updated: Thu Sep 20 10:42:47 2012 (+0200)
  *           By: tkloczko
- *     Update #: 76
+ *     Update #: 80
  */
 
 /* Commentary: 
@@ -138,29 +138,40 @@ void dtkComposerNodeVector3D::run(void)
 {
     if (!d->receiver_vec.isEmpty()) {
 
-        d->vector = d->receiver_vec.data();
-        d->x = (*d->vector)[0];
-        d->y = (*d->vector)[1];
-        d->z = (*d->vector)[2];
+        dtkVector3DReal *vector = d->receiver_vec.data();
+
+        d->x = (*vector)[0];
+        d->y = (*vector)[1];
+        d->z = (*vector)[2];
+
+        d->emitter_vec.setData(vector);
 
     } else {
 
         if (!d->vector)
-            d->vector = new dtkVector3DReal();  
+            d->vector = new dtkVector3DReal();
 
         if (!d->receiver_x.isEmpty())
             d->x = *d->receiver_x.data<qreal>();
+        else
+            d->x = 0.;
 
         if (!d->receiver_y.isEmpty())
             d->y = *d->receiver_y.data<qreal>();
+        else
+            d->y = 0.;
 
         if (!d->receiver_z.isEmpty())
             d->z = *d->receiver_z.data<qreal>();
+        else
+            d->z = 0.;
         
         (*d->vector)[0] = d->x;
         (*d->vector)[1] = d->y;
         (*d->vector)[2] = d->z;
+
+        d->emitter_vec.setData(d->vector);
     }
 
-    d->emitter_vec.setData(d->vector);
+    
 }

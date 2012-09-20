@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:29:21 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. sept. 17 12:29:36 2012 (+0200)
+ * Last-Updated: jeu. sept. 20 14:35:10 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 29
+ *     Update #: 30
  */
 
 /* Commentary: 
@@ -68,6 +68,9 @@ public:
 public:
     void   validate(void);
     void invalidate(void);
+
+public:
+    void setConnected(bool value);
 
 public:
     dtkComposerSceneNode *parent(void);

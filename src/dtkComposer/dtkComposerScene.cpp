@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: lun. sept. 17 12:56:20 2012 (+0200)
+ * Last-Updated: jeu. sept. 20 15:08:50 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 2275
+ *     Update #: 2328
  */
 
 /* Commentary:
@@ -705,6 +705,10 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsScene::mouseReleaseEvent(event);
 
+    foreach(dtkComposerSceneEdge *e, d->connected_edges)
+        e->setConnected(false);
+    d->connected_edges.clear();
+
     // Managing of reparenting
 
     if (d->reparent_target && d->reparent_target != d->reparent_origin) {
@@ -734,8 +738,39 @@ void dtkComposerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
     // Managing of current edge
 
-    if(!d->current_edge)
+    if(!d->current_edge) {
+        foreach(QGraphicsItem *item, this->selectedItems()) {
+            if (dtkComposerSceneNode *snode = dynamic_cast<dtkComposerSceneNode *>(item)) {
+                if (dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(snode)) {
+                    foreach(dtkComposerSceneEdge *e, composite->edges())
+                        d->connected_edges << e;
+                    foreach(dtkComposerSceneEdge *e, composite->inputEdges())
+                        d->connected_edges << e;
+                    foreach(dtkComposerSceneEdge *e, composite->outputEdges())
+                        d->connected_edges << e;
+                } else if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(snode)) {
+                    d->connected_edges << control->header()->inputEdges();
+                    d->connected_edges << control->footer()->outputEdges();
+                    foreach(dtkComposerSceneNodeComposite *b, control->blocks()) {
+                        foreach(dtkComposerSceneEdge *e, b->edges())
+                             d->connected_edges << e;
+                        foreach(dtkComposerSceneEdge *e, b->inputEdges())
+                             d->connected_edges << e;
+                        foreach(dtkComposerSceneEdge *e, b->outputEdges())
+                             d->connected_edges << e;
+                    }
+                }
+                foreach(dtkComposerSceneEdge *e, snode->inputEdges())
+                    d->connected_edges << e;
+                foreach(dtkComposerSceneEdge *e, snode->outputEdges())
+                    d->connected_edges << e;
+                foreach(dtkComposerSceneEdge *e, d->connected_edges)
+                    e->setConnected(true);
+            }
+        }
+
         return;
+    }
 
     if(dtkComposerScenePort *destination = this->portAt(event->scenePos()))
         d->current_edge->setDestination(destination);

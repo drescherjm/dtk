@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:33:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 14:19:35 2012 (+0200)
+ * Last-Updated: Thu Sep 20 13:13:15 2012 (+0200)
  *           By: tkloczko
- *     Update #: 145
+ *     Update #: 147
  */
 
 /* Commentary: 
@@ -38,6 +38,9 @@ template <typename T> class dtkComposerTransmitterEmitter : public dtkComposerTr
 public:
      dtkComposerTransmitterEmitter(dtkComposerNode *parent = 0);
     ~dtkComposerTransmitterEmitter(void);
+
+public:
+    void clearData(void);
 
 public:
     inline void setData(T *data);
@@ -77,6 +80,9 @@ template <typename T> class dtkComposerTransmitterEmitterVector : public dtkComp
 public:
      dtkComposerTransmitterEmitterVector(dtkComposerNode *parent = 0);
     ~dtkComposerTransmitterEmitterVector(void);
+
+public:
+    void clearData(void);
 
 public:
     inline void setData(dtkContainerVector<T> *vector);

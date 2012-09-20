@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 16:55:37 2012 (+0200)
+ * Last-Updated: Thu Sep 20 13:20:00 2012 (+0200)
  *           By: tkloczko
- *     Update #: 742
+ *     Update #: 746
  */
 
 /* Commentary: 
@@ -232,6 +232,16 @@ dtkComposerTransmitterVariant::~dtkComposerTransmitterVariant(void)
     e = NULL;
 }
 
+void dtkComposerTransmitterVariant::clearData(void)
+{
+    d->object = NULL;
+    d->variant.clear();
+    e->m_variant.clear();
+    if (d->container) 
+        delete d->container;
+    d->container = NULL;
+}
+
 //! Puts \a data into the variant transmitter which then plays the
 //! role of an emitter.
 /*! 
@@ -242,7 +252,6 @@ dtkComposerTransmitterVariant::~dtkComposerTransmitterVariant(void)
  *  
  *  
  */
-
 void dtkComposerTransmitterVariant::setData(const QVariant& data)
 {
     d->data_type = data.userType();

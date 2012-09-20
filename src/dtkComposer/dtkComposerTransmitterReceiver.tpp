@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 11:07:28 2012 (+0200)
+ * Last-Updated: Thu Sep 20 13:42:26 2012 (+0200)
  *           By: tkloczko
- *     Update #: 547
+ *     Update #: 559
  */
 
 /* Commentary: 
@@ -55,6 +55,22 @@ template <typename T> dtkComposerTransmitterReceiver<T>::~dtkComposerTransmitter
     active_emitter = NULL;
     active_variant = NULL;
 };
+
+//! 
+/*!  
+ *  
+ */
+template <typename T> void dtkComposerTransmitterReceiver<T>::clearData(void)
+{
+    d->variant.clear();
+    d->object = NULL;
+    d->container = NULL;
+
+    if (m_data)
+        delete m_data;
+    m_data = NULL;
+    
+}
 
 //! Returns the data as a modifiable reference.
 /*! 
@@ -278,8 +294,6 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::connect(dtkCompose
 {
     if (transmitter->kind() == Emitter) {
 
-        qDebug() << __func__ << this->dataType() << transmitter->dataType();
-
         if (this->dataType() == transmitter->dataType()) {
 
             dtkComposerTransmitterEmitter<T> *emitter = reinterpret_cast<dtkComposerTransmitterEmitter<T> *>(transmitter);
@@ -418,6 +432,24 @@ template <typename T> inline dtkComposerTransmitterReceiverVector<T>::dtkCompose
 template <typename T> inline dtkComposerTransmitterReceiverVector<T>::~dtkComposerTransmitterReceiverVector(void)
 {
 
+};
+
+//! 
+/*!  
+ *  
+ */
+template <typename T> void dtkComposerTransmitterReceiverVector<T>::clearData(void)
+{
+    d->variant.clear();
+    d->object = NULL;
+
+    if (d->container)
+        delete d->container;
+    d->container = NULL;
+
+    if (m_vector)
+        delete m_vector;
+    m_vector = NULL;
 };
 
 template <typename T> dtkContainerVector<T> *dtkComposerTransmitterReceiverVector<T>::dataFromEmitter(void)

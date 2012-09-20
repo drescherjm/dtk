@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 13:32:45 2012 (+0200)
+ * Last-Updated: Thu Sep 20 13:14:19 2012 (+0200)
  *           By: tkloczko
- *     Update #: 304
+ *     Update #: 309
  */
 
 /* Commentary: 
@@ -56,6 +56,16 @@ dtkComposerTransmitter::~dtkComposerTransmitter(void)
 
     d = NULL;
 }
+
+//! 
+/*!  
+ *  
+ */
+void dtkComposerTransmitter::clearData(void)
+{
+
+}
+
 
 //! Several cases can occur when calling this method.
 /*!  

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 13:00:10 2012 (+0200)
+ * Last-Updated: Thu Sep 20 13:12:33 2012 (+0200)
  *           By: tkloczko
- *     Update #: 410
+ *     Update #: 417
  */
 
 /* Commentary: 
@@ -49,6 +49,14 @@ template <typename T> inline dtkComposerTransmitterEmitter<T>::dtkComposerTransm
 template <typename T> inline dtkComposerTransmitterEmitter<T>::~dtkComposerTransmitterEmitter(void)
 {
 
+};
+
+template <typename T> void dtkComposerTransmitterEmitter<T>::clearData(void)
+{
+    m_data = NULL;
+    d->object = NULL;
+    d->variant.clear();
+    d->container = NULL;
 };
 
 //! Sets the data with \a data.
@@ -157,6 +165,16 @@ template <typename T> inline dtkComposerTransmitterEmitterVector<T>::dtkComposer
 template <typename T> inline dtkComposerTransmitterEmitterVector<T>::~dtkComposerTransmitterEmitterVector(void)
 {
 
+};
+
+template <typename T> void dtkComposerTransmitterEmitterVector<T>::clearData(void)
+{
+    m_vector = NULL;
+    d->object = NULL;
+    d->variant.clear();
+    if (d->container)
+        delete d->container;
+    d->container = NULL;
 };
 
 template <typename T> inline dtkComposerTransmitter::Kind dtkComposerTransmitterEmitterVector<T>::kind(void) const

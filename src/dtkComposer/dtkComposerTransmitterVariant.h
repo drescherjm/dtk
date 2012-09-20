@@ -4,15 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
-<<<<<<< HEAD
- * Last-Updated: Wed Sep 19 14:59:53 2012 (+0200)
+ * Last-Updated: Thu Sep 20 13:18:10 2012 (+0200)
  *           By: tkloczko
- *     Update #: 167
-=======
- * Last-Updated: Tue Sep 18 10:29:43 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 106
->>>>>>> master
+ *     Update #: 108
  */
 
 /* Commentary: 
@@ -47,6 +41,9 @@ class DTKCOMPOSER_EXPORT dtkComposerTransmitterVariant : public dtkComposerTrans
 public:
      dtkComposerTransmitterVariant(dtkComposerNode *parent = 0);
     ~dtkComposerTransmitterVariant(void);
+
+public:
+    void clearData(void);
 
 public:
     template <typename T> inline void setData(T *data);

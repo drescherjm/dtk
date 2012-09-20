@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 14:20:03 2012 (+0200)
+ * Last-Updated: Thu Sep 20 13:21:05 2012 (+0200)
  *           By: tkloczko
- *     Update #: 231
+ *     Update #: 234
  */
 
 /* Commentary: 
@@ -59,6 +59,9 @@ public:
 public:
              dtkComposerTransmitter(dtkComposerNode *parent = 0);
     virtual ~dtkComposerTransmitter(void);
+
+public:
+    virtual void clearData(void);
 
 public:
     virtual Kind kind(void) const = 0;

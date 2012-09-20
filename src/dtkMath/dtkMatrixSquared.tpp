@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Mon Jul 12 15:58:19 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 09:59:26 2012 (+0200)
+ * Last-Updated: Thu Sep 20 10:12:42 2012 (+0200)
  *           By: tkloczko
- *     Update #: 16
+ *     Update #: 20
  */
 
 /* Commentary: 
@@ -23,9 +23,8 @@
 #include "dtkMatrix.h"
 
 // /////////////////////////////////////////////////////////////////
-// Implementation of the template class dtkMatrixSquared's  methods
+// dtkMatrixSquared implementation
 // /////////////////////////////////////////////////////////////////
-
 
 template <typename T> inline dtkMatrixSquared<T>::dtkMatrixSquared(const dtkMatrix<T> &mat,
                                                                 unsigned irowStart,
@@ -127,7 +126,7 @@ template <typename T> dtkMatrixSquared<T> dtkMatrixSquared<T>::operator *(const 
 
 template <typename T> dtkMatrixSquared<T> dtkMatrixSquared<T>::operator *(const dtkMatrixSquared<T> &matSquared) const
 {
-    dtkMatrixSquared matSquaredResult(this->getRows());
+    dtkMatrixSquared matSquaredResult(this->size());
     matSquaredResult.storeProduct(*this, matSquared);
     return matSquaredResult;
 }
@@ -145,7 +144,7 @@ template <typename T> void dtkMatrixSquared<T>::storeInverse(const dtkMatrixSqua
 
 template <typename T> void dtkMatrixSquared<T>::makeUnity(void)
 {
-    unsigned crow(this->getRows()), ccol(this->getCols());
+    unsigned crow(this->numberOfRows()), ccol(this->numberOfColumns());
 
     for (unsigned irow = 0; irow < crow; ++irow) {
 	for (unsigned icol = 0; icol < ccol; ++icol) {
@@ -162,7 +161,7 @@ template <typename T> void dtkMatrixSquared<T>::makeAdjoint(void)
     // we need a copy of this
     dtkMatrixSquared matSquaredCopy(*this);
     // for easier access to crows
-    unsigned crowCopy = matSquaredCopy.getRows();
+    unsigned crowCopy = matSquaredCopy.numberOfRows();
     T elemTmp;
     // will eventually contain det(matSquaredCopy)
     T elemDet = dtkUnity<T>();
@@ -219,7 +218,7 @@ template <typename T> void dtkMatrixSquared<T>::makeInverse(void)
     // we need a copy of this
     dtkMatrixSquared matSquaredCopy(*this);
     // for easier access to crows
-    unsigned crowCopy = matSquaredCopy.getRows();
+    unsigned crowCopy = matSquaredCopy.numberOfRows();
     T elemTmp;
 
     // make this a unity matrix
@@ -273,7 +272,7 @@ template <typename T> inline dtkMatrixSquared<T> operator *(const T &value,
 
 template <typename T> dtkMatrixSquared<T> dtkTranspose(const dtkMatrixSquared<T> &matSquared)
 {
-    dtkMatrixSquared<T> matSquaredResult(matSquared.getRows());
+    dtkMatrixSquared<T> matSquaredResult(matSquared.size());
     matSquaredResult.storeTranspose(matSquared);
     return matSquaredResult;
 }
@@ -296,7 +295,7 @@ template <typename T> T dtkDeterminant(const dtkMatrixSquared<T> &matSquared)
 {
     // a copy of the input matrix
     dtkMatrixSquared<T> matSquaredCopy(matSquared);
-    unsigned crowCopy = matSquaredCopy.getRows();
+    unsigned crowCopy = matSquaredCopy.numberOfRows();
 
     // start row reduction
     T elemTmp;
@@ -342,7 +341,7 @@ template <typename T> T dtkMatrixSquaredTrace(const dtkMatrixSquared<T>& matSqua
 {
     T elemTmp = dtkZero<T>();
 
-    for (uint i = 0; i < matSquared.getCols(); i++)
+    for (uint i = 0; i < matSquared.size(); i++)
 	elemTmp += matSquared[i][i];
 
     return elemTmp;

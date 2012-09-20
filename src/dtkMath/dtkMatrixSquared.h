@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:08:32 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 08:35:06 2012 (+0200)
+ * Last-Updated: Thu Sep 20 10:11:06 2012 (+0200)
  *           By: tkloczko
- *     Update #: 45
+ *     Update #: 50
  */
 
 /* Commentary: 
@@ -21,6 +21,10 @@
 #define DTKMATRIXSQUARED_H
 
 #include "dtkMatrix.h"
+
+// /////////////////////////////////////////////////////////////////
+// dtkMatrixSquared interface
+// /////////////////////////////////////////////////////////////////
 
 template <typename T = double> class dtkMatrixSquared : public dtkMatrix<T>
 {
@@ -43,8 +47,9 @@ public:
 
     void mapInto(const dtkMatrixSquared &, unsigned, unsigned, unsigned);
 
-    unsigned size(void) const { return this->getRows(); };
+    unsigned size(void) const { return this->numberOfRows(); };
 
+public:
     dtkMatrixSquared operator +(const dtkMatrixSquared &) const;
     dtkMatrixSquared operator -(const dtkMatrixSquared &) const;
     dtkMatrixSquared operator -(void) const;
@@ -57,6 +62,7 @@ public:
     }
     dtkMatrixSquared operator /(const dtkMatrixSquared &) const;
 
+public:
     dtkMatrixSquared & operator =(const dtkMatrixSquared &matSquared);
     dtkMatrixSquared & operator +=(const dtkMatrixSquared &matSquared);
     dtkMatrixSquared & operator -=(const dtkMatrixSquared &matSquared);
@@ -65,6 +71,7 @@ public:
     dtkMatrixSquared & operator /=(const T &value);
     dtkMatrixSquared & operator /=(const dtkMatrixSquared &);
 
+public:
     void storeAdjoint(const dtkMatrixSquared &);
     void storeInverse(const dtkMatrixSquared &);
 
@@ -72,6 +79,10 @@ public:
     void makeInverse(void);
     void makeUnity(void);
 };
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
 
 template <typename T, unsigned crow> class dtkMatSquared: public T
 {
@@ -81,11 +92,19 @@ public:
     T & operator =(const T &smtx) { return T::operator=(smtx); }
 };
 
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
 template <typename T, unsigned crow> class dtkUnity< dtkMatSquared<dtkMatrixSquared<T>, crow> >: public dtkMatSquared<dtkMatrixSquared<T>, crow>
 {
 public:
     dtkUnity(void) { this->makeUnity(); }
 };
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
 
 template <typename T, unsigned crow> class dtkZero< dtkMatSquared<dtkMatrixSquared<T>, crow> >: public dtkMatSquared<dtkMatrixSquared<T>, crow>
 {

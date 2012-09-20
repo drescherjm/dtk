@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Mon Jul 12 16:18:19 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 10:02:29 2012 (+0200)
+ * Last-Updated: Thu Sep 20 10:15:29 2012 (+0200)
  *           By: tkloczko
- *     Update #: 2
+ *     Update #: 3
  */
 
 /* Commentary: 
@@ -28,7 +28,7 @@ using std::exp;
 using std::log;
 
 // /////////////////////////////////////////////////////////////////
-// Implementation of the template class dtkQuaternion's methods
+// dtkQuaternion implementation
 // /////////////////////////////////////////////////////////////////
 
 template <class T> inline dtkQuaternion<T>::dtkQuaternion(const T& elemIm0,

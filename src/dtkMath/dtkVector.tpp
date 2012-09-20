@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Mon Jul 12 16:04:26 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 09:59:59 2012 (+0200)
+ * Last-Updated: Thu Sep 20 10:09:50 2012 (+0200)
  *           By: tkloczko
- *     Update #: 4
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -26,7 +26,7 @@
 #include "dtkMatrixSquared.h"
 
 // /////////////////////////////////////////////////////////////////
-// Implementation of the template class dtkVector's methods
+// dtkVector implementation
 // /////////////////////////////////////////////////////////////////
 
 template <class T> inline dtkVector<T>::dtkVector(const dtkVector<T>& vec,
@@ -121,7 +121,7 @@ template <class T> T dtkVector<T>::operator *(const dtkVector<T>& vec) const
 {
     T elemResult = dtkZero<T>();
 
-    for (unsigned irow = 0; irow < (*this).getRows(); ++irow) 
+    for (unsigned irow = 0; irow < (*this).size(); ++irow) 
 	elemResult += (*this)[irow]*vec[irow];
 
     return elemResult;
@@ -143,14 +143,14 @@ template <class T> inline dtkVector<T> operator *(const T& value, const dtkVecto
 
 template <class T> dtkVector<T> operator *(const dtkMatrix<T>& mat, const dtkVector<T>& vec)
 {
-    dtkVector<T> vecResult(mat.getRows());
+    dtkVector<T> vecResult(mat.numberOfRows());
     vecResult.storeProduct(mat, vec);
     return vecResult;
 }
 
 template <class T> dtkVector<T> operator *(const dtkMatrixSquared<T>& mat, const dtkVector<T>& vec)
 {
-    dtkVector<T> vecResult(mat.getRows());
+    dtkVector<T> vecResult(mat.numberOfRows());
     vecResult.storeProduct(mat, vec);
     return vecResult;
 }

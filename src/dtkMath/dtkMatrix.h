@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jun  8 13:10:13 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 09:55:36 2012 (+0200)
+ * Last-Updated: Thu Sep 20 09:55:06 2012 (+0200)
  *           By: tkloczko
- *     Update #: 167
+ *     Update #: 188
  */
 
 /* Commentary: 
@@ -20,7 +20,7 @@
 #ifndef DTKMATRIX_H
 #define DTKMATRIX_H
 
-#include <QtCore/QString>
+#include <QtCore>
 
 //! Template class dtkZero 
 /*! 
@@ -60,11 +60,15 @@ template <typename T = double> class dtkMatrix
 public:
     typedef T element;
     
-    dtkMatrix(void);
-    dtkMatrix(unsigned, unsigned);
-    dtkMatrix(const dtkMatrix &);
-    dtkMatrix(const dtkMatrix &, unsigned, unsigned, unsigned, unsigned);
-   ~dtkMatrix(void) { if(m_crow) deallocate(); }
+public:
+     dtkMatrix(void);
+     dtkMatrix(unsigned, unsigned);
+     dtkMatrix(const dtkMatrix &);
+     dtkMatrix(const dtkMatrix &, unsigned, unsigned, unsigned, unsigned);
+    ~dtkMatrix(void);
+
+private:
+    void initialize(void);
 
 public:
     virtual QString  identifier(void) const;
@@ -76,10 +80,15 @@ public:
 
     void mapInto(const dtkMatrix&, unsigned, unsigned, unsigned, unsigned);
 
-    int getStatus(void) const { return m_nMatStatus; };
-    unsigned getRows(void) const { return m_crow; };
-    unsigned getCols(void) const { return m_ccol; };
+    Q_DECL_DEPRECATED int getStatus(void) const;
+    Q_DECL_DEPRECATED unsigned getRows(void) const;
+    Q_DECL_DEPRECATED unsigned getCols(void) const;
 
+    int status(void) const { return m_nMatStatus; };
+    unsigned numberOfRows(void) const { return m_crow; };
+    unsigned numberOfColumns(void) const { return m_ccol; };
+
+public:
     T* operator [](unsigned irow) { return m_rgrow[irow]; };
 
     const T* operator [](unsigned irow) const { return m_rgrow[irow]; };
@@ -95,6 +104,7 @@ public:
         return (*this)*tTmp;
     }
 
+public:
     dtkMatrix& operator =(const dtkMatrix &);
     dtkMatrix& operator +=(const dtkMatrix &);
     dtkMatrix& operator -=(const dtkMatrix &);
@@ -105,9 +115,11 @@ public:
         return (*this) *= tTmp;
     }
 
+public:
     int operator ==(const dtkMatrix &) const;
     int operator !=(const dtkMatrix &mat) const { return !( (*this) == mat ); }
 
+public:
     void storeSum(const dtkMatrix &, const dtkMatrix &);
     void storeProduct(const dtkMatrix &, const dtkMatrix &);
     void storeTranspose(const dtkMatrix &);
@@ -120,8 +132,6 @@ public:
     void multiplyRow(unsigned, const T &);
 
 private:
-    void initialize(void);
-
     unsigned m_crow;
     unsigned m_ccol;
     T **m_rgrow;

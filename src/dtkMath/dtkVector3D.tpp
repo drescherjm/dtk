@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Mon Jul 12 16:15:10 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 10:01:25 2012 (+0200)
+ * Last-Updated: Thu Sep 20 10:16:19 2012 (+0200)
  *           By: tkloczko
- *     Update #: 2
+ *     Update #: 3
  */
 
 /* Commentary: 
@@ -24,7 +24,7 @@
 #include "dtkMatrixSquared.h"
 
 // /////////////////////////////////////////////////////////////////
-// Implementation of the template class dtkVector3D's methods
+// dtkVector3D implementation
 // /////////////////////////////////////////////////////////////////
 
 template <class T> inline dtkVector3D<T>::dtkVector3D(const dtkMatrix<T>& mat,

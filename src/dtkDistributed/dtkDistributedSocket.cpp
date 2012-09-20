@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: Tue Sep 18 11:34:30 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 800
+ * Last-Updated: Thu Sep 20 10:16:53 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 801
  */
 
 /* Commentary:
@@ -70,7 +70,7 @@ void dtkDistributedSocket::send(QVariant variant, QString jobid, qint16 target)
 
     } else if(type == "dtkVectorReal") {
         dtkVectorReal v = variant.value<dtkVectorReal>();
-        int size = v.getRows();
+        int size = v.size();
         array = new QByteArray;
         QDataStream stream(array, QIODevice::WriteOnly);
         stream << size ;

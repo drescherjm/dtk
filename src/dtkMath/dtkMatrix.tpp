@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Mon Jul 12 15:42:21 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 09:56:08 2012 (+0200)
+ * Last-Updated: Thu Sep 20 10:12:59 2012 (+0200)
  *           By: tkloczko
- *     Update #: 19
+ *     Update #: 28
  */
 
 /* Commentary: 
@@ -31,7 +31,7 @@
 enum { N_NOTALLOCATED, N_ALLOCATED, N_MAPPED };
 
 // /////////////////////////////////////////////////////////////////
-// Implementation of the template class dtkMatrix's methods
+// dtkMatrix implementation
 // /////////////////////////////////////////////////////////////////
 
 //! Default constructor.
@@ -69,6 +69,21 @@ template <typename T> inline dtkMatrix<T>::dtkMatrix(const dtkMatrix<T> &mat,
     mapInto(mat, irowStart, icolStart, irowEnd, icolEnd);
 }
 
+template <typename T> inline dtkMatrix<T>::~dtkMatrix(void) 
+{ 
+    if (m_crow) 
+        deallocate(); 
+}
+
+//! Private method giving initial values for matrix attributes.
+template <typename T> inline void dtkMatrix<T>::initialize(void)
+{
+    m_crow       = 0;
+    m_ccol       = 0;
+    m_rgrow      = NULL;
+    m_nMatStatus = N_NOTALLOCATED;
+}
+
 //! Returns identifier of the matrix.
 template <typename T> QString dtkMatrix<T>::identifier(void) const
 {
@@ -82,7 +97,7 @@ template <typename T> QString dtkMatrix<T>::description(void) const
 
     string = "[ " ;
 
-    for (unsigned i = 0; i < getRows(); i++)
+    for (unsigned i = 0; i < numberOfRows(); i++)
     {
 	if (i > 0)
 	    string.append("; ");
@@ -90,7 +105,7 @@ template <typename T> QString dtkMatrix<T>::description(void) const
         QString string2 = QString("%1").arg(m_rgrow[i][0]);
         string += string2;
 
-	for (unsigned j = 1; j < getCols(); j++) {
+	for (unsigned j = 1; j < numberOfColumns(); j++) {
 	    string.append(", ");
             QString string3 = QString("%1").arg(m_rgrow[i][j]);
             string += string3;
@@ -100,15 +115,6 @@ template <typename T> QString dtkMatrix<T>::description(void) const
     string.append(" ]");
 
     return string;
-}
-
-//! Private method giving initial values for matrix attributes.
-template <typename T> inline void dtkMatrix<T>::initialize(void)
-{
-    m_crow       = 0;
-    m_ccol       = 0;
-    m_rgrow      = NULL;
-    m_nMatStatus = N_NOTALLOCATED;
 }
 
 //! 
@@ -138,6 +144,27 @@ template <typename T> void dtkMatrix<T>::allocate(unsigned crowInit, unsigned cc
 }
 
 //! 
+template <typename T> void dtkMatrix<T>::deallocate(void)
+{
+    switch (m_nMatStatus)
+    {
+    case N_NOTALLOCATED:
+	break;
+
+    case N_MAPPED:
+	delete [] m_rgrow;
+	break;
+
+    case N_ALLOCATED:
+	delete [] *m_rgrow;
+	delete [] m_rgrow;
+	break;
+    };
+
+    initialize();
+}
+
+//! 
 /*! 
  * Maps a matrix into another matrix, deallocates first if neccesary
  * allocates space on the free store for a matrix, deallocates first
@@ -162,25 +189,19 @@ template <typename T> void dtkMatrix<T>::mapInto(const dtkMatrix<T> &mat,
     m_nMatStatus = N_MAPPED;
 }
 
-//! 
-template <typename T> void dtkMatrix<T>::deallocate(void)
-{
-    switch (m_nMatStatus)
-    {
-    case N_NOTALLOCATED:
-	break;
+template <typename T> inline int dtkMatrix<T>::getStatus(void) const
+{ 
+    return m_nMatStatus; 
+}
+    
+template <typename T> inline unsigned dtkMatrix<T>::getRows(void) const 
+{ 
+    return m_crow; 
+}
 
-    case N_MAPPED:
-	delete [] m_rgrow;
-	break;
-
-    case N_ALLOCATED:
-	delete [] *m_rgrow;
-	delete [] m_rgrow;
-	break;
-    };
-
-    initialize();
+template <typename T> inline unsigned dtkMatrix<T>::getCols(void) const 
+{ 
+    return m_ccol; 
 }
 
 //! 
@@ -358,7 +379,7 @@ template <typename T> inline dtkMatrix<T> operator *(const T &value,
 //! Returns transpose of mat.
 template <typename T> dtkMatrix<T> transpose(const dtkMatrix<T> &mat)
 {
-    dtkMatrix<T> matTranspose( mat.getCols(), mat.getRows() );
+    dtkMatrix<T> matTranspose( mat.numberOfColumns(), mat.numberOfRows() );
     matTranspose.storeTranspose(mat);
     return matTranspose;
 }
@@ -368,14 +389,14 @@ template <typename T> std::ostream& operator <<(std::ostream& os, const dtkMatri
 {
     os << "[" ;
 
-    for (unsigned i = 0; i < mat.getRows(); i++)
+    for (unsigned i = 0; i < mat.numberOfRows(); i++)
     {
         if (i > 0)
             os << "; ";
 
         os  << mat[i][0];
 
-        for (unsigned j = 1; j < mat.getCols(); j++)
+        for (unsigned j = 1; j < mat.numberOfColumns(); j++)
             os  << ", " << mat[i][j];
     }
 
@@ -389,14 +410,14 @@ template <typename T> QDebug operator<<(QDebug dbg, const dtkMatrix<T>& mat)
 {
     dbg.nospace() << "[" ;
 
-    for (unsigned i = 0; i < mat.getRows(); i++)
+    for (unsigned i = 0; i < mat.numberOfRows(); i++)
     {
 	if (i > 0)
 	    dbg.nospace() << ";";
 
         dbg.nospace() << mat[i][0];
 
-	for (unsigned j = 1; j < mat.getCols(); j++)
+	for (unsigned j = 1; j < mat.numberOfColumns(); j++)
 	    dbg.nospace() << "," << mat[i][j];
     }
 
@@ -410,14 +431,14 @@ template <typename T> QDebug operator<<(QDebug dbg, const dtkMatrix<T> *mat)
 {
     dbg.nospace() << "[" ;
 
-    for (unsigned i = 0; i < mat->getRows(); i++)
+    for (unsigned i = 0; i < mat->numberOfRows(); i++)
     {
 	if (i > 0)
 	    dbg.nospace() << ";";
 
         dbg.nospace() << mat[i][0];
 
-	for (unsigned j = 1; j < mat->getCols(); j++)
+	for (unsigned j = 1; j < mat->numberOfColumns(); j++)
 	    dbg.nospace() << "," << mat[i][j];
     }
 

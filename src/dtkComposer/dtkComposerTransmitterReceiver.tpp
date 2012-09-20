@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 13:58:53 2012 (+0200)
+ * Last-Updated: Thu Sep 20 11:07:28 2012 (+0200)
  *           By: tkloczko
- *     Update #: 540
+ *     Update #: 547
  */
 
 /* Commentary: 
@@ -38,6 +38,7 @@
 template <typename T> dtkComposerTransmitterReceiver<T>::dtkComposerTransmitterReceiver(dtkComposerNode *parent) : dtkComposerTransmitter(parent)
 {
     m_data = NULL;
+    d->data_type = qMetaTypeId<T>(m_data);
 
     active_emitter = NULL;
     active_variant = NULL;
@@ -173,13 +174,7 @@ template <typename T> QVector<T*> dtkComposerTransmitterReceiver<T>::allData(voi
  */
 template <typename T> int dtkComposerTransmitterReceiver<T>::dataType(void)
 {
-    if (active_emitter)
-        return active_emitter->dataType();
-
-    if (active_variant)
-        return active_variant->dataType();
-
-    return 0;
+    return d->data_type;
 };
 
 //! 
@@ -282,6 +277,8 @@ template <typename T> QString dtkComposerTransmitterReceiver<T>::kindName(void) 
 template <typename T> bool dtkComposerTransmitterReceiver<T>::connect(dtkComposerTransmitter *transmitter)
 {
     if (transmitter->kind() == Emitter) {
+
+        qDebug() << __func__ << this->dataType() << transmitter->dataType();
 
         if (this->dataType() == transmitter->dataType()) {
 
@@ -412,6 +409,7 @@ template <typename T> dtkComposerTransmitter::LinkMap dtkComposerTransmitterRece
 template <typename T> inline dtkComposerTransmitterReceiverVector<T>::dtkComposerTransmitterReceiverVector(dtkComposerNode *parent) : dtkComposerTransmitterReceiver<T>(parent)
 {
     m_vector= NULL;
+    d->data_type = qMetaTypeId<dtkAbstractContainerWrapper>(reinterpret_cast<dtkAbstractContainerWrapper*>(0));
 
     active_emitter = NULL;
     active_variant = NULL;
@@ -513,13 +511,7 @@ template <typename T> QVariant& dtkComposerTransmitterReceiverVector<T>::variant
  */
 template <typename T> int dtkComposerTransmitterReceiverVector<T>::dataType(void)
 {
-    if (active_emitter)
-        return active_emitter->dataType();
-
-    if (active_variant)
-        return active_variant->dataType();
-
-    return 0;
+    return d->data_type;
 };
 
 //! 

@@ -4,7 +4,7 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:08:32 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 09:58:51 2012 (+0200)
+ * Last-Updated: Thu Sep 20 08:35:06 2012 (+0200)
  *           By: tkloczko
  *     Update #: 45
  */
@@ -38,7 +38,7 @@ public:
 
 public:
     void allocate(unsigned crowInit) {
-            dtkMatrix<T>::allocate(crowInit, crowInit);
+        dtkMatrix<T>::allocate(crowInit, crowInit);
     }
 
     void mapInto(const dtkMatrixSquared &, unsigned, unsigned, unsigned);

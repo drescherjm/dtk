@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Mon Jul 12 15:42:21 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 10:12:59 2012 (+0200)
+ * Last-Updated: Thu Sep 20 11:28:16 2012 (+0200)
  *           By: tkloczko
- *     Update #: 28
+ *     Update #: 32
  */
 
 /* Commentary: 
@@ -345,6 +345,20 @@ template <typename T> inline void dtkMatrix<T>::fill(const T &elemFill)
 }
 
 //! 
+template <typename T> inline void dtkMatrix<T>::makeTranspose(void)
+{
+    T temp;
+
+    for (unsigned irow = 0; irow < m_crow; ++irow) {
+	for (unsigned icol = 0; icol < m_ccol; ++icol) {
+            temp = m_rgrow[irow][icol];
+	    m_rgrow[irow][icol] = m_rgrow[icol][irow];
+            m_rgrow[icol][irow] = temp;
+        }
+    }            
+}
+
+//! 
 template <typename T> void dtkMatrix<T>::interchangeRows(unsigned irow1, unsigned irow2)
 {
     T* rowSav = m_rgrow[irow1];
@@ -377,7 +391,7 @@ template <typename T> inline dtkMatrix<T> operator *(const T &value,
 }
 
 //! Returns transpose of mat.
-template <typename T> dtkMatrix<T> transpose(const dtkMatrix<T> &mat)
+template <typename T> dtkMatrix<T> dtkTranspose(const dtkMatrix<T> &mat)
 {
     dtkMatrix<T> matTranspose( mat.numberOfColumns(), mat.numberOfRows() );
     matTranspose.storeTranspose(mat);

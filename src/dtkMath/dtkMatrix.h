@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jun  8 13:10:13 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 09:55:06 2012 (+0200)
+ * Last-Updated: Thu Sep 20 11:28:21 2012 (+0200)
  *           By: tkloczko
- *     Update #: 188
+ *     Update #: 190
  */
 
 /* Commentary: 
@@ -126,6 +126,8 @@ public:
     void storeAtPosition(unsigned, unsigned, const dtkMatrix &);
 
     void fill(const T &);
+
+    void makeTranspose(void);
 
     void interchangeRows(unsigned, unsigned);
     void addRowToRow(unsigned, unsigned, const T & = dtkUnity<T>());

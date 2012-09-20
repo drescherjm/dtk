@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 13:20:21 2012 (+0200)
+ * Last-Updated: Thu Sep 20 14:54:13 2012 (+0200)
  *           By: tkloczko
- *     Update #: 211
+ *     Update #: 219
  */
 
 /* Commentary:
@@ -106,6 +106,7 @@ void dtkComposerNodeArrayScalarExtractor::run(void)
 
         if (index >= array->count()) {
             dtkWarn() << "index > size of the input array. Zero is returned.";
+            d->value = 0;
 
         } else {
             d->value = array->at(index);
@@ -113,7 +114,8 @@ void dtkComposerNodeArrayScalarExtractor::run(void)
         }
 
     } else {
-        dtkWarn() << "Inputs not specified. Nothing is done";
+        dtkWarn() << "Inputs not specified. Zero is returned.";
+        d->value = 0;
     }
 }
 
@@ -156,6 +158,7 @@ dtkComposerNodeArrayScalarExtractorSubArray::~dtkComposerNodeArrayScalarExtracto
 {
     if (d->subarray)
         delete d->subarray;
+    d->subarray = NULL;
 
     delete d;
 
@@ -219,6 +222,7 @@ void dtkComposerNodeArrayScalarExtractorSubArray::run(void)
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
+        d->subarray->clear();
     }
 }
 
@@ -259,6 +263,7 @@ dtkComposerNodeArrayScalarExtractorArrayPart::~dtkComposerNodeArrayScalarExtract
 {
     if (d->subarray)
         delete d->subarray;
+    d->subarray = NULL;
 
     delete d;
 
@@ -333,5 +338,6 @@ void dtkComposerNodeArrayScalarExtractorArrayPart::run(void)
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
+        d->subarray->clear();
     }
 }

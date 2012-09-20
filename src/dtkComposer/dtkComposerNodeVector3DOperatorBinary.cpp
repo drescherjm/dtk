@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 16:15:40 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 13 15:54:09 2012 (+0200)
+ * Last-Updated: Thu Sep 20 14:21:55 2012 (+0200)
  *           By: tkloczko
- *     Update #: 67
+ *     Update #: 76
  */
 
 /* Commentary:
@@ -107,7 +107,7 @@ class dtkComposerNodeVector3DOperatorHomotheticPrivate
 {
 public:
     dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_vec;
-    dtkComposerTransmitterReceiver<qreal>           receiver_val;
+    dtkComposerTransmitterVariant                   receiver_val;
 
 public:
     dtkComposerTransmitterEmitter<dtkVector3DReal>  emitter_vec;
@@ -116,7 +116,13 @@ public:
 dtkComposerNodeVector3DOperatorHomothetic::dtkComposerNodeVector3DOperatorHomothetic(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVector3DOperatorHomotheticPrivate)
 {
     this->appendReceiver(&d->receiver_vec);
+
+    QList<int> variant_list;
+
+    variant_list << QMetaType::LongLong << QMetaType::Double;
+    d->receiver_val.setDataTypes(variant_list);
     this->appendReceiver(&d->receiver_val);
+
     this->appendEmitter(&d->emitter_vec);
 }
 
@@ -135,6 +141,9 @@ void dtkComposerNodeVector3DOperatorBinarySum::run(void)
 {
     if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
+
+        if (d->vector)
+            d->vector->deallocate();
 
     } else {
 
@@ -156,6 +165,9 @@ void dtkComposerNodeVector3DOperatorBinarySubstract::run(void)
     if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
 
+        if (d->vector)
+            d->vector->deallocate();
+
     } else {
 
         if (!d->vector) {
@@ -175,6 +187,9 @@ void dtkComposerNodeVector3DOperatorBinaryCrossProd::run(void)
 {
     if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
+
+        if (d->vector)
+            d->vector->deallocate();
 
     } else {
 
@@ -196,6 +211,8 @@ void dtkComposerNodeVector3DOperatorBinaryScalarDotProd::run(void)
     if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
 
+        d->value = 0.;
+
     } else {
 
         d->value = (*(d->receiver_lhs.data())) * (*(d->receiver_rhs.data()));
@@ -212,10 +229,12 @@ void dtkComposerNodeVector3DOperatorHomotheticMult::run(void)
     if (d->receiver_vec.isEmpty() || d->receiver_val.isEmpty()) { 
         dtkWarn() << "Inputs not specified. Nothing is done";
 
+        d->emitter_vec.clearData();
+
     } else {
         
         dtkVector3DReal *vector = d->receiver_vec.data();
-        qreal value = *d->receiver_val.data();
+        qreal value = *d->receiver_val.data<qreal>();
 
         *vector *= value;
 
@@ -232,8 +251,10 @@ void dtkComposerNodeVector3DOperatorHomotheticDivision::run(void)
     if (d->receiver_vec.isEmpty() || d->receiver_val.isEmpty()) {
         dtkWarn() << "Inputs not specified. Nothing is done";
 
+        d->emitter_vec.clearData();
+
     } else {
-        qreal value = *d->receiver_val.data();
+        qreal value = *d->receiver_val.data<qreal>();
 
         if (value != 0 ) {
             
@@ -245,6 +266,7 @@ void dtkComposerNodeVector3DOperatorHomotheticDivision::run(void)
 
         } else {
             dtkWarn() << "You divide by zero. Nothing is done" ;
+            d->emitter_vec.clearData();
 
         }
     }

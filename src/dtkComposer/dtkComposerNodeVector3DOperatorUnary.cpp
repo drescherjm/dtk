@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 15:58:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 13 16:32:56 2012 (+0200)
+ * Last-Updated: Thu Sep 20 14:08:56 2012 (+0200)
  *           By: tkloczko
- *     Update #: 40
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -93,6 +93,7 @@ void dtkComposerNodeVector3DOperatorUnaryUnitary::run(void)
     if (d->receiver_vec.isEmpty()) {
         
         dtkWarn() << "Input not specified. Nothing is done";
+        d->emitter_vec.clearData();
 
     }  else {
 
@@ -112,6 +113,7 @@ void dtkComposerNodeVector3DOperatorUnaryScalarNorm::run(void)
     if (d->receiver_vec.isEmpty()) {
 
         dtkWarn() << "Input not specified. Nothing is done";
+        d->value = -1.;
 
     }  else {
         

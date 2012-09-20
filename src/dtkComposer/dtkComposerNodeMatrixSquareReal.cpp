@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette Lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 10:33:42 2012 (+0200)
+ * Last-Updated: Thu Sep 20 13:50:18 2012 (+0200)
  *           By: tkloczko
- *     Update #: 75
+ *     Update #: 76
  */
 
 /* Commentary:
@@ -74,6 +74,11 @@ dtkComposerNodeMatrixSquareReal::dtkComposerNodeMatrixSquareReal(void) : dtkComp
 
 dtkComposerNodeMatrixSquareReal::~dtkComposerNodeMatrixSquareReal(void)
 {
+    if (d->matrix)
+        delete d->matrix;
+
+    d->matrix = NULL;
+
     delete d;
 
     d = NULL;

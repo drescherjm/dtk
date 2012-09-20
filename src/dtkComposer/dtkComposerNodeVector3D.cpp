@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 10:19:40 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 10:42:47 2012 (+0200)
+ * Last-Updated: Thu Sep 20 13:57:58 2012 (+0200)
  *           By: tkloczko
- *     Update #: 80
+ *     Update #: 82
  */
 
 /* Commentary: 
@@ -85,6 +85,10 @@ dtkComposerNodeVector3D::dtkComposerNodeVector3D(void) : dtkComposerNodeLeaf(), 
 
 dtkComposerNodeVector3D::~dtkComposerNodeVector3D(void)
 {
+    if (d->vector)
+        delete d->vector;
+    d->vector = NULL;
+
     delete d;
     
     d = NULL;

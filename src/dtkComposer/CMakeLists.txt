@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Thu Sep 20 10:25:54 2012 (+0200)
+## Last-Updated: Thu Sep 20 14:54:28 2012 (+0200)
 ##           By: tkloczko
-##     Update #: 601
+##     Update #: 610
 ######################################################################
 ##
 ### Commentary:
@@ -71,8 +71,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeLeafData.h
   dtkComposerNodeLeafProcess.h
   dtkComposerNodeLeafView.h
-  dtkComposerNodeList.h
-  dtkComposerNodeListOperator.h
   dtkComposerNodeLogger.h
   dtkComposerNodeMatrixSquareReal.h
   dtkComposerNodeMatrixSquareRealExtractor.h
@@ -87,8 +85,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeReal.h
   dtkComposerNodeString.h
   dtkComposerNodeStringOperator.h
-  dtkComposerNodeVector.h
-  dtkComposerNodeVectorOperator.h
   dtkComposerNodeVector3D.h
   dtkComposerNodeVector3DOperatorUnary.h
   dtkComposerNodeVector3DOperatorBinary.h
@@ -195,13 +191,11 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeLeafData.cpp
   dtkComposerNodeLeafProcess.cpp
   dtkComposerNodeLeafView.cpp
-  # dtkComposerNodeList.cpp
-  # dtkComposerNodeListOperator.cpp
   dtkComposerNodeLogger.cpp
   dtkComposerNodeMatrixSquareReal.cpp
-  # dtkComposerNodeMatrixSquareRealExtractor.cpp
-  # dtkComposerNodeMatrixSquareRealOperatorUnary.cpp
-  # dtkComposerNodeMatrixSquareRealOperatorBinary.cpp
+  dtkComposerNodeMatrixSquareRealExtractor.cpp
+  dtkComposerNodeMatrixSquareRealOperatorUnary.cpp
+  dtkComposerNodeMatrixSquareRealOperatorBinary.cpp
   dtkComposerNodeNumberOperator.cpp
   # dtkComposerNodeProcess.cpp
   dtkComposerNodeProxy.cpp
@@ -211,17 +205,15 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeReal.cpp
   dtkComposerNodeString.cpp
   dtkComposerNodeStringOperator.cpp
-  # dtkComposerNodeVector.cpp
-  # dtkComposerNodeVectorOperator.cpp
   dtkComposerNodeVector3D.cpp
   dtkComposerNodeVector3DOperatorUnary.cpp
   dtkComposerNodeVector3DOperatorBinary.cpp
   dtkComposerNodeVector3DOperatorTernary.cpp
-  # dtkComposerNodeVectorReal.cpp
-  # dtkComposerNodeVectorRealExtractor.cpp
-  # dtkComposerNodeVectorRealOperatorModifier.cpp
-  # dtkComposerNodeVectorRealOperatorUnary.cpp
-  # dtkComposerNodeVectorRealOperatorBinary.cpp
+  dtkComposerNodeVectorReal.cpp
+  dtkComposerNodeVectorRealExtractor.cpp
+  dtkComposerNodeVectorRealOperatorModifier.cpp
+  dtkComposerNodeVectorRealOperatorUnary.cpp
+  dtkComposerNodeVectorRealOperatorBinary.cpp
   dtkComposerNodeView.cpp
   dtkComposerScene.cpp
   dtkComposerSceneEdge.cpp

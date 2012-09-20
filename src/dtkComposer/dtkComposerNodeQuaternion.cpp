@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 13:06:02 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 10:42:05 2012 (+0200)
+ * Last-Updated: Thu Sep 20 13:52:46 2012 (+0200)
  *           By: tkloczko
- *     Update #: 40
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -86,6 +86,10 @@ dtkComposerNodeQuaternion::dtkComposerNodeQuaternion(void) : dtkComposerNodeLeaf
 
 dtkComposerNodeQuaternion::~dtkComposerNodeQuaternion(void)
 {
+    if (d->quat)
+        delete d->quat;
+    d->quat = NULL;
+
     delete d;
     
     d = NULL;

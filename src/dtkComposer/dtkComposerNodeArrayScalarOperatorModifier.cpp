@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 13:18:10 2012 (+0200)
+ * Last-Updated: Thu Sep 20 14:42:29 2012 (+0200)
  *           By: tkloczko
- *     Update #: 112
+ *     Update #: 114
  */
 
 /* Commentary:
@@ -85,7 +85,7 @@ dtkComposerNodeArrayScalarOperatorModifierAll::dtkComposerNodeArrayScalarOperato
 
     QList<int> variant_list;
 
-    variant_list << QMetaType::Int << QMetaType::UInt << QMetaType::LongLong << QMetaType::ULongLong << QMetaType::Double;
+    variant_list << QMetaType::LongLong << QMetaType::Double;
     d->receiver_value.setDataTypes(variant_list);
     this->appendReceiver(&d->receiver_value);
 
@@ -123,6 +123,7 @@ void dtkComposerNodeArrayScalarOperatorInsert::run(void)
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_array.clearData();
     }
 }
 
@@ -146,11 +147,11 @@ void dtkComposerNodeArrayScalarOperatorSet::run(void)
             array->replace(index, value);
 
         }
-
         d->emitter_array.setData(array);
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_array.clearData();
     }
 }
 
@@ -191,6 +192,7 @@ void dtkComposerNodeArrayScalarOperatorPrepend::run(void)
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_array.clearData();
     }
 }
 
@@ -213,6 +215,7 @@ void dtkComposerNodeArrayScalarOperatorModifierAllAdd::run(void)
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_array.clearData();
     }
 }
 
@@ -235,6 +238,7 @@ void dtkComposerNodeArrayScalarOperatorModifierAllSubstract::run(void)
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_array.clearData();
     }
 }
 
@@ -257,6 +261,7 @@ void dtkComposerNodeArrayScalarOperatorModifierAllMult::run(void)
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_array.clearData();
     }
 }
 
@@ -285,6 +290,7 @@ void dtkComposerNodeArrayScalarOperatorModifierAllDivide::run(void)
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_array.clearData();
     }
 }
 
@@ -312,6 +318,7 @@ void dtkComposerNodeArrayScalarOperatorSum::run(void)
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_array.clearData();
     }
 }
 
@@ -397,5 +404,6 @@ void dtkComposerNodeArrayScalarOperatorDivide::run(void)
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_array.clearData();
     }
 }

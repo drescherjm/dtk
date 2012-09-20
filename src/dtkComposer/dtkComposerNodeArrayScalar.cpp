@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 10:40:10 2012 (+0200)
+ * Last-Updated: Thu Sep 20 13:51:25 2012 (+0200)
  *           By: tkloczko
- *     Update #: 117
+ *     Update #: 118
  */
 
 /* Commentary: 
@@ -75,6 +75,10 @@ dtkComposerNodeArrayScalar::dtkComposerNodeArrayScalar(void) : dtkComposerNodeLe
 
 dtkComposerNodeArrayScalar::~dtkComposerNodeArrayScalar(void)
 {
+    if (d->array)
+        delete d->array;
+    d->array = NULL;
+
     delete d;
     
     d = NULL;

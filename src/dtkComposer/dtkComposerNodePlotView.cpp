@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:40:41 2012 (+0200)
  * Version: $Id$
- * Last-Updated: mar. juil.  3 18:49:10 2012 (+0200)
+ * Last-Updated: ven. sept. 21 15:37:39 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 64
+ *     Update #: 71
  */
 
 /* Commentary: 
@@ -46,7 +46,6 @@ dtkComposerNodePlotView::dtkComposerNodePlotView(void) : QObject(), dtkComposerN
     this->appendReceiver(&(d->receiver_x_axis_label));
     this->appendReceiver(&(d->receiver_y_axis_label));
 
-    connect(this, SIGNAL(runned()), this, SLOT(onRun()));
 }
 
 dtkComposerNodePlotView::~dtkComposerNodePlotView(void)
@@ -57,13 +56,6 @@ dtkComposerNodePlotView::~dtkComposerNodePlotView(void)
 }
 
 void dtkComposerNodePlotView::run(void)
-{
-    emit runned();
-
-    qApp->processEvents();
-}
-
-void dtkComposerNodePlotView::onRun(void)
 {
     if(d->receiver_curve.isEmpty())
         return;
@@ -82,6 +74,6 @@ void dtkComposerNodePlotView::onRun(void)
 
     foreach(dtkPlotCurve *curve, d->receiver_curve.allData())
         (*(d->view)) << curve;
-    
+
     d->view->update();
 }

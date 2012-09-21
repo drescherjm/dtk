@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:32:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun  1 11:36:24 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 29
+ * Last-Updated: jeu. sept. 20 23:47:28 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 30
  */
 
 /* Commentary: 
@@ -67,12 +67,6 @@ public:
 
 public:
     void run(void);
-
-signals:
-    void runned(void);
-
-protected slots:
-    void onRun(void);
 
 private:
     dtkComposerNodePlotCurvePrivate *d;

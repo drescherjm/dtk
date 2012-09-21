@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:40:41 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun  1 11:37:10 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 45
+ * Last-Updated: ven. sept. 21 15:37:12 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -48,7 +48,6 @@ dtkComposerNodePlotCurve::dtkComposerNodePlotCurve(void) : QObject(), dtkCompose
 
     this->appendEmitter(&(d->emitter_curve));
 
-    connect(this, SIGNAL(runned()), this, SLOT(onRun()));
 }
 
 dtkComposerNodePlotCurve::~dtkComposerNodePlotCurve(void)
@@ -64,16 +63,6 @@ dtkPlotCurve *dtkComposerNodePlotCurve::curve(void)
 }
 
 void dtkComposerNodePlotCurve::run(void)
-{
-  d->dirty = true;
-
-    emit runned();
-
-    while(d->dirty)
-      qApp->processEvents();
-}
-
-void dtkComposerNodePlotCurve::onRun(void)
 {
     if(d->receiver_x.isEmpty())
         return;

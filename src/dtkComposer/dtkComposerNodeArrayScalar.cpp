@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 21 14:09:41 2012 (+0200)
+ * Last-Updated: Fri Sep 21 18:57:26 2012 (+0200)
  *           By: tkloczko
- *     Update #: 123
+ *     Update #: 132
  */
 
 /* Commentary: 
@@ -66,7 +66,6 @@ dtkComposerNodeArrayScalar::dtkComposerNodeArrayScalar(void) : dtkComposerNodeLe
     d->receiver_value.setDataTypes(variant_list);
     this->appendReceiver(&d->receiver_value);
 
-    d->emitter_array.setData(d->array);
     this->appendEmitter(&d->emitter_array);
 
     d->emitter_size.setData(&d->size);
@@ -151,17 +150,16 @@ void dtkComposerNodeArrayScalar::run(void)
         } else {
 
             d->array->resize(d->size);
-        
+
             qreal value = 0.;
 
             if (!d->receiver_value.isEmpty())
                 value = *d->receiver_value.data<qreal>();
 
             for(qlonglong i = 0 ; i < d->size; ++i)
-                d->array->replace(value, i);
+                d->array->replace(i, value);
 
         }
-
         d->emitter_array.setData(d->array);
     }
 }

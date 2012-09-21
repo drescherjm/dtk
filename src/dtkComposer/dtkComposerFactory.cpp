@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Fri Sep 21 16:27:54 2012 (+0200)
+ * Last-Updated: Fri Sep 21 18:24:40 2012 (+0200)
  *           By: tkloczko
- *     Update #: 781
+ *     Update #: 783
  */
 
 /* Commentary:
@@ -65,7 +65,6 @@
 #include "dtkComposerNodeVectorRealOperatorUnary.h"
 #include "dtkComposerNodeVectorRealOperatorBinary.h"
 // #include "dtkComposerNodeView.h"
-// #include "dtkComposerNodeRemote.h"
 #include "dtkComposerSceneNodeLeaf.h"
 
 #if defined(DTK_BUILD_DISTRIBUTED)

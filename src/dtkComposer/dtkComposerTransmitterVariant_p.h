@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Aug  3 14:36:46 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 13:09:12 2012 (+0200)
+ * Last-Updated: Fri Sep 21 18:20:04 2012 (+0200)
  *           By: tkloczko
- *     Update #: 11
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -32,6 +32,25 @@ class dtkComposerTransmitterVariant;
 class dtkComposerTransmitterVariantPrivate
 {
 public:
+    dtkComposerTransmitterVariantPrivate(void)
+        {
+            type_conversions.insert(QMetaType::Bool, QMetaType::Bool);
+            type_conversions.insert(qMetaTypeId<bool*>(0), QMetaType::Bool);
+            type_conversions.insert(QMetaType::Int, QMetaType::Int);
+            type_conversions.insert(qMetaTypeId<int*>(0), QMetaType::Int);
+            type_conversions.insert(QMetaType::LongLong, QMetaType::LongLong);
+            type_conversions.insert(qMetaTypeId<qlonglong*>(0), QMetaType::LongLong);
+            type_conversions.insert(QMetaType::UInt, QMetaType::UInt);
+            type_conversions.insert(qMetaTypeId<uint*>(0), QMetaType::UInt);
+            type_conversions.insert(QMetaType::ULongLong, QMetaType::ULongLong);
+            type_conversions.insert(qMetaTypeId<qulonglong*>(0), QMetaType::ULongLong);
+            type_conversions.insert(QMetaType::Double, QMetaType::Double);
+            type_conversions.insert(qMetaTypeId<qreal*>(0), QMetaType::Double);
+            type_conversions.insert(QMetaType::QString, QMetaType::QString);
+            type_conversions.insert(qMetaTypeId<QString*>(0), QMetaType::QString);
+        }
+        
+public:
     QList<dtkComposerTransmitter *> emitters;
     QList<dtkComposerTransmitterVariant *> variants;
 
@@ -54,6 +73,9 @@ public:
     qlonglong value_i;
     qreal     value_r;
     QString   value_s;
+    
+public:
+    QHash<int, int> type_conversions;
 
 public:
     QVariant m_variant;

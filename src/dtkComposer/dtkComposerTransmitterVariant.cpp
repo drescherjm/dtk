@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 13:20:00 2012 (+0200)
+ * Last-Updated: Fri Sep 21 18:19:47 2012 (+0200)
  *           By: tkloczko
- *     Update #: 746
+ *     Update #: 766
  */
 
 /* Commentary: 
@@ -49,7 +49,7 @@ template <> bool *dtkComposerTransmitterVariant::data(void)
         e->value_b = emitter_variant.value<bool>();
 
     } else {
-        int emitter_type = this->dataType();
+        int emitter_type = e->type_conversions.value(this->dataType(), 0);
 
         switch (emitter_type) {
         case QVariant::Bool:
@@ -91,7 +91,7 @@ template <> qlonglong *dtkComposerTransmitterVariant::data(void)
         e->value_i = emitter_variant.value<qlonglong>();
 
     } else {
-        int emitter_type = this->dataType();
+        int emitter_type = e->type_conversions.value(this->dataType(), 0);
 
         switch (emitter_type) {
         case QVariant::LongLong:
@@ -133,7 +133,7 @@ template <> qreal *dtkComposerTransmitterVariant::data(void)
         e->value_r = emitter_variant.value<qreal>();
 
     } else {
-        int emitter_type = this->dataType();
+        int emitter_type = e->type_conversions.value(this->dataType(), 0);
         
         switch (emitter_type) {
         case QVariant::Double:
@@ -175,7 +175,7 @@ template <> QString *dtkComposerTransmitterVariant::data(void)
         e->value_s = emitter_variant.value<QString>();
 
     } else {
-        int emitter_type = this->dataType();
+        int emitter_type = e->type_conversions.value(this->dataType(), 0);
 
         switch (emitter_type) {
         case QVariant::String:

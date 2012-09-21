@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 14:42:29 2012 (+0200)
+ * Last-Updated: Fri Sep 21 16:25:51 2012 (+0200)
  *           By: tkloczko
- *     Update #: 114
+ *     Update #: 116
  */
 
 /* Commentary:
@@ -108,6 +108,13 @@ void dtkComposerNodeArrayScalarOperatorInsert::run(void)
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
         dtkContainerVectorReal *array = d->receiver_array.data();
+
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
+
         qlonglong index = *d->receiver_index.data<qlonglong>();
         qreal value = *d->receiver_value.data<qreal>();
 
@@ -137,6 +144,13 @@ void dtkComposerNodeArrayScalarOperatorSet::run(void)
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
         dtkContainerVectorReal *array = d->receiver_array.data();
+
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
+
         qlonglong index = *d->receiver_index.data<qlonglong>();
         qreal value = *d->receiver_value.data<qreal>();
 
@@ -165,6 +179,12 @@ void dtkComposerNodeArrayScalarOperatorAppend::run(void)
 
         dtkContainerVectorReal *array = d->receiver_array.data();
 
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
+
         qreal value = *d->receiver_value.data<qreal>();
 
         array->append(value);
@@ -172,6 +192,7 @@ void dtkComposerNodeArrayScalarOperatorAppend::run(void)
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_array.clearData();
     }
 }
 
@@ -184,6 +205,12 @@ void dtkComposerNodeArrayScalarOperatorPrepend::run(void)
     if (!d->receiver_array.isEmpty() && !d->receiver_value.isEmpty() ) {
 
         dtkContainerVectorReal *array = d->receiver_array.data();
+
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
 
         qreal value = *d->receiver_value.data<qreal>();
 
@@ -205,6 +232,12 @@ void dtkComposerNodeArrayScalarOperatorModifierAllAdd::run(void)
     if (!d->receiver_array.isEmpty() && !d->receiver_value.isEmpty() ) {
 
         dtkContainerVectorReal *array = d->receiver_array.data();
+
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
 
         qreal value = *d->receiver_value.data<qreal>();
 
@@ -229,6 +262,12 @@ void dtkComposerNodeArrayScalarOperatorModifierAllSubstract::run(void)
 
         dtkContainerVectorReal *array = d->receiver_array.data();
 
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
+
         qreal value = *d->receiver_value.data<qreal>();
 
         for(qlonglong i = 0 ; i < array->count(); ++i)
@@ -252,6 +291,12 @@ void dtkComposerNodeArrayScalarOperatorModifierAllMult::run(void)
 
         dtkContainerVectorReal *array = d->receiver_array.data();
 
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
+
         qreal value = *d->receiver_value.data<qreal>();
 
         for(qlonglong i = 0 ; i < array->count(); ++i)
@@ -274,6 +319,12 @@ void dtkComposerNodeArrayScalarOperatorModifierAllDivide::run(void)
     if (!d->receiver_array.isEmpty() && !d->receiver_value.isEmpty() ) {
 
         dtkContainerVectorReal *array = d->receiver_array.data();
+
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
 
         qreal value = *d->receiver_value.data<qreal>();
 
@@ -303,6 +354,13 @@ void dtkComposerNodeArrayScalarOperatorSum::run(void)
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
         dtkContainerVectorReal *array = d->receiver_array.data();
+
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
+
         qlonglong index = *d->receiver_index.data<qlonglong>();
         qreal value = *d->receiver_value.data<qreal>();
 
@@ -331,6 +389,13 @@ void dtkComposerNodeArrayScalarOperatorSubstract::run(void)
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
         dtkContainerVectorReal *array = d->receiver_array.data();
+
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
+
         qlonglong index = *d->receiver_index.data<qlonglong>();
         qreal value = *d->receiver_value.data<qreal>();
 
@@ -346,6 +411,7 @@ void dtkComposerNodeArrayScalarOperatorSubstract::run(void)
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_array.clearData();
     }
 }
 
@@ -358,6 +424,13 @@ void dtkComposerNodeArrayScalarOperatorMult::run(void)
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
         dtkContainerVectorReal *array = d->receiver_array.data();
+
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
+
         qlonglong index = *d->receiver_index.data<qlonglong>();
         qreal value = *d->receiver_value.data<qreal>();
 
@@ -373,6 +446,7 @@ void dtkComposerNodeArrayScalarOperatorMult::run(void)
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_array.clearData();
     }
 }
 
@@ -385,6 +459,13 @@ void dtkComposerNodeArrayScalarOperatorDivide::run(void)
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
         dtkContainerVectorReal *array = d->receiver_array.data();
+
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
+
         qlonglong index = *d->receiver_index.data<qlonglong>();
         qreal value = *d->receiver_value.data<qreal>();
 

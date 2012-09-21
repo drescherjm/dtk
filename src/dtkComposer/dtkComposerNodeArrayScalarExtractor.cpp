@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 14:54:13 2012 (+0200)
+ * Last-Updated: Fri Sep 21 16:24:36 2012 (+0200)
  *           By: tkloczko
- *     Update #: 219
+ *     Update #: 223
  */
 
 /* Commentary:
@@ -203,6 +203,7 @@ void dtkComposerNodeArrayScalarExtractorSubArray::run(void)
 
         if (!array || !indices) {
             dtkError() << "Inputs are not defined.";
+            d->emitter_subarray.clearData();
             return;
         }
 
@@ -222,7 +223,7 @@ void dtkComposerNodeArrayScalarExtractorSubArray::run(void)
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
-        d->subarray->clear();
+        d->emitter_subarray.clearData();
     }
 }
 
@@ -310,12 +311,14 @@ void dtkComposerNodeArrayScalarExtractorArrayPart::run(void)
 
         if (!array) {
             dtkError() << "Input array is not defined.";
+            d->emitter_subarray.clearData();
             return;
         }
 
         qlonglong from = *d->receiver_from.data();
         if (from >= array->count()) {
             dtkWarn() << "Starting value from is greater than array size:" << from << ">=" << array->count();
+            d->emitter_subarray.clearData();
             return;
         }
 
@@ -325,6 +328,7 @@ void dtkComposerNodeArrayScalarExtractorArrayPart::run(void)
 
         if (length < 0) {
             dtkWarn() << "Length value is negative:" << length << "<" << 0;
+            d->emitter_subarray.clearData();
             return;
         }
 
@@ -338,6 +342,6 @@ void dtkComposerNodeArrayScalarExtractorArrayPart::run(void)
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
-        d->subarray->clear();
+        d->emitter_subarray.clearData();
     }
 }

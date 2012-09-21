@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Thu Sep 20 14:55:45 2012 (+0200)
+ * Last-Updated: Fri Sep 21 16:27:54 2012 (+0200)
  *           By: tkloczko
- *     Update #: 769
+ *     Update #: 781
  */
 
 /* Commentary:
@@ -21,16 +21,15 @@
 
 #include "dtkComposerFactory.h"
 #include "dtkComposerNode.h"
-// #include "dtkComposerNodeArrayData.h"
-// #include "dtkComposerNodeArrayDataExtractor.h"
-// #include "dtkComposerNodeArrayDataOperatorModifier.h"
+#include "dtkComposerNodeArrayData.h"
+#include "dtkComposerNodeArrayDataExtractor.h"
+#include "dtkComposerNodeArrayDataOperatorModifier.h"
 #include "dtkComposerNodeArrayScalar.h"
 #include "dtkComposerNodeArrayScalarExtractor.h"
 #include "dtkComposerNodeArrayScalarOperatorModifier.h"
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
 #include "dtkComposerNodeConstants.h"
-#include "dtkComposerNodeContainerData.h"
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeControlCase.h"
 #include "dtkComposerNodeControlDoWhile.h"
@@ -49,7 +48,7 @@
 #include "dtkComposerNodeMatrixSquareRealOperatorUnary.h"
 #include "dtkComposerNodeMatrixSquareRealOperatorBinary.h"
 #include "dtkComposerNodeNumberOperator.h"
-// #include "dtkComposerNodeProcess.h"
+#include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeQuaternion.h"
 #include "dtkComposerNodeQuaternionOperatorUnary.h"
 #include "dtkComposerNodeQuaternionOperatorBinary.h"
@@ -70,7 +69,7 @@
 #include "dtkComposerSceneNodeLeaf.h"
 
 #if defined(DTK_BUILD_DISTRIBUTED)
-// #include "dtkComposerNodeRemote.h"
+#include "dtkComposerNodeRemote.h"
 #endif
 
 #if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
@@ -199,10 +198,10 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Generic Data"] = QStringList() << "data";
     d->types["Generic Data"] = "data";
 
-    // d->nodes << "Generic Process";
-    // d->descriptions["Generic Process"] = "<p>Description not yet filled!</p>";
-    // d->tags["Generic Process"] = QStringList() << "process";
-    // d->types["Generic Process"] = "process";
+    d->nodes << "Generic Process";
+    d->descriptions["Generic Process"] = "<p>Description not yet filled!</p>";
+    d->tags["Generic Process"] = QStringList() << "process";
+    d->types["Generic Process"] = "process";
 
     // d->nodes << "Generic View";
     // d->descriptions["Generic View"] = "<p>Description not yet filled!</p>";
@@ -214,13 +213,13 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 // /////////////////////////////////////////////////////////////////
 
 #if defined(DTK_BUILD_DISTRIBUTED)
-    // d->nodes << "Remote";
-    // d->tags["Remote"] = QStringList() <<  "distributed" << "tcp" << "remote" << "world";
-    // d->types["Remote"] = "remote";
+    d->nodes << "Remote";
+    d->tags["Remote"] = QStringList() <<  "distributed" << "tcp" << "remote" << "world";
+    d->types["Remote"] = "remote";
 
-    // d->nodes << "Remote Submit";
-    // d->tags["Remote Submit"] = QStringList() <<  "distributed" << "tcp" << "remote" << "submit" << "job";
-    // d->types["Remote Submit"] = "remoteSubmit";
+    d->nodes << "Remote Submit";
+    d->tags["Remote Submit"] = QStringList() <<  "distributed" << "tcp" << "remote" << "submit" << "job";
+    d->types["Remote Submit"] = "remoteSubmit";
 #endif
 
     // /////////////////////////////////////////////////////////////////
@@ -927,50 +926,45 @@ void dtkComposerFactory::initNodeArrayScalar(void)
 
 void dtkComposerFactory::initNodeContainerData(void)
 {
-    // d->nodes << "Data Container";
-    // d->descriptions["Data Container"] = "<p>Description not yet filled!</p>";
-    // d->tags["Data Container"] = QStringList() << "container" << "data";
-    // d->types["Data Container"] = "data_container";
+    d->nodes << "Data Array";
+    d->descriptions["Data Array"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array"] = QStringList() << "container" << "array" << "data" ;
+    d->types["Data Array"] = "array_data";
 
-    // d->nodes << "Data Array";
-    // d->descriptions["Data Array"] = "<p>Description not yet filled!</p>";
-    // d->tags["Data Array"] = QStringList() << "container" << "array" << "data" ;
-    // d->types["Data Array"] = "array_data";
+    d->nodes << "Data Array Extractor";
+    d->descriptions["Data Array Extractor"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array Extractor"] = QStringList() << "container" << "array" << "data" << "extractor";
+    d->types["Data Array Extractor"] = "array_data_extractor";
 
-    // d->nodes << "Data Array Extractor";
-    // d->descriptions["Data Array Extractor"] = "<p>Description not yet filled!</p>";
-    // d->tags["Data Array Extractor"] = QStringList() << "container" << "array" << "data" << "extractor";
-    // d->types["Data Array Extractor"] = "array_data_extractor";
+    d->nodes << "Data Array SubArray";
+    d->descriptions["Data Array SubArray"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array SubArray"] = QStringList() << "container" << "data" << "array" << "subarray"<< "extractor";
+    d->types["Data Array SubArray"] = "array_data_extractor_subarray";
 
-    // d->nodes << "Data Array SubArray";
-    // d->descriptions["Data Array SubArray"] = "<p>Description not yet filled!</p>";
-    // d->tags["Data Array SubArray"] = QStringList() << "container" << "data" << "array" << "subarray"<< "extractor";
-    // d->types["Data Array SubArray"] = "array_data_extractor_subarray";
+    d->nodes << "Data Array Part";
+    d->descriptions["Data Array Part"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array Part"] = QStringList() << "container" << "data" << "array" << "part" << "subarray" << "extractor";
+    d->types["Data Array Part"] = "array_data_extractor_array_part";
 
-    // d->nodes << "Data Array Part";
-    // d->descriptions["Data Array Part"] = "<p>Description not yet filled!</p>";
-    // d->tags["Data Array Part"] = QStringList() << "container" << "data" << "array" << "part" << "subarray" << "extractor";
-    // d->types["Data Array Part"] = "array_data_extractor_array_part";
+    d->nodes << "Data Array Insert";
+    d->descriptions["Data Array Insert"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array Insert"] = QStringList() << "container" << "array" << "data"  << "insert" ;
+    d->types["Data Array Insert"] = "array_data_insert";
 
-    // d->nodes << "Data Array Insert";
-    // d->descriptions["Data Array Insert"] = "<p>Description not yet filled!</p>";
-    // d->tags["Data Array Insert"] = QStringList() << "container" << "array" << "data"  << "insert" ;
-    // d->types["Data Array Insert"] = "array_data_insert";
+    d->nodes << "Data Array Set";
+    d->descriptions["Data Array Set"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array Set"] = QStringList() << "container" << "array" << "data"  << "set";
+    d->types["Data Array Set"] = "array_data_set";
 
-    // d->nodes << "Data Array Set";
-    // d->descriptions["Data Array Set"] = "<p>Description not yet filled!</p>";
-    // d->tags["Data Array Set"] = QStringList() << "container" << "array" << "data"  << "set";
-    // d->types["Data Array Set"] = "array_data_set";
+    d->nodes << "Data Array Append";
+    d->descriptions["Data Array Append"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array Append"] = QStringList() << "container" << "array" << "data"  << "append";
+    d->types["Data Array Append"] = "array_data_append";
 
-    // d->nodes << "Data Array Append";
-    // d->descriptions["Data Array Append"] = "<p>Description not yet filled!</p>";
-    // d->tags["Data Array Append"] = QStringList() << "container" << "array" << "data"  << "append";
-    // d->types["Data Array Append"] = "array_data_append";
-
-    // d->nodes << "Data Array Prepend";
-    // d->descriptions["Data Array Prepend"] = "<p>Description not yet filled!</p>";
-    // d->tags["Data Array Prepend"] = QStringList() << "container" << "array" << "data"  << "prepend";
-    // d->types["Data Array Prepend"] = "array_data_prepend";
+    d->nodes << "Data Array Prepend";
+    d->descriptions["Data Array Prepend"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array Prepend"] = QStringList() << "container" << "array" << "data"  << "prepend";
+    d->types["Data Array Prepend"] = "array_data_prepend";
 }
 
 void dtkComposerFactory::initNodeControl(void)
@@ -1050,32 +1044,29 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     // container nodes
 
-    // if(type == "data_container")
-    //     return new dtkComposerNodeContainerData;
+    if(type == "array_data")
+        return new dtkComposerNodeArrayData;
 
-    // if(type == "array_data")
-    //     return new dtkComposerNodeArrayData;
+    if(type == "array_data_extractor")
+        return new dtkComposerNodeArrayDataExtractor;
 
-    // if(type == "array_data_extractor")
-    //     return new dtkComposerNodeArrayDataExtractor;
+    if(type == "array_data_extractor_subarray")
+        return new dtkComposerNodeArrayDataExtractorSubArray;
 
-    // if(type == "array_data_extractor_subarray")
-    //     return new dtkComposerNodeArrayDataExtractorSubArray;
+    if(type == "array_data_extractor_array_part")
+        return new dtkComposerNodeArrayDataExtractorArrayPart;
 
-    // if(type == "array_data_extractor_array_part")
-    //     return new dtkComposerNodeArrayDataExtractorArrayPart;
+    if(type == "array_data_insert")
+        return new dtkComposerNodeArrayDataOperatorInsert;
 
-    // if(type == "array_data_insert")
-    //     return new dtkComposerNodeArrayDataOperatorInsert;
+    if(type == "array_data_set" || type == "array_data_replace")
+        return new dtkComposerNodeArrayDataOperatorSet;
 
-    // if(type == "array_data_set" || type == "array_data_replace")
-    //     return new dtkComposerNodeArrayDataOperatorSet;
+    if(type == "array_data_append")
+        return new dtkComposerNodeArrayDataOperatorAppend;
 
-    // if(type == "array_data_append")
-    //     return new dtkComposerNodeArrayDataOperatorAppend;
-
-    // if(type == "array_data_prepend")
-    //     return new dtkComposerNodeArrayDataOperatorPrepend;
+    if(type == "array_data_prepend")
+        return new dtkComposerNodeArrayDataOperatorPrepend;
 
     // Matrix Square Nodes
 
@@ -1471,8 +1462,8 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "data")
          return new dtkComposerNodeData;
 
-//     if(type == "process")
-//         return new dtkComposerNodeProcess;
+    if(type == "process")
+        return new dtkComposerNodeProcess;
 
 //     if(type == "view")
 //         return new dtkComposerNodeView;
@@ -1482,11 +1473,11 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 // /////////////////////////////////////////////////////////////////
 
 #if defined(DTK_BUILD_DISTRIBUTED)
-    // if(type == "remote")
-    //     return new dtkComposerNodeRemote;
+    if(type == "remote")
+        return new dtkComposerNodeRemote;
 
-    // if(type == "remoteSubmit")
-    //     return new dtkComposerNodeRemoteSubmit;
+    if(type == "remoteSubmit")
+        return new dtkComposerNodeRemoteSubmit;
 #endif
 
 // /////////////////////////////////////////////////////////////////
@@ -1523,7 +1514,6 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 #if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
     // if(type == "world")
     //     return new dtkComposerNodeWorld;
-
 
     // if(type == "communicatorSize")
     //     return new dtkComposerNodeCommunicatorSize;

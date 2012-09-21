@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Thu Sep 20 14:54:28 2012 (+0200)
+## Last-Updated: Fri Sep 21 16:26:33 2012 (+0200)
 ##           By: tkloczko
-##     Update #: 610
+##     Update #: 615
 ######################################################################
 ##
 ### Commentary:
@@ -54,7 +54,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeBooleanOperator.h
   dtkComposerNodeComposite.h
   dtkComposerNodeConstants.h
-  dtkComposerNodeContainerData.h
   dtkComposerNodeControl.h
   dtkComposerNodeControlCase.h
   dtkComposerNodeControlDoWhile.h
@@ -164,9 +163,9 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerMachine.cpp
   dtkComposerMachineState.cpp
   dtkComposerNode.cpp
-  # dtkComposerNodeArrayData.cpp
-  # dtkComposerNodeArrayDataExtractor.cpp
-  # dtkComposerNodeArrayDataOperatorModifier.cpp
+  dtkComposerNodeArrayData.cpp
+  dtkComposerNodeArrayDataExtractor.cpp
+  dtkComposerNodeArrayDataOperatorModifier.cpp
   dtkComposerNodeArrayScalar.cpp
   dtkComposerNodeArrayScalarExtractor.cpp
   dtkComposerNodeArrayScalarOperatorModifier.cpp
@@ -174,7 +173,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeBooleanOperator.cpp
   dtkComposerNodeComposite.cpp
   dtkComposerNodeConstants.cpp
-  # dtkComposerNodeContainerData.cpp
   dtkComposerNodeControl.cpp
   dtkComposerNodeControlCase.cpp
   dtkComposerNodeControlDoWhile.cpp
@@ -197,7 +195,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeMatrixSquareRealOperatorUnary.cpp
   dtkComposerNodeMatrixSquareRealOperatorBinary.cpp
   dtkComposerNodeNumberOperator.cpp
-  # dtkComposerNodeProcess.cpp
+  dtkComposerNodeProcess.cpp
   dtkComposerNodeProxy.cpp
   dtkComposerNodeQuaternion.cpp
   dtkComposerNodeQuaternionOperatorUnary.cpp

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 13:51:25 2012 (+0200)
+ * Last-Updated: Fri Sep 21 14:09:41 2012 (+0200)
  *           By: tkloczko
- *     Update #: 118
+ *     Update #: 123
  */
 
 /* Commentary: 
@@ -124,6 +124,12 @@ void dtkComposerNodeArrayScalar::run(void)
     if (!d->receiver_array.isEmpty()) {
 
         dtkContainerVectorReal *array = d->receiver_array.data();
+
+        if (!array) {
+            d->emitter_array.clearData();
+            dtkWarn() << "Input array is not valid. Nothing is done.";
+            return;
+        } 
         d->size = array->count();
 
         d->emitter_array.setData(array);        
@@ -142,7 +148,7 @@ void dtkComposerNodeArrayScalar::run(void)
             
             dtkWarn() << "The size of the array is zero.";
 
-        } else {          
+        } else {
 
             d->array->resize(d->size);
         
@@ -152,7 +158,7 @@ void dtkComposerNodeArrayScalar::run(void)
                 value = *d->receiver_value.data<qreal>();
 
             for(qlonglong i = 0 ; i < d->size; ++i)
-                *(d->array) << value;
+                d->array->replace(value, i);
 
         }
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 12:30:17 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 10:13:52 2012 (+0200)
+ * Last-Updated: Fri Sep 21 14:07:39 2012 (+0200)
  *           By: tkloczko
- *     Update #: 259
+ *     Update #: 260
  */
 
 /* Commentary: 
@@ -60,13 +60,13 @@ template <typename T> inline QString dtkContainerVector<T>::description(void) co
 
     string = "[ " ;
 
-    for (qlonglong i = 0; i < m_vector.count(); ++i)
-    {
-	if (i > 0)
-	    string.append("; ");
-        QString string2 = QString("%1").arg(m_vector.at(i));
-        string += string2;
-    }
+    // for (qlonglong i = 0; i < m_vector.count(); ++i)
+    // {
+    //     if (i > 0)
+    //         string.append("; ");
+    //     QString string2 = QString("%1").arg(m_vector.at(i));
+    //     string += string2;
+    // }
 
     string.append(" ]");
 

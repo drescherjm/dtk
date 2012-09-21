@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:35:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr 18 15:26:46 2012 (+0200)
+ * Last-Updated: Fri Sep 21 16:18:09 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 59
+ *     Update #: 60
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #define DTKCOMPOSER_P_H
 
 #include <QtCore>
+#include <QtNetwork>
 
 class dtkComposerCompass;
 class dtkComposerEvaluator;

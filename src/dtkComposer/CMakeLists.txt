@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: jeu. sept. 20 22:14:36 2012 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 596
+## Last-Updated: Fri Sep 21 16:17:20 2012 (+0200)
+##           By: Julien Wintz
+##     Update #: 597
 ######################################################################
 ##
 ### Commentary:
@@ -139,6 +139,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerGraphView.h
   dtkComposerMachine.h
   dtkComposerMachineState.h
+  dtkComposerNodeFile_p.h
   dtkComposerNodeView.h
   dtkComposerSceneModel.h
   dtkComposerScene.h

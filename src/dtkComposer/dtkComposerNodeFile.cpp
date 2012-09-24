@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 11:45:03 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep 21 16:19:31 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 76
+ * Last-Updated: Mon Sep 24 12:21:30 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 86
  */
 
 /* Commentary: 
@@ -83,6 +83,9 @@ void dtkComposerNodeFilePrivate::onRequestFinished(int id, bool error)
 dtkComposerNodeFile::dtkComposerNodeFile(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeFilePrivate)
 {
     this->appendReceiver(&(d->receiver));
+
+    d->fileName = QString();
+    d->emitter.setData(&d->fileName);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -95,19 +98,21 @@ dtkComposerNodeFile::~dtkComposerNodeFile(void)
 
 void dtkComposerNodeFile::run(void)
 {
-    QString path = d->receiver.data();
+    QString path = *d->receiver.data();
 
-    if(path.startsWith("http")) {
+    if (path.startsWith("http")) {
 
         d->download(QUrl(path));
 
-        if(!d->tempName.isEmpty())
-            d->emitter.setData(d->tempName);
+        if (!d->tempName.isEmpty())
+            d->fileName = d->tempName;
         else
-            d->emitter.setData(path);
+            d->fileName = path;
 
     } else {
-        d->emitter.setData(path);
+
+        d->fileName = path;
+
     }
 }
 

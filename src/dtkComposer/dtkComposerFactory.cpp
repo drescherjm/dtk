@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Mon Sep 24 11:43:15 2012 (+0200)
+ * Last-Updated: Mon Sep 24 12:13:33 2012 (+0200)
  *           By: tkloczko
- *     Update #: 791
+ *     Update #: 793
  */
 
 /* Commentary:
@@ -39,7 +39,7 @@
 #include "dtkComposerNodeControlMap.h"
 #include "dtkComposerNodeControlWhile.h"
 #include "dtkComposerNodeData.h"
-// #include "dtkComposerNodeFile.h"
+#include "dtkComposerNodeFile.h"
 // #include "dtkComposerNodeFileOperator.h"
 #include "dtkComposerNodeLogger.h"
 #include "dtkComposerNodeInteger.h"
@@ -142,10 +142,10 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["String"] = QStringList() << "primitive" << "string";
     d->types["String"] = "string";
 
-    // d->nodes << "File";
-    // d->descriptions["File"] = "<p>File node</p>";
-    // d->tags["File"] = QStringList() << "primitive" << "file";
-    // d->types["File"] = "file";
+    d->nodes << "File";
+    d->descriptions["File"] = "<p>File node</p>";
+    d->tags["File"] = QStringList() << "primitive" << "file";
+    d->types["File"] = "file";
 
     // Number operators
 
@@ -1093,8 +1093,8 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "string")
         return new dtkComposerNodeString;
 
-    // if(type == "file")
-    //     return new dtkComposerNodeFile;
+    if(type == "file")
+        return new dtkComposerNodeFile;
 
     // container nodes
 

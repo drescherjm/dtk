@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Mon Sep 24 12:12:11 2012 (+0200)
+## Last-Updated: Mon Sep 24 14:07:56 2012 (+0200)
 ##           By: tkloczko
-##     Update #: 619
+##     Update #: 620
 ######################################################################
 ##
 ### Commentary:
@@ -64,7 +64,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeControlWhile.h
   dtkComposerNodeData.h
   dtkComposerNodeFile.h
-  # dtkComposerNodeFileOperator.h
   dtkComposerNodeInteger.h
   dtkComposerNodeLeaf.h
   dtkComposerNodeLeafData.h
@@ -185,7 +184,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeControlWhile.cpp
   dtkComposerNodeData.cpp
   dtkComposerNodeFile.cpp
-  # dtkComposerNodeFileOperator.cpp
   dtkComposerNodeInteger.cpp
   dtkComposerNodeLeaf.cpp
   dtkComposerNodeLeafData.cpp

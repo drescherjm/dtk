@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Mon Sep 24 12:13:33 2012 (+0200)
+ * Last-Updated: Mon Sep 24 14:08:09 2012 (+0200)
  *           By: tkloczko
- *     Update #: 793
+ *     Update #: 794
  */
 
 /* Commentary:
@@ -40,7 +40,6 @@
 #include "dtkComposerNodeControlWhile.h"
 #include "dtkComposerNodeData.h"
 #include "dtkComposerNodeFile.h"
-// #include "dtkComposerNodeFileOperator.h"
 #include "dtkComposerNodeLogger.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeMatrixSquareReal.h"

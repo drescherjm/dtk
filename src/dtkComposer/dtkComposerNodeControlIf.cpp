@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 13:15:57 2012 (+0200)
+ * Last-Updated: Mon Sep 24 15:22:54 2012 (+0200)
  *           By: tkloczko
- *     Update #: 50
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -128,7 +128,7 @@ void dtkComposerNodeControlIf::setVariables(void)
 
 int dtkComposerNodeControlIf::selectBranch(void)
 {
-    bool value = d->cond.data<bool>();
+    bool value = *d->cond.data<bool>();
     
     foreach(dtkComposerTransmitter *t, d->then_block.emitters())
         t->setActive(value);

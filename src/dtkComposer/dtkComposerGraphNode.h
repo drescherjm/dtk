@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:08:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. sept. 21 09:59:46 2012 (+0200)
+ * Last-Updated: lun. sept. 24 09:58:38 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 159
+ *     Update #: 160
  */
 
 /* Commentary:
@@ -31,7 +31,7 @@ class dtkComposerNode;
 // dtkComposerGraphNode
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerGraphNode : public QObject, public QGraphicsItem
+class dtkComposerGraphNode : public QGraphicsObject
 {
     Q_OBJECT
 

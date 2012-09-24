@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mai 30 12:41:13 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 587
+ * Last-Updated: Mon Sep 24 15:06:42 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 591
  */
 
 /* Commentary:
@@ -88,7 +88,12 @@ dtkDistributedCommunicatorMpi::~dtkDistributedCommunicatorMpi(void)
     d = NULL;
 }
 
-dtkDistributedCommunicatorMpi::dtkDistributedCommunicatorMpi(const dtkDistributedCommunicatorMpi& c)
+dtkDistributedCommunicatorMpi::dtkDistributedCommunicatorMpi(const dtkDistributedCommunicatorMpi& other)
+{
+
+}
+
+dtkDistributedCommunicatorMpi& dtkDistributedCommunicatorMpi::operator=(const dtkDistributedCommunicatorMpi& other)
 {
 
 }
@@ -362,7 +367,7 @@ void dtkDistributedCommunicatorMpi::send(const QVariant &v, qint16 target, int t
             dtkDistributedCommunicator::send(array,3,target,tag);
         } else if (QString(v.typeName()) == "dtkVectorReal") {
             dtkVectorReal vector = v.value<dtkVectorReal>();
-            int vsize = vector.getRows();
+            int vsize = vector.size();
             dtkDistributedCommunicator::send(&vsize,1,target,tag);
             double array[vsize];
             for (int i=0; i<vsize; i++)

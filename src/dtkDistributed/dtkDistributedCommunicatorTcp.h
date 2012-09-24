@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: ven. avril 13 23:01:43 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 72
+ * Last-Updated: Mon Sep 24 15:05:43 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 73
  */
 
 /* Commentary: 
@@ -37,6 +37,11 @@ public:
      dtkDistributedCommunicatorTcp(void);
     ~dtkDistributedCommunicatorTcp(void);
 
+public:
+    dtkDistributedCommunicatorTcp(const dtkDistributedCommunicatorTcp& other);
+    dtkDistributedCommunicatorTcp& operator=(const dtkDistributedCommunicatorTcp& other);
+
+public:
     void   initialize(void);
     bool  initialized(void);
     void uninitialize(void);

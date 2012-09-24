@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. avril 19 13:06:46 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 230
+ * Last-Updated: Mon Sep 24 15:06:01 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 231
  */
 
 /* Commentary: 
@@ -53,6 +53,16 @@ dtkDistributedCommunicatorTcp::~dtkDistributedCommunicatorTcp(void)
     delete d;
 
     d = NULL;
+}
+
+dtkDistributedCommunicatorTcp::dtkDistributedCommunicatorTcp(const dtkDistributedCommunicatorTcp& other)
+{
+
+}
+
+dtkDistributedCommunicatorTcp& dtkDistributedCommunicatorTcp::operator = (const dtkDistributedCommunicatorTcp& other)
+{
+
 }
 
 void dtkDistributedCommunicatorTcp::connectToHost(const QString &host , qint16 port)

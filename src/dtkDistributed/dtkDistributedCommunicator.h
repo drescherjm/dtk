@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 09:18:40 2010 (+0100)
  * Version: $Id$
- * Last-Updated: ven. avril 13 23:00:58 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 114
+ * Last-Updated: Mon Sep 24 15:06:17 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 117
  */
 
 /* Commentary: 
@@ -35,7 +35,11 @@ public:
      dtkDistributedCommunicator(void);
     ~dtkDistributedCommunicator(void);
 
+public:
+    dtkDistributedCommunicator(const dtkDistributedCommunicator& other);
+    dtkDistributedCommunicator& operator = (const dtkDistributedCommunicator& other);
 
+public:
     enum DataType {
         dtkDistributedCommunicatorBool,
         dtkDistributedCommunicatorChar,

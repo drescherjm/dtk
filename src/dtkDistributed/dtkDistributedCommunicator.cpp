@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 13:38:59 2010 (+0100)
  * Version: $Id$
- * Last-Updated: lun. déc.  5 14:24:38 2011 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 102
+ * Last-Updated: Mon Sep 24 15:05:13 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 104
  */
 
 /* Commentary: 
@@ -36,6 +36,16 @@ dtkDistributedCommunicator::~dtkDistributedCommunicator(void)
     delete d;
 
     d = NULL;
+}
+
+dtkDistributedCommunicator::dtkDistributedCommunicator(const dtkDistributedCommunicator& other)
+{
+
+}
+
+dtkDistributedCommunicator& dtkDistributedCommunicator::operator = (const dtkDistributedCommunicator& other)
+{
+
 }
 
 void dtkDistributedCommunicator::send(bool *data, qint64 size, qint16 target, int tag)

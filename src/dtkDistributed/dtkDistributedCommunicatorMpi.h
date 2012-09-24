@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 16 12:14:45 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 99
+ * Last-Updated: Mon Sep 24 15:04:47 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 104
  */
 
 /* Commentary: 
@@ -33,9 +33,11 @@ public:
      dtkDistributedCommunicatorMpi(void);
     ~dtkDistributedCommunicatorMpi(void);
 
-    dtkDistributedCommunicatorMpi(const dtkDistributedCommunicatorMpi & c);
-    dtkDistributedCommunicatorMpi& operator=(const dtkDistributedCommunicatorMpi& c);
+public:
+    dtkDistributedCommunicatorMpi(const dtkDistributedCommunicatorMpi& other);
+    dtkDistributedCommunicatorMpi& operator=(const dtkDistributedCommunicatorMpi& other);
 
+public:
     void  initialize(void);
     bool  initialized(void);
     void uninitialize(void);
@@ -70,7 +72,7 @@ private:
 };
 
 Q_DECLARE_METATYPE(dtkDistributedCommunicatorMpi);
-Q_DECLARE_METATYPE(dtkDistributedCommunicatorMpi *);
+Q_DECLARE_METATYPE(dtkDistributedCommunicatorMpi*);
 
 
 #endif

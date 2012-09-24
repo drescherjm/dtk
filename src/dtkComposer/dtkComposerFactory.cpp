@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Mon Sep 24 14:08:09 2012 (+0200)
+ * Last-Updated: Mon Sep 24 15:07:59 2012 (+0200)
  *           By: tkloczko
- *     Update #: 794
+ *     Update #: 797
  */
 
 /* Commentary:
@@ -71,8 +71,8 @@
 #endif
 
 #if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
-// #include "dtkComposerNodeDistributed.h"
-// #include "dtkComposerNodeWorld.h"
+#include "dtkComposerNodeDistributed.h"
+#include "dtkComposerNodeWorld.h"
 #endif
 
 #if defined(DTK_BUILD_VR) && defined(DTK_HAVE_NITE)
@@ -268,50 +268,50 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     // /////////////////////////////////////////////////////////////////
 
 #if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
-    // d->nodes << "World";
-    // d->descriptions["World"] = "<p>Run a sub-compisition in a MPI context (comm world, process rank, world size).</p>";
-    // d->tags["World"] = QStringList() <<  "distributed" << "mpi" << "tcp" << "world";
-    // d->types["World"] = "world";
+    d->nodes << "World";
+    d->descriptions["World"] = "<p>Run a sub-compisition in a MPI context (comm world, process rank, world size).</p>";
+    d->tags["World"] = QStringList() <<  "distributed" << "mpi" << "tcp" << "world";
+    d->types["World"] = "world";
 
-    // d->nodes << "CommunicatorRank";
-    // d->tags["CommunicatorRank"] = QStringList() <<  "rank" << "distributed" << "mpi" << "communicator";
-    // d->types["CommunicatorRank"] = "communicatorRank";
+    d->nodes << "CommunicatorRank";
+    d->tags["CommunicatorRank"] = QStringList() <<  "rank" << "distributed" << "mpi" << "communicator";
+    d->types["CommunicatorRank"] = "communicatorRank";
 
-    // d->nodes << "CommunicatorSize";
-    // d->tags["CommunicatorSize"] = QStringList() <<  "size" << "distributed" << "mpi" << "communicator";
-    // d->types["CommunicatorSize"] = "communicatorSize";
+    d->nodes << "CommunicatorSize";
+    d->tags["CommunicatorSize"] = QStringList() <<  "size" << "distributed" << "mpi" << "communicator";
+    d->types["CommunicatorSize"] = "communicatorSize";
 
-    // d->nodes << "CommunicatorInit";
-    // d->tags["CommunicatorInit"] = QStringList() <<  "initialization" << "distributed" << "mpi" << "communicator";
-    // d->types["CommunicatorInit"] = "communicatorInit";
+    d->nodes << "CommunicatorInit";
+    d->tags["CommunicatorInit"] = QStringList() <<  "initialization" << "distributed" << "mpi" << "communicator";
+    d->types["CommunicatorInit"] = "communicatorInit";
 
-    // d->nodes << "CommunicatorUninitialize";
-    // d->tags["CommunicatorUninitialize"] = QStringList() <<  "finalize" << "distributed" << "mpi" << "communicator";
-    // d->types["CommunicatorUninitialize"] = "communicatorUninitialize";
+    d->nodes << "CommunicatorUninitialize";
+    d->tags["CommunicatorUninitialize"] = QStringList() <<  "finalize" << "distributed" << "mpi" << "communicator";
+    d->types["CommunicatorUninitialize"] = "communicatorUninitialize";
 
-    // d->nodes << "CommunicatorSendInteger";
-    // d->tags["CommunicatorSendInteger"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator" << "integer";
-    // d->types["CommunicatorSendInteger"] = "communicatorSendInteger";
+    d->nodes << "CommunicatorSendInteger";
+    d->tags["CommunicatorSendInteger"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator" << "integer";
+    d->types["CommunicatorSendInteger"] = "communicatorSendInteger";
 
-    // d->nodes << "CommunicatorReceiveInteger";
-    // d->tags["CommunicatorReceiveInteger"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator" << "integer";;
-    // d->types["CommunicatorReceiveInteger"] = "communicatorReceiveInteger";
+    d->nodes << "CommunicatorReceiveInteger";
+    d->tags["CommunicatorReceiveInteger"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator" << "integer";;
+    d->types["CommunicatorReceiveInteger"] = "communicatorReceiveInteger";
 
-    // d->nodes << "CommunicatorSendReal";
-    // d->tags["CommunicatorSendReal"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator" << "real";
-    // d->types["CommunicatorSendReal"] = "communicatorSendReal";
+    d->nodes << "CommunicatorSendReal";
+    d->tags["CommunicatorSendReal"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator" << "real";
+    d->types["CommunicatorSendReal"] = "communicatorSendReal";
 
-    // d->nodes << "CommunicatorReceiveReal";
-    // d->tags["CommunicatorReceiveReal"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator" << "real";;
-    // d->types["CommunicatorReceiveReal"] = "communicatorReceiveReal";
+    d->nodes << "CommunicatorReceiveReal";
+    d->tags["CommunicatorReceiveReal"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator" << "real";;
+    d->types["CommunicatorReceiveReal"] = "communicatorReceiveReal";
 
-    // d->nodes << "CommunicatorReceive";
-    // d->tags["CommunicatorReceive"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator";;
-    // d->types["CommunicatorReceive"] = "communicatorReceive";
+    d->nodes << "CommunicatorReceive";
+    d->tags["CommunicatorReceive"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator";;
+    d->types["CommunicatorReceive"] = "communicatorReceive";
 
-    // d->nodes << "CommunicatorSend";
-    // d->tags["CommunicatorSend"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator";;
-    // d->types["CommunicatorSend"] = "communicatorSend";
+    d->nodes << "CommunicatorSend";
+    d->tags["CommunicatorSend"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator";;
+    d->types["CommunicatorSend"] = "communicatorSend";
 #endif
 }
 
@@ -1005,57 +1005,6 @@ void dtkComposerFactory::initNodeControl(void)
     d->descriptions["While"] = "<p>Description not yet filled!</p>";
     d->tags["While"] = QStringList() << "control" << "while";
     d->types["While"] = "while";
-
-    // /////////////////////////////////////////////////////////////////
-    // MPI nodes
-    // /////////////////////////////////////////////////////////////////
-
-#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
-    d->nodes << "World";
-    d->descriptions["World"] = "<p>Run a sub-compisition in a MPI context (comm world, process rank, world size).</p>";
-    d->tags["World"] = QStringList() <<  "distributed" << "mpi" << "tcp" << "world";
-    d->types["World"] = "world";
-
-    d->nodes << "CommunicatorRank";
-    d->tags["CommunicatorRank"] = QStringList() <<  "rank" << "distributed" << "mpi" << "communicator";
-    d->types["CommunicatorRank"] = "communicatorRank";
-
-    d->nodes << "CommunicatorSize";
-    d->tags["CommunicatorSize"] = QStringList() <<  "size" << "distributed" << "mpi" << "communicator";
-    d->types["CommunicatorSize"] = "communicatorSize";
-
-    d->nodes << "CommunicatorInit";
-    d->tags["CommunicatorInit"] = QStringList() <<  "initialization" << "distributed" << "mpi" << "communicator";
-    d->types["CommunicatorInit"] = "communicatorInit";
-
-    d->nodes << "CommunicatorUninitialize";
-    d->tags["CommunicatorUninitialize"] = QStringList() <<  "finalize" << "distributed" << "mpi" << "communicator";
-    d->types["CommunicatorUninitialize"] = "communicatorUninitialize";
-
-    d->nodes << "CommunicatorSendInteger";
-    d->tags["CommunicatorSendInteger"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator" << "integer";
-    d->types["CommunicatorSendInteger"] = "communicatorSendInteger";
-
-    d->nodes << "CommunicatorReceiveInteger";
-    d->tags["CommunicatorReceiveInteger"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator" << "integer";;
-    d->types["CommunicatorReceiveInteger"] = "communicatorReceiveInteger";
-
-    d->nodes << "CommunicatorSendReal";
-    d->tags["CommunicatorSendReal"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator" << "real";
-    d->types["CommunicatorSendReal"] = "communicatorSendReal";
-
-    d->nodes << "CommunicatorReceiveReal";
-    d->tags["CommunicatorReceiveReal"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator" << "real";;
-    d->types["CommunicatorReceiveReal"] = "communicatorReceiveReal";
-
-    d->nodes << "CommunicatorReceive";
-    d->tags["CommunicatorReceive"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator";;
-    d->types["CommunicatorReceive"] = "communicatorReceive";
-
-    d->nodes << "CommunicatorSend";
-    d->tags["CommunicatorSend"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator";;
-    d->types["CommunicatorSend"] = "communicatorSend";
-#endif
 }
 
 dtkComposerFactory::~dtkComposerFactory(void)
@@ -1565,38 +1514,38 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 // /////////////////////////////////////////////////////////////////
 
 #if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
-    // if(type == "world")
-    //     return new dtkComposerNodeWorld;
+    if(type == "world")
+        return new dtkComposerNodeWorld;
 
-    // if(type == "communicatorSize")
-    //     return new dtkComposerNodeCommunicatorSize;
+    if(type == "communicatorSize")
+        return new dtkComposerNodeCommunicatorSize;
 
-    // if(type == "communicatorRank")
-    //     return new dtkComposerNodeCommunicatorRank;
+    if(type == "communicatorRank")
+        return new dtkComposerNodeCommunicatorRank;
 
-    // if(type == "communicatorUninitialize")
-    //     return new dtkComposerNodeCommunicatorUninitialize;
+    if(type == "communicatorUninitialize")
+        return new dtkComposerNodeCommunicatorUninitialize;
 
-    // if(type == "communicatorInit")
-    //     return new dtkComposerNodeCommunicatorInit;
+    if(type == "communicatorInit")
+        return new dtkComposerNodeCommunicatorInit;
 
-    // if(type == "communicatorSendInteger")
-    //     return new dtkComposerNodeCommunicatorSendInteger;
+    if(type == "communicatorSendInteger")
+        return new dtkComposerNodeCommunicatorSendInteger;
 
-    // if(type == "communicatorReceiveInteger")
-    //     return new dtkComposerNodeCommunicatorReceiveInteger;
+    if(type == "communicatorReceiveInteger")
+        return new dtkComposerNodeCommunicatorReceiveInteger;
 
-    // if(type == "communicatorSendReal")
-    //     return new dtkComposerNodeCommunicatorSendReal;
+    if(type == "communicatorSendReal")
+        return new dtkComposerNodeCommunicatorSendReal;
 
-    // if(type == "communicatorReceiveReal")
-    //     return new dtkComposerNodeCommunicatorReceiveReal;
+    if(type == "communicatorReceiveReal")
+        return new dtkComposerNodeCommunicatorReceiveReal;
 
-    // if(type == "communicatorSend")
-    //     return new dtkComposerNodeCommunicatorSend;
+    if(type == "communicatorSend")
+        return new dtkComposerNodeCommunicatorSend;
 
-    // if(type == "communicatorReceive")
-    //     return new dtkComposerNodeCommunicatorReceive;
+    if(type == "communicatorReceive")
+        return new dtkComposerNodeCommunicatorReceive;
 #endif
 
     return NULL;

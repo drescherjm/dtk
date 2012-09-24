@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 10:27:22 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 376
+ * Last-Updated: ven. sept. 21 15:11:12 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 403
  */
 
 /* Commentary: 
@@ -238,9 +238,7 @@ void dtkComposer::run(void)
 {
     this->updateRemotes(d->scene->root());
 
-    // temporary
-    d->evaluator->run();
-//    QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::run, false);
+    QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::run, false);
 
     d->graph->update();
 }

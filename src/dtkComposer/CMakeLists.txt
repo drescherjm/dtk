@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Fri Sep 21 16:26:33 2012 (+0200)
+## Last-Updated: Mon Sep 24 12:00:33 2012 (+0200)
 ##           By: tkloczko
-##     Update #: 615
+##     Update #: 617
 ######################################################################
 ##
 ### Commentary:
@@ -63,8 +63,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeControlMap.h
   dtkComposerNodeControlWhile.h
   dtkComposerNodeData.h
-  dtkComposerNodeFile.h
-  dtkComposerNodeFileOperator.h
+  # dtkComposerNodeFile.h
+  # dtkComposerNodeFileOperator.h
   dtkComposerNodeInteger.h
   dtkComposerNodeLeaf.h
   dtkComposerNodeLeafData.h
@@ -130,9 +130,11 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerFactory.h
   dtkComposerFactoryView.h
   dtkComposerGraph.h
+  dtkComposerGraphNode.h
   dtkComposerGraphView.h
   dtkComposerMachine.h
   dtkComposerMachineState.h
+  # dtkComposerNodeFile_p.h
   dtkComposerNodeView.h
   dtkComposerSceneModel.h
   dtkComposerScene.h

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Fri Sep 21 18:24:40 2012 (+0200)
+ * Last-Updated: Mon Sep 24 11:43:15 2012 (+0200)
  *           By: tkloczko
- *     Update #: 783
+ *     Update #: 791
  */
 
 /* Commentary:
@@ -123,27 +123,27 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     // primitive nodes
 
     d->nodes << "Boolean";
-    d->descriptions["Boolean"] = "<p>Description not yet filled!</p>";
+    d->descriptions["Boolean"] = "<p>Boolean node</p>";
     d->tags["Boolean"] = QStringList() << "primitive" << "boolean";
     d->types["Boolean"] = "boolean";
 
     d->nodes << "Integer";
-    d->descriptions["Integer"] = "<p>Description not yet filled!</p>";
+    d->descriptions["Integer"] = "<p>Integer node</p>";
     d->tags["Integer"] = QStringList() << "primitive" << "integer" << "number";
     d->types["Integer"] = "integer";
 
     d->nodes << "Real";
-    d->descriptions["Real"] = "<p>Description not yet filled!</p>";
+    d->descriptions["Real"] = "<p>Real node</p>";
     d->tags["Real"] = QStringList() << "primitive" << "real" << "number";
     d->types["Real"] = "real";
 
     d->nodes << "String";
-    d->descriptions["String"] = "<p>Description not yet filled!</p>";
+    d->descriptions["String"] = "<p>String node</p>";
     d->tags["String"] = QStringList() << "primitive" << "string";
     d->types["String"] = "string";
 
     // d->nodes << "File";
-    // d->descriptions["File"] = "<p>Description not yet filled!</p>";
+    // d->descriptions["File"] = "<p>File node</p>";
     // d->tags["File"] = QStringList() << "primitive" << "file";
     // d->types["File"] = "file";
 
@@ -153,6 +153,11 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     this->initNodeNumberOperatorBinary();
 
     // String operators
+
+    d->nodes << "String Equality";
+    d->descriptions["String Equality"] = "<p>Test the equality of two strings</p>";
+    d->tags["String Equality"] = QStringList() << "string" << "comparison" << "equality";
+    d->types["String Equality"] = "string_equality";
 
     d->nodes << "Append";
     d->descriptions["Append"] = "<p>Description not yet filled!</p>";
@@ -213,10 +218,12 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 
 #if defined(DTK_BUILD_DISTRIBUTED)
     d->nodes << "Remote";
+    d->descriptions["Remote"] = "<p>Execute a subcomposition on a remote node</p>";
     d->tags["Remote"] = QStringList() <<  "distributed" << "tcp" << "remote" << "world";
     d->types["Remote"] = "remote";
 
     d->nodes << "Remote Submit";
+    d->descriptions["Remote Submit"] = "<p>Submit a job on a remote cluster/machine. The output is the jobid.</p>";
     d->tags["Remote Submit"] = QStringList() <<  "distributed" << "tcp" << "remote" << "submit" << "job";
     d->types["Remote Submit"] = "remoteSubmit";
 #endif
@@ -263,6 +270,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 
 #if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
     // d->nodes << "World";
+    // d->descriptions["World"] = "<p>Run a sub-compisition in a MPI context (comm world, process rank, world size).</p>";
     // d->tags["World"] = QStringList() <<  "distributed" << "mpi" << "tcp" << "world";
     // d->types["World"] = "world";
 
@@ -316,12 +324,12 @@ void dtkComposerFactory::initNodeNumberOperatorUnary()
     d->types["Abs"] = "abs";
 
     d->nodes << "Incr";
-    d->descriptions["Incr"] = "<p>Increments the input number.</p>";
+    d->descriptions["Incr"] = "<p>Increments the input number of one (equivalent to the '++' operator).</p>";
     d->tags["Incr"] = QStringList() << "number" << "operator" << "unary" << "incr";
     d->types["Incr"] = "incr";
 
     d->nodes << "Decr";
-    d->descriptions["Decr"] = "<p>Decrements the input number.</p>";
+    d->descriptions["Decr"] = "<p>Decrements the input number of one (equivalent to the '--' operator ).</p>";
     d->tags["Decr"] = QStringList() << "number" << "operator" << "unary" << "decr";
     d->types["Decr"] = "decr";
 
@@ -401,27 +409,23 @@ void dtkComposerFactory::initNodeNumberOperatorUnary()
     d->types["Rad2deg"] = "rad2deg";
 
     d->nodes << "Ceil";
-    d->descriptions["Ceil"] = "<p>Description not yet filled!</p>";
+    d->descriptions["Ceil"] = "<p>Ceiling function  (smallest following integer)</p>";
     d->tags["Ceil"] = QStringList() << "number" << "operator" << "unary" << "ceil";
     d->types["Ceil"] = "ceil";
 
     d->nodes << "Floor";
-    d->descriptions["Floor"] = "<p>Description not yet filled!</p>";
+    d->descriptions["Floor"] = "<p>Compute the largest previous integer</p>";
     d->tags["Floor"] = QStringList() << "number" << "operator" << "unary" << "floor";
     d->types["Floor"] = "floor";
 
     d->nodes << "Round";
-    d->descriptions["Round"] = "<p>Description not yet filled!</p>";
+    d->descriptions["Round"] = "<p>Round the number</p>";
     d->tags["Round"] = QStringList() << "number" << "operator" << "unary" << "round";
     d->types["Round"] = "round";
 }
 
 void dtkComposerFactory::initNodeNumberOperatorBinary(void)
 {
-    d->nodes << "String Equality";
-    d->descriptions["String Equality"] = "<p>Description not yet filled!</p>";
-    d->tags["String Equality"] = QStringList() << "string" << "comparison" << "equality";
-    d->types["String Equality"] = "string_equality";
 
     d->nodes << "Eucldiv";
     d->descriptions["Eucldiv"] = "<p>Description not yet filled!</p>";
@@ -439,17 +443,17 @@ void dtkComposerFactory::initNodeNumberOperatorBinary(void)
     d->types["Logn"] = "logn";
 
     d->nodes << "Max";
-    d->descriptions["Max"] = "<p>Description not yet filled!</p>";
+    d->descriptions["Max"] = "<p>Compute the maximum of two numbers.</p>";
     d->tags["Max"] = QStringList() << "number" << "operator" << "binary" << "max";
     d->types["Max"] = "max";
 
     d->nodes << "Minus";
-    d->descriptions["Minus"] = "<p>Description not yet filled!</p>";
+    d->descriptions["Minus"] = "<p>Subtract rhs from lhs</p>";
     d->tags["Minus"] = QStringList() << "number" << "operator" << "binary" << "minus";
     d->types["Minus"] = "minus";
 
     d->nodes << "Min";
-    d->descriptions["Min"] = "<p>Description not yet filled!</p>";
+    d->descriptions["Min"] = "<p>Compute the minimum of two numbers</p>";
     d->tags["Min"] = QStringList() << "number" << "operator" << "binary" << "min";
     d->types["Min"] = "min";
 
@@ -459,12 +463,12 @@ void dtkComposerFactory::initNodeNumberOperatorBinary(void)
     d->types["Modulo"] = "modulo";
 
     d->nodes << "Mult";
-    d->descriptions["Mult"] = "<p>Description not yet filled!</p>";
+    d->descriptions["Mult"] = "<p>Multiply two numbers</p>";
     d->tags["Mult"] = QStringList() << "number" << "operator" << "binary" << "mult";
     d->types["Mult"] = "mult";
 
     d->nodes << "Plus";
-    d->descriptions["Plus"] = "<p>Description not yet filled!</p>";
+    d->descriptions["Plus"] = "<p>Compute the sum of two numbers</p>";
     d->tags["Plus"] = QStringList() << "number" << "operator" << "binary" << "plus";
     d->types["Plus"] = "plus";
 
@@ -474,7 +478,7 @@ void dtkComposerFactory::initNodeNumberOperatorBinary(void)
     d->types["Posnthroot"] = "posnthroot";
 
     d->nodes << "Power";
-    d->descriptions["Power"] = "<p>Description not yet filled!</p>";
+    d->descriptions["Power"] = "<p>Compute lhs at the power of rhs</p>";
     d->tags["Power"] = QStringList() << "number" << "operator" << "binary" << "power";
     d->types["Power"] = "power";
 
@@ -484,7 +488,7 @@ void dtkComposerFactory::initNodeNumberOperatorBinary(void)
     d->types["Ratio"] = "ratio";
 
     d->nodes << "Equal";
-    d->descriptions["Equal"] = "<p>Description not yet filled!</p>";
+    d->descriptions["Equal"] = "<p>Returns true if lhs is equal to rhs</p>";
     d->tags["Equal"] = QStringList() << "number" << "operator" << "binary" << "equal";
     d->types["Equal"] = "equal";
 
@@ -494,22 +498,22 @@ void dtkComposerFactory::initNodeNumberOperatorBinary(void)
     d->types["Notequal"] = "notequal";
 
     d->nodes << "Gt";
-    d->descriptions["Gt"] = "<p>Description not yet filled!</p>";
+    d->descriptions["Gt"] = "<p>Returns true if lhs is greater than rhs</p>";
     d->tags["Gt"] = QStringList() << "number" << "operator" << "binary" << "gt";
     d->types["Gt"] = "gt";
 
     d->nodes << "Lt";
-    d->descriptions["Lt"] = "<p>Description not yet filled!</p>";
+    d->descriptions["Lt"] = "<p>Returns true if lhs is less than rhs</p>";
     d->tags["Lt"] = QStringList() << "number" << "operator" << "binary" << "lt";
     d->types["Lt"] = "lt";
 
     d->nodes << "Gte";
-    d->descriptions["Gte"] = "<p>Description not yet filled!</p>";
+    d->descriptions["Gte"] = "<p>Returns true if lhs is greater or equal than rhs</p>";
     d->tags["Gte"] = QStringList() << "number" << "operator" << "binary" << "gte";
     d->types["Gte"] = "gte";
 
     d->nodes << "Lte";
-    d->descriptions["Lte"] = "<p>Description not yet filled!</p>";
+    d->descriptions["Lte"] = "<p>Returns true if lhs is less or equal than rhs</p>";
     d->tags["Lte"] = QStringList() << "number" << "operator" << "binary" << "lte";
     d->types["Lte"] = "lte";
 
@@ -1002,6 +1006,57 @@ void dtkComposerFactory::initNodeControl(void)
     d->descriptions["While"] = "<p>Description not yet filled!</p>";
     d->tags["While"] = QStringList() << "control" << "while";
     d->types["While"] = "while";
+
+    // /////////////////////////////////////////////////////////////////
+    // MPI nodes
+    // /////////////////////////////////////////////////////////////////
+
+#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
+    d->nodes << "World";
+    d->descriptions["World"] = "<p>Run a sub-compisition in a MPI context (comm world, process rank, world size).</p>";
+    d->tags["World"] = QStringList() <<  "distributed" << "mpi" << "tcp" << "world";
+    d->types["World"] = "world";
+
+    d->nodes << "CommunicatorRank";
+    d->tags["CommunicatorRank"] = QStringList() <<  "rank" << "distributed" << "mpi" << "communicator";
+    d->types["CommunicatorRank"] = "communicatorRank";
+
+    d->nodes << "CommunicatorSize";
+    d->tags["CommunicatorSize"] = QStringList() <<  "size" << "distributed" << "mpi" << "communicator";
+    d->types["CommunicatorSize"] = "communicatorSize";
+
+    d->nodes << "CommunicatorInit";
+    d->tags["CommunicatorInit"] = QStringList() <<  "initialization" << "distributed" << "mpi" << "communicator";
+    d->types["CommunicatorInit"] = "communicatorInit";
+
+    d->nodes << "CommunicatorUninitialize";
+    d->tags["CommunicatorUninitialize"] = QStringList() <<  "finalize" << "distributed" << "mpi" << "communicator";
+    d->types["CommunicatorUninitialize"] = "communicatorUninitialize";
+
+    d->nodes << "CommunicatorSendInteger";
+    d->tags["CommunicatorSendInteger"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator" << "integer";
+    d->types["CommunicatorSendInteger"] = "communicatorSendInteger";
+
+    d->nodes << "CommunicatorReceiveInteger";
+    d->tags["CommunicatorReceiveInteger"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator" << "integer";;
+    d->types["CommunicatorReceiveInteger"] = "communicatorReceiveInteger";
+
+    d->nodes << "CommunicatorSendReal";
+    d->tags["CommunicatorSendReal"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator" << "real";
+    d->types["CommunicatorSendReal"] = "communicatorSendReal";
+
+    d->nodes << "CommunicatorReceiveReal";
+    d->tags["CommunicatorReceiveReal"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator" << "real";;
+    d->types["CommunicatorReceiveReal"] = "communicatorReceiveReal";
+
+    d->nodes << "CommunicatorReceive";
+    d->tags["CommunicatorReceive"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator";;
+    d->types["CommunicatorReceive"] = "communicatorReceive";
+
+    d->nodes << "CommunicatorSend";
+    d->tags["CommunicatorSend"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator";;
+    d->types["CommunicatorSend"] = "communicatorSend";
+#endif
 }
 
 dtkComposerFactory::~dtkComposerFactory(void)

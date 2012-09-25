@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep 24 15:06:01 2012 (+0200)
+ * Last-Updated: Tue Sep 25 16:08:48 2012 (+0200)
  *           By: tkloczko
- *     Update #: 231
+ *     Update #: 232
  */
 
 /* Commentary: 
@@ -62,7 +62,7 @@ dtkDistributedCommunicatorTcp::dtkDistributedCommunicatorTcp(const dtkDistribute
 
 dtkDistributedCommunicatorTcp& dtkDistributedCommunicatorTcp::operator = (const dtkDistributedCommunicatorTcp& other)
 {
-
+    return *this;
 }
 
 void dtkDistributedCommunicatorTcp::connectToHost(const QString &host , qint16 port)

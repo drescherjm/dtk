@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Aug 18 19:42:04 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:52:09 2012 (+0200)
- *           By: Babette Lekouta
- *     Update #: 2
+ * Last-Updated: Tue Sep 25 16:19:06 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 3
  */
 
 /* Commentary:
@@ -112,7 +112,7 @@ void dtkSmartPointerTestObject::testSmartPointer(void)
     QVERIFY(pData->count() == 0);
 
     dtkSmartPointerTestData *pTestData = dynamic_cast< dtkSmartPointerTestData * >( pData );
-    QVERIFY(pData != NULL);
+    QVERIFY(pTestData != NULL);
     pTestData = NULL;
     delete pData;
     pData = NULL;

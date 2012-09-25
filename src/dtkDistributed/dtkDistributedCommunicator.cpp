@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 13:38:59 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep 24 15:05:13 2012 (+0200)
+ * Last-Updated: Tue Sep 25 16:08:34 2012 (+0200)
  *           By: tkloczko
- *     Update #: 104
+ *     Update #: 105
  */
 
 /* Commentary: 
@@ -45,7 +45,7 @@ dtkDistributedCommunicator::dtkDistributedCommunicator(const dtkDistributedCommu
 
 dtkDistributedCommunicator& dtkDistributedCommunicator::operator = (const dtkDistributedCommunicator& other)
 {
-
+    return *this;
 }
 
 void dtkDistributedCommunicator::send(bool *data, qint64 size, qint16 target, int tag)

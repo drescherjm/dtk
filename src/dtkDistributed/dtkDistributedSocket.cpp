@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: Thu Sep 20 10:16:53 2012 (+0200)
+ * Last-Updated: Tue Sep 25 16:09:10 2012 (+0200)
  *           By: tkloczko
- *     Update #: 801
+ *     Update #: 802
  */
 
 /* Commentary:
@@ -84,7 +84,7 @@ void dtkDistributedSocket::send(QVariant variant, QString jobid, qint16 target)
         stream << v[0] << v[1] << v[2] << v[3];
 
     } else {
-        bool is_pointer =false;
+        bool is_pointer = false;
 
         if (type != "dtkAbstractData") {
             dtkInfo() << "type is unknown ("<< type<<  "), assume it inherit from dtkAbstractData";

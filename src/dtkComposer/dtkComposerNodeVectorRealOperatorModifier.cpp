@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 14:47:14 2012 (+0200)
+ * Last-Updated: Tue Sep 25 16:14:05 2012 (+0200)
  *           By: tkloczko
- *     Update #: 55
+ *     Update #: 60
  */
 
 /* Commentary:
@@ -112,6 +112,11 @@ void dtkComposerNodeVectorRealOperatorModifierSet::run(void)
         qlonglong index = *d->receiver_index.data<qlonglong>();
         qreal value = *d->receiver_value.data<qreal>();
 
+        if (!vector) {
+            dtkError() << "Vector is not defined.";
+            return;
+        }
+
         if (index >= vector->size()) {
             dtkWarn() << "index > size of the vector. Same array is returned.";
 
@@ -139,6 +144,11 @@ void dtkComposerNodeVectorRealOperatorModifierSum::run(void)
         qlonglong index = *d->receiver_index.data<qlonglong>();
         qreal value = *d->receiver_value.data<qreal>();
 
+        if (!vector) {
+            dtkError() << "Vector is not defined.";
+            return;
+        }
+
         if (index >= vector->size()) {
             dtkWarn() << "index > size of the vector. Same array is returned.";
 
@@ -164,6 +174,11 @@ void dtkComposerNodeVectorRealOperatorModifierSubstract::run(void)
         dtkVectorReal *vector = d->receiver_vector.data();
         qlonglong index = *d->receiver_index.data<qlonglong>();
         qreal value = *d->receiver_value.data<qreal>();
+
+        if (!vector) {
+            dtkError() << "Vector is not defined.";
+            return;
+        }
 
         if (index >= vector->size()) {
             dtkWarn() << "index > size of the vector. Same array is returned.";
@@ -192,6 +207,11 @@ void dtkComposerNodeVectorRealOperatorModifierMult::run(void)
         qlonglong index = *d->receiver_index.data<qlonglong>();
         qreal value = *d->receiver_value.data<qreal>();
 
+        if (!vector) {
+            dtkError() << "Vector is not defined.";
+            return;
+        }
+
         if (index >= vector->size()) {
             dtkWarn() << "index > size of the vector. Same array is returned.";
 
@@ -218,6 +238,11 @@ void dtkComposerNodeVectorRealOperatorModifierDivide::run(void)
         dtkVectorReal *vector = d->receiver_vector.data();
         qlonglong index = *d->receiver_index.data<qlonglong>();
         qreal value = *d->receiver_value.data<qreal>();
+
+        if (!vector) {
+            dtkError() << "Vector is not defined.";
+            return;
+        }
 
         if (index >= vector->size()) {
             dtkWarn() << "index > size of the vector. Same array is returned.";
@@ -249,7 +274,12 @@ void dtkComposerNodeVectorRealOperatorModifierAllAdd::run(void)
         dtkVectorReal *vector = d->receiver_vector.data();
         qreal value = *d->receiver_value.data<qreal>();
 
-        for (int i = 0 ; i< vector->size(); ++i)
+        if (!vector) {
+            dtkError() << "Vector is not defined.";
+            return;
+        }
+
+        for (qlonglong i = 0 ; i < vector->size(); ++i)
             (*vector)[i] += value ;
 
         d->emitter_vector.setData(vector);
@@ -271,7 +301,12 @@ void dtkComposerNodeVectorRealOperatorModifierAllSubstract::run(void)
         dtkVectorReal *vector = d->receiver_vector.data();
         qreal value = *d->receiver_value.data<qreal>();
 
-        for (int i = 0 ; i< vector->size(); ++i)
+        if (!vector) {
+            dtkError() << "Vector is not defined.";
+            return;
+        }
+
+        for (qlonglong i = 0 ; i< vector->size(); ++i)
             (*vector)[i] -= value ;
 
         d->emitter_vector.setData(vector);
@@ -293,7 +328,7 @@ void dtkComposerNodeVectorRealOperatorModifierAllMult::run(void)
         dtkVectorReal *vector = d->receiver_vector.data();
         qreal value = *d->receiver_value.data<qreal>();
 
-        for (int i = 0 ; i< vector->size(); ++i)
+        for (qlonglong i = 0 ; i < vector->size(); ++i)
             (*vector)[i] *= value ;
 
         d->emitter_vector.setData(vector);
@@ -315,12 +350,17 @@ void dtkComposerNodeVectorRealOperatorModifierAllDivide::run(void)
         dtkVectorReal *vector = d->receiver_vector.data();
         qreal value = *d->receiver_value.data<qreal>();
 
+        if (!vector) {
+            dtkError() << "Vector is not defined.";
+            return;
+        }
+
         if (value == 0) {
             dtkWarn() << "Value is zero. Same array is returned." ;
 
         } else {
             
-            for (int i = 0 ; i< vector->size(); ++i)
+            for (qlonglong i = 0 ; i < vector->size(); ++i)
                 (*vector)[i] *= value ;
 
         }

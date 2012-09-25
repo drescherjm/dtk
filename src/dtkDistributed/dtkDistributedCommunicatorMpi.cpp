@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep 24 15:06:42 2012 (+0200)
+ * Last-Updated: Tue Sep 25 16:09:25 2012 (+0200)
  *           By: tkloczko
- *     Update #: 591
+ *     Update #: 592
  */
 
 /* Commentary:
@@ -95,7 +95,7 @@ dtkDistributedCommunicatorMpi::dtkDistributedCommunicatorMpi(const dtkDistribute
 
 dtkDistributedCommunicatorMpi& dtkDistributedCommunicatorMpi::operator=(const dtkDistributedCommunicatorMpi& other)
 {
-
+    return *this;
 }
 
 //! Mpi communicator initializer.

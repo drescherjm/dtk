@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Jul  4 12:07:20 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 21 16:51:03 2012 (+0200)
+ * Last-Updated: Tue Sep 25 16:11:19 2012 (+0200)
  *           By: tkloczko
- *     Update #: 58
+ *     Update #: 60
  */
 
 /* Commentary: 
@@ -327,7 +327,7 @@ void dtkComposerNodeArrayDataExtractorArrayPart::run(void)
             return;
         }
 
-        qlonglong length;
+        qlonglong length = 0;
         if (!d->receiver_length.isEmpty())
             length = *d->receiver_length.data();
         

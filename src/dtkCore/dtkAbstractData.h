@@ -5,7 +5,7 @@
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
  *           By: tkloczko
- *     Update #: 290
+ *     Update #: 291
  */
 
 /* Commentary:
@@ -52,13 +52,13 @@ public:
     dtkAbstractData& operator = (const dtkAbstractData& other);
 
 protected:
-   virtual void copy(const dtkAbstractData& other);
+   virtual void copy(const dtkAbstractObject& other);
 
 public:
     bool operator == (const dtkAbstractData& other) const;
 
 protected:
-   virtual bool isEqual(const dtkAbstractData& other) const;
+   virtual bool isEqual(const dtkAbstractObject& other) const;
 
 public:
     friend DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractData& data);

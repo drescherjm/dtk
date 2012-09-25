@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:43:14 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 12 15:28:16 2012 (+0200)
+ * Last-Updated: Tue Sep 25 08:36:36 2012 (+0200)
  *           By: tkloczko
- *     Update #: 125
+ *     Update #: 128
  */
 
 /* Commentary:
@@ -40,8 +40,14 @@ public:
 public:
    dtkAbstractObject& operator = (const dtkAbstractObject& other);
 
+protected:
+   virtual void copy(const dtkAbstractObject& other);
+
 public:
    bool operator == (const dtkAbstractObject& other) const;
+
+protected:
+   virtual bool isEqual(const dtkAbstractObject& other) const;
 
 public:
    virtual QString description(void) const;

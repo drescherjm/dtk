@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Tue Sep 25 10:22:31 2012 (+0200)
+ * Last-Updated: Tue Sep 25 10:27:37 2012 (+0200)
  *           By: tkloczko
- *     Update #: 799
+ *     Update #: 800
  */
 
 /* Commentary:
@@ -1507,6 +1507,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 #if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
     if(type == "dtkPlotCurve")
         return new dtkComposerNodePlotCurve;
+
+    if(type == "dtkPlotView")
+        return new dtkComposerNodePlotView;
 #endif
 
 // /////////////////////////////////////////////////////////////////

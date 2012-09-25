@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Aug  3 14:31:25 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 10:59:22 2012 (+0200)
+ * Last-Updated: Tue Sep 25 09:14:47 2012 (+0200)
  *           By: tkloczko
- *     Update #: 89
+ *     Update #: 90
  */
 
 /* Commentary: 
@@ -81,7 +81,10 @@ template <typename T> T *dtkComposerTransmitterVariant::data(void)
     case dtkComposerTransmitter::CopyOnWrite:
         if (this->enableCopy()) {
             if (!m_data) {
-                m_data = new T(*data);
+                if (dtkTypeInfo<T*>::dtkAbstractObjectPointer)
+                    m_data = reinterpret_cast<T*>(reinterpret_cast<dtkAbstractObject*>(data)->clone());
+                else
+                    m_data = new T(*data);
                 e->m_variant.setValue(m_data);
             } else {
                 *m_data = *data;
@@ -93,7 +96,10 @@ template <typename T> T *dtkComposerTransmitterVariant::data(void)
         break;
     case dtkComposerTransmitter::Copy:
         if (!m_data) {
-            m_data = new T(*data);
+            if (dtkTypeInfo<T*>::dtkAbstractObjectPointer)
+                m_data = reinterpret_cast<T*>(reinterpret_cast<dtkAbstractObject*>(data)->clone());
+            else
+                m_data = new T(*data);
             e->m_variant.setValue(m_data);
         } else {
             *m_data = *data;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:54:04 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 15:44:38 2012 (+0200)
+ * Last-Updated: Tue Sep 25 09:08:56 2012 (+0200)
  *           By: tkloczko
- *     Update #: 268
+ *     Update #: 269
  */
 
 /* Commentary:
@@ -101,16 +101,58 @@ dtkAbstractObject *dtkAbstractObject::clone(void)
  */
 dtkAbstractObject& dtkAbstractObject::operator = (const dtkAbstractObject& other)
 {
+    this->copy(other);
+
+    return (*this);
+}
+
+//! Enables to make a deep copy of the attributes through the class
+//! hierarchy.
+/*!
+ *  This method is called by the assignement operator which delegates
+ *  the copy process. When re-implementing this method into a derived
+ *  class of dtkAbstractObject, one must called first the copy method
+ *  of the parent to ensure that all the attributes are really copied.
+ *
+ *  Nevertheless, some caution must be taken to avoid slicing problem
+ *  as shown in the following example.
+ *
+ *  Example:
+ *  \code
+ *  class xyzObject : public dtkAbstractObject
+ *  {
+ *    ...
+ *    void copy(const dtkAbstractObject& other);
+ *    ...
+ *  };
+ *
+ *  void xyzObject::copy(const dtkAbstractObject& other)
+ *  {
+ *     // copy of the parent attributes
+ *     dtkAbstractObject::copy(other);
+ *
+ *     // copy of the xyzObject attributes
+ *     if (other.identifier() == this->identifier()) {
+ *        // cast other into xyzObject and do the copy
+ *     } else {
+ *        dtkWarn() << "other is not of same type than this, slicing is occuring.";
+ *     }
+ *  }
+ *  \endcode
+ */
+void dtkAbstractObject::copy(const dtkAbstractObject& other)
+{
+    if (this == &other)
+        return;
+
     this->setParent(other.parent());
 
-    d_ptr->values = other.d_ptr->values;
+    d_ptr->values     = other.d_ptr->values;
     d_ptr->properties = other.d_ptr->properties;
-    d_ptr->metadatas = other.d_ptr->metadatas;
+    d_ptr->metadatas  = other.d_ptr->metadatas;
 
     d_ptr->count = 0;
     d_ptr->isDeferredDeletionEnabled = true;
-
-    return *this;
 }
 
 //! Comparison operator.
@@ -119,6 +161,53 @@ dtkAbstractObject& dtkAbstractObject::operator = (const dtkAbstractObject& other
  */
 bool dtkAbstractObject::operator == (const dtkAbstractObject& other) const
 {
+    return this->isEqual(other);
+}
+
+//! Enables to make a deep comparison between all the attributes through the class
+//! hierarchy.
+/*!
+ *  This method is called by the comparator operator == which
+ *  delegates the comparison. When re-implementing this method into a
+ *  derived class of dtkAbstractObject, one must called the isEqual
+ *  method of the parent to ensure the comparison through all the
+ *  attributes.
+ *
+ *  Example:
+ *  \code
+ *  class xyzObject : public dtkAbstractObject
+ *  {
+ *    ...
+ *    bool isEqual(const dtkAbstractObject& other);
+ *    ...
+ *  };
+ *
+ *  bool xyzObject::isEqual(const dtkAbstractObject& other)
+ *  {
+ *     // comparison of the parent attributes
+ *     if (!dtkAbstractObject::isEqual(other))
+ *        return false;
+ *
+ *     // comparison of the types.
+ *     if (this->identifier() != other.identifier())
+ *        return false;
+ *
+ *     // comparison of the xyzObject attributes after casting of other.
+ *     ...
+ *
+ *     // comparison of parent attributes
+ *    if (!dtkAbstractObject::isEqual(other))
+ *       return false;
+ *
+ *    return true;
+ *  }
+ *  \endcode
+ */
+bool dtkAbstractObject::isEqual(const dtkAbstractObject& other) const
+{
+    if (this == &other)
+        return true;
+
     if (d_ptr->values != other.d_ptr->values         ||
         d_ptr->properties != other.d_ptr->properties ||
         d_ptr->metadatas != other.d_ptr->metadatas)

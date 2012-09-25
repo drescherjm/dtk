@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 12 15:38:17 2012 (+0200)
+ * Last-Updated: Tue Sep 25 09:02:48 2012 (+0200)
  *           By: tkloczko
- *     Update #: 104
+ *     Update #: 110
  */
 
 /* Commentary: 
@@ -67,9 +67,48 @@ dtkAbstractProcess *dtkAbstractProcess::clone(void)
 
 dtkAbstractProcess& dtkAbstractProcess::operator=(const dtkAbstractProcess& other)
 {
-    dtkAbstractObject::operator=(other);
+    this->copy(other);
 
-    return *this;
+    return (*this);
+}
+
+//! Enables to make a deep copy of the attributes through the class
+//! hierarchy.
+/*!
+ *  This method is called by the assignement operator which delegates
+ *  the copy process. When re-implementing this method into a derived
+ *  class of dtkAbstractProcess, one must called first the copy method
+ *  of the parent to ensure that all the attributes are really copied.
+ *
+ *  Nevertheless, some caution must be taken to avoid slicing problem
+ *  as shown in the following example.
+ *
+ *  Example:
+ *  \code
+ *  class xyzProcess : public dtkAbstractProcess
+ *  {
+ *    ...
+ *    void copy(const dtkAbstractObject& other);
+ *    ...
+ *  };
+ *
+ *  void xyzProcess::copy(const dtkAbstractObject& other)
+ *  {
+ *     // copy of the parent attributes
+ *     dtkAbstractProcess::copy(other);
+ *
+ *     // copy of the xyzProcess attributes
+ *     if (other.identifier() == this->identifier()) {
+ *        // cast other into xyzProcess and do the copy
+ *     } else {
+ *        dtkWarn() << "other is not of same type than this, slicing is occuring.";
+ *     }
+ *  }
+ *  \endcode
+ */
+void dtkAbstractProcess::copy(const dtkAbstractObject& other)
+{
+    dtkAbstractObject::copy(other);
 }
 
 QDebug operator<<(QDebug debug, const dtkAbstractProcess& process)

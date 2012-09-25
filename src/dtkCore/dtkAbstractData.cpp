@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 13 11:37:46 2012 (+0200)
+ * Last-Updated: Tue Sep 25 08:55:26 2012 (+0200)
  *           By: tkloczko
- *     Update #: 475
+ *     Update #: 492
  */
 
 /* Commentary:
@@ -100,45 +100,50 @@ dtkAbstractData& dtkAbstractData::operator = (const dtkAbstractData& other)
  *  class xyzData : public dtkAbstractData
  *  {
  *    ...
- *    void copy(const dtkAbstractData& other);
+ *    void copy(const dtkAbstractObject& other);
  *    ...
  *  };
  *
- *  void xyzData::copy(const dtkAbstractData& other)
+ *  void xyzData::copy(const dtkAbstractObject& other)
  *  {
  *     // copy of the parent attributes
  *     dtkAbstractData::copy(other);
  *
  *     // copy of the xyzData attributes
- *     if (typeid(other) == typeid(*this)) {
- *        // do the copy
+ *     if (other.identifier() == this->identifier()) {
+ *        // cast other into xyzData and do the copy
  *     } else {
  *        dtkWarn() << "other is not of same type than this, slicing is occuring.";
  *     }
  *  }
  *  \endcode
  */
-void dtkAbstractData::copy(const dtkAbstractData& other)
+void dtkAbstractData::copy(const dtkAbstractObject& other)
 {
-    if (this == &other)
-        return;
+    dtkAbstractObject::copy(other);
 
-    dtkAbstractObject::operator=(other);
+    if (this->identifier() == other.identifier()) {
 
-    DTK_D(dtkAbstractData);
+        const dtkAbstractData& data = reinterpret_cast<const dtkAbstractData&>(other);
 
-    d->readers       = other.d_func()->readers;
-    d->writers       = other.d_func()->writers;
-    d->converters    = other.d_func()->converters;
-    d->serializers   = other.d_func()->serializers;
-    d->deserializers = other.d_func()->deserializers;
+        DTK_D(dtkAbstractData);
 
-    d->path  = other.d_func()->path;
-    d->paths = other.d_func()->paths;
+        d->readers       = data.d_func()->readers;
+        d->writers       = data.d_func()->writers;
+        d->converters    = data.d_func()->converters;
+        d->serializers   = data.d_func()->serializers;
+        d->deserializers = data.d_func()->deserializers;
+        
+        d->path  = data.d_func()->path;
+        d->paths = data.d_func()->paths;
     
-    d->numberOfChannels = other.d_func()->numberOfChannels;
+        d->numberOfChannels = data.d_func()->numberOfChannels;
 
-    d->thumbnails = other.d_func()->thumbnails;
+        d->thumbnails = data.d_func()->thumbnails;
+
+    } else {
+        dtkWarn() << "Other is not of same type than this, slicing is occuring.";
+    }
 }
 
 //! Comparison operator.
@@ -164,40 +169,55 @@ bool dtkAbstractData::operator == (const dtkAbstractData& other) const
  *  class xyzData : public dtkAbstractData
  *  {
  *    ...
- *    bool isEqual(const dtkAbstractData& other);
+ *    bool isEqual(const dtkAbstractObject& other);
  *    ...
  *  };
  *
- *  bool xyzData::isEqual(const dtkAbstractData& other)
+ *  bool xyzData::isEqual(const dtkAbstractObject& other)
  *  {
  *     // comparison of the parent attributes
  *     if (!dtkAbstractData::isEqual(other))
  *        return false;
  *
- *     // comparison of the xyzData attributes
+ *     // comparison of the types.
+ *     if (this->identifier() != other.identifier())
+ *        return false;
+ *
+ *     // comparison of the xyzData attributes after casting of other.
  *     ...
+ *
+ *     // comparison of parent attributes
+ *    if (!dtkAbstractData::isEqual(other))
+ *       return false;
+ *
+ *    return true;
  *  }
  *  \endcode
  */
-bool dtkAbstractData::isEqual(const dtkAbstractData& other) const
+bool dtkAbstractData::isEqual(const dtkAbstractObject& other) const
 {
     if (this == &other)
         return true;
 
-    DTK_D(const dtkAbstractData);
-
-    if (d->readers          != other.d_func()->readers          ||
-        d->writers          != other.d_func()->writers          ||
-        d->converters       != other.d_func()->converters       ||
-        d->serializers      != other.d_func()->serializers      ||
-        d->deserializers    != other.d_func()->deserializers    ||
-        d->path             != other.d_func()->path             ||
-        d->paths            != other.d_func()->paths            ||
-        d->numberOfChannels != other.d_func()->numberOfChannels ||
-        d->thumbnails       != other.d_func()->thumbnails)
+    if (this->identifier() != other.identifier())
         return false;
 
-    if (!dtkAbstractObject::operator==(other))
+    const dtkAbstractData& data = reinterpret_cast<const dtkAbstractData&>(other);
+
+    DTK_D(const dtkAbstractData);
+
+    if (d->readers          != data.d_func()->readers          ||
+        d->writers          != data.d_func()->writers          ||
+        d->converters       != data.d_func()->converters       ||
+        d->serializers      != data.d_func()->serializers      ||
+        d->deserializers    != data.d_func()->deserializers    ||
+        d->path             != data.d_func()->path             ||
+        d->paths            != data.d_func()->paths            ||
+        d->numberOfChannels != data.d_func()->numberOfChannels ||
+        d->thumbnails       != data.d_func()->thumbnails)
+        return false;
+
+    if (!dtkAbstractObject::isEqual(other))
         return false;
 
     return true;  

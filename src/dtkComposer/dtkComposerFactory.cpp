@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Mon Sep 24 15:07:59 2012 (+0200)
+ * Last-Updated: Tue Sep 25 10:22:31 2012 (+0200)
  *           By: tkloczko
- *     Update #: 797
+ *     Update #: 799
  */
 
 /* Commentary:
@@ -63,7 +63,7 @@
 #include "dtkComposerNodeVectorRealOperatorModifier.h"
 #include "dtkComposerNodeVectorRealOperatorUnary.h"
 #include "dtkComposerNodeVectorRealOperatorBinary.h"
-// #include "dtkComposerNodeView.h"
+#include "dtkComposerNodeView.h"
 #include "dtkComposerSceneNodeLeaf.h"
 
 #if defined(DTK_BUILD_DISTRIBUTED)
@@ -206,10 +206,10 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["Generic Process"] = QStringList() << "process";
     d->types["Generic Process"] = "process";
 
-    // d->nodes << "Generic View";
-    // d->descriptions["Generic View"] = "<p>Description not yet filled!</p>";
-    // d->tags["Generic View"] = QStringList() << "view";
-    // d->types["Generic View"] = "view";
+    d->nodes << "Generic View";
+    d->descriptions["Generic View"] = "<p>Description not yet filled!</p>";
+    d->tags["Generic View"] = QStringList() << "view";
+    d->types["Generic View"] = "view";
 
 // /////////////////////////////////////////////////////////////////
 // Distributed nodes
@@ -1467,8 +1467,8 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "process")
         return new dtkComposerNodeProcess;
 
-//     if(type == "view")
-//         return new dtkComposerNodeView;
+    if(type == "view")
+        return new dtkComposerNodeView;
 
 // /////////////////////////////////////////////////////////////////
 // Distributed nodes

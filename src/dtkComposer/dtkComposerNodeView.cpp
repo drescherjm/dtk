@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 24 23:29:24 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 24 11:43:32 2012 (+0200)
+ * Last-Updated: Tue Sep 25 10:13:26 2012 (+0200)
  *           By: tkloczko
- *     Update #: 165
+ *     Update #: 172
  */
 
 /* Commentary: 
@@ -74,6 +74,7 @@ dtkComposerNodeView::~dtkComposerNodeView(void)
 {
     if (d->view)
         delete d->view;
+    d->view = NULL;
 
     delete d;
 
@@ -126,43 +127,37 @@ QString dtkComposerNodeView::outputLabelHint(int port)
 
 void dtkComposerNodeView::run(void)
 {
-    // if (d->receiver_type.isEmpty()) {
-    //     dtkWarn() << "no type speficied in view node!";
-    //     return;
-    // }
+    if (this->implementationHasChanged())
+        d->view = this->view();
 
-    // if(!d->view) {
-    //     d->view = dtkAbstractViewFactory::instance()->create(d->receiver_type.data());
+    if (!d->view) {
+        dtkWarn() << "no view, abort "<< this->currentImplementation();
+        return;
+    }
 
-    //     if(!d->receiver_fullscreen.isEmpty() && d->receiver_fullscreen.data()) {
-    //         d->view->widget()->showFullScreen();
-    //     } else {
-    //         d->view->widget()->resize(1024, 1024);
-    //         d->view->widget()->show();
-    //     }
-    // }
+    if(!d->receiver_fullscreen.isEmpty() && d->receiver_fullscreen.data()) {
+        d->view->widget()->showFullScreen();
+    } else {
+        d->view->widget()->resize(1024, 1024);
+        d->view->widget()->show();
+    }
 
-    // if (!d->view) {
-    //     dtkWarn() << "no view, abort" <<  d->receiver_type.data();
-    //     return;
-    // }
+    if(!d->receiver_head_position.isEmpty())
+        d->view->setHeadPosition(*d->receiver_head_position.data());
 
-    // if(!d->receiver_head_position.isEmpty())
-    //     d->view->setHeadPosition(d->receiver_head_position.data());
+    if(!d->receiver_head_orientation.isEmpty())
+        d->view->setHeadOrientation(*d->receiver_head_orientation.data());
 
-    // if(!d->receiver_head_orientation.isEmpty())
-    //     d->view->setHeadOrientation(d->receiver_head_orientation.data());
+    if(!d->receiver_screen_upper_left.isEmpty())
+        d->view->setUpperLeft(*d->receiver_screen_upper_left.data());
 
-    // if(!d->receiver_screen_upper_left.isEmpty())
-    //     d->view->setUpperLeft(d->receiver_screen_upper_left.data());
+    if(!d->receiver_screen_lower_left.isEmpty())
+        d->view->setLowerLeft(*d->receiver_screen_lower_left.data());
 
-    // if(!d->receiver_screen_lower_left.isEmpty())
-    //     d->view->setLowerLeft(d->receiver_screen_lower_left.data());
+    if(!d->receiver_screen_lower_right.isEmpty())
+        d->view->setLowerRight(*d->receiver_screen_lower_right.data());
 
-    // if(!d->receiver_screen_lower_right.isEmpty())
-    //     d->view->setLowerRight(d->receiver_screen_lower_right.data());
-
-    // if(!d->receiver_data.isEmpty())
-    //     foreach (dtkAbstractData *data, d->receiver_data.allData())
-    //         d->view->setData(data);
+    if(!d->receiver_data.isEmpty())
+        foreach (dtkAbstractData *data, d->receiver_data.allData())
+            d->view->setData(data);
 }

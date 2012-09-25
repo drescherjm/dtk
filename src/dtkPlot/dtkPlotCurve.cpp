@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:09:17 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 15:14:04 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 47
+ * Last-Updated: Tue Sep 25 10:19:55 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 50
  */
 
 /* Commentary: 
@@ -60,6 +60,15 @@ dtkPlotCurve::~dtkPlotCurve(void)
     delete d;
 
     d = NULL;
+}
+
+dtkPlotCurve& dtkPlotCurve::operator=(const dtkPlotCurve& other)
+{
+    d->setTitle(other.d->title().text()); 
+
+    d->data = other.d->data;
+    
+    d->setSamples(d->data);
 }
 
 void dtkPlotCurve::append(const QPointF& data)

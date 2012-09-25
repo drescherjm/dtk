@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:17:21
  * Version: $Id$
- * Last-Updated: Fri Sep 21 10:16:26 2012 (+0200)
+ * Last-Updated: Tue Sep 25 08:33:25 2012 (+0200)
  *           By: tkloczko
- *     Update #: 271
+ *     Update #: 288
  */
 
 /* Commentary:
@@ -70,9 +70,11 @@ dtkComposerNodeProcess::dtkComposerNodeProcess(void) : dtkComposerNodeLeafProces
     d->index = -1;
     d->emitter_integer.setData(&d->index);
     this->appendEmitter(&(d->emitter_integer));
+
     d->value = 0.;
     d->emitter_real.setData(&d->value);
     this->appendEmitter(&(d->emitter_real));
+
     this->appendEmitter(&(d->emitter_data));
 
     d->process = NULL;
@@ -113,28 +115,32 @@ void dtkComposerNodeProcess::run(void)
 
     if (!d->receiver_integer_0.isEmpty())
         d->process->setParameter(static_cast<int>(*d->receiver_integer_0.data()), 0);
-
+    
     if (!d->receiver_integer_1.isEmpty())
         d->process->setParameter(static_cast<int>(*d->receiver_integer_1.data()), 1);
-
+    
     if (!d->receiver_real.isEmpty())
         d->process->setParameter(*d->receiver_real.data());
-
-    if (!d->receiver_data.isEmpty())
-        d->process->setInput(d->receiver_data.data());
-
+    
+    if (!d->receiver_data.isEmpty()) {
+        dtkAbstractData *data = d->receiver_data.data();
+        d->process->setInput(data);
+    }
+        
     if (!d->receiver_lhs.isEmpty())
         d->process->setInput(d->receiver_lhs.data(), 0);
-
+        
     if (!d->receiver_rhs.isEmpty())
         d->process->setInput(d->receiver_rhs.data(), 1);
 
     d->index = d->process->run();
 
-    if (d->process->output())
-        d->value = *static_cast<qreal *>(d->process->data(0));
 
-    d->emitter_data.setData(d->process->output());
+    if (d->process->data(0))
+        d->value = *(static_cast<qreal *>(d->process->data(0)));
+
+    if (d->process->output())
+        d->emitter_data.setData(d->process->output());
 }
 
 QString dtkComposerNodeProcess::type(void)

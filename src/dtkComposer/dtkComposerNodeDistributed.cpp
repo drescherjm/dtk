@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/26 09:03:42
  * Version: $Id$
- * Last-Updated: Mon Sep 24 15:25:54 2012 (+0200)
+ * Last-Updated: Tue Sep 25 10:02:03 2012 (+0200)
  *           By: tkloczko
- *     Update #: 293
+ *     Update #: 297
  */
 
 /* Commentary:
@@ -85,7 +85,9 @@ public:
 
 dtkComposerNodeCommunicatorUninitialize::dtkComposerNodeCommunicatorUninitialize(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorUninitializePrivate)
 {
+    d->receiver.setDataTransmission(dtkComposerTransmitter::Reference);
     this->appendReceiver(&(d->receiver));
+
     this->appendReceiver(&(d->receiver_fake));
 }
 
@@ -130,6 +132,7 @@ public:
 
 dtkComposerNodeCommunicatorRank::dtkComposerNodeCommunicatorRank(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorRankPrivate)
 {
+    d->receiver.setDataTransmission(dtkComposerTransmitter::Reference);
     this->appendReceiver(&(d->receiver));
 
     d->rank = -1;
@@ -184,6 +187,7 @@ public:
 
 dtkComposerNodeCommunicatorSize::dtkComposerNodeCommunicatorSize(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorSizePrivate)
 {
+    d->receiver.setDataTransmission(dtkComposerTransmitter::Reference);
     this->appendReceiver(&(d->receiver));
 
     d->size = 0;
@@ -235,6 +239,7 @@ public:
 
 dtkComposerNodeCommunicatorSendInteger::dtkComposerNodeCommunicatorSendInteger(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorSendIntegerPrivate)
 {
+    d->receiver_comm.setDataTransmission(dtkComposerTransmitter::Reference);
     this->appendReceiver(&(d->receiver_comm));
     this->appendReceiver(&(d->receiver_data));
     this->appendReceiver(&(d->receiver_target));
@@ -284,6 +289,7 @@ public:
 
 dtkComposerNodeCommunicatorSendReal::dtkComposerNodeCommunicatorSendReal(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorSendRealPrivate)
 {
+    d->receiver_comm.setDataTransmission(dtkComposerTransmitter::Reference);
     this->appendReceiver(&(d->receiver_comm));
     this->appendReceiver(&(d->receiver_data));
 
@@ -332,6 +338,7 @@ public:
 
 dtkComposerNodeCommunicatorSend::dtkComposerNodeCommunicatorSend(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorSendPrivate)
 {
+    d->receiver_comm.setDataTransmission(dtkComposerTransmitter::Reference);
     this->appendReceiver(&(d->receiver_comm));
     this->appendReceiver(&(d->receiver_data));
 
@@ -383,6 +390,7 @@ public:
 
 dtkComposerNodeCommunicatorReceiveInteger::dtkComposerNodeCommunicatorReceiveInteger(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorReceiveIntegerPrivate)
 {
+    d->receiver_comm.setDataTransmission(dtkComposerTransmitter::Reference);
     this->appendReceiver(&(d->receiver_comm));
     this->appendReceiver(&(d->receiver_source));
 
@@ -437,6 +445,7 @@ public:
 
 dtkComposerNodeCommunicatorReceiveReal::dtkComposerNodeCommunicatorReceiveReal(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorReceiveRealPrivate)
 {
+    d->receiver_comm.setDataTransmission(dtkComposerTransmitter::Reference);
     this->appendReceiver(&(d->receiver_comm));
     this->appendReceiver(&(d->receiver_source));
 
@@ -488,6 +497,7 @@ public:
 
 dtkComposerNodeCommunicatorReceive::dtkComposerNodeCommunicatorReceive(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorReceivePrivate)
 {
+    d->receiver_comm.setDataTransmission(dtkComposerTransmitter::Reference);
     this->appendReceiver(&(d->receiver_comm));
     this->appendReceiver(&(d->receiver_source));
 

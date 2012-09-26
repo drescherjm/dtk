@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 11:45:03 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep 21 16:19:31 2012 (+0200)
+ * Last-Updated: Wed Sep 26 16:41:48 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 76
+ *     Update #: 101
  */
 
 /* Commentary: 
@@ -95,7 +95,12 @@ dtkComposerNodeFile::~dtkComposerNodeFile(void)
 
 void dtkComposerNodeFile::run(void)
 {
-    QString path = d->receiver.data();
+    QString path;
+
+    if(!d->receiver.isEmpty())
+        path = d->receiver.data();
+    else
+        path = d->emitter.data();
 
     if(path.startsWith("http")) {
 
@@ -135,4 +140,14 @@ QString dtkComposerNodeFile::outputLabelHint(int port)
         return "file";
 
     return dtkComposerNode::outputLabelHint(port);
+}
+
+QString dtkComposerNodeFile::value(void)
+{
+    return d->emitter.data();
+}
+
+void dtkComposerNodeFile::setValue(QString value)
+{
+    d->emitter.setData(value);
 }

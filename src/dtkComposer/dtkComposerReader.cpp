@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 17:18:29 2012 (+0200)
+ * Last-Updated: Wed Sep 26 15:32:08 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 706
+ *     Update #: 710
  */
 
 /* Commentary: 
@@ -23,6 +23,7 @@
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeControlCase.h"
+#include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeLeafData.h"
 #include "dtkComposerNodeLeafProcess.h"
@@ -579,6 +580,15 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
             for(int i = 0; i < childNodes.count(); i++) {
                 if(childNodes.at(i).toElement().tagName() == "value") {
                     s->setValue(childNodes.at(i).childNodes().at(0).toText().data());
+                }
+            }
+        }
+
+        if(dtkComposerNodeFile *f = dynamic_cast<dtkComposerNodeFile *>(leaf->wrapee())) {
+
+            for(int i = 0; i < childNodes.count(); i++) {
+                if(childNodes.at(i).toElement().tagName() == "value") {
+                    f->setValue(childNodes.at(i).childNodes().at(0).toText().data());
                 }
             }
         }

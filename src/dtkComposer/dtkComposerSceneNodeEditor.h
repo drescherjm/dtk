@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:08:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 11:17:36 2012 (+0200)
- *           By: tkloczko
- *     Update #: 46
+ * Last-Updated: Wed Sep 26 16:03:56 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 50
  */
 
 /* Commentary: 
@@ -68,6 +68,8 @@ protected slots:
     void onTitleChanged(const QString& text);
 
 protected slots:
+    void onBrowse(void);
+    void onBrowse(const QString&);
     void onValueChanged(bool);
     void onValueChanged(int);
     void onValueChanged(double);

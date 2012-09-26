@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. sept. 21 15:34:41 2012 (+0200)
+ * Last-Updated: mer. sept. 26 12:19:58 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 706
+ *     Update #: 734
  */
 
 /* Commentary:
@@ -48,6 +48,7 @@
 dtkComposerEvaluator::dtkComposerEvaluator(QObject *parent) : QObject(parent), d(new dtkComposerEvaluatorPrivate)
 {
     d->should_stop = false;
+    d->stack.setCapacity(1024);
     d->max_stack_size = 0;
 }
 
@@ -69,7 +70,7 @@ void dtkComposerEvaluator::run(bool run_concurrent)
     QTime time; time.start();
 
     d->stack.clear();
-    d->stack << d->graph->root();
+    d->stack.append(d->graph->root());
 
     emit evaluationStarted();
 
@@ -129,11 +130,11 @@ void dtkComposerEvaluator::cont(bool run_concurrent)
 
 void dtkComposerEvaluator::logStack(void)
 {
-    QListIterator<dtkComposerGraphNode *> i(d->stack);
-    dtkDebug() << "stack content:";
-    while (i.hasNext())
-        dtkDebug() << i.next()->title();
-    dtkDebug() << "stack end";
+    // QListIterator<dtkComposerGraphNode *> i(d->stack);
+    // dtkDebug() << "stack content:";
+    // while (i.hasNext())
+    //     dtkDebug() << i.next()->title();
+    // dtkDebug() << "stack end";
 }
 
 void dtkComposerEvaluator::next(bool run_concurrent)
@@ -170,13 +171,17 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
     dtkComposerGraphNodeList preds = d->current->predecessors();
     int   i = 0;
     int max = preds.count();
+
+    dtkComposerGraphNode *node ;
+
 //    dtkTrace() << "handle " << d->current->title();
     while (i < max && runnable) {
-        if (preds.at(i)->status() != dtkComposerGraphNode::Done) {
-            if (preds.at(i)->endloop()) {
+        node = preds.at(i);
+        if (node->status() != dtkComposerGraphNode::Done) {
+            if (node->endloop()) {
                 // predecessor is an end loop, we can continue, but we must unset the endloop flag.
-                dtkTrace() << "predecessor of "<< d->current->title() << " is an end loop, continue" << preds.at(i)->title();
-                preds.at(i)->setEndLoop(false);
+//                dtkTrace() << "predecessor of "<< d->current->title() << " is an end loop, continue" << node->title();
+                node->setEndLoop(false);
             } else
                 runnable = false;
         }
@@ -189,7 +194,7 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
         if (d->current->breakpoint() && d->current->status() == dtkComposerGraphNode::Ready ) {
             dtkTrace() << "break point reached";
             d->current->setStatus(dtkComposerGraphNode::Break);
-            d->stack << d->current;
+            d->stack.append( d->current);
             return false;
         }
         if (run_concurrent && (d->current->kind() == dtkComposerGraphNode::Process)){
@@ -207,23 +212,29 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
 
         dtkComposerGraphNodeList s = d->current->successors();
         max = s.count();
-        dtkComposerGraphNode *node ;
 
         for (int i = 0; i < max; i++) {
             node = s.at(i);
-            if (!d->stack.contains(node)) {
-//                dtkTrace() << "add successor to stack " << node->title();
-                d->stack << node;
+            bool is_stacked = false;
+            if (!d->stack.isEmpty()) {
+                for (int j = d->stack.firstIndex(); j <=  d->stack.lastIndex() ; j++)
+                    if (d->stack[j] == node) {
+                        is_stacked = true;
+                        break;
+                    }
             }
+//                dtkTrace() << "add successor to stack " << node->title();
+            if (is_stacked == false)
+                d->stack.append(node);
         }
     } else if (run_concurrent) {
         dtkTrace() << "add back current node to stack: "<< d->current->title();
-        d->stack << d->current;
+        d->stack.append(d->current);
     }
-    if (d->stack.size() > d->max_stack_size) {
-        d->max_stack_size = d->stack.size();
-        dtkDebug() << "Max stack size raised: "<< d->max_stack_size;
-    }
+    // if (d->stack.size() > d->max_stack_size) {
+    //     d->max_stack_size = d->stack.size();
+    //     dtkDebug() << "Max stack size raised: "<< d->max_stack_size;
+    // }
 
     return !d->stack.isEmpty();
 }

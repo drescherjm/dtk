@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: Fri Sep 21 09:59:32 2012 (+0200)
+ * Last-Updated: Wed Sep 26 14:08:07 2012 (+0200)
  *           By: tkloczko
- *     Update #: 1001
+ *     Update #: 1002
  */
 
 /* Commentary:
@@ -234,7 +234,7 @@ void dtkComposerNodeRemote::begin(void)
 
                 dtkAbstractData *data = NULL;
                 if (dtkAbstractObject *o = t->object())
-                    dtkAbstractData *data = qobject_cast<dtkAbstractData*>(o);
+                    data = qobject_cast<dtkAbstractData*>(o);
 
                 if (data) {
                     dtkDebug() << "sending dtkAbstractData in transmitter" << i;

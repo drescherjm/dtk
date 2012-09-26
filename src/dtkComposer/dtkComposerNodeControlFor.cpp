@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 15:19:19 2012 (+0200)
- *           By: tkloczko
- *     Update #: 130
+ * Last-Updated: mer. sept. 26 13:48:41 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 139
  */
 
 /* Commentary: 
@@ -155,21 +155,25 @@ void dtkComposerNodeControlFor::setInputs(void)
 
 void dtkComposerNodeControlFor::setOutputs(void)
 {
+    // start from 1 on purpose; the first port is the loop port.
     for (int i = 1; i < this->outputTwins().count(); i++) {
-        if (this->outputTwins().at(i)->container().isReset()) {
-            this->outputTwins().at(i)->twin()->setData(this->outputTwins().at(i)->data());
+        dtkComposerTransmitterVariant * v = this->outputTwins().at(i);
+        if (v->container().isReset()) {
+            v->twin()->setData(v->data());
         } else {
-            this->outputTwins().at(i)->twin()->setData(this->outputTwins().at(i)->container());
+            v->twin()->setData(v->container());
         }
     }
 }
 
 void dtkComposerNodeControlFor::setVariables(void)
 {
-    if (this->outputTwins().first()->container().isReset()) {
-        this->outputTwins().first()->twin()->setData(this->outputTwins().first()->data());
+    dtkComposerTransmitterVariant * first = this->outputTwins().first();
+
+    if (first->container().isReset()) {
+        first->twin()->setData(first->data());
     } else {
-        this->outputTwins().first()->twin()->setData(this->outputTwins().first()->container());
+        first->twin()->setData(first->container());
     }
 }
 

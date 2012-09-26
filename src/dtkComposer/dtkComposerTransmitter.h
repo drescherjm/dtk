@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 13:21:05 2012 (+0200)
+ * Last-Updated: Wed Sep 26 13:35:11 2012 (+0200)
  *           By: tkloczko
- *     Update #: 234
+ *     Update #: 235
  */
 
 /* Commentary: 
@@ -51,7 +51,7 @@ public:
 
 public:
     enum DataTransmission { 
-        CopyOnWrite,
+        AutoCopy,
         Copy,
         Reference
     };

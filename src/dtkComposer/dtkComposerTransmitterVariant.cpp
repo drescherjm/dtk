@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep 21 18:19:47 2012 (+0200)
+ * Last-Updated: Wed Sep 26 13:36:53 2012 (+0200)
  *           By: tkloczko
- *     Update #: 766
+ *     Update #: 767
  */
 
 /* Commentary: 
@@ -425,7 +425,7 @@ dtkAbstractContainerWrapper *dtkComposerTransmitterVariant::container(void)
         return NULL;
 
     switch(this->dataTransmission()) {
-    case dtkComposerTransmitter::CopyOnWrite:
+    case dtkComposerTransmitter::AutoCopy:
         if (this->enableCopy()) {
             if (!d->container)
                 d->container = container->clone();

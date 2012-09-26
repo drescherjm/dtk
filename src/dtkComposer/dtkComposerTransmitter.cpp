@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 13:14:19 2012 (+0200)
+ * Last-Updated: Wed Sep 26 13:36:11 2012 (+0200)
  *           By: tkloczko
- *     Update #: 309
+ *     Update #: 310
  */
 
 /* Commentary: 
@@ -43,7 +43,7 @@ dtkComposerTransmitter::dtkComposerTransmitter(dtkComposerNode *parent) : d(new 
 
     d->object = NULL;
     d->container = NULL;
-    d->data_transmission = CopyOnWrite;
+    d->data_transmission = AutoCopy;
 }
 
 //! Destroys dtkComposerTransmitter.
@@ -217,10 +217,10 @@ void dtkComposerTransmitter::activateEmitter(dtkComposerTransmitterVariant *emit
 
 //! Sets the type of data transmission.
 /*! 
- *  The transmission type can be either CopyOnWrite, Copy, or
- *  Reference. By default, the transmission type is CopyOnWrite.
+ *  The transmission type can be either AutoCopy, Copy, or
+ *  Reference. By default, the transmission type is AutoCopy.
  *
- *  When CopyOnWrite is on, the receiver checks if it is the only one
+ *  When AutoCopy is on, the receiver checks if it is the only one
  *  that receives the data. For that, it calls enableCopy() method. If
  *  false is returned, it means that it is the only receiver for this
  *  data and no copy is performed. Otherwise, in order to ensure that

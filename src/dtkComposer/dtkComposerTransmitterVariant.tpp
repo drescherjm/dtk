@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Aug  3 14:31:25 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 25 09:14:47 2012 (+0200)
+ * Last-Updated: Wed Sep 26 13:36:41 2012 (+0200)
  *           By: tkloczko
- *     Update #: 90
+ *     Update #: 91
  */
 
 /* Commentary: 
@@ -78,7 +78,7 @@ template <typename T> T *dtkComposerTransmitterVariant::data(void)
         m_data = e->m_variant.value<T*>();
 
     switch(this->dataTransmission()) {
-    case dtkComposerTransmitter::CopyOnWrite:
+    case dtkComposerTransmitter::AutoCopy:
         if (this->enableCopy()) {
             if (!m_data) {
                 if (dtkTypeInfo<T*>::dtkAbstractObjectPointer)

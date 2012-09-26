@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 25 09:11:46 2012 (+0200)
+ * Last-Updated: Wed Sep 26 13:37:06 2012 (+0200)
  *           By: tkloczko
- *     Update #: 561
+ *     Update #: 562
  */
 
 /* Commentary: 
@@ -99,7 +99,7 @@ template <typename T> T *dtkComposerTransmitterReceiver<T>::data(void)
         return NULL;
 
     switch(this->dataTransmission()) {
-    case dtkComposerTransmitter::CopyOnWrite:
+    case dtkComposerTransmitter::AutoCopy:
         if (this->enableCopy()) {
             if (!m_data) {
                 if (dtkTypeInfo<T*>::dtkAbstractObjectPointer)
@@ -477,7 +477,7 @@ template <typename T> dtkContainerVector<T> *dtkComposerTransmitterReceiverVecto
         return NULL;
 
     switch(this->dataTransmission()) {
-    case dtkComposerTransmitter::CopyOnWrite:
+    case dtkComposerTransmitter::AutoCopy:
         if (this->enableCopy()) {
             if (!m_vector)
                 m_vector = vector->clone();

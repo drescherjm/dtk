@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 26 13:36:53 2012 (+0200)
+ * Last-Updated: Wed Sep 26 14:40:50 2012 (+0200)
  *           By: tkloczko
- *     Update #: 767
+ *     Update #: 790
  */
 
 /* Commentary: 
@@ -287,75 +287,77 @@ void dtkComposerTransmitterVariant::setDataFrom(dtkComposerTransmitterVariant *s
 #if defined(DTK_BUILD_DISTRIBUTED)
 void dtkComposerTransmitterVariant::setDataFrom(dtkDistributedMessage *msg)
 {
-    // if (msg->type() == "double") {
+    if (msg->type() == "double") {
 
-    //     double *data = reinterpret_cast<double*>(msg->content().data());
-    //     this->setData(data);
+        e->value_r = *(reinterpret_cast<double*>(msg->content().data()));
 
-    // } else if (msg->type() == "qlonglong") {
+        this->setData<double>(&e->value_r);
 
-    //     qlonglong *data = reinterpret_cast<qlonglong*>(msg->content().data());
-    //     this->setData(data);
+    } else if (msg->type() == "qlonglong") {
 
-    // } else if (msg->type() == "qstring") {
+        e->value_i = *(reinterpret_cast<qlonglong*>(msg->content().data()));
+        this->setData<qlonglong>(&e->value_i);
 
-    //     this->setData(new QString(msg->content()));
+    } else if (msg->type() == "qstring") {
 
-    // } else if (msg->type() == "dtkVectorReal") {
+        e->value_s = QString(msg->content());
+        this->setData<QString>(&e->value_s);
 
-    //     if (msg->size() > 0) {
-    //         QByteArray array = msg->content();
-    //         int size;
-    //         QDataStream stream(&array, QIODevice::ReadOnly);
-    //         stream >> size;
-    //         dtkVectorReal *v = new dtkVectorReal(size);
+    } else if (msg->type() == "dtkVectorReal") {
 
-    //         for (int i=0; i< size; i++)
-    //             stream >> *(v[i]);
+        if (msg->size() > 0) {
+            QByteArray array = msg->content();
+            int size;
+            QDataStream stream(&array, QIODevice::ReadOnly);
+            stream >> size;
+            dtkVectorReal *v = new dtkVectorReal(size);
 
-    //         this->setData(v);
+            for (int i = 0; i < size; ++i)
+                stream >> (*v)[i];
 
-    //         dtkDebug() << "received dtkVectorReal, set data in transmitter; size is " << size;
+            this->setData<dtkVectorReal>(v);
 
-    //     } else
-    //         dtkWarn() << "warning: no content in dtkVectorReal transmitter";
+            dtkDebug() << "received dtkVectorReal, set data in transmitter; size is " << size;
 
-    // } else if (msg->type() == "dtkVector3DReal") {
+        } else
+            dtkWarn() << "warning: no content in dtkVectorReal transmitter";
 
-    //     if (msg->size() > 0) {
-    //         dtkVector3DReal *v = new dtkVector3D<qreal>();
+    } else if (msg->type() == "dtkVector3DReal") {
 
-    //         QDataStream stream(&(msg->content()), QIODevice::ReadOnly);
-    //         stream >> *v[0];
-    //         stream >> *v[1];
-    //         stream >> *v[2];
+        if (msg->size() > 0) {
+            dtkVector3DReal *v = new dtkVector3D<qreal>();
 
-    //         this->setData(v);
+            QDataStream stream(&(msg->content()), QIODevice::ReadOnly);
+            stream >> (*v)[0];
+            stream >> (*v)[1];
+            stream >> (*v)[2];
 
-    //         dtkDebug() << "received dtkVector3DReal, set data in transmitter" << *v[0] << *v[1] << *v[2];
+            this->setData<dtkVector3DReal>(v);
 
-    //     } else
-    //         dtkWarn() << "warning: no content in dtkVector3DReal transmitter";
+            dtkDebug() << "received dtkVector3DReal, set data in transmitter" << (*v)[0] << (*v)[1] << (*v)[2];
 
-    // } else if (msg->type() == "dtkQuaternionReal") {
+        } else
+            dtkWarn() << "warning: no content in dtkVector3DReal transmitter";
 
-    //     if (msg->size() > 0) {
-    //         dtkQuaternionReal q = new dtkQuaternion<qreal>();
+    } else if (msg->type() == "dtkQuaternionReal") {
 
-    //         QDataStream stream(&(msg->content()), QIODevice::ReadOnly);
-    //         stream >> *q[0];
-    //         stream >> *q[1];
-    //         stream >> *q[2];
-    //         stream >> *q[3];
+        if (msg->size() > 0) {
+            dtkQuaternionReal *q = new dtkQuaternion<qreal>();
 
-    //         this->setData(q);
+            QDataStream stream(&(msg->content()), QIODevice::ReadOnly);
+            stream >> (*q)[0];
+            stream >> (*q)[1];
+            stream >> (*q)[2];
+            stream >> (*q)[3];
 
-    //         dtkDebug() << "received dtkQuaternionReal, set data in transmitter" << *q[0] << *q[1] << *q[2] << *q[3];
+            this->setData<dtkQuaternionReal>(q);
 
-    //     } else
-    //         dtkWarn() << "warning: no content in dtkQuaternionReal transmitter";
+            dtkDebug() << "received dtkQuaternionReal, set data in transmitter" << (*q)[0] << (*q)[1] << (*q)[2] << (*q)[3];
 
-    // } else { // assume a dtkAbstractData
+        } else
+            dtkWarn() << "warning: no content in dtkQuaternionReal transmitter";
+
+    } //else { // assume a dtkAbstractData
 
     //     dtkDebug() << "received" <<  msg->type() << ", deserialize";
     //     QString type ;

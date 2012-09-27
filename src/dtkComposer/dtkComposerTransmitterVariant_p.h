@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Aug  3 14:36:46 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 27 11:51:09 2012 (+0200)
+ * Last-Updated: Thu Sep 27 15:00:39 2012 (+0200)
  *           By: tkloczko
- *     Update #: 53
+ *     Update #: 54
  */
 
 /* Commentary: 
@@ -41,10 +41,10 @@ public:
 
 public:
     dtkComposerTransmitterVariantPrivate(void) {        
-        types[0] = qMetaTypeId<qreal*>(0);
-        types[1] = qMetaTypeId<qlonglong*>(0);
-        types[2] = qMetaTypeId<QString*>(0);
-        types[3] = qMetaTypeId<bool*>(0);
+        metatypes[0] = qMetaTypeId<qreal*>(0);
+        metatypes[1] = qMetaTypeId<qlonglong*>(0);
+        metatypes[2] = qMetaTypeId<QString*>(0);
+        metatypes[3] = qMetaTypeId<bool*>(0);
     }
 
 public:
@@ -72,7 +72,7 @@ public:
     QString   value_s;
 
 public:
-    int types[4];
+    int metatypes[4];
     
 public:
     QVariant m_variant;

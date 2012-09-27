@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 24 23:29:24 2012 (+0200)
  * Version: $Id$
- * Last-Updated: mar. juil.  3 18:59:53 2012 (+0200)
+ * Last-Updated: jeu. sept. 20 23:46:49 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 161
+ *     Update #: 162
  */
 
 /* Commentary: 
@@ -66,7 +66,6 @@ dtkComposerNodeView::dtkComposerNodeView(void) : QObject(), dtkComposerNodeLeafV
     this->appendReceiver(&(d->receiver_screen_lower_right));
     this->appendReceiver(&(d->receiver_data));
 
-    connect(this, SIGNAL(runned()), this, SLOT(onRun()));
 }
 
 dtkComposerNodeView::~dtkComposerNodeView(void)
@@ -77,13 +76,6 @@ dtkComposerNodeView::~dtkComposerNodeView(void)
     delete d;
 
     d = NULL;
-}
-
-void dtkComposerNodeView::run(void)
-{
-    emit runned();
-
-    qApp->processEvents();
 }
 
 QString dtkComposerNodeView::type(void)
@@ -130,7 +122,7 @@ QString dtkComposerNodeView::outputLabelHint(int port)
     return dtkComposerNodeLeaf::outputLabelHint(port);
 }
 
-void dtkComposerNodeView::onRun(void)
+void dtkComposerNodeView::run(void)
 {
     if (d->receiver_type.isEmpty()) {
         dtkWarn() << "no type speficied in view node!";

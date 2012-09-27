@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 24 23:27:14 2012 (+0200)
  * Version: $Id$
- * Last-Updated: mar. juil.  3 18:59:35 2012 (+0200)
+ * Last-Updated: jeu. sept. 20 23:46:30 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 14
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -50,12 +50,6 @@ public:
 public:
     QString inputLabelHint(int);
     QString outputLabelHint(int);
-
-signals:
-    void runned(void);
-
-protected slots:
-    void onRun(void);
 
 private:
     dtkComposerNodeViewPrivate *d;

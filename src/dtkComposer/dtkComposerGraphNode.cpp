@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mars 28 13:30:35 2012 (+0200)
+ * Last-Updated: lun. sept. 24 09:59:07 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 226
+ *     Update #: 227
  */
 
 /* Commentary:
@@ -41,7 +41,7 @@ public:
     bool endloop;
 };
 
-dtkComposerGraphNode::dtkComposerGraphNode() : QGraphicsItem(),d(new dtkComposerGraphNodePrivate)
+dtkComposerGraphNode::dtkComposerGraphNode() : QGraphicsObject(),d(new dtkComposerGraphNodePrivate)
 {
     this->setFlag(QGraphicsItem::ItemIsSelectable, true);
     this->setFlag(QGraphicsItem::ItemIsMovable, true);

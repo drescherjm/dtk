@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:00:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. sept. 17 12:59:09 2012 (+0200)
+ * Last-Updated: jeu. sept. 20 14:49:40 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 114
+ *     Update #: 136
  */
 
 /* Commentary: 
@@ -37,6 +37,7 @@ public:
 public:
     bool valid;
     bool flagged;
+    bool connected_to_selection;
 };
 
 dtkComposerSceneEdge::dtkComposerSceneEdge(void) : QGraphicsItem(), d(new dtkComposerSceneEdgePrivate)
@@ -48,6 +49,7 @@ dtkComposerSceneEdge::dtkComposerSceneEdge(void) : QGraphicsItem(), d(new dtkCom
 
     d->valid   = false;
     d->flagged = false;
+    d->connected_to_selection = false;
 
     this->setFlags(QGraphicsItem::ItemIsSelectable);
     this->setZValue(0);
@@ -74,7 +76,9 @@ void dtkComposerSceneEdge::paint(QPainter *painter, const QStyleOptionGraphicsIt
 
     painter->setPen(QPen(Qt::black, 1));
 
-    if (!d->flagged)
+    if (d->connected_to_selection)
+        painter->setBrush(Qt::yellow);
+    else if (!d->flagged)
         painter->setBrush(Qt::gray);
     else
         if(d->valid)
@@ -217,6 +221,12 @@ void dtkComposerSceneEdge::invalidate(void)
     d->valid = false;
 
     d->flagged = true;
+}
+
+void dtkComposerSceneEdge::setConnected(bool value)
+{
+    d->connected_to_selection = value;
+    this->update();
 }
 
 dtkComposerSceneNode *dtkComposerSceneEdge::parent(void)

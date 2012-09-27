@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:39:36 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. mai 15 14:20:46 2012 (+0200)
+ * Last-Updated: mer. sept. 26 10:44:00 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 19
+ *     Update #: 28
  */
 
 /* Commentary: 
@@ -28,11 +28,17 @@ class dtkComposerEvaluatorPrivate : public QThread
 {
 public:
     dtkComposerGraph *graph;
-    dtkComposerGraphNodeList stack;
+    QContiguousCache<dtkComposerGraphNode *> stack;
     dtkComposerGraphNode *current;
 
 public:
+    QHash<dtkComposerGraphNode *, int > connected_views;
+public:
     bool should_stop;
+
+public:
+    int max_stack_size;
+
 };
 
 #endif

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 12 15:39:14 2012 (+0200)
+ * Last-Updated: Tue Sep 25 09:03:26 2012 (+0200)
  *           By: tkloczko
- *     Update #: 330
+ *     Update #: 331
  */
 
 /* Commentary:
@@ -47,6 +47,9 @@ public:
 
 public:
     dtkAbstractView& operator = (const dtkAbstractView& other);
+
+protected:
+   virtual void copy(const dtkAbstractObject& other);
 
 public:
     friend DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractView& viewer);

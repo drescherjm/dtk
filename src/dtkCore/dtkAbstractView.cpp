@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 12 15:40:21 2012 (+0200)
+ * Last-Updated: Tue Sep 25 09:05:25 2012 (+0200)
  *           By: tkloczko
- *     Update #: 326
+ *     Update #: 329
  */
 
 /* Commentary:
@@ -79,15 +79,62 @@ dtkAbstractView *dtkAbstractView::clone(void)
 
 dtkAbstractView& dtkAbstractView::operator=(const dtkAbstractView& other)
 {
-    dtkAbstractObject::operator=(other);
-
-    DTK_D(dtkAbstractView);
-
-    d->animators   = other.d_func()->animators;
-    d->navigators  = other.d_func()->navigators;
-    d->interactors = other.d_func()->interactors;
+    this->copy(other);
 
     return (*this);
+}
+
+//! Enables to make a deep copy of the attributes through the class
+//! hierarchy.
+/*!
+ *  This method is called by the assignement operator which delegates
+ *  the copy process. When re-implementing this method into a derived
+ *  class of dtkAbstractView, one must called first the copy method
+ *  of the parent to ensure that all the attributes are really copied.
+ *
+ *  Nevertheless, some caution must be taken to avoid slicing problem
+ *  as shown in the following example.
+ *
+ *  Example:
+ *  \code
+ *  class xyzView : public dtkAbstractView
+ *  {
+ *    ...
+ *    void copy(const dtkAbstractObject& other);
+ *    ...
+ *  };
+ *
+ *  void xyzView::copy(const dtkAbstractObject& other)
+ *  {
+ *     // copy of the parent attributes
+ *     dtkAbstractView::copy(other);
+ *
+ *     // copy of the xyzView attributes
+ *     if (other.identifier() == this->identifier()) {
+ *        // cast other into xyzView and do the copy
+ *     } else {
+ *        dtkWarn() << "other is not of same type than this, slicing is occuring.";
+ *     }
+ *  }
+ *  \endcode
+ */
+void dtkAbstractView::copy(const dtkAbstractObject& other)
+{
+    dtkAbstractObject::copy(other);
+
+    if (this->identifier() == other.identifier()) {
+
+        const dtkAbstractView& view = reinterpret_cast<const dtkAbstractView&>(other);
+
+        DTK_D(dtkAbstractView);
+
+        d->animators   = view.d_func()->animators;
+        d->navigators  = view.d_func()->navigators;
+        d->interactors = view.d_func()->interactors;
+
+    } else {
+        dtkWarn() << "Other is not of same type than this, slicing is occuring.";
+    }
 }
 
 void dtkAbstractView::initialize(void)

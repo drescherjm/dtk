@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 19:22:37 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Sep 18 09:22:50 2012 (+0200)
+## Last-Updated: Thu Sep 27 15:25:08 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 58
+##     Update #: 59
 ######################################################################
 ## 
 ### Commentary: 
@@ -27,9 +27,9 @@ add_subdirectory(dtkCrypto)
 add_subdirectory(dtkJson)
 add_subdirectory(dtkNotification)
 
-if(DTK_BUILD_VR AND DTK_BUILD_DISTRIBUTED)
+if(DTK_BUILD_VR)
   add_subdirectory(dtkVr)
-endif(DTK_BUILD_VR AND DTK_BUILD_DISTRIBUTED)
+endif(DTK_BUILD_VR)
 
 if(DTK_BUILD_SCRIPT)
   add_subdirectory(dtkScript)

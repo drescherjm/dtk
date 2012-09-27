@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 10:41:36 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 4493
+ * Last-Updated: mer. sept. 19 17:11:27 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 4516
  */
 
 /* Commentary: 
@@ -390,8 +390,9 @@ void dtkComposerStackCommandDestroyNode::redo(void)
             destroy_edge->redo();
     }
 
-    foreach(dtkComposerStackCommand *cmd, e->destroy_nodes)
-        cmd->redo();
+    const int listSize = e->destroy_nodes.size();
+    for (int i = 0; i < listSize; ++i)
+        e->destroy_nodes.at(i)->redo();
 
     d->graph->removeNode(e->node);
     d->graph->layout();
@@ -422,8 +423,12 @@ void dtkComposerStackCommandDestroyNode::undo(void)
     e->parent->addNode(e->node);
     d->graph->addNode(e->node);
 
-    foreach(dtkComposerStackCommand *destroy_node, e->destroy_nodes)
-        destroy_node->undo();
+    if (e->parent->visible())
+        d->scene->addItem(e->node);
+
+    const int listSize = e->destroy_nodes.size();
+    for (int i = listSize-1; i >= 0; --i)
+        e->destroy_nodes.at(i)->undo();
 
     e->parent->layout();
 
@@ -432,8 +437,6 @@ void dtkComposerStackCommandDestroyNode::undo(void)
 
     d->graph->layout();
 
-    if (e->parent->visible())
-        d->scene->addItem(e->node);
 
     d->scene->modify(true);
 }

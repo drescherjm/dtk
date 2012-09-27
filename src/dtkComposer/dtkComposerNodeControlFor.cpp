@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. sept. 27 14:40:02 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 147
+ * Last-Updated: Thu Sep 27 16:25:48 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 176
  */
 
 /* Commentary: 
@@ -144,7 +144,10 @@ dtkComposerNodeComposite *dtkComposerNodeControlFor::block(int id)
 
 void dtkComposerNodeControlFor::setInputs(void)
 {
-    foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
+    QList<dtkComposerTransmitterVariant*> list = this->inputTwins();
+    QList<dtkComposerTransmitterVariant*>::const_iterator it;
+    for (it = list.constBegin(); it != list.constEnd(); ++it) {
+        dtkComposerTransmitterVariant *v = *it;
         v->setTwinned(false);
         v->setDataFrom(v);
         v->setTwinned(true);
@@ -153,16 +156,19 @@ void dtkComposerNodeControlFor::setInputs(void)
 
 void dtkComposerNodeControlFor::setOutputs(void)
 {
-    // start from 1 on purpose; the first port is the loop port.
-    for (int i = 1; i < this->outputTwins().count(); i++) {
-        dtkComposerTransmitterVariant *twin = this->outputTwins().at(i);
-        twin->twin()->setDataFrom(twin);
+    QList<dtkComposerTransmitterVariant*> list = this->outputTwins();
+    QList<dtkComposerTransmitterVariant*>::const_iterator it;
+    // start from the second element of the list on purpose; the first port is the loop port.
+    for (it = list.constBegin() + 1; it != list.constEnd(); ++it) {
+        dtkComposerTransmitterVariant *v = *it;
+        v->twin()->setDataFrom(v);
     }
 }
 
 void dtkComposerNodeControlFor::setVariables(void)
 {
-    this->outputTwins().first()->twin()->setDataFrom(this->outputTwins().first());
+    dtkComposerTransmitterVariant *twin = this->outputTwins().first();
+    twin->twin()->setDataFrom(twin);
 }
 
 int dtkComposerNodeControlFor::selectBranch(void)

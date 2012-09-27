@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. sept. 27 17:03:13 2012 (+0200)
+ * Last-Updated: jeu. sept. 27 17:16:36 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 758
+ *     Update #: 759
  */
 
 /* Commentary:
@@ -209,12 +209,14 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
         }
 
         dtkComposerGraphNodeList s = d->current->successors();
+        bool is_stacked;
+        int j;
 
         for (it = s.constBegin(); it != s.constEnd(); ++it) {
             node = *it;
-            bool is_stacked = false;
+            is_stacked = false;
             if (!d->stack.isEmpty()) {
-                for (int j = d->stack.firstIndex(); j <=  d->stack.lastIndex() ; j++)
+                for (j = d->stack.firstIndex(); j <=  d->stack.lastIndex() ; j++)
                     if (d->stack[j] == node) {
                         is_stacked = true;
                         break;

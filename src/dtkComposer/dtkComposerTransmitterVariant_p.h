@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Aug  3 14:36:46 2012 (+0200)
  * Version: $Id$
- * Last-Updated: mer. sept. 26 15:54:54 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 42
+ * Last-Updated: Thu Sep 27 11:51:09 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -32,17 +32,21 @@ class dtkComposerTransmitterVariant;
 class dtkComposerTransmitterVariantPrivate
 {
 public:
-    dtkComposerTransmitterVariantPrivate(void)
-        {
-            type_conversions.insert(qMetaTypeId<bool*>(0), QMetaType::Bool);
-            type_conversions.insert(qMetaTypeId<int*>(0), QMetaType::Int);
-            type_conversions.insert(qMetaTypeId<qlonglong*>(0), QMetaType::LongLong);
-            type_conversions.insert(qMetaTypeId<uint*>(0), QMetaType::UInt);
-            type_conversions.insert(qMetaTypeId<qulonglong*>(0), QMetaType::ULongLong);
-            type_conversions.insert(qMetaTypeId<qreal*>(0), QMetaType::Double);
-            type_conversions.insert(qMetaTypeId<QString*>(0), QMetaType::QString);
-        }
-        
+    enum Type {
+        RealStar = 0,
+        LongLongStar = 1,
+        StringStar = 2,
+        BoolStar = 3
+    };
+
+public:
+    dtkComposerTransmitterVariantPrivate(void) {        
+        types[0] = qMetaTypeId<qreal*>(0);
+        types[1] = qMetaTypeId<qlonglong*>(0);
+        types[2] = qMetaTypeId<QString*>(0);
+        types[3] = qMetaTypeId<bool*>(0);
+    }
+
 public:
     QList<dtkComposerTransmitter *> emitters;
     QList<dtkComposerTransmitterVariant *> variants;
@@ -66,10 +70,10 @@ public:
     qlonglong value_i;
     qreal     value_r;
     QString   value_s;
-    
-public:
-    QHash<int, int> type_conversions;
 
+public:
+    int types[4];
+    
 public:
     QVariant m_variant;
 };

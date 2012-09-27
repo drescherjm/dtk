@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:48:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul  5 15:22:37 2011 (+0200)
+ * Last-Updated: Thu Sep 27 16:11:54 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 64
+ *     Update #: 67
  */
 
 /* Commentary:
@@ -47,6 +47,7 @@ public:
 
     QStringList creators(void) const;
 
+    QStringList implementations(void);
     QStringList implementations(const QString& interface);
     QStringList interfaces(void);
 

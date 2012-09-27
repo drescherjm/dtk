@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. sept. 26 13:53:43 2012 (+0200)
+ * Last-Updated: jeu. sept. 27 14:40:02 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 140
+ *     Update #: 147
  */
 
 /* Commentary: 
@@ -155,7 +155,8 @@ void dtkComposerNodeControlFor::setOutputs(void)
 {
     // start from 1 on purpose; the first port is the loop port.
     for (int i = 1; i < this->outputTwins().count(); i++) {
-        this->outputTwins().at(i)->twin()->setDataFrom(this->outputTwins().at(i));
+        dtkComposerTransmitterVariant *twin = this->outputTwins().at(i);
+        twin->twin()->setDataFrom(twin);
     }
 }
 

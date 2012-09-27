@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 27 15:08:32 2012 (+0200)
+ * Last-Updated: Thu Sep 27 15:39:00 2012 (+0200)
  *           By: tkloczko
- *     Update #: 854
+ *     Update #: 872
  */
 
 /* Commentary: 
@@ -155,15 +155,18 @@ template <> QString *dtkComposerTransmitterVariant::data(void)
         e->value_s = *(emitter_variant.value<QString*>());
 
     } else if (emitter_type == e->metatypes[dtkComposerTransmitterVariantPrivate::RealStar]) {
-        e->value_s = QString::number(*(emitter_variant.value<qreal*>()));
+        e->value_s.setNum(*(emitter_variant.value<qreal*>()), 'G', 16);
 
     } else if (emitter_type == e->metatypes[dtkComposerTransmitterVariantPrivate::LongLongStar]) {
-        e->value_s = QString::number(*(emitter_variant.value<qlonglong*>()));
+        e->value_s.setNum(*(emitter_variant.value<qlonglong*>()));
 
     } else if (emitter_type == e->metatypes[dtkComposerTransmitterVariantPrivate::BoolStar]) {
-        e->value_s = QString::number(*(emitter_variant.value<bool*>()));
+        e->value_s = QString::number(static_cast<int>(*(emitter_variant.value<bool*>())));
 
-    } else if (emitter_type <= QMetaType::Double && emitter_type != 0) {
+    } else if (emitter_type == QMetaType::Double) {
+        e->value_s.setNum(emitter_variant.value<qreal>(), 'G', 16);
+
+    } else if (emitter_type < QMetaType::Double && emitter_type != 0) {
         e->value_s = emitter_variant.value<QString>();
 
     } else if (emitter_type == QMetaType::QString) {

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. sept. 26 12:19:58 2012 (+0200)
+ * Last-Updated: jeu. sept. 27 17:03:13 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 734
+ *     Update #: 758
  */
 
 /* Commentary:
@@ -168,26 +168,24 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
     d->current = d->stack.takeFirst();
     bool runnable = true;
 
-    dtkComposerGraphNodeList preds = d->current->predecessors();
-    int   i = 0;
-    int max = preds.count();
-
+    dtkComposerGraphNodeList::const_iterator it;
     dtkComposerGraphNode *node ;
 
+    dtkComposerGraphNodeList preds = d->current->predecessors();
+
 //    dtkTrace() << "handle " << d->current->title();
-    while (i < max && runnable) {
-        node = preds.at(i);
+    for (it = preds.constBegin(); it != preds.constEnd(); ++it) {
+        node = *it;
         if (node->status() != dtkComposerGraphNode::Done) {
             if (node->endloop()) {
                 // predecessor is an end loop, we can continue, but we must unset the endloop flag.
 //                dtkTrace() << "predecessor of "<< d->current->title() << " is an end loop, continue" << node->title();
                 node->setEndLoop(false);
-            } else
+            } else {
                 runnable = false;
+                break;
+            }
         }
-//        dtkTrace() << "check pred" << preds.at(i)->title() << preds.at(i)->status();
-
-        i++;
     }
 
     if (runnable) {
@@ -211,10 +209,9 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
         }
 
         dtkComposerGraphNodeList s = d->current->successors();
-        max = s.count();
 
-        for (int i = 0; i < max; i++) {
-            node = s.at(i);
+        for (it = s.constBegin(); it != s.constEnd(); ++it) {
+            node = *it;
             bool is_stacked = false;
             if (!d->stack.isEmpty()) {
                 for (int j = d->stack.firstIndex(); j <=  d->stack.lastIndex() ; j++)

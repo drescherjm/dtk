@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. sept. 27 17:16:36 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 759
+ * Last-Updated: Fri Sep 28 23:01:51 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 782
  */
 
 /* Commentary:
@@ -166,24 +166,26 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
         return false;
 
     d->current = d->stack.takeFirst();
+    // dtkTrace() << "handle " << d->current->title();
     bool runnable = true;
 
     dtkComposerGraphNodeList::const_iterator it;
+    dtkComposerGraphNodeList::const_iterator ite;
     dtkComposerGraphNode *node ;
 
     dtkComposerGraphNodeList preds = d->current->predecessors();
-
-//    dtkTrace() << "handle " << d->current->title();
-    for (it = preds.constBegin(); it != preds.constEnd(); ++it) {
-        node = *it;
+    it = preds.constBegin();
+    ite = preds.constEnd();
+    while(it != ite) {
+        node = *it++;
         if (node->status() != dtkComposerGraphNode::Done) {
-            if (node->endloop()) {
-                // predecessor is an end loop, we can continue, but we must unset the endloop flag.
-//                dtkTrace() << "predecessor of "<< d->current->title() << " is an end loop, continue" << node->title();
-                node->setEndLoop(false);
-            } else {
+            if (!node->endloop()) {
                 runnable = false;
                 break;
+            } else {
+                // predecessor is an end loop, we can continue, but we must unset the endloop flag.
+                // dtkTrace() << "predecessor of "<< d->current->title() << " is an end loop, continue" << node->title();
+                node->setEndLoop(false);
             }
         }
     }
@@ -204,26 +206,23 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
             emit runMainThread();
             disconnect(this, SIGNAL(runMainThread()), d->current, SLOT(eval()));
         } else {
-//            dtkTrace() << "evaluating leaf node"<< d->current->title();
+            // dtkTrace() << "evaluating leaf node"<< d->current->title();
             d->current->eval();
         }
 
         dtkComposerGraphNodeList s = d->current->successors();
-        bool is_stacked;
-        int j;
-
-        for (it = s.constBegin(); it != s.constEnd(); ++it) {
-            node = *it;
-            is_stacked = false;
+        it = s.constBegin();
+        ite = s.constEnd();
+        while(it != ite) {
+            node = *it++;
+            bool stacked = false;
             if (!d->stack.isEmpty()) {
-                for (j = d->stack.firstIndex(); j <=  d->stack.lastIndex() ; j++)
-                    if (d->stack[j] == node) {
-                        is_stacked = true;
-                        break;
-                    }
+                int j = d->stack.firstIndex();
+                while(j <= d->stack.lastIndex() && !stacked)
+                    stacked = (d->stack.at(j++) == node);
             }
-//                dtkTrace() << "add successor to stack " << node->title();
-            if (is_stacked == false)
+            // dtkTrace() << "add successor to stack " << node->title();
+            if (!stacked)
                 d->stack.append(node);
         }
     } else if (run_concurrent) {

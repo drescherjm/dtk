@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 27 16:25:48 2012 (+0200)
+ * Last-Updated: Fri Sep 28 23:28:35 2012 (+0200)
  *           By: tkloczko
- *     Update #: 176
+ *     Update #: 191
  */
 
 /* Commentary: 
@@ -145,9 +145,11 @@ dtkComposerNodeComposite *dtkComposerNodeControlFor::block(int id)
 void dtkComposerNodeControlFor::setInputs(void)
 {
     QList<dtkComposerTransmitterVariant*> list = this->inputTwins();
-    QList<dtkComposerTransmitterVariant*>::const_iterator it;
-    for (it = list.constBegin(); it != list.constEnd(); ++it) {
-        dtkComposerTransmitterVariant *v = *it;
+    QList<dtkComposerTransmitterVariant*>::const_iterator it  = list.constBegin();
+    QList<dtkComposerTransmitterVariant*>::const_iterator ite = list.constEnd();
+
+    while(it != ite) {
+        dtkComposerTransmitterVariant *v = *it++;
         v->setTwinned(false);
         v->setDataFrom(v);
         v->setTwinned(true);
@@ -157,10 +159,12 @@ void dtkComposerNodeControlFor::setInputs(void)
 void dtkComposerNodeControlFor::setOutputs(void)
 {
     QList<dtkComposerTransmitterVariant*> list = this->outputTwins();
-    QList<dtkComposerTransmitterVariant*>::const_iterator it;
     // start from the second element of the list on purpose; the first port is the loop port.
-    for (it = list.constBegin() + 1; it != list.constEnd(); ++it) {
-        dtkComposerTransmitterVariant *v = *it;
+    QList<dtkComposerTransmitterVariant*>::const_iterator it  = list.constBegin() + 1;
+    QList<dtkComposerTransmitterVariant*>::const_iterator ite = list.constEnd();
+
+    while(it != ite) {
+        dtkComposerTransmitterVariant *v = *it++;
         v->twin()->setDataFrom(v);
     }
 }

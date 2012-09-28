@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep 28 23:01:51 2012 (+0200)
+ * Last-Updated: Fri Sep 28 23:59:12 2012 (+0200)
  *           By: tkloczko
- *     Update #: 782
+ *     Update #: 787
  */
 
 /* Commentary:
@@ -213,18 +213,35 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
         dtkComposerGraphNodeList s = d->current->successors();
         it = s.constBegin();
         ite = s.constEnd();
-        while(it != ite) {
-            node = *it++;
-            bool stacked = false;
-            if (!d->stack.isEmpty()) {
+        if (!d->stack.isEmpty()) {
+            while(it != ite) {
+                node = *it++;
+                bool stacked = false;
                 int j = d->stack.firstIndex();
                 while(j <= d->stack.lastIndex() && !stacked)
                     stacked = (d->stack.at(j++) == node);
+                // dtkTrace() << "add successor to stack " << node->title();
+                if (!stacked)
+                    d->stack.append(node);
             }
-            // dtkTrace() << "add successor to stack " << node->title();
-            if (!stacked)
-                d->stack.append(node);
+        } else {
+            while(it != ite)
+                d->stack.append(*it++);            
         }
+        
+
+        // while(it != ite) {
+        //     node = *it++;
+        //     bool stacked = false;
+        //     if (!d->stack.isEmpty()) {
+        //         int j = d->stack.firstIndex();
+        //         while(j <= d->stack.lastIndex() && !stacked)
+        //             stacked = (d->stack.at(j++) == node);
+        //     }
+        //     // dtkTrace() << "add successor to stack " << node->title();
+        //     if (!stacked)
+        //         d->stack.append(node);
+        // }
     } else if (run_concurrent) {
         dtkTrace() << "add back current node to stack: "<< d->current->title();
         d->stack.append(d->current);

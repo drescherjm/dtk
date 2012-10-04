@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 13:18:10 2012 (+0200)
+ * Last-Updated: Thu Oct  4 11:04:38 2012 (+0200)
  *           By: tkloczko
- *     Update #: 108
+ *     Update #: 111
  */
 
 /* Commentary: 
@@ -60,9 +60,13 @@ public:
 #if defined(DTK_BUILD_DISTRIBUTED)
     void setDataFrom(dtkDistributedMessage *msg);
 #endif
+    void setDataFrom(QByteArray *array);
 
 public:
     template <typename T> T *data(void);
+
+public:
+    QByteArray dataToByteArray(void);
 
 public:
     QVariant& variant(void);

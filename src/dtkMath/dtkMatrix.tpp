@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Mon Jul 12 15:42:21 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 11:28:16 2012 (+0200)
+ * Last-Updated: Thu Oct  4 12:57:03 2012 (+0200)
  *           By: tkloczko
- *     Update #: 32
+ *     Update #: 38
  */
 
 /* Commentary: 
@@ -460,5 +460,16 @@ template <typename T> QDebug operator<<(QDebug dbg, const dtkMatrix<T> *mat)
 
     return dbg.space();
 }
+
+template <typename T> QByteArray *dtkMatrix<T>::serialize(void)
+{
+    return NULL;
+};
+
+
+template <typename T>  void dtkMatrix<T>::deserialize(const QByteArray& array)
+{
+    
+};
 
 #endif

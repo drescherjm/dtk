@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jun  8 13:10:13 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 11:28:21 2012 (+0200)
+ * Last-Updated: Thu Oct  4 12:56:55 2012 (+0200)
  *           By: tkloczko
- *     Update #: 190
+ *     Update #: 193
  */
 
 /* Commentary: 
@@ -132,6 +132,10 @@ public:
     void interchangeRows(unsigned, unsigned);
     void addRowToRow(unsigned, unsigned, const T & = dtkUnity<T>());
     void multiplyRow(unsigned, const T &);
+
+public:
+    QByteArray *serialize(void);
+    void deserialize(const QByteArray& array);
 
 private:
     unsigned m_crow;

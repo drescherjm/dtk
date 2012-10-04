@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 27 15:39:00 2012 (+0200)
+ * Last-Updated: Thu Oct  4 13:56:39 2012 (+0200)
  *           By: tkloczko
- *     Update #: 872
+ *     Update #: 921
  */
 
 /* Commentary: 
@@ -365,6 +365,71 @@ void dtkComposerTransmitterVariant::setDataFrom(dtkDistributedMessage *msg)
     // }
 }
 #endif
+
+void dtkComposerTransmitterVariant::setDataFrom(QByteArray *array)
+{
+    
+}
+
+QByteArray dtkComposerTransmitterVariant::dataToByteArray(void)
+{
+    qint64 data_type = this->dataType();
+
+    QByteArray array = QByteArray(reinterpret_cast<const char*>(&data_type), sizeof(data_type));
+
+    switch(data_type) {
+    case QMetaType::Double: {
+        double data = *this->data<double>();
+        array.append(reinterpret_cast<const char*>(&data), sizeof(data));
+        break;
+    }
+    case QMetaType::LongLong: {
+        qlonglong data = *this->data<qlonglong>();
+        array.append(reinterpret_cast<const char*>(&data), sizeof(data));
+        break;
+    }
+    case QMetaType::QString: {
+        array.append(this->data<QString>()->toAscii());
+        break;
+    }
+    default:
+        if (dtkAbstractObject *o = this->object()) {
+            if (dtkAbstractData *data = qobject_cast<dtkAbstractData*>(o)) {
+                if (QByteArray *data_array = data->serialize()) {
+                    array.append(*data_array);
+                } else {
+                    dtkError() <<"serialization failed";
+                }
+            }
+        }
+
+        else if (data_type == qMetaTypeId<dtkVector3DReal>(0)) {
+
+            array.append(*(this->data<dtkVector3DReal>()->serialize()));
+
+        } else if (data_type == qMetaTypeId<dtkVectorReal>(0)) {
+
+            array.append(*(this->data<dtkVectorReal>()->serialize()));
+
+        } else if (data_type == qMetaTypeId<dtkQuaternionReal>(0)) { 
+
+            array.append(*(this->data<dtkQuaternionReal>()->serialize()));
+
+        } else if (data_type == qMetaTypeId<dtkMatrixReal>(0)) {
+
+            array.append(*(this->data<dtkMatrixReal>()->serialize()));
+
+        } else if (data_type == qMetaTypeId<dtkMatrixSquareReal>(0)) {
+
+            array.append(*(this->data<dtkMatrixSquareReal>()->serialize()));
+            
+        } else {
+            dtkWarn() << "Unable to serialize the data into QByteArray.";
+        }
+    }
+
+    return array;    
+}
 
 QVariant& dtkComposerTransmitterVariant::variant(void)
 {

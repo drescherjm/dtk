@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. oct.  4 15:04:13 2012 (+0200)
+ * Last-Updated: jeu. oct.  4 18:11:31 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 605
+ *     Update #: 615
  */
 
 /* Commentary:
@@ -351,10 +351,8 @@ void dtkDistributedCommunicatorMpi::receive(QByteArray &array, qint16 source, in
     qint64   arrayLength;
     dtkDistributedCommunicator::receive(&arrayLength,1,source,tag);
 
-    char     rawArray[arrayLength];
-    dtkDistributedCommunicator::receive(rawArray, arrayLength, source, tag);
-
-    array.fromRawData(rawArray, arrayLength);
+    array.resize(arrayLength);
+    dtkDistributedCommunicator::receive(array.data(), arrayLength, source, tag);
 
 }
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. oct.  4 16:01:56 2012 (+0200)
+ * Last-Updated: jeu. oct.  4 18:47:09 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 958
+ *     Update #: 1055
  */
 
 /* Commentary: 
@@ -264,6 +264,9 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
     qint64 data_type;
     QDataStream stream(&array, QIODevice::ReadOnly);
     stream >> data_type;
+    QString type = QString(QMetaType::typeName(data_type));
+
+    dtkDebug() << DTK_PRETTY_FUNCTION << "Try to set data from " << type << data_type << qMetaTypeId<dtkAbstractData>();
 
     switch(data_type) {
     case QMetaType::Double: {
@@ -313,20 +316,25 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
             m->deserialize(array);
             this->setData<dtkMatrixSquareReal>(m);
 
-        } else {
+        } else if (data_type == qMetaTypeId<dtkAbstractData>()) {
+            dtkDebug() << DTK_PRETTY_FUNCTION << "OK, dtkAbstractData" ;
+            qint64 real_type;
+            stream >> real_type;
 
-            //FIXME: need to add first dtkAbstractData type and then the real type
-            QString type = QMetaType::typeName(data_type);
-
+            QString typeName = QString(QMetaType::typeName(real_type));
+            dtkDebug() << DTK_PRETTY_FUNCTION << "Real type is " << typeName;
+            //FIXME: need to remove type info from array
             if (array.size() > 0) {
                 dtkAbstractData *data;
-                data = dtkAbstractDataFactory::instance()->create(type)->deserialize(array);
+                data = dtkAbstractDataFactory::instance()->create(typeName)->deserialize(array);
                 if (!data) {
-                    dtkError() << "Deserialization failed";
+                    dtkError() << "Deserialization failed for type" << typeName;
                 } else {
                     dtkDebug() << "set dtkAbstractData in transmitter, size is" << array.size();
 
                 }
+            } else {
+                dtkWarn() << "No data in byte array, can't create " << typeName;
             }
         }
     }
@@ -336,27 +344,48 @@ QByteArray dtkComposerTransmitterVariant::dataToByteArray(void)
 {
     qint64 data_type = this->dataType();
 
-    QByteArray array = QByteArray(reinterpret_cast<const char*>(&data_type), sizeof(data_type));
+//    QByteArray array = QByteArray(reinterpret_cast<const char*>(&data_type), sizeof(data_type));
+    QByteArray array = QByteArray();
+
+    QDataStream stream(&array, QIODevice::WriteOnly);
+
+    dtkDebug() << "create byte array for type" << data_type <<   QMetaType::typeName(data_type);
 
     switch(data_type) {
     case QMetaType::Double: {
         double data = *this->data<double>();
+        stream << data_type;
         array.append(reinterpret_cast<const char*>(&data), sizeof(data));
         break;
     }
     case QMetaType::LongLong: {
         qlonglong data = *this->data<qlonglong>();
+        stream << data_type;
         array.append(reinterpret_cast<const char*>(&data), sizeof(data));
         break;
     }
     case QMetaType::QString: {
+        stream << data_type;
         array.append(this->data<QString>()->toAscii());
         break;
     }
     default:
         if (dtkAbstractObject *o = this->object()) {
             if (dtkAbstractData *data = qobject_cast<dtkAbstractData*>(o)) {
+
                 if (QByteArray *data_array = data->serialize()) {
+                    if (data_type == qMetaTypeId<dtkAbstractData>()) {
+                        stream << data_type;
+                        const char* typeName = this->dataIdentifier().toAscii().data();
+                        qint64 real_type = QMetaType::type( typeName );
+                        dtkError() << "real type is" << real_type;
+                        stream << real_type;
+                    } else {
+                        qint64 parent_type = qMetaTypeId<dtkAbstractData>();
+                        stream << parent_type;
+                        stream << data_type;
+                    }
+
                     array.append(*data_array);
                 } else {
                     dtkError() <<"serialization failed";
@@ -366,22 +395,27 @@ QByteArray dtkComposerTransmitterVariant::dataToByteArray(void)
 
         else if (data_type == qMetaTypeId<dtkVector3DReal>(0)) {
 
+            stream << data_type;
             array.append(*(this->data<dtkVector3DReal>()->serialize()));
 
         } else if (data_type == qMetaTypeId<dtkVectorReal>(0)) {
 
+            stream << data_type;
             array.append(*(this->data<dtkVectorReal>()->serialize()));
 
         } else if (data_type == qMetaTypeId<dtkQuaternionReal>(0)) {
 
+            stream << data_type;
             array.append(*(this->data<dtkQuaternionReal>()->serialize()));
 
         } else if (data_type == qMetaTypeId<dtkMatrixReal>(0)) {
 
+            stream << data_type;
             array.append(*(this->data<dtkMatrixReal>()->serialize()));
 
         } else if (data_type == qMetaTypeId<dtkMatrixSquareReal>(0)) {
 
+            stream << data_type;
             array.append(*(this->data<dtkMatrixSquareReal>()->serialize()));
 
         } else {

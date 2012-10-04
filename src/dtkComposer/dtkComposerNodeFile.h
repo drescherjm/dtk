@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 11:44:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  1 11:48:51 2012 (+0100)
+ * Last-Updated: Wed Sep 26 15:29:44 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 18
  */
 
 /* Commentary: 
@@ -41,6 +41,12 @@ public:
 public:
     QString inputLabelHint(int);
     QString outputLabelHint(int);
+
+public:
+    QString value(void);
+
+public:
+    void setValue(QString value);
 
 private:
     dtkComposerNodeFilePrivate *d;

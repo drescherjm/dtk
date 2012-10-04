@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 15:13:20 2012 (+0200)
+ * Last-Updated: Thu Oct  4 10:05:10 2012 (+0200)
  *           By: tkloczko
- *     Update #: 1111
+ *     Update #: 1180
  */
 
 /* Commentary: 
@@ -34,15 +34,17 @@
 #include "dtkComposerNodeControlFor.h"
 #include "dtkComposerNodeControlForEach.h"
 #include "dtkComposerNodeControlMap.h"
+#include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeLeafData.h"
 #include "dtkComposerNodeLeafProcess.h"
 #include "dtkComposerNodeLeafView.h"
+
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
 
 #if defined(DTK_BUILD_DISTRIBUTED)
-// #include "dtkComposerNodeRemote.h"
+#include "dtkComposerNodeRemote.h"
 #endif
 
 #include "dtkComposerTransmitterVariant.h"
@@ -238,6 +240,11 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     d->edit = new QLineEdit(this);
     d->edit->setEnabled(false);
 
+    d->butn_f = new QToolButton(this);
+    d->butn_f->setText("Browse");
+    d->butn_f->setEnabled(false);
+    d->butn_f->setVisible(false);
+
     d->spin_d = new QSpinBox(this);
     d->spin_d->setMinimum(-9999999);
     d->spin_d->setMaximum(+9999999);
@@ -375,16 +382,22 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     lb_layout->addLayout(lv_layout);
     lb_layout->addLayout(bv_layout);
 
+    QHBoxLayout *bb_layout = new QHBoxLayout;
+    bb_layout->setContentsMargins(0, 0, 0, 0);
+    bb_layout->setSpacing(0);
+    bb_layout->addWidget(d->spin_d);
+    bb_layout->addWidget(d->spin_f);
+    bb_layout->addWidget(d->edit_s);
+    bb_layout->addWidget(d->butn_f);
+    bb_layout->addWidget(d->bool_widget);
+
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(top);
     layout->addLayout(lb_layout);
     layout->addLayout(p_layout);
-    layout->addWidget(d->spin_d);
-    layout->addWidget(d->spin_f);
-    layout->addWidget(d->edit_s);
-    layout->addWidget(d->bool_widget);
+    layout->addLayout(bb_layout);
 
     connect(d->add_loop_port, SIGNAL(clicked()), this, SLOT(addLoopPort()));
     connect(d->rem_loop_port, SIGNAL(clicked()), this, SLOT(removeLoopPort()));
@@ -405,6 +418,7 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     connect(d->spin_d, SIGNAL(valueChanged(int)), this, SLOT(onValueChanged(int)));
     connect(d->spin_f, SIGNAL(valueChanged(double)), this, SLOT(onValueChanged(double)));
     connect(d->edit_s, SIGNAL(textChanged(const QString&)), this, SLOT(onValueChanged(const QString &)));
+    connect(d->butn_f, SIGNAL(clicked()), this, SLOT(onBrowse()));
 
     connect(d->t_b, SIGNAL(toggled(bool)), this, SLOT(onValueChanged(bool)));
 
@@ -555,6 +569,10 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
             d->edit_s->setVisible(false);
             d->edit_s->setEnabled(false);
 
+            d->butn_f->blockSignals(true);
+            d->butn_f->setVisible(false);
+            d->butn_f->setEnabled(false);
+
             if (b_node->value()) {
                 d->t_b->setChecked(true);
                 d->f_b->setChecked(false);
@@ -582,6 +600,10 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
             d->edit_s->setVisible(false);
             d->edit_s->setEnabled(false);
 
+            d->butn_f->blockSignals(true);
+            d->butn_f->setVisible(false);
+            d->butn_f->setEnabled(false);
+
             d->t_b->blockSignals(true);
             d->bool_widget->setVisible(false);
             d->bool_widget->setEnabled(false);
@@ -601,6 +623,10 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
             d->edit_s->setVisible(false);
             d->edit_s->setEnabled(false);
 
+            d->butn_f->blockSignals(true);
+            d->butn_f->setVisible(false);
+            d->butn_f->setEnabled(false);
+
             d->t_b->blockSignals(true);
             d->bool_widget->setVisible(false);
             d->bool_widget->setEnabled(false);
@@ -611,6 +637,33 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
             d->edit_s->setVisible(true);
             d->edit_s->setEnabled(true);
             d->edit_s->setText(s_node->value());
+
+            d->butn_f->blockSignals(true);
+            d->butn_f->setVisible(false);
+            d->butn_f->setEnabled(false);
+
+            d->spin_d->blockSignals(true);
+            d->spin_d->setVisible(false);
+            d->spin_d->setEnabled(false);
+
+            d->spin_f->blockSignals(true);
+            d->spin_f->setVisible(false);
+            d->spin_f->setEnabled(false);
+
+            d->t_b->blockSignals(true);
+            d->bool_widget->setVisible(false);
+            d->bool_widget->setEnabled(false);
+
+        } else if (dtkComposerNodeFile *f_node = dynamic_cast<dtkComposerNodeFile *>(node->wrapee())) {
+
+            d->edit_s->blockSignals(false);
+            d->edit_s->setVisible(true);
+            d->edit_s->setEnabled(true);
+            d->edit_s->setText(f_node->value());
+
+            d->butn_f->blockSignals(false);
+            d->butn_f->setVisible(true);
+            d->butn_f->setEnabled(true);
 
             d->spin_d->blockSignals(true);
             d->spin_d->setVisible(false);
@@ -710,6 +763,10 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
             d->edit_s->setVisible(false);
             d->edit_s->setEnabled(false);
 
+            d->butn_f->blockSignals(true);
+            d->butn_f->setVisible(false);
+            d->butn_f->setEnabled(false);
+
             d->t_b->blockSignals(true);
             d->bool_widget->setVisible(false);
             d->bool_widget->setEnabled(false);
@@ -777,6 +834,10 @@ void dtkComposerSceneNodeEditor::clear(void)
     d->edit_s->blockSignals(true);
     d->edit_s->setVisible(false);
     d->edit_s->setEnabled(false);
+
+    d->butn_f->blockSignals(true);
+    d->butn_f->setVisible(false);
+    d->butn_f->setEnabled(false);
 
     d->select_implementation->blockSignals(true);
     d->select_implementation->setVisible(false);
@@ -1169,6 +1230,32 @@ void dtkComposerSceneNodeEditor::onTitleChanged(const QString& text)
     }
 }
 
+void dtkComposerSceneNodeEditor::onBrowse(void)
+{
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("composer");
+    QString path = settings.value("last_open_file_node", QDir::homePath()).toString();
+    settings.endGroup();
+
+    QFileDialog *dialog = new QFileDialog(this, tr("Open file"), path);
+    dialog->setStyleSheet("background-color: none ; color: none;");
+    dialog->setAcceptMode(QFileDialog::AcceptOpen);
+    dialog->setFileMode(QFileDialog::AnyFile);
+    dialog->open(this, SLOT(onBrowse(const QString&)));    
+}
+
+void dtkComposerSceneNodeEditor::onBrowse(const QString& file)
+{
+    QFileInfo info(file);
+    
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("composer");
+    settings.setValue("last_open_file_node", info.absolutePath());
+    settings.endGroup();
+
+    d->edit_s->setText(file);
+}
+
 void dtkComposerSceneNodeEditor::onValueChanged(bool value)
 {
     if (dtkComposerNodeBoolean *b_node = dynamic_cast<dtkComposerNodeBoolean *>(d->node->wrapee()))
@@ -1191,6 +1278,9 @@ void dtkComposerSceneNodeEditor::onValueChanged(const QString& value)
 {
     if (dtkComposerNodeString *s_node = dynamic_cast<dtkComposerNodeString *>(d->node->wrapee()))
         s_node->setValue(value);
+
+    if (dtkComposerNodeFile *f_node = dynamic_cast<dtkComposerNodeFile *>(d->node->wrapee()))
+        f_node->setValue(value);
 }
 
 void dtkComposerSceneNodeEditor::onImplementationChanged(const QString& implementation)

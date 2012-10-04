@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 17:06:18 2012 (+0200)
+ * Last-Updated: Wed Sep 26 15:31:26 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 518
+ *     Update #: 522
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeBoolean.h"
+#include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeLeafData.h"
 #include "dtkComposerNodeLeafProcess.h"
@@ -350,6 +351,16 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
         if (dtkComposerNodeString *s = dynamic_cast<dtkComposerNodeString *>(node->wrapee())) {
 
             QDomText text = document.createTextNode(s->value());
+
+            QDomElement value = document.createElement("value");
+            value.appendChild(text);
+
+            tag.appendChild(value);
+        }
+
+        if (dtkComposerNodeFile *f = dynamic_cast<dtkComposerNodeFile *>(node->wrapee())) {
+
+            QDomText text = document.createTextNode(f->value());
 
             QDomElement value = document.createElement("value");
             value.appendChild(text);

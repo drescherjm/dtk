@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 11:45:03 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep 24 12:21:30 2012 (+0200)
+ * Last-Updated: Thu Oct  4 10:23:04 2012 (+0200)
  *           By: tkloczko
- *     Update #: 86
+ *     Update #: 108
  */
 
 /* Commentary: 
@@ -98,21 +98,26 @@ dtkComposerNodeFile::~dtkComposerNodeFile(void)
 
 void dtkComposerNodeFile::run(void)
 {
-    QString path = *d->receiver.data();
+    QString path;
 
-    if (path.startsWith("http")) {
+    if (!d->receiver.isEmpty()) {
 
-        d->download(QUrl(path));
+        path = *d->receiver.data();
 
-        if (!d->tempName.isEmpty())
-            d->fileName = d->tempName;
-        else
+        if (path.startsWith("http")) {
+
+            d->download(QUrl(path));
+            
+            if (!d->tempName.isEmpty())
+                d->fileName = d->tempName;
+            else
+                d->fileName = path;
+
+        } else {
+            
             d->fileName = path;
 
-    } else {
-
-        d->fileName = path;
-
+        }
     }
 }
 
@@ -140,4 +145,14 @@ QString dtkComposerNodeFile::outputLabelHint(int port)
         return "file";
 
     return dtkComposerNode::outputLabelHint(port);
+}
+
+QString dtkComposerNodeFile::value(void)
+{
+    return d->fileName;
+}
+
+void dtkComposerNodeFile::setValue(QString value)
+{
+    d->fileName = value;
 }

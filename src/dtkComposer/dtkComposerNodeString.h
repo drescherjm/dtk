@@ -4,7 +4,7 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:50:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Aug  3 23:58:56 2012 (+0200)
+ * Last-Updated: Thu Oct  4 10:04:23 2012 (+0200)
  *           By: tkloczko
  *     Update #: 10
  */
@@ -56,6 +56,7 @@ public:
     inline QString outputLabelHint(int) {
         return "value";
     }
+
 public:
     QString value(void);
 

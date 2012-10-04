@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 09:18:40 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep 24 15:06:17 2012 (+0200)
- *           By: tkloczko
- *     Update #: 117
+ * Last-Updated: jeu. oct.  4 15:06:35 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 122
  */
 
 /* Commentary: 
@@ -89,7 +89,7 @@ public:
     virtual void      send(double *data, qint64 size, qint16 target, int tag);
     virtual void      send(dtkAbstractData *data,     qint16 target, int tag) = 0;
     virtual void      send(const QString& s,   qint16 target, int tag) = 0;
-    virtual void      send(const QVariant& variant,  qint16 target, int tag) = 0;
+    virtual void      send(QByteArray& array,  qint16 target, int tag) = 0;
 
     virtual void   receive(void   *data, qint64 size, DataType dataType, qint16 source, int tag) = 0;
     virtual void   receive(void   *data, qint64 size, DataType dataType, qint16 source, int tag, int& from) {
@@ -111,7 +111,7 @@ public:
     virtual void   receive(double *data, qint64 size, qint16 source, int tag);
     virtual void   receive(dtkAbstractData *&data, qint16 source, int tag) = 0;
     virtual void   receive(QString &s,   qint16 source, int tag) = 0;
-    virtual void   receive(QVariant &v,  qint16 source, int tag) = 0;
+    virtual void   receive(QByteArray &v,  qint16 source, int tag) = 0;
 
     virtual void   barrier(void) = 0;
 

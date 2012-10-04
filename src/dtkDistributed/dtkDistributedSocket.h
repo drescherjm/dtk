@@ -4,8 +4,8 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 21 23:50:26 2012 (+0200)
- *           By: Julien Wintz
+ * Last-Updated: jeu. oct.  4 16:05:11 2012 (+0200)
+ *           By: Nicolas Niclausse
  *     Update #:
  */
 
@@ -40,10 +40,6 @@ public:
 
 public:
     qint64 sendRequest(dtkDistributedMessage *msg);
-
-public:
-    void send(dtkAbstractData *data, QString jobid, qint16 target);
-    void send(QVariant data, QString jobid, qint16 target);
 
 public:
     dtkDistributedMessage *parseRequest(void);

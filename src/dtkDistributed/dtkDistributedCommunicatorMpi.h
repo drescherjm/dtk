@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep 24 15:04:47 2012 (+0200)
- *           By: tkloczko
- *     Update #: 104
+ * Last-Updated: jeu. oct.  4 15:04:34 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 107
  */
 
 /* Commentary: 
@@ -63,9 +63,10 @@ public:
     void receive(dtkAbstractData *&data, qint16 source, int tag);
 
     void      send(const QString& s, qint16 target, int tag) ;
-    void      send(const QVariant& v, qint16 target, int tag) ;
+    void      send(QByteArray& array, qint16 target, int tag) ;
+
     void   receive(QString &s, qint16 source, int tag) ;
-    void   receive(QVariant &v, qint16 source, int tag) ;
+    void   receive(QByteArray &a, qint16 source, int tag) ;
 
 private:
     dtkDistributedCommunicatorMpiPrivate *d;

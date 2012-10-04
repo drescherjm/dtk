@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Oct  4 11:04:38 2012 (+0200)
- *           By: tkloczko
- *     Update #: 111
+ * Last-Updated: jeu. oct.  4 15:24:53 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 114
  */
 
 /* Commentary: 
@@ -34,7 +34,6 @@ template <typename T> class dtkContainerVector;
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerTransmitterVariantPrivate;
-class dtkDistributedMessage;
 
 class DTKCOMPOSER_EXPORT dtkComposerTransmitterVariant : public dtkComposerTransmitter
 {
@@ -57,10 +56,7 @@ public:
 public:
     void setDataFrom(dtkComposerTransmitterVariant *source);
 
-#if defined(DTK_BUILD_DISTRIBUTED)
-    void setDataFrom(dtkDistributedMessage *msg);
-#endif
-    void setDataFrom(QByteArray *array);
+    void setDataFrom(QByteArray& array);
 
 public:
     template <typename T> T *data(void);

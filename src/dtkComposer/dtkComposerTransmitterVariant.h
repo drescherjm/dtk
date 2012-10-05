@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. oct.  4 15:24:53 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 114
+ * Last-Updated: Fri Oct  5 13:15:22 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 115
  */
 
 /* Commentary: 
@@ -84,6 +84,9 @@ public:
 
     QStringList  allDataIdentifier(void);
     QStringList allDataDescription(void);
+
+public:
+    void setActive(bool active);
 
 public:
     void activateEmitter(dtkComposerTransmitter        *emitter);

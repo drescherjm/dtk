@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. oct.  4 18:47:09 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 1055
+ * Last-Updated: Fri Oct  5 13:22:15 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 1077
  */
 
 /* Commentary: 
@@ -331,7 +331,7 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
                     dtkError() << "Deserialization failed for type" << typeName;
                 } else {
                     dtkDebug() << "set dtkAbstractData in transmitter, size is" << array.size();
-
+                    this->setData<dtkAbstractData>(data);
                 }
             } else {
                 dtkWarn() << "No data in byte array, can't create " << typeName;
@@ -355,13 +355,13 @@ QByteArray dtkComposerTransmitterVariant::dataToByteArray(void)
     case QMetaType::Double: {
         double data = *this->data<double>();
         stream << data_type;
-        array.append(reinterpret_cast<const char*>(&data), sizeof(data));
+        stream << data;
         break;
     }
     case QMetaType::LongLong: {
         qlonglong data = *this->data<qlonglong>();
         stream << data_type;
-        array.append(reinterpret_cast<const char*>(&data), sizeof(data));
+        stream << data;
         break;
     }
     case QMetaType::QString: {
@@ -378,7 +378,7 @@ QByteArray dtkComposerTransmitterVariant::dataToByteArray(void)
                         stream << data_type;
                         const char* typeName = this->dataIdentifier().toAscii().data();
                         qint64 real_type = QMetaType::type( typeName );
-                        dtkError() << "real type is" << real_type;
+                        dtkError() << "real type is" << real_type << this->dataIdentifier();
                         stream << real_type;
                     } else {
                         qint64 parent_type = qMetaTypeId<dtkAbstractData>();
@@ -505,7 +505,7 @@ int dtkComposerTransmitterVariant::dataType(void)
     if (e->twinned)
         return d->data_type;
 
-    if (e->active_variant)
+    if (e->active_variant) 
         return e->active_variant->dataType();
 
     if (e->active_emitter)
@@ -599,6 +599,17 @@ QStringList dtkComposerTransmitterVariant::allDataDescription(void)
     }
 
     return list;
+}
+
+void dtkComposerTransmitterVariant::setActive(bool active)
+{
+    d->active = active;
+
+    if (!active)
+        return;
+
+    foreach(dtkComposerTransmitter *receiver, d->receivers)
+        receiver->activateEmitter(this);
 }
 
 //! 
@@ -723,7 +734,7 @@ QList<int> dtkComposerTransmitterVariant::dataTypes(void)
 bool dtkComposerTransmitterVariant::connect(dtkComposerTransmitter *transmitter)
 {
     if (transmitter->kind() == Variant) {
-        dtkComposerTransmitterVariant *v = dynamic_cast<dtkComposerTransmitterVariant *>(transmitter);
+        dtkComposerTransmitterVariant *v = dynamic_cast<dtkComposerTransmitterVariant *>(transmitter);        
 
         if (e->data_types.isEmpty() || v->dataTypes().isEmpty()) {
             if (!e->variants.contains(v)) {

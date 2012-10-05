@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Oct  5 13:22:15 2012 (+0200)
- *           By: tkloczko
- *     Update #: 1077
+ * Last-Updated: ven. oct.  5 14:38:35 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 1086
  */
 
 /* Commentary: 
@@ -324,8 +324,10 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
             QString typeName = QString(QMetaType::typeName(real_type));
             dtkDebug() << DTK_PRETTY_FUNCTION << "Real type is " << typeName;
             //FIXME: need to remove type info from array
-            if (array.size() > 0) {
+            qlonglong header_length=2*sizeof(real_type);
+            if (array.size() >  header_length) {
                 dtkAbstractData *data;
+                array.remove(0,header_length);
                 data = dtkAbstractDataFactory::instance()->create(typeName)->deserialize(array);
                 if (!data) {
                     dtkError() << "Deserialization failed for type" << typeName;

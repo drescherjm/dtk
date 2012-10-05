@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: jeu. oct.  4 15:22:56 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 1020
+ * Last-Updated: Fri Oct  5 13:33:08 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 1022
  */
 
 /* Commentary:
@@ -271,7 +271,9 @@ void dtkComposerNodeRemote::end(void)
                     dtkDebug() << "Ok, data received, parse" ;
             }
             dtkDistributedMessage *msg = d->server->socket()->parseRequest();
+            t->setTwinned(false);
             t->setDataFrom(msg->content());
+            t->setTwinned(true);
 
         }
     } else {

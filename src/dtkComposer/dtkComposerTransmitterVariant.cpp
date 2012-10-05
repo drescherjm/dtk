@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Oct  5 13:40:22 2012 (+0200)
+ * Last-Updated: Fri Oct  5 13:48:39 2012 (+0200)
  *           By: tkloczko
- *     Update #: 1083
+ *     Update #: 1084
  */
 
 /* Commentary: 
@@ -271,9 +271,7 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
     switch(data_type) {
     case QMetaType::Double: {
         stream >> e->value_r;
-        qDebug() << __func__ << e->value_r;
         this->setData<double>(&e->value_r);
-        qDebug() << *this->variant().value<double*>();
         break;
     }
     case QMetaType::LongLong: {

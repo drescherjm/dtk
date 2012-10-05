@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Aug  3 14:36:46 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct  4 11:04:49 2012 (+0200)
- *           By: tkloczko
- *     Update #: 56
+ * Last-Updated: ven. oct.  5 21:41:28 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 66
  */
 
 /* Commentary: 
@@ -40,7 +40,15 @@ public:
     };
 
 public:
-    dtkComposerTransmitterVariantPrivate(void) {        
+  static const qlonglong dtkVector3DReal_Id     = 512;
+  static const qlonglong dtkVectorReal_Id       = 513;
+  static const qlonglong dtkQuaternionReal_Id   = 514;
+  static const qlonglong dtkMatrixReal_Id       = 515;
+  static const qlonglong dtkMatrixSquareReal_Id = 516;
+  static const qlonglong dtkAbstractData_Id     = 517;
+
+public:
+    dtkComposerTransmitterVariantPrivate(void) {
         metatypes[0] = qMetaTypeId<qreal*>(0);
         metatypes[1] = qMetaTypeId<qlonglong*>(0);
         metatypes[2] = qMetaTypeId<QString*>(0);

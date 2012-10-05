@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. oct.  5 14:38:35 2012 (+0200)
+ * Last-Updated: ven. oct.  5 15:38:42 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 1086
+ *     Update #: 1087
  */
 
 /* Commentary: 
@@ -266,12 +266,14 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
     stream >> data_type;
     QString type = QString(QMetaType::typeName(data_type));
 
-    dtkDebug() << DTK_PRETTY_FUNCTION << "Try to set data from " << type << data_type << qMetaTypeId<dtkAbstractData>();
+    dtkDebug() << DTK_PRETTY_FUNCTION << "Try to set data from " << type << data_type;
 
     switch(data_type) {
     case QMetaType::Double: {
         stream >> e->value_r;
+        qDebug() << __func__ << e->value_r;
         this->setData<double>(&e->value_r);
+        qDebug() << *this->variant().value<double*>();
         break;
     }
     case QMetaType::LongLong: {

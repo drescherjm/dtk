@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:37:15 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 23:39:39 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 75
+ * Last-Updated: ven. oct.  5 17:16:04 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 92
  */
 
 /* Commentary: 
@@ -27,6 +27,11 @@
 
 int main(int argc, char **argv)
 {
+
+#if defined (Q_OS_UNIX)
+    // unset QT_PLUGIN_PATH, otherwise, kde plugins can change the qmetatype ids
+    setenv("QT_PLUGIN_PATH", "", 1);
+#endif
     QApplication application(argc, argv);
     application.setApplicationName("dtkCreator");
     application.setOrganizationName("inria");

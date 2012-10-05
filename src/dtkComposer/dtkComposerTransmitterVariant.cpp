@@ -1,12 +1,7 @@
 /* dtkComposerTransmitterVariant.cpp --- 
  * 
  * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Fri Oct  5 16:27:18 2012 (+0200)
- *           By: tkloczko
- *     Update #: 86
  */
 
 /* Commentary: 
@@ -317,13 +312,10 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
             this->setData<dtkMatrixSquareReal>(m);
 
         } else if (data_type == qMetaTypeId<dtkAbstractData>()) {
-            dtkDebug() << DTK_PRETTY_FUNCTION << "OK, dtkAbstractData" ;
             qint64 real_type;
             stream >> real_type;
 
             QString typeName = QString(QMetaType::typeName(real_type));
-            dtkDebug() << DTK_PRETTY_FUNCTION << "Real type is " << typeName;
-            //FIXME: need to remove type info from array
             qlonglong header_length=2*sizeof(real_type);
             if (array.size() >  header_length) {
                 dtkAbstractData *data;
@@ -332,7 +324,7 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
                 if (!data) {
                     dtkError() << "Deserialization failed for type" << typeName;
                 } else {
-                    dtkDebug() << "set dtkAbstractData in transmitter, size is" << array.size();
+                    dtkDebug() << "set dtkAbstractData in transmitter, size is" << array.size() << typeName;;
                     this->setData<dtkAbstractData>(data);
                 }
             } else {
@@ -346,12 +338,9 @@ QByteArray dtkComposerTransmitterVariant::dataToByteArray(void)
 {
     qint64 data_type = this->dataType();
 
-//    QByteArray array = QByteArray(reinterpret_cast<const char*>(&data_type), sizeof(data_type));
     QByteArray array = QByteArray();
 
     QDataStream stream(&array, QIODevice::WriteOnly);
-
-    dtkDebug() << "create byte array for type" << data_type <<   QMetaType::typeName(data_type);
 
     switch(data_type) {
     case QMetaType::Double: {
@@ -380,7 +369,6 @@ QByteArray dtkComposerTransmitterVariant::dataToByteArray(void)
                         stream << data_type;
                         const char* typeName = this->dataIdentifier().toAscii().data();
                         qint64 real_type = QMetaType::type( typeName );
-                        dtkError() << "real type is" << real_type << this->dataIdentifier();
                         stream << real_type;
                     } else {
                         qint64 parent_type = qMetaTypeId<dtkAbstractData>();

@@ -260,6 +260,7 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
 {
     qint64 data_type;
     QDataStream stream(&array, QIODevice::ReadOnly);
+    qlonglong header_length=sizeof(data_type);
     stream >> data_type;
 
     dtkDebug() << DTK_PRETTY_FUNCTION << "Try to set data from " << data_type;
@@ -285,31 +286,36 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
 
         if (data_type == e->dtkVector3DReal_Id) {
 
-            dtkVector3DReal *v = new dtkVector3D<qreal>();
+            dtkVector3DReal *v = new dtkVector3D<double>();
+            array.remove(0,header_length);
             v->deserialize(array);
             this->setData<dtkVector3DReal>(v);
 
         } else if (data_type == e->dtkVectorReal_Id) {
 
-            dtkVectorReal *v = new dtkVector<qreal>();
+            dtkVectorReal *v = new dtkVector<double>();
+            array.remove(0,header_length);
             v->deserialize(array);
             this->setData<dtkVectorReal>(v);
 
         } else if (data_type == e->dtkQuaternionReal_Id) {
 
-            dtkQuaternionReal *q = new dtkQuaternion<qreal>();
+            dtkQuaternionReal *q = new dtkQuaternion<double>();
+            array.remove(0,header_length);
             q->deserialize(array);
             this->setData<dtkQuaternionReal>(q);
 
         } else if (data_type == e->dtkMatrixReal_Id) {
 
-            dtkMatrixReal *m = new dtkMatrix<qreal>();
+            dtkMatrixReal *m = new dtkMatrix<double>();
+            array.remove(0,header_length);
             m->deserialize(array);
             this->setData<dtkMatrixReal>(m);
 
         } else if (data_type == e->dtkMatrixSquareReal_Id) {
 
             dtkMatrixSquareReal *m = new dtkMatrixSquareReal();
+            array.remove(0,header_length);
             m->deserialize(array);
             this->setData<dtkMatrixSquareReal>(m);
 
@@ -321,7 +327,7 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
 
             //qdatastream is sending the qstring length, that's why
             //it's not 2 but 3 times a qlonglong sizeof
-            qlonglong header_length=3*sizeof(data_type)+typeName.size();
+            header_length=3*sizeof(data_type)+typeName.size();
 
             if (array.size() >  header_length) {
                 dtkAbstractData *data;
@@ -345,6 +351,7 @@ QByteArray dtkComposerTransmitterVariant::dataToByteArray(void)
     qint64 data_type = this->dataType();
 
     QByteArray array = QByteArray();
+    QByteArray *tmp_array  = NULL;
 
     QDataStream stream(&array, QIODevice::WriteOnly);
 
@@ -382,33 +389,38 @@ QByteArray dtkComposerTransmitterVariant::dataToByteArray(void)
         else if (data_type == qMetaTypeId<dtkVector3DReal>(0)) {
 
             stream << e->dtkVector3DReal_Id;
-            array.append(*(this->data<dtkVector3DReal>()->serialize()));
+            tmp_array =  this->data<dtkVector3DReal>()->serialize();
 
         } else if (data_type == qMetaTypeId<dtkVectorReal>(0)) {
 
             stream << e->dtkVectorReal_Id;
-            array.append(*(this->data<dtkVectorReal>()->serialize()));
+            tmp_array =  this->data<dtkVectorReal>()->serialize();
 
         } else if (data_type == qMetaTypeId<dtkQuaternionReal>(0)) {
 
             stream << e->dtkQuaternionReal_Id;
-            array.append(*(this->data<dtkQuaternionReal>()->serialize()));
+            tmp_array =  this->data<dtkQuaternionReal>()->serialize();
 
         } else if (data_type == qMetaTypeId<dtkMatrixReal>(0)) {
 
             stream << e->dtkMatrixReal_Id;
-            array.append(*(this->data<dtkMatrixReal>()->serialize()));
+            tmp_array =  this->data<dtkMatrixReal>()->serialize();
 
         } else if (data_type == qMetaTypeId<dtkMatrixSquareReal>(0)) {
 
             stream << e->dtkMatrixSquareReal_Id;
-            array.append(*(this->data<dtkMatrixSquareReal>()->serialize()));
+            tmp_array =  this->data<dtkMatrixSquareReal>()->serialize();
 
         } else {
             dtkWarn() << "Unable to serialize the data into QByteArray.";
             data_type = 0;
             stream << data_type;
         }
+    }
+
+    if (tmp_array) {
+        array.append(*tmp_array);
+        delete tmp_array;
     }
 
     return array;

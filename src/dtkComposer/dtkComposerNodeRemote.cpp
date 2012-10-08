@@ -4,9 +4,11 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
  * Version: $Id$
- * Last-Updated: Fri Oct  5 13:33:08 2012 (+0200)
- *           By: tkloczko
- *     Update #: 1022
+ * Last-Updated: Mon Oct  8 15:18:00 2012 (+0200)
+ *           By: Thibaud Kloczko, Inria.
+
+
+ *     Update #: 1024
  */
 
 /* Commentary:
@@ -236,7 +238,9 @@ void dtkComposerNodeRemote::begin(void)
                         dtkDebug() << "Ok, data received, parse" ;
                 }
                 dtkDistributedMessage *msg = d->slave->communicator()->socket()->parseRequest();
+                t->setTwinned(false);
                 t->setDataFrom(msg->content());
+                t->setTwinned(true);
 
                 dtkDebug() << "send data to slaves";
                 for (int j=1; j< size; j++)
@@ -247,7 +251,9 @@ void dtkComposerNodeRemote::begin(void)
                 dtkDebug() << "receive data from rank 0";
                 d->communicator->receive(array, 0, 0);
                 dtkDebug() << "data received, set";
+                t->setTwinned(false);
                 t->setDataFrom(array);
+                t->setTwinned(true);
             }
         }
     }

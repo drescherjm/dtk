@@ -277,8 +277,7 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
         break;
     }
     case QMetaType::QString: {
-        array.remove(0,sizeof(data_type));
-        e->value_s = QString(array);
+        e->value_s = QString(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
         this->setData<QString>(&e->value_s);
         break;
     }
@@ -287,36 +286,31 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
         if (data_type == e->dtkVector3DReal_Id) {
 
             dtkVector3DReal *v = new dtkVector3D<double>();
-            array.remove(0,header_length);
-            v->deserialize(array);
+            v->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
             this->setData<dtkVector3DReal>(v);
 
         } else if (data_type == e->dtkVectorReal_Id) {
 
             dtkVectorReal *v = new dtkVector<double>();
-            array.remove(0,header_length);
-            v->deserialize(array);
+            v->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
             this->setData<dtkVectorReal>(v);
 
         } else if (data_type == e->dtkQuaternionReal_Id) {
 
             dtkQuaternionReal *q = new dtkQuaternion<double>();
-            array.remove(0,header_length);
-            q->deserialize(array);
+            q->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
             this->setData<dtkQuaternionReal>(q);
 
         } else if (data_type == e->dtkMatrixReal_Id) {
 
             dtkMatrixReal *m = new dtkMatrix<double>();
-            array.remove(0,header_length);
-            m->deserialize(array);
+            m->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
             this->setData<dtkMatrixReal>(m);
 
         } else if (data_type == e->dtkMatrixSquareReal_Id) {
 
             dtkMatrixSquareReal *m = new dtkMatrixSquareReal();
-            array.remove(0,header_length);
-            m->deserialize(array);
+            m->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
             this->setData<dtkMatrixSquareReal>(m);
 
         } else if (data_type == e->dtkAbstractData_Id) {
@@ -331,8 +325,7 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
 
             if (array.size() >  header_length) {
                 dtkAbstractData *data;
-                array.remove(0,header_length);
-                data = dtkAbstractDataFactory::instance()->create(typeName)->deserialize(array);
+                data = dtkAbstractDataFactory::instance()->create(typeName)->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
                 if (!data) {
                     dtkError() << "Deserialization failed for type" << typeName;
                 } else {

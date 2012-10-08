@@ -530,11 +530,39 @@ QString dtkComposerTransmitterVariant::dataDescription(void)
     if(QString *s = this->data<QString>())
         return *s;
 
-    QString address;
-    QTextStream addressStream (&address);
-    addressStream << (d->variant.value<void*>());
+    qint64 data_type = this->dataType();
 
-    return address;
+    if (data_type == qMetaTypeId<dtkVector3DReal>(0)) {
+
+        return this->data<dtkVector3DReal>()->description();
+
+    } else if (data_type == qMetaTypeId<dtkVectorReal>(0)) {
+
+        return this->data<dtkVectorReal>()->description();
+
+    } else if (data_type == qMetaTypeId<dtkQuaternionReal>(0)) {
+
+        return this->data<dtkQuaternionReal>()->description();
+        
+    } else if (data_type == qMetaTypeId<dtkMatrixReal>(0)) {
+
+        return this->data<dtkMatrixReal>()->description();
+        
+    } else if (data_type == qMetaTypeId<dtkMatrixSquareReal>(0)) {
+
+        return this->data<dtkMatrixSquareReal>()->description();
+        
+    } else {
+
+        QString address;
+        QTextStream addressStream (&address);
+        addressStream << (d->variant.value<void*>());
+        
+        return address;
+
+    }
+
+    return QString();
 }
 
 QStringList dtkComposerTransmitterVariant::allDataIdentifier(void)

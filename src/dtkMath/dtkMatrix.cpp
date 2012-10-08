@@ -2,11 +2,6 @@
  * 
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
- * Created: Thu Oct  4 12:36:50 2012 (+0200)
- * Version: $Id$
- * Last-Updated: Thu Oct  4 12:58:12 2012 (+0200)
- *           By: tkloczko
- *     Update #: 23
  */
 
 /* Commentary: 
@@ -31,10 +26,9 @@ template <> QByteArray *dtkMatrix<double>::serialize(void)
         return NULL;
 
     QByteArray *array = new QByteArray;
-    array->append(reinterpret_cast<const char*>(&m_crow), sizeof(m_crow));
-    array->append(reinterpret_cast<const char*>(&m_ccol), sizeof(m_ccol));
-
     QDataStream stream(array, QIODevice::WriteOnly);
+    stream << m_crow;
+    stream << m_ccol;
 
     for (unsigned i = 0; i < i_end; ++i)
 	stream << (*m_rgrow)[i];

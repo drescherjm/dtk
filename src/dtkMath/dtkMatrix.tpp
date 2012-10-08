@@ -2,11 +2,6 @@
  * 
  * Author: Thibaud Kloczko
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
- * Created: Mon Jul 12 15:42:21 2010 (+0200)
- * Version: $Id$
- * Last-Updated: Thu Oct  4 12:57:03 2012 (+0200)
- *           By: tkloczko
- *     Update #: 38
  */
 
 /* Commentary: 
@@ -21,6 +16,8 @@
 #ifndef DTKMATRIX_TPP
 #define DTKMATRIX_TPP
 
+#include "dtkMathExport.h"
+
 #include <iostream>
 #include <iomanip>
 #include <typeinfo>
@@ -29,6 +26,13 @@
 #include <QtCore/QString>
 
 enum { N_NOTALLOCATED, N_ALLOCATED, N_MAPPED };
+
+// /////////////////////////////////////////////////////////////////
+// Template specializations forward declarations
+// /////////////////////////////////////////////////////////////////
+
+template <> DTKMATH_EXPORT QByteArray *dtkMatrix<double>::serialize(void);
+template <> DTKMATH_EXPORT void dtkMatrix<double>::deserialize(const QByteArray& array);
 
 // /////////////////////////////////////////////////////////////////
 // dtkMatrix implementation

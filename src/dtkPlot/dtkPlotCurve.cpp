@@ -81,7 +81,7 @@ void dtkPlotCurve::setColor(const QColor& color)
     d->setPen(color);
 }
 
-QColor dtkPlotCurve::getColor(void)
+QColor dtkPlotCurve::color(void)
 {
    return  d->pen().color();
 }

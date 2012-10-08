@@ -41,7 +41,7 @@ public:
 public:
     void setAntialiased(bool antiliased);
     void setColor(const QColor& color);
-    QColor getColor(void);
+    QColor color(void);
 
     void setData(const QVector<QPointF>& data);
 

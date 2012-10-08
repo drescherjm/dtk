@@ -1,5 +1,5 @@
 /* dtkPlotCurve.cpp --- 
- * 
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:09:17 2011 (+0200)
@@ -10,11 +10,11 @@
  */
 
 /* Commentary: 
- * 
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkPlotCurve.h"
@@ -79,6 +79,11 @@ void dtkPlotCurve::setAntialiased(bool antiliased)
 void dtkPlotCurve::setColor(const QColor& color)
 {
     d->setPen(color);
+}
+
+QColor dtkPlotCurve::getColor(void)
+{
+   return  d->pen().color();
 }
 
 void dtkPlotCurve::setData(const QVector<QPointF>& data)

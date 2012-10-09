@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. oct.  4 18:11:31 2012 (+0200)
+ * Last-Updated: lun. oct.  8 15:49:10 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 615
+ *     Update #: 629
  */
 
 /* Commentary:
@@ -331,8 +331,7 @@ void dtkDistributedCommunicatorMpi::send(QByteArray &array, qint16 target, int t
 {
     qint64   arrayLength = array.length();
     dtkDistributedCommunicator::send(&arrayLength,1,target,tag);
-    char *data = array.data();
-    dtkDistributedCommunicator::send(data, arrayLength, target, tag);
+    dtkDistributedCommunicator::send(array.data(), arrayLength, target, tag);
 
 }
 

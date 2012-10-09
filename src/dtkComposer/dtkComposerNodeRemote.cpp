@@ -239,6 +239,7 @@ void dtkComposerNodeRemote::begin(void)
                 for (int j=1; j< size; j++)
                     d->communicator->send(msg->content(),j,0);
 
+                delete msg;
             } else {
                 QByteArray array;
                 dtkDebug() << "receive data from rank 0";
@@ -273,6 +274,7 @@ void dtkComposerNodeRemote::end(void)
             t->setTwinned(false);
             t->setDataFrom(msg->content());
             t->setTwinned(true);
+            delete msg;
 
         }
     } else {
@@ -290,9 +292,8 @@ void dtkComposerNodeRemote::end(void)
                 dtkDebug() << "end, send transmitter data (we are rank 0)";
                 QByteArray array = t->dataToByteArray();
                 if (!array.isEmpty()) {
-                    dtkDistributedMessage *req = new dtkDistributedMessage(dtkDistributedMessage::DATA, d->jobid, dtkDistributedMessage::CONTROLLER_RUN_RANK, array.size(), "qvariant");
+                    dtkDistributedMessage *req = new dtkDistributedMessage(dtkDistributedMessage::DATA, d->jobid, dtkDistributedMessage::CONTROLLER_RUN_RANK, array.size(), "qvariant", array);
                     d->slave->communicator()->socket()->sendRequest(req);
-                    d->slave->communicator()->socket()->write(array);
                     delete req;
                 } else {
                     dtkError() << "serialization failed in transmitter";

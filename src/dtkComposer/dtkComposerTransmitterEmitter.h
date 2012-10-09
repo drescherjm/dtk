@@ -1,12 +1,7 @@
 /* dtkComposerTransmitterEmitter.h --- 
  * 
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
+ * Author: Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:33:49 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Thu Sep 20 13:13:15 2012 (+0200)
- *           By: tkloczko
- *     Update #: 147
  */
 
 /* Commentary: 

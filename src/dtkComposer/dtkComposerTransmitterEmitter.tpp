@@ -1,12 +1,7 @@
 /* dtkComposerTransmitterEmitter.tpp --- 
  * 
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
+ * Author: Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Thu Sep 20 13:12:33 2012 (+0200)
- *           By: tkloczko
- *     Update #: 417
  */
 
 /* Commentary: 
@@ -23,9 +18,20 @@
 #include "dtkComposerTransmitter_p.h"
 #include "dtkComposerTransmitterVariant.h"
 
+#include "dtkComposerExport.h"
+
 #include <dtkCore/dtkGlobal.h>
 
 #include <dtkContainer/dtkContainerVectorWrapper.h>
+
+// /////////////////////////////////////////////////////////////////
+// Forward declaration of specialized method
+// /////////////////////////////////////////////////////////////////
+
+template <> DTKCOMPOSER_EXPORT QString     dtkComposerTransmitterEmitter<qreal>::dataDescription(void);
+template <> DTKCOMPOSER_EXPORT QString dtkComposerTransmitterEmitter<qlonglong>::dataDescription(void);
+template <> DTKCOMPOSER_EXPORT QString   dtkComposerTransmitterEmitter<QString>::dataDescription(void);
+template <> DTKCOMPOSER_EXPORT QString      dtkComposerTransmitterEmitter<bool>::dataDescription(void);
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterEmitter implementation

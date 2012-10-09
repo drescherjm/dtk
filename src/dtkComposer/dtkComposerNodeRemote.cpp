@@ -1,14 +1,7 @@
-/* @(#)dtkComposerNodeRemote.cpp ---
+/* dtkComposerNodeRemote.cpp ---
  *
- * Author: Nicolas Niclausse
- * Copyright (C) 2012 - Nicolas Niclausse, Inria.
+ * Author: Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:19:20
- * Version: $Id$
- * Last-Updated: Mon Oct  8 15:18:00 2012 (+0200)
- *           By: Thibaud Kloczko, Inria.
-
-
- *     Update #: 1024
  */
 
 /* Commentary:

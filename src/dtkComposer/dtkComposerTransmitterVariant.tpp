@@ -1,12 +1,7 @@
 /* dtkComposerTransmitterVariant.tpp --- 
  * 
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
+ * Author: Thibaud Kloczko, Inria.
  * Created: Fri Aug  3 14:31:25 2012 (+0200)
- * Version: $Id$
- * Last-Updated: Wed Sep 26 13:36:41 2012 (+0200)
- *           By: tkloczko
- *     Update #: 91
  */
 
 /* Commentary: 

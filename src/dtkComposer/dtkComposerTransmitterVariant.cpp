@@ -1,6 +1,6 @@
 /* dtkComposerTransmitterVariant.cpp --- 
  * 
- * Author: tkloczko
+ * Author: Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  */
 
@@ -520,7 +520,7 @@ QString dtkComposerTransmitterVariant::dataDescription(void)
     if (dtkAbstractObject *o = this->object())
         return o->description();
 
-    if(QString *s = this->data<QString>())
+    if (QString *s = this->data<QString>())
         return *s;
 
     qint64 data_type = this->dataType();
@@ -594,11 +594,7 @@ QStringList dtkComposerTransmitterVariant::allDataDescription(void)
 
     if (e->twinned) {
 
-        QString address;
-        QTextStream addressStream (&address);
-        addressStream << (d->variant.value<void*>());
-
-        list << address;
+        list << this->dataDescription();
 
     } else {
 

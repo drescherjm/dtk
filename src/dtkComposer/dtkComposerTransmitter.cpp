@@ -1,12 +1,7 @@
 /* dtkComposerTransmitter.cpp --- 
  * 
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
+ * Author: Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Fri Oct  5 13:15:53 2012 (+0200)
- *           By: tkloczko
- *     Update #: 311
  */
 
 /* Commentary: 

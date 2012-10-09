@@ -1,12 +1,7 @@
 /* dtkComposerTransmitterReceiver.tpp --- 
  * 
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
+ * Author: Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 12:56:04 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Wed Sep 26 13:37:06 2012 (+0200)
- *           By: tkloczko
- *     Update #: 562
  */
 
 /* Commentary: 

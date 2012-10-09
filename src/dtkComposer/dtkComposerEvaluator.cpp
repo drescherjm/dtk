@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Sep 28 23:59:12 2012 (+0200)
- *           By: tkloczko
- *     Update #: 787
+ * Last-Updated: mar. oct.  9 16:53:48 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 818
  */
 
 /* Commentary:
@@ -50,6 +50,7 @@ dtkComposerEvaluator::dtkComposerEvaluator(QObject *parent) : QObject(parent), d
     d->should_stop = false;
     d->stack.setCapacity(1024);
     d->max_stack_size = 0;
+    d->notify = true;
 }
 
 dtkComposerEvaluator::~dtkComposerEvaluator(void)
@@ -65,6 +66,11 @@ void dtkComposerEvaluator::setGraph(dtkComposerGraph *graph)
     d->graph = graph;
 }
 
+void dtkComposerEvaluator::setNotify(bool notify)
+{
+    d->notify = notify;
+}
+
 void dtkComposerEvaluator::run(bool run_concurrent)
 {
     QTime time; time.start();
@@ -72,24 +78,29 @@ void dtkComposerEvaluator::run(bool run_concurrent)
     d->stack.clear();
     d->stack.append(d->graph->root());
 
-    emit evaluationStarted();
+    if (d->notify)
+        emit evaluationStarted();
 
     while (this->step(run_concurrent) && !d->should_stop);
     if (!d->should_stop) {
         QString msg = QString("Evaluation finished in %1 ms").arg(time.elapsed());
         dtkInfo() << msg;
-        dtkNotify(msg,30000);
+        if (d->notify)
+            dtkNotify(msg,30000);
         d->max_stack_size = 0;
     } else {
         QString msg = QString("Evaluation stopped after %1 ms").arg(time.elapsed());
         dtkInfo() << msg;
-        dtkNotify(msg,30000);
+        if (d->notify)
+            dtkNotify(msg,30000);
     }
 
     d->should_stop = false;
 
-    emit evaluationStopped();
+    if (d->notify)
+        emit evaluationStopped();
 }
+
 
 void dtkComposerEvaluator::stop(void)
 {

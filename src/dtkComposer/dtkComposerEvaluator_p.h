@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:39:36 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. sept. 26 10:44:00 2012 (+0200)
+ * Last-Updated: mar. oct.  9 16:54:01 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 28
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -35,6 +35,7 @@ public:
     QHash<dtkComposerGraphNode *, int > connected_views;
 public:
     bool should_stop;
+    bool notify;
 
 public:
     int max_stack_size;

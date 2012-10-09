@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:25:39
  * Version: $Id$
- * Last-Updated: lun. mai 21 09:08:22 2012 (+0200)
+ * Last-Updated: mar. oct.  9 14:48:27 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 223
+ *     Update #: 226
  */
 
 /* Commentary:
@@ -154,8 +154,10 @@ int dtkComposerEvaluatorSlave::exec(void)
             new_composition = false;
         } else {
             dtkFatal() << "Bad composition type, abort" << msg->type() << msg->content();
+            delete msg;
             return 1;
         }
+        delete msg;
 
         if (new_composition && composition.isEmpty()) {
             dtkFatal() << "Empty composition, abort" ;

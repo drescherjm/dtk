@@ -50,6 +50,8 @@ public:
 public:
     dtkAbstractObject *object(void);
 
+    dtkMatrix<double> *matrix(void);
+
     QVariant& variant(void);
           
     QVector<T*> allData(void);

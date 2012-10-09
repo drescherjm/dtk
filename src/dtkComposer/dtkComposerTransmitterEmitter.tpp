@@ -63,6 +63,7 @@ template <typename T> void dtkComposerTransmitterEmitter<T>::clearData(void)
     d->object = NULL;
     d->variant.clear();
     d->container = NULL;
+    d->matrix = NULL;
 };
 
 //! Sets the data with \a data.
@@ -88,6 +89,14 @@ template <typename T> dtkAbstractObject *dtkComposerTransmitterEmitter<T>::objec
 {
     if (dtkTypeInfo<T*>::dtkAbstractObjectPointer)
         return reinterpret_cast<dtkAbstractObject*>(m_data);
+    
+    return NULL;
+};
+
+template <typename T> dtkMatrix<double> *dtkComposerTransmitterEmitter<T>::matrix(void)
+{
+    if (dtkTypeInfo<T*>::dtkMatrixRealPointer)
+        return reinterpret_cast<dtkMatrix<double>*>(m_data);
     
     return NULL;
 };
@@ -181,6 +190,7 @@ template <typename T> void dtkComposerTransmitterEmitterVector<T>::clearData(voi
     if (d->container)
         delete d->container;
     d->container = NULL;
+    d->matrix = NULL;
 };
 
 template <typename T> inline dtkComposerTransmitter::Kind dtkComposerTransmitterEmitterVector<T>::kind(void) const

@@ -60,6 +60,7 @@ template <typename T> void dtkComposerTransmitterReceiver<T>::clearData(void)
     d->variant.clear();
     d->object = NULL;
     d->container = NULL;
+    d->matrix = NULL;
 
     if (m_data)
         delete m_data;
@@ -141,6 +142,20 @@ template <typename T> dtkAbstractObject *dtkComposerTransmitterReceiver<T>::obje
     
     if (data && dtkTypeInfo<T*>::dtkAbstractObjectPointer)
         return reinterpret_cast<dtkAbstractObject*>(data);
+
+    return NULL;
+};
+
+//! Returns the data as a modifiable reference.
+/*! 
+ *  
+ */
+template <typename T> dtkMatrix<double> *dtkComposerTransmitterReceiver<T>::matrix(void)
+{
+    T* data = this->data();
+    
+    if (data && dtkTypeInfo<T*>::dtkMatrixRealPointer)
+        return reinterpret_cast<dtkMatrix<double>*>(data);
 
     return NULL;
 };
@@ -443,6 +458,7 @@ template <typename T> void dtkComposerTransmitterReceiverVector<T>::clearData(vo
 {
     d->variant.clear();
     d->object = NULL;
+    d->matrix = NULL;
 
     if (d->container)
         delete d->container;

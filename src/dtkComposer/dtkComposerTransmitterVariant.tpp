@@ -36,14 +36,23 @@ template <typename T> inline void dtkComposerTransmitterVariant::setData(T *data
         d->container = NULL;
     }
 
-    if (dtkTypeInfo<T*>::dtkAbstractObjectPointer)
+    if (dtkTypeInfo<T*>::dtkAbstractObjectPointer) {
         d->object = reinterpret_cast<dtkAbstractObject*>(data);
-    else
+        d->matrix = NULL;
+
+    } else if (dtkTypeInfo<T*>::dtkMatrixRealPointer) {
         d->object = NULL;
+        d->matrix = reinterpret_cast<dtkMatrix<double>*>(data);
+
+    } else {
+        d->object = NULL;
+        d->matrix = NULL;
+    }
 }
 
 template <typename T> inline void dtkComposerTransmitterVariant::setData(dtkContainerVector<T> *data)
 {
+    e->data_owner = true;
     d->data_type = qMetaTypeId<dtkAbstractContainerWrapper>(reinterpret_cast<dtkAbstractContainerWrapper*>(0));
 
     if (!d->container)

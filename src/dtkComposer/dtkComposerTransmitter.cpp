@@ -38,6 +38,7 @@ dtkComposerTransmitter::dtkComposerTransmitter(dtkComposerNode *parent) : d(new 
 
     d->object = NULL;
     d->container = NULL;
+    d->matrix = NULL;
     d->data_transmission = AutoCopy;
 }
 
@@ -89,15 +90,22 @@ QVariant& dtkComposerTransmitter::variant(void)
     return d->variant;
 }
 
-//! A transmitter can contain a container. In this case, the
-//! transmitter is either a vector emitter, a vector receiver or a
-//! variant.
+//! 
 /*!  
  *  
  */
 dtkAbstractObject *dtkComposerTransmitter::object(void)
 {
     return d->object;
+}
+
+//! 
+/*!  
+ *  
+ */
+dtkMatrix<double> *dtkComposerTransmitter::matrix(void)
+{
+    return d->matrix;
 }
 
 //! A transmitter can contain a container. In this case, the

@@ -22,8 +22,6 @@
 
 #include <dtkContainer/dtkContainerVector.h>
 
-#include <QSharedPointer>
-
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterEmitter interface
 // /////////////////////////////////////////////////////////////////
@@ -44,6 +42,9 @@ public:
 
 public:
     dtkAbstractObject *object(void);
+
+public:
+    dtkMatrix<double> *matrix(void);
 
 public:
     virtual int dataType(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Aug  3 14:36:46 2012 (+0200)
  * Version: $Id$
- * Last-Updated: ven. oct.  5 21:41:28 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 66
+ * Last-Updated: 2012 Tue Oct  9 12:21:31 (+0200)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 68
  */
 
 /* Commentary: 
@@ -84,6 +84,9 @@ public:
     
 public:
     QVariant m_variant;
+
+public:
+    bool data_owner;
 };
 
 #endif

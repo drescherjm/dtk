@@ -69,6 +69,9 @@ public:
     dtkAbstractObject *object(void);
 
 public:
+    dtkMatrix<double> *matrix(void);
+
+public:
     int dataType(void);
 
     QString  dataIdentifier(void);

@@ -195,6 +195,8 @@ dtkComposerTransmitterVariant::dtkComposerTransmitterVariant(dtkComposerNode *pa
     e->already_ask = false;
 
     e->m_variant.clear();
+
+    e->data_owner = false;
 }
 
 dtkComposerTransmitterVariant::~dtkComposerTransmitterVariant(void)
@@ -206,12 +208,24 @@ dtkComposerTransmitterVariant::~dtkComposerTransmitterVariant(void)
 
 void dtkComposerTransmitterVariant::clearData(void)
 {
-    d->object = NULL;
     d->variant.clear();
-    e->m_variant.clear();
-    if (d->container) 
-        delete d->container;
+    e->m_variant.clear(); // cannot delete the pointer that it contains ! Source of memory leak !
+
+    if (e->data_owner) {
+        if (d->container) {
+            delete d->container;
+
+        } else if (d->object) {
+            delete d->object;
+
+        } else if (d->matrix) {
+            delete d->matrix;
+        }
+    }
+
+    d->object = NULL;
     d->container = NULL;
+    d->matrix = NULL;
 }
 
 //! Puts \a data into the variant transmitter which then plays the
@@ -232,6 +246,8 @@ void dtkComposerTransmitterVariant::setData(const QVariant& data)
         delete d->container;
         d->container = NULL;
     }
+    d->object = NULL;
+    d->matrix = NULL;
 }
 
 void dtkComposerTransmitterVariant::setData(dtkAbstractContainerWrapper *data)
@@ -240,12 +256,16 @@ void dtkComposerTransmitterVariant::setData(dtkAbstractContainerWrapper *data)
     d->container = data;
     d->variant.setValue(d->container);
     d->object = data;
+    d->matrix = NULL;
 }
 
 void dtkComposerTransmitterVariant::setDataFrom(dtkComposerTransmitterVariant *source)
 {
     d->data_type = source->dataType();
     d->variant = source->variant();
+
+    if (this != source)
+        e->data_owner = false;        
 
     dtkAbstractContainerWrapper *container = source->container();
     if (d->container != container) {
@@ -254,6 +274,7 @@ void dtkComposerTransmitterVariant::setDataFrom(dtkComposerTransmitterVariant *s
     }
 
     d->object = source->object();
+    d->matrix = source->matrix();
 }
 
 void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
@@ -283,37 +304,45 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
     }
     default:
 
+        e->data_owner = true;
+
         if (data_type == e->dtkVector3DReal_Id) {
 
-            dtkVector3DReal *v = new dtkVector3D<double>();
-            v->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
-            this->setData<dtkVector3DReal>(v);
+            if (!d->matrix)
+                d->matrix = new dtkVector3D<double>();
+            d->matrix->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
+            this->setData<dtkVector3DReal>(reinterpret_cast<dtkVector3DReal*>(d->matrix));
 
         } else if (data_type == e->dtkVectorReal_Id) {
 
-            dtkVectorReal *v = new dtkVector<double>();
-            v->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
-            this->setData<dtkVectorReal>(v);
+            if (!d->matrix)
+                d->matrix = new dtkVector<double>();
+            d->matrix->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
+            this->setData<dtkVectorReal>(reinterpret_cast<dtkVectorReal*>(d->matrix));
 
         } else if (data_type == e->dtkQuaternionReal_Id) {
 
-            dtkQuaternionReal *q = new dtkQuaternion<double>();
-            q->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
-            this->setData<dtkQuaternionReal>(q);
+            if (!d->matrix)
+                d->matrix = new dtkQuaternion<double>();
+            d->matrix->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
+            this->setData<dtkQuaternionReal>(reinterpret_cast<dtkQuaternionReal*>(d->matrix));
 
         } else if (data_type == e->dtkMatrixReal_Id) {
 
-            dtkMatrixReal *m = new dtkMatrix<double>();
-            m->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
-            this->setData<dtkMatrixReal>(m);
+            if (!d->matrix)
+                d->matrix = new dtkMatrix<double>();
+            d->matrix->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
+            this->setData<dtkMatrixReal>(d->matrix);
 
         } else if (data_type == e->dtkMatrixSquareReal_Id) {
 
-            dtkMatrixSquareReal *m = new dtkMatrixSquareReal();
-            m->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
-            this->setData<dtkMatrixSquareReal>(m);
+            if (!d->matrix)
+                d->matrix = new dtkMatrixSquareReal();
+            d->matrix->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
+            this->setData<dtkMatrixSquareReal>(reinterpret_cast<dtkMatrixSquareReal*>(d->matrix));
 
         } else if (data_type == e->dtkAbstractData_Id) {
+
             QString typeName ;
             dtkDebug() << "got dtkabstract data, read type name";
             stream >> typeName;
@@ -324,17 +353,30 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
             header_length=3*sizeof(data_type)+typeName.size();
 
             if (array.size() >  header_length) {
-                dtkAbstractData *data;
-                data = dtkAbstractDataFactory::instance()->create(typeName)->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
-                if (!data) {
+
+                if (!d->object)
+                    d->object = dtkAbstractDataFactory::instance()->create(typeName);
+                
+                if (!d->object) {
+                    dtkError() << "Unable to creat data of type" << typeName;
+                    return;
+                }                
+                
+                if (!(reinterpret_cast<dtkAbstractData*>(d->object))->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length))) {
                     dtkError() << "Deserialization failed for type" << typeName;
+                    
                 } else {
                     dtkDebug() << "set dtkAbstractData in transmitter, size is" << array.size() << typeName;;
-                    this->setData<dtkAbstractData>(data);
+                    this->setData<dtkAbstractData>(reinterpret_cast<dtkAbstractData*>(d->object));
                 }
             } else {
                 dtkWarn() << "No data in byte array, can't create " << typeName;
             }
+            
+        } else {
+            
+            e->data_owner = false;
+            dtkError() << "Deserialization not handled for type" << data_type;
         }
     }
 }
@@ -491,6 +533,20 @@ dtkAbstractObject *dtkComposerTransmitterVariant::object(void)
         return e->active_emitter->object();
 
     return d->object;
+}
+
+dtkMatrix<double> *dtkComposerTransmitterVariant::matrix(void)
+{
+    if (e->twinned)
+        return d->matrix;
+
+    if (e->active_variant)
+        return e->active_variant->matrix();
+
+    if (e->active_emitter)
+        return e->active_emitter->matrix();
+
+    return d->matrix;
 }
 
 int dtkComposerTransmitterVariant::dataType(void)

@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 11:45:03 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Thu Oct  4 10:23:04 2012 (+0200)
- *           By: tkloczko
- *     Update #: 108
  */
 
 /* Commentary: 
@@ -31,7 +27,12 @@
 
 void dtkComposerNodeFilePrivate::download(const QUrl& url)
 {
-    QTemporaryFile file; file.setAutoRemove(false);
+    QFileInfo file_template_info = QFileInfo(url.path());
+
+    QTemporaryFile file;
+    if(!file_template_info.completeSuffix().isEmpty())
+        file.setFileTemplate(file.fileTemplate() + "." + file_template_info.completeSuffix());
+    file.setAutoRemove(false);
     
     if (!file.open()) {
         qDebug() << DTK_PRETTY_FUNCTION << "Unable to file for saving";
